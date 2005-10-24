@@ -61,7 +61,7 @@ class LevelFileFactory(rest.app.ApplicationObjectFileFactory):
         levels = app.getSchoolToolApplication()['levels']
         node = doc.query('/m:object')[0]
         kwargs['title'] = node['title']
-        kwargs['isInitial'] = node.get('isInitial')
+        kwargs['isInitial'] = node.get('isInitial').lower() == u'true'
         levelid = node.get('nextLevel')
         try:
             kwargs['nextLevel'] = levelid and levels[levelid] or None
@@ -92,3 +92,8 @@ class LevelView(rest.View):
     template = rest.Template("level.pt",
                              content_type="text/xml; charset=UTF-8")
     factory = LevelFile
+
+    def isInitial(self):
+        if self.context.isInitial:
+            return u'true'
+        return u'false'

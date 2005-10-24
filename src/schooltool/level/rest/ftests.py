@@ -26,7 +26,7 @@ import unittest
 
 from schooltool.testing.functional import load_ftesting_zcml
 from schooltool.testing.functional import collect_ftests
-
+import schooltool.level.rest
 
 def test_suite():
     load_ftesting_zcml()

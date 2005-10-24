@@ -70,18 +70,18 @@ class AcademicRecordView(browser.BrowserView):
         elif 'REMOVE_SUBMIT' in self.request:
             manager = app.getSchoolToolApplication()['groups']['manager']
             process = self.record.levelProcess
-            items = interfaces.IManagerWorkItems(manager).items
+            items = interfaces.IManagerWorkItems(manager)
             # Create a copy by converting items to a tuple
-            for item in tuple(items):
+            for item in tuple(items.values()):
                 if item.participant.activity.process == process:
-                    items.remove(item)
+                    items.removeWorkItem(item)
             self.record.levelProcess = None
             return _('The Level Process was successfully removed.')
 
         elif 'WORKITEM_SUBMIT' in self.request:
             manager = app.getSchoolToolApplication()['groups']['manager']
-            for item in interfaces.IManagerWorkItems(manager).items:
-                if item.__name__ in self.request['workitemId']:
+            for id, item in interfaces.IManagerWorkItems(manager).items():
+                if id in self.request['workitemId']:
                     view = zapi.getMultiAdapter((item, self.request),
                                                 promotion.IFinishSchemaWorkitem)
                     return view.finish()
@@ -103,7 +103,7 @@ class AcademicRecordView(browser.BrowserView):
         return [
             zapi.getMultiAdapter(
                 (item, self.request), promotion.IFinishSchemaWorkitem)
-            for item in interfaces.IManagerWorkItems(manager).items
+            for item in interfaces.IManagerWorkItems(manager).values()
             if (item.participant.activity.process.workflowRelevantData.student
                 == self.context)]
-        
+

@@ -1,0 +1,250 @@
+===========
+Level Views
+===========
+
+This file contains the documentation and tests of the browser view classes
+provided by this package.
+
+
+Level Validation View
+---------------------
+
+The validation view ensures that created level graph is consistent. When the
+validation button is pressed, the level container will validate the
+layout. Let's create a stub implementation of the level container first:
+
+  >>> class LevelContainer(object):
+  ...      invalidError = None
+  ...
+  ...      def validate(self):
+  ...          if self.invalidError is not None:
+  ...              raise self.invalidError
+  >>> container = LevelContainer()
+
+Now we create a request that asks for the validation to occur:
+
+  >>> from zope.publisher.browser import TestRequest
+  >>> request = TestRequest(environ={'VALIDATE': True})
+
+After instantiating the view, we should now be able to validate the level
+graph:
+
+  >>> from schooltool.level.browser import level
+  >>> view = level.LevelValidationView(container, request)
+  >>> view.validate()
+
+Now, when a validation error occurs, the view looks up a view for the error
+that will provide an explanation:
+
+  >>> class ValidationErrorView(object):
+  ...
+  ...     def __init__(self, context, request):
+  ...         pass
+
+  >>> import zope.component
+  >>> import zope.interface
+  >>> from schooltool.level import interfaces
+  >>> zope.component.provideAdapter(
+  ...     ValidationErrorView,
+  ...     (interfaces.ILevelValidationError, TestRequest),
+  ...     zope.interface.Interface,
+  ...     name='info')
+
+So if the validation process causes a validation error
+
+  >>> container.invalidError = interfaces.LevelValidationError()
+
+we should get the validation error view:
+
+  >>> view.validate()
+  <ValidationErrorView object at ...>
+
+
+Edit Level Adapter
+------------------
+
+This adapter is used to edit a level; why can we not use the level directly?
+Well, users often do not want to just specify the next level in the graph, but
+also the previous one. In the data structure, however, we really one need to
+link to the next level. The adapter provides the functionality to also store
+the previous level.
+
+First, we need to create a level container with some levels though:
+
+  >>> from schooltool.level.level import LevelContainer, Level
+  >>> levels = LevelContainer()
+  >>> levels['grade1'] = Level('1st Grade')
+  >>> levels['grade2'] = Level('2nd Grade')
+
+Now we can instantiate the adapter for the second grade:
+
+  >>> editGrade2 = level.EditLevelAdapter(levels['grade2'])
+
+As we can see, initially there is no previous level:
+
+  >>> editGrade2.previousLevel
+
+But once, we set it, it is available:
+
+  >>> editGrade2.previousLevel = levels['grade1']
+  >>> editGrade2.previousLevel
+  <Level '1st Grade'>
+
+Of course, the second grade is now the first grade's next level:
+
+  >>> levels['grade1'].nextLevel
+  <Level '2nd Grade'>
+
+
+Level Add View
+--------------
+
+In order to have a valid add setup, we have to create an ``IAdding`` object,
+which corresponds to the '+' in the URL:
+
+  >>> class Adding(object):
+  ...     pass
+  >>> adding = Adding()
+
+We now have to create the level container, which is the context of adding:
+
+  >>> from schooltool.level.level import LevelContainer
+  >>> levelContainer = LevelContainer()
+  >>> adding.context = levelContainer
+
+When the add view is registered, ZCML adds some attributes -- `schema`,
+'fieldNames', and `_factory` -- and creates a new subclass:
+
+  >>> from schooltool.level.interfaces import ILevel
+  >>> class LevelAddView(level.LevelAddView):
+  ...     schema = ILevel
+  ...     fieldNames = ('title',)
+  ...     _factory = Level
+
+Now we can instantiate the view:
+
+  >>> request = TestRequest()
+  >>> view = LevelAddView(adding, request)
+
+The ``nextURL()`` method tells Zope 3 where you should be redirected after
+successfully adding a level.  We will pretend that ``container`` is located at
+the root so that ``zapi.absoluteURL(container)`` returns 'http://127.0.0.1'.
+
+  >>> from zope.app.traversing.interfaces import IContainmentRoot
+  >>> zope.interface.directlyProvides(levelContainer, IContainmentRoot)
+  >>> view.nextURL()
+  'http://127.0.0.1'
+
+We can cancel an action if we want to:
+
+  >>> request = TestRequest(environ={'CANCEL': 'Cancel'})
+  >>> view = LevelAddView(adding, request)
+  >>> view.update()
+  >>> request.response.getStatus()
+  302
+  >>> request.response.getHeader('Location')
+  'http://127.0.0.1'
+
+If 'CANCEL' is not present in the request, the view calls inherited
+'update'.  We will use a trick and set update_status to some value to
+short-circuit AddView.update().
+
+  >>> request = TestRequest()
+  >>> request.form = {'field.title': 'grade1',
+  ...                 'UPDATE_SUBMIT': 'Add'}
+  >>> view = LevelAddView(adding, request)
+  >>> view.update_status = 'Just checking'
+  >>> view.update()
+  'Just checking'
+
+
+Level Edit View
+---------------
+
+For the edit view to work we need to setup the level vocabulary as well:
+
+  >>> from schooltool.level.level import LevelVocabulary
+  >>> from zope.schema import vocabulary
+  >>> vocabulary._clear()
+  >>> registry = vocabulary.getVocabularyRegistry()
+  >>> registry.register('Levels', LevelVocabulary)
+
+The edit view really works with the edit level adapter we introduced above; so
+let's just reuse it:
+
+  >>> levels.__name__ = 'levels'
+  >>> zope.interface.directlyProvides(levels, IContainmentRoot)
+
+  >>> request = TestRequest()
+  >>> class LevelEditView(level.LevelEditView):
+  ...     schema = level.IEditLevelSchema
+  ...     fieldNames = ('title', 'isInitial', 'nextLevel', 'previousLevel')
+
+  >>> view = LevelEditView(editGrade2, request)
+
+We should not get redirected if we did not click on apply button:
+
+  >>> request = TestRequest()
+  >>> view = LevelEditView(editGrade2, request)
+  >>> view.update()
+  ''
+  >>> request.response.getStatus()
+  599
+
+After changing title of the level you should get redirected to the level
+overview:
+
+  >>> request = TestRequest()
+  >>> request.form = {'UPDATE_SUBMIT': 'Apply',
+  ...                 'field.title': u'Second Grade'}
+  >>> view = LevelEditView(editGrade2, request)
+  >>> view.update()
+  u'Updated on ${date_time}'
+  >>> request.response.getStatus()
+  302
+  >>> request.response.getHeader('Location')
+    'http://127.0.0.1/levels/grade2'
+
+  >>> editGrade2.title
+  u'Second Grade'
+
+Even if the title has not changed you should get redirected to the level
+overview:
+
+    >>> request = TestRequest()
+    >>> request.form = {'UPDATE_SUBMIT': 'Apply',
+    ...                 'field.title': u'Second Grade'}
+    >>> view = LevelEditView(editGrade2, request)
+    >>> view.update()
+    ''
+    >>> request.response.getStatus()
+    302
+    >>> request.response.getHeader('Location')
+    'http://127.0.0.1/levels/grade2'
+
+    >>> editGrade2.title
+    u'Second Grade'
+
+We should not get redirected if there were errors:
+
+    >>> request = TestRequest()
+    >>> request.form = {'UPDATE_SUBMIT': 'Apply',
+    ...                 'field.title': u''}
+    >>> view = LevelEditView(editGrade2, request)
+    >>> view.update()
+    u'An error occured.'
+    >>> request.response.getStatus()
+    599
+
+    >>> editGrade2.title
+    u'Second Grade'
+
+We can cancel an action if we want to:
+
+    >>> request = TestRequest(environ={'CANCEL': 'Cancel'})
+    >>> view = LevelEditView(editGrade2, request)
+    >>> view.update()
+    >>> request.response.getStatus()
+    302
+    >>> request.response.getHeader('Location')
+    'http://127.0.0.1/levels/grade2'

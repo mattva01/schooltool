@@ -65,7 +65,7 @@ class SampleLevels(object):
                 IAcademicRecord(person).levelProcess = process
 
         work = IManagerWorkItems(removeSecurityProxy(app['groups']['manager']))
-        for item in list(work.items):
+        for item in tuple(work.values()):
             if isinstance(item, SelectInitialLevel):
                 level = self.random.choice(levels.values())
                 item.finish(level)

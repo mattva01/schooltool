@@ -22,6 +22,7 @@ School Level and Related Interfaces
 $Id$
 """
 import zope.interface
+import zope.interface.common.mapping
 import zope.schema
 import zope.app.container.constraints
 from zope.app import container
@@ -176,17 +177,11 @@ class IAcademicRecord(zope.interface.Interface):
         required=False)
 
 
-class IManagerWorkItems(zope.interface.Interface):
+class IManagerWorkItems(zope.interface.common.mapping.IFullMapping):
     """Provides access to the manager group's work items."""
-
-    items = zope.schema.List(
-        title=_("Work Items"),
-        description=_("A list of work items for the manager."),
-        readonly=True,
-        required=True)
 
     def addWorkItem(item):
         """Add a work item to the manager group."""
 
-    def deleteWorkItem(item):
+    def removeWorkItem(item):
         """Delete a work item from the manager group."""

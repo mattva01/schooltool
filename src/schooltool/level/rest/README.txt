@@ -140,7 +140,7 @@ Let's first look at the academic status. You can simply get it and put it:
     >>> print rest("""
     ... GET /persons/stephan/academicStatus HTTP/1.1
     ... Authorization: Basic manager:schooltool
-    ... """)
+    ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: 0
     Content-Type: text/plain
@@ -196,7 +196,7 @@ workflow item.
     >>> print rest("""
     ... GET /persons/stephan/promotion HTTP/1.1
     ... Authorization: Basic manager:schooltool
-    ... """)
+    ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: 55
     Content-Type: text/xml; charset=UTF-8

@@ -3,7 +3,7 @@
             xmlns:i18n="http://xml.zope.org/namespaces/i18n"
             i18n:domain="schooltool">
   <title tal:content="context/title" />
-  <isInitial tal:content="context/isInitial" />
+  <isInitial tal:content="view/isInitial" />
   <nextLevel tal:content="python: context.nextLevel
                                   and path('context/nextLevel/zope:name')" />
   <relationships xlink:type="simple" xlink:title="Relationships"

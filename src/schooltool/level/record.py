@@ -101,4 +101,3 @@ class AcademicRecord(object):
             self.history.__parent__ = self.context
             self.status = None
             self.levelProcess = None
-        

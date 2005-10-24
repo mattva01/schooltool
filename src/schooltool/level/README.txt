@@ -324,7 +324,11 @@ for SchoolTool:
 We also need to set up an adapter to retrieve current work items for the
 manager group
 
-    >>> zope.component.provideAdapter(promotion.ManagerWorkItems)
+    >>> from schooltool.group.interfaces import IGroup
+    >>> from schooltool.level import interfaces
+    >>> zope.component.provideAdapter(promotion.getManagerWorkItems,
+    ...                               adapts=(IGroup,),
+    ...                               provides=interfaces.IManagerWorkItems)
 
 and one adapter to access and manage the academic record of the student:
 
@@ -388,13 +392,13 @@ is now marked as enrolled and the academic history shows an entry as well:
 The manager group should also have some work items:
 
     >>> work = level.interfaces.IManagerWorkItems(manager)
-    >>> work.items #doctest:+ELLIPSIS
+    >>> work.values() #doctest:+ELLIPSIS
     [<schooltool.level.promotion.SelectInitialLevel object at ...>]
 
 We can now select the work item and pass in the initial level. The student will
 start at the first grade:
 
-    >>> item = work.items[-1]
+    >>> item = list(work.values())[-1]
     >>> item.finish(st['levels']['level1'])
     WorkItemFinished(u'selectInitialLevel')
     ActivityFinished(Activity(u'promotion.enroll'))
@@ -408,10 +412,10 @@ Now the student is completing the first class.
 
 S/he passes the class easily:
 
-    >>> work.items #doctest:+ELLIPSIS
+    >>> list(work.values()) #doctest:+ELLIPSIS
     [<schooltool.level.promotion.SetLevelOutcome object at ...>]
 
-    >>> item = work.items[-1]
+    >>> item = list(work.values())[-1]
     >>> item.finish('pass')
     WorkItemFinished(u'setLevelOutcome')
     ActivityFinished(Activity(u'promotion.complete'))
@@ -439,10 +443,10 @@ and the student is now in the second grade:
 
 In second grade, however, s/he has troubles and fails.
 
-    >>> work.items #doctest:+ELLIPSIS
+    >>> list(work.values()) #doctest:+ELLIPSIS
     [<schooltool.level.promotion.SetLevelOutcome object at ...>]
 
-    >>> item = work.items[-1]
+    >>> item = list(work.values())[-1]
     >>> item.finish('fail')
     WorkItemFinished(u'setLevelOutcome')
     ActivityFinished(Activity(u'promotion.complete'))
@@ -466,27 +470,27 @@ Thus, the record is not as positive:
 
 But after that she is fine again until s/he graduates elementary school:
 
-    >>> work.items[-1].finish('pass') #doctest:+ELLIPSIS
+    >>> list(work.values())[-1].finish('pass') #doctest:+ELLIPSIS
     WorkItemFinished(u'setLevelOutcome')
     ...
     ActivityStarted(Activity(u'promotion.complete'))
 
-    >>> work.items[-1].finish('pass') #doctest:+ELLIPSIS
+    >>> list(work.values())[-1].finish('pass') #doctest:+ELLIPSIS
     WorkItemFinished(u'setLevelOutcome')
     ...
     ActivityStarted(Activity(u'promotion.complete'))
 
-    >>> work.items[-1].finish('pass') #doctest:+ELLIPSIS
+    >>> list(work.values())[-1].finish('pass') #doctest:+ELLIPSIS
     WorkItemFinished(u'setLevelOutcome')
     ...
     ActivityStarted(Activity(u'promotion.complete'))
 
-    >>> work.items[-1].finish('pass') #doctest:+ELLIPSIS
+    >>> list(work.values())[-1].finish('pass') #doctest:+ELLIPSIS
     WorkItemFinished(u'setLevelOutcome')
     ...
     ActivityStarted(Activity(u'promotion.complete'))
 
-    >>> work.items[-1].finish('pass')
+    >>> list(work.values())[-1].finish('pass')
     WorkItemFinished(u'setLevelOutcome')
     ActivityFinished(Activity(u'promotion.complete'))
     Transition(Activity(u'promotion.complete'), Activity(u'promotion.pass'))
@@ -516,7 +520,7 @@ requires a new process:
     WorkItemFinished(u'writeRecord')
     WorkItemFinished(u'updateStatus')
 
-    >>> item = work.items[-1]
+    >>> item = list(work.values())[-1]
     >>> item.finish(st['levels']['level7'])
     WorkItemFinished(u'selectInitialLevel')
     ActivityFinished(Activity(u'promotion.enroll'))
@@ -526,7 +530,7 @@ requires a new process:
 However, after a few months the family is moving and the student withdraws
 from the school:
 
-    >>> work.items[-1].finish('withdraw')
+    >>> list(work.values())[-1].finish('withdraw')
     WorkItemFinished(u'setLevelOutcome')
     ActivityFinished(Activity(u'promotion.complete'))
     Transition(Activity(u'promotion.complete'), Activity(u'promotion.withdraw'))

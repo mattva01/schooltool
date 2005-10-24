@@ -1,0 +1,109 @@
+=====================
+Academic Record Views
+=====================
+
+The package contains only one view, the academic record of a single
+student. The code is somewhat involved, since viewing and modifying the record
+of a single student is not that common, so that the code has been optimized
+for the manager-group specific views.
+
+Unfortunately, we have to set up the entire workflow machinery and SchoolTool
+application to demonstrate the functionality of the view:
+
+  >>> from schooltool.testing import setup
+  >>> st = setup.setupSchoolToolSite()
+
+  >>> setUpStudents(st)
+  >>> setUpGroups(st)
+  >>> setUpLevels(st)
+
+  >>> setUpPromotionWorkflow()
+
+Now, using the student Stephan, we can initialize the view:
+
+  >>> from zope.publisher.browser import TestRequest
+  >>> request = TestRequest()
+
+  >>> from schooltool.level.browser import record
+  >>> view = record.AcademicRecordView(st['persons']['srichter'], request)
+
+Since the view provides a lot of functionality, the view has several methods.
+
+
+Updating the Status
+-------------------
+
+While the status of the student is commonly controlled by the workflow, you
+can also set the status of the student manually:
+
+  >>> view.record.status
+
+  >>> request = TestRequest(form={'field.status': 'Graduated',
+  ...                             'UPDATE_SUBMIT': True})
+  >>> view = record.AcademicRecordView(st['persons']['srichter'], request)
+  >>> view.updateStatus()
+  u'The status was successfully updated.'
+
+  >>> view.record.status
+  u'Graduated'
+
+
+Updating the Process
+--------------------
+
+We can also control the complete workflow from this view. The first step is to
+initialize the process:
+
+  >>> request = TestRequest(form={'INITIALIZE_SUBMIT': True})
+  >>> view = record.AcademicRecordView(st['persons']['srichter'], request)
+  >>> view.updateProcess()
+  u'The Level Process was successfully initialized.'
+  >>> view.record.levelProcess
+  Process('schooltool.promotion')
+
+You can also see the workitems that have to be completed for the student:
+
+  >>> view.workitems()
+  [<schooltool.level.browser.promotion.SchemaWorkItemView object at ...>]
+
+Actually, we need the id of this workflow item, so let's grab it:
+
+  >>> id = view.workitems()[0].context.__name__
+
+Now we can promote the student to the next level:
+
+  >>> request = TestRequest(form={'workitemId': id,
+  ...                             id+'.level': 'level1',
+  ...                             'WORKITEM_SUBMIT': True})
+  >>> view = record.AcademicRecordView(st['persons']['srichter'], request)
+  >>> view.updateProcess()
+  u'Work Item successfully finished.'
+
+Finally, you can also remove the process prematurely. The tricky part here is
+that the not only the process needs to be deleted, but also the workitems in
+the manager:
+
+  >>> view.workitems()
+  [<schooltool.level.browser.promotion.SetLevelOutcomeView object at ...>]
+
+  >>> id = view.workitems()[0].context.__name__
+  >>> request = TestRequest(form={'workitemId': id,
+  ...                             'REMOVE_SUBMIT': True})
+  >>> view = record.AcademicRecordView(st['persons']['srichter'], request)
+  >>> view.updateProcess()
+  u'The Level Process was successfully removed.'
+
+  >>> view.workitems()
+  []
+
+
+Viewing History
+---------------
+
+Now that we have had some actions, you can also look at the history:
+
+  >>> pprint(list(view.history()))
+  [{'description': u'Enrolled at school',
+    'timestamp': u'...',
+    'title': u'Enrolled',
+    'user': '<unknown>'}]

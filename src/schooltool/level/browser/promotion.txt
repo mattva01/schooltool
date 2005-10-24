@@ -1,0 +1,184 @@
+===============
+Promotion Views
+===============
+
+This file gives you documents the Python API of the promotion browser views.
+
+
+Schema-based Work Item View
+---------------------------
+
+In order to complete a manual work item the user has to provide some
+information. This information is commonly described by a schema. This view
+uses the schema to collect the required data to complete the work item.
+
+This means, of course, that we need a schema and a work item first:
+
+  >>> import zope.interface
+  >>> import zope.schema
+
+  >>> class IWorkItemSchema(zope.interface.Interface):
+  ...     someValue = zope.schema.TextLine(title=u'Some Value')
+
+  >>> class WorkItem(object):
+  ...     __name__ = 'wi'
+  ...     schema = IWorkItemSchema
+  ...
+  ...     def finish(self, someValue=None):
+  ...         print u'Value: ' + someValue
+  >>> workitem = WorkItem()
+
+Now we can initialize the view, which will also setup the necessary widgets:
+
+  >>> from zope.publisher.browser import TestRequest
+  >>> request = TestRequest()
+
+  >>> import zope.wfmc.interfaces
+  >>> import schooltool.level.browser.promotion
+
+  >>> from schooltool.level import browser
+  >>> view = browser.promotion.SchemaWorkItemView(workitem, request)
+
+  >>> view.someValue_widget
+  <zope.app.form.browser.textwidgets.TextWidget object at ...>
+
+Now we can get a list of all widgets:
+
+  >>> view.widgets()
+  [<zope.app.form.browser.textwidgets.TextWidget object at ...>]
+
+Once the form is filled out, we can finish the work item:
+
+  >>> request = TestRequest(form={'wi.someValue': 'value'})
+
+  >>> view = browser.promotion.SchemaWorkItemView(workitem, request)
+  >>> view.finish()
+  Value: value
+  u'Work Item successfully finished.'
+
+
+"Set Level Outcome" Work Item View
+----------------------------------
+
+This view is an extension of the above-mentioned schema-based work item
+view. It provides an additional method that tells the user what the current
+level of the student is. Finding the level's title is not a straight forward
+lookup, but requires a lot of the workflow system to be setup. Thus I'll
+provide here a simple stub that gives us the title:
+
+  >>> class LevelOutcomeWorkItem(WorkItem):
+  ...
+  ...     def __getattr__(self, name):
+  ...         if name != 'title':
+  ...              return self
+  ...         return '1st Grade'
+  >>> levelOutcome = LevelOutcomeWorkItem()
+
+Now we can instantiate the view and get the extra information:
+
+  >>> view = browser.promotion.SetLevelOutcomeView(levelOutcome, request)
+  >>> view.extra()
+  u'Current Level: $level'
+  >>> view.extra().mapping
+  {'level': '1st Grade'}
+
+
+Promotion Work Items View
+-------------------------
+
+This view is the main controller of the promotion workflow. It provides an
+overview of the state of all students and their possible next actions. Since
+this screen requires a lot of the environment to be present, we have to do a
+lot of setup.
+
+First we have to create a valid SchoolTool site:
+
+  >>> from schooltool.testing import setup
+  >>> st = setup.setupSchoolToolSite()
+
+We then have to add students, groups and levels to it; I have done this in the
+test setup to not bore you with the details here:
+
+  >>> setUpStudents(st)
+  >>> setUpGroups(st)
+  >>> setUpLevels(st)
+
+We also have to register the promotion workflow and all the adapters that
+realize the application:
+
+  >>> setUpPromotionWorkflow()
+
+Now we can initialize the view using the manager group and a request:
+
+  >>> from zope.publisher.browser import TestRequest
+  >>> request = TestRequest()
+  >>> manager = st['groups']['manager']
+
+  >>> view = browser.promotion.PromotionWorkItemsView(manager, request)
+
+Now we can ask the view to list all students that do not have a promotion
+workflow on them yet:
+
+  >>> pprint(view.students())
+  [{'name': u'crichter', 'title': 'Claudia Richter', 'username': 'crichter'},
+   {'name': u'srichter', 'title': 'Stephan Richter', 'username': 'srichter'},
+   {'name': u'thoffman', 'title': 'Tom Hoffman', 'username': 'thoffman'}]
+
+The way to enroll some students is to send a request:
+
+  >>> request = TestRequest(environ={'ids': ['crichter', 'srichter'],
+  ...                                'ENROLL_SUBMIT': True})
+  >>> view = browser.promotion.PromotionWorkItemsView(manager, request)
+  >>> view.update()
+  u'Students successfully enrolled.'
+
+  >>> pprint(view.students())
+  [{'name': u'thoffman', 'title': 'Tom Hoffman', 'username': 'thoffman'}]
+
+Note that if you do not select any students, an error message will be returned:
+
+  >>> request = TestRequest(environ={'ENROLL_SUBMIT': True})
+  >>> view = browser.promotion.PromotionWorkItemsView(manager, request)
+  >>> view.update()
+  u'No students were selected.'
+
+Okay, now that the students are enrolled, they should appear in the list of
+students that need their initial level set:
+
+  >>> pprint(list(view.initialLevelItems()))
+  [{'id': '...',
+    'item_view': <schooltool.level.browser.promotion.SchemaWorkItemView ...>,
+    'student': <schooltool.person.person.Person ...>},
+   {'id': '...',
+    'item_view': <schooltool.level.browser.promotion.SchemaWorkItemView ...>,
+    'student': <schooltool.person.person.Person ...>}]
+
+Now we would like to set the initial level for Claudia to the first
+grade. First we need to get her work item id:
+
+  >>> id = list(view.initialLevelItems())[0]['id']
+
+Now we can set the level on the student:
+
+  >>> request = TestRequest(form={'ids': [id],
+  ...                             id+'.level': 'level1',
+  ...                             'WORKFLOW_SUBMIT': True})
+  >>> view = browser.promotion.PromotionWorkItemsView(manager, request)
+  >>> view.update()
+  u'Student processes successfully updated.'
+
+Note again that if you do not select any students, an error message will be
+returned:
+
+  >>> request = TestRequest(environ={'WORKFLOW_SUBMIT': True})
+  >>> view = browser.promotion.PromotionWorkItemsView(manager, request)
+  >>> view.update()
+  u'No students were selected.'
+
+Of course, now Claudia is listed under the outcome items:
+
+  >>> pprint(list(view.outcomeItems()))
+  [{'id': '...',
+    'item_view': <schooltool.level.browser.promotion.SchemaWorkItemView ...>,
+    'level': <Level '1st Grade'>,
+    'student': <schooltool.person.person.Person object at ...>}]

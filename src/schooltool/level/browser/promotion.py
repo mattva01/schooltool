@@ -38,7 +38,7 @@ class IFinishSchemaWorkitem(zope.interface.Interface):
 
 
 class SchemaWorkItemView(browser.BrowserView):
-    """Set the initial level of the student."""
+    """Generic work item view based on the work item's schema"""
 
     def __init__(self, workitem, request):
         super(SchemaWorkItemView, self).__init__(workitem, request)
@@ -71,6 +71,8 @@ class PromotionWorkItemsView(browser.BrowserView):
 
     def students(self):
         """Return PT-friendly list of student infos"""
+        # TODO: Once we decided on categorization, this lookup could be more
+        #       efficient by looking up all members of the students group.
         return [
             {'name': id, 'title': person.title, 'username': person.username}
             for id, person in app.getSchoolToolApplication()['persons'].items()
@@ -79,24 +81,24 @@ class PromotionWorkItemsView(browser.BrowserView):
     def initialLevelItems(self):
         """Return PT-friendly list of students who need to be initialized"""
         manager = app.getSchoolToolApplication()['groups']['manager']
-        for item in interfaces.IManagerWorkItems(manager).items:
+        for id, item in interfaces.IManagerWorkItems(manager).items():
             if zapi.isinstance(item, promotion.SelectInitialLevel):
                 wfData = item.participant.activity.process.workflowRelevantData
-                yield {'id': item.__name__,
+                yield {'id': id,
                        'student': wfData.student,
                        'item_view': SchemaWorkItemView(item, self.request)}
 
     def outcomeItems(self):
         """Return PT-friendly list of students who need to be promoted"""
         manager = app.getSchoolToolApplication()['groups']['manager']
-        for item in interfaces.IManagerWorkItems(manager).items:
+        for id, item in interfaces.IManagerWorkItems(manager).items():
             if zapi.isinstance(item, promotion.SetLevelOutcome):
                 wfData = item.participant.activity.process.workflowRelevantData
-                yield {'id': item.__name__,
+                yield {'id': id,
                        'level': wfData.level,
                        'student': wfData.student,
                        'item_view': SchemaWorkItemView(item, self.request)}
-                
+
     def update(self):
         """Update the workflows."""
         if 'ENROLL_SUBMIT' in self.request:
@@ -106,7 +108,7 @@ class PromotionWorkItemsView(browser.BrowserView):
 
             if 'ids' not in self.request:
                 return _('No students were selected.')
-            
+
             for id in self.request['ids']:
                 student = persons[id]
                 process = pd()
@@ -122,9 +124,10 @@ class PromotionWorkItemsView(browser.BrowserView):
                 return _('No students were selected.')
 
             ids = self.request['ids']
+            items = interfaces.IManagerWorkItems(manager)
             # Make a copy of the list by making it a tuple
-            for item in tuple(interfaces.IManagerWorkItems(manager).items):
-                if item.__name__ in ids:
+            for id, item in tuple(items.items()):
+                if id in ids:
                     view = SchemaWorkItemView(item, self.request)
                     view.finish()
             return _('Student processes successfully updated.')

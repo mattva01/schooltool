@@ -28,9 +28,11 @@ from zope.interface.verify import verifyObject
 from zope.testing import doctest
 from zope.app.testing import setup, ztapi
 
-from schooltool.testing.setup import setupLocalGrants
-from schooltool.testing import setup as stsetup
+from schooltool.group.interfaces import IGroup
+from schooltool.level.interfaces import IManagerWorkItems
 from schooltool.relationship.tests import setUpRelationships
+from schooltool.testing import setup as stsetup
+from schooltool.testing.setup import setupLocalGrants
 
 
 def setUpLevels():
@@ -67,7 +69,9 @@ def setUpLevels():
                                   name='.updateStatus')
     zope.component.provideAdapter(promotion.WriteRecord,
                                   name='.writeRecord')
-    zope.component.provideAdapter(promotion.ManagerWorkItems)
+    zope.component.provideAdapter(promotion.getManagerWorkItems,
+                                  adapts=(IGroup,),
+                                  provides=IManagerWorkItems)
 
     from schooltool.level import record
     zope.component.provideAdapter(record.AcademicRecord)
@@ -126,8 +130,8 @@ def doctest_SampleLevels():
         ...     person = app['persons']['student00' + str(i)]
         ...     proc = IAcademicRecord(person).levelProcess
         ...     print proc.workflowRelevantData.level
-        <Level '11th grade'>
         <Level '10th grade'>
+        <Level '11th grade'>
         <Level '12th grade'>
 
     """

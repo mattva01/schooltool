@@ -39,32 +39,29 @@ from schooltool.level import interfaces, record
 
 WorkItemsKey = 'schooltool.workflows.promotion.workitems'
 
-
-class ManagerWorkItems(object):
-    zope.component.adapts(group.interfaces.IGroup)
+class ManagerWorkItems(persistent.dict.PersistentDict):
     zope.interface.implements(interfaces.IManagerWorkItems)
 
-    def __init__(self, manager):
-        self.context = manager
-        annotations = IAnnotations(manager)
-        self.items = annotations.setdefault(WorkItemsKey,
-                                            persistent.list.PersistentList())
+    counter = 0
+
+    def __init__(self, context):
+        super(ManagerWorkItems, self).__init__()
+        self.context = context
 
     def addWorkItem(self, item):
         """Add a work item to the manager group."""
-        id = str(time.time())
-## These two lines, although possibly necessary, but ARE NOT UNIT TESTED AT
-## ALL, and removing them speeds up sample data generation by 20% by getting
-## rid of a horribly inefficient O(N**2) algorithm
-##                  -- mgedmin in a very bad mood (splitting headache)
-##      while id in [i.__name__ for i in self.items]:
-##          id = str(time.time())
+        id = str(self.counter)
+        self.counter += 1
         location.location.locate(item, self.context, id)
-        self.items.append(item)
+        self[id] = item
 
     def removeWorkItem(self, item):
-        self.items.remove(item)
+        del self[item.__name__]
 
+
+def getManagerWorkItems(manager):
+    annotations = IAnnotations(manager)
+    return annotations.setdefault(WorkItemsKey, ManagerWorkItems(manager))
 
 class Manager(persistent.Persistent):
     zope.component.adapts(zope.wfmc.interfaces.IActivity)

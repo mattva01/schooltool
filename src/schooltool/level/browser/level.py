@@ -32,9 +32,8 @@ from zope.app.publisher import browser
 from schooltool.level import interfaces
 from schooltool import SchoolToolMessageID as _
 from schooltool.app.browser import app
-from schooltool.app.browser import app as sb_app
 
-class LevelContainerView(sb_app.ContainerView):
+class LevelContainerView(app.ContainerView):
     """A Level Container view."""
 
     __used_for__ = interfaces.ILevelContainer
@@ -73,6 +72,7 @@ class EditLevelAdapter(object):
     zope.component.adapts(interfaces.ILevel)
 
     def __init__(self, context):
+        # Make sure we are no using setattr to set the context
         self.__dict__['context'] = context
 
     def __getattr__(self, name):
@@ -110,7 +110,7 @@ class LevelAddView(add.AddView):
             return add.AddView.update(self)
 
 
-class LevelEditView(sb_app.BaseEditView):
+class LevelEditView(app.BaseEditView):
     """View for editing Levels."""
 
     __used_for__ = interfaces.ILevel

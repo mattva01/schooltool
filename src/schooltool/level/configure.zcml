@@ -76,7 +76,9 @@
 
   <!-- Group to Work Items List Adapater -->
   <adapter
-      factory=".promotion.ManagerWorkItems"
+      for="schooltool.group.interfaces.IGroup"
+      provides=".interfaces.IManagerWorkItems"
+      factory=".promotion.getManagerWorkItems"
       />
 
 

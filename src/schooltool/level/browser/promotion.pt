@@ -39,9 +39,9 @@
           </td>
         </tr>
       </table>
-  
+
       <div class="controls">
-        <input type="submit" class="button-ok" name="ENROLL_SUBMIT" 
+        <input type="submit" class="button-ok" name="ENROLL_SUBMIT"
                value="Enroll" title="Shortcut: Alt-E" accesskey="E"
                i18n:attributes="value enroll-button; accesskey" />
       </div>
@@ -79,9 +79,9 @@
 
         </tr>
       </table>
-  
+
       <div class="controls">
-        <input type="submit" class="button-ok" name="WORKFLOW_SUBMIT" 
+        <input type="submit" class="button-ok" name="WORKFLOW_SUBMIT"
                value="Apply" title="Shortcut: Alt-I" accesskey="I"
                i18n:attributes="value apply-button; accesskey" />
       </div>
@@ -123,9 +123,9 @@
 
         </tr>
       </table>
-  
+
       <div class="controls">
-        <input type="submit" class="button-ok" name="WORKFLOW_SUBMIT" 
+        <input type="submit" class="button-ok" name="WORKFLOW_SUBMIT"
                value="Apply" title="Shortcut: Alt-O" accesskey="O"
                i18n:attributes="value apply-button; accesskey" />
       </div>
