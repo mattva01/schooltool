@@ -552,8 +552,44 @@ from the school:
     >>> rec.history[-1].user
     '<unknown>'
 
-
 Cleanup:
 
     >>> zope.event.subscribers.pop() #doctest: +ELLIPSIS
     <function log_workflow at ...>
+
+
+Process Storage Management
+--------------------------
+
+Now we know how the promotion workflow functions, but where is it stored? A
+subscriber to the ``IProcessStarted`` event stores the process usign the
+academic record API. Using a stub implementation for the workflow process and
+the event,
+
+    >>> student = person.Person('student', 'Mr. Student')
+
+    >>> class Process(object):
+    ...     process_definition_identifier = 'schooltool.promotion'
+    ...     student = None
+    ...     def __getattr__(self, name):
+    ...         return self
+    >>> process = Process()
+    >>> process.student = student
+
+    >>> class Event(object):
+    ...     pass
+    >>> event = Event()
+    >>> event.process = process
+
+we can assign the process to a student:
+
+    >>> promotion.addProcessToStudent(event)
+    >>> interfaces.IAcademicRecord(student).levelProcess is process
+    True
+
+The process is removed from the student using a ``IProcessFinished`` event
+subscriber:
+
+    >>> promotion.removeProcessFromStudent(event)
+    >>> interfaces.IAcademicRecord(student).levelProcess is None
+    True
