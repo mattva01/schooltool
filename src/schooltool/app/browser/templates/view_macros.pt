@@ -17,13 +17,8 @@
     <script type="text/javascript" src=""
             tal:attributes="src context/++resource++calwidget-calendar.js">
     </script>
-    <tal:block
-        repeat="viewlet viewlets:schooltool.app.browser.skin.CSSRegion"
-        replace="structure viewlet" />
-
-    <tal:block
-        repeat="viewlet viewlets:schooltool.app.browser.skin.JavaScriptRegion"
-        replace="structure viewlet" />
+    <tal:block replace="structure provider:schooltool.CSS" />
+    <tal:block replace="structure provider:schooltool.JavaScript" />
     <metal:block define-slot="title">
       <metal:block use-macro="view/@@schooltool_macros/generic/title" />
     </metal:block>
@@ -38,9 +33,7 @@
           <img src="logo.png" alt="SchoolTool" i18n:attributes="alt"
             tal:attributes="src context/++resource++logo.png"/>
         </a>
-        <tal:block
-            repeat="viewlet viewlets:schooltool.app.browser.skin.HeaderRegion"
-            replace="structure viewlet" />
+        <tal:block replace="structure provider:schooltool.Header" />
       </div>
       <div class="tools">
         <div class="breadcrumbs">
@@ -97,7 +90,7 @@
       <metal:block define-slot="column-left">
         <div id="column-left">
           <div metal:define-slot="navigation-box"
-               tal:replace="structure context/@@schooltool_navigation" 
+               tal:replace="structure context/@@schooltool_navigation"
                tal:on-error="nothing"/>
           <div class="portlet"
                tal:condition="context/@@view_get_menu/schooltool_actions">
@@ -125,7 +118,7 @@
     <div id="footer">
       <p>
         <strong tal:replace="context/schooltool:preferences/title"/>
-          <metal:block 
+          <metal:block
               use-macro="view/@@schooltool_macros/generic/serverinfo" />
           <span i18n:translate="">
             &copy; The Shuttleworth Foundation 2003 - <span>2005</span>:

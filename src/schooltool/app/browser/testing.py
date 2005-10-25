@@ -22,10 +22,12 @@ Setup code for SchoolTool application browser unit tests
 $Id$
 """
 import os.path
-from zope.interface import implements
+import zope.component
+from zope.interface import implements, Interface
 from zope.app.testing import setup, ztapi
 from zope.app.form.interfaces import IInputWidget
 from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.schema.interfaces import \
         IPassword, ITextLine, IText, IBytes, IBool, ISet, IList, IDate, \
         IInt, IChoice, IIterableVocabulary, IVocabularyTokenized, \
@@ -45,7 +47,7 @@ from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.basicskin.standardmacros import StandardMacros
 from zope.app.form.browser.macros import FormMacros
 from zope.app.publisher.browser.menu import MenuAccessView
-from zope.app.publisher.interfaces.browser import IBrowserMenu
+from zope.app.publisher.interfaces.browser import IBrowserView, IBrowserMenu
 
 from schooltool.relationship.tests import setUpRelationships
 from schooltool.app.browser import SchoolToolAPI, SortBy
@@ -179,22 +181,32 @@ def setUp(test=None):
     ztapi.provideUtility(IBrowserMenu, BrowserMenuStub('schooltool_actions'),
                          'schooltool_actions')
 
-    # viewlet TALES namespaces
+    # `provider` TALES namespaces
     from zope.app.pagetemplate import metaconfigure
-    from zope.app.viewlet import tales
-    metaconfigure.registerType('viewlets', tales.TALESViewletsExpression)
-    metaconfigure.registerType('viewlet', tales.TALESViewletExpression)
+    from zope.contentprovider import tales
+    metaconfigure.registerType('provider', tales.TALESProviderExpression)
 
-    # viewlet regions
-    from zope.app.viewlet.interfaces import IRegion
-    from zope.app.component.interface import provideInterface
+    # viewlet manager registrations
+    from zope.viewlet import manager
     from schooltool.app.browser import skin
-    provideInterface('schooltool.app.browser.skin.HeaderRegion',
-                     skin.HeaderRegion, IRegion)
-    provideInterface('schooltool.app.browser.skin.JavaScriptRegion',
-                     skin.JavaScriptRegion, IRegion)
-    provideInterface('schooltool.app.browser.skin.CSSRegion',
-                     skin.CSSRegion, IRegion)
+    zope.component.provideAdapter(
+        manager.ViewletManager(skin.IHeaderManager),
+        (Interface, IDefaultBrowserLayer, IBrowserView),
+        skin.IHeaderManager,
+        name='schooltool.Header')
+
+    zope.component.provideAdapter(
+        manager.ViewletManager(skin.IJavaScriptManager),
+        (Interface, IDefaultBrowserLayer, IBrowserView),
+        skin.IJavaScriptManager,
+        name='schooltool.JavaScript')
+
+    zope.component.provideAdapter(
+        manager.ViewletManager(skin.ICSSManager),
+        (Interface, IDefaultBrowserLayer, IBrowserView),
+        skin.ICSSManager,
+        name='schooltool.CSS')
+
 
 def tearDown(test=None):
     """Tear down the test fixture for schooltool.app.browser doctests."""

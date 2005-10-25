@@ -3,6 +3,26 @@
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
+  <!-- Viewlet Managers -->
+
+  <viewletManager
+      name="schooltool.CSS"
+      permission="zope.Public"
+      provides="schooltool.app.browser.skin.ICSSManager"
+      />
+
+  <viewletManager
+      name="schooltool.JavaScript"
+      permission="zope.Public"
+      provides="schooltool.app.browser.skin.IJavaScriptManager"
+      />
+
+  <viewletManager
+      name="schooltool.Header"
+      permission="zope.Public"
+      provides="schooltool.app.browser.skin.IHeaderManager"
+      />
+
   <!-- Skin and resources -->
 
   <zope:subscriber
@@ -18,21 +38,6 @@
   <skin
       name="SchoolTool"
       interface=".skin.ISchoolToolSkin"
-      />
-
-  <zope:interface
-      interface=".skin.HeaderRegion"
-      type="zope.app.viewlet.interfaces.IRegion"
-      />
-
-  <zope:interface
-      interface=".skin.JavaScriptRegion"
-      type="zope.app.viewlet.interfaces.IRegion"
-      />
-
-  <zope:interface
-      interface=".skin.CSSRegion"
-      type="zope.app.viewlet.interfaces.IRegion"
       />
 
   <page

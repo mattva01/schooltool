@@ -29,59 +29,20 @@ from zope.publisher.interfaces.browser import ILayer, IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.app.publisher.browser import applySkin
 from zope.app.traversing import api
-from zope.app.viewlet import viewlet
+from zope.viewlet.interfaces import IViewletManager
 
 from schooltool.app.interfaces import ISchoolToolApplication
 
 
-class ResourceViewletBase(object):
-
-    _path = None
-
-    def getFileURL(self):
-        resource = api.traverse(self.context, '++resource++' + self._path,
-                                request=self.request)
-        return resource()
-
-    def __call__(self, *args, **kw):
-        return self.index(*args, **kw)
-
-
-def JavaScriptViewlet(path):
-    """Create a viewlet that can simply insert a javascript link."""
-    src = os.path.join(os.path.dirname(__file__), 'templates',
-                       'javascript_viewlet.pt')
-
-    klass = type('JavaScriptViewlet',
-                 (ResourceViewletBase, viewlet.SimpleViewlet),
-                  {'index': viewlet.ViewletPageTemplateFile(src),
-                   '_path': path})
-
-    return klass
-
-
-def CSSViewlet(path):
-    """Create a viewlet that can simply insert a css link."""
-    src = os.path.join(os.path.dirname(__file__), 'templates',
-                       'css_viewlet.pt')
-
-    klass = type('CSSViewlet',
-                 (ResourceViewletBase, viewlet.SimpleViewlet),
-                  {'index': viewlet.ViewletPageTemplateFile(src),
-                   '_path': path})
-
-    return klass
-
-
-class JavaScriptRegion(Interface):
+class IJavaScriptManager(IViewletManager):
     """Provides a viewlet hook for the javascript link entries."""
 
 
-class CSSRegion(Interface):
+class ICSSManager(IViewletManager):
     """Provides a viewlet hook for the CSS link entries."""
 
 
-class HeaderRegion(Interface):
+class IHeaderManager(IViewletManager):
     """Provides a viewlet hook for the header of a page."""
 
 

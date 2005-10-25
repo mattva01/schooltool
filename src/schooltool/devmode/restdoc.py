@@ -127,7 +127,7 @@ class RESTDocumentation(BrowserView):
             factories = gsm.adapters.lookupAll((cspec,), IFileFactory)
             for name, factory in factories:
                 if not hasattr(factory.factory, 'schema'):
-                    import pdb; pdb.set_trace()
+                   import pdb; pdb.set_trace()
                 result.append({
                     'object_name': zapi.getName(self.context),
                     'container_name': container.__name__,

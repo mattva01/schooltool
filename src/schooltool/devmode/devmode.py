@@ -21,7 +21,7 @@ Devmode view support.
 
 $Id$
 """
-from schooltool.app.browser import skin
+from zope.viewlet import viewlet
 
-DevmodeJavascriptViewlet = skin.JavaScriptViewlet('switch.js')
-DevmodeCSSViewlet = skin.CSSViewlet('devmode.css')
+DevmodeJavascriptViewlet = viewlet.JavaScriptViewlet('switch.js')
+DevmodeCSSViewlet = viewlet.CSSViewlet('devmode.css')
