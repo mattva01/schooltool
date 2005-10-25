@@ -1692,7 +1692,7 @@ def doctest_CalendarEventAddView_add_validation():
         u'An error occured.'
 
         >>> print view.errors
-        MissingInputError: ('field.start_time', 'Time', None)
+        MissingInputError: ('field.start_time', u'Time', None)
         >>> print view.error
         None
         >>> len(calendar)
@@ -1709,7 +1709,7 @@ def doctest_CalendarEventAddView_add_validation():
         >>> view.update()
         u'An error occured.'
         >>> view.errors
-        WidgetInputError: ('title', 'Title', )
+        WidgetInputError: ('title', u'Title', )
         >>> view.error is None
         True
 
@@ -1756,7 +1756,7 @@ def doctest_CalendarEventAddView_add_validation():
         >>> view.update()
         u'An error occured.'
         >>> view.errors
-        WidgetInputError: ('title', 'Title', )
+        WidgetInputError: ('title', u'Title', )
         ConversionError: (u'Invalid time', None)
         >>> view.error is None
         True
@@ -1772,7 +1772,7 @@ def doctest_CalendarEventAddView_add_validation():
         >>> view.update()
         u'An error occured.'
         >>> view.errors
-        WidgetInputError: ('title', 'Title', )
+        WidgetInputError: ('title', u'Title', )
         ConversionError: (u'Invalid time', None)
         >>> view.error is None
         True
@@ -2122,7 +2122,7 @@ def doctest_CalendarEventAddView_getLastWeekDay():
         >>> request.form['field.start_date'] = ""
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> translate(view.getLastWeekDay())
-        'last weekday'
+        u'last weekday'
 
         >>> request.form['field.start_date'] = "2004-10-24"
         >>> view = CalendarEventAddTestView(calendar, request)
@@ -2162,7 +2162,7 @@ def doctest_CalendarEventAddView_cross_validation():
         >>> view.update()
         u'An error occured.'
         >>> view.errors
-        WidgetInputError: ('interval', 'Repeat every', )
+        WidgetInputError: ('interval', u'Repeat every', )
         >>> view.error is None
         True
 
@@ -2182,7 +2182,7 @@ def doctest_CalendarEventAddView_cross_validation():
         >>> view.update()
         u'An error occured.'
         >>> view.errors
-        WidgetInputError: ('until', 'Repeat until', End date is earlier than start date)
+        WidgetInputError: ('until', u'Repeat until', End date is earlier than start date)
         >>> view.error is None
         True
 
@@ -2201,8 +2201,8 @@ def doctest_CalendarEventAddView_cross_validation():
         >>> view.update()
         u'An error occured.'
         >>> view.errors
-        MissingInputError: ('field.interval', 'Repeat every', None)
-        MissingInputError: ('field.until', 'Repeat until', None)
+        MissingInputError: ('field.interval', u'Repeat every', None)
+        MissingInputError: ('field.until', u'Repeat until', None)
         >>> view.error is None
         True
 
@@ -2502,8 +2502,8 @@ def doctest_CalendarEventEditView_updateForm():
         >>> view.update()
         u'An error occured.'
         >>> print view.errors
-        WidgetInputError: ('start_date', 'Date', )
-        WidgetInputError: ('start_time', 'Time', )
+        WidgetInputError: ('start_date', u'Date', )
+        WidgetInputError: ('start_time', u'Time', )
         >>> print view.error
         None
 

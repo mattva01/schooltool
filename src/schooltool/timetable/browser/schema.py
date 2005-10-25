@@ -33,7 +33,7 @@ from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.publisher.browser import BrowserView
 
-from schooltool import SchoolToolMessageID as _
+from schooltool import SchoolToolMessage as _
 from schooltool.app.browser.app import ContainerView
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 from schooltool.timetable.interfaces import ITimetableModelFactory
@@ -52,8 +52,8 @@ class TimetableSchemaView(TimetableView):
     __used_for__ = ITimetableSchema
 
     def title(self):
-        msg = _("Timetable schema ${schema}")
-        msg.mapping = {'schema': self.context.__name__}
+        msg = _("Timetable schema ${schema}",
+                mapping = {'schema': self.context.__name__})
         return msg
 
 
@@ -269,15 +269,15 @@ class AdvancedTimetableSchemaAdd(BrowserView, TabindexMixin):
             if 'DELETE_DAY_%d' % n not in self.request:
                 day_id = self.request['day%d' % n].strip()
                 if not day_id:
-                    day_id_msgid = _('Day ${number}')
-                    day_id_msgid.mapping = {'number': len(day_ids) + 1}
+                    day_id_msgid = _('Day ${number}',
+                                     mapping={'number': len(day_ids) + 1})
                     day_id = translate(day_id_msgid, context=self.request)
                 day_ids.append(day_id)
                 day_idxs.append(n)
             n += 1
         if 'ADD_DAY' in self.request or not day_ids:
-            day_id_msgid = _('Day ${number}')
-            day_id_msgid.mapping = {'number': len(day_ids) + 1}
+            day_id_msgid = _('Day ${number}',
+                             mapping={'number': len(day_ids) + 1})
             day_id = translate(day_id_msgid, context=self.request)
             day_ids.append(day_id)
             day_idxs.append(-1)
@@ -309,8 +309,8 @@ class AdvancedTimetableSchemaAdd(BrowserView, TabindexMixin):
             previous_day = periods
 
         if 'ADD_PERIOD' in self.request:
-            period_name_msgid = _('Period ${number}')
-            period_name_msgid.mapping = {'number': len(longest_day) + 1}
+            period_name_msgid = _('Period ${number}',
+                                  mapping={'number': len(longest_day) + 1})
             period_name = translate(period_name_msgid, context=self.request)
             longest_day.append(period_name)
 

@@ -26,7 +26,7 @@ from zope.app.form.browser.add import AddView
 from zope.app.publisher.browser import BrowserView
 from schooltool.app.browser.app import ContainerView
 
-from schooltool import SchoolToolMessageID as _
+from schooltool import SchoolToolMessage as _
 from schooltool.course.interfaces import ICourse, ICourseContainer
 
 class CourseContainerView(ContainerView):

@@ -34,7 +34,7 @@ from schooltool.group.interfaces import IGroup
 from schooltool.person.interfaces import IPerson
 from schooltool.resource.interfaces import IResource
 
-from schooltool import SchoolToolMessageID as _
+from schooltool import SchoolToolMessage as _
 from schooltool.app import relationships
 from schooltool.course import interfaces
 
@@ -54,8 +54,8 @@ class Section(Persistent, contained.Contained):
     def _getLabel(self):
         instructors = " ".join([i.title for i in self.instructors])
         courses = " ".join([c.title for c in self.courses])
-        msg = _('${instructors} -- ${courses}')
-        msg.mapping = {'instructors': instructors, 'courses': courses}
+        msg = _('${instructors} -- ${courses}',
+                mapping={'instructors': instructors, 'courses': courses})
         return msg
 
     label = property(_getLabel)

@@ -312,7 +312,7 @@ def doctest_CycleStep():
         >>> view.update()
         True
         >>> session['day_names']
-        ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+        [u'Monday', u'Tuesday', u'Wednesday', u'Thursday', u'Friday']
 
     """
 
@@ -620,7 +620,7 @@ def doctest_WeeklySlotEntryStep():
         >>> view.getSessionData()['cycle'] = 'weekly'
 
         >>> view.dayNames()
-        ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+        [u'Monday', u'Tuesday', u'Wednesday', u'Thursday', u'Friday']
 
     At first we get a table with one empty row of input fields:
 
@@ -720,7 +720,7 @@ def doctest_WeeklySlotEntryStep():
         >>> view.update()
         False
         >>> translate(view.error)
-        'As you have selected a rotating timetable cycle and slots based on day of week, all days must have the same number of time periods.'
+        u'As you have selected a rotating timetable cycle and slots based on day of week, all days must have the same number of time periods.'
 
     If we change the time model, the same data will pass:
 

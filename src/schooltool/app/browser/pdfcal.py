@@ -33,7 +33,7 @@ from zope.security.proxy import removeSecurityProxy
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.browser import ViewPreferences
 from schooltool.calendar.utils import parse_date, week_start
-from schooltool import SchoolToolMessageID as _
+from schooltool import SchoolToolMessage as _
 
 
 global disabled
@@ -186,10 +186,11 @@ class PDFCalendarViewBase(BrowserView):
             description = event.description.encode('utf-8')
             paragraphs.append(Paragraph(description, self.italic_style))
         if event.location:
-            location_template = translate(_('Location: %s'),
-                                              context=self.request)
-            location = location_template % event.location.encode('utf-8')
-            paragraphs.append(Paragraph(location, self.normal_style))
+            location_template = translate(
+                _('Location: %s'), context=self.request)
+            location = location_template % event.location
+            paragraphs.append(
+                Paragraph(location.encode('utf-8'), self.normal_style))
         if event.resources:
             resource_titles = [resource.title for resource in event.resources]
             resource_str_template = translate(_('Booked resources: %s'),

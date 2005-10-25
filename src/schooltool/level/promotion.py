@@ -31,7 +31,7 @@ import zope.wfmc
 from zope.app import location
 from zope.app.annotation.interfaces import IAnnotations
 
-from schooltool import SchoolToolMessageID as _
+from schooltool import SchoolToolMessage as _
 from schooltool import group
 from schooltool.app import app
 from schooltool.level import interfaces, record

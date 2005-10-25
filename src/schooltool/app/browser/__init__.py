@@ -35,7 +35,7 @@ from zope.security.proxy import removeSecurityProxy
 
 from pytz import timezone
 
-from schooltool import SchoolToolMessageID as _
+from schooltool import SchoolToolMessage as _
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.app import getSchoolToolApplication
@@ -206,8 +206,7 @@ class SchoolToolSized(object):
         if num == 1:
             msgid = _("1 person")
         else:
-            msgid = _("${number} persons")
-            msgid.mapping = {'number': num}
+            msgid = _("${number} persons", mapping={'number': num})
         return msgid
 
 

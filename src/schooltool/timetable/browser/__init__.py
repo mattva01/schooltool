@@ -43,7 +43,7 @@ from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.person.interfaces import IPerson
 from schooltool.traverser.interfaces import ITraverserPlugin
 
-from schooltool import SchoolToolMessageID as _
+from schooltool import SchoolToolMessage as _
 from schooltool.timetable.interfaces import ITimetables, IHaveTimetables
 from schooltool.timetable.interfaces import ITimetable
 from schooltool.timetable.interfaces import ITerm
@@ -359,8 +359,8 @@ class TimetableView(BrowserView):
 
     def title(self):
         timetabled = self.context.__parent__.__parent__
-        msg = _("${object}'s timetable")
-        msg.mapping = {'object': timetabled.title}
+        msg = _("${object}'s timetable",
+                mapping = {'object': timetabled.title})
         return msg
 
     def rows(self):
@@ -851,8 +851,8 @@ class EmergencyDayView(BrowserView):
             calendar = ISchoolToolCalendar(getSchoolToolApplication())
             dtstart = datetime.datetime.combine(self.date, datetime.time())
             msg = _('School cancelled due to emergency.'
-                    ' Replacement day $replacement.')
-            msg.mapping['replacement'] = str(self.replacement)
+                    ' Replacement day $replacement.',
+                    mapping={'replacement': str(self.replacement)})
             msg = translate(msg, context=self.request)
             calendar.addEvent(
                 CalendarEvent(dtstart, datetime.timedelta(),
@@ -860,8 +860,8 @@ class EmergencyDayView(BrowserView):
 
             dtstart = datetime.datetime.combine(self.replacement,
                                                 datetime.time())
-            msg = _('Replacement day for emergency day $emergency.')
-            msg.mapping['emergency'] = str(self.date)
+            msg = _('Replacement day for emergency day $emergency.',
+                    mapping={'emergency': str(self.date)})
             msg = translate(msg, context=self.request)
             calendar.addEvent(
                 CalendarEvent(dtstart, datetime.timedelta(),

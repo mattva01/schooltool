@@ -24,7 +24,7 @@ $Id: app.py 4691 2005-08-12 18:59:44Z srichter $
 
 from zope.app.publisher.browser import BrowserView
 
-from schooltool import SchoolToolMessageID as _
+from schooltool import SchoolToolMessage as _
 from schooltool.app.browser.app import ContainerView, BaseAddView, BaseEditView
 
 from schooltool.resource.interfaces import IResourceContainer

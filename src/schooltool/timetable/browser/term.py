@@ -44,7 +44,7 @@ from schooltool.calendar.utils import next_month, week_start
 from schooltool.timetable.interfaces import ITermContainer, ITerm
 from schooltool.timetable.term import Term
 
-from schooltool import SchoolToolMessageID as _
+from schooltool import SchoolToolMessage as _
 
 
 class TermContainerView(ContainerView):
@@ -126,8 +126,8 @@ class TermEditView(BrowserView, TermEditViewMixin):
         setUpEditWidgets(self, ITermForm)
 
     def title(self):
-        title = _("Change Term: $title")
-        title.mapping = {'title': self.context.title}
+        title = _("Change Term: $title",
+                  mapping={'title': self.context.title})
         return title
 
     def update(self):

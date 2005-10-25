@@ -17,7 +17,8 @@
   <table>
     <tr>
       <th tal:repeat="day_name view/dayNames"
-          tal:content="day_name" />
+          tal:content="day_name"
+          i18n:translate=""/>
     </tr>
     <tr>
       <td tal:repeat="day_name view/dayNames">

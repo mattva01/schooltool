@@ -22,5 +22,5 @@ SchoolTool libraries and application
 
 VERSION='SVN'
 
-from zope.i18nmessageid import MessageIDFactory
-SchoolToolMessageID = MessageIDFactory("schooltool")
+from zope.i18nmessageid import MessageFactory
+SchoolToolMessage = MessageFactory("schooltool")

@@ -69,6 +69,9 @@ class TimetableSchemaView(View):
         return result
 
     def daytemplates(self):
+        items = self.context.items()
+        id = items[0][0]
+        #import pdb; pdb.set_trace()
         result = []
         for id, day in self.context.model.dayTemplates.items():
             if id is None:

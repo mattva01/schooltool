@@ -126,7 +126,7 @@ from zope.app.session.interfaces import ISession
 from schooltool.app.browser.cal import day_of_week_names
 from schooltool.timetable.browser import parse_time_range
 from schooltool.timetable.browser import format_time_range
-from schooltool import SchoolToolMessageID as _
+from schooltool import SchoolToolMessage as _
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.schema import TimetableSchema, TimetableSchemaDay
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot
@@ -412,8 +412,8 @@ class SimpleSlotEntryStep(FormStep):
         try:
             times = parse_time_range_list(data.get('times') or '')
         except ValueError, e:
-            self.error = _("Not a valid time slot: $slot.")
-            self.error.mapping['slot'] = unicode(e.args[0])
+            self.error = _("Not a valid time slot: $slot.",
+                           mapping={'slot': unicode(e.args[0])})
             return False
         if not times:
             self.error = _("Please enter at least one time slot.")
@@ -454,12 +454,12 @@ class RotatingSlotEntryStep(Step):
             try:
                 times = parse_time_range_list(s)
             except ValueError, e:
-                self.error = _("Not a valid time slot: $slot.")
-                self.error.mapping['slot'] = unicode(e.args[0])
+                self.error = _("Not a valid time slot: $slot.",
+                               mapping={'slot': unicode(e.args[0])})
                 return False
             if not times:
-                self.error = _("Please enter at least one time slot for $day.")
-                self.error.mapping['day'] = day_name
+                self.error = _("Please enter at least one time slot for $day.",
+                               mapping={'day': day_name})
                 return False
             result.append(times)
 
@@ -542,8 +542,8 @@ class PeriodNamesStep(FormStep):
         periods = parse_name_list(data.get('periods') or '')
         min_periods = self.requiredPeriods()
         if len(periods) < min_periods:
-            self.error = _("Please enter at least $number periods.")
-            self.error.mapping['number'] = min_periods
+            self.error = _("Please enter at least $number periods.",
+                           mapping={'number': min_periods})
             return False
         seen = Set()
         for period in periods:
@@ -618,8 +618,8 @@ class PeriodOrderSimple(Step):
                 errors.add(period)
         if errors:
             self.error = _('The following periods were selected more'
-                           ' than once: $periods')
-            self.error.mapping['periods'] = ', '.join(errors)
+                           ' than once: $periods',
+                           mapping={'periods': ', '.join(errors)})
             return False
 
         day_names = self.getSessionData()['day_names']
@@ -671,14 +671,13 @@ class PeriodOrderComplex(Step):
                 if period not in seen:
                     seen.add(period)
                 else:
-                    error = _("$period on day $day")
-                    error.mapping['period'] = period
-                    error.mapping['day'] = self.days()[i]
+                    error = _("$period on day $day",
+                              mapping={'period': period, 'day': self.days()[i]})
                     errors.add(translate(error, context=self.request))
         if errors:
             self.error = _('The following periods were selected more'
-                           ' than once: $periods')
-            self.error.mapping['periods'] = ', '.join(errors)
+                           ' than once: $periods',
+                           mapping={'periods': ', '.join(errors)})
             return False
 
         self.getSessionData()['periods_order'] = result

@@ -216,8 +216,10 @@
                    disabled python:view.weekdayDisabled(term.token);
                    checked python:view.weekdayChecked(term.token)"
                    />
-            <label tal:attributes="for string:weekday_${term/token}"
-               tal:content="python:view.weekdays_widget.textForValue(term)" class="plain" />
+            <label class="plain"
+                   tal:attributes="for string:weekday_${term/token}"
+                   tal:content="python:view.weekdays_widget.textForValue(term)"
+                   i18n:translate=""/>
           </span>
         </fieldset>
         <!-- monthly box -->

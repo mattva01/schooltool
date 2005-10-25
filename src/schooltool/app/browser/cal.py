@@ -55,7 +55,7 @@ from zope.app.filerepresentation.interfaces import IWriteFile, IReadFile
 from zope.app.session.interfaces import ISession
 from zope.app.traversing.api import getPath
 
-from schooltool import SchoolToolMessageID as _
+from schooltool import SchoolToolMessage as _
 from schooltool.app.browser import ViewPreferences
 from schooltool.app.browser import pdfcal
 from schooltool.app.browser.overlay import CalendarOverlayView
@@ -400,9 +400,9 @@ class CalendarDay(object):
         self.date = date
         self.events = events
         day_of_week = day_of_week_names[date.weekday()]
-        self.title = _('${day_of_week}, ${date}')
-        self.title.mapping = {'day_of_week': day_of_week,
-                              'date': date.strftime('%Y-%m-%d')}
+        self.title = _('${day_of_week}, ${date}',
+                       mapping = {'day_of_week': day_of_week,
+                                  'date': date.strftime('%Y-%m-%d')})
         # XXX Shouldn't we use a i18n formatter for the date in the title?
 
     def __cmp__(self, other):
@@ -874,10 +874,10 @@ class WeeklyCalendarView(CalendarViewBase):
     def title(self):
         month_name_msgid = month_names[self.cursor.month]
         month_name = translate(month_name_msgid, context=self.request)
-        msg = _('${month}, ${year} (week ${week})')
-        msg.mapping = {'month': month_name,
-                       'year': self.cursor.year,
-                       'week': self.cursor.isocalendar()[1]}
+        msg = _('${month}, ${year} (week ${week})',
+                mapping = {'month': month_name,
+                           'year': self.cursor.year,
+                           'week': self.cursor.isocalendar()[1]})
         return msg
 
     def prev(self):
@@ -928,8 +928,8 @@ class MonthlyCalendarView(CalendarViewBase):
     def title(self):
         month_name_msgid = month_names[self.cursor.month]
         month_name = translate(month_name_msgid, context=self.request)
-        msg = _('${month}, ${year}')
-        msg.mapping = {'month': month_name, 'year': self.cursor.year}
+        msg = _('${month}, ${year}',
+                mapping={'month': month_name, 'year': self.cursor.year})
         return msg
 
     def prev(self):
@@ -948,8 +948,8 @@ class MonthlyCalendarView(CalendarViewBase):
         return day_of_week_names[date.weekday()]
 
     def weekTitle(self, date):
-        msg = _('Week ${week_no}')
-        msg.mapping = {'week_no': date.isocalendar()[1]}
+        msg = _('Week ${week_no}',
+                mapping={'week_no': date.isocalendar()[1]})
         return msg
 
     def getCurrentMonth(self):
@@ -1788,8 +1788,7 @@ class CalendarEventViewMixin(object):
             weekday = evdate.weekday()
             day_of_week_msgid = day_of_week_names[weekday]
             day_of_week = translate(day_of_week_msgid, context=self.request)
-            msg = _("Last ${weekday}")
-            msg.mapping = {'weekday': day_of_week}
+            msg = _("Last ${weekday}", mapping={'weekday': day_of_week})
             return msg
 
     def getStartDate(self):
@@ -2106,9 +2105,9 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
                 if changed:
                     formatter = self.request.locale.dates.getFormatter(
                         'dateTime', 'medium')
-                    status = _("Updated on ${date_time}")
-                    status.mapping = {'date_time': formatter.format(
-                            datetime.utcnow())}
+                    status = _("Updated on ${date_time}",
+                               mapping = {'date_time': formatter.format(
+                                   datetime.utcnow())})
                 self.request.response.redirect(self.nextURL())
 
         self.update_status = status

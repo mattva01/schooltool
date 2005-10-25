@@ -32,7 +32,7 @@ from zope.publisher.browser import TestRequest
 from zope.app.testing import setup, ztapi
 from zope.app.publisher.browser import BrowserView
 
-from schooltool import SchoolToolMessageID as _
+from schooltool import SchoolToolMessage as _
 from schooltool.app.cal import CalendarEvent
 from schooltool.app.browser.pdfcal import PDFCalendarViewBase
 from schooltool.app.browser.pdfcal import setUpMSTTCoreFonts
@@ -235,7 +235,7 @@ def test_disabled():
 
         >>> view = pdfcal.PDFCalendarViewBase(object(), TestRequest())
         >>> view.pdfdata()
-        'PDF support is disabled.  It can be enabled by your administrator.'
+        u'PDF support is disabled.  It can be enabled by your administrator.'
 
     Clean up:
 
@@ -472,7 +472,7 @@ def doctest_DailyPDFCalendarView():
     The view's dateTitle method returns the representation of the date shown:
 
         >>> view.dateTitle(date(2005, 7, 1))
-        '2005-07-01, Friday'
+        u'2005-07-01, Friday'
 
     First, let's make sure that an empty calendar is rendered properly:
 
@@ -520,7 +520,7 @@ def doctest_WeeklyPDFCalendarView():
     The view's dateTitle method returns the representation of the date shown:
 
         >>> view.dateTitle(date(2005, 7, 1))
-        'Week 26 (2005-06-27 - 2005-07-04), 2005'
+        u'Week 26 (2005-06-27 - 2005-07-04), 2005'
 
     First, let's make sure that an empty calendar is rendered properly:
 
@@ -550,7 +550,7 @@ def doctest_WeeklyPDFCalendarView():
         >>> len(tables)
         2
         >>> tables[0].text
-        '2005-07-01, Friday'
+        u'2005-07-01, Friday'
         >>> tables[1]
         Table(...
         ...
@@ -566,12 +566,12 @@ def doctest_WeeklyPDFCalendarView():
         >>> len(tables)
         4
         >>> tables[0].text
-        '2005-07-01, Friday'
+        u'2005-07-01, Friday'
         >>> tables[1]
         Table(...
         ...
         >>> tables[2].text
-        '2005-07-03, Sunday'
+        u'2005-07-03, Sunday'
         >>> tables[3]
         Table(...
         ...
@@ -591,7 +591,7 @@ def doctest_MonthlyPDFCalendarView():
     The view's dateTitle method returns the representation of the date shown:
 
         >>> view.dateTitle(date(2005, 7, 1))
-        'July, 2005'
+        u'July, 2005'
 
     First, let's make sure that an empty calendar is rendered properly:
 
@@ -621,7 +621,7 @@ def doctest_MonthlyPDFCalendarView():
         >>> len(tables)
         2
         >>> tables[0].text
-        '2005-07-01, Friday'
+        u'2005-07-01, Friday'
         >>> tables[1]
         Table(...
         ...
@@ -645,12 +645,12 @@ def doctest_MonthlyPDFCalendarView():
         >>> len(tables)
         4
         >>> tables[0].text
-        '2005-07-01, Friday'
+        u'2005-07-01, Friday'
         >>> tables[1]
         Table(...
         ...
         >>> tables[2].text
-        '2005-07-31, Sunday'
+        u'2005-07-31, Sunday'
         >>> tables[3]
         Table(...
         ...
@@ -804,8 +804,9 @@ def tryToSetUpReportLab():
         return True # Assume that reportlab has been configured already.
 
     # Heuristic to try and find the TrueType fonts.
-    font_dirs = ['/usr/share/fonts/truetype/msttcorefonts',
-	         '/usr/share/fonts/corefonts',
+    font_dirs = ['/usr/share/fonts/truetype/msttcorefonts', # Debian
+	         '/usr/share/fonts/corefonts', # SuSE
+                 '/usr/X11R6/lib/X11/fonts/drakfont/ttf/', # Mandrake
                  r'C:\WINDOWS\Fonts']
     for font_dir in font_dirs:
         if os.path.exists(os.path.join(font_dir, 'arial.ttf')):

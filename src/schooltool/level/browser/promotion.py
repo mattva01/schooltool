@@ -28,7 +28,7 @@ from zope.app.publisher import browser
 from zope.app import form
 
 from schooltool.app import app
-from schooltool import SchoolToolMessageID as _
+from schooltool import SchoolToolMessage as _
 from schooltool.level import interfaces, promotion
 
 
@@ -61,8 +61,7 @@ class SetLevelOutcomeView(SchemaWorkItemView):
 
     def extra(self):
         wfrd = self.context.participant.activity.process.workflowRelevantData
-        text = _('Current Level: $level')
-        text.mapping = {'level': wfrd.level.title}
+        text = _('Current Level: $level', mapping={'level': wfrd.level.title})
         return text
 
 

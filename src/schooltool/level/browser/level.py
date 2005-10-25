@@ -30,7 +30,7 @@ from zope.app.form.browser import add
 from zope.app.publisher import browser
 
 from schooltool.level import interfaces
-from schooltool import SchoolToolMessageID as _
+from schooltool import SchoolToolMessage as _
 from schooltool.app.browser import app
 
 class LevelContainerView(app.ContainerView):

@@ -36,7 +36,7 @@ from schooltool.app.browser.app import ContainerView, BaseEditView
 from schooltool.group.interfaces import IGroup
 from schooltool.person.interfaces import IPerson
 
-from schooltool import SchoolToolMessageID as _
+from schooltool import SchoolToolMessage as _
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.course.interfaces import ISection, ISectionContainer
 
@@ -101,8 +101,8 @@ class SectionAddView(AddView):
 
         self.course = self.getCourseFromId(course_id)
         if self.course is not None:
-            self.label = _("Add a Section to ${course}")
-            self.label.mapping = {'course': self.course.title}
+            self.label = _("Add a Section to ${course}",
+                           mapping={'course': self.course.title})
 
     def update(self):
         if self.update_status is not None:

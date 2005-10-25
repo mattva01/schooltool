@@ -24,7 +24,7 @@ $Id: csvimport.py 4108 2005-06-15 14:27:59Z bskahan $
 from schooltool.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView
 from schooltool.person.person import Person
 
-from schooltool import SchoolToolMessageID as _
+from schooltool import SchoolToolMessage as _
 
 class PersonCSVImporter(BaseCSVImporter):
     """A Person CSV importer."""
@@ -56,8 +56,8 @@ class PersonCSVImporter(BaseCSVImporter):
             password = None
 
         if username in self.container:
-            error_msg = _("Duplicate username: ${username}")
-            error_msg.mapping = {'username' : ', '.join(data)}
+            error_msg = _("Duplicate username: ${username}",
+                          mapping={'username' : ', '.join(data)})
             self.errors.fields.append(error_msg)
             return
 

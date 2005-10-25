@@ -25,7 +25,7 @@ import zope.interface
 import zope.schema
 
 from zope.app.annotation.interfaces import IAnnotatable
-from schooltool import SchoolToolMessageID as _
+from schooltool import SchoolToolMessage as _
 
 
 class IHaveNotes(IAnnotatable):

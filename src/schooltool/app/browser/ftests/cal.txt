@@ -189,7 +189,7 @@ Now we will try disabling PDF views and check if the switch works.
     >>> frog.open('http://localhost/'
     ...           'persons/frog/calendar/2005-07-01.pdf')
     >>> frog.headers['content-type']
-    'text/plain'
+    'text/plain;charset=utf-8'
     >>> print frog.contents
     <BLANKLINE>
     PDF support is disabled...

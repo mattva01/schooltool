@@ -16,7 +16,7 @@
 
   <table>
     <tr>
-      <th tal:repeat="day view/days" tal:content="day"/>
+      <th tal:repeat="day view/days" tal:content="day" i18n:translate="" />
     </tr>
     <tr tal:repeat="slotnr python: range(max(numslots))"
         tal:define="numslots view/numSlots">

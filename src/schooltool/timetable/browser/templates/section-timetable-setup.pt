@@ -76,7 +76,7 @@
   <table class="timetable">
     <tr>
       <tal:block repeat="day view/days">
-        <th class="day" tal:content="day/title">Day N</th>
+        <th class="day" tal:content="day/title" i18n:translate="">Day N</th>
       </tal:block>
     </tr>
     <tr>

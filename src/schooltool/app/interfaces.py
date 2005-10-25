@@ -31,7 +31,7 @@ from zope.app import event
 from zope.app.location.interfaces import ILocation
 from zope.app.security.interfaces import IAuthentication, ILogout
 
-from schooltool import SchoolToolMessageID as _
+from schooltool import SchoolToolMessage as _
 from schooltool.calendar.interfaces import IEditCalendar, ICalendarEvent
 
 

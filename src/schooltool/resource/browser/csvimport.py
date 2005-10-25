@@ -24,7 +24,7 @@ $Id: csvimport.py 4108 2005-06-15 14:27:59Z bskahan $
 from schooltool.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView
 from schooltool.resource.resource import Resource
 
-from schooltool import SchoolToolMessageID as _
+from schooltool import SchoolToolMessage as _
 
 
 class ResourceCSVImporter(BaseCSVImporter):

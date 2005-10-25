@@ -27,7 +27,7 @@ from zope.security.proxy import removeSecurityProxy
 from zope.app.container.interfaces import INameChooser
 from zope.app.publisher.browser import BrowserView
 
-from schooltool import SchoolToolMessageID as _
+from schooltool import SchoolToolMessage as _
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.app import SimpleNameChooser
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -203,12 +203,12 @@ class BaseCSVImporter(object):
         except StopIteration:
             return result
         except csv.Error:
-            error_msg = _("Error in CSV data, line ${line_no}")
-            error_msg.mapping = {'line_no': line}
+            error_msg = _("Error in CSV data, line ${line_no}",
+                          mapping={'line_no': line})
             self.errors.generic.append(error_msg)
         except UnicodeError:
-            error_msg = _("Conversion to unicode failed in line ${line_no}")
-            error_msg.mapping = {'line_no': line}
+            error_msg = _("Conversion to unicode failed in line ${line_no}",
+                          mapping={'line_no': line})
             self.errors.generic.append(error_msg)
 
     def importFromCSV(self, csvdata):
@@ -352,8 +352,8 @@ class TimetableCSVImporter(object):
             else:
                 err_msg = _('Malformed line ${line_no} (it should contain a'
                             ' day id, a period id and optionally a location'
-                            ' id)')
-                err_msg.mapping = {'line_no': line + line_ofs - 1}
+                            ' id)',
+                            mapping={'line_no': line + line_ofs - 1})
                 self.errors.generic.append(err_msg)
                 continue
 
@@ -385,8 +385,8 @@ class TimetableCSVImporter(object):
             periods.append((day_id, period_id, location))
 
         if not finished or len(rows) == line_ofs:
-            err_msg = _("Incomplete section description on line ${line}")
-            err_msg.mapping = {'line': line}
+            err_msg = _("Incomplete section description on line ${line}",
+                        mapping = {'line': line})
             self.errors.generic.append(err_msg)
             return
 
@@ -481,15 +481,15 @@ class TimetableCSVImporter(object):
         try:
             self.term = self.app['terms'][term_id]
         except KeyError:
-            error_msg = _("The term ${term} does not exist.")
-            error_msg.mapping = {'term': term_id}
+            error_msg = _("The term ${term} does not exist.",
+                          mapping={'term': term_id})
             self.errors.generic.append(error_msg)
 
         try:
             self.ttschema = self.app['ttschemas'][ttschema_id]
         except KeyError:
-            error_msg = _("The timetable schema ${schema} does not exist.")
-            error_msg.mapping = {'schema': ttschema_id}
+            error_msg = _("The timetable schema ${schema} does not exist.",
+                          mapping={'schema': ttschema_id})
             self.errors.generic.append(error_msg)
 
     def parseCSVRows(self, rows):
@@ -519,13 +519,13 @@ class TimetableCSVImporter(object):
         except StopIteration:
             return result
         except csv.Error:
-            error_msg = _("Error in timetable CSV data, line ${line_no}")
-            error_msg.mapping = {'line_no': line}
+            error_msg = _("Error in timetable CSV data, line ${line_no}",
+                          mapping={'line_no': line})
             self.errors.generic.append(error_msg)
             raise InvalidCSVError()
         except UnicodeError:
-            error_msg = _("Conversion to unicode failed in line ${line_no}")
-            error_msg.mapping = {'line_no': line}
+            error_msg = _("Conversion to unicode failed in line ${line_no}",
+                          mapping={'line_no': line})
             self.errors.generic.append(error_msg)
             raise InvalidCSVError()
 
@@ -569,5 +569,5 @@ class TimetableCSVImportView(BaseCSVImportView):
             v = getattr(err, key)
             if v:
                 values = ', '.join([unicode(st) for st in v])
-                msg.mapping = {'args': values}
+                msg = _(msg, mapping={'args': values})
                 self.errors.append(msg)

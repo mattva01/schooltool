@@ -33,7 +33,7 @@ from zope.app.form.interfaces import WidgetsError
 from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.app.publisher.browser import BrowserView
 
-from schooltool import SchoolToolMessageID as _
+from schooltool import SchoolToolMessage as _
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.browser.app import ContainerView, ContainerDeleteView
 from schooltool.app.relationships import URIInstruction, URISection

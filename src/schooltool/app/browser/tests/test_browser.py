@@ -225,7 +225,7 @@ def doctest_SchoolToolSized():
       >>> persons['gintas'] = Person(u'gintas')
 
       >>> sized.sizeForSorting(), translate(sized.sizeForDisplay())
-      ((u'Persons', 1), '1 person')
+      ((u'Persons', 1), u'1 person')
 
       >>> persons['ignas'] = Person(u'ignas')
       >>> persons['marius'] = Person(u'marius')
