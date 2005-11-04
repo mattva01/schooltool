@@ -29,7 +29,7 @@ from zope.schema import Field, Object, Int, TextLine, List, Set, Tuple
 from zope.schema import Dict, Date, Timedelta
 from zope.schema.interfaces import IField
 from zope.app.annotation.interfaces import IAnnotatable
-from zope.app.container.constraints import contains
+from zope.app.container.constraints import contains, containers
 from zope.app.container.interfaces import IContainer, IContained
 from zope.app.location.interfaces import ILocation
 
@@ -800,6 +800,12 @@ class ITimetableSchemaContainer(IContainer, ILocation):
         """Return the default schema for the school"""
 
 
+class ITimetableSchemaContained(ITimetableSchema, IContained):
+    """Timetable Schema contained in an ITimetableSchemaContainer."""
+
+    containers(ITimetableSchemaContainer)
+
+
 class ITermContainer(IContainer, ILocation):
     """A container for terms.
 
@@ -808,3 +814,7 @@ class ITermContainer(IContainer, ILocation):
 
     contains(ITerm)
 
+class ITermContained(ITerm, IContained):
+    """Term contained in an ITermContainer."""
+
+    containers(ITermContainer)

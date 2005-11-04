@@ -33,6 +33,7 @@ from zope.app.container.contained import Contained
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.timetable import Timetable, TimetableDay
 from schooltool.timetable.interfaces import ITimetableSchema
+from schooltool.timetable.interfaces import ITimetableSchemaContained
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.interfaces import ITimetableSchemaDay
 from schooltool.timetable.interfaces import ITimetableSchemaWrite
@@ -69,7 +70,7 @@ class TimetableSchemaDay(Persistent):
 
 class TimetableSchema(Persistent, Contained):
 
-    implements(ITimetableSchema, ITimetableSchemaWrite)
+    implements(ITimetableSchemaContained, ITimetableSchemaWrite)
 
     def __init__(self, day_ids, title=None, model=None):
         """Create a new empty timetable schema.

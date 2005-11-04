@@ -41,7 +41,8 @@ from schooltool.course import interfaces
 
 class Section(Persistent, contained.Contained):
 
-    zope.interface.implements(interfaces.ISection, IAttributeAnnotatable)
+    zope.interface.implements(interfaces.ISectionContained,
+                              IAttributeAnnotatable)
 
     def __init__(self, title="Section", description=None, schedule=None,
                  courses=None, location=None):

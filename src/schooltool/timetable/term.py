@@ -33,7 +33,7 @@ from zope.app.container.contained import Contained
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.timetable.interfaces import IDateRange
 from schooltool.timetable.interfaces import ITermContainer
-from schooltool.timetable.interfaces import ITermWrite, ITerm
+from schooltool.timetable.interfaces import ITermWrite, ITermContained
 
 
 class DateRange(object):
@@ -63,7 +63,7 @@ class DateRange(object):
 
 class Term(DateRange, Contained, Persistent):
 
-    implements(ITerm, ITermWrite)
+    implements(ITermContained, ITermWrite)
 
     def __init__(self, title, first, last):
         DateRange.__init__(self, first, last)
