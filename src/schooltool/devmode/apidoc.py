@@ -23,10 +23,30 @@ $Id$
 """
 __docformat__ = 'restructuredtext'
 
+import zope.interface
+
 import zope.app.apidoc.ifacemodule.menu
 import zope.app.apidoc.codemodule.browser.menu
 import zope.app.apidoc.bookmodule.browser
+from zope.app.apidoc import apidoc
 from zope.app.apidoc import ifacemodule, codemodule, bookmodule, zcmlmodule
+from zope.app.apidoc.browser.skin import APIDOC
+
+from schooltool.devmode.skin import IDevModeLayer
+
+
+class schooltoolApidocNamespace(apidoc.apidocNamespace):
+    """Used to traverse to an API Documentation."""
+    def __init__(self, ob, request=None):
+        super(schooltoolApidocNamespace, self).__init__(ob, request)
+        # A small hack to ensure that SchoolTool stuff is available.
+        if request:
+            zope.interface.directlyProvides(
+                request, [IDevModeLayer, APIDOC])
+
+    def traverse(self, name, ignore):
+        return apidoc.handleNamespace(self.context, name)
+
 
 
 class InterfaceMenu(ifacemodule.menu.Menu):
@@ -35,7 +55,7 @@ class InterfaceMenu(ifacemodule.menu.Menu):
         for entry in super(InterfaceMenu, self).findInterfaces():
             if 'schooltool' not in entry['name']:
                 continue
-            entry['name'] = entry['name'].replace('schooltool', 'sb')
+            entry['name'] = entry['name'].replace('schooltool', 'st')
             yield entry
 
 
@@ -45,7 +65,7 @@ class CodeMenu(codemodule.browser.menu.Menu):
         for entry in super(CodeMenu, self).findClasses():
             if 'schooltool' not in entry['path']:
                 continue
-            entry['path'] = entry['path'].replace('schooltool', 'sb')
+            entry['path'] = entry['path'].replace('schooltool', 'st')
             yield entry
 
 

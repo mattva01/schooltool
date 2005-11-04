@@ -71,13 +71,13 @@
       />
 
   <!-- Introspector -->
-  <browser:page
-      name="introspector.html"
+  <browser:viewlet
+      name="introspector_css"
       for="*"
-      permission="schooltool.view"
-      template="introspector.pt"
-      class=".introspector.Introspector"
-      layer=".skin.IDevModeLayer"
+      manager="schooltool.app.browser.skin.ICSSManager"
+      class=".devmode.IntrospectorCSSViewlet"
+      permission="zope.View"
+      layer="schooltool.devmode.skin.IDevModeLayer"
       />
 
   <browser:resource
@@ -177,9 +177,5 @@
       name="restviews.html"
       template="restdoc.pt"
       />
-
-  <!-- Misc -->
-  <includeOverrides file="overrides.zcml" />
-
 
 </configure>

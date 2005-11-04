@@ -26,7 +26,6 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.browser.skin import ISchoolToolSkin
 
-
 class IDevModeLayer(IBrowserRequest):
     """SchoolBell devmode layer."""
 

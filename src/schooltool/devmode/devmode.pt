@@ -16,10 +16,9 @@
          target="new">Errors</a>
       <a href="@@introspector.html"
          target="new">Introspector</a>
-      <a href="/++apidoc++"
+      <a href="/++apidoc++/@@index.html"
          target="new">API Docs</a>
-      <a tal:attributes="href
-         string:${context/schooltool:app/@@absolute_url}/@@sampledata.html"
+      <a href="/@@sampledata.html"
          target="new">Sample data</a>
     </div>
   </div>

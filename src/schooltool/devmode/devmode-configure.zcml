@@ -1,0 +1,4 @@
+<include
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    zcml:condition="have devmode"
+    package="schooltool.devmode" />

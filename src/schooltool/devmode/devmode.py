@@ -25,3 +25,5 @@ from zope.viewlet import viewlet
 
 DevmodeJavascriptViewlet = viewlet.JavaScriptViewlet('switch.js')
 DevmodeCSSViewlet = viewlet.CSSViewlet('devmode.css')
+
+IntrospectorCSSViewlet = viewlet.CSSViewlet('introspector.css')

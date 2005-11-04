@@ -2,8 +2,8 @@
 Developer Mode User Interface
 =============================
 
-The developer mode of the user interface is intended to help SchoolBell
-developers and people using SchoolBell as a development platform to debug
+The developer mode of the user interface is intended to help SchoolTool
+developers and people using SchoolTool as a development platform to debug
 their code and find documentation as quickly as possible. To start, open the
 SchoolTool site in your browser
 
@@ -18,12 +18,15 @@ The developer mode should be visible:
     '...<h4>Developer Tools</h4>...
      ...<a href=".../RootErrorReportingUtility" target="new">Errors</a>...
      ...<a href="@@introspector.html" target="new">Introspector</a>...
-     ...<a href="/++apidoc++" target="new">API Docs</a>...'
+     ...<a href="/++apidoc++/@@index.html" target="new">API Docs</a>...
+     ...<a href="/@@sampledata.html" target="new">Sample data</a>...'
 
 Note that we only see the developer tools here, because these tests are run
 with the developer mode turned on. Commonly, the develoepr mode can be
-controlled in ``schooltool.conf``'s ``devmode`` switch. Simply add ``devmode
-on`` to your ``schooltool.conf`` file to turn on the mode.
+controlled using ``schooltool.conf``'s ``devmode`` switch. Simply add
+``devmode on`` to your ``schooltool.conf`` file to turn on the developer's
+mode.
+
 
 Error Reporting
 ---------------
@@ -108,3 +111,289 @@ Let's now make sure that we can get to the error list. First let's create a
     ...
 
 
+The Introspector
+----------------
+
+The introspector allows you to look at the current object, without any
+security constraints. The actual functionality of the introspector is part of
+the Zope 3 core and is simply "repackaged" for SchoolTool.
+
+The first step is to get to the object we would like to introspect. For
+example, let's see what the SchoolTool Manager looks like:
+
+    >>> browser.getLink('SchoolTool Manager').click()
+
+Now we can open the introspector using the Developer Tools menu in the
+top-right corner:
+
+    >>> browser.getLink('Introspector').click()
+
+Let me explain some of the features now. The headline gives you the class of
+the object, followed by the name:
+
+    >>> print browser.contents.strip()
+    <!DOC...
+    ...
+    <h1>
+      Object Introspector:
+      <a href="...person/Person/index.html">schooltool.person.person.Person</a>
+      ( manager )
+    </h1>
+    ...
+
+Below the title is a link to the parent:
+
+    >>> print browser.contents.strip()
+    <!DOC...
+    ...
+    <em>
+      Parent:
+      <a href=" http://localhost/persons/@@introspector.html">
+        persons
+      </a>
+    </em>
+    ...
+
+The probably most important information that the introspector can give a
+developer, are the directly provided interfaces; usually there are none, as in
+this case:
+
+    >>> print browser.contents.strip()
+    <!DOC...
+    ...
+    <h2>Directly Provided Interfaces</h2>
+    <div class="indent">
+      <div>
+        No interfaces are directly provided.
+     </div>
+    </div>
+    ...
+
+The following sections "Provided Interfaces", "Bases", "Attribute/Properties",
+and "Methods" are simply taken from the class documentation of the apidoc,
+with exception of the attribute and property values, which are the actual
+values on the object.
+
+The introspector also allows you to see the mapping or sequence items of the
+object, if it is a mapping or sequence, respectively. Since the `Person`
+object is neither, those sections are not available in our example.
+
+The final section of the introspector shows you a list of annotations, if they
+are inspectable. Since the attribute annotations are inspectable, we can see a
+range of annotation keys and their values:
+
+    >>> print browser.contents.strip()
+    <!DOC...
+    ...
+    <h2>Annotations</h2>
+    <div class="indent">
+      <ul class="attr-list">
+    ...
+    <li>
+      <b>
+        <code>'schooltool.app.PersonDetails'</code>
+      </b>
+      <br />
+      <a href="++annotations++schooltool.app.PersonDetails/@@introspector.html">
+        <code>&lt;schooltool.person.details.PersonDetails object ...&gt;</code>
+      </a>
+      (<span>type:</span>
+       <a href=".../Code/schooltool/person/details/PersonDetails/index.html">
+         <code>PersonDetails</code></a>)
+    </li>
+    ...
+
+The best part about it is that you can usually click on the annotation value
+to inspect it even further:
+
+    >>> browser.getLink('schooltool.person.details.PersonDetails').click()
+
+And now it starts all over again:
+
+    >>> print browser.contents.strip()
+    <!DOC...
+    ...
+    <h1>
+      Object Introspector:
+      <a href=".../index.html">schooltool.person.details.PersonDetails</a>
+      ( details )
+    </h1>
+    <em>
+      Parent:
+      <a href=" http://localhost/persons/manager/@@introspector.html">
+        manager
+      </a>
+    </em>
+    ...
+
+That's it. Since the code should allow you to inspect annotations, as well as
+mapping and sequence items as deep as you wish, you can gain a lot of insight
+of the functionality of SchoolTool by simply "browsing" the objects.
+
+
+API Documentation
+-----------------
+
+The SchoolTool API Documentation is a customized version of the regular Zope 3
+API documentation. Some features are removed, others added. But let's have a
+look.
+
+    >>> browser.getLink('API Docs').click()
+
+We can now look at the module list:
+
+    >>> browser.getLink(url='modulelist.html').click()
+
+The modules available in the SchoolTool API documentation are:
+
+    >>> browser.getLink('Interfaces')
+    <Link text='Interfaces' url='.../++apidoc++/Interface/@@menu.html'>
+    >>> browser.getLink('Code')
+    <Link text='Code' url='.../++apidoc++/Code/@@menu.html'>
+    >>> browser.getLink('RESTive Views')
+    <Link text='RESTive Views' url='.../++apidoc++/Code/@@restmenu.html'>
+    >>> browser.getLink('Book')
+    <Link text='Book' url='.../++apidoc++/Book/schooltool/@@menu.html'>
+
+You can also access the user preferences that are specific to the API
+documentation:
+
+    >>> browser.getLink('User Preferences').click()
+    >>> browser.getLink('Interface Details').click()
+
+On the main contents frame of the apidoc now appears a long list of options
+that specify the detail level you will see by default in the interface details
+screen.
+
+We can, for example, turn on the "Extended Browser Views" option, which is
+turned off by default:
+
+    >>> browser.getControl('Extended Browser Views').selected
+    False
+    >>> browser.getControl('Extended Browser Views').click()
+    >>> browser.getControl('Change').click()
+
+So now that we know how to change the preferences, let's have a detailed look
+at the various documentation modules:
+
+
+Interfaces
+~~~~~~~~~~
+
+The interfaces documentation module let's you search through all registered
+SchoolTool interfaces. Zope 3 interfaces are purposefully excluded:
+
+    >>> browser.open('http://localhost/')
+    >>> browser.getLink('API Docs').click()
+    >>> browser.getLink(url='modulelist.html').click()
+    >>> browser.getLink('Interfaces').click()
+
+You are now presented with a menu, where you can search for various
+interfaces. Let's search for the devmode interfaces:
+
+    >>> browser.getControl(name='search_str').value = 'devmode'
+    >>> browser.getControl('Find').click()
+
+When the screen returns we should see our devmode layer and skin interface:
+
+    >>> print browser.contents.strip()
+    <!DOC...
+    ...
+    <div>
+      ...
+      <div>
+        <a href="./schooltool.devmode.skin.IDevModeLayer/index.html"
+           target="main">st.devmode.skin.IDevModeLayer</a>
+      </div>
+      <div>
+        <a href="./schooltool.devmode.skin.ISchoolToolDevModeSkin/index.html"
+           target="main">st.devmode.skin.ISchoolToolDevModeSkin</a>
+      </div>
+      ...
+    </div>
+    ...
+
+You can also see how "schooltool" is abbreviated as "st" to make the name
+shorter. Clicking on one of those results will give you the typical interface
+details screen:
+
+    >>> browser.getLink('st.devmode.skin.ISchoolToolDevModeSkin').click()
+    >>> browser.contents
+    '...schooltool.devmode.skin.ISchoolToolDevModeSkin...'
+
+
+Code
+~~~~
+
+Similar to the interfaces, you can search the SchoolTool source code for
+classes of a particular name.
+
+    >>> browser.open('http://localhost/')
+    >>> browser.getLink('API Docs').click()
+    >>> browser.getLink(url='modulelist.html').click()
+    >>> browser.getLink('Code').click()
+
+Again, searching by the term "devmode" gives us multiple results:
+
+    >>> browser.getControl(name='path').value = 'devmode'
+    >>> browser.getControl('Find').click()
+    >>> print browser.contents.strip()
+    <!DOC...
+    ...
+    <div>
+      ...
+      <a href=".../++apidoc++/Code/schooltool/devmode/apidoc/BookMenu/"
+         target="main">st.devmode.apidoc.BookMenu</a>
+      <a href=".../++apidoc++/Code/schooltool/devmode/apidoc/CodeMenu/"
+         target="main">st.devmode.apidoc.CodeMenu</a>
+      <a href=".../++apidoc++/Code/schooltool/devmode/apidoc/InterfaceMenu/"
+         target="main">st.devmode.apidoc.InterfaceMenu</a>
+      ...
+    </div>
+    ...
+
+Again, "schooltool" is collpases to "st" and the documentation comes right up
+when clicking a link:
+
+    >>> browser.getLink('st.devmode.apidoc.InterfaceMenu').click()
+    >>> browser.contents
+    '...schooltool.devmode.apidoc.InterfaceMenu...'
+
+
+RESTive Views
+~~~~~~~~~~~~~
+
+
+Book
+~~~~
+
+The book is a collection of many text documentation files of the SchoolTool
+project.
+
+    >>> browser.open('http://localhost/')
+    >>> browser.getLink('API Docs').click()
+    >>> browser.getLink(url='modulelist.html').click()
+    >>> browser.getLink('Book').click()
+
+It is really the section of the entire apidoc book. The menu provides you with
+a tree-based outline. One of the chapters is "Calendar", so let's have a look:
+
+    >>> browser.getLink('Calendar').click()
+    >>> browser.contents
+    '...SchoolBell calendaring library...'
+
+
+Sample Data
+-----------
+
+SchoolTool also features a data generator, which will fill your SchoolTool
+instance with a lot of random data, which is perfect for performing and
+advanced functional testing. So let's have a look:
+
+    >>> browser.open('http://localhost/')
+    >>> browser.getLink('Sample data').click()
+
+You are now presented with a screen in which you can choose a random seed key
+for the data and a "Generate" button. The purpose of the seed is that you can
+reproduce a particular set of generated data. Since the generation process
+takes a very long time, I am refraining from a demonstration.

@@ -7,6 +7,14 @@ ol {
   padding: 0px;
 }
 
+h1 {
+    font-size: 130%;
+}
+
+h2 {
+    margin-top: 1em;
+}
+
 ul.attr-list li {
     margin-bottom: 0.5ex;
 }
