@@ -22,6 +22,7 @@ sys.argv.insert(1, '--config=' + config_file)
 
 import os
 basedir = os.path.abspath(os.path.dirname(sys.argv[0]))
+del sys.path[0]
 sys.path.insert(0, os.path.join(basedir, 'src'))
 sys.path.insert(0, os.path.join(basedir, 'Zope3', 'src'))
 
