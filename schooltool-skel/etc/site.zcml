@@ -5,6 +5,7 @@
 
   <include package="zope.app" />
   <include package="zope.app.securitypolicy" file="meta.zcml" />
+  <include package="zope.app.authentication" file="password.zcml" />
   <include package="zope.app.wfmc" file="meta.zcml" />
   <include package="zope.viewlet" file="meta.zcml" />
 
