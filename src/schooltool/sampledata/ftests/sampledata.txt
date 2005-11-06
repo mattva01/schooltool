@@ -17,6 +17,7 @@ clicks on it
       <div class="body">
         ...
         <a target="new" href="http://localhost/@@sampledata.html">Sample data</a>
+        ...
       </div>
     </div>
 
