@@ -12,3 +12,4 @@ schooltool-skel/var/Data.fs*
 schooltool-skel/var/*.pid
 buildsupport/zpkgsetup
 schooltool-skel/var/*.log
+src/schooltool/batching/tests/sample
