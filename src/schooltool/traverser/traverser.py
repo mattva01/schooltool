@@ -28,6 +28,7 @@ from zope.publisher.interfaces import IPublishTraverse
 
 from schooltool.traverser.interfaces import ITraverserPlugin
 
+_marker = object()
 
 class PluggableTraverser(object):
     """Generic Pluggable Traverser."""
@@ -55,56 +56,11 @@ class PluggableTraverser(object):
         raise NotFound(self.context, name, request)
 
 
-class AttributeTraverserPlugin(object):
-    """A simple traverser plugin that traverses an attribute by name"""
-
-    implements(ITraverserPlugin)
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-
-    def publishTraverse(self, request, name):
-        try:
-            obj = getattr(self.context, name)
-        except AttributeError:
-            raise NotFound(self.context, name, request)
-        else:
-            return obj
-
-
-class SingleAttributeTraverserPluginTemplate(object):
-    """Allow only a single attribute to be traversed."""
-
-    implements(ITraverserPlugin)
-
-    variableName = None
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-
-    def publishTraverse(self, request, name):
-        if name == self.variableName:
-            return getattr(self.context, name)
-
-        raise NotFound(self.context, name, request)
-
-
-def SingleAttributeTraverserPlugin(name):
-    return type('SingleAttributeTraverserPlugin',
-                (SingleAttributeTraverserPluginTemplate,),
-                {'variableName': name})
-
-
-class AdapterTraverserPluginTemplate(object):
-    """Traverse to an adapter by name."""
-
+class NameTraverserPlugin(object):
+    """Abstract class that traverses an object by name."""
     implements(ITraverserPlugin)
 
     traversalName = None
-    interface = None
-    adapterName = ''
 
     def __init__(self, context, request):
         self.context = context
@@ -112,18 +68,58 @@ class AdapterTraverserPluginTemplate(object):
 
     def publishTraverse(self, request, name):
         if name == self.traversalName:
-            adapter = queryAdapter(self.context, self.interface,
-                                   name=self.adapterName)
-            if adapter is not None:
-                return adapter
+            return self._traverse(request, name)
         raise NotFound(self.context, name, request)
+
+    def _traverse(self, request, name):
+        raise NotImplemented, 'Method must be implemented by subclasses.'
+
+
+class NullTraverserPluginTemplate(NameTraverserPlugin):
+    """Traverse to an adapter by name."""
+
+    def _traverse(self, request, name):
+        return self.context
+
+
+def NullTraverserPlugin(traversalName):
+    return type('NullTraverserPlugin', (NullTraverserPluginTemplate,),
+                {'traversalName': traversalName})
+
+
+class SingleAttributeTraverserPluginTemplate(NameTraverserPlugin):
+    """Allow only a single attribute to be traversed."""
+
+    def _traverse(self, request, name):
+        return getattr(self.context, name)
+
+
+def SingleAttributeTraverserPlugin(name):
+    return type('SingleAttributeTraverserPlugin',
+                (SingleAttributeTraverserPluginTemplate,),
+                {'traversalName': name})
+
+
+class AdapterTraverserPluginTemplate(NameTraverserPlugin):
+    """Traverse to an adapter by name."""
+    interface = None
+    adapterName = ''
+
+    def _traverse(self, request, name):
+        adapter = queryAdapter(self.context, self.interface,
+                               name=self.adapterName)
+        if adapter is None:
+            raise NotFound(self.context, name, request)
+
+        return adapter
 
 
 def AdapterTraverserPlugin(traversalName, interface, adapterName=''):
     return type('AdapterTraverserPlugin',
                 (AdapterTraverserPluginTemplate,),
                 {'traversalName': traversalName,
-                 'adapterName': adapterName, 'interface': interface})
+                 'adapterName': adapterName,
+                 'interface': interface})
 
 
 class ContainerTraverserPlugin(object):
@@ -142,3 +138,21 @@ class ContainerTraverserPlugin(object):
             raise NotFound(self.context, name, request)
 
         return subob
+
+
+class AttributeTraverserPlugin(object):
+    """A simple traverser plugin that traverses an attribute by name"""
+
+    implements(ITraverserPlugin)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def publishTraverse(self, request, name):
+        try:
+            obj = getattr(self.context, name)
+        except AttributeError:
+            raise NotFound(self.context, name, request)
+        else:
+            return obj

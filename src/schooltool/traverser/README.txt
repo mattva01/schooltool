@@ -41,7 +41,6 @@ We can now try to lookup the variable:
     ...
     NotFound: Object: <Content object at ...>, name: 'var'
 
-
 But it failed. Why? Because we have not registered a plugin traverser yet that
 knows how to lookup attributes. This package provides such a traverser
 already, so we just have to register it:
@@ -90,9 +89,9 @@ Advanced Uses
 -------------
 
 A more interesting case to consider is a traverser for a container. If you
-really dislike the Zope 3 traversal namespace notation ``++namespace`` and you
-can control the names in the container, then the pluggable traverser will also
-provide a viable solution. Let's say we have a container
+really dislike the Zope 3 traversal namespace notation ``++namespace++`` and
+you can control the names in the container, then the pluggable traverser will
+also provide a viable solution. Let's say we have a container
 
     >>> from zope.app.container.interfaces import IContainer
     >>> class IMyContainer(IContainer):
@@ -181,4 +180,72 @@ So here the result:
 
     >>> traverser.publishTraverse(request, 'some')
     <SomeAdapter object at ...>
+
+
+Traverser Plugins
+-----------------
+
+The `traverser` package comes with several default traverser plugins; three of
+them were already introduced above: `SingleAttributeTraverserPlugin`,
+`AdapterTraverserPlugin`, and `ContainerTraverserPlugin`. Another plugin is
+the the `NullTraverserPlugin`, which always just returns the object itself:
+
+    >>> from schooltool.traverser.traverser import NullTraverserPlugin
+    >>> SomethingPlugin = NullTraverserPlugin('something')
+
+    >>> plugin = SomethingPlugin(content, request)
+    >>> plugin.publishTraverse(request, 'something')
+    <Content object at ...>
+
+    >>> plugin.publishTraverse(request, 'something else')
+    Traceback (most recent call last):
+    ...
+    NotFound: Object: <Content object at ...>, name: 'something else'
+
+All of the above traversers with exception of the `ContainerTraverserPlugin`
+are realizations of the abstract `NameTraverserPlugin` class. Name traversers
+are traversers that can resolve one particular name. By using the abstract
+`NameTraverserPlugin` class, all of the traverser boilerplate can be
+avoided. Here is a simple example that always returns a specific value for a
+traversed name:
+
+    >>> from schooltool.traverser.traverser import NameTraverserPlugin
+    >>> class TrueTraverserPlugin(NameTraverserPlugin):
+    ...     traversalName = 'true'
+    ...     def _traverse(self, request, name):
+    ...         return True
+
+As you can see realized name traversers must implement the ``_traverse()``
+method, which is only responsible for returning the result. Of course it can
+also raise the `NotFound` error if something goes wrong during the
+computation. LEt's check it out:
+
+    >>> plugin = TrueTraverserPlugin(content, request)
+    >>> plugin.publishTraverse(request, 'true')
+    True
+
+    >>> plugin.publishTraverse(request, 'false')
+    Traceback (most recent call last):
+    ...
+    NotFound: Object: <Content object at ...>, name: 'false'
+
+A final traverser that is offered by the package is the
+`AttributeTraverserPlugin``, which simply allows one to traverse all
+accessible attributes of an object:
+
+    >>> from schooltool.traverser.traverser import AttributeTraverserPlugin
+
+    >>> plugin = AttributeTraverserPlugin(myContainer, request)
+    >>> plugin.publishTraverse(request, 'foo')
+    True
+    >>> plugin.publishTraverse(request, 'bar')
+    False
+    >>> plugin.publishTraverse(request, 'blah')
+    Traceback (most recent call last):
+    ...
+    NotFound: Object: <MyContainer object at ...>, name: 'blah'
+    >>> plugin.publishTraverse(request, 'some')
+    Traceback (most recent call last):
+    ...
+    NotFound: Object: <MyContainer object at ...>, name: 'some'
 
