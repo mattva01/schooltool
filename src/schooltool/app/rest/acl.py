@@ -21,13 +21,15 @@ RESTive views for access control
 
 $Id$
 """
-
+from zope.component import adapts
 from zope.interface import Interface, Attribute, implements
 from zope.security.proxy import ProxyFactory
+from zope.app.annotation.interfaces import IAnnotatable
 
 from schooltool.app.rest import View, Template
 from schooltool.app.rest.errors import RestError
 from schooltool.app.browser.app import ACLViewBase
+from schooltool.traverser.traverser import AdapterTraverserPlugin
 from schooltool.xmlparsing import XMLDocument
 
 
@@ -161,18 +163,10 @@ class IACLAdapter(Interface):
 
 class ACLAdapter:
     """A proxy to which the ACL view is hooked up."""
-
+    adapts(IAnnotatable)
     implements(IACLAdapter)
 
     def __init__(self, context):
         self.context = context
 
-
-class ACLTraverser(object):
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-
-    def publishTraverse(self, request, name):
-        return ACLAdapter(self.context)
+ACLTraverser = AdapterTraverserPlugin('acl', IACLAdapter)

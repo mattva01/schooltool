@@ -35,12 +35,13 @@ from schooltool.xmlparsing import XMLDocument
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.rest import View, Template
 from schooltool.app.rest.errors import RestError
+from schooltool.common import unquote_uri
 from schooltool.relationship.uri import IURIObject
 from schooltool.relationship.interfaces import IRelationshipLinks
 from schooltool.relationship.interfaces import IRelationshipSchema
 from schooltool.relationship.relationship import relate, unrelate
 from schooltool.relationship.interfaces import DuplicateRelationship
-from schooltool.common import unquote_uri
+from schooltool.traverser.traverser import AdapterTraverserPlugin
 
 
 def RelationshipsViewFactory(context, request):
@@ -237,16 +238,8 @@ class LinkView(View):
         return "Link removed"
 
 
-class RelationshipsTraverser(object):
-    """Allows traversing into /relationships of an annotatable."""
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-
-    def publishTraverse(self, request, name):
-        return IRelationshipLinks(self.context)
-
+RelationshipsTraverser = AdapterTraverserPlugin(
+    'relationships', IRelationshipLinks)
 
 class LinkTraverser(object):
     """Allows traversing into links of IRelationshipLinks."""

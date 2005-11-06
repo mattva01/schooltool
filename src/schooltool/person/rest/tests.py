@@ -24,6 +24,7 @@ $Id: test_app.py 4342 2005-07-25 16:02:24Z bskahan $
 import unittest
 from cStringIO import StringIO
 
+import zope.component
 from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 from zope.publisher.interfaces import NotFound
@@ -263,6 +264,9 @@ def doctest_PersonPasswordHttpTraverser():
 
     This traverser allows you to access the password of the person:
 
+        >>> from schooltool.person.rest.person import PersonPasswordWriter
+        >>> zope.component.provideAdapter(PersonPasswordWriter)
+
         >>> from schooltool.person.rest.person import \
         ...     PersonPasswordHTTPTraverser
         >>> person = Person()
@@ -274,10 +278,10 @@ def doctest_PersonPasswordHttpTraverser():
         >>> traverser.request is request
         True
 
-    The traverser should implement IHTTPPublisher:
+    The traverser should implement ``ITraverserPlugin``:
 
-        >>> from zope.publisher.interfaces.http import IHTTPPublisher
-        >>> verifyObject(IHTTPPublisher, traverser)
+        >>> from schooltool.traverser.interfaces import ITraverserPlugin
+        >>> verifyObject(ITraverserPlugin, traverser)
         True
 
     Now access the password:
@@ -292,21 +296,23 @@ def doctest_PersonPhotoHttpTraverser():
 
     This traverser allows you to access the photo of the person:
 
-        >>> from schooltool.person.rest.person import \
-        ...     PersonPhotoHTTPTraverser
+        >>> from schooltool.person.rest.person import PersonPhotoAdapter
+        >>> zope.component.provideAdapter(PersonPhotoAdapter)
+
         >>> person = Person()
         >>> request = TestRequest()
 
+        >>> from schooltool.person.rest.person import PersonPhotoHTTPTraverser
         >>> traverser = PersonPhotoHTTPTraverser(person, request)
         >>> traverser.context is person
         True
         >>> traverser.request is request
         True
 
-    The traverser should implement IHTTPPublisher:
+    The traverser should implement ``ITraverserPlugin``:
 
-        >>> from zope.publisher.interfaces.http import IHTTPPublisher
-        >>> verifyObject(IHTTPPublisher, traverser)
+        >>> from schooltool.traverser.interfaces import ITraverserPlugin
+        >>> verifyObject(ITraverserPlugin, traverser)
         True
 
     Now access the password:
@@ -334,16 +340,20 @@ def doctest_PersonPreferencesHttpTraverser():
         >>> ztapi.provideAdapter(Person, IPersonPreferences,
         ...                      getPersonPreferences)
 
+        >>> from schooltool.person.rest.preference import \
+        ...     PersonPreferencesAdapter
+        >>> zope.component.provideAdapter(PersonPreferencesAdapter)
+
         >>> traverser = PersonPreferencesHTTPTraverser(person, request)
         >>> traverser.context is person
         True
         >>> traverser.request is request
         True
 
-    The traverser should implement IHTTPPublisher:
+    The traverser should implement ``ITraverserPlugin``:
 
-        >>> from zope.publisher.interfaces.http import IHTTPPublisher
-        >>> verifyObject(IHTTPPublisher, traverser)
+        >>> from schooltool.traverser.interfaces import ITraverserPlugin
+        >>> verifyObject(ITraverserPlugin, traverser)
         True
 
     Now access the preferences:
@@ -363,14 +373,19 @@ def doctest_PersonPreferencesView():
 
     First lets create a view:
 
-        >>> from schooltool.person.rest.preference import \
-        ...     PersonPreferencesHTTPTraverser
+        >>> setup.placefulSetUp()
+
         >>> from schooltool.person.preference import getPersonPreferences
         >>> from schooltool.person.interfaces import IPersonPreferences
-        >>> setup.placefulSetUp()
         >>> ztapi.provideAdapter(Person, IPersonPreferences,
         ...                      getPersonPreferences)
 
+        >>> from schooltool.person.rest.preference import \
+        ...     PersonPreferencesAdapter
+        >>> zope.component.provideAdapter(PersonPreferencesAdapter)
+
+        >>> from schooltool.person.rest.preference import \
+        ...     PersonPreferencesHTTPTraverser
         >>> person = Person()
         >>> traverser = PersonPreferencesHTTPTraverser(person, TestRequest())
         >>> adapter = traverser.publishTraverse(TestRequest(), 'preferences')

@@ -25,10 +25,11 @@ from zope.component import adapts
 from zope.interface import implements
 from zope.publisher.interfaces import NotFound
 
-from schooltool.app.rest import View, Template, IRestTraverser
+from schooltool.app.rest import View, Template
 from schooltool.app.rest.app import ApplicationObjectFile
 from schooltool.app.rest.app import ApplicationObjectFileFactory
 from schooltool.app.rest.app import GenericContainerView
+from schooltool.traverser.traverser import AdapterTraverserPlugin
 
 from schooltool.person.interfaces import IPersonContainer, IPerson
 from schooltool.person.person import Person
@@ -91,23 +92,13 @@ class PersonView(View):
     factory = PersonFile
 
 
-class PersonPasswordHTTPTraverser(object):
-    """Traverses to the password writer of a person"""
-
-    adapts(IPerson)
-    implements(IRestTraverser)
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-
-    def publishTraverse(self, request, name):
-        return PersonPasswordWriter(self.context)
+PersonPasswordHTTPTraverser = AdapterTraverserPlugin(
+    'password', IPasswordWriter)
 
 
 class PersonPasswordWriter(object):
     """Adapter of person to IPasswordWriter."""
-
+    adapts(IPerson)
     implements(IPasswordWriter)
 
     def __init__(self, person):
@@ -137,23 +128,12 @@ class PasswordWriterView(View):
         return ''
 
 
-class PersonPhotoHTTPTraverser(object):
-    """Traverses to the photo of a person"""
-
-    adapts(IPerson)
-    implements(IRestTraverser)
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-
-    def publishTraverse(self, request, name):
-        return PersonPhotoAdapter(self.context)
+PersonPhotoHTTPTraverser = AdapterTraverserPlugin('photo', IPersonPhoto)
 
 
 class PersonPhotoAdapter(object):
     """Adapt a Person to PersonPhoto."""
-
+    adapts(IPerson)
     implements(IPersonPhoto)
 
     def __init__(self, person):

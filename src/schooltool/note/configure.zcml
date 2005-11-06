@@ -42,7 +42,7 @@
       template="note_add.pt"
       permission="schooltool.view"
       menu="schooltool_actions"
-      title="New Note" 
+      title="New Note"
       />
 
   <!-- REST API -->
@@ -51,16 +51,17 @@
     <allow attributes="context" />
   </content>
 
+  <adapter factory=".rest.NotesAdapter" />
+
   <class class=".rest.NotesView">
     <allow interface=".rest.INotesView" />
   </class>
 
-  <view
-      for="schooltool.note.interfaces.IHaveNotes"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.app.rest.IRestTraverser"
+  <subscriber
+      for=".interfaces.IHaveNotes
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".rest.NotesTraverser"
-      name="notes"
       />
 
   <view

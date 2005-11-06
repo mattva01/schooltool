@@ -24,8 +24,9 @@ $Id: app.py 4596 2005-08-08 12:53:09Z gintas $
 from zope.component import adapts
 from zope.interface import implements
 
-from schooltool.app.rest import View, Template, IRestTraverser
+from schooltool.app.rest import View, Template
 from schooltool.app.rest.errors import RestError
+from schooltool.traverser.traverser import AdapterTraverserPlugin
 from schooltool.xmlparsing import XMLDocument
 
 from schooltool.person.interfaces import IPerson
@@ -33,9 +34,13 @@ from schooltool.person.interfaces import IPersonPreferences
 from schooltool.person.rest.interfaces import IPersonPreferencesAdapter
 
 
+PersonPreferencesHTTPTraverser = AdapterTraverserPlugin(
+    'preferences', IPersonPreferencesAdapter)
+
 class PersonPreferencesAdapter(object):
     """Adapter of person to IPreferencesWriter"""
 
+    adapts(IPerson)
     implements(IPersonPreferencesAdapter)
 
     def __init__(self, person):
@@ -111,17 +116,3 @@ class PersonPreferencesView(View):
             setattr(self.preferences, name, value)
 
         return "Preferences updated"
-
-
-class PersonPreferencesHTTPTraverser(object):
-    """Traverser to person preferences."""
-
-    adapts(IPerson)
-    implements(IRestTraverser)
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-
-    def publishTraverse(self, request, name):
-        return PersonPreferencesAdapter(self.context)

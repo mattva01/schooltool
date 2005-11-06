@@ -29,8 +29,10 @@ from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
 
 from schooltool.xmlparsing import XMLDocument
 from schooltool.app.rest import View, Template
-from schooltool.app.interfaces import IWriteCalendar
+from schooltool.app.interfaces import IWriteCalendar, ISchoolToolCalendar
 from schooltool.calendar.icalendar import convert_calendar_to_ical
+from schooltool.traverser.traverser import NullTraverserPlugin
+from schooltool.traverser.traverser import AdapterTraverserPlugin
 
 
 class ApplicationObjectFileFactory(object):
@@ -187,25 +189,12 @@ class CalendarView(View):
         return ''
 
 
-class CalendarNullTraverser(object):
-    """A null traverser for calendars
+NullICSCalendarTraverserPlugin = NullTraverserPlugin('calendar.ics')
+NullVFBCalendarTraverserPlugin = NullTraverserPlugin('calendar.vfb')
 
-    It allows to access .../calendar/calendar.ics and similar.
-
-    >>> calendar = object()
-    >>> request = object()
-    >>> trav = CalendarNullTraverser(calendar, request)
-    >>> trav.publishTraverse(request, 'calendar.ics') is calendar
-    True
-    >>> trav.publishTraverse(request, 'calendar.vfb') is calendar
-    True
-    """
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-
-    def publishTraverse(self, request, name):
-        return self.context
-
-
+CalendarTraverserPlugin = AdapterTraverserPlugin(
+    'calendar', ISchoolToolCalendar)
+ICSCalendarTraverserPlugin = AdapterTraverserPlugin(
+    'calendar.ics', ISchoolToolCalendar)
+VFBCalendarTraverserPlugin = AdapterTraverserPlugin(
+    'calendar.vfb', ISchoolToolCalendar)

@@ -79,31 +79,3 @@ class View(object):
         body = self.GET()
         request.setHeader('Content-Length', len(body))
         return ""
-
-
-class IRestTraverser(IHTTPPublisher):
-    """A named traverser for ReSTive views."""
-
-
-class RestPublishTraverse(object):
-    """A 'multiplexer' traverser for ReSTive views.
-
-    This traverser uses other traversers providing ``IRestTraverser`` to do
-    its work.
-    """
-
-    implements(IHTTPPublisher)
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-
-    def publishTraverse(self, request, name):
-        # Find a traverser for the specific name; also known as name traversers
-        traverser = zapi.queryMultiAdapter((self.context, request),
-                                           IRestTraverser, name=name)
-
-        if traverser is not None:
-            return traverser.publishTraverse(request, name)
-
-        raise NotFound(self.context, name, request)

@@ -11,24 +11,24 @@
     <allow interface=".ICompositeTimetables" />
   </content>
 
+  <adapter factory=".CompositeTimetables" />
+
   <!-- Traversers -->
 
-  <view
-      for="..interfaces.IHaveTimetables"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
-      provides="schooltool.app.rest.IRestTraverser"
+  <subscriber
+      for="..interfaces.IHaveTimetables
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".CompositeTimetableTraverser"
       permission="zope.Public"
-      name="composite-timetables"
       />
 
-  <view
-      for="..interfaces.IHaveTimetables"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
-      provides="schooltool.app.rest.IRestTraverser"
+  <subscriber
+      for="..interfaces.IHaveTimetables
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".TimetableTraverser"
       permission="zope.Public"
-      name="timetables"
       />
 
   <view

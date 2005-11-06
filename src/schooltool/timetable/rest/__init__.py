@@ -41,7 +41,6 @@ from zope.app.filerepresentation.interfaces import IWriteDirectory
 from zope.app.event.objectevent import ObjectCreatedEvent
 
 from schooltool.app.rest import View, Template
-from schooltool.app.rest import IRestTraverser
 from schooltool.app.rest.errors import RestError
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.xmlparsing import XMLDocument
@@ -49,6 +48,7 @@ from schooltool.common import parse_date, parse_time
 from schooltool.timetable.interfaces import IHaveTimetables, ITimetables
 from schooltool.timetable.interfaces import ITimetableDict
 from schooltool.timetable import Timetable, TimetableActivity
+from schooltool.traverser import traverser
 from schooltool.app.rest.interfaces import ITimetableFileFactory
 from schooltool.app.rest.interfaces import INullTimetable, ICompositeTimetables
 from schooltool.common import unquote_uri
@@ -331,30 +331,11 @@ class TimetablePUT(object):
         return ''
 
 
-class TimetableTraverser(object):
-    """Allows traversing into /timetables of a ITimetables object.
+class TimetableTraverser(traverser.NameTraverserPlugin):
 
-    We need a ITimetables object and a request:
+    traversalName = 'timetables'
 
-        >>> from schooltool.person.person import Person
-        >>> from zope.publisher.browser import TestRequest
-        >>> person = Person()
-        >>> request = TestRequest()
-
-        >>> traverser = TimetableTraverser(person, request)
-        >>> timetables = ITimetables(person).timetables
-        >>> traverser.publishTraverse(request, "anything") is timetables
-        True
-    """
-
-    implements(IRestTraverser)
-    adapts(IHaveTimetables, IHTTPRequest)
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-
-    def publishTraverse(self, request, name):
+    def _traverse(self, request, name):
         return ITimetables(self.context).timetables
 
 
@@ -442,7 +423,7 @@ class CompositeTimetables(object):
         ['term', 'schema']
 
     """
-
+    adapts(IHaveTimetables)
     implements(ICompositeTimetables)
 
     def __init__(self, context):
@@ -450,40 +431,15 @@ class CompositeTimetables(object):
 
     def getCompositeTimetable(self, term, schema):
         """See ICompositeTimetables."""
-
         return ITimetables(self.context).getCompositeTimetable(term, schema)
 
     def listCompositeTimetables(self):
         """See ICompositeTimetables."""
-
         return ITimetables(self.context).listCompositeTimetables()
 
 
-class CompositeTimetableTraverser(object):
-    """Traverser for a_timetabled_object/composite-timetables
-
-    We need a timetabled object and a request:
-
-        >>> from schooltool.person.person import Person
-        >>> from zope.publisher.browser import TestRequest
-        >>> person = Person()
-        >>> request = TestRequest()
-
-        >>> traverser = CompositeTimetableTraverser(person, request)
-        >>> result = traverser.publishTraverse(request, "anything")
-        >>> ICompositeTimetables.providedBy(result)
-        True
-        >>> result.context is person
-        True
-
-    """
-
-    def __init__(self, context, request):
-        self.context = context
-
-    def publishTraverse(self, request, name):
-        return CompositeTimetables(self.context)
-
+CompositeTimetableTraverser = traverser.AdapterTraverserPlugin(
+    'composite-timetables', ICompositeTimetables)
 
 class CompositeTimetablesPublishTraverse(object):
     """Traverser for ICompositeTimetables objects

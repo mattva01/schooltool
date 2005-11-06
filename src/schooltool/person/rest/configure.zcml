@@ -3,22 +3,36 @@
            xmlns:browser="http://namespaces.zope.org/browser"
            i18n_domain="schooltool">
 
-<!-- Security Declarations -->
+<!-- Adapters -->
 
   <content class=".person.PersonPasswordWriter">
     <allow interface=".interfaces.IPasswordWriter" />
   </content>
+
+  <adapter factory=".person.PersonPasswordWriter" />
 
   <content class=".preference.PersonPreferencesAdapter">
     <allow
         interface=".interfaces.IPersonPreferencesAdapter" />
   </content>
 
+  <adapter factory=".preference.PersonPreferencesAdapter" />
+
   <content class=".person.PersonPhotoAdapter">
     <allow interface=".interfaces.IPersonPhoto" />
   </content>
 
+  <adapter factory=".person.PersonPhotoAdapter" />
+
 <!-- Traversers -->
+
+  <view
+      for="..interfaces.IPerson"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schooltool.traverser.traverser.PluggableTraverser"
+      permission="zope.Public"
+      />
 
   <view
       for="..interfaces.IPersonContainer"
@@ -28,39 +42,25 @@
       permission="zope.Public"
       />
 
-  <view
-      for="..interfaces.IPerson"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="zope.publisher.interfaces.http.IHTTPPublisher"
-      factory="schooltool.traverser.traverser.PluggableTraverser"
-      permission="zope.Public"
-      />
-
-  <view
-      for="..interfaces.IHavePreferences"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.app.rest.IRestTraverser"
+  <subscriber
+      for="..interfaces.IHavePreferences
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".preference.PersonPreferencesHTTPTraverser"
-      permission="zope.Public"
-      name="preferences"
       />
 
-  <view
-      for="..interfaces.IPerson"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.app.rest.IRestTraverser"
+  <subscriber
+      for="..interfaces.IPerson
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".person.PersonPasswordHTTPTraverser"
-      permission="zope.Public"
-      name="password"
       />
 
-  <view
-      for="..interfaces.IPerson"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.app.rest.IRestTraverser"
+  <subscriber
+      for="..interfaces.IPerson
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".person.PersonPhotoHTTPTraverser"
-      permission="zope.Public"
-      name="photo"
       />
 
   <adapter

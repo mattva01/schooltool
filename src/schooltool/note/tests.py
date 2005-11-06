@@ -23,6 +23,7 @@ $Id$
 """
 import unittest
 
+from zope.component import provideAdapter
 from zope.interface import implements
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
@@ -139,6 +140,7 @@ def doctest_rest_views():
         >>> from schooltool.note.rest import NotesViewFactory
         >>> from schooltool.note.rest import NotesTraverser
         >>> from schooltool.note.rest import NotesView
+        >>> from schooltool.note.rest import NotesAdapter
 
         >>> from schooltool.note.note import getNotes
         >>> from schooltool.note.interfaces import INotes
@@ -163,6 +165,7 @@ def doctest_rest_views():
 
     And a little more set up:
 
+        >>> provideAdapter(NotesAdapter)
         >>> traverser = NotesTraverser(person, request)
         >>> adapter = traverser.publishTraverse(request, 'notes')
 

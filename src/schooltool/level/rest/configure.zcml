@@ -60,13 +60,18 @@
 
   <!-- Academic Record Management -->
 
-  <view
-      for="schooltool.person.interfaces.IPerson"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
-      provides="schooltool.app.rest.IRestTraverser"
-      factory=".record.PersonHTTPTraverser"
+  <content class=".record.AcademicStatus">
+    <allow attributes="getStatus setStatus" />
+  </content>
+
+  <adapter factory=".record.AcademicStatus" />
+
+  <subscriber
+      for="schooltool.person.interfaces.IPerson
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".record.AcademicStatusTraverser"
       permission="zope.Public"
-      name="academicStatus"
       />
 
   <view
@@ -85,10 +90,6 @@
       permission="zope.Public"
       />
 
-  <content class=".record.AcademicStatus">
-    <allow attributes="getStatus setStatus" />
-  </content>
-
   <view
       for=".record.AcademicStatus"
       name="GET"
@@ -97,18 +98,19 @@
       permission="zope.Public"
       />
 
-  <view
-      for="schooltool.person.interfaces.IPerson"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
-      provides="schooltool.app.rest.IRestTraverser"
-      factory=".record.PersonHTTPTraverser"
-      permission="zope.Public"
-      name="academicHistory"
-      />
-
   <content class=".record.AcademicHistory">
     <allow attributes="record" />
   </content>
+
+  <adapter factory=".record.AcademicHistory" />
+
+  <subscriber
+      for="schooltool.person.interfaces.IPerson
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".record.AcademicHistoryTraverser"
+      permission="zope.Public"
+      />
 
   <view
       for=".record.AcademicHistory"
@@ -118,13 +120,12 @@
       permission="zope.Public"
       />
 
-  <view
-      for="schooltool.person.interfaces.IPerson"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
-      provides="schooltool.app.rest.IRestTraverser"
-      factory=".record.PersonHTTPTraverser"
+  <subscriber
+      for="schooltool.person.interfaces.IPerson
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".record.PromotionHTTPTraverser"
       permission="zope.Public"
-      name="promotion"
       />
 
   <content class=".record.AcademicProcessCreator">

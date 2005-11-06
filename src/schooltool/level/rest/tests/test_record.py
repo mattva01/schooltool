@@ -323,46 +323,6 @@ class TestSetLevelOutcomeView(ApplicationObjectViewTestMixin, PlacefulSetup,
         self.assertEqual(self.testObject.outcome, 'pass')
 
 
-class TestPersonHTTPTraverser(PlacefulSetup, unittest.TestCase):
-    """Test for LevelContainerView"""
-
-    def setUp(self):
-        super(TestPersonHTTPTraverser, self).setUp()
-        testing.setUpPromotionWorkflow()
-
-        zope.component.provideAdapter(record.AcademicRecord)
-
-        app = setup.setupSchoolToolSite()
-
-        app['persons']['srichter'] = Person('srichter', 'Stephan Richter')
-        app['groups']['manager'] = Group('manager', 'School Manager')
-
-        self.request = TestRequest()
-
-        self.traverser = rest.record.PersonHTTPTraverser(
-            app['persons']['srichter'], self.request)
-
-    def testPublishTraverse(self):
-
-        # Test traversing to the academic status
-        status = self.traverser.publishTraverse(self.request, 'academicStatus')
-        self.assert_(isinstance(status, rest.record.AcademicStatus))
-
-        # Test traversing to the academic history
-        hist = self.traverser.publishTraverse(self.request, 'academicHistory')
-        self.assert_(isinstance(hist, rest.record.AcademicHistory))
-
-        # Test traversing to the academic process creator
-        creator = self.traverser.publishTraverse(self.request, 'promotion')
-        self.assert_(isinstance(creator, rest.record.AcademicProcessCreator))
-
-        creator.create()
-        # Test traversing to the academic process
-        process = self.traverser.publishTraverse(self.request, 'promotion')
-        self.assert_(isinstance(process, promotion.SelectInitialLevel))
-
-
-
 def test_suite():
     suite = unittest.TestSuite((
         unittest.makeSuite(TestAcademicStatusView),
@@ -370,7 +330,6 @@ def test_suite():
         unittest.makeSuite(TestAcademicProcessCreatorView),
         unittest.makeSuite(TestSelectInitialLevelView),
         unittest.makeSuite(TestSetLevelOutcomeView),
-        unittest.makeSuite(TestPersonHTTPTraverser),
         ))
     suite.addTest(doctest.DocTestSuite(
         optionflags=doctest.ELLIPSIS|

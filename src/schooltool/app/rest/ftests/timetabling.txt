@@ -42,7 +42,7 @@ The manager can add one.
     ... PUT /terms/2005-fall HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
-    ... 
+    ...
     ... <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
     ...             first="2003-09-01" last="2003-09-07">
     ...     <title>2005 Fall</title>
@@ -277,7 +277,7 @@ Let's add a timetable schema:
     ... PUT /ttschemas/schema1 HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
-    ... 
+    ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
     ...   <title>Some Title</title>
     ...   <model factory="SequentialDaysTimetableModel">
@@ -377,7 +377,7 @@ Let's modify the timetable schema:
     ... PUT /ttschemas/schema1 HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
-    ... 
+    ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
     ...   <model factory="SequentialDaysTimetableModel">
     ...     <daytemplate>
@@ -454,7 +454,7 @@ Trying to put an invalid schema should get us an error:
     ... PUT /ttschemas/schema1 HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
-    ... 
+    ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
     ...   <model factory="SequentialDaysTimetableModel">
     ...     <daytemplate>
@@ -493,7 +493,7 @@ test):
     ... PUT /terms/2005-fall HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
-    ... 
+    ...
     ... <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
     ...             first="2003-09-01" last="2003-09-07">
     ...     <title>2005 Fall</title>
@@ -526,7 +526,7 @@ We can now add a timetable for the person:
     ... PUT /persons/john/timetables/2005-fall.schema1 HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
-    ... 
+    ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
     ...            xmlns:xlink="http://www.w3.org/1999/xlink">
     ...   <day id="Day 1">
@@ -543,7 +543,7 @@ We can now add a timetable for the person:
     ...     </period>
     ...   </day>
     ... </timetable>
-    ... """)
+    ... """, handle_errors=False)
     HTTP/1.1 201 Created
     Content-Length: 0
     Set-Cookie: ...
@@ -583,7 +583,7 @@ Let's modify it:
     ... PUT /persons/john/timetables/2005-fall.schema1 HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
-    ... 
+    ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
     ...            xmlns:xlink="http://www.w3.org/1999/xlink">
     ...   <day id="Day 1">

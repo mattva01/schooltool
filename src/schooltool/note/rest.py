@@ -21,13 +21,14 @@ RESTive views for notes
 
 $Id$
 """
-
+from zope.component import adapts
 from zope.interface import Interface, Attribute, implements
 from zope.security.checker import ProxyFactory
 
-from schooltool.xmlparsing import XMLDocument
 from schooltool.app.rest import View, Template
-from schooltool.note.interfaces import INotes
+from schooltool.xmlparsing import XMLDocument
+from schooltool.traverser.traverser import AdapterTraverserPlugin
+from schooltool.note.interfaces import INotes, IHaveNotes
 from schooltool.note.note import Note
 
 
@@ -116,27 +117,18 @@ class NotesView(View):
         self._notes.add(note)
 
 
-class NotesTraverser(object):
-    """Allows traversing into notes of an IHaveNotes provider."""
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-
-    def publishTraverse(self, request, name):
-        return NotesAdapter(self.context)
-
-
 class INotesAdapter(Interface):
     """Adapter for RESTivew view of notes."""
 
 
-class NotesAdapter:
+class NotesAdapter(object):
     """A proxy to which the Notes view is hooked up"""
 
+    adapts(IHaveNotes)
     implements(INotesAdapter)
 
     def __init__(self, context):
         self.context = context
 
 
+NotesTraverser = AdapterTraverserPlugin('notes', INotesAdapter)

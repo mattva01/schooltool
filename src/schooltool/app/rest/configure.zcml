@@ -8,6 +8,8 @@
     <allow attributes="context" />
   </content>
 
+  <adapter factory=".acl.ACLAdapter" />
+
   <content class="schooltool.relationship.relationship.LinkSet">
     <allow
        interface="schooltool.relationship.interfaces.IRelationshipLinks"
@@ -26,28 +28,10 @@
        />
   </content>
 
-  <content class=".RestPublishTraverse">
-    <allow interface="zope.publisher.interfaces.IPublishTraverse" />
-  </content>
-
 <!-- Traversers -->
 
-  <subscriber
-      for="zope.app.container.interfaces.IReadContainer
-           zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory="zope.app.http.traversal.ContainerTraverser"
-      />
-
-  <subscriber
-      for="zope.interface.Interface
-           zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".RestPublishTraverse"
-      />
-
   <view
-      for="schooltool.app.interfaces.ISchoolToolApplication"
+      for="zope.interface.Interface"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides="zope.publisher.interfaces.http.IHTTPPublisher"
       factory="schooltool.traverser.traverser.PluggableTraverser"
@@ -55,13 +39,68 @@
       />
 
   <view
-      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      for="..interfaces.ISchoolToolApplication"
       type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="zope.publisher.interfaces.IPublishTraverse"
-      factory=".RestPublishTraverse"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schooltool.traverser.traverser.PluggableTraverser"
       permission="zope.Public"
       />
 
+  <view
+      for="..interfaces.ISchoolToolCalendar"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schooltool.traverser.traverser.PluggableTraverser"
+      permission="zope.Public"
+      />
+
+  <subscriber
+      for="zope.app.container.interfaces.IReadContainer
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory="zope.app.http.traversal.ContainerTraverser"
+      permission="zope.Public"
+      />
+
+  <subscriber
+      for="zope.app.annotation.interfaces.IAnnotatable
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".acl.ACLTraverser"
+      permission="schooltool.controlAccess"
+      />
+
+  <subscriber
+      for="schooltool.app.interfaces.IHaveCalendar
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".app.CalendarTraverserPlugin"
+      permission="zope.Public"
+      />
+
+  <subscriber
+      for="schooltool.app.interfaces.IHaveCalendar
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".app.ICSCalendarTraverserPlugin"
+      permission="zope.Public"
+      />
+
+  <subscriber
+      for="schooltool.app.interfaces.IHaveCalendar
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".app.VFBCalendarTraverserPlugin"
+      permission="zope.Public"
+      />
+
+  <subscriber
+      for="zope.app.annotation.interfaces.IAnnotatable
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".relationships.RelationshipsTraverser"
+      permission="zope.Public"
+      />
 
   <view
       for="schooltool.relationship.interfaces.IRelationshipLinks"
@@ -71,68 +110,21 @@
       permission="zope.Public"
       />
 
-  <view
-      for="schooltool.app.interfaces.IHaveCalendar"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides=".IRestTraverser"
-      factory="schooltool.app.browser.cal.CalendarOwnerHTTPTraverser"
-      permission="zope.Public"
-      name="calendar"
-      />
-
-  <view
-      for="schooltool.app.interfaces.IHaveCalendar"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides=".IRestTraverser"
-      factory="schooltool.app.browser.cal.CalendarOwnerHTTPTraverser"
-      permission="zope.Public"
-      name="calendar.ics"
-      />
-
-  <view
-      for="schooltool.app.interfaces.IHaveCalendar"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides=".IRestTraverser"
-      factory="schooltool.app.browser.cal.CalendarOwnerHTTPTraverser"
-      permission="zope.Public"
-      name="calendar.vfb"
-      />
-
-  <view
-      for="zope.app.annotation.interfaces.IAnnotatable"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides=".IRestTraverser"
-      factory=".acl.ACLTraverser"
-      permission="schooltool.controlAccess"
-      name="acl"
-      />
-
-  <view
-      for="zope.app.annotation.interfaces.IAnnotatable"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides=".IRestTraverser"
-      factory=".relationships.RelationshipsTraverser"
-      permission="zope.Public"
-      name="relationships"
-      />
-
   <!-- the following are used by PUT requests on the normal web server -->
-  <view
-      for="schooltool.app.interfaces.ISchoolToolCalendar"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides=".IRestTraverser"
-      factory=".app.CalendarNullTraverser"
+  <subscriber
+      for="schooltool.app.interfaces.ISchoolToolCalendar
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".app.NullICSCalendarTraverserPlugin"
       permission="zope.Public"
-      name="calendar.ics"
       />
 
-  <view
-      for="schooltool.app.interfaces.ISchoolToolCalendar"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides=".IRestTraverser"
-      factory=".app.CalendarNullTraverser"
+  <subscriber
+      for="schooltool.app.interfaces.ISchoolToolCalendar
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".app.NullVFBCalendarTraverserPlugin"
       permission="zope.Public"
-      name="calendar.vfb"
       />
 
 <!-- RESTive verbs implementations -->

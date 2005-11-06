@@ -31,37 +31,40 @@ import schooltool
 from schooltool import person
 from schooltool.app import app, rest
 from schooltool.level import interfaces
+from schooltool.traverser import traverser
 from schooltool.xmlparsing import XMLDocument
 
 
-class PersonHTTPTraverser(object):
+class PromotionHTTPTraverser(traverser.NameTraverserPlugin):
 
-    zope.component.adapts(person.interfaces.IPerson)
-    zope.interface.implements(rest.IRestTraverser)
+    traversalName = 'promotion'
 
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-
-    def publishTraverse(self, request, name):
-        # XXX not unit tested -- uncomment the following line for proof
-        #raise NotImplementedError
+    def _traverse(self, request, name):
         record = interfaces.IAcademicRecord(self.context)
-        if name == 'academicStatus':
-            return AcademicStatus(record)
-        elif name == 'academicHistory':
-            return AcademicHistory(record)
-        elif name == 'promotion':
-            if record.levelProcess is None:
-                return AcademicProcessCreator(record)
-            manager = app.getSchoolToolApplication()['groups']['manager']
-            return [
-                item
-                for item in interfaces.IManagerWorkItems(manager).values()
-                if (item.participant.activity.process.workflowRelevantData.student == self.context)][0]
+        if record.levelProcess is None:
+            return AcademicProcessCreator(record)
+        manager = app.getSchoolToolApplication()['groups']['manager']
+        return [
+            item
+            for item in interfaces.IManagerWorkItems(manager).values()
+            if (item.participant.activity.process.workflowRelevantData.student
+                == self.context)][0]
+
+
+class IAcademicStatus(zope.interface.Interface):
+    """Academic status of a student."""
+
+    def getStatus():
+        """Return academic status of student."""
+
+    def setStatus(status):
+        """Set academic status of student."""
 
 
 class AcademicStatus(object):
+
+    zope.component.adapts(interfaces.IAcademicRecord)
+    zope.interface.implements(IAcademicStatus)
 
     def __init__(self, record):
         self.record = record
@@ -71,6 +74,15 @@ class AcademicStatus(object):
 
     def setStatus(self, status):
         self.record.status = status
+
+
+class AcademicStatusTraverser(traverser.NameTraverserPlugin):
+
+    traversalName = 'academicStatus'
+
+    def _traverse(self, request, name):
+        record = interfaces.IAcademicRecord(self.context)
+        return IAcademicStatus(record)
 
 
 class AcademicStatusView(rest.View):
@@ -96,10 +108,24 @@ class AcademicStatusView(rest.View):
         return self.context.getStatus() or ''
 
 
+class IAcademicHistory(zope.interface.Interface):
+    """Academic history of a student."""
+
 class AcademicHistory(object):
+
+    zope.component.adapts(interfaces.IAcademicRecord)
+    zope.interface.implements(IAcademicHistory)
 
     def __init__(self, record):
         self.record = record
+
+class AcademicHistoryTraverser(traverser.NameTraverserPlugin):
+
+    traversalName = 'academicHistory'
+
+    def _traverse(self, request, name):
+        record = interfaces.IAcademicRecord(self.context)
+        return IAcademicHistory(record)
 
 
 class AcademicHistoryView(rest.View):

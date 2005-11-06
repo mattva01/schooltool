@@ -21,7 +21,7 @@ Add a term:
     ... PUT /terms/2005-fall HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
-    ... 
+    ...
     ... <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
     ...             first="2003-09-01" last="2003-09-07">
     ...     <title>2005 Fall</title>
@@ -40,7 +40,7 @@ Add Schema:
     ... PUT /ttschemas/schema1 HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
-    ... 
+    ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
     ...   <model factory="SequentialDaysTimetableModel">
     ...     <daytemplate>
@@ -147,7 +147,7 @@ Add group timetables:
     ... PUT /groups/boys/timetables/2005-fall.schema1 HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
-    ... 
+    ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
     ...            xmlns:xlink="http://www.w3.org/1999/xlink">
     ...   <day id="Day 1">
@@ -164,7 +164,7 @@ Add group timetables:
     ...     </period>
     ...   </day>
     ... </timetable>
-    ... """)
+    ... """, handle_errors=False)
     HTTP/1.1 201 Created
     ...
 
@@ -172,7 +172,7 @@ Add group timetables:
     ... PUT /groups/guys/timetables/2005-fall.schema1 HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
-    ... 
+    ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
     ...            xmlns:xlink="http://www.w3.org/1999/xlink">
     ...   <day id="Day 1">
