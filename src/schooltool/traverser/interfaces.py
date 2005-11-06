@@ -38,14 +38,3 @@ class IPluggableTraverser(IPublishTraverse):
 
 class ITraverserPlugin(IPublishTraverse):
     """A plugin for the pluggable traverser."""
-
-
-class INamedComponentTraverserPlugin(ITraverserPlugin):
-    """A plugin for the pluggable traverser that tells about the names it
-    traverses and the components those names provide."""
-
-    providedComponents = Attribute("""
-        A dictionary that maps the traversable names to the component they
-        will provide. If the component is not known, return ``None``. This
-        property should return ``None``, if the names cannot be resolved.
-        """)
