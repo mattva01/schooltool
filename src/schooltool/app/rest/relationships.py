@@ -44,10 +44,6 @@ from schooltool.relationship.interfaces import DuplicateRelationship
 from schooltool.traverser.traverser import AdapterTraverserPlugin
 
 
-def RelationshipsViewFactory(context, request):
-    return ProxyFactory(RelationshipsView(context, request))
-
-
 class RelationshipsView(View):
     """A view of relationships on IRelationshipLinks.
 
@@ -205,8 +201,9 @@ class RelationshipsView(View):
         return "Relationship created: %s" % location
 
 
-def LinkViewFactory(context, request):
-    return ProxyFactory(LinkView(context, request))
+def RelationshipsViewFactory(context, request):
+    return ProxyFactory(RelationshipsView(context, request))
+RelationshipsViewFactory.factory = RelationshipsView
 
 
 class LinkView(View):
@@ -237,6 +234,10 @@ class LinkView(View):
         response.setHeader('content-type', 'text/plain; charset=UTF-8')
         return "Link removed"
 
+
+def LinkViewFactory(context, request):
+    return ProxyFactory(LinkView(context, request))
+LinkViewFactory.factory = LinkView
 
 RelationshipsTraverser = AdapterTraverserPlugin(
     'relationships', IRelationshipLinks)

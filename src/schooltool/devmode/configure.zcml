@@ -130,15 +130,6 @@
         template="menu.pt"
         layer="schooltool.devmode.skin.IDevModeLayer"
         />
-
-    <browser:page
-        for=".ifacemodule.InterfaceModule"
-        permission="zope.app.apidoc.UseAPIDoc"
-        class="schooltool.devmode.restdoc.RESTMenu"
-        name="restmenu.html"
-        template="menu.pt"
-        layer="schooltool.devmode.skin.IDevModeLayer"
-        />
   </configure>
 
   <browser:page
@@ -162,6 +153,23 @@
 
   <!-- RESTive API documentation -->
   <browser:page
+      for="*"
+      name="restdoc_macros"
+      permission="zope.View"
+      class=".restdoc.RESTDocMacros"
+      allowed_interface="zope.interface.common.mapping.IItemMapping"
+      layer="schooltool.devmode.skin.IDevModeLayer"
+      />
+
+  <browser:page
+      for="*"
+      name="restdoc_details_macros"
+      permission="zope.View"
+      template="restdoc_macros.pt"
+      layer="schooltool.devmode.skin.IDevModeLayer"
+      />
+
+  <browser:page
       for="zope.app.apidoc.codemodule.codemodule.CodeModule"
       permission="zope.app.apidoc.UseAPIDoc"
       class="schooltool.devmode.restdoc.RESTMenu"
@@ -171,7 +179,7 @@
       />
 
   <browser:page
-      for="zope.app.apidoc.codemodule.interfaces.IClassDocumentation"
+      for="*"
       permission="zope.app.apidoc.UseAPIDoc"
       class=".restdoc.RESTDocumentation"
       name="restviews.html"

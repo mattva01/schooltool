@@ -160,19 +160,21 @@
       />
   </class>
 
+  <!-- XXX: Changed factory from ACLViewFactory to ACLView -->
   <view
       for="schooltool.app.rest.acl.IACLAdapter"
       type="zope.publisher.interfaces.http.IHTTPRequest"
-      factory="schooltool.app.rest.acl.ACLViewFactory"
+      factory=".acl.ACLView"
       permission="schooltool.controlAccess"
       allowed_interface="schooltool.app.rest.acl.IACLView"
       name="GET"
       />
 
+  <!-- XXX: Changed factory from ACLViewFactory to ACLView -->
   <view
       for="schooltool.app.rest.acl.IACLAdapter"
       type="zope.publisher.interfaces.http.IHTTPRequest"
-      factory="schooltool.app.rest.acl.ACLViewFactory"
+      factory=".acl.ACLView"
       permission="schooltool.controlAccess"
       allowed_interface="schooltool.app.rest.acl.IACLView"
       name="POST"

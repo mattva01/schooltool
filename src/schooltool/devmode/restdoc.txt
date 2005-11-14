@@ -1,0 +1,172 @@
+===========================
+RESTive Views Documentation
+===========================
+
+One of the additions to the standard apidoc modules is the the `restdoc`
+module implement in
+
+   >>> from schooltool.devmode import restdoc
+
+The RESTive view documentation provides a list of classes that implement an
+interface that claims to be a content type. The REST views are collected for
+classes instead of the content type interfaces, because SchoolTool content
+type classes implement several marker interfaces that enhance the availability
+of RESTive views.
+
+
+`getHTTPViewRegistration(klass, name)`
+--------------------------------------
+
+This function returns the registration that matches the adapter lookup::
+
+  zope.component.getMultiAdapter(
+      (implementedBy(klass), IHTTPRequest), zope.interface.Interface, name=name)
+
+Let's first write a sensible class:
+
+  >>> import zope.interface
+
+  >>> class IFile(zope.interface.Interface):
+  ...     contents = zope.interface.Attribute('File contents.')
+
+  >>> class IMetaData(zope.interface.Interface):
+  ...     data = zope.interface.Attribute('File meta-data.')
+
+  >>> class File(object):
+  ...     zope.interface.implements(IFile, IMetaData)
+  ...     def __init__(self):
+  ...         self.contents = ''
+  ...         self.metadata = {}
+
+Now we need to develop a view for the file. For plain HTTP views, the view
+usually implements a verb:
+
+  >>> class GETFile(object):
+  ...
+  ...     def __init__(self, context, request):
+  ...         self.context = context
+  ...         self.request = request
+  ...
+  ...     def __call__(self):
+  ...         return self.context.content
+
+  >>> import zope.component
+  >>> import zope.publisher.interfaces.http
+  >>> zope.component.provideAdapter(
+  ...     GETFile,
+  ...     (IFile, zope.publisher.interfaces.http.IHTTPRequest),
+  ...     zope.interface.Interface,
+  ...     name='GET')
+
+We can now invoke the function to get the registration:
+
+  >>> restdoc.getHTTPViewRegistration(File, 'GET')
+  AdapterRegistration(('IFile', 'IHTTPRequest'), 'Interface', 'GET',
+                      <class 'schooltool.devmode.devmode_txt.GETFile'>, '')
+
+If a view does not exist, `None` should be returned:
+
+  >>> restdoc.getHTTPViewRegistration(File, 'HEAD') is None
+  True
+
+
+`getContainerInterfaces(klass)`
+-------------------------------
+
+This function determines the interfaces of containers to which the passed
+class instances can be added. It does this by inspecting the interface
+constraints:
+
+  >>> import zope.app.container.interfaces
+  >>> import zope.app.container.constraints
+  >>> class IFileContainer(zope.app.container.interfaces.IContainer):
+  ...     zope.app.container.constraints.contains(IFile)
+
+  >>> class IFileContained(IFile, zope.app.container.interfaces.IContained):
+  ...     zope.app.container.constraints.containers(IFileContainer)
+
+Originally, when no cosntraints are specified, the function returns an empty
+list:
+
+  >>> restdoc.getContainerInterfaces(File)
+  ()
+
+However, once we add the constraints to the implementation,
+
+  >>> zope.interface.classImplements(File, IFileContained)
+
+the container will be found:
+
+  >>> restdoc.getContainerInterfaces(File)
+  (<InterfaceClass schooltool.devmode.devmode_txt.IFileContainer>,)
+
+In order to make life easier, if no container interface is found for a given
+content type and the content type implements the container interface, then the
+`ISchoolToolApplication` interface is returned as the container, since typically
+content containers are located inside the SchoolTool application object:
+
+  >>> class FileFolder(object):
+  ...     zope.interface.implements(IFileContainer)
+
+  >>> restdoc.getContainerInterfaces(FileFolder)
+  (<InterfaceClass schooltool.app.interfaces.ISchoolToolApplication>,)
+
+
+`getAdapters(spec, provided)`
+-----------------------------
+
+Given a sepcification and the provided interface, this function returns the
+registrations for the adapters from `spec` to `provided`. The function
+basically does a low level adapter lookup and then looks for the correct
+registrations for those adapters.
+
+Let's say I am writing an `ISized` adapter for our file:
+
+  >>> from zope.app import size
+  >>> class FileSized(object):
+  ...     zope.component.adapts(IFile)
+  ...     zope.interface.implements(size.interfaces.ISized)
+
+  >>> zope.component.provideAdapter(FileSized)
+
+Now we get its registration:
+
+  >>> spec = zope.interface.implementedBy(File)
+  >>> restdoc.getAdapters(spec, size.interfaces.ISized)
+  [AdapterRegistration(('IFile',), 'ISized', '',
+                       <class 'schooltool.devmode.devmode_txt.FileSized'>, '')]
+
+
+`getNameTraversers(klass)`
+--------------------------
+
+In terms of REST documentation, name traversers are traversal plugins for pure
+HTTP requests that traverse a single name. Those traversers are recognized by
+the fact that they have a `traversalName` attribute. For details on how to
+work with the pluggable traverser framework and implem
+
+
+`RESTMenu` class
+----------------
+
+
+`RESTDocumentation` class
+-------------------------
+
+
+`getGETInfo()`
+~~~~~~~~~~~~~~
+
+
+`getPOSTInfo()`
+~~~~~~~~~~~~~~~
+
+`getPUTInfo()`
+~~~~~~~~~~~~~~
+
+
+`getDELETEInfo()`
+~~~~~~~~~~~~~~~~~
+
+`getNameTraversers()`
+~~~~~~~~~~~~~~~~~~~~~

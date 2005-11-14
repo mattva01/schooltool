@@ -150,6 +150,7 @@ def getCalendar(owner):
         calendar = Calendar(owner)
         annotations[CALENDAR_KEY] = calendar
         return calendar
+getCalendar.factory = Calendar # Convention to make adapter introspectable
 
 
 class WriteCalendar(object):

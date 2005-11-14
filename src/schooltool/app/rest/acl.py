@@ -72,9 +72,9 @@ class IACLView(Interface):
         the allowed set.
         """
 
-
-def ACLViewFactory(context, request):
-    return ProxyFactory(ACLView(context, request))
+# XXX: Why has this been here? This should be done by the CA
+#def ACLViewFactory(context, request):
+#    return ProxyFactory(ACLView(context, request))
 
 
 class ACLView(View, ACLViewBase):

@@ -47,7 +47,7 @@ from schooltool.xmlparsing import XMLDocument
 from schooltool.common import parse_date, parse_time
 from schooltool.timetable.interfaces import IHaveTimetables, ITimetables
 from schooltool.timetable.interfaces import ITimetableDict
-from schooltool.timetable import Timetable, TimetableActivity
+from schooltool.timetable import Timetable, TimetableActivity, TimetableDict
 from schooltool.traverser import traverser
 from schooltool.app.rest.interfaces import ITimetableFileFactory
 from schooltool.app.rest.interfaces import INullTimetable, ICompositeTimetables
@@ -334,6 +334,7 @@ class TimetablePUT(object):
 class TimetableTraverser(traverser.NameTraverserPlugin):
 
     traversalName = 'timetables'
+    component = TimetableDict
 
     def _traverse(self, request, name):
         return ITimetables(self.context).timetables

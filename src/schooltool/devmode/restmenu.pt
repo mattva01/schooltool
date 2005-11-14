@@ -6,7 +6,7 @@
 
     <div>Available Content Classes</div>
 
-    <div tal:define="classes view/listClasses">
+    <div tal:define="classes view/listContentClasses">
         <a href="" target="main"
            tal:repeat="info classes"
            tal:attributes="href info/url"

@@ -191,6 +191,11 @@
 
   <!-- Core and Domain content objects -->
 
+  <interface
+      interface=".interfaces.ISchoolToolApplication"
+      type="zope.app.content.interfaces.IContentType"
+      />
+
   <content class=".app.SchoolToolApplication">
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />
     <allow interface=".interfaces.ISchoolToolApplication" />

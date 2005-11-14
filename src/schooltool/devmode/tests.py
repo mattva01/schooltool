@@ -17,24 +17,26 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Functional tests for devmode.
+Devmode-related Browser View Tests
 
-$Id: test_all.py 2922 2005-02-22 19:04:44Z mg $
+$Id$
 """
 import unittest
-from zope.testing import doctest
-from zope.app.testing.functional import FunctionalDocFileSuite
+from zope.testing import doctest, doctestunit, module
+from schooltool.app.browser import testing
 
-from schooltool.testing.functional import load_ftesting_zcml
-
+def setUp(test):
+    testing.setUp(test)
+    module.setUp(test, 'schooltool.devmode.devmode_txt')
 
 def test_suite():
-    load_ftesting_zcml()
-    optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
-                   doctest.NORMALIZE_WHITESPACE |
-                   doctest.REPORT_ONLY_FIRST_FAILURE)
-    return FunctionalDocFileSuite('devmode.txt', optionflags=optionflags)
-
+    return unittest.TestSuite((
+        doctest.DocFileSuite(
+            'restdoc.txt',
+            setUp=setUp, tearDown=testing.tearDown,
+            globs={'pprint': doctestunit.pprint},
+            optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS),
+        ))
 
 if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')
+    unittest.main(default='test_suite')

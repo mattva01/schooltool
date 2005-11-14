@@ -1,0 +1,78 @@
+<metal:block define-macro="zcml">
+
+  <div tal:define="zcml info/zcml"
+       tal:condition="zcml">
+    <i i18n:translate="">Registered at:</i>
+    <metal:block use-macro="context/@@interface_macros/zcml" />
+  </div>
+
+</metal:block>
+
+<metal:block define-macro="factory">
+
+  <div tal:condition="info/factory/path">
+    <i i18n:translate="">Factory path:</i>
+    <a href=""
+       tal:condition="info/factory/referencable"
+       tal:attributes="href
+           string:$rootURL/Code/${info/factory/url}/index.html"
+       tal:content="info/factory/path" />
+    <span
+       tal:condition="not:info/factory/referencable"
+       tal:content="info/factory/path" />
+  </div>
+
+</metal:block>
+
+<metal:block define-macro="adapter-factory">
+
+  <div tal:condition="info/factory">
+    <i i18n:translate="">Factory path:</i>
+    <a href=""
+       tal:attributes="href
+           string:$rootURL/Code/${info/factory_url}/index.html"
+       tal:content="info/factory" />
+  </div>
+
+</metal:block>
+
+<metal:block define-macro="template">
+
+  <div tal:condition="info/factory/template">
+    <i i18n:translate="">Template:</i>
+    <span tal:replace="info/factory/template" />
+  </div>
+
+</metal:block>
+
+<metal:block define-macro="permission">
+
+  <div tal:condition="info/read_perm|nothing">
+    <i i18n:translate="">Permission:</i>
+    <span tal:replace="info/read_perm">zope.View</span>
+  </div>
+
+</metal:block>
+
+<metal:block define-macro="schema">
+
+  <div tal:condition="info/schema|nothing">
+    <i><b i18n:translate="">Schema:</b></i>
+    <div class="indent">
+      <pre style="font-size: 100%; margin: 0" tal:content="info/schema" />
+    </div>
+  </div>
+
+</metal:block>
+
+<metal:block define-macro="container">
+
+  <div tal:condition="info">
+    <i i18n:translate="">Container:</i>
+    <a href=""
+       tal:attributes="href
+           string:$rootURL/Interface/${info/module}.${info/name}/index.html"
+       tal:content="string:${info/module}.${info/name}" />
+  </div>
+
+</metal:block>

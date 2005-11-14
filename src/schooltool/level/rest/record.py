@@ -79,6 +79,8 @@ class AcademicStatus(object):
 class AcademicStatusTraverser(traverser.NameTraverserPlugin):
 
     traversalName = 'academicStatus'
+    component = AcademicStatus # A bit of a lie, since this does not have to
+                               # be true
 
     def _traverse(self, request, name):
         record = interfaces.IAcademicRecord(self.context)
@@ -122,6 +124,8 @@ class AcademicHistory(object):
 class AcademicHistoryTraverser(traverser.NameTraverserPlugin):
 
     traversalName = 'academicHistory'
+    component = AcademicHistory # A bit of a lie, since this does not have to
+                                # be true
 
     def _traverse(self, request, name):
         record = interfaces.IAcademicRecord(self.context)

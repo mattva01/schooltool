@@ -1,9 +1,13 @@
 <html metal:use-macro="views/apidoc_macros/details"
     i18n:domain="zope">
-<body metal:fill-slot="contents">
+<body metal:fill-slot="contents"
+      tal:define="rootURL view/apidocRoot">
 
   <h1 class="details-header" i18n:translate="">
-    RESTive API for <code tal:content="context/getPath" i18n:name="iface" />
+    RESTive API for
+    <a href="index.html">
+      <code tal:content="view/name" i18n:name="iface" />
+    </a>
   </h1>
 
   <h2 class="details-section" i18n:translate="">Verbs</h2>
@@ -13,118 +17,119 @@
        tal:define="info view/getGETInfo"
        tal:condition="info">
 
-    <h3>GET <i>&lt;<span tal:replace="context/zope:name" />&gt;</i></h3>
+    <h3>GET</h3>
     <div class="indent">
-      <div condition="info/factory/path">
-        <i i18n:translate="">factory path:</i>
-        <a href=""
-           tal:condition="info/factory/referencable"
-           tal:attributes="href 
-               string: ../../Code/${info/factory/url}/index.html"
-           tal:content="info/factory/path" />
-        <span
-           tal:condition="not:info/factory/referencable"
-           tal:content="info/factory/path" />
-      </div>
 
-      <div tal:condition="info/factory/template">
-        <i i18n:translate="">template:</i>
-        <span tal:replace="info/factory/template" />
-      </div>
-  
-      <div tal:condition="info/read_perm">
-        <i i18n:translate="">Permission:</i>
-        <span tal:replace="info/read_perm">zope.View</span>
-      </div>
+      <metal:block use-macro="context/@@restdoc_macros/zcml"/>
+      <metal:block use-macro="context/@@restdoc_macros/factory"/>
+      <metal:block use-macro="context/@@restdoc_macros/template"/>
+      <metal:block use-macro="context/@@restdoc_macros/permission"/>
 
     </div>
 
   </div>
 
   <div class="indent"
-       tal:repeat="info view/getCreatePUTInfo">
+       tal:define="info view/getPOSTInfo"
+       tal:condition="info">
 
-    <h3>
-      PUT 
-      <i>&lt;<span tal:replace="info/container_name" />&gt;</i> /
-      <i>&lt;<span tal:replace="info/object_name" />&gt;</i>
-      <span tal:condition="info/file_extension">
-        .<span tal:replace="info/file_extension" />
-      </span>
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <span style="font-size: 80%" i18n:translate="">(create)</span>
-    </h3>
-
+    <h3>POST</h3>
     <div class="indent">
-        <i i18n:translate="">factory path:</i>
-        <a href=""
-           tal:condition="info/factory/referencable"
-           tal:attributes="href 
-               string: ../../Code/${info/factory/url}/index.html"
-           tal:content="info/factory/path" />
-        <span
-           tal:condition="not:info/factory/referencable"
-           tal:content="info/factory/path" />
 
-      <div tal:condition="info/schema">
-        <i i18n:translate="">schema:</i>
-        <pre tal:content="info/schema" />
-      </div>
+      <metal:block use-macro="context/@@restdoc_macros/zcml"/>
+      <metal:block use-macro="context/@@restdoc_macros/factory"/>
+      <metal:block use-macro="context/@@restdoc_macros/template"/>
+      <metal:block use-macro="context/@@restdoc_macros/permission"/>
+      <metal:block use-macro="context/@@restdoc_macros/schema"/>
 
     </div>
 
   </div>
 
-
   <div class="indent"
-       tal:repeat="info view/getEditPUTInfo">
+       tal:define="info view/getPUTInfo"
+       tal:condition="info">
 
-    <h3>
-      PUT 
-      <i>&lt;<span tal:replace="info/object_name" />&gt;</i>
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <span style="font-size: 80%" i18n:translate="">(edit)</span>
-    </h3>
-
+    <h3>PUT</h3>
     <div class="indent">
-        <i i18n:translate="">factory path:</i>
-        <a href=""
-           tal:condition="info/factory/referencable"
-           tal:attributes="href 
-               string: ../../Code/${info/factory/url}/index.html"
-           tal:content="info/factory/path" />
-        <span
-           tal:condition="not:info/factory/referencable"
-           tal:content="info/factory/path" />
 
-      <div>
-        <i i18n:translate="">schema:</i>
-        <span i18n:translate="">See the PUT creation schema.</span>
+      <metal:block use-macro="context/@@restdoc_macros/zcml"/>
+      <metal:block use-macro="context/@@restdoc_macros/factory"/>
+      <metal:block use-macro="context/@@restdoc_macros/permission"/>
+
+      <div tal:condition="info/create|nothing">
+        <i><b i18n:translate="">Creation Adapter:</b></i>
+        <div class="indent" style="padding-bottom: 0.5em"
+             tal:define="info info/create">
+          <metal:block use-macro="context/@@restdoc_macros/zcml"/>
+          <metal:block use-macro="context/@@restdoc_macros/adapter-factory"/>
+          <tal:block define="info info/container">
+            <metal:block use-macro="context/@@restdoc_macros/container"/>
+          </tal:block>
+          <metal:block use-macro="context/@@restdoc_macros/permission"/>
+        </div>
       </div>
+
+      <div tal:condition="info/edit|nothing">
+        <i><b i18n:translate="">Modification Adapter:</b></i>
+        <div class="indent" style="padding-bottom: 0.5em"
+             tal:define="info info/edit">
+          <metal:block use-macro="context/@@restdoc_macros/zcml"/>
+          <metal:block use-macro="context/@@restdoc_macros/adapter-factory"/>
+          <metal:block use-macro="context/@@restdoc_macros/permission"/>
+        </div>
+      </div>
+
+      <metal:block use-macro="context/@@restdoc_macros/schema"/>
 
     </div>
 
   </div>
 
-
   <div class="indent"
-       tal:repeat="info view/getCreatePUTInfo">
+       tal:define="info view/getDELETEInfo">
 
-    <h3>
-      DELETE 
-      <i>&lt;<span tal:replace="info/container_name" />&gt;</i> /
-      <i>&lt;<span tal:replace="info/object_name" />&gt;</i>
-    </h3>
+    <h3>DELETE</h3>
+
+    <div class="indent">
+
+      <metal:block use-macro="context/@@restdoc_macros/zcml"/>
+      <metal:block use-macro="context/@@restdoc_macros/factory"/>
+      <tal:block repeat="info info/containers">
+        <metal:block use-macro="context/@@restdoc_macros/container"/>
+      </tal:block>
+      <metal:block use-macro="context/@@restdoc_macros/permission"/>
+
+    </div>
 
   </div>
 
+  <div tal:define="traversers view/getNameTraversers"
+       tal:condition="traversers">
 
+    <h2 class="details-section" i18n:translate="">Name Traversers</h2>
+    <div class="indent"
+         tal:repeat="info traversers">
+      <h3 tal:content="info/name">acl</h3>
+      <div class="indent">
+        <div tal:condition="info/component/path">
+          <i i18n:translate="">Resolves to:</i>
+          <a href=""
+             tal:condition="info/component/referencable"
+             tal:attributes="href
+                 string:$rootURL/Code/${info/component/url}/restviews.html"
+             tal:content="info/component/path" />
+          <span
+             tal:condition="not:info/component/referencable"
+             tal:content="info/component/path" />
+        </div>
 
-    <h3>POST &lt;<span tal:replace="context/zope:name" />&gt;</h3>
+        <metal:block use-macro="context/@@restdoc_macros/zcml"/>
+        <metal:block use-macro="context/@@restdoc_macros/permission"/>
 
+      </div>
+    </div>
 
-  <h2 class="details-section" i18n:translate="">Name Traversers</h2>
-  <div class="indent">
   </div>
 
 </body>
