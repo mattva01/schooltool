@@ -113,10 +113,10 @@ class RESTMenu(object):
 
         results = []
         for name, iface in zapi.getUtilitiesFor(IContentType):
-            if name.startswith('zope'):
-                continue
 
             for path, klass in classRegistry.getClassesThatImplement(iface):
+                if path.startswith('zope'):
+                    continue
                 results.append(
                     {'path': path.replace('schooltool', 'st'),
                      'url': path.replace('.', '/') + '/@@restviews.html'
@@ -223,8 +223,10 @@ class RESTDocumentation(BrowserView):
             schema = utilities.dedentString(schema)
         info['schema'] = schema
 
-        info.update(utilities.getPermissionIds(
-            'PUT', checker=reg.value.checker))
+        # Try to get the checker
+        checker = getattr(reg.value, 'checker', None)
+        if checker:
+            info.update(utilities.getPermissionIds('PUT', checker=checker))
 
         # Generically Zope 3 supports putting files by extension using the
         # IWriteFile interface; so we have to collect all of this info here.
@@ -254,8 +256,10 @@ class RESTDocumentation(BrowserView):
                 cdict = component.getInterfaceInfoDictionary(container)
                 info['create']['container'] = cdict
 
+                factory = component.getRealFactory(reg.value)
+
                 # Also, if we have a schema, show it.
-                schema  = getattr(reg.value.factory, 'schema', None)
+                schema  = getattr(factory, 'schema', None)
                 if schema:
                     schema = utilities.dedentString(schema)
                     info['schema'] = schema
@@ -276,8 +280,11 @@ class RESTDocumentation(BrowserView):
             return None
 
         info = presentation.getViewInfoDictionary(reg)
-        info.update(utilities.getPermissionIds(
-            'DELETE', checker=reg.value.checker))
+
+        # Retrieve better security information
+        checker = getattr(reg.value, 'checker', None)
+        if checker:
+            info.update(utilities.getPermissionIds('DELETE', checker=checker))
 
         # Now look up the containers and create an entry for each.
         containers = []
@@ -288,6 +295,7 @@ class RESTDocumentation(BrowserView):
 
 
     def getNameTraversers(self):
+        """Get a list of all name traversers."""
         result = []
         for reg in getNameTraversers(self.klass):
             # Get rid of all sorts of security and location wrappers

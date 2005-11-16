@@ -29,14 +29,10 @@ Let's first write a sensible class:
   >>> class IFile(zope.interface.Interface):
   ...     contents = zope.interface.Attribute('File contents.')
 
-  >>> class IMetaData(zope.interface.Interface):
-  ...     data = zope.interface.Attribute('File meta-data.')
-
   >>> class File(object):
-  ...     zope.interface.implements(IFile, IMetaData)
+  ...     zope.interface.implements(IFile)
   ...     def __init__(self):
   ...         self.contents = ''
-  ...         self.metadata = {}
 
 Now we need to develop a view for the file. For plain HTTP views, the view
 usually implements a verb:
@@ -143,30 +139,559 @@ Now we get its registration:
 In terms of REST documentation, name traversers are traversal plugins for pure
 HTTP requests that traverse a single name. Those traversers are recognized by
 the fact that they have a `traversalName` attribute. For details on how to
-work with the pluggable traverser framework and implem
+work with the pluggable traverser framework and implemenetions of plugins, see
+the documentation in the ``schooltool.traverser`` package.
+
+Let's register a couple of null-traversers:
+
+  >>> from schooltool.traverser import traverser
+  >>> plugin = traverser.NullTraverserPlugin('data')
+  >>> zope.component.provideSubscriptionAdapter(
+  ...     plugin,
+  ...     (IFile, zope.publisher.interfaces.http.IHTTPRequest),
+  ...     traverser.ITraverserPlugin)
+
+  >>> class ISomeContent(zope.interface.Interface):
+  ...     pass
+
+  >>> plugin = traverser.NullTraverserPlugin('info')
+  >>> zope.component.provideSubscriptionAdapter(
+  ...     plugin,
+  ...     (ISomeContent, zope.publisher.interfaces.http.IHTTPRequest),
+  ...     traverser.ITraverserPlugin)
+
+When asking for all the name adapters we only get the first one, since the
+other one requires an interface that is not implemented by the file class:
+
+  >>> restdoc.getNameTraversers(File)
+  [SubscriptionRegistration(('IFile', 'IHTTPRequest'), 'ITraverserPlugin',
+       <class 'schooltool.traverser.traverser.NullTraverserPlugin'>, '')]
 
 
 `RESTMenu` class
 ----------------
 
+The special RESTive menu only displays classes that implement a content type
+interface. So if we register the `IFile` interface as an `IContentType`,
+
+  >>> from zope.app import content
+  >>> zope.interface.directlyProvides(IFile, content.interfaces.IContentType)
+  >>> zope.component.provideUtility(IFile, content.interfaces.IContentType,
+  ...                               name='schooltool.file.IFile')
+
+and add the `File` class to the class registry
+
+  >>> from zope.app.apidoc import classregistry
+  >>> classregistry.classRegistry['schooltool.devmode.devmode_txt.File'] = File
+
+then we can get it from the menu:
+
+  >>> class FauxCodeModule(object):
+  ...     def get(self, name):
+  ...         pass
+
+  >>> menu = restdoc.RESTMenu()
+  >>> menu.context = FauxCodeModule()
+  >>> pprint(menu.listContentClasses())
+  [{'path': 'st.devmode.devmode_txt.File',
+    'url': 'schooltool/devmode/devmode_txt/File/@@restviews.html'}]
+
+Note how the `schooltool` package has been collapsed to `st`. This is
+intentional to save horizontal space in the thin menu column. Also, since this
+is a SchoolTool and not a Zope 3 API documentation, all content types starting
+with `zope` will be ignored:
+
+  >>> classregistry.classRegistry['zope.file.ZopeFile'] = File
+
+  >>> pprint(menu.listContentClasses())
+  [{'path': 'st.devmode.devmode_txt.File',
+    'url': 'schooltool/devmode/devmode_txt/File/@@restviews.html'}]
+
 
 `RESTDocumentation` class
 -------------------------
+
+This class is the main driver of the documentation. All features of the
+RESTive view documentation originate here. This class heavily relies on the
+apidoc inspection API to generate it's information. Please see the text files
+in the ``zope.app.apidoc`` package for more details.
+
+Already the initialization of the class does a lot of work. It first gets the
+apidoc root URL; fortunately, setup is not necessary for this step. Next the
+constructor ensures that the class registry is populated. Thus we need to
+register the `CodeModule` as an `IDocumentationModule` utility:
+
+  >>> from zope.app.apidoc.codemodule import codemodule
+  >>> from zope.app.apidoc.interfaces import IDocumentationModule
+  >>> zope.component.provideUtility(
+  ...     codemodule.CodeModule(), IDocumentationModule, 'Code')
+
+Next the view looks up the naked class and class name, given the code module's
+`Class` documentation object:
+
+  >>> import types
+  >>> fileModule = types.ModuleType('schooltool.file')
+
+  >>> from zope.app.apidoc.codemodule import module
+  >>> docModule = module.Module(
+  ...     None, 'schooltool.file', fileModule)
+
+  >>> from zope.app.apidoc.codemodule import class_
+  >>> docClass = class_.Class(docModule, 'File', File)
+
+We are now ready to instantiate the view,
+
+  >>> from zope.publisher.browser import TestRequest
+  >>> doc = restdoc.RESTDocumentation(docClass, TestRequest)
+
+and get the class and name:
+
+  >>> doc.klass
+  <class 'schooltool.devmode.devmode_txt.File'>
+  >>> doc.name
+  'File'
+
+The following sub-sections introduce the various HTTP-verb documentation
+segements.
 
 
 `getGETInfo()`
 ~~~~~~~~~~~~~~
 
+This method looks up the plain 'GET' HTTP view and displays its
+information. Thus we first have to create such an add view:
+
+  >>> class FileGETView(object):
+  ...    pass
+
+  # Often factories are wrapped:
+  >>> def GET(*args):
+  ...     return FileGETView(*args)
+  >>> GET.factory = FileGETView
+
+  >>> from zope.publisher.interfaces.http import IHTTPRequest
+  >>> zope.component.provideAdapter(
+  ...     GET, (IFile, IHTTPRequest), zope.interface.Interface, 'GET')
+
+We are now ready to look up the view info:
+
+  >>> pprint(doc.getGETInfo())
+  {'doc': '',
+   'factory': {'path': 'schooltool.devmode.devmode_txt.FileGETView',
+               'referencable': True,
+               'resource': None,
+               'template': None,
+               'url': 'schooltool/devmode/devmode_txt/FileGETView'},
+   'layer': None,
+   'name': 'GET',
+   'provided': {'module': 'zope.interface',
+                'name': 'Interface'},
+   'read_perm': None,
+   'required': [{'module': 'schooltool.devmode.devmode_txt',
+                 'name': 'IFile'},
+                {'module': 'zope.publisher.interfaces.http',
+                 'name': 'IHTTPRequest'}],
+   'type': 'zope.publisher.interfaces.http.IHTTPRequest',
+   'write_perm': None,
+   'zcml': None}
+
+If the factory has a template, it is also added to the documentation:
+
+  >>> class FauxTemplate(object):
+  ...     filename = './devmode_txt/template.pt'
+
+  >>> FileGETView.template = FauxTemplate()
+
+  >>> pprint(doc.getGETInfo())
+  {...
+   'factory': {'path': 'schooltool.devmode.devmode_txt.FileGETView',
+               'referencable': True,
+               'resource': None,
+               'template': './devmode_txt/template.pt',
+               'url': 'schooltool/devmode/devmode_txt/FileGETView'},
+   ...}
+
+Furthermore, if the factory has a checker associated with it, then we can even
+get some security information:
+
+  >>> from zope.security import checker
+  >>> FileGETView.checker = checker.Checker({'__call__': 'schooltool.SeeIt'})
+
+  >>> pprint(doc.getGETInfo())
+  {...
+   'read_perm': 'schooltool.SeeIt',
+   ...
+   'write_perm': u'n/a',
+   ...}
+
 
 `getPOSTInfo()`
 ~~~~~~~~~~~~~~~
 
+The information for the 'POST' verb is very similar to that of the 'GET' view.
+We first have to create such an add view:
+
+  >>> class FilePOSTView(object):
+  ...    pass
+
+  # Often factories are wrapped:
+  >>> def POST(*args):
+  ...     return FilePOSTView(*args)
+  >>> POST.factory = FilePOSTView
+
+  >>> zope.component.provideAdapter(
+  ...     POST, (IFile, IHTTPRequest), zope.interface.Interface, 'POST')
+
+We are now ready to look up the view info:
+
+  >>> pprint(doc.getPOSTInfo())
+  {'doc': '',
+   'factory': {'path': 'schooltool.devmode.devmode_txt.FilePOSTView',
+               'referencable': True,
+               'resource': None,
+               'template': None,
+               'url': 'schooltool/devmode/devmode_txt/FilePOSTView'},
+   'layer': None,
+   'name': 'POST',
+   'provided': {'module': 'zope.interface',
+                'name': 'Interface'},
+   'read_perm': None,
+   'required': [{'module': 'schooltool.devmode.devmode_txt',
+                 'name': 'IFile'},
+                {'module': 'zope.publisher.interfaces.http',
+                 'name': 'IHTTPRequest'}],
+   'type': 'zope.publisher.interfaces.http.IHTTPRequest',
+   'write_perm': None,
+   'zcml': None}
+
+If the factory has a template, it is also added to the documentation:
+
+  >>> class FauxTemplate(object):
+  ...     filename = './devmode_txt/template.pt'
+
+  >>> FilePOSTView.template = FauxTemplate()
+
+  >>> pprint(doc.getPOSTInfo())
+  {...
+   'factory': {'path': 'schooltool.devmode.devmode_txt.FilePOSTView',
+               'referencable': True,
+               'resource': None,
+               'template': './devmode_txt/template.pt',
+               'url': 'schooltool/devmode/devmode_txt/FilePOSTView'},
+   ...}
+
+Furthermore, if the factory has a checker associated with it, then we can even
+get some security information:
+
+  >>> from zope.security import checker
+  >>> POST.checker = checker.Checker({'__call__': 'schooltool.SeeIt'})
+
+  >>> pprint(doc.getPOSTInfo())
+  {...
+   'read_perm': 'schooltool.SeeIt',
+   ...
+   'write_perm': u'n/a',
+   ...}
+
+Additionally, some POST views have a schema associated with them, so this is
+retrieved too, when available:
+
+  >>> FilePOSTView.schema = '<schema>More here</schema>'
+
+  >>> pprint(doc.getPOSTInfo())
+  {...
+   'schema': '<schema>More here</schema>',
+   ...}
+
+
 `getPUTInfo()`
 ~~~~~~~~~~~~~~
+
+If a 'PUT' view is written from scratch, it is usally very similar to the ones
+previously covered verbs. We first have to create such an add view:
+
+  >>> class FilePUTView(object):
+  ...    pass
+
+  # Often factories are wrapped:
+  >>> def PUT(*args):
+  ...     return FilePUTView(*args)
+  >>> PUT.factory = FilePUTView
+
+  >>> zope.component.provideAdapter(
+  ...     PUT, (IFile, IHTTPRequest), zope.interface.Interface, 'PUT')
+
+We are now ready to look up the view info:
+
+  >>> pprint(doc.getPUTInfo())
+  {'doc': '',
+   'factory': {'path': 'schooltool.devmode.devmode_txt.FilePUTView',
+               'referencable': True,
+               'resource': None,
+               'template': None,
+               'url': 'schooltool/devmode/devmode_txt/FilePUTView'},
+   'layer': None,
+   'name': 'PUT',
+   'provided': {'module': 'zope.interface',
+                'name': 'Interface'},
+   'read_perm': None,
+   'required': [{'module': 'schooltool.devmode.devmode_txt',
+                 'name': 'IFile'},
+                {'module': 'zope.publisher.interfaces.http',
+                 'name': 'IHTTPRequest'}],
+   'schema': None,
+   'type': 'zope.publisher.interfaces.http.IHTTPRequest',
+   'write_perm': None,
+   'zcml': None}
+
+If the factory has a checker associated with it, then we can even
+get some security information:
+
+  >>> from zope.security import checker
+  >>> PUT.checker = checker.Checker({'PUT': 'schooltool.SeeIt'})
+
+  >>> pprint(doc.getPUTInfo())
+  {...
+   'read_perm': 'schooltool.SeeIt',
+   ...
+   'write_perm': u'n/a',
+   ...}
+
+Furthermore, PUT views usually have a schema associated with them, so this is
+retrieved too, when available:
+
+  >>> FilePUTView.schema = '<schema>More here</schema>'
+
+  >>> pprint(doc.getPUTInfo())
+  {...
+   'schema': '<schema>More here</schema>',
+   ...}
+
+However, retrieving the info for the 'PUT' verb is usually more complex, since
+it invokes several adapters that do the work. By default, there is a 'PUT'
+view registered for all objects that uses the `FileFactory` and `IWriteFile`
+adapters of the context to implement the PUT functionality:
+
+  >>> from zope.app.http import put
+
+  # Often factories are wrapped:
+  >>> def PUT(*args):
+  ...     return put.FilePUT(*args)
+  >>> PUT.factory = put.FilePUT
+
+  >>> zope.component.provideAdapter(
+  ...     PUT, (IFile, IHTTPRequest), zope.interface.Interface, 'PUT')
+
+Without any adapters registered, the result is pretty skimpy:
+
+  >>> pprint(doc.getPUTInfo())
+  {'doc': '',
+   'factory': {'path': 'zope.app.http.put.FilePUT',
+               'referencable': True,
+               'resource': None,
+               'template': None,
+               'url': 'zope/app/http/put/FilePUT'},
+   'layer': None,
+   'name': 'PUT',
+   'provided': {'module': 'zope.interface',
+                'name': 'Interface'},
+   'read_perm': None,
+   'required': [{'module': 'schooltool.devmode.devmode_txt',
+                 'name': 'IFile'},
+                {'module': 'zope.publisher.interfaces.http',
+                 'name': 'IHTTPRequest'}],
+   'schema': None,
+   'type': 'zope.publisher.interfaces.http.IHTTPRequest',
+   'write_perm': None,
+   'zcml': None}
+
+If we now register an `IWriteFile` adapter, an 'edit' section will be added to
+the dictionary:
+
+  >>> from zope.app.filerepresentation.interfaces import IWriteFile
+  >>> class FileWriteFile(object):
+  ...     zope.component.adapts(IFile)
+  ...     zope.interface.implements(IWriteFile)
+
+  >>> zope.component.provideAdapter(FileWriteFile)
+
+  >>> pprint(doc.getPUTInfo())
+  {...
+   'edit': {'doc': '',
+            'factory': 'schooltool.devmode.devmode_txt.FileWriteFile',
+            'factory_url': 'schooltool/devmode/devmode_txt/FileWriteFile',
+            'name': '',
+            'provided': {'module': 'zope.app.filerepresentation.interfaces',
+                         'name': 'IWriteFile'},
+            'required': [{'module': 'schooltool.devmode.devmode_txt',
+                          'name': 'IFile'}],
+            'zcml': None},
+   ...}
+
+Now, the `IFileFactory` adapter must be registered for the *container* of the
+`IFile` interface. We already defined the container interface to be
+`IFileContainer`.
+
+  >>> from zope.app.filerepresentation.interfaces import IFileFactory
+  >>> class FileFileFactory(object):
+  ...     zope.component.adapts(IFileContainer)
+  ...     zope.interface.implements(IFileFactory)
+
+  >>> zope.component.provideAdapter(FileFileFactory)
+
+In addition to the 'edit' section, we should now have a 'create' section:
+
+  >>> pprint(doc.getPUTInfo())
+  {'create': {'container': {'module': 'schooltool.devmode.devmode_txt',
+                            'name': 'IFileContainer'},
+              'doc': '',
+              'factory': 'schooltool.devmode.devmode_txt.FileFileFactory',
+              'factory_url': 'schooltool/devmode/devmode_txt/FileFileFactory',
+              'name': '',
+              'provided': {'module': 'zope.app.filerepresentation.interfaces',
+                           'name': 'IFileFactory'},
+              'required': [{'module': 'schooltool.devmode.devmode_txt',
+                            'name': 'IFileContainer'}],
+              'zcml': None},
+   ...
+   'schema': None,
+   ...}
+
+Since most file factories use schemas, it is also retrieved when available:
+
+  >>> FileFileFactory.schema = '<schema>More here</schema>'
+
+  >>> pprint(doc.getPUTInfo())
+  {'create': {'container': {'module': 'schooltool.devmode.devmode_txt',
+                            'name': 'IFileContainer'},
+              'doc': '',
+              'factory': 'schooltool.devmode.devmode_txt.FileFileFactory',
+              'factory_url': 'schooltool/devmode/devmode_txt/FileFileFactory',
+              'name': '',
+              'provided': {'module': 'zope.app.filerepresentation.interfaces',
+                           'name': 'IFileFactory'},
+              'required': [{'module': 'schooltool.devmode.devmode_txt',
+                            'name': 'IFileContainer'}],
+              'zcml': None},
+   ...
+   'schema': '<schema>More here</schema>',
+   ...}
 
 
 `getDELETEInfo()`
 ~~~~~~~~~~~~~~~~~
 
+The 'DELETE' view gives you the basic view information:
+
+  >>> class FileDELETEView(object):
+  ...    pass
+
+  >>> zope.component.provideAdapter(
+  ...     FileDELETEView, (IFile, IHTTPRequest), zope.interface.Interface,
+  ...     'DELETE')
+
+  >>> pprint(doc.getDELETEInfo())
+  {'containers': [{'module': 'schooltool.devmode.devmode_txt',
+                   'name': 'IFileContainer'}],
+   'doc': '',
+   'factory': {'path': 'schooltool.devmode.devmode_txt.FileDELETEView',
+               'referencable': True,
+               'resource': None,
+               'template': None,
+               'url': 'schooltool/devmode/devmode_txt/FileDELETEView'},
+   'layer': None,
+   'name': 'DELETE',
+   'provided': {'module': 'zope.interface',
+                'name': 'Interface'},
+   'read_perm': None,
+   'required': [{'module': 'schooltool.devmode.devmode_txt',
+                 'name': 'IFile'},
+                {'module': 'zope.publisher.interfaces.http',
+                 'name': 'IHTTPRequest'}],
+   'type': 'zope.publisher.interfaces.http.IHTTPRequest',
+   'write_perm': None,
+   'zcml': None}
+
+As you can see, the info also lists the containers from which the delete view
+can be called. If we add a checker to the factory, then we even get some
+better permission information:
+
+  >>> FileDELETEView.checker = checker.Checker({'DELETE': 'schooltool.SeeIt'})
+
+  >>> pprint(doc.getDELETEInfo())
+  {...
+   'read_perm': 'schooltool.SeeIt',
+   ...
+   'write_perm': u'n/a',
+   ...}
+
+
 `getNameTraversers()`
 ~~~~~~~~~~~~~~~~~~~~~
+
+We already looked at the `getNameTraversers()` function; this method simply
+creates an `info` dictionary for each name traverser registration.
+
+  >>> pprint(doc.getNameTraversers())
+  [{'component': {'path': 'schooltool.devmode.devmode_txt.File',
+                  'referencable': True,
+                  'url': 'schooltool/devmode/devmode_txt/File'},
+    'name': 'data',
+    'read_perm': None,
+    'write_perm': None,
+    'zcml': None}]
+
+This is the correct result for the `NullTraverser` we registered
+earlier. However, the method has to work much harder for an adapter traverser,
+so let's set one up:
+
+  >>> class IMetaData(zope.interface.Interface):
+  ...     pass
+
+  >>> class FileMetaData(object):
+  ...     zope.component.adapts(IFile)
+  ...     zope.interface.implements(IMetaData)
+
+  >>> zope.component.provideAdapter(FileMetaData)
+
+  >>> plugin = traverser.AdapterTraverserPlugin('metadata', IMetaData)
+  >>> zope.component.provideSubscriptionAdapter(
+  ...     plugin, (IFile, IHTTPRequest), traverser.ITraverserPlugin)
+
+If we call the method again, we should see the new traverser:
+
+  >>> traversers = doc.getNameTraversers()
+  >>> traversers.sort()
+  >>> pprint(traversers[1])
+  {'component': {'path': 'schooltool.devmode.devmode_txt.FileMetaData',
+                 'referencable': True,
+                 'url': 'schooltool/devmode/devmode_txt/FileMetaData'},
+   'name': 'metadata',
+   'read_perm': None,
+   'write_perm': None,
+   'zcml': None}
+
+In case you write your totally custom name traverser, just make sure that it
+has a `component` attribute that returns the class:
+
+  >>> class FileHistory(object):
+  ...     pass
+
+  >>> class FileHistoryTraverser(object):
+  ...     traversalName = 'history'
+  ...     component = FileHistory
+
+  >>> zope.component.provideSubscriptionAdapter(
+  ...     FileHistoryTraverser, (IFile, IHTTPRequest),
+  ...     traverser.ITraverserPlugin)
+
+  >>> traversers = doc.getNameTraversers()
+  >>> traversers.sort()
+  >>> pprint(traversers[1])
+  {'component': {'path': 'schooltool.devmode.devmode_txt.FileHistory',
+                 'referencable': True,
+                 'url': 'schooltool/devmode/devmode_txt/FileHistory'},
+   'name': 'history',
+   'read_perm': None,
+   'write_perm': None,
+   'zcml': None}
