@@ -537,7 +537,12 @@ Now, the `IFileFactory` adapter must be registered for the *container* of the
   ...     zope.component.adapts(IFileContainer)
   ...     zope.interface.implements(IFileFactory)
 
-  >>> zope.component.provideAdapter(FileFileFactory)
+  >>> def FactoryWrapper(*args):
+  ...     return FileFileFactory(*args)
+  >>> FactoryWrapper.factory = FileFileFactory
+
+  >>> zope.component.provideAdapter(
+  ...     FactoryWrapper, [IFileContainer], IFileFactory)
 
 In addition to the 'edit' section, we should now have a 'create' section:
 
