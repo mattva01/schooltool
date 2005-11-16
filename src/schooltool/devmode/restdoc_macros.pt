@@ -49,7 +49,7 @@
 
   <div tal:condition="info/read_perm|nothing">
     <i i18n:translate="">Permission:</i>
-    <span tal:replace="info/read_perm">zope.View</span>
+    <span tal:replace="info/read_perm" i18n:translate="">zope.View</span>
   </div>
 
 </metal:block>

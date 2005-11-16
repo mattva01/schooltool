@@ -363,6 +363,226 @@ when clicking a link:
 RESTive Views
 ~~~~~~~~~~~~~
 
+This documentation section provides detailed information about the available
+restive views of all SchoolTool content type classes.
+
+    >>> browser.open('http://localhost/')
+    >>> browser.getLink('API Docs').click()
+    >>> browser.getLink(url='modulelist.html').click()
+    >>> browser.getLink('RESTive Views').click()
+
+Since it is not expected that there are many content types around, no search
+interface is provided and all the content classes are listed. Let's select the
+`Person`, which is themost interesting class:
+
+    >>> browser.getLink('st.person.person.Person').click()
+
+The view begins witha  list of all available HTTP verbs. For the 'GET' view
+you can see the ZCML file the factory was reguistered at as well as the
+factory path:
+
+    >>> print browser.contents
+    <!DOC...
+    ...
+    <h3>GET</h3>
+    <div class="indent">
+      <div>
+        <i>Registered at:</i>
+        <a href="...">Zope3/src/schooltool/person/rest/configure.zcml</a>
+       <span class="small">
+         (line 88)</span>
+      </div>
+      <div>
+        <i>Factory path:</i>
+        <a href="...">schooltool.person.rest.person.PersonFile</a>
+      </div>
+    </div>
+    ...
+
+The 'PUT' view has a lot more information besides the standard information,
+
+    >>> print browser.contents
+    <!DOC...
+    ...
+    <h3>PUT</h3>
+    <div class="indent">
+    <div>
+      <i>Registered at:</i>
+      <a href="...">Zope3/Zope3/src/zope/app/http/configure.zcml</a>
+      <span class="small">
+        (line 34)</span>
+    </div>
+    <div>
+      <i>Factory path:</i>
+      <a href="...">zope.app.http.put.FilePUT</a>
+    </div>
+    <div>
+      <i>Permission:</i>
+      zope.Public
+    </div>
+    ...
+
+you also receive information about the adapter that can create a person inside
+a given container,
+
+    >>> print browser.contents
+    <!DOC...
+    ...
+    <div>
+      <i><b>Creation Adapter:</b></i>
+      <div class="indent" style="padding-bottom: 0.5em">
+        <div>
+          <i>Registered at:</i>
+          <a href="...">Zope3/src/schooltool/person/rest/configure.zcml</a>
+          <span class="small">
+            (line 66)</span>
+        </div>
+        <div>
+          <i>Factory path:</i>
+          <a href="...">schooltool.person.person.Person</a>
+        </div>
+        <div>
+          <i>Container:</i>
+          <a href="...">schooltool.person.interfaces.IPersonContainer</a>
+        </div>
+      </div>
+    </div>
+    ...
+
+the modification adapter,
+
+    >>> print browser.contents
+    <!DOC...
+    ...
+    <div>
+      <i><b>Modification Adapter:</b></i>
+      <div class="indent" style="padding-bottom: 0.5em">
+        <div>
+          <i>Registered at:</i>
+          <a href="...">Zope3/src/schooltool/person/rest/configure.zcml</a>
+          <span class="small">
+            (line 73)</span>
+        </div>
+        <div>
+          <i>Factory path:</i>
+          <a href="...">schooltool.person.rest.person.PersonFile</a>
+        </div>
+      </div>
+    </div>
+    ...
+
+and the schema used to create and/or modify the content:
+
+    >>> print browser.contents
+    <!DOC...
+    ...
+    <div>
+      <i><b>Schema:</b></i>
+      <div class="indent">
+        <pre style="font-size: 100%; margin: 0">...</pre>
+      </div>
+    </div>
+    ...
+
+The final verb for the person is 'DELETE'. Besides the usual information, we
+also get a list of containers from which the verb is valid:
+
+    >>> print browser.contents
+    <!DOC...
+    ...
+    <div class="indent">
+      <h3>DELETE</h3>
+      <div class="indent">
+        <div>
+          <i>Registered at:</i>
+          <a href="...">Zope3/Zope3/src/zope/app/http/configure.zcml</a>
+          <span class="small">
+            (line 43)</span>
+        </div>
+        <div>
+          <i>Factory path:</i>
+          <a href="...">zope.app.http.delete.DELETE</a>
+        </div>
+        <div>
+          <i>Container:</i>
+          <a href="...">schooltool.person.interfaces.IPersonContainer</a>
+        </div>
+        <div>
+          <i>Permission:</i>
+          zope.Public
+        </div>
+      </div>
+    </div>
+    ...
+
+Following the HTTP verbs, all identifyable name traversers are listed,
+including the access control list, `acl`:
+
+
+    >>> print browser.contents
+    <!DOC...
+    ...
+    <div class="indent">
+      <h3>acl</h3>
+      <div class="indent">
+        <div>
+          <i>Resolves to:</i>
+          <a href="...">schooltool.app.rest.acl.ACLAdapter</a>
+        </div>
+        <div>
+          <i>Registered at:</i>
+          <a href="...">Zope3/src/schooltool/app/rest/configure.zcml</a>
+          <span class="small">
+           (line 67)</span>
+        </div>
+      </div>
+    </div>
+    ...
+
+However, the link to the resolved component does not link the the class
+documentation, but another RESTive view documentation screen. This is to allow
+the inspection of the complete RESTive API:
+
+    >>> browser.getLink('schooltool.app.rest.acl.ACLAdapter').click()
+    >>> browser.url
+    '.../++apidoc++/Code/schooltool/app/rest/acl/ACLAdapter/restviews.html'
+
+In the ACL view, you can also see an example of a 'POST' view:
+
+    >>> print browser.contents
+    <!DOC...
+    ...
+    <div class="indent">
+      <h3>POST</h3>
+      <div class="indent">
+        <div>
+          <i>Registered at:</i>
+          <a href="...">Zope3/src/schooltool/app/rest/configure.zcml</a>
+          <span class="small">
+            (line 176)</span>
+        </div>
+        <div>
+          <i>Factory path:</i>
+          <a href="...">schooltool.app.rest.acl.ACLView</a>
+        </div>
+        <div>
+          <i>Template:</i>
+          Zope3/src/schooltool/app/rest/templates/acl.pt
+        </div>
+        <div>
+          <i>Permission:</i>
+          n/a
+        </div>
+        <div>
+          <i><b>Schema:</b></i>
+          <div class="indent">
+            <pre style="font-size: 100%; margin: 0">...</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+    ...
+
 
 Book
 ~~~~

@@ -256,9 +256,8 @@ class RESTDocumentation(BrowserView):
                 cdict = component.getInterfaceInfoDictionary(container)
                 info['create']['container'] = cdict
 
-                factory = component.getRealFactory(reg.value)
-
                 # Also, if we have a schema, show it.
+                factory = getattr(reg.value, 'factory', None)
                 schema  = getattr(factory, 'schema', None)
                 if schema:
                     schema = utilities.dedentString(schema)
