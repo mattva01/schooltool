@@ -5,10 +5,12 @@
 <!-- Security Declarations -->
 
   <content class=".acl.ACLAdapter">
-    <allow attributes="context" />
+    <require
+        permission="schooltool.controlAccess"
+        attributes="context" />
   </content>
 
-  <adapter factory=".acl.ACLAdapter" />
+  <adapter factory=".acl.ACLAdapter" locate="true" />
 
   <content class="schooltool.relationship.relationship.LinkSet">
     <allow

@@ -43,6 +43,7 @@ from zope.app.event.objectevent import ObjectCreatedEvent
 from schooltool.app.rest import View, Template
 from schooltool.app.rest.errors import RestError
 from schooltool.app.app import getSchoolToolApplication
+from zope.app.container.traversal import ItemTraverser
 from schooltool.xmlparsing import XMLDocument
 from schooltool.common import parse_date, parse_time
 from schooltool.timetable.interfaces import IHaveTimetables, ITimetables
@@ -346,7 +347,7 @@ class NullTimetable(NullResource):
     implements(INullTimetable)
 
 
-class TimetableDictPublishTraverse(object):
+class TimetableDictPublishTraverse(ItemTraverser):
     """Traverser for a_timetabled_object/timetables"""
 
     adapts(ITimetableDict, IHTTPRequest)
@@ -360,18 +361,22 @@ class TimetableDictPublishTraverse(object):
         # Note: the way the code is written now lets the user access
         # existing timetables even if their name refers to a deleted
         # term/schema. Not sure if that is a good or a bad thing.
+        itemTraverse = super(TimetableDictPublishTraverse, self)
         try:
-            return self.context[name]
-        except KeyError:
-            app = getSchoolToolApplication()
-            try:
-                term, schema = name.split('.')
-            except ValueError:
-                raise NotFound(self.context, name, request)
+            return itemTraverse.publishTraverse(request, name)
+        except NotFound:
+            pass
+
+        app = getSchoolToolApplication()
+        try:
+            term, schema = name.split('.')
+        except ValueError:
+            pass
+        else:
             if term in app['terms'] and schema in app['ttschemas']:
                 return NullTimetable(self.context, name)
-            else:
-                raise NotFound(self.context, name, request)
+
+        raise NotFound(self.context, name, request)
 
 
 class NullTimetablePUT(object):
@@ -500,6 +505,9 @@ class CompositeTimetablesPublishTraverse(object):
 
         if timetable:
             return timetable
+
+        # XXX: An HTTP traverser is responsible for looking up views, which is
+        #      not done here.
 
         raise NotFound(self.context, name, request)
 
