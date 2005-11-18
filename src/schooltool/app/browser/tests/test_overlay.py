@@ -298,7 +298,7 @@ def doctest_CalendarSelectionView():
         >>> print view()
         <BLANKLINE>
         ...
-              <select size="8" multiple="multiple" id="people" 
+              <select size="8" multiple="multiple" id="people"
                       name="persons:list">
                 <option selected="selected" value="eric">Eric Bjornsen</option>
                 <option selected="selected" value="igor">Igor</option>
@@ -422,7 +422,7 @@ def doctest_CalendarSelectionView_updateSelection():
         ...          for cal in user.overlaid_calendars]
         ...     l.sort()
         ...     for title, info in l:
-        ...         showtt = IShowTimetables(info).showTimetables 
+        ...         showtt = IShowTimetables(info).showTimetables
         ...         print '[%s][%s] %s' % (info.show and '+' or '-',
         ...                                showtt and '+' or '-',
         ...                                title)

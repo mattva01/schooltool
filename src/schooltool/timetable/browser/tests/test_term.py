@@ -138,7 +138,7 @@ def doctest_TermEditView_update():
         >>> view.term is view.context
         True
 
-    However if you reset update_status back to None, update will 
+    However if you reset update_status back to None, update will
 
         >>> view.update_status = None
         >>> view.update()

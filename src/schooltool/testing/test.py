@@ -496,7 +496,7 @@ class Colorizer(object):
             - This line esd chnged
             ?           ^^^     -
             + This line was changd
-            ?           ^^^   + 
+            ?           ^^^   +
               Some context
 
         """

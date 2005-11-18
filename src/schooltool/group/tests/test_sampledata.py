@@ -58,7 +58,7 @@ def doctest_SampleGroups():
         ('students', 'terms')
 
     Prepare students.
-    
+
         >>> setUpRelationships()
         >>> app = stsetup.setupSchoolToolSite()
         >>> from schooltool.person.sampledata import SampleStudents
@@ -87,16 +87,16 @@ def doctest_SampleGroups():
         Cart racing
         Cheerleading
         Chess club
-    
+
     Every group has n_members_in_group student members.
 
         >>> for i in range(plugin.n_groups):
-        ...     n_members = len(app['groups']['group%02d' % i].members) 
+        ...     n_members = len(app['groups']['group%02d' % i].members)
         ...     assert n_members == plugin.n_members_in_group
 
     No student is in more than one group.
 
-        >>> student_ids = [id for id in app['persons'].keys() 
+        >>> student_ids = [id for id in app['persons'].keys()
         ...                if id.startswith('student')]
         >>> for student_id in student_ids:
         ...     assert len(app['persons'][student_id].groups) <= 1

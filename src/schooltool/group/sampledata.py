@@ -40,7 +40,7 @@ from schooltool.app.interfaces import ISchoolToolCalendar
 
 class SampleGroups(object):
     """Sample data generation plugin that creates groups.
-    
+
     It also adds existing persons as members to the groups, and creates
     group-wide calendar events.
     """
@@ -63,7 +63,7 @@ class SampleGroups(object):
     def generate(self, app, seed=None):
         self.random = random.Random(seed)
         n_members = self.n_groups * self.n_members_in_group
-        
+
         student_ids = [id for id in app['persons'].keys()
                        if id.startswith('student')]
         assert len(student_ids) >= n_members
@@ -79,7 +79,7 @@ class SampleGroups(object):
                 member_id = member_iter.next()
                 student = removeSecurityProxy(app['persons'][member_id])
                 group.members.add(student)
-            
+
             # Add meeting event
             recurrenceRule = self.random.choice((DailyRecurrenceRule,
                                                  WeeklyRecurrenceRule,

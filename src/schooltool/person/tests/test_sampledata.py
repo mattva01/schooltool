@@ -143,7 +143,7 @@ def doctest_SamplePersonalEvents():
     """A sample data plugin that generates random personal events.
 
         >>> setUpRelationships()
-        
+
         >>> from schooltool.person.sampledata import SamplePersonalEvents
         >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
         >>> plugin = SamplePersonalEvents()
@@ -168,11 +168,11 @@ def doctest_SamplePersonalEvents():
 
         >>> plugin.probability
         10
-        
+
         >>> plugin.probability = 50
 
     Create random events for all students and teachers.
-        
+
         >>> plugin.generate(app, 42)
 
         >>> for i in range(5):
@@ -189,13 +189,13 @@ def doctest_SamplePersonalEvents():
         >>> calendar = ISchoolToolCalendar(person)
         >>> len(calendar)
         154
-        
+
         >>> events = list(calendar)
         >>> events.sort()
         >>> for event in events[0:5]:
         ...     print event.dtstart,
         ...     print event.duration,
-        ...     print event.title    
+        ...     print event.title
         2005-08-22 10:30:00+00:00 5:00:00 Birding
         2005-08-23 23:30:00+00:00 3:30:00 Soccer
         2005-08-24 20:30:00+00:00 0:30:00 Flashmob

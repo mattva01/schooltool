@@ -3740,7 +3740,7 @@ def doctest_CalendarViewBase():
         'http://127.0.0.1/calendar/2005-w05.pdf'
         >>> del view.cal_type
 
-        >>> pdfcal.disabled = real_pdfcal_disabled 
+        >>> pdfcal.disabled = real_pdfcal_disabled
 
     update() sets the cursor for the view.  If it does not find a date in
     request or the session, it defaults to the current day:

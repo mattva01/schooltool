@@ -46,5 +46,5 @@ class MultiBatchViewMixin(object):
 
     def updateBatch(self, name, lst, sort_on=None):
         """Use the provided name and iterable to create a new batch."""
-        self.batches[name] = Batch(lst, self.batch_starts[name], 
+        self.batches[name] = Batch(lst, self.batch_starts[name],
                                    self.batch_sizes[name], sort_on)

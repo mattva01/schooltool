@@ -1477,7 +1477,7 @@ def doctest_FinalStep_createSchema():
 def doctest_FinalStep_createSchema_different_order_on_different_days_weekly():
     """Unit test for FinalStep.createSchema
 
-    Weekly cycle, same time slots on each day, different period order in 
+    Weekly cycle, same time slots on each day, different period order in
     each day.
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
@@ -1527,7 +1527,7 @@ def doctest_FinalStep_createSchema_different_order_on_different_days_weekly():
 def doctest_FinalStep_createSchema_different_order_on_different_days_cyclic():
     """Unit test for FinalStep.createSchema
 
-    Rotating cycle, same time slots on each day, different period order in 
+    Rotating cycle, same time slots on each day, different period order in
     each day.
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
@@ -1656,7 +1656,7 @@ def doctest_FinalStep_createSchema_different_order_cyclic_weekly():
 def doctest_FinalStep_createSchema_different_times():
     """Unit test for FinalStep.createSchema
 
-    Weekly cycle, different time slots on each day, different period order in 
+    Weekly cycle, different time slots on each day, different period order in
     each day.
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep

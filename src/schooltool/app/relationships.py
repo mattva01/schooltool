@@ -144,7 +144,7 @@ def enforceCourseSectionConstraint(event):
         raise InvalidRelationship('Course must provide ICourse.')
 
 
-CourseSections = RelationshipSchema(URICourseSections, 
+CourseSections = RelationshipSchema(URICourseSections,
                                     course=URICourse,
                                     section=URISectionOfCourse)
 

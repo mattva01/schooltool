@@ -44,7 +44,7 @@ class ShowTimetablesStub(object):
     def _setShowTimetables(self, value):
         self.context._show_timetables = value
 
-    showTimetables = property(_getShowTimetables, _setShowTimetables)   
+    showTimetables = property(_getShowTimetables, _setShowTimetables)
 
 
 def doctest_Instruction():
