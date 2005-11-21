@@ -1,0 +1,66 @@
+=======================
+Standard Definition API
+=======================
+
+Standard Definitions are used to descibe an academic accomplishment.
+
+  >>> from cando import interfaces, standard
+
+A standard definition is a simple object:
+
+  >>> forloop = standard.StandardDefinition(u'Write a for loop.')
+  >>> forloop
+  StandardDefinition(u'Write a for loop.')
+
+Commonly, standard definitions are grouped:
+
+  >>> program = standard.GroupStandardDefinition(u'Programming')
+  >>> program
+  GroupStandardDefinition(u'Programming')
+
+Since grouping definitions implement the ``IContainer`` interface, we can
+simply use the mapping interface to add add other definitions:
+
+  >>> program[u'forloop'] = forloop
+
+The standard is now available in the group:
+
+  >>> list(program.keys())
+  [u'forloop']
+
+But the interesting part is the inheritance of standard definitions. Let's say
+that the programming group above is defined as a requirement for any
+programming class. Now we would like to extend that standard to a Python
+programming class:
+
+  >>> pyprogram = standard.GroupStandardDefinition(program)
+  >>> pyprogram['iter'] = standard.StandardDefinition('Create an iterator.')
+
+So now the lookup of all standards in ``py_program`` should be the generic and
+python-specific standards:
+
+  >>> list(pyprogram.keys())
+  [u'forloop', u'iter']
+
+When looking at the standards, one should be able to make the difference
+between inherited and locally defined standards:
+
+  >>> pyprogram[u'iter']
+  StandardDefinition(u'Create an iterator.')
+
+  >>> pyprogram[u'forloop']
+  InheritedStandardDefinition(StandardDefinition(u'Write a for loop.'))
+
+You can also inspect and manage the bases:
+
+  >>> pyprogran.bases
+  [GroupStandardDefinition(u'Programming')]
+
+  >>> pyprogram.removeBase(program)
+  >>> list(pyprogram.keys())
+  [u'iter']
+
+  >>> pyprogram.addBase(program)
+  >>> list(pyprogram.keys())
+  [u'forloop', u'iter']
+
