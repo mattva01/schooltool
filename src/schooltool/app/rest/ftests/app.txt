@@ -12,30 +12,11 @@ The front page:
     <schooltool xmlns:xlink="http://www.w3.org/1999/xlink">
       <message>Welcome to the SchoolTool server</message>
       <containers>
-        <container xlink:type="simple"
-                   xlink:href="http://localhost/terms"
-                   xlink:title="terms"/>
+        ...
         <container xlink:type="simple"
                    xlink:href="http://localhost/persons"
                    xlink:title="persons"/>
-        <container xlink:type="simple"
-                   xlink:href="http://localhost/courses"
-                   xlink:title="courses"/>
-        <container xlink:type="simple"
-                   xlink:href="http://localhost/levels"
-                   xlink:title="levels"/>
-        <container xlink:type="simple"
-                   xlink:href="http://localhost/groups"
-                   xlink:title="groups"/>
-        <container xlink:type="simple"
-                   xlink:href="http://localhost/ttschemas"
-                   xlink:title="ttschemas"/>
-        <container xlink:type="simple"
-                   xlink:href="http://localhost/sections"
-                   xlink:title="sections"/>
-        <container xlink:type="simple"
-                   xlink:href="http://localhost/resources"
-                   xlink:title="resources"/>
+        ...
       </containers>
     </schooltool>
     <BLANKLINE>
