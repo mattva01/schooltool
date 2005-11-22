@@ -63,6 +63,20 @@
       menu="schooltool_actions" title="New Term"
       />
 
+  <configure package="schooltool.app.browser">
+    <viewlet
+      name="terms"
+      for="*"
+      manager="schooltool.app.browser.skin.INavigationManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.app.browser.skin.NavigationViewlet"
+      permission="zope.View"
+      link="terms"
+      title="Terms"
+      order="70"
+      />
+  </configure>
+
   <page
       name="index.html"
       for="schooltool.timetable.interfaces.ITerm"
@@ -90,6 +104,20 @@
       menu="zmi_views"
       title="View"
       />
+
+  <configure package="schooltool.app.browser">
+    <viewlet
+      name="ttschemas"
+      for="*"
+      manager="schooltool.app.browser.skin.INavigationManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.app.browser.skin.NavigationViewlet"
+      permission="zope.View"
+      link="ttschemas"
+      title="School Timetables"
+      order="80"
+      />
+  </configure>
 
   <page
       name="simpleadd.html"

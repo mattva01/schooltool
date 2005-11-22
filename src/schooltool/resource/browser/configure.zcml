@@ -51,6 +51,18 @@
       <widget field="description" height="5" />
     </editform>
 
+    <viewlet
+      name="resources"
+      for="*"
+      manager="schooltool.app.browser.skin.INavigationManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.app.browser.skin.NavigationViewlet"
+      permission="zope.View"
+      link="resources"
+      title="Resources"
+      order="60"
+      />
+
   </configure>
 
 

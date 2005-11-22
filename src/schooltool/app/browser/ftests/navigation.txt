@@ -24,7 +24,7 @@ Navigation view
 The `schooltool_navigation` view is registered for "*".  It will present
 a portlet with the navigation links depending on the authorized user.
 
-    >>> manager.open('http://localhost/schooltool_navigation')
+    >>> manager.open('http://localhost/')
 
     >>> print analyze.queryHTML('//a[text()="Persons"]', manager.contents)[0]
     <a href="http://localhost/persons">Persons</a>
@@ -52,8 +52,7 @@ The main technical challenge in this view is finding the nearest
 ``ISchoolToolApplication`` instance, and providing the links relative to
 it.
 
-    >>> manager.open('http://localhost/'
-    ...              'groups/manager/schooltool_navigation')
+    >>> manager.open('http://localhost/groups/manager')
 
     >>> print analyze.queryHTML('//a[text()="Persons"]', manager.contents)[0]
     <a href="http://localhost/persons">Persons</a>

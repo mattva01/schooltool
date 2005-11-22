@@ -32,6 +32,18 @@
         permission="schooltool.edit"
         />
 
+    <viewlet
+      name="persons"
+      for="*"
+      manager="schooltool.app.browser.skin.INavigationManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.app.browser.skin.NavigationViewlet"
+      permission="zope.View"
+      link="persons"
+      title="Persons"
+      order="10"
+      />
+
   </configure>
 
   <containerViews

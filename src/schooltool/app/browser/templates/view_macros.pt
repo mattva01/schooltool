@@ -90,8 +90,8 @@
       <metal:block define-slot="column-left">
         <div id="column-left">
           <div metal:define-slot="navigation-box"
-               tal:replace="structure context/@@schooltool_navigation"
-               tal:on-error="nothing"/>
+               tal:replace="structure provider:schooltool.Navigation"/>
+
           <div class="portlet"
                tal:condition="context/@@view_get_menu/schooltool_actions">
             <h4 i18n:translate="">Actions</h4>

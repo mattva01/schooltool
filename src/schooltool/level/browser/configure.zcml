@@ -16,6 +16,18 @@
         menu="zmi_views" title="View"
         />
 
+    <viewlet
+      name="levels"
+      for="*"
+      manager="schooltool.app.browser.skin.INavigationManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.app.browser.skin.NavigationViewlet"
+      permission="zope.View"
+      link="levels"
+      title="Levels"
+      order="90"
+      />
+
   </configure>
 
   <containerViews

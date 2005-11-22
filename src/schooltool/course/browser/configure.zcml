@@ -19,6 +19,30 @@
         <widget field="description" height="5" />
     </addform>
 
+    <viewlet
+      name="courses"
+      for="*"
+      manager="schooltool.app.browser.skin.INavigationManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.app.browser.skin.NavigationViewlet"
+      permission="zope.View"
+      link="courses"
+      title="Courses"
+      order="40"
+      />
+
+    <viewlet
+      name="sections"
+      for="*"
+      manager="schooltool.app.browser.skin.INavigationManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.app.browser.skin.NavigationViewlet"
+      permission="zope.View"
+      link="sections"
+      title="Sections"
+      order="50"
+      />
+
   </configure>
 
   <page

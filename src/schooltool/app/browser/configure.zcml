@@ -23,6 +23,13 @@
       provides="schooltool.app.browser.skin.IHeaderManager"
       />
 
+  <viewletManager
+      name="schooltool.Navigation"
+      permission="zope.Public"
+      provides="schooltool.app.browser.skin.INavigationManager"
+      template="templates/navigation.pt"
+      />
+
   <!-- Skin and resources -->
 
   <zope:subscriber
@@ -189,17 +196,6 @@
       name="schooltool"
       provides="zope.app.traversing.interfaces.IPathAdapter"
       factory=".SchoolToolAPI"
-      />
-
-  <!-- Navigation -->
-
-  <page
-      for="*"
-      name="schooltool_navigation"
-      template="templates/navigation.pt"
-      class=".NavigationView"
-      permission="zope.View"
-      layer=".skin.ISchoolToolLayer"
       />
 
   <!-- Breadcrumbs -->

@@ -27,10 +27,12 @@ import sys
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import ILayer, IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.viewlet.interfaces import IViewletManager
+from zope.app import zapi
 from zope.app.publisher.browser import applySkin
 from zope.app.traversing import api
-from zope.viewlet.interfaces import IViewletManager
 
+from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication
 
 
@@ -44,6 +46,29 @@ class ICSSManager(IViewletManager):
 
 class IHeaderManager(IViewletManager):
     """Provides a viewlet hook for the header of a page."""
+
+
+class INavigationManager(IViewletManager):
+    """Provides a viewlet hook for the navigation section of a page."""
+
+
+class NavigationViewlet(object):
+    """A navigation viewlet base class."""
+
+    def appURL(self):
+        return zapi.absoluteURL(getSchoolToolApplication(), self.request)
+
+    def __cmp__(self, other):
+        if hasattr(self, 'order'):
+            if hasattr(other, 'order'):
+                return cmp(int(self.order), int(other.order))
+            else:
+                return -1
+        else:
+            if hasattr(other, 'order'):
+                return +1
+            else:
+                return cmp(self.title, other.title)
 
 
 class ISchoolToolLayer(ILayer, IBrowserRequest):

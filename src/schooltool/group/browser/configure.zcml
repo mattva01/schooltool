@@ -49,6 +49,18 @@
         title="Edit Info"
         />
 
+    <viewlet
+      name="groups"
+      for="*"
+      manager="schooltool.app.browser.skin.INavigationManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.app.browser.skin.NavigationViewlet"
+      permission="zope.View"
+      link="groups"
+      title="Groups"
+      order="20"
+      />
+
   </configure>
 
   <page
