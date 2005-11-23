@@ -20,6 +20,8 @@
 
 $Id$
 """
+__docformat__='restructuredtext'
+
 import persistent.list
 import zope.event
 import zope.interface
@@ -128,7 +130,7 @@ class GroupRequirement(zope.app.container.btree.BTreeContainer, Requirement):
     def items(self):
         '''See interface `IReadContainer`'''
         for key in self.keys():
-            yield self[key]
+            yield key, self[key]
 
     def __contains__(self, key):
         '''See interface `IReadContainer`'''

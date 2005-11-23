@@ -187,8 +187,13 @@ implementation for a simple pass/fail score system.
 
   >>> from schooltool.requirement import scoresystem
   >>> class PassFail(scoresystem.AbstractScoreSystem):
+  ...     PASS = True
+  ...     FAIL = False
   ...     def isPassingGrade(self, grade):
   ...         return bool(grade)
+  ...
+  ...     def __repr__(self):
+  ...         return '%s(%r)' % (self.__class__.__name__, self.title)
 
 The part of the interface that must be implemented is the ``isPassingGrade()``
 method.  The ``AbstractScoreSystem`` class already fulfills the other
@@ -206,3 +211,178 @@ We can now check whether a particular grade is a pass or fail:
   True
   >>> pf.isPassingGrade(0)
   False
+
+Evaluations
+-----------
+
+Evaluations provide a grade for a single requirement for a single person. The
+value of the evaluation depends on the score system. Evaluations are attached
+to objects providing the ``IHaveEvaluations`` interface. In our use cases,
+those objects are usually people.
+
+  >>> class Person(object):
+  ...     zope.interface.implements(interfaces.IHaveEvaluations,
+  ...                               annotation.interfaces.IAttributeAnnotatable)
+  ...     def __init__(self, name):
+  ...         self.name = name
+  ...
+  ...     def __repr__(self):
+  ...         return "%s(%r)" % (self.__class__.__name__, self.name)
+
+  >>> student = Person(u'Sample Student')
+
+Evaluations are made by an evaluator:
+
+  >>> teacher = Person(u'Sample Teacher')
+
+The evaluations for an evaluatable object can be accessed using the
+``IEvaluations`` adapter:
+
+  >>> evals = interfaces.IEvaluations(student)
+  >>> evals
+  <Evaluations for Person(u'Sample Student')>
+  >>> from zope.app import zapi
+  >>> zapi.getParent(evals)
+  Person(u'Sample Student')
+
+Initially, there are no evaluations available.
+
+  >>> sorted(evals.keys())
+  []
+
+We now create a new evaluation.  When creating an evaluation, the following
+arguments must be passed to the constructor:
+
+ - ``requirement``
+   The requirement should be a reference to a provider of the ``IRequirement``
+   interface.
+
+ - ``scoreSystem``
+   The score system should be a reference to a provider of the ``IScoreSystem``
+   interface.
+
+ - ``value``
+   The value is a data structure that represents a valid grade for the given
+   score system.
+
+ - ``evaluator``
+   The evaluator should be an object reference that represents the principal
+   making the evaluation. This will usually be a ``Person`` instance.
+
+For example, we would like to grade the student's skill for writing iterators
+in the programming class.
+
+  >>> from schooltool.requirement import evaluation
+  >>> ev = evaluation.Evaluation(req[u'iter'], pf, PassFail.PASS, teacher)
+  >>> ev.requirement
+  InheritedRequirement(Requirement(u'Create an iterator.'))
+  >>> ev.scoreSystem
+  PassFail(u'Simple Pass/Fail Score System')
+  >>> ev.value
+  True
+  >>> ev.evaluator
+  Person(u'Sample Teacher')
+  >>> ev.time
+  datetime.datetime(...)
+
+Now that an evaluation has been created, we can add it to the student's
+evaluations.
+
+  >>> name = evals.addEvaluation(ev)
+  >>> sorted(evals.values())
+  [<Evaluation for Inhe...ent(Requirement(u'Create an iterator.')), value=True>]
+
+Once several evaluations have been created, we can do some interesting queries.
+To demonstrate this feature effectively, we have to create a new requirement
+tree.
+
+  >>> calculus = requirement.GroupRequirement(u'Calculus')
+
+  >>> calculus[u'int'] = requirement.GroupRequirement(u'Integration')
+  >>> calculus[u'int']['fourier'] = requirement.Requirement(
+  ...     u'Fourier Transform')
+  >>> calculus[u'int']['path'] = requirement.Requirement(u'Path Integral')
+
+  >>> calculus[u'diff'] = requirement.GroupRequirement(u'Differentiation')
+  >>> calculus[u'diff'][u'partial'] = requirement.Requirement(
+  ...     u'Partial Differential Equations')
+  >>> calculus[u'diff'][u'systems'] = requirement.Requirement(u'Systems')
+
+  >>> calculus[u'limit'] = requirement.Requirement(u'Limit Theorem')
+
+  >>> calculus[u'fundamental'] = requirement.Requirement(
+  ...     u'Fundamental Theorem of Calculus')
+
+While our sample teacher teaches programming and differentiation, a second
+teacher teaches integration.
+
+  >>> teacher2 = Person(u'Mr. Elkner')
+
+With that done (phew), we can create evaluations based on these requirements.
+
+  >>> student2 = Person(u'Student Two')
+  >>> evals = interfaces.IEvaluations(student2)
+
+  >>> name = evals.addEvaluation(evaluation.Evaluation(
+  ...     calculus[u'int'][u'fourier'], pf, PassFail.FAIL, teacher2))
+
+  >>> name = evals.addEvaluation(evaluation.Evaluation(
+  ...     calculus[u'int'][u'path'], pf, PassFail.PASS, teacher2))
+
+  >>> name = evals.addEvaluation(evaluation.Evaluation(
+  ...     calculus[u'diff'][u'partial'], pf, PassFail.FAIL, teacher))
+
+  >>> name = evals.addEvaluation(evaluation.Evaluation(
+  ...     calculus[u'diff'][u'systems'], pf, PassFail.PASS, teacher))
+
+  >>> name = evals.addEvaluation(evaluation.Evaluation(
+  ...     calculus[u'limit'], pf, PassFail.FAIL, teacher))
+
+  >>> name = evals.addEvaluation(evaluation.Evaluation(
+  ...     calculus[u'fundamental'], pf, PassFail.PASS, teacher2))
+
+So now we can ask for all evaluations for which the sample teacher is the
+evaluator:
+
+  >>> teacherEvals = evals.getEvaluationsOfEvaluator(teacher)
+  >>> teacherEvals
+  <Evaluations for Person(u'Student Two')>
+
+  >>> [value for name, value in sorted(teacherEvals.items())]
+  [<Evaluation for Requirement(u'Partial Differential Equations'), value=False>,
+   <Evaluation for Requirement(u'Systems'), value=True>,
+   <Evaluation for Requirement(u'Limit Theorem'), value=False>]
+
+As you can see, the query method returned another evaluations object having the
+student as a parent.  It is very important that the evaluated object is not
+lost.  The big advantage of returning an evaluations object is the ability to
+perform chained queries:
+
+  >>> result = evals.getEvaluationsOfEvaluator(teacher) \
+  ...               .getEvaluationsForRequirement(calculus[u'diff'])
+  >>> [value for name, value in sorted(result.items())]
+  [<Evaluation for Requirement(u'Partial Differential Equations'), value=False>,
+   <Evaluation for Requirement(u'Systems'), value=True>]
+
+By default, these queries search recursively through the entire subtree of the
+requirement.  However, you can call turn off the recursion:
+
+  >>> result = evals.getEvaluationsOfEvaluator(teacher) \
+  ...               .getEvaluationsForRequirement(calculus, recurse=False)
+  >>> sorted(result.values())
+  [<Evaluation for Requirement(u'Limit Theorem'), value=False>]
+
+Of course, the few query methods defined by the container are not sufficient in
+all cases. In those scenarios, you can develop adapters that implement custom
+queries. The package provides a nice abstract base query adapter that can be
+used as follows:
+
+  >>> class PassedQuery(evaluation.AbstractQueryAdapter):
+  ...     def _query(self):
+  ...         return [(name, eval)
+  ...                 for name, eval in self.context.items()
+  ...                 if eval.scoreSystem.isPassingGrade(eval.value)]
+
+  >>> result = PassedQuery(evals)().getEvaluationsOfEvaluator(teacher)
+  >>> sorted(result.values())
+  [<Evaluation for Requirement(u'Systems'), value=True>]

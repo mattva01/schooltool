@@ -20,6 +20,8 @@
 
 $Id$
 """
+__docformat__='restructuredtext'
+
 import zope.interface
 import zope.schema
 import zope.app.container.constraints
@@ -55,8 +57,10 @@ class IGroupRequirement(zope.app.container.interfaces.IContainer, IRequirement):
         about the removal of this requirement.
         '''
 
+
 class IHaveRequirement(zope.interface.Interface):
     '''Marker interface for objects having requirements'''
+
 
 class IScoreSystem(zope.interface.Interface):
     '''A Score System'''
@@ -77,8 +81,14 @@ class IScoreSystem(zope.interface.Interface):
         The return value is a boolean.
         '''
 
-class IEvaluation(zope.interface.Interface):
+
+class IHaveEvaluations(zope.interface.Interface):
+    '''A marker interface for objects that can have evaluations'''
+
+
+class IEvaluation(zope.app.container.interfaces.IContained):
     '''An Evaluation'''
+    zope.app.container.constraints.containers(".IEvaluations")
 
     scoreSystem = zope.schema.Object(
         title=u'Score System',
@@ -93,12 +103,55 @@ class IEvaluation(zope.interface.Interface):
     value = zope.interface.Attribute(
         'The value of the grade')
 
-    time = zope.schema.DateTime(
+    time = zope.schema.Datetime(
         title=u'Time',
         description=u'The time the evaluation was made')
 
     evaluator = zope.interface.Attribute(
         'The entity doing the evaluation')
+
+
+class IEvaluations(zope.app.container.interfaces.IContainer):
+    '''An Evaluation Container'''
+    zope.app.container.constraints.contains(IEvaluation)
+
+    def __init__(self, items=None):
+        '''Initialize object.
+
+        The items should be a list of tuples or dictionary of evaluation names
+        and objects.
+        '''
+
+    def getEvaluationsForRequirement(requirement, recursive=True):
+        '''Match all evaluations that satisfy the requirement.
+
+        The return value is another ``IEvaluations`` object.  This allows for
+        chained queries.  For recursive queries, evaluations for all sub
+        requirements will be returned as well.
+        '''
+
+    def getEvaluationsOfEvaluator(evaluator):
+        '''Match all evaluations done by the specified evaluator.
+
+        The return value is another ``IEvaluations`` object.  This allows for
+        chained queries.  For recursive queries, evaluations for all sub
+        requirements will be returned as well.
+        '''
+
+
+class IEvaluationsQuery(zope.interface.Interface):
+    '''Evaluation Query
+
+    These objects query evaluations and return another evaluations object.
+    '''
+
+    def __call__(self, *args, **kwargs):
+        '''Execute the query and return an ``IEvaluations`` object.
+
+        The returned ``IEvaluations`` object *must* have the same parent and
+        name that the original ``IEvaluations`` object had.
+        '''
+
 
 class ICompetency(IRequirement):
     '''A competency.

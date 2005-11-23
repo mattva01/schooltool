@@ -21,19 +21,28 @@ Level-related Tests
 
 $Id$
 """
+__docformat__='restructuredtext'
+
 import os
 import unittest
 import zope.component
+import zope.interface
 from zope.testing import doctest, doctestunit
 from zope.component import testing
+from zope.app.container import contained
 from zope.app.testing import setup
-from schooltool.requirement import requirement, interfaces
+from schooltool.requirement import requirement, interfaces, evaluation
 
 def setUp(test):
     setup.placefulSetUp()
     zope.component.provideAdapter(requirement.getRequirement,
                                   (interfaces.IHaveRequirement,),
                                   interfaces.IRequirement)
+    zope.component.provideAdapter(contained.NameChooser,
+                                  (zope.interface.Interface,))
+    zope.component.provideAdapter(evaluation.getEvaluations,
+                                  (interfaces.IHaveEvaluations,),
+                                  interfaces.IEvaluations)
 
 def tearDown(test):
     setup.placefulTearDown()
@@ -44,7 +53,8 @@ def test_suite():
         doctest.DocFileSuite('README.txt',
                              setUp=setUp, tearDown=tearDown,
                              globs={'pprint': doctestunit.pprint},
-                             optionflags=doctest.NORMALIZE_WHITESPACE),
+                             optionflags=doctest.NORMALIZE_WHITESPACE|
+                                         doctest.ELLIPSIS),
         ))
 
 if __name__ == '__main__':
