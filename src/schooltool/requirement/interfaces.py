@@ -55,6 +55,9 @@ class IGroupRequirement(zope.app.container.interfaces.IContainer, IRequirement):
         about the removal of this requirement.
         '''
 
+class IHaveRequirement(zope.interface.Interface):
+    '''Marker interface for objects having requirements'''
+
 class ICompetency(IRequirement):
     '''A competency.
 

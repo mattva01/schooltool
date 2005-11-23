@@ -23,12 +23,17 @@ $Id$
 """
 import os
 import unittest
+import zope.component
 from zope.testing import doctest, doctestunit
 from zope.component import testing
 from zope.app.testing import setup
+from schooltool.requirement import requirement, interfaces
 
 def setUp(test):
     setup.placefulSetUp()
+    zope.component.provideAdapter(requirement.getRequirement,
+                                  (interfaces.IHaveRequirement,),
+                                  interfaces.IRequirement)
 
 def tearDown(test):
     setup.placefulTearDown()

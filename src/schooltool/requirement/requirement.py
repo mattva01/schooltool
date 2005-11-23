@@ -27,8 +27,10 @@ import zope.app.container.btree
 import zope.app.container.contained
 import zope.app.event.objectevent
 from zope.app import zapi
-
+from zope.app import annotation
 from schooltool.requirement import interfaces
+
+REQUIREMENT_KEY = "schooltool.requirement"
 
 class Requirement(zope.app.container.contained.Contained):
     """ """
@@ -157,3 +159,17 @@ class GroupRequirement(zope.app.container.btree.BTreeContainer, Requirement):
 
     def __repr__(self):
         return '%s(%r)' %(self.__class__.__name__, self.title)
+
+
+def getRequirement(context):
+    """Adapt an ``IHaveRequirement`` object to ``IRequirement``."""
+    annotations = annotation.interfaces.IAnnotations(context)
+    try:
+        return annotations[REQUIREMENT_KEY]
+    except KeyError:
+        ## TODO: support generic objects without titles
+        requirement = GroupRequirement(getattr(context, "title", None))
+        annotations[REQUIREMENT_KEY] = requirement
+        return requirement
+# Convention to make adapter introspectable
+getRequirement.factory = GroupRequirement
