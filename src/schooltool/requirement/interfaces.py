@@ -58,6 +58,48 @@ class IGroupRequirement(zope.app.container.interfaces.IContainer, IRequirement):
 class IHaveRequirement(zope.interface.Interface):
     '''Marker interface for objects having requirements'''
 
+class IScoreSystem(zope.interface.Interface):
+    '''A Score System'''
+
+    title = zope.schema.TextLine(
+        title=u'Title',
+        description=u'A brief title of the score system.',
+        required=True)
+
+    description = zope.schema.TextLine(
+        title=u'Description',
+        description=u'A brief description of the score system.',
+        required=True)
+
+    def isPassingGrade(grade):
+        '''Return whether meets a passing threshold.
+
+        The return value is a boolean.
+        '''
+
+class IEvaluation(zope.interface.Interface):
+    '''An Evaluation'''
+
+    scoreSystem = zope.schema.Object(
+        title=u'Score System',
+        description=u'The score system used for grading.',
+        schema=IScoreSystem)
+
+    requirement = zope.schema.Object(
+        title=u'Requirement',
+        description=u'The requirement being evaluated.',
+        schema=IRequirement)
+
+    value = zope.interface.Attribute(
+        'The value of the grade')
+
+    time = zope.schema.DateTime(
+        title=u'Time',
+        description=u'The time the evaluation was made')
+
+    evaluator = zope.interface.Attribute(
+        'The entity doing the evaluation')
+
 class ICompetency(IRequirement):
     '''A competency.
 

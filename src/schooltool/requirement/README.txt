@@ -175,3 +175,34 @@ new requirements:
   [u'decorator', u'forloop', u'iter']
   >>> req[u'decorator']
   Requirement(u'Create a decorator!')
+
+
+Score Systems
+-------------
+
+Score systems define the grading scheme of a group of or specific requirements.
+Since scoring schemes vary widely among schools and even requirements, the
+package provides an abstract score system class.  Below is an example
+implementation for a simple pass/fail score system.
+
+  >>> from schooltool.requirement import scoresystem
+  >>> class PassFail(scoresystem.AbstractScoreSystem):
+  ...     def isPassingGrade(self, grade):
+  ...         return bool(grade)
+
+The part of the interface that must be implemented is the ``isPassingGrade()``
+method.  The ``AbstractScoreSystem`` class already fulfills the other
+requirements of the ``IScoreSystem`` interface.
+
+  >>> pf = PassFail(u'Simple Pass/Fail Score System')
+  >>> pf.title
+  u'Simple Pass/Fail Score System'
+  >>> pf.description is None
+  True
+
+We can now check whether a particular grade is a pass or fail:
+
+  >>> pf.isPassingGrade(1)
+  True
+  >>> pf.isPassingGrade(0)
+  False
