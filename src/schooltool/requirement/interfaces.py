@@ -157,21 +157,3 @@ class IEvaluationsQuery(zope.interface.Interface):
         The returned ``IEvaluations`` object *must* have the same parent and
         name that the original ``IEvaluations`` object had.
         '''
-
-
-class ICompetency(IRequirement):
-    '''A competency.
-
-    This is a competency as defined by the state of Virginia, USA.
-    '''
-
-    id = zope.schema.TextLine(
-        title=u'Id',
-        description=u'Arbitrary string identifier.',
-        required=True)
-
-    required = zope.schema.Choice(
-        title=u'Required',
-        description=u'A flag that descibes the requirement of the competency.',
-        required=True,
-        values=[u'required', u'optional', u'sensitive'])
