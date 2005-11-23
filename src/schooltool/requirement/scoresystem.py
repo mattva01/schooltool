@@ -26,6 +26,8 @@ import zope.interface
 
 from schooltool.requirement import interfaces
 
+UNSCORED = "scoresystem.unscored"
+
 class AbstractScoreSystem(object):
     zope.interface.implements(interfaces.IScoreSystem)
 
@@ -33,5 +35,8 @@ class AbstractScoreSystem(object):
         self.title = title
         self.description = description
 
-    def isPassingGrade(self, grade):
+    def isPassingScore(self, score):
+        raise NotImplemented
+
+    def isValidScore(self, score):
         raise NotImplemented

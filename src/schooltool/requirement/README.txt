@@ -189,15 +189,19 @@ implementation for a simple pass/fail score system.
   >>> class PassFail(scoresystem.AbstractScoreSystem):
   ...     PASS = True
   ...     FAIL = False
-  ...     def isPassingGrade(self, grade):
-  ...         return bool(grade)
+  ...     def isPassingScore(self, score):
+  ...         return bool(score)
+  ...
+  ...     def isValidScore(self, score):
+  ...         return score in [self.PASS, self.FAIL, scoresystem.UNSCORED]
   ...
   ...     def __repr__(self):
   ...         return '%s(%r)' % (self.__class__.__name__, self.title)
 
-The part of the interface that must be implemented is the ``isPassingGrade()``
-method.  The ``AbstractScoreSystem`` class already fulfills the other
-requirements of the ``IScoreSystem`` interface.
+The part of the interface that must be implemented is the ``isPassingScore()``
+and ``isValidScore`` methods. The latter method must always return ``True`` for
+the ``UNSCORED`` value. The ``AbstractScoreSystem`` class already fulfills the
+other requirements of the ``IScoreSystem`` interface.
 
   >>> pf = PassFail(u'Simple Pass/Fail Score System')
   >>> pf.title
@@ -205,17 +209,28 @@ requirements of the ``IScoreSystem`` interface.
   >>> pf.description is None
   True
 
-We can now check whether a particular grade is a pass or fail:
+We can now check whether a particular score is a pass or fail:
 
-  >>> pf.isPassingGrade(1)
+  >>> pf.isPassingScore(1)
   True
-  >>> pf.isPassingGrade(0)
+  >>> pf.isPassingScore(0)
   False
+
+Furthermore, we can test whether a score conforms to the score system.
+
+  >>> pf.isValidScore(PassFail.PASS)
+  True
+  >>> pf.isValidScore(scoresystem.UNSCORED)
+  True
+  >>> pf.isValidScore('pass')
+  False
+
+
 
 Evaluations
 -----------
 
-Evaluations provide a grade for a single requirement for a single person. The
+Evaluations provide a score for a single requirement for a single person. The
 value of the evaluation depends on the score system. Evaluations are attached
 to objects providing the ``IHaveEvaluations`` interface. In our use cases,
 those objects are usually people.
@@ -262,14 +277,14 @@ arguments must be passed to the constructor:
    interface.
 
  - ``value``
-   The value is a data structure that represents a valid grade for the given
+   The value is a data structure that represents a valid score for the given
    score system.
 
  - ``evaluator``
    The evaluator should be an object reference that represents the principal
    making the evaluation. This will usually be a ``Person`` instance.
 
-For example, we would like to grade the student's skill for writing iterators
+For example, we would like to score the student's skill for writing iterators
 in the programming class.
 
   >>> from schooltool.requirement import evaluation
@@ -381,7 +396,7 @@ used as follows:
   ...     def _query(self):
   ...         return [(name, eval)
   ...                 for name, eval in self.context.items()
-  ...                 if eval.scoreSystem.isPassingGrade(eval.value)]
+  ...                 if eval.scoreSystem.isPassingScore(eval.value)]
 
   >>> result = PassedQuery(evals)().getEvaluationsOfEvaluator(teacher)
   >>> sorted(result.values())

@@ -75,10 +75,16 @@ class IScoreSystem(zope.interface.Interface):
         description=u'A brief description of the score system.',
         required=True)
 
-    def isPassingGrade(grade):
-        '''Return whether meets a passing threshold.
+    def isPassingScore(score):
+        '''Return whether score meets a passing threshold.
 
         The return value is a boolean.
+        '''
+
+    def isValidScore(score):
+        '''Return whether score is a valid score.
+
+        The return value is a boolean.  The ``UNSCORED`` value is a valid score.
         '''
 
 
