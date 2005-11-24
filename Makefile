@@ -7,7 +7,7 @@
 PYTHON=python
 ZPKG=../../zpkgtools/bin/zpkg
 ZOPE_REPOSITORY=svn://svn.zope.org/repos/main/
-TESTFLAGS=-w
+TESTFLAGS=-w -v
 POT=src/schooltool/locales/schooltool.pot
 PO=$(wildcard src/schooltool/locales/*/LC_MESSAGES/*.po)
 PYTHONPATH=src:Zope3/src
