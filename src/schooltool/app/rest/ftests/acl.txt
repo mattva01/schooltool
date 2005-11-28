@@ -194,10 +194,10 @@ John can not set the permissions as well:
     ...
 
 
-Let's change some permissions and grant John the right to manage permissions.
-Note that you do not need to upload the full list of permissions for each
-principal.  Only those principals that you mention will have their permissions
-changed.
+Let's change some permissions and grant John the right to manage
+permissions.  Note that you do not need to upload the full list of
+principals.  Only those principals that you mention will have their
+permissions changed.
 
     >>> print rest("""
     ... POST /persons/acl HTTP/1.1
@@ -222,7 +222,27 @@ changed.
     ...     <permission id="schooltool.addEvent" />
     ...     <permission id="schooltool.modifyEvent" />
     ...     <permission id="schooltool.controlAccess" setting="on" />
-    ...     <permission id="schooltool.manageMembership" />
+    ...     <permission id="schooltool.manageMembership" setting="on" />
+    ...   </principal>
+    ... </acl>
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Set-Cookie: ...
+    <BLANKLINE>
+    Permissions updated
+
+Though if you will skip a <permission> element it will default to
+unset.  For example, here we set only the controlAccess permission and
+implicitly unset manageMembership:
+
+    >>> print rest("""
+    ... POST /persons/acl HTTP/1.1
+    ... Authorization: Basic manager:schooltool
+    ...
+    ... <acl xmlns="http://schooltool.org/ns/model/0.1">
+    ...   <principal id="sb.person.john">
+    ...     <permission id="schooltool.controlAccess" setting="on" />
     ...   </principal>
     ... </acl>
     ... """)
