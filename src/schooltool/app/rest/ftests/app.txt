@@ -1,9 +1,8 @@
 Functional tests for SchoolTool app RESTive views
 =================================================
 
-The front page:
+The front page enumerates all top-level containers:
 
-    # XXX: Very brittle test that depends heavily on app layout.
     >>> print rest("""
     ... GET / HTTP/1.1
     ... """)
@@ -21,7 +20,7 @@ The front page:
     </schooltool>
     <BLANKLINE>
 
-There is only the manager group
+There is a number of built-in groups (listed alphabetically)
 
     >>> print rest("""
     ... GET /groups/ HTTP/1.1
@@ -36,15 +35,27 @@ There is only the manager group
       <name>groups</name>
       <items>
         <item xlink:type="simple"
+              xlink:href="http://localhost/groups/administrators"
+              xlink:title="School Administrators"/>
+        <item xlink:type="simple"
+              xlink:href="http://localhost/groups/clerks"
+              xlink:title="Clerks"/>
+        <item xlink:type="simple"
               xlink:href="http://localhost/groups/manager"
-              xlink:title="Manager"/>
+              xlink:title="Site Managers"/>
+        <item xlink:type="simple"
+              xlink:href="http://localhost/groups/students"
+              xlink:title="Students"/>
+        <item xlink:type="simple"
+              xlink:href="http://localhost/groups/teachers"
+              xlink:title="Teachers"/>
       </items>
       <acl xlink:type="simple" xlink:title="ACL"
            xlink:href="http://localhost/groups/acl"/>
     </container>
     <BLANKLINE>
 
-no resources:
+Initially there are no resources:
 
     >>> print rest("""
     ... GET /resources/ HTTP/1.1
@@ -61,7 +72,7 @@ no resources:
     </container>
     <BLANKLINE>
 
-and no persons:
+One person:
 
     >>> print rest("""
     ... GET /persons/ HTTP/1.1
@@ -82,7 +93,7 @@ and no persons:
     <BLANKLINE>
 
 
-and no courses:
+No courses:
 
     >>> print rest("""
     ... GET /courses/ HTTP/1.1

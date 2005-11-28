@@ -101,22 +101,18 @@ def doctest_SampleTeachers():
         >>> plugin.power
         48
 
-    This plugin creates a Teachers group and a number of teachers.
+    This plugin creates a number of teachers and adds them to the
+    Teachers group.
 
+        >>> from schooltool.group.group import Group
         >>> app = stsetup.setupSchoolToolSite()
+        >>> teachers = app['groups']['teachers'] = Group('Teachers')
         >>> len(app['persons'])
         0
-        >>> len(app['groups'])
+        >>> len(teachers.members)
         0
 
         >>> plugin.generate(app, 42)
-        >>> len(app['groups'])
-        1
-        >>> teachers = app['groups'].values()[0]
-        >>> teachers
-        <schooltool.group.group.Group object at ...>
-        >>> teachers.title
-        'Teachers'
         >>> len(teachers.members)
         48
 
@@ -150,7 +146,9 @@ def doctest_SamplePersonalEvents():
         >>> verifyObject(ISampleDataPlugin, plugin)
         True
 
+        >>> from schooltool.group.group import Group
         >>> app = stsetup.setupSchoolToolSite()
+        >>> app['groups']['teachers'] = Group('Teachers')
 
         >>> from schooltool.person.sampledata import SampleStudents
         >>> from schooltool.person.sampledata import SampleTeachers

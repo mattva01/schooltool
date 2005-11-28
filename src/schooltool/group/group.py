@@ -57,4 +57,12 @@ class Group(Persistent, Contained):
 def addGroupContainerToApplication(event):
     """Subscriber that adds a top-level groups container and a few groups."""
     event.object['groups'] = GroupContainer()
-    event.object['groups']['manager'] = Group(u'Manager', u'Manager Group.')
+    default_groups =  [
+        ("manager",        "Site Managers",         "Manager Group."),
+        ("students",       "Students",              "Students."),
+        ("teachers",       "Teachers",              "Teachers."),
+        ("clerks",         "Clerks",                "Clerks."),
+        ("administrators", "School Administrators", "School Administrators."),
+    ]
+    for id, title, description in default_groups:
+        event.object['groups'][id] = Group(title, description)

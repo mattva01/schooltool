@@ -77,13 +77,21 @@ def doctest_addGroupContainerToApplication():
         >>> app = SchoolToolApplication()
         >>> event = ObjectAddedEvent(app)
         >>> addGroupContainerToApplication(event)
+
+    The subscriber adds a container
+
         >>> app['groups']
         <schooltool.group.group.GroupContainer object at ...>
-        >>> group = app['groups']['manager']
-        >>> group.title
-        u'Manager'
-        >>> group.description
-        u'Manager Group.'
+
+    and a few groups
+
+        >>> for name, group in sorted(app['groups'].items()):
+        ...     print '%-15s %-25s %s' % (name, group.title, group.description)
+        administrators  School Administrators     School Administrators.
+        clerks          Clerks                    Clerks.
+        manager         Site Managers             Manager Group.
+        students        Students                  Students.
+        teachers        Teachers                  Teachers.
 
     """
 

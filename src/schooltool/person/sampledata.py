@@ -28,6 +28,7 @@ import os
 
 from pytz import utc
 from zope.interface import implements
+from zope.security.proxy import removeSecurityProxy
 
 from schooltool.sampledata.interfaces import ISampleDataPlugin
 from schooltool.sampledata.name import NameGenerator
@@ -68,13 +69,15 @@ class SampleTeachers(object):
 
     def generate(self, app, seed=None):
         namegen = NameGenerator(str(seed) + self.name)
-        teachers = app['groups']['teachers'] = Group(title='Teachers')
+        teachers = app['groups']['teachers']
         for i in range(self.power):
             name = namegen.generate()
             person_id = 'teacher%03d' % i
             person = Person(person_id, title=name)
             person.setPassword(person_id)
-            teachers.members.add(person)
+            # Without removeSecurityProxy we can't add members a
+            # group.
+            removeSecurityProxy(teachers.members).add(person)
             app['persons'][person_id] = person
 
 
