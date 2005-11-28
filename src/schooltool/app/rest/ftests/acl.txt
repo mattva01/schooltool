@@ -1,12 +1,15 @@
 Functional tests for SchoolBell ACL ReSTive view
 ================================================
 
-Initial state
+When you get an object's access control list, you see a list of <principal>
+elements with a fixed set of <permission> elements inside each.  For example,
+let's look at the permissions by default assigned to the person list:
 
-    >>> print rest("""
+    >>> response = rest("""
     ... GET /persons/acl HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... """, handle_errors=False)
+    >>> print response
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/html;charset=utf-8
@@ -14,7 +17,6 @@ Initial state
     <BLANKLINE>
     <acl xmlns="http://schooltool.org/ns/model/0.1">
       <principal id="zope.Authenticated">
-    <BLANKLINE>
           <permission setting="on" id="schooltool.view" />
           <permission id="schooltool.edit" />
           <permission id="schooltool.create" />
@@ -23,10 +25,8 @@ Initial state
           <permission id="schooltool.modifyEvent" />
           <permission id="schooltool.controlAccess" />
           <permission id="schooltool.manageMembership" />
-    <BLANKLINE>
       </principal>
       <principal id="zope.Anybody">
-    <BLANKLINE>
           <permission id="schooltool.view" />
           <permission id="schooltool.edit" />
           <permission id="schooltool.create" />
@@ -35,36 +35,52 @@ Initial state
           <permission id="schooltool.modifyEvent" />
           <permission id="schooltool.controlAccess" />
           <permission id="schooltool.manageMembership" />
-    <BLANKLINE>
       </principal>
-      <principal id="sb.group.manager">
-    <BLANKLINE>
-          <permission id="schooltool.view" />
-          <permission id="schooltool.edit" />
-          <permission id="schooltool.create" />
-          <permission id="schooltool.viewCalendar" />
-          <permission id="schooltool.addEvent" />
-          <permission id="schooltool.modifyEvent" />
-          <permission id="schooltool.controlAccess" />
-          <permission id="schooltool.manageMembership" />
-    <BLANKLINE>
-      </principal>
-      <principal id="sb.person.manager">
-    <BLANKLINE>
-          <permission setting="on" id="schooltool.view" />
-          <permission setting="on" id="schooltool.edit" />
-          <permission setting="on" id="schooltool.create" />
-          <permission setting="on" id="schooltool.viewCalendar" />
-          <permission setting="on" id="schooltool.addEvent" />
-          <permission setting="on" id="schooltool.modifyEvent" />
-          <permission setting="on" id="schooltool.controlAccess" />
-          <permission setting="on"
-                      id="schooltool.manageMembership" />
-    <BLANKLINE>
-      </principal>
+      ...
     </acl>
     <BLANKLINE>
 
+There are two predefined principals -- zope.Authenticated (permissions granted
+to this principal will apply to any authenticated user) and zope.Anybody
+(permissions granted to this principal will apply to everyone).  Each user and
+group is also a principal.
+
+    >>> from schooltool.xmlparsing import XMLDocument
+    >>> def extract_principals(response):
+    ...     doc = XMLDocument(response.getBody())
+    ...     doc.registerNs('st', 'http://schooltool.org/ns/model/0.1')
+    ...     return dict((p['id'], p) for p in doc.query('/st:acl/st:principal'))
+    >>> all_principals = extract_principals(response)
+
+For example, the 'manager' user has all permissions by default.  Note how the
+'id' attribute is constructed from the username.
+
+    >>> print all_principals['sb.person.manager']
+    <principal id="sb.person.manager">
+        <permission setting="on" id="schooltool.view"/>
+        <permission setting="on" id="schooltool.edit"/>
+        <permission setting="on" id="schooltool.create"/>
+        <permission setting="on" id="schooltool.viewCalendar"/>
+        <permission setting="on" id="schooltool.addEvent"/>
+        <permission setting="on" id="schooltool.modifyEvent"/>
+        <permission setting="on" id="schooltool.controlAccess"/>
+        <permission setting="on" id="schooltool.manageMembership"/>
+    </principal>
+
+And here is the 'Manager' group, which has no permissions by default.  Note how
+the 'id' attribute is constructed from the group name.
+
+    >>> print all_principals['sb.group.manager']
+    <principal id="sb.group.manager">
+        <permission id="schooltool.view"/>
+        <permission id="schooltool.edit"/>
+        <permission id="schooltool.create"/>
+        <permission id="schooltool.viewCalendar"/>
+        <permission id="schooltool.addEvent"/>
+        <permission id="schooltool.modifyEvent"/>
+        <permission id="schooltool.controlAccess"/>
+        <permission id="schooltool.manageMembership"/>
+    </principal>
 
 Now, let's create some groups and persons:
 
@@ -105,91 +121,44 @@ Now, let's create some groups and persons:
 
 Now, the ACL view should include those new principals as well:
 
-    >>> print rest("""
-    ... GET /acl HTTP/1.1
+    >>> response = rest("""
+    ... GET /persons/acl HTTP/1.1
     ... Authorization: Basic manager:schooltool
-    ... """)
+    ... """, handle_errors=False)
+    >>> print response
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/html;charset=utf-8
     Set-Cookie: ...
     <BLANKLINE>
     <acl xmlns="http://schooltool.org/ns/model/0.1">
-      <principal id="zope.Authenticated">
-    <BLANKLINE>
-          <permission setting="on" id="schooltool.view" />
-          <permission id="schooltool.edit" />
-          <permission id="schooltool.create" />
-          <permission id="schooltool.viewCalendar" />
-          <permission id="schooltool.addEvent" />
-          <permission id="schooltool.modifyEvent" />
-          <permission id="schooltool.controlAccess" />
-          <permission id="schooltool.manageMembership" />
-    <BLANKLINE>
-      </principal>
-      <principal id="zope.Anybody">
-    <BLANKLINE>
-          <permission id="schooltool.view" />
-          <permission id="schooltool.edit" />
-          <permission id="schooltool.create" />
-          <permission id="schooltool.viewCalendar" />
-          <permission id="schooltool.addEvent" />
-          <permission id="schooltool.modifyEvent" />
-          <permission id="schooltool.controlAccess" />
-          <permission id="schooltool.manageMembership" />
-    <BLANKLINE>
-      </principal>
-      <principal id="sb.group.a-group">
-    <BLANKLINE>
-          <permission id="schooltool.view" />
-          <permission id="schooltool.edit" />
-          <permission id="schooltool.create" />
-          <permission id="schooltool.viewCalendar" />
-          <permission id="schooltool.addEvent" />
-          <permission id="schooltool.modifyEvent" />
-          <permission id="schooltool.controlAccess" />
-          <permission id="schooltool.manageMembership" />
-    <BLANKLINE>
-      </principal>
-      <principal id="sb.group.manager">
-    <BLANKLINE>
-          <permission id="schooltool.view" />
-          <permission id="schooltool.edit" />
-          <permission id="schooltool.create" />
-          <permission id="schooltool.viewCalendar" />
-          <permission id="schooltool.addEvent" />
-          <permission id="schooltool.modifyEvent" />
-          <permission id="schooltool.controlAccess" />
-          <permission id="schooltool.manageMembership" />
-    <BLANKLINE>
-      </principal>
-      <principal id="sb.person.john">
-    <BLANKLINE>
-          <permission setting="on" id="schooltool.view" />
-          <permission id="schooltool.edit" />
-          <permission id="schooltool.create" />
-          <permission id="schooltool.viewCalendar" />
-          <permission id="schooltool.addEvent" />
-          <permission id="schooltool.modifyEvent" />
-          <permission id="schooltool.controlAccess" />
-          <permission id="schooltool.manageMembership" />
-    <BLANKLINE>
-      </principal>
-      <principal id="sb.person.manager">
-    <BLANKLINE>
-          <permission setting="on" id="schooltool.view" />
-          <permission setting="on" id="schooltool.edit" />
-          <permission setting="on" id="schooltool.create" />
-          <permission setting="on" id="schooltool.viewCalendar" />
-          <permission setting="on" id="schooltool.addEvent" />
-          <permission setting="on" id="schooltool.modifyEvent" />
-          <permission setting="on" id="schooltool.controlAccess" />
-          <permission setting="on"
-                      id="schooltool.manageMembership" />
-    <BLANKLINE>
-      </principal>
+      ...
     </acl>
-    <BLANKLINE>
+
+    >>> all_principals = extract_principals(response)
+    >>> print all_principals['sb.group.a-group']
+    <principal id="sb.group.a-group">
+        <permission id="schooltool.view"/>
+        <permission id="schooltool.edit"/>
+        <permission id="schooltool.create"/>
+        <permission id="schooltool.viewCalendar"/>
+        <permission id="schooltool.addEvent"/>
+        <permission id="schooltool.modifyEvent"/>
+        <permission id="schooltool.controlAccess"/>
+        <permission id="schooltool.manageMembership"/>
+    </principal>
+
+    >>> print all_principals['sb.person.john']
+    <principal id="sb.person.john">
+        <permission setting="on" id="schooltool.view"/>
+        <permission id="schooltool.edit"/>
+        <permission id="schooltool.create"/>
+        <permission id="schooltool.viewCalendar"/>
+        <permission id="schooltool.addEvent"/>
+        <permission id="schooltool.modifyEvent"/>
+        <permission id="schooltool.controlAccess"/>
+        <permission id="schooltool.manageMembership"/>
+    </principal>
 
 
 John cannot see the permissions, though:
@@ -225,8 +194,10 @@ John can not set the permissions as well:
     ...
 
 
-Let's change some permissions and grant John the right to manage
-permissions:
+Let's change some permissions and grant John the right to manage permissions.
+Note that you do not need to upload the full list of permissions for each
+principal.  Only those principals that you mention will have their permissions
+changed.
 
     >>> print rest("""
     ... POST /persons/acl HTTP/1.1
@@ -263,10 +234,11 @@ permissions:
 
 Now, the permissions are changed and John can see them:
 
-    >>> print rest("""
+    >>> response = rest("""
     ... GET /persons/acl HTTP/1.1
     ... Authorization: Basic john:ann
     ... """)
+    >>> print response
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/html;charset=utf-8
@@ -274,81 +246,21 @@ Now, the permissions are changed and John can see them:
     ...
     <BLANKLINE>
     <acl xmlns="http://schooltool.org/ns/model/0.1">
-      <principal id="zope.Authenticated">
-    <BLANKLINE>
-          <permission setting="on" id="schooltool.view" />
-          <permission id="schooltool.edit" />
-          <permission id="schooltool.create" />
-          <permission id="schooltool.viewCalendar" />
-          <permission id="schooltool.addEvent" />
-          <permission id="schooltool.modifyEvent" />
-          <permission id="schooltool.controlAccess" />
-          <permission id="schooltool.manageMembership" />
-    <BLANKLINE>
-      </principal>
-      <principal id="zope.Anybody">
-    <BLANKLINE>
-          <permission id="schooltool.view" />
-          <permission id="schooltool.edit" />
-          <permission id="schooltool.create" />
-          <permission id="schooltool.viewCalendar" />
-          <permission id="schooltool.addEvent" />
-          <permission id="schooltool.modifyEvent" />
-          <permission id="schooltool.controlAccess" />
-          <permission id="schooltool.manageMembership" />
-    <BLANKLINE>
-      </principal>
-      <principal id="sb.group.a-group">
-    <BLANKLINE>
-          <permission id="schooltool.view" />
-          <permission id="schooltool.edit" />
-          <permission id="schooltool.create" />
-          <permission setting="on" id="schooltool.viewCalendar" />
-          <permission id="schooltool.addEvent" />
-          <permission id="schooltool.modifyEvent" />
-          <permission id="schooltool.controlAccess" />
-          <permission id="schooltool.manageMembership" />
-    <BLANKLINE>
-      </principal>
-      <principal id="sb.group.manager">
-    <BLANKLINE>
-          <permission id="schooltool.view" />
-          <permission id="schooltool.edit" />
-          <permission id="schooltool.create" />
-          <permission id="schooltool.viewCalendar" />
-          <permission id="schooltool.addEvent" />
-          <permission id="schooltool.modifyEvent" />
-          <permission id="schooltool.controlAccess" />
-          <permission id="schooltool.manageMembership" />
-    <BLANKLINE>
-      </principal>
-      <principal id="sb.person.john">
-    <BLANKLINE>
-          <permission id="schooltool.view" />
-          <permission id="schooltool.edit" />
-          <permission id="schooltool.create" />
-          <permission id="schooltool.viewCalendar" />
-          <permission id="schooltool.addEvent" />
-          <permission id="schooltool.modifyEvent" />
-          <permission setting="on" id="schooltool.controlAccess" />
-          <permission id="schooltool.manageMembership" />
-    <BLANKLINE>
-      </principal>
-      <principal id="sb.person.manager">
-    <BLANKLINE>
-          <permission setting="on" id="schooltool.view" />
-          <permission setting="on" id="schooltool.edit" />
-          <permission setting="on" id="schooltool.create" />
-          <permission setting="on" id="schooltool.viewCalendar" />
-          <permission setting="on" id="schooltool.addEvent" />
-          <permission setting="on" id="schooltool.modifyEvent" />
-          <permission setting="on" id="schooltool.controlAccess" />
-          <permission setting="on"
-                      id="schooltool.manageMembership" />
-    <BLANKLINE>
-      </principal>
+    ...
     </acl>
-    <BLANKLINE>
+
+    >>> all_principals = extract_principals(response)
+    >>> print all_principals['sb.person.john']
+    <principal id="sb.person.john">
+        <permission id="schooltool.view"/>
+        <permission id="schooltool.edit"/>
+        <permission id="schooltool.create"/>
+        <permission id="schooltool.viewCalendar"/>
+        <permission id="schooltool.addEvent"/>
+        <permission id="schooltool.modifyEvent"/>
+        <permission setting="on" id="schooltool.controlAccess"/>
+        <permission id="schooltool.manageMembership"/>
+    </principal>
 
 And John can modify the permissions:
 
