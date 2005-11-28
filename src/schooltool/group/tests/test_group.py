@@ -29,6 +29,7 @@ from zope.testing import doctest
 
 from schooltool.testing.util import run_unit_tests
 
+
 def doctest_GroupContainer():
     """Tests for GroupContainer
 
@@ -64,6 +65,26 @@ def doctest_Group():
         'Illuminati'
         >>> illuminati.description
         'Secret Group'
+    """
+
+
+def doctest_addGroupContainerToApplication():
+    """Tests for addGroupContainerToApplication
+
+        >>> from schooltool.group.group import addGroupContainerToApplication
+        >>> from schooltool.app.app import SchoolToolApplication
+        >>> from zope.app.container.contained import ObjectAddedEvent
+        >>> app = SchoolToolApplication()
+        >>> event = ObjectAddedEvent(app)
+        >>> addGroupContainerToApplication(event)
+        >>> app['groups']
+        <schooltool.group.group.GroupContainer object at ...>
+        >>> group = app['groups']['manager']
+        >>> group.title
+        u'Manager'
+        >>> group.description
+        u'Manager Group.'
+
     """
 
 
