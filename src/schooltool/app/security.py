@@ -237,17 +237,6 @@ def applicationCalendarPermissionsSubscriber(event):
     By default view and viewCalendar are granted for unauthenticated users to
     the top level application so that everyone can see the front page and the
     the sitewide calendar without logging in.
-
-    Because permissions are applied recursively, we must restrict access
-    explicitly to the areas of the site that should not be public.
-
-    By default we restrict:
-        school/persons
-        school/groups
-        school/resources
-        school/sections
-        school/courses
-
     """
     if ISchoolToolApplication.providedBy(event.object):
         calendar = ISchoolToolCalendar(event.object)
