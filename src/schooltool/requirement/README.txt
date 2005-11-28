@@ -66,7 +66,7 @@ You can also inspect and manage the bases:
   [u'forloop', u'iter']
 
 Let's now look at a more advanced case. Let's say that the state of Virginia
-requires all students to take a progrramming class that fulfills the
+requires all students to take a programming class that fulfills the
 programming requirement:
 
   >>> va = requirement.GroupRequirement(u'Virginia')
@@ -88,7 +88,7 @@ state requirement:
   >>> sorted(va[u'program'].keys())
   [u'forloop']
 
-Another trickky case is when the basse is added later:
+Another trickky case is when the base is added later:
 
   >>> yhs = requirement.GroupRequirement(u'Yorktow HS')
   >>> yhs[u'program'] = requirement.GroupRequirement(u'Programming')
@@ -401,3 +401,4 @@ used as follows:
   >>> result = PassedQuery(evals)().getEvaluationsOfEvaluator(teacher)
   >>> sorted(result.values())
   [<Evaluation for Requirement(u'Systems'), value=True>]
+
