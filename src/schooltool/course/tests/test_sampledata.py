@@ -86,7 +86,9 @@ def doctest_SampleSections():
 
     As always, we'll need an application instance:
 
+        >>> from schooltool.group.group import Group
         >>> app = stsetup.setupSchoolToolSite()
+        >>> app['groups']['teachers'] = Group('Teachers')
 
     This plugins depends on lots of stuff, so I'm afraid we'll have to
     run it all:
@@ -155,7 +157,10 @@ def doctest_SampleTimetables():
         >>> plugin.dependencies
         ('sections', 'ttschema', 'terms')
 
+        >>> from schooltool.group.group import Group
         >>> app = stsetup.setupSchoolToolSite()
+        >>> app['groups']['teachers'] = Group('Teachers')
+
         >>> from schooltool.person.sampledata import SampleStudents
         >>> from schooltool.person.sampledata import SampleTeachers
         >>> from schooltool.course.sampledata import SampleCourses
