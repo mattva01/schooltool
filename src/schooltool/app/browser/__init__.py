@@ -30,6 +30,7 @@ from zope.app.size.interfaces import ISized
 from zope.app.traversing.interfaces import IPathAdapter, ITraversable
 from zope.app.security.interfaces import IPrincipal
 from zope.app.security.interfaces import IUnauthenticatedPrincipal
+from zope.app.dependable.interfaces import IDependable
 from zope.tales.interfaces import ITALESFunctionNamespace
 from zope.security.proxy import removeSecurityProxy
 
@@ -145,6 +146,28 @@ class SchoolToolAPI(object):
         """
         return IApplicationPreferences(self.app)
     preferences = property(preferences)
+
+    def has_dependents(self):
+        """Check whether an object has dependents (via IDependable).
+
+        Objects that have dependents cannot be removed from the system.
+
+        Sample usage in a page template:
+
+          <input type="checkbox" name="delete"
+                 tal:attributes="disabled obj/schooltool:has_dependents" />
+
+        """
+        # We cannot adapt security-proxied objects to IDependable.  Unwrapping
+        # is safe since we do not modify anything, and the information whether
+        # an object can be deleted or not is not classified.
+        unwrapped_context = removeSecurityProxy(self.context)
+        dependable = IDependable(unwrapped_context, None)
+        if dependable is None:
+            return False
+        else:
+            return bool(dependable.dependents())
+    has_dependents = property(has_dependents)
 
 
 class SortBy(object):

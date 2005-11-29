@@ -22,15 +22,22 @@ Tests for schooltool views.
 $Id: test_browser.py 3710 2005-05-15 10:27:21Z gintas $
 """
 import unittest
+
 from zope.interface import implements
 from zope.testing import doctest
 from zope.interface.verify import verifyObject
 from zope.app.location.interfaces import ILocation
 from zope.app.testing import ztapi, setup
+from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.app.dependable.interfaces import IDependable
 from zope.i18n import translate
 
 from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.testing import setup as sbsetup
+
+
+class SomeAnnotatable(object):
+    implements(IAttributeAnnotatable)
 
 
 def doctest_SchoolToolAPI():
@@ -43,16 +50,22 @@ def doctest_SchoolToolAPI():
         >>> verifyObject(ITALESFunctionNamespace, ns)
         True
 
+    """
+
+
+def doctest_SchoolToolAPI_aap():
+    r"""Tests for SchoolToolAPI.app.
+
     'context/schooltool:app' returns the nearest ISchoolToolApplication
 
         >>> app = sbsetup.setupSchoolToolSite()
 
+        >>> from schooltool.app.browser import SchoolToolAPI
         >>> SchoolToolAPI(app['persons']).app is app
         True
 
-
-    It does so even for objects that do not adapt to
-    ISchoolToolApplication, but are sublocations of SchoolToolApplication:
+    It does so even for objects that do not adapt to ISchoolToolApplication,
+    but are sublocations of SchoolToolApplication:
 
         >>> class Adding:
         ...     implements(ILocation)
@@ -62,9 +75,11 @@ def doctest_SchoolToolAPI():
         >>> SchoolToolAPI(adding).app is app
         True
 
+    """
 
-    'context/schooltool:preferences' returns an ApplicationPreferences object
-    for the nearest ISchoolToolApplication
+
+def doctest_SchoolToolAPI_preferences():
+    r"""Tests for SchoolToolAPI.preferences.
 
         >>> setup.setUpAnnotations()
         >>> from schooltool.app.interfaces import ISchoolToolApplication
@@ -73,20 +88,41 @@ def doctest_SchoolToolAPI():
         >>> ztapi.provideAdapter(ISchoolToolApplication,
         ...                      IApplicationPreferences,
         ...                      getApplicationPreferences)
+
+    'context/schooltool:preferences' returns an ApplicationPreferences object
+    for the nearest ISchoolToolApplication
+
+        >>> from schooltool.app.browser import SchoolToolAPI
+        >>> app = sbsetup.setupSchoolToolSite()
         >>> preferences = SchoolToolAPI(app).preferences
         >>> preferences.title
         'SchoolTool'
 
+        >>> preferences is SchoolToolAPI(app['persons']).preferences
+        True
+
+    """
+
+
+def doctest_SchoolToolAPI_person():
+    r"""Tests for SchoolToolAPI.person.
 
     'context/schooltool:person' adapts the context to IPerson:
 
+        >>> from schooltool.app.browser import SchoolToolAPI
         >>> from schooltool.person.person import Person
         >>> p = Person()
+
         >>> SchoolToolAPI(p).person is p
         True
-        >>> SchoolToolAPI(app).person is None
+        >>> SchoolToolAPI(None).person is None
         True
 
+    """
+
+
+def doctest_SchoolToolAPI_authenticated():
+    r"""Tests for SchoolToolAPI.authenticated.
 
     'context/schooltool:authenticated' checks whether context is an
     authenticated principal
@@ -97,15 +133,37 @@ def doctest_SchoolToolAPI():
         >>> anonymous = UnauthenticatedPrincipal('anonymous', 'Anonymous',
         ...                             "Anyone who did not bother to log in")
 
+        >>> from schooltool.app.browser import SchoolToolAPI
         >>> SchoolToolAPI(root).authenticated
         True
         >>> SchoolToolAPI(anonymous).authenticated
         False
 
+        >>> from schooltool.person.person import Person
         >>> SchoolToolAPI(Person()).authenticated
         Traceback (most recent call last):
           ...
         TypeError: schooltool:authenticated can only be applied to a principal
+
+    """
+
+
+def doctest_SchoolToolAPI_has_dependents():
+    r"""Tests for SchoolToolAPI.has_dependents.
+
+        >>> from schooltool.app.browser import SchoolToolAPI
+
+        >>> obj = object()
+        >>> SchoolToolAPI(obj).has_dependents
+        False
+
+        >>> obj = SomeAnnotatable()
+        >>> SchoolToolAPI(obj).has_dependents
+        False
+
+        >>> IDependable(obj).addDependent('foo')
+        >>> SchoolToolAPI(obj).has_dependents
+        True
 
     """
 

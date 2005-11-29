@@ -36,7 +36,9 @@
           method="post"
           tal:attributes="action string:${context/@@absolute_url}/delete.html">
       <div tal:repeat="obj batch">
-        <input type="checkbox" tal:attributes="name string:delete.${obj/zope:name}" />
+        <input type="checkbox"
+               tal:attributes="name string:delete.${obj/zope:name};
+                               disabled obj/schooltool:has_dependents" />
         <a tal:content="obj/title"
            tal:attributes="href obj/@@absolute_url">Some Object</a>
       </div>
