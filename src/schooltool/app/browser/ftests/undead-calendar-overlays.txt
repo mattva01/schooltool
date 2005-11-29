@@ -52,24 +52,6 @@ Let's add the group's calendar to his calendar overlays:
     >>> srichter_browser.getControl('A Group').selected = True
     >>> srichter_browser.getControl('Apply').click()
 
-Now we have to dodge two unrelated bugs.  Bug #1 is issue391.  The most
-straightforward way to fix it is to uncheck the 'public calendar' checkbox
-in the form we've just submitted, but here we stumble onto bug #2 -- issue395
-So, we have to do it the hard way.
-
-    >>> import transaction
-    >>> from zope.app import zapi
-    >>> app = getRootFolder()
-    >>> srichter_person = zapi.traverse(app, '/persons/srichter')
-    >>> for overlay_info in srichter_person.overlaid_calendars:
-    ...     if overlay_info.calendar.__parent__ is app:
-    ...         print "Removing the school-wide calendar."
-    ...         srichter_person.overlaid_calendars.remove(overlay_info.calendar)
-    ...         break
-    Removing the school-wide calendar.
-    >>> transaction.commit()
-
-
 Test
 ----
 
