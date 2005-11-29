@@ -56,7 +56,7 @@ clean:
 
 .PHONY: cleandb
 cleandb:
-	rm -f schooltool-skel/Data.fs*
+	rm -f schooltool-skel/var/Data.fs*
 
 .PHONY: realclean
 realclean: clean cleandb
