@@ -51,6 +51,7 @@ from zope.app.publication.zopepublication import ZopePublication
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
 from zope.app.container.contained import ObjectAddedEvent
+from zope.app.dependable.interfaces import IDependable
 
 from schooltool.app.app import SchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -409,6 +410,7 @@ class StandaloneServer(object):
         if MANAGER_USERNAME not in app['persons']:
             manager = Person(MANAGER_USERNAME, manager_title)
             app['persons'][MANAGER_USERNAME] = manager
+            IDependable(manager).addDependent('')
         manager = app['persons'][MANAGER_USERNAME]
         manager.setPassword(MANAGER_PASSWORD)
         roles = IPrincipalRoleManager(app)

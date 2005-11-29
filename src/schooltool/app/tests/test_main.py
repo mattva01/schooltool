@@ -28,6 +28,8 @@ import unittest
 
 from zope.testing import doctest
 from zope.app import zapi
+from zope.app.traversing.interfaces import IContainmentRoot
+from zope.interface import directlyProvides
 
 
 def findSiteZCML():
@@ -459,7 +461,6 @@ def doctest_bootstrapSchoolTool():
 
     This new application object is the containment root
 
-        >>> from zope.app.traversing.interfaces import IContainmentRoot
         >>> IContainmentRoot.providedBy(app)
         True
 
@@ -548,7 +549,7 @@ def doctest_bootstrapSchoolTool():
 
 
 def doctest_restoreManagerUser():
-    """Unittest for StandaloneServer.restoreManagerUser
+    r"""Unit test for StandaloneServer.restoreManagerUser
 
         >>> from zope.app.testing import setup
         >>> setup.placelessSetUp()
@@ -564,6 +565,7 @@ def doctest_restoreManagerUser():
 
         >>> from schooltool.app.app import SchoolToolApplication
         >>> app = SchoolToolApplication()
+        >>> directlyProvides(app, IContainmentRoot)
 
     Initially, there's no manager user in the database:
 
@@ -582,11 +584,17 @@ def doctest_restoreManagerUser():
 
     This user has a grant for zope.Manager role
 
-        >>> from zope.app.securitypolicy.interfaces import \\
+        >>> from zope.app.securitypolicy.interfaces import \
         ...     IPrincipalRoleManager
         >>> grants = IPrincipalRoleManager(app)
         >>> grants.getRolesForPrincipal('sb.person.manager')
         [('zope.Manager', PermissionSetting: Allow)]
+
+    To prevent this user from being deleted we add a dependency
+
+        >>> from zope.app.dependable.interfaces import IDependable
+        >>> IDependable(manager).dependents()
+        (u'/persons/',)
 
     Let's break the manager user by forgetting his password and
     revoking his permissions:
