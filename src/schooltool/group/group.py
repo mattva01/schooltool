@@ -26,6 +26,7 @@ from persistent import Persistent
 
 from zope.interface import implements
 from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.app.dependable.interfaces import IDependable
 from zope.app.container import btree
 from zope.app.container.contained import Contained
 
@@ -56,7 +57,8 @@ class Group(Persistent, Contained):
 
 def addGroupContainerToApplication(event):
     """Subscriber that adds a top-level groups container and a few groups."""
-    event.object['groups'] = GroupContainer()
+    app = event.object
+    app['groups'] = GroupContainer()
     default_groups =  [
         ("manager",        "Site Managers",         "Manager Group."),
         ("students",       "Students",              "Students."),
@@ -65,4 +67,6 @@ def addGroupContainerToApplication(event):
         ("administrators", "School Administrators", "School Administrators."),
     ]
     for id, title, description in default_groups:
-        event.object['groups'][id] = Group(title, description)
+        group = app['groups'][id] = Group(title, description)
+        IDependable(group).addDependent('')
+

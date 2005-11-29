@@ -24,8 +24,12 @@ $Id: test_app.py 4691 2005-08-12 18:59:44Z srichter $
 
 import unittest
 
+from zope.interface import directlyProvides
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
+from zope.app.testing import setup
+from zope.app.container.contained import ObjectAddedEvent
+from zope.app.traversing.interfaces import IContainmentRoot
 
 from schooltool.testing.util import run_unit_tests
 
@@ -71,19 +75,34 @@ def doctest_Group():
 def doctest_addGroupContainerToApplication():
     """Tests for addGroupContainerToApplication
 
+    This test needs annotations, dependencies and traversal
+
+        >>> setup.placelessSetUp()
+        >>> setup.setUpAnnotations()
+        >>> setup.setUpDependable()
+        >>> setup.setUpTraversal()
+
+    addGroupContainerToApplication is a subscriber for IObjectAddedEvent.
+
         >>> from schooltool.group.group import addGroupContainerToApplication
         >>> from schooltool.app.app import SchoolToolApplication
-        >>> from zope.app.container.contained import ObjectAddedEvent
         >>> app = SchoolToolApplication()
         >>> event = ObjectAddedEvent(app)
+
+    we want app to have a location
+
+        >>> directlyProvides(app, IContainmentRoot)
+
+    When you call the subscriber
+
         >>> addGroupContainerToApplication(event)
 
-    The subscriber adds a container
+    it adds a container for groups
 
         >>> app['groups']
         <schooltool.group.group.GroupContainer object at ...>
 
-    and a few groups
+    and a few built-in groups
 
         >>> for name, group in sorted(app['groups'].items()):
         ...     print '%-15s %-25s %s' % (name, group.title, group.description)
@@ -92,6 +111,17 @@ def doctest_addGroupContainerToApplication():
         manager         Site Managers             Manager Group.
         students        Students                  Students.
         teachers        Teachers                  Teachers.
+
+    These new groups are required for the application to function properly.  To
+    express that requirement we add explicit dependencies:
+
+        >>> from zope.app.dependable.interfaces import IDependable
+        >>> for group in app['groups'].values():
+        ...     assert IDependable(group).dependents() == (u'/groups/',)
+
+    Clean up
+
+        >>> setup.placelessTearDown()
 
     """
 
