@@ -1,0 +1,77 @@
+System objects
+==============
+
+SchoolTool has a default user object and some default group objects.  These
+objects are special and cannot be deleted.
+
+This functional test makes sure they cannot be deleted.
+
+
+Setup
+-----
+
+    >>> from zope.testbrowser import Browser
+    >>> manager_browser = Browser()
+    >>> manager_browser.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager_browser.handleErrors = False
+    >>> manager_browser.open('http://localhost/')
+    >>> "SchoolTool" in manager_browser.contents
+    True
+
+Let us add a user and a group, so that container views have something besides
+the default system objects:
+
+    >>> manager_browser.getLink('Groups').click()
+    >>> manager_browser.getLink('New Group').click()
+    >>> manager_browser.getControl('Title').value = 'A Group'
+    >>> manager_browser.getControl('Add').click()
+
+    >>> manager_browser.getLink('Persons').click()
+    >>> manager_browser.getLink('New Person').click()
+    >>> manager_browser.getControl('Full name').value = 'Stephan Richter'
+    >>> manager_browser.getControl('Username').value = 'srichter'
+    >>> manager_browser.getControl('Password').value = 'foobar'
+    >>> manager_browser.getControl('Verify password').value = 'foobar'
+    >>> manager_browser.getControl('Add').click()
+
+Test
+----
+
+The list of persons should have a disabled checkbox next to the manager user
+
+    >>> manager_browser.open('http://localhost/persons')
+    >>> for div in analyze.queryHTML('//form/div[input[@type="checkbox"]]',
+    ...                              manager_browser.contents):
+    ...     print div
+    <div>
+      <input type="checkbox" disabled name="delete.manager"><a href="http://localhost/persons/manager">SchoolTool Manager</a>
+    </div>
+    <div>
+      <input type="checkbox" name="delete.srichter"><a href="http://localhost/persons/srichter">Stephan Richter</a>
+    </div>
+
+The list of groups should have a disabled checkbox next to the default groups
+
+    >>> manager_browser.open('http://localhost/groups')
+    >>> for div in analyze.queryHTML('//form/div[input[@type="checkbox"]]',
+    ...                              manager_browser.contents):
+    ...     print div
+    <div>
+      <input type="checkbox" name="delete.a-group"><a href="http://localhost/groups/a-group">A Group</a>
+    </div>
+    <div>
+      <input type="checkbox" disabled name="delete.clerks"><a href="http://localhost/groups/clerks">Clerks</a>
+    </div>
+    <div>
+      <input type="checkbox" disabled name="delete.administrators"><a href="http://localhost/groups/administrators">School Administrators</a>
+    </div>
+    <div>
+      <input type="checkbox" disabled name="delete.manager"><a href="http://localhost/groups/manager">Site Managers</a>
+    </div>
+    <div>
+      <input type="checkbox" disabled name="delete.students"><a href="http://localhost/groups/students">Students</a>
+    </div>
+    <div>
+      <input type="checkbox" disabled name="delete.teachers"><a href="http://localhost/groups/teachers">Teachers</a>
+    </div>
+
