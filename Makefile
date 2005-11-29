@@ -54,10 +54,14 @@ clean:
 	         -o -name '*.py[co]' \) -exec rm -f {} \;
 	rm -rf build
 
+.PHONY: cleandb
+cleandb:
+	rm -f schooltool-skel/Data.fs*
+
 .PHONY: realclean
-realclean: clean
+realclean: clean cleandb
 	find . \( -name '*.so' -o -name '*.pyd' \) -exec rm -f {} \;
-	rm -f Data.fs* *.csv tags ID *.log
+	rm -f *.csv tags ID *.log
 	rm -f scripts/import-sampleschool
 	rm -f MANIFEST
 	rm -rf dist
