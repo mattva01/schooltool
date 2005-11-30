@@ -21,3 +21,4 @@ XXX
 
 $Id$
 """
+__docformat__ = 'reStructuredText'
