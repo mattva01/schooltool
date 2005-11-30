@@ -232,7 +232,7 @@ We should not get redirected if there were errors:
     ...                 'field.title': u''}
     >>> view = LevelEditView(editGrade2, request)
     >>> view.update()
-    u'An error occured.'
+    u'An error occurred.'
     >>> request.response.getStatus()
     599
 

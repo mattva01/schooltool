@@ -455,7 +455,7 @@ def doctest_GroupEditView():
         ...                 'field.title': u''}
         >>> view = TestGroupEditView(group, request)
         >>> view.update()
-        u'An error occured.'
+        u'An error occurred.'
         >>> request.response.getStatus()
         599
 
