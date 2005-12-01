@@ -382,7 +382,7 @@ def doctest_PersonAddView():
         ...                             'UPDATE_SUBMIT': 'Add'})
         >>> view = PersonAddView(pc, request)
         >>> view.update()
-        u'An error occured.'
+        u'An error occurred.'
         >>> view.error
         u'This username is already used!'
 
@@ -396,7 +396,7 @@ def doctest_PersonAddView():
         ...                             'UPDATE_SUBMIT': 'Add'})
         >>> view = PersonAddView(pc, request)
         >>> view.update()
-        u'An error occured.'
+        u'An error occurred.'
         >>> view.error
         u'Passwords do not match!'
         >>> 'coo' in pc

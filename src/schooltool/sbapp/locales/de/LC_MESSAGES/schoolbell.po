@@ -358,7 +358,7 @@ msgstr "Letzter ${weekday}"
 
 #: src/schoolbell/app/browser/cal.py:1402
 #: src/schoolbell/app/browser/cal.py:1703
-msgid "An error occured."
+msgid "An error occurred."
 msgstr "Ein Fehler trat auf."
 
 #: src/schoolbell/app/browser/cal.py:1434

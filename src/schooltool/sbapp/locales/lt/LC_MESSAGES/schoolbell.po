@@ -357,7 +357,7 @@ msgstr "Paskutinis ${weekday}"
 
 #: src/schoolbell/app/browser/cal.py:1402
 #: src/schoolbell/app/browser/cal.py:1703
-msgid "An error occured."
+msgid "An error occurred."
 msgstr "Klaida."
 
 #: src/schoolbell/app/browser/cal.py:1434

@@ -109,7 +109,7 @@ def doctest_SystemErrorView():
         >>> view = SystemErrorView(exc, TestRequest())
 
         >>> print view()
-        A system error has occured.
+        A system error has occurred.
 
         >>> view.request.response.getStatus()
         500

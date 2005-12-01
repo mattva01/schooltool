@@ -366,7 +366,7 @@ msgstr ""
 
 #: src/schoolbell/app/browser/cal.py:1402
 #: src/schoolbell/app/browser/cal.py:1703
-msgid "An error occured."
+msgid "An error occurred."
 msgstr ""
 
 #: src/schoolbell/app/browser/cal.py:1434
@@ -1825,7 +1825,7 @@ msgstr ""
 #~ msgstr ""
 
 #: import-sampleschool.py:58
-#~ msgid "An error occured!"
+#~ msgid "An error occurred!"
 #~ msgstr ""
 
 #: import-sampleschool.py:61 import-sampleschool.py:67

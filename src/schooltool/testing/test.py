@@ -529,7 +529,7 @@ class Colorizer(object):
             Got:
                 5
 
-        Or, if an exception has occured, like this:
+        Or, if an exception has occurred, like this:
 
             File "...", line 123, in foo.bar.baz.doctest_quux
             Failed example:

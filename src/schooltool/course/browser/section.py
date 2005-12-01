@@ -117,7 +117,7 @@ class SectionAddView(AddView):
                 self.course.sections.add(section)
             except WidgetsError, errors:
                 self.errors = errors
-                self.update_status = _("An error occured.")
+                self.update_status = _("An error occurred.")
                 return self.update_status
 
             self.request.response.redirect(self.nextURL())
