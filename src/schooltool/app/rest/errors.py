@@ -63,6 +63,20 @@ class IICalParseError(IException):
 classImplements(ICalParseError, IICalParseError)
 
 
+class DependencyErrorView(TextErrorView):
+    """A view for DependencyError.
+
+    Zope 3 raises a DependencyError when you try to remove a component while
+    other components depend on it.  SchoolTool uses this mechanism to prevent
+    users from deleting system objects like the manager user and some
+    predefined groups.
+    """
+
+    def __call__(self):
+        self.request.response.setStatus(405)
+        return 'Cannot delete system objects.'
+
+
 class SystemErrorView(TextErrorView):
     """A catch-all view for programmer errors"""
 

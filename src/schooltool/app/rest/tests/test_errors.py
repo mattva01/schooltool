@@ -83,6 +83,24 @@ def doctest_ICalParseErrorView():
     """
 
 
+def doctest_DependencyErrorView():
+    """Tests for DependencyErrorView.
+
+        >>> from schooltool.app.rest.errors import DependencyErrorView
+        >>> exc = Exception("something couldn't be deleted")
+        >>> view = DependencyErrorView(exc, TestRequest())
+
+        >>> print view()
+        Cannot delete system objects.
+
+        >>> view.request.response.getStatus()
+        405
+        >>> view.request.response.getHeader('Content-Type')
+        'text/plain; charset=utf-8'
+
+    """
+
+
 def doctest_SystemErrorView():
     """Tests for SystemErrorView.
 

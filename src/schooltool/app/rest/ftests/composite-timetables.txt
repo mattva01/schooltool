@@ -254,6 +254,8 @@ We can't delete composite timetables:
     HTTP/1.1 200 Ok
     ...
 
+XXX WTF?  Since when 200 Ok means 'NO YOU CANNOT DELETE THIS'?
+
 
 Epilogue
 --------

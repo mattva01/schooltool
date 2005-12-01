@@ -271,6 +271,14 @@
       permission="zope.Public"
       />
 
+  <view
+      for="zope.app.dependable.interfaces.DependencyError"
+      name="GET"
+      factory=".errors.DependencyErrorView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
   <configure
       xmlns:zcml="http://namespaces.zope.org/zcml"
       xmlns:apidoc="http://namespaces.zope.org/apidoc"
