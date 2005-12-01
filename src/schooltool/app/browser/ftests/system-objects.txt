@@ -4,7 +4,8 @@ System objects
 SchoolTool has a default user object and some default group objects.  These
 objects are special and cannot be deleted.
 
-This functional test makes sure they cannot be deleted.
+This functional test makes sure they cannot be deleted via the browser
+interface.
 
 
 Setup
