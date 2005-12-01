@@ -170,8 +170,8 @@ this case:
     ...
 
 The following sections "Provided Interfaces", "Bases", "Attribute/Properties",
-And "Methods" are simply taken from the class documentation of the apidoc,
-with exception of the attribute and property values, which are the actual
+and "Methods" are simply taken from the class documentation of the apidoc,
+with the exception of the attribute and property values, which are the actual
 values on the object.
 
 The introspector also allows you to see the mapping or sequence items of the
@@ -352,7 +352,7 @@ Again, searching by the term "devmode" gives us multiple results:
     </div>
     ...
 
-Again, "schooltool" is collapases to "st" and the documentation comes right up
+Again, "schooltool" is collapsed to "st" and the documentation comes right up
 when clicking a link:
 
     >>> browser.getLink('st.devmode.apidoc.InterfaceMenu').click()
