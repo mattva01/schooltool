@@ -204,20 +204,22 @@ __ http://sparkline.org/
 
 This is complicated.  Let's show a table:
 
-   +---------------+------------------+--------------------+------+---------+
-   | section meets | present during   | present during day | size | colour  |
-   | on this day?  | section?         | (homeroom period)? |      |         |
-   +---------------+------------------+--------------------+------+---------+
-   | yes           | unknown          | (does not matter)  | dot  | black   |
-   | yes           | yes              | (does not matter)  | full | black   |
-   | yes           | no (explained)   | (does not matter)  | full | black   |
-   | yes           | no (unexplained) | yes                | full | red     |
-   | yes           | no (unexplained) | no                 | full | yelllow |
-   | no            | (not available)  | unknown            | dot  | black   |
-   | no            | (not available)  | yes                | half | black   |
-   | no            | (not available)  | no (explained)     | half | black   |
-   | no            | (not available)  | no (unexplained)   | half | yellow  |
-   +---------------+------------------+--------------------+------+---------+
+   +---------+------------------+--------------------+------+---------+-----+
+   | section |                  |                    |      |         |     |
+   | meets   | present during   | present during day | size | colour  | +/- |  
+   | on this | section?         | (homeroom period)? |      |         |     |
+   | day?    |                  |                    |      |         |     |
+   +---------+------------------+--------------------+------+---------+-----+
+   | yes     | unknown          | (does not matter)  | dot  | black   | n/a |
+   | yes     | yes              | (does not matter)  | full | black   | +   |
+   | yes     | no (explained)   | (does not matter)  | full | black   | -   |
+   | yes     | no (unexplained) | yes                | full | red     | -   |
+   | yes     | no (unexplained) | no                 | full | yelllow | -   |
+   | no      | (not available)  | unknown            | dot  | black   | n/a |
+   | no      | (not available)  | yes                | half | black   | +   |
+   | no      | (not available)  | no (explained)     | half | black   | -   |
+   | no      | (not available)  | no (unexplained)   | half | yellow  | -   |
+   +---------+------------------+--------------------+------+---------+-----+
 
 If this table does not match the list of rules above, consider the table
 to be authoritative.
