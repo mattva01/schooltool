@@ -1,11 +1,11 @@
 
 div.devtools {
-  position: fixed;
-  right: 0px;
-  top: 0px;
-  background: url(++resource++box-bottom.png) bottom left no-repeat; 
-  width: 200px;
-  z-index: 99;
+    position: fixed;
+    right: 0px;
+    top: 0px;
+    background: url(++resource++box-bottom.png) bottom left no-repeat;
+    width: 200px;
+    z-index: 99;
 }
 
 div.devtools .header {

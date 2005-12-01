@@ -3,8 +3,8 @@ div.indent {
 }
 
 ol {
-  margin: 0px;
-  padding: 0px;
+    margin: 0px;
+    padding: 0px;
 }
 
 h1 {
@@ -34,82 +34,90 @@ div.documentation {
 }
 
 div.documentation h1 {
-  font-size: 120%;
+    font-size: 120%;
 }
 
 div.documentation h2 {
-  font-size: 110%;
-  font-style: italic;
+    font-size: 110%;
+    font-style: italic;
 }
 
 div.documentation h3 {
-  font-style: italic;
-  font-weight: normal;
-  padding: 0;
-  margin: 0;
+    font-style: italic;
+    font-weight: normal;
+    padding: 0;
+    margin: 0;
 }
 
 div.documentation p {
-  padding: 0;
-  margin-top: 0;
-  margin-bottom: 1em;
+    padding: 0;
+    margin-top: 0;
+    margin-bottom: 1em;
 }
 
 div.documentation ul, ol {
-  margin: 0.5em 2em;
+    margin: 0.5em 2em;
 }
 
 div.documentation a.reference img {
-  border: none;
+    border: none;
 }
 
 
 div.inline h1 {
-  padding: 0;
-  margin: 0;
-  margin-bottom: 0.5ex;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 0.5ex;
 }
 
 div.inline h2 {
-  margin-bottom: 0.5ex;
+    margin-bottom: 0.5ex;
 }
 
 div.inline h3 {
-  margin-bottom: 0.5ex;
+    margin-bottom: 0.5ex;
 }
 
 div.inline p {
-  margin: 0;
-  margin-bottom: 0.5ex;
+    margin: 0;
+    margin-bottom: 0.5ex;
 }
 
 /* reST markup - based on tools/stylesheets/default.css in the docutils dist */
 div.documentation .first {
-  margin-top: 0 ! important }
+    margin-top: 0 ! important;
+}
 
 div.documentation .last,
 div.documentation .with-subtitle {
-  margin-bottom: 0 ! important }
+    margin-bottom: 0 ! important;
+}
 
 div.documentation .hidden {
-  display: none }
+    display: none;
+}
 
 div.documentation a.toc-backref {
-  text-decoration: none ;
-  color: black }
+    text-decoration: none;
+    color: black;
+}
 
 div.documentation blockquote.epigraph {
-  margin: 2em 5em ; }
+    margin: 2em 5em;
+}
 
 div.documentation dl.docutils dd {
-  margin-bottom: 0.5em }
+    margin-bottom: 0.5em;
+}
 
 div.documentation div.abstract {
-  margin: 2em 5em }
+    margin: 2em 5em;
+}
 
 div.documentation div.abstract p.topic-title {
-  font-weight: bold ;
-  text-align: center }
+    font-weight: bold;
+    text-align: center;
+}
 
 div.documentation div.admonition,
 div.documentation div.attention,
@@ -121,82 +129,98 @@ div.documentation div.important,
 div.documentation div.note,
 div.documentation div.tip,
 div.documentation div.warning {
-  margin: 2em ;
-  border: medium outset ;
-  padding: 1em }
+    margin: 2em;
+    border: medium outset;
+    padding: 1em;
+}
 
-div.documentation div.admonition p.admonition-title, 
+div.documentation div.admonition p.admonition-title,
 div.documentation div.hint p.admonition-title,
 div.documentation div.important p.admonition-title,
 div.documentation div.note p.admonition-title,
 div.documentation div.tip p.admonition-title {
-  font-weight: bold ;
-  font-family: sans-serif }
+    font-weight: bold;
+    font-family: sans-serif;
+}
 
 div.documentation div.attention p.admonition-title,
 div.documentation div.caution p.admonition-title,
 div.documentation div.danger p.admonition-title,
 div.documentation div.error p.admonition-title,
 div.documentation div.warning p.admonition-title {
-  color: red ;
-  font-weight: bold ;
-  font-family: sans-serif }
+    color: red;
+    font-weight: bold;
+    font-family: sans-serif;
+}
 
 div.documentation div.dedication {
-  margin: 2em 5em ;
-  text-align: center ;
-  font-style: italic }
+    margin: 2em 5em;
+    text-align: center;
+    font-style: italic;
+}
 
 div.documentation div.dedication p.topic-title {
-  font-weight: bold ;
-  font-style: normal }
+    font-weight: bold;
+    font-style: normal;
+}
 
 div.documentation div.figure {
-  margin-left: 2em }
+    margin-left: 2em;
+}
 
 div.documentation div.footer,
 div.documentation div.header {
-  font-size: smaller }
+    font-size: smaller;
+}
 
 div.documentation div.line-block {
-  display: block ;
-  margin-top: 1em ;
-  margin-bottom: 1em }
+    display: block;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
 
 div.documentation div.line-block div.line-block {
-  margin-top: 0 ;
-  margin-bottom: 0 ;
-  margin-left: 1.5em }
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 1.5em;
+}
 
 div.documentation div.sidebar {
-  margin-left: 1em ;
-  border: medium outset ;
-  padding: 1em ;
-  background-color: #ffffee ;
-  width: 40% ;
-  float: right ;
-  clear: right }
+    margin-left: 1em;
+    border: medium outset;
+    padding: 1em;
+    background-color: #ffffee;
+    width: 40%;
+    float: right;
+    clear: right;
+}
 
 div.documentation div.sidebar p.rubric {
-  font-family: sans-serif ;
-  font-size: medium }
+    font-family: sans-serif;
+    font-size: medium;
+}
 
 div.documentation div.system-messages {
-  margin: 5em }
+    margin: 5em;
+}
 
 div.documentation div.system-messages h1 {
-  color: red }
+    color: red;
+}
 
 div.documentation div.system-message {
-  border: medium outset ;
-  padding: 1em }
+    border: medium outset;
+    padding: 1em;
+}
 
 div.documentation div.system-message p.system-message-title {
-  color: red ;
-  font-weight: bold }
+    color: red;
+    font-weight: bold;
+}
 
 div.documentation div.topic {
-  margin: 2em }
+    margin: 2em;
+}
 
 div.documentation h1.section-subtitle,
 div.documentation h2.section-subtitle,
@@ -204,135 +228,169 @@ div.documentation h3.section-subtitle,
 div.documentation h4.section-subtitle,
 div.documentation h5.section-subtitle,
 div.documentation h6.section-subtitle {
-  margin-top: 0.4em }
+    margin-top: 0.4em;
+}
 
 div.documentation h1.title {
-  text-align: center }
+    text-align: center;
+}
 
 div.documentation h2.subtitle {
-  text-align: center }
+    text-align: center;
+}
 
 div.documentation hr.docutils {
-  width: 75% }
+    width: 75%;
+}
 
 div.documentation ol.simple,
 div.documentation ul.simple {
-  margin-bottom: 1em }
+    margin-bottom: 1em;
+}
 
 div.documentation ol.arabic {
-  list-style: decimal }
+    list-style: decimal;
+}
 
 div.documentation ol.loweralpha {
-  list-style: lower-alpha }
+    list-style: lower-alpha;
+}
 
 div.documentation ol.upperalpha {
-  list-style: upper-alpha }
+    list-style: upper-alpha;
+}
 
 div.documentation ol.lowerroman {
-  list-style: lower-roman }
+    list-style: lower-roman;
+}
 
 div.documentation ol.upperroman {
-  list-style: upper-roman }
+    list-style: upper-roman;
+}
 
 div.documentation p.attribution {
-  text-align: right ;
-  margin-left: 50% }
+    text-align: right;
+    margin-left: 50%;
+}
 
 div.documentation p.caption {
-  font-style: italic }
+    font-style: italic;
+}
 
 div.documentation p.credits {
-  font-style: italic ;
-  font-size: smaller }
+    font-style: italic;
+    font-size: smaller;
+}
 
 div.documentation p.label {
-  white-space: nowrap }
+    white-space: nowrap;
+}
 
 div.documentation p.rubric {
-  font-weight: bold ;
-  font-size: larger ;
-  color: maroon ;
-  text-align: center }
+    font-weight: bold;
+    font-size: larger;
+    color: maroon;
+    text-align: center;
+}
 
 div.documentation p.sidebar-title {
-  font-family: sans-serif ;
-  font-weight: bold ;
-  font-size: larger }
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size: larger;
+}
 
 div.documentation p.sidebar-subtitle {
-  font-family: sans-serif ;
-  font-weight: bold }
+    font-family: sans-serif;
+    font-weight: bold;
+}
 
 div.documentation p.topic-title {
-  font-weight: bold }
+    font-weight: bold;
+}
 
 div.documentation pre.address {
-  margin-bottom: 0 ;
-  margin-top: 0 ;
-  font-family: serif ;
-  font-size: 100% }
+    margin-bottom: 0;
+    margin-top: 0;
+    font-family: serif;
+    font-size: 100%;
+}
 
 div.documentation pre.line-block {
-  font-family: serif ;
-  font-size: 100% }
+    font-family: serif;
+    font-size: 100%;
+}
 
 div.documentation pre.literal-block,
 div.documentation pre.doctest-block {
-  margin-left: 2em ;
-  margin-right: 2em ;
-  background-color: #eeeeee }
+    margin-left: 2em;
+    margin-right: 2em;
+    background-color: #eeeeee;
+}
 
 div.documentation span.classifier {
-  font-family: sans-serif ;
-  font-style: oblique }
+    font-family: sans-serif;
+    font-style: oblique;
+}
 
 div.documentation span.classifier-delimiter {
-  font-family: sans-serif ;
-  font-weight: bold }
+    font-family: sans-serif;
+    font-weight: bold;
+}
 
 div.documentation span.interpreted {
-  font-family: sans-serif }
+    font-family: sans-serif;
+}
 
 div.documentation span.option {
-  white-space: nowrap }
+    white-space: nowrap;
+}
 
 div.documentation span.pre {
-  white-space: pre }
+    white-space: pre;
+}
 
 div.documentation span.problematic {
-  color: red }
+    color: red;
+}
 
 div.documentation span.section-subtitle {
   /* font-size relative to parent (<h#> element) */
-  font-size: 80% }
+    font-size: 80%;
+}
 
 div.documentation table.citation {
-  border-left: solid thin gray }
+    border-left: solid thin gray;
+}
 
 div.documentation table.docinfo {
-  margin: 2em 4em }
+    margin: 2em 4em;
+}
 
 div.documentation table.docutils {
-  margin-top: 0.5em ;
-  margin-bottom: 0.5em }
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
 
 div.documentation table.footnote {
-  border-left: solid thin black }
+    border-left: solid thin black;
+}
 
 div.documentation table.docutils td,
 div.documentation table.docutils th,
 div.documentation table.docinfo td,
 div.documentation table.docinfo th {
-  padding-left: 0.5em ;
-  padding-right: 0.5em ;
-  vertical-align: top }
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    vertical-align: top;
+}
 
 div.documentation table.docutils th.field-name,
 div.documentation table.docinfo th.docinfo-name {
-  font-weight: bold ;
-  text-align: left ;
-  white-space: nowrap ;
-  padding-left: 0 }
+    font-weight: bold;
+    text-align: left;
+    white-space: nowrap;
+    padding-left: 0;
+}
 
 div.documentation h1 tt.docutils,
 div.documentation h2 tt.docutils,
@@ -340,10 +398,13 @@ div.documentation h3 tt.docutils,
 div.documentation h4 tt.docutils,
 div.documentation h5 tt.docutils,
 div.documentation h6 tt.docutils {
-  font-size: 100% }
+    font-size: 100%;
+}
 
 div.documentation tt.docutils {
-  background-color: #eeeeee }
+    background-color: #eeeeee;
+}
 
 div.documentation ul.auto-toc {
-  list-style-type: none }
+    list-style-type: none;
+}
