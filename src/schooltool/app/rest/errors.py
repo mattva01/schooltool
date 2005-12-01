@@ -51,12 +51,14 @@ class XMLErrorView(TextErrorView):
 
 
 class ICalParseErrorView(TextErrorView):
+    """A view for iCalendar parse errors"""
 
     def __call__(self):
         return 'Error parsing iCalendar data: ' + str(self.context)
 
 
-class IICalParseError(IException): pass
+class IICalParseError(IException):
+    """Invalid iCalendar data"""
 
 classImplements(ICalParseError, IICalParseError)
 
@@ -76,3 +78,4 @@ class SystemErrorView(TextErrorView):
 
 class RestError(Exception):
     """A catch-all error for ReST views that should produce a 400 response."""
+
