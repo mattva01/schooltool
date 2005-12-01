@@ -6,22 +6,23 @@ Attendance Tracking
 Definitions
 -----------
 
-"Absence" is when a student fails to show up during a period.
+An "absence" is when a student fails to show up during a period.
 
-"Day absence" is when a student fails to show up during the homeroom period for
-a particular day.
+A "day absence" is when a student fails to show up during the homeroom period
+for a particular day.
 
-"Section absence" is when a student fails to show up during a regular period.
+A "section absence" is when a student fails to show up for the scheduled
+meeting of a section.
 
-"Tardy" is when a student shows up late.
+A "tardy" is when a student shows up late.
 
-"Presence" is when a student shows up on time.
+A "presence" is when a student shows up on time.
 
-"Attendance incident" is either an absence or a tardy.
+An "attendance incident" is either an absence or a tardy.
 
-Attendance incidents can be either explained or unexplained.  We'll use the
-terms "explained" and "unexplained" instead of excused and unexcused, because
-the workflow may be resolved by an explanation that is not a valid excuse.
+Attendance incidents can be either "explained" or "unexplained".  We'll use the
+terms explained and unexplained instead of excused and unexcused, because the
+workflow may be resolved by an explanation that is not a valid excuse.
 
 
 Basic workflow
@@ -68,4 +69,158 @@ Use cases
 API
 ---
 
-TODO: write some science fiction code here
+The following code is *science-fiction*, that is, it doesn't work yet, but instead
+represents our thoughts about the API should look like
+
+    >>> from schooltool.attendance.interface import IAttendances
+
+    >>> student = app['persons']['student00937']
+    >>> attendances = IAttendances(student)
+
+    >>> ttcal = student.makeTimetableCalendar()
+    >>> first = datetime.datetime(Y, M, D, tzinfo=UTC)
+    >>> last = first + datetime.timedelta(days=1)
+    >>> all_sections = list(ttcal.expand(first, last))
+    >>> section_event = all_sections[0]
+
+Try one:
+
+    >>> attendances.get(section_event) == attendances.UNKNOWN
+    True
+
+    >>> attendances.record(section_event, attendances.ABSENT)
+    >>> attendances.get(section_event) == attendances.ABSENT
+    True
+
+    >>> attendances.record(section_event, attendances.TARDY)
+    >>> attendances.get(section_event) == attendances.TARDY
+    True
+
+    >>> attendances.record(section_event, attendances.PRESENT)
+    >>> attendances.get(section_event) == attendances.PRESENT
+    True
+
+    >>> attendances.makeCalendar(first, last)
+    <...ImmutableCalendar object ...>
+
+Logging
+
+    >>> logging.getLogger('schooltool.attendance').addHandler(...)
+    >>> attendances.record(section_event, attendances.ABSENT)
+    YYYY-MM-DD HH:MM:SS +ZZZZ: student Foo was absent from Math
+
+Vague thoughts: we need a method to extract the range of the current school day
+(taking timezone into account)
+
+On second thought attendance should be an object, not an enum
+
+    >>> attendances.get(section_event)
+    Attendance(UNKNOWN)
+
+    >>> attendances.record(section_event, attendances.ABSENT)
+    >>> attendances.get(section_event)
+    Attendance(ABSENT)
+
+    >>> attendances.record(section_event, attendances.TARDY)
+    >>> attendances.get(section_event)
+    Attendance(TARDY)
+
+    >>> attendances.get(section_event).explained
+    False
+    >>> attendances.get(section_event).explaination is None
+    True
+
+    >>> attendances.get(section_event).explain(u"Sick")
+    >>> attendances.get(section_event).explained
+    True
+    >>> attendances.get(section_event).explaination
+    u"Sick"
+    >>> attendances.get(section_event).explaination_date
+    datetime.datetime(...)
+
+Day attendance is recorded the same way, by taking a homeroom_period_event.
+
+    >>> attendances.getUnexplainedAttendances()
+    [...]
+
+    >>> attendances.getAttendancesForTerm(term)
+
+
+Sparkline attendance graph
+--------------------------
+
+The real-time attendance form will have whisker "sparkline" (see
+http://sparkline.org/) graphs showing attendance for the last 10 days for each
+student.
+
+- Successful attendance during days when the section has met are designated by
+  a full length positive black line. 
+
+    >>> homeroom_event = ???
+    >>> the_section = app['sections']['some_section']
+    >>> events = the_section.getMeetingEventsForDay(a_date)
+    >>> if events and attendance.get(events[0]).state == PRESENT:
+    ...    length = 'full'
+    ...    color = 'black'
+
+- Attendance on days the section does not meet are indicated by a half-length
+  black line.
+
+    >>> if not events and attendance.get(homeroom_event).state == PRESENT:
+    ...     length = 'half'
+    ...     color = 'black'
+
+- Non-attendance on days the section does not meet is indicated by a
+  half-length descending grey (excused) or yellow (unexcused) line.
+
+    >>> if not events and attendance.get(homeroom_event).state != PRESENT:
+    ...     length = 'half'
+    ...     if attendance.get(homeroom_event).explained:
+    ...         color = 'grey'
+    ...     else:
+    ...         color = 'yellow'
+
+- Non-attendance on days when the section meets is indicated by a full length
+  black (excused) or yellow (unexcused) line.
+
+    >>> if events and attendance.get(events[0]).state != PRESENT:
+    ...     length = 'full'
+    ...     if attendance.get(events[0]).explained:
+    ...         color = 'grey'
+    ...     else:
+    ...         color = 'yellow'
+
+- Non-attendance in days when the section met and the student was in school are
+  designated by full length red whiskers, until they are excused (black).
+
+    >>> if events and attendance.get(events[0]).state != PRESENT:
+    ...     length = 'full'
+    ...     if attendance.get(homeroom_event).state == PRESENT:
+    ...         if attendance.get(events[0]).explained:
+    ...             color = 'black'
+    ...         else:
+    ...             color = 'red'
+
+This is complicated.  Let's show a table:
+
+   +----------------+-------------------------+---------------------+--------------+
+   | section meets? | present during section? | present during day? | bar          |
+   +----------------+-------------------------+---------------------+--------------+
+   | yes            | yes                     | (does not matter)   | full black   |
+   | yes            | no (explained)          | (does not matter)   | full black   |
+   | yes            | no (unexplained)        | yes                 | full red     |
+   | yes            | no (unexplained)        | no                  | full yelllow |
+   | no             | (not available)         | yes                 | half black   |
+   | no             | (not available)         | no (explained)      | half grey    |
+   | no             | (not available)         | no (unexplained)    | half yellow  |
+   +----------------+-------------------------+---------------------+--------------+
+
+The table above does not indicate what to show in the following cases:
+
+   +----------------+-------------------------+---------------------+--------------+
+   | section meets? | present during section? | present during day? | bar          |
+   +----------------+-------------------------+---------------------+--------------+
+   | yes            | unknown                 | (does it matter?)   |              |
+   | no             | (not available)         | unknown             |              |
+   +----------------+-------------------------+---------------------+--------------+
+
