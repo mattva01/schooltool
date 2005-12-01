@@ -145,8 +145,8 @@ class ApplicationPreferences(Persistent):
 
     See schooltool.app.interfaces.ApplicationPreferences.
     """
+
     implements(IApplicationPreferences)
-    adapts(ISchoolToolApplication)
 
     title = 'SchoolTool'
 

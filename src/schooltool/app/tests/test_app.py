@@ -38,19 +38,18 @@ def doctest_SchoolToolApplication():
 
         >>> placelesssetup.setUp()
         >>> from schooltool.app.app import ApplicationPreferences
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
         >>> from schooltool.app.interfaces import IApplicationPreferences
         >>> provideAdapter(ApplicationPreferences,
+        ...                adapts=[ISchoolToolApplication],
         ...                provides=IApplicationPreferences)
+
+    Let's check that SchoolToolApplication satisfies the interface:
 
         >>> app = sbsetup.createSchoolToolApplication()
 
-    Let's check that the interface is satisfied:
-
-        >>> from schooltool.app.interfaces import ISchoolToolApplication
         >>> verifyObject(ISchoolToolApplication, app)
         True
-
-        >>> placelesssetup.tearDown()
 
     The most basic containers should be available:
 
@@ -76,10 +75,14 @@ def doctest_SchoolToolApplication():
 
     Our ApplicationPreferences title should be 'SchoolTool' by default:
 
-      >>> setup.setUpAnnotations()
-      >>> from schooltool.app.app import getApplicationPreferences
-      >>> getApplicationPreferences(app).title
-      'SchoolTool'
+        >>> setup.setUpAnnotations()
+        >>> from schooltool.app.app import getApplicationPreferences
+        >>> getApplicationPreferences(app).title
+        'SchoolTool'
+
+    Clean up
+
+        >>> placelesssetup.tearDown()
 
     """
 
