@@ -5,6 +5,7 @@ div.devtools {
   top: 0px;
   background: url(++resource++box-bottom.png) bottom left no-repeat; 
   width: 200px;
+  z-index: 99;
 }
 
 div.devtools .header {

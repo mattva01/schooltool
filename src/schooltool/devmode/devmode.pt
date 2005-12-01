@@ -6,8 +6,8 @@
       <img src="/@@/harrow.png" border="0" id=".arrow"
            style="vertical-align: middle"
            tal:attributes="id string:devtools.arrow" />
+      <h4>Developer Tools</h4>
     </a>
-    <h4>Developer Tools</h4>
   </div>
 
   <div id="devtools" style="display:none;">
