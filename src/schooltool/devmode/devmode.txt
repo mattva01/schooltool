@@ -408,7 +408,7 @@ The 'PUT' view has a lot more information besides the standard information,
     <div class="indent">
     <div>
       <i>Registered at:</i>
-      <a href="...">Zope3/Zope3/src/zope/app/http/configure.zcml</a>
+      <a href="...">Zope3/.../zope/app/http/configure.zcml</a>
       <span class="small">
         (line 34)</span>
     </div>
@@ -433,7 +433,7 @@ a given container,
       <div class="indent" style="padding-bottom: 0.5em">
         <div>
           <i>Registered at:</i>
-          <a href="...">Zope3/src/schooltool/person/rest/configure.zcml</a>
+          <a href="...">Zope3/.../schooltool/person/rest/configure.zcml</a>
           <span class="small">
             (line 66)</span>
         </div>
@@ -459,7 +459,7 @@ the modification adapter,
       <div class="indent" style="padding-bottom: 0.5em">
         <div>
           <i>Registered at:</i>
-          <a href="...">Zope3/src/schooltool/person/rest/configure.zcml</a>
+          <a href="...">Zope3/.../schooltool/person/rest/configure.zcml</a>
           <span class="small">
             (line 73)</span>
         </div>
@@ -495,7 +495,7 @@ also get a list of containers from which the verb is valid:
       <div class="indent">
         <div>
           <i>Registered at:</i>
-          <a href="...">Zope3/Zope3/src/zope/app/http/configure.zcml</a>
+          <a href="...">Zope3/.../zope/app/http/configure.zcml</a>
           <span class="small">
             (line 43)</span>
         </div>
@@ -531,7 +531,7 @@ including the access control list, `acl`:
         </div>
         <div>
           <i>Registered at:</i>
-          <a href="...">Zope3/src/schooltool/app/rest/configure.zcml</a>
+          <a href="...">Zope3/.../schooltool/app/rest/configure.zcml</a>
           <span class="small">
            (line 67)</span>
         </div>
@@ -557,7 +557,7 @@ In the ACL view, you can also see an example of a 'POST' view:
       <div class="indent">
         <div>
           <i>Registered at:</i>
-          <a href="...">Zope3/src/schooltool/app/rest/configure.zcml</a>
+          <a href="...">Zope3/.../schooltool/app/rest/configure.zcml</a>
           <span class="small">
             (line 176)</span>
         </div>
@@ -567,7 +567,7 @@ In the ACL view, you can also see an example of a 'POST' view:
         </div>
         <div>
           <i>Template:</i>
-          Zope3/src/schooltool/app/rest/templates/acl.pt
+          Zope3/.../schooltool/app/rest/templates/acl.pt
         </div>
         <div>
           <i>Permission:</i>
