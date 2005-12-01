@@ -74,8 +74,5 @@ class SystemErrorView(TextErrorView):
         return "A system error has occured."
 
 
-class IRestError(IException): pass
-
-
 class RestError(Exception):
     """A catch-all error for ReST views that should produce a 400 response."""
