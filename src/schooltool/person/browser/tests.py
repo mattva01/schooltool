@@ -454,7 +454,6 @@ def doctest_PersonPreferencesView():
         ...     PersonPreferencesView
         >>> from schooltool.person.person import Person
         >>> from schooltool.person.preference import getPersonPreferences
-        >>> from zope.app.annotation.interfaces import IAnnotations
         >>> from schooltool.person.interfaces import IPerson
         >>> from schooltool.person.interfaces import IPersonPreferences
 
