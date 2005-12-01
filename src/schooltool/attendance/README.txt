@@ -149,9 +149,10 @@ Day attendance is recorded the same way, by taking a homeroom_period_event.
 Sparkline attendance graph
 --------------------------
 
-The real-time attendance form will have whisker "sparkline" (see
-http://sparkline.org/) graphs showing attendance for the last 10 days for each
-student.
+The real-time attendance form will have whisker sparkline__ graphs showing
+attendance for the last 10 schooldays for each student.
+
+__ http://sparkline.org/
 
 - Successful attendance during days when the section has met are designated by
   a full length positive black line. 
@@ -203,24 +204,20 @@ student.
 
 This is complicated.  Let's show a table:
 
-   +----------------+-------------------------+---------------------+--------------+
-   | section meets? | present during section? | present during day? | bar          |
-   +----------------+-------------------------+---------------------+--------------+
-   | yes            | yes                     | (does not matter)   | full black   |
-   | yes            | no (explained)          | (does not matter)   | full black   |
-   | yes            | no (unexplained)        | yes                 | full red     |
-   | yes            | no (unexplained)        | no                  | full yelllow |
-   | no             | (not available)         | yes                 | half black   |
-   | no             | (not available)         | no (explained)      | half grey    |
-   | no             | (not available)         | no (unexplained)    | half yellow  |
-   +----------------+-------------------------+---------------------+--------------+
+   +---------------+------------------+--------------------+------+---------+
+   | section meets | present during   | present during day | size | colour  |
+   | on this day?  | section?         | (homeroom period)? |      |         |
+   +---------------+------------------+--------------------+------+---------+
+   | yes           | unknown          | (does not matter)  | dot  | black   |
+   | yes           | yes              | (does not matter)  | full | black   |
+   | yes           | no (explained)   | (does not matter)  | full | black   |
+   | yes           | no (unexplained) | yes                | full | red     |
+   | yes           | no (unexplained) | no                 | full | yelllow |
+   | no            | (not available)  | unknown            | dot  | black   |
+   | no            | (not available)  | yes                | half | black   |
+   | no            | (not available)  | no (explained)     | half | black   |
+   | no            | (not available)  | no (unexplained)   | half | yellow  |
+   +---------------+------------------+--------------------+------+---------+
 
-The table above does not indicate what to show in the following cases:
-
-   +----------------+-------------------------+---------------------+--------------+
-   | section meets? | present during section? | present during day? | bar          |
-   +----------------+-------------------------+---------------------+--------------+
-   | yes            | unknown                 | (does it matter?)   |              |
-   | no             | (not available)         | unknown             |              |
-   +----------------+-------------------------+---------------------+--------------+
-
+If this table does not match the list of rules above, consider the table
+to be authoritative.
