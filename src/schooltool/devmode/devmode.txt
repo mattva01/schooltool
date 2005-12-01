@@ -22,7 +22,7 @@ The developer mode should be visible:
      ...<a href="/@@sampledata.html" target="new">Sample data</a>...'
 
 Note that we only see the developer tools here, because these tests are run
-with the developer mode turned on. Commonly, the develoepr mode can be
+with the developer mode turned on. Commonly, the developer mode can be
 controlled using ``schooltool.conf``'s ``devmode`` switch. Simply add
 ``devmode on`` to your ``schooltool.conf`` file to turn on the developer's
 mode.
@@ -170,7 +170,7 @@ this case:
     ...
 
 The following sections "Provided Interfaces", "Bases", "Attribute/Properties",
-and "Methods" are simply taken from the class documentation of the apidoc,
+And "Methods" are simply taken from the class documentation of the apidoc,
 with exception of the attribute and property values, which are the actual
 values on the object.
 
@@ -352,7 +352,7 @@ Again, searching by the term "devmode" gives us multiple results:
     </div>
     ...
 
-Again, "schooltool" is collpases to "st" and the documentation comes right up
+Again, "schooltool" is collapases to "st" and the documentation comes right up
 when clicking a link:
 
     >>> browser.getLink('st.devmode.apidoc.InterfaceMenu').click()
@@ -373,12 +373,12 @@ restive views of all SchoolTool content type classes.
 
 Since it is not expected that there are many content types around, no search
 interface is provided and all the content classes are listed. Let's select the
-`Person`, which is themost interesting class:
+`Person`, which is the most interesting class:
 
     >>> browser.getLink('st.person.person.Person').click()
 
-The view begins witha  list of all available HTTP verbs. For the 'GET' view
-you can see the ZCML file the factory was reguistered at as well as the
+The view begins with a list of all available HTTP verbs. For the 'GET' view
+you can see the ZCML file the factory was registered at as well as the
 factory path:
 
     >>> print browser.contents
@@ -515,7 +515,7 @@ also get a list of containers from which the verb is valid:
     </div>
     ...
 
-Following the HTTP verbs, all identifyable name traversers are listed,
+Following the HTTP verbs, all identifiable name traversers are listed,
 including the access control list, `acl`:
 
 
