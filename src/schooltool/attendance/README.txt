@@ -186,7 +186,7 @@ student.
     >>> if events and attendance.get(events[0]).state != PRESENT:
     ...     length = 'full'
     ...     if attendance.get(events[0]).explained:
-    ...         color = 'grey'
+    ...         color = 'black'
     ...     else:
     ...         color = 'yellow'
 
