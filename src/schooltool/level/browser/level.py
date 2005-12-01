@@ -72,7 +72,7 @@ class EditLevelAdapter(object):
     zope.component.adapts(interfaces.ILevel)
 
     def __init__(self, context):
-        # Make sure we are no using setattr to set the context
+        # Make sure we are not using setattr to set the context
         self.__dict__['context'] = context
 
     def __getattr__(self, name):
