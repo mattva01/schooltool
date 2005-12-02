@@ -223,3 +223,124 @@ This is complicated.  Let's show a table:
 
 If this table does not match the list of rules above, consider the table
 to be authoritative.
+
+
+Another possible version of API
+-------------------------------
+
+The following code is another *science-fiction*, more WfMC'ish and less
+dependent of workflow structure.
+
+    >>> from schooltool.attendance.interface import IAttendanceItem
+
+    >>> student = app['persons']['student00937']
+
+    >>> ttcal = student.makeTimetableCalendar()
+    >>> first = datetime.datetime(Y, M, D, tzinfo=UTC)
+    >>> last = first + datetime.timedelta(days=1)
+    >>> all_sections = list(ttcal.expand(first, last))
+    >>> section_event = all_sections[0]
+
+Set up logging:
+
+    >>> logging.getLogger('schooltool.attendance').addHandler(...)
+
+Try one:
+
+    >>> attendance_item = IAttendanceItem(student, section_event)
+
+    >>> activitie = attendance_item.getCurrentActivities()
+    >>> activities
+    [AttendanceActivity(Waiting for student)]
+
+Try one of the activities:
+
+    >>> activity = activities[0]
+
+Make sure it's our job to process this activity:
+
+    >>> my_role = Role("teacher") # mapping roles to performers...?
+    >>> activity.performer.conforms(my_role)
+    True
+
+    >>> pprint_schema(activity.getSchema())
+    student_seen = Bool(
+        """Set to True if student was present when event started""",
+        default=True)
+
+    >>> activity.resolve(student_seen = False)
+
+Application logic changes "status" to "Explaining absence":
+
+    >>> activities = attendance_item.getCurrentActivities()
+    >>> activities
+    [AttendanceActivity(Explaining absence)]
+
+Let's make an explanation (student should, but who cares?):
+
+    >>> activity = activities[0]
+    >>> pprint_schema(activity.getSchema())
+    explanation = Text(
+        """Why student is absent?""",
+        default='')
+
+    >>> activity.resolve(explanation = """I hate math""")
+
+We can have more than one activity:
+
+    >>> activities = attendance_item.getCurrentActivities()
+    >>> activities
+    [AttendanceActivity(Resolving explanation),
+    AttendanceActivity(Overload explanation)]
+
+What is that second one?
+
+    >>> some_role = Role('Student's Parent')
+    >>> activities[1].performer.conforms(some_role)
+    True
+    >>> activities[1].performer.conforms(my_role)
+    False
+
+Ok, it's not for us, so we do our job:
+
+    >>> my_activity = activities[0]
+    >>> my_activity.performer.conforms(my_role)
+    True
+
+    >>> pprint_schema(my_activity.getSchema())
+    explanation = Text(
+        """Explanation by student""",
+        readonly = True)
+    resolution = Choice(
+        """Chose his destiny""",
+        choices = ['forgive', 'make suffer!'],
+        default = 'make suffer!')
+    arguments = Text(
+        """Support your decision with arguments""")
+
+We have some data to consider (explanation made by student). We can use
+different (and probably better) way to resolve activity.
+
+    >>> content = my_activity.getData()
+    >>> content.resolution = 'forgive'
+    >>> content.arguments = 'I hate math myself'
+    >>> my_activity.resolveWithData(content)
+
+Is our student lucky guy?
+
+    >>> attendance_item.getCurrentActivities()
+    [AttendanceActivity(ExcusedAbsence)]
+
+We want to show this as event:
+
+    >>> attendance_item.getEvent()
+    <...Event object ...>
+
+If someone wants to look at our log:
+
+    >>> print logging.getLogger('schooltool.attendance').dump()
+    YYYY-MM-DD HH:MM:SS +ZZZZ: student Foo was absent from Math
+    YYYY-MM-DD HH:MM:SS +ZZZZ: student Foo explained his absence at Math
+    YYYY-MM-DD HH:MM:SS +ZZZZ: student Foo was forgiven absence at Math
+
+
