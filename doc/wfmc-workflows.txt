@@ -97,7 +97,11 @@ terminology:
     student during the promotion process.
 
 When you first start JaWE, you get an empty document that looks pretty
-daunting at the beginning. The first task will be to create a process; do that
+daunting at the beginning.  The first task will be to create a package.  This is
+a container for your workflow.  Go to File > New and enter an appropriate id and 
+title.
+
+The next task will be to create a process; do that
 by clicking on the `Toolbox` tab and then on the `Insert Process` icon. You
 then click inside the drawing area somewhere, which places the new process
 into the grid. You can now double click on the process object to modify the
@@ -125,10 +129,11 @@ all activities.
 Now that you have developed the activities, you need to define the transitions
 between them. While you can choose between a simple, self-routed, and circular
 transition, I have only used simple transitions until now. To create a
-transition, click on the `Transition` icon then on the initial activity,
-holding the mouse button and going to the final activity after which you can
-let the mouse button go. You can then double click on the newly created arrow
-representing the transition to edit the transition properties. The most
+transition, click on the `Transition` icon then on the initial activity (this
+is a little finicky--make sure the initial activity is highlighted before you 
+drag), holding the mouse button and going to the final activity after which you 
+can let the mouse button go. You can then double click on the newly created 
+arrow representing the transition to edit the transition properties. The most
 important attribute here is the condition. In the expression field of the
 condition, you can enter a valid Python expression that should evaluate to
 ``True`` or ``False``. All of the workflow-relevant data variables are
