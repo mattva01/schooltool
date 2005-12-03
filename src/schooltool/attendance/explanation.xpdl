@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package Id="explanation" Name="Attendance Explanation" xmlns="http://www.wfmc.org/2002/XPDL1.0" xmlns:xpdl="http://www.wfmc.org/2002/XPDL1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.wfmc.org/2002/XPDL1.0 http://wfmc.org/standards/docs/TC-1025_schema_10_xpdl.xsd">
+    <PackageHeader>
+        <XPDLVersion>1.0</XPDLVersion>
+        <Vendor>Together</Vendor>
+        <Created>2005-12-02 00:08:55</Created>
+    </PackageHeader>
+    <RedefinableHeader PublicationStatus="UNDER_TEST"/>
+    <ConformanceClass GraphConformance="NON_BLOCKED"/>
+    <WorkflowProcesses>
+        <WorkflowProcess AccessLevel="PUBLIC" Id="explanation" Name="Explanation">
+            <ProcessHeader DurationUnit="D">
+                <Created>2005-12-02 00:14:00</Created>
+            </ProcessHeader>
+            <RedefinableHeader PublicationStatus="UNDER_TEST"/>
+            <Participants>
+                <Participant Id="attendanceAdmin" Name="Attendance Administrator">
+                    <ParticipantType Type="ROLE"/>
+                </Participant>
+            </Participants>
+            <Activities>
+                <Activity Id="explain" Name="Explain">
+                    <Implementation>
+                        <No/>
+                    </Implementation>
+                    <Performer>attendanceAdmin</Performer>
+                    <StartMode>
+                        <Automatic/>
+                    </StartMode>
+                    <FinishMode>
+                        <Automatic/>
+                    </FinishMode>
+                    <TransitionRestrictions>
+                        <TransitionRestriction>
+                            <Join Type="XOR"/>
+                            <Split Type="XOR">
+                                <TransitionRefs>
+                                    <TransitionRef Id="explain_to_excuse"/>
+                                    <TransitionRef Id="explanation_Tra14"/>
+                                    <TransitionRef Id="explanation_Tra12"/>
+                                </TransitionRefs>
+                            </Split>
+                        </TransitionRestriction>
+                    </TransitionRestrictions>
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="ParticipantID" Value="attendanceAdmin"/>
+                        <ExtendedAttribute Name="XOffset" Value="410"/>
+                        <ExtendedAttribute Name="YOffset" Value="30"/>
+                    </ExtendedAttributes>
+                </Activity>
+                <Activity Id="reject" Name="Reject">
+                    <Implementation>
+                        <No/>
+                    </Implementation>
+                    <Performer>attendanceAdmin</Performer>
+                    <StartMode>
+                        <Automatic/>
+                    </StartMode>
+                    <FinishMode>
+                        <Automatic/>
+                    </FinishMode>
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="ParticipantID" Value="attendanceAdmin"/>
+                        <ExtendedAttribute Name="XOffset" Value="490"/>
+                        <ExtendedAttribute Name="YOffset" Value="120"/>
+                    </ExtendedAttributes>
+                </Activity>
+                <Activity Id="makeTardy" Name="Make Tardy">
+                    <Implementation>
+                        <No/>
+                    </Implementation>
+                    <Performer>attendanceAdmin</Performer>
+                    <StartMode>
+                        <Automatic/>
+                    </StartMode>
+                    <FinishMode>
+                        <Automatic/>
+                    </FinishMode>
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="ParticipantID" Value="attendanceAdmin"/>
+                        <ExtendedAttribute Name="XOffset" Value="280"/>
+                        <ExtendedAttribute Name="YOffset" Value="160"/>
+                    </ExtendedAttributes>
+                </Activity>
+                <Activity Id="excuse" Name="Excuse">
+                    <Implementation>
+                        <No/>
+                    </Implementation>
+                    <Performer>attendanceAdmin</Performer>
+                    <StartMode>
+                        <Automatic/>
+                    </StartMode>
+                    <FinishMode>
+                        <Automatic/>
+                    </FinishMode>
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="ParticipantID" Value="attendanceAdmin"/>
+                        <ExtendedAttribute Name="XOffset" Value="610"/>
+                        <ExtendedAttribute Name="YOffset" Value="60"/>
+                    </ExtendedAttributes>
+                </Activity>
+                <Activity Id="create" Name="Create Absence">
+                    <Implementation>
+                        <No/>
+                    </Implementation>
+                    <Performer>attendanceAdmin</Performer>
+                    <StartMode>
+                        <Automatic/>
+                    </StartMode>
+                    <FinishMode>
+                        <Automatic/>
+                    </FinishMode>
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="ParticipantID" Value="attendanceAdmin"/>
+                        <ExtendedAttribute Name="XOffset" Value="250"/>
+                        <ExtendedAttribute Name="YOffset" Value="40"/>
+                    </ExtendedAttributes>
+                </Activity>
+            </Activities>
+            <Transitions>
+                <Transition From="create" Id="create_to_explain" To="explain">
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
+                    </ExtendedAttributes>
+                </Transition>
+                <Transition From="explain" Id="explanation_Tra12" To="makeTardy">
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
+                    </ExtendedAttributes>
+                </Transition>
+                <Transition From="makeTardy" Id="explain_to_tardy" To="explain">
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
+                    </ExtendedAttributes>
+                </Transition>
+                <Transition From="explain" Id="explanation_Tra14" To="reject">
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
+                    </ExtendedAttributes>
+                </Transition>
+                <Transition From="reject" Id="explain_to_reject" To="explain">
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
+                    </ExtendedAttributes>
+                </Transition>
+                <Transition From="explain" Id="explain_to_excuse" To="excuse">
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
+                    </ExtendedAttributes>
+                </Transition>
+            </Transitions>
+            <ExtendedAttributes>
+                <ExtendedAttribute Name="StartOfWorkflow" Value="attendanceAdmin;create;120;60;NOROUTING"/>
+                <ExtendedAttribute Name="EndOfWorkflow" Value="attendanceAdmin;excuse;750;100;NOROUTING"/>
+                <ExtendedAttribute Name="ParticipantVisualOrder" Value="attendanceAdmin;"/>
+            </ExtendedAttributes>
+        </WorkflowProcess>
+    </WorkflowProcesses>
+    <ExtendedAttributes>
+        <ExtendedAttribute Name="MadeBy" Value="JaWE"/>
+        <ExtendedAttribute Name="Version" Value="1.4.2"/>
+    </ExtendedAttributes>
+</Package>
