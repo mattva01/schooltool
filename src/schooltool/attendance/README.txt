@@ -261,8 +261,8 @@ to be authoritative.
     ...         else:
     ...             return 'yellow negative half line'
 
-XXX So should IDayAttendance.get take a date or datetime?
-XXX We stumble on timezones once again
+| **XXX** So should ISectionAttendance.record and get take a date or a datetime?
+| **XXX** We stumble on timezones once again -- at what time does a school day start?
 
 Homeroom class attendance
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -292,24 +292,38 @@ API::
             You can only record the absence or presence once for a given date.
             """
 
+Logging
+~~~~~~~
+
+All attendance related events appear in a log file
+
+    >>> logging.getLogger('schooltool.attendance').addHandler(...)
+    >>> IDayAttendance(student).record(section, datetime, False)
+    YYYY-MM-DD HH:MM:SS +ZZZZ: student Foo was absent from Math
+    >>> IDayAttendance(student).get(section, datetime).makeTardy(time)
+    YYYY-MM-DD HH:MM:SS +ZZZZ: student Foo was late for Math
+
+    >>> del logging.getLogger('schooltool.attendance').handlers[:]
+
+
+Attendance events in a student's calendar
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The calendar view will have to include two more calendars in its getCalendars() method:
+
+    >>> daily_absences = IDayAttendance(student).makeCalendar(start, end)
+    >>> section_absences = ISectionAttendance(student).makeCalendar(start, end)
+
+Daily absences will contain all-day events for all absences and tardies.
+Section absences will contain regular events for all absences and tardies.
+
+| **XXX** So ISectionAttendance.record should record both dtstart and duration
+
+
 Old science fiction
 ~~~~~~~~~~~~~~~~~~~
 
 XXX delete this
-
-    >>> attendances.makeCalendar(first, last)
-    <...ImmutableCalendar object ...>
-
-Logging
-
-    >>> logging.getLogger('schooltool.attendance').addHandler(...)
-    >>> attendances.record(section_event, attendances.ABSENT)
-    YYYY-MM-DD HH:MM:SS +ZZZZ: student Foo was absent from Math
-
-Vague thoughts: we need a method to extract the range of the current school day
-(taking timezone into account)
-
-...
 
     >>> attendances.get(section_event).explained
     False
@@ -449,5 +463,4 @@ If someone wants to look at our log:
     YYYY-MM-DD HH:MM:SS +ZZZZ: student Foo was absent from Math
     YYYY-MM-DD HH:MM:SS +ZZZZ: student Foo explained his absence at Math
     YYYY-MM-DD HH:MM:SS +ZZZZ: student Foo was forgiven absence at Math
-
 
