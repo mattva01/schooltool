@@ -63,7 +63,7 @@ Use cases
 
 - List of unexplained attendance incidents for a student for both days and periods.
 
-- Summary of all attendance incidents for a student for a single term.
+- List of all attendance incidents for a student for a single term (i.e. date range).
 
 - Modification of attendance workflow status, whatever that means.
 
@@ -131,10 +131,19 @@ The following API emerges::
         def isAbsent():  """True if status == ABSENT."""
         def isTardy():   """True if status == TARDY."""
 
+        def isExplained():
+            """Is the absence/tardy explained?
+
+            Meaningless (i.e. raises some exception) when status ==
+            UNKNOWN or PRESENT.
+            """
+
         def makeTardy(arrived):
             """Convert an absence to a tardy.
 
             `arrived` is a datetime.time.
+
+            Meaningless (i.e. raises some exception) when status != ABSENT.
             """
 
 
@@ -147,6 +156,21 @@ The realtime attendance form has colored backgrounds that indicate the following
 * student absent today (yellow)
 * student absent with excuse (greenish)
 * student in school earlier but subsequently gone with no excuse (red)
+
+**XXX** what does it mean, exactly?  Answer the following questions, please:
+
+- student was in homeroom, lecture #1, but is not present in lecture
+  #2.  I am in realtime form for lecture #2.  I see grey background.  I
+  check [x] absent, press submit.  five min later I go back to the form
+  (somebody else was late). Should the background be grey or red?
+
+- student was in homeroom, lecture #1, not in #2.  I'm in realtime
+  form for lecture #3.  student is present, which I mark. Then it is
+  time for lecture #4.  shoudl the background be red or grey?
+
+- student was not in homeroom, but was in lecture #1, then was not in lecture #2.
+  I'm in lecture #3.  background?  red or yellow?
+
 
 There is no background if a student's attendance hasn't been recorded yet.
 
@@ -239,6 +263,7 @@ to be authoritative.
     ...     day_end = day_start + datetime.timedelta(1)
     ...     section_meets_on_this_day = bool(section_calendar.expand(day_start, day_end))
     ...     section_presence = ISectionAttendance(student).get(section, date).status
+    ...     # XXX What if there are two events of the same section on the same date?
     ...     day_presence = IDayAttendance(student).get(date).status
     ...     if section_meets_on_this_day:
     ...         if section_presence.isUnknown:
@@ -261,8 +286,26 @@ to be authoritative.
     ...         else:
     ...             return 'yellow negative half line'
 
-| **XXX** So should ISectionAttendance.record and get take a date or a datetime?
+**XXX** We also need some way to get the last 10 schooldays
+
+**XXX** So should ISectionAttendance.record and get take a date or a datetime?
+
+  **Ignas**: it depends. Do we want to identify the exact time of an
+  attendance event or not.  If we only care that you missed Petersons
+  class on thursday - date, if we care about intricate cases like:
+
+    Peterson has two math lessons with 6 A on the same day, John is
+    present in the first one, yet has a headache and is excused to go
+    home, so he gets an "excused abscence" for the second lesson.
+
+  As our system allows scheduling same section more than once for a
+  day we should have a way to uniquely identify those two records
+  which would mean storing a datetime or (IMHO better: date,
+  period_id, section_id) because we would use the datetime to identify
+  the period anyway.
+
 | **XXX** We stumble on timezones once again -- at what time does a school day start?
+|         And by "at what time", I mean "at 00:00 in which timezone"?
 
 Homeroom class attendance
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -317,150 +360,103 @@ The calendar view will have to include two more calendars in its getCalendars() 
 Daily absences will contain all-day events for all absences and tardies.
 Section absences will contain regular events for all absences and tardies.
 
-| **XXX** So ISectionAttendance.record should record both dtstart and duration
+| **XXX** So ISectionAttendance.record should record both dtstart and duration?
+| Unless we are satisfied with zero-length events at the beginning of a section.
 
 
-Old science fiction
-~~~~~~~~~~~~~~~~~~~
+List of pending attendance incidents
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-XXX delete this
+"Attendance" should appear as a action while viewing a student.  The
+attendance view should show a list of pending unexcused attendance
+incidents, for both days and periods.
 
-    >>> attendances.get(section_event).explained
-    False
-    >>> attendances.get(section_event).explaination is None
-    True
+    >>> for ar in IDayAttendance(student):
+    ...     if not ar.isPresent() and not ar.isExplained():
+    ...         print "Explain why you weren't present on %s" % ar.date
+    >>> for ar in ISectionAttendance(student):
+    ...     if not ar.isPresent() and not ar.isExplained():
+    ...         print "Explain why you missed %s on %s" % (ar.section.title, ar.date)
 
-    >>> attendances.get(section_event).explain(u"Sick")
-    >>> attendances.get(section_event).explained
-    True
-    >>> attendances.get(section_event).explaination
-    u"Sick"
-    >>> attendances.get(section_event).explaination_date
-    datetime.datetime(...)
+New API, for both IDayAttendance and ISectionAttendance::
+
+        def __iter__():
+            """Return all recorded attendance records.
+
+            (This means that none of the returned records will be in
+            the UNKNOWN state.)
+            """
+
+We also need two new interfaces::
+
+    class IDayAttendance(IAttendanceRecord):
+        """A single attendance record for a day."""
+
+        date = Attribute("""The date of this record.""")
 
 
-    >>> attendances.getUnexplainedAttendances()
-    [...]
+    class ISectionAttendance(IAttendanceRecord):
+        """A single attendance record for a section."""
 
-    >>> attendances.getAttendancesForTerm(term)
+        section = Attribute("""The section object.""")
+
+        date = Attribute("""The date of this record.""")
+
+**XXX** so, what do we store here?
+
+- date (breaks if a section meets twice on the same day)
+- datetime (then makeCalendar is unclear)
+- datetime + duration
+- date + (timetable/period id)
 
 
+Summary of attendance per term
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Another possible version of API
--------------------------------
+The attendance view should show [...] a summary of absences and
+tardies by term.  The user can click on a term for a summary of all
+absences and tardies per term.
 
-The following code is another *science-fiction*, more WfMC'ish and less
-dependent of workflow structure.
+**XXX** what is a summary?
 
-    >>> from schooltool.attendance.interface import IAttendanceItem
+    >>> for term in app['terms'].values():
+    ...     n_present = n_absent = n_tardy = n_unexplained = 0
+    ...     for ar in IDayAttendance(student):
+    ...         if ar.date not in term:
+    ...            continue
+    ...         if ar.isPresent(): n_present += 1
+    ...         elif ar.isAbsent(): n_absent += 1
+    ...         elif ar.isTardy(): n_tardy += 1
+    ...         if not ar.isExplained(): n_unexplained += 1
+    ...     print "In this term you had", n_present, n_absent, n_tardy, n_unexplained
 
-    >>> student = app['persons']['student00937']
+**XXX** what is a summary of all absences/tardies per term?  How does
+it differ from a summary of all absences/tardies?
 
-    >>> ttcal = student.makeTimetableCalendar()
-    >>> first = datetime.datetime(Y, M, D, tzinfo=UTC)
-    >>> last = first + datetime.timedelta(days=1)
-    >>> all_sections = list(ttcal.expand(first, last))
-    >>> section_event = all_sections[0]
+**XXX** instead of guessing, we need to ask Tom to expand the spec.
 
-Set up logging:
 
-    >>> logging.getLogger('schooltool.attendance').addHandler(...)
+Workflow status modification
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Try one:
+This is the haziest part of the whole spec.  All we know is "If the
+user has the proper access, he or she can modify the workflow status
+of unresolved incidents from the attendance view."
 
-    >>> attendance_item = IAttendanceItem(student, section_event)
+Stab in the dark:
 
-    >>> activitie = attendance_item.getCurrentActivities()
-    >>> activities
-    [AttendanceActivity(Waiting for student)]
+* we want to attach explainations to absence records
 
-Try one of the activities:
+    >>> ar.addExplanation("The dog ate my homework")
+    >>> ar.addExplanation("I vas very sick from drinking bloo^H^H^H^Hjuice")
+    >>> print ar.explanations
+    ["The dog ...", "I vas very sick..."]
 
-    >>> activity = activities[0]
+* we want to resolve pending absences as excused
 
-Make sure it's our job to process this activity:
+    >>> ar.excuse()
 
-    >>> my_role = Role("teacher") # mapping roles to performers...?
-    >>> activity.performer.conforms(my_role)
-    True
+* we want to reject an explanation
 
-    >>> pprint_schema(activity.getSchema())
-    student_seen = Bool(
-        """Set to True if student was present when event started""",
-        default=True)
-
-    >>> activity.resolve(student_seen = False)
-
-Application logic changes "status" to "Explaining absence":
-
-    >>> activities = attendance_item.getCurrentActivities()
-    >>> activities
-    [AttendanceActivity(Explaining absence)]
-
-Let's make an explanation (student should, but who cares?):
-
-    >>> activity = activities[0]
-    >>> pprint_schema(activity.getSchema())
-    explanation = Text(
-        """Why student is absent?""",
-        default='')
-
-    >>> activity.resolve(explanation = """I hate math""")
-
-We can have more than one activity:
-
-    >>> activities = attendance_item.getCurrentActivities()
-    >>> activities
-    [AttendanceActivity(Resolving explanation),
-    AttendanceActivity(Overload explanation)]
-
-What is that second one?
-
-    >>> some_role = Role('Student's Parent')
-    >>> activities[1].performer.conforms(some_role)
-    True
-    >>> activities[1].performer.conforms(my_role)
-    False
-
-Ok, it's not for us, so we do our job:
-
-    >>> my_activity = activities[0]
-    >>> my_activity.performer.conforms(my_role)
-    True
-
-    >>> pprint_schema(my_activity.getSchema())
-    explanation = Text(
-        """Explanation by student""",
-        readonly = True)
-    resolution = Choice(
-        """Chose his destiny""",
-        choices = ['forgive', 'make suffer!'],
-        default = 'make suffer!')
-    arguments = Text(
-        """Support your decision with arguments""")
-
-We have some data to consider (explanation made by student). We can use
-different (and probably better) way to resolve activity.
-
-    >>> content = my_activity.getData()
-    >>> content.resolution = 'forgive'
-    >>> content.arguments = 'I hate math myself'
-    >>> my_activity.resolveWithData(content)
-
-Is our student lucky guy?
-
-    >>> attendance_item.getCurrentActivities()
-    [AttendanceActivity(ExcusedAbsence)]
-
-We want to show this as event:
-
-    >>> attendance_item.getEvent()
-    <...Event object ...>
-
-If someone wants to look at our log:
-
-    >>> print logging.getLogger('schooltool.attendance').dump()
-    YYYY-MM-DD HH:MM:SS +ZZZZ: student Foo was absent from Math
-    YYYY-MM-DD HH:MM:SS +ZZZZ: student Foo explained his absence at Math
-    YYYY-MM-DD HH:MM:SS +ZZZZ: student Foo was forgiven absence at Math
+     >>> ar.reject()
 
