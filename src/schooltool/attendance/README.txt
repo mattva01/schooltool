@@ -65,12 +65,80 @@ Use cases
 
 - Summary of all attendance incidents for a student for a single term.
 
+- Modification of attendance workflow status, whatever that means.
+
 
 API
 ---
 
 The following code is *science-fiction*, that is, it doesn't work yet, but instead
 represents our thoughts about the API should look like
+
+Realtime class attendance
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The user can create section absences for each student in a section.  Presences
+are also recorded.
+
+    >>> section = app['sections']['sec00213']
+    >>> for student in section.students:
+    ...     is_present = student.__name__ not in request['absent']
+    ...     ISectionAttendance(student).record(section, datetime, is_present)
+
+The form lets teachers convert absences to tardies
+
+    >>> for student in section.students:
+    ...     is_present = student.__name__ not in request['absent']
+    ...     attendance_record = ISectionAttendance(student).get(section, datetime)
+    ...     if is_present and attendance_record.isAbsent():
+    ...         arrived = parse_time(request['arrived.%s' % student.__name__])
+    ...         attendance_record.makeTardy(arrived=arrived)
+
+The form displays the current attendance status as well.
+
+    >>> for student in section.students:
+    ...     attendance_record = ISectionAttendance(student).get(section, datetime)
+    ...     absent_checked[student.__name__] = attendance_record.isAbsent()
+
+The following API emerges::
+
+    class ISectionAttendance(Interface):
+        """A set of all student's attendance records."""
+
+        def get(section, datetime):
+            """Return the attendance record for a specific section meeting.
+
+            Always succeeds, but the returned attendance record may be
+            "unknown".
+            """
+
+        def record(section, datetime, is_present):
+            """Record the student's absence or presence.
+
+            You can only record the absence or presence once for a given
+            (section, datetime) pair.
+            """
+
+    class IAttendanceRecord(Interface):
+        """A single attendance record for a day/section."""
+
+        status = Attribute("""Attendance status (UNKNOWN, PRESENT, ABSENT, TARDY.""")
+
+        def isUnknown(): """True if status == UNKNOWN."""
+        def isPresent(): """True if status == PRESENT."""
+        def isAbsent():  """True if status == ABSENT."""
+        def isTardy():   """True if status == TARDY."""
+
+        def makeTardy(arrived):
+            """Convert an absence to a tardy.
+
+            `arrived` is a datetime.time.
+            """
+
+Old science fiction
+~~~~~~~~~~~~~~~~~~~
+
+XXX delete this
 
     >>> from schooltool.attendance.interface import IAttendances
 
