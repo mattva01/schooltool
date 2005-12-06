@@ -227,20 +227,42 @@ This is complicated.  Let's show a table:
    | no      | (not available)  | no (unexplained)   | half | yellow  | `-` |
    +---------+------------------+--------------------+------+---------+-----+
 
+I *assume* tardy is the treated as absent, i.e. you look at whether the
+incident is explained or not.
+
 If this table does not match the list of rules above, consider the table
 to be authoritative.
 
-    >>> section_meets_on_this_day = ...
-    >>> section_presence = ISectionAttendance(student).get(section, date).status
-    >>> day_presence = IDayAttendance(student).get(date).status
-    >>> size_and_shape = {
-    ...     (True, UNKNOWN, UNKNOWN): ('black', 'dot'),
-    ...     (True, UNKNOWN, PRESENT): ('black', 'dot'),
-    ...     (True, UNKNOWN, ABSENT): ('black', 'dot'),
-    ...     (True, UNKNOWN, TARDY): ('black', 'dot'),
-    ...     no, that's wrong
+    >>> section_calendar = ITimetables(section).makeCalendar()
+    >>> def data_point(date):
+    ...     day_start = datetime.combine(date, time(0)) # XXX timezone
+    ...     day_end = day_start + datetime.timedelta(1)
+    ...     section_meets_on_this_day = bool(section_calendar.expand(day_start, day_end))
+    ...     section_presence = ISectionAttendance(student).get(section, date).status
+    ...     day_presence = IDayAttendance(student).get(date).status
+    ...     if section_meets_on_this_day:
+    ...         if section_presence.isUnknown:
+    ...             return 'black dot'
+    ...         elif section_presence.isPresent():
+    ...             return 'black positive full line'
+    ...         elif section_presence.isExplained():
+    ...             return 'black negative full line'
+    ...         elif day_presence.isPresent():
+    ...             return 'red negative full line'
+    ...         else:
+    ...             return 'yellow negative full line'
+    ...     else:
+    ...         if day_presence.isUnknown:
+    ...             return 'black dot'
+    ...         elif day_presence.isPresent():
+    ...             return 'black positive half line'
+    ...         elif day_presence.isExplained():
+    ...             return 'black negative half line'
+    ...         else:
+    ...             return 'yellow negative half line'
 
 XXX So should IDayAttendance.get take a date or datetime?
+XXX We stumble on timezones once again
 
 Homeroom class attendance
 ~~~~~~~~~~~~~~~~~~~~~~~~~
