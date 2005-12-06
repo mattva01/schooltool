@@ -80,6 +80,8 @@ Realtime class attendance
 The user can create section absences for each student in a section.  Presences
 are also recorded.
 
+    >>> from schooltool.attendance.interface import ISectionAttendance
+
     >>> section = app['sections']['sec00213']
     >>> for student in section.students:
     ...     is_present = student.__name__ not in request['absent']
@@ -103,7 +105,7 @@ The form displays the current attendance status as well.
 The following API emerges::
 
     class ISectionAttendance(Interface):
-        """A set of all student's attendance records."""
+        """A set of all student's section attendance records."""
 
         def get(section, datetime):
             """Return the attendance record for a specific section meeting.
@@ -112,7 +114,7 @@ The following API emerges::
             "unknown".
             """
 
-        def record(section, datetime, is_present):
+        def record(section, datetime, present):
             """Record the student's absence or presence.
 
             You can only record the absence or presence once for a given
@@ -135,38 +137,78 @@ The following API emerges::
             `arrived` is a datetime.time.
             """
 
+
+Colored backgrounds indicating attendance status
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The realtime attendance form has colored backgrounds that indicate the following:
+
+* student in school today (grey)
+* student absent today (yellow)
+* student absent with excuse (greenish)
+* student in school earlier but subsequently gone with no excuse (red)
+
+There is no background if a student's attendance hasn't been recorded yet.
+
+    >>> def getColorForStudent(student):
+    ...     ar = IDayAttendance(student).get(date)
+    ...     if ar.isUnknown():
+    ...         return 'transparent'
+    ...     elif ar.isAbsent():
+    ...         if ar.isExcused():
+    ...             return 'greenish'
+    ...         else:
+    ...             return 'grey'
+    ...     else: # present or tardy
+    ...         for ar in ISectionAttendance(student).getAllForDay(date):
+    ...             if ar.isAbsent() and not ar.isExcused():
+    ...                 return 'red'
+    ...         return 'grey'
+
+Thus our ISectionAttendance interface gains a new method::
+
+    class ISectionAttendance(Interface):
+        ...
+
+        def getAllForDay(date):
+            """Return all recorded attendance records for a specific day."""
+
+Note that there is no way to determine sections/datetimes from IAttendanceRecord
+objects returned by getAllForDay -- YAGNI.
+
+
+Homeroom class attendance
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Homeroom class attendance form deals with day absences.
+
+    >>> section = app['sections']['sec00213']
+    >>> for student in section.students:
+    ...     is_present = student.__name__ not in request['absent']
+    ...     IDayAttendance(student).record(date, is_present)
+
+API::
+
+    class IDayAttendance(Interface):
+        """A set of all student's day attendance records."""
+
+        def get(date):
+            """Return the attendance record for a specific day.
+
+            Always succeeds, but the returned attendance record may be
+            "unknown".
+            """
+
+        def record(date):
+            """Record the student's absence or presence.
+
+            You can only record the absence or presence once for a given date.
+            """
+
 Old science fiction
 ~~~~~~~~~~~~~~~~~~~
 
 XXX delete this
-
-    >>> from schooltool.attendance.interface import IAttendances
-
-    >>> student = app['persons']['student00937']
-    >>> attendances = IAttendances(student)
-
-    >>> ttcal = student.makeTimetableCalendar()
-    >>> first = datetime.datetime(Y, M, D, tzinfo=UTC)
-    >>> last = first + datetime.timedelta(days=1)
-    >>> all_sections = list(ttcal.expand(first, last))
-    >>> section_event = all_sections[0]
-
-Try one:
-
-    >>> attendances.get(section_event) == attendances.UNKNOWN
-    True
-
-    >>> attendances.record(section_event, attendances.ABSENT)
-    >>> attendances.get(section_event) == attendances.ABSENT
-    True
-
-    >>> attendances.record(section_event, attendances.TARDY)
-    >>> attendances.get(section_event) == attendances.TARDY
-    True
-
-    >>> attendances.record(section_event, attendances.PRESENT)
-    >>> attendances.get(section_event) == attendances.PRESENT
-    True
 
     >>> attendances.makeCalendar(first, last)
     <...ImmutableCalendar object ...>
@@ -180,18 +222,7 @@ Logging
 Vague thoughts: we need a method to extract the range of the current school day
 (taking timezone into account)
 
-On second thought attendance should be an object, not an enum
-
-    >>> attendances.get(section_event)
-    Attendance(UNKNOWN)
-
-    >>> attendances.record(section_event, attendances.ABSENT)
-    >>> attendances.get(section_event)
-    Attendance(ABSENT)
-
-    >>> attendances.record(section_event, attendances.TARDY)
-    >>> attendances.get(section_event)
-    Attendance(TARDY)
+...
 
     >>> attendances.get(section_event).explained
     False
@@ -206,7 +237,6 @@ On second thought attendance should be an object, not an enum
     >>> attendances.get(section_event).explaination_date
     datetime.datetime(...)
 
-Day attendance is recorded the same way, by taking a homeroom_period_event.
 
     >>> attendances.getUnexplainedAttendances()
     [...]
