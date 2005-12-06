@@ -177,6 +177,71 @@ Note that there is no way to determine sections/datetimes from IAttendanceRecord
 objects returned by getAllForDay -- YAGNI.
 
 
+Sparkline attendance graph
+--------------------------
+
+The real-time attendance form will have whisker sparkline__ graphs showing
+attendance for the last 10 schooldays for each student.
+
+__ http://sparkline.org/
+
+- Successful attendance during days when the section has met are designated by
+  a full length positive black line.
+
+- Attendance on days the section does not meet are indicated by a half-length
+  black line.
+
+- Non-attendance on days the section does not meet is indicated by a
+  half-length descending grey (excused) or yellow (unexcused) line.
+
+- Non-attendance on days when the section meets is indicated by a full length
+  black (excused) or yellow (unexcused) line.
+
+- Non-attendance in days when the section met and the student was in school are
+  designated by full length red whiskers, until they are excused (black).
+
+This is complicated.  Let's show a table:
+
+   +---------+------------------+--------------------+------+---------+-----+
+   | section |                  |                    |      |         |     |
+   | meets   | present during   | present during day | size | colour  | +/- |
+   | on this | section?         | (homeroom period)? |      |         |     |
+   | day?    |                  |                    |      |         |     |
+   +=========+==================+====================+======+=========+=====+
+   | yes     | unknown          | (does not matter)  | dot  | black   | n/a |
+   +---------+------------------+--------------------+------+---------+-----+
+   | yes     | yes              | (does not matter)  | full | black   | `+` |
+   +---------+------------------+--------------------+------+---------+-----+
+   | yes     | no (explained)   | (does not matter)  | full | black   | `-` |
+   +---------+------------------+--------------------+------+---------+-----+
+   | yes     | no (unexplained) | yes                | full | red     | `-` |
+   +---------+------------------+--------------------+------+---------+-----+
+   | yes     | no (unexplained) | no                 | full | yelllow | `-` |
+   +---------+------------------+--------------------+------+---------+-----+
+   | no      | (not available)  | unknown            | dot  | black   | n/a |
+   +---------+------------------+--------------------+------+---------+-----+
+   | no      | (not available)  | yes                | half | black   | `+` |
+   +---------+------------------+--------------------+------+---------+-----+
+   | no      | (not available)  | no (explained)     | half | black   | `-` |
+   +---------+------------------+--------------------+------+---------+-----+
+   | no      | (not available)  | no (unexplained)   | half | yellow  | `-` |
+   +---------+------------------+--------------------+------+---------+-----+
+
+If this table does not match the list of rules above, consider the table
+to be authoritative.
+
+    >>> section_meets_on_this_day = ...
+    >>> section_presence = ISectionAttendance(student).get(section, date).status
+    >>> day_presence = IDayAttendance(student).get(date).status
+    >>> size_and_shape = {
+    ...     (True, UNKNOWN, UNKNOWN): ('black', 'dot'),
+    ...     (True, UNKNOWN, PRESENT): ('black', 'dot'),
+    ...     (True, UNKNOWN, ABSENT): ('black', 'dot'),
+    ...     (True, UNKNOWN, TARDY): ('black', 'dot'),
+    ...     no, that's wrong
+
+XXX So should IDayAttendance.get take a date or datetime?
+
 Homeroom class attendance
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -243,84 +308,6 @@ Vague thoughts: we need a method to extract the range of the current school day
 
     >>> attendances.getAttendancesForTerm(term)
 
-
-Sparkline attendance graph
---------------------------
-
-The real-time attendance form will have whisker sparkline__ graphs showing
-attendance for the last 10 schooldays for each student.
-
-__ http://sparkline.org/
-
-- Successful attendance during days when the section has met are designated by
-  a full length positive black line. 
-
-    >>> homeroom_event = ???
-    >>> the_section = app['sections']['some_section']
-    >>> events = the_section.getMeetingEventsForDay(a_date)
-    >>> if events and attendance.get(events[0]).state == PRESENT:
-    ...    length = 'full'
-    ...    color = 'black'
-
-- Attendance on days the section does not meet are indicated by a half-length
-  black line.
-
-    >>> if not events and attendance.get(homeroom_event).state == PRESENT:
-    ...     length = 'half'
-    ...     color = 'black'
-
-- Non-attendance on days the section does not meet is indicated by a
-  half-length descending grey (excused) or yellow (unexcused) line.
-
-    >>> if not events and attendance.get(homeroom_event).state != PRESENT:
-    ...     length = 'half'
-    ...     if attendance.get(homeroom_event).explained:
-    ...         color = 'grey'
-    ...     else:
-    ...         color = 'yellow'
-
-- Non-attendance on days when the section meets is indicated by a full length
-  black (excused) or yellow (unexcused) line.
-
-    >>> if events and attendance.get(events[0]).state != PRESENT:
-    ...     length = 'full'
-    ...     if attendance.get(events[0]).explained:
-    ...         color = 'black'
-    ...     else:
-    ...         color = 'yellow'
-
-- Non-attendance in days when the section met and the student was in school are
-  designated by full length red whiskers, until they are excused (black).
-
-    >>> if events and attendance.get(events[0]).state != PRESENT:
-    ...     length = 'full'
-    ...     if attendance.get(homeroom_event).state == PRESENT:
-    ...         if attendance.get(events[0]).explained:
-    ...             color = 'black'
-    ...         else:
-    ...             color = 'red'
-
-This is complicated.  Let's show a table:
-
-   +---------+------------------+--------------------+------+---------+-----+
-   | section |                  |                    |      |         |     |
-   | meets   | present during   | present during day | size | colour  | +/- |  
-   | on this | section?         | (homeroom period)? |      |         |     |
-   | day?    |                  |                    |      |         |     |
-   +---------+------------------+--------------------+------+---------+-----+
-   | yes     | unknown          | (does not matter)  | dot  | black   | n/a |
-   | yes     | yes              | (does not matter)  | full | black   | +   |
-   | yes     | no (explained)   | (does not matter)  | full | black   | -   |
-   | yes     | no (unexplained) | yes                | full | red     | -   |
-   | yes     | no (unexplained) | no                 | full | yelllow | -   |
-   | no      | (not available)  | unknown            | dot  | black   | n/a |
-   | no      | (not available)  | yes                | half | black   | +   |
-   | no      | (not available)  | no (explained)     | half | black   | -   |
-   | no      | (not available)  | no (unexplained)   | half | yellow  | -   |
-   +---------+------------------+--------------------+------+---------+-----+
-
-If this table does not match the list of rules above, consider the table
-to be authoritative.
 
 
 Another possible version of API
