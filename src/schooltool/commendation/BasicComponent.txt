@@ -18,17 +18,19 @@ going to use the ``schooltool`` package as my top-level package. Unlike Java,
 the Python community does not use reverse network names, like
 ``edu.tufts.dev`` to describe a top-level package name.
 
-A package is simply a directory with an ``__init__.py`` file in it. So you
+A package is simply a directory with a file name ``__init__.py`` in it. So you
 could do the following to create the package::
 
   $ mkdir tufts
   $ echo "# Make a package" >> tufts/__init__.py
 
 Clearly, the above instructions are for Un*x/Linux systems. You need to adjust
-the commands as needed for other Operating Systems, such as Windows.
+the commands as needed for other Operating Systems, such as Windows, either 
+using the equivalent command line instructions or the graphical tools to create
+folders and text documents.
 
 Now that you have a top-level package, you create the project package inside
-of it using the same process as above. Naturally, I chose teh name
+of it using the same process as above. Naturally, I chose the name
 ``commendation`` for the package name. Note that the SchoolTool community
 always uses singular names for package names.
 
@@ -48,8 +50,8 @@ or
   >>> import schooltool.commendation
 
 (Of course, I am using ``schooltool`` as the top-level package and not
-``tufts`` as described above, because this implementation actually lives in
-``schooltool``.)
+``tufts`` as described above, because for the purposes of this example this 
+implementation actually lives in ``schooltool``.)
 
 
 Development of the ``ICommendation`` Interface
@@ -57,9 +59,9 @@ Development of the ``ICommendation`` Interface
 
 SchoolTool, using Zope 3 as its development platform, makes heavy use of
 component-based development. The central concept of this development pattern
-is the use of interfaces. Interfaces are a promise of an object to provide a
-specified set of methods and attributes. While it is not absolutely necessary
-to use interfaces and still play nice with SchoolTool, you will probably never
+is the use of interfaces. Interfaces are like a contract, a promise by an object 
+to provide a specified set of methods and attributes. While it is possible to 
+not use interfaces and still play nice with SchoolTool, you will probably never
 see objects that do not use interfaces to describe their functionality.
 
 Furthermore, if we take some more time now to create interfaces that contain a
@@ -70,15 +72,15 @@ public interfaces are, by coding convention, placed into a file called
 ``interfaces.py``.
 
 Since Python does not support interfaces directly in the language, the class
-statement is re-/mis-used to declare interfaces as well, except that an
+statement is used to declare interfaces as well, except that an
 interface must always inherit from ``zope.interface.Interface``[#iface]_
 somewhere in its inheritance tree. To specify fields, we use the
 ``zope.schema`` package[#schema]_. Have a look at the ``ICommendation``
 interface inside the ``interfaces.py`` file for the complete interface.
 
-Further the interfaces also serve as API documentation. Thus, the docuentation
-strings often contain a lot of information describing the behavior of the
-interface's methods and fields. As a consequence, we try to avoid large,
+The interfaces also serve as API documentation, containing 
+a lot of information describing the behavior of the
+interface's methods and fields. As a consequence, we can avoid large,
 descriptive documentation strings in the implementation.
 
 Let me make a couple more comments on the fields in the interface. First of
@@ -96,13 +98,13 @@ all, you can see that all fields are required:
 
 ``Choice`` fields are also special, since they need to define the available
 choices. In this case, we chose the simple method of specifying values
-sequence. Hoever this list is immediately converted to a vocabulary
+sequence. However this list is immediately converted to a vocabulary
 
   >>> [term.value for term in interfaces.ICommendation['scope'].vocabulary]
   [u'group', u'school-wide', u'community', u'state', u'national', u'global']
 
-Vocabularies a way to provide dynamic choice lists. In most applications, the
-choices for a given data field change as the application data evolves. For
+Vocabularies are a way to provide dynamic choice lists. In most applications, 
+the choices for a given data field change as the application data evolves. For
 example, you might want a field that let's you choose a student. In this case
 you would write a vocabulary that provides a term for each student.
 
