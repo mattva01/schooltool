@@ -124,9 +124,7 @@ signtar: dist
 
 .PHONY: extract-translations
 extract-translations:
-	# here for backwards compatibility only,
-	# setup.py does the work!
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) setup.py
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) i18nextract.py
 
 .PHONY: update-translations
 update-translations:
