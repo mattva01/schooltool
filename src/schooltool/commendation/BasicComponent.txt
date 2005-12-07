@@ -1,0 +1,248 @@
+=============================================
+Development of the ``Commendation`` Component
+=============================================
+
+The goal of this of the first section is to bootstrap a third-party add-on
+package for SchoolTool and implement a simple initial component.
+
+Creating the Package
+--------------------
+
+The SchoolTool developers recommend that you put any SchoolTool add-on code
+into a package. Furthermore, in order to avoid namespace collisions, you
+should also create a top level package that simply represents you. This could
+be either your common login name or the company you are working for. For
+example, if you work for Tufts University, a good top-level package would be
+``tufts``. Since this documentation is part of the SchoolTool project, I am
+going to use the ``schooltool`` package as my top-level package. Unlike Java,
+the Python community does not use reverse network names, like
+``edu.tufts.dev`` to describe a top-level package name.
+
+A package is simply a directory with an ``__init__.py`` file in it. So you
+could do the following to create the package::
+
+  $ mkdir tufts
+  $ echo "# Make a package" >> tufts/__init__.py
+
+Clearly, the above instructions are for Un*x/Linux systems. You need to adjust
+the commands as needed for other Operating Systems, such as Windows.
+
+Now that you have a top-level package, you create the project package inside
+of it using the same process as above. Naturally, I chose teh name
+``commendation`` for the package name. Note that the SchoolTool community
+always uses singular names for package names.
+
+::
+
+  $ cd tufts
+  $ mkdir commendation
+  $ echo "# Make a package" >> commendation/__init__.py
+
+What we are now left with is an empty package that can be imported in Python
+using
+
+  >>> from schooltool import commendation
+
+or
+
+  >>> import schooltool.commendation
+
+(Of course, I am using ``schooltool`` as the top-level package and not
+``tufts`` as described above, because this implementation actually lives in
+``schooltool``.)
+
+
+Development of the ``ICommendation`` Interface
+----------------------------------------------
+
+SchoolTool, using Zope 3 as its development platform, makes heavy use of
+component-based development. The central concept of this development pattern
+is the use of interfaces. Interfaces are a promise of an object to provide a
+specified set of methods and attributes. While it is not absolutely necessary
+to use interfaces and still play nice with SchoolTool, you will probably never
+see objects that do not use interfaces to describe their functionality.
+
+Furthermore, if we take some more time now to create interfaces that contain a
+lot of meta-data, then we can later profit from it. But we have to be patient
+for now. So, in Tom's E-mail he specified the fields he would like to have the
+fields ``title``, ``description``, ``scope``, ``date``, ``grantor``. All
+public interfaces are, by coding convention, placed into a file called
+``interfaces.py``.
+
+Since Python does not support interfaces directly in the language, the class
+statement is re-/mis-used to declare interfaces as well, except that an
+interface must always inherit from ``zope.interface.Interface``[#iface]_
+somewhere in its inheritance tree. To specify fields, we use the
+``zope.schema`` package[#schema]_. Have a look at the ``ICommendation``
+interface inside the ``interfaces.py`` file for the complete interface.
+
+Further the interfaces also serve as API documentation. Thus, the docuentation
+strings often contain a lot of information describing the behavior of the
+interface's methods and fields. As a consequence, we try to avoid large,
+descriptive documentation strings in the implementation.
+
+Let me make a couple more comments on the fields in the interface. First of
+all, you can see that all fields are required:
+
+  >>> import zope.schema
+  >>> from schooltool.commendation import interfaces
+  >>> for name, field in zope.schema.getFieldsInOrder(interfaces.ICommendation):
+  ...     print name, field.required
+  title True
+  description True
+  scope True
+  date True
+  grantor True
+
+``Choice`` fields are also special, since they need to define the available
+choices. In this case, we chose the simple method of specifying values
+sequence. Hoever this list is immediately converted to a vocabulary
+
+  >>> [term.value for term in interfaces.ICommendation['scope'].vocabulary]
+  [u'group', u'school-wide', u'community', u'state', u'national', u'global']
+
+Vocabularies a way to provide dynamic choice lists. In most applications, the
+choices for a given data field change as the application data evolves. For
+example, you might want a field that let's you choose a student. In this case
+you would write a vocabulary that provides a term for each student.
+
+Finally, since it is very important for SchoolTool to be internationalized
+(being able to be translated), we need to tell the system which strings are
+human-readable and must therefore be translatable. Translatable strings are
+known as "messages". We use message factories to create messages. As you can
+see in the interfaces file, message factories are instantiated using an
+argument. This argument is the translation domain[#msgid]_. The message id
+factory *must* be known as ``_``, since the SchoolTool message extraction
+tools look for this name in order to extract the name.
+
+.. [#iface] Read the ``README.txt`` in ``zope.interface`` for a general
+   introduction to interfaces. The other text files in the pacakge are also
+   very useful for more advanced applications of interfaces.
+
+.. [#schema] For more details see the documentation files in ``zope.schema``,
+   especially ``README.txt``.
+
+.. [#msgid] For an introduction to message ids see ``messages.txt`` in
+   ``zope.i18nmessageid``.
+
+
+Implementation of the ``Commendation`` Component
+------------------------------------------------
+
+Now that the interface has been designed, we can write an implementation for
+it. My imlpementation can be found in the ``Commendation`` class of the
+``commendation.pt`` file.
+
+Since all fields are required, they must be set during initialization. The
+date and grantor are not passed to the constructor, since they are
+determined. The date is simply extracted from the computer's internal clock
+and the grantor is the user that creates the instance and can be read from the
+system's interaction.
+
+  >>> from zope.security import management, testing
+  >>> management.endInteraction()
+  >>> management.newInteraction(
+  ...     testing.Participation(testing.Principal(u'manager')))
+
+Let's now create a commendation instance:
+
+  >>> from schooltool.commendation import commendation
+  >>> goodjob = commendation.Commendation(
+  ...     u'Good Job!',
+  ...     u'You have done a good job with the latest assignment.',
+  ...     u'school-wide')
+
+  >>> goodjob
+  <Commendation u'Good Job!' by u'manager'>
+
+Another feature of the constructor is that if no interaction and thus grantor
+principal is found, the term ``<unknown>`` is inserted.
+
+  >>> management.endInteraction()
+  >>> commendation.Commendation(
+  ...     u'Well done!', u'Job well done.', u'school-wide')
+  <Commendation u'Well done!' by u'<unknown>'>
+
+Finally you will notice, is the unusual implementation of the fields, which
+are not implemented as simple attributes, but using a special property, called
+the ``FieldProperty``. The field property uses a field to verify the property
+value before setting it. This allows us to enforce the schema fields on the
+Python level. I'll note that the SchoolTool code does not usually implement
+fields this way, though it is very useful and should be used.
+
+For example, the title and description must be unicode strings:
+
+  >>> goodjob.title = 'Well done!'
+  Traceback (most recent call last):
+  ...
+  WrongType: ('Well done!', <type 'unicode'>)
+
+  >>> goodjob.description = 'Job well done!'
+  Traceback (most recent call last):
+  ...
+  WrongType: ('Job well done!', <type 'unicode'>)
+
+Further, since the grantor and date are marked as read-only, you cannot assign
+new values to them:
+
+  >>> goodjob.grantor = u'me'
+  Traceback (most recent call last):
+  ...
+  ValueError: ('grantor', 'field is readonly')
+
+  >>> import datetime
+  >>> goodjob.date = datetime.date.today()
+  Traceback (most recent call last):
+  ...
+  ValueError: ('date', 'field is readonly')
+
+Finally, the choice field of the scope restricts the entries to the ones
+listed in the interface:
+
+  >>> goodjob.scope = u'universe'
+  Traceback (most recent call last):
+  ...
+  ConstraintNotSatisfied: universe
+
+And that's it. Note that the commendation object has no methods, other than
+overriding some builtins. This is very common for content objects, since
+Python is an attribute-centric object-oriented language. Most often adapters
+will implement methods that use and/or manipulate the content component's
+data.
+
+
+Testing the Implementation
+--------------------------
+
+Testing your code is one of the most important tasks of development in
+SchoolTool and the Zope 3 community at large. There are several ways to write
+tests, but we prefer writing documentation-based tests inside text files like
+this one. In fact this file itself is a doctest and all that we have to do is
+to hook it into the test runner system.
+
+Zope 3's test runner will look for modules and packages called ``tests``. If
+``tests`` is a package, it looks inside the directory to find modules having
+the prefix ``test``. Since we only have some relatively simple tests here, we
+only create a module called ``tests``. See the file ``tests.py`` for its
+contents.
+
+As you will see in the file, registering this file as a doctest is a simple
+matter of creating a ``DocFileSuite`` instance that points to this text
+file. Some setup and teardown functions are specified to ensure that the
+component architecture is up and running before the tests are executed. To run
+the tests from your SchoolTool root directory use the following command line::
+
+  $ python test.py -vpu1c -s src/schooltool/commendation/
+
+The output of the test run should look something like this::
+
+  Imported 1 module in 0.254s
+
+     1/1 (100.0%): schooltool/commendation/BasicComponent.txt
+  ----------------------------------------------------------------------
+  Ran 1 test in 0.213s
+
+  OK
+
+It means that the test suite successfully completed. Once this is the case, we
+can proceed with the next set of features.
