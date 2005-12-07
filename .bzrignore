@@ -1,5 +1,4 @@
 src/schooltool/locales/schooltool.pot
-src/schooltool/sbapp/locales/schoolbell.pot
 ./build
 ./Zope3
 ./schoolbell.conf
