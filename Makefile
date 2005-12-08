@@ -8,8 +8,8 @@ PYTHON=python
 ZPKG=../../zpkgtools/bin/zpkg
 ZOPE_REPOSITORY=svn://svn.zope.org/repos/main/
 TESTFLAGS=-w -v
-POT=src/schooltool/locales/schooltool.pot
-PO=$(wildcard src/schooltool/locales/*/LC_MESSAGES/*.po)
+LOCALES=src/schooltool/locales/
+TRANSLATION_DOMAINS=schoolbell # schooltool
 PYTHONPATH=src:Zope3/src
 LOCALE_PATTERN='src/schooltool/locales/@locale@/LC_MESSAGES/schoolbell.po'
 ROSETTA_URL='https://launchpad.ubuntu.com/products/schooltool/0.10-rc1/+pots/schooltool'
@@ -128,9 +128,12 @@ extract-translations:
 
 .PHONY: update-translations
 update-translations:
-	set -e; for f in $(PO); do		\
-	     msgmerge -U $$f $(POT);		\
-	     msgfmt -o $${f%.po}.mo $$f;	\
+	set -e; \
+	for domain in $(TRANSLATION_DOMAINS); do \
+	    for f in $(LOCALES)/*/LC_MESSAGES/$${domain}.po; do \
+		msgmerge -U $$f $(LOCALES)/$${domain}.pot ;\
+		msgfmt -o $${f%.po}.mo $$f;\
+	    done;\
 	done
 
 .PHONY: update-rosetta-pot
