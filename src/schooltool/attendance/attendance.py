@@ -28,6 +28,7 @@ import datetime
 from persistent import Persistent
 from persistent.list import PersistentList
 from zope.interface import implements
+from zope.app.annotation.interfaces import IAnnotations
 
 from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.attendance.interfaces import ISectionAttendanceRecord
@@ -111,4 +112,17 @@ class SectionAttendanceRecord(Persistent):
         return 'SectionAttendanceRecord(%r, %r, %s)' % (self.section,
                                                         self.datetime,
                                                         self.status)
+
+
+SECTION_ATTENDANCE_KEY = 'schooltool.attendance.SectionAttendance'
+
+def getSectionAttendance(person):
+    """Return the section attendance record for a person."""
+    annotations = IAnnotations(person)
+    try:
+        attendance = annotations[SECTION_ATTENDANCE_KEY]
+    except KeyError:
+        attendance = SectionAttendance()
+        annotations[SECTION_ATTENDANCE_KEY] = attendance
+    return attendance
 

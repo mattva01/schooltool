@@ -28,9 +28,16 @@ import unittest
 import datetime
 
 from persistent import Persistent
+from zope.interface import implements
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
+from zope.app.testing import setup
+from zope.app.annotation.interfaces import IAnnotations
+from zope.app.annotation.interfaces import IAttributeAnnotatable
+import zope.component
 
+import schooltool.app # Dead chicken to appease the circle of import gods
+from schooltool.person.interfaces import IPerson
 from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.attendance.interfaces import ISectionAttendanceRecord
 from schooltool.attendance.interfaces import UNKNOWN, PRESENT, ABSENT, TARDY
@@ -284,8 +291,45 @@ def doctest_SectionAttendanceRecord_isUnknown_isPresent_isAbsent_isTardy():
     """
 
 
+class PersonStub(object):
+    implements(IPerson, IAttributeAnnotatable)
+
+
+def doctest_getSectionAttendance():
+    """Tests for getSectionAttendance.
+
+        >>> setup.placelessSetUp()
+        >>> setup.setUpAnnotations()
+        >>> from schooltool.attendance.attendance import getSectionAttendance
+        >>> zope.component.provideAdapter(getSectionAttendance,
+        ...                               [IPerson], ISectionAttendance)
+
+    getSectionAttendance lets us get ISectionAttendance for a person
+
+        >>> person = PersonStub()
+        >>> attendance = ISectionAttendance(person)
+        >>> attendance
+        <schooltool.attendance.attendance.SectionAttendance object at ...>
+
+    The attendance object is stored in person's annotations
+
+        >>> annotations = IAnnotations(person)
+        >>> attendance is annotations['schooltool.attendance.SectionAttendance']
+        True
+
+    If you adapt more than once, you will get the same object
+
+        >>> attendance is ISectionAttendance(person)
+        True
+
+        >>> setup.placelessTearDown()
+
+    """
+
+
 def test_suite():
-    return doctest.DocTestSuite(optionflags=doctest.NORMALIZE_WHITESPACE)
+    optionflags = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
+    return doctest.DocTestSuite(optionflags=optionflags)
 
 
 if __name__ == '__main__':
