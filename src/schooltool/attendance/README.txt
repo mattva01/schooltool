@@ -479,16 +479,24 @@ Stab in the dark:
 
 * we want to attach explainations to absence records
 
+    >>> ar.isExplained()
+    False
     >>> ar.addExplanation("The dog ate my homework")
     >>> ar.addExplanation("I vas very sick from drinking bloo^H^H^H^Hjuice")
     >>> print ar.explanations
     ["The dog ...", "I vas very sick..."]
+    >>> ar.isExplained()
+    True
 
 * we want to resolve pending absences as excused
 
     >>> ar.excuse()
+    >>> ar.isExcused()
+    True
 
 * we want to reject an explanation
 
-     >>> ar.reject()
+    >>> ar.reject()
+    >>> ar.isExcused()
+    False
 
