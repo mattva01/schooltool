@@ -44,21 +44,23 @@ class SectionAttendance(Persistent):
 
     def __init__(self):
         self._records = PersistentList()
+        # When it is time to optimize, I think self._records should be replaced
+        # with a OOBTree, indexed by date.
 
     def __iter__(self):
         return iter(self._records)
 
     def filter(self, first, last):
-        # XXX
-        raise NotImplementedError
+        for ar in self:
+            if first <= ar.date <= last:
+                yield ar
 
     def makeCalendar(self, first, last):
         # XXX
         raise NotImplementedError
 
     def getAllForDay(self, date):
-        # XXX
-        raise NotImplementedError
+        return self.filter(date, date)
 
     def get(self, section, datetime):
         for ar in self._records:

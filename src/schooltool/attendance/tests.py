@@ -59,8 +59,15 @@ def doctest_SectionAttendance():
 
 
 class SectionStub(object):
+
+    def __init__(self, title=None):
+        self.title = title
+
     def __repr__(self):
-        return 'SectionStub()'
+        if self.title:
+            return 'SectionStub(%r)' % self.title
+        else:
+            return 'SectionStub()'
 
 
 def doctest_SectionAttendance_record():
@@ -206,6 +213,101 @@ def doctest_SectionAttendance_get():
         P2 False
         P3 False
         P4 True
+
+    """
+
+
+def doctest_SectionAttendance_getAllForDay():
+    """Tests for SectionAttendance.getAllForDay
+
+        >>> from schooltool.attendance.attendance import SectionAttendance
+        >>> sa = SectionAttendance()
+
+        >>> section1 = SectionStub('Math')
+        >>> section2 = SectionStub('Chem')
+        >>> dt1a = datetime.datetime(2005, 12, 5, 13, 30)
+        >>> dt1b = datetime.datetime(2005, 12, 5, 15, 30)
+        >>> dt2a = datetime.datetime(2005, 12, 7, 13, 30)
+        >>> dt2b = datetime.datetime(2005, 12, 7, 15, 30)
+        >>> dt3a = datetime.datetime(2005, 12, 9, 13, 30)
+        >>> dt3b = datetime.datetime(2005, 12, 9, 15, 30)
+        >>> duration = datetime.timedelta(minutes=45)
+
+        >>> sa.record(section1, dt1a, duration, 'A', True)
+        >>> sa.record(section1, dt2a, duration, 'A', True)
+        >>> sa.record(section2, dt2a, duration, 'A', False)
+        >>> sa.record(section1, dt2b, duration, 'B', False)
+        >>> sa.record(section2, dt3a, duration, 'A', True)
+
+        >>> def print_for(day):
+        ...     for ar in sorted(sa.getAllForDay(day)):
+        ...         print ar.date, ar.period_id, ar.section.title, ar.isPresent()
+
+        >>> print_for(dt1a.date())
+        2005-12-05 A Math True
+
+        >>> print_for(dt2a.date())
+        2005-12-07 A Math True
+        2005-12-07 A Chem False
+        2005-12-07 B Math False
+
+        >>> print_for(dt3a.date())
+        2005-12-09 A Chem True
+
+        >>> print_for(datetime.date(2005, 12, 4))
+
+    """
+
+
+def doctest_SectionAttendance_filter():
+    """Tests for SectionAttendance.filter
+
+        >>> from schooltool.attendance.attendance import SectionAttendance
+        >>> sa = SectionAttendance()
+
+        >>> section1 = SectionStub('Math')
+        >>> section2 = SectionStub('Chem')
+        >>> dt1a = datetime.datetime(2005, 12, 5, 13, 30)
+        >>> dt1b = datetime.datetime(2005, 12, 5, 15, 30)
+        >>> dt2a = datetime.datetime(2005, 12, 7, 13, 30)
+        >>> dt2b = datetime.datetime(2005, 12, 7, 15, 30)
+        >>> dt3a = datetime.datetime(2005, 12, 9, 13, 30)
+        >>> dt3b = datetime.datetime(2005, 12, 9, 15, 30)
+        >>> duration = datetime.timedelta(minutes=45)
+
+        >>> sa.record(section1, dt1a, duration, 'A', True)
+        >>> sa.record(section1, dt2a, duration, 'A', True)
+        >>> sa.record(section2, dt2a, duration, 'A', False)
+        >>> sa.record(section1, dt2b, duration, 'B', False)
+        >>> sa.record(section2, dt3a, duration, 'A', True)
+
+        >>> def print_for(first, last):
+        ...     for ar in sorted(sa.filter(first, last)):
+        ...         print ar.date, ar.period_id, ar.section.title, ar.isPresent()
+
+        >>> print_for(dt1a.date(), dt1a.date())
+        2005-12-05 A Math True
+
+        >>> print_for(dt1a.date(), dt2a.date())
+        2005-12-05 A Math True
+        2005-12-07 A Math True
+        2005-12-07 A Chem False
+        2005-12-07 B Math False
+
+        >>> print_for(dt2a.date(), dt3a.date())
+        2005-12-07 A Math True
+        2005-12-07 A Chem False
+        2005-12-07 B Math False
+        2005-12-09 A Chem True
+
+        >>> print_for(dt1a.date(), dt3a.date())
+        2005-12-05 A Math True
+        2005-12-07 A Math True
+        2005-12-07 A Chem False
+        2005-12-07 B Math False
+        2005-12-09 A Chem True
+
+        >>> print_for(dt3a.date(), dt1a.date())
 
     """
 
