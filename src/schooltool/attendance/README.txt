@@ -157,37 +157,44 @@ The realtime attendance form has colored backgrounds that indicate the following
 * student absent with excuse (greenish)
 * student in school earlier but subsequently gone with no excuse (red)
 
-**XXX** what does it mean, exactly?  Answer the following questions, please:
+Let's specify this more precisely:
 
-- student was in homeroom, lecture #1, but is not present in lecture
-  #2.  I am in realtime form for lecture #2.  I see grey background.  I
-  check [x] absent, press submit.  five min later I go back to the form
-  (somebody else was late). Should the background be grey or red?
+* grey -- there are no recorded absences/tardies for today (neither day, nor
+  section absences)
+* yellow -- there is at least one unexcused absence/tardy for today, and
+  there are no recorded presences for today
+* greenish -- there is at least one excused absence/tardy for today, there are
+  no unexcused absences/tardies nor recorded presences for today
+* red -- there are both recorded presences and recorded unexcused absences for
+  today
+* There is no background if a student's attendance hasn't been recorded yet.
 
-- student was in homeroom, lecture #1, not in #2.  I'm in realtime
-  form for lecture #3.  student is present, which I mark. Then it is
-  time for lecture #4.  shoudl the background be red or grey?
-
-- student was not in homeroom, but was in lecture #1, then was not in lecture #2.
-  I'm in lecture #3.  background?  red or yellow?
-
-
-There is no background if a student's attendance hasn't been recorded yet.
+Implementation:
 
     >>> def getColorForStudent(student):
-    ...     ar = IDayAttendance(student).get(date)
-    ...     if ar.isUnknown():
-    ...         return 'transparent'
-    ...     elif ar.isAbsent():
-    ...         if ar.isExcused():
-    ...             return 'greenish'
+    ...     records = [IDayAttendance(student).get(date)]
+    ...     records.extend(ISectionAttendance(student).getAllForDay(date))
+    ...     records = [ar for ar in records if not ar.isUnknown()]
+    ...     was_present = False
+    ...     was_absent = False
+    ...     was_absent_without_excuse = False
+    ...     for ar in records:
+    ...         if ar.isPresent():
+    ...             was_present = True
     ...         else:
-    ...             return 'grey'
-    ...     else: # present or tardy
-    ...         for ar in ISectionAttendance(student).getAllForDay(date):
-    ...             if ar.isAbsent() and not ar.isExcused():
-    ...                 return 'red'
+    ...             was_absent = True
+    ...             if not ar.isExcused():
+    ...                 was_absent_without_excuse = True
+    ...     if was_present and was_absent_without_excuse:
+    ...         return 'red'
+    ...     elif was_absent_without_excuse:
+    ...         return 'yellow'
+    ...     elif was_absent:
+    ...         return 'greenish'
+    ...     elif was_present:
     ...         return 'grey'
+    ...     else:
+    ...         return 'transparent'
 
 Thus our ISectionAttendance interface gains a new method::
 
@@ -254,19 +261,38 @@ This is complicated.  Let's show a table:
 I *assume* tardy is the treated as absent, i.e. you look at whether the
 incident is explained or not.
 
+If the section meets more than once on a given day, take the "worst" of the
+outcomes.
+
 If this table does not match the list of rules above, consider the table
 to be authoritative.
 
     >>> section_calendar = ITimetables(section).makeCalendar()
+    >>> def worst_section_presence(date):
+    ...     """Return the "worst" section presence on a given date."""
+    ...     records = [ar for ar in ISectionAttendance(student).getAllForDay(date)
+    ...                if ar.section == section]
+    ...     for ar in records:
+    ...         if (ar.isAbsent() or ar.isTardy()) and not ar.isExplained():
+    ...             return ar
+    ...     for ar in records:
+    ...         if ar.isAbsent() or ar.isTardy():
+    ...             return ar
+    ...     for ar in records:
+    ...         if ar.isPresent():
+    ...             return ar
+    ...     return UnknownAttendanceRecord()
+
+It appears that an attendance record needs to know about its section.
+
     >>> def data_point(date):
     ...     day_start = datetime.combine(date, time(0)) # XXX timezone
     ...     day_end = day_start + datetime.timedelta(1)
     ...     section_meets_on_this_day = bool(section_calendar.expand(day_start, day_end))
-    ...     section_presence = ISectionAttendance(student).get(section, date).status
-    ...     # XXX What if there are two events of the same section on the same date?
-    ...     day_presence = IDayAttendance(student).get(date).status
+    ...     section_presence = worst_section_presence(section, date)
+    ...     day_presence = IDayAttendance(student).get(date)
     ...     if section_meets_on_this_day:
-    ...         if section_presence.isUnknown:
+    ...         if section_presence.isUnknown():
     ...             return 'black dot'
     ...         elif section_presence.isPresent():
     ...             return 'black positive full line'
@@ -277,7 +303,7 @@ to be authoritative.
     ...         else:
     ...             return 'yellow negative full line'
     ...     else:
-    ...         if day_presence.isUnknown:
+    ...         if day_presence.isUnknown():
     ...             return 'black dot'
     ...         elif day_presence.isPresent():
     ...             return 'black positive half line'
