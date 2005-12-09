@@ -22,6 +22,8 @@ SchoolTool application
 $Id$
 
 """
+import calendar
+
 from persistent import Persistent
 from persistent.dict import PersistentDict
 
@@ -149,6 +151,14 @@ class ApplicationPreferences(Persistent):
     implements(IApplicationPreferences)
 
     title = 'SchoolTool'
+
+    timezone = 'UTC'
+
+    dateformat = '%Y-%m-%d'
+
+    timeformat = '%H:%M'
+
+    weekstart = calendar.MONDAY
 
     frontPageCalendar = True
 

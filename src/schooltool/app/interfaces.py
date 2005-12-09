@@ -21,6 +21,9 @@ SchoolTool application interfaces
 
 $Id$
 """
+import pytz
+import calendar
+
 import zope.interface
 import zope.schema
 
@@ -146,6 +149,35 @@ class IApplicationPreferences(zope.interface.Interface):
         description=_("""The name for the school or organization running
             this server.  This will be displayed on the public calendar, the
             bottom of all pages and in the page title."""))
+
+    timezone = zope.schema.Choice(
+        title=_("Time Zone"),
+        required=False,
+        description=_("""Time Zone used to display site-wide calendar
+            for guest users"""),
+        values=pytz.common_timezones)
+
+    timeformat = zope.schema.Choice(
+        title=_("Time Format"),
+        required=False,
+        description=_("Time Format"),
+        vocabulary=vocabulary([("%H:%M", _("HH:MM")),
+                                ("%I:%M %p", _("HH:MM am/pm"))]))
+
+    dateformat = zope.schema.Choice(
+        title=_("Date Format"),
+        required=False,
+        description=_("Date Format"),
+        vocabulary=vocabulary([("%m/%d/%y", _("MM/DD/YY")),
+                               ("%Y-%m-%d", _("YYYY-MM-DD")),
+                               ("%d %B, %Y", _("Day Month, Year"))]))
+
+    weekstart = zope.schema.Choice(
+        title=_("Week starts on:"),
+        required=False,
+        description=_("Start display of weeks on Sunday or Monday"),
+        vocabulary=vocabulary([(calendar.SUNDAY, _("Sunday")),
+                               (calendar.MONDAY, _("Monday"))]))
 
     frontPageCalendar = zope.schema.Bool(
         title=_("Front Page Calendar"),

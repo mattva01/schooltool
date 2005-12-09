@@ -1195,7 +1195,11 @@ def doctest_ApplicationPreferencesView():
     Now we can setup a post and set the site title:
 
         >>> request = TestRequest(form={'UPDATE_SUBMIT': 'Update',
-        ...                             'field.title': 'Company Calendars',})
+        ...                             'field.title': 'Company Calendars',
+        ...                             'field.dateformat': '%m/%d/%y',
+        ...                             'field.timeformat': '%I:%M %p',
+        ...                             'field.weekstart': '0',
+        ...                             'field.timezone': 'GMT'})
         >>> view = ApplicationPreferencesView(app, request)
 
         >>> view.update()
@@ -1203,6 +1207,18 @@ def doctest_ApplicationPreferencesView():
         >>> prefs = getApplicationPreferences(app)
         >>> prefs.title
         u'Company Calendars'
+
+        >>> prefs.dateformat
+        '%m/%d/%y'
+
+        >>> prefs.timeformat
+        '%I:%M %p'
+
+        >>> prefs.weekstart
+        0
+
+        >>> prefs.timezone
+        'GMT'
 
     """
 

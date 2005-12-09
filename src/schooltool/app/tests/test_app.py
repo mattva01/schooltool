@@ -80,6 +80,21 @@ def doctest_SchoolToolApplication():
         >>> getApplicationPreferences(app).title
         'SchoolTool'
 
+    Time settings for application:
+
+        >>> prefs = getApplicationPreferences(app)
+        >>> prefs.timezone
+        'UTC'
+
+        >>> prefs.dateformat
+        '%Y-%m-%d'
+
+        >>> prefs.timeformat
+        '%H:%M'
+
+        >>> prefs.weekstart
+        0
+
     Clean up
 
         >>> placelesssetup.tearDown()

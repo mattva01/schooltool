@@ -63,6 +63,44 @@ from schooltool.person.preference import getPersonPreferences
 from schooltool.person.interfaces import IPersonPreferences
 
 
+class PersonPreferencesStub:
+    weekstart = calendar.MONDAY
+    timeformat = "%H:%M"
+    dateformat = "%Y-%m-%d"
+    timezone = 'UTC'
+
+
+class PersonStub:
+    def __conform__(self, interface):
+        if interface is IPersonPreferences:
+            return PersonPreferencesStub()
+
+
+class PrincipalStub:
+
+    _person = PersonStub()
+
+    def __conform__(self, interface):
+        if interface is IPerson:
+            return self._person
+
+
+class RealPrincipalStub:
+
+    _person = Person()
+
+    def __conform__(self, interface):
+        if interface is IPerson:
+            return self._person
+
+
+class TestRequestWithPrincipal(TestRequest):
+    """TestRequest with principal who has PersonPreferences"""
+    def __init__(self, **kw):
+        super(TestRequestWithPrincipal, self).__init__(**kw)
+        self.setPrincipal(PrincipalStub())
+
+
 def dt(timestr):
     dt = parse_datetime('2004-11-05 %s:00' % timestr)
     return dt.replace(tzinfo=utc)
@@ -613,15 +651,6 @@ def createEvent(dtstart, duration, title, **kw):
     return CalendarEvent(dtstart, dur, title, **kw)
 
 
-class PrincipalStub(object):
-
-    _person = Person()
-
-    def __conform__(self, interface):
-        if interface is IPerson:
-            return self._person
-
-
 def registerCalendarHelperViews():
     """Register the real CalendarListView for use by other views."""
     from schooltool.app.browser.cal import CalendarListView
@@ -661,7 +690,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
     def test_initDayCache(self):
         from schooltool.app.browser.cal import CalendarViewBase
-        view = CalendarViewBase(None, TestRequest())
+        view = CalendarViewBase(None, TestRequestWithPrincipal())
 
         view.cursor = date(2005, 6, 9)
         view.first_day_of_week = calendar.SUNDAY
@@ -679,21 +708,21 @@ class TestCalendarViewBase(unittest.TestCase):
 
     def test_update_today_by_default(self):
         from schooltool.app.browser.cal import CalendarViewBase
-        request = TestRequest()
+        request = TestRequestWithPrincipal()
         view = CalendarViewBase(None, request)
         view.update()
         self.assertEquals(view.cursor, date.today())
 
     def test_update_explicit_date(self):
         from schooltool.app.browser.cal import CalendarViewBase
-        request = TestRequest(form={'date': '2005-03-04'})
+        request = TestRequestWithPrincipal(form={'date': '2005-03-04'})
         view = CalendarViewBase(None, request)
         view.update()
         self.assertEquals(view.cursor, date(2005, 3, 4))
 
     def test_update_date_from_session(self):
         from schooltool.app.browser.cal import CalendarViewBase
-        request = TestRequest()
+        request = TestRequestWithPrincipal()
         ISession(request)['calendar']['last_visited_day'] = date(2005, 1, 2)
         view = CalendarViewBase(None, request)
         view.inCurrentPeriod = lambda dt: False
@@ -704,7 +733,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
     def test_update_initializes_days_cache(self):
         from schooltool.app.browser.cal import CalendarViewBase
-        request = TestRequest(form={'date': '2005-03-04'})
+        request = TestRequestWithPrincipal(form={'date': '2005-03-04'})
         view = CalendarViewBase(None, request)
         view.update()
         self.assert_(view._days_cache is not None)
@@ -719,13 +748,13 @@ class TestCalendarViewBase(unittest.TestCase):
                              getPersonPreferences)
 
         request1 = TestRequest()
-        request1.setPrincipal(PrincipalStub())
+        request1.setPrincipal(RealPrincipalStub())
         view1 = CalendarViewBase(None, request1)
         dt = datetime(2004, 7, 1)
         self.assertEquals(view1.dayTitle(dt), "Thursday, 2004-07-01")
 
         request2 = TestRequest()
-        request2.setPrincipal(PrincipalStub())
+        request2.setPrincipal(RealPrincipalStub())
         self.assertEquals(view1.timezone.tzname(datetime.utcnow()), 'UTC')
 
         # set the dateformat preference to the long format and change the
@@ -744,8 +773,7 @@ class TestCalendarViewBase(unittest.TestCase):
     def test_prev_next(self):
         from schooltool.app.browser.cal import CalendarViewBase
 
-        request = TestRequest()
-        request.setPrincipal(PrincipalStub())
+        request = TestRequestWithPrincipal()
         view = CalendarViewBase(None, request)
 
         view.cursor = date(2004, 8, 18)
@@ -760,7 +788,7 @@ class TestCalendarViewBase(unittest.TestCase):
         from schooltool.app.cal import Calendar
 
         request = TestRequest()
-        request.setPrincipal(PrincipalStub())
+        request.setPrincipal(RealPrincipalStub())
 
         cal = Calendar(None)
         view = CalendarViewBase(cal, request)
@@ -796,8 +824,7 @@ class TestCalendarViewBase(unittest.TestCase):
         from schooltool.app.browser.cal import CalendarViewBase, CalendarDay
         from schooltool.app.cal import Calendar
 
-        request = TestRequest()
-        request.setPrincipal(PrincipalStub())
+        request = TestRequestWithPrincipal()
 
         cal = Calendar(None)
         view = CalendarViewBase(cal, request)
@@ -830,7 +857,7 @@ class TestCalendarViewBase(unittest.TestCase):
         from schooltool.app.browser.cal import CalendarViewBase
         from schooltool.app.cal import Calendar
         cal = Calendar(None)
-        request = TestRequest()
+        request = TestRequestWithPrincipal()
         view = CalendarViewBase(cal, request)
         view.getDays = getDaysStub
         self.do_test_getMonth(view)
@@ -838,7 +865,7 @@ class TestCalendarViewBase(unittest.TestCase):
     def test_getMonth_with_caching(self):
         from schooltool.app.browser.cal import CalendarViewBase
         cal = Calendar(None)
-        request = TestRequest()
+        request = TestRequestWithPrincipal()
         view = CalendarViewBase(cal, request)
 
         # We can pass a list of CalendarDays to getMonth to speed it up.
@@ -855,7 +882,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
     def test_getMonth_caching_corner_cases(self):
         from schooltool.app.browser.cal import CalendarViewBase
-        view = CalendarViewBase(None, TestRequest())
+        view = CalendarViewBase(None, TestRequestWithPrincipal())
         days = getDaysStub(date(2004, 7, 27), date(2004, 12, 31))
         self.assertRaises(AssertionError,
                           view.getMonth, date(2004, 8, 11), days=days)
@@ -898,8 +925,7 @@ class TestCalendarViewBase(unittest.TestCase):
     def test_getYear(self):
         from schooltool.app.browser.cal import CalendarViewBase
 
-        request = TestRequest()
-        request.setPrincipal(PrincipalStub())
+        request = TestRequestWithPrincipal()
 
         view = CalendarViewBase(None, request)
         view.getDays = getDaysStub
@@ -1005,7 +1031,8 @@ class TestCalendarViewBase(unittest.TestCase):
 
             >>> from schooltool.app.cal import Calendar
             >>> from schooltool.app.browser.cal import CalendarViewBase
-            >>> view = CalendarViewBase(Calendar(None), TestRequest())
+            >>> view = CalendarViewBase(Calendar(None),
+            ...                         TestRequestWithPrincipal())
 
         Now, if we call the method, the output of our stub will be returned:
 
@@ -1035,7 +1062,8 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> from schooltool.app.cal import Calendar
             >>> from schooltool.app.browser.cal import CalendarViewBase
             >>> from schooltool.person.person import Person
-            >>> view = CalendarViewBase(Calendar(Person()), TestRequest())
+            >>> view = CalendarViewBase(Calendar(Person()),
+            ...                         TestRequestWithPrincipal())
 
             >>> view._calendars is None
             True
@@ -1240,7 +1268,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
     def test_getDays_cache(self):
         from schooltool.app.browser.cal import CalendarViewBase
-        view = CalendarViewBase(None, TestRequest())
+        view = CalendarViewBase(None, TestRequestWithPrincipal())
         view._getDays = lambda *args: ['got some computed days']
 
         start = date(2004, 8, 10)
@@ -1387,7 +1415,7 @@ class TestCalendarViewBase(unittest.TestCase):
         first_year = datetime.today().year - 2
         last_year = datetime.today().year + 2
 
-        view = CalendarViewBase(cal, TestRequest())
+        view = CalendarViewBase(cal, TestRequestWithPrincipal())
 
         displayed_years = view.getJumpToYears()
 
@@ -1404,7 +1432,7 @@ class TestCalendarViewBase(unittest.TestCase):
         cal = Calendar(Person())
         directlyProvides(cal, IContainmentRoot)
 
-        view = CalendarViewBase(cal, TestRequest())
+        view = CalendarViewBase(cal, TestRequestWithPrincipal())
         view.cursor = date(2005, 3, 1)
 
         displayed_months = view.getJumpToMonths()
@@ -1444,7 +1472,7 @@ def doctest_CalendarEventView():
         >>> event = CalendarEvent(datetime(2002, 2, 3, 12, 30),
         ...                       timedelta(minutes=59), "Event")
         >>> cal.addEvent(event)
-        >>> request = TestRequest()
+        >>> request = TestRequestWithPrincipal()
         >>> view = CalendarEventView(event, request)
 
         >>> view.start
@@ -1485,7 +1513,7 @@ def doctest_CalendarEventView():
         >>> event2 = CalendarEvent(datetime(2004, 2, 3, 12, 30),
         ...                       timedelta(minutes=59), "Event")
         >>> cal.addEvent(event2)
-        >>> request = TestRequest()
+        >>> request = TestRequestWithPrincipal()
         >>> view = CalendarEventView(event2, request)
         >>> view.day
         u'Tuesday, 2004-02-03'
@@ -1498,18 +1526,20 @@ def doctest_CalendarEventAddView_add():
 
     First, let's simply render the CalendarEventAddTestView.
 
-        >>> view = CalendarEventAddTestView(Calendar(Person()), TestRequest())
+        >>> view = CalendarEventAddTestView(Calendar(Person()),
+        ...                                 TestRequest())
         >>> view.update()
 
     Let's try to add an event:
 
-        >>> request = TestRequest(form={'field.title': 'Hacking',
-        ...                             'field.start_date': '2004-08-13',
-        ...                             'field.start_time': '15:30',
-        ...                             'field.duration': '50',
-        ...                             'field.recurrence.used': '',
-        ...                             'field.recurrence_type': 'daily',
-        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': 'Hacking',
+        ...           'field.start_date': '2004-08-13',
+        ...           'field.start_time': '15:30',
+        ...           'field.duration': '50',
+        ...           'field.recurrence.used': '',
+        ...           'field.recurrence_type': 'daily',
+        ...           'UPDATE_SUBMIT': 'Add'})
 
         >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
@@ -1545,7 +1575,7 @@ def doctest_CalendarEventAddView_add():
     We can cowardly run away if we decide so, i.e., cancel our request.
     In that case we are redirected to today's calendar.
 
-        >>> request = TestRequest(form={'CANCEL': 'Cancel'})
+        >>> request = TestRequestWithPrincipal(form={'CANCEL': 'Cancel'})
         >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
@@ -1560,15 +1590,16 @@ def doctest_CalendarEventAddView_add():
 
     Let's try to add an event with an optional location field:
 
-        >>> request = TestRequest(form={'field.title': 'Hacking',
-        ...                             'field.start_date': '2004-08-13',
-        ...                             'field.start_time': '15:30',
-        ...                             'field.duration': '50',
-        ...                             'field.recurrence.used': '',
-        ...                             'field.recurrence_type': 'daily',
-        ...                             'field.location': 'Moon',
-        ...                             'field.weekdays-empty-marker': '1',
-        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': 'Hacking',
+        ...           'field.start_date': '2004-08-13',
+        ...           'field.start_time': '15:30',
+        ...           'field.duration': '50',
+        ...           'field.recurrence.used': '',
+        ...           'field.recurrence_type': 'daily',
+        ...           'field.location': 'Moon',
+        ...           'field.weekdays-empty-marker': '1',
+        ...           'UPDATE_SUBMIT': 'Add'})
 
         >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
@@ -1587,12 +1618,13 @@ def doctest_CalendarEventAddView_add():
         u'Moon'
 
 
-        >>> request = TestRequest(form={'field.title': 'Hacking',
-        ...                             'field.start_date': '2004-08-13',
-        ...                             'field.start_time': '15:30',
-        ...                             'field.location': 'Kitchen',
-        ...                             'field.duration': '50',
-        ...                             'field.recurrence_type': 'daily',})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': 'Hacking',
+        ...           'field.start_date': '2004-08-13',
+        ...           'field.start_time': '15:30',
+        ...           'field.location': 'Kitchen',
+        ...           'field.duration': '50',
+        ...           'field.recurrence_type': 'daily',})
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.title_widget.getInputValue()
         u'Hacking'
@@ -1607,15 +1639,16 @@ def doctest_CalendarEventAddView_add():
 
    Lets change our timezone to US/Eastern.
 
-        >>> request = TestRequest(form={'field.title': 'East Coast',
-        ...                             'field.start_date': '2004-08-13',
-        ...                             'field.start_time': '15:30',
-        ...                             'field.duration': '50',
-        ...                             'field.recurrence.used': '',
-        ...                             'field.recurrence_type': 'daily',
-        ...                             'field.location': 'East Coast',
-        ...                             'field.weekdays-empty-marker': '1',
-        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> request = TestRequest(
+        ...     form={'field.title': 'East Coast',
+        ...           'field.start_date': '2004-08-13',
+        ...           'field.start_time': '15:30',
+        ...           'field.duration': '50',
+        ...           'field.recurrence.used': '',
+        ...           'field.recurrence_type': 'daily',
+        ...           'field.location': 'East Coast',
+        ...           'field.weekdays-empty-marker': '1',
+        ...           'UPDATE_SUBMIT': 'Add'})
 
         >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
@@ -2988,7 +3021,7 @@ def doctest_getEvents_booking():
 
     We can see only one instance of the event:
 
-        >>> view = CalendarViewBase(calendar, TestRequest())
+        >>> view = CalendarViewBase(calendar, TestRequestWithPrincipal())
         >>> view.getCalendars = lambda: [
         ...     (calendar, 'r', 'g'),
         ...     (ISchoolToolCalendar(resource), 'b', 'y')]
@@ -3508,7 +3541,7 @@ class TestDailyCalendarView(unittest.TestCase):
         day (view.cursor).  Gridlines are spaced at 15 minute intervals.
 
             >>> from schooltool.app.browser.cal import DailyCalendarView
-            >>> view = DailyCalendarView(None, TestRequest())
+            >>> view = DailyCalendarView(None, TestRequestWithPrincipal())
             >>> view.starthour = 8
             >>> view.endhour = 18
             >>> view.cursor = date(2004, 8, 1)
@@ -3687,7 +3720,7 @@ def doctest_CalendarViewBase():
     CalendarViewBase has a method calURL used for forming links to other
     calendar views on other dates.
 
-        >>> request = TestRequest()
+        >>> request = TestRequestWithPrincipal()
         >>> view = CalendarViewBase(calendar, request)
         >>> view.inCurrentPeriod = lambda dt: False
         >>> view.cursor = date(2005, 2, 3)
@@ -3799,7 +3832,7 @@ def doctest_DailyCalendarView():
         >>> from schooltool.app.cal import Calendar
         >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
-        >>> view = DailyCalendarView(calendar, TestRequest())
+        >>> view = DailyCalendarView(calendar, TestRequestWithPrincipal())
 
     prev(), current() and next() return links for adjacent days:
 
@@ -3831,7 +3864,7 @@ def doctest_WeeklyCalendarView():
         >>> from schooltool.app.cal import Calendar
         >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
-        >>> view = WeeklyCalendarView(calendar, TestRequest())
+        >>> view = WeeklyCalendarView(calendar, TestRequestWithPrincipal())
 
     title() forms a nice title for the calendar:
 
@@ -3880,7 +3913,7 @@ def doctest_MonthlyCalendarView():
         >>> from schooltool.app.cal import Calendar
         >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
-        >>> view = MonthlyCalendarView(calendar, TestRequest())
+        >>> view = MonthlyCalendarView(calendar, TestRequestWithPrincipal())
 
     title() forms a nice title for the calendar:
 
@@ -3937,7 +3970,7 @@ def doctest_YearlyCalendarView():
         >>> from schooltool.app.cal import Calendar
         >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
-        >>> view = YearlyCalendarView(calendar, TestRequest())
+        >>> view = YearlyCalendarView(calendar, TestRequestWithPrincipal())
 
     Stub out view.getCalendars so that we do not need to worry about view
     registration:
@@ -4017,7 +4050,7 @@ def doctest_YearlyCalendarView_initDaysCache():
     r"""Tests for YearlyCalendarView._initDaysCache.
 
         >>> from schooltool.app.browser.cal import YearlyCalendarView
-        >>> view = YearlyCalendarView(None, TestRequest())
+        >>> view = YearlyCalendarView(None, TestRequestWithPrincipal())
 
     _initDaysCache designates the year of self.cursor (padded to week
     boundaries) as the time for caching

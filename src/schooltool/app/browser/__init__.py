@@ -40,6 +40,7 @@ from schooltool import SchoolToolMessage as _
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.app import getSchoolToolApplication
+from schooltool.app.app import getApplicationPreferences
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonPreferences
 
@@ -240,12 +241,10 @@ class ViewPreferences(object):
         person = IPerson(request.principal, None)
         if person is not None:
             prefs = IPersonPreferences(person)
-            self.dateformat = prefs.dateformat
-            self.timeformat = prefs.timeformat
-            self.first_day_of_week = prefs.weekstart
-            self.timezone = timezone(prefs.timezone)
         else:
-            self.first_day_of_week = 0
-            self.timeformat = '%H:%M'  # HH:MM
-            self.dateformat = '%Y-%m-%d'  # YYYY-MM-DD
-            self.timezone = utc
+            # XXX vidas: should use IApplicationPreferences(app)
+            prefs = getApplicationPreferences(getSchoolToolApplication())
+        self.dateformat = prefs.dateformat
+        self.timeformat = prefs.timeformat
+        self.first_day_of_week = prefs.weekstart
+        self.timezone = timezone(prefs.timezone)

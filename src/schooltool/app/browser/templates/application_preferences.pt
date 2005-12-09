@@ -30,6 +30,28 @@
 
     </fieldset>
 
+    <fieldset>
+      <legend i18n:translate="">
+        Calendar Preferences
+      </legend>
+
+      <div class="row" tal:define="widget nocall:view/timezone_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+
+      <div class="row" tal:define="widget nocall:view/timeformat_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+
+      <div class="row" tal:define="widget nocall:view/dateformat_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+
+      <div class="row" tal:define="widget nocall:view/weekstart_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+    </fieldset>
+
     <div class="controls">
         <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Apply"
                title="Shortcut: Alt-A" accesskey="A"

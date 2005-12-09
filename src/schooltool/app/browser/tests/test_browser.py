@@ -303,13 +303,12 @@ def doctest_ViewPrefences():
         >>> from schooltool.person.interfaces import IPerson
         >>> from schooltool.person.interfaces import IPersonPreferences
         >>> from schooltool.person.person import Person
-
+        >>> import calendar
         >>> class PreferenceStub:
-        ...     def __init__(self):
-        ...         self.weekstart = "0"
-        ...         self.timeformat = "%H:%M"
-        ...         self.dateformat = "%Y-%m-%d"
-        ...         self.timezone = 'UTC'
+        ...     weekstart = calendar.MONDAY
+        ...     timeformat = "%H:%M"
+        ...     dateformat = "%Y-%m-%d"
+        ...     timezone = 'UTC'
         >>> class PersonStub:
         ...     def __conform__(self, interface):
         ...         if interface is IPersonPreferences:
@@ -329,8 +328,29 @@ def doctest_ViewPrefences():
         >>> prefs.dateformat
         '%Y-%m-%d'
         >>> prefs.first_day_of_week
-        '0'
+        0
 
+    We have no principal (anonymous user):
+
+        >>> setup.setUpAnnotations()
+        >>> from schooltool.app.app import getApplicationPreferences
+        >>> app = sbsetup.setupSchoolToolSite()
+        >>> aprefs = getApplicationPreferences(app)
+        >>> aprefs.timezone = 'GMT'
+        >>> aprefs.dateformat = '%m/%d/%y'
+        >>> aprefs.timeformat = '%I:%M %p'
+        >>> aprefs.weekstart = calendar.SUNDAY
+        >>> request = TestRequest()
+        >>> prefs = ViewPreferences(request)
+        >>> from datetime import datetime
+        >>> prefs.timezone.tzname(datetime.utcnow())
+        'GMT'
+        >>> prefs.timeformat
+        '%I:%M %p'
+        >>> prefs.dateformat
+        '%m/%d/%y'
+        >>> prefs.first_day_of_week
+        6
     """
 
 
