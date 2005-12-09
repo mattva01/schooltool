@@ -28,7 +28,7 @@ by components implementing ``ICommendations``, which is done using the
 interface ``ICommendationContained``. Thus we now ensure that not only the
 container can only contain commendations, but also that the commendations can
 only be added to the commendations container. I will demonstrate the
-constraints, once we have implemented our two new interfaces[#constraints]_.
+constraints, once we have implemented our two new interfaces [#constraints]_.
 
 The ``ICommendationContained`` interface extends ``IContained``, which ensures
 that the component has a parent and name. This is needed so that the instances
@@ -81,15 +81,15 @@ component. In the next section I will show you how to connect the
 commendations to other components.
 
 .. [#constraints] For the implementation of constraints, which contains
-   several dpcstrong-based doctests, see ``zope.app.container.constraints``.
+   several docstring-based doctests, see ``zope.app.container.constraints``.
 
 
-Asoociating Commendations with SchoolTool Components
+Associating Commendations with SchoolTool Components
 ----------------------------------------------------
 
 To connect our commendations to another component, we are using
 annotations. Annotations are data that is connected with a particular
-object. In other words, annotations allow us to associate any datastructure
+object. In other words, annotations allow us to associate any data structure
 with a particular object. Thus, annotations are essential to the correct
 functioning of the SchoolTool system, because they contain all the information
 that is needed for an object to behave correctly inside the framework.
@@ -135,7 +135,7 @@ adapter from ``IHaveCommendations`` to ``ICommendations`` that uses the
 annotations. In short, an adapter adapts an object providing a particular
 interface (here ``IHaveCommendations``) to another interface (here
 ``ICommendations``). The argument to the adapter is the component that is
-adapted, in our example a ``Person`` class instance[#adapter]_. It does not
+adapted, in our example a ``Person`` class instance [#adapter]_. It does not
 matter whether the adapter is a class or a function, as long as the adapter is
 callable and takes one argument, everything is fine. While it is very common
 to implement adapters using classes, for annotation-based adapters like this

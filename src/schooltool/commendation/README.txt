@@ -21,11 +21,11 @@ Here is the original E-mail that contains Tom's specifications:
 
   Commendations have the following fields:
 
-   * Scope: [group, school-wide, community, state, national, global]
-   * Grantor
-   * Title
-   * Description
-   * Date
+  * Scope: [group, school-wide, community, state, national, global]
+  * Grantor
+  * Title
+  * Description
+  * Date
 
   Users with the proper role should have an "Add commendation" action
   when they're viewing a person or group.
