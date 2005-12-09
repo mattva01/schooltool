@@ -25,6 +25,7 @@ __docformat__ = 'reStructuredText'
 import zope.interface
 import zope.schema
 import zope.i18nmessageid
+from zope.app import container
 
 _ = zope.i18nmessageid.MessageFactory("commendation")
 
@@ -60,3 +61,17 @@ class ICommendation(zope.interface.Interface):
         description=_("The grantor of the commendation."),
         readonly=True,
         required=True)
+
+
+class ICommendations(zope.app.container.interfaces.IContainer):
+    '''An object containing several commendations.'''
+    container.constraints.contains(ICommendation)
+
+
+class ICommendationContained(container.interfaces.IContained):
+    '''A commendation that can only be contained by ``ICommendations``.'''
+    container.constraints.containers(ICommendations)
+
+
+class IHaveCommendations(zope.interface.Interface):
+    '''Objects having commendations associated with them.'''

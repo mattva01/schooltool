@@ -27,7 +27,7 @@ import os
 import unittest
 import zope.component
 import zope.interface
-from zope.testing import doctest, doctestunit
+from zope.testing import doctest
 from zope.component import testing
 from zope.app.container import contained
 from zope.app.testing import setup
@@ -40,12 +40,14 @@ def tearDown(test):
     setup.placefulTearDown()
 
 def test_suite():
+    optionflags = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
     return unittest.TestSuite((
         doctest.DocFileSuite('BasicComponent.txt',
                              setUp=setUp, tearDown=tearDown,
-                             globs={'pprint': doctestunit.pprint},
-                             optionflags=doctest.NORMALIZE_WHITESPACE|
-                                         doctest.ELLIPSIS),
+                             optionflags=optionflags),
+        doctest.DocFileSuite('PythonIntegration.txt',
+                             setUp=setUp, tearDown=tearDown,
+                             optionflags=optionflags),
         ))
 
 if __name__ == '__main__':

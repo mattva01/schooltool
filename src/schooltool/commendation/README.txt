@@ -54,13 +54,12 @@ Outline
    (c) Implementation of the ``Commendation`` Component
    (d) Testing the Implementation
 
-2. Python-Integration of Commentations into SchoolTool
+2. Python-Integration of Commendations into SchoolTool
 
    [``PythonIntegration.txt``]
 
    (a) The ``Commendations`` container
    (b) Asoociating Commendations with SchoolTool Components
-   (c) Testing the Integration
 
 3. System-Integration of Commentations into SchoolTool
 

@@ -26,13 +26,19 @@ import persistent
 import zope.interface
 import zope.security
 from zope.schema import fieldproperty
+from zope.app import annotation
+from zope.app.container import btree, contained
 from schooltool.commendation import interfaces
 
 
-class Commendation(persistent.Persistent):
+CommendationsKey = 'schooltool.commendation.Commendations'
+
+
+class Commendation(persistent.Persistent, contained.Contained):
     """A simple commendation implementation."""
 
-    zope.interface.implements(interfaces.ICommendation)
+    zope.interface.implements(interfaces.ICommendation,
+                              interfaces.ICommendationContained)
 
     title = fieldproperty.FieldProperty(interfaces.ICommendation['title'])
 
@@ -60,3 +66,22 @@ class Commendation(persistent.Persistent):
     def __repr__(self):
         return '<%s %r by %r>' %(self.__class__.__name__,
                                  self.title, self.grantor)
+
+
+class Commendations(btree.BTreeContainer):
+    '''A simple implementation of ``ICommendations``.'''
+    zope.interface.implements(interfaces.ICommendations)
+
+    def __repr__(self):
+        return '<%s for %r>' %(self.__class__.__name__, self.__parent__)
+
+
+def getCommendations(context):
+    """Adapt an ``IHaveCommendations`` object to ``ICommendations``."""
+    annotations = annotation.interfaces.IAnnotations(context)
+    try:
+        return annotations[CommendationsKey]
+    except KeyError:
+        annotations[CommendationsKey] = Commendations()
+        annotations[CommendationsKey].__parent__ = context
+        return annotations[CommendationsKey]
