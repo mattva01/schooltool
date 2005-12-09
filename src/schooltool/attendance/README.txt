@@ -85,7 +85,8 @@ are also recorded.
     >>> section = app['sections']['sec00213']
     >>> for student in section.students:
     ...     is_present = student.__name__ not in request['absent']
-    ...     ISectionAttendance(student).record(section, datetime, is_present)
+    ...     ISectionAttendance(student).record(section, datetime, duration,
+    ...                                        period_id, is_present)
 
 The form lets teachers convert absences to tardies
 
@@ -114,10 +115,10 @@ The following API emerges::
             "unknown".
             """
 
-        def record(section, datetime, present):
+        def record(section, datetime, duration, period_id, present):
             """Record the student's absence or presence.
 
-            You can only record the absence or presence once for a given
+            You can record the absence or presence only once for a given
             (section, datetime) pair.
             """
 
@@ -130,6 +131,11 @@ The following API emerges::
         def isPresent(): """True if status == PRESENT."""
         def isAbsent():  """True if status == ABSENT."""
         def isTardy():   """True if status == TARDY."""
+
+        late_arrival = Attribute("""Time of a late arrival.
+
+            None if status != TARDY.
+            """)
 
         def isExplained():
             """Is the absence/tardy explained?
@@ -183,7 +189,7 @@ Implementation:
     ...             was_present = True
     ...         else:
     ...             was_absent = True
-    ...             if not ar.isExcused():
+    ...             if not ar.isExplained():
     ...                 was_absent_without_excuse = True
     ...     if was_present and was_absent_without_excuse:
     ...         return 'red'
@@ -309,23 +315,15 @@ It appears that an attendance record needs to know about its section.
     ...         else:
     ...             return 'yellow negative half line'
 
-**XXX** We also need some way to get the last 10 schooldays
+We also need some way to get the last 10 schooldays
 
-**XXX** So should ISectionAttendance.record and get take a date or a datetime?
-
-  **Ignas**: it depends. Do we want to identify the exact time of an
-  attendance event or not.  If we only care that you missed Petersons
-  class on thursday - date, if we care about intricate cases like:
-
-    Peterson has two math lessons with 6 A on the same day, John is
-    present in the first one, yet has a headache and is excused to go
-    home, so he gets an "excused abscence" for the second lesson.
-
-  As our system allows scheduling same section more than once for a
-  day we should have a way to uniquely identify those two records
-  which would mean storing a datetime or (IMHO better: date,
-  period_id, section_id) because we would use the datetime to identify
-  the period anyway.
+    >>> last_schooldays = []
+    >>> d = datetime.date.today()
+    >>> term = getTermForDate(d)
+    >>> while d >= term.first and len(last_schooldays) < 10:
+    ...     if term.isSchoolday(d):
+    ...         last_schooldays.append(d)
+    ...     d -= datetime.date.resolution
 
 | **XXX** We stumble on timezones once again -- at what time does a school day start?
 |         And by "at what time", I mean "at 00:00 in which timezone"?
@@ -352,7 +350,7 @@ API::
             "unknown".
             """
 
-        def record(date):
+        def record(date, present):
             """Record the student's absence or presence.
 
             You can only record the absence or presence once for a given date.
@@ -364,10 +362,10 @@ Logging
 All attendance related events appear in a log file
 
     >>> logging.getLogger('schooltool.attendance').addHandler(...)
-    >>> IDayAttendance(student).record(section, datetime, False)
-    YYYY-MM-DD HH:MM:SS +ZZZZ: student Foo was absent from Math
-    >>> IDayAttendance(student).get(section, datetime).makeTardy(time)
-    YYYY-MM-DD HH:MM:SS +ZZZZ: student Foo was late for Math
+    >>> IDayAttendance(student).record(date, False)
+    YYYY-MM-DD HH:MM:SS +ZZZZ: student Foo was absent from homeroom
+    >>> IDayAttendance(student).get(date).makeTardy(time)
+    YYYY-MM-DD HH:MM:SS +ZZZZ: student Foo was late for homeroom
 
     >>> del logging.getLogger('schooltool.attendance').handlers[:]
 
@@ -383,8 +381,10 @@ The calendar view will have to include two more calendars in its getCalendars() 
 Daily absences will contain all-day events for all absences and tardies.
 Section absences will contain regular events for all absences and tardies.
 
-| **XXX** So ISectionAttendance.record should record both dtstart and duration?
-| Unless we are satisfied with zero-length events at the beginning of a section.
+New API, for both IDayAttendance and ISectionAttendance::
+
+        def makeCalendar(start, end):
+            """Return attendance incidents as calendar events."""
 
 
 List of pending attendance incidents
@@ -412,25 +412,31 @@ New API, for both IDayAttendance and ISectionAttendance::
 
 We also need two new interfaces::
 
-    class IDayAttendance(IAttendanceRecord):
+    class IDayAttendanceRecord(IAttendanceRecord):
         """A single attendance record for a day."""
 
         date = Attribute("""The date of this record.""")
 
 
-    class ISectionAttendance(IAttendanceRecord):
+    class ISectionAttendanceRecord(IAttendanceRecord):
         """A single attendance record for a section."""
 
         section = Attribute("""The section object.""")
 
+        datetime = Attribute("""The date and time of the section meeting.""")
+
+        duration = Attribute("""The duration of the section meeting."""
+
+        period_id = Attribute("""The name of the period.""")
+
+Actually, ``date`` is a useful attribute for IAttendanceRecord::
+
+    class IAttendanceRecord(Interface):
+        ...
         date = Attribute("""The date of this record.""")
 
-**XXX** so, what do we store here?
-
-- date (breaks if a section meets twice on the same day)
-- datetime (then makeCalendar is unclear)
-- datetime + duration
-- date + (timetable/period id)   <-- this is probably the right one
+For ISectionAttendanceRecord ``date`` may be a property that returns
+``self.datetime.date()``.
 
 
 Summary of attendance per term
@@ -452,6 +458,15 @@ We need to count the number of absences/tardies in a given time period
     >>> n_tardies = len(ar for ar in attendances if ar.isTardy())
 
 We also need to know for each attendance incident the date/time and section.
+
+New API, for both IDayAttendance and ISectionAttendance::
+
+        def filter(start, end):
+            """Return all recorded attendance records within a given date range.
+
+            (This means that none of the returned records will be in
+            the UNKNOWN state.)
+            """
 
 Workflow status modification
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
