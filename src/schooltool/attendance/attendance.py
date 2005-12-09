@@ -105,8 +105,11 @@ class SectionAttendanceRecord(Persistent):
         raise NotImplementedError
 
     def makeTardy(self, arrival_time):
-        # XXX
-        raise NotImplementedError
+        if not self.isAbsent():
+            raise AttendanceError("makeTardy when status is %s, not ABSENT"
+                                  % self.status)
+        self.status = TARDY
+        self.late_arrival = arrival_time
 
     def __repr__(self):
         return 'SectionAttendanceRecord(%r, %r, %s)' % (self.section,

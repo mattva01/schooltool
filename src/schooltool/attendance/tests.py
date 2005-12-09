@@ -41,6 +41,7 @@ from schooltool.person.interfaces import IPerson
 from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.attendance.interfaces import ISectionAttendanceRecord
 from schooltool.attendance.interfaces import UNKNOWN, PRESENT, ABSENT, TARDY
+from schooltool.attendance.interfaces import AttendanceError
 
 
 def doctest_SectionAttendance():
@@ -287,6 +288,41 @@ def doctest_SectionAttendanceRecord_isUnknown_isPresent_isAbsent_isTardy():
         PRESENT False True  False False
         ABSENT  False False True  False
         TARDY   False False False True
+
+    """
+
+
+def doctest_SectionAttendanceRecord_makeTardy():
+    r"""Tests for SectionAttendanceRecord.makeTardy
+
+        >>> from schooltool.attendance.attendance \
+        ...     import SectionAttendanceRecord
+
+    If you have an absence
+
+        >>> section = SectionStub()
+        >>> dt = datetime.datetime(2005, 11, 23, 14, 55)
+        >>> ar = SectionAttendanceRecord(section, dt, ABSENT)
+
+    you can convert it to a tardy
+
+        >>> ar.makeTardy(datetime.time(15, 03))
+
+        >>> ar.isTardy()
+        True
+        >>> ar.late_arrival
+        datetime.time(15, 3)
+
+    In all other cases you can't.
+
+        >>> for status in (UNKNOWN, PRESENT, TARDY):
+        ...     ar = SectionAttendanceRecord(section, dt, status)
+        ...     try:
+        ...         ar.makeTardy(datetime.time(15, 03))
+        ...     except AttendanceError:
+        ...         pass
+        ...     else:
+        ...         print "no AttendanceError when status=%s" % status
 
     """
 
