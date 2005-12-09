@@ -204,9 +204,6 @@ Thus our ISectionAttendance interface gains a new method::
         def getAllForDay(date):
             """Return all recorded attendance records for a specific day."""
 
-Note that there is no way to determine sections/datetimes from IAttendanceRecord
-objects returned by getAllForDay -- YAGNI.
-
 
 Sparkline attendance graph
 --------------------------
@@ -433,34 +430,28 @@ We also need two new interfaces::
 - date (breaks if a section meets twice on the same day)
 - datetime (then makeCalendar is unclear)
 - datetime + duration
-- date + (timetable/period id)
+- date + (timetable/period id)   <-- this is probably the right one
 
 
 Summary of attendance per term
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The attendance view should show [...] a summary of absences and
-tardies by term.  The user can click on a term for a summary of all
+tardies by term.  The user can click on a term for a list of all
 absences and tardies per term.
 
-**XXX** what is a summary?
+The summary is just the number of absences and tardies.  The list shows the
+time, date and class for each attendance incident.
 
-    >>> for term in app['terms'].values():
-    ...     n_present = n_absent = n_tardy = n_unexplained = 0
-    ...     for ar in IDayAttendance(student):
-    ...         if ar.date not in term:
-    ...            continue
-    ...         if ar.isPresent(): n_present += 1
-    ...         elif ar.isAbsent(): n_absent += 1
-    ...         elif ar.isTardy(): n_tardy += 1
-    ...         if not ar.isExplained(): n_unexplained += 1
-    ...     print "In this term you had", n_present, n_absent, n_tardy, n_unexplained
+We need to count the number of absences/tardies in a given time period
 
-**XXX** what is a summary of all absences/tardies per term?  How does
-it differ from a summary of all absences/tardies?
+    >>> day_attendances = IDayAttendance(student).filter(term.first, term.last)
+    >>> section_attendances = ISectionAttendance(student).filter(term.first, term.last)
+    >>> attendances = day_attendances + section_attendances
+    >>> n_absences = len(ar for ar in attendances if ar.isAbsent())
+    >>> n_tardies = len(ar for ar in attendances if ar.isTardy())
 
-**XXX** instead of guessing, we need to ask Tom to expand the spec.
-
+We also need to know for each attendance incident the date/time and section.
 
 Workflow status modification
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
