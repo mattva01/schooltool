@@ -240,15 +240,17 @@ def doctest_SectionAttendance_getAllForDay():
         >>> sa.record(section2, dt3a, duration, 'A', True)
 
         >>> def print_for(day):
-        ...     for ar in sorted(sa.getAllForDay(day)):
+        ...     def key(ar):
+        ...         return (ar.datetime, ar.section.title)
+        ...     for ar in sorted(sa.getAllForDay(day), key=key):
         ...         print ar.date, ar.period_id, ar.section.title, ar.isPresent()
 
         >>> print_for(dt1a.date())
         2005-12-05 A Math True
 
         >>> print_for(dt2a.date())
-        2005-12-07 A Math True
         2005-12-07 A Chem False
+        2005-12-07 A Math True
         2005-12-07 B Math False
 
         >>> print_for(dt3a.date())
@@ -282,7 +284,9 @@ def doctest_SectionAttendance_filter():
         >>> sa.record(section2, dt3a, duration, 'A', True)
 
         >>> def print_for(first, last):
-        ...     for ar in sorted(sa.filter(first, last)):
+        ...     def key(ar):
+        ...         return (ar.datetime, ar.section.title)
+        ...     for ar in sorted(sa.filter(first, last), key=key):
         ...         print ar.date, ar.period_id, ar.section.title, ar.isPresent()
 
         >>> print_for(dt1a.date(), dt1a.date())
@@ -290,20 +294,20 @@ def doctest_SectionAttendance_filter():
 
         >>> print_for(dt1a.date(), dt2a.date())
         2005-12-05 A Math True
-        2005-12-07 A Math True
         2005-12-07 A Chem False
+        2005-12-07 A Math True
         2005-12-07 B Math False
 
         >>> print_for(dt2a.date(), dt3a.date())
-        2005-12-07 A Math True
         2005-12-07 A Chem False
+        2005-12-07 A Math True
         2005-12-07 B Math False
         2005-12-09 A Chem True
 
         >>> print_for(dt1a.date(), dt3a.date())
         2005-12-05 A Math True
-        2005-12-07 A Math True
         2005-12-07 A Chem False
+        2005-12-07 A Math True
         2005-12-07 B Math False
         2005-12-09 A Chem True
 
