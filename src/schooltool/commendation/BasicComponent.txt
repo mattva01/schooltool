@@ -58,9 +58,9 @@ Development of the ``ICommendation`` Interface
 ----------------------------------------------
 
 SchoolTool, using Zope 3 as its development platform, makes heavy use of
-component-based development. The central concept of this development pattern
-is the use of interfaces. Interfaces are like a contract, a promise by an object 
-to provide a specified set of methods and attributes. While it is possible to 
+component-based development. The central concept of this development pattern is
+the use of interfaces. Interfaces are like a contract, a promise by an object
+to provide a specified set of methods and attributes. While it is possible to
 not use interfaces and still play nice with SchoolTool, you will probably never
 see objects that do not use interfaces to describe their functionality.
 
@@ -73,9 +73,9 @@ public interfaces are, by coding convention, placed into a file called
 
 Since Python does not support interfaces directly in the language, the class
 statement is used to declare interfaces as well, except that an
-interface must always inherit from ``zope.interface.Interface``[#iface]_
+interface must always inherit from ``zope.interface.Interface`` [#iface]_
 somewhere in its inheritance tree. To specify fields, we use the
-``zope.schema`` package[#schema]_. Have a look at the ``ICommendation``
+``zope.schema`` package [#schema]_. Have a look at the ``ICommendation``
 interface inside the ``interfaces.py`` file for the complete interface.
 
 The interfaces also serve as API documentation, containing 
@@ -113,12 +113,12 @@ Finally, since it is very important for SchoolTool to be internationalized
 human-readable and must therefore be translatable. Translatable strings are
 known as "messages". We use message factories to create messages. As you can
 see in the interfaces file, message factories are instantiated using an
-argument. This argument is the translation domain[#msgid]_. The message id
+argument. This argument is the translation domain [#msgid]_. The message id
 factory *must* be known as ``_``, since the SchoolTool message extraction
 tools look for this name in order to extract the name.
 
 .. [#iface] Read the ``README.txt`` in ``zope.interface`` for a general
-   introduction to interfaces. The other text files in the pacakge are also
+   introduction to interfaces. The other text files in the package are also
    very useful for more advanced applications of interfaces.
 
 .. [#schema] For more details see the documentation files in ``zope.schema``,
@@ -234,7 +234,7 @@ file. Some setup and teardown functions are specified to ensure that the
 component architecture is up and running before the tests are executed. To run
 the tests from your SchoolTool root directory use the following command line::
 
-  $ python test.py -vpu1c -s src/schooltool/commendation/
+  $ python test.py -vpu1 -s src/schooltool/commendation/
 
 The output of the test run should look something like this::
 
