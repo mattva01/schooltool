@@ -1250,10 +1250,9 @@ class DailyCalendarRowsView(BrowserView):
         if person is not None:
             prefs = IPersonPreferences(person)
             show_periods = prefs.cal_periods
-            tz = timezone(prefs.timezone)
         else:
             show_periods = False
-            tz = timezone(PersonPreferences.timezone)
+        tz = ViewPreferences(self.request).timezone
 
         if show_periods:
             periods = getPeriodsForDay(cursor)
@@ -1922,12 +1921,8 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
 
     def __init__(self, context, request):
 
-        # the default timezone 'UTC' is inherited from Mixin
-        person = IPerson(request.principal, None)
-        if person is not None:
-            prefs = IPersonPreferences(person)
-            if prefs.timezone is not None:
-                self.timezone = timezone(prefs.timezone)
+        prefs = ViewPreferences(request)
+        self.timezone = prefs.timezone
 
         if "field.start_date" not in request:
             today = date.today().strftime("%Y-%m-%d")
@@ -1985,12 +1980,8 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
     submit_button_title = _("Update")
 
     def __init__(self, context, request):
-        person = IPerson(request.principal, None)
-        if person is not None:
-            prefs = IPersonPreferences(person)
-            if prefs.timezone is not None:
-                self.timezone = timezone(prefs.timezone)
-
+        prefs = ViewPreferences(request)
+        self.timezone = prefs.timezone
         EditView.__init__(self, context, request)
 
     def keyword_arguments(self):

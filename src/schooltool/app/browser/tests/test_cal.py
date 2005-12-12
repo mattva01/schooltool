@@ -1527,7 +1527,7 @@ def doctest_CalendarEventAddView_add():
     First, let's simply render the CalendarEventAddTestView.
 
         >>> view = CalendarEventAddTestView(Calendar(Person()),
-        ...                                 TestRequest())
+        ...                                 TestRequestWithPrincipal())
         >>> view.update()
 
     Let's try to add an event:
@@ -1639,7 +1639,7 @@ def doctest_CalendarEventAddView_add():
 
    Lets change our timezone to US/Eastern.
 
-        >>> request = TestRequest(
+        >>> request = TestRequestWithPrincipal(
         ...     form={'field.title': 'East Coast',
         ...           'field.start_date': '2004-08-13',
         ...           'field.start_time': '15:30',
@@ -1712,11 +1712,12 @@ def doctest_CalendarEventAddView_add_validation():
 
     Let's try to add an event without a required field:
 
-        >>> request = TestRequest(form={'field.title': 'Hacking',
-        ...                             'field.duration': '50',
-        ...                             'field.recurrence.used': '',
-        ...                             'field.recurrence_type': 'daily',
-        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': 'Hacking',
+        ...           'field.duration': '50',
+        ...           'field.recurrence.used': '',
+        ...           'field.recurrence_type': 'daily',
+        ...           'UPDATE_SUBMIT': 'Add'})
 
         >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
@@ -1731,13 +1732,14 @@ def doctest_CalendarEventAddView_add_validation():
         >>> len(calendar)
         0
 
-        >>> request = TestRequest(form={'field.title': '',
-        ...                             'field.start_date': '2004-08-13',
-        ...                             'field.start_time': '15:30',
-        ...                             'field.location': 'Kitchen',
-        ...                             'field.duration': '50',
-        ...                             'field.recurrence_type': 'daily',
-        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': '',
+        ...           'field.start_date': '2004-08-13',
+        ...           'field.start_time': '15:30',
+        ...           'field.location': 'Kitchen',
+        ...           'field.duration': '50',
+        ...           'field.recurrence_type': 'daily',
+        ...           'UPDATE_SUBMIT': 'Add'})
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occurred.'
@@ -1747,13 +1749,14 @@ def doctest_CalendarEventAddView_add_validation():
         True
 
 
-        >>> request = TestRequest(form={'field.title': 'Hacking',
-        ...                             'field.start_date': '2004-31-13',
-        ...                             'field.start_time': '15:30',
-        ...                             'field.location': 'Kitchen',
-        ...                             'field.duration': '50',
-        ...                             'field.recurrence_type': 'daily',
-        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': 'Hacking',
+        ...           'field.start_date': '2004-31-13',
+        ...           'field.start_time': '15:30',
+        ...           'field.location': 'Kitchen',
+        ...           'field.duration': '50',
+        ...           'field.recurrence_type': 'daily',
+        ...           'UPDATE_SUBMIT': 'Add'})
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occurred.'
@@ -1763,13 +1766,14 @@ def doctest_CalendarEventAddView_add_validation():
         True
 
 
-        >>> request = TestRequest(form={'field.title': 'Hacking',
-        ...                             'field.start_date': '2004-08-13',
-        ...                             'field.start_time': '15:30',
-        ...                             'field.location': 'Kitchen',
-        ...                             'field.duration': '100h',
-        ...                             'field.recurrence_type': 'daily',
-        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': 'Hacking',
+        ...           'field.start_date': '2004-08-13',
+        ...           'field.start_time': '15:30',
+        ...           'field.location': 'Kitchen',
+        ...           'field.duration': '100h',
+        ...           'field.recurrence_type': 'daily',
+        ...           'UPDATE_SUBMIT': 'Add'})
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occurred.'
@@ -1778,13 +1782,14 @@ def doctest_CalendarEventAddView_add_validation():
         >>> view.error is None
         True
 
-        >>> request = TestRequest(form={'field.title': '',
-        ...                             'field.start_date': '2004-08-13',
-        ...                             'field.start_time': '1530',
-        ...                             'field.location': 'Kitchen',
-        ...                             'field.duration': '60',
-        ...                             'field.recurrence_type': 'daily',
-        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': '',
+        ...           'field.start_date': '2004-08-13',
+        ...           'field.start_time': '1530',
+        ...           'field.location': 'Kitchen',
+        ...           'field.duration': '60',
+        ...           'field.recurrence_type': 'daily',
+        ...           'UPDATE_SUBMIT': 'Add'})
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occurred.'
@@ -1794,13 +1799,14 @@ def doctest_CalendarEventAddView_add_validation():
         >>> view.error is None
         True
 
-        >>> request = TestRequest(form={'field.title': '',
-        ...                             'field.start_date': '2004-08-13',
-        ...                             'field.start_time': '1530',
-        ...                             'field.location': 'Kitchen',
-        ...                             'field.duration': '60',
-        ...                             'field.recurrence_type': 'daily',
-        ...                             'UPDATE': 'update'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': '',
+        ...           'field.start_date': '2004-08-13',
+        ...           'field.start_time': '1530',
+        ...           'field.location': 'Kitchen',
+        ...           'field.duration': '60',
+        ...           'field.recurrence_type': 'daily',
+        ...           'UPDATE': 'update'})
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occurred.'
@@ -1818,17 +1824,18 @@ def doctest_CalendarEventAddView_add_recurrence():
 
     Let's try to add a recurring event:
 
-        >>> request = TestRequest(form={'field.title': 'Hacking',
-        ...                             'field.start_date': '2004-08-13',
-        ...                             'field.start_time': '15:30',
-        ...                             'field.duration': '50',
-        ...                             'field.location': 'Moon',
-        ...                             'field.recurrence': 'on',
-        ...                             'field.recurrence.used': '',
-        ...                             'field.recurrence_type': 'daily',
-        ...                             'field.interval': '1',
-        ...                             'field.range': 'forever',
-        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': 'Hacking',
+        ...           'field.start_date': '2004-08-13',
+        ...           'field.start_time': '15:30',
+        ...           'field.duration': '50',
+        ...           'field.location': 'Moon',
+        ...           'field.recurrence': 'on',
+        ...           'field.recurrence.used': '',
+        ...           'field.recurrence_type': 'daily',
+        ...           'field.interval': '1',
+        ...           'field.range': 'forever',
+        ...           'UPDATE_SUBMIT': 'Add'})
 
         >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
@@ -1846,14 +1853,15 @@ def doctest_CalendarEventAddView_add_recurrence():
         >>> event.recurrence
         DailyRecurrenceRule(1, None, None, ())
 
-        >>> request = TestRequest(form={'field.title': 'Hacking',
-        ...                             'field.start_date': '2004-08-13',
-        ...                             'field.start_time': '15:30',
-        ...                             'field.location': 'Kitchen',
-        ...                             'field.duration': '50',
-        ...                             'field.recurrence.used': '',
-        ...                             'field.recurrence_type': 'daily',
-        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': 'Hacking',
+        ...           'field.start_date': '2004-08-13',
+        ...           'field.start_time': '15:30',
+        ...           'field.location': 'Kitchen',
+        ...           'field.duration': '50',
+        ...           'field.recurrence.used': '',
+        ...           'field.recurrence_type': 'daily',
+        ...           'UPDATE_SUBMIT': 'Add'})
         >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
@@ -1883,17 +1891,18 @@ def doctest_CalendarEventAddView_add_recurrence():
         >>> event.recurrence is None
         True
 
-        >>> request = TestRequest(form={'field.title': 'Hacking',
-        ...                             'field.start_date': '2004-08-13',
-        ...                             'field.start_time': '15:30',
-        ...                             'field.location': 'Kitchen',
-        ...                             'field.duration': '50',
-        ...                             'field.recurrence': 'on',
-        ...                             'field.recurrence.used': '',
-        ...                             'field.recurrence_type': 'daily',
-        ...                             'field.interval': '2',
-        ...                             'field.range': 'forever',
-        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': 'Hacking',
+        ...           'field.start_date': '2004-08-13',
+        ...           'field.start_time': '15:30',
+        ...           'field.location': 'Kitchen',
+        ...           'field.duration': '50',
+        ...           'field.recurrence': 'on',
+        ...           'field.recurrence.used': '',
+        ...           'field.recurrence_type': 'daily',
+        ...           'field.interval': '2',
+        ...           'field.range': 'forever',
+        ...           'UPDATE_SUBMIT': 'Add'})
 
 
         >>> calendar = Calendar(Person())
@@ -1932,18 +1941,19 @@ def doctest_CalendarEventAddView_recurrence_exceptions():
 
     Lets add a simple even with some exceptions:
 
-        >>> request = TestRequest(form={'field.title': 'Hacking',
-        ...               'field.start_date': '2004-08-13',
-        ...               'field.start_time': '15:30',
-        ...               'field.location': 'Kitchen',
-        ...               'field.duration': '50',
-        ...               'field.recurrence': 'on',
-        ...               'field.recurrence.used': '',
-        ...               'field.recurrence_type': 'daily',
-        ...               'field.interval': '1',
-        ...               'field.range': 'forever',
-        ...               'field.exceptions': '2004-08-14\n2004-08-19\n2004-08-20',
-        ...               'UPDATE_SUBMIT': 'Add'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': 'Hacking',
+        ...           'field.start_date': '2004-08-13',
+        ...           'field.start_time': '15:30',
+        ...           'field.location': 'Kitchen',
+        ...           'field.duration': '50',
+        ...           'field.recurrence': 'on',
+        ...           'field.recurrence.used': '',
+        ...           'field.recurrence_type': 'daily',
+        ...           'field.interval': '1',
+        ...           'field.range': 'forever',
+        ...           'field.exceptions': '2004-08-14\n2004-08-19\n2004-08-20',
+        ...           'UPDATE_SUBMIT': 'Add'})
 
 
         >>> calendar = Calendar(Person())
@@ -2003,7 +2013,7 @@ def doctest_CalendarEventAddView_getMonthDay():
     r"""Tests for CalendarEventAddView.getMonthDay().
 
         >>> calendar = Calendar(Person())
-        >>> request = TestRequest()
+        >>> request = TestRequestWithPrincipal()
         >>> request.form['field.start_date'] = u''
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.getMonthDay()
@@ -2022,7 +2032,7 @@ def doctest_CalendarEventAddView_weekdayChecked():
     r"""Tests for CalendarEventAddView.weekdayChecked().
 
         >>> calendar = Calendar(Person())
-        >>> request = TestRequest()
+        >>> request = TestRequestWithPrincipal()
         >>> request.form['field.start_date'] = u''
         >>> view = CalendarEventAddTestView(calendar, request)
 
@@ -2054,7 +2064,7 @@ def doctest_CalendarEventAddView_weekdayDisabled():
     r"""Tests for CalendarEventAddView.weekdayDisabled().
 
         >>> calendar = Calendar(Person())
-        >>> request = TestRequest()
+        >>> request = TestRequestWithPrincipal()
         >>> request.form['field.start_date'] = u''
         >>> view = CalendarEventAddTestView(calendar, request)
 
@@ -2085,16 +2095,17 @@ def doctest_CalendarEventAddView_weekdayDisabled():
 def doctest_CalendarEventAddView_getWeekDay():
     r"""Tests for CalendarEventAddView.getWeekDay().
 
-        >>> request = TestRequest(form={'field.title': 'Hacking',
-        ...                             'field.start_date': '2004-10-01',
-        ...                             'field.start_time': '15:30',
-        ...                             'field.location': 'Kitchen',
-        ...                             'field.duration': '50',
-        ...                             'field.recurrence': 'on',
-        ...                             'field.recurrence.used': '',
-        ...                             'field.recurrence_type': 'daily',
-        ...                             'field.interval': '2',
-        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': 'Hacking',
+        ...           'field.start_date': '2004-10-01',
+        ...           'field.start_time': '15:30',
+        ...           'field.location': 'Kitchen',
+        ...           'field.duration': '50',
+        ...           'field.recurrence': 'on',
+        ...           'field.recurrence.used': '',
+        ...           'field.recurrence_type': 'daily',
+        ...           'field.interval': '2',
+        ...           'UPDATE_SUBMIT': 'Add'})
         >>> calendar = Calendar(Person())
         >>> view = CalendarEventAddTestView(calendar, request)
 
@@ -2140,16 +2151,17 @@ def doctest_CalendarEventAddView_getWeekDay():
 def doctest_CalendarEventAddView_getLastWeekDay():
     r"""Tests for CalendarEventAddView.getLastWeekDay().
 
-        >>> request = TestRequest(form={'field.title': 'Hacking',
-        ...                             'field.start_date': '2004-10-01',
-        ...                             'field.start_time': '15:30',
-        ...                             'field.location': 'Kitchen',
-        ...                             'field.duration': '50',
-        ...                             'field.recurrence': 'on',
-        ...                             'field.recurrence.used': '',
-        ...                             'field.recurrence_type': 'daily',
-        ...                             'field.interval': '2',
-        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': 'Hacking',
+        ...           'field.start_date': '2004-10-01',
+        ...           'field.start_time': '15:30',
+        ...           'field.location': 'Kitchen',
+        ...           'field.duration': '50',
+        ...           'field.recurrence': 'on',
+        ...           'field.recurrence.used': '',
+        ...           'field.recurrence_type': 'daily',
+        ...           'field.interval': '2',
+        ...           'UPDATE_SUBMIT': 'Add'})
         >>> calendar = Calendar(Person())
 
         >>> request.form['field.start_date'] = ""
@@ -2178,18 +2190,19 @@ def doctest_CalendarEventAddView_getLastWeekDay():
 def doctest_CalendarEventAddView_cross_validation():
     r"""Tests for CalendarEventAddView cross validation.
 
-        >>> request = TestRequest(form={'field.title': 'Foo',
-        ...                             'field.start_date': '2003-12-01',
-        ...                             'field.start_time': '15:30',
-        ...                             'field.location': 'Kitchen',
-        ...                             'field.duration': '59',
-        ...                             'field.recurrence': 'on',
-        ...                             'field.recurrence_type': 'daily',
-        ...                             'field.interval': '',
-        ...                             'field.range': 'count',
-        ...                             'field.count': '6',
-        ...                             'field.until': '2004-01-01',
-        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': 'Foo',
+        ...     'field.start_date': '2003-12-01',
+        ...     'field.start_time': '15:30',
+        ...     'field.location': 'Kitchen',
+        ...     'field.duration': '59',
+        ...     'field.recurrence': 'on',
+        ...     'field.recurrence_type': 'daily',
+        ...     'field.interval': '',
+        ...     'field.range': 'count',
+        ...     'field.count': '6',
+        ...     'field.until': '2004-01-01',
+        ...     'UPDATE_SUBMIT': 'Add'})
         >>> calendar = Calendar(Person())
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -2199,17 +2212,18 @@ def doctest_CalendarEventAddView_cross_validation():
         >>> view.error is None
         True
 
-        >>> request = TestRequest(form={'field.title': 'Foo',
-        ...                             'field.start_date': '2003-12-01',
-        ...                             'field.start_time': '15:30',
-        ...                             'field.location': 'Kitchen',
-        ...                             'field.duration': '59',
-        ...                             'field.recurrence': 'on',
-        ...                             'field.recurrence_type' : 'daily',
-        ...                             'field.interval': '1',
-        ...                             'field.range': 'until',
-        ...                             'field.until': '2002-01-01',
-        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': 'Foo',
+        ...           'field.start_date': '2003-12-01',
+        ...           'field.start_time': '15:30',
+        ...           'field.location': 'Kitchen',
+        ...           'field.duration': '59',
+        ...           'field.recurrence': 'on',
+        ...           'field.recurrence_type' : 'daily',
+        ...           'field.interval': '1',
+        ...           'field.range': 'until',
+        ...           'field.until': '2002-01-01',
+        ...           'UPDATE_SUBMIT': 'Add'})
         >>> calendar = Calendar(Person())
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -2219,16 +2233,17 @@ def doctest_CalendarEventAddView_cross_validation():
         >>> view.error is None
         True
 
-        >>> request = TestRequest(form={'field.title': 'Hacking',
-        ...                             'field.start_date': '2004-08-13',
-        ...                             'field.start_time': '15:30',
-        ...                             'field.location': 'Kitchen',
-        ...                             'field.duration': '100',
-        ...                             'field.recurrence': 'on',
-        ...                             'field.recurrence_type' : 'daily',
-        ...                             'field.range': 'until',
-        ...                             'field.count': '23',
-        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': 'Hacking',
+        ...           'field.start_date': '2004-08-13',
+        ...           'field.start_time': '15:30',
+        ...           'field.location': 'Kitchen',
+        ...           'field.duration': '100',
+        ...           'field.recurrence': 'on',
+        ...           'field.recurrence_type' : 'daily',
+        ...           'field.range': 'until',
+        ...           'field.count': '23',
+        ...           'UPDATE_SUBMIT': 'Add'})
         >>> calendar = Calendar(Person())
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -2271,13 +2286,14 @@ def doctest_CalendarEventEditView_edit():
 
     Let's try to edit the event:
 
-        >>> request = TestRequest(form={'field.title': 'NonHacking',
-        ...                             'field.start_date': '2004-09-13',
-        ...                             'field.start_time': '15:30',
-        ...                             'field.duration': '50',
-        ...                             'field.recurrence.used': '',
-        ...                             'field.recurrence_type': 'daily',
-        ...                             'UPDATE_SUBMIT': 'Edit'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': 'NonHacking',
+        ...           'field.start_date': '2004-09-13',
+        ...           'field.start_time': '15:30',
+        ...           'field.duration': '50',
+        ...           'field.recurrence.used': '',
+        ...           'field.recurrence_type': 'daily',
+        ...           'UPDATE_SUBMIT': 'Edit'})
 
         >>> directlyProvides(event, IContainmentRoot)
         >>> view = CalendarEventEditTestView(event, request)
@@ -2312,14 +2328,15 @@ def doctest_CalendarEventEditView_edit():
         ...                       dtstart=datetime.datetime(2004, 8, 13, 20, 0),
         ...                       duration=datetime.timedelta(minutes=60),
         ...                       recurrence=rule)
-        >>> request = TestRequest(form={'field.title': 'NonHacking',
-        ...                             'field.start_date': '2004-09-19',
-        ...                             'field.start_time': '15:35',
-        ...                             'field.duration': '50',
-        ...                             'field.location': 'Kitchen',
-        ...                             'field.recurrence.used': '',
-        ...                             'field.recurrence_type': 'daily',
-        ...                             'UPDATE_SUBMIT': 'Edit'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': 'NonHacking',
+        ...           'field.start_date': '2004-09-19',
+        ...           'field.start_time': '15:35',
+        ...           'field.duration': '50',
+        ...           'field.location': 'Kitchen',
+        ...           'field.recurrence.used': '',
+        ...           'field.recurrence_type': 'daily',
+        ...           'UPDATE_SUBMIT': 'Edit'})
 
         >>> directlyProvides(event, IContainmentRoot)
         >>> view = CalendarEventEditTestView(event, request)
@@ -2352,18 +2369,19 @@ def doctest_CalendarEventEditView_edit():
 
     Now lets add a new recurrence to the existing event:
 
-        >>> request = TestRequest(form={'field.title': 'NonHacking',
-        ...                             'field.start_date': '2004-09-19',
-        ...                             'field.start_time': '15:35',
-        ...                             'field.duration': '50',
-        ...                             'field.location': 'Kitchen',
-        ...                             'field.recurrence.used': '',
-        ...                             'field.recurrence': 'on',
-        ...                             'field.recurrence_type' : 'daily',
-        ...                             'field.range': 'count',
-        ...                             'field.count': '23',
-        ...                             'field.interval': '2',
-        ...                             'UPDATE_SUBMIT': 'Edit'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': 'NonHacking',
+        ...           'field.start_date': '2004-09-19',
+        ...           'field.start_time': '15:35',
+        ...           'field.duration': '50',
+        ...           'field.location': 'Kitchen',
+        ...           'field.recurrence.used': '',
+        ...           'field.recurrence': 'on',
+        ...           'field.recurrence_type' : 'daily',
+        ...           'field.range': 'count',
+        ...           'field.count': '23',
+        ...           'field.interval': '2',
+        ...           'UPDATE_SUBMIT': 'Edit'})
 
         >>> directlyProvides(event, IContainmentRoot)
         >>> view = CalendarEventEditTestView(event, request)
@@ -2409,14 +2427,15 @@ def doctest_CalendarEventEditView_nextURL():
 
     Let's try to edit the event:
 
-        >>> request = TestRequest(form={'date': '2004-08-13',
-        ...                             'field.title': 'NonHacking',
-        ...                             'field.start_date': '2004-09-13',
-        ...                             'field.start_time': '15:30',
-        ...                             'field.duration': '50',
-        ...                             'field.recurrence.used': '',
-        ...                             'field.recurrence_type': 'daily',
-        ...                             'UPDATE_SUBMIT': 'Edit'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'date': '2004-08-13',
+        ...           'field.title': 'NonHacking',
+        ...           'field.start_date': '2004-09-13',
+        ...           'field.start_time': '15:30',
+        ...           'field.duration': '50',
+        ...           'field.recurrence.used': '',
+        ...           'field.recurrence_type': 'daily',
+        ...           'UPDATE_SUBMIT': 'Edit'})
 
         >>> view = CalendarEventEditTestView(event, request)
 
@@ -2429,14 +2448,15 @@ def doctest_CalendarEventEditView_nextURL():
 
     Let's try to cancel the editing event:
 
-        >>> request = TestRequest(form={'date': '2004-08-13',
-        ...                             'field.title': 'NonHacking',
-        ...                             'field.start_date': '2004-09-13',
-        ...                             'field.start_time': '15:30',
-        ...                             'field.duration': '50',
-        ...                             'field.recurrence.used': '',
-        ...                             'field.recurrence_type': 'daily',
-        ...                             'CANCEL': 'Cancel'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'date': '2004-08-13',
+        ...           'field.title': 'NonHacking',
+        ...           'field.start_date': '2004-09-13',
+        ...           'field.start_time': '15:30',
+        ...           'field.duration': '50',
+        ...           'field.recurrence.used': '',
+        ...           'field.recurrence_type': 'daily',
+        ...           'CANCEL': 'Cancel'})
 
         >>> view = CalendarEventEditTestView(event, request)
 
@@ -2450,14 +2470,15 @@ def doctest_CalendarEventEditView_nextURL():
     If the date stays unchanged - we should be redirected to the date
     that was set in the request:
 
-        >>> request = TestRequest(form={'date': '2004-08-13',
-        ...                             'field.title': 'NonHacking',
-        ...                             'field.start_date': '2004-09-13',
-        ...                             'field.start_time': '15:30',
-        ...                             'field.duration': '50',
-        ...                             'field.recurrence.used': '',
-        ...                             'field.recurrence_type': 'daily',
-        ...                             'UPDATE_SUBMIT': 'Edit'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'date': '2004-08-13',
+        ...           'field.title': 'NonHacking',
+        ...           'field.start_date': '2004-09-13',
+        ...           'field.start_time': '15:30',
+        ...           'field.duration': '50',
+        ...           'field.recurrence.used': '',
+        ...           'field.recurrence_type': 'daily',
+        ...           'UPDATE_SUBMIT': 'Edit'})
         >>> view = CalendarEventEditTestView(event, request)
 
         >>> view.update()
@@ -2481,13 +2502,14 @@ def doctest_CalendarEventEditView_updateForm():
 
     Let's try to update the form after changing some values:
 
-        >>> request = TestRequest(form={'field.title': 'NonHacking',
-        ...                             'field.start_date': '2005-02-27',
-        ...                             'field.start_time': '15:30',
-        ...                             'field.duration': '50',
-        ...                             'field.recurrence.used': '',
-        ...                             'field.recurrence_type': 'daily',
-        ...                             'UPDATE': 'Update'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': 'NonHacking',
+        ...           'field.start_date': '2005-02-27',
+        ...           'field.start_time': '15:30',
+        ...           'field.duration': '50',
+        ...           'field.recurrence.used': '',
+        ...           'field.recurrence_type': 'daily',
+        ...           'UPDATE': 'Update'})
 
         >>> view = CalendarEventEditTestView(event, request)
 
@@ -2522,13 +2544,14 @@ def doctest_CalendarEventEditView_updateForm():
 
     If we submit an invalid form - errors should be generated:
 
-        >>> request = TestRequest(form={'field.title': 'NonHacking',
-        ...                             'field.start_date': '',
-        ...                             'field.start_time': '',
-        ...                             'field.duration': '50',
-        ...                             'field.recurrence.used': '',
-        ...                             'field.recurrence_type': 'daily',
-        ...                             'UPDATE': 'Update'})
+        >>> request = TestRequestWithPrincipal(
+        ...     form={'field.title': 'NonHacking',
+        ...           'field.start_date': '',
+        ...           'field.start_time': '',
+        ...           'field.duration': '50',
+        ...           'field.recurrence.used': '',
+        ...           'field.recurrence_type': 'daily',
+        ...           'UPDATE': 'Update'})
 
         >>> view = CalendarEventEditTestView(event, request)
 
@@ -2555,7 +2578,7 @@ def doctest_CalendarEventEditView_getInitialData():
 
     And a view for the event:
 
-        >>> request = TestRequest()
+        >>> request = TestRequestWithPrincipal()
         >>> view = CalendarEventEditTestView(event, request)
 
     Let's check whether the default values are set properly:
@@ -2590,7 +2613,7 @@ def doctest_CalendarEventEditView_getInitialData():
 
     And a view for the event:
 
-        >>> request = TestRequest()
+        >>> request = TestRequestWithPrincipal()
         >>> view = CalendarEventEditTestView(event, request)
 
     Let's check whether the default values are set properly:
@@ -2626,7 +2649,7 @@ def doctest_CalendarEventEditView_getInitialData():
 
     And a view for the event:
 
-        >>> request = TestRequest()
+        >>> request = TestRequestWithPrincipal()
         >>> view = CalendarEventEditTestView(event, request)
 
     Let's check whether the default values are set properly:
@@ -2666,7 +2689,7 @@ def doctest_CalendarEventEditView_getInitialData():
 
     And a view for the event:
 
-        >>> request = TestRequest()
+        >>> request = TestRequestWithPrincipal()
         >>> view = CalendarEventEditTestView(event, request)
 
 
@@ -2692,7 +2715,7 @@ def doctest_CalendarEventEditView_getInitialData():
 
     And a view for the event:
 
-        >>> request = TestRequest()
+        >>> request = TestRequestWithPrincipal()
         >>> view = CalendarEventEditTestView(event, request)
 
     """
@@ -2711,7 +2734,7 @@ def doctest_CalendarEventEditView_getStartDate():
 
     And a view for the event:
 
-        >>> request = TestRequest()
+        >>> request = TestRequestWithPrincipal()
         >>> view = CalendarEventEditTestView(event, request)
 
     If the date is not passed in the request we should get the date of the event:
