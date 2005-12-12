@@ -88,7 +88,7 @@ state requirement:
   >>> sorted(va[u'program'].keys())
   [u'forloop']
 
-Another trickky case is when the base is added later:
+Another tricky case is when the base is added later:
 
   >>> yhs = requirement.GroupRequirement(u'Yorktow HS')
   >>> yhs[u'program'] = requirement.GroupRequirement(u'Programming')
