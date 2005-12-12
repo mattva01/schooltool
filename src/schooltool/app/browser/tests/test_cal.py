@@ -410,8 +410,6 @@ def doctest_EventForDisplay():
         'green'
         >>> e1.shortTitle
         'yawn'
-        >>> e1.getBooker() is None
-        True
 
     shortTitle is ellipsized if the title is long
 
@@ -425,39 +423,6 @@ def doctest_EventForDisplay():
 
         >>> e1 > e2
         True
-
-    If the event is a booking event and the source calendar is a calendar of
-    the resource we should get the booker of the event:
-
-       >>> resource = Resource("r1")
-       >>> e1.bookResource(resource)
-       >>> e1.source_calendar = ISchoolToolCalendar(resource)
-       >>> e1.getBooker() is person
-       True
-
-    If an event does not have a __parent__, getBooker() will return None:
-
-        >>> e1.context.__parent__ is calendar
-        True
-        >>> e1.context.__parent__ = None
-        >>> print e1.getBooker()
-        None
-
-    QED.  Now restore the fixture.
-
-        >>> e1.context.__parent__ = calendar
-
-    We should not see booked resources though:
-
-       >>> e1.getBookedResources()
-       ()
-
-    But if we are looking at the persons calendar we should get the
-    list of them:
-
-       >>> e1.source_calendar = calendar
-       >>> [resource.title for resource in  e1.getBookedResources()]
-       ['r1']
 
     By default events display their time in UTC, the way it's stored.
 
@@ -480,6 +445,83 @@ def doctest_EventForDisplay():
 
         >>> print e3cairo.dtstarttz.strftime('%Y-%m-%d')
         2004-01-02
+
+    """
+
+
+def doctest_EventForDisplay_getBooker_getBookedResources():
+    """Test for EventForDisplay.getBooker and getBookedResources.
+
+        >>> from schooltool.app.browser.cal import EventForDisplay
+        >>> from schooltool.resource.resource import Resource
+        >>> request = TestRequest()
+
+    If an event is not a resource booking event, getBooker returns None,
+    while getBookedResources returns an empty list.
+
+        >>> person = Person("p1")
+        >>> calendar = ISchoolToolCalendar(person)
+        >>> e1 = createEvent('2005-12-12 21:39:00', '15min',
+        ...                  'looking for mice')
+        >>> calendar.addEvent(e1)
+        >>> e1fd = EventForDisplay(e1, request, 'blue', 'yellow', calendar,
+        ...                        utc)
+        >>> print e1fd.getBooker()
+        None
+        >>> e1fd.getBookedResources()
+        ()
+
+    If an event is a resource booking event, and we're looking at a resource's
+    calendar, we should see who booked the resource, but not the other
+    resources that were also booked.
+
+        >>> resource1 = Resource("r1")
+        >>> e1.bookResource(resource1)
+        >>> resource2 = Resource("r2")
+        >>> e1.bookResource(resource2)
+
+    We're looking at the calendar of resource1 here:
+
+        >>> calendar = ISchoolToolCalendar(resource1)
+        >>> e1fd = EventForDisplay(e1, request, 'blue', 'yellow', calendar,
+        ...                        utc)
+        >>> e1fd.getBooker() is person
+        True
+        >>> e1fd.getBookedResources()
+        ()
+
+    We're looking at the calendar of resource2 here:
+
+        >>> calendar = ISchoolToolCalendar(resource2)
+        >>> e1fd = EventForDisplay(e1, request, 'blue', 'yellow', calendar,
+        ...                        utc)
+        >>> e1fd.getBooker() is person
+        True
+        >>> e1fd.getBookedResources()
+        ()
+
+    If we're looking at the calendar of the person who booked the event, we
+    shouldn't see the booker, but we should see the list of booked resources.
+
+        >>> calendar = ISchoolToolCalendar(person)
+        >>> e1fd = EventForDisplay(e1, request, 'blue', 'yellow', calendar,
+        ...                        utc)
+        >>> print e1fd.getBooker()
+        None
+        >>> sorted(r.title for r in e1fd.getBookedResources())
+        ['r1', 'r2']
+
+    Corner case: if event.__parent__ is None (XXX which happens when?) nothing
+    should break.
+
+        >>> e2 = createEvent('2005-12-12 21:39:00', '15min',
+        ...                  'looking for mice')
+        >>> e2fd = EventForDisplay(e2, request, 'blue', 'yellow', calendar,
+        ...                        utc)
+        >>> print e2fd.getBooker()
+        None
+        >>> e2fd.getBookedResources()
+        ()
 
     """
 

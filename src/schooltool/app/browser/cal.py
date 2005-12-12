@@ -344,7 +344,6 @@ class EventForDisplay(object):
         """
         calendar = self.context.__parent__
         if calendar is not None and self.source_calendar != calendar:
-            # XXX Shouldn't there be `is not` instead of `!=`?
             return calendar.__parent__
         else:
             return None
@@ -352,8 +351,7 @@ class EventForDisplay(object):
     def getBookedResources(self):
         """Return the list of booked resources.
 
-        Only if the source calendar is not a parent calendar of the
-        event.
+        Only if the source calendar is the parent calendar of the event.
         """
         if self.source_calendar == self.context.__parent__:
             return self.context.resources
