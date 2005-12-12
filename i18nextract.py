@@ -88,7 +88,8 @@ def write_pot(output_dir, path, domain, base_dir, site_zcml):
 if __name__ == '__main__':
     here = os.path.abspath(os.path.dirname(__file__))
     path = os.path.join(here, 'src')
-    base_dir = os.path.join(here, 'src', 'schooltool')
+    base_dir = here # Comments are relative to the source checkouts so we are
+                    # sure we don't have any absolute paths in there.
     output_dir = os.path.join(here, 'src', 'schooltool', 'locales')
     # SchoolTool
     domain = 'schooltool'
