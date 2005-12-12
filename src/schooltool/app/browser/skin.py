@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-SchoolBell skin.
+SchoolTool skin.
 
 $Id: skin.py 3335 2005-03-25 18:53:11Z ignas $
 """
@@ -52,11 +52,14 @@ class INavigationManager(IViewletManager):
     """Provides a viewlet hook for the navigation section of a page."""
 
 
-class NavigationViewlet(object):
-    """A navigation viewlet base class."""
+class OrderedViewlet(object):
+    """A viewlet that can be ordered by its ``order`` attribute.
 
-    def appURL(self):
-        return zapi.absoluteURL(getSchoolToolApplication(), self.request)
+    The order attribute can be a string, but it will be sorted numerically
+    (i.e. '1' before '5' before '20').  The attribute is optional; viewlets
+    without an ``order`` attribute will be sorted alphabetically by their
+    ``title`` attribute below all the ordered viewlets.
+    """
 
     def __cmp__(self, other):
         if hasattr(self, 'order'):
@@ -69,6 +72,13 @@ class NavigationViewlet(object):
                 return +1
             else:
                 return cmp(self.title, other.title)
+
+
+class NavigationViewlet(OrderedViewlet):
+    """A navigation viewlet base class."""
+
+    def appURL(self):
+        return zapi.absoluteURL(getSchoolToolApplication(), self.request)
 
 
 class ISchoolToolLayer(ILayer, IBrowserRequest):

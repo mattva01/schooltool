@@ -28,18 +28,22 @@ import pprint
 from zope.interface import providedBy
 from zope.testing import doctest
 from zope.app.testing import setup, ztapi
+from zope.publisher.browser import TestRequest
+from zope.app.publication.zopepublication import BeforeTraverseEvent
+
+from schooltool.testing.setup import setupSchoolToolSite
 
 
-def doctest_NavigationViewlet_cmp():
-    r"""Tests for NavigationViewlet.__cmp__
+def doctest_OrderedViewlet_cmp():
+    r"""Tests for OrderedViewlet.__cmp__
 
-        >>> from schooltool.app.browser.skin import NavigationViewlet
+        >>> from schooltool.app.browser.skin import OrderedViewlet
 
     If two viewlets have an ``order`` attribute, they are ordered by it.
     This attribute may be a string, if defined via zcml.
 
-        >>> v1 = NavigationViewlet()
-        >>> v2 = NavigationViewlet()
+        >>> v1 = OrderedViewlet()
+        >>> v2 = OrderedViewlet()
         >>> orders = [-5, 1, 5, 20, '-5', '1', '5', '20']
         >>> for v1.order in orders:
         ...     for v2.order in orders:
@@ -51,8 +55,8 @@ def doctest_NavigationViewlet_cmp():
     If two viewlets do not have an ``order`` attribute, they are ordered
     alphabetically by their ``title`` attributes.
 
-        >>> v1 = NavigationViewlet()
-        >>> v2 = NavigationViewlet()
+        >>> v1 = OrderedViewlet()
+        >>> v2 = OrderedViewlet()
         >>> titles = ['Hello', 'World', 'Apple', 'Tangerine']
         >>> for v1.title in titles:
         ...     for v2.title in titles:
@@ -64,9 +68,9 @@ def doctest_NavigationViewlet_cmp():
     If it so happens that one viewlet has an ``order`` attribute, and the other
     doesn't, the one with an order comes first.
 
-        >>> v1 = NavigationViewlet()
+        >>> v1 = OrderedViewlet()
         >>> v1.order = 42
-        >>> v2 = NavigationViewlet()
+        >>> v2 = OrderedViewlet()
         >>> v2.title = 'Um...'
         >>> cmp(v1, v2) < 0
         True
@@ -76,7 +80,7 @@ def doctest_NavigationViewlet_cmp():
     Here's an illustration:
 
         >>> def viewlet(title, order=None):
-        ...     v = NavigationViewlet()
+        ...     v = OrderedViewlet()
         ...     v.title = title
         ...     if order is not None:
         ...         v.order = order
@@ -102,14 +106,43 @@ def doctest_NavigationViewlet_cmp():
     """
 
 
+def doctest_NavigationViewlet():
+    r"""Tests for NavigationViewlet.
+
+        >>> from schooltool.app.browser.skin import NavigationViewlet
+
+    Navigation viewlets are ordered.
+
+        >>> from schooltool.app.browser.skin import OrderedViewlet
+        >>> issubclass(NavigationViewlet, OrderedViewlet)
+        True
+
+    """
+
+
+def doctest_NavigationViewlet_appURL():
+    r"""Tests for NavigationViewlet.appURL
+
+        >>> setup.placefulSetUp()
+        >>> site = setupSchoolToolSite()
+
+        >>> from schooltool.app.browser.skin import NavigationViewlet
+        >>> viewlet = NavigationViewlet()
+        >>> viewlet.request = TestRequest()
+        >>> viewlet.appURL()
+        'http://127.0.0.1'
+
+        >>> setup.placefulTearDown()
+
+    """
+
+
 def doctest_schoolToolTraverseSubscriber():
     """Tests for schoolToolTraverseSubscriber.
 
     We subscribe to Zope's BeforeTraverseEvent and apply the SchoolTool skin
     whenever an ISchoolToolApplication is traversed during URL traversal.
 
-        >>> from zope.publisher.browser import TestRequest
-        >>> from zope.app.publication.zopepublication import BeforeTraverseEvent
         >>> from schooltool.app.browser.skin import schoolToolTraverseSubscriber
         >>> from schooltool.app.browser.skin import ISchoolToolSkin
         >>> from schooltool.app.app import SchoolToolApplication
