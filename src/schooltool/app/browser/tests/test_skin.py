@@ -34,67 +34,36 @@ from zope.app.publication.zopepublication import BeforeTraverseEvent
 from schooltool.testing.setup import setupSchoolToolSite
 
 
-def doctest_OrderedViewlet_cmp():
-    r"""Tests for OrderedViewlet.__cmp__
+def doctest_OrderedViewletManager_sort():
+    r"""Tests for OrderedViewletManager.sort
 
-        >>> from schooltool.app.browser.skin import OrderedViewlet
+        >>> from schooltool.app.browser.skin import OrderedViewletManager
 
     If two viewlets have an ``order`` attribute, they are ordered by it.
     This attribute may be a string, if defined via zcml.
 
-        >>> v1 = OrderedViewlet()
-        >>> v2 = OrderedViewlet()
-        >>> orders = [-5, 1, 5, 20, '-5', '1', '5', '20']
-        >>> for v1.order in orders:
-        ...     for v2.order in orders:
-        ...         assert cmp(v1, v2) == cmp(int(v1.order), int(v2.order)), \
-        ...                 (v1.order, v2.order, cmp(v1, v2))
-        ...         assert cmp(v2, v1) == cmp(int(v2.order), int(v1.order)), \
-        ...                 (v1.order, v2.order, cmp(v1, v2))
-
     If two viewlets do not have an ``order`` attribute, they are ordered
     alphabetically by their ``title`` attributes.
-
-        >>> v1 = OrderedViewlet()
-        >>> v2 = OrderedViewlet()
-        >>> titles = ['Hello', 'World', 'Apple', 'Tangerine']
-        >>> for v1.title in titles:
-        ...     for v2.title in titles:
-        ...         assert cmp(v1, v2) == cmp(v1.title, v2.title), \
-        ...                 (v1.title, v2.title, cmp(v1, v2))
-        ...         assert cmp(v2, v1) == cmp(v2.title, v1.title), \
-        ...                 (v1.title, v2.title, cmp(v1, v2))
 
     If it so happens that one viewlet has an ``order`` attribute, and the other
     doesn't, the one with an order comes first.
 
-        >>> v1 = OrderedViewlet()
-        >>> v1.order = 42
-        >>> v2 = OrderedViewlet()
-        >>> v2.title = 'Um...'
-        >>> cmp(v1, v2) < 0
-        True
-        >>> cmp(v2, v1) > 0
-        True
+        >>> class SomeViewlet(object):
+        ...     def __init__(self, title, order=None):
+        ...         self.title = title
+        ...         if order is not None:
+        ...             self.order = order
 
-    Here's an illustration:
-
-        >>> def viewlet(title, order=None):
-        ...     v = OrderedViewlet()
-        ...     v.title = title
-        ...     if order is not None:
-        ...         v.order = order
-        ...     return v
+        >>> mgr = OrderedViewletManager(context=None, request=None, view=None)
         >>> viewlets = [
-        ...     viewlet('One', 1),
-        ...     viewlet('Apple'),
-        ...     viewlet('Twenty-two', 22),
-        ...     viewlet('Five', 5),
-        ...     viewlet('Orange'),
-        ...     viewlet('Grapefuit')
+        ...     ('name1', SomeViewlet('One', '1')),
+        ...     ('name2', SomeViewlet('Apple')),
+        ...     ('name3', SomeViewlet('Twenty-two', '22')),
+        ...     ('name4', SomeViewlet('Five', '5')),
+        ...     ('name5', SomeViewlet('Orange')),
+        ...     ('name6', SomeViewlet('Grapefuit')),
         ... ]
-        >>> viewlets.sort()
-        >>> for v in viewlets:
+        >>> for name, v in mgr.sort(viewlets):
         ...     print v.title
         One
         Five
@@ -102,20 +71,6 @@ def doctest_OrderedViewlet_cmp():
         Apple
         Grapefuit
         Orange
-
-    """
-
-
-def doctest_NavigationViewlet():
-    r"""Tests for NavigationViewlet.
-
-        >>> from schooltool.app.browser.skin import NavigationViewlet
-
-    Navigation viewlets are ordered.
-
-        >>> from schooltool.app.browser.skin import OrderedViewlet
-        >>> issubclass(NavigationViewlet, OrderedViewlet)
-        True
 
     """
 
@@ -159,7 +114,6 @@ def doctest_schoolToolTraverseSubscriber():
         >>> pprint.pprint(skin.getBases())
         (<InterfaceClass schooltool.app.browser.skin.ISchoolToolLayer>,
          <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>)
-
 
     The skin is, obviously, not applied if you traverse some other object
 

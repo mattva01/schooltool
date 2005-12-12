@@ -28,6 +28,7 @@
       permission="zope.Public"
       provides="schooltool.app.browser.skin.INavigationManager"
       template="templates/navigation.pt"
+      class="schooltool.app.browser.skin.OrderedViewletManager"
       />
 
   <!-- Skin and resources -->

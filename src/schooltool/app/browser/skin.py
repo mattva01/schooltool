@@ -28,6 +28,7 @@ from zope.interface import Interface
 from zope.publisher.interfaces.browser import ILayer, IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.viewlet.interfaces import IViewletManager
+from zope.viewlet.manager import ViewletManagerBase
 from zope.app import zapi
 from zope.app.publisher.browser import applySkin
 from zope.app.traversing import api
@@ -52,29 +53,31 @@ class INavigationManager(IViewletManager):
     """Provides a viewlet hook for the navigation section of a page."""
 
 
-class OrderedViewlet(object):
-    """A viewlet that can be ordered by its ``order`` attribute.
+class OrderedViewletManager(ViewletManagerBase):
+    """Viewlet manager that orders viewlets by their 'order' attribute.
 
     The order attribute can be a string, but it will be sorted numerically
     (i.e. '1' before '5' before '20').  The attribute is optional; viewlets
     without an ``order`` attribute will be sorted alphabetically by their
-    ``title`` attribute below all the ordered viewlets.
+    ``title`` attribute, and placed below all the ordered viewlets.
     """
 
-    def __cmp__(self, other):
-        if hasattr(self, 'order'):
-            if hasattr(other, 'order'):
-                return cmp(int(self.order), int(other.order))
+    def sort(self, viewlets):
+        """Sort the viewlets.
+
+        ``viewlets`` is a list of tuples of the form (name, viewlet).
+        """
+
+        def key_func((name, viewlet)):
+            if hasattr(viewlet, 'order'):
+                return (0, int(viewlet.order))
             else:
-                return -1
-        else:
-            if hasattr(other, 'order'):
-                return +1
-            else:
-                return cmp(self.title, other.title)
+                return (1, viewlet.title)
+
+        return sorted(viewlets, key=key_func)
 
 
-class NavigationViewlet(OrderedViewlet):
+class NavigationViewlet(object):
     """A navigation viewlet base class."""
 
     def appURL(self):
