@@ -365,10 +365,8 @@ class EventForDisplay(object):
         """
         if self.context.__parent__ is None:
             return None
-        # XXX mg: Is the date argument needed?  If so, should it be
-        #         self.dtstart, or self.dtstarttz?
         return (zapi.absoluteURL(self.context, self.request) + '/edit.html?' +
-                'date=%s' % self.dtstart.strftime('%Y-%m-%d'))
+                'date=%s' % self.dtstarttz.strftime('%Y-%m-%d'))
 
     def renderShort(self):
         """Short representation of the event for the monthly view."""

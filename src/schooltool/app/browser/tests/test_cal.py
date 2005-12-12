@@ -424,7 +424,7 @@ def doctest_EventForDisplay():
         >>> e1 > e2
         True
 
-    By default events display their time in UTC, the way it's stored.
+    You can specify the timezone you want the events to appear in
 
         >>> e3 = createEvent('2004-01-02 12:00:00', '15min',
         ...                  'sleeping for a little while because I was tired')
@@ -434,6 +434,7 @@ def doctest_EventForDisplay():
         2004-01-02 12:00:00+00:00
         >>> print e3utc.dtendtz
         2004-01-02 12:15:00+00:00
+
         >>> e3cairo = EventForDisplay(e3, request, 'blue', 'yellow', calendar,
         ...                           timezone('Africa/Cairo'))
         >>> print e3cairo.dtstarttz
@@ -441,10 +442,16 @@ def doctest_EventForDisplay():
         >>> print e3cairo.dtendtz
         2004-01-02 14:15:00+02:00
 
-    this is how we display it
+    Europe/Vilnius is a good test case, since the definiton of the zone has
+    changed over the years, and if you use the wrong datetime API, you'll
+    get a wrong UTC offset.
 
-        >>> print e3cairo.dtstarttz.strftime('%Y-%m-%d')
-        2004-01-02
+        >>> e3vilnius = EventForDisplay(e3, request, 'blue', 'yellow',
+        ...                             calendar, timezone('Europe/Vilnius'))
+        >>> print e3vilnius.dtstarttz
+        2004-01-02 14:00:00+02:00
+        >>> print e3vilnius.dtendtz
+        2004-01-02 14:15:00+02:00
 
     """
 
@@ -585,6 +592,13 @@ def doctest_EventForDisplay_editLink():
         >>> e = EventForDisplay(event, request, color1, color2, calendar, utc)
         >>> print e.editLink()
         http://127.0.0.1/calendar/xyzzy/edit.html?date=2005-09-26
+
+    Note that if you're in a different time zone, the date may be different
+
+        >>> e = EventForDisplay(event, request, color1, color2, calendar,
+        ...                     timezone('Asia/Tokyo'))
+        >>> print e.editLink()
+        http://127.0.0.1/calendar/xyzzy/edit.html?date=2005-09-27
 
     """
 
