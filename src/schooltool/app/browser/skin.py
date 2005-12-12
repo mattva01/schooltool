@@ -53,6 +53,10 @@ class INavigationManager(IViewletManager):
     """Provides a viewlet hook for the navigation section of a page."""
 
 
+class ICalendarEventViewletManager(IViewletManager):
+    """Provides a viewlet hook for daily calendar events."""
+
+
 class OrderedViewletManager(ViewletManagerBase):
     """Viewlet manager that orders viewlets by their 'order' attribute.
 

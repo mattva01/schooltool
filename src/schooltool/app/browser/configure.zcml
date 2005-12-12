@@ -31,6 +31,13 @@
       class="schooltool.app.browser.skin.OrderedViewletManager"
       />
 
+  <viewletManager
+      name="schooltool.CalendarEvent"
+      permission="zope.Public"
+      provides="schooltool.app.browser.skin.ICalendarEventViewletManager"
+      class="schooltool.app.browser.skin.OrderedViewletManager"
+      />
+
   <!-- Skin and resources -->
 
   <zope:subscriber
