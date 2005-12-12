@@ -76,3 +76,43 @@ Outline
    (a) Commendations View for SchoolTool Components
    (b) Commendations Viewlet
    (c) School-wise Commendations Overview
+
+
+Using this Tutorial
+-------------------
+
+You may find the structure of this tutorial to be unusual.  Most of the
+developer documentation in the SchoolTool and Zope 3 source code is in the
+form of Python "doctests," and one purpose of this package is to give you
+an introduction to reading and using documentation in this style.  
+
+The main narrative documentation is contained in text files, which are 
+formatted using a simple, unobtrusive markup language called ReStructured Text. 
+You can read the raw text files without much trouble, or they can also easily 
+be more prettily rendered as HTML, PDF or another format.
+
+Included in the narrative text, you will also see examples in the form of 
+simulated Python interpreter sessions.  If we wanted to demonstrate 
+addition, we could say:
+
+  >>> 2+3
+  5
+
+In addition to being a demonstration which the reader can follow along and 
+experiment with in their own Python interpreter, these snippets also function
+as real tests of the behavior of the tested components.  That is, when you run 
+the SchoolTool testrunner on this package, the testrunner will input ``2+3`` 
+into its own virtual Python interpreter, and if the result it gets back is
+not equal to the one listed, i.e., '5', then this will count as a failed test. 
+This will help us ensure that this documentation always works with the current 
+version of SchoolTool.  It is also an easy way for developers to write
+tests.
+
+To get the most out of this tutorial, you will need to refer back and forth 
+between these narrative files and the source code itself.  You also should
+have an instance of SchoolTool running with this package installed.  Further 
+documentation and references are available via your SchoolTool server, if you
+switch it into 'devmode.'  In your ``schooltool.conf`` file include a line
+which says "devmode on."  This will add a drop-down menu in the upper right 
+hand corner of the page which gives you access to further SchoolTool and 
+Zope 3 docs.
