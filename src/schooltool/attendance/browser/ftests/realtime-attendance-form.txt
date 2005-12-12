@@ -1,0 +1,139 @@
+Realtime Attendance Form
+========================
+
+
+Overview
+--------
+
+1. Define a simple school structure (courses, sections, timetables)
+2. Look at the real-time attendance form
+
+
+Setup
+-----
+
+This is going to be a bit boring, since we start with a clean slate.
+
+A manager logs in
+
+    >>> from zope.testbrowser import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/')
+
+and creates a course and a section
+
+    >>> manager.getLink('Courses').click()
+    >>> manager.getLink('New Course').click()
+    >>> manager.getControl('Title').value = 'Dancing 1'
+    >>> manager.getControl('Add').click()
+    >>> manager.getLink('Dancing 1').click()
+    >>> manager.getLink('New Section').click()
+    >>> manager.getControl('Code').value = 'dancing-1a'
+    >>> manager.getControl('Add').click()
+
+We also need a term and a timetable
+
+    >>> manager.getLink('Terms').click()
+    >>> manager.getLink('New Term').click()
+    >>> manager.getControl('Title').value = '2005 Fall'
+    >>> manager.getControl('Start date').value = '2005-09-01'
+    >>> manager.getControl('End date').value = '2006-01-31'
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Sunday').click()
+    >>> manager.getControl('Saturday').click()
+    >>> manager.getControl('Add term').click()
+
+    >>> manager.getLink('Timetables').click()
+    >>> manager.getLink('New Timetable').click()
+    >>> manager.getControl('Title').value = 'default'
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Days of the week').click()
+    >>> manager.getControl('Same time each day').click()
+    >>> manager.getControl(name='field.times').value = """
+    ...    9:30-10:25
+    ...    10:30-11:25
+    ...    11:35-12:20
+    ...    12:45-13:30
+    ...    13:35-14:20
+    ...    14:30-15:15
+    ... """
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Designated by time').click()
+
+Let's schedule the section
+
+    >>> manager.open('http://localhost/sections/dancing1a')
+    >>> manager.getLink('Schedule').click()
+
+    >>> manager.getControl(name="Monday.09:30-10:25").value = True
+    >>> manager.getControl(name="Wednesday.11:35-12:20").value = True
+    >>> manager.getControl('Save').click()
+
+Let's also create a teacher for the section
+
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+    >>> manager.getControl('Full name').value = 'Great Teacher Largo'
+    >>> manager.getControl('Username').value = 'largo'
+    >>> manager.getControl('Password').value = 'sittinghorse'
+    >>> manager.getControl('Verify password').value = 'sittinghorse'
+    >>> manager.getControl('Add').click()
+
+    >>> manager.open('http://localhost/sections/dancing1a')
+    >>> manager.getLink('edit instructors').click()
+    >>> manager.getControl('Great Teacher Largo').selected = True
+    >>> manager.getControl('Add').click()
+
+
+Real-time attendance form
+-------------------------
+
+The teacher logs in
+
+    >>> largo = Browser()
+    >>> largo.handleErrors = False
+    >>> largo.addHeader('Authorization', 'Basic largo:sittinghorse')
+
+Looks at his daily view, and sees the Dancing section there:
+
+    >>> largo.open('http://localhost/persons/largo/calendar/2005-12-12')
+    >>> print analyze.queryHTML('id("content-body")', largo.contents)[0]
+    <div id="content-body">
+    ...
+              <h6 style="background: #...">
+                  Dancing 1
+                  <span class="start-end">
+                    (<span>09:30</span>
+                       -
+                     <span>10:25</span>)
+                  </span>
+              </h6>
+    ...
+
+So.  One possible way of going to the attendance form is to follow a notional
+'Attendance' link in the event box.
+
+TODO: mg: to implement this we need to use viewlets inside cal_daily.pt
+
+Another way is to go look at the list of taught sections in the person's page.
+
+    >>> largo.open('http://localhost/persons/largo')
+    >>> info_blocks = analyze.queryHTML('//div[@class="info-block"]',
+    ...                                 largo.contents)
+    >>> for block in info_blocks:
+    ...     if 'Sections Taught' in block:
+    ...         print block
+    <div class="info-block">
+    <h5>Sections Taught</h5>
+    <ul><li>
+      <a href="http://localhost/sections/dancing1a">Great Teacher Largo
+         -- Dancing 1</a>
+      </li>
+    </ul></div>
+
+You can click on the Attendance link next to a class name, and you'll be
+redirected to the attendance form for the nearest section meeting.
+
+XXX: mg: but this is not convenient for the user, I think
