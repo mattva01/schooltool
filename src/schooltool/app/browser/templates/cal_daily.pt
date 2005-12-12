@@ -1,4 +1,4 @@
-<tal:defs define="status view/update" />
+<tal:defs define="ignored_status view/update" />
 <html metal:use-macro="view/@@schooltool_macros/calendar/page" 
       i18n:domain="schoolbell">
 <metal:block fill-slot="calendar-body">
@@ -6,21 +6,31 @@
 <div id="events-allday">
   <tal:loop repeat="allday view/getAllDayEvents">
     <div class="event-allday"
-      tal:define="evdate python:allday.dtstart.strftime('%Y-%m-%d')"
-      tal:attributes="style string:border: 1px ${allday/color2} solid;;
-                      background: ${allday/color1};;">
+         tal:attributes="style string:border: 1px ${allday/color2} solid;;
+                         background: ${allday/color1};;">
       <h6>
-        <a tal:attributes="href string:${allday/source_calendar/@@absolute_url}/${allday/unique_id};
-          title allday/description" tal:content="allday/title"/>
+        <a tal:attributes="href allday/viewLink; title allday/description"
+           tal:content="allday/title">(title)</a>
       </h6>
-          <a title="" i18n:attributes="title" class="delete"
-            tal:attributes="href string:${allday/source_calendar/@@absolute_url}/delete.html?event_id=${allday/unique_id}&date=${evdate};
-                            title string:Delete ${allday/title}"
-            ><img alt="[X]"
-              tal:attributes="src context/++resource++delete.png"/></a>
-      <tal:if condition="allday/description">
-        <p tal:content="allday/description"></p>
-      </tal:if>
+      <tal:comment>
+        XXX mg: I suspect that
+                  i18n:attributes="title"
+                  tal:attributes="title string:Delete $foo"
+                will not work, as it might try to translate all the real titles
+                (such as "Delete Meeting With Friend"), which will never be
+                defined in the '.po' file.
+            Watch out for more occurrences of this potential problem.
+      </tal:comment>
+      <a class="delete"
+         i18n:attributes="title"
+         tal:attributes="href allday/deleteLink;
+                         title string:Delete ${allday/title}"
+        ><img alt="[X]"
+              tal:attributes="src context/++resource++delete.png" /></a>
+      <p tal:condition="allday/description"
+         tal:content="allday/description">
+        (description)
+      </p>
     </div>
   </tal:loop>
 </div>
@@ -80,72 +90,64 @@
                              top: ${top}em;
                              class python:mine and 'event' or 'event other'">
 
-          <tal:block condition="ev/__parent__">
           <h6 tal:attributes="style string:background: ${ev/color2}">
-            <a tal:attributes="href string:${ev/source_calendar/@@absolute_url}/${ev/unique_id}; title ev/title">
-              <span tal:replace="ev/shortTitle" />
+            <a tal:attributes="href ev/viewLink; title ev/title"
+               tal:omit-tag="not:ev/viewLink">
+              <span tal:replace="ev/shortTitle">(shortened title)</span>
               <span class="start-end">
                 (<span
-                   tal:content="python:ev.dtstart.astimezone(view.timezone).strftime(view.time_fmt)"/>
+                   tal:content="python:ev.dtstarttz.strftime(view.time_fmt)"/>
                    -
                  <span
-                   tal:content="python:ev.dtend.astimezone(view.timezone).strftime(view.time_fmt)"/>)
+                   tal:content="python:ev.dtendtz.strftime(view.time_fmt)"/>)
               </span>
             </a>
           </h6>
-          <tal:if condition="python:view.canRemoveEvents() and ev.__parent__ == context">
-            <a tal:condition="ev/__parent__"
-               i18n:attributes="title" class="delete"
-               tal:attributes="href string:${ev/source_calendar/@@absolute_url}/delete.html?event_id=${ev/unique_id}&date=${evdate};
+          <tal:if_can_remove_events condition="view/canRemoveEvents">
+            <a class="delete"
+               tal:condition="ev/deleteLink"
+               i18n:attributes="title"
+               tal:attributes="href ev/deleteLink;
                                title string:Delete ${ev/title}"
               ><img alt="[X]"
-                tal:attributes="src context/++resource++delete.png"/></a>
-          </tal:if>
-          </tal:block>
-
-          <tal:block condition="not:ev/__parent__">
-          <h6 tal:attributes="style string:background: ${ev/color2}">
-              <span tal:replace="ev/shortTitle" />
-              <span class="start-end">
-                (<span
-                   tal:content="python:ev.dtstart.astimezone(view.timezone).strftime(view.time_fmt)"/>
-                   -
-                 <span
-                   tal:content="python:ev.dtend.astimezone(view.timezone).strftime(view.time_fmt)"/>)
-              </span>
-          </h6>
-          </tal:block>
-
+                    tal:attributes="src context/++resource++delete.png" /></a>
+          </tal:if_can_remove_events>
 
           <div class="body"
-              tal:attributes="style string:background: ${ev/color1};">
-            <div class="title" tal:content="ev/title"
-              tal:condition="python: ev.title != ev.shortTitle" />
+               tal:attributes="style string:background: ${ev/color1};">
+            <div class="title"
+                 tal:condition="python: ev.title != ev.shortTitle"
+                 tal:content="ev/title">
+              (title, but only if it was shortened in the title bar)
+            </div>
             <div i18n:translate="" tal:condition="ev/location"
                  class="location">Location:
               <span tal:content="ev/location" i18n:name="location" />
             </div>
             <div class="description" tal:content="ev/description" />
           </div>
+
           <div class="booked-resources"
                tal:define="resources ev/getBookedResources"
                tal:condition="resources">
-            <h6 class="booked-resource-header" tal:attributes="style string:background: ${ev/color2}">
+            <h6 class="booked-resource-header"
+                tal:attributes="style string:background: ${ev/color2}">
               <a style="color: #000;"
-                 tal:attributes="href string:${ev/@@absolute_url}/booking.html?date=${evdate};">Booked resources</a></h6>
+                 tal:attributes="href ev/bookingLink">Booked resources</a></h6>
             <tal:block tal:repeat="resource resources">
-              <a tal:attributes="href string:${resource/@@absolute_url}"
-                 tal:content="resource/title">A Pond</a>
+              <a tal:attributes="href resource/@@absolute_url"
+                 tal:content="resource/title">(A Pond)</a>
             </tal:block>
           </div>
           <div class="booked-resources"
                tal:define="booker ev/getBooker"
                tal:condition="booker">
-            <h6 class="booked-resource-header" tal:attributes="style string:background: ${ev/color2}">
+            <h6 class="booked-resource-header"
+                tal:attributes="style string:background: ${ev/color2}">
               <a style="color: #000;"
-                 tal:attributes="href string:${ev/@@absolute_url}/booking.html?date=${evdate};">Booked by</a></h6>
-            <a tal:attributes="href string:${booker/@@absolute_url}"
-               tal:content="booker/title">A Dude</a>
+                 tal:attributes="href ev/bookingLink">Booked by</a></h6>
+            <a tal:attributes="href booker/@@absolute_url"
+               tal:content="booker/title">(A Dude)</a>
           </div>
         </div>
       </tal:if>

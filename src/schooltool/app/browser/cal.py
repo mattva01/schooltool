@@ -357,6 +357,17 @@ class EventForDisplay(object):
             return self.context.resources
         return ()
 
+    def viewLink(self):
+        """Return the URL where you can view this event.
+
+        Returns None if the event is not viewable (e.g. it is a timetable
+        event).
+        """
+        if self.context.__parent__ is None:
+            return None
+        return '%s/%s' % (zapi.absoluteURL(self.source_calendar, self.request),
+                          self.unique_id)
+
     def editLink(self):
         """Return the URL where you can edit this event.
 
@@ -365,8 +376,33 @@ class EventForDisplay(object):
         """
         if self.context.__parent__ is None:
             return None
-        return (zapi.absoluteURL(self.context, self.request) + '/edit.html?' +
-                'date=%s' % self.dtstarttz.strftime('%Y-%m-%d'))
+        return '%s/edit.html?date=%s' % (
+                        zapi.absoluteURL(self.context, self.request),
+                        self.dtstarttz.strftime('%Y-%m-%d'))
+
+    def deleteLink(self):
+        """Return the URL where you can delete this event.
+
+        Returns None if the event is not deletable (e.g. it is a timetable
+        event).
+        """
+        if self.context.__parent__ is None:
+            return None
+        return '%s/delete.html?event_id=%s&date=%s' % (
+                        zapi.absoluteURL(self.source_calendar, self.request),
+                        self.unique_id,
+                        self.dtstarttz.strftime('%Y-%m-%d'))
+
+    def bookingLink(self):
+        """Return the URL where you can book resources for this event.
+
+        Returns None if you can't do that.
+        """
+        if self.context.__parent__ is None:
+            return None
+        return '%s/booking.html?date=%s' % (
+                        zapi.absoluteURL(self.context, self.request),
+                        self.dtstarttz.strftime('%Y-%m-%d'))
 
     def renderShort(self):
         """Short representation of the event for the monthly view."""

@@ -567,6 +567,34 @@ def doctest_EventForDisplay_renderShort():
     """
 
 
+def doctest_EventForDisplay_viewLink():
+    """Test for EventForDisplay.viewLink.
+
+        >>> from schooltool.app.browser.cal import EventForDisplay
+        >>> event = createEvent('2005-12-12 22:50:00', '20min', 'drive home',
+        ...                     unique_id='xyzzy')
+        >>> request = TestRequest()
+        >>> color1 = color2 = None
+        >>> calendar = Calendar(None)
+        >>> directlyProvides(calendar, IContainmentRoot)
+
+    Some events are not viewable (dynamically created events, such as timetable
+    events, that have no URLs):
+
+        >>> e = EventForDisplay(event, request, color1, color2, calendar, utc)
+        >>> print e.viewLink()
+        None
+
+    Other events are
+
+        >>> calendar.addEvent(event)
+        >>> e = EventForDisplay(event, request, color1, color2, calendar, utc)
+        >>> print e.viewLink()
+        http://127.0.0.1/calendar/xyzzy
+
+    """
+
+
 def doctest_EventForDisplay_editLink():
     """Test for EventForDisplay.editLink.
 
@@ -599,6 +627,76 @@ def doctest_EventForDisplay_editLink():
         ...                     timezone('Asia/Tokyo'))
         >>> print e.editLink()
         http://127.0.0.1/calendar/xyzzy/edit.html?date=2005-09-27
+
+    """
+
+
+def doctest_EventForDisplay_deleteLink():
+    """Test for EventForDisplay.deleteLink.
+
+        >>> from schooltool.app.browser.cal import EventForDisplay
+        >>> event = createEvent('2005-12-12 22:50:00', '20min', 'drive home',
+        ...                     unique_id='xyzzy')
+        >>> request = TestRequest()
+        >>> color1 = color2 = None
+        >>> calendar = Calendar(None)
+        >>> directlyProvides(calendar, IContainmentRoot)
+
+    Some events are not deletable.
+
+        >>> e = EventForDisplay(event, request, color1, color2, calendar, utc)
+        >>> print e.deleteLink()
+        None
+
+    Other events are
+
+        >>> calendar.addEvent(event)
+        >>> directlyProvides(calendar, IContainmentRoot)
+        >>> e = EventForDisplay(event, request, color1, color2, calendar, utc)
+        >>> print e.deleteLink()
+        http://127.0.0.1/calendar/delete.html?event_id=xyzzy&date=2005-12-12
+
+    Note that if you're in a different time zone, the date may be different
+
+        >>> e = EventForDisplay(event, request, color1, color2, calendar,
+        ...                     timezone('Asia/Tokyo'))
+        >>> print e.deleteLink()
+        http://127.0.0.1/calendar/delete.html?event_id=xyzzy&date=2005-12-13
+
+    """
+
+
+def doctest_EventForDisplay_bookingLink():
+    """Test for EventForDisplay.bookingLink.
+
+        >>> from schooltool.app.browser.cal import EventForDisplay
+        >>> event = createEvent('2005-12-12 22:50:00', '20min', 'drive home',
+        ...                     unique_id='xyzzy')
+        >>> request = TestRequest()
+        >>> color1 = color2 = None
+        >>> calendar = Calendar(None)
+        >>> directlyProvides(calendar, IContainmentRoot)
+
+    Some events are not bookable.
+
+        >>> e = EventForDisplay(event, request, color1, color2, calendar, utc)
+        >>> print e.bookingLink()
+        None
+
+    Other events are
+
+        >>> calendar.addEvent(event)
+        >>> directlyProvides(calendar, IContainmentRoot)
+        >>> e = EventForDisplay(event, request, color1, color2, calendar, utc)
+        >>> print e.bookingLink()
+        http://127.0.0.1/calendar/xyzzy/booking.html?date=2005-12-12
+
+    Note that if you're in a different time zone, the date may be different
+
+        >>> e = EventForDisplay(event, request, color1, color2, calendar,
+        ...                     timezone('Asia/Tokyo'))
+        >>> print e.bookingLink()
+        http://127.0.0.1/calendar/xyzzy/booking.html?date=2005-12-13
 
     """
 
