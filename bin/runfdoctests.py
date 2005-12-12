@@ -24,10 +24,15 @@ def main():
     args = sys.argv[1:]
 
     # Hack hack hack!
-    basedir = os.path.normpath(os.path.join(os.path.dirname(__file__),
+    basedir = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                             os.path.pardir))
-    sys.path.insert(0, os.path.abspath(os.path.join(basedir, 'src')))
-    sys.path.insert(0, os.path.abspath(os.path.join(basedir, 'Zope3/src')))
+    sys.path.insert(0, os.path.join(basedir, 'src'))
+    sys.path.insert(0, os.path.join(basedir, 'Zope3/src'))
+
+    # Tab completion
+    readline.set_completer_delims(' \t\n')
+    readline.parse_and_bind('tab: complete')
+
     # Load and set up Zope 3.
     start = time.time()
     print "Bringing up ftesting.zcml (wait 20 seconds or so)"
@@ -46,8 +51,8 @@ def main():
 
     try:
         print "Try these test scripts:"
-        os.system('find %s -path "*/ftests/*.txt" ! -path "*/.svn/*"'
-                  % os.path.join(basedir, 'src'))
+        os.chdir(basedir)
+        os.system('find src -path "*/ftests/*.txt" ! -path "*/.svn/*"')
         print
         while True:
             if args:
