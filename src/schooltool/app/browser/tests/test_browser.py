@@ -330,21 +330,40 @@ def doctest_ViewPrefences():
         >>> prefs.first_day_of_week
         0
 
-    We have no principal (anonymous user):
+    We have no principal (anonymous user) and no SchoolTool site (test
+    environment):
+
+        >>> request = TestRequest()
+        >>> prefs = ViewPreferences(request)
+        >>> from datetime import datetime
+        >>> prefs.timezone.tzname(datetime.utcnow())
+        'UTC'
+        >>> prefs.timeformat
+        '%H:%M'
+        >>> prefs.dateformat
+        '%Y-%m-%d'
+        >>> prefs.first_day_of_week
+        0
+
+    Let's set up a SchoolTool site:
 
         >>> setup.setUpAnnotations()
         >>> from schooltool.app.app import getApplicationPreferences
         >>> app = sbsetup.setupSchoolToolSite()
-        >>> aprefs = getApplicationPreferences(app)
-        >>> aprefs.timezone = 'GMT'
+        >>> from schooltool.app.interfaces import IApplicationPreferences
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
+        >>> ztapi.provideAdapter(ISchoolToolApplication,
+        ...                      IApplicationPreferences,
+        ...                      getApplicationPreferences)
+        >>> aprefs = IApplicationPreferences(app)
+        >>> aprefs.timezone = 'Europe/Moscow'
         >>> aprefs.dateformat = '%m/%d/%y'
         >>> aprefs.timeformat = '%I:%M %p'
         >>> aprefs.weekstart = calendar.SUNDAY
         >>> request = TestRequest()
         >>> prefs = ViewPreferences(request)
-        >>> from datetime import datetime
         >>> prefs.timezone.tzname(datetime.utcnow())
-        'GMT'
+        'MMT'
         >>> prefs.timeformat
         '%I:%M %p'
         >>> prefs.dateformat

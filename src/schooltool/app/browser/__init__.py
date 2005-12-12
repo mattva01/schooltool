@@ -21,6 +21,7 @@ Browser views for the SchoolTool application.
 
 $Id: __init__.py 3405 2005-04-12 16:08:43Z bskahan $
 """
+import calendar
 import itertools
 
 from zope.interface import implements
@@ -242,9 +243,22 @@ class ViewPreferences(object):
         if person is not None:
             prefs = IPersonPreferences(person)
         else:
-            # XXX vidas: should use IApplicationPreferences(app)
-            prefs = getApplicationPreferences(getSchoolToolApplication())
-        self.dateformat = prefs.dateformat
-        self.timeformat = prefs.timeformat
-        self.first_day_of_week = prefs.weekstart
-        self.timezone = timezone(prefs.timezone)
+            try:
+                app = getSchoolToolApplication()
+                prefs = IApplicationPreferences(app)
+            except ValueError:
+                prefs = None
+            except TypeError:
+                prefs = None
+
+        if prefs is not None:
+            self.dateformat = prefs.dateformat
+            self.timeformat = prefs.timeformat
+            self.first_day_of_week = prefs.weekstart
+            self.timezone = timezone(prefs.timezone)
+        else:
+            # no user, no application - test environment
+            self.dateformat = '%Y-%m-%d'
+            self.timeformat = '%H:%M'
+            self.first_day_of_week = calendar.MONDAY
+            self.timezone = timezone('UTC')
