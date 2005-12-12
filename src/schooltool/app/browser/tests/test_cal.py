@@ -426,20 +426,6 @@ def doctest_EventForDisplay():
         >>> e1 > e2
         True
 
-    The `renderShort` method is used to render the event in the monthly
-    calendar view.
-
-        >>> print e2.renderShort().replace('&ndash;', '--')
-        sleeping for a ... (12:00--12:15)
-
-    The same CalendarEvent can be renderered for display in a particular
-    timezone.
-
-        >>> e2east = EventForDisplay(e2, request, 'blue', 'yellow', calendar,
-        ...                          timezone=timezone('US/Eastern'))
-        >>> print e2east.renderShort().replace('&ndash;', '--')
-        sleeping for a ... (07:00--07:15)
-
     If the event is a booking event and the source calendar is a calendar of
     the resource we should get the booker of the event:
 
@@ -494,6 +480,40 @@ def doctest_EventForDisplay():
 
         >>> print e3cairo.dtstarttz.strftime('%Y-%m-%d')
         2004-01-02
+
+    """
+
+
+def doctest_EventForDisplay_renderShort():
+    """Test for EventForDisplay.renderShort.
+
+        >>> from schooltool.app.browser.cal import EventForDisplay
+        >>> e = createEvent('2004-01-02 14:00:00', '90min',
+        ...                 'sleeping for a little while because I was tired')
+        >>> request = None
+        >>> calendar = Calendar(None)
+        >>> efd = EventForDisplay(e, request, 'blue', 'yellow', calendar, utc)
+
+    The `renderShort` method is used to render the event in the monthly
+    calendar view.
+
+        >>> print efd.renderShort().replace('&ndash;', '--')
+        sleeping for a ... (14:00--15:30)
+
+    The same CalendarEvent can be renderered for display in a particular
+    timezone.
+
+        >>> efd = EventForDisplay(e, request, 'blue', 'yellow', calendar,
+        ...                       timezone=timezone('US/Eastern'))
+        >>> print efd.renderShort().replace('&ndash;', '--')
+        sleeping for a ... (09:00--10:30)
+
+    If the event crosses a day boundary, both dates are shown explicitly
+
+        >>> efd = EventForDisplay(e, request, 'blue', 'yellow', calendar,
+        ...                       timezone=timezone('Asia/Tokyo'))
+        >>> print efd.renderShort().replace('&ndash;', '--').replace('&nbsp;', ' ')
+        sleeping for a ... (Jan 02--Jan 03)
 
     """
 

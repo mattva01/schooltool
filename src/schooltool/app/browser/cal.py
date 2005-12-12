@@ -293,11 +293,12 @@ class EventForDisplay(object):
     attributes:
 
         dtend -- timestamp when the event ends
+        source_calendar -- the calendar this event came from
         color1, color2 -- colors used for display
         shortTitle -- title truncated to ~15 characters
         cssClass - 'class' attribute for styles
-        dtstarttz -- dtstart renderred in the view's timezone
-        dtendtz -- dtend renderred in the view's timezone
+        dtstarttz -- dtstart rendered in the view's timezone
+        dtendtz -- dtend rendered in the view's timezone
         allday -- whether this event is an all day event or not
 
     """
@@ -373,15 +374,13 @@ class EventForDisplay(object):
 
     def renderShort(self):
         """Short representation of the event for the monthly view."""
-        if self.dtstart.date() == self.dtend.date():
-            duration =  "%s&ndash;%s" % \
-                    (self.dtstarttz.strftime('%H:%M'),
-                     self.dtendtz.strftime('%H:%M'))
+        if self.dtstarttz.date() == self.dtendtz.date():
+            fmt = '%H:%M'
         else:
-            duration =  "%s&ndash;%s" % \
-                (self.dtstarttz.strftime('%b&nbsp;%d'),
-                 self.dtendtz.strftime('%b&nbsp;%d'))
-        return "%s (%s)" % (self.shortTitle, duration)
+            fmt = '%b&nbsp;%d'
+        return "%s (%s&ndash;%s)" % (self.shortTitle,
+                                     self.dtstarttz.strftime(fmt),
+                                     self.dtendtz.strftime(fmt))
 
 
 class CalendarDay(object):
