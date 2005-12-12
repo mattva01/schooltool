@@ -30,6 +30,78 @@ from zope.testing import doctest
 from zope.app.testing import setup, ztapi
 
 
+def doctest_NavigationViewlet_cmp():
+    r"""Tests for NavigationViewlet.__cmp__
+
+        >>> from schooltool.app.browser.skin import NavigationViewlet
+
+    If two viewlets have an ``order`` attribute, they are ordered by it.
+    This attribute may be a string, if defined via zcml.
+
+        >>> v1 = NavigationViewlet()
+        >>> v2 = NavigationViewlet()
+        >>> orders = [-5, 1, 5, 20, '-5', '1', '5', '20']
+        >>> for v1.order in orders:
+        ...     for v2.order in orders:
+        ...         assert cmp(v1, v2) == cmp(int(v1.order), int(v2.order)), \
+        ...                 (v1.order, v2.order, cmp(v1, v2))
+        ...         assert cmp(v2, v1) == cmp(int(v2.order), int(v1.order)), \
+        ...                 (v1.order, v2.order, cmp(v1, v2))
+
+    If two viewlets do not have an ``order`` attribute, they are ordered
+    alphabetically by their ``title`` attributes.
+
+        >>> v1 = NavigationViewlet()
+        >>> v2 = NavigationViewlet()
+        >>> titles = ['Hello', 'World', 'Apple', 'Tangerine']
+        >>> for v1.title in titles:
+        ...     for v2.title in titles:
+        ...         assert cmp(v1, v2) == cmp(v1.title, v2.title), \
+        ...                 (v1.title, v2.title, cmp(v1, v2))
+        ...         assert cmp(v2, v1) == cmp(v2.title, v1.title), \
+        ...                 (v1.title, v2.title, cmp(v1, v2))
+
+    If it so happens that one viewlet has an ``order`` attribute, and the other
+    doesn't, the one with an order comes first.
+
+        >>> v1 = NavigationViewlet()
+        >>> v1.order = 42
+        >>> v2 = NavigationViewlet()
+        >>> v2.title = 'Um...'
+        >>> cmp(v1, v2) < 0
+        True
+        >>> cmp(v2, v1) > 0
+        True
+
+    Here's an illustration:
+
+        >>> def viewlet(title, order=None):
+        ...     v = NavigationViewlet()
+        ...     v.title = title
+        ...     if order is not None:
+        ...         v.order = order
+        ...     return v
+        >>> viewlets = [
+        ...     viewlet('One', 1),
+        ...     viewlet('Apple'),
+        ...     viewlet('Twenty-two', 22),
+        ...     viewlet('Five', 5),
+        ...     viewlet('Orange'),
+        ...     viewlet('Grapefuit')
+        ... ]
+        >>> viewlets.sort()
+        >>> for v in viewlets:
+        ...     print v.title
+        One
+        Five
+        Twenty-two
+        Apple
+        Grapefuit
+        Orange
+
+    """
+
+
 def doctest_schoolToolTraverseSubscriber():
     """Tests for schoolToolTraverseSubscriber.
 
