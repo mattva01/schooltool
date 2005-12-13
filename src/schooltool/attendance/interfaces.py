@@ -105,7 +105,7 @@ class IAttendanceRecord(Interface):
         """)
 
     status = Attribute("""
-        Attendance status (UNKNOWN, PRESENT, ABSENT, TARDY.
+        Attendance status (UNKNOWN, PRESENT, ABSENT, TARDY).
         """)
 
     late_arrival = Attribute("""
