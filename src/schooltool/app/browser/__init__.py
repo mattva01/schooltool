@@ -246,9 +246,7 @@ class ViewPreferences(object):
             try:
                 app = getSchoolToolApplication()
                 prefs = IApplicationPreferences(app)
-            except ValueError:
-                prefs = None
-            except TypeError:
+            except (ValueError, TypeError):
                 prefs = None
 
         if prefs is not None:

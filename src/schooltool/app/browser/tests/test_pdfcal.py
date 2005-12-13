@@ -54,37 +54,6 @@ def pdfTearDown(test=None):
     setup.placefulTearDown()
 
 
-class PersonPreferencesStub:
-    def __init__(self):
-        self.weekstart = calendar.MONDAY
-        self.timeformat = "%H:%M"
-        self.dateformat = "%Y-%m-%d"
-        self.timezone = 'UTC'
-
-
-class PersonStub:
-    def __conform__(self, interface):
-        if interface is IPersonPreferences:
-            return PersonPreferencesStub()
-
-
-class PrincipalStub:
-
-    def __init__(self):
-        self._person = PersonStub()
-
-    def __conform__(self, interface):
-        if interface is IPerson:
-            return self._person
-
-
-class TestRequestWithPrincipal(TestRequest):
-    """TestRequest with principal who has PersonPreferences"""
-    def __init__(self, **kw):
-        super(TestRequestWithPrincipal, self).__init__(**kw)
-        self.setPrincipal(PrincipalStub())
-
-
 class StubbedBaseView(PDFCalendarViewBase):
     """A subclass of PDFCalendarViewBase for use in tests."""
 
@@ -104,7 +73,7 @@ class StubbedBaseView(PDFCalendarViewBase):
 def doctest_PDFCalendarViewBase():
     """Tests for PDFCalendarViewBase.
 
-        >>> request = TestRequestWithPrincipal(form={'date': '2005-07-08'})
+        >>> request = TestRequest(form={'date': '2005-07-08'})
         >>> person = Person(title="Mr. Smith")
         >>> view = StubbedBaseView(ISchoolToolCalendar(person), request)
 
@@ -119,7 +88,7 @@ def doctest_PDFCalendarViewBase():
 
     If we do not specify a date, today is taken by default:
 
-        >>> request = TestRequestWithPrincipal()
+        >>> request = TestRequest()
         >>> view = StubbedBaseView(ISchoolToolCalendar(person), request)
 
         >>> print view.pdfdata()
@@ -142,14 +111,14 @@ def doctest_PDFCalendarViewBase_getTimezone():
         >>> ztapi.provideAdapter(IPerson, IPersonPreferences,
         ...                      getPersonPreferences)
 
-        >>> request = TestRequestWithPrincipal(form={'date': '2005-07-08'})
+        >>> request = TestRequest(form={'date': '2005-07-08'})
         >>> person = Person(title="Mr. Smith")
         >>> view = StubbedBaseView(ISchoolToolCalendar(person), request)
         >>> view.getTimezone()
         <UTC>
 
-        >>> from schooltool.app.browser.tests.test_cal import RealPrincipalStub
-        >>> principal = RealPrincipalStub()
+        >>> from schooltool.app.browser.tests.test_cal import PrincipalStub
+        >>> principal = PrincipalStub()
         >>> IPersonPreferences(IPerson(principal)).timezone = "Europe/Vilnius"
         >>> request.setPrincipal(principal)
 
@@ -166,7 +135,7 @@ def doctest_PDFCalendarViewBase_buildStory():
     buildStory returns a list of platypus objects.
 
         >>> calendar = ISchoolToolCalendar(Person(title="Mr. Smith"))
-        >>> request = TestRequestWithPrincipal(form={'date': '2005-07-08'})
+        >>> request = TestRequest(form={'date': '2005-07-08'})
         >>> view = StubbedBaseView(calendar, request)
 
         >>> view.configureStyles()
@@ -214,7 +183,7 @@ def doctest_PDFCalendarViewBase_buildStory_unicode():
         >>> rsrc = Resource(title=u"\u0105 resource")
         >>> evt.bookResource(rsrc)
 
-        >>> request = TestRequestWithPrincipal(form={'date': '2005-07-08'})
+        >>> request = TestRequest(form={'date': '2005-07-08'})
         >>> view = StubbedBaseView(calendar, request)
         >>> view.configureStyles()
         >>> story = view.buildStory(date(2005, 7, 8))
@@ -239,7 +208,7 @@ def doctest_PDFCalendarViewBase_buildStory_unicode():
 def test_buildPageHeader():
     r"""Tests for PDFCalendarViewBase.buildPageHeader.
 
-        >>> request = TestRequestWithPrincipal(form={'date': '2005-07-08'})
+        >>> request = TestRequest(form={'date': '2005-07-08'})
         >>> view = StubbedBaseView(ISchoolToolCalendar(Person()), request)
 
         >>> view.configureStyles()
@@ -267,8 +236,7 @@ def test_disabled():
 
     The PDFCalendarViewBase.pdfdata returns a message:
 
-        >>> view = pdfcal.PDFCalendarViewBase(object(),
-        ...                                   TestRequestWithPrincipal())
+        >>> view = pdfcal.PDFCalendarViewBase(object(), TestRequest())
         >>> view.pdfdata()
         u'PDF support is disabled.  It can be enabled by your administrator.'
 
@@ -285,7 +253,7 @@ def doctest_PDFCalendarViewBase_dayEvents():
         >>> calendar = ISchoolToolCalendar(Person(title="Mr. Smith"))
         >>> resource = Resource()
         >>> calendar2 = ISchoolToolCalendar(resource)
-        >>> request = TestRequestWithPrincipal(form={'date': '2005-07-08'})
+        >>> request = TestRequest(form={'date': '2005-07-08'})
         >>> view = StubbedBaseView(calendar, request)
         >>> view.getCalendars = lambda: [calendar, calendar2]
 
@@ -358,8 +326,8 @@ def doctest_PDFCalendarViewBase_dayEvents_timezone():
         >>> setup.setUpAnnotations()
         >>> ztapi.provideAdapter(IPerson, IPersonPreferences,
         ...                      getPersonPreferences)
-        >>> from schooltool.app.browser.tests.test_cal import RealPrincipalStub
-        >>> principal = RealPrincipalStub()
+        >>> from schooltool.app.browser.tests.test_cal import PrincipalStub
+        >>> principal = PrincipalStub()
         >>> IPersonPreferences(IPerson(principal)).timezone = "Europe/Vilnius"
 
     Let's create a calendar and a view:
@@ -412,8 +380,8 @@ def doctest_PDFCalendarViewBase_buildEventTable():
         >>> setup.setUpAnnotations()
         >>> ztapi.provideAdapter(IPerson, IPersonPreferences,
         ...                      getPersonPreferences)
-        >>> from schooltool.app.browser.tests.test_cal import RealPrincipalStub
-        >>> principal = RealPrincipalStub()
+        >>> from schooltool.app.browser.tests.test_cal import PrincipalStub
+        >>> principal = PrincipalStub()
         >>> IPersonPreferences(IPerson(principal)).timezone = "Europe/Vilnius"
 
         >>> calendar = ISchoolToolCalendar(Person(title="Mr. Smith"))
@@ -452,7 +420,7 @@ def doctest_PDFCalendarViewBase_eventInfoCell():
     r"""Tests for buildEventTable.
 
         >>> calendar = ISchoolToolCalendar(Person(title="Mr. Smith"))
-        >>> request = TestRequestWithPrincipal(form={'date': '2005-07-08'})
+        >>> request = TestRequest(form={'date': '2005-07-08'})
         >>> view = StubbedBaseView(calendar, request)
         >>> view.configureStyles()
 
@@ -500,7 +468,7 @@ def doctest_DailyPDFCalendarView():
 
         >>> from schooltool.app.browser.pdfcal import DailyPDFCalendarView
         >>> calendar = ISchoolToolCalendar(Person())
-        >>> request = TestRequestWithPrincipal(form={'date': '2005-07-01'})
+        >>> request = TestRequest(form={'date': '2005-07-01'})
         >>> view = DailyPDFCalendarView(calendar, request)
         >>> view.getCalendars = lambda: [calendar]
 
@@ -548,7 +516,7 @@ def doctest_WeeklyPDFCalendarView():
 
         >>> from schooltool.app.browser.pdfcal import WeeklyPDFCalendarView
         >>> calendar = ISchoolToolCalendar(Person())
-        >>> request = TestRequestWithPrincipal(form={'date': '2005-07-01'})
+        >>> request = TestRequest(form={'date': '2005-07-01'})
         >>> view = WeeklyPDFCalendarView(calendar, request)
         >>> view.getCalendars = lambda: [calendar]
 
@@ -619,7 +587,7 @@ def doctest_MonthlyPDFCalendarView():
 
         >>> from schooltool.app.browser.pdfcal import MonthlyPDFCalendarView
         >>> calendar = ISchoolToolCalendar(Person())
-        >>> request = TestRequestWithPrincipal(form={'date': '2005-07-01'})
+        >>> request = TestRequest(form={'date': '2005-07-01'})
         >>> view = MonthlyPDFCalendarView(calendar, request)
         >>> view.getCalendars = lambda: [calendar]
 
@@ -808,8 +776,7 @@ def test_getCalendars(self):
         ...                   CalendarListViewStub)
 
         >>> from schooltool.app.cal import Calendar
-        >>> view = PDFCalendarViewBase(Calendar(None),
-        ...                            TestRequestWithPrincipal())
+        >>> view = PDFCalendarViewBase(Calendar(None), TestRequest())
 
     Now, if we call the method, the output of our stub will be returned:
 
