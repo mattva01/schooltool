@@ -16,12 +16,17 @@ ROSETTA_URL='https://launchpad.ubuntu.com/products/schooltool/0.10-rc1/+pots/sch
 ROSETTA_LOCALES=de el fr id lt nl nb pa pt tr
 SETUPFLAGS=
 
+# Which part of the Zope3 repository do we track
+#Z3_VERSION=trunk
+Z3_VERSION=branches/3.2
+#Z3_VERSION=tags/3.2.0
+
 .PHONY: all
 all: build
 
 .PHONY: zope3-checkout
 zope3-checkout:
-	-test -d Zope3 || svn co $(ZOPE_REPOSITORY)/Zope3/trunk Zope3
+	-test -d Zope3 || svn co $(ZOPE_REPOSITORY)/Zope3/${Z3_VERSION} Zope3
 
 .PHONY: zope3-update
 zope3-update:
