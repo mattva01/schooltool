@@ -17,10 +17,9 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Functional tests for devmode.
-
-$Id: test_all.py 2922 2005-02-22 19:04:44Z mg $
+Functional tests for course.
 """
+
 import unittest
 from zope.testing import doctest
 from zope.app.testing.functional import FunctionalDocFileSuite
