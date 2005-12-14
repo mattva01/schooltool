@@ -91,6 +91,29 @@ class ISectionAttendance(IAttendance):
         """
 
 
+NEW = 'NEW'
+ACCEPTED = 'ACCEPTED'
+REJECTED = 'REJECTED'
+
+
+class IAbsenceExplanation(Interface):
+    """An explanation of the absence"""
+
+    status = Attribute(
+        """Status of the explanation: (NEW, ACCEPTED, REJECTED)""")
+
+    text = Attribute("""Text of the explanation""")
+
+    def isAccepted():
+        """True if status is ACCEPTED"""
+
+    def accept():
+        """Make this explanation accepted"""
+
+    def reject():
+        """Make this explanation rejected"""
+
+
 UNKNOWN = 'UNKNOWN'
 PRESENT = 'PRESENT'
 ABSENT = 'ABSENT'
@@ -114,6 +137,12 @@ class IAttendanceRecord(Interface):
         None if status != TARDY.
         """)
 
+    explanations = Attribute("""
+        A list of explanations for this record.
+
+        Only valid if the status is ABSENT or TARDY.
+        """)
+
     def isUnknown(): """True if status == UNKNOWN."""
     def isPresent(): """True if status == PRESENT."""
     def isAbsent():  """True if status == ABSENT."""
@@ -124,6 +153,9 @@ class IAttendanceRecord(Interface):
 
         Raises AttendanceError when status == UNKNOWN or PRESENT.
         """
+
+    def addExplanation(text):
+        """Adds a new explanation for this attendance record."""
 
     def makeTardy(arrived):
         """Convert an absence to a tardy.

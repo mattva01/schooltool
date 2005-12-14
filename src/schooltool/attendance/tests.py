@@ -486,6 +486,44 @@ def doctest_SectionAttendanceRecord_makeTardy():
     """
 
 
+def doctest_AbsenceExplanation():
+    """Absence explanation is a text with a status
+
+        >>> from schooltool.attendance.attendance import AbsenceExplanation
+        >>> from schooltool.attendance.interfaces import IAbsenceExplanation
+        >>> expn = AbsenceExplanation("My dog ate my pants")
+        >>> verifyObject(IAbsenceExplanation, expn)
+        True
+
+        >>> expn.text
+        'My dog ate my pants'
+
+    First the explanation is not accepted:
+
+        >>> expn.isAccepted()
+        False
+
+        >>> expn.status
+        'NEW'
+
+    We can accept it:
+
+        >>> expn.accept()
+        >>> expn.status
+        'ACCEPTED'
+        >>> expn.isAccepted()
+        True
+
+    We can reject it:
+
+        >>> expn.reject()
+        >>> expn.status
+        'REJECTED'
+        >>> expn.isAccepted()
+        False
+
+    """
+
 class PersonStub(object):
     implements(IPerson, IAttributeAnnotatable)
 

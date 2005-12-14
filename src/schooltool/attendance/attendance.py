@@ -37,7 +37,9 @@ from zope.i18n import translate
 
 from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.attendance.interfaces import ISectionAttendanceRecord
+from schooltool.attendance.interfaces import IAbsenceExplanation
 from schooltool.attendance.interfaces import UNKNOWN, PRESENT, ABSENT, TARDY
+from schooltool.attendance.interfaces import NEW, ACCEPTED, REJECTED
 from schooltool.attendance.interfaces import AttendanceError
 
 
@@ -112,6 +114,7 @@ class SectionAttendanceRecord(Persistent):
         self.period_id = period_id
         self.status = status
         self.late_arrival = None
+        self.explanations = PersistentList()
 
     @property
     def date(self):
@@ -126,6 +129,10 @@ class SectionAttendanceRecord(Persistent):
         # XXX
         raise NotImplementedError
 
+    def addExplanation(self, text):
+        # XXX
+        raise NotImplementedError
+
     def makeTardy(self, arrival_time):
         if not self.isAbsent():
             raise AttendanceError("makeTardy when status is %s, not ABSENT"
@@ -137,6 +144,24 @@ class SectionAttendanceRecord(Persistent):
         return 'SectionAttendanceRecord(%r, %r, %s)' % (self.section,
                                                         self.datetime,
                                                         self.status)
+
+
+class AbsenceExplanation(Persistent):
+    """An explanation of an absence"""
+    implements(IAbsenceExplanation)
+
+    def __init__(self, text):
+        self.text = text
+        self.status = NEW
+
+    def accept(self):
+        self.status = ACCEPTED
+
+    def reject(self):
+        self.status = REJECTED
+
+    def isAccepted(self):
+        return self.status == ACCEPTED
 
 
 SECTION_ATTENDANCE_KEY = 'schooltool.attendance.SectionAttendance'
