@@ -21,14 +21,15 @@ SchoolTool application views.
 
 $Id$
 """
+
 import urllib
 import calendar
 import sys
-import transaction
 from datetime import datetime, date, time, timedelta
-from pytz import timezone
 from sets import Set
 
+import transaction
+from pytz import timezone, utc
 from zope.component import queryMultiAdapter, adapts
 from zope.event import notify
 from zope.interface import implements, Interface
@@ -59,6 +60,7 @@ from schooltool import SchoolToolMessage as _
 from schooltool.app.browser import ViewPreferences
 from schooltool.app.browser import pdfcal
 from schooltool.app.browser.overlay import CalendarOverlayView
+from schooltool.app.browser.interfaces import IEventForDisplay
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IHaveCalendar, IShowTimetables
@@ -106,7 +108,6 @@ short_day_of_week_names = {
     4: _("Fri"), 5: _("Sat"), 6: _("Sun"),
 }
 
-utc = timezone('UTC')
 
 #
 # Traversal
@@ -287,21 +288,9 @@ class CalendarHTTPTraverser(object):
 #
 
 class EventForDisplay(object):
-    """A single calendar event.
+    """A decorated calendar event."""
 
-    This is a wrapper around an ICalendarEvent object.  It adds view-specific
-    attributes:
-
-        dtend -- timestamp when the event ends
-        source_calendar -- the calendar this event came from
-        color1, color2 -- colors used for display
-        shortTitle -- title truncated to ~15 characters
-        cssClass - 'class' attribute for styles
-        dtstarttz -- dtstart rendered in the view's timezone
-        dtendtz -- dtend rendered in the view's timezone
-        allday -- whether this event is an all day event or not
-
-    """
+    implements(IEventForDisplay)
 
     cssClass = 'event'  # at the moment no other classes are used
 
