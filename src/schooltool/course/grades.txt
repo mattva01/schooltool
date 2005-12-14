@@ -1,0 +1,14 @@
+Grading Integration Tests
+=========================
+
+Let's give this a shot:
+
+  >>> from schooltool.course.section import Section
+  >>> section = Section()
+  >>> section.title = u"3rd Period Econ."
+  
+  >>> from schooltool.requirement.interfaces import IHaveRequirement
+  >>> from schooltool.requirement.interfaces import IRequirement
+  >>> req = IRequirement(section)
+  >>> req
+  GroupRequirement(u'3rd Period Econ.')
