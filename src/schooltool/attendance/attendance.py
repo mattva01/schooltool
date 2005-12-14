@@ -24,6 +24,7 @@ $Id$
 __docformat__ = 'reStructuredText'
 
 import datetime
+import operator
 
 from persistent import Persistent
 from persistent.list import PersistentList
@@ -126,12 +127,20 @@ class SectionAttendanceRecord(Persistent):
     def isTardy(self):   return self.status == TARDY
 
     def isExplained(self):
-        # XXX
-        raise NotImplementedError
+        if self.status not in (ABSENT, TARDY):
+            raise AttendanceError(
+                "only absences and tardies can be explained.")
+        return reduce(operator.or_,
+                      [e.isAccepted() for e in self.explanations],
+                      False)
 
     def addExplanation(self, text):
-        # XXX
-        raise NotImplementedError
+        if self.status not in (ABSENT, TARDY):
+            raise AttendanceError(
+                "only absences and tardies can be explained.")
+        explanation = AbsenceExplanation(text)
+        self.explanations.append(explanation)
+        return explanation
 
     def makeTardy(self, arrival_time):
         if not self.isAbsent():

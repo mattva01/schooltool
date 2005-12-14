@@ -486,6 +486,94 @@ def doctest_SectionAttendanceRecord_makeTardy():
     """
 
 
+def doctest_SectionAttendanceRecord_isExplained_addExplanation():
+    r"""Tests for SectionAttendanceRecord.addExplanation
+
+        >>> from schooltool.attendance.attendance \
+        ...     import SectionAttendanceRecord
+
+    If you have an absence
+
+        >>> section = SectionStub()
+        >>> dt = datetime.datetime(2005, 11, 23, 14, 55)
+        >>> ar = SectionAttendanceRecord(section, dt, ABSENT)
+
+    In the beginning it is not explained:
+
+        >>> ar.isExplained()
+        False
+
+    You can add an explanation to it:
+
+        >>> expn = ar.addExplanation("Was ill")
+        >>> len(ar.explanations)
+        1
+
+    Having explanations in itself does not make the absence explained:
+
+        >>> ar.isExplained()
+        False
+
+    However, if at least one the explanation is accepted, the absence
+    is explained:
+
+        >>> expn.accept()
+        >>> ar.isExplained()
+        True
+
+    There event can be unaccepted and rejected explanations:
+
+        >>> ar.addExplanation("Dog ate homework").reject()
+        >>> expn2 = ar.addExplanation("Solar eclipse")
+        >>> len(ar.explanations)
+        3
+
+    The absence is still explained:
+
+        >>> ar.isExplained()
+        True
+
+    If the record's status is not ABSENT or TARDY, isExplained raises
+    an exception:
+
+        >>> ar.status = UNKNOWN
+        >>> ar.isExplained()
+        Traceback (most recent call last):
+          ...
+        AttendanceError: only absences and tardies can be explained.
+
+        >>> ar.status = PRESENT
+        >>> ar.isExplained()
+        Traceback (most recent call last):
+          ...
+        AttendanceError: only absences and tardies can be explained.
+
+        >>> ar.status = TARDY
+        >>> ar.isExplained()
+        True
+
+    Likewise for addExplanation, it is only legal for absences and tardies:
+
+        >>> ar.status = UNKNOWN
+        >>> ar.addExplanation("whatever")
+        Traceback (most recent call last):
+          ...
+        AttendanceError: only absences and tardies can be explained.
+
+        >>> ar.status = PRESENT
+        >>> ar.addExplanation("whatever")
+        Traceback (most recent call last):
+          ...
+        AttendanceError: only absences and tardies can be explained.
+
+        >>> ar.status = TARDY
+        >>> ar.addExplanation("whatever")
+        <schooltool.attendance.attendance.AbsenceExplanation object at ...>
+
+
+    """
+
+
 def doctest_AbsenceExplanation():
     """Absence explanation is a text with a status
 
