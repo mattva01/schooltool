@@ -30,6 +30,11 @@ from persistent.list import PersistentList
 from zope.interface import implements
 from zope.app.annotation.interfaces import IAnnotations
 
+from schooltool.calendar.simple import ImmutableCalendar
+from schooltool.app.cal import CalendarEvent
+from schooltool import SchoolToolMessage as _
+from zope.i18n import translate
+
 from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.attendance.interfaces import ISectionAttendanceRecord
 from schooltool.attendance.interfaces import UNKNOWN, PRESENT, ABSENT, TARDY
@@ -56,8 +61,23 @@ class SectionAttendance(Persistent):
                 yield ar
 
     def makeCalendar(self, first, last):
-        # XXX
-        raise NotImplementedError
+        events = []
+        for record in self.filter(first, last):
+            title = None
+            if record.isTardy():
+                minutes = (record.late_arrival - record.datetime).seconds / 60
+                title = translate(
+                    _('Was tardy to ${section} (${mins} minutes).',
+                      mapping={'section': record.section.title,
+                               'mins': minutes}))
+            elif record.isAbsent():
+                title = translate(_('Was absent from ${section}.',
+                                    mapping={'section': record.section.title}))
+            if title:
+                events.append(CalendarEvent(title=title,
+                                            dtstart=record.datetime,
+                                            duration=record.duration))
+        return ImmutableCalendar(events)
 
     def getAllForDay(self, date):
         return self.filter(date, date)
