@@ -23,7 +23,6 @@ $Id$
 """
 from zope.component import adapts
 from zope.interface import Interface, Attribute, implements
-from zope.security.proxy import ProxyFactory
 from zope.app.annotation.interfaces import IAnnotatable
 
 from schooltool.app.rest import View, Template
@@ -71,10 +70,6 @@ class IACLView(Interface):
         Raise a RestError if a principal or permission id is not from
         the allowed set.
         """
-
-# XXX: Why has this been here? This should be done by the CA
-#def ACLViewFactory(context, request):
-#    return ProxyFactory(ACLView(context, request))
 
 
 class ACLView(View, ACLViewBase):

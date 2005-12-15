@@ -114,10 +114,8 @@ class TestTermView(QuietLibxml2Mixin, unittest.TestCase):
 
 class TestTermFileFactory(QuietLibxml2Mixin, unittest.TestCase):
     def setUp(self):
-        from schooltool.timetable.term import Term, TermContainer
+        from schooltool.timetable.term import TermContainer
         from schooltool.timetable.rest.term import TermFileFactory
-        from schooltool.timetable.rest.term import TermFile
-        from schooltool.timetable.rest.term import TermView
 
         self.terms = TermContainer()
         self.fileFactory = TermFileFactory(self.terms)

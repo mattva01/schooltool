@@ -307,7 +307,6 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         """
 
     def test_request(self):
-        from schooltool.restclient.restclient import SchoolToolClient
         path = '/path'
         body = 'spam'
         version = 'UnitTest/0.0'

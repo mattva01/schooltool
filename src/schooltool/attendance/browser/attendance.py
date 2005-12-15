@@ -25,16 +25,12 @@ import datetime
 
 from zope.app.publisher.browser import BrowserView
 from zope.interface import implements
-from zope.component import adapts
 from zope.publisher.interfaces import NotFound
 from zope.component import queryMultiAdapter
 
 from schooltool.traverser.interfaces import ITraverserPlugin
-from schooltool.attendance.browser.interfaces import ISectionAttendanceInfo
-from schooltool.course.interfaces import ISection
 from schooltool.calendar.utils import parse_date
 from schooltool.timetable.interfaces import ITimetables
-from schooltool.person.interfaces import ICalendarDisplayPreferences
 from schooltool.app.browser import ViewPreferences
 
 

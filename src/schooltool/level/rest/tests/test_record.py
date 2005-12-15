@@ -39,7 +39,7 @@ from schooltool.person.person import Person
 from schooltool.testing import setup
 
 import schooltool.level.rest.record
-from schooltool.level import interfaces, record, rest, testing, level, promotion
+from schooltool.level import record, rest, testing, level
 
 
 def testAcademicStatus():
