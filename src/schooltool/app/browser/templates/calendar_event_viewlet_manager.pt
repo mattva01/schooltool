@@ -1,0 +1,56 @@
+<tal:block i18n:domain="schooltool"
+           tal:define="ev view/ev">
+  <metal:block use-macro="template/macros/event-core-info" />
+  <metal:block use-macro="template/macros/event-resource-booking-info" />
+</tal:block>
+
+<tal:hide-macro-definitions-from-browser condition="nothing">
+<!-- Macro for the core information (location, description) inside an event box.
+     Expects to find an EventForDisplay instance named 'ev'
+  -->
+<metal:block define-macro="event-core-info">
+  <div class="body"
+       tal:attributes="style string:background: ${ev/color1};">
+    <div class="title"
+         tal:condition="python: ev.title != ev.shortTitle"
+         tal:content="ev/title">
+      (title, but only if it was shortened in the title bar)
+    </div>
+    <div i18n:translate="" tal:condition="ev/location"
+         class="location">Location:
+      <span tal:content="ev/location" i18n:name="location">(location)</span>
+    </div>
+    <div class="description" tal:content="ev/description">
+      (Description)
+    </div>
+  </div>
+</metal:block>
+
+<!-- Macro for the resource booking information inside an event box.
+     Expects to find an EventForDisplay instance named 'ev'
+  -->
+<metal:block define-macro="event-resource-booking-info">
+  <div class="booked-resources"
+       tal:define="resources ev/getBookedResources"
+       tal:condition="resources">
+    <h6 class="booked-resource-header"
+        tal:attributes="style string:background: ${ev/color2}">
+      <a style="color: #000;"
+         tal:attributes="href ev/bookingLink">Booked resources</a></h6>
+    <tal:block tal:repeat="resource resources">
+      <a tal:attributes="href resource/@@absolute_url"
+         tal:content="resource/title">(A Pond)</a>
+    </tal:block>
+  </div>
+  <div class="booked-resources"
+       tal:define="booker ev/getBooker"
+       tal:condition="booker">
+    <h6 class="booked-resource-header"
+        tal:attributes="style string:background: ${ev/color2}">
+      <a style="color: #000;"
+         tal:attributes="href ev/bookingLink">Booked by</a></h6>
+    <a tal:attributes="href booker/@@absolute_url"
+       tal:content="booker/title">(A Dude)</a>
+  </div>
+</metal:block>
+</tal:hide-macro-definitions-from-browser>

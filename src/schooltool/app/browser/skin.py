@@ -25,6 +25,8 @@ import os
 import sys
 
 from zope.interface import Interface
+from zope.interface import implements
+from zope.schema import Object
 from zope.publisher.interfaces.browser import ILayer, IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.viewlet.interfaces import IViewletManager
@@ -35,6 +37,7 @@ from zope.app.traversing import api
 
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.browser.interfaces import IEventForDisplay
 
 
 class IJavaScriptManager(IViewletManager):
@@ -79,6 +82,18 @@ class OrderedViewletManager(ViewletManagerBase):
                 return (1, viewlet.title)
 
         return sorted(viewlets, key=key_func)
+
+
+class ICalendarEventContext(Interface):
+    """Schema for attributes required by CalendarEventViewletManager."""
+
+    ev = Object(IEventForDisplay)
+
+
+class CalendarEventViewletManager(OrderedViewletManager):
+    """Viewlet manager for displaying of additional event information."""
+
+    implements(ICalendarEventContext)
 
 
 class NavigationViewlet(object):

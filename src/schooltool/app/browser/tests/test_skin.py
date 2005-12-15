@@ -92,6 +92,18 @@ def doctest_NavigationViewlet_appURL():
     """
 
 
+def doctest_CalendarEventViewletManager():
+    """Tests for CalendarEventViewletManager.
+
+        >>> from schooltool.app.browser.skin import CalendarEventViewletManager
+        >>> from schooltool.app.browser.skin import ICalendarEventContext
+        >>> viewletManager = CalendarEventViewletManager(None, None, None)
+        >>> ICalendarEventContext.providedBy(viewletManager)
+        True
+
+    """
+
+
 def doctest_schoolToolTraverseSubscriber():
     """Tests for schoolToolTraverseSubscriber.
 
