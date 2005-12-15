@@ -1,0 +1,16 @@
+<tal:defs define="dummy view/update" />
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Edit site preferences</title>
+</head>
+<body>
+<metal:nothing metal:fill-slot="content-header" />
+<metal:block metal:fill-slot="body">
+
+Date <span tal:replace="view/date"/>
+school timetable <span tal:replace="view/schooltt_id" />
+period <span tal:replace="view/period_id" />
+
+</metal:block>
+</body>
+</html>

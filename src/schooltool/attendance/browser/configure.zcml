@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<configure xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <subscriber
+      for="schooltool.course.interfaces.ISection
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".attendance.SectionAttendanceTraverserPlugin"
+      />
+
+  <browser:page
+      name="attendance"
+      for="schooltool.course.interfaces.ISection"
+      class="schooltool.attendance.browser.attendance.RealtimeAttendanceView"
+      template="templates/real_time.pt"
+      permission="zope.Public" />
+
+</configure>
