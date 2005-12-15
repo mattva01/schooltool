@@ -33,11 +33,7 @@ deprecated(('SchoolToolApplication', 'ApplicationPreferences'),
            'The reference will be gone in 0.15')
 
 from schooltool.app.overlay import \
-     CalendarOverlayInfo #as CalendarAndTTOverlayInfo
-class CalendarAndTTOverlayInfo(CalendarOverlayInfo):
-    def __new__(*args, **kw):
-        #import pdb; pdb.set_trace()
-        return CalendarOverlayInfo.__new__(*args, **kw)
+     CalendarOverlayInfo as CalendarAndTTOverlayInfo
 
 deprecated(('CalendarAndTTOverlayInfo',),
            'This specific class has been deprecated. Use '
