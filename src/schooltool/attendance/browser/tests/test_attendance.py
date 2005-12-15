@@ -24,6 +24,7 @@ $Id$
 import unittest
 import datetime
 
+from pytz import utc
 from zope.testing import doctest
 from zope.app.testing import ztapi
 from zope.publisher.browser import TestRequest
@@ -43,17 +44,57 @@ class StubTimetables(object):
 
     def makeTimetableCalendar(self):
         return ImmutableCalendar([
-            TimetableCalendarEvent(datetime.datetime(2005, 12, 15, 10, 00),
-                                   datetime.timedelta(minutes=45),
-                                   "Math",
-                                   period_id="B", activity=None),
-            TimetableCalendarEvent(datetime.datetime(2005, 12, 15, 11, 00),
-                                   datetime.timedelta(minutes=45),
-                                   "Arts",
-                                   period_id="C", activity=None),
+            TimetableCalendarEvent(
+                datetime.datetime(2005, 12, 14, 10, 00, tzinfo=utc),
+                datetime.timedelta(minutes=45),
+                "Math", period_id="A", activity=None),
+            TimetableCalendarEvent(
+                datetime.datetime(2005, 12, 14, 11, 00, tzinfo=utc),
+                datetime.timedelta(minutes=45),
+                "Arts", period_id="D", activity=None),
+            TimetableCalendarEvent(
+                datetime.datetime(2005, 12, 15, 10, 00, tzinfo=utc),
+                datetime.timedelta(minutes=45),
+                "Math", period_id="B", activity=None),
+            TimetableCalendarEvent(
+                datetime.datetime(2005, 12, 15, 11, 00, tzinfo=utc),
+                datetime.timedelta(minutes=45),
+                "Arts",
+                period_id="C", activity=None),
             ])
 
 
+def doctest_verifyPeriodForSection():
+    """Doctest for verifyPeriodForSection
+
+    When traversing to the realtime attendance form, we want to verify
+    that the section has the given period takes place on the given
+    date.  We have a utility function for that:
+
+        >>> from schooltool.attendance.browser.attendance import \\
+        ...     verifyPeriodForSection
+
+        >>> section = StubTimetables(None)
+
+    Now we can try our helper function:
+
+        >>> fourteenth = datetime.date(2005, 12, 14)
+        >>> fifteenth = datetime.date(2005, 12, 15)
+        >>> for date in fourteenth, fifteenth:
+        ...     for period_id in 'A', 'B', 'C', 'D':
+        ...         result = verifyPeriodForSection(section, date,
+        ...                                         period_id, utc)
+        ...         print date, period_id, result
+        2005-12-14 A True
+        2005-12-14 B False
+        2005-12-14 C False
+        2005-12-14 D True
+        2005-12-15 A False
+        2005-12-15 B True
+        2005-12-15 C True
+        2005-12-15 D False
+
+    """
 
 def doctest_SectionAttendanceTraverserPlugin():
     r"""Tests for SectionAttendanceTraverserPlugin

@@ -45,7 +45,6 @@ def verifyPeriodForSection(section, date, period_id, tz):
     """Return True if the section has a period with a given id on a
     given date
     """
-    # XXX: untested!
     start = tz.localize(datetime.datetime.combine(date, datetime.time()))
     end = start + datetime.date.resolution
 
