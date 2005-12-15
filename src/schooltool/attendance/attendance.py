@@ -69,7 +69,7 @@ class SectionAttendance(Persistent):
             if record.isTardy():
                 minutes = (record.late_arrival - record.datetime).seconds / 60
                 title = translate(
-                    _('Was tardy to ${section} (${mins} minutes).',
+                    _('Was late for ${section} (${mins} minutes).',
                       mapping={'section': record.section.title,
                                'mins': minutes}))
             elif record.isAbsent():

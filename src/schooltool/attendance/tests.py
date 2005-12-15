@@ -363,7 +363,7 @@ def doctest_SectionAttendance_makeCalendar():
 
         >>> print_for(dt1a.date(), dt3a.date())
         2005-12-07 13:30:00+00:00 0:45:00 Was absent from Chem.
-        2005-12-07 15:30:00+00:00 0:45:00 Was tardy to Math (5 minutes).
+        2005-12-07 15:30:00+00:00 0:45:00 Was late for Math (5 minutes).
 
 
     """
