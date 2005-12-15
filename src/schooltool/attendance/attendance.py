@@ -30,12 +30,11 @@ from persistent import Persistent
 from persistent.list import PersistentList
 from zope.interface import implements
 from zope.app.annotation.interfaces import IAnnotations
-
-from schooltool.calendar.simple import ImmutableCalendar
-from schooltool.app.cal import CalendarEvent
-from schooltool import SchoolToolMessage as _
 from zope.i18n import translate
 
+from schooltool import SchoolToolMessage as _
+from schooltool.calendar.simple import ImmutableCalendar
+from schooltool.app.cal import CalendarEvent
 from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.attendance.interfaces import ISectionAttendanceRecord
 from schooltool.attendance.interfaces import IAbsenceExplanation
