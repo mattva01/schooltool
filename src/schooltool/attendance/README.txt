@@ -147,7 +147,7 @@ The following API emerges::
         def makeTardy(arrived):
             """Convert an absence to a tardy.
 
-            `arrived` is a datetime.time.
+            `arrived` is a datetime.datetime.
 
             Meaningless (i.e. raises some exception) when status != ABSENT.
             """
@@ -364,7 +364,7 @@ All attendance related events appear in a log file
     >>> logging.getLogger('schooltool.attendance').addHandler(...)
     >>> IDayAttendance(student).record(date, False)
     YYYY-MM-DD HH:MM:SS +ZZZZ: student Foo was absent from homeroom
-    >>> IDayAttendance(student).get(date).makeTardy(time)
+    >>> IDayAttendance(student).get(date).makeTardy(datetime)
     YYYY-MM-DD HH:MM:SS +ZZZZ: student Foo was late for homeroom
 
     >>> del logging.getLogger('schooltool.attendance').handlers[:]

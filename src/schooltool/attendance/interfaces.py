@@ -132,7 +132,7 @@ class IAttendanceRecord(Interface):
         """)
 
     late_arrival = Attribute("""
-        Time of a late arrival.
+        Date and time of a late arrival.
 
         None if status != TARDY.
         """)
@@ -160,7 +160,7 @@ class IAttendanceRecord(Interface):
     def makeTardy(arrived):
         """Convert an absence to a tardy.
 
-        `arrived` is a datetime.time.
+        `arrived` is a datetime.datetime.
 
         Raises AttendanceError when status != ABSENT.
         """
