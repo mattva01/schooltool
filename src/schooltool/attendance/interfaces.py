@@ -24,7 +24,11 @@ $Id$
 __docformat__ = 'reStructuredText'
 
 
-from zope.interface import Interface, Attribute
+from zope.interface import Interface
+from zope.schema import Text, TextLine, Choice, List, Object
+from zope.schema import Date, Datetime, Timedelta
+
+from schooltool.course.interfaces import ISection
 
 
 class IAttendance(Interface):
@@ -99,10 +103,16 @@ REJECTED = 'REJECTED'
 class IAbsenceExplanation(Interface):
     """An explanation of the absence"""
 
-    status = Attribute(
-        """Status of the explanation: (NEW, ACCEPTED, REJECTED)""")
+    status = Choice(
+        title=u"Status",
+        description=u"""
+        Status of the explanation: NEW, ACCEPTED, or REJECTED.
+        """,
+        values=[NEW, ACCEPTED, REJECTED])
 
-    text = Attribute("""Text of the explanation""")
+    text = Text(
+        title=u"Text",
+        description=u"""Text of the explanation""")
 
     def isAccepted():
         """True if status is ACCEPTED"""
@@ -123,25 +133,35 @@ TARDY = 'TARDY'
 class IAttendanceRecord(Interface):
     """A single attendance record for a day/section."""
 
-    date = Attribute("""
+    date = Date(
+        title=u"Date",
+        description=u"""
         Date of the record.
         """)
 
-    status = Attribute("""
+    status = Choice(
+        title=u"Status",
+        description=u"""
         Attendance status (UNKNOWN, PRESENT, ABSENT, TARDY).
-        """)
+        """,
+        values=[UNKNOWN, PRESENT, ABSENT, TARDY])
 
-    late_arrival = Attribute("""
+    late_arrival = Datetime(
+        title=u"Date/time of late arrival",
+        description=u"""
         Date and time of a late arrival.
 
         None if status != TARDY.
         """)
 
-    explanations = Attribute("""
+    explanations = List(
+        title=u"Explanations",
+        description=u"""
         A list of explanations for this record.
 
         Only valid if the status is ABSENT or TARDY.
-        """)
+        """,
+        value_type=Object(schema=IAbsenceExplanation))
 
     def isUnknown(): """True if status == UNKNOWN."""
     def isPresent(): """True if status == PRESENT."""
@@ -173,13 +193,20 @@ class IDayAttendanceRecord(IAttendanceRecord):
 class ISectionAttendanceRecord(IAttendanceRecord):
     """A single attendance record for a section."""
 
-    section = Attribute("""The section object.""")
+    section = Object(
+        title=u"Section.",
+        schema=ISection)
 
-    datetime = Attribute("""The date and time of the section meeting.""")
+    datetime = Datetime(
+        title=u"Date/time",
+        description=u"""The date and time of the section meeting.""")
 
-    duration = Attribute("""The duration of the section meeting.""")
+    duration = Timedelta(
+        title=u"Duration",
+        description=u"""The duration of the section meeting.""")
 
-    period_id = Attribute("""The name of the period.""")
+    period_id = TextLine(
+        title=u"ID of the period.")
 
 
 class AttendanceError(Exception):
