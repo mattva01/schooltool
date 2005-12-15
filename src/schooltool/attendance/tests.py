@@ -521,7 +521,7 @@ def doctest_SectionAttendanceRecord_isExplained_addExplanation():
         >>> ar.isExplained()
         True
 
-    There event can be unaccepted and rejected explanations:
+    There even can be unaccepted and rejected explanations:
 
         >>> ar.addExplanation("Dog ate homework").reject()
         >>> expn2 = ar.addExplanation("Solar eclipse")
