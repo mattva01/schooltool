@@ -129,9 +129,10 @@ class SectionAttendanceRecord(Persistent):
         if self.status not in (ABSENT, TARDY):
             raise AttendanceError(
                 "only absences and tardies can be explained.")
-        return reduce(operator.or_,
-                      [e.isAccepted() for e in self.explanations],
-                      False)
+        for e in self.explanations:
+            if e.isAccepted():
+                return True
+        return False
 
     def addExplanation(self, text):
         if self.status not in (ABSENT, TARDY):
