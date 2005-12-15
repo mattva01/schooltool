@@ -22,8 +22,6 @@ Person sample data generation
 $Id$
 """
 
-import random
-
 from zope.interface import implements
 
 from schooltool.sampledata.interfaces import ISampleDataPlugin

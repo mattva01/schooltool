@@ -23,20 +23,14 @@ $Id: test_evolve8.py 5268 2005-10-14 19:15:43Z alga $
 """
 
 import unittest
-from datetime import date, time, timedelta
-from pprint import pprint
 
 from zope.app.testing import setup
 from zope.testing import doctest
 from zope.app.container.btree import BTreeContainer
 from zope.interface import implements
-from zope.interface import classImplements
-from zope.app.annotation.interfaces import IAttributeAnnotatable
 
 from schooltool.group.group import Group
 from schooltool.generations.tests import ContextStub
-import schooltool.app # Dead chicken to avoid issue 390
-from schooltool.testing import setup as stsetup
 
 
 def setUp(test):

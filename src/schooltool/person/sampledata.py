@@ -33,7 +33,6 @@ from zope.security.proxy import removeSecurityProxy
 from schooltool.sampledata.interfaces import ISampleDataPlugin
 from schooltool.sampledata.name import NameGenerator
 from schooltool.person.person import Person
-from schooltool.group.group import Group
 from schooltool.timetable.term import DateRange
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.cal import CalendarEvent

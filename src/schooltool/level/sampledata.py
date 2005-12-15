@@ -23,7 +23,6 @@ $Id$
 """
 
 import random
-import datetime
 
 from zope.app import zapi
 from zope.interface import implements

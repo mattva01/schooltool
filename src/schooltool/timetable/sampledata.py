@@ -22,7 +22,6 @@ Timetable sample data generation
 $Id$
 """
 
-import random
 import datetime
 
 from zope.interface import implements

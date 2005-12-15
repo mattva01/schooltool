@@ -28,10 +28,8 @@ from zope.interface import implements
 from zope.security.proxy import removeSecurityProxy
 
 from schooltool.sampledata.interfaces import ISampleDataPlugin
-from schooltool.person.person import Person
 from schooltool.course.course import Course
 from schooltool.course.section import Section
-from schooltool.sampledata.name import NameGenerator
 from schooltool.app.relationships import Instruction, CourseSections
 from schooltool.app.relationships import URICourse, URISection
 from schooltool.app.membership import Membership

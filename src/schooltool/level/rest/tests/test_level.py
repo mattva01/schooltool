@@ -31,9 +31,6 @@ from zope.app.component.testing import PlacefulSetup
 from zope.app.filerepresentation.interfaces import IFileFactory
 from zope.app.testing import ztapi
 
-import schooltool.app.rest.app
-import schooltool.app.rest.errors
-import schooltool.level.rest.level
 from schooltool.app.rest import testing
 from schooltool.level import interfaces, level, rest
 from schooltool.testing import setup

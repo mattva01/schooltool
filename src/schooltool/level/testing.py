@@ -21,6 +21,7 @@ Testing helper functions for this package
 
 $Id$
 """
+
 import os
 
 import zope.wfmc.interfaces
@@ -28,7 +29,6 @@ import zope.component
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.schema import vocabulary
 from zope.wfmc import xpdl, adapter
-from zope.app.testing import setup, placelesssetup
 
 from schooltool.group.interfaces import IGroup
 import schooltool.level.level

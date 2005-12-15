@@ -22,7 +22,6 @@ SchoolBell calendar views.
 $Id$
 """
 
-import os.path
 import datetime
 from cStringIO import StringIO
 

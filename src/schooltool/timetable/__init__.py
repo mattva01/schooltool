@@ -133,7 +133,6 @@ holiday.
 $Id$
 """
 
-import datetime
 from sets import Set, ImmutableSet
 
 import zope.event

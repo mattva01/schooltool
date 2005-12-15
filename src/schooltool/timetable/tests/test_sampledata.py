@@ -21,16 +21,14 @@ Unit tests for schooltool.timetable.sampledata
 
 $Id$
 """
+
 import unittest
-from pprint import pprint
 
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
 from zope.app.testing import setup
 
-from schooltool.testing.setup import setupLocalGrants
 from schooltool.testing import setup as stsetup
-from schooltool.relationship.tests import setUpRelationships
 
 
 def setUp(test):

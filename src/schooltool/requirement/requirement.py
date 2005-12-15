@@ -28,9 +28,10 @@ import zope.interface
 import zope.app.container.btree
 import zope.app.container.contained
 import zope.app.event.objectevent
-from zope.app import zapi
 from zope.app import annotation
+
 from schooltool.requirement import interfaces
+
 
 REQUIREMENT_KEY = "schooltool.requirement"
 

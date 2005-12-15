@@ -106,8 +106,6 @@ class BaseTimetableSourceTest(object):
         self.assertEqual(result, expected)
 
     def test_listTimetables(self):
-        from schooltool.timetable import TimetableActivity
-
         tm = ITimetables(Content())
 
         adapter = self.createAdapter(tm)

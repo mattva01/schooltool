@@ -22,8 +22,6 @@ SchoolBell calendaring objects.
 $Id$
 """
 
-import datetime
-
 from persistent.dict import PersistentDict
 from persistent import Persistent
 from zope.interface import implements

@@ -21,8 +21,9 @@ Tests for group views.
 
 $Id: test_app.py 4691 2005-08-12 18:59:44Z srichter $
 """
+
 import unittest
-from pprint import pprint
+
 from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest

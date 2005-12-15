@@ -23,7 +23,6 @@ $Id$
 """
 
 import unittest
-from pprint import pprint
 
 from zope.testing import doctest
 from zope.interface import implements

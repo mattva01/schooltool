@@ -21,9 +21,9 @@ Group interfaces
 
 $Id: interfaces.py 4691 2005-08-12 18:59:44Z srichter $
 """
+
 import zope.interface
 import zope.schema
-import zope.app.container.constraints
 from zope.app import container
 
 from schooltool import SchoolToolMessage as _

@@ -805,7 +805,7 @@ class TestTimetablesMixin(NiceDiffsMixin, EqualsSortedMixin,
 
     def setUp(self):
         from schooltool.relationship.tests import setUpRelationships
-        from schooltool.timetable.interfaces import ITimetable, ITimetables
+        from schooltool.timetable.interfaces import ITimetables
         from schooltool.timetable.interfaces import ITimetableSource
         from schooltool.timetable.source import MembershipTimetableSource
         from schooltool.timetable import TimetablesAdapter
@@ -922,7 +922,7 @@ class TestTimetablesMixin(NiceDiffsMixin, EqualsSortedMixin,
                          '/stub/composite-timetables/2003-fall.sequential')
 
     def test_makeTimetableCalendar(self):
-        from schooltool.timetable import TimetableActivity, Timetable
+        from schooltool.timetable import TimetableActivity
         from schooltool.app.cal import Calendar, CalendarEvent
 
         app = sbsetup.setupSchoolToolSite()

@@ -24,9 +24,7 @@ $Id$
 import unittest
 from StringIO import StringIO
 
-from zope.interface import Interface, implements
 from zope.app.testing.placelesssetup import PlacelessSetup
-from zope.app.testing import ztapi
 from zope.app.publication.http import HTTPPublication
 from zope.publisher.http import HTTPRequest
 

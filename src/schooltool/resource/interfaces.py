@@ -21,6 +21,7 @@ Resource-related interfaces
 
 $Id: interfaces.py 4704 2005-08-15 13:22:06Z srichter $
 """
+
 import zope.interface
 import zope.schema
 

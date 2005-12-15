@@ -21,8 +21,6 @@ SchoolTool skin.
 
 $Id: skin.py 3335 2005-03-25 18:53:11Z ignas $
 """
-import os
-import sys
 
 from zope.interface import Interface
 from zope.interface import implements
@@ -33,7 +31,6 @@ from zope.viewlet.interfaces import IViewletManager
 from zope.viewlet.manager import ViewletManagerBase
 from zope.app import zapi
 from zope.app.publisher.browser import applySkin
-from zope.app.traversing import api
 
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication

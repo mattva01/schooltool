@@ -27,7 +27,7 @@ import pprint
 
 from zope.interface import providedBy
 from zope.testing import doctest
-from zope.app.testing import setup, ztapi
+from zope.app.testing import setup
 from zope.publisher.browser import TestRequest
 from zope.app.publication.zopepublication import BeforeTraverseEvent
 

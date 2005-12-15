@@ -31,9 +31,7 @@ from zope.testing import doctest
 from zope.app.container.interfaces import INameChooser
 from zope.app.testing import ztapi
 
-from schooltool import timetable
 from schooltool.app.app import SimpleNameChooser
-from schooltool.app.browser import testing
 from schooltool.testing import setup as sbsetup
 from schooltool.testing.util import NiceDiffsMixin
 from schooltool.timetable import SequentialDaysTimetableModel

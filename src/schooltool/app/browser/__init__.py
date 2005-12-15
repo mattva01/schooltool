@@ -38,10 +38,8 @@ from zope.security.proxy import removeSecurityProxy
 from pytz import timezone
 
 from schooltool import SchoolToolMessage as _
-from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.app import getSchoolToolApplication
-from schooltool.app.app import getApplicationPreferences
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonPreferences
 

@@ -37,7 +37,6 @@ from zope.security.proxy import removeSecurityProxy
 from zope.app.traversing.api import traverse
 from zope.app.traversing.interfaces import TraversalError
 from zope.app.http.put import NullResource
-from zope.app.filerepresentation.interfaces import IWriteDirectory
 from zope.app.event.objectevent import ObjectCreatedEvent
 
 from schooltool.app.rest import View, Template
@@ -48,7 +47,7 @@ from schooltool.xmlparsing import XMLDocument
 from schooltool.common import parse_date, parse_time
 from schooltool.timetable.interfaces import IHaveTimetables, ITimetables
 from schooltool.timetable.interfaces import ITimetableDict
-from schooltool.timetable import Timetable, TimetableActivity, TimetableDict
+from schooltool.timetable import TimetableActivity, TimetableDict
 from schooltool.traverser import traverser
 from schooltool.app.rest.interfaces import ITimetableFileFactory
 from schooltool.app.rest.interfaces import INullTimetable, ICompositeTimetables

@@ -21,18 +21,15 @@ Unit tests for schooltool.person.sampledata
 
 $Id$
 """
+
 import unittest
-from pprint import pprint
-import datetime
 
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
 from zope.app.testing import setup
 
-from schooltool.testing.setup import setupLocalGrants
 from schooltool.testing import setup as stsetup
 from schooltool.relationship.tests import setUpRelationships
-from schooltool.timetable.term import Term
 from schooltool.app.interfaces import ISchoolToolCalendar
 
 

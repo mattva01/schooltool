@@ -23,7 +23,6 @@ $Id$
 """
 
 import sys
-import traceback
 import linecache
 import cgi
 

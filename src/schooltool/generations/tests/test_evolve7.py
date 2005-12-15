@@ -36,7 +36,7 @@ from schooltool.testing import setup as stsetup
 
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 from schooltool.timetable.model import SequentialDaysTimetableModel
-from schooltool.timetable.schema import TimetableSchema, TimetableSchemaDay
+from schooltool.timetable.schema import TimetableSchema
 
 
 def setUp(test):

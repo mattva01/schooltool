@@ -19,10 +19,9 @@
 """
 Testing registries.
 
-$Id: app.py 4705 2005-08-15 14:49:07Z srichter $
+$Id$
 """
 __docformat__ = 'restructuredtext'
-import sys
 
 
 _registries = {}

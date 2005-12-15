@@ -24,11 +24,8 @@ $Id: __init__.py 3405 2005-04-12 16:08:43Z bskahan $
 
 from zope.interface import implements
 from zope.publisher.http import HTTPRequest
-from zope.publisher.interfaces import NotFound
-from zope.publisher.interfaces.http import IHTTPPublisher
 from zope.server.http.commonaccesslogger import CommonAccessLogger
 from zope.server.http.wsgihttpserver import WSGIHTTPServer
-from zope.app import zapi
 from zope.app.publication.interfaces import IPublicationRequestFactory
 from zope.app.publication.http import HTTPPublication
 from zope.app.server.wsgi import ServerType

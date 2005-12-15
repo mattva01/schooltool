@@ -23,21 +23,19 @@ $Id$
 """
 __docformat__='restructuredtext'
 
-import os
 import unittest
-import zope.component
-import zope.interface
+
 from zope.testing import doctest
-from zope.component import testing
-from zope.app.container import contained
 from zope.app.testing import setup
-from schooltool.requirement import requirement, interfaces, evaluation
+
 
 def setUp(test):
     setup.placefulSetUp()
 
+
 def tearDown(test):
     setup.placefulTearDown()
+
 
 def test_suite():
     optionflags = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS

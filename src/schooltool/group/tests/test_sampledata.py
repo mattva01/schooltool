@@ -23,7 +23,7 @@ $Id$
 """
 
 import unittest
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from pytz import utc
 from zope.interface.verify import verifyObject

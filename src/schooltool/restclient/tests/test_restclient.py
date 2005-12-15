@@ -23,7 +23,6 @@ Unit tests for restclient.py
 import unittest
 import socket
 import datetime
-import urllib
 import base64
 
 from zope.testing.doctest import DocTestSuite
@@ -331,7 +330,6 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         self.assert_(conn.closed)
 
     def test_request_with_body_and_headers(self):
-        from schooltool.restclient.restclient import SchoolToolClient
         path = '/path'
         body = 'spam'
         version = 'UnitTest/0.0'

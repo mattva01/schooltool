@@ -21,8 +21,8 @@ Unit tests for schooltool.level.sampledata
 
 $Id$
 """
+
 import unittest
-from pprint import pprint
 
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
@@ -30,9 +30,7 @@ from zope.app.testing import setup, ztapi
 
 from schooltool.group.interfaces import IGroup
 from schooltool.level.interfaces import IManagerWorkItems
-from schooltool.relationship.tests import setUpRelationships
 from schooltool.testing import setup as stsetup
-from schooltool.testing.setup import setupLocalGrants
 
 
 def setUpLevels():

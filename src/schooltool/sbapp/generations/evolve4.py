@@ -24,12 +24,13 @@ an int.
 
 $Id$
 """
+
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.generations.utility import findObjectsProviding
+
 from schooltool.app.interfaces import ISchoolToolApplication, IHavePreferences
 from schooltool.app.app import getPersonPreferences
-import datetime
-import random
+
 
 def evolve(context):
     root = context.connection.root().get(ZopePublication.root_name, None)

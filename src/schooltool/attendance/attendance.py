@@ -24,7 +24,6 @@ $Id$
 __docformat__ = 'reStructuredText'
 
 import datetime
-import operator
 
 from persistent import Persistent
 from persistent.list import PersistentList

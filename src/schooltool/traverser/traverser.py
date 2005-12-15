@@ -21,10 +21,10 @@ Pluggable Traverser Implementation
 
 $Id$
 """
-from zope.component import subscribers, queryAdapter, queryMultiAdapter
+
 from zope.interface import implements
+from zope.component import subscribers, queryAdapter, queryMultiAdapter
 from zope.publisher.interfaces import NotFound
-from zope.publisher.interfaces import IPublishTraverse
 
 from schooltool.traverser.interfaces import ITraverserPlugin
 

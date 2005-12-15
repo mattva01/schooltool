@@ -21,7 +21,7 @@ Unit tests for the schooltool.timetable.schema module.
 
 $Id: test_timetable.py 4822 2005-08-19 01:35:11Z srichter $
 """
-import calendar
+
 import unittest
 from datetime import date
 from sets import Set

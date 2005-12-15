@@ -211,13 +211,10 @@ class TestTimetableFileFactory(TimetableTestMixin, unittest.TestCase):
 class TestTimetablePUT(TimetableTestMixin, unittest.TestCase):
 
     def setUp(self):
-        from schooltool.timetable.interfaces import ITimetableDict
-        from schooltool.timetable.rest import TimetableFileFactory
-
         TimetableTestMixin.setUp(self)
-        self.timetable =  self.createEmpty()
-        ITimetables(self.person).timetables["2003 fall.schema1"] = \
-                                                  self.timetable
+        self.timetable = self.createEmpty()
+        timetables = ITimetables(self.person).timetables
+        timetables["2003 fall.schema1"] = self.timetable
 
     def test_put(self):
         from schooltool.timetable.rest import TimetablePUT

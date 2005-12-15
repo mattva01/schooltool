@@ -37,7 +37,7 @@ from zope.app.publisher.browser import BrowserView
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.session.interfaces import ISession
 
-import schooltool.app
+import schooltool.app # sacrifice to appease circular import gods
 from schooltool.common import parse_datetime
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 from schooltool.timetable import SequentialDaysTimetableModel
@@ -4526,7 +4526,6 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
         # set up adaptation (the view checks user preferences)
         from schooltool.person.preference import getPersonPreferences
         from schooltool.person.interfaces import IPersonPreferences
-        from schooltool.person.interfaces import IHavePreferences
         from schooltool.person.person import Person
         ztapi.provideAdapter(Person, IPersonPreferences, getPersonPreferences)
 

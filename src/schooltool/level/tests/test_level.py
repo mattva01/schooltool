@@ -21,11 +21,13 @@ Level-related Tests
 
 $Id$
 """
+
 import os
 import unittest
+
 from zope.testing import doctest, doctestunit
-from zope.component import testing
 from zope.app.testing import setup
+
 
 def setUp(test):
     test.globs['this_directory'] = os.path.join(os.path.dirname(__file__), '..')

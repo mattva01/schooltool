@@ -26,7 +26,6 @@ import unittest
 import cStringIO
 
 import zope.interface
-import zope.component
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.app.annotation.interfaces import IAttributeAnnotatable

@@ -23,7 +23,6 @@ $Id$
 """
 
 import datetime
-import itertools
 import sets
 import re
 

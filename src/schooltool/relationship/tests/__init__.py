@@ -31,8 +31,6 @@ SomeContained).
 $Id$
 """
 
-import unittest
-
 from zope.app.tests import setup
 from zope.interface import implements
 from zope.app.annotation.interfaces import IAttributeAnnotatable

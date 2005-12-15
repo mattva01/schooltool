@@ -24,7 +24,7 @@ must be written for every specific presentation type.
 
 $Id$
 """
-from zope.interface import Attribute
+
 from zope.publisher.interfaces import IPublishTraverse
 
 

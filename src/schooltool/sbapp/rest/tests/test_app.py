@@ -25,7 +25,6 @@ $Id$
 import unittest
 from StringIO import StringIO
 
-import zope
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.app.testing import ztapi, setup

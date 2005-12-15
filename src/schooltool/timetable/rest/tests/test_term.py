@@ -206,7 +206,6 @@ class TestTermFile(QuietLibxml2Mixin, unittest.TestCase):
         from schooltool.timetable.interfaces import ITermContainer
         from schooltool.timetable.rest.term import TermFileFactory
         from schooltool.timetable.rest.term import TermFile
-        from schooltool.timetable.rest.term import TermView
 
         ztapi.provideAdapter(ITermContainer, IFileFactory, TermFileFactory)
 

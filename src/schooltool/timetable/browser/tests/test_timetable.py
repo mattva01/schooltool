@@ -24,7 +24,6 @@ $Id$
 
 import unittest
 import datetime
-import itertools
 
 from zope.i18n import translate
 from zope.interface import implements
@@ -34,7 +33,6 @@ from zope.testing.doctestunit import pprint
 
 from schooltool.app.browser import testing
 from schooltool.testing import setup as sbsetup
-from schooltool import timetable
 
 
 def setUp(test=None):

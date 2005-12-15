@@ -24,7 +24,6 @@ $Id$
 
 import urllib
 import calendar
-import sys
 from datetime import datetime, date, time, timedelta
 from sets import Set
 
@@ -64,8 +63,7 @@ from schooltool.app.browser.interfaces import IEventForDisplay
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IHaveCalendar, IShowTimetables
-from schooltool.app.interfaces import vocabulary
-from schooltool.calendar.interfaces import ICalendar, ICalendarEvent
+from schooltool.calendar.interfaces import ICalendar
 from schooltool.calendar.recurrent import DailyRecurrenceRule
 from schooltool.calendar.recurrent import YearlyRecurrenceRule
 from schooltool.calendar.recurrent import MonthlyRecurrenceRule
@@ -79,7 +77,7 @@ from schooltool.calendar.utils import parse_time, weeknum_bounds
 from schooltool.calendar.utils import week_start, prev_month, next_month
 from schooltool.course.interfaces import ISection
 from schooltool.person.interfaces import IPerson, IPersonPreferences
-from schooltool.person.preference import PersonPreferences
+from schooltool.person.interfaces import vocabulary
 from schooltool.resource.interfaces import IResource
 from schooltool.timetable.schema import getPeriodsForDay
 from schooltool.timetable.interfaces import ITimetables

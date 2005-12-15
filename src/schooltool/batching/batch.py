@@ -21,7 +21,6 @@ Batching for schooltool.
 
 $Id$
 """
-from schooltool.batching.interfaces import IBatch
 
 
 class Batch(object):

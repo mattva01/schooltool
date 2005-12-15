@@ -25,7 +25,7 @@ $Id$
 import unittest
 
 from zope.testing import doctest
-import schooltool.relationship
+
 
 def doctest_delete_breaks_relationships():
     """When you delete an object, all of its relationships should be removed

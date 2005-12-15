@@ -21,12 +21,11 @@ Tests for SchoolBell calendaring views.
 
 $Id$
 """
+
 import unittest
-from pytz import timezone
 
 from zope.interface import implements
 from zope.publisher.browser import TestRequest
-from zope.testing import doctest
 
 from schooltool.app.browser.testing import setUp as browserSetUp, tearDown
 from schooltool.testing import setup as sbsetup

@@ -21,14 +21,11 @@ SchoolTool application interfaces
 
 $Id$
 """
-import pytz
-import calendar
 
 import zope.interface
 import zope.schema
 
 import zope.app.event.objectevent
-import zope.app.container.constraints
 from zope.app import container
 from zope.app import event
 from zope.app.location.interfaces import ILocation
@@ -37,7 +34,6 @@ from zope.app.security.interfaces import IAuthentication, ILogout
 from schooltool import SchoolToolMessage as _
 from schooltool.calendar.interfaces import IEditCalendar, ICalendarEvent
 from schooltool.person.interfaces import ICalendarDisplayPreferences
-from schooltool.person.interfaces import vocabulary
 
 
 # Dirty hacks that provide sensible i10n for widget error messages.

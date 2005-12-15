@@ -23,7 +23,7 @@ $Id$
 """
 
 import random
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 
 from pytz import utc
 from zope.interface import implements
