@@ -33,11 +33,27 @@ from zope.app.annotation.interfaces import IAnnotatable
 from zope.app.location.interfaces import ILocation
 
 from schooltool import SchoolToolMessage as _
-from schooltool.app.interfaces import vocabulary
 from schooltool.group.interfaces import IGroupMember
+
+
+def vocabulary(choices):
+    """Create a SimpleVocabulary from a list of values and titles.
+
+    >>> v = vocabulary([('value1', u"Title for value1"),
+    ...                 ('value2', u"Title for value2")])
+    >>> for term in v:
+    ...   print term.value, '|', term.token, '|', term.title
+    value1 | value1 | Title for value1
+    value2 | value2 | Title for value2
+
+    """
+    return zope.schema.vocabulary.SimpleVocabulary(
+        [zope.schema.vocabulary.SimpleTerm(v, title=t) for v, t in choices])
+
 
 class IHavePreferences(IAnnotatable):
     """An object that can have preferences. Namely a Person."""
+
 
 class IReadPerson(IGroupMember):
     """Publically accessible part of IPerson."""
@@ -116,11 +132,8 @@ class IPersonContained(IPerson, container.interfaces.IContained):
     container.constraints.containers(IPersonContainer)
 
 
-class IPersonPreferences(zope.interface.Interface):
-    """Preferences stored in an annotation on a person."""
-
-    __parent__ = zope.interface.Attribute(
-        """Person who owns these preferences""")
+class ICalendarDisplayPreferences(zope.interface.Interface):
+    """Preferences for displaying calendar events."""
 
     timezone = zope.schema.Choice(
         title=_("Time Zone"),
@@ -146,6 +159,13 @@ class IPersonPreferences(zope.interface.Interface):
         description=_("Start display of weeks on Sunday or Monday"),
         vocabulary=vocabulary([(calendar.SUNDAY, _("Sunday")),
                                (calendar.MONDAY, _("Monday"))]))
+
+
+class IPersonPreferences(ICalendarDisplayPreferences):
+    """Preferences stored in an annotation on a person."""
+
+    __parent__ = zope.interface.Attribute(
+        """Person who owns these preferences""")
 
     # XXX: Only available in SchoolTool, but that's ok for now.
     cal_periods = zope.schema.Bool(

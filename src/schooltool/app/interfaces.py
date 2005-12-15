@@ -36,6 +36,8 @@ from zope.app.security.interfaces import IAuthentication, ILogout
 
 from schooltool import SchoolToolMessage as _
 from schooltool.calendar.interfaces import IEditCalendar, ICalendarEvent
+from schooltool.person.interfaces import ICalendarDisplayPreferences
+from schooltool.person.interfaces import vocabulary
 
 
 # Dirty hacks that provide sensible i10n for widget error messages.
@@ -57,21 +59,6 @@ textwidgets_strings=[_('Form input is not a file object'),
                      _("Invalid integer data"),
                      _("Invalid floating point data"),
                      _("Invalid datetime data")]
-
-
-def vocabulary(choices):
-    """Create a SimpleVocabulary from a list of values and titles.
-
-    >>> v = vocabulary([('value1', u"Title for value1"),
-    ...                 ('value2', u"Title for value2")])
-    >>> for term in v:
-    ...   print term.value, '|', term.token, '|', term.title
-    value1 | value1 | Title for value1
-    value2 | value2 | Title for value2
-
-    """
-    return zope.schema.vocabulary.SimpleVocabulary(
-        [zope.schema.vocabulary.SimpleTerm(v, title=t) for v, t in choices])
 
 
 # Events
@@ -140,7 +127,7 @@ class ISchoolToolApplication(container.interfaces.IReadContainer):
             bottom of all pages and in the page title."""))
 
 
-class IApplicationPreferences(zope.interface.Interface):
+class IApplicationPreferences(ICalendarDisplayPreferences):
     """Preferences stored in an annotation on the SchoolToolApplication."""
 
     title = zope.schema.TextLine(
@@ -149,35 +136,6 @@ class IApplicationPreferences(zope.interface.Interface):
         description=_("""The name for the school or organization running
             this server.  This will be displayed on the public calendar, the
             bottom of all pages and in the page title."""))
-
-    timezone = zope.schema.Choice(
-        title=_("Time Zone"),
-        required=False,
-        description=_("""Time Zone used to display site-wide calendar
-            for guest users"""),
-        values=pytz.common_timezones)
-
-    timeformat = zope.schema.Choice(
-        title=_("Time Format"),
-        required=False,
-        description=_("Time Format"),
-        vocabulary=vocabulary([("%H:%M", _("HH:MM")),
-                                ("%I:%M %p", _("HH:MM am/pm"))]))
-
-    dateformat = zope.schema.Choice(
-        title=_("Date Format"),
-        required=False,
-        description=_("Date Format"),
-        vocabulary=vocabulary([("%m/%d/%y", _("MM/DD/YY")),
-                               ("%Y-%m-%d", _("YYYY-MM-DD")),
-                               ("%d %B, %Y", _("Day Month, Year"))]))
-
-    weekstart = zope.schema.Choice(
-        title=_("Week starts on:"),
-        required=False,
-        description=_("Start display of weeks on Sunday or Monday"),
-        vocabulary=vocabulary([(calendar.SUNDAY, _("Sunday")),
-                               (calendar.MONDAY, _("Monday"))]))
 
     frontPageCalendar = zope.schema.Bool(
         title=_("Front Page Calendar"),

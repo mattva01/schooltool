@@ -95,11 +95,12 @@ class PersonPreferencesView(View):
         * 'name' is not defined in the interface
         * 'value' does not pass widget validation
         """
-        if name not in IPersonPreferences.names():
+        field = IPersonPreferences.get(name)
+        if field is None:
             raise RestError('Preference "%s" unknown' % name)
 
         try:
-            IPersonPreferences.get(name).validate(value)
+            field.validate(value)
         except Exception:
             raise RestError('Preference value "%s" does not'
                             ' pass validation on "%s"' % (value, name))
