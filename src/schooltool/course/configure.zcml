@@ -65,8 +65,6 @@
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
     <implements interface="schooltool.note.interfaces.IHaveNotes" />
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />
-    <implements interface=
-      "schooltool.requirement.interfaces.IHaveRequirement" />
 
     <require permission="schooltool.view"
              attributes="title description instructors members

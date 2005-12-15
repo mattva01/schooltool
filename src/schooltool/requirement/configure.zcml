@@ -9,6 +9,12 @@
     trusted="true"
     />
 
+  <adapter
+    for=".interfaces.IHaveEvaluations"
+    provides=".interfaces.IEvaluations"
+    factory=".evaluation.getEvaluations"
+    trusted="true"
+    />
 
   <content class=".requirement.Requirement">
     <require permission="schooltool.view"
@@ -24,5 +30,16 @@
       set_schema=".interfaces.IGroupRequirement" />
   </content>
 
+  <content class="schooltool.course.course.Course">
+    <implements interface=".interfaces.IHaveRequirement" />
+  </content>
+
+  <content class="schooltool.course.section.Section">
+    <implements interface=".interfaces.IHaveRequirement" />
+  </content>
+  
+  <content class="schooltool.person.person.Person">
+    <implements interface=".interfaces.IHaveEvaluations" />
+  </content>
 
 </configure>

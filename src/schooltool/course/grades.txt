@@ -1,14 +1,68 @@
 Grading Integration Tests
 =========================
 
-Let's give this a shot:
+Sections should be able to be adapted to ``IRequirement``:
 
   >>> from schooltool.course.section import Section
   >>> section = Section()
   >>> section.title = u"3rd Period Econ."
-  
-  >>> from schooltool.requirement.interfaces import IHaveRequirement
-  >>> from schooltool.requirement.interfaces import IRequirement
-  >>> req = IRequirement(section)
+    
+  >>> from schooltool.requirement import interfaces 
+  >>> req = interfaces.IRequirement(section)
   >>> req
   GroupRequirement(u'3rd Period Econ.')
+  
+Create some people.  
+  
+  >>> from schooltool.person.person import Person
+  >>> student = Person(u"Jane Student")
+  >>> teacher = Person(u"Joe Teacher")
+  
+Grab the student's ``IEvaluations`` adapter:
+
+  >>> evals = interfaces.IEvaluations(student)
+  >>> evals #doctest:+ELLIPSIS
+  <Evaluations for <schooltool.person.person.Person object at ...>
+  
+At the moment we need to create a scoring system from scratch:
+
+  >>> from schooltool.requirement.scoresystem import AbstractScoreSystem
+  >>> from schooltool.requirement.scoresystem import UNSCORED
+  >>> class PassFail(AbstractScoreSystem):
+  ...    PASS = True
+  ...    Fail = False
+  ...    def isPassingScore(self, score):
+  ...        return bool(score)
+  ...
+  ...    def isValidScore(self, score):
+  ...        return score in [self.PASS, self.FAIL, UNSCORED]
+  ...
+  ...    def __repr__(self):
+  ...        return '%s(%r)' % (self.__class__.__name__, self.title)
+  
+  >>> pf = PassFail(u'Simple Pass/Fail System')
+  >>> pf.title
+  u'Simple Pass/Fail System'
+  
+We should be able to make an evaluation now:
+
+  >>> from schooltool.requirement import evaluation
+  >>> ev = evaluation.Evaluation(req, pf, PassFail.PASS, teacher)
+  >>> ev.requirement
+  GroupRequirement(u'3rd Period Econ.')
+  >>> ev.scoreSystem
+  PassFail(u'Simple Pass/Fail System')
+  >>> ev.value
+  True
+  >>> ev.evaluator #doctest:+ELLIPSIS
+  <schooltool.person.person.Person object at ...>
+
+And we then attach the section evaluation to the student being evaluated:
+
+  >>> sorted(evals.keys())
+  []
+  >>> ev
+  <Evaluation for GroupRequirement(u'3rd Period Econ.'), value=True>
+
+  >>> # name = evals.addEvaluation(ev)
+  
