@@ -205,18 +205,29 @@ class SectionAttendance(Persistent, AttendanceFilteringMixin):
             title = None
             if record.isTardy():
                 minutes = (record.late_arrival - record.datetime).seconds / 60
-                title = translate(
-                    _('Was late for ${section} (${mins} minutes).',
-                      mapping={'section': record.section.title,
-                               'mins': minutes}))
+                title = self.tardyEventTitle(record, minutes)
             elif record.isAbsent():
-                title = translate(_('Was absent from ${section}.',
-                                    mapping={'section': record.section.title}))
+                title = self.absenceEventTitle(record)
             if title:
-                events.append(CalendarEvent(title=title,
-                                            dtstart=record.datetime,
-                                            duration=record.duration))
+                events.append(self.makeCalendarEvent(record, title))
         return ImmutableCalendar(events)
+
+    def tardyEventTitle(self, record, minutes_late):
+        """Produce a title for a calendar event representing a tardy."""
+        return translate(_('Was late for ${section} (${mins} minutes).',
+                           mapping={'section': record.section.title,
+                                    'mins': minutes_late}))
+
+    def absenceEventTitle(self, record):
+        """Produce a title for a calendar event representing an absence."""
+        return translate(_('Was absent from ${section}.',
+                           mapping={'section': record.section.title}))
+
+    def makeCalendarEvent(self, record, title):
+        """Produce a calendar event for an absence or a tardy."""
+        return CalendarEvent(title=title,
+                             dtstart=record.datetime,
+                             duration=record.duration)
 
     def getAllForDay(self, date):
         return self.filter(date, date)
