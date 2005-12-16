@@ -27,6 +27,7 @@ import datetime
 
 from persistent import Persistent
 from persistent.list import PersistentList
+from persistent.dict import PersistentDict
 from zope.interface import implements
 from zope.app.annotation.interfaces import IAnnotations
 from zope.i18n import translate
@@ -34,12 +35,74 @@ from zope.i18n import translate
 from schooltool import SchoolToolMessage as _
 from schooltool.calendar.simple import ImmutableCalendar
 from schooltool.app.cal import CalendarEvent
+from schooltool.attendance.interfaces import IDayAttendance
+from schooltool.attendance.interfaces import IDayAttendanceRecord
 from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.attendance.interfaces import ISectionAttendanceRecord
 from schooltool.attendance.interfaces import IAbsenceExplanation
 from schooltool.attendance.interfaces import UNKNOWN, PRESENT, ABSENT, TARDY
 from schooltool.attendance.interfaces import NEW, ACCEPTED, REJECTED
 from schooltool.attendance.interfaces import AttendanceError
+
+
+class DayAttendance(Persistent):
+    """Persistent object that stores day attendance records for a student."""
+
+    implements(IDayAttendance)
+
+    def __init__(self):
+        self._records = PersistentDict()
+        # When it is time to optimize, convert it to OOBTree
+
+    def __iter__(self):
+        return iter(self._records.values())
+
+    def filter(self, first, last):
+        raise NotImplementedError # XXX TODO
+
+    def makeCalendar(self, first, last):
+        raise NotImplementedError # XXX TODO
+
+    def get(self, date):
+        try:
+            return self._records[date]
+        except KeyError:
+            return DayAttendanceRecord(date, UNKNOWN)
+
+    def record(self, date, present):
+        if date in self._records:
+            raise AttendanceError('record for %s already exists' % date)
+        if present: status = PRESENT
+        else: status = ABSENT
+        self._records[date] = DayAttendanceRecord(date, status)
+
+
+class DayAttendanceRecord(Persistent):
+    """Record of a student's presence or absence on a given day."""
+
+    implements(IDayAttendanceRecord)
+
+    def __init__(self, date, status):
+        self.date = date
+        self.status = status
+        self.late_arrival = None
+        self.explanations = PersistentList()
+
+    # XXX test
+    def isUnknown(self): return self.status == UNKNOWN
+    def isPresent(self): return self.status == PRESENT
+    def isAbsent(self):  return self.status == ABSENT
+    def isTardy(self):   return self.status == TARDY
+
+    def isExplained(self):
+        raise NotImplementedError # XXX
+    def addExplanation(self, text):
+        raise NotImplementedError # XXX
+    def makeTardy(self, text):
+        raise NotImplementedError # XXX
+
+    def __repr__(self):
+        return 'DayAttendanceRecord(%r, %s)' % (self.date, self.status)
 
 
 class SectionAttendance(Persistent):

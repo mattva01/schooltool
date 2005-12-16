@@ -38,10 +38,219 @@ import zope.component
 
 import schooltool.app # Dead chicken to appease the circle of import gods
 from schooltool.person.interfaces import IPerson
+from schooltool.attendance.interfaces import IDayAttendance
+from schooltool.attendance.interfaces import IDayAttendanceRecord
 from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.attendance.interfaces import ISectionAttendanceRecord
 from schooltool.attendance.interfaces import UNKNOWN, PRESENT, ABSENT, TARDY
 from schooltool.attendance.interfaces import AttendanceError
+
+
+class PersonStub(object):
+    implements(IPerson, IAttributeAnnotatable)
+
+
+class SectionStub(object):
+
+    def __init__(self, title=None):
+        self.title = title
+
+    def __repr__(self):
+        if self.title:
+            return 'SectionStub(%r)' % self.title
+        else:
+            return 'SectionStub()'
+
+
+def doctest_DayAttendance():
+    """Test for DayAttendance
+
+        >>> from schooltool.attendance.attendance import DayAttendance
+        >>> da = DayAttendance()
+        >>> verifyObject(IDayAttendance, da)
+        True
+
+        >>> isinstance(da, Persistent)
+        True
+
+    """
+
+
+def doctest_DayAttendance_record():
+    """Test for DayAttendance.record
+
+        >>> from schooltool.attendance.attendance import DayAttendance
+        >>> da = DayAttendance()
+
+        >>> len(list(da))
+        0
+
+    Let's record a presence
+
+        >>> day = datetime.date(2005, 12, 9)
+        >>> da.record(day, True)
+
+    We can check that it is there
+
+        >>> len(list(da))
+        1
+
+        >>> ar = da.get(day)
+        >>> ar
+        DayAttendanceRecord(datetime.date(2005, 12, 9), PRESENT)
+        >>> IDayAttendanceRecord.providedBy(ar)
+        True
+
+    It has all the data
+
+        >>> ar.date == day
+        True
+        >>> ar.status == PRESENT
+        True
+
+    Let's record an absence
+
+        >>> day2 = datetime.date(2005, 12, 7)
+        >>> da.record(day2, False)
+
+    We can check that it is there
+
+        >>> len(list(da))
+        2
+
+        >>> ar = da.get(day2)
+        >>> ar.date == day2
+        True
+        >>> ar.status == ABSENT
+        True
+
+    We cannot override existing records
+
+        >>> da.record(day, False)
+        Traceback (most recent call last):
+          ...
+        AttendanceError: record for 2005-12-09 already exists
+
+        >>> da.record(day, True)
+        Traceback (most recent call last):
+          ...
+        AttendanceError: record for 2005-12-09 already exists
+
+        >>> da.record(day2, False)
+        Traceback (most recent call last):
+          ...
+        AttendanceError: record for 2005-12-07 already exists
+
+    """
+
+
+def doctest_DayAttendance_get():
+    """Tests for DayAttendance.get
+
+        >>> from schooltool.attendance.attendance import DayAttendance
+        >>> da = DayAttendance()
+
+    If you try to see the attendance record that has never been recorded, you
+    get a "null object".
+
+        >>> day = datetime.date(2005, 12, 3)
+        >>> ar = da.get(day)
+        >>> ar
+        DayAttendanceRecord(datetime.date(2005, 12, 3), UNKNOWN)
+        >>> IDayAttendanceRecord.providedBy(ar)
+        True
+        >>> ar.status == UNKNOWN
+        True
+        >>> ar.date == day
+        True
+
+    Otherwise you get the correct record for a given date
+
+        >>> day1 = datetime.date(2005, 12, 9)
+        >>> day2 = datetime.date(2005, 12, 10)
+        >>> da.record(day1, True)
+        >>> da.record(day2, False)
+
+        >>> for day in (day1, day2):
+        ...     ar = da.get(day)
+        ...     assert ar.date == day
+        ...     print ar.date, ar.isPresent()
+        2005-12-09 True
+        2005-12-10 False
+
+    """
+
+
+def doctest_DayAttendance_iter():
+    """Tests for DayAttendance.__iter__
+
+        >>> from schooltool.attendance.attendance import DayAttendance
+        >>> da = DayAttendance()
+
+        >>> list(da)
+        []
+
+        >>> day1 = datetime.date(2005, 12, 9)
+        >>> da.record(day1, True)
+
+        >>> list(da)
+        [DayAttendanceRecord(datetime.date(2005, 12, 9), PRESENT)]
+
+        >>> day2 = datetime.date(2005, 12, 10)
+        >>> da.record(day2, False)
+
+        >>> list(da)
+        [DayAttendanceRecord(...), DayAttendanceRecord(...)]
+        >>> sorted(ar.date for ar in da)
+        [datetime.date(2005, 12, 9), datetime.date(2005, 12, 10)]
+
+    """
+
+
+def doctest_DayAttendanceRecord():
+    r"""Tests for DayAttendanceRecord
+
+        >>> from schooltool.attendance.attendance \
+        ...     import DayAttendanceRecord
+
+    Let's create an UNKNOWN record
+
+        >>> day = datetime.date(2005, 11, 23)
+        >>> ar = DayAttendanceRecord(day, UNKNOWN)
+        >>> verifyObject(IDayAttendanceRecord, ar)
+        True
+
+        >>> isinstance(ar, Persistent)
+        True
+
+        >>> ar.status == UNKNOWN
+        True
+        >>> ar.date == day
+        True
+
+        >>> ar.late_arrival is None
+        True
+        >>> ar.explanations
+        []
+
+    Let's create a regular record
+
+        >>> day = datetime.date(2005, 11, 30)
+        >>> ar = DayAttendanceRecord(day, ABSENT)
+        >>> verifyObject(IDayAttendanceRecord, ar)
+        True
+
+        >>> ar.status == ABSENT
+        True
+        >>> ar.date == day
+        True
+
+        >>> ar.late_arrival is None
+        True
+        >>> ar.explanations
+        []
+
+    """
 
 
 def doctest_SectionAttendance():
@@ -56,18 +265,6 @@ def doctest_SectionAttendance():
         True
 
     """
-
-
-class SectionStub(object):
-
-    def __init__(self, title=None):
-        self.title = title
-
-    def __repr__(self):
-        if self.title:
-            return 'SectionStub(%r)' % self.title
-        else:
-            return 'SectionStub()'
 
 
 def doctest_SectionAttendance_record():
@@ -401,6 +598,8 @@ def doctest_SectionAttendanceRecord():
         True
         >>> ar.late_arrival is None
         True
+        >>> ar.explanations
+        []
 
     Let's create a regular record
 
@@ -426,6 +625,8 @@ def doctest_SectionAttendanceRecord():
 
         >>> ar.late_arrival is None
         True
+        >>> ar.explanations
+        []
 
     """
 
@@ -611,9 +812,6 @@ def doctest_AbsenceExplanation():
         False
 
     """
-
-class PersonStub(object):
-    implements(IPerson, IAttributeAnnotatable)
 
 
 def doctest_getSectionAttendance():

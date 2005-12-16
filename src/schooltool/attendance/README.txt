@@ -61,9 +61,11 @@ Use cases
 
 - Sparkline plot for day/section absence during the last 10 days.
 
-- List of unexplained attendance incidents for a student for both days and periods.
+- List of unexplained attendance incidents for a student for both days and
+  periods.
 
-- List of all attendance incidents for a student for a single term (i.e. date range).
+- List of all attendance incidents for a student for a single term (i.e. date
+  range).
 
 - Modification of attendance workflow status, whatever that means.
 
@@ -71,8 +73,9 @@ Use cases
 API
 ---
 
-The following code is *science-fiction*, that is, it doesn't work yet, but instead
-represents our thoughts about the API should look like
+The following code is *science-fiction*, that is, it doesn't work yet, but
+instead represents our thoughts about the API should look like
+
 
 Realtime class attendance
 ~~~~~~~~~~~~~~~~~~~~~~~~~
