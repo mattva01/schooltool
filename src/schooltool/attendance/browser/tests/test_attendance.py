@@ -23,6 +23,7 @@ $Id$
 """
 import unittest
 import datetime
+from pprint import pprint
 
 from pytz import utc, timezone
 from zope.testing import doctest
@@ -30,6 +31,7 @@ from zope.app.testing import ztapi, setup
 from zope.publisher.browser import TestRequest
 from zope.interface import implements, Interface
 from zope.component import adapts
+from zope.app.testing.setup import setUpAnnotations
 
 from schooltool.timetable import ITimetables
 from schooltool.timetable import TimetableActivity
@@ -37,6 +39,7 @@ from schooltool.timetable.model import TimetableCalendarEvent
 from schooltool.calendar.simple import ImmutableCalendar
 from schooltool.calendar.simple import SimpleCalendarEvent
 from schooltool.course.interfaces import ISection
+from schooltool.relationship.tests import setUpRelationships
 from schooltool.testing.util import fakePath
 
 
@@ -260,9 +263,198 @@ def doctest_AttendanceCalendarEventViewlet():
     """
 
 
+def doctest_RealtimeAttendanceView_listMembers():
+    """Test for RealtimeAttendanceView.listMembers
+
+    First, let's register getSectionAttendance as an adapter:
+
+        >>> from schooltool.attendance.interfaces import ISectionAttendance
+        >>> from schooltool.attendance.attendance import getSectionAttendance
+        >>> from schooltool.person.interfaces import IPerson
+        >>> ztapi.provideAdapter(IPerson, ISectionAttendance,
+        ...                      getSectionAttendance)
+
+    Let's set up a view:
+
+        >>> from schooltool.attendance.browser.attendance import \\
+        ...     RealtimeAttendanceView
+        >>> from schooltool.course.section import Section
+        >>> section = Section()
+        >>> view = RealtimeAttendanceView(section, TestRequest())
+        >>> view.date = datetime.date(2005, 12, 15)
+
+    If the section does not have any members, listMembers returns an
+    empty list:
+
+        >>> view.listMembers()
+        []
+
+    Let's add some students:
+
+        >>> from schooltool.group.group import Group
+        >>> from schooltool.person.person import Person, PersonContainer
+        >>> person1 = Person('person1', title='Person1')
+        >>> person2 = Person('person2', title='Person2')
+        >>> person3 = Person('person3', title='Person3')
+        >>> person4 = Person('person4', title='Person4')
+
+        >>> persons = PersonContainer()
+        >>> persons[''] = person1
+        >>> persons[''] = person2
+        >>> persons[''] = person3
+        >>> persons[''] = person4
+
+        >>> section.members.add(person1)
+        >>> section.members.add(person2)
+
+
+    These members should appear in the output
+
+        >>> pprint(view.listMembers())
+        [(u'person1', 'Person1', 'attendance-clear'),
+         (u'person2', 'Person2', 'attendance-clear')]
+
+    So should transitive members:
+
+        >>> form = Group('Form1')
+        >>> form.members.add(person3)
+        >>> form.members.add(person4)
+        >>> section.members.add(form)
+
+        >>> pprint(view.listMembers())
+        [(u'person1', 'Person1', 'attendance-clear'),
+         (u'person2', 'Person2', 'attendance-clear'),
+         (u'person3', 'Person3', 'attendance-clear'),
+         (u'person4', 'Person4', 'attendance-clear')]
+
+    Let's add an absence record to one person:
+
+        >>> attendance = ISectionAttendance(person4)
+        >>> attendance.record(
+        ...     section, datetime.datetime(2005, 12, 15, 10, 00, tzinfo=utc),
+        ...     datetime.timedelta(minutes=45), 'B', False)
+
+    Now the members' list displays a new status:
+
+        >>> pprint(view.listMembers())
+        [(u'person1', 'Person1', 'attendance-clear'),
+         (u'person2', 'Person2', 'attendance-clear'),
+         (u'person3', 'Person3', 'attendance-clear'),
+         (u'person4', 'Person4', 'attendance-absent')]
+
+    """
+
+def doctest_RealtimeAttendanceView_studentStatus():
+    """Tests for RealtimeAttendanceView.studentStatus
+
+    First, let's register getSectionAttendance as an adapter:
+
+        >>> from schooltool.attendance.interfaces import ISectionAttendance
+        >>> from schooltool.attendance.attendance import getSectionAttendance
+        >>> from schooltool.person.interfaces import IPerson
+        >>> ztapi.provideAdapter(IPerson, ISectionAttendance,
+        ...                      getSectionAttendance)
+
+
+        >>> from schooltool.attendance.browser.attendance import \\
+        ...     RealtimeAttendanceView
+        >>> from schooltool.course.section import Section
+        >>> section = Section()
+        >>> view = RealtimeAttendanceView(section, TestRequest())
+        >>> view.date = datetime.date(2005, 12, 15)
+
+    Let's add some members to the group:
+
+        >>> from schooltool.group.group import Group
+        >>> from schooltool.person.person import Person, PersonContainer
+        >>> person1 = Person('person1', title='Person1')
+        >>> person2 = Person('person2', title='Person2')
+        >>> person3 = Person('person3', title='Person3')
+        >>> person4 = Person('person4', title='Person4')
+
+        >>> persons = PersonContainer()
+        >>> persons[''] = person1
+        >>> persons[''] = person2
+        >>> persons[''] = person3
+        >>> persons[''] = person4
+
+        >>> section.members.add(person1)
+        >>> section.members.add(person2)
+
+    Initially the student's absence is 'clear' (no records):
+
+        >>> view.studentStatus(person1)
+        'attendance-clear'
+
+    Let's record an unexplained absence for the student:
+
+        >>> attendance = ISectionAttendance(person1)
+        >>> attendance.record(
+        ...     section, datetime.datetime(2005, 12, 15, 10, 00, tzinfo=utc),
+        ...     datetime.timedelta(minutes=45), 'B', False)
+
+    Now that the student has an unexplained absence, and no presence
+    records, the status is 'absent':
+
+        >>> view.studentStatus(person1)
+        'attendance-absent'
+
+    If we add a presence record for the same day, the status becomes 'alert':
+
+        >>> attendance.record(
+        ...     section, datetime.datetime(2005, 12, 15, 11, 00, tzinfo=utc),
+        ...     datetime.timedelta(minutes=45), 'C', True)
+        >>> view.studentStatus(person1)
+        'attendance-alert'
+
+    Let's take another student.  It's a good student, she's been
+    present to all sections:
+
+        >>> attendance = ISectionAttendance(person2)
+        >>> attendance.record(
+        ...     section, datetime.datetime(2005, 12, 15, 10, 00, tzinfo=utc),
+        ...     datetime.timedelta(minutes=45), 'B', True)
+        >>> attendance.record(
+        ...     section, datetime.datetime(2005, 12, 15, 11, 00, tzinfo=utc),
+        ...     datetime.timedelta(minutes=45), 'C', True)
+        >>> view.studentStatus(person2)
+        'attendance-present'
+
+    Let's take another yet student.  He's broken his leg and is
+    excused for the whole two months:
+
+        >>> attendance = ISectionAttendance(person3)
+        >>> attendance.record(
+        ...     section, datetime.datetime(2005, 12, 15, 10, 00, tzinfo=utc),
+        ...     datetime.timedelta(minutes=45), 'B', False)
+        >>> attendance.record(
+        ...     section, datetime.datetime(2005, 12, 15, 11, 00, tzinfo=utc),
+        ...     datetime.timedelta(minutes=45), 'C', False)
+        >>> for record in attendance.getAllForDay(view.date):
+        ...     expn = record.addExplanation("Broken leg")
+        ...     expn.accept()
+        >>> view.studentStatus(person3)
+        'attendance-explained'
+
+    Yet another student was tardy.  The status shows that he's been absent:
+
+        >>> attendance = ISectionAttendance(person4)
+        >>> attendance.record(
+        ...     section, datetime.datetime(2005, 12, 15, 10, 00, tzinfo=utc),
+        ...     datetime.timedelta(minutes=45), 'B', False)
+        >>> ar = attendance.getAllForDay(view.date).next()
+        >>> ar.makeTardy(datetime.datetime(2005, 12, 15, 10, 9, tzinfo=utc))
+        >>> view.studentStatus(person4)
+        'attendance-absent'
+
+    """
+
+
 def setUp(test):
     setup.placelessSetUp()
     setup.setUpTraversal()
+    setUpAnnotations()
+    setUpRelationships()
 
 
 def tearDown(test):
