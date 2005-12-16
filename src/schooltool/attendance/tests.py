@@ -809,8 +809,52 @@ def doctest_SectionAttendance_makeCalendar():
     """
 
 
+def doctest_SectionAttendance_tardyEventTitle():
+    r"""Tests for SectionAttendance.tardyEventTitle
+
+        >>> from schooltool.attendance.attendance import SectionAttendance
+        >>> from schooltool.attendance.attendance \
+        ...     import SectionAttendanceRecord
+        >>> sa = SectionAttendance()
+
+        >>> section = SectionStub(title="Lithomancy")
+        >>> dt = datetime.datetime(2005, 11, 23, 14, 55)
+        >>> duration = datetime.timedelta(minutes=45)
+        >>> period_id = 'Period A'
+        >>> ar = SectionAttendanceRecord(section, dt, ABSENT, duration,
+        ...                              period_id)
+        >>> minutes_late = 14
+        >>> ar.makeTardy(dt + datetime.timedelta(minutes=minutes_late))
+
+        >>> print sa.tardyEventTitle(ar, minutes_late)
+        Was late for Lithomancy (14 minutes).
+
+    """
+
+
+def doctest_SectionAttendance_absenceEventTitle():
+    r"""Tests for SectionAttendance.absenceEventTitle
+
+        >>> from schooltool.attendance.attendance import SectionAttendance
+        >>> from schooltool.attendance.attendance \
+        ...     import SectionAttendanceRecord
+        >>> sa = SectionAttendance()
+
+        >>> section = SectionStub(title="Lithomancy")
+        >>> dt = datetime.datetime(2005, 11, 23, 14, 55)
+        >>> duration = datetime.timedelta(minutes=45)
+        >>> period_id = 'Period A'
+        >>> ar = SectionAttendanceRecord(section, dt, ABSENT, duration,
+        ...                              period_id)
+
+        >>> print sa.absenceEventTitle(ar)
+        Was absent from Lithomancy.
+
+    """
+
+
 def doctest_SectionAttendance_makeCalendarEvent():
-    r"""Tests for SectionAttendance.makeCalendar
+    r"""Tests for SectionAttendance.makeCalendarEvent
 
         >>> from schooltool.attendance.attendance import SectionAttendance
         >>> from schooltool.attendance.attendance \
