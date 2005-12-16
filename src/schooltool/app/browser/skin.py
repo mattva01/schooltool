@@ -75,8 +75,11 @@ class OrderedViewletManager(ViewletManagerBase):
         def key_func((name, viewlet)):
             if hasattr(viewlet, 'order'):
                 return (0, int(viewlet.order))
-            else:
+            elif hasattr(viewlet, 'title'):
                 return (1, viewlet.title)
+            else:
+                raise AttributeError('%r viewlet has neither order nor title'
+                                     % name)
 
         return sorted(viewlets, key=key_func)
 

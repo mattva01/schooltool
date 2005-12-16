@@ -49,8 +49,9 @@ def doctest_OrderedViewletManager_sort():
     doesn't, the one with an order comes first.
 
         >>> class SomeViewlet(object):
-        ...     def __init__(self, title, order=None):
-        ...         self.title = title
+        ...     def __init__(self, title=None, order=None):
+        ...         if title is not None:
+        ...             self.title = title
         ...         if order is not None:
         ...             self.order = order
 
@@ -71,6 +72,32 @@ def doctest_OrderedViewletManager_sort():
         Apple
         Grapefuit
         Orange
+
+    Viewlets may not necessarily have a title, if they have an order.
+
+        >>> viewlets = [
+        ...     ('name1', SomeViewlet(order='1')),
+        ...     ('name22', SomeViewlet(order='22')),
+        ...     ('name5', SomeViewlet(order='5')),
+        ... ]
+        >>> for name, v in mgr.sort(viewlets):
+        ...     print name
+        name1
+        name5
+        name22
+
+    Viewlets must have either an order or a title, and the error message
+    should explicitly say which viewlet is at fault:
+
+        >>> viewlets = [
+        ...     ('name1', SomeViewlet(order='1')),
+        ...     ('name2', SomeViewlet()),
+        ...     ('name3', SomeViewlet(title='hi')),
+        ... ]
+        >>> mgr.sort(viewlets)
+        Traceback (most recent call last):
+          ...
+        AttributeError: 'name2' viewlet has neither order nor title
 
     """
 
