@@ -84,7 +84,7 @@ class OrderedViewletManager(ViewletManagerBase):
 class ICalendarEventContext(Interface):
     """Schema for attributes required by CalendarEventViewletManager."""
 
-    ev = Object(IEventForDisplay)
+    event = Object(IEventForDisplay)
 
 
 class CalendarEventViewletManager(OrderedViewletManager):

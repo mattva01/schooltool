@@ -4,19 +4,19 @@
 <metal:block fill-slot="calendar-body">
 
 <div id="events-allday">
-  <tal:loop repeat="ev view/getAllDayEvents">
+  <tal:loop repeat="event view/getAllDayEvents">
     <div class="event-allday"
-         tal:attributes="style string:border: 1px ${ev/color2} solid;;
-                         background: ${ev/color1};;">
+         tal:attributes="style string:border: 1px ${event/color2} solid;;
+                         background: ${event/color1};;">
       <h6>
-        <a tal:attributes="href ev/viewLink"
-           tal:omit-tag="not:ev/viewLink"
-           tal:content="ev/title">(title)</a>
+        <a tal:attributes="href event/viewLink"
+           tal:omit-tag="not:event/viewLink"
+           tal:content="event/title">(title)</a>
       </h6>
       <metal:block use-macro="template/macros/event-delete-button" />
 
-      <p tal:condition="ev/description"
-         tal:content="ev/description">
+      <p tal:condition="event/description"
+         tal:content="event/description">
         (description)
       </p>
     </div>
@@ -54,18 +54,18 @@
 <!-- Events -->
 <div class="events" tal:define="compress python:view.getColumns() > 2">
   <tal:each_row repeat="hour hours">
-    <tal:each_column repeat="ev hour/cols">
-      <tal:if_have_an_event condition="ev">
+    <tal:each_column repeat="event hour/cols">
+      <tal:if_have_an_event condition="event">
         <div class="event"
              onmouseover="this.style.zIndex=9; this.style.overflow='visible'; this.style.display='block';"
              onmouseout="this.style.zIndex=1; this.style.overflow='hidden'; this.style.display='block';"
-             tal:define="num repeat/ev/index;
+             tal:define="num repeat/event/index;
                          unit python:compress and '%' or 'em';
                          indent python:compress and 15 or 20.5;
                          left python:num * indent;
-                         top python:view.eventTop(ev);
-                         height python:view.eventHeight(ev)"
-             tal:attributes="style string:background: ${ev/color1};;
+                         top python:view.eventTop(event);
+                         height python:view.eventHeight(event)"
+             tal:attributes="style string:background: ${event/color1};;
                              min-height: ${height}em;;
                              height: ${height}em;;
                              margin-left: $left$unit;;
@@ -87,16 +87,16 @@
 <tal:hide-macro-definitions-from-browser condition="nothing">
 
 <!-- Macro for the title bar of an event box.
-     Expects to find an EventForDisplay instance named 'ev'
+     Expects to find an EventForDisplay instance named 'event'
   -->
 <metal:block define-macro="event-title-bar">
-  <h6 tal:attributes="style string:background: ${ev/color2}">
-    <a tal:attributes="href ev/viewLink; title ev/title"
-       tal:omit-tag="not:ev/viewLink">
-      <span tal:replace="ev/shortTitle">(shortened title)</span>
+  <h6 tal:attributes="style string:background: ${event/color2}">
+    <a tal:attributes="href event/viewLink; title event/title"
+       tal:omit-tag="not:event/viewLink">
+      <span tal:replace="event/shortTitle">(shortened title)</span>
       <span class="start-end"
-            tal:define="start python:ev.dtstarttz.strftime(view.time_fmt);
-                        end python:ev.dtendtz.strftime(view.time_fmt)">
+            tal:define="start python:event.dtstarttz.strftime(view.time_fmt);
+                        end python:event.dtendtz.strftime(view.time_fmt)">
         (<span tal:content="start">HH:MM</span>
           - <span tal:content="end">HH:MM</span>)
       </span>
@@ -105,7 +105,7 @@
 </metal:block>
 
 <!-- Macro for the delete button in an event box.
-     Expects to find an EventForDisplay instance named 'ev'
+     Expects to find an EventForDisplay instance named 'event'
 
      XXX mg: I suspect that
                i18n:attributes="title"
@@ -117,9 +117,9 @@
 <metal:block define-macro="event-delete-button">
   <tal:if_can_remove_events condition="view/canRemoveEvents">
     <a class="delete"
-       tal:condition="ev/deleteLink"
-       tal:attributes="href ev/deleteLink;
-                       title string:Delete ${ev/title}"
+       tal:condition="event/deleteLink"
+       tal:attributes="href event/deleteLink;
+                       title string:Delete ${event/title}"
        i18n:attributes="title"
       ><img alt="[X]" tal:attributes="src context/++resource++delete.png"
             /></a>
