@@ -146,7 +146,17 @@ class SectionAttendanceRecord(AttendanceRecord):
 # Attendance storage classes
 #
 
-class DayAttendance(Persistent):
+
+class AttendanceFilteringMixin(object):
+    """Mixin that implements IAttendance.filter on top of __iter__."""
+
+    def filter(self, first, last):
+        for ar in self:
+            if first <= ar.date <= last:
+                yield ar
+
+
+class DayAttendance(Persistent, AttendanceFilteringMixin):
     """Persistent object that stores day attendance records for a student."""
 
     implements(IDayAttendance)
@@ -157,9 +167,6 @@ class DayAttendance(Persistent):
 
     def __iter__(self):
         return iter(self._records.values())
-
-    def filter(self, first, last):
-        raise NotImplementedError # XXX TODO
 
     def makeCalendar(self, first, last):
         raise NotImplementedError # XXX TODO
@@ -178,7 +185,7 @@ class DayAttendance(Persistent):
         self._records[date] = DayAttendanceRecord(date, status)
 
 
-class SectionAttendance(Persistent):
+class SectionAttendance(Persistent, AttendanceFilteringMixin):
     """Persistent object that stores section attendance records for a student.
     """
 
@@ -191,11 +198,6 @@ class SectionAttendance(Persistent):
 
     def __iter__(self):
         return iter(self._records)
-
-    def filter(self, first, last):
-        for ar in self:
-            if first <= ar.date <= last:
-                yield ar
 
     def makeCalendar(self, first, last):
         events = []

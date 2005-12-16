@@ -359,6 +359,52 @@ def doctest_SectionAttendanceRecord():
 # Attendance storage classes
 #
 
+def doctest_AttendanceFilteringMixin_filter():
+    r"""Tests for AttendanceFilteringMixin.filter
+
+        >>> d1 = datetime.date(2005, 12, 5)
+        >>> d2 = datetime.date(2005, 12, 7)
+        >>> d3 = datetime.date(2005, 12, 9)
+
+        >>> from schooltool.attendance.attendance \
+        ...         import AttendanceFilteringMixin
+        >>> from schooltool.attendance.attendance import DayAttendanceRecord
+        >>> class AttendanceStub(AttendanceFilteringMixin):
+        ...     def __iter__(self):
+        ...         yield DayAttendanceRecord(d1, PRESENT)
+        ...         yield DayAttendanceRecord(d2, PRESENT)
+        ...         yield DayAttendanceRecord(d2, ABSENT)
+        ...         yield DayAttendanceRecord(d3, PRESENT)
+        >>> attendance = AttendanceStub()
+
+        >>> def print_for(first, last):
+        ...     for r in attendance.filter(first, last):
+        ...         print r.date, r.isPresent()
+
+        >>> print_for(d1, d1)
+        2005-12-05 True
+
+        >>> print_for(d1, d2)
+        2005-12-05 True
+        2005-12-07 True
+        2005-12-07 False
+
+        >>> print_for(d2, d3)
+        2005-12-07 True
+        2005-12-07 False
+        2005-12-09 True
+
+        >>> print_for(d1, d3)
+        2005-12-05 True
+        2005-12-07 True
+        2005-12-07 False
+        2005-12-09 True
+
+        >>> print_for(d3, d1)
+
+    """
+
+
 def doctest_DayAttendance():
     """Test for DayAttendance
 
@@ -705,61 +751,6 @@ def doctest_SectionAttendance_getAllForDay():
         2005-12-09 A Chem True
 
         >>> print_for(datetime.date(2005, 12, 4))
-
-    """
-
-
-def doctest_SectionAttendance_filter():
-    """Tests for SectionAttendance.filter
-
-        >>> from schooltool.attendance.attendance import SectionAttendance
-        >>> sa = SectionAttendance()
-
-        >>> section1 = SectionStub('Math')
-        >>> section2 = SectionStub('Chem')
-        >>> dt1a = datetime.datetime(2005, 12, 5, 13, 30)
-        >>> dt1b = datetime.datetime(2005, 12, 5, 15, 30)
-        >>> dt2a = datetime.datetime(2005, 12, 7, 13, 30)
-        >>> dt2b = datetime.datetime(2005, 12, 7, 15, 30)
-        >>> dt3a = datetime.datetime(2005, 12, 9, 13, 30)
-        >>> dt3b = datetime.datetime(2005, 12, 9, 15, 30)
-        >>> duration = datetime.timedelta(minutes=45)
-
-        >>> sa.record(section1, dt1a, duration, 'A', True)
-        >>> sa.record(section1, dt2a, duration, 'A', True)
-        >>> sa.record(section2, dt2a, duration, 'A', False)
-        >>> sa.record(section1, dt2b, duration, 'B', False)
-        >>> sa.record(section2, dt3a, duration, 'A', True)
-
-        >>> def print_for(first, last):
-        ...     def key(ar):
-        ...         return (ar.datetime, ar.section.title)
-        ...     for r in sorted(sa.filter(first, last), key=key):
-        ...         print r.date, r.period_id, r.section.title, r.isPresent()
-
-        >>> print_for(dt1a.date(), dt1a.date())
-        2005-12-05 A Math True
-
-        >>> print_for(dt1a.date(), dt2a.date())
-        2005-12-05 A Math True
-        2005-12-07 A Chem False
-        2005-12-07 A Math True
-        2005-12-07 B Math False
-
-        >>> print_for(dt2a.date(), dt3a.date())
-        2005-12-07 A Chem False
-        2005-12-07 A Math True
-        2005-12-07 B Math False
-        2005-12-09 A Chem True
-
-        >>> print_for(dt1a.date(), dt3a.date())
-        2005-12-05 A Math True
-        2005-12-07 A Chem False
-        2005-12-07 A Math True
-        2005-12-07 B Math False
-        2005-12-09 A Chem True
-
-        >>> print_for(dt3a.date(), dt1a.date())
 
     """
 
