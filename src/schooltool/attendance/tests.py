@@ -45,6 +45,7 @@ from schooltool.attendance.interfaces import ISectionAttendanceRecord
 from schooltool.attendance.interfaces import UNKNOWN, PRESENT, ABSENT, TARDY
 from schooltool.attendance.interfaces import AttendanceError
 
+
 #
 # Stubs
 #
@@ -820,7 +821,6 @@ def doctest_SectionAttendance_makeCalendar():
 # Adapters
 #
 
-
 def doctest_getSectionAttendance():
     """Tests for getSectionAttendance.
 
@@ -846,6 +846,38 @@ def doctest_getSectionAttendance():
     If you adapt more than once, you will get the same object
 
         >>> attendance is ISectionAttendance(person)
+        True
+
+        >>> setup.placelessTearDown()
+
+    """
+
+
+def doctest_getDayAttendance():
+    """Tests for getDayAttendance.
+
+        >>> setup.placelessSetUp()
+        >>> setup.setUpAnnotations()
+        >>> from schooltool.attendance.attendance import getDayAttendance
+        >>> zope.component.provideAdapter(getDayAttendance,
+        ...                               [IPerson], IDayAttendance)
+
+    getDayAttendance lets us get IDayAttendance for a person
+
+        >>> person = PersonStub()
+        >>> attendance = IDayAttendance(person)
+        >>> attendance
+        <schooltool.attendance.attendance.DayAttendance object at ...>
+
+    The attendance object is stored in person's annotations
+
+        >>> annotations = IAnnotations(person)
+        >>> attendance is annotations['schooltool.attendance.DayAttendance']
+        True
+
+    If you adapt more than once, you will get the same object
+
+        >>> attendance is IDayAttendance(person)
         True
 
         >>> setup.placelessTearDown()

@@ -45,6 +45,10 @@ from schooltool.attendance.interfaces import NEW, ACCEPTED, REJECTED
 from schooltool.attendance.interfaces import AttendanceError
 
 
+#
+# Attendance record classes
+#
+
 class AttendanceRecord(Persistent):
     """Base class for attendance records."""
 
@@ -138,6 +142,10 @@ class SectionAttendanceRecord(AttendanceRecord):
                                                         self.status)
 
 
+#
+# Attendance storage classes
+#
+
 class DayAttendance(Persistent):
     """Persistent object that stores day attendance records for a student."""
 
@@ -228,7 +236,13 @@ class SectionAttendance(Persistent):
         self._records.append(ar)
 
 
+#
+# Adapters
+#
+
+DAY_ATTENDANCE_KEY = 'schooltool.attendance.DayAttendance'
 SECTION_ATTENDANCE_KEY = 'schooltool.attendance.SectionAttendance'
+
 
 def getSectionAttendance(person):
     """Return the section attendance record for a person."""
@@ -238,5 +252,16 @@ def getSectionAttendance(person):
     except KeyError:
         attendance = SectionAttendance()
         annotations[SECTION_ATTENDANCE_KEY] = attendance
+    return attendance
+
+
+def getDayAttendance(person):
+    """Return the section attendance record for a person."""
+    annotations = IAnnotations(person)
+    try:
+        attendance = annotations[DAY_ATTENDANCE_KEY]
+    except KeyError:
+        attendance = DayAttendance()
+        annotations[DAY_ATTENDANCE_KEY] = attendance
     return attendance
 
