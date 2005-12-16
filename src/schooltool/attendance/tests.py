@@ -631,16 +631,13 @@ def doctest_SectionAttendanceRecord():
     """
 
 
-def doctest_SectionAttendanceRecord_isUnknown_isPresent_isAbsent_isTardy():
+def doctest_AttendanceRecord_isUnknown_isPresent_isAbsent_isTardy():
     r"""Tests for SectionAttendanceRecord.isSomething functions
 
-        >>> from schooltool.attendance.attendance \
-        ...     import SectionAttendanceRecord
+        >>> from schooltool.attendance.attendance import AttendanceRecord
 
-        >>> section = SectionStub()
-        >>> dt = datetime.datetime(2005, 11, 23, 14, 55)
         >>> for status in (UNKNOWN, PRESENT, ABSENT, TARDY):
-        ...     ar = SectionAttendanceRecord(section, dt, status)
+        ...     ar = AttendanceRecord(status)
         ...     print "%-7s %-5s %-5s %-5s %-5s" % (ar.status,
         ...                 ar.isUnknown(), ar.isPresent(), ar.isAbsent(),
         ...                 ar.isTardy())
@@ -652,17 +649,14 @@ def doctest_SectionAttendanceRecord_isUnknown_isPresent_isAbsent_isTardy():
     """
 
 
-def doctest_SectionAttendanceRecord_makeTardy():
-    r"""Tests for SectionAttendanceRecord.makeTardy
+def doctest_AttendanceRecord_makeTardy():
+    r"""Tests for AttendanceRecord.makeTardy
 
-        >>> from schooltool.attendance.attendance \
-        ...     import SectionAttendanceRecord
+        >>> from schooltool.attendance.attendance import AttendanceRecord
 
     If you have an absence
 
-        >>> section = SectionStub()
-        >>> dt = datetime.datetime(2005, 11, 23, 14, 55)
-        >>> ar = SectionAttendanceRecord(section, dt, ABSENT)
+        >>> ar = AttendanceRecord(ABSENT)
 
     you can convert it to a tardy
 
@@ -676,7 +670,7 @@ def doctest_SectionAttendanceRecord_makeTardy():
     In all other cases you can't.
 
         >>> for status in (UNKNOWN, PRESENT, TARDY):
-        ...     ar = SectionAttendanceRecord(section, dt, status)
+        ...     ar = AttendanceRecord(status)
         ...     try:
         ...         ar.makeTardy(datetime.time(15, 03))
         ...     except AttendanceError:
@@ -687,17 +681,14 @@ def doctest_SectionAttendanceRecord_makeTardy():
     """
 
 
-def doctest_SectionAttendanceRecord_isExplained_addExplanation():
-    r"""Tests for SectionAttendanceRecord.addExplanation
+def doctest_AttendanceRecord_isExplained_addExplanation():
+    r"""Tests for AttendanceRecord.addExplanation
 
-        >>> from schooltool.attendance.attendance \
-        ...     import SectionAttendanceRecord
+        >>> from schooltool.attendance.attendance import AttendanceRecord
 
     If you have an absence
 
-        >>> section = SectionStub()
-        >>> dt = datetime.datetime(2005, 11, 23, 14, 55)
-        >>> ar = SectionAttendanceRecord(section, dt, ABSENT)
+        >>> ar = AttendanceRecord(ABSENT)
 
     In the beginning it is not explained:
 

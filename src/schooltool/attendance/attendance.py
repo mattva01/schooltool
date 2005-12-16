@@ -45,6 +45,80 @@ from schooltool.attendance.interfaces import NEW, ACCEPTED, REJECTED
 from schooltool.attendance.interfaces import AttendanceError
 
 
+class AttendanceRecord(Persistent):
+    """Base class for attendance records."""
+
+    def __init__(self, status):
+        self.status = status
+        self.late_arrival = None
+        self.explanations = PersistentList()
+
+    def isUnknown(self): return self.status == UNKNOWN
+    def isPresent(self): return self.status == PRESENT
+    def isAbsent(self):  return self.status == ABSENT
+    def isTardy(self):   return self.status == TARDY
+
+    def isExplained(self):
+        if self.status not in (ABSENT, TARDY):
+            raise AttendanceError(
+                "only absences and tardies can be explained.")
+        for e in self.explanations:
+            if e.isAccepted():
+                return True
+        return False
+
+    def addExplanation(self, text):
+        if self.status not in (ABSENT, TARDY):
+            raise AttendanceError(
+                "only absences and tardies can be explained.")
+        explanation = AbsenceExplanation(text)
+        self.explanations.append(explanation)
+        return explanation
+
+    def makeTardy(self, arrival_time):
+        if not self.isAbsent():
+            raise AttendanceError("makeTardy when status is %s, not ABSENT"
+                                  % self.status)
+        self.status = TARDY
+        self.late_arrival = arrival_time
+
+
+class DayAttendanceRecord(AttendanceRecord):
+    """Record of a student's presence or absence on a given day."""
+
+    implements(IDayAttendanceRecord)
+
+    def __init__(self, date, status):
+        AttendanceRecord.__init__(self, status)
+        self.date = date
+
+    def __repr__(self):
+        return 'DayAttendanceRecord(%r, %s)' % (self.date, self.status)
+
+
+class SectionAttendanceRecord(AttendanceRecord):
+    """Record of a student's presence or absence at a given section meeting."""
+
+    implements(ISectionAttendanceRecord)
+
+    def __init__(self, section, datetime, status,
+                 duration=datetime.timedelta(0), period_id=None):
+        AttendanceRecord.__init__(self, status)
+        self.section = section
+        self.datetime = datetime
+        self.duration = duration
+        self.period_id = period_id
+
+    @property
+    def date(self):
+        return self.datetime.date()
+
+    def __repr__(self):
+        return 'SectionAttendanceRecord(%r, %r, %s)' % (self.section,
+                                                        self.datetime,
+                                                        self.status)
+
+
 class DayAttendance(Persistent):
     """Persistent object that stores day attendance records for a student."""
 
@@ -75,34 +149,6 @@ class DayAttendance(Persistent):
         if present: status = PRESENT
         else: status = ABSENT
         self._records[date] = DayAttendanceRecord(date, status)
-
-
-class DayAttendanceRecord(Persistent):
-    """Record of a student's presence or absence on a given day."""
-
-    implements(IDayAttendanceRecord)
-
-    def __init__(self, date, status):
-        self.date = date
-        self.status = status
-        self.late_arrival = None
-        self.explanations = PersistentList()
-
-    # XXX test
-    def isUnknown(self): return self.status == UNKNOWN
-    def isPresent(self): return self.status == PRESENT
-    def isAbsent(self):  return self.status == ABSENT
-    def isTardy(self):   return self.status == TARDY
-
-    def isExplained(self):
-        raise NotImplementedError # XXX
-    def addExplanation(self, text):
-        raise NotImplementedError # XXX
-    def makeTardy(self, text):
-        raise NotImplementedError # XXX
-
-    def __repr__(self):
-        return 'DayAttendanceRecord(%r, %s)' % (self.date, self.status)
 
 
 class SectionAttendance(Persistent):
@@ -161,60 +207,6 @@ class SectionAttendance(Persistent):
         ar = SectionAttendanceRecord(section, datetime, status=status,
                                      duration=duration, period_id=period_id)
         self._records.append(ar)
-
-
-class SectionAttendanceRecord(Persistent):
-    """Record of a student's presence or absence at a given section meeting."""
-
-    implements(ISectionAttendanceRecord)
-
-    def __init__(self, section, datetime, status,
-                 duration=datetime.timedelta(0), period_id=None):
-        self.section = section
-        self.datetime = datetime
-        self.duration = duration
-        self.period_id = period_id
-        self.status = status
-        self.late_arrival = None
-        self.explanations = PersistentList()
-
-    @property
-    def date(self):
-        return self.datetime.date()
-
-    def isUnknown(self): return self.status == UNKNOWN
-    def isPresent(self): return self.status == PRESENT
-    def isAbsent(self):  return self.status == ABSENT
-    def isTardy(self):   return self.status == TARDY
-
-    def isExplained(self):
-        if self.status not in (ABSENT, TARDY):
-            raise AttendanceError(
-                "only absences and tardies can be explained.")
-        for e in self.explanations:
-            if e.isAccepted():
-                return True
-        return False
-
-    def addExplanation(self, text):
-        if self.status not in (ABSENT, TARDY):
-            raise AttendanceError(
-                "only absences and tardies can be explained.")
-        explanation = AbsenceExplanation(text)
-        self.explanations.append(explanation)
-        return explanation
-
-    def makeTardy(self, arrival_time):
-        if not self.isAbsent():
-            raise AttendanceError("makeTardy when status is %s, not ABSENT"
-                                  % self.status)
-        self.status = TARDY
-        self.late_arrival = arrival_time
-
-    def __repr__(self):
-        return 'SectionAttendanceRecord(%r, %r, %s)' % (self.section,
-                                                        self.datetime,
-                                                        self.status)
 
 
 class AbsenceExplanation(Persistent):
