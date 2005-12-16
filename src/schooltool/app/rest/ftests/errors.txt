@@ -33,8 +33,6 @@ An ill-well formed document:
     <BLANKLINE>
     Ill-formed document.
 
-XXX mg: who commented out the following chunk and why?
-
 ## Method not supported errors:
 ##
 ##     >>> print rest("""
@@ -46,18 +44,20 @@ XXX mg: who commented out the following chunk and why?
 ##     Allow: GET
 ##     <BLANKLINE>
 ##     Method Not Allowed
-##
-## This is emitted by a special adapter:
-##
-##     >>> print rest("""
-##     ... DELETE / HTTP/1.1
-##     ...
-##     ... """, handle_errors=False)
-##     HTTP/1.1 405 Method Not Allowed
-##     Allow: GET
-##     <BLANKLINE>
-##     Method Not Allowed
-##
+
+     >>> print rest("""
+     ... DELETE / HTTP/1.1
+     ...
+     ... """)
+     HTTP/1.1 405 Method Not Allowed
+     Allow: DELETE, GET, OPTIONS, PUT
+     Content-Length: ...
+     <BLANKLINE>
+     Method Not Allowed
+
+XXX mg: the Allow: header above should only list 'GET', but I have no time to
+    make Zope 3 do that right now.
+
 
 Unauthorized errors are handled by Zope for us:
 
