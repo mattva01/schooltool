@@ -27,7 +27,9 @@ import base64
 from StringIO import StringIO
 from xml.sax import make_parser
 from xml.sax.handler import feature_namespaces
-from schooltool.testing.util import dedent, diff
+
+from schooltool.common import dedent
+from schooltool.testing.util import diff
 
 __metaclass__ = type
 

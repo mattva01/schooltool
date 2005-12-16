@@ -31,7 +31,8 @@ import unittest
 from pprint import pformat
 from StringIO import StringIO
 
-from schooltool.common import dedent  # it used to live here
+from zope.interface import implements
+from zope.app.traversing.interfaces import IContainmentRoot
 
 
 def unidiff(old, new, oldlabel="expected output", newlabel="actual output"):
@@ -69,13 +70,6 @@ def diff(old, new, oldlabel="expected output", newlabel="actual output"):
         else:
             raise AssertionError('unknown tag %r' % tag)
     return "\n".join(diff)
-
-
-# XXX this can go away now that we require Python 2.4
-def sorted(l):
-    l = list(l) # make a copy
-    l.sort()
-    return l
 
 
 def pformat_set(s):
@@ -385,4 +379,42 @@ class QuietLibxml2Mixin:
         def on_error_callback(ctx, msg):
             sys.stderr.write(msg)
         libxml2.registerErrorHandler(on_error_callback, None)
+
+
+
+class FakeRoot(object):
+    implements(IContainmentRoot)
+
+
+class FakeFolder(object):
+    def __init__(self, parent, name):
+        self.__parent__ = parent
+        self.__name__ = name
+
+
+def fakePath(obj, path):
+    """Make zapi.absoluteURL(obj) return url.
+
+        >>> from zope.app import zapi
+        >>> from zope.app.testing import setup
+        >>> setup.placelessSetUp()
+        >>> setup.setUpTraversal()
+
+        >>> class Stub: pass
+        >>> obj = Stub()
+        >>> fakePath(obj, '/dir/subdir/name')
+        >>> zapi.absoluteURL(obj, TestRequest())
+        'http://127.0.0.1/dir/subdir/name'
+
+        >>> setup.placelessTearDown()
+
+    """
+    folder = FakeRoot()
+    bits = [name for name in path.split('/') if name]
+    for name in bits[:-1]:
+        folder = FakeFolder(folder, name)
+    name = bits and bits[-1] or ''
+    obj.__parent__ = folder
+    obj.__name__ = name
+
 

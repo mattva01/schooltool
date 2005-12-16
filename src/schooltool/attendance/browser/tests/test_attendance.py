@@ -27,11 +27,9 @@ import datetime
 from pytz import utc, timezone
 from zope.testing import doctest
 from zope.app.testing import ztapi, setup
-from zope.app.traversing.interfaces import IContainmentRoot
 from zope.publisher.browser import TestRequest
 from zope.interface import implements, Interface
 from zope.component import adapts
-from zope.app import zapi
 
 from schooltool.timetable import ITimetables
 from schooltool.timetable import TimetableActivity
@@ -39,6 +37,7 @@ from schooltool.timetable.model import TimetableCalendarEvent
 from schooltool.calendar.simple import ImmutableCalendar
 from schooltool.calendar.simple import SimpleCalendarEvent
 from schooltool.course.interfaces import ISection
+from schooltool.testing.util import fakePath
 
 
 class StubTimetables(object):
@@ -259,34 +258,6 @@ def doctest_AttendanceCalendarEventViewlet():
         >>> viewlet.attendanceLink()
 
     """
-
-
-class FakeRoot(object):
-    implements(IContainmentRoot)
-
-
-class FakeFolder(object):
-    def __init__(self, parent, name):
-        self.__parent__ = parent
-        self.__name__ = name
-
-
-def fakePath(obj, path):
-    """Make zapi.absoluteURL(obj) return url.
-
-        >>> obj = SectionStub()
-        >>> fakePath(obj, '/dir/subdir/name')
-        >>> zapi.absoluteURL(obj, TestRequest())
-        'http://127.0.0.1/dir/subdir/name'
-
-    """
-    folder = FakeRoot()
-    bits = [name for name in path.split('/') if name]
-    for name in bits[:-1]:
-        folder = FakeFolder(folder, name)
-    name = bits and bits[-1] or ''
-    obj.__parent__ = folder
-    obj.__name__ = name
 
 
 def setUp(test):
