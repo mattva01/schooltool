@@ -1,0 +1,17 @@
+<div class="body"
+     i18n:domain="schooltool"
+     tal:define="event view/manager/event"
+     tal:attributes="style string:background: ${event/color1};">
+  <div class="title"
+       tal:condition="python: event.title != event.shortTitle"
+       tal:content="event/title">
+    (title, but only if it was shortened in the title bar)
+  </div>
+  <div i18n:translate="" tal:condition="event/location"
+       class="location">Location:
+    <span tal:content="event/location" i18n:name="location">(location)</span>
+  </div>
+  <div class="description" tal:content="event/description">
+    (Description)
+  </div>
+</div>

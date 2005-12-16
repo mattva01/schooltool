@@ -103,6 +103,15 @@ class NavigationViewlet(object):
         return zapi.absoluteURL(getSchoolToolApplication(), self.request)
 
 
+class CalendarEventViewlet(object):
+    """A calendar event viewlet base class.
+
+    Is is only necessary to avoid a bug in the <viewlet> directive handler:
+    if a <viewlet> directive does not specify a class, any extra attributes
+    (such as 'order') are silently discarded.
+    """
+
+
 class ISchoolToolLayer(ILayer, IBrowserRequest):
     """SchoolTool layer."""
 

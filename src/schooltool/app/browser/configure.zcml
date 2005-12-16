@@ -39,8 +39,27 @@
       name="schooltool.CalendarEvent"
       permission="zope.Public"
       provides="schooltool.app.browser.skin.ICalendarEventViewletManager"
-      template="templates/calendar_event_viewlet_manager.pt"
       class="schooltool.app.browser.skin.CalendarEventViewletManager"
+      />
+
+  <viewlet
+      name="event-info"
+      for="*"
+      manager="schooltool.app.browser.skin.ICalendarEventViewletManager"
+      template="templates/event_info_viewlet.pt"
+      class=".skin.CalendarEventViewlet"
+      permission="zope.Public"
+      order="10"
+      />
+
+  <viewlet
+      name="resource-booking-info"
+      for="*"
+      manager="schooltool.app.browser.skin.ICalendarEventViewletManager"
+      template="templates/event_booking_viewlet.pt"
+      class=".skin.CalendarEventViewlet"
+      permission="zope.Public"
+      order="20"
       />
 
   <!-- Skin and resources -->

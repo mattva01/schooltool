@@ -1,0 +1,25 @@
+<tal:block define="event view/manager/event">
+<div class="booked-resources"
+     i18n:domain="schooltool"
+     tal:define="resources event/getBookedResources"
+     tal:condition="resources">
+  <h6 class="booked-resource-header"
+      tal:attributes="style string:background: ${event/color2}">
+    <a style="color: #000;"
+       tal:attributes="href event/bookingLink">Booked resources</a></h6>
+  <tal:block tal:repeat="resource resources">
+    <a tal:attributes="href resource/@@absolute_url"
+       tal:content="resource/title">(A Pond)</a>
+  </tal:block>
+</div>
+<div class="booked-resources"
+     tal:define="booker event/getBooker"
+     tal:condition="booker">
+  <h6 class="booked-resource-header"
+      tal:attributes="style string:background: ${event/color2}">
+    <a style="color: #000;"
+       tal:attributes="href event/bookingLink">Booked by</a></h6>
+  <a tal:attributes="href booker/@@absolute_url"
+     tal:content="booker/title">(A Dude)</a>
+</div>
+</tal:block>
