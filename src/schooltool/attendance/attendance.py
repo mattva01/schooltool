@@ -34,7 +34,7 @@ from zope.i18n import translate
 
 from schooltool import SchoolToolMessage as _
 from schooltool.calendar.simple import ImmutableCalendar
-from schooltool.app.cal import CalendarEvent
+from schooltool.calendar.simple import SimpleCalendarEvent
 from schooltool.attendance.interfaces import IDayAttendance
 from schooltool.attendance.interfaces import IDayAttendanceRecord
 from schooltool.attendance.interfaces import ISectionAttendance
@@ -225,9 +225,9 @@ class SectionAttendance(Persistent, AttendanceFilteringMixin):
 
     def makeCalendarEvent(self, record, title):
         """Produce a calendar event for an absence or a tardy."""
-        return CalendarEvent(title=title,
-                             dtstart=record.datetime,
-                             duration=record.duration)
+        return SimpleCalendarEvent(title=title,
+                                   dtstart=record.datetime,
+                                   duration=record.duration)
 
     def getAllForDay(self, date):
         return self.filter(date, date)

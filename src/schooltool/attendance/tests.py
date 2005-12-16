@@ -38,6 +38,7 @@ import zope.component
 
 import schooltool.app # Dead chicken to appease the circle of import gods
 from schooltool.person.interfaces import IPerson
+from schooltool.calendar.interfaces import ICalendarEvent
 from schooltool.attendance.interfaces import IDayAttendance
 from schooltool.attendance.interfaces import IDayAttendanceRecord
 from schooltool.attendance.interfaces import ISectionAttendance
@@ -804,6 +805,30 @@ def doctest_SectionAttendance_makeCalendar():
         2005-12-07 13:30:00+00:00 0:45:00 Was absent from Chem.
         2005-12-07 15:30:00+00:00 0:45:00 Was late for Math (5 minutes).
 
+
+    """
+
+
+def doctest_SectionAttendance_makeCalendarEvent():
+    r"""Tests for SectionAttendance.makeCalendar
+
+        >>> from schooltool.attendance.attendance import SectionAttendance
+        >>> from schooltool.attendance.attendance \
+        ...     import SectionAttendanceRecord
+        >>> sa = SectionAttendance()
+
+        >>> section = SectionStub()
+        >>> dt = datetime.datetime(2005, 11, 23, 14, 55)
+        >>> duration = datetime.timedelta(minutes=45)
+        >>> period_id = 'Period A'
+        >>> ar = SectionAttendanceRecord(section, dt, ABSENT, duration,
+        ...                              period_id)
+
+        >>> ev = sa.makeCalendarEvent(ar, 'John was bad today')
+        >>> ICalendarEvent.providedBy(ev)
+        True
+        >>> print ev.dtstart, ev.duration, ev.title
+        2005-11-23 14:55:00+00:00 0:45:00 John was bad today
 
     """
 
