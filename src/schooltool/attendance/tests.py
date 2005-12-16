@@ -45,6 +45,9 @@ from schooltool.attendance.interfaces import ISectionAttendanceRecord
 from schooltool.attendance.interfaces import UNKNOWN, PRESENT, ABSENT, TARDY
 from schooltool.attendance.interfaces import AttendanceError
 
+#
+# Stubs
+#
 
 class PersonStub(object):
     implements(IPerson, IAttributeAnnotatable)
@@ -61,6 +64,299 @@ class SectionStub(object):
         else:
             return 'SectionStub()'
 
+
+#
+# Attendance record classes
+#
+
+def doctest_AttendanceRecord_isUnknown_isPresent_isAbsent_isTardy():
+    r"""Tests for SectionAttendanceRecord.isSomething functions
+
+        >>> from schooltool.attendance.attendance import AttendanceRecord
+
+        >>> for status in (UNKNOWN, PRESENT, ABSENT, TARDY):
+        ...     ar = AttendanceRecord(status)
+        ...     print "%-7s %-5s %-5s %-5s %-5s" % (ar.status,
+        ...                 ar.isUnknown(), ar.isPresent(), ar.isAbsent(),
+        ...                 ar.isTardy())
+        UNKNOWN True  False False False
+        PRESENT False True  False False
+        ABSENT  False False True  False
+        TARDY   False False False True
+
+    """
+
+
+def doctest_AttendanceRecord_makeTardy():
+    r"""Tests for AttendanceRecord.makeTardy
+
+        >>> from schooltool.attendance.attendance import AttendanceRecord
+
+    If you have an absence
+
+        >>> ar = AttendanceRecord(ABSENT)
+
+    you can convert it to a tardy
+
+        >>> ar.makeTardy(datetime.time(15, 03))
+
+        >>> ar.isTardy()
+        True
+        >>> ar.late_arrival
+        datetime.time(15, 3)
+
+    In all other cases you can't.
+
+        >>> for status in (UNKNOWN, PRESENT, TARDY):
+        ...     ar = AttendanceRecord(status)
+        ...     try:
+        ...         ar.makeTardy(datetime.time(15, 03))
+        ...     except AttendanceError:
+        ...         pass
+        ...     else:
+        ...         print "no AttendanceError when status=%s" % status
+
+    """
+
+
+def doctest_AttendanceRecord_isExplained_addExplanation():
+    r"""Tests for AttendanceRecord.addExplanation
+
+        >>> from schooltool.attendance.attendance import AttendanceRecord
+
+    If you have an absence
+
+        >>> ar = AttendanceRecord(ABSENT)
+
+    In the beginning it is not explained:
+
+        >>> ar.isExplained()
+        False
+
+    You can add an explanation to it:
+
+        >>> expn = ar.addExplanation("Was ill")
+        >>> len(ar.explanations)
+        1
+
+    Having explanations in itself does not make the absence explained:
+
+        >>> ar.isExplained()
+        False
+
+    However, if at least one the explanation is accepted, the absence
+    is explained:
+
+        >>> expn.accept()
+        >>> ar.isExplained()
+        True
+
+    There even can be unaccepted and rejected explanations:
+
+        >>> ar.addExplanation("Dog ate homework").reject()
+        >>> expn2 = ar.addExplanation("Solar eclipse")
+        >>> len(ar.explanations)
+        3
+
+    The absence is still explained:
+
+        >>> ar.isExplained()
+        True
+
+    If the record's status is not ABSENT or TARDY, isExplained raises
+    an exception:
+
+        >>> ar.status = UNKNOWN
+        >>> ar.isExplained()
+        Traceback (most recent call last):
+          ...
+        AttendanceError: only absences and tardies can be explained.
+
+        >>> ar.status = PRESENT
+        >>> ar.isExplained()
+        Traceback (most recent call last):
+          ...
+        AttendanceError: only absences and tardies can be explained.
+
+        >>> ar.status = TARDY
+        >>> ar.isExplained()
+        True
+
+    Likewise for addExplanation, it is only legal for absences and tardies:
+
+        >>> ar.status = UNKNOWN
+        >>> ar.addExplanation("whatever")
+        Traceback (most recent call last):
+          ...
+        AttendanceError: only absences and tardies can be explained.
+
+        >>> ar.status = PRESENT
+        >>> ar.addExplanation("whatever")
+        Traceback (most recent call last):
+          ...
+        AttendanceError: only absences and tardies can be explained.
+
+        >>> ar.status = TARDY
+        >>> ar.addExplanation("whatever")
+        <schooltool.attendance.attendance.AbsenceExplanation object at ...>
+
+
+    """
+
+
+def doctest_AbsenceExplanation():
+    """Absence explanation is a text with a status
+
+        >>> from schooltool.attendance.attendance import AbsenceExplanation
+        >>> from schooltool.attendance.interfaces import IAbsenceExplanation
+        >>> expn = AbsenceExplanation("My dog ate my pants")
+        >>> verifyObject(IAbsenceExplanation, expn)
+        True
+
+        >>> expn.text
+        'My dog ate my pants'
+
+    First the explanation is not accepted:
+
+        >>> expn.isAccepted()
+        False
+
+        >>> expn.status
+        'NEW'
+
+    We can accept it:
+
+        >>> expn.accept()
+        >>> expn.status
+        'ACCEPTED'
+        >>> expn.isAccepted()
+        True
+
+    We can reject it:
+
+        >>> expn.reject()
+        >>> expn.status
+        'REJECTED'
+        >>> expn.isAccepted()
+        False
+
+    """
+
+
+def doctest_DayAttendanceRecord():
+    r"""Tests for DayAttendanceRecord
+
+        >>> from schooltool.attendance.attendance \
+        ...     import DayAttendanceRecord
+
+    Let's create an UNKNOWN record
+
+        >>> day = datetime.date(2005, 11, 23)
+        >>> ar = DayAttendanceRecord(day, UNKNOWN)
+        >>> verifyObject(IDayAttendanceRecord, ar)
+        True
+
+        >>> isinstance(ar, Persistent)
+        True
+
+        >>> ar.status == UNKNOWN
+        True
+        >>> ar.date == day
+        True
+
+        >>> ar.late_arrival is None
+        True
+        >>> ar.explanations
+        []
+
+    Let's create a regular record
+
+        >>> day = datetime.date(2005, 11, 30)
+        >>> ar = DayAttendanceRecord(day, ABSENT)
+        >>> verifyObject(IDayAttendanceRecord, ar)
+        True
+
+        >>> ar.status == ABSENT
+        True
+        >>> ar.date == day
+        True
+
+        >>> ar.late_arrival is None
+        True
+        >>> ar.explanations
+        []
+
+    """
+
+
+def doctest_SectionAttendanceRecord():
+    r"""Tests for SectionAttendanceRecord
+
+        >>> from schooltool.attendance.attendance \
+        ...     import SectionAttendanceRecord
+
+    Let's create an UNKNOWN record
+
+        >>> section = SectionStub()
+        >>> dt = datetime.datetime(2005, 11, 23, 14, 55)
+        >>> ar = SectionAttendanceRecord(section, dt, UNKNOWN)
+        >>> verifyObject(ISectionAttendanceRecord, ar)
+        True
+
+        >>> isinstance(ar, Persistent)
+        True
+
+        >>> ar.status == UNKNOWN
+        True
+        >>> ar.section == section
+        True
+        >>> ar.datetime == dt
+        True
+        >>> ar.date == dt.date()
+        True
+
+        >>> ar.duration
+        datetime.timedelta(0)
+        >>> ar.period_id is None
+        True
+        >>> ar.late_arrival is None
+        True
+        >>> ar.explanations
+        []
+
+    Let's create a regular record
+
+        >>> section = SectionStub()
+        >>> dt = datetime.datetime(2005, 11, 23, 14, 55)
+        >>> duration = datetime.timedelta(minutes=45)
+        >>> period_id = 'Period A'
+        >>> ar = SectionAttendanceRecord(section, dt, PRESENT, duration,
+        ...                              period_id)
+
+        >>> ar.status == PRESENT
+        True
+        >>> ar.section == section
+        True
+        >>> ar.datetime == dt
+        True
+        >>> ar.date == dt.date()
+        True
+        >>> ar.duration == duration
+        True
+        >>> ar.period_id == period_id
+        True
+
+        >>> ar.late_arrival is None
+        True
+        >>> ar.explanations
+        []
+
+    """
+
+
+#
+# Attendance storage classes
+#
 
 def doctest_DayAttendance():
     """Test for DayAttendance
@@ -203,52 +499,6 @@ def doctest_DayAttendance_iter():
         [DayAttendanceRecord(...), DayAttendanceRecord(...)]
         >>> sorted(ar.date for ar in da)
         [datetime.date(2005, 12, 9), datetime.date(2005, 12, 10)]
-
-    """
-
-
-def doctest_DayAttendanceRecord():
-    r"""Tests for DayAttendanceRecord
-
-        >>> from schooltool.attendance.attendance \
-        ...     import DayAttendanceRecord
-
-    Let's create an UNKNOWN record
-
-        >>> day = datetime.date(2005, 11, 23)
-        >>> ar = DayAttendanceRecord(day, UNKNOWN)
-        >>> verifyObject(IDayAttendanceRecord, ar)
-        True
-
-        >>> isinstance(ar, Persistent)
-        True
-
-        >>> ar.status == UNKNOWN
-        True
-        >>> ar.date == day
-        True
-
-        >>> ar.late_arrival is None
-        True
-        >>> ar.explanations
-        []
-
-    Let's create a regular record
-
-        >>> day = datetime.date(2005, 11, 30)
-        >>> ar = DayAttendanceRecord(day, ABSENT)
-        >>> verifyObject(IDayAttendanceRecord, ar)
-        True
-
-        >>> ar.status == ABSENT
-        True
-        >>> ar.date == day
-        True
-
-        >>> ar.late_arrival is None
-        True
-        >>> ar.explanations
-        []
 
     """
 
@@ -566,243 +816,9 @@ def doctest_SectionAttendance_makeCalendar():
     """
 
 
-def doctest_SectionAttendanceRecord():
-    r"""Tests for SectionAttendanceRecord
-
-        >>> from schooltool.attendance.attendance \
-        ...     import SectionAttendanceRecord
-
-    Let's create an UNKNOWN record
-
-        >>> section = SectionStub()
-        >>> dt = datetime.datetime(2005, 11, 23, 14, 55)
-        >>> ar = SectionAttendanceRecord(section, dt, UNKNOWN)
-        >>> verifyObject(ISectionAttendanceRecord, ar)
-        True
-
-        >>> isinstance(ar, Persistent)
-        True
-
-        >>> ar.status == UNKNOWN
-        True
-        >>> ar.section == section
-        True
-        >>> ar.datetime == dt
-        True
-        >>> ar.date == dt.date()
-        True
-
-        >>> ar.duration
-        datetime.timedelta(0)
-        >>> ar.period_id is None
-        True
-        >>> ar.late_arrival is None
-        True
-        >>> ar.explanations
-        []
-
-    Let's create a regular record
-
-        >>> section = SectionStub()
-        >>> dt = datetime.datetime(2005, 11, 23, 14, 55)
-        >>> duration = datetime.timedelta(minutes=45)
-        >>> period_id = 'Period A'
-        >>> ar = SectionAttendanceRecord(section, dt, PRESENT, duration,
-        ...                              period_id)
-
-        >>> ar.status == PRESENT
-        True
-        >>> ar.section == section
-        True
-        >>> ar.datetime == dt
-        True
-        >>> ar.date == dt.date()
-        True
-        >>> ar.duration == duration
-        True
-        >>> ar.period_id == period_id
-        True
-
-        >>> ar.late_arrival is None
-        True
-        >>> ar.explanations
-        []
-
-    """
-
-
-def doctest_AttendanceRecord_isUnknown_isPresent_isAbsent_isTardy():
-    r"""Tests for SectionAttendanceRecord.isSomething functions
-
-        >>> from schooltool.attendance.attendance import AttendanceRecord
-
-        >>> for status in (UNKNOWN, PRESENT, ABSENT, TARDY):
-        ...     ar = AttendanceRecord(status)
-        ...     print "%-7s %-5s %-5s %-5s %-5s" % (ar.status,
-        ...                 ar.isUnknown(), ar.isPresent(), ar.isAbsent(),
-        ...                 ar.isTardy())
-        UNKNOWN True  False False False
-        PRESENT False True  False False
-        ABSENT  False False True  False
-        TARDY   False False False True
-
-    """
-
-
-def doctest_AttendanceRecord_makeTardy():
-    r"""Tests for AttendanceRecord.makeTardy
-
-        >>> from schooltool.attendance.attendance import AttendanceRecord
-
-    If you have an absence
-
-        >>> ar = AttendanceRecord(ABSENT)
-
-    you can convert it to a tardy
-
-        >>> ar.makeTardy(datetime.time(15, 03))
-
-        >>> ar.isTardy()
-        True
-        >>> ar.late_arrival
-        datetime.time(15, 3)
-
-    In all other cases you can't.
-
-        >>> for status in (UNKNOWN, PRESENT, TARDY):
-        ...     ar = AttendanceRecord(status)
-        ...     try:
-        ...         ar.makeTardy(datetime.time(15, 03))
-        ...     except AttendanceError:
-        ...         pass
-        ...     else:
-        ...         print "no AttendanceError when status=%s" % status
-
-    """
-
-
-def doctest_AttendanceRecord_isExplained_addExplanation():
-    r"""Tests for AttendanceRecord.addExplanation
-
-        >>> from schooltool.attendance.attendance import AttendanceRecord
-
-    If you have an absence
-
-        >>> ar = AttendanceRecord(ABSENT)
-
-    In the beginning it is not explained:
-
-        >>> ar.isExplained()
-        False
-
-    You can add an explanation to it:
-
-        >>> expn = ar.addExplanation("Was ill")
-        >>> len(ar.explanations)
-        1
-
-    Having explanations in itself does not make the absence explained:
-
-        >>> ar.isExplained()
-        False
-
-    However, if at least one the explanation is accepted, the absence
-    is explained:
-
-        >>> expn.accept()
-        >>> ar.isExplained()
-        True
-
-    There even can be unaccepted and rejected explanations:
-
-        >>> ar.addExplanation("Dog ate homework").reject()
-        >>> expn2 = ar.addExplanation("Solar eclipse")
-        >>> len(ar.explanations)
-        3
-
-    The absence is still explained:
-
-        >>> ar.isExplained()
-        True
-
-    If the record's status is not ABSENT or TARDY, isExplained raises
-    an exception:
-
-        >>> ar.status = UNKNOWN
-        >>> ar.isExplained()
-        Traceback (most recent call last):
-          ...
-        AttendanceError: only absences and tardies can be explained.
-
-        >>> ar.status = PRESENT
-        >>> ar.isExplained()
-        Traceback (most recent call last):
-          ...
-        AttendanceError: only absences and tardies can be explained.
-
-        >>> ar.status = TARDY
-        >>> ar.isExplained()
-        True
-
-    Likewise for addExplanation, it is only legal for absences and tardies:
-
-        >>> ar.status = UNKNOWN
-        >>> ar.addExplanation("whatever")
-        Traceback (most recent call last):
-          ...
-        AttendanceError: only absences and tardies can be explained.
-
-        >>> ar.status = PRESENT
-        >>> ar.addExplanation("whatever")
-        Traceback (most recent call last):
-          ...
-        AttendanceError: only absences and tardies can be explained.
-
-        >>> ar.status = TARDY
-        >>> ar.addExplanation("whatever")
-        <schooltool.attendance.attendance.AbsenceExplanation object at ...>
-
-
-    """
-
-
-def doctest_AbsenceExplanation():
-    """Absence explanation is a text with a status
-
-        >>> from schooltool.attendance.attendance import AbsenceExplanation
-        >>> from schooltool.attendance.interfaces import IAbsenceExplanation
-        >>> expn = AbsenceExplanation("My dog ate my pants")
-        >>> verifyObject(IAbsenceExplanation, expn)
-        True
-
-        >>> expn.text
-        'My dog ate my pants'
-
-    First the explanation is not accepted:
-
-        >>> expn.isAccepted()
-        False
-
-        >>> expn.status
-        'NEW'
-
-    We can accept it:
-
-        >>> expn.accept()
-        >>> expn.status
-        'ACCEPTED'
-        >>> expn.isAccepted()
-        True
-
-    We can reject it:
-
-        >>> expn.reject()
-        >>> expn.status
-        'REJECTED'
-        >>> expn.isAccepted()
-        False
-
-    """
+#
+# Adapters
+#
 
 
 def doctest_getSectionAttendance():

@@ -83,6 +83,25 @@ class AttendanceRecord(Persistent):
         self.late_arrival = arrival_time
 
 
+class AbsenceExplanation(Persistent):
+    """An explanation of an absence/tardy."""
+
+    implements(IAbsenceExplanation)
+
+    def __init__(self, text):
+        self.text = text
+        self.status = NEW
+
+    def accept(self):
+        self.status = ACCEPTED
+
+    def reject(self):
+        self.status = REJECTED
+
+    def isAccepted(self):
+        return self.status == ACCEPTED
+
+
 class DayAttendanceRecord(AttendanceRecord):
     """Record of a student's presence or absence on a given day."""
 
@@ -207,24 +226,6 @@ class SectionAttendance(Persistent):
         ar = SectionAttendanceRecord(section, datetime, status=status,
                                      duration=duration, period_id=period_id)
         self._records.append(ar)
-
-
-class AbsenceExplanation(Persistent):
-    """An explanation of an absence"""
-    implements(IAbsenceExplanation)
-
-    def __init__(self, text):
-        self.text = text
-        self.status = NEW
-
-    def accept(self):
-        self.status = ACCEPTED
-
-    def reject(self):
-        self.status = REJECTED
-
-    def isAccepted(self):
-        return self.status == ACCEPTED
 
 
 SECTION_ATTENDANCE_KEY = 'schooltool.attendance.SectionAttendance'
