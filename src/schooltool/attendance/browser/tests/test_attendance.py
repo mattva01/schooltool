@@ -78,9 +78,7 @@ def doctest_verifyPeriodForSection():
 
     Now we can try our helper function:
 
-        >>> fourteenth = datetime.date(2005, 12, 14)
-        >>> fifteenth = datetime.date(2005, 12, 15)
-        >>> for date in fourteenth, fifteenth:
+        >>> for date in [datetime.date(2005, 12, d) for d in (14, 15, 16)]:
         ...     for period_id in 'A', 'B', 'C', 'D':
         ...         result = verifyPeriodForSection(section, date,
         ...                                         period_id, utc)
@@ -93,6 +91,10 @@ def doctest_verifyPeriodForSection():
         2005-12-15 B True
         2005-12-15 C True
         2005-12-15 D False
+        2005-12-16 A False
+        2005-12-16 B False
+        2005-12-16 C False
+        2005-12-16 D False
 
     """
 
@@ -125,33 +127,31 @@ def doctest_SectionAttendanceTraverserPlugin():
         >>> class AttendanceViewStub(object):
         ...     def __init__(self, context, request): pass
         ...     def __repr__(self):
-        ...         return "%s, %s, %s" % (self.date,
-        ...                                self.schooltt_id,
-        ...                                self.period_id)
+        ...         return "%s, %s" % (self.date, self.period_id)
         >>> ztapi.browserView(None, 'attendance', AttendanceViewStub)
 
     Now we can try the typical case:
 
         >>> request = TestRequest()
-        >>> request.setTraversalStack(['B', 'default', '2005-12-15'])
+        >>> request.setTraversalStack(['B', '2005-12-15'])
         >>> plugin.publishTraverse(request, "attendance")
-        2005-12-15, default, B
+        2005-12-15, B
 
         >>> request.getTraversalStack()
         []
 
     If there are more elements on the traversal stack, they remain there:
 
-        >>> request.setTraversalStack(['extra', 'C', 'default', '2005-12-15'])
+        >>> request.setTraversalStack(['extra', 'C', '2005-12-15'])
         >>> plugin.publishTraverse(request, "attendance")
-        2005-12-15, default, C
+        2005-12-15, C
 
         >>> request.getTraversalStack()
         ['extra']
 
     What if the date is invalid?
 
-        >>> request.setTraversalStack(['A', 'default', '2005-02-29'])
+        >>> request.setTraversalStack(['A', '2005-02-29'])
         >>> plugin.publishTraverse(request, "attendance")
         Traceback (most recent call last):
           ...
@@ -159,7 +159,15 @@ def doctest_SectionAttendanceTraverserPlugin():
 
     What if the period is invalid?
 
-        >>> request.setTraversalStack(['A', 'default', '2005-12-15'])
+        >>> request.setTraversalStack(['A', '2005-12-15'])
+        >>> plugin.publishTraverse(request, "attendance")
+        Traceback (most recent call last):
+          ...
+        NotFound: Object: 'request', name: 'attendance'
+
+    If there are no date and period id following, we also get a NotFound:
+
+        >>> request.setTraversalStack([])
         >>> plugin.publishTraverse(request, "attendance")
         Traceback (most recent call last):
           ...

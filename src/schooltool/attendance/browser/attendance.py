@@ -55,10 +55,10 @@ def verifyPeriodForSection(section, date, period_id, tz):
 
 
 class SectionAttendanceTraverserPlugin(object):
-    """Taverser for attendance views
+    """Traverser for attendance views
 
-    This plugin extracts a date, school timetabe id, and period id
-    from the traversal stack, following the view name.
+    This plugin extracts a date and period id from the traversal
+    stack, following the view name.
     """
 
     implements(ITraverserPlugin)
@@ -68,18 +68,17 @@ class SectionAttendanceTraverserPlugin(object):
         self.request = request
 
     def publishTraverse(self, request, name):
-        if name in ('attendance', ):
+        if name == 'attendance':
             view = queryMultiAdapter((self.context, request),
                                      name=name)
             traversal_stack = request.getTraversalStack()
 
             try:
                 view.date = parse_date(traversal_stack.pop())
-            except ValueError:
+                view.period_id = traversal_stack.pop()
+            except (ValueError, IndexError):
                 raise NotFound(self.context, name, request)
 
-            view.schooltt_id = traversal_stack.pop()
-            view.period_id = traversal_stack.pop()
 
             # This should be the timezone that is used for timetables.
             # If timetables start using the server global timezone,
