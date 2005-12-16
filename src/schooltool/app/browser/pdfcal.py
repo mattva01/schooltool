@@ -333,6 +333,9 @@ class MonthlyPDFCalendarView(PDFCalendarViewBase):
         while day.month == date.month:
             events = self.dayEvents(day)
             if events:
+                # XXX bug: daySubtitle returns a Unicode string, platypus wants
+                #          UTF-8 -- http://issues.schooltool.org/issue438
+                #          When fixing look for other places like this!
                 story.append(Paragraph(self.daySubtitle(day),
                                        self.subtitle_style))
                 story.append(self.buildDayTable(events))
