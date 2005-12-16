@@ -8,7 +8,6 @@
 <metal:block metal:fill-slot="body">
 
 Date <span tal:replace="view/date"/>
-school timetable <span tal:replace="view/schooltt_id" />
 period <span tal:replace="view/period_id" />
 
 </metal:block>

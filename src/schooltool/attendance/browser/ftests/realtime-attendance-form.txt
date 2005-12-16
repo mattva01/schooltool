@@ -137,3 +137,12 @@ You can click on the Attendance link next to a class name, and you'll be
 redirected to the attendance form for the nearest section meeting.
 
 XXX: mg: but this is not convenient for the user, I think
+
+XXX: ig: no matter where the link is we should get to this page:
+
+    >>> largo.open('http://localhost/sections/dancing1a/attendance/2005-12-12/09:30-10:25/')
+    >>> print analyze.queryHTML('id("content-body")', largo.contents)[0]
+    <div id="content-body">
+    Date 2005-12-12
+    period 09:30-10:25
+    </div>
