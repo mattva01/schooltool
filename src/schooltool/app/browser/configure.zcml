@@ -47,7 +47,6 @@
       for="*"
       manager="schooltool.app.browser.skin.ICalendarEventViewletManager"
       template="templates/event_info_viewlet.pt"
-      class=".skin.CalendarEventViewlet"
       permission="zope.Public"
       order="10"
       />
@@ -57,7 +56,6 @@
       for="*"
       manager="schooltool.app.browser.skin.ICalendarEventViewletManager"
       template="templates/event_booking_viewlet.pt"
-      class=".skin.CalendarEventViewlet"
       permission="zope.Public"
       order="20"
       />
