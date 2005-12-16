@@ -32,14 +32,12 @@ EVALUATIONS_KEY = "schooltool.evaluations"
 
 def getRequirementList(req, recurse=True):
     result = []
-    if interfaces.IGroupRequirement.providedBy(req):
-        for value in req.values():
-            if recurse:
-                result += getRequirementList(value)
-            else:
-                result.append(value)
-    else:
-        result.append(req)
+    for value in req.values(): # loop through your children
+        if recurse: 
+            result += getRequirementList(value) # append their children...
+        else:
+            result.append(value) # just append the child
+    result.append(req) # append the object itself
     return result
 
 class Evaluations(container.btree.BTreeContainer,

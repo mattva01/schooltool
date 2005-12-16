@@ -35,16 +35,6 @@ from schooltool.requirement import interfaces
 
 REQUIREMENT_KEY = "schooltool.requirement"
 
-class Requirement(zope.app.container.contained.Contained):
-    """ """
-    zope.interface.implements(interfaces.IRequirement)
-
-    def __init__(self, title):
-        self.title = title
-
-    def __repr__(self):
-        return '%s(%r)' %(self.__class__.__name__, self.title)
-
 class InheritedRequirement(zope.app.container.contained.Contained):
     """ """
 
@@ -56,7 +46,6 @@ class InheritedRequirement(zope.app.container.contained.Contained):
     def __repr__(self):
         return '%s(%r)' %(self.__class__.__name__, self.original)
 
-    # Only good for GroupRequirement
     def __setitem__(self, key, value):
         req = self.original.__class__(self.original.title)
         self.__parent__[self.__name__] = req
@@ -66,12 +55,12 @@ class InheritedRequirement(zope.app.container.contained.Contained):
         return getattr(self.original, name)
 
 
-class GroupRequirement(zope.app.container.btree.BTreeContainer, Requirement):
+class Requirement(zope.app.container.btree.BTreeContainer):
     """ """
-    zope.interface.implements(interfaces.IGroupRequirement)
+    zope.interface.implements(interfaces.IRequirement)
 
     def __init__(self, title, *bases):
-        Requirement.__init__(self, title)
+        self.title = title
         zope.app.container.btree.BTreeContainer.__init__(self)
         self.bases = persistent.list.PersistentList()
         for base in bases:
@@ -81,20 +70,20 @@ class GroupRequirement(zope.app.container.btree.BTreeContainer, Requirement):
         if base in self.bases:
             return
         self.bases.append(base)
-        for name, value in super(GroupRequirement, self).items():
+        for name, value in super(Requirement, self).items():
             if name in base:
                 value.addBase(base[name])
 
     def removeBase(self, base):
         self.bases.remove(base)
-        for name, value in super(GroupRequirement, self).items():
+        for name, value in super(Requirement, self).items():
             if name in base:
                 value.removeBase(base[name])
 
     def keys(self):
         '''See interface `IReadContainer`'''
         keys = set()
-        for requirement in self.bases + [super(GroupRequirement, self)]:
+        for requirement in self.bases + [super(Requirement, self)]:
             keys.update(set(requirement.keys()))
         return keys
 
@@ -103,7 +92,7 @@ class GroupRequirement(zope.app.container.btree.BTreeContainer, Requirement):
 
     def __getitem__(self, key):
         '''See interface `IReadContainer`'''
-        container = super(GroupRequirement, self)
+        container = super(Requirement, self)
         try:
             return container.__getitem__(key)
         except KeyError:
@@ -155,7 +144,7 @@ class GroupRequirement(zope.app.container.btree.BTreeContainer, Requirement):
 
     def __delitem__(self, key):
         '''See interface `IWriteContainer`'''
-        container = super(GroupRequirement, self)
+        container = super(Requirement, self)
         zope.app.container.contained.uncontained(
             container.__getitem__(key), self, key)
         container.__delitem__(key)
@@ -171,8 +160,8 @@ def getRequirement(context):
         return annotations[REQUIREMENT_KEY]
     except KeyError:
         ## TODO: support generic objects without titles
-        requirement = GroupRequirement(getattr(context, "title", None))
+        requirement = Requirement(getattr(context, "title", None))
         annotations[REQUIREMENT_KEY] = requirement
         return requirement
 # Convention to make adapter introspectable
-getRequirement.factory = GroupRequirement
+getRequirement.factory = Requirement

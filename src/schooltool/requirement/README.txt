@@ -14,9 +14,9 @@ A requirement is a simple object:
 
 Commonly, requirements are grouped:
 
-  >>> program = requirement.GroupRequirement(u'Programming')
+  >>> program = requirement.Requirement(u'Programming')
   >>> program
-  GroupRequirement(u'Programming')
+  Requirement(u'Programming')
 
 Since grouping definitions implement the ``IContainer`` interface, we can
 simply use the mapping interface to add other requirements:
@@ -33,7 +33,7 @@ that the programming group above is defined as a requirement for any
 programming class. Now we would like to extend that requirement to a Python
 programming class:
 
-  >>> pyprogram = requirement.GroupRequirement(
+  >>> pyprogram = requirement.Requirement(
   ...     u'Python Programming', program)
   >>> pyprogram[u'iter'] = requirement.Requirement(u'Create an iterator.')
 
@@ -55,7 +55,7 @@ between inherited and locally defined requirements:
 You can also inspect and manage the bases:
 
   >>> pyprogram.bases
-  [GroupRequirement(u'Programming')]
+  [Requirement(u'Programming')]
 
   >>> pyprogram.removeBase(program)
   >>> sorted(pyprogram.keys())
@@ -69,14 +69,14 @@ Let's now look at a more advanced case. Let's say that the state of Virginia
 requires all students to take a programming class that fulfills the
 programming requirement:
 
-  >>> va = requirement.GroupRequirement(u'Virginia')
+  >>> va = requirement.Requirement(u'Virginia')
   >>> va[u'program'] = program
 
 Now, Yorktown High School (which is in Virginia) teaches Python and thus
 requires the Python requirement. However, Yorktown HS must still fulfill the
 state requirement:
 
-  >>> yhs = requirement.GroupRequirement(u'Yorktow HS', va)
+  >>> yhs = requirement.Requirement(u'Yorktow HS', va)
   >>> sorted(yhs[u'program'].keys())
   [u'forloop']
 
@@ -90,8 +90,8 @@ state requirement:
 
 Another tricky case is when the base is added later:
 
-  >>> yhs = requirement.GroupRequirement(u'Yorktow HS')
-  >>> yhs[u'program'] = requirement.GroupRequirement(u'Programming')
+  >>> yhs = requirement.Requirement(u'Yorktow HS')
+  >>> yhs[u'program'] = requirement.Requirement(u'Programming')
   >>> yhs[u'program'][u'iter'] = requirement.Requirement(u'Create an iterator.')
 
   >>> yhs.addBase(va)
@@ -141,7 +141,7 @@ There exists an adapter from the ``IHaveRequirement`` interface to the
 
   >>> req = interfaces.IRequirement(course)
   >>> req
-  GroupRequirement(u'Computer Science')
+  Requirement(u'Computer Science')
 
 The title of the course becomes the title of the requirement.  If we look at
 the requirements, it is empty.
@@ -311,14 +311,14 @@ Once several evaluations have been created, we can do some interesting queries.
 To demonstrate this feature effectively, we have to create a new requirement
 tree.
 
-  >>> calculus = requirement.GroupRequirement(u'Calculus')
+  >>> calculus = requirement.Requirement(u'Calculus')
 
-  >>> calculus[u'int'] = requirement.GroupRequirement(u'Integration')
+  >>> calculus[u'int'] = requirement.Requirement(u'Integration')
   >>> calculus[u'int']['fourier'] = requirement.Requirement(
   ...     u'Fourier Transform')
   >>> calculus[u'int']['path'] = requirement.Requirement(u'Path Integral')
 
-  >>> calculus[u'diff'] = requirement.GroupRequirement(u'Differentiation')
+  >>> calculus[u'diff'] = requirement.Requirement(u'Differentiation')
   >>> calculus[u'diff'][u'partial'] = requirement.Requirement(
   ...     u'Partial Differential Equations')
   >>> calculus[u'diff'][u'systems'] = requirement.Requirement(u'Systems')
@@ -401,4 +401,3 @@ used as follows:
   >>> result = PassedQuery(evals)().getEvaluationsOfEvaluator(teacher)
   >>> sorted(result.values())
   [<Evaluation for Requirement(u'Systems'), value=True>]
-

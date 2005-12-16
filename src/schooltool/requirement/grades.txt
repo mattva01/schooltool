@@ -10,7 +10,7 @@ Sections should be able to be adapted to ``IRequirement``:
   >>> from schooltool.requirement import interfaces 
   >>> req = interfaces.IRequirement(section)
   >>> req
-  GroupRequirement(u'3rd Period Econ.')
+  Requirement(u'3rd Period Econ.')
   
 Create some people.  
   
@@ -49,7 +49,7 @@ We should be able to make an evaluation now:
   >>> from schooltool.requirement import evaluation
   >>> ev = evaluation.Evaluation(req, pf, PassFail.PASS, teacher)
   >>> ev.requirement
-  GroupRequirement(u'3rd Period Econ.')
+  Requirement(u'3rd Period Econ.')
   >>> ev.scoreSystem
   PassFail(u'Simple Pass/Fail System')
   >>> ev.value
@@ -62,7 +62,7 @@ And we then attach the section evaluation to the student being evaluated:
   >>> sorted(evals.keys())
   []
   >>> ev
-  <Evaluation for GroupRequirement(u'3rd Period Econ.'), value=True>
+  <Evaluation for Requirement(u'3rd Period Econ.'), value=True>
 
-  >>> # name = evals.addEvaluation(ev)
+  # >>> name = evals.addEvaluation(ev)
   

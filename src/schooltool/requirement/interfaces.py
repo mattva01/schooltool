@@ -28,19 +28,15 @@ import zope.app.container.constraints
 import zope.app.container.interfaces
 
 
-class IRequirement(zope.interface.Interface):
-    '''The simplest form of a standard.'''
-    zope.app.container.constraints.containers('.IGroupRequirement')
+class IRequirement(zope.app.container.interfaces.IContainer):
+    '''Something a student can do.'''
+    #zope.app.container.constraints.contains(IRequirement)
+    #zope.app.container.constraints.containers('.IRequirement')
 
     title = zope.schema.TextLine(
         title=u'Title',
         description=u'A brief title of the requirement.',
         required=True)
-
-
-class IGroupRequirement(zope.app.container.interfaces.IContainer, IRequirement):
-    '''A group of requirements.'''
-    zope.app.container.constraints.contains(IRequirement)
 
     bases = zope.schema.List(
         title=u'Bases',

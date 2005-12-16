@@ -23,13 +23,6 @@
       set_schema=".interfaces.IRequirement" />
   </content>
 
-  <content class=".requirement.GroupRequirement">
-    <require permission="schooltool.view"
-      interface=".interfaces.IGroupRequirement" />
-    <require permission="schooltool.edit"
-      set_schema=".interfaces.IGroupRequirement" />
-  </content>
-
   <content class="schooltool.course.course.Course">
     <implements interface=".interfaces.IHaveRequirement" />
   </content>
