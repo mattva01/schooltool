@@ -21,7 +21,7 @@ Create some people.
 Grab the student's ``IEvaluations`` adapter:
 
   >>> evals = interfaces.IEvaluations(student)
-  >>> evals #doctest:+ELLIPSIS
+  >>> evals
   <Evaluations for <schooltool.person.person.Person object at ...>
   
 At the moment we need to create a scoring system from scratch:
@@ -30,7 +30,7 @@ At the moment we need to create a scoring system from scratch:
   >>> from schooltool.requirement.scoresystem import UNSCORED
   >>> class PassFail(AbstractScoreSystem):
   ...    PASS = True
-  ...    Fail = False
+  ...    FAIL = False
   ...    def isPassingScore(self, score):
   ...        return bool(score)
   ...
@@ -54,7 +54,7 @@ We should be able to make an evaluation now:
   PassFail(u'Simple Pass/Fail System')
   >>> ev.value
   True
-  >>> ev.evaluator #doctest:+ELLIPSIS
+  >>> ev.evaluator
   <schooltool.person.person.Person object at ...>
 
 And we then attach the section evaluation to the student being evaluated:
