@@ -100,19 +100,19 @@ def doctest_AttendanceRecord_makeTardy():
 
     you can convert it to a tardy
 
-        >>> ar.makeTardy(datetime.time(15, 03))
+        >>> ar.makeTardy(datetime.datetime(2005, 12, 16, 15, 03))
 
         >>> ar.isTardy()
         True
         >>> ar.late_arrival
-        datetime.time(15, 3)
+        datetime.datetime(2005, 12, 16, 15, 3)
 
     In all other cases you can't.
 
         >>> for status in (UNKNOWN, PRESENT, TARDY):
         ...     ar = AttendanceRecord(status)
         ...     try:
-        ...         ar.makeTardy(datetime.time(15, 03))
+        ...         ar.makeTardy(datetime.datetime(2005, 12, 16, 15, 03))
         ...     except AttendanceError:
         ...         pass
         ...     else:

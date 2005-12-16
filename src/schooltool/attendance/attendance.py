@@ -53,6 +53,7 @@ class AttendanceRecord(Persistent):
     """Base class for attendance records."""
 
     def __init__(self, status):
+        assert status in (UNKNOWN, PRESENT, ABSENT, TARDY)
         self.status = status
         self.late_arrival = None
         self.explanations = PersistentList()
@@ -80,6 +81,7 @@ class AttendanceRecord(Persistent):
         return explanation
 
     def makeTardy(self, arrival_time):
+        assert isinstance(arrival_time, datetime.datetime)
         if not self.isAbsent():
             raise AttendanceError("makeTardy when status is %s, not ABSENT"
                                   % self.status)
@@ -112,6 +114,7 @@ class DayAttendanceRecord(AttendanceRecord):
     implements(IDayAttendanceRecord)
 
     def __init__(self, date, status):
+        assert isinstance(date, datetime.date)
         AttendanceRecord.__init__(self, status)
         self.date = date
 
@@ -151,6 +154,8 @@ class AttendanceFilteringMixin(object):
     """Mixin that implements IAttendance.filter on top of __iter__."""
 
     def filter(self, first, last):
+        assert isinstance(first, datetime.date)
+        assert isinstance(last, datetime.date)
         for ar in self:
             if first <= ar.date <= last:
                 yield ar
@@ -172,12 +177,14 @@ class DayAttendance(Persistent, AttendanceFilteringMixin):
         raise NotImplementedError # XXX TODO
 
     def get(self, date):
+        assert isinstance(date, datetime.date)
         try:
             return self._records[date]
         except KeyError:
             return DayAttendanceRecord(date, UNKNOWN)
 
     def record(self, date, present):
+        assert isinstance(date, datetime.date)
         if date in self._records:
             raise AttendanceError('record for %s already exists' % date)
         if present: status = PRESENT
@@ -200,6 +207,8 @@ class SectionAttendance(Persistent, AttendanceFilteringMixin):
         return iter(self._records)
 
     def makeCalendar(self, first, last):
+        assert isinstance(first, datetime.date)
+        assert isinstance(last, datetime.date)
         events = []
         for record in self.filter(first, last):
             title = None
