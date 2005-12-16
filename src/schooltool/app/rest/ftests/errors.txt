@@ -33,30 +33,31 @@ An ill-well formed document:
     <BLANKLINE>
     Ill-formed document.
 
-## Method not supported errors:
-##
-##     >>> print rest("""
-##     ... POST / HTTP/1.1
-##     ...
-##     ... new user
-##     ... """)
-##     HTTP/1.1 405 Method Not Allowed
-##     Allow: GET
-##     <BLANKLINE>
-##     Method Not Allowed
+Method not supported errors:
 
-     >>> print rest("""
-     ... DELETE / HTTP/1.1
-     ...
-     ... """)
-     HTTP/1.1 405 Method Not Allowed
-     Allow: DELETE, GET, OPTIONS, PUT
-     Content-Length: ...
-     <BLANKLINE>
-     Method Not Allowed
+    >>> print rest("""
+    ... POST / HTTP/1.1
+    ...
+    ... new user
+    ... """)
+    HTTP/1.1 405 Method Not Allowed
+    Allow: DELETE, GET, OPTIONS, PUT
+    Content-Length: ...
+    <BLANKLINE>
+    Method Not Allowed
 
-XXX mg: the Allow: header above should only list 'GET', but I have no time to
-    make Zope 3 do that right now.
+    >>> print rest("""
+    ... DELETE / HTTP/1.1
+    ...
+    ... """)
+    HTTP/1.1 405 Method Not Allowed
+    Allow: DELETE, GET, OPTIONS, PUT
+    Content-Length: ...
+    <BLANKLINE>
+    Method Not Allowed
+
+XXX mg: the two Allow: headers above should only list 'GET', but I have no time
+   to make Zope 3 do that right now.
 
 
 Unauthorized errors are handled by Zope for us:
