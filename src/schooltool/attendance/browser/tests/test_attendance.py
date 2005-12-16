@@ -24,16 +24,21 @@ $Id$
 import unittest
 import datetime
 
-from pytz import utc
+from pytz import utc, timezone
 from zope.testing import doctest
-from zope.app.testing import ztapi
+from zope.app.testing import ztapi, setup
+from zope.app.traversing.interfaces import IContainmentRoot
 from zope.publisher.browser import TestRequest
 from zope.interface import implements, Interface
 from zope.component import adapts
+from zope.app import zapi
 
 from schooltool.timetable import ITimetables
-from schooltool.calendar.simple import ImmutableCalendar
+from schooltool.timetable import TimetableActivity
 from schooltool.timetable.model import TimetableCalendarEvent
+from schooltool.calendar.simple import ImmutableCalendar
+from schooltool.calendar.simple import SimpleCalendarEvent
+from schooltool.course.interfaces import ISection
 
 
 class StubTimetables(object):
@@ -176,9 +181,126 @@ def doctest_SectionAttendanceTraverserPlugin():
     """
 
 
+class CalendarEventViewletManagerStub(object):
+    pass
+
+
+class EventForDisplayStub(object):
+    def __init__(self, event, tz=utc):
+        self.context = event
+        self.dtstarttz = event.dtstart.astimezone(tz)
+
+
+class SectionStub(object):
+    implements(ISection)
+
+
+class PersonStub(object):
+    pass
+
+
+def doctest_AttendanceCalendarEventViewlet():
+    r"""Tests for AttendanceCalendarEventViewlet
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...     import AttendanceCalendarEventViewlet
+        >>> viewlet = AttendanceCalendarEventViewlet()
+        >>> viewlet.request = TestRequest()
+
+    Viewlets have a ``manager`` attribute that points to the viewlet manager.
+
+        >>> viewlet.manager = CalendarEventViewletManagerStub()
+
+    CalendarEventViewletManagerStub exports an ``event`` attribute, which
+    provides IEventForDisplay.  Section meeting events are all
+    ITimetableCalendarEvent.
+
+        >>> section = SectionStub()
+        >>> fakePath(section, u'/sections/math4a')
+        >>> activity = TimetableActivity(title="Math", owner=section)
+        >>> section_event = TimetableCalendarEvent(
+        ...     datetime.datetime(2005, 12, 16, 16, 15, tzinfo=utc),
+        ...     datetime.timedelta(minutes=45),
+        ...     "Math", period_id="P4", activity=activity)
+        >>> viewlet.manager.event = EventForDisplayStub(section_event)
+
+    The viewlet knows how to compute a link to the section attendance form
+
+        >>> viewlet.attendanceLink()
+        'http://127.0.0.1/sections/math4a/attendance/2005-12-16/P4'
+
+    The date in the link depends on the configured timezone
+
+        >>> tokyo = timezone('Asia/Tokyo')
+        >>> viewlet.manager.event = EventForDisplayStub(section_event, tokyo)
+        >>> viewlet.manager.event.dtstarttz
+        datetime.datetime(2005, 12, 17, 1, 15, ...)
+        >>> viewlet.attendanceLink()
+        'http://127.0.0.1/sections/math4a/attendance/2005-12-17/P4'
+
+    If the event is not a section meeting event, the link is empty
+
+        >>> person = PersonStub()
+        >>> activity = TimetableActivity(title="Math study", owner=person)
+        >>> nonsection_event = TimetableCalendarEvent(
+        ...     datetime.datetime(2005, 12, 16, 16, 15, tzinfo=utc),
+        ...     datetime.timedelta(minutes=45),
+        ...     activity.title, period_id="P3", activity=activity)
+        >>> viewlet.manager.event = EventForDisplayStub(nonsection_event)
+        >>> viewlet.attendanceLink()
+
+    The link is also empty if the event is not a timetable event.
+
+        >>> random_event = SimpleCalendarEvent(
+        ...     datetime.datetime(2005, 12, 16, 16, 15, tzinfo=utc),
+        ...     datetime.timedelta(minutes=15),
+        ...     "Snacks")
+        >>> viewlet.manager.event = EventForDisplayStub(random_event)
+        >>> viewlet.attendanceLink()
+
+    """
+
+
+class FakeRoot(object):
+    implements(IContainmentRoot)
+
+
+class FakeFolder(object):
+    def __init__(self, parent, name):
+        self.__parent__ = parent
+        self.__name__ = name
+
+
+def fakePath(obj, path):
+    """Make zapi.absoluteURL(obj) return url.
+
+        >>> obj = SectionStub()
+        >>> fakePath(obj, '/dir/subdir/name')
+        >>> zapi.absoluteURL(obj, TestRequest())
+        'http://127.0.0.1/dir/subdir/name'
+
+    """
+    folder = FakeRoot()
+    bits = [name for name in path.split('/') if name]
+    for name in bits[:-1]:
+        folder = FakeFolder(folder, name)
+    name = bits and bits[-1] or ''
+    obj.__parent__ = folder
+    obj.__name__ = name
+
+
+def setUp(test):
+    setup.placelessSetUp()
+    setup.setUpTraversal()
+
+
+def tearDown(test):
+    setup.placelessTearDown()
+
+
 def test_suite():
-    return unittest.TestSuite([
-                doctest.DocTestSuite(optionflags=doctest.ELLIPSIS)])
+    return doctest.DocTestSuite(optionflags=doctest.ELLIPSIS,
+                                setUp=setUp, tearDown=tearDown)
 
 
 if __name__ == '__main__':

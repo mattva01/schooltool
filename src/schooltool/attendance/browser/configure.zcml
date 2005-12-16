@@ -17,4 +17,14 @@
       template="templates/real_time.pt"
       permission="zope.Public" />
 
+  <browser:viewlet
+      name="section-attendance-link"
+      for="*"
+      manager="schooltool.app.browser.skin.ICalendarEventViewletManager"
+      template="templates/section-attendance-viewlet.pt"
+      class=".attendance.AttendanceCalendarEventViewlet"
+      permission="zope.Public"
+      order="15"
+      />
+
 </configure>

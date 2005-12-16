@@ -1,0 +1,5 @@
+<a tal:define="href view/attendanceLink"
+   tal:condition="href"
+   tal:attributes="href href"
+   i18n:translate=""
+   i18n:domain="schooltool">Attendance</a>

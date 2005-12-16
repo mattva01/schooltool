@@ -23,14 +23,17 @@ $Id$
 """
 import datetime
 
+from zope.app import zapi
 from zope.app.publisher.browser import BrowserView
 from zope.interface import implements
 from zope.publisher.interfaces import NotFound
 from zope.component import queryMultiAdapter
 
 from schooltool.traverser.interfaces import ITraverserPlugin
-from schooltool.calendar.utils import parse_date
 from schooltool.timetable.interfaces import ITimetables
+from schooltool.timetable.interfaces import ITimetableCalendarEvent
+from schooltool.calendar.utils import parse_date
+from schooltool.course.interfaces import ISection
 from schooltool.app.browser import ViewPreferences
 
 
@@ -91,3 +94,24 @@ class SectionAttendanceTraverserPlugin(object):
             request.setTraversalStack(traversal_stack)
             return view
         raise NotFound(self.context, name, request)
+
+
+class AttendanceCalendarEventViewlet(object):
+    """Viewlet for section meeting calendar events.
+
+    Adds an Attendance link to all section meeting events.
+    """
+
+    def attendanceLink(self):
+        event_for_display = self.manager.event
+        calendar_event = event_for_display.context
+        if not ITimetableCalendarEvent.providedBy(calendar_event):
+            return None
+        section = calendar_event.activity.owner
+        if not ISection.providedBy(section):
+            return None
+        return '%s/attendance/%s/%s' % (
+                    zapi.absoluteURL(section, self.request),
+                    event_for_display.dtstarttz.date(),
+                    calendar_event.period_id)
+
