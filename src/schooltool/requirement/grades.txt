@@ -1,20 +1,54 @@
 Grading Integration Tests
 =========================
 
-Sections should be able to be adapted to ``IRequirement``:
+The overarching requirement in this scenario is the school curriculum.  That is,
+this requirement represents the work that has to be done to graduate.
+
+  >>> from schooltool.requirement import interfaces, requirement
+  >>> graduation = requirement.Requirement(u'Graduation Requirements')
+
+We want to create a course to provide some context:
+
+  >>> from schooltool.course.course import Course
+  
+  >>> course = Course()
+  >>> course.title = u'Economics'
+  >>> course.title
+  u'Economics'
+
+The course implements `IRequirement`:
+
+  >>> course_req = interfaces.IRequirement(course)
+  >>> course_req
+  Requirement(u'Economics')
+
+We want to indicate that Economics is part of the Graduation Requirements:
+
+  >>> graduation[u'econ'] = course_req
+  >>> sorted(graduation.keys())
+  [u'econ']
+
+Now we'll create a section of the economics course.  It also implements 
+`IRequirement`:
 
   >>> from schooltool.course.section import Section
+  
   >>> section = Section()
-  >>> section.title = u"3rd Period Econ."
-    
-  >>> from schooltool.requirement import interfaces 
+  >>> section.title = u"3rd Period Econ."    
   >>> req = interfaces.IRequirement(section)
   >>> req
   Requirement(u'3rd Period Econ.')
+
+This section should inherit the requirements of the course:
+
+  >>> req.addBase(course_req)
+  >>> req.bases
+  [Requirement(u'Economics')]
   
 Create some people.  
   
   >>> from schooltool.person.person import Person
+  
   >>> student = Person(u"Jane Student")
   >>> teacher = Person(u"Joe Teacher")
   
@@ -23,7 +57,10 @@ Grab the student's ``IEvaluations`` adapter:
   >>> evals = interfaces.IEvaluations(student)
   >>> evals
   <Evaluations for <schooltool.person.person.Person object at ...>
-  
+  >>> from zope.app import zapi
+  >>> sorted(evals.keys())
+  []
+
 At the moment we need to create a scoring system from scratch:
 
   >>> from schooltool.requirement.scoresystem import AbstractScoreSystem
@@ -64,5 +101,7 @@ And we then attach the section evaluation to the student being evaluated:
   >>> ev
   <Evaluation for Requirement(u'3rd Period Econ.'), value=True>
 
-  # >>> name = evals.addEvaluation(ev)
+We need to do some kind of setup to get this working.
+
+  >>> #evals.addEvaluation(ev)
   
