@@ -1,4 +1,4 @@
-<metal:block use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
+<metal:block use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 
   <metal:slot fill-slot="title">
     <span tal:replace="context/title" i18n:translate="">
