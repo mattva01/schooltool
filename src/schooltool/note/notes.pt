@@ -1,4 +1,4 @@
-<div id="notes" i18n:domain="schoolbell">
+<div id="notes" i18n:domain="schooltool">
   <h5 i18n:translate="">Notes</h5>
   <tal:loop repeat="note context/@@notes/notes">
     <div tal:attributes="class python:note.privacy == 'public' and 'note public' or 'note private'">
