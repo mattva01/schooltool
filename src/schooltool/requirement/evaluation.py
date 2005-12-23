@@ -80,7 +80,7 @@ class Evaluations(container.btree.BTreeContainer,
 
 
 class Evaluation(container.contained.Contained):
-    zope.interface.implements(interfaces.IEvaluations)
+    zope.interface.implements(interfaces.IEvaluation)
 
     def __init__(self, requirement, scoreSystem, value, evaluator):
         self._value = None
