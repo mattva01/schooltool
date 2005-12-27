@@ -25,6 +25,8 @@ $Id: interfaces.py 4691 2005-08-12 18:59:44Z srichter $
 import zope.interface
 import zope.schema
 from zope.app import container
+from zope.app.container.interfaces import IContainer, IContained
+from zope.app.container import constraints
 
 from schooltool import SchoolToolMessage as _
 
@@ -50,13 +52,13 @@ class IGroup(zope.interface.Interface):
         """Members of the group (see IRelationshipProperty)""")
 
 
-class IGroupContainer(container.interfaces.IContainer):
+class IGroupContainer(IContainer):
     """Container of groups."""
 
     container.constraints.contains(IGroup)
 
 
-class IGroupContained(IGroup, container.interfaces.IContained):
+class IGroupContained(IGroup, IContained):
     """Group contained in an IGroupContainer."""
 
     container.constraints.containers(IGroupContainer)
