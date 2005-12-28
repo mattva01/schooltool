@@ -27,4 +27,10 @@
       order="15"
       />
 
+  <browser:page
+      name="sparkline.png"
+      for="schooltool.course.interfaces.ISection"
+      class="schooltool.attendance.browser.sparkline.AttendanceSparklineView"
+      permission="zope.Public" />
+
 </configure>
