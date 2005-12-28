@@ -161,7 +161,34 @@ class AttendanceFilteringMixin(object):
                 yield ar
 
 
-class DayAttendance(Persistent, AttendanceFilteringMixin):
+class AttendanceCalendarMixin(object):
+    """Mixin that implements IAttendance.makeCalendar on top of filter.
+
+    Classes that mix this in need to provide the following methods:
+
+        tardyEventTitle(record)
+        absenceEventTitled(record)
+        makeCalendarEvent(record, title)
+
+    """
+
+    def makeCalendar(self, first, last):
+        assert isinstance(first, datetime.date)
+        assert isinstance(last, datetime.date)
+        events = []
+        for record in self.filter(first, last):
+            title = None
+            if record.isTardy():
+                title = self.tardyEventTitle(record)
+            elif record.isAbsent():
+                title = self.absenceEventTitle(record)
+            if title:
+                events.append(self.makeCalendarEvent(record, title))
+        return ImmutableCalendar(events)
+
+
+class DayAttendance(Persistent, AttendanceFilteringMixin,
+                    AttendanceCalendarMixin):
     """Persistent object that stores day attendance records for a student."""
 
     implements(IDayAttendance)
@@ -173,8 +200,23 @@ class DayAttendance(Persistent, AttendanceFilteringMixin):
     def __iter__(self):
         return iter(self._records.values())
 
-    def makeCalendar(self, first, last):
-        raise NotImplementedError # XXX TODO
+    def tardyEventTitle(self, record):
+        """Produce a title for a calendar event representing a tardy."""
+        return translate(_('Was late for homeroom.'))
+
+    def absenceEventTitle(self, record):
+        """Produce a title for a calendar event representing an absence."""
+        return translate(_('Was absent from homeroom.'))
+
+    def makeCalendarEvent(self, record, title):
+        """Produce a calendar event for an absence or a tardy."""
+        # XXX mg: Having to specify a date*time* for an all-day event makes NO
+        #         SENSE WHATSOEVER.  Grr!
+        dtstart = datetime.datetime.combine(record.date, datetime.time())
+        return SimpleCalendarEvent(title=title,
+                                   dtstart=dtstart,
+                                   duration=datetime.timedelta(1),
+                                   allday=True)
 
     def get(self, date):
         assert isinstance(date, datetime.date)
@@ -192,7 +234,8 @@ class DayAttendance(Persistent, AttendanceFilteringMixin):
         self._records[date] = DayAttendanceRecord(date, status)
 
 
-class SectionAttendance(Persistent, AttendanceFilteringMixin):
+class SectionAttendance(Persistent, AttendanceFilteringMixin,
+                        AttendanceCalendarMixin):
     """Persistent object that stores section attendance records for a student.
     """
 
@@ -205,20 +248,6 @@ class SectionAttendance(Persistent, AttendanceFilteringMixin):
 
     def __iter__(self):
         return iter(self._records)
-
-    def makeCalendar(self, first, last):
-        assert isinstance(first, datetime.date)
-        assert isinstance(last, datetime.date)
-        events = []
-        for record in self.filter(first, last):
-            title = None
-            if record.isTardy():
-                title = self.tardyEventTitle(record)
-            elif record.isAbsent():
-                title = self.absenceEventTitle(record)
-            if title:
-                events.append(self.makeCalendarEvent(record, title))
-        return ImmutableCalendar(events)
 
     def tardyEventTitle(self, record):
         """Produce a title for a calendar event representing a tardy."""

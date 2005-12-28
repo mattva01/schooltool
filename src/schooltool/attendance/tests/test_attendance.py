@@ -67,6 +67,19 @@ class SectionStub(object):
             return 'SectionStub()'
 
 
+class AttendanceRecordStub(object):
+
+    def __init__(self, date, status):
+        self.date = date
+        self.status = status
+
+    def isTardy(self):
+        return self.status == TARDY
+
+    def isAbsent(self):
+        return self.status == ABSENT
+
+
 #
 # Attendance record classes
 #
@@ -406,6 +419,60 @@ def doctest_AttendanceFilteringMixin_filter():
     """
 
 
+def doctest_AttendanceCalendarMixin_makeCalendar():
+    r"""Tests for AttendanceCalendarMixin.makeCalendar
+
+        >>> from schooltool.attendance.attendance \
+        ...         import AttendanceCalendarMixin
+        >>> acm = AttendanceCalendarMixin()
+
+    When there are no incidents stored, makeCalendar returns an empty
+    ImmutableCalendar:
+
+        >>> acm.filter = lambda first, last: []
+        >>> cal = acm.makeCalendar(datetime.date(2005, 12, 5),
+        ...                        datetime.date(2005, 12, 6))
+        >>> cal
+        <schooltool.calendar.simple.ImmutableCalendar object at ...>
+        >>> list(cal)
+        []
+
+    Let's add some incidents:
+
+        >>> dt1a = datetime.datetime(2005, 12, 5, 13, 30)
+        >>> dt1b = datetime.datetime(2005, 12, 5, 15, 30)
+        >>> dt2a = datetime.datetime(2005, 12, 7, 13, 30)
+        >>> dt2b = datetime.datetime(2005, 12, 7, 15, 30)
+        >>> dt3a = datetime.datetime(2005, 12, 9, 13, 30)
+
+        >>> r1 = AttendanceRecordStub(dt1a, PRESENT)
+        >>> r2 = AttendanceRecordStub(dt2a, PRESENT)
+        >>> r3 = AttendanceRecordStub(dt2a, ABSENT)
+        >>> r4 = AttendanceRecordStub(dt2b, TARDY)
+        >>> r5 = AttendanceRecordStub(dt3a, PRESENT)
+
+        >>> from schooltool.calendar.simple import SimpleCalendarEvent
+        >>> acm.filter = lambda first, last: [r1, r2, r3, r4, r5]
+        >>> acm.absenceEventTitle = lambda record: 'Was absent'
+        >>> acm.tardyEventTitle = lambda record: 'Was late'
+        >>> acm.makeCalendarEvent = lambda r, title: SimpleCalendarEvent(
+        ...                             r.date, datetime.timedelta(0), title)
+
+    Now let's inspect the calendar produced for the second day:
+
+        >>> def print_for(first, last):
+        ...     def key(event):
+        ...         return (event.dtstart, event.title)
+        ...     for ev in sorted(acm.makeCalendar(first, last), key=key):
+        ...         print ev.dtstart, ev.title
+
+        >>> print_for(dt1a.date(), dt3a.date())
+        2005-12-07 13:30:00+00:00 Was absent
+        2005-12-07 15:30:00+00:00 Was late
+
+    """
+
+
 def doctest_DayAttendance():
     """Test for DayAttendance
 
@@ -547,6 +614,60 @@ def doctest_DayAttendance_iter():
         [DayAttendanceRecord(...), DayAttendanceRecord(...)]
         >>> sorted(ar.date for ar in da)
         [datetime.date(2005, 12, 9), datetime.date(2005, 12, 10)]
+
+    """
+
+
+def doctest_DayAttendance_tardyEventTitle():
+    r"""Tests for DayAttendance.tardyEventTitle
+
+        >>> from schooltool.attendance.attendance import DayAttendance
+        >>> from schooltool.attendance.attendance import DayAttendanceRecord
+        >>> sa = DayAttendance()
+
+        >>> day = datetime.date(2005, 11, 23)
+        >>> ar = DayAttendanceRecord(day, ABSENT)
+        >>> ar.makeTardy(datetime.datetime(2005, 11, 23, 17, 32))
+
+        >>> print sa.tardyEventTitle(ar)
+        Was late for homeroom.
+
+    """
+
+
+def doctest_DayAttendance_absenceEventTitle():
+    r"""Tests for DayAttendance.absenceEventTitle
+
+        >>> from schooltool.attendance.attendance import DayAttendance
+        >>> from schooltool.attendance.attendance import DayAttendanceRecord
+        >>> sa = DayAttendance()
+
+        >>> day = datetime.date(2005, 11, 23)
+        >>> ar = DayAttendanceRecord(day, ABSENT)
+
+        >>> print sa.absenceEventTitle(ar)
+        Was absent from homeroom.
+
+    """
+
+
+def doctest_DayAttendance_makeCalendarEvent():
+    r"""Tests for DayAttendance.makeCalendarEvent
+
+        >>> from schooltool.attendance.attendance import DayAttendance
+        >>> from schooltool.attendance.attendance import DayAttendanceRecord
+        >>> sa = DayAttendance()
+
+        >>> day = datetime.date(2005, 11, 23)
+        >>> ar = DayAttendanceRecord(day, ABSENT)
+
+        >>> ev = sa.makeCalendarEvent(ar, 'John was bad today')
+        >>> ICalendarEvent.providedBy(ev)
+        True
+        >>> ev.allday
+        True
+        >>> print ev.dtstart, ev.duration, ev.title
+        2005-11-23 00:00:00+00:00 1 day, 0:00:00 John was bad today
 
     """
 
@@ -752,59 +873,6 @@ def doctest_SectionAttendance_getAllForDay():
         2005-12-09 A Chem True
 
         >>> print_for(datetime.date(2005, 12, 4))
-
-    """
-
-
-def doctest_SectionAttendance_makeCalendar():
-    """Tests for SectionAttendance.makeCalendar
-
-        >>> from schooltool.attendance.attendance import SectionAttendance
-        >>> sa = SectionAttendance()
-
-    When there are no incidents stored, makeCalendar returns an empty
-    ImmutableCalendar:
-
-        >>> cal = sa.makeCalendar(datetime.datetime(2005, 12, 5, 13, 30),
-        ...                       datetime.datetime(2005, 12, 6, 13, 30))
-        >>> cal
-        <schooltool.calendar.simple.ImmutableCalendar object at ...>
-        >>> list(cal)
-        []
-
-    Let's add some incidents:
-
-        >>> section1 = SectionStub('Math')
-        >>> section2 = SectionStub('Chem')
-        >>> dt1a = datetime.datetime(2005, 12, 5, 13, 30)
-        >>> dt1b = datetime.datetime(2005, 12, 5, 15, 30)
-        >>> dt2a = datetime.datetime(2005, 12, 7, 13, 30)
-        >>> dt2b = datetime.datetime(2005, 12, 7, 15, 30)
-        >>> dt3a = datetime.datetime(2005, 12, 9, 13, 30)
-        >>> dt3b = datetime.datetime(2005, 12, 9, 15, 30)
-        >>> duration = datetime.timedelta(minutes=45)
-
-        >>> sa.record(section1, dt1a, duration, 'A', True)
-        >>> sa.record(section1, dt2a, duration, 'A', True)
-        >>> sa.record(section2, dt2a, duration, 'A', False)
-        >>> sa.record(section1, dt2b, duration, 'B', False)
-        >>> sa.record(section2, dt3a, duration, 'A', True)
-
-        >>> fivemin = datetime.timedelta(minutes=5)
-        >>> record = sa.get(section1, dt2b).makeTardy(dt2b + fivemin)
-
-    Now let's inspect the calendar produced for the second day:
-
-        >>> def print_for(first, last):
-        ...     def key(event):
-        ...         return (event.dtstart, event.title)
-        ...     for ev in sorted(sa.makeCalendar(first, last), key=key):
-        ...         print ev.dtstart, ev.duration, ev.title
-
-        >>> print_for(dt1a.date(), dt3a.date())
-        2005-12-07 13:30:00+00:00 0:45:00 Was absent from Chem.
-        2005-12-07 15:30:00+00:00 0:45:00 Was late for Math (5 minutes).
-
 
     """
 
