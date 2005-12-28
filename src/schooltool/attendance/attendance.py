@@ -81,7 +81,7 @@ class AttendanceRecord(Persistent):
         return explanation
 
     def makeTardy(self, arrival_time):
-        assert isinstance(arrival_time, datetime.datetime)
+        assert type(arrival_time) == datetime.datetime
         if not self.isAbsent():
             raise AttendanceError("makeTardy when status is %s, not ABSENT"
                                   % self.status)
@@ -114,7 +114,7 @@ class DayAttendanceRecord(AttendanceRecord):
     implements(IDayAttendanceRecord)
 
     def __init__(self, date, status):
-        assert isinstance(date, datetime.date)
+        assert type(date) == datetime.date
         AttendanceRecord.__init__(self, status)
         self.date = date
 
@@ -154,8 +154,8 @@ class AttendanceFilteringMixin(object):
     """Mixin that implements IAttendance.filter on top of __iter__."""
 
     def filter(self, first, last):
-        assert isinstance(first, datetime.date)
-        assert isinstance(last, datetime.date)
+        assert type(first) == datetime.date
+        assert type(last) == datetime.date
         for ar in self:
             if first <= ar.date <= last:
                 yield ar
@@ -173,8 +173,8 @@ class AttendanceCalendarMixin(object):
     """
 
     def makeCalendar(self, first, last):
-        assert isinstance(first, datetime.date)
-        assert isinstance(last, datetime.date)
+        assert type(first) == datetime.date
+        assert type(last) == datetime.date
         events = []
         for record in self.filter(first, last):
             title = None
@@ -219,14 +219,14 @@ class DayAttendance(Persistent, AttendanceFilteringMixin,
                                    allday=True)
 
     def get(self, date):
-        assert isinstance(date, datetime.date)
+        assert type(date) == datetime.date
         try:
             return self._records[date]
         except KeyError:
             return DayAttendanceRecord(date, UNKNOWN)
 
     def record(self, date, present):
-        assert isinstance(date, datetime.date)
+        assert type(date) == datetime.date
         if date in self._records:
             raise AttendanceError('record for %s already exists' % date)
         if present: status = PRESENT
