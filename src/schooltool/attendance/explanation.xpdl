@@ -13,15 +13,61 @@
                 <Created>2005-12-02 00:14:00</Created>
             </ProcessHeader>
             <RedefinableHeader PublicationStatus="UNDER_TEST"/>
+            <FormalParameters>
+                <FormalParameter Id="attendanceRecord" Mode="IN">
+                    <DataType>
+                        <BasicType Type="REFERENCE"/>
+                    </DataType>
+                </FormalParameter>
+            </FormalParameters>
+            <DataFields>
+                <DataField Id="attendanceRecord" IsArray="FALSE" Name="Attendance Record">
+                    <DataType>
+                        <BasicType Type="REFERENCE"/>
+                    </DataType>
+                </DataField>
+                <DataField Id="hasAcceptedExplanation" IsArray="FALSE" Name="Has Accepted Explanation">
+                    <DataType>
+                        <BasicType Type="BOOLEAN"/>
+                    </DataType>
+                    <InitialValue>False</InitialValue>
+                </DataField>
+                <DataField Id="explanation" IsArray="FALSE">
+                    <DataType>
+                        <BasicType Type="STRING"/>
+                    </DataType>
+                </DataField>
+            </DataFields>
             <Participants>
                 <Participant Id="attendanceAdmin" Name="Attendance Administrator">
                     <ParticipantType Type="ROLE"/>
                 </Participant>
             </Participants>
+            <Applications>
+                <Application Id="WaitForExplanation">
+                    <FormalParameters>
+                        <FormalParameter Id="explanation" Mode="OUT">
+                            <DataType>
+                                <BasicType Type="STRING"/>
+                            </DataType>
+                        </FormalParameter>
+                        <FormalParameter Id="attendanceRecord" Mode="IN">
+                            <DataType>
+                                <BasicType Type="REFERENCE"/>
+                            </DataType>
+                        </FormalParameter>
+                    </FormalParameters>
+                </Application>
+            </Applications>
             <Activities>
                 <Activity Id="explain" Name="Explain">
                     <Implementation>
-                        <No/>
+                        <Tool Id="WaitForExplanation" Type="APPLICATION">
+                            <ActualParameters>
+                                <ActualParameter>explanation</ActualParameter>
+                                <ActualParameter>attendanceRecord</ActualParameter>
+                            </ActualParameters>
+                        </Tool>
                     </Implementation>
                     <Performer>attendanceAdmin</Performer>
                     <StartMode>
@@ -36,8 +82,8 @@
                             <Split Type="XOR">
                                 <TransitionRefs>
                                     <TransitionRef Id="explain_to_excuse"/>
-                                    <TransitionRef Id="explanation_Tra14"/>
-                                    <TransitionRef Id="explanation_Tra12"/>
+                                    <TransitionRef Id="explain_to_reject"/>
+                                    <TransitionRef Id="explain_to_tardy"/>
                                 </TransitionRefs>
                             </Split>
                         </TransitionRestriction>
@@ -61,8 +107,8 @@
                     </FinishMode>
                     <ExtendedAttributes>
                         <ExtendedAttribute Name="ParticipantID" Value="attendanceAdmin"/>
-                        <ExtendedAttribute Name="XOffset" Value="490"/>
-                        <ExtendedAttribute Name="YOffset" Value="120"/>
+                        <ExtendedAttribute Name="XOffset" Value="500"/>
+                        <ExtendedAttribute Name="YOffset" Value="110"/>
                     </ExtendedAttributes>
                 </Activity>
                 <Activity Id="makeTardy" Name="Make Tardy">
@@ -78,8 +124,8 @@
                     </FinishMode>
                     <ExtendedAttributes>
                         <ExtendedAttribute Name="ParticipantID" Value="attendanceAdmin"/>
-                        <ExtendedAttribute Name="XOffset" Value="280"/>
-                        <ExtendedAttribute Name="YOffset" Value="160"/>
+                        <ExtendedAttribute Name="XOffset" Value="320"/>
+                        <ExtendedAttribute Name="YOffset" Value="110"/>
                     </ExtendedAttributes>
                 </Activity>
                 <Activity Id="excuse" Name="Excuse">
@@ -114,6 +160,7 @@
                         <ExtendedAttribute Name="ParticipantID" Value="attendanceAdmin"/>
                         <ExtendedAttribute Name="XOffset" Value="250"/>
                         <ExtendedAttribute Name="YOffset" Value="40"/>
+                        <ExtendedAttribute Name="AttendanceRecord"/>
                     </ExtendedAttributes>
                 </Activity>
             </Activities>
@@ -123,27 +170,30 @@
                         <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
                     </ExtendedAttributes>
                 </Transition>
-                <Transition From="explain" Id="explanation_Tra12" To="makeTardy">
+                <Transition From="explain" Id="explain_to_tardy" To="makeTardy">
+                    <Condition Type="CONDITION">1==2</Condition>
                     <ExtendedAttributes>
                         <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
                     </ExtendedAttributes>
                 </Transition>
-                <Transition From="makeTardy" Id="explain_to_tardy" To="explain">
+                <Transition From="makeTardy" Id="tardy_to_explain" To="explain">
                     <ExtendedAttributes>
                         <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
                     </ExtendedAttributes>
                 </Transition>
-                <Transition From="explain" Id="explanation_Tra14" To="reject">
+                <Transition From="explain" Id="explain_to_reject" To="reject">
+                    <Condition Type="CONDITION">1==2</Condition>
                     <ExtendedAttributes>
                         <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
                     </ExtendedAttributes>
                 </Transition>
-                <Transition From="reject" Id="explain_to_reject" To="explain">
+                <Transition From="reject" Id="reject_to_explain" To="explain">
                     <ExtendedAttributes>
                         <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
                     </ExtendedAttributes>
                 </Transition>
                 <Transition From="explain" Id="explain_to_excuse" To="excuse">
+                    <Condition Type="CONDITION">attendanceRecord.isExplained()</Condition>
                     <ExtendedAttributes>
                         <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
                     </ExtendedAttributes>
