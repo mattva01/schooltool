@@ -88,6 +88,19 @@ class AttendanceSparkline(object):
                 return rec
         return None
 
+    def sectionMeetsOn(self, day, tz, section_calendar):
+        """Does a section have a meeting on a given day?
+
+        ``tz`` is the school-wide timezone used to determine when exactly a
+        schoolday starts and ends.
+
+        ``section_calendar`` is a calendar containing section meetings
+        """
+        day_start = datetime.datetime.combine(day,
+                                              datetime.time(0, tzinfo=tz))
+        day_end = day_start + datetime.timedelta(1)
+        return bool(section_calendar.expand(day_start, day_end))
+
     def getData(self):
         """Get all the data necessary to draw the sparkline.
 
@@ -100,10 +113,7 @@ class AttendanceSparkline(object):
         data = []
         for day in days:
             record = self.getWorstRecordForDay(day)
-            day_start = datetime.datetime.combine(day,
-                                                  datetime.time(0, tzinfo=tz))
-            day_end = day_start + datetime.timedelta(1)
-            meets = bool(section_calendar.expand(day_start, day_end))
+            meets = self.sectionMeetsOn(day, tz, section_calendar)
             day_attendance = IDayAttendance(self.person)
             day_record = day_attendance.get(day)
             if meets:
