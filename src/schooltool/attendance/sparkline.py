@@ -46,6 +46,8 @@ class AttendanceSparkline(object):
     last several school days.
     """
 
+    width = 10
+
     def __init__(self, person, section, date):
         self.person = person
         self.section = section
@@ -91,7 +93,7 @@ class AttendanceSparkline(object):
 
         Returns list of tuples: (whisker_size, color, sign).
         """
-        days = self.getLastSchooldays()
+        days = self.getLastSchooldays(self.width)
         section_calendar = ITimetables(self.section).makeTimetableCalendar()
         timezone = IApplicationPreferences(getSchoolToolApplication()).timezone
         tz = pytz.timezone(timezone)
@@ -130,14 +132,17 @@ class AttendanceSparkline(object):
         """Render sparkline of specified size and return as PIL image."""
         data = self.getData()
         number_of_days = len(data)
+        left_margin = 0
+        if number_of_days < self.width:
+            left_margin = self.width - number_of_days
         attrs = data
-        width = number_of_days * (point_width + spacing)
+        width = (left_margin + number_of_days) * (point_width + spacing)
         image = Image.new('RGB', (width, height), 'white')
         draw = ImageDraw.Draw(image)
         middle = height/2
         for nr, attr in enumerate(attrs):
             size, color, sign = attr
-            x = nr * (point_width + spacing)
+            x = (left_margin + nr) * (point_width + spacing)
             if size == 'dot':
                 real_size = 0
             elif size == 'full':
