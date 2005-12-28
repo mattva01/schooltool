@@ -112,8 +112,8 @@ Looks at his daily view, and sees the Dancing section there:
               </h6>
     ...
 
-So.  One possible way of going to the attendance form is to follow a notional
-'Attendance' link in the event box.
+You can go to the section attendance form by following the 'Attendance' link in
+the event box.
 
     >>> largo.getLink('Attendance').click()
     >>> print analyze.queryHTML('id("content-body")', largo.contents)[0]
