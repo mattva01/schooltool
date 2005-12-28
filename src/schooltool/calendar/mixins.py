@@ -327,14 +327,14 @@ class CalendarEventMixin(object):
                 dtstart = datetime.datetime.combine(recdate, starttime)
                 dtend = dtstart + self.duration
                 if self.duration == zero: # corner case: zero-length self
-                    dtend += epsilon       # treat it as a very short self
+                    dtend += epsilon      # treat it as a very short self
                 if dtend > first and dtstart < last:
                     yield ExpandedCalendarEvent(self, dtstart=dtstart)
         else:
             dtstart = self.dtstart
             dtend = dtstart + self.duration
             if self.duration == zero: # corner case: zero-length self
-                dtend += epsilon       # treat it as a very short self
+                dtend += epsilon      # treat it as a very short self
             if dtend > first and dtstart < last:
                 yield self
 
