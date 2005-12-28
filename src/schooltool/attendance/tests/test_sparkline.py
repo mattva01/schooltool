@@ -148,7 +148,7 @@ class CalendarStub:
 
 
 class TimetablesStub:
-    def makeCalendar(self):
+    def makeTimetableCalendar(self):
         return CalendarStub()
 
 
@@ -181,7 +181,7 @@ def doctest_AttendanceSparkline():
         ...                     IApplicationPreferences,
         ...                     getApplicationPreferences)
         >>> prefs = IApplicationPreferences(app)
-        >>> prefs.timezone = utc
+        >>> prefs.timezone = 'UTC'
         >>> term = Term('test-term', datetime.date(2005, 9, 16),
         ...             datetime.date(2005, 11, 1))
         >>> term.addWeekdays(1, 3)

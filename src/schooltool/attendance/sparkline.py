@@ -27,6 +27,7 @@ __docformat__ = 'reStructuredText'
 import urllib
 import StringIO
 import datetime
+import pytz
 
 from PIL import Image, ImageDraw
 
@@ -91,8 +92,9 @@ class AttendanceSparkline(object):
         Returns list of tuples: (whisker_size, color, sign).
         """
         days = self.getLastSchooldays()
-        section_calendar = ITimetables(self.section).makeCalendar()
-        tz = IApplicationPreferences(getSchoolToolApplication()).timezone
+        section_calendar = ITimetables(self.section).makeTimetableCalendar()
+        timezone = IApplicationPreferences(getSchoolToolApplication()).timezone
+        tz = pytz.timezone(timezone)
         data = []
         for day in days:
             record = self.getWorstRecordForDay(day)
@@ -159,4 +161,10 @@ class AttendanceSparkline(object):
         im_data = StringIO.StringIO()
         image.save(im_data, 'PNG')
         return 'data:image/png,' + urllib.quote(im_data.getvalue())
+
+    def __str__(self):
+        image = self.render()
+        im_data = StringIO.StringIO()
+        image.save(im_data, 'PNG')
+        return im_data.getvalue()
 
