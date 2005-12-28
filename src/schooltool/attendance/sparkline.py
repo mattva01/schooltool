@@ -96,10 +96,9 @@ class AttendanceSparkline(object):
 
         ``section_calendar`` is a calendar containing section meetings
         """
-        day_start = datetime.datetime.combine(day,
-                                              datetime.time(0, tzinfo=tz))
+        day_start = tz.localize(datetime.datetime.combine(day, datetime.time()))
         day_end = day_start + datetime.timedelta(1)
-        return bool(section_calendar.expand(day_start, day_end))
+        return bool(list(section_calendar.expand(day_start, day_end)))
 
     def getData(self):
         """Get all the data necessary to draw the sparkline.

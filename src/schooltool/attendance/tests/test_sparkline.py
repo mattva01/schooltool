@@ -25,13 +25,14 @@ $Id$
 import unittest
 import datetime
 
-from pytz import utc
+from pytz import utc, timezone
 from zope.testing import doctest
 from zope.app.testing import setup, ztapi
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.app import getApplicationPreferences
+from schooltool.calendar.simple import ImmutableCalendar, SimpleCalendarEvent
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.term import Term
 from schooltool.testing import setup as stsetup
@@ -164,6 +165,8 @@ class SectionStub:
 def doctest_AttendanceSparkline():
     r"""Tests for AttendanceSparkline
 
+    XXX split this up into isolated unit tests for each method.
+
     Create simple sparkline:
 
         >>> section = SectionStub()
@@ -255,6 +258,64 @@ def doctest_AttendanceSparkline():
         F%A2%89%F7%01%00%00%00%FF%FF%A2%89%A1%00%00%00%00%FF%FFb%21F%11%
         A1%20B%97%05%00%00%00%FF%FF%A2%89K%01%00%00%00%FF%FF%03%00%02%E7
         %1C%15j%D1Z%E6%00%00%00%00IEND%AEB%60%82
+
+    """
+
+
+def doctest_AttendanceSparkline_sectionMeetsOn():
+    """Tests for AttendanceSparkline.sectionMeetsOn.
+
+        >>> from schooltool.attendance.sparkline import AttendanceSparkline
+        >>> as = AttendanceSparkline(None, None, None)
+
+    Europe/Vilnius is a good timezone for unit tests, because its UTC offset
+    has changed historically, which lets you catch certain timezone-related
+    bugs.
+
+        >>> tz = timezone('Europe/Vilnius')
+
+    On 2005-07-28 the UTC offset is +03:00, and the school day starts on
+    2005-07-27 21:00 UTC and ends on 2005-07-28 21:00 UTC
+
+    On 2005-12-28 the UTC offset is +02:00, and the school day starts on
+    2005-12-27 22:00 UTC and ends on 2005-12-28 22:00 UTC
+
+        >>> section_calendar = ImmutableCalendar([
+        ...     SimpleCalendarEvent(datetime.datetime(2005, 7, 27, 21, 30),
+        ...                         datetime.timedelta(hours=1),
+        ...                         '2005-07-28 EEST'),
+        ...     SimpleCalendarEvent(datetime.datetime(2005, 7, 30, 19, 30),
+        ...                         datetime.timedelta(hours=1),
+        ...                         '2005-07-30 EEST'),
+        ...     SimpleCalendarEvent(datetime.datetime(2005, 12, 27, 22, 30),
+        ...                         datetime.timedelta(hours=1),
+        ...                         '2005-12-28 EET'),
+        ...     SimpleCalendarEvent(datetime.datetime(2005, 12, 30, 20, 30),
+        ...                         datetime.timedelta(hours=1),
+        ...                         '2005-12-30 EET'),
+        ... ])
+
+        >>> as.sectionMeetsOn(datetime.date(2005, 7, 27), tz, section_calendar)
+        False
+        >>> as.sectionMeetsOn(datetime.date(2005, 7, 28), tz, section_calendar)
+        True
+        >>> as.sectionMeetsOn(datetime.date(2005, 7, 29), tz, section_calendar)
+        False
+        >>> as.sectionMeetsOn(datetime.date(2005, 7, 30), tz, section_calendar)
+        True
+        >>> as.sectionMeetsOn(datetime.date(2005, 7, 31), tz, section_calendar)
+        False
+
+        >>> as.sectionMeetsOn(datetime.date(2005, 12, 27), tz, section_calendar)
+        False
+        >>> as.sectionMeetsOn(datetime.date(2005, 12, 28), tz, section_calendar)
+        True
+        >>> as.sectionMeetsOn(datetime.date(2005, 12, 29), tz, section_calendar)
+        False
+        >>> as.sectionMeetsOn(datetime.date(2005, 12, 30), tz, section_calendar)
+        True
+        >>> as.sectionMeetsOn(datetime.date(2005, 12, 31), tz, section_calendar)
+        False
 
     """
 
