@@ -71,15 +71,15 @@ class StubTimetables(object):
             ])
 
 
-def doctest_verifyPeriodForSection():
-    """Doctest for verifyPeriodForSection
+def doctest_getPeriodEventForSection():
+    """Doctest for getPeriodEventForSection
 
     When traversing to the realtime attendance form, we want to verify
     that the section has the given period takes place on the given
     date.  We have a utility function for that:
 
         >>> from schooltool.attendance.browser.attendance import \\
-        ...     verifyPeriodForSection
+        ...     getPeriodEventForSection
 
         >>> section = StubTimetables(None)
 
@@ -87,21 +87,21 @@ def doctest_verifyPeriodForSection():
 
         >>> for date in [datetime.date(2005, 12, d) for d in (14, 15, 16)]:
         ...     for period_id in 'A', 'B', 'C', 'D':
-        ...         result = verifyPeriodForSection(section, date,
-        ...                                         period_id, utc)
-        ...         print date, period_id, result
-        2005-12-14 A True
-        2005-12-14 B False
-        2005-12-14 C False
-        2005-12-14 D True
-        2005-12-15 A False
-        2005-12-15 B True
-        2005-12-15 C True
-        2005-12-15 D False
-        2005-12-16 A False
-        2005-12-16 B False
-        2005-12-16 C False
-        2005-12-16 D False
+        ...         result = getPeriodEventForSection(section, date,
+        ...                                           period_id, utc)
+        ...         print date, period_id, result and result.dtstart
+        2005-12-14 A 2005-12-14 10:00:00+00:00
+        2005-12-14 B None
+        2005-12-14 C None
+        2005-12-14 D 2005-12-14 11:00:00+00:00
+        2005-12-15 A None
+        2005-12-15 B 2005-12-15 10:00:00+00:00
+        2005-12-15 C 2005-12-15 11:00:00+00:00
+        2005-12-15 D None
+        2005-12-16 A None
+        2005-12-16 B None
+        2005-12-16 C None
+        2005-12-16 D None
 
     """
 
@@ -274,6 +274,10 @@ def doctest_RealtimeAttendanceView_listMembers():
         >>> ztapi.provideAdapter(IPerson, ISectionAttendance,
         ...                      getSectionAttendance)
 
+    We'll need timetabling too:
+
+        >>> ztapi.provideAdapter(None, ITimetables, StubTimetables)
+
     Let's set up a view:
 
         >>> from schooltool.attendance.browser.attendance import \\
@@ -282,6 +286,7 @@ def doctest_RealtimeAttendanceView_listMembers():
         >>> section = Section()
         >>> view = RealtimeAttendanceView(section, TestRequest())
         >>> view.date = datetime.date(2005, 12, 15)
+        >>> view.period_id = 'C'
 
     If the section does not have any members, listMembers returns an
     empty list:
@@ -311,8 +316,8 @@ def doctest_RealtimeAttendanceView_listMembers():
     These members should appear in the output
 
         >>> pprint(view.listMembers())
-        [(u'person1', 'Person1', 'attendance-clear'),
-         (u'person2', 'Person2', 'attendance-clear')]
+        [(u'person1', 'Person1', 'attendance-clear', ' ', False),
+         (u'person2', 'Person2', 'attendance-clear', ' ', False)]
 
     So should transitive members:
 
@@ -322,10 +327,10 @@ def doctest_RealtimeAttendanceView_listMembers():
         >>> section.members.add(form)
 
         >>> pprint(view.listMembers())
-        [(u'person1', 'Person1', 'attendance-clear'),
-         (u'person2', 'Person2', 'attendance-clear'),
-         (u'person3', 'Person3', 'attendance-clear'),
-         (u'person4', 'Person4', 'attendance-clear')]
+        [(u'person1', 'Person1', 'attendance-clear', ' ', False),
+         (u'person2', 'Person2', 'attendance-clear', ' ', False),
+         (u'person3', 'Person3', 'attendance-clear', ' ', False),
+         (u'person4', 'Person4', 'attendance-clear', ' ', False)]
 
     Let's add an absence record to one person:
 
@@ -337,10 +342,36 @@ def doctest_RealtimeAttendanceView_listMembers():
     Now the members' list displays a new status:
 
         >>> pprint(view.listMembers())
-        [(u'person1', 'Person1', 'attendance-clear'),
-         (u'person2', 'Person2', 'attendance-clear'),
-         (u'person3', 'Person3', 'attendance-clear'),
-         (u'person4', 'Person4', 'attendance-absent')]
+        [(u'person1', 'Person1', 'attendance-clear', ' ', False),
+         (u'person2', 'Person2', 'attendance-clear', ' ', False),
+         (u'person3', 'Person3', 'attendance-clear', ' ', False),
+         (u'person4', 'Person4', 'attendance-absent', ' ', False)]
+
+    Let's add some absences in this period:
+
+        >>> attendance = ISectionAttendance(person4)
+        >>> attendance.record(
+        ...     section, datetime.datetime(2005, 12, 15, 11, 00, tzinfo=utc),
+        ...     datetime.timedelta(minutes=45), 'C', False)
+
+        >>> attendance = ISectionAttendance(person2)
+        >>> attendance.record(
+        ...     section, datetime.datetime(2005, 12, 15, 11, 00, tzinfo=utc),
+        ...     datetime.timedelta(minutes=45), 'C', False)
+        >>> ar = attendance.get(section,
+        ...            datetime.datetime(2005, 12, 15, 11, 00, tzinfo=utc))
+        >>> ar.makeTardy(datetime.datetime(2005, 12, 15, 11, 05, tzinfo=utc))
+
+        >>> attendance = ISectionAttendance(person3)
+        >>> attendance.record(
+        ...     section, datetime.datetime(2005, 12, 15, 11, 00, tzinfo=utc),
+        ...     datetime.timedelta(minutes=45), 'C', True)
+
+        >>> pprint(view.listMembers())
+        [(u'person1', 'Person1', 'attendance-clear', ' ', False),
+         (u'person2', 'Person2', 'attendance-absent', 'T', True),
+         (u'person3', 'Person3', 'attendance-present', '+', True),
+         (u'person4', 'Person4', 'attendance-absent', '-', False)]
 
     """
 
@@ -449,6 +480,130 @@ def doctest_RealtimeAttendanceView_studentStatus():
 
     """
 
+def doctest_RealtimeAttendanceView_update():
+    """Tests for RealtimeAttendanceView.update
+
+    Let's set up the section attendance adapter:
+
+        >>> from schooltool.attendance.interfaces import ISectionAttendance
+        >>> from schooltool.attendance.attendance import getSectionAttendance
+        >>> from schooltool.person.interfaces import IPerson
+        >>> ztapi.provideAdapter(IPerson, ISectionAttendance,
+        ...                      getSectionAttendance)
+
+    We'll need timetabling stubbed too:
+
+        >>> ztapi.provideAdapter(None, ITimetables, StubTimetables)
+
+    Let's create a section and a view:
+
+        >>> from schooltool.attendance.browser.attendance import \\
+        ...     RealtimeAttendanceView
+        >>> from schooltool.course.section import Section
+        >>> class MySection(Section):
+        ...     def __repr__(self): return '<Section>'
+        >>> section = MySection()
+
+    Let's add some members to the section:
+
+        >>> from schooltool.group.group import Group
+        >>> from schooltool.person.person import Person, PersonContainer
+        >>> person1 = Person('person1', title='Person1')
+        >>> person2 = Person('person2', title='Person2')
+        >>> person3 = Person('person3', title='Person3')
+        >>> person4 = Person('person4', title='Person4')
+
+        >>> persons = PersonContainer()
+        >>> persons[''] = person1
+        >>> persons[''] = person2
+        >>> persons[''] = person3
+        >>> persons[''] = person4
+
+        >>> section.members.add(person1)
+        >>> section.members.add(person2)
+        >>> section.members.add(person3)
+        >>> section.members.add(person4)
+
+    Let's instantiate the view:
+
+        >>> request = TestRequest(form={'person1_check': 'on',
+        ...                             'person2_check': 'on',
+        ...                             'ABSENT': 'Make absent'})
+        >>> view = RealtimeAttendanceView(section, request)
+        >>> view.date = datetime.date(2005, 12, 15)
+        >>> view.period_id = 'C'
+
+    Now we can call update:
+
+        >>> view.update()
+
+    Let's see the attendance data for these persons:
+
+        >>> records = list(ISectionAttendance(person1))
+        >>> len(records)
+        1
+        >>> pprint(records)
+        [SectionAttendanceRecord(<Section>, \
+              datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), ABSENT)]
+
+        >>> list(ISectionAttendance(person2))
+        [SectionAttendanceRecord(<Section>, \
+              datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), ABSENT)]
+
+        >>> list(ISectionAttendance(person3))
+        [SectionAttendanceRecord(<Section>, \
+              datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), PRESENT)]
+        >>> list(ISectionAttendance(person4))
+        [SectionAttendanceRecord(<Section>, \
+              datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), PRESENT)]
+
+    Let's call the view again, nothing changed:
+
+        >>> request = TestRequest(form={'ABSENT': 'Make absent'})
+        >>> view = RealtimeAttendanceView(section, request)
+        >>> view.date = datetime.date(2005, 12, 15)
+        >>> view.period_id = 'C'
+
+        >>> view.update()
+
+        >>> list(ISectionAttendance(person1))
+        [SectionAttendanceRecord(<Section>, \
+              datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), ABSENT)]
+        >>> list(ISectionAttendance(person2))
+        [SectionAttendanceRecord(<Section>, \
+              datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), ABSENT)]
+        >>> list(ISectionAttendance(person3))
+        [SectionAttendanceRecord(<Section>, \
+              datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), PRESENT)]
+        >>> list(ISectionAttendance(person4))
+        [SectionAttendanceRecord(<Section>, \
+              datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), PRESENT)]
+
+    If we call an absent person absent again, nothing breaks:
+
+        >>> request = TestRequest(form={'ABSENT': 'Make absent',
+        ...                             'person1_check': 'on'})
+        >>> view = RealtimeAttendanceView(section, request)
+        >>> view.date = datetime.date(2005, 12, 15)
+        >>> view.period_id = 'C'
+
+        >>> view.update()
+
+        >>> list(ISectionAttendance(person1))
+        [SectionAttendanceRecord(<Section>, \
+              datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), ABSENT)]
+        >>> list(ISectionAttendance(person2))
+        [SectionAttendanceRecord(<Section>, \
+              datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), ABSENT)]
+        >>> list(ISectionAttendance(person3))
+        [SectionAttendanceRecord(<Section>, \
+              datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), PRESENT)]
+        >>> list(ISectionAttendance(person4))
+        [SectionAttendanceRecord(<Section>, \
+              datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), PRESENT)]
+
+
+    """
 
 def setUp(test):
     setup.placelessSetUp()
@@ -462,8 +617,15 @@ def tearDown(test):
 
 
 def test_suite():
-    return doctest.DocTestSuite(optionflags=doctest.ELLIPSIS,
-                                setUp=setUp, tearDown=tearDown)
+    return unittest.TestSuite([
+        doctest.DocTestSuite(
+            optionflags=doctest.ELLIPSIS|doctest.NORMALIZE_WHITESPACE,
+            setUp=setUp, tearDown=tearDown),
+        doctest.DocTestSuite(
+            "schooltool.attendance.browser.attendance",
+            optionflags=doctest.ELLIPSIS,
+            setUp=setUp, tearDown=tearDown)
+        ])
 
 
 if __name__ == '__main__':

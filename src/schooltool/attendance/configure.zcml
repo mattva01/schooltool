@@ -1,17 +1,29 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
+
+  <class class=".attendance.SectionAttendance">
+    <allow interface=".interfaces.ISectionAttendance" />
+  </class>
+
+  <class class=".attendance.SectionAttendanceRecord">
+    <allow interface=".interfaces.ISectionAttendanceRecord" />
+  </class>
+
   <adapter
         for="schooltool.person.interfaces.IPerson"
         provides=".interfaces.ISectionAttendance"
         factory=".attendance.getSectionAttendance"
         trusted="true"
   />
+
   <adapter
         for="schooltool.person.interfaces.IPerson"
         provides=".interfaces.IDayAttendance"
         factory=".attendance.getDayAttendance"
         trusted="true"
   />
+
   <include package=".browser" />
+
 </configure>

@@ -14,7 +14,6 @@
       name="attendance"
       for="schooltool.course.interfaces.ISection"
       class="schooltool.attendance.browser.attendance.RealtimeAttendanceView"
-      template="templates/real_time.pt"
       permission="zope.Public" />
 
   <browser:viewlet
@@ -26,6 +25,16 @@
       permission="zope.Public"
       order="15"
       />
+
+  <browser:viewlet
+      name="attendance_css"
+      for="*"
+      manager="schooltool.app.browser.skin.ICSSManager"
+      class=".attendance.AttendanceCSSViewlet"
+      permission="zope.View"
+      />
+
+  <browser:resource name="attendance.css" file="attendance.css" />
 
   <browser:page
       name="sparkline.png"

@@ -116,9 +116,13 @@ You can go to the section attendance form by following the 'Attendance' link in
 the event box.
 
     >>> largo.getLink('Attendance').click()
-    >>> print analyze.queryHTML('id("content-body")', largo.contents)[0]
-    <div id="content-body">
-    Date 2005-12-12
-    period 09:30-10:25
+    >>> print analyze.queryHTML('id("content-header")', largo.contents)[0]
+    <div id="content-header">
+    <h2>Section attendance for Great Teacher Largo -- Dancing 1  at 2005-12-12
+    period 09:30-10:25</h2>
     </div>
 
+    <>>> print analyze.queryHTML('id("content-body")', largo.contents)[0]
+    ...
+    <form method="POST" action="http://localhost/sections/dancing1a/attendance/2005-12-12/09:30-10:25">
+    ...

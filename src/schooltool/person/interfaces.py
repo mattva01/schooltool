@@ -29,7 +29,7 @@ import zope.schema
 
 import zope.app.container.constraints
 from zope.app import container
-from zope.app.annotation.interfaces import IAnnotatable
+from zope.app.annotation.interfaces import IAnnotatable, IAttributeAnnotatable
 from zope.app.location.interfaces import ILocation
 
 from schooltool import SchoolToolMessage as _
@@ -105,7 +105,7 @@ class IWritePerson(zope.interface.Interface):
         """
 
 
-class IPerson(IReadPerson, IWritePerson):
+class IPerson(IReadPerson, IWritePerson, IAttributeAnnotatable):
     """Person.
 
     A person has a number of informative fields such as name, an optional
