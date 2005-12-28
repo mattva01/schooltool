@@ -213,16 +213,16 @@ class SectionAttendance(Persistent, AttendanceFilteringMixin):
         for record in self.filter(first, last):
             title = None
             if record.isTardy():
-                minutes = (record.late_arrival - record.datetime).seconds / 60
-                title = self.tardyEventTitle(record, minutes)
+                title = self.tardyEventTitle(record)
             elif record.isAbsent():
                 title = self.absenceEventTitle(record)
             if title:
                 events.append(self.makeCalendarEvent(record, title))
         return ImmutableCalendar(events)
 
-    def tardyEventTitle(self, record, minutes_late):
+    def tardyEventTitle(self, record):
         """Produce a title for a calendar event representing a tardy."""
+        minutes_late = (record.late_arrival - record.datetime).seconds / 60
         return translate(_('Was late for ${section} (${mins} minutes).',
                            mapping={'section': record.section.title,
                                     'mins': minutes_late}))

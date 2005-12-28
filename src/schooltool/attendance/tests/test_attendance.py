@@ -826,7 +826,7 @@ def doctest_SectionAttendance_tardyEventTitle():
         >>> minutes_late = 14
         >>> ar.makeTardy(dt + datetime.timedelta(minutes=minutes_late))
 
-        >>> print sa.tardyEventTitle(ar, minutes_late)
+        >>> print sa.tardyEventTitle(ar)
         Was late for Lithomancy (14 minutes).
 
     """
