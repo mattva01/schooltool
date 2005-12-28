@@ -110,18 +110,17 @@ class AttendanceSparkline(object):
         section_calendar = ITimetables(self.section).makeTimetableCalendar()
         timezone = IApplicationPreferences(getSchoolToolApplication()).timezone
         tz = pytz.timezone(timezone)
+        day_attendance = IDayAttendance(self.person)
         data = []
         for day in days:
-            record = self.getWorstRecordForDay(day)
-            meets = self.sectionMeetsOn(day, tz, section_calendar)
-            day_attendance = IDayAttendance(self.person)
             day_record = day_attendance.get(day)
-            if meets:
-                if not record or record.isUnknown():
+            section_record = self.getWorstRecordForDay(day)
+            if self.sectionMeetsOn(day, tz, section_calendar):
+                if not section_record or section_record.isUnknown():
                     data.append(('dot', 'black', '+'))
-                elif record.isPresent():
+                elif section_record.isPresent():
                     data.append(('full', 'black', '+'))
-                elif record.isExplained():
+                elif section_record.isExplained():
                     data.append(('full', 'black', '-'))
                 elif day_record.isPresent():
                     data.append(('full', 'red', '-'))
