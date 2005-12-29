@@ -75,13 +75,26 @@ class AttendanceRecord(Persistent):
                 return True
         return False
 
+    def acceptExplanation(self):
+        self.explanations[-1].status = ACCEPTED
+
+    def rejectExplanation(self):
+        self.explanations[-1].status = REJECTED
+
     def addExplanation(self, text):
         if self.status not in (ABSENT, TARDY):
             raise AttendanceError(
                 "only absences and tardies can be explained.")
+        if (self.explanations and
+            not self.explanations[-1].isProcessed()):
+            raise AttendanceError(
+                "you have unprocessed explanations.")
+        if (self.explanations and
+            self.explanations[-1].isAccepted()):
+            raise AttendanceError(
+                "can't add an explanation to an explained absence.")
         explanation = AbsenceExplanation(text)
         self.explanations.append(explanation)
-        return explanation
 
     def makeTardy(self, arrival_time):
         assert type(arrival_time) == datetime.datetime
@@ -101,11 +114,8 @@ class AbsenceExplanation(Persistent):
         self.text = text
         self.status = NEW
 
-    def accept(self):
-        self.status = ACCEPTED
-
-    def reject(self):
-        self.status = REJECTED
+    def isProcessed(self):
+        return self.status != NEW
 
     def isAccepted(self):
         return self.status == ACCEPTED

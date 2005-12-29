@@ -474,7 +474,7 @@ def doctest_RealtimeAttendanceView_studentStatus():
         ...     datetime.timedelta(minutes=45), 'C', False)
         >>> for record in attendance.getAllForDay(view.date):
         ...     expn = record.addExplanation("Broken leg")
-        ...     expn.accept()
+        ...     record.acceptExplanation()
         >>> view.studentStatus(person3)
         'attendance-explained'
 

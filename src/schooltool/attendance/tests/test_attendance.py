@@ -159,33 +159,47 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
 
     You can add an explanation to it:
 
-        >>> expn = ar.addExplanation("Was ill")
+        >>> ar.addExplanation("Was ill")
         >>> len(ar.explanations)
         1
+
+    If you have any unprocessed explanations - you can't add another
+    one:
+
+        >>> ar.addExplanation("Was very ill")
+        Traceback (most recent call last):
+          ...
+        AttendanceError: you have unprocessed explanations.
 
     Having explanations in itself does not make the absence explained:
 
         >>> ar.isExplained()
         False
 
-    However, if at least one the explanation is accepted, the absence
-    is explained:
+    However, if explanation is accepted, the absence is explained:
 
-        >>> expn.accept()
+        >>> ar.acceptExplanation()
         >>> ar.isExplained()
         True
 
-    There even can be unaccepted and rejected explanations:
+    There even can be unaccepted and rejected explanations, though we
+    will need a new attendance record for that, because we can't add
+    explanations to an explained record:
 
-        >>> ar.addExplanation("Dog ate homework").reject()
-        >>> expn2 = ar.addExplanation("Solar eclipse")
+        >>> ar.addExplanation("Dog ate homework")
+        Traceback (most recent call last):
+          ...
+        AttendanceError: can't add an explanation to an explained absence.
+
+    Now with a new record:
+
+        >>> ar = AttendanceRecord(ABSENT)
+        >>> ar.addExplanation("Dog ate homework")
+        >>> ar.rejectExplanation()
+        >>> ar.addExplanation("Solar eclipse")
         >>> len(ar.explanations)
-        3
-
-    The absence is still explained:
-
-        >>> ar.isExplained()
-        True
+        2
+        >>> ar.acceptExplanation()
 
     If the record's status is not ABSENT or TARDY, isExplained raises
     an exception:
@@ -220,10 +234,10 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
           ...
         AttendanceError: only absences and tardies can be explained.
 
-        >>> ar.status = TARDY
+        >>> ar = AttendanceRecord(TARDY)
         >>> ar.addExplanation("whatever")
+        >>> ar.explanations[-1]
         <schooltool.attendance.attendance.AbsenceExplanation object at ...>
-
 
     """
 
@@ -232,6 +246,7 @@ def doctest_AbsenceExplanation():
     """Absence explanation is a text with a status
 
         >>> from schooltool.attendance.attendance import AbsenceExplanation
+        >>> from schooltool.attendance.attendance import ACCEPTED, REJECTED
         >>> from schooltool.attendance.interfaces import IAbsenceExplanation
         >>> expn = AbsenceExplanation("My dog ate my pants")
         >>> verifyObject(IAbsenceExplanation, expn)
@@ -240,29 +255,34 @@ def doctest_AbsenceExplanation():
         >>> expn.text
         'My dog ate my pants'
 
-    First the explanation is not accepted:
+    First the explanation is not accepted and not processed:
 
         >>> expn.isAccepted()
+        False
+        >>> expn.isProcessed()
         False
 
         >>> expn.status
         'NEW'
 
-    We can accept it:
+    If it's status is ACCEPTED it becomes an accepted explanation:
 
-        >>> expn.accept()
-        >>> expn.status
-        'ACCEPTED'
+        >>> expn.status = ACCEPTED
         >>> expn.isAccepted()
         True
 
-    We can reject it:
+    And it is marked as a processed explanation:
 
-        >>> expn.reject()
-        >>> expn.status
-        'REJECTED'
+        >>> expn.isProcessed()
+        True
+
+    If not - it is unaccepted explanation:
+
+        >>> expn.status = REJECTED
         >>> expn.isAccepted()
         False
+        >>> expn.isProcessed()
+        True
 
     """
 

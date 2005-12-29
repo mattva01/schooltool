@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:wfmc="http://namespaces.zope.org/wfmc"
            i18n_domain="schooltool">
 
   <class class=".attendance.SectionAttendance">
@@ -23,6 +24,14 @@
         factory=".attendance.getDayAttendance"
         trusted="true"
   />
+
+  <!-- Process Definition for Explanation workflow -->
+  <wfmc:xpdl
+      file="explanation.xpdl"
+      process="explanation"
+      id="schooltool.attendance.explanation"
+      integration="zope.wfmc.adapter.integration"
+      />
 
   <include package=".browser" />
 

@@ -117,11 +117,8 @@ class IAbsenceExplanation(Interface):
     def isAccepted():
         """True if status is ACCEPTED"""
 
-    def accept():
-        """Make this explanation accepted"""
-
-    def reject():
-        """Make this explanation rejected"""
+    def isProcessed():
+        """True if status is not NEW"""
 
 
 UNKNOWN = 'UNKNOWN'
@@ -176,6 +173,12 @@ class IAttendanceRecord(Interface):
 
     def addExplanation(text):
         """Adds a new explanation for this attendance record."""
+
+    def acceptExplanation():
+        """Make the current (last) explanation accepted"""
+
+    def rejectExplanation():
+        """Make the current (last) explanation rejected"""
 
     def makeTardy(arrived):
         """Convert an absence to a tardy.
