@@ -50,7 +50,7 @@ def tearDown(test):
     setup.placefulTearDown()
 
 
-def show_image_as_text(img, extracolors):
+def show_image_as_text(img, extracolors={}):
     r"""Represent a small PIL image as ASCII text.
 
     The image should be 24-bit RGB data.
@@ -71,7 +71,7 @@ def show_image_as_text(img, extracolors):
         show_img(img, extracolors={'\x80\x80\x80': '+'})
 
     """
-    w, h = png.size
+    w, h = img.size
     data = img.tostring()
     assert len(data) == w*h*3
     colormap = {'\x00\x00\x00': '#',
