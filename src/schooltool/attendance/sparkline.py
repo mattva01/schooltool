@@ -165,16 +165,6 @@ class AttendanceSparkline(object):
                                fill=color)
         return image
 
-    def renderAsUriData(self, height=12, point_width=2, spacing=0):
-        """Render sparkline as a URI using the 'data' scheme.
-
-        Note that Internet Explorer doesn't support this URI scheme.
-        """
-        image = self.render(height, point_width, spacing)
-        im_data = StringIO.StringIO()
-        image.save(im_data, 'PNG')
-        return 'data:image/png,' + urllib.quote(im_data.getvalue())
-
     def renderAsPngData(self, *args, **kw):
         """Render the sparkline and return PNG data as a string.
 

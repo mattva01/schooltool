@@ -313,21 +313,6 @@ def doctest_AttendanceSparkline():
         SUVORK5CYII=
         <BLANKLINE>
 
-        >>> png_data = sparkline.renderAsUriData()
-        >>> width = 64
-        >>> print '\n'.join([png_data[i*width:i*width+width]
-        ...                  for i in range(len(png_data)/width+1)])
-        data:image/png,%89PNG%0D%0A%1A%0A%00%00%00%0DIHDR%00%00%00%1C%00
-        %00%00%0C%08%02%00%00%00%FE%B9JX%00%00%00%A8IDATx%9Cb%FC%FF%FF%3
-        F%03%E9%80%91%91%91%81%81%01%97%5E%00%00%00%00%FF%FFb%22%C3D%82%
-        00%00%00%00%FF%FF%A2%89%A1%00%00%00%00%FF%FF%22%60%28%23%23%23%C
-        4%A7%24%01%00%00%00%00%FF%FF%A2%89K%01%00%00%00%FF%FF%A2%89%A1%0
-        0%00%00%00%FF%FFb%C4%15%83%B8%7C%0DQ%8E%2C%89%2C%021%0B%00%00%00
-        %FF%FF%C2i%28%A6%050%95%10%F3%FE%23%893%C0E%20f%03%00%00%00%FF%F
-        F%A2%89%F7%01%00%00%00%FF%FF%A2%89%A1%00%00%00%00%FF%FFb%21F%11%
-        A1%20B%97%05%00%00%00%FF%FF%A2%89K%01%00%00%00%FF%FF%03%00%02%E7
-        %1C%15j%D1Z%E6%00%00%00%00IEND%AEB%60%82
-
     """
 
 
