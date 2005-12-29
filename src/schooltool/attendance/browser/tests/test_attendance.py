@@ -524,22 +524,41 @@ def doctest_RealtimeAttendanceView_update():
         >>> person2 = Person('person2', title='Person2')
         >>> person3 = Person('person3', title='Person3')
         >>> person4 = Person('person4', title='Person4')
+        >>> person5 = Person('person5', title='Person5')
 
         >>> persons = PersonContainer()
         >>> persons[''] = person1
         >>> persons[''] = person2
         >>> persons[''] = person3
         >>> persons[''] = person4
+        >>> persons[''] = person5
 
         >>> section.members.add(person1)
         >>> section.members.add(person2)
         >>> section.members.add(person3)
         >>> section.members.add(person4)
+        >>> section.members.add(person5)
+
+    Let's call update with an empty request:
+
+        >>> request = TestRequest()
+        >>> view = RealtimeAttendanceView(section, request)
+        >>> view.date = datetime.date(2005, 12, 15)
+        >>> view.period_id = 'C'
+
+        >>> view.update()
+
+    The students don't have attendance data for this section yet, so a
+    flag is set on the view:
+
+        >>> view.unknowns
+        True
 
     Let's instantiate the view:
 
         >>> request = TestRequest(form={'person1_check': 'on',
         ...                             'person2_check': 'on',
+        ...                             'person5_check': 'on',
         ...                             'ABSENT': 'Make absent'})
         >>> view = RealtimeAttendanceView(section, request)
         >>> view.date = datetime.date(2005, 12, 15)
@@ -549,6 +568,11 @@ def doctest_RealtimeAttendanceView_update():
 
         >>> view.update()
 
+    Now all students have attendance data set, so the status is changed:
+
+        >>> view.unknowns
+        False
+
     Let's see the attendance data for these persons:
 
         >>> records = list(ISectionAttendance(person1))
@@ -557,17 +581,18 @@ def doctest_RealtimeAttendanceView_update():
         >>> pprint(records)
         [SectionAttendanceRecord(<Section>,
               datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), ABSENT)]
-
         >>> list(ISectionAttendance(person2))
         [SectionAttendanceRecord(<Section>,
               datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), ABSENT)]
-
         >>> list(ISectionAttendance(person3))
         [SectionAttendanceRecord(<Section>,
               datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), PRESENT)]
         >>> list(ISectionAttendance(person4))
         [SectionAttendanceRecord(<Section>,
               datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), PRESENT)]
+        >>> list(ISectionAttendance(person5))
+        [SectionAttendanceRecord(<Section>,
+              datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), ABSENT)]
 
     Let's call the view again, nothing changed:
 
@@ -630,6 +655,135 @@ def doctest_RealtimeAttendanceView_update():
         >>> list(ISectionAttendance(person3))
         [SectionAttendanceRecord(<Section>,
               datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), PRESENT)]
+
+    Now, let's try to make a present person and an absent person
+    tardy, but without a specified time:
+
+        >>> tick = datetime.datetime.utcnow().replace(tzinfo=utc)
+        >>> request = TestRequest(form={'TARDY': 'Make tardy',
+        ...                             'person3_check': 'on',
+        ...                             'person1_check': 'on',
+        ...                             'arrival': ''})
+        >>> view = RealtimeAttendanceView(section, request)
+        >>> view.date = datetime.date(2005, 12, 15)
+        >>> view.period_id = 'C'
+
+        >>> view.update()
+        >>> tock = datetime.datetime.utcnow().replace(tzinfo=utc)
+
+    The status of the present person must be unchanged:
+
+        >>> list(ISectionAttendance(person3))
+        [SectionAttendanceRecord(<Section>,
+              datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), PRESENT)]
+
+    But the previously absent person must have changed to tardy:
+
+        >>> list(ISectionAttendance(person1))
+        [SectionAttendanceRecord(<Section>,
+              datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), TARDY)]
+
+    The arrival time is the time when the form was submitted:
+
+        >>> ar = iter(ISectionAttendance(person1)).next()
+        >>> tick <= ar.late_arrival <= tock
+        True
+
+    If the arrival time is incorrect, the error attribute on the view is set:
+
+        >>> request = TestRequest(form={'TARDY': 'Make tardy',
+        ...                             'person2_check': 'on',
+        ...                             'arrival': '12:20'})
+        >>> view = RealtimeAttendanceView(section, request)
+        >>> view.date = datetime.date(2005, 12, 15)
+        >>> view.period_id = 'C'
+
+        >>> view.update()
+
+        >>> list(ISectionAttendance(person2))
+        [SectionAttendanceRecord(<Section>,
+              datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), TARDY)]
+
+        >>> ar = iter(ISectionAttendance(person2)).next()
+        >>> ar.late_arrival
+        datetime.datetime(2005, 12, 15, 12, 20, tzinfo=<UTC>)
+
+    If the arrival time is incorrect, the error attribute on the view is set:
+
+        >>> request = TestRequest(form={'TARDY': 'Make tardy',
+        ...                             'person5_check': 'on',
+        ...                             'arrival': '2200'})
+        >>> view = RealtimeAttendanceView(section, request)
+        >>> view.date = datetime.date(2005, 12, 15)
+        >>> view.period_id = 'C'
+
+        >>> view.update()
+
+        >>> view.error
+        u'The arrival time you entered is invalid.  Please use HH:MM format'
+
+
+    """
+
+def doctest_RealtimeAttendanceView_getArrival():
+    """Tests for RealtimeAttendanceView.getArrival
+
+    We'll need person preferences for a timezone:
+
+        >>> from schooltool.person.interfaces import IPerson
+        >>> from schooltool.person.interfaces import IPersonPreferences
+        >>> from schooltool.person.preference import getPersonPreferences
+        >>> from schooltool.app.interfaces import ISchoolToolCalendar
+        >>> ztapi.provideAdapter(IPerson, IPersonPreferences,
+        ...                      getPersonPreferences)
+
+
+    Let's create a section and a view:
+
+        >>> from schooltool.attendance.browser.attendance import \\
+        ...     RealtimeAttendanceView
+        >>> from schooltool.course.section import Section
+        >>> section = Section()
+
+    If no arrival time was entered in the form, current time with
+    timezone is returned:
+
+        >>> view = RealtimeAttendanceView(section, TestRequest())
+        >>> tick = datetime.datetime.utcnow().replace(tzinfo=utc)
+        >>> arrival = view.getArrival()
+        >>> tock = datetime.datetime.utcnow().replace(tzinfo=utc)
+
+        >>> tick <= arrival <= tock
+        True
+
+    However if the time was entered in the form, that time in on the
+    date we're modifying attendance on, with the timezone of the
+    user's preference is returned:
+
+
+        >>> from schooltool.person.person import Person
+        >>> user = Person('user')
+        >>> from schooltool.person.interfaces import IPersonPreferences
+        >>> IPersonPreferences(user).timezone = 'Europe/Vilnius'
+
+        >>> request = TestRequest(form={'arrival': '22:13'})
+        >>> request.setPrincipal(user)
+        >>> view = RealtimeAttendanceView(section, request)
+        >>> view.date = datetime.date(2005, 12, 29)
+        >>> view.getArrival()
+        datetime.datetime(2005, 12, 29, 22, 13,
+                          tzinfo=<DstTzInfo 'Europe/Vilnius' EET+2:00:00 STD>)
+
+    If the time in the request is invalid, we just pass the ValueError along:
+
+        >>> request = TestRequest(form={'arrival': '2212'})
+        >>> request.setPrincipal(user)
+        >>> view = RealtimeAttendanceView(section, request)
+        >>> view.date = datetime.date(2005, 12, 29)
+        >>> view.getArrival()
+        Traceback (most recent call last):
+          ...
+        ValueError: need more than 1 value to unpack
 
     """
 

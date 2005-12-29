@@ -22,6 +22,7 @@ Views for SchoolTool attendance
 $Id$
 """
 import datetime
+from pytz import utc
 
 from zope.app import zapi
 from zope.app.publisher.browser import BrowserView
@@ -35,7 +36,7 @@ from zope.security.proxy import removeSecurityProxy
 from schooltool.traverser.interfaces import ITraverserPlugin
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import ITimetableCalendarEvent
-from schooltool.calendar.utils import parse_date
+from schooltool.calendar.utils import parse_date, parse_time
 from schooltool.course.interfaces import ISection
 from schooltool.app.browser import ViewPreferences
 from schooltool.person.interfaces import IPerson
@@ -43,7 +44,7 @@ from schooltool.group.interfaces import IGroup
 from schooltool.attendance.interfaces import IDayAttendance
 from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.attendance.interfaces import ABSENT, TARDY, PRESENT, UNKNOWN
-
+from schooltool import SchoolToolMessage as _
 
 AttendanceCSSViewlet = viewlet.CSSViewlet("attendance.css")
 
@@ -179,6 +180,8 @@ class RealtimeAttendanceView(BrowserView):
 
     __used_for__ = ISection
 
+    error = None
+
     def iterTransitiveMembers(self):
         """Return all transitive members of a section
 
@@ -197,15 +200,7 @@ class RealtimeAttendanceView(BrowserView):
 
 
     def listMembers(self):
-        """Return a list of tuples of member data prepared for display.
-
-        This method gathers all members of the section that are
-        persons, and all members of section members that are groups.
-
-        Each entry contains the following data:
-
-            person_id, title, attendance_status
-        """
+        """Return a list of RealtimeInfo objects about all members"""
 
         result = []
         tz = ViewPreferences(self.request).timezone
@@ -275,10 +270,10 @@ class RealtimeAttendanceView(BrowserView):
             return 'attendance-clear'
 
     def update(self):
+        tz = ViewPreferences(self.request).timezone
+        meeting = getPeriodEventForSection(self.context, self.date,
+                                           self.period_id, tz)
         if 'ABSENT' in self.request:
-            tz = ViewPreferences(self.request).timezone
-            meeting = getPeriodEventForSection(self.context, self.date,
-                                               self.period_id, tz)
             for person in self.iterTransitiveMembers():
                 attendance = ISectionAttendance(person)
                 ar = attendance.get(self.context, meeting.dtstart)
@@ -292,6 +287,38 @@ class RealtimeAttendanceView(BrowserView):
                         removeSecurityProxy(self.context), meeting.dtstart,
                         meeting.duration, self.period_id, True)
 
+        if 'TARDY' in self.request:
+            for person in self.iterTransitiveMembers():
+                attendance = ISectionAttendance(person)
+                ar = attendance.get(self.context, meeting.dtstart)
+                check_id = "%s_check" % person.__name__
+                if check_id in self.request and ar.isAbsent():
+                    try:
+                        arrived = self.getArrival()
+                    except ValueError:
+                        self.error = _('The arrival time you entered is '
+                                       'invalid.  Please use HH:MM format')
+                        break
+                    else:
+                        ar.makeTardy(arrived)
+
+
+        # whether to show the 'make absent' button or 'make tardy'
+        self.unknowns = False
+        for person in self.iterTransitiveMembers():
+            attendance = ISectionAttendance(person)
+            ar = attendance.get(self.context, meeting.dtstart)
+            if ar.isUnknown():
+                self.unknowns = True
+
+    def getArrival(self):
+        """Calculates the date of arrival from 'arrived' in request"""
+        if 'arrival' in self.request and self.request['arrival']:
+            tz = ViewPreferences(self.request).timezone
+            time = parse_time(self.request['arrival'])
+            result = datetime.datetime.combine(self.date, time)
+            return tz.localize(result)
+        return datetime.datetime.utcnow().replace(tzinfo=utc)
 
     template = ViewPageTemplateFile("templates/real_time.pt")
 

@@ -18,13 +18,20 @@
                       string:${request/URL}/${view/date}/${view/period_id}"
       method="POST">
 
+<div class="error" tal:condition="view/error" tal:content="view/error"
+     i18n:translate="">
+</div>
+
 <div class="attendance-legend">
   <p i18n:translate="">
-  Sparkline shows student presence for last ten schooldays. If presence is
-  unknown sparkline shows dot. If section meets it shows long whisker, if it
-  doesn't - half length whisker. Whisker is positive onlyis student was present
-  during meeting/homeroom period. Unexplained absence for meeting is drawn as
-  red whisker, unexplained absence for homeroom period - as yellow.
+  The sparkline, the little graph next to the student's name, shows
+  the student's attendance for last ten schooldays. If attendance
+  status for a day is unknown sparkline shows a dot. If the section
+  meets on a given day it shows a long whisker, if it doesn't - a half
+  length whisker. A whisker is positive (points upwards) only if the
+  student was present during meeting/homeroom period. An unexplained
+  absence for a meeting is coloured red, an unexplained absence for
+  homeroom period is yellow.
   </p>
   <p i18n:translate="">Color codes:
   <span class="attendance-clear">no records</span>,
@@ -47,9 +54,11 @@
       tal:define="check_id python:'%s_check' % info.name">
     <td>
       <input type="checkbox"
-             tal:attributes="name check_id;
-                             id check_id;
-                             disabled info/disabled"/>
+             tal:attributes="
+                  name check_id;
+                  id check_id;
+                  disabled info/disabled;
+                  checked python:view.error and check_id in request"/>
     </td>
     <td tal:attributes="class info/color">
        <label tal:attributes="for check_id"
@@ -65,11 +74,14 @@
 
 <div class="controls">
   <input type="submit" name="ABSENT" value="Mark as absent"
-         i18n:attributes="value" />
+         i18n:attributes="value" tal:condition="view/unknowns" />
+  <tal:block condition="not:view/unknowns">
   <input type="submit" name="TARDY" value="Make tardy"
          i18n:attributes="value" />
   <label for="arrival" i18n:translate="">Arrived at</label>
-  <input type="text" id="arrival" name="arrival" value="" />
+  <input type="text" id="arrival" name="arrival"
+       tal:attributes="value python:view.error and request['arrival'] or ''"/>
+  </tal:block>
 </div>
 </form>
 
