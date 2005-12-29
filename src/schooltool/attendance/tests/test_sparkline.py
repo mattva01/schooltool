@@ -244,6 +244,15 @@ def doctest_AttendanceSparkline():
         >>> png
         <PIL.Image.Image instance ...>
 
+        >>> png_data = sparkline.renderAsPngData()
+        >>> print png_data.encode('base64')
+        iVBORw0KGgoAAAANSUhEUgAAACoAAAAMCAIAAACbVLgnAAAAs0lEQVR4nGL8//8/A1UBIyMjAwMD
+        kcYCAAAA//9ioq7dpAIAAAAA//8aYOsBAAAA//8izXpGRkZI2FILAAAAAP//GmDfAwAAAP//GmDr
+        AQAAAP//Isp6zDCHiyBJMTIwYFcDl0KIMDIyMDIyMDAAAAAA//9iIcZ6eC7CzE7EiOCRAgAAAP//
+        GuDABwAAAP//GmDrAQAAAP//IirwMQGJZSVOxQAAAAD//xpg3wMAAAD//wMAYnUZMiAxcmAAAAAA
+        SUVORK5CYII=
+        <BLANKLINE>
+
         >>> png_data = sparkline.renderAsUriData()
         >>> width = 64
         >>> print '\n'.join([png_data[i*width:i*width+width]

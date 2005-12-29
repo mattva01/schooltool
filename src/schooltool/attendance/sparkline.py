@@ -175,7 +175,7 @@ class AttendanceSparkline(object):
         image.save(im_data, 'PNG')
         return 'data:image/png,' + urllib.quote(im_data.getvalue())
 
-    def __str__(self):
+    def renderAsPngData(self):
         image = self.render()
         im_data = StringIO.StringIO()
         image.save(im_data, 'PNG')

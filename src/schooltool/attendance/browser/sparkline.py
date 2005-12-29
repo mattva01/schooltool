@@ -49,6 +49,6 @@ class AttendanceSparklineView(BrowserView):
     def __call__(self):
         sparkline = AttendanceSparkline(self.person, self.section, self.date)
         self.request.response.setHeader('Content-Type', 'image/png')
-        return str(sparkline)
+        return sparkline.renderAsPngData()
 
 
