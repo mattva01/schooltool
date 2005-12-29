@@ -5,3 +5,10 @@
 .attendance-clear {}
 .attendance-table {border-collapse: collapse;}
 .attendance-row {border-bottom: 1px solid gray;}
+.attendance-legend {
+  float: right;
+  width:32em;
+  border: 1px solid gray;
+  display: block;
+  padding: 1em;
+}
