@@ -160,16 +160,18 @@ class AttendanceCalendarEventViewlet(object):
 
 class RealtimeInfo(object):
     """A row of information about a student for a realtime attendance form"""
-    def __init__(self, name, title, color, symbol, disabled):
+    def __init__(self, name, title, color, symbol, disabled, sparkline_url):
         self.name = name
         self.title = title
         self.color = color
         self.symbol = symbol
         self.disabled = disabled
+        self.sparkline_url = sparkline_url
 
     def __repr__(self):
-        return 'RealtimeInfo(%r, %r, %r, %r, %r)' % \
-               (self.name, self.title, self.color, self.symbol, self.disabled)
+        return 'RealtimeInfo(%r, %r, %r, %r, %r, %r)' % \
+               (self.name, self.title, self.color, self.symbol, self.disabled,
+                self.sparkline_url)
 
 
 class RealtimeAttendanceView(BrowserView):
@@ -214,12 +216,19 @@ class RealtimeAttendanceView(BrowserView):
             ar = ISectionAttendance(person).get(self.context, meeting.dtstart)
             current_status = formatAttendanceRecord(ar)
             disabled_checkbox = ar.isPresent() or ar.isTardy()
+            section_url = zapi.absoluteURL(ISection(self.context),
+                                   self.request)
+            person_url = person.username
+            date_url = self.date
+            sparkline_url = '%s/@@sparkline.png?person=%s&date=%s' % (section_url, person_url, date_url)
+
             result.append(RealtimeInfo(
                 person.__name__, # id
                 person.title,    # title
                 past_status,     # colour
                 current_status,  # letter
-                disabled_checkbox
+                disabled_checkbox,
+                sparkline_url
                 ))
 
         result.sort(key=lambda this: this.title)

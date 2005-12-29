@@ -293,6 +293,7 @@ def doctest_RealtimeAttendanceView_listMembers():
         ...     RealtimeAttendanceView
         >>> from schooltool.course.section import Section
         >>> section = Section()
+        >>> fakePath(section, '/section/absentology')
         >>> view = RealtimeAttendanceView(section, TestRequest())
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
@@ -325,8 +326,8 @@ def doctest_RealtimeAttendanceView_listMembers():
     These members should appear in the output
 
         >>> pprint(view.listMembers())
-        [RealtimeInfo(u'person1', 'Person1', 'attendance-clear', ' ', False),
-         RealtimeInfo(u'person2', 'Person2', 'attendance-clear', ' ', False)]
+        [RealtimeInfo(u'person1', 'Person1', 'attendance-clear', ' ', False, 'http://127.0.0.1/section/absentology/@@sparkline.png?person=person1&date=2005-12-15'),
+         RealtimeInfo(u'person2', 'Person2', 'attendance-clear', ' ', False, 'http://127.0.0.1/section/absentology/@@sparkline.png?person=person2&date=2005-12-15')]
 
     So should transitive members:
 
@@ -336,10 +337,10 @@ def doctest_RealtimeAttendanceView_listMembers():
         >>> section.members.add(form)
 
         >>> pprint(view.listMembers())
-        [RealtimeInfo(u'person1', 'Person1', 'attendance-clear', ' ', False),
-         RealtimeInfo(u'person2', 'Person2', 'attendance-clear', ' ', False),
-         RealtimeInfo(u'person3', 'Person3', 'attendance-clear', ' ', False),
-         RealtimeInfo(u'person4', 'Person4', 'attendance-clear', ' ', False)]
+        [RealtimeInfo(u'person1', 'Person1', 'attendance-clear', ' ', False, 'http://127.0.0.1/section/absentology/@@sparkline.png?person=person1&date=2005-12-15'),
+         RealtimeInfo(u'person2', 'Person2', 'attendance-clear', ' ', False, 'http://127.0.0.1/section/absentology/@@sparkline.png?person=person2&date=2005-12-15'),
+         RealtimeInfo(u'person3', 'Person3', 'attendance-clear', ' ', False, 'http://127.0.0.1/section/absentology/@@sparkline.png?person=person3&date=2005-12-15'),
+         RealtimeInfo(u'person4', 'Person4', 'attendance-clear', ' ', False, 'http://127.0.0.1/section/absentology/@@sparkline.png?person=person4&date=2005-12-15')]
 
     Let's add an absence record to one person:
 
@@ -351,10 +352,10 @@ def doctest_RealtimeAttendanceView_listMembers():
     Now the members' list displays a new status:
 
         >>> pprint(view.listMembers())
-        [RealtimeInfo(u'person1', 'Person1', 'attendance-clear', ' ', False),
-         RealtimeInfo(u'person2', 'Person2', 'attendance-clear', ' ', False),
-         RealtimeInfo(u'person3', 'Person3', 'attendance-clear', ' ', False),
-         RealtimeInfo(u'person4', 'Person4', 'attendance-absent', ' ', False)]
+        [RealtimeInfo(u'person1', 'Person1', 'attendance-clear', ' ', False, 'http://127.0.0.1/section/absentology/@@sparkline.png?person=person1&date=2005-12-15'),
+         RealtimeInfo(u'person2', 'Person2', 'attendance-clear', ' ', False, 'http://127.0.0.1/section/absentology/@@sparkline.png?person=person2&date=2005-12-15'),
+         RealtimeInfo(u'person3', 'Person3', 'attendance-clear', ' ', False, 'http://127.0.0.1/section/absentology/@@sparkline.png?person=person3&date=2005-12-15'),
+         RealtimeInfo(u'person4', 'Person4', 'attendance-absent', ' ', False, 'http://127.0.0.1/section/absentology/@@sparkline.png?person=person4&date=2005-12-15')]
 
     Let's add some absences in this period:
 
@@ -377,10 +378,10 @@ def doctest_RealtimeAttendanceView_listMembers():
         ...     datetime.timedelta(minutes=45), 'C', True)
 
         >>> pprint(view.listMembers())
-        [RealtimeInfo(u'person1', 'Person1', 'attendance-clear', ' ', False),
-         RealtimeInfo(u'person2', 'Person2', 'attendance-absent', 'T', True),
-         RealtimeInfo(u'person3', 'Person3', 'attendance-present', '+', True),
-         RealtimeInfo(u'person4', 'Person4', 'attendance-absent', '-', False)]
+        [RealtimeInfo(u'person1', 'Person1', 'attendance-clear', ' ', False, 'http://127.0.0.1/section/absentology/@@sparkline.png?person=person1&date=2005-12-15'),
+         RealtimeInfo(u'person2', 'Person2', 'attendance-absent', 'T', True, 'http://127.0.0.1/section/absentology/@@sparkline.png?person=person2&date=2005-12-15'),
+         RealtimeInfo(u'person3', 'Person3', 'attendance-present', '+', True, 'http://127.0.0.1/section/absentology/@@sparkline.png?person=person3&date=2005-12-15'),
+         RealtimeInfo(u'person4', 'Person4', 'attendance-absent', '-', False, 'http://127.0.0.1/section/absentology/@@sparkline.png?person=person4&date=2005-12-15')]
 
     """
 

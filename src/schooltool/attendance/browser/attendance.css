@@ -3,3 +3,5 @@
 .attendance-absent {background-color: #ffff80;}
 .attendance-present {background-color: #cccccc;}
 .attendance-clear {}
+.attendance-table {border-collapse: collapse;}
+.attendance-row {border-bottom: 1px solid gray;}
