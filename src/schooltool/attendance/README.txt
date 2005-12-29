@@ -439,7 +439,9 @@ Actually, ``date`` is a useful attribute for IAttendanceRecord::
         date = Attribute("""The date of this record.""")
 
 For ISectionAttendanceRecord ``date`` may be a property that returns
-``self.datetime.date()``.
+``self.datetime.date()``.  But be careful with timezones -- if you're in Tokyo,
+and a lesson starts at 8 AM on a Monday, that exact datetime corresponds to
+23 PM on Sunday UTC.  The date of that record should be Monday, not Sunday.
 
 
 Summary of attendance per term

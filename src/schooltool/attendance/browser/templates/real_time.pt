@@ -1,11 +1,15 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
 <head>
-  <title metal:fill-slot="title" i18n:translate=""><span tal:replace="context/label"/> attendance</title>
+  <title metal:fill-slot="title" i18n:translate=""
+    ><span tal:replace="context/label" i18n:name="section"/> attendance</title>
 </head>
 <body>
+
 <metal:block metal:fill-slot="content-header">
-<h2>Section attendance for <span tal:replace="context/label"/>  at <span tal:replace="view/date"/>
-period <span tal:replace="view/period_id" /></h2>
+<h2 i18n:translate="">Section attendance for <span i18n:name="section"
+  tal:replace="context/label"/> at <span i18n:name="date"
+  tal:replace="view/date" /> period <span i18n:name="period_id"
+  tal:replace="view/period_id" /></h2>
 </metal:block>
 
 <metal:block metal:fill-slot="body">
@@ -16,8 +20,8 @@ period <span tal:replace="view/period_id" /></h2>
 <table>
   <tr>
     <th>&nbsp;</th>
-    <th>Name</th>
-    <th>Status</th>
+    <th i18n:translate="">Name</th>
+    <th i18n:translate="">Status</th>
   </tr>
 
   <tal:loop repeat="info view/listMembers">
@@ -40,21 +44,22 @@ period <span tal:replace="view/period_id" /></h2>
 </table>
 
 <div class="controls">
-  <input type="submit" name="ABSENT" value="Mark as absent"/>
-  <input type="submit" name="TARDY" value="Make tardy"/>
-  <label for="arrival">Arrived at</label>
-  <input type="text" id="arrival" name="arrival" value=""/>
+  <input type="submit" name="ABSENT" value="Mark as absent"
+         i18n:attributes="value" />
+  <input type="submit" name="TARDY" value="Make tardy"
+         i18n:attributes="value" />
+  <label for="arrival" i18n:translate="">Arrived at</label>
+  <input type="text" id="arrival" name="arrival" value="" />
 </div>
 </form>
 
-<p>Color codes:
+<p i18n:translate="">Color codes:
 <span class="attendance-clear">no records</span>,
 <span class="attendance-present">present</span>,
 <span class="attendance-explained">was absent with explanation earlier today</span>,
 <span class="attendance-absent">was absent without explanation</span>,
 <span class="attendance-alert">was present and absent earlier today</span>.
 </p>
-
 
 </metal:block>
 </body>
