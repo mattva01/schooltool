@@ -27,6 +27,7 @@ __docformat__ = 'reStructuredText'
 import unittest
 import datetime
 
+from pytz import utc, timezone
 from persistent import Persistent
 from zope.interface import implements
 from zope.interface.verify import verifyObject
@@ -37,6 +38,8 @@ from zope.app.annotation.interfaces import IAttributeAnnotatable
 import zope.component
 
 import schooltool.app # Dead chicken to appease the circle of import gods
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.person.interfaces import IPerson
 from schooltool.calendar.interfaces import ICalendarEvent
 from schooltool.attendance.interfaces import IDayAttendance
@@ -78,6 +81,12 @@ class AttendanceRecordStub(object):
 
     def isAbsent(self):
         return self.status == ABSENT
+
+
+class ApplicationStub(object):
+    implements(ISchoolToolApplication, IApplicationPreferences)
+
+    timezone = 'UTC'
 
 
 #
@@ -313,7 +322,7 @@ def doctest_SectionAttendanceRecord():
     Let's create an UNKNOWN record
 
         >>> section = SectionStub()
-        >>> dt = datetime.datetime(2005, 11, 23, 14, 55)
+        >>> dt = datetime.datetime(2005, 11, 23, 14, 55, tzinfo=utc)
         >>> ar = SectionAttendanceRecord(section, dt, UNKNOWN)
         >>> verifyObject(ISectionAttendanceRecord, ar)
         True
@@ -326,8 +335,6 @@ def doctest_SectionAttendanceRecord():
         >>> ar.section == section
         True
         >>> ar.datetime == dt
-        True
-        >>> ar.date == dt.date()
         True
 
         >>> ar.duration
@@ -342,7 +349,7 @@ def doctest_SectionAttendanceRecord():
     Let's create a regular record
 
         >>> section = SectionStub()
-        >>> dt = datetime.datetime(2005, 11, 23, 14, 55)
+        >>> dt = datetime.datetime(2005, 11, 23, 14, 55, tzinfo=utc)
         >>> duration = datetime.timedelta(minutes=45)
         >>> period_id = 'Period A'
         >>> ar = SectionAttendanceRecord(section, dt, PRESENT, duration,
@@ -354,8 +361,6 @@ def doctest_SectionAttendanceRecord():
         True
         >>> ar.datetime == dt
         True
-        >>> ar.date == dt.date()
-        True
         >>> ar.duration == duration
         True
         >>> ar.period_id == period_id
@@ -365,6 +370,36 @@ def doctest_SectionAttendanceRecord():
         True
         >>> ar.explanations
         []
+
+    """
+
+
+def doctest_SectionAttendanceRecord_date():
+    r"""Tests for SectionAttendanceRecord
+
+        >>> from schooltool.attendance.attendance \
+        ...     import SectionAttendanceRecord
+
+    The date of an attendance record usually matches the date portion of the
+    section meeting datetime.
+
+        >>> section = SectionStub()
+        >>> dt = datetime.datetime(2005, 11, 23, 14, 55, tzinfo=utc)
+        >>> ar = SectionAttendanceRecord(section, dt, UNKNOWN)
+        >>> ar.date == dt.date()
+        True
+
+    Sometimes the date portion may differ.  2005-11-23 23:00 UTC is
+    2005-11-24 08:00 Tokyo time.  The timezone of the school is determined
+    from the application preferences.
+
+        >>> app = ISchoolToolApplication(None)
+        >>> IApplicationPreferences(app).timezone = 'Asia/Tokyo'
+
+        >>> dt = datetime.datetime(2005, 11, 23, 23, 00, tzinfo=utc)
+        >>> ar = SectionAttendanceRecord(section, dt, UNKNOWN)
+        >>> ar.date
+        datetime.date(2005, 11, 24)
 
     """
 
@@ -698,7 +733,7 @@ def doctest_SectionAttendance_record():
     Let's record a presence
 
         >>> section = SectionStub()
-        >>> dt = datetime.datetime(2005, 12, 9, 13, 30)
+        >>> dt = datetime.datetime(2005, 12, 9, 13, 30, tzinfo=utc)
         >>> duration = datetime.timedelta(minutes=45)
         >>> period_id = 'P1'
         >>> sa.record(section, dt, duration, period_id, True)
@@ -711,8 +746,8 @@ def doctest_SectionAttendance_record():
         >>> ar = sa.get(section, dt)
         >>> ar
         SectionAttendanceRecord(SectionStub(),
-                                datetime.datetime(2005, 12, 9, 13, 30),
-                                PRESENT)
+                datetime.datetime(2005, 12, 9, 13, 30, tzinfo=<UTC>),
+                PRESENT)
         >>> ISectionAttendanceRecord.providedBy(ar)
         True
 
@@ -731,7 +766,7 @@ def doctest_SectionAttendance_record():
 
     Let's record an absence for the same section
 
-        >>> dt = datetime.datetime(2005, 12, 9, 14, 30)
+        >>> dt = datetime.datetime(2005, 12, 9, 14, 30, tzinfo=utc)
         >>> duration = datetime.timedelta(minutes=30)
         >>> period_id = 'P2'
         >>> sa.record(section, dt, duration, period_id, False)
@@ -770,7 +805,7 @@ def doctest_SectionAttendance_record():
         >>> sa.record(section2, dt, duration, period_id, True)
         Traceback (most recent call last):
           ...
-        AttendanceError: record for SectionStub() at 2005-12-09 14:30:00
+        AttendanceError: record for SectionStub() at 2005-12-09 14:30:00+00:00
                          already exists
 
     """
@@ -784,7 +819,7 @@ def doctest_SectionAttendance_get():
 
         >>> section1 = SectionStub()
         >>> section2 = SectionStub()
-        >>> dt = datetime.datetime(2005, 12, 9, 13, 30)
+        >>> dt = datetime.datetime(2005, 12, 9, 13, 30, tzinfo=utc)
 
     If you try to see the attendance record that has never been recorded, you
     get a "null object".
@@ -792,8 +827,8 @@ def doctest_SectionAttendance_get():
         >>> ar = sa.get(section1, dt)
         >>> ar
         SectionAttendanceRecord(SectionStub(),
-                                datetime.datetime(2005, 12, 9, 13, 30),
-                                UNKNOWN)
+                datetime.datetime(2005, 12, 9, 13, 30, tzinfo=<UTC>),
+                UNKNOWN)
         >>> ISectionAttendanceRecord.providedBy(ar)
         True
         >>> ar.status == UNKNOWN
@@ -811,8 +846,8 @@ def doctest_SectionAttendance_get():
 
     Otherwise you get the correct record for a (section, datetime) pair.
 
-        >>> dt1 = datetime.datetime(2005, 12, 9, 13, 30)
-        >>> dt2 = datetime.datetime(2005, 12, 10, 13, 0)
+        >>> dt1 = datetime.datetime(2005, 12, 9, 13, 30, tzinfo=utc)
+        >>> dt2 = datetime.datetime(2005, 12, 10, 13, 0, tzinfo=utc)
         >>> duration = datetime.timedelta(minutes=50)
         >>> sa.record(section1, dt1, duration, 'P1', True)
         >>> sa.record(section2, dt1, duration, 'P2', False)
@@ -841,12 +876,12 @@ def doctest_SectionAttendance_getAllForDay():
 
         >>> section1 = SectionStub('Math')
         >>> section2 = SectionStub('Chem')
-        >>> dt1a = datetime.datetime(2005, 12, 5, 13, 30)
-        >>> dt1b = datetime.datetime(2005, 12, 5, 15, 30)
-        >>> dt2a = datetime.datetime(2005, 12, 7, 13, 30)
-        >>> dt2b = datetime.datetime(2005, 12, 7, 15, 30)
-        >>> dt3a = datetime.datetime(2005, 12, 9, 13, 30)
-        >>> dt3b = datetime.datetime(2005, 12, 9, 15, 30)
+        >>> dt1a = datetime.datetime(2005, 12, 5, 13, 30, tzinfo=utc)
+        >>> dt1b = datetime.datetime(2005, 12, 5, 15, 30, tzinfo=utc)
+        >>> dt2a = datetime.datetime(2005, 12, 7, 13, 30, tzinfo=utc)
+        >>> dt2b = datetime.datetime(2005, 12, 7, 15, 30, tzinfo=utc)
+        >>> dt3a = datetime.datetime(2005, 12, 9, 13, 30, tzinfo=utc)
+        >>> dt3b = datetime.datetime(2005, 12, 9, 15, 30, tzinfo=utc)
         >>> duration = datetime.timedelta(minutes=45)
 
         >>> sa.record(section1, dt1a, duration, 'A', True)
@@ -886,7 +921,7 @@ def doctest_SectionAttendance_tardyEventTitle():
         >>> sa = SectionAttendance()
 
         >>> section = SectionStub(title="Lithomancy")
-        >>> dt = datetime.datetime(2005, 11, 23, 14, 55)
+        >>> dt = datetime.datetime(2005, 11, 23, 14, 55, tzinfo=utc)
         >>> duration = datetime.timedelta(minutes=45)
         >>> period_id = 'Period A'
         >>> ar = SectionAttendanceRecord(section, dt, ABSENT, duration,
@@ -909,7 +944,7 @@ def doctest_SectionAttendance_absenceEventTitle():
         >>> sa = SectionAttendance()
 
         >>> section = SectionStub(title="Lithomancy")
-        >>> dt = datetime.datetime(2005, 11, 23, 14, 55)
+        >>> dt = datetime.datetime(2005, 11, 23, 14, 55, tzinfo=utc)
         >>> duration = datetime.timedelta(minutes=45)
         >>> period_id = 'Period A'
         >>> ar = SectionAttendanceRecord(section, dt, ABSENT, duration,
@@ -930,7 +965,7 @@ def doctest_SectionAttendance_makeCalendarEvent():
         >>> sa = SectionAttendance()
 
         >>> section = SectionStub()
-        >>> dt = datetime.datetime(2005, 11, 23, 14, 55)
+        >>> dt = datetime.datetime(2005, 11, 23, 14, 55, tzinfo=utc)
         >>> duration = datetime.timedelta(minutes=45)
         >>> period_id = 'Period A'
         >>> ar = SectionAttendanceRecord(section, dt, ABSENT, duration,
@@ -1013,9 +1048,21 @@ def doctest_getDayAttendance():
     """
 
 
+def setUp(test):
+    setup.placelessSetUp()
+    app = ApplicationStub()
+    zope.component.provideAdapter(lambda x: app,
+                                  [None], ISchoolToolApplication)
+
+
+def tearDown(test):
+    setup.placelessTearDown()
+
+
 def test_suite():
     optionflags = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
-    return doctest.DocTestSuite(optionflags=optionflags)
+    return doctest.DocTestSuite(optionflags=optionflags,
+                                setUp=setUp, tearDown=tearDown)
 
 
 if __name__ == '__main__':

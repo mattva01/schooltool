@@ -76,8 +76,16 @@ class SchoolToolApplication(Persistent, sample.SampleContainer,
     title = property(_title)
 
 
-def getSchoolToolApplication():
-    """Return the nearest ISchoolToolApplication"""
+def getSchoolToolApplication(ignore=None):
+    """Return the nearest ISchoolToolApplication.
+
+    This function is also registered as an adapter, so you
+    can use it like this:
+
+        app = ISchoolToolApplication(None)
+
+    and stub it in unit tests.
+    """
     candidate = getSite()
     if ISchoolToolApplication.providedBy(candidate):
         return candidate

@@ -25,6 +25,7 @@ __docformat__ = 'reStructuredText'
 
 import datetime
 
+import pytz
 from persistent import Persistent
 from persistent.list import PersistentList
 from persistent.dict import PersistentDict
@@ -33,6 +34,8 @@ from zope.app.annotation.interfaces import IAnnotations
 from zope.i18n import translate
 
 from schooltool import SchoolToolMessage as _
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.calendar.simple import ImmutableCalendar
 from schooltool.calendar.simple import SimpleCalendarEvent
 from schooltool.attendance.interfaces import IDayAttendance
@@ -129,6 +132,7 @@ class SectionAttendanceRecord(AttendanceRecord):
 
     def __init__(self, section, datetime, status,
                  duration=datetime.timedelta(0), period_id=None):
+        assert datetime.tzinfo is not None, 'need datetime with timezone'
         AttendanceRecord.__init__(self, status)
         self.section = section
         self.datetime = datetime
@@ -137,7 +141,9 @@ class SectionAttendanceRecord(AttendanceRecord):
 
     @property
     def date(self):
-        return self.datetime.date()
+        app = ISchoolToolApplication(None)
+        tzinfo = pytz.timezone(IApplicationPreferences(app).timezone)
+        return self.datetime.astimezone(tzinfo).date()
 
     def __repr__(self):
         return 'SectionAttendanceRecord(%r, %r, %s)' % (self.section,

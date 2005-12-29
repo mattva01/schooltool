@@ -56,6 +56,11 @@
     <allow interface=".interfaces.IWriteCalendar" />
   </class>
 
+  <adapter
+      for="None"
+      provides=".interfaces.ISchoolToolApplication"
+      factory=".app.getSchoolToolApplication" />
+
   <!-- Utilities -->
 
   <localUtility class=".security.SchoolToolAuthenticationUtility">

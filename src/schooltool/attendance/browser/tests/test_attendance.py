@@ -30,9 +30,11 @@ from zope.testing import doctest
 from zope.app.testing import ztapi, setup
 from zope.publisher.browser import TestRequest
 from zope.interface import implements, Interface
-from zope.component import adapts
+from zope.component import adapts, provideAdapter
 from zope.app.testing.setup import setUpAnnotations
 
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.timetable import ITimetables
 from schooltool.timetable import TimetableActivity
 from schooltool.timetable.model import TimetableCalendarEvent
@@ -41,6 +43,12 @@ from schooltool.calendar.simple import SimpleCalendarEvent
 from schooltool.course.interfaces import ISection
 from schooltool.relationship.tests import setUpRelationships
 from schooltool.testing.util import fakePath
+
+
+class ApplicationStub(object):
+    implements(ISchoolToolApplication, IApplicationPreferences)
+
+    timezone = 'UTC'
 
 
 class StubTimetables(object):
@@ -104,6 +112,7 @@ def doctest_getPeriodEventForSection():
         2005-12-16 D None
 
     """
+
 
 def doctest_SectionAttendanceTraverserPlugin():
     r"""Tests for SectionAttendanceTraverserPlugin
@@ -375,6 +384,7 @@ def doctest_RealtimeAttendanceView_listMembers():
 
     """
 
+
 def doctest_RealtimeAttendanceView_studentStatus():
     """Tests for RealtimeAttendanceView.studentStatus
 
@@ -479,6 +489,7 @@ def doctest_RealtimeAttendanceView_studentStatus():
         'attendance-absent'
 
     """
+
 
 def doctest_RealtimeAttendanceView_update():
     """Tests for RealtimeAttendanceView.update
@@ -621,11 +632,14 @@ def doctest_RealtimeAttendanceView_update():
 
     """
 
+
 def setUp(test):
     setup.placelessSetUp()
     setup.setUpTraversal()
     setUpAnnotations()
     setUpRelationships()
+    app = ApplicationStub()
+    ztapi.provideAdapter(None, ISchoolToolApplication, lambda x: app)
 
 
 def tearDown(test):
