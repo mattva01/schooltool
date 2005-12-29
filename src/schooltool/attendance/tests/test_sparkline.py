@@ -50,6 +50,52 @@ def tearDown(test):
     setup.placefulTearDown()
 
 
+def show_image_as_text(img, extracolors):
+    r"""Represent a small PIL image as ASCII text.
+
+    The image should be 24-bit RGB data.
+
+    Each pixel is represented by a single character:
+
+        # -- black
+        - -- white
+        R/G/B/C/M/Y -- bright red/green/blue/cyan/magenta/yellow
+        ? -- all other colors
+
+    You can override or extend the mapping by passing in ``extracolors``,
+    which is a mapping of colors (3-character long strings '\xRR\xGG\xBB')
+    to characters.
+
+    Example:
+
+        show_img(img, extracolors={'\x80\x80\x80': '+'})
+
+    """
+    w, h = png.size
+    data = img.tostring()
+    assert len(data) == w*h*3
+    colormap = {'\x00\x00\x00': '#',
+                '\xFF\x00\x00': 'R',
+                '\x00\xFF\x00': 'G',
+                '\x00\x00\xFF': 'B',
+                '\x00\xFF\xFF': 'C',
+                '\xFF\x00\xFF': 'M',
+                '\xFF\xFF\x00': 'Y',
+                '\xFF\xFF\xFF': '-'}
+    colormap.update(extracolors)
+    unknown_colours = set()
+    for i in range(0, w*h*3, 3):
+        if data[i:i+3] not in colormap:
+            unknown_colours.add(data[i:i+3])
+    for j in range(0, w*h*3, w*3):
+        print ''.join(colormap.get(data[i:i+3], '?')
+                      for i in range(j, j+w*3, 3))
+    if unknown_colours:
+        print "Unrecognized colors:"
+        for c in sorted(unknown_colours):
+            print r"  '\x%02X\x%02X\x%02X'" % tuple(map(ord, c))
+
+
 class AttendanceRecordStub:
     def __init__(self, status, explained=None, section=None):
         self.status = status
@@ -243,6 +289,20 @@ def doctest_AttendanceSparkline():
         >>> png = sparkline.render()
         >>> png
         <PIL.Image.Image instance ...>
+
+        >>> show_image_as_text(png)
+        ---------------------------##-------------
+        ---------------------------##-------------
+        ---------------------------##-------------
+        ---------------##----------##-------------
+        ---------------##----------##-------------
+        ---------------##----------##-------------
+        ------------##-##-##-##-YY-##-##-YY-##-RR-
+        ------------------##----YY----##-YY----RR-
+        ------------------##----YY----##-YY----RR-
+        ------------------##----YY----##-YY----RR-
+        ------------------------YY----##-------RR-
+        ------------------------YY----##-------RR-
 
         >>> png_data = sparkline.renderAsPngData()
         >>> print png_data.encode('base64')
