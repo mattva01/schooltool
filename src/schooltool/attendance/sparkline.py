@@ -46,7 +46,7 @@ class AttendanceSparkline(object):
     last several school days.
     """
 
-    width = 10
+    width = 10  # Minimum number of data points
 
     def __init__(self, person, section, date):
         self.person = person
@@ -136,7 +136,7 @@ class AttendanceSparkline(object):
                     data.append(('half', 'yellow', '-'))
         return data
 
-    def render(self, height=12, point_width=1, spacing=2):
+    def render(self, height=12, point_width=2, spacing=1):
         """Render sparkline of specified size and return as PIL image."""
         data = self.getData()
         number_of_days = len(data)
@@ -158,14 +158,14 @@ class AttendanceSparkline(object):
             else:
                 real_size = height/4
             if sign == '-':
-                draw.rectangle((x, middle, x+point_width, middle+real_size),
+                draw.rectangle((x, middle, x+point_width-1, middle+real_size),
                                fill=color)
             else:
-                draw.rectangle((x, middle, x+point_width, middle-real_size),
+                draw.rectangle((x, middle, x+point_width-1, middle-real_size),
                                fill=color)
         return image
 
-    def renderAsUriData(self, height=12, point_width=1, spacing=1):
+    def renderAsUriData(self, height=12, point_width=2, spacing=0):
         """Render sparkline as a URI using the 'data' scheme.
 
         Note that Internet Explorer doesn't support this URI scheme.
@@ -175,8 +175,12 @@ class AttendanceSparkline(object):
         image.save(im_data, 'PNG')
         return 'data:image/png,' + urllib.quote(im_data.getvalue())
 
-    def renderAsPngData(self):
-        image = self.render()
+    def renderAsPngData(self, *args, **kw):
+        """Render the sparkline and return PNG data as a string.
+
+        Takes the same arguments as ``render``.
+        """
+        image = self.render(*args, **kw)
         im_data = StringIO.StringIO()
         image.save(im_data, 'PNG')
         return im_data.getvalue()
