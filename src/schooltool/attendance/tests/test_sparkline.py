@@ -211,8 +211,6 @@ class SectionStub:
 def doctest_AttendanceSparkline():
     r"""Tests for AttendanceSparkline
 
-    XXX split this up into isolated unit tests for each method.
-
     Create simple sparkline:
 
         >>> section = SectionStub()
