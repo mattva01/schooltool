@@ -37,16 +37,16 @@ class AttendanceSparklineView(BrowserView):
 
     __used_for__ = ISection
 
-    def __init__(self, context, request):
-        BrowserView.__init__(self, context, request)
+    def update(self):
         self.section = self.context
-        person_id = request['person']
+        person_id = self.request['person']
         app = getSchoolToolApplication()
         self.person = app['persons'][person_id]
-        date = request['date']
+        date = self.request['date']
         self.date = parse_date(date)
 
     def __call__(self):
+        self.update()
         sparkline = AttendanceSparkline(self.person, self.section, self.date)
         self.request.response.setHeader('Content-Type', 'image/png')
         return sparkline.renderAsPngData()
