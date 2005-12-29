@@ -62,12 +62,7 @@
             <Activities>
                 <Activity Id="explain" Name="Explain">
                     <Implementation>
-                        <Tool Id="WaitForExplanation" Type="APPLICATION">
-                            <ActualParameters>
-                                <ActualParameter>explanation</ActualParameter>
-                                <ActualParameter>attendanceRecord</ActualParameter>
-                            </ActualParameters>
-                        </Tool>
+                        <No/>
                     </Implementation>
                     <Performer>attendanceAdmin</Performer>
                     <StartMode>
