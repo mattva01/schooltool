@@ -316,8 +316,8 @@ def doctest_RealtimeAttendanceView_listMembers():
     These members should appear in the output
 
         >>> pprint(view.listMembers())
-        [(u'person1', 'Person1', 'attendance-clear', ' ', False),
-         (u'person2', 'Person2', 'attendance-clear', ' ', False)]
+        [RealtimeInfo(u'person1', 'Person1', 'attendance-clear', ' ', False),
+         RealtimeInfo(u'person2', 'Person2', 'attendance-clear', ' ', False)]
 
     So should transitive members:
 
@@ -327,10 +327,10 @@ def doctest_RealtimeAttendanceView_listMembers():
         >>> section.members.add(form)
 
         >>> pprint(view.listMembers())
-        [(u'person1', 'Person1', 'attendance-clear', ' ', False),
-         (u'person2', 'Person2', 'attendance-clear', ' ', False),
-         (u'person3', 'Person3', 'attendance-clear', ' ', False),
-         (u'person4', 'Person4', 'attendance-clear', ' ', False)]
+        [RealtimeInfo(u'person1', 'Person1', 'attendance-clear', ' ', False),
+         RealtimeInfo(u'person2', 'Person2', 'attendance-clear', ' ', False),
+         RealtimeInfo(u'person3', 'Person3', 'attendance-clear', ' ', False),
+         RealtimeInfo(u'person4', 'Person4', 'attendance-clear', ' ', False)]
 
     Let's add an absence record to one person:
 
@@ -342,10 +342,10 @@ def doctest_RealtimeAttendanceView_listMembers():
     Now the members' list displays a new status:
 
         >>> pprint(view.listMembers())
-        [(u'person1', 'Person1', 'attendance-clear', ' ', False),
-         (u'person2', 'Person2', 'attendance-clear', ' ', False),
-         (u'person3', 'Person3', 'attendance-clear', ' ', False),
-         (u'person4', 'Person4', 'attendance-absent', ' ', False)]
+        [RealtimeInfo(u'person1', 'Person1', 'attendance-clear', ' ', False),
+         RealtimeInfo(u'person2', 'Person2', 'attendance-clear', ' ', False),
+         RealtimeInfo(u'person3', 'Person3', 'attendance-clear', ' ', False),
+         RealtimeInfo(u'person4', 'Person4', 'attendance-absent', ' ', False)]
 
     Let's add some absences in this period:
 
@@ -368,10 +368,10 @@ def doctest_RealtimeAttendanceView_listMembers():
         ...     datetime.timedelta(minutes=45), 'C', True)
 
         >>> pprint(view.listMembers())
-        [(u'person1', 'Person1', 'attendance-clear', ' ', False),
-         (u'person2', 'Person2', 'attendance-absent', 'T', True),
-         (u'person3', 'Person3', 'attendance-present', '+', True),
-         (u'person4', 'Person4', 'attendance-absent', '-', False)]
+        [RealtimeInfo(u'person1', 'Person1', 'attendance-clear', ' ', False),
+         RealtimeInfo(u'person2', 'Person2', 'attendance-absent', 'T', True),
+         RealtimeInfo(u'person3', 'Person3', 'attendance-present', '+', True),
+         RealtimeInfo(u'person4', 'Person4', 'attendance-absent', '-', False)]
 
     """
 
@@ -543,18 +543,18 @@ def doctest_RealtimeAttendanceView_update():
         >>> len(records)
         1
         >>> pprint(records)
-        [SectionAttendanceRecord(<Section>, \
+        [SectionAttendanceRecord(<Section>,
               datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), ABSENT)]
 
         >>> list(ISectionAttendance(person2))
-        [SectionAttendanceRecord(<Section>, \
+        [SectionAttendanceRecord(<Section>,
               datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), ABSENT)]
 
         >>> list(ISectionAttendance(person3))
-        [SectionAttendanceRecord(<Section>, \
+        [SectionAttendanceRecord(<Section>,
               datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), PRESENT)]
         >>> list(ISectionAttendance(person4))
-        [SectionAttendanceRecord(<Section>, \
+        [SectionAttendanceRecord(<Section>,
               datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), PRESENT)]
 
     Let's call the view again, nothing changed:
@@ -567,16 +567,16 @@ def doctest_RealtimeAttendanceView_update():
         >>> view.update()
 
         >>> list(ISectionAttendance(person1))
-        [SectionAttendanceRecord(<Section>, \
+        [SectionAttendanceRecord(<Section>,
               datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), ABSENT)]
         >>> list(ISectionAttendance(person2))
-        [SectionAttendanceRecord(<Section>, \
+        [SectionAttendanceRecord(<Section>,
               datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), ABSENT)]
         >>> list(ISectionAttendance(person3))
-        [SectionAttendanceRecord(<Section>, \
+        [SectionAttendanceRecord(<Section>,
               datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), PRESENT)]
         >>> list(ISectionAttendance(person4))
-        [SectionAttendanceRecord(<Section>, \
+        [SectionAttendanceRecord(<Section>,
               datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), PRESENT)]
 
     If we call an absent person absent again, nothing breaks:
@@ -590,18 +590,34 @@ def doctest_RealtimeAttendanceView_update():
         >>> view.update()
 
         >>> list(ISectionAttendance(person1))
-        [SectionAttendanceRecord(<Section>, \
+        [SectionAttendanceRecord(<Section>,
               datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), ABSENT)]
         >>> list(ISectionAttendance(person2))
-        [SectionAttendanceRecord(<Section>, \
+        [SectionAttendanceRecord(<Section>,
               datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), ABSENT)]
         >>> list(ISectionAttendance(person3))
-        [SectionAttendanceRecord(<Section>, \
+        [SectionAttendanceRecord(<Section>,
               datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), PRESENT)]
         >>> list(ISectionAttendance(person4))
-        [SectionAttendanceRecord(<Section>, \
+        [SectionAttendanceRecord(<Section>,
               datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), PRESENT)]
 
+    If we call a present person absent, nothing breaks:
+
+        >>> request = TestRequest(form={'ABSENT': 'Make absent',
+        ...                             'person3_check': 'on'})
+        >>> view = RealtimeAttendanceView(section, request)
+        >>> view.date = datetime.date(2005, 12, 15)
+        >>> view.period_id = 'C'
+
+        >>> view.update()
+
+    But the person remains present.  We can silently ignore this error
+    because the checkbox is disabled.
+
+        >>> list(ISectionAttendance(person3))
+        [SectionAttendanceRecord(<Section>,
+              datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), PRESENT)]
 
     """
 

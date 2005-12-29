@@ -26,19 +26,19 @@
   </tr>
 
   <tal:loop repeat="info view/listMembers">
-  <tr tal:attributes="class python:info[2]"
-      tal:define="check_id python:'%s_check' % info[0]">
+  <tr tal:attributes="class info/color"
+      tal:define="check_id python:'%s_check' % info.name">
     <td><input type="checkbox"
                tal:attributes="name check_id;
                                id check_id;
-                               disabled python:info[4]"/>
+                               disabled info/disabled"/>
     </td>
     <td>
        <label tal:attributes="for check_id"
-              tal:content="python:info[1]">Name</label>
+              tal:content="info/title">Name</label>
     </td>
     <td>
-      <span tal:replace="python:info[3]" />
+      <span tal:replace="info/symbol" />
     </td>
   </tr>
   </tal:loop>

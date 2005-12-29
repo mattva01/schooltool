@@ -158,6 +158,20 @@ class AttendanceCalendarEventViewlet(object):
                     calendar_event.period_id)
 
 
+class RealtimeInfo(object):
+    """A row of information about a student for a realtime attendance form"""
+    def __init__(self, name, title, color, symbol, disabled):
+        self.name = name
+        self.title = title
+        self.color = color
+        self.symbol = symbol
+        self.disabled = disabled
+
+    def __repr__(self):
+        return 'RealtimeInfo(%r, %r, %r, %r, %r)' % \
+               (self.name, self.title, self.color, self.symbol, self.disabled)
+
+
 class RealtimeAttendanceView(BrowserView):
     """Realtime attendance view for a section"""
 
@@ -200,14 +214,15 @@ class RealtimeAttendanceView(BrowserView):
             ar = ISectionAttendance(person).get(self.context, meeting.dtstart)
             current_status = formatAttendanceRecord(ar)
             disabled_checkbox = ar.isPresent() or ar.isTardy()
-            result.append((person.__name__, # id
-                           person.title,    # title
-                           past_status,     # colour
-                           current_status,  # letter
-                           disabled_checkbox
-                           ))
+            result.append(RealtimeInfo(
+                person.__name__, # id
+                person.title,    # title
+                past_status,     # colour
+                current_status,  # letter
+                disabled_checkbox
+                ))
 
-        result.sort(lambda this, other: cmp(this[1], other[1]))
+        result.sort(key=lambda this: this.title)
         return result
 
     def studentStatus(self, student):
