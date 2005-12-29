@@ -1,13 +1,14 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
 <head>
   <title metal:fill-slot="title" i18n:translate=""
-    ><span tal:replace="context/label" i18n:name="section"/> attendance</title>
+    ><span i18n:name="section" i18n:translate=""
+           tal:replace="context/label"/> attendance</title>
 </head>
 <body>
 
 <metal:block metal:fill-slot="content-header">
 <h2 i18n:translate="">Section attendance for <span i18n:name="section"
-  tal:replace="context/label"/> at <span i18n:name="date"
+  tal:replace="context/label" i18n:translate="" /> at <span i18n:name="date"
   tal:replace="view/date" /> period <span i18n:name="period_id"
   tal:replace="view/period_id" /></h2>
 </metal:block>
