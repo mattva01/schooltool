@@ -14,9 +14,7 @@
 </metal:block>
 
 <metal:block metal:fill-slot="body">
-<form tal:attributes="action
-                      string:${request/URL}/${view/date}/${view/period_id}"
-      method="POST">
+<form tal:attributes="action request/URL" method="POST">
 
 <div class="error" tal:condition="view/error" tal:content="view/error"
      i18n:translate="">

@@ -160,15 +160,21 @@ def doctest_SectionAttendanceTraverserPlugin():
 
     If there are more elements on the traversal stack, they remain there:
 
+        >>> request = TestRequest()
         >>> request.setTraversalStack(['extra', 'C', '2005-12-15'])
+        >>> request._traversed_names.extend(('sections', 's1', 'attendance'))
         >>> plugin.publishTraverse(request, "attendance")
         2005-12-15, C
 
         >>> request.getTraversalStack()
         ['extra']
 
+        >>> print request.URL
+        http://127.0.0.1/sections/s1/attendance/2005-12-15/C
+
     What if the date is invalid?
 
+        >>> request = TestRequest()
         >>> request.setTraversalStack(['A', '2005-02-29'])
         >>> plugin.publishTraverse(request, "attendance")
         Traceback (most recent call last):
@@ -177,6 +183,7 @@ def doctest_SectionAttendanceTraverserPlugin():
 
     What if the period is invalid?
 
+        >>> request = TestRequest()
         >>> request.setTraversalStack(['A', '2005-12-15'])
         >>> plugin.publishTraverse(request, "attendance")
         Traceback (most recent call last):
@@ -185,6 +192,7 @@ def doctest_SectionAttendanceTraverserPlugin():
 
     If there are no date and period id following, we also get a NotFound:
 
+        >>> request = TestRequest()
         >>> request.setTraversalStack([])
         >>> plugin.publishTraverse(request, "attendance")
         Traceback (most recent call last):

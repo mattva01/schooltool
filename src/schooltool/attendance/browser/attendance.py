@@ -126,6 +126,13 @@ class SectionAttendanceTraverserPlugin(object):
             except (ValueError, IndexError):
                 raise NotFound(self.context, name, request)
 
+            # XXX alga:
+            # Sad, but our elegant approach has this major
+            # shortcoming: in order to get request.URL right we need
+            # to mess with request's private attributes.
+            request._traversed_names.append(str(view.date))
+            request._traversed_names.append(view.period_id)
+
             # This should be the timezone that is used for timetables.
             # If timetables start using the server global timezone,
             # this should be fixed as well.
