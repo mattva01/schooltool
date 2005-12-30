@@ -87,7 +87,7 @@ Let's also create a teacher for the section
     >>> manager.getControl('Great Teacher Largo').selected = True
     >>> manager.getControl('Add').click()
 
-Create student
+Create some students
 
     >>> manager.getLink('Persons').click()
     >>> manager.getLink('New Person').click()
@@ -98,9 +98,21 @@ Create student
     >>> manager.getControl(name='group.students').value = True
     >>> manager.getControl('Add').click()
 
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+    >>> manager.getControl('Full name').value = 'Gretute'
+    >>> manager.getControl('Username').value = 'gretute'
+    >>> manager.getControl('Password').value = 'tenerife'
+    >>> manager.getControl('Verify password').value = 'tenerife'
+    >>> manager.getControl(name='group.students').value = True
+    >>> manager.getControl('Add').click()
+
+Add them to dancing section
+
     >>> manager.open('http://localhost/sections/dancing1a')
     >>> manager.getLink('edit individuals').click()
     >>> manager.getControl('Joniukas').selected = True
+    >>> manager.getControl('Gretute').selected = True
     >>> manager.getControl('Apply').click()
 
 
@@ -144,18 +156,70 @@ the event box.
     <form method="POST" action="http://localhost/sections/dancing1a/attendance/2005-12-12/09:30-10:25">
     ...
 
-Mark joniukas as absent:
+Mark Joniukas as absent:
 
     >>> largo.getControl(name='joniukas_check').value=True
     >>> largo.getControl('Mark as absent').click()
+
+Joniukas is marked as absent, and Gretute is marked as present (checkbox disabled)
+
+    >>> print '\n'.join(analyze.queryHTML('//tr[@class="attendance-row"]', largo.contents))
+    <tr class="attendance-row"><td>
+          <input type="checkbox" disabled name="gretute_check" id="gretute_check">...
+           <label for="gretute_check">Gretute</label>...
+          +
+    ...
+    <tr class="attendance-row"><td>
+          <input type="checkbox" name="joniukas_check" id="joniukas_check">...
+           <label for="joniukas_check">Joniukas</label>...
+          -
+    ...
+
+Finaly Joniukas is here, make him tardy
+
+    >>> largo.getControl(name='joniukas_check').value=True
+    >>> largo.getControl('Arrived at').value = 'too late'
+    >>> largo.getControl('Make tardy').click()
+
+We should have entered time...
+
+    >>> print analyze.queryHTML('//div[@class="error"]', largo.contents)[0]
+    <div class="error">The arrival time you entered is invalid.  Please use HH:MM format</div>
+
+Try it again (Joniukas remains checked)
+
+    >>> largo.getControl(name='joniukas_check').value
+    True
+    >>> largo.getControl('Arrived at').value = '10:22'
+    >>> largo.getControl('Make tardy').click()
+
+Now Joniukas is tardy
+
+    >>> print '\n'.join(analyze.queryHTML('//tr[@class="attendance-row"]', largo.contents))
+    <tr class="attendance-row"><td>
+          <input type="checkbox" disabled name="gretute_check" id="gretute_check">...
+           <label for="gretute_check">Gretute</label>...
+          +
+    ...
+    <tr class="attendance-row"><td>
+          <input type="checkbox" disabled name="joniukas_check" id="joniukas_check">...
+           <label for="joniukas_check">Joniukas</label>...
+          T
+    ...
 
 
 Sparkline
 ---------
 
-Look at attendance sparkline for joniukas
+Each person has attendance sparkline drawn along with status symbol:
 
-    >>> largo.open('http://localhost/sections/dancing1a/@@sparkline.png?person=joniukas&date=2005-12-12')
+    >>> print '\n'.join(analyze.queryHTML('//img[@width="30"]', largo.contents))
+    <img width="30" height="12" src="http://localhost/sections/dancing1a/@@sparkline.png?person=gretute&amp;date=2005-12-12">
+    <img width="30" height="12" src="http://localhost/sections/dancing1a/@@sparkline.png?person=joniukas&amp;date=2005-12-12">
+
+"Look" at the attendance sparkline for joniukas
+
+    >>> largo.open('http://localhost/sections/dancing1a/@@sparkline.png?person=joniukas&amp;date=2005-12-12')
     >>> image = largo.contents
     >>> print image.encode('base64')
     iVBORw0KGgoAAAANSUhEUgAAAB4AAAAMCAIAAAD6TJplAAAAjElEQVR4nGL8//8/A20AAAAA//9i
@@ -163,4 +227,25 @@ Look at attendance sparkline for joniukas
     w/8DDP///wcAAAD//2KhoqFozgUAAAD//6JhgAAAAAD//6Kh0QAAAAD//6Kh0QAAAAD//6Kh0QAA
     AAD//wMAJmo/WuPnyHEAAAAASUVORK5CYII=
     <BLANKLINE>
+
+It looks like this
+
+    >>> import Image
+    >>> import StringIO
+    >>> image_file = StringIO.StringIO(image)
+    >>> pil_image = Image.open(image_file)
+    >>> from schooltool.attendance.tests.test_sparkline import show_image_as_text
+    >>> show_image_as_text(pil_image, extracolors={'\xFF\xC0\x00': 'Y'})
+    ------------------------------
+    ------------------------------
+    ------------------------------
+    ------------------------------
+    ------------------------------
+    ------------------------------
+    ##-##-##-##-##-##-##-##-##-YY-
+    ---------------------------YY-
+    ---------------------------YY-
+    ---------------------------YY-
+    ---------------------------YY-
+    ---------------------------YY-
 
