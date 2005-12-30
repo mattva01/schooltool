@@ -98,7 +98,8 @@
             <h4 i18n:translate="">Actions</h4>
             <ul>
               <li tal:repeat="view context/@@view_get_menu/schooltool_actions">
-                <a tal:attributes="href view/action"
+                <a tal:attributes="href
+                             string:${context/@@absolute_url}/${view/action}"
                    tal:content="view/title" i18n:translate="" />
               </li>
             </ul>

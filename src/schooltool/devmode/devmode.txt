@@ -40,9 +40,13 @@ you are brought to the root error reporting utility.
 
 Here you can configure the utility and view errors:
 
-    >>> browser.contents
-    '...<a href="@@configure.html">Configure</a>...
-     ...<a href="@@index.html">Error List</a>...'
+    >>> print browser.contents
+    <BLANKLINE>
+    ...
+    <a href="http://localhost/++etc++site/default/RootErrorReportingUtility/@@configure.html">Configure</a>
+    ...
+    <a href="http://localhost/++etc++site/default/RootErrorReportingUtility/@@index.html">Error List</a>
+    ...
 
 In the configuration
 
