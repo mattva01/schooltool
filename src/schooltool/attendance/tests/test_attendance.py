@@ -48,6 +48,7 @@ from schooltool.attendance.interfaces import IDayAttendanceRecord
 from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.attendance.interfaces import ISectionAttendanceRecord
 from schooltool.attendance.interfaces import UNKNOWN, PRESENT, ABSENT, TARDY
+from schooltool.attendance.interfaces import ACCEPTED, REJECTED
 from schooltool.attendance.interfaces import AttendanceError
 
 
@@ -71,6 +72,10 @@ class SectionStub(object):
             return 'SectionStub()'
 
 
+class ExplanationStub(object):
+    pass
+
+
 class AttendanceRecordStub(object):
 
     def __init__(self, date, status):
@@ -82,6 +87,13 @@ class AttendanceRecordStub(object):
 
     def isAbsent(self):
         return self.status == ABSENT
+
+    def acceptExplanation(self):
+        print "accepted the explanation"
+
+    def rejectExplanation(self):
+        print "rejected the explanation"
+
 
 
 class ApplicationStub(object):
@@ -1149,6 +1161,46 @@ def doctest_MakeTardy():
         True
         >>> ar.late_arrival
         datetime.datetime(2005, 12, 30, 13, 21)
+
+    """
+
+
+def doctest_AcceptExplanation():
+    """Tests for AcceptExplanation.
+
+        >>> from schooltool.attendance.attendance import AcceptExplanation
+        >>> participant = ParticipantStub()
+        >>> work_item = AcceptExplanation(participant)
+
+    When you start the work item, it gets finished in record time
+
+        >>> ar = AttendanceRecordStub(None, None)
+        >>> ar.explanations = [ExplanationStub()]
+        >>> work_item.start(ar)
+        workItemFinished: AcceptExplanation ()
+
+        >>> ar.explanations[-1].status == ACCEPTED
+        True
+
+    """
+
+
+def doctest_RejectExplanation():
+    """Tests for RejectExplanation.
+
+        >>> from schooltool.attendance.attendance import RejectExplanation
+        >>> participant = ParticipantStub()
+        >>> work_item = RejectExplanation(participant)
+
+    When you start the work item, it gets finished in record time
+
+        >>> ar = AttendanceRecordStub(None, None)
+        >>> ar.explanations = [ExplanationStub()]
+        >>> work_item.start(ar)
+        workItemFinished: RejectExplanation ()
+
+        >>> ar.explanations[-1].status == REJECTED
+        True
 
     """
 

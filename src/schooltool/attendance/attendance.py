@@ -83,9 +83,13 @@ class AttendanceRecord(Persistent):
         return False
 
     def acceptExplanation(self):
+        # TODO: more sanity checks (e.g. don't overrule previous rejections)
+        # TODO: call self._work_item.acceptExplanation instead of
         self.explanations[-1].status = ACCEPTED
 
     def rejectExplanation(self):
+        # TODO: more sanity checks (e.g. don't overrule previous acceptances)
+        # TODO: call self._work_item.rejectExplanation instead of
         self.explanations[-1].status = REJECTED
 
     def addExplanation(self, text):
@@ -382,4 +386,18 @@ class MakeTardy(AttendanceWorkItem):
     def start(self, attendance_record, arrival_time):
         attendance_record.status = TARDY
         attendance_record.late_arrival = arrival_time
+        self.participant.activity.workItemFinished(self)
+
+
+class AcceptExplanation(AttendanceWorkItem):
+
+    def start(self, attendance_record):
+        attendance_record.explanations[-1].status = ACCEPTED
+        self.participant.activity.workItemFinished(self)
+
+
+class RejectExplanation(AttendanceWorkItem):
+
+    def start(self, attendance_record):
+        attendance_record.explanations[-1].status = REJECTED
         self.participant.activity.workItemFinished(self)
