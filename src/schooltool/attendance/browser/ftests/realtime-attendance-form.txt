@@ -79,12 +79,29 @@ Let's also create a teacher for the section
     >>> manager.getControl('Username').value = 'largo'
     >>> manager.getControl('Password').value = 'sittinghorse'
     >>> manager.getControl('Verify password').value = 'sittinghorse'
+    >>> manager.getControl(name='group.teachers').value = True
     >>> manager.getControl('Add').click()
 
     >>> manager.open('http://localhost/sections/dancing1a')
     >>> manager.getLink('edit instructors').click()
     >>> manager.getControl('Great Teacher Largo').selected = True
     >>> manager.getControl('Add').click()
+
+Create student
+
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+    >>> manager.getControl('Full name').value = 'Joniukas'
+    >>> manager.getControl('Username').value = 'joniukas'
+    >>> manager.getControl('Password').value = 'gretute'
+    >>> manager.getControl('Verify password').value = 'gretute'
+    >>> manager.getControl(name='group.students').value = True
+    >>> manager.getControl('Add').click()
+
+    >>> manager.open('http://localhost/sections/dancing1a')
+    >>> manager.getLink('edit individuals').click()
+    >>> manager.getControl('Joniukas').selected = True
+    >>> manager.getControl('Apply').click()
 
 
 Real-time attendance form
@@ -126,3 +143,24 @@ the event box.
     ...
     <form method="POST" action="http://localhost/sections/dancing1a/attendance/2005-12-12/09:30-10:25">
     ...
+
+Mark joniukas as absent:
+
+    >>> largo.getControl(name='joniukas_check').value=True
+    >>> largo.getControl('Mark as absent').click()
+
+
+Sparkline
+---------
+
+Look at attendance sparkline for joniukas
+
+    >>> largo.open('http://localhost/sections/dancing1a/@@sparkline.png?person=joniukas&date=2005-12-12')
+    >>> image = largo.contents
+    >>> print image.encode('base64')
+    iVBORw0KGgoAAAANSUhEUgAAAB4AAAAMCAIAAAD6TJplAAAAjElEQVR4nGL8//8/A20AAAAA//9i
+    opG5DAwMAAAAAP//oqHRAAAAAP//oqHRAAAAAP//oqHRAAAAAP//oqHRAAAAAP//giJ4OqGc8f8A
+    w/8DDP///wcAAAD//2KhoqFozgUAAAD//6JhgAAAAAD//6Kh0QAAAAD//6Kh0QAAAAD//6Kh0QAA
+    AAD//wMAJmo/WuPnyHEAAAAASUVORK5CYII=
+    <BLANKLINE>
+
