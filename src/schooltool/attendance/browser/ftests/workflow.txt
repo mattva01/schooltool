@@ -18,7 +18,9 @@ Let's set up a subscriber that prints out all the events:
     ...     print event
 
     >>> import zope.event
+    >>> from zope.app.testing.functional import setSite
     >>> zope.event.subscribers.append(log_workflow)
+    >>> setSite(getRootFolder())
 
 Now we can create the process:
 
@@ -37,6 +39,7 @@ Now we can create the process:
     Transition(Activity('schooltool.attendance.explanation.create'),
                Activity('schooltool.attendance.explanation.explain'))
     ActivityStarted(Activity('schooltool.attendance.explanation.explain'))
+    WorkItemFinished(u'WaitForExplanation')
     ActivityFinished(Activity('schooltool.attendance.explanation.explain'))
     ProcessFinished(Process('schooltool.attendance.explanation'))
 
@@ -46,3 +49,4 @@ moment, but that is going to change soon.
 Clean up:
 
     >>> zope.event.subscribers = zope.event.subscribers[:-1]
+    >>> setSite(None)

@@ -33,6 +33,23 @@
       integration="zope.wfmc.adapter.integration"
       />
 
+  <!-- Participant: AttendanceAdmin -->
+  <adapter
+     for="zope.wfmc.interfaces.IActivity"
+     provides="zope.wfmc.interfaces.IParticipant"
+     factory=".attendance.AttendanceAdmin"
+     name=".attendanceAdmin"
+     />
+
+  <!-- Applications -->
+
+  <adapter
+      for="zope.wfmc.interfaces.IParticipant"
+      provides="zope.wfmc.interfaces.IWorkItem"
+      factory=".attendance.WaitForExplanation"
+      name=".WaitForExplanation"
+      />
+
   <include package=".browser" />
 
 </configure>

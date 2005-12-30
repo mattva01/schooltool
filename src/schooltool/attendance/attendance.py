@@ -32,6 +32,12 @@ from persistent.dict import PersistentDict
 from zope.interface import implements
 from zope.app.annotation.interfaces import IAnnotations
 from zope.i18n import translate
+from zope.app.location.location import Location
+from zope.wfmc.interfaces import IWorkItem
+from zope.wfmc.interfaces import IParticipant
+from zope.wfmc.interfaces import IActivity
+from zope.interface import implements
+from zope.component import adapts
 
 from schooltool import SchoolToolMessage as _
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -46,6 +52,7 @@ from schooltool.attendance.interfaces import IAbsenceExplanation
 from schooltool.attendance.interfaces import UNKNOWN, PRESENT, ABSENT, TARDY
 from schooltool.attendance.interfaces import NEW, ACCEPTED, REJECTED
 from schooltool.attendance.interfaces import AttendanceError
+from schooltool.app.app import getSchoolToolApplication
 
 
 #
@@ -332,3 +339,29 @@ def getDayAttendance(person):
         annotations[DAY_ATTENDANCE_KEY] = attendance
     return attendance
 
+
+#
+# Workflow
+#
+
+class AttendanceAdmin(Persistent):
+    adapts(IActivity)
+    implements(IParticipant)
+
+    def __init__(self, activity):
+        self.activity = activity
+
+
+class WaitForExplanation(Persistent, Location):
+
+    adapts(IParticipant)
+    implements(IWorkItem)
+
+    def __init__(self, participant):
+        self.participant = participant
+
+    def start(self, attendance_record):
+        self.finish()
+
+    def finish(self):
+        self.participant.activity.workItemFinished(self, 'TODO: explanation')
