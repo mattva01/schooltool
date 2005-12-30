@@ -271,7 +271,15 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
 
         >>> ar = AttendanceRecord(ABSENT)
         >>> ar.addExplanation("Dog ate homework")
+
+    Rejecting it proceeds with the workflow:
+
         >>> ar.rejectExplanation()
+        Rejected explanation
+
+    And sets the status of the last explanation:
+
+        >>> ar.explanations[-1].status = REJECTED
         >>> ar.addExplanation("Solar eclipse")
         >>> len(ar.explanations)
         2

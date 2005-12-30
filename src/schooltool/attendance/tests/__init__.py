@@ -25,6 +25,9 @@ class WorkItemStub(object):
     def acceptExplanation(self):
         print "Accepted explanation"
 
+    def rejectExplanation(self):
+        print "Rejected explanation"
+
 
 class SilentProcessDef(object):
     def start(self, arg):

@@ -52,7 +52,7 @@ Let's add an explanation:
 
 and reject it
 
-    >>> ar._work_item.rejectExplanation()
+    >>> ar.rejectExplanation()
     WorkItemFinished(u'WaitForExplanation')
     ActivityFinished(Activity('schooltool.attendance.explanation.explain'))
     Transition(Activity('schooltool.attendance.explanation.explain'),

@@ -97,8 +97,7 @@ class AttendanceRecord(Persistent):
 
     def rejectExplanation(self):
         # TODO: more sanity checks (e.g. don't overrule previous acceptances)
-        # TODO: call self._work_item.rejectExplanation instead of
-        self.explanations[-1].status = REJECTED
+        self._work_item.rejectExplanation()
 
     def addExplanation(self, text):
         if self.status not in (ABSENT, TARDY):
