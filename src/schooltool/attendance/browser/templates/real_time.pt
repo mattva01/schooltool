@@ -24,13 +24,13 @@
 
 <div class="attendance-legend">
   <p i18n:translate="">
-  The sparkline, the little graph next to the student's name, shows
-  the student's attendance for last ten schooldays. If attendance
-  status for a day is unknown sparkline shows a dot. If the section
-  meets on a given day it shows a long whisker, if it doesn't - a half
-  length whisker. A whisker is positive (points upwards) only if the
-  student was present during meeting/homeroom period. An unexplained
-  absence for a meeting is coloured red, an unexplained absence for
+  The sparkline (the little graph next to each student's name) shows
+  the student's attendance for the last ten schooldays.  If attendance
+  status for a day is unknown the sparkline shows a dot. If the section
+  meets on a given day, the sparkline shows a long whisker, if it doesn't,
+  a half-length whisker.  The whisker is points upwards if the
+  student was present during the homeroom period. An unexplained
+  absence for a meeting is coloured red, and an unexplained absence for
   homeroom period is yellow.
   </p>
   <p i18n:translate="">Color codes:
@@ -65,7 +65,7 @@
               tal:content="info/title">Name</label>
     </td>
     <td>
-      <img width="30" height="12" tal:attributes="src info/sparkline_url">
+      <img width="30" height="12" tal:attributes="src info/sparkline_url" />
       <span tal:replace="info/symbol" />
     </td>
   </tr>
@@ -84,7 +84,6 @@
   </tal:block>
 </div>
 </form>
-
 
 </metal:block>
 </body>
