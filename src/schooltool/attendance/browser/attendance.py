@@ -273,11 +273,25 @@ class RealtimeAttendanceView(BrowserView):
         tz = ViewPreferences(self.request).timezone
         meeting = getPeriodEventForSection(self.context, self.date,
                                            self.period_id, tz)
-        if 'ABSENT' in self.request:
-            for person in self.iterTransitiveMembers():
-                attendance = ISectionAttendance(person)
-                ar = attendance.get(self.context, meeting.dtstart)
-                check_id = "%s_check" % person.__name__
+
+        # If there are persons with UNKNOWN status, show the 'absent' button,
+        # otherwise show 'tardy' and 'arrived'.
+        self.unknowns = False
+
+        if 'TARDY' in self.request:
+            try:
+                arrived = self.getArrival()
+            except ValueError:
+                self.error = _('The arrival time you entered is '
+                               'invalid.  Please use HH:MM format')
+                return
+
+        for person in self.iterTransitiveMembers():
+            attendance = ISectionAttendance(person)
+            ar = attendance.get(self.context, meeting.dtstart)
+            check_id = "%s_check" % person.__name__
+
+            if 'ABSENT' in self.request:
                 if check_id in self.request and ar.isUnknown():
                     attendance.record(
                         removeSecurityProxy(self.context), meeting.dtstart,
@@ -287,29 +301,14 @@ class RealtimeAttendanceView(BrowserView):
                         removeSecurityProxy(self.context), meeting.dtstart,
                         meeting.duration, self.period_id, True)
 
-        if 'TARDY' in self.request:
-            for person in self.iterTransitiveMembers():
-                attendance = ISectionAttendance(person)
-                ar = attendance.get(self.context, meeting.dtstart)
-                check_id = "%s_check" % person.__name__
+            if 'TARDY' in self.request:
                 if check_id in self.request and ar.isAbsent():
-                    try:
-                        arrived = self.getArrival()
-                    except ValueError:
-                        self.error = _('The arrival time you entered is '
-                                       'invalid.  Please use HH:MM format')
-                        break
-                    else:
-                        ar.makeTardy(arrived)
+                    ar.makeTardy(arrived)
 
-
-        # whether to show the 'make absent' button or 'make tardy'
-        self.unknowns = False
-        for person in self.iterTransitiveMembers():
-            attendance = ISectionAttendance(person)
             ar = attendance.get(self.context, meeting.dtstart)
             if ar.isUnknown():
                 self.unknowns = True
+
 
     def getArrival(self):
         """Calculates the date of arrival from 'arrived' in request"""
