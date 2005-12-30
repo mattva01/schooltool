@@ -48,6 +48,10 @@ class AttendanceSparkline(object):
 
     width = 10  # Minimum number of data points
 
+    # Predefined color palette
+    colors = {'black': '#000000', 'red': '#ff0000', 'yellow': '#ffc000'}
+
+
     def __init__(self, person, section, date):
         self.person = person
         self.section = section
@@ -138,18 +142,18 @@ class AttendanceSparkline(object):
 
     def render(self, height=12, point_width=2, spacing=1):
         """Render sparkline of specified size and return as PIL image."""
-        data = self.getData()
-        number_of_days = len(data)
+        attrs = self.getData()
+        number_of_days = len(attrs)
         left_margin = 0
         if number_of_days < self.width:
             left_margin = self.width - number_of_days
-        attrs = data
         width = (left_margin + number_of_days) * (point_width + spacing)
         image = Image.new('RGB', (width, height), 'white')
         draw = ImageDraw.Draw(image)
         middle = height/2
         for nr, attr in enumerate(attrs):
-            size, color, sign = attr
+            size, color_id, sign = attr
+            color = self.colors[color_id]
             x = (left_margin + nr) * (point_width + spacing)
             if size == 'dot':
                 real_size = 0

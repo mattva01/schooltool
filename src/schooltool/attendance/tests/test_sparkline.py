@@ -293,12 +293,14 @@ def doctest_AttendanceSparkline_render():
         ...                              ('half', 'black', '+'),
         ...                              ('half', 'black', '-'),
         ...                              ('dot', 'black', '+'),
-        ...                              ('full', 'yellow', '-'),
+        ...                              ('full', 'green', '-'),
         ...                              ('full', 'black', '+'),
         ...                              ('full', 'black', '-'),
-        ...                              ('half', 'yellow', '-'),
+        ...                              ('half', 'green', '-'),
         ...                              ('dot', 'black', '+'),
         ...                              ('full', 'red', '-')]
+        >>> sparkline.colors = {'black': '#000000', 'red': '#ff0000',
+        ...                     'green': '#00ff00'}
 
     Test AttendanceSparkline.render and renderAsPngData:
 
@@ -314,20 +316,20 @@ def doctest_AttendanceSparkline_render():
         ---------------##----------##-------------
         ---------------##----------##-------------
         ---------------##----------##-------------
-        ------------##-##-##-##-YY-##-##-YY-##-RR-
-        ------------------##----YY----##-YY----RR-
-        ------------------##----YY----##-YY----RR-
-        ------------------##----YY----##-YY----RR-
-        ------------------------YY----##-------RR-
-        ------------------------YY----##-------RR-
+        ------------##-##-##-##-GG-##-##-GG-##-RR-
+        ------------------##----GG----##-GG----RR-
+        ------------------##----GG----##-GG----RR-
+        ------------------##----GG----##-GG----RR-
+        ------------------------GG----##-------RR-
+        ------------------------GG----##-------RR-
 
         >>> png_data = sparkline.renderAsPngData()
         >>> print png_data.encode('base64')
-        iVBORw0KGgoAAAANSUhEUgAAACoAAAAMCAIAAACbVLgnAAAAs0lEQVR4nGL8//8/A1UBIyMjAwMD
+        iVBORw0KGgoAAAANSUhEUgAAACoAAAAMCAIAAACbVLgnAAAAtklEQVR4nGL8//8/A1UBIyMjAwMD
         kcYCAAAA//9ioq7dpAIAAAAA//8aYOsBAAAA//8izXpGRkZI2FILAAAAAP//GmDfAwAAAP//GmDr
-        AQAAAP//Isp6zDCHiyBJMTIwYFcDl0KIMDIyMDIyMDAAAAAA//9iIcZ6eC7CzE7EiOCRAgAAAP//
-        GuDABwAAAP//GmDrAQAAAP//IirwMQGJZSVOxQAAAAD//xpg3wMAAAD//wMAYnUZMiAxcmAAAAAA
-        SUVORK5CYII=
+        AQAAAP//Isp6zDCHiyAYDIyMDDjUwKQQ5jAyMjAyMjAwAAAAAP//YiHGenguwsxOxIjgkQIAAAD/
+        /xrgwAcAAAD//xpg6wEAAAD//yIq8DEBSWXlfwacigEAAAD//xpg3wMAAAD//wMABnIaNUZ2BAMA
+        AAAASUVORK5CYII=
         <BLANKLINE>
 
     """
