@@ -13,15 +13,9 @@ Let's set up a subscriber that prints out all the events:
 
 Now we can create the process:
 
-    >>> from zope.app import zapi
-    >>> pd = zapi.getUtility(zope.wfmc.interfaces.IProcessDefinition,
-    ...                      name='schooltool.attendance.explanation')
-
     >>> from schooltool.attendance.attendance import AttendanceRecord
     >>> from schooltool.attendance.attendance import ABSENT
-    >>> process = pd()
     >>> ar = AttendanceRecord(ABSENT)
-    >>> process.start(ar)
     ProcessStarted(Process('schooltool.attendance.explanation'))
     Transition(None, Activity('schooltool.attendance.explanation.create'))
     ActivityStarted(Activity('schooltool.attendance.explanation.create'))
