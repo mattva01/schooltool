@@ -20,18 +20,28 @@ from zope.interface import directlyProvides
 from zope.wfmc.interfaces import IProcessDefinition
 from zope.component import provideAdapter, provideUtility
 
+from schooltool.attendance.interfaces import TARDY
+
 
 class WorkItemStub(object):
+
+    def __init__(self, attendance_record):
+        self.attendance_record = attendance_record
+
     def acceptExplanation(self):
         print "Accepted explanation"
 
     def rejectExplanation(self):
         print "Rejected explanation"
 
+    def makeTardy(self, arrival_time):
+        self.attendance_record.status = TARDY
+        self.attendance_record.late_arrival = arrival_time
+
 
 class SilentProcessDef(object):
     def start(self, arg):
-        arg._work_item = WorkItemStub()
+        arg._work_item = WorkItemStub(arg)
 
 directlyProvides(SilentProcessDef, IProcessDefinition)
 

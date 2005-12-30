@@ -119,9 +119,7 @@ class AttendanceRecord(Persistent):
         if not self.isAbsent():
             raise AttendanceError("makeTardy when status is %s, not ABSENT"
                                   % self.status)
-        # TODO: call self._work_item.makeTardy(arrival_time) instead of
-        self.status = TARDY
-        self.late_arrival = arrival_time
+        self._work_item.makeTardy(arrival_time)
 
 
 class AbsenceExplanation(Persistent):

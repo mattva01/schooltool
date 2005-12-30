@@ -27,7 +27,7 @@ Now we can create the process:
 Let's make the attendance record a tardy:
 
     >>> from datetime import datetime
-    >>> ar._work_item.makeTardy(datetime(2005, 1, 1, 10, 15))
+    >>> ar.makeTardy(datetime(2005, 1, 1, 10, 15))
     WorkItemFinished(u'WaitForExplanation')
     ActivityFinished(Activity('schooltool.attendance.explanation.explain'))
     Transition(Activity('schooltool.attendance.explanation.explain'),
