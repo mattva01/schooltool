@@ -44,6 +44,7 @@ from schooltool.course.interfaces import ISection
 from schooltool.relationship.tests import setUpRelationships
 from schooltool.attendance.tests import stubProcessDefinition
 from schooltool.testing.util import fakePath
+from schooltool.attendance.interfaces import NEW, ACCEPTED, REJECTED
 
 
 class ApplicationStub(object):
@@ -474,8 +475,8 @@ def doctest_RealtimeAttendanceView_studentStatus():
         ...     section, datetime.datetime(2005, 12, 15, 11, 00, tzinfo=utc),
         ...     datetime.timedelta(minutes=45), 'C', False)
         >>> for record in attendance.getAllForDay(view.date):
-        ...     expn = record.addExplanation("Broken leg")
-        ...     record.acceptExplanation()
+        ...     record.addExplanation("Broken leg")
+        ...     record.explanations[-1].status = ACCEPTED
         >>> view.studentStatus(person3)
         'attendance-explained'
 

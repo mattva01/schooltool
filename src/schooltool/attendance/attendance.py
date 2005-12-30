@@ -93,8 +93,7 @@ class AttendanceRecord(Persistent):
 
     def acceptExplanation(self):
         # TODO: more sanity checks (e.g. don't overrule previous rejections)
-        # TODO: call self._work_item.acceptExplanation instead of
-        self.explanations[-1].status = ACCEPTED
+        self._work_item.acceptExplanation()
 
     def rejectExplanation(self):
         # TODO: more sanity checks (e.g. don't overrule previous acceptances)

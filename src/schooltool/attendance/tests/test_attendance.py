@@ -246,9 +246,15 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
         >>> ar.isExplained()
         False
 
-    However, if explanation is accepted, the absence is explained:
+    However, if explanation is accepted, the workflow will procede
+    into AcceptExplanation activity:
 
         >>> ar.acceptExplanation()
+        Accepted explanation
+
+    That should set the status of the last explanation to ACCEPTED:
+
+        >>> ar.explanations[-1].status = ACCEPTED
         >>> ar.isExplained()
         True
 
@@ -270,6 +276,7 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
         >>> len(ar.explanations)
         2
         >>> ar.acceptExplanation()
+        Accepted explanation
 
     If the record's status is not ABSENT or TARDY, isExplained raises
     an exception:
@@ -288,7 +295,7 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
 
         >>> ar.status = TARDY
         >>> ar.isExplained()
-        True
+        False
 
     Likewise for addExplanation, it is only legal for absences and tardies:
 

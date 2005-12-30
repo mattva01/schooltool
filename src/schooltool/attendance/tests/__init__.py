@@ -21,10 +21,17 @@ from zope.wfmc.interfaces import IProcessDefinition
 from zope.component import provideAdapter, provideUtility
 
 
+class WorkItemStub(object):
+    def acceptExplanation(self):
+        print "Accepted explanation"
+
+
 class SilentProcessDef(object):
     def start(self, arg):
-        pass
+        arg._work_item = WorkItemStub()
+
 directlyProvides(SilentProcessDef, IProcessDefinition)
+
 
 def stubProcessDefinition():
     provideUtility(SilentProcessDef, IProcessDefinition,
