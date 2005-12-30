@@ -361,4 +361,7 @@ class WaitForExplanation(Persistent, Location):
         self.participant = participant
 
     def start(self, attendance_record):
-        self.participant.activity.workItemFinished(self, 'TODO: explanation')
+        attendance_record._work_item = self
+
+    def makeTardy(self, arrival_time):
+        self.participant.activity.workItemFinished(self, 'tardy', arrival_time)

@@ -1102,11 +1102,19 @@ def doctest_WaitForExplanation():
         >>> participant = ParticipantStub()
         >>> work_item = WaitForExplanation(participant)
 
-    For the moment, WaitForExplanation is finished as soon as it gets started
+    When you start the work item, it gets recorded as an attribute of
+    the attendance record.
 
         >>> ar = AttendanceRecordStub(None, None)
         >>> work_item.start(ar)
-        workItemFinished: WaitForExplanation ('TODO: explanation',)
+        >>> ar._work_item is work_item
+        True
+
+    One way to complete the work item is to mark a tardy arrival
+
+        >>> late_arrival_time = datetime.datetime(2005, 12, 30, 13, 21)
+        >>> work_item.makeTardy(late_arrival_time)
+        workItemFinished: WaitForExplanation ('tardy', datetime.datetime(2005, 12, 30, 13, 21))
 
     """
 

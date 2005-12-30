@@ -31,7 +31,8 @@ Now we can create the process:
     >>> from schooltool.attendance.attendance import AttendanceRecord
     >>> from schooltool.attendance.attendance import ABSENT
     >>> process = pd()
-    >>> process.start(AttendanceRecord(ABSENT))
+    >>> ar = AttendanceRecord(ABSENT)
+    >>> process.start(ar)
     ProcessStarted(Process('schooltool.attendance.explanation'))
     Transition(None, Activity('schooltool.attendance.explanation.create'))
     ActivityStarted(Activity('schooltool.attendance.explanation.create'))
@@ -39,12 +40,20 @@ Now we can create the process:
     Transition(Activity('schooltool.attendance.explanation.create'),
                Activity('schooltool.attendance.explanation.explain'))
     ActivityStarted(Activity('schooltool.attendance.explanation.explain'))
+
+Let's make the attendance record a tardy:
+
+    >>> from datetime import datetime
+    >>> ar._work_item.makeTardy(datetime(2005, 1, 1, 10, 15))
     WorkItemFinished(u'WaitForExplanation')
     ActivityFinished(Activity('schooltool.attendance.explanation.explain'))
-    ProcessFinished(Process('schooltool.attendance.explanation'))
-
-It ends because we have no work items in the explain activity at the
-moment, but that is going to change soon.
+    Transition(Activity('schooltool.attendance.explanation.explain'),
+               Activity('schooltool.attendance.explanation.makeTardy'))
+    ActivityStarted(Activity('schooltool.attendance.explanation.makeTardy'))
+    ActivityFinished(Activity('schooltool.attendance.explanation.makeTardy'))
+    Transition(Activity('schooltool.attendance.explanation.makeTardy'),
+               Activity('schooltool.attendance.explanation.explain'))
+    ActivityStarted(Activity('schooltool.attendance.explanation.explain'))
 
 Clean up:
 
