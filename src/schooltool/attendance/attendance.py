@@ -36,8 +36,10 @@ from zope.app.location.location import Location
 from zope.wfmc.interfaces import IWorkItem
 from zope.wfmc.interfaces import IParticipant
 from zope.wfmc.interfaces import IActivity
+from zope.wfmc.interfaces import IProcessDefinition
 from zope.interface import implements
 from zope.component import adapts
+from zope.app import zapi
 
 from schooltool import SchoolToolMessage as _
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -67,6 +69,13 @@ class AttendanceRecord(Persistent):
         self.status = status
         self.late_arrival = None
         self.explanations = PersistentList()
+        if status == ABSENT:
+            self._createWorkflow()
+
+    def _createWorkflow(self):
+        pd = zapi.getUtility(IProcessDefinition,
+                             name='schooltool.attendance.explanation')
+        pd().start(self)
 
     def isUnknown(self): return self.status == UNKNOWN
     def isPresent(self): return self.status == PRESENT

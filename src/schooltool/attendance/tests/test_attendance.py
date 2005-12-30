@@ -29,14 +29,13 @@ import datetime
 
 from pytz import utc, timezone
 from persistent import Persistent
-from zope.interface import implements
+from zope.interface import implements, directlyProvides
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
 from zope.app.testing import setup
-from zope.app.annotation.interfaces import IAnnotations
-from zope.app.annotation.interfaces import IAttributeAnnotatable
-from zope.wfmc.interfaces import IParticipant
-import zope.component
+from zope.app.annotation.interfaces import IAnnotations, IAttributeAnnotatable
+from zope.wfmc.interfaces import IParticipant, IProcessDefinition
+from zope.component import provideAdapter, provideUtility
 
 import schooltool.app # Dead chicken to appease the circle of import gods
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -115,6 +114,54 @@ class ParticipantStub(object):
 #
 # Attendance record classes
 #
+
+class FakeProcessDef(object):
+    def start(self, arg):
+        print "starting process for %r" % arg
+
+directlyProvides(FakeProcessDef, IProcessDefinition)
+
+
+def stubProcessDef():
+    provideUtility(FakeProcessDef, IProcessDefinition,
+                   name='schooltool.attendance.explanation')
+
+
+def doctest_AttendanceRecord_createWorkflow():
+    """Tests for AttendanceRecord._createWorkflow
+
+        >>> from schooltool.attendance.attendance import AttendanceRecord
+        >>> ar = AttendanceRecord(UNKNOWN)
+
+        >>> stubProcessDef()
+
+        >>> ar._createWorkflow()
+        starting process for <schooltool.attendance.attendance.AttendanceRecord ...>
+
+    """
+
+
+def doctest_AttendanceRecord():
+    """Tests for AttendanceRecord.
+
+        >>> from schooltool.attendance.attendance import AttendanceRecord
+        >>> stubProcessDef()
+
+    A new workflow is created iff attendance record starts as an absence:
+
+        >>> ar = AttendanceRecord(UNKNOWN)
+        >>> ar = AttendanceRecord(PRESENT)
+
+        >>> ar = AttendanceRecord(ABSENT)
+        starting process for <schooltool.attendance.attendance.AttendanceRecord ...>
+
+        >>> ar = AttendanceRecord(TARDY)
+        Traceback (most recent call last):
+        ...
+        AssertionError
+
+    """
+
 
 def doctest_AttendanceRecord_isUnknown_isPresent_isAbsent_isTardy():
     r"""Tests for SectionAttendanceRecord.isSomething functions
@@ -1036,8 +1083,7 @@ def doctest_getSectionAttendance():
         >>> setup.placelessSetUp()
         >>> setup.setUpAnnotations()
         >>> from schooltool.attendance.attendance import getSectionAttendance
-        >>> zope.component.provideAdapter(getSectionAttendance,
-        ...                               [IPerson], ISectionAttendance)
+        >>> provideAdapter(getSectionAttendance, [IPerson], ISectionAttendance)
 
     getSectionAttendance lets us get ISectionAttendance for a person
 
@@ -1068,8 +1114,7 @@ def doctest_getDayAttendance():
         >>> setup.placelessSetUp()
         >>> setup.setUpAnnotations()
         >>> from schooltool.attendance.attendance import getDayAttendance
-        >>> zope.component.provideAdapter(getDayAttendance,
-        ...                               [IPerson], IDayAttendance)
+        >>> provideAdapter(getDayAttendance, [IPerson], IDayAttendance)
 
     getDayAttendance lets us get IDayAttendance for a person
 
@@ -1211,8 +1256,14 @@ def doctest_RejectExplanation():
 def setUp(test):
     setup.placelessSetUp()
     app = ApplicationStub()
-    zope.component.provideAdapter(lambda x: app,
-                                  [None], ISchoolToolApplication)
+    provideAdapter(lambda x: app, [None], ISchoolToolApplication)
+
+    class SilentProcessDef(object):
+        def start(self, arg):
+            pass
+    directlyProvides(SilentProcessDef, IProcessDefinition)
+    provideUtility(SilentProcessDef, IProcessDefinition,
+                   name='schooltool.attendance.explanation')
 
 
 def tearDown(test):
