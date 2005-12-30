@@ -122,7 +122,8 @@ def doctest_AttendanceRecord_isUnknown_isPresent_isAbsent_isTardy():
         >>> from schooltool.attendance.attendance import AttendanceRecord
 
         >>> for status in (UNKNOWN, PRESENT, ABSENT, TARDY):
-        ...     ar = AttendanceRecord(status)
+        ...     ar = AttendanceRecord(UNKNOWN)
+        ...     ar.status = status
         ...     print "%-7s %-5s %-5s %-5s %-5s" % (ar.status,
         ...                 ar.isUnknown(), ar.isPresent(), ar.isAbsent(),
         ...                 ar.isTardy())
@@ -155,7 +156,8 @@ def doctest_AttendanceRecord_makeTardy():
     In all other cases you can't.
 
         >>> for status in (UNKNOWN, PRESENT, TARDY):
-        ...     ar = AttendanceRecord(status)
+        ...     ar = AttendanceRecord(UNKNOWN)
+        ...     ar.status = status
         ...     try:
         ...         ar.makeTardy(datetime.datetime(2005, 12, 16, 15, 03))
         ...     except AttendanceError:
@@ -257,7 +259,8 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
           ...
         AttendanceError: only absences and tardies can be explained.
 
-        >>> ar = AttendanceRecord(TARDY)
+        >>> ar = AttendanceRecord(ABSENT)
+        >>> ar.status = TARDY
         >>> ar.addExplanation("whatever")
         >>> ar.explanations[-1]
         <schooltool.attendance.attendance.AbsenceExplanation object at ...>

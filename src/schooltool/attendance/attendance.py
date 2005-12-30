@@ -63,7 +63,7 @@ class AttendanceRecord(Persistent):
     """Base class for attendance records."""
 
     def __init__(self, status):
-        assert status in (UNKNOWN, PRESENT, ABSENT, TARDY)
+        assert status in (UNKNOWN, PRESENT, ABSENT)
         self.status = status
         self.late_arrival = None
         self.explanations = PersistentList()
