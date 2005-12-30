@@ -57,6 +57,20 @@
       name=".MakeTardy"
       />
 
+  <adapter
+      for="zope.wfmc.interfaces.IParticipant"
+      provides="zope.wfmc.interfaces.IWorkItem"
+      factory=".attendance.AcceptExplanation"
+      name=".AcceptExplanation"
+      />
+
+  <adapter
+      for="zope.wfmc.interfaces.IParticipant"
+      provides="zope.wfmc.interfaces.IWorkItem"
+      factory=".attendance.RejectExplanation"
+      name=".RejectExplanation"
+      />
+
   <include package=".browser" />
 
 </configure>

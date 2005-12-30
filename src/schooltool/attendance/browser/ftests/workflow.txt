@@ -1,17 +1,6 @@
 Attendance workflow
 ===================
 
-
-Overview
---------
-
-1. Set up logging subscriber
-2. Start the process
-3. Clean up
-
-Setup
------
-
 Let's set up a subscriber that prints out all the events:
 
     >>> def log_workflow(event):
@@ -62,6 +51,54 @@ It should be tardy now:
     True
     >>> ar.late_arrival
     datetime.datetime(2005, 1, 1, 10, 15)
+
+Let's add an explanation:
+
+    >>> ar.addExplanation('space aliens abducted me')
+
+and reject it
+
+    >>> ar._work_item.rejectExplanation()
+    WorkItemFinished(u'WaitForExplanation')
+    ActivityFinished(Activity('schooltool.attendance.explanation.explain'))
+    Transition(Activity('schooltool.attendance.explanation.explain'),
+               Activity('schooltool.attendance.explanation.reject'))
+    ActivityStarted(Activity('schooltool.attendance.explanation.reject'))
+    WorkItemFinished(u'RejectExplanation')
+    ActivityFinished(Activity('schooltool.attendance.explanation.reject'))
+    Transition(Activity('schooltool.attendance.explanation.reject'),
+               Activity('schooltool.attendance.explanation.explain'))
+    ActivityStarted(Activity('schooltool.attendance.explanation.explain'))
+
+    >>> def printExplanations(ar):
+    ...     for e in ar.explanations:
+    ...         print e.status + ':', e.text
+
+    >>> printExplanations(ar)
+    REJECTED: space aliens abducted me
+
+Let's add a better explanation:
+
+    >>> ar.addExplanation('I was lazy')
+
+and accept it
+
+    >>> ar._work_item.acceptExplanation()
+    WorkItemFinished(u'WaitForExplanation')
+    ActivityFinished(Activity('schooltool.attendance.explanation.explain'))
+    Transition(Activity('schooltool.attendance.explanation.explain'),
+               Activity('schooltool.attendance.explanation.excuse'))
+    ActivityStarted(Activity('schooltool.attendance.explanation.excuse'))
+    WorkItemFinished(u'AcceptExplanation')
+    ActivityFinished(Activity('schooltool.attendance.explanation.excuse'))
+    ProcessFinished(Process('schooltool.attendance.explanation'))
+
+    >>> printExplanations(ar)
+    REJECTED: space aliens abducted me
+    ACCEPTED: I was lazy
+
+This concludes our workflow process.
+
 
 Clean up:
 

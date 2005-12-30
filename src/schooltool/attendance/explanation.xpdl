@@ -76,6 +76,24 @@
                         </FormalParameter>
                     </FormalParameters>
                 </Application>
+                <Application Id="AcceptExplanation">
+                    <FormalParameters>
+                        <FormalParameter Id="attendanceRecord" Mode="IN">
+                            <DataType>
+                                <BasicType Type="REFERENCE"/>
+                            </DataType>
+                        </FormalParameter>
+                    </FormalParameters>
+                </Application>
+                <Application Id="RejectExplanation">
+                    <FormalParameters>
+                        <FormalParameter Id="attendanceRecord" Mode="IN">
+                            <DataType>
+                                <BasicType Type="REFERENCE"/>
+                            </DataType>
+                        </FormalParameter>
+                    </FormalParameters>
+                </Application>
             </Applications>
             <Activities>
                 <Activity Id="explain" Name="Explain">
@@ -115,7 +133,11 @@
                 </Activity>
                 <Activity Id="reject" Name="Reject">
                     <Implementation>
-                        <No/>
+                        <Tool Id="RejectExplanation" Type="APPLICATION">
+                            <ActualParameters>
+                                <ActualParameter>attendanceRecord</ActualParameter>
+                            </ActualParameters>
+                        </Tool>
                     </Implementation>
                     <Performer>attendanceAdmin</Performer>
                     <StartMode>
@@ -154,7 +176,11 @@
                 </Activity>
                 <Activity Id="excuse" Name="Excuse">
                     <Implementation>
-                        <No/>
+                        <Tool Id="AcceptExplanation" Type="APPLICATION">
+                            <ActualParameters>
+                                <ActualParameter>attendanceRecord</ActualParameter>
+                            </ActualParameters>
+                        </Tool>
                     </Implementation>
                     <Performer>attendanceAdmin</Performer>
                     <StartMode>
@@ -217,7 +243,7 @@
                     </ExtendedAttributes>
                 </Transition>
                 <Transition From="explain" Id="explain_to_excuse" To="excuse">
-                    <Condition Type="CONDITION">outcome == 'excuse'</Condition>
+                    <Condition Type="CONDITION">outcome == 'accept'</Condition>
                     <ExtendedAttributes>
                         <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
                     </ExtendedAttributes>
