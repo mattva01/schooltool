@@ -23,6 +23,7 @@
 </div>
 
 <div class="attendance-legend">
+  <h3 i18n:translate="">Legend</h3>
   <p i18n:translate="">
   The sparkline (the little graph next to each student's name) shows
   the student's attendance for the last ten schooldays.  If attendance
@@ -33,13 +34,16 @@
   absence for a meeting is coloured red, and an unexplained absence for
   homeroom period is yellow.
   </p>
-  <p i18n:translate="">Color codes:
-  <span class="attendance-clear">no records</span>,
-  <span class="attendance-present">present</span>,
-  <span class="attendance-explained">was absent with explanation earlier today</span>,
-  <span class="attendance-absent">was absent without explanation</span>,
-  <span class="attendance-alert">was present and absent earlier today</span>.
-  </p>
+  <p i18n:translate="">The student names are colored according to
+  their attendance during today:</p>
+  <ul>
+    <li class="attendance-clear">no records</li>
+    <li class="attendance-present">present</li>
+    <li class="attendance-explained">was absent with explanation
+        earlier today</li>
+    <li class="attendance-absent">was absent without explanation</li>
+    <li class="attendance-alert">was present and absent earlier today</li>
+  </ul>
 </div>
 
 <table class="attendance-table">
