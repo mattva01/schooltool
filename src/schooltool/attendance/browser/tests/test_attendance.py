@@ -42,6 +42,7 @@ from schooltool.calendar.simple import ImmutableCalendar
 from schooltool.calendar.simple import SimpleCalendarEvent
 from schooltool.course.interfaces import ISection
 from schooltool.relationship.tests import setUpRelationships
+from schooltool.attendance.tests import stubProcessDefinition
 from schooltool.testing.util import fakePath
 
 
@@ -795,6 +796,7 @@ def setUp(test):
     setUpRelationships()
     app = ApplicationStub()
     ztapi.provideAdapter(None, ISchoolToolApplication, lambda x: app)
+    stubProcessDefinition()
 
 
 def tearDown(test):

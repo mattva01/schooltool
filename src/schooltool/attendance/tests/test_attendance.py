@@ -49,6 +49,7 @@ from schooltool.attendance.interfaces import ISectionAttendanceRecord
 from schooltool.attendance.interfaces import UNKNOWN, PRESENT, ABSENT, TARDY
 from schooltool.attendance.interfaces import ACCEPTED, REJECTED
 from schooltool.attendance.interfaces import AttendanceError
+from schooltool.attendance.tests import stubProcessDefinition
 
 
 #
@@ -122,18 +123,14 @@ class FakeProcessDef(object):
 directlyProvides(FakeProcessDef, IProcessDefinition)
 
 
-def stubProcessDef():
-    provideUtility(FakeProcessDef, IProcessDefinition,
-                   name='schooltool.attendance.explanation')
-
-
 def doctest_AttendanceRecord_createWorkflow():
     """Tests for AttendanceRecord._createWorkflow
 
         >>> from schooltool.attendance.attendance import AttendanceRecord
         >>> ar = AttendanceRecord(UNKNOWN)
 
-        >>> stubProcessDef()
+        >>> provideUtility(FakeProcessDef, IProcessDefinition,
+        ...                name='schooltool.attendance.explanation')
 
         >>> ar._createWorkflow()
         starting process for <schooltool.attendance.attendance.AttendanceRecord ...>
@@ -145,7 +142,8 @@ def doctest_AttendanceRecord():
     """Tests for AttendanceRecord.
 
         >>> from schooltool.attendance.attendance import AttendanceRecord
-        >>> stubProcessDef()
+        >>> provideUtility(FakeProcessDef, IProcessDefinition,
+        ...                name='schooltool.attendance.explanation')
 
     A new workflow is created iff attendance record starts as an absence:
 
@@ -1257,14 +1255,7 @@ def setUp(test):
     setup.placelessSetUp()
     app = ApplicationStub()
     provideAdapter(lambda x: app, [None], ISchoolToolApplication)
-
-    class SilentProcessDef(object):
-        def start(self, arg):
-            pass
-    directlyProvides(SilentProcessDef, IProcessDefinition)
-    provideUtility(SilentProcessDef, IProcessDefinition,
-                   name='schooltool.attendance.explanation')
-
+    stubProcessDefinition()
 
 def tearDown(test):
     setup.placelessTearDown()
