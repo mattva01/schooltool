@@ -35,6 +35,7 @@ from zope.testing import doctest
 from zope.app.testing import setup
 from zope.app.annotation.interfaces import IAnnotations
 from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.wfmc.interfaces import IParticipant
 import zope.component
 
 import schooltool.app # Dead chicken to appease the circle of import gods
@@ -87,6 +88,16 @@ class ApplicationStub(object):
     implements(ISchoolToolApplication, IApplicationPreferences)
 
     timezone = 'UTC'
+
+
+class ActivityStub(object):
+
+    def workItemFinished(self, work_item, *args):
+        print "workItemFinished: %s %r" % (work_item.__class__.__name__, args)
+
+
+class ParticipantStub(object):
+    activity = ActivityStub()
 
 
 #
@@ -1064,6 +1075,38 @@ def doctest_getDayAttendance():
         True
 
         >>> setup.placelessTearDown()
+
+    """
+
+
+#
+# Workflow
+#
+
+def doctest_AttendanceAdmin():
+    """Tests for AttendanceAdmin.
+
+        >>> from schooltool.attendance.attendance import AttendanceAdmin
+        >>> participant = AttendanceAdmin('activity')
+        >>> participant.activity
+        'activity'
+
+    Well, it does nothing else.  Move along.
+    """
+
+
+def doctest_WaitForExplanation():
+    """Tests for WaitForExplanation.
+
+        >>> from schooltool.attendance.attendance import WaitForExplanation
+        >>> participant = ParticipantStub()
+        >>> work_item = WaitForExplanation(participant)
+
+    For the moment, WaitForExplanation is finished as soon as it gets started
+
+        >>> ar = AttendanceRecordStub(None, None)
+        >>> work_item.start(ar)
+        workItemFinished: WaitForExplanation ('TODO: explanation',)
 
     """
 

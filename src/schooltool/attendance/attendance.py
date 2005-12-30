@@ -361,7 +361,4 @@ class WaitForExplanation(Persistent, Location):
         self.participant = participant
 
     def start(self, attendance_record):
-        self.finish()
-
-    def finish(self):
         self.participant.activity.workItemFinished(self, 'TODO: explanation')
