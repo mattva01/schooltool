@@ -50,10 +50,18 @@ Let's make the attendance record a tardy:
     Transition(Activity('schooltool.attendance.explanation.explain'),
                Activity('schooltool.attendance.explanation.makeTardy'))
     ActivityStarted(Activity('schooltool.attendance.explanation.makeTardy'))
+    WorkItemFinished(u'MakeTardy')
     ActivityFinished(Activity('schooltool.attendance.explanation.makeTardy'))
     Transition(Activity('schooltool.attendance.explanation.makeTardy'),
                Activity('schooltool.attendance.explanation.explain'))
     ActivityStarted(Activity('schooltool.attendance.explanation.explain'))
+
+It should be tardy now:
+
+    >>> ar.isTardy()
+    True
+    >>> ar.late_arrival
+    datetime.datetime(2005, 1, 1, 10, 15)
 
 Clean up:
 

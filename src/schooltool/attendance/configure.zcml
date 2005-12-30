@@ -50,6 +50,13 @@
       name=".WaitForExplanation"
       />
 
+  <adapter
+      for="zope.wfmc.interfaces.IParticipant"
+      provides="zope.wfmc.interfaces.IWorkItem"
+      factory=".attendance.MakeTardy"
+      name=".MakeTardy"
+      />
+
   <include package=".browser" />
 
 </configure>

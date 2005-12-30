@@ -62,6 +62,20 @@
                         </FormalParameter>
                     </FormalParameters>
                 </Application>
+                <Application Id="MakeTardy">
+                    <FormalParameters>
+                        <FormalParameter Id="attendanceRecord" Mode="IN">
+                            <DataType>
+                                <BasicType Type="REFERENCE"/>
+                            </DataType>
+                        </FormalParameter>
+                        <FormalParameter Id="arrivalTime" Mode="IN">
+                            <DataType>
+                                <BasicType Type="DATETIME"/>
+                            </DataType>
+                        </FormalParameter>
+                    </FormalParameters>
+                </Application>
             </Applications>
             <Activities>
                 <Activity Id="explain" Name="Explain">
@@ -118,7 +132,12 @@
                 </Activity>
                 <Activity Id="makeTardy" Name="Make Tardy">
                     <Implementation>
-                        <No/>
+                        <Tool Id="MakeTardy" Type="APPLICATION">
+                            <ActualParameters>
+                                <ActualParameter>attendanceRecord</ActualParameter>
+                                <ActualParameter>arrivalTime</ActualParameter>
+                            </ActualParameters>
+                        </Tool>
                     </Implementation>
                     <Performer>attendanceAdmin</Performer>
                     <StartMode>
