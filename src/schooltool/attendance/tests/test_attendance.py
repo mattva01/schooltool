@@ -1119,6 +1119,23 @@ def doctest_WaitForExplanation():
     """
 
 
+def doctest_MakeTardy():
+    """Tests for MakeTardy.
+
+        >>> from schooltool.attendance.attendance import MakeTardy
+        >>> participant = ParticipantStub()
+        >>> work_item = MakeTardy(participant)
+
+    When you start the work item, it gets finished in record time
+
+        >>> ar = AttendanceRecordStub(None, None)
+        >>> late_arrival_time = datetime.datetime(2005, 12, 30, 13, 21)
+        >>> work_item.start(ar, late_arrival_time)
+        workItemFinished: MakeTardy ()
+
+    """
+
+
 def setUp(test):
     setup.placelessSetUp()
     app = ApplicationStub()

@@ -365,3 +365,15 @@ class WaitForExplanation(Persistent, Location):
 
     def makeTardy(self, arrival_time):
         self.participant.activity.workItemFinished(self, 'tardy', arrival_time)
+
+
+class MakeTardy(Persistent, Location):
+
+    adapts(IParticipant)
+    implements(IWorkItem)
+
+    def __init__(self, participant):
+        self.participant = participant
+
+    def start(self, attendance_record, arrival_time):
+        self.participant.activity.workItemFinished(self)

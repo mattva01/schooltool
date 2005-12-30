@@ -26,11 +26,6 @@
                         <BasicType Type="REFERENCE"/>
                     </DataType>
                 </DataField>
-                <DataField Id="explanation" IsArray="FALSE">
-                    <DataType>
-                        <BasicType Type="STRING"/>
-                    </DataType>
-                </DataField>
                 <DataField Id="arrivalTime" IsArray="FALSE">
                     <DataType>
                         <BasicType Type="DATETIME"/>
