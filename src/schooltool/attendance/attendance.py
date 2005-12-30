@@ -370,6 +370,12 @@ class WaitForExplanation(AttendanceWorkItem):
     def makeTardy(self, arrival_time):
         self.participant.activity.workItemFinished(self, 'tardy', arrival_time)
 
+    def rejectExplanation(self):
+        self.participant.activity.workItemFinished(self, 'reject', None)
+
+    def acceptExplanation(self):
+        self.participant.activity.workItemFinished(self, 'accept', None)
+
 
 class MakeTardy(AttendanceWorkItem):
 

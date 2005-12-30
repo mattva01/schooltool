@@ -1116,6 +1116,16 @@ def doctest_WaitForExplanation():
         >>> work_item.makeTardy(late_arrival_time)
         workItemFinished: WaitForExplanation ('tardy', datetime.datetime(2005, 12, 30, 13, 21))
 
+    Another way to complete it is to reject an explanation
+
+        >>> work_item.rejectExplanation()
+        workItemFinished: WaitForExplanation ('reject', None)
+
+    Or accept it is to reject an explanation
+
+        >>> work_item.acceptExplanation()
+        workItemFinished: WaitForExplanation ('accept', None)
+
     """
 
 
