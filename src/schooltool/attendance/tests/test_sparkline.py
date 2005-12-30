@@ -281,7 +281,26 @@ def doctest_AttendanceSparkline():
         ('dot', 'black', '+')
         ('full', 'red', '-')
 
-    Test AttendanceSparkline.render and renderAsUriData:
+    """
+
+
+def doctest_AttendanceSparkline_render():
+    r"""Tests for AttendanceSparkline render* methods.
+
+        >>> from schooltool.attendance.sparkline import AttendanceSparkline
+        >>> sparkline = AttendanceSparkline('person', 'section', 'date')
+        >>> sparkline.getData = lambda: [('dot', 'black', '+'),
+        ...                              ('half', 'black', '+'),
+        ...                              ('half', 'black', '-'),
+        ...                              ('dot', 'black', '+'),
+        ...                              ('full', 'yellow', '-'),
+        ...                              ('full', 'black', '+'),
+        ...                              ('full', 'black', '-'),
+        ...                              ('half', 'yellow', '-'),
+        ...                              ('dot', 'black', '+'),
+        ...                              ('full', 'red', '-')]
+
+    Test AttendanceSparkline.render and renderAsPngData:
 
         >>> sparkline.width = 14
         >>> png = sparkline.render()
