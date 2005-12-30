@@ -1,0 +1,48 @@
+Attendance workflow
+===================
+
+
+Overview
+--------
+
+1. Set up logging subscriber
+2. Start the process
+3. Clean up
+
+Setup
+-----
+
+Let's set up a subscriber that prints out all the events:
+
+    >>> def log_workflow(event):
+    ...     print event
+
+    >>> import zope.event
+    >>> zope.event.subscribers.append(log_workflow)
+
+Now we can create the process:
+
+    >>> from zope.app import zapi
+    >>> pd = zapi.getUtility(zope.wfmc.interfaces.IProcessDefinition,
+    ...                      name='schooltool.attendance.explanation')
+
+    >>> from schooltool.attendance.attendance import AttendanceRecord
+    >>> from schooltool.attendance.attendance import ABSENT
+    >>> process = pd()
+    >>> process.start(AttendanceRecord(ABSENT))
+    ProcessStarted(Process('schooltool.attendance.explanation'))
+    Transition(None, Activity('schooltool.attendance.explanation.create'))
+    ActivityStarted(Activity('schooltool.attendance.explanation.create'))
+    ActivityFinished(Activity('schooltool.attendance.explanation.create'))
+    Transition(Activity('schooltool.attendance.explanation.create'),
+               Activity('schooltool.attendance.explanation.explain'))
+    ActivityStarted(Activity('schooltool.attendance.explanation.explain'))
+    ActivityFinished(Activity('schooltool.attendance.explanation.explain'))
+    ProcessFinished(Process('schooltool.attendance.explanation'))
+
+It ends because we have no work items in the explain activity at the
+moment, but that is going to change soon.
+
+Clean up:
+
+    >>> zope.event.subscribers = zope.event.subscribers[:-1]
