@@ -352,13 +352,16 @@ class AttendanceAdmin(Persistent):
         self.activity = activity
 
 
-class WaitForExplanation(Persistent, Location):
+class AttendanceWorkItem(Persistent, Location):
 
     adapts(IParticipant)
     implements(IWorkItem)
 
     def __init__(self, participant):
         self.participant = participant
+
+
+class WaitForExplanation(AttendanceWorkItem):
 
     def start(self, attendance_record):
         attendance_record._work_item = self
@@ -367,13 +370,7 @@ class WaitForExplanation(Persistent, Location):
         self.participant.activity.workItemFinished(self, 'tardy', arrival_time)
 
 
-class MakeTardy(Persistent, Location):
-
-    adapts(IParticipant)
-    implements(IWorkItem)
-
-    def __init__(self, participant):
-        self.participant = participant
+class MakeTardy(AttendanceWorkItem):
 
     def start(self, attendance_record, arrival_time):
         self.participant.activity.workItemFinished(self)
