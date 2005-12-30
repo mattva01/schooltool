@@ -108,6 +108,7 @@ class AttendanceRecord(Persistent):
         if not self.isAbsent():
             raise AttendanceError("makeTardy when status is %s, not ABSENT"
                                   % self.status)
+        # TODO: call self._work_item.makeTardy(arrival_time) instead of
         self.status = TARDY
         self.late_arrival = arrival_time
 
@@ -373,4 +374,6 @@ class WaitForExplanation(AttendanceWorkItem):
 class MakeTardy(AttendanceWorkItem):
 
     def start(self, attendance_record, arrival_time):
+        attendance_record.status = TARDY
+        attendance_record.late_arrival = arrival_time
         self.participant.activity.workItemFinished(self)

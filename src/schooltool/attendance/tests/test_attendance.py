@@ -1133,6 +1133,13 @@ def doctest_MakeTardy():
         >>> work_item.start(ar, late_arrival_time)
         workItemFinished: MakeTardy ()
 
+    The state of the attendance record changes
+
+        >>> ar.status == TARDY
+        True
+        >>> ar.late_arrival
+        datetime.datetime(2005, 12, 30, 13, 21)
+
     """
 
 
