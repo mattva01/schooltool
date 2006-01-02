@@ -47,4 +47,5 @@ if __name__ == '__main__':
     if '--search-in' not in sys.argv and '-s' not in sys.argv:
         args += ["--search-in", os.path.join(lib, "schooltool")]
     args += sys.argv[1:]
-    test.main(args)
+    exitcode = test.main(args)
+    sys.exit(exitcode)
