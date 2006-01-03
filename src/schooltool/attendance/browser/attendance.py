@@ -220,9 +220,8 @@ class RealtimeAttendanceView(BrowserView):
             disabled_checkbox = ar.isPresent() or ar.isTardy()
             section_url = zapi.absoluteURL(ISection(self.context),
                                    self.request)
-            person_url = person.username
-            date_url = self.date
-            sparkline_url = '%s/@@sparkline.png?person=%s&date=%s' % (section_url, person_url, date_url)
+            sparkline_url = '%s/@@sparkline.png?person=%s&date=%s' %\
+                            (section_url, person.username, self.date)
 
             result.append(RealtimeInfo(
                 person.__name__, # id

@@ -214,8 +214,8 @@ Sparkline
 Each person has attendance sparkline drawn along with status symbol:
 
     >>> print '\n'.join(analyze.queryHTML('//img[@width="30"]', largo.contents))
-    <img width="30" height="12" src="http://localhost/sections/dancing1a/@@sparkline.png?person=gretute&amp;date=2005-12-12">
-    <img width="30" height="12" src="http://localhost/sections/dancing1a/@@sparkline.png?person=joniukas&amp;date=2005-12-12">
+    <img alt="attendance graph for the last 10 days" width="30" height="12" src="http://localhost/sections/dancing1a/@@sparkline.png?person=gretute&amp;date=2005-12-12">
+    <img alt="attendance graph for the last 10 days" width="30" height="12" src="http://localhost/sections/dancing1a/@@sparkline.png?person=joniukas&amp;date=2005-12-12">
 
 "Look" at the attendance sparkline for joniukas
 

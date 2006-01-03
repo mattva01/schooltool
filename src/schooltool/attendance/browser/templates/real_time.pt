@@ -67,7 +67,8 @@
               tal:content="info/title">Name</label>
     </td>
     <td>
-      <img width="30" height="12" tal:attributes="src info/sparkline_url" />
+      <img alt="attendance graph for the last 10 days" i18n:attributes="alt"
+           width="30" height="12" tal:attributes="src info/sparkline_url" />
       <span tal:replace="info/symbol" />
     </td>
   </tr>
