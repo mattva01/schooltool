@@ -88,6 +88,7 @@ def doctest_SampleSections():
         >>> from schooltool.group.group import Group
         >>> app = stsetup.setupSchoolToolSite()
         >>> app['groups']['teachers'] = Group('Teachers')
+        >>> app['groups']['students'] = Group('Students')
 
     This plugins depends on lots of stuff, so I'm afraid we'll have to
     run it all:
@@ -217,9 +218,12 @@ def doctest_SampleTimetables():
         >>> student = app['persons']['student042']
         >>> from schooltool.app.membership import URIGroup
         >>> for section in getRelatedObjects(student, URIGroup):
-        ...     timetable = ITimetables(section).timetables['2005-fall.simple']
-        ...     for day, period, activity in list(timetable.itercontent())[:1]:
-        ...         print period, activity.title
+        ...     if section.title != 'Students':
+        ...         timetable = ITimetables(section).\
+timetables['2005-fall.simple']
+        ...         for day, period, activity in list\
+(timetable.itercontent())[:1]:
+        ...             print period, activity.title
         D English B
         B Math A
         A History A

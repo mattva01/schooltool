@@ -50,11 +50,26 @@ class SampleStudents(object):
 
     def generate(self, app, seed=None):
         namegen = NameGenerator(str(seed) + self.name)
+        # some of the tests (e.g., for groups) are set up on the assumption that
+        # we won't populate the student group as we create students.  This
+        # is annoying, since we end up with an empty student group.  I'm not
+        # sure how to get around this except with a try/except here.
+        try:
+            students = app['groups']['students']
+            stud_group = True
+        except KeyError:
+            stud_group = False
         for i in range(self.power):
             name = namegen.generate()
             person_id = 'student%03d' % i
-            app['persons'][person_id] = Person(person_id, title=name)
-            app['persons'][person_id].setPassword(person_id)
+            person = Person(person_id, title=name)
+            person.setPassword(person_id)
+            # Without removeSecurityProxy we can't add members a
+            # group.
+            if stud_group:
+                removeSecurityProxy(students.members).add(person)
+
+            app['persons'][person_id] = person
 
 
 class SampleTeachers(object):
