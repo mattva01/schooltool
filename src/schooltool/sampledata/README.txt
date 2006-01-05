@@ -91,7 +91,7 @@ You need to define a plugin::
       name = 'person_color'
       dependencies = ('teachers', 'students')
 
-      def generate(app, seed=None):
+      def generate(self, app, seed=None):
           rng = random.Random(seed)
           for person in app['persons'].values():
               color = rng.choice(['red', 'green', 'blue'])
