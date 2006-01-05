@@ -25,9 +25,9 @@ could do the following to create the package::
   $ echo "# Make a package" >> tufts/__init__.py
 
 Clearly, the above instructions are for Un*x/Linux systems. You need to adjust
-the commands as needed for other Operating Systems, such as Windows, either 
-using the equivalent command line instructions or the graphical tools to create
-folders and text documents.
+the commands as needed for other Operating Systems, such as Windows, either
+using the equivalent command line instructions or the graphical tools to
+create folders and text documents.
 
 Now that you have a top-level package, you create the project package inside
 of it using the same process as above. Naturally, I chose the name
@@ -50,7 +50,7 @@ or
   >>> import schooltool.commendation
 
 (Of course, I am using ``schooltool`` as the top-level package and not
-``tufts`` as described above, because for the purposes of this example this 
+``tufts`` as described above, because for the purposes of this example this
 implementation actually lives in ``schooltool``.)
 
 
@@ -78,10 +78,10 @@ somewhere in its inheritance tree. To specify fields, we use the
 ``zope.schema`` package [#schema]_. Have a look at the ``ICommendation``
 interface inside the ``interfaces.py`` file for the complete interface.
 
-The interfaces also serve as API documentation, containing 
-a lot of information describing the behavior of the
-interface's methods and fields. As a consequence, we can avoid large,
-descriptive documentation strings in the implementation.
+The interfaces also serve as API documentation, containing a lot of
+information describing the behavior of the interface's methods and fields. As
+a consequence, we can avoid large, descriptive documentation strings in the
+implementation.
 
 Let me make a couple more comments on the fields in the interface. First of
 all, you can see that all fields are required:
@@ -103,7 +103,7 @@ sequence. However this list is immediately converted to a vocabulary
   >>> [term.value for term in interfaces.ICommendation['scope'].vocabulary]
   [u'group', u'school-wide', u'community', u'state', u'national', u'global']
 
-Vocabularies are a way to provide dynamic choice lists. In most applications, 
+Vocabularies are a way to provide dynamic choice lists. In most applications,
 the choices for a given data field change as the application data evolves. For
 example, you might want a field that let's you choose a student. In this case
 you would write a vocabulary that provides a term for each student.
@@ -187,19 +187,16 @@ For example, the title and description must be unicode strings:
 Further, since the grantor and date are marked as read-only, you cannot assign
 new values to them:
 
-XXX: ignas: these tests are failing on Zope3.2, but should work on the
-release branch.
+  >>> goodjob.grantor = u'me'
+  Traceback (most recent call last):
+  ...
+  ValueError: ('grantor', 'field is readonly')
 
-#   >>> goodjob.grantor = u'me'
-#   Traceback (most recent call last):
-#   ...
-#   ValueError: ('grantor', 'field is readonly')
-
-#   >>> import datetime
-#   >>> goodjob.date = datetime.date.today()
-#   Traceback (most recent call last):
-#   ...
-#   ValueError: ('date', 'field is readonly')
+  >>> import datetime
+  >>> goodjob.date = datetime.date.today()
+  Traceback (most recent call last):
+  ...
+  ValueError: ('date', 'field is readonly')
 
 Finally, the choice field of the scope restricts the entries to the ones
 listed in the interface:

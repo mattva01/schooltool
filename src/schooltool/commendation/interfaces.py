@@ -20,6 +20,9 @@
 
 $Id$
 """
+# Setting this attribute on the module declares that all doc strings in this
+# module are written in restructured text, the default Python documentation
+# format.
 __docformat__ = 'reStructuredText'
 
 import zope.interface
@@ -27,6 +30,14 @@ import zope.schema
 import zope.i18nmessageid
 from zope.app import container
 
+# Since Zope 3 is an application server and does not know the users locale
+# until a request is issued, we can only mark all strings that are supposed to
+# be translated when displayed. Additionally, a translatable string must be
+# assigned to a domain, so we know where it belongs to adn it allows us to
+# disambiguate translations.
+# In order for the string extraction tools to find the translatable strings,
+# they have to be wrapped by ``_()``, namely a callable called ``_``
+# (underscore).
 _ = zope.i18nmessageid.MessageFactory("commendation")
 
 
@@ -63,11 +74,16 @@ class ICommendation(zope.interface.Interface):
         required=True)
 
 
+# The ``IContainer`` interface specifes many methods that are related to
+# component management. It basically implements the Python mapping
+# API. However, its methods have to do a little bit more work, so that it
+# integrates nicely into the Zope 3 framework.
 class ICommendations(zope.app.container.interfaces.IContainer):
     '''An object containing several commendations.'''
     container.constraints.contains(ICommendation)
 
-
+# ``IContained`` says that this object can be contained by another. Basically,
+# it requires an object to provide a ``__parent__`` and ``__name__`` attribute.
 class ICommendationContained(container.interfaces.IContained):
     '''A commendation that can only be contained by ``ICommendations``.'''
     container.constraints.containers(ICommendations)

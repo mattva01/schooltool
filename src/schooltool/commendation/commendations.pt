@@ -1,0 +1,15 @@
+<metal:block use-macro="view/@@standard_macros/page" i18n:domain="commendation">
+
+  <metal:block fill-slot="content-header">
+    <h1 i18n:translate="">Commendations</h1>
+  </metal:block>
+
+  <metal:block metal:fill-slot="body">
+
+    <div style="border: 1px #999 solid; padding: 3px; margin-bottom: 1em"
+        tal:repeat="commendation view/commendations"
+        tal:content="structure commendation/@@details" />
+
+  </metal:block>
+
+</metal:block>

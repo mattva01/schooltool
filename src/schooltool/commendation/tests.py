@@ -28,14 +28,11 @@ import unittest
 from zope.testing import doctest
 from zope.app.testing import setup
 
-
 def setUp(test):
     setup.placefulSetUp()
 
-
 def tearDown(test):
     setup.placefulTearDown()
-
 
 def test_suite():
     optionflags = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS

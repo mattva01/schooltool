@@ -1,0 +1,326 @@
+===================================================
+System-Integration of Commentations into SchoolTool
+===================================================
+
+Now that we have integrated the commendations on the Python level, we need to
+complete this integration in the system. The goal of this section will be to
+make the commendations viewable and addable in the Web UI.
+
+While it is perfectly possible to *configure* SchoolTool components using Python
+directly, it is never done. Instead, there is a special configuration language
+called the Zope Configuration Markup Language, short ZCML. The intend here is
+that the configuration can be easily overridden and changed. This chapter will
+introduce you to some of the responsibilities and features of ZCML.
+
+By convention, all configuration is placed into a file called
+``configure.zcml``. If your package contains sub-packages, there is a
+``<include package="..." />`` directive that allows you to link in other
+configuration files. You can see that our package also has such a file. Since
+ZCML is a XML dialect, configuration directives are grouped into XML
+namespaces. Short names for the used namespaces inside a configuration file
+are commonly declared in the wrapping ``<configure>`` element as can be seen
+in ``configure.zcml``.
+
+Once the configuration file is created, you need a way to tell the system:
+"Hey, here is a new ZCML file." This is handled by placing a forwarding
+configuration file -- usually called ``<package>-configure.zcml`` -- into a
+special directory; in this case ``SCHOOLTOOL/etc/schooltool-skel``. To
+automate the task, create a ``SETUP.cfg`` file as demonstrated in the
+package. When you type ``make`` or ``python setup.py build``, the forwarding
+configuration file is automatically placed into the aforementioned directory.
+
+
+ZCML Registration of new Components
+-----------------------------------
+
+The primary objective of ZCML is to register components. In the previous
+chapter, we registered our component, the ``IHaveCommendations`` adapter,
+using Python directly. For the final system integration, we register the
+adapter using the ``<adapter>`` directive. Most of its attributes should be
+obvious. The ``trusted`` argument causes the adapted object (in other words
+the context of the adapter) to not be proxied, but the result from calling the
+adapter (in this case the ``Commendations`` instance) will be proxied. This is
+necessary, since there are no security declarations for the annotation
+attribute of the component.
+
+Next we declare the security assignments for the ``Commendation`` and
+``Commendations`` class. Since commendations are public, we allow them to be
+accessible publically. On the other hand, commendations should never be
+editable, so we simple make the commendation API writable only for the
+``schooltool.create`` permission. Note that those settings are true for both
+classes. The ``<content>`` directive is commonly used to make such
+declarations. The ``<allow>`` sub-directives makes the specified attributes
+public for access. If an interface is specified, all fields and methods will
+be made public. The ``<require>`` directive is very similar to the previous
+one, except that it allows one to specify the permission under which the
+attributes are accessible. As you can see, we are using the ``set_schema``
+attribute here, since we want to say that all fields in the given schema are
+only writable with the specified permission.
+
+Finally, we have to tell the system which objects will be able to have
+commendations. This is done by simply asserting the implementation of the
+``IHaveCommendations`` interface on the desired classes. As specified in Tom's
+requirement E-mail, all persons, groups and sections should be able to get
+commendations. Thus, you can see the three ``<class>`` directives with an
+``<implements>`` directive doing exactely that. If you review the previous
+chapter, you will see that we did the same there in Python.
+
+
+Create an Add and Commendations View
+------------------------------------
+
+Now that we have integrated the commendations with the system, we need to
+develop some views. The first screen will be the addform. Since commendations
+are tucked away in annotations, we cannot use the standard Zope 3 form
+machinery for the task without some modifications. In fact, we only need to
+change the methods that convert the input data to the object and handle the
+forwarding to the next screen. Additionally we have to set a couple of
+attributes manually, which usually would be set by the ``<browser:addform>``
+directive. You can see the add form view class called ``CommendationAddView``
+in the newly created module ``browser.py``.
+
+*Note*: By convention browser-related code is placed in a module called
+ ``browser``. If there is a lot of browser code, a package of the same name is
+ commonly created. This package does not only contain the Python code, but
+ also all other resources, such as icons, templates, etc.
+
+As you can see, the ``CommendationAddView`` class inherits from the
+``AddForm`` class, the standard class for add forms. By specifying the schema
+``ICommendations`` we tell the forms about the fields whose data must be
+collected. This selection can be refined using the ``fieldNames`` attribute,
+which specifies the fields and their order to be displayed. Since we do not
+want the form to ask for the creation date and the author, we only ask for the
+title, description and scope.
+
+Let's now have a look at the methods that are overridden. As you can see in
+the first line of the ``commendation_add.pt`` template -- the page template
+used for the add form -- the ``update()`` method is the first view class
+method that is called. The reson we are overriding it in this case is to
+support the additional "Cancel" button.
+
+  >>> from zope.interface import directlyProvides
+  >>> from zope.app.traversing.interfaces import IContainmentRoot
+  >>> from schooltool.app import app
+  >>> st = app.SchoolToolApplication()
+  >>> directlyProvides(st, IContainmentRoot)
+
+  >>> from schooltool.person import person
+  >>> st['persons']['sue'] = person.Person('sue', 'Sue')
+
+  >>> from zope.publisher.browser import TestRequest
+  >>> request = TestRequest(form={'CANCEL': True})
+
+  >>> from schooltool.commendation import browser
+  >>> addform = browser.CommendationAddView(st['persons']['sue'], request)
+
+  >>> addform.update()
+  'http://127.0.0.1/persons/sue'
+
+If instead of the "Cancel" button, the "Add" button is clicked, then the
+standard ``update()`` method is used. If all values were correctly input, the
+``create()`` method is called, which must return the created object:
+
+  >>> comm = addform.create(u'good job', u'very good job.', u'group')
+  >>> comm
+  <Commendation u'good job' by u'<unknown>'>
+
+After the commendation is created it is added using the ``add()`` method:
+
+  >>> addform.add(comm)
+  <Commendation u'good job' by u'<unknown>'>
+
+  >>> from schooltool.commendation import interfaces
+  >>> dict(interfaces.ICommendations(st['persons']['sue']).items())
+  {u'Commendation': <Commendation u'good job' by u'<unknown>'>}
+
+As you can see the commendation be returned again. Once the real work is done,
+``nextURL()`` is called to determine the URL to which the page should be
+forwarded.
+
+  >>> addform.nextURL()
+  'http://127.0.0.1/persons/sue'
+
+While, as mentioned before, it is custom to use the ``<browser:addform>``
+directive to create add forms, our special circumstances require us to use the
+more generic ``<browser:page>`` directive. The page directive fulfills several
+tasks. It creates the view from the view class and a given template, sets up
+security, and registers the page with a menu. In our case, only individuals
+having the ``schooltool.create`` permission can add commendations and the
+``schooltool_actions`` menu will provide a link for the add form, if the
+current user has been granted that permission.
+
+Now that we can add new commendations, we also need a way to view
+them. Instead of just writing one large view to render all the commendations
+of a a person, group or section, we first write a small view that will create
+an HTML snippet that represents one commendation. The view class,
+``CommendationDetails``, has only one responsibility: provide UI-friendly
+versions of the commendations data. That means that the grantor should not be
+an incomprehensible principal id, but the name of the person and the date
+should be formatted to the correct locale information of the user. Both of
+those requirements are fulfilled in the referenced class.
+
+  >>> details = browser.CommendationDetails()
+  >>> details.context = comm
+  >>> details.request = request
+
+  >>> details.title
+  u'good job'
+  >>> details.description
+  u'very good job.'
+  >>> details.grantor
+  u'<unknown>'
+  >>> details.date
+  u'...'
+
+Combined with the details template, ``commendation.pt``, the view is now
+registered using the ``<browser:page>`` directive, even though the view does
+not produce a full oage in itself. Also note that Tom specified that
+commendations are by definition public, so that the details view has the
+permission ``zope.Public``.
+
+The final step is to write a view for ``ICommendations`` that uses the
+commendation details view for each commendation. Since commendations are
+hidden in an annotation, the commendations view is registered for
+``IHaveCommendation``, but in the constructor the view looks up the
+commendations and stores them in an attribute. This is done in the
+``CommendationsView`` class.
+
+  >>> overview = browser.CommendationsView(st['persons']['sue'], request)
+  >>> list(overview.commendations)
+  [<Commendation u'good job' by u'<unknown>'>]
+
+Combined with a very short template, here ``commendations.pt``, the overview
+is registered as a page again.
+
+
+Testing Browser UI Code
+-----------------------
+
+Browser code can be tested in two ways. One is through unit tests, as we did
+in the previous sections as well as this one. All of the above interactive
+Python commands are unit tests with the difference that they are run with the
+full SchoolTool system setup.
+
+The second way of testing is through functional tests. Functional tests check
+the correctness on a higher level. Unit tests are programming tests, while
+functional tests are user tests. Ideally, they should be executed in a
+browser. And that's exactely what we will do. Zope 3 comes with a component
+known as the "test browser", which is a class that represents a little
+programmable browser. So here is a typical test:
+
+We get setup by accessing the site and logging in as the manager:
+
+  >>> from zope.testbrowser import Browser
+  >>> manager = Browser()
+  >>> manager.open('http://localhost/')
+
+  >>> manager.getLink('Log In').click()
+  >>> manager.getControl('Username').value = 'manager'
+  >>> manager.getControl('Password').value = 'schooltool'
+  >>> manager.getControl('Log in').click()
+
+Now that we are locked in, we have to create
+
+- a student,
+
+  >>> manager.getLink('persons').click()
+  >>> manager.getLink('New Person').click()
+  >>> manager.getControl('Full name').value = 'Tom Hoffman'
+  >>> manager.getControl('Username').value = 'tha1'
+  >>> manager.getControl('Password').value = 'myohmy'
+  >>> manager.getControl('Verify password').value = 'myohmy'
+  >>> manager.getControl('Add').click()
+
+- a course,
+
+  >>> manager.getLink('Courses').click()
+  >>> manager.getLink('New Course').click()
+  >>> manager.getControl('Title').value = 'Math 101'
+  >>> manager.getControl('Description').value = 'Basic Math'
+  >>> manager.getControl('Identifier').value = 'math101'
+  >>> manager.getControl('Add').click()
+
+- and a section.
+
+  >>> manager.getLink('Math 101').click()
+  >>> manager.getLink('New Section').click()
+  >>> manager.getControl('Code').value = 'Sec-A'
+  >>> manager.getControl('Description').value = 'Section A'
+  >>> manager.getControl('Identifier').value = 'math101-A'
+  >>> manager.getControl('Add').click()
+
+Now we should be able to add commendations to
+
+- persons,
+
+  >>> manager.getLink('Persons').click()
+  >>> manager.getLink('Tom Hoffman').click()
+  >>> manager.getLink('Add Commendation').click()
+  >>> manager.getControl('Title').value = 'Good Job!'
+  >>> manager.getControl('Description').value = 'You did a very good job.'
+  >>> manager.getControl('Add').click()
+
+  >>> manager.getLink('View Commendations').click()
+  >>> print analyze.queryHTML('//div[@class="commendation"]',
+  ...                         manager.contents)[0]
+  <div class="commendation">
+    <h3>Good Job!</h3>
+    <div style="font-size: 60%">
+      by <span class="grantor">SchoolTool Manager</span>
+      on <span class="date">...</span>
+    </div>
+    <div class="description">You did a very good job.</div>
+  </div>
+
+- groups,
+
+  >>> manager.getLink('Groups').click()
+  >>> manager.getLink('Students').click()
+  >>> manager.getLink('Add Commendation')
+  <Link text='Add Commendation' url='...groups/students/@@addCommendation.html'>
+  >>> manager.getLink('View Commendations')
+  <Link text='View Commendations' url='...groups/students/@@commendations.html'>
+
+- and sections.
+
+  >>> manager.getLink('Sections').click()
+  >>> manager.getLink('Sec-A').click()
+  >>> manager.getLink('Add Commendation')
+  <Link text='Add Commendation' url='...tions/math101-A/@@addCommendation.html'>
+  >>> manager.getLink('View Commendations')
+  <Link text='View Commendations' url='...tions/math101-A/@@commendations.html'>
+
+Also, not just everybody can add new commendations. For example Tom Hoffman,
+one of the students, cannot add new commendations:
+
+  >>> tom = Browser()
+  >>> tom.open('http://localhost/')
+
+  >>> tom.getLink('Log In').click()
+  >>> tom.getControl('Username').value = 'tha1'
+  >>> tom.getControl('Password').value = 'myohmy'
+  >>> tom.getControl('Log in').click()
+
+  >>> tom.handleErrors = False
+  >>> tom.open('http://localhost/persons/manager/@@addCommendation.html')
+  Traceback (most recent call last):
+  ...
+  Unauthorized: ...
+
+  >>> tom.open('http://localhost/groups/students/@@addCommendation.html')
+  Traceback (most recent call last):
+  ...
+  Unauthorized: ...
+
+  >>> tom.open('http://localhost/sections/math101-A/@@addCommendation.html')
+  Traceback (most recent call last):
+  ...
+  Unauthorized: ...
+
+On the other hand, since the commendations are public, he can view them:
+
+  >>> tom.open('http://localhost/persons/manager/@@commendations.html')
+  >>> tom.open('http://localhost/groups/students/@@commendations.html')
+  >>> tom.open('http://localhost/sections/math101-A/@@commendations.html')
+
+And that's all.

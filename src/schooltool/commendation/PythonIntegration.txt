@@ -87,14 +87,21 @@ commendations to other components.
 Associating Commendations with SchoolTool Components
 ----------------------------------------------------
 
-To connect our commendations to another component, we are using a feature of 
+To connect our commendations to another component, we are using a feature of
 Zope 3 called annotations. Annotations are data connected with a particular
 object. In other words, annotations allow us to associate any data structure
-with a particular object. (XXX - are they the data itself or just a wrapper/connector
-for a data object?  TEH) Thus, annotations are essential to the correct
-functioning of the SchoolTool system, because they contain all the information
-that is needed for an object to behave correctly inside the framework (XXX - 
-I don't know what that sentence means.  TEH).
+with a particular object. The data structure itself is known as one
+annotation, and an adapter (``IAnnotations``) is used to manage all
+annotations of an object.
+
+Annotations were developed to help components integrate into a system, such as
+SchoolTool. For example, the core component "Person" only knows about a title
+(full name), username, password, and the photo. But in order to be fully
+functional in SchoolTool, we also need to know demographic information,
+maintanance information (Dublin Core), and even store workflows of the
+person. All this data is implemented using annotations, which are inturn
+accessed by various adapters. Thus, annotations are essential to the
+SchoolTool application and a crucial part of the framework.
 
 Based on Tom's requirement E-mail, we do not just want to allow all components
 to have commendations; instead, only persons, groups and sections should be
@@ -102,6 +109,8 @@ able to have commendations. This is a common problem in SchoolTool and has an
 equally common solution. We are going to use a marker interface called
 ``IHaveCommentations`` that will be implemented by all components that can
 have commendations.
+
+So let's say we are given a person component:
 
   >>> import zope.interface
   >>> from zope.app import annotation
@@ -113,28 +122,29 @@ have commendations.
   ...     def __repr__(self):
   ...         return 'Person(%r)' %self.id
 
+Now we want to state that this particular class can have commendations. So we
+use the interface pacakge to attach the ``IHaveCommendations`` interface as
+one that is *implemented* by the ``Person`` class.
+
   >>> import zope.interface
   >>> from schooltool.commendation import interfaces
   >>> zope.interface.classImplements(Person, interfaces.IHaveCommendations)
 
-Now you might wonder, why did he not use the ``implements()`` function inside
+You might wonder, why did he not use the ``implements()`` function inside
 the class directly to specify the interface? The reason is so that you would
 ask yourself this question. I put it there to demonstrate how it will really
-work. The classes, like Person, we want to attach the commendation to, already
-exists and it would be very bad if we would alter the class just to assert
-this interface, since it would create a dependency. The better way to do it is
-using the ``classImplements()`` function, that allows us to assert implemented
-interfaces after the class is created. (XXX - THis isn't really clear.  I think
-it would be clearer if you would make it more clear what you're doing when you 
-create stub objects for testing. -- TEH)
+work. The classes, like ``Person``, we want to attach the commendation to,
+already exists and it would be very bad if we would alter the class just to
+assert this interface, since it would create a dependency. The better way to
+do it is using the ``classImplements()`` function, that allows us to assert
+implemented interfaces after the class is created.
 
 Also note that the component must be annotatable, that is, they must implement
-the ``IAttributeAnnotatable`` interface. In this particular case, the
-person is attribute annotatable, which 
-means that the annotations are stored
-in a special attribute of the ``Person`` class instance, which is the most
-common way for storing annotations. All SchoolTool content components
-implement ``IAttributeAnnotatable``.
+the ``IAttributeAnnotatable`` interface. In this particular case, the person
+is attribute annotatable, which means that the annotations are stored in a
+special attribute of the ``Person`` class instance, which is the most common
+way for storing annotations. All SchoolTool content components implement
+``IAttributeAnnotatable``.
 
 Now that we have a class that can have commendations, we have to write an
 adapter from ``IHaveCommendations`` to ``ICommendations`` that uses the

@@ -1,0 +1,40 @@
+<metal:block use-macro="view/@@standard_macros/page" i18n:domain="commendation">
+
+  <metal:block fill-slot="content-header">
+    <h1 i18n:translate="">Commendations Overview</h1>
+  </metal:block>
+
+  <metal:block metal:fill-slot="body">
+
+    <form method="post" enctype="multipart/form-data"
+          tal:attributes="action request/URL">
+
+      <label for="search_text">Text</label>
+      <input type="text" id="search_text" name="search_text" value=""
+             tal:attributes="value request/search_text|nothing" />
+
+      <label for="search_scope">Scope</label>
+      <select id="search_scope" name="search_scope" size="1">
+        <tal:loop repeat="scope view/scopeDict">
+          <option tal:content="scope"
+                  tal:attributes="value scope"
+                  tal:condition="python:scope != request.get('search_scope')" />
+          <option selected=""
+                  tal:content="scope"
+                  tal:attributes="value scope"
+                  tal:condition="python:scope == request.get('search_scope')" />
+        </tal:loop>
+      </select>
+
+      <input type="submit" class="button-ok" name="FILTER" value="Filter"
+             i18n:attributes="value filter-button" />
+
+    </form>
+
+    <div style="border: 1px #999 solid; padding: 3px; margin-bottom: 1em"
+        tal:repeat="commendation view/commendations"
+        tal:content="structure commendation/@@details" />
+
+  </metal:block>
+
+</metal:block>

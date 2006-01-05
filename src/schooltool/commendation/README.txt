@@ -66,16 +66,16 @@ Outline
    [``SystemIntegration.txt``]
 
    (a) ZCML Registration of new Components
-   (b) Create an Add and Edit View
-   (c) Setup correct Security
+   (b) Create an Add and Commendations View
+   (c) Testing Browser UI Code
 
 4. Viewing the Commendations
 
    [``Viewing.txt``]
 
-   (a) Commendations View for SchoolTool Components
-   (b) Commendations Viewlet
-   (c) School-wise Commendations Overview
+   (a) Caching Commendations
+   (b) Searching Commendations
+   (c) School-wide Commendations Overview
 
 
 Using this Tutorial

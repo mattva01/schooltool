@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="commendation">
+
+  <!-- Declare commendation-capable components -->
+
+  <class class="schooltool.person.person.Person">
+    <implements interface=".interfaces.IHaveCommendations" />
+  </class>
+
+  <class class="schooltool.group.group.Group">
+    <implements interface=".interfaces.IHaveCommendations" />
+  </class>
+
+  <class class="schooltool.course.section.Section">
+    <implements interface=".interfaces.IHaveCommendations" />
+  </class>
+
+  <!-- Security -->
+
+  <content class=".commendation.Commendations">
+    <allow interface="zope.app.container.interfaces.IReadContainer" />
+    <require permission="schooltool.create"
+             interface="zope.app.container.interfaces.IWriteContainer" />
+  </content>
+
+  <content class=".commendation.Commendation">
+    <allow interface=".interfaces.ICommendation" />
+    <require permission="schooltool.create"
+             set_schema=".interfaces.ICommendation" />
+  </content>
+
+  <!-- Commendation Adapter -->
+
+  <adapter
+      for=".interfaces.IHaveCommendations"
+      provides=".interfaces.ICommendations"
+      factory=".commendation.getCommendations"
+      trusted="true"
+      />
+
+  <!-- Commendation Event Subscribers -->
+
+  <subscriber
+      for=".interfaces.ICommendation
+           zope.app.event.interfaces.IObjectCreatedEvent"
+      handler=".commendation.cacheCommendation"
+      />
+
+  <!-- Browser UI -->
+
+  <browser:page
+      name="details"
+      for=".interfaces.ICommendation"
+      class=".browser.CommendationDetails"
+      template="commendation.pt"
+      permission="zope.Public"
+      />
+
+  <browser:page
+      name="commendations.html"
+      for=".interfaces.IHaveCommendations"
+      class=".browser.CommendationsView"
+      template="commendations.pt"
+      permission="zope.Public"
+      menu="schooltool_actions"
+      title="View Commendations"
+      />
+
+  <browser:page
+      name="addCommendation.html"
+      for=".interfaces.IHaveCommendations"
+      template="commendation_add.pt"
+      class=".browser.CommendationAddView"
+      permission="schooltool.create"
+      menu="schooltool_actions"
+      title="Add Commendation"
+      />
+
+  <browser:page
+      name="commendations.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class=".browser.CommendationsOverview"
+      template="commendations_overview.pt"
+      permission="zope.Public"
+      />
+
+  <configure package="schooltool.app.browser">
+
+    <browser:viewlet
+      name="commendations"
+      for="*"
+      manager="schooltool.app.browser.skin.INavigationManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.app.browser.skin.NavigationViewlet"
+      permission="zope.View"
+      link="@@commendations.html"
+      title="All Commendations"
+      order="100"
+      />
+
+  </configure>
+
+</configure>

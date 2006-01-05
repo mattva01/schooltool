@@ -1,0 +1,241 @@
+=========================
+Viewing the Commendations
+=========================
+
+The final part of Tom's specification E-mail states the following:
+
+  For the school, a "View commendations" action should present a
+  batched/searchable list of all commendations in reverse chronological
+  order.
+
+This means that our SchoolTool application should provide a view to look at
+and search all the existing commendation in a school. This poses several
+problems in our design. Currently, commendations are attached via annotations
+on all objects that provide ``IHaveCommendations``. Since we cannot know which
+objects will ever provide this interface, we cannot do simple object crawling.
+
+However, there is a simple object notification system that will send out an
+event whenever an object is created. We can write a subscriber to that event
+and thus catch all newly created commendations. Since it is not possible to
+edit or delete commendations in our simple system, we do not have to listen
+for other events.
+
+Once we have the event and the new commendation we have two choices. The best
+way would be to create an integer id utility (which created unique ids for any
+object and provides a map from the id to the object) and create a catalog with
+the correct fields for the commendation. However, I think this would be
+overkill, and the much simpler way would be to store references of the
+commendations in a list and do a simple linear search by hand.
+
+
+Caching Commendations
+---------------------
+
+As mentioned above, we can use an event subscriber to get access to all newly
+created commendations. An event subscriber is a callable Python object that
+expects as many arguments as there are event discriminators. Originally, the
+creation code (in the addform) sends a single ``ObjectCreatedEvent`` instance
+that contains the created object. A special subscriber is notified and resends
+the event sending out the pair ``(object, event)``. This is the notification
+we want to listen to; thus our event subscriber has two arguments.
+
+Usually event subscribers are simple functions, as it is in this case. It is
+called ``cacheCommendations(commendation, event)`` and is located in
+``commendation.py``. All the function does is to add the new commendation to a
+list that is stored as an annotation on the SchoolToolApplication.
+
+Here is how it works:
+
+  >>> from schooltool.app import app
+  >>> from zope.app.component import site
+  >>> st = app.SchoolToolApplication()
+  >>> st.setSiteManager(site.LocalSiteManager(st))
+
+  >>> from zope.app.component import hooks
+  >>> hooks.setSite(st)
+
+  >>> from schooltool.commendation import commendation
+  >>> comm = commendation.Commendation(u'good job', u'very good job!', u'group')
+  >>> event = object()
+  >>> commendation.cacheCommendation(comm, event)
+
+  >>> st.__annotations__['schooltool.commendation.Cache'][0] == comm
+  True
+
+Note that in the object database the commendation is only stored once and not
+for every time it is referenced.
+
+
+Searching Commendations
+-----------------------
+
+Now that we have a cache of all commendations in the system, we need to write
+a search across the commendations. I decided to provide two search
+criteria. The first is a simple sub-string match that tries to match test from
+the title and the description. The second is the scope, where you specify the
+smallest scope you want to see. For example, if you specify "global" then only
+commendations that can be seen globally are shown. If you specify
+"school-wide", then all global, national and schoole-wide commendations are
+displayed.
+
+Since the search code is not very involved, I simply implemented the
+functionality inside a view method. The probably clear way would have been to
+write an adapter or utility in this case. The code can be found in the
+``CommendationsOverview`` class of the ``browser.py`` module. Here a couple of
+search examples; we are reusing the SchoolTool application object produced
+above:
+
+  >>> from zope.publisher.browser import TestRequest
+  >>> request = TestRequest()
+
+  >>> from schooltool.commendation import browser
+  >>> overview = browser.CommendationsOverview(st, request)
+
+  >>> comm = commendation.Commendation(u'well done', u'', u'national')
+  >>> st.__annotations__['schooltool.commendation.Cache'].append(comm)
+
+By default all commendations are shown:
+
+  >>> overview.commendations()
+  [<Commendation u'good job' by u'<unknown>'>,
+   <Commendation u'well done' by u'<unknown>'>]
+
+Then we can filter by text:
+
+  >>> overview.request = TestRequest(form={'search_text': 'good'})
+  >>> overview.commendations()
+  [<Commendation u'good job' by u'<unknown>'>]
+
+Or by scope:
+
+  >>> overview.request = TestRequest(form={'search_scope': 'school-wide'})
+  >>> overview.commendations()
+  [<Commendation u'well done' by u'<unknown>'>]
+
+Of course you can also specify both search criteria:
+
+  >>> overview.request = TestRequest(
+  ...     form={'search_text': 'good', 'search_scope': 'school-wide'})
+  >>> overview.commendations()
+  []
+
+
+School-wide Commendations Overview
+----------------------------------
+
+Now that we have all the functionality written, all that is left to do is to
+write the template, ``commendation_overview.pt``, and register the
+page. Unfortunately, we cannot simply place the a menu item into the
+``schooltool_actions`` menu, because there is no view of the
+SchoolToolApplication. Even the ``[top]`` link in the breadcrumbs forwards you
+to the calendar. Thus the best place to put the link is in the Navigation
+menu. However, the entries in the navigation menu are not simple menu items,
+but viewlets. A special viewlet base class has been written for those entries,
+so that we simply copy the code and replace some of the entries. The result
+can be seen in ``configure.zcml``.
+
+Now that all components have been setup, we can test our overview screen via
+a browser:
+
+  >>> from zope.testbrowser import Browser
+  >>> manager = Browser()
+  >>> manager.open('http://localhost/')
+
+  >>> manager.getLink('Log In').click()
+  >>> manager.getControl('Username').value = 'manager'
+  >>> manager.getControl('Password').value = 'schooltool'
+  >>> manager.getControl('Log in').click()
+
+The first step is to create a person ...
+
+  >>> manager.getLink('persons').click()
+  >>> manager.getLink('New Person').click()
+  >>> manager.getControl('Full name').value = 'Tom Hoffman'
+  >>> manager.getControl('Username').value = 'tha1'
+  >>> manager.getControl('Password').value = 'myohmy'
+  >>> manager.getControl('Verify password').value = 'myohmy'
+  >>> manager.getControl('Add').click()
+
+to whom we attach a bunch of commendations:
+
+  >>> manager.getLink('Tom Hoffman').click()
+
+  >>> manager.getLink('Add Commendation').click()
+  >>> manager.getControl('Title').value = 'Good Job!'
+  >>> manager.getControl('Description').value = 'You did a very good job.'
+  >>> manager.getControl('Scope').value = ['global']
+  >>> manager.getControl('Add').click()
+
+  >>> manager.getLink('Add Commendation').click()
+  >>> manager.getControl('Title').value = 'Well Done!'
+  >>> manager.getControl('Description').value = 'A job well done.'
+  >>> manager.getControl('Scope').value = ['school-wide']
+  >>> manager.getControl('Add').click()
+
+Now we can go to the list of all commendations of the school and we should see
+both:
+
+  >>> manager.getLink('All Commendations').click()
+
+  >>> print analyze.queryHTML('//div[@class="commendation"]',
+  ...                         manager.contents)[0]
+  <div class="commendation">
+    <h3>Good Job!</h3>
+    <div style="font-size: 60%">
+      by <span class="grantor">SchoolTool Manager</span>
+      on <span class="date">...</span>
+    </div>
+    <div class="description">You did a very good job.</div>
+  </div>
+
+  >>> print analyze.queryHTML('//div[@class="commendation"]',
+  ...                         manager.contents)[1]
+  <div class="commendation">
+    <h3>Well Done!</h3>
+    <div style="font-size: 60%">
+      by <span class="grantor">SchoolTool Manager</span>
+      on <span class="date">...</span>
+    </div>
+    <div class="description">A job well done.</div>
+  </div>
+
+Now we filter by the term "well":
+
+  >>> manager.getControl('Text').value = u'well'
+  >>> manager.getControl('Filter').click()
+
+  >>> print analyze.queryHTML('//div[@class="commendation"]',
+  ...                         manager.contents)[0]
+  <div class="commendation">
+    <h3>Well Done!</h3>
+    <div style="font-size: 60%">
+      by <span class="grantor">SchoolTool Manager</span>
+      on <span class="date">...</span>
+    </div>
+    <div class="description">A job well done.</div>
+  </div>
+
+When we ask for all commendations on a national level, then we should only get
+the "Good job!" commendation:
+
+  >>> manager.getControl('Text').value = u''
+  >>> manager.getControl('Scope').value = ['national']
+  >>> manager.getControl('Filter').click()
+
+  >>> print analyze.queryHTML('//div[@class="commendation"]',
+  ...                         manager.contents)[0]
+  <div class="commendation">
+    <h3>Good Job!</h3>
+    <div style="font-size: 60%">
+      by <span class="grantor">SchoolTool Manager</span>
+      on <span class="date">...</span>
+    </div>
+    <div class="description">You did a very good job.</div>
+  </div>
+
+  >>> len(analyze.queryHTML('//div[@class="commendation"]', manager.contents))
+  1
+
+And that's all. You now have developed a fully integrated commendation system
+for SchoolTool. I intentionally left out some goodies, so that you have some
+room to play with the code yourself.

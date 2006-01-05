@@ -1,0 +1,11 @@
+<div class="commendation">
+  <h3 tal:content="view/title">Good Job!</h3>
+  <div style="font-size: 60%" i18n:translate="">
+    by <span class="grantor" tal:content="view/grantor" i18n:name="grantor" />
+    on <span class="date" tal:content="view/date" i18n:name="date" />
+  </div>
+  <div class="description"
+        tal:content="structure view/description">
+    You did a great job.
+  </div>
+</div>

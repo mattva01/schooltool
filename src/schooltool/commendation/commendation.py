@@ -28,11 +28,14 @@ import zope.security
 from zope.schema import fieldproperty
 from zope.app import annotation
 from zope.app.container import btree, contained
+from schooltool.app import app
 from schooltool.commendation import interfaces
 
-
+# Annoations are identified using annotation keys that must be truly
+# unique. Thus it is a good idea to make the Python path of the pacakge the
+# prefix of the annotation key. Below are the two keys we need.
 CommendationsKey = 'schooltool.commendation.Commendations'
-
+CommendationsCacheKey = 'schooltool.commendation.Cache'
 
 class Commendation(persistent.Persistent, contained.Contained):
     """A simple commendation implementation."""
@@ -40,6 +43,9 @@ class Commendation(persistent.Persistent, contained.Contained):
     zope.interface.implements(interfaces.ICommendation,
                               interfaces.ICommendationContained)
 
+    # We are using ``FieldProperty`` properties to implement the data
+    # fields. ``FieldProperty`` isntances ensure that no invalid values are
+    # assigned to the attribute.
     title = fieldproperty.FieldProperty(interfaces.ICommendation['title'])
 
     description = fieldproperty.FieldProperty(
@@ -53,7 +59,9 @@ class Commendation(persistent.Persistent, contained.Contained):
 
     def __init__(self, title, description, scope):
         self.date = datetime.date.today()
-        # Extract the current principal's id.
+        # Extract the current principal's id. If no interaction is found, then
+        # we also do not have a user. Thus we simply store a special string
+        # stating that the user was not found.
         interaction = zope.security.management.queryInteraction()
         if interaction and interaction.participations:
             self.grantor = interaction.participations[0].principal.id
@@ -64,6 +72,8 @@ class Commendation(persistent.Persistent, contained.Contained):
         self.scope = scope
 
     def __repr__(self):
+        # Providing an alternative implementation of the object's
+        # representation is commonly helpful, especially for doctests.
         return '<%s %r by %r>' %(self.__class__.__name__,
                                  self.title, self.grantor)
 
@@ -82,6 +92,21 @@ def getCommendations(context):
     try:
         return annotations[CommendationsKey]
     except KeyError:
+        # If the key was not found, then we have never added it, so do that
+        # now. Make sure that the annotation has a valid parent, so that we
+        # can create URLs and do local component lookups.
         annotations[CommendationsKey] = Commendations()
         annotations[CommendationsKey].__parent__ = context
         return annotations[CommendationsKey]
+
+
+def cacheCommendation(commendation, event):
+    """Cache a newly created commendation."""
+    # Whereever we are, get the SchoolTool application and access its
+    # annotations. Then add the commendation to the list of all cached
+    # commendations.
+    stapp = app.getSchoolToolApplication()
+    annotations = annotation.interfaces.IAnnotations(stapp)
+    if CommendationsCacheKey not in annotations:
+        annotations[CommendationsCacheKey] = persistent.list.PersistentList()
+    annotations[CommendationsCacheKey].append(commendation)
