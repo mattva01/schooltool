@@ -8,8 +8,8 @@ make the commendations viewable and addable in the Web UI.
 
 While it is perfectly possible to *configure* SchoolTool components using Python
 directly, it is never done. Instead, there is a special configuration language
-called the Zope Configuration Markup Language, short ZCML. The intend here is
-that the configuration can be easily overridden and changed. This chapter will
+called the Zope Configuration Markup Language, or ZCML. The intention here is
+that the configuration can be easily overridden and changed.  This chapter will
 introduce you to some of the responsibilities and features of ZCML.
 
 By convention, all configuration is placed into a file called
@@ -77,7 +77,9 @@ change the methods that convert the input data to the object and handle the
 forwarding to the next screen. Additionally we have to set a couple of
 attributes manually, which usually would be set by the ``<browser:addform>``
 directive. You can see the add form view class called ``CommendationAddView``
-in the newly created module ``browser.py``.
+in the newly created module ``browser.py``.  XXX - generally speaking I think 
+you should refer people to the relevant files at the beginning of the paragraph
+not at the end.
 
 *Note*: By convention browser-related code is placed in a module called
  ``browser``. If there is a lot of browser code, a package of the same name is
