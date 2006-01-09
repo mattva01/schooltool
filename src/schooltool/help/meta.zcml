@@ -1,0 +1,6 @@
+<configure
+    xmlns:meta="http://namespaces.zope.org/meta">
+
+  <meta:provides feature="context-help" />
+
+</configure>

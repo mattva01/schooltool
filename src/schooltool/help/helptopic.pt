@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="icon" type="image/png" href="favicon.ico"
+          tal:attributes="href context/++resource++favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="layout.css"
+          tal:attributes="href context/++resource++layout.css"/>
+    <link rel="stylesheet" type="text/css" href="help.css"
+          tal:attributes="href context/++resource++help.css"/>
+    <title tal:content="context/title" i18n:translate="">Topic Title</title>
+  </head>
+  <body>
+    <div id="header">
+      <div class="title tools">
+        <span tal:content="context/title" i18n:translate="">
+          Topic Title
+        </span>
+        <a href="javascript:window.close()" alt="[x]" style="float: right">
+          <img src="" tal:attributes="src context/++resource++delete.png" />
+        </a>
+      </div>
+    </div>
+    <div class="content" tal:content="structure view/topicContent">
+      Content of Help Topic goes here.
+    </div>
+  </body>
+</html>
+

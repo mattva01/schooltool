@@ -1,0 +1,15 @@
+BODY {
+    font-family: Verdana, Helvetica, Arial, Sans-Serif;
+    background: #fff;
+    color: #000;
+    min-width: 300px;
+}
+
+#header .title {
+    font-weight: bold;
+    text-align: left;
+}
+
+div.content {
+    padding: 1em;
+}

@@ -3,6 +3,13 @@
            xmlns:i18n="http://namespaces.zope.org/i18n"
            i18n_domain="schooltool">
 
+  <!-- Support Online Help -->
+
+  <include package="zope.app.renderer" file="meta.zcml" />
+  <include package="zope.app.renderer" />
+  <include package="zope.app.onlinehelp" file="meta.zcml" />
+  <include package="zope.app.onlinehelp" />
+
   <!-- Load devmode-specific Zope and SchoolTool packages -->
 
   <configure
@@ -11,12 +18,10 @@
     <include package="zope.app.apidoc" file="meta.zcml" />
     <include package="zope.app.preference" file="meta.zcml" />
     <include package="zope.app.renderer" file="meta.zcml" />
-    <include package="zope.app.onlinehelp" file="meta.zcml" />
     <include package="zope.app.apidoc" />
     <include package="zope.app.preference" />
     <include package="zope.app.renderer" />
     <include package="zope.app.tree" />
-    <include package="zope.app.onlinehelp" />
 
     <include package=".sampledata" />
   </configure>

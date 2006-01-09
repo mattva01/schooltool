@@ -134,4 +134,21 @@
       title="Import Persons"
       />
 
+  <!-- Register Context-Help screens -->
+
+  <configure
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      xmlns:help="http://namespaces.zope.org/help"
+      zcml:condition="have context-help">
+
+    <help:register
+        id="personcontainer_index"
+        title="Person Container - Contents"
+        doc_path="container_contents.rst"
+        for="schooltool.person.interfaces.IPersonContainer"
+        view="index.html"
+        />
+
+  </configure>
+
 </configure>

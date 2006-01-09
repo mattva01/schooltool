@@ -1,0 +1,44 @@
+===============
+Contextual Help
+===============
+
+The contextual help provides help screens for particular views. Let's first
+log in however.
+
+    >>> from zope.testbrowser import Browser
+    >>> manager = Browser()
+    >>> manager.open('http://localhost/')
+    >>> manager.getLink('Log In').click()
+    >>> manager.getControl('Username').value = 'manager'
+    >>> manager.getControl('Password').value = 'schooltool'
+    >>> manager.getControl('Log in').click()
+
+Now we are the calendar. A you can see there is no help link here, since there
+is no help for this link:
+
+    # I know this is a brittle test, but I do not want to overdo the test
+    # setup here.
+    >>> 'Context Help' in manager.contents
+    False
+
+But when we go to the person container, for example, we should be able to see
+the help:
+
+    >>> manager.getLink('persons').click()
+    >>> 'Context Help' in manager.contents
+    True
+
+In reality, you would now click on the link and a new window should open with
+the content. Since our test-browser does not support Javascript, we have to do
+this manually:
+
+    >>> manager.open('http://localhost/persons/++help++/contexthelp.html')
+
+    >>> print manager.contents
+    <!DOCTYPE...
+    ...
+    <title>Person Container - Contents</title>
+    ...
+    <div class="content"><p>This screen provides a list of all people
+    defined in their SchoolTool instance.</p>
+    ...

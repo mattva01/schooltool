@@ -1,0 +1,55 @@
+<configure
+    xmlns="http://namespaces.zope.org/browser"
+    xmlns:zope="http://namespaces.zope.org/zope"
+    i18n_domain="schooltool">
+
+  <zope:adapter
+      for="zope.interface.Interface
+           schooltool.app.browser.skin.ISchoolToolLayer
+           zope.interface.Interface"
+      provides="zope.contentprovider.interfaces.IContentProvider"
+      name="schooltool.Help"
+      factory=".browser.HelpLink"
+      permission="zope.Public"
+      />
+
+  <resource
+      name="help.css"
+      file="help.css"
+      />
+
+  <!-- generic contextual topic view -->
+  <page
+      name="contexthelp.html"
+      for="zope.app.onlinehelp.interfaces.IOnlineHelp"
+      class=".browser.ContextHelpView"
+      permission="zope.View"
+      attribute="getContextualTopicView"
+      layer="schooltool.app.browser.skin.ISchoolToolLayer"
+      />
+
+  <!-- simply topic view -->
+  <page
+      name="index.html"
+      for="zope.app.onlinehelp.interfaces.IOnlineHelpTopic"
+      class="zope.app.onlinehelp.browser.OnlineHelpTopicView"
+      template="helptopic.pt"
+      permission="zope.View"
+      layer="schooltool.app.browser.skin.ISchoolToolLayer"
+      />
+
+  <configure
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      xmlns:apidoc="http://namespaces.zope.org/apidoc"
+      zcml:condition="have apidoc">
+
+    <apidoc:bookchapter
+        id="contexthelp"
+        title="Contextual Help"
+        parent="schooltool"
+        doc_path="README.txt" />
+
+  </configure>
+
+
+</configure>

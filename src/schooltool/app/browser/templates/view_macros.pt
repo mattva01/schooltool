@@ -1,4 +1,4 @@
-<metal:block define-macro="page" i18n:domain="schoolbell">
+<metal:block define-macro="page" i18n:domain="schooltool">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
@@ -59,7 +59,7 @@
 
           <tal:if condition="user/schooltool:authenticated"
                   define="person user/schooltool:person">
-            <div metal:define-macro="logged_user">
+            <span metal:define-macro="logged_user">
 
               <tal:span i18n:translate="">User:</tal:span>
 
@@ -80,8 +80,11 @@
                   >Log Out</a>
               </tal:if>
 
-            </div>
+            </span>
           </tal:if>
+
+          <tal:block replace="structure provider:schooltool.Help"
+                     on-error="nothing" />
 
         </div>
       </div>
