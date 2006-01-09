@@ -747,6 +747,97 @@ def doctest_SectionLearnerGroupView():
 
     """
 
+def doctest_CoursesViewlet():
+    r"""Test for CoursesViewlet
+
+    Let's create a viewlet for a person's courses:
+
+        >>> from schooltool.course.browser.course import CoursesViewlet
+        >>> from schooltool.person.person import Person
+
+        >>> school = setup.setupSchoolToolSite()
+        >>> persons = school['persons']
+        >>> sections = school['sections']
+
+        >>> persons['teacher'] = teacher = Person("Teacher")
+        >>> teacher_view = CoursesViewlet(teacher, TestRequest())
+
+    Not a teacher yet:
+
+        >>> teacher_view.isTeacher()
+        False
+
+    We'll need something to teach:
+
+        >>> from schooltool.course.section import Section
+        >>> sections['section'] = section = Section(title="History")
+        >>> sections['section2'] = section2 = Section(title="Algebra")
+        >>> section.instructors.add(teacher)
+
+    Now we're teaching:
+
+        >>> teacher_view.isTeacher()
+        True
+        >>> teacher_view.isLearner()
+        False
+
+    We'll teach 2 courses this semester, and we'll need an easy way to get a
+    list of all the courses we're teaching.
+
+        >>> section2.instructors.add(teacher)
+        >>> teacher_view = CoursesViewlet(teacher, TestRequest())
+        >>> [section.title for section in teacher_view.instructorOf()]
+        ['History', 'Algebra']
+
+    Let's create a student
+
+        >>> persons['student'] = student = Person("Student")
+        >>> student_view = CoursesViewlet(student, TestRequest())
+
+        >>> student_view.isTeacher()
+        False
+        >>> student_view.isLearner()
+        False
+
+    Membership in a Section implies being a learner:
+
+        >>> section.members.add(student)
+        >>> student_view.isTeacher()
+        False
+        >>> student_view.isLearner()
+        True
+
+        >>> sections['section3'] = section3 = Section(title="English")
+        >>> sections['section4'] = section4 = Section(title="Gym")
+
+    Our student is taking several classes
+
+        >>> section3.members.add(student)
+        >>> student_view = CoursesViewlet(student, TestRequest())
+
+        >>> [section['section'].title for section in student_view.learnerOf()]
+        ['Algebra', 'English']
+
+    Students can also participate in sections as part of a group, say all 10th
+    grade students must take gym:
+
+        >>> from schooltool.group.group import Group
+        >>> tenth_grade = Group(title="Tenth Grade")
+        >>> tenth_grade.members.add(student)
+        >>> section4.members.add(tenth_grade)
+
+        >>> student_view = CoursesViewlet(student, TestRequest())
+        >>> [section['section'].title for section in student_view.learnerOf()]
+        ['Algebra', 'English', 'Gym']
+
+    One thing that might confuse is that learnerOf may be similar to but not
+    the same as view.context.groups
+
+        >>> [group.title for group in student_view.context.groups]
+        ['Algebra', 'English', 'Tenth Grade']
+
+    """
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,

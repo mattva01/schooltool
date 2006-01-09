@@ -548,6 +548,30 @@ def doctest_GroupCSVImportView():
 
     """
 
+def doctest_GroupsViewlet():
+    r"""Test for GroupsViewlet
+
+    Let's create a viewlet for a person's groups:
+
+        >>> from schooltool.group.browser.group import GroupsViewlet
+        >>> from schooltool.person.person import Person
+
+        >>> school = setup.setupSchoolToolSite()
+        >>> persons = school['persons']
+        >>> persons['student'] = student = Person("Student")
+
+    We want to display the generic groups a person is part of that aren't
+    sections so we have a filter in the view:
+
+        >>> from schooltool.group.group import Group
+        >>> tenth_grade = Group(title="Tenth Grade")
+        >>> tenth_grade.members.add(student)
+        >>> team = Group(title="Sports Team")
+        >>> team.members.add(student)
+        >>> student_view = GroupsViewlet(student, TestRequest())
+        >>> [group.title for group in student_view.memberOf()]
+        ['Tenth Grade', 'Sports Team']
+    """
 
 def test_suite():
     suite = unittest.TestSuite()
