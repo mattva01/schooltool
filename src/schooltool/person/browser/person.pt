@@ -41,72 +41,7 @@
            edit details
         </a>
       </div>
-
-      <tal:if tal:condition="view/isTeacher">
-        <tal:block tal:define="sections view/instructorOf">
-          <div class="info-block">
-            <h5 i18n:translate="">Sections Taught</h5>
-            <ul tal:condition="sections">
-              <tal:loop repeat="group sections">
-                <li>
-                  <a title=""
-                    tal:attributes="href group/@@absolute_url;
-                    title group/description|group/title"
-                    tal:content="group/label" i18n:translate=""></a>
-                </li>
-              </tal:loop>
-            </ul>
-          </div>
-        </tal:block>
-      </tal:if>
-
-      <tal:if tal:condition="view/isLearner">
-        <tal:block tal:define="sections view/learnerOf">
-          <div class="info-block">
-            <h5 i18n:translate="">Courses</h5>
-            <ul tal:condition="sections">
-              <tal:loop repeat="group sections">
-                <li>
-                  <a title=""
-                     tal:attributes="href group/section/@@absolute_url;
-                                     title group/section/description|group/section/title"
-                     tal:content="group/section/label"></a>
-                  <span class="hint" tal:condition="group/group">
-                    <span i18n:translate="">
-                      via group
-                    </span>
-                    <a href=""
-                       tal:attributes="href group/group/@@absolute_url"
-                       tal:content="group/group/title" />
-                  </span>
-                </li>
-              </tal:loop>
-            </ul>
-          </div>
-        </tal:block>
-      </tal:if>
-
-      <tal:block tal:define="groups view/memberOf">
-        <div class="info-block person-groups">
-          <h5 i18n:translate="">Groups</h5>
-          <ul tal:condition="groups">
-            <tal:loop repeat="group groups">
-              <li>
-                <a title=""
-                  tal:attributes="href group/@@absolute_url;
-                  title group/description|group/title"
-                  tal:content="group/title"></a>
-              </li>
-            </tal:loop>
-          </ul>
-          <a class="modify" href="" title="Manage this person's memberships"
-             tal:attributes="href string:${context/@@absolute_url}/@@groups.html"
-             i18n:attributes="title"
-             i18n:translate="">
-             edit groups
-          </a>
-        </div>
-      </tal:block>
+      <tal:block tal:replace="structure provider:schooltool.person.Info"/>
     </div>
 
   </metal:block>

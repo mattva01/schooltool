@@ -32,6 +32,7 @@ from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.browser.app import ContainerView, BaseAddView, BaseEditView
 from schooltool.person.interfaces import IPerson
 from schooltool.resource.interfaces import IResource
+from schooltool.course.interfaces import ISection
 
 from schooltool.group.interfaces import IGroupMember
 from schooltool.group.interfaces import IGroupContainer, IGroupContained
@@ -172,4 +173,11 @@ class GroupEditView(BaseEditView):
 
     __used_for__ = IGroupContained
 
+class GroupsViewlet(BrowserView):
+    """A viewlet showing the groups a person is in."""
 
+    def memberOf(self):
+        """Seperate out generic groups from sections."""
+
+        return [group for group in self.context.groups if not
+                ISection.providedBy(group)]

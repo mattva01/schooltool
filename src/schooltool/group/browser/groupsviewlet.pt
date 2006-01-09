@@ -1,0 +1,20 @@
+<div class="info-block person-groups"
+     tal:define="groups view/memberOf">
+  <h5 i18n:translate="">Groups</h5>
+  <ul tal:condition="groups">
+    <tal:loop repeat="group groups">
+      <li>
+        <a title=""
+          tal:attributes="href group/@@absolute_url;
+          title group/description|group/title"
+          tal:content="group/title"></a>
+      </li>
+    </tal:loop>
+  </ul>
+  <a class="modify" href="" title="Manage this person's memberships"
+     tal:attributes="href string:${context/@@absolute_url}/@@groups.html"
+     i18n:attributes="title"
+     i18n:translate="">
+     edit groups
+  </a>
+</div>

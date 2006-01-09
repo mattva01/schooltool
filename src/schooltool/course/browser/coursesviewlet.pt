@@ -1,0 +1,37 @@
+<div class="info-block" tal:define="sections view/instructorOf"
+     tal:condition="view/isTeacher">
+  <h5 i18n:translate="">Sections Taught</h5>
+  <ul tal:condition="sections">
+    <tal:loop repeat="group sections">
+      <li>
+        <a title=""
+          tal:attributes="href group/@@absolute_url;
+          title group/description|group/title"
+          tal:content="group/label" i18n:translate=""></a>
+      </li>
+    </tal:loop>
+  </ul>
+</div>
+
+<div class="info-block" tal:define="sections view/learnerOf"
+                        tal:condition="view/isLearner">
+  <h5 i18n:translate="">Courses</h5>
+    <ul tal:condition="sections">
+      <tal:loop repeat="group sections">
+        <li>
+          <a title=""
+             tal:attributes="href group/section/@@absolute_url;
+                             title group/section/description|group/section/title"
+             tal:content="group/section/label"></a>
+          <span class="hint" tal:condition="group/group">
+            <span i18n:translate="">
+              via group
+            </span>
+            <a href=""
+               tal:attributes="href group/group/@@absolute_url"
+               tal:content="group/group/title" />
+          </span>
+        </li>
+      </tal:loop>
+    </ul>
+</div>

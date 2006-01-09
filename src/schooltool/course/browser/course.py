@@ -27,7 +27,10 @@ from zope.app.publisher.browser import BrowserView
 from schooltool.app.browser.app import ContainerView
 
 from schooltool import SchoolToolMessage as _
-from schooltool.course.interfaces import ICourse, ICourseContainer
+from schooltool.course.interfaces import ICourse, ICourseContainer, ISection
+from schooltool.app.app import getSchoolToolApplication
+from schooltool.app.relationships import URIInstruction, URISection
+from schooltool.relationship import getRelatedObjects
 
 class CourseContainerView(ContainerView):
     """A Course Container view."""
@@ -57,3 +60,45 @@ class CourseAddView(AddView):
         else:
             return AddView.update(self)
 
+class CoursesViewlet(BrowserView):
+    """A viewlet showing the courses a person is in."""
+
+    def isTeacher(self):
+
+        if len(getRelatedObjects(self.context, URISection,
+                                 rel_type=URIInstruction)) > 0:
+            return True
+        else:
+            return False
+
+    def isLearner(self):
+        for obj in self.context.groups:
+            if ISection.providedBy(obj):
+                return True
+
+        return False
+
+    def instructorOf(self):
+        return getRelatedObjects(self.context, URISection,
+                                 rel_type=URIInstruction)
+
+    def memberOf(self):
+        """Seperate out generic groups from sections."""
+
+        return [group for group in self.context.groups if not
+                ISection.providedBy(group)]
+
+    def learnerOf(self):
+        results = []
+        sections = getSchoolToolApplication()['sections'].values()
+        for section in sections:
+            if self.context in section.members:
+                results.append({'section': section, 'group': None})
+            # XXX isTransitiveMember works in the test fixture but not in the
+            # application, working around it for the time being.
+            for group in self.memberOf():
+                if group in section.members:
+                    results.append({'section': section,
+                                    'group': group})
+
+        return results

@@ -12,6 +12,16 @@
       permission="zope.Public"
       />
 
+  <!-- Viewlet Mangers -->
+
+  <viewletManager
+      name="schooltool.person.Info"
+      permission="zope.Public"
+      provides="schooltool.person.browser.person.IPersonInfoManager"
+      template="infoblock.pt"
+      class="schooltool.app.browser.skin.OrderedViewletManager"
+      />
+
   <configure package="schooltool.app.browser">
 
     <page

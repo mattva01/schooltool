@@ -63,6 +63,17 @@
 
   </configure>
 
+  <viewlet
+      name="groupsinfo"
+      for="*"
+      manager="schooltool.person.browser.person.IPersonInfoManager"
+      template="groupsviewlet.pt"
+      class="schooltool.group.browser.group.GroupsViewlet"
+      permission="zope.View"
+      title="Groups"
+      order="30"
+      />
+
   <page
       name="groups.html"
       for="..interfaces.IGroupMember"

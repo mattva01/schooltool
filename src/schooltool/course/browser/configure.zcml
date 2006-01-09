@@ -45,6 +45,17 @@
 
   </configure>
 
+  <viewlet
+      name="coursesinfo"
+      for="*"
+      manager="schooltool.person.browser.person.IPersonInfoManager"
+      template="coursesviewlet.pt"
+      class="schooltool.course.browser.course.CoursesViewlet"
+      permission="zope.View"
+      title="Courses"
+      order="10"
+      />
+
   <page
       name="index.html"
       for="..interfaces.ICourse"

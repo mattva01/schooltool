@@ -32,6 +32,7 @@ from zope.app.form.interfaces import IInputWidget
 from zope.app.form.interfaces import WidgetsError
 from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.app.publisher.browser import BrowserView
+from zope.viewlet.interfaces import IViewletManager
 
 from schooltool import SchoolToolMessage as _
 from schooltool.app.app import getSchoolToolApplication
@@ -363,3 +364,6 @@ class PersonEditView(BrowserView):
         if 'CANCEL' in self.request:
             url = zapi.absoluteURL(self.context, self.request)
             self.request.response.redirect(url)
+
+class IPersonInfoManager(IViewletManager):
+    """Provides a viewlet hook for the information on a Person's page."""
