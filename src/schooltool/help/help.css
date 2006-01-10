@@ -5,11 +5,22 @@ BODY {
     min-width: 300px;
 }
 
-#header .title {
+table.header {
+    width: 100%;
+    background: #990000 url(++resource++toolbar-background.png) top left repeat-x;
+}
+
+td.title {
+    color: white;
+    font-size: 85%;
     font-weight: bold;
-    text-align: left;
+}
+
+td.close {
+    text-align: right;
+    padding-right: 4px;
 }
 
 div.content {
-    padding: 1em;
+    padding: 0.7em;
 }

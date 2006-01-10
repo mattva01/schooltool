@@ -1,18 +1,7 @@
 |
 <a id="tools-help" href="#"
-   tal:define="url string:'${request/URL}/++help++/@@contexthelp.html';
-               name string:'${view/title}';
-               settings string:'height=400
-                                ,width=600
-                                ,resizable=1
-                                ,scrollbars=yes
-                                ,location=no
-                                ,status=no
-                                ,toolbar=no
-                                ,menubar=no'"
-   tal:attributes="href python:'javascript:window.open('
-                                + url + ','
-                                + name + ','
-                                + settings +')'"
+   tal:define="url string:'${request/URL}/++help++/@@contexthelp.html'"
+   tal:attributes="href python:'javascript:popUp('+ url + ')';
+                   title view/title"
    i18n:translate=""
    >Help</a>

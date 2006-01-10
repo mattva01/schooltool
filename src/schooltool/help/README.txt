@@ -60,7 +60,8 @@ Now the helplink should produce some output:
   >>> print helplink.render()
   |
   <a id="tools-help"
-     href="javascript:window.open('http://127.0.0.1/++help++/@@contexthelp.html','Context Help','...')">Help</a>
+     href="javascript:popUp('http://127.0.0.1/++help++/@@contexthelp.html')"
+     title="Context Help">Help</a>
   <BLANKLINE>
 
 Once the link is provided, it needs to end somewhere. This package also
