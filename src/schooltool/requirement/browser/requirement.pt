@@ -1,0 +1,60 @@
+<tal:define define="dummy view/update"/>
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title"
+         tal:content="string:${context/title} Contents"
+         i18n:translate="">
+    Contents
+  </title>
+</head>
+<body>
+
+<h1 metal:fill-slot="content-header"
+    tal:content="string:${context/title} Sub Requirements"
+    i18n:translate="">Contents</h1>
+
+<metal:block metal:fill-slot="body"
+             tal:define="batch view/batch">
+  <tal:if tal:condition="batch">
+    <tal:if condition="request/SEARCH|nothing">
+      <tal:block define="extra_url python:'&SEARCH=%s' % request.get('SEARCH')">
+        <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+      </tal:block>
+    </tal:if>
+    <tal:if condition="not:request/SEARCH|nothing">
+      <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+    </tal:if>
+  </tal:if>
+  <form method="post" class="batch-search">
+    <input id="batch-search-box" type="text" name="SEARCH"
+      tal:attributes="value request/SEARCH|nothing"/>
+    <input type="submit" name="SEARCH_BUTTON" value="Find Now"
+      i18n:attributes="value"/>
+    <input type="submit" name="CLEAR_SEARCH" value="Clear"
+      i18n:attributes="value"/>
+    <input type="checkbox" name="RECURSIVE" value="0"
+      tal:attributes="value request/RECURSIVE|nothing"/>recursive?
+  </form>
+  <tal:if condition="batch" define="depth python:int(request.get('DEPTH',3))">
+    <div class="count">
+      <span i18n:translate="">Showing</span>
+      <span tal:content="python:len(batch)"/>
+      <span i18n:translate="">of</span>
+      <span tal:content="python:len(batch.list)"/>
+      <span i18n:translate="">items</span>
+    </div>
+    <form method="post">
+      <b>Depth:</b>
+      <input type="submit" name="DEPTH"
+          tal:condition="python:depth > 1"
+          tal:attributes="value python:depth-1" />
+      <b tal:content="python:depth">3</b>
+      <input type="submit" name="DEPTH"
+          tal:attributes="value python:depth+1" />
+    </form>
+    <tal:block replace="structure view/subthread" />
+  </tal:if>
+
+</metal:block>
+</body>
+</html>

@@ -29,6 +29,8 @@ import zope.app.container.btree
 import zope.app.container.contained
 import zope.app.event.objectevent
 from zope.app import annotation
+from zope.app.location import location
+from zope.app.publisher.browser import applySkin
 
 from schooltool.requirement import interfaces
 
@@ -165,3 +167,16 @@ def getRequirement(context):
         return requirement
 # Convention to make adapter introspectable
 getRequirement.factory = Requirement
+
+class requirementNamespace(object):
+    """Used to traverse to the requirements of an object"""
+    def __init__(self, ob, request=None):
+        if request:
+            from schooltool.app.browser.skin import ISchoolToolSkin
+            applySkin(request, ISchoolToolSkin)
+        self.context = ob
+
+    def traverse(self, name, ignore):
+        reqs = interfaces.IRequirement(self.context)
+        reqs = location.LocationProxy(reqs, self.context, u'++requirement++')
+        return reqs

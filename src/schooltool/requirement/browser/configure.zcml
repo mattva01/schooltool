@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope">
+
+  <configure
+      package="schooltool.app.browser"
+      i18n_domain="schooltool">
+
+    <addform
+        label="Add a Requirement"
+        name="addRequirement.html"
+        schema="schooltool.requirement.interfaces.IRequirement"
+        fields="title"
+        arguments="title"
+        set_after_add="title"
+        content_factory="schooltool.requirement.requirement.Requirement"
+        permission="schooltool.create"
+        template="templates/simple_add.pt"
+        class="schooltool.requirement.browser.requirement.RequirementAddView">
+    </addform>
+
+    <editform
+        label="Edit Requirement"
+        name="edit.html"
+        schema="schooltool.requirement.interfaces.IRequirement"
+        for="schooltool.requirement.interfaces.IRequirement"
+        fields="title"
+        template="templates/simple_edit.pt"
+        permission="schooltool.edit"
+        class="schooltool.requirement.browser.requirement.RequirementEditView"
+        menu="schooltool_actions"
+        title="Edit Requirement"
+        />
+  </configure>
+
+  <page
+      name="index.html"
+      for="schooltool.requirement.interfaces.IRequirement"
+      class="schooltool.requirement.browser.requirement.RequirementView"
+      template="requirement.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <containerViews
+      for="..interfaces.IRequirement"
+      contents="zope.ManageContent"
+      add="zope.View"
+      />
+
+  <menuItem
+      menu="schooltool_actions"
+      title="New Requirement"
+      for="schooltool.requirement.interfaces.IRequirement"
+      action="+/addRequirement.html"
+      />
+
+</configure>

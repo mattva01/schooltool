@@ -16,11 +16,32 @@
     trusted="true"
     />
 
+  <view
+      name="requirement" type="*"
+      provides="zope.app.traversing.interfaces.ITraversable"
+      for="schooltool.requirement.interfaces.IHaveRequirement"
+      factory=".requirement.requirementNamespace"
+      />
+  <adapter
+      name="requirement"
+      provides="zope.app.traversing.interfaces.ITraversable"
+      for="schooltool.requirement.interfaces.IHaveRequirement"
+      factory=".requirement.requirementNamespace"
+      />
+
   <content class=".requirement.Requirement">
+    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"
-      interface=".interfaces.IRequirement" />
+      attributes="keys values items __iter__ __len__ addBase removeBase title" />
     <require permission="schooltool.edit"
       set_schema=".interfaces.IRequirement" />
+    <require permission="schooltool.create"
+      interface="zope.app.container.interfaces.IWriteContainer" />
+  </content>
+
+  <content class="schooltool.app.app.SchoolToolApplication">
+    <implements 
+        interface="schooltool.requirement.interfaces.IHaveRequirement" />
   </content>
 
   <content class="schooltool.course.course.Course">
@@ -30,9 +51,11 @@
   <content class="schooltool.course.section.Section">
     <implements interface=".interfaces.IHaveRequirement" />
   </content>
-  
+
   <content class="schooltool.person.person.Person">
     <implements interface=".interfaces.IHaveEvaluations" />
   </content>
+
+  <include package=".browser" />
 
 </configure>
