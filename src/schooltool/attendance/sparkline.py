@@ -64,6 +64,7 @@ class AttendanceSparkline(object):
         if not term:
             return []
         last_days = []
+        date -= datetime.date.resolution
         while date >= term.first and len(last_days) < count:
             if term.isSchoolday(date):
                 last_days.append(date)

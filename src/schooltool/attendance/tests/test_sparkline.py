@@ -215,7 +215,7 @@ def doctest_AttendanceSparkline():
 
         >>> section = SectionStub()
         >>> person = PersonStub(section)
-        >>> date = datetime.date(2005, 10, 20)
+        >>> date = datetime.date(2005, 10, 25)
         >>> from schooltool.attendance.sparkline import AttendanceSparkline
         >>> sparkline = AttendanceSparkline(person, section, date)
 

@@ -211,22 +211,19 @@ Now Joniukas is tardy
 Sparkline
 ---------
 
-Each person has attendance sparkline drawn along with status symbol:
+Look at the attendance event for the next section meeting. Each person has
+attendance sparkline drawn along with the status symbol:
 
+    >>> largo.open('http://localhost/persons/largo/calendar/2005-12-14')
+    >>> largo.getLink('Attendance').click()
     >>> print '\n'.join(analyze.queryHTML('//img[@width="30"]', largo.contents))
-    <img alt="attendance graph for the last 10 days" width="30" height="12" src="http://localhost/sections/dancing1a/@@sparkline.png?person=gretute&amp;date=2005-12-12">
-    <img alt="attendance graph for the last 10 days" width="30" height="12" src="http://localhost/sections/dancing1a/@@sparkline.png?person=joniukas&amp;date=2005-12-12">
+    <img alt="attendance graph for the last 10 days" width="30" height="12" src="http://localhost/sections/dancing1a/@@sparkline.png?person=gretute&amp;date=2005-12-14">
+    <img alt="attendance graph for the last 10 days" width="30" height="12" src="http://localhost/sections/dancing1a/@@sparkline.png?person=joniukas&amp;date=2005-12-14">
 
 "Look" at the attendance sparkline for joniukas
 
-    >>> largo.open('http://localhost/sections/dancing1a/@@sparkline.png?person=joniukas&amp;date=2005-12-12')
+    >>> largo.open('http://localhost/sections/dancing1a/@@sparkline.png?person=joniukas&amp;date=2005-12-14')
     >>> image = largo.contents
-    >>> print image.encode('base64')
-    iVBORw0KGgoAAAANSUhEUgAAAB4AAAAMCAIAAAD6TJplAAAAjElEQVR4nGL8//8/A20AAAAA//9i
-    opG5DAwMAAAAAP//oqHRAAAAAP//oqHRAAAAAP//oqHRAAAAAP//oqHRAAAAAP//giJ4OqGc8f8A
-    w/8DDP///wcAAAD//2KhoqFozgUAAAD//6JhgAAAAAD//6Kh0QAAAAD//6Kh0QAAAAD//6Kh0QAA
-    AAD//wMAJmo/WuPnyHEAAAAASUVORK5CYII=
-    <BLANKLINE>
 
 It looks like this
 
@@ -242,10 +239,10 @@ It looks like this
     ------------------------------
     ------------------------------
     ------------------------------
-    ##-##-##-##-##-##-##-##-##-YY-
-    ---------------------------YY-
-    ---------------------------YY-
-    ---------------------------YY-
-    ---------------------------YY-
-    ---------------------------YY-
+    ##-##-##-##-##-##-##-##-YY-##-
+    ------------------------YY----
+    ------------------------YY----
+    ------------------------YY----
+    ------------------------YY----
+    ------------------------YY----
 
