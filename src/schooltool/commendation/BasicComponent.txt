@@ -71,12 +71,12 @@ fields ``title``, ``description``, ``scope``, ``date``, ``grantor``. All
 public interfaces are, by coding convention, placed into a file called
 ``interfaces.py``.
 
-Since Python does not support interfaces directly in the language, the class
-statement is used to declare interfaces as well, except that an
-interface must always inherit from ``zope.interface.Interface`` [#iface]_
-somewhere in its inheritance tree. To specify fields, we use the
-``zope.schema`` package [#schema]_. Have a look at the ``ICommendation``
-interface inside the ``interfaces.py`` file for the complete interface.
+Have a look at the ``ICommendation`` interface inside the ``interfaces.py``
+file for the complete interface. Since Python does not support interfaces
+directly in the language, the class statement is used to declare interfaces as
+well, except that an interface must always inherit from
+``zope.interface.Interface`` [#iface]_ somewhere in its inheritance tree. To
+specify fields, we use the ``zope.schema`` package [#schema]_.
 
 The interfaces also serve as API documentation, containing a lot of
 information describing the behavior of the interface's methods and fields. As
@@ -133,7 +133,7 @@ Implementation of the ``Commendation`` Component
 
 Now that the interface has been designed, we can write an implementation for
 it. My imlpementation can be found in the ``Commendation`` class of the
-``commendation.pt`` file.
+``commendation.py`` file.
 
 Since all fields are required, they must be set during initialization. The
 date and grantor are not passed to the constructor, since they are

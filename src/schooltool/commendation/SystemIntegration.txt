@@ -70,16 +70,15 @@ Create an Add and Commendations View
 ------------------------------------
 
 Now that we have integrated the commendations with the system, we need to
-develop some views. The first screen will be the addform. Since commendations
-are tucked away in annotations, we cannot use the standard Zope 3 form
-machinery for the task without some modifications. In fact, we only need to
-change the methods that convert the input data to the object and handle the
-forwarding to the next screen. Additionally we have to set a couple of
-attributes manually, which usually would be set by the ``<browser:addform>``
-directive. You can see the add form view class called ``CommendationAddView``
-in the newly created module ``browser.py``.  XXX - generally speaking I think 
-you should refer people to the relevant files at the beginning of the paragraph
-not at the end.
+develop some views. All of the browser-related code will be placed in a newly
+created module called ``browser.py``. The first screen will be the addform,
+which is implemented in the view class called ``CommendationAddView``. Since
+commendations are tucked away in annotations, we cannot use the standard Zope
+3 form machinery for the task without some modifications. In fact, we only
+need to change the methods that convert the input data to the object and
+handle the forwarding to the next screen. Additionally we have to set a couple
+of attributes manually, which usually would be set by the
+``<browser:addform>`` directive.
 
 *Note*: By convention browser-related code is placed in a module called
  ``browser``. If there is a lot of browser code, a package of the same name is
