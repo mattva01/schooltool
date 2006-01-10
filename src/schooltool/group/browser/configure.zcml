@@ -70,7 +70,6 @@
       template="groupsviewlet.pt"
       class="schooltool.group.browser.group.GroupsViewlet"
       permission="zope.View"
-      title="Groups"
       order="30"
       />
 

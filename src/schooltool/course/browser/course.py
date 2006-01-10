@@ -31,6 +31,7 @@ from schooltool.course.interfaces import ICourse, ICourseContainer, ISection
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.relationships import URIInstruction, URISection
 from schooltool.relationship import getRelatedObjects
+from schooltool.person.interfaces import IPerson
 
 class CourseContainerView(ContainerView):
     """A Course Container view."""
@@ -64,7 +65,7 @@ class CoursesViewlet(BrowserView):
     """A viewlet showing the courses a person is in."""
 
     def isTeacher(self):
-
+        """Find out if the person is an instructor for any sections."""
         if len(getRelatedObjects(self.context, URISection,
                                  rel_type=URIInstruction)) > 0:
             return True
@@ -72,6 +73,7 @@ class CoursesViewlet(BrowserView):
             return False
 
     def isLearner(self):
+        """Find out if the person is a member of any sections."""
         for obj in self.context.groups:
             if ISection.providedBy(obj):
                 return True
@@ -79,6 +81,7 @@ class CoursesViewlet(BrowserView):
         return False
 
     def instructorOf(self):
+        """Get the sections the person instructs."""
         return getRelatedObjects(self.context, URISection,
                                  rel_type=URIInstruction)
 
@@ -89,6 +92,7 @@ class CoursesViewlet(BrowserView):
                 ISection.providedBy(group)]
 
     def learnerOf(self):
+        """Get the sections the person is a member of."""
         results = []
         sections = getSchoolToolApplication()['sections'].values()
         for section in sections:

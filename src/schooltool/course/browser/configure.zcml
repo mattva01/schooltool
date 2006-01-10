@@ -52,7 +52,6 @@
       template="coursesviewlet.pt"
       class="schooltool.course.browser.course.CoursesViewlet"
       permission="zope.View"
-      title="Courses"
       order="10"
       />
 
