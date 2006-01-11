@@ -65,9 +65,45 @@ System requirements
   you want to generate PDF calendars.  To enable PDF support you will
   need to specify the path to fonts in the configuration file.
 
+Building and installing SchoolTool from a source tarball
+--------------------------------------------------------
 
-Building SchoolTool
--------------------
+From the un-packed tarball you can use the familiar ./configure; make;
+make install dance. So, going through it:
+
+$ ./configure --prefix=${libs}
+
+where ${libs} is the location where you want to install the libraries
+(it can be anywhere).
+
+$ make
+$ make install
+
+Change directory to the installed libraries:
+
+$ cd ${libs}
+
+Now from the installed libraries, we can test the installation by running:
+
+$ ./bin/schooltooltest -ufv1
+
+Then create a schooltool instance (${instance} is the directory to create the
+instance in):
+
+$ ./bin/mkschooltoolinst -d${instance}
+
+Change to the instance and test it:
+
+$ cd ${instance}
+$ ./bin/test -ufv --testschooltool
+
+Then you can start the server:
+
+$ ./bin/schooltool-server
+
+
+Building SchoolTool from a subversion checkout
+----------------------------------------------
 
 Run 'make build update-translations' to build the necessary extension modules
 and translations.  You will need to have gettext installed to compile the
@@ -75,39 +111,6 @@ translations.
 
 It is a good idea to run 'make test' and 'make ftest' to check if all the
 essential unit and functional tests pass.
-
-
-Installing and Configuring with Distutils (optional)
-----------------------------------------------------
-
-WARNING: distutils does not yet take care of removing old packages or ensuring
-that dependencies are correct. If you don't know how to resolve these issues
-manually, you should probably use one of the packages or run SchoolTool from
-an unpacked tarball/subversion checkout.
-
-It is possible to install SchoolTool using python distutils.  To do this, you
-have to use one of the distributed tarballs/zipfiles, which you unpack in a
-directory with the tools appropriate to your OS.
-
-First run the tests from the tarball to make sure all dependencies are
-installed and everything is ok (you may need to add the location of the
-Zope modules to the python path):
-
-test.py -uf
-
-Then install with:
-
-python setup.py install
-
-NOTE: You will also have to install SchoolBell from a SchoolBell tarball.
-
-Finally, to setup a SchoolTool instance, copy the installed script into a
-separate directory and create a config file with the name of the script and an
-extension .conf.  A good template can be found in the top level of the tarball
-(.conf.in). Running this script will then run an instance in that directory.
-
-Those interested in installing into a non-standard location should investigate
-the --paths and --default-config option for the install distutils commands.
 
 
 Running SchoolTool
@@ -137,8 +140,8 @@ The default web application port is 7080.  Once the server is running, you can
 connect to it with a web browser.
 
 
-Project structure
------------------
+Project structure (subversion checkout only)
+--------------------------------------------
 
   GPL                   the GNU General Public License, version 2
   README                this file
@@ -248,7 +251,7 @@ There are some more helpful make targets:
 Translation
 -----------
 
-Translation files live in src/schooltool/translation.  There is a directory
+Translation files live in src/schooltool/locales.  There is a directory
 for each language that contains a subdirectory called LC_MESSAGES that
 contains two files: schooltool.po and schooltool.mo.
 
