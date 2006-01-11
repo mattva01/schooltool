@@ -834,6 +834,10 @@ A.button-ok {
 	background: #eae8e3;
 }
 
+#calendar-view-day .active {
+	background: #a8a5a0;
+}
+
 #calendar-view-day .hour .title {
 	position: absolute;
 	top: 0;

@@ -3540,22 +3540,28 @@ class TestDailyCalendarView(unittest.TestCase):
         self.assertEquals(result,
                           [{'duration': 60, 'time': '10:00',
                             'title': '10:00', 'cols': (None,),
-                            'top': 0.0, 'height': 4.0},
+                            'top': 0.0, 'height': 4.0,
+                            'active': False},
                            {'duration': 60, 'time': '11:00',
                             'title': '11:00', 'cols': (None,),
-                            'top': 4.0, 'height': 4.0},
+                            'top': 4.0, 'height': 4.0,
+                            'active': False},
                            {'duration': 60, 'time': '12:00',
                             'title': '12:00', 'cols': (None,),
-                            'top': 8.0, 'height': 4.0},
+                            'top': 8.0, 'height': 4.0,
+                            'active': False},
                            {'duration': 60, 'time': '13:00',
                             'title': '13:00', 'cols': (None,),
-                            'top': 12.0, 'height': 4.0},
+                            'top': 12.0, 'height': 4.0,
+                            'active': False},
                            {'duration': 60, 'time': '14:00',
                             'title': '14:00', 'cols': (None,),
-                            'top': 16.0, 'height': 4.0},
+                            'top': 16.0, 'height': 4.0,
+                            'active': False},
                            {'duration': 60, 'time': '15:00',
                             'title': '15:00', 'cols': (None,),
-                            'top': 20.0, 'height': 4.0},
+                            'top': 20.0, 'height': 4.0,
+                            'active': False},
                             ])
 
         ev1 = createEvent('2004-08-12 12:00', '2h', "Meeting")
@@ -3569,6 +3575,7 @@ class TestDailyCalendarView(unittest.TestCase):
                 del d['duration']
                 del d['top']
                 del d['height']
+                del d['active']
             return l
 
         result = clearMisc(result)
@@ -3653,6 +3660,33 @@ class TestDailyCalendarView(unittest.TestCase):
         result = list(view.getHours())
 
         self.assertEquals(result, no_allday_events)
+
+    def test_getHoursActivePeriod(self):
+        from schooltool.app.browser.cal import DailyCalendarView
+
+        # Some setup.
+        person = Person(title="Da Boss")
+        cal = ISchoolToolCalendar(person)
+        view = DailyCalendarView(cal, TestRequest())
+        view.cursor = date(2004, 1, 1)
+        view._getCurrentTime = lambda: utc.localize(datetime(2004, 1, 1, 13, 0))
+        ev1 = createEvent('2004-01-01 00:01', '5min', "Start of the day")
+        ev2 = createEvent('2004-01-01 23:30', '5min', "End of the day")
+
+        cal.addEvent(ev1)
+        cal.addEvent(ev2)
+
+        result = list(view.getHours())
+        self.assert_(len(result) == 24)
+        self.assertEquals([hour for hour in result
+                           if hour['active'] is True],
+                          [{'title': '13:00',
+                            'top': 52.0,
+                            'cols': (None, None),
+                            'height': 4.0,
+                            'duration': 60,
+                            'time': '13:00',
+                            'active': True}])
 
     def test_getHours_short_periods(self):
         from schooltool.app.browser.cal import DailyCalendarView

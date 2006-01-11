@@ -1134,6 +1134,10 @@ class DailyCalendarView(CalendarViewBase):
                                     name='daily_calendar_rows')
         return view.calendarRows(self.cursor, self.starthour, self.endhour)
 
+    def _getCurrentTime(self):
+        """Returns current time localized to UTC timezone."""
+        return utc.localize(datetime.utcnow())
+
     def getHours(self):
         """Return an iterator over the rows of the table.
 
@@ -1190,9 +1194,12 @@ class DailyCalendarView(CalendarViewBase):
                 # is too little space as that looks rather ugly.
                 title = ''
 
+            active = start <= self._getCurrentTime() < end
+
             yield {'title': title,
                    'cols': tuple(cols),
                    'time': start.strftime("%H:%M"),
+                   'active': active,
                    'top': top,
                    'height': height,
                    # We can trust no period will be longer than a day
