@@ -29,7 +29,6 @@ import zope.app.container.btree
 import zope.app.container.contained
 import zope.app.event.objectevent
 from zope.app import annotation
-from zope.app.location import location
 from zope.app.publisher.browser import applySkin
 
 from schooltool.requirement import interfaces
@@ -57,7 +56,8 @@ class InheritedRequirement(zope.app.container.contained.Contained):
         return getattr(self.original, name)
 
 
-class Requirement(zope.app.container.btree.BTreeContainer):
+class Requirement(zope.app.container.btree.BTreeContainer,
+                  zope.app.container.contained.Contained):
     """ """
     zope.interface.implements(interfaces.IRequirement)
 
@@ -164,6 +164,7 @@ def getRequirement(context):
         ## TODO: support generic objects without titles
         requirement = Requirement(getattr(context, "title", None))
         annotations[REQUIREMENT_KEY] = requirement
+        zope.app.container.contained.contained(requirement, context, u'++requirement++')
         return requirement
 # Convention to make adapter introspectable
 getRequirement.factory = Requirement
@@ -171,12 +172,8 @@ getRequirement.factory = Requirement
 class requirementNamespace(object):
     """Used to traverse to the requirements of an object"""
     def __init__(self, ob, request=None):
-        if request:
-            from schooltool.app.browser.skin import ISchoolToolSkin
-            applySkin(request, ISchoolToolSkin)
         self.context = ob
 
     def traverse(self, name, ignore):
         reqs = interfaces.IRequirement(self.context)
-        reqs = location.LocationProxy(reqs, self.context, u'++requirement++')
         return reqs

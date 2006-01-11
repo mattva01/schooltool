@@ -32,7 +32,8 @@
   <content class=".requirement.Requirement">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"
-      attributes="keys values items __iter__ __len__ addBase removeBase title" />
+      attributes="keys values items __iter__ __len__ addBase removeBase title"
+      set_attributes="__parent__" />
     <require permission="schooltool.edit"
       set_schema=".interfaces.IRequirement" />
     <require permission="schooltool.create"

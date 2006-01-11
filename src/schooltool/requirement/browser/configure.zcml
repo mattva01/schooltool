@@ -43,6 +43,13 @@
       title="View"
       />
 
+  <page
+      name="treenode"
+      for="schooltool.requirement.interfaces.IRequirement"
+      template="treenode.pt"
+      permission="zope.View"
+      />
+
   <containerViews
       for="..interfaces.IRequirement"
       contents="zope.ManageContent"

@@ -28,7 +28,8 @@ import zope.app.container.constraints
 import zope.app.container.interfaces
 
 
-class IRequirement(zope.app.container.interfaces.IContainer):
+class IRequirement(zope.app.container.interfaces.IContainer,
+                   zope.app.container.interfaces.IContained):
     '''Something a student can do.'''
     #zope.app.container.constraints.contains(IRequirement)
     #zope.app.container.constraints.containers('.IRequirement')

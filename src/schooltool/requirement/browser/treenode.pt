@@ -1,0 +1,3 @@
+<a href=""
+   tal:attributes="href context/@@absolute_url"
+        tal:content="context/title">Requirement Title</a>

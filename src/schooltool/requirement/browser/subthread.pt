@@ -1,9 +1,8 @@
 <tal:define define="dummy view/update"/>
 <ul>
   <li tal:repeat="item view/listContentInfo">
-    <a href=""
-        tal:attributes="href item/child/@@absolute_url"
-        tal:content="item/child/title">Requirement Title</a>
+    <div tal:replace="structure item/child/@@treenode"
+         tal:on-error="nothing"/>
     <div tal:replace="structure item/thread"/>
   </li>
 </ul>
