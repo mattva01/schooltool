@@ -128,7 +128,7 @@ signtar: dist
 	mv dist/md5sum.asc dist/md5sum
 
 .PHONY: extract-translations
-extract-translations:
+extract-translations: build
 	PYTHONPATH=$(PYTHONPATH) $(PYTHON) i18nextract.py
 
 .PHONY: update-translations
