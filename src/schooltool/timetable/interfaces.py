@@ -86,9 +86,7 @@ class IDateRange(Interface):
 
 
 class ITerm(IDateRange, IContained):
-    """A calendar which can tell whether a day is a school day or not
-    in a certain school term.
-    """
+    """A term is a set of school days inside a given date range."""
 
     title = TextLine(title=_("Title"))
 
@@ -100,6 +98,10 @@ class ITerm(IDateRange, IContained):
 
 
 class ITermWrite(Interface):
+    """A term is a set of school days inside a given date range.
+
+    This interface defines an term that can be modified.
+    """
 
     def add(day):
         """Mark the day as a schoolday.
@@ -681,6 +683,7 @@ class ITimetableDict(IContainer):
     "default".
     """
 
+
 class IHaveTimetables(IAnnotatable):
     """A marker interface for content objects to declare themselves as having
        timetables."""
@@ -813,6 +816,7 @@ class ITermContainer(IContainer, ILocation):
     """
 
     contains(ITerm)
+
 
 class ITermContained(ITerm, IContained):
     """Term contained in an ITermContainer."""
