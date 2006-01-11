@@ -10,6 +10,16 @@ Mailing list: http://lists.schooltool.org/mailman/listinfo/schooltool
 Bug tracker: http://issues.schooltool.org/
 
 
+Default Login and Password
+--------------------------
+
+Username: manager
+Password: schooltool
+
+You should change the password after your first login by clicking on 'SchoolTool
+Manager' in the top bar and then 'Edit Info' in the left sidebar.
+
+
 Overview
 --------
 
@@ -40,14 +50,15 @@ Javascript will be usable, although perhaps not very nice or convenient.
 System requirements
 -------------------
 
-- Python 2.3 or 2.4 (http://www.python.org/)
-  (Debian users will need either python2.3 and python2.3-xml, or
-  python2.4 and python2.4-xml packages)
+- Python 2.4 (http://www.python.org/)
+  (Debian users will need either python2.4 and python2.4-xml packages)
 
-- Zope 3.1 (http://www.zope.org/Products/Zope3)
+- Zope 3.2 (http://www.zope.org/Products/Zope3)
 
 - libxml2 Python bindings (http://xmlsoft.org/).  Windows users can find
   binaries here:  http://users.skynet.be/sbi/libxml-python/
+
+- the Python Imaging Library (PIL) (http://www.pythonware.com/products/pil/)
 
 - (optional) the ReportLab Toolkit (http://www.reportlab.org), and
   Arial and Times New Roman TrueType fonts.  ReportLab is only needed if
