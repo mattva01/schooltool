@@ -62,7 +62,7 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
             </period>
           </day>
           <day id="Day 2">
-            <period id="C">
+            <period id="C" homeroom="">
             </period>
             <period id="D">
             </period>
@@ -87,7 +87,7 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
             </period>
           </day>
           <day id="Day 2">
-            <period id="C">
+            <period id="C" homeroom="">
               <activity title="CompSci">
                 <resource xlink:type="simple" xlink:href="http://127.0.0.1/resources/lab1"
                           xlink:title="Lab1"/>
@@ -131,8 +131,6 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         ztapi.provideAdapter(IAttributeAnnotatable, ITimetables,
                              TimetablesAdapter)
 
-
-
     def createTerm(self):
         from schooltool.timetable.term import Term
         return Term("2003 fall",
@@ -144,7 +142,7 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         from schooltool.timetable.schema import TimetableSchema
         tt = TimetableSchema(['Day 1', 'Day 2'])
         tt['Day 1'] = TimetableSchemaDay(['A', 'B'])
-        tt['Day 2'] = TimetableSchemaDay(['C', 'D'])
+        tt['Day 2'] = TimetableSchemaDay(['C', 'D'], 'C')
         return tt
 
     def createEmpty(self):

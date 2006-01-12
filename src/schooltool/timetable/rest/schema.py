@@ -191,6 +191,12 @@ class TimetableSchemaFileFactory(object):
                    <zeroOrMore>
                      <element name="period">
                        <ref name="idattr"/>
+                       <optional>
+                         <attribute name="homeroom">
+                           <!-- presence of this attribute indicates that this
+                                period is the homeroom period -->
+                         </attribute>
+                       </optional>
                      </element>
                    </zeroOrMore>
                  </element>
@@ -211,7 +217,17 @@ class TimetableSchemaFileFactory(object):
             if len(sets.Set(period_ids)) != len(period_ids):
                 raise RestError("Duplicate periods in schema")
 
-            timetable[day_id] = TimetableSchemaDay(period_ids)
+            homeroom_periods = [period['id']
+                            for period in day.query('tt:period[@homeroom]')]
+            if len(homeroom_periods) > 1:
+                raise RestError("There can be only one homeroom period"
+                                " for day %r" % day_id)
+            if homeroom_periods:
+                hpid = homeroom_periods[0]
+            else:
+                hpid = None
+
+            timetable[day_id] = TimetableSchemaDay(period_ids, hpid)
 
     def parseXML(self, xml):
         doc = XMLDocument(xml, self.schema)

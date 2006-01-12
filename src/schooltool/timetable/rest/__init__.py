@@ -205,6 +205,12 @@ class TimetableFileFactory(object):
                   <zeroOrMore>
                     <element name="period">
                       <ref name="idattr"/>
+                       <optional>
+                         <attribute name="homeroom">
+                           <!-- presence of this attribute indicates that this
+                                period is the homeroom period -->
+                         </attribute>
+                       </optional>
                       <zeroOrMore>
                         <ref name="activity"/>
                       </zeroOrMore>

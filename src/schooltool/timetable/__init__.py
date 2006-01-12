@@ -282,6 +282,8 @@ class TimetableDay(Persistent):
     homeroom_period_id = None
 
     def __init__(self, periods=(), homeroom_period_id=None):
+        if homeroom_period_id is not None:
+            assert homeroom_period_id in periods
         self.periods = periods
         self.homeroom_period_id = homeroom_period_id
         self.activities = PersistentDict()

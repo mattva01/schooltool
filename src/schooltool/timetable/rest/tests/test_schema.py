@@ -69,7 +69,7 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
             <day when="2005-07-09" id="Day 1" />
           </model>
           <day id="Day 1">
-            <period id="A">
+            <period id="A" homeroom="">
             </period>
             <period id="B">
             </period>
@@ -124,7 +124,7 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
         from schooltool.timetable.schema import TimetableSchemaDay
         from schooltool.timetable.schema import TimetableSchema
         schema = TimetableSchema(['Day 1', 'Day 2'])
-        schema['Day 1'] = TimetableSchemaDay(['A', 'B'])
+        schema['Day 1'] = TimetableSchemaDay(['A', 'B'], 'A')
         schema['Day 2'] = TimetableSchemaDay(['C', 'D'])
         schema.title = "A Schema"
         return schema
@@ -196,7 +196,7 @@ class TestTimetableSchemaView(TimetableSchemaMixin, XMLCompareMixin,
             <day when="2005-07-09" id="Day 1" />
           </model>
           <day id="Day 1">
-            <period id="A">
+            <period id="A" homeroom="">
             </period>
             <period id="B">
             </period>
@@ -241,7 +241,7 @@ class DayIdBasedModelMixin:
             <day when="2005-07-09" id="Day 1" />
           </model>
           <day id="Day 1">
-            <period id="A">
+            <period id="A" homeroom="">
             </period>
             <period id="B">
             </period>
@@ -263,7 +263,7 @@ class DayIdBasedModelMixin:
         from datetime import time, timedelta, date
 
         tt = TimetableSchema(['Day 1', 'Day 2'])
-        tt['Day 1'] = TimetableSchemaDay(['A', 'B'])
+        tt['Day 1'] = TimetableSchemaDay(['A', 'B'], 'A')
         tt['Day 2'] = TimetableSchemaDay(['C', 'D'])
         tt.title = "Title"
 
@@ -323,6 +323,13 @@ class TestTimetableSchemaFileFactory(TimetableSchemaMixin, unittest.TestCase):
         from schooltool.app.rest.errors import RestError
         self.assertRaises(RestError, IFileFactory(self.schemaContainer),
                           "foo.bar", "text/xml", self.schema_xml)
+
+    def test_setUpSchemaDays_two_homerooms(self):
+        from schooltool.app.rest.errors import RestError
+        broken_schema_xml = self.schema_xml.replace('<period id="B">',
+                                        '<period id="B" homeroom="">')
+        self.assertRaises(RestError, IFileFactory(self.schemaContainer),
+                          "broken", "text/xml", broken_schema_xml)
 
 
 class TestTimetableSchemaFileFactoryDayIdBased(DayIdBasedModelMixin,
