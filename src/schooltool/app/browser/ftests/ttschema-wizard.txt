@@ -1,6 +1,32 @@
 Functional test for timetable schema add wizard
 ===============================================
 
+There are several paths through the timetable schema wizard.  We shall test
+several of those, so that all pages are rendered, and all the branches are
+taken.
+
+   |testpath1| |testpath2| |testpath3| |testpath4| |testpath5| |testpath6|
+
+.. |testpath1| image:: ttschema-wizard-1-tiny.png
+.. |testpath2| image:: ttschema-wizard-2-tiny.png
+.. |testpath3| image:: ttschema-wizard-3-tiny.png
+.. |testpath4| image:: ttschema-wizard-4-tiny.png
+.. |testpath5| image:: ttschema-wizard-5-tiny.png
+.. |testpath6| image:: ttschema-wizard-6-tiny.png
+
+.. contents:: Overview
+   :backlinks: none
+
+.. You can generate the png pictures from GraphViz files by running
+..
+..   for n in 1 2 3 4 5 6; do
+..     dot -Tpng -o ttschema-wizard-$n.png ttschema-wizard-$n.dot
+..     mogrify -resize 50% ttschema-wizard-$n.png
+..     convert -resize 25% ttschema-wizard-$n.png ttschema-wizard-$n-tiny.png
+..   done
+
+The usual setup
+
     >>> from zope.testbrowser import Browser
     >>> manager = Browser()
     >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
@@ -1185,7 +1211,5 @@ again.
     >>> manager.getControl('Title')
     <Control name='field.title' type='text'>
 
-Epilogue
---------
 
- vim: ft=rest
+.. vim: ft=rest fdm=indent
