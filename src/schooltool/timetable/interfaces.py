@@ -472,6 +472,10 @@ class ITimetableSchemaDay(Interface):
         title=u"A list of period IDs for this day.",
         value_type=TextLine(title=u"A period id"))
 
+    homeroom_period_id = TextLine(
+        title=u"ID of the homeroom period",
+        required=False)
+
     def keys():
         """Return self.periods."""
 
@@ -586,6 +590,10 @@ class ITimetableDay(Interface):
     periods = List(
         title=u"A list of period IDs for this day.",
         value_type=TextLine(title=u"A period id"))
+
+    homeroom_period_id = TextLine(
+        title=u"ID of the homeroom period",
+        required=False)
 
     def keys():
         """Return self.periods."""

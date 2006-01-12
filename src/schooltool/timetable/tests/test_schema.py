@@ -107,7 +107,7 @@ class TestTimetableSchema(unittest.TestCase):
         periods2 = ('Green', 'Red', 'Yellow')
         tts = TimetableSchema(days)
         tts["A"] = TimetableSchemaDay(periods1)
-        tts["B"] = TimetableSchemaDay(periods2)
+        tts["B"] = TimetableSchemaDay(periods2, homeroom_period_id='Yellow')
 
         tt = tts.createTimetable()
         self.assertEquals(tt.day_ids, tts.day_ids)
@@ -117,6 +117,7 @@ class TestTimetableSchema(unittest.TestCase):
             day2 = tts[day_id]
             self.assert_(day is not day2)
             self.assertEquals(day.periods, day2.periods)
+            self.assertEquals(day.homeroom_period_id, day2.homeroom_period_id)
             for period in day.periods:
                 self.assertEquals(list(day[period]), [])
 
@@ -155,6 +156,13 @@ class TestTimetableSchema(unittest.TestCase):
         tts5["A"] = TimetableSchemaDay(periods1)
         tts5["B"] = TimetableSchemaDay(periods2)
         self.assertNotEquals(tts, tts5)
+
+        # Different homeroom period
+        tts6 = TimetableSchema(days)
+        tts6["A"] = TimetableSchemaDay(periods1)
+        tts6["B"] = TimetableSchemaDay(periods2, homeroom_period_id='Red')
+        self.assertNotEquals(tts, tts6)
+
 
 
 class TestTimetableSchemaContainer(unittest.TestCase):

@@ -252,7 +252,8 @@ class Timetable(Persistent):
         other = Timetable(self.day_ids)
         other.model = self.model
         for day_id in self.day_ids:
-            other[day_id] = TimetableDay(self[day_id].periods)
+            other[day_id] = TimetableDay(self[day_id].periods,
+                                         self[day_id].homeroom_period_id)
         return other
 
     def __eq__(self, other):
@@ -278,9 +279,11 @@ class TimetableDay(Persistent):
 
     timetable = None
     day_id = None
+    homeroom_period_id = None
 
-    def __init__(self, periods=()):
+    def __init__(self, periods=(), homeroom_period_id=None):
         self.periods = periods
+        self.homeroom_period_id = homeroom_period_id
         self.activities = PersistentDict()
         for p in periods:
             self.activities[p] = Set() # MaybePersistentKeysSet()
@@ -336,6 +339,8 @@ class TimetableDay(Persistent):
         if not ITimetableDay.providedBy(other):
             return False
         if self.periods != other.periods:
+            return False
+        if self.homeroom_period_id != other.homeroom_period_id:
             return False
         for period in self.periods:
             if Set(self.activities[period]) != Set(other.activities[period]):

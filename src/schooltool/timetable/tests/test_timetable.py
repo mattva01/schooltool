@@ -185,6 +185,7 @@ class TestTimetable(unittest.TestCase):
         tt["A"].add("Green", english)
         tt["A"].add("Blue", math)
         tt["B"].add("Green", bio)
+        tt["B"].homeroom_period_id = "Blue"
         tt.model = object()
 
         tt2 = tt.cloneEmpty()
@@ -196,6 +197,7 @@ class TestTimetable(unittest.TestCase):
             day2 = tt2[day_id]
             self.assert_(day is not day2)
             self.assertEquals(day.periods, day2.periods)
+            self.assertEquals(day.homeroom_period_id, day2.homeroom_period_id)
             for period in day2.periods:
                 self.assertEquals(list(day2[period]), [])
 
@@ -300,8 +302,13 @@ class TestTimetableDay(EventTestMixin, unittest.TestCase):
         td2.add("A", a1)
         self.assertEquals(td1, td2)
 
+        td1 = TimetableDay(periods)
         td3 = TimetableDay(('C', 'D'))
         self.assertNotEquals(td1, td3)
+
+        td1 = TimetableDay(periods)
+        td4 = TimetableDay(periods, homeroom_period_id='B')
+        self.assertNotEquals(td1, td4)
 
     def test_getitem_add_items_clear_remove(self):
         from schooltool.timetable import TimetableDay, Timetable, TimetableDict
