@@ -116,6 +116,25 @@ able to delete locally defined requirements and not inherited ones:
   ...
   KeyError: u'forloop'
 
+#The following tests inheritence when a sub requirement in a base is under
+#the same key as an uninherited sub requirement
+#
+#  >>> citinzenship = requirement.Requirement(u'Global Citizenship')
+#  >>> goodPerson = requirement.Requirement(u'Be a good person globally.')
+#  >>> citinzenship['goodPerson'] = goodPerson
+#
+#  >>> localCitizenship = requirement.Requirement(u'A Local Citizenship Requirement')
+#  >>> localCitizenship.addBase(citinzenship)
+#  >>> print localCitizenship.values()
+#  <BLANKLINE>
+#  ...Requirement(u'Be a good person globally.')...
+#
+#  >>> localGoodPerson = requirement.Requirement(u'Be a good person locally.')
+#  >>> localCitizenship['goodPerson'] = localGoodPerson
+#  >>> print localCitizenship.values()
+#  <BLANKLINE>
+#  ...Requirement(u'Be a good person globally.')...
+
 
 Requirement Adapters
 --------------------
