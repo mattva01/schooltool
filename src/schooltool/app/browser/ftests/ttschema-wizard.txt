@@ -653,54 +653,54 @@ Please put the periods in order for each day. We can rearrange them a bit:
 
 The schema is now created:
 
-  >>> print rest(r"""
-  ... GET /ttschemas/rotating-3 HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... """, handle_errors=False)
-  HTTP/1.1 200 Ok
-  Content-Length: ...
-  Content-Type: text/xml; charset=UTF-8
-  <BLANKLINE>
-  <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
-    <title>Rotating 3</title>
-    <model factory="SequentialDaysTimetableModel">
-      <daytemplate>
-        <used when="Friday"/>
-        <period duration="50" tstart="09:30"/>
-        <period duration="50" tstart="10:25"/>
-        <period duration="50" tstart="11:20"/>
-        <period duration="50" tstart="12:15"/>
-      </daytemplate>
-      <daytemplate>
-        <used when="Monday Thursday Tuesday Wednesday"/>
-        <period duration="55" tstart="09:30"/>
-        <period duration="55" tstart="10:30"/>
-        <period duration="55" tstart="11:30"/>
-        <period duration="55" tstart="12:30"/>
-      </daytemplate>
-      <daytemplate>
-        <used when="default"/>
-      </daytemplate>
-    </model>
-    <day id="A">
-      <period id="Period_A"/>
-      <period id="Period_C"/>
-      <period id="Period_B"/>
-      <period id="Period_D"/>
-    </day>
-    <day id="B">
-      <period id="Period_D"/>
-      <period id="Period_B"/>
-      <period id="Period_C"/>
-      <period id="Period_A"/>
-    </day>
-    <day id="C">
-      <period id="Period_A"/>
-      <period id="Period_B"/>
-      <period id="Period_C"/>
-      <period id="Period_D"/>
-    </day>
-  </timetable>
+    >>> print rest(r"""
+    ... GET /ttschemas/rotating-3 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+      <title>Rotating 3</title>
+      <model factory="SequentialDaysTimetableModel">
+        <daytemplate>
+          <used when="Friday"/>
+          <period duration="50" tstart="09:30"/>
+          <period duration="50" tstart="10:25"/>
+          <period duration="50" tstart="11:20"/>
+          <period duration="50" tstart="12:15"/>
+        </daytemplate>
+        <daytemplate>
+          <used when="Monday Thursday Tuesday Wednesday"/>
+          <period duration="55" tstart="09:30"/>
+          <period duration="55" tstart="10:30"/>
+          <period duration="55" tstart="11:30"/>
+          <period duration="55" tstart="12:30"/>
+        </daytemplate>
+        <daytemplate>
+          <used when="default"/>
+        </daytemplate>
+      </model>
+      <day id="A">
+        <period id="Period_A"/>
+        <period id="Period_C"/>
+        <period id="Period_B"/>
+        <period id="Period_D"/>
+      </day>
+      <day id="B">
+        <period id="Period_D"/>
+        <period id="Period_B"/>
+        <period id="Period_C"/>
+        <period id="Period_A"/>
+      </day>
+      <day id="C">
+        <period id="Period_A"/>
+        <period id="Period_B"/>
+        <period id="Period_C"/>
+        <period id="Period_D"/>
+      </day>
+    </timetable>
 
 
 Rotating timetable, take four
