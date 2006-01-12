@@ -18,6 +18,14 @@
         trusted="true"
   />
 
+  <class class=".attendance.DayAttendance">
+    <allow interface=".interfaces.IDayAttendance" />
+  </class>
+
+  <class class=".attendance.DayAttendanceRecord">
+    <allow interface=".interfaces.IDayAttendanceRecord" />
+  </class>
+
   <adapter
         for="schooltool.person.interfaces.IPerson"
         provides=".interfaces.IDayAttendance"
@@ -72,5 +80,14 @@
       />
 
   <include package=".browser" />
+
+  <!-- Calendar Provider subscriber -->
+
+  <subscriber
+      for="schooltool.app.interfaces.ISchoolToolCalendar
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.app.browser.cal.ICalendarProvider"
+      factory=".attendance.AttendanceCalendarProvider"
+      />
 
 </configure>

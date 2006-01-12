@@ -176,6 +176,28 @@ Joniukas is marked as absent, and Gretute is marked as present (checkbox disable
           -
     ...
 
+An abscence event should be visible in his calendar:
+
+    >>> joniukas = Browser()
+    >>> joniukas.addHeader('Authorization', 'Basic joniukas:gretute')
+    >>> joniukas.handleErrors = False
+    >>> joniukas.open('http://localhost/persons/joniukas/calendar/2005-12-12')
+
+    >>> print joniukas.contents
+    <BLANKLINE>
+    ...
+      <h6 style="background: ...">
+          Was absent from...
+          <span class="start-end">
+            (<span>09:30</span>
+              - <span>10:25</span>)
+          </span>
+      </h6>
+    ...
+      <div class="title">Was absent from dancing-1a.</div>
+    ...
+
+
 Finaly Joniukas is here, make him tardy
 
     >>> largo.getControl(name='joniukas_check').value=True
@@ -206,6 +228,24 @@ Now Joniukas is tardy
           <input type="checkbox" disabled name="joniukas_check" id="joniukas_check">...
            <label for="joniukas_check">Joniukas</label>...
           T
+    ...
+
+And the abscence event is replaced with a tardy event:
+
+    >>> joniukas.open('http://localhost/persons/joniukas/calendar/2005-12-12')
+
+    >>> print joniukas.contents
+    <BLANKLINE>
+    ...
+      <h6 style="background: ...">
+           Was late for da...
+           <span class="start-end">
+             (<span>09:30</span>
+               - <span>10:25</span>)
+           </span>
+      </h6>
+    ...
+      <div class="title">Was late for dancing-1a (52 minutes).</div>
     ...
 
 
