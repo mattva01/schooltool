@@ -44,6 +44,8 @@ class Section(Persistent, contained.Contained):
     zope.interface.implements(interfaces.ISectionContained,
                               IAttributeAnnotatable)
 
+    _location = None
+
     def __init__(self, title="Section", description=None, schedule=None,
                  courses=None, location=None):
         self.title = title
@@ -51,17 +53,16 @@ class Section(Persistent, contained.Contained):
         self.calendar = Calendar(self)
         self.location = location
 
-
-    def _getLabel(self):
+    @property
+    def label(self):
         instructors = " ".join([i.title for i in self.instructors])
         courses = " ".join([c.title for c in self.courses])
         msg = _('${instructors} -- ${courses}',
                 mapping={'instructors': instructors, 'courses': courses})
         return msg
 
-    label = property(_getLabel)
-
-    def _getSize(self):
+    @property
+    def size(self):
         size = 0
         for member in self.members:
             if IPerson.providedBy(member):
@@ -71,17 +72,20 @@ class Section(Persistent, contained.Contained):
 
         return size
 
-    size = property(_getSize)
+    @apply
+    def location():
 
-    _location = None
+        def get(self):
+            return self._location
 
-    def _setLocation(self, location):
-        if location is not None:
-            if (not IResource.providedBy(location) or not location.isLocation):
-                raise TypeError("Locations must be location resources.")
-        self._location = location
+        def set(self, location):
+            if location is not None:
+                if (not IResource.providedBy(location) or
+                    not location.isLocation):
+                    raise TypeError("Locations must be location resources.")
+            self._location = location
 
-    location = property(lambda self: self._location, _setLocation)
+        return property(get, set)
 
     instructors = RelationshipProperty(relationships.URIInstruction,
                                        relationships.URISection,
