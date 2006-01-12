@@ -222,31 +222,31 @@ We can examine its composition more easily by invoking the RESTive view.
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
       <title>Rotating</title>
       <model factory="SequentialDayIdBasedTimetableModel">
-	<daytemplate>
-	  <used when="A B C"/>
-	  <period duration="55" tstart="09:30"/>
-	  <period duration="55" tstart="10:30"/>
-	  <period duration="55" tstart="11:30"/>
-	  <period duration="55" tstart="12:30"/>
-	</daytemplate>
+        <daytemplate>
+          <used when="A B C"/>
+          <period duration="55" tstart="09:30"/>
+          <period duration="55" tstart="10:30"/>
+          <period duration="55" tstart="11:30"/>
+          <period duration="55" tstart="12:30"/>
+        </daytemplate>
       </model>
       <day id="A">
-	<period id="Period_A"/>
-	<period id="Period_C"/>
-	<period id="Period_B"/>
-	<period id="Period_D"/>
+        <period id="Period_A"/>
+        <period id="Period_C"/>
+        <period id="Period_B"/>
+        <period id="Period_D"/>
       </day>
       <day id="B">
-	<period id="Period_A"/>
-	<period id="Period_C"/>
-	<period id="Period_B"/>
-	<period id="Period_D"/>
+        <period id="Period_A"/>
+        <period id="Period_C"/>
+        <period id="Period_B"/>
+        <period id="Period_D"/>
       </day>
       <day id="C">
-	<period id="Period_A"/>
-	<period id="Period_C"/>
-	<period id="Period_B"/>
-	<period id="Period_D"/>
+        <period id="Period_A"/>
+        <period id="Period_C"/>
+        <period id="Period_B"/>
+        <period id="Period_D"/>
       </day>
     </timetable>
 
