@@ -764,16 +764,23 @@ def doctest_setUpMSTTCoreFonts():
 def test_getCalendars(self):
     """Test for PDFCalendarViewBase.getCalendars().
 
-    getCalendars() only delegates the task to a calendar list view.  We
-    will provide a stub view to test the method.
+    getCalendars() only delegates the task to the ICalendarProvider
+    subscriber.  We will provide a stub subscriber to test the method.
 
-        >>> class CalendarListViewStub(BrowserView):
+        >>> class CalendarListSubscriberStub(object):
+        ...     def __init__(self,context, request):
+        ...         pass
         ...     def getCalendars(self):
         ...         return [('some calendar', 'color1', 'color2'),
         ...                 ('another calendar', 'color1', 'color2')]
+
+        >>> from zope.component import provideSubscriptionAdapter
+        >>> from zope.publisher.interfaces.http import IHTTPRequest
         >>> from schooltool.app.interfaces import ISchoolToolCalendar
-        >>> ztapi.browserView(ISchoolToolCalendar, 'calendar_list',
-        ...                   CalendarListViewStub)
+        >>> from schooltool.app.browser.interfaces import ICalendarProvider
+        >>> provideSubscriptionAdapter(CalendarListSubscriberStub,
+        ...                            (ISchoolToolCalendar, IHTTPRequest),
+        ...                            ICalendarProvider)
 
         >>> from schooltool.app.cal import Calendar
         >>> view = PDFCalendarViewBase(Calendar(None), TestRequest())

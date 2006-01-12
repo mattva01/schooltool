@@ -592,14 +592,6 @@
 
   <page
       for="schooltool.app.interfaces.ISchoolToolCalendar"
-      name="calendar_list"
-      layer=".skin.ISchoolToolLayer"
-      class=".cal.CalendarListView"
-      permission="zope.View"
-      />
-
-  <page
-      for="schooltool.app.interfaces.ISchoolToolCalendar"
       name="daily_calendar_rows"
       layer=".skin.ISchoolToolLayer"
       class=".cal.DailyCalendarRowsView"
@@ -687,5 +679,14 @@
         doc_path="templates.txt" />
 
   </configure>
+
+  <!-- Calendar provider subscriber  -->
+
+  <zope:subscriber
+      for="schooltool.app.interfaces.ISchoolToolCalendar
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides=".cal.ICalendarProvider"
+      factory=".cal.CalendarListSubscriber"
+      />
 
 </configure>

@@ -26,11 +26,13 @@ import datetime
 from cStringIO import StringIO
 
 from zope.component import getMultiAdapter
+from zope.component import subscribers
 from zope.app.publisher.browser import BrowserView
 from zope.i18n import translate
 from zope.security.proxy import removeSecurityProxy
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.browser import ViewPreferences
+from schooltool.app.browser.interfaces import ICalendarProvider
 from schooltool.calendar.utils import parse_date, week_start
 from schooltool import SchoolToolMessage as _
 
@@ -99,10 +101,14 @@ class PDFCalendarViewBase(BrowserView):
 
     def getCalendars(self):
         """Get a list of calendars to display."""
-        calendar_list_view = getMultiAdapter((self.context, self.request),
-                                             name='calendar_list')
+        providers = subscribers((self.context, self.request), ICalendarProvider)
+
+        coloured_calendars = []
+        for provider in providers:
+            coloured_calendars += provider.getCalendars()
+
         calendars = [calendar for (calendar, color1, color2)
-                                  in calendar_list_view.getCalendars()]
+                     in coloured_calendars]
         return calendars
 
     def configureStyles(self):

@@ -30,6 +30,7 @@ from sets import Set
 import transaction
 from pytz import timezone, utc
 from zope.component import queryMultiAdapter, adapts
+from zope.component import subscribers
 from zope.event import notify
 from zope.interface import implements, Interface
 from zope.i18n import translate
@@ -59,6 +60,7 @@ from schooltool import SchoolToolMessage as _
 from schooltool.app.browser import ViewPreferences
 from schooltool.app.browser import pdfcal
 from schooltool.app.browser.overlay import CalendarOverlayView
+from schooltool.app.browser.interfaces import ICalendarProvider
 from schooltool.app.browser.interfaces import IEventForDisplay
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
@@ -639,10 +641,13 @@ class CalendarViewBase(BrowserView):
     _calendars = None # cache
 
     def getCalendars(self):
-        view = zapi.getMultiAdapter((self.context, self.request),
-                                    name='calendar_list')
+        providers = subscribers((self.context, self.request), ICalendarProvider)
+
         if self._calendars is None:
-            self._calendars = list(view.getCalendars())
+            result = []
+            for provider in providers:
+                result += provider.getCalendars()
+            self._calendars = result
         return self._calendars
 
     def getEvents(self, start_dt, end_dt):
@@ -1410,14 +1415,16 @@ class CalendarSTOverlayView(CalendarOverlayView):
         return annotations.get(self.SHOW_TIMETABLE_KEY, True)
 
 
-class CalendarListView(BrowserView):
-    """A simple view that can tell which calendars should be displayed.
+class CalendarListSubscriber(object):
+    """A subscriber that can tell which calendars should be displayed.
 
-    This view differs from the one in SchoolBell in that it includes
-    composite timetable calendars too.
+    This subscriber includes composite timetable calendars, overlaid
+    calendars and the calendar you are looking at.
     """
 
-    __used_for__ = ISchoolToolCalendar
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
 
     def getCalendars(self):
         """Get a list of calendars to display.

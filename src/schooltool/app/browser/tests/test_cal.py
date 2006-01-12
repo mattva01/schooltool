@@ -28,6 +28,7 @@ from pytz import timezone, utc
 
 from zope.i18n import translate
 from zope.interface import directlyProvides, implements
+from zope.component import provideSubscriptionAdapter
 from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
@@ -36,6 +37,7 @@ from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.publisher.browser import BrowserView
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.session.interfaces import ISession
+from zope.publisher.interfaces.http import IHTTPRequest
 
 import schooltool.app # sacrifice to appease circular import gods
 from schooltool.common import parse_datetime
@@ -61,6 +63,10 @@ from schooltool.person.person import Person, PersonContainer
 from schooltool.person.interfaces import IPerson
 from schooltool.person.preference import getPersonPreferences
 from schooltool.person.interfaces import IPersonPreferences
+
+# Used when registering CalendarProvider subscribers/stubs
+from schooltool.app.browser.cal import CalendarListSubscriber
+from schooltool.app.browser.interfaces import ICalendarProvider
 
 
 class PrincipalStub:
@@ -796,12 +802,17 @@ def createEvent(dtstart, duration, title, **kw):
     return CalendarEvent(dtstart, dur, title, **kw)
 
 
+def registerCalendarSubscribers():
+    """Register subscription adapter for listing calendars to display."""
+    provideSubscriptionAdapter(CalendarListSubscriber,
+                               (ISchoolToolCalendar, IHTTPRequest),
+                               ICalendarProvider)
+
+
 def registerCalendarHelperViews():
-    """Register the real CalendarListView for use by other views."""
-    from schooltool.app.browser.cal import CalendarListView
+    """Register the real DailyCalendarRowsView for use by other views."""
     from schooltool.app.browser.cal import DailyCalendarRowsView
     from schooltool.app.interfaces import ISchoolToolCalendar
-    ztapi.browserView(ISchoolToolCalendar, 'calendar_list', CalendarListView)
     ztapi.browserView(ISchoolToolCalendar, 'daily_calendar_rows',
                       DailyCalendarRowsView)
 
@@ -825,6 +836,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
         sbsetup.setupSessions()
         registerCalendarHelperViews()
+        registerCalendarSubscribers()
 
         # Usually registered for IHavePreferences
         ztapi.provideAdapter(IPerson, IPersonPreferences,
@@ -1108,6 +1120,7 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> app = sbsetup.setupSchoolToolSite()
             >>> setup.setUpAnnotations()
             >>> registerCalendarHelperViews()
+            >>> registerCalendarSubscribers()
             >>> sbsetup.setupTimetabling()
 
             >>> calendar = Calendar(Person())
@@ -1164,15 +1177,18 @@ class TestCalendarViewBase(unittest.TestCase):
 
             >>> setup.placelessSetUp()
 
-        getCalendars() only delegates the task to a calendar list view.  We
-        will provide a stub view to test the method.
+        getCalendars() only delegates the task to a ICalendarProvider
+        subscriber.  We will provide a stub subscriber to test the
+        method.
 
-            >>> class CalendarListViewStub(BrowserView):
+            >>> class CalendarListSubscriberStub(object):
+            ...     def __init__(self, context, request):
+            ...         pass
             ...     def getCalendars(self):
             ...         return ['some calendar', 'another calendar']
-            >>> from schooltool.app.interfaces import ISchoolToolCalendar
-            >>> ztapi.browserView(ISchoolToolCalendar, 'calendar_list',
-            ...                   CalendarListViewStub)
+            >>> provideSubscriptionAdapter(CalendarListSubscriberStub,
+            ...                            (ISchoolToolCalendar, IHTTPRequest),
+            ...                            ICalendarProvider)
 
             >>> from schooltool.app.cal import Calendar
             >>> from schooltool.app.browser.cal import CalendarViewBase
@@ -1194,12 +1210,14 @@ class TestCalendarViewBase(unittest.TestCase):
 
         Let's set up needed stubs:
 
-            >>> class CalendarListViewStub(BrowserView):
+            >>> class CalendarListSubscriberStub(object):
+            ...     def __init__(self, context, request):
+            ...         pass
             ...     def getCalendars(self):
             ...         return ['some calendar', 'another calendar']
-            >>> from schooltool.app.interfaces import ISchoolToolCalendar
-            >>> ztapi.browserView(ISchoolToolCalendar, 'calendar_list',
-            ...                   CalendarListViewStub)
+            >>> provideSubscriptionAdapter(CalendarListSubscriberStub,
+            ...                            (ISchoolToolCalendar, IHTTPRequest),
+            ...                            ICalendarProvider)
 
         The cache for calendar list is None by default:
 
@@ -1234,6 +1252,7 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> app = sbsetup.setupSchoolToolSite()
             >>> setup.setUpAnnotations()
             >>> registerCalendarHelperViews()
+            >>> registerCalendarSubscribers()
             >>> sbsetup.setupSessions()
             >>> sbsetup.setupTimetabling()
 
@@ -3223,6 +3242,7 @@ class TestDailyCalendarView(unittest.TestCase):
         setup.placefulSetUp()
         self.app = sbsetup.setupSchoolToolSite()
         registerCalendarHelperViews()
+        registerCalendarSubscribers()
         sbsetup.setupSessions()
         sbsetup.setupTimetabling()
         sbsetup.setupCalendaring()
@@ -3860,6 +3880,7 @@ class TestDailyCalendarView(unittest.TestCase):
             >>> app = sbsetup.setupSchoolToolSite()
             >>> setup.setUpAnnotations()
             >>> registerCalendarHelperViews()
+            >>> registerCalendarSubscribers()
             >>> sbsetup.setupSessions()
             >>> sbsetup.setupTimetabling()
 
@@ -4288,6 +4309,7 @@ def doctest_AtomCalendarView():
         >>> app = sbsetup.setupSchoolToolSite()
         >>> sbsetup.setupTimetabling()
         >>> registerCalendarHelperViews()
+        >>> registerCalendarSubscribers()
 
         >>> from schooltool.app.browser.cal import AtomCalendarView
 
@@ -4802,21 +4824,20 @@ def doctest_CalendarSTOverlayView():
     """
 
 
-def doctest_CalendarListView(self):
-    """Tests for CalendarListView.
+def doctest_CalendarListSubscriber(self):
+    """Tests for CalendarListSubscriber.
 
-    This view only has the getCalendars() method.
+    This subscriber only has the getCalendars() method.
 
-    The difference between this view and the one in SchoolBell is that this
-    view knows about timetables and may return timetable calendars as well.
-    The color of each timetable calendar is the same as of the corresponding
-    personal calendar.
+    This subscriber lists timetable calendars and overlaid calendars
+    as well as the context calendar.  The color of each timetable
+    calendar is the same as of the corresponding personal calendar.
 
-    CalendarListView.getCalendars returns a list of calendars that
+    CalendarListSubscriber.getCalendars returns a list of calendars that
     should be displayed.  This list always includes the context of
-    the view, but it may also include other calendars as well.
+    the subscriber, but it may also include other calendars as well.
 
-    Som initial setup:
+    Some initial setup:
 
         >>> sbsetup.setupCalendaring()
 
@@ -4877,12 +4898,12 @@ def doctest_CalendarListView(self):
 
     A simple check:
 
-        >>> from schooltool.app.browser.cal import CalendarListView
+        >>> from schooltool.app.browser.cal import CalendarListSubscriber
         >>> import calendar as pycalendar
         >>> calendar = CalendarStub('My Calendar')
         >>> request = TestRequest()
-        >>> view = CalendarListView(calendar, request)
-        >>> for c, col1, col2 in view.getCalendars():
+        >>> subscriber = CalendarListSubscriber(calendar, request)
+        >>> for c, col1, col2 in subscriber.getCalendars():
         ...     print '%s (%s, %s)' % (c.title, col1, col2)
         My Calendar (#9db8d2, #7590ae)
         My Calendar (timetable) (#9db8d2, #7590ae)
@@ -4900,7 +4921,7 @@ def doctest_CalendarListView(self):
         >>> principal = PrincipalStub()
         >>> request.setPrincipal(principal)
 
-        >>> for c, col1, col2 in view.getCalendars():
+        >>> for c, col1, col2 in subscriber.getCalendars():
         ...     print '%s (%s, %s)' % (c.title, col1, col2)
         My Calendar (#9db8d2, #7590ae)
         My Calendar (timetable) (#9db8d2, #7590ae)
@@ -4917,7 +4938,7 @@ def doctest_CalendarListView(self):
         >>> from schooltool.app.browser.cal import CalendarSTOverlayView
         >>> annotations[CalendarSTOverlayView.SHOW_TIMETABLE_KEY] = False
 
-        >>> for c, col1, col2 in view.getCalendars():
+        >>> for c, col1, col2 in subscriber.getCalendars():
         ...     print '%s (%s, %s)' % (c.title, col1, col2)
         My Calendar (#9db8d2, #7590ae)
         Other Calendar (red, blue)
@@ -4930,8 +4951,9 @@ def doctest_CalendarListView(self):
     Only the timetable is overlaid if the user is looking at someone else's
     calendar:
 
-        >>> view = CalendarListView(CalendarStub('Some Calendar'), request)
-        >>> for c, col1, col2 in view.getCalendars():
+        >>> subscriber = CalendarListSubscriber(CalendarStub('Some Calendar'),
+        ...                                     request)
+        >>> for c, col1, col2 in subscriber.getCalendars():
         ...     print '%s (%s, %s)' % (c.title, col1, col2)
         Some Calendar (#9db8d2, #7590ae)
         Some Calendar (timetable) (#9db8d2, #7590ae)

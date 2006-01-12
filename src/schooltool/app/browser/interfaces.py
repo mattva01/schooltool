@@ -23,6 +23,7 @@ $Id$
 """
 
 from zope.schema import Object, Datetime, TextLine
+from zope.interface import Interface
 
 from schooltool.calendar.interfaces import ICalendar, ICalendarEvent
 
@@ -105,3 +106,16 @@ class IEventForDisplay(ICalendarEvent):
         Suggested event class name.  Currently it is always 'event'.
         """)
 
+
+class ICalendarProvider(Interface):
+    """Calendar provider.
+
+    Subscription adapters providing this interface will be used to
+    combine the list of calendars that will be displayed.
+    """
+
+    def getCalendars():
+        """Gets a list of calendars to display.
+
+        Yields tuples (calendar, color1, color2).
+        """
