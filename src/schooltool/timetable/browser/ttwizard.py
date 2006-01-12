@@ -712,13 +712,37 @@ class HomeroomStep(ChoiceStep):
     def next(self):
         session = self.getSessionData()
         if session['homeroom'] == 'yes':
-            # TODO: HomeroomPeriodsStep
-            return FinalStep(self.context, self.request)
+            return HomeroomPeriodsStep(self.context, self.request)
         else:
             return FinalStep(self.context, self.request)
 
 
-# TODO: HomeroomPeriodsStep
+class HomeroomPeriodsStep(Step):
+    """Step to indicate the homeroom period for each day."""
+
+    __call__ = ViewPageTemplateFile('templates/ttwizard_homeroom.pt')
+
+    description = _('Please indicate the homeroom period for each day:')
+
+    error = None
+
+    def periods(self):
+        return self.getSessionData()['period_names']
+
+    def days(self):
+        session = self.getSessionData()
+        return session['day_names']
+
+    def update(self):
+        result = []
+        for daynr in range(len(self.days())):
+            homeroom_period_id = self.request.get('homeroom_%d' % daynr)
+            result.append(homeroom_period_id)
+        self.getSessionData()['homeroom_periods'] = result
+        return True
+
+    def next(self):
+        return FinalStep(self.context, self.request)
 
 
 class FinalStep(Step):

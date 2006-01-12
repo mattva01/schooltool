@@ -207,9 +207,18 @@ We can rearrange the periods now:
 
     >>> manager.getControl('Next').click()
 
-Do we use a homeroom period?  Let's say no:
+Do we use a homeroom period?  Let's say yes:
 
-    >>> manager.getControl('No').click()
+    >>> manager.getControl('Yes').click()
+
+Please indicate the homeroom period for each day.  Easy.  To make it more
+interesting, let's say that day A uses Period_A for homeroom, day B gets
+Period_B, while day C skips attendance.
+
+    >>> manager.getControl(name='homeroom_0').value = ['Period_A']
+    >>> manager.getControl(name='homeroom_1').value = ['Period_B']
+    >>> manager.getControl(name='homeroom_2').value = []
+    >>> manager.getControl('Next').click()
 
 Now we see the newly created timetable schema in the list.
 

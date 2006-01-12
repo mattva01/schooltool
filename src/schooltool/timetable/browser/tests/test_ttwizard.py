@@ -504,7 +504,7 @@ def doctest_SimpleSlotEntryStep():
     The text area contains one slot per line; extra spaces are stripped;
     empty lines are ignored.
 
-    The next page is the final page.
+    The next page is the named periods page.
 
         >>> view.next()
         <...ttwizard.NamedPeriodsStep...>
@@ -756,7 +756,7 @@ def doctest_NamedPeriodsStep():
         >>> view.next()
         <schooltool.timetable.browser.ttwizard.PeriodNamesStep...>
 
-    If periods are not named, go straight to the final step:
+    If periods are not named, go straight to the homeroom step:
 
         >>> view.getSessionData()['named_periods'] = False
         >>> view.next()
@@ -944,7 +944,7 @@ def doctest_PeriodOrderSimple():
         >>> print view.getSessionData()['periods_order']
         [['D', 'C', 'B'], ['D', 'C', 'B']]
 
-    The next step is always the final step:
+    The next step is always the homeroom step:
 
         >>> view.next()
         <...ttwizard.HomeroomStep ...>
@@ -1023,7 +1023,7 @@ def doctest_PeriodOrderComplex():
         >>> request = TestRequest()
         >>> view = PeriodOrderComplex(context, request)
 
-    Let's say we have some periods:
+    Let's say we have some periods and days in a rotating cycle:
 
         >>> session = view.getSessionData()
         >>> session['period_names'] = ['A', 'B', 'C', 'D']
@@ -1040,7 +1040,7 @@ def doctest_PeriodOrderComplex():
         ...      (datetime.time(10, 35), datetime.timedelta(0, 2700)),]]
         >>> session['time_slots'] = time_slots
 
-    Our view lets the template easily access them:
+    Our view lets the template easily access period and days names:
 
         >>> view.periods()
         ['A', 'B', 'C', 'D']
@@ -1126,7 +1126,7 @@ def doctest_PeriodOrderComplex():
         >>> print view.getSessionData()['periods_order']
         [['A'], ['B', 'A', 'C']]
 
-    The next step is always the final step:
+    The next step is always the homeroom step:
 
         >>> view.next()
         <...ttwizard.HomeroomStep ...>
@@ -1308,11 +1308,91 @@ def doctest_HomeroomStep():
 
     Otherwise, you will have to specify the homeroom period for each day
 
-    XXX not implemented yet
-
         >>> session['homeroom'] = 'yes'
         >>> view.next()
-        <...ttwizard.FinalStep...>
+        <...ttwizard.HomeroomPeriodsStep...>
+
+    """
+
+
+def doctest_HomeroomPeriodsStep():
+    r"""Unit test for HomeroomPeriodsStep view
+
+        >>> from schooltool.timetable.browser.ttwizard \
+        ...         import HomeroomPeriodsStep
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
+        >>> view = HomeroomPeriodsStep(context, request)
+
+    Let's say we have some periods:
+
+        >>> view.getSessionData()['period_names'] = ['A', 'B', 'C', 'D']
+
+    Our view lets the template easily access them:
+
+        >>> view.periods()
+        ['A', 'B', 'C', 'D']
+
+    Our view lets the template easily access days too:
+
+        >>> view.getSessionData()['day_names'] = ['Day1', 'Day2', 'Day3']
+        >>> view.days()
+        ['Day1', 'Day2', 'Day3']
+
+    If we render the view, we get a list of select boxes with period names; one
+    for each day:
+
+        >>> print view()
+        <BLANKLINE>
+        ...
+              <td>
+                <select name="homeroom_0">
+                  <option value="" selected="selected">(none)</option>
+                  <option>A</option>
+                  <option>B</option>
+                  <option>C</option>
+                  <option>D</option>
+                </select>
+              </td>
+              <td>
+                <select name="homeroom_1">
+                  <option value="" selected="selected">(none)</option>
+                  <option>A</option>
+                  <option>B</option>
+                  <option>C</option>
+                  <option>D</option>
+                </select>
+              </td>
+              <td>
+                <select name="homeroom_2">
+                  <option value="" selected="selected">(none)</option>
+                  <option>A</option>
+                  <option>B</option>
+                  <option>C</option>
+                  <option>D</option>
+                </select>
+              </td>
+          ...
+
+    When the user selects some of the items and submits the form, the choice
+    is remembered.
+
+        >>> request = TestRequest(form={'homeroom_0': 'D',
+        ...                             'homeroom_2': 'B'})
+        >>> view = HomeroomPeriodsStep(context, request)
+        >>> view.getSessionData()['period_names'] = ['A', 'B', 'C', 'D',
+        ...                                          'E', 'F']
+        >>> view.getSessionData()['day_names'] = ['1', '2', '3']
+
+        >>> view.update()
+        True
+        >>> print view.getSessionData()['homeroom_periods']
+        ['D', None, 'B']
+
+    The next step is always the final step:
+
+        >>> view.next()
+        <...ttwizard.FinalStep ...>
 
     """
 
