@@ -72,6 +72,10 @@ say that periods are designated by time.
 
     >>> manager.getControl('Designated by time').click()
 
+Do we use a homeroom period?  Let's say no:
+
+    >>> manager.getControl('No').click()
+
 The timetable schema gets created. Now we see the newly created timetable
 schema in the list.
 
@@ -203,6 +207,10 @@ We can rearrange the periods now:
 
     >>> manager.getControl('Next').click()
 
+Do we use a homeroom period?  Let's say no:
+
+    >>> manager.getControl('No').click()
+
 Now we see the newly created timetable schema in the list.
 
     >>> manager.getLink('Rotating')
@@ -251,8 +259,8 @@ We can examine its composition more easily by invoking the RESTive view.
     </timetable>
 
 
-Rotating timetable, take two
-----------------------------
+Rotating timetable, different daily period order
+------------------------------------------------
 
 .. image:: images/ttschema-wizard-3.png
 
@@ -334,6 +342,10 @@ liking:
     >>> manager.getControl(name='period_2_3').value = ['Period_D']
     >>> manager.getControl('Next').click()
 
+Do we use a homeroom period?  Let's say no:
+
+    >>> manager.getControl('No').click()
+
 The schema is now created:
 
     >>> print rest(r"""
@@ -377,8 +389,8 @@ The schema is now created:
     </timetable>
 
 
-Weekly timetable, take two
---------------------------
+Weekly timetable, named periods
+-------------------------------
 
 .. image:: images/ttschema-wizard-4.png
 
@@ -493,6 +505,10 @@ Please put the periods in order for each day. We can rearrange a little bit:
 
     >>> manager.getControl('Next').click()
 
+Do we use a homeroom period?  Let's say no:
+
+    >>> manager.getControl('No').click()
+
 The schema is now created:
 
     >>> print rest(r"""
@@ -556,8 +572,8 @@ The schema is now created:
     </timetable>
 
 
-Rotating timetable, take three
-------------------------------
+Rotating timetable, different period times (per weekday)
+--------------------------------------------------------
 
 .. image:: images/ttschema-wizard-5.png
 
@@ -651,6 +667,10 @@ Please put the periods in order for each day. We can rearrange them a bit:
 
     >>> manager.getControl('Next').click()
 
+Do we use a homeroom period?  Let's say no:
+
+    >>> manager.getControl('No').click()
+
 The schema is now created:
 
     >>> print rest(r"""
@@ -703,8 +723,8 @@ The schema is now created:
     </timetable>
 
 
-Rotating timetable, take four
------------------------------
+Rotating timetable, different period times (rotating day)
+---------------------------------------------------------
 
 .. image:: images/ttschema-wizard-6.png
 
@@ -809,6 +829,10 @@ Please put the periods in order for each day. We can rearrange them a bit:
     >>> manager.getControl(name='period_2_3').value = ['F']
 
     >>> manager.getControl('Next').click()
+
+Do we use a homeroom period?  Let's say no:
+
+    >>> manager.getControl('No').click()
 
 The schema is now created:
 

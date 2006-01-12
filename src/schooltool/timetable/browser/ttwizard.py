@@ -24,6 +24,9 @@ on the schooltool mailing list, in ttschema-wireframes.pdf[1].
 
     [1] http://lists.schooltool.org/pipermail/schooltool/2005-June/001347.html
 
+It has been slightly modified since.  You can find an up-to-date diagram
+of the workflow in src/schooltool/app/browser/ftests/images/
+
 The workflow is as follows:
 
     1. "New timetable schema"
@@ -92,13 +95,21 @@ The workflow is as follows:
 
         (The user sees a grid of drop-downs.)
 
-    14. The timetable schema is created.
+    14. "Does your school have a homeroom period?"
+
+        Skip to step 16 if it doesn't.
+
+    15. "Indicate which period is the homeroom period."
+
+        (The user sees a list of drop-downs.)
+
+    16. The timetable schema is created.
 
 
-The shortest path through this workflow contains 6 steps, the longest contains
-11 steps.
+The shortest path through this workflow contains 7 steps, the longest contains
+13 steps.
 
-Step 14 needs the following data:
+Step 16 needs the following data:
 
     - title (determined in step 1)
     - timetable model factory (determined in step 2)
@@ -523,7 +534,7 @@ class NamedPeriodsStep(ChoiceStep):
         if session['named_periods']:
             return PeriodNamesStep(self.context, self.request)
         else:
-            return FinalStep(self.context, self.request)
+            return HomeroomStep(self.context, self.request)
 
 
 class PeriodNamesStep(FormStep):
@@ -627,7 +638,7 @@ class PeriodOrderSimple(Step):
         return True
 
     def next(self):
-        return FinalStep(self.context, self.request)
+        return HomeroomStep(self.context, self.request)
 
 
 class PeriodOrderComplex(Step):
@@ -684,7 +695,30 @@ class PeriodOrderComplex(Step):
         return True
 
     def next(self):
-        return FinalStep(self.context, self.request)
+        return HomeroomStep(self.context, self.request)
+
+
+class HomeroomStep(ChoiceStep):
+    """A step for choosing whether the school has homeroom periods."""
+
+    key = 'homeroom'
+
+    question = _("Do you check student attendance for the day in a homeroom"
+                 " period or equivalent?")
+
+    choices = (('yes', _("Yes")),
+               ('no',  _("No")))
+
+    def next(self):
+        session = self.getSessionData()
+        if session['homeroom'] == 'yes':
+            # TODO: HomeroomPeriodsStep
+            return FinalStep(self.context, self.request)
+        else:
+            return FinalStep(self.context, self.request)
+
+
+# TODO: HomeroomPeriodsStep
 
 
 class FinalStep(Step):

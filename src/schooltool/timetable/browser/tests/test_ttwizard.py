@@ -760,7 +760,7 @@ def doctest_NamedPeriodsStep():
 
         >>> view.getSessionData()['named_periods'] = False
         >>> view.next()
-        <...ttwizard.FinalStep...>
+        <...ttwizard.HomeroomStep...>
 
     """
 
@@ -836,12 +836,13 @@ def doctest_PeriodNamesStep():
         >>> view.getSessionData()['period_names']
         [u'A', u'B', u'C', u'D']
 
-    The next page is FinalStep.
+    The next page is HomeroomStep.
 
         >>> view.next()
         <schooltool.timetable.browser.ttwizard.PeriodSequenceSameStep ...>
 
     """
+
 
 def doctest_PeriodSequenceSameStep():
     r"""Unit test for PeriodSequenceSameStep
@@ -865,6 +866,7 @@ def doctest_PeriodSequenceSameStep():
         <schooltool.timetable.browser.ttwizard.PeriodOrderComplex...>
 
     """
+
 
 def doctest_PeriodOrderSimple():
     """Unit test for PeriodOrderSimple view
@@ -945,7 +947,7 @@ def doctest_PeriodOrderSimple():
     The next step is always the final step:
 
         >>> view.next()
-        <...ttwizard.FinalStep ...>
+        <...ttwizard.HomeroomStep ...>
 
     If not all periods are in the request, update fails and the user
     gets an error.  This is unlikely in real life as the dropdowns
@@ -1127,7 +1129,7 @@ def doctest_PeriodOrderComplex():
     The next step is always the final step:
 
         >>> view.next()
-        <...ttwizard.FinalStep ...>
+        <...ttwizard.HomeroomStep ...>
 
     If not all periods are in the request, update fails and the user
     gets an error.  This is unlikely in real life as the dropdowns
@@ -1284,6 +1286,33 @@ def doctest_PeriodOrderComplex_weekly_rotating():
 
         >>> view.numSlots()
         [1, 1, 3, 1, 1]
+
+    """
+
+
+def doctest_HomeroomStep():
+    r"""Unit test for HomeroomStep
+
+        >>> from schooltool.timetable.browser.ttwizard import HomeroomStep
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
+        >>> view = HomeroomStep(context, request)
+
+    If you say that your school does not take attendance in a homeroom period,
+    you will be redirected to FinalStep.
+
+        >>> session = view.getSessionData()
+        >>> session['homeroom'] = 'no'
+        >>> view.next()
+        <...ttwizard.FinalStep...>
+
+    Otherwise, you will have to specify the homeroom period for each day
+
+    XXX not implemented yet
+
+        >>> session['homeroom'] = 'yes'
+        >>> view.next()
+        <...ttwizard.FinalStep...>
 
     """
 

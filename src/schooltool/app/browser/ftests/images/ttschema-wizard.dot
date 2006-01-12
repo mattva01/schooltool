@@ -12,9 +12,12 @@ digraph "Timetable Schema Wizard" {
   RotatingSlotEntryStep -> NamedPeriodsStep;
   WeeklySlotEntryStep -> NamedPeriodsStep;
   NamedPeriodsStep -> PeriodNamesStep;
-  NamedPeriodsStep -> FinalStep;
+  NamedPeriodsStep -> HomeroomStep;
   PeriodNamesStep -> PeriodOrderSimple;
   PeriodNamesStep -> PeriodOrderComplex;
-  PeriodOrderSimple -> FinalStep;
-  PeriodOrderComplex -> FinalStep;
+  PeriodOrderSimple -> HomeroomStep;
+  PeriodOrderComplex -> HomeroomStep;
+  HomeroomStep -> FinalStep;
+  HomeroomStep -> HomeroomPeriodsStep;
+  HomeroomPeriodsStep -> FinalStep;
 }
