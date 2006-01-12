@@ -17,13 +17,8 @@ taken.
 .. contents:: Overview
    :backlinks: none
 
-.. You can generate the png pictures from GraphViz files by running
-..
-..   for n in 1 2 3 4 5 6; do
-..     dot -Tpng -o ttschema-wizard-$n.png ttschema-wizard-$n.dot
-..     mogrify -resize 50% ttschema-wizard-$n.png
-..     convert -resize 25% ttschema-wizard-$n.png ttschema-wizard-$n-tiny.png
-..   done
+.. You can generate the png pictures from GraphViz files by running the
+.. update-images.sh shell script in the images/ subdirectory.
 
 The usual setup
 
