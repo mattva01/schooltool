@@ -69,6 +69,7 @@ Now the timetable:
     ... """
     >>> manager.getControl('Next').click()
     >>> manager.getControl('Designated by time').click()
+    >>> manager.getControl('No').click()
 
 
 We will need a course:

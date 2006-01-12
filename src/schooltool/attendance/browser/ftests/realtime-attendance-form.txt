@@ -61,6 +61,7 @@ We also need a term and a timetable
     ... """
     >>> manager.getControl('Next').click()
     >>> manager.getControl('Designated by time').click()
+    >>> manager.getControl('No').click()
 
 Let's schedule the section
 
