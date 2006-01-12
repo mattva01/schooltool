@@ -40,6 +40,7 @@ from zope.wfmc.interfaces import IProcessDefinition
 from zope.interface import implements
 from zope.component import adapts
 from zope.app import zapi
+from zope.security.proxy import removeSecurityProxy
 
 from schooltool import SchoolToolMessage as _
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -55,6 +56,8 @@ from schooltool.attendance.interfaces import UNKNOWN, PRESENT, ABSENT, TARDY
 from schooltool.attendance.interfaces import NEW, ACCEPTED, REJECTED
 from schooltool.attendance.interfaces import AttendanceError
 from schooltool.app.app import getSchoolToolApplication
+from schooltool.app.interfaces import ISchoolToolCalendar
+from schooltool.person.interfaces import IPerson
 
 
 #
@@ -205,18 +208,18 @@ class AttendanceCalendarMixin(object):
 
     """
 
-    def makeCalendar(self, first, last):
-        assert type(first) == datetime.date
-        assert type(last) == datetime.date
+    def makeCalendar(self):
         events = []
-        for record in self.filter(first, last):
+        for record in self:
             title = None
             if record.isTardy():
                 title = self.tardyEventTitle(record)
             elif record.isAbsent():
                 title = self.absenceEventTitle(record)
             if title:
-                events.append(self.makeCalendarEvent(record, title))
+                event = self.makeCalendarEvent(record, title)
+                event.__parent__ = None
+                events.append(event)
         return ImmutableCalendar(events)
 
 
@@ -406,3 +409,30 @@ class RejectExplanation(AttendanceWorkItem):
     def start(self, attendance_record):
         attendance_record.explanations[-1].status = REJECTED
         self.participant.activity.workItemFinished(self)
+
+#
+# Calendar Provider
+#
+
+class AttendanceCalendarProvider(object):
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def _getAuthenticatedUser(self):
+        return IPerson(self.request.principal, None)
+
+    def _isLookingAtOwnCalendar(self, user):
+        unproxied_context = removeSecurityProxy(self.context)
+        unproxied_calendar = removeSecurityProxy(ISchoolToolCalendar(user))
+        return unproxied_context is unproxied_calendar
+
+    def getCalendars(self):
+        user = self._getAuthenticatedUser()
+        if not user:
+            return
+
+        if self._isLookingAtOwnCalendar(user):
+            yield (ISectionAttendance(user).makeCalendar(), '#aa0000', '#ff0000')
+            yield (IDayAttendance(user).makeCalendar(), '#00aa00', '#00ff00')

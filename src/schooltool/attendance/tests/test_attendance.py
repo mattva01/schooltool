@@ -36,6 +36,7 @@ from zope.app.testing import setup
 from zope.app.annotation.interfaces import IAnnotations, IAttributeAnnotatable
 from zope.wfmc.interfaces import IParticipant, IProcessDefinition
 from zope.component import provideAdapter, provideUtility
+from zope.app.testing import ztapi
 
 import schooltool.app # Dead chicken to appease the circle of import gods
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -565,14 +566,17 @@ def doctest_AttendanceCalendarMixin_makeCalendar():
 
         >>> from schooltool.attendance.attendance \
         ...         import AttendanceCalendarMixin
-        >>> acm = AttendanceCalendarMixin()
+        >>> class MixinUserStub(AttendanceCalendarMixin):
+        ...     def __init__(self):
+        ...         self.events = []
+        ...     def __iter__(self):
+        ...         return iter(self.events)
+        >>> acm = MixinUserStub()
 
     When there are no incidents stored, makeCalendar returns an empty
     ImmutableCalendar:
 
-        >>> acm.filter = lambda first, last: []
-        >>> cal = acm.makeCalendar(datetime.date(2005, 12, 5),
-        ...                        datetime.date(2005, 12, 6))
+        >>> cal = acm.makeCalendar()
         >>> cal
         <schooltool.calendar.simple.ImmutableCalendar object at ...>
         >>> list(cal)
@@ -593,21 +597,21 @@ def doctest_AttendanceCalendarMixin_makeCalendar():
         >>> r5 = AttendanceRecordStub(dt3a, PRESENT)
 
         >>> from schooltool.calendar.simple import SimpleCalendarEvent
-        >>> acm.filter = lambda first, last: [r1, r2, r3, r4, r5]
+        >>> acm.events = [r1, r2, r3, r4, r5]
         >>> acm.absenceEventTitle = lambda record: 'Was absent'
         >>> acm.tardyEventTitle = lambda record: 'Was late'
         >>> acm.makeCalendarEvent = lambda r, title: SimpleCalendarEvent(
         ...                             r.date, datetime.timedelta(0), title)
 
-    Now let's inspect the calendar produced for the second day:
+    Now let's inspect the calendar:
 
-        >>> def print_for(first, last):
+        >>> def display():
         ...     def key(event):
         ...         return (event.dtstart, event.title)
-        ...     for ev in sorted(acm.makeCalendar(first, last), key=key):
+        ...     for ev in sorted(acm.makeCalendar(), key=key):
         ...         print ev.dtstart, ev.title
 
-        >>> print_for(dt1a.date(), dt3a.date())
+        >>> display()
         2005-12-07 13:30:00+00:00 Was absent
         2005-12-07 15:30:00+00:00 Was late
 
@@ -1093,7 +1097,6 @@ def doctest_SectionAttendance_makeCalendarEvent():
 def doctest_getSectionAttendance():
     """Tests for getSectionAttendance.
 
-        >>> setup.placelessSetUp()
         >>> setup.setUpAnnotations()
         >>> from schooltool.attendance.attendance import getSectionAttendance
         >>> provideAdapter(getSectionAttendance, [IPerson], ISectionAttendance)
@@ -1116,15 +1119,12 @@ def doctest_getSectionAttendance():
         >>> attendance is ISectionAttendance(person)
         True
 
-        >>> setup.placelessTearDown()
-
     """
 
 
 def doctest_getDayAttendance():
     """Tests for getDayAttendance.
 
-        >>> setup.placelessSetUp()
         >>> setup.setUpAnnotations()
         >>> from schooltool.attendance.attendance import getDayAttendance
         >>> provideAdapter(getDayAttendance, [IPerson], IDayAttendance)
@@ -1146,8 +1146,6 @@ def doctest_getDayAttendance():
 
         >>> attendance is IDayAttendance(person)
         True
-
-        >>> setup.placelessTearDown()
 
     """
 
@@ -1262,6 +1260,104 @@ def doctest_RejectExplanation():
 
         >>> ar.explanations[-1].status == REJECTED
         True
+
+    """
+
+def doctest_AttendanceCalendarProvider_getAuthenticatedUser():
+    """Tests for AttendanceCalendarProvider._getAuthenticatedUser.
+
+        >>> from schooltool.attendance.attendance import AttendanceCalendarProvider
+        >>> from zope.publisher.browser import TestRequest
+        >>> request = TestRequest()
+        >>> provider = AttendanceCalendarProvider(None, request)
+
+    If principal of the request can't be adapted to IPerson method returns None:
+
+        >>> provider._getAuthenticatedUser() is None
+        True
+
+    If the principal can be adapted - it returns the resulting Person:
+
+        >>> ztapi.provideAdapter(None, IPerson, lambda ctx: "IPerson(%s)" % ctx)
+
+        >>> request.setPrincipal("principal")
+
+        >>> print provider._getAuthenticatedUser()
+        IPerson(principal)
+
+    """
+
+def doctest_AttendanceCalendarProvider_isLookingAtOwnCalendar():
+    """Tests for AttendanceCalendarProvider._isLookingAtOwnCalendar.
+
+    Some set up:
+
+        >>> from schooltool.app.interfaces import ISchoolToolCalendar
+        >>> calendar = object()
+        >>> ztapi.provideAdapter(None, ISchoolToolCalendar, lambda ctx: calendar)
+
+    If the calendar of the user passed to this function is not the
+    same as the context of the provider - the user is looking at the
+    calendar of someone else:
+
+        >>> from schooltool.attendance.attendance import AttendanceCalendarProvider
+        >>> provider = AttendanceCalendarProvider(None, None)
+
+        >>> provider._isLookingAtOwnCalendar("User")
+        False
+
+    If it is the same calendar - the function should return True:
+
+        >>> provider.context = calendar
+        >>> provider._isLookingAtOwnCalendar("User")
+        True
+
+    """
+
+def doctest_AttendanceCalendarProvider():
+    """Tests for AttendanceCalendarProvider.
+
+        >>> from schooltool.attendance.attendance import AttendanceCalendarProvider
+        >>> provider = AttendanceCalendarProvider(None, None)
+
+    If there is no principal in the request (no users logged in) -
+    attendance calendar is not visible:
+
+        >>> provider._getAuthenticatedUser = lambda: False
+        >>> list(provider.getCalendars())
+        []
+
+    Let's log someone in:
+
+        >>> provider._getAuthenticatedUser = lambda: "User"
+
+    If user is looking at the calendar of some one else - he will not
+    see anything either:
+
+        >>> provider._isLookingAtOwnCalendar = lambda user: False
+        >>> list(provider.getCalendars())
+        []
+
+    If he is looking at the calendar of his own - his daily and
+    section attendance calendars should be in the list (we'll stub
+    them first):
+
+        >>> class AttendanceStub(object):
+        ...     def __init__(self, name):
+        ...         self.name = name
+        ...     def makeCalendar(self):
+        ...         return "%s" % self.name
+
+        >>> ztapi.provideAdapter(None, IDayAttendance,
+        ...     lambda user: AttendanceStub("DayAttendance calendar"))
+
+        >>> ztapi.provideAdapter(None, ISectionAttendance,
+        ...     lambda user: AttendanceStub("SectionAttendance calendar"))
+
+        >>> provider._isLookingAtOwnCalendar = lambda user: True
+        >>> list(provider.getCalendars())
+        [('SectionAttendance calendar', '#aa0000', '#ff0000'),
+         ('DayAttendance calendar', '#00aa00', '#00ff00')]
 
     """
 

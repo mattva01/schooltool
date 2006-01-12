@@ -49,11 +49,10 @@ class IAttendance(Interface):
         None of the returned records will have status == UNKNOWN.
         """
 
-    def makeCalendar(first, last):
+    def makeCalendar():
         """Return attendance incidents as calendar events.
 
-        Considers only those attendace records (ar) for which
-        first <= ar.date <= last, and ar.status is ABSENT or TARDY.
+        Lists all the attendace records (ar).
         """
 
 
