@@ -534,7 +534,30 @@ class NamedPeriodsStep(ChoiceStep):
         if session['named_periods']:
             return PeriodNamesStep(self.context, self.request)
         else:
+            periods_order = default_period_names(session['time_slots'])
+            session['periods_order'] = periods_order
             return HomeroomStep(self.context, self.request)
+
+
+def default_period_names(time_slots):
+    """Derive period names and order from time slots.
+
+        >>> from datetime import time, timedelta
+        >>> periods = [(time(9, 0), timedelta(minutes=50)),
+        ...            (time(12, 35), timedelta(minutes=50)),
+        ...            (time(14, 15), timedelta(minutes=55))]
+        >>> periods2 = [(time(9, 10), timedelta(minutes=50)),
+        ...             (time(12, 35), timedelta(minutes=50))]
+        >>> default_period_names([periods] * 3 + [periods2])
+        [['09:00-09:50', '12:35-13:25', '14:15-15:10'],
+         ['09:00-09:50', '12:35-13:25', '14:15-15:10'],
+         ['09:00-09:50', '12:35-13:25', '14:15-15:10'],
+         ['09:10-10:00', '12:35-13:25']]
+
+    """
+    return [[format_time_range(tstart, duration)
+             for tstart, duration in slots]
+            for slots in time_slots]
 
 
 class PeriodNamesStep(FormStep):
@@ -798,44 +821,6 @@ class FinalStep(Step):
 
     modelFactory = staticmethod(modelFactory)
 
-    def periodNames(named_periods, periods_order, time_slots):
-        """Return names of periods for each day in order, in the time slot
-        cycle.
-
-        `named_periods` indicates whether periods are named (as opposed to
-        being designated by time).
-
-        `periods_order` is a list of lists of period names in order (one list
-        per day).
-
-        `time_slots` is a list of day definitions, where each day is a
-        list of slots, and each slot is a tuple (tstart, duration).
-
-            >>> FinalStep.periodNames(True, [['a', 'b', 'c']] * 3, None)
-            [['a', 'b', 'c'], ['a', 'b', 'c'], ['a', 'b', 'c']]
-
-            >>> from datetime import time, timedelta
-            >>> periods = [(time(9, 0), timedelta(minutes=50)),
-            ...            (time(12, 35), timedelta(minutes=50)),
-            ...            (time(14, 15), timedelta(minutes=55))]
-            >>> periods2 = [(time(9, 10), timedelta(minutes=50)),
-            ...             (time(12, 35), timedelta(minutes=50))]
-            >>> FinalStep.periodNames(False, None, [periods] * 3 + [periods2])
-            [['09:00-09:50', '12:35-13:25', '14:15-15:10'],
-             ['09:00-09:50', '12:35-13:25', '14:15-15:10'],
-             ['09:00-09:50', '12:35-13:25', '14:15-15:10'],
-             ['09:10-10:00', '12:35-13:25']]
-
-        """
-        if named_periods:
-            return periods_order
-        else:
-            return [[format_time_range(tstart, duration)
-                     for tstart, duration in slots]
-                    for slots in time_slots]
-
-    periodNames = staticmethod(periodNames)
-
     def dayTemplates(periods_order, time_slots):
         """Return a dict of day templates for ITimetableModelFactory.
 
@@ -866,10 +851,8 @@ class FinalStep(Step):
         session = self.getSessionData()
         title = session['title']
         day_ids = session['day_names']
+        periods_order = session['periods_order']
 
-        periods_order = self.periodNames(session['named_periods'],
-                                         session.get('periods_order'),
-                                         session['time_slots'])
         day_templates = self.dayTemplates(periods_order, session['time_slots'])
 
         model_factory = self.modelFactory(session['cycle'],

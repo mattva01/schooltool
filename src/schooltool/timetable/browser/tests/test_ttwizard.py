@@ -756,18 +756,31 @@ def doctest_NamedPeriodsStep():
         >>> view.next()
         <schooltool.timetable.browser.ttwizard.PeriodNamesStep...>
 
-    If periods are not named, go straight to the homeroom step:
+    If periods are not named, go straight to the homeroom step, and compute
+    the default period names:
 
+        >>> from datetime import time, timedelta
+        >>> periods = [(time(9, 0), timedelta(minutes=50)),
+        ...            (time(12, 35), timedelta(minutes=50)),
+        ...            (time(14, 15), timedelta(minutes=55))]
+        >>> periods2 = [(time(9, 10), timedelta(minutes=50)),
+        ...             (time(12, 35), timedelta(minutes=50))]
+        >>> view.getSessionData()['time_slots'] = [periods] * 2 + [periods2]
         >>> view.getSessionData()['named_periods'] = False
+
         >>> view.next()
         <...ttwizard.HomeroomStep...>
+
+        >>> pprint(view.getSessionData()['periods_order'])
+        [['09:00-09:50', '12:35-13:25', '14:15-15:10'],
+         ['09:00-09:50', '12:35-13:25', '14:15-15:10'],
+         ['09:10-10:00', '12:35-13:25']]
 
     """
 
 
 def doctest_PeriodNamesStep():
-    r"""
-    Unit test for PeriodNamesStep
+    r"""Unit test for PeriodNamesStep
 
         >>> from schooltool.timetable.browser.ttwizard import PeriodNamesStep
         >>> context = app['ttschemas']
@@ -1398,7 +1411,7 @@ def doctest_HomeroomPeriodsStep():
 
 
 def doctest_FinalStep():
-    """Unit test for FinalStep
+    r"""Unit test for FinalStep
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
         >>> context = app['ttschemas']
@@ -1418,6 +1431,9 @@ def doctest_FinalStep():
         >>> data['time_slots'] = [[(time(9, 30), timedelta(minutes=55)),
         ...                        (time(10, 30), timedelta(minutes=55))]]
         >>> data['named_periods'] = False
+        >>> from schooltool.timetable.browser.ttwizard \
+        ...     import default_period_names
+        >>> data['periods_order'] = default_period_names(data['time_slots'])
 
         >>> view()
 
@@ -1509,7 +1525,7 @@ def doctest_FinalStep_dayTemplates():
 
 
 def doctest_FinalStep_createSchema():
-    """Unit test for FinalStep.createSchema
+    r"""Unit test for FinalStep.createSchema
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
         >>> context = app['ttschemas']
@@ -1528,6 +1544,9 @@ def doctest_FinalStep_createSchema():
         >>> data['time_slots'] = [[(time(9, 30), timedelta(minutes=55)),
         ...                        (time(10, 30), timedelta(minutes=55))]] * 5
         >>> data['named_periods'] = False
+        >>> from schooltool.timetable.browser.ttwizard \
+        ...     import default_period_names
+        >>> data['periods_order'] = default_period_names(data['time_slots'])
 
         >>> ttschema = view.createSchema()
         >>> ttschema
