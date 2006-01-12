@@ -729,12 +729,12 @@ class HomeroomStep(ChoiceStep):
     question = _("Do you check student attendance for the day in a homeroom"
                  " period or equivalent?")
 
-    choices = (('yes', _("Yes")),
-               ('no',  _("No")))
+    choices = ((True,  _("Yes")),
+               (False, _("No")))
 
     def next(self):
         session = self.getSessionData()
-        if session['homeroom'] == 'yes':
+        if session['homeroom']:
             return HomeroomPeriodsStep(self.context, self.request)
         else:
             return FinalStep(self.context, self.request)
@@ -749,8 +749,8 @@ class HomeroomPeriodsStep(Step):
 
     error = None
 
-    def periods(self):
-        return self.getSessionData()['period_names']
+    def periodsInOrder(self):
+        return self.getSessionData()['periods_order']
 
     def days(self):
         session = self.getSessionData()
@@ -758,8 +758,16 @@ class HomeroomPeriodsStep(Step):
 
     def update(self):
         result = []
-        for daynr in range(len(self.days())):
+        for daynr, periods in enumerate(self.periodsInOrder()):
             homeroom_period_id = self.request.get('homeroom_%d' % daynr)
+            if not homeroom_period_id:
+                homeroom_period_id = None
+            else:
+                if homeroom_period_id not in periods:
+                    self.error = _("There is no period $period on $day.",
+                                   mapping={'period': homeroom_period_id,
+                                            'day': self.days()[daynr]})
+                    return False
             result.append(homeroom_period_id)
         self.getSessionData()['homeroom_periods'] = result
         return True
@@ -852,6 +860,10 @@ class FinalStep(Step):
         title = session['title']
         day_ids = session['day_names']
         periods_order = session['periods_order']
+        if session['homeroom']:
+            homeroom_periods = session['homeroom_periods']
+        else:
+            homeroom_periods = [None] * len(day_ids)
 
         day_templates = self.dayTemplates(periods_order, session['time_slots'])
 
@@ -865,8 +877,9 @@ class FinalStep(Step):
                                   for idx, day_id in enumerate(day_ids)])
         model = model_factory(day_ids, day_templates)
         ttschema = TimetableSchema(day_ids, title=title, model=model)
-        for day_id, periods in zip(day_ids, periods_order):
-            ttschema[day_id] = TimetableSchemaDay(periods)
+        for day_id, periods, hpid in zip(day_ids, periods_order,
+                                         homeroom_periods):
+            ttschema[day_id] = TimetableSchemaDay(periods, hpid)
         return ttschema
 
     def add(self, ttschema):

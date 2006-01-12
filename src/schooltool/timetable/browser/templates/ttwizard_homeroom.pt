@@ -19,15 +19,15 @@
       <th tal:repeat="day view/days" tal:content="day" i18n:translate="" />
     </tr>
     <tr>
-      <td tal:repeat="day view/days">
-        <select tal:define="daynr repeat/day/index;
+      <td tal:repeat="periods view/periodsInOrder">
+        <select tal:define="daynr repeat/periods/index;
                             name string:homeroom_${daynr}"
                 tal:attributes="name name">
           <option tal:attributes="selected
                           python:not request.get(name)"
                   i18n:translate=""
                   value="">(none)</option>
-          <option tal:repeat="period view/periods"
+          <option tal:repeat="period periods"
                   tal:attributes="selected
                           python:period == request.get(name)"
                   tal:content="period" />

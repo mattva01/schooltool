@@ -1315,13 +1315,13 @@ def doctest_HomeroomStep():
     you will be redirected to FinalStep.
 
         >>> session = view.getSessionData()
-        >>> session['homeroom'] = 'no'
+        >>> session['homeroom'] = False
         >>> view.next()
         <...ttwizard.FinalStep...>
 
     Otherwise, you will have to specify the homeroom period for each day
 
-        >>> session['homeroom'] = 'yes'
+        >>> session['homeroom'] = True
         >>> view.next()
         <...ttwizard.HomeroomPeriodsStep...>
 
@@ -1337,20 +1337,22 @@ def doctest_HomeroomPeriodsStep():
         >>> request = TestRequest()
         >>> view = HomeroomPeriodsStep(context, request)
 
-    Let's say we have some periods:
+    Let's say we have some days with periods:
 
-        >>> view.getSessionData()['period_names'] = ['A', 'B', 'C', 'D']
+        >>> view.getSessionData()['day_names'] = ['Day1', 'Day2', 'Day3']
+        >>> view.getSessionData()['periods_order'] = [['A', 'B', 'C', 'D'],
+        ...                                           ['B', 'C', 'D', 'E'],
+        ...                                           ['C', 'D', 'E', 'F']]
 
     Our view lets the template easily access them:
 
-        >>> view.periods()
-        ['A', 'B', 'C', 'D']
-
-    Our view lets the template easily access days too:
-
-        >>> view.getSessionData()['day_names'] = ['Day1', 'Day2', 'Day3']
         >>> view.days()
         ['Day1', 'Day2', 'Day3']
+
+        >>> view.periodsInOrder()
+        [['A', 'B', 'C', 'D'],
+         ['B', 'C', 'D', 'E'],
+         ['C', 'D', 'E', 'F']]
 
     If we render the view, we get a list of select boxes with period names; one
     for each day:
@@ -1370,19 +1372,19 @@ def doctest_HomeroomPeriodsStep():
               <td>
                 <select name="homeroom_1">
                   <option value="" selected="selected">(none)</option>
-                  <option>A</option>
                   <option>B</option>
                   <option>C</option>
                   <option>D</option>
+                  <option>E</option>
                 </select>
               </td>
               <td>
                 <select name="homeroom_2">
                   <option value="" selected="selected">(none)</option>
-                  <option>A</option>
-                  <option>B</option>
                   <option>C</option>
                   <option>D</option>
+                  <option>E</option>
+                  <option>F</option>
                 </select>
               </td>
           ...
@@ -1391,16 +1393,25 @@ def doctest_HomeroomPeriodsStep():
     is remembered.
 
         >>> request = TestRequest(form={'homeroom_0': 'D',
-        ...                             'homeroom_2': 'B'})
+        ...                             'homeroom_2': 'C'})
         >>> view = HomeroomPeriodsStep(context, request)
-        >>> view.getSessionData()['period_names'] = ['A', 'B', 'C', 'D',
-        ...                                          'E', 'F']
-        >>> view.getSessionData()['day_names'] = ['1', '2', '3']
+        >>> view.getSessionData()['day_names'] = ['Day 1', 'Day 2', 'Day 3']
+        >>> view.getSessionData()['periods_order'] = [['A', 'B', 'C', 'D'],
+        ...                                           ['B', 'C', 'D', 'E'],
+        ...                                           ['C', 'D', 'E', 'F']]
 
         >>> view.update()
         True
         >>> print view.getSessionData()['homeroom_periods']
-        ['D', None, 'B']
+        ['D', None, 'C']
+
+    You are not allowed to sneak in periods which do not exist in a given day
+
+        >>> view.request.form['homeroom_1'] = 'A'
+        >>> view.update()
+        False
+        >>> print translate(view.error)
+        There is no period A on Day 2.
 
     The next step is always the final step:
 
@@ -1418,9 +1429,6 @@ def doctest_FinalStep():
         >>> request = TestRequest()
         >>> view = FinalStep(context, request)
 
-    In its first primitive incarnation, the wizard can magically create a whole
-    schema from almost no user data at all!  XXX: fix this
-
         >>> from datetime import time, timedelta
         >>> data = view.getSessionData()
         >>> data['title'] = u'Sample Schema'
@@ -1434,6 +1442,7 @@ def doctest_FinalStep():
         >>> from schooltool.timetable.browser.ttwizard \
         ...     import default_period_names
         >>> data['periods_order'] = default_period_names(data['time_slots'])
+        >>> data['homeroom'] = False
 
         >>> view()
 
@@ -1547,6 +1556,7 @@ def doctest_FinalStep_createSchema():
         >>> from schooltool.timetable.browser.ttwizard \
         ...     import default_period_names
         >>> data['periods_order'] = default_period_names(data['time_slots'])
+        >>> data['homeroom'] = False
 
         >>> ttschema = view.createSchema()
         >>> ttschema
@@ -1629,6 +1639,7 @@ def doctest_FinalStep_createSchema_different_order_on_different_days_weekly():
         ...                          ['C', 'D', 'E', 'F'],
         ...                          ['D', 'E', 'F', 'G'],
         ...                          ['E', 'F', 'G', 'H']]
+        >>> data['homeroom'] = False
         >>> ttschema = view.createSchema()
 
         >>> print_ttschema(ttschema)
@@ -1676,6 +1687,7 @@ def doctest_FinalStep_createSchema_different_order_on_different_days_cyclic():
         >>> data['periods_order'] = [['A', 'B', 'C', 'D'],
         ...                          ['B', 'C', 'D', 'E'],
         ...                          ['C', 'D', 'E', 'F']]
+        >>> data['homeroom'] = False
         >>> ttschema = view.createSchema()
 
         >>> print_ttschema(ttschema)
@@ -1735,6 +1747,7 @@ def doctest_FinalStep_createSchema_different_order_cyclic_weekly():
         >>> data['periods_order'] = [['A', 'B', 'C', 'D', 'E', 'F'],
         ...                          ['B', 'C', 'D', 'E', 'F', 'A'],
         ...                          ['C', 'D', 'E', 'F', 'A', 'B']]
+        >>> data['homeroom'] = False
         >>> ttschema = view.createSchema()
 
         >>> print_ttschema(ttschema)
@@ -1809,6 +1822,7 @@ def doctest_FinalStep_createSchema_different_times():
         ...                          ['C', 'D', 'E', 'F'],
         ...                          ['D', 'E', 'F', 'G'],
         ...                          ['E', 'F', 'G', 'H']]
+        >>> data['homeroom'] = False
         >>> ttschema = view.createSchema()
 
         >>> print_ttschema(ttschema)
@@ -1817,6 +1831,94 @@ def doctest_FinalStep_createSchema_different_times():
         B            C            D            E            F
         C            D            E            F            G
         D            E            F            G            H
+
+        >>> for day_id, day in ttschema.items():
+        ...     if day.homeroom_period_id is not None:
+        ...         print "Homeroom on %s is %s" % (day_id,
+        ...                                         day.homeroom_period_id)
+
+        >>> ttschema.model
+        <...WeeklyTimetableModel object at ...>
+
+        >>> print_day_templates(ttschema.model.dayTemplates)
+        --- day template None
+        --- day template 0
+        08:00-08:45
+        09:00-09:45
+        10:00-10:45
+        11:00-11:45
+        --- day template 1
+        08:05-08:50
+        09:05-09:50
+        10:05-10:50
+        11:05-11:50
+        --- day template 2
+        08:10-08:55
+        09:10-09:55
+        10:10-10:55
+        11:10-11:55
+        --- day template 3
+        08:15-09:00
+        09:15-10:00
+        10:15-11:00
+        11:15-12:00
+        --- day template 4
+        08:20-09:05
+        09:20-10:05
+        10:20-11:05
+        11:20-12:05
+
+    """
+
+
+def doctest_FinalStep_createSchema_with_homeroom():
+    """Unit test for FinalStep.createSchema
+
+    Weekly cycle, different time slots on each day, different period order in
+    each day, homeroom periods.
+
+        >>> from schooltool.timetable.browser.ttwizard import FinalStep
+        >>> view = FinalStep(app['ttschemas'], TestRequest())
+        >>> data = view.getSessionData()
+
+        >>> from datetime import time, timedelta
+        >>> slots = [[(time(8+n, d*5), timedelta(minutes=45))
+        ...           for n in range(4)]
+        ...          for d in range(5)]
+
+        >>> data['title'] = u'Default'
+        >>> data['cycle'] = 'weekly'
+        >>> data['day_names'] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
+        ...                      'Friday']
+        >>> data['similar_days'] = False
+        >>> data['time_slots'] = slots
+        >>> data['named_periods'] = True
+        >>> data['period_names'] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+        >>> data['periods_same'] = False
+        >>> data['periods_order'] = [['A', 'B', 'C', 'D'],
+        ...                          ['B', 'C', 'D', 'E'],
+        ...                          ['C', 'D', 'E', 'F'],
+        ...                          ['D', 'E', 'F', 'G'],
+        ...                          ['E', 'F', 'G', 'H']]
+        >>> data['homeroom'] = True
+        >>> data['homeroom_periods'] = ['A', 'C', None, 'F', 'H']
+        >>> ttschema = view.createSchema()
+
+        >>> print_ttschema(ttschema)
+        Monday       Tuesday      Wednesday    Thursday     Friday
+        A            B            C            D            E
+        B            C            D            E            F
+        C            D            E            F            G
+        D            E            F            G            H
+
+        >>> for day_id, day in ttschema.items():
+        ...     if day.homeroom_period_id is not None:
+        ...         print "Homeroom on %s is %s" % (day_id,
+        ...                                         day.homeroom_period_id)
+        Homeroom on Monday is A
+        Homeroom on Tuesday is C
+        Homeroom on Thursday is F
+        Homeroom on Friday is H
 
         >>> ttschema.model
         <...WeeklyTimetableModel object at ...>
