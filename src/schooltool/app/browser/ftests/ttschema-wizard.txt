@@ -7,12 +7,12 @@ taken.
 
    |testpath1| |testpath2| |testpath3| |testpath4| |testpath5| |testpath6|
 
-.. |testpath1| image:: ttschema-wizard-1-tiny.png
-.. |testpath2| image:: ttschema-wizard-2-tiny.png
-.. |testpath3| image:: ttschema-wizard-3-tiny.png
-.. |testpath4| image:: ttschema-wizard-4-tiny.png
-.. |testpath5| image:: ttschema-wizard-5-tiny.png
-.. |testpath6| image:: ttschema-wizard-6-tiny.png
+.. |testpath1| image:: images/ttschema-wizard-1-tiny.png
+.. |testpath2| image:: images/ttschema-wizard-2-tiny.png
+.. |testpath3| image:: images/ttschema-wizard-3-tiny.png
+.. |testpath4| image:: images/ttschema-wizard-4-tiny.png
+.. |testpath5| image:: images/ttschema-wizard-5-tiny.png
+.. |testpath6| image:: images/ttschema-wizard-6-tiny.png
 
 .. contents:: Overview
    :backlinks: none
@@ -37,7 +37,7 @@ The usual setup
 Weekly timetable
 ----------------
 
-.. image:: ttschema-wizard-1.png
+.. image:: images/ttschema-wizard-1.png
 
 Let's go to the `new timetable schema` wizard:
 
@@ -141,7 +141,7 @@ We can examine its composition more easily by invoking the RESTive view.
 Rotating timetable
 ------------------
 
-.. image:: ttschema-wizard-2.png
+.. image:: images/ttschema-wizard-2.png
 
 Let's do it again!
 
@@ -259,7 +259,7 @@ We can examine its composition more easily by invoking the RESTive view.
 Rotating timetable, take two
 ----------------------------
 
-.. image:: ttschema-wizard-3.png
+.. image:: images/ttschema-wizard-3.png
 
 Let's do it again!
 
@@ -385,7 +385,7 @@ The schema is now created:
 Weekly timetable, take two
 --------------------------
 
-.. image:: ttschema-wizard-4.png
+.. image:: images/ttschema-wizard-4.png
 
 Let's go to the timetable schema wizard:
 
@@ -564,7 +564,7 @@ The schema is now created:
 Rotating timetable, take three
 ------------------------------
 
-.. image:: ttschema-wizard-5.png
+.. image:: images/ttschema-wizard-5.png
 
 Let's do it again!
 
@@ -1018,7 +1018,7 @@ The schema is now created:
 Rotating timetable, take four
 -----------------------------
 
-.. image:: ttschema-wizard-6.png
+.. image:: images/ttschema-wizard-6.png
 
 Let's do it one last time!
 
