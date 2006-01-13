@@ -571,6 +571,8 @@ def doctest_AttendanceCalendarMixin_makeCalendar():
         ...         self.events = []
         ...     def __iter__(self):
         ...         return iter(self.events)
+        ...     def incidentDescription(self, record):
+        ...         return "Description"
         >>> acm = MixinUserStub()
 
     When there are no incidents stored, makeCalendar returns an empty
@@ -600,7 +602,7 @@ def doctest_AttendanceCalendarMixin_makeCalendar():
         >>> acm.events = [r1, r2, r3, r4, r5]
         >>> acm.absenceEventTitle = lambda record: 'Was absent'
         >>> acm.tardyEventTitle = lambda record: 'Was late'
-        >>> acm.makeCalendarEvent = lambda r, title: SimpleCalendarEvent(
+        >>> acm.makeCalendarEvent = lambda r, title, desc: SimpleCalendarEvent(
         ...                             r.date, datetime.timedelta(0), title)
 
     Now let's inspect the calendar:
@@ -614,6 +616,26 @@ def doctest_AttendanceCalendarMixin_makeCalendar():
         >>> display()
         2005-12-07 13:30:00+00:00 Was absent
         2005-12-07 15:30:00+00:00 Was late
+
+    """
+
+
+def doctest_AttendanceCalendarMixin_incidentDescription():
+    r"""Tests for AttendanceCalendarMixin.incidentDescription
+
+        >>> from schooltool.attendance.attendance import AttendanceCalendarMixin
+        >>> acm = AttendanceCalendarMixin()
+        >>> class RecordStub(object):
+        ...     def __init__(self, explained):
+        ...         self.explained = explained
+        ...     def isExplained(self):
+        ...         return self.explained
+
+        >>> acm.incidentDescription(RecordStub(False))
+        u'Is not explanained yet.'
+
+        >>> acm.incidentDescription(RecordStub(True))
+        u'Explanation was accepted.'
 
     """
 
@@ -806,13 +828,13 @@ def doctest_DayAttendance_makeCalendarEvent():
         >>> day = datetime.date(2005, 11, 23)
         >>> ar = DayAttendanceRecord(day, ABSENT)
 
-        >>> ev = sa.makeCalendarEvent(ar, 'John was bad today')
+        >>> ev = sa.makeCalendarEvent(ar, 'John was bad today', 'Very bad')
         >>> ICalendarEvent.providedBy(ev)
         True
         >>> ev.allday
         True
-        >>> print ev.dtstart, ev.duration, ev.title
-        2005-11-23 00:00:00+00:00 1 day, 0:00:00 John was bad today
+        >>> print ev.dtstart, ev.duration, ev.title, ev.description
+        2005-11-23 00:00:00+00:00 1 day, 0:00:00 John was bad today Very bad
 
     """
 
@@ -1081,11 +1103,11 @@ def doctest_SectionAttendance_makeCalendarEvent():
         >>> ar = SectionAttendanceRecord(section, dt, ABSENT, duration,
         ...                              period_id)
 
-        >>> ev = sa.makeCalendarEvent(ar, 'John was bad today')
+        >>> ev = sa.makeCalendarEvent(ar, 'John was bad today', 'Very bad')
         >>> ICalendarEvent.providedBy(ev)
         True
-        >>> print ev.dtstart, ev.duration, ev.title
-        2005-11-23 14:55:00+00:00 0:45:00 John was bad today
+        >>> print ev.dtstart, ev.duration, ev.title, ev.description
+        2005-11-23 14:55:00+00:00 0:45:00 John was bad today Very bad
 
     """
 

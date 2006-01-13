@@ -208,6 +208,13 @@ class AttendanceCalendarMixin(object):
 
     """
 
+    def incidentDescription(self, record):
+        """The description of the event for the attendance record."""
+        if record.isExplained():
+            return translate(_("Explanation was accepted."))
+        else:
+            return translate(_("Is not explanained yet."))
+
     def makeCalendar(self):
         events = []
         for record in self:
@@ -217,7 +224,8 @@ class AttendanceCalendarMixin(object):
             elif record.isAbsent():
                 title = self.absenceEventTitle(record)
             if title:
-                event = self.makeCalendarEvent(record, title)
+                description = self.incidentDescription(record)
+                event = self.makeCalendarEvent(record, title, description)
                 event.__parent__ = None
                 events.append(event)
         return ImmutableCalendar(events)
@@ -244,12 +252,13 @@ class DayAttendance(Persistent, AttendanceFilteringMixin,
         """Produce a title for a calendar event representing an absence."""
         return translate(_('Was absent from homeroom.'))
 
-    def makeCalendarEvent(self, record, title):
+    def makeCalendarEvent(self, record, title, description):
         """Produce a calendar event for an absence or a tardy."""
         # XXX mg: Having to specify a date*time* for an all-day event makes NO
         #         SENSE WHATSOEVER.  Grr!
         dtstart = datetime.datetime.combine(record.date, datetime.time())
         return SimpleCalendarEvent(title=title,
+                                   description=description,
                                    dtstart=dtstart,
                                    duration=datetime.timedelta(1),
                                    allday=True)
@@ -297,9 +306,10 @@ class SectionAttendance(Persistent, AttendanceFilteringMixin,
         return translate(_('Was absent from ${section}.',
                            mapping={'section': record.section.title}))
 
-    def makeCalendarEvent(self, record, title):
+    def makeCalendarEvent(self, record, title, description):
         """Produce a calendar event for an absence or a tardy."""
         return SimpleCalendarEvent(title=title,
+                                   description=description,
                                    dtstart=record.datetime,
                                    duration=record.duration)
 
