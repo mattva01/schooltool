@@ -203,6 +203,12 @@ class RealtimeAttendanceView(BrowserView):
         result.sort(key=lambda this: this.title)
         return result
 
+    def getDaysAttendanceRecords(self, student, date):
+        """Return all attendance records for a student and a given date."""
+        records = list(ISectionAttendance(student).getAllForDay(date))
+        records.append(IDayAttendance(student).get(date))
+        return records
+
     def studentStatus(self, student):
         """Returns the attendance status of a student
 
@@ -218,13 +224,10 @@ class RealtimeAttendanceView(BrowserView):
            attendance-explained -- only explained absences/tardies
 
         """
-        records = ISectionAttendance(student).getAllForDay(self.date)
-        # TODO: use day attendance here
-        #records.extend([IDayAttendance(student).get(self.date)])
         was_present = False
         was_absent = False
         was_absent_unexplained = False
-        for ar in records:
+        for ar in self.getDaysAttendanceRecords(student, self.date):
             if ar.isUnknown():
                 continue
             elif ar.isPresent():

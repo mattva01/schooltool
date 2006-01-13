@@ -203,10 +203,14 @@ def doctest_RealtimeAttendanceView_listMembers():
     First, let's register getSectionAttendance as an adapter:
 
         >>> from schooltool.attendance.interfaces import ISectionAttendance
+        >>> from schooltool.attendance.interfaces import IDayAttendance
         >>> from schooltool.attendance.attendance import getSectionAttendance
+        >>> from schooltool.attendance.attendance import getDayAttendance
         >>> from schooltool.person.interfaces import IPerson
         >>> ztapi.provideAdapter(IPerson, ISectionAttendance,
         ...                      getSectionAttendance)
+        >>> ztapi.provideAdapter(IPerson, IDayAttendance,
+        ...                      getDayAttendance)
 
     We'll need timetabling too:
 
@@ -311,16 +315,57 @@ def doctest_RealtimeAttendanceView_listMembers():
     """
 
 
+class SectionAttendanceStub(object):
+    def __init__(self, person):
+        self.person = person
+
+    def getAllForDay(self, date):
+        return ['s_%s_%s_%s' % (self.person, date, c) for c in 'a', 'b']
+
+
+class DayAttendanceStub(object):
+    def __init__(self, person):
+        self.person = person
+
+    def get(self, date):
+        return 'd_%s_%s' % (self.person, date)
+
+
+def doctest_RealtimeAttendanceView_getDaysAttendanceRecords():
+    r"""Tests for RealtimeAttendanceView.getDaysAttendanceRecords.
+
+        >>> from schooltool.person.interfaces import IPerson
+        >>> from schooltool.attendance.interfaces import ISectionAttendance
+        >>> from schooltool.attendance.interfaces import IDayAttendance
+        >>> ztapi.provideAdapter(None, ISectionAttendance,
+        ...                      SectionAttendanceStub)
+        >>> ztapi.provideAdapter(None, IDayAttendance,
+        ...                      DayAttendanceStub)
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...         import RealtimeAttendanceView
+        >>> view = RealtimeAttendanceView(None, None)
+
+        >>> view.getDaysAttendanceRecords('stud1', datetime.date(2006, 1, 3))
+        ['s_stud1_2006-01-03_a', 's_stud1_2006-01-03_b', 'd_stud1_2006-01-03']
+
+    """
+
+
 def doctest_RealtimeAttendanceView_studentStatus():
     r"""Tests for RealtimeAttendanceView.studentStatus
 
     First, let's register getSectionAttendance as an adapter:
 
         >>> from schooltool.attendance.interfaces import ISectionAttendance
+        >>> from schooltool.attendance.interfaces import IDayAttendance
         >>> from schooltool.attendance.attendance import getSectionAttendance
+        >>> from schooltool.attendance.attendance import getDayAttendance
         >>> from schooltool.person.interfaces import IPerson
         >>> ztapi.provideAdapter(IPerson, ISectionAttendance,
         ...                      getSectionAttendance)
+        >>> ztapi.provideAdapter(IPerson, IDayAttendance,
+        ...                      getDayAttendance)
 
 
         >>> from schooltool.attendance.browser.attendance import \
