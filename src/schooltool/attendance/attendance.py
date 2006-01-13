@@ -210,10 +210,13 @@ class AttendanceCalendarMixin(object):
 
     def incidentDescription(self, record):
         """The description of the event for the attendance record."""
+        # The mapping argument is here to suppress a spurious deprecation
+        # warning.  See Zope 3 bug http://www.zope.org/Collectors/Zope3-dev/531
+        workaround = {'': ''}
         if record.isExplained():
-            return translate(_("Explanation was accepted."))
+            return translate(_("Explanation was accepted.", mapping=workaround))
         else:
-            return translate(_("Is not explanained yet."))
+            return translate(_("Is not explanained yet.", mapping=workaround))
 
     def makeCalendar(self):
         events = []
