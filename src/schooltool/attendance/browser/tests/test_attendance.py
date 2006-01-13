@@ -21,6 +21,7 @@ Tests for SchoolTool attendance views
 
 $Id$
 """
+
 import unittest
 import datetime
 from pprint import pprint
@@ -734,6 +735,7 @@ def doctest_RealtimeAttendanceView_update():
 
 
     """
+
 
 def doctest_RealtimeAttendanceView_getArrival():
     """Tests for RealtimeAttendanceView.getArrival

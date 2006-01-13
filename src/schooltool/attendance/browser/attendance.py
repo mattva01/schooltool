@@ -21,6 +21,7 @@ Views for SchoolTool attendance
 
 $Id$
 """
+
 import datetime
 from pytz import utc
 
@@ -46,16 +47,18 @@ from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.attendance.interfaces import ABSENT, TARDY, PRESENT, UNKNOWN
 from schooltool import SchoolToolMessage as _
 
+
 AttendanceCSSViewlet = viewlet.CSSViewlet("attendance.css")
 
 
 def getPeriodEventForSection(section, date, period_id, tz):
-    """Returns event of the section meeting if the section has a
-    period with a given id on a given date, and None otherwise.
+    """Find the section meeting event, if it exists.
+
+    Returns the event of the section meeting if the section has a period with a
+    given id on a given date, and None otherwise.
     """
     start = tz.localize(datetime.datetime.combine(date, datetime.time()))
     end = start + datetime.date.resolution
-
     for ev in ITimetables(section).makeTimetableCalendar().expand(start, end):
         if period_id == ev.period_id:
             return ev
@@ -63,7 +66,7 @@ def getPeriodEventForSection(section, date, period_id, tz):
 
 
 def formatAttendanceRecord(ar):
-    """Returns a short indication of status of an attendance record:
+    """Returns a short indication of the status of an attendance record:
 
         >>> class AttendanceRecordStub:
         ...     status = 'ABSENT'
@@ -80,13 +83,13 @@ def formatAttendanceRecord(ar):
         >>> formatAttendanceRecord(ar)
         'T'
 
-    ''  for unknown:
+    ' '  for unknown:
 
         >>> ar.status = 'UNKNOWN'
         >>> formatAttendanceRecord(ar)
         ' '
 
-    And finally, + for present.
+    And finally, '+' for present.
 
         >>> ar.status = 'PRESENT'
         >>> formatAttendanceRecord(ar)
@@ -100,6 +103,7 @@ def formatAttendanceRecord(ar):
     elif ar.status == PRESENT:
         return '+'
     return ' '
+
 
 class SectionAttendanceTraverserPlugin(object):
     """Traverser for attendance views
@@ -153,6 +157,10 @@ class AttendanceCalendarEventViewlet(object):
     """
 
     def attendanceLink(self):
+        """Construct the URL for the attendance form for a section meeting.
+
+        Returns None if the calendar event is not a section meeting event.
+        """
         event_for_display = self.manager.event
         calendar_event = event_for_display.context
         if not ITimetableCalendarEvent.providedBy(calendar_event):
@@ -167,7 +175,8 @@ class AttendanceCalendarEventViewlet(object):
 
 
 class RealtimeInfo(object):
-    """A row of information about a student for a realtime attendance form"""
+    """A row of information about a student for the realtime attendance form"""
+
     def __init__(self, name, title, color, symbol, disabled, sparkline_url):
         self.name = name
         self.title = title
@@ -187,6 +196,8 @@ class RealtimeAttendanceView(BrowserView):
 
     __used_for__ = ISection
 
+    template = ViewPageTemplateFile("templates/real_time.pt")
+
     error = None
 
     def iterTransitiveMembers(self):
@@ -205,10 +216,8 @@ class RealtimeAttendanceView(BrowserView):
                     # recursive groups not supported
                     yield person
 
-
     def listMembers(self):
         """Return a list of RealtimeInfo objects about all members"""
-
         result = []
         tz = ViewPreferences(self.request).timezone
         meeting = getPeriodEventForSection(self.context, self.date,
@@ -220,7 +229,7 @@ class RealtimeAttendanceView(BrowserView):
             disabled_checkbox = ar.isPresent() or ar.isTardy()
             section_url = zapi.absoluteURL(ISection(self.context),
                                    self.request)
-            sparkline_url = '%s/@@sparkline.png?person=%s&date=%s' %\
+            sparkline_url = '%s/@@sparkline.png?person=%s&date=%s' % \
                             (section_url, person.username, self.date)
 
             result.append(RealtimeInfo(
@@ -251,6 +260,7 @@ class RealtimeAttendanceView(BrowserView):
 
         """
         records = ISectionAttendance(student).getAllForDay(self.date)
+        # TODO: use day attendance here
         #records.extend([IDayAttendance(student).get(self.date)])
         was_present = False
         was_absent = False
@@ -276,6 +286,7 @@ class RealtimeAttendanceView(BrowserView):
             return 'attendance-clear'
 
     def update(self):
+        """Process form submissions."""
         tz = ViewPreferences(self.request).timezone
         meeting = getPeriodEventForSection(self.context, self.date,
                                            self.period_id, tz)
@@ -315,18 +326,20 @@ class RealtimeAttendanceView(BrowserView):
             if ar.isUnknown():
                 self.unknowns = True
 
-
     def getArrival(self):
-        """Calculates the date of arrival from 'arrived' in request"""
-        if 'arrival' in self.request and self.request['arrival']:
+        """Extracts the date of late arrivals from the request.
+
+        If the time is not specified, defaults to now.
+        """
+        if self.request.get('arrival'):
             tz = ViewPreferences(self.request).timezone
             time = parse_time(self.request['arrival'])
             result = datetime.datetime.combine(self.date, time)
             return tz.localize(result)
         return datetime.datetime.utcnow().replace(tzinfo=utc)
 
-    template = ViewPageTemplateFile("templates/real_time.pt")
-
     def __call__(self):
+        """Process form submissions and render the view."""
         self.update()
         return self.template()
+
