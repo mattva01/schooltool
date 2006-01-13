@@ -60,8 +60,8 @@ class StubTimetables(object):
     def __init__(self, context):
         self.context = context
 
-    def makeTimetableCalendar(self):
-        return ImmutableCalendar([
+    def makeTimetableCalendar(self, first, last):
+        events = [
             TimetableCalendarEvent(
                 datetime.datetime(2005, 12, 14, 10, 00, tzinfo=utc),
                 datetime.timedelta(minutes=45),
@@ -79,7 +79,9 @@ class StubTimetables(object):
                 datetime.timedelta(minutes=45),
                 "Arts",
                 period_id="C", activity=None),
-            ])
+            ]
+        return ImmutableCalendar([e for e in events
+                                  if first <= e.dtstart.date() <= last])
 
 
 def doctest_getPeriodEventForSection():
@@ -89,8 +91,8 @@ def doctest_getPeriodEventForSection():
     that the section has the given period takes place on the given
     date.  We have a utility function for that:
 
-        >>> from schooltool.attendance.browser.attendance import \
-        ...     getPeriodEventForSection
+        >>> from schooltool.attendance.browser.attendance \
+        ...     import getPeriodEventForSection
 
         >>> section = StubTimetables(None)
 
@@ -98,8 +100,7 @@ def doctest_getPeriodEventForSection():
 
         >>> for date in [datetime.date(2005, 12, d) for d in (14, 15, 16)]:
         ...     for period_id in 'A', 'B', 'C', 'D':
-        ...         result = getPeriodEventForSection(section, date,
-        ...                                           period_id, utc)
+        ...         result = getPeriodEventForSection(section, date, period_id)
         ...         print date, period_id, result and result.dtstart
         2005-12-14 A 2005-12-14 10:00:00+00:00
         2005-12-14 B None

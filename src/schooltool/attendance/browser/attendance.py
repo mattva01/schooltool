@@ -51,15 +51,13 @@ from schooltool import SchoolToolMessage as _
 AttendanceCSSViewlet = viewlet.CSSViewlet("attendance.css")
 
 
-def getPeriodEventForSection(section, date, period_id, tz):
+def getPeriodEventForSection(section, date, period_id):
     """Find the section meeting event, if it exists.
 
     Returns the event of the section meeting if the section has a period with a
     given id on a given date, and None otherwise.
     """
-    start = tz.localize(datetime.datetime.combine(date, datetime.time()))
-    end = start + datetime.date.resolution
-    for ev in ITimetables(section).makeTimetableCalendar().expand(start, end):
+    for ev in ITimetables(section).makeTimetableCalendar(date, date):
         if period_id == ev.period_id:
             return ev
     return None
@@ -178,9 +176,8 @@ class RealtimeAttendanceView(BrowserView):
     def listMembers(self):
         """Return a list of RealtimeInfo objects about all members"""
         result = []
-        tz = ViewPreferences(self.request).timezone
         meeting = getPeriodEventForSection(self.context, self.date,
-                                           self.period_id, tz)
+                                           self.period_id)
         for person in self.iterTransitiveMembers():
             past_status = self.studentStatus(person)
             ar = ISectionAttendance(person).get(self.context, meeting.dtstart)
@@ -249,9 +246,8 @@ class RealtimeAttendanceView(BrowserView):
 
     def update(self):
         """Process form submissions."""
-        tz = ViewPreferences(self.request).timezone
         meeting = getPeriodEventForSection(self.context, self.date,
-                                           self.period_id, tz)
+                                           self.period_id)
 
         # If there are persons with UNKNOWN status, show the 'absent' button,
         # otherwise show 'tardy' and 'arrived'.
@@ -321,13 +317,8 @@ class RealtimeAttendanceView(BrowserView):
         if self.date is None or self.period_id is None:
             # Not enough traversal path elements
             raise NotFound(self.context, self.__name__, self.request)
-        # This should be the timezone that is used for timetables.
-        # If timetables start using the server global timezone,
-        # this should be fixed as well.
-        # XXX mg: I think they have already started
-        tz = ViewPreferences(self.request).timezone
         if not getPeriodEventForSection(self.context, self.date,
-                                        self.period_id, tz):
+                                        self.period_id):
             raise NotFound(self.context, self.__name__, self.request)
 
     def __call__(self):
