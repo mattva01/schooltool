@@ -74,6 +74,7 @@ The next step is to decide on a scoresystem to use for the requirements. For
 simplicity's sake, let use the standard Pass/Fail system:
 
   >>> from schooltool.requirement.scoresystem import PassFail
+  >>> pf = PassFail
 
 We should be able to make an evaluation now:
 
@@ -82,7 +83,7 @@ We should be able to make an evaluation now:
   >>> ev.requirement
   Requirement(u'3rd Period Econ.')
   >>> ev.scoreSystem
-  PassFail(u'Pass/Fail')
+  <ScoreSystem u'Pass/Fail'>
   >>> ev.value
   True
   >>> ev.evaluator
