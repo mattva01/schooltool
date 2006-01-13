@@ -117,92 +117,6 @@ def doctest_getPeriodEventForSection():
     """
 
 
-def doctest_SectionAttendanceTraverserPlugin():
-    r"""Tests for SectionAttendanceTraverserPlugin
-
-    We need an ITimetables adapter in order to verify that a given
-    period is valid for a given day:
-
-        >>> ztapi.provideAdapter(None, ITimetables, StubTimetables)
-
-        >>> from schooltool.attendance.browser.attendance import \
-        ...          SectionAttendanceTraverserPlugin
-        >>> from schooltool.traverser.interfaces import ITraverserPlugin
-
-        >>> ITraverserPlugin.implementedBy(SectionAttendanceTraverserPlugin)
-        True
-
-    If we traverse a name this plugin does not handle, we get a
-    NotFound error.
-
-        >>> plugin = SectionAttendanceTraverserPlugin("request", "context")
-        >>> plugin.publishTraverse(None, 'name')
-        Traceback (most recent call last):
-        ...
-        NotFound: Object: 'request', name: 'name'
-
-    We must register the view we are traversing to first:
-
-        >>> class AttendanceViewStub(object):
-        ...     def __init__(self, context, request): pass
-        ...     def __repr__(self):
-        ...         return "%s, %s" % (self.date, self.period_id)
-        >>> ztapi.browserView(None, 'attendance', AttendanceViewStub)
-
-    Now we can try the typical case:
-
-        >>> request = TestRequest()
-        >>> request.setTraversalStack(['B', '2005-12-15'])
-        >>> plugin.publishTraverse(request, "attendance")
-        2005-12-15, B
-
-        >>> request.getTraversalStack()
-        []
-
-    If there are more elements on the traversal stack, they remain there:
-
-        >>> request = TestRequest()
-        >>> request.setTraversalStack(['extra', 'C', '2005-12-15'])
-        >>> request._traversed_names.extend(('sections', 's1', 'attendance'))
-        >>> plugin.publishTraverse(request, "attendance")
-        2005-12-15, C
-
-        >>> request.getTraversalStack()
-        ['extra']
-
-        >>> print request.URL
-        http://127.0.0.1/sections/s1/attendance/2005-12-15/C
-
-    What if the date is invalid?
-
-        >>> request = TestRequest()
-        >>> request.setTraversalStack(['A', '2005-02-29'])
-        >>> plugin.publishTraverse(request, "attendance")
-        Traceback (most recent call last):
-          ...
-        NotFound: Object: 'request', name: 'attendance'
-
-    What if the period is invalid?
-
-        >>> request = TestRequest()
-        >>> request.setTraversalStack(['A', '2005-12-15'])
-        >>> plugin.publishTraverse(request, "attendance")
-        Traceback (most recent call last):
-          ...
-        NotFound: Object: 'request', name: 'attendance'
-
-    If there are no date and period id following, we also get a NotFound:
-
-        >>> request = TestRequest()
-        >>> request.setTraversalStack([])
-        >>> plugin.publishTraverse(request, "attendance")
-        Traceback (most recent call last):
-          ...
-        NotFound: Object: 'request', name: 'attendance'
-
-    """
-
-
 class CalendarEventViewletManagerStub(object):
     pass
 
@@ -796,6 +710,96 @@ def doctest_RealtimeAttendanceView_getArrival():
         Traceback (most recent call last):
           ...
         ValueError: need more than 1 value to unpack
+
+    """
+
+
+def doctest_RealtimeAttendanceView_publishTraverse():
+    r"""Tests for RealtimeAttendanceView.publishTraverse
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...          import RealtimeAttendanceView
+
+    Now we can try the typical case:
+
+        >>> request = TestRequest()
+        >>> section = 'section'
+        >>> view = RealtimeAttendanceView(section, request)
+        >>> view.date, view.period_id
+        (None, None)
+
+        >>> view.publishTraverse(request, '2005-12-15') is view
+        True
+        >>> view.date, view.period_id
+        (datetime.date(2005, 12, 15), None)
+
+        >>> view.publishTraverse(request, 'B') is view
+        True
+        >>> view.date, view.period_id
+        (datetime.date(2005, 12, 15), 'B')
+
+    If you try to traverse too much, you get an error
+
+        >>> view.publishTraverse(request, 'quux')
+        Traceback (most recent call last):
+          ...
+        NotFound: Object: 'section', name: 'quux'
+
+    What if the date is invalid?
+
+        >>> view = RealtimeAttendanceView(section, request)
+        >>> view.publishTraverse(request, "some time last week")
+        Traceback (most recent call last):
+          ...
+        NotFound: Object: 'section', name: 'some time last week'
+
+    """
+
+
+def doctest_RealtimeAttendanceView_verifyParameters():
+    r"""Tests for RealtimeAttendanceView.verifyParameters
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...          import RealtimeAttendanceView
+
+    We need an ITimetables adapter in order to verify that a given
+    period is valid for a given day:
+
+        >>> ztapi.provideAdapter(None, ITimetables, StubTimetables)
+
+    What if we try to render the view without specifying both the
+    date and the period id?
+
+        >>> request = TestRequest()
+        >>> section = 'section'
+        >>> view = RealtimeAttendanceView(section, request)
+        >>> view.__name__ = 'attendance'
+        >>> view.date, view.period_id
+        (None, None)
+
+        >>> view.verifyParameters()
+        Traceback (most recent call last):
+          ...
+        NotFound: Object: 'section', name: 'attendance'
+
+        >>> view.date = datetime.date(2005, 12, 15)
+        >>> view.verifyParameters()
+        Traceback (most recent call last):
+          ...
+        NotFound: Object: 'section', name: 'attendance'
+
+    What if the period is invalid?
+
+        >>> view.period_id = 'QUUX'
+        >>> view.verifyParameters()
+        Traceback (most recent call last):
+          ...
+        NotFound: Object: 'section', name: 'attendance'
+
+    And now suppose everything is fine
+
+        >>> view.period_id = 'B'
+        >>> view.verifyParameters()
 
     """
 

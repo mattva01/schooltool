@@ -105,51 +105,6 @@ def formatAttendanceRecord(ar):
     return ' '
 
 
-class SectionAttendanceTraverserPlugin(object):
-    """Traverser for attendance views
-
-    This plugin extracts a date and period id from the traversal
-    stack, following the view name.
-    """
-
-    implements(ITraverserPlugin)
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-
-    def publishTraverse(self, request, name):
-        if name == 'attendance':
-            view = queryMultiAdapter((self.context, request),
-                                     name=name)
-            traversal_stack = request.getTraversalStack()
-
-            try:
-                view.date = parse_date(traversal_stack.pop())
-                view.period_id = traversal_stack.pop()
-            except (ValueError, IndexError):
-                raise NotFound(self.context, name, request)
-
-            # XXX alga:
-            # Sad, but our elegant approach has this major
-            # shortcoming: in order to get request.URL right we need
-            # to mess with request's private attributes.
-            request._traversed_names.append(str(view.date))
-            request._traversed_names.append(view.period_id)
-
-            # This should be the timezone that is used for timetables.
-            # If timetables start using the server global timezone,
-            # this should be fixed as well.
-            tz = ViewPreferences(request).timezone
-
-            if not getPeriodEventForSection(self.context, view.date,
-                                            view.period_id, tz):
-                raise NotFound(self.context, name, request)
-            request.setTraversalStack(traversal_stack)
-            return view
-        raise NotFound(self.context, name, request)
-
-
 class AttendanceCalendarEventViewlet(object):
     """Viewlet for section meeting calendar events.
 
@@ -199,6 +154,10 @@ class RealtimeAttendanceView(BrowserView):
     template = ViewPageTemplateFile("templates/real_time.pt")
 
     error = None
+
+    # Additional parameters extracted from additional URL elements
+    date = None
+    period_id = None
 
     def iterTransitiveMembers(self):
         """Return all transitive members of a section
@@ -338,8 +297,39 @@ class RealtimeAttendanceView(BrowserView):
             return tz.localize(result)
         return datetime.datetime.utcnow().replace(tzinfo=utc)
 
+    def publishTraverse(self, request, name):
+        """Collect additional URL elements."""
+        if self.date is None:
+            try:
+                self.date = parse_date(name)
+                return self
+            except ValueError:
+                pass # will raise NotFound at the end
+        elif self.period_id is None:
+            self.period_id = name
+            return self
+        raise NotFound(self.context, name, self.request)
+
+    def verifyParameters(self):
+        """Check if the date and period_id parameters are valid.
+
+        Raises a NotFound error if they aren't.
+        """
+        if self.date is None or self.period_id is None:
+            # Not enough traversal path elements
+            raise NotFound(self.context, self.__name__, self.request)
+        # This should be the timezone that is used for timetables.
+        # If timetables start using the server global timezone,
+        # this should be fixed as well.
+        # XXX mg: I think they have already started
+        tz = ViewPreferences(self.request).timezone
+        if not getPeriodEventForSection(self.context, self.date,
+                                        self.period_id, tz):
+            raise NotFound(self.context, self.__name__, self.request)
+
     def __call__(self):
         """Process form submissions and render the view."""
+        self.verifyParameters()
         self.update()
         return self.template()
 

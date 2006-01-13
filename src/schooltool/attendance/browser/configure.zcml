@@ -3,13 +3,6 @@
            xmlns="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
-  <subscriber
-      for="schooltool.course.interfaces.ISection
-           zope.publisher.interfaces.browser.IBrowserRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".attendance.SectionAttendanceTraverserPlugin"
-      />
-
   <browser:page
       name="attendance"
       for="schooltool.course.interfaces.ISection"
