@@ -164,7 +164,8 @@ def getRequirement(context):
         ## TODO: support generic objects without titles
         requirement = Requirement(getattr(context, "title", None))
         annotations[REQUIREMENT_KEY] = requirement
-        zope.app.container.contained.contained(requirement, context, u'++requirement++')
+        zope.app.container.contained.contained(
+            requirement, context, u'++requirement++')
         return requirement
 # Convention to make adapter introspectable
 getRequirement.factory = Requirement
