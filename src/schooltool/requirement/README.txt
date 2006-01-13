@@ -116,24 +116,39 @@ able to delete locally defined requirements and not inherited ones:
   ...
   KeyError: u'forloop'
 
-#The following tests inheritence when a sub requirement in a base is under
-#the same key as an uninherited sub requirement
-#
-#  >>> citinzenship = requirement.Requirement(u'Global Citizenship')
-#  >>> goodPerson = requirement.Requirement(u'Be a good person globally.')
-#  >>> citinzenship['goodPerson'] = goodPerson
-#
-#  >>> localCitizenship = requirement.Requirement(u'A Local Citizenship Requirement')
-#  >>> localCitizenship.addBase(citinzenship)
-#  >>> print localCitizenship.values()
-#  <BLANKLINE>
-#  ...Requirement(u'Be a good person globally.')...
-#
-#  >>> localGoodPerson = requirement.Requirement(u'Be a good person locally.')
-#  >>> localCitizenship['goodPerson'] = localGoodPerson
-#  >>> print localCitizenship.values()
-#  <BLANKLINE>
-#  ...Requirement(u'Be a good person globally.')...
+
+Overriding Requirements
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Now let's have a look at a case where the more specific requirement overrides
+the a sub-requirement of one of its bases. First we create a global
+citizenship requirement that requires a person to be "good" globally.
+
+  >>> citinzenship = requirement.Requirement(u'Global Citizenship')
+  >>> goodPerson = requirement.Requirement(u'Be a good person globally.')
+  >>> citinzenship['goodPerson'] = goodPerson
+
+Now we create a local citizen requirement. Initially the local citizenship
+inherits the "good person" requirement from the global citizenship:
+
+  >>> localCitizenship = requirement.Requirement(
+  ...     u'A Local Citizenship Requirement')
+  >>> localCitizenship.addBase(citinzenship)
+  >>> print localCitizenship.values()
+  [InheritedRequirement(Requirement(u'Be a good person globally.'))]
+
+Now we override the "good person" requirement with a local one:
+
+  >>> localGoodPerson = requirement.Requirement(u'Be a good person locally.')
+  >>> localCitizenship['goodPerson'] = localGoodPerson
+  >>> print localCitizenship.values()
+  [Requirement(u'Be a good person locally.')]
+
+This behavior is a design decision we made. But it is coherent with the
+behavior of real inheritance and acquisition. Another policy might be that you
+can never override a requirement like that and an error should occur. This is,
+however, much more difficult, since adding bases becomes a very complex task
+that would envolve complex conflict resolution.
 
 
 Requirement Adapters
