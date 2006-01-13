@@ -1,3 +1,4 @@
+=========================
 Grading Integration Tests
 =========================
 
@@ -8,6 +9,8 @@ First we need to set up the school itself:
 
   >>> from schooltool.app.app import SchoolToolApplication
   >>> school = SchoolToolApplication()
+
+Next we are creating the base requirement for graduation:
 
   >>> from schooltool.requirement import interfaces, requirement
   >>> graduation = requirement.Requirement(u'Graduation Requirements')
@@ -21,7 +24,7 @@ We want to create a course to provide some context:
   >>> econ.title
   u'Economics'
 
-The course implements ``IRequirement``:
+The course can be adapted to be a ``IRequirement``:
 
   >>> econ_req = interfaces.IRequirement(econ)
   >>> econ_req
@@ -38,8 +41,9 @@ Now we'll create a section of the economics course.  It also implements
 
   >>> from schooltool.course.section import Section
 
-  >>> econ_section = school[u'sections'][u'3rd-econ'] = Section()
-  >>> econ_section.title = u"3rd Period Econ."
+  >>> econ_section = Section(u"3rd Period Econ.")
+  >>> school[u'sections'][u'3rd-econ'] = econ_section
+
   >>> sec_req = interfaces.IRequirement(econ_section)
   >>> sec_req
   Requirement(u'3rd Period Econ.')
@@ -66,25 +70,10 @@ Grab the student's ``IEvaluations`` adapter:
   >>> sorted(evals.keys())
   []
 
-At the moment we need to create a scoring system from scratch:
+The next step is to decide on a scoresystem to use for the requirements. For
+simplicity's sake, let use the standard Pass/Fail system:
 
-  >>> from schooltool.requirement.scoresystem import AbstractScoreSystem
-  >>> from schooltool.requirement.scoresystem import UNSCORED
-  >>> class PassFail(AbstractScoreSystem):
-  ...    PASS = True
-  ...    FAIL = False
-  ...    def isPassingScore(self, score):
-  ...        return bool(score)
-  ...
-  ...    def isValidScore(self, score):
-  ...        return score in [self.PASS, self.FAIL, UNSCORED]
-  ...
-  ...    def __repr__(self):
-  ...        return '%s(%r)' % (self.__class__.__name__, self.title)
-
-  >>> pf = PassFail(u'Simple Pass/Fail System')
-  >>> pf.title
-  u'Simple Pass/Fail System'
+  >>> from schooltool.requirement.scoresystem import PassFail
 
 We should be able to make an evaluation now:
 
@@ -93,7 +82,7 @@ We should be able to make an evaluation now:
   >>> ev.requirement
   Requirement(u'3rd Period Econ.')
   >>> ev.scoreSystem
-  PassFail(u'Simple Pass/Fail System')
+  PassFail(u'Pass/Fail')
   >>> ev.value
   True
   >>> ev.evaluator

@@ -31,8 +31,8 @@ import zope.app.container.interfaces
 class IRequirement(zope.app.container.interfaces.IContainer,
                    zope.app.container.interfaces.IContained):
     '''Something a student can do.'''
-    #zope.app.container.constraints.contains(IRequirement)
-    #zope.app.container.constraints.containers('.IRequirement')
+    zope.app.container.constraints.contains('.IRequirement')
+    zope.app.container.constraints.containers('.IRequirement')
 
     title = zope.schema.TextLine(
         title=u'Title',
@@ -65,17 +65,18 @@ class IScoreSystem(zope.interface.Interface):
     title = zope.schema.TextLine(
         title=u'Title',
         description=u'A brief title of the score system.',
-        required=True)
+        required=False)
 
     description = zope.schema.TextLine(
         title=u'Description',
         description=u'A brief description of the score system.',
-        required=True)
+        required=False)
 
     def isPassingScore(score):
         '''Return whether score meets a passing threshold.
 
-        The return value is a boolean.
+        The return value is a boolean. When it cannot be determined whether
+        the score is a passing score, then ``None`` is returned.
         '''
 
     def isValidScore(score):
@@ -84,6 +85,30 @@ class IScoreSystem(zope.interface.Interface):
         The return value is a boolean.  The ``UNSCORED`` value is a valid score.
         '''
 
+class IDiscreteValuesScoreSystem(IScoreSystem):
+    '''A score system that consists of discrete values.'''
+
+    values = zope.schema.List(
+        title=u'Values',
+        description=u'A list of all available values. Note that the list '
+                    u'must be sorted from the best to the worst grade.',
+        unique=True,
+        required=True)
+
+class IRangedValuesScoreSystem(IScoreSystem):
+    '''A score system that allows for a randge of values.'''
+
+    min = zope.schema.Int(
+        title=u'Minimum',
+        description=u'Minimum value in the score system',
+        required=True,
+        default=0)
+
+    max = zope.schema.Int(
+        title=u'Minimum',
+        description=u'Minimum value in the score system',
+        required=True,
+        default=100)
 
 class IHaveEvaluations(zope.interface.Interface):
     '''A marker interface for objects that can have evaluations'''

@@ -216,49 +216,207 @@ Score Systems
 
 Score systems define the grading scheme of a group of or specific requirements.
 Since scoring schemes vary widely among schools and even requirements, the
-package provides an abstract score system class.  Below is an example
-implementation for a simple pass/fail score system.
+package provides two score system classes that can be used to create new
+score systems.
+
+The first class is designed for grades that are given as discrete values. For
+example, if you want to be able to give the student a check, check plus, or
+check minus, then you can create a scoresystem as follows:
 
   >>> from schooltool.requirement import scoresystem
-  >>> class PassFail(scoresystem.AbstractScoreSystem):
-  ...     PASS = True
-  ...     FAIL = False
-  ...     def isPassingScore(self, score):
-  ...         return bool(score)
-  ...
-  ...     def isValidScore(self, score):
-  ...         return score in [self.PASS, self.FAIL, scoresystem.UNSCORED]
-  ...
-  ...     def __repr__(self):
-  ...         return '%s(%r)' % (self.__class__.__name__, self.title)
+  >>> check = scoresystem.DiscreteValuesScoreSystem(
+  ...    u'Check', u'Check-mark score system',
+  ...    ['+', 'v', '-'])
 
-The part of the interface that must be implemented is the ``isPassingScore()``
-and ``isValidScore`` methods. The latter method must always return ``True`` for
-the ``UNSCORED`` value. The ``AbstractScoreSystem`` class already fulfills the
-other requirements of the ``IScoreSystem`` interface.
+The first and second arguments of the constructor are the title and
+description. The third argument is the list of grades that are allowed in the
+score system. The grades **must** be sorted from the best to the worst. There
+are a couple of methods associated with a score system. First, you can ask
+whether a particular score is valid:
 
-  >>> pf = PassFail(u'Simple Pass/Fail Score System')
-  >>> pf.title
-  u'Simple Pass/Fail Score System'
-  >>> pf.description is None
+  >>> check.isValidScore('+')
   True
-
-We can now check whether a particular score is a pass or fail:
-
-  >>> pf.isPassingScore(1)
-  True
-  >>> pf.isPassingScore(0)
+  >>> check.isValidScore('f')
   False
 
-Furthermore, we can test whether a score conforms to the score system.
+There is also a global "unscored" score that can be used when assigning
+scores:
 
-  >>> pf.isValidScore(PassFail.PASS)
+  >>> check.isValidScore(scoresystem.UNSCORED)
   True
-  >>> pf.isValidScore(scoresystem.UNSCORED)
+
+The second method is there to check whether a score is a passing score.
+
+  >>> check.isPassingScore('+') is None
   True
-  >>> pf.isValidScore('pass')
+
+The result of this query is ``None``, because we have not defined a passing
+score yet. This is optional, since not in every case the decision of whether
+something is apassing score or not makes sense. If we initialize the score
+system again -- this time providing a minimum passing grade -- the method will
+provide more useful results:
+
+  >>> from schooltool.requirement import scoresystem
+  >>> check = scoresystem.DiscreteValuesScoreSystem(
+  ...    u'Check', u'Check-mark score system',
+  ...    ['+', 'v', '-'], 'v')
+  >>> check
+  <ScoreSystem u'Check'>
+
+  >>> check.isPassingScore('+')
+  True
+  >>> check.isPassingScore('v')
+  True
+  >>> check.isPassingScore('-')
   False
 
+Unscored returns a neutral result:
+
+  >>> check.isPassingScore(scoresystem.UNSCORED) is None
+  True
+
+The package also provides some default score systems.
+
+- A simple Pass/Fail score system:
+
+  >>> scoresystem.PassFail
+  <ScoreSystem u'Pass/Fail'>
+  >>> scoresystem.PassFail.title
+  u'Pass/Fail'
+  >>> scoresystem.PassFail.PASS
+  True
+  >>> scoresystem.PassFail.FAIL
+  False
+  >>> scoresystem.PassFail.isValidScore(scoresystem.PassFail.PASS)
+  True
+  >>> scoresystem.PassFail.isPassingScore(scoresystem.PassFail.PASS)
+  True
+  >>> scoresystem.PassFail.isPassingScore(scoresystem.PassFail.FAIL)
+  False
+
+- The standard American letter score system:
+
+  >>> scoresystem.AmericanLetterScoreSystem
+  <ScoreSystem u'Letter Grade'>
+  >>> scoresystem.AmericanLetterScoreSystem.title
+  u'Letter Grade'
+  >>> scoresystem.AmericanLetterScoreSystem.values
+  ['A', 'B', 'C', 'D', 'F']
+  >>> scoresystem.AmericanLetterScoreSystem.isValidScore('C')
+  True
+  >>> scoresystem.AmericanLetterScoreSystem.isValidScore('E')
+  False
+  >>> scoresystem.AmericanLetterScoreSystem.isPassingScore('D')
+  True
+  >>> scoresystem.AmericanLetterScoreSystem.isPassingScore('F')
+  False
+
+- The sxtended American letter score system:
+
+  >>> scoresystem.ExtendedAmericanLetterScoreSystem
+  <ScoreSystem u'Extended Letter Grade'>
+  >>> scoresystem.ExtendedAmericanLetterScoreSystem.title
+  u'Extended Letter Grade'
+  >>> scoresystem.ExtendedAmericanLetterScoreSystem.values
+  ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'F']
+  >>> scoresystem.ExtendedAmericanLetterScoreSystem.isValidScore('B-')
+  True
+  >>> scoresystem.ExtendedAmericanLetterScoreSystem.isValidScore('E')
+  False
+  >>> scoresystem.ExtendedAmericanLetterScoreSystem.isPassingScore('D-')
+  True
+  >>> scoresystem.ExtendedAmericanLetterScoreSystem.isPassingScore('F')
+  False
+
+The second score system class is the ranged values score system, which allows
+you to define numerical ranges as grades. Let's say I have given a quiz that
+has a maximum of 21 points:
+
+  >>> quizScore = scoresystem.RangedValuesScoreSystem(
+  ...     u'Quiz Score', u'Quiz Score System', 0, 21)
+  >>> quizScore
+  <ScoreSystem u'Quiz Score'>
+
+Again, the first and second arguments are the title and description. The third
+and forth arguments are the minum and maximum value of the numerical range. by
+default the minimum value is 0, so I could have skipped that argument and just
+provide a ``max`` keyword argument.
+
+Practically any numerical value in the range between the minimum and maximum
+value are valid scores:
+
+  >>> quizScore.isValidScore(-1)
+  False
+  >>> quizScore.isValidScore(0)
+  True
+  >>> quizScore.isValidScore(13.43)
+  True
+  >>> quizScore.isValidScore(21)
+  True
+  >>> quizScore.isValidScore(21.1)
+  False
+  >>> quizScore.isValidScore(scoresystem.UNSCORED)
+  True
+
+Since we have not defined a minimum passing grade, we cannot get a meaningful
+answer from the passing score evaluation:
+
+  >>> quizScore.isPassingScore(13) is None
+  True
+
+Again, if we provide a passing score at the beginning, then those queries amke
+sense:
+
+  >>> quizScore = scoresystem.RangedValuesScoreSystem(
+  ...     u'quizScore', u'Quiz Score System', 0, 21, 0.6*21) # 60%+ is passing
+
+  >>> quizScore.isPassingScore(13)
+  True
+  >>> quizScore.isPassingScore(10)
+  False
+  >>> quizScore.isPassingScore(scoresystem.UNSCORED) is None
+  True
+
+The package provides only one default ranged values score system, the percent
+score system:
+
+  >>> scoresystem.PercentScoreSystem
+  <ScoreSystem u'Percent'>
+  >>> scoresystem.PercentScoreSystem.title
+  u'Percent'
+  >>> scoresystem.PercentScoreSystem.min
+  0
+  >>> scoresystem.PercentScoreSystem.max
+  100
+
+  >>> scoresystem.PercentScoreSystem.isValidScore(40)
+  True
+  >>> scoresystem.PercentScoreSystem.isValidScore(scoresystem.UNSCORED)
+  True
+
+  >>> scoresystem.PercentScoreSystem.isPassingScore(60)
+  True
+  >>> scoresystem.PercentScoreSystem.isPassingScore(59)
+  False
+  >>> scoresystem.PercentScoreSystem.isPassingScore(scoresystem.UNSCORED)
+
+There is also an ``AbstractScoreSystem`` class that implements the title,
+description and representation for you already. It is used for both of the
+above types of score system. If you need to develop a score system that does
+not fit into any of the two categories, you might want to develop one using
+this abstract class.
+
+Finally, I would like to talk a little bit more about the ``UNSCORED``
+score. This global is not just a string, so that is will more efficiently
+store in the ZODB:
+
+  >>> scoresystem.UNSCORED
+  UNSCORED
+  >>> scoresystem.UNSCORED.__reduce__()
+  'UNSCORED'
+  >>> import pickle
+  >>> len(pickle.dumps(scoresystem.UNSCORED))
+  49
 
 
 Evaluations
@@ -321,12 +479,13 @@ arguments must be passed to the constructor:
 For example, we would like to score the student's skill for writing iterators
 in the programming class.
 
+  >>> pf = scoresystem.PassFail
   >>> from schooltool.requirement import evaluation
-  >>> ev = evaluation.Evaluation(req[u'iter'], pf, PassFail.PASS, teacher)
+  >>> ev = evaluation.Evaluation(req[u'iter'], pf, pf.PASS, teacher)
   >>> ev.requirement
   InheritedRequirement(Requirement(u'Create an iterator.'))
   >>> ev.scoreSystem
-  PassFail(u'Simple Pass/Fail Score System')
+  <ScoreSystem u'Pass/Fail'>
   >>> ev.value
   True
   >>> ev.evaluator
@@ -373,22 +532,22 @@ With that done (phew), we can create evaluations based on these requirements.
   >>> evals = interfaces.IEvaluations(student2)
 
   >>> name = evals.addEvaluation(evaluation.Evaluation(
-  ...     calculus[u'int'][u'fourier'], pf, PassFail.FAIL, teacher2))
+  ...     calculus[u'int'][u'fourier'], pf, pf.FAIL, teacher2))
 
   >>> name = evals.addEvaluation(evaluation.Evaluation(
-  ...     calculus[u'int'][u'path'], pf, PassFail.PASS, teacher2))
+  ...     calculus[u'int'][u'path'], pf, pf.PASS, teacher2))
 
   >>> name = evals.addEvaluation(evaluation.Evaluation(
-  ...     calculus[u'diff'][u'partial'], pf, PassFail.FAIL, teacher))
+  ...     calculus[u'diff'][u'partial'], pf, pf.FAIL, teacher))
 
   >>> name = evals.addEvaluation(evaluation.Evaluation(
-  ...     calculus[u'diff'][u'systems'], pf, PassFail.PASS, teacher))
+  ...     calculus[u'diff'][u'systems'], pf, pf.PASS, teacher))
 
   >>> name = evals.addEvaluation(evaluation.Evaluation(
-  ...     calculus[u'limit'], pf, PassFail.FAIL, teacher))
+  ...     calculus[u'limit'], pf, pf.FAIL, teacher))
 
   >>> name = evals.addEvaluation(evaluation.Evaluation(
-  ...     calculus[u'fundamental'], pf, PassFail.PASS, teacher2))
+  ...     calculus[u'fundamental'], pf, pf.PASS, teacher2))
 
 So now we can ask for all evaluations for which the sample teacher is the
 evaluator:
