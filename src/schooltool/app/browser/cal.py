@@ -1288,6 +1288,10 @@ class DailyCalendarRowsView(BrowserView):
             periods = getPeriodsForDay(cursor)
         else:
             periods = []
+        # XXX mg: I think this is completely bogus, timezone-wise.
+        #         This code needs a bit of  taking a step back, sitting down
+        #         and thinking.  Also look at the pdfcal code, I suspect it is
+        #         bogus in a similar way.
         today = datetime.combine(cursor, time(tzinfo=tz))
         rows = [today + timedelta(hours=hour)
                 for hour in range(starthour, endhour+1)]

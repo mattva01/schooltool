@@ -132,6 +132,12 @@ class BaseTimetableModel(Persistent):
                                                  date, day_id_gen)
             for period, tstart, duration in periods:
                 dt = datetime.datetime.combine(date, tstart)
+                # XXX: this will make all timetable events to behave as if the
+                # times defined in the timetable are specified in UTC.  We have
+                # decided that times in the timetable follow the site-wide
+                # timezone preference.  Thus this place should have conversion
+                # logic like the following:
+                #     dt = sitewide_tz.localize(dt).astimezone(pytz.utc)
                 for activity in timetable[day_id][period]:
                     key = (date, period, activity)
                     # IDs for functionally derived calendars should be
