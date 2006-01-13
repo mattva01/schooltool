@@ -83,13 +83,13 @@ class StubTimetables(object):
 
 
 def doctest_getPeriodEventForSection():
-    """Doctest for getPeriodEventForSection
+    r"""Doctest for getPeriodEventForSection
 
     When traversing to the realtime attendance form, we want to verify
     that the section has the given period takes place on the given
     date.  We have a utility function for that:
 
-        >>> from schooltool.attendance.browser.attendance import \\
+        >>> from schooltool.attendance.browser.attendance import \
         ...     getPeriodEventForSection
 
         >>> section = StubTimetables(None)
@@ -198,7 +198,7 @@ def doctest_AttendanceCalendarEventViewlet():
 
 
 def doctest_RealtimeAttendanceView_listMembers():
-    """Test for RealtimeAttendanceView.listMembers
+    r"""Test for RealtimeAttendanceView.listMembers
 
     First, let's register getSectionAttendance as an adapter:
 
@@ -214,7 +214,7 @@ def doctest_RealtimeAttendanceView_listMembers():
 
     Let's set up a view:
 
-        >>> from schooltool.attendance.browser.attendance import \\
+        >>> from schooltool.attendance.browser.attendance import \
         ...     RealtimeAttendanceView
         >>> from schooltool.course.section import Section
         >>> section = Section()
@@ -312,7 +312,7 @@ def doctest_RealtimeAttendanceView_listMembers():
 
 
 def doctest_RealtimeAttendanceView_studentStatus():
-    """Tests for RealtimeAttendanceView.studentStatus
+    r"""Tests for RealtimeAttendanceView.studentStatus
 
     First, let's register getSectionAttendance as an adapter:
 
@@ -323,7 +323,7 @@ def doctest_RealtimeAttendanceView_studentStatus():
         ...                      getSectionAttendance)
 
 
-        >>> from schooltool.attendance.browser.attendance import \\
+        >>> from schooltool.attendance.browser.attendance import \
         ...     RealtimeAttendanceView
         >>> from schooltool.course.section import Section
         >>> section = Section()
@@ -418,7 +418,7 @@ def doctest_RealtimeAttendanceView_studentStatus():
 
 
 def doctest_RealtimeAttendanceView_update():
-    """Tests for RealtimeAttendanceView.update
+    r"""Tests for RealtimeAttendanceView.update
 
     Let's set up the section attendance adapter:
 
@@ -434,7 +434,7 @@ def doctest_RealtimeAttendanceView_update():
 
     Let's create a section and a view:
 
-        >>> from schooltool.attendance.browser.attendance import \\
+        >>> from schooltool.attendance.browser.attendance import \
         ...     RealtimeAttendanceView
         >>> from schooltool.course.section import Section
         >>> class MySection(Section):
@@ -652,7 +652,7 @@ def doctest_RealtimeAttendanceView_update():
 
 
 def doctest_RealtimeAttendanceView_getArrival():
-    """Tests for RealtimeAttendanceView.getArrival
+    r"""Tests for RealtimeAttendanceView.getArrival
 
     We'll need person preferences for a timezone:
 
@@ -666,7 +666,7 @@ def doctest_RealtimeAttendanceView_getArrival():
 
     Let's create a section and a view:
 
-        >>> from schooltool.attendance.browser.attendance import \\
+        >>> from schooltool.attendance.browser.attendance import \
         ...     RealtimeAttendanceView
         >>> from schooltool.course.section import Section
         >>> section = Section()
