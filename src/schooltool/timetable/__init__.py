@@ -610,14 +610,18 @@ class TimetablesAdapter(object):
             keys |= adapter.listTimetables()
         return keys
 
-    def makeTimetableCalendar(self):
+    def _getTermContainer(self):
+        """Return the term container."""
+        return getSchoolToolApplication()["terms"]
+
+    def makeTimetableCalendar(self, first=None, last=None):
         events = []
-        terms = getSchoolToolApplication()["terms"]
+        terms = self._getTermContainer()
         for term_id, schema_id in self.listCompositeTimetables():
             term = terms[term_id]
             tt = self.getCompositeTimetable(term_id, schema_id)
-            cal = tt.model.createCalendar(term, tt)
-            events += list(cal)
+            cal = tt.model.createCalendar(term, tt, first, last)
+            events.extend(cal)
         result = ImmutableCalendar(events)
         # Parent is needed so that we can find out the owner of this calendar.
         directlyProvides(result, ILocation)

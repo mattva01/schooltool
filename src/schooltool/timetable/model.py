@@ -115,12 +115,19 @@ class BaseTimetableModel(Persistent):
         self.exceptionDays = PersistentDict()
         self.exceptionDayIds = PersistentDict()
 
-    def createCalendar(self, term, timetable):
+    def createCalendar(self, term, timetable, first=None, last=None):
         uid_suffix = '%s@%s' % (getPath(timetable), socket.getfqdn())
         events = []
         day_id_gen = self._dayGenerator()
-
+        if first is None:
+            first = term.first
+        if last is None:
+            last = term.last
         for date in term:
+            if not first <= date <= last:
+                # must call getDayId to keep track of days
+                day_id = self.getDayId(term, date, day_id_gen)
+                continue
             day_id, periods = self._periodsInDay(term, timetable,
                                                  date, day_id_gen)
             for period, tstart, duration in periods:
@@ -164,7 +171,7 @@ class BaseTimetableModel(Persistent):
                       day_id_gen=None, original=False):
         """Return a timetable day_id and a list of periods for a given day.
 
-        if day_id_gen is not provided, a new generator is created and
+        If day_id_gen is not provided, a new generator is created and
         scrolled to the date requested.  If day_id_gen is provided, it
         is called once to gain a day_id.
 
@@ -187,7 +194,7 @@ class BaseTimetableModel(Persistent):
             if period in timetable[day_id].keys():
                 result.append((period, slot.tstart, slot.duration))
 
-        result.sort(lambda x, y: cmp(x[1], y[1]))
+        result.sort(key=lambda x: x[1])
         return day_id, result
 
     def periodsInDay(self, term, timetable, day):

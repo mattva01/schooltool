@@ -962,7 +962,8 @@ class TestTimetablesMixin(NiceDiffsMixin, EqualsSortedMixin,
                                               for k in ttdict.keys()]
 
         class TimetableModelStub:
-            def createCalendar(this_self, schoolday_model, tt):
+            def createCalendar(this_self, schoolday_model, tt, first=None,
+                               last=None):
                 self.assert_(schoolday_model is term)
                 if tt is tt1:
                     return cal1
@@ -976,6 +977,24 @@ class TestTimetablesMixin(NiceDiffsMixin, EqualsSortedMixin,
         cal = tm.makeTimetableCalendar()
         self.assertEqualSorted(list(cal), list(cal1) + list(cal2))
         self.assert_(cal.__parent__ is tm.object)
+
+    def test_makeTimetableCalendar_with_filtering(self):
+        from schooltool.timetable import TimetablesAdapter
+
+        class TimetableModelStub:
+            def createCalendar(self, term, timetable, first=None, last=None):
+                return ['%s--%s' % (first, last)]
+
+        class TimetableStub:
+            model = TimetableModelStub()
+
+        tm = TimetablesAdapter(Content())
+        fake_term_container = {'term1': 'term1'}
+        tm._getTermContainer = lambda: fake_term_container
+        tm.listCompositeTimetables = lambda: [('term1', 'schema1')]
+        tm.getCompositeTimetable = lambda tid, sid: TimetableStub()
+        cal = tm.makeTimetableCalendar(first='last year', last='next week')
+        self.assertEquals(list(cal), ['last year--next week'])
 
 
 def test_suite():

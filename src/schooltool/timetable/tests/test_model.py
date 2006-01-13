@@ -357,6 +357,30 @@ class TestSequentialDayIdBasedTimetableModel(PlacelessSetup,
         self.assertEqual(expected, result,
                          diff(pformat(expected), pformat(result)))
 
+    def test_createCalendar_date_range(self):
+        from schooltool.timetable.model \
+                import SequentialDayIdBasedTimetableModel
+        template1, template2 = self.createDayTemplates()
+        model = SequentialDayIdBasedTimetableModel(('A', 'B'),
+                                                   {'A': template1,
+                                                    'B': template2})
+        schooldays = TermStub()
+        tt = self.createTimetable()
+        cal = model.createCalendar(schooldays, tt, first=date(2003, 11, 21),
+                                   last=date(2003, 11, 25))
+        result = self.extractCalendarEvents(cal, schooldays)
+        expected = [{},
+                    {datetime(2003, 11, 21, 11, 0, tzinfo=UTC): "Biology",
+                     datetime(2003, 11, 21, 13, 0, tzinfo=UTC): "Geography"},
+                    {}, {},
+                    {datetime(2003, 11, 24, 9, 0, tzinfo=UTC): "English",
+                     datetime(2003, 11, 24, 11, 0, tzinfo=UTC): "Math"},
+                    {datetime(2003, 11, 25, 11, 0, tzinfo=UTC): "Biology",
+                     datetime(2003, 11, 25, 13, 0, tzinfo=UTC): "Geography"},
+                    {}]
+        self.assertEqual(expected, result,
+                         diff(pformat(expected), pformat(result)))
+
     def test_verification(self):
         from schooltool.timetable.model import \
              SequentialDayIdBasedTimetableModel

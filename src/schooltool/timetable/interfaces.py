@@ -254,12 +254,15 @@ class ITimetableModel(Interface):
         is a replacement for some other day.
         """)
 
-    def createCalendar(term, timetable):
+    def createCalendar(term, timetable, first=None, last=None):
         """Return an ICalendar composed out of term and timetable.
 
         This method has model-specific knowledge as to how the schooldays,
         weekends and holidays map affects the mapping of the timetable
         onto the real-world calendar.
+
+        You can specify a range of dates to generate a calendar spanning a
+        given date range (inclusive) only.
         """
 
     def periodsInDay(term, timetable, date):
@@ -733,8 +736,12 @@ class ITimetables(Interface):
         available composite timetables.
         """
 
-    def makeTimetableCalendar():
-        """Generate and return a calendar from all composite timetables."""
+    def makeTimetableCalendar(first=None, last=None):
+        """Generate and return a calendar from all composite timetables.
+
+        You can specify a range of dates to generate a calendar spanning a
+        given date range (inclusive) only.
+        """
 
 
 class ITimetableSource(Interface):
