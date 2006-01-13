@@ -8,20 +8,20 @@ First we need to set up the school itself:
 
   >>> from schooltool.app.app import SchoolToolApplication
   >>> school = SchoolToolApplication()
-  
+
   >>> from schooltool.requirement import interfaces, requirement
   >>> graduation = requirement.Requirement(u'Graduation Requirements')
 
 We want to create a course to provide some context:
 
   >>> from schooltool.course.course import Course
-  
+
   >>> econ = school[u'courses'][u'econ'] = Course()
   >>> econ.title = u'Economics'
   >>> econ.title
   u'Economics'
 
-The course implements `IRequirement`:
+The course implements ``IRequirement``:
 
   >>> econ_req = interfaces.IRequirement(econ)
   >>> econ_req
@@ -33,13 +33,13 @@ We want to indicate that Economics is part of the Graduation Requirements:
   >>> sorted(graduation.keys())
   [u'econ']
 
-Now we'll create a section of the economics course.  It also implements 
-`IRequirement`:
+Now we'll create a section of the economics course.  It also implements
+``IRequirement``:
 
   >>> from schooltool.course.section import Section
-  
+
   >>> econ_section = school[u'sections'][u'3rd-econ'] = Section()
-  >>> econ_section.title = u"3rd Period Econ."    
+  >>> econ_section.title = u"3rd Period Econ."
   >>> sec_req = interfaces.IRequirement(econ_section)
   >>> sec_req
   Requirement(u'3rd Period Econ.')
@@ -49,14 +49,14 @@ This section should inherit the requirements of the course:
   >>> sec_req.addBase(econ_req)
   >>> sec_req.bases
   [Requirement(u'Economics')]
-  
-Create some people.  
-  
+
+Create some people.
+
   >>> from schooltool.person.person import Person
-  
+
   >>> student = school[u'persons'][u'jane'] = Person(u"Jane Student")
   >>> teacher = school[u'persons'][u'joe'] = Person(u"Joe Teacher")
-  
+
 Grab the student's ``IEvaluations`` adapter:
 
   >>> evals = interfaces.IEvaluations(student)
@@ -81,11 +81,11 @@ At the moment we need to create a scoring system from scratch:
   ...
   ...    def __repr__(self):
   ...        return '%s(%r)' % (self.__class__.__name__, self.title)
-  
+
   >>> pf = PassFail(u'Simple Pass/Fail System')
   >>> pf.title
   u'Simple Pass/Fail System'
-  
+
 We should be able to make an evaluation now:
 
   >>> from schooltool.requirement import evaluation
