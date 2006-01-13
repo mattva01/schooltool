@@ -18,8 +18,8 @@
           Topic Title
         </td>
         <td class="close">
-          <a href="javascript:window.close()" alt="[x]">
-            <img src="" tal:attributes="src context/++resource++delete.png" />
+          <a href="javascript:window.close()">
+            <img alt="[x]" tal:attributes="src context/++resource++delete.png" />
           </a>
         </td>
       </tr>

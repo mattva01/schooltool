@@ -21,7 +21,8 @@ Level-related Tests
 
 $Id$
 """
-__docformat__='restructuredtext'
+
+__docformat__ = 'restructuredtext'
 
 import unittest
 
@@ -30,6 +31,7 @@ from zope.app.testing.placelesssetup import setUp, tearDown
 
 # Some imports to make tests work
 import zope.contentprovider.interfaces
+
 
 def test_suite():
     optionflags = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS

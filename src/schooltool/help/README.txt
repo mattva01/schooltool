@@ -29,7 +29,7 @@ bar of the standard SchoolTool O-wrap.
   >>> from zope.app.testing import setup
   >>> setup.setUpTraversal()
 
-The helplink is instantiated with the typical content provider API:
+The help link is instantiated with the typical content provider API:
 
   >>> from schooltool.help import browser
   >>> helplink = browser.HelpLink(person, request, view)
@@ -42,7 +42,7 @@ We can now render the link:
 
 We get an empty string. This is because there is no help topic registered for
 this view yet. The help link is only shown, if a contextual help is really
-available. Let's now register a helptopic for the view:
+available. Let's now register a help topic for the view:
 
   >>> import os, tempfile
   >>> helpfile = tempfile.mktemp('.txt')
@@ -54,7 +54,7 @@ available. Let's now register a helptopic for the view:
   >>> globalhelp.registerHelpTopic(
   ...     '', u'person', u'Person Overview', helpfile, IPerson, u'index.html')
 
-Now the helplink should produce some output:
+Now the help link should produce some output:
 
   >>> helplink.update()
   >>> print helplink.render()

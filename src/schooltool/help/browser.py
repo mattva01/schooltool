@@ -21,6 +21,7 @@ Context-Help related views.
 
 $Id$
 """
+
 __docformat__ = 'reStructuredText'
 
 import zope.interface
@@ -45,9 +46,7 @@ class ContextHelpView(browser.BrowserView):
 
     @property
     def contextHelpTopic(self):
-        """Retrieve a help topic based on the context of the
-        help namespace.
-        """
+        """Retrieve a help topic based on the context of the help namespace."""
         if self.topic is not None:
             return self.topic
 
@@ -68,6 +67,7 @@ class ContextHelpView(browser.BrowserView):
 
 class HelpLink(object):
     """Help Link Content Provider"""
+
     zope.interface.implements(contentprovider.interfaces.IContentProvider)
 
     template = ViewPageTemplateFile('helplink.pt')
@@ -76,7 +76,7 @@ class HelpLink(object):
         self.__parent__ = view
         self.context, self.request = context, request
         self.show = False
-        self.title = 'Context Help'
+        self.title = 'Context Help' # XXX mg: i18n?
 
     def update(self):
         help = onlinehelp.helpNamespace(
@@ -89,3 +89,4 @@ class HelpLink(object):
         if self.show:
             return self.template()
         return u''
+
