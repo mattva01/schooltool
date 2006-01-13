@@ -176,7 +176,7 @@ Joniukas is marked as absent, and Gretute is marked as present (checkbox disable
           -
     ...
 
-An abscence event should be visible in his calendar:
+An absence event should be visible in his calendar:
 
     >>> joniukas = Browser()
     >>> joniukas.addHeader('Authorization', 'Basic joniukas:gretute')
@@ -230,7 +230,7 @@ Now Joniukas is tardy
           T
     ...
 
-And the abscence event is replaced with a tardy event:
+And the absence event is replaced with a tardy event:
 
     >>> joniukas.open('http://localhost/persons/joniukas/calendar/2005-12-12')
 

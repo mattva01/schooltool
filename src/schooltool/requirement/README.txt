@@ -124,16 +124,16 @@ Now let's have a look at a case where the more specific requirement overrides
 the a sub-requirement of one of its bases. First we create a global
 citizenship requirement that requires a person to be "good" globally.
 
-  >>> citinzenship = requirement.Requirement(u'Global Citizenship')
+  >>> citizenship = requirement.Requirement(u'Global Citizenship')
   >>> goodPerson = requirement.Requirement(u'Be a good person globally.')
-  >>> citinzenship['goodPerson'] = goodPerson
+  >>> citizenship['goodPerson'] = goodPerson
 
 Now we create a local citizen requirement. Initially the local citizenship
 inherits the "good person" requirement from the global citizenship:
 
   >>> localCitizenship = requirement.Requirement(
   ...     u'A Local Citizenship Requirement')
-  >>> localCitizenship.addBase(citinzenship)
+  >>> localCitizenship.addBase(citizenship)
   >>> print localCitizenship.values()
   [InheritedRequirement(Requirement(u'Be a good person globally.'))]
 
