@@ -41,7 +41,7 @@
   </content>
 
   <content class="schooltool.app.app.SchoolToolApplication">
-    <implements 
+    <implements
         interface="schooltool.requirement.interfaces.IHaveRequirement" />
   </content>
 

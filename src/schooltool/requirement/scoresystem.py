@@ -20,19 +20,21 @@
 
 $Id$
 """
-__docformat__='restructuredtext'
+
+__docformat__ = 'restructuredtext'
 
 import zope.interface
 
 from schooltool.requirement import interfaces
 
+
 class UNSCORED(object):
     """This object behaves like a string.
 
-    We want this to behave as a global, meaning it's pickled
-    by name, rather than value. We need to arrange that it has a suitable
-    __reduce__.
+    We want this to behave as a global, meaning it's pickled by name, rather
+    than value. We need to arrange that it has a suitable __reduce__.
     """
+
     def __reduce__(self):
         return 'UNSCORED'
 
@@ -51,18 +53,19 @@ class AbstractScoreSystem(object):
 
     def isPassingScore(self, score):
         """See interfaces.IScoreSystem"""
-        raise NotImplemented
+        raise NotImplementedError
 
     def isValidScore(self, score):
         """See interfaces.IScoreSystem"""
-        raise NotImplemented
+        raise NotImplementedError
 
     def __repr__(self):
-        return '<ScoreSystem %r>' %self.title
+        return '<ScoreSystem %r>' % self.title
 
 
 class DiscreteValuesScoreSystem(AbstractScoreSystem):
     """Abstract Discrete Values Score System"""
+
     zope.interface.implements(interfaces.IDiscreteValuesScoreSystem)
 
     # See interfaces.IDiscreteValuesScoreSystem
@@ -108,8 +111,10 @@ ExtendedAmericanLetterScoreSystem = DiscreteValuesScoreSystem(
     ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'F'],
     'D-')
 
+
 class RangedValuesScoreSystem(AbstractScoreSystem):
     """Abstract Ranged Values Score System"""
+
     zope.interface.implements(interfaces.IRangedValuesScoreSystem)
 
     # See interfaces.IRangedValuesScoreSystem
@@ -139,3 +144,4 @@ class RangedValuesScoreSystem(AbstractScoreSystem):
 
 PercentScoreSystem = RangedValuesScoreSystem(
     u'Percent', u'Percent Score System', 0, 100, 60)
+

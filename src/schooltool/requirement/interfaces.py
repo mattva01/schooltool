@@ -20,7 +20,8 @@
 
 $Id$
 """
-__docformat__='restructuredtext'
+
+__docformat__ = 'restructuredtext'
 
 import zope.interface
 import zope.schema
@@ -30,7 +31,8 @@ import zope.app.container.interfaces
 
 class IRequirement(zope.app.container.interfaces.IContainer,
                    zope.app.container.interfaces.IContained):
-    '''Something a student can do.'''
+    """Something a student can do."""
+
     zope.app.container.constraints.contains('.IRequirement')
     zope.app.container.constraints.containers('.IRequirement')
 
@@ -45,22 +47,22 @@ class IRequirement(zope.app.container.interfaces.IContainer,
         readonly=True)
 
     def addBase(definition):
-        '''Add a group requirement as a base definition.'''
+        """Add a group requirement as a base definition."""
 
     def removeBase(definition):
-        '''Remove a group requirement from the bases.
+        """Remove a group requirement from the bases.
 
         This method is responsible for notifying its contained requirements
         about the removal of this requirement.
-        '''
+        """
 
 
 class IHaveRequirement(zope.interface.Interface):
-    '''Marker interface for objects having requirements'''
+    """Marker interface for objects having requirements"""
 
 
 class IScoreSystem(zope.interface.Interface):
-    '''A Score System'''
+    """A Score System"""
 
     title = zope.schema.TextLine(
         title=u'Title',
@@ -73,20 +75,22 @@ class IScoreSystem(zope.interface.Interface):
         required=False)
 
     def isPassingScore(score):
-        '''Return whether score meets a passing threshold.
+        """Return whether score meets a passing threshold.
 
         The return value is a boolean. When it cannot be determined whether
         the score is a passing score, then ``None`` is returned.
-        '''
+        """
 
     def isValidScore(score):
-        '''Return whether score is a valid score.
+        """Return whether score is a valid score.
 
-        The return value is a boolean.  The ``UNSCORED`` value is a valid score.
-        '''
+        The return value is a boolean.  The ``UNSCORED`` value is a valid
+        score.
+        """
+
 
 class IDiscreteValuesScoreSystem(IScoreSystem):
-    '''A score system that consists of discrete values.'''
+    """A score system that consists of discrete values."""
 
     values = zope.schema.List(
         title=u'Values',
@@ -95,8 +99,9 @@ class IDiscreteValuesScoreSystem(IScoreSystem):
         unique=True,
         required=True)
 
+
 class IRangedValuesScoreSystem(IScoreSystem):
-    '''A score system that allows for a randge of values.'''
+    """A score system that allows for a randge of values."""
 
     min = zope.schema.Int(
         title=u'Minimum',
@@ -110,12 +115,14 @@ class IRangedValuesScoreSystem(IScoreSystem):
         required=True,
         default=100)
 
+
 class IHaveEvaluations(zope.interface.Interface):
-    '''A marker interface for objects that can have evaluations'''
+    """A marker interface for objects that can have evaluations"""
 
 
 class IEvaluation(zope.app.container.interfaces.IContained):
-    '''An Evaluation'''
+    """An Evaluation"""
+
     zope.app.container.constraints.containers(".IEvaluations")
 
     scoreSystem = zope.schema.Object(
@@ -140,42 +147,44 @@ class IEvaluation(zope.app.container.interfaces.IContained):
 
 
 class IEvaluations(zope.app.container.interfaces.IContainer):
-    '''An Evaluation Container'''
+    """An Evaluation Container"""
+
     zope.app.container.constraints.contains(IEvaluation)
 
     def __init__(self, items=None):
-        '''Initialize object.
+        """Initialize object.
 
         The items should be a list of tuples or dictionary of evaluation names
         and objects.
-        '''
+        """
 
     def getEvaluationsForRequirement(requirement, recursive=True):
-        '''Match all evaluations that satisfy the requirement.
+        """Match all evaluations that satisfy the requirement.
 
         The return value is another ``IEvaluations`` object.  This allows for
         chained queries.  For recursive queries, evaluations for all sub
         requirements will be returned as well.
-        '''
+        """
 
     def getEvaluationsOfEvaluator(evaluator):
-        '''Match all evaluations done by the specified evaluator.
+        """Match all evaluations done by the specified evaluator.
 
         The return value is another ``IEvaluations`` object.  This allows for
         chained queries.  For recursive queries, evaluations for all sub
         requirements will be returned as well.
-        '''
+        """
 
 
 class IEvaluationsQuery(zope.interface.Interface):
-    '''Evaluation Query
+    """Evaluation Query
 
     These objects query evaluations and return another evaluations object.
-    '''
+    """
 
     def __call__(self, *args, **kwargs):
-        '''Execute the query and return an ``IEvaluations`` object.
+        """Execute the query and return an ``IEvaluations`` object.
 
         The returned ``IEvaluations`` object *must* have the same parent and
         name that the original ``IEvaluations`` object had.
-        '''
+        """
+

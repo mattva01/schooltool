@@ -19,7 +19,7 @@
 """
 Tests for group views.
 
-$Id:$
+$Id$
 """
 
 import unittest
@@ -31,6 +31,7 @@ from zope.app.traversing.interfaces import IContainmentRoot
 
 from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.testing import setup
+
 
 def doctest_RequirementView():
     r"""Test for RequirementView
@@ -79,6 +80,7 @@ def doctest_RequirementView():
     The ``listContentInfo`` method essentially gets another tree structure
     used by the page templates to display each tree node
     """
+
 
 def doctest_RequirementAddView():
     r"""Test for RequirementAddView
@@ -175,8 +177,8 @@ def doctest_RequirementEditView():
         >>> request.response.getStatus()
         599
 
-    After changing name of the requirement you should get redirected to the requirement
-    list:
+    After changing name of the requirement you should get redirected to the
+    requirement list:
 
         >>> request = TestRequest()
         >>> request.form = {'UPDATE_SUBMIT': 'Apply',
@@ -192,8 +194,8 @@ def doctest_RequirementEditView():
         >>> requirement.title
         u'new_title'
 
-    Even if the title has not changed you should get redirected to the requirement
-    list:
+    Even if the title has not changed you should get redirected to the
+    requirement list:
 
         >>> request = TestRequest()
         >>> request.form = {'UPDATE_SUBMIT': 'Apply',
@@ -236,6 +238,7 @@ def doctest_RequirementEditView():
 
     """
 
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
@@ -246,3 +249,4 @@ def test_suite():
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')
+

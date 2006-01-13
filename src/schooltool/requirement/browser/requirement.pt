@@ -35,7 +35,7 @@
     <input type="checkbox" name="RECURSIVE" value="0"
       tal:attributes="value request/RECURSIVE|nothing"/>recursive?
   </form>
-  <tal:if condition="batch" define="depth python:int(request.get('DEPTH',3))">
+  <tal:if condition="batch" define="depth python:int(request.get('DEPTH', 3))">
     <div class="count">
       <span i18n:translate="">Showing</span>
       <span tal:content="python:len(batch)"/>

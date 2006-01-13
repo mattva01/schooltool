@@ -18,30 +18,37 @@ Level-related Tests
 
 $Id$
 """
-__docformat__='restructuredtext'
+
+__docformat__ = 'restructuredtext'
 
 import datetime
+
 import zope.component
 from zope.app import container
 from zope.app import zapi
 from zope.app.location import location
 from zope.app import annotation
+
 from schooltool.requirement import interfaces
 
+
 EVALUATIONS_KEY = "schooltool.evaluations"
+
 
 def getRequirementList(req, recurse=True):
     result = []
     for value in req.values(): # loop through your children
-        if recurse: 
+        if recurse:
             result += getRequirementList(value) # append their children...
         else:
             result.append(value) # just append the child
     result.append(req) # append the object itself
     return result
 
+
 class Evaluations(container.btree.BTreeContainer,
                   container.contained.Contained):
+
     zope.interface.implements(interfaces.IEvaluations)
 
     def __init__(self, items=None):
@@ -50,14 +57,14 @@ class Evaluations(container.btree.BTreeContainer,
             self[name] = value
 
     def addEvaluation(self, ev):
-        '''See interfaces.IEvaluations'''
+        """See interfaces.IEvaluations"""
         chooser = container.interfaces.INameChooser(self)
         name = chooser.chooseName('eval', ev)
         self[name] = ev
         return name
 
     def getEvaluationsForRequirement(self, req, recurse=True):
-        '''See interfaces.IEvaluations'''
+        """See interfaces.IEvaluations"""
         requirements = getRequirementList(req, recurse)
         result = [(name, ev)
                   for name, ev in self.items()
@@ -67,7 +74,7 @@ class Evaluations(container.btree.BTreeContainer,
         return result
 
     def getEvaluationsOfEvaluator(self, evaluator):
-        '''See interfaces.IEvaluations'''
+        """See interfaces.IEvaluations"""
         result = [(name, ev)
                   for name, ev in self.items()
                   if ev.evaluator == evaluator]
@@ -80,6 +87,7 @@ class Evaluations(container.btree.BTreeContainer,
 
 
 class Evaluation(container.contained.Contained):
+
     zope.interface.implements(interfaces.IEvaluation)
 
     def __init__(self, requirement, scoreSystem, value, evaluator):
@@ -96,6 +104,10 @@ class Evaluation(container.contained.Contained):
 
         def set(self, value):
             self._value = value
+            # XXX mg: since it is a very bad idea to mix datetimes with tzinfo
+            # and datetimes without tzinfo, I suggest using datetimes with
+            # tzinfo everywhere.  Most of SchoolTool follows this convention,
+            # (with the painful exception of schooltool.timetable).
             self.time = datetime.datetime.utcnow()
 
         return property(get, set)
@@ -106,6 +118,7 @@ class Evaluation(container.contained.Contained):
 
 
 class AbstractQueryAdapter(object):
+
     zope.component.adapts(interfaces.IEvaluations)
     zope.interface.implements(interfaces.IEvaluationsQuery)
 
@@ -116,11 +129,12 @@ class AbstractQueryAdapter(object):
         raise NotImplemented
 
     def __call__(self, *args, **kwargs):
-        '''See interfaces.IEvaluationsQuery'''
+        """See interfaces.IEvaluationsQuery"""
         result = Evaluations(self._query(*args, **kwargs))
         location.locate(
             result, zapi.getParent(self.context), zapi.name(self.context))
         return result
+
 
 def getEvaluations(context):
     """Adapt an ``IHaveEvaluations`` object to ``IEvaluations``."""
@@ -135,3 +149,4 @@ def getEvaluations(context):
         return evaluations
 # Convention to make adapter introspectable
 getEvaluations.factory = Evaluations
+

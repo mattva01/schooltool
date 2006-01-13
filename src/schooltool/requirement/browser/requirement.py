@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2006 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,10 +17,11 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-requirement browser views.
+schooltooo.requirement browser views.
 
-$Id:$
+$Id$
 """
+
 from zope.app import zapi
 from zope.app.form.browser.add import AddView
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
@@ -29,6 +30,7 @@ from schooltool import SchoolToolMessage as _
 import schooltool.app.browser.app
 import schooltool.requirement.interfaces
 from schooltool.batching import Batch
+
 
 class RequirementAddView(AddView):
     """A view for adding Requirements."""
@@ -53,10 +55,11 @@ class RequirementView(schooltool.app.browser.app.ContainerView):
     add_url = "+/addRequirement.html"
 
     def __init__(self, context, request, depth=None):
-        schooltool.app.browser.app.ContainerView.__init__(self, context, request)
+        schooltool.app.browser.app.ContainerView.__init__(self, context,
+                                                          request)
         self.depth = depth
-        if self.depth == None:
-            self.depth = int(request.get('DEPTH',3))
+        if self.depth is None:
+            self.depth = int(request.get('DEPTH', 3))
 
     def _search(self, searchstr, context):
         results = []
@@ -84,7 +87,8 @@ class RequirementView(schooltool.app.browser.app.ContainerView):
 
     def listContentInfo(self):
         children = []
-        if self.depth < 1: return []
+        if self.depth < 1:
+            return []
         for child in self.batch:
             if schooltool.requirement.interfaces.IRequirement.providedBy(child):
                 info = {}
@@ -101,3 +105,4 @@ class RequirementEditView(schooltool.app.browser.app.BaseEditView):
     """View for editing Requirements."""
 
     __used_for__ = schooltool.requirement.interfaces.IRequirement
+

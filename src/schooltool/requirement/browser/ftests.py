@@ -19,8 +19,9 @@
 """
 Functional tests for schooltool.level.
 
-$Id: test_all.py 2922 2005-02-22 19:04:44Z mg $
+$Id$
 """
+
 import unittest
 from zope.testing import doctest
 from zope.app.testing.functional import FunctionalDocFileSuite
@@ -38,6 +39,7 @@ def test_suite():
     return FunctionalDocFileSuite(
         'README.txt', optionflags=optionflags,
         globs={'analyze': analyze})
+
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')

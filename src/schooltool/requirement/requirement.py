@@ -20,7 +20,8 @@
 
 $Id$
 """
-__docformat__='restructuredtext'
+
+__docformat__ = 'restructuredtext'
 
 import persistent.list
 import zope.event
@@ -36,8 +37,9 @@ from schooltool.requirement import interfaces
 
 REQUIREMENT_KEY = "schooltool.requirement"
 
+
 class InheritedRequirement(zope.app.container.contained.Contained):
-    """ """
+    """XXX I want a docstring"""
 
     def __init__(self, requirement, parent, name):
         self.original = requirement
@@ -58,7 +60,8 @@ class InheritedRequirement(zope.app.container.contained.Contained):
 
 class Requirement(zope.app.container.btree.BTreeContainer,
                   zope.app.container.contained.Contained):
-    """ """
+    """XXX I want a docstring"""
+
     zope.interface.implements(interfaces.IRequirement)
 
     def __init__(self, title, *bases):
@@ -83,7 +86,7 @@ class Requirement(zope.app.container.btree.BTreeContainer,
                 value.removeBase(base[name])
 
     def keys(self):
-        '''See interface `IReadContainer`'''
+        """See interface `IReadContainer`"""
         keys = set()
         for requirement in self.bases + [super(Requirement, self)]:
             keys.update(set(requirement.keys()))
@@ -93,7 +96,7 @@ class Requirement(zope.app.container.btree.BTreeContainer,
         return iter(self.keys())
 
     def __getitem__(self, key):
-        '''See interface `IReadContainer`'''
+        """See interface `IReadContainer`"""
         container = super(Requirement, self)
         try:
             return container.__getitem__(key)
@@ -104,7 +107,7 @@ class Requirement(zope.app.container.btree.BTreeContainer,
         raise KeyError, key
 
     def get(self, key, default=None):
-        '''See interface `IReadContainer`'''
+        """See interface `IReadContainer`"""
         try:
             return self[key]
         except KeyError:
@@ -112,26 +115,26 @@ class Requirement(zope.app.container.btree.BTreeContainer,
         return default
 
     def values(self):
-        '''See interface `IReadContainer`'''
+        """See interface `IReadContainer`"""
         return [value for key, value in self.items()]
 
     def __len__(self):
-        '''See interface `IReadContainer`'''
+        """See interface `IReadContainer`"""
         return len(self.keys())
 
     def items(self):
-        '''See interface `IReadContainer`'''
+        """See interface `IReadContainer`"""
         for key in self.keys():
             yield key, self[key]
 
     def __contains__(self, key):
-        '''See interface `IReadContainer`'''
+        """See interface `IReadContainer`"""
         return key in self.keys()
 
     has_key = __contains__
 
     def __setitem__(self, key, object):
-        '''See interface `IWriteContainer`'''
+        """See interface `IWriteContainer`"""
         for base in self.bases:
             if key in base:
                 object.addBase(base[key])
@@ -145,7 +148,7 @@ class Requirement(zope.app.container.btree.BTreeContainer,
             zope.app.event.objectevent.modified(self)
 
     def __delitem__(self, key):
-        '''See interface `IWriteContainer`'''
+        """See interface `IWriteContainer`"""
         container = super(Requirement, self)
         zope.app.container.contained.uncontained(
             container.__getitem__(key), self, key)
@@ -170,11 +173,14 @@ def getRequirement(context):
 # Convention to make adapter introspectable
 getRequirement.factory = Requirement
 
+
 class requirementNamespace(object):
     """Used to traverse to the requirements of an object"""
+
     def __init__(self, ob, request=None):
         self.context = ob
 
     def traverse(self, name, ignore):
         reqs = interfaces.IRequirement(self.context)
         return reqs
+

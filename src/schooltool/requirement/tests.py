@@ -21,7 +21,8 @@ Level-related Tests
 
 $Id$
 """
-__docformat__='restructuredtext'
+
+__docformat__ = 'restructuredtext'
 
 import unittest
 
@@ -30,6 +31,7 @@ import zope.interface
 from zope.testing import doctest, doctestunit
 from zope.app.container import contained
 from zope.app.testing import setup
+
 from schooltool.requirement import requirement, interfaces, evaluation
 
 
