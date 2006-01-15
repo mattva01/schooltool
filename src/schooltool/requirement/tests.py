@@ -26,48 +26,15 @@ __docformat__ = 'restructuredtext'
 
 import unittest
 
-import zope.component
-import zope.interface
 from zope.testing import doctest, doctestunit
-from zope.app import keyreference
-from zope.app.container import contained
 from zope.app.testing import setup
 
-from schooltool.requirement import requirement, interfaces, evaluation
-
-
-class KeyReferenceStub(object):
-    """A stub implementation to allow testing of evaluations."""
-
-    key_type_id = 'tests.path'
-
-    def __init__(self, context):
-        self.context = context
-
-    def __call__(self):
-        return self.context
-
-    def __hash__(self):
-        return id(self.context)
-
-    def __cmp__(self, ref):
-        return cmp((self.key_type_id, self.__hash__()),
-                   (ref.key_type_id, ref.__hash__()))
-
+from schooltool.requirement import testing
 
 def setUp(test):
     setup.placefulSetUp()
-    zope.component.provideAdapter(requirement.getRequirement,
-                                  (zope.interface.Interface,),
-                                  interfaces.IRequirement)
-    zope.component.provideAdapter(contained.NameChooser,
-                                  (zope.interface.Interface,))
-    zope.component.provideAdapter(evaluation.getEvaluations,
-                                  (zope.interface.Interface,),
-                                  interfaces.IEvaluations)
-    zope.component.provideAdapter(KeyReferenceStub,
-                                  (zope.interface.Interface,),
-                                  keyreference.interfaces.IKeyReference)
+    testing.setUpRequirement()
+    testing.setUpEvaluation()
 
 
 def tearDown(test):

@@ -635,7 +635,7 @@ This section demonstrates the implementation of the ``IMapping`` API.
   >>> evals[calculus[u'fundamental']]
   Traceback (most recent call last):
   ...
-  KeyError: <schooltool.requirement.tests.KeyReferenceStub ...>
+  KeyError: <schooltool.requirement.testing.KeyReferenceStub ...>
 
 - ``__delitem__(key)``
 
@@ -645,7 +645,7 @@ This section demonstrates the implementation of the ``IMapping`` API.
   >>> del evals[calculus[u'fundamental']]
   Traceback (most recent call last):
   ...
-  KeyError: <schooltool.requirement.tests.KeyReferenceStub ...>
+  KeyError: <schooltool.requirement.testing.KeyReferenceStub ...>
 
 - ``__setitem__(key, value)``
 
@@ -670,7 +670,7 @@ This section demonstrates the implementation of the ``IMapping`` API.
 
 - ``keys()``
 
-  >>> evals.keys()
+  >>> sorted(evals.keys(), key = lambda x: x.title)
   [Requirement(u'Differentiation'), Requirement(u'Limit Theorem')]
 
 - ``__iter__()``
@@ -680,7 +680,7 @@ This section demonstrates the implementation of the ``IMapping`` API.
 
 - ``values()``
 
-  >>> list(evals.values())
+  >>> sorted(evals.values(), key=lambda x: x.requirement.title)
   [<Evaluation for Requirement(u'Differentiation'), value=False>,
    <Evaluation for Requirement(u'Limit Theorem'), value=True>]
 
