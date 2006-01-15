@@ -47,7 +47,7 @@ class Section(Persistent, contained.Contained):
     _location = None
 
     def __init__(self, title="Section", description=None, schedule=None,
-                 courses=None, location=None):
+                 location=None):
         self.title = title
         self.description = description
         self.calendar = Calendar(self)

@@ -139,7 +139,6 @@ def doctest_Section():
     r"""Tests for course section groups.
 
         >>> from schooltool.relationship.tests import setUp, tearDown
-        >>> from schooltool.relationship import getRelatedObjects
         >>> setUp()
 
         >>> from schooltool.course.section import Section
