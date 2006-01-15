@@ -135,20 +135,38 @@ class IEvaluation(zope.app.container.interfaces.IContained):
         description=u'The requirement being evaluated.',
         schema=IRequirement)
 
-    value = zope.interface.Attribute(
-        'The value of the grade')
+    value = zope.schema.Object(
+        title=u'Value',
+        description=u'A scoresystem-valid score that represents the grade.',
+        schema=zope.interface.Interface,
+        required=True)
 
     time = zope.schema.Datetime(
         title=u'Time',
         description=u'The time the evaluation was made')
 
-    evaluator = zope.interface.Attribute(
-        'The entity doing the evaluation')
+    evaluatee = zope.schema.Object(
+        title=u'Evaluatee',
+        description=u'The entity receiving the evaluation',
+        schema=zope.interface.Interface,
+        readonly=True,
+        required=True)
+
+    evaluator = zope.schema.Object(
+        title=u'Evaluator',
+        description=u'The entity doing the evaluation',
+        schema=zope.interface.Interface,
+        required=True)
 
 
-class IEvaluations(zope.app.container.interfaces.IContainer):
-    """An Evaluation Container"""
+class IEvaluations(zope.interface.common.mapping.IMapping):
+    """Evaluation storage
 
+    This object stores all evaluations of an entity. It is naturally a mapping
+    from requirement to the evaluation. Note that this object is not a classical
+    Zope container, because the key will **not** be a name, but some sort of
+    key reference to the requirement.
+    """
     zope.app.container.constraints.contains(IEvaluation)
 
     def __init__(self, items=None):
@@ -157,6 +175,9 @@ class IEvaluations(zope.app.container.interfaces.IContainer):
         The items should be a list of tuples or dictionary of evaluation names
         and objects.
         """
+
+    def addEvaluation(evaluation):
+        """Add an evaluation."""
 
     def getEvaluationsForRequirement(requirement, recursive=True):
         """Match all evaluations that satisfy the requirement.

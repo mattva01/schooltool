@@ -39,18 +39,26 @@ REQUIREMENT_KEY = "schooltool.requirement"
 
 
 class InheritedRequirement(zope.app.container.contained.Contained):
-    """XXX I want a docstring"""
+    """A simple requirement wrapper to mark inheritance.
+
+    However, once the inherited requirement is modified by adding a
+    sub-requirement, the inherited requirement is converted to a real one.
+    """
+    zope.interface.implements(interfaces.IRequirement)
 
     def __init__(self, requirement, parent, name):
         self.original = requirement
         self.__parent__ = parent
         self.__name__ = name
 
+    def __eq__(self, other):
+        return cmp(self.original, other)
+
     def __repr__(self):
         return '%s(%r)' %(self.__class__.__name__, self.original)
 
     def __setitem__(self, key, value):
-        req = self.original.__class__(self.original.title)
+        req = self.original.__class__(self.original.title, self.original)
         self.__parent__[self.__name__] = req
         req[key] = value
 
@@ -60,8 +68,7 @@ class InheritedRequirement(zope.app.container.contained.Contained):
 
 class Requirement(zope.app.container.btree.BTreeContainer,
                   zope.app.container.contained.Contained):
-    """XXX I want a docstring"""
-
+    """A persistent requirement using a BTree for sub-requirements"""
     zope.interface.implements(interfaces.IRequirement)
 
     def __init__(self, title, *bases):

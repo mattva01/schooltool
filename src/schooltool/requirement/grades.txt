@@ -7,8 +7,8 @@ this requirement represents the work that has to be done to graduate.
 
 First we need to set up the school itself:
 
-  >>> from schooltool.app.app import SchoolToolApplication
-  >>> school = SchoolToolApplication()
+  >>> from schooltool.testing import setup
+  >>> school = setup.setupSchoolToolSite()
 
 Next we are creating the base requirement for graduation:
 

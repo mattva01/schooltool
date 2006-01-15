@@ -22,12 +22,16 @@ $Id$
 __docformat__ = 'restructuredtext'
 
 import datetime
+import persistent
+from BTrees.OOBTree import OOBTree
 
 import zope.component
+import zope.event
+from zope.app import annotation
 from zope.app import container
 from zope.app import zapi
 from zope.app.location import location
-from zope.app import annotation
+from zope.app.keyreference.interfaces import IKeyReference
 
 from schooltool.requirement import interfaces
 
@@ -46,22 +50,81 @@ def getRequirementList(req, recurse=True):
     return result
 
 
-class Evaluations(container.btree.BTreeContainer,
-                  container.contained.Contained):
+class Evaluations(persistent.Persistent, container.contained.Contained):
+    """Evaluations mapping.
 
+    This particular implementation uses the ``zope.app.keyreference`` package
+    to generate the keys of the requirements. Any key that is passed in could
+    be the requirement or the ``IKeyReference`` of the requirement. This
+    implementation will always convert the key to provide ``IKeyReference``
+    before treating it as a true key.
+
+    Another feature of this implementation is that if you set an evaluation
+    for a requirement that has already an evaluation, then the old evaluation
+    is simply overridden. The ``IContainer`` interface would raise a duplicate
+    name error.
+    """
     zope.interface.implements(interfaces.IEvaluations)
 
     def __init__(self, items=None):
         super(Evaluations, self).__init__()
+        self._btree = OOBTree()
         for name, value in items or []:
             self[name] = value
 
-    def addEvaluation(self, ev):
+    def __getitem__(self, key):
+        """See zope.interface.common.mapping.IItemMapping"""
+        return self._btree[IKeyReference(key)]
+
+    def __delitem__(self, key):
+        """See zope.interface.common.mapping.IWriteMapping"""
+        value = self[key]
+        del self._btree[IKeyReference(key)]
+        event = container.contained.ObjectRemovedEvent(value, self)
+        zope.event.notify(event)
+
+    def __setitem__(self, key, value):
+        """See zope.interface.common.mapping.IWriteMapping"""
+        self._btree[IKeyReference(key)] = value
+        value, event = container.contained.containedEvent(value, self)
+        zope.event.notify(event)
+
+    def get(self, key, default=None):
+        """See zope.interface.common.mapping.IReadMapping"""
+        try:
+            return self[key]
+        except KeyError:
+            return default
+
+    def __contains__(self, key):
+        """See zope.interface.common.mapping.IReadMapping"""
+        return IKeyReference(key) in self._btree
+
+    def keys(self):
+        """See zope.interface.common.mapping.IEnumerableMapping"""
+        # For now I decided to return the activities (as I think it is more
+        # natural), though they are not the true keys as we know
+        return [key() for key in self._btree.keys()]
+
+    def __iter__(self):
+        """See zope.interface.common.mapping.IEnumerableMapping"""
+        return iter(self.keys())
+
+    def values(self):
+        """See zope.interface.common.mapping.IEnumerableMapping"""
+        return self._btree.values()
+
+    def items(self):
+        """See zope.interface.common.mapping.IEnumerableMapping"""
+        return [(key(), value) for key, value in self._btree.items()]
+
+    def __len__(self):
+        """See zope.interface.common.mapping.IEnumerableMapping"""
+        return len(self._btree)
+
+    def addEvaluation(self, evaluation):
         """See interfaces.IEvaluations"""
-        chooser = container.interfaces.INameChooser(self)
-        name = chooser.chooseName('eval', ev)
-        self[name] = ev
-        return name
+        self[evaluation.requirement] = evaluation
 
     def getEvaluationsForRequirement(self, req, recurse=True):
         """See interfaces.IEvaluations"""
@@ -83,7 +146,11 @@ class Evaluations(container.btree.BTreeContainer,
         return result
 
     def __repr__(self):
-        return '<%s for %r>' % (self.__class__.__name__, zapi.getParent(self))
+        try:
+            parent = zapi.getParent(self)
+        except TypeError:
+            parent = None
+        return '<%s for %r>' % (self.__class__.__name__, parent)
 
 
 class Evaluation(container.contained.Contained):
@@ -103,6 +170,8 @@ class Evaluation(container.contained.Contained):
             return self._value
 
         def set(self, value):
+            if not self.scoreSystem.isValidScore(value):
+                raise ValueError('%r is not a valid score.' %value)
             self._value = value
             # XXX mg: since it is a very bad idea to mix datetimes with tzinfo
             # and datetimes without tzinfo, I suggest using datetimes with
@@ -111,6 +180,13 @@ class Evaluation(container.contained.Contained):
             self.time = datetime.datetime.utcnow()
 
         return property(get, set)
+
+    @property
+    def evaluatee(self):
+        try:
+            return zapi.getParent(zapi.getParent(self))
+        except TypeError:
+            raise ValueError('Evaluation is not yet assigned to a evaluatee')
 
     def __repr__(self):
         return '<%s for %r, value=%r>' % (self.__class__.__name__,

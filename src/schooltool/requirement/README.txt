@@ -493,12 +493,26 @@ in the programming class.
   >>> ev.time
   datetime.datetime(...)
 
+The evaluation also has an ``evaluatee`` property, but since we have not
+assigned the evaluation to the person, looking up the evaluatee raises an
+value error:
+
+  >>> ev.evaluatee
+  Traceback (most recent call last):
+  ...
+  ValueError: Evaluation is not yet assigned to a evaluatee
+
 Now that an evaluation has been created, we can add it to the student's
 evaluations.
 
   >>> name = evals.addEvaluation(ev)
   >>> sorted(evals.values())
   [<Evaluation for Inhe...ent(Requirement(u'Create an iterator.')), value=True>]
+
+Now that the evaluation is added, the evaluatee is also available:
+
+  >>> ev.evaluatee
+  Person(u'Sample Student')
 
 Once several evaluations have been created, we can do some interesting queries.
 To demonstrate this feature effectively, we have to create a new requirement
@@ -531,22 +545,22 @@ With that done (phew), we can create evaluations based on these requirements.
   >>> student2 = Person(u'Student Two')
   >>> evals = interfaces.IEvaluations(student2)
 
-  >>> name = evals.addEvaluation(evaluation.Evaluation(
+  >>> evals.addEvaluation(evaluation.Evaluation(
   ...     calculus[u'int'][u'fourier'], pf, pf.FAIL, teacher2))
 
-  >>> name = evals.addEvaluation(evaluation.Evaluation(
+  >>> evals.addEvaluation(evaluation.Evaluation(
   ...     calculus[u'int'][u'path'], pf, pf.PASS, teacher2))
 
-  >>> name = evals.addEvaluation(evaluation.Evaluation(
+  >>> evals.addEvaluation(evaluation.Evaluation(
   ...     calculus[u'diff'][u'partial'], pf, pf.FAIL, teacher))
 
-  >>> name = evals.addEvaluation(evaluation.Evaluation(
+  >>> evals.addEvaluation(evaluation.Evaluation(
   ...     calculus[u'diff'][u'systems'], pf, pf.PASS, teacher))
 
-  >>> name = evals.addEvaluation(evaluation.Evaluation(
+  >>> evals.addEvaluation(evaluation.Evaluation(
   ...     calculus[u'limit'], pf, pf.FAIL, teacher))
 
-  >>> name = evals.addEvaluation(evaluation.Evaluation(
+  >>> evals.addEvaluation(evaluation.Evaluation(
   ...     calculus[u'fundamental'], pf, pf.PASS, teacher2))
 
 So now we can ask for all evaluations for which the sample teacher is the
@@ -556,7 +570,7 @@ evaluator:
   >>> teacherEvals
   <Evaluations for Person(u'Student Two')>
 
-  >>> [value for name, value in sorted(teacherEvals.items())]
+  >>> [value for key, value in sorted(teacherEvals.items())]
   [<Evaluation for Requirement(u'Partial Differential Equations'), value=False>,
    <Evaluation for Requirement(u'Systems'), value=True>,
    <Evaluation for Requirement(u'Limit Theorem'), value=False>]
@@ -568,7 +582,7 @@ perform chained queries:
 
   >>> result = evals.getEvaluationsOfEvaluator(teacher) \
   ...               .getEvaluationsForRequirement(calculus[u'diff'])
-  >>> [value for name, value in sorted(result.items())]
+  >>> [value for key, value in sorted(result.items())]
   [<Evaluation for Requirement(u'Partial Differential Equations'), value=False>,
    <Evaluation for Requirement(u'Systems'), value=True>]
 
@@ -587,10 +601,98 @@ used as follows:
 
   >>> class PassedQuery(evaluation.AbstractQueryAdapter):
   ...     def _query(self):
-  ...         return [(name, eval)
-  ...                 for name, eval in self.context.items()
+  ...         return [(key, eval)
+  ...                 for key, eval in self.context.items()
   ...                 if eval.scoreSystem.isPassingScore(eval.value)]
 
   >>> result = PassedQuery(evals)().getEvaluationsOfEvaluator(teacher)
   >>> sorted(result.values())
   [<Evaluation for Requirement(u'Systems'), value=True>]
+
+
+The ``IEvaluations`` API
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Contrary to what you might expect, the evaluations object is not a container,
+but a mapping from requirement to evaluation. The key reference package is used
+to create a hashable key for the requirement. The result is an object where we
+can quickly lookup the evaluation for a given requirement, which is clearly
+the most common form of query.
+
+This section demonstrates the implementation of the ``IMapping`` API.
+
+  >>> evals = evaluation.Evaluations(
+  ...     [(calculus[u'limit'],
+  ...       evaluation.Evaluation(calculus[u'limit'], pf, pf.PASS, teacher)),
+  ...      (calculus[u'diff'],
+  ...       evaluation.Evaluation(calculus[u'diff'], pf, pf.FAIL, teacher))]
+  ...     )
+
+- ``__getitem__(key)``
+
+  >>> evals[calculus[u'limit']]
+   <Evaluation for Requirement(u'Limit Theorem'), value=True>
+  >>> evals[calculus[u'fundamental']]
+  Traceback (most recent call last):
+  ...
+  KeyError: <schooltool.requirement.tests.KeyReferenceStub ...>
+
+- ``__delitem__(key)``
+
+  >>> del evals[calculus[u'limit']]
+  >>> len(evals._btree)
+  1
+  >>> del evals[calculus[u'fundamental']]
+  Traceback (most recent call last):
+  ...
+  KeyError: <schooltool.requirement.tests.KeyReferenceStub ...>
+
+- ``__setitem__(key, value)``
+
+  >>> evals[calculus[u'limit']] = evaluation.Evaluation(
+  ...     calculus[u'limit'], pf, pf.PASS, teacher)
+  >>> len(evals._btree)
+  2
+
+- ``get(key, default=None)``
+
+  >>> evals.get(calculus[u'limit'])
+   <Evaluation for Requirement(u'Limit Theorem'), value=True>
+  >>> evals.get(calculus[u'fundamental'], default=False)
+  False
+
+- ``__contains__(key)``
+
+  >>> calculus[u'limit'] in evals
+  True
+  >>> calculus[u'fundamental'] in evals
+  False
+
+- ``keys()``
+
+  >>> evals.keys()
+  [Requirement(u'Differentiation'), Requirement(u'Limit Theorem')]
+
+- ``__iter__()``
+
+  >>> [key for key in iter(evals)]
+  [Requirement(u'Differentiation'), Requirement(u'Limit Theorem')]
+
+- ``values()``
+
+  >>> list(evals.values())
+  [<Evaluation for Requirement(u'Differentiation'), value=False>,
+   <Evaluation for Requirement(u'Limit Theorem'), value=True>]
+
+- ``items()``
+
+  >>> list(evals.items())
+  [(Requirement(u'Differentiation'),
+    <Evaluation for Requirement(u'Differentiation'), value=False>),
+   (Requirement(u'Limit Theorem'),
+    <Evaluation for Requirement(u'Limit Theorem'), value=True>)]
+
+- ``__len__()``
+
+  >>> len(evals)
+  2

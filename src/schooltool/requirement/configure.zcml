@@ -3,18 +3,18 @@
 <configure xmlns="http://namespaces.zope.org/zope">
 
   <adapter
-    for=".interfaces.IHaveRequirement"
-    provides=".interfaces.IRequirement"
-    factory=".requirement.getRequirement"
-    trusted="true"
-    />
+      for=".interfaces.IHaveRequirement"
+      provides=".interfaces.IRequirement"
+      factory=".requirement.getRequirement"
+      trusted="true"
+      />
 
   <adapter
-    for=".interfaces.IHaveEvaluations"
-    provides=".interfaces.IEvaluations"
-    factory=".evaluation.getEvaluations"
-    trusted="true"
-    />
+      for=".interfaces.IHaveEvaluations"
+      provides=".interfaces.IEvaluations"
+      factory=".evaluation.getEvaluations"
+      trusted="true"
+      />
 
   <view
       name="requirement" type="*"

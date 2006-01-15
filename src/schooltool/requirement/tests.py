@@ -29,22 +29,45 @@ import unittest
 import zope.component
 import zope.interface
 from zope.testing import doctest, doctestunit
+from zope.app import keyreference
 from zope.app.container import contained
 from zope.app.testing import setup
 
 from schooltool.requirement import requirement, interfaces, evaluation
 
 
+class KeyReferenceStub(object):
+    """A stub implementation to allow testing of evaluations."""
+
+    key_type_id = 'tests.path'
+
+    def __init__(self, context):
+        self.context = context
+
+    def __call__(self):
+        return self.context
+
+    def __hash__(self):
+        return id(self.context)
+
+    def __cmp__(self, ref):
+        return cmp((self.key_type_id, self.__hash__()),
+                   (ref.key_type_id, ref.__hash__()))
+
+
 def setUp(test):
     setup.placefulSetUp()
     zope.component.provideAdapter(requirement.getRequirement,
-                                  (interfaces.IHaveRequirement,),
+                                  (zope.interface.Interface,),
                                   interfaces.IRequirement)
     zope.component.provideAdapter(contained.NameChooser,
                                   (zope.interface.Interface,))
     zope.component.provideAdapter(evaluation.getEvaluations,
-                                  (interfaces.IHaveEvaluations,),
+                                  (zope.interface.Interface,),
                                   interfaces.IEvaluations)
+    zope.component.provideAdapter(KeyReferenceStub,
+                                  (zope.interface.Interface,),
+                                  keyreference.interfaces.IKeyReference)
 
 
 def tearDown(test):
@@ -54,6 +77,11 @@ def tearDown(test):
 def test_suite():
     return unittest.TestSuite((
         doctest.DocFileSuite('README.txt',
+                             setUp=setUp, tearDown=tearDown,
+                             globs={'pprint': doctestunit.pprint},
+                             optionflags=doctest.NORMALIZE_WHITESPACE|
+                                         doctest.ELLIPSIS),
+        doctest.DocFileSuite('grades.txt',
                              setUp=setUp, tearDown=tearDown,
                              globs={'pprint': doctestunit.pprint},
                              optionflags=doctest.NORMALIZE_WHITESPACE|
