@@ -43,8 +43,16 @@ class IActivity(interfaces.IRequirement):
         vocabulary="schooltool.gradebook.categories",
         required=True)
 
-    scoresystem = zope.interface.Attribute(
-        'Score system to be used for the grading')
+    scoresystem = zope.schema.Choice(
+        title=_("Scoresystem"),
+        description=_("The activity scoresystem."),
+        vocabulary="schooltool.gradebook.scoresystems",
+        required=True)
+
+    date = zope.schema.Date(
+        title=_("Date"),
+        description=_("The date the activity was created."),
+        required=True)
 
 class IGradebook(zope.interface.Interface):
     """The gradebook of a section.

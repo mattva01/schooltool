@@ -14,6 +14,45 @@
       handler=".category.addDefaultCategoriesToApplication"
       />
 
+  <!-- Score System registrations -->
+
+  <utility
+      provides="schooltool.requirement.interfaces.IScoreSystem"
+      component="schooltool.requirement.scoresystem.PassFail"
+      name="Pass/Fail"
+      />
+
+  <utility
+      provides="schooltool.requirement.interfaces.IScoreSystem"
+      component="schooltool.requirement.scoresystem.AmericanLetterScoreSystem"
+      name="Letter Grade"
+      />
+
+  <utility
+      provides="schooltool.requirement.interfaces.IScoreSystem"
+      component="
+          schooltool.requirement.scoresystem.ExtendedAmericanLetterScoreSystem"
+      name="Extended Letter Grade"
+      />
+
+  <utility
+      provides="schooltool.requirement.interfaces.IScoreSystem"
+      component="schooltool.requirement.scoresystem.PercentScoreSystem"
+      name="Percent"
+      />
+
+  <utility
+      provides="schooltool.requirement.interfaces.IScoreSystem"
+      component="schooltool.requirement.scoresystem.HundredPointsScoreSystem"
+      name="100 Points"
+      />
+
+  <vocabulary
+      name="schooltool.gradebook.scoresystems"
+      factory="zope.app.component.vocabulary.UtilityVocabulary"
+      interface="schooltool.requirement.interfaces.IScoreSystem"
+      />
+
   <!-- Activity Adapters -->
 
   <adapter
@@ -29,6 +68,36 @@
       factory=".activity.getSectionActivities"
       trusted="true"
       />
+
+  <!-- Activity Content and Security -->
+
+  <content class=".activity.Activities">
+    <allow interface="zope.interface.common.mapping.IReadMapping" />
+    <require
+        permission="schooltool.view"
+        attributes="keys __iter__ values items __len__ addBase removeBase title"
+        />
+    <require
+        permission="schooltool.edit"
+        interface="zope.interface.common.mapping.IWriteMapping"
+        set_schema=".interfaces.IActivities"
+        />
+  </content>
+
+  <content class=".activity.Activity">
+    <allow interface="zope.interface.common.mapping.IReadMapping" />
+    <require
+        permission="schooltool.view"
+        attributes="keys __iter__ values items __len__
+                    addBase removeBase title description category scoresystem"
+        />
+    <require
+        permission="schooltool.edit"
+        interface="zope.interface.common.mapping.IWriteMapping"
+        set_schema=".interfaces.IActivity"
+        />
+  </content>
+
 
   <!-- Gradebook Adapter -->
 

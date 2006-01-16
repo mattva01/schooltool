@@ -60,7 +60,8 @@ def getCourseActivities(context):
     except KeyError:
         activities = Activities(context.title)
         annotations[ACTIVITIES_KEY] = activities
-        zope.app.container.contained.contained(activities, context)
+        zope.app.container.contained.contained(
+            activities, context, 'activities')
         return activities
 
 # Convention to make adapter introspectable
@@ -79,7 +80,8 @@ def getSectionActivities(context):
         for course in context.courses:
             activities.addBase(getCourseActivities(course))
         annotations[ACTIVITIES_KEY] = activities
-        zope.app.container.contained.contained(activities, context)
+        zope.app.container.contained.contained(
+            activities, context, 'activities')
         return activities
 
 # Convention to make adapter introspectable

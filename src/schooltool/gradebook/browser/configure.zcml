@@ -3,15 +3,17 @@
     xmlns="http://namespaces.zope.org/browser"
     xmlns:zope="http://namespaces.zope.org/zope">
 
-    <form
-        label="Activity Categories"
-        name="categories.html"
-        schema=".category.ICategoriesForm"
-        for="schooltool.app.interfaces.ISchoolToolApplication"
-        template="categories.pt"
-        class=".category.CategoryOverview"
-        permission="schooltool.edit"
-        />
+  <!-- Categories -->
+
+  <form
+      label="Activity Categories"
+      name="categories.html"
+      schema=".category.ICategoriesForm"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      template="categories.pt"
+      class=".category.CategoryOverview"
+      permission="schooltool.edit"
+      />
 
   <configure package="schooltool.app.browser">
 
@@ -28,5 +30,74 @@
         />
 
   </configure>
+
+  <!-- Activities -->
+
+  <configure package="schooltool.app.browser">
+
+    <page
+        name="index.html"
+        for="schooltool.gradebook.interfaces.IActivities"
+        class="schooltool.gradebook.browser.activity.ActivitiesView"
+        template="templates/container.pt"
+        permission="zope.View"
+        />
+
+    <addform
+        label="Add an Activity"
+        name="addActivity.html"
+        schema="schooltool.gradebook.interfaces.IActivity"
+        fields="title description category scoresystem"
+        arguments="title category scoresystem"
+        content_factory="schooltool.gradebook.activity.Activity"
+        permission="schooltool.create"
+        template="templates/simple_add.pt"
+        class="schooltool.gradebook.browser.activity.ActivityAddView">
+      <widget field="description" height="5" />
+    </addform>
+
+    <editform
+        label="Edit Activity"
+        name="edit.html"
+        for="schooltool.gradebook.interfaces.IActivity"
+        schema="schooltool.gradebook.interfaces.IActivity"
+        fields="title description category scoresystem"
+        permission="schooltool.edit"
+        template="templates/simple_edit.pt"
+        class="schooltool.gradebook.browser.activity.ActivityEditView"
+        menu="schooltool_actions"
+        title="Edit"
+        />
+
+  </configure>
+
+  <defaultView
+      for="..interfaces.IActivity"
+      name="edit.html"
+      />
+
+  <menuItem
+      menu="schooltool_actions"
+      title="Activities"
+      for="schooltool.course.interfaces.ICourse"
+      action="activities/index.html"
+      permission="zope.View"
+      />
+
+  <menuItem
+      menu="schooltool_actions"
+      title="Activities"
+      for="schooltool.course.interfaces.ISection"
+      action="activities/index.html"
+      permission="zope.View"
+      />
+
+  <menuItem
+      menu="schooltool_actions"
+      title="New Activity"
+      for="..interfaces.IActivities"
+      action="+/addActivity.html"
+      permission="schooltool.create"
+      />
 
 </configure>

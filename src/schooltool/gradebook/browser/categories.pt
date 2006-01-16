@@ -16,7 +16,8 @@
       Manage Activity Categories
     </h3>
 
-    <div class="info" tal:condition="view/message" tal:content="view/message" />
+    <div class="info" tal:condition="view/message" tal:content="view/message"
+          i18n:translate="" />
 
     <div class="row" tal:define="widget nocall:view/categories_widget">
       <div metal:use-macro="context/@@form_macros/widget_row" />
