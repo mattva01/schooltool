@@ -54,30 +54,55 @@ class ApplicationStub(object):
     timezone = 'UTC'
 
 
+class TimetableDayStub(object):
+    def __init__(self, periods, homeroom_period_id):
+        self.periods = periods
+        self.homeroom_period_id = homeroom_period_id
+
+class TimetableStub(object):
+    def __init__(self, days):
+        self._days = days
+    def __getitem__(self, day_id):
+        return self._days[day_id]
+
+class TimetableActivityStub(object):
+    def __init__(self, timetable, title):
+        self.timetable = timetable
+        self.title = title
+
+
 class StubTimetables(object):
     adapts(Interface)
     implements(ITimetables)
     def __init__(self, context):
         self.context = context
+        self._tt = TimetableStub({
+                        'D1': TimetableDayStub(['A', 'D'], None),
+                        'D2': TimetableDayStub(['B', 'C'], 'B'),
+                   })
 
     def makeTimetableCalendar(self, first, last):
         events = [
             TimetableCalendarEvent(
                 datetime.datetime(2005, 12, 14, 10, 00, tzinfo=utc),
                 datetime.timedelta(minutes=45),
-                "Math", day_id='D1', period_id="A", activity=None),
+                "Math", day_id='D1', period_id="A",
+                activity=TimetableActivityStub(self._tt, "Math")),
             TimetableCalendarEvent(
                 datetime.datetime(2005, 12, 14, 11, 00, tzinfo=utc),
                 datetime.timedelta(minutes=45),
-                "Arts", day_id='D1', period_id="D", activity=None),
+                "Arts", day_id='D1', period_id="D",
+                activity=TimetableActivityStub(self._tt, "Arts")),
             TimetableCalendarEvent(
                 datetime.datetime(2005, 12, 15, 10, 00, tzinfo=utc),
                 datetime.timedelta(minutes=45),
-                "Math", day_id='D2', period_id="B", activity=None),
+                "Math", day_id='D2', period_id="B",
+                activity=TimetableActivityStub(self._tt, "Math")),
             TimetableCalendarEvent(
                 datetime.datetime(2005, 12, 15, 11, 00, tzinfo=utc),
                 datetime.timedelta(minutes=45),
-                "Arts", day_id='D2', period_id="C", activity=None),
+                "Arts", day_id='D2', period_id="C",
+                activity=TimetableActivityStub(self._tt, "Arts")),
             ]
         return ImmutableCalendar([e for e in events
                                   if first <= e.dtstart.date() <= last])
@@ -129,6 +154,8 @@ class EventForDisplayStub(object):
 
 class SectionStub(object):
     implements(ISection)
+
+    members = ()
 
 
 class PersonStub(object):
@@ -692,6 +719,40 @@ def doctest_RealtimeAttendanceView_update():
         >>> view.error
         u'The arrival time you entered is invalid.  Please use HH:MM format'
 
+    """
+
+
+def doctest_RealtimeAttendanceView_update_homeroom():
+    r"""Tests for RealtimeAttendanceView.update
+
+    We need an ITimetables adapter in order to verify that a given
+    period is valid for a given day:
+
+        >>> ztapi.provideAdapter(None, ITimetables, StubTimetables)
+
+    The ``update`` method is able to tell the difference between regular
+    section meetings and the homeroom meeting.
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...     import RealtimeAttendanceView
+        >>> section = SectionStub()
+        >>> request = TestRequest()
+        >>> view = RealtimeAttendanceView(section, request)
+
+    The 'C' period on 2005-12-15 is a regular section meeting
+
+        >>> view.date = datetime.date(2005, 12, 15)
+        >>> view.period_id = 'C'
+        >>> view.update()
+        >>> view.homeroom
+        False
+
+    The 'B' period, on the other hand, is the homeroom period
+
+        >>> view.period_id = 'B'
+        >>> view.update()
+        >>> view.homeroom
+        True
 
     """
 

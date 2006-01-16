@@ -7,10 +7,14 @@
 <body>
 
 <metal:block metal:fill-slot="content-header">
-<h2 i18n:translate="">Section attendance for <span i18n:name="section"
-  tal:replace="context/label" i18n:translate="" /> at <span i18n:name="date"
-  tal:replace="view/date" /> period <span i18n:name="period_id"
-  tal:replace="view/period_id" /></h2>
+<h2 tal:condition="view/homeroom" i18n:translate="">Homeroom attendance for
+  <span i18n:name="section" tal:replace="context/label" i18n:translate="" />
+  at <span i18n:name="date" tal:replace="view/date" />
+  period <span i18n:name="period_id" tal:replace="view/period_id" /></h2>
+<h2 tal:condition="not:view/homeroom" i18n:translate="">Section attendance for
+  <span i18n:name="section" tal:replace="context/label" i18n:translate="" />
+  at <span i18n:name="date" tal:replace="view/date" />
+  period <span i18n:name="period_id" tal:replace="view/period_id" /></h2>
 </metal:block>
 
 <metal:block metal:fill-slot="body">

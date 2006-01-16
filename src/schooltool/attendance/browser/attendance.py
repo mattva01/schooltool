@@ -249,6 +249,10 @@ class RealtimeAttendanceView(BrowserView):
         meeting = getPeriodEventForSection(self.context, self.date,
                                            self.period_id)
 
+        timetable = meeting.activity.timetable
+        homeroom_period_id = timetable[meeting.day_id].homeroom_period_id
+        self.homeroom = (meeting.period_id == homeroom_period_id)
+
         # If there are persons with UNKNOWN status, show the 'absent' button,
         # otherwise show 'tardy' and 'arrived'.
         self.unknowns = False
