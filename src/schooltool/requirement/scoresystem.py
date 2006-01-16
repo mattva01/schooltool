@@ -145,3 +145,6 @@ class RangedValuesScoreSystem(AbstractScoreSystem):
 PercentScoreSystem = RangedValuesScoreSystem(
     u'Percent', u'Percent Score System', 0, 100, 60)
 
+HundredPointsScoreSystem = RangedValuesScoreSystem(
+    u'100 Points', u'100 Points Score System', 0, 100, 60)
+
