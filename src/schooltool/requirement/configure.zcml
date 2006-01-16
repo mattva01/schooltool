@@ -30,15 +30,30 @@
       />
 
   <content class=".requirement.Requirement">
-    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
-    <require permission="schooltool.view"
-      attributes="keys values items __iter__ __len__ addBase removeBase title"
-      />
-    <require permission="schooltool.edit"
-      set_schema=".interfaces.IRequirement" />
-    <require permission="schooltool.create"
-      interface="zope.app.container.interfaces.IWriteContainer" />
+    <allow interface="zope.interface.common.mapping.IReadMapping" />
+    <require
+        permission="schooltool.view"
+        attributes="keys __iter__ values items __len__ addBase removeBase title"
+        />
+    <require
+        permission="schooltool.edit"
+        set_schema=".interfaces.IRequirement"
+        />
+    <require
+        permission="schooltool.create"
+        interface="zope.interface.common.mapping.IWriteMapping"
+        />
   </content>
+
+  <content class=".requirement.InheritedRequirement">
+    <require like_class=".requirement.Requirement" />
+    <require
+        permission="zope.View"
+        attributes="original"
+        />
+  </content>
+
+  <!-- Those declarations should go somewhere else eventually -->
 
   <content class="schooltool.app.app.SchoolToolApplication">
     <implements
