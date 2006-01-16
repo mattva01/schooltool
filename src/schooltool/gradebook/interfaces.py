@@ -37,10 +37,10 @@ class IActivity(interfaces.IRequirement):
         description=_("A detailed description of the activity."),
         required=False)
 
-    # XXX: Should be a choice field.
-    category = zope.schema.TextLine(
+    category = zope.schema.Choice(
         title=_("Category"),
         description=_("The activity category"),
+        vocabulary="schooltool.gradebook.categories",
         required=True)
 
     scoresystem = zope.interface.Attribute(

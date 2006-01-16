@@ -24,7 +24,9 @@ $Id$
 import os
 import unittest
 
+import optionstorage
 import zope.component
+import zope.app.annotation.interfaces
 from zope.testing import doctest, doctestunit
 from zope.app.testing import setup
 
@@ -39,6 +41,12 @@ def setUp(test):
     setup.placefulSetUp()
     setUpRelationships()
     schooltool.requirement.testing.setUpEvaluation()
+
+    zope.component.provideAdapter(
+        optionstorage.OptionStorage,
+        (zope.app.annotation.interfaces.IAnnotatable,),
+        optionstorage.interfaces.IOptionStorage)
+
     zope.component.provideAdapter(
         activity.getCourseActivities,
         (course.interfaces.ICourse,), interfaces.IActivities)

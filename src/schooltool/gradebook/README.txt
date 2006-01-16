@@ -7,6 +7,77 @@ activities to be graded and each row is a student. Since SchoolTool is an
 object-oriented application, we have the unique oppurtunity to implement it a
 little bit different and to provide some unique features.
 
+Categories
+----------
+
+When the SchoolTool instance is initially setup, it is part of the
+administations job to setup activity categories. Activity categories can be
+"homework", "paper", "test", "final exam", etc.
+
+    >>> from schooltool.testing import setup
+    >>> school = setup.setupSchoolToolSite()
+
+By default, some categories should be available in the vocabulary. Since this
+is a test, we have to set them up manually:
+
+    >>> from schooltool.testing import registry
+    >>> registry.setupDefaultCategories(school)
+
+The categories are managed by a special option storage vocabulary. As soon as
+the SchoolTool application is registered as a site, the vocabulary can be
+easily initiated.
+
+    >>> from schooltool.gradebook import category
+    >>> categories = category.CategoryVocabulary()
+
+We can now see the default categories:
+
+    >>> sorted([term.title for term in categories])
+    [u'Assignment', u'Essay', u'Exam', u'Homework', u'Journal', u'Lab',
+     u'Presentation', u'Project']
+
+The actual categories, however, are not managed by the vocabulary directly,
+but by an option storage dictionary. The category module provides a high-level
+function to get the dictionary:
+
+    >>> dict = category.getCategories(school)
+
+Now we can add,
+
+    >>> dict.addValue('quiz', 'en', u'Quiz')
+    >>> sorted([term.title for term in categories])
+    [u'Assignment', u'Essay', u'Exam', u'Homework', u'Journal', u'Lab',
+     u'Presentation', u'Project', u'Quiz']
+
+delete,
+
+    >>> dict.delValue('quiz', 'en')
+    >>> sorted([term.title for term in categories])
+    [u'Assignment', u'Essay', u'Exam', u'Homework', u'Journal', u'Lab',
+     u'Presentation', u'Project']
+
+and query values:
+
+    >>> dict.getValue('assignment','en')
+    u'Assignment'
+
+    >>> dict.getValue('faux','en')
+    Traceback (most recent call last):
+    ...
+    KeyError: 'Invalid row/column pair'
+
+    >>> dict.queryValue('faux','en', default=u'default')
+    u'default'
+
+    >>> sorted(dict.getKeys())
+    ['assignment', 'essay', 'exam', 'homework', 'journal', 'lab',
+     'presentation', 'project']
+
+As you can see, the option storage also supports multiple languages, though
+only English is currently supported. (Of course, administrators can delete all
+default categories and register new ones in their favorite language.)
+
+
 Activities
 ----------
 
