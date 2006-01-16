@@ -570,10 +570,11 @@ evaluator:
   >>> teacherEvals
   <Evaluations for Person(u'Student Two')>
 
-  >>> [value for key, value in sorted(teacherEvals.items())]
-  [<Evaluation for Requirement(u'Partial Differential Equations'), value=False>,
-   <Evaluation for Requirement(u'Systems'), value=True>,
-   <Evaluation for Requirement(u'Limit Theorem'), value=False>]
+  >>> [value for key, value in sorted(
+  ...     teacherEvals.items(), key=lambda x: x[1].requirement.title)]
+  [<Evaluation for Requirement(u'Limit Theorem'), value=False>,
+   <Evaluation for Requirement(u'Partial Differential Equations'), value=False>,
+   <Evaluation for Requirement(u'Systems'), value=True>]
 
 As you can see, the query method returned another evaluations object having the
 student as a parent.  It is very important that the evaluated object is not
@@ -582,7 +583,8 @@ perform chained queries:
 
   >>> result = evals.getEvaluationsOfEvaluator(teacher) \
   ...               .getEvaluationsForRequirement(calculus[u'diff'])
-  >>> [value for key, value in sorted(result.items())]
+  >>> [value for key, value in sorted(
+  ...     result.items(), key=lambda x: x[1].requirement.title)]
   [<Evaluation for Requirement(u'Partial Differential Equations'), value=False>,
    <Evaluation for Requirement(u'Systems'), value=True>]
 
@@ -675,7 +677,7 @@ This section demonstrates the implementation of the ``IMapping`` API.
 
 - ``__iter__()``
 
-  >>> [key for key in iter(evals)]
+  >>> sorted(iter(evals), key=lambda x: x.title)
   [Requirement(u'Differentiation'), Requirement(u'Limit Theorem')]
 
 - ``values()``
@@ -686,7 +688,7 @@ This section demonstrates the implementation of the ``IMapping`` API.
 
 - ``items()``
 
-  >>> list(evals.items())
+  >>> sorted(evals.items(), key=lambda x: x[0].title)
   [(Requirement(u'Differentiation'),
     <Evaluation for Requirement(u'Differentiation'), value=False>),
    (Requirement(u'Limit Theorem'),
