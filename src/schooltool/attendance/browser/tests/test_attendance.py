@@ -108,6 +108,18 @@ class StubTimetables(object):
                                   if first <= e.dtstart.date() <= last])
 
 
+def setUpAttendanceAdapters():
+    from schooltool.attendance.interfaces import ISectionAttendance
+    from schooltool.attendance.interfaces import IDayAttendance
+    from schooltool.attendance.attendance import getSectionAttendance
+    from schooltool.attendance.attendance import getDayAttendance
+    from schooltool.person.interfaces import IPerson
+    ztapi.provideAdapter(IPerson, ISectionAttendance,
+                         getSectionAttendance)
+    ztapi.provideAdapter(IPerson, IDayAttendance,
+                         getDayAttendance)
+
+
 def doctest_getPeriodEventForSection():
     r"""Doctest for getPeriodEventForSection
 
@@ -229,15 +241,7 @@ def doctest_RealtimeAttendanceView_listMembers():
 
     First, let's register getSectionAttendance as an adapter:
 
-        >>> from schooltool.attendance.interfaces import ISectionAttendance
-        >>> from schooltool.attendance.interfaces import IDayAttendance
-        >>> from schooltool.attendance.attendance import getSectionAttendance
-        >>> from schooltool.attendance.attendance import getDayAttendance
-        >>> from schooltool.person.interfaces import IPerson
-        >>> ztapi.provideAdapter(IPerson, ISectionAttendance,
-        ...                      getSectionAttendance)
-        >>> ztapi.provideAdapter(IPerson, IDayAttendance,
-        ...                      getDayAttendance)
+        >>> setUpAttendanceAdapters()
 
     We'll need timetabling too:
 
@@ -246,13 +250,16 @@ def doctest_RealtimeAttendanceView_listMembers():
     Let's set up a view:
 
         >>> from schooltool.attendance.browser.attendance import \
-        ...     RealtimeAttendanceView
+        ...     RealtimeAttendanceView, getPeriodEventForSection
         >>> from schooltool.course.section import Section
         >>> section = Section()
         >>> fakePath(section, '/section/absentology')
         >>> view = RealtimeAttendanceView(section, TestRequest())
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
+        >>> view.meeting = getPeriodEventForSection(section, view.date,
+        ...                                         view.period_id)
+        >>> view.homeroom = False
 
     If the section does not have any members, listMembers returns an
     empty list:
@@ -300,6 +307,7 @@ def doctest_RealtimeAttendanceView_listMembers():
 
     Let's add an absence record to one person:
 
+        >>> from schooltool.attendance.interfaces import ISectionAttendance
         >>> attendance = ISectionAttendance(person4)
         >>> attendance.record(
         ...     section, datetime.datetime(2005, 12, 15, 10, 00, tzinfo=utc),
@@ -346,6 +354,12 @@ class SectionAttendanceStub(object):
     def __init__(self, person):
         self.person = person
 
+    def get(self, section, datetime):
+        return 's_%s_%s-%s' % (self.person, datetime, section)
+
+    def record(self, section, datetime, duration, period_id, present):
+        print 'Recording: %s -> %s' % (self.get(section, datetime), present)
+
     def getAllForDay(self, date):
         return ['s_%s_%s_%s' % (self.person, date, c) for c in 'a', 'b']
 
@@ -357,11 +371,13 @@ class DayAttendanceStub(object):
     def get(self, date):
         return 'd_%s_%s' % (self.person, date)
 
+    def record(self, date, present):
+        print 'Recording: %s -> %s' % (self.get(date), present)
+
 
 def doctest_RealtimeAttendanceView_getDaysAttendanceRecords():
     r"""Tests for RealtimeAttendanceView.getDaysAttendanceRecords.
 
-        >>> from schooltool.person.interfaces import IPerson
         >>> from schooltool.attendance.interfaces import ISectionAttendance
         >>> from schooltool.attendance.interfaces import IDayAttendance
         >>> ztapi.provideAdapter(None, ISectionAttendance,
@@ -384,16 +400,9 @@ def doctest_RealtimeAttendanceView_studentStatus():
 
     First, let's register getSectionAttendance as an adapter:
 
-        >>> from schooltool.attendance.interfaces import ISectionAttendance
-        >>> from schooltool.attendance.interfaces import IDayAttendance
-        >>> from schooltool.attendance.attendance import getSectionAttendance
-        >>> from schooltool.attendance.attendance import getDayAttendance
-        >>> from schooltool.person.interfaces import IPerson
-        >>> ztapi.provideAdapter(IPerson, ISectionAttendance,
-        ...                      getSectionAttendance)
-        >>> ztapi.provideAdapter(IPerson, IDayAttendance,
-        ...                      getDayAttendance)
+        >>> setUpAttendanceAdapters()
 
+    We will need a view
 
         >>> from schooltool.attendance.browser.attendance import \
         ...     RealtimeAttendanceView
@@ -427,6 +436,7 @@ def doctest_RealtimeAttendanceView_studentStatus():
 
     Let's record an unexplained absence for the student:
 
+        >>> from schooltool.attendance.interfaces import ISectionAttendance
         >>> attendance = ISectionAttendance(person1)
         >>> attendance.record(
         ...     section, datetime.datetime(2005, 12, 15, 10, 00, tzinfo=utc),
@@ -494,11 +504,7 @@ def doctest_RealtimeAttendanceView_update():
 
     Let's set up the section attendance adapter:
 
-        >>> from schooltool.attendance.interfaces import ISectionAttendance
-        >>> from schooltool.attendance.attendance import getSectionAttendance
-        >>> from schooltool.person.interfaces import IPerson
-        >>> ztapi.provideAdapter(IPerson, ISectionAttendance,
-        ...                      getSectionAttendance)
+        >>> setUpAttendanceAdapters()
 
     We'll need timetabling stubbed too:
 
@@ -572,6 +578,7 @@ def doctest_RealtimeAttendanceView_update():
 
     Let's see the attendance data for these persons:
 
+        >>> from schooltool.attendance.interfaces import ISectionAttendance
         >>> records = list(ISectionAttendance(person1))
         >>> len(records)
         1
@@ -753,6 +760,140 @@ def doctest_RealtimeAttendanceView_update_homeroom():
         >>> view.update()
         >>> view.homeroom
         True
+
+    """
+
+
+def doctest_RealtimeAttendanceView_update_set_homeroom():
+    r"""Tests for RealtimeAttendanceView.update
+
+    We need an ITimetables adapter in order to verify that a given
+    period is valid for a given day:
+
+        >>> ztapi.provideAdapter(None, ITimetables, StubTimetables)
+
+    We will also need attendance adapters.
+
+        >>> setUpAttendanceAdapters()
+
+    The RealtimeAttendanceView is used both for regular section meetings,
+    and for homeroom attendance.
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...     import RealtimeAttendanceView
+        >>> section = SectionStub()
+        >>> request = TestRequest()
+        >>> view = RealtimeAttendanceView(section, request)
+
+    We will need at least one person.
+
+        >>> from schooltool.person.person import Person
+        >>> person1 = Person('person1', title='Person1')
+        >>> person1.__name__ = 'p1'
+        >>> person2 = Person('person2', title='Person1')
+        >>> person2.__name__ = 'p2'
+        >>> section.members = [person1, person2]
+
+    The 'B' period is the homeroom period
+
+        >>> view.date = datetime.date(2005, 12, 15)
+        >>> view.period_id = 'B'
+        >>> view.update()
+        >>> view.homeroom
+        True
+
+    If you mark some absences, they will be recorded as day absences, not
+    section absences.
+
+        >>> view.request = TestRequest(form={'ABSENT': 'Absent',
+        ...                                  'p1_check': 'on'})
+        >>> view.update()
+
+        >>> from schooltool.attendance.interfaces import IDayAttendance
+        >>> list(IDayAttendance(person1))
+        [DayAttendanceRecord(datetime.date(2005, 12, 15), ABSENT)]
+        >>> list(IDayAttendance(person2))
+        [DayAttendanceRecord(datetime.date(2005, 12, 15), PRESENT)]
+
+    We can see that there is no section attendance data:
+
+        >>> from schooltool.attendance.interfaces import ISectionAttendance
+        >>> list(ISectionAttendance(person1))
+        []
+        >>> list(ISectionAttendance(person2))
+        []
+
+    """
+
+
+def doctest_RealtimeAttendanceView_getAttendance():
+    r"""Tests for RealtimeAttendanceView._getAttendance
+
+        >>> from schooltool.attendance.interfaces import ISectionAttendance
+        >>> from schooltool.attendance.interfaces import IDayAttendance
+        >>> ztapi.provideAdapter(None, ISectionAttendance,
+        ...                      SectionAttendanceStub)
+        >>> ztapi.provideAdapter(None, IDayAttendance,
+        ...                      DayAttendanceStub)
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...         import RealtimeAttendanceView
+        >>> request = TestRequest()
+        >>> view = RealtimeAttendanceView('math', request)
+
+        >>> from schooltool.timetable.model import TimetableCalendarEvent
+        >>> person = 'jonas'
+        >>> view.date = datetime.date(2005, 1, 16)
+        >>> view.period_id = 'p4'
+        >>> view.meeting = TimetableCalendarEvent(
+        ...     datetime.datetime(2005, 1, 16, 10, 25, tzinfo=utc),
+        ...     datetime.timedelta(minutes=45),
+        ...     "Math", day_id='D1', period_id="p4",
+        ...     activity=None)
+
+        >>> view.homeroom = True
+        >>> view._getAttendance(person)
+        'd_jonas_2005-01-16'
+
+        >>> view.homeroom = False
+        >>> view._getAttendance(person)
+        's_jonas_2005-01-16 10:25:00+00:00-math'
+
+    """
+
+
+def doctest_RealtimeAttendanceView_record():
+    r"""Tests for RealtimeAttendanceView._record
+
+        >>> from schooltool.attendance.interfaces import ISectionAttendance
+        >>> from schooltool.attendance.interfaces import IDayAttendance
+        >>> ztapi.provideAdapter(None, ISectionAttendance,
+        ...                      SectionAttendanceStub)
+        >>> ztapi.provideAdapter(None, IDayAttendance,
+        ...                      DayAttendanceStub)
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...         import RealtimeAttendanceView
+        >>> request = TestRequest()
+        >>> view = RealtimeAttendanceView('math', request)
+
+        >>> from schooltool.timetable.model import TimetableCalendarEvent
+        >>> person = 'jonas'
+        >>> view.date = datetime.date(2005, 1, 16)
+        >>> view.period_id = 'p4'
+        >>> view.meeting = TimetableCalendarEvent(
+        ...     datetime.datetime(2005, 1, 16, 10, 25, tzinfo=utc),
+        ...     datetime.timedelta(minutes=45),
+        ...     "Math", day_id='D1', period_id="p4",
+        ...     activity=None)
+
+        >>> view.homeroom = True
+        >>> view._record(person, True)
+        Recording: d_jonas_2005-01-16 -> True
+
+        >>> view.homeroom = False
+        >>> view._record(person, False)
+        Recording: s_jonas_2005-01-16 10:25:00+00:00-math -> False
 
     """
 

@@ -176,11 +176,9 @@ class RealtimeAttendanceView(BrowserView):
     def listMembers(self):
         """Return a list of RealtimeInfo objects about all members"""
         result = []
-        meeting = getPeriodEventForSection(self.context, self.date,
-                                           self.period_id)
         for person in self.iterTransitiveMembers():
             past_status = self.studentStatus(person)
-            ar = ISectionAttendance(person).get(self.context, meeting.dtstart)
+            ar = self._getAttendance(person)
             current_status = formatAttendanceRecord(ar)
             disabled_checkbox = ar.isPresent() or ar.isTardy()
             section_url = zapi.absoluteURL(ISection(self.context),
@@ -246,12 +244,12 @@ class RealtimeAttendanceView(BrowserView):
 
     def update(self):
         """Process form submissions."""
-        meeting = getPeriodEventForSection(self.context, self.date,
-                                           self.period_id)
+        self.meeting = getPeriodEventForSection(self.context, self.date,
+                                                self.period_id)
 
-        timetable = meeting.activity.timetable
-        homeroom_period_id = timetable[meeting.day_id].homeroom_period_id
-        self.homeroom = (meeting.period_id == homeroom_period_id)
+        timetable = self.meeting.activity.timetable
+        homeroom_period_id = timetable[self.meeting.day_id].homeroom_period_id
+        self.homeroom = (self.meeting.period_id == homeroom_period_id)
 
         # If there are persons with UNKNOWN status, show the 'absent' button,
         # otherwise show 'tardy' and 'arrived'.
@@ -266,27 +264,42 @@ class RealtimeAttendanceView(BrowserView):
                 return
 
         for person in self.iterTransitiveMembers():
-            attendance = ISectionAttendance(person)
-            ar = attendance.get(self.context, meeting.dtstart)
             check_id = "%s_check" % person.__name__
+            ar = self._getAttendance(person)
 
             if 'ABSENT' in self.request:
                 if check_id in self.request and ar.isUnknown():
-                    attendance.record(
-                        removeSecurityProxy(self.context), meeting.dtstart,
-                        meeting.duration, self.period_id, False)
+                    self._record(person, False)
                 elif ar.isUnknown():
-                    attendance.record(
-                        removeSecurityProxy(self.context), meeting.dtstart,
-                        meeting.duration, self.period_id, True)
+                    self._record(person, True)
 
             if 'TARDY' in self.request:
                 if check_id in self.request and ar.isAbsent():
                     ar.makeTardy(arrived)
 
-            ar = attendance.get(self.context, meeting.dtstart)
+            ar = self._getAttendance(person)
             if ar.isUnknown():
                 self.unknowns = True
+
+    def _getAttendance(self, student):
+        """Get a student's attendance record."""
+        if self.homeroom:
+            attendance = IDayAttendance(student)
+            return attendance.get(self.date)
+        else:
+            attendance = ISectionAttendance(student)
+            return attendance.get(self.context, self.meeting.dtstart)
+
+    def _record(self, student, present):
+        """Record a student's presence or absence."""
+        if self.homeroom:
+            attendance = IDayAttendance(student)
+            attendance.record(self.date, present)
+        else:
+            attendance = ISectionAttendance(student)
+            attendance.record(removeSecurityProxy(self.context),
+                              self.meeting.dtstart, self.meeting.duration,
+                              self.period_id, present)
 
     def getArrival(self):
         """Extracts the date of late arrivals from the request.
