@@ -1,19 +1,82 @@
 <?xml version="1.0"?>
+<configure
+    xmlns="http://namespaces.zope.org/zope">
 
-<configure xmlns="http://namespaces.zope.org/zope">
+  <!-- Category Vocabulary -->
+
+  <vocabulary
+      name="schooltool.gradebook.categories"
+      factory=".category.Categories"
+      />
+
+  <subscriber
+      for="schooltool.app.interfaces.IApplicationInitializationEvent"
+      handler=".category.addDefaultCategoriesToApplication"
+      />
+
+  <!-- Activity Adapters -->
 
   <adapter
       for="schooltool.course.interfaces.ICourse"
       provides=".interfaces.IActivities"
-      factory=".requirement.getCourseActivities"
+      factory=".activity.getCourseActivities"
       trusted="true"
       />
 
   <adapter
       for="schooltool.course.interfaces.ISection"
       provides=".interfaces.IActivities"
-      factory=".requirement.getSectionActivities"
+      factory=".activity.getSectionActivities"
       trusted="true"
       />
+
+  <!-- Gradebook Adapter -->
+
+  <adapter
+      for="schooltool.course.interfaces.ISection"
+      provides=".interfaces.IGradebook"
+      factory=".gradebook.Gradebook"
+      trusted="true"
+      />
+
+  <!-- Pluggable traverser plugins for HTTP paths -->
+
+  <subscriber
+      for="schooltool.course.interfaces.ISection
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".activity.ActivitiesTraverserPlugin"
+      />
+
+  <subscriber
+      for="schooltool.course.interfaces.ICourse
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".activity.ActivitiesTraverserPlugin"
+      />
+
+  <subscriber
+      for="schooltool.course.interfaces.ISection
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".gradebook.GradebookTraverserPlugin"
+      />
+
+  <!-- apidoc help setup -->
+
+  <configure
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      xmlns:apidoc="http://namespaces.zope.org/apidoc"
+      zcml:condition="have apidoc">
+
+    <apidoc:bookchapter
+        id="gradebook"
+        title="Gradebook API"
+        parent="schooltool"
+        doc_path="README.txt" />
+
+  </configure>
+
+  <include package=".browser" />
 
 </configure>

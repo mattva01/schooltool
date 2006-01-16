@@ -24,9 +24,10 @@ __docformat__ = 'reStructuredText'
 
 import zope.component
 import zope.interface
+from schooltool import course, requirement
+from schooltool.traverser import traverser
 
 from schooltool.gradebook import interfaces
-from schooltool import course, requirement
 
 class Gradebook(object):
 
@@ -100,3 +101,8 @@ class Gradebook(object):
             evaluations = requirement.interfaces.IEvaluations(student)
             if activity in evaluations:
                 yield student, evaluations[activity]
+
+
+# HTTP pluggable traverser plugin
+GradebookTraverserPlugin = traverser.AdapterTraverserPlugin(
+    'gradebook', interfaces.IGradebook)

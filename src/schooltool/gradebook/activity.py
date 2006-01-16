@@ -26,6 +26,7 @@ import datetime
 import zope.interface
 from zope.app import annotation
 from schooltool.requirement import requirement
+from schooltool.traverser import traverser
 
 from schooltool.gradebook import interfaces
 
@@ -83,3 +84,7 @@ def getSectionActivities(context):
 
 # Convention to make adapter introspectable
 getSectionActivities.factory = Activities
+
+# HTTP pluggable traverser plugin
+ActivitiesTraverserPlugin = traverser.AdapterTraverserPlugin(
+    'activities', interfaces.IActivities)
