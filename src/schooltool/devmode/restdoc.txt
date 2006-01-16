@@ -144,12 +144,12 @@ the documentation in the ``schooltool.traverser`` package.
 
 Let's register a couple of null-traversers:
 
-  >>> from schooltool.traverser import traverser
+  >>> from schooltool.traverser import traverser, interfaces
   >>> plugin = traverser.NullTraverserPlugin('data')
   >>> zope.component.provideSubscriptionAdapter(
   ...     plugin,
   ...     (IFile, zope.publisher.interfaces.http.IHTTPRequest),
-  ...     traverser.ITraverserPlugin)
+  ...     interfaces.ITraverserPlugin)
 
   >>> class ISomeContent(zope.interface.Interface):
   ...     pass
@@ -158,7 +158,7 @@ Let's register a couple of null-traversers:
   >>> zope.component.provideSubscriptionAdapter(
   ...     plugin,
   ...     (ISomeContent, zope.publisher.interfaces.http.IHTTPRequest),
-  ...     traverser.ITraverserPlugin)
+  ...     interfaces.ITraverserPlugin)
 
 When asking for all the name adapters we only get the first one, since the
 other one requires an interface that is not implemented by the file class:
@@ -661,7 +661,7 @@ so let's set one up:
 
   >>> plugin = traverser.AdapterTraverserPlugin('metadata', IMetaData)
   >>> zope.component.provideSubscriptionAdapter(
-  ...     plugin, (IFile, IHTTPRequest), traverser.ITraverserPlugin)
+  ...     plugin, (IFile, IHTTPRequest), interfaces.ITraverserPlugin)
 
 If we call the method again, we should see the new traverser:
 
@@ -688,7 +688,7 @@ has a `component` attribute that returns the class:
 
   >>> zope.component.provideSubscriptionAdapter(
   ...     FileHistoryTraverser, (IFile, IHTTPRequest),
-  ...     traverser.ITraverserPlugin)
+  ...     interfaces.ITraverserPlugin)
 
   >>> traversers = doc.getNameTraversers()
   >>> traversers.sort()
