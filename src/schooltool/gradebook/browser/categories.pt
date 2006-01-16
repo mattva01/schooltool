@@ -1,0 +1,51 @@
+<tal:defs define="dummy view/update" />
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+    Manage Activity Categories
+  </title>
+</head>
+<body>
+<metal:nothing metal:fill-slot="content-header" />
+<metal:block metal:fill-slot="body">
+
+  <form action="." method="post" tal:attributes="action request/URL"
+        class="standalone" enctype="multipart/form-data">
+
+    <h3 i18n:translate="">
+      Manage Activity Categories
+    </h3>
+
+    <div class="info" tal:condition="view/message" tal:content="view/message" />
+
+    <div class="row" tal:define="widget nocall:view/categories_widget">
+      <div metal:use-macro="context/@@form_macros/widget_row" />
+    </div>
+
+    <div class="controls">
+        <input type="submit" class="button-ok" name="REMOVE" value="Remove"
+               i18n:attributes="value remove-button" />
+    </div>
+
+    <div class="row" tal:define="widget nocall:view/newCategory_widget">
+      <div metal:use-macro="context/@@form_macros/widget_row" />
+    </div>
+
+    <div class="controls">
+        <input type="submit" class="button-ok" name="ADD" value="Add"
+               i18n:attributes="value add-button;" />
+    </div>
+
+    <div class="row" tal:define="widget nocall:view/defaultCategory_widget">
+      <div metal:use-macro="context/@@form_macros/widget_row" />
+    </div>
+
+    <div class="controls">
+        <input type="submit" class="button-ok" name="CHANGE" value="Change"
+               i18n:attributes="value change-button;" />
+    </div>
+  </form>
+
+</metal:block>
+</body>
+</html>

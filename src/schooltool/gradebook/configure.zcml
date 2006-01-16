@@ -6,7 +6,7 @@
 
   <vocabulary
       name="schooltool.gradebook.categories"
-      factory=".category.Categories"
+      factory=".category.CategoryVocabulary"
       />
 
   <subscriber

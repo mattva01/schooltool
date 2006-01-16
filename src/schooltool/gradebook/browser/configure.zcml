@@ -1,7 +1,32 @@
 <?xml version="1.0"?>
 <configure
-    xmlns="http://namespaces.zope.org/zope"
-    xmlns:browser="http://namespaces.zope.org/browser">
+    xmlns="http://namespaces.zope.org/browser"
+    xmlns:zope="http://namespaces.zope.org/zope">
 
+    <form
+        label="Activity Categories"
+        name="categories.html"
+        schema=".category.ICategoriesForm"
+        for="schooltool.app.interfaces.ISchoolToolApplication"
+        template="categories.pt"
+        class=".category.CategoryOverview"
+        permission="schooltool.edit"
+        />
+
+  <configure package="schooltool.app.browser">
+
+    <viewlet
+        name="categories"
+        for="*"
+        manager="schooltool.app.browser.skin.INavigationManager"
+        template="templates/navigationViewlet.pt"
+        class="schooltool.app.browser.skin.NavigationViewlet"
+        permission="zope.View"
+        link="categories.html"
+        title="Activity Categories"
+        order="200"
+        />
+
+  </configure>
 
 </configure>
