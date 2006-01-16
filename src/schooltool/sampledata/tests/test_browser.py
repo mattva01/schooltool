@@ -98,8 +98,10 @@ def doctest_SampleDataView_update():
 
     When the work is done the times attribute is set on the view:
 
-        >>> pprint(view.times)
-        {'play': 0.0, 'work': 0.0}
+        >>> sorted(view.times)
+        ['play', 'work']
+        >>> for item, time in view.times.items():
+        ...     assert time < 0.1   # 100 ms ought to be enough to do nothing
         >>> view.work_done
         True
 
