@@ -65,20 +65,19 @@ class StubTimetables(object):
             TimetableCalendarEvent(
                 datetime.datetime(2005, 12, 14, 10, 00, tzinfo=utc),
                 datetime.timedelta(minutes=45),
-                "Math", period_id="A", activity=None),
+                "Math", day_id='D1', period_id="A", activity=None),
             TimetableCalendarEvent(
                 datetime.datetime(2005, 12, 14, 11, 00, tzinfo=utc),
                 datetime.timedelta(minutes=45),
-                "Arts", period_id="D", activity=None),
+                "Arts", day_id='D1', period_id="D", activity=None),
             TimetableCalendarEvent(
                 datetime.datetime(2005, 12, 15, 10, 00, tzinfo=utc),
                 datetime.timedelta(minutes=45),
-                "Math", period_id="B", activity=None),
+                "Math", day_id='D2', period_id="B", activity=None),
             TimetableCalendarEvent(
                 datetime.datetime(2005, 12, 15, 11, 00, tzinfo=utc),
                 datetime.timedelta(minutes=45),
-                "Arts",
-                period_id="C", activity=None),
+                "Arts", day_id='D2', period_id="C", activity=None),
             ]
         return ImmutableCalendar([e for e in events
                                   if first <= e.dtstart.date() <= last])
@@ -158,7 +157,7 @@ def doctest_AttendanceCalendarEventViewlet():
         >>> section_event = TimetableCalendarEvent(
         ...     datetime.datetime(2005, 12, 16, 16, 15, tzinfo=utc),
         ...     datetime.timedelta(minutes=45),
-        ...     "Math", period_id="P4", activity=activity)
+        ...     "Math", day_id='D3', period_id="P4", activity=activity)
         >>> viewlet.manager.event = EventForDisplayStub(section_event)
 
     The viewlet knows how to compute a link to the section attendance form
@@ -182,7 +181,7 @@ def doctest_AttendanceCalendarEventViewlet():
         >>> nonsection_event = TimetableCalendarEvent(
         ...     datetime.datetime(2005, 12, 16, 16, 15, tzinfo=utc),
         ...     datetime.timedelta(minutes=45),
-        ...     activity.title, period_id="P3", activity=activity)
+        ...     activity.title, day_id='D3', period_id="P3", activity=activity)
         >>> viewlet.manager.event = EventForDisplayStub(nonsection_event)
         >>> viewlet.attendanceLink()
 

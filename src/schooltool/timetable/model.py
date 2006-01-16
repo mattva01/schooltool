@@ -146,8 +146,8 @@ class BaseTimetableModel(Persistent):
                                            duration)), uid_suffix)
                     event = TimetableCalendarEvent(
                                 dt, duration, activity.title,
-                                unique_id=uid,
-                                period_id=period, activity=activity)
+                                unique_id=uid, day_id=day_id, period_id=period,
+                                activity=activity)
                     events.append(event)
         return ImmutableCalendar(events)
 
@@ -292,7 +292,6 @@ class SequentialDayIdBasedTimetableModel(BaseSequentialTimetableModel):
             if day_id not in self.dayTemplates:
                 raise AssertionError("No day template for day id %s" % day_id)
 
-
     def _getUsualTemplateForDay(self, date, day_id):
         """Returns the schoolday template for a certain date
         disregarding special days.
@@ -332,12 +331,13 @@ class TimetableCalendarEvent(CalendarEvent):
 
     implements(ITimetableCalendarEvent)
 
+    day_id = property(lambda self: self._day_id)
     period_id = property(lambda self: self._period_id)
     activity = property(lambda self: self._activity)
 
     def __init__(self, *args, **kwargs):
+        self._day_id = kwargs.pop('day_id')
         self._period_id = kwargs.pop('period_id')
         self._activity = kwargs.pop('activity')
         CalendarEvent.__init__(self, *args, **kwargs)
-
 

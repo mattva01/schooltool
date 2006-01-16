@@ -24,16 +24,20 @@ $Id$
 
 import calendar
 import unittest
+import itertools
 from datetime import date, time, timedelta, datetime
 from pprint import pformat
 
 from pytz import UTC
 from zope.interface.verify import verifyObject
+from zope.app.traversing.interfaces import IPhysicallyLocatable
 from zope.app.testing.placelesssetup import PlacelessSetup
-from zope.app.testing import ztapi
+from zope.app.testing import ztapi, setup
+from zope.testing import doctest
 
 from schooltool.testing.util import NiceDiffsMixin
 from schooltool.testing.util import diff
+from schooltool.testing.util import fakePath
 from schooltool.timetable.tests.test_timetable import TermStub
 
 
@@ -60,28 +64,80 @@ class BaseTestTimetableModel:
         return result
 
 
+def createSimpleTimetable():
+    """Create a simple timetable.
+
+          Period | Day A    Day B
+          ------ : -------  ---------
+          Green  : English  Biology
+          Blue   : Math     Geography
+
+    """
+    from schooltool.timetable import Timetable, TimetableDay
+    from schooltool.timetable import TimetableActivity
+    tt = Timetable(('A', 'B'))
+    periods = ('Green', 'Blue')
+    tt["A"] = TimetableDay(periods)
+    tt["B"] = TimetableDay(periods)
+    tt["A"].add("Green", TimetableActivity("English"))
+    tt["A"].add("Blue", TimetableActivity("Math"))
+    tt["B"].add("Green", TimetableActivity("Biology"))
+    tt["B"].add("Blue", TimetableActivity("Geography"))
+    return tt
+
+
 class SequentialTestSetupMixin:
+    createTimetable = staticmethod(createSimpleTimetable)
 
-    def createTimetable(self):
-        """Create a simple timetable.
 
-              Period | Day A    Day B
-              ------ : -------  ---------
-              Green  : English  Biology
-              Blue   : Math     Geography
+def doctest_BaseTimetableModel_createCalendar():
+    """Tests for BaseTimetableModel.createCalendar
 
-        """
-        from schooltool.timetable import Timetable, TimetableDay
-        from schooltool.timetable import TimetableActivity
-        tt = Timetable(('A', 'B'))
-        periods = ('Green', 'Blue')
-        tt["A"] = TimetableDay(periods)
-        tt["B"] = TimetableDay(periods)
-        tt["A"].add("Green", TimetableActivity("English"))
-        tt["A"].add("Blue", TimetableActivity("Math"))
-        tt["B"].add("Green", TimetableActivity("Biology"))
-        tt["B"].add("Blue", TimetableActivity("Geography"))
-        return tt
+        >>> from schooltool.timetable.model import BaseTimetableModel
+        >>> btm = BaseTimetableModel()
+
+    We have a stub term that lasts from 2003-11-20 to 2003-11-26, and a simple
+    timetable.
+
+        >>> term = TermStub()
+        >>> timetable = createSimpleTimetable()
+        >>> from schooltool.timetable.interfaces import ITimetable
+        >>> ztapi.provideAdapter(ITimetable, IPhysicallyLocatable,
+        ...                      TimetablePhysicallyLocatableAdapterStub)
+
+    BaseTimetableModel is a base class and needs concrete implementations for
+    its abstract methods.
+
+        >>> btm._dayGenerator = lambda: itertools.cycle(['A', 'B'])
+        >>> btm.schooldayStrategy = lambda date, generator: generator.next()
+        >>> from schooltool.timetable import SchooldayTemplate, SchooldaySlot
+        >>> day_template = SchooldayTemplate()
+        >>> t, td = time, timedelta
+        >>> day_template.add(SchooldaySlot(t(9, 0), td(minutes=90)))
+        >>> day_template.add(SchooldaySlot(t(11, 05), td(minutes=80)))
+        >>> btm._getUsualTemplateForDay = lambda date, day_id: day_template
+
+    Let us create a calendar.
+
+        >>> from schooltool.timetable.interfaces import ITimetableCalendarEvent
+        >>> cal = btm.createCalendar(term, timetable,
+        ...                          first=date(2003, 11, 21),
+        ...                          last=date(2003, 11, 25))
+        >>> for e in cal:
+        ...     print '%s %s--%s %-10s %s' % (
+        ...                 e.dtstart.date(), e.dtstart.strftime('%H:%M'),
+        ...                 (e.dtstart + e.duration).strftime('%H:%M'),
+        ...                 '(%s, %s)' % (e.day_id, e.period_id), e.title)
+        ...     assert verifyObject(ITimetableCalendarEvent, e)
+        ...     assert e.title == e.activity.title
+        2003-11-21 09:00--10:30 (B, Green) Biology
+        2003-11-21 11:05--12:25 (B, Blue)  Geography
+        2003-11-24 09:00--10:30 (A, Green) English
+        2003-11-24 11:05--12:25 (A, Blue)  Math
+        2003-11-25 09:00--10:30 (B, Green) Biology
+        2003-11-25 11:05--12:25 (B, Blue)  Geography
+
+    """
 
 
 class TestSequentialDaysTimetableModel(PlacelessSetup,
@@ -91,7 +147,6 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
                                        SequentialTestSetupMixin):
 
     def setUp(self):
-        from zope.app.traversing.interfaces import IPhysicallyLocatable
         from schooltool.timetable.interfaces import ITimetable
         PlacelessSetup.setUp(self)
 
@@ -580,24 +635,29 @@ class TestTimetableCalendarEvent(unittest.TestCase):
         from schooltool.timetable import TimetableCalendarEvent
         from schooltool.timetable.interfaces import ITimetableCalendarEvent
 
+        day_id = 'Day2'
         period_id = 'Mathematics'
         activity = object()
 
         ev = TimetableCalendarEvent(datetime(2004, 10, 13, 12),
                                     timedelta(45), "Math",
-                                    period_id=period_id, activity=activity)
+                                    day_id=day_id, period_id=period_id,
+                                    activity=activity)
         verifyObject(ITimetableCalendarEvent, ev)
-        for attr in ['period_id', 'activity']:
+        for attr in ['day_id', 'period_id', 'activity']:
             self.assertRaises(AttributeError, setattr, ev, attr, object())
 
 
 def test_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestSequentialDaysTimetableModel))
-    suite.addTest(unittest.makeSuite(TestSequentialDayIdBasedTimetableModel))
-    suite.addTest(unittest.makeSuite(TestWeeklyTimetableModel))
-    suite.addTest(unittest.makeSuite(TestTimetableCalendarEvent))
-    return suite
+    return unittest.TestSuite([
+        doctest.DocTestSuite(setUp=setup.placelessSetUp,
+                             tearDown=setup.placelessTearDown),
+        unittest.makeSuite(TestSequentialDaysTimetableModel),
+        unittest.makeSuite(TestSequentialDayIdBasedTimetableModel),
+        unittest.makeSuite(TestWeeklyTimetableModel),
+        unittest.makeSuite(TestTimetableCalendarEvent),
+    ])
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')
+

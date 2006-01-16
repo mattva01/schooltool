@@ -677,6 +677,9 @@ class ITimetableActivityRemovedEvent(ITimetableActivityEvent):
 class ITimetableCalendarEvent(ISchoolToolCalendarEvent):
     """A calendar event that has been created from a timetable."""
 
+    day_id = TextLine(
+        title=u"The id of the timetable day.")
+
     period_id = TextLine(
         title=u"The period id of the corresponding timetable event.")
 
