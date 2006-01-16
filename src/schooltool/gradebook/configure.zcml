@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<configure xmlns="http://namespaces.zope.org/zope">
+
+  <adapter
+      for="schooltool.course.interfaces.ICourse"
+      provides=".interfaces.IActivities"
+      factory=".requirement.getCourseActivities"
+      trusted="true"
+      />
+
+  <adapter
+      for="schooltool.course.interfaces.ISection"
+      provides=".interfaces.IActivities"
+      factory=".requirement.getSectionActivities"
+      trusted="true"
+      />
+
+</configure>

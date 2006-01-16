@@ -33,7 +33,7 @@ and then add the activity:
     ...     title=u'Final',
     ...     description=u'Final Exam',
     ...     category=u'Exam',
-    ...     scoresystem=scoresystem.PercentScoreSystem())
+    ...     scoresystem=scoresystem.PercentScoreSystem)
     >>> final = alg1_act['finalExam']
 
 Besides the title and description, one must also specify the category and the
@@ -46,7 +46,8 @@ Now that we have created a course and added activities, let's now add a
 section:
 
     >>> from schooltool.course import section
-    >>> sectionA = course.Course('Alg1-A', courses=[alg1_act])
+    >>> sectionA = section.Section('Alg1-A')
+    >>> alg1.sections.add(sectionA)
 
 We also want to have some students in the class,
 
@@ -71,7 +72,7 @@ Now we can add activities to the section using the same API as for the course:
     ...     title=u'HW 1',
     ...     description=u'Homework 1',
     ...     category=u'Assginment',
-    ...     scoresystem=scoresystem.RangedValuesScoreSystem(max=10)
+    ...     scoresystem=scoresystem.RangedValuesScoreSystem(max=10),
     ...     date=datetime.date(2006, 2, 10))
     >>> hw1 = sectionA_act['hw1']
 
@@ -79,7 +80,7 @@ Now we can add activities to the section using the same API as for the course:
     ...     title=u'HW 2',
     ...     description=u'Homework 2',
     ...     category=u'Assginment',
-    ...     scoresystem=scoresystem.RangedValuesScoreSystem(max=10)
+    ...     scoresystem=scoresystem.RangedValuesScoreSystem(max=15),
     ...     date=datetime.date(2006, 4, 15))
     >>> hw2 = sectionA_act['hw2']
 
@@ -90,9 +91,9 @@ can either be interpreted as the due date or the date an exam is taken.
 
 We can also look at the activities that we defined:
 
-    >>> list(section_act.values())
-    [InheritedRequirement(<Activity u'Final'>), <Activity u'HW 1'>,
-     <Activity u'HW 2'>]
+    >>> sorted(sectionA_act.items())
+    [('finalExam', InheritedRequirement(<Activity u'Final'>)),
+     ('hw1', <Activity u'HW 1'>), ('hw2', <Activity u'HW 2'>)]
 
 As you can see, the section *always* inherits the activities from the
 course.
@@ -114,7 +115,7 @@ Let's enter some grades:
     >>> gradebook.evaluate(student=claudia, activity=hw1, score=7)
 
     >>> gradebook.evaluate(student=tom, activity=hw2, score=10)
-    >>> gradebook.evaluate(student=paul, activity=hw2, score=13)
+    >>> gradebook.evaluate(student=paul, activity=hw2, score=12)
     >>> gradebook.evaluate(student=claudia, activity=hw2, score=14)
 
     >>> gradebook.evaluate(student=tom, activity=final, score=85)
@@ -129,7 +130,7 @@ Of course there are some safety precautions:
     >>> gradebook.evaluate(student=marius, activity=final, score=99)
     Traceback (most recent call last):
     ...
-    ValueError: 'marius' is not in this section.
+    ValueError: Student 'marius' is not in this section.
 
 2. You cannot add a grade for an activity that does not belong to the section:
 
@@ -141,16 +142,16 @@ Of course there are some safety precautions:
     >>> gradebook.evaluate(student=claudia, activity=hw3, score=8)
     Traceback (most recent call last):
     ...
-    ValueError: 'HW 3' is not an activity of this section.
+    ValueError: u'HW 3' is not part of this section.
 
 3. You cannot add a grade that is not a valid value of the score system:
 
-    >>> gradebook.evaluate(student=claudia, activity=hw3, score=-8)
+    >>> gradebook.evaluate(student=claudia, activity=hw2, score=-8)
     Traceback (most recent call last):
     ...
     ValueError: -8 is not a valid score.
 
-    >>> gradebook.evaluate(student=claudia, activity=hw3, score=16)
+    >>> gradebook.evaluate(student=claudia, activity=hw2, score=16)
     Traceback (most recent call last):
     ...
     ValueError: 16 is not a valid score.
@@ -162,7 +163,7 @@ student and activity has been made:
     >>> gradebook.hasEvaluation(student=tom, activity=hw1)
     True
 
-You can then also delete an evaluation:
+You can then also delete evaluations:
 
     >>> gradebook.removeEvaluation(student=tom, activity=hw1)
     >>> gradebook.hasEvaluation(student=tom, activity=hw1)
@@ -172,24 +173,69 @@ The gradebook also provides a simple, but powerful query function that allows
 you to look up the rows, columns or single cells of the virtual gradebook
 spreadsheet:
 
-    >>> gradebook.getEvaluations(student=paul)
-    []
+    >>> sorted(gradebook.getEvaluationsForStudent(paul),
+    ...        key=lambda x: x[0].title)
+    [(<Activity u'Final'>, <Evaluation for <Activity u'Final'>, value=99>),
+     (<Activity u'HW 1'>, <Evaluation for <Activity u'HW 1'>, value=10>),
+     (<Activity u'HW 2'>, <Evaluation for <Activity u'HW 2'>, value=12>)]
 
-    >>> gradebook.getEvaluations(activity=hw1)
-    []
+    >>> sorted(gradebook.getEvaluationsForActivity(hw2),
+    ...        key=lambda x: x[0].username)
+    [(<...Person ...>, <Evaluation for <Activity u'HW 2'>, value=14>),
+     (<...Person ...>, <Evaluation for <Activity u'HW 2'>, value=12>),
+     (<...Person ...>, <Evaluation for <Activity u'HW 2'>, value=10>)]
 
-    >>> gradebook.getEvaluations(student=tom, activity=hw1)
-    []
-
+    >>> gradebook.getEvaluation(tom, hw2)
+    <Evaluation for <Activity u'HW 2'>, value=10>
 
 Statistics
 ----------
+
+The gradebook comes also with a simple statistics package. The statistics are
+an adapter of the gradebook:
+
+    >>> statistics = interfaces.IStatistics(gradebook)
+
+You can now calculate the basic statistics:
+
+- The average grade of an activity:
+
+    >>> statistics.calculateAverage(hw2)
+    12.0
+
+- The average grade as a percentage:
+
+    >>> statistics.calculatePercentAverage(hw2)
+    80.0
+
+- The median of an activity:
+
+    >>> statistics.calculateMedian(hw2)
+    12.0
+
+- The standard deviation of an activity:
+
+    >>> statistics.calculateStandardDeviation(hw2)
+    2.0
+
+- The variance of the activity:
+
+    >>> statistics.calculateVariance(hw2)
+    4.0
+
+Okay, that's pretty much it. The statistics represent computations on the
+columns of the virtual spreadsheets. To make meaningful computations for the
+rows -- in other words computing the final grade of a student -- we need to
+work a little bit harder.
 
 
 Weight Scales
 -------------
 
+To be done later.
+
 
 Sorting Activities
 ------------------
 
+To be done later.
