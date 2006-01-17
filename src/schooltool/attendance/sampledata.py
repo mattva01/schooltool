@@ -26,6 +26,7 @@ __docformat__ = 'reStructuredText'
 import random
 
 from zope.interface import implements
+from zope.security.proxy import removeSecurityProxy
 
 from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.sampledata.interfaces import ISampleDataPlugin
@@ -49,12 +50,15 @@ class SectionAttendancePlugin(object):
         rng = random.Random(seed)
         term = app['terms']['2005-fall']
         for section in app['sections'].values():
+            # You cannot store proxied objects in the ZODB.  It is safe
+            # to unwrap, since only managers can invoke sample data.
+            unproxied_section = removeSecurityProxy(section)
             meetings = ITimetables(section).makeTimetableCalendar(term.first,
                                                                   term.last)
             for student in section.members:
                 attendance = ISectionAttendance(student)
                 for meeting in meetings:
                     present = rng.random() > self.absence_rate
-                    attendance.record(section, meeting.dtstart,
+                    attendance.record(unproxied_section, meeting.dtstart,
                                       meeting.duration, meeting.period_id,
                                       present)
