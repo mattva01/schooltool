@@ -226,14 +226,16 @@ check minus, then you can create a scoresystem as follows:
   >>> from schooltool.requirement import scoresystem
   >>> check = scoresystem.DiscreteValuesScoreSystem(
   ...    u'Check', u'Check-mark score system',
-  ...    {'+' : 1, 'v': 0, '-': -1})
+  ...    [('+', 1), ('v', 0), ('-', -1)])
 
 The first and second arguments of the constructor are the title and
-description. The third argument is a dictionary with the score being the key
-and the numerical equivalent being the value. Providing a numerical value is
-necessary to conduct automated statistics and grade computations. There
-are a handful of methods associated with a score system. First, you can ask
-whether a particular score is valid:
+description. The third argument is a list that really represents a mapping
+from the score to the numerical equivalent. Providing a numerical value is
+necessary to conduct automated statistics and grade computations. Also, we are
+purposefully not passing in a dictionary, so that the order of the items is
+retained, which is important for user interface purposes. There are a handful
+of methods associated with a score system. First, you can ask whether a
+particular score is valid:
 
   >>> check.isValidScore('+')
   True
@@ -287,7 +289,7 @@ provide more useful results:
   >>> from schooltool.requirement import scoresystem
   >>> check = scoresystem.DiscreteValuesScoreSystem(
   ...    u'Check', u'Check-mark score system',
-  ...    {'+' : 1, 'v': 0, '-': -1}, minPassingScore='v')
+  ...    [('+', 1), ('v', 0), ('-', -1)], minPassingScore='v')
   >>> check
   <DiscreteValuesScoreSystem u'Check'>
 
@@ -316,21 +318,24 @@ better than implicit anyways:
   >>> from schooltool.requirement import scoresystem
   >>> check = scoresystem.DiscreteValuesScoreSystem(
   ...    u'Check', u'Check-mark score system',
-  ...    {'+' : 1, 'v': 0, '-': -1}, bestScore='+', minPassingScore='v')
+  ...    [('+', 1), ('v', 0), ('-', -1)], bestScore='+', minPassingScore='v')
 
   >>> check.getBestScore()
   '+'
 
-The package also provides some default score systems.
+The package also provides some default score systems. Since those score
+systems are global ones, they reduce very efficiently for pickling.
 
 - A simple Pass/Fail score system:
 
   >>> scoresystem.PassFail
-  <DiscreteValuesScoreSystem u'Pass/Fail'>
+  <GlobalDiscreteValuesScoreSystem u'Pass/Fail'>
+  >>> scoresystem.PassFail.__reduce__()
+  'PassFail'
   >>> scoresystem.PassFail.title
   u'Pass/Fail'
-  >>> pprint(scoresystem.PassFail.scores)
-  {u'Fail': 0, u'Pass': 1}
+  >>> scoresystem.PassFail.scores
+  [(u'Pass', 1), (u'Fail', 0)]
   >>> scoresystem.PassFail.isValidScore('Pass')
   True
   >>> scoresystem.PassFail.isPassingScore('Pass')
@@ -347,11 +352,13 @@ The package also provides some default score systems.
 - The standard American letter score system:
 
   >>> scoresystem.AmericanLetterScoreSystem
-  <DiscreteValuesScoreSystem u'Letter Grade'>
+  <GlobalDiscreteValuesScoreSystem u'Letter Grade'>
+  >>> scoresystem.AmericanLetterScoreSystem.__reduce__()
+  'AmericanLetterScoreSystem'
   >>> scoresystem.AmericanLetterScoreSystem.title
   u'Letter Grade'
-  >>> pprint(scoresystem.AmericanLetterScoreSystem.scores)
-  {'A': 4, 'B': 3, 'C': 2, 'D': 1, 'F': 0}
+  >>> scoresystem.AmericanLetterScoreSystem.scores
+  [('A', 4), ('B', 3), ('C', 2), ('D', 1), ('F', 0)]
   >>> scoresystem.AmericanLetterScoreSystem.isValidScore('C')
   True
   >>> scoresystem.AmericanLetterScoreSystem.isValidScore('E')
@@ -370,11 +377,13 @@ The package also provides some default score systems.
 - The extended American letter score system:
 
   >>> scoresystem.ExtendedAmericanLetterScoreSystem
-  <DiscreteValuesScoreSystem u'Extended Letter Grade'>
+  <GlobalDiscreteValuesScoreSystem u'Extended Letter Grade'>
+  >>> scoresystem.ExtendedAmericanLetterScoreSystem.__reduce__()
+  'ExtendedAmericanLetterScoreSystem'
   >>> scoresystem.ExtendedAmericanLetterScoreSystem.title
   u'Extended Letter Grade'
-  >>> sorted(scoresystem.ExtendedAmericanLetterScoreSystem.scores.keys())
-  ['A', 'A+', 'A-', 'B', 'B+', 'B-', 'C', 'C+', 'C-', 'D', 'D+', 'D-', 'F']
+  >>> [s for s, v in scoresystem.ExtendedAmericanLetterScoreSystem.scores]
+  ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'F']
   >>> scoresystem.ExtendedAmericanLetterScoreSystem.isValidScore('B-')
   True
   >>> scoresystem.ExtendedAmericanLetterScoreSystem.isValidScore('E')
@@ -469,7 +478,9 @@ The package provides two default ranged values score system, the percent
 score system,
 
   >>> scoresystem.PercentScoreSystem
-  <RangedValuesScoreSystem u'Percent'>
+  <GlobalRangedValuesScoreSystem u'Percent'>
+  >>> scoresystem.PercentScoreSystem.__reduce__()
+  'PercentScoreSystem'
   >>> scoresystem.PercentScoreSystem.title
   u'Percent'
   >>> scoresystem.PercentScoreSystem.min
@@ -499,7 +510,9 @@ score system,
 and the "100 points" score system:
 
   >>> scoresystem.HundredPointsScoreSystem
-  <RangedValuesScoreSystem u'100 Points'>
+  <GlobalRangedValuesScoreSystem u'100 Points'>
+  >>> scoresystem.HundredPointsScoreSystem.__reduce__()
+  'HundredPointsScoreSystem'
   >>> scoresystem.HundredPointsScoreSystem.title
   u'100 Points'
   >>> scoresystem.HundredPointsScoreSystem.min
@@ -611,7 +624,7 @@ in the programming class.
   >>> ev.requirement
   InheritedRequirement(Requirement(u'Create an iterator.'))
   >>> ev.scoreSystem
-  <DiscreteValuesScoreSystem u'Pass/Fail'>
+  <GlobalDiscreteValuesScoreSystem u'Pass/Fail'>
   >>> ev.value
   'Pass'
   >>> ev.evaluator

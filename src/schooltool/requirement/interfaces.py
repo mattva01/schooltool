@@ -114,10 +114,10 @@ class IScoreSystem(zope.interface.Interface):
 class IDiscreteValuesScoreSystem(IScoreSystem):
     """A score system that consists of discrete values."""
 
-    scores = zope.schema.Dict(
+    scores = zope.schema.List(
         title=u'Scores',
-        description=u'A dictionary of the score (key) and its numerical '
-                    u'value (value).',
+        description=u'A list of 2-tuples of the form (score, numerical value).',
+        value_type=zope.schema.Tuple(),
         required=True)
 
 

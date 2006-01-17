@@ -83,7 +83,7 @@ We should be able to make an evaluation now:
   >>> ev.requirement
   Requirement(u'3rd Period Econ.')
   >>> ev.scoreSystem
-  <DiscreteValuesScoreSystem u'Pass/Fail'>
+  <GlobalDiscreteValuesScoreSystem u'Pass/Fail'>
   >>> ev.value
   'Pass'
   >>> ev.evaluator
