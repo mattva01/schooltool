@@ -1221,11 +1221,10 @@ class DailyCalendarView(CalendarViewBase):
 
         Clips dt so that it is never outside today's box.
         """
-        dtaware = dt.replace(tzinfo=self.timezone)
-        base = datetime.combine(self.cursor, time(tzinfo=self.timezone))
+        base = self.timezone.localize(datetime.combine(self.cursor, time()))
         display_start = base + timedelta(hours=self.starthour)
         display_end = base + timedelta(hours=self.endhour)
-        clipped_dt = max(display_start, min(dtaware, display_end))
+        clipped_dt = max(display_start, min(dt, display_end))
         td = clipped_dt - display_start
         offset_in_minutes = td.seconds / 60 + td.days * 24 * 60
         return offset_in_minutes / 15.

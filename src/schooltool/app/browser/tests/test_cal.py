@@ -3768,32 +3768,32 @@ class TestDailyCalendarView(unittest.TestCase):
         snapToGrid returns a (floating point) postition in the grid.  Topmost
         gridline is number 0 and it corresponds to starthour.
 
-            >>> view.snapToGrid(datetime(2004, 8, 1, 8, 0))
+            >>> view.snapToGrid(datetime(2004, 8, 1, 8, 0, tzinfo=utc))
             0.0
 
-            >>> view.snapToGrid(datetime(2004, 8, 1, 8, 1))
+            >>> view.snapToGrid(datetime(2004, 8, 1, 8, 1, tzinfo=utc))
             0.066...
-            >>> view.snapToGrid(datetime(2004, 8, 1, 8, 7))
+            >>> view.snapToGrid(datetime(2004, 8, 1, 8, 7, tzinfo=utc))
             0.466...
-            >>> view.snapToGrid(datetime(2004, 8, 1, 8, 8))
+            >>> view.snapToGrid(datetime(2004, 8, 1, 8, 8, tzinfo=utc))
             0.533...
-            >>> view.snapToGrid(datetime(2004, 8, 1, 8, 15))
+            >>> view.snapToGrid(datetime(2004, 8, 1, 8, 15, tzinfo=utc))
             1.0
 
         Timestamps before starthour are clipped to 0
 
-            >>> view.snapToGrid(datetime(2004, 8, 1, 7, 30))
+            >>> view.snapToGrid(datetime(2004, 8, 1, 7, 30, tzinfo=utc))
             0.0
-            >>> view.snapToGrid(datetime(2004, 7, 30, 16, 30))
+            >>> view.snapToGrid(datetime(2004, 7, 30, 16, 30, tzinfo=utc))
             0.0
 
         Timestamps after endhour are clipped to the bottom
 
-            >>> view.snapToGrid(datetime(2004, 8, 1, 18, 0))
+            >>> view.snapToGrid(datetime(2004, 8, 1, 18, 0, tzinfo=utc))
             40.0
-            >>> view.snapToGrid(datetime(2004, 8, 1, 18, 20))
+            >>> view.snapToGrid(datetime(2004, 8, 1, 18, 20, tzinfo=utc))
             40.0
-            >>> view.snapToGrid(datetime(2004, 8, 2, 10, 40))
+            >>> view.snapToGrid(datetime(2004, 8, 2, 10, 40, tzinfo=utc))
             40.0
 
         Corner case: starthour == 0, endhour == 24
@@ -3801,15 +3801,15 @@ class TestDailyCalendarView(unittest.TestCase):
             >>> view.starthour = 0
             >>> view.endhour = 24
 
-            >>> view.snapToGrid(datetime(2004, 8, 1, 0, 0))
+            >>> view.snapToGrid(datetime(2004, 8, 1, 0, 0, tzinfo=utc))
             0.0
-            >>> view.snapToGrid(datetime(2004, 8, 1, 2, 0))
+            >>> view.snapToGrid(datetime(2004, 8, 1, 2, 0, tzinfo=utc))
             8.0
-            >>> view.snapToGrid(datetime(2004, 7, 30, 16, 30))
+            >>> view.snapToGrid(datetime(2004, 7, 30, 16, 30, tzinfo=utc))
             0.0
-            >>> view.snapToGrid(datetime(2004, 8, 1, 23, 55))
+            >>> view.snapToGrid(datetime(2004, 8, 1, 23, 55, tzinfo=utc))
             95.666...
-            >>> view.snapToGrid(datetime(2004, 8, 2, 10, 40))
+            >>> view.snapToGrid(datetime(2004, 8, 2, 10, 40, tzinfo=utc))
             96.0
 
         """
