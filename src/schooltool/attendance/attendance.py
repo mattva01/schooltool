@@ -321,8 +321,8 @@ class SectionAttendance(Persistent, AttendanceFilteringMixin,
         ar = SectionAttendanceRecord(section, datetime, status=status,
                                      duration=duration, period_id=period_id)
         if datetime not in self._records:
-            self._records[datetime] = PersistentList()
-        self._records[datetime].append(ar)
+            self._records[datetime] = ()
+        self._records[datetime] += (ar, )
 
     def tardyEventTitle(self, record):
         """Produce a title for a calendar event representing a tardy."""
