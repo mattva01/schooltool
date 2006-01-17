@@ -88,15 +88,36 @@ class IScoreSystem(zope.interface.Interface):
         score.
         """
 
+    def getBestScore():
+        """Return the best score of the grading system.
+
+        The best score is required to compute statistics. It is also a helpful
+        piece of information for the grader.
+        """
+
+    def fromUnicode(rawScore):
+        """Convert a unicode representation of the score to a true value.
+
+        User input always comes as a (unicode) string. Only the scoresystem
+        contains the necessary information to convert those strings into real
+        values.
+        """
+
+    def getNumericalValue(score):
+        """Return a numerical value for the score.
+
+        In order to compute grades and statistics, we need to be able to
+        assign a numerical value to a score.
+        """
+
 
 class IDiscreteValuesScoreSystem(IScoreSystem):
     """A score system that consists of discrete values."""
 
-    values = zope.schema.List(
-        title=u'Values',
-        description=u'A list of all available values. Note that the list '
-                    u'must be sorted from the best to the worst grade.',
-        unique=True,
+    scores = zope.schema.Dict(
+        title=u'Scores',
+        description=u'A dictionary of the score (key) and its numerical '
+                    u'value (value).',
         required=True)
 
 

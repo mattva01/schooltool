@@ -29,8 +29,10 @@
       factory=".requirement.requirementNamespace"
       />
 
+  <!-- Requirement Content -->
+
   <content class=".requirement.Requirement">
-    <allow interface="zope.interface.common.mapping.IReadMapping" />
+    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require
         permission="schooltool.view"
         attributes="keys __iter__ values items __len__ addBase removeBase title"
@@ -41,7 +43,7 @@
         />
     <require
         permission="schooltool.create"
-        interface="zope.interface.common.mapping.IWriteMapping"
+        interface="zope.app.container.interfaces.IWriteContainer"
         />
   </content>
 
@@ -50,6 +52,15 @@
     <require
         permission="zope.View"
         attributes="original"
+        />
+  </content>
+
+  <!-- Evaluations Content -->
+
+  <content class=".evaluation.Evaluations">
+    <require
+        permission="schooltool.edit"
+        interface=".interfaces.IEvaluations"
         />
   </content>
 

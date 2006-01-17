@@ -79,13 +79,13 @@ simplicity's sake, let use the standard Pass/Fail system:
 We should be able to make an evaluation now:
 
   >>> from schooltool.requirement import evaluation
-  >>> ev = evaluation.Evaluation(sec_req, pf, PassFail.PASS, teacher)
+  >>> ev = evaluation.Evaluation(sec_req, pf, 'Pass', teacher)
   >>> ev.requirement
   Requirement(u'3rd Period Econ.')
   >>> ev.scoreSystem
-  <ScoreSystem u'Pass/Fail'>
+  <DiscreteValuesScoreSystem u'Pass/Fail'>
   >>> ev.value
-  True
+  'Pass'
   >>> ev.evaluator
   <schooltool.person.person.Person object at ...>
 
@@ -94,10 +94,10 @@ And we then attach the section evaluation to the student being evaluated:
   >>> sorted(evals.keys())
   []
   >>> ev
-  <Evaluation for Requirement(u'3rd Period Econ.'), value=True>
+  <Evaluation for Requirement(u'3rd Period Econ.'), value='Pass'>
 
 We need to do some kind of setup to get this working.
 
   >>> name = evals.addEvaluation(ev)
   >>> sorted(evals.values())
-  [<Evaluation for Requirement(u'3rd Period Econ.'), value=True>]
+  [<Evaluation for Requirement(u'3rd Period Econ.'), value='Pass'>]

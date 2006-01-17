@@ -226,12 +226,13 @@ check minus, then you can create a scoresystem as follows:
   >>> from schooltool.requirement import scoresystem
   >>> check = scoresystem.DiscreteValuesScoreSystem(
   ...    u'Check', u'Check-mark score system',
-  ...    ['+', 'v', '-'])
+  ...    {'+' : 1, 'v': 0, '-': -1})
 
 The first and second arguments of the constructor are the title and
-description. The third argument is the list of grades that are allowed in the
-score system. The grades **must** be sorted from the best to the worst. There
-are a couple of methods associated with a score system. First, you can ask
+description. The third argument is a dictionary with the score being the key
+and the numerical equivalent being the value. Providing a numerical value is
+necessary to conduct automated statistics and grade computations. There
+are a handful of methods associated with a score system. First, you can ask
 whether a particular score is valid:
 
   >>> check.isValidScore('+')
@@ -245,23 +246,50 @@ scores:
   >>> check.isValidScore(scoresystem.UNSCORED)
   True
 
-The second method is there to check whether a score is a passing score.
+Next, you can ask the score system to tell you the numerical value for a given
+score:
+
+  >>> check.getNumericalValue('+')
+  1
+
+Again, the unscored score returns a ``None`` result:
+
+  >>> check.getNumericalValue(scoresystem.UNSCORED) is None
+  True
+
+When a user inputs a grade, it is always a string value. Thus there is a
+method that allows us to convert unicode string representations of the score
+to a valid score.
+
+  >>> check.fromUnicode('+')
+  '+'
+  >>> check.fromUnicode('f')
+  Traceback (most recent call last):
+  ...
+  ValidationError: 'f' is not a valid score.
+
+Empty strings are converted to the unscored score:
+
+  >>> check.fromUnicode('') is scoresystem.UNSCORED
+  True
+
+The fourth method is there to check whether a score is a passing score.
 
   >>> check.isPassingScore('+') is None
   True
 
 The result of this query is ``None``, because we have not defined a passing
 score yet. This is optional, since not in every case the decision of whether
-something is apassing score or not makes sense. If we initialize the score
+something is a passing score or not makes sense. If we initialize the score
 system again -- this time providing a minimum passing grade -- the method will
 provide more useful results:
 
   >>> from schooltool.requirement import scoresystem
   >>> check = scoresystem.DiscreteValuesScoreSystem(
   ...    u'Check', u'Check-mark score system',
-  ...    ['+', 'v', '-'], 'v')
+  ...    {'+' : 1, 'v': 0, '-': -1}, minPassingScore='v')
   >>> check
-  <ScoreSystem u'Check'>
+  <DiscreteValuesScoreSystem u'Check'>
 
   >>> check.isPassingScore('+')
   True
@@ -275,33 +303,55 @@ Unscored returns a neutral result:
   >>> check.isPassingScore(scoresystem.UNSCORED) is None
   True
 
+Finally, you can query the score system for the best score:
+
+  >>> check.getBestScore() is None
+  True
+
+You receive ``None``, because you did not specify a maximum score yet. You
+might think that this is unnecessary, since you specified numerical values,
+but sometimes two scores might have the same numerical values and explicit is
+better than implicit anyways:
+
+  >>> from schooltool.requirement import scoresystem
+  >>> check = scoresystem.DiscreteValuesScoreSystem(
+  ...    u'Check', u'Check-mark score system',
+  ...    {'+' : 1, 'v': 0, '-': -1}, bestScore='+', minPassingScore='v')
+
+  >>> check.getBestScore()
+  '+'
+
 The package also provides some default score systems.
 
 - A simple Pass/Fail score system:
 
   >>> scoresystem.PassFail
-  <ScoreSystem u'Pass/Fail'>
+  <DiscreteValuesScoreSystem u'Pass/Fail'>
   >>> scoresystem.PassFail.title
   u'Pass/Fail'
-  >>> scoresystem.PassFail.PASS
+  >>> pprint(scoresystem.PassFail.scores)
+  {u'Fail': 0, u'Pass': 1}
+  >>> scoresystem.PassFail.isValidScore('Pass')
   True
-  >>> scoresystem.PassFail.FAIL
+  >>> scoresystem.PassFail.isPassingScore('Pass')
+  True
+  >>> scoresystem.PassFail.isPassingScore('Fail')
   False
-  >>> scoresystem.PassFail.isValidScore(scoresystem.PassFail.PASS)
-  True
-  >>> scoresystem.PassFail.isPassingScore(scoresystem.PassFail.PASS)
-  True
-  >>> scoresystem.PassFail.isPassingScore(scoresystem.PassFail.FAIL)
-  False
+  >>> scoresystem.PassFail.getBestScore()
+  u'Pass'
+  >>> scoresystem.PassFail.fromUnicode(u'Pass')
+  u'Pass'
+  >>> scoresystem.PassFail.getNumericalValue(u'Pass')
+  1
 
 - The standard American letter score system:
 
   >>> scoresystem.AmericanLetterScoreSystem
-  <ScoreSystem u'Letter Grade'>
+  <DiscreteValuesScoreSystem u'Letter Grade'>
   >>> scoresystem.AmericanLetterScoreSystem.title
   u'Letter Grade'
-  >>> scoresystem.AmericanLetterScoreSystem.values
-  ['A', 'B', 'C', 'D', 'F']
+  >>> pprint(scoresystem.AmericanLetterScoreSystem.scores)
+  {'A': 4, 'B': 3, 'C': 2, 'D': 1, 'F': 0}
   >>> scoresystem.AmericanLetterScoreSystem.isValidScore('C')
   True
   >>> scoresystem.AmericanLetterScoreSystem.isValidScore('E')
@@ -310,15 +360,21 @@ The package also provides some default score systems.
   True
   >>> scoresystem.AmericanLetterScoreSystem.isPassingScore('F')
   False
+  >>> scoresystem.AmericanLetterScoreSystem.getBestScore()
+  'A'
+  >>> scoresystem.AmericanLetterScoreSystem.fromUnicode('B')
+  'B'
+  >>> scoresystem.AmericanLetterScoreSystem.getNumericalValue('B')
+  3
 
-- The sxtended American letter score system:
+- The extended American letter score system:
 
   >>> scoresystem.ExtendedAmericanLetterScoreSystem
-  <ScoreSystem u'Extended Letter Grade'>
+  <DiscreteValuesScoreSystem u'Extended Letter Grade'>
   >>> scoresystem.ExtendedAmericanLetterScoreSystem.title
   u'Extended Letter Grade'
-  >>> scoresystem.ExtendedAmericanLetterScoreSystem.values
-  ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'F']
+  >>> sorted(scoresystem.ExtendedAmericanLetterScoreSystem.scores.keys())
+  ['A', 'A+', 'A-', 'B', 'B+', 'B-', 'C', 'C+', 'C-', 'D', 'D+', 'D-', 'F']
   >>> scoresystem.ExtendedAmericanLetterScoreSystem.isValidScore('B-')
   True
   >>> scoresystem.ExtendedAmericanLetterScoreSystem.isValidScore('E')
@@ -327,6 +383,12 @@ The package also provides some default score systems.
   True
   >>> scoresystem.ExtendedAmericanLetterScoreSystem.isPassingScore('F')
   False
+  >>> scoresystem.ExtendedAmericanLetterScoreSystem.getBestScore()
+  'A+'
+  >>> scoresystem.ExtendedAmericanLetterScoreSystem.fromUnicode('B-')
+  'B-'
+  >>> scoresystem.ExtendedAmericanLetterScoreSystem.getNumericalValue('B')
+  3.0
 
 The second score system class is the ranged values score system, which allows
 you to define numerical ranges as grades. Let's say I have given a quiz that
@@ -335,7 +397,7 @@ has a maximum of 21 points:
   >>> quizScore = scoresystem.RangedValuesScoreSystem(
   ...     u'Quiz Score', u'Quiz Score System', 0, 21)
   >>> quizScore
-  <ScoreSystem u'Quiz Score'>
+  <RangedValuesScoreSystem u'Quiz Score'>
 
 Again, the first and second arguments are the title and description. The third
 and forth arguments are the minum and maximum value of the numerical range. by
@@ -358,6 +420,32 @@ value are valid scores:
   >>> quizScore.isValidScore(scoresystem.UNSCORED)
   True
 
+Clearly, for this type of score system, the numerical value always equals the
+score itself:
+
+  >>> quizScore.getNumericalValue(20)
+  20
+  >>> quizScore.getNumericalValue(20.1)
+  20.100000000000001
+  >>> import decimal
+  >>> quizScore.getNumericalValue(decimal.Decimal('20.1'))
+  Decimal("20.1")
+
+We can also convert any unicode input to a score.
+
+  >>> quizScore.fromUnicode('20')
+  20
+  >>> quizScore.fromUnicode('20.1')
+  Decimal("20.1")
+
+Note that non-integer values will always be converted to the decimal type,
+since float does not have an exact precision. Since the best score for the
+ranged value score system is well-defined by the maximum value, we can get a
+answer any time:
+
+  >>> quizScore.getBestScore()
+  21
+
 Since we have not defined a minimum passing grade, we cannot get a meaningful
 answer from the passing score evaluation:
 
@@ -377,11 +465,11 @@ sense:
   >>> quizScore.isPassingScore(scoresystem.UNSCORED) is None
   True
 
-The package provides only one default ranged values score system, the percent
-score system:
+The package provides two default ranged values score system, the percent
+score system,
 
   >>> scoresystem.PercentScoreSystem
-  <ScoreSystem u'Percent'>
+  <RangedValuesScoreSystem u'Percent'>
   >>> scoresystem.PercentScoreSystem.title
   u'Percent'
   >>> scoresystem.PercentScoreSystem.min
@@ -399,6 +487,44 @@ score system:
   >>> scoresystem.PercentScoreSystem.isPassingScore(59)
   False
   >>> scoresystem.PercentScoreSystem.isPassingScore(scoresystem.UNSCORED)
+
+  >>> scoresystem.PercentScoreSystem.getBestScore()
+  100
+  >>> scoresystem.PercentScoreSystem.fromUnicode('42')
+  42
+  >>> scoresystem.PercentScoreSystem.getNumericalValue(42)
+  42
+
+
+and the "100 points" score system:
+
+  >>> scoresystem.HundredPointsScoreSystem
+  <RangedValuesScoreSystem u'100 Points'>
+  >>> scoresystem.HundredPointsScoreSystem.title
+  u'100 Points'
+  >>> scoresystem.HundredPointsScoreSystem.min
+  0
+  >>> scoresystem.HundredPointsScoreSystem.max
+  100
+
+  >>> scoresystem.HundredPointsScoreSystem.isValidScore(40)
+  True
+  >>> scoresystem.HundredPointsScoreSystem.isValidScore(scoresystem.UNSCORED)
+  True
+
+  >>> scoresystem.HundredPointsScoreSystem.isPassingScore(60)
+  True
+  >>> scoresystem.HundredPointsScoreSystem.isPassingScore(59)
+  False
+  >>> scoresystem.HundredPointsScoreSystem.isPassingScore(scoresystem.UNSCORED)
+
+  >>> scoresystem.HundredPointsScoreSystem.getBestScore()
+  100
+  >>> scoresystem.HundredPointsScoreSystem.fromUnicode('42')
+  42
+  >>> scoresystem.HundredPointsScoreSystem.getNumericalValue(42)
+  42
+
 
 There is also an ``AbstractScoreSystem`` class that implements the title,
 description and representation for you already. It is used for both of the
@@ -481,13 +607,13 @@ in the programming class.
 
   >>> pf = scoresystem.PassFail
   >>> from schooltool.requirement import evaluation
-  >>> ev = evaluation.Evaluation(req[u'iter'], pf, pf.PASS, teacher)
+  >>> ev = evaluation.Evaluation(req[u'iter'], pf, 'Pass', teacher)
   >>> ev.requirement
   InheritedRequirement(Requirement(u'Create an iterator.'))
   >>> ev.scoreSystem
-  <ScoreSystem u'Pass/Fail'>
+  <DiscreteValuesScoreSystem u'Pass/Fail'>
   >>> ev.value
-  True
+  'Pass'
   >>> ev.evaluator
   Person(u'Sample Teacher')
   >>> ev.time
@@ -507,7 +633,7 @@ evaluations.
 
   >>> name = evals.addEvaluation(ev)
   >>> sorted(evals.values())
-  [<Evaluation for Inhe...ent(Requirement(u'Create an iterator.')), value=True>]
+  [<Evaluation for In...nt(Requirement(u'Create an iterator.')), value='Pass'>]
 
 Now that the evaluation is added, the evaluatee is also available:
 
@@ -546,22 +672,22 @@ With that done (phew), we can create evaluations based on these requirements.
   >>> evals = interfaces.IEvaluations(student2)
 
   >>> evals.addEvaluation(evaluation.Evaluation(
-  ...     calculus[u'int'][u'fourier'], pf, pf.FAIL, teacher2))
+  ...     calculus[u'int'][u'fourier'], pf, 'Fail', teacher2))
 
   >>> evals.addEvaluation(evaluation.Evaluation(
-  ...     calculus[u'int'][u'path'], pf, pf.PASS, teacher2))
+  ...     calculus[u'int'][u'path'], pf, 'Pass', teacher2))
 
   >>> evals.addEvaluation(evaluation.Evaluation(
-  ...     calculus[u'diff'][u'partial'], pf, pf.FAIL, teacher))
+  ...     calculus[u'diff'][u'partial'], pf, 'Fail', teacher))
 
   >>> evals.addEvaluation(evaluation.Evaluation(
-  ...     calculus[u'diff'][u'systems'], pf, pf.PASS, teacher))
+  ...     calculus[u'diff'][u'systems'], pf, 'Pass', teacher))
 
   >>> evals.addEvaluation(evaluation.Evaluation(
-  ...     calculus[u'limit'], pf, pf.FAIL, teacher))
+  ...     calculus[u'limit'], pf, 'Fail', teacher))
 
   >>> evals.addEvaluation(evaluation.Evaluation(
-  ...     calculus[u'fundamental'], pf, pf.PASS, teacher2))
+  ...     calculus[u'fundamental'], pf, 'Pass', teacher2))
 
 So now we can ask for all evaluations for which the sample teacher is the
 evaluator:
@@ -572,9 +698,9 @@ evaluator:
 
   >>> [value for key, value in sorted(
   ...     teacherEvals.items(), key=lambda x: x[1].requirement.title)]
-  [<Evaluation for Requirement(u'Limit Theorem'), value=False>,
-   <Evaluation for Requirement(u'Partial Differential Equations'), value=False>,
-   <Evaluation for Requirement(u'Systems'), value=True>]
+  [<Evaluation for Requirement(u'Limit Theorem'), value='Fail'>,
+   <Evaluation for Requirement(u'Partial Differential Equations'), value='Fail'>,
+   <Evaluation for Requirement(u'Systems'), value='Pass'>]
 
 As you can see, the query method returned another evaluations object having the
 student as a parent.  It is very important that the evaluated object is not
@@ -585,8 +711,8 @@ perform chained queries:
   ...               .getEvaluationsForRequirement(calculus[u'diff'])
   >>> [value for key, value in sorted(
   ...     result.items(), key=lambda x: x[1].requirement.title)]
-  [<Evaluation for Requirement(u'Partial Differential Equations'), value=False>,
-   <Evaluation for Requirement(u'Systems'), value=True>]
+  [<Evaluation for Requirement(u'Partial Differential Equations'), value='Fail'>,
+   <Evaluation for Requirement(u'Systems'), value='Pass'>]
 
 By default, these queries search recursively through the entire subtree of the
 requirement.  However, you can call turn off the recursion:
@@ -594,7 +720,7 @@ requirement.  However, you can call turn off the recursion:
   >>> result = evals.getEvaluationsOfEvaluator(teacher) \
   ...               .getEvaluationsForRequirement(calculus, recurse=False)
   >>> sorted(result.values())
-  [<Evaluation for Requirement(u'Limit Theorem'), value=False>]
+  [<Evaluation for Requirement(u'Limit Theorem'), value='Fail'>]
 
 Of course, the few query methods defined by the container are not sufficient in
 all cases. In those scenarios, you can develop adapters that implement custom
@@ -609,7 +735,7 @@ used as follows:
 
   >>> result = PassedQuery(evals)().getEvaluationsOfEvaluator(teacher)
   >>> sorted(result.values())
-  [<Evaluation for Requirement(u'Systems'), value=True>]
+  [<Evaluation for Requirement(u'Systems'), value='Pass'>]
 
 
 The ``IEvaluations`` API
@@ -625,15 +751,15 @@ This section demonstrates the implementation of the ``IMapping`` API.
 
   >>> evals = evaluation.Evaluations(
   ...     [(calculus[u'limit'],
-  ...       evaluation.Evaluation(calculus[u'limit'], pf, pf.PASS, teacher)),
+  ...       evaluation.Evaluation(calculus[u'limit'], pf, 'Pass', teacher)),
   ...      (calculus[u'diff'],
-  ...       evaluation.Evaluation(calculus[u'diff'], pf, pf.FAIL, teacher))]
+  ...       evaluation.Evaluation(calculus[u'diff'], pf, 'Fail', teacher))]
   ...     )
 
 - ``__getitem__(key)``
 
   >>> evals[calculus[u'limit']]
-   <Evaluation for Requirement(u'Limit Theorem'), value=True>
+  <Evaluation for Requirement(u'Limit Theorem'), value='Pass'>
   >>> evals[calculus[u'fundamental']]
   Traceback (most recent call last):
   ...
@@ -652,14 +778,14 @@ This section demonstrates the implementation of the ``IMapping`` API.
 - ``__setitem__(key, value)``
 
   >>> evals[calculus[u'limit']] = evaluation.Evaluation(
-  ...     calculus[u'limit'], pf, pf.PASS, teacher)
+  ...     calculus[u'limit'], pf, 'Pass', teacher)
   >>> len(evals._btree)
   2
 
 - ``get(key, default=None)``
 
   >>> evals.get(calculus[u'limit'])
-   <Evaluation for Requirement(u'Limit Theorem'), value=True>
+   <Evaluation for Requirement(u'Limit Theorem'), value='Pass'>
   >>> evals.get(calculus[u'fundamental'], default=False)
   False
 
@@ -683,16 +809,16 @@ This section demonstrates the implementation of the ``IMapping`` API.
 - ``values()``
 
   >>> sorted(evals.values(), key=lambda x: x.requirement.title)
-  [<Evaluation for Requirement(u'Differentiation'), value=False>,
-   <Evaluation for Requirement(u'Limit Theorem'), value=True>]
+  [<Evaluation for Requirement(u'Differentiation'), value='Fail'>,
+   <Evaluation for Requirement(u'Limit Theorem'), value='Pass'>]
 
 - ``items()``
 
   >>> sorted(evals.items(), key=lambda x: x[0].title)
   [(Requirement(u'Differentiation'),
-    <Evaluation for Requirement(u'Differentiation'), value=False>),
+    <Evaluation for Requirement(u'Differentiation'), value='Fail'>),
    (Requirement(u'Limit Theorem'),
-    <Evaluation for Requirement(u'Limit Theorem'), value=True>)]
+    <Evaluation for Requirement(u'Limit Theorem'), value='Pass'>)]
 
 - ``__len__()``
 

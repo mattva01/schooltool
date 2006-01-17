@@ -20,10 +20,10 @@
 
 $Id$
 """
-
 __docformat__ = 'restructuredtext'
-
+import decimal
 import zope.interface
+import zope.schema
 
 from schooltool.requirement import interfaces
 
@@ -59,8 +59,20 @@ class AbstractScoreSystem(object):
         """See interfaces.IScoreSystem"""
         raise NotImplementedError
 
+    def getBestScore(self):
+        """See interfaces.IScoreSystem"""
+        raise NotImplementedError
+
+    def fromUnicode(self, rawScore):
+        """See interfaces.IScoreSystem"""
+        raise NotImplementedError
+
+    def getNumericalValue(self, score):
+        """See interfaces.IScoreSystem"""
+        raise NotImplementedError
+
     def __repr__(self):
-        return '<ScoreSystem %r>' % self.title
+        return '<%s %r>' % (self.__class__.__name__, self.title)
 
 
 class DiscreteValuesScoreSystem(AbstractScoreSystem):
@@ -69,14 +81,16 @@ class DiscreteValuesScoreSystem(AbstractScoreSystem):
     zope.interface.implements(interfaces.IDiscreteValuesScoreSystem)
 
     # See interfaces.IDiscreteValuesScoreSystem
-    values = None
+    scores = None
     _minPassingScore = None
+    _bestScore = None
 
     def __init__(self, title=None, description=None,
-                 values=None, minPassingScore=None):
+                 scores=None, bestScore=None, minPassingScore=None):
         self.title = title
         self.description = description
-        self.values = values or []
+        self.scores = scores or {}
+        self._bestScore = bestScore
         self._minPassingScore = minPassingScore
 
     def isPassingScore(self, score):
@@ -85,31 +99,48 @@ class DiscreteValuesScoreSystem(AbstractScoreSystem):
             return None
         if self._minPassingScore is None:
             return None
-        index = self.values.index
-        return index(score) <= index(self._minPassingScore)
+        return self.scores[score] >= self.scores[self._minPassingScore]
 
     def isValidScore(self, score):
         """See interfaces.IScoreSystem"""
-        return score in self.values + [UNSCORED]
+        return score in self.scores.keys() + [UNSCORED]
 
-    def __repr__(self):
-        return '<ScoreSystem %r>' %self.title
+    def getBestScore(self):
+        """See interfaces.IScoreSystem"""
+        return self._bestScore
+
+    def fromUnicode(self, rawScore):
+        """See interfaces.IScoreSystem"""
+        if rawScore is '':
+            return UNSCORED
+
+        if not self.isValidScore(rawScore):
+            raise zope.schema.ValidationError(
+                "'%s' is not a valid score." %rawScore)
+        return rawScore
+
+    def getNumericalValue(self, score):
+        """See interfaces.IScoreSystem"""
+        if score is UNSCORED:
+            return None
+        return self.scores[score]
 
 
 PassFail = DiscreteValuesScoreSystem(
     u'Pass/Fail', u'Pass or Fail score system.',
-    [True, False], True)
-PassFail.PASS = True
-PassFail.FAIL = False
+    {u'Pass': 1, u'Fail': 0}, u'Pass', u'Pass')
 
 AmericanLetterScoreSystem = DiscreteValuesScoreSystem(
     u'Letter Grade', u'American Letter Grade',
-    ['A', 'B', 'C', 'D', 'F'], 'D')
+    {'A': 4, 'B': 3, 'C': 2, 'D': 1, 'F': 0}, 'A', 'D')
 
 ExtendedAmericanLetterScoreSystem = DiscreteValuesScoreSystem(
     u'Extended Letter Grade', u'American Extended Letter Grade',
-    ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'F'],
-    'D-')
+    {'A+': 4.0, 'A': 4.0, 'A-': 3.7,
+     'B+': 3.3, 'B': 3.0, 'B-': 2.7,
+     'C+': 2.3, 'C': 2.0, 'C-': 1.7,
+     'D+': 1.3, 'D': 1.0, 'D-': 0.7,
+     'F': 0.0}, 'A+', 'D-')
 
 
 class RangedValuesScoreSystem(AbstractScoreSystem):
@@ -140,6 +171,31 @@ class RangedValuesScoreSystem(AbstractScoreSystem):
         if score is UNSCORED:
             return True
         return score >= self.min and score <= self.max
+
+    def getBestScore(self):
+        """See interfaces.IScoreSystem"""
+        return self.max
+
+    def fromUnicode(self, rawScore):
+        """See interfaces.IScoreSystem"""
+        if rawScore is '':
+            return UNSCORED
+
+        if '.' not in rawScore:
+            score = int(rawScore)
+        else:
+            score = decimal.Decimal(rawScore)
+
+        if not self.isValidScore(score):
+            raise zope.schema.ValidationError(
+                "%r is not a valid score." %score)
+        return score
+
+    def getNumericalValue(self, score):
+        """See interfaces.IScoreSystem"""
+        if score is UNSCORED:
+            return None
+        return score
 
 
 PercentScoreSystem = RangedValuesScoreSystem(
