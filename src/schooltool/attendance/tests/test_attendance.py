@@ -398,7 +398,7 @@ def doctest_DayAttendanceRecord():
         >>> ar.late_arrival is None
         True
         >>> ar.explanations
-        []
+        ()
 
     Let's create a regular record
 
@@ -415,7 +415,7 @@ def doctest_DayAttendanceRecord():
         >>> ar.late_arrival is None
         True
         >>> ar.explanations
-        []
+        ()
 
     """
 
@@ -451,7 +451,7 @@ def doctest_SectionAttendanceRecord():
         >>> ar.late_arrival is None
         True
         >>> ar.explanations
-        []
+        ()
 
     Let's create a regular record
 
@@ -476,7 +476,7 @@ def doctest_SectionAttendanceRecord():
         >>> ar.late_arrival is None
         True
         >>> ar.explanations
-        []
+        ()
 
     """
 

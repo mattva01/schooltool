@@ -26,6 +26,7 @@ __docformat__ = 'reStructuredText'
 import datetime
 
 import pytz
+from BTrees.OOBTree import OOBTree
 from persistent import Persistent
 from persistent.list import PersistentList
 from persistent.dict import PersistentDict
@@ -67,11 +68,13 @@ from schooltool.person.interfaces import IPerson
 class AttendanceRecord(Persistent):
     """Base class for attendance records."""
 
+    # These are class attributes to conserve ZODB space
+    late_arrival = None
+    explanations = ()
+
     def __init__(self, status):
         assert status in (UNKNOWN, PRESENT, ABSENT)
         self.status = status
-        self.late_arrival = None
-        self.explanations = PersistentList()
         if status == ABSENT:
             self._createWorkflow()
 
@@ -115,6 +118,8 @@ class AttendanceRecord(Persistent):
             raise AttendanceError(
                 "can't add an explanation to an explained absence.")
         explanation = AbsenceExplanation(text)
+        if not self.explanations: # convert the tuple to a persistent list
+            self.explanations = PersistentList()
         self.explanations.append(explanation)
 
     def makeTardy(self, arrival_time):
@@ -290,12 +295,34 @@ class SectionAttendance(Persistent, AttendanceFilteringMixin,
     implements(ISectionAttendance)
 
     def __init__(self):
-        self._records = PersistentList()
-        # When it is time to optimize, I think self._records should be replaced
-        # with a OOBTree, indexed by date.
+        self._records = OOBTree() # datetime -> list of AttendanceRecords
 
     def __iter__(self):
-        return iter(self._records)
+        for group in self._records.values():
+            for record in group:
+                yield record
+
+    def getAllForDay(self, date):
+        # TODO: use a binary tree?
+        return self.filter(date, date)
+
+    def get(self, section, datetime):
+        for ar in self._records.get(datetime, ()):
+            if ar.section == section:
+                return ar
+        return SectionAttendanceRecord(section, datetime, status=UNKNOWN)
+
+    def record(self, section, datetime, duration, period_id, present):
+        if self.get(section, datetime).status != UNKNOWN:
+            raise AttendanceError('record for %s at %s already exists'
+                                  % (section, datetime))
+        if present: status = PRESENT
+        else: status = ABSENT
+        ar = SectionAttendanceRecord(section, datetime, status=status,
+                                     duration=duration, period_id=period_id)
+        if datetime not in self._records:
+            self._records[datetime] = PersistentList()
+        self._records[datetime].append(ar)
 
     def tardyEventTitle(self, record):
         """Produce a title for a calendar event representing a tardy."""
@@ -316,24 +343,6 @@ class SectionAttendance(Persistent, AttendanceFilteringMixin,
                                    dtstart=record.datetime,
                                    duration=record.duration)
 
-    def getAllForDay(self, date):
-        return self.filter(date, date)
-
-    def get(self, section, datetime):
-        for ar in self._records:
-            if (ar.section, ar.datetime) == (section, datetime):
-                return ar
-        return SectionAttendanceRecord(section, datetime, status=UNKNOWN)
-
-    def record(self, section, datetime, duration, period_id, present):
-        if self.get(section, datetime).status != UNKNOWN:
-            raise AttendanceError('record for %s at %s already exists'
-                                  % (section, datetime))
-        if present: status = PRESENT
-        else: status = ABSENT
-        ar = SectionAttendanceRecord(section, datetime, status=status,
-                                     duration=duration, period_id=period_id)
-        self._records.append(ar)
 
 
 #
