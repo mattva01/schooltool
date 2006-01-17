@@ -22,7 +22,6 @@ $Id$
 """
 __docformat__ = 'restructuredtext'
 import decimal
-import persistent
 import zope.interface
 import zope.schema
 
@@ -45,7 +44,7 @@ class UNSCORED(object):
 UNSCORED = UNSCORED()
 
 
-class AbstractScoreSystem(persistent.Persistent):
+class AbstractScoreSystem(object):
     zope.interface.implements(interfaces.IScoreSystem)
 
     def __init__(self, title, description=None):
