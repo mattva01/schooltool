@@ -65,7 +65,8 @@
         <ul tal:condition="course/sections|nothing" class="section-list">
           <li tal:repeat="section course/sections">
             <a tal:content="section/label"
-               tal:attributes="href section/@@absolute_url">Some Object</a>
+               tal:attributes="href section/@@absolute_url"
+               i18n:translate="">Some Object</a>
             <span class="hint">
               (<span tal:replace="section/size"/>
               <span i18n:translate="">Students</span>)
