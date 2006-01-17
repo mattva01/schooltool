@@ -34,11 +34,14 @@ from zope.app.traversing.interfaces import IPhysicallyLocatable
 from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.app.testing import ztapi, setup
 from zope.testing import doctest
+from zope.interface import implements
 
 from schooltool.testing.util import NiceDiffsMixin
 from schooltool.testing.util import diff
 from schooltool.testing.util import fakePath
 from schooltool.timetable.tests.test_timetable import TermStub
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 
 
 class TimetablePhysicallyLocatableAdapterStub:
@@ -90,8 +93,20 @@ class SequentialTestSetupMixin:
     createTimetable = staticmethod(createSimpleTimetable)
 
 
+class ApplicationStub(object):
+    implements(ISchoolToolApplication, IApplicationPreferences)
+    def __init__(self, timezone='UTC'):
+        self.timezone=timezone
+    def __call__(self, context):
+        return self
+
+
 def doctest_BaseTimetableModel_createCalendar():
     """Tests for BaseTimetableModel.createCalendar
+
+    We'll have to provide application configuration stub:
+
+        >>> ztapi.provideAdapter(None, ISchoolToolApplication, ApplicationStub())
 
         >>> from schooltool.timetable.model import BaseTimetableModel
         >>> btm = BaseTimetableModel()
@@ -123,19 +138,40 @@ def doctest_BaseTimetableModel_createCalendar():
         >>> cal = btm.createCalendar(term, timetable,
         ...                          first=date(2003, 11, 21),
         ...                          last=date(2003, 11, 25))
-        >>> for e in cal:
-        ...     print '%s %s--%s %-10s %s' % (
-        ...                 e.dtstart.date(), e.dtstart.strftime('%H:%M'),
-        ...                 (e.dtstart + e.duration).strftime('%H:%M'),
-        ...                 '(%s, %s)' % (e.day_id, e.period_id), e.title)
-        ...     assert verifyObject(ITimetableCalendarEvent, e)
-        ...     assert e.title == e.activity.title
-        2003-11-21 09:00--10:30 (B, Green) Biology
-        2003-11-21 11:05--12:25 (B, Blue)  Geography
-        2003-11-24 09:00--10:30 (A, Green) English
-        2003-11-24 11:05--12:25 (A, Blue)  Math
-        2003-11-25 09:00--10:30 (B, Green) Biology
-        2003-11-25 11:05--12:25 (B, Blue)  Geography
+
+        >>> def print_cal(cal):
+        ...     for e in cal:
+        ...         print '%s %s--%s %s %-10s %s' % (
+        ...                     e.dtstart.date(), e.dtstart.strftime('%H:%M'),
+        ...                     (e.dtstart + e.duration).strftime('%H:%M'),
+        ...                     e.dtstart.tzinfo,
+        ...                     '(%s, %s)' % (e.day_id, e.period_id), e.title)
+        ...         assert verifyObject(ITimetableCalendarEvent, e)
+        ...         assert e.title == e.activity.title
+        >>> print_cal(cal)
+        2003-11-21 09:00--10:30 UTC (B, Green) Biology
+        2003-11-21 11:05--12:25 UTC (B, Blue)  Geography
+        2003-11-24 09:00--10:30 UTC (A, Green) English
+        2003-11-24 11:05--12:25 UTC (A, Blue)  Math
+        2003-11-25 09:00--10:30 UTC (B, Green) Biology
+        2003-11-25 11:05--12:25 UTC (B, Blue)  Geography
+
+    If school will get transported to Lithuania, lessons should still
+    start at the same time (9:00 at the morning), but the time should
+    be stored in UTC:
+
+        >>> ztapi.provideAdapter(None, ISchoolToolApplication,
+        ...                      ApplicationStub('Europe/Vilnius'))
+        >>> cal = btm.createCalendar(term, timetable,
+        ...                          first=date(2003, 11, 21),
+        ...                          last=date(2003, 11, 25))
+        >>> print_cal(cal)
+        2003-11-21 07:00--08:30 UTC (B, Green) Biology
+        2003-11-21 09:05--10:25 UTC (B, Blue)  Geography
+        2003-11-24 07:00--08:30 UTC (A, Green) English
+        2003-11-24 09:05--10:25 UTC (A, Blue)  Math
+        2003-11-25 07:00--08:30 UTC (B, Green) Biology
+        2003-11-25 09:05--10:25 UTC (B, Blue)  Geography
 
     """
 
@@ -152,6 +188,7 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
 
         ztapi.provideAdapter(ITimetable, IPhysicallyLocatable,
                              TimetablePhysicallyLocatableAdapterStub)
+        ztapi.provideAdapter(None, ISchoolToolApplication, ApplicationStub())
 
     def createModel(self):
         """Create a simple sequential timetable model.
@@ -360,6 +397,7 @@ class TestSequentialDayIdBasedTimetableModel(PlacelessSetup,
 
         ztapi.provideAdapter(ITimetable, IPhysicallyLocatable,
                              TimetablePhysicallyLocatableAdapterStub)
+        ztapi.provideAdapter(None, ISchoolToolApplication, ApplicationStub())
 
     def createDayTemplates(self):
         from schooltool.timetable import SchooldayTemplate, SchooldaySlot
@@ -479,6 +517,7 @@ class TestWeeklyTimetableModel(PlacelessSetup,
         PlacelessSetup.setUp(self)
         ztapi.provideAdapter(ITimetable, IPhysicallyLocatable,
                              TimetablePhysicallyLocatableAdapterStub)
+        ztapi.provideAdapter(None, ISchoolToolApplication, ApplicationStub())
 
     def test(self):
         from schooltool.timetable import WeeklyTimetableModel

@@ -37,6 +37,7 @@ $Id$
 import socket
 import itertools
 import datetime
+import pytz
 
 from persistent import Persistent
 from persistent.dict import PersistentDict
@@ -45,6 +46,8 @@ from zope.app.traversing.api import getPath
 
 from schooltool.app.cal import CalendarEvent
 from schooltool.calendar.simple import ImmutableCalendar
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 
 from schooltool.timetable.interfaces import IWeekdayBasedTimetableModel
 from schooltool.timetable.interfaces import IDayIdBasedTimetableModel
@@ -130,6 +133,10 @@ class BaseTimetableModel(Persistent):
                 continue
             day_id, periods = self._periodsInDay(term, timetable,
                                                  date, day_id_gen)
+
+            app = ISchoolToolApplication(None)
+            sitewide_tz = pytz.timezone(IApplicationPreferences(app).timezone)
+
             for period, tstart, duration in periods:
                 dt = datetime.datetime.combine(date, tstart)
                 # XXX: this will make all timetable events to behave as if the
@@ -138,6 +145,7 @@ class BaseTimetableModel(Persistent):
                 # timezone preference.  Thus this place should have conversion
                 # logic like the following:
                 #     dt = sitewide_tz.localize(dt).astimezone(pytz.utc)
+                dt = sitewide_tz.localize(dt).astimezone(pytz.utc)
                 for activity in timetable[day_id][period]:
                     key = (date, period, activity)
                     # IDs for functionally derived calendars should be

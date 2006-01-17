@@ -27,16 +27,21 @@ import unittest
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
 from zope.app.testing import setup
+from zope.app.tests import ztapi
 
 from schooltool.testing import setup as stsetup
 from schooltool.relationship.tests import setUpRelationships
+from schooltool.app.interfaces import ISchoolToolApplication
 
 
 def setUp(test):
     setup.placefulSetUp()
     setUpRelationships()
+    app = stsetup.setupSchoolToolSite()
+    ztapi.provideAdapter(None, ISchoolToolApplication, lambda x: app)
     stsetup.setupTimetabling()
     stsetup.setupCalendaring()
+    stsetup.setUpApplicationPreferences()
 
 
 def tearDown(test):
