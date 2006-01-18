@@ -25,7 +25,10 @@ $Id$
 import time
 import unittest
 from datetime import datetime, date, timedelta
+
+import pytz
 from zope.interface.verify import verifyObject
+from zope.testing import doctest
 
 
 class RecurrenceRuleTestBase:
@@ -304,6 +307,7 @@ class TestYearlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         self.assertEqual(rule._scroll(ev, date(2004, 3, 1)),
                          (8, date(2004, 2, 29)))
 
+
 class TestWeeklyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 
     def createRule(self, *args, **kwargs):
@@ -357,7 +361,7 @@ class TestWeeklyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
                        (6, date(1978, 6, 7)),
                        (7, date(1978, 6, 8))]
 
-        for delta in range(40):
+        for delta in range(-10, 40):
             d = date(1978, 5, 17) + date.resolution * delta
             self.assert_(rule._scroll(ev, d) in goodresults, d)
 
@@ -799,8 +803,26 @@ class TestMonthIndex(unittest.TestCase):
         self.assertEqual(monthindex(2004, 12, -2, 3), date(2004, 12, 23))
 
 
+def doctest_InfinitePastEventsBug():
+    """Regression test for http://issues.schooltool.org/issue461
+
+        >>> from schooltool.calendar.simple import SimpleCalendarEvent
+        >>> from schooltool.calendar.recurrent import WeeklyRecurrenceRule
+        >>> ev = SimpleCalendarEvent(datetime(2006, 1, 18, tzinfo=pytz.utc),
+        ...                          timedelta(hours=1), 'Sample event',
+        ...                          recurrence=WeeklyRecurrenceRule())
+        >>> for e in ev.expand(datetime(2006, 1, 1, tzinfo=pytz.utc),
+        ...                    datetime(2006, 2, 1, tzinfo=pytz.utc)):
+        ...     print e.dtstart
+        2006-01-18 00:00:00+00:00
+        2006-01-25 00:00:00+00:00
+
+    """
+
+
 def test_suite():
     suite = unittest.TestSuite()
+    suite.addTest(doctest.DocTestSuite())
     suite.addTest(unittest.makeSuite(TestDailyRecurrenceRule))
     suite.addTest(unittest.makeSuite(TestYearlyRecurrenceRule))
     suite.addTest(unittest.makeSuite(TestWeeklyRecurrenceRule))

@@ -289,6 +289,8 @@ class WeeklyRecurrenceRule(RecurrenceRule):
     def _scroll(self, event, startdate):
         """Fast-forward to recurrences near startdate"""
         start = event.dtstart.date()
+        if startdate < start:
+            startdate = start
         weeks = weekspan(start, startdate)
         perweek = len(self.weekdays) + 1 # nr of recurrences per week
         count = weeks / self.interval * perweek

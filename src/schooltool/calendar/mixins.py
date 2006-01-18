@@ -320,8 +320,12 @@ class CalendarEventMixin(object):
         zero = datetime.timedelta(0)
         epsilon = datetime.timedelta.resolution
         if self.recurrence is not None:
+            # XXX mg: doesn't dtstart.time() already return UTC time?
             naivetime = self.dtstart.time()
             starttime = naivetime.replace(tzinfo=utc)
+            # XXX mg: I have a bad feeling about taking just the date part and
+            #         discarding the time and timezone.  It should at least
+            #         convert the dates to UTC!
             for recdate in self.recurrence.apply(self, first.date(),
                                                  last.date()):
                 dtstart = datetime.datetime.combine(recdate, starttime)
