@@ -55,12 +55,44 @@
         />
   </content>
 
+  <!-- Scoresystem Content -->
+
+  <content class=".scoresystem.GlobalDiscreteValuesScoreSystem">
+    <require
+        permission="zope.View"
+        interface=".interfaces.IDiscreteValuesScoreSystem"
+        />
+    <require
+        permission="schooltool.edit"
+        set_schema=".interfaces.IScoreSystem"
+        />
+  </content>
+
+  <content class=".scoresystem.GlobalRangedValuesScoreSystem">
+    <require
+        permission="zope.View"
+        interface=".interfaces.IRangedValuesScoreSystem"
+        />
+    <require
+        permission="schooltool.edit"
+        set_schema=".interfaces.IScoreSystem"
+        />
+  </content>
+
   <!-- Evaluations Content -->
 
   <content class=".evaluation.Evaluations">
     <require
         permission="schooltool.edit"
         interface=".interfaces.IEvaluations"
+        />
+  </content>
+
+  <content class=".evaluation.Evaluation">
+    <require
+        permission="schooltool.edit"
+        interface=".interfaces.IEvaluation"
+        set_schema=".interfaces.IEvaluation"
         />
   </content>
 
