@@ -94,10 +94,60 @@
 
   <menuItem
       menu="schooltool_actions"
+      title="Activities"
+      for="..interfaces.IGradebook"
+      action="../activities/index.html"
+      permission="zope.View"
+      />
+
+  <menuItem
+      menu="schooltool_actions"
       title="New Activity"
       for="..interfaces.IActivities"
       action="+/addActivity.html"
       permission="schooltool.create"
+      />
+
+  <!-- Gradebook -->
+
+  <page
+      name="index.html"
+      for="..interfaces.IGradebook"
+      class=".gradebook.GradebookOverview"
+      template="gradebook_overview.pt"
+      permission="schooltool.edit"
+      />
+
+  <menuItem
+      menu="schooltool_actions"
+      title="Gradebook"
+      for="schooltool.course.interfaces.ISection"
+      action="gradebook/index.html"
+      permission="zope.View"
+      />
+
+  <page
+      name="gradeStudent.html"
+      for="..interfaces.IGradebook"
+      class=".gradebook.GradeStudent"
+      template="gradebook_grade_student.pt"
+      permission="schooltool.edit"
+      />
+
+  <page
+      name="gradeActivity.html"
+      for="..interfaces.IGradebook"
+      class=".gradebook.GradeActivity"
+      template="gradebook_grade_activity.pt"
+      permission="schooltool.edit"
+      />
+
+  <page
+      name="grade.html"
+      for="..interfaces.IGradebook"
+      class=".gradebook.Grade"
+      template="gradebook_grade.pt"
+      permission="schooltool.edit"
       />
 
 </configure>

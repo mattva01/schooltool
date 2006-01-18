@@ -1,0 +1,75 @@
+<tal:tag condition="view/update" />
+<html metal:use-macro="context/@@standard_macros/page"
+      i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+    Gradebook
+  </title>
+</head>
+<body>
+<div metal:fill-slot="body">
+
+  <h3 i18n:translate="">
+    Grade
+  </h3>
+  <br />
+
+  <form tal:attributes="action request/URL"
+        method="post" enctype="multipart/form-data">
+
+    <input type="hidden" name="activity" value=""
+           tal:attributes="value request/activity" />
+
+    <input type="hidden" name="student" value=""
+           tal:attributes="value request/student" />
+
+    <table border="1">
+      <tr>
+       <th i18n:translate="">Student Name</th>
+       <th i18n:translate="">Activity Name</th>
+       <th i18n:translate="">(Due) Date</th>
+       <th i18n:translate="">Modification Date</th>
+       <th><label for="grade" i18n:translate="">Grade</label></th>
+       <th i18n:translate="">Max. Score</th>
+     </tr>
+     <tr tal:define="activity view/activityInfo;
+                     evaluation view/evaluationInfo;
+                     student view/student">
+       <td tal:content="student/title">
+         Tom Hoffman
+       </td>
+       <td tal:content="activity/title">
+         Homework 1
+       </td>
+       <td tal:content="activity/date">
+         January 5, 2006
+       </td>
+       <td tal:content="evaluation/time">
+         January
+       </td>
+       <td>
+         <input type="text" id="grade" name="grade" value="" size="4"
+             tal:attributes="value evaluation/value" />
+       </td>
+       <td tal:content="activity/maxScore">
+         100
+       </td>
+     </tr>
+    </table>
+
+    <div class="controls">
+      <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Update"
+             title="Shortcut: Alt-U" accesskey="U"
+             i18n:attributes="value update-button; accesskey" />
+      <input type="submit" class="button-ok" name="DELETE" value="Delete"
+             title="Shortcut: Alt-D" accesskey="D"
+             i18n:attributes="value update-button; accesskey" />
+      <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+             i18n:attributes="value cancel-button" />
+    </div>
+
+  </form>
+
+</div>
+</body>
+</html>

@@ -61,13 +61,21 @@ class IGradebook(zope.interface.Interface):
     gradebook spreadsheet/table.
     """
 
+    activities = zope.schema.List(
+        title=_('Activities'),
+        description=_('Activities in this gradebook.'))
+
+    students = zope.schema.List(
+        title=_('Students'),
+        description=_('Students in this gradebook.'))
+
     def hasEvaluation(student, activity):
         """Check whether an evaluation exists for a student-activity pair."""
 
-    def getEvaluation(student, activity):
+    def getEvaluation(student, activity, default=None):
         """Get the evaluation of a student for a given activity."""
 
-    def evaluate(student, activity, score):
+    def evaluate(student, activity, score, evaluator=None):
         """Evaluate a student for an activity"""
 
     def removeEvaluation(student, activity):

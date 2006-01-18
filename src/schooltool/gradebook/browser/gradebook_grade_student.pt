@@ -1,0 +1,58 @@
+<tal:tag condition="view/update" />
+<html metal:use-macro="context/@@standard_macros/page"
+      i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+    Gradebook
+  </title>
+</head>
+<body>
+<div metal:fill-slot="body">
+
+  <h3 i18n:translate="">
+    Grade <span tal:replace="view/student/title" i18n:name="name" />
+  </h3>
+  <br />
+
+  <form tal:attributes="action request/URL"
+        method="post" enctype="multipart/form-data">
+
+    <input type="hidden" name="student" value=""
+           tal:attributes="value request/student" />
+
+    <table border="1">
+      <tr>
+       <th>Activity</th>
+       <th tal:repeat="activity view/activities">
+         <label for=""
+                tal:attributes="for activity/hash"
+                tal:content="activity/title">
+           HW 1
+         </label>
+         <div tal:content="activity/max" />
+       </th>
+     </tr>
+     <tr>
+       <td>Grade</td>
+       <td tal:repeat="grade view/grades">
+         <input type="text" name="" value="" size="4"
+             tal:attributes="name grade/activity;
+                             id grade/activity;
+                             value grade/value" />
+       </td>
+     </tr>
+    </table>
+
+    <div class="controls">
+      <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Update"
+             title="Shortcut: Alt-U" accesskey="U"
+             i18n:attributes="value update-button; accesskey" />
+      <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+             i18n:attributes="value cancel-button" />
+    </div>
+
+  </form>
+
+</div>
+</body>
+</html>

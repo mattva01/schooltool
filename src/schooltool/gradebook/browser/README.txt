@@ -154,6 +154,9 @@ Now we can add those people to the section:
     >>> manager.getControl('Claudia Richter').click()
     >>> manager.getControl('Apply').click()
 
+    >>> 'Paul Cardune' in manager.contents
+    True
+
     >>> manager.getLink('edit instructors').click()
     >>> manager.getControl('Stephan Richter').click()
     >>> manager.getControl('Add').click()
@@ -211,3 +214,165 @@ Note that the final is already listed:
     True
 
 XXX Edit form test later, once we can have custom scoresystems.
+
+Nore that we have both, students and activities, we can enter the gradebook.
+
+    >>> stephan.getLink('top').click()
+    >>> stephan.getLink('Courses').click()
+    >>> stephan.getLink('Physics I').click()
+    >>> stephan.getLink('(PHYI-1)').click()
+    >>> stephan.getLink('Gradebook').click()
+
+The initial gradebook screen is a simple spreadsheet. In order to prevent
+accidental score submission, we do not allow to enter grades in this
+table. Instead you select a row (student), column (activity) or cell (student,
+activity) to enter the scores.
+
+
+Entering Scores for a Row (Student)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Let's say we want to enter the grades for Claudia. All we do is to simply
+click on her name:
+
+    >>> stephan.getLink('Claudia Richter').click()
+
+Now we just enter the grades:
+
+    >>> stephan.getControl('Final').value = u'93'
+    >>> stephan.getControl('HW 1').value = u'87'
+    >>> stephan.getControl('HW 2').value = u'56'
+
+    >>> stephan.getControl('Update').click()
+
+The screen will return to the grade overview, where the grades are no visible:
+
+    >>> '93' in stephan.contents
+    True
+    >>> '87' in stephan.contents
+    True
+    >>> '56' in stephan.contents
+    True
+
+Now let's enter again and change a grade:
+
+    >>> stephan.getLink('Claudia Richter').click()
+    >>> stephan.getControl('HW 2').value = u'76'
+    >>> stephan.getControl('Update').click()
+
+    >>> '76' in stephan.contents
+    True
+
+Of course, you can also abort the grading.
+
+    >>> stephan.getLink('Claudia Richter').click()
+    >>> stephan.getControl('Cancel').click()
+    >>> stephan.url
+    'http://localhost/sections/phyi1/gradebook/index.html'
+
+
+Entering Scores for a Column (Activity)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Let's say we want to enter the grades for Homework 1. All we do is to simply
+click on the activity's name:
+
+    >>> stephan.getLink('HW 1').click()
+
+Now we just enter the grades. Since Claudia has already a grade, we only need
+to grade Paul and Tom:
+
+    >>> stephan.getControl('Paul Cardune').value = u'90'
+    >>> stephan.getControl('Tom Hoffman').value = u'82'
+
+    >>> stephan.getControl('Update').click()
+
+The screen will return to the grade overview, where the grades are no visible:
+
+    >>> '90' in stephan.contents
+    True
+    >>> '82' in stephan.contents
+    True
+
+Now let's enter again and change a grade:
+
+    >>> stephan.getLink('HW 1').click()
+    >>> stephan.getControl('Claudia Richter').value = u'98'
+    >>> stephan.getControl('Update').click()
+
+    >>> '98' in stephan.contents
+    True
+
+Of course, you can also abort the grading.
+
+    >>> stephan.getLink('HW 1').click()
+    >>> stephan.getControl('Cancel').click()
+    >>> stephan.url
+    'http://localhost/sections/phyi1/gradebook/index.html'
+
+
+Entering Scores for a Cell (Student, Activity)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When you click directly on the grade, you can also edit it. Let's day that we
+want to modify Claudia's Homework 2 grade. Until now she had a 76:
+
+    >>> stephan.getLink('76').click()
+
+The screen that opens gives you several pieces of information, such as the
+student's name,
+
+    >>> 'Claudia Richter' in stephan.contents
+    True
+
+the activity name,
+
+    >>> 'HW 2' in stephan.contents
+    True
+
+the (due) date of the activity,
+
+    # Cannot show the value because it is variable
+    >>> '(Due) Date' in stephan.contents
+    True
+
+the last modification date,
+
+    # Cannot show the value because it is variable
+    >>> 'Modification Date' in stephan.contents
+    True
+
+and the maximum score:
+
+    >>> '100' in stephan.contents
+    True
+
+This for also allows you to delete the evaluation, which is sometimes
+necessary:
+
+    >>> stephan.getControl('Grade').value
+    '76'
+    >>> stephan.getControl('Delete').click()
+    >>> stephan.getControl('Grade').value
+    ''
+
+Now let's enter a new grade:
+
+    >>> stephan.getControl('Grade').value = '86'
+    >>> stephan.getControl('Update').click()
+
+    >>> stephan.url
+    'http://localhost/sections/phyi1/gradebook/index.html'
+    >>> '86' in stephan.contents
+    True
+
+Of course, you can also cancel actions:
+
+    >>> stephan.getLink('86').click()
+    >>> stephan.getControl('Grade').value = '66'
+    >>> stephan.getControl('Cancel').click()
+
+    >>> stephan.url
+    'http://localhost/sections/phyi1/gradebook/index.html'
+    >>> '86' in stephan.contents
+    True

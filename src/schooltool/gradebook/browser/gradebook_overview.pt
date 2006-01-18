@@ -1,0 +1,46 @@
+<html metal:use-macro="context/@@standard_macros/page"
+      i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+    Gradebook
+  </title>
+</head>
+<body>
+<div metal:fill-slot="body">
+
+  <table border="1">
+    <tr>
+     <th i18n:translate="">Name</th>
+     <th tal:repeat="activity view/activities">
+       <div>
+         <a href=""
+            tal:attributes="href
+                string:gradeActivity.html?activity=${activity/hash}"
+            tal:content="activity/title">
+           HW 1
+         </a>
+       </div>
+       <div tal:content="activity/max" />
+     </th>
+    </tr>
+    <tr tal:repeat="row view/table">
+      <td>
+        <a href=""
+           tal:attributes="href
+               string:gradeStudent.html?student=${row/student/id}"
+           tal:content="row/student/title">
+          Tom Hoffman
+        </a>
+      </td>
+      <td tal:repeat="grade row/grades">
+        <a href=""
+           tal:attributes="href
+        string:grade.html?student=${row/student/id}&activity=${grade/activity}"
+           tal:content="grade/value" />
+      </td>
+    </tr>
+  </table>
+
+</div>
+</body>
+</html>

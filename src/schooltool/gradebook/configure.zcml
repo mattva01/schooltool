@@ -89,7 +89,8 @@
     <require
         permission="schooltool.view"
         attributes="keys __iter__ values items __len__
-                    addBase removeBase title description category scoresystem"
+                    addBase removeBase
+                    title description category scoresystem date"
         />
     <require
         permission="schooltool.edit"
@@ -100,6 +101,12 @@
 
 
   <!-- Gradebook Adapter -->
+
+  <content class=".gradebook.Gradebook">
+    <require
+        permission="schooltool.edit"
+        interface=".interfaces.IGradebook" />
+  </content>
 
   <adapter
       for="schooltool.course.interfaces.ISection"

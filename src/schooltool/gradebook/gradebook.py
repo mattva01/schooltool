@@ -24,6 +24,8 @@ __docformat__ = 'reStructuredText'
 
 import zope.component
 import zope.interface
+from zope.security import proxy
+
 from schooltool import course, requirement
 from schooltool.traverser import traverser
 
@@ -36,6 +38,9 @@ class Gradebook(object):
 
     def __init__(self, context):
         self.context = context
+        # To make URL creation happy
+        self.__parent__ = context
+        self.__name__ = 'gradebook'
         # Make sure we are not having inherited requirements
         self.activities = []
         for activity in interfaces.IActivities(context).values():
@@ -43,46 +48,54 @@ class Gradebook(object):
                 activity, requirement.requirement.InheritedRequirement):
                 activity = activity.original
             self.activities.append(activity)
+        self.students = list(self.context.members)
 
     def _checkStudent(self, student):
-        if student not in self.context.members:
+        if student not in self.students:
             raise ValueError(
                 'Student %r is not in this section.' %student.username)
+        # Remove security proxy, so that the object can be referenced and
+        # adapters are not proxied. Note that the gradebook itself has
+        # sufficient tight security.
+        return proxy.removeSecurityProxy(student)
 
     def _checkActivity(self, activity):
         if activity not in self.activities:
             raise ValueError(
                 '%r is not part of this section.' %activity.title)
+        # Remove security proxy, so that the object can be referenced and
+        # adapters are not proxied. Note that the gradebook itself has
+        # sufficient tight security.
+        return proxy.removeSecurityProxy(activity)
 
     def hasEvaluation(self, student, activity):
         """See interfaces.IGradebook"""
-        self._checkStudent(student)
-        self._checkActivity(activity)
+        student = self._checkStudent(student)
+        activity = self._checkActivity(activity)
         if activity in requirement.interfaces.IEvaluations(student):
                 return True
         return False
 
-    def getEvaluation(self, student, activity):
+    def getEvaluation(self, student, activity, default=None):
         """See interfaces.IGradebook"""
-        self._checkStudent(student)
-        self._checkActivity(activity)
+        student = self._checkStudent(student)
+        activity = self._checkActivity(activity)
         evaluations = requirement.interfaces.IEvaluations(student)
-        return evaluations[activity]
+        return evaluations.get(activity, default)
 
-    def evaluate(self, student, activity, score):
+    def evaluate(self, student, activity, score, evaluator=None):
         """See interfaces.IGradebook"""
-        self._checkStudent(student)
-        self._checkActivity(activity)
-        # XXX: Determine evaluator
+        student = self._checkStudent(student)
+        activity = self._checkActivity(activity)
         evaluation = requirement.evaluation.Evaluation(
-            activity, activity.scoresystem, score, None)
+            activity, activity.scoresystem, score, evaluator)
         evaluations = requirement.interfaces.IEvaluations(student)
         evaluations.addEvaluation(evaluation)
 
     def removeEvaluation(self, student, activity):
         """See interfaces.IGradebook"""
         self._checkStudent(student)
-        self._checkActivity(activity)
+        activity = self._checkActivity(activity)
         evaluations = requirement.interfaces.IEvaluations(student)
         del evaluations[activity]
 
