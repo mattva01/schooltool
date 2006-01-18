@@ -115,25 +115,26 @@ def doctest_SectionAttendancePlugin():
         Ann was present on 2005-09-11 09:30:00 (p1, s2)
         Ann was present on 2005-09-13 09:30:00 (p1, s2)
         Jon was present on 2005-09-01 09:30:00 (p1, s1)
-        Jon was present on 2005-09-03 09:30:00 (p1, s1)
-        Jon was present on 2005-09-05 09:30:00 (p1, s1)
-        Jon was present on 2005-09-07 09:30:00 (p1, s1)
-        Jon was present on 2005-09-09 09:30:00 (p1, s1)
-        Jon was present on 2005-09-11 09:30:00 (p1, s1)
-        Jon was present on 2005-09-13 09:30:00 (p1, s1)
         Ian was present on 2005-09-01 09:30:00 (p1, s1)
+        Jon was present on 2005-09-03 09:30:00 (p1, s1)
         Ian was present on 2005-09-03 09:30:00 (p1, s1)
+        Jon was present on 2005-09-05 09:30:00 (p1, s1)
         Ian was present on 2005-09-05 09:30:00 (p1, s1)
+        Jon was present on 2005-09-07 09:30:00 (p1, s1)
         Ian was present on 2005-09-07 09:30:00 (p1, s1)
+        Jon was present on 2005-09-09 09:30:00 (p1, s1)
         Ian was present on 2005-09-09 09:30:00 (p1, s1)
-        Ian was absent on 2005-09-11 09:30:00 (p1, s1)
+        Jon was present on 2005-09-11 09:30:00 (p1, s1)
+        Ian was present on 2005-09-11 09:30:00 (p1, s1)
+        Jon was absent on 2005-09-13 09:30:00 (p1, s1)
         Ian was present on 2005-09-13 09:30:00 (p1, s1)
 
     """
 
 
 def test_suite():
-    optionflags = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
+    optionflags = (doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS |
+                   doctest.REPORT_NDIFF)
     return doctest.DocTestSuite(optionflags=optionflags,
                                 setUp=setup.placelessSetUp,
                                 tearDown=setup.placelessTearDown)

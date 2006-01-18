@@ -92,8 +92,6 @@
 
   <!-- Sample data -->
 
-  <!-- BEWARE: if you uncomment this, functional tests will take more than 20
-               minutes, and will require 1 GB of memory!
   <configure
       xmlns:zcml="http://namespaces.zope.org/zcml"
       zcml:condition="have devmode">
@@ -105,6 +103,5 @@
         />
 
   </configure>
-    -->
 
 </configure>

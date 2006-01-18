@@ -318,8 +318,24 @@ class SectionAttendance(Persistent, AttendanceFilteringMixin,
                                   % (section, datetime))
         if present: status = PRESENT
         else: status = ABSENT
-        ar = SectionAttendanceRecord(section, datetime, status=status,
-                                     duration=duration, period_id=period_id)
+        # Optimization: attendance records with status PRESENT are never
+        # changed, and look the same for all students.  If we reuse the
+        # same persistent object for all section members, we conserve
+        # a huge amount of memory and disk space.
+        # XXX mg: go read http://www.zope.org/Wikis/ZODB/VolatileAttributes
+        #     I am not sure it is safe to store a Persistent object in a
+        #     _v_attr, as it might survive transaction boundaries.  If you
+        #     happen to use it from a different transaction, will it work?
+        if (status == PRESENT and
+            getattr(section, "_v_SectionAttendance_cache",
+                    (None, ))[0] == datetime):
+            ar = section._v_SectionAttendance_cache[1]
+        else:
+            ar = SectionAttendanceRecord(section, datetime, status=status,
+                                         duration=duration,
+                                         period_id=period_id)
+            if status == PRESENT:
+                section._v_SectionAttendance_cache = (datetime, ar)
         if datetime not in self._records:
             self._records[datetime] = ()
         self._records[datetime] += (ar, )

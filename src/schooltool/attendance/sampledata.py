@@ -25,6 +25,7 @@ __docformat__ = 'reStructuredText'
 
 import random
 
+import transaction
 from zope.interface import implements
 from zope.security.proxy import removeSecurityProxy
 
@@ -55,10 +56,13 @@ class SectionAttendancePlugin(object):
             unproxied_section = removeSecurityProxy(section)
             meetings = ITimetables(section).makeTimetableCalendar(term.first,
                                                                   term.last)
-            for student in section.members:
-                attendance = ISectionAttendance(student)
-                for meeting in meetings:
+            for meeting in meetings:
+                for student in section.members:
+                    attendance = ISectionAttendance(student)
                     present = rng.random() > self.absence_rate
                     attendance.record(unproxied_section, meeting.dtstart,
                                       meeting.duration, meeting.period_id,
                                       present)
+            # The transaction commit keeps the memory usage low, but at a cost
+            # of running time and disk space.
+            transaction.commit()
