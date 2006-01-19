@@ -116,12 +116,68 @@ able to delete locally defined requirements and not inherited ones:
   ...
   KeyError: u'forloop'
 
+Finally, requirements are ordered containers, which means that you can change
+the order of the dependency requirements. Let's first create a new
+requirements structure:
+
+  >>> physics = requirement.Requirement(u'Physics')
+  >>> physics[u'thermo'] = requirement.Requirement(u'Thermodynamics')
+  >>> physics[u'mech'] = requirement.Requirement(u'Mechanics')
+  >>> physics[u'rel'] = requirement.Requirement(u'Special Relativity')
+  >>> physics[u'elec'] = requirement.Requirement(u'Electromagnetism')
+
+  >>> college_physics = requirement.Requirement(u'College Physics', physics)
+  >>> college_physics[u'quant'] = requirement.Requirement(u'Quantum Mechanics')
+
+Now let's have a look at the original order:
+
+  >>> physics.keys()
+  [u'thermo', u'mech', u'rel', u'elec']
+
+The ordered container interface provides a fairly low level -- but powerful --
+method to change the order:
+
+  >>> physics.updateOrder([u'mech', u'elec', u'thermo', u'rel'])
+  >>> physics.keys()
+  [u'mech', u'elec', u'thermo', u'rel']
+
+The requirement interface provides another high-level method for sorting. It
+allows you to specify a new position for a given name:
+
+  >>> physics.changePosition(u'elec', 3)
+  >>> physics.keys()
+  [u'mech', u'thermo', u'elec', u'rel']
+
+  >>> physics.changePosition(u'rel', 1)
+  >>> physics.keys()
+  [u'mech', u'rel', u'thermo', u'elec']
+
+Now, the order of physics requirement purposefully does not change the order
+of the college physics requirement and vice versa:
+
+  >>> college_physics.keys()
+  [u'thermo', u'mech', u'rel', u'elec', u'quant']
+
+  >>> college_physics.changePosition(u'mech', 0)
+  >>> college_physics.changePosition(u'elec', 2)
+  >>> college_physics.changePosition(u'quant', 3)
+  >>> college_physics.keys()
+  [u'mech', u'thermo', u'elec', u'quant', u'rel']
+
+  >>> physics.keys()
+  [u'mech', u'rel', u'thermo', u'elec']
+
+There are many more high-level ordering functions that could be provided. But
+we wanted to keep the ``IRequirement`` interface a simple as possible and the
+idea is that you can implement adapters that use the ``updateOrder()`` method
+to provide high-level ordering APIs if desired.
+
 
 Overriding Requirements
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Now let's have a look at a case where the more specific requirement overrides
-the a sub-requirement of one of its bases. First we create a global
+the a dependency requirement of one of its bases. First we create a global
 citizenship requirement that requires a person to be "good" globally.
 
   >>> citizenship = requirement.Requirement(u'Global Citizenship')
@@ -149,6 +205,116 @@ behavior of real inheritance and acquisition. Another policy might be that you
 can never override a requirement like that and an error should occur. This is,
 however, much more difficult, since adding bases becomes a very complex task
 that would envolve complex conflict resolution.
+
+
+Complex Inheritance Patterns
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+__Note__: You probably want to skip this section, if you read this file for
+          the first time. It is not important for your understanding of the
+          package.
+
+Requirement inheritance can be very complex. The following section tests for
+those complex cases and ensures that they are working correctly. Let's first
+setup a 3-level requirement path:
+
+  >>> animal = requirement.Requirement(u'Animal')
+  >>> dog = requirement.Requirement(u'Dog', animal)
+  >>> hound = requirement.Requirement(u'Hound', dog)
+
+  >>> animal.keys()
+  []
+  >>> dog.keys()
+  []
+  >>> hound.keys()
+  []
+
+  >>> animal[u'categories'] = requirement.Requirement(u'Categories')
+
+  >>> animal.keys()
+  [u'categories']
+  >>> dog.keys()
+  [u'categories']
+  >>> hound.keys()
+  [u'categories']
+
+Now, one of the tricky parts is to get the key management done correctly, when
+a base higher-up is added or removed.
+
+  >>> lifeform = requirement.Requirement(u'Lifeform')
+  >>> lifeform[u'characteristics'] = requirement.Requirement(u'Characteristics')
+
+  >>> animal.addBase(lifeform)
+  >>> lifeform.keys()
+  [u'characteristics']
+  >>> animal.keys()
+  [u'categories', u'characteristics']
+  >>> dog.keys()
+  [u'categories', u'characteristics']
+  >>> hound.keys()
+  [u'categories', u'characteristics']
+
+  >>> animal.removeBase(lifeform)
+  >>> lifeform.keys()
+  [u'characteristics']
+  >>> animal.keys()
+  [u'categories']
+  >>> dog.keys()
+  [u'categories']
+  >>> hound.keys()
+  [u'categories']
+
+Another case is where you have multiple bases and two or more bases have a
+requirement with the same name. In this case the name should still be only
+listed once and the first listed base's value is chosen.
+
+  >>> mamal = requirement.Requirement(u'Mamal')
+  >>> mamal[u'categories'] = requirement.Requirement(u'Categories')
+
+  >>> dog.addBase(mamal)
+  >>> dog.keys()
+  [u'categories']
+  >>> hound.keys()
+  [u'categories']
+
+  >>> dog.values()
+  [InheritedRequirement(Requirement(u'Categories'))]
+  >>> dog[u'categories'].original is animal[u'categories']
+  True
+  >>> dog[u'categories'].original is mamal[u'categories']
+  False
+
+  >>> dog.removeBase(animal)
+  >>> dog.keys()
+  [u'categories']
+  >>> hound.keys()
+  [u'categories']
+
+  >>> dog.values()
+  [InheritedRequirement(Requirement(u'Categories'))]
+  >>> dog[u'categories'].original is animal[u'categories']
+  False
+  >>> dog[u'categories'].original is mamal[u'categories']
+  True
+
+Finally, let's make sure that when getting a value, it is wrapped with
+inherited requirement wrappers for every level of inheritance:
+
+  >>> mamal[u'categories']
+  Requirement(u'Categories')
+  >>> dog[u'categories']
+  InheritedRequirement(Requirement(u'Categories'))
+  >>> hound[u'categories']
+  InheritedRequirement(InheritedRequirement(Requirement(u'Categories')))
+
+A simple helper function is used to unwrap requirements:
+
+  >>> requirement.unwrapRequirement(mamal[u'categories'])
+  Requirement(u'Categories')
+  >>> requirement.unwrapRequirement(dog[u'categories'])
+  Requirement(u'Categories')
+  >>> requirement.unwrapRequirement(hound[u'categories'])
+  Requirement(u'Categories')
 
 
 Requirement Adapters

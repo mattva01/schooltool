@@ -23,10 +23,12 @@ $Id$
 
 __docformat__ = 'restructuredtext'
 
+import BTrees.OOBTree
+import persistent
 import persistent.list
 import zope.event
 import zope.interface
-import zope.app.container.btree
+import zope.app.container.ordered
 import zope.app.container.contained
 import zope.app.event.objectevent
 from zope.app import annotation
@@ -66,47 +68,99 @@ class InheritedRequirement(zope.app.container.contained.Contained):
         return getattr(self.original, name)
 
 
-class Requirement(zope.app.container.btree.BTreeContainer,
+def unwrapRequirement(requirement):
+    """Remove all inherited requirement wrappers."""
+    while isinstance(requirement, InheritedRequirement):
+        requirement = requirement.original
+    return requirement
+
+
+class Requirement(persistent.Persistent,
                   zope.app.container.contained.Contained):
     """A persistent requirement using a BTree for sub-requirements"""
-    zope.interface.implements(interfaces.IRequirement)
+    zope.interface.implements(interfaces.IExtendedRequirement)
 
     def __init__(self, title, *bases):
+        super(Requirement, self).__init__()
+        # See interfaces.IRequirement
         self.title = title
-        zope.app.container.btree.BTreeContainer.__init__(self)
+        # See interfaces.IRequirement
         self.bases = persistent.list.PersistentList()
+        # See interfaces.IExtendedRequirement
+        self.subs = persistent.list.PersistentList()
+        # Storage for contained requirements
+        self._data = BTrees.OOBTree.OOBTree()
+        # List of keys that describe the order of the contained requirements
+        self._order = persistent.list.PersistentList()
         for base in bases:
             self.addBase(base)
 
+    def collectKeys(self):
+        """See interfaces.IExtendedRequirement"""
+        keys = tuple(self._data.keys())
+        for base in self.bases:
+            keys += base.collectKeys()
+        return keys
+
+    def distributeKey(self, key):
+        """See interfaces.IExtendedRequirement"""
+        self._order.append(key)
+        for sub in self.subs:
+            sub.distributeKey(key)
+
+    def undistributeKey(self, key):
+        """See interfaces.IExtendedRequirement"""
+        self._order.remove(key)
+        for sub in self.subs:
+            sub.undistributeKey(key)
+
     def addBase(self, base):
+        """See interfaces.IRequirement"""
         if base in self.bases:
             return
         self.bases.append(base)
-        for name, value in super(Requirement, self).items():
+        base.subs.append(self)
+        for name, value in self._data.items():
             if name in base:
                 value.addBase(base[name])
+        for name in base.keys():
+            if name not in self._order:
+                self.distributeKey(name)
 
     def removeBase(self, base):
+        """See interfaces.IRequirement"""
         self.bases.remove(base)
-        for name, value in super(Requirement, self).items():
+        base.subs.remove(self)
+        for name, value in self._data.items():
             if name in base:
                 value.removeBase(base[name])
 
+        collectedKeys = self.collectKeys()
+        for name in self._order:
+            if name not in collectedKeys:
+                self.undistributeKey(name)
+
+    def changePosition(self, name, pos):
+        """See interfaces.IRequirement"""
+        old_pos = self._order.index(name)
+        if old_pos < pos:
+            pos -= 1;
+        self._order.remove(name)
+        self._order.insert(pos, name)
+        zope.app.container.contained.notifyContainerModified(self)
+
     def keys(self):
         """See interface `IReadContainer`"""
-        keys = set()
-        for requirement in self.bases + [super(Requirement, self)]:
-            keys.update(set(requirement.keys()))
-        return keys
+        return self._order
 
     def __iter__(self):
+        """See interface `IReadContainer`"""
         return iter(self.keys())
 
     def __getitem__(self, key):
         """See interface `IReadContainer`"""
-        container = super(Requirement, self)
         try:
-            return container.__getitem__(key)
+            return self._data[key]
         except KeyError:
             for base in self.bases:
                 if key in base:
@@ -149,17 +203,30 @@ class Requirement(zope.app.container.btree.BTreeContainer,
         # Now set the item
         object, event = zope.app.container.contained.containedEvent(
             object, self, key)
-        self._SampleContainer__data.__setitem__(key, object)
+        self._data[key] = object
+        if key not in self._order:
+            self.distributeKey(key)
+        # Notify all subs of the addition
+        for sub in self.subs:
+            if not key in sub._order:
+                sub._order.append(key)
         if event:
             zope.event.notify(event)
             zope.app.event.objectevent.modified(self)
 
     def __delitem__(self, key):
         """See interface `IWriteContainer`"""
-        container = super(Requirement, self)
-        zope.app.container.contained.uncontained(
-            container.__getitem__(key), self, key)
-        container.__delitem__(key)
+        zope.app.container.contained.uncontained(self._data[key], self, key)
+        self._order.remove(key)
+        del self._data[key]
+
+    def updateOrder(self, order):
+        """See zope.app.container.interfaces.IOrderedContainer"""
+        if set(self._order) != set(order):
+            raise ValueError("Incompatible key set.")
+
+        self._order = persistent.list.PersistentList(order)
+        zope.app.container.contained.notifyContainerModified(self)
 
     def __repr__(self):
         return '%s(%r)' %(self.__class__.__name__, self.title)

@@ -29,9 +29,15 @@ import zope.app.container.constraints
 import zope.app.container.interfaces
 
 
-class IRequirement(zope.app.container.interfaces.IContainer,
+class IRequirement(zope.app.container.interfaces.IOrderedContainer,
                    zope.app.container.interfaces.IContained):
-    """Something a student can do."""
+    """Something a student can do.
+
+    A requirement can contain further requirements that are needed to fulfill
+    this requirement. You can think of those requirements as dependencies of
+    this requirement. We will refer to those requirements from now on as
+    dependencies or depoendency requirements.
+    """
 
     zope.app.container.constraints.contains('.IRequirement')
     zope.app.container.constraints.containers('.IRequirement')
@@ -55,6 +61,43 @@ class IRequirement(zope.app.container.interfaces.IContainer,
         This method is responsible for notifying its contained requirements
         about the removal of this requirement.
         """
+
+    def changePosition(name, pos):
+        """Changes the requirement's position to the specified position."""
+
+
+class IExtendedRequirement(IRequirement):
+    """Extended Requirement
+
+    In order to correctly implement the ``IRequirement`` interface and not
+    make implementation-specific assumptions, we need some more methods. All
+    requirements properly implementing IExtendedRequirement should be able to
+    work together without any further assumptions.
+
+    This interface keeps track of all inherited requirements (``bases``) and all
+    sub-requirements (``subs``).
+    """
+    zope.app.container.constraints.contains('.IExtendedRequirement')
+    zope.app.container.constraints.containers('.IExtendedRequirement')
+
+    subs = zope.schema.List(
+        title=u'Sub-requirements',
+        description=u'An enumeration of sub-requirements.',
+        readonly=True)
+
+    def collectKeys(self):
+        """Collect all available keys without using any ``IContainer``
+        methods.
+
+        This method is needed to compute the newly available keys, once a base
+        was added or removed.
+        """
+
+    def distributeKey(self, key):
+        """Distribute a new key to itself and all sub-requirements."""
+
+    def undistributeKey(self, key):
+        """Un-distribute a new key to itself and all sub-requirements."""
 
 
 class IHaveRequirement(zope.interface.Interface):
@@ -204,7 +247,7 @@ class IEvaluations(zope.interface.common.mapping.IMapping):
         """Match all evaluations that satisfy the requirement.
 
         The return value is another ``IEvaluations`` object.  This allows for
-        chained queries.  For recursive queries, evaluations for all sub
+        chained queries.  For recursive queries, evaluations for all dependency
         requirements will be returned as well.
         """
 
@@ -212,7 +255,7 @@ class IEvaluations(zope.interface.common.mapping.IMapping):
         """Match all evaluations done by the specified evaluator.
 
         The return value is another ``IEvaluations`` object.  This allows for
-        chained queries.  For recursive queries, evaluations for all sub
+        chained queries.  For recursive queries, evaluations for all dependency
         requirements will be returned as well.
         """
 
