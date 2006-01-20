@@ -14,7 +14,7 @@
           of the note.
         </tal:comment>
         <tal:if condition="python:note.owner == request.principal.id">
-          <a class="delete" alt="[x]"
+          <a class="delete"
              tal:attributes="href string:?DELETE_NOTE=1&uid=${note/unique_id}"
              i18n:translate="">Delete</a>
         </tal:if>
