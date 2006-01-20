@@ -40,6 +40,7 @@
   <div class="field">
     <input type="text" tal:replace="structure widget"/>
     <img class="CalIcon" src="" id="" onmousedown=""
+      alt="[popup calendar]" i18n:attributes="alt"
       tal:attributes="id string:${widget/name}Icon;
         onclick string:clickWidgetIcon('${widget/name}');;;
         src context/++resource++calwidget-icon.gif"/>

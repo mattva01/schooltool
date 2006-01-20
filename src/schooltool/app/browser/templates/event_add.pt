@@ -276,7 +276,8 @@
             <input type="text" name="field.until" id="field.until"
                    tal:attributes="value view/until_widget/_getFormValue"/>
             <img class="CalIcon" onClick="clickWidgetIcon('field.until');"
-                 id="field.untilIcon"
+                 id="field.untilIcon" alt="[popup calendar]"
+                 i18n:attributes="alt"
                  tal:attributes="src context/++resource++calwidget-icon.gif"/>
             <div id="field.untilDiv"
                  style="background: #fff; position: absolute; display: none;">

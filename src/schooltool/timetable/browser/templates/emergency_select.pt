@@ -30,6 +30,7 @@ add a replacement day to the term.
     <input type="text" name="date" id="date"
            tal:attributes="value request/date|nothing"/>
     <img class="CalIcon" onClick="clickWidgetIcon('date');" id="dateIcon"
+         alt="[popup calendar]" i18n:attributes="alt"
          tal:attributes="src context/++resource++calwidget-icon.gif"/>
     <div id="dateDiv"
          style="background: #fff; position: absolute; display: none;"/>

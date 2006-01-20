@@ -13,7 +13,7 @@
       href=""
       tal:attributes="href string:http://www.schooltool.org">
       <img title="Schooltool" src="" alt="[Schooltool.org]" 
-           border="0px" i18n:attributes="alt;title"
+           border="0" i18n:attributes="alt;title"
            tal:attributes="src context/++resource++logo.png"/>
     </a>
   </div>

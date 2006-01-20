@@ -5,6 +5,7 @@
        style="text-decoration: none">
       <img src="/@@/harrow.png" border="0" id=".arrow"
            style="vertical-align: middle"
+           alt="(>)"
            tal:attributes="id string:devtools.arrow" />
       <h4>Developer Tools</h4>
     </a>

@@ -8,7 +8,7 @@
   <metal:block fill-slot="content-header">
 
     <tal:if condition="context/photo">
-      <img width="48px" src="photo" class="person-photo"
+      <img src="photo" class="person-photo" alt="photo" i18n:attributes="alt"
            tal:attributes="src string:${context/@@absolute_url}/photo" />
     </tal:if>
     <h1 tal:content="context/title" />

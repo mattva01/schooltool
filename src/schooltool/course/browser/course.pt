@@ -31,7 +31,8 @@
               <tal:loop repeat="instructor instructors">
                 <tal:if condition="instructor/photo">
                   <div class="instructor">
-                    <img src="photo" class="person-photo"
+                    <img src="photo" class="person-photo" alt="photo"
+                         i18n:attributes="alt"
                          tal:attributes="src string:${instructor/@@absolute_url}/photo" />
                   <br />
                   <a href="" tal:content="instructor/title"
