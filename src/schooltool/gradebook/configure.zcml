@@ -42,6 +42,7 @@
         permission="schooltool.edit"
         interface="zope.interface.common.mapping.IWriteMapping"
         set_schema=".interfaces.IActivities"
+        attributes="changePosition"
         />
   </content>
 
