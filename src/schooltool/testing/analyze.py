@@ -24,7 +24,7 @@ $Id$
 
 import sys
 import libxml2
-from schooltool.xmlparsing import XMLDocument
+from schooltool.xmlparsing import HTMLDocument
 
 
 def on_error_callback(ctx, msg):
@@ -35,7 +35,7 @@ def queryHTML(xpath, response):
     """XXX write me a docstring please XXX"""
     # We need to shut up libxml2, so it does not spew errors to stderr.
     libxml2.registerErrorHandler(lambda ctx, error: None, None)
-    doc = XMLDocument(libxml2.htmlParseDoc(response, 'utf-8'))
+    doc = HTMLDocument(response)
     doc.registerNs('', 'http://www.w3.org/1999/xhtml')
     result = [str(node) for node in doc.query(xpath)]
     doc.free()

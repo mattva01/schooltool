@@ -139,18 +139,19 @@ class XMLDocument(object):
                 else:
                     raise XMLParseError("Ill-formed document.")
 
-        if isinstance(body, libxml2.xmlDoc):
-            self._doc = body
-        else:
-            try:
-                self._doc = libxml2.parseDoc(body)
-            except libxml2.parserError:
-                raise XMLParseError("Ill-formed document.")
+        self._doc = self._parse(body)
         self._xpathctx = self._doc.xpathNewContext()
         self.namespaces = {}
         if namespaces:
             for ns, url in namespaces.items():
                 self.registerNs(ns, url)
+
+    def _parse(self, body):
+        """Parse a string and return a libxml2 document object."""
+        try:
+            return libxml2.parseDoc(body)
+        except libxml2.parserError:
+            raise XMLParseError("Ill-formed document.")
 
     def registerNs(self, ns, url):
         """Register an XML namespace.
@@ -240,6 +241,36 @@ class XMLDocument(object):
 
         """
         self.free()
+
+
+class HTMLDocument(XMLDocument):
+    r"""HTML document.
+
+    Similair to XMLDocument, but does not require well-formed XML markup.
+
+        >>> body = '''
+        ...   Hi, my name is Marius.
+        ...   <p>
+        ...   I hate ill-formed XML.
+        ... '''.lstrip()
+        >>> doc = HTMLDocument(body)
+        >>> len(doc.query('//p'))
+        2
+
+    When you're done you should free the memory allocated by libxml2
+
+        >>> doc.free()
+
+    If you do not free the memory manually, it will be freed during garbage
+    collection.
+    """
+
+    def _parse(self, body):
+        """Parse a string and return a libxml2 document object."""
+        try:
+            return libxml2.htmlParseDoc(body, 'UTF-8')
+        except libxml2.parserError:
+            raise XMLParseError("HTML parse error document.")
 
 
 class XMLNode(object):
