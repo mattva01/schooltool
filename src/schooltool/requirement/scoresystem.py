@@ -231,3 +231,13 @@ HundredPointsScoreSystem = GlobalRangedValuesScoreSystem(
     'HundredPointsScoreSystem',
     u'100 Points', u'100 Points Score System', 0, 100, 60)
 
+
+class ICustomScoreSystem(zope.interface.Interface):
+    """Marker interface for score systems created in the widget."""
+
+class IScoreSystemField(zope.schema.interfaces.IField):
+    """A field that represents score system."""
+
+class ScoreSystemField(zope.schema.Field):
+    """Score System Field."""
+    zope.interface.implements(IScoreSystemField)

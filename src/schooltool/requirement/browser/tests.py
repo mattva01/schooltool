@@ -26,7 +26,7 @@ import unittest
 
 from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
-from zope.testing import doctest
+from zope.testing import doctest, doctestunit
 from zope.app.traversing.interfaces import IContainmentRoot
 
 from schooltool.app.browser.testing import setUp, tearDown
@@ -240,11 +240,16 @@ def doctest_RequirementEditView():
 
 
 def test_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
-                                       optionflags=doctest.ELLIPSIS|
-                                                   doctest.REPORT_NDIFF))
-    return suite
+    return unittest.TestSuite((
+        doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
+                             optionflags=doctest.ELLIPSIS|
+                                         doctest.REPORT_NDIFF),
+        doctest.DocFileSuite('scoresystem.txt',
+                             setUp=setUp, tearDown=tearDown,
+                             globs={'pprint': doctestunit.pprint},
+                             optionflags=doctest.NORMALIZE_WHITESPACE|
+                                         doctest.ELLIPSIS),
+        ))
 
 
 if __name__ == '__main__':

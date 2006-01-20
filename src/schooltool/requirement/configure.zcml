@@ -57,10 +57,32 @@
 
   <!-- Scoresystem Content -->
 
+  <content class=".scoresystem.DiscreteValuesScoreSystem">
+    <require
+        permission="zope.View"
+        interface=".interfaces.IDiscreteValuesScoreSystem"
+        />
+    <require
+        permission="schooltool.edit"
+        set_schema=".interfaces.IScoreSystem"
+        />
+  </content>
+
   <content class=".scoresystem.GlobalDiscreteValuesScoreSystem">
     <require
         permission="zope.View"
         interface=".interfaces.IDiscreteValuesScoreSystem"
+        />
+    <require
+        permission="schooltool.edit"
+        set_schema=".interfaces.IScoreSystem"
+        />
+  </content>
+
+  <content class=".scoresystem.RangedValuesScoreSystem">
+    <require
+        permission="zope.View"
+        interface=".interfaces.IRangedValuesScoreSystem"
         />
     <require
         permission="schooltool.edit"
@@ -78,6 +100,45 @@
         set_schema=".interfaces.IScoreSystem"
         />
   </content>
+
+  <!-- Score System registrations -->
+
+  <vocabulary
+      name="schooltool.requirement.scoresystems"
+      factory="zope.app.component.vocabulary.UtilityVocabulary"
+      interface="schooltool.requirement.interfaces.IScoreSystem"
+      />
+
+  <utility
+      provides="schooltool.requirement.interfaces.IScoreSystem"
+      component="schooltool.requirement.scoresystem.PassFail"
+      name="Pass/Fail"
+      />
+
+  <utility
+      provides="schooltool.requirement.interfaces.IScoreSystem"
+      component="schooltool.requirement.scoresystem.AmericanLetterScoreSystem"
+      name="Letter Grade"
+      />
+
+  <utility
+      provides="schooltool.requirement.interfaces.IScoreSystem"
+      component="
+          schooltool.requirement.scoresystem.ExtendedAmericanLetterScoreSystem"
+      name="Extended Letter Grade"
+      />
+
+  <utility
+      provides="schooltool.requirement.interfaces.IScoreSystem"
+      component="schooltool.requirement.scoresystem.PercentScoreSystem"
+      name="Percent"
+      />
+
+  <utility
+      provides="schooltool.requirement.interfaces.IScoreSystem"
+      component="schooltool.requirement.scoresystem.HundredPointsScoreSystem"
+      name="100 Points"
+      />
 
   <!-- Evaluations Content -->
 

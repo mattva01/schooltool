@@ -174,8 +174,8 @@ class IRangedValuesScoreSystem(IScoreSystem):
         default=0)
 
     max = zope.schema.Int(
-        title=u'Minimum',
-        description=u'Minimum value in the score system',
+        title=u'Maximum',
+        description=u'Maximum value in the score system',
         required=True,
         default=100)
 

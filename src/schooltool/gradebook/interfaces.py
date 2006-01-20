@@ -23,7 +23,7 @@ $Id$
 __docformat__ = 'reStructuredText'
 
 import zope.interface
-from schooltool.requirement import interfaces
+from schooltool.requirement import interfaces, scoresystem
 from schooltool import SchoolToolMessage as _
 
 class IActivities(interfaces.IRequirement):
@@ -43,10 +43,9 @@ class IActivity(interfaces.IRequirement):
         vocabulary="schooltool.gradebook.categories",
         required=True)
 
-    scoresystem = zope.schema.Choice(
+    scoresystem = scoresystem.ScoreSystemField(
         title=_("Scoresystem"),
         description=_("The activity scoresystem."),
-        vocabulary="schooltool.gradebook.scoresystems",
         required=True)
 
     date = zope.schema.Date(

@@ -83,7 +83,8 @@ means that we need to add an activity:
     >>> manager.getControl('Title').value = 'Final'
     >>> manager.getControl('Description').value = 'Final Exam'
     >>> manager.getControl('Category').value = ['exam']
-    >>> manager.getControl('Scoresystem').value = ['100 Points']
+    >>> manager.getControl(
+    ...     name='field.scoresystem.existing').value = ['100 Points']
     >>> manager.getControl('Add').click()
 
     >>> 'Final' in manager.contents
@@ -199,7 +200,8 @@ Note that the final is already listed:
     >>> stephan.getControl('Title').value = 'HW 1'
     >>> stephan.getControl('Description').value = 'Homework 1'
     >>> stephan.getControl('Category').value = ['assignment']
-    >>> stephan.getControl('Scoresystem').value = ['100 Points']
+    >>> stephan.getControl(
+    ...     name='field.scoresystem.existing').value = ['100 Points']
     >>> stephan.getControl('Add').click()
     >>> 'HW 1' in stephan.contents
     True
@@ -208,7 +210,8 @@ Note that the final is already listed:
     >>> stephan.getControl('Title').value = 'HW 2'
     >>> stephan.getControl('Description').value = 'Homework 2'
     >>> stephan.getControl('Category').value = ['assignment']
-    >>> stephan.getControl('Scoresystem').value = ['100 Points']
+    >>> stephan.getControl(
+    ...     name='field.scoresystem.existing').value = ['100 Points']
     >>> stephan.getControl('Add').click()
     >>> 'HW 2' in stephan.contents
     True

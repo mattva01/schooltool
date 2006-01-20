@@ -14,45 +14,6 @@
       handler=".category.addDefaultCategoriesToApplication"
       />
 
-  <!-- Score System registrations -->
-
-  <utility
-      provides="schooltool.requirement.interfaces.IScoreSystem"
-      component="schooltool.requirement.scoresystem.PassFail"
-      name="Pass/Fail"
-      />
-
-  <utility
-      provides="schooltool.requirement.interfaces.IScoreSystem"
-      component="schooltool.requirement.scoresystem.AmericanLetterScoreSystem"
-      name="Letter Grade"
-      />
-
-  <utility
-      provides="schooltool.requirement.interfaces.IScoreSystem"
-      component="
-          schooltool.requirement.scoresystem.ExtendedAmericanLetterScoreSystem"
-      name="Extended Letter Grade"
-      />
-
-  <utility
-      provides="schooltool.requirement.interfaces.IScoreSystem"
-      component="schooltool.requirement.scoresystem.PercentScoreSystem"
-      name="Percent"
-      />
-
-  <utility
-      provides="schooltool.requirement.interfaces.IScoreSystem"
-      component="schooltool.requirement.scoresystem.HundredPointsScoreSystem"
-      name="100 Points"
-      />
-
-  <vocabulary
-      name="schooltool.gradebook.scoresystems"
-      factory="zope.app.component.vocabulary.UtilityVocabulary"
-      interface="schooltool.requirement.interfaces.IScoreSystem"
-      />
-
   <!-- Activity Adapters -->
 
   <adapter

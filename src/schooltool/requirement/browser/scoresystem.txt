@@ -1,0 +1,453 @@
+====================
+Score System Widgets
+====================
+
+Score system widgets are used to provide an advanced user experience when
+selecting score systems. The score system widget allows you to either select
+an existing, registered score system *or* create a custom one on the fly.
+
+Step 0 is some framework setup. We do not need much, though; one task is
+setting up the score system vocabulary:
+
+  >>> from schooltool.requirement import interfaces
+
+  >>> def ScoreSystems(context):
+  ...     from zope.app.component import vocabulary
+  ...     return vocabulary.UtilityVocabulary(context, interfaces.IScoreSystem)
+
+  >>> from zope.schema import vocabulary
+  >>> vocabulary.getVocabularyRegistry().register(
+  ...     'schooltool.requirement.scoresystems', ScoreSystems)
+
+  >>> import zope.component
+  >>> from schooltool.requirement import scoresystem
+
+  >>> zope.component.provideUtility(
+  ...     scoresystem.PassFail, interfaces.IScoreSystem,
+  ...     u'Pass/Fail')
+
+  >>> zope.component.provideUtility(
+  ...     scoresystem.AmericanLetterScoreSystem, interfaces.IScoreSystem,
+  ...     u'Letter Grade')
+
+  >>> zope.component.provideUtility(
+  ...     scoresystem.PercentScoreSystem, interfaces.IScoreSystem,
+  ...     u'Percent')
+
+First we have to create a field and a request:
+
+  >>> field = scoresystem.ScoreSystemField(
+  ...     title=u'Scoresystem',
+  ...     description=u'The score system',
+  ...     required=True)
+  >>> field.__name__ = 'field'
+
+  >>> from zope.publisher.browser import TestRequest
+  >>> request = TestRequest()
+
+Now we can initialize widget.
+
+  >>> import schooltool.requirement.browser.scoresystem
+  >>> from schooltool.requirement import browser
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+
+Let's make sure that all fields have the correct value:
+
+  >>> widget.name
+  'field.field'
+
+  >>> widget.label
+  u'Scoresystem'
+
+  >>> widget.hint
+  u'The score system'
+
+  >>> widget.visible
+  True
+
+  >>> widget.required
+  True
+
+The constructor should have also created 4 widgets:
+
+  >>> widget.existing_widget
+  <zope.app.form.browser.itemswidgets.DropdownWidget object at ...>
+  >>> widget.custom_widget
+  <zope.app.form.browser.boolwidgets.CheckBoxWidget object at ...>
+  >>> widget.min_widget
+  <zope.app.form.browser.textwidgets.IntWidget object at ...>
+  >>> widget.max_widget
+  <zope.app.form.browser.textwidgets.IntWidget object at ...>
+
+
+``setRenderedValue(value)`` Method
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The first method is ``setRenderedValue()``. The widget has two use cases,
+based on the type of value. If the value is a custom score system, it will
+send the information to the custom, min and max widget:
+
+  >>> 'checked="checked"' in widget.custom_widget()
+  False
+  >>> 'value="5"' in widget.min_widget()
+  False
+  >>> 'value="15"' in widget.max_widget()
+  False
+
+  >>> import zope.interface
+  >>> custom = scoresystem.RangedValuesScoreSystem(u'generated', min=5, max=15)
+  >>> zope.interface.directlyProvides(custom, scoresystem.ICustomScoreSystem)
+  >>> widget.setRenderedValue(custom)
+
+  >>> 'checked="checked"' in widget.custom_widget()
+  True
+  >>> 'value="5"' in widget.min_widget()
+  True
+  >>> 'value="15"' in widget.max_widget()
+  True
+
+After resetting the widget passing in one of the score systems in the
+vocabulary, should set the existing widget:
+
+  >>> 'selected="selected" value="Pass/Fail"' in widget.existing_widget()
+  False
+
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+  >>> widget.setRenderedValue(scoresystem.PassFail)
+
+  >>> 'selected="selected" value="Pass/Fail"' in widget.existing_widget()
+  True
+  >>> 'checked="checked"' in widget.custom_widget()
+  False
+
+
+``setPrefix(prefix)`` Method
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The prefix determines the name of the widget and all its sub-widgets.
+
+  >>> widget.name
+  'field.field'
+  >>> widget.existing_widget.name
+  'field.field.existing'
+  >>> widget.custom_widget.name
+  'field.field.custom'
+  >>> widget.min_widget.name
+  'field.field.min'
+  >>> widget.max_widget.name
+  'field.field.max'
+
+  >>> widget.setPrefix('test.')
+
+  >>> widget.name
+  'test.field'
+  >>> widget.existing_widget.name
+  'test.field.existing'
+  >>> widget.custom_widget.name
+  'test.field.custom'
+  >>> widget.min_widget.name
+  'test.field.min'
+  >>> widget.max_widget.name
+  'test.field.max'
+
+
+``getInputValue()`` Method
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This method returns a score system based on the input; the data is assumed to
+be valid. In our case that means, if we selected the custom score system and
+have valid min and max values, a generated custom score system should be
+returned:
+
+  >>> request = TestRequest(form={
+  ...     'field.field.custom.used': '',
+  ...     'field.field.custom': 'on',
+  ...     'field.field.min': 10,
+  ...     'field.field.max': 20})
+
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+
+  >>> custom = widget.getInputValue()
+  >>> scoresystem.ICustomScoreSystem.providedBy(custom)
+  True
+  >>> custom.title
+  u'generated'
+  >>> custom.min
+  10
+  >>> custom.max
+  20
+
+On the other hand, if we selected an existing score system, it should be
+returned:
+
+  >>> request = TestRequest(form={
+  ...     'field.field.custom.used': '',
+  ...     'field.field.existing': 'Pass/Fail'})
+
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+  >>> passfail = widget.getInputValue()
+  >>> passfail is scoresystem.PassFail
+  True
+
+
+``applyChanges(content)`` Method
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This method applies the new score system to the passed content. However, it
+must be smart enough to detect whether the values really changed.
+
+  >>> class Content(object):
+  ...     field = None
+  >>> content = Content()
+
+  >>> request = TestRequest(form={
+  ...     'field.field.custom.used': '',
+  ...     'field.field.custom': 'on',
+  ...     'field.field.min': 10,
+  ...     'field.field.max': 20})
+
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+  >>> widget.applyChanges(content)
+  True
+  >>> content.field
+  <RangedValuesScoreSystem u'generated'>
+
+  >>> widget.applyChanges(content)
+  False
+
+  >>> request = TestRequest(form={
+  ...     'field.field.custom.used': '',
+  ...     'field.field.existing': 'Pass/Fail'})
+
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+
+  >>> widget.applyChanges(content)
+  True
+  >>> content.field
+  <GlobalDiscreteValuesScoreSystem u'Pass/Fail'>
+
+  >>> widget.applyChanges(content)
+  False
+
+
+``hasInput()`` Method
+~~~~~~~~~~~~~~~~~~~~~
+
+This mehtod checks for any input, but does not validate it. In our case this
+means that either an existing scoresystem has been selected or the the custom
+score system checkbox has been set.
+
+  >>> request = TestRequest()
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+  >>> widget.hasInput()
+  False
+
+  >>> request = TestRequest(form={
+  ...     'field.field.custom.used': '',
+  ...     'field.field.custom': 'on'})
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+  >>> widget.hasInput()
+  True
+
+  >>> request = TestRequest(form={
+  ...     'field.field.existing': ''})
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+  >>> widget.hasInput()
+  True
+
+  >>> request = TestRequest(form={
+  ...     'field.field.existing': 'Pass/Fail',
+  ...     'field.field.custom.used': '',
+  ...     'field.field.custom': 'on'})
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+  >>> widget.hasInput()
+  True
+
+
+``hasValidInput()`` Method
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Additionally to checking for any input, this method also checks whether the
+input is valid:
+
+  >>> request = TestRequest()
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+  >>> widget.hasValidInput()
+  False
+
+  >>> request = TestRequest(form={
+  ...     'field.field.custom.used': '',
+  ...     'field.field.custom': 'on'})
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+  >>> widget.hasValidInput()
+  False
+
+  >>> request = TestRequest(form={
+  ...     'field.field.custom.used': '',
+  ...     'field.field.custom': 'on',
+  ...     'field.field.min': 1,
+  ...     'field.field.max': 3})
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+  >>> widget.hasValidInput()
+  True
+
+  >>> request = TestRequest(form={
+  ...     'field.field.existing': ''})
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+  >>> widget.hasValidInput()
+  True
+
+  >>> request = TestRequest(form={
+  ...     'field.field.existing': 'Pass/Fail',
+  ...     'field.field.custom.used': '',
+  ...     'field.field.custom': 'on'})
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+  >>> widget.hasValidInput()
+  False
+
+The final input is not valid, because if you select the custom checkbox, the
+widget expects that you really wanted a custom score system. But since the min
+and max value were not specified, the input is invalid.
+
+
+hidden() Method
+~~~~~~~~~~~~~~~
+
+This method is implemented by simply concetatenating the hidden output of the
+custom, min and max widget for custom score systems and the hidden output of
+the existing widget for a selected score system:
+
+  >>> request = TestRequest(form={
+  ...     'field.field.custom.used': '',
+  ...     'field.field.custom': 'on',
+  ...     'field.field.min': 1,
+  ...     'field.field.max': 3})
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+  >>> print widget.hidden()
+  <input class="hiddenType" id="field.field.custom" name="field.field.custom"
+         type="hidden" value="on"  />
+  <input class="hiddenType" id="field.field.min" name="field.field.min"
+         type="hidden" value="1"  />
+  <input class="hiddenType" id="field.field.max" name="field.field.max"
+         type="hidden" value="3"  />
+
+  >>> request = TestRequest(form={
+  ...     'field.field.existing': 'Pass/Fail'})
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+  >>> print widget.hidden()
+  <input class="hiddenType" id="field.field.existing"
+         name="field.field.existing" type="hidden" value="Pass/Fail"  />
+
+
+error() Method
+~~~~~~~~~~~~~~
+
+Again, we have our two cases. If the custom widget is selected, we check for
+possible errors first in the min and then in the max widget:
+
+  >>> request = TestRequest(form={
+  ...     'field.field.custom.used': '',
+  ...     'field.field.custom': 'on',
+  ...     'field.field.min': 'f',
+  ...     'field.field.max': 'f'})
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+  >>> widget.getInputValue()
+  Traceback (most recent call last):
+  ...
+  ConversionError: (u'Invalid integer data', <exceptions.ValueError ...>)
+  >>> print widget.error()
+  <span class="error">Invalid integer data</span>
+
+  >>> request = TestRequest(form={
+  ...     'field.field.custom.used': '',
+  ...     'field.field.custom': 'on',
+  ...     'field.field.min': '0',
+  ...     'field.field.max': 'f'})
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+  >>> widget.getInputValue()
+  Traceback (most recent call last):
+  ...
+  ConversionError: (u'Invalid integer data', <exceptions.ValueError ...>)
+  >>> print widget.error()
+  <span class="error">Invalid integer data</span>
+
+  >>> request = TestRequest(form={
+  ...     'field.field.custom.used': '',
+  ...     'field.field.custom': 'on',
+  ...     'field.field.min': '0',
+  ...     'field.field.max': '10'})
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+  >>> widget.getInputValue()
+  <RangedValuesScoreSystem u'generated'>
+  >>> widget.error()
+  ''
+
+When the custom checkbox is unchecked, then the existing widget error is
+returned:
+
+  >>> request = TestRequest(form={
+  ...     'field.field.custom.used': '',
+  ...     'field.field.existing': 'foo'})
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+  >>> widget.getInputValue()
+  Traceback (most recent call last):
+  ...
+  ConversionError: ('Invalid value', token 'foo' not found in vocabulary)
+  >>> print widget.error()
+  <span class="error">Invalid value</span>
+
+  >>> request = TestRequest(form={
+  ...     'field.field.custom.used': '',
+  ...     'field.field.existing': 'Pass/Fail'})
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+  >>> widget.getInputValue()
+  <GlobalDiscreteValuesScoreSystem u'Pass/Fail'>
+  >>> widget.error()
+  ''
+
+
+__call__() Method
+~~~~~~~~~~~~~~~~~
+
+This method renders the widget using the sub-widgets. I am refraining from
+going through every combination here, since we know the sub-widgets work:
+
+  >>> request = TestRequest(form={
+  ...     'field.field.custom.used': '',
+  ...     'field.field.custom': 'on',
+  ...     'field.field.min': '0',
+  ...     'field.field.max': '10'})
+  >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
+  >>> print widget()
+  <fieldset>
+  <div>
+  <div class="value">
+  <select id="field.field.existing" name="field.field.existing" size="1" >
+  <option value="">(no value)</option>
+  <option value="Letter Grade">Letter Grade</option>
+  <option value="Pass/Fail">Pass/Fail</option>
+  <option value="Percent">Percent</option>
+  </select>
+  </div>
+  <input name="field.field.existing-empty-marker" type="hidden" value="1" />
+  </div>
+  <p><b>-- or --</b></p>
+  <p>
+    <input class="hiddenType" id="field.field.custom.used"
+           name="field.field.custom.used" type="hidden" value="" />
+    <input class="checkboxType" checked="checked" id="field.field.custom"
+           name="field.field.custom" type="checkbox" value="on"  />
+    <label for="field.field.custom">Custom score system</label>
+  </p>
+  <p>
+    <label for="field.field.min">Minimum</label>
+    <input class="textType" id="field.field.min" name="field.field.min"
+           size="10" type="text" value="0"  />
+  </p>
+  <p>
+    <label for="field.field.max">Maximum</label>
+    <input class="textType" id="field.field.max" name="field.field.max"
+           size="10" type="text" value="10"  />
+  </p>
+  </fieldset>
+  <BLANKLINE>

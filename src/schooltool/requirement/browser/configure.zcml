@@ -2,6 +2,16 @@
 <configure xmlns="http://namespaces.zope.org/browser"
            xmlns:zope="http://namespaces.zope.org/zope">
 
+  <!-- Score system widget registration -->
+
+  <zope:view
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      for="schooltool.requirement.scoresystem.IScoreSystemField"
+      provides="zope.app.form.interfaces.IInputWidget"
+      factory=".scoresystem.ScoreSystemWidget"
+      permission="zope.Public"
+      />
+
   <configure
       package="schooltool.app.browser"
       i18n_domain="schooltool">
