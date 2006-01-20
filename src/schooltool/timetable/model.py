@@ -138,13 +138,10 @@ class BaseTimetableModel(Persistent):
             sitewide_tz = pytz.timezone(IApplicationPreferences(app).timezone)
 
             for period, tstart, duration in periods:
+                # `tstart` in the timetable is defined to be in the site-wide
+                # timezone.  We need to convert that to UTC, because calendar
+                # events insist on storing UTC time.
                 dt = datetime.datetime.combine(date, tstart)
-                # XXX: this will make all timetable events to behave as if the
-                # times defined in the timetable are specified in UTC.  We have
-                # decided that times in the timetable follow the site-wide
-                # timezone preference.  Thus this place should have conversion
-                # logic like the following:
-                #     dt = sitewide_tz.localize(dt).astimezone(pytz.utc)
                 dt = sitewide_tz.localize(dt).astimezone(pytz.utc)
                 for activity in timetable[day_id][period]:
                     key = (date, period, activity)
