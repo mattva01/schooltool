@@ -1,0 +1,55 @@
+<tal:define define="dummy view/update"/>
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Activities</title>
+</head>
+<body>
+
+<h1 metal:fill-slot="content-header"
+    i18n:translate="">Activities</h1>
+
+<metal:block metal:fill-slot="body"
+             tal:define="activities view/activities">
+  <form method="post"
+        tal:attributes="action string:${context/@@absolute_url}">
+    <input type="hidden" name="form-submitted" value="" />
+    <div tal:repeat="activity activities">
+      <select name=""
+              onchange="this.form.submit()"
+              tal:attributes="name string:pos.${activity/name}">
+        <tal:block repeat="num view/positions">
+          <option value="1"
+              tal:condition="python:num != activity['pos']"
+              tal:attributes="value num"
+              tal:content="num" />
+          <option value="1" selected="selected"
+              tal:condition="python:num == activity['pos']"
+              tal:attributes="value num"
+              tal:content="num" />
+        </tal:block>
+      </select>
+      <input type="checkbox" name="delete:list" disabled=""
+             tal:attributes="value activity/name;
+                             disabled activity/disabled" />
+
+      <a tal:condition="not:activity/inherited"
+         tal:content="activity/title"
+         tal:attributes="href activity/url">Inherited Activity</a>
+
+      <span tal:condition="activity/inherited">
+        <span tal:content="activity/title">Inherited Activity</span>
+        <span i18n:translate="">(inherited)</span>
+      </span>
+
+    </div>
+    <div class="controls">
+      <input type="submit" class="button-cancel" name="DELETE" value="Delete"
+             i18n:attributes="value delete-button;" />
+    </div>
+  </form>
+
+  <p tal:condition="not:activities" i18n:translate="">There are none.</p>
+
+</metal:block>
+</body>
+</html>

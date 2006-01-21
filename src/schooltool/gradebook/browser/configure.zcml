@@ -35,14 +35,6 @@
 
   <configure package="schooltool.app.browser">
 
-    <page
-        name="index.html"
-        for="schooltool.gradebook.interfaces.IActivities"
-        class="schooltool.gradebook.browser.activity.ActivitiesView"
-        template="templates/container.pt"
-        permission="zope.View"
-        />
-
     <addform
         label="Add an Activity"
         name="addActivity.html"
@@ -70,6 +62,14 @@
         />
 
   </configure>
+
+  <page
+      name="index.html"
+      for="..interfaces.IActivities"
+      class=".activity.ActivitiesView"
+      template="activities_overview.pt"
+      permission="zope.View"
+      />
 
   <defaultView
       for="..interfaces.IActivity"

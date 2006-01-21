@@ -20,19 +20,47 @@
 
 $Id$
 """
+from zope.app import zapi
 from schooltool.app.browser import app
 from schooltool.gradebook import interfaces
+from schooltool.requirement import requirement
 from schooltool import SchoolToolMessage as _
 
-class ActivitiesView(app.ContainerView):
+class ActivitiesView(object):
     """A Group Container view."""
 
     __used_for__ = interfaces.IActivities
 
-    index_title = _("Activities")
-    add_title = _("Add Activity")
-    add_url = "+/addActivity.html"
+    def activities(self):
+        pos = 0
+        for activity in self.context.values():
+            pos += 1
+            inherited = False
+            if zapi.isinstance(activity, requirement.InheritedRequirement):
+                inherited = True
+                activity = requirement.unwrapRequirement(activity)
+            yield {'name': zapi.name(activity),
+                   'title': activity.title,
+                   'inherited': inherited,
+                   'disabled': inherited and 'disabled' or '',
+                   'url': zapi.absoluteURL(activity, self.request),
+                   'pos': pos}
 
+    def positions(self):
+        return range(1, len(self.context)+1)
+
+    def update(self):
+        if 'DELETE' in self.request:
+            for name in self.request.get('delete', []):
+                del self.context[name]
+        elif 'form-submitted' in self.request:
+            old_pos = 0
+            for activity in self.context.values():
+                old_pos += 1
+                name = zapi.name(activity)
+                new_pos = int(self.request['pos.'+name])
+                if new_pos != old_pos:
+                    self.context.changePosition(name, new_pos-1)
 
 class ActivityAddView(app.BaseAddView):
     """A view for adding an activity."""
