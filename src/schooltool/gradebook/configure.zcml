@@ -70,10 +70,27 @@
         interface=".interfaces.IGradebook" />
   </content>
 
+  <!-- This adapter locates itself. -->
   <adapter
       for="schooltool.course.interfaces.ISection"
       provides=".interfaces.IGradebook"
       factory=".gradebook.Gradebook"
+      trusted="true"
+      />
+
+  <!-- Statistics adapter -->
+
+  <content class=".statistic.Statistics">
+    <require
+        permission="schooltool.edit"
+        interface=".interfaces.IStatistics" />
+  </content>
+
+  <adapter
+      for=".interfaces.IGradebook"
+      provides=".interfaces.IStatistics"
+      factory=".statistic.Statistics"
+      locate="true"
       trusted="true"
       />
 

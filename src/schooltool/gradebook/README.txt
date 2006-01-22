@@ -259,6 +259,36 @@ spreadsheet:
     >>> gradebook.getEvaluation(tom, hw2)
     <Evaluation for <Activity u'HW 2'>, value=10>
 
+
+Sorting by Column
+~~~~~~~~~~~~~~~~~
+
+Another important feature of the gradebook is to be able to tell the sorting
+rules for the grades table for a particular person. The method to get the
+sorting key is ``getSortKey(person)``. By default the gradebook is sorted by
+the student's title in A-Z:
+
+  >>> gradebook.getSortKey(stephan)
+  ('student', False)
+
+The first element of the returned tuple is the field to sort by. "student" is
+a special field. All other fields are the hash of the activity to be sorted
+by. The second element specifies whether the sorting should be reversed. You
+can set the key eith the methods counterpart:
+
+  >>> gradebook.setSortKey(stephan, ('student', True))
+  >>> gradebook.getSortKey(stephan)
+  ('student', True)
+
+  >>> gradebook.setSortKey(stephan, ('-234', False))
+  >>> gradebook.getSortKey(stephan)
+  ('-234', False)
+
+And that's it. The gradebook itself will not interpret the sorting key any
+further. It is up to the view code to implement the rest of the sorting
+feature. This is because the view code can often be much more efficient in
+implement ordering.
+
 Statistics
 ----------
 
@@ -274,25 +304,47 @@ You can now calculate the basic statistics:
     >>> statistics.calculateAverage(hw2)
     12.0
 
+  Of course, if there are no grades, the average cannot be computed:
+
+    >>> gradebook.removeEvaluation(student=paul, activity=hw1)
+    >>> gradebook.removeEvaluation(student=claudia, activity=hw1)
+    >>> statistics.calculateAverage(hw1) is None
+    True
+
 - The average grade as a percentage:
 
     >>> statistics.calculatePercentAverage(hw2)
     80.0
+    >>> statistics.calculatePercentAverage(hw1) is None
+    True
 
 - The median of an activity:
 
     >>> statistics.calculateMedian(hw2)
     12.0
+    >>> statistics.calculateMedian(hw1) is None
+    True
 
 - The standard deviation of an activity:
 
     >>> statistics.calculateStandardDeviation(hw2)
     2.0
 
+  Of course, we can only compute the standard deviation and variance, if we
+  have at least 2 values:
+
+    >>> statistics.calculateStandardDeviation(hw1) is None
+    True
+    >>> gradebook.evaluate(student=tom, activity=hw1, score=8)
+    >>> statistics.calculateStandardDeviation(hw1) is None
+    True
+
 - The variance of the activity:
 
     >>> statistics.calculateVariance(hw2)
     4.0
+    >>> statistics.calculateVariance(hw1) is None
+    True
 
 Okay, that's pretty much it. The statistics represent computations on the
 columns of the virtual spreadsheets. To make meaningful computations for the
@@ -302,11 +354,5 @@ work a little bit harder.
 
 Weight Scales
 -------------
-
-To be done later.
-
-
-Sorting Activities
-------------------
 
 To be done later.

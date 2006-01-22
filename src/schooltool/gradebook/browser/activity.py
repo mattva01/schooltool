@@ -58,6 +58,8 @@ class ActivitiesView(object):
             for activity in self.context.values():
                 old_pos += 1
                 name = zapi.name(activity)
+                if 'pos.'+name not in self.request:
+                    continue
                 new_pos = int(self.request['pos.'+name])
                 if new_pos != old_pos:
                     self.context.changePosition(name, new_pos-1)

@@ -14,6 +14,13 @@
   </h3>
   <br />
 
+  <div class="message"
+       tal:condition="view/message"
+       tal:content="view/message"
+       i18n:translate="">
+    Message
+  </div>
+
   <form tal:attributes="action request/URL"
         method="post" enctype="multipart/form-data">
 

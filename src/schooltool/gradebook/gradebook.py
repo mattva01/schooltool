@@ -21,15 +21,21 @@
 $Id$
 """
 __docformat__ = 'reStructuredText'
+import persistent.dict
 
 import zope.component
 import zope.interface
 from zope.security import proxy
+from zope.app import annotation
+from zope.app.keyreference.interfaces import IKeyReference
 
 from schooltool import course, requirement
 from schooltool.traverser import traverser
 
 from schooltool.gradebook import interfaces
+
+GRADEBOOK_SORTING_KEY = 'schooltool.gradebook.sorting'
+
 
 class Gradebook(object):
 
@@ -94,7 +100,7 @@ class Gradebook(object):
 
     def removeEvaluation(self, student, activity):
         """See interfaces.IGradebook"""
-        self._checkStudent(student)
+        student = self._checkStudent(student)
         activity = self._checkActivity(activity)
         evaluations = requirement.interfaces.IEvaluations(student)
         del evaluations[activity]
@@ -114,6 +120,22 @@ class Gradebook(object):
             evaluations = requirement.interfaces.IEvaluations(student)
             if activity in evaluations:
                 yield student, evaluations[activity]
+
+    def getSortKey(self, person):
+        person = proxy.removeSecurityProxy(person)
+        ann = annotation.interfaces.IAnnotations(person)
+        if GRADEBOOK_SORTING_KEY not in ann:
+            ann[GRADEBOOK_SORTING_KEY] = persistent.dict.PersistentDict()
+        section_id = hash(IKeyReference(self.context))
+        return ann[GRADEBOOK_SORTING_KEY].get(section_id, ('student', False))
+
+    def setSortKey(self, person, value):
+        person = proxy.removeSecurityProxy(person)
+        ann = annotation.interfaces.IAnnotations(person)
+        if GRADEBOOK_SORTING_KEY not in ann:
+            ann[GRADEBOOK_SORTING_KEY] = persistent.dict.PersistentDict()
+        section_id = hash(IKeyReference(self.context))
+        ann[GRADEBOOK_SORTING_KEY][section_id] = value
 
 
 # HTTP pluggable traverser plugin

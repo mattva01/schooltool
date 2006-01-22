@@ -92,6 +92,17 @@ class IGradebook(zope.interface.Interface):
         Return iteratable of 2-tuples of the form (student, evaluation).
         """
 
+    def getSortKey(person):
+        """Get the sortkey for the gradebook table."""
+
+    def setSortKey(person, value):
+        """Set the sortkey for the gradebook table.
+
+        The value is a 2-tuple. The entry in the tuple is either "student" to
+        sort by student title or the hash of the activity. The second entry
+        specifies whether the sorting is reversed.
+        """
+
 
 class IStatistics(zope.interface.Interface):
     """Statistics for the gradebook"""

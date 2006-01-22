@@ -21,29 +21,48 @@
 $Id$
 """
 __docformat__ = 'reStructuredText'
+import zope.schema
 from zope.security import proxy
 from zope.app import zapi
 from zope.app.keyreference.interfaces import IKeyReference
 
 from schooltool.app import app
+from schooltool.gradebook import interfaces
+from schooltool.requirement.scoresystem import UNSCORED
+from schooltool import SchoolToolMessage as _
+
 
 class GradebookOverview(object):
     """Gradebook Overview/Table"""
 
+    def update(self):
+        """Retrieve sorting information and store changes of it."""
+        person = self.request.principal._person
+        if 'sort_by' in self.request:
+            sort_by = self.request['sort_by']
+            key, reverse = self.context.getSortKey(person)
+            if sort_by == key:
+                reverse = not reverse
+            else:
+                reverse=False
+            self.context.setSortKey(person, (sort_by, reverse))
+        self.sortKey = self.context.getSortKey(person)
+
     def activities(self):
+        """Get  a list of all activities."""
         result = [
             {'title': activity.title,
              'max':activity.scoresystem.getBestScore(),
              'hash': IKeyReference(activity).__hash__()}
             for activity in self.context.activities]
-        return sorted(result, key=lambda x: x['title'])
+        return result
 
     def table(self):
-        activities = sorted(self.context.activities,
-                            key=lambda x: x.title)
+        """Generate the table of grades."""
         activities = [(IKeyReference(activity).__hash__(), activity)
-                      for activity in activities]
+                      for activity in self.context.activities]
         gradebook = proxy.removeSecurityProxy(self.context)
+        rows = []
         for student in self.context.students:
             grades = []
             for hash, activity in activities:
@@ -53,12 +72,52 @@ class GradebookOverview(object):
                 else:
                     grades.append({'activity': hash, 'value': '-'})
 
-            yield {'student': {'title': student.title, 'id': student.username},
-                   'grades': grades}
+            rows.append(
+                {'student': {'title': student.title, 'id': student.username},
+                 'grades': grades})
 
+        # Do the sorting
+        key, reverse = self.sortKey
+        def generateKey(row):
+            if key != 'student':
+                grades = dict([(str(grade['activity']), grade['value'])
+                               for grade in row['grades']])
+                return grades.get(key, row['student']['title'])
+            return row['student']['title']
+
+        return sorted(rows, key=generateKey, reverse=reverse)
+
+    def statistics(self):
+        """Calculate various statistical quantities for all activities."""
+        statistics = interfaces.IStatistics(self.context)
+        activities = self.context.activities
+        decimal = self.request.locale.numbers.getFormatter('decimal')
+        percent = self.request.locale.numbers.getFormatter('decimal')
+        stats = [
+            {'name': _('Average'), 'formatter': decimal,
+             'function': statistics.calculateAverage, 'values': []},
+            {'name': _('Percent Average'), 'formatter': percent,
+             'function': statistics.calculatePercentAverage, 'values': []},
+            {'name': _('Median'), 'formatter': decimal,
+             'function': statistics.calculateMedian, 'values': []},
+            {'name': _('Standard Deviation'), 'formatter': decimal,
+             'function': statistics.calculateStandardDeviation, 'values': []},
+            {'name': _('Variance'), 'formatter': decimal,
+             'function': statistics.calculateVariance, 'values': []},
+            ]
+        for act in activities:
+            for stat in stats:
+                value = stat['function'](act)
+                if not value:
+                    stat['values'].append(_('N/A'))
+                else:
+                    stat['values'].append(stat['formatter'].format(value))
+        return stats
 
 class GradeStudent(object):
     """Grading a single student."""
+
+    message = ''
 
     @property
     def student(self):
@@ -68,26 +127,24 @@ class GradeStudent(object):
 
     @property
     def activities(self):
-        result = [
+        return [
             {'title': activity.title,
              'max': activity.scoresystem.getBestScore(),
              'hash': IKeyReference(activity).__hash__()}
             for activity in self.context.activities]
-        return sorted(result, key=lambda x: x['title'])
 
     def grades(self):
-        activities = sorted(self.context.activities,
-                            key=lambda x: x.title)
         activities = [(IKeyReference(activity).__hash__(), activity)
-                      for activity in activities]
+                      for activity in self.context.activities]
         student = self.student
         gradebook = proxy.removeSecurityProxy(self.context)
         for hash, activity in activities:
             ev = gradebook.getEvaluation(student, activity)
-            if ev is not None:
-                yield {'activity': hash, 'value': ev.value}
+            value = self.request.get(str(hash))
+            if ev is not None and ev.value is not UNSCORED:
+                yield {'activity': hash, 'value': value or ev.value}
             else:
-                yield {'activity': hash, 'value': ''}
+                yield {'activity': hash, 'value': value or ''}
 
     def update(self):
         if 'CANCEL' in self.request:
@@ -105,9 +162,24 @@ class GradeStudent(object):
 
                     # If a value is present, create an evaluation, if the
                     # score is different
-                    score = activity.scoresystem.fromUnicode(self.request[hash])
+                    try:
+                        score = activity.scoresystem.fromUnicode(
+                            self.request[hash])
+                    except (zope.schema.ValidationError, ValueError):
+                        self.message = _(
+                            'The grade $value for activity $name is not valid.',
+                            mapping={'value': self.request[hash],
+                                     'name': activity.title})
+                        return
                     ev = gradebook.getEvaluation(student, activity)
-                    if ev is None or score != ev.value:
+                    # Delete the score
+                    if ev is not None and score is UNSCORED:
+                        self.context.removeEvaluation(student, activity)
+                    # Do nothing
+                    elif ev is None and score is UNSCORED:
+                        continue
+                    # Replace the score or add new one/
+                    elif ev is None or score != ev.value:
                         self.context.evaluate(
                             student, activity, score, evaluator)
 
@@ -116,6 +188,8 @@ class GradeStudent(object):
 
 class GradeActivity(object):
     """Grading a single activity"""
+
+    message = ''
 
     @property
     def activity(self):
@@ -132,10 +206,11 @@ class GradeActivity(object):
         gradebook = proxy.removeSecurityProxy(self.context)
         for student in self.context.students:
             ev = gradebook.getEvaluation(student, self.activity)
+            value = self.request.get(student.username)
             if ev is not None:
-                value = ev.value
+                value = value or ev.value
             else:
-                value = ''
+                value = value or ''
 
             yield {'student': {'title': student.title, 'id': student.username},
                    'value': value}
@@ -155,9 +230,24 @@ class GradeActivity(object):
 
                     # If a value is present, create an evaluation, if the
                     # score is different
-                    score = activity.scoresystem.fromUnicode(self.request[id])
+                    try:
+                        score = activity.scoresystem.fromUnicode(
+                            self.request[id])
+                    except (zope.schema.ValidationError, ValueError):
+                        self.message = _(
+                            'The grade $value for $name is not valid.',
+                            mapping={'value': self.request[id],
+                                     'name': student.title})
+                        return
                     ev = gradebook.getEvaluation(student, activity)
-                    if ev is None or score != ev.value:
+                    # Delete the score
+                    if ev is not None and score is UNSCORED:
+                        self.context.removeEvaluation(student, activity)
+                    # Do nothing
+                    elif ev is None and score is UNSCORED:
+                        continue
+                    # Replace the score or add new one/
+                    elif ev is None or score != ev.value:
                         self.context.evaluate(
                             student, activity, score, evaluator)
 

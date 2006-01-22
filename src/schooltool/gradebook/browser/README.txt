@@ -173,8 +173,8 @@ manipulate activities and other section data:
     >>> manager.getControl('Set Access', index=0).click()
 
 
-Grading
--------
+Gradbook Management
+-------------------
 
 Once the term started, the instructor of the section will add more activities:
 
@@ -216,9 +216,62 @@ Note that the final is already listed:
     >>> 'HW 2' in stephan.contents
     True
 
-XXX Edit form test later, once we can have custom scoresystems.
+But, oh, we really did not want to make Homework 2 out of a hundred points,
+but only out of 50. So let's edit it:
 
-Nore that we have both, students and activities, we can enter the gradebook.
+    >>> stephan.getLink('HW 2').click()
+    >>> stephan.getControl('Custom score system').click()
+    >>> stephan.getControl('Maximum').value = '50'
+    >>> stephan.getControl('Apply').click()
+
+    >>> stephan.getControl('Maximum').value
+    '50'
+    >>> stephan.getLink('activities').click()
+
+Now that we have all our activities setup, we would like to rearrange their
+order more logically. The final should really be at the end of the list. In
+the browser you should usually just select the new position and some
+Javascript would submit the form. Since Javascript is not working in the
+tests, we submit, the form manually:
+
+    >>> stephan.open(stephan.url+'?form-submitted=&pos.Activity=3')
+    >>> stephan.contents.find('HW 1') \
+    ...     < stephan.contents.find('HW 2') \
+    ...     < stephan.contents.find('Final')
+    True
+
+Also note that the final cannot be edited, since it is inherited:
+
+    >>> stephan.getLink('Final')
+    Traceback (most recent call last):
+    ...
+    LinkNotFoundError
+
+    >>> stephan.getLink('HW 1')
+    <Link text='HW 1' url='.../sections/phyi1/activities/Activity-2'>
+
+Finally, you can also delete activities that you have locally created:
+
+    >>> stephan.getLink('New Activity').click()
+    >>> stephan.getControl('Title').value = 'HW 3'
+    >>> stephan.getControl('Description').value = 'Homework 3'
+    >>> stephan.getControl('Category').value = ['assignment']
+    >>> stephan.getControl(
+    ...     name='field.scoresystem.existing').value = ['100 Points']
+    >>> stephan.getControl('Add').click()
+    >>> 'HW 3' in stephan.contents
+    True
+
+    >>> stephan.getControl(name='delete:list').value = ['Activity-4']
+    >>> stephan.getControl('Delete').click()
+    >>> 'HW 3' in stephan.contents
+    False
+
+
+Grading
+-------
+
+Now that we have both, students and activities, we can enter the gradebook.
 
     >>> stephan.getLink('top').click()
     >>> stephan.getLink('Courses').click()
@@ -248,23 +301,49 @@ Now we just enter the grades:
 
     >>> stephan.getControl('Update').click()
 
+But since I entered an invlaid value for Homework 2, we get an error message:
+
+    >>> 'The grade 56 for activity HW 2 is not valid.' in stephan.contents
+    True
+
+Also note that all the other entered values should be retained:
+
+    >>> 'value="93"' in stephan.contents
+    True
+    >>> 'value="87"' in stephan.contents
+    True
+    >>> 'value="56"' in stephan.contents
+    True
+
+    >>> stephan.getControl('HW 2').value = u'36'
+    >>> stephan.getControl('Update').click()
+
 The screen will return to the grade overview, where the grades are no visible:
 
-    >>> '93' in stephan.contents
+    >>> '>93<' in stephan.contents
     True
-    >>> '87' in stephan.contents
+    >>> '>87<' in stephan.contents
     True
-    >>> '56' in stephan.contents
+    >>> '>36<' in stephan.contents
     True
 
 Now let's enter again and change a grade:
 
     >>> stephan.getLink('Claudia Richter').click()
-    >>> stephan.getControl('HW 2').value = u'76'
+    >>> stephan.getControl('HW 2').value = u'46'
     >>> stephan.getControl('Update').click()
 
-    >>> '76' in stephan.contents
+    >>> '>46<' in stephan.contents
     True
+
+When you want to delete an evaluation altogether, simply blank the value:
+
+    >>> stephan.getLink('Claudia Richter').click()
+    >>> stephan.getControl('HW 2').value = u''
+    >>> stephan.getControl('Update').click()
+
+    >>> '>46<' in stephan.contents
+    False
 
 Of course, you can also abort the grading.
 
@@ -285,16 +364,36 @@ click on the activity's name:
 Now we just enter the grades. Since Claudia has already a grade, we only need
 to grade Paul and Tom:
 
-    >>> stephan.getControl('Paul Cardune').value = u'90'
+    >>> stephan.getControl('Paul Cardune').value = u'190'
     >>> stephan.getControl('Tom Hoffman').value = u'82'
 
     >>> stephan.getControl('Update').click()
 
-The screen will return to the grade overview, where the grades are no visible:
+Again, we entered an invalid value, this time for Paul:
 
-    >>> '90' in stephan.contents
+    >>> 'The grade 190 for Paul Cardune is not valid.' in stephan.contents
     True
-    >>> '82' in stephan.contents
+
+Also note that all the other entered values should be retained:
+
+    >>> 'value="190"' in stephan.contents
+    True
+    >>> 'value="82"' in stephan.contents
+    True
+    >>> 'value="87"' in stephan.contents
+    True
+
+    >>> stephan.getControl('Paul Cardune').value = u'90'
+    >>> stephan.getControl('Update').click()
+
+The screen will return to the grade overview, where the grades are now
+visible:
+
+    >>> '>90<' in stephan.contents
+    True
+    >>> '>82<' in stephan.contents
+    True
+    >>> '>87<' in stephan.contents
     True
 
 Now let's enter again and change a grade:
@@ -303,8 +402,17 @@ Now let's enter again and change a grade:
     >>> stephan.getControl('Claudia Richter').value = u'98'
     >>> stephan.getControl('Update').click()
 
-    >>> '98' in stephan.contents
+    >>> '>98<' in stephan.contents
     True
+
+When you want to delete an evaluation altogether, simply blank the value:
+
+    >>> stephan.getLink('HW 1').click()
+    >>> stephan.getControl('Claudia Richter').value = u''
+    >>> stephan.getControl('Update').click()
+
+    >>> '>98<' in stephan.contents
+    False
 
 Of course, you can also abort the grading.
 
@@ -320,17 +428,17 @@ Entering Scores for a Cell (Student, Activity)
 When you click directly on the grade, you can also edit it. Let's day that we
 want to modify Claudia's Homework 2 grade. Until now she had a 76:
 
-    >>> stephan.getLink('76').click()
+    >>> stephan.getLink('90').click()
 
 The screen that opens gives you several pieces of information, such as the
 student's name,
 
-    >>> 'Claudia Richter' in stephan.contents
+    >>> 'Paul Cardune' in stephan.contents
     True
 
 the activity name,
 
-    >>> 'HW 2' in stephan.contents
+    >>> 'HW 1' in stephan.contents
     True
 
 the (due) date of the activity,
@@ -354,7 +462,7 @@ This for also allows you to delete the evaluation, which is sometimes
 necessary:
 
     >>> stephan.getControl('Grade').value
-    '76'
+    '90'
     >>> stephan.getControl('Delete').click()
     >>> stephan.getControl('Grade').value
     ''
@@ -366,7 +474,7 @@ Now let's enter a new grade:
 
     >>> stephan.url
     'http://localhost/sections/phyi1/gradebook/index.html'
-    >>> '86' in stephan.contents
+    >>> '>86<' in stephan.contents
     True
 
 Of course, you can also cancel actions:
@@ -377,5 +485,164 @@ Of course, you can also cancel actions:
 
     >>> stephan.url
     'http://localhost/sections/phyi1/gradebook/index.html'
-    >>> '86' in stephan.contents
+    >>> '>86<' in stephan.contents
+    True
+
+
+Statistics
+~~~~~~~~~~
+
+On the bottom of the gradebook, there are several statistical values for each
+activity. Let's clear all Homework 1 grades to see the effects:
+
+    >>> stephan.getLink('HW 1').click()
+    >>> stephan.getControl('Claudia Richter').value = u''
+    >>> stephan.getControl('Paul Cardune').value = u''
+    >>> stephan.getControl('Tom Hoffman').value = u''
+    >>> stephan.getControl('Update').click()
+
+If there are no grades, all statistical values should not be available:
+
+    >>> print stephan.contents
+    <BLANKLINE>
+    ...
+    <tr class="Statistic">
+      <td class="name">Average</td>
+      <td class="value">N/A</td>
+      ...
+    </tr>
+    <tr class="Statistic">
+      <td class="name">Percent Average</td>
+      <td class="value">N/A</td>
+      ...
+    </tr>
+    <tr class="Statistic">
+      <td class="name">Median</td>
+      <td class="value">N/A</td>
+      ...
+    </tr>
+    <tr class="Statistic">
+      <td class="name">Standard Deviation</td>
+      <td class="value">N/A</td>
+      ...
+    </tr>
+    <tr class="Statistic">
+      <td class="name">Variance</td>
+      <td class="value">N/A</td>
+      ...
+    </tr>
+    ...
+
+If I add a grade for Claudia, then the first statistics should show. Note that
+the standard deviation and variance cannot be computed, since there are no
+degrees of freedom.
+
+    >>> stephan.getLink('HW 1').click()
+    >>> stephan.getControl('Claudia Richter').value = u'80'
+    >>> stephan.getControl('Update').click()
+
+    >>> print stephan.contents
+    <BLANKLINE>
+    ...
+    <tr class="Statistic">
+      <td class="name">Average</td>
+      <td class="value">80.0</td>
+      ...
+    </tr>
+    <tr class="Statistic">
+      <td class="name">Percent Average</td>
+      <td class="value">80.0</td>
+      ...
+    </tr>
+    <tr class="Statistic">
+      <td class="name">Median</td>
+      <td class="value">80.0</td>
+      ...
+    </tr>
+    <tr class="Statistic">
+      <td class="name">Standard Deviation</td>
+      <td class="value">N/A</td>
+      ...
+    </tr>
+    <tr class="Statistic">
+      <td class="name">Variance</td>
+      <td class="value">N/A</td>
+      ...
+    </tr>
+    ...
+
+Once more than one grade is entered, all statistics show:
+
+    >>> stephan.getLink('HW 1').click()
+    >>> stephan.getControl('Paul Cardune').value = u'70'
+    >>> stephan.getControl('Tom Hoffman').value = u'90'
+    >>> stephan.getControl('Update').click()
+
+    >>> print stephan.contents
+    <BLANKLINE>
+    ...
+    <tr class="Statistic">
+      <td class="name">Average</td>
+      <td class="value">80.0</td>
+      ...
+    </tr>
+    <tr class="Statistic">
+      <td class="name">Percent Average</td>
+      <td class="value">80.0</td>
+      ...
+    </tr>
+    <tr class="Statistic">
+      <td class="name">Median</td>
+      <td class="value">80.0</td>
+      ...
+    </tr>
+    <tr class="Statistic">
+      <td class="name">Standard Deviation</td>
+      <td class="value">10.0</td>
+      ...
+    </tr>
+    <tr class="Statistic">
+      <td class="name">Variance</td>
+      <td class="value">100.0</td>
+      ...
+    </tr>
+    ...
+
+
+Sorting
+~~~~~~~
+
+Another feature of the gradebook is the ability to sort each column in a
+descending and ascending fashion. By default the student's name is sorted
+alphabetically:
+
+    >>> stephan.contents.find('Claudia') \
+    ...     < stephan.contents.find('Paul') \
+    ...     < stephan.contents.find('Tom')
+    True
+
+Once I click on the name sort button (again), the order is reversed:
+
+    >>> stephan.getLink(url='sort_by=student').click()
+    >>> stephan.contents.find('Claudia') \
+    ...     > stephan.contents.find('Paul') \
+    ...     > stephan.contents.find('Tom')
+    True
+
+Then we want to sort by grade in Homework 1, so we should have:
+
+    >>> import re
+    >>> url = re.compile('.*sort_by=-?[0-9]+')
+    >>> stephan.getLink(url=url).click()
+    >>> stephan.contents.find('Paul') \
+    ...     < stephan.contents.find('Claudia') \
+    ...     < stephan.contents.find('Tom')
+    True
+
+Clicking it again, reverses the order:
+
+    >>> stephan.getLink(url=url).click()
+    >>> stephan.contents.find('Paul') \
+    ...     > stephan.contents.find('Claudia') \
+    ...     > stephan.contents.find('Tom')
     True

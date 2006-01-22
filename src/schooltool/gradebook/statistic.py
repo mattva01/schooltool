@@ -41,36 +41,61 @@ class Statistics(object):
 
     def calculateAverage(self, activity):
         """See interfaces.IStatistics"""
-        scores = [ev.value
+        scores = [ev.scoreSystem.getNumericalValue(ev.value)
                   for s, ev in self.context.getEvaluationsForActivity(activity)]
-        try:
-            samples = len(scores)
-        except TypeError:
-            raise TypeError('Scores are not numerical.')
-        return float(sum(scores))/samples
+
+        if len(scores) == 0:
+            return None
+
+        return float(sum(scores))/len(scores)
+
 
     def calculatePercentAverage(self, activity):
         """See interfaces.IStatistics"""
-        total = getattr(activity.scoresystem, 'max', None)
-        if total is None:
-            raise TypeError('Scoresystem cannot provide max value.')
-        return self.calculateAverage(activity)/total*100.0
+        total = activity.scoresystem.getNumericalValue(
+            activity.scoresystem.getBestScore())
+        avg = self.calculateAverage(activity)
+
+        if avg is None:
+            return None
+
+        return avg/total*100.0
+
 
     def calculateMedian(self, activity):
         """See interfaces.IStatistics"""
-        scores = [ev.value
+        scores = [ev.scoreSystem.getNumericalValue(ev.value)
                   for s, ev in self.context.getEvaluationsForActivity(activity)]
+
+        if len(scores) == 0:
+            return None
+
         scores.sort()
         return float(scores[len(scores)/2])
 
+
     def calculateStandardDeviation(self, activity):
         """See interfaces.IStatistics"""
-        return math.sqrt(self.calculateVariance(activity))
+        variance = self.calculateVariance(activity)
+
+        if variance is None:
+            return None
+
+        return math.sqrt(variance)
+
 
     def calculateVariance(self, activity):
         """See interfaces.IStatistics"""
         avg = self.calculateAverage(activity)
-        scores = [ev.value
+
+        if avg is None:
+            return None
+
+        scores = [ev.scoreSystem.getNumericalValue(ev.value)
                   for s, ev in self.context.getEvaluationsForActivity(activity)]
         help = [(score - avg)**2 for score in scores]
+
+        if len(scores) == 1:
+            return None
+
         return sum(help)/(len(scores)-1)

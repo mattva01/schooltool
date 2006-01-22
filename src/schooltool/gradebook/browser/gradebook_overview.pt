@@ -1,3 +1,4 @@
+<tal:tag condition="view/update" />
 <html metal:use-macro="context/@@standard_macros/page"
       i18n:domain="schooltool">
 <head>
@@ -8,9 +9,12 @@
 <body>
 <div metal:fill-slot="body">
 
-  <table border="1">
+  <table class="grades" border="1">
     <tr>
-     <th i18n:translate="">Name</th>
+     <th i18n:translate="">
+       <div>Name</div>
+       <a href="?sort_by=student">(sort)</a>
+     </th>
      <th tal:repeat="activity view/activities">
        <div>
          <a href=""
@@ -20,6 +24,12 @@
            HW 1
          </a>
        </div>
+       <a href="?sort_by="
+          tal:attributes="href
+              string:${request/URL}?sort_by=${activity/hash}"
+          i18n:translate="">
+         (sort)
+       </a>
        <div tal:content="activity/max" />
      </th>
     </tr>
@@ -37,6 +47,19 @@
            tal:attributes="href
         string:grade.html?student=${row/student/id}&activity=${grade/activity}"
            tal:content="grade/value" />
+      </td>
+    </tr>
+    <tr class="Statistic" tal:repeat="stat view/statistics">
+      <td class="name"
+          tal:content="stat/name"
+          i18n:translate="">
+        Quantity
+      </td>
+      <td class="value"
+          tal:repeat="value stat/values"
+          tal:content="value"
+          i18n:translate="">
+        50.0 %
       </td>
     </tr>
   </table>
