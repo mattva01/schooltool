@@ -24,6 +24,7 @@ __docformat__ = 'restructuredtext'
 import decimal
 import zope.interface
 import zope.schema
+import zope.security.checker
 
 from schooltool.requirement import interfaces
 
@@ -41,6 +42,7 @@ class UNSCORED(object):
     def __repr__(self):
         return 'UNSCORED'
 
+zope.security.checker.BasicTypes[UNSCORED] = zope.security.checker.NoProxy
 UNSCORED = UNSCORED()
 
 
@@ -113,7 +115,7 @@ class DiscreteValuesScoreSystem(AbstractScoreSystem):
 
     def fromUnicode(self, rawScore):
         """See interfaces.IScoreSystem"""
-        if rawScore is '':
+        if rawScore == '':
             return UNSCORED
 
         if not self.isValidScore(rawScore):
@@ -193,7 +195,7 @@ class RangedValuesScoreSystem(AbstractScoreSystem):
 
     def fromUnicode(self, rawScore):
         """See interfaces.IScoreSystem"""
-        if rawScore is '':
+        if rawScore == '':
             return UNSCORED
 
         if '.' not in rawScore:

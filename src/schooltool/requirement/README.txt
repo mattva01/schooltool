@@ -144,7 +144,7 @@ method to change the order:
 The requirement interface provides another high-level method for sorting. It
 allows you to specify a new position for a given name:
 
-  >>> physics.changePosition(u'elec', 3)
+  >>> physics.changePosition(u'elec', 2)
   >>> physics.keys()
   [u'mech', u'thermo', u'elec', u'rel']
 

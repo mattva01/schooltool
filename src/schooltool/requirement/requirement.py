@@ -143,8 +143,6 @@ class Requirement(persistent.Persistent,
     def changePosition(self, name, pos):
         """See interfaces.IRequirement"""
         old_pos = self._order.index(name)
-        if old_pos < pos:
-            pos -= 1;
         self._order.remove(name)
         self._order.insert(pos, name)
         zope.app.container.contained.notifyContainerModified(self)
