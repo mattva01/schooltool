@@ -62,7 +62,7 @@ class SampleTimetableSchema(object):
         ttschema = TimetableSchema(day_ids, model=model)
         for idx, day_id in enumerate(day_ids):
             periods = period_ids[idx:] + period_ids[:idx]
-            ttschema[day_id] = TimetableSchemaDay(periods)
+            ttschema[day_id] = TimetableSchemaDay(periods, periods[0])
         app['ttschemas']['simple'] = ttschema
 
 

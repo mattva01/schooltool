@@ -83,13 +83,13 @@ def doctest_SampleTimetableSchema():
         ...    print day,
         ...    for period in schema[day].keys():
         ...         print period,
-        ...    print
-        Day 1 A B C D E F
-        Day 2 B C D E F A
-        Day 3 C D E F A B
-        Day 4 D E F A B C
-        Day 5 E F A B C D
-        Day 6 F A B C D E
+        ...    print "Homeroom - ", schema[day].homeroom_period_id
+        Day 1 A B C D E F Homeroom -  A
+        Day 2 B C D E F A Homeroom -  B
+        Day 3 C D E F A B Homeroom -  C
+        Day 4 D E F A B C Homeroom -  D
+        Day 5 E F A B C D Homeroom -  E
+        Day 6 F A B C D E Homeroom -  F
 
     The default timetable schema is set:
 
