@@ -22,7 +22,7 @@ Initial School Setup
 
 We now go to the top and enter the category management page:
 
-    >>> manager.getLink('top').click()
+    >>> manager.getLink('SchoolTool').click()
     >>> manager.getLink('Activity Categories').click()
 
 As you can see, there are already several categories pre-defined. Oftentimes,
@@ -185,7 +185,7 @@ Once the term started, the instructor of the section will add more activities:
     >>> stephan.getControl('Password').value = 'pwd'
     >>> stephan.getControl('Log in').click()
 
-    >>> stephan.getLink('top').click()
+    >>> stephan.getLink('SchoolTool').click()
     >>> stephan.getLink('Courses').click()
     >>> stephan.getLink('Physics I').click()
     >>> stephan.getLink('(PHYI-1)').click()
@@ -226,7 +226,7 @@ but only out of 50. So let's edit it:
 
     >>> stephan.getControl('Maximum').value
     '50'
-    >>> stephan.getLink('activities').click()
+    >>> stephan.getLink('Activities').click()
 
 Now that we have all our activities setup, we would like to rearrange their
 order more logically. The final should really be at the end of the list. In
@@ -273,7 +273,7 @@ Grading
 
 Now that we have both, students and activities, we can enter the gradebook.
 
-    >>> stephan.getLink('top').click()
+    >>> stephan.getLink('SchoolTool').click()
     >>> stephan.getLink('Courses').click()
     >>> stephan.getLink('Physics I').click()
     >>> stephan.getLink('(PHYI-1)').click()

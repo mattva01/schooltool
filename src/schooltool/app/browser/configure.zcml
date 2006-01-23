@@ -231,11 +231,33 @@
   <!-- Breadcrumbs -->
 
   <page
-      for="schooltool.app.interfaces.ISchoolToolCalendarEvent"
-      name="absolute_url"
-      class=".cal.CalendarEventAbsoluteURL"
+      for="*"
+      name="breadcrumbs"
+      class=".breadcrumbs.Breadcrumbs"
       permission="zope.Public"
-      allowed_interface="zope.app.traversing.browser.interfaces.IAbsoluteURL"
+      allowed_interface=".interfaces.IBreadcrumbs"
+      />
+
+  <zope:adapter
+      factory=".breadcrumbs.GenericBreadcrumbInfo"
+      trusted="true"
+      permission="zope.Public"
+      />
+
+  <zope:adapter
+      for="schooltool.app.interfaces.ISchoolToolCalendar
+           zope.publisher.interfaces.http.IHTTPRequest"
+      factory=".cal.CalendarBreadcrumbInfo"
+      trusted="true"
+      permission="zope.Public"
+      />
+
+  <zope:adapter
+      for="schooltool.app.interfaces.ISchoolToolCalendarEvent
+           zope.publisher.interfaces.http.IHTTPRequest"
+      factory=".cal.CalendarEventBreadcrumbInfo"
+      trusted="true"
+      permission="zope.Public"
       />
 
   <!-- Error messages -->

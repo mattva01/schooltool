@@ -454,13 +454,13 @@ Let's see what the breadcrumbs are for this event:
     >>> print analyze.queryHTML('//div[@class="breadcrumbs"]',
     ...                         frog.contents)[0].replace(u'\u00bb'.encode('UTF-8'), '&#187;')
     <div class="breadcrumbs">
-      <a href="http://localhost">top</a>
+      <a href="http://localhost">SchoolTool</a>
       &#187;
       <a href="http://localhost/persons">persons</a>
       &#187;
-      <a href="http://localhost/persons/frog">frog</a>
+      <a href="http://localhost/persons/frog">Frog</a>
       &#187;
-      <a href="http://localhost/persons/frog/calendar">calendar</a>
+      <a href="http://localhost/persons/frog/calendar">Calendar</a>
       &#187;
       <a href="http://localhost/persons/frog/calendar/dummy-uid/edit.html">Important event</a>
     </div>
@@ -731,7 +731,7 @@ see them:
     >>> manager.getControl('Duration').value = '30'
     >>> manager.getControl('Add').click()
 
-    >>> manager.getLink('top').click()
+    >>> manager.getLink('SchoolTool').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('Animals').click()
     >>> manager.getLink('View Calendar').click()

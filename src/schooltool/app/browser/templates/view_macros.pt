@@ -37,14 +37,15 @@
       </div>
       <div class="tools">
         <div class="breadcrumbs">
-        <tal:for tal:repeat="breadcrumb context/@@absolute_url/breadcrumbs">
-          <a tal:condition="repeat/breadcrumb/start"
-             tal:attributes="href breadcrumb/url"
-             i18n:translate="">top</a>
+        <tal:for tal:repeat="breadcrumb context/@@breadcrumbs/crumbs">
           <tal:if condition="not:repeat/breadcrumb/start">&#187;</tal:if>
-          <a tal:condition="not:repeat/breadcrumb/start"
+          <a tal:condition="breadcrumb/active"
              tal:attributes="href breadcrumb/url"
-             tal:content="breadcrumb/name|string:top">Breadcrumb</a>
+             tal:content="breadcrumb/name"
+             i18n:translate="">Breadcrumb</a>
+          <span tal:condition="not: breadcrumb/active"
+                tal:content="breadcrumb/name"
+                i18n:translate="">Breadcrumb</span>
         </tal:for>
         </div>
         <div

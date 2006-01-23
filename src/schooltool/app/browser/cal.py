@@ -59,9 +59,11 @@ from zope.app.traversing.api import getPath
 from schooltool import SchoolToolMessage as _
 from schooltool.app.browser import ViewPreferences
 from schooltool.app.browser import pdfcal
+from schooltool.app.browser import breadcrumbs
 from schooltool.app.browser.overlay import CalendarOverlayView
 from schooltool.app.browser.interfaces import ICalendarProvider
 from schooltool.app.browser.interfaces import IEventForDisplay
+from schooltool.app.browser.interfaces import IBreadcrumbInfo
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IHaveCalendar, IShowTimetables
@@ -2362,13 +2364,54 @@ def enableICalendarUpload(ical_view):
     return IWriteFile(ical_view.context)
 
 
-class CalendarEventAbsoluteURL(AbsoluteURL):
+class CalendarEventBreadcrumbInfo(breadcrumbs.GenericBreadcrumbInfo):
+    """Calendar Event Breadcrumb Info
 
-    def breadcrumbs(self):
-        # XXX Doesn't seem to be tested.
-        container = getattr(self.context, '__parent__', None)
-        base = tuple(zapi.getMultiAdapter((container, self.request),
-                                          name='absolute_url').breadcrumbs())
+    First, set up a parent:
+
+      >>> class Object(object):
+      ...     def __init__(self, parent=None, name=None):
+      ...         self.__parent__ = parent
+      ...         self.__name__ = name
+
+      >>> calendar = Object()
+      >>> from zope.app.traversing.interfaces import IContainmentRoot
+      >>> import zope.interface
+      >>> zope.interface.directlyProvides(calendar, IContainmentRoot)
+
+    Now setup the event:
+
+      >>> event = Object(calendar, u'+1243@localhost')
+
+    Setup a request:
+
+      >>> from zope.publisher.browser import TestRequest
+      >>> request = TestRequest()
+
+    Now register the breadcrumb info component and other setup:
+
+      >>> import zope.component
+      >>> import zope.interface
+      >>> from schooltool.app.browser import interfaces, breadcrumbs
+      >>> zope.component.provideAdapter(breadcrumbs.GenericBreadcrumbInfo,
+      ...                              (Object, TestRequest),
+      ...                              interfaces.IBreadcrumbInfo)
+
+      >>> from zope.app.testing import setup
+      >>> setup.setUpTraversal()
+
+    Now initialize this info and test it:
+
+      >>> info = CalendarEventBreadcrumbInfo(event, request)
+      >>> info.url
+      'http://127.0.0.1/+1243@localhost/edit.html'
+    """
+
+    @property
+    def url(self):
         name = urllib.quote(self.context.__name__.encode('utf-8'), "@+")
-        return base + ({'name': self.context.title,
-                        'url': "%s/%s/edit.html" % (base[-1]['url'], name)}, )
+        parent_info = zapi.getMultiAdapter(
+            (self.context.__parent__, self.request), IBreadcrumbInfo)
+        return '%s/%s/edit.html' %(parent_info.url, name)
+
+CalendarBreadcrumbInfo = breadcrumbs.CustomNameBreadCrumbInfo(_('Calendar'))

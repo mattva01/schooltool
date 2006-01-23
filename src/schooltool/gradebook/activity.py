@@ -25,9 +25,10 @@ __docformat__ = 'reStructuredText'
 import datetime
 import zope.interface
 from zope.app import annotation
+
+from schooltool import SchoolToolMessage as _
 from schooltool.requirement import requirement
 from schooltool.traverser import traverser
-
 from schooltool.gradebook import interfaces
 
 ACTIVITIES_KEY = 'schooltool.gradebook.activities'
@@ -58,7 +59,7 @@ def getCourseActivities(context):
     try:
         return annotations[ACTIVITIES_KEY]
     except KeyError:
-        activities = Activities(context.title)
+        activities = Activities(_('Activities'))
         annotations[ACTIVITIES_KEY] = activities
         zope.app.container.contained.contained(
             activities, context, 'activities')
@@ -74,7 +75,7 @@ def getSectionActivities(context):
     try:
         return annotations[ACTIVITIES_KEY]
     except KeyError:
-        activities = Activities(context.title)
+        activities = Activities(_('Activities'))
         # Make sure that the sections activities include all the activities of
         # the courses as well
         for course in context.courses:
