@@ -486,7 +486,7 @@ class SchooldayTemplate(object):
     def add(self, obj):
         if not ISchooldaySlot.providedBy(obj):
             raise TypeError("SchooldayTemplate can only contain "
-                            "ISchooldaySlotss (got %r)" % (obj,))
+                            "ISchooldaySlots (got %r)" % (obj,))
         self.events.add(obj)
 
     def remove(self, obj):
