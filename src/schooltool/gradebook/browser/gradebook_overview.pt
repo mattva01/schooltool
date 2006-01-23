@@ -11,9 +11,9 @@
 
   <table class="grades" border="1">
     <tr>
-     <th i18n:translate="">
-       <div>Name</div>
-       <a href="?sort_by=student">(sort)</a>
+     <th>
+       <div i18n:translate="">Name</div>
+       <a href="?sort_by=student" i18n:translate="">(sort)</a>
      </th>
      <th tal:repeat="activity view/activities">
        <div>

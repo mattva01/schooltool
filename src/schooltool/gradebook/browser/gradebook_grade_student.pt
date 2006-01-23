@@ -29,7 +29,7 @@
 
     <table border="1">
       <tr>
-       <th>Activity</th>
+       <th i18n:translate="">Activity</th>
        <th tal:repeat="activity view/activities">
          <label for=""
                 tal:attributes="for activity/hash"

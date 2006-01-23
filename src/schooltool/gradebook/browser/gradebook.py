@@ -28,6 +28,7 @@ from zope.app.keyreference.interfaces import IKeyReference
 
 from schooltool.app import app
 from schooltool.gradebook import interfaces
+from schooltool.person.interfaces import IPerson
 from schooltool.requirement.scoresystem import UNSCORED
 from schooltool import SchoolToolMessage as _
 
@@ -37,7 +38,7 @@ class GradebookOverview(object):
 
     def update(self):
         """Retrieve sorting information and store changes of it."""
-        person = self.request.principal._person
+        person = IPerson(self.request.principal)
         if 'sort_by' in self.request:
             sort_by = self.request['sort_by']
             key, reverse = self.context.getSortKey(person)
@@ -53,24 +54,24 @@ class GradebookOverview(object):
         result = [
             {'title': activity.title,
              'max':activity.scoresystem.getBestScore(),
-             'hash': IKeyReference(activity).__hash__()}
+             'hash': hash(IKeyReference(activity))}
             for activity in self.context.activities]
         return result
 
     def table(self):
         """Generate the table of grades."""
-        activities = [(IKeyReference(activity).__hash__(), activity)
+        activities = [(hash(IKeyReference(activity)), activity)
                       for activity in self.context.activities]
         gradebook = proxy.removeSecurityProxy(self.context)
         rows = []
         for student in self.context.students:
             grades = []
-            for hash, activity in activities:
+            for act_hash, activity in activities:
                 ev = gradebook.getEvaluation(student, activity)
                 if ev is not None:
-                    grades.append({'activity': hash, 'value': ev.value})
+                    grades.append({'activity': act_hash, 'value': ev.value})
                 else:
-                    grades.append({'activity': hash, 'value': '-'})
+                    grades.append({'activity': act_hash, 'value': '-'})
 
             rows.append(
                 {'student': {'title': student.title, 'id': student.username},
@@ -130,21 +131,21 @@ class GradeStudent(object):
         return [
             {'title': activity.title,
              'max': activity.scoresystem.getBestScore(),
-             'hash': IKeyReference(activity).__hash__()}
+             'hash': hash(IKeyReference(activity))}
             for activity in self.context.activities]
 
     def grades(self):
-        activities = [(IKeyReference(activity).__hash__(), activity)
+        activities = [(hash(IKeyReference(activity)), activity)
                       for activity in self.context.activities]
         student = self.student
         gradebook = proxy.removeSecurityProxy(self.context)
-        for hash, activity in activities:
+        for act_hash, activity in activities:
             ev = gradebook.getEvaluation(student, activity)
-            value = self.request.get(str(hash))
+            value = self.request.get(str(act_hash))
             if ev is not None and ev.value is not UNSCORED:
-                yield {'activity': hash, 'value': value or ev.value}
+                yield {'activity': act_hash, 'value': value or ev.value}
             else:
-                yield {'activity': hash, 'value': value or ''}
+                yield {'activity': act_hash, 'value': value or ''}
 
     def update(self):
         if 'CANCEL' in self.request:
@@ -152,23 +153,23 @@ class GradeStudent(object):
 
         elif 'UPDATE_SUBMIT' in self.request:
             student = self.student
-            evaluator = zapi.getName(self.request.principal._person)
+            evaluator = zapi.getName(IPerson(self.request.principal))
             gradebook = proxy.removeSecurityProxy(self.context)
             # Iterate through all activities
             for activity in self.context.activities:
                 # Create a hash and see whether it is in the request
-                hash = str(IKeyReference(activity).__hash__())
-                if hash in self.request:
+                act_hash = str(hash(IKeyReference(activity)))
+                if act_hash in self.request:
 
                     # If a value is present, create an evaluation, if the
                     # score is different
                     try:
                         score = activity.scoresystem.fromUnicode(
-                            self.request[hash])
+                            self.request[act_hash])
                     except (zope.schema.ValidationError, ValueError):
                         self.message = _(
                             'The grade $value for activity $name is not valid.',
-                            mapping={'value': self.request[hash],
+                            mapping={'value': self.request[act_hash],
                                      'name': activity.title})
                         return
                     ev = gradebook.getEvaluation(student, activity)
@@ -195,9 +196,9 @@ class GradeActivity(object):
     def activity(self):
         if hasattr(self, '_activity'):
             return self._activity
-        hash = int(self.request['activity'])
+        act_hash = int(self.request['activity'])
         for activity in self.context.activities:
-            if IKeyReference(activity).__hash__() == hash:
+            if hash(IKeyReference(activity)) == act_hash:
                 self._activity = activity
                 return activity
 
@@ -221,7 +222,7 @@ class GradeActivity(object):
 
         elif 'UPDATE_SUBMIT' in self.request:
             activity = self.activity
-            evaluator = zapi.getName(self.request.principal._person)
+            evaluator = zapi.getName(IPerson(self.request.principal))
             gradebook = proxy.removeSecurityProxy(self.context)
             # Iterate through all students
             for student in self.context.students:
@@ -267,9 +268,9 @@ class Grade(object):
     def activity(self):
         if hasattr(self, '_activity'):
             return self._activity
-        hash = int(self.request['activity'])
+        act_hash = int(self.request['activity'])
         for activity in self.context.activities:
-            if IKeyReference(activity).__hash__() == hash:
+            if hash(IKeyReference(activity)) == act_hash:
                 self._activity = activity
                 return activity
 
@@ -299,7 +300,7 @@ class Grade(object):
             self.context.removeEvaluation(self.student, self.activity)
 
         elif 'UPDATE_SUBMIT' in self.request:
-            evaluator = zapi.getName(self.request.principal._person)
+            evaluator = zapi.getName(IPerson(self.request.principal))
 
             score = self.activity.scoresystem.fromUnicode(self.request['grade'])
             gradebook = proxy.removeSecurityProxy(self.context)

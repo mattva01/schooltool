@@ -29,7 +29,7 @@
 
     <table border="1">
       <tr>
-       <th>Name</th>
+       <th i18n:translate="">Name</th>
        <th tal:define="activity view/activity">
          <div tal:content="activity/title">
            HW 1
