@@ -24,6 +24,7 @@ $Id$
 __docformat__ = 'reStructuredText'
 
 import random
+import datetime
 
 import transaction
 from zope.interface import implements
@@ -45,17 +46,32 @@ class SectionAttendancePlugin(object):
     name = "section_attendance"
     dependencies = ("section_timetables", )
 
-    absence_rate = 0.01     # A student skips 1% of meetings on average
+    absence_rate = 0.03     # A student skips 3% of meetings on average
+    tardy_rate = 0.90       # A student is late to 90% of abscences on average
+    explanation_rate = 0.50 # Student explains 50% of his abscences and tardies
+    excuse_rate = 0.50      # 50% of explained tardies/abscences are excused
+    reject_rate = 0.30      # 30% of explained tardies/abscences are rejected
+
+    only_last_n_days = None # Instead of generating attendance data
+                            # for the whole term (which is slow),
+                            # generate it only for the last N days
 
     def generate(self, app, seed=None):
         rng = random.Random(seed)
         term = app['terms']['2005-fall']
+
+        # interval in which attendance records will be generated
+        start_date = term.first
+        end_date = term.last
+        if self.only_last_n_days:
+            start_date = end_date - datetime.timedelta(self.only_last_n_days - 1)
+
         for section in app['sections'].values():
             # You cannot store proxied objects in the ZODB.  It is safe
             # to unwrap, since only managers can invoke sample data.
             unproxied_section = removeSecurityProxy(section)
-            meetings = ITimetables(section).makeTimetableCalendar(term.first,
-                                                                  term.last)
+            meetings = ITimetables(section).makeTimetableCalendar(start_date,
+                                                                  end_date)
             for meeting in meetings:
                 for student in section.members:
                     attendance = ISectionAttendance(student)
@@ -63,6 +79,18 @@ class SectionAttendancePlugin(object):
                     attendance.record(unproxied_section, meeting.dtstart,
                                       meeting.duration, meeting.period_id,
                                       present)
+                    if not present:
+                        ar = attendance.get(unproxied_section, meeting.dtstart)
+                        if rng.random() < self.tardy_rate:
+                            ar.makeTardy(meeting.dtstart + datetime.timedelta(minutes=15))
+
+                        if rng.random() < self.explanation_rate:
+                            ar.addExplanation("My car broke")
+                            if rng.random() < self.excuse_rate:
+                                ar.acceptExplanation()
+                            elif rng.random() < self.reject_rate:
+                                ar.rejectExplanation()
+
             # The transaction commit keeps the memory usage low, but at a cost
             # of running time and disk space.
             transaction.commit()

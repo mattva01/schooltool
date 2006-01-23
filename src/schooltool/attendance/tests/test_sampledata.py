@@ -66,6 +66,19 @@ class FakeTimetablesAdapter(object):
             first += datetime.timedelta(2)
         return events
 
+
+class FakeAttendanceRecord(object):
+    def __init__(self):
+        pass
+    def makeTardy(self, datetime):
+        print "Tardy at %s" % datetime
+
+    def addExplanation(self, explanation):
+        print "Added explanation '%s'" % explanation
+    def rejectExplanation(self):
+        print "Rejected explanation."
+
+
 class FakeAttendanceAdapter(object):
     def __init__(self, person):
         self.person = person
@@ -73,6 +86,8 @@ class FakeAttendanceAdapter(object):
         print "%s was %s on %s (%s, %s)" % (self.person,
                     {True: 'present', False: 'absent'}[present], dtstart,
                     period_id, section)
+    def get(self, section, datetime):
+        return FakeAttendanceRecord()
 
 
 def doctest_SectionAttendancePlugin():
@@ -108,17 +123,22 @@ def doctest_SectionAttendancePlugin():
 
         >>> plugin.generate(app, seed=42)
         Ann was present on 2005-09-01 09:30:00 (p1, s2)
-        Ann was present on 2005-09-03 09:30:00 (p1, s2)
+        Ann was absent on 2005-09-03 09:30:00 (p1, s2)
+        Tardy at 2005-09-03 09:45:00
+        Added explanation 'My car broke'
         Ann was present on 2005-09-05 09:30:00 (p1, s2)
         Ann was present on 2005-09-07 09:30:00 (p1, s2)
         Ann was present on 2005-09-09 09:30:00 (p1, s2)
-        Ann was present on 2005-09-11 09:30:00 (p1, s2)
-        Ann was present on 2005-09-13 09:30:00 (p1, s2)
+        Ann was absent on 2005-09-11 09:30:00 (p1, s2)
+        Tardy at 2005-09-11 09:45:00
+        Ann was absent on 2005-09-13 09:30:00 (p1, s2)
+        Tardy at 2005-09-13 09:45:00
         Jon was present on 2005-09-01 09:30:00 (p1, s1)
         Ian was present on 2005-09-01 09:30:00 (p1, s1)
         Jon was present on 2005-09-03 09:30:00 (p1, s1)
         Ian was present on 2005-09-03 09:30:00 (p1, s1)
-        Jon was present on 2005-09-05 09:30:00 (p1, s1)
+        Jon was absent on 2005-09-05 09:30:00 (p1, s1)
+        Tardy at 2005-09-05 09:45:00
         Ian was present on 2005-09-05 09:30:00 (p1, s1)
         Jon was present on 2005-09-07 09:30:00 (p1, s1)
         Ian was present on 2005-09-07 09:30:00 (p1, s1)
@@ -126,8 +146,22 @@ def doctest_SectionAttendancePlugin():
         Ian was present on 2005-09-09 09:30:00 (p1, s1)
         Jon was present on 2005-09-11 09:30:00 (p1, s1)
         Ian was present on 2005-09-11 09:30:00 (p1, s1)
-        Jon was absent on 2005-09-13 09:30:00 (p1, s1)
+        Jon was present on 2005-09-13 09:30:00 (p1, s1)
         Ian was present on 2005-09-13 09:30:00 (p1, s1)
+
+    You can generate sample data only for the last days of the term:
+
+        >>> plugin.only_last_n_days = 3
+        >>> plugin.generate(app, seed=15)
+        Ann was present on 2005-09-12 09:30:00 (p1, s2)
+        Ann was absent on 2005-09-14 09:30:00 (p1, s2)
+        Tardy at 2005-09-14 09:45:00
+        Added explanation 'My car broke'
+        Rejected explanation.
+        Jon was present on 2005-09-12 09:30:00 (p1, s1)
+        Ian was present on 2005-09-12 09:30:00 (p1, s1)
+        Jon was present on 2005-09-14 09:30:00 (p1, s1)
+        Ian was present on 2005-09-14 09:30:00 (p1, s1)
 
     """
 
