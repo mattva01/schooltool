@@ -79,7 +79,7 @@ class Gradebook(object):
         student = self._checkStudent(student)
         activity = self._checkActivity(activity)
         if activity in requirement.interfaces.IEvaluations(student):
-                return True
+            return True
         return False
 
     def getEvaluation(self, student, activity, default=None):
