@@ -274,7 +274,7 @@ the student's title in A-Z:
 The first element of the returned tuple is the field to sort by. "student" is
 a special field. All other fields are the hash of the activity to be sorted
 by. The second element specifies whether the sorting should be reversed. You
-can set the key eith the methods counterpart:
+can set the key using the ``setSortKey(person, (key, reverse))`` method:
 
   >>> gradebook.setSortKey(stephan, ('student', True))
   >>> gradebook.getSortKey(stephan)
