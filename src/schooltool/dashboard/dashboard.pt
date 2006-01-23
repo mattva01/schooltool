@@ -1,0 +1,17 @@
+<html metal:use-macro="context/@@standard_macros/page"
+      i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+    Dashboard
+  </title>
+</head>
+<body>
+
+<h1 metal:fill-slot="content-header"
+    i18n:translate="">Dashboard</h1>
+
+<div metal:fill-slot="body"
+     tal:content="structure provider:schooltool.dashboard" />
+
+</body>
+</html>

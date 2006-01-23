@@ -1,0 +1,12 @@
+<table width="100%">
+  <tr>
+    <td tal:repeat="column view/table" valign="top">
+      <tal:block repeat="category column">
+        <fieldset tal:condition="category">
+          <legend tal:content="category/title">Management</legend>
+          <tal:block replace="structure category/render" />
+        </fieldset>
+      </tal:block>
+    </td>
+  </tr>
+</table>

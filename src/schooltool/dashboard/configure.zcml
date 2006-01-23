@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<configure
+    xmlns="http://namespaces.zope.org/browser"
+    xmlns:zope="http://namespaces.zope.org/zope">
+
+  <page
+      name="dashboard.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      template="dashboard.pt"
+      permission="zope.View"
+      />
+
+  <viewletManager
+      name="schooltool.dashboard"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      permission="zope.Public"
+      class=".dashboard.Dashboard"
+      provides=".interfaces.IDashboard"
+      template="dashboard_manager.pt"
+      />
+
+  <viewlet
+      name="sections"
+      for="*"
+      manager=".interfaces.IDashboard"
+      template="sections.pt"
+      class=".dashboard.SectionsCategory"
+      permission="zope.View"
+      title="My Sections"
+      weight="10"
+      />
+
+  <viewlet
+      name="term_admin"
+      for="*"
+      manager=".interfaces.IDashboard"
+      template="term.pt"
+      class=".dashboard.DashboardCategory"
+      permission="zope.View"
+      title="Term Administration"
+      weight="50"
+      />
+
+  <viewlet
+      name="school_admin"
+      for="*"
+      manager=".interfaces.IDashboard"
+      template="school.pt"
+      class=".dashboard.DashboardCategory"
+      permission="zope.View"
+      title="School Administration"
+      weight="200"
+      />
+
+</configure>

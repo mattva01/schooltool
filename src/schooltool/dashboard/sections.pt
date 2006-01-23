@@ -1,0 +1,10 @@
+<ul style="list-style: disc; left-padding: 2em;">
+  <li tal:repeat="section view/getSections">
+    <a href=""
+       tal:attributes="href section/@@absolute_url"
+       tal:content="section/title">
+      Section A
+    </a>
+  </li>
+</ul>
+

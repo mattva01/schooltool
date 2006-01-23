@@ -1,0 +1,17 @@
+<ul style="list-style: disc; left-padding: 2em;">
+  <li>
+    <a href="courses" i18n:translate="">
+      Courses
+    </a>
+  </li>
+  <li>
+    <a href="sections" i18n:translate="">
+      Sections
+    </a>
+  </li>
+  <li>
+    <a href="terms" i18n:translate="">
+      Terms
+    </a>
+  </li>
+</ul>
