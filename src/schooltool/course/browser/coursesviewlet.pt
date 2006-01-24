@@ -22,7 +22,8 @@
           <a title=""
              tal:attributes="href group/section/@@absolute_url;
                              title group/section/description|group/section/title"
-             tal:content="group/section/label"></a>
+             tal:content="group/section/label"
+             i18n:translate=""></a>
           <span class="hint" tal:condition="group/group">
             <span i18n:translate="">
               via group
