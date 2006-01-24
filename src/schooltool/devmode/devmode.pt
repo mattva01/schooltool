@@ -13,14 +13,10 @@
 
   <div id="devtools" style="display:none;">
     <div class="body">
-      <a href="/++etc++site/default/RootErrorReportingUtility"
-         target="new">Errors</a>
-      <a href="@@introspector.html"
-         target="new">Introspector</a>
-      <a href="/++apidoc++/@@index.html"
-         target="new">API Docs</a>
-      <a href="/@@sampledata.html"
-         target="new">Sample data</a>
+      <a href="/++etc++site/default/RootErrorReportingUtility">Errors</a>
+      <a href="@@introspector.html">Introspector</a>
+      <a href="/++apidoc++/@@index.html">API Docs</a>
+      <a href="/@@sampledata.html">Sample data</a>
     </div>
   </div>
 
