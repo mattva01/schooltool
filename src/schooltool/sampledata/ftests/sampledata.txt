@@ -15,7 +15,7 @@ clicks on it
     >>> print analyze.queryHTML("//div[@id='devtools']", manager.contents)[0]
     <div id="devtools" style="display:none;">
         <div class="body">
-          ...<a href="/@@sampledata.html" target="new">Sample data</a>...
+          ...<a href="/@@sampledata.html">Sample data</a>...
         </div>
       </div>
 
