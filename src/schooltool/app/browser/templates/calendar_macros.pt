@@ -1,4 +1,4 @@
-<metal:block define-macro="navigation" i18n:domain="schoolbell">
+<metal:block define-macro="navigation" i18n:domain="schooltool">
   <div id="calendar-navigation-context">
     <a id="calendar-navigation-context-previous" i18n:attributes="title"
        tal:attributes="href view/prev;
@@ -24,7 +24,7 @@
   </div>
 </metal:block>
 
-<metal:block define-macro="mode" i18n:domain="schoolbell">
+<metal:block define-macro="mode" i18n:domain="schooltool">
   <div id="calendar-navigation">
     <a id="calendar-navigation-pdf"
        tal:condition="view/pdfURL"
@@ -61,7 +61,7 @@
   </div>
 </metal:block>
 
-<metal:block define-macro="page" i18n:domain="schoolbell">
+<metal:block define-macro="page" i18n:domain="schooltool">
   <html metal:use-macro="view/@@standard_macros/page">
 
     <title metal:fill-slot="title" i18n:translate="">
@@ -110,11 +110,11 @@
 
 <!-- BEGIN CALENDAR MACROS -->
 
-<metal:block define-macro="portlet-calendar-overlay" i18n:domain="schoolbell">
+<metal:block define-macro="portlet-calendar-overlay" i18n:domain="schooltool">
   <div tal:replace="structure context/@@calendar_overlay" />
 </metal:block>
 
-<metal:block define-macro="portlet-calendar-jumpto" i18n:domain="schoolbell">
+<metal:block define-macro="portlet-calendar-jumpto" i18n:domain="schooltool">
   <div id="portlet-jumpto" class="portlet">
 
     <h4 i18n:translate="">Jump To ...</h4>
@@ -147,7 +147,7 @@
 </metal:block>
 
 
-<metal:block define-macro="brief-month-view" i18n:domain="schoolbell">
+<metal:block define-macro="brief-month-view" i18n:domain="schooltool">
   <table class="month" cellpadding="0" cellspacing="0">
     <tr>
       <th colspan="7" class="month-title"
@@ -168,7 +168,7 @@
 </metal:block>
 
 <metal:block define-macro="portlet-calendar-view-month"
-             i18n:domain="schoolbell">
+             i18n:domain="schooltool">
 
   <div id="portlet-calendar-view-month" class="portlet">
 
@@ -191,7 +191,7 @@
 
 </metal:block>
 
-<metal:block define-macro="portlet-tomorrow-events" i18n:domain="schoolbell">
+<metal:block define-macro="portlet-tomorrow-events" i18n:domain="schooltool">
 
   <tal:comment condition="nothing">
        XXX: The on-error call is almost certainly a hack; someone who
