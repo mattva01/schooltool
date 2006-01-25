@@ -5,8 +5,11 @@ Realtime Attendance Form
 Overview
 --------
 
-1. Define a simple school structure (courses, sections, timetables)
-2. Look at the real-time attendance form
+1. Define a simple school structure (courses, sections, timetables).
+2. Look at the real-time attendance form, then use it.
+3. Look for absence events in the student's calendar.
+4. Look at nice sparklines.
+5. Take a brief glance at the student's attendance view.
 
 
 Setup
@@ -286,4 +289,26 @@ It looks like this
     ------------------------YY----
     ------------------------YY----
     ------------------------YY----
+
+
+Attendance view
+---------------
+
+A student's page contains an "Attendance" action in the menu.
+
+    >>> largo.open('http://localhost/persons/joniukas')
+    >>> largo.getLink('Attendance').click()
+
+If you go there, you see a list of unresolved absences
+
+    >>> print largo.contents
+    <BLANKLINE>
+    ...
+    <h2>Attendance of Joniukas</h2>
+    ...
+    <p>Unresolved absences:</p>
+    <ul>
+      <li>2005-12-12 09:30: late for Great Teacher Largo -- Dancing 1</li>
+    </ul>
+    ...
 

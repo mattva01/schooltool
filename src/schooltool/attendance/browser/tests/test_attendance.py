@@ -24,6 +24,7 @@ $Id$
 
 import unittest
 import datetime
+import itertools
 from pprint import pprint
 
 from pytz import utc, timezone
@@ -33,12 +34,14 @@ from zope.publisher.browser import TestRequest
 from zope.interface import implements, Interface
 from zope.component import adapts, provideAdapter
 from zope.app.testing.setup import setUpAnnotations
+from zope.i18n import translate
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.timetable import ITimetables
 from schooltool.timetable import TimetableActivity
 from schooltool.timetable.model import TimetableCalendarEvent
+from schooltool.timetable.term import DateRange
 from schooltool.calendar.simple import ImmutableCalendar
 from schooltool.calendar.simple import SimpleCalendarEvent
 from schooltool.course.interfaces import ISection
@@ -46,6 +49,8 @@ from schooltool.relationship.tests import setUpRelationships
 from schooltool.attendance.tests import stubProcessDefinition
 from schooltool.testing.util import fakePath
 from schooltool.attendance.interfaces import NEW, ACCEPTED, REJECTED
+from schooltool.attendance.interfaces import PRESENT, ABSENT, TARDY, UNKNOWN
+from schooltool import SchoolToolMessage as _
 
 
 class ApplicationStub(object):
@@ -168,6 +173,13 @@ class SectionStub(object):
     implements(ISection)
 
     members = ()
+
+    def __init__(self, title='a_section'):
+        self._title = title
+
+    @property
+    def label(self):
+        return _('$title', mapping={'title': self._title})
 
 
 class PersonStub(object):
@@ -1047,6 +1059,80 @@ def doctest_RealtimeAttendanceView_verifyParameters():
 
         >>> view.period_id = 'B'
         >>> view.verifyParameters()
+
+    """
+
+
+def doctest_StudentAttendanceView_unresolvedAbsences():
+    r"""Tests for StudentAttendanceView
+
+    We shall use some simple attendance adapters for this test
+
+        >>> from schooltool.attendance.interfaces import ISectionAttendance
+        >>> from schooltool.attendance.interfaces import IDayAttendance
+        >>> class DayAttendanceStub(object):
+        ...     adapts(None)
+        ...     implements(IDayAttendance)
+        ...     def __init__(self, context):
+        ...         pass
+        ...     def filter(self, first, last):
+        ...         return []
+        >>> provideAdapter(DayAttendanceStub)
+        >>> class SectionAttendanceStub(object):
+        ...     adapts(None)
+        ...     implements(ISectionAttendance)
+        ...     def __init__(self, context):
+        ...         pass
+        ...     def filter(self, first, last):
+        ...         return []
+        >>> provideAdapter(SectionAttendanceStub)
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...        import StudentAttendanceView
+        >>> student = 'pretend this is a student'
+        >>> request = TestRequest()
+        >>> view = StudentAttendanceView(student, request)
+
+    Simple case first: when there are no recorded absences/tardies, we get an
+    empty list.
+
+        >>> list(view.unresolvedAbsences())
+        []
+
+    Let's create some attendances.
+
+        >>> from schooltool.attendance.attendance import DayAttendanceRecord
+        >>> from schooltool.attendance.attendance import SectionAttendanceRecord
+        >>> view.today = lambda: datetime.date(2006, 1, 24)
+        >>> view.cutoff = datetime.timedelta(days=5)
+        >>> def filter(self, first, last):
+        ...     status = itertools.cycle([PRESENT, ABSENT, TARDY, UNKNOWN])
+        ...     for day in DateRange(first, last):
+        ...         ar = DayAttendanceRecord(day, UNKNOWN)
+        ...         ar.status = status.next()
+        ...         yield ar
+        >>> DayAttendanceStub.filter = filter
+        >>> def filter(self, first, last):
+        ...     status = itertools.cycle([PRESENT, ABSENT, TARDY, UNKNOWN])
+        ...     sections = itertools.cycle([SectionStub('math42'),
+        ...                                 SectionStub('grammar3'),
+        ...                                 SectionStub('relativity97')])
+        ...     for day in DateRange(first, last):
+        ...         time = datetime.time(9, 30)
+        ...         dt = utc.localize(datetime.datetime.combine(day, time))
+        ...         ar = SectionAttendanceRecord(sections.next(), dt, UNKNOWN)
+        ...         ar.status = status.next()
+        ...         yield ar
+        >>> SectionAttendanceStub.filter = filter
+
+        >>> for absence in view.unresolvedAbsences():
+        ...     print translate(absence)
+        2006-01-22: absent from homeroom
+        2006-01-23: late for homeroom
+        2006-01-26: absent from homeroom
+        2006-01-22 09:30: absent from grammar3
+        2006-01-23 09:30: late for relativity97
+        2006-01-26 09:30: absent from relativity97
 
     """
 

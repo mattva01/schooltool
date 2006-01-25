@@ -7,7 +7,7 @@
       name="attendance"
       for="schooltool.course.interfaces.ISection"
       class="schooltool.attendance.browser.attendance.RealtimeAttendanceView"
-      permission="zope.Public" />
+      permission="schooltool.view" />
 
   <browser:viewlet
       name="section-attendance-link"
@@ -33,6 +33,16 @@
       name="sparkline.png"
       for="schooltool.course.interfaces.ISection"
       class="schooltool.attendance.browser.sparkline.AttendanceSparklineView"
-      permission="zope.Public" />
+      permission="schooltool.view" />
+
+  <browser:page
+      name="attendance.html"
+      for="schooltool.person.interfaces.IPerson"
+      class="schooltool.attendance.browser.attendance.StudentAttendanceView"
+      template="templates/student-attendance.pt"
+      permission="schooltool.view"
+      menu="schooltool_actions"
+      title="Attendance"
+      />
 
 </configure>

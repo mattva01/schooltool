@@ -1,0 +1,33 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate=""
+    >Attendance of <span i18n:name="person" i18n:translate=""
+           tal:replace="context/title"/></title>
+</head>
+<body>
+
+<metal:block metal:fill-slot="content-header">
+<h2 i18n:translate="">Attendance of <span i18n:name="person"
+    tal:replace="context/title" /></h2>
+</metal:block>
+
+<metal:block metal:fill-slot="body"
+             tal:define="unresolved_absences
+                            python:list(view.unresolvedAbsences())">
+
+<tal:if_there_are_any condition="unresolved_absences">
+<p i18n:translate="">Unresolved absences:</p>
+
+<ul>
+  <li tal:repeat="absence view/unresolvedAbsences"
+      tal:content="absence"
+      i18n:translate="" />
+</ul>
+</tal:if_there_are_any>
+<tal:else condition="not:unresolved_absences">
+<p i18n:translate="">There are no unresolved absences.</p>
+</tal:else>
+
+</metal:block>
+</body>
+</html>

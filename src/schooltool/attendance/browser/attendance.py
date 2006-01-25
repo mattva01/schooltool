@@ -29,10 +29,13 @@ from zope.app import zapi
 from zope.app.publisher.browser import BrowserView
 from zope.interface import implements
 from zope.publisher.interfaces import NotFound
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.component import queryMultiAdapter
+from zope.component import adapts
 from zope.viewlet import viewlet
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.security.proxy import removeSecurityProxy
+from zope.i18n import translate
 
 from schooltool.traverser.interfaces import ITraverserPlugin
 from schooltool.timetable.interfaces import ITimetables
@@ -343,4 +346,49 @@ class RealtimeAttendanceView(BrowserView):
         self.verifyParameters()
         self.update()
         return self.template()
+
+
+class StudentAttendanceView(BrowserView):
+    """Attendance view for a student.
+
+    Lists pending unexcused attendance incidents, and a summary of absences and
+    tardies by term.
+    """
+
+    adapts(IPerson, IBrowserRequest)
+
+    cutoff = datetime.timedelta(weeks=8)
+
+    def today(self):
+        """Figure out today's date in a random timezone.
+
+        It is not as useless as you might imagine from the randomness of the
+        timezone.  If you add a sufficient number of hours (26?). you can be
+        sure to find the upper limit on any recorded attendance events
+        (assuming no time travel).
+        """
+        return datetime.date.today()
+
+    def unresolvedAbsences(self):
+        """Return all recent unresolved absences."""
+        last = self.today() + datetime.timedelta(2)
+        first = last - self.cutoff
+        for ar in IDayAttendance(self.context).filter(first, last):
+            if ar.isAbsent():
+                yield _('$date: absent from homeroom',
+                        mapping={'date': ar.date})
+            elif ar.isTardy():
+                yield _('$date: late for homeroom',
+                        mapping={'date': ar.date})
+        for ar in ISectionAttendance(self.context).filter(first, last):
+            if ar.isAbsent():
+                yield _('$date $time: absent from $section',
+                        mapping={'date': ar.date,
+                                 'time': ar.datetime.strftime('%H:%M'),
+                                 'section': translate(ar.section.label)})
+            elif ar.isTardy():
+                yield _('$date $time: late for $section',
+                        mapping={'date': ar.date,
+                                 'time': ar.datetime.strftime('%H:%M'),
+                                 'section': translate(ar.section.label)})
 
