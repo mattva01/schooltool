@@ -5,7 +5,7 @@
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       xmlns:dc="http://purl.org/dc/elements/1.1/"
-      i18n:domain="schoolbell"
+      i18n:domain="schooltool"
       tal:define="days view/getCurrentWeek">
 
   <div xmlns="http://www.w3.org/1999/xhtml">
@@ -26,7 +26,7 @@
   </title>
   <tagline tal:content="view/current"></tagline>
   <modified tal:content="view/w3cdtf_datetime_now">
-    XXX Need schoolbell.calendar.utils
+    XXX Need schooltool.calendar.utils
   </modified>
   <link href="" rel="alternate" type="text/html" 
         tal:attributes="href view/current"/>
@@ -34,8 +34,8 @@
   <id tal:content="string:tag:${view/@@absolute_url}">
     XXX Need unique ID generator
   </id>
-  <generator url="http://www.schooltool.org/schoolbell" version="1.0">
-    Schoolbell
+  <generator url="http://www.schooltool.org/" version="1.0">
+    SchoolTool
   </generator>
 
   <info mode="xml" type="text/html">
