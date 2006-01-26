@@ -363,19 +363,19 @@ class StudentAttendanceView(BrowserView):
     def unresolvedAbsences(self):
         """Return all recent unresolved absences."""
         for ar in IDayAttendance(self.context):
-            if ar.isAbsent():
+            if ar.isAbsent() and not ar.isExplained():
                 yield _('$date: absent from homeroom',
                         mapping={'date': ar.date})
-            elif ar.isTardy():
+            elif ar.isTardy() and not ar.isExplained():
                 yield _('$date: late for homeroom',
                         mapping={'date': ar.date})
         for ar in ISectionAttendance(self.context):
-            if ar.isAbsent():
+            if ar.isAbsent() and not ar.isExplained():
                 yield _('$date $time: absent from $section',
                         mapping={'date': ar.date,
                                  'time': ar.datetime.strftime('%H:%M'),
                                  'section': translate(ar.section.label)})
-            elif ar.isTardy():
+            elif ar.isTardy() and not ar.isExplained():
                 yield _('$date $time: late for $section',
                         mapping={'date': ar.date,
                                  'time': ar.datetime.strftime('%H:%M'),

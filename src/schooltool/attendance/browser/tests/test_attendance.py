@@ -1103,34 +1103,45 @@ def doctest_StudentAttendanceView_unresolvedAbsences():
 
     Let's create some attendances.
 
-        >>> from schooltool.attendance.attendance import DayAttendanceRecord
-        >>> from schooltool.attendance.attendance import SectionAttendanceRecord
+        >>> class DayAttendanceRecordStub(object):
+        ...     def __init__(self, date, status, explained):
+        ...         self.date = date
+        ...         self.status = status
+        ...         self._explained = explained
+        ...     def isAbsent(self): return self.status == ABSENT
+        ...     def isTardy(self): return self.status == TARDY
+        ...     def isExplained(self): return self._explained
+        >>> class SectionAttendanceRecordStub(DayAttendanceRecordStub):
+        ...     def __init__(self, section, datetime, status, explained):
+        ...         self.section = section
+        ...         self.date = datetime.date()
+        ...         self.datetime = datetime
+        ...         self.status = status
+        ...         self._explained = explained
         >>> first = datetime.date(2006, 1, 21)
-        >>> last = datetime.date(2006, 1, 26)
-        >>> status = itertools.cycle([PRESENT, ABSENT, TARDY, UNKNOWN])
-        >>> for day in DateRange(first, last):
-        ...     ar = DayAttendanceRecord(day, UNKNOWN)
-        ...     ar.status = status.next()
-        ...     DayAttendanceStub._records.append(ar)
-        >>> status = itertools.cycle([PRESENT, ABSENT, TARDY, UNKNOWN])
+        >>> last = datetime.date(2006, 1, 28)
+        >>> status = itertools.cycle([PRESENT, ABSENT, TARDY, PRESENT])
+        >>> DayAttendanceStub._records = [
+        ...         DayAttendanceRecordStub(day, status.next(),
+        ...                                 day >= datetime.date(2006, 1, 26))
+        ...         for day in DateRange(first, last)]
+        >>> status = itertools.cycle([PRESENT, ABSENT, TARDY, PRESENT])
         >>> sections = itertools.cycle([SectionStub('math42'),
         ...                             SectionStub('grammar3'),
         ...                             SectionStub('relativity97')])
-        >>> for day in DateRange(first, last):
-        ...     time = datetime.time(9, 30)
-        ...     dt = utc.localize(datetime.datetime.combine(day, time))
-        ...     ar = SectionAttendanceRecord(sections.next(), dt, UNKNOWN)
-        ...     ar.status = status.next()
-        ...     SectionAttendanceStub._records.append(ar)
+        >>> time = datetime.time(9, 30)
+        >>> SectionAttendanceStub._records = [
+        ...         SectionAttendanceRecordStub(sections.next(),
+        ...                 utc.localize(datetime.datetime.combine(day, time)),
+        ...                 status.next(), day >= datetime.date(2006, 1, 26))
+        ...         for day in DateRange(first, last)]
 
         >>> for absence in view.unresolvedAbsences():
         ...     print translate(absence)
         2006-01-22: absent from homeroom
         2006-01-23: late for homeroom
-        2006-01-26: absent from homeroom
         2006-01-22 09:30: absent from grammar3
         2006-01-23 09:30: late for relativity97
-        2006-01-26 09:30: absent from relativity97
 
     """
 
