@@ -1,0 +1,168 @@
+Student Attendance View
+=======================
+
+Overview
+--------
+
+1. Define a simple school structure (courses, sections, timetables).
+2. Register some absences and tardies
+3. Look at the student's attendance view
+
+
+Setup
+-----
+
+This is going to be a bit boring, since we start with a clean slate.
+
+A manager logs in
+
+    >>> from zope.testbrowser import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/')
+
+and creates a course and a section
+
+    >>> manager.getLink('Courses').click()
+    >>> manager.getLink('New Course').click()
+    >>> manager.getControl('Title').value = 'Dancing 1'
+    >>> manager.getControl('Add').click()
+    >>> manager.getLink('Dancing 1').click()
+    >>> manager.getLink('New Section').click()
+    >>> manager.getControl('Code').value = 'dancing-1a'
+    >>> manager.getControl('Add').click()
+
+We also need a term and a timetable
+
+    >>> manager.getLink('Terms').click()
+    >>> manager.getLink('New Term').click()
+    >>> manager.getControl('Title').value = '2005 Fall'
+    >>> manager.getControl('Start date').value = '2005-09-01'
+    >>> manager.getControl('End date').value = '2006-01-31'
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Sunday').click()
+    >>> manager.getControl('Saturday').click()
+    >>> manager.getControl('Add term').click()
+
+    >>> manager.getLink('Timetables').click()
+    >>> manager.getLink('New Timetable').click()
+    >>> manager.getControl('Title').value = 'default'
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Days of the week').click()
+    >>> manager.getControl('Same time each day').click()
+    >>> manager.getControl(name='field.times').value = """
+    ...    9:30-10:25
+    ...    10:30-11:25
+    ...    11:35-12:20
+    ...    12:45-13:30
+    ...    13:35-14:20
+    ...    14:30-15:15
+    ... """
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Designated by time').click()
+    >>> manager.getControl('Yes').click()
+    >>> manager.getControl(name='homeroom_0').value = ['09:30-10:25']
+    >>> manager.getControl(name='homeroom_1').value = ['09:30-10:25']
+    >>> manager.getControl(name='homeroom_2').value = ['09:30-10:25']
+    >>> manager.getControl(name='homeroom_3').value = ['09:30-10:25']
+    >>> manager.getControl(name='homeroom_4').value = ['09:30-10:25']
+    >>> manager.getControl('Next').click()
+
+Let's schedule the section
+
+    >>> manager.open('http://localhost/sections/dancing1a')
+    >>> manager.getLink('Schedule').click()
+
+    >>> manager.getControl(name="Monday.09:30-10:25").value = True
+    >>> manager.getControl(name="Wednesday.11:35-12:20").value = True
+    >>> manager.getControl('Save').click()
+
+Let's also create a teacher for the section
+
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+    >>> manager.getControl('Full name').value = 'Great Teacher Largo'
+    >>> manager.getControl('Username').value = 'largo'
+    >>> manager.getControl('Password').value = 'sittinghorse'
+    >>> manager.getControl('Verify password').value = 'sittinghorse'
+    >>> manager.getControl(name='group.teachers').value = True
+    >>> manager.getControl('Add').click()
+
+    >>> manager.open('http://localhost/sections/dancing1a')
+    >>> manager.getLink('edit instructors').click()
+    >>> manager.getControl('Great Teacher Largo').selected = True
+    >>> manager.getControl('Add').click()
+
+Create some students
+
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+    >>> manager.getControl('Full name').value = 'Joniukas'
+    >>> manager.getControl('Username').value = 'joniukas'
+    >>> manager.getControl('Password').value = 'gretute'
+    >>> manager.getControl('Verify password').value = 'gretute'
+    >>> manager.getControl(name='group.students').value = True
+    >>> manager.getControl('Add').click()
+
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+    >>> manager.getControl('Full name').value = 'Gretute'
+    >>> manager.getControl('Username').value = 'gretute'
+    >>> manager.getControl('Password').value = 'tenerife'
+    >>> manager.getControl('Verify password').value = 'tenerife'
+    >>> manager.getControl(name='group.students').value = True
+    >>> manager.getControl('Add').click()
+
+Add them to dancing section
+
+    >>> manager.open('http://localhost/sections/dancing1a')
+    >>> manager.getLink('edit individuals').click()
+    >>> manager.getControl('Joniukas').selected = True
+    >>> manager.getControl('Gretute').selected = True
+    >>> manager.getControl('Apply').click()
+
+And register some absences
+
+    >>> manager.open('http://localhost/sections/dancing1a'
+    ...              '/attendance/2005-11-14/09:30-10:25')
+    >>> manager.getControl(name='joniukas_check').value=True
+    >>> manager.getControl('Mark as absent').click()
+
+    >>> manager.open('http://localhost/sections/dancing1a'
+    ...              '/attendance/2005-11-16/11:35-12:20')
+    >>> manager.getControl(name='joniukas_check').value=True
+    >>> manager.getControl('Mark as absent').click()
+
+    >>> manager.open('http://localhost/sections/dancing1a'
+    ...              '/attendance/2005-11-21/09:30-10:25')
+    >>> manager.getControl(name='joniukas_check').value=True
+    >>> manager.getControl('Mark as absent').click()
+
+    >>> manager.open('http://localhost/sections/dancing1a'
+    ...              '/attendance/2005-11-23/11:35-12:20')
+    >>> manager.getControl(name='joniukas_check').value=True
+    >>> manager.getControl('Mark as absent').click()
+    >>> manager.getControl(name='joniukas_check').value=True
+    >>> manager.getControl('Arrived at').value = '11:45'
+    >>> manager.getControl('Make tardy').click()
+
+
+Attendance view
+---------------
+
+A student's page contains an "Attendance" action in the menu.
+
+    >>> manager.open('http://localhost/persons/joniukas')
+    >>> manager.getLink('Attendance').click()
+
+    >>> from schooltool.xmlparsing import HTMLDocument
+    >>> doc = HTMLDocument(manager.contents)
+    >>> print doc.query('//table[@class="attendance_summary_per_term"]')[0]
+    <table class="attendance_summary_per_term"><tr><th rowspan="2">Term</th><th colspan="2">Day attendance</th><th colspan="2">Section attendance</th></tr><tr><th>Absences</th><th>Tardies</th><th>Absences</th><th>Tardies</th></tr><tr><td>2005 Fall</td>
+      <td class="number">2</td>
+      <td class="number">0</td>
+      <td class="number">1</td>
+      <td class="number">1</td>
+    </tr></table>
+
