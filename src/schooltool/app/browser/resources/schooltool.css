@@ -16,6 +16,11 @@ input.disabled {
     background: #bab5ab !important;
     border: #eae8e3 !important;
 }
+
+td.number {
+    text-align: right;
+}
+
 .section {
     margin: 0.5em;
     background: #eae8e3;

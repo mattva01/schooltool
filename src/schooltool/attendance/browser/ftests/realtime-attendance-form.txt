@@ -301,6 +301,9 @@ A student's page contains an "Attendance" action in the menu.
 
 If you go there, you see a list of unresolved absences
 
+XXX mg: the view uses a sliding time window, so this test will start failing in
+        a couple of months
+
     >>> print largo.contents
     <BLANKLINE>
     ...

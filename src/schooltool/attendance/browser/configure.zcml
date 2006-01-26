@@ -39,7 +39,6 @@
       name="attendance.html"
       for="schooltool.person.interfaces.IPerson"
       class="schooltool.attendance.browser.attendance.StudentAttendanceView"
-      template="templates/student-attendance.pt"
       permission="schooltool.view"
       menu="schooltool_actions"
       title="Attendance"

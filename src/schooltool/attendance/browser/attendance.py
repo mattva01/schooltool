@@ -43,6 +43,7 @@ from schooltool.timetable.interfaces import ITimetableCalendarEvent
 from schooltool.calendar.utils import parse_date, parse_time
 from schooltool.course.interfaces import ISection
 from schooltool.app.browser import ViewPreferences
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPerson
 from schooltool.group.interfaces import IGroup
 from schooltool.attendance.interfaces import IDayAttendance
@@ -357,7 +358,9 @@ class StudentAttendanceView(BrowserView):
 
     adapts(IPerson, IBrowserRequest)
 
-    cutoff = datetime.timedelta(weeks=8)
+    __call__ = ViewPageTemplateFile('templates/student-attendance.pt')
+
+    cutoff = datetime.timedelta(weeks=8) # Ignore absences older than 8 weeks
 
     def today(self):
         """Figure out today's date in a random timezone.
@@ -392,3 +395,35 @@ class StudentAttendanceView(BrowserView):
                                  'time': ar.datetime.strftime('%H:%M'),
                                  'section': translate(ar.section.label)})
 
+    def terms(self):
+        """List all terms in chronological order."""
+        app = ISchoolToolApplication(None)
+        terms = sorted(app['terms'].values(), key=lambda t: t.first)
+        return terms
+
+    def summaryPerTerm(self):
+        """List a summary of absences and tardies for each term."""
+        day_attendance = IDayAttendance(self.context)
+        section_attendance = ISectionAttendance(self.context)
+        for term in self.terms():
+            n_day_absences, n_day_tardies = self.countAbsences(
+                    day_attendance.filter(term.first, term.last))
+            n_section_absences, n_section_tardies = self.countAbsences(
+                    section_attendance.filter(term.first, term.last))
+            yield {'title': term.title,
+                   'first': term.first,
+                   'last': term.last,
+                   'day_absences': n_day_absences,
+                   'day_tardies': n_day_tardies,
+                   'section_absences': n_section_absences,
+                   'section_tardies': n_section_tardies}
+
+    def countAbsences(self, attendance_records):
+        """Count absences and tardies."""
+        n_absences = n_tardies = 0
+        for ar in attendance_records:
+            if ar.isAbsent():
+                n_absences += 1
+            elif ar.isTardy():
+                n_tardies += 1
+        return n_absences, n_tardies

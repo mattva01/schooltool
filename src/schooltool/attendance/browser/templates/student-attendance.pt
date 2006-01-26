@@ -28,6 +28,20 @@
 <p i18n:translate="">There are no unresolved absences.</p>
 </tal:else>
 
+<h2 i18n:translate="">Summary</h2>
+
+<table class="attendance_summary_per_term">
+<tr><th i18n:translate="" rowspan="2">Term</th><th colspan="2">Day attendance</th><th colspan="2">Section attendance</th></tr>
+<tr><th i18n:translate="">Absences</th><th i18n:translate="">Tardies</th><th i18n:translate="">Absences</th><th i18n:translate="">Tardies</th></tr>
+<tr tal:repeat="term view/summaryPerTerm">
+  <td tal:content="term/title">(term)</td>
+  <td class="number" tal:content="term/day_absences">(d_a)</td>
+  <td class="number" tal:content="term/day_tardies">(d_t)</td>
+  <td class="number" tal:content="term/section_absences">(s_a)</td>
+  <td class="number" tal:content="term/section_tardies">(s_t)</td>
+</tr>
+</table>
+
 </metal:block>
 </body>
 </html>

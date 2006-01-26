@@ -1064,7 +1064,7 @@ def doctest_RealtimeAttendanceView_verifyParameters():
 
 
 def doctest_StudentAttendanceView_unresolvedAbsences():
-    r"""Tests for StudentAttendanceView
+    r"""Tests for StudentAttendanceView.unresolvedAbsences
 
     We shall use some simple attendance adapters for this test
 
@@ -1133,6 +1133,122 @@ def doctest_StudentAttendanceView_unresolvedAbsences():
         2006-01-22 09:30: absent from grammar3
         2006-01-23 09:30: late for relativity97
         2006-01-26 09:30: absent from relativity97
+
+    """
+
+
+def doctest_StudentAttendanceView_terms():
+    r"""Tests for StudentAttendanceView.terms
+
+    A little stubbing
+
+        >>> class TermStub(object):
+        ...     def __init__(self, y, m1, d1, m2, d2):
+        ...         self.first = datetime.date(y, m1, d1)
+        ...         self.last = datetime.date(y, m2, d2)
+        >>> class SchoolToolApplicationStub(object):
+        ...     adapts(None)
+        ...     implements(ISchoolToolApplication)
+        ...     _terms = {'2004-fall': TermStub(2004, 9, 1, 12, 22),
+        ...               '2005-spring': TermStub(2005, 2, 1, 5, 21),
+        ...               '2005-fall': TermStub(2005, 9, 1, 12, 22),
+        ...               '2006-spring': TermStub(2006, 2, 1, 5, 21)}
+        ...     def __init__(self, context):
+        ...         pass
+        ...     def __getitem__(self, name):
+        ...         return {'terms': self._terms}[name]
+        >>> provideAdapter(SchoolToolApplicationStub)
+
+    and we can test that StudentAttendanceView.terms returns all the terms
+    in chronological order
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...        import StudentAttendanceView
+        >>> view = StudentAttendanceView(None, None)
+        >>> for term in view.terms():
+        ...     print term.first, '--', term.last
+        2004-09-01 -- 2004-12-22
+        2005-02-01 -- 2005-05-21
+        2005-09-01 -- 2005-12-22
+        2006-02-01 -- 2006-05-21
+
+    """
+
+
+def doctest_StudentAttendanceView_countAbsences():
+    r"""Tests for StudentAttendanceView.countAbsences
+
+        >>> from schooltool.attendance.attendance import AttendanceRecord
+        >>> a = AttendanceRecord(ABSENT)
+        >>> p = AttendanceRecord(PRESENT)
+        >>> t = AttendanceRecord(UNKNOWN)
+        >>> t.status = TARDY
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...        import StudentAttendanceView
+        >>> view = StudentAttendanceView(None, None)
+        >>> view.countAbsences([])
+        (0, 0)
+        >>> view.countAbsences([a, p, a, t])
+        (2, 1)
+
+    """
+
+
+def doctest_StudentAttendanceView_summaryPerTerm():
+    r"""Tests for StudentAttendanceView.summaryPerTerm
+
+    We shall use some simple attendance adapters for this test
+
+        >>> from schooltool.attendance.attendance import AttendanceRecord
+        >>> a = AttendanceRecord(ABSENT)
+        >>> p = AttendanceRecord(PRESENT)
+        >>> t = AttendanceRecord(UNKNOWN)
+        >>> t.status = TARDY
+
+        >>> class TermStub(object):
+        ...     def __init__(self, name):
+        ...         self.title = name
+        ...         self.first = name
+        ...         self.last = name
+
+        >>> from schooltool.attendance.interfaces import ISectionAttendance
+        >>> from schooltool.attendance.interfaces import IDayAttendance
+        >>> class DayAttendanceStub(object):
+        ...     adapts(None)
+        ...     implements(IDayAttendance)
+        ...     def __init__(self, context):
+        ...         pass
+        ...     def filter(self, first, last):
+        ...         return {'term1': [p, p, p, a, p, a, t, t, a, p, p],
+        ...                 'term2': [a, a, p, t, p],
+        ...                 'term3': [p, p, p]}[first]
+        >>> provideAdapter(DayAttendanceStub)
+        >>> class SectionAttendanceStub(object):
+        ...     adapts(None)
+        ...     implements(ISectionAttendance)
+        ...     def __init__(self, context):
+        ...         pass
+        ...     def filter(self, first, last):
+        ...         return {'term1': [p, p, p],
+        ...                 'term2': [a, t, p, t, p],
+        ...                 'term3': [p, a, p, p, a]}[first]
+        >>> provideAdapter(SectionAttendanceStub)
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...        import StudentAttendanceView
+        >>> student = 'pretend this is a student'
+        >>> request = TestRequest()
+        >>> view = StudentAttendanceView(student, request)
+        >>> view.terms = lambda: [TermStub('term1'), TermStub('term2'),
+        ...                       TermStub('term3')]
+
+        >>> for term in view.summaryPerTerm():
+        ...     print ('%(title)s  %(day_absences)d %(day_tardies)d'
+        ...            '  %(section_absences)d %(section_tardies)d' % term)
+        term1  3 2  0 0
+        term2  2 1  1 2
+        term3  0 0  2 0
 
     """
 
