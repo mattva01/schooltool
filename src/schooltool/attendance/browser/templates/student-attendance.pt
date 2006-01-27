@@ -34,13 +34,28 @@
 <tr><th i18n:translate="" rowspan="2">Term</th><th colspan="2">Day attendance</th><th colspan="2">Section attendance</th></tr>
 <tr><th i18n:translate="">Absences</th><th i18n:translate="">Tardies</th><th i18n:translate="">Absences</th><th i18n:translate="">Tardies</th></tr>
 <tr tal:repeat="term view/summaryPerTerm">
-  <td tal:content="term/title">(term)</td>
+  <td><a tal:attributes="href string:?term=${term/name}" tal:content="term/title">(term)</a></td>
   <td class="number" tal:content="term/day_absences">(d_a)</td>
   <td class="number" tal:content="term/day_tardies">(d_t)</td>
   <td class="number" tal:content="term/section_absences">(s_a)</td>
   <td class="number" tal:content="term/section_tardies">(s_t)</td>
 </tr>
 </table>
+
+<tal:if_detailed_summary_wanted define="term view/term_for_detailed_summary"
+                                condition="term">
+<h2 tal:content="term/title">(term)</h2>
+<tal:block tal:define="absences python:list(view.absencesForTerm(term))">
+<ul tal:condition="absences">
+  <li tal:repeat="absence absences"
+      tal:content="absence"
+      i18n:translate="" />
+</ul>
+<tal:else condition="not:absences">
+<p i18n:translate="">There were no absences in this term.</p>
+</tal:else>
+</tal:block>
+</tal:if_detailed_summary_wanted>
 
 </metal:block>
 </body>

@@ -157,12 +157,30 @@ A student's page contains an "Attendance" action in the menu.
     >>> manager.getLink('Attendance').click()
 
     >>> from schooltool.xmlparsing import HTMLDocument
+    >>> from schooltool.testing.util import normalize_xml
     >>> doc = HTMLDocument(manager.contents)
-    >>> print doc.query('//table[@class="attendance_summary_per_term"]')[0]
-    <table class="attendance_summary_per_term"><tr><th rowspan="2">Term</th><th colspan="2">Day attendance</th><th colspan="2">Section attendance</th></tr><tr><th>Absences</th><th>Tardies</th><th>Absences</th><th>Tardies</th></tr><tr><td>2005 Fall</td>
-      <td class="number">2</td>
-      <td class="number">0</td>
-      <td class="number">1</td>
-      <td class="number">1</td>
-    </tr></table>
+    >>> table = doc.query('//table[@class="attendance_summary_per_term"]')[0]
+    >>> print normalize_xml(str(table), compact=True)
+    <table class="attendance_summary_per_term">
+      <tr>
+        <th rowspan="2">Term</th>
+        <th colspan="2">Day attendance</th>
+        <th colspan="2">Section attendance</th>
+      </tr>
+      <tr>
+        <th>Absences</th>
+        <th>Tardies</th>
+        <th>Absences</th>
+        <th>Tardies</th>
+      </tr>
+      <tr>
+        <td>
+          <a href="?term=2005-fall">2005 Fall</a>
+        </td>
+        <td class="number">2</td>
+        <td class="number">0</td>
+        <td class="number">1</td>
+        <td class="number">1</td>
+      </tr>
+    </table>
 

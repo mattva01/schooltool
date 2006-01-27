@@ -45,18 +45,45 @@ from schooltool.timetable.term import DateRange
 from schooltool.calendar.simple import ImmutableCalendar
 from schooltool.calendar.simple import SimpleCalendarEvent
 from schooltool.course.interfaces import ISection
+from schooltool.testing.util import fakePath
 from schooltool.relationship.tests import setUpRelationships
 from schooltool.attendance.tests import stubProcessDefinition
-from schooltool.testing.util import fakePath
 from schooltool.attendance.interfaces import NEW, ACCEPTED, REJECTED
 from schooltool.attendance.interfaces import PRESENT, ABSENT, TARDY, UNKNOWN
+from schooltool.attendance.interfaces import IDayAttendance
+from schooltool.attendance.interfaces import ISectionAttendance
+from schooltool.attendance.interfaces import IDayAttendanceRecord
+from schooltool.attendance.interfaces import ISectionAttendanceRecord
 from schooltool import SchoolToolMessage as _
 
 
-class ApplicationStub(object):
-    implements(ISchoolToolApplication, IApplicationPreferences)
+class TermStub(object):
+    def __init__(self, y, m1, d1, m2, d2):
+        self.first = datetime.date(y, m1, d1)
+        self.last = datetime.date(y, m2, d2)
+    def __str__(self):
+        return '<TermStub: %s..%s>' % (self.first, self.last)
 
+
+class SchoolToolApplicationStub(object):
+    adapts(None)
+    implements(ISchoolToolApplication)
+    _terms = {'2004-fall': TermStub(2004, 9, 1, 12, 22),
+              '2005-spring': TermStub(2005, 2, 1, 5, 21),
+              '2005-fall': TermStub(2005, 9, 1, 12, 22),
+              '2006-spring': TermStub(2006, 2, 1, 5, 21)}
+    def __init__(self, context):
+        pass
+    def __getitem__(self, name):
+        return {'terms': self._terms}[name]
+
+
+class ApplicationPreferencesStub(object):
+    adapts(ISchoolToolApplication)
+    implements(IApplicationPreferences)
     timezone = 'UTC'
+    def __init__(self, context):
+        pass
 
 
 class TimetableDayStub(object):
@@ -64,11 +91,13 @@ class TimetableDayStub(object):
         self.periods = periods
         self.homeroom_period_id = homeroom_period_id
 
+
 class TimetableStub(object):
     def __init__(self, days):
         self._days = days
     def __getitem__(self, day_id):
         return self._days[day_id]
+
 
 class TimetableActivityStub(object):
     def __init__(self, timetable, title):
@@ -113,16 +142,120 @@ class StubTimetables(object):
                                   if first <= e.dtstart.date() <= last])
 
 
+class DayAttendanceRecordStub(object):
+    implements(IDayAttendanceRecord)
+    def __init__(self, date, status, explained=False):
+        self.date = date
+        self.status = status
+        self._explained = explained
+    def isAbsent(self): return self.status == ABSENT
+    def isTardy(self): return self.status == TARDY
+    def isExplained(self): return self._explained
+
+
+class SectionAttendanceRecordStub(object):
+    implements(ISectionAttendanceRecord)
+    def __init__(self, section, datetime, status, explained=False):
+        self.section = section
+        self.date = datetime.date()
+        self.datetime = datetime
+        self.status = status
+        self._explained = explained
+    def isAbsent(self): return self.status == ABSENT
+    def isTardy(self): return self.status == TARDY
+    def isExplained(self): return self._explained
+
+
+class DayAttendanceStub(object):
+    adapts(None)
+    implements(IDayAttendance)
+
+    def __init__(self, person):
+        self.person = person
+        self._records = getattr(person, '_day_attendance_records', [])
+
+    def __iter__(self):
+        return iter(self._records)
+
+    def filter(self, first, last):
+        status = itertools.cycle([PRESENT, ABSENT, TARDY, PRESENT])
+        midpoint = first + (last - first) / 2
+        return [DayAttendanceRecordStub(day, status.next(), day < midpoint)
+                for day in DateRange(first, last)]
+
+    def get(self, date):
+        return 'd_%s_%s' % (self.person, date)
+
+    def record(self, date, present):
+        print 'Recording: %s -> %s' % (self.get(date), present)
+
+
+class SectionAttendanceStub(object):
+    adapts(None)
+    implements(ISectionAttendance)
+
+    def __init__(self, person):
+        self.person = person
+        self._records = getattr(person, '_section_attendance_records', [])
+
+    def __iter__(self):
+        return iter(self._records)
+
+    def filter(self, first, last):
+        status = itertools.cycle([PRESENT, ABSENT, TARDY, PRESENT])
+        sections = itertools.cycle([SectionStub('math42'),
+                                    SectionStub('grammar3'),
+                                    SectionStub('relativity97')])
+        time = datetime.time(9, 30)
+        midpoint = first + (last - first) / 2
+        return [SectionAttendanceRecordStub(sections.next(),
+                      utc.localize(datetime.datetime.combine(day, time)),
+                      status.next(), day < midpoint)
+                for day in DateRange(first, last)]
+
+    def get(self, section, datetime):
+        return 's_%s_%s-%s' % (self.person, datetime, section)
+
+    def record(self, section, datetime, duration, period_id, present):
+        print 'Recording: %s -> %s' % (self.get(section, datetime), present)
+
+    def getAllForDay(self, date):
+        return ['s_%s_%s_%s' % (self.person, date, c) for c in 'a', 'b']
+
+
+class CalendarEventViewletManagerStub(object):
+    pass
+
+
+class EventForDisplayStub(object):
+    def __init__(self, event, tz=utc):
+        self.context = event
+        self.dtstarttz = event.dtstart.astimezone(tz)
+
+
+class SectionStub(object):
+    implements(ISection)
+
+    members = ()
+
+    def __init__(self, title='a_section'):
+        self._title = title
+
+    @property
+    def label(self):
+        return _('$title', mapping={'title': self._title})
+
+
+class PersonStub(object):
+    pass
+
+
 def setUpAttendanceAdapters():
-    from schooltool.attendance.interfaces import ISectionAttendance
-    from schooltool.attendance.interfaces import IDayAttendance
     from schooltool.attendance.attendance import getSectionAttendance
     from schooltool.attendance.attendance import getDayAttendance
     from schooltool.person.interfaces import IPerson
-    ztapi.provideAdapter(IPerson, ISectionAttendance,
-                         getSectionAttendance)
-    ztapi.provideAdapter(IPerson, IDayAttendance,
-                         getDayAttendance)
+    ztapi.provideAdapter(IPerson, ISectionAttendance, getSectionAttendance)
+    ztapi.provideAdapter(IPerson, IDayAttendance, getDayAttendance)
 
 
 def doctest_getPeriodEventForSection():
@@ -157,33 +290,6 @@ def doctest_getPeriodEventForSection():
         2005-12-16 D None
 
     """
-
-
-class CalendarEventViewletManagerStub(object):
-    pass
-
-
-class EventForDisplayStub(object):
-    def __init__(self, event, tz=utc):
-        self.context = event
-        self.dtstarttz = event.dtstart.astimezone(tz)
-
-
-class SectionStub(object):
-    implements(ISection)
-
-    members = ()
-
-    def __init__(self, title='a_section'):
-        self._title = title
-
-    @property
-    def label(self):
-        return _('$title', mapping={'title': self._title})
-
-
-class PersonStub(object):
-    pass
 
 
 def doctest_AttendanceCalendarEventViewlet():
@@ -319,7 +425,6 @@ def doctest_RealtimeAttendanceView_listMembers():
 
     Let's add an absence record to one person:
 
-        >>> from schooltool.attendance.interfaces import ISectionAttendance
         >>> attendance = ISectionAttendance(person4)
         >>> attendance.record(
         ...     section, datetime.datetime(2005, 12, 15, 10, 00, tzinfo=utc),
@@ -362,40 +467,11 @@ def doctest_RealtimeAttendanceView_listMembers():
     """
 
 
-class SectionAttendanceStub(object):
-    def __init__(self, person):
-        self.person = person
-
-    def get(self, section, datetime):
-        return 's_%s_%s-%s' % (self.person, datetime, section)
-
-    def record(self, section, datetime, duration, period_id, present):
-        print 'Recording: %s -> %s' % (self.get(section, datetime), present)
-
-    def getAllForDay(self, date):
-        return ['s_%s_%s_%s' % (self.person, date, c) for c in 'a', 'b']
-
-
-class DayAttendanceStub(object):
-    def __init__(self, person):
-        self.person = person
-
-    def get(self, date):
-        return 'd_%s_%s' % (self.person, date)
-
-    def record(self, date, present):
-        print 'Recording: %s -> %s' % (self.get(date), present)
-
-
 def doctest_RealtimeAttendanceView_getDaysAttendanceRecords():
     r"""Tests for RealtimeAttendanceView.getDaysAttendanceRecords.
 
-        >>> from schooltool.attendance.interfaces import ISectionAttendance
-        >>> from schooltool.attendance.interfaces import IDayAttendance
-        >>> ztapi.provideAdapter(None, ISectionAttendance,
-        ...                      SectionAttendanceStub)
-        >>> ztapi.provideAdapter(None, IDayAttendance,
-        ...                      DayAttendanceStub)
+        >>> provideAdapter(SectionAttendanceStub)
+        >>> provideAdapter(DayAttendanceStub)
 
         >>> from schooltool.attendance.browser.attendance \
         ...         import RealtimeAttendanceView
@@ -448,7 +524,6 @@ def doctest_RealtimeAttendanceView_studentStatus():
 
     Let's record an unexplained absence for the student:
 
-        >>> from schooltool.attendance.interfaces import ISectionAttendance
         >>> attendance = ISectionAttendance(person1)
         >>> attendance.record(
         ...     section, datetime.datetime(2005, 12, 15, 10, 00, tzinfo=utc),
@@ -590,7 +665,6 @@ def doctest_RealtimeAttendanceView_update():
 
     Let's see the attendance data for these persons:
 
-        >>> from schooltool.attendance.interfaces import ISectionAttendance
         >>> records = list(ISectionAttendance(person1))
         >>> len(records)
         1
@@ -821,7 +895,6 @@ def doctest_RealtimeAttendanceView_update_set_homeroom():
         ...                                  'p1_check': 'on'})
         >>> view.update()
 
-        >>> from schooltool.attendance.interfaces import IDayAttendance
         >>> list(IDayAttendance(person1))
         [DayAttendanceRecord(datetime.date(2005, 12, 15), ABSENT)]
         >>> list(IDayAttendance(person2))
@@ -829,7 +902,6 @@ def doctest_RealtimeAttendanceView_update_set_homeroom():
 
     We can see that there is no section attendance data:
 
-        >>> from schooltool.attendance.interfaces import ISectionAttendance
         >>> list(ISectionAttendance(person1))
         []
         >>> list(ISectionAttendance(person2))
@@ -841,12 +913,8 @@ def doctest_RealtimeAttendanceView_update_set_homeroom():
 def doctest_RealtimeAttendanceView_getAttendance():
     r"""Tests for RealtimeAttendanceView._getAttendance
 
-        >>> from schooltool.attendance.interfaces import ISectionAttendance
-        >>> from schooltool.attendance.interfaces import IDayAttendance
-        >>> ztapi.provideAdapter(None, ISectionAttendance,
-        ...                      SectionAttendanceStub)
-        >>> ztapi.provideAdapter(None, IDayAttendance,
-        ...                      DayAttendanceStub)
+        >>> provideAdapter(SectionAttendanceStub)
+        >>> provideAdapter(DayAttendanceStub)
 
         >>> from schooltool.attendance.browser.attendance \
         ...         import RealtimeAttendanceView
@@ -877,12 +945,8 @@ def doctest_RealtimeAttendanceView_getAttendance():
 def doctest_RealtimeAttendanceView_record():
     r"""Tests for RealtimeAttendanceView._record
 
-        >>> from schooltool.attendance.interfaces import ISectionAttendance
-        >>> from schooltool.attendance.interfaces import IDayAttendance
-        >>> ztapi.provideAdapter(None, ISectionAttendance,
-        ...                      SectionAttendanceStub)
-        >>> ztapi.provideAdapter(None, IDayAttendance,
-        ...                      DayAttendanceStub)
+        >>> provideAdapter(SectionAttendanceStub)
+        >>> provideAdapter(DayAttendanceStub)
 
         >>> from schooltool.attendance.browser.attendance \
         ...         import RealtimeAttendanceView
@@ -1063,65 +1127,94 @@ def doctest_RealtimeAttendanceView_verifyParameters():
     """
 
 
+def doctest_StudentAttendanceView_term_for_detailed_summary():
+    r"""Tests for StudentAttendanceView.term_for_detailed_summary
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...        import StudentAttendanceView
+        >>> request = TestRequest()
+        >>> view = StudentAttendanceView(None, request)
+
+    Empty request:
+
+        >>> print view.term_for_detailed_summary
+        None
+
+        >>> request.form['term'] = ''
+        >>> print view.term_for_detailed_summary
+        None
+
+    Invalid request:
+
+        >>> request.form['term'] = 'no-such-term'
+        >>> print view.term_for_detailed_summary
+        None
+
+    Term name in the request:
+
+        >>> request.form['term'] = '2005-fall'
+        >>> print view.term_for_detailed_summary
+        <TermStub: 2005-09-01..2005-12-22>
+
+    """
+
+
+def doctest_StudentAttendanceView_formatAttendanceRecord():
+    r"""Tests for StudentAttendanceView.formatAttendanceRecord
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...        import StudentAttendanceView
+        >>> view = StudentAttendanceView(None, None)
+
+        >>> ar = DayAttendanceRecordStub(datetime.date(2006, 1, 14), ABSENT)
+        >>> print translate(view.formatAttendanceRecord(ar))
+        2006-01-14: absent from homeroom
+
+        >>> ar = DayAttendanceRecordStub(datetime.date(2006, 1, 14), TARDY)
+        >>> print translate(view.formatAttendanceRecord(ar))
+        2006-01-14: late for homeroom
+
+        >>> ar = SectionAttendanceRecordStub(SectionStub('math17'),
+        ...             datetime.datetime(2006, 1, 14, 17, 3, tzinfo=utc), ABSENT)
+        >>> print translate(view.formatAttendanceRecord(ar))
+        2006-01-14 17:03: absent from math17
+
+        >>> ar = SectionAttendanceRecordStub(SectionStub('math17'),
+        ...             datetime.datetime(2006, 1, 14, 17, 3, tzinfo=utc), TARDY)
+        >>> print translate(view.formatAttendanceRecord(ar))
+        2006-01-14 17:03: late for math17
+
+    """
+
+
 def doctest_StudentAttendanceView_unresolvedAbsences():
     r"""Tests for StudentAttendanceView.unresolvedAbsences
 
     We shall use some simple attendance adapters for this test
 
-        >>> from schooltool.attendance.interfaces import ISectionAttendance
-        >>> from schooltool.attendance.interfaces import IDayAttendance
-        >>> class DayAttendanceStub(object):
-        ...     adapts(None)
-        ...     implements(IDayAttendance)
-        ...     _records = []
-        ...     def __init__(self, context):
-        ...         pass
-        ...     def __iter__(self):
-        ...         return iter(self._records)
         >>> provideAdapter(DayAttendanceStub)
-        >>> class SectionAttendanceStub(object):
-        ...     adapts(None)
-        ...     implements(ISectionAttendance)
-        ...     _records = []
-        ...     def __init__(self, context):
-        ...         pass
-        ...     def __iter__(self):
-        ...         return iter(self._records)
         >>> provideAdapter(SectionAttendanceStub)
 
         >>> from schooltool.attendance.browser.attendance \
         ...        import StudentAttendanceView
-        >>> student = 'pretend this is a student'
+        >>> student = PersonStub()
         >>> request = TestRequest()
         >>> view = StudentAttendanceView(student, request)
 
     Simple case first: when there are no recorded absences/tardies, we get an
     empty list.
 
+        >>> student._day_attendance_records = []
+        >>> student._section_attendance_records = []
         >>> list(view.unresolvedAbsences())
         []
 
     Let's create some attendances.
 
-        >>> class DayAttendanceRecordStub(object):
-        ...     def __init__(self, date, status, explained):
-        ...         self.date = date
-        ...         self.status = status
-        ...         self._explained = explained
-        ...     def isAbsent(self): return self.status == ABSENT
-        ...     def isTardy(self): return self.status == TARDY
-        ...     def isExplained(self): return self._explained
-        >>> class SectionAttendanceRecordStub(DayAttendanceRecordStub):
-        ...     def __init__(self, section, datetime, status, explained):
-        ...         self.section = section
-        ...         self.date = datetime.date()
-        ...         self.datetime = datetime
-        ...         self.status = status
-        ...         self._explained = explained
         >>> first = datetime.date(2006, 1, 21)
         >>> last = datetime.date(2006, 1, 28)
         >>> status = itertools.cycle([PRESENT, ABSENT, TARDY, PRESENT])
-        >>> DayAttendanceStub._records = [
+        >>> student._day_attendance_records = [
         ...         DayAttendanceRecordStub(day, status.next(),
         ...                                 day >= datetime.date(2006, 1, 26))
         ...         for day in DateRange(first, last)]
@@ -1130,7 +1223,7 @@ def doctest_StudentAttendanceView_unresolvedAbsences():
         ...                             SectionStub('grammar3'),
         ...                             SectionStub('relativity97')])
         >>> time = datetime.time(9, 30)
-        >>> SectionAttendanceStub._records = [
+        >>> student._section_attendance_records = [
         ...         SectionAttendanceRecordStub(sections.next(),
         ...                 utc.localize(datetime.datetime.combine(day, time)),
         ...                 status.next(), day >= datetime.date(2006, 1, 26))
@@ -1146,26 +1239,48 @@ def doctest_StudentAttendanceView_unresolvedAbsences():
     """
 
 
+def doctest_StudentAttendanceView_absencesForTerm():
+    r"""Tests for StudentAttendanceView.absencesForTerm
+
+    We shall use some simple attendance adapters for this test
+
+        >>> provideAdapter(DayAttendanceStub)
+        >>> provideAdapter(SectionAttendanceStub)
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...        import StudentAttendanceView
+        >>> student = PersonStub()
+        >>> request = TestRequest()
+        >>> view = StudentAttendanceView(student, request)
+
+        >>> term = TermStub(2006, 2, 20, 3, 7)
+        >>> for a in view.absencesForTerm(term):
+        ...     print translate(a)
+        2006-02-21: absent from homeroom
+        2006-02-22: late for homeroom
+        2006-02-25: absent from homeroom
+        2006-02-26: late for homeroom
+        2006-03-01: absent from homeroom
+        2006-03-02: late for homeroom
+        2006-03-05: absent from homeroom
+        2006-03-06: late for homeroom
+        2006-02-21 09:30: absent from grammar3
+        2006-02-22 09:30: late for relativity97
+        2006-02-25 09:30: absent from relativity97
+        2006-02-26 09:30: late for math42
+        2006-03-01 09:30: absent from math42
+        2006-03-02 09:30: late for grammar3
+        2006-03-05 09:30: absent from grammar3
+        2006-03-06 09:30: late for relativity97
+
+    """
+
+
 def doctest_StudentAttendanceView_terms():
     r"""Tests for StudentAttendanceView.terms
 
     A little stubbing
 
-        >>> class TermStub(object):
-        ...     def __init__(self, y, m1, d1, m2, d2):
-        ...         self.first = datetime.date(y, m1, d1)
-        ...         self.last = datetime.date(y, m2, d2)
-        >>> class SchoolToolApplicationStub(object):
-        ...     adapts(None)
-        ...     implements(ISchoolToolApplication)
-        ...     _terms = {'2004-fall': TermStub(2004, 9, 1, 12, 22),
-        ...               '2005-spring': TermStub(2005, 2, 1, 5, 21),
-        ...               '2005-fall': TermStub(2005, 9, 1, 12, 22),
-        ...               '2006-spring': TermStub(2006, 2, 1, 5, 21)}
-        ...     def __init__(self, context):
-        ...         pass
-        ...     def __getitem__(self, name):
-        ...         return {'terms': self._terms}[name]
         >>> provideAdapter(SchoolToolApplicationStub)
 
     and we can test that StudentAttendanceView.terms returns all the terms
@@ -1217,12 +1332,11 @@ def doctest_StudentAttendanceView_summaryPerTerm():
 
         >>> class TermStub(object):
         ...     def __init__(self, name):
+        ...         self.__name__ = name
         ...         self.title = name
         ...         self.first = name
         ...         self.last = name
 
-        >>> from schooltool.attendance.interfaces import ISectionAttendance
-        >>> from schooltool.attendance.interfaces import IDayAttendance
         >>> class DayAttendanceStub(object):
         ...     adapts(None)
         ...     implements(IDayAttendance)
@@ -1267,9 +1381,9 @@ def setUp(test):
     setup.setUpTraversal()
     setUpAnnotations()
     setUpRelationships()
-    app = ApplicationStub()
-    ztapi.provideAdapter(None, ISchoolToolApplication, lambda x: app)
     stubProcessDefinition()
+    provideAdapter(SchoolToolApplicationStub)
+    provideAdapter(ApplicationPreferencesStub)
 
 
 def tearDown(test):

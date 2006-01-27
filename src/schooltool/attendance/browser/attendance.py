@@ -23,6 +23,7 @@ $Id$
 """
 
 import datetime
+import itertools
 from pytz import utc
 
 from zope.app import zapi
@@ -47,7 +48,9 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPerson
 from schooltool.group.interfaces import IGroup
 from schooltool.attendance.interfaces import IDayAttendance
+from schooltool.attendance.interfaces import IDayAttendanceRecord
 from schooltool.attendance.interfaces import ISectionAttendance
+from schooltool.attendance.interfaces import ISectionAttendanceRecord
 from schooltool.attendance.interfaces import ABSENT, TARDY, PRESENT, UNKNOWN
 from schooltool import SchoolToolMessage as _
 
@@ -360,32 +363,54 @@ class StudentAttendanceView(BrowserView):
 
     __call__ = ViewPageTemplateFile('templates/student-attendance.pt')
 
-    def unresolvedAbsences(self):
-        """Return all recent unresolved absences."""
-        for ar in IDayAttendance(self.context):
-            if ar.isAbsent() and not ar.isExplained():
-                yield _('$date: absent from homeroom',
-                        mapping={'date': ar.date})
-            elif ar.isTardy() and not ar.isExplained():
-                yield _('$date: late for homeroom',
-                        mapping={'date': ar.date})
-        for ar in ISectionAttendance(self.context):
-            if ar.isAbsent() and not ar.isExplained():
-                yield _('$date $time: absent from $section',
-                        mapping={'date': ar.date,
-                                 'time': ar.datetime.strftime('%H:%M'),
-                                 'section': translate(ar.section.label)})
-            elif ar.isTardy() and not ar.isExplained():
-                yield _('$date $time: late for $section',
-                        mapping={'date': ar.date,
-                                 'time': ar.datetime.strftime('%H:%M'),
-                                 'section': translate(ar.section.label)})
+    @property
+    def term_for_detailed_summary(self):
+        """Return the term for a detailed list of absences."""
+        app = ISchoolToolApplication(None)
+        term_name = self.request.get('term', None)
+        return app['terms'].get(term_name, None)
 
     def terms(self):
         """List all terms in chronological order."""
         app = ISchoolToolApplication(None)
         terms = sorted(app['terms'].values(), key=lambda t: t.first)
         return terms
+
+    def formatAttendanceRecord(self, ar):
+        """Format an attendance record for display."""
+        assert ar.isAbsent() or ar.isTardy()
+        if IDayAttendanceRecord.providedBy(ar):
+            mapping = {'date': ar.date}
+            if ar.isAbsent():
+                return _('$date: absent from homeroom', mapping=mapping)
+            else:
+                return _('$date: late for homeroom', mapping=mapping)
+        else:
+            assert ISectionAttendanceRecord.providedBy(ar)
+            mapping={'date': ar.date,
+                     'time': ar.datetime.strftime('%H:%M'),
+                     'section': translate(ar.section.label)}
+            if ar.isAbsent():
+                return _('$date $time: absent from $section', mapping=mapping)
+            else:
+                return _('$date $time: late for $section', mapping=mapping)
+
+    def unresolvedAbsences(self):
+        """Return all unresolved absences and tardies."""
+        day_attendance = IDayAttendance(self.context)
+        section_attendance = ISectionAttendance(self.context)
+        for ar in itertools.chain(day_attendance, section_attendance):
+            if (ar.isAbsent() or ar.isTardy()) and not ar.isExplained():
+                yield self.formatAttendanceRecord(ar)
+
+    def absencesForTerm(self, term):
+        """Return all absences and tardies in a term."""
+        day_attendance = IDayAttendance(self.context)
+        section_attendance = ISectionAttendance(self.context)
+        for ar in itertools.chain(day_attendance.filter(term.first, term.last),
+                        section_attendance.filter(term.first, term.last)):
+            if ar.isAbsent() or ar.isTardy():
+                yield self.formatAttendanceRecord(ar)
 
     def summaryPerTerm(self):
         """List a summary of absences and tardies for each term."""
@@ -396,7 +421,8 @@ class StudentAttendanceView(BrowserView):
                     day_attendance.filter(term.first, term.last))
             n_section_absences, n_section_tardies = self.countAbsences(
                     section_attendance.filter(term.first, term.last))
-            yield {'title': term.title,
+            yield {'name': term.__name__,
+                   'title': term.title,
                    'first': term.first,
                    'last': term.last,
                    'day_absences': n_day_absences,

@@ -80,7 +80,7 @@ def pformat_set(s):
 
 
 
-def normalize_xml(xml, recursively_sort=()):
+def normalize_xml(xml, recursively_sort=(), compact=False):
     """Normalizes an XML document.
 
     The idea is that two semantically equivalent XML documents should be
@@ -105,6 +105,9 @@ def normalize_xml(xml, recursively_sort=()):
     test:sort="recursively" automatically appended to their attribute lists in
     the text.  Use it when you cannot or do not want to modify the XML document
     itself.
+
+    If compact is True, nodes that only have text (without newlines) will be
+    presented more compactly ("<tag>text</tag>").
 
     Caveats:
      - normalize_xml does not deal well with text nodes
@@ -152,12 +155,15 @@ def normalize_xml(xml, recursively_sort=()):
                 s = ''.join([child.render(level+1) for child in self.children])
             else:
                 s = ''
-            if s:
+            if not s:
+                result.append('%s/>\n' % line)
+            elif (compact and len(self.children) == 1 and '<' not in s
+                  and s.count('\n') == 1):
+                result.append('%s>%s</%s>\n' % (line, s.strip(), self.tag))
+            else:
                 result.append('%s>\n' % line)
                 result.append(s)
                 result.append('%s</%s>\n' % (indent, self.tag))
-            else:
-                result.append('%s/>\n' % line)
             return ''.join(result)
 
         def finalize(self):
