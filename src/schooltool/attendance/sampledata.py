@@ -93,12 +93,12 @@ class SectionAttendancePlugin(object):
                     person = persons[person_name]
                     present = self.rng.random() > self.day_absence_rate
                     if not present:
-                        day_absences[strdate].append(person)
+                        day_absences[strdate].append(person_name)
                     IDayAttendance(person).record(day, present)
         transaction.commit()
         return day_absences
 
-    def generateSectionAttendance(self):
+    def generateSectionAttendance(self, day_absences):
         """Generate sample data for section attendance."""
         for section in self.app['sections'].values():
             meetings = ITimetables(section).makeTimetableCalendar(self.start_date,
@@ -109,8 +109,8 @@ class SectionAttendancePlugin(object):
                     present = self.rng.random() > self.absence_rate
 
                     datestr = meeting.dtstart.strftime("%Y-%m-%d")
-                    day_absence = (datestr in self.day_absences and
-                                   student in self.day_absences[datestr])
+                    day_absence = (datestr in day_absences and
+                                   student.__name__ in day_absences[datestr])
                     if day_absence:
                         present = False
 
@@ -144,5 +144,5 @@ class SectionAttendancePlugin(object):
             timedelta = datetime.timedelta(self.only_last_n_days - 1)
             self.start_date = self.end_date - timedelta
 
-        self.day_absences = self.generateDayAttendance()
-        self.generateSectionAttendance()
+        day_absences = self.generateDayAttendance()
+        self.generateSectionAttendance(day_absences)

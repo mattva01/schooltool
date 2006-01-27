@@ -58,6 +58,15 @@ class SectionStub(object):
         return self.name
 
 
+class PersonStub(object):
+
+    def __init__(self, name):
+        self.__name__ = name
+
+    def __repr__(self):
+        return "%s" % self.__name__
+
+
 class TimetableCalendarEventStub(object):
     def __init__(self, dtstart, duration, period_id):
         self.dtstart = dtstart
@@ -191,10 +200,10 @@ def doctest_SectionAttendancePlugin_generateDayAttendance():
         Ian was absent on 2005-09-11
         Jon was absent on 2005-09-13
         Ian was absent on 2005-09-13
-        [('2005-09-11', ['Jon', 'Ian']),
-         ('2005-09-13', ['Jon', 'Ian'])]
+        [('2005-09-11', ['student_Jon', 'student_Ian']),
+         ('2005-09-13', ['student_Jon', 'student_Ian'])]
 
-    Unless the abscence rate is 0:
+    Unless the absence rate is 0:
 
         >>> plugin.day_absence_rate = 0
         >>> print sorted(plugin.generateDayAttendance().items())
@@ -222,14 +231,14 @@ def doctest_SectionAttendancePlugin_generateSectionAttendance():
         ...        'sections': {'s1': SectionStub('s1'),
         ...                     's2': SectionStub('s2')}}
 
-        >>> app['sections']['s1'].members = ['Jon', 'Ian']
-        >>> app['sections']['s2'].members = ['Ann']
+        >>> app['sections']['s1'].members = [PersonStub('Jon'),
+        ...                                  PersonStub('Ian')]
+        >>> app['sections']['s2'].members = [PersonStub('Ann')]
         >>> plugin.app = app
         >>> plugin.term = term
         >>> plugin.start_date = term.first
         >>> plugin.end_date = term.last
         >>> plugin.rng = random.Random(42)
-        >>> plugin.day_absences = []
 
     The "sections" need to be adaptable to ITimetables
 
@@ -243,7 +252,7 @@ def doctest_SectionAttendancePlugin_generateSectionAttendance():
 
     Now we can generate some sample data
 
-        >>> plugin.generateSectionAttendance()
+        >>> plugin.generateSectionAttendance([])
         Ann was present on 2005-09-01 09:30:00 (p1, s2)
         Ann was absent on 2005-09-03 09:30:00 (p1, s2)
         Tardy at 2005-09-03 09:45:00
@@ -274,7 +283,7 @@ def doctest_SectionAttendancePlugin_generateSectionAttendance():
 
         >>> plugin.start_date = term.last - datetime.timedelta(days=3)
         >>> plugin.rng = random.Random(42)
-        >>> plugin.generateSectionAttendance()
+        >>> plugin.generateSectionAttendance([])
         Ann was present on 2005-09-11 09:30:00 (p1, s2)
         Ann was absent on 2005-09-13 09:30:00 (p1, s2)
         Tardy at 2005-09-13 09:45:00
@@ -284,14 +293,13 @@ def doctest_SectionAttendancePlugin_generateSectionAttendance():
         Ian was absent on 2005-09-13 09:30:00 (p1, s1)
         Tardy at 2005-09-13 09:45:00
 
-    If there was a day abscence - the student should not be present in
+    If there was a day absence - the student should not be present in
     any of the section events (even if absence_rate is zero):
 
         >>> plugin.absence_rate = 0
         >>> plugin.rng = random.Random(42)
-        >>> plugin.day_absences = {'2005-09-11': ['Jon'],
-        ...                        '2005-09-13': ['Ian']}
-        >>> plugin.generateSectionAttendance()
+        >>> day_absences = {'2005-09-11': ['Jon'], '2005-09-13': ['Ian']}
+        >>> plugin.generateSectionAttendance(day_absences)
         Ann was present on 2005-09-11 09:30:00 (p1, s2)
         Ann was present on 2005-09-13 09:30:00 (p1, s2)
         Jon was absent on 2005-09-11 09:30:00 (p1, s1)
@@ -319,8 +327,8 @@ def doctest_SectionAttendancePlugin_generate():
         >>> def generateDayAttendanceStub():
         ...     print 'Generating day attendance data'
         ...     return 'day_attendance_data'
-        >>> def generateSectionAttendanceStub():
-        ...     print 'Generating section attendance data'
+        >>> def generateSectionAttendanceStub(day_absences):
+        ...     print 'Generating section attendance data (%s)' % day_absences
         >>> plugin.generateDayAttendance = generateDayAttendanceStub
         >>> plugin.generateSectionAttendance = generateSectionAttendanceStub
 
@@ -331,7 +339,7 @@ def doctest_SectionAttendancePlugin_generate():
 
         >>> plugin.generate(app, 42)
         Generating day attendance data
-        Generating section attendance data
+        Generating section attendance data (day_attendance_data)
 
         >>> plugin.app is app
         True
@@ -348,16 +356,13 @@ def doctest_SectionAttendancePlugin_generate():
         >>> plugin.rng
         <random.Random object at ...>
 
-        >>> plugin.day_absences
-        'day_attendance_data'
-
     Now if we set the only_last_n_days attribute, the start_date
     should get shifted:
 
         >>> plugin.only_last_n_days = 2
         >>> plugin.generate(app, 42)
         Generating day attendance data
-        Generating section attendance data
+        Generating section attendance data (day_attendance_data)
 
         >>> plugin.start_date
         datetime.date(2005, 9, 13)
