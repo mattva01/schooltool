@@ -1088,6 +1088,42 @@ def doctest_SectionAttendance_absenceEventTitle():
     """
 
 
+def doctest_SectionAttendance_filter():
+    """Tests for SectionAttendance.filter
+
+        >>> from schooltool.attendance.attendance import SectionAttendance
+        >>> sa = SectionAttendance()
+
+        >>> class BTreeStub(object):
+        ...     records = []
+        ...     def values(self, **kwargs):
+        ...         print sorted(kwargs.items())
+        ...         return self.records
+
+        >>> sa._records = BTreeStub()
+
+    Filter uses facilities provided by OOBTree to get the values:
+
+        >>> list(sa.filter(datetime.date(2005, 11, 23),
+        ...                datetime.date(2005, 11, 27)))
+        [('excludemax', True),
+         ('max', datetime.datetime(2005, 11, 28, 0, 0, tzinfo=<UTC>)),
+         ('min', datetime.datetime(2005, 11, 23, 0, 0, tzinfo=<UTC>))]
+        []
+
+    And then ectracts the records themselves:
+
+        >>> sa._records.records = [('record1', 'record2',), ('record3',), ()]
+        >>> list(sa.filter(datetime.date(2005, 11, 21),
+        ...                datetime.date(2005, 11, 27)))
+        [('excludemax', True),
+         ('max', datetime.datetime(2005, 11, 28, 0, 0, tzinfo=<UTC>)),
+         ('min', datetime.datetime(2005, 11, 21, 0, 0, tzinfo=<UTC>))]
+        ['record1', 'record2', 'record3']
+
+    """
+
+
 def doctest_SectionAttendance_makeCalendarEvent():
     r"""Tests for SectionAttendance.makeCalendarEvent
 
@@ -1285,6 +1321,7 @@ def doctest_RejectExplanation():
 
     """
 
+
 def doctest_AttendanceCalendarProvider_getAuthenticatedUser():
     """Tests for AttendanceCalendarProvider._getAuthenticatedUser.
 
@@ -1308,6 +1345,7 @@ def doctest_AttendanceCalendarProvider_getAuthenticatedUser():
         IPerson(principal)
 
     """
+
 
 def doctest_AttendanceCalendarProvider_isLookingAtOwnCalendar():
     """Tests for AttendanceCalendarProvider._isLookingAtOwnCalendar.
@@ -1335,6 +1373,7 @@ def doctest_AttendanceCalendarProvider_isLookingAtOwnCalendar():
         True
 
     """
+
 
 def doctest_AttendanceCalendarProvider():
     """Tests for AttendanceCalendarProvider.
@@ -1380,6 +1419,47 @@ def doctest_AttendanceCalendarProvider():
         >>> list(provider.getCalendars())
         [('SectionAttendance calendar', '#aa0000', '#ff0000'),
          ('DayAttendance calendar', '#00aa00', '#00ff00')]
+
+    """
+
+
+def doctest_date_to_schoolday_start():
+    """Tests for date_to_schoolday_start.
+
+    Given a date this function should return the datetime of the
+    beginning of the day.
+
+        >>> from schooltool.attendance.attendance import date_to_schoolday_start
+        >>> date_to_schoolday_start(datetime.date(2005, 1, 1))
+        datetime.datetime(2005, 1, 1, 0, 0, tzinfo=<UTC>)
+
+    Application timezone is taken into account.
+
+        >>> app = ISchoolToolApplication(None)
+        >>> IApplicationPreferences(app).timezone = 'Europe/Vilnius'
+        >>> date_to_schoolday_start(datetime.date(2005, 1, 1))
+        datetime.datetime(2005, 1, 1, 0, 0,
+            tzinfo=<DstTzInfo 'Europe/Vilnius' EET+2:00:00 STD>)
+
+    """
+
+
+def doctest_date_to_schoolday_end():
+    """Tests for date_to_schoolday_end.
+
+    Given a date, returns the datetime of the end of the day.
+
+        >>> from schooltool.attendance.attendance import date_to_schoolday_end
+        >>> date_to_schoolday_end(datetime.date(2005, 1, 1))
+        datetime.datetime(2005, 1, 2, 0, 0, tzinfo=<UTC>)
+
+    Takes application timezone into account.
+
+        >>> app = ISchoolToolApplication(None)
+        >>> IApplicationPreferences(app).timezone = 'Europe/Vilnius'
+        >>> date_to_schoolday_end(datetime.date(2005, 1, 1))
+        datetime.datetime(2005, 1, 2, 0, 0,
+            tzinfo=<DstTzInfo 'Europe/Vilnius' EET+2:00:00 STD>)
 
     """
 

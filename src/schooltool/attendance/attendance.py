@@ -61,6 +61,24 @@ from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.person.interfaces import IPerson
 
 
+def date_to_schoolday_start(date):
+    """Given a date, return the datetime of the beginning of the day.
+
+    Takes the school's timezone into account.
+    """
+    app = ISchoolToolApplication(None)
+    tzinfo = pytz.timezone(IApplicationPreferences(app).timezone)
+    return tzinfo.localize(datetime.datetime.combine(date, datetime.time(0)))
+
+
+def date_to_schoolday_end(date):
+    """Given a date, return the datetime of the end of the day.
+
+    Takes the school's timezone into account.
+    """
+    return date_to_schoolday_start(date) + datetime.timedelta(days=1)
+
+
 #
 # Attendance record classes
 #
@@ -302,8 +320,17 @@ class SectionAttendance(Persistent, AttendanceFilteringMixin,
             for record in group:
                 yield record
 
+    def filter(self, first, last):
+        assert type(first) == datetime.date
+        assert type(last) == datetime.date
+        dt_min = date_to_schoolday_start(first)
+        dt_max = date_to_schoolday_end(last)
+        for group in self._records.values(min=dt_min, max=dt_max,
+                                          excludemax=True):
+            for record in group:
+                yield record
+
     def getAllForDay(self, date):
-        # TODO: use a binary tree?
         return self.filter(date, date)
 
     def get(self, section, datetime):
