@@ -137,7 +137,7 @@
       name="index.html"
       for="schooltool.timetable.interfaces.ITimetableSchema"
       class=".schema.TimetableSchemaView"
-      template="templates/timetable.pt"
+      template="templates/timetableschema.pt"
       permission="schooltool.view"
       menu="zmi_views" title="View"
       />

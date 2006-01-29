@@ -19,7 +19,7 @@
 """
 Timetabling Schema views.
 
-$Id: __init__.py 4822 2005-08-19 01:35:11Z srichter $
+$Id$
 """
 from zope.i18n import translate
 from zope.interface import Interface
@@ -50,6 +50,21 @@ from schooltool.timetable.browser import format_time_range
 class TimetableSchemaView(TimetableView):
 
     __used_for__ = ITimetableSchema
+
+    def homerooms(self):
+        """Returns a dictionary of day indexes to homeroom period indexes"""
+        result = {}
+        for daynr, dayid in enumerate(self.context.keys()):
+            day = self.context[dayid]
+            if not day.homeroom_period_id:
+                result[daynr] = None
+                continue
+            else:
+                for periodnr, periodid in enumerate(day.keys()):
+                    if periodid == day.homeroom_period_id:
+                        result[daynr] = periodnr
+                        continue
+        return result
 
     def title(self):
         msg = _("Timetable schema ${schema}",

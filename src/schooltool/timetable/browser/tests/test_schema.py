@@ -19,7 +19,7 @@
 """
 Tests for schooltool timetable schema views.
 
-$Id: test_timetable.py 4822 2005-08-19 01:35:11Z srichter $
+$Id$
 """
 
 import unittest
@@ -401,9 +401,10 @@ def doctest_TimetableSchemaView():
 
     Create some context:
 
-        >>> tts = TimetableSchema(['day 1'])
+        >>> tts = TimetableSchema(['day 1', 'day 2'])
         >>> tts.__name__ = 'some-schema'
-        >>> tts['day 1'] = ttd = TimetableSchemaDay(['A'])
+        >>> tts['day 1'] = ttd1 = TimetableSchemaDay(['A', 'B'])
+        >>> tts['day 2'] = ttd2 = TimetableSchemaDay(['A', 'B'])
 
         >>> request = TestRequest()
         >>> view = TimetableSchemaView(tts, request)
@@ -416,7 +417,16 @@ def doctest_TimetableSchemaView():
     ``rows()`` delegates the job to ``format_timetable_for_presentation``:
 
         >>> view.rows()
-        [[{'period': 'A', 'activity': ''}]]
+        [[{'period': 'A', 'activity': ''}, {'period': 'A', 'activity': ''}],
+         [{'period': 'B', 'activity': ''}, {'period': 'B', 'activity': ''}]]
+
+    ``homerooms()`` returns a dict of homeroom periods.  It is for use
+    by the template, so the days and the periods are designated by
+    their index rather than id:
+        >>> ttd1.homeroom_period_id = 'A'
+        >>> ttd2.homeroom_period_id = None
+        >>> view.homerooms()
+        {0: 0, 1: None}
 
     """
 
