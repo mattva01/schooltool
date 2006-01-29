@@ -171,6 +171,25 @@ rest-access-log-file schooltool-skel/log/rest-access.log
 web-access-log-file schooltool-skel/log/web-access.log
 
 #
+# attendance-log-file
+#
+#   Specifies the path of a log file used for attendance
+#   logging. Special values STDERR and STDOUT mean standard error and
+#   standard output respectively.
+#
+#   You can specify more than one log file.  All messages will be duplicated
+#   to all the log files.
+#
+# Default:
+#    attendance-log-file var/attendance.log
+#
+# Examples:
+#    attendance-log-file /var/log/schooltool/attendance.log
+#    attendance-log-file STDOUT
+#
+attendance-log-file schooltool-skel/log/attendance.log
+
+#
 # lang
 #
 #   Specifies the locale of the messages to be used on the server.

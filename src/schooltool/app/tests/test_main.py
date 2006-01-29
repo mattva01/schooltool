@@ -354,6 +354,7 @@ def doctest_setup():
         ...     path = []
         ...     error_log_file = ['STDERR']
         ...     web_access_log_file = ['STDOUT']
+        ...     attendance_log_file = ['STDOUT']
         ...     lang = 'lt'
         ...     reportlab_fontdir = ''
         ...     devmode = False
@@ -400,6 +401,12 @@ def doctest_setup():
         >>> logger2.handlers
         [<logging.StreamHandler instance at 0x...>]
 
+    As well as an attendance logger:
+
+        >>> logger3 = logging.getLogger('attendance')
+        >>> logger3.handlers
+        [<logging.StreamHandler instance at 0x...>]
+
     The language adapter shouldn't have been installed:
 
         >>> from zope.i18n.interfaces import IUserPreferredLanguages
@@ -416,11 +423,13 @@ def doctest_setup():
     We better clean up logging before we leave:
 
         >>> logging.getLogger('ZODB.lock_file').disabled = False
-        >>> for logger in [logger1, logger2]:
+        >>> for logger in [logger1, logger2, logger3]:
         ...     del logger.handlers[:]
-        ...     logger1.propagate = True
-        ...     logger1.disabled = False
-        ...     logger1.setLevel(0)
+        ...     logger.propagate = True
+        ...     logger.disabled = False
+
+        >>> for logger in [logger1, logger3]:
+        ...     logger.setLevel(0)
 
         >>> setup.placelessTearDown()
 

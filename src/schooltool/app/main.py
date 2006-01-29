@@ -434,6 +434,7 @@ class StandaloneServer(object):
         setUpLogger(None, options.config.error_log_file,
                     "%(asctime)s %(message)s")
         setUpLogger('accesslog', options.config.web_access_log_file)
+        setUpLogger('attendance', options.config.attendance_log_file)
 
         # Shut up ZODB lock_file, because it logs tracebacks when unable
         # to lock the database file, and we don't want that.

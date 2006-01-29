@@ -206,6 +206,17 @@
     </example>
   </multikey>
 
+  <multikey name="attendance-log-file" datatype="string">
+    <description>
+      Specifies the path of a file used for the attendance log.
+      Special values STDERR and STDOUT mean standard error and standard
+      output respectively.
+    </description>
+    <example>
+      attendance-log-file /var/log/schooltool/attendance.log
+    </example>
+  </multikey>
+
   <key name="lang" datatype="string" default="auto">
     <description>
       Specifies the locale of the messages to be used on the server.
