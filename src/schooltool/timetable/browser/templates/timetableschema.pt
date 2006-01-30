@@ -27,7 +27,8 @@
           class="period">1</th>
       <td tal:attributes="width td_width" class="activity">
             <span tal:condition="python: homerooms[repeat['col'].index()] ==
-                                         repeat['row'].index()">Homeroom</span>
+                                         repeat['row'].index()"
+                  i18n:translate="">Homeroom</span>
       </td>
     </tal:block></tr>
   </table>
