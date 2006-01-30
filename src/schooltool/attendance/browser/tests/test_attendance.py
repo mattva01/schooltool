@@ -55,6 +55,7 @@ from schooltool.attendance.interfaces import IDayAttendance
 from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.attendance.interfaces import IDayAttendanceRecord
 from schooltool.attendance.interfaces import ISectionAttendanceRecord
+from schooltool.attendance.interfaces import AttendanceError
 from schooltool import SchoolToolMessage as _
 
 
@@ -152,6 +153,14 @@ class DayAttendanceRecordStub(object):
     def isAbsent(self): return self.status == ABSENT
     def isTardy(self): return self.status == TARDY
     def isExplained(self): return self._explained
+    def addExplanation(self, expl):
+        print "Added explanation: %s" % expl
+    def acceptExplanation(self):
+        print "Accepted explanation"
+    def rejectExplanation(self):
+        print "Rejected explanation"
+    def raiseError(self, *args):
+        raise AttendanceError
 
 
 class SectionAttendanceRecordStub(object):
@@ -240,6 +249,7 @@ class SectionStub(object):
     members = ()
 
     def __init__(self, title='a_section'):
+        self.__name__ = title
         self._title = title
 
     @property
@@ -249,6 +259,20 @@ class SectionStub(object):
 
 class PersonStub(object):
     pass
+
+
+def print_and_return_True(text):
+    def inner(*args):
+        print text
+        return True
+    return inner
+
+
+def print_and_return_False(text):
+    def inner(*args):
+        print text
+        return False
+    return inner
 
 
 def setUpAttendanceAdapters():
@@ -1231,7 +1255,7 @@ def doctest_StudentAttendanceView_unresolvedAbsences():
         ...         for day in DateRange(first, last)]
 
         >>> for absence in view.unresolvedAbsences():
-        ...     print translate(absence)
+        ...     print translate(absence['text'])
         2006-01-22: absent from homeroom
         2006-01-23: late for homeroom
         2006-01-22 09:30: absent from grammar3
@@ -1373,6 +1397,306 @@ def doctest_StudentAttendanceView_summaryPerTerm():
         term1  3 2  0 0
         term2  2 1  1 2
         term3  0 0  2 0
+
+    """
+
+
+def doctest_StudentAttendanceView_makeId():
+    r"""Tests for StudentAttendanceView.makeId
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...        import StudentAttendanceView
+        >>> view = StudentAttendanceView(None, None)
+
+        >>> from schooltool.attendance.attendance import DayAttendanceRecord
+        >>> a = DayAttendanceRecord(datetime.date(2006, 1, 29), ABSENT)
+
+        >>> view.makeId(a)
+        'd_2006-01-29'
+
+        >>> from schooltool.attendance.attendance import SectionAttendanceRecord
+        >>> dt = utc.localize(datetime.datetime(2006, 1, 29, 14, 30))
+        >>> a = SectionAttendanceRecord(SectionStub(u'Some section \u1234'),
+        ...                             dt, ABSENT)
+
+        >>> view.makeId(a)
+        's_2006-01-29_14:30:00+00:00_U29tZSBzZWN0aW9uIOGItA=='
+
+    """
+
+
+def doctest_StudentAttendanceView_update():
+    r"""Tests for StudentAttendanceView.update
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...        import StudentAttendanceView
+        >>> request = TestRequest()
+        >>> view = StudentAttendanceView(None, request)
+        >>> def _process(ar, text, explanation, resolve):
+        ...     print ar
+        ...     if explanation: print 'Explaining %s: %s' % (text, explanation)
+        ...     if resolve == 'accept': print 'Accepting %s' % text
+        ...     if resolve == 'reject': print 'Rejecting %s' % text
+        >>> view._process = _process
+        >>> view.unresolvedAbsences = lambda: [
+        ...     {'id': 'ar123', 'attendance_record': '<ar123>',
+        ...      'text': 'Attendance Record #123'},
+        ...     {'id': 'ar124', 'attendance_record': '<ar124>',
+        ...      'text': 'Attendance Record #124'},
+        ...     {'id': 'ar125', 'attendance_record': '<ar125>',
+        ...      'text': 'Attendance Record #125'},
+        ... ]
+
+    No 'UPDATE' button in request -- nothing happens.
+
+        >>> view.update()
+
+    No checkboxes in request -- nothing happens.
+
+        >>> request.form['UPDATE'] = u'Do it!'
+        >>> view.update()
+
+    No explanation or radio buttons -- nothing significant happens
+
+        >>> request.form['UPDATE'] = u'Do it!'
+        >>> request.form['ar123'] = 'on'
+        >>> request.form['ar125'] = 'on'
+        >>> view.update()
+        <ar123>
+        <ar125>
+
+    Let's add an explanation and accept:
+
+        >>> request.form['UPDATE'] = u'Do it!'
+        >>> request.form['ar123'] = 'on'
+        >>> request.form['ar125'] = 'on'
+        >>> request.form['explanation'] = 'yada yada'
+        >>> request.form['resolve'] = 'accept'
+        >>> view.update()
+        <ar123>
+        Explaining Attendance Record #123: yada yada
+        Accepting Attendance Record #123
+        <ar125>
+        Explaining Attendance Record #125: yada yada
+        Accepting Attendance Record #125
+
+    """
+
+
+def doctest_StudentAttendanceView_process():
+    r"""Tests for StudentAttendanceView._process
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...        import StudentAttendanceView
+        >>> view = StudentAttendanceView(None, None)
+        >>> view.errors = []
+        >>> view.statuses = []
+        >>> view._addExplanation = print_and_return_True('addExplanation')
+        >>> view._acceptExplanation = print_and_return_True('acceptExplanation')
+        >>> view._rejectExplanation = print_and_return_True('rejectExplanation')
+
+        >>> ar = 'attendance_record'
+        >>> text = 'THIS ABSENCE'
+        >>> view._process(ar, text, '', 'ignore')
+
+    Nothing happened.
+
+        >>> view.statuses
+        []
+
+    Let's add an explanation; nothing else
+
+        >>> view._process(ar, text, 'explainexplainexplain', 'ignore')
+        addExplanation
+        >>> for status in view.statuses:
+        ...     print translate(status)
+        Added an explanation for THIS ABSENCE
+
+    Let's accept an explanation; nothing else
+
+        >>> view.statuses = []
+        >>> view._process(ar, text, '', 'accept')
+        acceptExplanation
+        >>> for status in view.statuses:
+        ...     print translate(status)
+        Resolved THIS ABSENCE
+
+    Let's reject an explanation; nothing else
+
+        >>> view.statuses = []
+        >>> view._process(ar, text, '', 'reject')
+        rejectExplanation
+        >>> for status in view.statuses:
+        ...     print translate(status)
+        Rejected explanation for THIS ABSENCE
+
+    Ok, now let's both add and accept an explanation
+
+        >>> view.statuses = []
+        >>> view._process(ar, text, 'gugugu', 'accept')
+        addExplanation
+        acceptExplanation
+        >>> for status in view.statuses:
+        ...     print translate(status)
+        Resolved THIS ABSENCE
+
+    Let's reject an explanation; nothing else
+
+        >>> view.statuses = []
+        >>> view._process(ar, text, 'baaaa', 'reject')
+        addExplanation
+        rejectExplanation
+        >>> for status in view.statuses:
+        ...     print translate(status)
+        Rejected explanation for THIS ABSENCE
+
+    """
+
+
+def doctest_StudentAttendanceView_process_error_handling():
+    r"""Tests for StudentAttendanceView._process
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...        import StudentAttendanceView
+        >>> view = StudentAttendanceView(None, None)
+        >>> view.errors = []
+        >>> view.statuses = []
+        >>> view._addExplanation = print_and_return_False('addExplanation')
+        >>> view._acceptExplanation = print_and_return_True('acceptExplanation')
+        >>> view._rejectExplanation = print_and_return_True('rejectExplanation')
+
+        >>> ar = 'attendance_record'
+        >>> text = 'THIS ABSENCE'
+
+    Let's add an explanation, when you cannot add an explanation
+
+        >>> view._process(ar, text, 'explainexplainexplain', 'ignore')
+        addExplanation
+        >>> view.statuses
+        []
+
+    You cannot accept/reject anything if addExplanation fails
+
+        >>> view._process(ar, text, 'explainexplainexplain', 'accept')
+        addExplanation
+        >>> view._process(ar, text, 'explainexplainexplain', 'reject')
+        addExplanation
+        >>> view.statuses
+        []
+
+    Ok, suppose you could add an explanation, but accept/reject borks
+
+        >>> view._addExplanation = print_and_return_True('addExplanation')
+        >>> view._acceptExplanation = print_and_return_False('acceptExplanation')
+        >>> view._rejectExplanation = print_and_return_False('rejectExplanation')
+
+        >>> view._process(ar, text, 'explainexplainexplain', 'accept')
+        addExplanation
+        acceptExplanation
+        >>> for status in view.statuses:
+        ...     print translate(status)
+        Added an explanation for THIS ABSENCE
+
+        >>> view.statuses = []
+        >>> view._process(ar, text, 'explainexplainexplain', 'reject')
+        addExplanation
+        rejectExplanation
+        >>> for status in view.statuses:
+        ...     print translate(status)
+        Added an explanation for THIS ABSENCE
+
+    Ok, suppose you did not add an explanation, and accept/reject borks
+
+        >>> view.statuses = []
+        >>> view._process(ar, text, '', 'accept')
+        acceptExplanation
+        >>> view.statuses
+        []
+
+        >>> view.statuses = []
+        >>> view._process(ar, text, '', 'reject')
+        rejectExplanation
+        >>> view.statuses
+        []
+
+    """
+
+
+def doctest_StudentAttendanceView_addExplanation():
+    r"""Tests for StudentAttendanceView._addExplanation
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...        import StudentAttendanceView
+        >>> view = StudentAttendanceView(None, None)
+        >>> view.errors = []
+
+        >>> ar = DayAttendanceRecordStub(datetime.date(2006, 1, 29), ABSENT)
+        >>> view._addExplanation(ar, 'Bububu', {'absence': 'THIS ABSENCE'})
+        Added explanation: Bububu
+        True
+        >>> view.errors
+        []
+
+        >>> ar.addExplanation = ar.raiseError
+        >>> view._addExplanation(ar, 'Bububu', {'absence': 'THIS ABSENCE'})
+        False
+
+        >>> for err in view.errors:
+        ...     print translate(err)
+        Cannot add new explanation for THIS ABSENCE:
+            old explanation not accepted/rejected
+
+    """
+
+
+def doctest_StudentAttendanceView_acceptExplanation():
+    r"""Tests for StudentAttendanceView._acceptExplanation
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...        import StudentAttendanceView
+        >>> view = StudentAttendanceView(None, None)
+        >>> view.errors = []
+
+        >>> ar = DayAttendanceRecordStub(datetime.date(2006, 1, 29), ABSENT)
+        >>> view._acceptExplanation(ar, {'absence': 'THIS ABSENCE'})
+        Accepted explanation
+        True
+        >>> view.errors
+        []
+
+        >>> ar.acceptExplanation = ar.raiseError
+        >>> view._acceptExplanation(ar, {'absence': 'THIS ABSENCE'})
+        False
+
+        >>> for err in view.errors:
+        ...     print translate(err)
+        There are no outstanding explanations to accept for THIS ABSENCE
+
+    """
+
+
+def doctest_StudentAttendanceView_rejectExplanation():
+    r"""Tests for StudentAttendanceView._rejectExplanation
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...        import StudentAttendanceView
+        >>> view = StudentAttendanceView(None, None)
+        >>> view.errors = []
+
+        >>> ar = DayAttendanceRecordStub(datetime.date(2006, 1, 29), ABSENT)
+        >>> view._rejectExplanation(ar, {'absence': 'THIS ABSENCE'})
+        Rejected explanation
+        True
+        >>> view.errors
+        []
+
+        >>> ar.rejectExplanation = ar.raiseError
+        >>> view._rejectExplanation(ar, {'absence': 'THIS ABSENCE'})
+        False
+
+        >>> for err in view.errors:
+        ...     print translate(err)
+        There are no outstanding explanations to reject for THIS ABSENCE
 
     """
 

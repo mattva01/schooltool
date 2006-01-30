@@ -156,11 +156,10 @@ A student's page contains an "Attendance" action in the menu.
     >>> manager.open('http://localhost/persons/joniukas')
     >>> manager.getLink('Attendance').click()
 
-    >>> from schooltool.xmlparsing import HTMLDocument
     >>> from schooltool.testing.util import normalize_xml
-    >>> doc = HTMLDocument(manager.contents)
-    >>> table = doc.query('//table[@class="attendance_summary_per_term"]')[0]
-    >>> print normalize_xml(str(table), compact=True)
+    >>> for node in analyze.queryHTML('//table[@class="attendance_summary_per_term"]',
+    ...                       manager.contents):
+    ...     print normalize_xml(node, compact=True)
     <table class="attendance_summary_per_term">
       <tr>
         <th rowspan="2">Term</th>

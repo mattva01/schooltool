@@ -51,6 +51,7 @@ from schooltool.attendance.interfaces import IDayAttendanceRecord
 from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.attendance.interfaces import ISectionAttendanceRecord
 from schooltool.attendance.interfaces import ABSENT, TARDY, PRESENT, UNKNOWN
+from schooltool.attendance.interfaces import AttendanceError
 from schooltool import SchoolToolMessage as _
 
 
@@ -360,7 +361,83 @@ class StudentAttendanceView(BrowserView):
 
     adapts(IPerson, IBrowserRequest)
 
-    __call__ = ViewPageTemplateFile('templates/student-attendance.pt')
+    template = ViewPageTemplateFile('templates/student-attendance.pt')
+
+    def __call__(self):
+        """Process the form and render the view."""
+        self.update()
+        return self.template()
+
+    def update(self):
+        """Process the form."""
+        self.statuses = []
+        self.errors = []
+        if 'UPDATE' not in self.request:
+            return
+        explanation = self.request.get('explanation', '').strip()
+        resolve = self.request.get('resolve', '')
+        for ar in self.unresolvedAbsences():
+            if ar['id'] in self.request.form:
+                self._process(ar['attendance_record'], translate(ar['text']),
+                              explanation, resolve)
+
+    def _process(self, ar, text, explanation, resolve):
+        """Process a single attendance record"""
+        # We want only one status message per attendance record, so if we
+        # both add an explanation and accept/reject it in one go, only the
+        # acceptance/rejection status message will be shown.
+        status = None
+        mapping = mapping={'absence': text}
+        if explanation:
+            if self._addExplanation(ar, explanation, mapping):
+                status = _('Added an explanation for $absence',
+                           mapping=mapping)
+            else:
+                # If we couldn't add an explanation, let's not accept/reject
+                # some other explanation that just happened to be there.
+                return
+        if resolve == 'accept':
+            if self._acceptExplanation(ar, mapping):
+                status = _('Resolved $absence', mapping=mapping)
+        elif resolve == 'reject':
+            if self._rejectExplanation(ar, mapping):
+                status = _('Rejected explanation for $absence',
+                           mapping=mapping)
+        if status:
+            self.statuses.append(status)
+
+    def _addExplanation(self, ar, explanation, mapping):
+        """Add an explanation, reporting errors gracefully."""
+        try:
+            ar.addExplanation(explanation)
+            return True
+        except AttendanceError:
+            self.errors.append(_('Cannot add new explanation for'
+                                 ' $absence: old explanation not'
+                                 ' accepted/rejected', mapping=mapping))
+            return False
+
+    def _acceptExplanation(self, ar, mapping):
+        """Accept an explanation, reporting errors gracefully."""
+        try:
+            ar.acceptExplanation()
+            return True
+        except AttendanceError:
+            self.errors.append(_('There are no outstanding'
+                                 ' explanations to accept for'
+                                 ' $absence', mapping=mapping))
+            return False
+
+    def _rejectExplanation(self, ar, mapping):
+        """Reject an explanation, reporting errors gracefully."""
+        try:
+            ar.rejectExplanation()
+            return True
+        except AttendanceError:
+            self.errors.append(_('There are no outstanding'
+                                 ' explanations to reject for'
+                                 ' $absence', mapping=mapping))
+            return False
 
     @property
     def term_for_detailed_summary(self):
@@ -374,6 +451,15 @@ class StudentAttendanceView(BrowserView):
         app = ISchoolToolApplication(None)
         terms = sorted(app['terms'].values(), key=lambda t: t.first)
         return terms
+
+    def makeId(self, ar):
+        """Create an ID to identify an attendance record."""
+        if IDayAttendanceRecord.providedBy(ar):
+            return "d_%s" % ar.date
+        else:
+            return "s_%s_%s" % (ar.datetime.isoformat('_'),
+                                ar.section.__name__.encode('UTF-8')
+                                                   .encode('base64').rstrip())
 
     def formatAttendanceRecord(self, ar):
         """Format an attendance record for display."""
@@ -400,7 +486,9 @@ class StudentAttendanceView(BrowserView):
         section_attendance = ISectionAttendance(self.context)
         for ar in itertools.chain(day_attendance, section_attendance):
             if (ar.isAbsent() or ar.isTardy()) and not ar.isExplained():
-                yield self.formatAttendanceRecord(ar)
+                yield {'id': self.makeId(ar),
+                       'text': self.formatAttendanceRecord(ar),
+                       'attendance_record': ar}
 
     def absencesForTerm(self, term):
         """Return all absences and tardies in a term."""
@@ -438,3 +526,4 @@ class StudentAttendanceView(BrowserView):
             elif ar.isTardy():
                 n_tardies += 1
         return n_absences, n_tardies
+

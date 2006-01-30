@@ -12,3 +12,10 @@
   display: block;
   padding: 1em;
 }
+
+form#attendance_explain_resolve div.row {
+  margin-top: 1em;
+}
+form#attendance_explain_resolve div.label {
+  float: none;
+}
