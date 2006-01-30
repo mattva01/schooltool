@@ -38,7 +38,6 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.security.proxy import removeSecurityProxy
 from zope.i18n import translate
 
-from schooltool.traverser.interfaces import ITraverserPlugin
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import ITimetableCalendarEvent
 from schooltool.calendar.utils import parse_date, parse_time
