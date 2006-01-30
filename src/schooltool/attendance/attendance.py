@@ -164,7 +164,7 @@ class SectionAttendanceLoggingProxy(AttendanceLoggingProxy):
 
     def makeTardy(self, arrival_time):
         self.attentdance_record.makeTardy(arrival_time)
-        self.log("tardified an absence, arrival time (%s)" % arrival_time)
+        self.log("made attendance record a tardy, arrival time (%s)" % arrival_time)
 
 
 #

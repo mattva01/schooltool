@@ -26,6 +26,7 @@ __docformat__ = 'reStructuredText'
 
 import unittest
 import datetime
+import logging
 
 from pytz import utc, timezone
 from persistent import Persistent
@@ -37,6 +38,10 @@ from zope.app.annotation.interfaces import IAnnotations, IAttributeAnnotatable
 from zope.wfmc.interfaces import IParticipant, IProcessDefinition
 from zope.component import provideAdapter, provideUtility
 from zope.app.testing import ztapi
+from zope.security.management import endInteraction
+from zope.security.management import newInteraction
+from zope.security.management import restoreInteraction
+from zope.publisher.browser import TestRequest
 
 import schooltool.app # Dead chicken to appease the circle of import gods
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -60,11 +65,15 @@ from schooltool.attendance.tests import stubProcessDefinition
 class PersonStub(object):
     implements(IPerson, IAttributeAnnotatable)
 
+    def __init__(self, name=None):
+        self.__name__ = name
+
 
 class SectionStub(object):
 
-    def __init__(self, title=None):
+    def __init__(self, title=None, name=None):
         self.title = title
+        self.__name__ = name
 
     def __repr__(self):
         if self.title:
@@ -89,6 +98,12 @@ class AttendanceRecordStub(object):
     def isAbsent(self):
         return self.status == ABSENT
 
+    def makeTardy(self, arrival_time):
+        print "made tardy (%s)" % arrival_time
+
+    def addExplanation(self, explanation):
+        print "added an explanation"
+
     def acceptExplanation(self):
         print "accepted the explanation"
 
@@ -111,6 +126,146 @@ class ActivityStub(object):
 
 class ParticipantStub(object):
     activity = ActivityStub()
+
+
+def doctest_getRequestFromInteraction():
+    """Tests for getRequestFromInteraction.
+
+        >>> endInteraction()
+
+    If there is no interaction - function returns None:
+
+        >>> from schooltool.attendance.attendance import getRequestFromInteraction
+        >>> getRequestFromInteraction() is None
+        True
+
+
+        >>> from zope.app.appsetup.appsetup import SystemConfigurationParticipation
+        >>> newInteraction(SystemConfigurationParticipation())
+        >>> getRequestFromInteraction() is None
+        True
+
+        >>> restoreInteraction()
+        >>> endInteraction()
+
+        >>> from zope.publisher.browser import TestRequest
+        >>> request = TestRequest()
+        >>> newInteraction(request)
+        >>> getRequestFromInteraction() is request
+        True
+
+        >>> restoreInteraction()
+
+    """
+
+
+def doctest_AttendanceLoggingProxy():
+    """Tests for AttendanceLoggingProxy.
+
+        >>> endInteraction()
+
+        >>> from schooltool.attendance.attendance import AttendanceLoggingProxy
+        >>> proxy = AttendanceLoggingProxy("record", "person")
+        >>> proxy._getLogger() is logging.getLogger("attendance")
+        True
+
+        >>> print proxy.__dict__
+        {'person': 'person', 'attentdance_record': 'record'}
+
+        >>> proxy._getLoggedInPerson() is None
+        True
+
+        >>> request = TestRequest()
+        >>> request.setPrincipal(PersonStub(name="Jonas"))
+        >>> newInteraction(request)
+        >>> proxy._getLoggedInPerson()
+        'Jonas'
+
+        >>> restoreInteraction()
+
+    """
+
+
+class LoggerStub(object):
+
+    def info(self, message):
+        # XXX - setting up handlers to the real logger would be
+        # cleaner
+        print message
+
+
+def doctest_AttendanceLoggingProxy_logging():
+    """Tests for AttendanceLoggingProxy logging facilities.
+
+        >>> from schooltool.attendance.attendance import AttendanceLoggingProxy
+        >>> class DummyLogger(AttendanceLoggingProxy):
+        ...     def _getLoggedInPerson(self):
+        ...         return "john"
+        ...     def _getLogger(self):
+        ...         return LoggerStub()
+
+        >>> proxy = DummyLogger(AttendanceRecordStub("2005-01-01", ABSENT),
+        ...                     PersonStub(name="peter"))
+        >>> repr(proxy)
+        '<schooltool.attendance.tests.test_attendance.AttendanceRecordStub object at ...>'
+
+        >>> proxy.log("dummy message")
+        2...-...-...,
+        john,
+        <...AttendanceRecordStub object at ...> of peter:
+        dummy message
+
+        >>> proxy.addExplanation("explanation")
+        added an explanation
+        2..., john, <...> of peter: added an explanation
+
+        >>> proxy.acceptExplanation()
+        accepted the explanation
+        2..., john, <...> of peter: accepted explanation
+
+        >>> proxy.rejectExplanation()
+        rejected the explanation
+        2..., john, <...> of peter: rejected explanation
+
+    """
+
+
+def doctest_DayAttendanceLoggingProxy():
+    r"""Tests for DayAttendanceLoggingProxy.
+
+        >>> from schooltool.attendance.attendance import \
+        ...     DayAttendanceLoggingProxy
+        >>> proxy = DayAttendanceLoggingProxy(None, None)
+
+        >>> IDayAttendanceRecord.providedBy(proxy)
+        True
+
+    """
+
+
+def doctest_SectionAttendanceLoggingProxy():
+    r"""Tests for SectionAttendanceLoggingProxy.
+
+        >>> from schooltool.attendance.attendance import \
+        ...     SectionAttendanceLoggingProxy
+        >>> class DummyLogger(SectionAttendanceLoggingProxy):
+        ...     def _getLoggedInPerson(self):
+        ...         return "john"
+        ...     def _getLogger(self):
+        ...         return LoggerStub()
+
+
+        >>> proxy = DummyLogger(AttendanceRecordStub("2005-01-01", ABSENT),
+        ...                     PersonStub(name="peter"))
+
+        >>> ISectionAttendanceRecord.providedBy(proxy)
+        True
+
+        >>> proxy.makeTardy("arrival time")
+        made tardy (arrival time)
+        2..., john, <...> of peter: made attendance record a tardy, arrival time (arrival time)
+
+    """
 
 
 #
@@ -666,7 +821,10 @@ def doctest_DayAttendance():
     """Test for DayAttendance
 
         >>> from schooltool.attendance.attendance import DayAttendance
-        >>> da = DayAttendance()
+        >>> person = object()
+        >>> da = DayAttendance(person)
+        >>> da.person is person
+        True
         >>> verifyObject(IDayAttendance, da)
         True
 
@@ -680,7 +838,7 @@ def doctest_DayAttendance_record():
     """Test for DayAttendance.record
 
         >>> from schooltool.attendance.attendance import DayAttendance
-        >>> da = DayAttendance()
+        >>> da = DayAttendance(PersonStub())
 
         >>> len(list(da))
         0
@@ -748,7 +906,7 @@ def doctest_DayAttendance_get():
     """Tests for DayAttendance.get
 
         >>> from schooltool.attendance.attendance import DayAttendance
-        >>> da = DayAttendance()
+        >>> da = DayAttendance(PersonStub())
 
     If you try to see the attendance record that has never been recorded, you
     get a "null object".
@@ -764,6 +922,11 @@ def doctest_DayAttendance_get():
         >>> ar.date == day
         True
 
+    A proxied object is returned:
+
+        >>> type(ar)
+        <class 'schooltool.attendance.attendance.DayAttendanceLoggingProxy'>
+
     Otherwise you get the correct record for a given date
 
         >>> day1 = datetime.date(2005, 12, 9)
@@ -778,6 +941,11 @@ def doctest_DayAttendance_get():
         2005-12-09 True
         2005-12-10 False
 
+    These are proxied too:
+
+        >>> type(da.get(day1))
+        <class 'schooltool.attendance.attendance.DayAttendanceLoggingProxy'>
+
     """
 
 
@@ -785,7 +953,7 @@ def doctest_DayAttendance_iter():
     """Tests for DayAttendance.__iter__
 
         >>> from schooltool.attendance.attendance import DayAttendance
-        >>> da = DayAttendance()
+        >>> da = DayAttendance(PersonStub())
 
         >>> list(da)
         []
@@ -812,13 +980,13 @@ def doctest_DayAttendance_tardyEventTitle():
 
         >>> from schooltool.attendance.attendance import DayAttendance
         >>> from schooltool.attendance.attendance import DayAttendanceRecord
-        >>> sa = DayAttendance()
+        >>> da = DayAttendance(None)
 
         >>> day = datetime.date(2005, 11, 23)
         >>> ar = DayAttendanceRecord(day, ABSENT)
         >>> ar.makeTardy(datetime.datetime(2005, 11, 23, 17, 32))
 
-        >>> print sa.tardyEventTitle(ar)
+        >>> print da.tardyEventTitle(ar)
         Was late for homeroom.
 
     """
@@ -829,7 +997,7 @@ def doctest_DayAttendance_absenceEventTitle():
 
         >>> from schooltool.attendance.attendance import DayAttendance
         >>> from schooltool.attendance.attendance import DayAttendanceRecord
-        >>> sa = DayAttendance()
+        >>> sa = DayAttendance(None)
 
         >>> day = datetime.date(2005, 11, 23)
         >>> ar = DayAttendanceRecord(day, ABSENT)
@@ -845,12 +1013,12 @@ def doctest_DayAttendance_makeCalendarEvent():
 
         >>> from schooltool.attendance.attendance import DayAttendance
         >>> from schooltool.attendance.attendance import DayAttendanceRecord
-        >>> sa = DayAttendance()
+        >>> da = DayAttendance(None)
 
         >>> day = datetime.date(2005, 11, 23)
         >>> ar = DayAttendanceRecord(day, ABSENT)
 
-        >>> ev = sa.makeCalendarEvent(ar, 'John was bad today', 'Very bad')
+        >>> ev = da.makeCalendarEvent(ar, 'John was bad today', 'Very bad')
         >>> ICalendarEvent.providedBy(ev)
         True
         >>> ev.allday
@@ -865,7 +1033,10 @@ def doctest_SectionAttendance():
     """Test for SectionAttendance
 
         >>> from schooltool.attendance.attendance import SectionAttendance
-        >>> sa = SectionAttendance()
+        >>> person = object()
+        >>> sa = SectionAttendance(person)
+        >>> sa.person is person
+        True
         >>> verifyObject(ISectionAttendance, sa)
         True
 
@@ -879,7 +1050,7 @@ def doctest_SectionAttendance_record():
     """Tests for SectionAttendance.record
 
         >>> from schooltool.attendance.attendance import SectionAttendance
-        >>> sa = SectionAttendance()
+        >>> sa = SectionAttendance(PersonStub())
 
         >>> len(list(sa))
         0
@@ -969,14 +1140,14 @@ def doctest_SectionAttendance_get():
     """Tests for SectionAttendance.get
 
         >>> from schooltool.attendance.attendance import SectionAttendance
-        >>> sa = SectionAttendance()
+        >>> sa = SectionAttendance(PersonStub())
 
         >>> section1 = SectionStub()
         >>> section2 = SectionStub()
         >>> dt = datetime.datetime(2005, 12, 9, 13, 30, tzinfo=utc)
 
-    If you try to see the attendance record that has never been recorded, you
-    get a "null object".
+    If you try to see the attendance record that has never been
+    recorded, you get a "null object".
 
         >>> ar = sa.get(section1, dt)
         >>> ar
@@ -1019,6 +1190,11 @@ def doctest_SectionAttendance_get():
         P3 False
         P4 True
 
+    Real objects are getting wrapped too:
+
+        >>> type(sa.get(section1, dt1))
+        <class 'schooltool.attendance.attendance.SectionAttendanceLoggingProxy'>
+
     """
 
 
@@ -1026,7 +1202,7 @@ def doctest_SectionAttendance_getAllForDay():
     """Tests for SectionAttendance.getAllForDay
 
         >>> from schooltool.attendance.attendance import SectionAttendance
-        >>> sa = SectionAttendance()
+        >>> sa = SectionAttendance(PersonStub())
 
         >>> section1 = SectionStub('Math')
         >>> section2 = SectionStub('Chem')
@@ -1072,7 +1248,7 @@ def doctest_SectionAttendance_tardyEventTitle():
         >>> from schooltool.attendance.attendance import SectionAttendance
         >>> from schooltool.attendance.attendance \
         ...     import SectionAttendanceRecord
-        >>> sa = SectionAttendance()
+        >>> sa = SectionAttendance(None)
 
         >>> section = SectionStub(title="Lithomancy")
         >>> dt = datetime.datetime(2005, 11, 23, 14, 55, tzinfo=utc)
@@ -1095,7 +1271,7 @@ def doctest_SectionAttendance_absenceEventTitle():
         >>> from schooltool.attendance.attendance import SectionAttendance
         >>> from schooltool.attendance.attendance \
         ...     import SectionAttendanceRecord
-        >>> sa = SectionAttendance()
+        >>> sa = SectionAttendance(None)
 
         >>> section = SectionStub(title="Lithomancy")
         >>> dt = datetime.datetime(2005, 11, 23, 14, 55, tzinfo=utc)
@@ -1114,7 +1290,7 @@ def doctest_SectionAttendance_filter():
     """Tests for SectionAttendance.filter
 
         >>> from schooltool.attendance.attendance import SectionAttendance
-        >>> sa = SectionAttendance()
+        >>> sa = SectionAttendance(None)
 
         >>> class BTreeStub(object):
         ...     records = []
@@ -1152,7 +1328,7 @@ def doctest_SectionAttendance_makeCalendarEvent():
         >>> from schooltool.attendance.attendance import SectionAttendance
         >>> from schooltool.attendance.attendance \
         ...     import SectionAttendanceRecord
-        >>> sa = SectionAttendance()
+        >>> sa = SectionAttendance(None)
 
         >>> section = SectionStub()
         >>> dt = datetime.datetime(2005, 11, 23, 14, 55, tzinfo=utc)
@@ -1199,6 +1375,11 @@ def doctest_getSectionAttendance():
         >>> attendance is ISectionAttendance(person)
         True
 
+    Attendance object has a reference to the person:
+
+        >>> attendance.person is person
+        True
+
     """
 
 
@@ -1225,6 +1406,11 @@ def doctest_getDayAttendance():
     If you adapt more than once, you will get the same object
 
         >>> attendance is IDayAttendance(person)
+        True
+
+    Attendance object has a reference to the person:
+
+        >>> attendance.person is person
         True
 
     """
@@ -1491,9 +1677,12 @@ def setUp(test):
     app = ApplicationStub()
     provideAdapter(lambda x: app, [None], ISchoolToolApplication)
     stubProcessDefinition()
+    logging.getLogger('attendance').disabled = True
+
 
 def tearDown(test):
     setup.placelessTearDown()
+    logging.getLogger('attendance').disabled = False
 
 
 def test_suite():
