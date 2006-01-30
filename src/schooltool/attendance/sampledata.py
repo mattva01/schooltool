@@ -36,16 +36,18 @@ from schooltool.sampledata.interfaces import ISampleDataPlugin
 from schooltool.timetable.interfaces import ITimetables
 
 
-class SectionAttendancePlugin(object):
-    """Section attendance sample data generator.
+class SampleAttendancePlugin(object):
+    """Section and day attendance sample data generator.
 
     Generates attendance data for the fall term of 2005 only.
     """
 
     implements(ISampleDataPlugin)
 
-    name = "section_attendance"
+    name = "attendance"
     dependencies = ("section_timetables", )
+
+    term_to_use = '2005-fall'
 
     day_absence_rate = 0.15 # A student skips 15% of days on average
 
@@ -135,7 +137,7 @@ class SectionAttendancePlugin(object):
         # unwrap, since only managers can invoke sample data.
         self.app = removeSecurityProxy(app)
         self.rng = random.Random(seed)
-        self.term = app['terms']['2005-fall']
+        self.term = app['terms'][self.term_to_use]
 
         # interval in which attendance records will be generated
         self.start_date = self.term.first

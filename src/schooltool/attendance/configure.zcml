@@ -105,9 +105,9 @@
       zcml:condition="have devmode">
 
     <utility
-        factory=".sampledata.SectionAttendancePlugin"
+        factory=".sampledata.SampleAttendancePlugin"
         provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
-        name="section_attendance"
+        name="attendance"
         />
 
   </configure>

@@ -131,11 +131,11 @@ class FakeDayAttendanceAdapter(object):
                                     False: 'absent'}[present],
                                    date)
 
-def doctest_SectionAttendancePlugin_explainAttendanceRecord():
-    """Tests for SectionAttendancePlugin.explainAttendanceRecord.
+def doctest_SampleAttendancePlugin_explainAttendanceRecord():
+    """Tests for SampleAttendancePlugin.explainAttendanceRecord.
 
-        >>> from schooltool.attendance.sampledata import SectionAttendancePlugin
-        >>> plugin = SectionAttendancePlugin()
+        >>> from schooltool.attendance.sampledata import SampleAttendancePlugin
+        >>> plugin = SampleAttendancePlugin()
 
     Whether an attendance record will be explained or not depends on
     the explanation_rate.
@@ -169,11 +169,11 @@ def doctest_SectionAttendancePlugin_explainAttendanceRecord():
     """
 
 
-def doctest_SectionAttendancePlugin_generateDayAttendance():
-    """Tests for SectionAttendancePlugin.generateDayAttendance
+def doctest_SampleAttendancePlugin_generateDayAttendance():
+    """Tests for SampleAttendancePlugin.generateDayAttendance
 
-        >>> from schooltool.attendance.sampledata import SectionAttendancePlugin
-        >>> plugin = SectionAttendancePlugin()
+        >>> from schooltool.attendance.sampledata import SampleAttendancePlugin
+        >>> plugin = SampleAttendancePlugin()
 
         >>> app = {'terms': {'2005-fall': TermStub()},
         ...        'persons': {'student_Jon': 'Jon',
@@ -217,11 +217,11 @@ def doctest_SectionAttendancePlugin_generateDayAttendance():
     """
 
 
-def doctest_SectionAttendancePlugin_generateSectionAttendance():
-    """Tests for SectionAttendancePlugin.generateDayAttendance
+def doctest_SampleAttendancePlugin_generateSectionAttendance():
+    """Tests for SampleAttendancePlugin.generateDayAttendance
 
-        >>> from schooltool.attendance.sampledata import SectionAttendancePlugin
-        >>> plugin = SectionAttendancePlugin()
+        >>> from schooltool.attendance.sampledata import SampleAttendancePlugin
+        >>> plugin = SampleAttendancePlugin()
 
     The plugin wants an application object with 'sections' and 'terms'
     containers.  It is easier to use stubs:
@@ -310,12 +310,12 @@ def doctest_SectionAttendancePlugin_generateSectionAttendance():
     """
 
 
-def doctest_SectionAttendancePlugin_generate():
-    r"""Tests for SectionAttendancePlugin
+def doctest_SampleAttendancePlugin_generate():
+    r"""Tests for SampleAttendancePlugin
 
         >>> from schooltool.attendance.sampledata \
-        ...     import SectionAttendancePlugin
-        >>> plugin = SectionAttendancePlugin()
+        ...     import SampleAttendancePlugin
+        >>> plugin = SampleAttendancePlugin()
         >>> verifyObject(ISampleDataPlugin, plugin)
         True
 
