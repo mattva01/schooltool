@@ -33,6 +33,14 @@
         trusted="true"
   />
 
+  <class class=".attendance.DayAttendanceLoggingProxy">
+    <allow interface=".interfaces.IDayAttendanceRecord" />
+  </class>
+
+  <class class=".attendance.SectionAttendanceLoggingProxy">
+    <allow interface=".interfaces.ISectionAttendanceRecord" />
+  </class>
+
   <!-- Process Definition for Explanation workflow -->
   <wfmc:xpdl
       file="explanation.xpdl"

@@ -25,6 +25,7 @@ $Id$
 import unittest
 import datetime
 import itertools
+import logging
 from pprint import pprint
 
 from pytz import utc, timezone
@@ -1384,10 +1385,12 @@ def setUp(test):
     stubProcessDefinition()
     provideAdapter(SchoolToolApplicationStub)
     provideAdapter(ApplicationPreferencesStub)
+    logging.getLogger('attendance').disabled = True
 
 
 def tearDown(test):
     setup.placelessTearDown()
+    logging.getLogger('attendance').disabled = False
 
 
 def test_suite():

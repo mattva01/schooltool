@@ -24,6 +24,7 @@ $Id$
 __docformat__ = 'reStructuredText'
 
 import datetime
+import logging
 
 import pytz
 from BTrees.OOBTree import OOBTree
@@ -42,8 +43,12 @@ from zope.interface import implements
 from zope.component import adapts
 from zope.app import zapi
 from zope.security.proxy import removeSecurityProxy
+from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.security.management import queryInteraction
+
 
 from schooltool import SchoolToolMessage as _
+from schooltool.person.interfaces import IPerson
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.calendar.simple import ImmutableCalendar
@@ -77,6 +82,89 @@ def date_to_schoolday_end(date):
     Takes the school's timezone into account.
     """
     return date_to_schoolday_start(date) + datetime.timedelta(days=1)
+
+
+def getRequestFromInteraction(request_type=IBrowserRequest):
+    """Extract the browser request from the current interaction.
+
+    Returns None when there is no interaction, or when the interaction has no
+    participations that provide request_type.
+    """
+    interaction = queryInteraction()
+    if interaction is not None:
+        for participation in interaction.participations:
+            if request_type.providedBy(participation):
+                return participation
+    return None
+
+
+class AttendanceLoggingProxy(object):
+    """Logging proxy for attendance records.
+
+    Logs information about operations performed on attendance recrod
+    into an attendance log file.
+    """
+
+    def __init__(self, attentdance_record, person):
+        self.__dict__["attentdance_record"] = attentdance_record
+        self.__dict__["person"] = person
+
+    def _getLoggedInPerson(self):
+        """Get the name of the principal.
+
+        Returns None when there is no interaction or request.
+        """
+        # XXX ignas: what about restive views ?
+        request = getRequestFromInteraction()
+
+        if request:
+            return IPerson(request.principal).__name__
+        else:
+            return None
+
+    def _getLogger(self):
+        return logging.getLogger("attendance")
+
+    def log(self, action):
+        logger = self._getLogger()
+        logger.info("%s, %s, %s of %s: %s" % (datetime.datetime.utcnow(),
+                                              self._getLoggedInPerson(),
+                                              self.attentdance_record,
+                                              self.person.__name__,
+                                              action))
+
+    def addExplanation(self, explanation):
+        self.attentdance_record.addExplanation(explanation)
+        self.log("added an explanation")
+
+    def acceptExplanation(self):
+        self.attentdance_record.acceptExplanation()
+        self.log("accepted explanation")
+
+    def rejectExplanation(self):
+        self.attentdance_record.rejectExplanation()
+        self.log("rejected explanation")
+
+    def __repr__(self):
+        return repr(self.attentdance_record)
+
+    def __getattr__(self, name):
+        return getattr(self.attentdance_record, name)
+
+    def __setattr__(self, name, value):
+        setattr(self.attentdance_record, name, value)
+
+
+class DayAttendanceLoggingProxy(AttendanceLoggingProxy):
+    implements(IDayAttendanceRecord)
+
+
+class SectionAttendanceLoggingProxy(AttendanceLoggingProxy):
+    implements(ISectionAttendanceRecord)
+
+    def makeTardy(self, arrival_time):
+        self.attentdance_record.makeTardy(arrival_time)
+        self.log("tardified an absence, arrival time (%s)" % arrival_time)
 
 
 #
@@ -179,6 +267,9 @@ class DayAttendanceRecord(AttendanceRecord):
     def __repr__(self):
         return 'DayAttendanceRecord(%r, %s)' % (self.date, self.status)
 
+    def __str__(self):
+        return 'DayAttendanceRecord(%s, %s)' % (self.date, self.status)
+
 
 class SectionAttendanceRecord(AttendanceRecord):
     """Record of a student's presence or absence at a given section meeting."""
@@ -204,6 +295,12 @@ class SectionAttendanceRecord(AttendanceRecord):
         return 'SectionAttendanceRecord(%r, %r, %s)' % (self.section,
                                                         self.datetime,
                                                         self.status)
+
+    def __str__(self):
+        return 'SectionAttendanceRecord(%s, %s, section=%s)' %(
+            self.datetime,
+            self.status,
+            self.section.__name__)
 
 
 #
@@ -265,12 +362,17 @@ class DayAttendance(Persistent, AttendanceFilteringMixin,
 
     implements(IDayAttendance)
 
-    def __init__(self):
+    def __init__(self, person):
         self._records = PersistentDict()
         # When it is time to optimize, convert it to OOBTree
+        self.person = person
+
+    def _wrapRecordForLogging(self, ar):
+        return DayAttendanceLoggingProxy(ar, self.person)
 
     def __iter__(self):
-        return iter(self._records.values())
+        for ar in self._records.values():
+            yield self._wrapRecordForLogging(ar)
 
     def tardyEventTitle(self, record):
         """Produce a title for a calendar event representing a tardy."""
@@ -294,9 +396,9 @@ class DayAttendance(Persistent, AttendanceFilteringMixin,
     def get(self, date):
         assert type(date) == datetime.date
         try:
-            return self._records[date]
+            return self._wrapRecordForLogging(self._records[date])
         except KeyError:
-            return DayAttendanceRecord(date, UNKNOWN)
+            return self._wrapRecordForLogging(DayAttendanceRecord(date, UNKNOWN))
 
     def record(self, date, present):
         assert type(date) == datetime.date
@@ -304,7 +406,9 @@ class DayAttendance(Persistent, AttendanceFilteringMixin,
             raise AttendanceError('record for %s already exists' % date)
         if present: status = PRESENT
         else: status = ABSENT
-        self._records[date] = DayAttendanceRecord(date, status)
+        ar = DayAttendanceRecord(date, status)
+        self._records[date] = ar
+        self._wrapRecordForLogging(ar).log("created")
 
 
 class SectionAttendance(Persistent, AttendanceFilteringMixin,
@@ -314,13 +418,17 @@ class SectionAttendance(Persistent, AttendanceFilteringMixin,
 
     implements(ISectionAttendance)
 
-    def __init__(self):
+    def __init__(self, person):
+        self.person = person
         self._records = OOBTree() # datetime -> list of AttendanceRecords
 
     def __iter__(self):
         for group in self._records.values():
             for record in group:
-                yield record
+                yield self._wrapRecordForLogging(record)
+
+    def _wrapRecordForLogging(self, ar):
+        return SectionAttendanceLoggingProxy(ar, self.person)
 
     def filter(self, first, last):
         assert type(first) == datetime.date
@@ -330,7 +438,7 @@ class SectionAttendance(Persistent, AttendanceFilteringMixin,
         for group in self._records.values(min=dt_min, max=dt_max,
                                           excludemax=True):
             for record in group:
-                yield record
+                yield self._wrapRecordForLogging(record)
 
     def getAllForDay(self, date):
         return self.filter(date, date)
@@ -338,8 +446,9 @@ class SectionAttendance(Persistent, AttendanceFilteringMixin,
     def get(self, section, datetime):
         for ar in self._records.get(datetime, ()):
             if ar.section == section:
-                return ar
-        return SectionAttendanceRecord(section, datetime, status=UNKNOWN)
+                return self._wrapRecordForLogging(ar)
+        ar = SectionAttendanceRecord(section, datetime, status=UNKNOWN)
+        return self._wrapRecordForLogging(ar)
 
     def record(self, section, datetime, duration, period_id, present):
         if self.get(section, datetime).status != UNKNOWN:
@@ -368,6 +477,7 @@ class SectionAttendance(Persistent, AttendanceFilteringMixin,
         if datetime not in self._records:
             self._records[datetime] = ()
         self._records[datetime] += (ar, )
+        self._wrapRecordForLogging(ar).log("created")
 
     def tardyEventTitle(self, record):
         """Produce a title for a calendar event representing a tardy."""
@@ -404,7 +514,7 @@ def getSectionAttendance(person):
     try:
         attendance = annotations[SECTION_ATTENDANCE_KEY]
     except KeyError:
-        attendance = SectionAttendance()
+        attendance = SectionAttendance(person)
         annotations[SECTION_ATTENDANCE_KEY] = attendance
     return attendance
 
@@ -415,7 +525,7 @@ def getDayAttendance(person):
     try:
         attendance = annotations[DAY_ATTENDANCE_KEY]
     except KeyError:
-        attendance = DayAttendance()
+        attendance = DayAttendance(person)
         annotations[DAY_ATTENDANCE_KEY] = attendance
     return attendance
 
