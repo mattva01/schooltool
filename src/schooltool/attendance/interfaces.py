@@ -213,4 +213,3 @@ class ISectionAttendanceRecord(IAttendanceRecord):
 
 class AttendanceError(Exception):
     """Attendance tracking error."""
-
