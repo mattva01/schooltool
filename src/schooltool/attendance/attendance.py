@@ -363,8 +363,7 @@ class DayAttendance(Persistent, AttendanceFilteringMixin,
     implements(IDayAttendance)
 
     def __init__(self, person):
-        self._records = PersistentDict()
-        # When it is time to optimize, convert it to OOBTree
+        self._records = OOBTree()
         self.person = person
 
     def _wrapRecordForLogging(self, ar):
