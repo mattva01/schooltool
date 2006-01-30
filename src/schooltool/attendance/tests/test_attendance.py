@@ -329,6 +329,28 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
     """
 
 
+def doctest_AttendanceRecord_accept_reject_explaination():
+    r"""Tests for AttendanceRecord.accept/rejectExplanation.
+
+        >>> from schooltool.attendance.attendance import AttendanceRecord
+        >>> from schooltool.attendance.interfaces import ABSENT
+        >>> ar = AttendanceRecord(ABSENT)
+
+    If there are no explanations, you cannot accept nor reject them.
+
+        >>> ar.acceptExplanation()
+        Traceback (most recent call last):
+          ...
+        AttendanceError: there are no outstanding explanations.
+
+        >>> ar.rejectExplanation()
+        Traceback (most recent call last):
+          ...
+        AttendanceError: there are no outstanding explanations.
+
+    """
+
+
 def doctest_AbsenceExplanation():
     """Absence explanation is a text with a status
 

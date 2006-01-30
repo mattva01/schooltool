@@ -116,11 +116,13 @@ class AttendanceRecord(Persistent):
         return False
 
     def acceptExplanation(self):
-        # TODO: more sanity checks (e.g. don't overrule previous rejections)
+        if not self.explanations or self.explanations[-1].isProcessed():
+            raise AttendanceError("there are no outstanding explanations.")
         self._work_item.acceptExplanation()
 
     def rejectExplanation(self):
-        # TODO: more sanity checks (e.g. don't overrule previous acceptances)
+        if not self.explanations or self.explanations[-1].isProcessed():
+            raise AttendanceError("there are no outstanding explanations.")
         self._work_item.rejectExplanation()
 
     def addExplanation(self, text):
@@ -474,6 +476,7 @@ class RejectExplanation(AttendanceWorkItem):
     def start(self, attendance_record):
         attendance_record.explanations[-1].status = REJECTED
         self.participant.activity.workItemFinished(self)
+
 
 #
 # Calendar Provider
