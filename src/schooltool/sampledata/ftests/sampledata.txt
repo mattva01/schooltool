@@ -37,9 +37,19 @@ The Sample Data Generation page appears
 
 Let's do it, thinks our valiant manager, and pushes the button.
 
+  Since the full data set requires HUGE amounts of RAM (on the order of 700 megs)
+  and time, we will cheat and ask the attendance sample data plugin to 
+  only generate data for 2 weeks.
+
+    >>> from zope.component import queryUtility
+    >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
+    >>> plugin = queryUtility(ISampleDataPlugin, 'attendance')
+    >>> if plugin is not None:
+    ...     plugin.only_last_n_days = 14
+
     >>> manager.getControl('Generate').click()
 
-A couple of minutes later he gets a result
+Several minutes later he gets a result
 
     >>> print manager.contents
     <BLANKLINE>

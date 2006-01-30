@@ -30,7 +30,7 @@ from schooltool.testing.functional import collect_ftests
 
 def test_suite():
     load_ftesting_zcml()
-    return collect_ftests(level=3) # 'cause it is slow and a memory hog
+    return collect_ftests(level=2) # 'cause it is slow and a memory hog
 
 
 if __name__ == '__main__':
