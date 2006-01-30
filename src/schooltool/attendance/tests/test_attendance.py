@@ -170,7 +170,7 @@ def doctest_AttendanceLoggingProxy():
         True
 
         >>> print proxy.__dict__
-        {'person': 'person', 'attentdance_record': 'record'}
+        {'person': 'person', 'attendance_record': 'record'}
 
         >>> proxy._getLoggedInPerson() is None
         True

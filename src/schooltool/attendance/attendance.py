@@ -43,7 +43,7 @@ from zope.interface import implements
 from zope.component import adapts
 from zope.app import zapi
 from zope.security.proxy import removeSecurityProxy
-from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.publisher.interfaces import IApplicationRequest
 from zope.security.management import queryInteraction
 
 
@@ -84,7 +84,7 @@ def date_to_schoolday_end(date):
     return date_to_schoolday_start(date) + datetime.timedelta(days=1)
 
 
-def getRequestFromInteraction(request_type=IBrowserRequest):
+def getRequestFromInteraction(request_type=IApplicationRequest):
     """Extract the browser request from the current interaction.
 
     Returns None when there is no interaction, or when the interaction has no
@@ -105,8 +105,8 @@ class AttendanceLoggingProxy(object):
     into an attendance log file.
     """
 
-    def __init__(self, attentdance_record, person):
-        self.__dict__["attentdance_record"] = attentdance_record
+    def __init__(self, attendance_record, person):
+        self.__dict__["attendance_record"] = attendance_record
         self.__dict__["person"] = person
 
     def _getLoggedInPerson(self):
@@ -114,13 +114,12 @@ class AttendanceLoggingProxy(object):
 
         Returns None when there is no interaction or request.
         """
-        # XXX ignas: what about restive views ?
         request = getRequestFromInteraction()
-
         if request:
-            return IPerson(request.principal).__name__
-        else:
-            return None
+            person = IPerson(request.principal, None)
+            if person:
+                return person.__name__
+        return None
 
     def _getLogger(self):
         return logging.getLogger("attendance")
@@ -129,30 +128,30 @@ class AttendanceLoggingProxy(object):
         logger = self._getLogger()
         logger.info("%s, %s, %s of %s: %s" % (datetime.datetime.utcnow(),
                                               self._getLoggedInPerson(),
-                                              self.attentdance_record,
+                                              self.attendance_record,
                                               self.person.__name__,
                                               action))
 
     def addExplanation(self, explanation):
-        self.attentdance_record.addExplanation(explanation)
+        self.attendance_record.addExplanation(explanation)
         self.log("added an explanation")
 
     def acceptExplanation(self):
-        self.attentdance_record.acceptExplanation()
+        self.attendance_record.acceptExplanation()
         self.log("accepted explanation")
 
     def rejectExplanation(self):
-        self.attentdance_record.rejectExplanation()
+        self.attendance_record.rejectExplanation()
         self.log("rejected explanation")
 
     def __repr__(self):
-        return repr(self.attentdance_record)
+        return repr(self.attendance_record)
 
     def __getattr__(self, name):
-        return getattr(self.attentdance_record, name)
+        return getattr(self.attendance_record, name)
 
     def __setattr__(self, name, value):
-        setattr(self.attentdance_record, name, value)
+        setattr(self.attendance_record, name, value)
 
 
 class DayAttendanceLoggingProxy(AttendanceLoggingProxy):
@@ -163,7 +162,7 @@ class SectionAttendanceLoggingProxy(AttendanceLoggingProxy):
     implements(ISectionAttendanceRecord)
 
     def makeTardy(self, arrival_time):
-        self.attentdance_record.makeTardy(arrival_time)
+        self.attendance_record.makeTardy(arrival_time)
         self.log("made attendance record a tardy, arrival time (%s)" % arrival_time)
 
 
