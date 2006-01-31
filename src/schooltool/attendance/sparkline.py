@@ -141,7 +141,7 @@ class AttendanceSparkline(object):
                     data.append(('half', 'yellow', '-'))
         return data
 
-    def render(self, height=12, point_width=2, spacing=1):
+    def render(self, height=13, point_width=2, spacing=1):
         """Render sparkline of specified size and return as PIL image."""
         attrs = self.getData()
         number_of_days = len(attrs)

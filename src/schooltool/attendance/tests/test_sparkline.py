@@ -322,14 +322,15 @@ def doctest_AttendanceSparkline_render():
         ------------------##----GG----##-GG----RR-
         ------------------------GG----##-------RR-
         ------------------------GG----##-------RR-
+        ------------------------GG----##-------RR-
 
         >>> png_data = sparkline.renderAsPngData()
         >>> print png_data.encode('base64')
-        iVBORw0KGgoAAAANSUhEUgAAACoAAAAMCAIAAACbVLgnAAAAtklEQVR4nGL8//8/A1UBIyMjAwMD
+        iVBORw0KGgoAAAANSUhEUgAAACoAAAANCAIAAABQCGuCAAAAv0lEQVR4nGL8//8/A1UBIyMjAwMD
         kcYCAAAA//9ioq7dpAIAAAAA//8aYOsBAAAA//8izXpGRkZI2FILAAAAAP//GmDfAwAAAP//GmDr
         AQAAAP//Isp6zDCHiyAYDIyMDDjUwKQQ5jAyMjAyMjAwAAAAAP//YiHGenguwsxOxIjgkQIAAAD/
-        /xrgwAcAAAD//xpg6wEAAAD//yIq8DEBSWXlfwacigEAAAD//xpg3wMAAAD//wMABnIaNUZ2BAMA
-        AAAASUVORK5CYII=
+        /xrgwAcAAAD//xpg6wEAAAD//yIq8DEBSWXlfwacigEAAAD//xpg3wMAAAD//xpg6wEAAAD//wMA
+        CH4aN2r6OOEAAAAASUVORK5CYII=
         <BLANKLINE>
 
     """

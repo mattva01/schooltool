@@ -96,11 +96,12 @@ def doctest_AttendanceSparklineView_call():
 
         >>> image = view()
         >>> print image.encode('base64')
-        iVBORw0KGgoAAAANSUhEUgAAAB4AAAAMCAIAAAD6TJplAAAAfElEQVR4nGL8//8/A20AAAAA//9i
+        iVBORw0KGgoAAAANSUhEUgAAAB4AAAANCAIAAAAxEEnAAAAAhUlEQVR4nGL8//8/A20AAAAA//9i
         opG5DAwMAAAAAP//oqHRAAAAAP//oqHRAAAAAP//oqHRAAAAAP//oqHRAAAAAP//oqHRAAAAAP//
-        oqHRAAAAAP//oqHRAAAAAP//oqHRAAAAAP//oqHRAAAAAP//oqHRAAAAAP//AwDxYgMVIfC6SQAA
-        AABJRU5ErkJggg==
+        oqHRAAAAAP//oqHRAAAAAP//oqHRAAAAAP//oqHRAAAAAP//oqHRAAAAAP//oqHRAAAAAP//AwAK
+        rQMX3Fm3sgAAAABJRU5ErkJggg==
         <BLANKLINE>
+
     """
 
 
