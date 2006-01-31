@@ -24,7 +24,7 @@ $Id$
 
 import datetime
 import itertools
-from pytz import utc
+import pytz
 
 from zope.app import zapi
 from zope.app.publisher.browser import BrowserView
@@ -44,6 +44,7 @@ from schooltool.calendar.utils import parse_date, parse_time
 from schooltool.course.interfaces import ISection
 from schooltool.app.browser import ViewPreferences
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.person.interfaces import IPerson
 from schooltool.group.interfaces import IGroup
 from schooltool.attendance.interfaces import IDayAttendance
@@ -56,6 +57,34 @@ from schooltool import SchoolToolMessage as _
 
 
 AttendanceCSSViewlet = viewlet.CSSViewlet("attendance.css")
+
+
+def datetime_to_schoolday_date(datetime):
+    """Given a datetime, return the date of the schoolday.
+
+    Takes the school's timezone into account.
+    """
+    app = ISchoolToolApplication(None)
+    tzinfo = pytz.timezone(IApplicationPreferences(app).timezone)
+    return datetime.astimezone(tzinfo).date()
+
+
+def getCurrentSectionMeeting(section, datetime):
+    """Find the closest section meeting event, if it exists on a given day.
+
+    Returns the event of the section meeting if there is one on a given day,
+    and None otherwise.
+    """
+    date = datetime_to_schoolday_date(datetime)
+    closest_meeting = None
+    last_meeting = None
+    events = ITimetables(section).makeTimetableCalendar(date, date)
+    for ev in reversed(sorted(events, key=lambda e: e.dtstart)):
+        if datetime < ev.dtstart + ev.duration:
+            closest_meeting = ev
+        if last_meeting is None:
+            last_meeting = ev
+    return closest_meeting or last_meeting
 
 
 def getPeriodEventForSection(section, date, period_id):
@@ -318,7 +347,7 @@ class RealtimeAttendanceView(BrowserView):
             time = parse_time(self.request['arrival'])
             result = datetime.datetime.combine(self.date, time)
             return tz.localize(result)
-        return datetime.datetime.utcnow().replace(tzinfo=utc)
+        return pytz.utc.localize(datetime.datetime.utcnow())
 
     def publishTraverse(self, request, name):
         """Collect additional URL elements."""

@@ -283,6 +283,144 @@ def setUpAttendanceAdapters():
     ztapi.provideAdapter(IPerson, IDayAttendance, getDayAttendance)
 
 
+def doctest_getCurrentSectionMeeting():
+    r"""Doctest for getCurrentSectionMeeting
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...     import getCurrentSectionMeeting
+
+        >>> section = StubTimetables(None)
+
+    On a day with no meetings you get None
+
+        >>> dt = utc.localize(datetime.datetime(2005, 12, 12, 9, 30))
+        >>> print getCurrentSectionMeeting(section, dt)
+        None
+
+    The timetable for 2005-12-14 looks like this:
+
+        >>> date = datetime.date(2005, 12, 14)
+        >>> for ev in section.makeTimetableCalendar(date, date):
+        ...     dtend = ev.dtstart + ev.duration
+        ...     print '%s--%s %s' % (ev.dtstart.strftime('%Y-%m-%d %H:%M'),
+        ...                          dtend.strftime('%H:%M'), ev.title)
+        2005-12-14 10:00--10:45 Math
+        2005-12-14 11:00--11:45 Arts
+
+    Let's poke around then
+
+        >>> datetimes = []
+        >>> for time in ('9:30, 10:00, 10:30, 10:45, '
+        ...              '10:50, 11:00, 11:30, 11:45, 11:50').split(', '):
+        ...     h, m = map(int, time.split(':'))
+        ...     dt = utc.localize(datetime.datetime(2005, 12, 14, h, m))
+        ...     datetimes.append(dt)
+
+        >>> for dt in datetimes:
+        ...     ev = getCurrentSectionMeeting(section, dt)
+        ...     print '%s %s' % (dt.strftime('%H:%M'), ev.title)
+        09:30 Math
+        10:00 Math
+        10:30 Math
+        10:45 Arts
+        10:50 Arts
+        11:00 Arts
+        11:30 Arts
+        11:45 Arts
+        11:50 Arts
+
+    Same thing happens if you change the ordering of events returned by
+    makeTimetableCalendar:
+
+        >>> section.makeTimetableCalendar = lambda *a: \
+        ...     reversed(list(StubTimetables(None).makeTimetableCalendar(*a)))
+
+        >>> for dt in datetimes:
+        ...     ev = getCurrentSectionMeeting(section, dt)
+        ...     print '%s %s' % (dt.strftime('%H:%M'), ev.title)
+        09:30 Math
+        10:00 Math
+        10:30 Math
+        10:45 Arts
+        10:50 Arts
+        11:00 Arts
+        11:30 Arts
+        11:45 Arts
+        11:50 Arts
+
+    And what if you have overlapping periods?
+
+        >>> section.makeTimetableCalendar = lambda *a: ImmutableCalendar([
+        ...     TimetableCalendarEvent(
+        ...         datetime.datetime(2005, 12, 14, 10, 00, tzinfo=utc),
+        ...         datetime.timedelta(minutes=45),
+        ...         "Math", day_id='D1', period_id="A",
+        ...         activity=None),
+        ...     TimetableCalendarEvent(
+        ...         datetime.datetime(2005, 12, 14, 10, 45, tzinfo=utc),
+        ...         datetime.timedelta(minutes=15),
+        ...         "Lunch break", day_id='D1', period_id="B",
+        ...         activity=None),
+        ...     TimetableCalendarEvent(
+        ...         datetime.datetime(2005, 12, 14, 11, 00, tzinfo=utc),
+        ...         datetime.timedelta(minutes=45),
+        ...         "Arts", day_id='D1', period_id="D",
+        ...         activity=None),
+        ...     TimetableCalendarEvent(
+        ...         datetime.datetime(2005, 12, 14, 11, 40, tzinfo=utc),
+        ...         datetime.timedelta(minutes=45),
+        ...         "Noise", day_id='D1', period_id="Q",
+        ...         activity=None),
+        ...     ])
+
+        >>> for ev in section.makeTimetableCalendar(date, date):
+        ...     dtend = ev.dtstart + ev.duration
+        ...     print '%s--%s %s' % (ev.dtstart.strftime('%Y-%m-%d %H:%M'),
+        ...                          dtend.strftime('%H:%M'), ev.title)
+        2005-12-14 10:00--10:45 Math
+        2005-12-14 10:45--11:00 Lunch break
+        2005-12-14 11:00--11:45 Arts
+        2005-12-14 11:40--12:25 Noise
+
+        >>> for dt in datetimes:
+        ...     ev = getCurrentSectionMeeting(section, dt)
+        ...     print '%s %s' % (dt.strftime('%H:%M'), ev.title)
+        09:30 Math
+        10:00 Math
+        10:30 Math
+        10:45 Lunch break
+        10:50 Lunch break
+        11:00 Arts
+        11:30 Arts
+        11:45 Noise
+        11:50 Noise
+
+    What if you use outlandish timezones, and cross the date line?
+
+        >>> tokyo = timezone('Pacific/Rarotonga')
+        >>> dt = datetimes[0].astimezone(tokyo)
+
+        >>> dt.astimezone(utc) == datetimes[0]
+        True
+        >>> dt.date() != datetimes[0].date()
+        True
+
+        >>> for dt in datetimes:
+        ...     ev = getCurrentSectionMeeting(section, dt.astimezone(tokyo))
+        ...     print '%s %s' % (dt.strftime('%H:%M'), ev.title)
+        09:30 Math
+        10:00 Math
+        10:30 Math
+        10:45 Lunch break
+        10:50 Lunch break
+        11:00 Arts
+        11:30 Arts
+        11:45 Noise
+        11:50 Noise
+
+    """
+
+
 def doctest_getPeriodEventForSection():
     r"""Doctest for getPeriodEventForSection
 
