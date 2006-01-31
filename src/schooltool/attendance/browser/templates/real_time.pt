@@ -20,6 +20,9 @@
 <metal:block metal:fill-slot="body">
 <form tal:attributes="action request/URL" method="POST">
 
+<input type="hidden" name="date" tal:attributes="value view/date" />
+<input type="hidden" name="period_id" tal:attributes="value view/period_id" />
+
 <div class="error" tal:condition="view/error" tal:content="view/error"
      i18n:translate="">
 </div>
@@ -72,7 +75,7 @@
     </td>
     <td>
       <img alt="attendance graph for the last 10 days" i18n:attributes="alt"
-           width="30" height="12" tal:attributes="src info/sparkline_url" />
+           width="30" height="13" tal:attributes="src info/sparkline_url" />
       <span tal:replace="info/symbol" />
     </td>
   </tr>
