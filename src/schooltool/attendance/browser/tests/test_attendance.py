@@ -1212,6 +1212,53 @@ def doctest_StudentAttendanceView_formatAttendanceRecord():
     """
 
 
+def doctest_StudentAttendanceView_interleaveAttendanceRecords():
+    r"""Tests for StudentAttendanceView.interleaveAttendanceRecords
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...        import StudentAttendanceView
+        >>> view = StudentAttendanceView(None, None)
+
+    Let's use trivial stubs
+
+        >>> class ARStub(object):
+        ...     def __init__(self, date):
+        ...         self.date = date
+        ...     def __repr__(self):
+        ...         return '%s%d' % (self.prefix, self.date)
+        >>> class DAR(ARStub):
+        ...     prefix = 'd'
+        >>> class SAR(ARStub):
+        ...     prefix = 's'
+
+        >>> day = [DAR(d) for d in 1, 2, 5, 6, 7, 8]
+        >>> section = [SAR(d) for d in 2, 2, 3, 4, 5, 8, 9, 10, 11]
+        >>> print list(view.interleaveAttendanceRecords(day, section))
+        [d1, d2, s2, s2, s3, s4, d5, s5, d6, d7, d8, s8, s9, s10, s11]
+
+        >>> day = [DAR(d) for d in 2, 5, 6, 7, 8]
+        >>> section = [SAR(d) for d in 1, 3, 4, 4, 5, 5]
+        >>> print list(view.interleaveAttendanceRecords(day, section))
+        [s1, d2, s3, s4, s4, d5, s5, s5, d6, d7, d8]
+
+        >>> day = []
+        >>> section = [SAR(d) for d in 1, 2]
+        >>> print list(view.interleaveAttendanceRecords(day, section))
+        [s1, s2]
+
+        >>> day = [DAR(d) for d in 2, 5, 6]
+        >>> section = []
+        >>> print list(view.interleaveAttendanceRecords(day, section))
+        [d2, d5, d6]
+
+        >>> day = []
+        >>> section = []
+        >>> print list(view.interleaveAttendanceRecords(day, section))
+        []
+
+    """
+
+
 def doctest_StudentAttendanceView_unresolvedAbsences():
     r"""Tests for StudentAttendanceView.unresolvedAbsences
 
@@ -1257,8 +1304,8 @@ def doctest_StudentAttendanceView_unresolvedAbsences():
         >>> for absence in view.unresolvedAbsences():
         ...     print translate(absence['text'])
         2006-01-22: absent from homeroom
-        2006-01-23: late for homeroom
         2006-01-22 09:30: absent from grammar3
+        2006-01-23: late for homeroom
         2006-01-23 09:30: late for relativity97
 
     """
@@ -1282,20 +1329,20 @@ def doctest_StudentAttendanceView_absencesForTerm():
         >>> for a in view.absencesForTerm(term):
         ...     print translate(a)
         2006-02-21: absent from homeroom
-        2006-02-22: late for homeroom
-        2006-02-25: absent from homeroom
-        2006-02-26: late for homeroom
-        2006-03-01: absent from homeroom
-        2006-03-02: late for homeroom
-        2006-03-05: absent from homeroom
-        2006-03-06: late for homeroom
         2006-02-21 09:30: absent from grammar3
+        2006-02-22: late for homeroom
         2006-02-22 09:30: late for relativity97
+        2006-02-25: absent from homeroom
         2006-02-25 09:30: absent from relativity97
+        2006-02-26: late for homeroom
         2006-02-26 09:30: late for math42
+        2006-03-01: absent from homeroom
         2006-03-01 09:30: absent from math42
+        2006-03-02: late for homeroom
         2006-03-02 09:30: late for grammar3
+        2006-03-05: absent from homeroom
         2006-03-05 09:30: absent from grammar3
+        2006-03-06: late for homeroom
         2006-03-06 09:30: late for relativity97
 
     """

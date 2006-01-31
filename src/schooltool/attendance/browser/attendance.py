@@ -480,11 +480,36 @@ class StudentAttendanceView(BrowserView):
             else:
                 return _('$date $time: late for $section', mapping=mapping)
 
+    def interleaveAttendanceRecords(self, day_attendances, section_attendances):
+        """Interleave day and section attendance records."""
+        day_iter = iter(itertools.chain(day_attendances, [None]))
+        section_iter = iter(itertools.chain(section_attendances, [None]))
+        cur_day = day_iter.next()
+        cur_section = section_iter.next()
+        while cur_day is not None and cur_section is not None:
+            if cur_day.date <= cur_section.date:
+                yield cur_day
+                cur_day = day_iter.next()
+            else:
+                yield cur_section
+                cur_section = section_iter.next()
+        if cur_day is not None:
+            yield cur_day
+            for cur_day in day_iter:
+                if cur_day is not None:
+                    yield cur_day
+        if cur_section is not None:
+            yield cur_section
+            for cur_section in section_iter:
+                if cur_section is not None:
+                    yield cur_section
+
     def unresolvedAbsences(self):
         """Return all unresolved absences and tardies."""
         day_attendance = IDayAttendance(self.context)
         section_attendance = ISectionAttendance(self.context)
-        for ar in itertools.chain(day_attendance, section_attendance):
+        for ar in self.interleaveAttendanceRecords(day_attendance,
+                                                   section_attendance):
             if (ar.isAbsent() or ar.isTardy()) and not ar.isExplained():
                 yield {'id': self.makeId(ar),
                        'text': self.formatAttendanceRecord(ar),
@@ -494,8 +519,9 @@ class StudentAttendanceView(BrowserView):
         """Return all absences and tardies in a term."""
         day_attendance = IDayAttendance(self.context)
         section_attendance = ISectionAttendance(self.context)
-        for ar in itertools.chain(day_attendance.filter(term.first, term.last),
-                        section_attendance.filter(term.first, term.last)):
+        for ar in self.interleaveAttendanceRecords(
+                            day_attendance.filter(term.first, term.last),
+                            section_attendance.filter(term.first, term.last)):
             if ar.isAbsent() or ar.isTardy():
                 yield self.formatAttendanceRecord(ar)
 
