@@ -261,8 +261,8 @@ attendance sparkline drawn along with the status symbol:
     >>> largo.open('http://localhost/persons/largo/calendar/2005-12-14')
     >>> largo.getLink('Attendance').click()
     >>> print '\n'.join(analyze.queryHTML('//img[@width="30"]', largo.contents))
-    <img alt="attendance graph for the last 10 days" width="30" height="12" src="http://localhost/sections/dancing1a/@@sparkline.png?person=gretute&amp;date=2005-12-14">
-    <img alt="attendance graph for the last 10 days" width="30" height="12" src="http://localhost/sections/dancing1a/@@sparkline.png?person=joniukas&amp;date=2005-12-14">
+    <img alt="attendance graph for the last 10 days" width="30" height="13" src="http://localhost/sections/dancing1a/@@sparkline.png?person=gretute&amp;date=2005-12-14">
+    <img alt="attendance graph for the last 10 days" width="30" height="13" src="http://localhost/sections/dancing1a/@@sparkline.png?person=joniukas&amp;date=2005-12-14">
 
 "Look" at the attendance sparkline for joniukas
 
