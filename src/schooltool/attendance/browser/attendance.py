@@ -186,6 +186,8 @@ class RealtimeAttendanceView(BrowserView):
     __used_for__ = ISection
 
     template = ViewPageTemplateFile("templates/real_time.pt")
+    no_section_meeting_today_template = ViewPageTemplateFile(
+                                            "templates/no_section_meeting.pt")
 
     error = None
 
@@ -367,6 +369,8 @@ class RealtimeAttendanceView(BrowserView):
 
         Raises a NotFound error if they aren't.
         """
+        if self.date is None and self.period_id is None:
+            self.findClosestMeeting()
         if self.date is None or self.period_id is None:
             # Not enough traversal path elements
             raise NotFound(self.context, self.__name__, self.request)
@@ -374,11 +378,31 @@ class RealtimeAttendanceView(BrowserView):
                                         self.period_id):
             raise NotFound(self.context, self.__name__, self.request)
 
+    def findClosestMeeting(self):
+        """Find the closest section meeting."""
+        if 'date' in self.request.form and 'period_id' in self.request.form:
+            self.date = parse_date(self.request['date'])
+            self.period_id = self.request['period_id']
+            return
+        now = pytz.utc.localize(datetime.datetime.utcnow())
+        ev = getCurrentSectionMeeting(self.context, now)
+        if not ev:
+            raise NoSectionMeetingToday
+        self.date = datetime_to_schoolday_date(now)
+        self.period_id = ev.period_id
+
     def __call__(self):
         """Process form submissions and render the view."""
-        self.verifyParameters()
+        try:
+            self.verifyParameters()
+        except NoSectionMeetingToday:
+            return self.no_section_meeting_today_template()
         self.update()
         return self.template()
+
+
+class NoSectionMeetingToday(Exception):
+    """There are no section meetings today."""
 
 
 class StudentAttendanceView(BrowserView):

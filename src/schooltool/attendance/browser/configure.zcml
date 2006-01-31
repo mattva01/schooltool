@@ -7,7 +7,10 @@
       name="attendance"
       for="schooltool.course.interfaces.ISection"
       class="schooltool.attendance.browser.attendance.RealtimeAttendanceView"
-      permission="schooltool.view" />
+      permission="schooltool.view"
+      menu="schooltool_actions"
+      title="Attendance"
+      />
 
   <browser:viewlet
       name="section-attendance-link"

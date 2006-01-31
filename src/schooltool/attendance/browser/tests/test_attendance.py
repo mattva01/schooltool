@@ -1254,7 +1254,8 @@ def doctest_RealtimeAttendanceView_verifyParameters():
         >>> ztapi.provideAdapter(None, ITimetables, StubTimetables)
 
     What if we try to render the view without specifying both the
-    date and the period id?
+    date and the period id?  We try to find the closest section meeting
+    for today, but there aren't any.
 
         >>> request = TestRequest()
         >>> section = 'section'
@@ -1266,7 +1267,9 @@ def doctest_RealtimeAttendanceView_verifyParameters():
         >>> view.verifyParameters()
         Traceback (most recent call last):
           ...
-        NotFound: Object: 'section', name: 'attendance'
+        NoSectionMeetingToday
+
+    What if we specify incomplete data?
 
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.verifyParameters()
@@ -1286,6 +1289,72 @@ def doctest_RealtimeAttendanceView_verifyParameters():
 
         >>> view.period_id = 'B'
         >>> view.verifyParameters()
+
+    """
+
+
+def doctest_RealtimeAttendanceView_findClosestMeeting():
+    r"""Tests for RealtimeAttendanceView.findClosestMeeting
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...          import RealtimeAttendanceView
+
+        >>> request = TestRequest()
+        >>> section = 'section'
+        >>> view = RealtimeAttendanceView(section, request)
+
+    If we have date and period_id in the request, then we're processing a form
+    and should use them.
+
+        >>> request.form['date'] = '2005-10-12'
+        >>> request.form['period_id'] = 'quux'
+        >>> view.findClosestMeeting()
+        >>> view.date
+        datetime.date(2005, 10, 12)
+        >>> view.period_id
+        'quux'
+
+    Otherwise look at the current date and time.
+
+        >>> del request.form['date']
+        >>> del request.form['period_id']
+
+        >>> from schooltool.attendance.browser import attendance
+        >>> real_getCurrentSectionMeeting = attendance.getCurrentSectionMeeting
+        >>> asked_for = [None, None]
+        >>> def getCurrentSectionMeeting_stub(section, time, asked_for=asked_for):
+        ...     asked_for[:] = time, section
+        ...     return TimetableCalendarEvent(
+        ...         datetime.datetime(2005, 12, 14, 10, 00, tzinfo=utc),
+        ...         datetime.timedelta(minutes=45),
+        ...         "Math", day_id='D1', period_id="qwerty", activity=None)
+        >>> attendance.getCurrentSectionMeeting = getCurrentSectionMeeting_stub
+
+        >>> before = utc.localize(datetime.datetime.utcnow())
+        >>> view.findClosestMeeting()
+        >>> after = utc.localize(datetime.datetime.utcnow())
+
+        >>> before <= asked_for[0] <= after
+        True
+        >>> asked_for[1] == section
+        True
+
+        >>> before.date() <= view.date <= after.date()
+        True
+        >>> view.period_id
+        'qwerty'
+
+    If there are no meetings, raise NoSectionMeetingToday
+
+        >>> attendance.getCurrentSectionMeeting = lambda *args: None
+        >>> view.findClosestMeeting()
+        Traceback (most recent call last):
+          ...
+        NoSectionMeetingToday
+
+    Done
+
+        >>> attendance.getCurrentSectionMeeting = real_getCurrentSectionMeeting
 
     """
 
