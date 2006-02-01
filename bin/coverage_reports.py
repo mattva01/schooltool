@@ -239,13 +239,11 @@ def generate_html(output_filename, tree, my_index, info, path):
     print >> html, '</table><hr/>'
     if not get_tree_node(tree, my_index):
         file_path = os.path.join(path, index_to_filename(my_index))
-        tmp_path = output_filename + '.tmp'
-        enscript = 'enscript -q --footer --header -h --language=html --highlight=python --color '
-        enscript += '%s -o %s' % (file_path, tmp_path)
         # XXX can get painful if filenames contain unsafe characters
-        os.system(enscript)
-        text = open(tmp_path).read()
-        os.remove(tmp_path)
+        pipe = os.popen('enscript -q --footer --header -h --language=html'
+                        ' --highlight=python --color -o - %s' % file_path, 'r')
+        text = pipe.read()
+        pipe.close()
         text = text[text.find('<PRE>'):]
         text = text[:text.find('</PRE>')]
         def color_uncov(line):
