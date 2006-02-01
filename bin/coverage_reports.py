@@ -209,17 +209,10 @@ def generate_html(output_filename, tree, my_index, info, path):
       <body><h1>Unit test coverage for %(name)s</h1>
       <table>
     """ % {'name': index_to_name(my_index)}
-    def make_cmp_for_index(sort_by_coverage=False):
-        if sort_by_coverage:
-            def smart_sort(a, b):
-                if len(a) != len(b): return cmp(len(a), len(b))
-                a_p = get_tree_node(tree, a).uncovered
-                b_p = get_tree_node(tree, b).uncovered
-                return cmp(b_p, a_p)
-            return smart_sort
-        else:
-            return lambda a, b: cmp(a, b)
-    info.sort(make_cmp_for_index(True))
+    def key(node_path):
+        node = get_tree_node(tree, node_path)
+        return (len(node_path), -node.uncovered)
+    info.sort(key=key)
     for file_index in info:
         if not file_index:
             continue # skip root node
