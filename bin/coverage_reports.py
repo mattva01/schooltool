@@ -16,9 +16,10 @@ class CoverageNode(dict):
 
     def _percent(self):
         covered, total = self.coverage
-        percent = 0
-        if total > 0:
+        if total != 0:
             percent = int(100 * covered / total)
+        else:
+            percent = 100
         return percent
 
     percent = property(_percent)
@@ -138,6 +139,8 @@ def generate_html(url, tree, my_index, info, path):
         nice_name = index_to_nice_name(file_index)
         if not node.keys():
             nice_name += '.py'
+        else:
+            nice_name += '/'
         print >>html, '<tr><td><a href="%s">%s</a></td>' % \
                       (index_to_url(file_index),
                        nice_name),
