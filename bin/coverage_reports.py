@@ -32,6 +32,11 @@ class CoverageNode(dict):
                 self._total += total_more
         return self._covered, self._total
 
+    @property
+    def uncovered(self):
+        covered, total = self.coverage
+        return total - covered
+
 
 def parse_file(path):
     """Parse file and return (covered, total)."""
@@ -124,9 +129,9 @@ def generate_html(url, tree, my_index, info, path):
         if sort_by_coverage:
             def smart_sort(a, b):
                 if len(a) != len(b): return cmp(len(a), len(b))
-                a_p = get_tree_node(tree, a).percent
-                b_p = get_tree_node(tree, b).percent
-                return cmp(a_p, b_p)
+                a_p = get_tree_node(tree, a).uncovered
+                b_p = get_tree_node(tree, b).uncovered
+                return cmp(b_p, a_p)
             return smart_sort
         else:
             return lambda a, b: cmp(a, b)
