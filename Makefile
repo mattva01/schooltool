@@ -97,6 +97,7 @@ coverage-reports-html:
 	rm -rf coverage/reports
 	mkdir coverage/reports
 	$(PYTHON) bin/coverage_reports.py coverage coverage/reports
+	ln -s schooltool.html coverage/reports/index.html
 
 .PHONY: coverage-report
 coverage-report:

@@ -137,6 +137,8 @@ def generate_html(url, tree, my_index, info, path):
             return lambda a, b: cmp(a, b)
     info.sort(make_cmp_for_index(True))
     for file_index in info:
+        if not file_index:
+            continue # skip root node
         node = get_tree_node(tree, file_index)
         covered, total = node.coverage
         uncovered = total - covered
@@ -189,6 +191,8 @@ def generate_htmls_from_tree(tree, path, report_path):
             return
         traverse_tree(tree, [], list_parents_and_childs)
         url = os.path.join(report_path, index_to_url(my_index))
+        if not my_index:
+            return # skip root node
         generate_html(url, tree, my_index, info, path)
     traverse_tree(tree, [], make_html)
 
