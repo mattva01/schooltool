@@ -114,6 +114,7 @@ def generate_html(url, tree, my_index, info, path):
         a {text-decoration: none; display: block; padding-right: 1em;}
         a:hover {background: #EFA;}
         hr {height: 1px; border: none; border-top: 1px solid gray;}
+        .notcovered {background: #FCC;}
       </style>
       </head>
       <body><h1>%s</h1>
@@ -158,9 +159,10 @@ def generate_html(url, tree, my_index, info, path):
         text = text[:text.find('</PRE>')]
         def color_uncov(line):
             if '&gt;&gt;&gt;&gt;&gt;&gt;' in line:
-                return '<span style="background: #FCC">%s</span>' % line
+                return ('<div class="notcovered">%s</div>'
+                        % line.rstrip('\n'))
             return line
-        text = '\n'.join(map(color_uncov, text.splitlines()))
+        text = ''.join(map(color_uncov, text.splitlines(True)))
         print >> html, '<pre>%s</pre>' % text
     print >> html, """
     </body>
