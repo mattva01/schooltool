@@ -410,7 +410,6 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
 
     That should set the status of the last explanation to ACCEPTED:
 
-        >>> ar.explanations[-1].status = ACCEPTED
         >>> ar.isExplained()
         True
 
@@ -435,7 +434,6 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
 
     And sets the status of the last explanation:
 
-        >>> ar.explanations[-1].status = REJECTED
         >>> ar.addExplanation("Solar eclipse")
         >>> len(ar.explanations)
         2
@@ -445,7 +443,7 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
     If the record's status is not ABSENT or TARDY, isExplained raises
     an exception:
 
-        >>> ar.status = UNKNOWN
+        >>> ar = AttendanceRecord(UNKNOWN)
         >>> ar.isExplained()
         Traceback (most recent call last):
           ...
