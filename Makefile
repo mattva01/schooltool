@@ -92,6 +92,12 @@ coverage: build
 	rm -rf coverage
 	$(PYTHON) test.py $(TESTFLAGS) --coverage -s src/schooltool
 
+.PHONY: coverage-reports-html
+coverage-reports-html: coverage
+	rm -rf coverage/reports
+	mkdir coverage/reports
+	$(PYTHON) bin/coverage_reports.py coverage coverage/reports
+
 .PHONY: coverage-report
 coverage-report:
 	@cd coverage && ls schooltool* | grep -v tests | xargs grep -c '^>>>>>>' | grep -v ':0$$'
