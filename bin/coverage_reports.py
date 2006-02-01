@@ -2,9 +2,9 @@
 
 import sys
 import os
-import os.path
 import subprocess
 from pprint import pprint
+
 
 class CoverageNode(dict):
 
@@ -14,26 +14,23 @@ class CoverageNode(dict):
         return '%s%% covered (%s of %s lines uncovered)' % \
                (self.percent, uncovered, total)
 
-    def _percent(self):
+    @property
+    def percent(self):
         covered, total = self.coverage
         if total != 0:
-            percent = int(100 * covered / total)
+            return int(100 * covered / total)
         else:
-            percent = 100
-        return percent
+            return 100
 
-    percent = property(_percent)
-
-    def _coverage(self):
-        if not hasattr(self, '_total'):
+    @property
+    def coverage(self):
+        if not hasattr(self, '_total'): # caching
             self._covered, self._total = 0, 0
             for substats in self.values():
                 covered_more, total_more = substats.coverage
                 self._covered += covered_more
                 self._total += total_more
         return self._covered, self._total
-
-    coverage = property(_coverage)
 
 
 def parse_file(path):
@@ -88,6 +85,7 @@ def index_to_url(index):
         return '%s.html' % '.'.join(index)
     return 'index.html'
 
+
 def index_to_filename(index):
     if index:
         return '%s.cover' % '.'.join(index)
@@ -95,22 +93,23 @@ def index_to_filename(index):
 
 
 def index_to_nice_name(index):
-    def spaces(item):
-        return '&nbsp;'*8
     if index:
-        return ''.join(map(spaces, index[:-1])) + index[-1]
-    return 'All'
+        return '&nbsp;' * 4 * (len(index) - 1) + index[-1]
+    else:
+        return 'All'
+
 
 def index_to_name(index):
     if index:
         return '.'.join(index)
     return 'All'
 
+
 def generate_html(url, tree, my_index, info, path):
     html = open(url, 'w')
-    print >>html, """
+    print >> html, """
     <html>
-      <head><title>Coverage report for %s</title>
+      <head><title>Unit test coverage report for %s</title>
       <style type="text/css">
         a {text-decoration: none; display: block; padding-right: 1em;}
         a:hover {background: #EFA;}
@@ -141,17 +140,17 @@ def generate_html(url, tree, my_index, info, path):
             nice_name += '.py'
         else:
             nice_name += '/'
-        print >>html, '<tr><td><a href="%s">%s</a></td>' % \
-                      (index_to_url(file_index),
-                       nice_name),
-        print >>html, '<td>covered %s%% (%s of %s uncovered)</td></tr>' % \
-                      (percent, uncovered, total)
-    print >>html, '</table><hr/>'
+        print >> html, '<tr><td><a href="%s">%s</a></td>' % \
+                       (index_to_url(file_index), nice_name),
+        print >> html, '<td>covered %s%% (%s of %s uncovered)</td></tr>' % \
+                       (percent, uncovered, total)
+    print >> html, '</table><hr/>'
     if not get_tree_node(tree, my_index):
         file_path = os.path.join(path, index_to_filename(my_index))
         tmp_path = url + '.tmp'
         enscript = 'enscript -q --footer --header -h --language=html --highlight=python --color '
         enscript += '%s -o %s' % (file_path, tmp_path)
+        # XXX can get painful if filenames contain unsafe characters
         os.system(enscript)
         text = open(tmp_path).read()
         os.remove(tmp_path)
@@ -162,8 +161,8 @@ def generate_html(url, tree, my_index, info, path):
                 return '<span style="background: #FCC">%s</span>' % line
             return line
         text = '\n'.join(map(color_uncov, text.splitlines()))
-        print >>html, '<pre>%s</pre>' % text
-    print >>html, """
+        print >> html, '<pre>%s</pre>' % text
+    print >> html, """
     </body>
     </html>"""
     html.close()
@@ -175,11 +174,10 @@ def generate_htmls_from_tree(tree, path, report_path):
         def list_parents_and_childs(index):
             position = len(index)
             my_position = len(my_index)
-            if position <= my_position and \
-               index == my_index[:position]:
+            if position <= my_position and index == my_index[:position]:
                 info.append(index)
-            elif position == my_position + 1 and \
-               index[:my_position] == my_index:
+            elif (position == my_position + 1 and
+                  index[:my_position] == my_index):
                 info.append(index)
             return
         traverse_tree(tree, [], list_parents_and_childs)
@@ -201,9 +199,9 @@ def make_coverage_reports(path, report_path):
 def main():
     path = 'coverage'
     report_path = 'reports'
-    if len(sys.argv)>1:
+    if len(sys.argv) > 1:
         path = sys.argv[1]
-    if len(sys.argv)>2:
+    if len(sys.argv) > 2:
         report_path = sys.argv[2]
 
     make_coverage_reports(path, report_path)
