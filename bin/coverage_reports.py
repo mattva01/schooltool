@@ -80,14 +80,11 @@ def parse_file(filename):
     covered = 0
     total = 0
     for line in file(filename):
-        if line.startswith('>>>>>>'):
-            total += 1
-        try:
-            passes = int(line.split(":")[0])
-            total += 1
+        if line.startswith(' '*7) or len(line) < 7:
+            continue
+        total += 1
+        if not line.startswith('>>>>>>'):
             covered += 1
-        except:
-            pass
     return (covered, total)
 
 
