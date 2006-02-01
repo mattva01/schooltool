@@ -188,8 +188,9 @@ def generate_htmls_from_tree(tree, path, report_path):
 
 def make_coverage_reports(path, report_path):
     def filter_fn(filename):
-        return ('tests' not in filename and
-                'schooltool' in filename and
+        return (filename.endswith('.cover') and
+                filename.startswith('schooltool') and
+                'tests' not in filename and
                 not filename.startswith('<'))
     filelist = get_file_list(path, filter_fn)
     tree = create_tree(filelist, path)
