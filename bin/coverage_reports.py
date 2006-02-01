@@ -114,7 +114,7 @@ def generate_html(url, tree, my_index, info, path):
     html = open(url, 'w')
     print >> html, """
     <html>
-      <head><title>Unit test coverage report for %s</title>
+      <head><title>Unit test coverage for %(name)s</title>
       <style type="text/css">
         a {text-decoration: none; display: block; padding-right: 1em;}
         a:hover {background: #EFA;}
@@ -122,9 +122,9 @@ def generate_html(url, tree, my_index, info, path):
         .notcovered {background: #FCC;}
       </style>
       </head>
-      <body><h1>%s</h1>
+      <body><h1>Unit test coverage for %(name)s</h1>
       <table>
-    """ % (index_to_name(my_index), index_to_name(my_index))
+    """ % {'name': index_to_name(my_index)}
     def make_cmp_for_index(sort_by_coverage=False):
         if sort_by_coverage:
             def smart_sort(a, b):
