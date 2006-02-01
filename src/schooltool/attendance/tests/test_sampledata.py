@@ -90,6 +90,9 @@ class FakeTimetablesAdapter(object):
 
 
 class FakeAttendanceRecord(object):
+
+    explanations = ()
+
     def __init__(self):
         self.hasExplanations = False
         self.accepted = False
@@ -100,12 +103,18 @@ class FakeAttendanceRecord(object):
 
     def addExplanation(self, explanation):
         self.hasExplanations = True
+        print "Added explanation"
 
     def acceptExplanation(self):
         self.accepted = True
+        print "Accepted explanation"
 
     def rejectExplanation(self):
         self.rejected = True
+        print "Rejected explanation"
+
+    def isExplained(self):
+        return False
 
 
 class FakeAttendanceAdapter(object):
@@ -131,6 +140,10 @@ class FakeDayAttendanceAdapter(object):
                                     False: 'absent'}[present],
                                    date)
 
+    def get(self, date):
+        return FakeAttendanceRecord()
+
+
 def doctest_SampleAttendancePlugin_explainAttendanceRecord():
     """Tests for SampleAttendancePlugin.explainAttendanceRecord.
 
@@ -146,6 +159,9 @@ def doctest_SampleAttendancePlugin_explainAttendanceRecord():
         ...     ar = FakeAttendanceRecord()
         ...     plugin.explainAttendanceRecord(ar)
         ...     assert(ar.hasExplanations)
+        Added explanation
+        ...
+        Accepted explanation
 
     The explanation being accepted depends on the excuse_rate:
 
@@ -155,6 +171,9 @@ def doctest_SampleAttendancePlugin_explainAttendanceRecord():
         ...     plugin.explainAttendanceRecord(ar)
         ...     assert(ar.hasExplanations)
         ...     assert(ar.accepted)
+        Added explanation
+        ...
+        Accepted explanation
 
      Rejection depends on reject_rate:
 
@@ -165,6 +184,9 @@ def doctest_SampleAttendancePlugin_explainAttendanceRecord():
         ...     plugin.explainAttendanceRecord(ar)
         ...     assert(ar.hasExplanations)
         ...     assert(ar.rejected)
+        Added explanation
+        ...
+        Rejected explanation
 
     """
 
@@ -197,11 +219,17 @@ def doctest_SampleAttendancePlugin_generateDayAttendance():
 
         >>> print sorted(plugin.generateDayAttendance().items())
         Jon was absent on 2005-09-11
+        ...
         Ian was absent on 2005-09-11
+        ...
         Jon was absent on 2005-09-13
+        ...
         Ian was absent on 2005-09-13
-        [('2005-09-11', ['student_Jon', 'student_Ian']),
-         ('2005-09-13', ['student_Jon', 'student_Ian'])]
+        ...
+        [('2005-09-11', {'student_Jon': ((), (), False),
+                         'student_Ian': ((), (), False)}),
+         ('2005-09-13', {'student_Jon': ((), (), False),
+                         'student_Ian': ((), (), False)})]
 
     Unless the absence rate is 0:
 
@@ -211,8 +239,8 @@ def doctest_SampleAttendancePlugin_generateDayAttendance():
         Ian was present on 2005-09-11
         Jon was present on 2005-09-13
         Ian was present on 2005-09-13
-        [('2005-09-11', []),
-         ('2005-09-13', [])]
+        [('2005-09-11', {}),
+         ('2005-09-13', {})]
 
     """
 
@@ -256,21 +284,26 @@ def doctest_SampleAttendancePlugin_generateSectionAttendance():
         Ann was present on 2005-09-01 09:30:00 (p1, s2)
         Ann was absent on 2005-09-03 09:30:00 (p1, s2)
         Tardy at 2005-09-03 09:45:00
+        Added explanation
+        Accepted explanation
         Ann was present on 2005-09-05 09:30:00 (p1, s2)
         Ann was present on 2005-09-07 09:30:00 (p1, s2)
         Ann was present on 2005-09-09 09:30:00 (p1, s2)
-        Ann was absent on 2005-09-11 09:30:00 (p1, s2)
-        Tardy at 2005-09-11 09:45:00
+        Ann was present on 2005-09-11 09:30:00 (p1, s2)
         Ann was absent on 2005-09-13 09:30:00 (p1, s2)
         Tardy at 2005-09-13 09:45:00
+        Added explanation
+        Accepted explanation
         Jon was present on 2005-09-01 09:30:00 (p1, s1)
         Ian was present on 2005-09-01 09:30:00 (p1, s1)
         Jon was present on 2005-09-03 09:30:00 (p1, s1)
         Ian was present on 2005-09-03 09:30:00 (p1, s1)
-        Jon was absent on 2005-09-05 09:30:00 (p1, s1)
-        Tardy at 2005-09-05 09:45:00
+        Jon was present on 2005-09-05 09:30:00 (p1, s1)
         Ian was present on 2005-09-05 09:30:00 (p1, s1)
-        Jon was present on 2005-09-07 09:30:00 (p1, s1)
+        Jon was absent on 2005-09-07 09:30:00 (p1, s1)
+        Tardy at 2005-09-07 09:45:00
+        Added explanation
+        Accepted explanation
         Ian was present on 2005-09-07 09:30:00 (p1, s1)
         Jon was present on 2005-09-09 09:30:00 (p1, s1)
         Ian was present on 2005-09-09 09:30:00 (p1, s1)
@@ -278,6 +311,7 @@ def doctest_SampleAttendancePlugin_generateSectionAttendance():
         Ian was present on 2005-09-11 09:30:00 (p1, s1)
         Jon was present on 2005-09-13 09:30:00 (p1, s1)
         Ian was present on 2005-09-13 09:30:00 (p1, s1)
+
 
     Let's shift the start date a bit, and reset the rng:
 
@@ -287,25 +321,34 @@ def doctest_SampleAttendancePlugin_generateSectionAttendance():
         Ann was present on 2005-09-11 09:30:00 (p1, s2)
         Ann was absent on 2005-09-13 09:30:00 (p1, s2)
         Tardy at 2005-09-13 09:45:00
+        Added explanation
+        Accepted explanation
         Jon was present on 2005-09-11 09:30:00 (p1, s1)
         Ian was present on 2005-09-11 09:30:00 (p1, s1)
         Jon was present on 2005-09-13 09:30:00 (p1, s1)
-        Ian was absent on 2005-09-13 09:30:00 (p1, s1)
-        Tardy at 2005-09-13 09:45:00
+        Ian was present on 2005-09-13 09:30:00 (p1, s1)
 
     If there was a day absence - the student should not be present in
     any of the section events (even if absence_rate is zero):
 
         >>> plugin.absence_rate = 0
         >>> plugin.rng = random.Random(42)
-        >>> day_absences = {'2005-09-11': ['Jon'], '2005-09-13': ['Ian']}
+        >>> day_absences = {'2005-09-11': {'Jon': ((), (), False)},
+        ...                 '2005-09-13': {'Jon': (True, True, True),
+        ...                                'Ian': (True, False, False),
+        ...                                'Ann': (True, True, False)}}
         >>> plugin.generateSectionAttendance(day_absences)
         Ann was present on 2005-09-11 09:30:00 (p1, s2)
-        Ann was present on 2005-09-13 09:30:00 (p1, s2)
+        Ann was absent on 2005-09-13 09:30:00 (p1, s2)
+        Added explanation
+        Rejected explanation
         Jon was absent on 2005-09-11 09:30:00 (p1, s1)
         Ian was present on 2005-09-11 09:30:00 (p1, s1)
-        Jon was present on 2005-09-13 09:30:00 (p1, s1)
+        Jon was absent on 2005-09-13 09:30:00 (p1, s1)
+        Added explanation
+        Accepted explanation
         Ian was absent on 2005-09-13 09:30:00 (p1, s1)
+        Added explanation
 
     """
 

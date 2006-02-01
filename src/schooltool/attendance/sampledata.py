@@ -53,11 +53,11 @@ class SampleAttendancePlugin(object):
 
     absence_rate = 0.03     # A student skips 3% of meetings on average
     tardy_rate = 0.90       # A student is late to 90% of absences on average
-    explanation_rate = 0.50 # Student explains 50% of his absences and tardies
-    excuse_rate = 0.50      # 50% of explained tardies/absences are excused
+    explanation_rate = 0.80 # Student explains 80% of his absences and tardies
+    excuse_rate = 0.80      # 80% of explained tardies/absences are excused
     reject_rate = 0.30      # 30% of explained tardies/absences are rejected
 
-    only_last_n_days = None # Instead of generating attendance data
+    only_last_n_days = 14   # Instead of generating attendance data
                             # for the whole term (which is slow),
                             # generate it only for the last N days
 
@@ -88,15 +88,23 @@ class SampleAttendancePlugin(object):
                 continue
             strdate = day.strftime("%Y-%m-%d")
             if self.term.isSchoolday(day):
-                day_absences[strdate] = []
+                day_absences[strdate] = {}
                 for person_name in persons:
                     if not person_name.startswith("student"):
                         continue
                     person = persons[person_name]
                     present = self.rng.random() > self.day_absence_rate
+
+                    da = IDayAttendance(person)
+                    da.record(day, present)
+                    ar = da.get(day)
                     if not present:
-                        day_absences[strdate].append(person_name)
-                    IDayAttendance(person).record(day, present)
+                        self.explainAttendanceRecord(ar)
+                        day_absences[strdate][person_name] = (
+                            ar.explanations,
+                            (ar.explanations and ar.explanations[-1].isProcessed()),
+                            ar.isExplained())
+
         transaction.commit()
         return day_absences
 
@@ -121,11 +129,18 @@ class SampleAttendancePlugin(object):
                                       present)
                     ar = attendance.get(section, meeting.dtstart)
 
-                    if not present and not day_absence:
+                    if day_absence:
+                        explained, processed, accepted = day_absences[datestr][student.__name__]
+                        if explained:
+                            ar.addExplanation("My car broke!")
+                        if accepted:
+                            ar.acceptExplanation()
+                        elif processed:
+                            ar.rejectExplanation()
+
+                    elif not present:
                         if self.rng.random() < self.tardy_rate:
                             ar.makeTardy(meeting.dtstart + datetime.timedelta(minutes=15))
-
-                    if not present:
                         self.explainAttendanceRecord(ar)
 
             # The transaction commit keeps the memory usage low, but at a cost
