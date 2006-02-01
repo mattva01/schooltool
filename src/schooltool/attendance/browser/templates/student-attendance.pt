@@ -13,9 +13,13 @@
 
 <metal:block metal:fill-slot="body"
              tal:define="unresolved_absences
-                            python:list(view.unresolvedAbsences())">
-
-<tal:if_there_are_any condition="unresolved_absences">
+                            python:list(view.unresolvedAbsences());
+                         unresolved_explained_absences
+                            python: [ar for ar in unresolved_absences
+                                     if ar['explanation']];
+                         unresolved_unexplained_absences
+                            python: [ar for ar in unresolved_absences
+                                     if not ar['explanation']];">
 
 <div class="info" tal:repeat="status view/statuses"
      tal:content="status" i18n:translate="">
@@ -26,49 +30,89 @@
   (error message)
 </div>
 
-<p i18n:translate="">Unresolved absences:</p>
+<tal:else condition="not:unresolved_absences">
+<p i18n:translate="">There are no unresolved absences.</p>
+</tal:else>
+
+<tal:if_there_are_any_explained condition="unresolved_explained_absences">
 
 <form id="attendance_explain_resolve" action="." method="post"
       tal:attributes="action request/URL">
 
-<div class="attendance_record" tal:repeat="absence view/unresolvedAbsences">
-<input type="checkbox" tal:attributes="name absence/id; id absence/id" />
-<label tal:attributes="for absence/id" tal:content="absence/text"
-       i18n:translate="" />
+<h3 i18n:translate="">Unresolved explained absences</h3>
+
+<div class="attendance_record"
+     tal:repeat="absence unresolved_explained_absences">
+  <input type="checkbox" tal:attributes="name absence/id; id absence/id" />
+  <label tal:attributes="for absence/id" tal:content="absence/text"
+         i18n:translate="" />
+  <div class="explanation" tal:content="absence/explanation">
+    (explanation)
+  </div>
 </div>
 
 <div class="row">
-<div class="label">
-<label for="explanation">Add an explanation<label>
-</div>
-<div class="field">
-<textarea id="explanation" name="explanation" cols="60" rows="5">
-</textarea>
-</div>
-</div>
-
-<div class="row">
-<div><input type="radio" name="resolve" id="do_not_resolve" value=""
-            checked="checked" />
-<label for="do_not_resolve">Do not resolve</label>
-</div>
-<div><input type="radio" name="resolve" id="accept" value="accept" />
-<label for="accept">Accept</label>
-</div>
-<div><input type="radio" name="resolve" id="reject" value="reject" />
-<label for="reject">Reject</label>
-</div>
+  <div><input type="radio" name="resolve" id="do_not_resolve" value=""
+              checked="checked" />
+  <label for="do_not_resolve">Do not resolve</label>
+  </div>
+  <div><input type="radio" name="resolve" id="accept" value="accept" />
+  <label for="accept">Accept</label>
+  </div>
+  <div><input type="radio" name="resolve" id="reject" value="reject" />
+  <label for="reject">Reject</label>
+  </div>
 </div>
 
 <div class="controls">
-<input type="submit" class="button-ok" name="UPDATE" value="Update" />
+  <input type="submit" class="button-ok" name="UPDATE" value="Update" />
 </div>
 
 </form>
-</tal:if_there_are_any>
-<tal:else condition="not:unresolved_absences">
-<p i18n:translate="">There are no unresolved absences.</p>
-</tal:else>
+</tal:if_there_are_any_explained>
+
+<tal:if_there_are_any_unexplained condition="unresolved_unexplained_absences">
+
+<form id="attendance_explain_resolve" action="." method="post"
+      tal:attributes="action request/URL">
+
+<h3 i18n:translate="">Unresolved unexplained absences</h3>
+
+<div class="attendance_record"
+     tal:repeat="absence unresolved_unexplained_absences">
+  <input type="checkbox" tal:attributes="name absence/id; id absence/id" />
+  <label tal:attributes="for absence/id" tal:content="absence/text"
+         i18n:translate="" />
+</div>
+
+<div class="row">
+  <div class="label">
+  <label for="explanation">Add an explanation<label>
+  </div>
+  <div class="field">
+  <textarea id="explanation" name="explanation" cols="60" rows="5"></textarea>
+  </div>
+</div>
+
+<div class="row">
+  <div><input type="radio" name="resolve" id="do_not_resolve" value=""
+              checked="checked" />
+  <label for="do_not_resolve">Do not resolve</label>
+  </div>
+  <div><input type="radio" name="resolve" id="accept" value="accept" />
+  <label for="accept">Accept</label>
+  </div>
+  <div><input type="radio" name="resolve" id="reject" value="reject" />
+  <label for="reject">Reject</label>
+  </div>
+</div>
+
+<div class="controls">
+  <input type="submit" class="button-ok" name="UPDATE" value="Update" />
+</div>
+
+</form>
+</tal:if_there_are_any_unexplained>
 
 <h2 i18n:translate="">Summary</h2>
 

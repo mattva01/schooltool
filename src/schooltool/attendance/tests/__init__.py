@@ -20,7 +20,7 @@ from zope.interface import directlyProvides
 from zope.wfmc.interfaces import IProcessDefinition
 from zope.component import provideAdapter, provideUtility
 
-from schooltool.attendance.interfaces import TARDY
+from schooltool.attendance.interfaces import TARDY, ACCEPTED, REJECTED
 
 
 class WorkItemStub(object):
@@ -30,9 +30,11 @@ class WorkItemStub(object):
 
     def acceptExplanation(self):
         print "Accepted explanation"
+        self.attendance_record.explanations[-1].status = ACCEPTED
 
     def rejectExplanation(self):
         print "Rejected explanation"
+        self.attendance_record.explanations[-1].status = REJECTED
 
     def makeTardy(self, arrival_time):
         self.attendance_record.status = TARDY

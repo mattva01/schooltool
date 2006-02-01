@@ -19,3 +19,12 @@ form#attendance_explain_resolve div.row {
 form#attendance_explain_resolve div.label {
   float: none;
 }
+
+form#attendance_explain_resolve div.explanation {
+  margin: 0.5ex 0.5ex 2ex 6ex;
+}
+
+form#attendance_explain_resolve h3 {
+  margin-top: 4ex;
+  margin-bottom: 2ex;
+}

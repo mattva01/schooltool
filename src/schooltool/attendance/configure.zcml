@@ -41,6 +41,11 @@
     <allow interface=".interfaces.ISectionAttendanceRecord" />
   </class>
 
+  <class class=".attendance.AbsenceExplanation">
+    <allow interface=".interfaces.IAbsenceExplanation" />
+  </class>
+
+
   <!-- Process Definition for Explanation workflow -->
   <wfmc:xpdl
       file="explanation.xpdl"

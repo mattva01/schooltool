@@ -146,6 +146,7 @@ class StubTimetables(object):
 
 class DayAttendanceRecordStub(object):
     implements(IDayAttendanceRecord)
+    explanations = ()
     def __init__(self, date, status, explained=False):
         self.date = date
         self.status = status
@@ -165,6 +166,7 @@ class DayAttendanceRecordStub(object):
 
 class SectionAttendanceRecordStub(object):
     implements(ISectionAttendanceRecord)
+    explanations = ()
     def __init__(self, section, datetime, status, explained=False):
         self.section = section
         self.date = datetime.date()
@@ -1675,6 +1677,40 @@ def doctest_StudentAttendanceView_makeId():
 
         >>> view.makeId(a)
         's_2006-01-29_14:30:00+00:00_U29tZSBzZWN0aW9uIOGItA=='
+
+    """
+
+
+def doctest_StudentAttendanceView_outstandingExplanation():
+    r"""Tests for StudentAttendanceView.outstandingExplanation
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...        import StudentAttendanceView
+        >>> view = StudentAttendanceView(None, None)
+
+        >>> from schooltool.attendance.attendance import DayAttendanceRecord
+        >>> a = DayAttendanceRecord(datetime.date(2006, 1, 29), ABSENT)
+
+        >>> print view.outstandingExplanation(a)
+        None
+
+        >>> a.addExplanation('Burumburum')
+        >>> print view.outstandingExplanation(a)
+        Burumburum
+
+        >>> a.rejectExplanation()
+        Rejected explanation
+        >>> print view.outstandingExplanation(a)
+        None
+
+        >>> a.addExplanation('Qua qua')
+        >>> print view.outstandingExplanation(a)
+        Qua qua
+
+        >>> a.acceptExplanation()
+        Accepted explanation
+        >>> print view.outstandingExplanation(a)
+        None
 
     """
 

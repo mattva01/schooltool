@@ -533,6 +533,13 @@ class StudentAttendanceView(BrowserView):
             else:
                 return _('$date $time: late for $section', mapping=mapping)
 
+    def outstandingExplanation(self, ar):
+        """Return the outstanding unaccepted explanation, if any."""
+        if ar.explanations and not ar.explanations[-1].isProcessed():
+            return ar.explanations[-1].text
+        else:
+            return None
+
     def interleaveAttendanceRecords(self, day_attendances, section_attendances):
         """Interleave day and section attendance records."""
         day_iter = iter(itertools.chain(day_attendances, [None]))
@@ -566,7 +573,8 @@ class StudentAttendanceView(BrowserView):
             if (ar.isAbsent() or ar.isTardy()) and not ar.isExplained():
                 yield {'id': self.makeId(ar),
                        'text': self.formatAttendanceRecord(ar),
-                       'attendance_record': ar}
+                       'attendance_record': ar,
+                       'explanation': self.outstandingExplanation(ar)}
 
     def absencesForTerm(self, term):
         """Return all absences and tardies in a term."""
