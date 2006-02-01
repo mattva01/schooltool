@@ -111,8 +111,9 @@ def generate_html(url, tree, my_index, info, path):
     <html>
       <head><title>Coverage report for %s</title>
       <style type="text/css">
-        a {text-decoration: none;}
+        a {text-decoration: none; display: block; padding-right: 1em;}
         a:hover {background: #EFA;}
+        hr {height: 1px; border: none; border-top: 1px solid gray;}
       </style>
       </head>
       <body><h1>%s</h1>
