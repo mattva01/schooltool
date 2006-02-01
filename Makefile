@@ -93,7 +93,7 @@ coverage: build
 	$(PYTHON) test.py $(TESTFLAGS) --coverage -s src/schooltool
 
 .PHONY: coverage-reports-html
-coverage-reports-html: coverage
+coverage-reports-html:
 	rm -rf coverage/reports
 	mkdir coverage/reports
 	$(PYTHON) bin/coverage_reports.py coverage coverage/reports
