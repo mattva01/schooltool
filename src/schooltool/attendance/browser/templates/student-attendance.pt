@@ -114,12 +114,15 @@
 </form>
 </tal:if_there_are_any_unexplained>
 
+<tal:summary_by_term define="terms python:list(view.summaryPerTerm())">
 <h2 i18n:translate="">Summary</h2>
 
-<table class="attendance_summary_per_term">
+<p i18n:translate="" tal:condition="not:terms">There are no terms defined.</p>
+
+<table class="attendance_summary_per_term" tal:condition="terms">
 <tr><th i18n:translate="" rowspan="2">Term</th><th colspan="2">Day attendance</th><th colspan="2">Section attendance</th></tr>
 <tr><th i18n:translate="">Absences</th><th i18n:translate="">Tardies</th><th i18n:translate="">Absences</th><th i18n:translate="">Tardies</th></tr>
-<tr tal:repeat="term view/summaryPerTerm">
+<tr tal:repeat="term terms">
   <td><a tal:attributes="href string:?term=${term/name}" tal:content="term/title">(term)</a></td>
   <td class="number" tal:content="term/day_absences">(d_a)</td>
   <td class="number" tal:content="term/day_tardies">(d_t)</td>
@@ -142,6 +145,8 @@
 </tal:else>
 </tal:block>
 </tal:if_detailed_summary_wanted>
+
+</tal:summary_by_term>
 
 </metal:block>
 </body>
