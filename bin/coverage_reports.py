@@ -27,6 +27,8 @@ invocation to produce HTML coverage reports is thus
 
 import sys
 import os
+import datetime
+import cgi
 
 
 class CoverageNode(dict):
@@ -181,7 +183,7 @@ def index_to_name(index):
     return 'everything'
 
 
-def generate_html(output_filename, tree, my_index, info, path):
+def generate_html(output_filename, tree, my_index, info, path, footer=""):
     """Generate HTML for a tree node.
 
     ``output_filename`` is the output file name.
@@ -204,6 +206,7 @@ def generate_html(output_filename, tree, my_index, info, path):
         a:hover {background: #EFA;}
         hr {height: 1px; border: none; border-top: 1px solid gray;}
         .notcovered {background: #FCC;}
+        .footer {margin: 2em; font-size: small; color: gray;}
       </style>
       </head>
       <body><h1>Unit test coverage for %(name)s</h1>
@@ -234,11 +237,16 @@ def generate_html(output_filename, tree, my_index, info, path):
         file_path = os.path.join(path, index_to_filename(my_index))
         # XXX can get painful if filenames contain unsafe characters
         pipe = os.popen('enscript -q --footer --header -h --language=html'
-                        ' --highlight=python --color -o - %s' % file_path, 'r')
+                        ' --highlight=python --color -o - "%s"' % file_path,
+                        'r')
         text = pipe.read()
-        pipe.close()
-        text = text[text.find('<PRE>'):]
-        text = text[:text.find('</PRE>')]
+        if pipe.close():
+            # Failed to run enscript; maybe it is not installed?  Disable
+            # syntax highlighting then.
+            text = cgi.escape(file(file_path).read())
+        else:
+            text = text[text.find('<PRE>')+len('<PRE>'):]
+            text = text[:text.find('</PRE>')]
         def color_uncov(line):
             if '&gt;&gt;&gt;&gt;&gt;&gt;' in line:
                 return ('<div class="notcovered">%s</div>'
@@ -247,12 +255,15 @@ def generate_html(output_filename, tree, my_index, info, path):
         text = ''.join(map(color_uncov, text.splitlines(True)))
         print >> html, '<pre>%s</pre>' % text
     print >> html, """
+      <div class="footer">
+      %s
+      </div>
     </body>
-    </html>"""
+    </html>""" % footer
     html.close()
 
 
-def generate_htmls_from_tree(tree, path, report_path):
+def generate_htmls_from_tree(tree, path, report_path, footer=""):
     """Generate HTML files for all nodes in the tree.
 
     ``tree`` is the root node of the tree.
@@ -276,7 +287,7 @@ def generate_htmls_from_tree(tree, path, report_path):
         output_filename = os.path.join(report_path, index_to_url(my_index))
         if not my_index:
             return # skip root node
-        generate_html(output_filename, tree, my_index, info, path)
+        generate_html(output_filename, tree, my_index, info, path, footer)
     traverse_tree(tree, [], make_html)
 
 
@@ -289,7 +300,18 @@ def make_coverage_reports(path, report_path):
                 not filename.startswith('<'))
     filelist = get_file_list(path, filter_fn)
     tree = create_tree(filelist, path)
-    generate_htmls_from_tree(tree, path, report_path)
+    rev = get_svn_revision(os.path.join(path, os.path.pardir))
+    timestamp = str(datetime.datetime.utcnow())+"Z"
+    footer = "Generated for revision %s on %s" % (rev, timestamp)
+    generate_htmls_from_tree(tree, path, report_path, footer)
+
+
+def get_svn_revision(path):
+    """Return the Subversion revision number for a working directory."""
+    for line in os.popen('svn info "%s"' % path, 'r'):
+        if line.startswith('Last Changed Rev:'):
+            return line.split(':')[1].strip()
+    return "UNKNOWN"
 
 
 def main():
