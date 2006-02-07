@@ -157,7 +157,8 @@ Project structure (subversion checkout only)
   schooltool.conf.in    sample configuration file
 
   build/                temporary files are placed here during build process
-  coverage/             unit test coverage reports are placed here
+  coverage/             unit test coverage reports (produced by make coverage)
+    reports/            html version of the above (make coverage-reports-html)
   doc/                  documentation
   src/                  source code
     schooltool/         Python package 'schooltool'
@@ -198,14 +199,6 @@ The test runner has more options and features.  To find out about them, do
 
   python test.py -h
 
-Functional tests are are not completely isolated.  Some functional tests
-create named database state snapshots, while other tests reuse those snapshots
-of known database state.  The test runner does not know which tests create
-which snapshots, so if you want to run just one (or a couple) of functional
-tests in isolation, it is likely that you will have first run the full suite
-to create the necessary snapshots.  Do not restart the test server, or all
-saved snapshots will be gone.
-
 
 Unit test coverage
 ------------------
@@ -224,7 +217,18 @@ Each source line is annotated with a number that shows how many times
 this line was reached during testing.  Watch out for lines marked with
 '>>>>>>' as they indicate code that is not unit tested.
 
-There are some more helpful make targets:
+A prettier HTML version of the coverage reports can be generated with
+
+  make coverage
+  make coverage-reports-html
+
+Look at HTML files in ./coverage/reports/.  You should have enscript installed
+for syntax highlighting source files.
+
+The HTML version of coverage reports is published nightly at
+http://source.schooltool.org/coverage/
+
+There are some other helpful make targets:
 
   make coverage-report-list
 
@@ -309,7 +313,7 @@ the only differing thing would be the local port number.
 Copyright information
 ---------------------
 
-SchoolTool is copyright (c) 2003--2005 Shuttleworth Foundation
+SchoolTool is copyright (c) 2003--2006 Shuttleworth Foundation
 
 All files in the src/schooltool directory (with some exceptions in
 src/schooltool/locales) are part of SchoolTool, and are (c) Shuttleworth
