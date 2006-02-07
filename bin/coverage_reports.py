@@ -308,10 +308,10 @@ def make_coverage_reports(path, report_path):
 
 def get_svn_revision(path):
     """Return the Subversion revision number for a working directory."""
-    for line in os.popen('svn info "%s"' % path, 'r'):
-        if line.startswith('Last Changed Rev:'):
-            return line.split(':')[1].strip()
-    return "UNKNOWN"
+    rev = os.popen('svnversion "%s"' % path, 'r').readline().strip()
+    if not rev:
+        rev = "UNKNOWN"
+    return rev
 
 
 def main():
