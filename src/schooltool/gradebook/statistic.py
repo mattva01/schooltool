@@ -22,6 +22,7 @@ $Id$
 """
 __docformat__ = 'reStructuredText'
 import math
+from decimal import Decimal
 import zope.component
 import zope.interface
 
@@ -47,7 +48,7 @@ class Statistics(object):
         if len(scores) == 0:
             return None
 
-        return float(sum(scores))/len(scores)
+        return sum(scores)/len(scores)
 
 
     def calculatePercentAverage(self, activity):
@@ -59,7 +60,7 @@ class Statistics(object):
         if avg is None:
             return None
 
-        return avg/total*100.0
+        return avg/total*100
 
 
     def calculateMedian(self, activity):
@@ -71,7 +72,7 @@ class Statistics(object):
             return None
 
         scores.sort()
-        return float(scores[len(scores)/2])
+        return scores[len(scores)/2]
 
 
     def calculateStandardDeviation(self, activity):
@@ -81,7 +82,7 @@ class Statistics(object):
         if variance is None:
             return None
 
-        return math.sqrt(variance)
+        return Decimal(str(math.sqrt(variance)))
 
 
     def calculateVariance(self, activity):
