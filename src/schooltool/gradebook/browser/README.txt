@@ -546,7 +546,7 @@ degrees of freedom.
     ...
     <tr class="Statistic">
       <td class="name">Average</td>
-      <td class="value">80.0</td>
+      <td class="value">80</td>
       ...
     </tr>
     <tr class="Statistic">
@@ -556,7 +556,7 @@ degrees of freedom.
     </tr>
     <tr class="Statistic">
       <td class="name">Median</td>
-      <td class="value">80.0</td>
+      <td class="value">80</td>
       ...
     </tr>
     <tr class="Statistic">
@@ -583,7 +583,7 @@ Once more than one grade is entered, all statistics show:
     ...
     <tr class="Statistic">
       <td class="name">Average</td>
-      <td class="value">80.0</td>
+      <td class="value">80</td>
       ...
     </tr>
     <tr class="Statistic">
@@ -593,7 +593,7 @@ Once more than one grade is entered, all statistics show:
     </tr>
     <tr class="Statistic">
       <td class="name">Median</td>
-      <td class="value">80.0</td>
+      <td class="value">80</td>
       ...
     </tr>
     <tr class="Statistic">
@@ -603,7 +603,7 @@ Once more than one grade is entered, all statistics show:
     </tr>
     <tr class="Statistic">
       <td class="name">Variance</td>
-      <td class="value">100.0</td>
+      <td class="value">100</td>
       ...
     </tr>
     ...
