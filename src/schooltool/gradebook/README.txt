@@ -259,6 +259,56 @@ spreadsheet:
     >>> gradebook.getEvaluation(tom, hw2)
     <Evaluation for <Activity u'HW 2'>, value=10>
 
+Total score
+~~~~~~~~~~~
+
+Let's calculate the total score for Paul. First we'll verify Paul's
+individual scores:
+
+  >>> sorted(gradebook.getEvaluationsForStudent(paul),
+  ...        key=lambda (activity, evaluation): activity.title)
+  [(<Activity u'Final'>, <Evaluation for <Activity u'Final'>, value=99>),
+   (<Activity u'HW 1'>, <Evaluation for <Activity u'HW 1'>, value=10>),
+   (<Activity u'HW 2'>, <Evaluation for <Activity u'HW 2'>, value=12>)]
+
+Let's review Paul's evaluations. For the Final activity, he received a
+score of 99 out of a 100. For HW 1 he received 10 out of a range of 0
+to 10, and for HW 2 he received a 12 out of a maximum of 15. We first
+convert all these to fractions (a number between 0 and 1) and then
+calculate the final grade as an average of the fractions, and then
+transformed to a percentile.
+
+Let's do the calculation by hand first:
+
+  >>> from decimal import Decimal
+  >>> (Decimal(99) / Decimal(100) + 
+  ...  Decimal(10) / Decimal(10) +
+  ...  Decimal(12) / Decimal(15)) / 3 * 100
+  Decimal("93.00")
+
+We have a method on the gradebook that can do this calculation:
+
+  >>> gradebook.getTotalScoreForStudent(paul)
+  Decimal("93.00")
+
+Tom doesn't have a complete set of grades (the HW 1 grade is missing):
+
+  >>> sorted(gradebook.getEvaluationsForStudent(tom),
+  ...        key=lambda (activity, evaluation): activity.title)
+  [(<Activity u'Final'>, <Evaluation for <Activity u'Final'>, value=85>), 
+   (<Activity u'HW 2'>, <Evaluation for <Activity u'HW 2'>, value=10>)]
+
+The total score will be an average of these scores, and the missing score
+does not count:
+
+  >>> (Decimal(85) / Decimal(100) + 
+  ...  Decimal(10) / Decimal(15)) / 2 * 100
+  Decimal("75.83333333333333333333333335")
+
+Our score calculation method will give us the same result:
+
+  >>> gradebook.getTotalScoreForStudent(tom)
+  Decimal("75.83333333333333333333333335")
 
 Sorting by Column
 ~~~~~~~~~~~~~~~~~
@@ -302,7 +352,7 @@ You can now calculate the basic statistics:
 - The average grade of an activity:
 
     >>> statistics.calculateAverage(hw2)
-    12.0
+    Decimal("12")
 
   Of course, if there are no grades, the average cannot be computed:
 
@@ -314,21 +364,21 @@ You can now calculate the basic statistics:
 - The average grade as a percentage:
 
     >>> statistics.calculatePercentAverage(hw2)
-    80.0
+    Decimal("80.0")
     >>> statistics.calculatePercentAverage(hw1) is None
     True
 
 - The median of an activity:
 
     >>> statistics.calculateMedian(hw2)
-    12.0
+    Decimal("12")
     >>> statistics.calculateMedian(hw1) is None
     True
 
 - The standard deviation of an activity:
 
     >>> statistics.calculateStandardDeviation(hw2)
-    2.0
+    Decimal("2.0")
 
   Of course, we can only compute the standard deviation and variance, if we
   have at least 2 values:
@@ -342,7 +392,7 @@ You can now calculate the basic statistics:
 - The variance of the activity:
 
     >>> statistics.calculateVariance(hw2)
-    4.0
+    Decimal("4")
     >>> statistics.calculateVariance(hw1) is None
     True
 

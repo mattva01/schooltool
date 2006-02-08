@@ -83,15 +83,21 @@ class IGradebook(zope.interface.Interface):
     def getEvaluationsForStudent(student):
         """Get the evaluations of the section for this student.
 
-        Return iteratable of 2-tuples of the form (activity, evaluation).
+        Return iterable of 2-tuples of the form (activity, evaluation).
         """
 
     def getEvaluationsForActivity(activity):
         """Get the evaluations of a particular activity in the section.
 
-        Return iteratable of 2-tuples of the form (student, evaluation).
+        Return iterable of 2-tuples of the form (student, evaluation).
         """
 
+    def getTotalScoreForStudent(student):
+        """Compute the total score for a student.
+
+        Return a percentile in the form of a decimal.
+        """        
+        
     def getSortKey(person):
         """Get the sortkey for the gradebook table."""
 
@@ -102,8 +108,7 @@ class IGradebook(zope.interface.Interface):
         sort by student title or the hash of the activity. The second entry
         specifies whether the sorting is reversed.
         """
-
-
+    
 class IStatistics(zope.interface.Interface):
     """Statistics for the gradebook"""
 
