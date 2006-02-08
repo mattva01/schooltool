@@ -389,10 +389,11 @@ The first class is designed for grades that are given as discrete values. For
 example, if you want to be able to give the student a check, check plus, or
 check minus, then you can create a scoresystem as follows:
 
+  >>> from decimal import Decimal
   >>> from schooltool.requirement import scoresystem
   >>> check = scoresystem.DiscreteValuesScoreSystem(
   ...    u'Check', u'Check-mark score system',
-  ...    [('+', 1), ('v', 0), ('-', -1)])
+  ...    [('+', Decimal(1)), ('v', Decimal(0)), ('-', Decimal(-1))])
 
 The first and second arguments of the constructor are the title and
 description. The third argument is a list that really represents a mapping
@@ -418,12 +419,22 @@ Next, you can ask the score system to tell you the numerical value for a given
 score:
 
   >>> check.getNumericalValue('+')
-  1
+  Decimal("1")
 
 Again, the unscored score returns a ``None`` result:
 
   >>> check.getNumericalValue(scoresystem.UNSCORED) is None
   True
+
+We can also ask for the fractional value of a score. This is based on the
+range of scores:
+
+  >>> check.getFractionalValue('+')
+  Decimal("1")
+  >>> check.getFractionalValue('v')
+  Decimal("0.5")
+  >>> check.getFractionalValue('-')
+  Decimal("0")
 
 When a user inputs a grade, it is always a string value. Thus there is a
 method that allows us to convert unicode string representations of the score
@@ -455,7 +466,10 @@ provide more useful results:
   >>> from schooltool.requirement import scoresystem
   >>> check = scoresystem.DiscreteValuesScoreSystem(
   ...    u'Check', u'Check-mark score system',
-  ...    [('+', 1), ('v', 0), ('-', -1)], minPassingScore='v')
+  ...    [('+', Decimal(1)), 
+  ...     ('v', Decimal(0)), 
+  ...     ('-', Decimal(-1))], 
+  ...     minPassingScore='v')
   >>> check
   <DiscreteValuesScoreSystem u'Check'>
 
@@ -484,7 +498,8 @@ better than implicit anyways:
   >>> from schooltool.requirement import scoresystem
   >>> check = scoresystem.DiscreteValuesScoreSystem(
   ...    u'Check', u'Check-mark score system',
-  ...    [('+', 1), ('v', 0), ('-', -1)], bestScore='+', minPassingScore='v')
+  ...    [('+', Decimal(1)), ('v', Decimal(0)), ('-', Decimal(-1))],
+  ...    bestScore='+', minPassingScore='v')
 
   >>> check.getBestScore()
   '+'
@@ -501,7 +516,7 @@ systems are global ones, they reduce very efficiently for pickling.
   >>> scoresystem.PassFail.title
   u'Pass/Fail'
   >>> scoresystem.PassFail.scores
-  [(u'Pass', 1), (u'Fail', 0)]
+  [(u'Pass', Decimal("1")), (u'Fail', Decimal("0"))]
   >>> scoresystem.PassFail.isValidScore('Pass')
   True
   >>> scoresystem.PassFail.isPassingScore('Pass')
@@ -513,7 +528,11 @@ systems are global ones, they reduce very efficiently for pickling.
   >>> scoresystem.PassFail.fromUnicode(u'Pass')
   u'Pass'
   >>> scoresystem.PassFail.getNumericalValue(u'Pass')
-  1
+  Decimal("1")
+  >>> scoresystem.PassFail.getFractionalValue(u'Pass')
+  Decimal("1")
+  >>> scoresystem.PassFail.getFractionalValue(u'Fail')
+  Decimal("0")
 
 - The standard American letter score system:
 
@@ -524,7 +543,8 @@ systems are global ones, they reduce very efficiently for pickling.
   >>> scoresystem.AmericanLetterScoreSystem.title
   u'Letter Grade'
   >>> scoresystem.AmericanLetterScoreSystem.scores
-  [('A', 4), ('B', 3), ('C', 2), ('D', 1), ('F', 0)]
+  [('A', Decimal("4")), ('B', Decimal("3")), ('C', Decimal("2")), 
+   ('D', Decimal("1")), ('F', Decimal("0"))]
   >>> scoresystem.AmericanLetterScoreSystem.isValidScore('C')
   True
   >>> scoresystem.AmericanLetterScoreSystem.isValidScore('E')
@@ -538,8 +558,12 @@ systems are global ones, they reduce very efficiently for pickling.
   >>> scoresystem.AmericanLetterScoreSystem.fromUnicode('B')
   'B'
   >>> scoresystem.AmericanLetterScoreSystem.getNumericalValue('B')
-  3
-
+  Decimal("3")
+  >>> scoresystem.AmericanLetterScoreSystem.getFractionalValue('B')
+  Decimal("0.75")
+  >>> scoresystem.AmericanLetterScoreSystem.getFractionalValue('F')
+  Decimal("0")
+ 
 - The extended American letter score system:
 
   >>> scoresystem.ExtendedAmericanLetterScoreSystem
@@ -563,14 +587,18 @@ systems are global ones, they reduce very efficiently for pickling.
   >>> scoresystem.ExtendedAmericanLetterScoreSystem.fromUnicode('B-')
   'B-'
   >>> scoresystem.ExtendedAmericanLetterScoreSystem.getNumericalValue('B')
-  3.0
+  Decimal("3.0")
+  >>> scoresystem.ExtendedAmericanLetterScoreSystem.getFractionalValue('A')
+  Decimal("1")
+  >>> scoresystem.ExtendedAmericanLetterScoreSystem.getFractionalValue('A+')
+  Decimal("1")
 
 The second score system class is the ranged values score system, which allows
 you to define numerical ranges as grades. Let's say I have given a quiz that
 has a maximum of 21 points:
 
   >>> quizScore = scoresystem.RangedValuesScoreSystem(
-  ...     u'Quiz Score', u'Quiz Score System', 0, 21)
+  ...     u'Quiz Score', u'Quiz Score System', Decimal(0), Decimal(21))
   >>> quizScore
   <RangedValuesScoreSystem u'Quiz Score'>
 
@@ -582,15 +610,15 @@ provide a ``max`` keyword argument.
 Practically any numerical value in the range between the minimum and maximum
 value are valid scores:
 
-  >>> quizScore.isValidScore(-1)
+  >>> quizScore.isValidScore(Decimal(-1))
   False
-  >>> quizScore.isValidScore(0)
+  >>> quizScore.isValidScore(Decimal(0))
   True
-  >>> quizScore.isValidScore(13.43)
+  >>> quizScore.isValidScore(Decimal("13.43"))
   True
-  >>> quizScore.isValidScore(21)
+  >>> quizScore.isValidScore(Decimal(21))
   True
-  >>> quizScore.isValidScore(21.1)
+  >>> quizScore.isValidScore(Decimal("21.1"))
   False
   >>> quizScore.isValidScore(scoresystem.UNSCORED)
   True
@@ -598,18 +626,22 @@ value are valid scores:
 Clearly, for this type of score system, the numerical value always equals the
 score itself:
 
-  >>> quizScore.getNumericalValue(20)
-  20
-  >>> quizScore.getNumericalValue(20.1)
-  20.100000000000001
-  >>> import decimal
-  >>> quizScore.getNumericalValue(decimal.Decimal('20.1'))
+  >>> quizScore.getNumericalValue(Decimal(20))
+  Decimal("20")
+  >>> quizScore.getNumericalValue(Decimal('20.1'))
   Decimal("20.1")
+
+We can also determine the fractional value:
+
+  >>> quizScore.getFractionalValue(Decimal(20))
+  Decimal("0.9523809523809523809523809524")
+  >>> quizScore.getFractionalValue(Decimal(0))
+  Decimal("0")
 
 We can also convert any unicode input to a score.
 
   >>> quizScore.fromUnicode('20')
-  20
+  Decimal("20")
   >>> quizScore.fromUnicode('20.1')
   Decimal("20.1")
 
@@ -619,26 +651,39 @@ ranged value score system is well-defined by the maximum value, we can get a
 answer any time:
 
   >>> quizScore.getBestScore()
-  21
+  Decimal("21")
 
 Since we have not defined a minimum passing grade, we cannot get a meaningful
 answer from the passing score evaluation:
 
-  >>> quizScore.isPassingScore(13) is None
+  >>> quizScore.isPassingScore(Decimal(13)) is None
   True
 
-Again, if we provide a passing score at the beginning, then those queries amke
+Again, if we provide a passing score at the beginning, then those queries make
 sense:
 
   >>> quizScore = scoresystem.RangedValuesScoreSystem(
-  ...     u'quizScore', u'Quiz Score System', 0, 21, 0.6*21) # 60%+ is passing
+  ...     u'quizScore', u'Quiz Score System', 
+  ...     Decimal(0), Decimal(21), Decimal("0.6")*21) # 60%+ is passing
 
-  >>> quizScore.isPassingScore(13)
+  >>> quizScore.isPassingScore(Decimal(13))
   True
-  >>> quizScore.isPassingScore(10)
+  >>> quizScore.isPassingScore(Decimal(10))
   False
   >>> quizScore.isPassingScore(scoresystem.UNSCORED) is None
   True
+
+Let's also try a ranged system that doesn't start at 0:
+
+  >>> quizScore = scoresystem.RangedValuesScoreSystem(
+  ...     u'quizScore', u'Score System that does not start at zero', 
+  ...     Decimal(5), Decimal(10))
+  >>> quizScore.getFractionalValue(Decimal(5))
+  Decimal("0")
+  >>> quizScore.getFractionalValue(Decimal(10))
+  Decimal("1")
+  >>> quizScore.getFractionalValue(Decimal("7.5"))
+  Decimal("0.5")
 
 The package provides two default ranged values score system, the percent
 score system,
@@ -650,28 +695,29 @@ score system,
   >>> scoresystem.PercentScoreSystem.title
   u'Percent'
   >>> scoresystem.PercentScoreSystem.min
-  0
+  Decimal("0")
   >>> scoresystem.PercentScoreSystem.max
-  100
+  Decimal("100")
 
-  >>> scoresystem.PercentScoreSystem.isValidScore(40)
+  >>> scoresystem.PercentScoreSystem.isValidScore(Decimal(40))
   True
   >>> scoresystem.PercentScoreSystem.isValidScore(scoresystem.UNSCORED)
   True
 
-  >>> scoresystem.PercentScoreSystem.isPassingScore(60)
+  >>> scoresystem.PercentScoreSystem.isPassingScore(Decimal(60))
   True
-  >>> scoresystem.PercentScoreSystem.isPassingScore(59)
+  >>> scoresystem.PercentScoreSystem.isPassingScore(Decimal(59))
   False
   >>> scoresystem.PercentScoreSystem.isPassingScore(scoresystem.UNSCORED)
 
   >>> scoresystem.PercentScoreSystem.getBestScore()
-  100
+  Decimal("100")
   >>> scoresystem.PercentScoreSystem.fromUnicode('42')
-  42
-  >>> scoresystem.PercentScoreSystem.getNumericalValue(42)
-  42
-
+  Decimal("42")
+  >>> scoresystem.PercentScoreSystem.getNumericalValue(Decimal(42))
+  Decimal("42")
+  >>> scoresystem.PercentScoreSystem.getFractionalValue(Decimal(42))
+  Decimal("0.42")
 
 and the "100 points" score system:
 
@@ -682,28 +728,29 @@ and the "100 points" score system:
   >>> scoresystem.HundredPointsScoreSystem.title
   u'100 Points'
   >>> scoresystem.HundredPointsScoreSystem.min
-  0
+  Decimal("0")
   >>> scoresystem.HundredPointsScoreSystem.max
-  100
+  Decimal("100")
 
-  >>> scoresystem.HundredPointsScoreSystem.isValidScore(40)
+  >>> scoresystem.HundredPointsScoreSystem.isValidScore(Decimal(40))
   True
   >>> scoresystem.HundredPointsScoreSystem.isValidScore(scoresystem.UNSCORED)
   True
 
-  >>> scoresystem.HundredPointsScoreSystem.isPassingScore(60)
+  >>> scoresystem.HundredPointsScoreSystem.isPassingScore(Decimal(60))
   True
-  >>> scoresystem.HundredPointsScoreSystem.isPassingScore(59)
+  >>> scoresystem.HundredPointsScoreSystem.isPassingScore(Decimal(59))
   False
   >>> scoresystem.HundredPointsScoreSystem.isPassingScore(scoresystem.UNSCORED)
 
   >>> scoresystem.HundredPointsScoreSystem.getBestScore()
-  100
+  Decimal("100")
   >>> scoresystem.HundredPointsScoreSystem.fromUnicode('42')
-  42
-  >>> scoresystem.HundredPointsScoreSystem.getNumericalValue(42)
-  42
-
+  Decimal("42")
+  >>> scoresystem.HundredPointsScoreSystem.getNumericalValue(Decimal(42))
+  Decimal("42")
+  >>> scoresystem.HundredPointsScoreSystem.getFractionalValue(Decimal(42))
+  Decimal("0.42")
 
 There is also an ``AbstractScoreSystem`` class that implements the title,
 description and representation for you already. It is used for both of the

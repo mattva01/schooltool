@@ -153,7 +153,11 @@ class IScoreSystem(zope.interface.Interface):
         assign a numerical value to a score.
         """
 
+    def getFractionalValue(score):
+        """Return a decimal fraction between 0..1 for the score.
+        """
 
+        
 class IDiscreteValuesScoreSystem(IScoreSystem):
     """A score system that consists of discrete values."""
 

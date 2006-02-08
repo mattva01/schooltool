@@ -21,10 +21,12 @@
 $Id$
 """
 __docformat__ = 'restructuredtext'
-import decimal
+
 import zope.interface
 import zope.schema
 import zope.security.checker
+
+from decimal import Decimal
 
 from schooltool.requirement import interfaces
 
@@ -73,6 +75,10 @@ class AbstractScoreSystem(object):
         """See interfaces.IScoreSystem"""
         raise NotImplementedError
 
+    def getFractionValue(self, score):
+        """See interfaces.IScoreSystem"""
+        raise NotImplementedError
+         
     def __repr__(self):
         return '<%s %r>' % (self.__class__.__name__, self.title)
 
@@ -130,6 +136,14 @@ class DiscreteValuesScoreSystem(AbstractScoreSystem):
         scores = dict(self.scores)
         return scores[score]
 
+    def getFractionalValue(self, score):
+        """See interfaces.IScoreSystem"""
+        # get maximum and minimum score to determine the range
+        maximum = self.scores[0][1]
+        minimum = self.scores[-1][1]
+        # normalized numerical score
+        value = self.getNumericalValue(score) - minimum
+        return value / (maximum - minimum)
 
 class GlobalDiscreteValuesScoreSystem(DiscreteValuesScoreSystem):
 
@@ -143,21 +157,22 @@ class GlobalDiscreteValuesScoreSystem(DiscreteValuesScoreSystem):
 PassFail = GlobalDiscreteValuesScoreSystem(
     'PassFail',
     u'Pass/Fail', u'Pass or Fail score system.',
-    [(u'Pass', 1), (u'Fail', 0)], u'Pass', u'Pass')
+    [(u'Pass', Decimal(1)), (u'Fail', Decimal(0))], u'Pass', u'Pass')
 
 AmericanLetterScoreSystem = GlobalDiscreteValuesScoreSystem(
     'AmericanLetterScoreSystem',
     u'Letter Grade', u'American Letter Grade',
-    [('A', 4), ('B', 3), ('C', 2), ('D', 1), ('F', 0)], 'A', 'D')
+    [('A', Decimal(4)), ('B', Decimal(3)), ('C', Decimal(2)),
+     ('D', Decimal(1)), ('F', Decimal(0))], 'A', 'D')
 
 ExtendedAmericanLetterScoreSystem = GlobalDiscreteValuesScoreSystem(
     'ExtendedAmericanLetterScoreSystem',
     u'Extended Letter Grade', u'American Extended Letter Grade',
-    [('A+', 4.0), ('A', 4.0), ('A-', 3.7),
-     ('B+', 3.3), ('B', 3.0), ('B-', 2.7),
-     ('C+', 2.3), ('C', 2.0), ('C-', 1.7),
-     ('D+', 1.3), ('D', 1.0), ('D-', 0.7),
-     ('F',  0.0)], 'A+', 'D-')
+    [('A+', Decimal('4.0')), ('A', Decimal('4.0')), ('A-', Decimal('3.7')),
+     ('B+', Decimal('3.3')), ('B', Decimal('3.0')), ('B-', Decimal('2.7')),
+     ('C+', Decimal('2.3')), ('C', Decimal('2.0')), ('C-', Decimal('1.7')),
+     ('D+', Decimal('1.3')), ('D', Decimal('1.0')), ('D-', Decimal('0.7')),
+     ('F',  Decimal('0.0'))], 'A+', 'D-')
 
 
 class RangedValuesScoreSystem(AbstractScoreSystem):
@@ -171,10 +186,12 @@ class RangedValuesScoreSystem(AbstractScoreSystem):
     _minPassingScore = None
 
     def __init__(self, title=None, description=None,
-                 min=0, max=100, minPassingScore=None):
+                 min=Decimal(0), max=Decimal(100), minPassingScore=None):
         self.title = title
         self.description = description
-        self.min, self.max = min, max
+        self.min, self.max = Decimal(min), Decimal(max)
+        if minPassingScore is not None:
+            minPassingScore = Decimal(minPassingScore)
         self._minPassingScore = minPassingScore
 
     def isPassingScore(self, score):
@@ -198,10 +215,7 @@ class RangedValuesScoreSystem(AbstractScoreSystem):
         if rawScore == '':
             return UNSCORED
 
-        if '.' not in rawScore:
-            score = int(rawScore)
-        else:
-            score = decimal.Decimal(rawScore)
+        score = Decimal(rawScore)
 
         if not self.isValidScore(score):
             raise zope.schema.ValidationError(
@@ -212,8 +226,13 @@ class RangedValuesScoreSystem(AbstractScoreSystem):
         """See interfaces.IScoreSystem"""
         if score is UNSCORED:
             return None
-        return score
+        return Decimal(score)
 
+    def getFractionalValue(self, score):
+        """See interfaces.IScoreSystem"""
+        # normalized numerical score
+        value = self.getNumericalValue(score) - self.min
+        return value / (self.max - self.min)
 
 class GlobalRangedValuesScoreSystem(RangedValuesScoreSystem):
 
@@ -227,11 +246,12 @@ class GlobalRangedValuesScoreSystem(RangedValuesScoreSystem):
 
 PercentScoreSystem = GlobalRangedValuesScoreSystem(
     'PercentScoreSystem',
-    u'Percent', u'Percent Score System', 0, 100, 60)
+    u'Percent', u'Percent Score System', Decimal(0), Decimal(100), Decimal(60))
 
 HundredPointsScoreSystem = GlobalRangedValuesScoreSystem(
     'HundredPointsScoreSystem',
-    u'100 Points', u'100 Points Score System', 0, 100, 60)
+    u'100 Points', u'100 Points Score System',
+    Decimal(0), Decimal(100), Decimal(60))
 
 
 class ICustomScoreSystem(zope.interface.Interface):
