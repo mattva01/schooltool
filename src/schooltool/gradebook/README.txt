@@ -265,11 +265,11 @@ Total score
 Let's calculate the total score for Paul. First we'll verify Paul's
 individual scores:
 
-  >>> sorted(gradebook.getEvaluationsForStudent(paul),
-  ...        key=lambda (activity, evaluation): activity.title)
-  [(<Activity u'Final'>, <Evaluation for <Activity u'Final'>, value=99>),
-   (<Activity u'HW 1'>, <Evaluation for <Activity u'HW 1'>, value=10>),
-   (<Activity u'HW 2'>, <Evaluation for <Activity u'HW 2'>, value=12>)]
+    >>> sorted(gradebook.getEvaluationsForStudent(paul),
+    ...        key=lambda (activity, evaluation): activity.title)
+    [(<Activity u'Final'>, <Evaluation for <Activity u'Final'>, value=99>),
+     (<Activity u'HW 1'>, <Evaluation for <Activity u'HW 1'>, value=10>),
+     (<Activity u'HW 2'>, <Evaluation for <Activity u'HW 2'>, value=12>)]
 
 Let's review Paul's evaluations. For the Final activity, he received a
 score of 99 out of a 100. For HW 1 he received 10 out of a range of 0
@@ -280,35 +280,35 @@ transformed to a percentile.
 
 Let's do the calculation by hand first:
 
-  >>> from decimal import Decimal
-  >>> (Decimal(99) / Decimal(100) + 
-  ...  Decimal(10) / Decimal(10) +
-  ...  Decimal(12) / Decimal(15)) / 3 * 100
-  Decimal("93.00")
+    >>> from decimal import Decimal
+    >>> (Decimal(99) / Decimal(100) + 
+    ...  Decimal(10) / Decimal(10) +
+    ...  Decimal(12) / Decimal(15)) / 3 * 100
+    Decimal("93.00")
 
 We have a method on the gradebook that can do this calculation:
 
-  >>> gradebook.getTotalScoreForStudent(paul)
-  Decimal("93.00")
+    >>> gradebook.getTotalScoreForStudent(paul)
+    Decimal("93.00")
 
 Tom doesn't have a complete set of grades (the HW 1 grade is missing):
 
-  >>> sorted(gradebook.getEvaluationsForStudent(tom),
-  ...        key=lambda (activity, evaluation): activity.title)
-  [(<Activity u'Final'>, <Evaluation for <Activity u'Final'>, value=85>), 
-   (<Activity u'HW 2'>, <Evaluation for <Activity u'HW 2'>, value=10>)]
+    >>> sorted(gradebook.getEvaluationsForStudent(tom),
+    ...        key=lambda (activity, evaluation): activity.title)
+    [(<Activity u'Final'>, <Evaluation for <Activity u'Final'>, value=85>), 
+     (<Activity u'HW 2'>, <Evaluation for <Activity u'HW 2'>, value=10>)]
 
 The total score will be an average of these scores, and the missing score
 does not count:
 
-  >>> (Decimal(85) / Decimal(100) + 
-  ...  Decimal(10) / Decimal(15)) / 2 * 100
-  Decimal("75.83333333333333333333333335")
+    >>> (Decimal(85) / Decimal(100) + 
+    ...  Decimal(10) / Decimal(15)) / 2 * 100
+    Decimal("75.83333333333333333333333335")
 
 Our score calculation method will give us the same result:
 
-  >>> gradebook.getTotalScoreForStudent(tom)
-  Decimal("75.83333333333333333333333335")
+    >>> gradebook.getTotalScoreForStudent(tom)
+    Decimal("75.83333333333333333333333335")
 
 Sorting by Column
 ~~~~~~~~~~~~~~~~~
@@ -318,21 +318,21 @@ rules for the grades table for a particular person. The method to get the
 sorting key is ``getSortKey(person)``. By default the gradebook is sorted by
 the student's title in A-Z:
 
-  >>> gradebook.getSortKey(stephan)
-  ('student', False)
+    >>> gradebook.getSortKey(stephan)
+    ('student', False)
 
 The first element of the returned tuple is the field to sort by. "student" is
 a special field. All other fields are the hash of the activity to be sorted
 by. The second element specifies whether the sorting should be reversed. You
 can set the key using the ``setSortKey(person, (key, reverse))`` method:
 
-  >>> gradebook.setSortKey(stephan, ('student', True))
-  >>> gradebook.getSortKey(stephan)
-  ('student', True)
+    >>> gradebook.setSortKey(stephan, ('student', True))
+    >>> gradebook.getSortKey(stephan)
+    ('student', True)
 
-  >>> gradebook.setSortKey(stephan, ('-234', False))
-  >>> gradebook.getSortKey(stephan)
-  ('-234', False)
+    >>> gradebook.setSortKey(stephan, ('-234', False))
+    >>> gradebook.getSortKey(stephan)
+    ('-234', False)
 
 And that's it. The gradebook itself will not interpret the sorting key any
 further. It is up to the view code to implement the rest of the sorting
