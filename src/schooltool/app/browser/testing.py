@@ -200,23 +200,26 @@ def setUp(test=None):
     # viewlet manager registrations
     from zope.viewlet import manager
     from schooltool.app.browser import skin
+    name = 'schooltool.Header'
     zope.component.provideAdapter(
-        manager.ViewletManager(skin.IHeaderManager),
+        manager.ViewletManager(name, skin.IHeaderManager),
         (Interface, IDefaultBrowserLayer, IBrowserView),
         skin.IHeaderManager,
-        name='schooltool.Header')
+        name=name)
 
+    name = 'schooltool.JavaScript'
     zope.component.provideAdapter(
-        manager.ViewletManager(skin.IJavaScriptManager),
+        manager.ViewletManager(name, skin.IJavaScriptManager),
         (Interface, IDefaultBrowserLayer, IBrowserView),
         skin.IJavaScriptManager,
-        name='schooltool.JavaScript')
+        name=name)
 
+    name = 'schooltool.CSS'
     zope.component.provideAdapter(
-        manager.ViewletManager(skin.ICSSManager),
+        manager.ViewletManager(name, skin.ICSSManager),
         (Interface, IDefaultBrowserLayer, IBrowserView),
         skin.ICSSManager,
-        name='schooltool.CSS')
+        name=name)
 
 
 def tearDown(test=None):
