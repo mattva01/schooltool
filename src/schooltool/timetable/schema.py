@@ -19,7 +19,7 @@
 """
 Timetable Schemas
 
-$Id: interfaces.py 4814 2005-08-18 19:37:17Z srichter $
+$Id$
 """
 from persistent import Persistent
 from persistent.dict import PersistentDict
@@ -30,14 +30,12 @@ from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container.btree import BTreeContainer
 from zope.app.container.contained import Contained
 
-from schooltool.app.app import getSchoolToolApplication
 from schooltool.timetable import Timetable, TimetableDay
 from schooltool.timetable.interfaces import ITimetableSchema
 from schooltool.timetable.interfaces import ITimetableSchemaContained
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.interfaces import ITimetableSchemaDay
 from schooltool.timetable.interfaces import ITimetableSchemaWrite
-from schooltool.timetable.term import getTermForDate
 
 
 class TimetableSchemaDay(Persistent):
@@ -158,26 +156,6 @@ class TimetableSchemaContainer(BTreeContainer):
 
     def getDefault(self):
         return self[self.default_id]
-
-
-def getPeriodsForDay(date):
-    """Return a list of timetable periods defined for `date`.
-
-    This function uses the default timetable schema and the appropriate time
-    period for `date`.
-
-    Returns a list of ISchooldaySlot objects.
-
-    Returns an empty list if there are no periods defined for `date` (e.g.
-    if there is no default timetable schema, or `date` falls outside all
-    time periods, or it happens to be a holiday).
-    """
-    schooldays = getTermForDate(date)
-    ttcontainer = getSchoolToolApplication()['ttschemas']
-    if ttcontainer.default_id is None or schooldays is None:
-        return []
-    ttschema = ttcontainer.getDefault()
-    return ttschema.model.periodsInDay(schooldays, ttschema, date)
 
 
 ##############################################################################

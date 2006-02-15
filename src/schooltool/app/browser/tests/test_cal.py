@@ -43,6 +43,7 @@ import schooltool.app # sacrifice to appease circular import gods
 from schooltool.common import parse_datetime
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 from schooltool.timetable import SequentialDaysTimetableModel
+from schooltool.timetable.schema import TimetableSchema
 from schooltool.testing.util import NiceDiffsMixin
 
 # Used in defining CalendarEventAddTestView
@@ -4679,6 +4680,86 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
                     for i in range(8, 19)]
         self.assertEquals(result, expected)
 
+    def test_getPersonTimezone(self):
+        from schooltool.app.browser.cal import DailyCalendarRowsView
+        request = TestRequest()
+        view = DailyCalendarRowsView(ISchoolToolCalendar(self.person), request)
+
+        # when there is no principal - the default timezone should be
+        # returned
+        self.assertEquals(view.getPersonTimezone(), timezone('UTC'))
+
+        # but when there is one, we should return his prefered timezone
+        request.setPrincipal(self.person)
+        prefs = IPersonPreferences(self.person)
+        prefs.timezone = 'Europe/Vilnius'
+
+        self.assertEquals(view.getPersonTimezone(), timezone('Europe/Vilnius'))
+
+    def test_getPeriods(self):
+        from schooltool.app.browser.cal import DailyCalendarRowsView
+        request = TestRequest()
+        view = DailyCalendarRowsView(ISchoolToolCalendar(self.person), request)
+
+        # if no user has logged we should get an empty list
+        self.assertEquals(view.getPeriods(date(2005, 1, 1)), [])
+
+        # same if our user doesn't want to see periods in his calendar
+        request.setPrincipal(self.person)
+        IPersonPreferences(self.person).cal_periods = False
+        self.assertEquals(view.getPeriods(date(2005, 1, 1)), [])
+
+        # if currently logged in user wants to see periods, the
+        # parameter is passed to getPeriodsForDay method.
+        view.getPeriodsForDay = lambda cursor: ("Yep", cursor)
+        IPersonPreferences(self.person).cal_periods = True
+        self.assertEquals(view.getPeriods(date(2005, 1, 1)),
+                          ("Yep", date(2005, 1, 1)))
+
+
+class TestDailyCalendarRowsView_getPeriodsForDay(unittest.TestCase):
+
+    def setUp(self):
+        setup.placefulSetUp()
+        app = sbsetup.setupSchoolToolSite()
+
+        from schooltool.timetable.term import Term
+        self.term1 = Term('Sample', date(2004, 9, 1), date(2004, 12, 20))
+        self.term2 = Term('Sample', date(2005, 1, 1), date(2005, 6, 1))
+        app["terms"]['2004-fall'] = self.term1
+        app["terms"]['2005-spring'] = self.term2
+
+        class TimetableModelStub:
+            def periodsInDay(self, schooldays, ttschema, date):
+                return 'periodsInDay', schooldays, ttschema, date
+
+        tt = TimetableSchema([])
+        tt.model = TimetableModelStub()
+        self.tt = tt
+        app["ttschemas"]['default'] = tt
+        self.app = app
+
+    def tearDown(self):
+        setup.placefulTearDown()
+
+    def test_getPeriodsForDay(self):
+        from schooltool.app.browser.cal import DailyCalendarRowsView
+        view = DailyCalendarRowsView(None, TestRequest())
+        # A white-box test: we delegate to ITimetableModel.periodsInDay
+        # with the correct arguments
+        self.assertEquals(view.getPeriodsForDay(date(2004, 10, 14)),
+                          ('periodsInDay', self.term1, self.tt,
+                           date(2004, 10, 14)))
+
+        # However, if there is no time period, we return []
+        self.assertEquals(view.getPeriodsForDay(date(2005, 10, 14)),
+                          [])
+
+        # If there is no timetable schema, we return []
+        self.app["ttschemas"].default_id = None
+        self.assertEquals(view.getPeriodsForDay(date(2004, 10, 14)),
+                          [])
+
 
 def doctest_CalendarSTOverlayView():
     r"""Tests for CalendarSTOverlayView
@@ -5062,6 +5143,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestDailyCalendarView))
     suite.addTest(unittest.makeSuite(TestGetRecurrenceRule))
     suite.addTest(unittest.makeSuite(TestDailyCalendarRowsView))
+    suite.addTest(unittest.makeSuite(TestDailyCalendarRowsView_getPeriodsForDay))
     suite.addTest(doctest.DocTestSuite(
         setUp=setUp, tearDown=tearDown,
         optionflags=doctest.ELLIPSIS|doctest.REPORT_NDIFF|

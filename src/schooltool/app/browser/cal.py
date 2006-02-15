@@ -26,6 +26,7 @@ import urllib
 import calendar
 from datetime import datetime, date, time, timedelta
 from sets import Set
+import pytz
 
 import transaction
 from pytz import timezone, utc
@@ -63,6 +64,8 @@ from schooltool.app.browser import breadcrumbs
 from schooltool.app.browser.overlay import CalendarOverlayView
 from schooltool.app.browser.interfaces import ICalendarProvider
 from schooltool.app.browser.interfaces import IEventForDisplay
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.browser.interfaces import IBreadcrumbInfo
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
@@ -83,8 +86,8 @@ from schooltool.course.interfaces import ISection
 from schooltool.person.interfaces import IPerson, IPersonPreferences
 from schooltool.person.interfaces import vocabulary
 from schooltool.resource.interfaces import IResource
-from schooltool.timetable.schema import getPeriodsForDay
 from schooltool.timetable.interfaces import ITimetables
+from schooltool.timetable.term import getTermForDate
 
 
 def same(a, b):
@@ -1271,24 +1274,51 @@ class DailyCalendarRowsView(BrowserView):
 
     __used_for__ = ISchoolToolCalendar
 
+    def getPersonTimezone(self):
+        """Return the prefered timezone of the user."""
+        return ViewPreferences(self.request).timezone
+
+    def getPeriodsForDay(self, date):
+        """Return a list of timetable periods defined for `date`.
+
+        This function uses the default timetable schema and the appropriate time
+        period for `date`.
+
+        Returns a list of ISchooldaySlot objects.
+
+        Returns an empty list if there are no periods defined for `date` (e.g.
+        if there is no default timetable schema, or `date` falls outside all
+        time periods, or it happens to be a holiday).
+        """
+        schooldays = getTermForDate(date)
+        ttcontainer = getSchoolToolApplication()['ttschemas']
+        if ttcontainer.default_id is None or schooldays is None:
+            return []
+        ttschema = ttcontainer.getDefault()
+        return ttschema.model.periodsInDay(schooldays, ttschema, date)
+
+    def getPeriods(self, cursor):
+        """Return the date we get from getPeriodsForDay.
+
+        Checks user preferences, returns an empty list if no user is
+        logged in.
+        """
+        person = IPerson(self.request.principal, None)
+        if (person is not None and
+            IPersonPreferences(person).cal_periods):
+            return self.getPeriodsForDay(cursor)
+        else:
+            return []
+
     def calendarRows(self, cursor, starthour, endhour):
         """Iterate over (title, start, duration) of time slots that make up
         the daily calendar.
 
         Returns a generator.
         """
-        person = IPerson(self.request.principal, None)
-        if person is not None:
-            prefs = IPersonPreferences(person)
-            show_periods = prefs.cal_periods
-        else:
-            show_periods = False
-        tz = ViewPreferences(self.request).timezone
+        tz = self.getPersonTimezone()
+        periods = self.getPeriods(cursor)
 
-        if show_periods:
-            periods = getPeriodsForDay(cursor)
-        else:
-            periods = []
         # XXX mg: I think this is completely bogus, timezone-wise.
         #         This code needs a bit of  taking a step back, sitting down
         #         and thinking.  Also look at the pdfcal code, I suspect it is
@@ -1318,15 +1348,19 @@ class DailyCalendarRowsView(BrowserView):
             pstart = pstart.replace(tzinfo=tz)
             return pstart == dt
 
+        calendarRows = []
+
         start, row_ends = rows[0], rows[1:]
         for end in row_ends:
             if periods and periodIsStarting(start):
                 period = periods.pop(0)
-                yield (period[0], start, period[2])
+                calendarRows.append((period[0], start, period[2]))
             else:
                 duration = end - start
-                yield ('%d:%02d' % (start.hour, start.minute), start, duration)
+                calendarRows.append(('%d:%02d' % (start.hour, start.minute),
+                                     start, duration))
             start = end
+        return calendarRows
 
     def rowTitle(self, hour, minute):
         """Return the row title as HH:MM or H:MM am/pm."""

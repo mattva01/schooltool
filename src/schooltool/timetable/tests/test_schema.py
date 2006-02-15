@@ -19,7 +19,7 @@
 """
 Unit tests for the schooltool.timetable.schema module.
 
-$Id: test_timetable.py 4822 2005-08-19 01:35:11Z srichter $
+$Id$
 """
 
 import unittest
@@ -37,7 +37,6 @@ from schooltool.timetable.interfaces import ITimetableSchemaWrite
 from schooltool.timetable.schema import TimetableSchema
 from schooltool.timetable.schema import TimetableSchemaContainer
 from schooltool.timetable.schema import TimetableSchemaDay
-from schooltool.timetable.schema import getPeriodsForDay
 
 from schooltool.testing import setup
 
@@ -193,54 +192,11 @@ class TestTimetableSchemaContainer(unittest.TestCase):
         self.assertRaises(ValueError, setattr, service, 'default_id', 'nosuch')
 
 
-class TestGetPeriodsForDay(unittest.TestCase):
-
-    def setUp(self):
-        placefulSetUp()
-        app = setup.setupSchoolToolSite()
-
-        from schooltool.timetable.term import Term
-        self.term1 = Term('Sample', date(2004, 9, 1), date(2004, 12, 20))
-        self.term2 = Term('Sample', date(2005, 1, 1), date(2005, 6, 1))
-        app["terms"]['2004-fall'] = self.term1
-        app["terms"]['2005-spring'] = self.term2
-
-        class TimetableModelStub:
-            def periodsInDay(self, schooldays, ttschema, date):
-                return 'periodsInDay', schooldays, ttschema, date
-
-        tt = TimetableSchema([])
-        tt.model = TimetableModelStub()
-        self.tt = tt
-        app["ttschemas"]['default'] = tt
-        self.app = app
-
-    def tearDown(self):
-        placefulTearDown()
-
-    def test_getPeriodsForDay(self):
-        # A white-box test: we delegate to ITimetableModel.periodsInDay
-        # with the correct arguments
-        self.assertEquals(getPeriodsForDay(date(2004, 10, 14)),
-                          ('periodsInDay', self.term1, self.tt,
-                           date(2004, 10, 14)))
-
-        # However, if there is no time period, we return []
-        self.assertEquals(getPeriodsForDay(date(2005, 10, 14)),
-                          [])
-
-        # If there is no timetable schema, we return []
-        self.app["ttschemas"].default_id = None
-        self.assertEquals(getPeriodsForDay(date(2004, 10, 14)),
-                          [])
-
-
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestTimetableSchema))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaDay))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaContainer))
-    suite.addTest(unittest.makeSuite(TestGetPeriodsForDay))
     return suite
 
 if __name__ == '__main__':
