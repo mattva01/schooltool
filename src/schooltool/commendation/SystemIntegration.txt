@@ -211,7 +211,7 @@ programmable browser. So here is a typical test:
 
 We get setup by accessing the site and logging in as the manager:
 
-  >>> from zope.testbrowser import Browser
+  >>> from zope.testbrowser.testing import Browser
   >>> manager = Browser()
   >>> manager.open('http://localhost/')
 

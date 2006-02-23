@@ -11,7 +11,7 @@ Set up
 
 We will create a resource
 
-    >>> from zope.testbrowser import Browser
+    >>> from zope.testbrowser.testing import Browser
     >>> manager = Browser()
     >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
     >>> manager.handleErrors = False

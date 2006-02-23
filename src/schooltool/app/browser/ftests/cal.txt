@@ -4,7 +4,7 @@ Functional doctest for calendaring
 Set up
 ------
 
-    >>> from zope.testbrowser import Browser
+    >>> from zope.testbrowser.testing import Browser
     >>> manager = Browser()
     >>> manager.handleErrors = False
     >>> manager.addHeader('Authorization', 'Basic manager:schooltool')

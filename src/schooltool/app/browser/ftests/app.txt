@@ -4,7 +4,7 @@ Functional doctest for SchoolTool
 This is a functional doctest for schooltool.  To find out more about
 functional doctests, read Zope3/src/zope/app/ftests/doctest.txt
 
-    >>> from zope.testbrowser import Browser
+    >>> from zope.testbrowser.testing import Browser
     >>> manager = Browser()
     >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
     >>> manager.handleErrors = False

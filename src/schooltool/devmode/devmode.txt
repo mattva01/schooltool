@@ -7,8 +7,8 @@ developers and people using SchoolTool as a development platform to debug
 their code and find documentation as quickly as possible. To start, open the
 SchoolTool site in your browser
 
-    >>> import zope.testbrowser
-    >>> browser = zope.testbrowser.Browser()
+    >>> from zope.testbrowser.testing import Browser
+    >>> browser = Browser()
     >>> browser.addHeader('Authorization', 'Basic manager:schooltool')
     >>> browser.open('http://localhost/')
 

@@ -20,7 +20,7 @@ Overview
 Setup
 -----
 
-    >>> from zope.testbrowser import Browser
+    >>> from zope.testbrowser.testing import Browser
     >>> manager = Browser()
     >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
     >>> manager.handleErrors = False

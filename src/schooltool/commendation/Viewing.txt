@@ -137,7 +137,7 @@ can be seen in ``configure.zcml``.
 Now that all components have been setup, we can test our overview screen via
 a browser:
 
-  >>> from zope.testbrowser import Browser
+  >>> from zope.testbrowser.testing import Browser
   >>> manager = Browser()
   >>> manager.open('http://localhost/')
 

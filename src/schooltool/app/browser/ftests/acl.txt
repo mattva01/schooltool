@@ -3,7 +3,7 @@ Access control view
 
 First, log in
 
-    >>> from zope.testbrowser import Browser
+    >>> from zope.testbrowser.testing import Browser
     >>> manager = Browser()
     >>> manager.handleErrors = False
     >>> manager.addHeader('Authorization', 'Basic manager:schooltool')

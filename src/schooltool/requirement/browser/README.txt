@@ -5,7 +5,7 @@ Requirements via the Web UI
 This document presents the mangagement of requirements from the perspective
 of the Web UI.
 
-    >>> from zope.testbrowser import Browser
+    >>> from zope.testbrowser.testing import Browser
     >>> browser = Browser()
     >>> browser.addHeader('Authorization', 'Basic manager:schooltool')
 

@@ -19,7 +19,7 @@ This is going to be a bit boring, since we start with a clean slate.
 
 A manager logs in
 
-    >>> from zope.testbrowser import Browser
+    >>> from zope.testbrowser.testing import Browser
     >>> manager = Browser()
     >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
     >>> manager.handleErrors = False

@@ -7,7 +7,7 @@ gradebook. The first task the administrator has to complete during the
 SchoolTool setup is the configuration of the categories. So let's log in as a
 manager:
 
-    >>> from zope.testbrowser import Browser
+    >>> from zope.testbrowser.testing import Browser
 
     >>> manager = Browser()
     >>> manager.open('http://localhost/')

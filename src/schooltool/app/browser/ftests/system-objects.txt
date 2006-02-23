@@ -11,7 +11,7 @@ interface.
 Setup
 -----
 
-    >>> from zope.testbrowser import Browser
+    >>> from zope.testbrowser.testing import Browser
     >>> manager_browser = Browser()
     >>> manager_browser.addHeader('Authorization', 'Basic manager:schooltool')
     >>> manager_browser.handleErrors = False

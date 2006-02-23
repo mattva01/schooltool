@@ -5,7 +5,7 @@ Level Management and Academic Workflow via the Web UI
 This document presents the management of levels and the academic career of a
 student via a promotion workflow from the perspective of the Web UI.
 
-    >>> from zope.testbrowser import Browser
+    >>> from zope.testbrowser.testing import Browser
     >>> browser = Browser()
     >>> browser.addHeader('Authorization', 'Basic manager:schooltool')
 

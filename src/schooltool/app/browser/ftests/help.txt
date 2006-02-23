@@ -5,7 +5,7 @@ Contextual Help
 The contextual help provides help screens for particular views. Let's first
 log in however.
 
-    >>> from zope.testbrowser import Browser
+    >>> from zope.testbrowser.testing import Browser
     >>> manager = Browser()
     >>> manager.open('http://localhost/')
     >>> manager.getLink('Log In').click()
