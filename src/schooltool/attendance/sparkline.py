@@ -24,7 +24,6 @@ $Id$
 __docformat__ = 'reStructuredText'
 
 
-import urllib
 import StringIO
 import datetime
 import pytz

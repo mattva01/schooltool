@@ -30,7 +30,6 @@ import pytz
 from BTrees.OOBTree import OOBTree
 from persistent import Persistent
 from persistent.list import PersistentList
-from persistent.dict import PersistentDict
 from zope.interface import implements
 from zope.app.annotation.interfaces import IAnnotations
 from zope.i18n import translate
@@ -61,7 +60,6 @@ from schooltool.attendance.interfaces import IAbsenceExplanation
 from schooltool.attendance.interfaces import UNKNOWN, PRESENT, ABSENT, TARDY
 from schooltool.attendance.interfaces import NEW, ACCEPTED, REJECTED
 from schooltool.attendance.interfaces import AttendanceError
-from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.person.interfaces import IPerson
 

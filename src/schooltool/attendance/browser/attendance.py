@@ -28,10 +28,8 @@ import pytz
 
 from zope.app import zapi
 from zope.app.publisher.browser import BrowserView
-from zope.interface import implements
 from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.component import queryMultiAdapter
 from zope.component import adapts
 from zope.viewlet import viewlet
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile

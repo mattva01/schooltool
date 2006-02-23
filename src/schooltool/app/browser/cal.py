@@ -26,7 +26,6 @@ import urllib
 import calendar
 from datetime import datetime, date, time, timedelta
 from sets import Set
-import pytz
 
 import transaction
 from pytz import timezone, utc
@@ -52,7 +51,7 @@ from zope.app.form.interfaces import IWidgetInputError, IInputWidget
 from zope.app.form.interfaces import WidgetInputError, WidgetsError
 from zope.app.form.utility import getWidgetsData
 from zope.app.publisher.browser import BrowserView
-from zope.app.traversing.browser.absoluteurl import absoluteURL, AbsoluteURL
+from zope.app.traversing.browser.absoluteurl import absoluteURL
 from zope.app.filerepresentation.interfaces import IWriteFile, IReadFile
 from zope.app.session.interfaces import ISession
 from zope.app.traversing.api import getPath
@@ -64,7 +63,6 @@ from schooltool.app.browser import breadcrumbs
 from schooltool.app.browser.overlay import CalendarOverlayView
 from schooltool.app.browser.interfaces import ICalendarProvider
 from schooltool.app.browser.interfaces import IEventForDisplay
-from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.browser.interfaces import IBreadcrumbInfo
 from schooltool.app.app import getSchoolToolApplication

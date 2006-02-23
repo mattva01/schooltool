@@ -28,11 +28,9 @@ import persistent
 import persistent.list
 import zope.event
 import zope.interface
-import zope.app.container.ordered
 import zope.app.container.contained
 import zope.app.event.objectevent
 from zope.app import annotation
-from zope.app.publisher.browser import applySkin
 
 from schooltool.requirement import interfaces
 

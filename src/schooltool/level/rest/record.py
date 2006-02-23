@@ -19,7 +19,7 @@
 """
 REST interface for academic records
 
-$Id: app.py 4109 2005-06-15 17:36:38Z bskahan $
+$Id$
 """
 
 import zope.component
@@ -28,7 +28,6 @@ import zope.security
 import zope.wfmc
 from zope.app import zapi
 
-from schooltool import person
 from schooltool.app import app, rest
 from schooltool.level import interfaces
 from schooltool.traverser import traverser

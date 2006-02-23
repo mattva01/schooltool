@@ -24,7 +24,6 @@ from zope.app import zapi
 from schooltool.app.browser import app
 from schooltool.gradebook import interfaces
 from schooltool.requirement import requirement
-from schooltool import SchoolToolMessage as _
 
 class ActivitiesView(object):
     """A Group Container view."""

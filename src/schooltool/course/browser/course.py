@@ -19,7 +19,7 @@
 """
 course browser views.
 
-$Id: app.py 4691 2005-08-12 18:59:44Z srichter $
+$Id$
 """
 from zope.app import zapi
 from zope.app.form.browser.add import AddView
@@ -31,7 +31,6 @@ from schooltool.course.interfaces import ICourse, ICourseContainer, ISection
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.relationships import URIInstruction, URISection
 from schooltool.relationship import getRelatedObjects
-from schooltool.person.interfaces import IPerson
 
 class CourseContainerView(ContainerView):
     """A Course Container view."""

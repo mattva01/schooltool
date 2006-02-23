@@ -22,8 +22,6 @@ Views for SchoolTool attendance sparkline
 $Id$
 """
 
-import datetime
-
 from schooltool.course.interfaces import ISection
 from zope.app.publisher.browser import BrowserView
 from schooltool.app.app import getSchoolToolApplication

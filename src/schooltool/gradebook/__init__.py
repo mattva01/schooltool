@@ -1,7 +1,6 @@
 # Make a package
 
 def registerTestSetup():
-    from zope.interface import classImplements
     from schooltool.testing import registry
 
     def addDefaultCategories(app):

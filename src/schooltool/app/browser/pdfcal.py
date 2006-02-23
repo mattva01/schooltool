@@ -25,7 +25,6 @@ $Id$
 import datetime
 from cStringIO import StringIO
 
-from zope.component import getMultiAdapter
 from zope.component import subscribers
 from zope.app.publisher.browser import BrowserView
 from zope.i18n import translate
