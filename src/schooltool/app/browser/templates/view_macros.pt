@@ -127,7 +127,7 @@
           <metal:block
               use-macro="view/@@schooltool_macros/generic/serverinfo" />
           <span i18n:translate="">
-            &copy; The Shuttleworth Foundation 2003 - <span>2005</span>:
+            &copy; The Shuttleworth Foundation 2003 - <span>2006</span>:
             Supporting Social Innovation.
           </span>
       </p>
