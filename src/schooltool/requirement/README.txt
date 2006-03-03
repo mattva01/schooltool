@@ -116,6 +116,17 @@ able to delete locally defined requirements and not inherited ones:
   ...
   KeyError: u'forloop'
 
+If we override the forloop requirement however, we should be able to delete the
+locally created forloop requirement.  After this, the InheritedRequirement that
+has just been overridden should reappear.
+
+  >>> yhs[u'program'][u'forloop'] = requirement.Requirement(u'Write a python for loop.')
+  >>> yhs[u'program'][u'forloop']
+  Requirement(u'Write a python for loop.')
+  >>> del yhs[u'program'][u'forloop']
+  >>> yhs[u'program'][u'forloop']
+  InheritedRequirement(Requirement(u'Write a for loop.'))
+
 Finally, requirements are ordered containers, which means that you can change
 the order of the dependency requirements. Let's first create a new
 requirements structure:
