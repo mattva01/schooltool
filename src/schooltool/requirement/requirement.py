@@ -31,6 +31,7 @@ import zope.interface
 import zope.app.container.contained
 import zope.app.event.objectevent
 from zope.app import annotation
+from zope.app.keyreference.interfaces import IKeyReference
 
 from schooltool.requirement import interfaces
 
@@ -65,10 +66,19 @@ class InheritedRequirement(zope.app.container.contained.Contained):
     def __getattr__(self, name):
         return getattr(self.original, name)
 
+def getRequirementKey(requirement):
+    """Get the reference key for any requirement.
+
+    This also includes InheritedRequirements in which case it unwraps the
+    InheritedRequirement into a regular Requirement.
+    """
+
+    requirement = unwrapRequirement(requirement)
+    return IKeyReference(requirement)
 
 def unwrapRequirement(requirement):
     """Remove all inherited requirement wrappers."""
-    while isinstance(requirement, InheritedRequirement):
+    while requirement.__class__ == InheritedRequirement:
         requirement = requirement.original
     return requirement
 

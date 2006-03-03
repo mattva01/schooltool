@@ -316,6 +316,20 @@ A simple helper function is used to unwrap requirements:
   >>> requirement.unwrapRequirement(hound[u'categories'])
   Requirement(u'Categories')
 
+The unwrapper also works for subclasses of Requirement.  To show this we will
+first create a simple subclass.
+
+  >>> class SpecialRequirement(requirement.Requirement):
+  ...     pass
+  >>> topLevel = SpecialRequirement(u'Global Top Level')
+  >>> topLevel['subone'] = SpecialRequirement(u'Global Sub Level One')
+  >>> localLevel = SpecialRequirement(u'Local Top Level')
+  >>> localLevel.addBase(topLevel)
+  >>> localLevel['subone']
+  InheritedRequirement(SpecialRequirement(u'Global Sub Level One'))
+  >>> requirement.unwrapRequirement(localLevel['subone'])
+  SpecialRequirement(u'Global Sub Level One')
+
 
 Requirement Adapters
 --------------------
@@ -1050,3 +1064,8 @@ This section demonstrates the implementation of the ``IMapping`` API.
 
   >>> len(evals)
   2
+
+Epilogue
+--------
+
+ vim: ft=rest
