@@ -345,6 +345,20 @@ first create a simple subclass.
   >>> requirement.unwrapRequirement(localLevel['subone'])
   SpecialRequirement(u'Global Sub Level One')
 
+One can also quickly get the requirement's key using the
+``getRequirementKey()`` function:
+
+  >>> key1 = hash(requirement.getRequirementKey(mamal[u'categories']))
+  >>> str(key1)
+  '...'
+
+This function also unwraps inherited requirements, so that the key is always
+the same:
+
+  >>> key2 = hash(requirement.getRequirementKey(dog[u'categories']))
+  >>> key1 == key2
+  True
+
 
 Requirement Adapters
 --------------------
