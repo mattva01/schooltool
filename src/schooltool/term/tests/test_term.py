@@ -19,7 +19,7 @@
 """
 Unit tests for the schooltool.timetable.term module.
 
-$Id: test_timetable.py 4822 2005-08-19 01:35:11Z srichter $
+$Id$
 """
 import calendar
 import unittest
@@ -31,18 +31,13 @@ from zope.app.container.contained import Contained
 from zope.app.location.interfaces import ILocation
 from zope.app.testing.setup import placefulSetUp, placefulTearDown
 
-from schooltool.timetable.interfaces import IDateRange
-from schooltool.timetable.interfaces import ITerm, ITermWrite
-from schooltool.timetable.interfaces import ITermContainer
-from schooltool.timetable.term import DateRange
-from schooltool.timetable.term import Term, TermContainer
-from schooltool.timetable.term import getTermForDate, getNextTermForDate
-
+from schooltool.term import interfaces, term
 from schooltool.testing import setup
+
 
 class TermStub(Contained):
 
-    implements(ITerm)
+    implements(interfaces.ITerm)
 
     #     November 2003
     #  Su Mo Tu We Th Fr Sa
@@ -79,8 +74,8 @@ class TermStub(Contained):
 class TestDateRange(unittest.TestCase):
 
     def test(self):
-        dr = DateRange(date(2003, 1, 1), date(2003, 1, 31))
-        verifyObject(IDateRange, dr)
+        dr = term.DateRange(date(2003, 1, 1), date(2003, 1, 31))
+        verifyObject(interfaces.IDateRange, dr)
 
         # __contains__
         self.assert_(date(2002, 12, 31) not in dr)
@@ -93,13 +88,13 @@ class TestDateRange(unittest.TestCase):
         self.assertEqual(len(days), 31)
         self.assertEqual(len(dr), 31)
 
-        days = DateRange(date(2003, 1, 1), date(2003, 1, 2))
+        days = term.DateRange(date(2003, 1, 1), date(2003, 1, 2))
         self.assertEqual(list(days), [date(2003, 1, 1), date(2003, 1, 2)])
 
-        days = DateRange(date(2003, 1, 1), date(2003, 1, 1))
+        days = term.DateRange(date(2003, 1, 1), date(2003, 1, 1))
         self.assertEqual(list(days), [date(2003, 1, 1)])
 
-        self.assertRaises(ValueError, DateRange,
+        self.assertRaises(ValueError, term.DateRange,
                           date(2003, 1, 2), date(2003, 1, 1))
 
 
@@ -107,13 +102,13 @@ class TestTerm(unittest.TestCase):
 
     def test_interface(self):
 
-        cal = Term('Sample', date(2003, 9, 1), date(2003, 12, 24))
-        verifyObject(ITerm, cal)
-        verifyObject(ITermWrite, cal)
+        cal = term.Term('Sample', date(2003, 9, 1), date(2003, 12, 24))
+        verifyObject(interfaces.ITerm, cal)
+        verifyObject(interfaces.ITermWrite, cal)
         verifyObject(ILocation, cal)
 
     def testAddRemoveSchoolday(self):
-        cal = Term('Sample', date(2003, 9, 1), date(2003, 9, 14))
+        cal = term.Term('Sample', date(2003, 9, 1), date(2003, 9, 14))
 
         self.assert_(not cal.isSchoolday(date(2003, 9, 1)))
         self.assert_(not cal.isSchoolday(date(2003, 9, 2)))
@@ -127,7 +122,7 @@ class TestTerm(unittest.TestCase):
         self.assertRaises(ValueError, cal.remove, date(2003, 9, 15))
 
     def testReset(self):
-        cal = Term('Sample', date(2003, 9, 1), date(2003, 9, 15))
+        cal = term.Term('Sample', date(2003, 9, 1), date(2003, 9, 15))
         cal.addWeekdays(1, 3, 5)
 
         new_first, new_last = date(2003, 8, 1), date(2003, 9, 30)
@@ -141,7 +136,7 @@ class TestTerm(unittest.TestCase):
         self.assertRaises(ValueError, cal.reset, new_last, new_first)
 
     def testMarkWeekday(self):
-        cal = Term('Sample', date(2003, 9, 1), date(2003, 9, 17))
+        cal = term.Term('Sample', date(2003, 9, 1), date(2003, 9, 17))
         for day in 1, 8, 15:
             self.assert_(not cal.isSchoolday(date(2003, 9, day)))
 
@@ -167,7 +162,7 @@ class TestTerm(unittest.TestCase):
             self.assert_(cal.isSchoolday(date(2003, 9, day+2)))
 
     def test_contains(self):
-        cal = Term('Sample', date(2003, 9, 1), date(2003, 9, 16))
+        cal = term.Term('Sample', date(2003, 9, 1), date(2003, 9, 16))
         self.assert_(date(2003, 8, 31) not in cal)
         self.assert_(date(2003, 9, 17) not in cal)
         for day in range(1, 17):
@@ -178,11 +173,11 @@ class TestTerm(unittest.TestCase):
 class TestTermContainer(unittest.TestCase):
 
     def test_interface(self):
-        service = TermContainer()
-        verifyObject(ITermContainer, service)
+        service = term.TermContainer()
+        verifyObject(interfaces.ITermContainer, service)
 
     def test(self):
-        service = TermContainer()
+        service = term.TermContainer()
         self.assertEqual(list(service.keys()), [])
 
         schooldays = TermStub()
@@ -216,8 +211,8 @@ class TestGetTermForDate(unittest.TestCase):
         placefulSetUp()
         app = setup.setupSchoolToolSite()
 
-        self.term1 = Term('Sample', date(2004, 9, 1), date(2004, 12, 20))
-        self.term2 = Term('Sample', date(2005, 1, 1), date(2005, 6, 1))
+        self.term1 = term.Term('Sample', date(2004, 9, 1), date(2004, 12, 20))
+        self.term2 = term.Term('Sample', date(2005, 1, 1), date(2005, 6, 1))
         app["terms"]['2004-fall'] = self.term1
         app["terms"]['2005-spring'] = self.term2
 
@@ -236,30 +231,30 @@ class TestGetTermForDate(unittest.TestCase):
         placefulTearDown()
 
     def test_getTermForDate(self):
-        self.assert_(getTermForDate(date(2004, 8, 31)) is None)
-        self.assert_(getTermForDate(date(2004, 9, 1)) is self.term1)
-        self.assert_(getTermForDate(date(2004, 11, 5)) is self.term1)
-        self.assert_(getTermForDate(date(2004, 12, 20)) is self.term1)
-        self.assert_(getTermForDate(date(2004, 12, 21)) is None)
-        self.assert_(getTermForDate(date(2005, 3, 17)) is self.term2)
-        self.assert_(getTermForDate(date(2005, 11, 5)) is None)
+        self.assert_(term.getTermForDate(date(2004, 8, 31)) is None)
+        self.assert_(term.getTermForDate(date(2004, 9, 1)) is self.term1)
+        self.assert_(term.getTermForDate(date(2004, 11, 5)) is self.term1)
+        self.assert_(term.getTermForDate(date(2004, 12, 20)) is self.term1)
+        self.assert_(term.getTermForDate(date(2004, 12, 21)) is None)
+        self.assert_(term.getTermForDate(date(2005, 3, 17)) is self.term2)
+        self.assert_(term.getTermForDate(date(2005, 11, 5)) is None)
 
     def test_getNextTermForDate(self):
-        self.assert_(getNextTermForDate(date(2004, 8, 31)) is self.term1)
-        self.assert_(getNextTermForDate(date(2004, 9, 1)) is self.term1)
-        self.assert_(getNextTermForDate(date(2004, 11, 5)) is self.term1)
-        self.assert_(getNextTermForDate(date(2004, 12, 20)) is self.term1)
-        self.assert_(getNextTermForDate(date(2004, 12, 21)) is self.term2)
-        self.assert_(getNextTermForDate(date(2005, 3, 17)) is self.term2)
-        self.assert_(getNextTermForDate(date(2005, 11, 5)) is self.term2)
-        self.term3 = Term('Sample', date(2006, 1, 1), date(2006, 6, 1))
+        self.assert_(term.getNextTermForDate(date(2004, 8, 31)) is self.term1)
+        self.assert_(term.getNextTermForDate(date(2004, 9, 1)) is self.term1)
+        self.assert_(term.getNextTermForDate(date(2004, 11, 5)) is self.term1)
+        self.assert_(term.getNextTermForDate(date(2004, 12, 20)) is self.term1)
+        self.assert_(term.getNextTermForDate(date(2004, 12, 21)) is self.term2)
+        self.assert_(term.getNextTermForDate(date(2005, 3, 17)) is self.term2)
+        self.assert_(term.getNextTermForDate(date(2005, 11, 5)) is self.term2)
+        self.term3 = term.Term('Sample', date(2006, 1, 1), date(2006, 6, 1))
         self.app["terms"]["term3"] = self.term3
-        self.assert_(getNextTermForDate(date(2005, 11, 5)) is self.term3)
-        self.assert_(getNextTermForDate(date(2004, 8, 31)) is self.term1)
+        self.assert_(term.getNextTermForDate(date(2005, 11, 5)) is self.term3)
+        self.assert_(term.getNextTermForDate(date(2004, 8, 31)) is self.term1)
         del self.app["terms"]["term3"]
         del self.app["terms"]['2004-fall']
         del self.app["terms"]['2005-spring']
-        self.assert_(getNextTermForDate(date(2004, 8, 31)) is None)
+        self.assert_(term.getNextTermForDate(date(2004, 8, 31)) is None)
 
 
 def test_suite():

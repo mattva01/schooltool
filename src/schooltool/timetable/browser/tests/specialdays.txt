@@ -38,7 +38,7 @@ The schema has a model attribute:
 We will need a term:
 
     >>> import datetime
-    >>> from schooltool.timetable.term import Term
+    >>> from schooltool.term.term import Term
     >>> app["terms"]["2005-summer"] = Term('2005 summer',
     ...                                    datetime.date(2005, 6, 1),
     ...                                    datetime.date(2005, 8, 31))

@@ -172,7 +172,7 @@ def doctest_SampleTimetables():
         >>> from schooltool.resource.sampledata import SampleResources
         >>> from schooltool.course.sampledata import SampleSections
         >>> from schooltool.timetable.sampledata import SampleTimetableSchema
-        >>> from schooltool.timetable.sampledata import SampleTerms
+        >>> from schooltool.term.sampledata import SampleTerms
         >>> SampleTeachers().generate(app, 42)
         >>> SampleStudents().generate(app, 42)
         >>> SampleCourses().generate(app, 42)
@@ -259,7 +259,7 @@ def doctest_SampleTimetables_assignPeriodToSection():
     Also, we need a timetable schema with terms:
 
         >>> from schooltool.timetable.sampledata import SampleTimetableSchema
-        >>> from schooltool.timetable.sampledata import SampleTerms
+        >>> from schooltool.term.sampledata import SampleTerms
         >>> SampleTimetableSchema().generate(app, 42)
         >>> SampleTerms().generate(app, 42)
 
@@ -335,7 +335,7 @@ def doctest_SampleSectionAssignments():
         >>> CourseSections(course=c, section=s8)
 
         >>> from schooltool.timetable.sampledata import SampleTimetableSchema
-        >>> from schooltool.timetable.sampledata import SampleTerms
+        >>> from schooltool.term.sampledata import SampleTerms
         >>> SampleTimetableSchema().generate(app, 42)
         >>> SampleTerms().generate(app, 42)
 

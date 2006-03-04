@@ -19,26 +19,23 @@
 """
 Term implementation
 
-$Id: __init__.py 4824 2005-08-19 14:39:13Z srichter $
+$Id$
 """
 import datetime
-from persistent import Persistent
-from sets import Set
+import persistent
 
-from zope.interface import implements
+import zope.interface
 from zope.app.annotation.interfaces import IAttributeAnnotatable
-from zope.app.container.btree import BTreeContainer
-from zope.app.container.contained import Contained
+from zope.app.container import contained, btree
 
 from schooltool.app.app import getSchoolToolApplication
-from schooltool.timetable.interfaces import IDateRange
-from schooltool.timetable.interfaces import ITermContainer
-from schooltool.timetable.interfaces import ITermWrite, ITermContained
+
+from schooltool.term import interfaces
 
 
 class DateRange(object):
 
-    implements(IDateRange)
+    zope.interface.implements(interfaces.IDateRange)
 
     def __init__(self, first, last):
         self.first = first
@@ -61,14 +58,14 @@ class DateRange(object):
         return self.first <= date <= self.last
 
 
-class Term(DateRange, Contained, Persistent):
+class Term(DateRange, contained.Contained, persistent.Persistent):
 
-    implements(ITermContained, ITermWrite)
+    zope.interface.implements(interfaces.ITerm, interfaces.ITermWrite)
 
     def __init__(self, title, first, last):
-        DateRange.__init__(self, first, last)
+        super(Term, self).__init__(first, last)
         self.title = title
-        self._schooldays = Set()
+        self._schooldays = set()
 
     def _validate(self, date):
         if not date in self:
@@ -119,9 +116,9 @@ class Term(DateRange, Contained, Persistent):
         self._schooldays.clear()
 
 
-class TermContainer(BTreeContainer):
+class TermContainer(btree.BTreeContainer):
 
-    implements(ITermContainer, IAttributeAnnotatable)
+    zope.interface.implements(interfaces.ITermContainer, IAttributeAnnotatable)
 
 
 def getTermForDate(date):

@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="schooltool">
+
+  <!-- Traversers -->
+
+  <view
+      for="..interfaces.ITermContainer"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schooltool.traverser.traverser.PluggableTraverser"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..interfaces.ITerm"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schooltool.traverser.traverser.PluggableTraverser"
+      permission="zope.Public"
+      />
+
+  <!-- Term Views -->
+
+  <view
+      for="..interfaces.ITermContainer"
+      name="GET"
+      factory=".term.TermContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for="..interfaces.ITermContainer"
+      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      factory=".term.TermFileFactory"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for="..interfaces.ITerm"
+      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      factory=".term.TermFile"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..interfaces.ITerm"
+      name="GET"
+      factory=".term.TermView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+</configure>

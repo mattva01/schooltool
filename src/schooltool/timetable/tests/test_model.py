@@ -277,7 +277,7 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
                          diff(pformat(expected), pformat(result)))
 
     def test_createCalendar_exceptionDays(self):
-        from schooltool.timetable.term import Term
+        from schooltool.term.term import Term
         from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 
         tt = self.createTimetable()
@@ -315,7 +315,7 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
 
     def test_schooldayStrategy_getDayId(self):
         from schooltool.timetable import SequentialDaysTimetableModel
-        from schooltool.timetable.term import Term
+        from schooltool.term.term import Term
         from schooltool.timetable import SchooldayTemplate
 
         term = Term('Sample', date(2005, 6, 27), date(2005, 7, 10))
@@ -524,7 +524,7 @@ class TestWeeklyTimetableModel(PlacelessSetup,
         from schooltool.timetable import SchooldayTemplate, SchooldaySlot
         from schooltool.timetable import Timetable, TimetableDay
         from schooltool.timetable import TimetableActivity
-        from schooltool.timetable.term import Term
+        from schooltool.term.term import Term
         from schooltool.timetable.interfaces import IWeekdayBasedTimetableModel
 
         days = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
@@ -638,7 +638,7 @@ class TestWeeklyTimetableModel(PlacelessSetup,
 
     def test_schooldayStrategy(self):
         from schooltool.timetable import WeeklyTimetableModel
-        from schooltool.timetable.term import Term
+        from schooltool.term.term import Term
         from schooltool.timetable import SchooldayTemplate
 
         term = Term('Sample', date(2005, 6, 27), date(2005, 7, 10))

@@ -45,7 +45,7 @@ from schooltool.app.membership import URIGroup, URIMember, URIMembership
 from schooltool.testing import setup as sbsetup
 from schooltool.testing.util import NiceDiffsMixin
 from schooltool.testing.util import EqualsSortedMixin
-from schooltool.timetable.tests.test_term import TermStub
+from schooltool.term.tests.test_term import TermStub
 
 class ActivityStub(object):
 

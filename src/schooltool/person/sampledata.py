@@ -33,9 +33,12 @@ from zope.security.proxy import removeSecurityProxy
 from schooltool.sampledata.interfaces import ISampleDataPlugin
 from schooltool.sampledata.name import NameGenerator
 from schooltool.person.person import Person
-from schooltool.timetable.term import DateRange
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.cal import CalendarEvent
+
+
+# XXX: Eek, st.person depends on st.term only because of this import!
+from schooltool.term.term import DateRange
 
 
 class SampleStudents(object):

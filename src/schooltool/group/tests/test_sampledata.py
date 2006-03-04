@@ -33,7 +33,10 @@ from zope.app.testing import setup
 from schooltool.testing import setup as stsetup
 from schooltool.relationship.tests import setUpRelationships
 from schooltool.app.cal import getCalendar
-from schooltool.timetable.term import getTermForDate
+
+
+# Eek, st.group depends on st.term because of this import
+from schooltool.term.term import getTermForDate
 
 
 def setUp(test):
@@ -62,7 +65,7 @@ def doctest_SampleGroups():
         >>> setUpRelationships()
         >>> app = stsetup.setupSchoolToolSite()
         >>> from schooltool.person.sampledata import SampleStudents
-        >>> from schooltool.timetable.sampledata import SampleTerms
+        >>> from schooltool.term.sampledata import SampleTerms
         >>> studentsPlugin = SampleStudents()
         >>> studentsPlugin.generate(app, 42)
         >>> termsPlugin = SampleTerms()

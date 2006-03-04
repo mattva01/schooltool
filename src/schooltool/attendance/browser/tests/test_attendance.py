@@ -39,10 +39,10 @@ from zope.i18n import translate
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
+from schooltool.term.term import DateRange
 from schooltool.timetable import ITimetables
 from schooltool.timetable import TimetableActivity
 from schooltool.timetable.model import TimetableCalendarEvent
-from schooltool.timetable.term import DateRange
 from schooltool.calendar.simple import ImmutableCalendar
 from schooltool.calendar.simple import SimpleCalendarEvent
 from schooltool.course.interfaces import ISection

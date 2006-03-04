@@ -132,7 +132,7 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
                              TimetablesAdapter)
 
     def createTerm(self):
-        from schooltool.timetable.term import Term
+        from schooltool.term.term import Term
         return Term("2003 fall",
                     datetime.date(2003, 9, 1),
                     datetime.date(2003, 9, 30))
@@ -233,7 +233,7 @@ def doctest_TimetableDictPublishTraverse():
         >>> app = sbsetup.setupSchoolToolSite()
 
         >>> from datetime import date
-        >>> from schooltool.timetable.term import Term
+        >>> from schooltool.term.term import Term
         >>> from schooltool.timetable.schema import TimetableSchema
         >>> app['terms']['2005-fall'] = Term('2005 Fall',
         ...         date(2005, 9, 1), date(2005, 12, 31))

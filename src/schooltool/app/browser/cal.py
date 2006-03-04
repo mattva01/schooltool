@@ -85,7 +85,7 @@ from schooltool.person.interfaces import IPerson, IPersonPreferences
 from schooltool.person.interfaces import vocabulary
 from schooltool.resource.interfaces import IResource
 from schooltool.timetable.interfaces import ITimetables
-from schooltool.timetable.term import getTermForDate
+from schooltool.term.term import getTermForDate
 
 
 def same(a, b):

@@ -4607,7 +4607,7 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
         app['ttschemas']['default'] = schema
 
         # set up terms
-        from schooltool.timetable.term import Term
+        from schooltool.term.term import Term
         app['terms']['term'] = term = Term("Some term", date(2004, 9, 1),
                                            date(2004, 12, 31))
         term.add(date(2004, 11, 5))
@@ -4723,7 +4723,7 @@ class TestDailyCalendarRowsView_getPeriodsForDay(unittest.TestCase):
         setup.placefulSetUp()
         app = sbsetup.setupSchoolToolSite()
 
-        from schooltool.timetable.term import Term
+        from schooltool.term.term import Term
         self.term1 = Term('Sample', date(2004, 9, 1), date(2004, 12, 20))
         self.term2 = Term('Sample', date(2005, 1, 1), date(2005, 6, 1))
         app["terms"]['2004-fall'] = self.term1

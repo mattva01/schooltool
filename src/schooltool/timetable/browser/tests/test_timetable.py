@@ -183,7 +183,7 @@ def doctest_PersonTimetableSetupView():
         ...                                            ["9:00", "10:00"])
         >>> app["ttschemas"]["other"] = createSchema([], [])
 
-        >>> from schooltool.timetable.term import Term
+        >>> from schooltool.term.term import Term
         >>> app["terms"]["2005-spring"] = Term('2005 Spring',
         ...                                    datetime.date(2004, 2, 1),
         ...                                    datetime.date(2004, 6, 30))
@@ -536,7 +536,7 @@ def doctest_SectionTimetableSetupView():
         ...                                            ["9:00", "10:00"])
 
 
-        >>> from schooltool.timetable.term import Term
+        >>> from schooltool.term.term import Term
         >>> app["terms"]["2005-spring"] = Term('2005 Spring',
         ...                                    datetime.date(2004, 2, 1),
         ...                                    datetime.date(2004, 6, 30))
@@ -588,7 +588,7 @@ def doctest_SectionTimetableSetupView():
     today
 
         >>> import datetime
-        >>> from schooltool.timetable.term import getNextTermForDate
+        >>> from schooltool.term.term import getNextTermForDate
         >>> getNextTermForDate(datetime.date.today()) in view.getTerms()
         True
         >>> len(view.getTerms())
@@ -738,12 +738,6 @@ def test_suite():
                                        optionflags=optionflags))
     suite.addTest(doctest.DocTestSuite('schooltool.timetable.browser',
                                        optionflags=optionflags))
-    suite.addTest(doctest.DocFileSuite(
-        'emergencydays.txt', setUp=setUp, tearDown=tearDown,
-        globs={'createSchema': createSchema,
-               'createDayTemplate': createDayTemplate,
-               'pprint': pprint},
-        optionflags=optionflags))
     suite.addTest(doctest.DocFileSuite(
         'specialdays.txt', setUp=setUp, tearDown=tearDown,
         globs={'createSchema': createSchema,

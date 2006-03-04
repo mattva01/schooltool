@@ -26,11 +26,6 @@
       />
 
   <adapter
-      for=".interfaces.ITermContainer"
-      factory="schooltool.app.app.SimpleNameChooser"
-      provides="zope.app.container.interfaces.INameChooser" />
-
-  <adapter
       for=".interfaces.ITimetableSchemaContainer"
       factory="schooltool.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
@@ -66,32 +61,6 @@
     <!-- TTCalendarEvent does not have a __parent__, so fine-grained
          security declarations won't work. -->
     <allow interface=".interfaces.ITimetableCalendarEvent" />
-  </content>
-
-  <interface
-      interface=".interfaces.ITermContainer"
-      type="zope.app.content.interfaces.IContentType"
-      />
-
-  <content class=".term.TermContainer">
-    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
-    <require permission="schooltool.view"
-             attributes="keys values __iter__ __len__" />
-    <require permission="schooltool.create"
-             interface="zope.app.container.interfaces.IWriteContainer" />
-  </content>
-
-  <interface
-      interface=".interfaces.ITerm"
-      type="zope.app.content.interfaces.IContentType"
-      />
-
-  <content class=".term.Term">
-    <allow interface=".interfaces.ITerm"
-           attributes="__cmp__"/>
-    <require permission="schooltool.edit"
-             interface=".interfaces.ITermWrite"
-             set_schema=".interfaces.ITerm" />
   </content>
 
   <content class=".TimetableDict">
@@ -177,12 +146,6 @@
         factory=".sampledata.SampleTimetableSchema"
         provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
         name="ttschema"
-        />
-
-    <utility
-        factory=".sampledata.SampleTerms"
-        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
-        name="terms"
         />
 
   </configure>

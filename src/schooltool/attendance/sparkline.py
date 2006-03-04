@@ -33,7 +33,7 @@ from PIL import Image, ImageDraw
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.timetable.interfaces import ITimetables
-from schooltool.timetable.term import getTermForDate
+from schooltool.term.term import getTermForDate
 from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.attendance.interfaces import IDayAttendance
 

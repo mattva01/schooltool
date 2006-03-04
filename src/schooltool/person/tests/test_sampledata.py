@@ -149,7 +149,7 @@ def doctest_SamplePersonalEvents():
 
         >>> from schooltool.person.sampledata import SampleStudents
         >>> from schooltool.person.sampledata import SampleTeachers
-        >>> from schooltool.timetable.sampledata import SampleTerms
+        >>> from schooltool.term.sampledata import SampleTerms
         >>> plugin_students = SampleStudents()
         >>> plugin_students.power = 20
         >>> plugin_teachers = SampleTeachers()

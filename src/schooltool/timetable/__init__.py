@@ -122,14 +122,6 @@ A timetable schema is like a timetable that has no activities and no exeptions.
 You can create an empty timetable by calling the createTimetable method of a
 schema.  See ITimetableSchema, ITimetableSchemaDay.
 
-Terms
------
-
-A term defines a range in time (e.g. September 1 to December 31, 2004) and for
-every day within that range it defines whether that day is a schoolday or a
-holiday.
-
-
 $Id$
 """
 
@@ -175,9 +167,9 @@ from schooltool.timetable.model import TimetableCalendarEvent
 # BBB: Make sure the old data object references are still there.
 from zope.deprecation import deprecated
 
-from schooltool.timetable.term import TermContainer, Term
+from schooltool.term.term import TermContainer, Term
 deprecated(('TermContainer', 'Term'),
-           'This class has moved to schooltool.timetable.term. '
+           'This class has moved to schooltool.term.term. '
            'The reference will be gone in 0.15')
 
 # Those classes are added from the schema module to avoid recursive imports
@@ -631,8 +623,6 @@ class TimetablesAdapter(object):
 
 
 def addToApplication(event):
-    from schooltool.timetable.term import TermContainer
-    event.object['terms'] = TermContainer()
     from schooltool.timetable.schema import TimetableSchemaContainer
     event.object['ttschemas'] = TimetableSchemaContainer()
 
@@ -640,15 +630,11 @@ def addToApplication(event):
 def registerTestSetup():
     from schooltool.testing import registry
 
-    def addTermAndTTSchemasContainer(app):
-        from schooltool.timetable.term import TermContainer
-        app['terms'] = TermContainer()
+    def addTTSchemasContainer(app):
         from schooltool.timetable.schema import TimetableSchemaContainer
         app['ttschemas'] = TimetableSchemaContainer()
 
-    registry.register('ApplicationContainers', addTermAndTTSchemasContainer)
+    registry.register('ApplicationContainers', addTTSchemasContainer)
 
 registerTestSetup()
 del registerTestSetup
-
-

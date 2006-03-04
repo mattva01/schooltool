@@ -48,7 +48,7 @@ The schemas have a model attribute:
 We will need a term:
 
     >>> import datetime
-    >>> from schooltool.timetable.term import Term
+    >>> from schooltool.term.term import Term
     >>> term = Term('2005 summer',
     ...             datetime.date(2005, 6, 1),
     ...             datetime.date(2005, 8, 31))
@@ -59,7 +59,7 @@ Now we can create the view:
 
     >>> from zope.publisher.browser import TestRequest
     >>> request = TestRequest()
-    >>> from schooltool.timetable.browser import EmergencyDayView
+    >>> from schooltool.term.browser.emergency import EmergencyDayView
     >>> view = EmergencyDayView(term, request)
     >>> print view()
     <BLANKLINE>

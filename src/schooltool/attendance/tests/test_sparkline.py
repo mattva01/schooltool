@@ -33,8 +33,8 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.app import getApplicationPreferences
 from schooltool.calendar.simple import ImmutableCalendar, SimpleCalendarEvent
+from schooltool.term.term import Term
 from schooltool.timetable.interfaces import ITimetables
-from schooltool.timetable.term import Term
 from schooltool.testing import setup as stsetup
 from schooltool.attendance.interfaces import UNKNOWN, PRESENT, ABSENT, TARDY
 from schooltool.attendance.interfaces import ISectionAttendance

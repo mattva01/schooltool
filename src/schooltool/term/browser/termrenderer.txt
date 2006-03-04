@@ -6,8 +6,8 @@ Unit tests for TermRenderer.calendar
 ------------------------------------
 
     >>> import datetime
-    >>> from schooltool.timetable.term import Term
-    >>> from schooltool.timetable.browser.term import TermRenderer
+    >>> from schooltool.term.term import Term
+    >>> from schooltool.term.browser.term import TermRenderer
 
     >>> term = Term('Sample', datetime.date(2004, 8, 1),
     ...                     datetime.date(2004, 8, 31))

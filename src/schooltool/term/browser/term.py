@@ -19,7 +19,7 @@
 """
 Timetabling Term views.
 
-$Id: __init__.py 4822 2005-08-19 01:35:11Z srichter $
+$Id$
 """
 import datetime
 import itertools
@@ -41,8 +41,8 @@ from schooltool.app.browser.app import ContainerView
 from schooltool.app.browser.cal import month_names
 from schooltool.calendar.utils import parse_date
 from schooltool.calendar.utils import next_month, week_start
-from schooltool.timetable.interfaces import ITermContainer, ITerm
-from schooltool.timetable.term import Term
+from schooltool.term.interfaces import ITermContainer, ITerm
+from schooltool.term.term import Term
 
 from schooltool import SchoolToolMessage as _
 

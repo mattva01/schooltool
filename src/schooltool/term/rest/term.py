@@ -19,7 +19,7 @@
 """
 RESTive views for Terms
 
-$Id: app.py 3419 2005-04-14 18:34:36Z alga $
+$Id$
 """
 import datetime
 from StringIO import StringIO
@@ -37,8 +37,8 @@ from schooltool.app.rest import View
 from schooltool.app.rest.app import GenericContainerView
 from schooltool.app.rest.errors import RestError
 
-from schooltool.timetable.term import Term
-from schooltool.timetable.interfaces import ITermContainer, ITerm
+from schooltool.term.term import Term
+from schooltool.term.interfaces import ITermContainer, ITerm
 
 
 class TermContainerView(GenericContainerView):

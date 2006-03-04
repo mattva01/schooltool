@@ -19,7 +19,7 @@
 """
 Tests for schooltool term views.
 
-$Id: test_timetable.py 4822 2005-08-19 01:35:11Z srichter $
+$Id$
 """
 import datetime
 import unittest
@@ -28,17 +28,17 @@ from zope.i18n import translate
 from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
+from zope.testing.doctestunit import pprint
 from zope.app.traversing.interfaces import IContainmentRoot
 
-from schooltool.timetable.browser.tests.test_timetable import setUp, tearDown
-from schooltool.timetable.browser.tests.test_timetable import print_cal
+from schooltool.timetable.browser.tests import test_timetable
 
 
 def doctest_TermView_calendar():
     '''Unit tests for TermAddView.calendar
 
-        >>> from schooltool.timetable.term import Term
-        >>> from schooltool.timetable.browser.term import TermView
+        >>> from schooltool.term.term import Term
+        >>> from schooltool.term.browser.term import TermView
         >>> context = Term('Sample', datetime.date(2004, 8, 1),
         ...                        datetime.date(2004, 8, 31))
         >>> request = TestRequest()
@@ -47,7 +47,7 @@ def doctest_TermView_calendar():
     This view has just one method, `calendar`, that invokes TermRenderer
     to give a nice structure of lists and dicts for the page template.
 
-        >>> print_cal(view.calendar())
+        >>> test_timetable.print_cal(view.calendar())
         *                        August 2004
                  Mon Tue Wed Thu Fri Sat Sun
         Week 31:                           1
@@ -63,8 +63,8 @@ def doctest_TermView_calendar():
 def doctest_TermEditView_title():
     '''Unit tests for TermEditView.title
 
-        >>> from schooltool.timetable.term import Term
-        >>> from schooltool.timetable.browser.term import TermEditView
+        >>> from schooltool.term.term import Term
+        >>> from schooltool.term.browser.term import TermEditView
         >>> context = Term('Sample', datetime.date(2004, 8, 1),
         ...                        datetime.date(2004, 8, 31))
         >>> request = TestRequest()
@@ -83,8 +83,8 @@ def doctest_TermEditView_title():
 def doctest_TermEditView_calendar():
     '''Unit tests for TermEditView.calendar
 
-        >>> from schooltool.timetable.term import Term
-        >>> from schooltool.timetable.browser.term import TermEditView
+        >>> from schooltool.term.term import Term
+        >>> from schooltool.term.browser.term import TermEditView
         >>> context = Term('Sample', datetime.date(2004, 8, 4),
         ...                        datetime.date(2004, 8, 6))
         >>> request = TestRequest()
@@ -94,7 +94,7 @@ def doctest_TermEditView_calendar():
 
         >>> view.term = Term('Sample', datetime.date(2004, 8, 1),
         ...                          datetime.date(2004, 8, 12))
-        >>> print_cal(view.calendar())
+        >>> test_timetable.print_cal(view.calendar())
         *                        August 2004
                  Mon Tue Wed Thu Fri Sat Sun
         Week 31:                           1
@@ -107,8 +107,8 @@ def doctest_TermEditView_calendar():
 def doctest_TermEditView_update():
     '''Unit tests for TermEditView.update
 
-        >>> from schooltool.timetable.term import Term
-        >>> from schooltool.timetable.browser.term import TermEditView
+        >>> from schooltool.term.term import Term
+        >>> from schooltool.term.browser.term import TermEditView
         >>> context = Term('Sample', datetime.date(2004, 8, 4),
         ...                        datetime.date(2004, 8, 6))
         >>> request = TestRequest()
@@ -185,8 +185,8 @@ def doctest_TermAddView_update():
 
     `update` sets view.term
 
-        >>> from schooltool.timetable.term import TermContainer
-        >>> from schooltool.timetable.browser.term import TermAddView
+        >>> from schooltool.term.term import TermContainer
+        >>> from schooltool.term.browser.term import TermAddView
         >>> context = TermContainer()
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
@@ -211,8 +211,8 @@ def doctest_TermAddView_create():
     by `update` before), or raises a WidgetsError (because `_buildTerm`
     discovered an error in the form).
 
-        >>> from schooltool.timetable.term import TermContainer
-        >>> from schooltool.timetable.browser.term import TermAddView
+        >>> from schooltool.term.term import TermContainer
+        >>> from schooltool.term.browser.term import TermAddView
         >>> context = TermContainer()
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
@@ -235,9 +235,9 @@ def doctest_TermAddView_add():
 
     `add` adds the term to the term service.
 
-        >>> from schooltool.timetable.term import TermContainer
-        >>> from schooltool.timetable.term import Term
-        >>> from schooltool.timetable.browser.term import TermAddView
+        >>> from schooltool.term.term import TermContainer
+        >>> from schooltool.term.term import Term
+        >>> from schooltool.term.browser.term import TermAddView
         >>> context = TermContainer()
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
@@ -264,8 +264,8 @@ def doctest_TermAddView_create():
     by `update` before), or raises a WidgetsError (because `_buildTerm`
     discovered an error in the form).
 
-        >>> from schooltool.timetable.term import TermContainer
-        >>> from schooltool.timetable.browser.term import TermAddView
+        >>> from schooltool.term.term import TermContainer
+        >>> from schooltool.term.browser.term import TermAddView
         >>> context = TermContainer()
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
@@ -288,8 +288,8 @@ def doctest_TermAddView_nextURL():
 
     `nextURL` returns the absolute url of its context.
 
-        >>> from schooltool.timetable.term import TermContainer
-        >>> from schooltool.timetable.browser.term import TermAddView
+        >>> from schooltool.term.term import TermContainer
+        >>> from schooltool.term.browser.term import TermAddView
         >>> context = TermContainer()
         >>> directlyProvides(context, IContainmentRoot)
         >>> request = TestRequest()
@@ -306,8 +306,8 @@ def doctest_TermEditViewMixin_buildTerm():
     We shall use TermAddView here -- it inherits TermEditViewMixin._buildTerm
     without changing it.
 
-        >>> from schooltool.timetable.term import TermContainer
-        >>> from schooltool.timetable.browser.term import TermAddView
+        >>> from schooltool.term.term import TermContainer
+        >>> from schooltool.term.browser.term import TermAddView
         >>> context = TermContainer()
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
@@ -410,8 +410,8 @@ def doctest_TermEditViewMixin_buildTerm():
 def doctest_TermAddView_calendar():
     '''Unit tests for TermAddView.calendar
 
-        >>> from schooltool.timetable.term import TermContainer
-        >>> from schooltool.timetable.browser.term import TermAddView
+        >>> from schooltool.term.term import TermContainer
+        >>> from schooltool.term.browser.term import TermAddView
         >>> context = TermContainer()
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
@@ -449,7 +449,7 @@ def doctest_TermAddView_calendar():
         >>> request.form['field.first'] = '2004-08-01'
         >>> request.form['field.last'] = '2004-08-31'
         >>> view.term = view._buildTerm()
-        >>> print_cal(view.calendar())
+        >>> test_timetable.print_cal(view.calendar())
         *                        August 2004
                  Mon Tue Wed Thu Fri Sat Sun
         Week 31:                           1
@@ -467,11 +467,20 @@ def test_suite():
     optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
                    doctest.REPORT_ONLY_FIRST_FAILURE |
                    doctest.NORMALIZE_WHITESPACE)
-    suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
-                                       optionflags=optionflags))
+    suite.addTest(doctest.DocTestSuite(
+        setUp=test_timetable.setUp, tearDown=test_timetable.tearDown,
+        optionflags=optionflags))
     suite.addTest(doctest.DocFileSuite(
-        'termrenderer.txt', setUp=setUp, tearDown=tearDown,
-        globs={'print_cal': print_cal},
+        'emergencydays.txt',
+        setUp=test_timetable.setUp, tearDown=test_timetable.tearDown,
+        globs={'createSchema': test_timetable.createSchema,
+               'createDayTemplate': test_timetable.createDayTemplate,
+               'pprint': pprint},
+        optionflags=optionflags))
+    suite.addTest(doctest.DocFileSuite(
+        'termrenderer.txt',
+        setUp=test_timetable.setUp, tearDown=test_timetable.tearDown,
+        globs={'print_cal': test_timetable.print_cal},
         optionflags=optionflags))
     return suite
 
