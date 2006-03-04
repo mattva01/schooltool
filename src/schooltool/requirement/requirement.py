@@ -52,7 +52,7 @@ class InheritedRequirement(zope.app.container.contained.Contained):
         self.__parent__ = parent
         self.__name__ = name
 
-    def __eq__(self, other):
+    def __cmp__(self, other):
         return cmp(self.original, other)
 
     def __repr__(self):
