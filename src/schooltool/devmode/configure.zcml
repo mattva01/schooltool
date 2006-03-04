@@ -8,13 +8,11 @@
 
   <!-- Generic DevMode setup -->
 
-  <browser:layer
-      name="DevMode"
-      interface=".skin.IDevModeLayer" />
-
-  <browser:skin
+  <interface
+      interface="schooltool.devmode.skin.ISchoolToolDevModeSkin"
+      type="zope.publisher.interfaces.browser.IBrowserSkinType"
       name="SchoolToolDevMode"
-      interface=".skin.ISchoolToolDevModeSkin" />
+      />
 
   <browser:viewlet
       name="devmode"

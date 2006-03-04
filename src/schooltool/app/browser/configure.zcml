@@ -67,14 +67,10 @@
       for="zope.app.publication.interfaces.IBeforeTraverseEvent"
       />
 
-  <layer
-      name="SchoolToolLayer"
-      interface=".skin.ISchoolToolLayer"
-      />
-
-  <skin
+  <zope:interface
+      interface="schooltool.app.browser.skin.ISchoolToolSkin"
+      type="zope.publisher.interfaces.browser.IBrowserSkinType"
       name="SchoolTool"
-      interface=".skin.ISchoolToolSkin"
       />
 
   <page
@@ -628,7 +624,7 @@
       class="schooltool.app.browser.csvimport.TimetableCSVImportView"
       template="templates/timetables-csvimport.pt"
       permission="schooltool.create"
-      layer="SchoolToolLayer"
+      layer=".skin.ISchoolToolLayer"
       menu="schooltool_actions"
       title="Import Sections"
       />

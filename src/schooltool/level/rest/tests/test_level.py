@@ -19,7 +19,7 @@
 """
 Tests for level REST views.
 
-$Id: test_app.py 4342 2005-07-25 16:02:24Z bskahan $
+$Id$
 """
 import unittest
 
@@ -32,6 +32,7 @@ from zope.app.filerepresentation.interfaces import IFileFactory
 from zope.app.testing import ztapi
 
 from schooltool.app.rest import testing
+import schooltool.level.rest.level
 from schooltool.level import interfaces, level, rest
 from schooltool.testing import setup
 

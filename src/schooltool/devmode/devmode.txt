@@ -309,10 +309,6 @@ When the screen returns we should see our devmode layer and skin interface:
         <a href="./schooltool.devmode.skin.IDevModeLayer/index.html"
            target="main">st.devmode.skin.IDevModeLayer</a>
       </div>
-      <div>
-        <a href="./schooltool.devmode.skin.ISchoolToolDevModeSkin/index.html"
-           target="main">st.devmode.skin.ISchoolToolDevModeSkin</a>
-      </div>
       ...
     </div>
     ...
@@ -321,9 +317,9 @@ You can also see how "schooltool" is abbreviated as "st" to make the name
 shorter. Clicking on one of those results will give you the typical interface
 details screen:
 
-    >>> browser.getLink('st.devmode.skin.ISchoolToolDevModeSkin').click()
+    >>> browser.getLink('st.devmode.skin.IDevModeLayer').click()
     >>> browser.contents
-    '...schooltool.devmode.skin.ISchoolToolDevModeSkin...'
+    '...schooltool.devmode.skin.IDevModeLayer...'
 
 
 Code

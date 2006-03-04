@@ -52,13 +52,11 @@
       for="zope.app.publication.interfaces.IBeforeTraverseEvent"
       />
 
-  <layer
+  <zope:interface
+      interface="schooltool.sbapp.browser.skin.ISchoolBellSkin"
+      type="zope.publisher.interfaces.browser.IBrowserSkinType"
       name="SchoolBell"
-      interface=".skin.ISchoolBellLayer" />
-
-  <skin
-      name="SchoolBell"
-      interface=".skin.ISchoolBellSkin" />
+      />
 
   <page
       name="generic_macros"
