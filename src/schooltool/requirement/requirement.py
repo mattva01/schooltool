@@ -223,8 +223,13 @@ class Requirement(persistent.Persistent,
     def __delitem__(self, key):
         """See interface `IWriteContainer`"""
         zope.app.container.contained.uncontained(self._data[key], self, key)
-        self._order.remove(key)
         del self._data[key]
+        # Remove the key only, if no inherited requirements remain
+        inherited_keys = []
+        for base in self.bases:
+            inherited_keys += base.collectKeys()
+        if key not in inherited_keys:
+            self._order.remove(key)
 
     def updateOrder(self, order):
         """See zope.app.container.interfaces.IOrderedContainer"""

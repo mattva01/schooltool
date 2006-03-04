@@ -118,12 +118,16 @@ able to delete locally defined requirements and not inherited ones:
 
 If we override the forloop requirement however, we should be able to delete the
 locally created forloop requirement.  After this, the InheritedRequirement that
-has just been overridden should reappear.
+has just been overridden should reappear and the forloop should still be
+available as a key.
 
-  >>> yhs[u'program'][u'forloop'] = requirement.Requirement(u'Write a python for loop.')
+  >>> yhs[u'program'][u'forloop'] = requirement.Requirement(
+  ...     u'Write a python for loop.')
   >>> yhs[u'program'][u'forloop']
   Requirement(u'Write a python for loop.')
   >>> del yhs[u'program'][u'forloop']
+  >>> yhs[u'program'].keys()
+  [u'forloop']
   >>> yhs[u'program'][u'forloop']
   InheritedRequirement(Requirement(u'Write a for loop.'))
 
