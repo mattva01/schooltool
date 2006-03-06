@@ -606,11 +606,12 @@ class CalendarViewBase(BrowserView):
         This returns a list of quarters, each quarter is a list of months,
         each month is a list of weeks, and each week is a list of CalendarDays.
         """
-
         first_day_of_year = date(dt.year, 1, 1)
-        year_start_day_padded_weeks = week_start(first_day_of_year)
+        year_start_day_padded_weeks = week_start(first_day_of_year,
+                                                 self.first_day_of_week)
         last_day_of_year = date(dt.year, 12, 31)
-        year_end_day_padded_weeks = week_start(last_day_of_year) + timedelta(7)
+        year_end_day_padded_weeks = week_start(last_day_of_year,
+                                               self.first_day_of_week) + timedelta(7)
 
         day_cache = self.getDays(year_start_day_padded_weeks,
                                  year_end_day_padded_weeks)

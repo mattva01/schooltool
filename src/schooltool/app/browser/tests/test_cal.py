@@ -1104,6 +1104,27 @@ class TestCalendarViewBase(unittest.TestCase):
         for i, month in enumerate(months):
             self.assertEquals(month, date(2004, i+1, 1))
 
+    def test_getYear_when_sunday(self):
+        # Regression test for http://issues.schooltool.org/issue449
+        from schooltool.app.browser.cal import CalendarViewBase
+        view = CalendarViewBase(None, TestRequest())
+        view.getDays = getDaysStub
+        view.first_day_of_week = calendar.SUNDAY
+        def getMonthStub(dt, days=None):
+            # Check that boundaries of `days` are ones that we expect
+            self.assertEquals(days[0].date, date(2003, 12, 28))
+            self.assertEquals(days[-1].date, date(2005, 1, 1))
+            return dt
+        view.getMonth = getMonthStub
+        year = view.getYear(date(2004, 3, 4))
+        self.assertEquals(len(year), 4)
+        months = []
+        for quarter in year:
+            self.assertEquals(len(quarter), 3)
+            months.extend(quarter)
+        for i, month in enumerate(months):
+            self.assertEquals(month, date(2004, i+1, 1))
+
     def assertEqualEventLists(self, result, expected):
         fmt = lambda x: '[%s]' % ', '.join([e.title for e in x])
         self.assertEquals(result, expected,
