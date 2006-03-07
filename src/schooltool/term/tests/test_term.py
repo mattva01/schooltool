@@ -71,33 +71,6 @@ class TermStub(Contained):
         return date(2003, 11, 20) <= day <= date(2003, 11, 26)
 
 
-class TestDateRange(unittest.TestCase):
-
-    def test(self):
-        dr = term.DateRange(date(2003, 1, 1), date(2003, 1, 31))
-        verifyObject(interfaces.IDateRange, dr)
-
-        # __contains__
-        self.assert_(date(2002, 12, 31) not in dr)
-        self.assert_(date(2003, 2, 1) not in dr)
-        for day in range(1, 32):
-            self.assert_(date(2003, 1, day) in dr)
-
-        # __iter__
-        days = list(dr)
-        self.assertEqual(len(days), 31)
-        self.assertEqual(len(dr), 31)
-
-        days = term.DateRange(date(2003, 1, 1), date(2003, 1, 2))
-        self.assertEqual(list(days), [date(2003, 1, 1), date(2003, 1, 2)])
-
-        days = term.DateRange(date(2003, 1, 1), date(2003, 1, 1))
-        self.assertEqual(list(days), [date(2003, 1, 1)])
-
-        self.assertRaises(ValueError, term.DateRange,
-                          date(2003, 1, 2), date(2003, 1, 1))
-
-
 class TestTerm(unittest.TestCase):
 
     def test_interface(self):
@@ -259,7 +232,6 @@ class TestGetTermForDate(unittest.TestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestDateRange))
     suite.addTest(unittest.makeSuite(TestTerm))
     suite.addTest(unittest.makeSuite(TestTermContainer))
     suite.addTest(unittest.makeSuite(TestGetTermForDate))

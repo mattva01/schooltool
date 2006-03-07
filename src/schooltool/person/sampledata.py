@@ -38,7 +38,7 @@ from schooltool.app.cal import CalendarEvent
 
 
 # XXX: Eek, st.person depends on st.term only because of this import!
-from schooltool.term.term import DateRange
+from schooltool.term.daterange import DateRange
 
 
 class SampleStudents(object):

@@ -30,35 +30,10 @@ from zope.app.container import contained, btree
 
 from schooltool.app.app import getSchoolToolApplication
 
-from schooltool.term import interfaces
+from schooltool.term import interfaces, daterange
 
 
-class DateRange(object):
-
-    zope.interface.implements(interfaces.IDateRange)
-
-    def __init__(self, first, last):
-        self.first = first
-        self.last = last
-        if last < first:
-            # import timemachine
-            raise ValueError("Last date %r less than first date %r" %
-                             (last, first))
-
-    def __iter__(self):
-        date = self.first
-        while date <= self.last:
-            yield date
-            date += datetime.date.resolution
-
-    def __len__(self):
-        return (self.last - self.first).days + 1
-
-    def __contains__(self, date):
-        return self.first <= date <= self.last
-
-
-class Term(DateRange, contained.Contained, persistent.Persistent):
+class Term(daterange.DateRange, contained.Contained, persistent.Persistent):
 
     zope.interface.implements(interfaces.ITerm, interfaces.ITermWrite)
 
