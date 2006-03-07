@@ -117,25 +117,11 @@ class IScoreSystem(zope.interface.Interface):
         description=u'A brief description of the score system.',
         required=False)
 
-    def isPassingScore(score):
-        """Return whether score meets a passing threshold.
-
-        The return value is a boolean. When it cannot be determined whether
-        the score is a passing score, then ``None`` is returned.
-        """
-
     def isValidScore(score):
         """Return whether score is a valid score.
 
         The return value is a boolean.  The ``UNSCORED`` value is a valid
         score.
-        """
-
-    def getBestScore():
-        """Return the best score of the grading system.
-
-        The best score is required to compute statistics. It is also a helpful
-        piece of information for the grader.
         """
 
     def fromUnicode(rawScore):
@@ -144,6 +130,24 @@ class IScoreSystem(zope.interface.Interface):
         User input always comes as a (unicode) string. Only the scoresystem
         contains the necessary information to convert those strings into real
         values.
+        """
+
+
+class IValuesScoreSystem(IScoreSystem):
+    """A Score System that deal with specific score values."""
+
+    def isPassingScore(score):
+        """Return whether score meets a passing threshold.
+
+        The return value is a boolean. When it cannot be determined whether
+        the score is a passing score, then ``None`` is returned.
+        """
+
+    def getBestScore():
+        """Return the best score of the grading system.
+
+        The best score is required to compute statistics. It is also a helpful
+        piece of information for the grader.
         """
 
     def getNumericalValue(score):
@@ -157,8 +161,8 @@ class IScoreSystem(zope.interface.Interface):
         """Return a decimal fraction between 0..1 for the score.
         """
 
-        
-class IDiscreteValuesScoreSystem(IScoreSystem):
+
+class IDiscreteValuesScoreSystem(IValuesScoreSystem):
     """A score system that consists of discrete values."""
 
     scores = zope.schema.List(
@@ -168,7 +172,7 @@ class IDiscreteValuesScoreSystem(IScoreSystem):
         required=True)
 
 
-class IRangedValuesScoreSystem(IScoreSystem):
+class IRangedValuesScoreSystem(IValuesScoreSystem):
     """A score system that allows for a randge of values."""
 
     min = zope.schema.Int(

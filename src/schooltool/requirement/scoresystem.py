@@ -47,9 +47,49 @@ class UNSCORED(object):
 zope.security.checker.BasicTypes[UNSCORED] = zope.security.checker.NoProxy
 UNSCORED = UNSCORED()
 
-
 class AbstractScoreSystem(object):
     zope.interface.implements(interfaces.IScoreSystem)
+
+    def __init__(self, title, description=None):
+        self.title = title
+        self.description = description
+
+    def __repr__(self):
+        return '<%s %r>' % (self.__class__.__name__, self.title)
+
+    def isValidScore(self, score):
+        """See interfaces.IScoreSystem"""
+        raise NotImplementedError
+
+    def fromUnicode(self, rawScore):
+        """See interfaces.IScoreSystem"""
+        raise NotImplementedError
+
+
+class CommentScoreSystem(AbstractScoreSystem):
+
+    def isValidScore(self, score):
+        """See interfaces.IScoreSystem"""
+        if score is UNSCORED:
+            return True
+        return isinstance(score, (str, unicode))
+
+    def fromUnicode(self, rawScore):
+        """See interfaces.IScoreSystem"""
+        if not rawScore:
+            return UNSCORED
+        return rawScore
+
+    def __reduce__(self):
+        return 'CommentScoreSystem'
+
+# Singelton
+CommentScoreSystem = CommentScoreSystem(
+    u'Comments', u'Scores are commentary text.')
+
+
+class AbstractValuesScoreSystem(AbstractScoreSystem):
+    zope.interface.implements(interfaces.IValuesScoreSystem)
 
     def __init__(self, title, description=None):
         self.title = title
@@ -59,15 +99,7 @@ class AbstractScoreSystem(object):
         """See interfaces.IScoreSystem"""
         raise NotImplementedError
 
-    def isValidScore(self, score):
-        """See interfaces.IScoreSystem"""
-        raise NotImplementedError
-
     def getBestScore(self):
-        """See interfaces.IScoreSystem"""
-        raise NotImplementedError
-
-    def fromUnicode(self, rawScore):
         """See interfaces.IScoreSystem"""
         raise NotImplementedError
 
@@ -78,12 +110,9 @@ class AbstractScoreSystem(object):
     def getFractionValue(self, score):
         """See interfaces.IScoreSystem"""
         raise NotImplementedError
-         
-    def __repr__(self):
-        return '<%s %r>' % (self.__class__.__name__, self.title)
 
 
-class DiscreteValuesScoreSystem(AbstractScoreSystem):
+class DiscreteValuesScoreSystem(AbstractValuesScoreSystem):
     """Abstract Discrete Values Score System"""
 
     zope.interface.implements(interfaces.IDiscreteValuesScoreSystem)
@@ -175,7 +204,7 @@ ExtendedAmericanLetterScoreSystem = GlobalDiscreteValuesScoreSystem(
      ('F',  Decimal('0.0'))], 'A+', 'D-')
 
 
-class RangedValuesScoreSystem(AbstractScoreSystem):
+class RangedValuesScoreSystem(AbstractValuesScoreSystem):
     """Abstract Ranged Values Score System"""
 
     zope.interface.implements(interfaces.IRangedValuesScoreSystem)

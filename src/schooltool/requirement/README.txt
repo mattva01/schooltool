@@ -423,17 +423,63 @@ new requirements:
 Score Systems
 -------------
 
-Score systems define the grading scheme of a group of or specific requirements.
-Since scoring schemes vary widely among schools and even requirements, the
-package provides two score system classes that can be used to create new
-score systems.
+Score systems define the grading scheme of specific or a group of
+requirements. The simplest scoring system provided by this package is the
+commentary scoring system, which can have any comment as a score.
 
-The first class is designed for grades that are given as discrete values. For
-example, if you want to be able to give the student a check, check plus, or
-check minus, then you can create a scoresystem as follows:
+  >>> from schooltool.requirement import scoresystem
+  >>> scoresystem.CommentScoreSystem.title
+  u'Comments'
+  >>> scoresystem.CommentScoreSystem.description
+  u'Scores are commentary text.'
+
+The score system interface requires two methods to be implemented. The first
+methods checks whether a value is a valid score. For the commentary score
+system all types of strings are allowed:
+
+  >>> scoresystem.CommentScoreSystem.isValidScore('My comment.')
+  True
+  >>> scoresystem.CommentScoreSystem.isValidScore(u'My comment.')
+  True
+  >>> scoresystem.CommentScoreSystem.isValidScore(49)
+  False
+
+There is also a global "unscored" score that can be used when assigning
+scores:
+
+  >>> scoresystem.CommentScoreSystem.isValidScore(scoresystem.UNSCORED)
+  True
+
+When a user inputs a grade, it is always a string value. Thus there is a
+method that allows us to convert unicode string representations of the score
+to a valid score. Since commentaries are unicode strings, the result
+equals the input:
+
+  >>> scoresystem.CommentScoreSystem.fromUnicode(u'My comment.')
+  u'My comment.'
+
+Empty strings are converted to the unscored score:
+
+  >>> scoresystem.CommentScoreSystem.fromUnicode('') is scoresystem.UNSCORED
+  True
+
+This scoring system can also be efficiently pickled:
+
+  >>> import pickle
+  >>> len(pickle.dumps(scoresystem.CommentScoreSystem))
+  59
+
+The commentary scoreing system cannot be used for statistical
+computations. See below for more details.
+
+Since scoring schemes vary widely among schools and even requirements, the
+package provides several score system classes that can be used to create new
+score systems. The first class is designed for grades that are given as
+discrete values. For example, if you want to be able to give the student a
+check, check plus, or check minus, then you can create a scoresystem as
+follows:
 
   >>> from decimal import Decimal
-  >>> from schooltool.requirement import scoresystem
   >>> check = scoresystem.DiscreteValuesScoreSystem(
   ...    u'Check', u'Check-mark score system',
   ...    [('+', Decimal(1)), ('v', Decimal(0)), ('-', Decimal(-1))])
@@ -444,17 +490,13 @@ from the score to the numerical equivalent. Providing a numerical value is
 necessary to conduct automated statistics and grade computations. Also, we are
 purposefully not passing in a dictionary, so that the order of the items is
 retained, which is important for user interface purposes. There are a handful
-of methods associated with a score system. First, you can ask whether a
-particular score is valid:
+of methods associated with a values-based score system. We already looked at
+the two above. First, you can ask whether a particular score is valid:
 
   >>> check.isValidScore('+')
   True
   >>> check.isValidScore('f')
   False
-
-There is also a global "unscored" score that can be used when assigning
-scores:
-
   >>> check.isValidScore(scoresystem.UNSCORED)
   True
 
@@ -464,7 +506,7 @@ score:
   >>> check.getNumericalValue('+')
   Decimal("1")
 
-Again, the unscored score returns a ``None`` result:
+The unscored score returns a ``None`` result:
 
   >>> check.getNumericalValue(scoresystem.UNSCORED) is None
   True
@@ -485,12 +527,11 @@ to a valid score.
 
   >>> check.fromUnicode('+')
   '+'
+
   >>> check.fromUnicode('f')
   Traceback (most recent call last):
   ...
   ValidationError: 'f' is not a valid score.
-
-Empty strings are converted to the unscored score:
 
   >>> check.fromUnicode('') is scoresystem.UNSCORED
   True
@@ -509,9 +550,9 @@ provide more useful results:
   >>> from schooltool.requirement import scoresystem
   >>> check = scoresystem.DiscreteValuesScoreSystem(
   ...    u'Check', u'Check-mark score system',
-  ...    [('+', Decimal(1)), 
-  ...     ('v', Decimal(0)), 
-  ...     ('-', Decimal(-1))], 
+  ...    [('+', Decimal(1)),
+  ...     ('v', Decimal(0)),
+  ...     ('-', Decimal(-1))],
   ...     minPassingScore='v')
   >>> check
   <DiscreteValuesScoreSystem u'Check'>
@@ -586,7 +627,7 @@ systems are global ones, they reduce very efficiently for pickling.
   >>> scoresystem.AmericanLetterScoreSystem.title
   u'Letter Grade'
   >>> scoresystem.AmericanLetterScoreSystem.scores
-  [('A', Decimal("4")), ('B', Decimal("3")), ('C', Decimal("2")), 
+  [('A', Decimal("4")), ('B', Decimal("3")), ('C', Decimal("2")),
    ('D', Decimal("1")), ('F', Decimal("0"))]
   >>> scoresystem.AmericanLetterScoreSystem.isValidScore('C')
   True
@@ -606,7 +647,7 @@ systems are global ones, they reduce very efficiently for pickling.
   Decimal("0.75")
   >>> scoresystem.AmericanLetterScoreSystem.getFractionalValue('F')
   Decimal("0")
- 
+
 - The extended American letter score system:
 
   >>> scoresystem.ExtendedAmericanLetterScoreSystem
@@ -706,7 +747,7 @@ Again, if we provide a passing score at the beginning, then those queries make
 sense:
 
   >>> quizScore = scoresystem.RangedValuesScoreSystem(
-  ...     u'quizScore', u'Quiz Score System', 
+  ...     u'quizScore', u'Quiz Score System',
   ...     Decimal(0), Decimal(21), Decimal("0.6")*21) # 60%+ is passing
 
   >>> quizScore.isPassingScore(Decimal(13))
@@ -719,7 +760,7 @@ sense:
 Let's also try a ranged system that doesn't start at 0:
 
   >>> quizScore = scoresystem.RangedValuesScoreSystem(
-  ...     u'quizScore', u'Score System that does not start at zero', 
+  ...     u'quizScore', u'Score System that does not start at zero',
   ...     Decimal(5), Decimal(10))
   >>> quizScore.getFractionalValue(Decimal(5))
   Decimal("0")
@@ -796,10 +837,10 @@ and the "100 points" score system:
   Decimal("0.42")
 
 There is also an ``AbstractScoreSystem`` class that implements the title,
-description and representation for you already. It is used for both of the
-above types of score system. If you need to develop a score system that does
-not fit into any of the two categories, you might want to develop one using
-this abstract class.
+description and the representation of the object for you already. It is used
+for both of the above types of score system. If you need to develop a score
+system that does not fit into any of the two categories, you might want to
+develop one using this abstract class.
 
 Finally, I would like to talk a little bit more about the ``UNSCORED``
 score. This global is not just a string, so that is will more efficiently
