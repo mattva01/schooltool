@@ -30,6 +30,9 @@ import sys
 
 here = os.path.abspath(os.path.dirname(__file__))
 
+# Remove this directory from path:
+# (prevents conflicts between python's test module and the test runner)
+sys.path[:] = [p for p in sys.path if os.path.abspath(p) != here]
 # Lets add the Zope and schooltool paths to sys.path
 zope3 = os.path.join(here, 'Zope3', 'src')
 sys.path.insert(0, zope3)
