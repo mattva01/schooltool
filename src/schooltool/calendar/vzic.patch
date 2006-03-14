@@ -1,0 +1,52 @@
+===================================================================
+--- Makefile                    	(Original)
++++ Makefile	                        (Updated)
+@@ -23,7 +23,7 @@
+ # gets expanded to today's date. There is also a vzic-merge.pl which can be
+ # used to merge changes into a master set of VTIMEZONEs. If a VTIMEZONE has
+ # changed, it bumps the version number on the end of this prefix. */
+-TZID_PREFIX = /myorganization.org/%D_1/
++TZID_PREFIX = /schooltool.org/Olson_%D_1/
+ 
+ # This is what libical-evolution uses.
+ #TZID_PREFIX = /softwarestudio.org/Olson_%D_1/
+--- vzic-dump.c                         	(Original)
++++ vzic-dump.c	                                (Updated)
+@@ -358,11 +358,7 @@
+        them a bit easier. But they don't have entries in the zone.tab file,
+        so we use the entry from the timezone linked from. */
+     zone_name_in_hash = zone_name;
+-    if (!strcmp (zone_name, "America/Indiana/Indianapolis"))
+-      zone_name_in_hash = "America/Indianapolis";
+-    else if (!strcmp (zone_name, "America/Kentucky/Louisville"))
+-      zone_name_in_hash = "America/Louisville";
+-    else if (!strcmp (zone_name, "Asia/Istanbul"))
++     if (!strcmp (zone_name, "Asia/Istanbul"))
+       zone_name_in_hash = "Europe/Istanbul";
+     else if (!strcmp (zone_name, "Europe/Nicosia"))
+       zone_name_in_hash = "Asia/Nicosia";
+--- vzic-output.c                       	(Original)
++++ vzic-output.c                               (Updated)
+@@ -1934,7 +1934,7 @@
+ 		 month + 1);
+       } else {
+ 	printf ("ERROR: %s: Couldn't output RRULE (day=%i) compatable with Outlook\n", CurrentZoneName, day_number);
+-	exit (1);
++	sprintf (buffer, "RRULE:FREQ=YEARLY");
+       }
+     } else {
+ 	sprintf (buffer, "RRULE:FREQ=YEARLY");
+@@ -2120,7 +2120,12 @@
+ 		 month + 1, WeekDays[day_weekday]);
+       } else {
+ 	printf ("ERROR: %s: Couldn't modify RRULE to be compatable with Outlook (day >= %i, month = %i)\n", CurrentZoneName, day_number, month + 1);
+-	exit (1);
++        sprintf (buffer,
++  	       "RRULE:FREQ=YEARLY;BYMONTH=%i;BYMONTHDAY=%i,%i,%i,%i,%i,%i,%i;BYDAY=%s",
++  	       month + 1,
++  	       day_number, day_number + 1, day_number + 2, day_number + 3,
++  	       day_number + 4, day_number + 5, day_number + 6,
++  	       WeekDays[day_weekday]);
+       }
+ 
+     } else {
