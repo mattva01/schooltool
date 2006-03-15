@@ -143,7 +143,7 @@ update-translations:
 	set -e; \
 	for domain in $(TRANSLATION_DOMAINS); do \
 	    for f in $(LOCALES)/*/LC_MESSAGES/$${domain}.po; do \
-		msgmerge -U $$f $(LOCALES)/$${domain}.pot ;\
+		msgmerge -qU $$f $(LOCALES)/$${domain}.pot ;\
 		msgfmt -o $${f%.po}.mo $$f;\
 	    done;\
 	done
