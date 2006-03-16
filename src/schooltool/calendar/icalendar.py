@@ -482,7 +482,7 @@ class ICalReader:
 
     def iterEvents(self):
         """Iterate over all VEVENT objects in an ICalendar file."""
-        iterator = RowParser.iterRow(self.file, self.charset)
+        iterator = RowParser.parse(self.file, self.charset)
 
         # Check that the stream begins with BEGIN:VCALENDAR
         try:
@@ -625,7 +625,7 @@ class RowParser(object):
             return (key, value, params)
 
     @staticmethod
-    def iterRow(file, charset='UTF-8'):
+    def parse(file, charset='UTF-8'):
         """A generator that returns one record at a time, as a tuple of
         (name, value, params).
         """
