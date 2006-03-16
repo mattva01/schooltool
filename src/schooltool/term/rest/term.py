@@ -30,7 +30,7 @@ from zope.interface import implements
 from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
 from zope.app.traversing.api import getPath
 
-from schooltool.calendar.icalendar import ICalReader
+from schooltool.calendar.icalendar import parse_icalendar
 from schooltool.common import parse_date
 from schooltool.xmlparsing import XMLDocument
 from schooltool.app.rest import View
@@ -137,8 +137,7 @@ class TermFileFactory(object):
     def parseText(self, data, name=None):
         first = last = None
         days = []
-        reader = ICalReader(StringIO(data))
-        for event in reader.iterEvents():
+        for event in parse_icalendar(StringIO(data)):
             summary = event.getOne('SUMMARY', '').lower()
             if summary not in ('school period', 'schoolday'):
                 continue # ignore boring events

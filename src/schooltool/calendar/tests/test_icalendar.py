@@ -533,6 +533,76 @@ class TestVEvent(unittest.TestCase):
                                           vevent.rdate_types, True)
 
 
+class TestRowParser(unittest.TestCase):
+
+    def test_iterRow(self):
+        from schooltool.calendar.icalendar import RowParser
+        file = StringIO("key1\n"
+                        " :value1\n"
+                        " \n"
+                        "key2\n"
+                        " ;VALUE=foo\n"
+                        " :value2\n"
+                        "key3;VALUE=bar:value3\n")
+        self.assertEqual(list(RowParser.iterRow(file)),
+                         [('KEY1', 'value1', {}),
+                          ('KEY2', 'value2', {'VALUE': 'FOO'}),
+                          ('KEY3', 'value3', {'VALUE': 'BAR'})])
+
+        file = StringIO("key1:value1\n"
+                        "key2;VALUE=foo:value2\n"
+                        "key3;VALUE=bar:value3\n")
+        self.assertEqual(list(RowParser.iterRow(file)),
+                         [('KEY1', 'value1', {}),
+                          ('KEY2', 'value2', {'VALUE': 'FOO'}),
+                          ('KEY3', 'value3', {'VALUE': 'BAR'})])
+
+        file = StringIO("key1:value:with:colons:in:it\n")
+        self.assertEqual(list(RowParser.iterRow(file)),
+                         [('KEY1', 'value:with:colons:in:it', {})])
+
+        file = StringIO("ke\r\n y1\n\t:value\r\n  1 \r\n .")
+        self.assertEqual(list(RowParser.iterRow(file)),
+                         [('KEY1', 'value 1 .', {})])
+
+        file = StringIO("key;param=\xe2\x98\xbb:\r\n"
+                        " value \xe2\x98\xbb\r\n")
+        self.assertEqual(list(RowParser.iterRow(file)),
+                         [("KEY", u"value \u263B", {'PARAM': u'\u263B'})])
+
+    def test_parseRow(self):
+        from schooltool.calendar.icalendar import RowParser
+        parseRow = RowParser._parseRow
+        self.assertEqual(parseRow("key:"), ("KEY", "", {}))
+        self.assertEqual(parseRow("key:value"), ("KEY", "value", {}))
+        self.assertEqual(parseRow("key:va:lu:e"), ("KEY", "va:lu:e", {}))
+        self.assertRaises(ICalParseError, parseRow, "key but no value")
+        self.assertRaises(ICalParseError, parseRow, ":value but no key")
+        self.assertRaises(ICalParseError, parseRow, "bad name:")
+
+        self.assertEqual(parseRow("key;param=:value"),
+                         ("KEY", "value", {'PARAM': ''}))
+        self.assertEqual(parseRow("key;param=pvalue:value"),
+                         ("KEY", "value", {'PARAM': 'PVALUE'}))
+        self.assertEqual(parseRow('key;param=pvalue;param2=value2:value'),
+                         ("KEY", "value", {'PARAM': 'PVALUE',
+                                           'PARAM2': 'VALUE2'}))
+        self.assertEqual(parseRow('key;param="pvalue":value'),
+                         ("KEY", "value", {'PARAM': 'pvalue'}))
+        self.assertEqual(parseRow('key;param=pvalue;param2="value2":value'),
+                         ("KEY", "value", {'PARAM': 'PVALUE',
+                                           'PARAM2': 'value2'}))
+        self.assertRaises(ICalParseError, parseRow, "k;:no param")
+        self.assertRaises(ICalParseError, parseRow, "k;a?=b:bad param")
+        self.assertRaises(ICalParseError, parseRow, "k;a=\":bad param")
+        self.assertRaises(ICalParseError, parseRow, "k;a=\"\177:bad param")
+        self.assertRaises(ICalParseError, parseRow, "k;a=\001:bad char")
+        self.assertEqual(parseRow("key;param=a,b,c:value"),
+                         ("KEY", "value", {'PARAM': ['A', 'B', 'C']}))
+        self.assertEqual(parseRow('key;param=a,"b,c",d:value'),
+                         ("KEY", "value", {'PARAM': ['A', 'b,c', 'D']}))
+
+
 class TestICalReader(unittest.TestCase):
 
     example_ical = dedent("""\
@@ -543,6 +613,22 @@ class TestICalReader(unittest.TestCase):
          :-//Mozilla.org/NONSGML Mozilla Calendar V1.0//EN
         METHOD
          :PUBLISH
+        BEGIN:VTIMEZONE
+        TZID:Europe/Berlin
+        LAST-MODIFIED:20060314T174500Z
+        BEGIN:STANDARD
+        DTSTART:20051030T010000
+        TZOFFSETTO:+0100
+        TZOFFSETFROM:+0000
+        TZNAME:CET
+        END:STANDARD
+        BEGIN:DAYLIGHT
+        DTSTART:20060326T020000
+        TZOFFSETTO:+0200
+        TZOFFSETFROM:+0100
+        TZNAME:CEST
+        END:DAYLIGHT
+        END:VTIMEZONE
         BEGIN:VEVENT
         UID
          :956630271
@@ -602,16 +688,17 @@ class TestICalReader(unittest.TestCase):
         DTSTART;VALUE=DATE:20031225
         SUMMARY:Christmas again!
         END:VEVENT
+
         END:VCALENDAR
         """)
 
     def test_iterEvents(self):
-        from schooltool.calendar.icalendar import ICalReader, ICalParseError
+        from schooltool.calendar.icalendar import parse_icalendar, ICalParseError
         file = StringIO(self.example_ical)
-        reader = ICalReader(file)
-        result = list(reader.iterEvents())
+        result = parse_icalendar(file)
         self.assertEqual(len(result), 3)
         vevent = result[0]
+
         self.assertEqual(vevent.getOne('x-mozilla-recur-default-units'),
                          'weeks')
         self.assertEqual(vevent.getOne('dtstart'), date(2003, 12, 25))
@@ -625,7 +712,7 @@ class TestICalReader(unittest.TestCase):
         self.assertEqual(vevent.getOne('dtstart'), date(2003, 12, 25))
         self.assertEqual(vevent.dtstart, date(2003, 12, 25))
 
-        reader = ICalReader(StringIO(dedent("""\
+        result = parse_icalendar(StringIO(dedent("""\
                     BEGIN:VCALENDAR
 
                     BEGIN:VEVENT
@@ -638,76 +725,75 @@ class TestICalReader(unittest.TestCase):
 
                     END:VCALENDAR
                     """)))
-        result = list(reader.iterEvents())
         self.assertEquals(len(result), 1)
         vevent = result[0]
         self.assert_(vevent.hasProp('uid'))
         self.assert_(vevent.hasProp('dtstart'))
         self.assert_(not vevent.hasProp('x-prop'))
 
-        reader = ICalReader(StringIO(dedent("""\
+        file = StringIO(dedent("""\
                     BEGIN:VCALENDAR
                     BEGIN:VEVENT
                     DTSTART;VALUE=DATE:20010203
                     END:VEVENT
                     END:VCALENDAR
-                    """)))
+                    """))
         # missing UID
-        self.assertRaises(ICalParseError, list, reader.iterEvents())
+        self.assertRaises(ICalParseError, parse_icalendar, file)
 
-        reader = ICalReader(StringIO(dedent("""\
+        file = StringIO(dedent("""\
                     BEGIN:VCALENDAR
                     BEGIN:VEVENT
                     DTSTART;VALUE=DATE:20010203
-                    """)))
-        self.assertRaises(ICalParseError, list, reader.iterEvents())
+                    """))
+        self.assertRaises(ICalParseError, parse_icalendar, file)
 
-        reader = ICalReader(StringIO(dedent("""\
+        file = StringIO(dedent("""\
                     BEGIN:VCALENDAR
                     BEGIN:VEVENT
                     DTSTART;VALUE=DATE:20010203
                     END:VCALENDAR
                     END:VEVENT
-                    """)))
-        self.assertRaises(ICalParseError, list, reader.iterEvents())
+                    """))
+        self.assertRaises(ICalParseError, parse_icalendar, file)
 
-        reader = ICalReader(StringIO(dedent("""\
+        file = StringIO(dedent("""\
                     BEGIN:VCALENDAR
                     END:VCALENDAR
                     X-PROP:foo
-                    """)))
-        self.assertRaises(ICalParseError, list, reader.iterEvents())
+                    """))
+        self.assertRaises(ICalParseError, parse_icalendar, file)
 
-        reader = ICalReader(StringIO(dedent("""\
+        file = StringIO(dedent("""\
                     BEGIN:VCALENDAR
                     END:VCALENDAR
                     BEGIN:VEVENT
                     END:VEVENT
-                    """)))
-        self.assertRaises(ICalParseError, list, reader.iterEvents())
+                    """))
+        self.assertRaises(ICalParseError, parse_icalendar, file)
 
-        reader = ICalReader(StringIO(dedent("""\
+        file = StringIO(dedent("""\
                     BEGIN:VCALENDAR
                     BEGIN:VEVENT
                     DTSTART;VALUE=DATE:20010203
                     END:VEVENT
                     END:VCALENDAR
                     END:UNIVERSE
-                    """)))
-        self.assertRaises(ICalParseError, list, reader.iterEvents())
+                    """))
+        self.assertRaises(ICalParseError, parse_icalendar, file)
 
-        reader = ICalReader(StringIO(dedent("""\
+        file = StringIO(dedent("""\
                     DTSTART;VALUE=DATE:20010203
-                    """)))
-        self.assertRaises(ICalParseError, list, reader.iterEvents())
+                    """))
+        self.assertRaises(ICalParseError, parse_icalendar, file)
 
-        reader = ICalReader(StringIO(dedent("""\
+        file = StringIO(dedent("""\
                     This is just plain text
-                    """)))
-        self.assertRaises(ICalParseError, list, reader.iterEvents())
+                    """))
+        self.assertRaises(ICalParseError, parse_icalendar, file)
 
-        reader = ICalReader(StringIO(""))
-        self.assertEquals(list(reader.iterEvents()), [])
+        file = StringIO("")
+        self.assertEquals(parse_icalendar(file), [])
 
 
 class TestRowParser(unittest.TestCase):
@@ -825,11 +911,14 @@ def doctest_ical_reader_empty_summary():
 
     """
 
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite())
     suite.addTest(doctest.DocTestSuite('schooltool.calendar.icalendar',
-                        optionflags=doctest.ELLIPSIS | doctest.REPORT_UDIFF))
+                        optionflags=doctest.ELLIPSIS | doctest.REPORT_UDIFF |
+                                    doctest.NORMALIZE_WHITESPACE))
+    suite.addTest(unittest.makeSuite(TestRowParser))
     suite.addTest(unittest.makeSuite(TestParseDateTime))
     suite.addTest(unittest.makeSuite(TestPeriod))
     suite.addTest(unittest.makeSuite(TestVEvent))

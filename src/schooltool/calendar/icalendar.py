@@ -28,6 +28,7 @@ Outlook meeting planner.
 
 If you have a calendar, you can convert it to an iCalendar file like this:
 
+    >>> from pytz import timezone
     >>> from datetime import datetime, timedelta
     >>> from schooltool.calendar.simple import ImmutableCalendar
     >>> from schooltool.calendar.simple import SimpleCalendarEvent
@@ -68,12 +69,15 @@ There is some trickery to make empty calendars work:
 $Id$
 """
 
+import pytz
 import datetime
 import calendar
 import re
 from cStringIO import StringIO
 from sets import Set
+
 from schooltool.calendar.simple import SimpleCalendarEvent
+from schooltool.calendar.vcal_dict import timezone_map
 
 
 EMPTY_CALENDAR_PLACEHOLDER = 'empty-calendar-placeholder@schooltool.org'
@@ -370,6 +374,7 @@ def ical_duration(value):
         'PT22S'
         >>> ical_duration(timedelta(0, 3622))
         'PT1H0M22S'
+
     """
     sign = ""
     if value.days < 0:
@@ -406,8 +411,8 @@ def read_icalendar(icalendar_text, charset='UTF-8'):
     if not hasattr(icalendar_text, 'read'):
         # It is not a file-like object -- let's assume it is a string
         icalendar_text = StringIO(icalendar_text)
-    reader = ICalReader(icalendar_text, charset)
-    for vevent in reader.iterEvents():
+
+    for vevent in parse_icalendar(icalendar_text, charset):
         if vevent.uid == EMPTY_CALENDAR_PLACEHOLDER:
             continue # Ignore empty calendar placeholder "event"
 
@@ -435,102 +440,6 @@ def read_icalendar(icalendar_text, charset='UTF-8'):
 ical_weekdays = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']
 
 
-class ICalReader:
-    """An object which reads in an iCalendar file.
-
-    The `iterEvents` method returns an iterator over all VEvent objects
-    corresponding to the events in the iCalendar file.
-
-    Short grammar of iCalendar files (RFC 2445 is the full spec):
-
-      contentline        = name *(";" param ) ":" value CRLF
-        ; content line first must be unfolded by replacing CRLF followed by a
-        ; single WSP with an empty string
-      name               = x-name / iana-token
-      x-name             = "X-" [vendorid "-"] 1*(ALPHA / DIGIT / "-")
-      iana-token         = 1*(ALPHA / DIGIT / "-")
-      vendorid           = 3*(ALPHA / DIGIT)
-      param              = param-name "=" param-value *("," param-value)
-      param-name         = iana-token / x-token
-      param-value        = paramtext / quoted-string
-      paramtext          = *SAFE-CHAR
-      value              = *VALUE-CHAR
-      quoted-string      = DQUOTE *QSAFE-CHAR DQUOTE
-
-      NON-US-ASCII       = %x80-F8
-      QSAFE-CHAR         = WSP / %x21 / %x23-7E / NON-US-ASCII
-                         ; Any character except CTLs and DQUOTE
-      SAFE-CHAR          = WSP / %x21 / %x23-2B / %x2D-39 / %x3C-7E
-                          / NON-US-ASCII
-                         ; Any character except CTLs, DQUOTE, ";", ":", ","
-      VALUE-CHAR         = WSP / %x21-7E / NON-US-ASCII  ; anything except CTLs
-      CR                 = %x0D
-      LF                 = %x0A
-      CRLF               = CR LF
-      CTL                = %x00-08 / %x0A-1F / %x7F
-      ALPHA              = %x41-5A / %x61-7A             ; A-Z / a-z
-      DIGIT              = %x30-39                       ; 0-9
-      DQUOTE             = %x22                          ; Quotation Mark
-      WSP                = SPACE / HTAB
-      SPACE              = %x20
-      HTAB               = %x09
-    """
-
-    def __init__(self, file, charset='UTF-8'):
-        self.file = file
-        self.charset = charset
-
-    def iterEvents(self):
-        """Iterate over all VEVENT objects in an ICalendar file."""
-        iterator = RowParser.parse(self.file, self.charset)
-
-        # Check that the stream begins with BEGIN:VCALENDAR
-        try:
-            key, value, params = iterator.next()
-            if (key, value, params) != ('BEGIN', 'VCALENDAR', {}):
-                raise ICalParseError('This is not iCalendar')
-        except StopIteration:
-            # The file is empty.  Mozilla produces a 0-length file when
-            # publishing an empty calendar.  Let's accept it as a valid
-            # calendar that has no events.  I'm not sure if a 0-length
-            # file is a valid text/calendar object according to RFC 2445.
-            raise
-        component_stack = ['VCALENDAR']
-
-        # Extract all VEVENT components
-        obj = None
-        for key, value, params in iterator:
-            if key == "BEGIN":
-                if obj is not None:
-                    # Subcomponents terminate the processing of a VEVENT
-                    # component.  We can get away with this now, because we're
-                    # not interested in alarms and RFC 2445 specifies, that all
-                    # properties inside a VEVENT component ought to precede any
-                    # VALARM subcomponents.
-                    obj.validate()
-                    yield obj
-                    obj = None
-                if not component_stack and value != "VCALENDAR":
-                    raise ICalParseError("Text outside VCALENDAR component")
-                if value == "VEVENT":
-                    obj = VEvent()
-                component_stack.append(value)
-            elif key == "END":
-                if obj is not None and value == "VEVENT":
-                    obj.validate()
-                    yield obj
-                    obj = None
-                if not component_stack or component_stack[-1] != value:
-                    raise ICalParseError("Mismatched BEGIN/END")
-                component_stack.pop()
-            elif obj is not None:
-                obj.add(key, value, params)
-            elif not component_stack:
-                raise ICalParseError("Text outside VCALENDAR component")
-        if component_stack:
-            raise ICalParseError("Unterminated components")
-
-
 class RowParser(object):
 
     @staticmethod
@@ -553,6 +462,7 @@ class RowParser(object):
         ('FOO', 'bar', {})
         >>> RowParser._parseRow('foo;value=bar:BAZFOO')
         ('FOO', 'BAZFOO', {'VALUE': 'BAR'})
+
         """
 
         it = iter(record_str)
@@ -651,6 +561,206 @@ class RowParser(object):
             row = "".join(record).decode(charset)
             yield RowParser._parseRow(row)
 
+
+def parse_block(rows):
+    """Read a block from BEGIN until END.
+
+    Returns a dict with sub blocks and a dict of properties.
+
+        >>> parse_block([])
+        ([], {})
+
+        >>> lines = ["BEGIN:VTIMEZONE",
+        ...          "SOME:Property",
+        ...          "END:VTIMEZONE"]
+        >>> parse_block(RowParser.parse(lines))
+        ([], {u'VTIMEZONE': [[(u'BEGIN', u'VTIMEZONE', {}),
+                              (u'SOME', u'Property', {}),
+                              (u'END', u'VTIMEZONE', {})]]})
+
+        >>> lines = ["BEGIN:VTIMEZONE",
+        ...          "SOME:Property",
+        ...          "END:VTIMEZONE",
+        ...          "PROP1: VAL1",
+        ...          "PROP2:",
+        ...          " VAL2",
+        ...          "prop3;value=bar:val3"]
+        >>> props, blocks = parse_block(RowParser.parse(lines))
+        >>> props
+        [(u'PROP1', u' VAL1', {}),
+         (u'PROP2', u'VAL2', {}),
+         (u'PROP3', u'val3', {u'VALUE': u'BAR'})]
+        >>> blocks
+        {u'VTIMEZONE': [[(u'BEGIN', u'VTIMEZONE', {}),
+                         (u'SOME', u'Property', {}),
+                         (u'END', u'VTIMEZONE', {})]]}
+
+        >>> lines = ["BEGIN:VTIMEZONE",
+        ...          "SOME:Property",
+        ...          "BEGIN:STANDARD",
+        ...          "OTHER:Property",
+        ...          "END:STANDARD",
+        ...          "END:VTIMEZONE",
+        ...          "BEGIN:VTIMEZONE",
+        ...          "SOME:Property",
+        ...          "BEGIN:DAYLIGHT",
+        ...          "ANOTHER:Property",
+        ...          "END:DAYLIGHT",
+        ...          "END:VTIMEZONE",
+        ...          "PROP1: VAL1",
+        ...          "PROP2:",
+        ...          " VAL2",
+        ...          "prop3;value=bar:val3"]
+        >>> props, blocks = parse_block(RowParser.parse(lines))
+        >>> props
+        [(u'PROP1', u' VAL1', {}),
+         (u'PROP2', u'VAL2', {}),
+         (u'PROP3', u'val3', {u'VALUE': u'BAR'})]
+        >>> blocks
+        {u'VTIMEZONE': [[(u'BEGIN', u'VTIMEZONE', {}),
+                         (u'SOME', u'Property', {}),
+                         (u'BEGIN', u'STANDARD', {}),
+                         (u'OTHER', u'Property', {}),
+                         (u'END', u'STANDARD', {}),
+                         (u'END', u'VTIMEZONE', {})],
+                        [(u'BEGIN', u'VTIMEZONE', {}),
+                         (u'SOME', u'Property', {}),
+                         (u'BEGIN', u'DAYLIGHT', {}),
+                         (u'ANOTHER', u'Property', {}),
+                         (u'END', u'DAYLIGHT', {}),
+                         (u'END', u'VTIMEZONE', {})]]}
+
+        >>> lines = ["BEGIN:VCALENDAR",
+        ...          "BEGIN:VEVENT",
+        ...          "DTSTART;VALUE=DATE:20010203"]
+        >>> props, blocks = parse_block(RowParser.parse(lines))
+        Traceback (most recent call last):
+        ...
+        ICalParseError: Mismatched BEGIN/END
+
+    """
+    blocks = {}
+    props = []
+    parse_stack = []
+    block = []
+    for key, value, params in rows:
+        if key == "BEGIN":
+            parse_stack.append(value)
+            # if this is the first time we encounter this block in
+            # top level
+            if (len(parse_stack) == 1 and
+                value not in blocks.keys()):
+                blocks[value] = []
+        if parse_stack:
+            block.append((key, value, params))
+        else:
+            props.append((key, value, params))
+        if key == "END":
+            if not parse_stack or parse_stack[-1] != value:
+                raise ICalParseError("Mismatched BEGIN/END")
+            if len(parse_stack) == 1:
+                blocks[parse_stack[0]].append(block)
+                block = []
+            parse_stack.pop(-1)
+    if parse_stack:
+        raise ICalParseError("Mismatched BEGIN/END")
+    return props, blocks
+
+
+class VCalendarCollection(object):
+
+    def __init__(self, vcalendars):
+        self.vcalendars = vcalendars
+
+    @staticmethod
+    def parse(rows):
+        """Parse a list of rows into a VCalendarCollection object."""
+        props, blocks = parse_block(rows)
+
+        if props:
+            raise ICalParseError("Text outside VCALENDAR component")
+
+        # Handle empty ics files
+        if not blocks:
+            vcalendars = []
+        elif 'VCALENDAR' not in blocks.keys():
+            raise ICalParseError('This is not iCalendar')
+        elif blocks.keys() != ['VCALENDAR']:
+            raise ICalParseError("Text outside VCALENDAR component")
+        else:
+            vcalendars = [VCalendar.parse(block)
+                          for block in blocks['VCALENDAR']]
+        return VCalendarCollection(vcalendars)
+
+
+class VCalendar(object):
+
+    def __init__(self, events, timezones):
+        self.events = events
+        self.timezones = timezones
+
+    @staticmethod
+    def parse(rows):
+        """Parse a list of rows into a VCalendar object."""
+        props, blocks = parse_block(rows[1:-1])
+
+        events = []
+        if 'VEVENT' in blocks.keys():
+            events = [VEvent.parse(block)
+                      for block in blocks['VEVENT']]
+        return VCalendar(events, [])
+
+
+def parse_icalendar(file, charset='UTF-8'):
+    """A function that reads in an iCalendar file.
+
+    Returns a list of all VEvent objects corresponding to the events
+    in the iCalendar file.
+
+    Short grammar of iCalendar files (RFC 2445 is the full spec):
+
+      contentline        = name *(";" param ) ":" value CRLF
+        ; content line first must be unfolded by replacing CRLF followed by a
+        ; single WSP with an empty string
+      name               = x-name / iana-token
+      x-name             = "X-" [vendorid "-"] 1*(ALPHA / DIGIT / "-")
+      iana-token         = 1*(ALPHA / DIGIT / "-")
+      vendorid           = 3*(ALPHA / DIGIT)
+      param              = param-name "=" param-value *("," param-value)
+      param-name         = iana-token / x-token
+      param-value        = paramtext / quoted-string
+      paramtext          = *SAFE-CHAR
+      value              = *VALUE-CHAR
+      quoted-string      = DQUOTE *QSAFE-CHAR DQUOTE
+
+      NON-US-ASCII       = %x80-F8
+      QSAFE-CHAR         = WSP / %x21 / %x23-7E / NON-US-ASCII
+                         ; Any character except CTLs and DQUOTE
+      SAFE-CHAR          = WSP / %x21 / %x23-2B / %x2D-39 / %x3C-7E
+                          / NON-US-ASCII
+                         ; Any character except CTLs, DQUOTE, ";", ":", ","
+      VALUE-CHAR         = WSP / %x21-7E / NON-US-ASCII  ; anything except CTLs
+      CR                 = %x0D
+      LF                 = %x0A
+      CRLF               = CR LF
+      CTL                = %x00-08 / %x0A-1F / %x7F
+      ALPHA              = %x41-5A / %x61-7A             ; A-Z / a-z
+      DIGIT              = %x30-39                       ; 0-9
+      DQUOTE             = %x22                          ; Quotation Mark
+      WSP                = SPACE / HTAB
+      SPACE              = %x20
+      HTAB               = %x09
+
+    """
+
+    rows = RowParser.parse(file, charset)
+    vccol = VCalendarCollection.parse(rows)
+
+    events = []
+    for calendar in vccol.vcalendars:
+        for event in calendar.events:
+            events.append(event)
+    return events
 
 def parse_text(value):
     r"""Parse iCalendar TEXT value.
@@ -1004,7 +1114,7 @@ def parse_recurrence_rule(value):
     return rule.replace(interval=interval, count=count, until=until)
 
 
-class VEvent:
+class VEvent(object):
     """iCalendar event.
 
     Life cycle: when a VEvent is created, a number of properties should be
@@ -1261,8 +1371,20 @@ class VEvent:
         for d in dates:
             yield d
 
+    @staticmethod
+    def parse(rows):
+        """Parse a list of rows into a VEvent object."""
+        vevent = VEvent()
+        props, blocks = parse_block(rows[1:-1])
 
-class Period:
+        for key, value, params in props:
+            vevent.add(key, value, params)
+
+        vevent.validate()
+        return vevent
+
+
+class Period(object):
     """A period of time."""
 
     def __init__(self, start, end_or_duration):
