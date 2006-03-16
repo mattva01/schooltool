@@ -480,6 +480,60 @@ class ICalReader:
         self.file = file
         self.charset = charset
 
+    def iterEvents(self):
+        """Iterate over all VEVENT objects in an ICalendar file."""
+        iterator = RowParser.iterRow(self.file, self.charset)
+
+        # Check that the stream begins with BEGIN:VCALENDAR
+        try:
+            key, value, params = iterator.next()
+            if (key, value, params) != ('BEGIN', 'VCALENDAR', {}):
+                raise ICalParseError('This is not iCalendar')
+        except StopIteration:
+            # The file is empty.  Mozilla produces a 0-length file when
+            # publishing an empty calendar.  Let's accept it as a valid
+            # calendar that has no events.  I'm not sure if a 0-length
+            # file is a valid text/calendar object according to RFC 2445.
+            raise
+        component_stack = ['VCALENDAR']
+
+        # Extract all VEVENT components
+        obj = None
+        for key, value, params in iterator:
+            if key == "BEGIN":
+                if obj is not None:
+                    # Subcomponents terminate the processing of a VEVENT
+                    # component.  We can get away with this now, because we're
+                    # not interested in alarms and RFC 2445 specifies, that all
+                    # properties inside a VEVENT component ought to precede any
+                    # VALARM subcomponents.
+                    obj.validate()
+                    yield obj
+                    obj = None
+                if not component_stack and value != "VCALENDAR":
+                    raise ICalParseError("Text outside VCALENDAR component")
+                if value == "VEVENT":
+                    obj = VEvent()
+                component_stack.append(value)
+            elif key == "END":
+                if obj is not None and value == "VEVENT":
+                    obj.validate()
+                    yield obj
+                    obj = None
+                if not component_stack or component_stack[-1] != value:
+                    raise ICalParseError("Mismatched BEGIN/END")
+                component_stack.pop()
+            elif obj is not None:
+                obj.add(key, value, params)
+            elif not component_stack:
+                raise ICalParseError("Text outside VCALENDAR component")
+        if component_stack:
+            raise ICalParseError("Unterminated components")
+
+
+class RowParser(object):
+
+    @staticmethod
     def _parseRow(record_str):
         """Parse a single content line.
 
@@ -495,9 +549,9 @@ class ICalReader:
 
         Raises ICalParseError on syntax errors.
 
-        >>> ICalReader._parseRow('foo:bar')
+        >>> RowParser._parseRow('foo:bar')
         ('FOO', 'bar', {})
-        >>> ICalReader._parseRow('foo;value=bar:BAZFOO')
+        >>> RowParser._parseRow('foo;value=bar:BAZFOO')
         ('FOO', 'BAZFOO', {'VALUE': 'BAR'})
         """
 
@@ -570,21 +624,20 @@ class ICalReader:
         else:
             return (key, value, params)
 
-    _parseRow = staticmethod(_parseRow)
-
-    def _iterRow(self):
+    @staticmethod
+    def iterRow(file, charset='UTF-8'):
         """A generator that returns one record at a time, as a tuple of
         (name, value, params).
         """
         record = []
-        for line in self.file:
+        for line in file:
             if not line.strip():
                 continue
             if line[0] in '\t ':
                 line = line[1:]
             elif record:
-                row = "".join(record).decode(self.charset)
-                yield self._parseRow(row)
+                row = "".join(record).decode(charset)
+                yield RowParser._parseRow(row)
                 record = []
             if line.endswith('\r\n'):
                 record.append(line[:-2])
@@ -595,58 +648,8 @@ class ICalReader:
                 # strictly speaking this is a violation of RFC 2445
                 record.append(line)
         if record:
-            row = "".join(record).decode(self.charset)
-            yield self._parseRow(row)
-
-    def iterEvents(self):
-        """Iterate over all VEVENT objects in an ICalendar file."""
-        iterator = self._iterRow()
-
-        # Check that the stream begins with BEGIN:VCALENDAR
-        try:
-            key, value, params = iterator.next()
-            if (key, value, params) != ('BEGIN', 'VCALENDAR', {}):
-                raise ICalParseError('This is not iCalendar')
-        except StopIteration:
-            # The file is empty.  Mozilla produces a 0-length file when
-            # publishing an empty calendar.  Let's accept it as a valid
-            # calendar that has no events.  I'm not sure if a 0-length
-            # file is a valid text/calendar object according to RFC 2445.
-            raise
-        component_stack = ['VCALENDAR']
-
-        # Extract all VEVENT components
-        obj = None
-        for key, value, params in iterator:
-            if key == "BEGIN":
-                if obj is not None:
-                    # Subcomponents terminate the processing of a VEVENT
-                    # component.  We can get away with this now, because we're
-                    # not interested in alarms and RFC 2445 specifies, that all
-                    # properties inside a VEVENT component ought to precede any
-                    # VALARM subcomponents.
-                    obj.validate()
-                    yield obj
-                    obj = None
-                if not component_stack and value != "VCALENDAR":
-                    raise ICalParseError("Text outside VCALENDAR component")
-                if value == "VEVENT":
-                    obj = VEvent()
-                component_stack.append(value)
-            elif key == "END":
-                if obj is not None and value == "VEVENT":
-                    obj.validate()
-                    yield obj
-                    obj = None
-                if not component_stack or component_stack[-1] != value:
-                    raise ICalParseError("Mismatched BEGIN/END")
-                component_stack.pop()
-            elif obj is not None:
-                obj.add(key, value, params)
-            elif not component_stack:
-                raise ICalParseError("Text outside VCALENDAR component")
-        if component_stack:
-            raise ICalParseError("Unterminated components")
+            row = "".join(record).decode(charset)
+            yield RowParser._parseRow(row)
 
 
 def parse_text(value):

@@ -709,8 +709,11 @@ class TestICalReader(unittest.TestCase):
         reader = ICalReader(StringIO(""))
         self.assertEquals(list(reader.iterEvents()), [])
 
+
+class TestRowParser(unittest.TestCase):
+
     def test_iterRow(self):
-        from schooltool.calendar.icalendar import ICalReader
+        from schooltool.calendar.icalendar import RowParser
         file = StringIO("key1\n"
                         " :value1\n"
                         " \n"
@@ -718,8 +721,7 @@ class TestICalReader(unittest.TestCase):
                         " ;VALUE=foo\n"
                         " :value2\n"
                         "key3;VALUE=bar:value3\n")
-        reader = ICalReader(file)
-        self.assertEqual(list(reader._iterRow()),
+        self.assertEqual(list(RowParser.iterRow(file)),
                          [('KEY1', 'value1', {}),
                           ('KEY2', 'value2', {'VALUE': 'FOO'}),
                           ('KEY3', 'value3', {'VALUE': 'BAR'})])
@@ -727,29 +729,27 @@ class TestICalReader(unittest.TestCase):
         file = StringIO("key1:value1\n"
                         "key2;VALUE=foo:value2\n"
                         "key3;VALUE=bar:value3\n")
-        reader = ICalReader(file)
-        self.assertEqual(list(reader._iterRow()),
+        self.assertEqual(list(RowParser.iterRow(file)),
                          [('KEY1', 'value1', {}),
                           ('KEY2', 'value2', {'VALUE': 'FOO'}),
                           ('KEY3', 'value3', {'VALUE': 'BAR'})])
 
         file = StringIO("key1:value:with:colons:in:it\n")
-        reader = ICalReader(file)
-        self.assertEqual(list(reader._iterRow()),
+        self.assertEqual(list(RowParser.iterRow(file)),
                          [('KEY1', 'value:with:colons:in:it', {})])
 
-        reader = ICalReader(StringIO("ke\r\n y1\n\t:value\r\n  1 \r\n ."))
-        self.assertEqual(list(reader._iterRow()),
+        file = StringIO("ke\r\n y1\n\t:value\r\n  1 \r\n .")
+        self.assertEqual(list(RowParser.iterRow(file)),
                          [('KEY1', 'value 1 .', {})])
 
-        reader = ICalReader(StringIO("key;param=\xe2\x98\xbb:\r\n"
-                                     " value \xe2\x98\xbb\r\n"))
-        self.assertEqual(list(reader._iterRow()),
+        file = StringIO("key;param=\xe2\x98\xbb:\r\n"
+                        " value \xe2\x98\xbb\r\n")
+        self.assertEqual(list(RowParser.iterRow(file)),
                          [("KEY", u"value \u263B", {'PARAM': u'\u263B'})])
 
     def test_parseRow(self):
-        from schooltool.calendar.icalendar import ICalReader, ICalParseError
-        parseRow = ICalReader._parseRow
+        from schooltool.calendar.icalendar import RowParser
+        parseRow = RowParser._parseRow
         self.assertEqual(parseRow("key:"), ("KEY", "", {}))
         self.assertEqual(parseRow("key:value"), ("KEY", "value", {}))
         self.assertEqual(parseRow("key:va:lu:e"), ("KEY", "va:lu:e", {}))
