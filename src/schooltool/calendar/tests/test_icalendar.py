@@ -748,7 +748,7 @@ class TestRowParser(unittest.TestCase):
                          [("KEY", u"value \u263B", {'PARAM': u'\u263B'})])
 
     def test_parseRow(self):
-        from schooltool.calendar.icalendar import RowParser
+        from schooltool.calendar.icalendar import RowParser, ICalParseError
         parseRow = RowParser._parseRow
         self.assertEqual(parseRow("key:"), ("KEY", "", {}))
         self.assertEqual(parseRow("key:value"), ("KEY", "value", {}))
@@ -834,6 +834,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestPeriod))
     suite.addTest(unittest.makeSuite(TestVEvent))
     suite.addTest(unittest.makeSuite(TestICalReader))
+    suite.addTest(unittest.makeSuite(TestRowParser))
     return suite
 
 if __name__ == '__main__':
