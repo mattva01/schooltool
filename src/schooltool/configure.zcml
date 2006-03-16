@@ -31,8 +31,8 @@
     <include package="zope.app.preference" />
     <include package="zope.app.renderer" />
     <include package="zope.app.tree" />
-
     <include package=".sampledata" />
+    <include package=".setupdata" />
   </configure>
 
   <!-- Translations -->
