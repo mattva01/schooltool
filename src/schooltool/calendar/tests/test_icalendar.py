@@ -903,12 +903,12 @@ def doctest_VTimezone():
         >>> vtz.tznames
         [u'CET']
 
-    In Evolution calendars X-LIC-LOCATION is much more useful than TZID,
-    so the former overrides the latter.
+    In Evolution calendars X-LIC-LOCATION is very useful for mapping to
+    actual pytz timezones, so we store it too if we find it:
 
         >>> example_vtimezone = dedent('''
         ... BEGIN:VTIMEZONE
-        ... TZID:Evolution-blahblah@@obscured_Europe/Berlin
+        ... TZID:Evolution-blahblah@@obscure_Europe/Berlin
         ... X-LIC-LOCATION:Europe/Berlin
         ... LAST-MODIFIED:20060314T174500Z
         ... BEGIN:STANDARD
@@ -922,27 +922,8 @@ def doctest_VTimezone():
         >>> rows = RowParser.parse(example_vtimezone.splitlines())
         >>> vtz = VTimezone.parse(rows)
         >>> vtz.tzid
-        u'Europe/Berlin'
-
-    Just to make sure that everything works if X-LIC-LOCATION comes before
-    TZID:
-
-        >>> example_vtimezone = dedent('''
-        ... BEGIN:VTIMEZONE
-        ... X-LIC-LOCATION:Europe/Berlin
-        ... TZID:Evolution-blahblah@@obscured_Europe/Berlin
-        ... LAST-MODIFIED:20060314T174500Z
-        ... BEGIN:STANDARD
-        ... DTSTART:20051030T010000
-        ... TZOFFSETTO:+0100
-        ... TZOFFSETFROM:+0000
-        ... TZNAME:CET
-        ... END:STANDARD
-        ... END:VTIMEZONE
-        ... ''')
-        >>> rows = RowParser.parse(example_vtimezone.splitlines())
-        >>> vtz = VTimezone.parse(rows)
-        >>> vtz.tzid
+        u'Evolution-blahblah@@obscure_Europe/Berlin'
+        >>> vtz.x_lic_location
         u'Europe/Berlin'
 
     """

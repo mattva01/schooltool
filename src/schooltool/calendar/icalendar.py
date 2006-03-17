@@ -713,9 +713,10 @@ class VCalendar(object):
 
 class VTimezone(object):
 
-    def __init__(self, tzid, tznames):
+    def __init__(self, tzid, tznames, x_lic_location=None):
         self.tzid = tzid
         self.tznames = tznames
+        self.x_lic_location = x_lic_location
 
     @staticmethod
     def parse(rows):
@@ -724,13 +725,12 @@ class VTimezone(object):
         props, blocks = parse_block(rows[1:-1])
 
         tzid = None
+        x_lic_location = None
         for key, value, params in props:
             if key == 'TZID':
                 tzid = value
             elif key == 'X-LIC-LOCATION':
-                # In Evolution calendars TZID is not useful.
-                tzid = value
-                break
+                x_lic_location = value
         if not tzid:
             raise ICalParseError("Missing TZID in VTIMEZONE block")
 
@@ -742,7 +742,7 @@ class VTimezone(object):
         if not tznames:
             raise ICalParseError("Missing STANDARD section in VTIMEZONE block")
 
-        return VTimezone(tzid, tznames)
+        return VTimezone(tzid, tznames, x_lic_location=x_lic_location)
 
 
 def parse_icalendar(file, charset='UTF-8'):
