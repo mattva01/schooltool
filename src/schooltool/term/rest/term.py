@@ -51,8 +51,6 @@ class TermFileFactory(object):
     implements(IFileFactory)
     adapts(ITermContainer)
 
-    complex_prop_names = ('RRULE', 'RDATE', 'EXRULE', 'EXDATE')
-
     _dow_map = {"Monday": 0, "Tuesday": 1, "Wednesday": 2, "Thursday": 3,
                 "Friday": 4, "Saturday": 5, "Sunday": 6}
 
@@ -138,17 +136,14 @@ class TermFileFactory(object):
         first = last = None
         days = []
         for event in parse_icalendar(StringIO(data)):
-            summary = event.getOne('SUMMARY', '').lower()
+            summary = event.summary.lower()
             if summary not in ('school period', 'schoolday'):
                 continue # ignore boring events
 
             if not event.all_day_event:
                 raise RestError("All-day event should be used")
 
-            has_complex_props = reduce(operator.or_,
-                                  map(event.hasProp, self.complex_prop_names))
-
-            if has_complex_props:
+            if event.rrule or event.rdates or event.exdates:
                 raise RestError("Repeating events/exceptions not yet supported")
 
             if summary == 'school period':
@@ -158,7 +153,7 @@ class TermFileFactory(object):
                 else:
                     first, last = event.dtstart, event.dtend
             elif summary == 'schoolday':
-                if event.duration != datetime.date.resolution:
+                if event.dtend - event.dtstart != datetime.date.resolution:
                     raise RestError("Schoolday longer than one day")
                 days.append(event.dtstart)
         else:
