@@ -866,6 +866,171 @@ class TestRowParser(unittest.TestCase):
                          ("KEY", "value", {'PARAM': ['A', 'b,c', 'D']}))
 
 
+def doctest_VTimezone():
+    r"""Test for VTimezone.
+
+        >>> from schooltool.calendar.icalendar import VTimezone, RowParser
+        >>> tz = VTimezone('SchoolTool-Europe/Vilnius', ['foo'])
+        >>> tz.tzid
+        'SchoolTool-Europe/Vilnius'
+        >>> tz.tznames
+        ['foo']
+
+        >>> example_vtimezone = dedent('''
+        ... BEGIN:VTIMEZONE
+        ... TZID:Europe/Berlin
+        ... LAST-MODIFIED:20060314T174500Z
+        ... BEGIN:STANDARD
+        ... DTSTART:20051030T010000
+        ... TZOFFSETTO:+0100
+        ... TZOFFSETFROM:+0000
+        ... TZNAME:CET
+        ... END:STANDARD
+        ... BEGIN:DAYLIGHT
+        ... DTSTART:20060326T020000
+        ... TZOFFSETTO:+0200
+        ... TZOFFSETFROM:+0100
+        ... TZNAME:CEST
+        ... END:DAYLIGHT
+        ... END:VTIMEZONE
+        ... ''')
+
+        >>> rows = RowParser.parse(example_vtimezone.splitlines())
+        >>> vtz = VTimezone.parse(rows)
+
+        >>> vtz.tzid
+        u'Europe/Berlin'
+        >>> vtz.tznames
+        [u'CET']
+
+    In Evolution calendars X-LIC-LOCATION is much more useful than TZID,
+    so the former overrides the latter.
+
+        >>> example_vtimezone = dedent('''
+        ... BEGIN:VTIMEZONE
+        ... TZID:Evolution-blahblah@@obscured_Europe/Berlin
+        ... X-LIC-LOCATION:Europe/Berlin
+        ... LAST-MODIFIED:20060314T174500Z
+        ... BEGIN:STANDARD
+        ... DTSTART:20051030T010000
+        ... TZOFFSETTO:+0100
+        ... TZOFFSETFROM:+0000
+        ... TZNAME:CET
+        ... END:STANDARD
+        ... END:VTIMEZONE
+        ... ''')
+        >>> rows = RowParser.parse(example_vtimezone.splitlines())
+        >>> vtz = VTimezone.parse(rows)
+        >>> vtz.tzid
+        u'Europe/Berlin'
+
+    Just to make sure that everything works if X-LIC-LOCATION comes before
+    TZID:
+
+        >>> example_vtimezone = dedent('''
+        ... BEGIN:VTIMEZONE
+        ... X-LIC-LOCATION:Europe/Berlin
+        ... TZID:Evolution-blahblah@@obscured_Europe/Berlin
+        ... LAST-MODIFIED:20060314T174500Z
+        ... BEGIN:STANDARD
+        ... DTSTART:20051030T010000
+        ... TZOFFSETTO:+0100
+        ... TZOFFSETFROM:+0000
+        ... TZNAME:CET
+        ... END:STANDARD
+        ... END:VTIMEZONE
+        ... ''')
+        >>> rows = RowParser.parse(example_vtimezone.splitlines())
+        >>> vtz = VTimezone.parse(rows)
+        >>> vtz.tzid
+        u'Europe/Berlin'
+
+    """
+
+
+def doctest_VTimezone_errors():
+    r"""Test for VTimezone error handling.
+
+        >>> from schooltool.calendar.icalendar import VTimezone, RowParser
+
+    First, let's omit the timezone ID:
+
+        >>> example_vtimezone = dedent('''
+        ... BEGIN:VTIMEZONE
+        ... LAST-MODIFIED:20060314T174500Z
+        ... BEGIN:STANDARD
+        ... DTSTART:20051030T010000
+        ... TZOFFSETTO:+0100
+        ... TZOFFSETFROM:+0000
+        ... TZNAME:CET
+        ... END:STANDARD
+        ... END:VTIMEZONE
+        ... ''')
+        >>> rows = RowParser.parse(example_vtimezone.splitlines())
+        >>> VTimezone.parse(rows)
+        Traceback (most recent call last):
+            ...
+        ICalParseError: Missing TZID in VTIMEZONE block
+
+    Then omit the STANDARD section:
+
+        >>> example_vtimezone = dedent('''
+        ... BEGIN:VTIMEZONE
+        ... TZID:Europe/Berlin
+        ... LAST-MODIFIED:20060314T174500Z
+        ... END:VTIMEZONE
+        ... ''')
+        >>> rows = RowParser.parse(example_vtimezone.splitlines())
+        >>> VTimezone.parse(rows)
+        Traceback (most recent call last):
+            ...
+        ICalParseError: Missing STANDARD section in VTIMEZONE block
+
+    """
+
+
+def doctest_VCalendar():
+    """Test for VCalendar.
+
+        >>> from schooltool.calendar.icalendar import VCalendar, RowParser
+        >>> vcal = VCalendar(['event1'], ['timezone2'])
+        >>> vcal.events
+        ['event1']
+        >>> vcal.timezones
+        ['timezone2']
+
+    Now we will check the parser
+
+        >>> example_ical = dedent('''
+        ... BEGIN:VCALENDAR
+        ... VERSION:2.0
+        ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        ...
+        ... BEGIN:VTIMEZONE
+        ... TZID:Europe/Berlin
+        ... BEGIN:STANDARD
+        ... TZNAME:CET
+        ... END:STANDARD
+        ... END:VTIMEZONE
+        ...
+        ... BEGIN:VEVENT
+        ... UID:some-random-uid@example.com
+        ... DTSTART:20050226T160000
+        ... DURATION:PT6H
+        ... DTSTAMP:20050203T150000
+        ... END:VEVENT
+        ... END:VCALENDAR
+        ... ''')
+        >>> rows = list(RowParser.parse(example_ical.splitlines()))
+        >>> vcal = VCalendar.parse(rows)
+        >>> vcal.timezones
+        [<schooltool.calendar.icalendar.VTimezone object at ...>]
+        >>> vcal.events
+        [<schooltool.calendar.icalendar.VEvent object at ...>]
+
+    """
+
+
 def doctest_ical_reader_empty_summary():
     r"""Regression test for read_icalendar
 
@@ -914,7 +1079,9 @@ def doctest_ical_reader_empty_summary():
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(doctest.DocTestSuite())
+    suite.addTest(doctest.DocTestSuite(
+                        optionflags=doctest.ELLIPSIS | doctest.REPORT_UDIFF |
+                                    doctest.NORMALIZE_WHITESPACE))
     suite.addTest(doctest.DocTestSuite('schooltool.calendar.icalendar',
                         optionflags=doctest.ELLIPSIS | doctest.REPORT_UDIFF |
                                     doctest.NORMALIZE_WHITESPACE))

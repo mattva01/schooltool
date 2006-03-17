@@ -704,11 +704,45 @@ class VCalendar(object):
         """Parse a list of rows into a VCalendar object."""
         props, blocks = parse_block(rows[1:-1])
 
-        events = []
-        if 'VEVENT' in blocks.keys():
-            events = [VEvent.parse(block)
-                      for block in blocks['VEVENT']]
-        return VCalendar(events, [])
+        timezones = [VTimezone.parse(block)
+                     for block in blocks.get('VTIMEZONE', [])]
+        events = [VEvent.parse(block)
+                  for block in blocks.get('VEVENT', [])]
+        return VCalendar(events, timezones)
+
+
+class VTimezone(object):
+
+    def __init__(self, tzid, tznames):
+        self.tzid = tzid
+        self.tznames = tznames
+
+    @staticmethod
+    def parse(rows):
+        """Parse a list of rows into a VTimezone object."""
+        rows = list(rows)
+        props, blocks = parse_block(rows[1:-1])
+
+        tzid = None
+        for key, value, params in props:
+            if key == 'TZID':
+                tzid = value
+            elif key == 'X-LIC-LOCATION':
+                # In Evolution calendars TZID is not useful.
+                tzid = value
+                break
+        if not tzid:
+            raise ICalParseError("Missing TZID in VTIMEZONE block")
+
+        tznames = []
+        for block in blocks.get('STANDARD', []):
+            for key, value, params in block:
+                if key == 'TZNAME':
+                    tznames.append(value)
+        if not tznames:
+            raise ICalParseError("Missing STANDARD section in VTIMEZONE block")
+
+        return VTimezone(tzid, tznames)
 
 
 def parse_icalendar(file, charset='UTF-8'):
