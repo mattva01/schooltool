@@ -792,8 +792,7 @@ def parse_icalendar(file, charset='UTF-8'):
 
     events = []
     for calendar in vccol.vcalendars:
-        for event in calendar.events:
-            events.append(event)
+        events.extend(calendar.events)
     return events
 
 def parse_text(value):
