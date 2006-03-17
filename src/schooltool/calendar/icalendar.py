@@ -423,8 +423,9 @@ def read_icalendar(icalendar_text, charset='UTF-8'):
         if not isinstance(dtstart, datetime.datetime):
             dtstart = datetime.datetime.combine(dtstart,
                                                 datetime.time(0))
+        duration = vevent.dtend - vevent.dtstart
 
-        yield SimpleCalendarEvent(dtstart, vevent.duration,
+        yield SimpleCalendarEvent(dtstart, duration,
                                   vevent.summary or '',
                                   location=vevent.location,
                                   description=vevent.description,
@@ -1279,17 +1280,25 @@ class VEventParser(object):
         summary = self.getOne('SUMMARY')
 
         all_day_event = self._getType('DTSTART') == 'DATE'
+
         dtstart = self.getOne('DTSTART')
+        prop = self._props['DTSTART'][0]
+        dtstart_tzid = prop[1].get('TZID')
+
         if self.hasProp('DURATION'):
             duration = self.getOne('DURATION')
             dtend = dtstart + duration
+            dtend_tzid = dtstart_tzid
         else:
             dtend = self.getOne('DTEND', None)
+            if dtend is not None:
+                dtend_tzid = self._props['DTEND'][0][1].get('TZID')
+            else:
+                dtend_tzid = dtstart_tzid
             if dtend is None:
                 dtend = dtstart
                 if all_day_event:
                     dtend += datetime.date.resolution
-            duration = dtend - dtstart
 
         location = self.getOne('LOCATION', None)
         description = self.getOne('DESCRIPTION', None)
@@ -1311,9 +1320,10 @@ class VEventParser(object):
             rrule = rrule.replace(exceptions=exceptions)
 
         return VEvent(uid=uid, summary=summary, all_day_event=all_day_event,
-                      dtstart=dtstart, dtend=dtend, duration=duration,
-                      location=location, description=description,
-                      rrule=rrule, rdates=rdates, exdates=exdates)
+                      dtstart=dtstart, dtstart_tzid=dtstart_tzid, dtend=dtend,
+                      dtend_tzid=dtend_tzid, location=location,
+                      description=description, rrule=rrule, rdates=rdates,
+                      exdates=exdates)
 
     def _extractListOfDates(self, key, accepted_types, all_day_event):
         """Parse a comma separated list of values.
@@ -1370,36 +1380,6 @@ class VEventParser(object):
         """Return True if this VEvent has a named property."""
         return property.upper() in self._props
 
-    def iterDates(self):
-        """Iterate over all dates within this event.
-
-        This is only valid for all-day events at the moment.
-        """
-        if not self.all_day_event:
-            raise ValueError('iterDates is only defined for all-day events')
-
-        # Find out the set of start dates
-        start_set = {self.dtstart: None}
-        for rdate in self.rdates:
-            start_set[rdate] = rdate
-        for exdate in self.exdates:
-            if exdate in start_set:
-                del start_set[exdate]
-
-        # Find out the set of all dates
-        date_set = Set(start_set)
-        duration = self.duration.days
-        for d in start_set:
-            for n in range(1, duration):
-                d += datetime.date.resolution
-                date_set.add(d)
-
-        # Yield all dates in chronological order
-        dates = list(date_set)
-        dates.sort()
-        for d in dates:
-            yield d
-
 
 class VEvent(object):
     """A calendar event.
@@ -1410,8 +1390,9 @@ class VEvent(object):
           summary           Textual summary of this event
           all_day_event     True if this is an all-day event
           dtstart           start of the event (inclusive)
+          dtstart_tzid      timezone for the start of the event
           dtend             end of the event (not inclusive)
-          duration          length of the event
+          dtend_tzid        timezone for the end of the event
           location          location of the event
           description       description of the event
           rrule             recurrency rule
@@ -1420,14 +1401,16 @@ class VEvent(object):
 
     """
 
-    def __init__(self, uid, summary, all_day_event, dtstart, dtend, duration,
-                 location, description, rrule, rdates, exdates):
+    def __init__(self, uid, summary, all_day_event, dtstart, dtstart_tzid,
+                 dtend, dtend_tzid, location, description, rrule, rdates,
+                 exdates):
         self.uid = uid
         self.summary = summary
         self.all_day_event = all_day_event
         self.dtstart = dtstart
+        self.dtstart_tzid = dtstart_tzid
         self.dtend = dtend
-        self.duration = duration
+        self.dtend_tzid = dtend_tzid
         self.location = location
         self.description = description
         self.rrule = rrule

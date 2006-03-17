@@ -117,19 +117,16 @@ class TestPeriod(unittest.TestCase):
         p1 = Period(dt1, dt2)
         self.assertEquals(p1.start, dt1)
         self.assertEquals(p1.end, dt2)
-        self.assertEquals(p1.duration, td)
 
         p2 = Period(dt1, td)
         self.assertEquals(p2.start, dt1)
         self.assertEquals(p2.end, dt2)
-        self.assertEquals(p2.duration, td)
 
         self.assertEquals(p1, p2)
 
         p = Period(dt1, timedelta(0))
         self.assertEquals(p.start, dt1)
         self.assertEquals(p.end, dt1)
-        self.assertEquals(p.duration, timedelta(0))
 
         self.assertRaises(ValueError, Period, dt2, dt1)
         self.assertRaises(ValueError, Period, dt1, -td)
@@ -252,52 +249,6 @@ class TestVEvent(unittest.TestCase):
         vevent.add('unknown', 'magic', {'VALUE': 'UNKNOWN-TYPE'})
         self.assertEquals(vevent.getOne('unknown'), 'magic')
 
-    def test_iterDates(self):
-        from schooltool.calendar.icalendar import VEventParser
-        vevent = VEventParser()
-        vevent.all_day_event = True
-        vevent.dtstart = date(2003, 1, 2)
-        vevent.dtend = date(2003, 1, 5)
-        vevent.duration = timedelta(days=3)
-        vevent.rdates = []
-        vevent.exdates = []
-        self.assertEquals(list(vevent.iterDates()),
-                    [date(2003, 1, 2), date(2003, 1, 3), date(2003, 1, 4)])
-
-        vevent.all_day_event = False;
-        self.assertRaises(ValueError, list, vevent.iterDates())
-
-    def test_iterDates_with_rdate_exdate(self):
-        from schooltool.calendar.icalendar import VEventParser
-        vevent = VEventParser()
-        vevent.all_day_event = True
-        vevent.dtstart = date(2003, 1, 5)
-        vevent.dtend = date(2003, 1, 6)
-        vevent.duration = timedelta(days=1)
-        vevent.rdates = [date(2003, 1, 2), date(2003, 1, 8), date(2003, 1, 8)]
-        vevent.exdates = []
-        expected = [date(2003, 1, 2), date(2003, 1, 5), date(2003, 1, 8)]
-        self.assertEquals(list(vevent.iterDates()), expected)
-
-        vevent.exdates = [date(2003, 1, 6)]
-        expected = [date(2003, 1, 2), date(2003, 1, 5), date(2003, 1, 8)]
-        self.assertEquals(list(vevent.iterDates()), expected)
-
-        vevent.exdates = [date(2003, 1, 2), date(2003, 1, 2)]
-        expected = [date(2003, 1, 5), date(2003, 1, 8)]
-        self.assertEquals(list(vevent.iterDates()), expected)
-
-        vevent.exdates = [date(2003, 1, 5)]
-        expected = [date(2003, 1, 2), date(2003, 1, 8)]
-        self.assertEquals(list(vevent.iterDates()), expected)
-
-        vevent.dtend = date(2003, 1, 7)
-        vevent.duration = timedelta(days=2)
-        vevent.exdates = [date(2003, 1, 5), date(2003, 1, 3)]
-        expected = [date(2003, 1, 2), date(2003, 1, 3),
-                    date(2003, 1, 8), date(2003, 1, 9)]
-        self.assertEquals(list(vevent.iterDates()), expected)
-
     def test_validate_error_cases(self):
         from schooltool.calendar.icalendar import VEventParser, ICalParseError
 
@@ -316,12 +267,10 @@ class TestVEvent(unittest.TestCase):
         vevent = VEventParser()
         vevent.add('dtstart', '20010203', {'VALUE': 'DATE'})
         vevent.add('dtend', '20010203', {'VALUE': 'DATE'})
-        vevent.add('duration', 'P1D', {})
         self.assertRaises(ICalParseError, vevent.validate)
 
         vevent = VEventParser()
         vevent.add('dtstart', '20010203', {'VALUE': 'DATE'})
-        vevent.add('duration', 'two years', {'VALUE': 'TEXT'})
         self.assertRaises(ICalParseError, vevent.validate)
 
     def test_validate_all_day_events(self):
@@ -336,7 +285,6 @@ class TestVEvent(unittest.TestCase):
         self.assertEquals(vevent.summary, 'An event')
         self.assertEquals(vevent.uid, 'unique')
         self.assertEquals(vevent.dtend, date(2001, 2, 4))
-        self.assertEquals(vevent.duration, timedelta(days=1))
 
         parser = VEventParser()
         parser.add('summary', 'An\\nevent\\; with backslashes', {})
@@ -349,7 +297,6 @@ class TestVEvent(unittest.TestCase):
         self.assertEquals(vevent.dtstart, date(2001, 2, 3))
         self.assertEquals(vevent.uid, 'unique2')
         self.assertEquals(vevent.dtend, date(2001, 2, 5))
-        self.assertEquals(vevent.duration, timedelta(days=2))
 
         parser = VEventParser()
         parser.add('dtstart', '20010203', {'VALUE': 'DATE'})
@@ -361,7 +308,6 @@ class TestVEvent(unittest.TestCase):
         self.assertEquals(vevent.dtstart, date(2001, 2, 3))
         self.assertEquals(vevent.uid, 'unique3')
         self.assertEquals(vevent.dtend, date(2001, 2, 5))
-        self.assertEquals(vevent.duration, timedelta(days=2))
 
         parser = VEventParser()
         parser.add('dtstart', '20010203', {'VALUE': 'DATE'})
@@ -385,7 +331,6 @@ class TestVEvent(unittest.TestCase):
         self.assert_(not vevent.all_day_event)
         self.assertEquals(vevent.dtstart, datetime(2001, 2, 3, 4, 5, 6))
         self.assertEquals(vevent.dtend, datetime(2001, 2, 3, 4, 5, 6))
-        self.assertEquals(vevent.duration, timedelta(days=0))
         self.assertEquals(vevent.rdates, [])
 
         parser = VEventParser()
@@ -396,8 +341,6 @@ class TestVEvent(unittest.TestCase):
         self.assert_(not vevent.all_day_event)
         self.assertEquals(vevent.dtstart, datetime(2001, 2, 3, 4, 0, 0))
         self.assertEquals(vevent.dtend, datetime(2001, 2, 4, 5, 1, 2))
-        self.assertEquals(vevent.duration, timedelta(days=1, hours=1,
-                                                     minutes=1, seconds=2))
 
         parser = VEventParser()
         parser.add('dtstart', '20010203T040000')
@@ -407,8 +350,6 @@ class TestVEvent(unittest.TestCase):
         self.assert_(not vevent.all_day_event)
         self.assertEquals(vevent.dtstart, datetime(2001, 2, 3, 4, 0, 0))
         self.assertEquals(vevent.dtend, datetime(2001, 2, 4, 5, 1, 2))
-        self.assertEquals(vevent.duration, timedelta(days=1, hours=1,
-                                                     minutes=1, seconds=2))
 
         parser = VEventParser()
         parser.add('dtstart', '20010203T010203')
@@ -432,6 +373,31 @@ class TestVEvent(unittest.TestCase):
         parser.add('uid', 'unique', {})
         parser.add('dtend', '20010203T010202')
         self.assertRaises(ICalParseError, parser.parse)
+
+    def test_timezones(self):
+        from schooltool.calendar.icalendar import VEventParser, ICalParseError
+
+        parser = VEventParser()
+        parser.add('dtstart', '20010203T040000', params={'TZID': 'Vilnius'})
+        parser.add('uid', 'unique', {})
+        parser.add('dtend', '20010204T050102', params={'TZID': 'Kaunas'})
+        vevent = parser.parse()
+        self.assert_(not vevent.all_day_event)
+        self.assertEquals(vevent.dtstart, datetime(2001, 2, 3, 4, 0, 0))
+        self.assertEquals(vevent.dtstart_tzid, 'Vilnius')
+        self.assertEquals(vevent.dtend, datetime(2001, 2, 4, 5, 1, 2))
+        self.assertEquals(vevent.dtend_tzid, 'Kaunas')
+
+        parser = VEventParser()
+        parser.add('dtstart', '20010203T040000', params={'TZID': 'Vilnius'})
+        parser.add('uid', 'unique', {})
+        parser.add('duration', 'P1DT1H1M2S')
+        vevent = parser.parse()
+        self.assert_(not vevent.all_day_event)
+        self.assertEquals(vevent.dtstart, datetime(2001, 2, 3, 4, 0, 0))
+        self.assertEquals(vevent.dtstart_tzid, 'Vilnius')
+        self.assertEquals(vevent.dtend, datetime(2001, 2, 4, 5, 1, 2))
+        self.assertEquals(vevent.dtend_tzid, 'Vilnius')
 
     def test_validate_location(self):
         from schooltool.calendar.icalendar import VEventParser
