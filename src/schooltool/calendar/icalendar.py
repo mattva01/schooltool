@@ -1147,7 +1147,7 @@ def parse_recurrence_rule(value):
     return rule.replace(interval=interval, count=count, until=until)
 
 
-class VEvent(object):
+class VEventParser(object):
     """iCalendar event.
 
     Life cycle: when a VEvent is created, a number of properties should be
@@ -1234,9 +1234,8 @@ class VEvent(object):
         Property name is case insensitive.  Params should be a dict from
         uppercased parameter names to their values.
 
-        Multiple calls to add with the same property name override the
-        value.  This is sufficient for now, but will have to be changed
-        soon.
+        Multiple calls to add with the same property name override the value.
+        This is sufficient for now, but will have to be changed soon.
         """
         if params is None:
             params = {}
@@ -1250,21 +1249,7 @@ class VEvent(object):
             self._props[key] = [(value, params)]
 
     def validate(self):
-        """Check that this VEvent has all the necessary properties.
-
-        Also sets the following attributes:
-          uid               The unique id of this event
-          summary           Textual summary of this event
-          all_day_event     True if this is an all-day event
-          dtstart           start of the event (inclusive)
-          dtend             end of the event (not inclusive)
-          duration          length of the event
-          location          location of the event
-          description       description of the event
-          rrule             recurrency rule
-          rdates            a list of recurrence dates or periods
-          exdates           a list of exception dates
-        """
+        """Check that this event has all the necessary properties."""
         if not self.hasProp('UID'):
             raise ICalParseError("VEVENT must have a UID property")
         if not self.hasProp('DTSTART'):
@@ -1284,40 +1269,51 @@ class VEvent(object):
                 raise ICalParseError("DURATION property should have type"
                                      " DURATION")
 
-        self.uid = self.getOne('UID')
-        self.summary = self.getOne('SUMMARY')
+    def parse(self):
+        """Construct the corresponding VEvent object.
 
-        self.all_day_event = self._getType('DTSTART') == 'DATE'
-        self.dtstart = self.getOne('DTSTART')
+        Returns a VEvent.
+        """
+        self.validate()
+        uid = self.getOne('UID')
+        summary = self.getOne('SUMMARY')
+
+        all_day_event = self._getType('DTSTART') == 'DATE'
+        dtstart = self.getOne('DTSTART')
         if self.hasProp('DURATION'):
-            self.duration = self.getOne('DURATION')
-            self.dtend = self.dtstart + self.duration
+            duration = self.getOne('DURATION')
+            dtend = dtstart + duration
         else:
-            self.dtend = self.getOne('DTEND', None)
-            if self.dtend is None:
-                self.dtend = self.dtstart
-                if self.all_day_event:
-                    self.dtend += datetime.date.resolution
-            self.duration = self.dtend - self.dtstart
+            dtend = self.getOne('DTEND', None)
+            if dtend is None:
+                dtend = dtstart
+                if all_day_event:
+                    dtend += datetime.date.resolution
+            duration = dtend - dtstart
 
-        self.location = self.getOne('LOCATION', None)
-        self.description = self.getOne('DESCRIPTION', None)
+        location = self.getOne('LOCATION', None)
+        description = self.getOne('DESCRIPTION', None)
 
-        if self.dtstart > self.dtend:
+        if dtstart > dtend:
             raise ICalParseError("Event start time should precede end time")
-        elif self.all_day_event and self.dtstart == self.dtend:
+        elif all_day_event and dtstart == dtend:
             raise ICalParseError("Event start time should precede end time")
 
-        self.rdates = self._extractListOfDates('RDATE', self.rdate_types,
-                                               self.all_day_event)
-        self.exdates = self._extractListOfDates('EXDATE', self.exdate_types,
-                                                self.all_day_event)
+        rdates = self._extractListOfDates('RDATE', self.rdate_types,
+                                          all_day_event)
+        exdates = self._extractListOfDates('EXDATE', self.exdate_types,
+                                           all_day_event)
 
-        self.rrule = self.getOne('RRULE', None)
-        if self.rrule is not None and self.exdates:
+        rrule = self.getOne('RRULE', None)
+        if rrule is not None and exdates:
             exceptions = [datetime.date(dt.year, dt.month, dt.day)
-                          for dt in self.exdates]
-            self.rrule = self.rrule.replace(exceptions=exceptions)
+                          for dt in exdates]
+            rrule = rrule.replace(exceptions=exceptions)
+
+        return VEvent(uid=uid, summary=summary, all_day_event=all_day_event,
+                      dtstart=dtstart, dtend=dtend, duration=duration,
+                      location=location, description=description,
+                      rrule=rrule, rdates=rdates, exdates=exdates)
 
     def _extractListOfDates(self, key, accepted_types, all_day_event):
         """Parse a comma separated list of values.
@@ -1404,17 +1400,50 @@ class VEvent(object):
         for d in dates:
             yield d
 
+
+class VEvent(object):
+    """A calendar event.
+
+    Attributes:
+
+          uid               The unique id of this event
+          summary           Textual summary of this event
+          all_day_event     True if this is an all-day event
+          dtstart           start of the event (inclusive)
+          dtend             end of the event (not inclusive)
+          duration          length of the event
+          location          location of the event
+          description       description of the event
+          rrule             recurrency rule
+          rdates            a list of recurrence dates or periods
+          exdates           a list of exception dates
+
+    """
+
+    def __init__(self, uid, summary, all_day_event, dtstart, dtend, duration,
+                 location, description, rrule, rdates, exdates):
+        self.uid = uid
+        self.summary = summary
+        self.all_day_event = all_day_event
+        self.dtstart = dtstart
+        self.dtend = dtend
+        self.duration = duration
+        self.location = location
+        self.description = description
+        self.rrule = rrule
+        self.rdates = rdates
+        self.exdates = exdates
+
     @staticmethod
     def parse(rows):
         """Parse a list of rows into a VEvent object."""
-        vevent = VEvent()
+        parser = VEventParser()
         props, blocks = parse_block(rows[1:-1])
 
         for key, value, params in props:
-            vevent.add(key, value, params)
+            parser.add(key, value, params)
 
-        vevent.validate()
-        return vevent
+        return parser.parse()
 
 
 class Period(object):

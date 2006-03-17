@@ -159,8 +159,8 @@ class TestPeriod(unittest.TestCase):
 class TestVEvent(unittest.TestCase):
 
     def test_add(self):
-        from schooltool.calendar.icalendar import VEvent, ICalParseError
-        vevent = VEvent()
+        from schooltool.calendar.icalendar import VEventParser, ICalParseError
+        vevent = VEventParser()
         value, params = 'bar', {'VALUE': 'TEXT'}
         vevent.add('foo', value, params)
         self.assertEquals(vevent._props, {'FOO': [(value, params)]})
@@ -178,16 +178,16 @@ class TestVEvent(unittest.TestCase):
         self.assertRaises(ICalParseError, vevent.add, 'uid', '2')
 
     def test_hasProp(self):
-        from schooltool.calendar.icalendar import VEvent
-        vevent = VEvent()
+        from schooltool.calendar.icalendar import VEventParser
+        vevent = VEventParser()
         vevent.add('foo', 'bar', {})
         self.assert_(vevent.hasProp('foo'))
         self.assert_(vevent.hasProp('Foo'))
         self.assert_(not vevent.hasProp('baz'))
 
     def test__getType(self):
-        from schooltool.calendar.icalendar import VEvent
-        vevent = VEvent()
+        from schooltool.calendar.icalendar import VEventParser
+        vevent = VEventParser()
         vevent.add('x-explicit', '', {'VALUE': 'INTEGER'})
         vevent.add('dtstart', 'implicit type', {})
         vevent.add('x-default', '', {})
@@ -200,8 +200,8 @@ class TestVEvent(unittest.TestCase):
         self.assertRaises(KeyError, vevent._getType, 'nonexistent')
 
     def test_getOne(self):
-        from schooltool.calendar.icalendar import VEvent
-        vevent = VEvent()
+        from schooltool.calendar.icalendar import VEventParser
+        vevent = VEventParser()
 
         vevent.add('foo', 'bar', {})
         self.assertEquals(vevent.getOne('foo'), 'bar')
@@ -253,8 +253,8 @@ class TestVEvent(unittest.TestCase):
         self.assertEquals(vevent.getOne('unknown'), 'magic')
 
     def test_iterDates(self):
-        from schooltool.calendar.icalendar import VEvent
-        vevent = VEvent()
+        from schooltool.calendar.icalendar import VEventParser
+        vevent = VEventParser()
         vevent.all_day_event = True
         vevent.dtstart = date(2003, 1, 2)
         vevent.dtend = date(2003, 1, 5)
@@ -268,8 +268,8 @@ class TestVEvent(unittest.TestCase):
         self.assertRaises(ValueError, list, vevent.iterDates())
 
     def test_iterDates_with_rdate_exdate(self):
-        from schooltool.calendar.icalendar import VEvent
-        vevent = VEvent()
+        from schooltool.calendar.icalendar import VEventParser
+        vevent = VEventParser()
         vevent.all_day_event = True
         vevent.dtstart = date(2003, 1, 5)
         vevent.dtend = date(2003, 1, 6)
@@ -299,51 +299,51 @@ class TestVEvent(unittest.TestCase):
         self.assertEquals(list(vevent.iterDates()), expected)
 
     def test_validate_error_cases(self):
-        from schooltool.calendar.icalendar import VEvent, ICalParseError
+        from schooltool.calendar.icalendar import VEventParser, ICalParseError
 
-        vevent = VEvent()
+        vevent = VEventParser()
         self.assertRaises(ICalParseError, vevent.validate)
 
-        vevent = VEvent()
+        vevent = VEventParser()
         vevent.add('dtstart', 'xyzzy', {'VALUE': 'TEXT'})
         self.assertRaises(ICalParseError, vevent.validate)
 
-        vevent = VEvent()
+        vevent = VEventParser()
         vevent.add('dtstart', '20010203', {'VALUE': 'DATE'})
         vevent.add('dtend', '20010203T0000', {'VALUE': 'DATE-TIME'})
         self.assertRaises(ICalParseError, vevent.validate)
 
-        vevent = VEvent()
+        vevent = VEventParser()
         vevent.add('dtstart', '20010203', {'VALUE': 'DATE'})
         vevent.add('dtend', '20010203', {'VALUE': 'DATE'})
         vevent.add('duration', 'P1D', {})
         self.assertRaises(ICalParseError, vevent.validate)
 
-        vevent = VEvent()
+        vevent = VEventParser()
         vevent.add('dtstart', '20010203', {'VALUE': 'DATE'})
         vevent.add('duration', 'two years', {'VALUE': 'TEXT'})
         self.assertRaises(ICalParseError, vevent.validate)
 
     def test_validate_all_day_events(self):
-        from schooltool.calendar.icalendar import VEvent, ICalParseError
+        from schooltool.calendar.icalendar import VEventParser, ICalParseError
 
-        vevent = VEvent()
-        vevent.add('summary', 'An event', {})
-        vevent.add('uid', 'unique', {})
-        vevent.add('dtstart', '20010203', {'VALUE': 'DATE'})
-        vevent.validate()
+        parser = VEventParser()
+        parser.add('summary', 'An event', {})
+        parser.add('uid', 'unique', {})
+        parser.add('dtstart', '20010203', {'VALUE': 'DATE'})
+        vevent = parser.parse()
         self.assert_(vevent.all_day_event)
         self.assertEquals(vevent.summary, 'An event')
         self.assertEquals(vevent.uid, 'unique')
         self.assertEquals(vevent.dtend, date(2001, 2, 4))
         self.assertEquals(vevent.duration, timedelta(days=1))
 
-        vevent = VEvent()
-        vevent.add('summary', 'An\\nevent\\; with backslashes', {})
-        vevent.add('uid', 'unique2', {})
-        vevent.add('dtstart', '20010203', {'VALUE': 'DATE'})
-        vevent.add('dtend', '20010205', {'VALUE': 'DATE'})
-        vevent.validate()
+        parser = VEventParser()
+        parser.add('summary', 'An\\nevent\\; with backslashes', {})
+        parser.add('uid', 'unique2', {})
+        parser.add('dtstart', '20010203', {'VALUE': 'DATE'})
+        parser.add('dtend', '20010205', {'VALUE': 'DATE'})
+        vevent = parser.parse()
         self.assertEquals(vevent.summary, 'An\nevent; with backslashes')
         self.assert_(vevent.all_day_event)
         self.assertEquals(vevent.dtstart, date(2001, 2, 3))
@@ -351,11 +351,11 @@ class TestVEvent(unittest.TestCase):
         self.assertEquals(vevent.dtend, date(2001, 2, 5))
         self.assertEquals(vevent.duration, timedelta(days=2))
 
-        vevent = VEvent()
-        vevent.add('dtstart', '20010203', {'VALUE': 'DATE'})
-        vevent.add('uid', 'unique3', {})
-        vevent.add('duration', 'P2D')
-        vevent.validate()
+        parser = VEventParser()
+        parser.add('dtstart', '20010203', {'VALUE': 'DATE'})
+        parser.add('uid', 'unique3', {})
+        parser.add('duration', 'P2D')
+        vevent = parser.parse()
         self.assertEquals(vevent.summary, None)
         self.assert_(vevent.all_day_event)
         self.assertEquals(vevent.dtstart, date(2001, 2, 3))
@@ -363,102 +363,102 @@ class TestVEvent(unittest.TestCase):
         self.assertEquals(vevent.dtend, date(2001, 2, 5))
         self.assertEquals(vevent.duration, timedelta(days=2))
 
-        vevent = VEvent()
-        vevent.add('dtstart', '20010203', {'VALUE': 'DATE'})
-        vevent.add('uid', 'unique4', {})
-        vevent.add('dtend', '20010201', {'VALUE': 'DATE'})
-        self.assertRaises(ICalParseError, vevent.validate)
+        parser = VEventParser()
+        parser.add('dtstart', '20010203', {'VALUE': 'DATE'})
+        parser.add('uid', 'unique4', {})
+        parser.add('dtend', '20010201', {'VALUE': 'DATE'})
+        self.assertRaises(ICalParseError, parser.parse)
 
-        vevent = VEvent()
-        vevent.add('dtstart', '20010203', {'VALUE': 'DATE'})
-        vevent.add('uid', 'unique5', {})
-        vevent.add('dtend', '20010203', {'VALUE': 'DATE'})
-        self.assertRaises(ICalParseError, vevent.validate)
+        parser = VEventParser()
+        parser.add('dtstart', '20010203', {'VALUE': 'DATE'})
+        parser.add('uid', 'unique5', {})
+        parser.add('dtend', '20010203', {'VALUE': 'DATE'})
+        self.assertRaises(ICalParseError, parser.parse)
 
     def test_validate_not_all_day_events(self):
-        from schooltool.calendar.icalendar import VEvent, ICalParseError
+        from schooltool.calendar.icalendar import VEventParser, ICalParseError
 
-        vevent = VEvent()
-        vevent.add('dtstart', '20010203T040506')
-        vevent.add('uid', 'unique', {})
-        vevent.validate()
+        parser = VEventParser()
+        parser.add('dtstart', '20010203T040506')
+        parser.add('uid', 'unique', {})
+        vevent = parser.parse()
         self.assert_(not vevent.all_day_event)
         self.assertEquals(vevent.dtstart, datetime(2001, 2, 3, 4, 5, 6))
         self.assertEquals(vevent.dtend, datetime(2001, 2, 3, 4, 5, 6))
         self.assertEquals(vevent.duration, timedelta(days=0))
         self.assertEquals(vevent.rdates, [])
 
-        vevent = VEvent()
-        vevent.add('dtstart', '20010203T040000')
-        vevent.add('uid', 'unique', {})
-        vevent.add('dtend', '20010204T050102')
-        vevent.validate()
+        parser = VEventParser()
+        parser.add('dtstart', '20010203T040000')
+        parser.add('uid', 'unique', {})
+        parser.add('dtend', '20010204T050102')
+        vevent = parser.parse()
         self.assert_(not vevent.all_day_event)
         self.assertEquals(vevent.dtstart, datetime(2001, 2, 3, 4, 0, 0))
         self.assertEquals(vevent.dtend, datetime(2001, 2, 4, 5, 1, 2))
         self.assertEquals(vevent.duration, timedelta(days=1, hours=1,
                                                      minutes=1, seconds=2))
 
-        vevent = VEvent()
-        vevent.add('dtstart', '20010203T040000')
-        vevent.add('uid', 'unique', {})
-        vevent.add('duration', 'P1DT1H1M2S')
-        vevent.validate()
+        parser = VEventParser()
+        parser.add('dtstart', '20010203T040000')
+        parser.add('uid', 'unique', {})
+        parser.add('duration', 'P1DT1H1M2S')
+        vevent = parser.parse()
         self.assert_(not vevent.all_day_event)
         self.assertEquals(vevent.dtstart, datetime(2001, 2, 3, 4, 0, 0))
         self.assertEquals(vevent.dtend, datetime(2001, 2, 4, 5, 1, 2))
         self.assertEquals(vevent.duration, timedelta(days=1, hours=1,
                                                      minutes=1, seconds=2))
 
-        vevent = VEvent()
-        vevent.add('dtstart', '20010203T010203')
-        vevent.add('uid', 'unique', {})
-        vevent.add('rdate', '20010205T040506')
-        vevent.add('exdate', '20010206T040506')
-        vevent.validate()
+        parser = VEventParser()
+        parser.add('dtstart', '20010203T010203')
+        parser.add('uid', 'unique', {})
+        parser.add('rdate', '20010205T040506')
+        parser.add('exdate', '20010206T040506')
+        vevent = parser.parse()
         self.assertEquals(vevent.rdates, [datetime(2001, 2, 5, 4, 5, 6)])
         self.assertEquals(vevent.exdates, [datetime(2001, 2, 6, 4, 5, 6)])
 
-        vevent = VEvent()
-        vevent.add('dtstart', '20010203T010203')
-        vevent.add('uid', 'unique', {})
-        vevent.add('exdate', '20010206,20020307', {'VALUE': 'DATE'})
-        vevent.add('rrule', 'FREQ=DAILY')
-        vevent.validate()
+        parser = VEventParser()
+        parser.add('dtstart', '20010203T010203')
+        parser.add('uid', 'unique', {})
+        parser.add('exdate', '20010206,20020307', {'VALUE': 'DATE'})
+        parser.add('rrule', 'FREQ=DAILY')
+        vevent = parser.parse()
         self.assertEquals(vevent.exdates, [date(2001, 2, 6), date(2002, 3, 7)])
 
-        vevent = VEvent()
-        vevent.add('dtstart', '20010203T010203')
-        vevent.add('uid', 'unique', {})
-        vevent.add('dtend', '20010203T010202')
-        self.assertRaises(ICalParseError, vevent.validate)
+        parser = VEventParser()
+        parser.add('dtstart', '20010203T010203')
+        parser.add('uid', 'unique', {})
+        parser.add('dtend', '20010203T010202')
+        self.assertRaises(ICalParseError, parser.parse)
 
     def test_validate_location(self):
-        from schooltool.calendar.icalendar import VEvent
-        vevent = VEvent()
-        vevent.add('dtstart', '20010203T040506')
-        vevent.add('uid', 'unique5', {})
-        vevent.add('location', 'Somewhere')
-        vevent.validate()
+        from schooltool.calendar.icalendar import VEventParser
+        parser = VEventParser()
+        parser.add('dtstart', '20010203T040506')
+        parser.add('uid', 'unique5', {})
+        parser.add('location', 'Somewhere')
+        vevent = parser.parse()
         self.assertEquals(vevent.location, 'Somewhere')
 
     def test_validate_description(self):
-        from schooltool.calendar.icalendar import VEvent
-        vevent = VEvent()
-        vevent.add('dtstart', '20010203T040506')
-        vevent.add('uid', 'unique5', {})
-        vevent.add('description', 'Some long text')
-        vevent.validate()
+        from schooltool.calendar.icalendar import VEventParser
+        parser = VEventParser()
+        parser.add('dtstart', '20010203T040506')
+        parser.add('uid', 'unique5', {})
+        parser.add('description', 'Some long text')
+        vevent = parser.parse()
         self.assertEquals(vevent.description, 'Some long text')
 
     def test_validate_rrule(self):
-        from schooltool.calendar.icalendar import VEvent
-        vevent = VEvent()
-        vevent.add('dtstart', '20010203T040506')
-        vevent.add('uid', 'unique5', {})
-        vevent.add('location', 'Somewhere')
-        vevent.add('rrule', 'FREQ=DAILY;COUNT=3')
-        vevent.validate()
+        from schooltool.calendar.icalendar import VEventParser
+        parser = VEventParser()
+        parser.add('dtstart', '20010203T040506')
+        parser.add('uid', 'unique5', {})
+        parser.add('location', 'Somewhere')
+        parser.add('rrule', 'FREQ=DAILY;COUNT=3')
+        vevent = parser.parse()
 
         self.assertEquals(vevent.rrule.interval, 1)
         self.assertEquals(vevent.rrule.count, 3)
@@ -466,15 +466,15 @@ class TestVEvent(unittest.TestCase):
         self.assertEquals(vevent.rrule.exceptions, ())
 
     def test_validate_rrule_exceptions(self):
-        from schooltool.calendar.icalendar import VEvent
-        vevent = VEvent()
-        vevent.add('dtstart', '20010203T040506')
-        vevent.add('uid', 'unique5', {})
-        vevent.add('location', 'Somewhere')
-        vevent.add('rrule', 'FREQ=MONTHLY;BYDAY=3MO')
-        vevent.add('exdate', '19960402T010000,19960404T010000')
-        vevent.add('exdate', '19960406T010000,19960408T010000')
-        vevent.validate()
+        from schooltool.calendar.icalendar import VEventParser
+        parser = VEventParser()
+        parser.add('dtstart', '20010203T040506')
+        parser.add('uid', 'unique5', {})
+        parser.add('location', 'Somewhere')
+        parser.add('rrule', 'FREQ=MONTHLY;BYDAY=3MO')
+        parser.add('exdate', '19960402T010000,19960404T010000')
+        parser.add('exdate', '19960406T010000,19960408T010000')
+        vevent = parser.parse()
 
         self.assertEquals(vevent.rrule.interval, 1)
         self.assertEquals(vevent.rrule.count, None)
@@ -486,9 +486,9 @@ class TestVEvent(unittest.TestCase):
         self.assert_(not isinstance(vevent.rrule.exceptions[0], datetime))
 
     def test_extractListOfDates(self):
-        from schooltool.calendar.icalendar import VEvent, Period, ICalParseError
+        from schooltool.calendar.icalendar import VEventParser, Period, ICalParseError
 
-        vevent = VEvent()
+        vevent = VEventParser()
         vevent.add('rdate', '20010205T040506')
         vevent.add('rdate', '20010206T040506,20010207T000000')
         vevent.add('rdate', '20010208', {'VALUE': 'DATE'})
@@ -504,29 +504,29 @@ class TestVEvent(unittest.TestCase):
         self.assertEqual(expected, rdates,
                          diff(pformat(expected), pformat(rdates)))
 
-        vevent = VEvent()
+        vevent = VEventParser()
         vevent.add('rdate', '20010205T040506', {'VALUE': 'TEXT'})
         self.assertRaises(ICalParseError, vevent._extractListOfDates, 'RDATE',
                                           vevent.rdate_types, False)
 
-        vevent = VEvent()
+        vevent = VEventParser()
         vevent.add('exdate', '20010205T040506/P1D', {'VALUE': 'PERIOD'})
         self.assertRaises(ICalParseError, vevent._extractListOfDates, 'EXDATE',
                                           vevent.exdate_types, False)
 
-        vevent = VEvent()
+        vevent = VEventParser()
         vevent.add('rdate', '20010208', {'VALUE': 'DATE'})
         rdates = vevent._extractListOfDates('RDATE', vevent.rdate_types, True)
         expected = [date(2001, 2, 8)]
         self.assertEqual(expected, rdates,
                          diff(pformat(expected), pformat(rdates)))
 
-        vevent = VEvent()
+        vevent = VEventParser()
         vevent.add('rdate', '20010205T040506', {'VALUE': 'DATE-TIME'})
         self.assertRaises(ICalParseError, vevent._extractListOfDates, 'RDATE',
                                           vevent.rdate_types, True)
 
-        vevent = VEvent()
+        vevent = VEventParser()
         vevent.add('rdate', '20010209T000000/20010210T000000',
                    {'VALUE': 'PERIOD'})
         self.assertRaises(ICalParseError, vevent._extractListOfDates, 'RDATE',
@@ -699,17 +699,11 @@ class TestICalReader(unittest.TestCase):
         self.assertEqual(len(result), 3)
         vevent = result[0]
 
-        self.assertEqual(vevent.getOne('x-mozilla-recur-default-units'),
-                         'weeks')
-        self.assertEqual(vevent.getOne('dtstart'), date(2003, 12, 25))
         self.assertEqual(vevent.dtstart, date(2003, 12, 25))
-        self.assertEqual(vevent.getOne('dtend'), date(2003, 12, 26))
         self.assertEqual(vevent.dtend, date(2003, 12, 26))
         vevent = result[1]
-        self.assertEqual(vevent.getOne('dtstart'), date(2003, 05, 01))
         self.assertEqual(vevent.dtstart, date(2003, 05, 01))
         vevent = result[2]
-        self.assertEqual(vevent.getOne('dtstart'), date(2003, 12, 25))
         self.assertEqual(vevent.dtstart, date(2003, 12, 25))
 
         result = parse_icalendar(StringIO(dedent("""\
@@ -727,9 +721,8 @@ class TestICalReader(unittest.TestCase):
                     """)))
         self.assertEquals(len(result), 1)
         vevent = result[0]
-        self.assert_(vevent.hasProp('uid'))
-        self.assert_(vevent.hasProp('dtstart'))
-        self.assert_(not vevent.hasProp('x-prop'))
+        self.assert_(vevent.uid)
+        self.assert_(vevent.dtstart)
 
         file = StringIO(dedent("""\
                     BEGIN:VCALENDAR
