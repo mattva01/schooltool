@@ -81,16 +81,13 @@ def generate(app):
             for dep in plugin.dependencies:
                 visit(dep)
             start = time.clock()
-            plugin.generate(app)
+            plugin.generate(app, 'data')
             times[name] = time.clock() - start
             status[name] = closed
-
         elif status[name] == closed:
             return
-
         elif status[name] == open:
             raise CyclicDependencyError("cyclic dependency at '%s'" % name)
-
 
     for name in plugins:
         visit(name)
