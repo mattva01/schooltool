@@ -30,7 +30,7 @@ from zope.interface import implements
 from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
 from zope.app.traversing.api import getPath
 
-from schooltool.calendar.icalendar import parse_icalendar
+from schooltool.calendar.icalendar import read_icalendar
 from schooltool.common import parse_date
 from schooltool.xmlparsing import XMLDocument
 from schooltool.app.rest import View
@@ -135,15 +135,15 @@ class TermFileFactory(object):
     def parseText(self, data, name=None):
         first = last = None
         days = []
-        for event in parse_icalendar(StringIO(data)):
-            summary = event.summary.lower()
+        for event in read_icalendar(data):
+            summary = event.title.lower()
             if summary not in ('school period', 'schoolday'):
                 continue # ignore boring events
 
-            if not event.all_day_event:
+            if not event.allday:
                 raise RestError("All-day event should be used")
 
-            if event.rrule or event.rdates or event.exdates:
+            if event.recurrence:
                 raise RestError("Repeating events/exceptions not yet supported")
 
             if summary == 'school period':
@@ -151,20 +151,20 @@ class TermFileFactory(object):
                     (first, last) != (event.dtstart, event.dtend)):
                     raise RestError("Multiple definitions of school period")
                 else:
-                    first, last = event.dtstart, event.dtend
+                    first, last = event.dtstart.date(), (event.dtstart + event.duration).date()
             elif summary == 'schoolday':
-                if event.dtend - event.dtstart != datetime.date.resolution:
+                if event.duration != datetime.date.resolution:
                     raise RestError("Schoolday longer than one day")
                 days.append(event.dtstart)
         else:
             if first is None:
                 raise RestError("School period not defined")
             for day in days:
-                if not first <= day < last:
+                if not first <= day.date() < last:
                     raise RestError("Schoolday outside school period")
             term = Term(name, first, last - datetime.date.resolution)
             for day in days:
-                term.add(day)
+                term.add(day.date())
         return term
 
     def parseXML(self, data, name=None):

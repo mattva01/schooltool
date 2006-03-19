@@ -152,6 +152,16 @@ class TestPeriod(unittest.TestCase):
 
         self.assert_(p1.overlaps(p1))
 
+    def test_cmp(self):
+        from schooltool.calendar.icalendar import Period
+        p1 = Period(datetime(2004, 1, 1, 12, 0), timedelta(hours=1))
+        p2 = Period(datetime(2004, 1, 1, 12, 0), timedelta(hours=1))
+        p3 = Period(datetime(2004, 1, 1, 12, 0), timedelta(hours=4))
+
+        self.assert_(p1 == p2)
+        self.assert_(p1 != p3)
+        self.assertRaises(NotImplementedError, p1.__cmp__, "NOT A PERIOD")
+
 
 class TestVEvent(unittest.TestCase):
 
@@ -569,7 +579,7 @@ class TestRowParser(unittest.TestCase):
                          ("KEY", "value", {'PARAM': ['A', 'b,c', 'D']}))
 
 
-class TestICalReader(unittest.TestCase):
+class TestReadIcalendar(unittest.TestCase):
 
     example_ical = dedent("""\
         BEGIN:VCALENDAR
@@ -658,21 +668,198 @@ class TestICalReader(unittest.TestCase):
         END:VCALENDAR
         """)
 
-    def test_iterEvents(self):
-        from schooltool.calendar.icalendar import parse_icalendar, ICalParseError
+    ical_with_timezones = dedent("""\
+        """)
+
+    def doctest_error_handling(self):
+        r"""Test for read_icalendar error handling.
+
+        Let's try parsing some invalid icalendar files:
+
+            >>> from schooltool.calendar.icalendar import read_icalendar
+
+            >>> file = StringIO(dedent('''\
+            ...             BEGIN:VCALENDAR
+            ...             BEGIN:VEVENT
+            ...             DTSTART;VALUE=DATE:20010203
+            ...             END:VEVENT
+            ...             END:VCALENDAR
+            ...             '''))
+            >>> list(read_icalendar(file))
+            Traceback (most recent call last):
+            ...
+            ICalParseError: VEVENT must have a UID property
+
+            >>> file = StringIO(dedent('''\
+            ...             BEGIN:VCALENDAR
+            ...             BEGIN:VEVENT
+            ...             UID:hello
+            ...             END:VEVENT
+            ...             END:VCALENDAR
+            ...             '''))
+            >>> list(read_icalendar(file))
+            Traceback (most recent call last):
+            ...
+            ICalParseError: VEVENT must have a DTSTART property
+
+            >>> file = StringIO(dedent('''\
+            ...             BEGIN:VCALENDAR
+            ...             BEGIN:VEVENT
+            ...             UID:hello
+            ...             DTSTART;VALUE=DATUM:20010203T101516
+            ...             END:VEVENT
+            ...             END:VCALENDAR
+            ...             '''))
+            >>> list(read_icalendar(file))
+            Traceback (most recent call last):
+            ...
+            ICalParseError: DTSTART property should have a DATE or DATE-TIME value
+
+            >>> file = StringIO(dedent('''\
+            ...             BEGIN:VCALENDAR
+            ...             BEGIN:VEVENT
+            ...             UID:hello
+            ...             DTSTART;VALUE=DATE-TIME:20010203T101516
+            ...             DTEND;VALUE=DATE:20010203
+            ...             END:VEVENT
+            ...             END:VCALENDAR
+            ...             '''))
+            >>> list(read_icalendar(file))
+            Traceback (most recent call last):
+            ...
+            ICalParseError: DTEND property should have the same type as DTSTART
+
+            >>> file = StringIO(dedent('''\
+            ...             BEGIN:VCALENDAR
+            ...             BEGIN:VEVENT
+            ...             UID:hello
+            ...             DTSTART;VALUE=DATE:20010201
+            ...             DTEND;VALUE=DATE:20010203
+            ...             DURATION:P1DT1H1M2S
+            ...             END:VEVENT
+            ...             END:VCALENDAR
+            ...             '''))
+            >>> list(read_icalendar(file))
+            Traceback (most recent call last):
+            ...
+            ICalParseError: VEVENT cannot have both a DTEND and a DURATION property
+
+            >>> file = StringIO(dedent('''\
+            ...             BEGIN:VCALENDAR
+            ...             BEGIN:VEVENT
+            ...             UID:hello
+            ...             DTSTART;VALUE=DATE:20010201
+            ...             DURATION;VALUE=DAYS:P1DT1H1M2S
+            ...             END:VEVENT
+            ...             END:VCALENDAR
+            ...             '''))
+            >>> list(read_icalendar(file))
+            Traceback (most recent call last):
+            ...
+            ICalParseError: DURATION property should have type DURATION
+
+            >>> file = StringIO(dedent('''\
+            ...             BEGIN:VCALENDAR
+            ...             BEGIN:VEVENT
+            ...             DTSTART;VALUE=DATE:20010203
+            ...             '''))
+            >>> list(read_icalendar(file))
+            Traceback (most recent call last):
+            ...
+            ICalParseError: Mismatched BEGIN/END
+
+            >>> file = StringIO(dedent('''\
+            ...             BEGIN:VCALENDAR
+            ...             BEGIN:VEVENT
+            ...             DTSTART;VALUE=DATE:20010203
+            ...             END:VCALENDAR
+            ...             END:VEVENT
+            ...             '''))
+            >>> list(read_icalendar(file))
+            Traceback (most recent call last):
+            ...
+            ICalParseError: Mismatched BEGIN/END
+
+
+            >>> file = StringIO(dedent('''\
+            ...             BEGIN:VEVENT
+            ...             END:VEVENT
+            ...             '''))
+            >>> list(read_icalendar(file))
+            Traceback (most recent call last):
+            ...
+            ICalParseError: This is not iCalendar
+
+            >>> file = StringIO(dedent('''\
+            ...             BEGIN:VCALENDAR
+            ...             END:VCALENDAR
+            ...             X-PROP:foo
+            ...             '''))
+            >>> list(read_icalendar(file))
+            Traceback (most recent call last):
+            ...
+            ICalParseError: Text outside VCALENDAR component
+
+            >>> file = StringIO(dedent('''\
+            ...             BEGIN:VCALENDAR
+            ...             END:VCALENDAR
+            ...             BEGIN:VEVENT
+            ...             END:VEVENT
+            ...             '''))
+            >>> list(read_icalendar(file))
+            Traceback (most recent call last):
+            ...
+            ICalParseError: Text outside VCALENDAR component
+
+            >>> file = StringIO(dedent('''\
+            ...             BEGIN:VCALENDAR
+            ...             BEGIN:VEVENT
+            ...             DTSTART;VALUE=DATE:20010203
+            ...             END:VEVENT
+            ...             END:VCALENDAR
+            ...             END:UNIVERSE
+            ...             '''))
+            >>> list(read_icalendar(file))
+            Traceback (most recent call last):
+            ...
+            ICalParseError: Mismatched BEGIN/END
+
+            >>> file = StringIO(dedent('''\
+            ...             DTSTART;VALUE=DATE:20010203
+            ...             '''))
+            >>> list(read_icalendar(file))
+            Traceback (most recent call last):
+            ...
+            ICalParseError: Text outside VCALENDAR component
+
+            >>> file = StringIO(dedent('''\
+            ...             This is just plain text
+            ...             '''))
+            >>> list(read_icalendar(file))
+            Traceback (most recent call last):
+            ...
+            ICalParseError: Expected ':' in line:
+            This is just plain text
+
+        """
+
+    def test_read_icalendar(self):
+        from schooltool.calendar.icalendar import read_icalendar, ICalParseError
+        from pytz import utc
         file = StringIO(self.example_ical)
-        result = parse_icalendar(file)
+        result = list(read_icalendar(file))
         self.assertEqual(len(result), 3)
-        vevent = result[0]
+        event = result[0]
 
-        self.assertEqual(vevent.dtstart, date(2003, 12, 25))
-        self.assertEqual(vevent.dtend, date(2003, 12, 26))
-        vevent = result[1]
-        self.assertEqual(vevent.dtstart, date(2003, 05, 01))
-        vevent = result[2]
-        self.assertEqual(vevent.dtstart, date(2003, 12, 25))
 
-        result = parse_icalendar(StringIO(dedent("""\
+        self.assertEqual(event.dtstart, datetime(2003, 12, 25, 0, 0, tzinfo=utc))
+        self.assertEqual(event.duration, timedelta(days=1))
+        event = result[1]
+        self.assertEqual(event.dtstart, datetime(2003, 5, 1, 0, 0, tzinfo=utc))
+        event = result[2]
+        self.assertEqual(event.duration, timedelta(days=1))
+
+        result = list(read_icalendar(StringIO(dedent("""\
                     BEGIN:VCALENDAR
 
                     BEGIN:VEVENT
@@ -684,75 +871,14 @@ class TestICalReader(unittest.TestCase):
                     END:VEVENT
 
                     END:VCALENDAR
-                    """)))
+                    """))))
         self.assertEquals(len(result), 1)
-        vevent = result[0]
-        self.assert_(vevent.uid)
-        self.assert_(vevent.dtstart)
-
-        file = StringIO(dedent("""\
-                    BEGIN:VCALENDAR
-                    BEGIN:VEVENT
-                    DTSTART;VALUE=DATE:20010203
-                    END:VEVENT
-                    END:VCALENDAR
-                    """))
-        # missing UID
-        self.assertRaises(ICalParseError, parse_icalendar, file)
-
-        file = StringIO(dedent("""\
-                    BEGIN:VCALENDAR
-                    BEGIN:VEVENT
-                    DTSTART;VALUE=DATE:20010203
-                    """))
-        self.assertRaises(ICalParseError, parse_icalendar, file)
-
-        file = StringIO(dedent("""\
-                    BEGIN:VCALENDAR
-                    BEGIN:VEVENT
-                    DTSTART;VALUE=DATE:20010203
-                    END:VCALENDAR
-                    END:VEVENT
-                    """))
-        self.assertRaises(ICalParseError, parse_icalendar, file)
-
-        file = StringIO(dedent("""\
-                    BEGIN:VCALENDAR
-                    END:VCALENDAR
-                    X-PROP:foo
-                    """))
-        self.assertRaises(ICalParseError, parse_icalendar, file)
-
-        file = StringIO(dedent("""\
-                    BEGIN:VCALENDAR
-                    END:VCALENDAR
-                    BEGIN:VEVENT
-                    END:VEVENT
-                    """))
-        self.assertRaises(ICalParseError, parse_icalendar, file)
-
-        file = StringIO(dedent("""\
-                    BEGIN:VCALENDAR
-                    BEGIN:VEVENT
-                    DTSTART;VALUE=DATE:20010203
-                    END:VEVENT
-                    END:VCALENDAR
-                    END:UNIVERSE
-                    """))
-        self.assertRaises(ICalParseError, parse_icalendar, file)
-
-        file = StringIO(dedent("""\
-                    DTSTART;VALUE=DATE:20010203
-                    """))
-        self.assertRaises(ICalParseError, parse_icalendar, file)
-
-        file = StringIO(dedent("""\
-                    This is just plain text
-                    """))
-        self.assertRaises(ICalParseError, parse_icalendar, file)
+        event = result[0]
+        self.assertEquals(event.unique_id, 'hello')
+        self.assert_(event.dtstart)
 
         file = StringIO("")
-        self.assertEquals(parse_icalendar(file), [])
+        self.assertEquals(list(read_icalendar(file)), [])
 
 
 class TestRowParser(unittest.TestCase):
@@ -1017,6 +1143,41 @@ def doctest_ical_reader_empty_summary():
     """
 
 
+def doctest_read_icalendar_all_day():
+    r"""Test for generation of allday events.
+
+    SchoolTool should import all day events as such:
+
+        >>> from schooltool.calendar.icalendar import read_icalendar
+        >>> events = list(read_icalendar('''\
+        ... BEGIN:VCALENDAR
+        ... VERSION:2.0
+        ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        ... BEGIN:VEVENT
+        ... SUMMARY:All day event
+        ... UID:some-random-uid@example.com
+        ... DTSTART;VALUE=DATE:20050226
+        ... DURATION:P2D
+        ... DTSTAMP:20050203T150000
+        ... END:VEVENT
+        ... END:VCALENDAR
+        ... '''))
+        >>> len(events)
+        1
+
+        >>> event = list(events)[0]
+        >>> event.title
+        u'All day event'
+        >>> event.duration
+        datetime.timedelta(2)
+        >>> event.allday
+        True
+        >>> event.dtstart
+        datetime.datetime(2005, 2, 26, 0, 0, tzinfo=<UTC>)
+
+    """
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite(
@@ -1029,7 +1190,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestParseDateTime))
     suite.addTest(unittest.makeSuite(TestPeriod))
     suite.addTest(unittest.makeSuite(TestVEvent))
-    suite.addTest(unittest.makeSuite(TestICalReader))
+    suite.addTest(unittest.makeSuite(TestReadIcalendar))
     suite.addTest(unittest.makeSuite(TestRowParser))
     return suite
 

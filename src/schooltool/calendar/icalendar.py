@@ -408,29 +408,32 @@ def read_icalendar(icalendar_text, charset='UTF-8'):
     Unsupported features of the iCalendar file (e.g. VTODO components, complex
     recurrence rules, unknown properties) are silently ignored.
     """
+
     if not hasattr(icalendar_text, 'read'):
         # It is not a file-like object -- let's assume it is a string
         icalendar_text = StringIO(icalendar_text)
 
-    for vevent in parse_icalendar(icalendar_text, charset):
-        if vevent.uid == EMPTY_CALENDAR_PLACEHOLDER:
-            continue # Ignore empty calendar placeholder "event"
+    rows = RowParser.parse(icalendar_text, charset)
+    vccol = VCalendarCollection.parse(rows)
 
-        # Currently SchoolBell does not support all-day events, so we must
-        # convert them into ordinary events that last 24 hours
-        # TODO: Now it does and this should be fixed!
-        dtstart = vevent.dtstart
-        if not isinstance(dtstart, datetime.datetime):
-            dtstart = datetime.datetime.combine(dtstart,
-                                                datetime.time(0))
-        duration = vevent.dtend - vevent.dtstart
+    for calendar in vccol.vcalendars:
+        for vevent in calendar.events:
+            if vevent.uid == EMPTY_CALENDAR_PLACEHOLDER:
+                continue # Ignore empty calendar placeholder "event"
 
-        yield SimpleCalendarEvent(dtstart, duration,
-                                  vevent.summary or '',
-                                  location=vevent.location,
-                                  description=vevent.description,
-                                  unique_id=vevent.uid,
-                                  recurrence=vevent.rrule)
+            dtstart = vevent.dtstart
+            if not isinstance(dtstart, datetime.datetime):
+                dtstart = datetime.datetime.combine(dtstart,
+                                                    datetime.time(0))
+            duration = vevent.dtend - vevent.dtstart
+
+            yield SimpleCalendarEvent(dtstart, duration,
+                                      vevent.summary or '',
+                                      location=vevent.location,
+                                      description=vevent.description,
+                                      unique_id=vevent.uid,
+                                      recurrence=vevent.rrule,
+                                      allday=vevent.all_day_event)
 
 
 #
@@ -745,56 +748,6 @@ class VTimezone(object):
 
         return VTimezone(tzid, tznames, x_lic_location=x_lic_location)
 
-
-def parse_icalendar(file, charset='UTF-8'):
-    """A function that reads in an iCalendar file.
-
-    Returns a list of all VEvent objects corresponding to the events
-    in the iCalendar file.
-
-    Short grammar of iCalendar files (RFC 2445 is the full spec):
-
-      contentline        = name *(";" param ) ":" value CRLF
-        ; content line first must be unfolded by replacing CRLF followed by a
-        ; single WSP with an empty string
-      name               = x-name / iana-token
-      x-name             = "X-" [vendorid "-"] 1*(ALPHA / DIGIT / "-")
-      iana-token         = 1*(ALPHA / DIGIT / "-")
-      vendorid           = 3*(ALPHA / DIGIT)
-      param              = param-name "=" param-value *("," param-value)
-      param-name         = iana-token / x-token
-      param-value        = paramtext / quoted-string
-      paramtext          = *SAFE-CHAR
-      value              = *VALUE-CHAR
-      quoted-string      = DQUOTE *QSAFE-CHAR DQUOTE
-
-      NON-US-ASCII       = %x80-F8
-      QSAFE-CHAR         = WSP / %x21 / %x23-7E / NON-US-ASCII
-                         ; Any character except CTLs and DQUOTE
-      SAFE-CHAR          = WSP / %x21 / %x23-2B / %x2D-39 / %x3C-7E
-                          / NON-US-ASCII
-                         ; Any character except CTLs, DQUOTE, ";", ":", ","
-      VALUE-CHAR         = WSP / %x21-7E / NON-US-ASCII  ; anything except CTLs
-      CR                 = %x0D
-      LF                 = %x0A
-      CRLF               = CR LF
-      CTL                = %x00-08 / %x0A-1F / %x7F
-      ALPHA              = %x41-5A / %x61-7A             ; A-Z / a-z
-      DIGIT              = %x30-39                       ; 0-9
-      DQUOTE             = %x22                          ; Quotation Mark
-      WSP                = SPACE / HTAB
-      SPACE              = %x20
-      HTAB               = %x09
-
-    """
-
-    rows = RowParser.parse(file, charset)
-    vccol = VCalendarCollection.parse(rows)
-
-    events = []
-    for calendar in vccol.vcalendars:
-        events.extend(calendar.events)
-    return events
 
 def parse_text(value):
     r"""Parse iCalendar TEXT value.
