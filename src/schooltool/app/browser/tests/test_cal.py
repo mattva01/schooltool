@@ -1639,7 +1639,8 @@ class CalendarEventAddTestView(CalendarEventAddView):
     _arguments = []
     _keyword_arguments = ['title', 'start_date', 'start_time', 'duration',
                           'recurrence', 'location', 'recurrence_type',
-                          'interval', 'range', 'until', 'count', 'exceptions']
+                          'interval', 'range', 'until', 'count', 'exceptions',
+                          'allday']
     _set_before_add = []
     _set_after_add = []
 
@@ -1701,6 +1702,66 @@ def doctest_CalendarEventView():
         >>> view = CalendarEventView(event2, request)
         >>> view.day
         u'Tuesday, 2004-02-03'
+
+    """
+
+
+def doctest_CalendarEventAddView_add_allday():
+    r"""Adding an allday event with a duration.
+
+    When creating an allday event we were not using the duration
+    field, now that should be fixed:
+
+        >>> request = TestRequest(
+        ...     form={'field.title': 'NonHacking',
+        ...           'field.start_date': '2005-02-27',
+        ...           'field.allday': 'on',
+        ...           'field.duration': '15',
+        ...           'field.recurrence.used': '',
+        ...           'field.recurrence_type': 'daily',
+        ...           'UPDATE_SUBMIT': 'Add'})
+
+        >>> calendar = Calendar(Person())
+        >>> directlyProvides(calendar, IContainmentRoot)
+        >>> view = CalendarEventAddTestView(calendar, request)
+        >>> view.update()
+        ''
+
+        >>> print view.errors
+        ()
+        >>> print view.error
+        None
+
+        >>> event = list(calendar)[0]
+        >>> event.allday
+        True
+        >>> event.duration.days
+        15
+
+    And even if the user will manage to set some other duration units
+    (not days), that input will be ignored:
+
+        >>> request = TestRequest(
+        ...     form={'field.title': 'Hacking',
+        ...           'field.start_date': '2005-02-27',
+        ...           'field.allday': 'on',
+        ...           'field.duration': '13',
+        ...           'field.duration_type': 'minutes',
+        ...           'field.recurrence.used': '',
+        ...           'field.recurrence_type': 'daily',
+        ...           'UPDATE_SUBMIT': 'Add'})
+
+        >>> calendar = Calendar(Person())
+        >>> directlyProvides(calendar, IContainmentRoot)
+        >>> view = CalendarEventAddTestView(calendar, request)
+        >>> view.update()
+        ''
+
+        >>> event = list(calendar)[0]
+        >>> event.allday
+        True
+        >>> event.duration.days
+        13
 
     """
 
@@ -2452,7 +2513,8 @@ class CalendarEventEditTestView(CalendarEventEditView):
     _arguments = []
     _keyword_arguments = ['title', 'start_date', 'start_time', 'duration',
                           'recurrence', 'location', 'recurrence_type',
-                          'interval', 'range', 'until', 'count', 'exceptions']
+                          'interval', 'range', 'until', 'count', 'exceptions',
+                          'allday']
     _set_before_add = []
     _set_after_add = []
 

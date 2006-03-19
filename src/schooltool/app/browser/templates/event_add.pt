@@ -32,6 +32,11 @@
             monthly_box.style.display = 'none';
         }
     }
+
+    first_run = true;
+    stored_duration = null;
+    stored_duration_type = null;
+
     function allday_changed() {
         /// XXX: No effect in IE
         var form = document.getElementById('form');
@@ -39,15 +44,39 @@
         var start_time = document.getElementById('field.start_time');
         var duration = document.getElementById('field.duration');
         var duration_type = document.getElementById('field.duration_type');
+
+        current_duration = duration.value;
+        current_duration_type = duration_type.value;
+
         if (allday.checked == true) {
             start_time.disabled = true;
-            duration.disabled = true;
             duration_type.disabled = true;
+
+            if (!first_run) {
+                if (stored_duration) {
+                     duration.value = stored_duration;
+                }
+                else if (current_duration_type != 'days'){
+                     duration.value = 1;
+                }
+                duration_type.value = 'days';
+                stored_duration = current_duration;
+                stored_duration_type = current_duration_type;
+            }
         } else {
             start_time.disabled = false;
-            duration.disabled = false;
             duration_type.disabled = false;
+
+            if (!first_run) {
+                if (stored_duration) {
+                     duration.value = stored_duration;
+                     duration_type.value = stored_duration_type;
+                }
+                stored_duration = current_duration;
+                stored_duration_type = current_duration_type;
+            }
         }
+        first_run = false;
     }
     function range_changed() {
         var range_c = document.getElementById('field.range_c');

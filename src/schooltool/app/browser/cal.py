@@ -1901,7 +1901,8 @@ class CalendarEventViewMixin(object):
         allday = kwargs.pop('allday', None)
         if not allday:
             self._requireField("start_time", errors)
-            self._requireField("duration", errors)
+
+        self._requireField("duration", errors)
 
         # Remove fields not needed for makeRecurrenceRule from kwargs
         title = kwargs.pop('title', None)
@@ -1953,7 +1954,9 @@ class CalendarEventViewMixin(object):
         if allday is True:
             # iCalendar has no spec for describing all-day events, but it seems
             # to be the de facto standard to give them a 1d duration.
-            duration = 1
+            # XXX ignas: ical has allday events, they are different
+            # from normal events, because they have a date as their
+            # dtstart not a datetime
             duration_type = "days"
             start_time = time(0, 0, tzinfo=utc)
             start = datetime.combine(start_date, start_time)
