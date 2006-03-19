@@ -156,6 +156,7 @@ Let the Frog modify this event:
     >>> frog.getControl('Date').value = '2005-02-03'
     >>> frog.getControl('Time').value = '01:00'
     >>> frog.getControl('Duration').value = '500'
+    >>> frog.getControl(name="field.duration_type").value = ['minutes']
 
     >>> frog.getControl('Update', index=1).click()
 

@@ -2784,6 +2784,36 @@ def doctest_CalendarEventEditView_getInitialData():
         >>> view.recurrence_widget._getFormValue()
         ''
 
+    Regression test for events with duration longer than 24 hours:
+
+        >>> event = CalendarEvent(title="Hacking",
+        ...                       dtstart=datetime.datetime(2004, 8, 13, 20, 0),
+        ...                       duration=datetime.timedelta(days=2),
+        ...                       location="Kitchen")
+
+        >>> view = CalendarEventEditTestView(event, request)
+        >>> view.duration_widget._getFormValue()
+        2
+
+        >>> view.duration_type_widget._getFormValue()
+        'days'
+
+    As users don't really measure all the times in minutes it would be
+    kind of nice to show units in hours if minutes divide up by 60:
+
+        >>> event = CalendarEvent(title="Hacking",
+        ...                       dtstart=datetime.datetime(2004, 8, 13, 20, 0),
+        ...                       duration=datetime.timedelta(hours=2),
+        ...                       location="Kitchen")
+
+        >>> view = CalendarEventEditTestView(event, request)
+
+        >>> view.duration_widget._getFormValue()
+        2
+
+        >>> view.duration_type_widget._getFormValue()
+        'hours'
+
     Let's create a recurrent event:
 
         >>> from schooltool.app.browser.cal import makeRecurrenceRule

@@ -2075,7 +2075,13 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
         initial["allday"] = context.allday
         initial["start_date"] = context.dtstart.date()
         initial["start_time"] = context.dtstart.astimezone(self.timezone).strftime("%H:%M")
-        initial["duration"] = context.duration.seconds / 60
+        duration = context.duration.seconds / 60 + context.duration.days * 1440
+        initial["duration_type"] = (duration % 60 and "minutes" or
+                                    duration % (24 * 60) and "hours" or
+                                    "days")
+        initial["duration"] = (initial["duration_type"] == "minutes" and duration or
+                               initial["duration_type"] == "hours" and duration / 60 or
+                               initial["duration_type"] == "days" and duration / 60 / 24)
         initial["location"] = context.location
         initial["description"] = context.description
         recurrence = context.recurrence
