@@ -19,7 +19,7 @@
 """
 Tests for schooltool views.
 
-$Id: test_browser.py 3710 2005-05-15 10:27:21Z gintas $
+$Id$
 """
 import unittest
 
@@ -370,27 +370,6 @@ def doctest_ViewPrefences():
         '%m/%d/%y'
         >>> prefs.first_day_of_week
         6
-    """
-
-
-def doctest_NavigationView():
-    """Unit tests for NavigationView.
-
-    This view works for any ILocatable object within a SchoolTool instance.
-
-      >>> from schooltool.app.app import SchoolToolApplication
-      >>> from schooltool.person.person import Person
-      >>> app = sbsetup.setupSchoolToolSite()
-      >>> p = Person('1')
-      >>> app['persons']['1'] = p
-
-    It makes the application available as `view.app`:
-
-      >>> from schooltool.app.browser import NavigationView
-      >>> view = NavigationView(p, None)
-      >>> view.app is app
-      True
-
     """
 
 

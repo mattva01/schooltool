@@ -45,27 +45,6 @@ from schooltool.person.interfaces import IPersonPreferences
 
 utc = timezone('UTC')
 
-
-class NavigationView(BrowserView):
-    """View for the navigation portlet.
-
-    A separate view lets us vary the content of the navigation portlet
-    according to the currently logged in user and/or context.  Currently
-    we do not make use of this flexibility, though.
-
-    This view finds the schooltool application from context and makes it
-    available to the page template as view/app.  Rendering this view on
-    an object that is not a part of a SchoolTool instance will raise an error,
-    so don't do that.
-
-    There is a SchoolTool version of this view in the schooltool layer.
-    """
-
-    def __init__(self, context, request):
-        super(NavigationView, self).__init__(context, request)
-        self.app = getSchoolToolApplication()
-
-
 class SchoolToolAPI(object):
     """TALES function namespace for SchoolTool specific actions.
 

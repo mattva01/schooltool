@@ -53,7 +53,6 @@ from schooltool.relationship.tests import setUpRelationships
 from schooltool.skin import breadcrumbs
 from schooltool.skin.macros import SchoolToolMacros
 
-from schooltool.app.browser import NavigationView
 from schooltool.app.browser import SchoolToolAPI, SortBy
 
 class BrowserMenuStub(object):
@@ -146,10 +145,6 @@ def setUp(test=None):
                       SimpleViewClass("./templates/calendar_macros.pt"))
     ztapi.browserView(None, 'generic_macros',
                       SimpleViewClass("../../skin/templates/generic_macros.pt"))
-
-    ztapi.browserView(None, 'schooltool_navigation',
-                      SimpleViewClass("../../skin/templates/navigation.pt",
-                                      bases=(NavigationView,)))
 
     # batching macros
     ztapi.browserView(None, 'batch_macros',
