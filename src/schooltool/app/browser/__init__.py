@@ -43,7 +43,6 @@ from schooltool.app.app import getSchoolToolApplication
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonPreferences
 
-utc = timezone('UTC')
 
 class SchoolToolAPI(object):
     """TALES function namespace for SchoolTool specific actions.
