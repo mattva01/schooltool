@@ -213,7 +213,7 @@ You can create an iCalendar file from a SchoolBell calendar.
     BEGIN:VEVENT
     UID:20050211T140836Z-19135-1013-8968-3@muskatas
     ...
-    DTSTART:20050209T203000Z
+    DTSTART:20050209T183000Z
     DURATION:PT3H
     DTSTAMP:...
     END:VEVENT

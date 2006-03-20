@@ -32,6 +32,7 @@ from datetime import date, timedelta, datetime
 from StringIO import StringIO
 
 from zope.testing import doctest
+from zope.testing.doctestunit import pprint
 
 
 def diff(old, new, oldlabel="expected output", newlabel="actual output"):
@@ -87,24 +88,20 @@ class TestParseDateTime(TimezoneTestMixin, unittest.TestCase):
     def test_timezones(self):
         # The simple tests are in the doctest of parse_date_time.
         from schooltool.calendar.icalendar import parse_date_time
+        from pytz import utc
 
         if not self.have_tzset:
             return # Do not run this test on Windows
 
         self.setTZ('UTC')
         dt = parse_date_time('20041029T125031Z')
-        self.assertEquals(dt, datetime(2004, 10, 29, 12, 50, 31))
+        self.assertEquals(dt, datetime(2004, 10, 29, 12, 50, 31, tzinfo=utc))
 
         self.setTZ('EET-2EEST')
         dt = parse_date_time('20041029T095031Z') # daylight savings
-        self.assertEquals(dt, datetime(2004, 10, 29, 9, 50, 31))
+        self.assertEquals(dt, datetime(2004, 10, 29, 9, 50, 31, tzinfo=utc))
         dt = parse_date_time('20041129T095031Z') # no daylight savings
-        self.assertEquals(dt, datetime(2004, 11, 29, 9, 50, 31))
-
-        # we handle dates without any TZ info by assuming UTC.
-        # TODO: probably can remove support and raise an error in these cases.
-        self.assertEquals(parse_date_time('20041129T095031Z'),
-                          parse_date_time('20041129T095031'))
+        self.assertEquals(dt, datetime(2004, 11, 29, 9, 50, 31, tzinfo=utc))
 
 
 class TestPeriod(unittest.TestCase):
@@ -589,22 +586,6 @@ class TestReadIcalendar(unittest.TestCase):
          :-//Mozilla.org/NONSGML Mozilla Calendar V1.0//EN
         METHOD
          :PUBLISH
-        BEGIN:VTIMEZONE
-        TZID:Europe/Berlin
-        LAST-MODIFIED:20060314T174500Z
-        BEGIN:STANDARD
-        DTSTART:20051030T010000
-        TZOFFSETTO:+0100
-        TZOFFSETFROM:+0000
-        TZNAME:CET
-        END:STANDARD
-        BEGIN:DAYLIGHT
-        DTSTART:20060326T020000
-        TZOFFSETTO:+0200
-        TZOFFSETFROM:+0100
-        TZNAME:CEST
-        END:DAYLIGHT
-        END:VTIMEZONE
         BEGIN:VEVENT
         UID
          :956630271
@@ -669,6 +650,177 @@ class TestReadIcalendar(unittest.TestCase):
         """)
 
     ical_with_timezones = dedent("""\
+        BEGIN:VCALENDAR
+        VERSION:2.0
+        X-WR-CALNAME:testas
+        PRODID:-//Apple Computer\, Inc//iCal 1.5//EN
+        X-WR-RELCALID:42A41871-B382-11DA-BA4E-000A95CA5872
+        X-WR-TIMEZONE:Europe/Helsinki
+        CALSCALE:GREGORIAN
+        METHOD:PUBLISH
+        BEGIN:VTIMEZONE
+        TZID:Europe/Berlin
+        LAST-MODIFIED:20060314T174500Z
+        BEGIN:STANDARD
+        DTSTART:20051030T010000
+        TZOFFSETTO:+0100
+        TZOFFSETFROM:+0000
+        TZNAME:CET
+        END:STANDARD
+        BEGIN:DAYLIGHT
+        DTSTART:20060326T020000
+        TZOFFSETTO:+0200
+        TZOFFSETFROM:+0100
+        TZNAME:CEST
+        END:DAYLIGHT
+        END:VTIMEZONE
+        BEGIN:VTIMEZONE
+        TZID:Asia/Shanghai
+        LAST-MODIFIED:20060314T174500Z
+        BEGIN:STANDARD
+        DTSTART:19321213T204552
+        TZOFFSETTO:+0800
+        TZOFFSETFROM:+0000
+        TZNAME:CST
+        END:STANDARD
+        BEGIN:DAYLIGHT
+        DTSTART:19400603T000000
+        TZOFFSETTO:+0900
+        TZOFFSETFROM:+0800
+        TZNAME:CDT
+        END:DAYLIGHT
+        BEGIN:STANDARD
+        DTSTART:19401001T000000
+        TZOFFSETTO:+0800
+        TZOFFSETFROM:+0900
+        TZNAME:CST
+        END:STANDARD
+        BEGIN:DAYLIGHT
+        DTSTART:19410316T000000
+        TZOFFSETTO:+0900
+        TZOFFSETFROM:+0800
+        TZNAME:CDT
+        END:DAYLIGHT
+        BEGIN:STANDARD
+        DTSTART:19411001T000000
+        TZOFFSETTO:+0800
+        TZOFFSETFROM:+0900
+        TZNAME:CST
+        END:STANDARD
+        BEGIN:DAYLIGHT
+        DTSTART:19860504T000000
+        TZOFFSETTO:+0900
+        TZOFFSETFROM:+0800
+        TZNAME:CDT
+        END:DAYLIGHT
+        BEGIN:STANDARD
+        DTSTART:19860914T000000
+        TZOFFSETTO:+0800
+        TZOFFSETFROM:+0900
+        TZNAME:CST
+        END:STANDARD
+        BEGIN:DAYLIGHT
+        DTSTART:19870412T000000
+        TZOFFSETTO:+0900
+        TZOFFSETFROM:+0800
+        TZNAME:CDT
+        END:DAYLIGHT
+        BEGIN:STANDARD
+        DTSTART:19870913T000000
+        TZOFFSETTO:+0800
+        TZOFFSETFROM:+0900
+        TZNAME:CST
+        END:STANDARD
+        BEGIN:DAYLIGHT
+        DTSTART:19880410T000000
+        TZOFFSETTO:+0900
+        TZOFFSETFROM:+0800
+        TZNAME:CDT
+        END:DAYLIGHT
+        BEGIN:STANDARD
+        DTSTART:19880911T000000
+        TZOFFSETTO:+0800
+        TZOFFSETFROM:+0900
+        TZNAME:CST
+        END:STANDARD
+        BEGIN:DAYLIGHT
+        DTSTART:19890416T000000
+        TZOFFSETTO:+0900
+        TZOFFSETFROM:+0800
+        TZNAME:CDT
+        END:DAYLIGHT
+        BEGIN:STANDARD
+        DTSTART:19890917T000000
+        TZOFFSETTO:+0800
+        TZOFFSETFROM:+0900
+        TZNAME:CST
+        END:STANDARD
+        BEGIN:DAYLIGHT
+        DTSTART:19900415T000000
+        TZOFFSETTO:+0900
+        TZOFFSETFROM:+0800
+        TZNAME:CDT
+        END:DAYLIGHT
+        BEGIN:STANDARD
+        DTSTART:19900916T000000
+        TZOFFSETTO:+0800
+        TZOFFSETFROM:+0900
+        TZNAME:CST
+        END:STANDARD
+        BEGIN:DAYLIGHT
+        DTSTART:19910414T000000
+        TZOFFSETTO:+0900
+        TZOFFSETFROM:+0800
+        TZNAME:CDT
+        END:DAYLIGHT
+        BEGIN:STANDARD
+        DTSTART:19910915T000000
+        TZOFFSETTO:+0800
+        TZOFFSETFROM:+0900
+        TZNAME:CST
+        END:STANDARD
+        END:VTIMEZONE
+        BEGIN:VTIMEZONE
+        TZID:Europe/Helsinki
+        LAST-MODIFIED:20060314T174500Z
+        BEGIN:STANDARD
+        DTSTART:20051030T010000
+        TZOFFSETTO:+0200
+        TZOFFSETFROM:+0000
+        TZNAME:EET
+        END:STANDARD
+        BEGIN:DAYLIGHT
+        DTSTART:20060326T040000
+        TZOFFSETTO:+0300
+        TZOFFSETFROM:+0200
+        TZNAME:EEST
+        END:DAYLIGHT
+        END:VTIMEZONE
+        BEGIN:VEVENT
+        DTSTART;TZID=Europe/Helsinki:20060307T200000
+        SUMMARY:Europe/helsinki
+        UID:42A40DBE-B382-11DA-BA4E-000A95CA5872
+        SEQUENCE:1
+        DTSTAMP:20060314T174340Z
+        DURATION:PT1H
+        END:VEVENT
+        BEGIN:VEVENT
+        DTSTART;TZID=Asia/Shanghai:20060308T200000
+        SUMMARY:Asia/Shanghai
+        UID:42A411C1-B382-11DA-BA4E-000A95CA5872
+        SEQUENCE:2
+        DTSTAMP:20060314T174418Z
+        DURATION:PT1H
+        END:VEVENT
+        BEGIN:VEVENT
+        DTSTART;TZID=Europe/Berlin:20060309T200000
+        SUMMARY:Europe/Berlin
+        UID:42A4138F-B382-11DA-BA4E-000A95CA5872
+        SEQUENCE:2
+        DTSTAMP:20060314T174433Z
+        DURATION:PT1H
+        END:VEVENT
+        END:VCALENDAR
         """)
 
     def doctest_error_handling(self):
@@ -843,6 +995,23 @@ class TestReadIcalendar(unittest.TestCase):
 
         """
 
+    def test_read_icalendar_with_timezones(self):
+        from schooltool.calendar.icalendar import read_icalendar, ICalParseError
+        from pytz import utc
+
+        file = StringIO(self.ical_with_timezones)
+        result = list(read_icalendar(file))
+        self.assertEqual(len(result), 3)
+        event = result[0]
+
+        self.assertEqual(event.dtstart, datetime(2006, 3, 7, 18, 0, tzinfo=utc))
+
+        event = result[1]
+        self.assertEqual(event.dtstart, datetime(2006, 3, 8, 12, 0, tzinfo=utc))
+
+        event = result[2]
+        self.assertEqual(event.dtstart, datetime(2006, 3, 9, 19, 0, tzinfo=utc))
+
     def test_read_icalendar(self):
         from schooltool.calendar.icalendar import read_icalendar, ICalParseError
         from pytz import utc
@@ -879,6 +1048,109 @@ class TestReadIcalendar(unittest.TestCase):
 
         file = StringIO("")
         self.assertEquals(list(read_icalendar(file)), [])
+
+
+def doctest_read_icalendar_floating():
+    r"""Tests for reading of events with floating time.
+
+        >>> from schooltool.calendar.icalendar import read_icalendar
+        >>> calendar = dedent('''\
+        ...     BEGIN:VCALENDAR
+        ...     BEGIN:VEVENT
+        ...     UID:hello
+        ...     DTSTART;VALUE=DATE-TIME:20010203T101516
+        ...     BEGIN:VALARM
+        ...     X-PROP:foo
+        ...     END:VALARM
+        ...     END:VEVENT
+        ...
+        ...     END:VCALENDAR''')
+
+    If no fallback_tz is passed, floating time events are converted to
+    UTC:
+
+        >>> event = list(read_icalendar(calendar))[0]
+        >>> event.dtstart
+        datetime.datetime(2001, 2, 3, 10, 15, 16, tzinfo=<UTC>)
+
+    But if we pass a fallback_tz it should be used:
+
+        >>> import pytz
+        >>> tzinfo = pytz.timezone('Europe/Vilnius')
+        >>> event = list(read_icalendar(calendar, fallback_tz=tzinfo))[0]
+        >>> event.dtstart
+        datetime.datetime(2001, 2, 3, 8, 15, 16, tzinfo=<UTC>)
+
+    """
+
+
+def doctest_read_icalendar_unrecognized_timezone():
+    r"""Tests for reading of events with unrecognized timezone.
+
+    If event has a timezone we can't recognize set:
+
+        >>> from schooltool.calendar.icalendar import read_icalendar
+        >>> calendar = dedent('''\
+        ...     BEGIN:VCALENDAR
+        ...
+        ...     BEGIN:VTIMEZONE
+        ...     TZID:Yurop/Berlin
+        ...     BEGIN:STANDARD
+        ...     TZNAME:YNAME
+        ...     END:STANDARD
+        ...     END:VTIMEZONE
+        ...
+        ...     BEGIN:VEVENT
+        ...     UID:some-random-uid@example.com
+        ...     DTSTART;TZID=Yurop/Berlin:20050226T160000
+        ...     DURATION:PT6H
+        ...     DTSTAMP:20050203T150000
+        ...     END:VEVENT
+        ...
+        ...     END:VCALENDAR''')
+
+    they are treated as if they were happening in UTC:
+
+        >>> event = list(read_icalendar(calendar))[0]
+        >>> event.dtstart
+        datetime.datetime(2005, 2, 26, 16, 0, tzinfo=<UTC>)
+
+    But if we pass a fallback_tz it should be used:
+
+        >>> import pytz
+        >>> tzinfo = pytz.timezone('Europe/Vilnius')
+        >>> event = list(read_icalendar(calendar, fallback_tz=tzinfo))[0]
+        >>> event.dtstart
+        datetime.datetime(2005, 2, 26, 14, 0, tzinfo=<UTC>)
+
+    """
+
+
+def doctest_read_icalendar_allday_dtend():
+    r"""Tests for reading of allday events with DTEND.
+
+    Duration of all-day events should get properly calculated:
+
+        >>> from schooltool.calendar.icalendar import read_icalendar
+        >>> calendar = dedent('''\
+        ...     BEGIN:VCALENDAR
+        ...
+        ...     BEGIN:VEVENT
+        ...     UID:some-random-uid@example.com
+        ...     DTSTART;VALUE=DATE:20050226
+        ...     DTEND;VALUE=DATE:20050228
+        ...     DTSTAMP:20050203T150000
+        ...     END:VEVENT
+        ...
+        ...     END:VCALENDAR''')
+
+        >>> event = list(read_icalendar(calendar))[0]
+        >>> event.dtstart
+        datetime.datetime(2005, 2, 26, 0, 0, tzinfo=<UTC>)
+        >>> event.duration
+        datetime.timedelta(2)
+
+    """
 
 
 class TestRowParser(unittest.TestCase):
@@ -1014,6 +1286,48 @@ def doctest_VTimezone():
     """
 
 
+def doctest_VTimezone_getTzinfo():
+    """Tests for VTimezone.getTzinfo()
+
+        >>> from schooltool.calendar.icalendar import VTimezone
+
+    If tzid has a matching timezone, we use it, ignoring other
+    arguments:
+
+        >>> vtimezone = VTimezone("Europe/Berlin",
+        ...                       ['CET', 'CEST'],
+        ...                       x_lic_location="Europe/Vilnius")
+        >>> vtimezone.getTzinfo()
+        <DstTzInfo 'Europe/Berlin' CET+1:00:00 STD>
+
+    If not, we iterate through tzname list and return the first match:
+
+        >>> vtimezone = VTimezone("Evolution-blahblah@@obscure_Europe/Berlin",
+        ...                       ['CET', 'CEST'])
+        >>> vtimezone.getTzinfo()
+        <DstTzInfo 'CET' CET+1:00:00 STD>
+
+    We iterate from end to front, because in most ics files more
+    recent tznames are in the end of the list:
+
+        >>> vtimezone = VTimezone("Evolution-blahblah@@obscure_Europe/Berlin",
+        ...                       ['CET', 'EET'])
+        >>> vtimezone.getTzinfo()
+        <DstTzInfo 'EET' EET+2:00:00 STD>
+
+    If x_lic_location is supplied and has a matching timezone, tznames
+    are ignored. x_lic_location is used only if tzid has no matching
+    timezone:
+
+        >>> vtimezone = VTimezone("Evolution-blahblah@@obscure_Europe/Berlin",
+        ...                       ['CET', 'CEST'],
+        ...                       x_lic_location="Europe/Vilnius")
+        >>> vtimezone.getTzinfo()
+        <DstTzInfo 'Europe/Vilnius' WMT+1:24:00 STD>
+
+    """
+
+
 def doctest_VTimezone_errors():
     r"""Test for VTimezone error handling.
 
@@ -1089,8 +1403,47 @@ def doctest_VCalendar():
         ... ''')
         >>> rows = list(RowParser.parse(example_ical.splitlines()))
         >>> vcal = VCalendar.parse(rows)
-        >>> vcal.timezones
-        [<schooltool.calendar.icalendar.VTimezone object at ...>]
+        >>> pprint(vcal.timezones)
+        {u'EUROPE/BERLIN': <DstTzInfo 'Europe/Berlin' CET+1:00:00 STD>,
+         'UTC': <UTC>}
+        >>> vcal.events
+        [<schooltool.calendar.icalendar.VEvent object at ...>]
+
+    If there is a vtimezone block that we can't find a tzinfo for we
+    are skipping it:
+
+        >>> example_ical = dedent('''
+        ... BEGIN:VCALENDAR
+        ... VERSION:2.0
+        ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        ...
+        ... BEGIN:VTIMEZONE
+        ... TZID:Europe/Berlin
+        ... BEGIN:STANDARD
+        ... TZNAME:CET
+        ... END:STANDARD
+        ... END:VTIMEZONE
+        ...
+        ... BEGIN:VTIMEZONE
+        ... TZID:Yurop/Berlin
+        ... BEGIN:STANDARD
+        ... TZNAME:YNAME
+        ... END:STANDARD
+        ... END:VTIMEZONE
+        ...
+        ... BEGIN:VEVENT
+        ... UID:some-random-uid@example.com
+        ... DTSTART:20050226T160000
+        ... DURATION:PT6H
+        ... DTSTAMP:20050203T150000
+        ... END:VEVENT
+        ... END:VCALENDAR
+        ... ''')
+        >>> rows = list(RowParser.parse(example_ical.splitlines()))
+        >>> vcal = VCalendar.parse(rows)
+        >>> pprint(vcal.timezones)
+        {u'EUROPE/BERLIN': <DstTzInfo 'Europe/Berlin' CET+1:00:00 STD>,
+         'UTC': <UTC>}
         >>> vcal.events
         [<schooltool.calendar.icalendar.VEvent object at ...>]
 

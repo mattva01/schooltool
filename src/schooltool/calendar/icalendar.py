@@ -397,13 +397,16 @@ def ical_duration(value):
         return "%sP%dD%s" % (sign, abs(value.days), timepart)
 
 
-def read_icalendar(icalendar_text, charset='UTF-8'):
+def read_icalendar(icalendar_text, charset='UTF-8', fallback_tz=pytz.utc):
     """Read an iCalendar file and return calendar events.
 
     Returns an iterator over calendar events.
 
     `icalendar_text` can be a file object or a string.  It is assumed that
     the iCalendar file contains UTF-8 text.
+
+    `fallback_tz` is used for timestamps when the timezone is not specified
+    or not recognized.
 
     Unsupported features of the iCalendar file (e.g. VTODO components, complex
     recurrence rules, unknown properties) are silently ignored.
@@ -425,7 +428,19 @@ def read_icalendar(icalendar_text, charset='UTF-8'):
             if not isinstance(dtstart, datetime.datetime):
                 dtstart = datetime.datetime.combine(dtstart,
                                                     datetime.time(0))
-            duration = vevent.dtend - vevent.dtstart
+            # XXX regression test for events with a date as dtend
+            dtend = vevent.dtend
+            if not isinstance(dtend, datetime.datetime):
+                dtend = datetime.datetime.combine(dtend,
+                                                  datetime.time(0))
+
+            if dtstart.tzinfo is None:
+                dtstart_tz = calendar.timezones.get(vevent.dtstart_tzid, fallback_tz)
+                dtstart = dtstart_tz.localize(dtstart).astimezone(pytz.utc)
+            if dtend.tzinfo is None:
+                dtend_tz = calendar.timezones.get(vevent.dtend_tzid, fallback_tz)
+                dtend = dtend_tz.localize(dtend).astimezone(pytz.utc)
+            duration = dtend - dtstart
 
             yield SimpleCalendarEvent(dtstart, duration,
                                       vevent.summary or '',
@@ -708,8 +723,14 @@ class VCalendar(object):
         """Parse a list of rows into a VCalendar object."""
         props, blocks = parse_block(rows[1:-1])
 
-        timezones = [VTimezone.parse(block)
-                     for block in blocks.get('VTIMEZONE', [])]
+        timezones = {'UTC': pytz.utc}
+        for block in blocks.get('VTIMEZONE', []):
+            vtimezone = VTimezone.parse(block)
+            tzinfo = vtimezone.getTzinfo()
+            if tzinfo is None:
+                continue # couldn't parse it :/
+                # TODO: the user should be informed
+            timezones[vtimezone.tzid.upper()] = tzinfo
         events = [VEvent.parse(block)
                   for block in blocks.get('VEVENT', [])]
         return VCalendar(events, timezones)
@@ -721,6 +742,19 @@ class VTimezone(object):
         self.tzid = tzid
         self.tznames = tznames
         self.x_lic_location = x_lic_location
+
+    def getTzinfo(self):
+        """Deduce the pytz timezone from the VTIMEZONE block."""
+        if self.tzid in pytz.all_timezones:
+            return pytz.timezone(self.tzid)
+        elif self.x_lic_location in pytz.all_timezones:
+            return pytz.timezone(self.x_lic_location)
+        else:
+            for tzname in reversed(self.tznames):
+                if tzname in pytz.all_timezones:
+                    return pytz.timezone(tzname)
+        # We don't know
+        return None
 
     @staticmethod
     def parse(rows):
@@ -825,7 +859,7 @@ def parse_date_time(value):
     datetime.datetime(2003, 4, 5, 6, 7, 8)
 
     >>> parse_date_time('20030405T060708Z')
-    datetime.datetime(2003, 4, 5, 6, 7, 8)
+    datetime.datetime(2003, 4, 5, 6, 7, 8, tzinfo=<UTC>)
 
     Examples of invalid arguments:
 
@@ -856,9 +890,7 @@ def parse_date_time(value):
     dt = datetime.datetime(int(y), int(m), int(d),
                            int(hh), int(mm), int(ss))
     if utc:
-        # currently we only handle iCal files in UTC.
-        pass
-
+        return pytz.utc.localize(dt)
     return dt
 
 
