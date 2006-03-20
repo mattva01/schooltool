@@ -1,0 +1,192 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <!-- Viewlet Managers -->
+
+  <viewletManager
+      name="schooltool.CSS"
+      permission="zope.Public"
+      provides=".skin.ICSSManager"
+      />
+
+  <viewletManager
+      name="schooltool.JavaScript"
+      permission="zope.Public"
+      provides=".skin.IJavaScriptManager"
+      />
+
+  <viewletManager
+      name="schooltool.Header"
+      permission="zope.Public"
+      provides=".skin.IHeaderManager"
+      />
+
+  <viewletManager
+      name="schooltool.Navigation"
+      permission="zope.Public"
+      provides=".skin.INavigationManager"
+      template="templates/navigation.pt"
+      class=".skin.OrderedViewletManager"
+      />
+
+  <!-- Skin and resources -->
+
+  <zope:interface
+      interface=".skin.ISchoolToolSkin"
+      type="zope.publisher.interfaces.browser.IBrowserSkinType"
+      name="SchoolTool"
+      />
+
+  <page
+      name="standard_macros"
+      for="*"
+      class=".macros.StandardMacros"
+      allowed_interface="zope.interface.common.mapping.IItemMapping"
+      permission="zope.Public"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+
+  <page
+      name="schooltool_macros"
+      for="*"
+      class=".macros.SchoolToolMacros"
+      allowed_interface="zope.interface.common.mapping.IItemMapping"
+      permission="zope.Public"
+      />
+
+  <page
+      name="view_macros"
+      for="*"
+      permission="zope.View"
+      template="templates/view_macros.pt"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+
+  <page
+      name="generic_macros"
+      for="*"
+      permission="zope.View"
+      template="templates/generic_macros.pt"
+      />
+
+  <page
+      name="widget_macros"
+      for="*"
+      permission="zope.View"
+      template="templates/widget_macros.pt"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+
+  <icon
+      name="zmi_icon"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      file="resources/icon.png"
+      />
+
+  <resource
+      name="logo.png"
+      file="resources/schooltool.png"
+      layer="schooltool.skin.ISchoolToolLayer" />
+
+  <resource
+      name="schooltool.css"
+      file="resources/schooltool.css"
+      layer="schooltool.skin.ISchoolToolLayer" />
+
+  <resource name="layout.css" file="resources/layout.css"
+            layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="schooltool.js" file="resources/schooltool.js"
+            layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="favicon.ico" file="resources/favicon.ico"
+            layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="toolbar-background.png"
+            file="resources/toolbar-background.png"
+            layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="toolbar-background-hover.png"
+            file="resources/toolbar-background-hover.png"
+            layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="sidebar-background.png"
+            file="resources/sidebar-background.png"
+            layer="schooltool.skin.ISchoolToolLayer" />
+
+  <resource name="previous.png" file="resources/previous.png"
+            layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="next.png" file="resources/next.png"
+            layer="schooltool.skin.ISchoolToolLayer" />
+
+  <resource name="printer.png" file="resources/printer.png"
+            layer="schooltool.skin.ISchoolToolLayer" />
+
+  <resource name="delete.png" file="resources/delete.png"
+            layer="schooltool.skin.ISchoolToolLayer" />
+
+  <resource name="note-head-l.gif" file="resources/note-head-l.gif"
+            layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="note-head-r.gif" file="resources/note-head-r.gif"
+            layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="note-body-r.gif" file="resources/note-body-r.gif"
+            layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="note-body-l.gif" file="resources/note-body-l.gif"
+            layer="schooltool.skin.ISchoolToolLayer" />
+
+  <resource name="private-note-head-l.gif"
+            file="resources/private-note-head-l.gif"
+            layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="private-note-head-r.gif"
+            file="resources/private-note-head-r.gif"
+            layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="private-note-body-r.gif"
+            file="resources/private-note-body-r.gif"
+            layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="private-note-body-l.gif"
+            file="resources/private-note-body-l.gif"
+            layer="schooltool.skin.ISchoolToolLayer" />
+
+  <!-- Breadcrumbs -->
+
+  <page
+      for="*"
+      name="breadcrumbs"
+      class=".breadcrumbs.Breadcrumbs"
+      permission="zope.Public"
+      allowed_interface=".interfaces.IBreadcrumbs"
+      />
+
+  <zope:adapter
+      factory=".breadcrumbs.GenericBreadcrumbInfo"
+      trusted="true"
+      permission="zope.Public"
+      />
+
+  <!-- Error messages -->
+
+  <page
+      for="zope.interface.common.interfaces.IException"
+      name="index.html"
+      layer="schooltool.skin.ISchoolToolLayer"
+      class=".error.ErrorView"
+      template="templates/error.pt"
+      permission="zope.Public"
+      />
+
+  <page
+      for="zope.publisher.interfaces.INotFound"
+      name="index.html"
+      layer="schooltool.skin.ISchoolToolLayer"
+      class="zope.app.exception.browser.notfound.NotFound"
+      template="templates/notfound.pt"
+      permission="zope.Public"
+      />
+
+  <page
+      for="zope.security.interfaces.IUnauthorized"
+      name="index.html"
+      layer="schooltool.skin.ISchoolToolLayer"
+      class="zope.app.exception.browser.unauthorized.Unauthorized"
+      template="templates/unauthorized.pt"
+      permission="zope.Public"
+      />
+
+</configure>

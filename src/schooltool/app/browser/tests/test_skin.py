@@ -19,7 +19,7 @@
 """
 Tests for schooltool.app.browser.skin.
 
-$Id: test_skin.py 2643 2005-02-01 11:13:58Z mg $
+$Id$
 """
 
 import unittest
@@ -30,94 +30,6 @@ from zope.testing import doctest
 from zope.app.testing import setup
 from zope.publisher.browser import TestRequest
 from zope.app.publication.zopepublication import BeforeTraverseEvent
-
-from schooltool.testing.setup import setupSchoolToolSite
-
-
-def doctest_OrderedViewletManager_sort():
-    r"""Tests for OrderedViewletManager.sort
-
-        >>> from schooltool.app.browser.skin import OrderedViewletManager
-
-    If two viewlets have an ``order`` attribute, they are ordered by it.
-    This attribute may be a string, if defined via zcml.
-
-    If two viewlets do not have an ``order`` attribute, they are ordered
-    alphabetically by their ``title`` attributes.
-
-    If it so happens that one viewlet has an ``order`` attribute, and the other
-    doesn't, the one with an order comes first.
-
-        >>> class SomeViewlet(object):
-        ...     def __init__(self, title=None, order=None):
-        ...         if title is not None:
-        ...             self.title = title
-        ...         if order is not None:
-        ...             self.order = order
-
-        >>> mgr = OrderedViewletManager(context=None, request=None, view=None)
-        >>> viewlets = [
-        ...     ('name1', SomeViewlet('One', '1')),
-        ...     ('name2', SomeViewlet('Apple')),
-        ...     ('name3', SomeViewlet('Twenty-two', '22')),
-        ...     ('name4', SomeViewlet('Five', '5')),
-        ...     ('name5', SomeViewlet('Orange')),
-        ...     ('name6', SomeViewlet('Grapefuit')),
-        ... ]
-        >>> for name, v in mgr.sort(viewlets):
-        ...     print v.title
-        One
-        Five
-        Twenty-two
-        Apple
-        Grapefuit
-        Orange
-
-    Viewlets may not necessarily have a title, if they have an order.
-
-        >>> viewlets = [
-        ...     ('name1', SomeViewlet(order='1')),
-        ...     ('name22', SomeViewlet(order='22')),
-        ...     ('name5', SomeViewlet(order='5')),
-        ... ]
-        >>> for name, v in mgr.sort(viewlets):
-        ...     print name
-        name1
-        name5
-        name22
-
-    Viewlets must have either an order or a title, and the error message
-    should explicitly say which viewlet is at fault:
-
-        >>> viewlets = [
-        ...     ('name1', SomeViewlet(order='1')),
-        ...     ('name2', SomeViewlet()),
-        ...     ('name3', SomeViewlet(title='hi')),
-        ... ]
-        >>> mgr.sort(viewlets)
-        Traceback (most recent call last):
-          ...
-        AttributeError: 'name2' viewlet has neither order nor title
-
-    """
-
-
-def doctest_NavigationViewlet_appURL():
-    r"""Tests for NavigationViewlet.appURL
-
-        >>> setup.placefulSetUp()
-        >>> site = setupSchoolToolSite()
-
-        >>> from schooltool.app.browser.skin import NavigationViewlet
-        >>> viewlet = NavigationViewlet()
-        >>> viewlet.request = TestRequest()
-        >>> viewlet.appURL()
-        'http://127.0.0.1'
-
-        >>> setup.placefulTearDown()
-
-    """
-
 
 def doctest_CalendarEventViewletManager():
     """Tests for CalendarEventViewletManager.
@@ -130,7 +42,6 @@ def doctest_CalendarEventViewletManager():
 
     """
 
-
 def doctest_schoolToolTraverseSubscriber():
     """Tests for schoolToolTraverseSubscriber.
 
@@ -138,7 +49,7 @@ def doctest_schoolToolTraverseSubscriber():
     whenever an ISchoolToolApplication is traversed during URL traversal.
 
         >>> from schooltool.app.browser.skin import schoolToolTraverseSubscriber
-        >>> from schooltool.app.browser.skin import ISchoolToolSkin
+        >>> from schooltool.skin import ISchoolToolSkin
         >>> from schooltool.app.app import SchoolToolApplication
 
         >>> ob = SchoolToolApplication()
@@ -149,9 +60,9 @@ def doctest_schoolToolTraverseSubscriber():
         True
         >>> skin = list(providedBy(request).interfaces())[1]
         >>> skin
-        <InterfaceClass schooltool.app.browser.skin.ISchoolToolSkin>
+        <InterfaceClass schooltool.skin.skin.ISchoolToolSkin>
         >>> pprint.pprint(skin.getBases())
-        (<InterfaceClass schooltool.app.browser.skin.ISchoolToolLayer>,
+        (<InterfaceClass schooltool.skin.skin.ISchoolToolLayer>,
          <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>)
 
     The skin is, obviously, not applied if you traverse some other object

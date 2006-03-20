@@ -50,11 +50,11 @@ from zope.app.publisher.browser.menu import MenuAccessView
 from zope.app.publisher.interfaces.browser import IBrowserView, IBrowserMenu
 
 from schooltool.relationship.tests import setUpRelationships
-from schooltool.app.browser import SchoolToolAPI, SortBy
-from schooltool.app.browser import NavigationView
-from schooltool.app.browser import breadcrumbs
-from schooltool.app.browser.macros import SchoolToolMacros
+from schooltool.skin import breadcrumbs
+from schooltool.skin.macros import SchoolToolMacros
 
+from schooltool.app.browser import NavigationView
+from schooltool.app.browser import SchoolToolAPI, SortBy
 
 class BrowserMenuStub(object):
     """A stub that fakes browser menu.
@@ -139,16 +139,16 @@ def setUp(test=None):
     # standard_macros, schooltool_macros and schooltool_navigation
     ztapi.browserView(None, 'standard_macros', StandardMacros)
     ztapi.browserView(None, 'view_macros',
-                      SimpleViewClass("./templates/view_macros.pt"))
+                      SimpleViewClass("../../skin/templates/view_macros.pt"))
 
     ztapi.browserView(None, 'schooltool_macros', SchoolToolMacros)
     ztapi.browserView(None, 'calendar_macros',
                       SimpleViewClass("./templates/calendar_macros.pt"))
     ztapi.browserView(None, 'generic_macros',
-                      SimpleViewClass("./templates/generic_macros.pt"))
+                      SimpleViewClass("../../skin/templates/generic_macros.pt"))
 
     ztapi.browserView(None, 'schooltool_navigation',
-                      SimpleViewClass("./templates/navigation.pt",
+                      SimpleViewClass("../../skin/templates/navigation.pt",
                                       bases=(NavigationView,)))
 
     # batching macros
@@ -199,7 +199,7 @@ def setUp(test=None):
 
     # viewlet manager registrations
     from zope.viewlet import manager
-    from schooltool.app.browser import skin
+    from schooltool import skin
     name = 'schooltool.Header'
     zope.component.provideAdapter(
         manager.ViewletManager(name, skin.IHeaderManager),

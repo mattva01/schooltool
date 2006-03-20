@@ -119,32 +119,3 @@ class ICalendarProvider(Interface):
 
         Yields tuples (calendar, color1, color2).
         """
-
-class IBreadcrumbs(Interface):
-    """An object providing breadcrumbs.
-
-    This object will use the ``IBreadcrumbInfo`` adapter to get its
-    information from each entry.
-    """
-
-    crumbs = Attribute('An iteratable of all breadcrumbs.')
-
-
-class IBreadcrumbInfo(Interface):
-    """Provides pieces of information about a breadcrumb."""
-
-    name = TextLine(
-        title=u'Name',
-        description=u'The name of the breadcrumb.',
-        required=True)
-
-    url = URI(
-        title=u'URL',
-        description=u'The url of the breadcrumb.',
-        required=True)
-
-    active = Bool(
-        title=u'Active',
-        description=u'Tells whether the breadcrumb link should active.',
-        required=True,
-        default=True)

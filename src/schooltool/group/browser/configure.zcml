@@ -12,7 +12,7 @@
       permission="zope.Public"
       />
 
-  <configure package="schooltool.app.browser">
+  <configure package="schooltool.skin">
     <page
         name="index.html"
         for="schooltool.group.interfaces.IGroupContainer"
@@ -52,9 +52,9 @@
     <viewlet
       name="groups"
       for="*"
-      manager="schooltool.app.browser.skin.INavigationManager"
+      manager="schooltool.skin.INavigationManager"
       template="templates/navigationViewlet.pt"
-      class="schooltool.app.browser.skin.NavigationViewlet"
+      class="schooltool.skin.NavigationViewlet"
       permission="zope.View"
       link="groups"
       title="Groups"

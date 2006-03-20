@@ -3,7 +3,7 @@
            xmlns:zope="http://namespaces.zope.org/zope">
 
   <configure
-      package="schooltool.app.browser"
+      package="schooltool.skin"
       i18n_domain="schooltool">
 
     <addform
@@ -22,9 +22,9 @@
     <viewlet
       name="courses"
       for="*"
-      manager="schooltool.app.browser.skin.INavigationManager"
+      manager="schooltool.skin.INavigationManager"
       template="templates/navigationViewlet.pt"
-      class="schooltool.app.browser.skin.NavigationViewlet"
+      class="schooltool.skin.NavigationViewlet"
       permission="zope.View"
       link="courses"
       title="Courses"
@@ -34,9 +34,9 @@
     <viewlet
       name="sections"
       for="*"
-      manager="schooltool.app.browser.skin.INavigationManager"
+      manager="schooltool.skin.INavigationManager"
       template="templates/navigationViewlet.pt"
-      class="schooltool.app.browser.skin.NavigationViewlet"
+      class="schooltool.skin.NavigationViewlet"
       permission="zope.View"
       link="sections"
       title="Sections"
@@ -63,7 +63,7 @@
       permission="zope.View"
       menu="zmi_views"
       title="View"
-      layer="schooltool.app.browser.skin.ISchoolToolLayer"
+      layer="schooltool.skin.ISchoolToolLayer"
       />
 
   <page
@@ -90,7 +90,7 @@
       permission="schooltool.create"
       menu="schooltool_actions"
       title="Import Courses"
-      layer="schooltool.app.browser.skin.ISchoolToolLayer"
+      layer="schooltool.skin.ISchoolToolLayer"
       />
 
   <menuItem
@@ -118,7 +118,7 @@
       permission="zope.View"
       menu="zmi_views"
       title="View"
-      layer="schooltool.app.browser.skin.ISchoolToolLayer"
+      layer="schooltool.skin.ISchoolToolLayer"
       />
 
   <containerViews

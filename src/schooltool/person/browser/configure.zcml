@@ -18,10 +18,10 @@
       name="schooltool.person.Info"
       permission="zope.Public"
       provides="schooltool.person.browser.person.IPersonInfoManager"
-      class="schooltool.app.browser.skin.OrderedViewletManager"
+      class="schooltool.skin.OrderedViewletManager"
       />
 
-  <configure package="schooltool.app.browser">
+  <configure package="schooltool.skin">
 
     <page
         name="index.html"
@@ -33,6 +33,21 @@
         title="View"
         />
 
+    <viewlet
+      name="persons"
+      for="*"
+      manager="schooltool.skin.INavigationManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.skin.NavigationViewlet"
+      permission="zope.View"
+      link="persons"
+      title="Persons"
+      order="10"
+      />
+
+  </configure>
+
+  <configure package="schooltool.app.browser">
     <page
         for="schooltool.person.interfaces.IPerson"
         name="calendar_selection.html"
@@ -40,19 +55,6 @@
         template="templates/calendar_selection.pt"
         permission="schooltool.edit"
         />
-
-    <viewlet
-      name="persons"
-      for="*"
-      manager="schooltool.app.browser.skin.INavigationManager"
-      template="templates/navigationViewlet.pt"
-      class="schooltool.app.browser.skin.NavigationViewlet"
-      permission="zope.View"
-      link="persons"
-      title="Persons"
-      order="10"
-      />
-
   </configure>
 
   <containerViews

@@ -19,7 +19,7 @@
 """
 Tests for schooltool views.
 
-$Id: test_app.py 3481 2005-04-21 15:28:29Z bskahan $
+$Id$
 """
 import unittest
 from pprint import pprint
@@ -687,6 +687,7 @@ def doctest_ACLView():
          ('schooltool.controlAccess', u'Control access'),
          ('schooltool.manageMembership', u'Manage membership')]
 
+        
     The view displays a matrix with groups and persons as rows and
     permissions as columns:
 

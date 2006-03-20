@@ -13,7 +13,7 @@
       />
 
   <configure
-      package="schooltool.app.browser"
+      package="schooltool.skin"
       i18n_domain="schooltool">
 
     <addform

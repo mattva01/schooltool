@@ -16,30 +16,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
+"""Skin package for SchoolTool.
+
+$Id: breadcrumbs.py 5675 2006-01-23 03:08:51Z srichter $
 """
-SchoolBell skin.
 
-$Id$
-"""
-from zope.app.publisher.browser import applySkin
-from zope.publisher.interfaces.browser import IBrowserRequest
-from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.skin import ISchoolToolSkin
-
-class IDevModeLayer(IBrowserRequest):
-    """SchoolBell devmode layer."""
-
-
-class ISchoolToolDevModeSkin(IDevModeLayer, ISchoolToolSkin):
-    """The SchoolBell devmode skin"""
-
-
-def schoolToolTraverseSubscriber(event):
-    """A subscriber to BeforeTraverseEvent.
-
-    Sets the SchoolBell skin if the object traversed is a SchoolBell
-    application instance.
-    """
-    if (ISchoolToolApplication.providedBy(event.object) and
-        IBrowserRequest.providedBy(event.request)):
-        applySkin(event.request, ISchoolToolDevModeSkin)
+from skin import ISchoolToolLayer, ISchoolToolSkin
+from skin import INavigationManager
+from skin import ICSSManager, IJavaScriptManager, IHeaderManager
+from skin import OrderedViewletManager, NavigationViewlet

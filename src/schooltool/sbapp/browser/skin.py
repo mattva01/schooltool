@@ -26,7 +26,7 @@ from zope.publisher.interfaces.browser import ILayer, IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserRequest
 from schooltool.app.interfaces import ISchoolToolApplication
 
-from schooltool.app.browser.skin import ISchoolToolLayer
+from schooltool.skin import ISchoolToolLayer
 
 
 class ISchoolBellLayer(ILayer, IBrowserRequest):

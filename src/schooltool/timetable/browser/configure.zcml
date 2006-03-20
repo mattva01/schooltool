@@ -54,13 +54,13 @@
       title="View"
       />
 
-  <configure package="schooltool.app.browser">
+  <configure package="schooltool.skin">
     <viewlet
       name="ttschemas"
       for="*"
-      manager="schooltool.app.browser.skin.INavigationManager"
+      manager="schooltool.skin.INavigationManager"
       template="templates/navigationViewlet.pt"
-      class="schooltool.app.browser.skin.NavigationViewlet"
+      class="schooltool.skin.NavigationViewlet"
       permission="zope.View"
       link="ttschemas"
       title="School Timetables"

@@ -29,8 +29,7 @@ from zope.app.publisher import browser
 from zope.app.traversing.interfaces import IContainmentRoot
 
 from schooltool import SchoolToolMessage as _
-from schooltool.app.browser import interfaces
-
+from schooltool.skin import interfaces
 
 class Breadcrumbs(browser.BrowserView):
     """Special Breadcrumbs implementation."""

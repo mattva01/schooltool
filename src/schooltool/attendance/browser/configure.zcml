@@ -25,7 +25,7 @@
   <browser:viewlet
       name="attendance_css"
       for="*"
-      manager="schooltool.app.browser.skin.ICSSManager"
+      manager="schooltool.skin.ICSSManager"
       class=".attendance.AttendanceCSSViewlet"
       permission="zope.View"
       />

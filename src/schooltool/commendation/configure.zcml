@@ -87,14 +87,14 @@
       permission="zope.Public"
       />
 
-  <configure package="schooltool.app.browser">
+  <configure package="schooltool.skin">
 
     <browser:viewlet
       name="commendations"
       for="*"
-      manager="schooltool.app.browser.skin.INavigationManager"
+      manager="schooltool.skin.INavigationManager"
       template="templates/navigationViewlet.pt"
-      class="schooltool.app.browser.skin.NavigationViewlet"
+      class="schooltool.skin.NavigationViewlet"
       permission="zope.View"
       link="@@commendations.html"
       title="All Commendations"

@@ -15,14 +15,14 @@
       permission="schooltool.edit"
       />
 
-  <configure package="schooltool.app.browser">
+  <configure package="schooltool.skin">
 
     <viewlet
         name="categories"
         for="*"
-        manager="schooltool.app.browser.skin.INavigationManager"
+        manager="schooltool.skin.INavigationManager"
         template="templates/navigationViewlet.pt"
-        class="schooltool.app.browser.skin.NavigationViewlet"
+        class="schooltool.skin.NavigationViewlet"
         permission="zope.View"
         link="categories.html"
         title="Activity Categories"
@@ -33,7 +33,7 @@
 
   <!-- Activities -->
 
-  <configure package="schooltool.app.browser">
+  <configure package="schooltool.skin">
 
     <addform
         label="Add an Activity"

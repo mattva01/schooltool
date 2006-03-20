@@ -5,7 +5,7 @@
 
   <!-- Level Container Views -->
 
-  <configure package="schooltool.app.browser">
+  <configure package="schooltool.skin">
 
     <page
         name="index.html"
@@ -19,9 +19,9 @@
     <viewlet
       name="levels"
       for="*"
-      manager="schooltool.app.browser.skin.INavigationManager"
+      manager="schooltool.skin.INavigationManager"
       template="templates/navigationViewlet.pt"
-      class="schooltool.app.browser.skin.NavigationViewlet"
+      class="schooltool.skin.NavigationViewlet"
       permission="zope.View"
       link="levels"
       title="Levels"
@@ -66,7 +66,7 @@
   <zope:adapter
       factory=".level.EditLevelAdapter" />
 
-  <configure package="schooltool.app.browser">
+  <configure package="schooltool.skin">
 
     <addform
         label="Add a Level"

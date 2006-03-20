@@ -17,7 +17,7 @@
   <browser:viewlet
       name="devmode"
       for="*"
-      manager="schooltool.app.browser.skin.IHeaderManager"
+      manager="schooltool.skin.IHeaderManager"
       template="devmode.pt"
       permission="zope.View"
       layer="schooltool.devmode.skin.IDevModeLayer"
@@ -26,7 +26,7 @@
   <browser:viewlet
       name="devmode_javascript"
       for="*"
-      manager="schooltool.app.browser.skin.IJavaScriptManager"
+      manager="schooltool.skin.IJavaScriptManager"
       class=".devmode.DevmodeJavascriptViewlet"
       permission="zope.View"
       layer="schooltool.devmode.skin.IDevModeLayer"
@@ -35,7 +35,7 @@
   <browser:viewlet
       name="devmode_css"
       for="*"
-      manager="schooltool.app.browser.skin.ICSSManager"
+      manager="schooltool.skin.ICSSManager"
       class=".devmode.DevmodeCSSViewlet"
       permission="zope.View"
       layer="schooltool.devmode.skin.IDevModeLayer"
@@ -72,7 +72,7 @@
   <browser:viewlet
       name="introspector_css"
       for="*"
-      manager="schooltool.app.browser.skin.ICSSManager"
+      manager="schooltool.skin.ICSSManager"
       class=".devmode.IntrospectorCSSViewlet"
       permission="zope.View"
       layer="schooltool.devmode.skin.IDevModeLayer"

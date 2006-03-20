@@ -5,32 +5,6 @@
 
   <!-- Viewlet Managers -->
 
-  <viewletManager
-      name="schooltool.CSS"
-      permission="zope.Public"
-      provides="schooltool.app.browser.skin.ICSSManager"
-      />
-
-  <viewletManager
-      name="schooltool.JavaScript"
-      permission="zope.Public"
-      provides="schooltool.app.browser.skin.IJavaScriptManager"
-      />
-
-  <viewletManager
-      name="schooltool.Header"
-      permission="zope.Public"
-      provides="schooltool.app.browser.skin.IHeaderManager"
-      />
-
-  <viewletManager
-      name="schooltool.Navigation"
-      permission="zope.Public"
-      provides="schooltool.app.browser.skin.INavigationManager"
-      template="templates/navigation.pt"
-      class="schooltool.app.browser.skin.OrderedViewletManager"
-      />
-
   <zope:interface
       interface=".skin.ICalendarEventContext"
       type="zope.contentprovider.interfaces.ITALNamespaceData" />
@@ -60,155 +34,7 @@
       order="20"
       />
 
-  <!-- Skin and resources -->
-
-  <zope:subscriber
-      handler=".skin.schoolToolTraverseSubscriber"
-      for="zope.app.publication.interfaces.IBeforeTraverseEvent"
-      />
-
-  <zope:interface
-      interface="schooltool.app.browser.skin.ISchoolToolSkin"
-      type="zope.publisher.interfaces.browser.IBrowserSkinType"
-      name="SchoolTool"
-      />
-
-  <page
-      name="standard_macros"
-      for="*"
-      class=".macros.StandardMacros"
-      allowed_interface="zope.interface.common.mapping.IItemMapping"
-      permission="zope.Public"
-      layer=".skin.ISchoolToolLayer"
-      />
-
-  <page
-      name="schooltool_macros"
-      for="*"
-      class=".macros.SchoolToolMacros"
-      allowed_interface="zope.interface.common.mapping.IItemMapping"
-      permission="zope.Public"
-      />
-
-  <page
-      name="view_macros"
-      for="*"
-      permission="zope.View"
-      template="templates/view_macros.pt"
-      layer=".skin.ISchoolToolLayer"
-      />
-
-  <page
-      name="calendar_macros"
-      for="*"
-      permission="zope.View"
-      template="templates/calendar_macros.pt"
-      />
-
-  <page
-      name="generic_macros"
-      for="*"
-      permission="zope.View"
-      template="templates/generic_macros.pt"
-      />
-
-  <page
-      name="widget_macros"
-      for="*"
-      permission="zope.View"
-      template="templates/widget_macros.pt"
-      layer=".skin.ISchoolToolLayer"
-      />
-
-  <icon
-      name="zmi_icon"
-      for="schooltool.app.interfaces.ISchoolToolApplication"
-      file="resources/icon.png"
-      />
-
-  <resource
-      name="logo.png"
-      file="resources/schooltool.png"
-      layer=".skin.ISchoolToolLayer" />
-
-  <resource
-      name="schooltool.css"
-      file="resources/schooltool.css"
-      layer=".skin.ISchoolToolLayer" />
-
-  <resource name="layout.css" file="resources/layout.css"
-            layer=".skin.ISchoolToolLayer" />
-  <resource name="schooltool.js" file="resources/schooltool.js"
-            layer=".skin.ISchoolToolLayer" />
-  <resource name="favicon.ico" file="resources/favicon.ico"
-            layer=".skin.ISchoolToolLayer" />
-  <resource name="toolbar-background.png"
-            file="resources/toolbar-background.png"
-            layer=".skin.ISchoolToolLayer" />
-  <resource name="toolbar-background-hover.png"
-            file="resources/toolbar-background-hover.png"
-            layer=".skin.ISchoolToolLayer" />
-  <resource name="sidebar-background.png"
-            file="resources/sidebar-background.png"
-            layer=".skin.ISchoolToolLayer" />
-
-  <resource name="previous.png" file="resources/previous.png"
-            layer=".skin.ISchoolToolLayer" />
-  <resource name="next.png" file="resources/next.png"
-            layer=".skin.ISchoolToolLayer" />
-
-  <resource name="printer.png" file="resources/printer.png"
-            layer=".skin.ISchoolToolLayer" />
-  <resource name="day.png" file="resources/day.png"
-            layer=".skin.ISchoolToolLayer" />
-  <resource name="week.png" file="resources/week.png"
-            layer=".skin.ISchoolToolLayer" />
-  <resource name="month.png" file="resources/month.png"
-            layer=".skin.ISchoolToolLayer" />
-  <resource name="year.png" file="resources/year.png"
-            layer=".skin.ISchoolToolLayer" />
-
-  <resource name="delete.png" file="resources/delete.png"
-            layer=".skin.ISchoolToolLayer" />
-
-  <resource name="note-head-l.gif" file="resources/note-head-l.gif"
-            layer=".skin.ISchoolToolLayer" />
-  <resource name="note-head-r.gif" file="resources/note-head-r.gif"
-            layer=".skin.ISchoolToolLayer" />
-  <resource name="note-body-r.gif" file="resources/note-body-r.gif"
-            layer=".skin.ISchoolToolLayer" />
-  <resource name="note-body-l.gif" file="resources/note-body-l.gif"
-            layer=".skin.ISchoolToolLayer" />
-
-  <resource name="private-note-head-l.gif"
-            file="resources/private-note-head-l.gif"
-            layer=".skin.ISchoolToolLayer" />
-  <resource name="private-note-head-r.gif"
-            file="resources/private-note-head-r.gif"
-            layer=".skin.ISchoolToolLayer" />
-  <resource name="private-note-body-r.gif"
-            file="resources/private-note-body-r.gif"
-            layer=".skin.ISchoolToolLayer" />
-  <resource name="private-note-body-l.gif"
-            file="resources/private-note-body-l.gif"
-            layer=".skin.ISchoolToolLayer" />
-
-  <!-- calwidget (external) -->
-
-  <resource name="calwidget-calendar.js"
-      file="resources/calwidget/calendar.js"
-      layer=".skin.ISchoolToolLayer" />
-
-  <resource name="calwidget-calendar.css"
-      file="resources/calwidget/calendar.css"
-      layer=".skin.ISchoolToolLayer" />
-
-  <resource name="calwidget-icon.gif"
-      file="resources/calwidget/icon.gif"
-      layer=".skin.ISchoolToolLayer" />
-
-
-  <!-- TALES path expressions -->
+ <!-- TALES path expressions -->
 
   <zope:adapter
       for="*"
@@ -224,21 +50,44 @@
       factory=".SchoolToolAPI"
       />
 
-  <!-- Breadcrumbs -->
+  <!-- Skin and resources -->
+
+  <zope:subscriber
+      handler=".skin.schoolToolTraverseSubscriber"
+      for="zope.app.publication.interfaces.IBeforeTraverseEvent"
+      />
 
   <page
+      name="calendar_macros"
       for="*"
-      name="breadcrumbs"
-      class=".breadcrumbs.Breadcrumbs"
-      permission="zope.Public"
-      allowed_interface=".interfaces.IBreadcrumbs"
+      permission="zope.View"
+      template="templates/calendar_macros.pt"
       />
 
-  <zope:adapter
-      factory=".breadcrumbs.GenericBreadcrumbInfo"
-      trusted="true"
-      permission="zope.Public"
-      />
+  <resource name="day.png" file="resources/day.png"
+            layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="week.png" file="resources/week.png"
+            layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="month.png" file="resources/month.png"
+            layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="year.png" file="resources/year.png"
+            layer="schooltool.skin.ISchoolToolLayer" />
+
+  <!-- calwidget (external) -->
+
+  <resource name="calwidget-calendar.js"
+      file="resources/calwidget/calendar.js"
+      layer="schooltool.skin.ISchoolToolLayer" />
+
+  <resource name="calwidget-calendar.css"
+      file="resources/calwidget/calendar.css"
+      layer="schooltool.skin.ISchoolToolLayer" />
+
+  <resource name="calwidget-icon.gif"
+      file="resources/calwidget/icon.gif"
+      layer="schooltool.skin.ISchoolToolLayer" />
+
+  <!-- Breadcrumbs -->
 
   <zope:adapter
       for="schooltool.app.interfaces.ISchoolToolCalendar
@@ -253,35 +102,6 @@
            zope.publisher.interfaces.http.IHTTPRequest"
       factory=".cal.CalendarEventBreadcrumbInfo"
       trusted="true"
-      permission="zope.Public"
-      />
-
-  <!-- Error messages -->
-
-  <page
-      for="zope.interface.common.interfaces.IException"
-      name="index.html"
-      layer=".skin.ISchoolToolLayer"
-      class=".error.ErrorView"
-      template="templates/error.pt"
-      permission="zope.Public"
-      />
-
-  <page
-      for="zope.publisher.interfaces.INotFound"
-      name="index.html"
-      layer=".skin.ISchoolToolLayer"
-      class="zope.app.exception.browser.notfound.NotFound"
-      template="templates/notfound.pt"
-      permission="zope.Public"
-      />
-
-  <page
-      for="zope.security.interfaces.IUnauthorized"
-      name="index.html"
-      layer=".skin.ISchoolToolLayer"
-      class="zope.app.exception.browser.unauthorized.Unauthorized"
-      template="templates/unauthorized.pt"
       permission="zope.Public"
       />
 
@@ -331,7 +151,7 @@
       class="schooltool.app.browser.app.ApplicationView"
       template="templates/index.pt"
       permission="zope.Public"
-      layer="schooltool.app.browser.skin.ISchoolToolLayer"
+      layer="schooltool.skin.ISchoolToolLayer"
       />
 
   <addMenuItem
@@ -361,7 +181,7 @@
   <page
       for="*"
       name="login.html"
-      layer=".skin.ISchoolToolLayer"
+      layer="schooltool.skin.ISchoolToolLayer"
       template="templates/login.pt"
       class=".app.LoginView"
       permission="zope.Public"
@@ -370,7 +190,7 @@
   <page
       for="*"
       name="logout.html"
-      layer=".skin.ISchoolToolLayer"
+      layer="schooltool.skin.ISchoolToolLayer"
       class=".app.LogoutView"
       permission="zope.Public"
       />
@@ -378,7 +198,7 @@
   <page
       for="zope.app.annotation.interfaces.IAnnotatable"
       name="acl.html"
-      layer=".skin.ISchoolToolLayer"
+      layer="schooltool.skin.ISchoolToolLayer"
       class=".app.ACLView"
       template="templates/acl.pt"
       permission="schooltool.controlAccess"
@@ -593,7 +413,7 @@
   <page
       for="schooltool.app.interfaces.ISchoolToolCalendarEvent"
       name="booking.html"
-      layer=".skin.ISchoolToolLayer"
+      layer="schooltool.skin.ISchoolToolLayer"
       class=".cal.CalendarEventBookingView"
       template="templates/event_booking.pt"
       permission="schooltool.edit"
@@ -602,7 +422,7 @@
   <page
       for="*"
       name="calendar_overlay"
-      layer=".skin.ISchoolToolLayer"
+      layer="schooltool.skin.ISchoolToolLayer"
       class=".cal.CalendarSTOverlayView"
       template="templates/calendar_overlay.pt"
       permission="zope.View"
@@ -611,7 +431,7 @@
   <page
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       name="daily_calendar_rows"
-      layer=".skin.ISchoolToolLayer"
+      layer="schooltool.skin.ISchoolToolLayer"
       class=".cal.DailyCalendarRowsView"
       permission="zope.View"
       />
@@ -624,7 +444,7 @@
       class="schooltool.app.browser.csvimport.TimetableCSVImportView"
       template="templates/timetables-csvimport.pt"
       permission="schooltool.create"
-      layer=".skin.ISchoolToolLayer"
+      layer="schooltool.skin.ISchoolToolLayer"
       menu="schooltool_actions"
       title="Import Sections"
       />

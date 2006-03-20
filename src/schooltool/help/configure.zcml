@@ -5,7 +5,7 @@
 
   <zope:adapter
       for="zope.interface.Interface
-           schooltool.app.browser.skin.ISchoolToolLayer
+           schooltool.skin.ISchoolToolLayer
            zope.interface.Interface"
       provides="zope.contentprovider.interfaces.IContentProvider"
       name="schooltool.Help"
@@ -25,7 +25,7 @@
       class=".browser.ContextHelpView"
       permission="zope.View"
       attribute="getContextualTopicView"
-      layer="schooltool.app.browser.skin.ISchoolToolLayer"
+      layer="schooltool.skin.ISchoolToolLayer"
       />
 
   <!-- simply topic view -->
@@ -35,7 +35,7 @@
       class="zope.app.onlinehelp.browser.OnlineHelpTopicView"
       template="helptopic.pt"
       permission="zope.View"
-      layer="schooltool.app.browser.skin.ISchoolToolLayer"
+      layer="schooltool.skin.ISchoolToolLayer"
       />
 
   <configure

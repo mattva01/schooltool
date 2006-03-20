@@ -19,7 +19,7 @@
 """
 Browser views for the SchoolTool application.
 
-$Id: __init__.py 3405 2005-04-12 16:08:43Z bskahan $
+$Id$
 """
 import calendar
 import itertools

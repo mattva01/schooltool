@@ -32,7 +32,7 @@ from zope.app.exception.interfaces import ISystemErrorView
 def doctest_ErrorView():
     r"""Test for ErrorView
 
-        >>> from schooltool.app.browser.error import ErrorView
+        >>> from schooltool.skin.error import ErrorView
         >>> exception = RuntimeError("some kind of error")
         >>> request = TestRequest()
         >>> view = ErrorView(exception, request)

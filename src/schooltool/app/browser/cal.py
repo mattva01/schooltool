@@ -57,14 +57,15 @@ from zope.app.session.interfaces import ISession
 from zope.app.traversing.api import getPath
 
 from schooltool import SchoolToolMessage as _
+
+from schooltool.skin.interfaces import IBreadcrumbInfo
+from schooltool.skin import breadcrumbs
 from schooltool.app.browser import ViewPreferences
 from schooltool.app.browser import pdfcal
-from schooltool.app.browser import breadcrumbs
 from schooltool.app.browser.overlay import CalendarOverlayView
 from schooltool.app.browser.interfaces import ICalendarProvider
 from schooltool.app.browser.interfaces import IEventForDisplay
 from schooltool.app.interfaces import IApplicationPreferences
-from schooltool.app.browser.interfaces import IBreadcrumbInfo
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IHaveCalendar, IShowTimetables
@@ -2434,7 +2435,7 @@ class CalendarEventBreadcrumbInfo(breadcrumbs.GenericBreadcrumbInfo):
 
       >>> import zope.component
       >>> import zope.interface
-      >>> from schooltool.app.browser import interfaces, breadcrumbs
+      >>> from schooltool.skin import interfaces, breadcrumbs
       >>> zope.component.provideAdapter(breadcrumbs.GenericBreadcrumbInfo,
       ...                              (Object, TestRequest),
       ...                              interfaces.IBreadcrumbInfo)

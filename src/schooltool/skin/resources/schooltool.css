@@ -167,8 +167,8 @@ table.timetable td {
 }
 
 #portlet-calendar-overlay table.overlays {
-    padding: 0;
-    margin: 0;
+    padding: none;
+    margin: none;
     border-collapse: collapse;
 }
 

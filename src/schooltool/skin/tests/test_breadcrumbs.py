@@ -57,7 +57,7 @@ def test_breadcrumbs():
 
     Now we can initialize the genreic info adapter:
 
-      >>> from schooltool.app.browser import breadcrumbs
+      >>> from schooltool.skin import breadcrumbs
       >>> generic = breadcrumbs.GenericBreadcrumbInfo(sub1, request)
 
     The generic ``active`` flag value is always true:
@@ -98,7 +98,7 @@ def test_breadcrumbs():
 
       >>> import zope.component
       >>> import zope.interface
-      >>> from schooltool.app.browser import interfaces
+      >>> from schooltool.skin import interfaces
       >>> zope.component.provideAdapter(breadcrumbs.GenericBreadcrumbInfo,
       ...                              (Object, TestRequest),
       ...                              interfaces.IBreadcrumbInfo)
