@@ -4,31 +4,31 @@
 
 <!-- Security Declarations -->
 
-  <content class=".acl.ACLAdapter">
+  <class class=".acl.ACLAdapter">
     <require
         permission="schooltool.controlAccess"
         attributes="context" />
-  </content>
+  </class>
 
   <adapter factory=".acl.ACLAdapter" locate="true" />
 
-  <content class="schooltool.relationship.relationship.LinkSet">
+  <class class="schooltool.relationship.relationship.LinkSet">
     <allow
        interface="schooltool.relationship.interfaces.IRelationshipLinks"
        />
-  </content>
+  </class>
 
-  <content class="schooltool.relationship.relationship.Link">
+  <class class="schooltool.relationship.relationship.Link">
     <allow
        interface="schooltool.relationship.interfaces.IRelationshipLink"
        />
-  </content>
+  </class>
 
-  <content class="schooltool.relationship.uri.URIObject">
+  <class class="schooltool.relationship.uri.URIObject">
     <allow
        interface="schooltool.relationship.uri.IURIObject"
        />
-  </content>
+  </class>
 
 <!-- Traversers -->
 

@@ -8,27 +8,27 @@
       type="zope.app.content.interfaces.IContentType"
       />
 
-  <content class=".course.CourseContainer">
+  <class class=".course.CourseContainer">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"
              attributes="keys values items __iter__ __len__" />
     <require permission="schooltool.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
-  </content>
+  </class>
 
   <interface
       interface=".interfaces.ICourse"
       type="zope.app.content.interfaces.IContentType"
       />
 
-  <content class=".course.Course">
+  <class class=".course.Course">
     <implements
         interface="schooltool.note.interfaces.IHaveNotes" />
     <require permission="schooltool.view"
              attributes="title description sections __cmp__" />
     <require permission="schooltool.edit"
              set_schema=".interfaces.ICourse" />
-  </content>
+  </class>
 
   <subscriber
       for="schooltool.app.interfaces.IApplicationInitializationEvent"
@@ -48,20 +48,20 @@
       type="zope.app.content.interfaces.IContentType"
       />
 
-  <content class=".section.SectionContainer">
+  <class class=".section.SectionContainer">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"
              attributes="keys values items __iter__ __len__" />
     <require permission="schooltool.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
-  </content>
+  </class>
 
   <interface
       interface=".interfaces.ISection"
       type="zope.app.content.interfaces.IContentType"
       />
 
-  <content class=".section.Section">
+  <class class=".section.Section">
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
     <implements interface="schooltool.note.interfaces.IHaveNotes" />
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />
@@ -71,7 +71,7 @@
                          courses label size __cmp__ location" />
     <require permission="schooltool.edit"
              set_schema=".interfaces.ISection" />
-  </content>
+  </class>
 
   <subscriber
       for="schooltool.app.interfaces.IApplicationInitializationEvent"

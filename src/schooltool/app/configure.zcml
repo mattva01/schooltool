@@ -4,9 +4,10 @@
 
   <!-- Vocabularies -->
 
-  <vocabulary
+  <utility
+      provides="zope.app.schema.interfaces.IVocabularyFactory"
+      component="schooltool.app.app.LocationResourceVocabulary"
       name="LocationResources"
-      factory=".app.LocationResourceVocabulary"
       />
 
   <!-- Adapters -->
@@ -201,13 +202,13 @@
       type="zope.app.content.interfaces.IContentType"
       />
 
-  <content class=".app.SchoolToolApplication">
+  <class class=".app.SchoolToolApplication">
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />
     <allow interface=".interfaces.ISchoolToolApplication" />
     <allow attributes="getSiteManager" />
-  </content>
+  </class>
 
-  <content class=".cal.Calendar">
+  <class class=".cal.Calendar">
     <require permission="schooltool.viewCalendar"
              interface="schooltool.calendar.interfaces.ICalendar"
              attributes="title __cmp__" />
@@ -215,9 +216,9 @@
              attributes="addEvent" />
     <require permission="schooltool.modifyEvent"
              attributes="clear removeEvent" />
-  </content>
+  </class>
 
-  <content class=".cal.CalendarEvent">
+  <class class=".cal.CalendarEvent">
     <implements interface="schooltool.note.interfaces.IHaveNotes" />
     <require permission="schooltool.viewCalendar"
              interface="schooltool.calendar.interfaces.ICalendarEvent"
@@ -226,15 +227,15 @@
              set_schema="schooltool.calendar.interfaces.ICalendarEvent"
              attributes="bookResource unbookResource"
              set_attributes="__parent__" />
-  </content>
+  </class>
 
-  <content class=".app.ApplicationPreferences">
+  <class class=".app.ApplicationPreferences">
     <require permission="zope.Public"
              interface=".interfaces.IApplicationPreferences" />
     <!-- Not really appropriate permission to require -->
     <require permission="schooltool.manageMembership"
              set_schema=".interfaces.IApplicationPreferences" />
-  </content>
+  </class>
 
   <!-- Views -->
 
@@ -245,62 +246,62 @@
 
   <!-- XXX It feels wrong to tweak permissions of objects in a sibling. -->
 
-  <content class="schooltool.calendar.mixins.ExpandedCalendarEvent">
+  <class class="schooltool.calendar.mixins.ExpandedCalendarEvent">
     <require permission="schooltool.viewCalendar"
              interface="schooltool.calendar.interfaces.IExpandedCalendarEvent"
              attributes="resources"
              />
-  </content>
+  </class>
 
-  <content class="schooltool.calendar.recurrent.DailyRecurrenceRule">
+  <class class="schooltool.calendar.recurrent.DailyRecurrenceRule">
     <require permission="zope.Public"
              interface="schooltool.calendar.interfaces.IDailyRecurrenceRule" />
-  </content>
+  </class>
 
-  <content class="schooltool.calendar.recurrent.WeeklyRecurrenceRule">
+  <class class="schooltool.calendar.recurrent.WeeklyRecurrenceRule">
     <require permission="zope.Public"
              interface="schooltool.calendar.interfaces.IWeeklyRecurrenceRule"
              />
-  </content>
+  </class>
 
-  <content class="schooltool.calendar.recurrent.MonthlyRecurrenceRule">
+  <class class="schooltool.calendar.recurrent.MonthlyRecurrenceRule">
     <require permission="zope.Public"
              interface="schooltool.calendar.interfaces.IMonthlyRecurrenceRule"
              />
-  </content>
+  </class>
 
-  <content class="schooltool.calendar.recurrent.YearlyRecurrenceRule">
+  <class class="schooltool.calendar.recurrent.YearlyRecurrenceRule">
     <require permission="zope.Public"
              interface="schooltool.calendar.interfaces.IYearlyRecurrenceRule"
              />
-  </content>
+  </class>
 
-  <content class="schooltool.calendar.simple.ImmutableCalendar">
+  <class class="schooltool.calendar.simple.ImmutableCalendar">
     <require permission="zope.Public"
              interface="schooltool.calendar.interfaces.ICalendar" />
-  </content>
+  </class>
 
   <adapter
       for="schooltool.calendar.interfaces.IEditCalendar"
       factory=".cal.WriteCalendar"
       provides=".interfaces.IWriteCalendar" />
 
-  <content
+  <class
       class="schooltool.app.overlay.BoundOverlaidCalendarsProperty">
     <allow attributes="__iter__ __contains__" />
     <require
         permission="schooltool.viewCalendar"
         attributes="add remove" />
-  </content>
+  </class>
 
-  <content class="schooltool.app.overlay.CalendarOverlayInfo">
+  <class class="schooltool.app.overlay.CalendarOverlayInfo">
     <require
         permission="schooltool.view"
         interface="schooltool.app.overlay.ICalendarOverlayInfo"/>
     <require
         permission="schooltool.viewCalendar"
         set_schema="schooltool.app.overlay.ICalendarOverlayInfo"/>
-  </content>
+  </class>
 
   <!-- Documentation -->
 

@@ -3,10 +3,10 @@
     xmlns="http://namespaces.zope.org/zope"
     i18n_domain="schooltool">
 
-  <content
+  <class
       class="schooltool.relationship.relationship.BoundRelationshipProperty">
     <allow attributes="__iter__ __contains__" />
-  </content>
+  </class>
 
   <adapter
       for="zope.app.annotation.interfaces.IAnnotatable"

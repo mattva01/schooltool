@@ -19,26 +19,26 @@
       type="zope.app.content.interfaces.IContentType"
       />
 
-  <content class=".term.TermContainer">
+  <class class=".term.TermContainer">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"
              attributes="keys values __iter__ __len__" />
     <require permission="schooltool.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
-  </content>
+  </class>
 
   <interface
       interface=".interfaces.ITerm"
       type="zope.app.content.interfaces.IContentType"
       />
 
-  <content class=".term.Term">
+  <class class=".term.Term">
     <allow interface=".interfaces.ITerm"
            attributes="__cmp__"/>
     <require permission="schooltool.edit"
              interface=".interfaces.ITermWrite"
              set_schema=".interfaces.ITerm" />
-  </content>
+  </class>
 
   <!-- sample data -->
   <configure

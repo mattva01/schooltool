@@ -11,19 +11,19 @@
       trusted="true"
       />
 
-  <content class=".note.Notes">
+  <class class=".note.Notes">
     <require permission="zope.Public"
              attributes="__iter__" />
     <require permission="schooltool.view"
              attributes="add remove clear" />
-  </content>
+  </class>
 
-  <content class=".note.Note">
+  <class class=".note.Note">
     <require permission="zope.Public"
              interface=".interfaces.INote" />
     <require permission="schooltool.create"
              set_schema=".interfaces.INote" />
-  </content>
+  </class>
 
   <!-- Browser UI -->
 
@@ -47,9 +47,9 @@
 
   <!-- REST API -->
 
-  <content class=".rest.NotesAdapter">
+  <class class=".rest.NotesAdapter">
     <allow attributes="context" />
-  </content>
+  </class>
 
   <adapter factory=".rest.NotesAdapter" />
 

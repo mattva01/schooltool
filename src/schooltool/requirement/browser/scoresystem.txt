@@ -13,7 +13,8 @@ setting up the score system vocabulary:
 
   >>> def ScoreSystems(context):
   ...     from zope.app.component import vocabulary
-  ...     return vocabulary.UtilityVocabulary(context, interfaces.IScoreSystem)
+  ...     return vocabulary.UtilityVocabulary(context,
+  ...                                         interface=interfaces.IScoreSystem)
 
   >>> from zope.schema import vocabulary
   >>> vocabulary.getVocabularyRegistry().register(

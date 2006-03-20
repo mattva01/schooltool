@@ -60,9 +60,9 @@
 
   <!-- Academic Record Management -->
 
-  <content class=".record.AcademicStatus">
+  <class class=".record.AcademicStatus">
     <allow attributes="getStatus setStatus" />
-  </content>
+  </class>
 
   <adapter factory=".record.AcademicStatus" />
 
@@ -98,9 +98,9 @@
       permission="zope.Public"
       />
 
-  <content class=".record.AcademicHistory">
+  <class class=".record.AcademicHistory">
     <allow attributes="record" />
-  </content>
+  </class>
 
   <adapter factory=".record.AcademicHistory" />
 
@@ -128,9 +128,9 @@
       permission="zope.Public"
       />
 
-  <content class=".record.AcademicProcessCreator">
+  <class class=".record.AcademicProcessCreator">
     <allow attributes="create" />
-  </content>
+  </class>
 
   <view
       for=".record.AcademicProcessCreator"

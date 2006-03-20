@@ -89,7 +89,7 @@
       type="zope.app.content.interfaces.IContentType"
       />
 
-  <content class=".level.LevelContainer">
+  <class class=".level.LevelContainer">
     <implements
         interface="zope.app.annotation.interfaces.IAttributeAnnotatable" />
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
@@ -97,21 +97,21 @@
              attributes="keys values items __iter__ __len__ validate" />
     <require permission="schooltool.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
-  </content>
+  </class>
 
   <interface
       interface=".interfaces.ILevel"
       type="zope.app.content.interfaces.IContentType"
       />
 
-  <content class=".level.Level">
+  <class class=".level.Level">
     <implements
         interface="zope.app.annotation.interfaces.IAttributeAnnotatable" />
     <require permission="schooltool.view"
              interface=".interfaces.ILevel" />
     <require permission="schooltool.edit"
              set_schema=".interfaces.ILevel" />
-  </content>
+  </class>
 
   <!-- Application hook -->
   <subscriber
@@ -121,9 +121,11 @@
 
 
   <!-- Level vocabulary -->
-  <vocabulary
-     name="Levels"
-     factory=".level.LevelVocabulary" />
+  <utility
+      provides="zope.app.schema.interfaces.IVocabularyFactory"
+      component="schooltool.level.level.LevelVocabulary"
+      name="Levels"
+      />
 
   <!-- Academic Record Adapter -->
   <class class=".record.History">

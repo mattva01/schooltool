@@ -53,89 +53,89 @@
       component="schooltool.timetable.WeeklyTimetableModel"
       />
 
-  <content class=".TimetableActivity">
+  <class class=".TimetableActivity">
     <allow interface=".interfaces.ITimetableActivity" />
-  </content>
+  </class>
 
-  <content class=".TimetableCalendarEvent">
+  <class class=".TimetableCalendarEvent">
     <!-- TTCalendarEvent does not have a __parent__, so fine-grained
          security declarations won't work. -->
     <allow interface=".interfaces.ITimetableCalendarEvent" />
-  </content>
+  </class>
 
-  <content class=".TimetableDict">
+  <class class=".TimetableDict">
     <require permission="schooltool.edit"
              interface="zope.app.container.interfaces.IWriteContainer" />
     <require permission="schooltool.view"
              interface="zope.app.container.interfaces.IReadContainer" />
-  </content>
+  </class>
 
   <interface
       interface=".interfaces.ITimetableSchemaContainer"
       type="zope.app.content.interfaces.IContentType"
       />
 
-  <content class=".schema.TimetableSchemaContainer">
+  <class class=".schema.TimetableSchemaContainer">
     <require permission="schooltool.create"
              interface="zope.app.container.interfaces.IWriteContainer"
              set_attributes="default_id" />
     <require permission="zope.View"
              interface="zope.app.container.interfaces.IReadContainer"
              attributes="getDefault default_id" />
-  </content>
+  </class>
 
-  <content class=".Timetable">
+  <class class=".Timetable">
     <allow interface=".interfaces.ITimetable" />
     <require permission="schooltool.edit"
              interface=".interfaces.ITimetableWrite"
              set_schema=".interfaces.ITimetable" />
-  </content>
+  </class>
 
-  <content class=".TimetableDay">
+  <class class=".TimetableDay">
     <allow interface=".interfaces.ITimetableDay" />
     <require permission="schooltool.edit"
              interface=".interfaces.ITimetableDayWrite"
              set_schema=".interfaces.ITimetableDay" />
-  </content>
+  </class>
 
   <interface
       interface=".interfaces.ITimetableSchema"
       type="zope.app.content.interfaces.IContentType"
       />
 
-  <content class=".schema.TimetableSchema">
+  <class class=".schema.TimetableSchema">
     <allow interface=".interfaces.ITimetableSchema" />
     <require permission="schooltool.edit"
              interface=".interfaces.ITimetableSchemaWrite"
              set_schema=".interfaces.ITimetableSchema" />
-  </content>
+  </class>
 
-  <content class=".schema.TimetableSchemaDay">
+  <class class=".schema.TimetableSchemaDay">
     <allow interface=".interfaces.ITimetableSchemaDay" />
-  </content>
+  </class>
 
-  <content class=".SchooldayTemplate">
+  <class class=".SchooldayTemplate">
     <allow interface=".interfaces.ISchooldayTemplate" />
     <require permission="schooltool.edit"
              interface=".interfaces.ISchooldayTemplateWrite"
              set_schema=".interfaces.ISchooldayTemplate" />
-  </content>
+  </class>
 
-  <content class=".SequentialDaysTimetableModel">
+  <class class=".SequentialDaysTimetableModel">
     <allow interface=".interfaces.IWeekdayBasedTimetableModel" />
-  </content>
+  </class>
 
-  <content class=".SequentialDayIdBasedTimetableModel">
+  <class class=".SequentialDayIdBasedTimetableModel">
     <allow interface=".interfaces.IDayIdBasedTimetableModel" />
-  </content>
+  </class>
 
-  <content class=".WeeklyTimetableModel">
+  <class class=".WeeklyTimetableModel">
     <allow interface=".interfaces.IWeekdayBasedTimetableModel" />
-  </content>
+  </class>
 
-  <content class=".SchooldaySlot">
+  <class class=".SchooldaySlot">
     <allow interface=".interfaces.ISchooldaySlot" />
-  </content>
+  </class>
 
   <!-- sample data -->
   <configure

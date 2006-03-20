@@ -31,7 +31,7 @@
 
   <!-- Requirement Content -->
 
-  <content class=".requirement.Requirement">
+  <class class=".requirement.Requirement">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require
         permission="schooltool.view"
@@ -45,19 +45,19 @@
         permission="schooltool.create"
         interface="zope.app.container.interfaces.IWriteContainer"
         />
-  </content>
+  </class>
 
-  <content class=".requirement.InheritedRequirement">
+  <class class=".requirement.InheritedRequirement">
     <require like_class=".requirement.Requirement" />
     <require
         permission="zope.View"
         attributes="original"
         />
-  </content>
+  </class>
 
   <!-- Scoresystem Content -->
 
-  <content class=".scoresystem.DiscreteValuesScoreSystem">
+  <class class=".scoresystem.DiscreteValuesScoreSystem">
     <require
         permission="zope.View"
         interface=".interfaces.IDiscreteValuesScoreSystem"
@@ -66,9 +66,9 @@
         permission="schooltool.edit"
         set_schema=".interfaces.IScoreSystem"
         />
-  </content>
+  </class>
 
-  <content class=".scoresystem.GlobalDiscreteValuesScoreSystem">
+  <class class=".scoresystem.GlobalDiscreteValuesScoreSystem">
     <require
         permission="zope.View"
         interface=".interfaces.IDiscreteValuesScoreSystem"
@@ -77,9 +77,9 @@
         permission="schooltool.edit"
         set_schema=".interfaces.IScoreSystem"
         />
-  </content>
+  </class>
 
-  <content class=".scoresystem.RangedValuesScoreSystem">
+  <class class=".scoresystem.RangedValuesScoreSystem">
     <require
         permission="zope.View"
         interface=".interfaces.IRangedValuesScoreSystem"
@@ -88,9 +88,9 @@
         permission="schooltool.edit"
         set_schema=".interfaces.IScoreSystem"
         />
-  </content>
+  </class>
 
-  <content class=".scoresystem.GlobalRangedValuesScoreSystem">
+  <class class=".scoresystem.GlobalRangedValuesScoreSystem">
     <require
         permission="zope.View"
         interface=".interfaces.IRangedValuesScoreSystem"
@@ -99,14 +99,14 @@
         permission="schooltool.edit"
         set_schema=".interfaces.IScoreSystem"
         />
-  </content>
+  </class>
 
   <!-- Score System registrations -->
 
-  <vocabulary
+  <utility
+      provides="zope.app.schema.interfaces.IVocabularyFactory"
+      component="zope.app.component.vocabulary.UtilityVocabulary"
       name="schooltool.requirement.scoresystems"
-      factory="zope.app.component.vocabulary.UtilityVocabulary"
-      interface="schooltool.requirement.interfaces.IScoreSystem"
       />
 
   <utility
@@ -142,39 +142,39 @@
 
   <!-- Evaluations Content -->
 
-  <content class=".evaluation.Evaluations">
+  <class class=".evaluation.Evaluations">
     <require
         permission="schooltool.edit"
         interface=".interfaces.IEvaluations"
         />
-  </content>
+  </class>
 
-  <content class=".evaluation.Evaluation">
+  <class class=".evaluation.Evaluation">
     <require
         permission="schooltool.edit"
         interface=".interfaces.IEvaluation"
         set_schema=".interfaces.IEvaluation"
         />
-  </content>
+  </class>
 
   <!-- Those declarations should go somewhere else eventually -->
 
-  <content class="schooltool.app.app.SchoolToolApplication">
+  <class class="schooltool.app.app.SchoolToolApplication">
     <implements
         interface="schooltool.requirement.interfaces.IHaveRequirement" />
-  </content>
+  </class>
 
-  <content class="schooltool.course.course.Course">
+  <class class="schooltool.course.course.Course">
     <implements interface=".interfaces.IHaveRequirement" />
-  </content>
+  </class>
 
-  <content class="schooltool.course.section.Section">
+  <class class="schooltool.course.section.Section">
     <implements interface=".interfaces.IHaveRequirement" />
-  </content>
+  </class>
 
-  <content class="schooltool.person.person.Person">
+  <class class="schooltool.person.person.Person">
     <implements interface=".interfaces.IHaveEvaluations" />
-  </content>
+  </class>
 
   <include package=".browser" />
 

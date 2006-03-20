@@ -4,9 +4,10 @@
 
   <!-- Category Vocabulary -->
 
-  <vocabulary
+  <utility
+      provides="zope.app.schema.interfaces.IVocabularyFactory"
+      component="schooltool.gradebook.category.CategoryVocabulary"
       name="schooltool.gradebook.categories"
-      factory=".category.CategoryVocabulary"
       />
 
   <subscriber
@@ -32,7 +33,7 @@
 
   <!-- Activity Content and Security -->
 
-  <content class=".activity.Activities">
+  <class class=".activity.Activities">
     <allow interface="zope.interface.common.mapping.IReadMapping" />
     <require
         permission="schooltool.view"
@@ -44,9 +45,9 @@
         set_schema=".interfaces.IActivities"
         attributes="changePosition"
         />
-  </content>
+  </class>
 
-  <content class=".activity.Activity">
+  <class class=".activity.Activity">
     <allow interface="zope.interface.common.mapping.IReadMapping" />
     <require
         permission="schooltool.view"
@@ -59,16 +60,16 @@
         interface="zope.interface.common.mapping.IWriteMapping"
         set_schema=".interfaces.IActivity"
         />
-  </content>
+  </class>
 
 
   <!-- Gradebook Adapter -->
 
-  <content class=".gradebook.Gradebook">
+  <class class=".gradebook.Gradebook">
     <require
         permission="schooltool.edit"
         interface=".interfaces.IGradebook" />
-  </content>
+  </class>
 
   <!-- This adapter locates itself. -->
   <adapter
@@ -80,11 +81,11 @@
 
   <!-- Statistics adapter -->
 
-  <content class=".statistic.Statistics">
+  <class class=".statistic.Statistics">
     <require
         permission="schooltool.edit"
         interface=".interfaces.IStatistics" />
-  </content>
+  </class>
 
   <adapter
       for=".interfaces.IGradebook"

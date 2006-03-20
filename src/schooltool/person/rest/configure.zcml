@@ -5,22 +5,22 @@
 
 <!-- Adapters -->
 
-  <content class=".person.PersonPasswordWriter">
+  <class class=".person.PersonPasswordWriter">
     <allow interface=".interfaces.IPasswordWriter" />
-  </content>
+  </class>
 
   <adapter factory=".person.PersonPasswordWriter" />
 
-  <content class=".preference.PersonPreferencesAdapter">
+  <class class=".preference.PersonPreferencesAdapter">
     <allow
         interface=".interfaces.IPersonPreferencesAdapter" />
-  </content>
+  </class>
 
   <adapter factory=".preference.PersonPreferencesAdapter" />
 
-  <content class=".person.PersonPhotoAdapter">
+  <class class=".person.PersonPhotoAdapter">
     <allow interface=".interfaces.IPersonPhoto" />
-  </content>
+  </class>
 
   <adapter factory=".person.PersonPhotoAdapter" />
 

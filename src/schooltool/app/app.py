@@ -30,7 +30,9 @@ from persistent.dict import PersistentDict
 from zope.component import adapts
 from zope.event import notify
 from zope.interface import implements
+from zope.interface import classProvides
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+from zope.app.schema.interfaces import IVocabularyFactory
 
 from zope.app.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 from zope.app.component.hooks import getSite
@@ -238,6 +240,8 @@ class ShowTimetables(object):
 
 class LocationResourceVocabulary(SimpleVocabulary):
     """Choice vocabulary of all location resources."""
+
+    classProvides(IVocabularyFactory)
 
     def __init__(self, context):
         resources = getSchoolToolApplication()['resources']

@@ -20,17 +20,17 @@
 
   <!-- Security -->
 
-  <content class=".commendation.Commendations">
+  <class class=".commendation.Commendations">
     <allow interface="zope.app.container.interfaces.IReadContainer" />
     <require permission="schooltool.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
-  </content>
+  </class>
 
-  <content class=".commendation.Commendation">
+  <class class=".commendation.Commendation">
     <allow interface=".interfaces.ICommendation" />
     <require permission="schooltool.create"
              set_schema=".interfaces.ICommendation" />
-  </content>
+  </class>
 
   <!-- Commendation Adapter -->
 

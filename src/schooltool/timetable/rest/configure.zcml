@@ -3,13 +3,13 @@
            xmlns:i18n="http://namespaces.zope.org/i18n"
            i18n_domain="schooltool">
 
-  <content class=".NullTimetable">
+  <class class=".NullTimetable">
     <allow interface=".INullTimetable" />
-  </content>
+  </class>
 
-  <content class=".CompositeTimetables">
+  <class class=".CompositeTimetables">
     <allow interface=".ICompositeTimetables" />
-  </content>
+  </class>
 
   <adapter factory=".CompositeTimetables" />
 

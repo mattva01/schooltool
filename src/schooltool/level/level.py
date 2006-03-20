@@ -27,6 +27,8 @@ import zope.interface
 import zope.schema
 from zope.app import zapi
 from zope.app.container import contained, btree
+from zope.interface import classProvides
+from zope.app.schema.interfaces import IVocabularyFactory
 
 from schooltool.app import app
 from schooltool.level import interfaces
@@ -97,6 +99,7 @@ class LevelVocabulary(object):
     The location must be set, so that the schooltool application can be found.
     """
     zope.interface.implements(zope.schema.interfaces.IVocabularyTokenized)
+    classProvides(IVocabularyFactory)
 
     def __init__(self, context=None):
         pass

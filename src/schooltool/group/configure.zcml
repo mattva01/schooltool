@@ -7,20 +7,20 @@
       type="zope.app.content.interfaces.IContentType"
       />
 
-  <content class=".group.GroupContainer">
+  <class class=".group.GroupContainer">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"
              attributes="keys values items __iter__ __len__" />
     <require permission="schooltool.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
-  </content>
+  </class>
 
   <interface
       interface=".interfaces.IGroup"
       type="zope.app.content.interfaces.IContentType"
       />
 
-  <content class=".group.Group">
+  <class class=".group.Group">
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />
     <implements interface="schooltool.note.interfaces.IHaveNotes" />
 
@@ -29,7 +29,7 @@
              attributes="title description groups members" />
     <require permission="schooltool.edit"
              set_schema=".interfaces.IGroup" />
-  </content>
+  </class>
 
   <adapter
       for=".interfaces.IGroupContainer"

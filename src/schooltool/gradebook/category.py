@@ -22,6 +22,9 @@ $Id$
 """
 __docformat__ = 'reStructuredText'
 
+from zope.interface import classProvides
+from zope.app.schema.interfaces import IVocabularyFactory
+
 import optionstorage
 from optionstorage import vocabulary, interfaces
 from schooltool.app import app
@@ -31,6 +34,8 @@ VOCABULARY_NAME = 'schooltool.gradebook.activities'
 
 class CategoryVocabulary(optionstorage.vocabulary.OptionStorageVocabulary):
     """Activity Categories Vocabulary"""
+
+    classProvides(IVocabularyFactory)
 
     def __init__(self, context=None, name=None):
         st = app.getSchoolToolApplication()
