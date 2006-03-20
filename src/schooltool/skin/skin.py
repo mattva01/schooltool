@@ -36,14 +36,11 @@ from schooltool.app.app import getSchoolToolApplication
 class IJavaScriptManager(IViewletManager):
     """Provides a viewlet hook for the javascript link entries."""
 
-
 class ICSSManager(IViewletManager):
     """Provides a viewlet hook for the CSS link entries."""
 
-
 class IHeaderManager(IViewletManager):
     """Provides a viewlet hook for the header of a page."""
-
 
 class INavigationManager(IViewletManager):
     """Provides a viewlet hook for the navigation section of a page."""
@@ -73,7 +70,6 @@ class OrderedViewletManager(ViewletManagerBase):
                                      % name)
 
         return sorted(viewlets, key=key_func)
-
 
 class NavigationViewlet(object):
     """A navigation viewlet base class."""
