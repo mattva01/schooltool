@@ -65,6 +65,7 @@ System requirements
   you want to generate PDF calendars.  To enable PDF support you will
   need to specify the path to fonts in the configuration file.
 
+
 Building and installing SchoolTool from a source tarball
 --------------------------------------------------------
 
@@ -105,9 +106,9 @@ $ ./bin/schooltool-server
 Building SchoolTool from a subversion checkout
 ----------------------------------------------
 
-Run 'make build update-translations' to build the necessary extension modules
-and translations.  You will need to have gettext installed to compile the
-translations.
+Run 'make build extract-translations update-translations' to build the
+necessary extension modules and translations.  You will need to have gettext
+installed to compile the translations.
 
 It is a good idea to run 'make test' and 'make ftest' to check if all the
 essential unit and functional tests pass.
@@ -255,18 +256,28 @@ There are some other helpful make targets:
 Translation
 -----------
 
-Translation files live in src/schooltool/locales.  There is a directory
-for each language that contains a subdirectory called LC_MESSAGES that
-contains two files: schooltool.po and schooltool.mo.
+Translation templates live in src/schooltool/locales/*.pot, they are the
+translatable strings extracted from the source. Translation templates are used
+to update other translations and create new ones. You can generate them via
+this command:
 
-To start a new translation, create a language directory and LC_MESSAGES and
-use src/schooltool/translation/schooltool.pot as a template.  Generate
-schooltool.mo with msgfmt (or by calling make update-translations).
+  $ make extract-translations
 
-When you change the translatable strings in the source code or page templates,
-be sure to run
+Translation files live in src/schooltool/locales.  There is a
+directory for each language that contains a subdirectory called
+LC_MESSAGES that contains the .po files and the compiled .mo files.
+The .mo files must be present if schooltool is to use them and are
+built by the command:
 
-  make extract-translations
+  $ make update-translations
+
+XXX: At present there is no easy way of compiling .mo files in the
+     tarball and the _source_ tarball does not contain them.
+
+To start a new translation, create a language directory and
+LC_MESSAGES and use src/schooltool/locales/*.pot as a templates (copy
+them to the new directory and rename them as .po).  Generate .mo files
+with msgfmt (or by calling make update-translations).
 
 
 Virtual hosting
