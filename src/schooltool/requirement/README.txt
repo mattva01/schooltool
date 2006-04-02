@@ -52,6 +52,11 @@ between inherited and locally defined requirements:
   >>> pyprogram[u'forloop']
   InheritedRequirement(Requirement(u'Write a for loop.'))
 
+You can also check for the ``IInheritedRequirement`` interface.
+
+  >>> interfaces.IInheritedRequirement.providedBy(pyprogram[u'forloop'])
+  True
+
 You can also inspect and manage the bases:
 
   >>> pyprogram.bases
@@ -135,15 +140,22 @@ Furthermore, sometimes it's the case where we only want to inherit one or more
 of the requirements from a particular base.  In this case we just add the
 specific requirement we want to inherit as we would add a normal requirement,
 instead of adding the base.  the ``__setitem__`` method will see that the
-requirement we are adding is part of another requirement, and will make it an
-``InheritedRequirement`` object instead.
+requirement we are adding is part of another requirement, and will make it a
+``PersistentInheritedRequirement`` object instead.
+
+``PersistentInheritedRequirement`` is just like the ``InheritedRequirement``
+class except that is is persistent.  Since requirements are wrapped by the
+``InheritedRequirement`` class on the fly, they must be wrapped every time
+they are accessed based on the rules of inheritance (governed by bases).
+The ``PersistentInheritedRequirement`` class allows us to make a more arbitrary
+wrapping, as is necessary here.
 
   >>> yhs.removeBase(va)
   >>> yhs[u'program'].keys()
   []
   >>> yhs[u'program'][u'forloop'] = va[u'program'][u'forloop']
   >>> yhs[u'program'][u'forloop']
-  InheritedRequirement(Requirement(u'Write a for loop.'))
+  PersistentInheritedRequirement(Requirement(u'Write a for loop.'))
   >>> yhs[u'program'][u'forloop'].__parent__.__parent__
   Requirement(u'Yorktown HS')
   >>> va[u'program'][u'forloop'].__parent__.__parent__

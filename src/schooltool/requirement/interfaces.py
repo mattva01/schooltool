@@ -66,6 +66,15 @@ class IRequirement(zope.app.container.interfaces.IOrderedContainer,
         """Changes the requirement's position to the specified position."""
 
 
+## XXX: should I put the various methods/attributes of the InheritedRequirement
+##      class?  If there wasn't a corresponding interface before, it must not
+##      be that important to have a particular "contract" for
+##      InheritedRequirements.  Especially since they already offer
+##      IRequirement.
+class IInheritedRequirement(zope.interface.Interface):
+    """A marker interface for the InheritedRequirement class."""
+
+
 class IExtendedRequirement(IRequirement):
     """Extended Requirement
 

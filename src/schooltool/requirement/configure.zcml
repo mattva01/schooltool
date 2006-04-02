@@ -55,6 +55,10 @@
         />
   </class>
 
+  <class class=".requirement.PersistentInheritedRequirement">
+    <require like_class=".requirement.InheritedRequirement" />
+  </class>
+
   <!-- Scoresystem Content -->
 
   <class class=".scoresystem.DiscreteValuesScoreSystem">
