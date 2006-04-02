@@ -208,9 +208,13 @@ class Requirement(persistent.Persistent,
                 object.addBase(base[key])
 
         # Now set the item
-        object, event = zope.app.container.contained.containedEvent(
-            object, self, key)
-        self._data[key] = object
+        if object.__parent__:
+            newobject = InheritedRequirement(object, self, key)
+        else:
+            newobject = object
+        newobject, event = zope.app.container.contained.containedEvent(
+            newobject, self, key)
+        self._data[key] = newobject
         if key not in self._order:
             self.distributeKey(key)
         # Notify all subs of the addition

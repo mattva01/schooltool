@@ -76,7 +76,7 @@ Now, Yorktown High School (which is in Virginia) teaches Python and thus
 requires the Python requirement. However, Yorktown HS must still fulfill the
 state requirement:
 
-  >>> yhs = requirement.Requirement(u'Yorktow HS', va)
+  >>> yhs = requirement.Requirement(u'Yorktown HS', va)
   >>> sorted(yhs[u'program'].keys())
   [u'forloop']
 
@@ -90,7 +90,7 @@ state requirement:
 
 Another tricky case is when the base is added later:
 
-  >>> yhs = requirement.Requirement(u'Yorktow HS')
+  >>> yhs = requirement.Requirement(u'Yorktown HS')
   >>> yhs[u'program'] = requirement.Requirement(u'Programming')
   >>> yhs[u'program'][u'iter'] = requirement.Requirement(u'Create an iterator.')
 
@@ -130,6 +130,30 @@ available as a key.
   [u'forloop']
   >>> yhs[u'program'][u'forloop']
   InheritedRequirement(Requirement(u'Write a for loop.'))
+
+Furthermore, sometimes it's the case where we only want to inherit one or more
+of the requirements from a particular base.  In this case we just add the
+specific requirement we want to inherit as we would add a normal requirement,
+instead of adding the base.  the ``__setitem__`` method will see that the
+requirement we are adding is part of another requirement, and will make it an
+``InheritedRequirement`` object instead.
+
+  >>> yhs.removeBase(va)
+  >>> yhs[u'program'].keys()
+  []
+  >>> yhs[u'program'][u'forloop'] = va[u'program'][u'forloop']
+  >>> yhs[u'program'][u'forloop']
+  InheritedRequirement(Requirement(u'Write a for loop.'))
+  >>> yhs[u'program'][u'forloop'].__parent__.__parent__
+  Requirement(u'Yorktown HS')
+  >>> va[u'program'][u'forloop'].__parent__.__parent__
+  Requirement(u'Virginia')
+  >>> del yhs[u'program'][u'forloop']
+  >>> yhs[u'program'].keys()
+  []
+  >>> va[u'program'].keys()
+  [u'forloop']
+  >>> yhs.addBase(va)
 
 Finally, requirements are ordered containers, which means that you can change
 the order of the dependency requirements. Let's first create a new
