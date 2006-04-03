@@ -46,7 +46,9 @@ timetable's key.
 Objects that have timetables
 ----------------------------
 
-An object that has (or may have) timetables implements ITimetables.
+An object that has (or may have) timetables implements
+IHaveTimetables.  The timetables themselves are stored in annotations
+and can be accessed through by adapting the owner to ITimetables.
 
 An object's composite timetable is derived by combining the object's
 timetable with composite timetables of other objects, acquired by
@@ -625,6 +627,27 @@ class TimetablesAdapter(object):
 def addToApplication(event):
     from schooltool.timetable.schema import TimetableSchemaContainer
     event.object['ttschemas'] = TimetableSchemaContainer()
+
+
+def findRelatedTimetables(schooltt):
+    """Find all timetables that use a given school timetable.
+
+    Returns a list of Timetable objects.
+    """
+    app = getSchoolToolApplication(schooltt)
+    timetables = []
+    timetables += ITimetables(app).timetables.values()
+
+    for container in 'persons', 'groups', 'resources':
+        for obj in app[container].values():
+            timetables += ITimetables(obj).timetables.values()
+
+    result = []
+    for tt in timetables:
+        if tt.__name__.split('.')[1] == schooltt.__name__:
+            result.append(tt)
+
+    return result
 
 
 def registerTestSetup():

@@ -35,6 +35,7 @@ from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.app.testing import ztapi
 from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.location.interfaces import ILocation
+from zope.testing import doctest
 
 from schooltool import timetable
 from schooltool.timetable.interfaces import ITimetables
@@ -997,8 +998,124 @@ class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
         self.assertEquals(list(cal), ['last year--next week'])
 
 
+def doctest_findRelatedTimetables():
+    """Tests for findRelatedTimetables()
+
+       >>> from schooltool.timetable import TimetablesAdapter
+       >>> setup.placefulSetUp()
+       >>> ztapi.provideAdapter(IAttributeAnnotatable, ITimetables,
+       ...                      TimetablesAdapter)
+       >>> setup.setUpAnnotations()
+
+       >>> from schooltool.testing.setup import createSchoolToolApplication
+       >>> from schooltool.timetable import findRelatedTimetables
+       >>> app = sbsetup.setupSchoolToolSite()
+
+    Let's create a timetable schema:
+
+       >>> from schooltool.timetable.schema import TimetableSchema
+       >>> from schooltool.timetable.schema import TimetableSchemaDay
+
+       >>> days = ('A', 'B')
+       >>> periods1 = ('Green', 'Blue')
+       >>> tts = TimetableSchema(days)
+       >>> tts["A"] = TimetableSchemaDay(periods1)
+       >>> tts["B"] = TimetableSchemaDay(periods1)
+
+       >>> days = ('C', 'D')
+       >>> tts2 = TimetableSchema(days)
+       >>> tts2["C"] = TimetableSchemaDay(periods1)
+       >>> tts2["D"] = TimetableSchemaDay(periods1)
+
+       >>> app['ttschemas']['simple'] = tts
+       >>> app['ttschemas']['other'] = tts2
+
+    Now we can call our utility function.  Since our schema is not
+    used, an empty list is returned:
+
+       >>> findRelatedTimetables(tts)
+       []
+
+    Let's add a timetable to the app object:
+
+       >>> ITimetables(app).timetables['2006.simple'] = tts.createTimetable()
+       >>> findRelatedTimetables(tts)
+       [<Timetable: ('A', 'B'),
+        {'A': <schooltool.timetable.TimetableDay object at ...>,
+         'B': <schooltool.timetable.TimetableDay object at ...>}, None>]
+
+    Now, let's add a timetable of a different schema:
+
+       >>> ITimetables(app).timetables['2006.other'] = tts2.createTimetable()
+       >>> findRelatedTimetables(tts)
+       [<Timetable: ('A', 'B'),
+        {'A': <schooltool.timetable.TimetableDay object at ...>,
+         'B': <schooltool.timetable.TimetableDay object at ...>}, None>]
+
+    Let's add some persons, groups and resources with timetables:
+
+       >>> from schooltool.person.person import Person
+       >>> from schooltool.group.group import Group
+       >>> from schooltool.resource.resource import Resource
+
+       >>> app['persons']['p1'] = Person('p1')
+       >>> app['persons']['p2'] = Person('p2')
+       >>> app['groups']['g'] = Group('friends')
+       >>> app['resources']['r'] = Resource('friends')
+
+       >>> adapter = ITimetables(app['persons']['p1'])
+       >>> adapter.timetables['2006.simple'] = tts.createTimetable()
+       >>> adapter.timetables['2005.simple'] = tts.createTimetable()
+       >>> adapter.timetables['2006.other'] = tts2.createTimetable()
+
+       >>> adapter = ITimetables(app['persons']['p2'])
+       >>> adapter.timetables['2006.simple'] = tts.createTimetable()
+
+       >>> adapter = ITimetables(app['groups']['g'])
+       >>> adapter.timetables['2006.simple'] = tts.createTimetable()
+       >>> adapter.timetables['2006.other'] = tts2.createTimetable()
+
+       >>> adapter = ITimetables(app['resources']['r'])
+       >>> adapter.timetables['2006.simple'] = tts.createTimetable()
+
+    Let's see the timetables for this schema now:
+
+       >>> findRelatedTimetables(tts)
+       [<Timetable: ('A', 'B'), ...>,
+        <Timetable: ('A', 'B'), ...>,
+        <Timetable: ('A', 'B'), ...>,
+        <Timetable: ('A', 'B'), ...>,
+        <Timetable: ('A', 'B'), ...>,
+        <Timetable: ('A', 'B'), ...>]
+
+       >>> [(tt.__parent__.__parent__.__name__, tt.__name__)
+       ...   for tt in findRelatedTimetables(tts)]
+       [(None, '2006.simple'), (u'p1', '2006.simple'),
+        (u'p1', '2005.simple'), (u'p2', '2006.simple'),
+        (u'g', '2006.simple'), (u'r', '2006.simple')]
+
+    Let's see the timetables of the other schema:
+
+       >>> findRelatedTimetables(tts2)
+       [<Timetable: ('C', 'D'), ...>,
+        <Timetable: ('C', 'D'), ...>,
+        <Timetable: ('C', 'D'), ...>]
+
+       >>> [(tt.__parent__.__parent__.__name__, tt.__name__)
+       ...   for tt in findRelatedTimetables(tts2)]
+       [(None, '2006.other'), (u'p1', '2006.other'), (u'g', '2006.other')]
+
+    Clean up:
+
+       >>> setup.placefulTearDown()
+    """
+
+
 def test_suite():
     suite = unittest.TestSuite()
+    optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
+                   doctest.NORMALIZE_WHITESPACE)
+    suite.addTest(doctest.DocTestSuite(optionflags=optionflags))
     suite.addTest(unittest.makeSuite(TestTimetable))
     suite.addTest(unittest.makeSuite(TestTimetableDay))
     suite.addTest(unittest.makeSuite(TestTimetableActivity))
