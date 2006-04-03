@@ -37,41 +37,18 @@ and book it for our history class:
     HTTP/1.1 201 Created
     ...
 
-Let's check that relationship was created:
+Section events should be visible in the calendar of the resource:
 
-    >>> print rest("""
-    ... GET /sections/history6a/relationships HTTP/1.1
-    ... Authorization: Basic manager:schooltool
-    ... """)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/xml; charset=UTF-8
-    Set-Cookie: ...
-    <BLANKLINE>
-    <relationships xmlns:xlink="http://www.w3.org/1999/xlink"
-                   xmlns="http://schooltool.org/ns/model/0.1">
-      <existing>
-        <relationship xlink:type="simple"
-                      xlink:role="http://schooltool.org/ns/coursesections/course"
-                      xlink:arcrole="http://schooltool.org/ns/coursesections"
-                      xlink:href="http://localhost/courses/history-6">
-          <manage xlink:type="simple"
-                  xlink:href="http://localhost/sections/history6a/relationships/1"/>
-        </relationship>
-        <relationship xlink:type="simple"
-                      xlink:role="http://schooltool.org/ns/instruction/instructor"
-                      xlink:arcrole="http://schooltool.org/ns/instruction"
-                      xlink:href="http://localhost/persons/frog">
-          <manage xlink:type="simple"
-                  xlink:href="http://localhost/sections/history6a/relationships/2"/>
-        </relationship>
-        <relationship xlink:type="simple"
-                      xlink:role="http://schooltool.org/ns/sectionbooking/resource"
-                      xlink:arcrole="http://schooltool.org/ns/sectionbooking"
-                      xlink:href="http://localhost/resources/a-resource">
-          <manage xlink:type="simple"
-                  xlink:href="http://localhost/sections/history6a/relationships/3"/>
-        </relationship>
-      </existing>
-    </relationships>
-    <BLANKLINE>
+    >>> manager.open('http://localhost/resources/a-resource/calendar/2005-09-07')
+    >>> print analyze.queryHTML('id("content-body")', manager.contents)[0]
+    <div id="content-body">
+    ...
+              <h6 style="background: #...">
+                  History 6
+                  <span class="start-end">
+                    (<span>11:35</span>
+                       -
+                     <span>12:20</span>)
+                  </span>
+              </h6>
+    ...
