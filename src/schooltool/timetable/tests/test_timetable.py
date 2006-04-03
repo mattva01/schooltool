@@ -807,8 +807,8 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
         td['a.c'] = TimetableStub()
 
 
-class TestTimetablesMixin(NiceDiffsMixin, EqualsSortedMixin,
-                          unittest.TestCase):
+class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
+                            unittest.TestCase):
 
     def setUp(self):
         from schooltool.relationship.tests import setUpRelationships
@@ -1007,7 +1007,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetableDict))
     suite.addTest(unittest.makeSuite(TestSchooldaySlot))
     suite.addTest(unittest.makeSuite(TestSchooldayTemplate))
-    suite.addTest(unittest.makeSuite(TestTimetablesMixin))
+    suite.addTest(unittest.makeSuite(TestTimetablesAdapter))
     return suite
 
 if __name__ == '__main__':
