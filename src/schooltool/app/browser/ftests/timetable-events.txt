@@ -9,114 +9,14 @@ events.
 A manager logs in:
 
     >>> from zope.testbrowser.testing import Browser
+    >>> from schooltool.app.browser.ftests import setUpTimetabling
     >>> manager = Browser()
     >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
     >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/')
-    >>> 'SchoolTool' in manager.contents
-    True
 
-Let's add a user:
+And sets up timetabling:
 
-    >>> manager.getLink('Persons').click()
-    >>> manager.getLink('New Person').click()
-
-    >>> manager.getControl('Full name').value = 'Frog'
-    >>> manager.getControl('Username').value = 'frog'
-    >>> manager.getControl('Password').value = 'pwd'
-    >>> manager.getControl('Verify password').value = 'pwd'
-    >>> manager.getControl('Add').click()
-
-We will need a term and a School timetable:
-
-    >>> manager.open('http://localhost/terms')
-    >>> manager.getLink('New Term').click()
-
-    >>> manager.getControl('Title').value = '2005 Fall'
-    >>> manager.getControl('Start date').value = '2005-09-01'
-    >>> manager.getControl('End date').value = '2006-01-31'
-    >>> manager.getControl('Next').click()
-
-
-    >>> manager.getControl('Sunday').click()
-    >>> manager.getControl('Saturday').click()
-    >>> manager.getControl('Add term').click()
-
-    >>> print analyze.queryHTML('id("content-body")', manager.contents)[0]
-    <div id="content-body">
-        <ul><li>
-            <a href="http://localhost/terms/2005-fall">2005 Fall</a>
-          </li>
-        </ul></div>
-
-
-Now the timetable:
-
-    >>> manager.open('http://localhost/ttschemas')
-    >>> manager.getLink('New Timetable').click()
-
-    >>> manager.getControl('Title').value = 'default'
-    >>> manager.getControl('Next').click()
-    >>> manager.getControl('Days of the week').click()
-    >>> manager.getControl('Same time each day').click()
-    >>> manager.getControl(name='field.times').value = """
-    ...    9:30-10:25
-    ...    10:30-11:25
-    ...    11:35-12:20
-    ...    12:45-13:30
-    ...    13:35-14:20
-    ...    14:30-15:15
-    ... """
-    >>> manager.getControl('Next').click()
-    >>> manager.getControl('Designated by time').click()
-    >>> manager.getControl('No').click()
-
-
-We will need a course:
-
-    >>> manager.open('http://localhost/courses')
-    >>> manager.getLink('New Course').click()
-
-    >>> manager.getControl('Title').value = 'History 6'
-    >>> manager.getControl('Description').value = 'History for the sixth class'
-    >>> manager.getControl('Add').click()
-
-And a section:
-
-    >>> manager.getLink('History 6').click()
-    >>> manager.getLink('New Section').click()
-    >>> manager.getControl('Code').value = 'history-6a'
-    >>> manager.getControl('Description').value = 'History for the class 6A'
-    >>> manager.getControl('Add').click()
-
-Let's assign Frog as a teacher for History 6:
-
-    >>> manager.getLink(url='http://localhost/sections/history6a').click()
-    >>> manager.getLink('edit instructors').click()
-    >>> manager.getControl('Frog').selected = True
-    >>> manager.getControl('Add').click()
-
-    >>> print analyze.queryHTML('id("content-body")', manager.contents)[0]
-    <div id="content-body">
-    ...
-    <fieldset><legend>Current Instructors</legend>
-    <div>
-      <label>
-        <input type="checkbox" name="remove_instructor.frog">
-        Frog
-      </label>
-    </div>
-    ...
-
-
-And schedule the section:
-
-    >>> manager.open('http://localhost/sections/history6a')
-    >>> manager.getLink('Schedule').click()
-
-    >>> manager.getControl(name="Monday.09:30-10:25").value = True
-    >>> manager.getControl(name="Wednesday.11:35-12:20").value = True
-    >>> manager.getControl('Save').click()
+    >>> setUpTimetabling(manager, user='frog', password='pwd')
 
 Frog logs in:
 
