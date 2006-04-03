@@ -2,14 +2,6 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:i18n="http://namespaces.zope.org/i18n">
 
-  <!-- Vocabularies -->
-
-  <utility
-      provides="zope.app.schema.interfaces.IVocabularyFactory"
-      component="schooltool.app.app.LocationResourceVocabulary"
-      name="LocationResources"
-      />
-
   <!-- Adapters -->
 
   <class class="schooltool.app.overlay.CalendarOverlayInfo">

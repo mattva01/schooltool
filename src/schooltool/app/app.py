@@ -236,15 +236,3 @@ class ShowTimetables(object):
         self.annotations[SHOW_TIMETABLES_KEY] = value
 
     showTimetables = property(getShowTimetables, setShowTimetables)
-
-
-class LocationResourceVocabulary(SimpleVocabulary):
-    """Choice vocabulary of all location resources."""
-
-    classProvides(IVocabularyFactory)
-
-    def __init__(self, context):
-        resources = getSchoolToolApplication()['resources']
-        locations = [SimpleTerm(l, token=l.title)
-                     for l in resources.values() if l.isLocation]
-        super(LocationResourceVocabulary, self).__init__(locations)

@@ -19,7 +19,7 @@
 """
 Course and Section related interfaces
 
-$Id: interfaces.py 4750 2005-08-16 19:13:10Z srichter $
+$Id$
 """
 import zope.interface
 import zope.schema
@@ -89,12 +89,6 @@ class ISection(IGroup):
 
     size = zope.interface.Attribute(
         """The number of member students in the section.""")
-
-    location = zope.schema.Choice(
-        title=u"Location",
-        required=False,
-        description=u"The resource where this section meets.",
-        vocabulary="LocationResources")
 
 
 class ISectionContainer(container.interfaces.IContainer):

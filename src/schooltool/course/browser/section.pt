@@ -19,20 +19,12 @@
 
   <div id="section-view">
 
-    <tal:if condition="context/location">
-      <p>
-        <a href=""
-           tal:attributes="href context/location/@@absolute_url"
-           tal:content="context/location/title"/>
-      </p>
-    </tal:if>
     <a class="modify" href=""
-       title="Change the location or name of this section."
-       tal:condition="view/canModifyLocation"
+       title="Change the name or description of this section."
        tal:attributes="href string:${context/@@absolute_url}/edit.html"
        i18n:attributes="title"
        i18n:translate="">
-       change location
+       edit info
     </a>
 
     <p class="description" tal:content="context/description"/>

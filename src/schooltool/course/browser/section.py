@@ -19,7 +19,7 @@
 """
 course browser views.
 
-$Id: app.py 4691 2005-08-12 18:59:44Z srichter $
+$Id$
 """
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import canWrite
@@ -65,11 +65,6 @@ class SectionView(BrowserView):
 
     def getGroups(self):
         return filter(IGroup.providedBy, self.context.members)
-
-    def _canModifyLocation(self):
-        return canWrite(self.context, 'location')
-
-    canModifyLocation = property(_canModifyLocation)
 
 
 class SectionAddView(AddView):

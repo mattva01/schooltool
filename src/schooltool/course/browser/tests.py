@@ -19,7 +19,7 @@
 """
 Unit tests for course and section views.
 
-$Id: test_app.py 4750 2005-08-16 19:13:10Z srichter $
+$Id$
 """
 import unittest
 
@@ -215,17 +215,6 @@ def doctest_SectionView():
         >>> [g.title for g in view.getGroups()]
         ['Form1']
 
-    We'll need some setup from zope.security:
-
-        >>> from zope.security.checker import defineChecker
-        >>> from zope.security.checker import Checker
-        >>> checker = Checker(
-        ...    {'location':'test_allowed'},
-        ...    {'location':'test_allowed'})
-        >>> defineChecker(Section, checker)
-        >>> view.canModifyLocation
-        True
-
     TODO in the future we should probably prevent users being direct memebers
     of a section if they're transitive members.
 
@@ -264,19 +253,12 @@ def doctest_SectionAddView():
 
         >>> class SectionAddViewForTesting(SectionAddView):
         ...     schema = ISection
-        ...     fieldNames = ('title', 'description', 'location')
+        ...     fieldNames = ('title', 'description')
         ...     _factory = Section
         ...     _arguments = []
         ...     _keyword_arguments = []
         ...     _set_before_add = 'title',
         ...     _set_after_add = []
-
-    We need some setup for our vocabulary:
-
-        >>> from zope.schema.vocabulary import getVocabularyRegistry
-        >>> from schooltool.app.app import LocationResourceVocabulary
-        >>> registry = getVocabularyRegistry()
-        >>> registry.register('LocationResources', LocationResourceVocabulary)
 
     create a SchoolTool instance:
 
@@ -371,14 +353,10 @@ def doctest_SectionEditView():
         >>> from schooltool.course.section import Section
         >>> from schooltool.course.interfaces import ISection
 
-    We need some setup for our vocabulary:
+    We need some setup:
 
         >>> from schooltool.app.app import SchoolToolApplication
         >>> app = setup.setupSchoolToolSite()
-        >>> from zope.schema.vocabulary import getVocabularyRegistry
-        >>> from schooltool.app.app import LocationResourceVocabulary
-        >>> registry = getVocabularyRegistry()
-        >>> registry.register('LocationResources', LocationResourceVocabulary)
         >>> from schooltool.resource.resource import Resource
         >>> app['resources']['room1'] = room1 = Resource("Room 1",
         ...                                               isLocation=True)
@@ -389,7 +367,7 @@ def doctest_SectionEditView():
 
         >>> class TestSectionEditView(SectionEditView):
         ...     schema = ISection
-        ...     fieldNames = ('title', 'description', 'location')
+        ...     fieldNames = ('title', 'description')
         ...     _factory = Section
 
         >>> view = TestSectionEditView(section, request)
@@ -408,7 +386,6 @@ def doctest_SectionEditView():
 
         >>> request = TestRequest()
         >>> request.form = {'UPDATE_SUBMIT': 'Apply',
-        ...                 'field.location': u'Room 1',
         ...                 'field.title': u'new_title'}
         >>> view = TestSectionEditView(section, request)
         >>> view.update()
@@ -420,8 +397,6 @@ def doctest_SectionEditView():
 
         >>> section.title
         u'new_title'
-        >>> section.location.title
-        'Room 1'
 
     Even if the title has not changed you should get redirected to the section
     list:
