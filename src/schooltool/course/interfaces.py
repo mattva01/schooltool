@@ -87,6 +87,9 @@ class ISection(IGroup):
     courses = zope.interface.Attribute(
         """A list of courses this section is a member of.""")
 
+    resources = zope.interface.Attribute(
+        """A list of booked resources.""")
+
     size = zope.interface.Attribute(
         """The number of member students in the section.""")
 

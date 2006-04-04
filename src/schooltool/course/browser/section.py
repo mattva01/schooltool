@@ -260,3 +260,23 @@ class SectionLearnerGroupView(RelationshipEditingViewBase):
         selected_items = Set(self.getSelectedItems())
         return [p for p in container.values()
                 if p not in selected_items]
+
+
+class SectionResourceView(RelationshipEditingViewBase):
+    """View for adding learners to a Section."""
+
+    __used_for__ = ISection
+
+    title = _("Resources")
+    current_title = _("Current Resources")
+    available_title = _("Available Resources")
+
+    def getCollection(self):
+        return self.context.resources
+
+    def getAvailableItems(self):
+        """Return a list of all possible members."""
+        container = getSchoolToolApplication()['resources']
+        selected_items = Set(self.getSelectedItems())
+        return [p for p in container.values()
+                if p not in selected_items]

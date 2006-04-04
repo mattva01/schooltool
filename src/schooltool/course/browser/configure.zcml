@@ -163,6 +163,14 @@
       />
 
   <page
+      name="resources.html"
+      for="..interfaces.ISection"
+      class=".section.SectionResourceView"
+      template="edit_relationships.pt"
+      permission="schooltool.manageMembership"
+      />
+
+  <page
       name="learners.html"
       for="..interfaces.ISection"
       class=".section.SectionLearnerView"

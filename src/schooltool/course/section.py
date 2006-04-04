@@ -19,7 +19,7 @@
 """
 Section implementation
 
-$Id: app.py 4750 2005-08-16 19:13:10Z srichter $
+$Id$
 """
 from persistent import Persistent
 import zope.interface
@@ -36,7 +36,7 @@ from schooltool.resource.interfaces import IResource
 
 from schooltool import SchoolToolMessage as _
 from schooltool.app import relationships
-from schooltool.course import interfaces
+from schooltool.course import interfaces, booking
 
 
 class Section(Persistent, contained.Contained):
@@ -98,6 +98,10 @@ class Section(Persistent, contained.Contained):
     members = RelationshipProperty(membership.URIMembership,
                                    membership.URIGroup,
                                    membership.URIMember)
+
+    resources = RelationshipProperty(booking.URISectionBooking,
+                                     booking.URISection,
+                                     booking.URIResource)
 
 
 class SectionContainer(btree.BTreeContainer):

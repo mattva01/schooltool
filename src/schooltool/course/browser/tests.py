@@ -610,6 +610,7 @@ def doctest_SectionLearnerView():
 
     """
 
+
 def doctest_SectionLearnerGroupView():
     """Tests for SectionLearnerGroupView.
 
@@ -652,6 +653,43 @@ def doctest_SectionLearnerGroupView():
         >>> view.context.members = [smith, frogs]
         >>> [item.title for item in view.getSelectedItems()]
         ['frogs']
+
+    """
+
+
+def doctest_SectionResourceView():
+    """Tests for SectionResourceView.
+
+    First we need to set up some persons:
+
+        >>> from schooltool.app.app import SchoolToolApplication
+        >>> from schooltool.resource.resource import Resource
+        >>> school = setup.setupSchoolToolSite()
+        >>> resources = school['resources']
+        >>> directlyProvides(school, IContainmentRoot)
+        >>> rock = resources['rock'] = Resource('rock')
+        >>> stone = resources['stone'] = Resource('stone')
+        >>> boulder = resources['boulder'] = Resource('boulder')
+
+    getCollection plainly returns resources attribute of a section:
+
+        >>> from schooltool.course.browser.section import SectionResourceView
+        >>> class SectionStub(object):
+        ...     resources = [rock]
+        >>> view = SectionResourceView(SectionStub(), None)
+        >>> [item.title for item in view.getCollection()]
+        ['rock']
+
+    All resources that are not currently booked are considered
+    available:
+
+        >>> [item.title for item in view.getAvailableItems()]
+        ['boulder', 'stone']
+
+        >>> view.context.resources = []
+
+        >>> [item.title for item in view.getAvailableItems()]
+        ['boulder', 'rock', 'stone']
 
     """
 
