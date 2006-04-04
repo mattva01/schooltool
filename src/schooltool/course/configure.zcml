@@ -67,8 +67,9 @@
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />
 
     <require permission="schooltool.view"
-             attributes="title description instructors members
-                         courses label size __cmp__ location" />
+             interface=".interfaces.ISection" />
+    <require permission="schooltool.view"
+             attributes="__cmp__" />
     <require permission="schooltool.edit"
              set_schema=".interfaces.ISection" />
   </class>
