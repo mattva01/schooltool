@@ -133,49 +133,62 @@ class SectionEditView(BaseEditView):
     __used_for__ = ISection
 
 
-class SectionInstructorView(BrowserView):
-    """View for adding instructors to a Section."""
+class RelationshipEditingViewBase(BrowserView):
 
-    __used_for__ = ISection
+    def getCollection(self):
+        raise NotImplementedError()
 
-    def getCurrentInstructors(self):
-        """Return a list of all possible members."""
-        return self.context.instructors
-
-    def getPotentialInstructors(self):
-        """Return a list of all possible members."""
-        container = getSchoolToolApplication()['persons']
-        return [p for p in container.values() if p not in
-                self.context.instructors]
+    def getAvailableItems(self):
+        raise NotImplementedError()
 
     def update(self):
         # This method is rather similar to GroupListView.update().
         context_url = zapi.absoluteURL(self.context, self.request)
-        context_instructors = removeSecurityProxy(self.context.instructors)
-        if 'ADD_INSTRUCTORS' in self.request:
-            for instructor in self.getPotentialInstructors():
-                if 'add_instructor.' + instructor.__name__ in self.request:
-                    instructor = removeSecurityProxy(instructor)
-                    context_instructors.add(instructor)
-        elif 'REMOVE_INSTRUCTORS' in self.request:
-            for instructor in self.getCurrentInstructors():
-                if 'remove_instructor.' + instructor.__name__ in self.request:
-                    instructor = removeSecurityProxy(instructor)
-                    context_instructors.remove(instructor)
+        context_items = removeSecurityProxy(self.getCollection())
+        if 'ADD_ITEMS' in self.request:
+            for item in self.getAvailableItems():
+                if 'add_item.' + item.__name__ in self.request:
+                    item = removeSecurityProxy(item)
+                    context_items.add(item)
+        elif 'REMOVE_ITEMS' in self.request:
+            for item in self.getCollection():
+                if 'remove_item.' + item.__name__ in self.request:
+                    item = removeSecurityProxy(item)
+                    context_items.remove(item)
         elif 'CANCEL' in self.request:
             self.request.response.redirect(context_url)
 
         if 'SEARCH' in self.request and 'CLEAR_SEARCH' not in self.request:
             searchstr = self.request['SEARCH'].lower()
-            results = [item for item in self.getPotentialInstructors()
+            results = [item for item in self.getAvailableItems()
                        if searchstr in item.title.lower()]
         else:
             self.request.form['SEARCH'] = ''
-            results = self.getPotentialInstructors()
+            results = self.getAvailableItems()
 
         start = int(self.request.get('batch_start', 0))
         size = int(self.request.get('batch_size', 10))
         self.batch = Batch(results, start, size, sort_by='title')
+
+
+class SectionInstructorView(RelationshipEditingViewBase):
+    """View for adding instructors to a Section."""
+
+    __used_for__ = ISection
+
+    title = _("Instructors")
+    current_title = _("Current Instructors")
+    available_title = _("Available Instructors")
+
+    def getCollection(self):
+        """Return a list of all possible members."""
+        return self.context.instructors
+
+    def getAvailableItems(self):
+        """Return a list of all possible members."""
+        container = getSchoolToolApplication()['persons']
+        return [p for p in container.values() if p not in
+                self.getCollection()]
 
 
 class SectionLearnerView(BrowserView):

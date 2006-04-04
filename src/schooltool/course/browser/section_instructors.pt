@@ -8,35 +8,33 @@
              tal:define="batch view/batch">
 
 <form method="post" tal:attributes="action request/URL" class="standalone">
-<h3 i18n:translate="">
-  Instructors
-</h3>
-<fieldset tal:define="instructors view/getCurrentInstructors">
-  <tal:if condition="instructors">
-    <legend i18n:translate="">Current Instructors</legend>
-    <div tal:repeat="instructor instructors/sortby:title">
+<h3 i18n:translate="" tal:content="view/title" />
+<fieldset tal:define="items view/getCollection">
+  <tal:if condition="items">
+    <legend i18n:translate="" tal:content="view/current_title" />
+    <div tal:repeat="item items/sortby:title">
       <label>
-        <input tal:attributes="name string:remove_instructor.${instructor/__name__}"
+        <input tal:attributes="name string:remove_item.${item/__name__}"
           type="checkbox" />
-        <span tal:replace="instructor/title" />
+        <span tal:replace="item/title" />
       </label>
     </div>
     <div class="controls">
-      <input type="submit" class="button-ok" name="REMOVE_INSTRUCTORS"
+      <input type="submit" class="button-ok" name="REMOVE_ITEMS"
         value="Remove"
         title="Shortcut: Alt-R" accesskey="R"
         i18n:attributes="value; accesskey" />
     </div>
   </tal:if>
-  <p tal:condition="not:instructors" i18n:translate="">
+  <p tal:condition="not:items" i18n:translate="">
     There are none.
   </p>
 </fieldset>
 </form>
 <form method="post" tal:attributes="action request/URL" class="standalone">
 <fieldset>
-  <legend i18n:translate="">Available Instructors</legend>
-  <div class="instructor_list">
+  <legend i18n:translate="" tal:content="view/available_title" />
+  <div class="item_list">
   <tal:if tal:condition="batch">
     <tal:if condition="request/SEARCH|nothing">
       <tal:block define="extra_url python:'&SEARCH=%s' % request.get('SEARCH')">
@@ -53,15 +51,15 @@
       i18n:attributes="value"/>
     <input type="submit" name="CLEAR_SEARCH" value="Clear"
       i18n:attributes="value"/>
-    <div tal:repeat="instructor batch" tal:condition="batch">
+    <div tal:repeat="item batch" tal:condition="batch">
       <label>
-        <input tal:attributes="name string:add_instructor.${instructor/__name__}"
+        <input tal:attributes="name string:add_item.${item/__name__}"
                type="checkbox" />
-        <span tal:replace="instructor/title" />
+        <span tal:replace="item/title" />
       </label>
     </div>
     <div class="controls">
-      <input type="submit" class="button-ok" name="ADD_INSTRUCTORS"
+      <input type="submit" class="button-ok" name="ADD_ITEMS"
         value="Add" tal:condition="batch"
         title="Shortcut: Alt-A" accesskey="A"
         i18n:attributes="value; accesskey" />

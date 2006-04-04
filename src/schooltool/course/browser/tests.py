@@ -443,10 +443,95 @@ def doctest_SectionEditView():
     """
 
 
-def doctest_SectionInstructorView():
-    r"""Tests for adding sections.
+def doctest_RelationshipEditingViewBase():
+    r"""Tests for RelationshipEditingViewBase.
 
-    lets setup a schooltool instance with some members.
+        >>> from schooltool.person.person import Person
+        >>> class ItemStub(object):
+        ...     def __init__(self, name):
+        ...         self.__name__ = name
+        ...         self.title = name
+        >>> class RelationshipPropertyStub(object):
+        ...     items = [ItemStub('john'),
+        ...              ItemStub('pete')]
+        ...     def __iter__(self):
+        ...         return iter(self.items)
+        ...     def add(self, item):
+        ...         print "Adding: %s" % item.title
+        ...     def remove(self, item):
+        ...         print "Removing: %s" % item.title
+
+    Inheriting views must implement getCollection and
+    getAvailableItems methods:
+
+        >>> from schooltool.course.browser.section import RelationshipEditingViewBase
+        >>> class MembershipView(RelationshipEditingViewBase):
+        ...     def getCollection(self):
+        ...         return RelationshipPropertyStub()
+        ...     def getAvailableItems(self):
+        ...         return [ItemStub('ann'), ItemStub('frog')]
+
+    Let's add Ann to the list:
+
+        >>> request = TestRequest()
+        >>> request.form = {'add_item.ann': 'on',
+        ...                 'ADD_ITEMS': 'Apply'}
+        >>> view = MembershipView(None, request)
+        >>> view.update()
+        Adding: ann
+
+    Someone might want to cancel a change.
+
+        >>> request = TestRequest()
+        >>> request.form = {'add_item.ann': 'on', 'CANCEL': 'Cancel'}
+        >>> view = MembershipView(None, request)
+        >>> view.update()
+
+    No one was added, but we got redirected:
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('Location')
+        'http://127.0.0.1'
+
+    We can remove items too:
+
+        >>> request.form = {'remove_item.john': 'on',
+        ...                 'remove_item.pete': 'on',
+        ...                 'REMOVE_ITEMS': 'Remove'}
+        >>> view = MembershipView(None, request)
+        >>> view.update()
+        Removing: john
+        Removing: pete
+
+    We also use a batch for available items in this view
+
+        >>> [i.title for i in view.batch]
+        ['ann', 'frog']
+
+    Which is searchable
+
+        >>> request.form = {'SEARCH': 'ann'}
+        >>> view = MembershipView(None, request)
+        >>> view.update()
+        >>> [i.title for i in view.batch]
+        ['ann']
+
+    The search can be cleared, ignoring any search value passed:
+
+        >>> request.form = {'SEARCH': 'ann', 'CLEAR_SEARCH': 'on'}
+        >>> view = MembershipView(None, request)
+        >>> view.update()
+        >>> [i.title for i in view.batch]
+        ['ann', 'frog']
+
+    """
+
+
+def doctest_SectionInstructorView():
+    """Tests for SectionInstructorView.
+
+    First we need to setup some persons:
 
         >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.person.person import Person
@@ -454,103 +539,30 @@ def doctest_SectionInstructorView():
         >>> persons = school['persons']
         >>> directlyProvides(school, IContainmentRoot)
         >>> sections = school['sections']
-        >>> persons['smith'] = Person('smith', 'Mr. Smith')
-        >>> persons['jones'] = Person('jones', 'Mrs. Jones')
-        >>> persons['stevens'] = Person('stevens', 'Ms. Stevens')
+        >>> persons['smith'] = Person('smith', 'John Smith')
+        >>> persons['jones'] = Person('jones', 'Sally Jones')
+        >>> persons['stevens'] = Person('stevens', 'Bob Stevens')
 
-    SecionInstructorView is used to relate persons to the section with the
-    URIInstruction relationship.
+    Current items plainly returns all instructions of a section:
 
-        >>> from schooltool.course.section import Section
         >>> from schooltool.course.browser.section import SectionInstructorView
-        >>> section = Section()
-        >>> sections['section'] = section
-        >>> request = TestRequest()
-        >>> view = SectionInstructorView(section, request)
-        >>> view.update()
+        >>> class SectionStub(object):
+        ...     instructors = [persons['smith']]
+        >>> view = SectionInstructorView(SectionStub(), None)
+        >>> [item.title for item in view.getCollection()]
+        ['John Smith']
 
-    No instructors yet:
+    All persons that are not in the current instructor list are
+    considered available:
 
-        >>> [i.title for i in section.instructors]
-        []
+        >>> [item.title for item in view.getAvailableItems()]
+        ['Sally Jones', 'Bob Stevens']
 
-    lets see who's available to be an instructor:
+        >>> view.context.instructors = []
 
-        >>> [i.title for i in view.getPotentialInstructors()]
-        ['Mrs. Jones', 'Mr. Smith', 'Ms. Stevens']
+        >>> [item.title for item in view.getAvailableItems()]
+        ['Sally Jones', 'John Smith', 'Bob Stevens']
 
-    let's make Mr. Smith the instructor:
-
-        >>> request = TestRequest()
-        >>> request.form = {'add_instructor.smith': 'on',
-        ...                 'ADD_INSTRUCTORS': 'Apply'}
-        >>> view = SectionInstructorView(section, request)
-        >>> view.update()
-
-    He should have joined:
-
-        >>> [i.title for i in section.instructors]
-        ['Mr. Smith']
-
-    Someone might want to cancel a change.
-
-        We can cancel an action if we want to:
-
-        >>> request = TestRequest()
-        >>> request.form = {'add_instructor.jones': 'on', 'CANCEL': 'Cancel'}
-        >>> view = SectionInstructorView(section, request)
-        >>> view.update()
-        >>> [person.title for person in section.instructors]
-        ['Mr. Smith']
-        >>> request.response.getStatus()
-        302
-        >>> request.response.getHeader('Location')
-        'http://127.0.0.1/sections/section'
-
-    a Section can have more than one instructor:
-
-        >>> request.form = {'add_instructor.stevens': 'on',
-        ...                 'ADD_INSTRUCTORS': 'Add'}
-        >>> view = SectionInstructorView(section, request)
-        >>> request = TestRequest()
-        >>> view.update()
-
-        >>> [person.title for person in section.instructors]
-        ['Mr. Smith', 'Ms. Stevens']
-
-    We can remove an instructor:
-
-        >>> request.form = {'remove_instructor.smith': 'on',
-        ...                 'REMOVE_INSTRUCTORS': 'Remove'}
-        >>> view = SectionInstructorView(section, request)
-        >>> request = TestRequest()
-        >>> view.update()
-
-    Goodbye Mr. Smith:
-
-        >>> [person.title for person in section.instructors]
-        ['Ms. Stevens']
-
-    We also use a batch in this view
-
-        >>> [i.title for i in view.batch]
-        ['Mr. Smith', 'Mrs. Jones']
-
-    Which is searchable
-
-        >>> request.form = {'SEARCH': 'Smith'}
-        >>> view = SectionInstructorView(section, request)
-        >>> view.update()
-        >>> [i.title for i in view.batch]
-        ['Mr. Smith']
-
-    And the search can be cleared, ignoring any search value passed:
-
-        >>> request.form = {'SEARCH': 'Smith', 'CLEAR_SEARCH': 'on'}
-        >>> view = SectionInstructorView(section, request)
-        >>> view.update()
-        >>> [i.title for i in view.batch]
-        ['Mr. Smith', 'Mrs. Jones']
     """
 
 

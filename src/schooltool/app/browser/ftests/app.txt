@@ -250,7 +250,7 @@ As does Toad's:
 Adding a teacher:
 
     >>> manager.getLink('edit instructors').click()
-    >>> manager.getControl(name='add_instructor.frog').value = True
+    >>> manager.getControl(name='add_item.frog').value = True
     >>> manager.getControl('Add').click()
 
     >>> print manager.contents
@@ -317,7 +317,7 @@ And Frog's overlay portlet shows the section:
 If we fire Frog, in hopes of getting Salamander to step in:
 
     >>> manager.getLink('edit instructors').click()
-    >>> manager.getControl(name='remove_instructor.frog').value = True
+    >>> manager.getControl(name='remove_item.frog').value = True
     >>> manager.getControl('Remove').click()
 
 Frog can't see the section's calendar any more
