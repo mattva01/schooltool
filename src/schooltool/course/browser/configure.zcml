@@ -166,7 +166,7 @@
       name="learners.html"
       for="..interfaces.ISection"
       class=".section.SectionLearnerView"
-      template="section_learners.pt"
+      template="edit_relationships.pt"
       permission="schooltool.manageMembership"
       />
 
@@ -174,7 +174,7 @@
       name="learner-groups.html"
       for="..interfaces.ISection"
       class=".section.SectionLearnerGroupView"
-      template="section_learners.pt"
+      template="edit_relationships.pt"
       permission="schooltool.manageMembership"
       />
 

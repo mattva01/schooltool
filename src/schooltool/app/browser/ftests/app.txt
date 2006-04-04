@@ -361,8 +361,9 @@ And the section's calendar is no longer in his overlay portlet.
 Adding a student:
 
     >>> manager.getLink('edit individuals').click()
-    >>> manager.getControl(name='member.toad').value = True
-    >>> manager.getControl('Apply').click()
+    >>> manager.getControl(name='add_item.toad').value = True
+    >>> manager.getControl('Add').click()
+    >>> manager.getLink('HIS1').click()
 
 Now toad is in the Students div
 

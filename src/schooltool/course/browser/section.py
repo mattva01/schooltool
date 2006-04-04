@@ -21,6 +21,8 @@ course browser views.
 
 $Id$
 """
+from sets import Set
+
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import canWrite
 from zope.app import zapi
@@ -30,6 +32,8 @@ from zope.app.form.interfaces import WidgetsError
 from zope.app.form.utility import getWidgetsData
 from zope.app.publisher.browser import BrowserView
 
+from schooltool.person.interfaces import IPerson
+from schooltool.group.interfaces import IGroup
 from schooltool.batching import Batch
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.app.browser.app import ContainerView, BaseEditView
@@ -135,26 +139,45 @@ class SectionEditView(BaseEditView):
 
 class RelationshipEditingViewBase(BrowserView):
 
+    def add(self, item):
+        """Add an item to the list of selected items."""
+        # Only those who can edit this section will see the view so it
+        # is safe to remove the security proxy here
+        collection = removeSecurityProxy(self.getCollection())
+        collection.add(item)
+
+    def remove(self, item):
+        """Remove an item from selected items."""
+        # Only those who can edit this section will see the view so it
+        # is safe to remove the security proxy here
+        collection = removeSecurityProxy(self.getCollection())
+        collection.remove(item)
+
     def getCollection(self):
-        raise NotImplementedError()
+        """Return the backend storage for related objects."""
+        raise NotImplementedError("Subclasses should override this method.")
+
+    def getSelectedItems(self):
+        """Return a sequence of items that are already selected."""
+        return self.getCollection()
 
     def getAvailableItems(self):
-        raise NotImplementedError()
+        """Return a sequence of items that can be selected."""
+        raise NotImplementedError("Subclasses should override this method.")
 
     def update(self):
         # This method is rather similar to GroupListView.update().
         context_url = zapi.absoluteURL(self.context, self.request)
-        context_items = removeSecurityProxy(self.getCollection())
         if 'ADD_ITEMS' in self.request:
             for item in self.getAvailableItems():
                 if 'add_item.' + item.__name__ in self.request:
                     item = removeSecurityProxy(item)
-                    context_items.add(item)
+                    self.add(item)
         elif 'REMOVE_ITEMS' in self.request:
-            for item in self.getCollection():
+            for item in self.getSelectedItems():
                 if 'remove_item.' + item.__name__ in self.request:
                     item = removeSecurityProxy(item)
-                    context_items.remove(item)
+                    self.remove(item)
         elif 'CANCEL' in self.request:
             self.request.response.redirect(context_url)
 
@@ -181,52 +204,59 @@ class SectionInstructorView(RelationshipEditingViewBase):
     available_title = _("Available Instructors")
 
     def getCollection(self):
-        """Return a list of all possible members."""
         return self.context.instructors
 
     def getAvailableItems(self):
         """Return a list of all possible members."""
         container = getSchoolToolApplication()['persons']
-        return [p for p in container.values() if p not in
-                self.getCollection()]
+        selected_items = Set(self.getSelectedItems())
+        return [p for p in container.values()
+                if p not in selected_items]
 
 
-class SectionLearnerView(BrowserView):
+class SectionLearnerView(RelationshipEditingViewBase):
     """View for adding learners to a Section.  """
 
     __used_for__ = ISection
 
-    def getPotentialLearners(self):
+    title = _("Students")
+    current_title = _("Current Students")
+    available_title = _("Available Students")
+
+    def getCollection(self):
+        return self.context.members
+
+    def getSelectedItems(self):
+        """Return a list of selected members."""
+        return filter(IPerson.providedBy, self.getCollection())
+
+    def getAvailableItems(self):
         """Return a list of all possible members."""
         container = getSchoolToolApplication()['persons']
-        return container.values()
-
-    def update(self):
-        # This method is rather similar to GroupListView.update().
-        context_url = zapi.absoluteURL(self.context, self.request)
-        if 'UPDATE_SUBMIT' in self.request:
-            context_members = removeSecurityProxy(self.context.members)
-            for member in self.getPotentialLearners():
-                want = bool('member.' + member.__name__ in self.request)
-                have = bool(member in context_members)
-                # add() and remove() could throw an exception, but at the
-                # moment the constraints are never violated, so we ignore
-                # the problem.
-                if want != have:
-                    member = removeSecurityProxy(member)
-                    if want:
-                        context_members.add(member)
-                    else:
-                        context_members.remove(member)
-            self.request.response.redirect(context_url)
-        elif 'CANCEL' in self.request:
-            self.request.response.redirect(context_url)
+        selected_items = Set(self.getSelectedItems())
+        return [p for p in container.values()
+                if p not in selected_items]
 
 
-class SectionLearnerGroupView(SectionLearnerView):
-    """View for adding groups of students to a Section."""
+class SectionLearnerGroupView(RelationshipEditingViewBase):
+    """View for adding learners to a Section."""
 
-    def getPotentialLearners(self):
+    __used_for__ = ISection
+
+    title = _("Groups")
+    current_title = _("Current Groups")
+    available_title = _("Available Groups")
+
+    def getCollection(self):
+        return self.context.members
+
+    def getSelectedItems(self):
+        """Return a list of selected members."""
+        return filter(IGroup.providedBy, self.getCollection())
+
+    def getAvailableItems(self):
         """Return a list of all possible members."""
         container = getSchoolToolApplication()['groups']
-        return container.values()
+        selected_items = Set(self.getSelectedItems())
+        return [p for p in container.values()
+                if p not in selected_items]

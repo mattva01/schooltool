@@ -461,11 +461,11 @@ def doctest_RelationshipEditingViewBase():
         ...     def remove(self, item):
         ...         print "Removing: %s" % item.title
 
-    Inheriting views must implement getCollection and
-    getAvailableItems methods:
+    Inheriting views must implement getCollection() and
+    getAvailableItems():
 
         >>> from schooltool.course.browser.section import RelationshipEditingViewBase
-        >>> class MembershipView(RelationshipEditingViewBase):
+        >>> class RelationshipView(RelationshipEditingViewBase):
         ...     def getCollection(self):
         ...         return RelationshipPropertyStub()
         ...     def getAvailableItems(self):
@@ -476,7 +476,7 @@ def doctest_RelationshipEditingViewBase():
         >>> request = TestRequest()
         >>> request.form = {'add_item.ann': 'on',
         ...                 'ADD_ITEMS': 'Apply'}
-        >>> view = MembershipView(None, request)
+        >>> view = RelationshipView(None, request)
         >>> view.update()
         Adding: ann
 
@@ -484,7 +484,7 @@ def doctest_RelationshipEditingViewBase():
 
         >>> request = TestRequest()
         >>> request.form = {'add_item.ann': 'on', 'CANCEL': 'Cancel'}
-        >>> view = MembershipView(None, request)
+        >>> view = RelationshipView(None, request)
         >>> view.update()
 
     No one was added, but we got redirected:
@@ -499,7 +499,7 @@ def doctest_RelationshipEditingViewBase():
         >>> request.form = {'remove_item.john': 'on',
         ...                 'remove_item.pete': 'on',
         ...                 'REMOVE_ITEMS': 'Remove'}
-        >>> view = MembershipView(None, request)
+        >>> view = RelationshipView(None, request)
         >>> view.update()
         Removing: john
         Removing: pete
@@ -512,7 +512,7 @@ def doctest_RelationshipEditingViewBase():
     Which is searchable
 
         >>> request.form = {'SEARCH': 'ann'}
-        >>> view = MembershipView(None, request)
+        >>> view = RelationshipView(None, request)
         >>> view.update()
         >>> [i.title for i in view.batch]
         ['ann']
@@ -520,7 +520,7 @@ def doctest_RelationshipEditingViewBase():
     The search can be cleared, ignoring any search value passed:
 
         >>> request.form = {'SEARCH': 'ann', 'CLEAR_SEARCH': 'on'}
-        >>> view = MembershipView(None, request)
+        >>> view = RelationshipView(None, request)
         >>> view.update()
         >>> [i.title for i in view.batch]
         ['ann', 'frog']
@@ -531,19 +531,18 @@ def doctest_RelationshipEditingViewBase():
 def doctest_SectionInstructorView():
     """Tests for SectionInstructorView.
 
-    First we need to setup some persons:
+    First we need to set up some persons:
 
         >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.person.person import Person
         >>> school = setup.setupSchoolToolSite()
         >>> persons = school['persons']
         >>> directlyProvides(school, IContainmentRoot)
-        >>> sections = school['sections']
         >>> persons['smith'] = Person('smith', 'John Smith')
         >>> persons['jones'] = Person('jones', 'Sally Jones')
         >>> persons['stevens'] = Person('stevens', 'Bob Stevens')
 
-    Current items plainly returns all instructions of a section:
+    getCollection plainly returns instructors attribute of a section:
 
         >>> from schooltool.course.browser.section import SectionInstructorView
         >>> class SectionStub(object):
@@ -567,172 +566,95 @@ def doctest_SectionInstructorView():
 
 
 def doctest_SectionLearnerView():
-    r"""Tests for adding sections.
+    """Tests for SectionLearnerView.
 
-    lets setup a schooltool instance with some members.
+    First we need to set up some persons:
 
         >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.person.person import Person
         >>> school = setup.setupSchoolToolSite()
         >>> persons = school['persons']
         >>> directlyProvides(school, IContainmentRoot)
-        >>> sections = school['sections']
-        >>> persons['smith'] = Person('smith', 'John Smith')
-        >>> persons['jones'] = Person('jones', 'Sally Jones')
-        >>> persons['stevens'] = Person('stevens', 'Bob Stevens')
+        >>> smith = persons['smith'] = Person('smith', 'John Smith')
+        >>> jones = persons['jones'] = Person('jones', 'Sally Jones')
+        >>> stevens = persons['stevens'] = Person('stevens', 'Bob Stevens')
 
-    SecionLearnerView is used to relate persons to the section with the
-    URIMembership relationship.  Persons with standard membership in a section
-    are considered 'learners' or 'students':
+    getCollection plainly returns members attribute of a section:
 
-        >>> from schooltool.course.section import Section
         >>> from schooltool.course.browser.section import SectionLearnerView
-        >>> section = Section()
-        >>> sections['section'] = section
-        >>> request = TestRequest()
-        >>> view = SectionLearnerView(section, request)
-        >>> view.update()
+        >>> class SectionStub(object):
+        ...     members = [smith]
+        >>> view = SectionLearnerView(SectionStub(), None)
+        >>> [item.title for item in view.getCollection()]
+        ['John Smith']
 
-    No learners yet:
+    All persons that are not in the selected learner list are
+    considered available:
 
-        >>> [i.title for i in section.members]
-        []
+        >>> [item.title for item in view.getAvailableItems()]
+        ['Sally Jones', 'Bob Stevens']
 
-    lets see who's available to be an learner:
+        >>> view.context.members = []
 
-        >>> [i.title for i in view.getPotentialLearners()]
+        >>> [item.title for item in view.getAvailableItems()]
         ['Sally Jones', 'John Smith', 'Bob Stevens']
 
-    let's make Mr. Smith the learner:
+    Any non-person members should be skipped when displaying selected
+    items:
 
-        >>> request = TestRequest()
-        >>> request.form = {'member.smith': 'on', 'UPDATE_SUBMIT': 'Apply'}
-        >>> view = SectionLearnerView(section, request)
-        >>> view.update()
-
-    He should have joined:
-
-        >>> [i.title for i in section.members]
+        >>> from schooltool.group.group import Group
+        >>> frogs = Group('frogs')
+        >>> view.context.members = [smith, frogs]
+        >>> [item.title for item in view.getSelectedItems()]
         ['John Smith']
-
-    And we should be directed to the group info page:
-
-        >>> request.response.getStatus()
-        302
-        >>> request.response.getHeader('Location')
-        'http://127.0.0.1/sections/section'
-
-    Someone might want to cancel a change.
-
-        We can cancel an action if we want to:
-
-        >>> request = TestRequest()
-        >>> request.form = {'member.jones': 'on', 'CANCEL': 'Cancel'}
-        >>> view = SectionLearnerView(section, request)
-        >>> view.update()
-        >>> [person.title for person in section.members]
-        ['John Smith']
-        >>> request.response.getStatus()
-        302
-        >>> request.response.getHeader('Location')
-        'http://127.0.0.1/sections/section'
-
-    a Section can have more than one learner:
-
-        >>> request.form = {'member.smith': 'on',
-        ...                 'member.stevens': 'on',
-        ...                 'UPDATE_SUBMIT': 'Apply'}
-        >>> view = SectionLearnerView(section, request)
-        >>> request = TestRequest()
-        >>> view.update()
-
-        >>> [person.title for person in section.members]
-        ['John Smith', 'Bob Stevens']
-
-    We can remove an learner:
-
-        >>> request.form = {'member.stevens': 'on',
-        ...                 'UPDATE_SUBMIT': 'Apply'}
-        >>> view = SectionLearnerView(section, request)
-        >>> request = TestRequest()
-        >>> view.update()
-
-    Goodbye Mr. Smith:
-
-        >>> [person.title for person in section.members]
-        ['Bob Stevens']
 
     """
-
 
 def doctest_SectionLearnerGroupView():
-    r"""Tests for adding groups of students to sections.
+    """Tests for SectionLearnerGroupView.
 
-    lets setup a schooltool instance with some members.
+    First we need to set up some groups:
 
-        >>> from schooltool.course.browser.section import \
-        ...     SectionLearnerGroupView
         >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.group.group import Group
-        >>> from schooltool.person.person import Person
         >>> school = setup.setupSchoolToolSite()
-        >>> persons = school['persons']
         >>> groups = school['groups']
         >>> directlyProvides(school, IContainmentRoot)
-        >>> sections = school['sections']
+        >>> frogs = groups['frogs'] = Group('frogs', 'Bunch of frogs')
+        >>> lilies = groups['lilies'] = Group('lilies', 'Lillie pond')
+        >>> bugs = groups['bugs'] = Group('bugs', "Lot's o Bugs")
 
-    Some People:
+    getCollection plainly returns members attribute of a section:
 
-        >>> persons['smith'] = smith = Person('smith', 'John Smith')
-        >>> persons['jones'] = jones = Person('jones', 'Sally Jones')
-        >>> persons['stevens'] = stevens = Person('stevens', 'Bob Stevens')
+        >>> from schooltool.course.browser.section import SectionLearnerGroupView
+        >>> class SectionStub(object):
+        ...     members = [frogs]
+        >>> view = SectionLearnerGroupView(SectionStub(), None)
+        >>> [item.title for item in view.getCollection()]
+        ['frogs']
 
-    We'll need a group:
+    All groups that are not in the selected learner list are
+    considered available:
 
-        >>> groups['form1'] = form1 = Group(title="Form 1")
-        >>> form1.members.add(smith)
-        >>> form1.members.add(jones)
+        >>> [item.title for item in view.getAvailableItems()]
+        ['bugs', 'lilies']
 
-        >>> from schooltool.course.section import Section
-        >>> section = Section()
-        >>> sections['section'] = section
-        >>> request = TestRequest()
+        >>> view.context.members = []
 
+        >>> [item.title for item in view.getAvailableItems()]
+        ['bugs', 'frogs', 'lilies']
 
-        >>> view = SectionLearnerGroupView(section, request)
-        >>> view.update()
+    Any non-person members should be skipped when displaying selected
+    items:
 
-    Let's see what's available to add:
-
-        >>> [g.title for g in view.getPotentialLearners()]
-        ['Form 1']
-
-    No learners yet:
-
-        >>> [i.title for i in section.members]
-        []
-
-    Lets add the Group as a member:
-
-        >>> request = TestRequest()
-        >>> request.form = {'member.form1': 'on', 'UPDATE_SUBMIT': 'Apply'}
-        >>> view = SectionLearnerGroupView(section, request)
-        >>> view.update()
-
-        >>> [g.title for g in section.members]
-        ['Form 1']
-
-    We can delete it like we would a Person:
-
-        >>> request = TestRequest()
-        >>> request.form = {'UPDATE_SUBMIT': 'Apply'}
-        >>> view = SectionLearnerGroupView(section, request)
-        >>> view.update()
-
-        >>> [g.title for g in section.members]
-        []
+        >>> from schooltool.person.person import Person
+        >>> smith = Person('smith', 'John Smith')
+        >>> view.context.members = [smith, frogs]
+        >>> [item.title for item in view.getSelectedItems()]
+        ['frogs']
 
     """
+
 
 def doctest_CoursesViewlet():
     r"""Test for CoursesViewlet
@@ -824,6 +746,7 @@ def doctest_CoursesViewlet():
         ['Algebra', 'English', 'Tenth Grade']
 
     """
+
 
 def test_suite():
     suite = unittest.TestSuite()

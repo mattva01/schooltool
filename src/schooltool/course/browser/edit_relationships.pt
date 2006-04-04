@@ -9,7 +9,7 @@
 
 <form method="post" tal:attributes="action request/URL" class="standalone">
 <h3 i18n:translate="" tal:content="view/title" />
-<fieldset tal:define="items view/getCollection">
+<fieldset tal:define="items view/getSelectedItems">
   <tal:if condition="items">
     <legend i18n:translate="" tal:content="view/current_title" />
     <div tal:repeat="item items/sortby:title">
