@@ -29,6 +29,23 @@
 
     <p class="description" tal:content="context/description"/>
 
+    <div class="info-block" tal:define="resources context/resources">
+      <h3 i18n:translate="">Resources</h3>
+      <ul>
+        <li tal:repeat="obj resources/sortby:title">
+          <a tal:attributes="href obj/@@absolute_url"
+             tal:content="obj/title" />
+        </li>
+      </ul>
+      <a class="modify" href=""
+         title="Change the resources for this section."
+         tal:attributes="href string:${context/@@absolute_url}/resources.html"
+         i18n:attributes="title"
+         i18n:translate="">
+         book resources
+      </a>
+    </div>
+
     <div class="info-block" tal:define="instructors context/instructors">
       <h3 i18n:translate="">Instructors</h3>
       <ul>
