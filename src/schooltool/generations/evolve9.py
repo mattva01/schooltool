@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2006 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,14 +17,26 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Generations for database version upgrades.
+Upgrade SchoolTool to generation 9.
+
+Book section locations using relationships.
 
 $Id$
 """
 
-from zope.app.generations.generations import SchemaManager
+from zope.app.publication.zopepublication import ZopePublication
+from zope.app.generations.utility import findObjectsProviding
 
-schemaManager = SchemaManager(
-    minimum_generation=9,
-    generation=9,
-    package_name='schooltool.generations')
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.group.group import Group
+
+
+def evolve(context):
+    root = context.connection.root()[ZopePublication.root_name]
+    for app in findObjectsProviding(root, ISchoolToolApplication):
+        section_container = app['sections']
+        for section in section_container.values():
+            location = getattr(section, 'location', None)
+            if location:
+                section.resources.add(location)
+                del section.location
