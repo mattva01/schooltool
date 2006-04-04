@@ -138,7 +138,7 @@ def doctest_SampleSections():
         >>> import zope.i18n
         >>> student = app['persons']['teacher042']
         >>> for section in getRelatedObjects(student, URISection):
-        ...     print section.location.title
+        ...     print list(section.resources)[0].title
         Room 60
         Room 60
         Room 60
@@ -254,6 +254,10 @@ def doctest_SampleTimetables_assignPeriodToSection():
         >>> app = stsetup.setupSchoolToolSite()
         >>> c = app['courses']['my_course'] = Course('My Course')
         >>> s = app['sections']['the_sect'] = Section('Sect')
+        >>> class ResourceStub:
+        ...     def __repr__(self):
+        ...         return 'resource'
+        >>> s.resources = [ResourceStub()] # be evil and replace the property
         >>> CourseSections(course=c, section=s)
 
     Also, we need a timetable schema with terms:
@@ -272,23 +276,23 @@ def doctest_SampleTimetables_assignPeriodToSection():
         >>> from schooltool.timetable.interfaces import ITimetables
         >>> timetable = ITimetables(s).timetables['2005-fall.simple']
         >>> for day, period, activity in timetable.itercontent():
-        ...     print day, period, activity.title
-        Day 1 B My Course
-        Day 2 B My Course
-        Day 3 B My Course
-        Day 4 B My Course
-        Day 5 B My Course
-        Day 6 B My Course
+        ...     print day, period, activity.title, activity.resources
+        Day 1 B My Course ImmutableSet([resource])
+        Day 2 B My Course ImmutableSet([resource])
+        Day 3 B My Course ImmutableSet([resource])
+        Day 4 B My Course ImmutableSet([resource])
+        Day 5 B My Course ImmutableSet([resource])
+        Day 6 B My Course ImmutableSet([resource])
 
         >>> timetable = ITimetables(s).timetables['2006-spring.simple']
         >>> for day, period, activity in timetable.itercontent():
-        ...     print day, period, activity.title
-        Day 1 B My Course
-        Day 2 B My Course
-        Day 3 B My Course
-        Day 4 B My Course
-        Day 5 B My Course
-        Day 6 B My Course
+        ...     print day, period, activity.title, activity.resources
+        Day 1 B My Course ImmutableSet([resource])
+        Day 2 B My Course ImmutableSet([resource])
+        Day 3 B My Course ImmutableSet([resource])
+        Day 4 B My Course ImmutableSet([resource])
+        Day 5 B My Course ImmutableSet([resource])
+        Day 6 B My Course ImmutableSet([resource])
 
     """
 

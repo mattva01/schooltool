@@ -19,7 +19,7 @@
 """
 Unit tests for course and section implementations.
 
-$Id: test_app.py 4750 2005-08-16 19:13:10Z srichter $
+$Id$
 """
 import unittest
 from zope.testing import doctest
@@ -241,36 +241,6 @@ def doctest_Section():
         ...     print course.title
         US History
         English
-
-    Sections can have a location resource to indicate where the section
-    regularly meets.
-
-        >>> from schooltool.resource.resource import Resource
-        >>> section.location is None
-        True
-
-        >>> room123 = Resource("Room123", isLocation=True)
-        >>> section.location = room123
-        >>> section.location.title
-        'Room123'
-
-    Locations have to be marked with isLocation, so printers can't be
-    locations:
-
-        >>> printer = Resource("Laser Printer")
-        >>> section.location = printer
-        Traceback (most recent call last):
-        ...
-        TypeError: Locations must be location resources.
-
-    Things other than resources can't be locations:
-
-        >>> section.location = Course()
-        Traceback (most recent call last):
-        ...
-        TypeError: Locations must be location resources.
-
-        >>> section.location = None
 
     We're done:
 

@@ -46,12 +46,10 @@ class Section(Persistent, contained.Contained):
 
     _location = None
 
-    def __init__(self, title="Section", description=None, schedule=None,
-                 location=None):
+    def __init__(self, title="Section", description=None, schedule=None):
         self.title = title
         self.description = description
         self.calendar = Calendar(self)
-        self.location = location
 
     @property
     def label(self):
@@ -67,25 +65,9 @@ class Section(Persistent, contained.Contained):
         for member in self.members:
             if IPerson.providedBy(member):
                 size = size + 1
-            if IGroup.providedBy(member):
+            elif IGroup.providedBy(member):
                 size = size + len(member.members)
-
         return size
-
-    @apply
-    def location():
-
-        def get(self):
-            return self._location
-
-        def set(self, location):
-            if location is not None:
-                if (not IResource.providedBy(location) or
-                    not location.isLocation):
-                    raise TypeError("Locations must be location resources.")
-            self._location = location
-
-        return property(get, set)
 
     instructors = RelationshipProperty(relationships.URIInstruction,
                                        relationships.URISection,

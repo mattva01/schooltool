@@ -19,7 +19,7 @@
 """
 Tests for course-related RESTive views.
 
-$Id: test_app.py 4691 2005-08-12 18:59:44Z srichter $
+$Id$
 """
 
 import unittest
@@ -221,51 +221,6 @@ def doctest_SectionFileFactory():
         u'Newer Section'
         >>> section.description
         u'Newer, Better'
-
-    We can identify a resource of a section, this requires a little more
-    setup:
-
-
-        >>> app = sbsetup.setupSchoolToolSite()
-        >>> from schooltool.resource.resource import Resource
-
-        >>> app['resources']['room1'] = room1 = Resource("Room 1",
-        ...                                               isLocation=True)
-        >>> app['resources']['printer'] = printer = Resource("Printer")
-
-        >>> section3 = factory("section3", None,
-        ...              '''<object xmlns="http://schooltool.org/ns/model/0.1"
-        ...                         title="Newer Section"
-        ...                         course="history"
-        ...                         location="room1"
-        ...                         description="Newer, Better"/>''')
-
-        >>> section3.location.title
-        'Room 1'
-
-    You can't add a location that isn't marked isLocation:
-
-        >>> section4 = factory("section4", None,
-        ...              '''<object xmlns="http://schooltool.org/ns/model/0.1"
-        ...                         title="Newer Section"
-        ...                         course="history"
-        ...                         location="printer"
-        ...                         description="Newer, Better"/>''')
-        Traceback (most recent call last):
-        ...
-        TypeError: Locations must be location resources.
-
-    If there's no location with that ID we get a RestError:
-
-        >>> section4 = factory("section4", None,
-        ...              '''<object xmlns="http://schooltool.org/ns/model/0.1"
-        ...                         title="Newer Section"
-        ...                         course="history"
-        ...                         location="not-there"
-        ...                         description="Newer, Better"/>''')
-        Traceback (most recent call last):
-        ...
-        RestError: No such location.
 
     """
 

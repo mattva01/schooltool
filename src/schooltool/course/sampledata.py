@@ -113,7 +113,7 @@ class SampleSections(object):
                 room = self.random.choice(rooms)
                 rooms.remove(room)
                 for section in getRelatedObjects(person, URISection):
-                    section.location = room
+                    section.resources.add(room)
 
 
 class SampleTimetables(object):
@@ -132,7 +132,7 @@ class SampleTimetables(object):
             ITimetables(section).timetables[ttname] = timetable
             for day_id in timetable.keys():
                 activity = TimetableActivity(course.title, owner=section,
-                                             resources=(section.location, ))
+                                             resources=section.resources)
                 timetable[day_id].add(period, activity)
 
     def generate(self, app, seed=None):
