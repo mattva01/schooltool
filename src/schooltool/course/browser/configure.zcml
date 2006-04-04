@@ -158,7 +158,7 @@
       name="instructors.html"
       for="..interfaces.ISection"
       class=".section.SectionInstructorView"
-      template="section_instructors.pt"
+      template="edit_relationships.pt"
       permission="schooltool.manageMembership"
       />
 
