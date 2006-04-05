@@ -71,5 +71,6 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     "Topic :: Education",
     "Topic :: Office/Business :: Scheduling"],
     package_dir={'': 'src'},
-    packages=find_packages('src')
+    packages=find_packages('src'),
+    install_requires=['SQLObject>=0.7'] # this dependency is imaginary;)
     )
