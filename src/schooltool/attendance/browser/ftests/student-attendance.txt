@@ -120,7 +120,7 @@ Add them to dancing section
     >>> manager.getLink('edit individuals').click()
     >>> manager.getControl('Joniukas').selected = True
     >>> manager.getControl('Gretute').selected = True
-    >>> manager.getControl('Apply').click()
+    >>> manager.getControl('Add').click()
 
 And register some absences
 

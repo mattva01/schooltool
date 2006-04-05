@@ -153,7 +153,8 @@ Now we can add those people to the section:
     >>> manager.getControl('Paul Cardune').click()
     >>> manager.getControl('Tom Hoffman').click()
     >>> manager.getControl('Claudia Richter').click()
-    >>> manager.getControl('Apply').click()
+    >>> manager.getControl('Add').click()
+    >>> manager.getLink('PHYI-1').click()
 
     >>> 'Paul Cardune' in manager.contents
     True
