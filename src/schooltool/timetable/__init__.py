@@ -154,7 +154,9 @@ from schooltool.timetable.interfaces import ISchooldayTemplate
 from schooltool.timetable.interfaces import ISchooldayTemplateWrite
 from schooltool.timetable.interfaces import ITimetables, IHaveTimetables
 from schooltool.timetable.interfaces import ITimetableSource
+from schooltool.timetable.interfaces import ITimetableSchema
 from schooltool.timetable.interfaces import Unchanged
+from schooltool.term.interfaces import ITerm
 from schooltool.app.app import getSchoolToolApplication
 
 # Imports for ZODB compatibility
@@ -624,30 +626,40 @@ class TimetablesAdapter(object):
         return result
 
 
-def addToApplication(event):
-    from schooltool.timetable.schema import TimetableSchemaContainer
-    event.object['ttschemas'] = TimetableSchemaContainer()
+def findRelatedTimetables(ob):
+    """Finds all timetables in the app instance that use a given object
 
-
-def findRelatedTimetables(schooltt):
-    """Find all timetables that use a given school timetable.
+    The object can be either a school timetable or a term.
 
     Returns a list of Timetable objects.
     """
-    app = getSchoolToolApplication(schooltt)
+    if ITerm.providedBy(ob):
+        index = 0
+    elif ITimetableSchema.providedBy(ob):
+        index = 1
+    else:
+        raise TypeError("Expected a Term or a TimetableSchema, got %r" %
+                        (ob, ))
+
+    app = getSchoolToolApplication(ob)
     timetables = []
     timetables += ITimetables(app).timetables.values()
 
     for container in 'persons', 'groups', 'resources':
-        for obj in app[container].values():
-            timetables += ITimetables(obj).timetables.values()
+        for ttowner in app[container].values():
+            timetables += ITimetables(ttowner).timetables.values()
 
     result = []
     for tt in timetables:
-        if tt.__name__.split('.')[1] == schooltt.__name__:
+        if tt.__name__.split('.')[index] == ob.__name__:
             result.append(tt)
 
     return result
+
+
+def addToApplication(event):
+    from schooltool.timetable.schema import TimetableSchemaContainer
+    event.object['ttschemas'] = TimetableSchemaContainer()
 
 
 def registerTestSetup():
