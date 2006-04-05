@@ -116,6 +116,7 @@ class Options(object):
     daemon = False
     quiet = False
     config = None
+    pack = False
     restore_manager = False
 
     def __init__(self):
@@ -339,7 +340,8 @@ class StandaloneServer(object):
         progname = os.path.basename(argv[0])
         try:
             opts, args = getopt.gnu_getopt(argv[1:], 'c:hdr',
-                                           ['config=', 'help', 'daemon',
+                                           ['config=', 'pack',
+                                            'help', 'daemon',
                                             'restore-manager'])
         except getopt.error, e:
             print >> sys.stderr, _("%s: %s") % (progname, e)
@@ -351,6 +353,8 @@ class StandaloneServer(object):
                 sys.exit(0)
             if k in ('-c', '--config'):
                 options.config_file = v
+            if k in ('-p', '--pack'):
+                options.pack = True
             if k in ('-d', '--daemon'):
                 if not hasattr(os, 'fork'):
                     print >> sys.stderr, _("%s: daemon mode not supported on"
@@ -459,6 +463,8 @@ class StandaloneServer(object):
         db_configuration = options.config.database
         try:
            db = db_configuration.open()
+           if options.pack:
+               db.pack()
         except IOError, e:
             print >> sys.stderr, _("Could not initialize the database:\n%s" %
                                    (e, ))

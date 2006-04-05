@@ -332,7 +332,7 @@ def doctest_setup():
 
     - sets up loggers
     - configures Zope 3 components
-    - opens the database
+    - opens the database (optionally packs it)
     - starts tcp servers
 
     It is difficult to unit test, but we'll try.
