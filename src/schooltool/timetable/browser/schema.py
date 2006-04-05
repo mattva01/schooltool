@@ -212,14 +212,18 @@ class TimetableSchemaContainerView(ContainerView):
         return ''
 
 
-class TimetableSchemaContainerDeleteView(ContainerDeleteView):
-    """TimetableSchema Container view."""
+class TimetableDependentDeleteView(ContainerDeleteView):
+    """The delete view for school timetables and schemas.
+
+    Finds all timetables that use the object to be deleted and deletes
+    them too.
+    """
 
     adapts((ITimetableSchemaContainer, IBrowserRequest))
     implements(IBrowserPublisher)
 
-    def timetables(self, stt):
-        return findRelatedTimetables(stt)
+    def timetables(self, obj):
+        return findRelatedTimetables(obj)
 
     def update(self):
         if 'UPDATE_SUBMIT' in self.request:

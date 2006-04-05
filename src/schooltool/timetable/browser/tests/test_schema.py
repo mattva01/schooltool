@@ -836,8 +836,12 @@ def doctest_TimetableSchemaContainerView():
     """
 
 
-def doctest_TimetableSchemaContainerDeleteView():
-    r"""Tests for TimetableSchemaContainerDeleteView
+def doctest_TimetableDependentDeleteView():
+    r"""Tests for TimetableDependentDeleteView.
+
+    This view is used to delete school timetables and terms, and
+    recursively deletes all timetables that use the object to be
+    deleted.
 
     First, let's set up:
 
@@ -877,10 +881,10 @@ def doctest_TimetableSchemaContainerDeleteView():
     Now, we can run the view:
 
         >>> from schooltool.timetable.browser.schema \
-        ...     import TimetableSchemaContainerDeleteView
+        ...     import TimetableDependentDeleteView
         >>> request = TestRequest(form={'delete.simple': 'on',
         ...                             'UPDATE_SUBMIT': 'Delete'})
-        >>> view = TimetableSchemaContainerDeleteView(app['ttschemas'],
+        >>> view = TimetableDependentDeleteView(app['ttschemas'],
         ...                                           request)
         >>> view.update()
 
@@ -904,10 +908,10 @@ def doctest_TimetableSchemaContainerDeleteView():
     The user can also cancel the deletion:
 
         >>> from schooltool.timetable.browser.schema \
-        ...     import TimetableSchemaContainerDeleteView
+        ...     import TimetableDependentDeleteView
         >>> request = TestRequest(form={'delete.other': 'on',
         ...                             'CANCEL': 'Cancel'})
-        >>> view = TimetableSchemaContainerDeleteView(app['ttschemas'],
+        >>> view = TimetableDependentDeleteView(app['ttschemas'],
         ...                                           request)
         >>> view.update()
 

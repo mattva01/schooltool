@@ -57,7 +57,7 @@
   <page
       name="delete.html"
       for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
-      class=".schema.TimetableSchemaContainerDeleteView"
+      class=".schema.TimetableDependentDeleteView"
       template="templates/schooltt-delete.pt"
       permission="schooltool.edit"
       menu="zmi_views"

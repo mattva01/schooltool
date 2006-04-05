@@ -14,6 +14,16 @@
       />
 
   <page
+      name="delete.html"
+      for="..interfaces.ITermContainer"
+      class="schooltool.timetable.browser.schema.TimetableDependentDeleteView"
+      template="term-container-delete.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <page
       name="add.html"
       for="..interfaces.ITermContainer"
       class=".term.TermAddView"

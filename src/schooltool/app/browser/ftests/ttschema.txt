@@ -16,6 +16,7 @@ Overview
 8. Mark 2005-07-07 as an emergency day -- move it to 2005-09-01.
 9. Verify that 2005-09-01 remembers class times specified in step 6.
 10. Delete a school timetable
+11. Delete a term
 
 
 Setup
@@ -437,3 +438,40 @@ The default schema selection is unset:
     >>> 'selected' not in manager.contents
     True
 
+
+Let's go back to the index of terms:
+
+    >>> manager.getLink('Terms').click()
+
+Let's delete the term:
+
+    >>> manager.getControl(name='delete.2005-summer').value = True
+    >>> manager.getControl('Delete').click()
+
+We get to the confirmation page:
+
+    >>> print manager.contents
+    <BLANKLINE>
+    ...
+    Are you sure you want to delete the selected terms?
+    ...
+            <input type="hidden" name="delete.2005-summer" />
+            <a href="http://localhost/terms/2005-summer">2005 Summer</a>.
+            This term is used by 0 individual timetables.
+    ...
+
+Let's proceed:
+
+    >>> manager.getControl('Confirm').click()
+
+We get back to the terms index page:
+
+    >>> '<h1>Terms</h1>' in manager.contents
+    True
+
+But the deleted term is not there:
+
+    >>> '2005-summer' not in manager.contents
+    True
+    >>> '2005 summer' not in manager.contents
+    True
