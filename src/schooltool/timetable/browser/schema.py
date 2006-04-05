@@ -22,7 +22,8 @@ Timetabling Schema views.
 $Id$
 """
 from zope.i18n import translate
-from zope.interface import Interface
+from zope.component import adapts
+from zope.interface import Interface, implements
 from zope.schema import TextLine, Int
 from zope.schema.interfaces import RequiredMissing
 from zope.app import zapi
@@ -32,14 +33,18 @@ from zope.app.form.interfaces import WidgetsError
 from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.publisher.browser import BrowserView
+from zope.app.traversing.api import getParent, getName
+from zope.publisher.interfaces.browser import IBrowserPublisher
+from zope.publisher.interfaces.browser import IBrowserRequest
 
 from schooltool import SchoolToolMessage as _
-from schooltool.app.browser.app import ContainerView
+from schooltool.app.browser.app import ContainerView, ContainerDeleteView
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 from schooltool.timetable.interfaces import ITimetableModelFactory
 from schooltool.timetable.interfaces import ITimetableSchema
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.schema import TimetableSchema, TimetableSchemaDay
+from schooltool.timetable import findRelatedTimetables
 
 from schooltool.timetable.browser import TimetableView, TabindexMixin
 from schooltool.timetable.browser import fix_duplicates, parse_time_range
@@ -205,6 +210,27 @@ class TimetableSchemaContainerView(ContainerView):
         if 'UPDATE_SUBMIT' in self.request:
             self.context.default_id = self.request['ttschema'] or None
         return ''
+
+
+class TimetableSchemaContainerDeleteView(ContainerDeleteView):
+    """TimetableSchema Container view."""
+
+    adapts((ITimetableSchemaContainer, IBrowserRequest))
+    implements(IBrowserPublisher)
+
+    def timetables(self, stt):
+        return findRelatedTimetables(stt)
+
+    def update(self):
+        if 'UPDATE_SUBMIT' in self.request:
+            for key in self.listIdsForDeletion():
+                for tt in findRelatedTimetables(self.context[key]):
+                    ttdict = getParent(tt)
+                    del ttdict[getName(tt)]
+                del self.context[key]
+            self.request.response.redirect(self.nextURL())
+        elif 'CANCEL' in self.request:
+            self.request.response.redirect(self.nextURL())
 
 
 class IAdvancedTimetableSchemaAddSchema(Interface):

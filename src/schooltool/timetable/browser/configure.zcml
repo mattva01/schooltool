@@ -54,6 +54,16 @@
       title="View"
       />
 
+  <page
+      name="delete.html"
+      for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      class=".schema.TimetableSchemaContainerDeleteView"
+      template="templates/schooltt-delete.pt"
+      permission="schooltool.edit"
+      menu="zmi_views"
+      title="View"
+      />
+
   <configure package="schooltool.skin">
     <viewlet
       name="ttschemas"

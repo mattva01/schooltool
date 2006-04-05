@@ -29,7 +29,8 @@ from zope.i18n import translate
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.app.container.interfaces import INameChooser
-from zope.app.testing import ztapi
+from zope.app.testing import ztapi, setup
+from zope.app.annotation.interfaces import IAttributeAnnotatable
 
 from schooltool.app.app import SimpleNameChooser
 from schooltool.testing import setup as sbsetup
@@ -794,7 +795,8 @@ def doctest_TimetableSchemaContainerView():
         >>> from schooltool.timetable.browser.schema import \
         ...      TimetableSchemaContainerView
         >>> from zope.publisher.browser import TestRequest
-        >>> view = TimetableSchemaContainerView(app["ttschemas"], TestRequest())
+        >>> view = TimetableSchemaContainerView(app["ttschemas"],
+        ...                                     TestRequest())
 
     The default ttschema id should be "schema1":
 
@@ -831,6 +833,97 @@ def doctest_TimetableSchemaContainerView():
         >>> app["ttschemas"].default_id is None
         True
 
+    """
+
+
+def doctest_TimetableSchemaContainerDeleteView():
+    r"""Tests for TimetableSchemaContainerDeleteView
+
+    First, let's set up:
+
+        >>> from schooltool.timetable import TimetablesAdapter
+        >>> from schooltool.timetable.interfaces import ITimetables
+        >>> setup.placefulSetUp()
+        >>> ztapi.provideAdapter(IAttributeAnnotatable, ITimetables,
+        ...                      TimetablesAdapter)
+        >>> setup.setUpAnnotations()
+
+    Now, let's create a couple of timetables to operate on:
+
+        >>> from schooltool.timetable.schema import TimetableSchema
+        >>> from schooltool.timetable.schema import TimetableSchemaDay
+        >>> from schooltool.testing.setup import createSchoolToolApplication
+        >>> app = sbsetup.setupSchoolToolSite()
+
+        >>> days = ('A', 'B')
+        >>> periods1 = ('Green', 'Blue')
+        >>> tts = TimetableSchema(days)
+        >>> tts["A"] = TimetableSchemaDay(periods1)
+        >>> tts["B"] = TimetableSchemaDay(periods1)
+
+        >>> days = ('C', 'D')
+        >>> tts2 = TimetableSchema(days)
+        >>> tts2["C"] = TimetableSchemaDay(periods1)
+        >>> tts2["D"] = TimetableSchemaDay(periods1)
+
+        >>> app['ttschemas']['simple'] = tts
+        >>> app['ttschemas']['other'] = tts2
+
+    Let's create a couple of timetables on the application:
+
+        >>> ITimetables(app).timetables['2006.simple'] = tts.createTimetable()
+        >>> ITimetables(app).timetables['2006.other'] = tts2.createTimetable()
+
+    Now, we can run the view:
+
+        >>> from schooltool.timetable.browser.schema \
+        ...     import TimetableSchemaContainerDeleteView
+        >>> request = TestRequest(form={'delete.simple': 'on',
+        ...                             'UPDATE_SUBMIT': 'Delete'})
+        >>> view = TimetableSchemaContainerDeleteView(app['ttschemas'],
+        ...                                           request)
+        >>> view.update()
+
+    The timetable schema is deleted:
+
+        >>> list(app['ttschemas'].keys())
+        [u'other']
+
+    Also, the dependent timetables have been deleted:
+
+        >>> ITimetables(app).timetables.keys()
+        ['2006.other']
+
+    The user is redirected to the school timetable index view:
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('Location')
+        'http://127.0.0.1/ttschemas'
+
+    The user can also cancel the deletion:
+
+        >>> from schooltool.timetable.browser.schema \
+        ...     import TimetableSchemaContainerDeleteView
+        >>> request = TestRequest(form={'delete.other': 'on',
+        ...                             'CANCEL': 'Cancel'})
+        >>> view = TimetableSchemaContainerDeleteView(app['ttschemas'],
+        ...                                           request)
+        >>> view.update()
+
+    In that case, the data is unchanged:
+
+        >>> list(app['ttschemas'].keys())
+        [u'other']
+        >>> ITimetables(app).timetables.keys()
+        ['2006.other']
+
+    The user is also redirected to the school timetable index view:
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('Location')
+        'http://127.0.0.1/ttschemas'
     """
 
 

@@ -15,7 +15,22 @@
   <p tal:condition="not:objects" i18n:translate="">There are none.</p>
   <tal:block tal:condition="objects"
              tal:define="default_id context/default_id">
-    <ul>
+    <form tal:condition="canModify"
+          method="post"
+          tal:attributes="action string:${context/@@absolute_url}/delete.html">
+      <div tal:repeat="obj objects/sortby:title">
+        <input type="checkbox"
+               tal:attributes="name string:delete.${obj/zope:name};
+                               disabled obj/schooltool:has_dependents" />
+        <a tal:content="obj/title"
+           tal:attributes="href obj/@@absolute_url">Some Object</a>
+      </div>
+      <div class="controls">
+        <input type="submit" class="button-cancel" value="Delete"
+               i18n:attributes="value delete-button;" />
+      </div>
+    </form>
+    <ul tal:condition="not:canModify">
       <li tal:repeat="obj objects/sortby:title">
         <a tal:content="obj/title"
            tal:attributes="href obj/@@absolute_url">Some Object</a>

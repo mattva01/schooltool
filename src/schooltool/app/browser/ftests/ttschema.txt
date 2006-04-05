@@ -15,6 +15,7 @@ Overview
 7. Switch the default schema to 'other'.
 8. Mark 2005-07-07 as an emergency day -- move it to 2005-09-01.
 9. Verify that 2005-09-01 remembers class times specified in step 6.
+10. Delete a school timetable
 
 
 Setup
@@ -393,3 +394,46 @@ But the replacement day now contains periods all-right:
     '11:00'
     >>> manager.getControl(name='P3_end').value
     '11:45'
+
+Let's go back to the index of the school timetables:
+
+    >>> manager.getLink('School Timetables').click()
+
+Let's delete the new schema:
+
+    >>> manager.getControl(name='delete.schema-2').value = True
+    >>> manager.getControl('Delete').click()
+
+We get to the confirmation page:
+
+    >>> print manager.contents
+    <BLANKLINE>
+    ...
+    Are you sure you want to delete the selected school timetables?
+    ...
+            <input type="hidden" name="delete.schema-2" />
+            <a href="http://localhost/ttschemas/schema-2">Schema 2</a>.
+            This school timetable is used by 0 individual timetables.
+    ...
+
+Let's proceed:
+
+    >>> manager.getControl('Confirm').click()
+
+We get back to the school timetables index page:
+
+    >>> '<h1>School Timetables</h1>' in manager.contents
+    True
+
+But the deleted schema is not there:
+
+    >>> 'schema-2' not in manager.contents
+    True
+    >>> 'Schema 2' not in manager.contents
+    True
+
+The default schema selection is unset:
+
+    >>> 'selected' not in manager.contents
+    True
+
