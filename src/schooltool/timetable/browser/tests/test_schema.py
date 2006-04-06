@@ -41,8 +41,14 @@ from schooltool.timetable import WeeklyTimetableModel
 from schooltool.timetable.interfaces import ITimetableModelFactory
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.browser.tests.test_timetable import setUp, tearDown
-from schooltool.timetable.browser.tests.test_timetable import createSchema
+from schooltool.timetable.browser.tests import test_timetable
 from schooltool.timetable.browser.tests.test_timetable import createDayTemplate
+
+
+def createSchema(*args):
+    tts = test_timetable.createSchema(*args)
+    tts.timezone = 'Asia/Tokyo'
+    return tts
 
 
 class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
@@ -396,12 +402,14 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
 
 
 def doctest_TimetableSchemaView():
-    """Test for TimetableView.
+    """Test for TimetableSchemaView.
 
         >>> from schooltool.timetable.browser.schema import TimetableSchemaView
         >>> from schooltool.timetable.schema import TimetableSchema
         >>> from schooltool.timetable.schema import TimetableSchemaDay
         >>> from schooltool.timetable import TimetableActivity
+
+        >>> app = sbsetup.setupSchoolToolSite()
 
     Create some context:
 
@@ -427,11 +435,23 @@ def doctest_TimetableSchemaView():
     ``homerooms()`` returns a dict of homeroom periods.  It is for use
     by the template, so the days and the periods are designated by
     their index rather than id:
+
         >>> ttd1.homeroom_period_id = 'A'
         >>> ttd2.homeroom_period_id = None
         >>> view.homerooms()
         {0: 0, 1: None}
 
+    ``timezone`` is a property that is not None only if the schema
+    timezone is different from the app default:
+
+        >>> tts.timezone
+        'UTC'
+
+        >>> view.timezone
+
+        >>> tts.timezone = 'Asia/Tokyo'
+        >>> view.timezone
+        'Asia/Tokyo'
     """
 
 

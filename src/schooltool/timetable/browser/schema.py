@@ -78,6 +78,17 @@ class TimetableSchemaView(TimetableView):
                 mapping = {'schema': self.context.__name__})
         return msg
 
+    @property
+    def timezone(self):
+        """Return a timezone if it is different from app default.
+
+        Return None if it is not.
+        """
+        app = ISchoolToolApplication(None)
+        apptz = IApplicationPreferences(app).timezone
+        if self.context.timezone != apptz:
+            return self.context.timezone
+
 
 class SimpleTimetableSchemaAdd(BrowserView):
     """A simple timetable schema definition view"""

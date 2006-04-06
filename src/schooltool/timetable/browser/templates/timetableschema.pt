@@ -12,6 +12,8 @@
              tal:define="owner_url context/__parent__/__parent__/@@absolute_url;
                          calendar_url string:$owner_url/calendar/daily.html">
 
+  <p tal:condition="view/timezone"
+     tal:content="string:Timezone: ${view/timezone}"/>
   <table class="timetable"
          tal:define="ncols python:len(context.keys()) or 1;
                      col_width python:'%d%%' % (100 / ncols);
