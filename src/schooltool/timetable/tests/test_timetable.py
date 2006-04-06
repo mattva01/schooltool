@@ -232,6 +232,12 @@ class TestTimetable(unittest.TestCase):
         tt2["B"].remove("Green", bio)
         self.assertNotEquals(tt, tt2)
 
+        tt["B"].remove("Green", bio)
+        self.assertEquals(tt, tt2)
+
+        tt2.timezone = 'Europe/Vilnius'
+        self.assertNotEquals(tt, tt2)
+
     def test_itercontent(self):
         from schooltool.timetable import TimetableActivity
         tt = self.createTimetable()

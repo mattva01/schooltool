@@ -122,7 +122,8 @@ class TimetableSchema(Persistent, Contained):
     def __eq__(self, other):
         if ITimetableSchema.providedBy(other):
             return (self.items() == other.items()
-                    and self.model == other.model)
+                    and self.model == other.model
+                    and self.timezone == other.timezone)
         else:
             return False
 

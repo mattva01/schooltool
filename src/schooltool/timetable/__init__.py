@@ -258,7 +258,8 @@ class Timetable(Persistent):
     def __eq__(self, other):
         if ITimetable.providedBy(other):
             return (self.items() == other.items()
-                    and self.model == other.model)
+                    and self.model == other.model
+                    and self.timezone == other.timezone)
         else:
             return False
 

@@ -163,6 +163,13 @@ class TestTimetableSchema(unittest.TestCase):
         tts6["B"] = TimetableSchemaDay(periods2, homeroom_period_id='Red')
         self.assertNotEquals(tts, tts6)
 
+        # Different time zone
+        tts7 = TimetableSchema(days)
+        tts7["A"] = TimetableSchemaDay(periods1)
+        tts7["B"] = TimetableSchemaDay(periods2)
+        tts7.timezone = 'Europe/Vilnius'
+        self.assertNotEquals(tts, tts7)
+
 
 
 class TestTimetableSchemaContainer(unittest.TestCase):
