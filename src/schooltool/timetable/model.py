@@ -134,15 +134,14 @@ class BaseTimetableModel(Persistent):
             day_id, periods = self._periodsInDay(term, timetable,
                                                  date, day_id_gen)
 
-            app = ISchoolToolApplication(None)
-            sitewide_tz = pytz.timezone(IApplicationPreferences(app).timezone)
+            tz = pytz.timezone(timetable.timezone)
 
             for period, tstart, duration in periods:
                 # `tstart` in the timetable is defined to be in the site-wide
                 # timezone.  We need to convert that to UTC, because calendar
                 # events insist on storing UTC time.
                 dt = datetime.datetime.combine(date, tstart)
-                dt = sitewide_tz.localize(dt).astimezone(pytz.utc)
+                dt = tz.localize(dt).astimezone(pytz.utc)
                 for activity in timetable[day_id][period]:
                     key = (date, period, activity)
                     # IDs for functionally derived calendars should be

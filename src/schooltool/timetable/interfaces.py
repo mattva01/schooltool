@@ -337,6 +337,8 @@ class ITimetableSchema(IContained):
         title=u"A timetable model this timetable should be used with.",
         schema=ITimetableModel)
 
+    timezone = TextLine(title=u"The name of a timezone of this timetable")
+
     def keys():
         """Return a sequence of identifiers for days within the timetable.
 
@@ -415,6 +417,8 @@ class ITimetable(ILocation):
     model = Object(
         title=u"A timetable model this timetable should be used with.",
         schema=ITimetableModel)
+
+    timezone = TextLine(title=u"The name of a timezone of this timetable")
 
     def keys():
         """Return a sequence of identifiers for days within the timetable.

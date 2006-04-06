@@ -195,6 +195,8 @@ class Timetable(Persistent):
     __name__ = None
     __parent__ = None
 
+    timezone = 'UTC'
+
     def __init__(self, day_ids):
         """Create a new empty timetable.
 

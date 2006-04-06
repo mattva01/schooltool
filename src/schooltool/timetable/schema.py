@@ -77,7 +77,7 @@ class TimetableSchema(Persistent, Contained):
 
     implements(ITimetableSchemaContained, ITimetableSchemaWrite)
 
-    def __init__(self, day_ids, title=None, model=None):
+    def __init__(self, day_ids, title=None, model=None, timezone='UTC'):
         """Create a new empty timetable schema.
 
         day_ids is a sequence of the day ids of this timetable.
@@ -91,6 +91,7 @@ class TimetableSchema(Persistent, Contained):
         self.day_ids = day_ids
         self.days = PersistentDict()
         self.model = model
+        self.timezone = timezone
 
     def keys(self):
         return list(self.day_ids)
@@ -110,12 +111,13 @@ class TimetableSchema(Persistent, Contained):
         self.days[key] = value
 
     def createTimetable(self):
-        other = Timetable(self.day_ids)
-        other.model = self.model
+        new = Timetable(self.day_ids)
+        new.model = self.model
+        new.timezone = self.timezone
         for day_id in self.day_ids:
-            other[day_id] = TimetableDay(self[day_id].periods,
-                                         self[day_id].homeroom_period_id)
-        return other
+            new[day_id] = TimetableDay(self[day_id].periods,
+                                       self[day_id].homeroom_period_id)
+        return new
 
     def __eq__(self, other):
         if ITimetableSchema.providedBy(other):

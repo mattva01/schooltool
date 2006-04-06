@@ -157,11 +157,10 @@ def doctest_BaseTimetableModel_createCalendar():
         2003-11-25 11:05--12:25 UTC (B, Blue)  Geography
 
     If school will get transported to Lithuania, lessons should still
-    start at the same time (9:00 at the morning), but the time should
-    be stored in UTC:
+    start at the same local time (9:00 in the morning), but the time
+    should be stored in UTC:
 
-        >>> ztapi.provideAdapter(None, ISchoolToolApplication,
-        ...                      ApplicationStub('Europe/Vilnius'))
+        >>> timetable.timezone = 'Europe/Vilnius'
         >>> cal = btm.createCalendar(term, timetable,
         ...                          first=date(2003, 11, 21),
         ...                          last=date(2003, 11, 25))

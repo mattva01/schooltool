@@ -104,13 +104,14 @@ class TestTimetableSchema(unittest.TestCase):
         days = ('A', 'B')
         periods1 = ('Green', 'Blue')
         periods2 = ('Green', 'Red', 'Yellow')
-        tts = TimetableSchema(days)
+        tts = TimetableSchema(days, timezone='Europe/Vilnius')
         tts["A"] = TimetableSchemaDay(periods1)
         tts["B"] = TimetableSchemaDay(periods2, homeroom_period_id='Yellow')
 
         tt = tts.createTimetable()
         self.assertEquals(tt.day_ids, tts.day_ids)
         self.assert_(tt.model is tts.model)
+        self.assert_(tt.timezone == tts.timezone)
         for day_id in tt.day_ids:
             day = tt[day_id]
             day2 = tts[day_id]
