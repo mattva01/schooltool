@@ -19,7 +19,7 @@
 """
 Unit tests for schooltool.timetable.rest.schema
 
-$Id: test_rest.py 4822 2005-08-19 01:35:11Z srichter $
+$Id$
 """
 import unittest
 from zope.interface import Interface
@@ -43,6 +43,7 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
     schema_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
           <title>Title</title>
+          <timezone name="Europe/Vilnius"/>
           <model factory="SequentialDaysTimetableModel">
             <daytemplate>
               <used when="default" />
@@ -136,6 +137,8 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
 
         tt = self.createEmptySchema()
 
+        tt.timezone = 'Europe/Vilnius'
+
         hour = timedelta(minutes=60)
         half = timedelta(minutes=30)
 
@@ -174,6 +177,7 @@ class TestTimetableSchemaView(TimetableSchemaMixin, XMLCompareMixin,
     empty_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
           <title>A Schema</title>
+          <timezone name="Europe/Vilnius"/>
           <model factory="SequentialDaysTimetableModel">
             <daytemplate>
               <used when="2005-07-07"/>
@@ -226,6 +230,7 @@ class DayIdBasedModelMixin:
     empty_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
           <title>Title</title>
+          <timezone name="UTC"/>
           <model factory="SequentialDayIdBasedTimetableModel">
             <daytemplate>
               <used when="Day 1"/>

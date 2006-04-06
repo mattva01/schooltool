@@ -19,7 +19,7 @@
 """
 RESTive views for SchoolTool timetabling
 
-$Id: app.py 3419 2005-04-14 18:34:36Z alga $
+$Id$
 """
 
 import datetime
@@ -199,6 +199,11 @@ class TimetableFileFactory(object):
 
           <define name="timetable">
             <element name="timetable">
+              <element name="timezone">
+                <attribute name="name">
+                  <text />
+                </attribute>
+              </element>
               <oneOrMore>
                 <element name="day">
                   <ref name="idattr"/>
@@ -253,6 +258,8 @@ class TimetableFileFactory(object):
                 tt = app["ttschemas"][schema_id].createTimetable()
             except KeyError:
                 raise RestError("Timetable schema not defined: %s" % schema_id)
+            tznode = doc.query('/tt:timetable/tt:timezone')[0]
+            tt.timezone = tznode['name']
             for day in doc.query('/tt:timetable/tt:day'):
                 day_id = day['id']
                 if day_id not in tt.keys():

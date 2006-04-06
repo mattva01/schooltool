@@ -1,6 +1,7 @@
 <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
            xmlns:tal="http://xml.zope.org/namespaces/tal">
   <title tal:content="context/title"/>
+  <timezone tal:attributes="name context/timezone" />
   <model tal:attributes="factory context/model/factory_id">
     <daytemplate tal:repeat="day view/daytemplates">
       <used tal:attributes="when day/used"/>

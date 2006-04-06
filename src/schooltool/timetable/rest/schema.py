@@ -19,7 +19,7 @@
 """
 RESTive views for timetable schemas
 
-$Id: app.py 3419 2005-04-14 18:34:36Z alga $
+$Id$
 """
 import sets
 import datetime
@@ -147,6 +147,11 @@ class TimetableSchemaFileFactory(object):
                    <text />
                  </element>
                </optional>
+               <element name="timezone">
+                 <attribute name="name">
+                   <text />
+                 </attribute>
+               </element>
                <element name="model">
                  <attribute name="factory">
                    <text/>
@@ -246,6 +251,9 @@ class TimetableSchemaFileFactory(object):
                 title_node = titles[0]
                 title = title_node.content
 
+            tznode = doc.query('/tt:timetable/tt:timezone')[0]
+            tzname = tznode['name']
+
             factory = zapi.queryUtility(ITimetableModelFactory, factory_id)
             if factory is None:
                 raise RestError("Incorrect timetable model factory")
@@ -328,7 +336,8 @@ class TimetableSchemaFileFactory(object):
             if len(sets.Set(day_ids)) != len(day_ids):
                 raise RestError("Duplicate days in schema")
 
-            timetable = TimetableSchema(day_ids, title=title, model=model)
+            timetable = TimetableSchema(day_ids, title=title, model=model,
+                                        timezone=tzname)
             self.setUpSchemaDays(timetable, days)
 
             return timetable

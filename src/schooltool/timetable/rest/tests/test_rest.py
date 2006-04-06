@@ -55,6 +55,7 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
     empty_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
                    xmlns:xlink="http://www.w3.org/1999/xlink">
+          <timezone name="UTC"/>
           <day id="Day 1">
             <period id="A">
             </period>
@@ -73,6 +74,7 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
     full_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
                    xmlns:xlink="http://www.w3.org/1999/xlink">
+          <timezone name="Europe/Vilnius"/>
           <day id="Day 1">
             <period id="A">
               <activity title="Maths">
@@ -160,6 +162,7 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         tt['Day 1'].add('B', TimetableActivity('French', owner))
         tt['Day 2'].add('C', TimetableActivity('CompSci', owner, [lab1, lab2]))
         tt['Day 2'].add('D', TimetableActivity('CompSci', owner, [zab]))
+        tt.timezone = "Europe/Vilnius"
         return tt
 
 

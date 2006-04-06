@@ -2,6 +2,7 @@
            xmlns:xlink="http://www.w3.org/1999/xlink"
            xmlns:tal="http://xml.zope.org/namespaces/tal"
            xmlns:metal="http://xml.zope.org/namespaces/metal">
+  <timezone tal:attributes="name context/timezone" />
   <day tal:repeat="item context/items"
        tal:attributes="id python:item[0]">
     <period tal:define="day python:item[1]"
