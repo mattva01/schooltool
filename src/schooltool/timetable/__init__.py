@@ -139,6 +139,7 @@ from zope.app import zapi
 from zope.app.annotation.interfaces import IAnnotations
 from zope.app.location.interfaces import ILocation
 from zope.app.traversing.api import getPath
+from zope.app.generations.utility import findObjectsProviding
 
 from schooltool.calendar.simple import ImmutableCalendar
 
@@ -645,11 +646,9 @@ def findRelatedTimetables(ob):
 
     app = getSchoolToolApplication(ob)
     timetables = []
-    timetables += ITimetables(app).timetables.values()
 
-    for container in 'persons', 'groups', 'resources':
-        for ttowner in app[container].values():
-            timetables += ITimetables(ttowner).timetables.values()
+    for ttowner in findObjectsProviding(app, IHaveTimetables):
+        timetables += ITimetables(ttowner).timetables.values()
 
     result = []
     for tt in timetables:

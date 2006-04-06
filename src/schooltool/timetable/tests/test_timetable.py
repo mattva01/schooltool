@@ -1003,6 +1003,7 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
 
        >>> from schooltool.timetable import TimetablesAdapter
        >>> from schooltool.timetable.interfaces import ITimetables
+       >>> from schooltool.timetable.interfaces import IHaveTimetables
        >>> setup.placefulSetUp()
        >>> ztapi.provideAdapter(IAttributeAnnotatable, ITimetables,
        ...                      TimetablesAdapter)
@@ -1011,6 +1012,7 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
        >>> from schooltool.testing.setup import createSchoolToolApplication
        >>> from schooltool.timetable import findRelatedTimetables
        >>> app = stsetup.setupSchoolToolSite()
+       >>> directlyProvides(app, IHaveTimetables)
 
     Let's create a timetable schema:
 
@@ -1064,6 +1066,10 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
        >>> app['groups']['g'] = Group('friends')
        >>> app['resources']['r'] = Resource('friends')
 
+       >>> for ob in (app['persons']['p1'], app['persons']['p2'],
+       ...            app['groups']['g'], app['resources']['r']):
+       ...     directlyProvides(ob, IHaveTimetables)
+
        >>> adapter = ITimetables(app['persons']['p1'])
        >>> adapter.timetables['2006.simple'] = tts.createTimetable()
        >>> adapter.timetables['2005.simple'] = tts.createTimetable()
@@ -1115,6 +1121,7 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
 def doctest_findRelatedTimetables_forTerm():
     """Tests for findRelatedTimetables() with terms as arguments
 
+       >>> from schooltool.timetable.interfaces import IHaveTimetables
        >>> from schooltool.timetable import TimetablesAdapter
        >>> from schooltool.timetable.interfaces import ITimetables
        >>> setup.placefulSetUp()
@@ -1125,6 +1132,7 @@ def doctest_findRelatedTimetables_forTerm():
        >>> from schooltool.testing.setup import createSchoolToolApplication
        >>> from schooltool.timetable import findRelatedTimetables
        >>> app = stsetup.setupSchoolToolSite()
+       >>> directlyProvides(app, IHaveTimetables)
 
     Let's create a couple of terms:
 
@@ -1178,6 +1186,10 @@ def doctest_findRelatedTimetables_forTerm():
        >>> app['persons']['p2'] = Person('p2')
        >>> app['groups']['g'] = Group('friends')
        >>> app['resources']['r'] = Resource('friends')
+
+       >>> for ob in (app['persons']['p1'], app['persons']['p2'],
+       ...            app['groups']['g'], app['resources']['r']):
+       ...     directlyProvides(ob, IHaveTimetables)
 
        >>> adapter = ITimetables(app['persons']['p1'])
        >>> adapter.timetables['2005.simple'] = tts.createTimetable()
