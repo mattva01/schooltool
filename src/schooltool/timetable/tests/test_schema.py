@@ -171,7 +171,6 @@ class TestTimetableSchema(unittest.TestCase):
         self.assertNotEquals(tts, tts7)
 
 
-
 class TestTimetableSchemaContainer(unittest.TestCase):
 
     def test_interface(self):
