@@ -39,6 +39,8 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 
 from schooltool import SchoolToolMessage as _
 from schooltool.app.browser.app import ContainerView, ContainerDeleteView
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 from schooltool.timetable.interfaces import ITimetableModelFactory
 from schooltool.timetable.interfaces import ITimetableSchema
@@ -159,7 +161,9 @@ class SimpleTimetableSchemaAdd(BrowserView):
         factory = zapi.getUtility(ITimetableModelFactory,
                                   'WeeklyTimetableModel')
         model = factory(self.day_ids, {None: daytemplate})
-        schema = TimetableSchema(self.day_ids)
+        app = ISchoolToolApplication(None)
+        tzname = IApplicationPreferences(app).timezone
+        schema = TimetableSchema(self.day_ids, timezone=tzname)
         for day_id in self.day_ids:
             schema[day_id] = TimetableSchemaDay(
                 [title for title, start, duration in periods])
@@ -359,7 +363,9 @@ class AdvancedTimetableSchemaAdd(BrowserView, TabindexMixin):
             period_name = translate(period_name_msgid, context=self.request)
             longest_day.append(period_name)
 
-        ttschema = TimetableSchema(day_ids)
+        app = ISchoolToolApplication(None)
+        tzname = IApplicationPreferences(app).timezone
+        ttschema = TimetableSchema(day_ids, timezone=tzname)
         for day, periods in zip(day_ids, periods_for_day):
             ttschema[day] = TimetableSchemaDay(periods)
 

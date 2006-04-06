@@ -37,6 +37,10 @@ from zope.app.container.interfaces import INameChooser
 from schooltool.testing import setup
 from schooltool.app.browser import testing as schooltool_setup
 from schooltool.app.app import SimpleNameChooser
+from schooltool.app.app import getApplicationPreferences
+from schooltool.app.app import getSchoolToolApplication
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.testing.setup import setUpApplicationPreferences
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.browser import format_time_range
@@ -65,6 +69,11 @@ def setUp(test):
     setup.setupSessions()
     setUpApplicationPreferences()
     setUpNameChoosers()
+    ztapi.provideAdapter(ISchoolToolApplication, IApplicationPreferences,
+                         getApplicationPreferences)
+    ztapi.provideAdapter(None, ISchoolToolApplication,
+                         getSchoolToolApplication)
+
     test.globs['app'] = setup.setupSchoolToolSite()
 
 
@@ -1607,6 +1616,19 @@ def doctest_FinalStep_createSchema():
         D1           D2           D3
         Green        Green        Green
         Blue         Blue         Blue
+
+    The ttschema's timezone is 'UTC', the app default:
+
+        >>> ttschema.timezone
+        'UTC'
+
+    However if we set a school preferred timezone and try again:
+
+        >>> from schooltool.app.interfaces import IApplicationPreferences
+        >>> IApplicationPreferences(app).timezone = 'Australia/Canberra'
+        >>> ttschema = view.createSchema()
+        >>> ttschema.timezone
+        'Australia/Canberra'
 
     """
 

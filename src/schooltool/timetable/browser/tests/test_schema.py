@@ -33,6 +33,7 @@ from zope.app.testing import ztapi, setup
 from zope.app.annotation.interfaces import IAttributeAnnotatable
 
 from schooltool.app.app import SimpleNameChooser
+from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.testing import setup as sbsetup
 from schooltool.testing.util import NiceDiffsMixin
 from schooltool.timetable import SequentialDaysTimetableModel
@@ -49,6 +50,7 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
     def setUp(self):
         setUp()
         self.app = sbsetup.setupSchoolToolSite()
+        IApplicationPreferences(self.app).timezone = 'Asia/Tokyo'
 
         # Register the timetable models
         ztapi.provideUtility(ITimetableModelFactory,
@@ -116,6 +118,7 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
         self.assertEquals(schema, view.ttschema)
         self.assertEquals(schema.model.timetableDayIds, view.ttschema.keys())
         self.assertEquals(schema.model.dayTemplates, view.day_templates)
+        self.assertEquals(schema.timezone, 'Asia/Tokyo')
 
     def test_model_error(self):
         request = TestRequest(form={'model': 'xxx',
@@ -452,6 +455,7 @@ def doctest_SimpleTimetableSchemaAdd():
     timetable schemas container:
 
         >>> app = sbsetup.setupSchoolToolSite()
+        >>> IApplicationPreferences(app).timezone = 'Asia/Tokyo'
 
         >>> request = TestRequest()
         >>> from schooltool.timetable.browser.schema import \
@@ -543,6 +547,8 @@ def doctest_SimpleTimetableSchemaAdd():
         ...     print period.tstart, period.duration
         09:00:00 0:45:00
         10:00:00 0:45:00
+        >>> schema.timezone
+        'Asia/Tokyo'
 
     We should get redirected to the ttschemas index:
 

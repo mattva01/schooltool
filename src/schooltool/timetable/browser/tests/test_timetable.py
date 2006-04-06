@@ -30,8 +30,11 @@ from zope.interface import implements
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.testing.doctestunit import pprint
+from zope.app.testing import ztapi
 
 from schooltool.app.browser import testing
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.app import getSchoolToolApplication
 from schooltool.testing import setup as sbsetup
 
 
@@ -39,6 +42,9 @@ def setUp(test=None):
     testing.setUp(test)
     sbsetup.setupTimetabling()
     sbsetup.setUpApplicationPreferences()
+    ztapi.provideAdapter(None, ISchoolToolApplication,
+                         getSchoolToolApplication)
+
 
 tearDown = testing.tearDown
 

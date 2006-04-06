@@ -135,6 +135,8 @@ from zope.app.container.interfaces import INameChooser
 from zope.app.session.interfaces import ISession
 
 from schooltool.app.browser.cal import day_of_week_names
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.timetable.browser import parse_time_range
 from schooltool.timetable.browser import format_time_range
 from schooltool import SchoolToolMessage as _
@@ -876,7 +878,10 @@ class FinalStep(Step):
             day_templates = dict([(day_id, day_templates.get(idx, default))
                                   for idx, day_id in enumerate(day_ids)])
         model = model_factory(day_ids, day_templates)
-        ttschema = TimetableSchema(day_ids, title=title, model=model)
+        app = ISchoolToolApplication(None)
+        tzname = IApplicationPreferences(app).timezone
+        ttschema = TimetableSchema(day_ids, title=title, model=model,
+                                   timezone=tzname)
         for day_id, periods, hpid in zip(day_ids, periods_order,
                                          homeroom_periods):
             ttschema[day_id] = TimetableSchemaDay(periods, hpid)
