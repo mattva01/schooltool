@@ -59,7 +59,6 @@ class SampleTimetableSchema(object):
             day_templates[day_id] = day_template
 
         model = SequentialDayIdBasedTimetableModel(day_ids, day_templates)
-        app = ISchoolToolApplication(None)
         tzname = IApplicationPreferences(app).timezone
         ttschema = TimetableSchema(day_ids, model=model, timezone=tzname)
         for idx, day_id in enumerate(day_ids):

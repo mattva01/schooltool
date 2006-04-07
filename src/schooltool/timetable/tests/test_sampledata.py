@@ -29,15 +29,11 @@ from zope.testing import doctest
 from zope.app.testing import setup, ztapi
 
 from schooltool.testing import setup as stsetup
-from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.app import getSchoolToolApplication
 
 
 def setUp(test):
     setup.placefulSetUp()
     stsetup.setUpApplicationPreferences()
-    ztapi.provideAdapter(None, ISchoolToolApplication,
-                         getSchoolToolApplication)
 
 
 def tearDown(test):
