@@ -95,6 +95,7 @@ We can examine its composition more easily by invoking the RESTive view.
     <BLANKLINE>
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
       <title>Default</title>
+      <timezone name="UTC"/>
       <model factory="WeeklyTimetableModel">
         <daytemplate>
           <used when="default"/>
@@ -238,6 +239,7 @@ We can examine its composition more easily by invoking the RESTive view.
     <BLANKLINE>
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
       <title>Rotating</title>
+      <timezone name="UTC"/>
       <model factory="SequentialDayIdBasedTimetableModel">
         <daytemplate>
           <used when="A B C"/>
@@ -368,6 +370,7 @@ The schema is now created:
     <BLANKLINE>
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
       <title>Rotating 2</title>
+      <timezone name="UTC"/>
       <model factory="SequentialDayIdBasedTimetableModel">
         <daytemplate>
           <used when="A B C"/>
@@ -531,6 +534,7 @@ The schema is now created:
     <BLANKLINE>
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
       <title>Weekly 2</title>
+      <timezone name="UTC"/>
       <model factory="WeeklyTimetableModel">
         <daytemplate>
           <used when="Friday"/>
@@ -692,6 +696,7 @@ The schema is now created:
     <BLANKLINE>
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
       <title>Rotating 3</title>
+      <timezone name="UTC"/>
       <model factory="SequentialDaysTimetableModel">
         <daytemplate>
           <used when="Friday"/>
@@ -856,6 +861,7 @@ The schema is now created:
     <BLANKLINE>
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
       <title>Rotating 4</title>
+      <timezone name="UTC"/>
       <model factory="SequentialDayIdBasedTimetableModel">
         <daytemplate>
           <used when="C Day Day A"/>

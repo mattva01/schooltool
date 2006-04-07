@@ -280,6 +280,7 @@ Let's add a timetable schema:
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
     ...   <title>Some Title</title>
+    ...   <timezone name="UTC"/>
     ...   <model factory="SequentialDaysTimetableModel">
     ...     <daytemplate>
     ...       <used when="Friday Thursday" />
@@ -348,6 +349,7 @@ Let's see what's inside:
     <BLANKLINE>
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
       <title>Some Title</title>
+      <timezone name="UTC"/>
       <model factory="SequentialDaysTimetableModel">
         <daytemplate>
           <used when="Friday Thursday"/>
@@ -379,6 +381,7 @@ Let's modify the timetable schema:
     ... Content-Type: text/xml
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+    ...   <timezone name="UTC"/>
     ...   <model factory="SequentialDaysTimetableModel">
     ...     <daytemplate>
     ...       <used when="Friday Thursday" />
@@ -426,6 +429,7 @@ And check that schema was indeed modified:
     <BLANKLINE>
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
       <title>Schema</title>
+      <timezone name="UTC"/>
       <model factory="SequentialDaysTimetableModel">
         <daytemplate>
           <used when="Friday Thursday"/>
@@ -456,6 +460,7 @@ Trying to put an invalid schema should get us an error:
     ... Content-Type: text/xml
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+    ...   <timezone name="UTC"/>
     ...   <model factory="SequentialDaysTimetableModel">
     ...     <daytemplate>
     ...       <used when="Friday Thursday" />
@@ -529,6 +534,7 @@ We can now add a timetable for the person:
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
     ...            xmlns:xlink="http://www.w3.org/1999/xlink">
+    ...   <timezone name="UTC"/>
     ...   <day id="Day 1">
     ...     <period id="A">
     ...     </period>
@@ -561,6 +567,7 @@ It should be there:
     <BLANKLINE>
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
                xmlns:xlink="http://www.w3.org/1999/xlink">
+      <timezone name="UTC"/>
       <day id="Day 1">
         <period id="A">
         </period>
@@ -586,6 +593,7 @@ Let's modify it:
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
     ...            xmlns:xlink="http://www.w3.org/1999/xlink">
+    ...   <timezone name="UTC"/>
     ...   <day id="Day 1">
     ...     <period id="A">
     ...     </period>
@@ -620,6 +628,7 @@ The timetable should look different now:
     <BLANKLINE>
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
                xmlns:xlink="http://www.w3.org/1999/xlink">
+      <timezone name="UTC"/>
       <day id="Day 1">
         <period id="A">
         </period>

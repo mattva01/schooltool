@@ -45,6 +45,7 @@ Add a schema:
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
     ...   <title>Some Title</title>
+    ...   <timezone name="UTC"/>
     ...   <model factory="SequentialDaysTimetableModel">
     ...     <daytemplate>
     ...       <used when="default" />
@@ -180,6 +181,7 @@ Lets add a timetable for the first section:
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
     ...            xmlns:xlink="http://www.w3.org/1999/xlink">
+    ...   <timezone name="UTC"/>
     ...   <day id="Day 1">
     ...     <period id="A">
     ...     </period>
@@ -208,6 +210,7 @@ For the second one:
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
     ...            xmlns:xlink="http://www.w3.org/1999/xlink">
+    ...   <timezone name="UTC"/>
     ...   <day id="Day 1">
     ...     <period id="A">
     ...       <activity title="Birdwatching 2"/>
@@ -236,6 +239,7 @@ And the third one:
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
     ...            xmlns:xlink="http://www.w3.org/1999/xlink">
+    ...   <timezone name="UTC"/>
     ...   <day id="Day 1">
     ...     <period id="A">
     ...       <activity title="Birdwatching 3 (practice)"/>

@@ -42,6 +42,7 @@ Add Schema:
     ... Content-Type: text/xml
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+    ...   <timezone name="UTC"/>
     ...   <model factory="SequentialDaysTimetableModel">
     ...     <daytemplate>
     ...       <used when="default" />
@@ -150,6 +151,7 @@ Add group timetables:
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
     ...            xmlns:xlink="http://www.w3.org/1999/xlink">
+    ...   <timezone name="UTC"/>
     ...   <day id="Day 1">
     ...     <period id="A">
     ...     </period>
@@ -175,6 +177,7 @@ Add group timetables:
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
     ...            xmlns:xlink="http://www.w3.org/1999/xlink">
+    ...   <timezone name="UTC"/>
     ...   <day id="Day 1">
     ...     <period id="A">
     ...     </period>
@@ -206,6 +209,7 @@ Lets look at john's composite timetable:
     <BLANKLINE>
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
                xmlns:xlink="http://www.w3.org/1999/xlink">
+      <timezone name="UTC"/>
       <day id="Day 1">
         <period id="A">
         </period>
