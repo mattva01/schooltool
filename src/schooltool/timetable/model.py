@@ -137,8 +137,7 @@ class BaseTimetableModel(Persistent):
             tz = pytz.timezone(timetable.timezone)
 
             for period, tstart, duration in periods:
-                # `tstart` in the timetable is defined to be in the site-wide
-                # timezone.  We need to convert that to UTC, because calendar
+                # We need to convert dtstart to UTC, because calendar
                 # events insist on storing UTC time.
                 dt = datetime.datetime.combine(date, tstart)
                 dt = tz.localize(dt).astimezone(pytz.utc)
