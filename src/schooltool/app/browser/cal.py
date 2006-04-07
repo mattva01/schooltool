@@ -1284,7 +1284,8 @@ class DailyCalendarRowsView(BrowserView):
         This function uses the default timetable schema and the appropriate time
         period for `date`.
 
-        Returns a list of ISchooldaySlot objects.
+        Retuns a list of (id, dtstart, duration) tuples.  The times
+        are timezone-aware and in the timezone of the timetable.
 
         Returns an empty list if there are no periods defined for `date` (e.g.
         if there is no default timetable schema, or `date` falls outside all
@@ -1295,7 +1296,43 @@ class DailyCalendarRowsView(BrowserView):
         if ttcontainer.default_id is None or schooldays is None:
             return []
         ttschema = ttcontainer.getDefault()
-        return ttschema.model.periodsInDay(schooldays, ttschema, date)
+        tttz = timezone(ttschema.timezone)
+        displaytz = self.getPersonTimezone()
+
+        # Find out the days in the timetable that our display date overlaps
+        daystart = displaytz.localize(datetime.combine(date, time(0)))
+        dayend = daystart + date.resolution
+        day1 = daystart.astimezone(tttz).date()
+        day2 = dayend.astimezone(tttz).date()
+
+        def resolvePeriods(date):
+            result = []
+            periods = ttschema.model.periodsInDay(schooldays, ttschema, date)
+            for id, tstart, duration in  periods:
+                dtstart = datetime.combine(date, tstart)
+                dtstart = tttz.localize(dtstart)
+                result.append((id, dtstart, duration))
+            return result
+
+        periods = resolvePeriods(day1)
+        if day2 != day1:
+            periods += resolvePeriods(day2)
+
+        result = []
+
+        # Filter out periods outside date boundaries and chop off the
+        # ones overlapping them.
+        for id, dtstart, duration in periods:
+            if (dtstart + duration <= daystart) or (dayend <= dtstart):
+                continue
+            if dtstart < daystart:
+                duration -= daystart - dtstart
+                dtstart = daystart.astimezone(tttz)
+            if dayend < dtstart + duration:
+                duration = dayend - dtstart
+            result.append((id, dtstart, duration))
+
+        return result
 
     def getPeriods(self, cursor):
         """Return the date we get from getPeriodsForDay.
@@ -1319,21 +1356,18 @@ class DailyCalendarRowsView(BrowserView):
         tz = self.getPersonTimezone()
         periods = self.getPeriods(cursor)
 
-        # XXX mg: I think this is completely bogus, timezone-wise.
-        #         This code needs a bit of  taking a step back, sitting down
-        #         and thinking.  Also look at the pdfcal code, I suspect it is
-        #         bogus in a similar way.
-        today = datetime.combine(cursor, time(tzinfo=tz))
-        rows = [today + timedelta(hours=hour)
+        daystart = tz.localize(datetime.combine(cursor, time()))
+        rows = [daystart + timedelta(hours=hour)
                 for hour in range(starthour, endhour+1)]
 
         if periods:
+            timetable = getSchoolToolApplication()['ttschemas'].getDefault()
+            tttz = timezone(timetable.timezone)
+
             # Put starts and ends of periods into rows
             for period in periods:
-                period_id, tstart, duration = period
-                pstart = datetime.combine(cursor, tstart)
-                pstart = pstart.replace(tzinfo=tz)
-                pend = pstart + duration
+                period_id, pstart, duration = period
+                pend = (pstart + duration).astimezone(tz)
                 for point in rows[:]:
                     if pstart < point < pend:
                         rows.remove(point)
@@ -1343,16 +1377,12 @@ class DailyCalendarRowsView(BrowserView):
                     rows.append(pend)
             rows.sort()
 
-        def periodIsStarting(dt):
-            pstart = datetime.combine(cursor, periods[0][1])
-            pstart = pstart.replace(tzinfo=tz)
-            return pstart == dt
-
         calendarRows = []
 
         start, row_ends = rows[0], rows[1:]
+        start = start.astimezone(tz)
         for end in row_ends:
-            if periods and periodIsStarting(start):
+            if periods and periods[0][1] == start:
                 period = periods.pop(0)
                 calendarRows.append((period[0], start, period[2]))
             else:

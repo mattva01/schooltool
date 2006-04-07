@@ -3930,7 +3930,6 @@ class TestDailyCalendarView(unittest.TestCase):
 
     def test_eventTop(self):
         from schooltool.app.browser.cal import DailyCalendarView
-        from pytz import timezone
         view = DailyCalendarView(None, TestRequest())
         view.starthour = 8
         view.endhour = 18
@@ -4710,6 +4709,7 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
                                    ['1', '2', '3', '4'],
                                    ['1', '2', '3', '4'],
                                    ['1', '2', '3', '4'])
+        schema.timezone = 'Europe/London'
         template = SchooldayTemplate()
         template.add(SchooldaySlot(time(8, 0), timedelta(hours=1)))
         template.add(SchooldaySlot(time(10, 15), timedelta(hours=1)))
@@ -4759,6 +4759,43 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
                     ("16:00", dt('16:00'), timedelta(hours=1)),
                     ("17:00", dt('17:00'), timedelta(hours=1)),
                     ("18:00", dt('18:00'), timedelta(hours=1))]
+
+        self.assertEquals(result, expected)
+
+    def test_calendarRows_otherTZ(self):
+        from schooltool.app.browser.cal import DailyCalendarRowsView
+        from schooltool.app.security import Principal
+
+        request = TestRequest()
+        principal = Principal('person', 'Some person', person=self.person)
+        request.setPrincipal(principal)
+        view = DailyCalendarRowsView(ISchoolToolCalendar(self.person), request)
+
+        km = timezone('Asia/Kamchatka')
+        view.getPersonTimezone = lambda: km
+
+        result = list(view.calendarRows(date(2004, 11, 5), 8, 19))
+
+        kmdt = lambda arg: km.localize(parse_datetime('2004-11-05 %s:00' %
+                                                      arg))
+
+        expected = [('8:00', kmdt('8:00'), timedelta(0, 3600)),
+                    ('9:00', kmdt('9:00'), timedelta(0, 3600)),
+                    ('10:00', kmdt('10:00'),timedelta(0, 3600)),
+                    ('11:00', kmdt('11:00'),timedelta(0, 3600)),
+                    ('12:00', kmdt('12:00'),timedelta(0, 3600)),
+                    ('13:00', kmdt('13:00'),timedelta(0, 3600)),
+                    ('14:00', kmdt('14:00'),timedelta(0, 3600)),
+                    ('15:00', kmdt('15:00'),timedelta(0, 3600)),
+                    ('16:00', kmdt('16:00'),timedelta(0, 3600)),
+                    ('17:00', kmdt('17:00'),timedelta(0, 3600)),
+                    ('18:00', kmdt('18:00'),timedelta(0, 3600)),
+                    ('19:00', kmdt('19:00'),timedelta(0, 3600)),
+                    ('1',  kmdt("20:00"), timedelta(0, 3600)),
+                    ('21:00', kmdt("21:00"), timedelta(0, 4500)),
+                    ('2',  kmdt("22:15"), timedelta(0, 3600)),
+                    ('23:15', kmdt("23:15"), timedelta(0, 900)),
+                    ('3', kmdt("23:30"), timedelta(0, 1800))]
 
         self.assertEquals(result, expected)
 
@@ -4830,7 +4867,8 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
                           ("Yep", date(2005, 1, 1)))
 
 
-class TestDailyCalendarRowsView_getPeriodsForDay(unittest.TestCase):
+class TestDailyCalendarRowsView_getPeriodsForDay(NiceDiffsMixin,
+                                                 unittest.TestCase):
 
     def setUp(self):
         setup.placefulSetUp()
@@ -4843,11 +4881,18 @@ class TestDailyCalendarRowsView_getPeriodsForDay(unittest.TestCase):
         app["terms"]['2005-spring'] = self.term2
 
         class TimetableModelStub:
-            def periodsInDay(self, schooldays, ttschema, date):
-                return 'periodsInDay', schooldays, ttschema, date
+            def periodsInDay(this, schooldays, ttschema, date):
+                if schooldays == self.term1 and ttschema == self.tt:
+                    return  [('A', time(9,0), timedelta(minutes=115)),
+                             ('B', time(11,0), timedelta(minutes=115)),
+                             ('C', time(13,0), timedelta(minutes=115)),
+                             ('D', time(15,0), timedelta(minutes=115)),]
+                else:
+                    return []
 
         tt = TimetableSchema([])
         tt.model = TimetableModelStub()
+        tt.timezone = 'Europe/London'
         self.tt = tt
         app["ttschemas"]['default'] = tt
         self.app = app
@@ -4855,14 +4900,44 @@ class TestDailyCalendarRowsView_getPeriodsForDay(unittest.TestCase):
     def tearDown(self):
         setup.placefulTearDown()
 
-    def test_getPeriodsForDay(self):
+    def test_getPeriodsForDay_sameTZ(self):
         from schooltool.app.browser.cal import DailyCalendarRowsView
         view = DailyCalendarRowsView(None, TestRequest())
-        # A white-box test: we delegate to ITimetableModel.periodsInDay
-        # with the correct arguments
+        uk = timezone('Europe/London')
+        view.getPersonTimezone = lambda: uk
+        delta = timedelta(minutes=115)
+        ukdt = lambda *args: uk.localize(datetime(*args))
         self.assertEquals(view.getPeriodsForDay(date(2004, 10, 14)),
-                          ('periodsInDay', self.term1, self.tt,
-                           date(2004, 10, 14)))
+                          [('A', ukdt(2004, 10, 14,  9, 0), delta),
+                           ('B', ukdt(2004, 10, 14, 11, 0), delta),
+                           ('C', ukdt(2004, 10, 14, 13, 0), delta),
+                           ('D', ukdt(2004, 10, 14, 15, 0), delta)])
+
+        # However, if there is no time period, we return []
+        self.assertEquals(view.getPeriodsForDay(date(2005, 10, 14)),
+                          [])
+
+        # If there is no timetable schema, we return []
+        self.app["ttschemas"].default_id = None
+        self.assertEquals(view.getPeriodsForDay(date(2004, 10, 14)),
+                          [])
+
+    def test_getPeriodsForDay_otherTZ(self):
+        from schooltool.app.browser.cal import DailyCalendarRowsView
+        view = DailyCalendarRowsView(None, TestRequest())
+        # Auckland is 12h ahead of London
+        view.getPersonTimezone = lambda: timezone('Pacific/Auckland')
+        uk = timezone('Europe/London')
+
+        delta = timedelta(minutes=115)
+        td = timedelta
+        ukdt = lambda *args: uk.localize(datetime(*args))
+        self.assertEquals(view.getPeriodsForDay(date(2004, 10, 14)),
+                          [('B', ukdt(2004, 10, 13, 12, 0), td(minutes=55)),
+                           ('C', ukdt(2004, 10, 13, 13, 0), delta),
+                           ('D', ukdt(2004, 10, 13, 15, 0), delta),
+                           ('A', ukdt(2004, 10, 14, 9, 0), delta),
+                           ('B', ukdt(2004, 10, 14, 11, 0), td(minutes=60))])
 
         # However, if there is no time period, we return []
         self.assertEquals(view.getPeriodsForDay(date(2005, 10, 14)),
