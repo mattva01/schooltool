@@ -253,6 +253,7 @@ class Timetable(Persistent):
     def cloneEmpty(self):
         other = Timetable(self.day_ids)
         other.model = self.model
+        other.timezone = self.timezone
         for day_id in self.day_ids:
             other[day_id] = TimetableDay(self[day_id].periods,
                                          self[day_id].homeroom_period_ids)

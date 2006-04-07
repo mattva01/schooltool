@@ -188,11 +188,13 @@ class TestTimetable(unittest.TestCase):
         tt["B"].add("Green", bio)
         tt["B"].homeroom_period_ids = ["Blue"]
         tt.model = object()
+        tt.timezone = 'Foo/Bar'
 
         tt2 = tt.cloneEmpty()
         self.assert_(tt2 is not tt)
         self.assertEquals(tt.day_ids, tt2.day_ids)
         self.assert_(tt.model is tt2.model)
+        self.assert_(tt.timezone is tt2.timezone)
         for day_id in tt2.day_ids:
             day = tt[day_id]
             day2 = tt2[day_id]
