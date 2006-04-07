@@ -42,14 +42,15 @@ class TimetableSchemaDay(Persistent):
 
     implements(ITimetableSchemaDay)
 
-    # BBB: default value for ZODB compatibility
-    homeroom_period_id = None
+    def __init__(self, periods=(), homeroom_period_ids=None):
+        if homeroom_period_ids is not None:
+            for id in homeroom_period_ids:
+                assert id in periods, "%s not in %s" % (id, periods)
+        else:
+            homeroom_period_ids = []
 
-    def __init__(self, periods=(), homeroom_period_id=None):
-        if homeroom_period_id is not None:
-            assert homeroom_period_id in periods
         self.periods = periods
-        self.homeroom_period_id = homeroom_period_id
+        self.homeroom_period_ids = homeroom_period_ids
 
     def keys(self):
         return self.periods
@@ -64,8 +65,8 @@ class TimetableSchemaDay(Persistent):
 
     def __eq__(self, other):
         if ITimetableSchemaDay.providedBy(other):
-            return (self.periods, self.homeroom_period_id) == \
-                    (other.periods, other.homeroom_period_id)
+            return (self.periods, self.homeroom_period_ids) == \
+                    (other.periods, other.homeroom_period_ids)
         else:
             return False
 
@@ -116,7 +117,7 @@ class TimetableSchema(Persistent, Contained):
         new.timezone = self.timezone
         for day_id in self.day_ids:
             new[day_id] = TimetableDay(self[day_id].periods,
-                                       self[day_id].homeroom_period_id)
+                                         self[day_id].homeroom_period_ids)
         return new
 
     def __eq__(self, other):

@@ -24,6 +24,7 @@ $Id$
 
 from zope.interface import implements
 from zope.component import adapts
+
 from schooltool.timetable.source import BaseRelationshipTimetableSource
 from schooltool.relationship.uri import URIObject
 from schooltool.relationship.relationship import RelationshipSchema

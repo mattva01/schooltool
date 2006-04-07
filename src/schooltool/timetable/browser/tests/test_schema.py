@@ -436,8 +436,8 @@ def doctest_TimetableSchemaView():
     by the template, so the days and the periods are designated by
     their index rather than id:
 
-        >>> ttd1.homeroom_period_id = 'A'
-        >>> ttd2.homeroom_period_id = None
+        >>> ttd1.homeroom_period_ids = ['A']
+        >>> ttd2.homeroom_period_ids = []
         >>> view.homerooms()
         {0: 0, 1: None}
 

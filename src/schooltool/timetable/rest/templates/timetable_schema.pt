@@ -19,7 +19,7 @@
     <period tal:define="day python:item[1]"
             tal:repeat="period day/periods"
             tal:attributes="homeroom
-                  python:[None, ''][period == day.homeroom_period_id];
+                  python:[None, ''][period in day.homeroom_period_ids];
                             id period" />
   </day>
 </timetable>

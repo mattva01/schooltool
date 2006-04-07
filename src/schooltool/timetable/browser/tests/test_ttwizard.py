@@ -1412,7 +1412,7 @@ def doctest_HomeroomPeriodsStep():
         >>> view.update()
         True
         >>> print view.getSessionData()['homeroom_periods']
-        ['D', None, 'C']
+        [['D'], [], ['C']]
 
     You are not allowed to sneak in periods which do not exist in a given day
 
@@ -1855,9 +1855,9 @@ def doctest_FinalStep_createSchema_different_times():
         D            E            F            G            H
 
         >>> for day_id, day in ttschema.items():
-        ...     if day.homeroom_period_id is not None:
+        ...     if day.homeroom_period_ids:
         ...         print "Homeroom on %s is %s" % (day_id,
-        ...                                         day.homeroom_period_id)
+        ...                                         day.homeroom_period_ids[0])
 
         >>> ttschema.model
         <...WeeklyTimetableModel object at ...>
@@ -1923,7 +1923,7 @@ def doctest_FinalStep_createSchema_with_homeroom():
         ...                          ['D', 'E', 'F', 'G'],
         ...                          ['E', 'F', 'G', 'H']]
         >>> data['homeroom'] = True
-        >>> data['homeroom_periods'] = ['A', 'C', None, 'F', 'H']
+        >>> data['homeroom_periods'] = [['A'], ['C'], [], ['F'], ['H']]
         >>> ttschema = view.createSchema()
 
         >>> print_ttschema(ttschema)
@@ -1934,9 +1934,9 @@ def doctest_FinalStep_createSchema_with_homeroom():
         D            E            F            G            H
 
         >>> for day_id, day in ttschema.items():
-        ...     if day.homeroom_period_id is not None:
+        ...     if day.homeroom_period_ids:
         ...         print "Homeroom on %s is %s" % (day_id,
-        ...                                         day.homeroom_period_id)
+        ...                                         day.homeroom_period_ids[0])
         Homeroom on Monday is A
         Homeroom on Tuesday is C
         Homeroom on Thursday is F

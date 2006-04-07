@@ -8,7 +8,7 @@
     <period tal:define="day python:item[1]"
             tal:repeat="item day/items"
             tal:attributes="homeroom
-                  python:[None, ''][item[0] == day.homeroom_period_id];
+                  python:[None, ''][item[0] in day.homeroom_period_ids];
                             id python:item[0]">
      <tal:block tal:repeat="activity python:item[1]">
       <activity metal:define-macro="activity"

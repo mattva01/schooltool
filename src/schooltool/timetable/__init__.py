@@ -143,6 +143,9 @@ from zope.app.generations.utility import findObjectsProviding
 
 from schooltool.calendar.simple import ImmutableCalendar
 
+# appease the gods of circular imports
+from schooltool.app.interfaces import ISchoolToolCalendarEvent
+
 from schooltool.timetable.interfaces import ITimetable, ITimetableWrite
 from schooltool.timetable.interfaces import ITimetableDay, ITimetableDayWrite
 from schooltool.timetable.interfaces import ITimetableDict
@@ -252,7 +255,7 @@ class Timetable(Persistent):
         other.model = self.model
         for day_id in self.day_ids:
             other[day_id] = TimetableDay(self[day_id].periods,
-                                         self[day_id].homeroom_period_id)
+                                         self[day_id].homeroom_period_ids)
         return other
 
     def __eq__(self, other):
@@ -279,13 +282,15 @@ class TimetableDay(Persistent):
 
     timetable = None
     day_id = None
-    homeroom_period_id = None
 
-    def __init__(self, periods=(), homeroom_period_id=None):
-        if homeroom_period_id is not None:
-            assert homeroom_period_id in periods
+    def __init__(self, periods=(), homeroom_period_ids=None):
+        if homeroom_period_ids is not None:
+            for id in homeroom_period_ids:
+                assert id in periods
+        else:
+            homeroom_period_ids = []
         self.periods = periods
-        self.homeroom_period_id = homeroom_period_id
+        self.homeroom_period_ids = homeroom_period_ids
         self.activities = PersistentDict()
         for p in periods:
             self.activities[p] = Set() # MaybePersistentKeysSet()
@@ -342,7 +347,7 @@ class TimetableDay(Persistent):
             return False
         if self.periods != other.periods:
             return False
-        if self.homeroom_period_id != other.homeroom_period_id:
+        if self.homeroom_period_ids != other.homeroom_period_ids:
             return False
         for period in self.periods:
             if Set(self.activities[period]) != Set(other.activities[period]):

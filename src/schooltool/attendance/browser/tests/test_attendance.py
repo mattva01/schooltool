@@ -89,9 +89,9 @@ class ApplicationPreferencesStub(object):
 
 
 class TimetableDayStub(object):
-    def __init__(self, periods, homeroom_period_id):
+    def __init__(self, periods, homeroom_period_ids):
         self.periods = periods
-        self.homeroom_period_id = homeroom_period_id
+        self.homeroom_period_ids = homeroom_period_ids
 
 
 class TimetableStub(object):
@@ -113,8 +113,8 @@ class StubTimetables(object):
     def __init__(self, context):
         self.context = context
         self._tt = TimetableStub({
-                        'D1': TimetableDayStub(['A', 'D'], None),
-                        'D2': TimetableDayStub(['B', 'C'], 'B'),
+                        'D1': TimetableDayStub(['A', 'D'], []),
+                        'D2': TimetableDayStub(['B', 'C'], ['B']),
                    })
 
     def makeTimetableCalendar(self, first, last):

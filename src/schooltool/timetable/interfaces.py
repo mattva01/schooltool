@@ -389,8 +389,8 @@ class ITimetableSchemaDay(Interface):
         title=u"A list of period IDs for this day.",
         value_type=TextLine(title=u"A period id"))
 
-    homeroom_period_id = TextLine(
-        title=u"ID of the homeroom period",
+    homeroom_period_ids = List(
+        title=u"A list of homeroom period IDs for this day",
         required=False)
 
     def keys():
@@ -510,8 +510,8 @@ class ITimetableDay(Interface):
         title=u"A list of period IDs for this day.",
         value_type=TextLine(title=u"A period id"))
 
-    homeroom_period_id = TextLine(
-        title=u"ID of the homeroom period",
+    homeroom_period_ids = TextLine(
+        title=u"IDs of homeroom periods",
         required=False)
 
     def keys():

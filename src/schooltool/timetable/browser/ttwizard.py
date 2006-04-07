@@ -761,16 +761,16 @@ class HomeroomPeriodsStep(Step):
     def update(self):
         result = []
         for daynr, periods in enumerate(self.periodsInOrder()):
+            homeroom_period_ids = []
             homeroom_period_id = self.request.get('homeroom_%d' % daynr)
-            if not homeroom_period_id:
-                homeroom_period_id = None
-            else:
+            if homeroom_period_id:
                 if homeroom_period_id not in periods:
                     self.error = _("There is no period $period on $day.",
                                    mapping={'period': homeroom_period_id,
                                             'day': self.days()[daynr]})
                     return False
-            result.append(homeroom_period_id)
+                homeroom_period_ids.append(homeroom_period_id)
+            result.append(homeroom_period_ids)
         self.getSessionData()['homeroom_periods'] = result
         return True
 
@@ -882,9 +882,9 @@ class FinalStep(Step):
         tzname = IApplicationPreferences(app).timezone
         ttschema = TimetableSchema(day_ids, title=title, model=model,
                                    timezone=tzname)
-        for day_id, periods, hpid in zip(day_ids, periods_order,
-                                         homeroom_periods):
-            ttschema[day_id] = TimetableSchemaDay(periods, hpid)
+        for day_id, periods, hpids in zip(day_ids, periods_order,
+                                          homeroom_periods):
+            ttschema[day_id] = TimetableSchemaDay(periods, hpids)
         return ttschema
 
     def add(self, ttschema):

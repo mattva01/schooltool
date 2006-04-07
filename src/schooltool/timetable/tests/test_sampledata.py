@@ -90,7 +90,7 @@ def doctest_SampleTimetableSchema():
         ...    print day,
         ...    for period in schema[day].keys():
         ...         print period,
-        ...    print "Homeroom - ", schema[day].homeroom_period_id
+        ...    print "Homeroom - ", schema[day].homeroom_period_ids[0]
         Day 1 A B C D E F Homeroom -  A
         Day 2 B C D E F A Homeroom -  B
         Day 3 C D E F A B Homeroom -  C

@@ -125,7 +125,7 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
         from schooltool.timetable.schema import TimetableSchemaDay
         from schooltool.timetable.schema import TimetableSchema
         schema = TimetableSchema(['Day 1', 'Day 2'])
-        schema['Day 1'] = TimetableSchemaDay(['A', 'B'], 'A')
+        schema['Day 1'] = TimetableSchemaDay(['A', 'B'], ['A'])
         schema['Day 2'] = TimetableSchemaDay(['C', 'D'])
         schema.title = "A Schema"
         return schema
@@ -268,7 +268,7 @@ class DayIdBasedModelMixin:
         from datetime import time, timedelta, date
 
         tt = TimetableSchema(['Day 1', 'Day 2'])
-        tt['Day 1'] = TimetableSchemaDay(['A', 'B'], 'A')
+        tt['Day 1'] = TimetableSchemaDay(['A', 'B'], ['A'])
         tt['Day 2'] = TimetableSchemaDay(['C', 'D'])
         tt.title = "Title"
 
