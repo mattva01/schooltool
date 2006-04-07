@@ -26,13 +26,18 @@ import unittest
 
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
-from zope.app.testing import setup
+from zope.app.testing import setup, ztapi
 
 from schooltool.testing import setup as stsetup
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.app import getSchoolToolApplication
 
 
 def setUp(test):
     setup.placefulSetUp()
+    stsetup.setUpApplicationPreferences()
+    ztapi.provideAdapter(None, ISchoolToolApplication,
+                         getSchoolToolApplication)
 
 
 def tearDown(test):
@@ -44,11 +49,13 @@ def doctest_SampleTimetableSchema():
 
         >>> from schooltool.timetable.sampledata import SampleTimetableSchema
         >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
+        >>> from schooltool.app.interfaces import IApplicationPreferences
         >>> plugin = SampleTimetableSchema()
         >>> verifyObject(ISampleDataPlugin, plugin)
         True
 
         >>> app = stsetup.setupSchoolToolSite()
+        >>> IApplicationPreferences(app).timezone = 'Europe/Vilnius'
 
     This plugin creates a timetable schema:
 
@@ -95,6 +102,11 @@ def doctest_SampleTimetableSchema():
 
         >>> app['ttschemas'].getDefault()
         <schooltool.timetable.schema.TimetableSchema object at ...>
+
+    The schema's timezone is correctly set from the app preferences:
+
+        >>> schema.timezone
+        'Europe/Vilnius'
 
     """
 

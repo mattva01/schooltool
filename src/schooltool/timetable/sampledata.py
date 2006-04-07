@@ -29,6 +29,9 @@ from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 from schooltool.timetable.schema import TimetableSchema, TimetableSchemaDay
 from schooltool.timetable.model import SequentialDayIdBasedTimetableModel
 
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
+
 
 class SampleTimetableSchema(object):
 
@@ -56,7 +59,9 @@ class SampleTimetableSchema(object):
             day_templates[day_id] = day_template
 
         model = SequentialDayIdBasedTimetableModel(day_ids, day_templates)
-        ttschema = TimetableSchema(day_ids, model=model)
+        app = ISchoolToolApplication(None)
+        tzname = IApplicationPreferences(app).timezone
+        ttschema = TimetableSchema(day_ids, model=model, timezone=tzname)
         for idx, day_id in enumerate(day_ids):
             periods = period_ids[idx:] + period_ids[:idx]
             ttschema[day_id] = TimetableSchemaDay(periods, periods[0])
