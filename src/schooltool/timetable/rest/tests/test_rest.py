@@ -57,9 +57,9 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
                    xmlns:xlink="http://www.w3.org/1999/xlink">
           <timezone name="UTC"/>
           <day id="Day 1">
-            <period id="A">
+            <period id="A" homeroom="">
             </period>
-            <period id="B">
+            <period id="B" homeroom="">
             </period>
           </day>
           <day id="Day 2">
@@ -76,13 +76,13 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
                    xmlns:xlink="http://www.w3.org/1999/xlink">
           <timezone name="Europe/Vilnius"/>
           <day id="Day 1">
-            <period id="A">
+            <period id="A" homeroom="">
               <activity title="Maths">
                 <resource xlink:type="simple" xlink:href="http://127.0.0.1/resources/room1"
                           xlink:title="Room1"/>
               </activity>
             </period>
-            <period id="B">
+            <period id="B" homeroom="">
               <activity title="English" />
               <activity title="French">
               </activity>
@@ -143,8 +143,8 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         from schooltool.timetable.schema import TimetableSchemaDay
         from schooltool.timetable.schema import TimetableSchema
         tt = TimetableSchema(['Day 1', 'Day 2'])
-        tt['Day 1'] = TimetableSchemaDay(['A', 'B'])
-        tt['Day 2'] = TimetableSchemaDay(['C', 'D'], 'C')
+        tt['Day 1'] = TimetableSchemaDay(['A', 'B'], ['A', 'B'])
+        tt['Day 2'] = TimetableSchemaDay(['C', 'D'], ['C'])
         return tt
 
     def createEmpty(self):

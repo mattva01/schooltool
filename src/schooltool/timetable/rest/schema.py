@@ -224,15 +224,8 @@ class TimetableSchemaFileFactory(object):
 
             homeroom_periods = [period['id']
                                 for period in day.query('tt:period[@homeroom]')]
-            if len(homeroom_periods) > 1:
-                raise RestError("There can be only one homeroom period"
-                                " for day %r" % day_id)
-            if homeroom_periods:
-                hpids = [homeroom_periods[0]]
-            else:
-                hpids = []
 
-            timetable[day_id] = TimetableSchemaDay(period_ids, hpids)
+            timetable[day_id] = TimetableSchemaDay(period_ids, homeroom_periods)
 
     def parseXML(self, xml):
         doc = XMLDocument(xml, self.schema)

@@ -331,10 +331,14 @@ class TestTimetableSchemaFileFactory(TimetableSchemaMixin, unittest.TestCase):
 
     def test_setUpSchemaDays_two_homerooms(self):
         from schooltool.app.rest.errors import RestError
-        broken_schema_xml = self.schema_xml.replace('<period id="B">',
-                                        '<period id="B" homeroom="">')
-        self.assertRaises(RestError, IFileFactory(self.schemaContainer),
-                          "broken", "text/xml", broken_schema_xml)
+        two_homeroom_schema_xml = self.schema_xml.replace(
+            '<period id="B">',
+            '<period id="B" homeroom="">')
+        factory = IFileFactory(self.schemaContainer)
+        schema = factory("two_homeroom", "text/xml", two_homeroom_schema_xml)
+        extendend_schema = self.createExtendedSchema()
+        extendend_schema.days['Day 1'].homeroom_period_ids = ['A', 'B']
+        self.assertEquals(schema, extendend_schema, )
 
 
 class TestTimetableSchemaFileFactoryDayIdBased(DayIdBasedModelMixin,
