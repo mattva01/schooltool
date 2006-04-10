@@ -519,8 +519,8 @@ def doctest_AttendanceCalendarEventViewlet():
     """
 
 
-def doctest_RealtimeAttendanceView_listMembers():
-    r"""Test for RealtimeAttendanceView.listMembers
+def doctest_AttendanceView_listMembers():
+    r"""Test for AttendanceView.listMembers
 
     First, let's register getSectionAttendance as an adapter:
 
@@ -533,11 +533,11 @@ def doctest_RealtimeAttendanceView_listMembers():
     Let's set up a view:
 
         >>> from schooltool.attendance.browser.attendance import \
-        ...     RealtimeAttendanceView, getPeriodEventForSection
+        ...     AttendanceView, getPeriodEventForSection
         >>> from schooltool.course.section import Section
         >>> section = Section()
         >>> fakePath(section, '/section/absentology')
-        >>> view = RealtimeAttendanceView(section, TestRequest())
+        >>> view = AttendanceView(section, TestRequest())
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
         >>> view.meeting = getPeriodEventForSection(section, view.date,
@@ -632,15 +632,15 @@ def doctest_RealtimeAttendanceView_listMembers():
     """
 
 
-def doctest_RealtimeAttendanceView_getDaysAttendanceRecords():
-    r"""Tests for RealtimeAttendanceView.getDaysAttendanceRecords.
+def doctest_AttendanceView_getDaysAttendanceRecords():
+    r"""Tests for AttendanceView.getDaysAttendanceRecords.
 
         >>> provideAdapter(SectionAttendanceStub)
         >>> provideAdapter(DayAttendanceStub)
 
         >>> from schooltool.attendance.browser.attendance \
-        ...         import RealtimeAttendanceView
-        >>> view = RealtimeAttendanceView(None, None)
+        ...         import AttendanceView
+        >>> view = AttendanceView(None, None)
 
         >>> view.getDaysAttendanceRecords('stud1', datetime.date(2006, 1, 3))
         ['s_stud1_2006-01-03_a', 's_stud1_2006-01-03_b', 'd_stud1_2006-01-03']
@@ -648,8 +648,8 @@ def doctest_RealtimeAttendanceView_getDaysAttendanceRecords():
     """
 
 
-def doctest_RealtimeAttendanceView_studentStatus():
-    r"""Tests for RealtimeAttendanceView.studentStatus
+def doctest_AttendanceView_studentStatus():
+    r"""Tests for AttendanceView.studentStatus
 
     First, let's register getSectionAttendance as an adapter:
 
@@ -658,10 +658,10 @@ def doctest_RealtimeAttendanceView_studentStatus():
     We will need a view
 
         >>> from schooltool.attendance.browser.attendance import \
-        ...     RealtimeAttendanceView
+        ...     AttendanceView
         >>> from schooltool.course.section import Section
         >>> section = Section()
-        >>> view = RealtimeAttendanceView(section, TestRequest())
+        >>> view = AttendanceView(section, TestRequest())
         >>> view.date = datetime.date(2005, 12, 15)
 
     Let's add some members to the group:
@@ -751,8 +751,8 @@ def doctest_RealtimeAttendanceView_studentStatus():
     """
 
 
-def doctest_RealtimeAttendanceView_update():
-    r"""Tests for RealtimeAttendanceView.update
+def doctest_AttendanceView_update():
+    r"""Tests for AttendanceView.update
 
     Let's set up the section attendance adapter:
 
@@ -765,7 +765,7 @@ def doctest_RealtimeAttendanceView_update():
     Let's create a section and a view:
 
         >>> from schooltool.attendance.browser.attendance import \
-        ...     RealtimeAttendanceView
+        ...     AttendanceView
         >>> from schooltool.course.section import Section
         >>> class MySection(Section):
         ...     def __repr__(self): return '<Section>'
@@ -797,7 +797,7 @@ def doctest_RealtimeAttendanceView_update():
     Let's call update with an empty request:
 
         >>> request = TestRequest()
-        >>> view = RealtimeAttendanceView(section, request)
+        >>> view = AttendanceView(section, request)
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
 
@@ -815,7 +815,7 @@ def doctest_RealtimeAttendanceView_update():
         ...                             'person2_check': 'on',
         ...                             'person5_check': 'on',
         ...                             'ABSENT': 'Make absent'})
-        >>> view = RealtimeAttendanceView(section, request)
+        >>> view = AttendanceView(section, request)
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
 
@@ -852,7 +852,7 @@ def doctest_RealtimeAttendanceView_update():
     Let's call the view again, nothing changed:
 
         >>> request = TestRequest(form={'ABSENT': 'Make absent'})
-        >>> view = RealtimeAttendanceView(section, request)
+        >>> view = AttendanceView(section, request)
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
 
@@ -875,7 +875,7 @@ def doctest_RealtimeAttendanceView_update():
 
         >>> request = TestRequest(form={'ABSENT': 'Make absent',
         ...                             'person1_check': 'on'})
-        >>> view = RealtimeAttendanceView(section, request)
+        >>> view = AttendanceView(section, request)
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
 
@@ -898,7 +898,7 @@ def doctest_RealtimeAttendanceView_update():
 
         >>> request = TestRequest(form={'ABSENT': 'Make absent',
         ...                             'person3_check': 'on'})
-        >>> view = RealtimeAttendanceView(section, request)
+        >>> view = AttendanceView(section, request)
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
 
@@ -919,7 +919,7 @@ def doctest_RealtimeAttendanceView_update():
         ...                             'person3_check': 'on',
         ...                             'person1_check': 'on',
         ...                             'arrival': ''})
-        >>> view = RealtimeAttendanceView(section, request)
+        >>> view = AttendanceView(section, request)
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
 
@@ -949,7 +949,7 @@ def doctest_RealtimeAttendanceView_update():
         >>> request = TestRequest(form={'TARDY': 'Make tardy',
         ...                             'person2_check': 'on',
         ...                             'arrival': '12:20'})
-        >>> view = RealtimeAttendanceView(section, request)
+        >>> view = AttendanceView(section, request)
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
 
@@ -968,7 +968,7 @@ def doctest_RealtimeAttendanceView_update():
         >>> request = TestRequest(form={'TARDY': 'Make tardy',
         ...                             'person5_check': 'on',
         ...                             'arrival': '2200'})
-        >>> view = RealtimeAttendanceView(section, request)
+        >>> view = AttendanceView(section, request)
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
 
@@ -980,8 +980,8 @@ def doctest_RealtimeAttendanceView_update():
     """
 
 
-def doctest_RealtimeAttendanceView_update_homeroom():
-    r"""Tests for RealtimeAttendanceView.update
+def doctest_AttendanceView_update_homeroom():
+    r"""Tests for AttendanceView.update
 
     We need an ITimetables adapter in order to verify that a given
     period is valid for a given day:
@@ -992,10 +992,10 @@ def doctest_RealtimeAttendanceView_update_homeroom():
     section meetings and the homeroom meeting.
 
         >>> from schooltool.attendance.browser.attendance \
-        ...     import RealtimeAttendanceView
+        ...     import AttendanceView
         >>> section = SectionStub()
         >>> request = TestRequest()
-        >>> view = RealtimeAttendanceView(section, request)
+        >>> view = AttendanceView(section, request)
 
     The 'C' period on 2005-12-15 is a regular section meeting
 
@@ -1015,8 +1015,8 @@ def doctest_RealtimeAttendanceView_update_homeroom():
     """
 
 
-def doctest_RealtimeAttendanceView_update_set_homeroom():
-    r"""Tests for RealtimeAttendanceView.update
+def doctest_AttendanceView_update_set_homeroom():
+    r"""Tests for AttendanceView.update
 
     We need an ITimetables adapter in order to verify that a given
     period is valid for a given day:
@@ -1027,14 +1027,14 @@ def doctest_RealtimeAttendanceView_update_set_homeroom():
 
         >>> setUpAttendanceAdapters()
 
-    The RealtimeAttendanceView is used both for regular section meetings,
+    The AttendanceView is used both for regular section meetings,
     and for homeroom attendance.
 
         >>> from schooltool.attendance.browser.attendance \
-        ...     import RealtimeAttendanceView
+        ...     import AttendanceView
         >>> section = SectionStub()
         >>> request = TestRequest()
-        >>> view = RealtimeAttendanceView(section, request)
+        >>> view = AttendanceView(section, request)
 
     We will need at least one person.
 
@@ -1075,16 +1075,16 @@ def doctest_RealtimeAttendanceView_update_set_homeroom():
     """
 
 
-def doctest_RealtimeAttendanceView_getAttendance():
-    r"""Tests for RealtimeAttendanceView._getAttendance
+def doctest_AttendanceView_getAttendance():
+    r"""Tests for AttendanceView._getAttendance
 
         >>> provideAdapter(SectionAttendanceStub)
         >>> provideAdapter(DayAttendanceStub)
 
         >>> from schooltool.attendance.browser.attendance \
-        ...         import RealtimeAttendanceView
+        ...         import AttendanceView
         >>> request = TestRequest()
-        >>> view = RealtimeAttendanceView('math', request)
+        >>> view = AttendanceView('math', request)
 
         >>> from schooltool.timetable.model import TimetableCalendarEvent
         >>> person = 'jonas'
@@ -1107,16 +1107,16 @@ def doctest_RealtimeAttendanceView_getAttendance():
     """
 
 
-def doctest_RealtimeAttendanceView_record():
-    r"""Tests for RealtimeAttendanceView._record
+def doctest_AttendanceView_record():
+    r"""Tests for AttendanceView._record
 
         >>> provideAdapter(SectionAttendanceStub)
         >>> provideAdapter(DayAttendanceStub)
 
         >>> from schooltool.attendance.browser.attendance \
-        ...         import RealtimeAttendanceView
+        ...         import AttendanceView
         >>> request = TestRequest()
-        >>> view = RealtimeAttendanceView('math', request)
+        >>> view = AttendanceView('math', request)
 
         >>> from schooltool.timetable.model import TimetableCalendarEvent
         >>> person = 'jonas'
@@ -1139,8 +1139,8 @@ def doctest_RealtimeAttendanceView_record():
     """
 
 
-def doctest_RealtimeAttendanceView_getArrival():
-    r"""Tests for RealtimeAttendanceView.getArrival
+def doctest_AttendanceView_getArrival():
+    r"""Tests for AttendanceView.getArrival
 
     We'll need person preferences for a timezone:
 
@@ -1155,14 +1155,14 @@ def doctest_RealtimeAttendanceView_getArrival():
     Let's create a section and a view:
 
         >>> from schooltool.attendance.browser.attendance import \
-        ...     RealtimeAttendanceView
+        ...     AttendanceView
         >>> from schooltool.course.section import Section
         >>> section = Section()
 
     If no arrival time was entered in the form, current time with
     timezone is returned:
 
-        >>> view = RealtimeAttendanceView(section, TestRequest())
+        >>> view = AttendanceView(section, TestRequest())
         >>> tick = datetime.datetime.utcnow().replace(tzinfo=utc)
         >>> arrival = view.getArrival()
         >>> tock = datetime.datetime.utcnow().replace(tzinfo=utc)
@@ -1182,7 +1182,7 @@ def doctest_RealtimeAttendanceView_getArrival():
 
         >>> request = TestRequest(form={'arrival': '22:13'})
         >>> request.setPrincipal(user)
-        >>> view = RealtimeAttendanceView(section, request)
+        >>> view = AttendanceView(section, request)
         >>> view.date = datetime.date(2005, 12, 29)
         >>> view.getArrival()
         datetime.datetime(2005, 12, 29, 22, 13,
@@ -1192,7 +1192,7 @@ def doctest_RealtimeAttendanceView_getArrival():
 
         >>> request = TestRequest(form={'arrival': '2212'})
         >>> request.setPrincipal(user)
-        >>> view = RealtimeAttendanceView(section, request)
+        >>> view = AttendanceView(section, request)
         >>> view.date = datetime.date(2005, 12, 29)
         >>> view.getArrival()
         Traceback (most recent call last):
@@ -1202,17 +1202,17 @@ def doctest_RealtimeAttendanceView_getArrival():
     """
 
 
-def doctest_RealtimeAttendanceView_publishTraverse():
-    r"""Tests for RealtimeAttendanceView.publishTraverse
+def doctest_AttendanceView_publishTraverse():
+    r"""Tests for AttendanceView.publishTraverse
 
         >>> from schooltool.attendance.browser.attendance \
-        ...          import RealtimeAttendanceView
+        ...          import AttendanceView
 
     Now we can try the typical case:
 
         >>> request = TestRequest()
         >>> section = 'section'
-        >>> view = RealtimeAttendanceView(section, request)
+        >>> view = AttendanceView(section, request)
         >>> view.date, view.period_id
         (None, None)
 
@@ -1235,7 +1235,7 @@ def doctest_RealtimeAttendanceView_publishTraverse():
 
     What if the date is invalid?
 
-        >>> view = RealtimeAttendanceView(section, request)
+        >>> view = AttendanceView(section, request)
         >>> view.publishTraverse(request, "some time last week")
         Traceback (most recent call last):
           ...
@@ -1244,11 +1244,11 @@ def doctest_RealtimeAttendanceView_publishTraverse():
     """
 
 
-def doctest_RealtimeAttendanceView_verifyParameters():
-    r"""Tests for RealtimeAttendanceView.verifyParameters
+def doctest_AttendanceView_verifyParameters():
+    r"""Tests for AttendanceView.verifyParameters
 
         >>> from schooltool.attendance.browser.attendance \
-        ...          import RealtimeAttendanceView
+        ...          import AttendanceView
 
     We need an ITimetables adapter in order to verify that a given
     period is valid for a given day:
@@ -1261,7 +1261,7 @@ def doctest_RealtimeAttendanceView_verifyParameters():
 
         >>> request = TestRequest()
         >>> section = 'section'
-        >>> view = RealtimeAttendanceView(section, request)
+        >>> view = AttendanceView(section, request)
         >>> view.__name__ = 'attendance'
         >>> view.date, view.period_id
         (None, None)
@@ -1295,15 +1295,15 @@ def doctest_RealtimeAttendanceView_verifyParameters():
     """
 
 
-def doctest_RealtimeAttendanceView_findClosestMeeting():
-    r"""Tests for RealtimeAttendanceView.findClosestMeeting
+def doctest_AttendanceView_findClosestMeeting():
+    r"""Tests for AttendanceView.findClosestMeeting
 
         >>> from schooltool.attendance.browser.attendance \
-        ...          import RealtimeAttendanceView
+        ...          import AttendanceView
 
         >>> request = TestRequest()
         >>> section = 'section'
-        >>> view = RealtimeAttendanceView(section, request)
+        >>> view = AttendanceView(section, request)
 
     If we have date and period_id in the request, then we're processing a form
     and should use them.

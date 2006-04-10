@@ -178,12 +178,16 @@ class RealtimeInfo(object):
                 self.sparkline_url)
 
 
-class RealtimeAttendanceView(BrowserView):
-    """Realtime attendance view for a section"""
+class AttendanceView(BrowserView):
+    """Attendance view for a section
+
+    Shows a realtime or a retrospective attendance form depending on
+    when the view is accessed.
+    """
 
     __used_for__ = ISection
 
-    template = ViewPageTemplateFile("templates/real_time.pt")
+    realtime_template = ViewPageTemplateFile("templates/real_time.pt")
     no_section_meeting_today_template = ViewPageTemplateFile(
                                             "templates/no_section_meeting.pt")
 
@@ -396,7 +400,7 @@ class RealtimeAttendanceView(BrowserView):
         except NoSectionMeetingToday:
             return self.no_section_meeting_today_template()
         self.update()
-        return self.template()
+        return self.realtime_template()
 
 
 class NoSectionMeetingToday(Exception):
