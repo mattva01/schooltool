@@ -6,7 +6,7 @@
   <browser:page
       name="attendance"
       for="schooltool.course.interfaces.ISection"
-      class="schooltool.attendance.browser.attendance.RealtimeAttendanceView"
+      class="schooltool.attendance.browser.attendance.AttendanceView"
       permission="schooltool.view"
       menu="schooltool_actions"
       title="Attendance"
