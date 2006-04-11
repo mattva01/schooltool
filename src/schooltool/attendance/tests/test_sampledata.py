@@ -67,11 +67,25 @@ class PersonStub(object):
         return "%s" % self.__name__
 
 
+class TimetableActivityDayStub(object):
+
+    homeroom_period_ids = ['p1']
+
+    def __getitem__(self, key):
+        return self
+
+    @property
+    def timetable(self):
+        return self
+
+
 class TimetableCalendarEventStub(object):
     def __init__(self, dtstart, duration, period_id):
         self.dtstart = dtstart
         self.duration = duration
         self.period_id = period_id
+        self.activity = TimetableActivityDayStub()
+        self.day_id = None
 
 
 class FakeTimetablesAdapter(object):
@@ -85,6 +99,11 @@ class FakeTimetablesAdapter(object):
             period_id = 'p1'
             e = TimetableCalendarEventStub(dtstart, duration, period_id)
             events.append(e)
+
+            period_id = 'p2'
+            e = TimetableCalendarEventStub(dtstart, duration, period_id)
+            events.append(e)
+
             first += datetime.timedelta(2)
         return events
 
@@ -129,23 +148,16 @@ class FakeAttendanceAdapter(object):
     def get(self, section, datetime):
         return FakeAttendanceRecord()
 
+class FakeHomeroomAttendanceAdapter(FakeAttendanceAdapter):
 
-class FakeDayAttendanceAdapter(object):
-    def __init__(self, person):
-        self.person = person
-
-    def record(self, date, present):
-        print "%s was %s on %s" % (self.person,
-                                   {True: 'present',
-                                    False: 'absent'}[present],
-                                   date)
-
-    def get(self, date):
-        return FakeAttendanceRecord()
+    def record(self, section, dtstart, duration, period_id, present):
+        print "%s was %s on %s (%s, %s) in Homeroom Period" % (self.person,
+                    {True: 'present', False: 'absent'}[present], dtstart,
+                    period_id, section)
 
 
 def doctest_SampleAttendancePlugin_explainAttendanceRecord():
-    """Tests for SampleAttendancePlugin.explainAttendanceRecord.
+    """Tests for SampleAttendancePlugin applyExplanation and generateExplanation.
 
         >>> from schooltool.attendance.sampledata import SampleAttendancePlugin
         >>> plugin = SampleAttendancePlugin()
@@ -157,7 +169,7 @@ def doctest_SampleAttendancePlugin_explainAttendanceRecord():
         >>> plugin.explanation_rate = 1
         >>> for i in range(100):
         ...     ar = FakeAttendanceRecord()
-        ...     plugin.explainAttendanceRecord(ar)
+        ...     plugin.applyExplanation(ar, plugin.generateExplanation())
         ...     assert(ar.hasExplanations)
         Added explanation
         ...
@@ -168,7 +180,7 @@ def doctest_SampleAttendancePlugin_explainAttendanceRecord():
         >>> plugin.excuse_rate = 1
         >>> for i in range(100):
         ...     ar = FakeAttendanceRecord()
-        ...     plugin.explainAttendanceRecord(ar)
+        ...     plugin.applyExplanation(ar, plugin.generateExplanation())
         ...     assert(ar.hasExplanations)
         ...     assert(ar.accepted)
         Added explanation
@@ -181,7 +193,7 @@ def doctest_SampleAttendancePlugin_explainAttendanceRecord():
         >>> plugin.reject_rate = 1
         >>> for i in range(100):
         ...     ar = FakeAttendanceRecord()
-        ...     plugin.explainAttendanceRecord(ar)
+        ...     plugin.applyExplanation(ar, plugin.generateExplanation())
         ...     assert(ar.hasExplanations)
         ...     assert(ar.rejected)
         Added explanation
@@ -191,8 +203,8 @@ def doctest_SampleAttendancePlugin_explainAttendanceRecord():
     """
 
 
-def doctest_SampleAttendancePlugin_generateDayAttendance():
-    """Tests for SampleAttendancePlugin.generateDayAttendance
+def doctest_SampleAttendancePlugin_generateHomeroomAttendance():
+    """Tests for SampleAttendancePlugin.generateHomeroomAttendance
 
         >>> from schooltool.attendance.sampledata import SampleAttendancePlugin
         >>> plugin = SampleAttendancePlugin()
@@ -208,37 +220,27 @@ def doctest_SampleAttendancePlugin_generateDayAttendance():
         >>> plugin.rng = random.Random(42)
         >>> plugin.day_absence_rate = 1
 
-
-    Persons need to be adaptable to IDayAttendance
-
-        >>> from schooltool.attendance.interfaces import IDayAttendance
-        >>> ztapi.provideAdapter(None, IDayAttendance,
-        ...                      FakeDayAttendanceAdapter)
-
     Only students are marked as absent/present:
 
-        >>> print sorted(plugin.generateDayAttendance().items())
-        Jon was absent on 2005-09-11
-        ...
-        Ian was absent on 2005-09-11
-        ...
-        Jon was absent on 2005-09-13
-        ...
-        Ian was absent on 2005-09-13
-        ...
-        [('2005-09-11', {'student_Jon': ((), (), False),
-                         'student_Ian': ((), (), False)}),
-         ('2005-09-13', {'student_Jon': ((), (), False),
-                         'student_Ian': ((), (), False)})]
+        >>> print sorted(plugin.generateHomeroomAttendance().items())
+        [('2005-09-11', {'student_Jon': (True, True, True),
+                         'student_Ian': (True, True, True)}),
+         ('2005-09-13', {'student_Jon': (True, True, True),
+                         'student_Ian': (True, True, True)})]
 
-    Unless the absence rate is 0:
+    If explanation rate is 0, no explanations should get explained:
+
+        >>> plugin.explanation_rate = 0
+        >>> print sorted(plugin.generateHomeroomAttendance().items())
+        [('2005-09-11', {'student_Jon': (False, False, False),
+                         'student_Ian': (False, False, False)}),
+         ('2005-09-13', {'student_Jon': (False, False, False),
+                         'student_Ian': (False, False, False)})]
+
+    When the absence rate is 0, no absences are recorded:
 
         >>> plugin.day_absence_rate = 0
-        >>> print sorted(plugin.generateDayAttendance().items())
-        Jon was present on 2005-09-11
-        Ian was present on 2005-09-11
-        Jon was present on 2005-09-13
-        Ian was present on 2005-09-13
+        >>> print sorted(plugin.generateHomeroomAttendance().items())
         [('2005-09-11', {}),
          ('2005-09-13', {})]
 
@@ -246,7 +248,7 @@ def doctest_SampleAttendancePlugin_generateDayAttendance():
 
 
 def doctest_SampleAttendancePlugin_generateSectionAttendance():
-    """Tests for SampleAttendancePlugin.generateDayAttendance
+    """Tests for SampleAttendancePlugin.generateHomeroomAttendance
 
         >>> from schooltool.attendance.sampledata import SampleAttendancePlugin
         >>> plugin = SampleAttendancePlugin()
@@ -277,40 +279,85 @@ def doctest_SampleAttendancePlugin_generateSectionAttendance():
         >>> from schooltool.attendance.interfaces import ISectionAttendance
         >>> ztapi.provideAdapter(None, ISectionAttendance,
         ...                      FakeAttendanceAdapter)
+        >>> from schooltool.attendance.interfaces import IHomeroomAttendance
+        >>> ztapi.provideAdapter(None, IHomeroomAttendance,
+        ...                      FakeHomeroomAttendanceAdapter)
 
     Now we can generate some sample data
 
         >>> plugin.generateSectionAttendance([])
+        Ann was present on 2005-09-01 09:30:00 (p1, s2) in Homeroom Period
         Ann was present on 2005-09-01 09:30:00 (p1, s2)
-        Ann was absent on 2005-09-03 09:30:00 (p1, s2)
-        Tardy at 2005-09-03 09:45:00
+        Ann was absent on 2005-09-01 09:30:00 (p2, s2)
+        Tardy at 2005-09-01 09:45:00
         Added explanation
         Accepted explanation
+        Ann was present on 2005-09-03 09:30:00 (p1, s2) in Homeroom Period
+        Ann was present on 2005-09-03 09:30:00 (p1, s2)
+        Ann was present on 2005-09-03 09:30:00 (p2, s2)
+        Ann was present on 2005-09-05 09:30:00 (p1, s2) in Homeroom Period
         Ann was present on 2005-09-05 09:30:00 (p1, s2)
-        Ann was present on 2005-09-07 09:30:00 (p1, s2)
-        Ann was present on 2005-09-09 09:30:00 (p1, s2)
-        Ann was present on 2005-09-11 09:30:00 (p1, s2)
-        Ann was absent on 2005-09-13 09:30:00 (p1, s2)
-        Tardy at 2005-09-13 09:45:00
-        Added explanation
-        Accepted explanation
-        Jon was present on 2005-09-01 09:30:00 (p1, s1)
-        Ian was present on 2005-09-01 09:30:00 (p1, s1)
-        Jon was present on 2005-09-03 09:30:00 (p1, s1)
-        Ian was present on 2005-09-03 09:30:00 (p1, s1)
-        Jon was present on 2005-09-05 09:30:00 (p1, s1)
-        Ian was present on 2005-09-05 09:30:00 (p1, s1)
-        Jon was absent on 2005-09-07 09:30:00 (p1, s1)
+        Ann was present on 2005-09-05 09:30:00 (p2, s2)
+        Ann was absent on 2005-09-07 09:30:00 (p1, s2) in Homeroom Period
+        Ann was absent on 2005-09-07 09:30:00 (p1, s2)
         Tardy at 2005-09-07 09:45:00
         Added explanation
         Accepted explanation
+        Ann was present on 2005-09-07 09:30:00 (p2, s2)
+        Ann was present on 2005-09-09 09:30:00 (p1, s2) in Homeroom Period
+        Ann was present on 2005-09-09 09:30:00 (p1, s2)
+        Ann was present on 2005-09-09 09:30:00 (p2, s2)
+        Ann was present on 2005-09-11 09:30:00 (p1, s2) in Homeroom Period
+        Ann was present on 2005-09-11 09:30:00 (p1, s2)
+        Ann was present on 2005-09-11 09:30:00 (p2, s2)
+        Ann was present on 2005-09-13 09:30:00 (p1, s2) in Homeroom Period
+        Ann was present on 2005-09-13 09:30:00 (p1, s2)
+        Ann was absent on 2005-09-13 09:30:00 (p2, s2)
+        Tardy at 2005-09-13 09:45:00
+        Added explanation
+        Accepted explanation
+        Jon was present on 2005-09-01 09:30:00 (p1, s1) in Homeroom Period
+        Jon was present on 2005-09-01 09:30:00 (p1, s1)
+        Ian was present on 2005-09-01 09:30:00 (p1, s1) in Homeroom Period
+        Ian was present on 2005-09-01 09:30:00 (p1, s1)
+        Jon was present on 2005-09-01 09:30:00 (p2, s1)
+        Ian was present on 2005-09-01 09:30:00 (p2, s1)
+        Jon was present on 2005-09-03 09:30:00 (p1, s1) in Homeroom Period
+        Jon was present on 2005-09-03 09:30:00 (p1, s1)
+        Ian was present on 2005-09-03 09:30:00 (p1, s1) in Homeroom Period
+        Ian was present on 2005-09-03 09:30:00 (p1, s1)
+        Jon was present on 2005-09-03 09:30:00 (p2, s1)
+        Ian was present on 2005-09-03 09:30:00 (p2, s1)
+        Jon was present on 2005-09-05 09:30:00 (p1, s1) in Homeroom Period
+        Jon was present on 2005-09-05 09:30:00 (p1, s1)
+        Ian was present on 2005-09-05 09:30:00 (p1, s1) in Homeroom Period
+        Ian was present on 2005-09-05 09:30:00 (p1, s1)
+        Jon was present on 2005-09-05 09:30:00 (p2, s1)
+        Ian was present on 2005-09-05 09:30:00 (p2, s1)
+        Jon was present on 2005-09-07 09:30:00 (p1, s1) in Homeroom Period
+        Jon was present on 2005-09-07 09:30:00 (p1, s1)
+        Ian was present on 2005-09-07 09:30:00 (p1, s1) in Homeroom Period
         Ian was present on 2005-09-07 09:30:00 (p1, s1)
+        Jon was present on 2005-09-07 09:30:00 (p2, s1)
+        Ian was present on 2005-09-07 09:30:00 (p2, s1)
+        Jon was present on 2005-09-09 09:30:00 (p1, s1) in Homeroom Period
         Jon was present on 2005-09-09 09:30:00 (p1, s1)
+        Ian was present on 2005-09-09 09:30:00 (p1, s1) in Homeroom Period
         Ian was present on 2005-09-09 09:30:00 (p1, s1)
+        Jon was present on 2005-09-09 09:30:00 (p2, s1)
+        Ian was present on 2005-09-09 09:30:00 (p2, s1)
+        Jon was present on 2005-09-11 09:30:00 (p1, s1) in Homeroom Period
         Jon was present on 2005-09-11 09:30:00 (p1, s1)
+        Ian was present on 2005-09-11 09:30:00 (p1, s1) in Homeroom Period
         Ian was present on 2005-09-11 09:30:00 (p1, s1)
+        Jon was present on 2005-09-11 09:30:00 (p2, s1)
+        Ian was present on 2005-09-11 09:30:00 (p2, s1)
+        Jon was present on 2005-09-13 09:30:00 (p1, s1) in Homeroom Period
         Jon was present on 2005-09-13 09:30:00 (p1, s1)
+        Ian was present on 2005-09-13 09:30:00 (p1, s1) in Homeroom Period
         Ian was present on 2005-09-13 09:30:00 (p1, s1)
+        Jon was present on 2005-09-13 09:30:00 (p2, s1)
+        Ian was present on 2005-09-13 09:30:00 (p2, s1)
 
 
     Let's shift the start date a bit, and reset the rng:
@@ -318,36 +365,74 @@ def doctest_SampleAttendancePlugin_generateSectionAttendance():
         >>> plugin.start_date = term.last - datetime.timedelta(days=3)
         >>> plugin.rng = random.Random(42)
         >>> plugin.generateSectionAttendance([])
+        Ann was present on 2005-09-11 09:30:00 (p1, s2) in Homeroom Period
         Ann was present on 2005-09-11 09:30:00 (p1, s2)
-        Ann was absent on 2005-09-13 09:30:00 (p1, s2)
-        Tardy at 2005-09-13 09:45:00
+        Ann was absent on 2005-09-11 09:30:00 (p2, s2)
+        Tardy at 2005-09-11 09:45:00
         Added explanation
         Accepted explanation
+        Ann was present on 2005-09-13 09:30:00 (p1, s2) in Homeroom Period
+        Ann was present on 2005-09-13 09:30:00 (p1, s2)
+        Ann was present on 2005-09-13 09:30:00 (p2, s2)
+        Jon was present on 2005-09-11 09:30:00 (p1, s1) in Homeroom Period
         Jon was present on 2005-09-11 09:30:00 (p1, s1)
+        Ian was present on 2005-09-11 09:30:00 (p1, s1) in Homeroom Period
         Ian was present on 2005-09-11 09:30:00 (p1, s1)
+        Jon was absent on 2005-09-11 09:30:00 (p2, s1)
+        Tardy at 2005-09-11 09:45:00
+        Added explanation
+        Accepted explanation
+        Ian was present on 2005-09-11 09:30:00 (p2, s1)
+        Jon was present on 2005-09-13 09:30:00 (p1, s1) in Homeroom Period
         Jon was present on 2005-09-13 09:30:00 (p1, s1)
+        Ian was present on 2005-09-13 09:30:00 (p1, s1) in Homeroom Period
         Ian was present on 2005-09-13 09:30:00 (p1, s1)
+        Jon was present on 2005-09-13 09:30:00 (p2, s1)
+        Ian was present on 2005-09-13 09:30:00 (p2, s1)
+
 
     If there was a day absence - the student should not be present in
     any of the section events (even if absence_rate is zero):
 
         >>> plugin.absence_rate = 0
         >>> plugin.rng = random.Random(42)
-        >>> day_absences = {'2005-09-11': {'Jon': ((), (), False)},
+        >>> day_absences = {'2005-09-11': {'Jon': (False, False, False)},
         ...                 '2005-09-13': {'Jon': (True, True, True),
         ...                                'Ian': (True, False, False),
         ...                                'Ann': (True, True, False)}}
         >>> plugin.generateSectionAttendance(day_absences)
+        Ann was present on 2005-09-11 09:30:00 (p1, s2) in Homeroom Period
         Ann was present on 2005-09-11 09:30:00 (p1, s2)
+        Ann was present on 2005-09-11 09:30:00 (p2, s2)
+        Ann was absent on 2005-09-13 09:30:00 (p1, s2) in Homeroom Period
+        Added explanation
+        Rejected explanation
         Ann was absent on 2005-09-13 09:30:00 (p1, s2)
         Added explanation
         Rejected explanation
+        Ann was absent on 2005-09-13 09:30:00 (p2, s2)
+        Added explanation
+        Rejected explanation
+        Jon was absent on 2005-09-11 09:30:00 (p1, s1) in Homeroom Period
         Jon was absent on 2005-09-11 09:30:00 (p1, s1)
+        Ian was present on 2005-09-11 09:30:00 (p1, s1) in Homeroom Period
         Ian was present on 2005-09-11 09:30:00 (p1, s1)
+        Jon was absent on 2005-09-11 09:30:00 (p2, s1)
+        Ian was present on 2005-09-11 09:30:00 (p2, s1)
+        Jon was absent on 2005-09-13 09:30:00 (p1, s1) in Homeroom Period
+        Added explanation
+        Accepted explanation
         Jon was absent on 2005-09-13 09:30:00 (p1, s1)
         Added explanation
         Accepted explanation
+        Ian was absent on 2005-09-13 09:30:00 (p1, s1) in Homeroom Period
+        Added explanation
         Ian was absent on 2005-09-13 09:30:00 (p1, s1)
+        Added explanation
+        Jon was absent on 2005-09-13 09:30:00 (p2, s1)
+        Added explanation
+        Accepted explanation
+        Ian was absent on 2005-09-13 09:30:00 (p2, s1)
         Added explanation
 
     """
@@ -367,12 +452,12 @@ def doctest_SampleAttendancePlugin_generate():
 
     Let's stub those methods:
 
-        >>> def generateDayAttendanceStub():
+        >>> def generateHomeroomAttendanceStub():
         ...     print 'Generating day attendance data'
         ...     return 'day_attendance_data'
         >>> def generateSectionAttendanceStub(day_absences):
         ...     print 'Generating section attendance data (%s)' % day_absences
-        >>> plugin.generateDayAttendance = generateDayAttendanceStub
+        >>> plugin.generateHomeroomAttendance = generateHomeroomAttendanceStub
         >>> plugin.generateSectionAttendance = generateSectionAttendanceStub
 
         >>> term = TermStub()

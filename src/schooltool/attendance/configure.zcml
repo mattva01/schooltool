@@ -11,6 +11,10 @@
     <allow interface=".interfaces.ISectionAttendanceRecord" />
   </class>
 
+  <class class=".attendance.SectionAttendanceLoggingProxy">
+    <allow interface=".interfaces.ISectionAttendanceRecord" />
+  </class>
+
   <adapter
         for="schooltool.person.interfaces.IPerson"
         provides=".interfaces.ISectionAttendance"
@@ -18,28 +22,24 @@
         trusted="true"
   />
 
-  <class class=".attendance.DayAttendance">
-    <allow interface=".interfaces.IDayAttendance" />
+  <class class=".attendance.HomeroomAttendance">
+    <allow interface=".interfaces.IHomeroomAttendance" />
   </class>
 
-  <class class=".attendance.DayAttendanceRecord">
-    <allow interface=".interfaces.IDayAttendanceRecord" />
+  <class class=".attendance.HomeroomAttendanceRecord">
+    <allow interface=".interfaces.IHomeroomAttendanceRecord" />
+  </class>
+
+  <class class=".attendance.HomeroomAttendanceLoggingProxy">
+    <allow interface=".interfaces.IHomeroomAttendanceRecord" />
   </class>
 
   <adapter
         for="schooltool.person.interfaces.IPerson"
-        provides=".interfaces.IDayAttendance"
-        factory=".attendance.getDayAttendance"
+        provides=".interfaces.IHomeroomAttendance"
+        factory=".attendance.getHomeroomAttendance"
         trusted="true"
   />
-
-  <class class=".attendance.DayAttendanceLoggingProxy">
-    <allow interface=".interfaces.IDayAttendanceRecord" />
-  </class>
-
-  <class class=".attendance.SectionAttendanceLoggingProxy">
-    <allow interface=".interfaces.ISectionAttendanceRecord" />
-  </class>
 
   <class class=".attendance.AbsenceExplanation">
     <allow interface=".interfaces.IAbsenceExplanation" />

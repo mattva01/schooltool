@@ -117,7 +117,7 @@ class TimetableSchema(Persistent, Contained):
         new.timezone = self.timezone
         for day_id in self.day_ids:
             new[day_id] = TimetableDay(self[day_id].periods,
-                                         self[day_id].homeroom_period_ids)
+                                       self[day_id].homeroom_period_ids)
         return new
 
     def __eq__(self, other):

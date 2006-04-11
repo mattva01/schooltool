@@ -28,7 +28,7 @@ from persistent import Persistent
 from zope.testing import doctest
 from zope.app.testing import setup, ztapi
 
-from schooltool.attendance.interfaces import IDayAttendance
+from schooltool.attendance.interfaces import IHomeroomAttendance
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.testing import setup as stsetup
 from schooltool.attendance.browser.sparkline import AttendanceSparklineView
@@ -43,7 +43,7 @@ def tearDown(test):
     setup.placefulTearDown()
 
 
-class DayAttendanceStub:
+class HomeroomAttendanceStub:
     pass
 
 
@@ -51,8 +51,8 @@ class PersonStub(Persistent):
     username = 'boy'
 
     def __conform__(self, interface):
-        if interface is IDayAttendance:
-            return DayAttendanceStub()
+        if interface is IHomeroomAttendance:
+            return HomeroomAttendanceStub()
 
 
 class CalendarStub:

@@ -35,7 +35,7 @@ from schooltool.app.app import getSchoolToolApplication
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.term.term import getTermForDate
 from schooltool.attendance.interfaces import ISectionAttendance
-from schooltool.attendance.interfaces import IDayAttendance
+from schooltool.attendance.interfaces import IHomeroomAttendance
 
 
 class AttendanceSparkline(object):
@@ -113,11 +113,13 @@ class AttendanceSparkline(object):
         section_calendar = ITimetables(self.section).makeTimetableCalendar()
         timezone = IApplicationPreferences(getSchoolToolApplication()).timezone
         tz = pytz.timezone(timezone)
-        day_attendance = IDayAttendance(self.person)
+        hr_attendance = IHomeroomAttendance(self.person)
         data = []
         for day in days:
-            day_record = day_attendance.get(day)
             section_record = self.getWorstRecordForDay(day)
+            hr_period = None
+            if section_record:
+                hr_period = hr_attendance.getHomeroomPeriodForRecord(section_record)
             if self.sectionMeetsOn(day, tz, section_calendar):
                 if not section_record or section_record.isUnknown():
                     data.append(('dot', 'black', '+'))
@@ -125,16 +127,16 @@ class AttendanceSparkline(object):
                     data.append(('full', 'black', '+'))
                 elif section_record.isExplained():
                     data.append(('full', 'black', '-'))
-                elif day_record.isPresent():
+                elif hr_period.isPresent():
                     data.append(('full', 'red', '-'))
                 else:
                     data.append(('full', 'yellow', '-'))
             else:
-                if not day_record or day_record.isUnknown():
+                if not hr_period or hr_period.isUnknown():
                     data.append(('dot', 'black', '+'))
-                elif day_record.isPresent():
+                elif hr_period.isPresent():
                     data.append(('half', 'black', '+'))
-                elif day_record.isExplained():
+                elif hr_period.isExplained():
                     data.append(('half', 'black', '-'))
                 else:
                     data.append(('half', 'yellow', '-'))

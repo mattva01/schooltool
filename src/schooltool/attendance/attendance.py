@@ -52,8 +52,8 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.calendar.simple import ImmutableCalendar
 from schooltool.calendar.simple import SimpleCalendarEvent
-from schooltool.attendance.interfaces import IDayAttendance
-from schooltool.attendance.interfaces import IDayAttendanceRecord
+from schooltool.attendance.interfaces import IHomeroomAttendance
+from schooltool.attendance.interfaces import IHomeroomAttendanceRecord
 from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.attendance.interfaces import ISectionAttendanceRecord
 from schooltool.attendance.interfaces import IAbsenceExplanation
@@ -142,6 +142,10 @@ class AttendanceLoggingProxy(object):
         self.attendance_record.rejectExplanation()
         self.log("rejected explanation")
 
+    def makeTardy(self, arrival_time):
+        self.attendance_record.makeTardy(arrival_time)
+        self.log("made attendance record a tardy, arrival time (%s)" % arrival_time)
+
     def __repr__(self):
         return repr(self.attendance_record)
 
@@ -152,21 +156,33 @@ class AttendanceLoggingProxy(object):
         setattr(self.attendance_record, name, value)
 
 
-class DayAttendanceLoggingProxy(AttendanceLoggingProxy):
-    implements(IDayAttendanceRecord)
-
-
 class SectionAttendanceLoggingProxy(AttendanceLoggingProxy):
     implements(ISectionAttendanceRecord)
 
-    def makeTardy(self, arrival_time):
-        self.attendance_record.makeTardy(arrival_time)
-        self.log("made attendance record a tardy, arrival time (%s)" % arrival_time)
+
+class HomeroomAttendanceLoggingProxy(AttendanceLoggingProxy):
+    implements(IHomeroomAttendanceRecord)
 
 
 #
 # Attendance record classes
 #
+
+class AbsenceExplanation(Persistent):
+    """An explanation of an absence/tardy."""
+
+    implements(IAbsenceExplanation)
+
+    def __init__(self, text):
+        self.text = text
+        self.status = NEW
+
+    def isProcessed(self):
+        return self.status != NEW
+
+    def isAccepted(self):
+        return self.status == ACCEPTED
+
 
 class AttendanceRecord(Persistent):
     """Base class for attendance records."""
@@ -234,38 +250,11 @@ class AttendanceRecord(Persistent):
                                   % self.status)
         self._work_item.makeTardy(arrival_time)
 
-
-class AbsenceExplanation(Persistent):
-    """An explanation of an absence/tardy."""
-
-    implements(IAbsenceExplanation)
-
-    def __init__(self, text):
-        self.text = text
-        self.status = NEW
-
-    def isProcessed(self):
-        return self.status != NEW
-
-    def isAccepted(self):
-        return self.status == ACCEPTED
-
-
-class DayAttendanceRecord(AttendanceRecord):
-    """Record of a student's presence or absence on a given day."""
-
-    implements(IDayAttendanceRecord)
-
-    def __init__(self, date, status):
-        assert type(date) == datetime.date
-        AttendanceRecord.__init__(self, status)
-        self.date = date
-
-    def __repr__(self):
-        return 'DayAttendanceRecord(%r, %s)' % (self.date, self.status)
-
-    def __str__(self):
-        return 'DayAttendanceRecord(%s, %s)' % (self.date, self.status)
+    @property
+    def date(self):
+        app = ISchoolToolApplication(None)
+        tzinfo = pytz.timezone(IApplicationPreferences(app).timezone)
+        return self.datetime.astimezone(tzinfo).date()
 
 
 class SectionAttendanceRecord(AttendanceRecord):
@@ -282,19 +271,39 @@ class SectionAttendanceRecord(AttendanceRecord):
         self.duration = duration
         self.period_id = period_id
 
-    @property
-    def date(self):
-        app = ISchoolToolApplication(None)
-        tzinfo = pytz.timezone(IApplicationPreferences(app).timezone)
-        return self.datetime.astimezone(tzinfo).date()
-
     def __repr__(self):
         return 'SectionAttendanceRecord(%r, %r, %s)' % (self.section,
                                                         self.datetime,
                                                         self.status)
 
     def __str__(self):
-        return 'SectionAttendanceRecord(%s, %s, section=%s)' %(
+        return 'SectionAttendanceRecord(%s, %s, section=%s)' % (
+            self.datetime,
+            self.status,
+            self.section.__name__)
+
+
+class HomeroomAttendanceRecord(AttendanceRecord):
+    """Record of a student's presence or absence at a given homeroom period."""
+
+    implements(IHomeroomAttendanceRecord)
+
+    def __init__(self, section, datetime, status,
+                 duration=datetime.timedelta(0), period_id=None):
+        assert datetime.tzinfo is not None, 'need datetime with timezone'
+        AttendanceRecord.__init__(self, status)
+        self.section = section
+        self.datetime = datetime
+        self.duration = duration
+        self.period_id = period_id
+
+    def __repr__(self):
+        return 'HomeroomAttendanceRecord(%r, %r, %s)' % (self.section,
+                                                         self.datetime,
+                                                         self.status)
+
+    def __str__(self):
+        return 'HomeroomAttendanceRecord(%s, %s, section=%s)' % (
             self.datetime,
             self.status,
             self.section.__name__)
@@ -353,66 +362,7 @@ class AttendanceCalendarMixin(object):
         return ImmutableCalendar(events)
 
 
-class DayAttendance(Persistent, AttendanceFilteringMixin,
-                    AttendanceCalendarMixin):
-    """Persistent object that stores day attendance records for a student."""
-
-    implements(IDayAttendance)
-
-    def __init__(self, person):
-        self._records = OOBTree()
-        self.person = person
-
-    def _wrapRecordForLogging(self, ar):
-        return DayAttendanceLoggingProxy(ar, self.person)
-
-    def __iter__(self):
-        for ar in self._records.values():
-            yield self._wrapRecordForLogging(ar)
-
-    def tardyEventTitle(self, record):
-        """Produce a title for a calendar event representing a tardy."""
-        return translate(_('Was late for homeroom.'))
-
-    def absenceEventTitle(self, record):
-        """Produce a title for a calendar event representing an absence."""
-        return translate(_('Was absent from homeroom.'))
-
-    def makeCalendarEvent(self, record, title, description):
-        """Produce a calendar event for an absence or a tardy."""
-        # XXX mg: Having to specify a date*time* for an all-day event makes NO
-        #         SENSE WHATSOEVER.  Grr!
-        dtstart = datetime.datetime.combine(record.date, datetime.time())
-        return SimpleCalendarEvent(title=title,
-                                   description=description,
-                                   dtstart=dtstart,
-                                   duration=datetime.timedelta(1),
-                                   allday=True)
-
-    def get(self, date):
-        assert type(date) == datetime.date
-        try:
-            return self._wrapRecordForLogging(self._records[date])
-        except KeyError:
-            return self._wrapRecordForLogging(DayAttendanceRecord(date, UNKNOWN))
-
-    def record(self, date, present):
-        assert type(date) == datetime.date
-        if date in self._records:
-            raise AttendanceError('record for %s already exists' % date)
-        if present: status = PRESENT
-        else: status = ABSENT
-        ar = DayAttendanceRecord(date, status)
-        self._records[date] = ar
-        self._wrapRecordForLogging(ar).log("created")
-
-
-class SectionAttendance(Persistent, AttendanceFilteringMixin,
-                        AttendanceCalendarMixin):
-    """Persistent object that stores section attendance records for a student.
-    """
-
-    implements(ISectionAttendance)
+class AttendanceBase(Persistent, AttendanceFilteringMixin):
 
     def __init__(self, person):
         self.person = person
@@ -422,9 +372,6 @@ class SectionAttendance(Persistent, AttendanceFilteringMixin,
         for group in self._records.values():
             for record in group:
                 yield self._wrapRecordForLogging(record)
-
-    def _wrapRecordForLogging(self, ar):
-        return SectionAttendanceLoggingProxy(ar, self.person)
 
     def filter(self, first, last):
         assert type(first) == datetime.date
@@ -443,15 +390,10 @@ class SectionAttendance(Persistent, AttendanceFilteringMixin,
         for ar in self._records.get(datetime, ()):
             if ar.section == section:
                 return self._wrapRecordForLogging(ar)
-        ar = SectionAttendanceRecord(section, datetime, status=UNKNOWN)
+        ar = self.factory(section, datetime, status=UNKNOWN)
         return self._wrapRecordForLogging(ar)
 
-    def record(self, section, datetime, duration, period_id, present):
-        if self.get(section, datetime).status != UNKNOWN:
-            raise AttendanceError('record for %s at %s already exists'
-                                  % (section, datetime))
-        if present: status = PRESENT
-        else: status = ABSENT
+    def createAttendanceRecord(self, section, datetime, duration, period_id, status):
         # Optimization: attendance records with status PRESENT are never
         # changed, and look the same for all students.  If we reuse the
         # same persistent object for all section members, we conserve
@@ -461,19 +403,64 @@ class SectionAttendance(Persistent, AttendanceFilteringMixin,
         #     _v_attr, as it might survive transaction boundaries.  If you
         #     happen to use it from a different transaction, will it work?
         if (status == PRESENT and
-            getattr(section, "_v_SectionAttendance_cache",
+            getattr(section, self.cache_attribute,
                     (None, ))[0] == datetime):
-            ar = section._v_SectionAttendance_cache[1]
+            ar = getattr(section, self.cache_attribute)[1]
         else:
-            ar = SectionAttendanceRecord(section, datetime, status=status,
-                                         duration=duration,
-                                         period_id=period_id)
+            ar = self.factory(section, datetime, status=status,
+                              duration=duration, period_id=period_id)
             if status == PRESENT:
-                section._v_SectionAttendance_cache = (datetime, ar)
+                setattr(section, self.cache_attribute, (datetime, ar))
+        return ar
+
+
+    def record(self, section, datetime, duration, period_id, present):
+        if self.get(section, datetime).status != UNKNOWN:
+            raise AttendanceError('record for %s at %s already exists'
+                                  % (section, datetime))
+        if present: status = PRESENT
+        else: status = ABSENT
+
+        ar = self.createAttendanceRecord(section, datetime, duration, period_id, status)
+
+        # TODO: Use setdefault
         if datetime not in self._records:
             self._records[datetime] = ()
+
         self._records[datetime] += (ar, )
         self._wrapRecordForLogging(ar).log("created")
+
+
+class HomeroomAttendance(AttendanceBase):
+
+    implements(IHomeroomAttendance)
+
+    cache_attribute = "_v_HomeroomAttendance_cache"
+    factory = HomeroomAttendanceRecord
+
+    def _wrapRecordForLogging(self, ar):
+        return HomeroomAttendanceLoggingProxy(ar, self.person)
+
+    def getHomeroomPeriodForRecord(self, section_ar):
+        hr_periods = self.getAllForDay(section_ar.date)
+        for period in reversed(list(hr_periods)):
+            if period.datetime <= section_ar.datetime:
+                return period
+
+        return self.get(section_ar.section, section_ar.datetime)
+
+
+class SectionAttendance(AttendanceBase, AttendanceCalendarMixin):
+    """Persistent object that stores section attendance records for a student.
+    """
+
+    implements(ISectionAttendance)
+
+    cache_attribute = "_v_SectionAttendance_cache"
+    factory = SectionAttendanceRecord
+
+    def _wrapRecordForLogging(self, ar):
+        return SectionAttendanceLoggingProxy(ar, self.person)
 
     def tardyEventTitle(self, record):
         """Produce a title for a calendar event representing a tardy."""
@@ -494,14 +481,12 @@ class SectionAttendance(Persistent, AttendanceFilteringMixin,
                                    dtstart=record.datetime,
                                    duration=record.duration)
 
-
-
 #
 # Adapters
 #
 
-DAY_ATTENDANCE_KEY = 'schooltool.attendance.DayAttendance'
 SECTION_ATTENDANCE_KEY = 'schooltool.attendance.SectionAttendance'
+HOMEROOM_ATTENDANCE_KEY = 'schooltool.attendance.HomeroomAttendance'
 
 
 def getSectionAttendance(person):
@@ -515,14 +500,14 @@ def getSectionAttendance(person):
     return attendance
 
 
-def getDayAttendance(person):
+def getHomeroomAttendance(person):
     """Return the section attendance record for a person."""
     annotations = IAnnotations(person)
     try:
-        attendance = annotations[DAY_ATTENDANCE_KEY]
+        attendance = annotations[HOMEROOM_ATTENDANCE_KEY]
     except KeyError:
-        attendance = DayAttendance(person)
-        annotations[DAY_ATTENDANCE_KEY] = attendance
+        attendance = HomeroomAttendance(person)
+        annotations[HOMEROOM_ATTENDANCE_KEY] = attendance
     return attendance
 
 
@@ -609,4 +594,3 @@ class AttendanceCalendarProvider(object):
 
         if self._isLookingAtOwnCalendar(user):
             yield (ISectionAttendance(user).makeCalendar(), '#aa0000', '#ff0000')
-            yield (IDayAttendance(user).makeCalendar(), '#00aa00', '#00ff00')

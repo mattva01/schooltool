@@ -30,7 +30,7 @@ import transaction
 from zope.interface import implements
 from zope.security.proxy import removeSecurityProxy
 
-from schooltool.attendance.interfaces import IDayAttendance
+from schooltool.attendance.interfaces import IHomeroomAttendance
 from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.sampledata.interfaces import ISampleDataPlugin
 from schooltool.timetable.interfaces import ITimetables
@@ -61,87 +61,98 @@ class SampleAttendancePlugin(object):
                             # for the whole term (which is slow),
                             # generate it only for the last N days
 
-    def explainAttendanceRecord(self, ar):
-        """Sometimes adds an explaination.
+    def applyExplanation(self, ar, (explained, processed, accepted)):
+        if explained:
+            ar.addExplanation("My car broke!")
+        if accepted:
+            ar.acceptExplanation()
+        elif processed:
+            ar.rejectExplanation()
 
-        Chance of the attendance record being explained is set in
-        explanation_rate.
-
-        Depending on excuse_rate and reject_rate the explanation is
-        either accepted or rejected.
-        """
+    def generateExplanation(self):
+        explained = False
+        processed = False
+        accepted = False
         if self.rng.random() < self.explanation_rate:
-            ar.addExplanation("My car broke")
+            explained = True
             if self.rng.random() < self.excuse_rate:
-                ar.acceptExplanation()
+                processed = True
+                accepted = True
             elif self.rng.random() < self.reject_rate:
-                ar.rejectExplanation()
+                processed = True
+                accepted = False
+        return (explained, processed, accepted)
 
-    def generateDayAttendance(self):
-        """Generate sample data for day attendance."""
-        day_absences = {}
+    def generateHomeroomAttendanceDay(self):
+        day = {}
+        persons = self.app['persons']
+        for person_name in persons:
+            if not person_name.startswith("student"):
+                continue
+            person = persons[person_name]
+            present = self.rng.random() > self.day_absence_rate
+
+            if not present:
+                day[person_name] = self.generateExplanation()
+        return day
+
+    def generateHomeroomAttendance(self):
+        """Generate sample data for homeroom attendance."""
+        hr_absences = {}
         persons = self.app['persons']
         for day in self.term:
             if day < self.start_date:
                 continue
             if day > self.end_date:
                 continue
+
             strdate = day.strftime("%Y-%m-%d")
             if self.term.isSchoolday(day):
-                day_absences[strdate] = {}
-                for person_name in persons:
-                    if not person_name.startswith("student"):
-                        continue
-                    person = persons[person_name]
-                    present = self.rng.random() > self.day_absence_rate
+                hr_absences[strdate] = self.generateHomeroomAttendanceDay()
+        return hr_absences
 
-                    da = IDayAttendance(person)
-                    da.record(day, present)
-                    ar = da.get(day)
-                    if not present:
-                        self.explainAttendanceRecord(ar)
-                        day_absences[strdate][person_name] = (
-                            ar.explanations,
-                            (ar.explanations and ar.explanations[-1].isProcessed()),
-                            ar.isExplained())
-
-        transaction.commit()
-        return day_absences
-
-    def generateSectionAttendance(self, day_absences):
+    def generateSectionAttendance(self, hr_absences):
         """Generate sample data for section attendance."""
         for section in self.app['sections'].values():
             meetings = ITimetables(section).makeTimetableCalendar(self.start_date,
                                                                   self.end_date)
             for meeting in meetings:
+
+                timetable = meeting.activity.timetable
+                homeroom_period_ids = timetable[meeting.day_id].homeroom_period_ids
+                homeroom = (meeting.period_id in homeroom_period_ids)
+
                 for student in section.members:
-                    attendance = ISectionAttendance(student)
+
                     present = self.rng.random() > self.absence_rate
 
                     datestr = meeting.dtstart.strftime("%Y-%m-%d")
-                    day_absence = (datestr in day_absences and
-                                   student.__name__ in day_absences[datestr])
-                    if day_absence:
+                    hr_absence = (datestr in hr_absences and
+                                  student.__name__ in hr_absences[datestr])
+
+                    if hr_absence:
                         present = False
+                        hr_explanation = hr_absences[datestr][student.__name__]
 
-                    attendance.record(section, meeting.dtstart,
-                                      meeting.duration, meeting.period_id,
-                                      present)
-                    ar = attendance.get(section, meeting.dtstart)
+                    def recordStatus(attendance):
+                        attendance.record(section, meeting.dtstart,
+                                          meeting.duration, meeting.period_id,
+                                          present)
+                        record = attendance.get(section, meeting.dtstart)
+                        if hr_absence:
+                            self.applyExplanation(record, hr_explanation)
+                        return record
 
-                    if day_absence:
-                        explained, processed, accepted = day_absences[datestr][student.__name__]
-                        if explained:
-                            ar.addExplanation("My car broke!")
-                        if accepted:
-                            ar.acceptExplanation()
-                        elif processed:
-                            ar.rejectExplanation()
+                    if homeroom:
+                        hr_attendance = IHomeroomAttendance(student)
+                        recordStatus(hr_attendance)
 
-                    elif not present:
+                    attendance = ISectionAttendance(student)
+                    ar = recordStatus(attendance)
+                    if not present and not hr_absence:
                         if self.rng.random() < self.tardy_rate:
                             ar.makeTardy(meeting.dtstart + datetime.timedelta(minutes=15))
-                        self.explainAttendanceRecord(ar)
+                        self.applyExplanation(ar, self.generateExplanation())
 
             # The transaction commit keeps the memory usage low, but at a cost
             # of running time and disk space.
@@ -161,5 +172,5 @@ class SampleAttendancePlugin(object):
             timedelta = datetime.timedelta(self.only_last_n_days - 1)
             self.start_date = self.end_date - timedelta
 
-        day_absences = self.generateDayAttendance()
-        self.generateSectionAttendance(day_absences)
+        hr_absences = self.generateHomeroomAttendance()
+        self.generateSectionAttendance(hr_absences)

@@ -38,7 +38,7 @@ from schooltool.timetable.interfaces import ITimetables
 from schooltool.testing import setup as stsetup
 from schooltool.attendance.interfaces import UNKNOWN, PRESENT, ABSENT, TARDY
 from schooltool.attendance.interfaces import ISectionAttendance
-from schooltool.attendance.interfaces import IDayAttendance
+from schooltool.attendance.interfaces import IHomeroomAttendance
 
 
 def setUp(test):
@@ -97,10 +97,11 @@ def show_image_as_text(img, extracolors={}):
 
 
 class AttendanceRecordStub:
-    def __init__(self, status, explained=None, section=None):
+    def __init__(self, status, explained=None, section=None, date=None):
         self.status = status
         self.explained = explained
         self.section = section
+        self.date = date
 
     def isUnknown(self):
         return self.status == UNKNOWN
@@ -126,24 +127,38 @@ class SectionAttendanceStub:
 
     def getAllForDay(self, date):
         result = []
+
+        def add(*args, **kwargs):
+            result.append(AttendanceRecordStub(*args, **kwargs))
+
+        if date in [datetime.date(2005, 9, 20),
+                    datetime.date(2005, 9, 22),
+                    datetime.date(2005, 9, 27),
+                    datetime.date(2005, 10, 13),
+                    datetime.date(2005, 10, 18)]:
+            add(PRESENT, section=self.section, date=date)
+
+
         if date == datetime.date(2005, 9, 29):
-            result.append(AttendanceRecordStub(UNKNOWN, section=self.section))
+            add(UNKNOWN, section=self.section, date=datetime.date(2005, 9, 29))
         if date == datetime.date(2005, 10, 4):
-            result.append(AttendanceRecordStub(UNKNOWN, section=self.section))
-            result.append(AttendanceRecordStub(TARDY, 'lazy',
-                                               section=self.section))
-            result.append(AttendanceRecordStub(ABSENT, section=self.section))
+            add(UNKNOWN, section=self.section, date=datetime.date(2005, 10, 4))
+            add(TARDY, 'lazy', section=self.section, date=datetime.date(2005, 10, 4))
+            add(ABSENT, section=self.section, date=datetime.date(2005, 10, 4))
         if date == datetime.date(2005, 10, 6):
-            result.append(AttendanceRecordStub(PRESENT, section=self.section))
+            add(PRESENT, section=self.section, date=datetime.date(2005, 10, 6))
         if date == datetime.date(2005, 10, 11):
-            result.append(AttendanceRecordStub(TARDY, 'ill',
-                                               section=self.section))
+            add(TARDY, 'ill', section=self.section, date=datetime.date(2005, 10, 11))
         if date == datetime.date(2005, 10, 20):
-            result.append(AttendanceRecordStub(ABSENT, section=self.section))
+            add(ABSENT, section=self.section, date=datetime.date(2005, 10, 20))
         return result
 
 
-class DayAttendanceStub:
+class HomeroomAttendanceStub:
+
+    def getHomeroomPeriodForRecord(self, section_ar):
+        return self.get(section_ar.date)
+
     def get(self, day):
         if day == datetime.date(2005, 9, 20):
             return AttendanceRecordStub(UNKNOWN)
@@ -176,8 +191,8 @@ class PersonStub:
     def __conform__(self, iface):
         if iface is ISectionAttendance:
             return self.section_attendance
-        if iface is IDayAttendance:
-            return DayAttendanceStub()
+        if iface is IHomeroomAttendance:
+            return HomeroomAttendanceStub()
 
 
 class CalendarStub:

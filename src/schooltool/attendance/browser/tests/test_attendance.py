@@ -51,9 +51,9 @@ from schooltool.relationship.tests import setUpRelationships
 from schooltool.attendance.tests import stubProcessDefinition
 from schooltool.attendance.interfaces import NEW, ACCEPTED, REJECTED
 from schooltool.attendance.interfaces import PRESENT, ABSENT, TARDY, UNKNOWN
-from schooltool.attendance.interfaces import IDayAttendance
+from schooltool.attendance.interfaces import IHomeroomAttendance
 from schooltool.attendance.interfaces import ISectionAttendance
-from schooltool.attendance.interfaces import IDayAttendanceRecord
+from schooltool.attendance.interfaces import IHomeroomAttendanceRecord
 from schooltool.attendance.interfaces import ISectionAttendanceRecord
 from schooltool.attendance.interfaces import AttendanceError
 from schooltool import SchoolToolMessage as _
@@ -144,26 +144,6 @@ class StubTimetables(object):
                                   if first <= e.dtstart.date() <= last])
 
 
-class DayAttendanceRecordStub(object):
-    implements(IDayAttendanceRecord)
-    explanations = ()
-    def __init__(self, date, status, explained=False):
-        self.date = date
-        self.status = status
-        self._explained = explained
-    def isAbsent(self): return self.status == ABSENT
-    def isTardy(self): return self.status == TARDY
-    def isExplained(self): return self._explained
-    def addExplanation(self, expl):
-        print "Added explanation: %s" % expl
-    def acceptExplanation(self):
-        print "Accepted explanation"
-    def rejectExplanation(self):
-        print "Rejected explanation"
-    def raiseError(self, *args):
-        raise AttendanceError
-
-
 class SectionAttendanceRecordStub(object):
     implements(ISectionAttendanceRecord)
     explanations = ()
@@ -177,34 +157,22 @@ class SectionAttendanceRecordStub(object):
     def isTardy(self): return self.status == TARDY
     def isExplained(self): return self._explained
 
+    def _raiseError(self, *args):
+        raise AttendanceError("An error")
 
-class DayAttendanceStub(object):
-    adapts(None)
-    implements(IDayAttendance)
+    def acceptExplanation(self):
+        print "Accepted explanation"
 
-    def __init__(self, person):
-        self.person = person
-        self._records = getattr(person, '_day_attendance_records', [])
 
-    def __iter__(self):
-        return iter(self._records)
-
-    def filter(self, first, last):
-        status = itertools.cycle([PRESENT, ABSENT, TARDY, PRESENT])
-        midpoint = first + (last - first) / 2
-        return [DayAttendanceRecordStub(day, status.next(), day < midpoint)
-                for day in DateRange(first, last)]
-
-    def get(self, date):
-        return 'd_%s_%s' % (self.person, date)
-
-    def record(self, date, present):
-        print 'Recording: %s -> %s' % (self.get(date), present)
+class HomeroomAttendanceRecordStub(SectionAttendanceRecordStub):
+    implements(IHomeroomAttendanceRecord)
 
 
 class SectionAttendanceStub(object):
     adapts(None)
     implements(ISectionAttendance)
+
+    factory = SectionAttendanceRecordStub
 
     def __init__(self, person):
         self.person = person
@@ -220,9 +188,9 @@ class SectionAttendanceStub(object):
                                     SectionStub('relativity97')])
         time = datetime.time(9, 30)
         midpoint = first + (last - first) / 2
-        return [SectionAttendanceRecordStub(sections.next(),
-                      utc.localize(datetime.datetime.combine(day, time)),
-                      status.next(), day < midpoint)
+        return [self.factory(sections.next(),
+                             utc.localize(datetime.datetime.combine(day, time)),
+                             status.next(), day < midpoint)
                 for day in DateRange(first, last)]
 
     def get(self, section, datetime):
@@ -233,6 +201,22 @@ class SectionAttendanceStub(object):
 
     def getAllForDay(self, date):
         return ['s_%s_%s_%s' % (self.person, date, c) for c in 'a', 'b']
+
+
+class HomeroomAttendanceStub(SectionAttendanceStub):
+    implements(IHomeroomAttendance)
+
+    factory = HomeroomAttendanceRecordStub
+
+    def __init__(self, person):
+        self.person = person
+        self._records = getattr(person, '_homeroom_attendance_records', [])
+
+    def get(self, section, datetime):
+        return 'h_%s_%s-%s' % (self.person, datetime, section)
+
+    def getAllForDay(self, date):
+        return ['h_%s_%s_%s' % (self.person, date, c) for c in 'a', 'b']
 
 
 class CalendarEventViewletManagerStub(object):
@@ -279,10 +263,10 @@ def print_and_return_False(text):
 
 def setUpAttendanceAdapters():
     from schooltool.attendance.attendance import getSectionAttendance
-    from schooltool.attendance.attendance import getDayAttendance
+    from schooltool.attendance.attendance import getHomeroomAttendance
     from schooltool.person.interfaces import IPerson
     ztapi.provideAdapter(IPerson, ISectionAttendance, getSectionAttendance)
-    ztapi.provideAdapter(IPerson, IDayAttendance, getDayAttendance)
+    ztapi.provideAdapter(IPerson, IHomeroomAttendance, getHomeroomAttendance)
 
 
 def doctest_getCurrentSectionMeeting():
@@ -518,6 +502,43 @@ def doctest_AttendanceCalendarEventViewlet():
 
     """
 
+def doctest_AttendanceView():
+    r"""Tests for AttendanceView.
+
+        >>> from schooltool.attendance.browser.attendance import AttendanceView
+        >>> request = TestRequest()
+        >>> view = AttendanceView(None, request)
+
+    Calling the view should update the form and render the realtime
+    template:
+
+        >>> def update():
+        ...     print "Updated form."
+        >>> def realtime_template():
+        ...     return "The real-time template"
+        >>> view.update = update
+        >>> view.realtime_template = realtime_template
+        >>> view.verifyParameters = lambda: True
+
+        >>> view()
+        Updated form.
+        'The real-time template'
+
+    Unless verifyParameters raises NoSectionMeetingToday exception:
+
+        >>> from schooltool.attendance.browser.attendance import NoSectionMeetingToday
+        >>> def verify_parameters():
+        ...     raise NoSectionMeetingToday
+        >>> view.verifyParameters = verify_parameters
+        >>> def nsmt_template():
+        ...     return "The nsmt template"
+        >>> view.no_section_meeting_today_template = nsmt_template
+
+        >>> view()
+        'The nsmt template'
+
+    """
+
 
 def doctest_AttendanceView_listMembers():
     r"""Test for AttendanceView.listMembers
@@ -636,14 +657,15 @@ def doctest_AttendanceView_getDaysAttendanceRecords():
     r"""Tests for AttendanceView.getDaysAttendanceRecords.
 
         >>> provideAdapter(SectionAttendanceStub)
-        >>> provideAdapter(DayAttendanceStub)
+        >>> provideAdapter(HomeroomAttendanceStub, provides=IHomeroomAttendance)
 
         >>> from schooltool.attendance.browser.attendance \
         ...         import AttendanceView
         >>> view = AttendanceView(None, None)
 
         >>> view.getDaysAttendanceRecords('stud1', datetime.date(2006, 1, 3))
-        ['s_stud1_2006-01-03_a', 's_stud1_2006-01-03_b', 'd_stud1_2006-01-03']
+        ['s_stud1_2006-01-03_a', 's_stud1_2006-01-03_b',
+         'h_stud1_2006-01-03_a', 'h_stud1_2006-01-03_b']
 
     """
 
@@ -1015,71 +1037,11 @@ def doctest_AttendanceView_update_homeroom():
     """
 
 
-def doctest_AttendanceView_update_set_homeroom():
-    r"""Tests for AttendanceView.update
-
-    We need an ITimetables adapter in order to verify that a given
-    period is valid for a given day:
-
-        >>> ztapi.provideAdapter(None, ITimetables, StubTimetables)
-
-    We will also need attendance adapters.
-
-        >>> setUpAttendanceAdapters()
-
-    The AttendanceView is used both for regular section meetings,
-    and for homeroom attendance.
-
-        >>> from schooltool.attendance.browser.attendance \
-        ...     import AttendanceView
-        >>> section = SectionStub()
-        >>> request = TestRequest()
-        >>> view = AttendanceView(section, request)
-
-    We will need at least one person.
-
-        >>> from schooltool.person.person import Person
-        >>> person1 = Person('person1', title='Person1')
-        >>> person1.__name__ = 'p1'
-        >>> person2 = Person('person2', title='Person1')
-        >>> person2.__name__ = 'p2'
-        >>> section.members = [person1, person2]
-
-    The 'B' period is the homeroom period
-
-        >>> view.date = datetime.date(2005, 12, 15)
-        >>> view.period_id = 'B'
-        >>> view.update()
-        >>> view.homeroom
-        True
-
-    If you mark some absences, they will be recorded as day absences, not
-    section absences.
-
-        >>> view.request = TestRequest(form={'ABSENT': 'Absent',
-        ...                                  'p1_check': 'on'})
-        >>> view.update()
-
-        >>> list(IDayAttendance(person1))
-        [DayAttendanceRecord(datetime.date(2005, 12, 15), ABSENT)]
-        >>> list(IDayAttendance(person2))
-        [DayAttendanceRecord(datetime.date(2005, 12, 15), PRESENT)]
-
-    We can see that there is no section attendance data:
-
-        >>> list(ISectionAttendance(person1))
-        []
-        >>> list(ISectionAttendance(person2))
-        []
-
-    """
-
-
 def doctest_AttendanceView_getAttendance():
     r"""Tests for AttendanceView._getAttendance
 
         >>> provideAdapter(SectionAttendanceStub)
-        >>> provideAdapter(DayAttendanceStub)
+        >>> provideAdapter(HomeroomAttendanceStub, provides=IHomeroomAttendance)
 
         >>> from schooltool.attendance.browser.attendance \
         ...         import AttendanceView
@@ -1096,11 +1058,6 @@ def doctest_AttendanceView_getAttendance():
         ...     "Math", day_id='D1', period_id="p4",
         ...     activity=None)
 
-        >>> view.homeroom = True
-        >>> view._getAttendance(person)
-        'd_jonas_2005-01-16'
-
-        >>> view.homeroom = False
         >>> view._getAttendance(person)
         's_jonas_2005-01-16 10:25:00+00:00-math'
 
@@ -1111,7 +1068,7 @@ def doctest_AttendanceView_record():
     r"""Tests for AttendanceView._record
 
         >>> provideAdapter(SectionAttendanceStub)
-        >>> provideAdapter(DayAttendanceStub)
+        >>> provideAdapter(HomeroomAttendanceStub, provides=IHomeroomAttendance)
 
         >>> from schooltool.attendance.browser.attendance \
         ...         import AttendanceView
@@ -1128,11 +1085,6 @@ def doctest_AttendanceView_record():
         ...     "Math", day_id='D1', period_id="p4",
         ...     activity=None)
 
-        >>> view.homeroom = True
-        >>> view._record(person, True)
-        Recording: d_jonas_2005-01-16 -> True
-
-        >>> view.homeroom = False
         >>> view._record(person, False)
         Recording: s_jonas_2005-01-16 10:25:00+00:00-math -> False
 
@@ -1361,6 +1313,30 @@ def doctest_AttendanceView_findClosestMeeting():
     """
 
 
+def doctest_StudentAttendanceView():
+    r"""Tests for StudentAttendanceView.
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...        import StudentAttendanceView
+        >>> request = TestRequest()
+        >>> view = StudentAttendanceView(None, request)
+
+    Calling the view should update the form and render the template:
+
+        >>> def update():
+        ...     print "Updated form."
+        >>> def template():
+        ...     return "The template"
+        >>> view.update = update
+        >>> view.template = template
+
+        >>> view()
+        Updated form.
+        'The template'
+
+    """
+
+
 def doctest_StudentAttendanceView_term_for_detailed_summary():
     r"""Tests for StudentAttendanceView.term_for_detailed_summary
 
@@ -1400,13 +1376,15 @@ def doctest_StudentAttendanceView_formatAttendanceRecord():
         ...        import StudentAttendanceView
         >>> view = StudentAttendanceView(None, None)
 
-        >>> ar = DayAttendanceRecordStub(datetime.date(2006, 1, 14), ABSENT)
+        >>> ar = HomeroomAttendanceRecordStub(SectionStub('math17'),
+        ...             datetime.datetime(2006, 1, 14, 17, 3, tzinfo=utc), ABSENT)
         >>> print translate(view.formatAttendanceRecord(ar))
-        2006-01-14: absent from homeroom
+        2006-01-14 17:03: absent from homeroom
 
-        >>> ar = DayAttendanceRecordStub(datetime.date(2006, 1, 14), TARDY)
+        >>> ar = HomeroomAttendanceRecordStub(SectionStub('math17'),
+        ...             datetime.datetime(2006, 1, 14, 17, 3, tzinfo=utc), TARDY)
         >>> print translate(view.formatAttendanceRecord(ar))
-        2006-01-14: late for homeroom
+        2006-01-14 17:03: late for homeroom
 
         >>> ar = SectionAttendanceRecordStub(SectionStub('math17'),
         ...             datetime.datetime(2006, 1, 14, 17, 3, tzinfo=utc), ABSENT)
@@ -1431,34 +1409,35 @@ def doctest_StudentAttendanceView_interleaveAttendanceRecords():
     Let's use trivial stubs
 
         >>> class ARStub(object):
-        ...     def __init__(self, date):
-        ...         self.date = date
+        ...     def __init__(self, datetime):
+        ...         self.datetime = datetime
+        ...         self.date = datetime
         ...     def __repr__(self):
         ...         return '%s%d' % (self.prefix, self.date)
-        >>> class DAR(ARStub):
-        ...     prefix = 'd'
+        >>> class HAR(ARStub):
+        ...     prefix = 'h'
         >>> class SAR(ARStub):
         ...     prefix = 's'
 
-        >>> day = [DAR(d) for d in 1, 2, 5, 6, 7, 8]
+        >>> day = [HAR(d) for d in 1, 2, 5, 6, 7, 8]
         >>> section = [SAR(d) for d in 2, 2, 3, 4, 5, 8, 9, 10, 11]
         >>> print list(view.interleaveAttendanceRecords(day, section))
-        [d1, d2, s2, s2, s3, s4, d5, s5, d6, d7, d8, s8, s9, s10, s11]
+        [h1, h2, s2, s2, s3, s4, h5, s5, h6, h7, h8, s8, s9, s10, s11]
 
-        >>> day = [DAR(d) for d in 2, 5, 6, 7, 8]
+        >>> day = [HAR(d) for d in 2, 5, 6, 7, 8]
         >>> section = [SAR(d) for d in 1, 3, 4, 4, 5, 5]
         >>> print list(view.interleaveAttendanceRecords(day, section))
-        [s1, d2, s3, s4, s4, d5, s5, s5, d6, d7, d8]
+        [s1, h2, s3, s4, s4, h5, s5, s5, h6, h7, h8]
 
         >>> day = []
         >>> section = [SAR(d) for d in 1, 2]
         >>> print list(view.interleaveAttendanceRecords(day, section))
         [s1, s2]
 
-        >>> day = [DAR(d) for d in 2, 5, 6]
+        >>> day = [HAR(d) for d in 2, 5, 6]
         >>> section = []
         >>> print list(view.interleaveAttendanceRecords(day, section))
-        [d2, d5, d6]
+        [h2, h5, h6]
 
         >>> day = []
         >>> section = []
@@ -1473,7 +1452,7 @@ def doctest_StudentAttendanceView_unresolvedAbsences():
 
     We shall use some simple attendance adapters for this test
 
-        >>> provideAdapter(DayAttendanceStub)
+        >>> provideAdapter(HomeroomAttendanceStub, provides=IHomeroomAttendance)
         >>> provideAdapter(SectionAttendanceStub)
 
         >>> from schooltool.attendance.browser.attendance \
@@ -1485,7 +1464,7 @@ def doctest_StudentAttendanceView_unresolvedAbsences():
     Simple case first: when there are no recorded absences/tardies, we get an
     empty list.
 
-        >>> student._day_attendance_records = []
+        >>> student._homeroom_attendance_records = []
         >>> student._section_attendance_records = []
         >>> list(view.unresolvedAbsences())
         []
@@ -1495,26 +1474,33 @@ def doctest_StudentAttendanceView_unresolvedAbsences():
         >>> first = datetime.date(2006, 1, 21)
         >>> last = datetime.date(2006, 1, 28)
         >>> status = itertools.cycle([PRESENT, ABSENT, TARDY, PRESENT])
-        >>> student._day_attendance_records = [
-        ...         DayAttendanceRecordStub(day, status.next(),
-        ...                                 day >= datetime.date(2006, 1, 26))
-        ...         for day in DateRange(first, last)]
-        >>> status = itertools.cycle([PRESENT, ABSENT, TARDY, PRESENT])
+        >>> time = datetime.time(9, 30)
         >>> sections = itertools.cycle([SectionStub('math42'),
         ...                             SectionStub('grammar3'),
         ...                             SectionStub('relativity97')])
-        >>> time = datetime.time(9, 30)
+        >>> dts = [utc.localize(datetime.datetime.combine(day, time))
+        ...        for day in DateRange(first, last)]
+        >>> statii = 5*[PRESENT, ABSENT, TARDY, PRESENT]
+
+        >>> student._homeroom_attendance_records = [
+        ...         HomeroomAttendanceRecordStub(None,
+        ...                 dt,
+        ...                 status,
+        ...                 dt.date() >= datetime.date(2006, 1, 26))
+        ...         for dt, status in zip(dts, statii)]
+
         >>> student._section_attendance_records = [
-        ...         SectionAttendanceRecordStub(sections.next(),
-        ...                 utc.localize(datetime.datetime.combine(day, time)),
-        ...                 status.next(), day >= datetime.date(2006, 1, 26))
-        ...         for day in DateRange(first, last)]
+        ...         SectionAttendanceRecordStub(section,
+        ...                 dt,
+        ...                 status,
+        ...                 dt.date() >= datetime.date(2006, 1, 26))
+        ...         for section, dt, status in zip(sections, dts, statii)]
 
         >>> for absence in view.unresolvedAbsences():
         ...     print translate(absence['text'])
-        2006-01-22: absent from homeroom
+        2006-01-22 09:30: absent from homeroom
         2006-01-22 09:30: absent from grammar3
-        2006-01-23: late for homeroom
+        2006-01-23 09:30: late for homeroom
         2006-01-23 09:30: late for relativity97
 
     """
@@ -1525,7 +1511,7 @@ def doctest_StudentAttendanceView_absencesForTerm():
 
     We shall use some simple attendance adapters for this test
 
-        >>> provideAdapter(DayAttendanceStub)
+        >>> provideAdapter(HomeroomAttendanceStub, provides=IHomeroomAttendance)
         >>> provideAdapter(SectionAttendanceStub)
 
         >>> from schooltool.attendance.browser.attendance \
@@ -1537,21 +1523,21 @@ def doctest_StudentAttendanceView_absencesForTerm():
         >>> term = TermStub(2006, 2, 20, 3, 7)
         >>> for a in view.absencesForTerm(term):
         ...     print translate(a)
-        2006-02-21: absent from homeroom
+        2006-02-21 09:30: absent from homeroom
         2006-02-21 09:30: absent from grammar3
-        2006-02-22: late for homeroom
+        2006-02-22 09:30: late for homeroom
         2006-02-22 09:30: late for relativity97
-        2006-02-25: absent from homeroom
+        2006-02-25 09:30: absent from homeroom
         2006-02-25 09:30: absent from relativity97
-        2006-02-26: late for homeroom
+        2006-02-26 09:30: late for homeroom
         2006-02-26 09:30: late for math42
-        2006-03-01: absent from homeroom
+        2006-03-01 09:30: absent from homeroom
         2006-03-01 09:30: absent from math42
-        2006-03-02: late for homeroom
+        2006-03-02 09:30: late for homeroom
         2006-03-02 09:30: late for grammar3
-        2006-03-05: absent from homeroom
+        2006-03-05 09:30: absent from homeroom
         2006-03-05 09:30: absent from grammar3
-        2006-03-06: late for homeroom
+        2006-03-06 09:30: late for homeroom
         2006-03-06 09:30: late for relativity97
 
     """
@@ -1618,16 +1604,16 @@ def doctest_StudentAttendanceView_summaryPerTerm():
         ...         self.first = name
         ...         self.last = name
 
-        >>> class DayAttendanceStub(object):
+        >>> class HomeroomAttendanceStub(object):
         ...     adapts(None)
-        ...     implements(IDayAttendance)
+        ...     implements(IHomeroomAttendance)
         ...     def __init__(self, context):
         ...         pass
         ...     def filter(self, first, last):
         ...         return {'term1': [p, p, p, a, p, a, t, t, a, p, p],
         ...                 'term2': [a, a, p, t, p],
         ...                 'term3': [p, p, p]}[first]
-        >>> provideAdapter(DayAttendanceStub)
+        >>> provideAdapter(HomeroomAttendanceStub)
         >>> class SectionAttendanceStub(object):
         ...     adapts(None)
         ...     implements(ISectionAttendance)
@@ -1648,7 +1634,7 @@ def doctest_StudentAttendanceView_summaryPerTerm():
         ...                       TermStub('term3')]
 
         >>> for term in view.summaryPerTerm():
-        ...     print ('%(title)s  %(day_absences)d %(day_tardies)d'
+        ...     print ('%(title)s  %(homeroom_absences)d %(homeroom_tardies)d'
         ...            '  %(section_absences)d %(section_tardies)d' % term)
         term1  3 2  0 0
         term2  2 1  1 2
@@ -1664,14 +1650,15 @@ def doctest_StudentAttendanceView_makeId():
         ...        import StudentAttendanceView
         >>> view = StudentAttendanceView(None, None)
 
-        >>> from schooltool.attendance.attendance import DayAttendanceRecord
-        >>> a = DayAttendanceRecord(datetime.date(2006, 1, 29), ABSENT)
+        >>> from schooltool.attendance.attendance import HomeroomAttendanceRecord
+        >>> dt = utc.localize(datetime.datetime(2006, 1, 29, 14, 30))
+        >>> a = HomeroomAttendanceRecord(SectionStub(u'Some section \u1234'),
+        ...                              dt, ABSENT)
 
         >>> view.makeId(a)
-        'd_2006-01-29'
+        'h_2006-01-29_14:30:00+00:00_homeroom'
 
         >>> from schooltool.attendance.attendance import SectionAttendanceRecord
-        >>> dt = utc.localize(datetime.datetime(2006, 1, 29, 14, 30))
         >>> a = SectionAttendanceRecord(SectionStub(u'Some section \u1234'),
         ...                             dt, ABSENT)
 
@@ -1688,8 +1675,11 @@ def doctest_StudentAttendanceView_outstandingExplanation():
         ...        import StudentAttendanceView
         >>> view = StudentAttendanceView(None, None)
 
-        >>> from schooltool.attendance.attendance import DayAttendanceRecord
-        >>> a = DayAttendanceRecord(datetime.date(2006, 1, 29), ABSENT)
+
+        >>> from schooltool.attendance.attendance import HomeroomAttendanceRecord
+        >>> a = HomeroomAttendanceRecord(None,
+        ...         datetime.datetime(2006, 1, 29, tzinfo=utc),
+        ...         ABSENT)
 
         >>> print view.outstandingExplanation(a)
         None
@@ -1920,14 +1910,20 @@ def doctest_StudentAttendanceView_addExplanation():
         >>> view = StudentAttendanceView(None, None)
         >>> view.errors = []
 
-        >>> ar = DayAttendanceRecordStub(datetime.date(2006, 1, 29), ABSENT)
+        >>> ar = HomeroomAttendanceRecordStub(None,
+        ...         datetime.datetime(2006, 1, 29, tzinfo=utc),
+        ...         ABSENT)
+
+        >>> def addExplanation(explanation):
+        ...     print "Added explanation:", explanation
+        >>> ar.addExplanation = addExplanation
         >>> view._addExplanation(ar, 'Bububu', {'absence': 'THIS ABSENCE'})
         Added explanation: Bububu
         True
         >>> view.errors
         []
 
-        >>> ar.addExplanation = ar.raiseError
+        >>> ar.addExplanation = ar._raiseError
         >>> view._addExplanation(ar, 'Bububu', {'absence': 'THIS ABSENCE'})
         False
 
@@ -1947,14 +1943,15 @@ def doctest_StudentAttendanceView_acceptExplanation():
         >>> view = StudentAttendanceView(None, None)
         >>> view.errors = []
 
-        >>> ar = DayAttendanceRecordStub(datetime.date(2006, 1, 29), ABSENT)
+        >>> ar = HomeroomAttendanceRecordStub(None,
+        ...          datetime.datetime(2006, 1, 29, tzinfo=utc), ABSENT)
         >>> view._acceptExplanation(ar, {'absence': 'THIS ABSENCE'})
         Accepted explanation
         True
         >>> view.errors
         []
 
-        >>> ar.acceptExplanation = ar.raiseError
+        >>> ar.acceptExplanation = ar._raiseError
         >>> view._acceptExplanation(ar, {'absence': 'THIS ABSENCE'})
         False
 
@@ -1973,14 +1970,18 @@ def doctest_StudentAttendanceView_rejectExplanation():
         >>> view = StudentAttendanceView(None, None)
         >>> view.errors = []
 
-        >>> ar = DayAttendanceRecordStub(datetime.date(2006, 1, 29), ABSENT)
+        >>> ar = HomeroomAttendanceRecordStub(None,
+        ...          datetime.datetime(2006, 1, 29, tzinfo=utc), ABSENT)
+        >>> def rejectExplanation():
+        ...     print "Rejected explanation"
+        >>> ar.rejectExplanation = rejectExplanation
         >>> view._rejectExplanation(ar, {'absence': 'THIS ABSENCE'})
         Rejected explanation
         True
         >>> view.errors
         []
 
-        >>> ar.rejectExplanation = ar.raiseError
+        >>> ar.rejectExplanation = ar._raiseError
         >>> view._rejectExplanation(ar, {'absence': 'THIS ABSENCE'})
         False
 

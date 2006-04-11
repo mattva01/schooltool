@@ -163,7 +163,7 @@ A student's page contains an "Attendance" action in the menu.
     <table class="attendance_summary_per_term">
       <tr>
         <th rowspan="2">Term</th>
-        <th colspan="2">Day attendance</th>
+        <th colspan="2">Homeroom attendance</th>
         <th colspan="2">Section attendance</th>
       </tr>
       <tr>
@@ -176,9 +176,9 @@ A student's page contains an "Attendance" action in the menu.
         <td>
           <a href="?term=2005-fall">2005 Fall</a>
         </td>
-        <td class="number">2</td>
         <td class="number">0</td>
-        <td class="number">1</td>
+        <td class="number">0</td>
+        <td class="number">3</td>
         <td class="number">1</td>
       </tr>
     </table>

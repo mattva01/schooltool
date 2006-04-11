@@ -45,8 +45,8 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.person.interfaces import IPerson
 from schooltool.group.interfaces import IGroup
-from schooltool.attendance.interfaces import IDayAttendance
-from schooltool.attendance.interfaces import IDayAttendanceRecord
+from schooltool.attendance.interfaces import IHomeroomAttendance
+from schooltool.attendance.interfaces import IHomeroomAttendanceRecord
 from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.attendance.interfaces import ISectionAttendanceRecord
 from schooltool.attendance.interfaces import ABSENT, TARDY, PRESENT, UNKNOWN
@@ -240,9 +240,9 @@ class AttendanceView(BrowserView):
 
     def getDaysAttendanceRecords(self, student, date):
         """Return all attendance records for a student and a given date."""
-        records = list(ISectionAttendance(student).getAllForDay(date))
-        records.append(IDayAttendance(student).get(date))
-        return records
+        section_ars = list(ISectionAttendance(student).getAllForDay(date))
+        homeroom_ars = list(IHomeroomAttendance(student).getAllForDay(date))
+        return section_ars + homeroom_ars
 
     def studentStatus(self, student):
         """Returns the attendance status of a student
@@ -323,23 +323,15 @@ class AttendanceView(BrowserView):
 
     def _getAttendance(self, student):
         """Get a student's attendance record."""
-        if self.homeroom:
-            attendance = IDayAttendance(student)
-            return attendance.get(self.date)
-        else:
-            attendance = ISectionAttendance(student)
-            return attendance.get(self.context, self.meeting.dtstart)
+        attendance = ISectionAttendance(student)
+        return attendance.get(self.context, self.meeting.dtstart)
 
     def _record(self, student, present):
         """Record a student's presence or absence."""
-        if self.homeroom:
-            attendance = IDayAttendance(student)
-            attendance.record(self.date, present)
-        else:
-            attendance = ISectionAttendance(student)
-            attendance.record(removeSecurityProxy(self.context),
-                              self.meeting.dtstart, self.meeting.duration,
-                              self.period_id, present)
+        attendance = ISectionAttendance(student)
+        attendance.record(removeSecurityProxy(self.context),
+                          self.meeting.dtstart, self.meeting.duration,
+                          self.period_id, present)
 
     def getArrival(self):
         """Extracts the date of late arrivals from the request.
@@ -509,31 +501,34 @@ class StudentAttendanceView(BrowserView):
 
     def makeId(self, ar):
         """Create an ID to identify an attendance record."""
-        if IDayAttendanceRecord.providedBy(ar):
-            return "d_%s" % ar.date
+        if IHomeroomAttendanceRecord.providedBy(ar):
+            prefix = "h"
+            name = "homeroom"
         else:
-            return "s_%s_%s" % (ar.datetime.isoformat('_'),
-                                ar.section.__name__.encode('UTF-8')
-                                                   .encode('base64').rstrip())
+            prefix = "s"
+            name = ar.section.__name__.encode('UTF-8').encode('base64').rstrip()
+
+        return "%s_%s_%s" % (prefix,
+                             ar.datetime.isoformat('_'),
+                             name)
 
     def formatAttendanceRecord(self, ar):
         """Format an attendance record for display."""
         assert ar.isAbsent() or ar.isTardy()
-        if IDayAttendanceRecord.providedBy(ar):
-            mapping = {'date': ar.date}
-            if ar.isAbsent():
-                return _('$date: absent from homeroom', mapping=mapping)
-            else:
-                return _('$date: late for homeroom', mapping=mapping)
+        if IHomeroomAttendanceRecord.providedBy(ar):
+            title = translate(_('homeroom'))
         else:
             assert ISectionAttendanceRecord.providedBy(ar)
-            mapping={'date': ar.date,
-                     'time': ar.datetime.strftime('%H:%M'),
-                     'section': translate(ar.section.label)}
-            if ar.isAbsent():
-                return _('$date $time: absent from $section', mapping=mapping)
-            else:
-                return _('$date $time: late for $section', mapping=mapping)
+            title = translate(ar.section.label)
+
+        mapping = {'date': ar.date,
+                   'time': ar.datetime.strftime('%H:%M'),
+                   'section': title}
+
+        if ar.isAbsent():
+            return _('$date $time: absent from $section', mapping=mapping)
+        else:
+            return _('$date $time: late for $section', mapping=mapping)
 
     def outstandingExplanation(self, ar):
         """Return the outstanding unaccepted explanation, if any."""
@@ -542,22 +537,23 @@ class StudentAttendanceView(BrowserView):
         else:
             return None
 
-    def interleaveAttendanceRecords(self, day_attendances, section_attendances):
+    def interleaveAttendanceRecords(self, homeroom_attendances,
+                                    section_attendances):
         """Interleave day and section attendance records."""
-        day_iter = iter(itertools.chain(day_attendances, [None]))
+        homeroom_iter = iter(itertools.chain(homeroom_attendances, [None]))
         section_iter = iter(itertools.chain(section_attendances, [None]))
-        cur_day = day_iter.next()
+        cur_day = homeroom_iter.next()
         cur_section = section_iter.next()
         while cur_day is not None and cur_section is not None:
-            if cur_day.date <= cur_section.date:
+            if cur_day.datetime <= cur_section.datetime:
                 yield cur_day
-                cur_day = day_iter.next()
+                cur_day = homeroom_iter.next()
             else:
                 yield cur_section
                 cur_section = section_iter.next()
         if cur_day is not None:
             yield cur_day
-            for cur_day in day_iter:
+            for cur_day in homeroom_iter:
                 if cur_day is not None:
                     yield cur_day
         if cur_section is not None:
@@ -568,41 +564,43 @@ class StudentAttendanceView(BrowserView):
 
     def unresolvedAbsences(self):
         """Return all unresolved absences and tardies."""
-        day_attendance = IDayAttendance(self.context)
+        homeroom_attendance = IHomeroomAttendance(self.context)
         section_attendance = ISectionAttendance(self.context)
-        for ar in self.interleaveAttendanceRecords(day_attendance,
+        l = []
+        for ar in self.interleaveAttendanceRecords(homeroom_attendance,
                                                    section_attendance):
             if (ar.isAbsent() or ar.isTardy()) and not ar.isExplained():
-                yield {'id': self.makeId(ar),
-                       'text': self.formatAttendanceRecord(ar),
-                       'attendance_record': ar,
-                       'explanation': self.outstandingExplanation(ar)}
+                l.append({'id': self.makeId(ar),
+                          'text': self.formatAttendanceRecord(ar),
+                          'attendance_record': ar,
+                          'explanation': self.outstandingExplanation(ar)})
+        return l
 
     def absencesForTerm(self, term):
         """Return all absences and tardies in a term."""
-        day_attendance = IDayAttendance(self.context)
+        homeroom_attendance = IHomeroomAttendance(self.context)
         section_attendance = ISectionAttendance(self.context)
         for ar in self.interleaveAttendanceRecords(
-                            day_attendance.filter(term.first, term.last),
+                            homeroom_attendance.filter(term.first, term.last),
                             section_attendance.filter(term.first, term.last)):
             if ar.isAbsent() or ar.isTardy():
                 yield self.formatAttendanceRecord(ar)
 
     def summaryPerTerm(self):
         """List a summary of absences and tardies for each term."""
-        day_attendance = IDayAttendance(self.context)
+        homeroom_attendance = IHomeroomAttendance(self.context)
         section_attendance = ISectionAttendance(self.context)
         for term in self.terms():
-            n_day_absences, n_day_tardies = self.countAbsences(
-                    day_attendance.filter(term.first, term.last))
+            n_homeroom_absences, n_homeroom_tardies = self.countAbsences(
+                    homeroom_attendance.filter(term.first, term.last))
             n_section_absences, n_section_tardies = self.countAbsences(
                     section_attendance.filter(term.first, term.last))
             yield {'name': term.__name__,
                    'title': term.title,
                    'first': term.first,
                    'last': term.last,
-                   'day_absences': n_day_absences,
-                   'day_tardies': n_day_tardies,
+                   'homeroom_absences': n_homeroom_absences,
+                   'homeroom_tardies': n_homeroom_tardies,
                    'section_absences': n_section_absences,
                    'section_tardies': n_section_tardies}
 

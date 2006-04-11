@@ -48,8 +48,8 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.person.interfaces import IPerson
 from schooltool.calendar.interfaces import ICalendarEvent
-from schooltool.attendance.interfaces import IDayAttendance
-from schooltool.attendance.interfaces import IDayAttendanceRecord
+from schooltool.attendance.interfaces import IHomeroomAttendance
+from schooltool.attendance.interfaces import IHomeroomAttendanceRecord
 from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.attendance.interfaces import ISectionAttendanceRecord
 from schooltool.attendance.interfaces import UNKNOWN, PRESENT, ABSENT, TARDY
@@ -227,18 +227,9 @@ def doctest_AttendanceLoggingProxy_logging():
         rejected the explanation
         2..., john, <...> of peter: rejected explanation
 
-    """
-
-
-def doctest_DayAttendanceLoggingProxy():
-    r"""Tests for DayAttendanceLoggingProxy.
-
-        >>> from schooltool.attendance.attendance import \
-        ...     DayAttendanceLoggingProxy
-        >>> proxy = DayAttendanceLoggingProxy(None, None)
-
-        >>> IDayAttendanceRecord.providedBy(proxy)
-        True
+        >>> proxy.makeTardy("arrival time")
+        made tardy (arrival time)
+        2..., john, <...> of peter: made attendance record a tardy, arrival time (arrival time)
 
     """
 
@@ -248,22 +239,23 @@ def doctest_SectionAttendanceLoggingProxy():
 
         >>> from schooltool.attendance.attendance import \
         ...     SectionAttendanceLoggingProxy
-        >>> class DummyLogger(SectionAttendanceLoggingProxy):
-        ...     def _getLoggedInPerson(self):
-        ...         return "john"
-        ...     def _getLogger(self):
-        ...         return LoggerStub()
-
-
-        >>> proxy = DummyLogger(AttendanceRecordStub("2005-01-01", ABSENT),
-        ...                     PersonStub(name="peter"))
+        >>> proxy = SectionAttendanceLoggingProxy(None, None)
 
         >>> ISectionAttendanceRecord.providedBy(proxy)
         True
 
-        >>> proxy.makeTardy("arrival time")
-        made tardy (arrival time)
-        2..., john, <...> of peter: made attendance record a tardy, arrival time (arrival time)
+    """
+
+
+def doctest_HomeroomAttendanceLoggingProxy():
+    r"""Tests for HomeroomAttendanceLoggingProxy.
+
+        >>> from schooltool.attendance.attendance import \
+        ...     HomeroomAttendanceLoggingProxy
+        >>> proxy = HomeroomAttendanceLoggingProxy(None, None)
+
+        >>> IHomeroomAttendanceRecord.providedBy(proxy)
+        True
 
     """
 
@@ -318,7 +310,7 @@ def doctest_AttendanceRecord():
 
 
 def doctest_AttendanceRecord_isUnknown_isPresent_isAbsent_isTardy():
-    r"""Tests for SectionAttendanceRecord.isSomething functions
+    r"""Tests for AttendanceRecord.isSomething functions
 
         >>> from schooltool.attendance.attendance import AttendanceRecord
 
@@ -549,52 +541,6 @@ def doctest_AbsenceExplanation():
     """
 
 
-def doctest_DayAttendanceRecord():
-    r"""Tests for DayAttendanceRecord
-
-        >>> from schooltool.attendance.attendance \
-        ...     import DayAttendanceRecord
-
-    Let's create an UNKNOWN record
-
-        >>> day = datetime.date(2005, 11, 23)
-        >>> ar = DayAttendanceRecord(day, UNKNOWN)
-        >>> verifyObject(IDayAttendanceRecord, ar)
-        True
-
-        >>> isinstance(ar, Persistent)
-        True
-
-        >>> ar.status == UNKNOWN
-        True
-        >>> ar.date == day
-        True
-
-        >>> ar.late_arrival is None
-        True
-        >>> ar.explanations
-        ()
-
-    Let's create a regular record
-
-        >>> day = datetime.date(2005, 11, 30)
-        >>> ar = DayAttendanceRecord(day, ABSENT)
-        >>> verifyObject(IDayAttendanceRecord, ar)
-        True
-
-        >>> ar.status == ABSENT
-        True
-        >>> ar.date == day
-        True
-
-        >>> ar.late_arrival is None
-        True
-        >>> ar.explanations
-        ()
-
-    """
-
-
 def doctest_SectionAttendanceRecord():
     r"""Tests for SectionAttendanceRecord
 
@@ -686,6 +632,33 @@ def doctest_SectionAttendanceRecord_date():
     """
 
 
+def doctest_HomeroomAttendanceRecord():
+    r"""Tests for HomeroomAttendanceRecord
+
+        >>> from schooltool.attendance.attendance \
+        ...     import HomeroomAttendanceRecord
+
+    Homeroom attendance record acts the same as section attendance
+    record does, but has different str, repr and implements a diffrent
+    interface:
+
+        >>> from schooltool.attendance.interfaces import IHomeroomAttendanceRecord
+        >>> section = SectionStub(name='Art')
+        >>> dt = datetime.datetime(2005, 11, 23, 14, 55, tzinfo=utc)
+        >>> ar = HomeroomAttendanceRecord(section, dt, UNKNOWN)
+        >>> IHomeroomAttendanceRecord.providedBy(ar)
+        True
+
+        >>> str(ar)
+        'HomeroomAttendanceRecord(2005-11-23 14:55:00+00:00, UNKNOWN, section=Art)'
+
+        >>> repr(ar)
+        'HomeroomAttendanceRecord(SectionStub(),
+             datetime.datetime(2005, 11, 23, 14, 55, tzinfo=<UTC>),
+             UNKNOWN)'
+
+    """
+
 #
 # Attendance storage classes
 #
@@ -697,15 +670,21 @@ def doctest_AttendanceFilteringMixin_filter():
         >>> d2 = datetime.date(2005, 12, 7)
         >>> d3 = datetime.date(2005, 12, 9)
 
+        >>> dt1 = datetime.datetime(2005, 12, 5, tzinfo=utc)
+        >>> dt2 = datetime.datetime(2005, 12, 7, tzinfo=utc)
+        >>> dt3 = datetime.datetime(2005, 12, 9, tzinfo=utc)
+
         >>> from schooltool.attendance.attendance \
         ...         import AttendanceFilteringMixin
-        >>> from schooltool.attendance.attendance import DayAttendanceRecord
+        >>> from schooltool.attendance.attendance import SectionAttendanceRecord
         >>> class AttendanceStub(AttendanceFilteringMixin):
         ...     def __iter__(self):
-        ...         yield DayAttendanceRecord(d1, PRESENT)
-        ...         yield DayAttendanceRecord(d2, PRESENT)
-        ...         yield DayAttendanceRecord(d2, ABSENT)
-        ...         yield DayAttendanceRecord(d3, PRESENT)
+        ...         return iter(SectionAttendanceRecord(None, dt, status)
+        ...                     for (dt, status) in [(dt1, PRESENT),
+        ...                                          (dt2, PRESENT),
+        ...                                          (dt2, ABSENT),
+        ...                                          (dt3, PRESENT)])
+
         >>> attendance = AttendanceStub()
 
         >>> def print_for(first, last):
@@ -811,218 +790,6 @@ def doctest_AttendanceCalendarMixin_incidentDescription():
 
         >>> acm.incidentDescription(RecordStub(True))
         u'Explanation was accepted.'
-
-    """
-
-
-def doctest_DayAttendance():
-    """Test for DayAttendance
-
-        >>> from schooltool.attendance.attendance import DayAttendance
-        >>> person = object()
-        >>> da = DayAttendance(person)
-        >>> da.person is person
-        True
-        >>> verifyObject(IDayAttendance, da)
-        True
-
-        >>> isinstance(da, Persistent)
-        True
-
-    """
-
-
-def doctest_DayAttendance_record():
-    """Test for DayAttendance.record
-
-        >>> from schooltool.attendance.attendance import DayAttendance
-        >>> da = DayAttendance(PersonStub())
-
-        >>> len(list(da))
-        0
-
-    Let's record a presence
-
-        >>> day = datetime.date(2005, 12, 9)
-        >>> da.record(day, True)
-
-    We can check that it is there
-
-        >>> len(list(da))
-        1
-
-        >>> ar = da.get(day)
-        >>> ar
-        DayAttendanceRecord(datetime.date(2005, 12, 9), PRESENT)
-        >>> IDayAttendanceRecord.providedBy(ar)
-        True
-
-    It has all the data
-
-        >>> ar.date == day
-        True
-        >>> ar.status == PRESENT
-        True
-
-    Let's record an absence
-
-        >>> day2 = datetime.date(2005, 12, 7)
-        >>> da.record(day2, False)
-
-    We can check that it is there
-
-        >>> len(list(da))
-        2
-
-        >>> ar = da.get(day2)
-        >>> ar.date == day2
-        True
-        >>> ar.status == ABSENT
-        True
-
-    We cannot override existing records
-
-        >>> da.record(day, False)
-        Traceback (most recent call last):
-          ...
-        AttendanceError: record for 2005-12-09 already exists
-
-        >>> da.record(day, True)
-        Traceback (most recent call last):
-          ...
-        AttendanceError: record for 2005-12-09 already exists
-
-        >>> da.record(day2, False)
-        Traceback (most recent call last):
-          ...
-        AttendanceError: record for 2005-12-07 already exists
-
-    """
-
-
-def doctest_DayAttendance_get():
-    """Tests for DayAttendance.get
-
-        >>> from schooltool.attendance.attendance import DayAttendance
-        >>> da = DayAttendance(PersonStub())
-
-    If you try to see the attendance record that has never been recorded, you
-    get a "null object".
-
-        >>> day = datetime.date(2005, 12, 3)
-        >>> ar = da.get(day)
-        >>> ar
-        DayAttendanceRecord(datetime.date(2005, 12, 3), UNKNOWN)
-        >>> IDayAttendanceRecord.providedBy(ar)
-        True
-        >>> ar.status == UNKNOWN
-        True
-        >>> ar.date == day
-        True
-
-    A proxied object is returned:
-
-        >>> type(ar)
-        <class 'schooltool.attendance.attendance.DayAttendanceLoggingProxy'>
-
-    Otherwise you get the correct record for a given date
-
-        >>> day1 = datetime.date(2005, 12, 9)
-        >>> day2 = datetime.date(2005, 12, 10)
-        >>> da.record(day1, True)
-        >>> da.record(day2, False)
-
-        >>> for day in (day1, day2):
-        ...     ar = da.get(day)
-        ...     assert ar.date == day
-        ...     print ar.date, ar.isPresent()
-        2005-12-09 True
-        2005-12-10 False
-
-    These are proxied too:
-
-        >>> type(da.get(day1))
-        <class 'schooltool.attendance.attendance.DayAttendanceLoggingProxy'>
-
-    """
-
-
-def doctest_DayAttendance_iter():
-    """Tests for DayAttendance.__iter__
-
-        >>> from schooltool.attendance.attendance import DayAttendance
-        >>> da = DayAttendance(PersonStub())
-
-        >>> list(da)
-        []
-
-        >>> day1 = datetime.date(2005, 12, 9)
-        >>> da.record(day1, True)
-
-        >>> list(da)
-        [DayAttendanceRecord(datetime.date(2005, 12, 9), PRESENT)]
-
-        >>> day2 = datetime.date(2005, 12, 10)
-        >>> da.record(day2, False)
-
-        >>> list(da)
-        [DayAttendanceRecord(...), DayAttendanceRecord(...)]
-        >>> sorted(ar.date for ar in da)
-        [datetime.date(2005, 12, 9), datetime.date(2005, 12, 10)]
-
-    """
-
-
-def doctest_DayAttendance_tardyEventTitle():
-    r"""Tests for DayAttendance.tardyEventTitle
-
-        >>> from schooltool.attendance.attendance import DayAttendance
-        >>> from schooltool.attendance.attendance import DayAttendanceRecord
-        >>> da = DayAttendance(None)
-
-        >>> day = datetime.date(2005, 11, 23)
-        >>> ar = DayAttendanceRecord(day, ABSENT)
-        >>> ar.makeTardy(datetime.datetime(2005, 11, 23, 17, 32))
-
-        >>> print da.tardyEventTitle(ar)
-        Was late for homeroom.
-
-    """
-
-
-def doctest_DayAttendance_absenceEventTitle():
-    r"""Tests for DayAttendance.absenceEventTitle
-
-        >>> from schooltool.attendance.attendance import DayAttendance
-        >>> from schooltool.attendance.attendance import DayAttendanceRecord
-        >>> sa = DayAttendance(None)
-
-        >>> day = datetime.date(2005, 11, 23)
-        >>> ar = DayAttendanceRecord(day, ABSENT)
-
-        >>> print sa.absenceEventTitle(ar)
-        Was absent from homeroom.
-
-    """
-
-
-def doctest_DayAttendance_makeCalendarEvent():
-    r"""Tests for DayAttendance.makeCalendarEvent
-
-        >>> from schooltool.attendance.attendance import DayAttendance
-        >>> from schooltool.attendance.attendance import DayAttendanceRecord
-        >>> da = DayAttendance(None)
-
-        >>> day = datetime.date(2005, 11, 23)
-        >>> ar = DayAttendanceRecord(day, ABSENT)
-
-        >>> ev = da.makeCalendarEvent(ar, 'John was bad today', 'Very bad')
-        >>> ICalendarEvent.providedBy(ev)
-        True
-        >>> ev.allday
-        True
-        >>> print ev.dtstart, ev.duration, ev.title, ev.description
-        2005-11-23 00:00:00+00:00 1 day, 0:00:00 John was bad today Very bad
 
     """
 
@@ -1307,7 +1074,7 @@ def doctest_SectionAttendance_filter():
          ('min', datetime.datetime(2005, 11, 23, 0, 0, tzinfo=<UTC>))]
         []
 
-    And then ectracts the records themselves:
+    And then extracts the records themselves:
 
         >>> sa._records.records = [('record1', 'record2',), ('record3',), ()]
         >>> list(sa.filter(datetime.date(2005, 11, 21),
@@ -1344,6 +1111,81 @@ def doctest_SectionAttendance_makeCalendarEvent():
     """
 
 
+def doctest_HomeroomAttendance_wrapRecordForLogging():
+    r"""Tests for HomeroomAttendance._wrapRecordForLogging
+
+        >>> from schooltool.attendance.attendance import HomeroomAttendance
+        >>> ha = HomeroomAttendance(None)
+
+        >>> from schooltool.attendance.attendance import HomeroomAttendanceRecord
+        >>> dt = datetime.datetime(2005, 11, 23, 14, 55, tzinfo=utc)
+        >>> ar = HomeroomAttendanceRecord(None, dt, UNKNOWN)
+
+    _wrapRecordForLogging should wrap atendance records in a
+    HomeroomAttendanceLoggingProxy:
+
+        >>> proxied_ar = ha._wrapRecordForLogging(ar)
+        >>> type(proxied_ar)
+        <class 'schooltool.attendance.attendance.HomeroomAttendanceLoggingProxy'>
+
+        >>> proxied_ar.attendance_record is ar
+        True
+
+    """
+
+
+def doctest_HomeroomAttendance_wrapRecordForLogging():
+    r"""Tests for HomeroomAttendance.getHomeroomPeriodForRecord.
+
+        >>> from schooltool.attendance.attendance import HomeroomAttendance
+        >>> ha = HomeroomAttendance(None)
+
+    getHomeroomPeriodForRecord returns homeroom AR that the given
+    section AR belongs to, which means the closest attendance record
+    recorded at the same time or before the given section attendance
+    record:
+
+        >>> section = SectionStub('History')
+        >>> def makeDT(hour, minutes):
+        ...     return datetime.datetime(2005, 1, 1, hour, minutes, tzinfo=utc)
+        >>> timestamps = [makeDT(hour, 0) for hour in range(10, 14)]
+
+        >>> from schooltool.attendance.attendance import HomeroomAttendanceRecord
+        >>> def getAllForDay(self):
+        ...     return [HomeroomAttendanceRecord(section, dt, PRESENT)
+        ...             for dt in timestamps]
+        >>> ha.getAllForDay = getAllForDay
+
+        >>> from schooltool.attendance.attendance import SectionAttendanceRecord
+        >>> ar = SectionAttendanceRecord(section, makeDT(10, 55), PRESENT)
+        >>> str(ha.getHomeroomPeriodForRecord(ar))
+        'HomeroomAttendanceRecord(2005-01-01 10:00:00+00:00, PRESENT, section=None)'
+
+        >>> from schooltool.attendance.attendance import SectionAttendanceRecord
+        >>> ar = SectionAttendanceRecord(section, makeDT(10, 0), PRESENT)
+        >>> str(ha.getHomeroomPeriodForRecord(ar))
+        'HomeroomAttendanceRecord(2005-01-01 10:00:00+00:00, PRESENT, section=None)'
+
+        >>> from schooltool.attendance.attendance import SectionAttendanceRecord
+        >>> ar = SectionAttendanceRecord(section, makeDT(11, 0), PRESENT)
+        >>> str(ha.getHomeroomPeriodForRecord(ar))
+        'HomeroomAttendanceRecord(2005-01-01 11:00:00+00:00, PRESENT, section=None)'
+
+        >>> from schooltool.attendance.attendance import SectionAttendanceRecord
+        >>> ar = SectionAttendanceRecord(section, makeDT(16, 0), PRESENT)
+        >>> str(ha.getHomeroomPeriodForRecord(ar))
+        'HomeroomAttendanceRecord(2005-01-01 13:00:00+00:00, PRESENT, section=None)'
+
+    If there is no such record a HomeroomAttendanceRecord with status
+    UNKNOWN, matching datetime and the same section is returned:
+
+        >>> ar = SectionAttendanceRecord(section, makeDT(9, 55), PRESENT)
+        >>> str(ha.getHomeroomPeriodForRecord(ar))
+        "HomeroomAttendanceRecord(SectionStub('History'),
+             datetime.datetime(2005, 1, 1, 9, 55, tzinfo=<UTC>), UNKNOWN)"
+
+    """
+
 #
 # Adapters
 #
@@ -1371,39 +1213,6 @@ def doctest_getSectionAttendance():
     If you adapt more than once, you will get the same object
 
         >>> attendance is ISectionAttendance(person)
-        True
-
-    Attendance object has a reference to the person:
-
-        >>> attendance.person is person
-        True
-
-    """
-
-
-def doctest_getDayAttendance():
-    """Tests for getDayAttendance.
-
-        >>> setup.setUpAnnotations()
-        >>> from schooltool.attendance.attendance import getDayAttendance
-        >>> provideAdapter(getDayAttendance, [IPerson], IDayAttendance)
-
-    getDayAttendance lets us get IDayAttendance for a person
-
-        >>> person = PersonStub()
-        >>> attendance = IDayAttendance(person)
-        >>> attendance
-        <schooltool.attendance.attendance.DayAttendance object at ...>
-
-    The attendance object is stored in person's annotations
-
-        >>> annotations = IAnnotations(person)
-        >>> attendance is annotations['schooltool.attendance.DayAttendance']
-        True
-
-    If you adapt more than once, you will get the same object
-
-        >>> attendance is IDayAttendance(person)
         True
 
     Attendance object has a reference to the person:
@@ -1615,16 +1424,12 @@ def doctest_AttendanceCalendarProvider():
         ...     def makeCalendar(self):
         ...         return "%s" % self.name
 
-        >>> ztapi.provideAdapter(None, IDayAttendance,
-        ...     lambda user: AttendanceStub("DayAttendance calendar"))
-
         >>> ztapi.provideAdapter(None, ISectionAttendance,
         ...     lambda user: AttendanceStub("SectionAttendance calendar"))
 
         >>> provider._isLookingAtOwnCalendar = lambda user: True
         >>> list(provider.getCalendars())
-        [('SectionAttendance calendar', '#aa0000', '#ff0000'),
-         ('DayAttendance calendar', '#00aa00', '#00ff00')]
+        [('SectionAttendance calendar', '#aa0000', '#ff0000')]
 
     """
 
