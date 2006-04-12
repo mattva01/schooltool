@@ -423,10 +423,7 @@ class AttendanceBase(Persistent, AttendanceFilteringMixin):
 
         ar = self.createAttendanceRecord(section, datetime, duration, period_id, status)
 
-        # TODO: Use setdefault
-        if datetime not in self._records:
-            self._records[datetime] = ()
-
+        self._records.setdefault(datetime, ())
         self._records[datetime] += (ar, )
         self._wrapRecordForLogging(ar).log("created")
 
