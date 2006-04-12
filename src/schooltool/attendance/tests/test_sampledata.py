@@ -286,76 +286,73 @@ def doctest_SampleAttendancePlugin_generateSectionAttendance():
     Now we can generate some sample data
 
         >>> plugin.generateSectionAttendance([])
-        Ann was present on 2005-09-01 09:30:00 (p1, s2) in Homeroom Period
         Ann was present on 2005-09-01 09:30:00 (p1, s2)
-        Ann was absent on 2005-09-01 09:30:00 (p2, s2)
-        Tardy at 2005-09-01 09:45:00
-        Added explanation
-        Accepted explanation
-        Ann was present on 2005-09-03 09:30:00 (p1, s2) in Homeroom Period
+        Ann was present on 2005-09-01 09:30:00 (p1, s2) in Homeroom Period
+        Ann was present on 2005-09-01 09:30:00 (p2, s2)
         Ann was present on 2005-09-03 09:30:00 (p1, s2)
+        Ann was present on 2005-09-03 09:30:00 (p1, s2) in Homeroom Period
         Ann was present on 2005-09-03 09:30:00 (p2, s2)
-        Ann was present on 2005-09-05 09:30:00 (p1, s2) in Homeroom Period
         Ann was present on 2005-09-05 09:30:00 (p1, s2)
+        Ann was present on 2005-09-05 09:30:00 (p1, s2) in Homeroom Period
         Ann was present on 2005-09-05 09:30:00 (p2, s2)
-        Ann was absent on 2005-09-07 09:30:00 (p1, s2) in Homeroom Period
         Ann was absent on 2005-09-07 09:30:00 (p1, s2)
         Tardy at 2005-09-07 09:45:00
         Added explanation
         Accepted explanation
-        Ann was present on 2005-09-07 09:30:00 (p2, s2)
-        Ann was present on 2005-09-09 09:30:00 (p1, s2) in Homeroom Period
-        Ann was present on 2005-09-09 09:30:00 (p1, s2)
-        Ann was present on 2005-09-09 09:30:00 (p2, s2)
-        Ann was present on 2005-09-11 09:30:00 (p1, s2) in Homeroom Period
-        Ann was present on 2005-09-11 09:30:00 (p1, s2)
-        Ann was present on 2005-09-11 09:30:00 (p2, s2)
-        Ann was present on 2005-09-13 09:30:00 (p1, s2) in Homeroom Period
-        Ann was present on 2005-09-13 09:30:00 (p1, s2)
-        Ann was absent on 2005-09-13 09:30:00 (p2, s2)
-        Tardy at 2005-09-13 09:45:00
+        Ann was absent on 2005-09-07 09:30:00 (p1, s2) in Homeroom Period
+        Tardy at 2005-09-07 09:45:00
         Added explanation
         Accepted explanation
-        Jon was present on 2005-09-01 09:30:00 (p1, s1) in Homeroom Period
+        Ann was present on 2005-09-07 09:30:00 (p2, s2)
+        Ann was present on 2005-09-09 09:30:00 (p1, s2)
+        Ann was present on 2005-09-09 09:30:00 (p1, s2) in Homeroom Period
+        Ann was present on 2005-09-09 09:30:00 (p2, s2)
+        Ann was present on 2005-09-11 09:30:00 (p1, s2)
+        Ann was present on 2005-09-11 09:30:00 (p1, s2) in Homeroom Period
+        Ann was present on 2005-09-11 09:30:00 (p2, s2)
+        Ann was present on 2005-09-13 09:30:00 (p1, s2)
+        Ann was present on 2005-09-13 09:30:00 (p1, s2) in Homeroom Period
+        Ann was present on 2005-09-13 09:30:00 (p2, s2)
         Jon was present on 2005-09-01 09:30:00 (p1, s1)
-        Ian was present on 2005-09-01 09:30:00 (p1, s1) in Homeroom Period
+        Jon was present on 2005-09-01 09:30:00 (p1, s1) in Homeroom Period
         Ian was present on 2005-09-01 09:30:00 (p1, s1)
+        Ian was present on 2005-09-01 09:30:00 (p1, s1) in Homeroom Period
         Jon was present on 2005-09-01 09:30:00 (p2, s1)
         Ian was present on 2005-09-01 09:30:00 (p2, s1)
-        Jon was present on 2005-09-03 09:30:00 (p1, s1) in Homeroom Period
         Jon was present on 2005-09-03 09:30:00 (p1, s1)
-        Ian was present on 2005-09-03 09:30:00 (p1, s1) in Homeroom Period
+        Jon was present on 2005-09-03 09:30:00 (p1, s1) in Homeroom Period
         Ian was present on 2005-09-03 09:30:00 (p1, s1)
+        Ian was present on 2005-09-03 09:30:00 (p1, s1) in Homeroom Period
         Jon was present on 2005-09-03 09:30:00 (p2, s1)
         Ian was present on 2005-09-03 09:30:00 (p2, s1)
-        Jon was present on 2005-09-05 09:30:00 (p1, s1) in Homeroom Period
         Jon was present on 2005-09-05 09:30:00 (p1, s1)
-        Ian was present on 2005-09-05 09:30:00 (p1, s1) in Homeroom Period
+        Jon was present on 2005-09-05 09:30:00 (p1, s1) in Homeroom Period
         Ian was present on 2005-09-05 09:30:00 (p1, s1)
+        Ian was present on 2005-09-05 09:30:00 (p1, s1) in Homeroom Period
         Jon was present on 2005-09-05 09:30:00 (p2, s1)
         Ian was present on 2005-09-05 09:30:00 (p2, s1)
-        Jon was present on 2005-09-07 09:30:00 (p1, s1) in Homeroom Period
         Jon was present on 2005-09-07 09:30:00 (p1, s1)
-        Ian was present on 2005-09-07 09:30:00 (p1, s1) in Homeroom Period
+        Jon was present on 2005-09-07 09:30:00 (p1, s1) in Homeroom Period
         Ian was present on 2005-09-07 09:30:00 (p1, s1)
+        Ian was present on 2005-09-07 09:30:00 (p1, s1) in Homeroom Period
         Jon was present on 2005-09-07 09:30:00 (p2, s1)
         Ian was present on 2005-09-07 09:30:00 (p2, s1)
-        Jon was present on 2005-09-09 09:30:00 (p1, s1) in Homeroom Period
         Jon was present on 2005-09-09 09:30:00 (p1, s1)
-        Ian was present on 2005-09-09 09:30:00 (p1, s1) in Homeroom Period
+        Jon was present on 2005-09-09 09:30:00 (p1, s1) in Homeroom Period
         Ian was present on 2005-09-09 09:30:00 (p1, s1)
+        Ian was present on 2005-09-09 09:30:00 (p1, s1) in Homeroom Period
         Jon was present on 2005-09-09 09:30:00 (p2, s1)
         Ian was present on 2005-09-09 09:30:00 (p2, s1)
-        Jon was present on 2005-09-11 09:30:00 (p1, s1) in Homeroom Period
         Jon was present on 2005-09-11 09:30:00 (p1, s1)
-        Ian was present on 2005-09-11 09:30:00 (p1, s1) in Homeroom Period
+        Jon was present on 2005-09-11 09:30:00 (p1, s1) in Homeroom Period
         Ian was present on 2005-09-11 09:30:00 (p1, s1)
+        Ian was present on 2005-09-11 09:30:00 (p1, s1) in Homeroom Period
         Jon was present on 2005-09-11 09:30:00 (p2, s1)
         Ian was present on 2005-09-11 09:30:00 (p2, s1)
-        Jon was present on 2005-09-13 09:30:00 (p1, s1) in Homeroom Period
         Jon was present on 2005-09-13 09:30:00 (p1, s1)
-        Ian was present on 2005-09-13 09:30:00 (p1, s1) in Homeroom Period
+        Jon was present on 2005-09-13 09:30:00 (p1, s1) in Homeroom Period
         Ian was present on 2005-09-13 09:30:00 (p1, s1)
+        Ian was present on 2005-09-13 09:30:00 (p1, s1) in Homeroom Period
         Jon was present on 2005-09-13 09:30:00 (p2, s1)
         Ian was present on 2005-09-13 09:30:00 (p2, s1)
 
@@ -365,28 +362,25 @@ def doctest_SampleAttendancePlugin_generateSectionAttendance():
         >>> plugin.start_date = term.last - datetime.timedelta(days=3)
         >>> plugin.rng = random.Random(42)
         >>> plugin.generateSectionAttendance([])
-        Ann was present on 2005-09-11 09:30:00 (p1, s2) in Homeroom Period
         Ann was present on 2005-09-11 09:30:00 (p1, s2)
-        Ann was absent on 2005-09-11 09:30:00 (p2, s2)
-        Tardy at 2005-09-11 09:45:00
-        Added explanation
-        Accepted explanation
-        Ann was present on 2005-09-13 09:30:00 (p1, s2) in Homeroom Period
+        Ann was present on 2005-09-11 09:30:00 (p1, s2) in Homeroom Period
+        Ann was present on 2005-09-11 09:30:00 (p2, s2)
         Ann was present on 2005-09-13 09:30:00 (p1, s2)
+        Ann was present on 2005-09-13 09:30:00 (p1, s2) in Homeroom Period
         Ann was present on 2005-09-13 09:30:00 (p2, s2)
-        Jon was present on 2005-09-11 09:30:00 (p1, s1) in Homeroom Period
         Jon was present on 2005-09-11 09:30:00 (p1, s1)
-        Ian was present on 2005-09-11 09:30:00 (p1, s1) in Homeroom Period
+        Jon was present on 2005-09-11 09:30:00 (p1, s1) in Homeroom Period
         Ian was present on 2005-09-11 09:30:00 (p1, s1)
+        Ian was present on 2005-09-11 09:30:00 (p1, s1) in Homeroom Period
         Jon was absent on 2005-09-11 09:30:00 (p2, s1)
         Tardy at 2005-09-11 09:45:00
         Added explanation
         Accepted explanation
         Ian was present on 2005-09-11 09:30:00 (p2, s1)
-        Jon was present on 2005-09-13 09:30:00 (p1, s1) in Homeroom Period
         Jon was present on 2005-09-13 09:30:00 (p1, s1)
-        Ian was present on 2005-09-13 09:30:00 (p1, s1) in Homeroom Period
+        Jon was present on 2005-09-13 09:30:00 (p1, s1) in Homeroom Period
         Ian was present on 2005-09-13 09:30:00 (p1, s1)
+        Ian was present on 2005-09-13 09:30:00 (p1, s1) in Homeroom Period
         Jon was present on 2005-09-13 09:30:00 (p2, s1)
         Ian was present on 2005-09-13 09:30:00 (p2, s1)
 
@@ -401,33 +395,33 @@ def doctest_SampleAttendancePlugin_generateSectionAttendance():
         ...                                'Ian': (True, False, False),
         ...                                'Ann': (True, True, False)}}
         >>> plugin.generateSectionAttendance(day_absences)
-        Ann was present on 2005-09-11 09:30:00 (p1, s2) in Homeroom Period
         Ann was present on 2005-09-11 09:30:00 (p1, s2)
+        Ann was present on 2005-09-11 09:30:00 (p1, s2) in Homeroom Period
         Ann was present on 2005-09-11 09:30:00 (p2, s2)
-        Ann was absent on 2005-09-13 09:30:00 (p1, s2) in Homeroom Period
+        Ann was absent on 2005-09-13 09:30:00 (p1, s2)
         Added explanation
         Rejected explanation
-        Ann was absent on 2005-09-13 09:30:00 (p1, s2)
+        Ann was absent on 2005-09-13 09:30:00 (p1, s2) in Homeroom Period
         Added explanation
         Rejected explanation
         Ann was absent on 2005-09-13 09:30:00 (p2, s2)
         Added explanation
         Rejected explanation
-        Jon was absent on 2005-09-11 09:30:00 (p1, s1) in Homeroom Period
         Jon was absent on 2005-09-11 09:30:00 (p1, s1)
-        Ian was present on 2005-09-11 09:30:00 (p1, s1) in Homeroom Period
+        Jon was absent on 2005-09-11 09:30:00 (p1, s1) in Homeroom Period
         Ian was present on 2005-09-11 09:30:00 (p1, s1)
+        Ian was present on 2005-09-11 09:30:00 (p1, s1) in Homeroom Period
         Jon was absent on 2005-09-11 09:30:00 (p2, s1)
         Ian was present on 2005-09-11 09:30:00 (p2, s1)
-        Jon was absent on 2005-09-13 09:30:00 (p1, s1) in Homeroom Period
-        Added explanation
-        Accepted explanation
         Jon was absent on 2005-09-13 09:30:00 (p1, s1)
         Added explanation
         Accepted explanation
-        Ian was absent on 2005-09-13 09:30:00 (p1, s1) in Homeroom Period
+        Jon was absent on 2005-09-13 09:30:00 (p1, s1) in Homeroom Period
         Added explanation
+        Accepted explanation
         Ian was absent on 2005-09-13 09:30:00 (p1, s1)
+        Added explanation
+        Ian was absent on 2005-09-13 09:30:00 (p1, s1) in Homeroom Period
         Added explanation
         Jon was absent on 2005-09-13 09:30:00 (p2, s1)
         Added explanation
