@@ -1037,11 +1037,107 @@ def doctest_AttendanceView_update_homeroom():
     """
 
 
-def doctest_AttendanceView_getAttendance():
-    r"""Tests for AttendanceView._getAttendance
+def doctest_AttendanceView_update_homeroom():
+    r"""Tests for AttendanceView.update
 
-        >>> provideAdapter(SectionAttendanceStub)
-        >>> provideAdapter(HomeroomAttendanceStub, provides=IHomeroomAttendance)
+    We need an ITimetables adapter in order to verify that a given
+    period is valid for a given day:
+
+        >>> ztapi.provideAdapter(None, ITimetables, StubTimetables)
+
+    The ``update`` method is able to tell the difference between regular
+    section meetings and the homeroom meeting.
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...     import AttendanceView
+        >>> section = SectionStub()
+        >>> request = TestRequest()
+        >>> view = AttendanceView(section, request)
+
+    The 'C' period on 2005-12-15 is a regular section meeting
+
+        >>> view.date = datetime.date(2005, 12, 15)
+        >>> view.period_id = 'C'
+        >>> view.update()
+        >>> view.homeroom
+        False
+
+    The 'B' period, on the other hand, is the homeroom period
+
+        >>> view.period_id = 'B'
+        >>> view.update()
+        >>> view.homeroom
+        True
+
+    """
+
+
+def doctest_AttendanceView_update_set_homeroom():
+    r"""Tests for AttendanceView.update
+
+    We need an ITimetables adapter in order to verify that a given
+    period is valid for a given day:
+
+        >>> ztapi.provideAdapter(None, ITimetables, StubTimetables)
+
+    We will also need attendance adapters.
+
+        >>> setUpAttendanceAdapters()
+
+    The AttendanceView is used both for regular section meetings,
+    and for homeroom attendance.
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...     import AttendanceView
+        >>> section = SectionStub()
+        >>> request = TestRequest()
+        >>> view = AttendanceView(section, request)
+
+    We will need at least one person.
+
+        >>> from schooltool.person.person import Person
+        >>> person1 = Person('person1', title='Person1')
+        >>> person1.__name__ = 'p1'
+        >>> person2 = Person('person2', title='Person1')
+        >>> person2.__name__ = 'p2'
+        >>> section.members = [person1, person2]
+
+    The 'B' period is the homeroom period
+
+        >>> view.date = datetime.date(2005, 12, 15)
+        >>> view.period_id = 'B'
+        >>> view.update()
+        >>> view.homeroom
+        True
+
+    If you mark some absences, they will be recorded as homeroom
+    absences, not just section absences.
+
+        >>> view.request = TestRequest(form={'ABSENT': 'Absent',
+        ...                                  'p1_check': 'on'})
+        >>> view.update()
+
+        >>> list(IHomeroomAttendance(person1))
+        [HomeroomAttendanceRecord(<...SectionStub...>,
+             datetime.datetime(2005, 12, 15, 10, 0, tzinfo=<UTC>), ABSENT)]
+        >>> list(IHomeroomAttendance(person2))
+        [HomeroomAttendanceRecord(<...SectionStub...>,
+             datetime.datetime(2005, 12, 15, 10, 0, tzinfo=<UTC>), PRESENT)]
+
+    We can see that section attendance data was recorded too:
+
+        >>> list(ISectionAttendance(person1))
+        [SectionAttendanceRecord(<...SectionStub...>,
+             datetime.datetime(2005, 12, 15, 10, 0, tzinfo=<UTC>), ABSENT)]
+        >>> list(ISectionAttendance(person2))
+        [SectionAttendanceRecord(<...SectionStub...>,
+             datetime.datetime(2005, 12, 15, 10, 0, tzinfo=<UTC>), PRESENT)]
+
+    """
+
+
+def doctest_AttendanceView_getAttendanceRecord():
+    r"""Tests for AttendanceView._getAttendanceRecord
 
         >>> from schooltool.attendance.browser.attendance \
         ...         import AttendanceView
@@ -1058,8 +1154,11 @@ def doctest_AttendanceView_getAttendance():
         ...     "Math", day_id='D1', period_id="p4",
         ...     activity=None)
 
-        >>> view._getAttendance(person)
+        >>> view._getAttendanceRecord(SectionAttendanceStub(person))
         's_jonas_2005-01-16 10:25:00+00:00-math'
+
+        >>> view._getAttendanceRecord(HomeroomAttendanceStub(person))
+        'h_jonas_2005-01-16 10:25:00+00:00-math'
 
     """
 
@@ -1085,7 +1184,8 @@ def doctest_AttendanceView_record():
         ...     "Math", day_id='D1', period_id="p4",
         ...     activity=None)
 
-        >>> view._record(person, False)
+        >>> attendance = ISectionAttendance(person)
+        >>> view._record(attendance, False)
         Recording: s_jonas_2005-01-16 10:25:00+00:00-math -> False
 
     """

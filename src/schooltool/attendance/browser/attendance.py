@@ -218,7 +218,7 @@ class AttendanceView(BrowserView):
         result = []
         for person in self.iterTransitiveMembers():
             past_status = self.studentStatus(person)
-            ar = self._getAttendance(person)
+            ar = self._getAttendanceRecord(ISectionAttendance(person))
             current_status = formatAttendanceRecord(ar)
             disabled_checkbox = ar.isPresent() or ar.isTardy()
             section_url = zapi.absoluteURL(ISection(self.context),
@@ -295,40 +295,43 @@ class AttendanceView(BrowserView):
         # otherwise show 'tardy' and 'arrived'.
         self.unknowns = False
 
-        if 'TARDY' in self.request:
+        for person in self.iterTransitiveMembers():
+            check_id = "%s_check" % person.__name__
+            selected = check_id in self.request
+
+            attendance = ISectionAttendance(person)
+            self.updateAttendance(attendance, selected)
+
+            if self.homeroom:
+                hr_attendance = IHomeroomAttendance(person)
+                self.updateAttendance(hr_attendance, selected)
+
+    def updateAttendance(self, attendance, selected):
+        ar = self._getAttendanceRecord(attendance)
+        if 'ABSENT' in self.request:
+            if ar.isUnknown():
+                present = not selected
+                self._record(attendance, present)
+        elif 'TARDY' in self.request:
             try:
                 arrived = self.getArrival()
             except ValueError:
                 self.error = _('The arrival time you entered is '
                                'invalid.  Please use HH:MM format')
                 return
+            if selected and ar.isAbsent():
+                ar.makeTardy(arrived)
 
-        for person in self.iterTransitiveMembers():
-            check_id = "%s_check" % person.__name__
-            ar = self._getAttendance(person)
+        ar = self._getAttendanceRecord(attendance)
+        if ar.isUnknown():
+            self.unknowns = True
 
-            if 'ABSENT' in self.request:
-                if check_id in self.request and ar.isUnknown():
-                    self._record(person, False)
-                elif ar.isUnknown():
-                    self._record(person, True)
-
-            if 'TARDY' in self.request:
-                if check_id in self.request and ar.isAbsent():
-                    ar.makeTardy(arrived)
-
-            ar = self._getAttendance(person)
-            if ar.isUnknown():
-                self.unknowns = True
-
-    def _getAttendance(self, student):
-        """Get a student's attendance record."""
-        attendance = ISectionAttendance(student)
+    def _getAttendanceRecord(self, attendance):
+        """Get a attendance record for this section meeting."""
         return attendance.get(self.context, self.meeting.dtstart)
 
-    def _record(self, student, present):
+    def _record(self, attendance, present):
         """Record a student's presence or absence."""
-        attendance = ISectionAttendance(student)
         attendance.record(removeSecurityProxy(self.context),
                           self.meeting.dtstart, self.meeting.duration,
                           self.period_id, present)

@@ -62,11 +62,11 @@ We also need a term and a timetable
     >>> manager.getControl('Next').click()
     >>> manager.getControl('Designated by time').click()
     >>> manager.getControl('Yes').click()
-    >>> manager.getControl(name='homeroom_0').value = ['09:30-10:25']
-    >>> manager.getControl(name='homeroom_1').value = ['09:30-10:25']
-    >>> manager.getControl(name='homeroom_2').value = ['09:30-10:25']
-    >>> manager.getControl(name='homeroom_3').value = ['09:30-10:25']
-    >>> manager.getControl(name='homeroom_4').value = ['09:30-10:25']
+    >>> manager.getControl(name='homeroom_0_09:30-10:25').value = True
+    >>> manager.getControl(name='homeroom_1_09:30-10:25').value = True
+    >>> manager.getControl(name='homeroom_2_09:30-10:25').value = True
+    >>> manager.getControl(name='homeroom_3_09:30-10:25').value = True
+    >>> manager.getControl(name='homeroom_4_09:30-10:25').value = True
     >>> manager.getControl('Next').click()
 
 Let's schedule the section
@@ -176,7 +176,7 @@ A student's page contains an "Attendance" action in the menu.
         <td>
           <a href="?term=2005-fall">2005 Fall</a>
         </td>
-        <td class="number">0</td>
+        <td class="number">2</td>
         <td class="number">0</td>
         <td class="number">3</td>
         <td class="number">1</td>
