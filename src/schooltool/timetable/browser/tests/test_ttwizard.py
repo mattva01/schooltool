@@ -1363,46 +1363,37 @@ def doctest_HomeroomPeriodsStep():
          ['B', 'C', 'D', 'E'],
          ['C', 'D', 'E', 'F']]
 
-    If we render the view, we get a list of select boxes with period names; one
-    for each day:
+    If we render the view, we get lists of checkboxes with period names,
+    one list for each day.
 
         >>> print view()
         <BLANKLINE>
         ...
               <td>
-                <select name="homeroom_0">
-                  <option value="" selected="selected">(none)</option>
-                  <option>A</option>
-                  <option>B</option>
-                  <option>C</option>
-                  <option>D</option>
-                </select>
-              </td>
-              <td>
-                <select name="homeroom_1">
-                  <option value="" selected="selected">(none)</option>
-                  <option>B</option>
-                  <option>C</option>
-                  <option>D</option>
-                  <option>E</option>
-                </select>
-              </td>
-              <td>
-                <select name="homeroom_2">
-                  <option value="" selected="selected">(none)</option>
-                  <option>C</option>
-                  <option>D</option>
-                  <option>E</option>
-                  <option>F</option>
-                </select>
-              </td>
-          ...
+        <BLANKLINE>
+        <BLANKLINE>
+                    <input type="checkbox" name="homeroom_0_A"
+                           id="homeroom_0_A" />
+                    <label for="homeroom_0_A">A</label>
+        <BLANKLINE>
+                  <br />
+        <BLANKLINE>
+        <BLANKLINE>
+        <BLANKLINE>
+                    <input type="checkbox" name="homeroom_0_B"
+                           id="homeroom_0_B" />
+                    <label for="homeroom_0_B">B</label>
+        <BLANKLINE>
+                  <br />
+        ...
 
     When the user selects some of the items and submits the form, the choice
     is remembered.
 
-        >>> request = TestRequest(form={'homeroom_0': 'D',
-        ...                             'homeroom_2': 'C'})
+        >>> request = TestRequest(form={'homeroom_0_A': 'checked',
+        ...                             'homeroom_0_C': 'checked',
+        ...                             'homeroom_2_C': 'checked',
+        ...                             'homeroom_2_F': 'checked'})
         >>> view = HomeroomPeriodsStep(context, request)
         >>> view.getSessionData()['day_names'] = ['Day 1', 'Day 2', 'Day 3']
         >>> view.getSessionData()['periods_order'] = [['A', 'B', 'C', 'D'],
@@ -1412,15 +1403,7 @@ def doctest_HomeroomPeriodsStep():
         >>> view.update()
         True
         >>> print view.getSessionData()['homeroom_periods']
-        [['D'], [], ['C']]
-
-    You are not allowed to sneak in periods which do not exist in a given day
-
-        >>> view.request.form['homeroom_1'] = 'A'
-        >>> view.update()
-        False
-        >>> print translate(view.error)
-        There is no period A on Day 2.
+        [['A', 'C'], [], ['C', 'F']]
 
     The next step is always the final step:
 

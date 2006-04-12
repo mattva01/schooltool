@@ -747,7 +747,7 @@ class HomeroomPeriodsStep(Step):
 
     __call__ = ViewPageTemplateFile('templates/ttwizard_homeroom.pt')
 
-    description = _('Please indicate the homeroom period for each day:')
+    description = _('Please indicate the homeroom period(s) for each day:')
 
     error = None
 
@@ -762,14 +762,10 @@ class HomeroomPeriodsStep(Step):
         result = []
         for daynr, periods in enumerate(self.periodsInOrder()):
             homeroom_period_ids = []
-            homeroom_period_id = self.request.get('homeroom_%d' % daynr)
-            if homeroom_period_id:
-                if homeroom_period_id not in periods:
-                    self.error = _("There is no period $period on $day.",
-                                   mapping={'period': homeroom_period_id,
-                                            'day': self.days()[daynr]})
-                    return False
-                homeroom_period_ids.append(homeroom_period_id)
+            for period in periods:
+                period_id = 'homeroom_%d_%s' % (daynr, period)
+                if period_id in self.request:
+                    homeroom_period_ids.append(period)
             result.append(homeroom_period_ids)
         self.getSessionData()['homeroom_periods'] = result
         return True

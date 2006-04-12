@@ -20,18 +20,19 @@
     </tr>
     <tr>
       <td tal:repeat="periods view/periodsInOrder">
-        <select tal:define="daynr repeat/periods/index;
-                            name string:homeroom_${daynr}"
-                tal:attributes="name name">
-          <option tal:attributes="selected
-                          python:not request.get(name)"
-                  i18n:translate=""
-                  value="">(none)</option>
-          <option tal:repeat="period periods"
-                  tal:attributes="selected
-                          python:period == request.get(name)"
-                  tal:content="period" />
-        </select>
+        <tal:for define="daynr repeat/periods/index"
+                 repeat="period periods">
+          <tal:defs define="name string:homeroom_${daynr}_${period}">
+            <input type="checkbox"
+                   tal:attributes="name name;
+                                   id name;
+                                   checked python:request.get(name)" />
+            <label tal:content="period"
+                   tal:attributes="for name" />
+          </tal:defs>
+          <br />
+        </tal:for>
+
       </td>
     </tr>
   </table>
