@@ -505,12 +505,11 @@ class StudentAttendanceView(BrowserView):
             prefix = "h"
             name = "homeroom"
         else:
+            assert ISectionAttendanceRecord.providedBy(ar)
             prefix = "s"
-            name = ar.section.__name__.encode('UTF-8').encode('base64').rstrip()
-
-        return "%s_%s_%s" % (prefix,
-                             ar.datetime.isoformat('_'),
-                             name)
+            name = ar.section.__name__.encode('UTF-8').encode('base64')
+            name = name.rstrip() # chomp off the trailing newline
+        return "%s_%s_%s" % (prefix, ar.datetime.isoformat('_'), name)
 
     def formatAttendanceRecord(self, ar):
         """Format an attendance record for display."""
