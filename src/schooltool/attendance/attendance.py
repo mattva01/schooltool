@@ -418,10 +418,13 @@ class AttendanceBase(Persistent, AttendanceFilteringMixin):
         if self.get(section, datetime).status != UNKNOWN:
             raise AttendanceError('record for %s at %s already exists'
                                   % (section, datetime))
-        if present: status = PRESENT
-        else: status = ABSENT
+        if present:
+            status = PRESENT
+        else:
+            status = ABSENT
 
-        ar = self.createAttendanceRecord(section, datetime, duration, period_id, status)
+        ar = self.createAttendanceRecord(section, datetime, duration,
+                                         period_id, status)
 
         self._records.setdefault(datetime, ())
         self._records[datetime] += (ar, )
