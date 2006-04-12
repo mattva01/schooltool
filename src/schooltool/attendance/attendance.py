@@ -402,17 +402,15 @@ class AttendanceBase(Persistent, AttendanceFilteringMixin):
         #     I am not sure it is safe to store a Persistent object in a
         #     _v_attr, as it might survive transaction boundaries.  If you
         #     happen to use it from a different transaction, will it work?
-        if (status == PRESENT and
-            getattr(section, self.cache_attribute,
-                    (None, ))[0] == datetime):
-            ar = getattr(section, self.cache_attribute)[1]
+        cached = getattr(section, self.cache_attribute, (None, ))
+        if (status == PRESENT and cached[0] == datetime):
+            ar = cached[1]
         else:
             ar = self.factory(section, datetime, status=status,
                               duration=duration, period_id=period_id)
             if status == PRESENT:
                 setattr(section, self.cache_attribute, (datetime, ar))
         return ar
-
 
     def record(self, section, datetime, duration, period_id, present):
         if self.get(section, datetime).status != UNKNOWN:
