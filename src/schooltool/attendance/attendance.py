@@ -27,7 +27,6 @@ import datetime
 import logging
 
 import pytz
-from BTrees.OIBTree import OITreeSet
 from BTrees.OOBTree import OOBTree
 from persistent import Persistent
 from persistent.list import PersistentList
@@ -584,16 +583,18 @@ class UnresolvedAbsenceCache(Persistent):
     implements(IUnresolvedAbsenceCache)
 
     def __init__(self):
-        self._cache = OITreeSet()
+        self._cache = OOBTree()
 
-    def add(self, record):
-        self._cache.insert(record)
+    def add(self, student, record):
+        self._cache[record] = student
 
     def remove(self, record):
-        self._cache.remove(record)
+        del self._cache[record]
 
     def homeroomAbsences(self):
-        return filter(IHomeroomAttendanceRecord.providedBy, self._cache)
+        return [(student, record)
+                for record, student in self._cache.items()
+                if IHomeroomAttendanceRecord.providedBy(record)]
 
 
 AbsenceCacheKey = 'schooltool.attendance.absencecache'
@@ -611,9 +612,10 @@ def addAttendanceRecordToCache(event):
     pdi = event.process.process_definition_identifier
     if pdi == 'schooltool.attendance.explanation':
         record = event.process.workflowRelevantData.attendanceRecord
+        student = event.process.workflowRelevantData.student
         app = ISchoolToolApplication(None)
         cache = IUnresolvedAbsenceCache(app)
-        cache.add(record)
+        cache.add(student, record)
 
 
 def removeAttendanceRecordFromCache(event):

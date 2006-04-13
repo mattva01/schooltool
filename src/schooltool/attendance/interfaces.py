@@ -204,14 +204,17 @@ class IHomeroomAttendanceRecord(ISectionAttendanceRecord):
 class IUnresolvedAbsenceCache(Interface):
     """A set of unresolved absences."""
 
-    def add(record):
-        """Register an unresolved absence record."""
+    def add(student, record):
+        """Register an unresolved absence record for a student."""
 
     def remove(record):
         """Unregister an absence record that has been resolved."""
 
     def homeroomAbsences():
-        """Iterate over homeroom absences."""
+        """Iterate over homeroom absences
+
+        Returns a sequence of tuples (student, record).
+        """
 
 
 class AttendanceError(Exception):

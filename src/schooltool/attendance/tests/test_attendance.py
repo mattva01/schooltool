@@ -1362,15 +1362,16 @@ def doctest_UnresolvedAbsenceCache_add_remove():
 
     Let's test the add and remove operations:
 
-        >>> obj = 'absence'
-        >>> cache.add(obj)
+        >>> student = 'student'
+        >>> absence = 'absence'
+        >>> cache.add('student', 'absence')
 
-        >>> list(cache._cache)
-        ['absence']
+        >>> dict(cache._cache)
+        {'absence': 'student'}
 
-        >>> cache.remove(obj)
-        >>> list(cache._cache)
-        []
+        >>> cache.remove(absence)
+        >>> dict(cache._cache)
+        {}
 
     """
 
@@ -1385,16 +1386,16 @@ def doctest_UnresolvedAbsenceCache_homeroomAbsences():
 
     Let's test that homeroomAbsences filters by interface:
 
-        >>> cache.add(object())
-        >>> cache.add('foo')
+        >>> cache.add('student1', object())
+        >>> cache.add('student2', 'foo')
 
         >>> class HomeroomAbsenceStub(object):
         ...     implements(IHomeroomAttendanceRecord)
         ...     def __repr__(self): return 'homeroom'
-        >>> cache.add(HomeroomAbsenceStub())
+        >>> cache.add('student3', HomeroomAbsenceStub())
 
         >>> list(cache.homeroomAbsences())
-        [homeroom]
+        [('student3', homeroom)]
 
     """
 
@@ -1446,14 +1447,23 @@ def doctest_add_or_removeAttendanceRecordFromCache():
         ...                      lambda none: 'virtual schooltool')
         >>> from schooltool.attendance.interfaces import \
         ...     IUnresolvedAbsenceCache
-        >>> cache = set()
+        >>> class CacheStub(object):
+        ...     def __init__(self):
+        ...         self._cache = {}
+        ...     def add(self, student, record):
+        ...         self._cache[record] = student
+        ...     def remove(self, record):
+        ...         del self._cache[record]
+        >>> cache = CacheStub()
         >>> def cacheAdapter(app):
         ...     assert app == 'virtual schooltool'
         ...     return cache
         >>> ztapi.provideAdapter(None, IUnresolvedAbsenceCache,
         ...                      cacheAdapter)
 
-        >>> ar = object()
+        >>> class ARStub(object):
+        ...     def __repr__(self): return 'ar'
+        >>> ar = ARStub()
 
     We can get away with this, because the event is not modified:
 
@@ -1462,6 +1472,7 @@ def doctest_add_or_removeAttendanceRecordFromCache():
         ...     class process(object):
         ...         process_definition_identifier = pdi
         ...         class workflowRelevantData(object):
+        ...             student = 'a student'
         ...             attendanceRecord = ar
 
         >>> event = Event()
@@ -1474,15 +1485,15 @@ def doctest_add_or_removeAttendanceRecordFromCache():
 
     And it has landed there!
 
-        >>> list(cache) == [ar]
-        True
+        >>> cache._cache
+        {ar: 'a student'}
 
     Let's test removal too:
 
         >>> removeAttendanceRecordFromCache(event)
 
-        >>> list(cache)
-        []
+        >>> cache._cache
+        {}
 
     """
 
