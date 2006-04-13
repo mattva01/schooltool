@@ -27,6 +27,7 @@ import datetime
 import logging
 
 import pytz
+from BTrees.OIBTree import OITreeSet
 from BTrees.OOBTree import OOBTree
 from persistent import Persistent
 from persistent.list import PersistentList
@@ -45,9 +46,9 @@ from zope.security.proxy import removeSecurityProxy
 from zope.publisher.interfaces import IApplicationRequest
 from zope.security.management import queryInteraction
 
-
 from schooltool import SchoolToolMessage as _
 from schooltool.person.interfaces import IPerson
+from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.calendar.simple import ImmutableCalendar
@@ -56,6 +57,7 @@ from schooltool.attendance.interfaces import IHomeroomAttendance
 from schooltool.attendance.interfaces import IHomeroomAttendanceRecord
 from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.attendance.interfaces import ISectionAttendanceRecord
+from schooltool.attendance.interfaces import IUnresolvedAbsenceCache
 from schooltool.attendance.interfaces import IAbsenceExplanation
 from schooltool.attendance.interfaces import UNKNOWN, PRESENT, ABSENT, TARDY
 from schooltool.attendance.interfaces import NEW, ACCEPTED, REJECTED
@@ -565,6 +567,57 @@ class RejectExplanation(AttendanceWorkItem):
     def start(self, attendance_record):
         attendance_record.explanations[-1].status = REJECTED
         self.participant.activity.workItemFinished(self)
+
+
+class UnresolvedAbsenceCache(Persistent):
+    """A set of unresolved absences.
+
+    At the moment all unresolved absences are stored here, but only
+    homeroom absences are used.
+    """
+
+    implements(IUnresolvedAbsenceCache)
+
+    def __init__(self):
+        self._cache = OITreeSet()
+
+    def add(self, record):
+        self._cache.insert(record)
+
+    def remove(self, record):
+        self._cache.remove(record)
+
+    def homeroomAbsences(self):
+        return filter(IHomeroomAttendanceRecord.providedBy, self._cache)
+
+
+AbsenceCacheKey = 'schooltool.attendance.absencecache'
+
+
+def getUnresolvedAbsenceCache(app):
+    admin = app['groups']['administrators']
+    annotations = IAnnotations(admin)
+    if AbsenceCacheKey not in annotations:
+        annotations[AbsenceCacheKey] = UnresolvedAbsenceCache()
+    return annotations[AbsenceCacheKey]
+
+
+def addAttendanceRecordToCache(event):
+    pdi = event.process.process_definition_identifier
+    if pdi == 'schooltool.attendance.explanation':
+        record = event.process.workflowRelevantData.attendanceRecord
+        app = ISchoolToolApplication(None)
+        cache = IUnresolvedAbsenceCache(app)
+        cache.add(record)
+
+
+def removeAttendanceRecordFromCache(event):
+    pdi = event.process.process_definition_identifier
+    if pdi == 'schooltool.attendance.explanation':
+        record = event.process.workflowRelevantData.attendanceRecord
+        app = ISchoolToolApplication(None)
+        cache = IUnresolvedAbsenceCache(app)
+        cache.remove(record)
 
 
 #

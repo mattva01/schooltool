@@ -201,5 +201,18 @@ class IHomeroomAttendanceRecord(ISectionAttendanceRecord):
     """A single attendance record for a homeroom period."""
 
 
+class IUnresolvedAbsenceCache(Interface):
+    """A set of unresolved absences."""
+
+    def add(record):
+        """Register an unresolved absence record."""
+
+    def remove(record):
+        """Unregister an absence record that has been resolved."""
+
+    def homeroomAbsences():
+        """Iterate over homeroom absences."""
+
+
 class AttendanceError(Exception):
     """Attendance tracking error."""

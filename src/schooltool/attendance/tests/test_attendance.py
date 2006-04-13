@@ -1337,6 +1337,153 @@ def doctest_RejectExplanation():
     """
 
 
+def doctest_UnresolvedAbsenceCache_add_remove():
+    r"""Tests for UnresolvedAbsenceCache.
+
+    Some setup:
+
+        >>> from schooltool.attendance.attendance import UnresolvedAbsenceCache
+        >>> from schooltool.attendance.interfaces import \
+        ...     IUnresolvedAbsenceCache
+
+    Check the interface:
+
+        >>> cache = UnresolvedAbsenceCache()
+        >>> verifyObject(IUnresolvedAbsenceCache, cache)
+        True
+
+    The contents are stored in the attribute `_cache`:
+
+        >>> list(cache._cache)
+        []
+
+    Let's test the add and remove operations:
+
+        >>> obj = 'absence'
+        >>> cache.add(obj)
+
+        >>> list(cache._cache)
+        ['absence']
+
+        >>> cache.remove(obj)
+        >>> list(cache._cache)
+        []
+
+    """
+
+
+def doctest_UnresolvedAbsenceCache_homeroomAbsences():
+    r"""Tests for UnresolvedAbsenceCache.homeroomAbsences
+
+        >>> from schooltool.attendance.attendance import UnresolvedAbsenceCache
+        >>> from schooltool.attendance.interfaces import \
+        ...     IUnresolvedAbsenceCache
+        >>> cache = UnresolvedAbsenceCache()
+
+    Let's test that homeroomAbsences filters by interface:
+
+        >>> cache.add(object())
+        >>> cache.add('foo')
+
+        >>> class HomeroomAbsenceStub(object):
+        ...     implements(IHomeroomAttendanceRecord)
+        ...     def __repr__(self): return 'homeroom'
+        >>> cache.add(HomeroomAbsenceStub())
+
+        >>> list(cache.homeroomAbsences())
+        [homeroom]
+
+    """
+
+
+def doctest_getUnresolvedAbsenceCache():
+    r"""Tests for getUnresolvedAbsenceCache.
+
+        >>> setup.setUpAnnotations()
+        >>> from schooltool.attendance.attendance import \
+        ...     getUnresolvedAbsenceCache
+
+        >>> class Annotatable(object):
+        ...     implements(IAttributeAnnotatable)
+        >>> adminstub = Annotatable()
+        >>> groupstub = {'administrators': adminstub}
+        >>> appstub = {'groups': groupstub}
+
+    Now the cache does not yet exist in annotations:
+
+        >>> IAnnotations(adminstub)
+        {}
+
+    But if we ask for one, it will be created:
+
+        >>> cache = getUnresolvedAbsenceCache(appstub)
+
+        >>> IAnnotations(adminstub)
+        {'schooltool.attendance.absencecache':
+           <...attendance.UnresolvedAbsenceCache ...>}
+
+        >>> from schooltool.attendance.interfaces import \
+        ...     IUnresolvedAbsenceCache
+        >>> verifyObject(IUnresolvedAbsenceCache, cache)
+        True
+
+        >>> cache2 = getUnresolvedAbsenceCache(appstub)
+        >>> cache is cache2
+        True
+
+    """
+
+
+def doctest_add_or_removeAttendanceRecordFromCache():
+    r"""Tests for addAttendanceRecordToCache, removeAttendanceRecordFromCache.
+
+    Some setup:
+
+        >>> ztapi.provideAdapter(None, ISchoolToolApplication,
+        ...                      lambda none: 'virtual schooltool')
+        >>> from schooltool.attendance.interfaces import \
+        ...     IUnresolvedAbsenceCache
+        >>> cache = set()
+        >>> def cacheAdapter(app):
+        ...     assert app == 'virtual schooltool'
+        ...     return cache
+        >>> ztapi.provideAdapter(None, IUnresolvedAbsenceCache,
+        ...                      cacheAdapter)
+
+        >>> ar = object()
+
+    We can get away with this, because the event is not modified:
+
+        >>> pdi = 'schooltool.attendance.explanation'
+        >>> class Event(object):
+        ...     class process(object):
+        ...         process_definition_identifier = pdi
+        ...         class workflowRelevantData(object):
+        ...             attendanceRecord = ar
+
+        >>> event = Event()
+
+    We can add the record to the cache:
+
+        >>> from schooltool.attendance.attendance import \
+        ...     addAttendanceRecordToCache, removeAttendanceRecordFromCache
+        >>> addAttendanceRecordToCache(event)
+
+    And it has landed there!
+
+        >>> list(cache) == [ar]
+        True
+
+    Let's test removal too:
+
+        >>> removeAttendanceRecordFromCache(event)
+
+        >>> list(cache)
+        []
+
+    """
+
+
 def doctest_AttendanceCalendarProvider_getAuthenticatedUser():
     """Tests for AttendanceCalendarProvider._getAuthenticatedUser.
 
