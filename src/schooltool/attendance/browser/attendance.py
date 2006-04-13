@@ -619,9 +619,3 @@ class StudentAttendanceView(BrowserView):
 
 class AttendancePanelView(BrowserView):
     """A control panel for tracking global attendance."""
-
-    @property
-    def unresolvedAttendances(self):
-        admin = self.context['groups']['administrators']
-        from schooltool.attendance.interfaces import IUnresolvedAbsenceCache
-        return IUnresolvedAbsenceCache(admin)

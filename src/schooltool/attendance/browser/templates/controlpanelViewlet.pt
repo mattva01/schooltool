@@ -1,0 +1,5 @@
+<li>
+  <a tal:attributes="href string:${view/appURL}/${view/link}"
+     tal:content="view/title"
+     i18n:translate="">Title</a>
+</li>

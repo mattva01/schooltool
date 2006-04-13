@@ -1,0 +1,18 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate=""
+        >Attendance Control Panel</title>
+</head>
+<body>
+
+<metal:block metal:fill-slot="content-header">
+<h2 i18n:translate="">Attendance Control Panel</h2>
+</metal:block>
+
+<metal:block metal:fill-slot="body">
+
+Here be attendance (in ze future).
+
+</metal:block>
+</body>
+</html>

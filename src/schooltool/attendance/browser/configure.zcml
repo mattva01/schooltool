@@ -47,4 +47,26 @@
       title="Attendance"
       />
 
+  <browser:page
+      name="attendancepanel.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class="schooltool.attendance.browser.attendance.AttendancePanelView"
+      template="templates/controlpanel.pt"
+      permission="schooltool.viewAttendance"
+      menu="schooltool_actions"
+      title="Attendance Control Panel"
+      />
+
+  <browser:viewlet
+      name="attendance_control_panel"
+      for="*"
+      manager="schooltool.skin.INavigationManager"
+      template="templates/controlpanelViewlet.pt"
+      class="schooltool.skin.NavigationViewlet"
+      permission="schooltool.viewAttendance"
+      link="attendancepanel.html"
+      title="Attendance Panel"
+      order="90"
+      />
+
 </configure>
