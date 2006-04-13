@@ -312,7 +312,7 @@ A student's page contains an "Attendance" action in the menu.
     >>> harvie.handleErrors = False
     >>> harvie.addHeader('Authorization', 'Basic harvie:facts')
     >>> harvie.open('http://localhost/persons/joniukas')
-    >>> harvie.getLink('Attendance').click()
+    >>> harvie.getLink('Attendance', url='@@attendance.html').click()
 
 If you go there, you see a list of unresolved absences
 
