@@ -30,6 +30,7 @@ from zope.app.container.btree import BTreeContainer
 from zope.interface import implements
 
 from schooltool.resource.resource import Resource
+from schooltool.app import membership
 from schooltool.course.section import Section
 from schooltool.generations.tests import ContextStub
 

@@ -7,7 +7,7 @@
       name="attendance"
       for="schooltool.course.interfaces.ISection"
       class="schooltool.attendance.browser.attendance.AttendanceView"
-      permission="schooltool.view"
+      permission="schooltool.viewAttendance"
       menu="schooltool_actions"
       title="Attendance"
       />

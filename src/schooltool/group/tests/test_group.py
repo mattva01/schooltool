@@ -19,7 +19,7 @@
 """
 Unit tests for groups
 
-$Id: test_app.py 4691 2005-08-12 18:59:44Z srichter $
+$Id$
 """
 
 import unittest
@@ -27,7 +27,7 @@ import unittest
 from zope.interface import directlyProvides
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
-from zope.app.testing import setup
+from zope.app.testing import setup, ztapi
 from zope.app.container.contained import ObjectAddedEvent
 from zope.app.traversing.interfaces import IContainmentRoot
 
@@ -81,6 +81,17 @@ def doctest_addGroupContainerToApplication():
         >>> setup.setUpAnnotations()
         >>> setup.setUpDependable()
         >>> setup.setUpTraversal()
+        >>> from zope.app.annotation.interfaces import IAnnotatable
+        >>> from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
+        >>> from zope.interface import implements
+        >>> class RoleManagerStub:
+        ...     implements(IPrincipalRoleManager)
+        ...     def __init__(self, *args, **kw):
+        ...         pass
+        ...     def assignRoleToPrincipal(self, role, principal):
+        ...         print 'Assign role=%s, principal=%s' % (role, principal)
+        >>> ztapi.provideAdapter(IAnnotatable, IPrincipalRoleManager,
+        ...                      RoleManagerStub)
 
     addGroupContainerToApplication is a subscriber for IObjectAddedEvent.
 
@@ -96,6 +107,10 @@ def doctest_addGroupContainerToApplication():
     When you call the subscriber
 
         >>> addGroupContainerToApplication(event)
+        Assign role=schooltool.manager, principal=sb.group.manager
+        Assign role=schooltool.administrator, principal=sb.group.administrators
+        Assign role=schooltool.teacher, principal=sb.group.teachers
+        Assign role=schooltool.clerk, principal=sb.group.clerks
 
     it adds a container for groups
 

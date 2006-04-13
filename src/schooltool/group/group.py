@@ -19,11 +19,12 @@
 """
 Group objects
 
-$Id: app.py 4691 2005-08-12 18:59:44Z srichter $
+$Id$
 """
 __docformat__ = 'restructuredtext'
 from persistent import Persistent
 
+from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
 from zope.interface import implements
 from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.dependable.interfaces import IDependable
@@ -69,4 +70,10 @@ def addGroupContainerToApplication(event):
     for id, title, description in default_groups:
         group = app['groups'][id] = Group(title, description)
         IDependable(group).addDependent('')
+    roles = IPrincipalRoleManager(app)
+    roles.assignRoleToPrincipal('schooltool.manager', 'sb.group.manager')
+    roles.assignRoleToPrincipal('schooltool.administrator',
+                                'sb.group.administrators')
+    roles.assignRoleToPrincipal('schooltool.teacher', 'sb.group.teachers')
+    roles.assignRoleToPrincipal('schooltool.clerk', 'sb.group.clerks')
 
