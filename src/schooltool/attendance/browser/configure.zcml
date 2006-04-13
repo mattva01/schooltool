@@ -42,7 +42,7 @@
       name="attendance.html"
       for="schooltool.person.interfaces.IPerson"
       class="schooltool.attendance.browser.attendance.StudentAttendanceView"
-      permission="schooltool.view"
+      permission="schooltool.viewAttendance"
       menu="schooltool_actions"
       title="Attendance"
       />

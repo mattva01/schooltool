@@ -91,6 +91,17 @@ Let's also create a teacher for the section
     >>> manager.getControl('Great Teacher Largo').selected = True
     >>> manager.getControl('Add').click()
 
+Create clerk
+
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+    >>> manager.getControl('Full name').value = 'Krumpetzki'
+    >>> manager.getControl('Username').value = 'harvie'
+    >>> manager.getControl('Password').value = 'facts'
+    >>> manager.getControl('Verify password').value = 'facts'
+    >>> manager.getControl(name='group.clerks').value = True
+    >>> manager.getControl('Add').click()
+
 Create some students
 
     >>> manager.getLink('Persons').click()
@@ -297,12 +308,15 @@ Attendance view
 
 A student's page contains an "Attendance" action in the menu.
 
-    >>> largo.open('http://localhost/persons/joniukas')
-    >>> largo.getLink('Attendance').click()
+    >>> harvie = Browser()
+    >>> harvie.handleErrors = False
+    >>> harvie.addHeader('Authorization', 'Basic harvie:facts')
+    >>> harvie.open('http://localhost/persons/joniukas')
+    >>> harvie.getLink('Attendance').click()
 
 If you go there, you see a list of unresolved absences
 
-    >>> print largo.contents
+    >>> print harvie.contents
     <BLANKLINE>
     ...
     <h2>Attendance of Joniukas</h2>
