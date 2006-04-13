@@ -39,8 +39,9 @@
   <div class="group_list">
     <tal:if condition="batch">
       <tal:if condition="request/SEARCH|nothing">
-        <tal:block define="extra_url python:'&SEARCH=%s' % request.get('SEARCH')">        <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
-        </tal:block>
+      <tal:block define="extra_url python:'&SEARCH=%s' % request.get('SEARCH')">
+        <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+      </tal:block>
       </tal:if>
       <tal:if condition="not:request/SEARCH|nothing">
         <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
