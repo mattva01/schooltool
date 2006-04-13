@@ -193,21 +193,25 @@ class AttendanceRecord(Persistent):
     late_arrival = None
     explanations = ()
 
-    def __init__(self, status):
+    def __init__(self, status, person):
         assert status in (UNKNOWN, PRESENT, ABSENT)
         self.status = status
         if status == ABSENT:
-            self._createWorkflow()
+            self._createWorkflow(person)
 
-    def _createWorkflow(self):
+    def _createWorkflow(self, person):
         pd = zapi.getUtility(IProcessDefinition,
                              name='schooltool.attendance.explanation')
-        pd().start(self)
+        pd().start(self, person)
 
-    def isUnknown(self): return self.status == UNKNOWN
-    def isPresent(self): return self.status == PRESENT
-    def isAbsent(self):  return self.status == ABSENT
-    def isTardy(self):   return self.status == TARDY
+    def isUnknown(self):
+        return self.status == UNKNOWN
+    def isPresent(self):
+        return self.status == PRESENT
+    def isAbsent(self):
+        return self.status == ABSENT
+    def isTardy(self):
+        return self.status == TARDY
 
     def isExplained(self):
         if self.status not in (ABSENT, TARDY):
@@ -264,10 +268,10 @@ class SectionAttendanceRecord(AttendanceRecord):
 
     implements(ISectionAttendanceRecord)
 
-    def __init__(self, section, datetime, status,
+    def __init__(self, section, datetime, status, person,
                  duration=datetime.timedelta(0), period_id=None):
         assert datetime.tzinfo is not None, 'need datetime with timezone'
-        AttendanceRecord.__init__(self, status)
+        AttendanceRecord.__init__(self, status, person)
         self.section = section
         self.datetime = datetime
         self.duration = duration
@@ -290,10 +294,10 @@ class HomeroomAttendanceRecord(AttendanceRecord):
 
     implements(IHomeroomAttendanceRecord)
 
-    def __init__(self, section, datetime, status,
+    def __init__(self, section, datetime, status, person,
                  duration=datetime.timedelta(0), period_id=None):
         assert datetime.tzinfo is not None, 'need datetime with timezone'
-        AttendanceRecord.__init__(self, status)
+        AttendanceRecord.__init__(self, status, person)
         self.section = section
         self.datetime = datetime
         self.duration = duration
@@ -392,7 +396,7 @@ class AttendanceBase(Persistent, AttendanceFilteringMixin):
         for ar in self._records.get(datetime, ()):
             if ar.section == section:
                 return self._wrapRecordForLogging(ar)
-        ar = self.factory(section, datetime, status=UNKNOWN)
+        ar = self.factory(section, datetime, status=UNKNOWN, person=self.person)
         return self._wrapRecordForLogging(ar)
 
     def createAttendanceRecord(self, section, datetime, duration, period_id, status):
@@ -409,7 +413,8 @@ class AttendanceBase(Persistent, AttendanceFilteringMixin):
             ar = cached[1]
         else:
             ar = self.factory(section, datetime, status=status,
-                              duration=duration, period_id=period_id)
+                              person=self.person, duration=duration,
+                              period_id=period_id)
             if status == PRESENT:
                 setattr(section, self.cache_attribute, (datetime, ar))
         return ar

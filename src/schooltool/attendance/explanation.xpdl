@@ -19,6 +19,11 @@
                         <BasicType Type="REFERENCE"/>
                     </DataType>
                 </FormalParameter>
+                <FormalParameter Id="student" Mode="IN">
+                    <DataType>
+                        <BasicType Type="REFERENCE"/>
+                    </DataType>
+                </FormalParameter>
             </FormalParameters>
             <DataFields>
                 <DataField Id="attendanceRecord" IsArray="FALSE" Name="Attendance Record">
@@ -34,6 +39,11 @@
                 <DataField Id="outcome" IsArray="FALSE">
                     <DataType>
                         <BasicType Type="STRING"/>
+                    </DataType>
+                </DataField>
+                <DataField Id="student" IsArray="FALSE" Name="Student">
+                    <DataType>
+                        <BasicType Type="REFERENCE"/>
                     </DataType>
                 </DataField>
             </DataFields>
@@ -206,6 +216,7 @@
                         <ExtendedAttribute Name="JaWE_GRAPH_OFFSET" Value="250,40"/>
                         <ExtendedAttribute Name="JaWE_GRAPH_PARTICIPANT_ID" Value="attendanceAdmin"/>
                         <ExtendedAttribute Name="AttendanceRecord"/>
+                        <ExtendedAttribute Name="Person"/>
                     </ExtendedAttributes>
                 </Activity>
             </Activities>

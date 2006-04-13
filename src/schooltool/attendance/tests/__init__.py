@@ -42,7 +42,7 @@ class WorkItemStub(object):
 
 
 class SilentProcessDef(object):
-    def start(self, arg):
+    def start(self, arg, person):
         arg._work_item = WorkItemStub(arg)
 
 directlyProvides(SilentProcessDef, IProcessDefinition)

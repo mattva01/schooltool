@@ -19,7 +19,7 @@
 """
 SchoolTool application views.
 
-$Id: app.py 3481 2005-04-21 15:28:29Z bskahan $
+$Id$
 """
 
 import itertools

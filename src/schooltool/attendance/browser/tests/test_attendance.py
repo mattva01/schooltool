@@ -147,7 +147,7 @@ class StubTimetables(object):
 class SectionAttendanceRecordStub(object):
     implements(ISectionAttendanceRecord)
     explanations = ()
-    def __init__(self, section, datetime, status, explained=False):
+    def __init__(self, section, datetime, status, person=None, explained=False):
         self.section = section
         self.date = datetime.date()
         self.datetime = datetime
@@ -1586,6 +1586,7 @@ def doctest_StudentAttendanceView_unresolvedAbsences():
         ...         HomeroomAttendanceRecordStub(None,
         ...                 dt,
         ...                 status,
+        ...                 'person',
         ...                 dt.date() >= datetime.date(2006, 1, 26))
         ...         for dt, status in zip(dts, statii)]
 
@@ -1593,6 +1594,7 @@ def doctest_StudentAttendanceView_unresolvedAbsences():
         ...         SectionAttendanceRecordStub(section,
         ...                 dt,
         ...                 status,
+        ...                 'person',
         ...                 dt.date() >= datetime.date(2006, 1, 26))
         ...         for section, dt, status in zip(sections, dts, statii)]
 
@@ -1670,9 +1672,9 @@ def doctest_StudentAttendanceView_countAbsences():
     r"""Tests for StudentAttendanceView.countAbsences
 
         >>> from schooltool.attendance.attendance import AttendanceRecord
-        >>> a = AttendanceRecord(ABSENT)
-        >>> p = AttendanceRecord(PRESENT)
-        >>> t = AttendanceRecord(UNKNOWN)
+        >>> a = AttendanceRecord(ABSENT, 'person')
+        >>> p = AttendanceRecord(PRESENT, 'person')
+        >>> t = AttendanceRecord(UNKNOWN, 'person')
         >>> t.status = TARDY
 
         >>> from schooltool.attendance.browser.attendance \
@@ -1692,9 +1694,9 @@ def doctest_StudentAttendanceView_summaryPerTerm():
     We shall use some simple attendance adapters for this test
 
         >>> from schooltool.attendance.attendance import AttendanceRecord
-        >>> a = AttendanceRecord(ABSENT)
-        >>> p = AttendanceRecord(PRESENT)
-        >>> t = AttendanceRecord(UNKNOWN)
+        >>> a = AttendanceRecord(ABSENT, 'person')
+        >>> p = AttendanceRecord(PRESENT, 'person')
+        >>> t = AttendanceRecord(UNKNOWN, 'person')
         >>> t.status = TARDY
 
         >>> class TermStub(object):
@@ -1753,14 +1755,14 @@ def doctest_StudentAttendanceView_makeId():
         >>> from schooltool.attendance.attendance import HomeroomAttendanceRecord
         >>> dt = utc.localize(datetime.datetime(2006, 1, 29, 14, 30))
         >>> a = HomeroomAttendanceRecord(SectionStub(u'Some section \u1234'),
-        ...                              dt, ABSENT)
+        ...                              dt, ABSENT, 'person')
 
         >>> view.makeId(a)
         'h_2006-01-29_14:30:00+00:00_homeroom'
 
         >>> from schooltool.attendance.attendance import SectionAttendanceRecord
         >>> a = SectionAttendanceRecord(SectionStub(u'Some section \u1234'),
-        ...                             dt, ABSENT)
+        ...                             dt, ABSENT, 'person')
 
         >>> view.makeId(a)
         's_2006-01-29_14:30:00+00:00_U29tZSBzZWN0aW9uIOGItA=='
@@ -1779,7 +1781,7 @@ def doctest_StudentAttendanceView_outstandingExplanation():
         >>> from schooltool.attendance.attendance import HomeroomAttendanceRecord
         >>> a = HomeroomAttendanceRecord(None,
         ...         datetime.datetime(2006, 1, 29, tzinfo=utc),
-        ...         ABSENT)
+        ...         ABSENT, 'person')
 
         >>> print view.outstandingExplanation(a)
         None

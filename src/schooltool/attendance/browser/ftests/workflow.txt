@@ -13,9 +13,11 @@ Let's set up a subscriber that prints out all the events:
 
 Now we can create the process:
 
+    >>> from schooltool.person.person import Person
     >>> from schooltool.attendance.attendance import AttendanceRecord
     >>> from schooltool.attendance.attendance import ABSENT
-    >>> ar = AttendanceRecord(ABSENT)
+    >>> person = Person('jonas', title='Jonas')
+    >>> ar = AttendanceRecord(ABSENT, person)
     ProcessStarted(Process('schooltool.attendance.explanation'))
     Transition(None, Activity('schooltool.attendance.explanation.create'))
     ActivityStarted(Activity('schooltool.attendance.explanation.create'))

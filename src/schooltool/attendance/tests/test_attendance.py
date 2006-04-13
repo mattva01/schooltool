@@ -265,8 +265,9 @@ def doctest_HomeroomAttendanceLoggingProxy():
 #
 
 class FakeProcessDef(object):
-    def start(self, arg):
+    def start(self, arg, person):
         print "starting process for %r" % arg
+        print person
 
 directlyProvides(FakeProcessDef, IProcessDefinition)
 
@@ -275,13 +276,14 @@ def doctest_AttendanceRecord_createWorkflow():
     """Tests for AttendanceRecord._createWorkflow
 
         >>> from schooltool.attendance.attendance import AttendanceRecord
-        >>> ar = AttendanceRecord(UNKNOWN)
+        >>> ar = AttendanceRecord(UNKNOWN, None)
 
         >>> provideUtility(FakeProcessDef, IProcessDefinition,
         ...                name='schooltool.attendance.explanation')
 
-        >>> ar._createWorkflow()
+        >>> ar._createWorkflow('person')
         starting process for <schooltool.attendance.attendance.AttendanceRecord ...>
+        person
 
     """
 
@@ -295,13 +297,14 @@ def doctest_AttendanceRecord():
 
     A new workflow is created iff attendance record starts as an absence:
 
-        >>> ar = AttendanceRecord(UNKNOWN)
-        >>> ar = AttendanceRecord(PRESENT)
+        >>> ar = AttendanceRecord(UNKNOWN, 'a person')
+        >>> ar = AttendanceRecord(PRESENT, 'a person')
 
-        >>> ar = AttendanceRecord(ABSENT)
+        >>> ar = AttendanceRecord(ABSENT, 'a person')
         starting process for <schooltool.attendance.attendance.AttendanceRecord ...>
+        a person
 
-        >>> ar = AttendanceRecord(TARDY)
+        >>> ar = AttendanceRecord(TARDY, 'a person')
         Traceback (most recent call last):
         ...
         AssertionError
@@ -315,7 +318,7 @@ def doctest_AttendanceRecord_isUnknown_isPresent_isAbsent_isTardy():
         >>> from schooltool.attendance.attendance import AttendanceRecord
 
         >>> for status in (UNKNOWN, PRESENT, ABSENT, TARDY):
-        ...     ar = AttendanceRecord(UNKNOWN)
+        ...     ar = AttendanceRecord(UNKNOWN, 'person')
         ...     ar.status = status
         ...     print "%-7s %-5s %-5s %-5s %-5s" % (ar.status,
         ...                 ar.isUnknown(), ar.isPresent(), ar.isAbsent(),
@@ -335,7 +338,7 @@ def doctest_AttendanceRecord_makeTardy():
 
     If you have an absence
 
-        >>> ar = AttendanceRecord(ABSENT)
+        >>> ar = AttendanceRecord(ABSENT, 'person')
 
     you can convert it to a tardy
 
@@ -349,7 +352,7 @@ def doctest_AttendanceRecord_makeTardy():
     In all other cases you can't.
 
         >>> for status in (UNKNOWN, PRESENT, TARDY):
-        ...     ar = AttendanceRecord(UNKNOWN)
+        ...     ar = AttendanceRecord(UNKNOWN, 'person')
         ...     ar.status = status
         ...     try:
         ...         ar.makeTardy(datetime.datetime(2005, 12, 16, 15, 03))
@@ -368,7 +371,7 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
 
     If you have an absence
 
-        >>> ar = AttendanceRecord(ABSENT)
+        >>> ar = AttendanceRecord(ABSENT, 'fake person')
 
     In the beginning it is not explained:
 
@@ -416,7 +419,7 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
 
     Now with a new record:
 
-        >>> ar = AttendanceRecord(ABSENT)
+        >>> ar = AttendanceRecord(ABSENT, 'bad pupil')
         >>> ar.addExplanation("Dog ate homework")
 
     Rejecting it proceeds with the workflow:
@@ -435,7 +438,7 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
     If the record's status is not ABSENT or TARDY, isExplained raises
     an exception:
 
-        >>> ar = AttendanceRecord(UNKNOWN)
+        >>> ar = AttendanceRecord(UNKNOWN, 'person')
         >>> ar.isExplained()
         Traceback (most recent call last):
           ...
@@ -465,7 +468,7 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
           ...
         AttendanceError: only absences and tardies can be explained.
 
-        >>> ar = AttendanceRecord(ABSENT)
+        >>> ar = AttendanceRecord(ABSENT, 'person')
         >>> ar.status = TARDY
         >>> ar.addExplanation("whatever")
         >>> ar.explanations[-1]
@@ -479,7 +482,7 @@ def doctest_AttendanceRecord_accept_reject_explaination():
 
         >>> from schooltool.attendance.attendance import AttendanceRecord
         >>> from schooltool.attendance.interfaces import ABSENT
-        >>> ar = AttendanceRecord(ABSENT)
+        >>> ar = AttendanceRecord(ABSENT, None)
 
     If there are no explanations, you cannot accept nor reject them.
 
@@ -551,7 +554,7 @@ def doctest_SectionAttendanceRecord():
 
         >>> section = SectionStub()
         >>> dt = datetime.datetime(2005, 11, 23, 14, 55, tzinfo=utc)
-        >>> ar = SectionAttendanceRecord(section, dt, UNKNOWN)
+        >>> ar = SectionAttendanceRecord(section, dt, UNKNOWN, 'person')
         >>> verifyObject(ISectionAttendanceRecord, ar)
         True
 
@@ -580,8 +583,8 @@ def doctest_SectionAttendanceRecord():
         >>> dt = datetime.datetime(2005, 11, 23, 14, 55, tzinfo=utc)
         >>> duration = datetime.timedelta(minutes=45)
         >>> period_id = 'Period A'
-        >>> ar = SectionAttendanceRecord(section, dt, PRESENT, duration,
-        ...                              period_id)
+        >>> ar = SectionAttendanceRecord(section, dt, PRESENT, 'person',
+        ...                              duration, period_id)
 
         >>> ar.status == PRESENT
         True
@@ -613,7 +616,7 @@ def doctest_SectionAttendanceRecord_date():
 
         >>> section = SectionStub()
         >>> dt = datetime.datetime(2005, 11, 23, 14, 55, tzinfo=utc)
-        >>> ar = SectionAttendanceRecord(section, dt, UNKNOWN)
+        >>> ar = SectionAttendanceRecord(section, dt, UNKNOWN, 'person')
         >>> ar.date == dt.date()
         True
 
@@ -625,7 +628,7 @@ def doctest_SectionAttendanceRecord_date():
         >>> IApplicationPreferences(app).timezone = 'Asia/Tokyo'
 
         >>> dt = datetime.datetime(2005, 11, 23, 23, 00, tzinfo=utc)
-        >>> ar = SectionAttendanceRecord(section, dt, UNKNOWN)
+        >>> ar = SectionAttendanceRecord(section, dt, UNKNOWN, 'person')
         >>> ar.date
         datetime.date(2005, 11, 24)
 
@@ -645,7 +648,7 @@ def doctest_HomeroomAttendanceRecord():
         >>> from schooltool.attendance.interfaces import IHomeroomAttendanceRecord
         >>> section = SectionStub(name='Art')
         >>> dt = datetime.datetime(2005, 11, 23, 14, 55, tzinfo=utc)
-        >>> ar = HomeroomAttendanceRecord(section, dt, UNKNOWN)
+        >>> ar = HomeroomAttendanceRecord(section, dt, UNKNOWN, 'person')
         >>> IHomeroomAttendanceRecord.providedBy(ar)
         True
 
@@ -679,7 +682,7 @@ def doctest_AttendanceFilteringMixin_filter():
         >>> from schooltool.attendance.attendance import SectionAttendanceRecord
         >>> class AttendanceStub(AttendanceFilteringMixin):
         ...     def __iter__(self):
-        ...         return iter(SectionAttendanceRecord(None, dt, status)
+        ...         return iter(SectionAttendanceRecord(None, dt, status, None)
         ...                     for (dt, status) in [(dt1, PRESENT),
         ...                                          (dt2, PRESENT),
         ...                                          (dt2, ABSENT),
@@ -1099,8 +1102,8 @@ def doctest_SectionAttendance_makeCalendarEvent():
         >>> dt = datetime.datetime(2005, 11, 23, 14, 55, tzinfo=utc)
         >>> duration = datetime.timedelta(minutes=45)
         >>> period_id = 'Period A'
-        >>> ar = SectionAttendanceRecord(section, dt, ABSENT, duration,
-        ...                              period_id)
+        >>> ar = SectionAttendanceRecord(section, dt, ABSENT, 'person',
+        ...                              duration, period_id)
 
         >>> ev = sa.makeCalendarEvent(ar, 'John was bad today', 'Very bad')
         >>> ICalendarEvent.providedBy(ev)
@@ -1152,34 +1155,34 @@ def doctest_HomeroomAttendance_wrapRecordForLogging():
 
         >>> from schooltool.attendance.attendance import HomeroomAttendanceRecord
         >>> def getAllForDay(self):
-        ...     return [HomeroomAttendanceRecord(section, dt, PRESENT)
+        ...     return [HomeroomAttendanceRecord(section, dt, PRESENT, 'p')
         ...             for dt in timestamps]
         >>> ha.getAllForDay = getAllForDay
 
         >>> from schooltool.attendance.attendance import SectionAttendanceRecord
-        >>> ar = SectionAttendanceRecord(section, makeDT(10, 55), PRESENT)
+        >>> ar = SectionAttendanceRecord(section, makeDT(10, 55), PRESENT, 'p')
         >>> str(ha.getHomeroomPeriodForRecord(ar))
         'HomeroomAttendanceRecord(2005-01-01 10:00:00+00:00, PRESENT, section=None)'
 
         >>> from schooltool.attendance.attendance import SectionAttendanceRecord
-        >>> ar = SectionAttendanceRecord(section, makeDT(10, 0), PRESENT)
+        >>> ar = SectionAttendanceRecord(section, makeDT(10, 0), PRESENT, 'p')
         >>> str(ha.getHomeroomPeriodForRecord(ar))
         'HomeroomAttendanceRecord(2005-01-01 10:00:00+00:00, PRESENT, section=None)'
 
         >>> from schooltool.attendance.attendance import SectionAttendanceRecord
-        >>> ar = SectionAttendanceRecord(section, makeDT(11, 0), PRESENT)
+        >>> ar = SectionAttendanceRecord(section, makeDT(11, 0), PRESENT, 'p')
         >>> str(ha.getHomeroomPeriodForRecord(ar))
         'HomeroomAttendanceRecord(2005-01-01 11:00:00+00:00, PRESENT, section=None)'
 
         >>> from schooltool.attendance.attendance import SectionAttendanceRecord
-        >>> ar = SectionAttendanceRecord(section, makeDT(16, 0), PRESENT)
+        >>> ar = SectionAttendanceRecord(section, makeDT(16, 0), PRESENT, 'p')
         >>> str(ha.getHomeroomPeriodForRecord(ar))
         'HomeroomAttendanceRecord(2005-01-01 13:00:00+00:00, PRESENT, section=None)'
 
     If there is no such record a HomeroomAttendanceRecord with status
     UNKNOWN, matching datetime and the same section is returned:
 
-        >>> ar = SectionAttendanceRecord(section, makeDT(9, 55), PRESENT)
+        >>> ar = SectionAttendanceRecord(section, makeDT(9, 55), PRESENT, 'p')
         >>> str(ha.getHomeroomPeriodForRecord(ar))
         "HomeroomAttendanceRecord(SectionStub('History'),
              datetime.datetime(2005, 1, 1, 9, 55, tzinfo=<UTC>), UNKNOWN)"
