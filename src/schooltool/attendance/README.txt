@@ -218,18 +218,12 @@ Sparkline attendance graph
 --------------------------
 
 The real-time attendance form will have whisker sparkline__ graphs showing
-attendance for the last 10 schooldays for each student.
+attendance for the last 10 meetings of the section for each student.
 
 __ http://sparkline.org/
 
 - Successful attendance during days when the section has met are designated by
   a full length positive black line.
-
-- Attendance on days the section does not meet are indicated by a half-length
-  black line.
-
-- Non-attendance on days the section does not meet is indicated by a
-  half-length descending grey (excused) or yellow (unexcused) line.
 
 - Non-attendance on days when the section meets is indicated by a full length
   black (excused) or yellow (unexcused) line.
@@ -255,17 +249,9 @@ This is complicated.  Let's show a table:
    +---------+------------------+--------------------+------+---------+-----+
    | yes     | no (unexplained) | no                 | full | yellow  | `-` |
    +---------+------------------+--------------------+------+---------+-----+
-   | no      | (not available)  | unknown            | dot  | black   | n/a |
-   +---------+------------------+--------------------+------+---------+-----+
-   | no      | (not available)  | yes                | half | black   | `+` |
-   +---------+------------------+--------------------+------+---------+-----+
-   | no      | (not available)  | no (explained)     | half | black   | `-` |
-   +---------+------------------+--------------------+------+---------+-----+
-   | no      | (not available)  | no (unexplained)   | half | yellow  | `-` |
-   +---------+------------------+--------------------+------+---------+-----+
+   
 
-I *assume* tardy is the treated as absent, i.e. you look at whether the
-incident is explained or not.
+This only covers absences, not tardies.  Tardies are ignored.
 
 If the section meets more than once on a given day, take the "worst" of the
 outcomes.
