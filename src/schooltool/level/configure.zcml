@@ -19,7 +19,7 @@
      name=".manager"
      />
 
-  <!-- Promotion Wokflow subscribers -->
+  <!-- Promotion Workflow subscribers -->
   <subscriber
       for="zope.wfmc.interfaces.IProcessStarted"
       handler=".promotion.addProcessToStudent"
