@@ -1,3 +1,4 @@
+<tal:defs define="update view/update" />
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
   <title metal:fill-slot="title" i18n:translate=""
@@ -11,7 +12,16 @@
 
 <metal:block metal:fill-slot="body">
 
-Here be attendance (in ze future).
+<form class="standalone">
+<fieldset tal:define="batch view/batch">
+  <legend i18n:translate="">Absent-minded students</legend>
+  <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+  <div tal:repeat="member batch">
+    <a tal:attributes="href string:${member/@@absolute_url}/@@attendance.html"
+       tal:content="member/title" />
+  </div>
+</fieldset>
+</form>
 
 </metal:block>
 </body>

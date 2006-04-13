@@ -2094,6 +2094,55 @@ def doctest_StudentAttendanceView_rejectExplanation():
     """
 
 
+def doctest_AttendancePanelView():
+    r"""Tests for AttendancePanelView.
+
+        >>> from schooltool.attendance.browser.attendance import \
+        ...     AttendancePanelView
+        >>> from schooltool.attendance.interfaces import IUnresolvedAbsenceCache
+
+        >>> class PersonStub(object):
+        ...     def __init__(self, title):
+        ...         self.title = title
+        ...     def __repr__(self):
+        ...         return self.title
+        >>> class AppStub(object):
+        ...     implements(IUnresolvedAbsenceCache)
+        ...     def homeroomAbsences(self):
+        ...         return [(PersonStub('Some person'), 'some absence'),
+        ...                 (PersonStub('Another person'), 'another absence'),
+        ...                 (PersonStub('Zorro'), 'missing')]
+        >>> admins = AppStub()
+        >>> context = admins
+        >>> request = TestRequest()
+        >>> view = AttendancePanelView(context, request)
+
+        >>> view.getCache() is admins
+        True
+
+        >>> view.update()
+        >>> view.batch.start
+        0
+        >>> view.batch.size
+        10
+        >>> list(view.batch)
+        [Another person, Some person, Zorro]
+
+    Let's chect that arguments in the request are reacted to:
+
+        >>> request.form['batch_start'] = 2
+        >>> request.form['batch_size'] = 2
+        >>> view.update()
+        >>> view.batch.start
+        2
+        >>> view.batch.size
+        2
+        >>> list(view.batch)
+        [Zorro]
+
+    """
+
+
 def setUp(test):
     setup.placelessSetUp()
     setup.setUpTraversal()

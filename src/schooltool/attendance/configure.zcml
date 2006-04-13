@@ -22,6 +22,17 @@
         trusted="true"
   />
 
+  <adapter
+        for="schooltool.app.interfaces.ISchoolToolApplication"
+        provides=".interfaces.IUnresolvedAbsenceCache"
+        factory=".attendance.getUnresolvedAbsenceCache"
+        trusted="true"
+  />
+
+  <class class=".attendance.UnresolvedAbsenceCache">
+    <allow interface=".interfaces.IUnresolvedAbsenceCache" />
+  </class>
+
   <class class=".attendance.HomeroomAttendance">
     <allow interface=".interfaces.IHomeroomAttendance" />
   </class>
@@ -45,6 +56,17 @@
     <allow interface=".interfaces.IAbsenceExplanation" />
   </class>
 
+
+  <!-- Attendance workflow subscribers -->
+  <subscriber
+      for="zope.wfmc.interfaces.IProcessStarted"
+      handler=".attendance.addAttendanceRecordToCache"
+      />
+
+  <subscriber
+      for="zope.wfmc.interfaces.IProcessFinished"
+      handler=".attendance.removeAttendanceRecordFromCache"
+      />
 
   <!-- Process Definition for Explanation workflow -->
   <wfmc:xpdl

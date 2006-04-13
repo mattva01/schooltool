@@ -36,6 +36,7 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.security.proxy import removeSecurityProxy
 from zope.i18n import translate
 
+from schooltool.batching.batch import Batch
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import ITimetableCalendarEvent
 from schooltool.calendar.utils import parse_date, parse_time
@@ -43,6 +44,7 @@ from schooltool.course.interfaces import ISection
 from schooltool.app.browser import ViewPreferences
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
+from schooltool.attendance.interfaces import IUnresolvedAbsenceCache
 from schooltool.person.interfaces import IPerson
 from schooltool.group.interfaces import IGroup
 from schooltool.attendance.interfaces import IHomeroomAttendance
@@ -619,3 +621,14 @@ class StudentAttendanceView(BrowserView):
 
 class AttendancePanelView(BrowserView):
     """A control panel for tracking global attendance."""
+
+    def getCache(self):
+        return IUnresolvedAbsenceCache(self.context)
+
+    def update(self):
+        absences = self.getCache().homeroomAbsences()
+        results = [student for student, record in absences]
+
+        start = int(self.request.get('batch_start', 0))
+        size = int(self.request.get('batch_size', 10))
+        self.batch = Batch(results, start, size, sort_by='title')

@@ -7,6 +7,7 @@ Overview
 1. Define a simple school structure (courses, sections, timetables).
 2. Register some absences and tardies
 3. Look at the student's attendance view
+4. Look at the attendance control panel
 
 
 Setup
@@ -154,7 +155,7 @@ Attendance view
 A student's page contains an "Attendance" action in the menu.
 
     >>> manager.open('http://localhost/persons/joniukas')
-    >>> manager.getLink('Attendance').click()
+    >>> manager.getLink('Attendance', url='@@attendance.html').click()
 
     >>> from schooltool.testing.util import normalize_xml
     >>> for node in analyze.queryHTML('//table[@class="attendance_summary_per_term"]',
@@ -183,3 +184,8 @@ A student's page contains an "Attendance" action in the menu.
       </tr>
     </table>
 
+Let's check the attendance panel:
+
+    >>> manager.getLink('Attendance Panel').click()
+    >>> 'Joniukas' in manager.contents
+    True
