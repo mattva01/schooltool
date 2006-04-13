@@ -58,7 +58,7 @@ def doctest_walk_ics():
         >>> import schooltool.calendar.tests as tests
         >>> import os
         >>> path = os.path.dirname(tests.__file__)
-        >>> tzinfo = list(walk_ics(path))
+        >>> tzinfo = sorted(list(walk_ics(path)))
         Timezone 'sample' was not found
 
     There are 2 timezone files in the test directory:
