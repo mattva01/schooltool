@@ -126,9 +126,8 @@
                         </TransitionRestriction>
                     </TransitionRestrictions>
                     <ExtendedAttributes>
-                        <ExtendedAttribute Name="ParticipantID" Value="attendanceAdmin"/>
-                        <ExtendedAttribute Name="XOffset" Value="410"/>
-                        <ExtendedAttribute Name="YOffset" Value="30"/>
+                        <ExtendedAttribute Name="JaWE_GRAPH_OFFSET" Value="410,30"/>
+                        <ExtendedAttribute Name="JaWE_GRAPH_PARTICIPANT_ID" Value="attendanceAdmin"/>
                     </ExtendedAttributes>
                 </Activity>
                 <Activity Id="reject" Name="Reject">
@@ -147,9 +146,8 @@
                         <Automatic/>
                     </FinishMode>
                     <ExtendedAttributes>
-                        <ExtendedAttribute Name="ParticipantID" Value="attendanceAdmin"/>
-                        <ExtendedAttribute Name="XOffset" Value="500"/>
-                        <ExtendedAttribute Name="YOffset" Value="110"/>
+                        <ExtendedAttribute Name="JaWE_GRAPH_OFFSET" Value="500,110"/>
+                        <ExtendedAttribute Name="JaWE_GRAPH_PARTICIPANT_ID" Value="attendanceAdmin"/>
                     </ExtendedAttributes>
                 </Activity>
                 <Activity Id="makeTardy" Name="Make Tardy">
@@ -169,9 +167,8 @@
                         <Automatic/>
                     </FinishMode>
                     <ExtendedAttributes>
-                        <ExtendedAttribute Name="ParticipantID" Value="attendanceAdmin"/>
-                        <ExtendedAttribute Name="XOffset" Value="320"/>
-                        <ExtendedAttribute Name="YOffset" Value="110"/>
+                        <ExtendedAttribute Name="JaWE_GRAPH_OFFSET" Value="320,110"/>
+                        <ExtendedAttribute Name="JaWE_GRAPH_PARTICIPANT_ID" Value="attendanceAdmin"/>
                     </ExtendedAttributes>
                 </Activity>
                 <Activity Id="excuse" Name="Excuse">
@@ -190,9 +187,8 @@
                         <Automatic/>
                     </FinishMode>
                     <ExtendedAttributes>
-                        <ExtendedAttribute Name="ParticipantID" Value="attendanceAdmin"/>
-                        <ExtendedAttribute Name="XOffset" Value="610"/>
-                        <ExtendedAttribute Name="YOffset" Value="60"/>
+                        <ExtendedAttribute Name="JaWE_GRAPH_OFFSET" Value="610,60"/>
+                        <ExtendedAttribute Name="JaWE_GRAPH_PARTICIPANT_ID" Value="attendanceAdmin"/>
                     </ExtendedAttributes>
                 </Activity>
                 <Activity Id="create" Name="Create Absence">
@@ -207,9 +203,8 @@
                         <Automatic/>
                     </FinishMode>
                     <ExtendedAttributes>
-                        <ExtendedAttribute Name="ParticipantID" Value="attendanceAdmin"/>
-                        <ExtendedAttribute Name="XOffset" Value="250"/>
-                        <ExtendedAttribute Name="YOffset" Value="40"/>
+                        <ExtendedAttribute Name="JaWE_GRAPH_OFFSET" Value="250,40"/>
+                        <ExtendedAttribute Name="JaWE_GRAPH_PARTICIPANT_ID" Value="attendanceAdmin"/>
                         <ExtendedAttribute Name="AttendanceRecord"/>
                     </ExtendedAttributes>
                 </Activity>
@@ -217,47 +212,47 @@
             <Transitions>
                 <Transition From="create" Id="create_to_explain" To="explain">
                     <ExtendedAttributes>
-                        <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
+                        <ExtendedAttribute Name="JaWE_GRAPH_TRANSITION_STYLE" Value="NO_ROUTING_ORTHOGONAL"/>
                     </ExtendedAttributes>
                 </Transition>
                 <Transition From="explain" Id="explain_to_tardy" To="makeTardy">
                     <Condition Type="CONDITION">outcome == 'tardy'</Condition>
                     <ExtendedAttributes>
-                        <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
+                        <ExtendedAttribute Name="JaWE_GRAPH_TRANSITION_STYLE" Value="NO_ROUTING_ORTHOGONAL"/>
                     </ExtendedAttributes>
                 </Transition>
                 <Transition From="makeTardy" Id="tardy_to_explain" To="explain">
                     <ExtendedAttributes>
-                        <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
+                        <ExtendedAttribute Name="JaWE_GRAPH_TRANSITION_STYLE" Value="NO_ROUTING_ORTHOGONAL"/>
                     </ExtendedAttributes>
                 </Transition>
                 <Transition From="explain" Id="explain_to_reject" To="reject">
                     <Condition Type="CONDITION">outcome == 'reject'</Condition>
                     <ExtendedAttributes>
-                        <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
+                        <ExtendedAttribute Name="JaWE_GRAPH_TRANSITION_STYLE" Value="NO_ROUTING_ORTHOGONAL"/>
                     </ExtendedAttributes>
                 </Transition>
                 <Transition From="reject" Id="reject_to_explain" To="explain">
                     <ExtendedAttributes>
-                        <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
+                        <ExtendedAttribute Name="JaWE_GRAPH_TRANSITION_STYLE" Value="NO_ROUTING_ORTHOGONAL"/>
                     </ExtendedAttributes>
                 </Transition>
                 <Transition From="explain" Id="explain_to_excuse" To="excuse">
                     <Condition Type="CONDITION">outcome == 'accept'</Condition>
                     <ExtendedAttributes>
-                        <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
+                        <ExtendedAttribute Name="JaWE_GRAPH_TRANSITION_STYLE" Value="NO_ROUTING_ORTHOGONAL"/>
                     </ExtendedAttributes>
                 </Transition>
             </Transitions>
             <ExtendedAttributes>
-                <ExtendedAttribute Name="StartOfWorkflow" Value="attendanceAdmin;create;120;60;NOROUTING"/>
-                <ExtendedAttribute Name="EndOfWorkflow" Value="attendanceAdmin;excuse;750;100;NOROUTING"/>
-                <ExtendedAttribute Name="ParticipantVisualOrder" Value="attendanceAdmin;"/>
+                <ExtendedAttribute Name="JaWE_GRAPH_END_OF_WORKFLOW" Value="JaWE_GRAPH_PARTICIPANT_ID=attendanceAdmin,CONNECTING_ACTIVITY_ID=excuse,X_OFFSET=761,Y_OFFSET=111,JaWE_GRAPH_TRANSITION_STYLE=NO_ROUTING_ORTHOGONAL,TYPE=END_DEFAULT"/>
+                <ExtendedAttribute Name="JaWE_GRAPH_START_OF_WORKFLOW" Value="JaWE_GRAPH_PARTICIPANT_ID=attendanceAdmin,CONNECTING_ACTIVITY_ID=create,X_OFFSET=131,Y_OFFSET=71,JaWE_GRAPH_TRANSITION_STYLE=NO_ROUTING_ORTHOGONAL,TYPE=START_DEFAULT"/>
+                <ExtendedAttribute Name="JaWE_GRAPH_WORKFLOW_PARTICIPANT_ORDER" Value="attendanceAdmin"/>
             </ExtendedAttributes>
         </WorkflowProcess>
     </WorkflowProcesses>
     <ExtendedAttributes>
-        <ExtendedAttribute Name="MadeBy" Value="JaWE"/>
-        <ExtendedAttribute Name="Version" Value="1.4.2"/>
+        <ExtendedAttribute Name="EDITING_TOOL" Value="Together Workflow Editor Community Edition"/>
+        <ExtendedAttribute Name="EDITING_TOOL_VERSION" Value="2.0-2-C-20060228-0902"/>
     </ExtendedAttributes>
 </Package>
