@@ -119,6 +119,21 @@ TARDY = 'TARDY'
 class IAttendanceRecord(Interface):
     """A single attendance record for a day/section."""
 
+    section = Object(
+        title=u"Section.",
+        schema=ISection)
+
+    datetime = Datetime(
+        title=u"Date/time",
+        description=u"""The date and time of the section meeting.""")
+
+    duration = Timedelta(
+        title=u"Duration",
+        description=u"""The duration of the section meeting.""")
+
+    period_id = TextLine(
+        title=u"ID of the period.")
+
     date = Date(
         title=u"Date",
         description=u"""
@@ -181,23 +196,8 @@ class IAttendanceRecord(Interface):
 class ISectionAttendanceRecord(IAttendanceRecord):
     """A single attendance record for a section."""
 
-    section = Object(
-        title=u"Section.",
-        schema=ISection)
 
-    datetime = Datetime(
-        title=u"Date/time",
-        description=u"""The date and time of the section meeting.""")
-
-    duration = Timedelta(
-        title=u"Duration",
-        description=u"""The duration of the section meeting.""")
-
-    period_id = TextLine(
-        title=u"ID of the period.")
-
-
-class IHomeroomAttendanceRecord(ISectionAttendanceRecord):
+class IHomeroomAttendanceRecord(IAttendanceRecord):
     """A single attendance record for a homeroom period."""
 
 

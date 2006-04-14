@@ -275,6 +275,20 @@ class FakeProcessDef(object):
 directlyProvides(FakeProcessDef, IProcessDefinition)
 
 
+def doctest_AttendanceRecord():
+    """Tests for AttendanceRecord.
+
+        >>> from schooltool.attendance.attendance import AttendanceRecord
+        >>> section = SectionStub()
+        >>> dt = datetime.datetime(2005, 11, 23, 14, 55, tzinfo=utc)
+        >>> ar = AttendanceRecord(section, dt, UNKNOWN, 'person')
+
+        >>> from schooltool.attendance.interfaces import IAttendanceRecord
+        >>> verifyObject(IAttendanceRecord, ar)
+        True
+
+    """
+
 def doctest_AttendanceRecord_cmp():
     """Tests for AttendanceRecord.__cmp__.
 

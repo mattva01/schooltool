@@ -52,6 +52,7 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.calendar.simple import ImmutableCalendar
 from schooltool.calendar.simple import SimpleCalendarEvent
+from schooltool.attendance.interfaces import IAttendanceRecord
 from schooltool.attendance.interfaces import IHomeroomAttendance
 from schooltool.attendance.interfaces import IHomeroomAttendanceRecord
 from schooltool.attendance.interfaces import ISectionAttendance
@@ -188,6 +189,8 @@ class AbsenceExplanation(Persistent):
 
 class AttendanceRecord(Persistent):
     """Base class for attendance records."""
+
+    implements(IAttendanceRecord)
 
     # These are class attributes to conserve ZODB space
     late_arrival = None
