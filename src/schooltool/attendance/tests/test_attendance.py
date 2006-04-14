@@ -82,6 +82,9 @@ class SectionStub(object):
             return 'SectionStub()'
 
 
+some_dt = datetime.datetime(2006, 4, 14, 12, 13, tzinfo=utc)
+
+
 class ExplanationStub(object):
     pass
 
@@ -272,11 +275,31 @@ class FakeProcessDef(object):
 directlyProvides(FakeProcessDef, IProcessDefinition)
 
 
+def doctest_AttendanceRecord_cmp():
+    """Tests for AttendanceRecord.__cmp__.
+
+        >>> from schooltool.attendance.attendance import AttendanceRecord
+        >>> section = SectionStub()
+        >>> dt = datetime.datetime(2005, 11, 23, 14, 55, tzinfo=utc)
+        >>> ar = AttendanceRecord(section, dt, UNKNOWN, 'person')
+
+        >>> ar == ar
+        True
+        >>> ar == AttendanceRecord(section, dt, UNKNOWN, 'person')
+        True
+        >>> ar == AttendanceRecord(section, dt, ABSENT, 'person')
+        False
+        >>> ar > AttendanceRecord(section, dt, ABSENT, 'person')
+        True
+
+    """
+
+
 def doctest_AttendanceRecord_createWorkflow():
     """Tests for AttendanceRecord._createWorkflow
 
         >>> from schooltool.attendance.attendance import AttendanceRecord
-        >>> ar = AttendanceRecord(UNKNOWN, None)
+        >>> ar = AttendanceRecord(None, some_dt, UNKNOWN, None)
 
         >>> provideUtility(FakeProcessDef, IProcessDefinition,
         ...                name='schooltool.attendance.explanation')
@@ -294,7 +317,7 @@ def doctest_AttendanceRecord_isUnknown_isPresent_isAbsent_isTardy():
         >>> from schooltool.attendance.attendance import AttendanceRecord
 
         >>> for status in (UNKNOWN, PRESENT, ABSENT, TARDY):
-        ...     ar = AttendanceRecord(UNKNOWN, 'person')
+        ...     ar = AttendanceRecord(None, some_dt, UNKNOWN, 'person')
         ...     ar.status = status
         ...     print "%-7s %-5s %-5s %-5s %-5s" % (ar.status,
         ...                 ar.isUnknown(), ar.isPresent(), ar.isAbsent(),
@@ -314,7 +337,7 @@ def doctest_AttendanceRecord_makeTardy():
 
     If you have an absence
 
-        >>> ar = AttendanceRecord(ABSENT, 'person')
+        >>> ar = AttendanceRecord(None, some_dt, ABSENT, 'person')
         >>> ar._createWorkflow('person')
 
     you can convert it to a tardy
@@ -329,7 +352,7 @@ def doctest_AttendanceRecord_makeTardy():
     In all other cases you can't.
 
         >>> for status in (UNKNOWN, PRESENT, TARDY):
-        ...     ar = AttendanceRecord(UNKNOWN, 'person')
+        ...     ar = AttendanceRecord(None, some_dt, UNKNOWN, 'person')
         ...     ar.status = status
         ...     try:
         ...         ar.makeTardy(datetime.datetime(2005, 12, 16, 15, 03))
@@ -348,7 +371,7 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
 
     If you have an absence
 
-        >>> ar = AttendanceRecord(ABSENT, 'fake person')
+        >>> ar = AttendanceRecord(None, some_dt, ABSENT, 'fake person')
         >>> ar._createWorkflow('fake person')
 
     In the beginning it is not explained:
@@ -397,7 +420,7 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
 
     Now with a new record:
 
-        >>> ar = AttendanceRecord(ABSENT, 'bad pupil')
+        >>> ar = AttendanceRecord(None, some_dt, ABSENT, 'bad pupil')
         >>> ar._createWorkflow('bad pupil')
         >>> ar.addExplanation("Dog ate homework")
 
@@ -417,7 +440,7 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
     If the record's status is not ABSENT or TARDY, isExplained raises
     an exception:
 
-        >>> ar = AttendanceRecord(UNKNOWN, 'person')
+        >>> ar = AttendanceRecord(None, some_dt, UNKNOWN, 'person')
         >>> ar.isExplained()
         Traceback (most recent call last):
           ...
@@ -447,7 +470,7 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
           ...
         AttendanceError: only absences and tardies can be explained.
 
-        >>> ar = AttendanceRecord(ABSENT, 'person')
+        >>> ar = AttendanceRecord(None, some_dt, ABSENT, 'person')
         >>> ar.status = TARDY
         >>> ar.addExplanation("whatever")
         >>> ar.explanations[-1]
@@ -461,7 +484,7 @@ def doctest_AttendanceRecord_accept_reject_explaination():
 
         >>> from schooltool.attendance.attendance import AttendanceRecord
         >>> from schooltool.attendance.interfaces import ABSENT
-        >>> ar = AttendanceRecord(ABSENT, None)
+        >>> ar = AttendanceRecord(None, some_dt, ABSENT, None)
 
     If there are no explanations, you cannot accept nor reject them.
 
@@ -556,17 +579,6 @@ def doctest_SectionAttendanceRecord():
         >>> ar.explanations
         ()
 
-    Let's check comparisons:
-
-        >>> ar == ar
-        True
-        >>> ar == SectionAttendanceRecord(section, dt, UNKNOWN, 'person')
-        True
-        >>> ar == SectionAttendanceRecord(section, dt, ABSENT, 'person')
-        False
-        >>> ar > SectionAttendanceRecord(section, dt, ABSENT, 'person')
-        True
-
     Let's create a regular record
 
         >>> section = SectionStub()
@@ -591,23 +603,6 @@ def doctest_SectionAttendanceRecord():
         True
         >>> ar.explanations
         ()
-
-    A new workflow is created iff attendance record starts as an absence:
-
-        >>> provideUtility(FakeProcessDef, IProcessDefinition,
-        ...                name='schooltool.attendance.explanation')
-
-        >>> ar = SectionAttendanceRecord(section, dt, UNKNOWN, 'a person')
-        >>> ar = SectionAttendanceRecord(section, dt, PRESENT, 'a person')
-
-        >>> ar = SectionAttendanceRecord(section, dt, ABSENT, 'a person')
-        starting process for ...AttendanceRecord...
-        a person
-
-        >>> ar = SectionAttendanceRecord(section, dt, TARDY, 'a person')
-        Traceback (most recent call last):
-        ...
-        AssertionError
 
     """
 
@@ -666,35 +661,6 @@ def doctest_HomeroomAttendanceRecord():
         'HomeroomAttendanceRecord(SectionStub(),
              datetime.datetime(2005, 11, 23, 14, 55, tzinfo=<UTC>),
              UNKNOWN)'
-
-    Let's check comparisons:
-
-        >>> ar == ar
-        True
-        >>> ar == HomeroomAttendanceRecord(section, dt, UNKNOWN, 'person')
-        True
-        >>> ar == HomeroomAttendanceRecord(section, dt, ABSENT, 'person')
-        False
-        >>> ar > HomeroomAttendanceRecord(section, dt, ABSENT, 'person')
-        True
-
-    A new workflow is created iff attendance record starts as an absence:
-
-        >>> provideUtility(FakeProcessDef, IProcessDefinition,
-        ...                name='schooltool.attendance.explanation')
-
-        >>> ar = HomeroomAttendanceRecord(section, dt, UNKNOWN, 'a person')
-        >>> ar = HomeroomAttendanceRecord(section, dt, PRESENT, 'a person')
-
-        >>> ar = HomeroomAttendanceRecord(section, dt, ABSENT, 'a person')
-        starting process for ...AttendanceRecord...
-        a person
-
-        >>> ar = HomeroomAttendanceRecord(section, dt, TARDY, 'a person')
-        Traceback (most recent call last):
-        ...
-        AssertionError
-
 
     """
 

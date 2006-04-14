@@ -193,9 +193,27 @@ class AttendanceRecord(Persistent):
     late_arrival = None
     explanations = ()
 
-    def __init__(self, status, person):
+    def __init__(self, section, datetime, status, person,
+                 duration=datetime.timedelta(0), period_id=None):
+        assert datetime.tzinfo is not None, 'need datetime with timezone'
         assert status in (UNKNOWN, PRESENT, ABSENT)
         self.status = status
+        self.section = section
+        self.datetime = datetime
+        self.duration = duration
+        self.period_id = period_id
+        if status == ABSENT:
+            self._createWorkflow(person)
+
+    def __cmp__(self, other):
+        def reprtuple(absence):
+            return (absence.__class__.__name__,
+                    absence.section.__name__,
+                    absence.datetime,
+                    absence.status,
+                    absence.duration,
+                    absence.period_id)
+        return cmp(reprtuple(self), reprtuple(other))
 
     def _createWorkflow(self, person):
         pd = zapi.getUtility(IProcessDefinition,
@@ -266,17 +284,6 @@ class SectionAttendanceRecord(AttendanceRecord):
 
     implements(ISectionAttendanceRecord)
 
-    def __init__(self, section, datetime, status, person,
-                 duration=datetime.timedelta(0), period_id=None):
-        assert datetime.tzinfo is not None, 'need datetime with timezone'
-        AttendanceRecord.__init__(self, status, person)
-        self.section = section
-        self.datetime = datetime
-        self.duration = duration
-        self.period_id = period_id
-        if status == ABSENT:
-            self._createWorkflow(person)
-
     def __repr__(self):
         return 'SectionAttendanceRecord(%r, %r, %s)' % (self.section,
                                                         self.datetime,
@@ -288,32 +295,11 @@ class SectionAttendanceRecord(AttendanceRecord):
             self.status,
             self.section.__name__)
 
-    def __cmp__(self, other):
-        def reprtuple(absence):
-            return (absence.__class__.__name__,
-                    absence.section.__name__,
-                    absence.datetime,
-                    absence.status,
-                    absence.duration,
-                    absence.period_id)
-        return cmp(reprtuple(self), reprtuple(other))
-
 
 class HomeroomAttendanceRecord(AttendanceRecord):
     """Record of a student's presence or absence at a given homeroom period."""
 
     implements(IHomeroomAttendanceRecord)
-
-    def __init__(self, section, datetime, status, person,
-                 duration=datetime.timedelta(0), period_id=None):
-        assert datetime.tzinfo is not None, 'need datetime with timezone'
-        AttendanceRecord.__init__(self, status, person)
-        self.section = section
-        self.datetime = datetime
-        self.duration = duration
-        self.period_id = period_id
-        if status == ABSENT:
-            self._createWorkflow(person)
 
     def __repr__(self):
         return 'HomeroomAttendanceRecord(%r, %r, %s)' % (self.section,
@@ -325,16 +311,6 @@ class HomeroomAttendanceRecord(AttendanceRecord):
             self.datetime,
             self.status,
             self.section.__name__)
-
-    def __cmp__(self, other):
-        def reprtuple(absence):
-            return (absence.__class__.__name__,
-                    absence.section.__name__,
-                    absence.datetime,
-                    absence.status,
-                    absence.duration,
-                    absence.period_id)
-        return cmp(reprtuple(self), reprtuple(other))
 
 
 #

@@ -59,6 +59,9 @@ from schooltool.attendance.interfaces import AttendanceError
 from schooltool import SchoolToolMessage as _
 
 
+some_dt = datetime.datetime(2006, 4, 14, 12, 13, tzinfo=utc)
+
+
 class TermStub(object):
     def __init__(self, y, m1, d1, m2, d2):
         self.first = datetime.date(y, m1, d1)
@@ -1672,9 +1675,9 @@ def doctest_StudentAttendanceView_countAbsences():
     r"""Tests for StudentAttendanceView.countAbsences
 
         >>> from schooltool.attendance.attendance import AttendanceRecord
-        >>> a = AttendanceRecord(ABSENT, 'person')
-        >>> p = AttendanceRecord(PRESENT, 'person')
-        >>> t = AttendanceRecord(UNKNOWN, 'person')
+        >>> a = AttendanceRecord(None, some_dt, ABSENT, 'person')
+        >>> p = AttendanceRecord(None, some_dt, PRESENT, 'person')
+        >>> t = AttendanceRecord(None, some_dt, UNKNOWN, 'person')
         >>> t.status = TARDY
 
         >>> from schooltool.attendance.browser.attendance \
@@ -1694,9 +1697,9 @@ def doctest_StudentAttendanceView_summaryPerTerm():
     We shall use some simple attendance adapters for this test
 
         >>> from schooltool.attendance.attendance import AttendanceRecord
-        >>> a = AttendanceRecord(ABSENT, 'person')
-        >>> p = AttendanceRecord(PRESENT, 'person')
-        >>> t = AttendanceRecord(UNKNOWN, 'person')
+        >>> a = AttendanceRecord(None, some_dt, ABSENT, 'person')
+        >>> p = AttendanceRecord(None, some_dt, PRESENT, 'person')
+        >>> t = AttendanceRecord(None, some_dt, UNKNOWN, 'person')
         >>> t.status = TARDY
 
         >>> class TermStub(object):
