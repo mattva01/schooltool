@@ -14,12 +14,45 @@
 
 <form class="standalone">
 <fieldset tal:define="batch view/batch">
-  <legend i18n:translate="">Absent-minded students</legend>
-  <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
-  <div tal:repeat="member batch">
-    <a tal:attributes="href string:${member/@@absolute_url}/@@attendance.html"
-       tal:content="member/title" />
+  <legend i18n:translate="">Students with unresolved absences</legend>
+
+  <tal:if condition="batch">
+    <tal:if condition="request/SEARCH|nothing">
+    <tal:block define="extra_url python:'&SEARCH=%s' % request.get('SEARCH')">
+      <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+    </tal:block>
+    </tal:if>
+    <tal:if condition="not:request/SEARCH|nothing">
+      <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+    </tal:if>
+  </tal:if>
+
+  <div class="batch-search">
+    <input id="batch-search-box" type="text" name="SEARCH"
+        tal:attributes="value request/SEARCH|nothing"/>
+    <input type="submit" name="SEARCH_BUTTON" value="Find Now"
+        i18n:attributes="value"/>
+    <input type="submit" name="CLEAR_SEARCH" value="Clear"
+        i18n:attributes="value"/>
   </div>
+
+  <table>
+    <tr>
+      <th i18n:translate="">Person</th>
+      <th i18n:translate="">Homeroom<br/>absences</th>
+      <th i18n:translate="">Section<br/>absences</th>
+    </tr>
+
+    <tr tal:repeat="item batch">
+      <td>
+        <a tal:attributes="
+            href string:${item/person/@@absolute_url}/@@attendance.html"
+            i18n:translate="" tal:content="item/title" />
+      </td>
+      <td tal:content="item/hr_absences" />
+      <td tal:content="item/section_absences" />
+    </tr>
+  </table>
 </fieldset>
 </form>
 

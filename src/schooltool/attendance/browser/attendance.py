@@ -625,13 +625,27 @@ class AttendancePanelView(BrowserView):
 
     __used_for__ = ISchoolToolApplication
 
-    def getCache(self):
-        return IUnresolvedAbsenceCache(self.context)
+    def getItems(self, search_str):
+        cache = IUnresolvedAbsenceCache(self.context)
+        subjects = [(self.context['persons'][username], absences)
+                    for username, absences in iter(cache)]
+        # TODO: It would be more efficient to only calculate stats for
+        # the given person.
+        return [{'title': person.title,
+                 'person': person,
+                 'hr_absences':
+                    len(filter(IHomeroomAttendanceRecord.providedBy, absences)),
+                 'section_absences':
+                    len(filter(ISectionAttendanceRecord.providedBy, absences))
+                 }
+                for person, absences in subjects
+                if search_str.lower() in person.title.lower()]
 
     def update(self):
-        results = [self.context['persons'][username]
-                   for username, absences in iter(self.getCache())]
-
+        if 'CLEAR_SEARCH' in self.request:
+            self.request.form['SEARCH'] = ''
+        search_str = self.request.get('SEARCH', '')
+        results = self.getItems(search_str)
         start = int(self.request.get('batch_start', 0))
         size = int(self.request.get('batch_size', 10))
         self.batch = Batch(results, start, size, sort_by='title')

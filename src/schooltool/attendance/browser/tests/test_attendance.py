@@ -147,8 +147,7 @@ class StubTimetables(object):
                                   if first <= e.dtstart.date() <= last])
 
 
-class SectionAttendanceRecordStub(object):
-    implements(ISectionAttendanceRecord)
+class BaseAttendanceRecordStub(object):
     explanations = ()
     def __init__(self, section, datetime, status, person=None, explained=False):
         self.section = section
@@ -167,7 +166,11 @@ class SectionAttendanceRecordStub(object):
         print "Accepted explanation"
 
 
-class HomeroomAttendanceRecordStub(SectionAttendanceRecordStub):
+class SectionAttendanceRecordStub(BaseAttendanceRecordStub):
+    implements(ISectionAttendanceRecord)
+
+
+class HomeroomAttendanceRecordStub(BaseAttendanceRecordStub):
     implements(IHomeroomAttendanceRecord)
 
 
@@ -2097,8 +2100,8 @@ def doctest_StudentAttendanceView_rejectExplanation():
     """
 
 
-def doctest_AttendancePanelView():
-    r"""Tests for AttendancePanelView.
+def doctest_AttendancePanelView_getItems():
+    r"""Tests for AttendancePanelView.getItems.
 
         >>> from schooltool.attendance.browser.attendance import \
         ...     AttendancePanelView
@@ -2112,12 +2115,15 @@ def doctest_AttendancePanelView():
         ...     def __repr__(self):
         ...         return self.title
 
+        >>> har = HomeroomAttendanceRecordStub(None, some_dt, None)
+        >>> sar = SectionAttendanceRecordStub(None, some_dt, None)
+
         >>> class AppStub(object):
         ...     implements(IUnresolvedAbsenceCache)
         ...     def __iter__(self): # from IUnresolvedAbsenceCache
-        ...         return iter([('person', ['abs1', 'abs2']),
-        ...                      ('archangel', ['abs3']),
-        ...                      ('zorro', ['abs4'])])
+        ...         return iter([('person', [har, sar, sar]),
+        ...                      ('archangel', [sar]),
+        ...                      ('zorro', [har])])
         ...     def __getitem__(self, key):
         ...         if key == 'persons':
         ...             return {'person': PersonStub('person'),
@@ -2128,28 +2134,86 @@ def doctest_AttendancePanelView():
         >>> request = TestRequest()
         >>> view = AttendancePanelView(app, request)
 
-        >>> view.getCache() is app
-        True
+        >>> for item in view.getItems(''):
+        ...     print item['person'], item['title']
+        ...     print ('HR: %d, section: %d'
+        ...            % (item['hr_absences'], item['section_absences']))
+        Person Person
+        HR: 1, section: 2
+        Archangel Archangel
+        HR: 0, section: 1
+        Zorro Zorro
+        HR: 1, section: 0
+
+    Check filtering:
+
+        >>> for item in view.getItems('zo'):
+        ...     print item['person'], item['title']
+        ...     print ('HR: %d, section: %d'
+        ...            % (item['hr_absences'], item['section_absences']))
+        Zorro Zorro
+        HR: 1, section: 0
+
+    """
+
+
+def doctest_AttendancePanelView_update():
+    r"""Tests for AttendancePanelView.update.
+
+        >>> from schooltool.attendance.browser.attendance import \
+        ...     AttendancePanelView
+        >>> from schooltool.attendance.interfaces import IUnresolvedAbsenceCache
+
+        >>> app = None
+        >>> request = TestRequest()
+        >>> view = AttendancePanelView(app, request)
+        >>> def getItemsStub(search_str):
+        ...     print 'getItems(%r)' % search_str
+        ...     return [{'title': 'Person'},
+        ...             {'title': 'Archangel'},
+        ...             {'title': 'Zorro'}]
+        >>> view.getItems = getItemsStub
+
+    We call update():
 
         >>> view.update()
+        getItems('')
+
         >>> view.batch.start
         0
         >>> view.batch.size
         10
-        >>> list(view.batch)
-        [Archangel, Person, Zorro]
+        >>> [item['title'] for item in view.batch]
+        ['Archangel', 'Person', 'Zorro']
 
     Let's chect that arguments in the request are reacted to:
 
         >>> request.form['batch_start'] = 2
         >>> request.form['batch_size'] = 2
         >>> view.update()
+        getItems('')
         >>> view.batch.start
         2
         >>> view.batch.size
         2
-        >>> list(view.batch)
-        [Zorro]
+        >>> [item['title'] for item in view.batch]
+        ['Zorro']
+
+    Test searching:
+
+        >>> request.form['SEARCH'] = 'FoO'
+        >>> view.update()
+        getItems('FoO')
+        >>> request.form['SEARCH']
+        'FoO'
+
+    If CLEAR_SEARCH is set, SEARCH will be reset:
+
+        >>> request.form['CLEAR_SEARCH'] = 'Clear'
+        >>> view.update()
+        getItems('')
+        >>> request.form['SEARCH']
+        ''
 
     """
 

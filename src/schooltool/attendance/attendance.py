@@ -577,11 +577,7 @@ class RejectExplanation(AttendanceWorkItem):
 
 
 class UnresolvedAbsenceCache(Persistent):
-    """A set of unresolved absences.
-
-    At the moment all unresolved absences are stored here, but only
-    homeroom absences are used.
-    """
+    """A set of unresolved absences."""
 
     implements(IUnresolvedAbsenceCache)
 
