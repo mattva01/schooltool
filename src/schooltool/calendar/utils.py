@@ -29,6 +29,7 @@ import calendar
 from datetime import date, datetime, timedelta, time
 
 from pytz import timezone, utc
+from zope.testing.cleanup import addCleanUp
 
 
 def prev_month(date):
@@ -449,3 +450,6 @@ def stub_utcnow(value):
         _utcnow_hook = value
     else:
         _utcnow_hook = lambda: value
+
+
+addCleanUp(stub_utcnow, None)
