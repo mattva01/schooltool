@@ -2101,23 +2101,31 @@ def doctest_AttendancePanelView():
         ...     AttendancePanelView
         >>> from schooltool.attendance.interfaces import IUnresolvedAbsenceCache
 
+    We'll need a few stubs:
+
         >>> class PersonStub(object):
         ...     def __init__(self, title):
-        ...         self.title = title
+        ...         self.title = title.capitalize()
         ...     def __repr__(self):
         ...         return self.title
+
         >>> class AppStub(object):
         ...     implements(IUnresolvedAbsenceCache)
-        ...     def homeroomAbsences(self):
-        ...         return [(PersonStub('Some person'), 'some absence'),
-        ...                 (PersonStub('Another person'), 'another absence'),
-        ...                 (PersonStub('Zorro'), 'missing')]
-        >>> admins = AppStub()
-        >>> context = admins
-        >>> request = TestRequest()
-        >>> view = AttendancePanelView(context, request)
+        ...     def __iter__(self): # from IUnresolvedAbsenceCache
+        ...         return iter([('person', ['abs1', 'abs2']),
+        ...                      ('archangel', ['abs3']),
+        ...                      ('zorro', ['abs4'])])
+        ...     def __getitem__(self, key):
+        ...         if key == 'persons':
+        ...             return {'person': PersonStub('person'),
+        ...                     'archangel': PersonStub('archangel'),
+        ...                     'zorro': PersonStub('zorro')}
 
-        >>> view.getCache() is admins
+        >>> app = AppStub()
+        >>> request = TestRequest()
+        >>> view = AttendancePanelView(app, request)
+
+        >>> view.getCache() is app
         True
 
         >>> view.update()
@@ -2126,7 +2134,7 @@ def doctest_AttendancePanelView():
         >>> view.batch.size
         10
         >>> list(view.batch)
-        [Another person, Some person, Zorro]
+        [Archangel, Person, Zorro]
 
     Let's chect that arguments in the request are reacted to:
 

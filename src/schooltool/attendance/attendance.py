@@ -196,8 +196,6 @@ class AttendanceRecord(Persistent):
     def __init__(self, status, person):
         assert status in (UNKNOWN, PRESENT, ABSENT)
         self.status = status
-        if status == ABSENT:
-            self._createWorkflow(person)
 
     def _createWorkflow(self, person):
         pd = zapi.getUtility(IProcessDefinition,
@@ -276,6 +274,8 @@ class SectionAttendanceRecord(AttendanceRecord):
         self.datetime = datetime
         self.duration = duration
         self.period_id = period_id
+        if status == ABSENT:
+            self._createWorkflow(person)
 
     def __repr__(self):
         return 'SectionAttendanceRecord(%r, %r, %s)' % (self.section,
@@ -287,6 +287,16 @@ class SectionAttendanceRecord(AttendanceRecord):
             self.datetime,
             self.status,
             self.section.__name__)
+
+    def __cmp__(self, other):
+        def reprtuple(absence):
+            return (absence.__class__.__name__,
+                    absence.section.__name__,
+                    absence.datetime,
+                    absence.status,
+                    absence.duration,
+                    absence.period_id)
+        return cmp(reprtuple(self), reprtuple(other))
 
 
 class HomeroomAttendanceRecord(AttendanceRecord):
@@ -302,6 +312,8 @@ class HomeroomAttendanceRecord(AttendanceRecord):
         self.datetime = datetime
         self.duration = duration
         self.period_id = period_id
+        if status == ABSENT:
+            self._createWorkflow(person)
 
     def __repr__(self):
         return 'HomeroomAttendanceRecord(%r, %r, %s)' % (self.section,
@@ -313,6 +325,16 @@ class HomeroomAttendanceRecord(AttendanceRecord):
             self.datetime,
             self.status,
             self.section.__name__)
+
+    def __cmp__(self, other):
+        def reprtuple(absence):
+            return (absence.__class__.__name__,
+                    absence.section.__name__,
+                    absence.datetime,
+                    absence.status,
+                    absence.duration,
+                    absence.period_id)
+        return cmp(reprtuple(self), reprtuple(other))
 
 
 #
@@ -588,16 +610,18 @@ class UnresolvedAbsenceCache(Persistent):
         self._cache = OOBTree()
 
     def add(self, student, record):
-        self._cache[record] = student
+        records = self._cache.setdefault(student.__name__, PersistentList())
+        assert record not in records
+        records.append(record)
 
-    def remove(self, record):
-        if record in self._cache: # XXX Workaround for sampledata crash.
-            del self._cache[record]
+    def remove(self, student, record):
+        records = self._cache[student.__name__]
+        records.remove(record)
+        if not records:
+            del self._cache[student.__name__]
 
-    def homeroomAbsences(self):
-        return [(student, record)
-                for record, student in self._cache.items()
-                if IHomeroomAttendanceRecord.providedBy(record)]
+    def __iter__(self):
+        return iter(self._cache.items())
 
 
 AbsenceCacheKey = 'schooltool.attendance.absencecache'
@@ -639,9 +663,10 @@ def removeAttendanceRecordFromCache(event):
     pdi = event.process.process_definition_identifier
     if pdi == 'schooltool.attendance.explanation':
         record = event.process.workflowRelevantData.attendanceRecord
+        student = event.process.workflowRelevantData.student
         app = ISchoolToolApplication(None)
         cache = IUnresolvedAbsenceCache(app)
-        cache.remove(record)
+        cache.remove(student, record)
 
 
 #

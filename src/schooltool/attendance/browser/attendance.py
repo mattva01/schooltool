@@ -623,12 +623,14 @@ class StudentAttendanceView(BrowserView):
 class AttendancePanelView(BrowserView):
     """A control panel for tracking global attendance."""
 
+    __used_for__ = ISchoolToolApplication
+
     def getCache(self):
         return IUnresolvedAbsenceCache(self.context)
 
     def update(self):
-        absences = self.getCache().homeroomAbsences()
-        results = [student for student, record in absences]
+        results = [self.context['persons'][username]
+                   for username, absences in iter(self.getCache())]
 
         start = int(self.request.get('batch_start', 0))
         size = int(self.request.get('batch_size', 10))

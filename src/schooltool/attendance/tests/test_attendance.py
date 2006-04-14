@@ -288,30 +288,6 @@ def doctest_AttendanceRecord_createWorkflow():
     """
 
 
-def doctest_AttendanceRecord():
-    """Tests for AttendanceRecord.
-
-        >>> from schooltool.attendance.attendance import AttendanceRecord
-        >>> provideUtility(FakeProcessDef, IProcessDefinition,
-        ...                name='schooltool.attendance.explanation')
-
-    A new workflow is created iff attendance record starts as an absence:
-
-        >>> ar = AttendanceRecord(UNKNOWN, 'a person')
-        >>> ar = AttendanceRecord(PRESENT, 'a person')
-
-        >>> ar = AttendanceRecord(ABSENT, 'a person')
-        starting process for <schooltool.attendance.attendance.AttendanceRecord ...>
-        a person
-
-        >>> ar = AttendanceRecord(TARDY, 'a person')
-        Traceback (most recent call last):
-        ...
-        AssertionError
-
-    """
-
-
 def doctest_AttendanceRecord_isUnknown_isPresent_isAbsent_isTardy():
     r"""Tests for AttendanceRecord.isSomething functions
 
@@ -339,6 +315,7 @@ def doctest_AttendanceRecord_makeTardy():
     If you have an absence
 
         >>> ar = AttendanceRecord(ABSENT, 'person')
+        >>> ar._createWorkflow('person')
 
     you can convert it to a tardy
 
@@ -372,6 +349,7 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
     If you have an absence
 
         >>> ar = AttendanceRecord(ABSENT, 'fake person')
+        >>> ar._createWorkflow('fake person')
 
     In the beginning it is not explained:
 
@@ -420,6 +398,7 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
     Now with a new record:
 
         >>> ar = AttendanceRecord(ABSENT, 'bad pupil')
+        >>> ar._createWorkflow('bad pupil')
         >>> ar.addExplanation("Dog ate homework")
 
     Rejecting it proceeds with the workflow:
@@ -577,6 +556,17 @@ def doctest_SectionAttendanceRecord():
         >>> ar.explanations
         ()
 
+    Let's check comparisons:
+
+        >>> ar == ar
+        True
+        >>> ar == SectionAttendanceRecord(section, dt, UNKNOWN, 'person')
+        True
+        >>> ar == SectionAttendanceRecord(section, dt, ABSENT, 'person')
+        False
+        >>> ar > SectionAttendanceRecord(section, dt, ABSENT, 'person')
+        True
+
     Let's create a regular record
 
         >>> section = SectionStub()
@@ -601,6 +591,23 @@ def doctest_SectionAttendanceRecord():
         True
         >>> ar.explanations
         ()
+
+    A new workflow is created iff attendance record starts as an absence:
+
+        >>> provideUtility(FakeProcessDef, IProcessDefinition,
+        ...                name='schooltool.attendance.explanation')
+
+        >>> ar = SectionAttendanceRecord(section, dt, UNKNOWN, 'a person')
+        >>> ar = SectionAttendanceRecord(section, dt, PRESENT, 'a person')
+
+        >>> ar = SectionAttendanceRecord(section, dt, ABSENT, 'a person')
+        starting process for ...AttendanceRecord...
+        a person
+
+        >>> ar = SectionAttendanceRecord(section, dt, TARDY, 'a person')
+        Traceback (most recent call last):
+        ...
+        AssertionError
 
     """
 
@@ -659,6 +666,35 @@ def doctest_HomeroomAttendanceRecord():
         'HomeroomAttendanceRecord(SectionStub(),
              datetime.datetime(2005, 11, 23, 14, 55, tzinfo=<UTC>),
              UNKNOWN)'
+
+    Let's check comparisons:
+
+        >>> ar == ar
+        True
+        >>> ar == HomeroomAttendanceRecord(section, dt, UNKNOWN, 'person')
+        True
+        >>> ar == HomeroomAttendanceRecord(section, dt, ABSENT, 'person')
+        False
+        >>> ar > HomeroomAttendanceRecord(section, dt, ABSENT, 'person')
+        True
+
+    A new workflow is created iff attendance record starts as an absence:
+
+        >>> provideUtility(FakeProcessDef, IProcessDefinition,
+        ...                name='schooltool.attendance.explanation')
+
+        >>> ar = HomeroomAttendanceRecord(section, dt, UNKNOWN, 'a person')
+        >>> ar = HomeroomAttendanceRecord(section, dt, PRESENT, 'a person')
+
+        >>> ar = HomeroomAttendanceRecord(section, dt, ABSENT, 'a person')
+        starting process for ...AttendanceRecord...
+        a person
+
+        >>> ar = HomeroomAttendanceRecord(section, dt, TARDY, 'a person')
+        Traceback (most recent call last):
+        ...
+        AssertionError
+
 
     """
 
@@ -1357,45 +1393,50 @@ def doctest_UnresolvedAbsenceCache_add_remove():
 
     The contents are stored in the attribute `_cache`:
 
-        >>> list(cache._cache)
-        []
+        >>> dict(cache._cache.items())
+        {}
 
     Let's test the add and remove operations:
 
-        >>> student = 'student'
-        >>> absence = 'absence'
-        >>> cache.add('student', 'absence')
+        >>> class StudentStub:
+        ...     __name__ = 'student'
+        ...     def __repr__(self): return 'student'
+        >>> student = StudentStub()
+        >>> from schooltool.attendance.interfaces import ABSENT
+        >>> class RecordStub:
+        ...     status = ABSENT
+        ...     def __repr__(self): return 'absence'
 
-        >>> dict(cache._cache)
-        {'absence': 'student'}
+    When we add a record, a bucket should be created:
 
-        >>> cache.remove(absence)
-        >>> dict(cache._cache)
+        >>> absence = RecordStub()
+        >>> cache.add(student, absence)
+        >>> dict(cache._cache.items())
+        {'student': [absence]}
+
+    The next record should just append to the list:
+
+        >>> absence2 = RecordStub()
+        >>> cache.add(student, absence2)
+        >>> dict(cache._cache.items())
+        {'student': [absence, absence]}
+
+    Let's check __iter__ on our way:
+
+        >>> list(cache)
+        [('student', [absence, absence])]
+
+    Remove works:
+
+        >>> cache.remove(student, absence)
+        >>> dict(cache._cache.items())
+        {'student': [absence]}
+
+    If no absences are left for a student, the bucket is deleted:
+
+        >>> cache.remove(student, absence2)
+        >>> dict(cache._cache.items())
         {}
-
-    """
-
-
-def doctest_UnresolvedAbsenceCache_homeroomAbsences():
-    r"""Tests for UnresolvedAbsenceCache.homeroomAbsences
-
-        >>> from schooltool.attendance.attendance import UnresolvedAbsenceCache
-        >>> from schooltool.attendance.interfaces import \
-        ...     IUnresolvedAbsenceCache
-        >>> cache = UnresolvedAbsenceCache()
-
-    Let's test that homeroomAbsences filters by interface:
-
-        >>> cache.add('student1', object())
-        >>> cache.add('student2', 'foo')
-
-        >>> class HomeroomAbsenceStub(object):
-        ...     implements(IHomeroomAttendanceRecord)
-        ...     def __repr__(self): return 'homeroom'
-        >>> cache.add('student3', HomeroomAbsenceStub())
-
-        >>> list(cache.homeroomAbsences())
-        [('student3', homeroom)]
 
     """
 
@@ -1452,7 +1493,7 @@ def doctest_add_or_removeAttendanceRecordFromCache():
         ...         self._cache = {}
         ...     def add(self, student, record):
         ...         self._cache[record] = student
-        ...     def remove(self, record):
+        ...     def remove(self, student, record):
         ...         del self._cache[record]
         >>> cache = CacheStub()
         >>> def cacheAdapter(app):

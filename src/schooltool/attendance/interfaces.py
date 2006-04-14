@@ -207,13 +207,13 @@ class IUnresolvedAbsenceCache(Interface):
     def add(student, record):
         """Register an unresolved absence record for a student."""
 
-    def remove(record):
+    def remove(student, record):
         """Unregister an absence record that has been resolved."""
 
-    def homeroomAbsences():
-        """Iterate over homeroom absences
+    def __iter__():
+        """Iterate over absences.
 
-        Returns a sequence of tuples (student, record).
+        Returns a sequence of tuples (user_name, [absence1, absence2, ...]).
         """
 
 
