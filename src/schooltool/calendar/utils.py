@@ -28,9 +28,7 @@ import re
 import calendar
 from datetime import date, datetime, timedelta, time
 
-from pytz import timezone
-
-utc = timezone("UTC")
+from pytz import timezone, utc
 
 
 def prev_month(date):
@@ -371,3 +369,83 @@ def parse_timetz(s, tz=utc):
         ss = int(parts[2])
     return time(hh, mm, ss, tzinfo=tz)
 
+
+# A hook for unit tests and functional tests:  overrides the "now"
+# utcnow() will return its return value if it is not None
+_utcnow_hook = None
+
+
+def utcnow():
+    """Return the datetime of now with a UTC timezone.
+
+        >>> tick = utc.localize(datetime.utcnow())
+        >>> tack = utcnow()
+        >>> tock = utc.localize(datetime.utcnow())
+        >>> tick <= tack <= tock
+        True
+
+        >>> tack.tzinfo
+        <UTC>
+
+    Is hookable for tests by setting the utcnow_hook module global:
+
+        >>> from schooltool.calendar import utils
+        >>> utils._utcnow_hook = lambda: datetime(1970, 1, 1, 1, 1, tzinfo=utc)
+        >>> utcnow()
+        datetime.datetime(1970, 1, 1, 1, 1, tzinfo=<UTC>)
+
+    Clean up:
+
+        >>> utils._utcnow_hook = None
+    """
+    global _utcnow_hook
+    if _utcnow_hook is not None:
+        return _utcnow_hook()
+    else:
+        return utc.localize(datetime.utcnow())
+
+
+def stub_utcnow(value):
+    """Provide a fake value that utcnow will return.
+
+    The fake value can be a datetime:
+
+        >>> stub_utcnow(datetime(1970, 1, 1, 0, 0, tzinfo=utc))
+        >>> utcnow()
+        datetime.datetime(1970, 1, 1, 0, 0, tzinfo=<UTC>)
+        >>> utcnow()
+        datetime.datetime(1970, 1, 1, 0, 0, tzinfo=<UTC>)
+
+    Alternatively, it can be a callable:
+
+        >>> def faketime():
+        ...    yield datetime(1970, 1, 1, 0, 0, tzinfo=utc)
+        ...    yield datetime(1970, 1, 1, 0, 1, tzinfo=utc)
+        ...    yield datetime(1970, 1, 1, 0, 2, tzinfo=utc)
+
+        >>> stub_utcnow(faketime().next)
+        >>> utcnow()
+        datetime.datetime(1970, 1, 1, 0, 0, tzinfo=<UTC>)
+        >>> utcnow()
+        datetime.datetime(1970, 1, 1, 0, 1, tzinfo=<UTC>)
+        >>> utcnow()
+        datetime.datetime(1970, 1, 1, 0, 2, tzinfo=<UTC>)
+
+    When we set the stubbed value to None, utcnow starts returning real time:
+
+        >>> stub_utcnow(None)
+
+        >>> tick = utc.localize(datetime.utcnow())
+        >>> tack = utcnow()
+        >>> tock = utc.localize(datetime.utcnow())
+        >>> tick <= tack <= tock
+        True
+
+    """
+    global _utcnow_hook
+    if value is None:
+        _utcnow_hook = None
+    elif hasattr(value, '__call__'):
+        _utcnow_hook = value
+    else:
+        _utcnow_hook = lambda: value
