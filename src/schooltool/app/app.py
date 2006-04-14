@@ -174,6 +174,8 @@ class ApplicationPreferences(Persistent):
 
     attendanceStatusCodes = None
 
+    attendanceRetroactiveTimeout = 60
+
 
 def getApplicationPreferences(app):
     """Adapt a SchoolToolApplication to IApplicationPreferences."""
