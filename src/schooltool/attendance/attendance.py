@@ -135,8 +135,8 @@ class AttendanceLoggingProxy(object):
         self.attendance_record.addExplanation(explanation)
         self.log("added an explanation")
 
-    def acceptExplanation(self):
-        self.attendance_record.acceptExplanation()
+    def acceptExplanation(self, code):
+        self.attendance_record.acceptExplanation(code)
         self.log("accepted explanation")
 
     def rejectExplanation(self):
@@ -177,6 +177,7 @@ class AbsenceExplanation(Persistent):
     def __init__(self, text):
         self.text = text
         self.status = NEW
+        self.code = ''
 
     def isProcessed(self):
         return self.status != NEW
@@ -221,10 +222,10 @@ class AttendanceRecord(Persistent):
                 return True
         return False
 
-    def acceptExplanation(self):
+    def acceptExplanation(self, code):
         if not self.explanations or self.explanations[-1].isProcessed():
             raise AttendanceError("there are no outstanding explanations.")
-        self._work_item.acceptExplanation()
+        self._work_item.acceptExplanation(code)
 
     def rejectExplanation(self):
         if not self.explanations or self.explanations[-1].isProcessed():
@@ -542,13 +543,13 @@ class WaitForExplanation(AttendanceWorkItem):
         attendance_record._work_item = self
 
     def makeTardy(self, arrival_time):
-        self.participant.activity.workItemFinished(self, 'tardy', arrival_time)
+        self.participant.activity.workItemFinished(self, 'tardy', arrival_time, None)
 
     def rejectExplanation(self):
-        self.participant.activity.workItemFinished(self, 'reject', None)
+        self.participant.activity.workItemFinished(self, 'reject', None, None)
 
-    def acceptExplanation(self):
-        self.participant.activity.workItemFinished(self, 'accept', None)
+    def acceptExplanation(self, code):
+        self.participant.activity.workItemFinished(self, 'accept', None, code)
 
 
 class MakeTardy(AttendanceWorkItem):
@@ -561,8 +562,9 @@ class MakeTardy(AttendanceWorkItem):
 
 class AcceptExplanation(AttendanceWorkItem):
 
-    def start(self, attendance_record):
+    def start(self, attendance_record, code):
         attendance_record.explanations[-1].status = ACCEPTED
+        attendance_record.explanations[-1].code = code
         self.participant.activity.workItemFinished(self)
 
 

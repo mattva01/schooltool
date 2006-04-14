@@ -28,7 +28,7 @@ class WorkItemStub(object):
     def __init__(self, attendance_record):
         self.attendance_record = attendance_record
 
-    def acceptExplanation(self):
+    def acceptExplanation(self, code):
         print "Accepted explanation"
         self.attendance_record.explanations[-1].status = ACCEPTED
 

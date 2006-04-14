@@ -124,7 +124,7 @@ class FakeAttendanceRecord(object):
         self.hasExplanations = True
         print "Added explanation"
 
-    def acceptExplanation(self):
+    def acceptExplanation(self, code):
         self.accepted = True
         print "Accepted explanation"
 

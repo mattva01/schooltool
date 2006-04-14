@@ -52,6 +52,15 @@
 </div>
 
 <div class="row">
+  <div class="label">
+  <label for="explanation">Set status:<label>
+  </div>
+  <div class="field">
+  <input type="text" id="absence_status" name="absence_status" />
+  </div>
+</div>
+
+<div class="row">
   <div><input type="radio" name="resolve" id="do_not_resolve" value=""
               checked="checked" />
   <label for="do_not_resolve">Do not resolve</label>

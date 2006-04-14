@@ -24,6 +24,7 @@ $Id$
 
 import itertools
 
+from zope.schema import getFieldNamesInOrder
 from zope.interface import implements
 from zope.security.checker import canAccess
 from zope.security.interfaces import IParticipation
@@ -322,8 +323,11 @@ class ApplicationPreferencesView(BrowserView):
         initial = {}
         for field in self.schema:
             initial[field] = getattr(prefs, field)
-
-        setUpWidgets(self, self.schema, IInputWidget, initial=initial)
+        # XXX disable attendanceStatusCodes widget
+        names = getFieldNamesInOrder(self.schema)
+        self.field_names = [name for name in names if name != 'attendanceStatusCodes']
+        setUpWidgets(self, self.schema, IInputWidget, initial=initial,
+                     names=self.field_names)
 
     def update(self):
         if 'CANCEL' in self.request:
@@ -331,7 +335,7 @@ class ApplicationPreferencesView(BrowserView):
             self.request.response.redirect(url)
         elif 'UPDATE_SUBMIT' in self.request:
             try:
-                data = getWidgetsData(self, self.schema)
+                data = getWidgetsData(self, self.schema, self.field_names)
             except WidgetsError:
                 return # Errors will be displayed next to widgets
 

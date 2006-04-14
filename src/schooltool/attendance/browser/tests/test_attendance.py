@@ -160,7 +160,7 @@ class SectionAttendanceRecordStub(object):
     def _raiseError(self, *args):
         raise AttendanceError("An error")
 
-    def acceptExplanation(self):
+    def acceptExplanation(self, code):
         print "Accepted explanation"
 
 
@@ -1799,7 +1799,7 @@ def doctest_StudentAttendanceView_outstandingExplanation():
         >>> print view.outstandingExplanation(a)
         Qua qua
 
-        >>> a.acceptExplanation()
+        >>> a.acceptExplanation('001')
         Accepted explanation
         >>> print view.outstandingExplanation(a)
         None
@@ -1814,7 +1814,7 @@ def doctest_StudentAttendanceView_update():
         ...        import StudentAttendanceView
         >>> request = TestRequest()
         >>> view = StudentAttendanceView(None, request)
-        >>> def _process(ar, text, explanation, resolve):
+        >>> def _process(ar, text, explanation, resolve, code):
         ...     print ar
         ...     if explanation: print 'Explaining %s: %s' % (text, explanation)
         ...     if resolve == 'accept': print 'Accepting %s' % text
@@ -1879,7 +1879,7 @@ def doctest_StudentAttendanceView_process():
 
         >>> ar = 'attendance_record'
         >>> text = 'THIS ABSENCE'
-        >>> view._process(ar, text, '', 'ignore')
+        >>> view._process(ar, text, '', 'ignore', '')
 
     Nothing happened.
 
@@ -1888,7 +1888,7 @@ def doctest_StudentAttendanceView_process():
 
     Let's add an explanation; nothing else
 
-        >>> view._process(ar, text, 'explainexplainexplain', 'ignore')
+        >>> view._process(ar, text, 'explainexplainexplain', 'ignore', '')
         addExplanation
         >>> for status in view.statuses:
         ...     print translate(status)
@@ -1897,7 +1897,7 @@ def doctest_StudentAttendanceView_process():
     Let's accept an explanation; nothing else
 
         >>> view.statuses = []
-        >>> view._process(ar, text, '', 'accept')
+        >>> view._process(ar, text, '', 'accept', '001')
         acceptExplanation
         >>> for status in view.statuses:
         ...     print translate(status)
@@ -1906,7 +1906,7 @@ def doctest_StudentAttendanceView_process():
     Let's reject an explanation; nothing else
 
         >>> view.statuses = []
-        >>> view._process(ar, text, '', 'reject')
+        >>> view._process(ar, text, '', 'reject', '')
         rejectExplanation
         >>> for status in view.statuses:
         ...     print translate(status)
@@ -1915,7 +1915,7 @@ def doctest_StudentAttendanceView_process():
     Ok, now let's both add and accept an explanation
 
         >>> view.statuses = []
-        >>> view._process(ar, text, 'gugugu', 'accept')
+        >>> view._process(ar, text, 'gugugu', 'accept', '001')
         addExplanation
         acceptExplanation
         >>> for status in view.statuses:
@@ -1925,7 +1925,7 @@ def doctest_StudentAttendanceView_process():
     Let's reject an explanation; nothing else
 
         >>> view.statuses = []
-        >>> view._process(ar, text, 'baaaa', 'reject')
+        >>> view._process(ar, text, 'baaaa', 'reject', '')
         addExplanation
         rejectExplanation
         >>> for status in view.statuses:
@@ -1952,16 +1952,16 @@ def doctest_StudentAttendanceView_process_error_handling():
 
     Let's add an explanation, when you cannot add an explanation
 
-        >>> view._process(ar, text, 'explainexplainexplain', 'ignore')
+        >>> view._process(ar, text, 'explainexplainexplain', 'ignore', '')
         addExplanation
         >>> view.statuses
         []
 
     You cannot accept/reject anything if addExplanation fails
 
-        >>> view._process(ar, text, 'explainexplainexplain', 'accept')
+        >>> view._process(ar, text, 'explainexplainexplain', 'accept', '001')
         addExplanation
-        >>> view._process(ar, text, 'explainexplainexplain', 'reject')
+        >>> view._process(ar, text, 'explainexplainexplain', 'reject', '')
         addExplanation
         >>> view.statuses
         []
@@ -1972,7 +1972,7 @@ def doctest_StudentAttendanceView_process_error_handling():
         >>> view._acceptExplanation = print_and_return_False('acceptExplanation')
         >>> view._rejectExplanation = print_and_return_False('rejectExplanation')
 
-        >>> view._process(ar, text, 'explainexplainexplain', 'accept')
+        >>> view._process(ar, text, 'explainexplainexplain', 'accept', '001')
         addExplanation
         acceptExplanation
         >>> for status in view.statuses:
@@ -1980,7 +1980,7 @@ def doctest_StudentAttendanceView_process_error_handling():
         Added an explanation for THIS ABSENCE
 
         >>> view.statuses = []
-        >>> view._process(ar, text, 'explainexplainexplain', 'reject')
+        >>> view._process(ar, text, 'explainexplainexplain', 'reject', '')
         addExplanation
         rejectExplanation
         >>> for status in view.statuses:
@@ -1990,13 +1990,13 @@ def doctest_StudentAttendanceView_process_error_handling():
     Ok, suppose you did not add an explanation, and accept/reject borks
 
         >>> view.statuses = []
-        >>> view._process(ar, text, '', 'accept')
+        >>> view._process(ar, text, '', 'accept', '001')
         acceptExplanation
         >>> view.statuses
         []
 
         >>> view.statuses = []
-        >>> view._process(ar, text, '', 'reject')
+        >>> view._process(ar, text, '', 'reject', '')
         rejectExplanation
         >>> view.statuses
         []
@@ -2047,14 +2047,14 @@ def doctest_StudentAttendanceView_acceptExplanation():
 
         >>> ar = HomeroomAttendanceRecordStub(None,
         ...          datetime.datetime(2006, 1, 29, tzinfo=utc), ABSENT)
-        >>> view._acceptExplanation(ar, {'absence': 'THIS ABSENCE'})
+        >>> view._acceptExplanation(ar, '001', {'absence': 'THIS ABSENCE'})
         Accepted explanation
         True
         >>> view.errors
         []
 
         >>> ar.acceptExplanation = ar._raiseError
-        >>> view._acceptExplanation(ar, {'absence': 'THIS ABSENCE'})
+        >>> view._acceptExplanation(ar, '001', {'absence': 'THIS ABSENCE'})
         False
 
         >>> for err in view.errors:

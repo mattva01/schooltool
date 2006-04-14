@@ -65,7 +65,7 @@ class SampleAttendancePlugin(object):
         if explained:
             ar.addExplanation("My car broke!")
         if accepted:
-            ar.acceptExplanation()
+            ar.acceptExplanation('001')
         elif processed:
             ar.rejectExplanation()
 

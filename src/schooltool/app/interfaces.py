@@ -140,6 +140,11 @@ class IApplicationPreferences(ICalendarDisplayPreferences):
         required=False,
         default=True)
 
+    attendanceStatusCodes = zope.schema.Dict(
+        title=_("Attendance status codes"),
+        description=_("Dictionary of abbreviated attendance status codes"),
+        required=True)
+
 
 class IWriteCalendar(zope.interface.Interface):
 

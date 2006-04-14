@@ -426,14 +426,15 @@ class StudentAttendanceView(BrowserView):
         self.errors = []
         if 'UPDATE' not in self.request:
             return
+        code = self.request.get('code', '')
         explanation = self.request.get('explanation', '').strip()
         resolve = self.request.get('resolve', '')
         for ar in self.unresolvedAbsences():
             if ar['id'] in self.request.form:
                 self._process(ar['attendance_record'], translate(ar['text']),
-                              explanation, resolve)
+                              explanation, resolve, code)
 
-    def _process(self, ar, text, explanation, resolve):
+    def _process(self, ar, text, explanation, resolve, code):
         """Process a single attendance record"""
         # We want only one status message per attendance record, so if we
         # both add an explanation and accept/reject it in one go, only the
@@ -449,7 +450,7 @@ class StudentAttendanceView(BrowserView):
                 # some other explanation that just happened to be there.
                 return
         if resolve == 'accept':
-            if self._acceptExplanation(ar, mapping):
+            if self._acceptExplanation(ar, code, mapping):
                 status = _('Resolved $absence', mapping=mapping)
         elif resolve == 'reject':
             if self._rejectExplanation(ar, mapping):
@@ -469,10 +470,10 @@ class StudentAttendanceView(BrowserView):
                                  ' accepted/rejected', mapping=mapping))
             return False
 
-    def _acceptExplanation(self, ar, mapping):
+    def _acceptExplanation(self, ar, code, mapping):
         """Accept an explanation, reporting errors gracefully."""
         try:
-            ar.acceptExplanation()
+            ar.acceptExplanation(code)
             return True
         except AttendanceError:
             self.errors.append(_('There are no outstanding'

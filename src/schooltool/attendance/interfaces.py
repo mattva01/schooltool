@@ -163,7 +163,7 @@ class IAttendanceRecord(Interface):
     def addExplanation(text):
         """Adds a new explanation for this attendance record."""
 
-    def acceptExplanation():
+    def acceptExplanation(code):
         """Make the current (last) explanation accepted"""
 
     def rejectExplanation():

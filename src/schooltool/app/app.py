@@ -172,6 +172,8 @@ class ApplicationPreferences(Persistent):
 
     frontPageCalendar = True
 
+    attendanceStatusCodes = None
+
 
 def getApplicationPreferences(app):
     """Adapt a SchoolToolApplication to IApplicationPreferences."""

@@ -79,7 +79,7 @@ Let's add a better explanation:
 
 and accept it
 
-    >>> ar.acceptExplanation()
+    >>> ar.acceptExplanation('001')
     WorkItemFinished(u'WaitForExplanation')
     ActivityFinished(Activity('schooltool.attendance.explanation.explain'))
     Transition(Activity('schooltool.attendance.explanation.explain'),

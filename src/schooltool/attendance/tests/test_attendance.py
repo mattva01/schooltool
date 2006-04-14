@@ -104,7 +104,7 @@ class AttendanceRecordStub(object):
     def addExplanation(self, explanation):
         print "added an explanation"
 
-    def acceptExplanation(self):
+    def acceptExplanation(self, code):
         print "accepted the explanation"
 
     def rejectExplanation(self):
@@ -219,7 +219,7 @@ def doctest_AttendanceLoggingProxy_logging():
         added an explanation
         2..., john, <...> of peter: added an explanation
 
-        >>> proxy.acceptExplanation()
+        >>> proxy.acceptExplanation('001')
         accepted the explanation
         2..., john, <...> of peter: accepted explanation
 
@@ -400,7 +400,7 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
     However, if explanation is accepted, the workflow will procede
     into AcceptExplanation activity:
 
-        >>> ar.acceptExplanation()
+        >>> ar.acceptExplanation('001')
         Accepted explanation
 
     That should set the status of the last explanation to ACCEPTED:
@@ -432,7 +432,7 @@ def doctest_AttendanceRecord_isExplained_addExplanation():
         >>> ar.addExplanation("Solar eclipse")
         >>> len(ar.explanations)
         2
-        >>> ar.acceptExplanation()
+        >>> ar.acceptExplanation('001')
         Accepted explanation
 
     If the record's status is not ABSENT or TARDY, isExplained raises
@@ -486,7 +486,7 @@ def doctest_AttendanceRecord_accept_reject_explaination():
 
     If there are no explanations, you cannot accept nor reject them.
 
-        >>> ar.acceptExplanation()
+        >>> ar.acceptExplanation('001')
         Traceback (most recent call last):
           ...
         AttendanceError: there are no outstanding explanations.
@@ -1261,17 +1261,17 @@ def doctest_WaitForExplanation():
 
         >>> late_arrival_time = datetime.datetime(2005, 12, 30, 13, 21)
         >>> work_item.makeTardy(late_arrival_time)
-        workItemFinished: WaitForExplanation ('tardy', datetime.datetime(2005, 12, 30, 13, 21))
+        workItemFinished: WaitForExplanation ('tardy', datetime.datetime(2005, 12, 30, 13, 21), None)
 
     Another way to complete it is to reject an explanation
 
         >>> work_item.rejectExplanation()
-        workItemFinished: WaitForExplanation ('reject', None)
+        workItemFinished: WaitForExplanation ('reject', None, None)
 
     Or accept it is to reject an explanation
 
-        >>> work_item.acceptExplanation()
-        workItemFinished: WaitForExplanation ('accept', None)
+        >>> work_item.acceptExplanation('001')
+        workItemFinished: WaitForExplanation ('accept', None, '001')
 
     """
 
@@ -1311,7 +1311,7 @@ def doctest_AcceptExplanation():
 
         >>> ar = AttendanceRecordStub(None, None)
         >>> ar.explanations = [ExplanationStub()]
-        >>> work_item.start(ar)
+        >>> work_item.start(ar, '001')
         workItemFinished: AcceptExplanation ()
 
         >>> ar.explanations[-1].status == ACCEPTED

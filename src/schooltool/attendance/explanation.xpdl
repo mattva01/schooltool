@@ -41,6 +41,11 @@
                         <BasicType Type="STRING"/>
                     </DataType>
                 </DataField>
+                <DataField Id="code" IsArray="FALSE" Name="Code">
+                    <DataType>
+                        <BasicType Type="STRING"/>
+                    </DataType>
+                </DataField>
                 <DataField Id="student" IsArray="FALSE" Name="Student">
                     <DataType>
                         <BasicType Type="REFERENCE"/>
@@ -70,6 +75,11 @@
                                 <BasicType Type="DATETIME"/>
                             </DataType>
                         </FormalParameter>
+                        <FormalParameter Id="code" Mode="OUT">
+                            <DataType>
+                                <BasicType Type="STRING"/>
+                            </DataType>
+                        </FormalParameter>
                     </FormalParameters>
                 </Application>
                 <Application Id="MakeTardy">
@@ -93,6 +103,11 @@
                                 <BasicType Type="REFERENCE"/>
                             </DataType>
                         </FormalParameter>
+                        <FormalParameter Id="code" Mode="IN">
+                            <DataType>
+                                <BasicType Type="STRING"/>
+                            </DataType>
+                        </FormalParameter>
                     </FormalParameters>
                 </Application>
                 <Application Id="RejectExplanation">
@@ -113,6 +128,7 @@
                                 <ActualParameter>attendanceRecord</ActualParameter>
                                 <ActualParameter>outcome</ActualParameter>
                                 <ActualParameter>arrivalTime</ActualParameter>
+                                <ActualParameter>code</ActualParameter>
                             </ActualParameters>
                         </Tool>
                     </Implementation>
@@ -186,6 +202,7 @@
                         <Tool Id="AcceptExplanation" Type="APPLICATION">
                             <ActualParameters>
                                 <ActualParameter>attendanceRecord</ActualParameter>
+                                <ActualParameter>code</ActualParameter>
                             </ActualParameters>
                         </Tool>
                     </Implementation>
