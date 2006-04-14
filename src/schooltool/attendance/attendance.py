@@ -604,6 +604,11 @@ AbsenceCacheKey = 'schooltool.attendance.absencecache'
 
 
 def getUnresolvedAbsenceCache(app):
+    """Extract the absence cache from the application.
+
+    Internally the cache is stored as an annotation on the administrators'
+    group.
+    """
     admin = app['groups']['administrators']
     annotations = IAnnotations(admin)
     if AbsenceCacheKey not in annotations:
@@ -612,6 +617,11 @@ def getUnresolvedAbsenceCache(app):
 
 
 def addAttendanceRecordToCache(event):
+    """A subscriber that adds an attendance record to the cache.
+
+    The subscriber is invoked when a process starts.  The related record should
+    be an absence/tardy.
+    """
     pdi = event.process.process_definition_identifier
     if pdi == 'schooltool.attendance.explanation':
         record = event.process.workflowRelevantData.attendanceRecord
@@ -622,6 +632,10 @@ def addAttendanceRecordToCache(event):
 
 
 def removeAttendanceRecordFromCache(event):
+    """A subscriber that removes an attendance record from the cache.
+
+    The subscriber is invoked when a process ends.
+    """
     pdi = event.process.process_definition_identifier
     if pdi == 'schooltool.attendance.explanation':
         record = event.process.workflowRelevantData.attendanceRecord
