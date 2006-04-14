@@ -445,7 +445,7 @@ def stub_utcnow(value):
     global _utcnow_hook
     if value is None:
         _utcnow_hook = None
-    elif hasattr(value, '__call__'):
+    elif callable(value):
         _utcnow_hook = value
     else:
         _utcnow_hook = lambda: value
