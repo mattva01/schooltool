@@ -28,3 +28,7 @@ form#attendance_explain_resolve h3 {
   margin-top: 4ex;
   margin-bottom: 2ex;
 }
+
+form td.num {
+  text-align: center;
+}

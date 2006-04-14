@@ -49,8 +49,8 @@
             href string:${item/person/@@absolute_url}/@@attendance.html"
             i18n:translate="" tal:content="item/title" />
       </td>
-      <td tal:content="item/hr_absences" />
-      <td tal:content="item/section_absences" />
+      <td class="num" tal:content="item/hr_absences" />
+      <td class="num" tal:content="item/section_absences" />
     </tr>
   </table>
 </fieldset>
