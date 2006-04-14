@@ -589,7 +589,8 @@ class UnresolvedAbsenceCache(Persistent):
         self._cache[record] = student
 
     def remove(self, record):
-        del self._cache[record]
+        if record in self._cache: # XXX Workaround for sampledata crash.
+            del self._cache[record]
 
     def homeroomAbsences(self):
         return [(student, record)
