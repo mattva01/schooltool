@@ -547,20 +547,20 @@ class StudentAttendanceView(BrowserView):
         """Interleave day and section attendance records."""
         homeroom_iter = itertools.chain(homeroom_attendances, [None])
         section_iter = itertools.chain(section_attendances, [None])
-        cur_day = homeroom_iter.next()
+        cur_homeroom = homeroom_iter.next()
         cur_section = section_iter.next()
-        while cur_day is not None and cur_section is not None:
-            if cur_day.datetime <= cur_section.datetime:
-                yield cur_day
-                cur_day = homeroom_iter.next()
+        while cur_homeroom is not None and cur_section is not None:
+            if cur_homeroom.datetime <= cur_section.datetime:
+                yield cur_homeroom
+                cur_homeroom = homeroom_iter.next()
             else:
                 yield cur_section
                 cur_section = section_iter.next()
-        if cur_day is not None:
-            yield cur_day
-            for cur_day in homeroom_iter:
-                if cur_day is not None:
-                    yield cur_day
+        if cur_homeroom is not None:
+            yield cur_homeroom
+            for cur_homeroom in homeroom_iter:
+                if cur_homeroom is not None:
+                    yield cur_homeroom
         if cur_section is not None:
             yield cur_section
             for cur_section in section_iter:
