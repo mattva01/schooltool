@@ -452,4 +452,4 @@ def stub_utcnow(value):
         _utcnow_hook = lambda: value
 
 
-addCleanUp(stub_utcnow, None)
+addCleanUp(stub_utcnow, (None, ))
