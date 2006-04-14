@@ -32,6 +32,9 @@ from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.component import adapts
 from zope.viewlet import viewlet
+from zope.schema import Choice
+from zope.app.form.browser.itemswidgets import DropdownWidget
+from zope.schema.vocabulary import SimpleVocabulary
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.security.proxy import removeSecurityProxy
 from zope.i18n import translate
@@ -424,9 +427,23 @@ class StudentAttendanceView(BrowserView):
         """Process the form."""
         self.statuses = []
         self.errors = []
+
+        # hand craft dropdown widget from dict
+        app = ISchoolToolApplication(None)
+        code_dict = IApplicationPreferences(app).attendanceStatusCodes
+        code_items = sorted((i[1], i[0]) for i in code_dict.items())
+        code_vocabulary = SimpleVocabulary.fromItems(code_items)
+        self.code = ''
+        code_field = Choice(__name__='code', title=u'Set status:',
+                            required=False,
+                            vocabulary=code_vocabulary).bind(self)
+        self.code_widget = DropdownWidget(code_field, code_vocabulary, self.request)
+
         if 'UPDATE' not in self.request:
             return
-        code = self.request.get('code', '')
+        code = ''
+        if self.code_widget.hasInput():
+            code = self.code_widget.getInputValue()
         explanation = self.request.get('explanation', '').strip()
         resolve = self.request.get('resolve', '')
         for ar in self.unresolvedAbsences():

@@ -87,6 +87,7 @@ class ApplicationPreferencesStub(object):
     adapts(ISchoolToolApplication)
     implements(IApplicationPreferences)
     timezone = 'UTC'
+    attendanceStatusCodes = {'001': 'excused'}
     def __init__(self, context):
         pass
 
@@ -1823,7 +1824,8 @@ def doctest_StudentAttendanceView_update():
         >>> def _process(ar, text, explanation, resolve, code):
         ...     print ar
         ...     if explanation: print 'Explaining %s: %s' % (text, explanation)
-        ...     if resolve == 'accept': print 'Accepting %s' % text
+        ...     if resolve == 'accept':
+        ...         print 'Accepting %s (code %r)' % (text, code)
         ...     if resolve == 'reject': print 'Rejecting %s' % text
         >>> view._process = _process
         >>> view.unresolvedAbsences = lambda: [
@@ -1859,14 +1861,15 @@ def doctest_StudentAttendanceView_update():
         >>> request.form['ar123'] = 'on'
         >>> request.form['ar125'] = 'on'
         >>> request.form['explanation'] = 'yada yada'
+        >>> request.form['field.code'] = 'excused'
         >>> request.form['resolve'] = 'accept'
         >>> view.update()
         <ar123>
         Explaining Attendance Record #123: yada yada
-        Accepting Attendance Record #123
+        Accepting Attendance Record #123 (code '001')
         <ar125>
         Explaining Attendance Record #125: yada yada
-        Accepting Attendance Record #125
+        Accepting Attendance Record #125 (code '001')
 
     """
 

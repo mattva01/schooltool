@@ -52,11 +52,8 @@
 </div>
 
 <div class="row">
-  <div class="label">
-  <label for="explanation">Set status:<label>
-  </div>
-  <div class="field">
-  <input type="text" id="absence_status" name="absence_status" />
+  <div class="row" tal:define="widget nocall:view/code_widget">
+    <div metal:use-macro="context/@@form_macros/widget_row" />
   </div>
 </div>
 

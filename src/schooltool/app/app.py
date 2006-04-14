@@ -172,7 +172,9 @@ class ApplicationPreferences(Persistent):
 
     frontPageCalendar = True
 
-    attendanceStatusCodes = None
+    # XXX some meaningless sample data
+    attendanceStatusCodes = {'001': 'excused',
+                             '002': 'unexcused'}
 
     attendanceRetroactiveTimeout = 60
 
