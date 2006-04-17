@@ -332,6 +332,99 @@ If you go there, you see a list of unresolved absences
     ...2005-12-12 09:30: late for Great Teacher Largo -- Dancing 1...
 
 
+Retroactive attendance form
+---------------------------
+
+Some time has passed, and the teacher comes back to filling in
+attendance after the lunch break the next day:
+
+    >>> from schooltool.calendar.utils import stub_utcnow
+    >>> stub_utcnow(datetime(2005, 12, 14, 16, 44, tzinfo=utc))
+
+He knows the URL and just enters it:
+
+    >>> largo.open("http://localhost/sections/dancing1a/"
+    ...            "attendance/2005-12-14/11:35-12:20")
+
+He gets to the retroactive attendance form.  It does not have
+'ABSENT' or 'TARDY' buttons, but has a 'SUBMIT':
+
+    >>> 'ABSENT' not in largo.contents
+    True
+    >>> 'TARDY' not in largo.contents
+    True
+    >>> 'SUBMIT' in largo.contents
+    True
+
+The default values of the radio buttons are "present":
+
+    >>> largo.getControl(name="joniukas").value
+    ['P']
+    >>> largo.getControl(name="gretute").value
+    ['P']
+
+Largo enters an arrival time and tries to submit the form:
+
+    >>> largo.getControl(name="joniukas_tardy").value = '12:00'
+    >>> largo.getControl('Submit').click()
+
+He gets an error:
+
+   >>> print largo.contents
+   <BLANKLINE>
+   ...
+   <p class="error">Arrival times only apply to tardy students</p>
+   ...
+
+He then notices that he forgot to mark Joniukas as tardy, and Gretute
+as absent:
+
+    >>> largo.getControl(name="joniukas").value =  ['T']
+    >>> largo.getControl(name="gretute").value =  ['A']
+    >>> largo.getControl('Submit').click()
+
+The form submits fine.  The controls still show their values but are
+disabled:
+
+    >>> print largo.contents
+    <BLANKLINE>
+    ...
+    <h2>Section attendance for
+      Great Teacher Largo -- Dancing 1
+      at 2005-12-14
+      period 11:35-12:20</h2>
+      ...
+      <tr class="attendance-retro-row">
+        <td class="attendance-absent">
+           <label>Gretute</label>
+        </td>
+        ...
+        <td class="other">
+          <input type="radio" value="A" disabled="disabled"
+                 checked="checked" name="gretute" />
+        </td>
+        ...
+      </tr>
+      <tr class="attendance-retro-row">
+        <td class="attendance-absent">
+           <label>Joniukas</label>
+        </td>
+        ...
+        <td class="other">
+          <input type="radio" value="T" disabled="disabled"
+                 checked="checked" name="joniukas" />
+          <input type="text" disabled="disabled"
+                 name="joniukas_tardy" value="12:00" />
+        </td>
+      </tr>
+    </table>
+    ...
+
+Resubmitting the form does nothing:
+
+    >>> largo.getControl('Submit').click()
+
+
 Epilog
 ------
 

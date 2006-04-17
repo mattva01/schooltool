@@ -69,7 +69,8 @@
              tal:attributes="name name;
                              disabled disabled;
                              value python:request.get(name, default)"/>
-      <p tal:condition="error" tal:content="error" class="error" />
+      <p tal:condition="error" tal:content="error" class="error"
+         i18n:translate=""/>
     </td>
   </tr>
   </tal:loop>
