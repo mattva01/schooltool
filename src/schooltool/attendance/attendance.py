@@ -157,6 +157,10 @@ class AttendanceLoggingProxy(object):
     def __setattr__(self, name, value):
         setattr(self.attendance_record, name, value)
 
+    def __cmp__(self, other):
+        return cmp(self.attendance_record,
+                   other.attendance_record)
+
 
 class SectionAttendanceLoggingProxy(AttendanceLoggingProxy):
     implements(ISectionAttendanceRecord)

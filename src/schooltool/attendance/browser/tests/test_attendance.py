@@ -152,10 +152,11 @@ class StubTimetables(object):
 
 class BaseAttendanceRecordStub(object):
     explanations = ()
-    def __init__(self, section, datetime, status, person=None, explained=False):
+    def __init__(self, section, dt, status, person=None, explained=False):
         self.section = section
-        self.date = datetime.date()
-        self.datetime = datetime
+        self.date = dt.date()
+        self.late_arrival = dt + datetime.timedelta(minutes=15)
+        self.datetime = dt
         self.status = status
         self._explained = explained
     def isAbsent(self): return self.status == ABSENT
@@ -914,7 +915,7 @@ def doctest_AttendanceView_update():
 
         >>> list(ISectionAttendance(person1))
         [SectionAttendanceRecord(<Section>,
-              datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), ABSENT)]
+        datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), ABSENT)]
         >>> list(ISectionAttendance(person2))
         [SectionAttendanceRecord(<Section>,
               datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), ABSENT)]
@@ -1725,7 +1726,7 @@ def doctest_StudentAttendanceView_formatAttendanceRecord():
         >>> ar = HomeroomAttendanceRecordStub(SectionStub('math17'),
         ...             datetime.datetime(2006, 1, 14, 17, 3, tzinfo=utc), TARDY)
         >>> print translate(view.formatAttendanceRecord(ar))
-        2006-01-14 17:03: late for homeroom
+        2006-01-14 17:03: late for homeroom, arrived on 17:18
 
         >>> ar = SectionAttendanceRecordStub(SectionStub('math17'),
         ...             datetime.datetime(2006, 1, 14, 17, 3, tzinfo=utc), ABSENT)
@@ -1735,7 +1736,7 @@ def doctest_StudentAttendanceView_formatAttendanceRecord():
         >>> ar = SectionAttendanceRecordStub(SectionStub('math17'),
         ...             datetime.datetime(2006, 1, 14, 17, 3, tzinfo=utc), TARDY)
         >>> print translate(view.formatAttendanceRecord(ar))
-        2006-01-14 17:03: late for math17
+        2006-01-14 17:03: late for math17, arrived on 17:18
 
     """
 
@@ -1788,6 +1789,302 @@ def doctest_StudentAttendanceView_interleaveAttendanceRecords():
     """
 
 
+def doctest_StudentAttendanceView_unresolvedAttendanceRecords():
+    r"""Test for StudentAttendanceView.unresolvedAttendanceRecords
+
+        >>> provideAdapter(HomeroomAttendanceStub, provides=IHomeroomAttendance)
+        >>> provideAdapter(SectionAttendanceStub)
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...        import StudentAttendanceView
+        >>> student = PersonStub()
+        >>> request = TestRequest()
+        >>> view = StudentAttendanceView(student, request)
+
+    Simple case first: when there are no recorded absences/tardies, we get an
+    empty list.
+
+        >>> student._homeroom_attendance_records = []
+        >>> student._section_attendance_records = []
+        >>> list(view.unresolvedAttendanceRecords())
+        []
+
+    An unresolved absence is marked by an attendance record that is
+    tardy or absent and is not yet explained:
+
+        >>> absences = [True, True, False, False]
+        >>> tardies = [False, False, True, False]
+        >>> explanations = [True, False, False, False]
+
+        >>> class AttendanceRecordStub(object):
+        ...     def __init__(self, absent, tardy, explained):
+        ...         self.isAbsent = lambda: absent
+        ...         self.isTardy = lambda: tardy
+        ...         self.isExplained = lambda: explained
+
+        >>> ars = []
+        >>> for absent, tardy, explained in zip(absences, tardies, explanations):
+        ...      ars.append(AttendanceRecordStub(absent, tardy, explained))
+        >>> student._homeroom_attendance_records = ars
+        >>> result = list(view.unresolvedAttendanceRecords())
+        >>> [ar in result for ar in ars]
+        [False, True, True, False]
+
+    """
+
+
+def doctest_StudentAttendanceView_pigeonHoleAttendanceRecords():
+    """Tests for StudentAttendanceView.pigeonHoleAttendanceRecords
+
+        >>> from schooltool.attendance.browser.attendance import StudentAttendanceView
+        >>> view = StudentAttendanceView(None, None)
+
+        >>> class AttendanceRecordStub(object):
+        ...     def __init__(self, name, year, month, day):
+        ...         self.name = name
+        ...         self.date = datetime.date(year, month, day)
+        ...     def __repr__(self):
+        ...         return self.name
+
+    When given an empty list the method returns an empty list:
+
+        >>> attendance_records = []
+        >>> view.unresolvedAttendanceRecords = lambda : attendance_records
+        >>> view.pigeonHoleAttendanceRecords()
+        []
+
+    If there are any attendance records they are placed into sublists
+    by their date:
+
+        >>> attendance_records = [AttendanceRecordStub('ar1', 2005, 1, 1),
+        ...                       AttendanceRecordStub('ar2', 2005, 1, 1),
+        ...                       AttendanceRecordStub('ar3', 2005, 1, 2),
+        ...                       AttendanceRecordStub('ar4', 2005, 1, 2),
+        ...                       AttendanceRecordStub('ar5', 2005, 1, 3),
+        ...                       AttendanceRecordStub('ar6', 2005, 1, 4)]
+        >>> view.unresolvedAttendanceRecords = lambda : attendance_records
+        >>> view.pigeonHoleAttendanceRecords()
+        [[ar1, ar2], [ar3, ar4], [ar5], [ar6]]
+
+    """
+
+
+def doctest_StudentAttendanceView_inheritsFrom():
+    """Tests for StudentAttendanceView.inheritsFrom.
+
+        >>> from schooltool.attendance.browser.attendance import StudentAttendanceView
+        >>> view = StudentAttendanceView(None, None)
+
+    If student was absent on the homeroom period, homeroom attendance
+    record should cover all of associated section attendance records:
+
+        >>> view.inheritsFrom(HomeroomAttendanceRecordStub(
+        ...                       None,
+        ...                       datetime.datetime(2005, 1, 1),
+        ...                       ABSENT),
+        ...                   None)
+        True
+
+    If student was late to the homeroom only attendance records with
+    arrival time upto the late_arival + 5 minutes should be considered
+    as inheriting:
+
+        >>> hr_ar = HomeroomAttendanceRecordStub(None,
+        ...             datetime.datetime(2005, 1, 1, 10, 15),
+        ...             TARDY)
+        >>> section_ar = SectionAttendanceRecordStub(None,
+        ...                 datetime.datetime(2005, 1, 1, 10, 15),
+        ...                 TARDY)
+
+        >>> view.inheritsFrom(hr_ar, section_ar)
+        True
+
+        >>> section_ar.late_arrival += datetime.timedelta(minutes=5)
+        >>> view.inheritsFrom(hr_ar, section_ar)
+        True
+
+        >>> section_ar.late_arrival += datetime.timedelta(minutes=1)
+        >>> view.inheritsFrom(hr_ar, section_ar)
+        False
+
+    """
+
+
+def doctest_StudentAttendanceView_getInheritingRecords():
+    """Tests for StudentAttendanceView.getInheritingRecords
+
+        >>> hr_ar = HomeroomAttendanceRecordStub(None,
+        ...             datetime.datetime(2005, 1, 1, 10, 15),
+        ...             TARDY)
+        >>> class HomeroomAttendanceStub(object):
+        ...     adapts(None)
+        ...     implements(IHomeroomAttendance)
+        ...     def __init__(self, person):
+        ...         pass
+        ...     def getHomeroomPeriodForRecord(self, record):
+        ...         if record.date == hr_ar.date:
+        ...             return hr_ar
+
+        >>> provideAdapter(HomeroomAttendanceStub, provides=IHomeroomAttendance)
+
+        >>> from schooltool.attendance.browser.attendance import StudentAttendanceView
+        >>> view = StudentAttendanceView(None, None)
+
+    If there are no attendance records, return an empty list:
+
+        >>> view.getInheritingRecords(hr_ar, [])
+        []
+
+
+    If not, only records that have the hr_ar as their parent homeroom
+    period and should inherit from it are returned:
+
+        >>> section = SectionStub("English")
+        >>> section_records = [SectionAttendanceRecordStub(section,
+        ...                        datetime.datetime(2005, 1, 1, 10, 15),
+        ...                        TARDY),
+        ...                    SectionAttendanceRecordStub(section,
+        ...                        datetime.datetime(2005, 1, 2, 10, 15),
+        ...                        TARDY),
+        ...                    SectionAttendanceRecordStub(section,
+        ...                        datetime.datetime(2005, 1, 1, 10, 21),
+        ...                        TARDY)]
+        >>> [translate(view.formatAttendanceRecord(ar))
+        ...  for ar in view.getInheritingRecords(hr_ar, section_records)]
+        [u'2005-01-01 10:15: late for English, arrived on 10:30']
+
+    """
+
+
+def doctest_StudentAttendanceView_hasParentHomeroom():
+    """Tests for StudentAttendanceView.hasParentHomeroom
+
+        >>> hr_ar = HomeroomAttendanceRecordStub(None,
+        ...             datetime.datetime(2005, 1, 1, 10, 15),
+        ...             TARDY)
+        >>> class HomeroomAttendanceStub(object):
+        ...     adapts(None)
+        ...     implements(IHomeroomAttendance)
+        ...     def __init__(self, person):
+        ...         pass
+        ...     def getHomeroomPeriodForRecord(self, record):
+        ...         if record.date == hr_ar.date:
+        ...             return hr_ar
+
+        >>> provideAdapter(HomeroomAttendanceStub, provides=IHomeroomAttendance)
+
+        >>> from schooltool.attendance.browser.attendance import StudentAttendanceView
+        >>> view = StudentAttendanceView(None, None)
+
+    If there are no other attendance records, return False:
+
+        >>> section = SectionStub("English")
+        >>> section_ar = SectionAttendanceRecordStub(section,
+        ...                  datetime.datetime(2005, 1, 1, 10, 15),
+        ...                  TARDY)
+        >>> view.hasParentHomeroom(section_ar, [section_ar])
+        False
+
+    If there is a homeroom given attendance record inherits from return True:
+
+        >>> records = [hr_ar,
+        ...            SectionAttendanceRecordStub(section,
+        ...                datetime.datetime(2005, 1, 2, 10, 15),
+        ...                TARDY),
+        ...            SectionAttendanceRecordStub(section,
+        ...                datetime.datetime(2005, 1, 1, 10, 21),
+        ...                TARDY)]
+        >>> view.hasParentHomeroom(section_ar, records)
+        True
+
+    Unless you were too late:
+
+        >>> section_ar2 = SectionAttendanceRecordStub(section,
+        ...                   datetime.datetime(2005, 1, 1, 10, 21),
+        ...                   TARDY)
+        >>> view.hasParentHomeroom(section_ar2, records)
+        False
+
+    """
+
+
+def doctest_StudentAttendanceView_hideInheritingRecords():
+    """Tests for StudentAttendanceView.hideInheritingRecords
+
+    Method removes all section attendance records that have a parent
+    homeroom attendance record from the list:
+
+        >>> from schooltool.attendance.browser.attendance import StudentAttendanceView
+        >>> view = StudentAttendanceView(None, None)
+        >>> days = [['hr1', 'ar1', 'hr1ar1'], ['hr2', 'hr2ar1', 'hr2ar2', 'ar3']]
+
+    Method hasParentHomeroom is used when checking whether attendance
+    record is inheriting from any of attendance records in the day:
+
+        >>> view.hasParentHomeroom = lambda ar, day: [
+        ...                              rec for rec in day
+        ...                              if rec != ar and ar.startswith(rec)]
+        >>> view.hideInheritingRecords(days)
+        [['hr1', 'ar1'],
+         ['hr2', 'ar3']]
+
+    """
+
+
+def doctest_StudentAttendanceView_flattenDays():
+    r"""Tests for StudentAttendanceView.flattenDays
+
+    Flatten day takes a list of days and puts all the attendance
+    records into a flat list with dicts for each attendance record:
+
+        >>> from schooltool.attendance.browser.attendance import StudentAttendanceView
+        >>> view = StudentAttendanceView(None, None)
+        >>> days = [['ar1'], ['ar4', 'ar5']]
+        >>> view.makeId = lambda x: "Id for %s" % x
+        >>> view.formatAttendanceRecord = lambda x: "Text for %s" % x
+        >>> view.outstandingExplanation = lambda x: "Explanations for %s" % x
+        >>> view.flattenDays(days)
+        [{'text': 'Text for ar1',
+          'attendance_record': 'ar1',
+          'explanation': 'Explanations for ar1',
+          'id': 'Id for ar1',
+          'day': ['ar1']},
+         {'text': 'Text for ar4',
+          'attendance_record': 'ar4',
+          'explanation': 'Explanations for ar4',
+          'id': 'Id for ar4',
+          'day': ['ar4', 'ar5']},
+         {'text': 'Text for ar5',
+          'attendance_record': 'ar5',
+          'explanation': 'Explanations for ar5',
+          'id': 'Id for ar5',
+          'day': ['ar4', 'ar5']}]
+
+    """
+
+
+def doctest_StudentAttendanceView_unresolvedAbsencesForDisplay():
+    r"""Tests for StudentAttendanceView.unresolvedAbsencesForDisplay
+
+    This method takes a list of pigenholed attendance records, removes
+    inheriting attendance records from it and flattens the resulting
+    list of days:
+
+        >>> from schooltool.attendance.browser.attendance import StudentAttendanceView
+        >>> view = StudentAttendanceView(None, None)
+        >>> view.pigeonHoleAttendanceRecords = lambda: 'list of days'
+        >>> def hideInheritingRecords(days):
+        ...     return "%s without ineriting records" % days
+        >>> view.hideInheritingRecords = hideInheritingRecords
+        >>> def flattenDays(days):
+        ...     return "Flattened %s." % days
+        >>> view.flattenDays = flattenDays
+        >>> view.unresolvedAbsencesForDisplay()
+        'Flattened list of days without ineriting records.'
+
+    """
+
+
 def doctest_StudentAttendanceView_unresolvedAbsences():
     r"""Tests for StudentAttendanceView.unresolvedAbsences
 
@@ -1814,7 +2111,6 @@ def doctest_StudentAttendanceView_unresolvedAbsences():
 
         >>> first = datetime.date(2006, 1, 21)
         >>> last = datetime.date(2006, 1, 28)
-        >>> status = itertools.cycle([PRESENT, ABSENT, TARDY, PRESENT])
         >>> time = datetime.time(9, 30)
         >>> sections = itertools.cycle([SectionStub('math42'),
         ...                             SectionStub('grammar3'),
@@ -1843,8 +2139,8 @@ def doctest_StudentAttendanceView_unresolvedAbsences():
         ...     print translate(absence['text'])
         2006-01-22 09:30: absent from homeroom
         2006-01-22 09:30: absent from grammar3
-        2006-01-23 09:30: late for homeroom
-        2006-01-23 09:30: late for relativity97
+        2006-01-23 09:30: late for homeroom, arrived on 09:45
+        2006-01-23 09:30: late for relativity97, arrived on 09:45
 
     """
 
@@ -1868,20 +2164,20 @@ def doctest_StudentAttendanceView_absencesForTerm():
         ...     print translate(a)
         2006-02-21 09:30: absent from homeroom
         2006-02-21 09:30: absent from grammar3
-        2006-02-22 09:30: late for homeroom
-        2006-02-22 09:30: late for relativity97
+        2006-02-22 09:30: late for homeroom, arrived on 09:45
+        2006-02-22 09:30: late for relativity97, arrived on 09:45
         2006-02-25 09:30: absent from homeroom
         2006-02-25 09:30: absent from relativity97
-        2006-02-26 09:30: late for homeroom
-        2006-02-26 09:30: late for math42
+        2006-02-26 09:30: late for homeroom, arrived on 09:45
+        2006-02-26 09:30: late for math42, arrived on 09:45
         2006-03-01 09:30: absent from homeroom
         2006-03-01 09:30: absent from math42
-        2006-03-02 09:30: late for homeroom
-        2006-03-02 09:30: late for grammar3
+        2006-03-02 09:30: late for homeroom, arrived on 09:45
+        2006-03-02 09:30: late for grammar3, arrived on 09:45
         2006-03-05 09:30: absent from homeroom
         2006-03-05 09:30: absent from grammar3
-        2006-03-06 09:30: late for homeroom
-        2006-03-06 09:30: late for relativity97
+        2006-03-06 09:30: late for homeroom, arrived on 09:45
+        2006-03-06 09:30: late for relativity97, arrived on 09:45
 
     """
 
@@ -2064,12 +2360,14 @@ def doctest_StudentAttendanceView_update():
         >>> view._process = _process
         >>> view.unresolvedAbsences = lambda: [
         ...     {'id': 'ar123', 'attendance_record': '<ar123>',
-        ...      'text': 'Attendance Record #123'},
+        ...      'text': 'Attendance Record #123', 'day': ['<ar124>']},
         ...     {'id': 'ar124', 'attendance_record': '<ar124>',
-        ...      'text': 'Attendance Record #124'},
+        ...      'text': 'Attendance Record #124', 'day': ['<ar123>']},
         ...     {'id': 'ar125', 'attendance_record': '<ar125>',
-        ...      'text': 'Attendance Record #125'},
+        ...      'text': 'Attendance Record #125', 'day': []},
         ... ]
+        >>> view.getInheritingRecords = lambda ar, day: []
+        >>> view.formatAttendanceRecord = lambda ar: ar
 
     No 'UPDATE' button in request -- nothing happens.
 
@@ -2104,6 +2402,27 @@ def doctest_StudentAttendanceView_update():
         <ar125>
         Explaining Attendance Record #125: yada yada
         Accepting Attendance Record #125 (code '001')
+
+   If attendance record has inheriting attendance records - they
+   should be updated too:
+
+        >>> request.form = {}
+        >>> request.form['UPDATE'] = u'Do it!'
+        >>> request.form['ar123'] = 'on'
+        >>> request.form['explanation'] = 'yada yada'
+        >>> request.form['field.code'] = 'excused'
+        >>> request.form['resolve'] = 'accept'
+        >>> view.getInheritingRecords = lambda ar, day: ['<ar126>', '<ar127>']
+        >>> view.update()
+        <ar123>
+        Explaining Attendance Record #123: yada yada
+        Accepting Attendance Record #123 (code '001')
+        <ar126>
+        Explaining <ar126>: yada yada
+        Accepting <ar126> (code '001')
+        <ar127>
+        Explaining <ar127>: yada yada
+        Accepting <ar127> (code '001')
 
     """
 

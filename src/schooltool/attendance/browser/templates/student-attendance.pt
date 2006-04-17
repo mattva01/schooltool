@@ -13,7 +13,7 @@
 
 <metal:block metal:fill-slot="body"
              tal:define="unresolved_absences
-                            python:list(view.unresolvedAbsences());
+                            python:list(view.unresolvedAbsencesForDisplay());
                          unresolved_explained_absences
                             python: [ar for ar in unresolved_absences
                                      if ar['explanation']];

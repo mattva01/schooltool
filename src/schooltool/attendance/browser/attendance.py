@@ -509,6 +509,12 @@ class StudentAttendanceView(BrowserView):
             if ar['id'] in self.request.form:
                 self._process(ar['attendance_record'], translate(ar['text']),
                               explanation, resolve, code)
+                inheriting_ars = self.getInheritingRecords(
+                    ar['attendance_record'],
+                    ar['day'])
+                for iar in inheriting_ars:
+                    self._process(iar, translate(self.formatAttendanceRecord(iar)),
+                                  explanation, resolve, code)
 
     def _process(self, ar, text, explanation, resolve, code):
         """Process a single attendance record"""
@@ -516,7 +522,7 @@ class StudentAttendanceView(BrowserView):
         # both add an explanation and accept/reject it in one go, only the
         # acceptance/rejection status message will be shown.
         status = None
-        mapping = mapping={'absence': text}
+        mapping = {'absence': text}
         if explanation:
             if self._addExplanation(ar, explanation, mapping):
                 status = _('Added an explanation for $absence',
@@ -602,14 +608,17 @@ class StudentAttendanceView(BrowserView):
             assert ISectionAttendanceRecord.providedBy(ar)
             title = translate(ar.section.label)
 
+        arrival_time = ar.late_arrival and ar.late_arrival.strftime('%H:%M')
         mapping = {'date': ar.date,
                    'time': ar.datetime.strftime('%H:%M'),
-                   'section': title}
+                   'section': title,
+                   'late_arrival': arrival_time}
 
         if ar.isAbsent():
             return _('$date $time: absent from $section', mapping=mapping)
         else:
-            return _('$date $time: late for $section', mapping=mapping)
+            return _('$date $time: late for $section,'
+                     ' arrived on $late_arrival', mapping=mapping)
 
     def outstandingExplanation(self, ar):
         """Return the outstanding unaccepted explanation, if any."""
@@ -643,19 +652,106 @@ class StudentAttendanceView(BrowserView):
                 if cur_section is not None:
                     yield cur_section
 
-    def unresolvedAbsences(self):
-        """Return all unresolved absences and tardies."""
+    def unresolvedAttendanceRecords(self):
+        """Return an interleaved list of unresolved absence records."""
         homeroom_attendance = IHomeroomAttendance(self.context)
         section_attendance = ISectionAttendance(self.context)
-        l = []
+
+        records = []
         for ar in self.interleaveAttendanceRecords(homeroom_attendance,
                                                    section_attendance):
             if (ar.isAbsent() or ar.isTardy()) and not ar.isExplained():
+                records.append(ar)
+        return records
+
+    def pigeonHoleAttendanceRecords(self):
+        """Divide attendance records into a list of days.
+
+        Returns a list of lists, in which every sublist has attendance
+        records for one date.
+        """
+        attendance_records = self.unresolvedAttendanceRecords()
+        date = None
+        days = []
+        for ar in attendance_records:
+            if ar.date != date:
+                days.append([])
+                date = ar.date
+            days[-1].append(ar)
+        return days
+
+    def inheritsFrom(self, homeroom_ar, section_ar):
+        """Return True if section_ar should inherit it's status from homeroom_ar."""
+        assert homeroom_ar.isAbsent() or homeroom_ar.isTardy()
+        if homeroom_ar.isAbsent():
+            return True
+
+        arrival = section_ar.late_arrival or (section_ar.datetime +
+                                              section_ar.duration)
+        # XXX ignas: i should get the delta from schooltool preferences
+        delta = datetime.timedelta(minutes=5)
+        if arrival - delta > homeroom_ar.late_arrival:
+            return False
+
+        return True
+
+    def getInheritingRecords(self, homeroom_ar, day):
+        """Filter out inheriting attendance records in a day."""
+        homeroom_attendance = IHomeroomAttendance(self.context)
+        records = []
+        for ar in day:
+            if not IHomeroomAttendanceRecord.providedBy(ar):
+                hr_ar = homeroom_attendance.getHomeroomPeriodForRecord(ar)
+                if hr_ar == homeroom_ar and self.inheritsFrom(homeroom_ar, ar):
+                    records.append(ar)
+        return records
+
+    def hasParentHomeroom(self, section_ar, day):
+        """Check whether section_ar has a parent homeroom in a day."""
+        if IHomeroomAttendanceRecord.providedBy(section_ar):
+            return False
+        homeroom_attendance = IHomeroomAttendance(self.context)
+        hr_ar = homeroom_attendance.getHomeroomPeriodForRecord(section_ar)
+        return hr_ar in day and self.inheritsFrom(hr_ar, section_ar)
+
+    def hideInheritingRecords(self, days):
+        """Remove inheriting absences from days in the list.
+
+        Days is a list of days where each day is a list of attendance
+        records: [[ar, ar, ar], [ar, ar]].
+        """
+        new_days = []
+        for day in days:
+            new_day = []
+            for ar in list(day):
+                if not self.hasParentHomeroom(ar, day):
+                    new_day.append(ar)
+            new_days.append(new_day)
+        return new_days
+
+    def flattenDays(self, days):
+        """Flatten a list of days into a list of attendance record dicts."""
+        l = []
+        for day in days:
+            for ar in day:
                 l.append({'id': self.makeId(ar),
                           'text': self.formatAttendanceRecord(ar),
                           'attendance_record': ar,
-                          'explanation': self.outstandingExplanation(ar)})
+                          'explanation': self.outstandingExplanation(ar),
+                          'day': day
+                          })
         return l
+
+    def unresolvedAbsencesForDisplay(self):
+        """Return only non inheriting unresolved absences."""
+        days = self.pigeonHoleAttendanceRecords()
+        days = self.hideInheritingRecords(days)
+        return self.flattenDays(days)
+
+    def unresolvedAbsences(self):
+        """Return all unresolved absences and tardies."""
+        days = self.pigeonHoleAttendanceRecords()
+        return self.flattenDays(days)
 
     def absencesForTerm(self, term):
         """Return all absences and tardies in a term."""

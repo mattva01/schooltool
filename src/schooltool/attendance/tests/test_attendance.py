@@ -113,6 +113,9 @@ class AttendanceRecordStub(object):
     def rejectExplanation(self):
         print "rejected the explanation"
 
+    def __cmp__(self, other):
+        return cmp((self.__class__, self.date, self.status),
+                   (other.__class__, other.date, other.status),)
 
 
 class ApplicationStub(object):
@@ -233,6 +236,15 @@ def doctest_AttendanceLoggingProxy_logging():
         >>> proxy.makeTardy("arrival time")
         made tardy (arrival time)
         2..., john, <...> of peter: made attendance record a tardy, arrival time (arrival time)
+
+    Proxy should not interfere with the comparison operator of wrapped
+    objects:
+
+        >>> proxy2 = DummyLogger(AttendanceRecordStub("2005-01-01", ABSENT),
+        ...                      PersonStub(name="peter"))
+
+        >>> proxy == proxy2
+        True
 
     """
 
