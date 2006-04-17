@@ -50,6 +50,7 @@ from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.attendance.interfaces import IUnresolvedAbsenceCache
 from schooltool.person.interfaces import IPerson
 from schooltool.group.interfaces import IGroup
+from schooltool.calendar.utils import utcnow
 from schooltool.attendance.interfaces import IHomeroomAttendance
 from schooltool.attendance.interfaces import IHomeroomAttendanceRecord
 from schooltool.attendance.interfaces import ISectionAttendance
@@ -169,13 +170,15 @@ class AttendanceCalendarEventViewlet(object):
 class RealtimeInfo(object):
     """A row of information about a student for the realtime attendance form"""
 
-    def __init__(self, name, title, color, symbol, disabled, sparkline_url):
+    def __init__(self, name, title, color, symbol, disabled, sparkline_url,
+                 arrival_time):
         self.name = name
         self.title = title
         self.color = color
         self.symbol = symbol
         self.disabled = disabled
         self.sparkline_url = sparkline_url
+        self.arrival_time = arrival_time
 
     def __repr__(self):
         return 'RealtimeInfo(%r, %r, %r, %r, %r, %r)' % \
@@ -193,6 +196,7 @@ class AttendanceView(BrowserView):
     __used_for__ = ISection
 
     realtime_template = ViewPageTemplateFile("templates/real_time.pt")
+    retro_template = ViewPageTemplateFile("templates/retro.pt")
     no_section_meeting_today_template = ViewPageTemplateFile(
                                             "templates/no_section_meeting.pt")
 
@@ -237,7 +241,8 @@ class AttendanceView(BrowserView):
                 past_status,     # colour
                 current_status,  # letter
                 disabled_checkbox,
-                sparkline_url
+                sparkline_url,
+                ar.late_arrival
                 ))
 
         result.sort(key=lambda this: this.title)
@@ -289,13 +294,6 @@ class AttendanceView(BrowserView):
 
     def update(self):
         """Process form submissions."""
-        self.meeting = getPeriodEventForSection(self.context, self.date,
-                                                self.period_id)
-
-        timetable = self.meeting.activity.timetable
-        homeroom_period_ids = timetable[self.meeting.day_id].homeroom_period_ids
-        self.homeroom = (self.meeting.period_id in homeroom_period_ids)
-
         # If there are persons with UNKNOWN status, show the 'absent' button,
         # otherwise show 'tardy' and 'arrived'.
         self.unknowns = False
@@ -331,6 +329,49 @@ class AttendanceView(BrowserView):
         if ar.isUnknown():
             self.unknowns = True
 
+    def retro_update(self):
+        """Process submissions for the retroactive form"""
+        self.arrival_errors = {}
+        self.arrivals = {}
+        if 'SUBMIT' in self.request:
+            for person in self.iterTransitiveMembers():
+                name = person.__name__
+                arrival_string = self.request.get(name + '_tardy', '').strip()
+                if self.request.get(name) == 'T':
+                    if not arrival_string:
+                        self.arrival_errors[name] = _(
+                            'You need to provide the arrival time')
+                        continue
+                    try:
+                        self.arrivals[name] = self.getArrival(name + '_tardy')
+                    except ValueError:
+                        self.arrival_errors[name] = _(
+                            'The arrival time you entered is '
+                            'invalid.  Please use HH:MM format')
+                elif arrival_string:
+                    self.arrival_errors[name] = _(
+                        'Arrival times only apply to tardy students')
+            if self.arrival_errors:
+                return
+            for person in self.iterTransitiveMembers():
+                attendance = ISectionAttendance(person)
+                self._retroUpdatePerson(attendance, person)
+                if self.homeroom:
+                    hattendance = IHomeroomAttendance(person)
+                    self._retroUpdatePerson(hattendance, person)
+
+    def _retroUpdatePerson(self, attendance, person):
+        name = person.__name__
+        action = self.request.get(name, 'U')
+        if action == 'P':
+            self._record(attendance, True)
+        elif action == 'A':
+            self._record(attendance, False)
+        elif action == 'T':
+            self._record(attendance, False)
+            ar = self._getAttendanceRecord(attendance)
+            ar.makeTardy(self.arrivals[name])
+
     def _getAttendanceRecord(self, attendance):
         """Get a attendance record for this section meeting."""
         return attendance.get(self.context, self.meeting.dtstart)
@@ -341,14 +382,14 @@ class AttendanceView(BrowserView):
                           self.meeting.dtstart, self.meeting.duration,
                           self.period_id, present)
 
-    def getArrival(self):
+    def getArrival(self, field='arrival'):
         """Extracts the date of late arrivals from the request.
 
         If the time is not specified, defaults to now.
         """
-        if self.request.get('arrival'):
+        if self.request.get(field):
             tz = ViewPreferences(self.request).timezone
-            time = parse_time(self.request['arrival'])
+            time = parse_time(self.request[field])
             result = datetime.datetime.combine(self.date, time)
             return tz.localize(result)
         return pytz.utc.localize(datetime.datetime.utcnow())
@@ -376,9 +417,14 @@ class AttendanceView(BrowserView):
         if self.date is None or self.period_id is None:
             # Not enough traversal path elements
             raise NotFound(self.context, self.__name__, self.request)
-        if not getPeriodEventForSection(self.context, self.date,
-                                        self.period_id):
+        self.meeting = getPeriodEventForSection(self.context, self.date,
+                                               self.period_id)
+        if not self.meeting:
             raise NotFound(self.context, self.__name__, self.request)
+        timetable = self.meeting.activity.timetable
+        homeroom_ids = timetable[self.meeting.day_id].homeroom_period_ids
+        self.homeroom = (self.meeting.period_id in homeroom_ids)
+
 
     def findClosestMeeting(self):
         """Find the closest section meeting."""
@@ -393,14 +439,27 @@ class AttendanceView(BrowserView):
         self.date = datetime_to_schoolday_date(now)
         self.period_id = ev.period_id
 
+    def sectionMeetingFinished(self):
+        app = ISchoolToolApplication(None)
+        mins = IApplicationPreferences(app).attendanceRetroactiveTimeout
+        delta = datetime.timedelta(minutes=mins)
+        if self.meeting.dtstart + self.meeting.duration + delta < utcnow():
+            return True
+        return False
+
     def __call__(self):
         """Process form submissions and render the view."""
         try:
             self.verifyParameters()
         except NoSectionMeetingToday:
             return self.no_section_meeting_today_template()
-        self.update()
-        return self.realtime_template()
+
+        if self.sectionMeetingFinished():
+            self.retro_update()
+            return self.retro_template()
+        else:
+            self.update()
+            return self.realtime_template()
 
 
 class NoSectionMeetingToday(Exception):

@@ -15,6 +15,13 @@ Setup
 
 This is going to be a bit boring, since we start with a clean slate.
 
+Let's say now it's 2005-11-14T9:44Z:
+
+    >>> from pytz import utc
+    >>> from datetime import datetime
+    >>> from schooltool.calendar.utils import stub_utcnow
+    >>> stub_utcnow(datetime(2005, 11, 14, 9, 44, tzinfo=utc))
+
 A manager logs in
 
     >>> from zope.testbrowser.testing import Browser
@@ -189,3 +196,10 @@ Let's check the attendance panel:
     >>> manager.getLink('Attendance Panel').click()
     >>> 'Joniukas' in manager.contents
     True
+
+Epilog
+------
+
+Let's reset the "now" stub:
+
+    >>> stub_utcnow(None)

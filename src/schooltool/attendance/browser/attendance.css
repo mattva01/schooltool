@@ -29,6 +29,19 @@ form#attendance_explain_resolve h3 {
   margin-bottom: 2ex;
 }
 
+tr.attendance-retro-row th,  tr.attendance-retro-row td{
+  border-bottom: 1px solid gray;
+  text-align: center;
+}
+
+tr.attendance-retro-row .first {
+  border-left: none;
+}
+
+tr.attendance-retro-row .other {
+  border-left: 1px solid gray;
+}
+
 form td.num {
   text-align: center;
 }

@@ -45,6 +45,7 @@ from schooltool.timetable import TimetableActivity
 from schooltool.timetable.model import TimetableCalendarEvent
 from schooltool.calendar.simple import ImmutableCalendar
 from schooltool.calendar.simple import SimpleCalendarEvent
+from schooltool.calendar.utils import utcnow, stub_utcnow
 from schooltool.course.interfaces import ISection
 from schooltool.testing.util import fakePath
 from schooltool.relationship.tests import setUpRelationships
@@ -87,6 +88,7 @@ class ApplicationPreferencesStub(object):
     adapts(ISchoolToolApplication)
     implements(IApplicationPreferences)
     timezone = 'UTC'
+    attendanceRetroactiveTimeout = 60
     attendanceStatusCodes = {'001': 'excused'}
     def __init__(self, context):
         pass
@@ -516,8 +518,8 @@ def doctest_AttendanceView():
         >>> request = TestRequest()
         >>> view = AttendanceView(None, request)
 
-    Calling the view should update the form and render the realtime
-    template:
+    Calling the view during or before the section meeting should
+    update the form and render the realtime template:
 
         >>> def update():
         ...     print "Updated form."
@@ -525,15 +527,32 @@ def doctest_AttendanceView():
         ...     return "The real-time template"
         >>> view.update = update
         >>> view.realtime_template = realtime_template
+        >>> view.sectionMeetingFinished = lambda: False
         >>> view.verifyParameters = lambda: True
 
         >>> view()
         Updated form.
         'The real-time template'
 
+    Calling the view some time after the section meeting should
+    update the form and render the retroactive template:
+
+        >>> def retro_update():
+        ...     print "Updated retro form."
+        >>> def retro_template():
+        ...     return "The retro template"
+        >>> view.retro_update = retro_update
+        >>> view.retro_template = retro_template
+        >>> view.sectionMeetingFinished = lambda: True
+
+        >>> view()
+        Updated retro form.
+        'The retro template'
+
     Unless verifyParameters raises NoSectionMeetingToday exception:
 
-        >>> from schooltool.attendance.browser.attendance import NoSectionMeetingToday
+        >>> from schooltool.attendance.browser.attendance \
+        ...      import NoSectionMeetingToday
         >>> def verify_parameters():
         ...     raise NoSectionMeetingToday
         >>> view.verifyParameters = verify_parameters
@@ -794,7 +813,7 @@ def doctest_AttendanceView_update():
     Let's create a section and a view:
 
         >>> from schooltool.attendance.browser.attendance import \
-        ...     AttendanceView
+        ...     AttendanceView, getPeriodEventForSection
         >>> from schooltool.course.section import Section
         >>> class MySection(Section):
         ...     def __repr__(self): return '<Section>'
@@ -829,6 +848,8 @@ def doctest_AttendanceView_update():
         >>> view = AttendanceView(section, request)
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
+        >>> view.meeting = getPeriodEventForSection(section, view.date, 'C')
+        >>> view.homeroom = False
 
         >>> view.update()
 
@@ -847,6 +868,8 @@ def doctest_AttendanceView_update():
         >>> view = AttendanceView(section, request)
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
+        >>> view.meeting = getPeriodEventForSection(section, view.date, 'C')
+        >>> view.homeroom = False
 
     Now we can call update:
 
@@ -884,6 +907,8 @@ def doctest_AttendanceView_update():
         >>> view = AttendanceView(section, request)
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
+        >>> view.meeting = getPeriodEventForSection(section, view.date, 'C')
+        >>> view.homeroom = False
 
         >>> view.update()
 
@@ -907,6 +932,8 @@ def doctest_AttendanceView_update():
         >>> view = AttendanceView(section, request)
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
+        >>> view.meeting = getPeriodEventForSection(section, view.date, 'C')
+        >>> view.homeroom = False
 
         >>> view.update()
 
@@ -930,6 +957,8 @@ def doctest_AttendanceView_update():
         >>> view = AttendanceView(section, request)
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
+        >>> view.meeting = getPeriodEventForSection(section, view.date, 'C')
+        >>> view.homeroom = False
 
         >>> view.update()
 
@@ -951,6 +980,8 @@ def doctest_AttendanceView_update():
         >>> view = AttendanceView(section, request)
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
+        >>> view.meeting = getPeriodEventForSection(section, view.date, 'C')
+        >>> view.homeroom = False
 
         >>> view.update()
         >>> tock = datetime.datetime.utcnow().replace(tzinfo=utc)
@@ -981,6 +1012,8 @@ def doctest_AttendanceView_update():
         >>> view = AttendanceView(section, request)
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
+        >>> view.meeting = getPeriodEventForSection(section, view.date, 'C')
+        >>> view.homeroom = False
 
         >>> view.update()
 
@@ -1000,6 +1033,8 @@ def doctest_AttendanceView_update():
         >>> view = AttendanceView(section, request)
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
+        >>> view.meeting = getPeriodEventForSection(section, view.date, 'C')
+        >>> view.homeroom = False
 
         >>> view.update()
 
@@ -1020,8 +1055,9 @@ def doctest_AttendanceView_update_homeroom():
     The ``update`` method is able to tell the difference between regular
     section meetings and the homeroom meeting.
 
+        >>> from schooltool.attendance.browser.attendance import AttendanceView
         >>> from schooltool.attendance.browser.attendance \
-        ...     import AttendanceView
+        ...     import getPeriodEventForSection
         >>> section = SectionStub()
         >>> request = TestRequest()
         >>> view = AttendanceView(section, request)
@@ -1030,6 +1066,7 @@ def doctest_AttendanceView_update_homeroom():
 
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
+        >>> view.meeting = getPeriodEventForSection(section, view.date, 'C')
         >>> view.update()
         >>> view.homeroom
         False
@@ -1037,6 +1074,7 @@ def doctest_AttendanceView_update_homeroom():
     The 'B' period, on the other hand, is the homeroom period
 
         >>> view.period_id = 'B'
+        >>> view.meeting = getPeriodEventForSection(section, view.date, 'B')
         >>> view.update()
         >>> view.homeroom
         True
@@ -1056,7 +1094,7 @@ def doctest_AttendanceView_update_homeroom():
     section meetings and the homeroom meeting.
 
         >>> from schooltool.attendance.browser.attendance \
-        ...     import AttendanceView
+        ...     import AttendanceView, getPeriodEventForSection
         >>> section = SectionStub()
         >>> request = TestRequest()
         >>> view = AttendanceView(section, request)
@@ -1065,16 +1103,14 @@ def doctest_AttendanceView_update_homeroom():
 
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
+        >>> view.meeting = getPeriodEventForSection(section, view.date, 'C')
         >>> view.update()
-        >>> view.homeroom
-        False
 
     The 'B' period, on the other hand, is the homeroom period
 
         >>> view.period_id = 'B'
+        >>> view.meeting = getPeriodEventForSection(section, view.date, 'B')
         >>> view.update()
-        >>> view.homeroom
-        True
 
     """
 
@@ -1095,7 +1131,7 @@ def doctest_AttendanceView_update_set_homeroom():
     and for homeroom attendance.
 
         >>> from schooltool.attendance.browser.attendance \
-        ...     import AttendanceView
+        ...     import AttendanceView, getPeriodEventForSection
         >>> section = SectionStub()
         >>> request = TestRequest()
         >>> view = AttendanceView(section, request)
@@ -1113,9 +1149,9 @@ def doctest_AttendanceView_update_set_homeroom():
 
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'B'
-        >>> view.update()
-        >>> view.homeroom
-        True
+        >>> view.meeting = getPeriodEventForSection(section, view.date,
+        ...                                         view.period_id)
+        >>> view.homeroom = True
 
     If you mark some absences, they will be recorded as homeroom
     absences, not just section absences.
@@ -1142,6 +1178,125 @@ def doctest_AttendanceView_update_set_homeroom():
 
     """
 
+
+def doctest_AttendanceView_retro_update():
+    r"""This is an update method for the retroactive attendance form.
+
+    We'll need some timetabling and attendance adapters:
+
+        >>> ztapi.provideAdapter(None, ITimetables, StubTimetables)
+        >>> setUpAttendanceAdapters()
+
+    The AttendanceView is used both for regular section meetings,
+    and for homeroom attendance.
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...     import AttendanceView, getPeriodEventForSection
+        >>> section = SectionStub()
+        >>> request = TestRequest()
+        >>> view = AttendanceView(section, request)
+
+    We will need several persons:
+
+        >>> from schooltool.person.person import Person
+        >>> person1 = Person('person1', title='Person1')
+        >>> person1.__name__ = 'p1'
+        >>> person2 = Person('person2', title='Person2')
+        >>> person2.__name__ = 'p2'
+        >>> person3 = Person('person3', title='Person3')
+        >>> person3.__name__ = 'p3'
+        >>> person4 = Person('person4', title='Person4')
+        >>> person4.__name__ = 'p4'
+        >>> section.members = [person1, person2, person3, person4]
+
+    The 'B' period is the homeroom period:
+
+        >>> view.date = datetime.date(2005, 12, 15)
+        >>> view.period_id = 'B'
+        >>> view.meeting = getPeriodEventForSection(section, view.date,
+        ...                                         view.period_id)
+        >>> view.homeroom = True
+
+    Let's say the first person was present, the other was absent, the
+    third was tardy, and we're undecided about the last one:
+
+        >>> view.request = TestRequest(form={'p1': 'P', 'p2': 'A',
+        ...                                  'p3': 'T', 'p3_tardy': '10:10',
+        ...                                  'p4': 'U'})
+        >>> view.retro_update()
+
+    When there's no submit in the request, nothing happens:
+
+        >>> list(ISectionAttendance(person1))
+        []
+
+    Now we press the submit button:
+
+        >>> view.request = TestRequest(form={'p1': 'P', 'p2': 'A',
+        ...                                  'p3': 'T', 'p3_tardy': '10:10',
+        ...                                  'p4': 'U', 'SUBMIT': 'Go!'})
+        >>> view.retro_update()
+
+        >>> list(ISectionAttendance(person1))
+        [SectionAttendanceRecord(<...SectionStub...>,
+             datetime.datetime(2005, 12, 15, 10, 0, tzinfo=<UTC>), PRESENT)]
+
+        >>> list(ISectionAttendance(person2))
+        [SectionAttendanceRecord(<...SectionStub...>,
+             datetime.datetime(2005, 12, 15, 10, 0, tzinfo=<UTC>), ABSENT)]
+
+        >>> list(ISectionAttendance(person3))
+        [SectionAttendanceRecord(<...SectionStub...>,
+             datetime.datetime(2005, 12, 15, 10, 0, tzinfo=<UTC>), TARDY)]
+        >>> list(ISectionAttendance(person3))[0].late_arrival
+        datetime.datetime(2005, 12, 15, 10, 10, tzinfo=<UTC>)
+
+        >>> list(ISectionAttendance(person4))
+        []
+
+    The homeroom records are updated as well:
+
+        >>> list(IHomeroomAttendance(person1))
+        [HomeroomAttendanceRecord(<...SectionStub...>,
+         datetime.datetime(2005, 12, 15, 10, 0, tzinfo=<UTC>), PRESENT)]
+
+        >>> list(IHomeroomAttendance(person2))
+        [HomeroomAttendanceRecord(<...SectionStub...>,
+         datetime.datetime(2005, 12, 15, 10, 0, tzinfo=<UTC>), ABSENT)]
+
+        >>> list(IHomeroomAttendance(person3))
+        [HomeroomAttendanceRecord(<...SectionStub...>,
+         datetime.datetime(2005, 12, 15, 10, 0, tzinfo=<UTC>), TARDY)]
+
+        >>> list(IHomeroomAttendance(person4))
+        []
+
+    Let's test the error handling of the arrival times:
+
+        >>> view.period_id = 'C'
+        >>> view.meeting = getPeriodEventForSection(section, view.date,
+        ...                                         view.period_id)
+        >>> view.homeroom = False
+        >>> view.request = TestRequest(form={'p1': 'P', 'p1_tardy': '12:34',
+        ...                                  'p2': 'T', 'p2_tardy': '',
+        ...                                  'p3': 'T', 'p3_tardy': '10 mins',
+        ...                                  'p4': 'T', 'p4_tardy': '10:10',
+        ...                                  'SUBMIT': 'Go!'})
+        >>> view.retro_update()
+        >>> view.arrivals
+        {'p4': datetime.datetime(2005, 12, 15, 10, 10, tzinfo=<UTC>)}
+        >>> pprint(view.arrival_errors)
+        {'p1': u'Arrival times only apply to tardy students',
+         'p2': u'You need to provide the arrival time',
+         'p3': u'The arrival time you entered is invalid.
+                 Please use HH:MM format'}
+
+    When there were errors, even the valid record was not updated:
+
+        >>> list(ISectionAttendance(person4))
+        []
+
+    """
 
 def doctest_AttendanceView_getAttendanceRecord():
     r"""Tests for AttendanceView._getAttendanceRecord
@@ -1351,8 +1506,87 @@ def doctest_AttendanceView_verifyParameters():
         >>> view.period_id = 'B'
         >>> view.verifyParameters()
 
+    If everything is fine, verifyParameters saves the meeting
+    (timetable calendar event), and if it is a homeroom period:
+
+        >>> view.meeting
+        <schooltool.timetable.model.TimetableCalendarEvent object at ...>
+        >>> view.meeting.period_id
+        'B'
+        >>> view.meeting.dtstart
+        datetime.datetime(2005, 12, 15, 10, 0, tzinfo=<UTC>)
+        >>> view.homeroom
+        True
+
+    Let's try a non-homeroom period:
+
+        >>> view.period_id = 'C'
+        >>> view.verifyParameters()
+        >>> view.meeting.period_id
+        'C'
+        >>> view.meeting.dtstart
+        datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>)
+        >>> view.homeroom
+        False
+
     """
 
+
+def doctest_AttendanceView_sectionMeetingFinished():
+    """Tests for AttendanceView.sectionMeetingFinished
+
+    This method tells us whether to show the realtime or retroactive
+    attendance form.
+
+        >>> from schooltool.attendance.browser.attendance import AttendanceView
+
+        >>> section = object()
+        >>> view = AttendanceView(section, TestRequest())
+        >>> now = datetime.datetime(2006, 4, 14, 12, 0, tzinfo=utc)
+        >>> stub_utcnow(now)
+
+    If the meeting is still in progress, sectionMeetingFinished,
+    obviously, returns false:
+
+        >>> view.meeting = TimetableCalendarEvent(
+        ...     datetime.datetime(2006, 4, 14, 11, 50, tzinfo=utc),
+        ...     datetime.timedelta(minutes=45),
+        ...     "Math", day_id='D1', period_id="p4",
+        ...     activity=None)
+        >>> view.sectionMeetingFinished()
+        False
+
+    Well before the meeting, it also returns False:
+
+        >>> view.meeting = TimetableCalendarEvent(
+        ...     datetime.datetime(2006, 4, 14, 13, 00, tzinfo=utc),
+        ...     datetime.timedelta(minutes=45),
+        ...     "Math", day_id='D1', period_id="p4",
+        ...     activity=None)
+        >>> view.sectionMeetingFinished()
+        False
+
+    Immediately after the meeting, it also returns False:
+
+        >>> view.meeting = TimetableCalendarEvent(
+        ...     datetime.datetime(2006, 4, 14, 11, 14, tzinfo=utc),
+        ...     datetime.timedelta(minutes=45),
+        ...     "Math", day_id='D1', period_id="p4",
+        ...     activity=None)
+        >>> view.sectionMeetingFinished()
+        False
+
+    However, 1 hour after the meeting has finished, it returns True:
+
+        >>> view.meeting = TimetableCalendarEvent(
+        ...     datetime.datetime(2006, 4, 14, 10, 14, tzinfo=utc),
+        ...     datetime.timedelta(minutes=45),
+        ...     "Math", day_id='D1', period_id="p4",
+        ...     activity=None)
+        >>> view.sectionMeetingFinished()
+        True
+
+    """
 
 def doctest_AttendanceView_findClosestMeeting():
     r"""Tests for AttendanceView.findClosestMeeting

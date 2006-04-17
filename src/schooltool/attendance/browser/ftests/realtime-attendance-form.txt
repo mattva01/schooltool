@@ -134,6 +134,14 @@ Add them to dancing section
 Real-time attendance form
 -------------------------
 
+Let's say now it's 2005-12-12T9:44Z:
+
+    >>> from pytz import utc
+    >>> from datetime import datetime
+    >>> from schooltool.calendar.utils import stub_utcnow
+    >>> stub_utcnow(datetime(2005, 12, 12, 9, 44, tzinfo=utc))
+
+
 The teacher logs in
 
     >>> largo = Browser()
@@ -323,3 +331,10 @@ If you go there, you see a list of unresolved absences
     ...
     ...2005-12-12 09:30: late for Great Teacher Largo -- Dancing 1...
 
+
+Epilog
+------
+
+Let's reset the "now" stub:
+
+    >>> stub_utcnow(None)
