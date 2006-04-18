@@ -68,9 +68,14 @@ from schooltool.person.interfaces import IPerson
 
 class AttendancePreferences(Persistent):
 
-    # XXX some meaningless sample data
-    defaultAttendanceStatusCodes = {'001': 'excused',
-                                    '002': 'unexcused'}
+    defaultAttendanceStatusCodes = {'P': 'Parent Excused',
+                                    'S': 'School Excused',
+                                    'I': 'In School Suspension',
+                                    'O': 'Out of School Suspension',
+                                    'X': 'Truant',
+                                    'V': 'Vacation',
+                                    'F': 'Field Trip',
+                                    'B': 'Late Bus'}
 
     attendanceRetroactiveTimeout = 60
 
