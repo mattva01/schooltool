@@ -286,14 +286,9 @@ def doctest_AttendanceSparkline():
         >>> for item in data:
         ...     print item
         ('dot', 'black', '+')
-        ('half', 'black', '+')
-        ('half', 'black', '-')
-        ('dot', 'black', '+')
         ('full', 'yellow', '-')
         ('full', 'black', '+')
         ('full', 'black', '-')
-        ('half', 'yellow', '-')
-        ('dot', 'black', '+')
         ('full', 'red', '-')
 
     """
