@@ -80,9 +80,7 @@ class AttendancePreferencesView(BrowserView):
 
         app = ISchoolToolApplication(None)
         self.prefs = IAttendancePreferences(app)
-        self.dictionary = getattr(self.prefs, 'attendanceStatusCodes', None)
-        if not self.dictionary:
-            self.dictionary = {}
+        self.dictionary = self.prefs.attendanceStatusCodes
 
         initial = {}
         for field in self.schema:
