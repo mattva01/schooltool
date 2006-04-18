@@ -131,15 +131,6 @@ class AttendanceSparkline(object):
                     data.append(('full', 'red', '-'))
                 else:
                     data.append(('full', 'yellow', '-'))
-#             else:
-#                 if not hr_period or hr_period.isUnknown():
-#                     data.append(('dot', 'black', '+'))
-#                 elif hr_period.isPresent():
-#                     data.append(('half', 'black', '+'))
-#                 elif hr_period.isExplained():
-#                     data.append(('half', 'black', '-'))
-#                 else:
-#                     data.append(('half', 'yellow', '-'))
         return data
 
     def render(self, height=13, point_width=2, spacing=1):
