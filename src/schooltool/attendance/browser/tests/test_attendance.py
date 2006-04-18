@@ -1679,6 +1679,123 @@ def doctest_StudentAttendanceView():
     """
 
 
+def doctest_StudentAttendanceView_parseArrivalTime():
+    r"""Tests for AttendanceView.parseArrivalTime
+
+    We'll need person preferences for a timezone:
+
+        >>> from schooltool.person.interfaces import IPerson
+        >>> from schooltool.person.interfaces import IPersonPreferences
+        >>> from schooltool.person.preference import getPersonPreferences
+        >>> from schooltool.app.interfaces import ISchoolToolCalendar
+        >>> ztapi.provideAdapter(IPerson, IPersonPreferences,
+        ...                      getPersonPreferences)
+
+
+    Let's create a section and a view:
+
+        >>> from schooltool.attendance.browser.attendance import \
+        ...     StudentAttendanceView
+
+    If no arrival time was passed None is returned:
+
+        >>> view = StudentAttendanceView(None, TestRequest())
+        >>> arrival = view.parseArrivalTime(None, "")
+        >>> arrival is None
+        True
+
+    However if some time was given it should get parsed and combined
+    with the date:
+
+        >>> from schooltool.person.person import Person
+        >>> user = Person('user')
+        >>> from schooltool.person.interfaces import IPersonPreferences
+        >>> IPersonPreferences(user).timezone = 'Europe/Vilnius'
+
+        >>> request = TestRequest()
+        >>> request.setPrincipal(user)
+        >>> view = StudentAttendanceView(None, request)
+        >>> date = datetime.date(2005, 12, 29)
+        >>> view.parseArrivalTime(date, '22:13')
+        datetime.datetime(2005, 12, 29, 22, 13,
+                          tzinfo=<DstTzInfo 'Europe/Vilnius' EET+2:00:00 STD>)
+
+    If the time is invalid, we just pass the ValueError along:
+
+        >>> view = StudentAttendanceView(None, request)
+        >>> date = datetime.date(2005, 12, 29)
+        >>> view.parseArrivalTime(date, '2213')
+        Traceback (most recent call last):
+          ...
+        ValueError: need more than 1 value to unpack
+
+    """
+
+
+def doctest_StudentAttendanceView_makeTardy():
+    r"""Tests for StudentAttendanceView.makeTardy
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...        import StudentAttendanceView
+        >>> view = StudentAttendanceView(None, None)
+        >>> view.errors = []
+
+        >>> ar = HomeroomAttendanceRecordStub(None,
+        ...          datetime.datetime(2006, 1, 29, tzinfo=utc), ABSENT)
+        >>> def makeTardy(dt):
+        ...     print "Made tardy %s" % dt
+        >>> ar.makeTardy = makeTardy
+        >>> view.parseArrivalTime = lambda date, time: "%s %s" % (date, time)
+
+        >>> view._makeTardy(ar, "22:15", {'absence': 'THIS ABSENCE'})
+        Made tardy 2006-01-29 22:15
+        True
+        >>> view.errors
+        []
+
+        >>> ar.makeTardy = ar._raiseError
+        >>> view._makeTardy(ar, "22:15", {'absence': 'THIS ABSENCE'})
+        False
+
+        >>> for err in view.errors:
+        ...     print translate(err)
+        Could not convert THIS ABSENCE absence intoa homeroom tardy
+
+    Only homeroom attendance records can be converted into tardies:
+
+        >>> view.errors = []
+        >>> view._makeTardy("tsmee", "22:15", {'absence': 'THIS ABSENCE'})
+        False
+
+        >>> for err in view.errors:
+        ...     print translate(err)
+        THIS ABSENCE is not a homeroom absence, only homeroom absences can be
+        converted into tardies
+
+    If we supply an invalid time - tardy_error is set:
+
+        >>> def valueError(date, time):
+        ...     raise ValueError()
+        >>> view.parseArrivalTime = valueError
+        >>> view._makeTardy(ar, "22:15", {'absence': 'THIS ABSENCE'})
+        False
+
+        >>> view.tardy_error
+        u'The arrival time you entered is invalid.  Please use HH:MM format'
+
+    If no arrival_time was provided a different error message should
+    appear:
+
+        >>> view.parseArrivalTime = lambda date, time: None
+        >>> view._makeTardy(ar, "", {'absence': 'THIS ABSENCE'})
+        False
+
+        >>> view.tardy_error
+        u'You must provide a valid arrival time.'
+
+    """
+
+
 def doctest_StudentAttendanceView_term_for_detailed_summary():
     r"""Tests for StudentAttendanceView.term_for_detailed_summary
 
@@ -2351,12 +2468,13 @@ def doctest_StudentAttendanceView_update():
         ...        import StudentAttendanceView
         >>> request = TestRequest()
         >>> view = StudentAttendanceView(None, request)
-        >>> def _process(ar, text, explanation, resolve, code):
+        >>> def _process(ar, text, explanation, resolve, code, late_arrival):
         ...     print ar
         ...     if explanation: print 'Explaining %s: %s' % (text, explanation)
         ...     if resolve == 'accept':
         ...         print 'Accepting %s (code %r)' % (text, code)
         ...     if resolve == 'reject': print 'Rejecting %s' % text
+        ...     if resolve == 'tardy': print 'Converting %s to tardy on %s' % (text, late_arrival)
         >>> view._process = _process
         >>> view.unresolvedAbsences = lambda: [
         ...     {'id': 'ar123', 'attendance_record': '<ar123>',
@@ -2424,6 +2542,19 @@ def doctest_StudentAttendanceView_update():
         Explaining <ar127>: yada yada
         Accepting <ar127> (code '001')
 
+    Make tardy should not be inherited, as this form should allow only
+    homeroom periods to be converted into tardies:
+
+        >>> request.form = {}
+        >>> request.form['UPDATE'] = u'Do it!'
+        >>> request.form['ar123'] = 'on'
+        >>> request.form['resolve'] = 'tardy'
+        >>> request.form['tardy_time'] = '15:56'
+        >>> view.getInheritingRecords = lambda ar, day: ['<ar126>', '<ar127>']
+        >>> view.update()
+        <ar123>
+        Converting Attendance Record #123 to tardy on 15:56
+
     """
 
 
@@ -2438,10 +2569,11 @@ def doctest_StudentAttendanceView_process():
         >>> view._addExplanation = print_and_return_True('addExplanation')
         >>> view._acceptExplanation = print_and_return_True('acceptExplanation')
         >>> view._rejectExplanation = print_and_return_True('rejectExplanation')
+        >>> view._makeTardy = print_and_return_True('makeTardy')
 
         >>> ar = 'attendance_record'
         >>> text = 'THIS ABSENCE'
-        >>> view._process(ar, text, '', 'ignore', '')
+        >>> view._process(ar, text, '', 'ignore', '', '')
 
     Nothing happened.
 
@@ -2450,7 +2582,7 @@ def doctest_StudentAttendanceView_process():
 
     Let's add an explanation; nothing else
 
-        >>> view._process(ar, text, 'explainexplainexplain', 'ignore', '')
+        >>> view._process(ar, text, 'explainexplainexplain', 'ignore', '', '')
         addExplanation
         >>> for status in view.statuses:
         ...     print translate(status)
@@ -2459,7 +2591,7 @@ def doctest_StudentAttendanceView_process():
     Let's accept an explanation; nothing else
 
         >>> view.statuses = []
-        >>> view._process(ar, text, '', 'accept', '001')
+        >>> view._process(ar, text, '', 'accept', '001', '')
         acceptExplanation
         >>> for status in view.statuses:
         ...     print translate(status)
@@ -2468,7 +2600,7 @@ def doctest_StudentAttendanceView_process():
     Let's reject an explanation; nothing else
 
         >>> view.statuses = []
-        >>> view._process(ar, text, '', 'reject', '')
+        >>> view._process(ar, text, '', 'reject', '', '')
         rejectExplanation
         >>> for status in view.statuses:
         ...     print translate(status)
@@ -2477,7 +2609,7 @@ def doctest_StudentAttendanceView_process():
     Ok, now let's both add and accept an explanation
 
         >>> view.statuses = []
-        >>> view._process(ar, text, 'gugugu', 'accept', '001')
+        >>> view._process(ar, text, 'gugugu', 'accept', '001', '')
         addExplanation
         acceptExplanation
         >>> for status in view.statuses:
@@ -2487,12 +2619,21 @@ def doctest_StudentAttendanceView_process():
     Let's reject an explanation; nothing else
 
         >>> view.statuses = []
-        >>> view._process(ar, text, 'baaaa', 'reject', '')
+        >>> view._process(ar, text, 'baaaa', 'reject', '', '')
         addExplanation
         rejectExplanation
         >>> for status in view.statuses:
         ...     print translate(status)
         Rejected explanation for THIS ABSENCE
+
+    Let's make this absence into a tardy:
+
+        >>> view.statuses = []
+        >>> view._process(ar, text, '', 'tardy', '', '15:23')
+        makeTardy
+        >>> for status in view.statuses:
+        ...     print translate(status)
+        Made THIS ABSENCE a tardy
 
     """
 
@@ -2514,16 +2655,16 @@ def doctest_StudentAttendanceView_process_error_handling():
 
     Let's add an explanation, when you cannot add an explanation
 
-        >>> view._process(ar, text, 'explainexplainexplain', 'ignore', '')
+        >>> view._process(ar, text, 'explainexplainexplain', 'ignore', '', '')
         addExplanation
         >>> view.statuses
         []
 
     You cannot accept/reject anything if addExplanation fails
 
-        >>> view._process(ar, text, 'explainexplainexplain', 'accept', '001')
+        >>> view._process(ar, text, 'explainexplainexplain', 'accept', '001', '')
         addExplanation
-        >>> view._process(ar, text, 'explainexplainexplain', 'reject', '')
+        >>> view._process(ar, text, 'explainexplainexplain', 'reject', '', '')
         addExplanation
         >>> view.statuses
         []
@@ -2534,7 +2675,7 @@ def doctest_StudentAttendanceView_process_error_handling():
         >>> view._acceptExplanation = print_and_return_False('acceptExplanation')
         >>> view._rejectExplanation = print_and_return_False('rejectExplanation')
 
-        >>> view._process(ar, text, 'explainexplainexplain', 'accept', '001')
+        >>> view._process(ar, text, 'explainexplainexplain', 'accept', '001', '')
         addExplanation
         acceptExplanation
         >>> for status in view.statuses:
@@ -2542,7 +2683,7 @@ def doctest_StudentAttendanceView_process_error_handling():
         Added an explanation for THIS ABSENCE
 
         >>> view.statuses = []
-        >>> view._process(ar, text, 'explainexplainexplain', 'reject', '')
+        >>> view._process(ar, text, 'explainexplainexplain', 'reject', '', '')
         addExplanation
         rejectExplanation
         >>> for status in view.statuses:
@@ -2552,13 +2693,13 @@ def doctest_StudentAttendanceView_process_error_handling():
     Ok, suppose you did not add an explanation, and accept/reject borks
 
         >>> view.statuses = []
-        >>> view._process(ar, text, '', 'accept', '001')
+        >>> view._process(ar, text, '', 'accept', '001', '')
         acceptExplanation
         >>> view.statuses
         []
 
         >>> view.statuses = []
-        >>> view._process(ar, text, '', 'reject', '')
+        >>> view._process(ar, text, '', 'reject', '', '')
         rejectExplanation
         >>> view.statuses
         []

@@ -486,6 +486,7 @@ class StudentAttendanceView(BrowserView):
         """Process the form."""
         self.statuses = []
         self.errors = []
+        self.tardy_error = None
 
         # hand craft dropdown widget from dict
         app = ISchoolToolApplication(None)
@@ -505,18 +506,21 @@ class StudentAttendanceView(BrowserView):
             code = self.code_widget.getInputValue()
         explanation = self.request.get('explanation', '').strip()
         resolve = self.request.get('resolve', '')
+        late_arrival = self.request.get('tardy_time', '')
         for ar in self.unresolvedAbsences():
             if ar['id'] in self.request.form:
                 self._process(ar['attendance_record'], translate(ar['text']),
-                              explanation, resolve, code)
-                inheriting_ars = self.getInheritingRecords(
-                    ar['attendance_record'],
-                    ar['day'])
-                for iar in inheriting_ars:
-                    self._process(iar, translate(self.formatAttendanceRecord(iar)),
-                                  explanation, resolve, code)
+                              explanation, resolve, code, late_arrival)
+                # make tardy is not inherited
+                if resolve != 'tardy':
+                    inheriting_ars = self.getInheritingRecords(
+                        ar['attendance_record'],
+                        ar['day'])
+                    for iar in inheriting_ars:
+                        self._process(iar, translate(self.formatAttendanceRecord(iar)),
+                                      explanation, resolve, code, late_arrival)
 
-    def _process(self, ar, text, explanation, resolve, code):
+    def _process(self, ar, text, explanation, resolve, code, late_arrival):
         """Process a single attendance record"""
         # We want only one status message per attendance record, so if we
         # both add an explanation and accept/reject it in one go, only the
@@ -537,6 +541,10 @@ class StudentAttendanceView(BrowserView):
         elif resolve == 'reject':
             if self._rejectExplanation(ar, mapping):
                 status = _('Rejected explanation for $absence',
+                           mapping=mapping)
+        elif resolve == 'tardy':
+            if self._makeTardy(ar, late_arrival, mapping):
+                status = _('Made $absence a tardy',
                            mapping=mapping)
         if status:
             self.statuses.append(status)
@@ -572,6 +580,46 @@ class StudentAttendanceView(BrowserView):
             self.errors.append(_('There are no outstanding'
                                  ' explanations to reject for'
                                  ' $absence', mapping=mapping))
+            return False
+
+    def parseArrivalTime(self, date, late_arrival):
+        """Converts a string HH:MM to a datetime.
+
+        If the time is not specified, returns None.
+        """
+        if late_arrival:
+            tz = ViewPreferences(self.request).timezone
+            time = parse_time(late_arrival)
+            result = datetime.datetime.combine(date, time)
+            return tz.localize(result)
+
+    def _makeTardy(self, ar, late_arrival, mapping):
+        """Convert homeroom attendance record into a tardy."""
+        if not IHomeroomAttendanceRecord.providedBy(ar) or not ar.isAbsent():
+            self.errors.append(_('$absence is not a homeroom absence,'
+                                 ' only homeroom absences can be converted'
+                                 ' into tardies',
+                                 mapping=mapping))
+            return False
+
+        try:
+            arrived = self.parseArrivalTime(ar.date, late_arrival)
+        except ValueError:
+            self.tardy_error = _('The arrival time you entered is '
+                                 'invalid.  Please use HH:MM format')
+            return False
+
+
+        if not late_arrival:
+            self.tardy_error = _('You must provide a valid arrival time.')
+            return False
+
+        try:
+            ar.makeTardy(arrived)
+            return True
+        except AttendanceError:
+            self.errors.append(_('Could not convert $absence absence into'
+                                 'a homeroom tardy', mapping=mapping))
             return False
 
     @property

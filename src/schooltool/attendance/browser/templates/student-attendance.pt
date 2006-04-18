@@ -99,7 +99,11 @@
   <textarea id="explanation" name="explanation" cols="60" rows="5"></textarea>
   </div>
 </div>
-
+<div class="row">
+  <div class="row" tal:define="widget nocall:view/code_widget">
+    <div metal:use-macro="context/@@form_macros/widget_row" />
+  </div>
+</div>
 <div class="row">
   <div><input type="radio" name="resolve" id="do_not_resolve" value=""
               checked="checked" />
@@ -111,6 +115,11 @@
   <div><input type="radio" name="resolve" id="reject" value="reject" />
   <label for="reject">Reject</label>
   </div>
+  <div><input type="radio" name="resolve" id="tardy" value="tardy" />
+  <label for="tardy">Make Tardy</label> <input type="text" name="tardy_time" />
+  </div>
+  <div class="error" tal:condition="view/tardy_error"
+       tal:content="view/tardy_error" i18n:translate="" />
 </div>
 
 <div class="controls">
