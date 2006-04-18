@@ -131,6 +131,8 @@ class AttendanceSparkline(object):
                     data.append(('full', 'red', '-'))
                 else:
                     data.append(('full', 'yellow', '-'))
+            else:
+                data.append(('dot', 'black', '+'))
         return data
 
     def render(self, height=13, point_width=2, spacing=1):
