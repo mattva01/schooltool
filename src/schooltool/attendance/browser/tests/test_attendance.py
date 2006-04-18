@@ -559,10 +559,31 @@ def doctest_getPeriodEventForSection():
 def doctest_AttendanceCalendarEventViewlet():
     r"""Tests for AttendanceCalendarEventViewlet
 
+    Set up security:
+
+        >>> from zope.app.security.settings import PermissionSetting
+        >>> class FakePermissionManager:
+        ...     setting = PermissionSetting('Allow')
+        ...     def __init__(self, context):
+        ...         pass
+        ...     def getPermissionsForPrincipal(self, principalid):
+        ...         if principalid == 'manager':
+        ...             return [('schooltool.viewAttendance', self.setting)]
+        ...         return []
+        >>> class FakePrincipal:
+        ...     id = 'manager'
+
+        >>> from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
+        >>> ztapi.provideAdapter(ISection, IPrincipalPermissionManager,
+        ...                      FakePermissionManager)
+
+    Create viewlet:
+
         >>> from schooltool.attendance.browser.attendance \
         ...     import AttendanceCalendarEventViewlet
         >>> viewlet = AttendanceCalendarEventViewlet()
         >>> viewlet.request = TestRequest()
+        >>> viewlet.request._principal = FakePrincipal()
 
     Viewlets have a ``manager`` attribute that points to the viewlet manager.
 
@@ -585,6 +606,13 @@ def doctest_AttendanceCalendarEventViewlet():
 
         >>> viewlet.attendanceLink()
         'http://127.0.0.1/sections/math4a/attendance/2005-12-16/P4'
+
+    Unless you are not authorised:
+
+        >>> viewlet.request.principal.id = 'guest'
+        >>> print viewlet.attendanceLink()
+        None
+        >>> viewlet.request.principal.id = 'manager' # restore
 
     The date in the link depends on the configured timezone
 
