@@ -78,6 +78,7 @@ class AttendancePreferencesStub(object):
     def __init__(self):
         self.attendanceRetroactiveTimeout = 60
         self.attendanceStatusCodes = {'001': 'excused', '002': 'unexcused'}
+        self.homeroomTardyGracePeriod = 5
 
 
 class SchoolToolApplicationStub(object):
@@ -308,17 +309,27 @@ def doctest_AttendancePreferencesView():
         >>> from schooltool.attendance.browser.attendance import AttendancePreferencesView
         >>> view = AttendancePreferencesView(app, request)
 
-    Check setting retroactive timeout value:
+    Check setting retroactive timeout and homeroom tardy grace period values:
 
         >>> prefs.attendanceRetroactiveTimeout
         60
+        >>> prefs.homeroomTardyGracePeriod
+        5
         >>> request = TestRequest(form={
         ...     'UPDATE_SUBMIT': 'Update',
-        ...     'field.attendanceRetroactiveTimeout': '10'})
+        ...     'field.attendanceRetroactiveTimeout': '10',
+        ...     'field.homeroomTardyGracePeriod': '1'})
         >>> view = AttendancePreferencesView(app, request)
         >>> view.update()
         >>> prefs.attendanceRetroactiveTimeout
         10
+        >>> prefs.homeroomTardyGracePeriod
+        1
+
+    Restore original values:
+
+        >>> prefs.attendanceRetroactiveTimeout = 60
+        >>> prefs.homeroomTardyGracePeriod = 5
 
     Now we can setup a post and add/edit/remove codes:
 

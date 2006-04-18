@@ -86,7 +86,7 @@ class AttendancePreferencesView(BrowserView):
         for field in self.schema:
             initial[field] = getattr(self.prefs, field)
         names = getFieldNamesInOrder(self.schema)
-        # XXX disable attendanceStatusCodes widget
+        # disable attendanceStatusCodes widget
         self.field_names = [name for name in names if name != 'attendanceStatusCodes']
         setUpWidgets(self, self.schema, IInputWidget, initial=initial,
                      names=self.field_names)
@@ -827,8 +827,9 @@ class StudentAttendanceView(BrowserView):
 
         arrival = section_ar.late_arrival or (section_ar.datetime +
                                               section_ar.duration)
-        # XXX ignas: i should get the delta from schooltool preferences
-        delta = datetime.timedelta(minutes=5)
+        app = ISchoolToolApplication(None)
+        minutes = IAttendancePreferences(app).homeroomTardyGracePeriod
+        delta = datetime.timedelta(minutes=minutes)
         if arrival - delta > homeroom_ar.late_arrival:
             return False
 

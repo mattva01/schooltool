@@ -48,6 +48,14 @@ class IAttendancePreferences(Interface):
             changes from realtime to retroactive."""),
         required=True)
 
+    homeroomTardyGracePeriod = Int(
+        title=_("Homeroom tardy grace period"),
+        description=_("""
+            The period of time in minutes you can be late for section after
+            beeing late for homeroom period without giving separate
+            explanation."""),
+        required=True)
+
 
 class IAttendance(Interface):
     """Common functions for attendance tracking."""

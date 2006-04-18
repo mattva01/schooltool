@@ -74,6 +74,8 @@ class AttendancePreferences(Persistent):
 
     attendanceRetroactiveTimeout = 60
 
+    homeroomTardyGracePeriod = 5
+
     def __init__(self):
         self.attendanceStatusCodes = self.defaultAttendanceStatusCodes
 
