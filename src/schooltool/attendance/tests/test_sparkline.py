@@ -251,19 +251,31 @@ def doctest_AttendanceSparkline():
 
     Take look at last 12 schooldays (we should get only 10):
 
-        >>> last_days = sparkline.getLastSchooldays(12)
+        >>> last_days = list(sparkline.getLastSchooldays())[:12]
         >>> for day in last_days:
         ...     print day
-        2005-09-20
-        2005-09-22
+        2005-10-20
+        2005-10-18
+        2005-10-13
+        2005-10-11
+        2005-10-06
+        2005-10-04
+        2005-09-29
         2005-09-27
+        2005-09-22
+        2005-09-20
+
+    Test AttendanceSparkline.getLastSectionDays:
+
+        >>> last_section_days = sparkline.getLastSectionDays(10)
+        >>> for day in last_section_days:
+        ...     print day
         2005-09-29
         2005-10-04
         2005-10-06
         2005-10-11
-        2005-10-13
-        2005-10-18
         2005-10-20
+
 
     Test AttendanceSparkline.getRecordsForDay:
 
@@ -286,14 +298,9 @@ def doctest_AttendanceSparkline():
         >>> for item in data:
         ...     print item
         ('dot', 'black', '+')
-        ('dot', 'black', '+')
-        ('dot', 'black', '+')
-        ('dot', 'black', '+')
         ('full', 'yellow', '-')
         ('full', 'black', '+')
         ('full', 'black', '-')
-        ('dot', 'black', '+')
-        ('dot', 'black', '+')
         ('full', 'red', '-')
 
     """

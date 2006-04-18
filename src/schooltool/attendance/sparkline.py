@@ -56,20 +56,17 @@ class AttendanceSparkline(object):
         self.section = section
         self.date = date
 
-    def getLastSchooldays(self, count=10):
-        """Return list of last ``count`` schoolday dates."""
+    def getLastSchooldays(self):
+        """Return last schoolday dates (generator)"""
         date = self.date
         term = getTermForDate(date)
         if not term:
-            return []
-        last_days = []
+            return
         date -= datetime.date.resolution
-        while date >= term.first and len(last_days) < count:
+        while date >= term.first:
             if term.isSchoolday(date):
-                last_days.append(date)
+                yield date
             date -= datetime.date.resolution
-        last_days.reverse()
-        return last_days
 
     def getRecordsForDay(self, date):
         """Get all records for ``date`` corresponding to our section."""
@@ -104,15 +101,26 @@ class AttendanceSparkline(object):
         day_end = day_start + datetime.timedelta(1)
         return bool(list(section_calendar.expand(day_start, day_end)))
 
+    def getLastSectionDays(self, count=10):
+        section_calendar = ITimetables(self.section).makeTimetableCalendar()
+        timezone = IApplicationPreferences(getSchoolToolApplication()).timezone
+        tz = pytz.timezone(timezone)
+        result = []
+        for day in self.getLastSchooldays():
+            if self.sectionMeetsOn(day, tz, section_calendar):
+                result.append(day)
+                count -= 1
+                if count == 0:
+                    break
+        result.reverse()
+        return result
+
     def getData(self):
         """Get all the data necessary to draw the sparkline.
 
         Returns list of tuples: (whisker_size, color, sign).
         """
-        days = self.getLastSchooldays(self.width)
-        section_calendar = ITimetables(self.section).makeTimetableCalendar()
-        timezone = IApplicationPreferences(getSchoolToolApplication()).timezone
-        tz = pytz.timezone(timezone)
+        days = self.getLastSectionDays(self.width)
         hr_attendance = IHomeroomAttendance(self.person)
         data = []
         for day in days:
@@ -120,19 +128,16 @@ class AttendanceSparkline(object):
             hr_period = None
             if section_record:
                 hr_period = hr_attendance.getHomeroomPeriodForRecord(section_record)
-            if self.sectionMeetsOn(day, tz, section_calendar):
-                if not section_record or section_record.isUnknown():
-                    data.append(('dot', 'black', '+'))
-                elif section_record.isPresent():
-                    data.append(('full', 'black', '+'))
-                elif section_record.isExplained():
-                    data.append(('full', 'black', '-'))
-                elif hr_period.isPresent():
-                    data.append(('full', 'red', '-'))
-                else:
-                    data.append(('full', 'yellow', '-'))
-            else:
+            if not section_record or section_record.isUnknown():
                 data.append(('dot', 'black', '+'))
+            elif section_record.isPresent():
+                data.append(('full', 'black', '+'))
+            elif section_record.isExplained():
+                data.append(('full', 'black', '-'))
+            elif hr_period.isPresent():
+                data.append(('full', 'red', '-'))
+            else:
+                data.append(('full', 'yellow', '-'))
         return data
 
     def render(self, height=13, point_width=2, spacing=1):
