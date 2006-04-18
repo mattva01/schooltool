@@ -1,0 +1,143 @@
+Time zones used in SchoolTool
+-----------------------------
+
+In schooltool, there are three significant time zones: the school
+timezone (the application preference), the user's preferred one, and
+UTC.  Practically, the user's preferred timezone will differ from the
+server timezone only in special cases, but we need to handle this
+difference anyway.
+
+The user's preferred timezone should only be used when accepting
+datetime input from the user, and when determining the day boundaries
+on the calendar views.
+
+A rule of thumb is that all the datetimes in the system should use the
+application timezone.  Business processes such as timetabling,
+attendance and so on use the application timezone.  The school day
+boundaries are determined in this timezone.
+
+As a historical legacy, SchoolTool internally stores most times in
+UTC, and some parts of SchoolTool might still require that the
+timezone is used in calendar events' dtstart attributes.
+
+The application timezone can be acquired thus::
+
+    >>> import pytz
+    >>> from schooltool.app.interfaces import ISchoolToolApplication
+    >>> from schooltool.app.interfaces import IApplicationPreferences
+    >>> app = ISchoolToolApplication(None)
+    >>> apptimezone = pytz.timezone(IApplicationPreferences(app).timezone)
+
+In order to get the user preferred timezone, you need the browser
+request::
+
+    >>> from schooltool.app.browser import ViewPreferences
+    >>> usertz = ViewPreferences(request).timezone
+
+
+Converting timezones
+--------------------
+
+There are two kinds of timezone conversion: you might have a naïve
+timezone and want to apply a certain timezone for it, of you might
+want to express a timezone-aware datetime in another timezone.
+
+For the latter, use ``astimezone``:
+
+    >>> tz_aware_dt.astimezone(other_tz)
+
+For the former, that is making the datetime timezone-aware, always use
+timezone.localize::
+
+    >>> tz_aware_dt = timezone.localize(naive_dt)
+
+**Never use** ``datetime.replace(tzinfo=timezone)`` as it will get you
+incorrect results most of the time.  For example::
+
+    ### DON'T DO THIS! This is wrong. ###
+    >>> import pytz
+    >>> import datetime
+    >>> vilnius = pytz.timezone('Europe/Vilnius')
+    >>> datetime.datetime(2006, 1, 1, 0, 0, tzinfo=vilnius)
+    datetime.datetime(2006, 1, 1, 0, 0, tzinfo=<DstTzInfo 'Europe/Vilnius' WMT+1:24:00 STD>)
+
+This gets the timezone that was used in Vilnius in 1900!  Even if the
+timezone is unchanged since the start of the ZoneInfo database, we
+loose all hope of getting the daylight savings right.  If we use the
+``localize`` method we get the correct result::
+
+    >>> vilnius.localize(datetime.datetime(2006, 1, 1, 0, 0))
+    datetime.datetime(2006, 1, 1, 0, 0, tzinfo=<DstTzInfo 'Europe/Vilnius' EET+2:00:00 STD>)
+
+Let's look at the UTC expressions of both times to see the difference clearly::
+
+    >>> good = vilnius.localize(datetime.datetime(2006, 1, 1, 0, 0))
+    >>> wrong = datetime.datetime(2006, 1, 1, 0, 0, tzinfo=vno)
+    >>> good.astimezone(pytz.utc)
+    datetime.datetime(2005, 12, 31, 22, 0, tzinfo=<UTC>)
+    >>> wrong.astimezone(pytz.utc)
+    datetime.datetime(2005, 12, 31, 22, 36, tzinfo=<UTC>)
+
+When using the ``datetime.replace`` for replacing other datetime
+components, you should convert the result to the desired timezone, as
+your manipulation might have shifted the datetime into a different
+timezones because the daylight savings have changed.
+
+On the day when the daylight savings time switches, timezone.localize
+might raise if you pass the "missing hour".  In this example, the time
+is moved from 2:59AM to 4:00AM, so 3:00AM does not exist::
+
+    >>> vilnius.localize(datetime.datetime(2006, 3, 26, 3, 1))
+    Traceback (most recent call last):
+      ...
+    IndexError: list index out of range
+
+
+What is Today?
+--------------
+
+This question arises when displaying timetable and calendar events on
+the calendar of the user.  When the timezones of the application and
+user preference differ, actually two schooldays should be filtered for
+display.
+
+**Never use datetime.date.today()**.  You'll get a date in the system
+timezone, that might be terribly wrong if the application timezone and
+the user's preferred timezone differ from that.
+
+If you need a date for today to be displayed for the user do this::
+
+    >>> from datetime import datetime
+    >>> from pytz import timezone
+    >>> def today(self, tz):
+    ...     current_time = timezone('UTC').localize(datetime.utcnow())
+    ...     return current_time.astimezone(tz).date()
+
+Here's an example of how the correct date usage can be tested.  These
+two timezones are on the different sides of the International Date
+Line, so the dates in these timezones are always different::
+
+    >>> from schooltool.app.browser.cal import CalendarViewBase
+    >>> view = CalendarViewBase(None, TestRequest())
+
+    >>> current_time = timezone('UTC').localize(datetime.utcnow())
+
+    >>> tz = timezone('Etc/GMT+12')
+    >>> today_date = current_time.astimezone(tz).date()
+    >>> view.timezone = tz
+    >>> view.today() == today_date
+    True
+
+    >>> tz = timezone('Etc/GMT-12')
+    >>> today_date = current_time.astimezone(tz).date()
+    >>> view.timezone = tz
+    >>> view.today() == today_date
+    True
+
+If you want to store a date of an event - store::
+
+    >>> timezone('UTC').localize(datetime.datetime.utcnow())
+
+and display only the date part to the user, using::
+
+    >>> dt.astimezone(user_tz).date()
