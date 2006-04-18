@@ -30,14 +30,12 @@
 <div class="attendance-legend">
   <h3 i18n:translate="">Legend</h3>
   <p i18n:translate="">
-  The sparkline (the little graph next to each student's name) shows
-  the student's attendance for the last ten schooldays.  If attendance
-  status for a day is unknown the sparkline shows a dot. If the section
-  meets on a given day, the sparkline shows a long whisker, if it doesn't,
-  a half-length whisker.  The whisker is points upwards if the
-  student was present during the homeroom period. An unexplained
-  absence for a meeting is coloured red, and an unexplained absence for
-  homeroom period is yellow.
+  The sparkline (the little graph next to each student's name) shows the
+  student's attendance for the last ten schooldays section had meetings on.  If
+  attendance status for a day is unknown the sparkline shows a dot. The whisker
+  points upwards if the student was present during the homeroom period. An
+  unexplained absence for a meeting is coloured red, and an unexplained absence
+  for homeroom period is yellow.
   </p>
   <p i18n:translate="">The student names are colored according to
   their attendance during today:</p>
