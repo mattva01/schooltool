@@ -42,15 +42,15 @@ from schooltool.relationship.interfaces import InvalidRelationship
 #
 
 URIInstruction = URIObject('http://schooltool.org/ns/instruction',
-                          'Instruction', 'The instruction relationship.')
+                           'Instruction', 'The instruction relationship.')
 URISection = URIObject('http://schooltool.org/ns/instruction/section',
-                     'Section', 'A role of a containing section.')
+                       'Section', 'A role of a containing section.')
 URIInstructor = URIObject('http://schooltool.org/ns/instruction/instructor',
-                      'Instructor', 'A section instructor role.')
+                          'Instructor', 'A section instructor role.')
 
 Instruction = RelationshipSchema(URIInstruction,
-                                instructor=URIInstructor,
-                                section=URISection)
+                                 instructor=URIInstructor,
+                                 section=URISection)
 
 
 def enforceInstructionConstraints(event):
