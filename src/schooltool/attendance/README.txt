@@ -249,7 +249,7 @@ This is complicated.  Let's show a table:
    +---------+------------------+--------------------+------+---------+-----+
    | yes     | no (unexplained) | no                 | full | yellow  | `-` |
    +---------+------------------+--------------------+------+---------+-----+
-   
+
 
 This only covers absences, not tardies.  Tardies are ignored.
 
