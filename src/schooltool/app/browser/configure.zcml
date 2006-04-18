@@ -170,6 +170,13 @@
       menu="schooltool_actions"
       title="Change Site Preferences" />
 
+  <page
+      name="site-preferences-codes.html"
+      for="schooltool.person.interfaces.IPerson"
+      class="schooltool.app.browser.app.ApplicationPreferencesAttendanceCodesView"
+      template="templates/application_preferences_codes.pt"
+      permission="schooltool.manageMembership" />
+
   <!-- Make index.html the default ZMI view for ISchoolToolApplication -->
 
   <menuItem

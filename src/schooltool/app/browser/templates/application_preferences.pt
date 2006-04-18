@@ -60,7 +60,7 @@
                i18n:attributes="value cancel-button" />
     </div>
   </form>
-
+  <a href="@@site-preferences-codes.html" i18n:translate="">Edit attendance status codes</a>
 </metal:block>
 </body>
 </html>

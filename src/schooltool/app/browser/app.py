@@ -44,6 +44,7 @@ from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 
 from schooltool import SchoolToolMessage as _
 from schooltool.app.app import getSchoolToolApplication
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.batching import Batch
@@ -344,6 +345,75 @@ class ApplicationPreferencesView(BrowserView):
             for field in self.schema:
                 if field in data: # skip non-fields
                     setattr(prefs, field, data[field])
+
+
+class ApplicationPreferencesAttendanceCodesView(BrowserView):
+    """View used for editing attendance status codes."""
+
+    __used_for__ = IApplicationPreferences
+
+    error = None
+    message = None
+
+    def __init__(self, context, request):
+        BrowserView.__init__(self, context, request)
+
+        app = ISchoolToolApplication(None)
+        self.prefs = IApplicationPreferences(app)
+        self.dictionary = getattr(self.prefs, 'attendanceStatusCodes', None)
+        if not self.dictionary:
+            self.dictionary = {}
+
+    @property
+    def codes(self):
+        result = []
+        for (key, value) in sorted(self.dictionary.items()):
+            result.append({'key': key, 'value': value})
+        return result
+
+    def validateKey(self, key):
+        key = key.strip()
+        if not key:
+            for i in xrange(999):
+                i_s = '%03d' % (i+1)
+                if i_s in self.dictionary:
+                    continue
+                return i_s
+            return 'default'
+        return key
+
+    def update(self):
+        if 'CANCEL' in self.request:
+            url = zapi.absoluteURL(self.context, self.request)
+            self.request.response.redirect(url)
+            return
+        for arg in self.request.keys():
+            if arg.startswith('REMOVE_'):
+                key = arg[7:]
+                if key in self.dictionary:
+                    del self.dictionary[key]
+        if 'ADD' in self.request:
+            new_key = self.validateKey(self.request['new_key'])
+            new_value = self.request['new_value']
+            if new_value in self.dictionary.values():
+                self.error = 'Description fields must be unique'
+                return
+            self.dictionary[new_key] = new_value
+        if 'UPDATE_SUBMIT' in self.request:
+            for key in self.dictionary:
+                key_s = 'key_%s' % key
+                value_s = 'value_%s' % key
+                if key_s in self.request and \
+                   value_s in self.request:
+                    del self.dictionary[key]
+                    new_key = self.validateKey(self.request[key_s])
+                    new_value = self.request[value_s]
+                    if new_value in self.dictionary.values():
+                        self.error = 'Description fields must be unique'
+                        return
+                    self.dictionary[new_key] = new_value
+        # make it persistent
+        self.prefs.attendanceStatusCodes = self.dictionary
 
 
 class ProbeParticipation:
