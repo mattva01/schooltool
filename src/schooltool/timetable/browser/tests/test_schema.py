@@ -436,10 +436,10 @@ def doctest_TimetableSchemaView():
     by the template, so the days and the periods are designated by
     their index rather than id:
 
-        >>> ttd1.homeroom_period_ids = ['A']
+        >>> ttd1.homeroom_period_ids = ['A', 'B']
         >>> ttd2.homeroom_period_ids = []
         >>> view.homerooms()
-        {0: 0, 1: None}
+        {0: set([0, 1]), 1: set([])}
 
     ``timezone`` is a property that is not None only if the schema
     timezone is different from the app default:

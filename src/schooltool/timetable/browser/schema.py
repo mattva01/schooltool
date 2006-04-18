@@ -63,14 +63,11 @@ class TimetableSchemaView(TimetableView):
         result = {}
         for daynr, dayid in enumerate(self.context.keys()):
             day = self.context[dayid]
-            if not day.homeroom_period_ids:
-                result[daynr] = None
-                continue
-            else:
+            result[daynr] = set()
+            if day.homeroom_period_ids:
                 for periodnr, periodid in enumerate(day.keys()):
-                    if periodid == day.homeroom_period_ids[0]:
-                        result[daynr] = periodnr
-                        continue
+                    if periodid in day.homeroom_period_ids:
+                        result[daynr].add(periodnr)
         return result
 
     def title(self):
