@@ -37,10 +37,11 @@ def doctest_SchoolToolApplication():
     We need to register an adapter to make the title attribute available:
 
         >>> placelesssetup.setUp()
-        >>> from schooltool.app.app import ApplicationPreferences
+        >>> setup.setUpAnnotations()
         >>> from schooltool.app.interfaces import ISchoolToolApplication
         >>> from schooltool.app.interfaces import IApplicationPreferences
-        >>> provideAdapter(ApplicationPreferences,
+        >>> from schooltool.app.app import getApplicationPreferences
+        >>> provideAdapter(getApplicationPreferences,
         ...                adapts=[ISchoolToolApplication],
         ...                provides=IApplicationPreferences)
 
@@ -75,7 +76,6 @@ def doctest_SchoolToolApplication():
 
     Our ApplicationPreferences title should be 'SchoolTool' by default:
 
-        >>> setup.setUpAnnotations()
         >>> from schooltool.app.app import getApplicationPreferences
         >>> getApplicationPreferences(app).title
         'SchoolTool'
