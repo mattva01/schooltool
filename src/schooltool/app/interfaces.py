@@ -140,19 +140,6 @@ class IApplicationPreferences(ICalendarDisplayPreferences):
         required=False,
         default=True)
 
-    attendanceStatusCodes = zope.schema.Dict(
-        title=_("Attendance status codes"),
-        description=_("Dictionary of abbreviated attendance status codes"),
-        required=True)
-
-    attendanceRetroactiveTimeout = zope.schema.Int(
-        title=_("Retroactive attendance timeout"),
-        description=_("""
-            The period of time in minutes that must pass after the
-            section meeting is completed before the attendance form
-            changes from realtime to retroactive."""),
-        required=True)
-
 
 class IWriteCalendar(zope.interface.Interface):
 

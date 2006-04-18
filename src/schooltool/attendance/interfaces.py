@@ -26,9 +26,27 @@ __docformat__ = 'reStructuredText'
 
 from zope.interface import Interface
 from zope.schema import Text, TextLine, Choice, List, Object
-from zope.schema import Date, Datetime, Timedelta
+from zope.schema import Date, Datetime, Timedelta, Dict, Int
 
+from schooltool import SchoolToolMessage as _
 from schooltool.course.interfaces import ISection
+
+
+class IAttendancePreferences(Interface):
+    """Attendance preferences stored in an annotation on the SchoolTool app."""
+
+    attendanceStatusCodes = Dict(
+        title=_("Attendance status codes"),
+        description=_("Dictionary of abbreviated attendance status codes"),
+        required=True)
+
+    attendanceRetroactiveTimeout = Int(
+        title=_("Retroactive attendance timeout"),
+        description=_("""
+            The period of time in minutes that must pass after the
+            section meeting is completed before the attendance form
+            changes from realtime to retroactive."""),
+        required=True)
 
 
 class IAttendance(Interface):

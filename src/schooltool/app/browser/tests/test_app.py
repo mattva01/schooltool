@@ -1201,8 +1201,7 @@ def doctest_ApplicationPreferencesView():
         ...     'field.dateformat': '%m/%d/%y',
         ...     'field.timeformat': '%I:%M %p',
         ...     'field.weekstart': '0',
-        ...     'field.timezone': 'GMT',
-        ...     'field.attendanceRetroactiveTimeout': '5'})
+        ...     'field.timezone': 'GMT'})
         >>> view = ApplicationPreferencesView(app, request)
 
         >>> view.update()
@@ -1222,88 +1221,6 @@ def doctest_ApplicationPreferencesView():
 
         >>> prefs.timezone
         'GMT'
-
-        >>> prefs.attendanceRetroactiveTimeout
-        5
-
-    """
-
-
-def doctest_ApplicationPreferencesAttendanceCodesView():
-    r"""Test for ApplicationPreferencesAttendanceCodesView.
-
-    We need to setup a SchoolToolApplication site and build our
-    ISchoolToolApplication adapter:
-
-        >>> app = sbsetup.setupSchoolToolSite()
-
-        >>> from schooltool.app.browser.app import ApplicationPreferencesAttendanceCodesView
-        >>> from schooltool.app.app import getApplicationPreferences
-        >>> from schooltool.app.interfaces import IApplicationPreferences
-        >>> from schooltool.app.interfaces import ISchoolToolApplication
-
-        >>> setup.setUpAnnotations()
-        >>> ztapi.provideAdapter(None, ISchoolToolApplication,
-        ...                      lambda a: app)
-        >>> ztapi.provideAdapter(ISchoolToolApplication,
-        ...                      IApplicationPreferences,
-        ...                      getApplicationPreferences)
-
-    Make sure we can create a view:
-
-        >>> request = TestRequest()
-        >>> view = ApplicationPreferencesAttendanceCodesView(app, request)
-
-    Now we can setup a post and add/edit/remove codes:
-
-        >>> def printCodes():
-        ...     prefs = getApplicationPreferences(app)
-        ...     print '\n'.join(map(str, sorted(prefs.attendanceStatusCodes.items())))
-
-        >>> printCodes()
-        ('001', 'excused')
-        ('002', 'unexcused')
-
-        >>> request = TestRequest(form={
-        ...     'UPDATE_SUBMIT': 'Update',
-        ...     'key_002': '003',
-        ...     'value_002': 'discarded'})
-        >>> view = ApplicationPreferencesAttendanceCodesView(app, request)
-        >>> view.update()
-        >>> printCodes()
-        ('001', 'excused')
-        ('003', 'discarded')
-
-        >>> request = TestRequest(form={
-        ...     'ADD': 'Add',
-        ...     'new_key': '404',
-        ...     'new_value': 'discarded'})
-        >>> view = ApplicationPreferencesAttendanceCodesView(app, request)
-        >>> view.update()
-        >>> printCodes()
-        ('001', 'excused')
-        ('003', 'discarded')
-        >>> view.error
-        'Description fields must be unique'
-
-        >>> request = TestRequest(form={
-        ...     'ADD': 'Add',
-        ...     'new_key': '404',
-        ...     'new_value': 'not found'})
-        >>> view = ApplicationPreferencesAttendanceCodesView(app, request)
-        >>> view.update()
-        >>> printCodes()
-        ('001', 'excused')
-        ('003', 'discarded')
-        ('404', 'not found')
-
-        >>> request = TestRequest(form={
-        ...     'REMOVE_003': 'Remove'})
-        >>> view = ApplicationPreferencesAttendanceCodesView(app, request)
-        >>> view.update()
-        >>> printCodes()
-        ('001', 'excused')
-        ('404', 'not found')
 
     """
 

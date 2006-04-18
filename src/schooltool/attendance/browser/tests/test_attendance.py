@@ -39,6 +39,7 @@ from zope.i18n import translate
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
+from schooltool.attendance.interfaces import IAttendancePreferences
 from schooltool.term.daterange import DateRange
 from schooltool.timetable import ITimetables
 from schooltool.timetable import TimetableActivity
@@ -71,6 +72,14 @@ class TermStub(object):
         return '<TermStub: %s..%s>' % (self.first, self.last)
 
 
+class AttendancePreferencesStub(object):
+    adapts(ISchoolToolApplication)
+    implements(IAttendancePreferences)
+    def __init__(self):
+        self.attendanceRetroactiveTimeout = 60
+        self.attendanceStatusCodes = {'001': 'excused', '002': 'unexcused'}
+
+
 class SchoolToolApplicationStub(object):
     adapts(None)
     implements(ISchoolToolApplication)
@@ -78,18 +87,20 @@ class SchoolToolApplicationStub(object):
               '2005-spring': TermStub(2005, 2, 1, 5, 21),
               '2005-fall': TermStub(2005, 9, 1, 12, 22),
               '2006-spring': TermStub(2006, 2, 1, 5, 21)}
+    _attendancePrefs = AttendancePreferencesStub()
     def __init__(self, context):
         pass
     def __getitem__(self, name):
         return {'terms': self._terms}[name]
+    def __conform__(self, it):
+        if it is IAttendancePreferences:
+            return self._attendancePrefs
 
 
 class ApplicationPreferencesStub(object):
     adapts(ISchoolToolApplication)
     implements(IApplicationPreferences)
     timezone = 'UTC'
-    attendanceRetroactiveTimeout = 60
-    attendanceStatusCodes = {'001': 'excused'}
     def __init__(self, context):
         pass
 
@@ -277,6 +288,89 @@ def setUpAttendanceAdapters():
     from schooltool.person.interfaces import IPerson
     ztapi.provideAdapter(IPerson, ISectionAttendance, getSectionAttendance)
     ztapi.provideAdapter(IPerson, IHomeroomAttendance, getHomeroomAttendance)
+
+
+def doctest_AttendancePreferencesView():
+    r"""Test for AttendancePreferencesView.
+
+    We need to setup a SchoolToolApplication site:
+
+        >>> app = ISchoolToolApplication(None)
+        >>> prefs = IAttendancePreferences(app)
+        >>> from zope.app.form.interfaces import IInputWidget
+        >>> from zope.app.form.browser.textwidgets import IntWidget
+        >>> from zope.schema.interfaces import IInt
+        >>> ztapi.browserViewProviding(IInt, IntWidget, IInputWidget)
+
+    Make sure we can create a view:
+
+        >>> request = TestRequest()
+        >>> from schooltool.attendance.browser.attendance import AttendancePreferencesView
+        >>> view = AttendancePreferencesView(app, request)
+
+    Check setting retroactive timeout value:
+
+        >>> prefs.attendanceRetroactiveTimeout
+        60
+        >>> request = TestRequest(form={
+        ...     'UPDATE_SUBMIT': 'Update',
+        ...     'field.attendanceRetroactiveTimeout': '10'})
+        >>> view = AttendancePreferencesView(app, request)
+        >>> view.update()
+        >>> prefs.attendanceRetroactiveTimeout
+        10
+
+    Now we can setup a post and add/edit/remove codes:
+
+        >>> def printCodes():
+        ...     print '\n'.join(map(str, sorted(prefs.attendanceStatusCodes.items())))
+
+        >>> printCodes()
+        ('001', 'excused')
+        ('002', 'unexcused')
+
+        >>> request = TestRequest(form={
+        ...     'UPDATE_SUBMIT': 'Update',
+        ...     'key_002': '003',
+        ...     'value_002': 'discarded'})
+        >>> view = AttendancePreferencesView(app, request)
+        >>> view.update()
+        >>> printCodes()
+        ('001', 'excused')
+        ('003', 'discarded')
+
+        >>> request = TestRequest(form={
+        ...     'ADD': 'Add',
+        ...     'new_key': '404',
+        ...     'new_value': 'discarded'})
+        >>> view = AttendancePreferencesView(app, request)
+        >>> view.update()
+        >>> printCodes()
+        ('001', 'excused')
+        ('003', 'discarded')
+        >>> view.error
+        'Description fields must be unique'
+
+        >>> request = TestRequest(form={
+        ...     'ADD': 'Add',
+        ...     'new_key': '404',
+        ...     'new_value': 'not found'})
+        >>> view = AttendancePreferencesView(app, request)
+        >>> view.update()
+        >>> printCodes()
+        ('001', 'excused')
+        ('003', 'discarded')
+        ('404', 'not found')
+
+        >>> request = TestRequest(form={
+        ...     'REMOVE_003': 'Remove'})
+        >>> view = AttendancePreferencesView(app, request)
+        >>> view.update()
+        >>> printCodes()
+        ('001', 'excused')
+        ('404', 'not found')
+
+    """
 
 
 def doctest_getCurrentSectionMeeting():

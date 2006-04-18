@@ -16,6 +16,13 @@
   </class>
 
   <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      provides=".interfaces.IAttendancePreferences"
+      factory=".attendance.getAttendancePreferences"
+      trusted="true"
+  />
+
+  <adapter
         for="schooltool.person.interfaces.IPerson"
         provides=".interfaces.ISectionAttendance"
         factory=".attendance.getSectionAttendance"

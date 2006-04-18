@@ -26,6 +26,8 @@ import datetime
 import itertools
 import pytz
 
+from zope.app.form.interfaces import WidgetsError
+from zope.app.form.interfaces import IInputWidget
 from zope.app import zapi
 from zope.app.publisher.browser import BrowserView
 from zope.publisher.interfaces import NotFound
@@ -35,6 +37,8 @@ from zope.viewlet import viewlet
 from zope.schema import Choice
 from zope.app.form.browser.itemswidgets import DropdownWidget
 from zope.schema.vocabulary import SimpleVocabulary
+from zope.schema import getFieldNamesInOrder
+from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.security.proxy import removeSecurityProxy
 from zope.i18n import translate
@@ -51,6 +55,7 @@ from schooltool.attendance.interfaces import IUnresolvedAbsenceCache
 from schooltool.person.interfaces import IPerson
 from schooltool.group.interfaces import IGroup
 from schooltool.calendar.utils import utcnow
+from schooltool.attendance.interfaces import IAttendancePreferences
 from schooltool.attendance.interfaces import IHomeroomAttendance
 from schooltool.attendance.interfaces import IHomeroomAttendanceRecord
 from schooltool.attendance.interfaces import ISectionAttendance
@@ -58,6 +63,94 @@ from schooltool.attendance.interfaces import ISectionAttendanceRecord
 from schooltool.attendance.interfaces import ABSENT, TARDY, PRESENT, UNKNOWN
 from schooltool.attendance.interfaces import AttendanceError
 from schooltool import SchoolToolMessage as _
+
+
+class AttendancePreferencesView(BrowserView):
+    """View used for editing attendance status codes."""
+
+    __used_for__ = IAttendancePreferences
+
+    error = None
+    message = None
+
+    schema = IAttendancePreferences
+
+    def __init__(self, context, request):
+        BrowserView.__init__(self, context, request)
+
+        app = ISchoolToolApplication(None)
+        self.prefs = IAttendancePreferences(app)
+        self.dictionary = getattr(self.prefs, 'attendanceStatusCodes', None)
+        if not self.dictionary:
+            self.dictionary = {}
+
+        initial = {}
+        for field in self.schema:
+            initial[field] = getattr(self.prefs, field)
+        names = getFieldNamesInOrder(self.schema)
+        # XXX disable attendanceStatusCodes widget
+        self.field_names = [name for name in names if name != 'attendanceStatusCodes']
+        setUpWidgets(self, self.schema, IInputWidget, initial=initial,
+                     names=self.field_names)
+
+    @property
+    def codes(self):
+        result = []
+        for (key, value) in sorted(self.dictionary.items()):
+            result.append({'key': key, 'value': value})
+        return result
+
+    def validateKey(self, key):
+        key = key.strip()
+        if not key:
+            for i in xrange(999):
+                i_s = '%03d' % (i+1)
+                if i_s in self.dictionary:
+                    continue
+                return i_s
+            return 'default'
+        return key
+
+    def update(self):
+        if 'CANCEL' in self.request:
+            url = zapi.absoluteURL(self.context, self.request)
+            self.request.response.redirect(url)
+            return
+        for arg in self.request.keys():
+            if arg.startswith('REMOVE_'):
+                key = arg[7:]
+                if key in self.dictionary:
+                    del self.dictionary[key]
+        if 'ADD' in self.request:
+            new_key = self.validateKey(self.request['new_key'])
+            new_value = self.request['new_value']
+            if new_value in self.dictionary.values():
+                self.error = 'Description fields must be unique'
+                return
+            self.dictionary[new_key] = new_value
+        if 'UPDATE_SUBMIT' in self.request:
+            for key in self.dictionary:
+                key_s = 'key_%s' % key
+                value_s = 'value_%s' % key
+                if key_s in self.request and \
+                   value_s in self.request:
+                    del self.dictionary[key]
+                    new_key = self.validateKey(self.request[key_s])
+                    new_value = self.request[value_s]
+                    if new_value in self.dictionary.values():
+                        self.error = 'Description fields must be unique'
+                        return
+                    self.dictionary[new_key] = new_value
+            try:
+                data = getWidgetsData(self, self.schema, self.field_names)
+            except WidgetsError:
+                return # Errors will be displayed next to widgets
+
+            for field in self.schema:
+                if field in data: # skip non-fields
+                    setattr(self.prefs, field, data[field])
+        # make it persistent
+        self.prefs.attendanceStatusCodes = self.dictionary
 
 
 AttendanceCSSViewlet = viewlet.CSSViewlet("attendance.css")
@@ -441,7 +534,7 @@ class AttendanceView(BrowserView):
 
     def sectionMeetingFinished(self):
         app = ISchoolToolApplication(None)
-        mins = IApplicationPreferences(app).attendanceRetroactiveTimeout
+        mins = IAttendancePreferences(app).attendanceRetroactiveTimeout
         delta = datetime.timedelta(minutes=mins)
         if self.meeting.dtstart + self.meeting.duration + delta < utcnow():
             return True
@@ -490,7 +583,7 @@ class StudentAttendanceView(BrowserView):
 
         # hand craft dropdown widget from dict
         app = ISchoolToolApplication(None)
-        code_dict = IApplicationPreferences(app).attendanceStatusCodes
+        code_dict = IAttendancePreferences(app).attendanceStatusCodes
         code_items = sorted((i[1], i[0]) for i in code_dict.items())
         code_vocabulary = SimpleVocabulary.fromItems(code_items)
         self.code = ''

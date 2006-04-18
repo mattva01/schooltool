@@ -66,6 +66,31 @@ from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.person.interfaces import IPerson
 
 
+class AttendancePreferences(Persistent):
+
+    # XXX some meaningless sample data
+    defaultAttendanceStatusCodes = {'001': 'excused',
+                                    '002': 'unexcused'}
+
+    attendanceRetroactiveTimeout = 60
+
+    def __init__(self):
+        self.attendanceStatusCodes = self.defaultAttendanceStatusCodes
+
+
+def getAttendancePreferences(app):
+    """Adapt a SchoolToolApplication to IAttendancePreferences."""
+
+    annotations = IAnnotations(app)
+    key = 'schooltool.app.AttendancesPreferences'
+    try:
+        return annotations[key]
+    except KeyError:
+        annotations[key] = AttendancePreferences()
+        annotations[key].__parent__ = app
+        return annotations[key]
+
+
 def date_to_schoolday_start(date):
     """Given a date, return the datetime of the beginning of the day.
 

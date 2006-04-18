@@ -172,12 +172,6 @@ class ApplicationPreferences(Persistent):
 
     frontPageCalendar = True
 
-    # XXX some meaningless sample data
-    attendanceStatusCodes = {'001': 'excused',
-                             '002': 'unexcused'}
-
-    attendanceRetroactiveTimeout = 60
-
 
 def getApplicationPreferences(app):
     """Adapt a SchoolToolApplication to IApplicationPreferences."""
