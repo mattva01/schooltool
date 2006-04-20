@@ -55,13 +55,20 @@
               <legend i18n:translate="">Conflicting events</legend>
               <div>
                 <div tal:repeat="event conflicting_events">
-                  <a tal:attributes="href string:${event/context/@@absolute_url}/edit.html" tal:content="event/shortTitle" />
+                  <tal:if condition="event/context/__parent__">
+                    <a tal:attributes="href string:${event/context/@@absolute_url}/edit.html" tal:content="event/shortTitle" />
+                  </tal:if>
+                  <tal:if condition="not:event/context/__parent__">
+                    <a tal:attributes="href string:${event/context/activity/owner/@@absolute_url}/resources.html" tal:content="event/shortTitle" />
+                  </tal:if>
                     (<span tal:replace="python:event.dtstart.strftime('%H:%M')"/> -
                     <span tal:replace="python:event.dtend.strftime('%H:%M')"/>)
-                  <tal:block tal:define="owner python: event.context.__parent__.__parent__">
-                    <a tal:define="owner_url string:${owner/@@absolute_url}/calendar"
-                       tal:attributes="href python: '%s/%s/' % (owner_url, context.dtstart.strftime('%Y-%m-%d'))" tal:content="owner/title">A Dude</a>
-                  </tal:block>
+                    <tal:block tal:define="owner python: event.context.__parent__
+                                                           and event.context.__parent__.__parent__
+                                                           or event.context.activity.owner">
+                      <a tal:define="owner_url string:${owner/@@absolute_url}/calendar"
+                         tal:attributes="href python: '%s/%s/' % (owner_url, context.dtstart.strftime('%Y-%m-%d'))" tal:content="owner/title">A Dude</a>
+                    </tal:block>
                 </div>
               </div>
             </fieldset>

@@ -2310,17 +2310,22 @@ class CalendarEventBookingView(CalendarEventView):
         return absoluteURL(self.context.__parent__, self.request)
 
     def getConflictingEvents(self, resource):
-        """Return a list of events that would conflict when booking resource."""
-        events = []
-        if not canAccess(ISchoolToolCalendar(resource), "expand"):
-            return events
+        """Return a list of events that would conflict when booking a resource."""
+        calendar = ISchoolToolCalendar(resource)
+        if not canAccess(calendar, "expand"):
+            return []
 
-        for event in ISchoolToolCalendar(resource).expand(
-            self.context.dtstart,
-            self.context.dtstart + self.context.duration):
-            if event != self.context:
-                events.append(EventForBookingDisplay(event))
-        return events
+        ttcalendar = ITimetables(resource).makeTimetableCalendar()
+        events = []
+
+        for cal in (calendar, ttcalendar):
+            evts = list(cal.expand(self.context.dtstart,
+                                   self.context.dtstart + self.context.duration))
+            events.extend(evts)
+
+        return [EventForBookingDisplay(event)
+                for event in events
+                if event != self.context]
 
 
 def makeRecurrenceRule(interval=None, until=None,

@@ -365,7 +365,7 @@ def doctest_EventForDisplay():
         >>> e1.allday
         False
 
-    If event is an allday event EventForDisplay has it's allday attribute set:
+    If event is an allday event EventForDisplay has its allday attribute set:
 
         >>> event.allday = True
         >>> allday_efd = EventForDisplay(event, request, 'red', 'green',
@@ -386,6 +386,8 @@ def doctest_EventForDisplay():
         'red'
         >>> e1.color2
         'green'
+
+
         >>> e1.shortTitle
         'yawn'
 
@@ -3204,6 +3206,75 @@ def doctest_TestCalendarEventBookingView():
         u'02 February, 2002 - 04:02 AM'
 
     """
+
+
+def doctest_CalendarEventBookingView_getConflictingEvents():
+    """Test for CalendarEventBookingView.getConflictingEvents
+
+        >>> from schooltool.app.browser.cal import CalendarEventBookingView
+
+        >>> class EventStub(object):
+        ...     def __init__(self, title):
+        ...         self.title = title
+        ...     __parent__ = ISchoolToolCalendar(Person())
+        ...     dtstart = datetime(2006, 4, 20, 20, 7, tzinfo=utc)
+        ...     duration = timedelta(1)
+        ...     title = "Event"
+
+        >>> class CalendarStub(object):
+        ...     def __init__(self, title, events):
+        ...         self.events = events
+        ...         self.title = title
+        ...     def expand(self, dtstart, dtend):
+        ...         print "%s.expand(%s, %s)" % (self.title, dtstart, dtend)
+        ...         return self.events
+
+    Let's give ourselves the permission to access the calendar events:
+
+        >>> from zope.security.checker import defineChecker
+        >>> from zope.security.checker import Checker
+        >>> defineChecker(CalendarStub,
+        ...               Checker({'expand': 'zope.Public'},
+        ...                       {'expand': 'zope.Public'}))
+
+        >>> class TimetableStub(object):
+        ...     def makeTimetableCalendar(self):
+        ...         return CalendarStub("timetable", [EventStub("tt")])
+
+        >>> from schooltool.timetable.interfaces import ITimetables
+        >>> class ResourceStub(object):
+        ...     calendar = CalendarStub("calendar", [EventStub("cal")])
+        ...     def __conform__(self, iface):
+        ...         if iface is ISchoolToolCalendar:
+        ...             return self.calendar
+        ...         elif iface is ITimetables:
+        ...             return TimetableStub()
+
+        >>> context = EventStub("evt")
+        >>> view = CalendarEventBookingView(context, TestRequest())
+
+        >>> resource = ResourceStub()
+        >>> conflicts = view.getConflictingEvents(resource)
+        calendar.expand(2006-04-20 20:07:00+00:00, 2006-04-21 20:07:00+00:00)
+        timetable.expand(2006-04-20 20:07:00+00:00, 2006-04-21 20:07:00+00:00)
+
+    All conflicting events are returned:
+
+        >>> [evt.title for evt in conflicts]
+        ['cal', 'tt']
+
+    If the event that is booking the resources is ignored:
+
+        >>> resource.calendar = CalendarStub("calendar", [context])
+        >>> conflicts = view.getConflictingEvents(resource)
+        calendar.expand(2006-04-20 20:07:00+00:00, 2006-04-21 20:07:00+00:00)
+        timetable.expand(2006-04-20 20:07:00+00:00, 2006-04-21 20:07:00+00:00)
+
+        >>> [evt.title for evt in conflicts]
+        ['tt']
+
+    """
+
 
 def doctest_getEvents_booking():
     """Test for CalendarViewBase.getEvents when booking is involved
