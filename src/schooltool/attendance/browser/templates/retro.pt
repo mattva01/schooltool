@@ -42,7 +42,10 @@
            value python:request.form.get(info.name, default);
            disabled python:info.symbol != ' '">
     <td tal:attributes="class info/color" class="first">
-       <label tal:content="info/title">Name</label>
+       <label tal:content="info/title"
+              tal:attributes="class python:disabled and 'disabled' or None">
+          Name
+       </label>
     </td>
     <td class="other">
       <input type="radio" value="P"

@@ -42,6 +42,10 @@ tr.attendance-retro-row .other {
   border-left: 1px solid gray;
 }
 
+tr.attendance-retro-row .disabled {
+  color: gray;
+}
+
 form td.num {
   text-align: center;
 }
