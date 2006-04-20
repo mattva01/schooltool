@@ -1288,34 +1288,20 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> cal1.addEvent(createEvent('2005-02-20 16:00', '1h', 'walk'))
             >>> view = CalendarViewBase(cal1, TestRequest())
             >>> view.inCurrentPeriod = lambda dt: False
-            >>> for e in view.getEvents(datetime(2005, 2, 21),
-            ...                         datetime(2005, 3, 1)):
+            >>> for e in view.getEvents(datetime(2005, 2, 21, tzinfo=utc),
+            ...                         datetime(2005, 3, 1, tzinfo=utc)):
             ...     print e.title
             ...     print e.dtstarttz
             code
             2005-02-26 19:39:00+00:00
-
-        Changes in the view's timezone are reflected in the events dtstarttz
-
-            >>> view.timezone = timezone('US/Eastern')
-            >>> view.update()
-            >>> for e in view.getEvents(datetime(2005, 2, 21),
-            ...                         datetime(2005, 3, 1)):
-            ...     print e.title
-            ...     print e.dtstarttz
-            code
-            2005-02-26 14:39:00-05:00
-
-            >>> view.timezone = timezone('UTC')
-            >>> view.update()
 
         We will stub view.getCalendars to simulate overlayed calendars
 
             >>> cal2 = Calendar(None)
             >>> cal2.addEvent(createEvent('2005-02-27 12:00', '1h', 'rest'))
             >>> view.getCalendars = lambda:[(cal1, 'r', 'g'), (cal2, 'b', 'y')]
-            >>> for e in view.getEvents(datetime(2005, 2, 21),
-            ...                         datetime(2005, 3, 1)):
+            >>> for e in view.getEvents(datetime(2005, 2, 21, tzinfo=utc),
+            ...                         datetime(2005, 3, 1, tzinfo=utc)):
             ...     print e.title, '(%s)' % e.color1
             code (r)
             rest (b)
@@ -1332,46 +1318,7 @@ class TestCalendarViewBase(unittest.TestCase):
             ...     cal1.addEvent(CalendarEvent(datetime(2002, 2, 3, i),
             ...                       timedelta(minutes=59), "day3-" + str(i)))
 
-        The default timezone for a CalendarView is UTC.
-
-            >>> titles = []
-            >>> for e in view.getEvents(datetime(2002, 2, 2),
-            ...                         datetime(2002, 2, 3)):
-            ...     titles.append(e.title)
-            >>> titles.sort()
-            >>> for title in  titles:
-            ...     print title
-            day2-0
-            day2-1
-            day2-10
-            day2-11
-            day2-12
-            day2-13
-            day2-14
-            day2-15
-            day2-16
-            day2-17
-            day2-18
-            day2-19
-            day2-2
-            day2-20
-            day2-21
-            day2-22
-            day2-23
-            day2-3
-            day2-4
-            day2-5
-            day2-6
-            day2-7
-            day2-8
-            day2-9
-
-        Now lets change the timezone to something with a negative utcoffset.
-
-            >>> view.timezone = timezone('US/Eastern')
-            >>> view.update()
-            >>> view.timezone.tzname(datetime.utcnow())
-            'EST'
+        Let's get some events in the interval between two dates:
 
             >>> titles = []
             >>> for e in view.getEvents(datetime(2002, 2, 2, tzinfo=utc),
@@ -1380,47 +1327,6 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> titles.sort()
             >>> for title in  titles:
             ...     print title
-            day2-10
-            day2-11
-            day2-12
-            day2-13
-            day2-14
-            day2-15
-            day2-16
-            day2-17
-            day2-18
-            day2-19
-            day2-20
-            day2-21
-            day2-22
-            day2-23
-            day2-5
-            day2-6
-            day2-7
-            day2-8
-            day2-9
-            day3-0
-            day3-1
-            day3-2
-            day3-3
-            day3-4
-
-        And something with a positive offset
-
-            >>> view.timezone = timezone('Africa/Cairo')
-            >>> view.update()
-            >>> view.timezone.tzname(datetime.utcnow())
-            'EET'
-
-            >>> titles = []
-            >>> for e in view.getEvents(datetime(2002, 2, 2),
-            ...                         datetime(2002, 2, 3)):
-            ...     titles.append(e.title)
-            >>> titles.sort()
-            >>> for title in  titles:
-            ...     print title
-            day1-22
-            day1-23
             day2-0
             day2-1
             day2-10
@@ -1436,6 +1342,8 @@ class TestCalendarViewBase(unittest.TestCase):
             day2-2
             day2-20
             day2-21
+            day2-22
+            day2-23
             day2-3
             day2-4
             day2-5
@@ -1524,7 +1432,7 @@ class TestCalendarViewBase(unittest.TestCase):
         app = sbsetup.setupSchoolToolSite()
         sbsetup.setupTimetabling()
 
-        e0 = createEvent('2004-08-10 22:00', '1h', "e0")
+        e0 = createEvent('2004-08-10 22:00', '30m', "e0")
         e1 = createEvent('2004-08-11 02:00', '1h', "e1")
         e2 = createEvent('2004-08-11 12:00', '1h', "e2")
         e3 = createEvent('2004-08-11 22:00', '1h', "e3")
@@ -1559,18 +1467,22 @@ class TestCalendarViewBase(unittest.TestCase):
         self.assertEqualEventLists(days[0].events, [e2, e3, e4])
 
         view.timezone = timezone('Europe/Vilnius')
-        days = view._getDays(start, end)
+        days = view._getDays(date(2004, 8, 11), date(2004, 8, 12))
 
         self.assertEquals(len(days), 1)
         self.assertEquals(days[0].date, date(2004, 8, 11))
 
         self.assertEqualEventLists(days[0].events, [e0, e1, e2])
 
-        start = date(2004, 8, 12)
-        end = date(2004, 8, 13)
-        days = view._getDays(start, end)
+        days = view._getDays(date(2004, 8, 12), date(2004, 8, 13))
+        self.assertEquals(len(days), 1)
+        self.assertEquals(days[0].date, date(2004, 8, 12))
+
+        self.assertEqualEventLists(days[0].events, [e3, e4])
 
         view.timezone = timezone('US/Eastern')
+        start = date(2004, 8, 12)
+        end = date(2004, 8, 13)
         days = view._getDays(start, end)
 
         self.assertEquals(len(days), 1)
@@ -1585,10 +1497,6 @@ class TestCalendarViewBase(unittest.TestCase):
         self.assertEquals(days[0].date, date(2004, 8, 12))
 
         self.assertEqualEventLists(days[0].events, [e3, e4])
-
-
-
-
 
     def test_getJumpToYears(self):
         from schooltool.app.cal import Calendar
@@ -3323,8 +3231,8 @@ def doctest_getEvents_booking():
         >>> view.getCalendars = lambda: [
         ...     (calendar, 'r', 'g'),
         ...     (ISchoolToolCalendar(resource), 'b', 'y')]
-        >>> for e in view.getEvents(datetime(2005, 2, 21),
-        ...                         datetime(2005, 3, 1)):
+        >>> for e in view.getEvents(datetime(2005, 2, 21, tzinfo=utc),
+        ...                         datetime(2005, 3, 1, tzinfo=utc)):
         ...     print e.title, '(%s)' % e.color1
         code (r)
 
@@ -3341,8 +3249,8 @@ def doctest_getEvents_booking():
         ...     (calendar, 'r', 'g'),
         ...     (ISchoolToolCalendar(resource), 'b', 'y'),
         ...     (ISchoolToolCalendar(toad), 'm', 'c')]
-        >>> for e in view.getEvents(datetime(2005, 2, 21),
-        ...                         datetime(2005, 3, 1)):
+        >>> for e in view.getEvents(datetime(2005, 2, 21, tzinfo=utc),
+        ...                         datetime(2005, 3, 1, tzinfo=utc)):
         ...     print e.title, '(%s)' % e.color1
         code (r)
         swim (b)

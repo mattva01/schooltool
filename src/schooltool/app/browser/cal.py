@@ -661,8 +661,6 @@ class CalendarViewBase(BrowserView):
         `start_dt` and `end_dt` (datetime objects) are bounds (half-open) for
         the result.
         """
-        start_dt = start_dt.replace(tzinfo=self.timezone)
-        end_dt = end_dt.replace(tzinfo=self.timezone)
         for calendar, color1, color2 in self.getCalendars():
             for event in calendar.expand(start_dt, end_dt):
                 if (same(event.__parent__, self.context) and
@@ -709,9 +707,8 @@ class CalendarViewBase(BrowserView):
             day += timedelta(1)
 
         # We have date objects, but ICalendar.expand needs datetime objects
-        # XXX utc here is a bug, probably http://issues.schooltool.org/issue373
-        start_dt = datetime.combine(start, time(tzinfo=utc))
-        end_dt = datetime.combine(end, time(tzinfo=utc))
+        start_dt = self.timezone.localize(datetime.combine(start, time()))
+        end_dt = self.timezone.localize(datetime.combine(end, time()))
         for event in self.getEvents(start_dt, end_dt):
             #  day1  day2  day3  day4  day5
             # |.....|.....|.....|.....|.....|
