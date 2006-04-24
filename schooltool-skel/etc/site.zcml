@@ -22,7 +22,7 @@
 
   <include files="package-includes/*-meta.zcml" />
   <include package="schooltool" />
-  <!- pull in some meta configuration needed by schooltool. -->
+  <!-- pull in some meta configuration needed by schooltool. -->
   <include package="zc.resourcelibrary" file="meta.zcml" />
 
   <include files="package-includes/*-configure.zcml" />
