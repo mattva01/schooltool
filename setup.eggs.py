@@ -55,7 +55,7 @@ interface.
 Any modern web browser is suitable for the web application interface.  The
 interface degrades gracefully, so a browser that does not support CSS or
 Javascript will be usable, although perhaps not very nice or convenient.""",
-    version='0.0.0.0we_have_to_fix_this',
+    version='2006a2',
     url='http://www.schooltool.org',
     license="GPL",
     maintainer="SchoolTool development team",
@@ -72,5 +72,5 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     "Topic :: Office/Business :: Scheduling"],
     package_dir={'': 'src'},
     packages=find_packages('src'),
-    install_requires=['SQLObject>=0.7'] # this dependency is imaginary;)
+    install_requires=['zc.resourcelibrary >= 0.5'] )
     )
