@@ -73,6 +73,6 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     "Topic :: Office/Business :: Scheduling"],
     package_dir={'': 'src'},
     packages=find_packages('src'),
-    install_requires=['zc.resourcelibrary >= 0.5'],  
+    install_requires=['zc.table >= 0.5'],  
     dependency_links=['http://download.zope.org/distribution/',],
     )
