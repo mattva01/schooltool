@@ -397,7 +397,7 @@ disabled:
       ...
       <tr class="attendance-retro-row">
         <td class="attendance-absent">
-           <label>Gretute</label>
+           <label class="disabled">Gretute</label>
         </td>
         ...
         <td class="other">
@@ -408,7 +408,7 @@ disabled:
       </tr>
       <tr class="attendance-retro-row">
         <td class="attendance-absent">
-           <label>Joniukas</label>
+           <label class="disabled">Joniukas</label>
         </td>
         ...
         <td class="other">
