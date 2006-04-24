@@ -49,7 +49,7 @@
       name="coursesinfo"
       for="*"
       manager="schooltool.person.browser.person.IPersonInfoManager"
-      template="coursesviewlet.pt"
+      template="templates/coursesviewlet.pt"
       class="schooltool.course.browser.course.CoursesViewlet"
       permission="zope.View"
       order="10"
@@ -59,7 +59,7 @@
       name="index.html"
       for="..interfaces.ICourse"
       class=".course.CourseView"
-      template="course.pt"
+      template="templates/course.pt"
       permission="zope.View"
       menu="zmi_views"
       title="View"
@@ -70,7 +70,7 @@
       name="index.html"
       for="..interfaces.ICourseContainer"
       class=".course.CourseContainerView"
-      template="course_container.pt"
+      template="templates/course_container.pt"
       permission="zope.View"
       menu="zmi_views"
       title="View"
@@ -86,7 +86,7 @@
       name="course-csvimport.html"
       for="..interfaces.ICourseContainer"
       class=".csvimport.CourseCSVImportView"
-      template="course-csvimport.pt"
+      template="templates/course-csvimport.pt"
       permission="schooltool.create"
       menu="schooltool_actions"
       title="Import Courses"
@@ -104,7 +104,7 @@
       name="index.html"
       for="..interfaces.ISectionContainer"
       class=".section.SectionContainerView"
-      template="section_container.pt"
+      template="templates/section_container.pt"
       permission="zope.View"
       menu="zmi_views"
       title="View"
@@ -114,7 +114,7 @@
       name="index.html"
       for="..interfaces.ISection"
       class=".section.SectionView"
-      template="section.pt"
+      template="templates/section.pt"
       permission="zope.View"
       menu="zmi_views"
       title="View"
@@ -133,7 +133,7 @@
       schema="..interfaces.ISection"
       fields="title description"
       set_before_add="title"
-      template="section_add.pt"
+      template="templates/section_add.pt"
       content_factory="..section.Section"
       permission="schooltool.create"
       class=".section.SectionAddView">
@@ -146,7 +146,7 @@
       schema="..interfaces.ISection"
       for="..interfaces.ISection"
       fields="title description"
-      template="section_edit.pt"
+      template="templates/section_edit.pt"
       permission="schooltool.edit"
       class=".section.SectionEditView"
       menu="schooltool_actions"
@@ -158,7 +158,7 @@
       name="instructors.html"
       for="..interfaces.ISection"
       class=".section.SectionInstructorView"
-      template="edit_relationships.pt"
+      template="templates/edit_relationships.pt"
       permission="schooltool.manageMembership"
       />
 
@@ -166,7 +166,7 @@
       name="resources.html"
       for="..interfaces.ISection"
       class=".section.SectionResourceView"
-      template="edit_relationships.pt"
+      template="templates/edit_relationships.pt"
       permission="schooltool.manageMembership"
       />
 
@@ -174,7 +174,7 @@
       name="learners.html"
       for="..interfaces.ISection"
       class=".section.SectionLearnerView"
-      template="edit_relationships.pt"
+      template="templates/edit_relationships.pt"
       permission="schooltool.manageMembership"
       />
 
@@ -182,7 +182,7 @@
       name="learner-groups.html"
       for="..interfaces.ISection"
       class=".section.SectionLearnerGroupView"
-      template="edit_relationships.pt"
+      template="templates/edit_relationships.pt"
       permission="schooltool.manageMembership"
       />
 
