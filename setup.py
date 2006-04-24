@@ -34,7 +34,8 @@ import os
 from setuptools import setup, find_packages
 
 # Setup SchoolTool
-setup(name="schooltool",
+setup(
+    name="schooltool",
     description="A common information systems platform for school administration.",
     long_description="""
 SchoolTool is an open source school management information system.  It is
@@ -72,5 +73,6 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     "Topic :: Office/Business :: Scheduling"],
     package_dir={'': 'src'},
     packages=find_packages('src'),
-    install_requires=['zc.resourcelibrary >= 0.5'] )
+    install_requires=['zc.resourcelibrary >= 0.5'],  
+    dependency_links=['http://download.zope.org/distribution/',],
     )
