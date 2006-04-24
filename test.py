@@ -22,6 +22,7 @@ SchoolTool test script.
 
 $Id$
 """
+
 import sys, os
 
 if sys.version_info < (2, 4):
@@ -33,6 +34,8 @@ here = os.path.dirname(os.path.realpath(__file__))
 # Replace the directory of this wrapper script with SchoolTool and Zope 3
 # source directories
 sys.path[:1] = [os.path.join(here, 'src'), os.path.join(here, 'Zope3', 'src')]
+import site
+site.addsitedir(os.path.join(here, 'Zope3', 'src'))
 
 from schooltool.testing import test
 
