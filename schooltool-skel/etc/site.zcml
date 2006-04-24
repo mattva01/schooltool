@@ -23,12 +23,13 @@
   <include files="package-includes/*-meta.zcml" />
   <include package="schooltool" />
   <!- pull in some meta configuration needed by schooltool. -->
-  <include package="zc.resourcelibrary" file="zc.resourcelibrary-meta.zcml" />
+  <include package="zc.resourcelibrary" file="meta.zcml" />
 
   <include files="package-includes/*-configure.zcml" />
 
   <!-- pull in some configuration needed by schooltool. -->
-  <include package="zc.resourcelibrary" file="zc.resourcelibrary-configure.zcml" />
+  <include package="zc.resourcelibrary" file="configure.zcml" />
+  <include package="zc.table" file="configure.zcml" />
 
   <include package="zope.app.securitypolicy"/>
 
