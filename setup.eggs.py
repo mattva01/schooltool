@@ -30,6 +30,12 @@ if sys.version_info < (2, 4):
     print >> sys.stderr, 'Your python is %s' % sys.version
     sys.exit(1)
 
+def get_version():
+    f = open('src/schooltool/version.txt', 'r')
+    result = f.read()
+    f.close()
+    return result
+
 import os
 from setuptools import setup, find_packages
 
@@ -56,7 +62,7 @@ interface.
 Any modern web browser is suitable for the web application interface.  The
 interface degrades gracefully, so a browser that does not support CSS or
 Javascript will be usable, although perhaps not very nice or convenient.""",
-    version='2006a2',
+    version=get_version(),
     url='http://www.schooltool.org',
     license="GPL",
     maintainer="SchoolTool development team",

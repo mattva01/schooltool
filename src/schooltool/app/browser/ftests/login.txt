@@ -34,7 +34,7 @@ application object. Those views log in or log out the user of the session.
 Make sure the current version number is somewhere on the page:
 
     >>> import schooltool
-    >>> schooltool.VERSION in anonymous.contents
+    >>> schooltool.get_version() in anonymous.contents
     True
 
 Incorrect password:
