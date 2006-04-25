@@ -81,7 +81,7 @@ def generate(app):
             for dep in plugin.dependencies:
                 visit(dep)
             start = time.clock()
-            plugin.generate(app, 'data')
+            plugin.generate(app)
             times[name] = time.clock() - start
             status[name] = closed
         elif status[name] == closed:
