@@ -30,14 +30,15 @@ if sys.version_info < (2, 4):
     print >> sys.stderr, 'Your python is %s' % sys.version
     sys.exit(1)
 
+import os
+from setuptools import setup, find_packages
+
 def get_version():
-    f = open('src/schooltool/version.txt', 'r')
+    version_file = os.path.join('src', 'schooltool', 'version.txt')
+    f = open(version_file, 'r')
     result = f.read()
     f.close()
     return result
-
-import os
-from setuptools import setup, find_packages
 
 # Setup SchoolTool
 setup(
@@ -79,6 +80,6 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     "Topic :: Office/Business :: Scheduling"],
     package_dir={'': 'src'},
     packages=find_packages('src'),
-    install_requires=['zc.table >= 0.5'],  
+    install_requires=['zc.table >= 0.5'],
     dependency_links=['http://download.zope.org/distribution/',],
     )

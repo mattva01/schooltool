@@ -39,7 +39,6 @@ sys.path.insert(0, zope3)
 st = os.path.join(here, 'src')
 sys.path.insert(0, st)
 
-import schooltool
 from zope.app.locales import extract
 
 # Monkey patch the Zope3 translation extraction machinery
@@ -74,10 +73,17 @@ msgstr ""
 
 """
 
+def get_version():
+    version_file = os.path.join('src', 'schooltool', 'version.txt')
+    f = open(version_file, 'r')
+    result = f.read()
+    f.close()
+    return result
+
 class POTMaker(extract.POTMaker):
 
     def _getProductVersion(self):
-        return "SchoolTool Version %s" % schooltool.VERSION
+        return "SchoolTool Version %s" % get_version()
 
 def write_pot(output_dir, path, domain, base_dir, site_zcml):
     # Create the POT
