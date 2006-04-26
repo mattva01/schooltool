@@ -127,7 +127,7 @@ def print_cal(calendar, day_format='%(number)3d'):
 
 
 def doctest_TimetableView():
-    '''Test for TimetableView.
+    """Test for TimetableView.
 
         >>> from schooltool.timetable.browser import TimetableView
         >>> from schooltool.timetable import Timetable
@@ -148,18 +148,18 @@ def doctest_TimetableView():
     title() returns the view's title:
 
         >>> translate(view.title())
-        u"Section\'s timetable"
+        u"Section's timetable"
 
     rows() delegates the job to format_timetable_for_presentation:
 
         >>> view.rows()
         [[{'period': 'A', 'activity': 'Something'}]]
 
-    '''
+    """
 
 
 def doctest_PersonTimetableSetupView():
-    '''Doctest for the PersonTimetableSetupView view
+    """Doctest for the PersonTimetableSetupView view
 
     We will need an application object
 
@@ -215,8 +215,8 @@ def doctest_PersonTimetableSetupView():
         >>> view.getSchema() is app["ttschemas"]["default"]
         True
 
-    The default for a term is "the current term", or, if there\'s none, the
-    next one.  Since this depends on today\'s date, we can\'t explicitly test
+    The default for a term is "the current term", or, if there's none, the
+    next one.  Since this depends on today's date, we can't explicitly test
     it here.
 
         >>> (view.getTerm() is app["terms"]["2005-spring"] or
@@ -386,7 +386,7 @@ def doctest_PersonTimetableSetupView():
            9:00: [] [none]
           10:00: [History, Math] [none]
 
-    When people are members of a section as part of a form (group) we don\'t
+    When people are members of a section as part of a form (group) we don't
     allow changing that period from here.  They must be removed from the
     group.
 
@@ -442,11 +442,11 @@ def doctest_PersonTimetableSetupView():
         <BLANKLINE>
         ...
 
-    '''
+    """
 
 
 def doctest_PersonTimetableSetupView_no_timetables():
-    '''Doctest for the PersonTimetableSetupView view
+    """Doctest for the PersonTimetableSetupView view
 
     What if there are no terms/timetable schemas?
 
@@ -478,11 +478,11 @@ def doctest_PersonTimetableSetupView_no_timetables():
         <p>There are no terms or timetable schemas defined.</p>
         ...
 
-    '''
+    """
 
 
 def doctest_PersonTimetableSetupView_no_default_ttschema():
-    '''Doctest for the PersonTimetableSetupView view
+    """Doctest for the PersonTimetableSetupView view
 
     What if there is no default timetable schema?
 
@@ -517,11 +517,11 @@ def doctest_PersonTimetableSetupView_no_default_ttschema():
         >>> view.getSchema() is app["ttschemas"]["other"]
         True
 
-    '''
+    """
 
 
 def doctest_SectionTimetableSetupView():
-    '''Doctest for the SectionTimetableSetupView view
+    """Doctest for the SectionTimetableSetupView view
 
     We will need an application object
 
@@ -554,7 +554,7 @@ def doctest_SectionTimetableSetupView():
         >>> request = TestRequest()
         >>> view = SectionTimetableSetupView(context, request)
 
-    We have some helper methods to simplify the form if there\'s only one
+    We have some helper methods to simplify the form if there's only one
     option for terms or schemas:
 
         >>> view.app = app
@@ -629,7 +629,7 @@ def doctest_SectionTimetableSetupView():
         >>> request.response.getHeader('location')
         'http://127.0.0.1/sections/math'
 
-    If we save the form, we\'re redirected to the timetable view for the schema
+    If we save the form, we're redirected to the timetable view for the schema
     that we just saved:
 
         >>> request = TestRequest(form={'SAVE': 'Save'})
@@ -650,7 +650,7 @@ def doctest_SectionTimetableSetupView():
         >>> ITimetables(math).timetables['2005-fall.default']['Tue'].items()
         [('9:00', Set([])), ('10:00', Set([]))]
 
-    Let\'s add some scheduled classes:
+    Let's add some scheduled classes:
 
         >>> request = TestRequest(form={'ttschema': 'default',
         ...                             'term': '2005-fall',
@@ -692,7 +692,7 @@ def doctest_SectionTimetableSetupView():
         ...                             'Mon.9:00':'ON',
         ...                             'SAVE': 'Save'})
 
-    Since we don\'t have an update() method, we call the page again to see our
+    Since we don't have an update() method, we call the page again to see our
     last changes, all the periods that were 'ON' are now checked:
 
         >>> view = SectionTimetableSetupView(context, request)
@@ -726,13 +726,13 @@ def doctest_SectionTimetableSetupView():
                             id="Tue.10:00" value="Tue.10:00"
         ...
 
-    Tuesday\'s Activity is no longer there:
+    Tuesday's Activity is no longer there:
 
         >>> ITimetables(math).timetables['2005-fall.default']['Tue']['9:00']
         Set([])
 
 
-    '''
+    """
 
 
 def test_suite():
