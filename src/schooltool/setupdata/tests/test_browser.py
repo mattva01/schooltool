@@ -71,10 +71,10 @@ def doctest_SetupDataView_update():
         >>> pprint(DummySetupPlugin.log)
         [('work',
           <schooltool.app.app.SchoolToolApplication object at ...>,
-          'data'),
+          None),
          ('play',
           <schooltool.app.app.SchoolToolApplication object at ...>,
-          'data')]
+          None)]
 
     When the work is done the times attribute is set on the view:
 
