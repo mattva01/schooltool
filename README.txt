@@ -85,6 +85,11 @@ Change directory to the installed libraries:
 $ cd ${libs}
 $ PYTHONPATH=lib/python easy_install -f http://download.zope.org/distribution --install-dir lib/python zc.table
 
+If you don't have the command `easy_install`, please see the following
+instructions on how to install it:
+
+http://peak.telecommunity.com/DevCenter/EasyInstall#installing-easy-install
+
 Now from the installed libraries, we can test the installation by running:
 
 $ ./bin/schooltooltest -ufv1
@@ -185,7 +190,11 @@ packaged as Python eggs. Sometimes it is important to be able to change
 these eggs and make checkins to them during Schooltool dependencies.
 
 What will follow is an example pertaining to the zc.resourcelibrary
-package.
+package. Note that in order to follow these instructions you need to
+have a recent version of setuptools installed (post a11). The most
+easy way to do this is to use ez_setup.py, here:
+
+http://peak.telecommunity.com/DevCenter/EasyInstall#installing-easy-install
 
 Remove the previously installed egg:
 
