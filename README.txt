@@ -193,9 +193,10 @@ Remove the previously installed egg:
 cd Zope3/src
 rm zc.resourcelibrary*
 
-Now do a writeable checkout of zc.resourcelibrary somewhere:
+Now do a writeable checkout of zc.resourcelibrary somewhere, for
+instance in the schooltool root directory:
 
-cd ..
+cd ../..
 svn co svn+ssh://svn.zope.org/repos/main/zc.resourcelibrary/trunk zc.resourcelibrary
 
 Then install zc.resourcelibrary into Zope3/src in development mode:
@@ -205,6 +206,25 @@ PYTHONPATH=../Zope3/src/ python setup.py develop --install-dir ../Zope3/src/
 
 (For some reason running this command from within the
 zc.resourcelibrary directory seems to be required.)
+
+You can test an development egg dependency with a command like this,
+in the Zope3 directory:
+
+cd ..
+cd Zope3
+python2.4 test.py --test-path=../zc.resourcelibrary/src/ -s zc.resourcelibrary
+
+(this assumes that zc.resourcelibrary has been checked out in the
+schooltool root directory)
+
+Some notes on running the tests:
+
+* to run the Zope 3 functional tests, first do a `make inplace` in the
+  Zope 3 checkout. zc.resourcelibrary has functional tests.
+
+* Note that the tests will fail as these are functional
+  tests. zc.resourcelibrary did not have its configure.zcml or
+  meta.zcml installed into Zope 3's package includes.
 
 Testing
 -------
