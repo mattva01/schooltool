@@ -83,8 +83,7 @@ $ make install
 Change directory to the installed libraries:
 
 $ cd ${libs}
-
-PYTHONPATH=lib/python easy_install -f http://download.zope.org/distribution --install-dir lib/python zc.table
+$ PYTHONPATH=lib/python easy_install -f http://download.zope.org/distribution --install-dir lib/python zc.table
 
 Now from the installed libraries, we can test the installation by running:
 
@@ -190,19 +189,19 @@ package.
 
 Remove the previously installed egg:
 
-cd Zope3/src
-rm zc.resourcelibrary*
+$ cd Zope3/src
+$ rm zc.resourcelibrary*
 
 Now do a writeable checkout of zc.resourcelibrary somewhere, for
 instance in the schooltool root directory:
 
-cd ../..
-svn co svn+ssh://svn.zope.org/repos/main/zc.resourcelibrary/trunk zc.resourcelibrary
+$ cd ../..
+$ svn co svn+ssh://svn.zope.org/repos/main/zc.resourcelibrary/trunk zc.resourcelibrary
 
 Then install zc.resourcelibrary into Zope3/src in development mode:
 
-cd zc.resourcelibrary
-PYTHONPATH=../Zope3/src/ python setup.py develop --install-dir ../Zope3/src/
+$ cd zc.resourcelibrary
+$ PYTHONPATH=../Zope3/src/ python setup.py develop --install-dir ../Zope3/src/
 
 (For some reason running this command from within the
 zc.resourcelibrary directory seems to be required.)
@@ -210,9 +209,9 @@ zc.resourcelibrary directory seems to be required.)
 You can test an development egg dependency with a command like this,
 in the Zope3 directory:
 
-cd ..
-cd Zope3
-python2.4 test.py --test-path=../zc.resourcelibrary/src/ -s zc.resourcelibrary
+$ cd ..
+$ cd Zope3
+$ python2.4 test.py --test-path=../zc.resourcelibrary/src/ -s zc.resourcelibrary
 
 (this assumes that zc.resourcelibrary has been checked out in the
 schooltool root directory)
