@@ -9,5 +9,5 @@
 
 <metal:block define-macro="serverinfo">
   <span i18n:translate="">Server Running SchoolTool</span>
-  <span tal:content="modules/schooltool/VERSION"/>
+  <span tal:content="modules/schooltool/get_version"/>
 </metal:block>

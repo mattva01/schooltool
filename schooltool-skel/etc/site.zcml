@@ -21,8 +21,16 @@
   <browser:menu id="help_actions" />
 
   <include files="package-includes/*-meta.zcml" />
+  <!-- pull in some meta configuration needed by schooltool. -->
+  <include package="zc.resourcelibrary" file="meta.zcml" />
+
   <include package="schooltool" />
+
   <include files="package-includes/*-configure.zcml" />
+
+  <!-- pull in some configuration needed by schooltool. -->
+  <include package="zc.resourcelibrary" file="configure.zcml" />
+  <include package="zc.table" file="configure.zcml" />
 
   <include package="zope.app.securitypolicy"/>
 
@@ -47,5 +55,5 @@
 
   <!-- Provide local overrides of standard configurations-->
   <includeOverrides files="package-includes/*-overrides.zcml" />
-
+  
 </configure>

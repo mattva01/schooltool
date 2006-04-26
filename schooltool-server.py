@@ -24,7 +24,10 @@ import os
 basedir = os.path.abspath(os.path.dirname(sys.argv[0]))
 del sys.path[0]
 sys.path.insert(0, os.path.join(basedir, 'src'))
-sys.path.insert(0, os.path.join(basedir, 'Zope3', 'src'))
+z3dir = os.path.join(basedir, 'Zope3', 'src')
+sys.path.insert(0, z3dir)
+import site
+site.addsitedir(z3dir)
 
 import schooltool.app.main
 schooltool.app.main.StandaloneServer().main()
