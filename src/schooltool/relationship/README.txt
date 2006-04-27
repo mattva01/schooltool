@@ -410,7 +410,7 @@ Caveats
 
 - When you copy objects (e.g. using Zope's IObjectCopier), you should take
   care to ensure that you do not duplicate just one half of relationship
-  links.  It is tricky.  locationCopy from zope.app.location.pickling
+  links.  It is tricky.  locationCopy from zope.location.pickling
   performs deep copies of all objects that are located within the object you
   are copying.  It works if all relationships are within this subtree (or
   outside it).  You will get problems if you have a relationship between

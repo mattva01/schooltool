@@ -180,7 +180,7 @@ def doctest_Calendar():
     The calendar should be an ILocation and it should implement IEditCalendar.
 
         >>> from schooltool.calendar.interfaces import IEditCalendar
-        >>> from zope.app.location.interfaces import ILocation
+        >>> from zope.location.interfaces import ILocation
         >>> verifyObject(IEditCalendar, cal)
         True
         >>> verifyObject(ILocation, cal)

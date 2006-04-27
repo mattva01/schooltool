@@ -33,7 +33,7 @@ from persistent.list import PersistentList
 from zope.interface import implements
 from zope.annotation.interfaces import IAnnotations
 from zope.i18n import translate
-from zope.app.location.location import Location
+from zope.location.location import Location
 from zope.wfmc.interfaces import IWorkItem
 from zope.wfmc.interfaces import IParticipant
 from zope.wfmc.interfaces import IActivity

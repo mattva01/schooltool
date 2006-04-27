@@ -27,7 +27,7 @@ import persistent
 import zope.interface
 import zope.schema
 import zope.wfmc
-from zope.app import location
+from zope import location
 from zope.annotation.interfaces import IAnnotations
 
 from schooltool import SchoolToolMessage as _

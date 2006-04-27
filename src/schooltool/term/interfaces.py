@@ -26,7 +26,7 @@ import zope.schema
 
 from zope.app.container import constraints
 from zope.app.container.interfaces import IContainer, IContained
-from zope.app.location.interfaces import ILocation
+from zope.location.interfaces import ILocation
 
 from schooltool import SchoolToolMessage as _
 

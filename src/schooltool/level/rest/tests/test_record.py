@@ -30,7 +30,7 @@ from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.component.testing import PlacefulSetup
-from zope.app.location.interfaces import ILocation
+from zope.location.interfaces import ILocation
 
 from schooltool.app.rest.testing import ApplicationObjectViewTestMixin
 from schooltool.app.rest.errors import RestError

@@ -31,7 +31,7 @@ from zope.schema.interfaces import IField
 from zope.annotation.interfaces import IAnnotatable
 from zope.app.container.constraints import contains, containers
 from zope.app.container.interfaces import IContainer, IContained
-from zope.app.location.interfaces import ILocation
+from zope.location.interfaces import ILocation
 
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
 from schooltool.calendar.interfaces import Unchanged

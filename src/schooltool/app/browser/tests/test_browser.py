@@ -26,7 +26,7 @@ import unittest
 from zope.interface import implements
 from zope.testing import doctest
 from zope.interface.verify import verifyObject
-from zope.app.location.interfaces import ILocation
+from zope.location.interfaces import ILocation
 from zope.app.testing import ztapi, setup
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.dependable.interfaces import IDependable

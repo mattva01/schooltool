@@ -19,7 +19,7 @@
 """
 Unit tests for schooltool.app.security
 
-$Id: test_security.py 4431 2005-08-02 04:33:27Z tvon $
+$Id$
 """
 import unittest
 from pprint import pprint
@@ -256,7 +256,7 @@ def doctest_PersonDetails():
         >>> verifyObject(IPersonDetails, details)
         True
 
-        >>> from zope.app.location.interfaces import ILocation
+        >>> from zope.location.interfaces import ILocation
         >>> verifyObject(ILocation, details)
         True
 

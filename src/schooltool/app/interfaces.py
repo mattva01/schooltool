@@ -28,7 +28,7 @@ import zope.schema
 import zope.app.event.objectevent
 from zope.app import container
 from zope.app import event
-from zope.app.location.interfaces import ILocation
+from zope.location.interfaces import ILocation
 from zope.app.security.interfaces import IAuthentication, ILogout
 
 from schooltool import SchoolToolMessage as _

@@ -28,7 +28,7 @@ from sets import Set
 from zope.app.publisher.browser import BrowserView
 from zope.app.traversing.api import getPath
 from zope.app.traversing.browser.absoluteurl import absoluteURL
-from zope.app.location.interfaces import ILocation
+from zope.location.interfaces import ILocation
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import canAccess
 

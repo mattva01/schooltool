@@ -30,7 +30,7 @@ import zope.event
 from zope.app import annotation
 from zope.app import container
 from zope.app import zapi
-from zope.app.location import location
+from zope.location import location
 from zope.app.keyreference.interfaces import IKeyReference
 
 from schooltool.requirement import interfaces

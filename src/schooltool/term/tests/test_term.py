@@ -28,7 +28,7 @@ from datetime import date
 from zope.interface import implements
 from zope.interface.verify import verifyObject
 from zope.app.container.contained import Contained
-from zope.app.location.interfaces import ILocation
+from zope.location.interfaces import ILocation
 from zope.app.testing.setup import placefulSetUp, placefulTearDown
 
 from schooltool.term import interfaces, term

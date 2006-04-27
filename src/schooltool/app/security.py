@@ -31,7 +31,7 @@ from zope.app.component.site import LocalSiteManager
 from zope.app.component.site import UtilityRegistration
 from zope.app.container.contained import Contained
 from zope.app.container.interfaces import IObjectAddedEvent
-from zope.app.location.interfaces import ILocation
+from zope.location.interfaces import ILocation
 from zope.app.security.interfaces import IAuthentication, ILoginPassword
 from zope.app.security.interfaces import IAuthenticatedGroup, IEveryoneGroup
 from zope.app.session.interfaces import ISession
