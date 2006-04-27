@@ -132,7 +132,7 @@ raised:
     >>> auth.getPrincipal('sb.person.nonexistent')
     Traceback (most recent call last):
     ...
-    PrincipalLookupError: 'sb.person.nonexistent'
+    PrincipalLookupError: sb.person.nonexistent
 
 
 The groups of the SchoolBell instance are also principals:
