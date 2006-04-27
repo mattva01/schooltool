@@ -21,7 +21,7 @@
 $Id$
 """
 __docformat__ = 'reStructuredText'
-from zope.app import annotation
+from zope import annotation
 from zope.app import container
 from zope.app import security
 from zope.app import zapi

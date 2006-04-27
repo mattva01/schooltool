@@ -5118,7 +5118,7 @@ def doctest_CalendarListSubscriber(self):
     If the person has the current timetable display unchecked, the composite
     timetable calendar is not included in the list:
 
-        >>> from zope.app.annotation.interfaces import IAnnotations
+        >>> from zope.annotation.interfaces import IAnnotations
         >>> annotations = IAnnotations(principal.person)
         >>> from schooltool.app.browser.cal import CalendarSTOverlayView
         >>> annotations[CalendarSTOverlayView.SHOW_TIMETABLE_KEY] = False

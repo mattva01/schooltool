@@ -26,12 +26,12 @@ import persistent
 import zope.interface
 import zope.security
 from zope.schema import fieldproperty
-from zope.app import annotation
+from zope import annotation
 from zope.app.container import btree, contained
 from schooltool.app import app
 from schooltool.commendation import interfaces
 
-# Annoations are identified using annotation keys that must be truly
+# Annotations are identified using annotation keys that must be truly
 # unique. Thus it is a good idea to make the Python path of the pacakge the
 # prefix of the annotation key. Below are the two keys we need.
 CommendationsKey = 'schooltool.commendation.Commendations'

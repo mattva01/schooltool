@@ -27,7 +27,7 @@ from BTrees.OOBTree import OOBTree
 
 import zope.component
 import zope.event
-from zope.app import annotation
+from zope import annotation
 from zope.app import container
 from zope.app import zapi
 from zope.location import location

@@ -28,7 +28,7 @@ from decimal import Decimal
 import zope.component
 import zope.interface
 from zope.security import proxy
-from zope.app import annotation
+from zope import annotation
 from zope.app.keyreference.interfaces import IKeyReference
 
 from schooltool import course, requirement

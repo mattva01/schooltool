@@ -1013,7 +1013,7 @@ def doctest_ACLView_inheritance():
 
     Set up for local grants:
 
-        >>> from zope.app.annotation.interfaces import IAnnotatable
+        >>> from zope.annotation.interfaces import IAnnotatable
         >>> from zope.app.securitypolicy.interfaces import \
         ...                         IPrincipalPermissionManager
         >>> from zope.app.securitypolicy.principalpermission import \

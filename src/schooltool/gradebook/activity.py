@@ -24,7 +24,7 @@ __docformat__ = 'reStructuredText'
 
 import datetime
 import zope.interface
-from zope.app import annotation
+from zope import annotation
 
 from schooltool import SchoolToolMessage as _
 from schooltool.requirement import requirement

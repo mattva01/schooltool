@@ -113,7 +113,7 @@ have commendations.
 So let's say we are given a person component:
 
   >>> import zope.interface
-  >>> from zope.app import annotation
+  >>> from zope import annotation
   >>> class Person(object):
   ...     zope.interface.implements(annotation.interfaces.IAttributeAnnotatable)
   ...     def __init__(self, id):
