@@ -85,7 +85,7 @@ from schooltool.course.interfaces import ISection
 from schooltool.person.interfaces import IPerson, IPersonPreferences
 from schooltool.person.interfaces import vocabulary
 from schooltool.resource.interfaces import IResource
-from schooltool.timetable.interfaces import ITimetables
+from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.term.term import getTermForDate
 
 
@@ -1455,7 +1455,7 @@ class CalendarListSubscriber(object):
         yield (self.context, '#9db8d2', '#7590ae')
 
         parent = zapi.getParent(self.context)
-        ttcalendar = ITimetables(parent).makeTimetableCalendar()
+        ttcalendar = ICompositeTimetables(parent).makeTimetableCalendar()
 
         user = IPerson(self.request.principal, None)
         if user is None:
@@ -1485,7 +1485,7 @@ class CalendarListSubscriber(object):
                 # overlaid timetables
                 if IShowTimetables(item).showTimetables:
                     owner = item.calendar.__parent__
-                    ttcalendar = ITimetables(owner).makeTimetableCalendar()
+                    ttcalendar = ICompositeTimetables(owner).makeTimetableCalendar()
                     yield (ttcalendar, item.color1, item.color2)
 
 #
@@ -2269,7 +2269,7 @@ class CalendarEventBookingView(CalendarEventView):
         if not canAccess(calendar, "expand"):
             return []
 
-        ttcalendar = ITimetables(resource).makeTimetableCalendar()
+        ttcalendar = ICompositeTimetables(resource).makeTimetableCalendar()
         events = []
 
         for cal in (calendar, ttcalendar):

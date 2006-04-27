@@ -62,7 +62,7 @@
       />
 
   <class class=".section.Section">
-    <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
+    <implements interface="schooltool.timetable.interfaces.IOwnTimetables" />
     <implements interface="schooltool.note.interfaces.IHaveNotes" />
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />
 
@@ -140,7 +140,7 @@
   <!-- Timetable source subscriber -->
 
   <subscriber
-      for="schooltool.timetable.interfaces.ITimetables"
+      for="schooltool.timetable.interfaces.IHaveTimetables"
       provides="schooltool.timetable.interfaces.ITimetableSource"
       factory=".booking.BookingTimetableSource"
       permission="zope.Public"

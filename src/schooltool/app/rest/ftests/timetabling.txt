@@ -513,14 +513,28 @@ test):
     Set-Cookie: ...
     <BLANKLINE>
 
-Let's add a person:
+
+Add a course:
 
     >>> print rest("""
-    ... PUT /persons/john HTTP/1.1
+    ... PUT /courses/birdwatching HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
-    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="John"/>
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+And a section:
+
+    >>> print rest("""
+    ... PUT /sections/birdwatching-1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding1"
+    ...         course="birding" />
     ... """)
     HTTP/1.1 201 Created
     ...
@@ -528,7 +542,7 @@ Let's add a person:
 We can now add a timetable for the person:
 
     >>> print rest(r"""
-    ... PUT /persons/john/timetables/2005-fall.schema1 HTTP/1.1
+    ... PUT /sections/birdwatching-1/timetables/2005-fall.schema1 HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
@@ -558,7 +572,7 @@ We can now add a timetable for the person:
 It should be there:
 
     >>> print rest(r"""
-    ... GET /persons/john/timetables/2005-fall.schema1 HTTP/1.1
+    ... GET /sections/birdwatching-1/timetables/2005-fall.schema1 HTTP/1.1
     ... Authorization: Basic manager:schooltool""")
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -587,7 +601,7 @@ It should be there:
 Let's modify it:
 
     >>> print rest(r"""
-    ... PUT /persons/john/timetables/2005-fall.schema1 HTTP/1.1
+    ... PUT /sections/birdwatching-1/timetables/2005-fall.schema1 HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
@@ -619,7 +633,7 @@ Let's modify it:
 The timetable should look different now:
 
     >>> print rest(r"""
-    ... GET /persons/john/timetables/2005-fall.schema1 HTTP/1.1
+    ... GET /sections/birdwatching-1/timetables/2005-fall.schema1 HTTP/1.1
     ... Authorization: Basic manager:schooltool""")
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -652,7 +666,7 @@ The timetable should look different now:
 Let's look at the list of timetables we have now:
 
     >>> print rest(r"""
-    ... GET /persons/john/timetables/ HTTP/1.1
+    ... GET /sections/birdwatching-1/timetables/ HTTP/1.1
     ... Authorization: Basic manager:schooltool""")
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -661,7 +675,7 @@ Let's look at the list of timetables we have now:
     <BLANKLINE>
     <timetables xmlns:xlink="http://www.w3.org/1999/xlink">
       <timetable xlink:type="simple" term="2005-fall"
-                 xlink:href="http://localhost/persons/john/timetables/2005-fall.schema1"
+                 xlink:href="http://localhost/sections/birdwatching-1/timetables/2005-fall.schema1"
                  schema="schema1"/>
     </timetables>
     <BLANKLINE>
@@ -669,7 +683,7 @@ Let's look at the list of timetables we have now:
 Let's delete it:
 
     >>> print rest(r"""
-    ... DELETE /persons/john/timetables/2005-fall.schema1 HTTP/1.1
+    ... DELETE /sections/birdwatching-1/timetables/2005-fall.schema1 HTTP/1.1
     ... Authorization: Basic manager:schooltool""")
     HTTP/1.1 200 Ok
     Content-Length: 0
@@ -679,7 +693,7 @@ Let's delete it:
 Now it's gone:
 
     >>> print rest(r"""
-    ... GET /persons/john/timetables/ HTTP/1.1
+    ... GET /sections/birdwatching-1/timetables/ HTTP/1.1
     ... Authorization: Basic manager:schooltool""")
     HTTP/1.1 200 Ok
     Content-Length: ...

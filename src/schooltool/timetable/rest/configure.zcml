@@ -7,12 +7,6 @@
     <allow interface=".INullTimetable" />
   </class>
 
-  <class class=".CompositeTimetables">
-    <allow interface=".ICompositeTimetables" />
-  </class>
-
-  <adapter factory=".CompositeTimetables" />
-
   <!-- Traversers -->
 
   <subscriber
@@ -24,7 +18,7 @@
       />
 
   <subscriber
-      for="..interfaces.IHaveTimetables
+      for="..interfaces.IOwnTimetables
            zope.publisher.interfaces.http.IHTTPRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".TimetableTraverser"
@@ -40,7 +34,7 @@
       />
 
   <view
-      for="schooltool.app.rest.interfaces.ICompositeTimetables"
+      for="schooltool.timetable.interfaces.ICompositeTimetables"
       type="zope.publisher.interfaces.browser.IHTTPRequest"
       provides="zope.publisher.interfaces.IPublishTraverse"
       factory=".CompositeTimetablesPublishTraverse"
@@ -130,7 +124,7 @@
       />
 
   <view
-      for="schooltool.app.rest.interfaces.ICompositeTimetables"
+      for="schooltool.timetable.interfaces.ICompositeTimetables"
       name="GET"
       factory=".CompositeTimetablesView"
       type="zope.publisher.interfaces.http.IHTTPRequest"

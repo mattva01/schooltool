@@ -19,7 +19,7 @@
 """
 SchoolTool restive view interfaces
 
-$Id: interfaces.py 3798 2005-05-17 15:33:29Z gintas $
+$Id$
 """
 
 from zope.interface import Interface
@@ -40,22 +40,3 @@ class ITimetableFileFactory(Interface):
 class INullTimetable(INullResource):
     """Placeholder objects for new timetables to be created via PUT
     """
-
-
-class ICompositeTimetables(Interface):
-    """A marker interface used when traversing into composite timetables."""
-
-    def getCompositeTimetable(term_id, tt_schema_id):
-        """Return a composite timetable for a given object with a
-        given timetable schema for a given time period id.
-
-        The timetable returned includes the events from the timetables
-        of parent groups, groups taught, etc.
-
-        This function can return None if the object has no timetable.
-        """
-
-    def listCompositeTimetables():
-        """Return a sequence of (time_period_id, tt_schema_id) for all
-        available composite timetables.
-        """

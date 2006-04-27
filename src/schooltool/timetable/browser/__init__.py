@@ -42,7 +42,7 @@ from schooltool.traverser.interfaces import ITraverserPlugin
 
 from schooltool import SchoolToolMessage as _
 from schooltool.timetable.interfaces import ITimetables, IHaveTimetables
-from schooltool.timetable.interfaces import ITimetable
+from schooltool.timetable.interfaces import ITimetable, IOwnTimetables
 from schooltool.course.interfaces import ISection
 from schooltool.timetable import Timetable, TimetableDay
 from schooltool.timetable import TimetableActivity
@@ -109,9 +109,9 @@ class TabindexMixin(object):
 
 
 class TimetablesTraverser(object):
-    """A traverser that allows to traverse to a calendar owner's calendar."""
+    """A traverser that allows to traverse to a timetable of its context."""
 
-    adapts(IHaveTimetables)
+    adapts(IOwnTimetables)
     implements(ITraverserPlugin)
 
     def __init__(self, context, request):

@@ -41,7 +41,7 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.attendance.interfaces import IAttendancePreferences
 from schooltool.term.daterange import DateRange
-from schooltool.timetable import ITimetables
+from schooltool.timetable import ICompositeTimetables
 from schooltool.timetable import TimetableActivity
 from schooltool.timetable.model import TimetableCalendarEvent
 from schooltool.calendar.simple import ImmutableCalendar
@@ -127,7 +127,7 @@ class TimetableActivityStub(object):
 
 class StubTimetables(object):
     adapts(Interface)
-    implements(ITimetables)
+    implements(ICompositeTimetables)
     def __init__(self, context):
         self.context = context
         self._tt = TimetableStub({
@@ -709,7 +709,7 @@ def doctest_AttendanceView_listMembers():
 
     We'll need timetabling too:
 
-        >>> ztapi.provideAdapter(None, ITimetables, StubTimetables)
+        >>> ztapi.provideAdapter(None, ICompositeTimetables, StubTimetables)
 
     Let's set up a view:
 
@@ -942,7 +942,7 @@ def doctest_AttendanceView_update():
 
     We'll need timetabling stubbed too:
 
-        >>> ztapi.provideAdapter(None, ITimetables, StubTimetables)
+        >>> ztapi.provideAdapter(None, ICompositeTimetables, StubTimetables)
 
     Let's create a section and a view:
 
@@ -1181,10 +1181,10 @@ def doctest_AttendanceView_update():
 def doctest_AttendanceView_update_homeroom():
     r"""Tests for AttendanceView.update
 
-    We need an ITimetables adapter in order to verify that a given
+    We need an ICompositeTimetables adapter in order to verify that a given
     period is valid for a given day:
 
-        >>> ztapi.provideAdapter(None, ITimetables, StubTimetables)
+        >>> ztapi.provideAdapter(None, ICompositeTimetables, StubTimetables)
 
     The ``update`` method is able to tell the difference between regular
     section meetings and the homeroom meeting.
@@ -1219,10 +1219,10 @@ def doctest_AttendanceView_update_homeroom():
 def doctest_AttendanceView_update_homeroom():
     r"""Tests for AttendanceView.update
 
-    We need an ITimetables adapter in order to verify that a given
+    We need an ICompositeTimetables adapter in order to verify that a given
     period is valid for a given day:
 
-        >>> ztapi.provideAdapter(None, ITimetables, StubTimetables)
+        >>> ztapi.provideAdapter(None, ICompositeTimetables, StubTimetables)
 
     The ``update`` method is able to tell the difference between regular
     section meetings and the homeroom meeting.
@@ -1252,10 +1252,10 @@ def doctest_AttendanceView_update_homeroom():
 def doctest_AttendanceView_update_set_homeroom():
     r"""Tests for AttendanceView.update
 
-    We need an ITimetables adapter in order to verify that a given
+    We need an ICompositeTimetables adapter in order to verify that a given
     period is valid for a given day:
 
-        >>> ztapi.provideAdapter(None, ITimetables, StubTimetables)
+        >>> ztapi.provideAdapter(None, ICompositeTimetables, StubTimetables)
 
     We will also need attendance adapters.
 
@@ -1318,7 +1318,7 @@ def doctest_AttendanceView_retro_update():
 
     We'll need some timetabling and attendance adapters:
 
-        >>> ztapi.provideAdapter(None, ITimetables, StubTimetables)
+        >>> ztapi.provideAdapter(None, ICompositeTimetables, StubTimetables)
         >>> setUpAttendanceAdapters()
 
     The AttendanceView is used both for regular section meetings,
@@ -1598,10 +1598,10 @@ def doctest_AttendanceView_verifyParameters():
         >>> from schooltool.attendance.browser.attendance \
         ...          import AttendanceView
 
-    We need an ITimetables adapter in order to verify that a given
+    We need an ICompositeTimetables adapter in order to verify that a given
     period is valid for a given day:
 
-        >>> ztapi.provideAdapter(None, ITimetables, StubTimetables)
+        >>> ztapi.provideAdapter(None, ICompositeTimetables, StubTimetables)
 
     What if we try to render the view without specifying both the
     date and the period id?  We try to find the closest section meeting

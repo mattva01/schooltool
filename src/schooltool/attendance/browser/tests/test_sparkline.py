@@ -29,7 +29,7 @@ from zope.testing import doctest
 from zope.app.testing import setup, ztapi
 
 from schooltool.attendance.interfaces import IHomeroomAttendance
-from schooltool.timetable.interfaces import ITimetables
+from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.testing import setup as stsetup
 from schooltool.attendance.browser.sparkline import AttendanceSparklineView
 
@@ -67,7 +67,7 @@ class TimetablesStub:
 
 class SectionStub:
     def __conform__(self, interface):
-        if interface is ITimetables:
+        if interface is ICompositeTimetables:
             return TimetablesStub()
 
 

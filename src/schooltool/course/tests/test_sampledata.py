@@ -28,10 +28,14 @@ from zope.interface.verify import verifyObject
 from zope.testing import doctest
 from zope.app.testing import setup
 from zope.app.testing import ztapi
+from zope.component import provideSubscriptionAdapter
 
 from schooltool.testing import setup as stsetup
 from schooltool.relationship.tests import setUpRelationships
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.timetable.source import OwnedTimetableSource
+from schooltool.timetable.interfaces import IOwnTimetables
+from schooltool.timetable.interfaces import ITimetableSource
 
 
 def setUp(test):
@@ -39,6 +43,9 @@ def setUp(test):
     setUpRelationships()
     app = stsetup.setupSchoolToolSite()
     ztapi.provideAdapter(None, ISchoolToolApplication, lambda x: app)
+    provideSubscriptionAdapter(OwnedTimetableSource,
+                               (IOwnTimetables,),
+                               ITimetableSource)
     stsetup.setupTimetabling()
     stsetup.setupCalendaring()
     stsetup.setUpApplicationPreferences()

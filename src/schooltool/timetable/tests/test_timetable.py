@@ -39,7 +39,9 @@ from zope.testing import doctest
 
 from schooltool import timetable
 from schooltool.timetable.interfaces import ITimetables
+from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.timetable.interfaces import ITimetable, ITimetableActivity
+from schooltool.timetable.interfaces import IOwnTimetables
 from schooltool.relationship import RelationshipProperty
 from schooltool.app.membership import URIGroup, URIMember, URIMembership
 
@@ -700,16 +702,17 @@ class TestSchooldayTemplate(unittest.TestCase):
         self.assert_(not tmpl != tmpl2)
 
 
-class Content(object):
+class ContentStub(object):
 
-    implements(IAttributeAnnotatable)
+    implements(IOwnTimetables, IAttributeAnnotatable)
 
     members = RelationshipProperty(URIMembership, URIGroup, URIMember)
     groups = RelationshipProperty(URIMembership, URIGroup, URIMember)
 
-class Parent(Content):
 
-    implements(ITimetables)
+class Parent(ContentStub):
+
+    implements(ITimetables, ICompositeTimetables)
 
     def __init__(self):
         self.object = self
@@ -821,34 +824,64 @@ class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
 
     def setUp(self):
         from schooltool.relationship.tests import setUpRelationships
-        from schooltool.timetable.interfaces import ITimetables
         from schooltool.timetable.interfaces import ITimetableSource
-        from schooltool.timetable.source import MembershipTimetableSource
         from schooltool.timetable import TimetablesAdapter
 
         self.site = setup.placefulSetUp(True)
         setup.setUpAnnotations()
         setUpRelationships()
 
-        ztapi.subscribe((ITimetables, ), ITimetableSource,
-                        MembershipTimetableSource)
-
-        ztapi.provideAdapter(IAttributeAnnotatable, ITimetables,
+        ztapi.provideAdapter(IOwnTimetables, ITimetables,
                              TimetablesAdapter)
-
 
     def tearDown(self):
         setup.placefulTearDown()
 
     def test_interface(self):
-        from schooltool.timetable.interfaces import ITimetables
         from schooltool.timetable import TimetablesAdapter, TimetableDict
 
-        content = Content()
+        content = ContentStub()
         tm = TimetablesAdapter(content)
         verifyObject(ITimetables, tm)
         self.assert_(isinstance(tm.timetables, TimetableDict))
         self.assertEqual(tm.timetables.__parent__, content)
+
+
+class TestCompositeTimetables(NiceDiffsMixin, EqualsSortedMixin,
+                              unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.relationship.tests import setUpRelationships
+        from schooltool.timetable.interfaces import ITimetableSource
+        from schooltool.timetable.interfaces import IHaveTimetables
+        from schooltool.timetable.interfaces import ICompositeTimetables
+        from schooltool.timetable.source import MembershipTimetableSource
+        from schooltool.timetable.source import OwnedTimetableSource
+        from schooltool.timetable import TimetablesAdapter
+        from schooltool.timetable import CompositeTimetables
+
+        self.site = setup.placefulSetUp(True)
+        setup.setUpAnnotations()
+        setUpRelationships()
+
+        ztapi.subscribe((IHaveTimetables, ), ITimetableSource,
+                        MembershipTimetableSource)
+        ztapi.subscribe((IOwnTimetables, ), ITimetableSource,
+                        OwnedTimetableSource)
+        ztapi.provideAdapter(IHaveTimetables, ICompositeTimetables,
+                             CompositeTimetables)
+        ztapi.provideAdapter(IOwnTimetables, ITimetables,
+                             TimetablesAdapter)
+
+    def tearDown(self):
+        setup.placefulTearDown()
+
+    def newTimetable(self):
+        from schooltool.timetable import Timetable, TimetableDay
+        tt = Timetable(("A", "B"))
+        tt["A"] = TimetableDay(["Green", "Blue"])
+        tt["B"] = TimetableDay(["Green", "Blue"])
+        return tt
 
     def newTimetableSchema(self):
         from schooltool.timetable.schema import TimetableSchema
@@ -858,35 +891,33 @@ class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
         tt["B"] = TimetableSchemaDay(["Green", "Blue"])
         return tt
 
-    def newTimetable(self):
-        from schooltool.timetable import Timetable, TimetableDay
-        tt = Timetable(("A", "B"))
-        tt["A"] = TimetableDay(["Green", "Blue"])
-        tt["B"] = TimetableDay(["Green", "Blue"])
-        return tt
-
     def test_composite_table_own(self):
-        tm = ITimetables(Content())
+        content = ContentStub()
+        ct = ICompositeTimetables(content)
+        tm = ITimetables(content)
+
         self.assertEqual(tm.timetables, {})
-        self.assertEqual(tm.getCompositeTimetable("a", "b"), None)
-        self.assertEqual(tm.listCompositeTimetables(), Set())
+        self.assertEqual(ct.getCompositeTimetable("a", "b"), None)
+        self.assertEqual(ct.listCompositeTimetables(), Set())
 
         tt = tm.timetables["2003 fall.sequential"] = self.newTimetable()
 
-        result = tm.getCompositeTimetable("2003 fall", "sequential")
+        result = ct.getCompositeTimetable("2003 fall", "sequential")
         self.assertEqual(result, tt)
         self.assert_(result is not tt)
 
-        self.assertEqual(tm.listCompositeTimetables(),
+        self.assertEqual(ct.listCompositeTimetables(),
                          Set([("2003 fall", "sequential")]))
 
     def test_composite_table_related(self):
         from schooltool.timetable import TimetableActivity
         from schooltool.app.membership import Membership
 
-        tm = ITimetables(Content())
+        content = ContentStub()
+        ct = ICompositeTimetables(content)
+        tm = ITimetables(content)
         parent = Parent()
-        Membership(group=parent, member=tm.object)
+        Membership(group=parent, member=content)
 
         composite = self.newTimetable()
         english = TimetableActivity("English")
@@ -904,10 +935,10 @@ class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
         parent.getCompositeTimetable = newComposite
         parent.listCompositeTimetables = listComposites
 
-        result = tm.getCompositeTimetable("2003 fall", "sequential")
+        result = ct.getCompositeTimetable("2003 fall", "sequential")
         self.assertEqual(result, composite)
         self.assert_(result is not composite)
-        self.assertEqual(tm.listCompositeTimetables(),
+        self.assertEqual(ct.listCompositeTimetables(),
                          Set([("2003 fall", "sequential")]))
 
         # Now test with our object having a private timetable
@@ -916,21 +947,22 @@ class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
         private["B"].add("Blue", math)
         tm.timetables["2003 fall.sequential"] = private
 
-        result = tm.getCompositeTimetable("2003 fall", "sequential")
+        result = ct.getCompositeTimetable("2003 fall", "sequential")
         expected = composite.cloneEmpty()
         expected.update(composite)
         expected.update(private)
         self.assertEqual(result, expected)
-        self.assertEqual(tm.listCompositeTimetables(),
+        self.assertEqual(ct.listCompositeTimetables(),
                          Set([("2003 fall", "sequential")]))
 
     def test_paths(self):
-        content = Content()
-        tm = ITimetables(content)
+        content = ContentStub()
         content.__name__ = 'stub'
         content.__parent__ = self.site
+        ct = ICompositeTimetables(content)
+        tm = ITimetables(content)
         tt = tm.timetables["2003-fall.sequential"] = self.newTimetable()
-        tt1 = tm.getCompositeTimetable("2003-fall", "sequential")
+        tt1 = ct.getCompositeTimetable("2003-fall", "sequential")
 
         self.assertEqual(getPath(tt),
                          '/stub/timetables/2003-fall.sequential')
@@ -948,7 +980,7 @@ class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
         tss['sequential'] = self.newTimetableSchema()
         tss['other'] = self.newTimetableSchema()
         tss['and another'] = self.newTimetableSchema()
-        tm = ITimetables(Content())
+        ct = ICompositeTimetables(ContentStub())
 
         tt1 = self.newTimetable()
         tt1["A"].add("Green", TimetableActivity("AG"))
@@ -966,8 +998,8 @@ class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
 
         ttdict = {"2003 fall.sequential": tt1,
                   "2003 fall.other": tt2}
-        tm.getCompositeTimetable = lambda p, s: ttdict.get("%s.%s" % (p, s))
-        tm.listCompositeTimetables = lambda: [k.split(".")
+        ct.getCompositeTimetable = lambda p, s: ttdict.get("%s.%s" % (p, s))
+        ct.listCompositeTimetables = lambda: [k.split(".")
                                               for k in ttdict.keys()]
 
         class TimetableModelStub:
@@ -983,12 +1015,13 @@ class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
 
         tt1.model = TimetableModelStub()
         tt2.model = TimetableModelStub()
-        cal = tm.makeTimetableCalendar()
+        cal = ct.makeTimetableCalendar()
         self.assertEqualSorted(list(cal), list(cal1) + list(cal2))
-        self.assert_(cal.__parent__ is tm.object)
+        self.assert_(cal.__parent__ is ct.context)
 
     def test_makeTimetableCalendar_with_filtering(self):
         from schooltool.timetable import TimetablesAdapter
+        from schooltool.timetable import CompositeTimetables
 
         class TimetableModelStub:
             def createCalendar(self, term, timetable, first=None, last=None):
@@ -997,12 +1030,13 @@ class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
         class TimetableStub:
             model = TimetableModelStub()
 
-        tm = TimetablesAdapter(Content())
+        content = ContentStub()
+        ct = CompositeTimetables(content)
         fake_term_container = {'term1': 'term1'}
-        tm._getTermContainer = lambda: fake_term_container
-        tm.listCompositeTimetables = lambda: [('term1', 'schema1')]
-        tm.getCompositeTimetable = lambda tid, sid: TimetableStub()
-        cal = tm.makeTimetableCalendar(first='last year', last='next week')
+        ct._getTermContainer = lambda: fake_term_container
+        ct.listCompositeTimetables = lambda: [('term1', 'schema1')]
+        ct.getCompositeTimetable = lambda tid, sid: TimetableStub()
+        cal = ct.makeTimetableCalendar(first='last year', last='next week')
         self.assertEquals(list(cal), ['last year--next week'])
 
 
@@ -1011,16 +1045,16 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
 
        >>> from schooltool.timetable import TimetablesAdapter
        >>> from schooltool.timetable.interfaces import ITimetables
-       >>> from schooltool.timetable.interfaces import IHaveTimetables
+       >>> from schooltool.timetable.interfaces import IOwnTimetables
        >>> setup.placefulSetUp()
-       >>> ztapi.provideAdapter(IAttributeAnnotatable, ITimetables,
+       >>> ztapi.provideAdapter(IOwnTimetables, ITimetables,
        ...                      TimetablesAdapter)
        >>> setup.setUpAnnotations()
 
        >>> from schooltool.testing.setup import createSchoolToolApplication
        >>> from schooltool.timetable import findRelatedTimetables
        >>> app = stsetup.setupSchoolToolSite()
-       >>> directlyProvides(app, IHaveTimetables)
+       >>> directlyProvides(app, IOwnTimetables)
 
     Let's create a timetable schema:
 
@@ -1076,7 +1110,7 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
 
        >>> for ob in (app['persons']['p1'], app['persons']['p2'],
        ...            app['groups']['g'], app['resources']['r']):
-       ...     directlyProvides(ob, IHaveTimetables)
+       ...     directlyProvides(ob, IOwnTimetables)
 
        >>> adapter = ITimetables(app['persons']['p1'])
        >>> adapter.timetables['2006.simple'] = tts.createTimetable()
@@ -1129,18 +1163,18 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
 def doctest_findRelatedTimetables_forTerm():
     """Tests for findRelatedTimetables() with terms as arguments
 
-       >>> from schooltool.timetable.interfaces import IHaveTimetables
+       >>> from schooltool.timetable.interfaces import IOwnTimetables
        >>> from schooltool.timetable import TimetablesAdapter
        >>> from schooltool.timetable.interfaces import ITimetables
        >>> setup.placefulSetUp()
-       >>> ztapi.provideAdapter(IAttributeAnnotatable, ITimetables,
+       >>> ztapi.provideAdapter(IOwnTimetables, ITimetables,
        ...                      TimetablesAdapter)
        >>> setup.setUpAnnotations()
 
        >>> from schooltool.testing.setup import createSchoolToolApplication
        >>> from schooltool.timetable import findRelatedTimetables
        >>> app = stsetup.setupSchoolToolSite()
-       >>> directlyProvides(app, IHaveTimetables)
+       >>> directlyProvides(app, IOwnTimetables)
 
     Let's create a couple of terms:
 
@@ -1197,7 +1231,7 @@ def doctest_findRelatedTimetables_forTerm():
 
        >>> for ob in (app['persons']['p1'], app['persons']['p2'],
        ...            app['groups']['g'], app['resources']['r']):
-       ...     directlyProvides(ob, IHaveTimetables)
+       ...     directlyProvides(ob, IOwnTimetables)
 
        >>> adapter = ITimetables(app['persons']['p1'])
        >>> adapter.timetables['2005.simple'] = tts.createTimetable()
@@ -1275,6 +1309,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestSchooldaySlot))
     suite.addTest(unittest.makeSuite(TestSchooldayTemplate))
     suite.addTest(unittest.makeSuite(TestTimetablesAdapter))
+    suite.addTest(unittest.makeSuite(TestCompositeTimetables))
     return suite
 
 if __name__ == '__main__':

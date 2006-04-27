@@ -32,7 +32,7 @@ from PIL import Image, ImageDraw
 
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.app import getSchoolToolApplication
-from schooltool.timetable.interfaces import ITimetables
+from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.term.term import getTermForDate
 from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.attendance.interfaces import IHomeroomAttendance
@@ -102,7 +102,7 @@ class AttendanceSparkline(object):
         return bool(list(section_calendar.expand(day_start, day_end)))
 
     def getLastSectionDays(self, count=10):
-        section_calendar = ITimetables(self.section).makeTimetableCalendar()
+        section_calendar = ICompositeTimetables(self.section).makeTimetableCalendar()
         timezone = IApplicationPreferences(getSchoolToolApplication()).timezone
         tz = pytz.timezone(timezone)
         result = []

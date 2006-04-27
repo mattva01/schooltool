@@ -46,11 +46,11 @@ from zope.app.container.traversal import ItemTraverser
 from schooltool.xmlparsing import XMLDocument
 from schooltool.common import parse_date, parse_time
 from schooltool.timetable.interfaces import IHaveTimetables, ITimetables
-from schooltool.timetable.interfaces import ITimetableDict
+from schooltool.timetable.interfaces import ITimetableDict, ICompositeTimetables
 from schooltool.timetable import TimetableActivity, TimetableDict
 from schooltool.traverser import traverser
 from schooltool.app.rest.interfaces import ITimetableFileFactory
-from schooltool.app.rest.interfaces import INullTimetable, ICompositeTimetables
+from schooltool.app.rest.interfaces import INullTimetable
 from schooltool.common import unquote_uri
 
 
@@ -424,40 +424,9 @@ class NullTimetablePUT(object):
         return ''
 
 
-class CompositeTimetables(object):
-    """Adapter of ITimetables to ICompositeTimetables.
-
-    It just wraps a ITimetables object under an ICompositeTimetables
-    interface.
-
-        >>> from schooltool.timetable.tests.test_timetable import Parent
-        >>> obj = Parent()
-        >>> ct = CompositeTimetables(obj)
-        >>> ICompositeTimetables.providedBy(ct)
-        True
-
-        >>> obj.getCompositeTimetable = lambda term,schema: [term, schema]
-        >>> ct.getCompositeTimetable("term", "schema")
-        ['term', 'schema']
-
-    """
-    adapts(IHaveTimetables)
-    implements(ICompositeTimetables)
-
-    def __init__(self, context):
-        self.context = context
-
-    def getCompositeTimetable(self, term, schema):
-        """See ICompositeTimetables."""
-        return ITimetables(self.context).getCompositeTimetable(term, schema)
-
-    def listCompositeTimetables(self):
-        """See ICompositeTimetables."""
-        return ITimetables(self.context).listCompositeTimetables()
-
-
 CompositeTimetableTraverser = traverser.AdapterTraverserPlugin(
     'composite-timetables', ICompositeTimetables)
+
 
 class CompositeTimetablesPublishTraverse(object):
     """Traverser for ICompositeTimetables objects

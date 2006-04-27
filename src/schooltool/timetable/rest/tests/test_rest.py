@@ -111,9 +111,10 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         PlacefulSetup.setUp(self)
         self.app = sbsetup.setupSchoolToolSite()
 
-        from schooltool.person.person import Person
+        from schooltool.timetable.interfaces import IOwnTimetables
+        from schooltool.course.section import Section
         from schooltool.resource.resource import Resource
-        self.app["persons"]["john"] = self.person = Person("john", "John Smith")
+        self.app["sections"]["history"] = self.section = Section("History")
         self.app["resources"]['room1'] = Resource("Room1")
         self.app["resources"]['lab1'] = Resource("Lab1")
         self.app["resources"]['lab2'] = Resource("Lab2")
@@ -194,16 +195,16 @@ class TestTimetableFileFactory(TimetableTestMixin, unittest.TestCase):
         from schooltool.app.rest.interfaces import ITimetableFileFactory
         from schooltool.timetable.rest import TimetableFileFactory
         verifyObject(ITimetableFileFactory,
-                     TimetableFileFactory(ITimetables(self.person).timetables,
+                     TimetableFileFactory(ITimetables(self.section).timetables,
                                           TestRequest()))
 
     def test_call(self):
         from schooltool.timetable.rest import TimetableFileFactory
 
-        factory = TimetableFileFactory(ITimetables(self.person).timetables,
+        factory = TimetableFileFactory(ITimetables(self.section).timetables,
                                        TestRequest())
         timetable = factory("2003 fall.schema1", "text/xml", self.full_xml)
-        self.assertEquals(timetable, self.createFull(self.person))
+        self.assertEquals(timetable, self.createFull(self.section))
 
         timetable = factory("2003 fall.schema1", "text/xml", self.empty_xml)
         self.assertEquals(timetable, self.createEmpty())
@@ -214,7 +215,7 @@ class TestTimetablePUT(TimetableTestMixin, unittest.TestCase):
     def setUp(self):
         TimetableTestMixin.setUp(self)
         self.timetable = self.createEmpty()
-        timetables = ITimetables(self.person).timetables
+        timetables = ITimetables(self.section).timetables
         timetables["2003 fall.schema1"] = self.timetable
 
     def test_put(self):
@@ -223,8 +224,8 @@ class TestTimetablePUT(TimetableTestMixin, unittest.TestCase):
         view = TimetablePUT(self.timetable, request)
         view.PUT()
         self.assertEquals(
-            ITimetables(self.person).timetables["2003 fall.schema1"],
-            self.createFull(self.person))
+            ITimetables(self.section).timetables["2003 fall.schema1"],
+            self.createFull(self.section))
 
 
 def doctest_TimetableDictPublishTraverse():
@@ -391,32 +392,32 @@ class TestTimetableDictView(TimetableTestMixin, unittest.TestCase):
 
     def setUp(self):
         TimetableTestMixin.setUp(self)
-        self.tt = ITimetables(self.person).timetables["2003 fall.schema1"] \
+        self.tt = ITimetables(self.section).timetables["2003 fall.schema1"] \
                 = self.createEmpty()
 
     def test_getTimetables(self):
-        view = self.createView(ITimetables(self.person).timetables,
+        view = self.createView(ITimetables(self.section).timetables,
                                TestRequest())
         timetables = view.getTimetables()
         self.assertEquals(len(timetables), 1)
         self.assert_(timetables[0] is self.tt)
 
     def test_timetables(self):
-        view = self.createView(ITimetables(self.person).timetables,
+        view = self.createView(ITimetables(self.section).timetables,
                                TestRequest())
         self.assertEquals(view.timetables, [{
-          'url': "http://127.0.0.1/persons/john/timetables/2003%20fall.schema1",
+          'url': "http://127.0.0.1/sections/history/timetables/2003%20fall.schema1",
           'term': u'2003 fall',
           'schema': u'schema1'}])
 
     def test_get(self):
-        view = self.createView(ITimetables(self.person).timetables,
+        view = self.createView(ITimetables(self.section).timetables,
                                TestRequest())
         self.assertEqualsXML(
             view.GET(),
             """<timetables xmlns:xlink="http://www.w3.org/1999/xlink">
                  <timetable xlink:type="simple" term="2003 fall"
-                            xlink:href="http://127.0.0.1/persons/john/timetables/2003%20fall.schema1"
+                            xlink:href="http://127.0.0.1/sections/history/timetables/2003%20fall.schema1"
                             schema="schema1"/>
                </timetables>""")
 
@@ -425,36 +426,26 @@ class TestCompositeTimetablesView(TimetableTestMixin, unittest.TestCase):
 
     def createView(self, context, request):
         from schooltool.timetable.rest import CompositeTimetablesView
-        return CompositeTimetablesView(ITimetables(context), request)
+        return CompositeTimetablesView(context, request)
 
     def setUp(self):
         TimetableTestMixin.setUp(self)
-        self.tt = ITimetables(self.person).timetables["2003 fall.schema1"] \
-                = self.createEmpty()
+        tt = self.createEmpty()
+        self.tt = ITimetables(self.section).timetables["2003 fall.schema1"] = tt
 
+        class CompositeTimetablesStub(object):
+            def getCompositeTimetable(self, term, schema):
+                if (term, schema) == ("2003 fall", "schema1"):
+                    return tt
+            def listCompositeTimetables(self):
+                return [("2003 fall", "schema1")]
+
+        self.section = CompositeTimetablesStub()
 
     def test_getTimetables(self):
-        view = self.createView(self.person, TestRequest())
+        view = self.createView(self.section, TestRequest())
         timetables = view.getTimetables()
         self.assertEquals(len(timetables), 1)
-
-
-    def test_timetables(self):
-        view = self.createView(self.person, TestRequest())
-        self.assertEquals(view.timetables, [{
-            'url': "http://127.0.0.1/persons/john/composite-timetables/2003%20fall.schema1",
-            'term': u'2003 fall',
-            'schema': u'schema1'}])
-
-    def test_get(self):
-        view = self.createView(self.person, TestRequest())
-        self.assertEqualsXML(
-            view.GET(),
-            """<timetables xmlns:xlink="http://www.w3.org/1999/xlink">
-                 <timetable xlink:type="simple" term="2003 fall"
-                            xlink:href="http://127.0.0.1/persons/john/composite-timetables/2003%20fall.schema1"
-                            schema="schema1"/>
-               </timetables>""")
 
 
 def test_suite():

@@ -33,7 +33,7 @@ from zope.security.proxy import removeSecurityProxy
 from schooltool.attendance.interfaces import IHomeroomAttendance
 from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.sampledata.interfaces import ISampleDataPlugin
-from schooltool.timetable.interfaces import ITimetables
+from schooltool.timetable.interfaces import ICompositeTimetables
 
 
 class SampleAttendancePlugin(object):
@@ -114,8 +114,8 @@ class SampleAttendancePlugin(object):
     def generateSectionAttendance(self, hr_absences):
         """Generate sample data for section attendance."""
         for section in self.app['sections'].values():
-            meetings = ITimetables(section).makeTimetableCalendar(self.start_date,
-                                                                  self.end_date)
+            meetings = ICompositeTimetables(section).makeTimetableCalendar(self.start_date,
+                                                                           self.end_date)
             for meeting in meetings:
 
                 timetable = meeting.activity.timetable

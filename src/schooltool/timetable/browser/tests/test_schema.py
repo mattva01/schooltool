@@ -25,6 +25,8 @@ $Id$
 import unittest
 from pprint import pprint
 
+from zope.interface import directlyProvides
+from zope.interface import directlyProvidedBy
 from zope.i18n import translate
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
@@ -883,7 +885,9 @@ def doctest_TimetableDependentDeleteView():
         >>> from schooltool.timetable.schema import TimetableSchema
         >>> from schooltool.timetable.schema import TimetableSchemaDay
         >>> from schooltool.testing.setup import createSchoolToolApplication
+        >>> from schooltool.timetable.interfaces import IOwnTimetables
         >>> app = sbsetup.setupSchoolToolSite()
+        >>> directlyProvides(app, directlyProvidedBy(app) + IOwnTimetables)
 
         >>> days = ('A', 'B')
         >>> periods1 = ('Green', 'Blue')

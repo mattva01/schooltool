@@ -23,10 +23,16 @@ $Id$
 """
 import unittest
 from sets import Set
+
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.testing import setup, ztapi
-from schooltool.timetable.tests.test_timetable import Content, Parent
+from zope.testing import doctest
+from schooltool.timetable.tests.test_timetable import ContentStub, Parent
 from schooltool.timetable.interfaces import ITimetables
+from schooltool.timetable.interfaces import IOwnTimetables
+from schooltool.timetable.interfaces import IHaveTimetables
+from schooltool.timetable.interfaces import ICompositeTimetables
+from schooltool.timetable import CompositeTimetables
 from schooltool.timetable import TimetablesAdapter
 from zope.interface.verify import verifyObject
 
@@ -39,16 +45,24 @@ class BaseTimetableSourceTest(object):
         self.site = setup.placefulSetUp(True)
         setup.setUpAnnotations()
         setUpRelationships()
-
-        ztapi.provideAdapter(IAttributeAnnotatable, ITimetables,
+        ztapi.provideAdapter(IOwnTimetables, ITimetables,
                              TimetablesAdapter)
+        class CompositeTimetablesStub(object):
+            def __init__(self, context):
+                self.context = context
+            def listCompositeTimetables(self):
+                return self.context.listCompositeTimetables()
+            def getCompositeTimetable(self, *args):
+                return self.context.getCompositeTimetable(*args)
+        ztapi.provideAdapter(IHaveTimetables, ICompositeTimetables,
+                             CompositeTimetablesStub)
 
     def tearDown(self):
         setup.placefulTearDown()
 
     def test(self):
         from schooltool.timetable.interfaces import ITimetableSource
-        context = ITimetables(Content())
+        context = ContentStub()
         adapter = self.createAdapter(context)
         verifyObject(ITimetableSource, adapter)
 
@@ -62,9 +76,9 @@ class BaseTimetableSourceTest(object):
     def test_getTimetable(self):
         from schooltool.timetable import TimetableActivity
 
-        tm = ITimetables(Content())
+        content = ContentStub()
         parent = Parent()
-        self.createRelationship(tm.object, parent)
+        self.createRelationship(content, parent)
 
         composite = self.newTimetable()
         english = TimetableActivity("English")
@@ -80,7 +94,7 @@ class BaseTimetableSourceTest(object):
         parent.listCompositeTimetables = (
             lambda: Set([("2003 fall", "sequential")]))
 
-        adapter = self.createAdapter(tm)
+        adapter = self.createAdapter(content)
         result = adapter.getTimetable("2003 fall", "sequential")
         self.assertEqual(result, composite)
 
@@ -90,7 +104,7 @@ class BaseTimetableSourceTest(object):
 
         # let's try it with two timetables
         otherparent = Parent()
-        self.createRelationship(tm.object, otherparent)
+        self.createRelationship(content, otherparent)
 
         othertt = self.newTimetable()
         math = TimetableActivity("Math")
@@ -106,13 +120,13 @@ class BaseTimetableSourceTest(object):
         self.assertEqual(result, expected)
 
     def test_listTimetables(self):
-        tm = ITimetables(Content())
+        content = ContentStub()
 
-        adapter = self.createAdapter(tm)
+        adapter = self.createAdapter(content)
         self.assertEqual(adapter.listTimetables(), Set())
 
         parent = Parent()
-        self.createRelationship(tm.object, parent)
+        self.createRelationship(content, parent)
 
         parent.listCompositeTimetables = (
             lambda: Set([("2003 fall", "sequential")]))
@@ -121,7 +135,7 @@ class BaseTimetableSourceTest(object):
                          Set([("2003 fall", "sequential")]))
 
         otherparent = Parent()
-        self.createRelationship(tm.object, otherparent)
+        self.createRelationship(content, otherparent)
 
         otherparent.listCompositeTimetables = (
             lambda: Set([("2005 fall", "sequential")]))
@@ -155,10 +169,47 @@ class TestInstructionTimetableSource(BaseTimetableSourceTest,
         Instruction(instructor=context, section=related)
 
 
+def doctest_OwnedTimetableSource():
+    """Tests for OwnedTimetableSource
+
+        >>> from schooltool.timetable.source import OwnedTimetableSource
+        >>> from zope.interface import implements
+        >>> class Timetables(object):
+        ...     timetables = {}
+
+        >>> class TTOwnerStub(object):
+        ...     implements(IOwnTimetables)
+        ...     timetables = Timetables()
+        ...     def __conform__(self, iface):
+        ...         if iface == ITimetables:
+        ...             return self.timetables
+
+        >>> owner = TTOwnerStub()
+        >>> source = OwnedTimetableSource(owner)
+
+        >>> source.getTimetable("2003", "autumn") is None
+        True
+
+        >>> source.listTimetables()
+        Set([])
+
+        >>> ITimetables(owner).timetables = {'2003.autumn': "a timetable",
+        ...                                  '2005.spring': "a pine corn"}
+        >>> source.listTimetables()
+        Set([('2003', 'autumn'), ('2005', 'spring')])
+
+        >>> source.getTimetable("2003", "autumn")
+        'a timetable'
+
+    """
+
+
 def test_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestMembershipTimetableSource))
-    suite.addTest(unittest.makeSuite(TestInstructionTimetableSource))
+    return unittest.TestSuite([
+        doctest.DocTestSuite(setUp=setup.placelessSetUp,
+                             tearDown=setup.placelessTearDown),
+        unittest.makeSuite(TestMembershipTimetableSource),
+        unittest.makeSuite(TestInstructionTimetableSource)])
     return suite
 
 if __name__ == '__main__':

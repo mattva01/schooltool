@@ -156,7 +156,8 @@ from schooltool.timetable.interfaces import ITimetableReplacedEvent
 from schooltool.timetable.interfaces import ISchooldaySlot
 from schooltool.timetable.interfaces import ISchooldayTemplate
 from schooltool.timetable.interfaces import ISchooldayTemplateWrite
-from schooltool.timetable.interfaces import ITimetables, IHaveTimetables
+from schooltool.timetable.interfaces import ITimetables, IHaveTimetables, IOwnTimetables
+from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.timetable.interfaces import ITimetableSource
 from schooltool.timetable.interfaces import ITimetableSchema
 from schooltool.timetable.interfaces import Unchanged
@@ -571,7 +572,7 @@ class TimetablesAdapter(object):
     ``ICompositeTimetableProvider`` facets.
     """
     implements(ITimetables)
-    adapts(IHaveTimetables)
+    adapts(IOwnTimetables)
 
     def __init__(self, context):
         self.object = context
@@ -581,19 +582,37 @@ class TimetablesAdapter(object):
             self.timetables = annotations[TIMETABLES_KEY] = TimetableDict()
             self.timetables.__parent__ = context
 
+
+class CompositeTimetables(object):
+    """Adapter of IHaveTimetables to ICompositeTimetables.
+
+    It just wraps a IHaveTimetables object under an ICompositeTimetables
+    interface.
+
+        >>> from schooltool.timetable.tests.test_timetable import Parent
+        >>> obj = Parent()
+        >>> ct = CompositeTimetables(obj)
+        >>> ICompositeTimetables.providedBy(ct)
+        True
+
+        >>> obj.getCompositeTimetable = lambda term,schema: [term, schema]
+        >>> ct.getCompositeTimetable("term", "schema")
+        ['term', 'schema']
+
+    """
+    adapts(IHaveTimetables)
+    implements(ICompositeTimetables)
+
+    def __init__(self, context):
+        self.context = context
+
     def getCompositeTimetable(self, period_id, schema_id):
         timetables = []
         # Get the timetables from timetable source subscription adapters
-        for adapter in zapi.subscribers((self, ), ITimetableSource):
+        for adapter in zapi.subscribers((self.context, ), ITimetableSource):
             tt = adapter.getTimetable(period_id, schema_id)
             if tt is not None:
                 timetables.append(tt)
-
-        # Add the individual timetable to the composite
-        try:
-            timetables.append(self.timetables["%s.%s" % (period_id, schema_id)])
-        except KeyError:
-            pass
 
         if not timetables:
             return None
@@ -604,15 +623,15 @@ class TimetablesAdapter(object):
             result.update(tt)
 
         parent = TimetableDict()
-        parent.__parent__ = self.object
+        parent.__parent__ = self.context
         parent.__name__ = 'composite-timetables'
         parent[".".join((period_id, schema_id))] = result
 
         return result
 
     def listCompositeTimetables(self):
-        keys = Set([tuple(k.split(".")) for k in self.timetables.keys()])
-        for adapter in zapi.subscribers((self, ), ITimetableSource):
+        keys = Set()
+        for adapter in zapi.subscribers((self.context, ), ITimetableSource):
             keys |= adapter.listTimetables()
         return keys
 
@@ -631,7 +650,7 @@ class TimetablesAdapter(object):
         result = ImmutableCalendar(events)
         # Parent is needed so that we can find out the owner of this calendar.
         directlyProvides(result, ILocation)
-        result.__parent__ = self.object
+        result.__parent__ = self.context
         result.__name__ = 'timetable-calendar'
         return result
 
@@ -654,7 +673,7 @@ def findRelatedTimetables(ob):
     app = getSchoolToolApplication(ob)
     timetables = []
 
-    for ttowner in findObjectsProviding(app, IHaveTimetables):
+    for ttowner in findObjectsProviding(app, IOwnTimetables):
         timetables += ITimetables(ttowner).timetables.values()
 
     result = []

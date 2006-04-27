@@ -12,16 +12,23 @@
   <!-- Subscribers -->
 
   <subscriber
-      for=".interfaces.ITimetables"
+      for=".interfaces.IHaveTimetables"
       provides=".interfaces.ITimetableSource"
       factory="schooltool.timetable.source.MembershipTimetableSource"
       permission="zope.Public"
       />
 
   <subscriber
-      for=".interfaces.ITimetables"
+      for=".interfaces.IHaveTimetables"
       provides=".interfaces.ITimetableSource"
       factory="schooltool.timetable.source.InstructionTimetableSource"
+      permission="zope.Public"
+      />
+
+  <subscriber
+      for=".interfaces.IOwnTimetables"
+      provides=".interfaces.ITimetableSource"
+      factory="schooltool.timetable.source.OwnedTimetableSource"
       permission="zope.Public"
       />
 
@@ -32,6 +39,15 @@
 
   <adapter
       factory=".TimetablesAdapter"
+      trusted="true"
+      permission="zope.Public" />
+
+  <class class=".CompositeTimetables">
+    <allow interface=".interfaces.ICompositeTimetables" />
+  </class>
+
+  <adapter
+      factory=".CompositeTimetables"
       trusted="true"
       permission="zope.Public" />
 

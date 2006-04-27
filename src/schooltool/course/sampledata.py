@@ -34,6 +34,7 @@ from schooltool.app.relationships import Instruction, CourseSections
 from schooltool.app.relationships import URICourse, URISection
 from schooltool.app.membership import Membership
 from schooltool.relationship import getRelatedObjects
+from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable import TimetableActivity
 from schooltool.app.cal import CalendarEvent
@@ -200,7 +201,7 @@ class SampleSectionAssignments(object):
         self.taken_projectors = set()
 
         for section in app['sections'].values():
-            ttcal = ITimetables(section).makeTimetableCalendar()
+            ttcal = ICompositeTimetables(section).makeTimetableCalendar()
             calendar = ISchoolToolCalendar(section)
             for event in ttcal:
                 if self.random.randrange(13) == 7: # is today lucky?

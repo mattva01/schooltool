@@ -11,7 +11,7 @@
   </zope:class>
 
   <zope:subscriber
-      for="schooltool.timetable.interfaces.IHaveTimetables
+      for="schooltool.timetable.interfaces.IOwnTimetables
            zope.publisher.interfaces.browser.IBrowserRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".TimetablesTraverser"
@@ -22,7 +22,7 @@
   <menuItem
       menu="schooltool_actions"
       title="View Timetables"
-      for="schooltool.timetable.interfaces.IHaveTimetables"
+      for="schooltool.timetable.interfaces.IOwnTimetables"
       action="timetables/index.html"
       />
 

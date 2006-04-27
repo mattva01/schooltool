@@ -614,7 +614,12 @@ class ITimetableDict(IContainer):
     """
 
 
-class IHaveTimetables(IAnnotatable):
+class IHaveTimetables(Interface):
+    """A marker interface for content objects to declare themselves as having
+       timetables."""
+
+
+class IOwnTimetables(IHaveTimetables, IAnnotatable):
     """A marker interface for content objects to declare themselves as having
        timetables."""
 
@@ -639,6 +644,10 @@ class ITimetables(Interface):
         will inherit timetable events through composition (see
         getCompositeTimetable).
         """)
+
+
+class ICompositeTimetables(Interface):
+    """An interface for objects that have composite timetables."""
 
     def getCompositeTimetable(term_id, tt_schema_id):
         """Return a composite timetable for a given object with a

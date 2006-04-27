@@ -34,7 +34,10 @@ from zope.app.testing import ztapi
 
 from schooltool.app.browser import testing
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.timetable.interfaces import ITimetables
+from schooltool.timetable.interfaces import IOwnTimetables
 from schooltool.app.app import getSchoolToolApplication
+from schooltool.timetable import TimetablesAdapter
 from schooltool.testing import setup as sbsetup
 
 
@@ -133,7 +136,10 @@ def doctest_TimetableView():
         >>> from schooltool.timetable import Timetable
         >>> from schooltool.timetable import TimetableDay, TimetableActivity
         >>> from schooltool.timetable.interfaces import ITimetables
-        >>> from schooltool.course.section import Section
+
+        >>> from schooltool.course.section import Section as STSection
+        >>> class Section(STSection):
+        ...     implements(IOwnTimetables)
 
     Create some context:
 
@@ -164,6 +170,8 @@ def doctest_PersonTimetableSetupView():
     We will need an application object
 
         >>> app = sbsetup.setupSchoolToolSite()
+        >>> ztapi.provideAdapter(IOwnTimetables, ITimetables,
+        ...                      TimetablesAdapter)
 
     and a Person from that application
 
@@ -176,7 +184,9 @@ def doctest_PersonTimetableSetupView():
 
     We will need some sections
 
-        >>> from schooltool.course.section import Section
+        >>> from schooltool.course.section import Section as STSection
+        >>> class Section(STSection):
+        ...     implements(IOwnTimetables)
         >>> app["sections"]["math"] = math = Section("Math")
         >>> app["sections"]["biology"] = biology = Section("Biology")
         >>> app["sections"]["physics"] = physics = Section("Physics")
@@ -260,7 +270,7 @@ def doctest_PersonTimetableSetupView():
         >>> pprint(section_map)
         {('Mon', '10:00'): Set([]),
          ('Mon', '9:00'): Set([]),
-         ('Tue', '10:00'): Set([<schooltool.course.section.Section ...>]),
+         ('Tue', '10:00'): Set([<schooltool...Section ...>]),
          ('Tue', '9:00'): Set([])}
 
     allSections simply takes a union of a number of sets containing sections.
@@ -526,10 +536,15 @@ def doctest_SectionTimetableSetupView():
     We will need an application object
 
         >>> app = sbsetup.setupSchoolToolSite()
+        >>> ztapi.provideAdapter(IOwnTimetables, ITimetables,
+        ...                      TimetablesAdapter)
+
+        >>> from schooltool.course.section import Section as STSection
+        >>> class Section(STSection):
+        ...     implements(IOwnTimetables)
 
     We will need a section
 
-        >>> from schooltool.course.section import Section
         >>> from schooltool.timetable.interfaces import ITimetables
         >>> app["sections"]["math"] = math = Section("Math")
         >>> ITimetables(math).timetables.keys()

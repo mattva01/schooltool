@@ -47,6 +47,7 @@ from zope.i18n import translate
 
 from schooltool.batching.batch import Batch
 from schooltool.timetable.interfaces import ITimetables
+from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.timetable.interfaces import ITimetableCalendarEvent
 from schooltool.calendar.utils import parse_date, parse_time
 from schooltool.course.interfaces import ISection
@@ -175,7 +176,7 @@ def getCurrentSectionMeeting(section, datetime):
     date = datetime_to_schoolday_date(datetime)
     closest_meeting = None
     last_meeting = None
-    events = ITimetables(section).makeTimetableCalendar(date, date)
+    events = ICompositeTimetables(section).makeTimetableCalendar(date, date)
     for ev in reversed(sorted(events, key=lambda e: e.dtstart)):
         if datetime < ev.dtstart + ev.duration:
             closest_meeting = ev
@@ -190,7 +191,7 @@ def getPeriodEventForSection(section, date, period_id):
     Returns the event of the section meeting if the section has a period with a
     given id on a given date, and None otherwise.
     """
-    for ev in ITimetables(section).makeTimetableCalendar(date, date):
+    for ev in ICompositeTimetables(section).makeTimetableCalendar(date, date):
         if period_id == ev.period_id:
             return ev
     return None

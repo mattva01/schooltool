@@ -33,7 +33,7 @@ from zope.interface.verify import verifyObject
 from zope.app.testing import ztapi, setup
 
 from schooltool.sampledata.interfaces import ISampleDataPlugin
-from schooltool.timetable.interfaces import ITimetables
+from schooltool.timetable.interfaces import ICompositeTimetables
 
 
 class TermStub(object):
@@ -270,9 +270,9 @@ def doctest_SampleAttendancePlugin_generateSectionAttendance():
         >>> plugin.end_date = term.last
         >>> plugin.rng = random.Random(42)
 
-    The "sections" need to be adaptable to ITimetables
+    The "sections" need to be adaptable to ICompositeTimetables
 
-        >>> ztapi.provideAdapter(None, ITimetables, FakeTimetablesAdapter)
+        >>> ztapi.provideAdapter(None, ICompositeTimetables, FakeTimetablesAdapter)
 
     And section members need to be adaptable to ISectionAttendance
 

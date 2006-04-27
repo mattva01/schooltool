@@ -310,27 +310,8 @@ We can have a look at the timetable too, and see a few timetable activities:
           <td class="activity" width="18%"></td>
         </tr>
 
-
-Timetables on persons, groups, and resources
---------------------------------------------
-
-Persons, groups and resources should have timetables.
-
-Frog's timetable list can be accessed through a menu item in the main page:
-
-    >>> manager.getLink('Persons').click()
-    >>> manager.getLink('Frog').click()
-    >>> manager.getLink('View Timetables').click()
-
-We can view the person's timetable list, although it will be empty:
-
-    >>> print analyze.queryHTML('//div[@class="info-block"]',
-    ...                         manager.contents)[0]
-    <div class="info-block">
-        <h3>Timetables</h3>
-        <ul></ul></div>
-
-The activities should show up in the calendar:
+The activities should show up in the calendar of the users that are in
+this section too:
 
     >>> manager.open('http://localhost/'
     ...              'persons/frog/calendar/2005-09-05')

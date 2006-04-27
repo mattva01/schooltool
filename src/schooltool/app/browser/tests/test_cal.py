@@ -3178,13 +3178,13 @@ def doctest_CalendarEventBookingView_getConflictingEvents():
         ...     def makeTimetableCalendar(self):
         ...         return CalendarStub("timetable", [EventStub("tt")])
 
-        >>> from schooltool.timetable.interfaces import ITimetables
+        >>> from schooltool.timetable.interfaces import ICompositeTimetables
         >>> class ResourceStub(object):
         ...     calendar = CalendarStub("calendar", [EventStub("cal")])
         ...     def __conform__(self, iface):
         ...         if iface is ISchoolToolCalendar:
         ...             return self.calendar
-        ...         elif iface is ITimetables:
+        ...         elif iface is ICompositeTimetables:
         ...             return TimetableStub()
 
         >>> context = EventStub("evt")
@@ -5053,9 +5053,10 @@ def doctest_CalendarListSubscriber(self):
         >>> from schooltool.app.cal import CALENDAR_KEY
         >>> from zope.interface import implements
         >>> from zope.annotation.interfaces import IAttributeAnnotatable
-        >>> from schooltool.timetable.interfaces import ITimetables
+        >>> from schooltool.timetable.interfaces import ICompositeTimetables
         >>> class PersonStub:
-        ...     implements(IAttributeAnnotatable, IHaveCalendar, ITimetables)
+        ...     implements(IAttributeAnnotatable, IHaveCalendar,
+        ...                ICompositeTimetables)
         ...     def __init__(self, title, calendar=None):
         ...         self.title = title
         ...         self.__annotations__= {CALENDAR_KEY: calendar}
