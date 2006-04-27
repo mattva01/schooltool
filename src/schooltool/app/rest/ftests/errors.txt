@@ -115,16 +115,17 @@ response.  Let's create a view that raises this error:
     ...     def POST(self):
     ...         raise RestError("Houston, we've got a problem")
 
-    >>> from schooltool.app.interfaces import ISchoolToolApplication
+
+    >>> from schooltool.person.interfaces import IPerson
     >>> from zope.publisher.interfaces.http import IHTTPRequest
     >>> from zope.interface import Interface
-    >>> ztapi.provideAdapter((ISchoolToolApplication, IHTTPRequest), Interface,
+    >>> ztapi.provideAdapter((IPerson, IHTTPRequest), Interface,
     ...                      BadView, 'POST')
 
 Now, let's trigger it:
 
     >>> print rest("""
-    ... POST / HTTP/1.1
+    ... POST /persons/test HTTP/1.1
     ... Content-Type: text/xml
     ... """)
     HTTP/1.1 400 Bad Request
