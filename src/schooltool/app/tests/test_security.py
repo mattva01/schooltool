@@ -28,7 +28,7 @@ from zope.testing import doctest
 from zope.app.testing import setup, ztapi
 from zope.app import zapi
 from zope.traversing.interfaces import TraversalError
-from zope.component.exceptions import ComponentLookupError
+from zope.component.interfaces import ComponentLookupError
 from zope.app.security.interfaces import IAuthentication
 from zope.app.container.contained import ObjectAddedEvent
 
