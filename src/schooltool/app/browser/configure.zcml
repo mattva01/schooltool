@@ -113,7 +113,7 @@
 
   <zope:adapter
       for="schooltool.app.interfaces.ISchoolToolApplication"
-      provides="zope.app.size.interfaces.ISized"
+      provides="zope.size.interfaces.ISized"
       factory=".SchoolToolSized"
       />
 

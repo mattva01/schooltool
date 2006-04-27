@@ -118,7 +118,7 @@ registrations for those adapters.
 
 Let's say I am writing an `ISized` adapter for our file:
 
-  >>> from zope.app import size
+  >>> from zope import size
   >>> class FileSized(object):
   ...     zope.component.adapts(IFile)
   ...     zope.interface.implements(size.interfaces.ISized)
