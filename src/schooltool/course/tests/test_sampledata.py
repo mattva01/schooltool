@@ -27,7 +27,7 @@ import unittest
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
 from zope.app.testing import setup
-from zope.app.tests import ztapi
+from zope.app.testing import ztapi
 
 from schooltool.testing import setup as stsetup
 from schooltool.relationship.tests import setUpRelationships

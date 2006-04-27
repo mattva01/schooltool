@@ -84,7 +84,7 @@ IAttributeAnnotatable.
 
 We need some setup to make Zope 3 annotations work.
 
-    >>> from zope.app.tests import setup
+    >>> from zope.app.testing import setup
     >>> setup.placelessSetUp()
     >>> setup.setUpAnnotations()
 

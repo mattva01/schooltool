@@ -15,7 +15,7 @@ Boring (or interesting, depending on your perspective) implementation details
 We register a path adapter 'sortby' and it becomes available in TALES
 path expressions.
 
-    >>> from zope.app.tests import setup
+    >>> from zope.app.testing import setup
     >>> setup.placelessSetUp()
 
     >>> from zope.component import provideAdapter

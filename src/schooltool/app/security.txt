@@ -25,7 +25,7 @@ SchoolBell authentication utility
 
 (Handwaving...)
 
-    >>> from zope.app.tests import setup
+    >>> from zope.app.testing import setup
     >>> root = setup.placefulSetUp(True)
     >>> from schooltool.relationship.tests import setUpRelationships
     >>> setUpRelationships()
@@ -34,7 +34,7 @@ SchoolBell authentication utility
 
     >>> from zope.app.security.principalregistry import principalRegistry
     >>> from zope.app.security.interfaces import IAuthentication
-    >>> from zope.app.tests import ztapi
+    >>> from zope.app.testing import ztapi
     >>> ztapi.provideUtility(IAuthentication, principalRegistry)
 
     Session setup:

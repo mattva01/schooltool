@@ -27,7 +27,7 @@ from pprint import pprint
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
 from zope.app.container.contained import ObjectAddedEvent
-from zope.app.tests import setup
+from zope.app.testing import setup
 
 from schooltool.testing.setup import setupLocalGrants
 from schooltool.testing import setup as sbsetup
@@ -194,7 +194,7 @@ def doctest_Person():
 def doctest_PersonPreferences():
     r"""Tests for the Preferences adapter
 
-        >>> from zope.app.tests import setup
+        >>> from zope.app.testing import setup
         >>> setup.placelessSetUp()
         >>> setup.setUpAnnotations()
         >>> from schooltool.person.person import Person
@@ -241,7 +241,7 @@ def doctest_PersonPreferences():
 def doctest_PersonDetails():
     r"""Tests for the contact information Details adapter
 
-        >>> from zope.app.tests import setup
+        >>> from zope.app.testing import setup
         >>> setup.placelessSetUp()
         >>> setup.setUpAnnotations()
         >>> from schooltool.person.person import Person

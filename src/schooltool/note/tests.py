@@ -29,7 +29,7 @@ from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 
 from zope.annotation.interfaces import IAttributeAnnotatable
-from zope.app.tests import setup, ztapi
+from zope.app.testing import setup, ztapi
 
 from schooltool.app.browser.testing import setUp, tearDown
 
@@ -39,7 +39,7 @@ def doctest_getNotes():
 
     We need to set up Zope 3 annotations
 
-        >>> from zope.app.tests import setup
+        >>> from zope.app.testing import setup
         >>> setup.placelessSetUp()
         >>> setup.setUpAnnotations()
 

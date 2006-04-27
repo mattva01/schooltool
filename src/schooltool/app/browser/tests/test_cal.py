@@ -32,7 +32,7 @@ from zope.component import provideSubscriptionAdapter
 from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
-from zope.app.tests import setup, ztapi
+from zope.app.testing import setup, ztapi
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.publisher.browser import BrowserView
 from zope.traversing.interfaces import IContainmentRoot

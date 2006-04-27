@@ -31,7 +31,7 @@ SomeContained).
 $Id$
 """
 
-from zope.app.tests import setup
+from zope.app.testing import setup
 from zope.interface import implements
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container.contained import Contained
@@ -72,12 +72,12 @@ def setUpRelationships():
     """Set up the adapter from IAnnotatable to IRelationshipLinks.
 
     This function is created for use in unit tests.  You should call
-    zope.app.tests.setup.placelessSetUp before calling this function
-    (and don't forget to call zope.app.tests.setup.placelessTearDown after
-    you're done).  You should also call zope.app.tests.setup.setUpAnnotations
+    zope.app.testing.setup.placelessSetUp before calling this function
+    (and don't forget to call zope.app.testing.setup.placelessTearDown after
+    you're done).  You should also call zope.app.testing.setup.setUpAnnotations
     to get a complete test fixture.
     """
-    from zope.app.tests import ztapi
+    from zope.app.testing import ztapi
     from zope.annotation.interfaces import IAnnotatable
     from schooltool.relationship.interfaces import IRelationshipLinks
     from schooltool.relationship.annotatable import getRelationshipLinks

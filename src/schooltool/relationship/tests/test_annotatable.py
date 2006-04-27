@@ -25,7 +25,7 @@ $Id$
 import unittest
 
 from zope.testing import doctest
-from zope.app.tests import setup
+from zope.app.testing import setup
 from zope.interface import implements
 from zope.annotation.interfaces import IAttributeAnnotatable
 
@@ -35,7 +35,7 @@ def doctest_getRelationshipLinks():
 
     We need to set up Zope 3 annotations
 
-        >>> from zope.app.tests import setup
+        >>> from zope.app.testing import setup
         >>> setup.placelessSetUp()
         >>> setup.setUpAnnotations()
 

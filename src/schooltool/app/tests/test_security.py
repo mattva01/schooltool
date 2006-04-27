@@ -25,7 +25,7 @@ $Id$
 import unittest
 
 from zope.testing import doctest
-from zope.app.tests import setup, ztapi
+from zope.app.testing import setup, ztapi
 from zope.app import zapi
 from zope.traversing.interfaces import TraversalError
 from zope.component.exceptions import ComponentLookupError
