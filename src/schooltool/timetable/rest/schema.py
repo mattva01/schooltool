@@ -27,7 +27,7 @@ import datetime
 from zope.interface import implements
 from zope.component import adapts
 from zope.app import zapi
-from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
+from zope.filerepresentation.interfaces import IFileFactory, IWriteFile
 
 from schooltool.app.rest import View, Template
 from schooltool.app.rest.app import GenericContainerView

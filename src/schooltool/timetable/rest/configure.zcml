@@ -93,14 +93,14 @@
 
   <adapter
       for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
-      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      provides="zope.filerepresentation.interfaces.IFileFactory"
       factory=".schema.TimetableSchemaFileFactory"
       permission="zope.Public"
       />
 
   <adapter
       for="schooltool.timetable.interfaces.ITimetableSchema"
-      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      provides="zope.filerepresentation.interfaces.IWriteFile"
       factory=".schema.TimetableSchemaFile"
       permission="zope.Public"
       />

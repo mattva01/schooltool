@@ -33,14 +33,14 @@
 
   <adapter
       for="..interfaces.ITermContainer"
-      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      provides="zope.filerepresentation.interfaces.IFileFactory"
       factory=".term.TermFileFactory"
       permission="zope.Public"
       />
 
   <adapter
       for="..interfaces.ITerm"
-      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      provides="zope.filerepresentation.interfaces.IWriteFile"
       factory=".term.TermFile"
       permission="zope.Public"
       />

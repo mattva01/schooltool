@@ -28,7 +28,7 @@ from cStringIO import StringIO
 from zope.interface import Interface
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
-from zope.app.filerepresentation.interfaces import IFileFactory
+from zope.filerepresentation.interfaces import IFileFactory
 from zope.app.testing import setup, ztapi
 from zope.traversing import namespace
 from zope.traversing.interfaces import ITraversable

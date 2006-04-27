@@ -20,14 +20,14 @@
 
   <adapter
       for="..interfaces.IResourceContainer"
-      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      provides="zope.filerepresentation.interfaces.IFileFactory"
       factory=".resource.ResourceFileFactory"
       permission="zope.Public"
       />
 
   <adapter
       for="..interfaces.IResource"
-      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      provides="zope.filerepresentation.interfaces.IWriteFile"
       factory=".resource.ResourceFile"
       permission="zope.Public"
       />

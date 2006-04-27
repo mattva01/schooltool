@@ -27,7 +27,7 @@ import operator
 
 from zope.component import adapts
 from zope.interface import implements
-from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
+from zope.filerepresentation.interfaces import IFileFactory, IWriteFile
 from zope.traversing.api import getPath
 
 from schooltool.calendar.icalendar import read_icalendar

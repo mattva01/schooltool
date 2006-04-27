@@ -26,7 +26,7 @@ from zope.interface import Interface
 from zope.interface import directlyProvides
 from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
-from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
+from zope.filerepresentation.interfaces import IFileFactory, IWriteFile
 from zope.app.testing import ztapi, setup
 from zope.traversing import namespace
 from zope.traversing.interfaces import ITraversable

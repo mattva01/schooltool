@@ -65,14 +65,14 @@
 
   <adapter
       for="..interfaces.IPersonContainer"
-      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      provides="zope.filerepresentation.interfaces.IFileFactory"
       factory=".person.PersonFileFactory"
       permission="zope.Public"
       />
 
   <adapter
       for="..interfaces.IPerson"
-      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      provides="zope.filerepresentation.interfaces.IWriteFile"
       factory=".person.PersonFile"
       permission="zope.Public"
       />

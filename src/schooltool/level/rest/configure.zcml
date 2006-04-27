@@ -22,14 +22,14 @@
 
   <adapter
       for="..interfaces.ILevelContainer"
-      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      provides="zope.filerepresentation.interfaces.IFileFactory"
       factory=".level.LevelFileFactory"
       permission="zope.Public"
       />
 
   <adapter
       for="..interfaces.ILevel"
-      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      provides="zope.filerepresentation.interfaces.IWriteFile"
       factory=".level.LevelFile"
       permission="zope.Public"
       />

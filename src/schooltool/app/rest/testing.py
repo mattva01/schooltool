@@ -53,7 +53,7 @@ class ContainerViewTestMixin(XMLCompareMixin, QuietLibxml2Mixin):
         setup.placefulSetUp()
         self.setUpLibxml2()
 
-        from zope.app.filerepresentation.interfaces import IFileFactory
+        from zope.filerepresentation.interfaces import IFileFactory
         ztapi.provideView(Interface, Interface, ITraversable, 'view',
                           zope.traversing.namespace.view)
         ztapi.provideAdapter(IGroupContainer, INameChooser,
@@ -114,7 +114,7 @@ class ContainerViewTestMixin(XMLCompareMixin, QuietLibxml2Mixin):
 class FileFactoriesSetUp(PlacefulSetup):
 
     def setUp(self):
-        from zope.app.filerepresentation.interfaces import IFileFactory
+        from zope.filerepresentation.interfaces import IFileFactory
         PlacefulSetup.setUp(self)
         ztapi.provideAdapter(IGroupContainer, IFileFactory,
                              GroupFileFactory)

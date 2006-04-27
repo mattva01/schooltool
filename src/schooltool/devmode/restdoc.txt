@@ -505,7 +505,7 @@ Without any adapters registered, the result is pretty skimpy:
 If we now register an `IWriteFile` adapter, an 'edit' section will be added to
 the dictionary:
 
-  >>> from zope.app.filerepresentation.interfaces import IWriteFile
+  >>> from zope.filerepresentation.interfaces import IWriteFile
   >>> class FileWriteFile(object):
   ...     zope.component.adapts(IFile)
   ...     zope.interface.implements(IWriteFile)
@@ -529,7 +529,7 @@ Now, the `IFileFactory` adapter must be registered for the *container* of the
 `IFile` interface. We already defined the container interface to be
 `IFileContainer`.
 
-  >>> from zope.app.filerepresentation.interfaces import IFileFactory
+  >>> from zope.filerepresentation.interfaces import IFileFactory
   >>> class FileFileFactory(object):
   ...     zope.component.adapts(IFileContainer)
   ...     zope.interface.implements(IFileFactory)

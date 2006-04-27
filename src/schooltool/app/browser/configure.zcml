@@ -119,7 +119,7 @@
 
   <zope:adapter
       for="schooltool.calendar.browser.CalendarICalendarView"
-      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      provides="zope.filerepresentation.interfaces.IWriteFile"
       factory=".cal.enableICalendarUpload"
       trusted="yes"
       />

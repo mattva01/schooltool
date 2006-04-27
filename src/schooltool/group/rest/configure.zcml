@@ -20,14 +20,14 @@
 
   <adapter
       for="..interfaces.IGroupContainer"
-      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      provides="zope.filerepresentation.interfaces.IFileFactory"
       factory=".group.GroupFileFactory"
       permission="zope.Public"
       />
 
   <adapter
       for="..interfaces.IGroup"
-      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      provides="zope.filerepresentation.interfaces.IWriteFile"
       factory=".group.GroupFile"
       permission="zope.Public"
       />

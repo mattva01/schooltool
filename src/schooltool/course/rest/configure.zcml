@@ -21,7 +21,7 @@
 
   <adapter
       for="..interfaces.ICourseContainer"
-      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      provides="zope.filerepresentation.interfaces.IFileFactory"
       factory=".course.CourseFileFactory"
       permission="zope.Public"
       />
@@ -52,7 +52,7 @@
 
   <adapter
       for="..interfaces.ICourse"
-      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      provides="zope.filerepresentation.interfaces.IWriteFile"
       factory=".course.CourseFile"
       permission="zope.Public"
       />
@@ -85,7 +85,7 @@
 
   <adapter
       for="..interfaces.ISectionContainer"
-      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      provides="zope.filerepresentation.interfaces.IFileFactory"
       factory=".section.SectionFileFactory"
       permission="zope.Public"
       />
@@ -108,7 +108,7 @@
 
   <adapter
       for="..interfaces.ISection"
-      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      provides="zope.filerepresentation.interfaces.IWriteFile"
       factory=".section.SectionFile"
       permission="zope.Public"
       />

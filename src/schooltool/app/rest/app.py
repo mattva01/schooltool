@@ -19,13 +19,13 @@
 """
 RESTive views for SchoolToolApplication
 
-$Id: app.py 3419 2005-04-14 18:34:36Z alga $
+$Id$
 """
 
 from zope.app import zapi
 from zope.interface import implements
 from zope.app.container.interfaces import INameChooser
-from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
+from zope.filerepresentation.interfaces import IFileFactory, IWriteFile
 
 from schooltool.xmlparsing import XMLDocument
 from schooltool.app.rest import View, Template

@@ -19,7 +19,7 @@
 """
 Tests for person REST views.
 
-$Id: test_app.py 4342 2005-07-25 16:02:24Z bskahan $
+$Id$
 """
 import unittest
 from cStringIO import StringIO
@@ -29,7 +29,7 @@ from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 from zope.publisher.interfaces import NotFound
 from zope.testing import doctest
-from zope.app.filerepresentation.interfaces import IFileFactory
+from zope.filerepresentation.interfaces import IFileFactory
 from zope.app.testing import ztapi, setup
 
 from schooltool.app.rest.testing import ApplicationObjectViewTestMixin

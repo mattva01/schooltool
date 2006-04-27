@@ -28,7 +28,7 @@ from zope.traversing.interfaces import IPathAdapter
 from zope.app.pagetemplate import talesapi
 from zope.publisher.browser import TestRequest
 from zope.app.component.testing import PlacefulSetup
-from zope.app.filerepresentation.interfaces import IFileFactory
+from zope.filerepresentation.interfaces import IFileFactory
 from zope.app.testing import ztapi
 
 from schooltool.app.rest import testing

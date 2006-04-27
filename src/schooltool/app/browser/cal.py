@@ -52,7 +52,7 @@ from zope.app.form.interfaces import WidgetInputError, WidgetsError
 from zope.app.form.utility import getWidgetsData
 from zope.publisher.browser import BrowserView
 from zope.traversing.browser.absoluteurl import absoluteURL
-from zope.app.filerepresentation.interfaces import IWriteFile, IReadFile
+from zope.filerepresentation.interfaces import IWriteFile, IReadFile
 from zope.app.session.interfaces import ISession
 from zope.traversing.api import getPath
 

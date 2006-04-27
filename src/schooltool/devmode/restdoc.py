@@ -36,7 +36,7 @@ from zope.app.apidoc.interfaces import IDocumentationModule
 from zope.app.basicskin.standardmacros import StandardMacros
 from zope.app.container.interfaces import IContainer
 from zope.app.content.interfaces import IContentType
-from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
+from zope.filerepresentation.interfaces import IFileFactory, IWriteFile
 from zope.app.http.put import FilePUT
 from zope.publisher.browser import BrowserView
 
