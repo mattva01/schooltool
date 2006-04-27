@@ -57,8 +57,8 @@ usually implements a verb:
 We can now invoke the function to get the registration:
 
   >>> restdoc.getHTTPViewRegistration(File, 'GET')
-  AdapterRegistration(('IFile', 'IHTTPRequest'), 'Interface', 'GET',
-                      <class 'schooltool.devmode.devmode_txt.GETFile'>, '')
+  AdapterRegistration(<BaseGlobalComponents base>, 
+                      [IFile, IHTTPRequest], Interface, 'GET', GETFile, u'')
 
 If a view does not exist, `None` should be returned:
 
@@ -129,8 +129,8 @@ Now we get its registration:
 
   >>> spec = zope.interface.implementedBy(File)
   >>> restdoc.getAdapters(spec, size.interfaces.ISized)
-  [AdapterRegistration(('IFile',), 'ISized', '',
-                       <class 'schooltool.devmode.devmode_txt.FileSized'>, '')]
+  [AdapterRegistration(<BaseGlobalComponents base>, 
+                       [IFile], ISized, '', FileSized, u'')]
 
 
 `getNameTraversers(klass)`
@@ -164,8 +164,9 @@ When asking for all the name adapters we only get the first one, since the
 other one requires an interface that is not implemented by the file class:
 
   >>> restdoc.getNameTraversers(File)
-  [SubscriptionRegistration(('IFile', 'IHTTPRequest'), 'ITraverserPlugin',
-       <class 'schooltool.traverser.traverser.NullTraverserPlugin'>, '')]
+  [SubscriptionRegistration(<BaseGlobalComponents base>, 
+                            [IFile, IHTTPRequest], ITraverserPlugin, u'', 
+                            NullTraverserPlugin, u'')]
 
 
 `RESTMenu` class
@@ -276,7 +277,7 @@ information. Thus we first have to create such an add view:
 We are now ready to look up the view info:
 
   >>> pprint(doc.getGETInfo())
-  {'doc': '',
+  {'doc': u'',
    'factory': {'path': 'schooltool.devmode.devmode_txt.FileGETView',
                'referencable': True,
                'resource': None,
@@ -344,7 +345,7 @@ We first have to create such an add view:
 We are now ready to look up the view info:
 
   >>> pprint(doc.getPOSTInfo())
-  {'doc': '',
+  {'doc': u'',
    'factory': {'path': 'schooltool.devmode.devmode_txt.FilePOSTView',
                'referencable': True,
                'resource': None,
@@ -422,7 +423,7 @@ previously covered verbs. We first have to create such an add view:
 We are now ready to look up the view info:
 
   >>> pprint(doc.getPUTInfo())
-  {'doc': '',
+  {'doc': u'',
    'factory': {'path': 'schooltool.devmode.devmode_txt.FilePUTView',
                'referencable': True,
                'resource': None,
@@ -482,7 +483,7 @@ adapters of the context to implement the PUT functionality:
 Without any adapters registered, the result is pretty skimpy:
 
   >>> pprint(doc.getPUTInfo())
-  {'doc': '',
+  {'doc': u'',
    'factory': {'path': 'zope.app.http.put.FilePUT',
                'referencable': True,
                'resource': None,
@@ -513,11 +514,11 @@ the dictionary:
 
   >>> pprint(doc.getPUTInfo())
   {...
-   'edit': {'doc': '',
+   'edit': {'doc': u'',
             'factory': 'schooltool.devmode.devmode_txt.FileWriteFile',
             'factory_url': 'schooltool/devmode/devmode_txt/FileWriteFile',
             'name': '',
-            'provided': {'module': 'zope.app.filerepresentation.interfaces',
+            'provided': {'module': 'zope.filerepresentation.interfaces',
                          'name': 'IWriteFile'},
             'required': [{'module': 'schooltool.devmode.devmode_txt',
                           'name': 'IFile'}],
@@ -545,11 +546,11 @@ In addition to the 'edit' section, we should now have a 'create' section:
   >>> pprint(doc.getPUTInfo())
   {'create': {'container': {'module': 'schooltool.devmode.devmode_txt',
                             'name': 'IFileContainer'},
-              'doc': '',
+              'doc': u'',
               'factory': 'schooltool.devmode.devmode_txt.FileFileFactory',
               'factory_url': 'schooltool/devmode/devmode_txt/FileFileFactory',
               'name': '',
-              'provided': {'module': 'zope.app.filerepresentation.interfaces',
+              'provided': {'module': 'zope.filerepresentation.interfaces',
                            'name': 'IFileFactory'},
               'required': [{'module': 'schooltool.devmode.devmode_txt',
                             'name': 'IFileContainer'}],
@@ -565,11 +566,11 @@ Since most file factories use schemas, it is also retrieved when available:
   >>> pprint(doc.getPUTInfo())
   {'create': {'container': {'module': 'schooltool.devmode.devmode_txt',
                             'name': 'IFileContainer'},
-              'doc': '',
+              'doc': u'',
               'factory': 'schooltool.devmode.devmode_txt.FileFileFactory',
               'factory_url': 'schooltool/devmode/devmode_txt/FileFileFactory',
               'name': '',
-              'provided': {'module': 'zope.app.filerepresentation.interfaces',
+              'provided': {'module': 'zope.filerepresentation.interfaces',
                            'name': 'IFileFactory'},
               'required': [{'module': 'schooltool.devmode.devmode_txt',
                             'name': 'IFileContainer'}],
@@ -594,7 +595,7 @@ The 'DELETE' view gives you the basic view information:
   >>> pprint(doc.getDELETEInfo())
   {'containers': [{'module': 'schooltool.devmode.devmode_txt',
                    'name': 'IFileContainer'}],
-   'doc': '',
+   'doc': u'',
    'factory': {'path': 'schooltool.devmode.devmode_txt.FileDELETEView',
                'referencable': True,
                'resource': None,
