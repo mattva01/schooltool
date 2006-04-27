@@ -29,7 +29,7 @@ import persistent.list
 import zope.event
 import zope.interface
 import zope.app.container.contained
-import zope.app.event.objectevent
+import zope.lifecycleevent
 from zope import annotation
 from zope.app import zapi
 from zope.app.keyreference.interfaces import IKeyReference
@@ -234,7 +234,7 @@ class Requirement(persistent.Persistent,
                 sub._order.append(key)
         if event:
             zope.event.notify(event)
-            zope.app.event.objectevent.modified(self)
+            zope.lifecycleevent.modified(self)
 
     def __delitem__(self, key):
         """See interface `IWriteContainer`"""

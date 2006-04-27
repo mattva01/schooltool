@@ -29,7 +29,7 @@ from zope.schema import TextLine, Date
 
 from zope.app import zapi
 from zope.app.container.interfaces import INameChooser
-from zope.app.event.objectevent import modified
+from zope.lifecycleevent import modified
 from zope.app.form.browser.add import AddView
 from zope.app.form.browser.submit import Update
 from zope.app.form.interfaces import WidgetsError

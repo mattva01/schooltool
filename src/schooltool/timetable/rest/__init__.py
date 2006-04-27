@@ -37,7 +37,7 @@ from zope.security.proxy import removeSecurityProxy
 from zope.traversing.api import traverse
 from zope.traversing.interfaces import TraversalError
 from zope.app.http.put import NullResource
-from zope.app.event.objectevent import ObjectCreatedEvent
+from zope.lifecycleevent import ObjectCreatedEvent
 
 from schooltool.app.rest import View, Template
 from schooltool.app.rest.errors import RestError
