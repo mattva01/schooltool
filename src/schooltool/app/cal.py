@@ -27,7 +27,7 @@ from persistent import Persistent
 from zope.interface import implements
 from zope.schema import getFieldNames
 from zope.component import adapts
-from zope.app.annotation.interfaces import IAttributeAnnotatable, IAnnotations
+from zope.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 from zope.app.container.contained import Contained
 
 from schooltool.calendar.icalendar import read_icalendar

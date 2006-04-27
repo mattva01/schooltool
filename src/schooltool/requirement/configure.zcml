@@ -108,7 +108,7 @@
   <!-- Score System registrations -->
 
   <utility
-      provides="zope.app.schema.interfaces.IVocabularyFactory"
+      provides="zope.schema.interfaces.IVocabularyFactory"
       component="zope.app.component.vocabulary.UtilityVocabulary"
       name="schooltool.requirement.scoresystems"
       />

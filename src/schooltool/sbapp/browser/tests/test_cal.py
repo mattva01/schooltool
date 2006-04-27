@@ -84,7 +84,7 @@ def doctest_CalendarListView(self):
         ...         self.timeformat = "%H:%M"
         ...         self.dateformat = "%Y-%m-%d"
         ...         self.timezone = 'UTC'
-        >>> from zope.app.annotation.interfaces import IAttributeAnnotatable
+        >>> from zope.annotation.interfaces import IAttributeAnnotatable
         >>> from schooltool.app.interfaces import IHaveCalendar
         >>> from schooltool.app.cal import CALENDAR_KEY
         >>> class PersonStub:

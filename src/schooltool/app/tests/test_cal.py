@@ -29,7 +29,7 @@ from datetime import datetime, timedelta
 from zope.testing import doctest
 from zope.interface import implements
 from zope.interface.verify import verifyObject
-from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.testing import setup
 
 from schooltool.app.interfaces import IHaveCalendar

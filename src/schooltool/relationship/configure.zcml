@@ -9,7 +9,7 @@
   </class>
 
   <adapter
-      for="zope.app.annotation.interfaces.IAnnotatable"
+      for="zope.annotation.interfaces.IAnnotatable"
       provides="schooltool.relationship.interfaces.IRelationshipLinks"
       factory="schooltool.relationship.annotatable.getRelationshipLinks"
       trusted="true"

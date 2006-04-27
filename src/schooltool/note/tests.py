@@ -28,7 +28,7 @@ from zope.interface import implements
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 
-from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.tests import setup, ztapi
 
 from schooltool.app.browser.testing import setUp, tearDown
@@ -46,7 +46,7 @@ def doctest_getNotes():
     We need to have an annotatable object
 
         >>> from zope.interface import implements
-        >>> from zope.app.annotation.interfaces import IAttributeAnnotatable
+        >>> from zope.annotation.interfaces import IAttributeAnnotatable
         >>> class SomeAnnotatable(object):
         ...     implements(IAttributeAnnotatable)
 
@@ -86,7 +86,7 @@ def doctest_browser_NoteAddView():
     Let's create an owner for our note.  We need an id for our person to test
     the AddView later on:
 
-        >>> from zope.app.annotation.interfaces import IAttributeAnnotatable
+        >>> from zope.annotation.interfaces import IAttributeAnnotatable
         >>> class Owner(object):
         ...     implements(IAttributeAnnotatable, IHaveNotes)
         ...     id = None
@@ -102,7 +102,7 @@ def doctest_browser_NoteAddView():
 
     We need to set up an adapter for notes
 
-        >>> from zope.app.annotation.interfaces import IAnnotations
+        >>> from zope.annotation.interfaces import IAnnotations
         >>> setup.setUpAnnotations()
         >>> from schooltool.note.note import getNotes
         >>> ztapi.provideAdapter(IHaveNotes, INotes, getNotes)
@@ -145,7 +145,7 @@ def doctest_rest_views():
         >>> from schooltool.note.note import getNotes
         >>> from schooltool.note.interfaces import INotes
         >>> from schooltool.note.interfaces import IHaveNotes
-        >>> from zope.app.annotation.interfaces import IAnnotations
+        >>> from zope.annotation.interfaces import IAnnotations
         >>> setup.setUpAnnotations()
         >>> setup.placefulSetUp()
         >>> ztapi.provideAdapter(IHaveNotes, INotes, getNotes)

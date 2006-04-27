@@ -28,7 +28,7 @@ from zope.testing import doctest
 from zope.interface import classImplements
 from zope.publisher.browser import TestRequest
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
-from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.testing import ztapi
 
 from schooltool.app.browser.testing import setUp as browserSetUp, tearDown

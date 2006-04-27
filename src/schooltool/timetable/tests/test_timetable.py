@@ -33,7 +33,7 @@ from zope.interface import implements, directlyProvides
 from zope.app.traversing.api import getPath
 from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.app.testing import ztapi
-from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.location.interfaces import ILocation
 from zope.testing import doctest
 

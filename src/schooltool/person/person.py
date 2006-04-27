@@ -26,7 +26,7 @@ import sha
 from persistent import Persistent
 
 from zope.interface import implements
-from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container import btree
 from zope.app.container.contained import Contained
 from zope.app.container.interfaces import IObjectAddedEvent

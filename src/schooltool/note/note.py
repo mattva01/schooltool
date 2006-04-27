@@ -35,7 +35,7 @@ TODO: Notes are basically stupid comments, do we need real discussion items?  A
       group notes that a new supply of super-fresh cream is due the day before
       the picnic..)
 
-$Id:$
+$Id$
 """
 import datetime
 import random
@@ -43,7 +43,7 @@ import persistent
 import persistent.list
 import zope.interface
 
-from zope.app.annotation.interfaces import IAnnotations
+from zope.annotation.interfaces import IAnnotations
 
 from schooltool.note import interfaces
 

@@ -35,7 +35,7 @@ from zope.app.component.testing import PlacefulSetup
 from zope.testing.doctest import DocTestSuite, ELLIPSIS, NORMALIZE_WHITESPACE
 from zope.publisher.browser import TestRequest
 from zope.publisher.interfaces.http import IHTTPRequest
-from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.annotation.interfaces import IAttributeAnnotatable
 
 from schooltool.testing.util import XMLCompareMixin
 from schooltool.testing import setup as sbsetup

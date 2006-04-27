@@ -24,7 +24,7 @@ The first incompatible change from 2 was introduced in rev .
 $Id$
 """
 
-from zope.app.annotation.interfaces import IAnnotations
+from zope.annotation.interfaces import IAnnotations
 from zope.app.generations.utility import findObjectsProviding
 from zope.app.publication.zopepublication import ZopePublication
 

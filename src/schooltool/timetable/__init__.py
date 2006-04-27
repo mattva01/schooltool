@@ -136,7 +136,7 @@ from zope.component import adapts
 from zope.interface import directlyProvides, implements
 
 from zope.app import zapi
-from zope.app.annotation.interfaces import IAnnotations
+from zope.annotation.interfaces import IAnnotations
 from zope.app.location.interfaces import ILocation
 from zope.app.traversing.api import getPath
 from zope.app.generations.utility import findObjectsProviding

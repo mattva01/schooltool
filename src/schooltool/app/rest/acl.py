@@ -23,7 +23,7 @@ $Id$
 """
 from zope.component import adapts
 from zope.interface import Interface, Attribute, implements
-from zope.app.annotation.interfaces import IAnnotatable
+from zope.annotation.interfaces import IAnnotatable
 
 from schooltool.app.rest import View, Template
 from schooltool.app.rest.errors import RestError

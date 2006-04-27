@@ -415,7 +415,7 @@ def doctest_ACLViewBase_applyPermissionChanges():
 
     Set up local permission grants:
 
-        >>> from zope.app.annotation.interfaces import IAnnotatable
+        >>> from zope.annotation.interfaces import IAnnotatable
         >>> from zope.app.securitypolicy.interfaces import \
         ...                         IPrincipalPermissionManager
         >>> from zope.app.securitypolicy.principalpermission import \
@@ -523,7 +523,7 @@ def doctest_ACLViewBase_permsForPrincipal():
 
     Set up for local grants:
 
-        >>> from zope.app.annotation.interfaces import IAnnotatable
+        >>> from zope.annotation.interfaces import IAnnotatable
         >>> from zope.app.securitypolicy.interfaces import \
         ...                         IPrincipalPermissionManager
         >>> from zope.app.securitypolicy.principalpermission import \
@@ -590,7 +590,7 @@ def doctest_ACLView():
 
     Set up for local grants:
 
-        >>> from zope.app.annotation.interfaces import IAnnotatable
+        >>> from zope.annotation.interfaces import IAnnotatable
         >>> from zope.app.securitypolicy.interfaces import \
         ...                         IPrincipalPermissionManager
         >>> from zope.app.securitypolicy.principalpermission import \
@@ -1110,7 +1110,7 @@ def doctest_hasPermissions():
 
     Set up for local grants:
 
-        >>> from zope.app.annotation.interfaces import IAnnotatable
+        >>> from zope.annotation.interfaces import IAnnotatable
         >>> from zope.app.securitypolicy.interfaces import \
         ...                         IPrincipalPermissionManager
         >>> from zope.app.securitypolicy.principalpermission import \

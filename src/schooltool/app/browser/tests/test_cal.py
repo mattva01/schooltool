@@ -4940,7 +4940,7 @@ def doctest_CalendarSTOverlayView():
         >>> provideAdapter(ShowTimetables)
 
         >>> from zope.interface import classImplements
-        >>> from zope.app.annotation.interfaces import IAttributeAnnotatable
+        >>> from zope.annotation.interfaces import IAttributeAnnotatable
         >>> from schooltool.app.overlay import CalendarOverlayInfo
         >>> classImplements(CalendarOverlayInfo, IAttributeAnnotatable)
 
@@ -5115,7 +5115,7 @@ def doctest_CalendarListSubscriber(self):
         >>> from schooltool.app.interfaces import IHaveCalendar
         >>> from schooltool.app.cal import CALENDAR_KEY
         >>> from zope.interface import implements
-        >>> from zope.app.annotation.interfaces import IAttributeAnnotatable
+        >>> from zope.annotation.interfaces import IAttributeAnnotatable
         >>> from schooltool.timetable.interfaces import ITimetables
         >>> class PersonStub:
         ...     implements(IAttributeAnnotatable, IHaveCalendar, ITimetables)

@@ -25,7 +25,7 @@ an IRelationshipLinks adapter.  There is a default adapter registered for
 all IAnnotatable objects that uses Zope 3 annotations.
 """
 
-from zope.app.annotation.interfaces import IAnnotations
+from zope.annotation.interfaces import IAnnotations
 from schooltool.relationship.relationship import LinkSet
 
 

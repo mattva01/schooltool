@@ -28,7 +28,7 @@ import zope.schema
 from zope.app import zapi
 from zope.app.container import contained, btree
 from zope.interface import classProvides
-from zope.app.schema.interfaces import IVocabularyFactory
+from zope.schema.interfaces import IVocabularyFactory
 
 from schooltool.app import app
 from schooltool.level import interfaces

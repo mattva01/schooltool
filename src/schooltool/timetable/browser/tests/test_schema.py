@@ -30,7 +30,7 @@ from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.app.container.interfaces import INameChooser
 from zope.app.testing import ztapi, setup
-from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.annotation.interfaces import IAttributeAnnotatable
 
 from schooltool.app.app import SimpleNameChooser
 from schooltool.app.interfaces import IApplicationPreferences

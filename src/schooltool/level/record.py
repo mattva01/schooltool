@@ -26,7 +26,7 @@ import persistent
 import zope.component
 import zope.interface
 import zope.security
-from zope.app.annotation.interfaces import IAnnotations
+from zope.annotation.interfaces import IAnnotations
 
 from schooltool import person
 from schooltool.level import interfaces

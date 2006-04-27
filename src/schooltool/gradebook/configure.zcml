@@ -5,7 +5,7 @@
   <!-- Category Vocabulary -->
 
   <utility
-      provides="zope.app.schema.interfaces.IVocabularyFactory"
+      provides="zope.schema.interfaces.IVocabularyFactory"
       component="schooltool.gradebook.category.CategoryVocabulary"
       name="schooltool.gradebook.categories"
       />

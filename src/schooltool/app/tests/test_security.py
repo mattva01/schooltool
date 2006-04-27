@@ -52,7 +52,7 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
                                                 'Authenticated users',
                                                 ''))
         # Local permission grants for principals
-        from zope.app.annotation.interfaces import IAnnotatable
+        from zope.annotation.interfaces import IAnnotatable
         from zope.app.securitypolicy.interfaces import \
              IPrincipalPermissionManager
         from zope.app.securitypolicy.principalpermission import \
@@ -128,7 +128,7 @@ def doctest_applicationCalendarPermissionsSubscriber():
         ...                                         'Authenticated users',
         ...                                         ''))
 
-        >>> from zope.app.annotation.interfaces import IAnnotatable
+        >>> from zope.annotation.interfaces import IAnnotatable
         >>> from zope.app.securitypolicy.interfaces import \
         ...      IPrincipalPermissionManager
         >>> from zope.app.securitypolicy.principalpermission import \

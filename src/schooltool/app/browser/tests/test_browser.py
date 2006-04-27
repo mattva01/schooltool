@@ -28,7 +28,7 @@ from zope.testing import doctest
 from zope.interface.verify import verifyObject
 from zope.app.location.interfaces import ILocation
 from zope.app.testing import ztapi, setup
-from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.dependable.interfaces import IDependable
 from zope.i18n import translate
 

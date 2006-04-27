@@ -26,7 +26,7 @@ import unittest
 
 import optionstorage
 import zope.component
-import zope.app.annotation.interfaces
+import zope.annotation.interfaces
 from zope.testing import doctest, doctestunit
 from zope.app.testing import setup
 
@@ -44,7 +44,7 @@ def setUp(test):
 
     zope.component.provideAdapter(
         optionstorage.OptionStorage,
-        (zope.app.annotation.interfaces.IAnnotatable,),
+        (zope.annotation.interfaces.IAnnotatable,),
         optionstorage.interfaces.IOptionStorage)
 
     zope.component.provideAdapter(

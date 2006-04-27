@@ -36,7 +36,7 @@ class TestAclView(unittest.TestCase, XMLCompareMixin):
 
     def setUp(self):
         # Local grants:
-        from zope.app.annotation.interfaces import IAnnotatable
+        from zope.annotation.interfaces import IAnnotatable
         from zope.app.securitypolicy.interfaces import \
                                 IPrincipalPermissionManager
         from zope.app.securitypolicy.principalpermission import \

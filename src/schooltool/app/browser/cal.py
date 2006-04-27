@@ -41,7 +41,7 @@ from zope.security.checker import canAccess
 from zope.schema import Date, TextLine, Choice, Int, Bool, List, Text
 from zope.schema.interfaces import RequiredMissing, ConstraintNotSatisfied
 from zope.app import zapi
-from zope.app.annotation.interfaces import IAnnotations
+from zope.annotation.interfaces import IAnnotations
 from zope.app.event.objectevent import ObjectModifiedEvent
 from zope.app.form.browser.add import AddView
 from zope.app.form.browser.editview import EditView

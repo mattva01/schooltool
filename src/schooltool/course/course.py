@@ -19,12 +19,12 @@
 """
 Course implementation
 
-$Id: app.py 4750 2005-08-16 19:13:10Z srichter $
+$Id$
 """
 from persistent import Persistent
 import zope.interface
 
-from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container import btree, contained
 
 from schooltool.relationship import RelationshipProperty

@@ -83,7 +83,7 @@ You need to define a plugin::
 
   import random
   import zope.interface
-  from zope.app.annotation.interfaces import IAnnotations
+  from zope.annotation.interfaces import IAnnotations
   from schooltool.sampledata.interfaces import ISampleDataPlugin
 
   class PersonColorPlugin(object):

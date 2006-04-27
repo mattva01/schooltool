@@ -33,7 +33,7 @@ $Id$
 
 from zope.app.tests import setup
 from zope.interface import implements
-from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container.contained import Contained
 
 
@@ -78,7 +78,7 @@ def setUpRelationships():
     to get a complete test fixture.
     """
     from zope.app.tests import ztapi
-    from zope.app.annotation.interfaces import IAnnotatable
+    from zope.annotation.interfaces import IAnnotatable
     from schooltool.relationship.interfaces import IRelationshipLinks
     from schooltool.relationship.annotatable import getRelationshipLinks
     ztapi.provideAdapter(IAnnotatable, IRelationshipLinks,

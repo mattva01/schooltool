@@ -57,7 +57,7 @@ def getHTTPViewRegistration(klass, name):
         return
 
     for reg in gsm.registrations():
-        if (isinstance(reg, AdapterRegistration) and reg.value == adapter):
+        if (isinstance(reg, AdapterRegistration) and reg.factory == adapter):
             return reg
 
 
@@ -85,7 +85,7 @@ def getAdapters(spec, provided):
     return [
         reg
         for reg in gsm.registrations()
-        if (isinstance(reg, AdapterRegistration) and reg.value in factories)]
+        if (isinstance(reg, AdapterRegistration) and reg.factory in factories)]
 
 
 def getNameTraversers(klass):
@@ -97,7 +97,7 @@ def getNameTraversers(klass):
         reg
         for reg in gsm.registrations()
         if (isinstance(reg, SubscriptionRegistration)
-            and reg.value in factories)]
+            and reg.factory in factories)]
 
 
 class RESTDocMacros(StandardMacros):

@@ -74,7 +74,7 @@ to IRelationshipLinks, it is enough to declare that our objects are
 IAttributeAnnotatable.
 
     >>> from zope.interface import implements
-    >>> from zope.app.annotation.interfaces import IAttributeAnnotatable
+    >>> from zope.annotation.interfaces import IAttributeAnnotatable
     >>> class SomeObject(object):
     ...     implements(IAttributeAnnotatable)
     ...     def __init__(self, name):

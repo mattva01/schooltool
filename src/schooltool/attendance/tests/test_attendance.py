@@ -34,7 +34,7 @@ from zope.interface import implements, directlyProvides
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
 from zope.app.testing import setup
-from zope.app.annotation.interfaces import IAnnotations, IAttributeAnnotatable
+from zope.annotation.interfaces import IAnnotations, IAttributeAnnotatable
 from zope.wfmc.interfaces import IParticipant, IProcessDefinition
 from zope.component import provideAdapter, provideUtility
 from zope.app.testing import ztapi

@@ -32,9 +32,9 @@ from zope.event import notify
 from zope.interface import implements
 from zope.interface import classProvides
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
-from zope.app.schema.interfaces import IVocabularyFactory
+from zope.schema.interfaces import IVocabularyFactory
 
-from zope.app.annotation.interfaces import IAttributeAnnotatable, IAnnotations
+from zope.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 from zope.app.component.hooks import getSite
 from zope.app.component.site import SiteManagerContainer
 from zope.app.container import sample
@@ -194,7 +194,7 @@ class ShowTimetables(object):
 
         >>> from zope.interface import classImplements
         >>> from schooltool.app.overlay import CalendarOverlayInfo
-        >>> from zope.app.annotation.interfaces import IAttributeAnnotatable
+        >>> from zope.annotation.interfaces import IAttributeAnnotatable
         >>> classImplements(CalendarOverlayInfo, IAttributeAnnotatable)
 
         >>> calendar = object()

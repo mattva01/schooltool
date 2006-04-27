@@ -19,13 +19,13 @@
 """
 Person Preferences implementation
 
-$Id:$
+$Id$
 """
 import calendar
 
 from persistent import Persistent
 from zope.interface import implements
-from zope.app.annotation.interfaces import IAnnotations
+from zope.annotation.interfaces import IAnnotations
 
 from schooltool.person import interfaces
 

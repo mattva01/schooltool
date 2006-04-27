@@ -19,12 +19,12 @@
 """
 Notes support interfaces
 
-$Id: interfaces.py 4637 2005-08-09 17:29:12Z srichter $
+$Id$
 """
 import zope.interface
 import zope.schema
 
-from zope.app.annotation.interfaces import IAnnotatable
+from zope.annotation.interfaces import IAnnotatable
 from schooltool import SchoolToolMessage as _
 
 

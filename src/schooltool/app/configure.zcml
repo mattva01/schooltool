@@ -6,7 +6,7 @@
 
   <class class="schooltool.app.overlay.CalendarOverlayInfo">
     <implements
-        interface="zope.app.annotation.interfaces.IAttributeAnnotatable" />
+        interface="zope.annotation.interfaces.IAttributeAnnotatable" />
   </class>
 
   <adapter

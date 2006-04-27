@@ -27,7 +27,7 @@ import unittest
 from zope.testing import doctest
 from zope.app.tests import setup
 from zope.interface import implements
-from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.annotation.interfaces import IAttributeAnnotatable
 
 
 def doctest_getRelationshipLinks():
@@ -42,7 +42,7 @@ def doctest_getRelationshipLinks():
     We need to have an annotatable object
 
         >>> from zope.interface import implements
-        >>> from zope.app.annotation.interfaces import IAttributeAnnotatable
+        >>> from zope.annotation.interfaces import IAttributeAnnotatable
         >>> class SomeAnnotatable(object):
         ...     implements(IAttributeAnnotatable)
 

@@ -19,13 +19,13 @@
 """
 SchoolTool resource object
 
-$Id: app.py 4704 2005-08-15 13:22:06Z srichter $
+$Id$
 """
 __docformat__ = 'restructuredtext'
 from persistent import Persistent
 
 from zope.interface import implements
-from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container import btree
 from zope.app.container.contained import Contained
 

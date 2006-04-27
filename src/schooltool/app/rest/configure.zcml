@@ -65,7 +65,7 @@
       />
 
   <subscriber
-      for="zope.app.annotation.interfaces.IAnnotatable
+      for="zope.annotation.interfaces.IAnnotatable
            zope.publisher.interfaces.http.IHTTPRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".acl.ACLTraverser"
@@ -97,7 +97,7 @@
       />
 
   <subscriber
-      for="zope.app.annotation.interfaces.IAnnotatable
+      for="zope.annotation.interfaces.IAnnotatable
            zope.publisher.interfaces.http.IHTTPRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".relationships.RelationshipsTraverser"

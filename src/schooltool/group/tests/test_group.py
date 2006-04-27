@@ -81,7 +81,7 @@ def doctest_addGroupContainerToApplication():
         >>> setup.setUpAnnotations()
         >>> setup.setUpDependable()
         >>> setup.setUpTraversal()
-        >>> from zope.app.annotation.interfaces import IAnnotatable
+        >>> from zope.annotation.interfaces import IAnnotatable
         >>> from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
         >>> from zope.interface import implements
         >>> class RoleManagerStub:

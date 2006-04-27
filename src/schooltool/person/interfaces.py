@@ -19,7 +19,7 @@
 """
 Person interfaces
 
-$Id:$
+$Id$
 """
 import calendar
 import pytz
@@ -29,7 +29,7 @@ import zope.schema
 
 import zope.app.container.constraints
 from zope.app import container
-from zope.app.annotation.interfaces import IAnnotatable, IAttributeAnnotatable
+from zope.annotation.interfaces import IAnnotatable, IAttributeAnnotatable
 from zope.app.location.interfaces import ILocation
 
 from schooltool import SchoolToolMessage as _

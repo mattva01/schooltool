@@ -47,7 +47,7 @@ __metaclass__ = type
 def setUp(test=None):
     testSetUp(test)
 
-    from zope.app.annotation.interfaces import IAttributeAnnotatable
+    from zope.annotation.interfaces import IAttributeAnnotatable
     from schooltool.timetable import TimetablesAdapter
     ztapi.provideAdapter(IAttributeAnnotatable, ITimetables,
                          TimetablesAdapter)

@@ -23,7 +23,7 @@ $Id$
 __docformat__ = 'reStructuredText'
 
 from zope.interface import classProvides
-from zope.app.schema.interfaces import IVocabularyFactory
+from zope.schema.interfaces import IVocabularyFactory
 
 import optionstorage
 from optionstorage import vocabulary, interfaces

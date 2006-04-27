@@ -23,7 +23,7 @@ $Id$
 """
 import unittest
 from sets import Set
-from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.testing import setup, ztapi
 from schooltool.timetable.tests.test_timetable import Content, Parent
 from schooltool.timetable.interfaces import ITimetables

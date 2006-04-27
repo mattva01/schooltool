@@ -19,7 +19,7 @@
 """
 SchoolBell Testing Support
 
-$Id: app.py 4705 2005-08-15 14:49:07Z srichter $
+$Id$
 """
 __docformat__ = 'restructuredtext'
 from schooltool.app.security import setUpLocalAuth
@@ -47,7 +47,7 @@ def setupSessions():
 
 
 # --------------------- Local Permission Manager Setup ---------------------
-from zope.app.annotation.interfaces import IAnnotatable
+from zope.annotation.interfaces import IAnnotatable
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.app.securitypolicy.principalpermission import \
      AnnotationPrincipalPermissionManager

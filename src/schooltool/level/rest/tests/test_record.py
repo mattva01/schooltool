@@ -19,7 +19,7 @@
 """
 Tests for level REST views.
 
-$Id: test_app.py 4342 2005-07-25 16:02:24Z bskahan $
+$Id$
 """
 import datetime
 import unittest
@@ -28,7 +28,7 @@ import cStringIO
 import zope.interface
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
-from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.component.testing import PlacefulSetup
 from zope.app.location.interfaces import ILocation
 

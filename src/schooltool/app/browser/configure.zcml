@@ -197,7 +197,7 @@
       />
 
   <page
-      for="zope.app.annotation.interfaces.IAnnotatable"
+      for="zope.annotation.interfaces.IAnnotatable"
       name="acl.html"
       layer="schooltool.skin.ISchoolToolLayer"
       class=".app.ACLView"
