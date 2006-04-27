@@ -158,7 +158,7 @@ class RESTDocumentation(BrowserView):
 
         # Doctor up the info dict a little bit. This is easier than trying to
         # do the info dict from scratch.
-        factory = component.getRealFactory(reg.value)
+        factory = component.getRealFactory(reg.factory)
 
         # We deal with a zope.app.component.metaconfigure.ProxyView
         if hasattr(factory, 'template'):
@@ -186,20 +186,20 @@ class RESTDocumentation(BrowserView):
         info = presentation.getViewInfoDictionary(reg)
 
         # In plain HTTP views, `__call__` is the right method to get perms for.
-        if hasattr(reg.value, 'checker'):
+        if hasattr(reg.factory, 'checker'):
             info.update(utilities.getPermissionIds(
-                '__call__', checker=reg.value.checker))
+                '__call__', checker=reg.factory.checker))
 
-        if hasattr(reg.value, 'factory'):
+        if hasattr(reg.factory, 'factory'):
             # Try to find a schema
-            schema  = getattr(reg.value.factory, 'schema', None)
+            schema  = getattr(reg.factory.factory, 'schema', None)
             if schema:
                 schema = utilities.dedentString(schema)
                 info['schema'] = schema
 
             # We deal with a zope.app.component.metaconfigure.ProxyView
-            if hasattr(reg.value.factory, 'template'):
-                fn = reg.value.factory.template.filename
+            if hasattr(reg.factory.factory, 'template'):
+                fn = reg.factory.factory.template.filename
                 info['factory']['template'] = presentation.relativizePath(fn)
 
         return info
@@ -218,19 +218,19 @@ class RESTDocumentation(BrowserView):
 
         # Doctor up the info dict a little bit. This is easier than trying to
         # do the info dict from scratch.
-        schema  = getattr(reg.value.factory, 'schema', None)
+        schema  = getattr(reg.factory.factory, 'schema', None)
         if schema:
             schema = utilities.dedentString(schema)
         info['schema'] = schema
 
         # Try to get the checker
-        checker = getattr(reg.value, 'checker', None)
+        checker = getattr(reg.factory, 'checker', None)
         if checker:
             info.update(utilities.getPermissionIds('PUT', checker=checker))
 
         # Generically Zope 3 supports putting files by extension using the
         # IWriteFile interface; so we have to collect all of this info here.
-        if component.getRealFactory(reg.value.factory) is FilePUT:
+        if component.getRealFactory(reg.factory.factory) is FilePUT:
 
             # The should be only one IWriteFile adapter too.
             spec = zope.interface.implementedBy(self.klass)
@@ -257,7 +257,7 @@ class RESTDocumentation(BrowserView):
                 info['create']['container'] = cdict
 
                 # Also, if we have a schema, show it.
-                factory = getattr(reg.value, 'factory', None)
+                factory = getattr(reg.factory, 'factory', None)
                 schema  = getattr(factory, 'schema', None)
                 if schema:
                     schema = utilities.dedentString(schema)
@@ -281,7 +281,7 @@ class RESTDocumentation(BrowserView):
         info = presentation.getViewInfoDictionary(reg)
 
         # Retrieve better security information
-        checker = getattr(reg.value, 'checker', None)
+        checker = getattr(reg.factory, 'checker', None)
         if checker:
             info.update(utilities.getPermissionIds('DELETE', checker=checker))
 
@@ -298,7 +298,7 @@ class RESTDocumentation(BrowserView):
         result = []
         for reg in getNameTraversers(self.klass):
             # Get rid of all sorts of security and location wrappers
-            factory = component.getRealFactory(reg.value)
+            factory = component.getRealFactory(reg.factory)
 
             if not hasattr(factory, 'traversalName'):
                 continue
@@ -312,10 +312,10 @@ class RESTDocumentation(BrowserView):
             info.update(utilities.getPermissionIds(
                 'publishTraverse', klass=getattr(factory, 'factory', factory)))
 
-            if isinstance(reg.doc, (str, unicode)):
+            if isinstance(reg.info, (str, unicode)):
                 info['zcml'] = None
             else:
-                info['zcml'] = component.getParserInfoInfoDictionary(reg.doc)
+                info['zcml'] = component.getParserInfoInfoDictionary(reg.info)
 
             adapter = None
             if AdapterTraverserPluginTemplate in factory.__bases__:
