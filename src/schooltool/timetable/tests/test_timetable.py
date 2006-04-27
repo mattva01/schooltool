@@ -30,7 +30,7 @@ from persistent import Persistent
 from zope.app.testing import setup
 from zope.interface.verify import verifyObject
 from zope.interface import implements, directlyProvides
-from zope.app.traversing.api import getPath
+from zope.traversing.api import getPath
 from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.app.testing import ztapi
 from zope.annotation.interfaces import IAttributeAnnotatable
@@ -576,7 +576,7 @@ class TestTimetablingPersistence(unittest.TestCase):
 
     def testTimetableActivity(self):
         from schooltool.timetable import TimetableActivity
-        from zope.app.traversing.interfaces import IContainmentRoot
+        from zope.traversing.interfaces import IContainmentRoot
         import transaction
         from schooltool.person.person import Person
         from schooltool.resource.resource import Resource

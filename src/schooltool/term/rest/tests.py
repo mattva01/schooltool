@@ -29,7 +29,7 @@ from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
 from zope.app.filerepresentation.interfaces import IFileFactory
 from zope.app.testing import ztapi, setup
-from zope.app.traversing.interfaces import IContainmentRoot
+from zope.traversing.interfaces import IContainmentRoot
 
 from schooltool.testing.util import QuietLibxml2Mixin
 from schooltool.common import dedent

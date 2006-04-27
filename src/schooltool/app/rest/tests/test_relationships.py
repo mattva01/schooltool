@@ -27,7 +27,7 @@ from StringIO import StringIO
 
 import zope
 from zope.interface import Interface
-from zope.app.traversing.interfaces import ITraversable
+from zope.traversing.interfaces import ITraversable
 from zope.app.container.interfaces import INameChooser
 from zope.publisher.browser import TestRequest
 from zope.app.testing import setup, ztapi
@@ -69,7 +69,7 @@ class CommonSetupMixin(XMLCompareMixin, QuietLibxml2Mixin):
                              URIMember,
                              name="http://schooltool.org/ns/membership/group")
         ztapi.provideView(Interface, Interface, ITraversable, 'view',
-                          zope.app.traversing.namespace.view)
+                          zope.traversing.namespace.view)
         ztapi.provideAdapter(IGroupContainer,
                              INameChooser,
                              SimpleNameChooser)

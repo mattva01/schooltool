@@ -48,7 +48,7 @@ from zope.app.server.main import run
 from zope.app.server.wsgi import http
 from zope.app.appsetup import DatabaseOpened, ProcessStarting
 from zope.app.publication.zopepublication import ZopePublication
-from zope.app.traversing.interfaces import IContainmentRoot
+from zope.traversing.interfaces import IContainmentRoot
 from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
 from zope.app.container.contained import ObjectAddedEvent
 from zope.app.dependable.interfaces import IDependable

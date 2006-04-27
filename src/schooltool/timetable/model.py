@@ -42,7 +42,7 @@ import pytz
 from persistent import Persistent
 from persistent.dict import PersistentDict
 from zope.interface import implements, classProvides
-from zope.app.traversing.api import getPath
+from zope.traversing.api import getPath
 
 from schooltool.app.cal import CalendarEvent
 from schooltool.calendar.simple import ImmutableCalendar

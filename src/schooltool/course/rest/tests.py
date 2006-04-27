@@ -30,8 +30,8 @@ from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.app.filerepresentation.interfaces import IFileFactory
 from zope.app.testing import setup, ztapi
-from zope.app.traversing import namespace
-from zope.app.traversing.interfaces import ITraversable
+from zope.traversing import namespace
+from zope.traversing.interfaces import ITraversable
 
 from schooltool.testing import setup as sbsetup
 from schooltool.testing.util import compareXML

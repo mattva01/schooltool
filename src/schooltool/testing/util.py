@@ -32,7 +32,7 @@ from pprint import pformat
 from StringIO import StringIO
 
 from zope.interface import implements
-from zope.app.traversing.interfaces import IContainmentRoot
+from zope.traversing.interfaces import IContainmentRoot
 
 
 def unidiff(old, new, oldlabel="expected output", newlabel="actual output"):

@@ -28,9 +28,9 @@ from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
 from zope.app.testing import ztapi, setup
-from zope.app.traversing import namespace
-from zope.app.traversing.interfaces import ITraversable
-from zope.app.traversing.interfaces import IContainmentRoot
+from zope.traversing import namespace
+from zope.traversing.interfaces import ITraversable
+from zope.traversing.interfaces import IContainmentRoot
 
 from schooltool.testing import setup as sbsetup
 from schooltool.testing.util import QuietLibxml2Mixin

@@ -30,7 +30,7 @@ from pprint import pformat
 
 from pytz import UTC
 from zope.interface.verify import verifyObject
-from zope.app.traversing.interfaces import IPhysicallyLocatable
+from zope.traversing.interfaces import IPhysicallyLocatable
 from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.app.testing import ztapi, setup
 from zope.testing import doctest
@@ -390,7 +390,7 @@ class TestSequentialDayIdBasedTimetableModel(PlacelessSetup,
                                              BaseTestTimetableModel):
 
     def setUp(self):
-        from zope.app.traversing.interfaces import IPhysicallyLocatable
+        from zope.traversing.interfaces import IPhysicallyLocatable
         from schooltool.timetable.interfaces import ITimetable
         PlacelessSetup.setUp(self)
 
@@ -511,7 +511,7 @@ class TestWeeklyTimetableModel(PlacelessSetup,
                                BaseTestTimetableModel):
 
     def setUp(self):
-        from zope.app.traversing.interfaces import IPhysicallyLocatable
+        from zope.traversing.interfaces import IPhysicallyLocatable
         from schooltool.timetable.interfaces import ITimetable
         PlacelessSetup.setUp(self)
         ztapi.provideAdapter(ITimetable, IPhysicallyLocatable,

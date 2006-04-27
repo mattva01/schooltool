@@ -138,7 +138,7 @@ from zope.interface import directlyProvides, implements
 from zope.app import zapi
 from zope.annotation.interfaces import IAnnotations
 from zope.location.interfaces import ILocation
-from zope.app.traversing.api import getPath
+from zope.traversing.api import getPath
 from zope.app.generations.utility import findObjectsProviding
 
 from schooltool.calendar.simple import ImmutableCalendar

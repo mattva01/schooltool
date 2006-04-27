@@ -29,7 +29,7 @@ from zope.interface.verify import verifyObject
 from zope.testing import doctest
 from zope.app.testing import setup, ztapi
 from zope.app.container.contained import ObjectAddedEvent
-from zope.app.traversing.interfaces import IContainmentRoot
+from zope.traversing.interfaces import IContainmentRoot
 
 from schooltool.testing.util import run_unit_tests
 

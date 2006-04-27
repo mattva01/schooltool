@@ -25,13 +25,13 @@ __metaclass__ = type
 
 from StringIO import StringIO
 
-import zope.app.traversing.namespace
+import zope.traversing.namespace
 from zope.interface import Interface
 from zope.publisher.browser import TestRequest
 from zope.app.component.testing import PlacefulSetup
 from zope.app.container.interfaces import INameChooser
 from zope.app.testing import ztapi, setup
-from zope.app.traversing.interfaces import ITraversable
+from zope.traversing.interfaces import ITraversable
 
 from schooltool.testing import setup as sbsetup
 from schooltool.testing.util import XMLCompareMixin
@@ -55,7 +55,7 @@ class ContainerViewTestMixin(XMLCompareMixin, QuietLibxml2Mixin):
 
         from zope.app.filerepresentation.interfaces import IFileFactory
         ztapi.provideView(Interface, Interface, ITraversable, 'view',
-                          zope.app.traversing.namespace.view)
+                          zope.traversing.namespace.view)
         ztapi.provideAdapter(IGroupContainer, INameChooser,
                              SimpleNameChooser)
         ztapi.provideAdapter(IGroupContainer, IFileFactory,

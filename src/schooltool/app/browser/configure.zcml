@@ -39,14 +39,14 @@
   <zope:adapter
       for="*"
       name="sortby"
-      provides="zope.app.traversing.interfaces.IPathAdapter"
+      provides="zope.traversing.interfaces.IPathAdapter"
       factory=".SortBy"
       />
 
   <zope:adapter
       for="*"
       name="schooltool"
-      provides="zope.app.traversing.interfaces.IPathAdapter"
+      provides="zope.traversing.interfaces.IPathAdapter"
       factory=".SchoolToolAPI"
       />
 

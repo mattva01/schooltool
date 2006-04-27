@@ -51,10 +51,10 @@ from zope.app.form.interfaces import IWidgetInputError, IInputWidget
 from zope.app.form.interfaces import WidgetInputError, WidgetsError
 from zope.app.form.utility import getWidgetsData
 from zope.app.publisher.browser import BrowserView
-from zope.app.traversing.browser.absoluteurl import absoluteURL
+from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.app.filerepresentation.interfaces import IWriteFile, IReadFile
 from zope.app.session.interfaces import ISession
-from zope.app.traversing.api import getPath
+from zope.traversing.api import getPath
 
 from schooltool import SchoolToolMessage as _
 
@@ -2404,7 +2404,7 @@ class CalendarEventBreadcrumbInfo(breadcrumbs.GenericBreadcrumbInfo):
       ...         self.__name__ = name
 
       >>> calendar = Object()
-      >>> from zope.app.traversing.interfaces import IContainmentRoot
+      >>> from zope.traversing.interfaces import IContainmentRoot
       >>> import zope.interface
       >>> zope.interface.directlyProvides(calendar, IContainmentRoot)
 

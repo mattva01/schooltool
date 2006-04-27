@@ -19,7 +19,7 @@
 """
 Tests for Person views.
 
-$Id: test_app.py 4637 2005-08-09 17:29:12Z srichter $
+$Id$
 """
 import unittest
 
@@ -27,7 +27,7 @@ from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.app.testing import setup, ztapi
-from zope.app.traversing.interfaces import IContainmentRoot
+from zope.traversing.interfaces import IContainmentRoot
 
 from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.testing import setup as sbsetup
@@ -223,7 +223,7 @@ def doctest_PersonAddView():
         ...     def __call__(self): return "http://localhost/frogpond/persons"
         ...
         >>> from schooltool.person.interfaces import IPersonContainer
-        >>> from zope.app.traversing.browser.interfaces import IAbsoluteURL
+        >>> from zope.traversing.browser.interfaces import IAbsoluteURL
         >>> ztapi.browserViewProviding(IPersonContainer, FakeURL, \
         ...                            providing=IAbsoluteURL)
 

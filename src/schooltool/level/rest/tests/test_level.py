@@ -24,7 +24,7 @@ $Id$
 import unittest
 
 import zope.interface
-from zope.app.traversing.interfaces import IPathAdapter
+from zope.traversing.interfaces import IPathAdapter
 from zope.app.pagetemplate import talesapi
 from zope.publisher.browser import TestRequest
 from zope.app.component.testing import PlacefulSetup

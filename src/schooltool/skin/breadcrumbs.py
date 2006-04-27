@@ -26,7 +26,7 @@ import zope.interface
 import zope.publisher.interfaces.http
 from zope.app import zapi
 from zope.app.publisher import browser
-from zope.app.traversing.interfaces import IContainmentRoot
+from zope.traversing.interfaces import IContainmentRoot
 
 from schooltool import SchoolToolMessage as _
 from schooltool.skin import interfaces

@@ -74,7 +74,7 @@ def createSchoolToolApplication():
 from zope.interface import directlyProvides
 from zope.app.component.hooks import setSite
 from zope.app.component.site import LocalSiteManager
-from zope.app.traversing.interfaces import IContainmentRoot
+from zope.traversing.interfaces import IContainmentRoot
 def setupSchoolToolSite():
     """This should only be called after ``placefulSetUp()``."""
     app = createSchoolToolApplication()

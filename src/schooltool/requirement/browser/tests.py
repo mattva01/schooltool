@@ -27,7 +27,7 @@ import unittest
 from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest, doctestunit
-from zope.app.traversing.interfaces import IContainmentRoot
+from zope.traversing.interfaces import IContainmentRoot
 
 from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.testing import setup

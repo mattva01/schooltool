@@ -19,7 +19,7 @@
 """
 Tests for group views.
 
-$Id: test_app.py 4691 2005-08-12 18:59:44Z srichter $
+$Id$
 """
 
 import unittest
@@ -27,7 +27,7 @@ import unittest
 from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
-from zope.app.traversing.interfaces import IContainmentRoot
+from zope.traversing.interfaces import IContainmentRoot
 
 from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.testing import setup

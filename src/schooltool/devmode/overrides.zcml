@@ -11,12 +11,12 @@
 
   <view
       name="apidoc" type="*"
-      provides="zope.app.traversing.interfaces.ITraversable" for="*"
+      provides="zope.traversing.interfaces.ITraversable" for="*"
       factory=".apidoc.schooltoolApidocNamespace"
       />
   <adapter
       name="apidoc"
-      provides="zope.app.traversing.interfaces.ITraversable" for="*"
+      provides="zope.traversing.interfaces.ITraversable" for="*"
       factory=".apidoc.schooltoolApidocNamespace"
       />
 

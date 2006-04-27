@@ -79,7 +79,7 @@ def doctest_browser_NoteAddView():
         ...     def __call__(self):
         ...         return "http://localhost/frogpond/persons/milton"
         >>> from schooltool.note.interfaces import IHaveNotes, INotes
-        >>> from zope.app.traversing.browser.interfaces import IAbsoluteURL
+        >>> from zope.traversing.browser.interfaces import IAbsoluteURL
         >>> ztapi.browserViewProviding(IHaveNotes, FakeURL, \
         ...                            providing=IAbsoluteURL)
 

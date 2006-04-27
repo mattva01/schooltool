@@ -23,8 +23,8 @@ $Id$
 """
 
 from zope.app import zapi
-from zope.app.traversing.api import traverse
-from zope.app.traversing.interfaces import TraversalError
+from zope.traversing.api import traverse
+from zope.traversing.interfaces import TraversalError
 from zope.component import getUtility
 from zope.component.interfaces import ComponentLookupError
 from zope.publisher.interfaces import NotFound

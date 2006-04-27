@@ -46,7 +46,7 @@ def test_breadcrumbs():
       ...         self.__name__ = name
 
       >>> root = Object()
-      >>> from zope.app.traversing.interfaces import IContainmentRoot
+      >>> from zope.traversing.interfaces import IContainmentRoot
       >>> import zope.interface
       >>> zope.interface.directlyProvides(root, IContainmentRoot)
 

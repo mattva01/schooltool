@@ -88,7 +88,7 @@ def doctest_ContainerView():
         >>> setup.setUpAnnotations()
 
         >>> personContainer = PersonContainer()
-        >>> from zope.app.traversing.interfaces import IContainmentRoot
+        >>> from zope.traversing.interfaces import IContainmentRoot
         >>> directlyProvides(personContainer, IContainmentRoot)
 
         >>> personContainer['pete'] = Person('pete', 'Pete Parrot')
@@ -144,7 +144,7 @@ def doctest_ContainerDeleteView():
         >>> personContainer = PersonContainer()
 
         >>> from zope.interface import directlyProvides
-        >>> from zope.app.traversing.interfaces import IContainmentRoot
+        >>> from zope.traversing.interfaces import IContainmentRoot
         >>> directlyProvides(personContainer, IContainmentRoot)
 
         >>> personContainer['pete'] = Person('pete', 'Pete Parrot')

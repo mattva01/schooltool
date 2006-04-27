@@ -28,7 +28,7 @@ import unittest
 
 from zope.testing import doctest
 from zope.app import zapi
-from zope.app.traversing.interfaces import IContainmentRoot
+from zope.traversing.interfaces import IContainmentRoot
 from zope.interface import directlyProvides
 
 

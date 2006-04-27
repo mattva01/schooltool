@@ -19,7 +19,7 @@ path expressions.
     >>> setup.placelessSetUp()
 
     >>> from zope.component import provideAdapter
-    >>> from zope.app.traversing.interfaces import IPathAdapter
+    >>> from zope.traversing.interfaces import IPathAdapter
     >>> from schooltool.app.browser import SortBy
     >>> provideAdapter(SortBy, name='sortby', provides=IPathAdapter)
 

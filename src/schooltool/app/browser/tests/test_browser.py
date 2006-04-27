@@ -174,11 +174,11 @@ def doctest_SortBy():
         >>> from schooltool.app.browser import SortBy
         >>> adapter = SortBy([])
 
-        >>> from zope.app.traversing.interfaces import IPathAdapter
+        >>> from zope.traversing.interfaces import IPathAdapter
         >>> verifyObject(IPathAdapter, adapter)
         True
 
-        >>> from zope.app.traversing.interfaces import ITraversable
+        >>> from zope.traversing.interfaces import ITraversable
         >>> verifyObject(ITraversable, adapter)
         True
 

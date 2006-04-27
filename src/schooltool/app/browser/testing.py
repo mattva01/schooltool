@@ -40,9 +40,9 @@ from zope.app.form.browser import \
 from zope.app.form.interfaces import IWidgetInputError
 from zope.app.form.browser.interfaces import IWidgetInputErrorView
 from zope.app.form.browser.exception import WidgetInputErrorView
-from zope.app.traversing.interfaces import ITraversable
-from zope.app.traversing.namespace import view, resource
-from zope.app.traversing.interfaces import IPathAdapter
+from zope.traversing.interfaces import ITraversable
+from zope.traversing.namespace import view, resource
+from zope.traversing.interfaces import IPathAdapter
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.basicskin.standardmacros import StandardMacros
 from zope.app.form.browser.macros import FormMacros

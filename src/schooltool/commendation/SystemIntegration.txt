@@ -100,7 +100,7 @@ method that is called. The reson we are overriding it in this case is to
 support the additional "Cancel" button.
 
   >>> from zope.interface import directlyProvides
-  >>> from zope.app.traversing.interfaces import IContainmentRoot
+  >>> from zope.traversing.interfaces import IContainmentRoot
   >>> from schooltool.app import app
   >>> st = app.SchoolToolApplication()
   >>> directlyProvides(st, IContainmentRoot)

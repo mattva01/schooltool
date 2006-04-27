@@ -34,8 +34,8 @@ from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces.http import IHTTPRequest
 from zope.security.proxy import removeSecurityProxy
-from zope.app.traversing.api import traverse
-from zope.app.traversing.interfaces import TraversalError
+from zope.traversing.api import traverse
+from zope.traversing.interfaces import TraversalError
 from zope.app.http.put import NullResource
 from zope.app.event.objectevent import ObjectCreatedEvent
 
