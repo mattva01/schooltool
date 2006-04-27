@@ -25,7 +25,7 @@ $Id$
 import zope.interface
 import zope.schema
 
-import zope.app.event.objectevent
+from zope.component.interfaces import ObjectEvent, IObjectEvent
 from zope.app import container
 from zope.app import event
 from zope.location.interfaces import ILocation
@@ -59,13 +59,13 @@ textwidgets_strings=[_('Form input is not a file object'),
 
 # Events
 
-class IApplicationInitializationEvent(event.interfaces.IObjectEvent):
+class IApplicationInitializationEvent(IObjectEvent):
     """The SchoolTool application is being initiazed.
 
     Usually subscribers add soemthing to the initialization process.
     """
 
-class ApplicationInitializationEvent(event.objectevent.ObjectEvent):
+class ApplicationInitializationEvent(ObjectEvent):
     zope.interface.implements(IApplicationInitializationEvent)
 
 
