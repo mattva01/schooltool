@@ -21,7 +21,7 @@ Browser views for notes.
 """
 
 from zope.app import zapi
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 from zope.app.form.browser.add import AddView
 
 from schooltool.note.interfaces import IHaveNotes, INotes, INote

@@ -37,7 +37,7 @@ def doctest_MultiBatchViewMixin():
         >>> data1 = [1, 2, 3, 4, 5]
         >>> data2 = [100, 200, 300, 400, 500]
 
-        >>> from zope.app.publisher.browser import BrowserView
+        >>> from zope.publisher.browser import BrowserView
         >>> from schooltool.batching.browser import MultiBatchViewMixin
 
         >>> class SampleView(BrowserView, MultiBatchViewMixin):

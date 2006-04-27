@@ -26,7 +26,7 @@ import datetime
 from cStringIO import StringIO
 
 from zope.component import subscribers
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 from zope.i18n import translate
 from zope.security.proxy import removeSecurityProxy
 from schooltool.app.interfaces import ISchoolToolCalendar

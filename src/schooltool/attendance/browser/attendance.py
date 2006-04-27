@@ -31,7 +31,7 @@ from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.app.form.interfaces import WidgetsError
 from zope.app.form.interfaces import IInputWidget
 from zope.app import zapi
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.component import adapts

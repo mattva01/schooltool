@@ -34,7 +34,7 @@ from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.app.testing import setup, ztapi
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 from zope.traversing.interfaces import IContainmentRoot
 from zope.app.session.interfaces import ISession
 from zope.publisher.interfaces.http import IHTTPRequest

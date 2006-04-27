@@ -25,7 +25,7 @@ import csv
 
 from zope.security.proxy import removeSecurityProxy
 from zope.app.container.interfaces import INameChooser
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 
 from schooltool import SchoolToolMessage as _
 from schooltool.app.app import getSchoolToolApplication

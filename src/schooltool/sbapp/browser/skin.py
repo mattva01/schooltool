@@ -21,7 +21,7 @@ SchoolBell skin.
 
 $Id$
 """
-from zope.app.publisher.browser import applySkin
+from zope.publisher.browser import applySkin
 from zope.publisher.interfaces.browser import ILayer, IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserRequest
 from schooltool.app.interfaces import ISchoolToolApplication

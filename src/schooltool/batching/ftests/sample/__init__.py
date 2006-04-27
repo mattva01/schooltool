@@ -19,12 +19,12 @@
 """
 Browser view for sample batch implementation
 
-$Id: browser.py 4857 2005-08-24 20:51:55Z srichter $
+$Id$
 """
 from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 
 from schooltool.batching import Batch
 from schooltool.batching.browser import MultiBatchViewMixin

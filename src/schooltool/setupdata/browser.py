@@ -22,7 +22,7 @@ Views for the setup data generation
 $Id: browser.py 5225 2005-10-12 18:02:40Z alga $
 """
 from zope.app import zapi
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from schooltool.app.interfaces import ISchoolToolApplication

@@ -29,7 +29,7 @@ from zope.publisher.interfaces.browser import ILayer, IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.viewlet.interfaces import IViewletManager
 from zope.viewlet.manager import ViewletManagerBase
-from zope.app.publisher.browser import applySkin
+from zope.publisher.browser import applySkin
 from zope.publisher.interfaces.browser import IBrowserRequest
 
 from schooltool.app.browser.interfaces import IEventForDisplay

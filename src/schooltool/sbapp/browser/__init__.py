@@ -21,7 +21,7 @@ Browser views for the SchoolBell application.
 
 $Id$
 """
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 from schooltool.app.app import getSchoolToolApplication
 
 class NavigationView(BrowserView):

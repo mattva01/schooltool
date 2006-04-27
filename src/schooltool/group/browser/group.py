@@ -19,12 +19,12 @@
 """
 group views.
 
-$Id: app.py 4691 2005-08-12 18:59:44Z srichter $
+$Id$
 """
 from zope.security import checkPermission
 from zope.security.proxy import removeSecurityProxy
 from zope.app import zapi
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 
 from schooltool import SchoolToolMessage as _
 from schooltool.batching import Batch

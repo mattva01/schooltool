@@ -19,14 +19,14 @@
 """
 Functional tests for schooltool.app.app.
 
-$Id: test_all.py 2922 2005-02-22 19:04:44Z mg $
+$Id$
 """
 
 import unittest
 
 from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserPublisher
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 
 from schooltool.testing.functional import load_ftesting_zcml
 from schooltool.testing.functional import collect_ftests

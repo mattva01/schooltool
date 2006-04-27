@@ -36,7 +36,7 @@ from zope.app.form.browser.add import AddView
 from zope.app.form.browser.editview import EditView
 from zope.app.form.interfaces import IInputWidget
 from zope.app.form.interfaces import WidgetsError
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 from zope.app.security.interfaces import IAuthentication
 from zope.app.security.interfaces import IAuthenticatedGroup
 from zope.app.security.interfaces import IUnauthenticatedGroup

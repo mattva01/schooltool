@@ -26,7 +26,7 @@ from zope.app import container
 from zope.app import security
 from zope.app import zapi
 from zope.app.form.browser.add import AddView
-from zope.app.publisher import browser
+from zope.publisher import browser
 
 # Import the 'commendation' message id factory
 from schooltool.commendation import interfaces, commendation

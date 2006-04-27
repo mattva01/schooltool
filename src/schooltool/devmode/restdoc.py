@@ -38,7 +38,7 @@ from zope.app.container.interfaces import IContainer
 from zope.app.content.interfaces import IContentType
 from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
 from zope.app.http.put import FilePUT
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.traverser.interfaces import ITraverserPlugin

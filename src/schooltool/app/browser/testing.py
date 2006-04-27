@@ -47,7 +47,8 @@ from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.basicskin.standardmacros import StandardMacros
 from zope.app.form.browser.macros import FormMacros
 from zope.app.publisher.browser.menu import MenuAccessView
-from zope.app.publisher.interfaces.browser import IBrowserView, IBrowserMenu
+from zope.app.publisher.interfaces.browser import IBrowserMenu
+from zope.publisher.interfaces.browser import IBrowserView
 
 from schooltool.relationship.tests import setUpRelationships
 from schooltool.skin import breadcrumbs

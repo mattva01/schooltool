@@ -50,7 +50,7 @@ from zope.app.form.interfaces import ConversionError
 from zope.app.form.interfaces import IWidgetInputError, IInputWidget
 from zope.app.form.interfaces import WidgetInputError, WidgetsError
 from zope.app.form.utility import getWidgetsData
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.app.filerepresentation.interfaces import IWriteFile, IReadFile
 from zope.app.session.interfaces import ISession
@@ -2377,7 +2377,7 @@ def enableICalendarUpload(ical_view):
 
     We have a fake view on that calendar
 
-        >>> from zope.app.publisher.browser import BrowserView
+        >>> from zope.publisher.browser import BrowserView
         >>> from zope.publisher.browser import TestRequest
         >>> view = BrowserView(calendar, TestRequest())
 

@@ -25,7 +25,7 @@ $Id$
 from datetime import datetime, time, timedelta
 from pytz import timezone
 
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import canAccess
 

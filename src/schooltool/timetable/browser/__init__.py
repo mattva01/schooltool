@@ -31,7 +31,7 @@ from zope.publisher.interfaces import NotFound
 from zope.security.proxy import removeSecurityProxy
 
 from zope.app import zapi
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from schooltool.calendar.utils import parse_date, parse_time

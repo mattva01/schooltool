@@ -27,7 +27,7 @@ import linecache
 import cgi
 
 from zope.interface import implements
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 from zope.app.exception.interfaces import ISystemErrorView
 
 

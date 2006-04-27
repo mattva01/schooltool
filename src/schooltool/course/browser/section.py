@@ -30,7 +30,7 @@ from zope.app.component.hooks import getSite
 from zope.app.form.browser.add import AddView
 from zope.app.form.interfaces import WidgetsError
 from zope.app.form.utility import getWidgetsData
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 
 from schooltool.person.interfaces import IPerson
 from schooltool.group.interfaces import IGroup

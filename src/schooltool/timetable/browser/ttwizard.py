@@ -129,7 +129,7 @@ from zope.app.form.utility import setUpWidgets
 from zope.app.form.utility import getWidgetsData
 from zope.app.form.interfaces import IInputWidget
 from zope.app.form.interfaces import WidgetsError
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.container.interfaces import INameChooser
 from zope.app.session.interfaces import ISession

@@ -23,7 +23,7 @@ $Id$
 """
 
 from schooltool.course.interfaces import ISection
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.calendar.utils import parse_date
 

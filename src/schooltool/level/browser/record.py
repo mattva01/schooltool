@@ -19,13 +19,13 @@
 """
 Student Academic Record View
 
-$Id: app.py 3481 2005-04-21 15:28:29Z bskahan $
+$Id$
 """
 import zope.security
 import zope.wfmc
 from zope.app import form
 from zope.app import zapi
-from zope.app.publisher import browser
+from zope.publisher import browser
 
 from schooltool.app import app
 from schooltool import SchoolToolMessage as _

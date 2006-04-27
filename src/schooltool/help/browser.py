@@ -28,11 +28,12 @@ import zope.interface
 from zope import contentprovider
 from zope.app import onlinehelp
 from zope.app import zapi
-from zope.app.publisher import browser, interfaces
+from zope.app.publisher import browser
 from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.publisher.browser import BrowserView
+from zope.publisher.interfaces.browser import IBrowserView
 
-
-class ContextHelpView(browser.BrowserView):
+class ContextHelpView(BrowserView):
 
     def __init__(self, context, request):
         super(ContextHelpView, self).__init__(context, request)
@@ -52,7 +53,7 @@ class ContextHelpView(browser.BrowserView):
 
         help_context = self.context.context
         self.topic = None
-        if interfaces.browser.IBrowserView.providedBy(help_context):
+        if IBrowserView.providedBy(help_context):
             name = zapi.getName(help_context)
             help_context = zapi.getParent(help_context)
         else:

@@ -21,7 +21,7 @@ bar of the standard SchoolTool O-wrap.
   >>> from zope.publisher.browser import TestRequest
   >>> request = TestRequest()
 
-  >>> from zope.app.publisher.browser import BrowserView
+  >>> from zope.publisher.browser import BrowserView
   >>> class View(BrowserView):
   ...     __name__ = u'index.html'
   >>> view = View(person, request)

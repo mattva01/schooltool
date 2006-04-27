@@ -19,7 +19,7 @@
 """
 Level views.
 
-$Id: app.py 3481 2005-04-21 15:28:29Z bskahan $
+$Id$
 """
 import zope.component
 import zope.interface
@@ -27,7 +27,7 @@ import zope.schema
 from zope.security import proxy
 from zope.app import zapi
 from zope.app.form.browser import add
-from zope.app.publisher import browser
+from zope.publisher import browser
 
 from schooltool.level import interfaces
 from schooltool import SchoolToolMessage as _

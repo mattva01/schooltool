@@ -31,7 +31,7 @@ from datetime import datetime, date, timedelta
 from zope.testing import doctest
 from zope.publisher.browser import TestRequest
 from zope.app.testing import setup, ztapi
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 
 from schooltool import SchoolToolMessage as _
 from schooltool.app.cal import CalendarEvent

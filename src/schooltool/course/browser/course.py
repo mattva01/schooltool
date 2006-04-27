@@ -23,7 +23,7 @@ $Id$
 """
 from zope.app import zapi
 from zope.app.form.browser.add import AddView
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 from schooltool.app.browser.app import ContainerView
 
 from schooltool import SchoolToolMessage as _

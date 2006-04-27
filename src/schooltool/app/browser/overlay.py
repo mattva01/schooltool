@@ -25,7 +25,7 @@ $Id$
 import urllib
 from sets import Set
 
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 from zope.traversing.api import getPath
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.location.interfaces import ILocation
