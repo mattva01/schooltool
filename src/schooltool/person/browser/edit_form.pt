@@ -1,0 +1,21 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<body>
+<metal:nothing metal:fill-slot="content-header" />
+<metal:block metal:fill-slot="body">
+
+  <form action="." method="post"
+        tal:attributes="action request/URL"
+        class="standalone" enctype="multipart/form-data">
+    
+    <fieldset>
+      <div metal:use-macro="context/@@form_macros/widget_rows" />
+    </fieldset>
+
+    <div class="controls">
+      <input tal:repeat="action view/actions" 
+             tal:replace="structure action/render" />
+    </div>
+  </form>
+</metal:block>
+</body>
+</html>

@@ -152,4 +152,20 @@
 
   </configure>
 
+  <!-- demographics infrastructure (in personform) -->
+
+  <zope:subscriber
+      for="..interfaces.IPerson zope.publisher.interfaces.IPublisherRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".personform.nameinfo_traverser"
+      permission="zope.Public"
+      />
+
+   <page
+      for="..interfaces.INameInfo"
+      name="edit.html"
+      class=".personform.NameInfoEdit"
+      permission="schooltool.edit"
+      />
+
 </configure>

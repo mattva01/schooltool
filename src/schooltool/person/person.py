@@ -26,7 +26,9 @@ import sha
 from persistent import Persistent
 
 from zope.interface import implements
+from zope import schema
 from zope.annotation.interfaces import IAttributeAnnotatable
+from zope.location import locate, ILocation
 from zope.app.container import btree
 from zope.app.container.contained import Contained
 from zope.app.container.interfaces import IObjectAddedEvent
@@ -68,7 +70,9 @@ class Person(Persistent, Contained):
     def __init__(self, username=None, title=None):
         self.title = title
         self.username = username
-
+        self.nameinfo = NameInfo()
+        locate(self.nameinfo, self, 'nameinfo')
+        
     def setPassword(self, password):
         self._hashed_password = hash_password(password)
 
@@ -79,7 +83,12 @@ class Person(Persistent, Contained):
     def hasPassword(self):
         return self._hashed_password is not None
 
+class NameInfo(Persistent):
+    implements(interfaces.INameInfo, ILocation)
 
+    def __init__(self):
+        initializeSchemaAttributes(interfaces.INameInfo, self)
+    
 def hash_password(password):
     r"""Compute a SHA-1 hash of a given password.
 
@@ -130,3 +139,7 @@ def personAppCalendarOverlaySubscriber(event):
 
 def addPersonContainerToApplication(event):
     event.object['persons'] = PersonContainer()
+
+def initializeSchemaAttributes(iface, obj):
+    for field in schema.getFields(iface).values():
+        field.set(obj, field.default)

@@ -1,0 +1,25 @@
+============
+Demographics
+============
+
+We can add a person:
+
+  >>> from zope.testbrowser.testing import Browser
+  >>> browser = Browser()
+  >>> browser.addHeader('Authorization', 'Basic manager:schooltool')
+  >>> browser.open('http://localhost/persons/@@add.html')
+  >>> title = browser.getControl(name='field.title')
+  >>> title.value = 'foo'
+  >>> username = browser.getControl(name='field.username')
+  >>> username.value = 'foo'
+  >>> browser.getControl('Add').click()
+
+And we can edit its name info:
+
+  >>> browser.open('http://localhost/persons/foo/nameinfo/@@edit.html')
+  >>> full_name = browser.getControl(name='form.full_name')
+  >>> full_name.value = 'Someone Schooltool'
+  >>> browser.getControl('Apply').click()
+  >>> browser.open('http://localhost/persons/foo/nameinfo/@@edit.html')
+  >>> browser.getControl(name='form.full_name').value
+  'Someone Schooltool'

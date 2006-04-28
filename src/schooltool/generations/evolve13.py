@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2006 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,14 +17,24 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Generations for database version upgrades.
+Upgrade SchoolTool to generation 13.
 
-$Id$
+Introduce a new attribute nameinfo on Person objects.
+
+$Id: evolve13.py 5946 2006-04-18 15:47:33Z ignas $
 """
 
-from zope.app.generations.generations import SchemaManager
+from zope.app.publication.zopepublication import ZopePublication
+from zope.app.generations.utility import findObjectsProviding
+from zope.location import locate, ILocation
 
-schemaManager = SchemaManager(
-    minimum_generation=13,
-    generation=13,
-    package_name='schooltool.generations')
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.person.person import NameInfo
+
+def evolve(context):
+    root = context.connection.root()[ZopePublication.root_name]
+    for app in findObjectsProviding(root, ISchoolToolApplication):
+        for student in app['persons'].values():
+            student.nameinfo = NameInfo()
+            locate(student.nameinfo, student, 'nameinfo')
+
