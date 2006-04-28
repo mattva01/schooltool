@@ -56,10 +56,9 @@ def getHTTPViewRegistration(klass, name):
     if adapter is None:
         return
 
-    for reg in gsm.registrations():
-        if (isinstance(reg, AdapterRegistration) and reg.factory == adapter):
+    for reg in gsm.registeredAdapters():
+        if reg.factory == adapter:
             return reg
-
 
 def getContainerInterfaces(klass):
     """Get a list of interfaces that describe containers in which instances of
@@ -84,8 +83,8 @@ def getAdapters(spec, provided):
         for name, factory in gsm.adapters.lookupAll((spec,), provided)]
     return [
         reg
-        for reg in gsm.registrations()
-        if (isinstance(reg, AdapterRegistration) and reg.factory in factories)]
+        for reg in gsm.registeredAdapters()
+        if reg.factory in factories]
 
 
 def getNameTraversers(klass):
@@ -95,9 +94,8 @@ def getNameTraversers(klass):
                                                        ITraverserPlugin)]
     return [
         reg
-        for reg in gsm.registrations()
-        if (isinstance(reg, SubscriptionRegistration)
-            and reg.factory in factories)]
+        for reg in gsm.registeredSubscriptionAdapters()
+        if reg.factory in factories]
 
 
 class RESTDocMacros(StandardMacros):
