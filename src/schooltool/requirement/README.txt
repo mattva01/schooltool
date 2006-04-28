@@ -406,7 +406,7 @@ them must provide the ``IHaveRequirement`` interface. Thus we first have to
 implement an object that provides this interface.
 
   >>> import zope.interface
-  >>> from zope.app import annotation
+  >>> from zope import annotation
   >>> class Course(object):
   ...     zope.interface.implements(interfaces.IHaveRequirement,
   ...                               annotation.interfaces.IAttributeAnnotatable)
