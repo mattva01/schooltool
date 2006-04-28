@@ -26,9 +26,7 @@ from persistent import Persistent
 from zope.app import zapi
 from zope.app.component import getNextUtility
 from zope.app.component.interfaces import ISite
-from zope.app.component.interfaces.registration import ActiveStatus
 from zope.app.component.site import LocalSiteManager
-from zope.app.component.site import UtilityRegistration
 from zope.app.container.contained import Contained
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.location.interfaces import ILocation
