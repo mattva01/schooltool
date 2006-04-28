@@ -361,7 +361,7 @@
   <menuItem
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       menu="schooltool_actions" title="Open in iCal"
-      action="../calendar.ics" permission="schooltool.viewCalendar" />
+      action="calendar.ics" permission="schooltool.viewCalendar" />
 
 
   <!-- Calendar event views -->

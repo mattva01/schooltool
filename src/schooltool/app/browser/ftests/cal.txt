@@ -102,17 +102,6 @@ Now just the VFREEBUSY component of calendar
     END:VCALENDAR
     <BLANKLINE>
 
-
-The iCalendar file can actually be accessed from two different locations.
-Here's the other one:
-
-XXX mg: shouldn't we just pick one and settle on that?
-
-    # XXX: Where is the link for this file?
-    >>> frog.open('http://localhost/persons/frog/calendar.ics')
-    >>> frog.headers['content-type']
-    'text/calendar; charset=UTF-8'
-
 Let's render the weekly calendar view:
 
     # XXX: There is no link in the app for this URL.
@@ -254,7 +243,7 @@ let's use an aliased URL (directly on the person rather than on the calendar):
 
 And lets make sure that time is listed as BUSY
 
-    >>> frog.open('http://localhost/persons/frog/calendar.vfb')
+    >>> frog.open('http://localhost/persons/frog/calendar/calendar.vfb')
     >>> print frog.contents
     <BLANKLINE>
     BEGIN:VCALENDAR
