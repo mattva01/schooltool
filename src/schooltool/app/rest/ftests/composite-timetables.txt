@@ -154,7 +154,7 @@ Add a course:
     HTTP/1.1 201 Created
     ...
 
-And acouple of sections:
+And a couple of sections:
 
     >>> print rest("""
     ... PUT /sections/birdwatching-1 HTTP/1.1
@@ -264,7 +264,7 @@ Add section timetables:
     HTTP/1.1 201 Created
     ...
 
-Lets look at john's composite timetable:
+Let's look at John's composite timetable:
 
     >>> print rest(r"""
     ... GET /persons/john/composite-timetables/2005-fall.schema1 HTTP/1.1

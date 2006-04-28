@@ -595,7 +595,7 @@ class CompositeTimetables(object):
         >>> ICompositeTimetables.providedBy(ct)
         True
 
-        >>> obj.getCompositeTimetable = lambda term,schema: [term, schema]
+        >>> obj.getCompositeTimetable = lambda term, schema: [term, schema]
         >>> ct.getCompositeTimetable("term", "schema")
         ['term', 'schema']
 
