@@ -109,7 +109,7 @@ def doctest_copy_breaks_relationships():
 
     We copy one of the objects to another container.
 
-        >>> from zope.app.copypastemove import ObjectCopier
+        >>> from zope.copypastemove import ObjectCopier
         >>> another_container = BTreeContainer()
         >>> copier = ObjectCopier(container['orange'])
         >>> new_name = copier.copyTo(another_container)
@@ -178,7 +178,7 @@ def doctest_copy_does_not_break_inside_relationships():
 
     We copy the first object to another container.
 
-        >>> from zope.app.copypastemove import ObjectCopier
+        >>> from zope.copypastemove import ObjectCopier
         >>> another_container = BTreeContainer()
         >>> copier = ObjectCopier(container['orange'])
         >>> new_name = copier.copyTo(another_container)
