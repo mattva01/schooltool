@@ -153,7 +153,7 @@ def doctest_TermEditView_update():
     and sends an ObjectModifiedEvent.
 
         >>> import zope.event
-        >>> from zope.app.event.interfaces import IObjectModifiedEvent
+        >>> from zope.lifecycleevent.interfaces import IObjectModifiedEvent
         >>> old_subscribers = zope.event.subscribers[:]
         >>> def modified_handler(event):
         ...     if IObjectModifiedEvent.providedBy(event):

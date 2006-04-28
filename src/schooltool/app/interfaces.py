@@ -27,7 +27,6 @@ import zope.schema
 
 from zope.component.interfaces import ObjectEvent, IObjectEvent
 from zope.app import container
-from zope.app import event
 from zope.location.interfaces import ILocation
 from zope.app.security.interfaces import IAuthentication, ILogout
 

@@ -21,7 +21,7 @@
       />
 
   <subscriber
-      for="zope.app.event.interfaces.IObjectCopiedEvent"
+      for="zope.lifecycleevent.interfaces.IObjectCopiedEvent"
       handler="schooltool.relationship.objectevents.unrelateOnCopy"
       />
 

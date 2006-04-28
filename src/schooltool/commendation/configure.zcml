@@ -45,7 +45,7 @@
 
   <subscriber
       for=".interfaces.ICommendation
-           zope.app.event.interfaces.IObjectCreatedEvent"
+           zope.lifecycleevent.interfaces.IObjectCreatedEvent"
       handler=".commendation.cacheCommendation"
       />
 
