@@ -14,6 +14,7 @@
   <include package="zope.app.http" />
   <include package="zope.contentprovider" />
   <include package="zope.viewlet" />
+  <include package="zope.formlib" />
 
   <!-- Workaround to shut down a DeprecationWarning that appears because we do
        not include zope.app.onlinehelp and the rotterdam skin tries to look for
