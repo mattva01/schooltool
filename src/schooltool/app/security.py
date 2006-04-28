@@ -190,16 +190,15 @@ def setUpLocalAuth(site, auth=None):
     if not ISite.providedBy(site):
         site.setSiteManager(LocalSiteManager(site))
 
+    # go to the site management folder
     default = zapi.traverse(site, '++etc++site/default')
-    reg_manager = default.registrationManager
-
-    if 'SchoolToolAuth' not in default:
-        # Add and register the auth utility
-        default['SchoolToolAuth'] = auth
-        registration = UtilityRegistration('', IAuthentication, auth)
-        reg_manager.addRegistration(registration)
-        registration.status = ActiveStatus
-
+    # if we already have the auth utility registered, we're done
+    if 'SchoolToolAuth' in default:
+        return
+    # otherwise add it and register it
+    default['SchoolToolAuth'] = auth
+    manager = site.getSiteManager()
+    manager.registerUtility(auth, IAuthentication)
 
 def authSetUpSubscriber(event):
     """Set up local authentication for newly added SchoolTool apps.
