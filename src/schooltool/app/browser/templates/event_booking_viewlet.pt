@@ -1,7 +1,9 @@
-<tal:block define="event view/manager/event">
+<tal:block define="event view/manager/event;
+                   resources event/getBookedResources;
+                   booker event/getBooker"
+           tal:condition="resources">
 <div class="booked-resources"
      i18n:domain="schooltool"
-     tal:define="resources event/getBookedResources"
      tal:condition="resources">
   <h6 class="booked-resource-header"
       tal:attributes="style string:background: ${event/color2}">
@@ -13,7 +15,6 @@
   </tal:block>
 </div>
 <div class="booked-resources"
-     tal:define="booker event/getBooker"
      tal:condition="booker">
   <h6 class="booked-resource-header"
       tal:attributes="style string:background: ${event/color2}">

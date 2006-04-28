@@ -377,75 +377,26 @@ def doctest_EventForDisplay_getBooker_getBookedResources():
     """Test for EventForDisplay.getBooker and getBookedResources.
 
         >>> from schooltool.app.browser.cal import EventForDisplay
-        >>> from schooltool.resource.resource import Resource
-        >>> request = TestRequest()
+        >>> from schooltool.app.interfaces import ISchoolToolCalendarEvent
+        >>> class EventStub(object):
+        ...     implements(ISchoolToolCalendarEvent)
+        ...     resources = ['res1', 'res2']
+        ...     owner = "Jonas"
+        >>> class EFD(EventForDisplay):
+        ...     def __init__(self):
+        ...         self.context = EventStub()
 
-    If an event is not a resource booking event, getBooker returns None,
-    while getBookedResources returns an empty list.
+    getBookedResources plainly returns the list of resources of the
+    event:
 
-        >>> person = Person("p1")
-        >>> calendar = ISchoolToolCalendar(person)
-        >>> e1 = createEvent('2005-12-12 21:39:00', '15min',
-        ...                  'looking for mice')
-        >>> calendar.addEvent(e1)
-        >>> e1fd = EventForDisplay(e1, request, 'blue', 'yellow', calendar,
-        ...                        utc)
-        >>> print e1fd.getBooker()
-        None
-        >>> e1fd.getBookedResources()
-        ()
+        >>> efd = EFD()
+        >>> efd.getBookedResources()
+        ['res1', 'res2']
 
-    If an event is a resource booking event, and we're looking at a resource's
-    calendar, we should see who booked the resource, but not the other
-    resources that were also booked.
+    getBooker returns the owner of the event:
 
-        >>> resource1 = Resource("r1")
-        >>> e1.bookResource(resource1)
-        >>> resource2 = Resource("r2")
-        >>> e1.bookResource(resource2)
-
-    We're looking at the calendar of resource1 here:
-
-        >>> calendar = ISchoolToolCalendar(resource1)
-        >>> e1fd = EventForDisplay(e1, request, 'blue', 'yellow', calendar,
-        ...                        utc)
-        >>> e1fd.getBooker() is person
-        True
-        >>> e1fd.getBookedResources()
-        ()
-
-    We're looking at the calendar of resource2 here:
-
-        >>> calendar = ISchoolToolCalendar(resource2)
-        >>> e1fd = EventForDisplay(e1, request, 'blue', 'yellow', calendar,
-        ...                        utc)
-        >>> e1fd.getBooker() is person
-        True
-        >>> e1fd.getBookedResources()
-        ()
-
-    If we're looking at the calendar of the person who booked the event, we
-    shouldn't see the booker, but we should see the list of booked resources.
-
-        >>> calendar = ISchoolToolCalendar(person)
-        >>> e1fd = EventForDisplay(e1, request, 'blue', 'yellow', calendar,
-        ...                        utc)
-        >>> print e1fd.getBooker()
-        None
-        >>> sorted(r.title for r in e1fd.getBookedResources())
-        ['r1', 'r2']
-
-    Corner case: if event.__parent__ is None (XXX which happens when?) nothing
-    should break.
-
-        >>> e2 = createEvent('2005-12-12 21:39:00', '15min',
-        ...                  'looking for mice')
-        >>> e2fd = EventForDisplay(e2, request, 'blue', 'yellow', calendar,
-        ...                        utc)
-        >>> print e2fd.getBooker()
-        None
-        >>> e2fd.getBookedResources()
-        ()
+        >>> print efd.getBooker()
+        Jonas
 
     """
 
@@ -1526,7 +1477,7 @@ def doctest_CalendarEventView():
         >>> view.display.dtendtz.time()
         datetime.time(13, 29)
 
-    The display has knows about booked resources, currently there are none.
+    The display knows about booked resources, currently there are none.
 
         >>> view.display.getBookedResources()
         ()

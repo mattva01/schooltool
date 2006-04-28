@@ -94,6 +94,9 @@ class ISchoolToolCalendarEvent(ICalendarEvent,
     resources = zope.interface.Attribute(
         """Resources that are booked by this event""")
 
+    owner = zope.interface.Attribute(
+        """Object which this event belongs to.""")
+
     def bookResource(resource):
         """Book a resource."""
 

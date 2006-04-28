@@ -132,8 +132,7 @@ class SampleTimetables(object):
             timetable = app['ttschemas'].getDefault().createTimetable()
             ITimetables(section).timetables[ttname] = timetable
             for day_id in timetable.keys():
-                activity = TimetableActivity(course.title, owner=section,
-                                             resources=section.resources)
+                activity = TimetableActivity(course.title, owner=section)
                 timetable[day_id].add(period, activity)
 
     def generate(self, app, seed=None):

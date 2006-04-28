@@ -344,3 +344,10 @@ class TimetableCalendarEvent(CalendarEvent):
         self._activity = kwargs.pop('activity')
         CalendarEvent.__init__(self, *args, **kwargs)
 
+    @property
+    def resources(self):
+        return self.activity.resources
+
+    @property
+    def owner(self):
+        return self.activity.owner

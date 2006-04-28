@@ -77,31 +77,19 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
           <timezone name="Europe/Vilnius"/>
           <day id="Day 1">
             <period id="A" homeroom="">
-              <activity title="Maths">
-                <resource xlink:type="simple" xlink:href="http://127.0.0.1/resources/room1"
-                          xlink:title="Room1"/>
-              </activity>
+              <activity title="Maths" />
             </period>
             <period id="B" homeroom="">
               <activity title="English" />
-              <activity title="French">
-              </activity>
+              <activity title="French" />
             </period>
           </day>
           <day id="Day 2">
             <period id="C" homeroom="">
-              <activity title="CompSci">
-                <resource xlink:type="simple" xlink:href="http://127.0.0.1/resources/lab1"
-                          xlink:title="Lab1"/>
-                <resource xlink:type="simple" xlink:href="http://127.0.0.1/resources/lab2"
-                          xlink:title="Lab2"/>
-              </activity>
+              <activity title="CompSci" />
             </period>
             <period id="D">
-              <activity title="CompSci">
-                <resource xlink:type="simple" xlink:href="http://127.0.0.1/resources/%C5%BEabas"
-                          xlink:title="Zabas"/>
-              </activity>
+              <activity title="CompSci" />
             </period>
           </day>
         </timetable>

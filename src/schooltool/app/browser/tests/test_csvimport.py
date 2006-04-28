@@ -31,7 +31,6 @@ from zope.testing import doctest
 from zope.app.testing import ztapi
 
 from schooltool.app.browser.testing import setUp as testSetUp, tearDown
-from schooltool.resource.resource import Resource
 from schooltool.person.person import Person
 from schooltool.testing import setup
 
@@ -251,8 +250,6 @@ class TestTimetableCSVImporter(unittest.TestCase):
 
         self.course = app['courses']['philosophy'] = Course(title="Philosophy")
         self.section = app['sections']['section'] = Section(title="Something")
-        self.location = app['resources']['location'] = Resource("Inside")
-        self.location2 = app['resources']['location2'] = Resource("Outside")
 
         # set a timetable schema
         from schooltool.timetable.schema import TimetableSchema
@@ -357,16 +354,16 @@ class TestTimetableCSVImporter(unittest.TestCase):
             "summer","three-day"
             "","",""
             "philosophy","lorch"
-            "Monday","A","location"
+            "Monday","A"
             "Monday","B"
-            "Tuesday","C","location2"
+            "Tuesday","C"
             "***"
             "guzman"
             "curtin"
             ""
             "philosophy","guzman",""
             "Wednesday","B",""
-            "Wednesday","C","location2"
+            "Wednesday","C"
             "***"
             "curtin"
             "lorch"
@@ -406,7 +403,6 @@ class TestTimetableCSVImporter(unittest.TestCase):
         # Look closer into an activity.
         activity = list(lorch_tt['Monday']['A'])[0]
         self.assert_(activity.owner is philosophy_lorch)
-        self.assertEquals(list(activity.resources), [self.location])
 
         # Finally, let's make sure that we can import the same data
         # several times without crashing.
@@ -508,8 +504,8 @@ class TestTimetableCSVImporter(unittest.TestCase):
 
         course = self.app['courses']['philosophy']
         instructor = self.app['persons']['lorch']
-        periods = [('Monday', 'A', self.location),
-                   ('Tuesday', 'C', None)]
+        periods = [('Monday', 'A'),
+                   ('Tuesday', 'C')]
 
         # dry run
         section = imp.createSection(course, instructor,
@@ -537,7 +533,6 @@ class TestTimetableCSVImporter(unittest.TestCase):
         act = list(acts)[0]
         self.assertEquals(act.title, course.title)
         self.assert_(act.owner is section)
-        self.assertEquals(list(act.resources), [self.location])
         self.assert_(act.timetable is tt)
 
         acts = tt['Tuesday']['C']
@@ -545,7 +540,6 @@ class TestTimetableCSVImporter(unittest.TestCase):
         act = list(acts)[0]
         self.assertEquals(act.title, course.title)
         self.assert_(act.owner is section)
-        self.assertEquals(list(act.resources), [])
 
         # If the same data is imported a second time, nothing should change.
         section2 = imp.createSection(course, instructor,
@@ -559,8 +553,8 @@ class TestTimetableCSVImporter(unittest.TestCase):
 
         course = self.app['courses']['philosophy']
         instructor = self.app['persons']['lorch']
-        periods = [('Monday', 'A', self.location),
-                   ('Tuesday', 'C', None)]
+        periods = [('Monday', 'A'),
+                   ('Tuesday', 'C')]
 
         title = 'Philosophy - Lorch'
         section = self.app['sections']['oogabooga'] = Section(title=title)
@@ -578,7 +572,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         imp = self.createImporter(term='fall', ttschema='three-day')
 
         lines = [['philosophy', 'curtin'],
-                 ['Monday', 'A', 'location'],
+                 ['Monday', 'A'],
                  ['Wednesday', 'B'],
                  ['***'],
                  ['lorch'],
@@ -613,8 +607,8 @@ class TestTimetableCSVImporter(unittest.TestCase):
         # check the logs
         philosophy = self.course
         curtin = self.app['persons']['curtin']
-        expected_periods = [('Monday', 'A', self.location),
-                            ('Wednesday', 'B', None)]
+        expected_periods = [('Monday', 'A'),
+                            ('Wednesday', 'B')]
         self.assertEquals(section_log,
                           [(philosophy, curtin, expected_periods, False)])
         lines_expected = [['lorch'], ['guzman']]
@@ -633,27 +627,11 @@ class TestTimetableCSVImporter(unittest.TestCase):
     def test_importChunk_errors_period(self):
         # provide a row for a period too
         lines = [['relativity_theory', 'einstein'],
-                 ['day x', 'period y', 'location z']]
+                 ['day x', 'period y']]
         imp = self.createImporter(term='fall', ttschema='three-day')
         imp.importChunk(lines, line=5)
         self.assertEquals(imp.errors.day_ids, ['day x'])
         self.assertEquals(imp.errors.periods, [])
-        self.assertEquals(imp.errors.locations, ['location z'])
-        self.assertEquals(translate(imp.errors.generic[0]),
-                          'Incomplete section description on line 5')
-
-    def test_importChunk_errors_location_issue424(self):
-        # Regression test for issue 424 (UnboundLocal error in importChunk)
-        # importChunk used to fail if it encountered an invalid location
-        # that was already flagged as invalid.
-        lines = [['relativity_theory', 'einstein'],
-                 ['Monday', 'A', 'location z']]
-        imp = self.createImporter(term='fall', ttschema='three-day')
-        imp.errors.locations.append('location z') # record invalid location
-        imp.importChunk(lines, line=5)
-        self.assertEquals(imp.errors.day_ids, [])
-        self.assertEquals(imp.errors.periods, [])
-        self.assertEquals(imp.errors.locations, ['location z'])
         self.assertEquals(translate(imp.errors.generic[0]),
                           'Incomplete section description on line 5')
 
@@ -665,18 +643,18 @@ class TestTimetableCSVImporter(unittest.TestCase):
         imp = self.createImporter(term='fall', ttschema='three-day')
         imp.importChunk(lines, line=5)
         self.assertEquals(translate(imp.errors.generic[0]),
-                          'Malformed line 6 (it should contain a day id,'
-                          ' a period id and optionally a location id)')
+                          'Malformed line 6 (it should contain a day id and'
+                          ' a period id)')
         self.assertEquals(translate(imp.errors.generic[1]),
-                          'Malformed line 7 (it should contain a day id,'
-                          ' a period id and optionally a location id)')
+                          'Malformed line 7 (it should contain a day id and'
+                          ' a period id)')
 
     def test_importChunk_errors_persons(self):
         # an extra row for a period and a terminator -- the section is still
         # malformed
         lines = [['relativity_theory', 'einstein'],
-                 ['day x', 'ZZZ', 'Moon'],
-                 ['Tuesday', 'ZZZ', 'Moon'],
+                 ['day x', 'ZZZ'],
+                 ['Tuesday', 'ZZZ'],
                  ['***']]
         imp = self.createImporter(term='fall', ttschema='three-day')
         imported_person_data = []
@@ -687,7 +665,6 @@ class TestTimetableCSVImporter(unittest.TestCase):
         imp.importChunk(lines, line=5)
         self.assertEquals(imp.errors.day_ids, ['day x'])
         self.assertEquals(imp.errors.periods, ['ZZZ'])
-        self.assertEquals(imp.errors.locations, ['Moon'])
         self.assertEquals(translate(imp.errors.generic[0]),
                           'Incomplete section description on line 5')
         # importPersons did not get called

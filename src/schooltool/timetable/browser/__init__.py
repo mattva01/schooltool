@@ -302,16 +302,8 @@ def format_timetable_for_presentation(timetable):
       >>> timetable['day 1'].add('A', TimetableActivity('Something'))
       >>> timetable['day 1'].add('B', TimetableActivity('A2'))
       >>> timetable['day 1'].add('B', TimetableActivity('A1'))
-
-    Some timetable activities may have associated resources
-
-      >>> from schooltool.resource.resource import Resource
-      >>> r1 = Resource('R1')
-      >>> r2 = Resource('R2')
-      >>> timetable['day 2'].add('C', TimetableActivity('Else',
-      ...                                               resources=[r1]))
-      >>> timetable['day 3'].add('F', TimetableActivity('A3',
-      ...                                               resources=[r2, r1]))
+      >>> timetable['day 2'].add('C', TimetableActivity('Else'))
+      >>> timetable['day 3'].add('F', TimetableActivity('A3'))
 
     Here's how it looks like
 
@@ -320,7 +312,7 @@ def format_timetable_for_presentation(timetable):
       ...    for cell in row:
       ...        print '%(period)1s: %(activity)-11s |' % cell,
       ...    print
-      A: Something   | C: Else (R1)   | F: A3 (R1, R2) |
+      A: Something   | C: Else        | F: A3          |
       B: A1 / A2     | D:             |  :             |
        :             | E:             |  :             |
 
@@ -331,13 +323,7 @@ def format_timetable_for_presentation(timetable):
         for nrow, (period, actiter) in enumerate(day.items()):
             activities = []
             for a in actiter:
-                resources = [r.title for r in a.resources]
-                if resources:
-                    resources.sort()
-                    activities.append('%s (%s)'
-                                      % (a.title, ', '.join(resources)))
-                else:
-                    activities.append(a.title)
+                activities.append(a.title)
             activities.sort()
             if nrow >= len(rows):
                 rows.append([{'period': '', 'activity': ''}] * ncol)

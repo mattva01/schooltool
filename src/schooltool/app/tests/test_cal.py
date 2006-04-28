@@ -87,6 +87,21 @@ def doctest_CalendarEvent():
         >>> event.dtend
         datetime.timedelta(0, 3600)
 
+
+    Owner of the event is the __parent__ of its calendar:
+
+        >>> class CalStub(object):
+        ...     __parent__ = "Owner"
+        >>> event.__parent__ = CalStub()
+        >>> event.owner
+        'Owner'
+
+    If event has no calendar it is assumed that it has no owner too:
+
+        >>> event.__parent__ = None
+        >>> event.owner is None
+        True
+
     It is very unwise to touch the __name__ or unique_id of events.
     TODO: enforce this restriction.
 

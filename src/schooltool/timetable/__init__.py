@@ -146,6 +146,7 @@ from schooltool.calendar.simple import ImmutableCalendar
 # appease the gods of circular imports
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
 
+from schooltool.timetable.interfaces import IBookResources
 from schooltool.timetable.interfaces import ITimetable, ITimetableWrite
 from schooltool.timetable.interfaces import ITimetableDay, ITimetableDayWrite
 from schooltool.timetable.interfaces import ITimetableDict
@@ -371,28 +372,30 @@ class TimetableActivity(object):
 
     implements(ITimetableActivity)
 
-    def __init__(self, title=None, owner=None, resources=(), timetable=None):
+    def __init__(self, title=None, owner=None, timetable=None):
         self._title = title
         self._owner = owner
-        self._resources = ImmutableSet(resources)
         self._timetable = timetable
 
     title = property(lambda self: self._title)
     owner = property(lambda self: self._owner)
-    resources = property(lambda self: self._resources)
     timetable = property(lambda self: self._timetable)
 
+    @property
+    def resources(self):
+        resource_booker = IBookResources(self.owner, None)
+        return resource_booker and resource_booker.resources or []
+
     def __repr__(self):
-        return ("TimetableActivity(%r, %r, %r, %r)"
-                % (self.title, self.owner, self.resources, self.timetable))
+        return ("TimetableActivity(%r, %r, %r)"
+                % (self.title, self.owner, self.timetable))
 
     def __eq__(self, other):
         # Is it really a good idea to ignore self.timetable?
         # On further thought it does not matter -- we never compare activities
         # that come from timetables with different keys.
         if ITimetableActivity.providedBy(other):
-            return (self.title == other.title and self.owner == other.owner
-                    and self.resources == other.resources)
+            return self.title == other.title and self.owner == other.owner
         else:
             return False
 
@@ -400,16 +403,13 @@ class TimetableActivity(object):
         return not self.__eq__(other)
 
     def __hash__(self):
-        return hash((self.title, self.owner, self.resources))
+        return hash((self.title, self.owner))
 
-    def replace(self, title=Unchanged, owner=Unchanged,
-                      resources=Unchanged, timetable=Unchanged):
+    def replace(self, title=Unchanged, owner=Unchanged, timetable=Unchanged):
         if title is Unchanged: title = self.title
         if owner is Unchanged: owner = self.owner
-        if resources is Unchanged: resources = self.resources
         if timetable is Unchanged: timetable = self.timetable
-        return TimetableActivity(title=title, owner=owner,
-                                 resources=resources, timetable=timetable)
+        return TimetableActivity(title=title, owner=owner, timetable=timetable)
 
 
 class TimetableReplacedEvent(object):

@@ -39,8 +39,7 @@
           Each section description's first row contains the <strong>course
           id</strong> and the <strong>instructor id</strong> for the new
           section.  Then a number of rows, each containing a <strong>day
-          id</strong>, a <strong>period id</strong> and an optional
-          <strong>location id</strong>, follows.  The list of period
+          id</strong> and a <strong>period id</strong>, follows.  The list of period
           descriptions is terminated by three asterisks ('***') in the first
           column.  After the terminator, any number of <strong>person
           ids</strong> may follow, the denoted persons will be added to the
@@ -53,29 +52,27 @@
 "2005-fall","three-day"
 "","",""
 "philosophy","lorch"
-"Monday","A","room137"
+"Monday","A"
 "Monday","B"
-"Tuesday","C","room138"
+"Tuesday","C"
 "***"
 "johnny"
 "billy"
 ""
 "literature","guzman"
 "Wednesday","B"
-"Wednesday","C","room139"
+"Wednesday","C"
 "***"
 "johnny"
 "pete"
 </pre>
         <p i18n:translate="">
           The above example will create two new sections, one for the
-          philosophy lecture and the other for the literature lecture   The
-          section for the philosophy lecture will have persons with ids
-          'johnny' and 'billy' as learners, and its timetable will contain
-          three timetable activities, two on Monday (one taking place in the
-          location denoted by the id `room137`, one without a specified
-          location)   The literature section will be processed in a similar
-          fashion.
+          philosophy lecture and the other for the literature lecture.
+          The section for the philosophy lecture will have persons
+          with ids 'johnny' and 'billy' as learners, and its timetable
+          will contain three timetable activities, two on Monday.  The
+          literature section will be processed in a similar fashion.
         </p>
 
         <p i18n:translate="">

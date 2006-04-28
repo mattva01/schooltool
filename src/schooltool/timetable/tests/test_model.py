@@ -675,7 +675,11 @@ class TestTimetableCalendarEvent(unittest.TestCase):
 
         day_id = 'Day2'
         period_id = 'Mathematics'
-        activity = object()
+
+        class ActivityStub(object):
+            owner = None
+            resources = []
+        activity = ActivityStub()
 
         ev = TimetableCalendarEvent(datetime(2004, 10, 13, 12),
                                     timedelta(45), "Math",
@@ -684,6 +688,26 @@ class TestTimetableCalendarEvent(unittest.TestCase):
         verifyObject(ITimetableCalendarEvent, ev)
         for attr in ['day_id', 'period_id', 'activity']:
             self.assertRaises(AttributeError, setattr, ev, attr, object())
+
+    def test_owner_resources(self):
+        from schooltool.timetable import TimetableCalendarEvent
+        from schooltool.timetable.interfaces import ITimetableCalendarEvent
+
+        day_id = 'Day2'
+        period_id = 'Mathematics'
+
+        class ActivityStub(object):
+            resources = ['cookie', 'parrot']
+            owner = ['Long John']
+        activity = ActivityStub()
+
+        ev = TimetableCalendarEvent(datetime(2004, 10, 13, 12),
+                                    timedelta(45), "Sailin mate",
+                                    day_id=day_id, period_id=period_id,
+                                    activity=activity)
+
+        self.assertEqual(ev.owner, activity.owner)
+        self.assertEqual(ev.resources, activity.resources)
 
 
 def test_suite():

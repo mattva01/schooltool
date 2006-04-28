@@ -27,6 +27,7 @@ import datetime
 from zope.interface import Interface, Attribute, implements
 from zope.schema import Field, Object, Int, TextLine, List, Set, Tuple
 from zope.schema import Dict, Date, Timedelta
+from zope.schema import Iterable
 from zope.schema.interfaces import IField
 from zope.annotation.interfaces import IAnnotatable
 from zope.app.container.constraints import contains, containers
@@ -251,9 +252,8 @@ class ITimetableActivity(Interface):
         The activity lives in the owner's timetable.
         """)
 
-    resources = Set(
+    resources = Iterable(
         title=u"A set of resources assigned to this activity.",
-        value_type=Field(title=u"A resource"),
         description=u"""
         The activity is also present in the timetables of all resources
         assigned to this activity.
@@ -266,14 +266,13 @@ class ITimetableActivity(Interface):
         to a composite timetable or a timetable of a resource.
         """)
 
-    def replace(title=Unchanged, owner=Unchanged, resources=Unchanged,
-                timetable=Unchanged):
+    def replace(title=Unchanged, owner=Unchanged, timetable=Unchanged):
         """Return a copy of this activity with some fields changed."""
 
     def __eq__(other):
         """Is this timetable activity equal to `other`?
 
-        Timetable activities are equal iff their title, owner and resources
+        Timetable activities are equal iff their title and owner
         attributes are equal.
 
         Returns false if other is not a timetable activity.
@@ -622,6 +621,13 @@ class IHaveTimetables(Interface):
 class IOwnTimetables(IHaveTimetables, IAnnotatable):
     """A marker interface for content objects to declare themselves as having
        timetables."""
+
+
+class IBookResources(Interface):
+    """An object that can have booked resources."""
+
+    resources = Iterable(
+        title=u"Booked resources")
 
 
 class ITimetables(Interface):

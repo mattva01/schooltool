@@ -421,12 +421,7 @@ class TestTimetableActivity(unittest.TestCase):
         tb = TimetableActivity("Dancing", owner)
         tc = TimetableActivity("Fencing", owner)
         td = TimetableActivity("Dancing", object())
-        res1 = object()
-        res2 = object()
-        te = TimetableActivity("Dancing", owner, [res1, res2])
-        tf = TimetableActivity("Dancing", owner, [res2, res1])
-        tg = TimetableActivity("Dancing", owner, [res1, res2],
-                               timetable=object())
+        tg = TimetableActivity("Dancing", owner, timetable=object())
 
         # Do we really want to ignore timetable when hashing/comparing?
         # On further thought it does not matter -- we never compare activities
@@ -438,9 +433,7 @@ class TestTimetableActivity(unittest.TestCase):
         self.assertNotEqual(ta, tc)
         self.assertNotEqual(ta, td)
         self.assertNotEqual(ta, fake_thing)
-        self.assertNotEqual(ta, te)
-        self.assertEqual(te, tf)
-        self.assertEqual(tf, tg)
+        self.assertEqual(ta, tg)
 
         # __ne__
         self.failIf(ta != ta)
@@ -448,17 +441,13 @@ class TestTimetableActivity(unittest.TestCase):
         self.assert_(ta != tc)
         self.assert_(ta != td)
         self.assert_(ta != fake_thing)
-        self.assert_(ta != te)
-        self.failIf(te != tf)
-        self.failIf(tf != tg)
+        self.failIf(ta != tg)
 
         # __hash__
         self.assertEqual(hash(ta), hash(tb))
         self.assertNotEqual(hash(ta), hash(tc))
         self.assertNotEqual(hash(ta), hash(td))
-        self.assertNotEqual(hash(ta), hash(te))
-        self.assertEqual(hash(te), hash(tf))
-        self.assertEqual(hash(tf), hash(tg))
+        self.assertEqual(hash(ta), hash(tg))
 
     def test_immutability(self):
         from schooltool.timetable import TimetableActivity

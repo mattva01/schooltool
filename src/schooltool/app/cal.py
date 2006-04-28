@@ -81,6 +81,13 @@ class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
                                  if r is not resource])
         ISchoolToolCalendar(resource).removeEvent(self)
 
+    @property
+    def owner(self):
+        if self.__parent__:
+            return self.__parent__.__parent__
+        else:
+            return None
+
 
 class Calendar(Persistent, CalendarMixin):
     """A persistent calendar."""

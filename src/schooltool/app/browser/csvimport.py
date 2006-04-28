@@ -64,13 +64,12 @@ class TimetableImportErrorCollection(object):
         self.persons = []
         self.courses = []
         self.sections = []
-        self.locations = []
         self.records = []
 
     def anyErrors(self):
         return bool(self.generic or self.day_ids or self.periods
                     or self.persons or self.courses or self.sections
-                    or self.locations or self.records)
+                    or self.records)
 
     def __repr__(self):
         return "<%s %r>" % (self.__class__.__name__, self.__dict__)
@@ -274,8 +273,8 @@ class TimetableCSVImporter(object):
         consist of chunks like this:
 
         course_id, instructor_id
-        day_id, period_id[, location_id]
-        day_id, period_id[, location_id]
+        day_id, period_id
+        day_id, period_id
         ...
         ***
         student_id
@@ -335,7 +334,6 @@ class TimetableCSVImporter(object):
         if instructor is None:
             self.errors.persons.append(instructor_id)
 
-        invalid_location = object() # marker
         line_ofs = 1
         periods = []
         finished = False
@@ -346,27 +344,12 @@ class TimetableCSVImporter(object):
                 break
             elif len(row) == 2:
                 day_id, period_id = row
-                location_id = None
-            elif len(row) == 3:
-                day_id, period_id, location_id = row
             else:
                 err_msg = _('Malformed line ${line_no} (it should contain a'
-                            ' day id, a period id and optionally a location'
-                            ' id)',
+                            ' day id and a period id)',
                             mapping={'line_no': line + line_ofs - 1})
                 self.errors.generic.append(err_msg)
                 continue
-
-            # check resource_id
-            if location_id:
-                try:
-                    location = self.app['resources'][location_id]
-                except KeyError:
-                    location = invalid_location
-                    if location_id not in self.errors.locations:
-                        self.errors.locations.append(location_id)
-            else:
-                location = None
 
             # check day_id
             try:
@@ -382,7 +365,7 @@ class TimetableCSVImporter(object):
                 self.errors.periods.append(period_id)
                 continue
 
-            periods.append((day_id, period_id, location))
+            periods.append((day_id, period_id))
 
         if not finished or len(rows) == line_ofs:
             err_msg = _("Incomplete section description on line ${line}",
@@ -397,9 +380,7 @@ class TimetableCSVImporter(object):
     def createSection(self, course, instructor, periods, dry_run=True):
         """Create a section.
 
-        `periods` is a list of tuples (day_id, period_id, location).
-        `location` is a Resource object, or None, in which case no
-        resource is booked.
+        `periods` is a list of tuples (day_id, period_id).
 
         A title is generated from the titles of `course` and `instructor`.
         If an existing section with the same title is found, it is used instead
@@ -440,13 +421,8 @@ class TimetableCSVImporter(object):
             tt = timetables[timetable_key]
 
         # Add timetable activities.
-        for day_id, period_id, location in periods:
-            if location is not None:
-                resources = (location, )
-            else:
-                resources = ()
-            act = TimetableActivity(title=course.title, owner=section,
-                                    resources=resources)
+        for day_id, period_id in periods:
+            act = TimetableActivity(title=course.title, owner=section)
             tt[day_id].add(period_id, act)
 
         return section
@@ -564,7 +540,6 @@ class TimetableCSVImportView(BaseCSVImportView):
             ('persons', _("Persons not found: ${args}.")),
             ('courses', _("Courses not found: ${args}.")),
             ('sections', _("Sections not found: ${args}.")),
-            ('locations', _("Locations not found: ${args}.")),
             ('records', _("Invalid records: ${args}."))]:
             v = getattr(err, key)
             if v:
