@@ -86,8 +86,8 @@
             <option i18n:translate=""
                     tal:repeat="section period/sections/sortby:title"
                     tal:attributes="value section/__name__;
-                                    selected python:section is selection
-                                                and 'selected' or None"
+                        selected python:(selection and section.__name__ == selection.__name__)
+                                        and 'selected' or None"
                     tal:content="section/label"></option>
           </select>
         </td>

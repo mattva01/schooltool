@@ -36,6 +36,8 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from schooltool.calendar.utils import parse_date, parse_time
 from schooltool.app.interfaces import ISchoolToolCalendar
+from schooltool.relationship.relationship import getRelatedObjects
+from schooltool.app.membership import URIGroup, URIMember
 from schooltool.person.interfaces import IPerson
 from schooltool.term.term import getNextTermForDate, getTermForDate
 from schooltool.traverser.interfaces import ITraverserPlugin
@@ -379,6 +381,9 @@ class PersonTimetableSetupView(TimetableSetupViewMixin):
         else:
             return getNextTermForDate(datetime.date.today())
 
+    def sections(self):
+        return getSchoolToolApplication()['sections'].values()
+
     def sectionMap(self, term, ttschema):
         """Compute a mapping of timetable slots to sections.
 
@@ -391,7 +396,7 @@ class PersonTimetableSetupView(TimetableSetupViewMixin):
         for day_id, day in ttschema.items():
             for period_id in day.periods:
                 section_map[day_id, period_id] = sets.Set()
-        for section in getSchoolToolApplication()['sections'].values():
+        for section in self.sections():
             timetable = ITimetables(section).timetables.get(ttkey)
             if timetable:
                 for day_id, period_id, activity in timetable.itercontent():
@@ -423,6 +428,16 @@ class PersonTimetableSetupView(TimetableSetupViewMixin):
 
         """
 
+        def getSections(item):
+            return [section for section in getRelatedObjects(item, URIGroup)
+                    if ISection.providedBy(section)]
+
+        person_sections = getSections(self.context)
+        group_sections = []
+        for group in self.context.groups:
+            for section in getSections(group):
+                group_sections.append((group, section))
+
         def days(schema):
             for day_id, day in schema.items():
                 yield {'title': day_id,
@@ -440,19 +455,19 @@ class PersonTimetableSetupView(TimetableSetupViewMixin):
             for period_id in day.periods:
                 sections = section_map[day_id, period_id]
                 sections = sortedbytitle(sections)
+                section_set = set(sections)
 
                 in_group = []
-                for group in sortedbytitle(self.context.groups):
-                    for section in sections:
-                        if group in section.members:
-                            in_group.append({'group': group,
-                                            'section': section})
+                for group, section in group_sections:
+                    if section in section_set:
+                        in_group.append({'group': group,
+                                         'section': section})
                 in_group = sortedbytitle(in_group, 'section')
 
                 selected = []
                 if not in_group:
-                    selected = [section for section in sections
-                                if self.context in section.members]
+                    selected = [section for section in person_sections
+                                if section in section_set]
                     selected = sortedbytitle(selected)
                 if not selected:
                     selected = [None]
