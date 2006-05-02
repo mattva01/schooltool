@@ -242,7 +242,7 @@ class TestTimetable(unittest.TestCase):
         tt2.timezone = 'Europe/Vilnius'
         self.assertNotEquals(tt, tt2)
 
-    def test_itercontent(self):
+    def test_activities(self):
         from schooltool.timetable import TimetableActivity
         tt = self.createTimetable()
         english = TimetableActivity("English")
@@ -251,7 +251,7 @@ class TestTimetable(unittest.TestCase):
         tt["A"].add("Green", english)
         tt["A"].add("Blue", math)
         tt["B"].add("Green", bio)
-        result = list(tt.itercontent())
+        result = tt.activities()
         expected = [("A", "Green", english),
                     ("A", "Blue", math),
                     ("B", "Green", bio)]

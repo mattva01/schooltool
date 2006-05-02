@@ -399,7 +399,7 @@ class PersonTimetableSetupView(TimetableSetupViewMixin):
         for section in self.sections():
             timetable = ITimetables(section).timetables.get(ttkey)
             if timetable:
-                for day_id, period_id, activity in timetable.itercontent():
+                for day_id, period_id, activity in timetable.activities():
                     section_map[day_id, period_id].add(section)
         return section_map
 

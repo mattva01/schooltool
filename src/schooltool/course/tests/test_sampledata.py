@@ -215,7 +215,7 @@ def doctest_SampleTimetables():
 
         >>> section = getRelatedObjects(teacher, URISection)[0]
         >>> timetable = ITimetables(section).timetables['2005-fall.simple']
-        >>> for day, period, activity in timetable.itercontent():
+        >>> for day, period, activity in timetable.activities():
         ...     print day, period, activity.title
         Day 1 F Spanish C
         Day 2 F Spanish C
@@ -231,10 +231,8 @@ def doctest_SampleTimetables():
         >>> from schooltool.app.membership import URIGroup
         >>> for section in getRelatedObjects(student, URIGroup):
         ...     if section.title != 'Students':
-        ...         timetable = ITimetables(section).\
-timetables['2005-fall.simple']
-        ...         for day, period, activity in list\
-(timetable.itercontent())[:1]:
+        ...         timetable = ITimetables(section).timetables['2005-fall.simple']
+        ...         for day, period, activity in timetable.itercontent()[:1]:
         ...             print period, activity.title
         D English B
         B Math A
@@ -278,7 +276,7 @@ def doctest_SampleTimetables_assignPeriodToSection():
 
         >>> from schooltool.timetable.interfaces import ITimetables
         >>> timetable = ITimetables(s).timetables['2005-fall.simple']
-        >>> for day, period, activity in timetable.itercontent():
+        >>> for day, period, activity in timetable.activities():
         ...     print day, period, activity.title
         Day 1 B My Course
         Day 2 B My Course
@@ -288,7 +286,7 @@ def doctest_SampleTimetables_assignPeriodToSection():
         Day 6 B My Course
 
         >>> timetable = ITimetables(s).timetables['2006-spring.simple']
-        >>> for day, period, activity in timetable.itercontent():
+        >>> for day, period, activity in timetable.activities():
         ...     print day, period, activity.title
         Day 1 B My Course
         Day 2 B My Course

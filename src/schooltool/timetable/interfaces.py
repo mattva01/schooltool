@@ -434,10 +434,10 @@ class ITimetable(ILocation):
     def __getitem__(key):
         """Return a ITimetableDay for a given day id."""
 
-    def itercontent():
-        """Iterate over all activites in this timetable.
+    def activities():
+        """Return all activities in this timetable.
 
-        Return an iterator for tuples (day_id, period_id, activity).
+        Returns a list of tuples (day_id, period_id, activity).
         """
 
     def cloneEmpty():

@@ -525,7 +525,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
 
         # Check timetable
         tt = ITimetables(section).timetables['fall.three-day']
-        self.assertEquals(len(list(tt.itercontent())), 2)
+        self.assertEquals(len(tt.activities()), 2)
 
         # Check activities in timetable
         acts = tt['Monday']['A']
@@ -546,7 +546,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
                                      periods=periods, dry_run=False)
         self.assert_(section2 is section)
         self.assert_(ITimetables(section).timetables['fall.three-day'] is tt)
-        self.assertEquals(len(list(tt.itercontent())), 2)
+        self.assertEquals(len(tt.itercontent()), 2)
 
     def test_createSection_existing(self):
         imp = self.createImporter(term='fall', ttschema='three-day')
@@ -583,7 +583,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
 
         philosophy_curtin = self.app['sections']['philosophy--curtin']
         tt = ITimetables(philosophy_curtin).timetables['fall.three-day']
-        activities = list(tt.itercontent())
+        activities = tt.itercontent()
         self.assertEquals(len(activities), 2)
 
         # Let's stub out createSection and importPersons and make sure that the

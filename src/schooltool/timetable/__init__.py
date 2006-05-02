@@ -249,7 +249,7 @@ class Timetable(Persistent):
     def update(self, other):
         if self.cloneEmpty() != other.cloneEmpty():
             raise ValueError("Timetables have different schemas")
-        for day, period, activity in other.itercontent():
+        for day, period, activity in other.activities():
             self[day].add(period, activity, False)
 
     def cloneEmpty(self):
@@ -272,11 +272,12 @@ class Timetable(Persistent):
     def __ne__(self, other):
         return not self.__eq__(other)
 
-    def itercontent(self):
+    def activities(self):
+        act = []
         for day_id in self.day_ids:
             for period_id, iactivities in self.days[day_id].items():
-                for activity in iactivities:
-                    yield (day_id, period_id, activity)
+                act.extend([(day_id, period_id, activity) for activity in iactivities])
+        return act
 
 
 class TimetableDay(Persistent):
