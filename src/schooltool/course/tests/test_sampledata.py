@@ -232,7 +232,7 @@ def doctest_SampleTimetables():
         >>> for section in getRelatedObjects(student, URIGroup):
         ...     if section.title != 'Students':
         ...         timetable = ITimetables(section).timetables['2005-fall.simple']
-        ...         for day, period, activity in timetable.itercontent()[:1]:
+        ...         for day, period, activity in timetable.activities()[:1]:
         ...             print period, activity.title
         D English B
         B Math A
