@@ -9,11 +9,7 @@ ZPKG=../../zpkgtools/bin/zpkg
 ZOPE_REPOSITORY=svn://svn.zope.org/repos/main/
 TESTFLAGS=-w -v
 LOCALES=src/schooltool/locales/
-TRANSLATION_DOMAINS=schoolbell # schooltool
 PYTHONPATH:=$(PYTHONPATH):src:Zope3/src
-LOCALE_PATTERN='src/schooltool/locales/@locale@/LC_MESSAGES/schoolbell.po'
-ROSETTA_URL='https://launchpad.ubuntu.com/products/schooltool/0.10-rc1/+pots/schooltool'
-ROSETTA_LOCALES=de el fr id lt nl nb pa pt tr
 SETUPFLAGS=
 
 # Which part of the Zope3 repository do we track
@@ -149,26 +145,65 @@ update-translations:
 	    done;\
 	done
 
-.PHONY: update-rosetta-pot
-update-rosetta-pot:
-	$(PYTHON) setup.py build
-	touch ../launchpad_cookies
-	chmod 0600 ../launchpad_cookies ../launchpad_pwd
-	curl -kc ../launchpad_cookies -D ../header_login\
-	    -F "loginpage_password=<../launchpad_pwd" \
-	    -F loginpage_email=jinty@web.de \
-	    -F loginpage_submit_login=Log\ In \
-	    https://launchpad.ubuntu.com/+login > ../launchpad_log
-	curl -kc ../launchpad_cookies -b ../launchpad_cookies\
-	    -F "file=@src/schooltool/locales/schooltool.pot" \
-	    -F "UPLOAD=Upload" \
-	    https://launchpad.ubuntu.com/products/schooltool/0.10-rc1/+pots/schooltool/+upload > ../launchpad_log2
-	rm ../launchpad_cookies
+#
+# Makefile rules for importing and exporting translations to rosetta:
+#
+# To create tarballs suitable for uploading to rosetta:
+#
+# 	The following command will create tarballs in the current directory of
+# 	the form {schooltool,schoolbell}-translations.tar.gz. These should be
+# 	suitable for uploading to rosetta.
+#
+# 	$ make translation-tarballs
+#
+# To import translations from rosetta:
+#
+#	1. get a clean checkout of schooltool
+# 	2. download the tarballs of exportd PO files from rosetta and rename
+# 	   them to rosetta-schooltool.tar.gz and rosetta-schoolbell.tar.gz
+# 	3. run 'make update-rosetta-translations'
+# 	4. use svn to add and commit any new/changed translations
+#
 
-.PHONY: get-rosetta-translations
-get-rosetta-translations:
-	# This needs to be vewy vewy quiet as it will probably be called by cron
-	./utilities/get-rosetta-translations.py \
-	    --baseurl $(ROSETTA_URL)\
-	    --filepattern $(LOCALE_PATTERN)\
-	    --loglevel='ERROR' $(ROSETTA_LOCALES)
+
+.PHONY:create-translation-tarball
+create-translation-tarball:
+	#extract-translations update-translations
+	[ ! -e translations.tmp ] || \
+	    { echo ERROR: cowardly refusing to continue because translations.tmp exists; exit 1; }
+	mkdir translations.tmp
+	cp $(LOCALES)/$(DOMAIN).pot translations.tmp/template.pot
+	dir=`pwd` && cd $(LOCALES) && \
+	    find * -maxdepth 0 -type d \
+	    -exec cp {}/LC_MESSAGES/$(DOMAIN).po $${dir}/translations.tmp/{}.po \;
+	cd translations.tmp && tar -czf ../$(DOMAIN)-translations.tar.gz *
+	rm -rf translations.tmp
+
+.PHONY: translation-tarballs
+translation-tarballs: extract-translations update-translations
+	$(MAKE) DOMAIN=schooltool create-translation-tarball
+	$(MAKE) DOMAIN=schoolbell create-translation-tarball
+
+.PHONY: extract-rosetta-tarball
+extract-rosetta-tarball:
+	[ -e rosetta-$(DOMAIN).tar.gz ]
+	[ ! -e translations.tmp ] || \
+	    { echo ERROR: cowardly refusing to continue because translations.tmp exists; exit 1; }
+	mkdir translations.tmp
+	cd translations.tmp && tar -xzf ../rosetta-$(DOMAIN).tar.gz && mv */* .
+	set -e; for file in translations.tmp/*.po; do \
+	    dir=$(LOCALES)/`basename $${file} .po`/LC_MESSAGES; \
+	    [ -x $${dir} ] || mkdir -p $${dir}; \
+	    cp $${file} $${dir}/$(DOMAIN).po; \
+	    echo Updating $${dir}/$(DOMAIN).po; \
+	done
+	rm -rf translations.tmp
+
+.PHONY: update-rosetta-translations
+update-rosetta-translations:
+	[ -e rosetta-schooltool.tar.gz ]
+	[ -e rosetta-schoolbell.tar.gz ]
+	$(MAKE) DOMAIN=schoolbell extract-rosetta-tarball
+	$(MAKE) DOMAIN=schooltool extract-rosetta-tarball
+	$(MAKE) PYTHON=$(PYTHON) extract-translations update-translations
+	find $(LOCALES) \( -name '*.po~' -o -name '*.mo' \) -exec rm -f {} \;
