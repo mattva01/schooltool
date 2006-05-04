@@ -597,3 +597,26 @@ Frog should still be able to see the resource's calendar
     </h6>
     ...
 
+
+Let's delete mud:
+
+    >>> manager.open('http://localhost/resources/')
+    >>> manager.getControl(name='delete.mud').value = True
+    >>> manager.getControl('Delete').click()
+    >>> manager.getControl('Confirm').click()
+
+Stork should still be able to see his calendar:
+(regression test for issue 472: Deleting booked resource makes calendar
+ unviewable.)
+
+    >>> stork.open('http://localhost/persons/stork/calendar/2005-08-07')
+    >>> print stork.contents
+    <BLANKLINE>
+    ...
+    <h6 ...>
+      <a href="http://localhost/persons/stork/calendar/smartie-uid"
+         title="Mud bath">
+        Mud bath
+      ...
+    </h6>
+    ...

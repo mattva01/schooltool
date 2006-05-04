@@ -38,6 +38,7 @@ from schooltool.calendar.simple import SimpleCalendarEvent
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IWriteCalendar
+from schooltool.app.interfaces import IHaveCalendar
 
 
 CALENDAR_KEY = 'schooltool.app.calendar.Calendar'
@@ -236,3 +237,43 @@ class WriteCalendar(object):
                 for attr in self._event_attrs:
                     setattr(old_event, attr, getattr(new_event, attr))
 
+
+def clearCalendarOnDeletion(event):
+    """When you delete an object, it's calendar should be cleared
+
+        >>> from zope.app.testing import setup
+        >>> from schooltool.relationship.tests import setUp, tearDown
+        >>> from schooltool.testing.setup import setupCalendaring
+
+        >>> setUp()
+        >>> setupCalendaring()
+
+        >>> import zope.event
+        >>> old_subscribers = zope.event.subscribers[:]
+        >>> from schooltool.app.cal import clearCalendarOnDeletion
+        >>> zope.event.subscribers.append(clearCalendarOnDeletion)
+
+    We will need some object that implements IHaveCalendar for that:
+
+        >>> from zope.app.container.btree import BTreeContainer
+        >>> container = BTreeContainer()
+        >>> from schooltool.person.person import Person
+        >>> container = BTreeContainer()
+        >>> container['petras'] = petras =  Person(username="Petras")
+        >>> def clearCalendar():
+        ...     print "Clearing calendar"
+        >>> ISchoolToolCalendar(petras).clear = clearCalendar
+
+    If we delete Petras his calendar should be cleared:
+
+        >>> del container['petras']
+        Clearing calendar
+
+    Restore old subscribers:
+
+        >>> zope.event.subscribers[:] = old_subscribers
+        >>> tearDown()
+
+    """
+    if IHaveCalendar.providedBy(event.object):
+        ISchoolToolCalendar(event.object).clear()
