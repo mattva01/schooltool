@@ -30,7 +30,7 @@ from zope.publisher.browser import BrowserView
 from zope.i18n import translate
 from zope.security.proxy import removeSecurityProxy
 from schooltool.app.interfaces import ISchoolToolCalendar
-from schooltool.app.browser import ViewPreferences
+from schooltool.app.browser import ViewPreferences, same
 from schooltool.app.browser.interfaces import ICalendarProvider
 from schooltool.calendar.utils import parse_date, week_start
 from schooltool import SchoolToolMessage as _
@@ -43,14 +43,6 @@ SANS = 'Arial_Normal'
 SANS_OBLIQUE = 'Arial_Italic'
 SANS_BOLD = 'Arial_Bold'
 SERIF = 'Times_New_Roman'
-
-
-def ident(obj1, obj2):
-    """Return True if the references obj1 and obj2 point to the same object.
-
-    The references may be security-proxied.
-    """
-    return removeSecurityProxy(obj1) is removeSecurityProxy(obj2)
 
 
 class PDFCalendarViewBase(BrowserView):
@@ -213,7 +205,7 @@ class PDFCalendarViewBase(BrowserView):
         tags = []
         if event.recurrence:
             tags.append(translate(_("recurrent"), context=self.request))
-        if (not ident(event.__parent__, self.context)
+        if (not same(event.__parent__, self.context)
             and event.__parent__ is not None):
             # We have an event from an overlaid calendar.
             tag = translate(_('overlaid from %s'), context=self.request)
@@ -240,8 +232,8 @@ class PDFCalendarViewBase(BrowserView):
 
         for calendar in self.getCalendars():
             for event in calendar.expand(start, end):
-                if (ident(event.__parent__, self.context)
-                      and not ident(calendar, self.context)):
+                if (same(event.__parent__, self.context)
+                      and not same(calendar, self.context)):
                     # We may have overlaid resource booking events appearing
                     # twice (once for self.context and another time for the
                     # other calendar).  We can recognize such dupes by

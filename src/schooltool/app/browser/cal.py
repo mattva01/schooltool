@@ -60,7 +60,7 @@ from schooltool import SchoolToolMessage as _
 
 from schooltool.skin.interfaces import IBreadcrumbInfo
 from schooltool.skin import breadcrumbs
-from schooltool.app.browser import ViewPreferences
+from schooltool.app.browser import ViewPreferences, same
 from schooltool.app.browser import pdfcal
 from schooltool.app.browser.overlay import CalendarOverlayView
 from schooltool.app.browser.interfaces import ICalendarProvider
@@ -89,10 +89,6 @@ from schooltool.resource.interfaces import IResource
 from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.term.term import getTermForDate
 
-
-def same(a, b):
-    """Return True if a and b points to the same possibly proxied object."""
-    return removeSecurityProxy(a) is removeSecurityProxy(b)
 
 #
 # Constants

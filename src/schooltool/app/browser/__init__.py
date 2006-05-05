@@ -236,3 +236,11 @@ class ViewPreferences(object):
             self.timeformat = '%H:%M'
             self.first_day_of_week = calendar.MONDAY
             self.timezone = timezone('UTC')
+
+
+def same(obj1, obj2):
+    """Return True if the references obj1 and obj2 point to the same object.
+
+    The references may be security-proxied.
+    """
+    return removeSecurityProxy(obj1) is removeSecurityProxy(obj2)
