@@ -595,7 +595,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
             section_log.append((course, instructor, periods, dry_run))
             return stub_section
         imp.createSection = createSectionStub
-        persons_log  = []
+        persons_log = []
         def importPersonsStub(person_data, section, dry_run=True):
             persons_log.append((person_data, section, dry_run))
         imp.importPersons = importPersonsStub
@@ -675,7 +675,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.assertEquals(imp.errors.day_ids, ['day x'])
         self.assertEquals(imp.errors.periods, ['ZZZ'])
         self.assertEquals(translate(imp.errors.generic[0]),
-                          'Incomplete section description on line 5')
+                          'No students in section (line 9)')
         # importPersons did not get called
         self.assertEquals(imported_person_data, [])
 

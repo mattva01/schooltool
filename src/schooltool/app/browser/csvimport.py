@@ -373,9 +373,14 @@ class TimetableCSVImporter(object):
 
             periods.append((day_id, period_id))
 
-        if not finished or len(rows) == line_ofs:
+        if not finished:
             err_msg = _("Incomplete section description on line ${line}",
                         mapping = {'line': line})
+            self.errors.generic.append(err_msg)
+            return
+        if len(rows) == line_ofs:
+            err_msg = _("No students in section (line ${line})",
+                        mapping = {'line': line + line_ofs})
             self.errors.generic.append(err_msg)
             return
 
