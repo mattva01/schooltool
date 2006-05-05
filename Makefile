@@ -148,6 +148,13 @@ update-translations:
 #
 # Makefile rules for importing and exporting translations to rosetta:
 #
+# To create a translation templates (schooltool.pot, schoolbell.pot) for
+# uploading to rosetta:
+#
+# 	1. run 'make extract-translations'
+# 	2. upload the src/schooltool/locales/{schoolbell,schooltool}.pot files
+# 	   to rosetta.
+#
 # To create tarballs suitable for uploading to rosetta:
 #
 # 	The following command will create tarballs in the current directory of
@@ -155,6 +162,10 @@ update-translations:
 # 	suitable for uploading to rosetta.
 #
 # 	$ make translation-tarballs
+# 	
+# 	WARNING: Only do this if you are _sure_ you want to. you risk
+# 	overwiting translations that have been changed in rosetta. Normally it
+# 	is only necessary to upload *.pot files.
 #
 # To import translations from rosetta:
 #
@@ -206,4 +217,5 @@ update-rosetta-translations:
 	$(MAKE) DOMAIN=schoolbell extract-rosetta-tarball
 	$(MAKE) DOMAIN=schooltool extract-rosetta-tarball
 	$(MAKE) PYTHON=$(PYTHON) extract-translations update-translations
+	# remove .po~ and .mo files so they are not accidentally committed
 	find $(LOCALES) \( -name '*.po~' -o -name '*.mo' \) -exec rm -f {} \;
