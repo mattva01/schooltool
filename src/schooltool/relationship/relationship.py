@@ -354,9 +354,8 @@ class BoundRelationshipProperty(object):
         return count
 
     def __iter__(self):
-        for link in IRelationshipLinks(self.this):
-            if link.role == self.other_role and link.rel_type == self.rel_type:
-                yield link.target
+        return iter(getRelatedObjects(self.this, self.other_role,
+                                      self.rel_type))
 
     def add(self, other, extra_info=None):
         """Establish a relationship between `self.this` and `other`."""
