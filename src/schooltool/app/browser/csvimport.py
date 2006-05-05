@@ -323,8 +323,14 @@ class TimetableCSVImporter(object):
         You should run this method with dry_run=True before trying the
         real thing, or you might get in trouble.
         """
-        # TODO: split up this method
-        course_id, instructor_id = rows[0]
+        row = rows[0]
+        if len(row[:2]) != 2:
+            err_msg = _('Wrong section header on line ${line_no} (it should contain a'
+                        ' course id and an instructor id)',
+                        mapping={'line_no': line})
+            self.errors.generic.append(err_msg)
+            return
+        course_id, instructor_id = row[:2]
 
         course = self.app['courses'].get(course_id, None)
         if course is None:

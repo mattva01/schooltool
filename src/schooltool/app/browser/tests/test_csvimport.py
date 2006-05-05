@@ -624,6 +624,15 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.assertEquals(translate(imp.errors.generic[0]),
                           'Incomplete section description on line 5')
 
+    def test_importChunk_errors_wrong_header(self):
+        # only provide the top row
+        lines = [['relativity_theory']]
+        imp = self.createImporter()
+        imp.importChunk(lines, line=5)
+        self.assertEquals(translate(imp.errors.generic[0]),
+                          u'Wrong section header on line 5 (it should contain'
+                          ' a course id and an instructor id)')
+
     def test_importChunk_errors_period(self):
         # provide a row for a period too
         lines = [['relativity_theory', 'einstein'],
