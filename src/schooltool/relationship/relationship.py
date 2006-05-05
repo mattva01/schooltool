@@ -522,8 +522,7 @@ class LinkSet(Persistent, Contained):
             raise ValueError("This link does not belong to this container!")
 
     def clear(self):
-        for key in list(self._links.keys()):
-            del self._links[key]
+        self._links.clear()
 
     def __iter__(self):
         return iter(self._links.values())
