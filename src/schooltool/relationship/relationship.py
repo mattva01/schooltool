@@ -27,6 +27,7 @@ all IAnnotatable objects that uses Zope 3 annotations.
 
 from BTrees.OOBTree import OOBTree
 from persistent import Persistent
+from persistent.list import PersistentList
 from zope.app.container.contained import Contained
 from zope.interface import implements
 import zope.event
@@ -206,12 +207,7 @@ class RelationshipRemovedEvent(RelationshipEvent):
 
 def getRelatedObjects(obj, role, rel_type=None):
     """Return all objects related to `obj` with a given role."""
-    if rel_type is None:
-        return [link.target for link in IRelationshipLinks(obj)
-                if link.role == role]
-    else:
-        return [link.target for link in IRelationshipLinks(obj)
-                if link.role == role and link.rel_type == rel_type]
+    return IRelationshipLinks(obj).getTargetsByRole(role, rel_type)
 
 
 class RelationshipSchema(object):
@@ -228,9 +224,10 @@ class RelationshipSchema(object):
     Relationship schemas are syntactic sugar.  If you define a relationship
     schema like this:
 
-        >>> URIMembership = 'example:Membership'
-        >>> URIMember = 'example:Member'
-        >>> URIGroup = 'example:Group'
+        >>> from schooltool.relationship.tests import URIStub
+        >>> URIMembership = URIStub('example:Membership')
+        >>> URIMember = URIStub('example:Member')
+        >>> URIGroup = URIStub('example:Group')
         >>> Membership = RelationshipSchema(URIMembership,
         ...                     member=URIMember, group=URIGroup)
 
@@ -418,12 +415,30 @@ class LinkSet(Persistent, Contained):
 
     You can add new links to it
 
-        >>> link1 = Link('example:Group', object(), 'example:Member',
-        ...              'example:Membership')
-        >>> link2 = Link('example:Friend', object(), 'example:Friend',
-        ...              'example:Friendship')
+        >>> from schooltool.relationship.tests import URIStub
+        >>> link1 = Link('example:Group', object(), URIStub('example:Member'),
+        ...              URIStub('example:Membership'))
+        >>> link2 = Link('example:Friend', object(), URIStub('example:Friend'),
+        ...              URIStub('example:Friendship'))
         >>> linkset.add(link1)
         >>> linkset.add(link2)
+
+    The links have landed in the cache too:
+
+        >>> expected = {
+        ...     'example:Member': [link1],
+        ...     'example:Friend': [link2]}
+        >>> dict(linkset._byrole.items()) == expected
+        True
+
+    Let's zap the cache and call getLinksByRole(), which should restore it:
+
+        >>> del linkset._byrole
+        >>> linkset.getLinksByRole(URIStub('something'))
+        []
+
+        >>> dict(linkset._byrole.items()) == expected
+        True
 
     Links should get named:
 
@@ -452,8 +467,10 @@ class LinkSet(Persistent, Contained):
 
     You can look for links for a specific relationship
 
-        >>> linkset.find('example:Group', link1.target, 'example:Member',
-        ...              'example:Membership') is link1
+        >>> linkset.find('example:Group',
+        ...              link1.target,
+        ...              URIStub('example:Member'),
+        ...              URIStub('example:Membership')) is link1
         True
 
     We can't add same link into the container twice:
@@ -465,8 +482,9 @@ class LinkSet(Persistent, Contained):
 
     If find fails, it raises ValueError, just like list.index.
 
-        >>> linkset.find('example:Member', link1.target, 'example:Group',
-        ...              'example:Membership')      # doctest: +ELLIPSIS
+        >>> linkset.find('example:Member', link1.target,
+        ...              URIStub('example:Group'),
+        ...              URIStub('example:Membership'))      # doctest: +ELLIPSIS
         Traceback (most recent call last):
           ...
         ValueError: ...
@@ -476,6 +494,11 @@ class LinkSet(Persistent, Contained):
         >>> linkset.remove(link2)
         >>> Set(linkset) == Set([link1])
         True
+
+    The links are removed from the cache too:
+
+        >>> list(linkset._byrole.keys())
+        ['example:Member']
 
     If you try to remove a link that is not in the set, you will get a
     ValueError.
@@ -491,7 +514,12 @@ class LinkSet(Persistent, Contained):
         >>> Set(linkset) == Set([])
         True
 
-    It is documented in IRelationshipLinks
+    The cache has been cleared too:
+
+        >>> len(linkset._byrole)
+        0
+
+    The class is documented in IRelationshipLinks
 
         >>> from zope.interface.verify import verifyObject
         >>> verifyObject(IRelationshipLinks, linkset)
@@ -503,6 +531,19 @@ class LinkSet(Persistent, Contained):
 
     def __init__(self):
         self._links = OOBTree()
+        self._byrole = OOBTree() # role -> list of links
+
+    def getLinksByRole(self, role):
+        """Get a set of links by role."""
+        try:
+            cache = self._byrole
+        except AttributeError:
+            cache = OOBTree()
+            for link in self:
+                cache.setdefault(link.role.uri, PersistentList()).append(link)
+            self._byrole = cache
+
+        return cache.get(role.uri, [])
 
     def add(self, link):
         if link.__parent__ == self:
@@ -515,27 +556,44 @@ class LinkSet(Persistent, Contained):
         self._links[link.__name__] = link
         link.__parent__ = self
 
+        self._byrole.setdefault(link.role.uri, PersistentList()).append(link)
+
     def remove(self, link):
         if link is self._links.get(link.__name__):
             del self._links[link.__name__]
+            uri = link.role.uri
+            self._byrole[uri].remove(link)
+            if not self._byrole[uri]:
+                del self._byrole[uri]
         else:
             raise ValueError("This link does not belong to this container!")
 
     def clear(self):
         self._links.clear()
+        self._byrole.clear()
 
     def __iter__(self):
         return iter(self._links.values())
 
     def find(self, my_role, target, role, rel_type):
-        for link in self:
+        links = self.getLinksByRole(role)
+        for link in links:
             if (link.rel_type == rel_type and link.target is target
-                and link.my_role == my_role and link.role == role):
+                and link.my_role == my_role):
                 return link
-        raise ValueError(my_role, target, role, rel_type)
+        else:
+            raise ValueError(my_role, target, role, rel_type)
 
     def __getitem__(self, id):
         return self._links[id]
 
     def get(self, key, default=None):
         return self._links.get(key, default)
+
+    def getTargetsByRole(self, role, rel_type=None):
+        links = self.getLinksByRole(role)
+        if rel_type is None:
+            return [link.target for link in links]
+        else:
+            return [link.target for link in links
+                    if link.rel_type == rel_type]

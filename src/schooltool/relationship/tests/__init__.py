@@ -53,6 +53,13 @@ class SomeContained(SomeObject, Contained):
     """A simple annotatable contained object for tests."""
 
 
+class URIStub(object):
+    def __init__(self, uri):
+        self.uri = uri
+    def __cmp__(self, other):
+        return cmp(self.uri, other.uri)
+
+
 def setUp():
     """Set up for schooltool.relationship doctests.
 

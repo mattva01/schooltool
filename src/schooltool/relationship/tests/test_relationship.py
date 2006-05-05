@@ -25,6 +25,7 @@ $Id$
 import unittest
 
 from zope.testing import doctest
+from schooltool.relationship.tests import URIStub
 
 
 def doctest_relate():
@@ -48,7 +49,7 @@ def doctest_relate():
         ...         return iter([])
         ...     def add(self, link):
         ...         print 'Linking %s with %s (the %s in %s)' % (self,
-        ...                 link.target, link.role, link.rel_type)
+        ...                 link.target, link.role.uri, link.rel_type)
 
         >>> fred = Relatable('Fred')
         >>> wilma = Relatable('Wilma')
@@ -56,41 +57,37 @@ def doctest_relate():
     Now we can test relate
 
         >>> from schooltool.relationship.relationship import relate
-        >>> relate('marriage', (fred, 'husband'), (wilma, 'wife'))
+
+        >>> husband = URIStub('husband')
+        >>> wife = URIStub('wife')
+
+        >>> relate('marriage', (fred, husband), (wilma, wife))
         Linking Fred with Wilma (the wife in marriage)
         Linking Wilma with Fred (the husband in marriage)
 
     """
 
 
-def doctest_getRelatedObjects():
-    """Tests for getRelatedObjects
+def doctest_LinkSet_getTargetsByRole():
+    """Tests for getTargetsByRole
 
-    getRelatedObjects relies on adapters to IRelationshipLinks.  For the
-    purposes of this test it is simpler to just implement IRelationshipLinks
-    directly in the object
+        >>> from schooltool.relationship.relationship import LinkSet, Link
 
-        >>> from zope.interface import implements
-        >>> from schooltool.relationship.interfaces import IRelationshipLinks
-        >>> from schooltool.relationship.relationship import Link
+        >>> obj = LinkSet()
 
-        >>> class Relatable:
-        ...     implements(IRelationshipLinks)
-        ...     def __iter__(self):
-        ...         return iter([
-        ...             Link('role_of_b', 'a', 'role_of_a', 'rel_type_a'),
-        ...             Link('role_of_a', 'b', 'role_of_b', 'rel_type_b')])
+        >>> role_a = URIStub('role_of_a')
+        >>> role_b = URIStub('role_of_b')
 
-        >>> obj = Relatable()
+        >>> obj.add(Link(role_b, 'a', role_a, 'rel_type_a'))
+        >>> obj.add(Link(role_a, 'b', role_b, 'rel_type_b'))
 
-    Now we can test getRelatedObjects
+    Now we can test getTargetsByRole
 
-        >>> from schooltool.relationship.relationship import getRelatedObjects
-        >>> getRelatedObjects(obj, 'role_of_a')
+        >>> obj.getTargetsByRole(role_a)
         ['a']
-        >>> getRelatedObjects(obj, 'role_of_b')
+        >>> obj.getTargetsByRole(role_b)
         ['b']
-        >>> getRelatedObjects(obj, 'role_of_c')
+        >>> obj.getTargetsByRole(URIStub('role_c'))
         []
 
     """
@@ -105,8 +102,11 @@ def doctest_RelationshipSchema():
     The constructor takes exactly two keyword arguments
 
         >>> from schooltool.relationship import RelationshipSchema
-        >>> RelationshipSchema('example:Mgmt', manager='example:Mgr',
-        ...                    report='example:Rpt', supervisor='example:Spv')
+        >>> role_mgr = URIStub('example:Mgr')
+        >>> role_rpt = URIStub('example:Rpt')
+        >>> role_spv = URIStub('example:Spv')
+        >>> RelationshipSchema('example:Mgmt', manager=role_mgr,
+        ...                    report=role_rpt, supervisor=role_spv)
         Traceback (most recent call last):
           ...
         TypeError: A relationship must have exactly two ends.
@@ -118,30 +118,31 @@ def doctest_RelationshipSchema():
     This works:
 
         >>> Management = RelationshipSchema('example:Mgmt',
-        ...                                 manager='example:Mgr',
-        ...                                 report='example:Rpt')
+        ...                                 manager=role_mgr,
+        ...                                 report=role_rpt)
 
     You can call relationship schemas
 
         >>> from schooltool.relationship.tests import SomeObject
-        >>> a, b = map(SomeObject, ['a', 'b'])
+        >>> a = SomeObject('a')
+        >>> b = SomeObject('b')
         >>> Management(manager=a, report=b)
 
     You will see that a is b's manager, and b is a's report:
 
         >>> from schooltool.relationship import getRelatedObjects
-        >>> getRelatedObjects(b, 'example:Mgr')
+        >>> getRelatedObjects(b, role_mgr)
         [a]
-        >>> getRelatedObjects(a, 'example:Rpt')
+        >>> getRelatedObjects(a, role_rpt)
         [b]
 
     Order of arguments does not matter
 
         >>> c, d = map(SomeObject, ['c', 'd'])
         >>> Management(report=c, manager=d)
-        >>> getRelatedObjects(c, 'example:Mgr')
+        >>> getRelatedObjects(c, role_mgr)
         [d]
-        >>> getRelatedObjects(d, 'example:Rpt')
+        >>> getRelatedObjects(d, role_rpt)
         [c]
 
     You must give correct arguments, though
@@ -208,8 +209,8 @@ def doctest_unrelateAll():
         ...       ('example:Loop', (a, 'example:BothEnds'),
         ...                        (a, 'example:BothEnds')),
         ... ]
-        >>> for args in relationships:
-        ...     relate(*args)
+        >>> for rel_type, (a, rel_a), (b, rel_b) in relationships:
+        ...     relate(rel_type, (a, URIStub(rel_a)), (b, URIStub(rel_b)))
 
     We are not interested in relationship events up to this point
 
@@ -226,7 +227,7 @@ def doctest_unrelateAll():
     Relationships are broken properly, from both ends
 
         >>> from schooltool.relationship import getRelatedObjects
-        >>> getRelatedObjects(b, 'example:Foo')
+        >>> getRelatedObjects(b, URIStub('example:Foo'))
         []
 
     Also, we got a bunch of events
@@ -237,15 +238,16 @@ def doctest_unrelateAll():
         >>> from schooltool.relationship.interfaces \
         ...         import IRelationshipRemovedEvent
         >>> before_removal_events = Set([
-        ...         (e.rel_type, (e.participant1, e.role1),
-        ...                      (e.participant2, e.role2))
+        ...         (e.rel_type, (e.participant1, e.role1.uri),
+        ...                      (e.participant2, e.role2.uri))
         ...         for e in events
         ...         if IBeforeRemovingRelationshipEvent.providedBy(e)])
         >>> before_removal_events == Set(relationships)
         True
 
-        >>> removal_events = Set([(e.rel_type, (e.participant1, e.role1),
-        ...                        (e.participant2, e.role2))
+        >>> removal_events = Set([(e.rel_type,
+        ...                        (e.participant1, e.role1.uri),
+        ...                        (e.participant2, e.role2.uri))
         ...                       for e in events
         ...                       if IRelationshipRemovedEvent.providedBy(e)])
         >>> removal_events == Set(relationships)

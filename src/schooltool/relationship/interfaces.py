@@ -106,6 +106,10 @@ class IRelationshipLinks(Interface):
         The default is returned if there is no value for the key.
         """
 
+    def getTargetsByRole(role, rel_type=None):
+        """Return all objects related to this object with a given role."""
+
+
 class IRelationshipEvent(Interface):
     """Common attributes for relationship events."""
 

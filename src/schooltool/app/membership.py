@@ -99,8 +99,9 @@ Resources can't be part of a group:
 
 Of course, these constraints do not apply to other kinds of relationships.
 
-    >>> relate('example:Frogship', (jonas, 'example:Frog'),
-    ...                            (petras, 'example:Frog'))
+    >>> from schooltool.relationship.tests import URIStub
+    >>> relate('example:Frogship', (jonas, URIStub('example:Frog')),
+    ...                            (petras, URIStub('example:Frog')))
 
 That's all.
 

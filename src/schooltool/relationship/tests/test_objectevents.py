@@ -25,6 +25,7 @@ $Id$
 import unittest
 
 from zope.testing import doctest
+from schooltool.relationship.tests import URIStub
 
 
 def doctest_delete_breaks_relationships():
@@ -46,9 +47,9 @@ def doctest_delete_breaks_relationships():
 
         >>> from schooltool.relationship import getRelatedObjects, relate
         >>> relate('example:Relationship',
-        ...             (apple, 'example:One'),
-        ...             (orange, 'example:Two'))
-        >>> getRelatedObjects(apple, 'example:Two')
+        ...             (apple, URIStub('example:One')),
+        ...             (orange, URIStub('example:Two')))
+        >>> getRelatedObjects(apple, URIStub('example:Two'))
         [orange]
 
     We put those objects to a Zope 3 container.
@@ -61,7 +62,7 @@ def doctest_delete_breaks_relationships():
     When we delete an object, all of its relationships should disappear
 
         >>> del container['orange']
-        >>> getRelatedObjects(apple, 'example:Two')
+        >>> getRelatedObjects(apple, URIStub('example:Two'))
         []
 
         >>> zope.event.subscribers[:] = old_subscribers
@@ -95,9 +96,9 @@ def doctest_copy_breaks_relationships():
 
         >>> from schooltool.relationship import getRelatedObjects, relate
         >>> relate('example:Relationship',
-        ...             (apple, 'example:One'),
-        ...             (orange, 'example:Two'))
-        >>> getRelatedObjects(apple, 'example:Two')
+        ...             (apple, URIStub('example:One')),
+        ...             (orange, URIStub('example:Two')))
+        >>> getRelatedObjects(apple, URIStub('example:Two'))
         [orange]
 
     We put those objects to a Zope 3 container.
@@ -123,9 +124,9 @@ def doctest_copy_breaks_relationships():
 
     The old relationships should still work
 
-        >>> getRelatedObjects(apple, 'example:Two')
+        >>> getRelatedObjects(apple, URIStub('example:Two'))
         [orange]
-        >>> getRelatedObjects(orange, 'example:One')
+        >>> getRelatedObjects(orange, URIStub('example:One'))
         [apple]
 
         >>> zope.event.subscribers[:] = old_subscribers
@@ -158,10 +159,10 @@ def doctest_copy_does_not_break_inside_relationships():
         >>> orange = SomeContained('orange')
 
         >>> from schooltool.relationship import getRelatedObjects, relate
-        >>> relate('example:Relationship',
-        ...             (apple, 'example:One'),
-        ...             (orange, 'example:Two'))
-        >>> getRelatedObjects(apple, 'example:Two')
+        >>> relate(URIStub('example:Relationship'),
+        ...             (apple, URIStub('example:One')),
+        ...             (orange, URIStub('example:Two')))
+        >>> getRelatedObjects(apple, URIStub('example:Two'))
         [orange]
 
     We put one of the objects to a Zope 3 container.
@@ -185,27 +186,28 @@ def doctest_copy_does_not_break_inside_relationships():
         >>> copy_of_orange = another_container[new_name]
         >>> copy_of_apple = copy_of_orange.apple
 
+        >>> r1 = URIStub('example:One')
+        >>> r2 = URIStub('example:Two')
+
     When we copy an object, its internal relationships should remain
 
-        >>> getRelatedObjects(copy_of_orange, 'example:One')
+        >>> getRelatedObjects(copy_of_orange, r1)
         [apple]
-        >>> getRelatedObjects(copy_of_apple, 'example:Two')
+        >>> getRelatedObjects(copy_of_apple, r2)
         [orange]
 
     These two objects are, in fact, copies
 
-        >>> getRelatedObjects(copy_of_orange,
-        ...                   'example:One')[0] is copy_of_apple
+        >>> getRelatedObjects(copy_of_orange, r1)[0] is copy_of_apple
         True
-        >>> getRelatedObjects(copy_of_apple,
-        ...                   'example:Two')[0] is copy_of_orange
+        >>> getRelatedObjects(copy_of_apple, r2)[0] is copy_of_orange
         True
 
     The old relationships should still work
 
-        >>> getRelatedObjects(apple, 'example:Two')
+        >>> getRelatedObjects(apple, r2)
         [orange]
-        >>> getRelatedObjects(orange, 'example:One')
+        >>> getRelatedObjects(orange, r1)
         [apple]
 
         >>> zope.event.subscribers[:] = old_subscribers
