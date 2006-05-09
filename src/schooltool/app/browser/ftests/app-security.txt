@@ -76,7 +76,7 @@ Adding persons should not work without a schooltool.create permission:
 
     >>> frog.open('http://localhost/persons/add.html')
     >>> print frog.url
-    http...?forbidden=yes&nexturl=http://localhost/persons/add.html
+    http...?forbidden=yes&nexturl=http%3A//localhost/persons/add.html
 
 Adding a group also fails:
 
@@ -87,7 +87,7 @@ Adding a group also fails:
 
     >>> frog.open('http://localhost/groups/+/addSchoolToolGroup.html')
     >>> print frog.url
-    http...?forbidden=yes&nexturl=http://localhost/groups/+/...
+    http...?forbidden=yes&nexturl=http%3A//localhost/groups/%2B/...
 
 And the resource too:
 
@@ -99,7 +99,7 @@ And the resource too:
     >>> frog.open(
     ...     'http://localhost/resources/+/addSchoolToolResource.html')
     >>> print frog.url
-    http...?forbidden=yes&nexturl=http://localhost/resources/+/...
+    http...?forbidden=yes&nexturl=http%3A//localhost/resources/%2B/...
 
 Let's grant the permission to the user:
 
@@ -239,7 +239,7 @@ Now he can't edit the info:
     >>> frog.getControl('Apply').click()
 
     >>> print frog.url
-    http...?forbidden=yes&nexturl=http://.../persons/frog/@@edit.html
+    http...?forbidden=yes&nexturl=http%3A//.../persons/frog/%40%40edit.html
 
 
 But still can see his calendar (regression test for Issue354 User

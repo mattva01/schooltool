@@ -22,6 +22,8 @@ SchoolTool security infrastructure
 $Id$
 """
 
+import urllib
+
 from persistent import Persistent
 from zope.app import zapi
 from zope.app.component import getNextUtility
@@ -119,8 +121,9 @@ class SchoolToolAuthenticationUtility(Persistent, Contained):
             return next.unauthorized(id, request)
         app = getSchoolToolApplication()
         url = zapi.absoluteURL(app, request)
+
         request.response.redirect("%s/@@login.html?forbidden=yes&nexturl=%s"
-                                  % (url, request.URL))
+                                  % (url, urllib.quote(str(request.URL))))
 
     def getPrincipal(self, id):
         """Get principal meta-data.

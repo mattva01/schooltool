@@ -265,7 +265,17 @@ login page:
     >>> request.response.getStatus()
     302
     >>> request.response.getHeader('Location')
-    'http://127.0.0.1/frogpond/@@login.html?forbidden=yes&nexturl=http://127.0.0.1'
+    'http://127.0.0.1/frogpond/@@login.html?forbidden=yes&nexturl=http%3A//127.0.0.1'
+
+The URL is properly escaped
+
+    >>> request = TestRequest()
+    >>> request.getURL = lambda *a: '/++etc++site'
+    >>> auth.unauthorized(None, request)
+    >>> request.response.getStatus()
+    302
+    >>> request.response.getHeader('Location')
+    'http://127.0.0.1/frogpond/@@login.html?forbidden=yes&nexturl=/%2B%2Betc%2B%2Bsite'
 
 However it does that only for regular browser requests.  Other kinds of
 requests issue the default challenge by setting the response code to 401
