@@ -23,3 +23,9 @@ And we can edit its name info:
   >>> browser.open('http://localhost/persons/foo/nameinfo/@@edit.html')
   >>> browser.getControl(name='form.full_name').value
   'Someone Schooltool'
+
+We can also view the name info:
+
+  >>> browser.open('http://localhost/persons/foo/nameinfo')
+  >>> 'Someone Schooltool' in browser.contents
+  True

@@ -10,11 +10,18 @@
       permission="zope.Public"
       />
 
-   <page
+  <page
       for="..interfaces.INameInfo"
       name="edit.html"
       class=".personform.NameInfoEdit"
       permission="schooltool.edit"
+      />
+
+  <page
+      for="..interfaces.INameInfo"
+      name="index.html"
+      class=".personform.NameInfoDisplay"
+      permission="schooltool.view"
       />
 
   <configure package="schooltool.person.browser">
