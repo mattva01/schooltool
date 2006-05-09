@@ -37,10 +37,16 @@ class StudentStub(object):
 
     def __init__(self, name):
         self.__name__ = name
+        self.username = name
+        self.title = name
+        self.photo = None
+        self._hashed_password = None
+        self.groups = []
+        self.overlaid_calendars = None
+        self.__annotations__ = None
         
     def __repr__(self):
         return self.__name__
-
 
 class AppStub(dict):
     implements(ISchoolToolApplication)
@@ -52,8 +58,8 @@ class AppStub(dict):
         for name in ['s1', 's2', 's3']:
             self['persons'][name] = StudentStub(name)
 
-def doctest_evolve13():
-    """Evolution to generation 13.
+def doctest_evolve14():
+    """Evolution to generation 14.
 
         >>> context = ContextStub()
         >>> context.root_folder['app'] = app = AppStub()
@@ -62,9 +68,13 @@ def doctest_evolve13():
         >>> hasattr(s1, 'nameinfo')
         False
 
-        >>> from schooltool.generations.evolve13 import evolve
+        >>> from schooltool.generations.evolve14 import evolve
         >>> evolve(context)
+        >>> s1 = app['persons']['s1']
         >>> hasattr(s1, 'nameinfo')
+        True
+
+        >>> s1.username == 's1'
         True
     """
 

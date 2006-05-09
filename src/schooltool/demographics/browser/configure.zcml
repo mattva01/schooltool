@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <zope:subscriber
+      for="schooltool.person.interfaces.IPerson zope.publisher.interfaces.IPublisherRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".personform.nameinfo_traverser"
+      permission="zope.Public"
+      />
+
+   <page
+      for="..interfaces.INameInfo"
+      name="edit.html"
+      class=".personform.NameInfoEdit"
+      permission="schooltool.edit"
+      />
+
+  <configure package="schooltool.person.browser">
+    <page
+        name="add.html"
+        for="schooltool.person.interfaces.IPersonContainer"
+        class="schooltool.demographics.browser.personform.PersonAddView"
+        template="person_add.pt"
+        permission="schooltool.create"
+        menu="schooltool_actions" title="New Person" />
+  </configure>
+
+</configure>

@@ -78,5 +78,6 @@
   <include package=".person" />
   <include package=".group" />
   <include package=".resource" />
+  <include package=".demographics" />
 
 </configure>

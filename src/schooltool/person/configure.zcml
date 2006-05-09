@@ -44,17 +44,6 @@
         attributes="nameinfo" />
   </class>
 
-  <class class=".person.NameInfo">
-    <require
-       permission="schooltool.view"
-       interface=".interfaces.INameInfo"
-       />
-    <require
-       permission="schooltool.edit"
-       set_schema=".interfaces.INameInfo"
-       />
-  </class>
-
   <class class=".preference.PersonPreferences">
     <require
         permission="schooltool.view"

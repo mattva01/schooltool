@@ -112,14 +112,6 @@
       />
 
   <page
-      name="add.html"
-      for="..interfaces.IPersonContainer"
-      class=".person.PersonAddView"
-      template="person_add.pt"
-      permission="schooltool.create"
-      menu="schooltool_actions" title="New Person" />
-
-  <page
       name="photo"
       for="..interfaces.IPerson"
       class=".person.PersonPhotoView"
@@ -151,21 +143,5 @@
         />
 
   </configure>
-
-  <!-- demographics infrastructure (in personform) -->
-
-  <zope:subscriber
-      for="..interfaces.IPerson zope.publisher.interfaces.IPublisherRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".personform.nameinfo_traverser"
-      permission="zope.Public"
-      />
-
-   <page
-      for="..interfaces.INameInfo"
-      name="edit.html"
-      class=".personform.NameInfoEdit"
-      permission="schooltool.edit"
-      />
 
 </configure>

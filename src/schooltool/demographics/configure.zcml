@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           i18n_domain="schooltool">
+
+  <class class=".person.Person">
+    <implements interface="schooltool.app.interfaces.IHaveCalendar" />
+    <implements interface="schooltool.note.interfaces.IHaveNotes" />
+    <implements interface="schooltool.person.interfaces.IHavePreferences" />
+    <require
+        permission="schooltool.view"
+        interface="schooltool.person.interfaces.IReadPerson"
+        attributes="__cmp__" />
+    <require
+        permission="schooltool.edit"
+        interface="schooltool.person.interfaces.IWritePerson"
+        set_schema="schooltool.person.interfaces.IPerson" />
+    <require
+        permission="schooltool.view"
+        attributes="nameinfo" />
+  </class>
+
+  <class class=".person.NameInfo">
+    <require
+       permission="schooltool.view"
+       interface=".interfaces.INameInfo"
+       />
+    <require
+       permission="schooltool.edit"
+       set_schema=".interfaces.INameInfo"
+       />
+  </class>
+
+  <include package=".browser" />
+
+</configure>

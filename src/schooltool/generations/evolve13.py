@@ -19,22 +19,10 @@
 """
 Upgrade SchoolTool to generation 13.
 
-Introduce a new attribute nameinfo on Person objects.
-
 $Id: evolve13.py 5946 2006-04-18 15:47:33Z ignas $
 """
 
-from zope.app.publication.zopepublication import ZopePublication
-from zope.app.generations.utility import findObjectsProviding
-from zope.location import locate, ILocation
-
-from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.person.person import NameInfo
-
 def evolve(context):
-    root = context.connection.root()[ZopePublication.root_name]
-    for app in findObjectsProviding(root, ISchoolToolApplication):
-        for student in app['persons'].values():
-            student.nameinfo = NameInfo()
-            locate(student.nameinfo, student, 'nameinfo')
-
+    # don't do anything anymore, but leave it in here since people may
+    # already have evolved to it
+    pass
