@@ -45,6 +45,14 @@
       title="Schedule" />
 
   <page
+      name="schedule.html"
+      for="schooltool.resource.interfaces.IResource"
+      class="schooltool.timetable.browser.ResourceTimetableSetupView"
+      permission="zope.View"
+      menu="schooltool_actions"
+      title="Schedule" />
+
+  <page
       name="index.html"
       for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
       class=".schema.TimetableSchemaContainerView"

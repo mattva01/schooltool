@@ -163,6 +163,41 @@ def doctest_TimetableView():
 
     """
 
+def doctest_ResourceTimetableSetupiew():
+    """Doctest for the ResourceTimetableSetupView.
+
+    ResourceTimetableSetupView inherits from TimetableSetupViewMixin
+    and implements these methods:
+
+    getGroupSections which plainly returns an empty list:
+
+        >>> from schooltool.timetable.browser import ResourceTimetableSetupView
+        >>> view = ResourceTimetableSetupView(None, None)
+        >>> view.getGroupSections()
+        []
+
+    and getSections, which returns all related sections of the item
+    passed as a parameter:
+
+        >>> from zope.component import adapts
+        >>> from zope.interface import implements
+        >>> from schooltool.relationship.interfaces import IRelationshipLinks
+        >>> from zope.component import provideAdapter
+        >>> class RelationshipLinks(object):
+        ...     adapts(None)
+        ...     implements(IRelationshipLinks)
+        ...     def __init__(self, context):
+        ...         self.context = context
+        ...     def getTargetsByRole(self, role, reltype):
+        ...         return ["Relation for %s of type %s" % (
+        ...                      self.context, role)]
+        >>> provideAdapter(RelationshipLinks)
+        >>> resource = "A book"
+        >>> view.getSections(resource)
+        ['Relation for A book of type <URIObject Section>']
+
+    """
+
 
 def doctest_PersonTimetableSetupView():
     """Doctest for the PersonTimetableSetupView view

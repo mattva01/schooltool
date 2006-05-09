@@ -25,31 +25,31 @@ import datetime
 import sets
 import re
 
+from zope.app import zapi
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
 from zope.interface import implements
+from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces import NotFound
 from zope.security.proxy import removeSecurityProxy
 
-from zope.app import zapi
-from zope.publisher.browser import BrowserView
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
-
-from schooltool.calendar.utils import parse_date, parse_time
+from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
-from schooltool.relationship.relationship import getRelatedObjects
 from schooltool.app.membership import URIGroup, URIMember
-from schooltool.person.interfaces import IPerson
-from schooltool.term.term import getNextTermForDate, getTermForDate
-from schooltool.traverser.interfaces import ITraverserPlugin
-
-from schooltool import SchoolToolMessage as _
-from schooltool.timetable.interfaces import ITimetables, IHaveTimetables
-from schooltool.timetable.interfaces import ITimetable, IOwnTimetables
+from schooltool.calendar.utils import parse_date, parse_time
+from schooltool.course.booking import URISection
 from schooltool.course.interfaces import ISection
+from schooltool.person.interfaces import IPerson
+from schooltool.relationship.relationship import getRelatedObjects
+from schooltool.resource.interfaces import IResource
+from schooltool.term.term import getNextTermForDate, getTermForDate
+from schooltool.timetable import SchooldaySlot
 from schooltool.timetable import Timetable, TimetableDay
 from schooltool.timetable import TimetableActivity
-from schooltool.timetable import SchooldaySlot
-from schooltool.app.app import getSchoolToolApplication
+from schooltool.timetable.interfaces import ITimetable, IOwnTimetables
+from schooltool.timetable.interfaces import ITimetables, IHaveTimetables
+from schooltool.traverser.interfaces import ITraverserPlugin
+from schooltool import SchoolToolMessage as _
 
 
 class TabindexMixin(object):
@@ -360,19 +360,6 @@ class TimetableSetupViewMixin(BrowserView):
         selected_ttschema = self.request.get('ttschema', ttschemas.default_id)
         return ttschemas.get(selected_ttschema, ttschemas.values()[0])
 
-
-class PersonTimetableSetupView(TimetableSetupViewMixin):
-    """A view for scheduling a student.
-
-    This view displays a drop-down for every timetable period, listing the
-    sections scheduled for that period.  When the user submits the form, the
-    person is added to selected sections and removed from unselected ones.
-    """
-
-    __used_for__ = IPerson
-
-    template = ViewPageTemplateFile('templates/person-timetable-setup.pt')
-
     def getTerm(self):
         """Return the chosen term."""
         if 'term' in self.request:
@@ -409,17 +396,6 @@ class PersonTimetableSetupView(TimetableSetupViewMixin):
         for sectionset in section_map.itervalues():
             sections.update(sectionset)
         return sections
-
-    def getSections(self, item):
-        return [section for section in getRelatedObjects(item, URIGroup)
-                if ISection.providedBy(section)]
-
-    def getGroupSections(self):
-        group_sections = []
-        for group in self.context.groups:
-            for section in self.getSections(group):
-                group_sections.append((group, section))
-        return group_sections
 
     def getDays(self, ttschema, section_map):
         """Return the current selection.
@@ -506,6 +482,52 @@ class PersonTimetableSetupView(TimetableSetupViewMixin):
             self.days = self.getDays(self.ttschema, section_map)
         return self.template()
 
+    def getSections(self, item):
+        raise NotImplementedError(
+            "This method should be implemented in subclasses")
+
+    def getGroupSections(self):
+        raise NotImplementedError(
+            "This method should be implemented in subclasses")
+
+
+class ResourceTimetableSetupView(TimetableSetupViewMixin):
+    """A view for scheduling a resource."""
+
+    __used_for__ = IResource
+
+    template = ViewPageTemplateFile('templates/person-timetable-setup.pt')
+
+    def getSections(self, item):
+        return getRelatedObjects(item, URISection)
+
+    def getGroupSections(self):
+        return []
+
+
+class PersonTimetableSetupView(TimetableSetupViewMixin):
+    """A view for scheduling a student.
+
+    This view displays a drop-down for every timetable period, listing the
+    sections scheduled for that period.  When the user submits the form, the
+    person is added to selected sections and removed from unselected ones.
+    """
+
+    __used_for__ = IPerson
+
+    template = ViewPageTemplateFile('templates/person-timetable-setup.pt')
+
+    def getSections(self, item):
+        return [section for section in getRelatedObjects(item, URIGroup)
+                if ISection.providedBy(section)]
+
+    def getGroupSections(self):
+        group_sections = []
+        for group in self.context.groups:
+            for section in self.getSections(group):
+                group_sections.append((group, section))
+        return group_sections
+
 
 class SectionTimetableSetupView(TimetableSetupViewMixin):
 
@@ -551,10 +573,12 @@ class SectionTimetableSetupView(TimetableSetupViewMixin):
 
         """
 
+        timetables = ITimetables(self.context).timetables
+        key = self.ttkeys[0]
         try:
             # All timetables for a given ttschema will have the same pattern
             # regardless of term.
-            timetable = ITimetables(self.context).timetables[self.ttkeys[0]]
+            timetable = timetables[key]
         except KeyError:
             timetable = None
 
