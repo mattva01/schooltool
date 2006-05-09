@@ -1,24 +1,14 @@
 Tests for resource booking in timetable events
 ----------------------------------------------
 
-A manager logs in:
+A manager logs in and sets up timetabling:
 
-    >>> from zope.testbrowser.testing import Browser
-    >>> from schooltool.app.browser.ftests import setUpTimetabling
-    >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
-    >>> manager.handleErrors = False
-
-And sets up timetabling:
-
-    >>> setUpTimetabling(manager, user='frog', password='pwd')
+    >>> from schooltool.app.browser.ftests import setup
+    >>> setup.setUpTimetabling(username='frog')
 
 Let's create a resource:
 
-    >>> manager.open("http://localhost/resources")
-    >>> manager.getLink('New Resource').click()
-    >>> manager.getControl('Title').value = "A Resource"
-    >>> manager.getControl('Add').click()
+    >>> setup.addResource('A resource')
 
 and book it for our history class:
 
@@ -39,6 +29,7 @@ and book it for our history class:
 
 Section events should be visible in the calendar of the resource:
 
+    >>> manager = setup.logInManager()
     >>> manager.open('http://localhost/resources/a-resource/calendar/2005-09-07')
     >>> print analyze.queryHTML('id("content-body")', manager.contents)[0]
     <div id="content-body">

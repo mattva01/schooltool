@@ -6,23 +6,14 @@ Regression test for issue405:
 Traceback when trying to render weekly view when there are timetable
 events.
 
-A manager logs in:
+A manager logs in and sets up timetabling:
 
-    >>> from zope.testbrowser.testing import Browser
-    >>> from schooltool.app.browser.ftests import setUpTimetabling
-    >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
-    >>> manager.handleErrors = False
-
-And sets up timetabling:
-
-    >>> setUpTimetabling(manager, user='frog', password='pwd')
+    >>> from schooltool.app.browser.ftests import setup
+    >>> setup.setUpTimetabling(username='frog')
 
 Frog logs in:
 
-    >>> frog = Browser()
-    >>> frog.handleErrors = False
-    >>> frog.addHeader('Authorization', 'Basic frog:pwd')
+    >>> frog = setup.logIn('frog')
 
 Looks at his daily view:
 
