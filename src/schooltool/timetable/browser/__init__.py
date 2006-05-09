@@ -410,6 +410,17 @@ class PersonTimetableSetupView(TimetableSetupViewMixin):
             sections.update(sectionset)
         return sections
 
+    def getSections(self, item):
+        return [section for section in getRelatedObjects(item, URIGroup)
+                if ISection.providedBy(section)]
+
+    def getGroupSections(self):
+        group_sections = []
+        for group in self.context.groups:
+            for section in self.getSections(group):
+                group_sections.append((group, section))
+        return group_sections
+
     def getDays(self, ttschema, section_map):
         """Return the current selection.
 
@@ -428,15 +439,8 @@ class PersonTimetableSetupView(TimetableSetupViewMixin):
 
         """
 
-        def getSections(item):
-            return [section for section in getRelatedObjects(item, URIGroup)
-                    if ISection.providedBy(section)]
-
-        person_sections = getSections(self.context)
-        group_sections = []
-        for group in self.context.groups:
-            for section in getSections(group):
-                group_sections.append((group, section))
+        person_sections = self.getSections(self.context)
+        group_sections = self.getGroupSections()
 
         def days(schema):
             for day_id, day in schema.items():
