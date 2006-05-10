@@ -68,7 +68,7 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
         from schooltool.app.security import authSetUpSubscriber
         self.assertRaises(ComponentLookupError, self.app.getSiteManager)
         event = ObjectAddedEvent(self.app)
-        authSetUpSubscriber(event)
+        authSetUpSubscriber(self.app, event)
         auth = zapi.traverse(self.app, '++etc++site/default/SchoolToolAuth')
         auth1 = zapi.getUtility(IAuthentication, context=self.app)
         self.assert_(auth is auth1)
@@ -82,24 +82,7 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
 
         # If we fire the event again, it does not fail.  Such events
         # are fired when the object is copied and pasted.
-        authSetUpSubscriber(event)
-
-    def test_other_object(self):
-        from schooltool.app.security import authSetUpSubscriber
-        event = ObjectAddedEvent(self.root)
-        authSetUpSubscriber(event)
-        self.assertRaises(TraversalError, zapi.traverse,
-                          self.root, '++etc++site/default/SchoolToolAuth')
-
-    def test_other_event(self):
-        from schooltool.app.security import authSetUpSubscriber
-        class SomeEvent:
-            object = self.app
-        authSetUpSubscriber(SomeEvent())
-        self.assertRaises(ComponentLookupError, self.app.getSiteManager)
-        self.assertRaises(TraversalError, zapi.traverse,
-                          self.app, '++etc++site/default/SchoolToolAuth')
-
+        authSetUpSubscriber(self.app, event)
 
 def doctest_applicationCalendarPermissionsSubscriber():
     r"""
@@ -139,7 +122,7 @@ def doctest_applicationCalendarPermissionsSubscriber():
 
     Call our subscriber:
 
-        >>> applicationCalendarPermissionsSubscriber(ObjectAddedEvent(st))
+        >>> applicationCalendarPermissionsSubscriber(st, ObjectAddedEvent(st))
 
     Check that unauthenticated has only viewCalendar permission on st.calendar:
 
@@ -156,17 +139,6 @@ def doctest_applicationCalendarPermissionsSubscriber():
 
         >>> map = IPrincipalPermissionManager(st)
         >>> print map.getPermissionsForPrincipal(unauthenticated.id)
-        []
-
-    Check that no permissions are set if the object added is not an app.
-
-        >>> from schooltool.person.person import Person
-        >>> person = Person('james')
-        >>> root['sb']['persons']['james'] = person
-        >>> applicationCalendarPermissionsSubscriber(
-        ...     ObjectAddedEvent(person))
-        >>> map = IPrincipalPermissionManager(ISchoolToolCalendar(person))
-        >>> map.getPermissionsForPrincipal(unauthenticated.id)
         []
 
     Authenticated users should be allowed to see the application calendar too:

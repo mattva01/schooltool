@@ -111,21 +111,19 @@ def hash_password(password):
     return sha.sha(password.encode('UTF-8')).digest()
 
 
-def personAppCalendarOverlaySubscriber(event):
+def personAppCalendarOverlaySubscriber(person, event):
     """Add application calendar to overlays of all new persons.
     """
-    if IObjectAddedEvent.providedBy(event):
-        if interfaces.IPerson.providedBy(event.object):
-            try:
-                app = getSchoolToolApplication()
-                event.object.overlaid_calendars.add(ISchoolToolCalendar(app))
-            except ValueError:
-                # If we get this we are probably in the initial new-site setup
-                # or creating a new manager during startup.  This should be
-                # safe to ignore since it will happen very infrequently
-                # (perhaps only once) and the manager can easily add the site
-                # calendar to his/her overlay in the overlay selection view.
-                pass
+    try:
+        app = getSchoolToolApplication()
+        person.overlaid_calendars.add(ISchoolToolCalendar(app))
+    except ValueError:
+        # If we get this we are probably in the initial new-site setup
+        # or creating a new manager during startup.  This should be
+        # safe to ignore since it will happen very infrequently
+        # (perhaps only once) and the manager can easily add the site
+        # calendar to his/her overlay in the overlay selection view.
+        pass
 
 
 def addPersonContainerToApplication(event):

@@ -54,7 +54,7 @@
 
   <zope:subscriber
       handler=".skin.schoolToolTraverseSubscriber"
-      for="zope.app.publication.interfaces.IBeforeTraverseEvent"
+      for="schooltool.app.interfaces.ISchoolToolApplication zope.app.publication.interfaces.IBeforeTraverseEvent"
       />
 
   <page

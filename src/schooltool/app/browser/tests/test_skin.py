@@ -55,7 +55,7 @@ def doctest_schoolToolTraverseSubscriber():
         >>> ob = SchoolToolApplication()
         >>> request = TestRequest()
         >>> ev = BeforeTraverseEvent(ob, request)
-        >>> schoolToolTraverseSubscriber(ev)
+        >>> schoolToolTraverseSubscriber(ob, ev)
         >>> ISchoolToolSkin.providedBy(request)
         True
         >>> skin = list(providedBy(request).interfaces())[1]
@@ -64,15 +64,6 @@ def doctest_schoolToolTraverseSubscriber():
         >>> pprint.pprint(skin.getBases())
         (<InterfaceClass schooltool.skin.skin.ISchoolToolLayer>,
          <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>)
-
-    The skin is, obviously, not applied if you traverse some other object
-
-        >>> ob = object()
-        >>> request = TestRequest()
-        >>> ev = BeforeTraverseEvent(ob, request)
-        >>> schoolToolTraverseSubscriber(ev)
-        >>> ISchoolToolSkin.providedBy(request)
-        False
 
     """
 

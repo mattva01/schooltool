@@ -19,24 +19,22 @@
 """
 Person security infrastructure
 
-$Id: security.py 4431 2005-08-02 04:33:27Z tvon $
+$Id$
 """
 from schooltool.person.interfaces import IPerson
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 
-def personPermissionsSubscriber(event):
+def personPermissionsSubscriber(person, event):
     """Grant default permissions to all new persons"""
-    if IObjectAddedEvent.providedBy(event):
-        if IPerson.providedBy(event.object):
-            map = IPrincipalPermissionManager(event.object)
-            principalid = 'sb.person.' + event.object.__name__
-            map.grantPermissionToPrincipal('schooltool.view', principalid)
-            map.grantPermissionToPrincipal('schooltool.edit', principalid)
-            map.grantPermissionToPrincipal('schooltool.addEvent', principalid)
-            map.grantPermissionToPrincipal('schooltool.modifyEvent',
-                                           principalid)
-            map.grantPermissionToPrincipal('schooltool.viewCalendar',
-                                           principalid)
-            map.grantPermissionToPrincipal('schooltool.controlAccess',
-                                           principalid)
+    map = IPrincipalPermissionManager(person)
+    principalid = 'sb.person.' + person.__name__
+    map.grantPermissionToPrincipal('schooltool.view', principalid)
+    map.grantPermissionToPrincipal('schooltool.edit', principalid)
+    map.grantPermissionToPrincipal('schooltool.addEvent', principalid)
+    map.grantPermissionToPrincipal('schooltool.modifyEvent',
+                                   principalid)
+    map.grantPermissionToPrincipal('schooltool.viewCalendar',
+                                   principalid)
+    map.grantPermissionToPrincipal('schooltool.controlAccess',
+                                   principalid)

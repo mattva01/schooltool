@@ -53,7 +53,7 @@ def doctest_personPermissionsSubscriber():
     Call our subscriber:
 
         >>> from schooltool.app.security import groupPermissionsSubscriber
-        >>> groupPermissionsSubscriber(ObjectAddedEvent(group))
+        >>> groupPermissionsSubscriber(group, ObjectAddedEvent(group))
 
     Check that the group has a view permission on self:
 
@@ -65,15 +65,6 @@ def doctest_personPermissionsSubscriber():
         >>> pprint(perms)
         [('schooltool.view', PermissionSetting: Allow),
          ('schooltool.viewCalendar', PermissionSetting: Allow)]
-
-    Check that no permissions are set if the object added is not a group:
-
-        >>> person = Person('joe')
-        >>> root['sb']['persons']['joe'] = person
-        >>> groupPermissionsSubscriber(ObjectAddedEvent(person))
-        >>> map = IPrincipalPermissionManager(person)
-        >>> map.getPermissionsForPrincipal('sb.person.joe')
-        []
 
     Clean up:
 

@@ -74,12 +74,12 @@
       />
 
   <subscriber
-      for="zope.app.container.interfaces.IObjectAddedEvent"
+      for="schooltool.person.interfaces.IPerson zope.app.container.interfaces.IObjectAddedEvent"
       handler=".security.personPermissionsSubscriber"
       />
 
   <subscriber
-      for="zope.app.container.interfaces.IObjectAddedEvent"
+      for="schooltool.person.interfaces.IPerson zope.app.container.interfaces.IObjectAddedEvent"
       handler=".person.personAppCalendarOverlaySubscriber"
       />
 

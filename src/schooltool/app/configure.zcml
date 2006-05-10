@@ -111,17 +111,17 @@
   <!-- Event Subscribers -->
 
   <subscriber
-      for="zope.app.container.interfaces.IObjectAddedEvent"
+      for="schooltool.app.interfaces.ISchoolToolApplication zope.app.container.interfaces.IObjectAddedEvent"
       handler=".security.authSetUpSubscriber"
       />
 
   <subscriber
-      for="zope.app.container.interfaces.IObjectAddedEvent"
+      for="schooltool.group.interfaces.IGroup zope.app.container.interfaces.IObjectAddedEvent"
       handler=".security.groupPermissionsSubscriber"
       />
 
   <subscriber
-      for="zope.app.container.interfaces.IObjectAddedEvent"
+      for="schooltool.app.interfaces.ISchoolToolApplication zope.app.container.interfaces.IObjectAddedEvent"
       handler=".security.applicationCalendarPermissionsSubscriber"
       />
 

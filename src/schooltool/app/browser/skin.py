@@ -35,7 +35,6 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 from schooltool.app.browser.interfaces import IEventForDisplay
 from schooltool.skin.skin import OrderedViewletManager
 from schooltool.skin.skin import ISchoolToolSkin
-from schooltool.app.interfaces import ISchoolToolApplication
 
 class ICalendarEventViewletManager(IViewletManager):
     """Provides a viewlet hook for daily calendar events."""
@@ -54,12 +53,11 @@ class CalendarEventViewletManager(OrderedViewletManager):
 
 # did not move this into schooltool.skin because this actually
 # enables the skin, doesn't define it.
-def schoolToolTraverseSubscriber(event):
+def schoolToolTraverseSubscriber(app, event):
     """A subscriber to BeforeTraverseEvent.
 
     Sets the SchoolBell skin if the object traversed is a SchoolBell
     application instance.
     """
-    if (ISchoolToolApplication.providedBy(event.object) and
-        IBrowserRequest.providedBy(event.request)):
+    if IBrowserRequest.providedBy(event.request):
         applySkin(event.request, ISchoolToolSkin)
