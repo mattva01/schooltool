@@ -30,6 +30,19 @@ We can also view the name info:
   >>> 'Someone Schooltool' in browser.contents
   True
 
+We can edit its demographics:
+
+  >>> browser.open('http://localhost/persons/foo/demographics/@@edit.html')
+  >>> previous_school = browser.getControl(name='form.previous_school')
+  >>> previous_school.value = 'Some text'
+  >>> browser.getControl('Apply').click()
+
+and view it:
+
+  >>> browser.open('http://localhost/persons/foo/demographics')
+  >>> 'Some text' in browser.contents
+  True
+
 We can also add people as CSV data:
 
   >>> browser.open('http://localhost/persons/@@person-csvimport.html')

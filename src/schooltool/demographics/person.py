@@ -13,12 +13,20 @@ class Person(PersonBase):
         super(Person, self).__init__(username, title)
         self.nameinfo = NameInfo()
         locate(self.nameinfo, self, 'nameinfo')
+        self.demographics = Demographics()
+        locate(self.demographics, self, 'demographics')
         
 class NameInfo(Persistent):
     implements(interfaces.INameInfo, ILocation)
 
     def __init__(self):
         initializeSchemaAttributes(interfaces.INameInfo, self)
+
+class Demographics(Persistent):
+    implements(interfaces.IDemographics, ILocation)
+
+    def __init__(self):
+        initializeSchemaAttributes(interfaces.IDemographics, self)
 
 def initializeSchemaAttributes(iface, obj):
     for field in schema.getFields(iface).values():

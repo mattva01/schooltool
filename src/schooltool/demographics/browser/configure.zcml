@@ -24,6 +24,27 @@
       permission="schooltool.view"
       />
 
+  <zope:subscriber
+      for="schooltool.person.interfaces.IPerson zope.publisher.interfaces.IPublisherRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".personform.demographics_traverser"
+      permission="zope.Public"
+      />
+
+  <page
+      for="..interfaces.IDemographics"
+      name="edit.html"
+      class=".personform.DemographicsEdit"
+      permission="schooltool.edit"
+      />
+
+  <page
+      for="..interfaces.IDemographics"
+      name="index.html"
+      class=".personform.DemographicsDisplay"
+      permission="schooltool.view"
+      />
+
   <!-- make sure we add demographics.person.Person instead of
        default schooltool.person.Person -->
   <configure package="schooltool.person.browser">
@@ -48,5 +69,12 @@
         title="Import Persons"
         />
   </configure>
+
+  <!-- to get simple drop down lists in widgets -->
+  <zope:adapter
+      for="zope.schema.interfaces.IIterableSource
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".personform.Terms"
+      />
 
 </configure>
