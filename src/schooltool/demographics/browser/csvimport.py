@@ -9,4 +9,3 @@ class PersonCSVImporter(PersonCSVImporterBase):
 
 class PersonCSVImportView(BaseCSVImportView):
     importer_class = PersonCSVImporter
-    
