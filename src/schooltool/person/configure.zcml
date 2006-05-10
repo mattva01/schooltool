@@ -39,9 +39,6 @@
         permission="schooltool.edit"
         interface=".interfaces.IWritePerson"
         set_schema=".interfaces.IPerson" />
-    <require
-        permission="schooltool.view"
-        attributes="nameinfo" />
   </class>
 
   <class class=".preference.PersonPreferences">
