@@ -117,16 +117,6 @@
       class=".person.PersonPhotoView"
       permission="zope.View" />
 
-  <page
-      name="person-csvimport.html"
-      for="..interfaces.IPersonContainer"
-      class=".csvimport.PersonCSVImportView"
-      template="person-csvimport.pt"
-      permission="schooltool.create"
-      menu="schooltool_actions"
-      title="Import Persons"
-      />
-
   <!-- Register Context-Help screens -->
 
   <configure

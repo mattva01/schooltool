@@ -19,7 +19,7 @@
 """
 csv importing.
 
-$Id: csvimport.py 4108 2005-06-15 14:27:59Z bskahan $
+$Id$
 """
 from schooltool.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView
 from schooltool.person.person import Person
@@ -61,7 +61,7 @@ class PersonCSVImporter(BaseCSVImporter):
             self.errors.fields.append(error_msg)
             return
 
-        obj = Person(username=data[0], title=data[1])
+        obj = self.personFactory(data[0], data[1])
 
         if password:
             obj.setPassword(password)
@@ -69,7 +69,9 @@ class PersonCSVImporter(BaseCSVImporter):
         if not dry_run:
             self.container[data[0]] = obj
 
-
+    def personFactory(self, username, title):
+        return Person(username=username, title=title)
+    
 class PersonCSVImportView(BaseCSVImportView):
     """View for Person CSV importer."""
 

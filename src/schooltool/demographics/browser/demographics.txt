@@ -29,3 +29,15 @@ We can also view the name info:
   >>> browser.open('http://localhost/persons/foo/nameinfo')
   >>> 'Someone Schooltool' in browser.contents
   True
+
+We can also add people as CSV data:
+
+  >>> browser.open('http://localhost/persons/@@person-csvimport.html')
+  >>> csv = browser.getControl(name='csvtext')
+  >>> csv.value = 'alpha, Alpha\nbeta, Beta'
+  >>> browser.getControl(name="UPDATE_SUBMIT").click()
+
+We can browse to the nameinfo of the newly added persons:
+
+  >>> browser.open('http://localhost/persons/alpha/nameinfo')
+  >>> browser.open('http://localhost/persons/beta/nameinfo')
