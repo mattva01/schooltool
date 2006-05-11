@@ -43,6 +43,16 @@ from schooltool.person.interfaces import IPerson
 from schooltool import SchoolToolMessage as _
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.course.interfaces import ISection, ISectionContainer
+from schooltool.timetable.browser import TimetableConflictMixin
+from schooltool.relationship.relationship import getRelatedObjects
+from schooltool.app.membership import URIGroup
+from schooltool.app.relationships import URISection
+from schooltool.course import booking
+
+
+def same(a, b):
+    """Check if two possibly proxied objects are one and the same."""
+    return removeSecurityProxy(a) is removeSecurityProxy(b)
 
 
 class SectionContainerView(ContainerView):
@@ -137,7 +147,7 @@ class SectionEditView(BaseEditView):
     __used_for__ = ISection
 
 
-class RelationshipEditingViewBase(BrowserView):
+class RelationshipEditingViewBase(BrowserView, TimetableConflictMixin):
 
     def add(self, item):
         """Add an item to the list of selected items."""
@@ -165,6 +175,25 @@ class RelationshipEditingViewBase(BrowserView):
         """Return a sequence of items that can be selected."""
         raise NotImplementedError("Subclasses should override this method.")
 
+    def getConflictingSections(self, item):
+        """Return a sequence of sections that conflict with item.
+
+        update(), which sets self.busy_periods, should be called before
+        invoking this method.
+        """
+        result = []
+        for section in self.getSections(item):
+            if same(section, self.context):
+                continue
+            for (day_id, period_id), sections in self.busy_periods:
+                if section in sections:
+                    result.append({'day_id': day_id,
+                                   'period_id': period_id,
+                                   'section': section})
+        result.sort(key=lambda x: (x['day_id'], x['period_id'],
+                                   x['section'].label))
+        return result
+
     def update(self):
         # This method is rather similar to GroupListView.update().
         context_url = zapi.absoluteURL(self.context, self.request)
@@ -191,6 +220,15 @@ class RelationshipEditingViewBase(BrowserView):
 
         start = int(self.request.get('batch_start', 0))
         size = int(self.request.get('batch_size', 10))
+        term = self.getTerm()
+        ttschema = self.getSchema()
+        if ttschema:
+            section_map = self.sectionMap(term, ttschema)
+            self.busy_periods = [(key, sections)
+                                 for key, sections in section_map.items()
+                                 if self.context in sections]
+        else:
+            self.busy_periods = []
         self.batch = Batch(results, start, size, sort_by='title')
 
 
@@ -202,6 +240,10 @@ class SectionInstructorView(RelationshipEditingViewBase):
     title = _("Instructors")
     current_title = _("Current Instructors")
     available_title = _("Available Instructors")
+
+    def getSections(self, item):
+        return [section for section in getRelatedObjects(item, URISection)
+                if ISection.providedBy(section)]
 
     def getCollection(self):
         return self.context.instructors
@@ -222,6 +264,10 @@ class SectionLearnerView(RelationshipEditingViewBase):
     title = _("Students")
     current_title = _("Current Students")
     available_title = _("Available Students")
+
+    def getSections(self, item):
+        return [section for section in getRelatedObjects(item, URIGroup)
+                if ISection.providedBy(section)]
 
     def getCollection(self):
         return self.context.members
@@ -247,6 +293,10 @@ class SectionLearnerGroupView(RelationshipEditingViewBase):
     current_title = _("Current Groups")
     available_title = _("Available Groups")
 
+    def getSections(self, item):
+        return [section for section in getRelatedObjects(item, URIGroup)
+                if ISection.providedBy(section)]
+
     def getCollection(self):
         return self.context.members
 
@@ -261,7 +311,6 @@ class SectionLearnerGroupView(RelationshipEditingViewBase):
         return [p for p in container.values()
                 if p not in selected_items]
 
-
 class SectionResourceView(RelationshipEditingViewBase):
     """View for adding learners to a Section."""
 
@@ -270,6 +319,9 @@ class SectionResourceView(RelationshipEditingViewBase):
     title = _("Resources")
     current_title = _("Current Resources")
     available_title = _("Available Resources")
+
+    def getSections(self, item):
+        return getRelatedObjects(item, booking.URISection)
 
     def getCollection(self):
         return self.context.resources

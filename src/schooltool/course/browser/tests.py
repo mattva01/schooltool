@@ -446,11 +446,12 @@ def doctest_SectionEditView():
 def doctest_RelationshipEditingViewBase():
     r"""Tests for RelationshipEditingViewBase.
 
-        >>> from schooltool.person.person import Person
+        >>> app = setup.setupSchoolToolSite()
+
         >>> class ItemStub(object):
         ...     def __init__(self, name):
         ...         self.__name__ = name
-        ...         self.title = name
+        ...         self.title = name.title()
         >>> class RelationshipPropertyStub(object):
         ...     items = [ItemStub('john'),
         ...              ItemStub('pete')]
@@ -465,11 +466,16 @@ def doctest_RelationshipEditingViewBase():
     getAvailableItems():
 
         >>> from schooltool.course.browser.section import RelationshipEditingViewBase
+        >>> class SchemaStub(ItemStub):
+        ...     def items(self):
+        ...         return []
         >>> class RelationshipView(RelationshipEditingViewBase):
         ...     def getCollection(self):
         ...         return RelationshipPropertyStub()
         ...     def getAvailableItems(self):
         ...         return [ItemStub('ann'), ItemStub('frog')]
+        ...     def getTerm(self): return ItemStub('does not matter')
+        ...     def getSchema(self): return SchemaStub('does not matter')
 
     Let's add Ann to the list:
 
@@ -478,7 +484,7 @@ def doctest_RelationshipEditingViewBase():
         ...                 'ADD_ITEMS': 'Apply'}
         >>> view = RelationshipView(None, request)
         >>> view.update()
-        Adding: ann
+        Adding: Ann
 
     Someone might want to cancel a change.
 
@@ -501,13 +507,13 @@ def doctest_RelationshipEditingViewBase():
         ...                 'REMOVE_ITEMS': 'Remove'}
         >>> view = RelationshipView(None, request)
         >>> view.update()
-        Removing: john
-        Removing: pete
+        Removing: John
+        Removing: Pete
 
     We also use a batch for available items in this view
 
         >>> [i.title for i in view.batch]
-        ['ann', 'frog']
+        ['Ann', 'Frog']
 
     Which is searchable
 
@@ -515,7 +521,7 @@ def doctest_RelationshipEditingViewBase():
         >>> view = RelationshipView(None, request)
         >>> view.update()
         >>> [i.title for i in view.batch]
-        ['ann']
+        ['Ann']
 
     The search can be cleared, ignoring any search value passed:
 
@@ -523,7 +529,60 @@ def doctest_RelationshipEditingViewBase():
         >>> view = RelationshipView(None, request)
         >>> view.update()
         >>> [i.title for i in view.batch]
-        ['ann', 'frog']
+        ['Ann', 'Frog']
+
+    """
+
+
+def doctest_RelationshipEditingViewBase_no_timetables():
+    r"""Tests for RelationshipEditingViewBase.
+
+    RelationshipEditingViewBase should work even if there are no timetables
+    defined.
+
+        >>> from schooltool.course.browser.section import RelationshipEditingViewBase
+        >>> app = setup.setupSchoolToolSite()
+        >>> view = RelationshipEditingViewBase(app, TestRequest())
+        >>> view.getSchema = lambda: None
+        >>> view.getAvailableItems = lambda: []
+
+        >>> view.update()
+
+    """
+
+
+def doctest_RelationshipEditingViewBase_getConflictingSections():
+    r"""Tests for RelationshipEditingViewBase.getConflictingSections
+
+        >>> class SectionStub(object):
+        ...     def __init__(self, label):
+        ...         self.label = label
+        ...     def __repr__(self):
+        ...         return 'Section ' + self.label
+
+        >>> context = SectionStub('x')
+        >>> section1 = SectionStub('1')
+        >>> section2 = SectionStub('2')
+
+        >>> def getSectionsStub(item):
+        ...     print "Called getSections on", item
+        ...     return [context, section2]
+
+        >>> from schooltool.course.browser.section import RelationshipEditingViewBase
+        >>> view = RelationshipEditingViewBase(context, None)
+        >>> view.getSections = getSectionsStub
+        >>> view.busy_periods = [(('d1', 'a'), [section1]),
+        ...                      (('d2', 'b'), [section1, context]),
+        ...                      (('d4', 'd'), [section2]),
+        ...                      (('d3', 'c'), [section2])]
+
+        >>> for d in view.getConflictingSections('iTeM'):
+        ...     print sorted(d.items())
+        Called getSections on iTeM
+        [('day_id', 'd3'), ('period_id', 'c'), ('section', Section 2)]
+        [('day_id', 'd4'), ('period_id', 'd'), ('section', Section 2)]
+
+    Note that the results are sorted by (day_id, period, section.label).
 
     """
 

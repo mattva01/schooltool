@@ -350,23 +350,8 @@ class TimetableView(BrowserView):
         return format_timetable_for_presentation(self.context)
 
 
-class TimetableSetupViewMixin(BrowserView):
-    """Common methods for setting up timetables."""
-
-    def getSchema(self):
-        """Return the chosen timetable schema."""
-        app = getSchoolToolApplication()
-        ttschemas = app["ttschemas"]
-        selected_ttschema = self.request.get('ttschema', ttschemas.default_id)
-        return ttschemas.get(selected_ttschema, ttschemas.values()[0])
-
-    def getTerm(self):
-        """Return the chosen term."""
-        if 'term' in self.request:
-            terms = getSchoolToolApplication()["terms"]
-            return terms[self.request['term']]
-        else:
-            return getNextTermForDate(datetime.date.today())
+class TimetableConflictMixin(object):
+    """A mixin for views that check for booking conflicts."""
 
     def sections(self):
         return getSchoolToolApplication()['sections'].values()
@@ -389,6 +374,39 @@ class TimetableSetupViewMixin(BrowserView):
                 for day_id, period_id, activity in timetable.activities():
                     section_map[day_id, period_id].add(section)
         return section_map
+
+    def getSchema(self):
+        """Return the chosen timetable schema.
+
+        If there are no timetable schemas, None is returned.
+        """
+        app = getSchoolToolApplication()
+        ttschemas = app["ttschemas"]
+        ttschema_id = self.request.get('ttschema', ttschemas.default_id)
+        ttschema = ttschemas.get(ttschema_id, None)
+        if not ttschema and ttschemas:
+            ttschema = ttschemas.values()[0]
+        return ttschema
+
+    def getTerm(self):
+        """Return the chosen term."""
+        if 'term' in self.request:
+            terms = getSchoolToolApplication()["terms"]
+            return terms[self.request['term']]
+        else:
+            return getNextTermForDate(datetime.date.today())
+
+    def getSections(self, item):
+        raise NotImplementedError(
+            "This method should be implemented in subclasses")
+
+    def getGroupSections(self):
+        raise NotImplementedError(
+            "This method should be implemented in subclasses")
+
+
+class TimetableSetupViewBase(BrowserView, TimetableConflictMixin):
+    """Common methods for setting up timetables."""
 
     def allSections(self, section_map):
         """Return a set of all sections that can be selected."""
@@ -464,9 +482,13 @@ class TimetableSetupViewMixin(BrowserView):
         self.has_timetables = bool(self.app["terms"] and self.app["ttschemas"])
         if not self.has_timetables:
             return self.template()
+
+        # TODO Are these really needed in view attributes?
         self.term = self.getTerm()
         self.ttschema = self.getSchema()
+        assert self.ttschema is not None, 'no timetable schema'
         section_map = self.sectionMap(self.term, self.ttschema)
+
         self.days = self.getDays(self.ttschema, section_map)
         if 'SAVE' in self.request:
             student = removeSecurityProxy(self.context)
@@ -482,16 +504,8 @@ class TimetableSetupViewMixin(BrowserView):
             self.days = self.getDays(self.ttschema, section_map)
         return self.template()
 
-    def getSections(self, item):
-        raise NotImplementedError(
-            "This method should be implemented in subclasses")
 
-    def getGroupSections(self):
-        raise NotImplementedError(
-            "This method should be implemented in subclasses")
-
-
-class ResourceTimetableSetupView(TimetableSetupViewMixin):
+class ResourceTimetableSetupView(TimetableSetupViewBase):
     """A view for scheduling a resource."""
 
     __used_for__ = IResource
@@ -505,7 +519,7 @@ class ResourceTimetableSetupView(TimetableSetupViewMixin):
         return []
 
 
-class PersonTimetableSetupView(TimetableSetupViewMixin):
+class PersonTimetableSetupView(TimetableSetupViewBase):
     """A view for scheduling a student.
 
     This view displays a drop-down for every timetable period, listing the
@@ -529,7 +543,7 @@ class PersonTimetableSetupView(TimetableSetupViewMixin):
         return group_sections
 
 
-class SectionTimetableSetupView(TimetableSetupViewMixin):
+class SectionTimetableSetupView(TimetableSetupViewBase):
 
     __used_for__ = ISection
 

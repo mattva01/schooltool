@@ -10,6 +10,7 @@ manager:
     >>> from zope.testbrowser.testing import Browser
 
     >>> manager = Browser()
+    >>> manager.handleErrors = False
     >>> manager.open('http://localhost/')
     >>> manager.getLink('Log In').click()
     >>> manager.getControl('Username').value = 'manager'

@@ -18,6 +18,14 @@
           type="checkbox" />
         <span tal:replace="item/title" />
       </label>
+      <div tal:repeat="conflict python:view.getConflictingSections(item)"
+           i18n:translate="">
+        Conflict:
+        <a tal:content="conflict/section/label"
+           tal:attributes="href conflict/section/@@absolute_url" />
+        (<span tal:replace="conflict/day_id" i18n:name="day_id" />,
+         <span tal:replace="conflict/period_id" i18n:name="period_id" />)
+      </div>
     </div>
     <div class="controls">
       <input type="submit" class="button-ok" name="REMOVE_ITEMS"
@@ -57,6 +65,14 @@
                type="checkbox" />
         <span tal:replace="item/title" />
       </label>
+      <div tal:repeat="conflict python:view.getConflictingSections(item)"
+           i18n:translate="">
+        Conflict:
+        <a tal:content="conflict/section/label"
+           tal:attributes="href conflict/section/@@absolute_url" />
+        (<span tal:replace="conflict/day_id" i18n:name="day_id" />,
+         <span tal:replace="conflict/period_id" i18n:name="period_id" />)
+      </div>
     </div>
     <div class="controls">
       <input type="submit" class="button-ok" name="ADD_ITEMS"

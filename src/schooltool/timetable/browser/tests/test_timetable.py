@@ -505,11 +505,21 @@ def doctest_PersonTimetableSetupView_no_timetables():
         >>> context = Person("student", "Steven Udent")
         >>> app["persons"]["whatever"] = context
 
+        >>> len(app['ttschemas'])
+        0
+        >>> len(app['terms'])
+        0
+
     We can now create the view.
 
         >>> from schooltool.timetable.browser import PersonTimetableSetupView
         >>> request = TestRequest()
         >>> view = PersonTimetableSetupView(context, request)
+
+    getSchema returns None:
+
+        >>> print view.getSchema()
+        None
 
     What does __call__ do?
 
