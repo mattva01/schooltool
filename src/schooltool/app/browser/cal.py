@@ -2205,9 +2205,10 @@ class CalendarEventBookingView(CalendarEventView):
         self.end = u'' + self.dtend.strftime(format)
 
     def __call__(self):
-        # if the authenticated user does not have the modifyEvent permission,
+        # If the authenticated user does not have the modifyEvent permission,
         # raise Unauthorized unless the user does have the addEvent
         # permission and has come here directly from the event adding form.
+        # This will fix issue 486.
         return self.template()
 
     def update(self):
@@ -2227,14 +2228,12 @@ class CalendarEventBookingView(CalendarEventView):
                 if 'marker-%s' % res_id in self.request:
                     booked = self.hasBooked(resource)
                     checked = res_id in self.request
-                    if booked != checked:
-                        if checked:
-                            # TODO: make sure the user has permission to book
-                            self.context.bookResource(resource)
-                        else:
-                            # Always allow unbooking, even if permission to
-                            # book was revoked
-                            self.context.unbookResource(resource)
+                    if booked and not checked:
+                        # Always allow unbooking, even if permission to
+                        # book that specific resource was revoked.
+                        self.context.unbookResource(resource)
+                    elif not booked and checked and self.canBook(resource):
+                        self.context.bookResource(resource)
             self.request.response.redirect(self.nextURL())
 
         return self.update_status
