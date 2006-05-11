@@ -22,7 +22,7 @@ Upgrade to generation 5.
 Moving to TZ aware events requires copying the old events to new non-naive
 events.
 
-$Id: evolve5.py 3254 2005-03-09 19:19:26Z alga $
+$Id$
 """
 
 from pytz import timezone

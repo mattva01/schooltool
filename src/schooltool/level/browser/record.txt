@@ -11,7 +11,7 @@ Unfortunately, we have to set up the entire workflow machinery and SchoolTool
 application to demonstrate the functionality of the view:
 
   >>> from schooltool.testing import setup
-  >>> st = setup.setupSchoolToolSite()
+  >>> st = setup.setUpSchoolToolSite()
 
   >>> setUpStudents(st)
   >>> setUpGroups(st)

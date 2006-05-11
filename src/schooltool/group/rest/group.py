@@ -19,7 +19,7 @@
 """
 RESTive views for Groups
 
-$Id: app.py 4691 2005-08-12 18:59:44Z srichter $
+$Id$
 """
 from zope.component import adapts
 

@@ -32,7 +32,7 @@ from zope.component.interfaces import ComponentLookupError
 from zope.app.security.interfaces import IAuthentication
 from zope.app.container.contained import ObjectAddedEvent
 
-from schooltool.testing.setup import setupLocalGrants
+from schooltool.testing.setup import setUpLocalGrants
 from schooltool.testing import setup as sbsetup
 
 
@@ -91,8 +91,8 @@ def doctest_applicationCalendarPermissionsSubscriber():
         >>> from schooltool.app.security import \
         ...      applicationCalendarPermissionsSubscriber
         >>> root = setup.placefulSetUp(True)
-        >>> sbsetup.setupCalendaring()
-        >>> setupLocalGrants()
+        >>> sbsetup.setUpCalendaring()
+        >>> setUpLocalGrants()
         >>> st = sbsetup.createSchoolToolApplication()
 
         >>> root['sb'] = st

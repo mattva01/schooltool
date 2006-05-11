@@ -46,7 +46,7 @@ def doctest_SampleTerms():
 
     This plugin generates two terms:
 
-        >>> app = stsetup.setupSchoolToolSite()
+        >>> app = stsetup.setUpSchoolToolSite()
         >>> plugin.generate(app, 42)
         >>> len(app['terms'])
         2

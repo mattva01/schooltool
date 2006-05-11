@@ -9,7 +9,7 @@ the schoolday template for this day.
 First of all, we need an app object:
 
     >>> from schooltool.testing import setup as sbsetup
-    >>> app = sbsetup.setupSchoolToolSite()
+    >>> app = sbsetup.setUpSchoolToolSite()
 
 We have a timetable schema to put the view on:
 

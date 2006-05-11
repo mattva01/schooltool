@@ -47,7 +47,7 @@ def doctest_SampleResources():
         >>> verifyObject(ISampleDataPlugin, plugin)
         True
 
-        >>> app = stsetup.setupSchoolToolSite()
+        >>> app = stsetup.setUpSchoolToolSite()
         >>> len(app['resources'])
         0
 

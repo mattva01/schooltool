@@ -19,7 +19,7 @@
 """
 csv importing.
 
-$Id: csvimport.py 4108 2005-06-15 14:27:59Z bskahan $
+$Id$
 """
 from schooltool.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView
 from schooltool.group.group import Group

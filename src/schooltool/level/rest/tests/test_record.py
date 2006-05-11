@@ -97,7 +97,7 @@ def testAcademicProcessCreator():
 
       >>> from zope.app.testing.setup import placefulSetUp
       >>> placefulSetUp()
-      >>> app = setup.setupSchoolToolSite()
+      >>> app = setup.setUpSchoolToolSite()
       >>> app['groups']['manager'] = Group('manager', 'School Manager')
 
     Then we need to make sure that persons can be annotated:
@@ -220,7 +220,7 @@ class TestAcademicProcessCreatorView(ApplicationObjectViewTestMixin,
 
         zope.interface.classImplements(Person, IAttributeAnnotatable)
 
-        app = setup.setupSchoolToolSite()
+        app = setup.setUpSchoolToolSite()
         app['groups']['manager'] = Group('manager', 'School Manager')
 
 
@@ -252,7 +252,7 @@ class TestSelectInitialLevelView(ApplicationObjectViewTestMixin, PlacefulSetup,
     def setUp(self):
         ApplicationObjectViewTestMixin.setUp(self)
 
-        app = setup.setupSchoolToolSite()
+        app = setup.setUpSchoolToolSite()
         app['levels']['level1'] = level.Level('level1', '1st Grade')
         self.level1 = app['levels']['level1']
 
@@ -289,7 +289,7 @@ class TestSetLevelOutcomeView(ApplicationObjectViewTestMixin, PlacefulSetup,
     def setUp(self):
         ApplicationObjectViewTestMixin.setUp(self)
 
-        app = setup.setupSchoolToolSite()
+        app = setup.setUpSchoolToolSite()
         app['levels']['level1'] = level.Level('level1', '1st Grade')
         self.level1 = app['levels']['level1']
 

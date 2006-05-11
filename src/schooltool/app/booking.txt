@@ -21,7 +21,7 @@ Set up the calendaring framework:
     >>> setup.setUpAnnotations()
 
     >>> from schooltool.testing import setup as sbsetup
-    >>> sbsetup.setupCalendaring()
+    >>> sbsetup.setUpCalendaring()
 
 We will need some test fixture for relationships.
 

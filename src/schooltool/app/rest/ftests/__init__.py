@@ -19,7 +19,7 @@
 """
 Tests for scholltool.rest.app
 
-$Id: __init__.py 3344 2005-03-30 22:36:28Z alga $
+$Id$
 """
 
 from zope.app.testing.functional import HTTPCaller

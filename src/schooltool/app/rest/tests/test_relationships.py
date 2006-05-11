@@ -74,7 +74,7 @@ class CommonSetupMixin(XMLCompareMixin, QuietLibxml2Mixin):
                              INameChooser,
                              SimpleNameChooser)
 
-        self.app = sbsetup.setupSchoolToolSite()
+        self.app = sbsetup.setUpSchoolToolSite()
 
         self.group = self.app['groups']["root"] = Group("group")
         self.new = self.app['groups']["new"] = Group("New Group")

@@ -34,7 +34,7 @@ from zope.app.session.interfaces import IClientIdManager, ISession
 from zope.app.session.session import ClientId, Session
 from zope.app.session.session import PersistentSessionDataContainer
 from zope.app.testing import ztapi
-def setupSessions():
+def setUpSessions():
     """Set up the session machinery.
 
     Do this after placelessSetUp().
@@ -52,7 +52,7 @@ from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.app.securitypolicy.principalpermission import \
      AnnotationPrincipalPermissionManager
 from zope.app.testing import setup
-def setupLocalGrants():
+def setUpLocalGrants():
     """Set up annotations and AnnotatationPrincipalPermissionManager"""
     setup.setUpAnnotations()
     setup.setUpTraversal()
@@ -75,7 +75,7 @@ from zope.interface import directlyProvides
 from zope.app.component.hooks import setSite
 from zope.app.component.site import LocalSiteManager
 from zope.traversing.interfaces import IContainmentRoot
-def setupSchoolToolSite():
+def setUpSchoolToolSite():
     """This should only be called after ``placefulSetUp()``."""
     app = createSchoolToolApplication()
     directlyProvides(app, IContainmentRoot)
@@ -88,7 +88,7 @@ def setupSchoolToolSite():
 from schooltool.app.interfaces import IHaveCalendar
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.cal import getCalendar
-def setupCalendaring():
+def setUpCalendaring():
     ztapi.provideAdapter(IHaveCalendar, ISchoolToolCalendar, getCalendar)
     registry.setupCalendarComponents()
 
@@ -98,7 +98,7 @@ from schooltool.timetable.interfaces import IHaveTimetables, ITimetables
 from schooltool.timetable.interfaces import IOwnTimetables, ICompositeTimetables
 from schooltool.timetable import TimetablesAdapter
 from schooltool.timetable import CompositeTimetables
-def setupTimetabling():
+def setUpTimetabling():
     ztapi.provideAdapter(IOwnTimetables, ITimetables, TimetablesAdapter)
     ztapi.provideAdapter(IHaveTimetables,
                          ICompositeTimetables,

@@ -19,7 +19,7 @@
 """
 Unit tests for schooltool.generations.evolve6
 
-$Id: test_evolve8.py 5268 2005-10-14 19:15:43Z alga $
+$Id$
 """
 
 import unittest

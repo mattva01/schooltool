@@ -57,7 +57,7 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
 
     def setUp(self):
         setUp()
-        self.app = sbsetup.setupSchoolToolSite()
+        self.app = sbsetup.setUpSchoolToolSite()
         IApplicationPreferences(self.app).timezone = 'Asia/Tokyo'
 
         # Register the timetable models
@@ -411,7 +411,7 @@ def doctest_TimetableSchemaView():
         >>> from schooltool.timetable.schema import TimetableSchemaDay
         >>> from schooltool.timetable import TimetableActivity
 
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
 
     Create some context:
 
@@ -476,7 +476,7 @@ def doctest_SimpleTimetableSchemaAdd():
     Suppose we have a SchoolTool instance, and create a view for its
     timetable schemas container:
 
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
         >>> IApplicationPreferences(app).timezone = 'Asia/Tokyo'
 
         >>> request = TestRequest()
@@ -728,7 +728,7 @@ def doctest_SimpleTimetableSchemaAdd_errors():
     Suppose we have a SchoolTool instance, and create a view for its
     timetable schemas container:
 
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
 
     No name specified:
 
@@ -886,7 +886,7 @@ def doctest_TimetableDependentDeleteView():
         >>> from schooltool.timetable.schema import TimetableSchemaDay
         >>> from schooltool.testing.setup import createSchoolToolApplication
         >>> from schooltool.timetable.interfaces import IOwnTimetables
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
         >>> directlyProvides(app, directlyProvidedBy(app) + IOwnTimetables)
 
         >>> days = ('A', 'B')

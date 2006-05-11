@@ -35,7 +35,7 @@ from schooltool.app.interfaces import ISchoolToolCalendar
 
 def setUp(test):
     setup.placefulSetUp()
-    stsetup.setupCalendaring()
+    stsetup.setUpCalendaring()
 
 def tearDown(test):
     setup.placefulTearDown()
@@ -56,7 +56,7 @@ def doctest_SampleStudents():
         >>> plugin.power
         1000
 
-        >>> app = stsetup.setupSchoolToolSite()
+        >>> app = stsetup.setUpSchoolToolSite()
         >>> len(app['persons'])
         0
 
@@ -102,7 +102,7 @@ def doctest_SampleTeachers():
     Teachers group.
 
         >>> from schooltool.group.group import Group
-        >>> app = stsetup.setupSchoolToolSite()
+        >>> app = stsetup.setUpSchoolToolSite()
         >>> teachers = app['groups']['teachers'] = Group('Teachers')
         >>> len(app['persons'])
         0
@@ -144,7 +144,7 @@ def doctest_SamplePersonalEvents():
         True
 
         >>> from schooltool.group.group import Group
-        >>> app = stsetup.setupSchoolToolSite()
+        >>> app = stsetup.setUpSchoolToolSite()
         >>> app['groups']['teachers'] = Group('Teachers')
 
         >>> from schooltool.person.sampledata import SampleStudents

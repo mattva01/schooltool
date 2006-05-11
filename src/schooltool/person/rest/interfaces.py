@@ -19,7 +19,7 @@
 """
 Person REST interfaces
 
-$Id:$
+$Id$
 """
 from zope.interface import Interface, Attribute
 

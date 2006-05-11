@@ -57,7 +57,7 @@ class TestAclView(unittest.TestCase, XMLCompareMixin):
         setUpRelationships()
 
         # SchoolToolApplication
-        self.app = sbsetup.setupSchoolToolSite()
+        self.app = sbsetup.setUpSchoolToolSite()
 
         from schooltool.person.person import Person
         self.person = self.app['persons']['joe'] = Person('joe')

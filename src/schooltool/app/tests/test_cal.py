@@ -112,7 +112,7 @@ def doctest_CalendarEvent_resource_booking():
     """Resource booking tests for CalendarEvent.
 
         >>> setup.setUpAnnotations()
-        >>> sbsetup.setupCalendaring()
+        >>> sbsetup.setUpCalendaring()
 
     All calendar events have a `resources` argument, but initially it is empty.
 
@@ -313,7 +313,7 @@ def doctest_Calendar_addEvent_resource_booking():
     """Tests for Calendar.addEvent.
 
         >>> setup.setUpAnnotations()
-        >>> sbsetup.setupCalendaring()
+        >>> sbsetup.setUpCalendaring()
 
     For the purposes of resource booking, a resource is anything that
     has a 'calendar' attribute.

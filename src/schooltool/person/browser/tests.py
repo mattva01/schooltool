@@ -230,7 +230,7 @@ def doctest_PersonAddView():
     Let's create a PersonContainer
 
         >>> from schooltool.app.app import SchoolToolApplication
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
         >>> pc = app['persons']
 
     Now let's create a PersonAddView for the container

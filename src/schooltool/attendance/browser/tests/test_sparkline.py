@@ -79,7 +79,7 @@ def doctest_AttendanceSparklineView_call():
         >>> from zope.publisher.browser import TestRequest
         >>> request = TestRequest()
         >>> context = None
-        >>> app = stsetup.setupSchoolToolSite()
+        >>> app = stsetup.setUpSchoolToolSite()
         >>> view = AttendanceSparklineView(context, request)
         >>> view.update = lambda: None
         >>> view.person = PersonStub()
@@ -111,7 +111,7 @@ def doctest_AttendanceSparklineView_update():
         >>> from zope.publisher.browser import TestRequest
         >>> request = TestRequest(form={'person': 'boy', 'date': '2005-10-20'})
         >>> context = 'Section'
-        >>> app = stsetup.setupSchoolToolSite()
+        >>> app = stsetup.setUpSchoolToolSite()
         >>> app['persons']['boy'] = PersonStub()
         >>> view = AttendanceSparklineView(context, request)
         >>> view.update()

@@ -138,7 +138,7 @@ class TestTimetableCSVImportView(unittest.TestCase):
 
     def setUp(self):
         setUp()
-        self.app = setup.setupSchoolToolSite()
+        self.app = setup.setUpSchoolToolSite()
 
         from schooltool.timetable.schema import TimetableSchema
         from schooltool.timetable.schema import TimetableSchemaDay
@@ -246,7 +246,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         ztapi.provideAdapter(ISectionContainer, INameChooser,
                              SimpleNameChooser)
 
-        self.app = app = setup.setupSchoolToolSite()
+        self.app = app = setup.setUpSchoolToolSite()
 
         self.course = app['courses']['philosophy'] = Course(title="Philosophy")
         self.section = app['sections']['section'] = Section(title="Something")

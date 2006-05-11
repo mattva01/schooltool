@@ -21,7 +21,7 @@ Upgrade SchoolTool to generation 8.
 
 Change the format of exceptionDays on timetable models.
 
-$Id: evolve8.py 5268 2005-10-14 19:15:43Z alga $
+$Id$
 """
 
 from zope.app.publication.zopepublication import ZopePublication

@@ -15,7 +15,7 @@ administations job to setup activity categories. Activity categories can be
 "homework", "paper", "test", "final exam", etc.
 
     >>> from schooltool.testing import setup
-    >>> school = setup.setupSchoolToolSite()
+    >>> school = setup.setUpSchoolToolSite()
 
 By default, some categories should be available in the vocabulary. Since this
 is a test, we have to set them up manually:

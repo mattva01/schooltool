@@ -43,7 +43,7 @@ from schooltool.attendance.interfaces import IHomeroomAttendance
 
 def setUp(test):
     setup.placefulSetUp()
-    stsetup.setupCalendaring()
+    stsetup.setUpCalendaring()
 
 
 def tearDown(test):
@@ -238,7 +238,7 @@ def doctest_AttendanceSparkline():
 
     We need schooltool application for timezone preference and terms.
 
-        >>> app = stsetup.setupSchoolToolSite()
+        >>> app = stsetup.setUpSchoolToolSite()
         >>> ztapi.provideAdapter(ISchoolToolApplication,
         ...                     IApplicationPreferences,
         ...                     getApplicationPreferences)

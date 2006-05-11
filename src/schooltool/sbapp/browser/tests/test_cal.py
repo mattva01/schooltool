@@ -39,9 +39,9 @@ from schooltool.person.interfaces import IPersonPreferences
 
 def setUp(test=None):
     browserSetUp(test)
-    sbsetup.setupSchoolToolSite()
-    sbsetup.setupCalendaring()
-    sbsetup.setupTimetabling()
+    sbsetup.setUpSchoolToolSite()
+    sbsetup.setUpCalendaring()
+    sbsetup.setUpTimetabling()
 
 def doctest_CalendarListView(self):
     """Tests for CalendarListView.

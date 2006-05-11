@@ -44,7 +44,7 @@ def doctest_GroupListView():
 
     One requirement: the person has to know where he is.
 
-        >>> app = setup.setupSchoolToolSite()
+        >>> app = setup.setUpSchoolToolSite()
         >>> app['persons']['ignas'] = person
 
     We will be testing the person's awareness of the world, so we will
@@ -164,7 +164,7 @@ def doctest_MemberListView():
 
     We need these objects to live in an application:
 
-        >>> app = setup.setupSchoolToolSite()
+        >>> app = setup.setUpSchoolToolSite()
         >>> app['groups']['pov'] = pov
         >>> app['persons']['gintas'] = gintas
         >>> app['persons']['ignas'] = ignas
@@ -556,7 +556,7 @@ def doctest_GroupsViewlet():
         >>> from schooltool.group.browser.group import GroupsViewlet
         >>> from schooltool.person.person import Person
 
-        >>> school = setup.setupSchoolToolSite()
+        >>> school = setup.setUpSchoolToolSite()
         >>> persons = school['persons']
         >>> persons['student'] = student = Person("Student")
 

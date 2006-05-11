@@ -57,7 +57,7 @@ class CalendarOverlayView(BrowserView):
             >>> setup.setUpAnnotations()
 
             >>> from schooltool.testing import setup as sbsetup
-            >>> sbsetup.setupCalendaring()
+            >>> sbsetup.setUpCalendaring()
 
         The portlet is only shown when an authenticated user is looking
         at his/her calendar.

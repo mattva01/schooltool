@@ -40,7 +40,7 @@ This generation converts all the old class paths to their new ones.
    schoolbell, but are now in schooltool. Examples are `relationship` and
    `calendar`.
 
-$Id: evolve2.py 4259 2005-07-21 00:57:30Z tvon $
+$Id$
 """
 from zope.app.securitypolicy.securitymap import PersistentSecurityMap
 

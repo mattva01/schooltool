@@ -19,7 +19,7 @@
 """
 RESTive views for Person Preferences
 
-$Id: app.py 4596 2005-08-08 12:53:09Z gintas $
+$Id$
 """
 from zope.component import adapts
 from zope.interface import implements

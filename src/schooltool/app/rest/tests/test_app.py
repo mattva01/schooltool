@@ -19,7 +19,7 @@
 """
 Unit tests for schooltool.app.rest.app.
 
-$Id: test_app.py 3526 2005-04-28 17:16:47Z bskahan $
+$Id$
 """
 import unittest
 
@@ -37,7 +37,7 @@ def doctest_ApplicationView():
 
         >>> from schooltool.app.rest.app import ApplicationView
         >>> setup.placefulSetUp()
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
         >>> view = ApplicationView(app, TestRequest())
         >>> result = view.GET()
 

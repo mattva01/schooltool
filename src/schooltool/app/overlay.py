@@ -26,7 +26,7 @@ This module defines relationships used to store calendar subscriptions.
     >>> setup.setUpAnnotations()
 
     >>> from schooltool.testing import setup as sbsetup
-    >>> sbsetup.setupCalendaring()
+    >>> sbsetup.setUpCalendaring()
 
     >>> from schooltool.relationship.tests import setUpRelationships
     >>> setUpRelationships()
@@ -397,10 +397,10 @@ def unrelateCalendarOnDeletion(event):
 
         >>> from zope.app.testing import setup
         >>> from schooltool.relationship.tests import setUp, tearDown
-        >>> from schooltool.testing.setup import setupCalendaring
+        >>> from schooltool.testing.setup import setUpCalendaring
 
         >>> setUp()
-        >>> setupCalendaring()
+        >>> setUpCalendaring()
 
         >>> import zope.event
         >>> old_subscribers = zope.event.subscribers[:]

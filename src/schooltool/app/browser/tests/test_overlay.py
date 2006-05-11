@@ -38,7 +38,7 @@ from schooltool.testing import setup
 
 def setUp(test=None):
     browserSetUp(test)
-    setup.setupCalendaring()
+    setup.setUpCalendaring()
 
     from schooltool.app.overlay import CalendarOverlayInfo
     from schooltool.app.interfaces import IShowTimetables
@@ -74,7 +74,7 @@ def doctest_CalendarOverlayView():
         >>> from schooltool.group.group import Group
         >>> from schooltool.person.person import Person
         >>> from schooltool.app.security import Principal
-        >>> app = setup.setupSchoolToolSite()
+        >>> app = setup.setUpSchoolToolSite()
         >>> person = app['persons']['whatever'] = Person('fred')
         >>> group1 = app['groups']['g1'] = Group(title="Group 1")
         >>> group2 = app['groups']['g2'] = Group(title="Group 2")
@@ -153,7 +153,7 @@ def doctest_CalendarOverlayView_items():
 
         >>> from schooltool.group.group import Group
         >>> from schooltool.person.person import Person
-        >>> app = setup.setupSchoolToolSite()
+        >>> app = setup.setUpSchoolToolSite()
         >>> person = app['persons']['p1'] = Person('p1', title="Person")
         >>> group1 = app['groups']['g1'] = Group(title="Group 1")
         >>> group2 = app['groups']['g2'] = Group(title="Group 2")
@@ -216,7 +216,7 @@ def doctest_CalendarSelectionView():
         >>> from schooltool.group.group import Group
         >>> from schooltool.person.person import Person
         >>> from schooltool.app.security import Principal
-        >>> app = setup.setupSchoolToolSite()
+        >>> app = setup.setUpSchoolToolSite()
         >>> persons = app['persons']
         >>> groups = app['groups']
         >>> resources = app['resources']

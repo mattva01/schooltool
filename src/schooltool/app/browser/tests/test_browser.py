@@ -58,7 +58,7 @@ def doctest_SchoolToolAPI_aap():
 
     'context/schooltool:app' returns the nearest ISchoolToolApplication
 
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
 
         >>> from schooltool.app.browser import SchoolToolAPI
         >>> SchoolToolAPI(app['persons']).app is app
@@ -93,7 +93,7 @@ def doctest_SchoolToolAPI_preferences():
     for the nearest ISchoolToolApplication
 
         >>> from schooltool.app.browser import SchoolToolAPI
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
         >>> preferences = SchoolToolAPI(app).preferences
         >>> preferences.title
         'SchoolTool'
@@ -273,7 +273,7 @@ def doctest_SchoolToolSized():
       >>> from schooltool.app.browser import SchoolToolSized
       >>> from schooltool.person.person import Person
 
-      >>> app = sbsetup.setupSchoolToolSite()
+      >>> app = sbsetup.setUpSchoolToolSite()
       >>> sized = SchoolToolSized(app)
 
       >>> sized.sizeForSorting(), translate(sized.sizeForDisplay())
@@ -349,7 +349,7 @@ def doctest_ViewPrefences():
 
         >>> setup.setUpAnnotations()
         >>> from schooltool.app.app import getApplicationPreferences
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
         >>> from schooltool.app.interfaces import IApplicationPreferences
         >>> from schooltool.app.interfaces import ISchoolToolApplication
         >>> ztapi.provideAdapter(ISchoolToolApplication,

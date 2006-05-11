@@ -19,7 +19,7 @@
 """
 Functional tests for schooltool.app.rest.
 
-$Id: test_all.py 3344 2005-03-30 22:36:28Z alga $
+$Id$
 """
 
 import unittest

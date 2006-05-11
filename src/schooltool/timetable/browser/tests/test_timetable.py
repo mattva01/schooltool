@@ -43,7 +43,7 @@ from schooltool.testing import setup as sbsetup
 
 def setUp(test=None):
     testing.setUp(test)
-    sbsetup.setupTimetabling()
+    sbsetup.setUpTimetabling()
     sbsetup.setUpApplicationPreferences()
     ztapi.provideAdapter(None, ISchoolToolApplication,
                          getSchoolToolApplication)
@@ -204,7 +204,7 @@ def doctest_PersonTimetableSetupView():
 
     We will need an application object
 
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
         >>> ztapi.provideAdapter(IOwnTimetables, ITimetables,
         ...                      TimetablesAdapter)
 
@@ -497,7 +497,7 @@ def doctest_PersonTimetableSetupView_no_timetables():
 
     We will need an application object
 
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
 
     and a Person from that application
 
@@ -543,7 +543,7 @@ def doctest_PersonTimetableSetupView_no_default_ttschema():
 
     We will need an application object
 
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
 
     and a Person from that application
 
@@ -580,7 +580,7 @@ def doctest_SectionTimetableSetupView():
 
     We will need an application object
 
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
         >>> ztapi.provideAdapter(IOwnTimetables, ITimetables,
         ...                      TimetablesAdapter)
 

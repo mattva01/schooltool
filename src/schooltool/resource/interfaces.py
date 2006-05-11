@@ -19,7 +19,7 @@
 """
 Resource-related interfaces
 
-$Id: interfaces.py 4704 2005-08-15 13:22:06Z srichter $
+$Id$
 """
 
 import zope.interface

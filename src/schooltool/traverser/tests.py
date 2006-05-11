@@ -13,7 +13,7 @@
 ##############################################################################
 """Tests for the Preferences System
 
-$Id: tests.py 29143 2005-02-14 22:43:16Z srichter $
+$Id$
 """
 import unittest
 

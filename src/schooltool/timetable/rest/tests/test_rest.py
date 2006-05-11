@@ -97,7 +97,7 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
 
     def setUp(self):
         PlacefulSetup.setUp(self)
-        self.app = sbsetup.setupSchoolToolSite()
+        self.app = sbsetup.setUpSchoolToolSite()
 
         from schooltool.timetable.interfaces import IOwnTimetables
         from schooltool.course.section import Section
@@ -222,7 +222,7 @@ def doctest_TimetableDictPublishTraverse():
     Some setup is needed:
 
         >>> setup.placefulSetUp()
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
 
         >>> from datetime import date
         >>> from schooltool.term.term import Term

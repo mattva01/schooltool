@@ -19,7 +19,7 @@
 """
 Tests for groups.
 
-$Id: test_app.py 4691 2005-08-12 18:59:44Z srichter $
+$Id$
 """
 
 import unittest

@@ -42,7 +42,7 @@ from schooltool.timetable.schema import TimetableSchema
 def setUp(test):
     setup.placelessSetUp()
     setup.setUpAnnotations()
-    stsetup.setupTimetabling()
+    stsetup.setUpTimetabling()
 
 
 def tearDown(test):

@@ -962,7 +962,7 @@ class TestCompositeTimetables(NiceDiffsMixin, EqualsSortedMixin,
         from schooltool.timetable import TimetableActivity
         from schooltool.app.cal import Calendar, CalendarEvent
 
-        app = stsetup.setupSchoolToolSite()
+        app = stsetup.setUpSchoolToolSite()
 
         term = app["terms"]['2003 fall'] = TermStub()
         tss = app["ttschemas"]
@@ -1042,7 +1042,7 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
 
        >>> from schooltool.testing.setup import createSchoolToolApplication
        >>> from schooltool.timetable import findRelatedTimetables
-       >>> app = stsetup.setupSchoolToolSite()
+       >>> app = stsetup.setUpSchoolToolSite()
        >>> directlyProvides(app, IOwnTimetables)
 
     Let's create a timetable schema:
@@ -1162,7 +1162,7 @@ def doctest_findRelatedTimetables_forTerm():
 
        >>> from schooltool.testing.setup import createSchoolToolApplication
        >>> from schooltool.timetable import findRelatedTimetables
-       >>> app = stsetup.setupSchoolToolSite()
+       >>> app = stsetup.setUpSchoolToolSite()
        >>> directlyProvides(app, IOwnTimetables)
 
     Let's create a couple of terms:

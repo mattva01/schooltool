@@ -30,7 +30,7 @@ from zope.interface import implements
 from zope.testing import doctest
 from zope.app.testing import setup, ztapi
 from zope.publisher.browser import TestRequest
-from schooltool.testing.setup import setupSchoolToolSite
+from schooltool.testing.setup import setUpSchoolToolSite
 from schooltool.testing.setup import setUpApplicationPreferences
 from schooltool.setupdata.tests.test_generator import DummyPlugin
 from schooltool.setupdata.interfaces import ISetupDataPlugin
@@ -51,7 +51,7 @@ class DummySetupPlugin(DummyPlugin):
 def doctest_SetupDataView_update():
     """Tests for SetupDataView.update method
 
-        >>> app = setupSchoolToolSite()
+        >>> app = setUpSchoolToolSite()
         >>> from schooltool.setupdata.browser import SetupDataView
 
     Now, let's set up some stub setup data plugins.
@@ -119,7 +119,7 @@ def doctest_SetupDataView__call__():
     Let's create an application object and a view:
 
         >>> from schooltool.setupdata.browser import SetupDataView
-        >>> app = setupSchoolToolSite()
+        >>> app = setUpSchoolToolSite()
         >>> request = TestRequest(form={'seed': 'test'})
         >>> view = SetupDataView(app, request)
 

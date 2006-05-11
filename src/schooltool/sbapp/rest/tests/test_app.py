@@ -39,7 +39,7 @@ class TestAppView(XMLCompareMixin, unittest.TestCase):
 
     def setUp(self):
         setup.placefulSetUp()
-        self.app = sbsetup.setupSchoolToolSite()
+        self.app = sbsetup.setUpSchoolToolSite()
         from schooltool.app.rest.app import ApplicationView
         self.view = ApplicationView(self.app, TestRequest())
 
@@ -113,7 +113,7 @@ def doctest_CalendarView():
         >>> setup.setUpAnnotations()
 
         >>> from schooltool.testing import setup as sbsetup
-        >>> sbsetup.setupCalendaring()
+        >>> sbsetup.setUpCalendaring()
 
     First lets create a view:
 

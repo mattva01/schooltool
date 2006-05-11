@@ -40,13 +40,13 @@ def doctest_ApplicationView():
 
     Some setup
 
-        >>> sbsetup.setupCalendaring()
+        >>> sbsetup.setUpCalendaring()
 
         >>> from schooltool.app.app import getApplicationPreferences
         >>> from schooltool.app.interfaces import IApplicationPreferences
         >>> from schooltool.app.interfaces import ISchoolToolApplication
 
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
 
         >>> ztapi.provideAdapter(ISchoolToolApplication,
         ...                      IApplicationPreferences,
@@ -253,7 +253,7 @@ def doctest_LoginView():
 
     Suppose we have a SchoolTool app and a person:
 
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
         >>> persons = app['persons']
 
         >>> frog = Person('frog')
@@ -284,7 +284,7 @@ def doctest_LoginView():
         >>> auth = SchoolToolAuthenticationUtility()
         >>> ztapi.provideUtility(IAuthentication, auth)
         >>> auth.__parent__ = app
-        >>> sbsetup.setupSessions()
+        >>> sbsetup.setUpSessions()
 
     It does not authenticate our session:
 
@@ -353,7 +353,7 @@ def doctest_LogoutView():
     """
     Suppose we have a SchoolTool app and a person:
 
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
         >>> persons = app['persons']
 
         >>> from schooltool.person.person import Person
@@ -368,7 +368,7 @@ def doctest_LogoutView():
         >>> auth = SchoolToolAuthenticationUtility()
         >>> ztapi.provideUtility(IAuthentication, auth)
         >>> auth.__parent__ = app
-        >>> sbsetup.setupSessions()
+        >>> sbsetup.setUpSessions()
 
     We have a request in an authenticated session:
 
@@ -433,7 +433,7 @@ def doctest_ACLViewBase_applyPermissionChanges():
 
     Set up the application:
 
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
 
     And a person:
 
@@ -541,7 +541,7 @@ def doctest_ACLViewBase_permsForPrincipal():
 
     Suppose we have a SchoolTool object:
 
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
 
     In it, we have a principal:
 
@@ -614,7 +614,7 @@ def doctest_ACLView():
 
     Suppose we have a SchoolTool app:
 
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
 
     We have a couple of persons and groups:
 
@@ -1025,7 +1025,7 @@ def doctest_ACLView_inheritance():
 
     Suppose we have a SchoolTool app:
 
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
 
     We have a couple of persons and groups:
 
@@ -1129,7 +1129,7 @@ def doctest_hasPermissions():
 
     Suppose we have a SchoolTool object:
 
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
 
     In it, we have a principal:
 
@@ -1176,7 +1176,7 @@ def doctest_ApplicationPreferencesView():
     We need to setup a SchoolToolApplication site and build our
     ISchoolToolApplication adapter:
 
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
 
         >>> from schooltool.app.browser.app import ApplicationPreferencesView
         >>> from schooltool.app.app import getApplicationPreferences

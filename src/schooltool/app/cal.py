@@ -243,10 +243,10 @@ def clearCalendarOnDeletion(event):
 
         >>> from zope.app.testing import setup
         >>> from schooltool.relationship.tests import setUp, tearDown
-        >>> from schooltool.testing.setup import setupCalendaring
+        >>> from schooltool.testing.setup import setUpCalendaring
 
         >>> setUp()
-        >>> setupCalendaring()
+        >>> setUpCalendaring()
 
         >>> import zope.event
         >>> old_subscribers = zope.event.subscribers[:]

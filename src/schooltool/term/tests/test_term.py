@@ -182,7 +182,7 @@ class TestGetTermForDate(unittest.TestCase):
 
     def setUp(self):
         placefulSetUp()
-        app = setup.setupSchoolToolSite()
+        app = setup.setUpSchoolToolSite()
 
         self.term1 = term.Term('Sample', date(2004, 9, 1), date(2004, 12, 20))
         self.term2 = term.Term('Sample', date(2005, 1, 1), date(2005, 6, 1))

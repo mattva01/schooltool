@@ -29,7 +29,7 @@ from zope.testing import doctest
 from zope.app.container.contained import ObjectAddedEvent
 from zope.app.testing import setup
 
-from schooltool.testing.setup import setupLocalGrants
+from schooltool.testing.setup import setUpLocalGrants
 from schooltool.testing import setup as sbsetup
 
 
@@ -42,7 +42,7 @@ def doctest_personPermissionsSubscriber():
         >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.group.group import Group, GroupContainer
         >>> from schooltool.person.person import Person, PersonContainer
-        >>> setupLocalGrants()
+        >>> setUpLocalGrants()
         >>> root['sb'] = SchoolToolApplication()
         >>> root['sb']['persons'] = PersonContainer()
         >>> root['sb']['groups'] = GroupContainer()
@@ -164,7 +164,7 @@ def doctest_Person():
 
         >>> setup.placelessSetUp()
         >>> setup.setUpAnnotations()
-        >>> sbsetup.setupCalendaring()
+        >>> sbsetup.setUpCalendaring()
 
         >>> from schooltool.app.interfaces import ISchoolToolCalendar
         >>> calendar = ISchoolToolCalendar(person)

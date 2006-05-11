@@ -6,12 +6,12 @@ Set up
 ------
 
     >>> from schooltool.testing import setup as sbsetup
-    >>> sbsetup.setupCalendaring()
+    >>> sbsetup.setUpCalendaring()
     >>> sbsetup.setUpApplicationPreferences()
 
 First of all, we need an app object:
 
-    >>> app = sbsetup.setupSchoolToolSite()
+    >>> app = sbsetup.setUpSchoolToolSite()
 
 We have a timetable schema to put the view on:
 

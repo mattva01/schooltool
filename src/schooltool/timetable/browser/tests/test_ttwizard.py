@@ -66,7 +66,7 @@ def setUp(test):
     a global named `app` in all doctests.
     """
     schooltool_setup.setUp(test)
-    setup.setupSessions()
+    setup.setUpSessions()
     setUpApplicationPreferences()
     setUpNameChoosers()
     ztapi.provideAdapter(ISchoolToolApplication, IApplicationPreferences,
@@ -74,7 +74,7 @@ def setUp(test):
     ztapi.provideAdapter(None, ISchoolToolApplication,
                          getSchoolToolApplication)
 
-    test.globs['app'] = setup.setupSchoolToolSite()
+    test.globs['app'] = setup.setUpSchoolToolSite()
 
 
 def tearDown(test):

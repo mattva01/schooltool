@@ -76,7 +76,7 @@ def doctest_CourseAddView():
         ...     _factory = Course
 
 
-        >>> app = setup.setupSchoolToolSite()
+        >>> app = setup.setUpSchoolToolSite()
         >>> container = app['courses']
         >>> request = TestRequest()
         >>> context = AddingStub(container, request)
@@ -263,7 +263,7 @@ def doctest_SectionAddView():
     create a SchoolTool instance:
 
         >>> from schooltool.app.app import SchoolToolApplication
-        >>> app = setup.setupSchoolToolSite()
+        >>> app = setup.setUpSchoolToolSite()
         >>> directlyProvides(app, IContainmentRoot)
         >>> sections = app['sections']
         >>> courses = app['courses']
@@ -356,7 +356,7 @@ def doctest_SectionEditView():
     We need some setup:
 
         >>> from schooltool.app.app import SchoolToolApplication
-        >>> app = setup.setupSchoolToolSite()
+        >>> app = setup.setUpSchoolToolSite()
         >>> from schooltool.resource.resource import Resource
         >>> app['resources']['room1'] = room1 = Resource("Room 1",
         ...                                               isLocation=True)
@@ -446,7 +446,7 @@ def doctest_SectionEditView():
 def doctest_RelationshipEditingViewBase():
     r"""Tests for RelationshipEditingViewBase.
 
-        >>> app = setup.setupSchoolToolSite()
+        >>> app = setup.setUpSchoolToolSite()
 
         >>> class ItemStub(object):
         ...     def __init__(self, name):
@@ -541,7 +541,7 @@ def doctest_RelationshipEditingViewBase_no_timetables():
     defined.
 
         >>> from schooltool.course.browser.section import RelationshipEditingViewBase
-        >>> app = setup.setupSchoolToolSite()
+        >>> app = setup.setUpSchoolToolSite()
         >>> view = RelationshipEditingViewBase(app, TestRequest())
         >>> view.getSchema = lambda: None
         >>> view.getAvailableItems = lambda: []
@@ -594,7 +594,7 @@ def doctest_SectionInstructorView():
 
         >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.person.person import Person
-        >>> school = setup.setupSchoolToolSite()
+        >>> school = setup.setUpSchoolToolSite()
         >>> persons = school['persons']
         >>> directlyProvides(school, IContainmentRoot)
         >>> persons['smith'] = Person('smith', 'John Smith')
@@ -631,7 +631,7 @@ def doctest_SectionLearnerView():
 
         >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.person.person import Person
-        >>> school = setup.setupSchoolToolSite()
+        >>> school = setup.setUpSchoolToolSite()
         >>> persons = school['persons']
         >>> directlyProvides(school, IContainmentRoot)
         >>> smith = persons['smith'] = Person('smith', 'John Smith')
@@ -677,7 +677,7 @@ def doctest_SectionLearnerGroupView():
 
         >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.group.group import Group
-        >>> school = setup.setupSchoolToolSite()
+        >>> school = setup.setUpSchoolToolSite()
         >>> groups = school['groups']
         >>> directlyProvides(school, IContainmentRoot)
         >>> frogs = groups['frogs'] = Group('frogs', 'Bunch of frogs')
@@ -723,7 +723,7 @@ def doctest_SectionResourceView():
 
         >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.resource.resource import Resource
-        >>> school = setup.setupSchoolToolSite()
+        >>> school = setup.setUpSchoolToolSite()
         >>> resources = school['resources']
         >>> directlyProvides(school, IContainmentRoot)
         >>> rock = resources['rock'] = Resource('rock')
@@ -761,7 +761,7 @@ def doctest_CoursesViewlet():
         >>> from schooltool.course.browser.course import CoursesViewlet
         >>> from schooltool.person.person import Person
 
-        >>> school = setup.setupSchoolToolSite()
+        >>> school = setup.setUpSchoolToolSite()
         >>> persons = school['persons']
         >>> sections = school['sections']
 

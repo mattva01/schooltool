@@ -71,7 +71,7 @@ class TestLevelFileFactory(PlacefulSetup, unittest.TestCase):
 
     def setUp(self):
         super(TestLevelFileFactory, self).setUp()
-        self.app = setup.setupSchoolToolSite()
+        self.app = setup.setUpSchoolToolSite()
         self.factory = rest.level.LevelFileFactory(self.app['levels'])
 
     def test_attributes(self):
@@ -103,7 +103,7 @@ class TestLevelFile(testing.FileFactoriesSetUp, PlacefulSetup,
 
     def setUp(self):
         super(TestLevelFile, self).setUp()
-        self.app = setup.setupSchoolToolSite()
+        self.app = setup.setUpSchoolToolSite()
         ztapi.provideAdapter(interfaces.ILevelContainer, IFileFactory,
                              rest.level.LevelFileFactory)
 

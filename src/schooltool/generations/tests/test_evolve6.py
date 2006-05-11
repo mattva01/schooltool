@@ -40,7 +40,7 @@ from schooltool.relationship.tests import setUpRelationships
 def setUp(test):
     setup.placelessSetUp()
     setup.setUpAnnotations()
-    sbsetup.setupCalendaring()
+    sbsetup.setUpCalendaring()
     setUpRelationships()
 
 

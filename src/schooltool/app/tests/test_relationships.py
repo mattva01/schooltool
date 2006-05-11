@@ -19,7 +19,7 @@
 """
 Unit tests for schooltool.app.relationships
 
-$Id: test_app.py 3504 2005-04-22 16:34:13Z bskahan $
+$Id$
 """
 
 from pprint import pprint
@@ -318,8 +318,8 @@ def doctest_updateStudentCalendars():
         >>> from schooltool.person.person import Person
         >>> from schooltool.relationship.tests import setUp, tearDown
         >>> setUp()
-        >>> from schooltool.testing.setup import setupLocalGrants
-        >>> setupLocalGrants()
+        >>> from schooltool.testing.setup import setUpLocalGrants
+        >>> setUpLocalGrants()
 
         >>> from schooltool.app.overlay import CalendarOverlayInfo
         >>> ztapi.provideAdapter(CalendarOverlayInfo, IShowTimetables,
@@ -361,10 +361,10 @@ def doctest_updateStudentCalendars():
 
     The person is granted access to view the section's calendar:
 
-        >>> from schooltool.testing.setup import setupLocalGrants
+        >>> from schooltool.testing.setup import setUpLocalGrants
         >>> from zope.app.securitypolicy.interfaces import \
         ...                                         IPrincipalPermissionManager
-        >>> setupLocalGrants()
+        >>> setUpLocalGrants()
         >>> perms = IPrincipalPermissionManager(section)
         >>> x = perms.getPermissionsForPrincipal('sb.person.p')
         >>> x.sort()

@@ -31,7 +31,7 @@ from zope.app.testing import setup
 from zope.publisher.browser import TestRequest
 from zope.app.publication.zopepublication import BeforeTraverseEvent
 
-from schooltool.testing.setup import setupSchoolToolSite
+from schooltool.testing.setup import setUpSchoolToolSite
 
 
 def doctest_OrderedViewletManager_sort():
@@ -106,7 +106,7 @@ def doctest_NavigationViewlet_appURL():
     r"""Tests for NavigationViewlet.appURL
 
         >>> setup.placefulSetUp()
-        >>> site = setupSchoolToolSite()
+        >>> site = setUpSchoolToolSite()
 
         >>> from schooltool.skin import NavigationViewlet
         >>> viewlet = NavigationViewlet()

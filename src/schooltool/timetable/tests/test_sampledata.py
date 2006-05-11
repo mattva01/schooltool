@@ -50,7 +50,7 @@ def doctest_SampleTimetableSchema():
         >>> verifyObject(ISampleDataPlugin, plugin)
         True
 
-        >>> app = stsetup.setupSchoolToolSite()
+        >>> app = stsetup.setUpSchoolToolSite()
         >>> IApplicationPreferences(app).timezone = 'Europe/Vilnius'
 
     This plugin creates a timetable schema:

@@ -29,7 +29,7 @@ from pprint import pprint
 from zope.testing import doctest
 from zope.app.testing import setup, ztapi
 from zope.publisher.browser import TestRequest
-from schooltool.testing.setup import setupSchoolToolSite
+from schooltool.testing.setup import setUpSchoolToolSite
 from schooltool.testing.setup import setUpApplicationPreferences
 import schooltool.app.browser.testing
 
@@ -44,7 +44,7 @@ def tearDown(test):
 def doctest_SampleDataView_update():
     """Tests for SampleDataView.update method
 
-        >>> app = setupSchoolToolSite()
+        >>> app = setUpSchoolToolSite()
 
     When seed is not provided in the request, the seed is set to
     'SchoolTool', so that sample data is reproducible:
@@ -140,7 +140,7 @@ def doctest_SampleDataView__call__():
     Let's create an application object and a view:
 
         >>> from schooltool.sampledata.browser import SampleDataView
-        >>> app = setupSchoolToolSite()
+        >>> app = setUpSchoolToolSite()
         >>> request = TestRequest(form={'seed': 'test'})
         >>> view = SampleDataView(app, request)
 

@@ -41,13 +41,13 @@ from schooltool.timetable.interfaces import ITimetableSource
 def setUp(test):
     setup.placefulSetUp()
     setUpRelationships()
-    app = stsetup.setupSchoolToolSite()
+    app = stsetup.setUpSchoolToolSite()
     ztapi.provideAdapter(None, ISchoolToolApplication, lambda x: app)
     provideSubscriptionAdapter(OwnedTimetableSource,
                                (IOwnTimetables,),
                                ITimetableSource)
-    stsetup.setupTimetabling()
-    stsetup.setupCalendaring()
+    stsetup.setUpTimetabling()
+    stsetup.setUpCalendaring()
     stsetup.setUpApplicationPreferences()
 
 
@@ -66,7 +66,7 @@ def doctest_SampleCourse():
 
     As always, we'll need an application instance:
 
-        >>> app = stsetup.setupSchoolToolSite()
+        >>> app = stsetup.setUpSchoolToolSite()
 
     The plugin generates 24 courses:
 
@@ -98,7 +98,7 @@ def doctest_SampleSections():
     As always, we'll need an application instance:
 
         >>> from schooltool.group.group import Group
-        >>> app = stsetup.setupSchoolToolSite()
+        >>> app = stsetup.setUpSchoolToolSite()
         >>> app['groups']['teachers'] = Group('Teachers')
         >>> app['groups']['students'] = Group('Students')
 
@@ -170,7 +170,7 @@ def doctest_SampleTimetables():
         ('sections', 'ttschema', 'terms')
 
         >>> from schooltool.group.group import Group
-        >>> app = stsetup.setupSchoolToolSite()
+        >>> app = stsetup.setUpSchoolToolSite()
         >>> app['groups']['teachers'] = Group('Teachers')
 
         >>> from schooltool.person.sampledata import SampleStudents
@@ -256,7 +256,7 @@ def doctest_SampleTimetables_assignPeriodToSection():
         >>> from schooltool.course.course import Course
         >>> from schooltool.course.section import Section
         >>> from schooltool.app.relationships import CourseSections
-        >>> app = stsetup.setupSchoolToolSite()
+        >>> app = stsetup.setUpSchoolToolSite()
         >>> c = app['courses']['my_course'] = Course('My Course')
         >>> s = app['sections']['the_sect'] = Section('Sect')
         >>> CourseSections(course=c, section=s)
@@ -313,7 +313,7 @@ def doctest_SampleSectionAssignments():
         >>> plugin.dependencies
         ('section_timetables', 'resources')
 
-        >>> app = stsetup.setupSchoolToolSite()
+        >>> app = stsetup.setUpSchoolToolSite()
 
         >>> from schooltool.course.course import Course
         >>> from schooltool.course.section import Section

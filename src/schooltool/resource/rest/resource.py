@@ -19,7 +19,7 @@
 """
 RESTive views for resource,
 
-$Id: app.py 4704 2005-08-15 13:22:06Z srichter $
+$Id$
 """
 from zope.component import adapts
 

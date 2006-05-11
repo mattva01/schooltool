@@ -86,8 +86,8 @@ def dt(timestr):
 
 def setUp(test=None):
     browserSetUp(test)
-    sbsetup.setupCalendaring()
-    sbsetup.setupSessions()
+    sbsetup.setUpCalendaring()
+    sbsetup.setUpSessions()
 
 
 def doctest_ToCalendarTraverser():
@@ -726,7 +726,7 @@ class TestCalendarViewBase(unittest.TestCase):
     def setUp(self):
         setup.placefulSetUp()
 
-        sbsetup.setupSessions()
+        sbsetup.setUpSessions()
         registerCalendarHelperViews()
         registerCalendarSubscribers()
 
@@ -1030,11 +1030,11 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> from schooltool.app.cal import Calendar
 
             >>> setup.placefulSetUp()
-            >>> app = sbsetup.setupSchoolToolSite()
+            >>> app = sbsetup.setUpSchoolToolSite()
             >>> setup.setUpAnnotations()
             >>> registerCalendarHelperViews()
             >>> registerCalendarSubscribers()
-            >>> sbsetup.setupTimetabling()
+            >>> sbsetup.setUpTimetabling()
 
             >>> calendar = Calendar(Person())
             >>> vb = CalendarViewBase(calendar, TestRequest())
@@ -1162,12 +1162,12 @@ class TestCalendarViewBase(unittest.TestCase):
         """Test for CalendarViewBase.getEvents
 
             >>> setup.placefulSetUp()
-            >>> app = sbsetup.setupSchoolToolSite()
+            >>> app = sbsetup.setUpSchoolToolSite()
             >>> setup.setUpAnnotations()
             >>> registerCalendarHelperViews()
             >>> registerCalendarSubscribers()
-            >>> sbsetup.setupSessions()
-            >>> sbsetup.setupTimetabling()
+            >>> sbsetup.setUpSessions()
+            >>> sbsetup.setUpTimetabling()
 
         CalendarViewBase.getEvents returns a list of wrapped calendar
         events.
@@ -1272,8 +1272,8 @@ class TestCalendarViewBase(unittest.TestCase):
     def test_getDays(self):
         from schooltool.app.browser.cal import CalendarViewBase
         from schooltool.app.cal import Calendar
-        app = sbsetup.setupSchoolToolSite()
-        sbsetup.setupTimetabling()
+        app = sbsetup.setUpSchoolToolSite()
+        sbsetup.setUpTimetabling()
 
         e0 = createEvent('2004-08-10 11:00', '1h', "e0")
         e2 = createEvent('2004-08-11 11:00', '1h', "e2")
@@ -1320,8 +1320,8 @@ class TestCalendarViewBase(unittest.TestCase):
     def test_getDays_in_timezones(self):
         from schooltool.app.browser.cal import CalendarViewBase
         from schooltool.app.cal import Calendar
-        app = sbsetup.setupSchoolToolSite()
-        sbsetup.setupTimetabling()
+        app = sbsetup.setUpSchoolToolSite()
+        sbsetup.setUpTimetabling()
 
         e0 = createEvent('2004-08-10 22:00', '30m', "e0")
         e1 = createEvent('2004-08-11 02:00', '1h', "e1")
@@ -2955,7 +2955,7 @@ def doctest_TestCalendarEventBookingView():
         >>> from schooltool.resource.resource import Resource
         >>> from schooltool.app.cal import CalendarEvent
 
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
 
         >>> from zope.security.checker import defineChecker, Checker
         >>> defineChecker(Calendar,
@@ -3353,12 +3353,12 @@ class TestDailyCalendarView(unittest.TestCase):
 
     def setUp(self):
         setup.placefulSetUp()
-        self.app = sbsetup.setupSchoolToolSite()
+        self.app = sbsetup.setUpSchoolToolSite()
         registerCalendarHelperViews()
         registerCalendarSubscribers()
-        sbsetup.setupSessions()
-        sbsetup.setupTimetabling()
-        sbsetup.setupCalendaring()
+        sbsetup.setUpSessions()
+        sbsetup.setUpTimetabling()
+        sbsetup.setUpCalendaring()
 
     def tearDown(self):
         setup.placefulTearDown()
@@ -3989,12 +3989,12 @@ class TestDailyCalendarView(unittest.TestCase):
         """Test for DailyCalendarView.getAllDayEvents
 
             >>> setup.placefulSetUp()
-            >>> app = sbsetup.setupSchoolToolSite()
+            >>> app = sbsetup.setUpSchoolToolSite()
             >>> setup.setUpAnnotations()
             >>> registerCalendarHelperViews()
             >>> registerCalendarSubscribers()
-            >>> sbsetup.setupSessions()
-            >>> sbsetup.setupTimetabling()
+            >>> sbsetup.setUpSessions()
+            >>> sbsetup.setUpTimetabling()
 
         DailyCalendarView.getAllDayEvents returns a list of wrapped
         all-day calendar events for the date of the view cursor.
@@ -4034,7 +4034,7 @@ class TestDailyCalendarView(unittest.TestCase):
 def doctest_CalendarViewBase():
     """Tests for CalendarViewBase.
 
-        >>> sbsetup.setupSessions()
+        >>> sbsetup.setUpSessions()
 
         >>> from schooltool.app.browser.cal import CalendarViewBase
         >>> from schooltool.app.cal import Calendar
@@ -4418,8 +4418,8 @@ def doctest_AtomCalendarView():
     Some setup:
 
         >>> setup.placefulSetUp()
-        >>> app = sbsetup.setupSchoolToolSite()
-        >>> sbsetup.setupTimetabling()
+        >>> app = sbsetup.setUpSchoolToolSite()
+        >>> sbsetup.setUpTimetabling()
         >>> registerCalendarHelperViews()
         >>> registerCalendarSubscribers()
 
@@ -4689,7 +4689,7 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
 
     def setUp(self):
         setUp()
-        sbsetup.setupCalendaring()
+        sbsetup.setUpCalendaring()
 
         # set up adaptation (the view checks user preferences)
         from schooltool.person.preference import getPersonPreferences
@@ -4698,7 +4698,7 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
         ztapi.provideAdapter(Person, IPersonPreferences, getPersonPreferences)
 
         # set up the site
-        app = sbsetup.setupSchoolToolSite()
+        app = sbsetup.setUpSchoolToolSite()
 
         self.person = app['persons']['person'] = Person('person')
 
@@ -4871,7 +4871,7 @@ class TestDailyCalendarRowsView_getPeriodsForDay(NiceDiffsMixin,
 
     def setUp(self):
         setup.placefulSetUp()
-        app = sbsetup.setupSchoolToolSite()
+        app = sbsetup.setUpSchoolToolSite()
 
         from schooltool.term.term import Term
         self.term1 = Term('Sample', date(2004, 9, 1), date(2004, 12, 20))
@@ -4953,7 +4953,7 @@ def doctest_CalendarSTOverlayView():
 
      Some setup:
 
-        >>> sbsetup.setupCalendaring()
+        >>> sbsetup.setUpCalendaring()
 
         >>> from zope.component import provideAdapter
         >>> from schooltool.app.app import ShowTimetables
@@ -4988,7 +4988,7 @@ def doctest_CalendarSTOverlayView():
         >>> from schooltool.course.course import Course
         >>> from schooltool.course.section import Section
         >>> from schooltool.app.security import Principal
-        >>> app = sbsetup.setupSchoolToolSite()
+        >>> app = sbsetup.setUpSchoolToolSite()
         >>> person = app['persons']['whatever'] = Person('fred')
         >>> group1 = app['groups']['g1'] = Group(title="Group 1")
         >>> group2 = app['groups']['g2'] = Group(title="Group 2")
@@ -5107,7 +5107,7 @@ def doctest_CalendarListSubscriber(self):
 
     Some initial setup:
 
-        >>> sbsetup.setupCalendaring()
+        >>> sbsetup.setUpCalendaring()
 
     A handful of useful stubs:
 

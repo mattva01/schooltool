@@ -23,7 +23,7 @@ Issue349 - while the original evolution script (evolve6) evolved
 properties that were set properly. Default settings 'YYYY-MM-DD' were
 left unmodified.
 
-$Id: evolve6.py 4741 2005-08-16 17:41:15Z ignas $
+$Id$
 """
 
 from zope.app.publication.zopepublication import ZopePublication

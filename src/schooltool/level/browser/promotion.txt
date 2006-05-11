@@ -94,7 +94,7 @@ lot of setup.
 First we have to create a valid SchoolTool site:
 
   >>> from schooltool.testing import setup
-  >>> st = setup.setupSchoolToolSite()
+  >>> st = setup.setUpSchoolToolSite()
 
 We then have to add students, groups and levels to it; I have done this in the
 test setup to not bore you with the details here:

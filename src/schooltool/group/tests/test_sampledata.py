@@ -41,7 +41,7 @@ from schooltool.term.term import getTermForDate
 
 def setUp(test):
     setup.placefulSetUp()
-    stsetup.setupCalendaring()
+    stsetup.setUpCalendaring()
 
 
 def tearDown(test):
@@ -63,7 +63,7 @@ def doctest_SampleGroups():
     Prepare students.
 
         >>> setUpRelationships()
-        >>> app = stsetup.setupSchoolToolSite()
+        >>> app = stsetup.setUpSchoolToolSite()
         >>> from schooltool.person.sampledata import SampleStudents
         >>> from schooltool.term.sampledata import SampleTerms
         >>> studentsPlugin = SampleStudents()

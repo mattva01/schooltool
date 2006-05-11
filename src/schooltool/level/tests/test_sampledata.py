@@ -103,7 +103,7 @@ def doctest_SampleLevels():
 
         >>> from schooltool.group.group import Group
         >>> from schooltool.person.person import Person
-        >>> app = stsetup.setupSchoolToolSite()
+        >>> app = stsetup.setUpSchoolToolSite()
         >>> app['groups']['manager'] = Group('Manager')
         >>> app['persons']['student000'] = Person('student000', 'John')
         >>> app['persons']['student001'] = Person('student001', 'Joe')

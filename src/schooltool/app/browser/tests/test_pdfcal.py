@@ -47,7 +47,7 @@ from schooltool.testing import setup as sbsetup
 
 def pdfSetUp(test=None):
     setup.placefulSetUp()
-    sbsetup.setupCalendaring()
+    sbsetup.setUpCalendaring()
 
 
 def pdfTearDown(test=None):

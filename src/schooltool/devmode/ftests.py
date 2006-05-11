@@ -19,7 +19,7 @@
 """
 Functional tests for devmode.
 
-$Id: test_all.py 2922 2005-02-22 19:04:44Z mg $
+$Id$
 """
 import unittest
 from zope.testing import doctest
