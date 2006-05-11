@@ -55,7 +55,7 @@ from zope.app.dependable.interfaces import IDependable
 
 from schooltool.app.app import SchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.person.person import Person
+from schooltool.demographics.person import Person
 from schooltool.app.rest import restServerType
 from schooltool.app.browser import pdfcal
 

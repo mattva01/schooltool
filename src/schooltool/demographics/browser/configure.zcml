@@ -77,4 +77,11 @@
       factory=".personform.Terms"
       />
 
+  <page
+     for="schooltool.person.interfaces.IPersonContainer"
+     name="table.html"
+     class=".table.PersonTable"
+     permission="schooltool.view"
+     />
+
 </configure>
