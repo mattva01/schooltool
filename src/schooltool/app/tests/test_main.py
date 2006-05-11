@@ -384,8 +384,9 @@ def doctest_setup():
 
     The manager is a SchoolTool person:
 
-        >>> app['persons']['manager']
-        <schooltool.person.person.Person object at ...>
+        >>> from schooltool.person.interfaces import IPerson
+        >>> IPerson.providedBy(app['persons']['manager'])
+        True
 
     A web access logger has been set up:
 
