@@ -4,9 +4,6 @@
 </head>
 <body>
 <metal:block metal:fill-slot="body">
-<form action="."
-    tal:attributes="action request/URL" method="post"
-    enctype="multipart/form-data">
 
   <table class="listing">
     <thead>
@@ -37,8 +34,7 @@
       </tr>
     </tfoot>
   </table>
-    
-</form>
+
 </metal:block>
 </body>
 </html>
