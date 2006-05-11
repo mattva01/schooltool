@@ -36,6 +36,7 @@ from zope.interface import implements, Interface
 from zope.i18n import translate
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces import NotFound
+from zope.security.interfaces import Unauthorized
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import canAccess
 from zope.schema import Date, TextLine, Choice, Int, Bool, List, Text
@@ -1987,7 +1988,9 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
     def add(self, event):
         """Add the event to a calendar."""
         self.context.addEvent(event)
-        self._event_uid = event.unique_id
+        uid = self._event_uid = event.unique_id
+        session_data = ISession(self.request)['schooltool.calendar']
+        session_data.setdefault('added_event_uids', set()).add(uid)
         return event
 
     def update(self):
@@ -2205,11 +2208,31 @@ class CalendarEventBookingView(CalendarEventView):
         self.end = u'' + self.dtend.strftime(format)
 
     def __call__(self):
-        # If the authenticated user does not have the modifyEvent permission,
-        # raise Unauthorized unless the user does have the addEvent
-        # permission and has come here directly from the event adding form.
-        # This will fix issue 486.
+        self.checkPermission()
         return self.template()
+
+    def checkPermission(self):
+        if canAccess(self.context, 'bookResource'):
+            return
+        # If the authenticated user has the addEvent permission and has
+        # come here directly from the event adding form, let him book.
+        # (Fixes issue 486.)
+        if self.justAddedThisEvent():
+            return
+        raise Unauthorized("user not allowed to book")
+
+    def justAddedThisEvent(self):
+        session_data = ISession(self.request)['schooltool.calendar']
+        added_event_ids = session_data.get('added_event_uids', [])
+        return self.context.unique_id in added_event_ids
+
+    def clearJustAddedStatus(self):
+        """Remove the context uid from the list of added events."""
+        session_data = ISession(self.request)['schooltool.calendar']
+        added_event_ids = session_data.get('added_event_uids', [])
+        uid = self.context.unique_id
+        if uid in added_event_ids:
+            added_event_ids.remove(uid)
 
     def update(self):
         """Book/unbook resources according to the request."""
@@ -2218,12 +2241,11 @@ class CalendarEventBookingView(CalendarEventView):
         if 'CANCEL' in self.request:
             url = absoluteURL(self.context, self.request)
             self.request.response.redirect('%s/@@edit.html' % url)
+            self.clearJustAddedStatus()
             return ''
-
-        if "UPDATE_SUBMIT" in self.request and not self.update_status:
+        elif "UPDATE_SUBMIT" in self.request and not self.update_status:
             self.update_status = ''
             sb = getSchoolToolApplication()
-
             for res_id, resource in sb["resources"].items():
                 if 'marker-%s' % res_id in self.request:
                     booked = self.hasBooked(resource)
@@ -2233,7 +2255,11 @@ class CalendarEventBookingView(CalendarEventView):
                         # book that specific resource was revoked.
                         self.context.unbookResource(resource)
                     elif not booked and checked and self.canBook(resource):
-                        self.context.bookResource(resource)
+                        # We check in the view that the principal
+                        # has either addEvent or modifyEvent as required
+                        event = removeSecurityProxy(self.context)
+                        event.bookResource(resource)
+            self.clearJustAddedStatus()
             self.request.response.redirect(self.nextURL())
 
         return self.update_status

@@ -416,7 +416,7 @@
       name="booking.html"
       layer="schooltool.skin.ISchoolToolLayer"
       class=".cal.CalendarEventBookingView"
-      permission="schooltool.edit"
+      permission="zope.View"
       />
 
   <page

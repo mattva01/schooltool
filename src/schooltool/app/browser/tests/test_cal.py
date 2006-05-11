@@ -87,6 +87,7 @@ def dt(timestr):
 def setUp(test=None):
     browserSetUp(test)
     sbsetup.setupCalendaring()
+    sbsetup.setupSessions()
 
 
 def doctest_ToCalendarTraverser():
@@ -1560,6 +1561,41 @@ def doctest_CalendarEventAddView_add_allday():
         True
         >>> event.duration.days
         13
+
+    """
+
+
+def doctest_CalendarEventAddView_add_mark_for_booking():
+    r"""Tests for CalendarEventAddView.add.
+
+    We'll need a minimal event stub that offers a unique id:
+
+        >>> from schooltool.app.interfaces import ISchoolToolCalendarEvent
+        >>> class EventStub(object):
+        ...     implements(ISchoolToolCalendarEvent)
+        ...     __parent__ = None
+        ...     resources = ()
+        ...     def __init__(self, uid):
+        ...         self.unique_id = uid
+
+        >>> request = TestRequest()
+        >>> view = CalendarEventAddTestView(Calendar(Person()), request)
+
+    Let's add an event:
+
+        >>> evt = view.add(EventStub('uid1'))
+
+    Its id should have landed in the session:
+
+        >>> session_data = ISession(request)['schooltool.calendar']
+        >>> sorted(session_data['added_event_uids'])
+        ['uid1']
+
+    Let's try another one:
+
+        >>> evt2 = view.add(EventStub('uid2'))
+        >>> sorted(session_data['added_event_uids'])
+        ['uid1', 'uid2']
 
     """
 
@@ -3092,6 +3128,102 @@ def doctest_TestCalendarEventBookingView():
         u'02 February, 2002 - 02:02 AM'
         >>> view.end
         u'02 February, 2002 - 04:02 AM'
+
+    """
+
+
+def doctest_CalendarEventBookingView_justAddedThisEvent():
+    """Test for CalendarEventBookingView.justAddedThisEvent
+
+        >>> from schooltool.app.interfaces import ISchoolToolCalendarEvent
+        >>> class EventStub(object):
+        ...     implements(ISchoolToolCalendarEvent)
+        ...     __parent__ = ISchoolToolCalendar(Person())
+        ...     resources = ()
+        ...     dtstart = datetime(2006, 4, 20, 20, 7, tzinfo=utc)
+        ...     duration = timedelta(1)
+        ...     title = "Ordinary event"
+        ...     def __init__(self, uid):
+        ...         self.unique_id = uid
+
+        >>> context = EventStub('uid1')
+        >>> request = TestRequest()
+
+        >>> from schooltool.app.browser.cal import CalendarEventBookingView
+        >>> view = CalendarEventBookingView(context, request)
+
+    At this moment the view knows nothing about adding this event:
+
+        >>> view.justAddedThisEvent()
+        False
+
+    Let's register a different event as added:
+
+        >>> session_data = ISession(request)['schooltool.calendar']
+        >>> session_data['added_event_uids'] = set(['uid2'])
+
+    The view still refuses to acknowledge that you have added the event:
+
+        >>> view.justAddedThisEvent()
+        False
+
+    Ok, that's enough.  We really *did* add the event:
+
+        >>> session_data['added_event_uids'] = set(['uid1', 'uid2'])
+
+    This time the view is not so stubborn:
+
+        >>> view.justAddedThisEvent()
+        True
+
+    """
+
+
+def doctest_CalendarEventBookingView_clearJustAddedStatus():
+    """Test for CalendarEventBookingView.clearJustAddedStatus
+
+        >>> from schooltool.app.interfaces import ISchoolToolCalendarEvent
+        >>> class EventStub(object):
+        ...     implements(ISchoolToolCalendarEvent)
+        ...     __parent__ = ISchoolToolCalendar(Person())
+        ...     resources = ()
+        ...     dtstart = datetime(2006, 4, 20, 20, 7, tzinfo=utc)
+        ...     duration = timedelta(1)
+        ...     title = "Ordinary event"
+        ...     def __init__(self, uid):
+        ...         self.unique_id = uid
+
+        >>> context = EventStub('uid1')
+        >>> request = TestRequest()
+
+        >>> from schooltool.app.browser.cal import CalendarEventBookingView
+        >>> view = CalendarEventBookingView(context, request)
+
+    This method should not break even if the list of added events is
+    not initialized.
+
+        >>> view.clearJustAddedStatus()
+
+    Let's register an event as added:
+
+        >>> session_data = ISession(request)['schooltool.calendar']
+        >>> session_data['added_event_uids'] = set(['uid3'])
+
+    The view will not delete this registration, because it's not ours:
+
+        >>> view.clearJustAddedStatus()
+        >>> session_data['added_event_uids']
+        set(['uid3'])
+
+    Ok, that's enough.  We really *did* add the event:
+
+        >>> session_data['added_event_uids'] = set(['uid1', 'uid2'])
+
+    This time the other registration remains, but uid1 is removed.
+
+        >>> view.clearJustAddedStatus()
+        >>> session_data['added_event_uids']
+        set(['uid2'])
 
     """
 
