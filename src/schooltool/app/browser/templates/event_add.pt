@@ -48,7 +48,7 @@
         current_duration = duration.value;
         current_duration_type = duration_type.value;
 
-        if (allday.checked == true) {
+        if (allday.checked) {
             start_time.disabled = true;
             duration_type.disabled = true;
 
