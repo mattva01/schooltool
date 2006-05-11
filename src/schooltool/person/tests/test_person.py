@@ -228,41 +228,6 @@ def doctest_PersonPreferences():
 
     """
 
-
-def doctest_PersonDetails():
-    r"""Tests for the contact information Details adapter
-
-        >>> from zope.app.testing import setup
-        >>> setup.placelessSetUp()
-        >>> setup.setUpAnnotations()
-        >>> from schooltool.person.person import Person
-
-        >>> person = Person('person')
-
-    Make sure the attribute stores the correct interface
-
-        >>> from schooltool.person.interfaces import IPersonDetails
-        >>> from schooltool.person.details import getPersonDetails
-        >>> details = getPersonDetails(person)
-        >>> verifyObject(IPersonDetails, details)
-        True
-
-        >>> from zope.location.interfaces import ILocation
-        >>> verifyObject(ILocation, details)
-        True
-
-    Need to have prefs.__parent__ refer to the person its attached to
-
-        >>> details.__parent__ == person
-        True
-
-    Clean up:
-
-        >>> setup.placelessTearDown()
-
-    """
-
-
 def test_suite():
     return unittest.TestSuite([
         doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),

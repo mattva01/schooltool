@@ -385,33 +385,6 @@ def doctest_PersonPreferencesView():
 
     """
 
-
-def doctest_PersonDetailsView():
-    """
-
-        >>> from schooltool.person.browser.person import PersonDetailsView
-        >>> from schooltool.person.person import Person
-        >>> from schooltool.person.details import getPersonDetails
-        >>> from schooltool.person.interfaces import IPersonDetails
-        >>> from schooltool.person.interfaces import IPerson
-
-        >>> setup.setUpAnnotations()
-        >>> ztapi.provideAdapter(IPerson, IPersonDetails, \
-                                 getPersonDetails)
-
-        >>> person = Person()
-        >>> request = TestRequest()
-
-        >>> view = PersonDetailsView(person, request)
-
-    Cancel a change TODO: set view.message
-
-        >>> request.form = {'CANCEL': 'Cancel'}
-        >>> view = PersonDetailsView(person, request)
-
-    """
-
-
 def doctest_PersonCSVImporter():
     r"""Tests for PersonCSVImporter.
 

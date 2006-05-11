@@ -93,15 +93,6 @@
       title="Change Preferences" />
 
   <page
-      name="details.html"
-      for="..interfaces.IPerson"
-      class=".person.PersonDetailsView"
-      template="person_details.pt"
-      permission="zope.View"
-      menu="schooltool_actions"
-      title="Change Details" />
-
-  <page
       name="edit.html"
       for="..interfaces.IPerson"
       class=".person.PersonEditView"

@@ -171,39 +171,3 @@ class IPersonPreferences(ICalendarDisplayPreferences):
     cal_periods = zope.schema.Bool(
         title=_("Show periods"),
         description=_("Show period names in daily view"))
-
-
-class IPersonDetails(ILocation):
-    """Contacts details stored as an annotation on a Person."""
-
-    nickname = zope.schema.TextLine(
-        title=_("Nickname"),
-        required=False,
-        description=_("A short nickname for this person."))
-
-    primary_email = zope.schema.TextLine(
-        title=_("Primary Email"),
-        required=False)
-
-    secondary_email = zope.schema.TextLine(
-        title=_("Secondary Email"),
-        required=False)
-
-    primary_phone = zope.schema.TextLine(
-        title=_("Primary phone"),
-        required=False,
-        description=_("Recommended telephone number."))
-
-    secondary_phone = zope.schema.TextLine(
-        title=_("Secondary phone"),
-        required=False,
-        description=_("Secondary telephone number."))
-
-    home_page = zope.schema.TextLine(
-        title=_("Website"),
-        required=False,
-        description=_("Website or weblog."))
-
-    mailing_address = zope.schema.Text(
-        title=_("Mailing address"),
-        required=False)

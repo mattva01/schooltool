@@ -43,8 +43,7 @@ deprecated(('CalendarAndTTOverlayInfo',),
 
 from schooltool.person.person import PersonContainer, Person
 from schooltool.person.preference import PersonPreferences
-from schooltool.person.details import PersonDetails
-deprecated(('PersonContainer', 'Person', 'PersonPreferences', 'PersonDetails'),
+deprecated(('PersonContainer', 'Person', 'PersonPreferences'),
            'This class has moved to schooltool.person.person. '
            'The reference will be gone in 0.15')
 

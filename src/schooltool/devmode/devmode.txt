@@ -195,22 +195,22 @@ range of annotation keys and their values:
     ...
     <li>
       <b>
-        <code>'schooltool.app.PersonDetails'</code>
+        <code>'schooltool.app.PersonPreferences'</code>
       </b>
       <br />
-      <a href="++annotations++schooltool.app.PersonDetails/@@introspector.html">
-        <code>&lt;schooltool.person.details.PersonDetails object ...&gt;</code>
+      <a href="++annotations++schooltool.app.PersonPreferences/@@introspector.html">
+        <code>&lt;schooltool.person.preference.PersonPreferences object ...&gt;</code>
       </a>
       (<span>type:</span>
-       <a href=".../Code/schooltool/person/details/PersonDetails/index.html">
-         <code>PersonDetails</code></a>)
+       <a href=".../Code/schooltool/person/preference/PersonPreferences/index.html">
+         <code>PersonPreferences</code></a>)
     </li>
     ...
 
 The best part about it is that you can usually click on the annotation value
 to inspect it even further:
 
-    >>> browser.getLink('schooltool.person.details.PersonDetails').click()
+    >>> browser.getLink('schooltool.person.preference.PersonPreferences').click()
 
 And now it starts all over again:
 
@@ -219,8 +219,8 @@ And now it starts all over again:
     ...
     <h1>
       Object Introspector:
-      <a href=".../index.html">schooltool.person.details.PersonDetails</a>
-      ( details )
+      <a href=".../index.html">schooltool.person.preference.PersonPreferences</a>
+      ( ++annotations++schooltool.app.PersonPreferences )
     </h1>
     <em>
       Parent:

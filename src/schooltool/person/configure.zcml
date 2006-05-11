@@ -50,26 +50,10 @@
         set_schema=".interfaces.IPersonPreferences" />
   </class>
 
-  <class class=".details.PersonDetails">
-    <require
-        permission="schooltool.view"
-        interface=".interfaces.IPersonDetails" />
-    <require
-        permission="schooltool.edit"
-        set_schema=".interfaces.IPersonDetails" />
-  </class>
-
   <adapter
       for=".interfaces.IHavePreferences"
       provides=".interfaces.IPersonPreferences"
       factory=".preference.getPersonPreferences"
-      trusted="true"
-      />
-
-  <adapter
-      for=".interfaces.IPerson"
-      provides=".interfaces.IPersonDetails"
-      factory=".details.getPersonDetails"
       trusted="true"
       />
 
