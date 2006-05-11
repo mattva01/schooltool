@@ -15,6 +15,8 @@ class Person(PersonBase):
         locate(self.nameinfo, self, 'nameinfo')
         self.demographics = Demographics()
         locate(self.demographics, self, 'demographics')
+        self.schooldata = SchoolData()
+        locate(self.schooldata, self, 'schooldata')
         
 class NameInfo(Persistent):
     implements(interfaces.INameInfo, ILocation)
@@ -27,6 +29,12 @@ class Demographics(Persistent):
 
     def __init__(self):
         initializeSchemaAttributes(interfaces.IDemographics, self)
+
+class SchoolData(Persistent):
+    implements(interfaces.ISchoolData, ILocation)
+
+    def __init__(self):
+        initializeSchemaAttributes(interfaces.ISchoolData, self)
 
 def initializeSchemaAttributes(iface, obj):
     for field in schema.getFields(iface).values():

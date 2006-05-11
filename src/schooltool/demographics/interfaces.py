@@ -80,3 +80,36 @@ class IDemographics(Interface):
         title=_(u"Previous school"),
         required=False
         )
+
+class ISchoolData(Interface):
+    id = schema.TextLine(
+        title=_(u"ID"),
+        required=False,
+        )
+
+    enrollment_date = schema.Date(
+        title=_(u"Enrollment date"),
+        required=False,
+        )
+
+    projected_graduation_year = schema.Int(
+        title=_(u"Projected graduation year"),
+        required=False,
+        )
+
+    advisor = schema.Choice(
+        title=_(u"Advisor"),
+        source=SourceList(['alpha', 'beta']),
+        required=False,
+        )
+
+    team = schema.Choice(
+        title=_(u"Team"),
+        source=SourceList(['gamma', 'delta']),
+        required=False,
+        )
+
+    health_information = schema.Text(
+        title=_(u"Health information"),
+        required=False,
+        )

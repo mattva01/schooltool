@@ -43,6 +43,16 @@ and view it:
   >>> 'Some text' in browser.contents
   True
 
+and its school data:
+  
+  >>> browser.open('http://localhost/persons/foo/schooldata/@@edit.html')
+  >>> id = browser.getControl(name='form.id')
+  >>> id.value = 'ABC'
+  >>> browser.getControl('Apply').click()
+  >>> browser.open('http://loaclhost/persons/foo/schooldata')
+  >>> 'ABC' in browser.contents
+  True
+
 We can also add people as CSV data:
 
   >>> browser.open('http://localhost/persons/@@person-csvimport.html')

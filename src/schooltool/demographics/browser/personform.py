@@ -29,6 +29,14 @@ class DemographicsEdit(PageEditForm):
 class DemographicsDisplay(PageDisplayForm):
     form_fields = form.Fields(interfaces.IDemographics)
 
+schooldata_traverser = SingleAttributeTraverserPlugin('schooldata')
+
+class SchoolDataEdit(PageEditForm):
+    form_fields = form.Fields(interfaces.ISchoolData)
+    
+class SchoolDataDisplay(PageDisplayForm):
+    form_fields = form.Fields(interfaces.ISchoolData)
+    
 class PersonAddView(PersonAddViewBase):
     _factory = Person
 

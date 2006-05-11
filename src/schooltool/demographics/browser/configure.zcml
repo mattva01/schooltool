@@ -45,6 +45,27 @@
       permission="schooltool.view"
       />
 
+  <zope:subscriber
+      for="schooltool.person.interfaces.IPerson zope.publisher.interfaces.IPublisherRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".personform.schooldata_traverser"
+      permission="zope.Public"
+      />
+
+  <page
+      for="..interfaces.ISchoolData"
+      name="edit.html"
+      class=".personform.SchoolDataEdit"
+      permission="schooltool.edit"
+      />
+
+  <page
+      for="..interfaces.ISchoolData"
+      name="index.html"
+      class=".personform.SchoolDataDisplay"
+      permission="schooltool.view"
+      />
+
   <!-- make sure we add demographics.person.Person instead of
        default schooltool.person.Person -->
   <configure package="schooltool.person.browser">
