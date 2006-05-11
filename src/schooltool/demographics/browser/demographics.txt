@@ -53,6 +53,14 @@ and its school data:
   >>> 'ABC' in browser.contents
   True
 
+and various parent and emergency contact screens:
+
+  >>> browser.open('http://localhost/persons/foo/parent1/@@edit.html')
+  >>> browser.open('http://localhost/persons/foo/parent2/@@edit.html')
+  >>> browser.open('http://localhost/persons/foo/emergency1/@@edit.html')
+  >>> browser.open('http://localhost/persons/foo/emergency2/@@edit.html')
+  >>> browser.open('http://localhost/persons/foo/emergency3/@@edit.html')
+
 We can also add people as CSV data:
 
   >>> browser.open('http://localhost/persons/@@person-csvimport.html')

@@ -17,7 +17,7 @@
         set_schema="schooltool.person.interfaces.IPerson" />
     <require
         permission="schooltool.view"
-        attributes="nameinfo demographics schooldata" />
+        attributes="nameinfo demographics schooldata parent1 parent2 emergency1 emergency2 emergency3" />
   </class>
 
   <class class=".person.NameInfo">
@@ -50,6 +50,17 @@
     <require
        permission="schooltool.edit"
        set_schema=".interfaces.ISchoolData"
+       />
+  </class>
+
+  <class class=".person.ContactInfo">
+    <require
+       permission="schooltool.view"
+       interface=".interfaces.IContactInfo"
+       />
+    <require
+       permission="schooltool.edit"
+       set_schema=".interfaces.IContactInfo"
        />
   </class>
 

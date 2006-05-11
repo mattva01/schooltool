@@ -113,3 +113,55 @@ class ISchoolData(Interface):
         title=_(u"Health information"),
         required=False,
         )
+
+class IContactInfo(Interface):
+    name = schema.TextLine(
+        title=_(u"Name"),
+        required=False,
+        )
+
+    relationship_to_student = schema.Choice(
+        title=_(u"Relationship to student"),
+        source=SourceList(['parent', 'guardian', 'grandparent']),
+        required=False,
+        )
+
+    street = schema.Text(
+        title=_(u"Street"),
+        required=False,
+        )
+
+    city = schema.TextLine(
+        title=_(u"City"),
+        required=False,
+        )
+
+    state = schema.TextLine(
+        title=_(u"State"),
+        required=False,
+        )
+
+    postal_code = schema.TextLine(
+        title=_(u"Postal code"),
+        required=False,
+        )
+
+    home_phone = schema.TextLine(
+        title=_(u"Home phone"),
+        required=False,
+        )
+
+    work_phone = schema.TextLine(
+        title=_(u"Work phone"),
+        required=False,
+        )
+
+    cell_phone = schema.TextLine(
+        title=_(u"Cell phone"),
+        required=False,
+        )
+
+    notes = schema.Text(
+        title=_(u"Notes"),
+        required=False,
+        )

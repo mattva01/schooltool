@@ -66,6 +66,51 @@
       permission="schooltool.view"
       />
 
+  <zope:subscriber
+      for="schooltool.person.interfaces.IPerson zope.publisher.interfaces.IPublisherRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".personform.parent1_traverser"
+      permission="zope.Public"
+      />
+  <zope:subscriber
+      for="schooltool.person.interfaces.IPerson zope.publisher.interfaces.IPublisherRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".personform.parent2_traverser"
+      permission="zope.Public"
+      />
+  <zope:subscriber
+      for="schooltool.person.interfaces.IPerson zope.publisher.interfaces.IPublisherRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".personform.emergency1_traverser"
+      permission="zope.Public"
+      />
+  <zope:subscriber
+      for="schooltool.person.interfaces.IPerson zope.publisher.interfaces.IPublisherRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".personform.emergency2_traverser"
+      permission="zope.Public"
+      />
+  <zope:subscriber
+      for="schooltool.person.interfaces.IPerson zope.publisher.interfaces.IPublisherRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".personform.emergency3_traverser"
+      permission="zope.Public"
+      />
+
+  <page
+      for="..interfaces.IContactInfo"
+      name="edit.html"
+      class=".personform.ContactInfoEdit"
+      permission="schooltool.edit"
+      />
+
+  <page
+      for="..interfaces.IContactInfo"
+      name="index.html"
+      class=".personform.ContactInfoDisplay"
+      permission="schooltool.view"
+      />
+
   <!-- make sure we add demographics.person.Person instead of
        default schooltool.person.Person -->
   <configure package="schooltool.person.browser">

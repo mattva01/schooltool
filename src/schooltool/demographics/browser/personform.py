@@ -36,6 +36,18 @@ class SchoolDataEdit(PageEditForm):
     
 class SchoolDataDisplay(PageDisplayForm):
     form_fields = form.Fields(interfaces.ISchoolData)
+
+parent1_traverser = SingleAttributeTraverserPlugin('parent1')
+parent2_traverser = SingleAttributeTraverserPlugin('parent2')
+emergency1_traverser = SingleAttributeTraverserPlugin('emergency1')
+emergency2_traverser = SingleAttributeTraverserPlugin('emergency2')
+emergency3_traverser = SingleAttributeTraverserPlugin('emergency3')
+
+class ContactInfoEdit(PageEditForm):
+    form_fields = form.Fields(interfaces.IContactInfo)
+    
+class ContactInfoDisplay(PageDisplayForm):
+    form_fields = form.Fields(interfaces.IContactInfo)
     
 class PersonAddView(PersonAddViewBase):
     _factory = Person
