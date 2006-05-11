@@ -416,7 +416,6 @@
       name="booking.html"
       layer="schooltool.skin.ISchoolToolLayer"
       class=".cal.CalendarEventBookingView"
-      template="templates/event_booking.pt"
       permission="schooltool.edit"
       />
 

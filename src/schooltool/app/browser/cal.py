@@ -55,6 +55,7 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.filerepresentation.interfaces import IWriteFile, IReadFile
 from zope.app.session.interfaces import ISession
 from zope.traversing.api import getPath
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from schooltool import SchoolToolMessage as _
 
@@ -2193,6 +2194,8 @@ class CalendarEventBookingView(CalendarEventView):
     errors = ()
     update_status = None
 
+    template = ViewPageTemplateFile("templates/event_booking.pt")
+
     def __init__(self, context, request):
         CalendarEventView.__init__(self, context, request)
 
@@ -2200,6 +2203,12 @@ class CalendarEventBookingView(CalendarEventView):
                               self.preferences.timeformat)
         self.start = u'' + self.dtstart.strftime(format)
         self.end = u'' + self.dtend.strftime(format)
+
+    def __call__(self):
+        # if the authenticated user does not have the modifyEvent permission,
+        # raise Unauthorized unless the user does have the addEvent
+        # permission and has come here directly from the event adding form.
+        return self.template()
 
     def update(self):
         """Book/unbook resources according to the request."""
@@ -2230,19 +2239,22 @@ class CalendarEventBookingView(CalendarEventView):
 
         return self.update_status
 
-    def _availableResources(self):
+    @property
+    def availableResources(self):
         """Gives us a list of all bookable resources."""
-        resources = []
-        calendar_owner = removeSecurityProxy(self.context.__parent__.__parent__)
         sb = getSchoolToolApplication()
-        for resource in sb["resources"].values():
-            if ((canAccess(ISchoolToolCalendar(resource), "addEvent") or
-                 self.hasBooked(resource)) and
-                resource is not calendar_owner):
-                resources.append(resource)
-        return resources
+        calendar_owner = removeSecurityProxy(self.context.__parent__.__parent__)
+        def isBookable(resource):
+            if resource is calendar_owner:
+                # A calendar event in a resource's calendar shouldn't book
+                # that resource, it would be silly.
+                return False
+            return self.canBook(resource) or self.hasBooked(resource)
+        return filter(isBookable, sb['resources'].values())
 
-    availableResources = property(_availableResources)
+    def canBook(self, resource):
+        """Can the user book this resource?"""
+        return canAccess(ISchoolToolCalendar(resource), "addEvent")
 
     def hasBooked(self, resource):
         """Checks whether a resource is booked by this event."""
