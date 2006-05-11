@@ -45,6 +45,7 @@ from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 from schooltool.timetable import SequentialDaysTimetableModel
 from schooltool.timetable.schema import TimetableSchema
 from schooltool.testing.util import NiceDiffsMixin
+from schooltool.app.interfaces import ISchoolToolCalendarEvent
 
 # Used in defining CalendarEventAddTestView
 from schooltool.app.browser.cal import CalendarEventAddView
@@ -88,6 +89,21 @@ def setUp(test=None):
     browserSetUp(test)
     sbsetup.setUpCalendaring()
     sbsetup.setUpSessions()
+
+
+class EventStub(object):
+
+    implements(ISchoolToolCalendarEvent)
+
+    dtstart = datetime(2006, 4, 20, 20, 7, tzinfo=utc)
+    duration = timedelta(1)
+    title = "Ordinary event"
+
+    def __init__(self, unique_id='uid', owner=None, resources=()):
+        self.__parent__ = ISchoolToolCalendar(Person())
+        self.owner = owner
+        self.resources = resources
+        self.unique_id = unique_id
 
 
 def doctest_ToCalendarTraverser():
@@ -378,14 +394,10 @@ def doctest_EventForDisplay_getBooker_getBookedResources():
     """Test for EventForDisplay.getBooker and getBookedResources.
 
         >>> from schooltool.app.browser.cal import EventForDisplay
-        >>> from schooltool.app.interfaces import ISchoolToolCalendarEvent
-        >>> class EventStub(object):
-        ...     implements(ISchoolToolCalendarEvent)
-        ...     resources = ['res1', 'res2']
-        ...     owner = "Jonas"
         >>> class EFD(EventForDisplay):
         ...     def __init__(self):
-        ...         self.context = EventStub()
+        ...         self.context = EventStub(resources=['res1', 'res2'],
+        ...                                  owner='Jonas')
 
     getBookedResources plainly returns the list of resources of the
     event:
@@ -574,7 +586,8 @@ def doctest_EventForBookingDisplay():
     """A wrapper for calendar events.
 
         >>> from schooltool.app.browser.cal import EventForBookingDisplay
-        >>> e1 = createEvent('2004-01-02 14:45:50', '5min', 'yawn')
+        >>> e1 = createEvent('2004-01-02 14:45:50', '5min', 'yawn',
+        ...                  unique_id='uid0')
         >>> e1 = EventForBookingDisplay(e1)
 
     EventForBookingDisplay lets us access all the usual attributes
@@ -587,6 +600,8 @@ def doctest_EventForBookingDisplay():
         'UTC'
         >>> e1.title
         'yawn'
+        >>> e1.unique_id
+        'uid0'
 
     It adds some additional attributes
 
@@ -1568,18 +1583,11 @@ def doctest_CalendarEventAddView_add_allday():
 def doctest_CalendarEventAddView_add_mark_for_booking():
     r"""Tests for CalendarEventAddView.add.
 
-    We'll need a minimal event stub that offers a unique id:
-
-        >>> from schooltool.app.interfaces import ISchoolToolCalendarEvent
-        >>> class EventStub(object):
-        ...     implements(ISchoolToolCalendarEvent)
-        ...     __parent__ = None
-        ...     resources = ()
-        ...     def __init__(self, uid):
-        ...         self.unique_id = uid
-
+        >>> class CalendarStub(object):
+        ...     def addEvent(self, e):
+        ...         pass
         >>> request = TestRequest()
-        >>> view = CalendarEventAddTestView(Calendar(Person()), request)
+        >>> view = CalendarEventAddTestView(CalendarStub(), request)
 
     Let's add an event:
 
@@ -3135,17 +3143,6 @@ def doctest_TestCalendarEventBookingView():
 def doctest_CalendarEventBookingView_justAddedThisEvent():
     """Test for CalendarEventBookingView.justAddedThisEvent
 
-        >>> from schooltool.app.interfaces import ISchoolToolCalendarEvent
-        >>> class EventStub(object):
-        ...     implements(ISchoolToolCalendarEvent)
-        ...     __parent__ = ISchoolToolCalendar(Person())
-        ...     resources = ()
-        ...     dtstart = datetime(2006, 4, 20, 20, 7, tzinfo=utc)
-        ...     duration = timedelta(1)
-        ...     title = "Ordinary event"
-        ...     def __init__(self, uid):
-        ...         self.unique_id = uid
-
         >>> context = EventStub('uid1')
         >>> request = TestRequest()
 
@@ -3181,17 +3178,6 @@ def doctest_CalendarEventBookingView_justAddedThisEvent():
 
 def doctest_CalendarEventBookingView_clearJustAddedStatus():
     """Test for CalendarEventBookingView.clearJustAddedStatus
-
-        >>> from schooltool.app.interfaces import ISchoolToolCalendarEvent
-        >>> class EventStub(object):
-        ...     implements(ISchoolToolCalendarEvent)
-        ...     __parent__ = ISchoolToolCalendar(Person())
-        ...     resources = ()
-        ...     dtstart = datetime(2006, 4, 20, 20, 7, tzinfo=utc)
-        ...     duration = timedelta(1)
-        ...     title = "Ordinary event"
-        ...     def __init__(self, uid):
-        ...         self.unique_id = uid
 
         >>> context = EventStub('uid1')
         >>> request = TestRequest()
@@ -3233,14 +3219,6 @@ def doctest_CalendarEventBookingView_getConflictingEvents():
 
         >>> from schooltool.app.browser.cal import CalendarEventBookingView
 
-        >>> class EventStub(object):
-        ...     def __init__(self, title):
-        ...         self.title = title
-        ...     __parent__ = ISchoolToolCalendar(Person())
-        ...     dtstart = datetime(2006, 4, 20, 20, 7, tzinfo=utc)
-        ...     duration = timedelta(1)
-        ...     title = "Event"
-
         >>> class CalendarStub(object):
         ...     def __init__(self, title, events):
         ...         self.events = events
@@ -3280,7 +3258,7 @@ def doctest_CalendarEventBookingView_getConflictingEvents():
 
     All conflicting events are returned:
 
-        >>> [evt.title for evt in conflicts]
+        >>> [evt.unique_id for evt in conflicts]
         ['cal', 'tt']
 
     If the event that is booking the resources is ignored:
@@ -3290,7 +3268,7 @@ def doctest_CalendarEventBookingView_getConflictingEvents():
         calendar.expand(2006-04-20 20:07:00+00:00, 2006-04-21 20:07:00+00:00)
         timetable.expand(2006-04-20 20:07:00+00:00, 2006-04-21 20:07:00+00:00)
 
-        >>> [evt.title for evt in conflicts]
+        >>> [evt.unique_id for evt in conflicts]
         ['tt']
 
     """

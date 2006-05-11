@@ -2189,6 +2189,7 @@ class EventForBookingDisplay(object):
             self.shortTitle = self.title[:15] + '...'
         else:
             self.shortTitle = self.title
+        self.unique_id = self.context.unique_id
 
 
 class CalendarEventBookingView(CalendarEventView):
