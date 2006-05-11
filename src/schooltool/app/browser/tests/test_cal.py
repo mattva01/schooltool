@@ -2789,6 +2789,8 @@ def doctest_CalendarEventEditView_getInitialData():
         >>> view.exceptions_widget._getFormValue()
         '2004-08-14\r\n2004-08-15'
 
+    The days should have shifted to a later date:
+
         >>> view.weekdays_widget._getFormValue()
         [1, 2, 3, 4, 5, 6]
 
@@ -2858,6 +2860,13 @@ def doctest_CalendarEventEditView_getStartDate():
 
         >>> view.getStartDate()
         datetime.date(2004, 8, 13)
+
+    If the timezone of the view shifts the event into the different
+    day, the date changes:
+
+        >>> view.timezone = timezone('Australia/Canberra')
+        >>> view.getStartDate()
+        datetime.date(2004, 8, 14)
 
     If the date is passed in request but has no sane value we should get None:
 
@@ -2952,6 +2961,38 @@ class TestGetRecurrenceRule(unittest.TestCase):
         self.assertEquals(rule, MonthlyRecurrenceRule(interval=1,
                                                       monthly="lastweekday"))
 
+
+def doctest_convertWeekdaysList():
+    """A test for convertWeekdaysList
+
+       >>> from schooltool.app.browser.cal import convertWeekdaysList
+
+    When it's 1:00 AM in Vilnius, it's still yesterday in London:
+
+       >>> vilnius = timezone('Europe/Vilnius')
+       >>> london = timezone('Europe/London')
+       >>> dt = vilnius.localize(datetime(2006, 5, 5, 1, 0))
+       >>> convertWeekdaysList(dt, vilnius, london, (0, ))
+       [6]
+       >>> convertWeekdaysList(dt, vilnius, london, (5, 6))
+       [4, 5]
+
+    And vice versa:
+
+       >>> convertWeekdaysList(dt, london, vilnius, (0, ))
+       [1]
+       >>> convertWeekdaysList(dt, london, vilnius, (5, 6))
+       [6, 0]
+
+    Let's look at the time that is the same day in Vilnius and London:
+
+       >>> dt = vilnius.localize(datetime(2006, 5, 5, 23, 0))
+       >>> convertWeekdaysList(dt, london, vilnius, (0, ))
+       [0]
+       >>> convertWeekdaysList(dt, london, vilnius, (5, 6))
+       [5, 6]
+
+    """
 
 def doctest_TestCalendarEventBookingView():
     r"""A test for the resource booking view.

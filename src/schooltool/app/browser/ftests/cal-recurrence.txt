@@ -1,0 +1,81 @@
+Regression test for broken weekly recurrence in far-off-UTC timezones
+=====================================================================
+
+    >>> from zope.testbrowser.testing import Browser
+    >>> manager = Browser()
+    >>> manager.handleErrors = False
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager.open('http://localhost/')
+
+Let's go to the user preferences view:
+
+    >>> manager.getLink("SchoolTool Manager").click()
+    >>> manager.getLink("Change Preferences").click()
+
+Let's set the timezone to Australia:
+
+    >>> manager.getControl("Time Zone").value = ["Australia/Canberra"]
+    >>> manager.getControl("Apply").click()
+
+Let go to the calendar, a particular day in fact:
+
+    >>> manager.getLink("My Calendar").click()
+    >>> manager.open(manager.url + '/2006-01-01')
+    >>> "Calendar for SchoolTool Manager - Sunday, 2006-01-01" \
+    ... in manager.contents
+    True
+
+Let's add an event:
+
+    >>> manager.getLink("8:00").click()
+    >>> manager.getControl("Title").value = "Foo bar"
+    >>> manager.getControl("Recurring").click()
+    >>> manager.getControl(name="field.recurrence_type").value = ["weekly"]
+
+We see Sunday checked and disabled:
+
+    >>> manager.getControl("Sun").selected
+    True
+    >>> manager.getControl("Sun").disabled
+    True
+
+We also check Wednesday:
+
+    >>> manager.getControl("Wed").click()
+
+And submit:
+
+    >>> manager.getControl("Add").click()
+
+Let's look back at the event edit view:
+
+    >>> manager.getLink("Foo bar").click()
+    >>> manager.getLink("edit event").click()
+
+We see Sunday and Wednesday checked and Sunday disabled:
+
+    >>> manager.getControl("Sun").selected
+    True
+    >>> manager.getControl("Wed").selected
+    True
+
+    >>> manager.getControl("Sun").disabled
+    True
+
+Let's look at the next Wednesday:
+
+    >>> manager.open("http://localhost/persons/manager/calendar/2006-01-04")
+    >>> "Calendar for SchoolTool Manager - Wednesday, 2006-01-04" \
+    ...                                             in manager.contents
+    True
+    >>> "Foo bar" in manager.contents
+    True
+
+And the following Sunday:
+
+    >>> manager.open("http://localhost/persons/manager/calendar/2006-01-08")
+    >>> "Calendar for SchoolTool Manager - Sunday, 2006-01-08" \
+    ...                                             in manager.contents
+    True
+    >>> "Foo bar" in manager.contents
+    True

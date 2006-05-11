@@ -1940,6 +1940,14 @@ class CalendarEventViewMixin(object):
         dargs = {duration_type : duration}
         duration = timedelta(**dargs)
 
+        # Shift the weekdays to the correct timezone
+        if 'weekdays' in kwargs and kwargs['weekdays']:
+            kwargs['weekdays'] = tuple(convertWeekdaysList(start,
+                                                           self.timezone,
+                                                           start.tzinfo,
+                                                           kwargs['weekdays']))
+
+
         rrule = recurrence and makeRecurrenceRule(**kwargs) or None
         return {'location': location,
                 'description': description,
@@ -2088,7 +2096,12 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
 
             if recurrence_type == "weekly":
                 if recurrence.weekdays:
-                    initial["weekdays"] = list(recurrence.weekdays)
+                    # Convert weekdays to the correct TZ
+                    initial["weekdays"] = convertWeekdaysList(
+                        self.context.dtstart,
+                        self.context.dtstart.tzinfo,
+                        self.timezone,
+                        recurrence.weekdays)
 
             if recurrence_type == "monthly":
                 if recurrence.monthly:
@@ -2100,7 +2113,7 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
         if "field.start_date" in self.request:
             return CalendarEventViewMixin.getStartDate(self)
         else:
-            return self.context.dtstart.date()
+            return self.context.dtstart.astimezone(self.timezone).date()
 
     def applyChanges(self):
         data = getWidgetsData(self, self.schema, names=self.fieldNames)
@@ -2340,6 +2353,25 @@ def makeRecurrenceRule(interval=None, until=None,
         return YearlyRecurrenceRule(**kwargs)
     else:
         raise NotImplementedError()
+
+
+def convertWeekdaysList(dt, fromtz, totz, weekdays):
+    """Convert the weekday list from one timezone to the other.
+
+    The days can shift by one day in either direction or stay,
+    depending on the timezones and the time of the event.
+
+    The arguments are as follows:
+
+       dt       -- the tz-aware start of the event
+       fromtz   -- the timezone the weekdays list is in
+       totz     -- the timezone the weekdays list is converted to
+       weekdays -- a list of values in range(7), 0 is Monday.
+
+    """
+    delta_td = dt.astimezone(totz).date() - dt.astimezone(fromtz).date()
+    delta = delta_td.days
+    return [(wd + delta) % 7 for wd in weekdays]
 
 
 def datesParser(raw_dates):
