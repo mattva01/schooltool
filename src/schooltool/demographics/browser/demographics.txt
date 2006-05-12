@@ -82,5 +82,3 @@ We can also see the persons added so far in tabular display:
   True
   >>> 'foo' in browser.contents
   True
-  >>> 'Someone Schooltool' in browser.contents
-  True

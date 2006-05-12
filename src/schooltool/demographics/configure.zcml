@@ -18,6 +18,9 @@
     <require
         permission="schooltool.view"
         attributes="nameinfo demographics schooldata parent1 parent2 emergency1 emergency2 emergency3 modified" />
+    <require
+        permission="schooltool.edit"
+        set_attributes="modified" />
   </class>
 
   <subscriber
