@@ -1,21 +1,82 @@
+import pytz
+import datetime
+from zope.app import zapi
 from zope.interface import implements
-from zope.formlib import form
+from zope import event
+from zope.formlib import form, namedtemplate
+from zope.formlib.interfaces import IAction
+from zope.lifecycleevent import ObjectModifiedEvent
+from zope.interface.common import idatetime
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.app.form.browser.interfaces import ITerms
 from schooltool.traverser.traverser import SingleAttributeTraverserPlugin
 from schooltool.person.browser.person import PersonAddView as PersonAddViewBase
+from schooltool.person.interfaces import IReadPerson
 from schooltool.demographics.person import Person
 from schooltool.demographics import interfaces
+from schooltool import SchoolToolMessage as _
 
 class PageDisplayForm(form.PageDisplayForm):
     template = ViewPageTemplateFile('display_form.pt')
 
-class PageEditForm(form.PageEditForm):
+class AttributeEditForm(form.PageEditForm):
     template = ViewPageTemplateFile('edit_form.pt')
 
+    def title(self):
+        # must be subclassed
+        raise NotImplementedError
+
+    def legend(self):
+        # optional
+        return None
+    
+    @form.action(_("Apply"), condition=form.haveInputWidgets)
+    def handle_edit_action(self, action, data):
+        if not form.applyChanges(self.context, self.form_fields, data,
+                                 self.adapters):
+            self.status = _('No changes')
+            return
+        
+        # notify parent that we were modified
+        event.notify(ObjectModifiedEvent(self.context.__parent__))
+        formatter = self.request.locale.dates.getFormatter(
+            'dateTime', 'medium')
+        
+        try:
+            time_zone = idatetime.ITZInfo(self.request)
+        except TypeError:
+            time_zone = pytz.UTC
+
+        self.status = _(
+            "Updated on ${date_time}",
+            mapping={
+              'date_time':
+              formatter.format(datetime.datetime.now(time_zone))
+              }
+            )
+        
+    @form.action(_("Cancel"), condition=form.haveInputWidgets)
+    def handle_cancel_action(self, action, data):
+        # redirect to parent
+        url = zapi.absoluteURL(self.context.__parent__, self.request)
+        self.request.response.redirect(url)
+        return ''
+
+class PersonEditForm(AttributeEditForm):
+
+    def fullname(self):
+        return IReadPerson(self.context.__parent__).title
+        
 nameinfo_traverser = SingleAttributeTraverserPlugin('nameinfo')
 
-class NameInfoEdit(PageEditForm):
+class NameInfoEdit(PersonEditForm):
+    def title(self):
+        return _(u'Change name information for ${fullname}',
+                 mapping={'fullname':self.fullname()})
+
+    def legend(self):
+        return _(u'Name information')
+    
     form_fields = form.Fields(interfaces.INameInfo)
 
 class NameInfoDisplay(PageDisplayForm):
@@ -23,7 +84,11 @@ class NameInfoDisplay(PageDisplayForm):
 
 demographics_traverser = SingleAttributeTraverserPlugin('demographics')
 
-class DemographicsEdit(PageEditForm):
+class DemographicsEdit(PersonEditForm):
+    def title(self):
+        return _(u'Change demographics for ${fullname}',
+                 mapping={'fullname': self.fullname()})
+    
     form_fields = form.Fields(interfaces.IDemographics)
 
 class DemographicsDisplay(PageDisplayForm):
@@ -31,7 +96,11 @@ class DemographicsDisplay(PageDisplayForm):
 
 schooldata_traverser = SingleAttributeTraverserPlugin('schooldata')
 
-class SchoolDataEdit(PageEditForm):
+class SchoolDataEdit(PersonEditForm):
+    def title(self):
+        return _(u'Change school data for ${fullname}',
+                 mapping={'fullname': self.fullname()})
+    
     form_fields = form.Fields(interfaces.ISchoolData)
     
 class SchoolDataDisplay(PageDisplayForm):
@@ -43,7 +112,14 @@ emergency1_traverser = SingleAttributeTraverserPlugin('emergency1')
 emergency2_traverser = SingleAttributeTraverserPlugin('emergency2')
 emergency3_traverser = SingleAttributeTraverserPlugin('emergency3')
 
-class ContactInfoEdit(PageEditForm):
+class ContactInfoEdit(PersonEditForm):
+    # XXX title should be different depending on which attribute we're
+    # viewing (parental contact, emergency contact, etc). How to
+    # accomplish that without having to duplicate views or interfaces?
+    def title(self):
+        return _(u'Change contact information for ${fullname}',
+                 mapping={'fullname': self.fullname()})
+    
     form_fields = form.Fields(interfaces.IContactInfo)
     
 class ContactInfoDisplay(PageDisplayForm):
@@ -70,3 +146,15 @@ class Terms(object):
 
     def getValue(self, token):
         return token
+
+@namedtemplate.implementation(IAction)
+def render_submit_button(self):
+    if not self.available():
+        return ''
+    label = self.label
+    if isinstance(label, zope.i18nmessageid.Message):
+        label = zope.i18n.translate(self.label, context=self.form.request)
+    return ('<input type="submit" id="%s" name="%s" value="%s"'
+            ' class="button-ok" />' %
+            (self.__name__, self.__name__, label)
+            )
