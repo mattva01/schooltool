@@ -17,8 +17,13 @@
         set_schema="schooltool.person.interfaces.IPerson" />
     <require
         permission="schooltool.view"
-        attributes="nameinfo demographics schooldata parent1 parent2 emergency1 emergency2 emergency3" />
+        attributes="nameinfo demographics schooldata parent1 parent2 emergency1 emergency2 emergency3 modified" />
   </class>
+
+  <subscriber
+    for="schooltool.person.interfaces.IPerson zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+    handler=".person.personModifiedSubscriber"
+   />
 
   <class class=".person.NameInfo">
     <require

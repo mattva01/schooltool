@@ -68,12 +68,20 @@ class PersonTable(TablePage):
         prefix = GetterColumn(
             name='full_name',
             title=u'Full name',
-            getter=lambda i, f: i.nameinfo.full_name,
+            getter=lambda i, f: i.title,
             subsort=True)
         directlyProvides(prefix, ISortableColumn)
+        modified = GetterColumn(
+            name='modified',
+            title=u'Modified',
+            getter=lambda i, f: i.modified,
+            subsort=True)
+        directlyProvides(modified, ISortableColumn)
+        
         return [
             full_name,
             prefix,
+            modified,
             EditColumn(name='edit', title=u'Edit'),
             DisplayColumn(name='display', title=u'Display')
             ]
