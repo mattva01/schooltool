@@ -108,8 +108,8 @@ def doctest_SampleSections():
         >>> plugin.dependencies
         ('teachers', 'students', 'courses', 'resources')
 
-        >>> from schooltool.person.sampledata import SampleStudents
-        >>> from schooltool.person.sampledata import SampleTeachers
+        >>> from schooltool.demographics.sampledata import SampleStudents
+        >>> from schooltool.demographics.sampledata import SampleTeachers
         >>> from schooltool.course.sampledata import SampleCourses
         >>> from schooltool.resource.sampledata import SampleResources
         >>> SampleTeachers().generate(app, 42)
@@ -173,8 +173,8 @@ def doctest_SampleTimetables():
         >>> app = stsetup.setUpSchoolToolSite()
         >>> app['groups']['teachers'] = Group('Teachers')
 
-        >>> from schooltool.person.sampledata import SampleStudents
-        >>> from schooltool.person.sampledata import SampleTeachers
+        >>> from schooltool.demographics.sampledata import SampleStudents
+        >>> from schooltool.demographics.sampledata import SampleTeachers
         >>> from schooltool.course.sampledata import SampleCourses
         >>> from schooltool.resource.sampledata import SampleResources
         >>> from schooltool.course.sampledata import SampleSections

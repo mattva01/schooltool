@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.person.sampledata
+Unit tests for schooltool.demographics.sampledata
 
 $Id$
 """
@@ -44,7 +44,7 @@ def tearDown(test):
 def doctest_SampleStudents():
     """A sample data plugin that generates students
 
-        >>> from schooltool.person.sampledata import SampleStudents
+        >>> from schooltool.demographics.sampledata import SampleStudents
         >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
         >>> plugin = SampleStudents()
         >>> verifyObject(ISampleDataPlugin, plugin)
@@ -87,7 +87,7 @@ def doctest_SampleTeachers():
 
         >>> setUpRelationships()
 
-        >>> from schooltool.person.sampledata import SampleTeachers
+        >>> from schooltool.demographics.sampledata import SampleTeachers
         >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
         >>> plugin = SampleTeachers()
         >>> verifyObject(ISampleDataPlugin, plugin)
@@ -137,7 +137,7 @@ def doctest_SamplePersonalEvents():
 
         >>> setUpRelationships()
 
-        >>> from schooltool.person.sampledata import SamplePersonalEvents
+        >>> from schooltool.demographics.sampledata import SamplePersonalEvents
         >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
         >>> plugin = SamplePersonalEvents()
         >>> verifyObject(ISampleDataPlugin, plugin)
@@ -147,8 +147,8 @@ def doctest_SamplePersonalEvents():
         >>> app = stsetup.setUpSchoolToolSite()
         >>> app['groups']['teachers'] = Group('Teachers')
 
-        >>> from schooltool.person.sampledata import SampleStudents
-        >>> from schooltool.person.sampledata import SampleTeachers
+        >>> from schooltool.demographics.sampledata import SampleStudents
+        >>> from schooltool.demographics.sampledata import SampleTeachers
         >>> from schooltool.term.sampledata import SampleTerms
         >>> plugin_students = SampleStudents()
         >>> plugin_students.power = 20

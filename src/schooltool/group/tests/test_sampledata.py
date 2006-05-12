@@ -64,7 +64,7 @@ def doctest_SampleGroups():
 
         >>> setUpRelationships()
         >>> app = stsetup.setUpSchoolToolSite()
-        >>> from schooltool.person.sampledata import SampleStudents
+        >>> from schooltool.demographics.sampledata import SampleStudents
         >>> from schooltool.term.sampledata import SampleTerms
         >>> studentsPlugin = SampleStudents()
         >>> studentsPlugin.generate(app, 42)
