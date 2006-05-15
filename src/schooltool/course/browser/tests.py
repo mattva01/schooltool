@@ -30,6 +30,9 @@ from zope.testing import doctest
 from zope.app.container.browser.adding import Adding
 from zope.traversing.interfaces import IContainmentRoot
 from zope.app.testing import ztapi
+from zope.component import adapts
+from zope.interface import implements
+from zope.component import provideAdapter
 
 from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.testing import setup
@@ -583,6 +586,152 @@ def doctest_RelationshipEditingViewBase_getConflictingSections():
         [('day_id', 'd4'), ('period_id', 'd'), ('section', Section 2)]
 
     Note that the results are sorted by (day_id, period, section.label).
+
+    """
+
+
+def doctest_RelationshipEditingViewBase_findConflicts():
+    """Tests for RelationshipEditingViewBase._findConflists
+
+        >>> from schooltool.course.browser.section import RelationshipEditingViewBase
+        >>> view = RelationshipEditingViewBase(None, None)
+        >>> view._findConflicts([], [])
+        []
+
+        >>> class EventStub(object):
+        ...     def __init__(self, start, duration, name):
+        ...         self.dtstart = start
+        ...         self.duration = duration
+        ...         self.name = name
+        ...     def __cmp__(self, other):
+        ...         return cmp(self.dtstart, other.dtstart)
+        ...     def __repr__(self):
+        ...         return self.name
+
+        >>> def e(s):
+        ...     events = []
+        ...     cur = None
+        ...     for time, char in enumerate(s):
+        ...         if cur and char == cur.name:
+        ...             cur.duration += 1
+        ...         elif char != '-':
+        ...             cur = EventStub(time, 1, char)
+        ...             events.append(cur)
+        ...     return events
+
+        >>> tte = e('---aaaaa----bbbbb----ccccc----ddddddd--')
+        >>> cal = e('---------xxx-----yy-----zzzz----q-w----')
+        >>> view._findConflicts(tte, cal)
+        [z, q, w]
+
+        >>> tte = e('--abcd-----eee------')
+        >>> cal = e('-xxxxxx--yyy-----zz-')
+        >>> view._findConflicts(tte, cal)
+        [x, y]
+
+    """
+
+
+def doctest_RelationshipEditingViewBase_groupConflicts():
+    """Tests for RelationshipEditingViewBase._groupConflicts
+
+    Given an empty list the function should return an empty list:
+
+        >>> from schooltool.course.browser.section import RelationshipEditingViewBase
+        >>> view = RelationshipEditingViewBase(None, None)
+        >>> view._groupConflicts([])
+        []
+
+    Events are considered unique if their unique_id's are different:
+
+        >>> class EventStub(object):
+        ...     def __init__(self, id):
+        ...         self.unique_id = id
+
+        >>> events = [EventStub(id) for id in "abcda"]
+
+        >>> sorted(e.unique_id for e in view._groupConflicts(events))
+        ['a', 'b', 'c', 'd']
+
+    """
+
+def doctest_RelationshipEditingViewBase_getConflictingEvents():
+    """Tests for RelationshipEditingViewBase.getConflictingEvents
+
+        >>> from schooltool.timetable.interfaces import ICompositeTimetables
+        >>> from schooltool.app.interfaces import ISchoolToolCalendar
+        >>> class TimetabledStub(object):
+        ...     def __init__(self, events):
+        ...         self.events = events
+        >>> class CompositeTimetablesStub(object):
+        ...     adapts(TimetabledStub)
+        ...     implements(ICompositeTimetables)
+        ...     def __init__(self, section):
+        ...         self.section = section
+        ...     def makeTimetableCalendar(self):
+        ...         return self.section.events
+        >>> provideAdapter(CompositeTimetablesStub)
+
+        >>> class CalendarStub(object):
+        ...     adapts(TimetabledStub)
+        ...     implements(ISchoolToolCalendar)
+        ...     def __init__(self, item):
+        ...         self.item = item
+        ...     def expand(self, start, end):
+        ...         print "Expanding from %s to %s" % (start, end)
+        ...         return self.item.events
+        >>> provideAdapter(CalendarStub)
+
+    First let's try it out with a section without events in its
+    timetable:
+
+        >>> from schooltool.course.browser.section import RelationshipEditingViewBase
+        >>> view = RelationshipEditingViewBase(TimetabledStub([]), None)
+        >>> view.getConflictingEvents(TimetabledStub([]))
+        []
+
+        >>> class EventStub(object):
+        ...     def __init__(self, start):
+        ...         self.dtstart = start
+        ...         self.duration = 3
+        ...     def __cmp__(self, other):
+        ...         return cmp(self.dtstart, other.dtstart)
+        ...     def __repr__(self):
+        ...         return "e%s" % self.dtstart
+
+    Any events in the item calendar are ignored and an empty list is
+    returned:
+
+        >>> events = [EventStub(start) for start in [30, 10, 20]]
+        >>> view.getConflictingEvents(TimetabledStub(events))
+        []
+
+    If there are no events in the item calendar, an empty list is
+    returned:
+
+        >>> view = RelationshipEditingViewBase(TimetabledStub(events), None)
+        >>> view.getConflictingEvents(TimetabledStub([]))
+        Expanding from 10 to 33
+        []
+
+    The calendar was expanded from the dtstart of the first event till
+    the dtend of the last one. This works with only one event too:
+
+        >>> view = RelationshipEditingViewBase(TimetabledStub(events[-1:]), None)
+        >>> view.getConflictingEvents(TimetabledStub([]))
+        Expanding from 20 to 23
+        []
+
+    If there are events in both calendars all unique conflicting
+    events are returned:
+
+        >>> more_events = [EventStub(start) for start in [25, 15]]
+        >>> view._findConflicts = lambda tte, cae: "conflicts between %s and %s" % (tte, cae)
+        >>> view._groupConflicts = lambda conflicts: "Grouped %s" % conflicts
+
+        >>> print view.getConflictingEvents(TimetabledStub(more_events))
+        Expanding from 20 to 23
+        Grouped conflicts between [e20] and [e25, e15]
 
     """
 

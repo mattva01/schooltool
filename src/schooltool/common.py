@@ -399,3 +399,22 @@ def unquote_uri(uri):
 
     """
     return urllib.unquote(str(uri)).decode('UTF-8')
+
+
+def collect(fn):
+    """Convert a generator to a function that returns a list of items.
+
+        >>> @collect
+        ... def something(x, y, z):
+        ...     yield x
+        ...     yield y + z
+
+        >>> something(1, 2, 3)
+        [1, 5]
+
+    """
+    def collector(*args, **kw):
+        return list(fn(*args, **kw))
+    collector.__name__ = fn.__name__
+    collector.__doc__ = fn.__doc__
+    return collector

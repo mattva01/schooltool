@@ -41,13 +41,17 @@ from schooltool.group.interfaces import IGroup
 from schooltool.person.interfaces import IPerson
 
 from schooltool import SchoolToolMessage as _
+from schooltool.common import collect
 from schooltool.app.app import getSchoolToolApplication
+from schooltool.calendar.interfaces import IExpandedCalendarEvent
 from schooltool.course.interfaces import ISection, ISectionContainer
 from schooltool.timetable.browser import TimetableConflictMixin
 from schooltool.relationship.relationship import getRelatedObjects
 from schooltool.app.membership import URIGroup
 from schooltool.app.relationships import URISection
 from schooltool.course import booking
+from schooltool.app.interfaces import ISchoolToolCalendar
+from schooltool.timetable.interfaces import ICompositeTimetables
 
 
 def same(a, b):
@@ -193,6 +197,56 @@ class RelationshipEditingViewBase(BrowserView, TimetableConflictMixin):
         result.sort(key=lambda x: (x['day_id'], x['period_id'],
                                    x['section'].label))
         return result
+
+    @collect
+    def _findConflicts(self, timetable_events, calendar_events):
+        """Returns calendar events that intersect with section timetable events.
+
+        This method expects timetable_events list to be ordered by dtstart.
+        """
+        calendar_events = sorted(calendar_events, reverse=True)
+        def before(a, b):
+            return (a.dtstart + a.duration) <= b.dtstart
+
+        for ttevent in timetable_events:
+            while calendar_events:
+                if before(ttevent, calendar_events[-1]):
+                    break
+                elif before(calendar_events[-1], ttevent):
+                    calendar_events.pop()
+                else:
+                    # conflict!
+                    yield calendar_events.pop()
+
+    def _groupConflicts(self, conflicts):
+        """Generate a list of unique events out of a list of expanded events."""
+        uniques = {}
+        for event in conflicts:
+            uniques.setdefault(event.unique_id, event)
+        return uniques.values()
+
+    def getConflictingEvents(self, item):
+        """Return a list of conflicting events.
+
+        Conflicting events are events that occur in the item calendar
+        at some time that is booked/taken by section timetable event.
+        """
+        calendar = ISchoolToolCalendar(item)
+        ctt = ICompositeTimetables(self.context)
+
+        timetable_events = sorted(ctt.makeTimetableCalendar())
+
+        if not timetable_events:
+            return []
+
+        first = timetable_events[0]
+        last = timetable_events[-1]
+        calendar_events = calendar.expand(first.dtstart,
+                                          last.dtstart + last.duration)
+
+        conflicts = self._findConflicts(timetable_events, calendar_events)
+
+        return self._groupConflicts(conflicts)
 
     def update(self):
         # This method is rather similar to GroupListView.update().

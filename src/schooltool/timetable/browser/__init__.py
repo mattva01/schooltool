@@ -404,6 +404,18 @@ class TimetableConflictMixin(object):
         raise NotImplementedError(
             "This method should be implemented in subclasses")
 
+    def getTimetable(self):
+        timetables = ITimetables(self.context).timetables
+        term = self.getTerm()
+        ttschema = self.getSchema()
+        key = '.'.join((term.__name__, ttschema.__name__))
+        try:
+            # All timetables for a given ttschema will have the same pattern
+            # regardless of term.
+            return timetables[key]
+        except KeyError:
+            return None
+
 
 class TimetableSetupViewBase(BrowserView, TimetableConflictMixin):
     """Common methods for setting up timetables."""
@@ -586,15 +598,7 @@ class SectionTimetableSetupView(TimetableSetupViewBase):
                             for this shcema
 
         """
-
-        timetables = ITimetables(self.context).timetables
-        key = self.ttkeys[0]
-        try:
-            # All timetables for a given ttschema will have the same pattern
-            # regardless of term.
-            timetable = timetables[key]
-        except KeyError:
-            timetable = None
+        timetable = self.getTimetable()
 
         def days(schema):
             for day_id, day in schema.items():
