@@ -2941,48 +2941,45 @@ def doctest_AttendancePanelView_getItems():
 
         >>> class PersonStub(object):
         ...     def __init__(self, title):
-        ...         self.title = title.capitalize()
+        ...         self.title = title
         ...     def __repr__(self):
-        ...         return self.title
-
-        >>> har = HomeroomAttendanceRecordStub(None, some_dt, None)
-        >>> sar = SectionAttendanceRecordStub(None, some_dt, None)
+        ...         return self.title.lower()
 
         >>> class AppStub(object):
-        ...     implements(IUnresolvedAbsenceCache)
-        ...     def __iter__(self): # from IUnresolvedAbsenceCache
-        ...         return iter([('person', [har, sar, sar]),
-        ...                      ('archangel', [sar]),
-        ...                      ('zorro', [har])])
         ...     def __getitem__(self, key):
         ...         if key == 'persons':
-        ...             return {'person': PersonStub('person'),
-        ...                     'archangel': PersonStub('archangel'),
-        ...                     'zorro': PersonStub('zorro')}
+        ...             return {'person': PersonStub('Person'),
+        ...                     'archangel': PersonStub('Archangel'),
+        ...                     'zorro': PersonStub('Zorro')}
+
+        >>> class UnresolvedAbsenceCacheStub(object):
+        ...     adapts(AppStub)
+        ...     implements(IUnresolvedAbsenceCache)
+        ...     def __init__(self, context):
+        ...         pass
+        ...     def __iter__(self):
+        ...         yield ('person', 'absences of person')
+        ...         yield ('archangel', 'absences of archangel')
+        ...         yield ('zorro', 'absences of zorro')
+        >>> provideAdapter(UnresolvedAbsenceCacheStub)
+
+    All items:
 
         >>> app = AppStub()
         >>> request = TestRequest()
         >>> view = AttendancePanelView(app, request)
 
-        >>> for item in view.getItems(''):
-        ...     print item['person'], item['title']
-        ...     print ('HR: %d, section: %d'
-        ...            % (item['hr_absences'], item['section_absences']))
-        Person Person
-        HR: 1, section: 2
-        Archangel Archangel
-        HR: 0, section: 1
-        Zorro Zorro
-        HR: 1, section: 0
+        >>> for item in view.getItems():
+        ...     print item['person'], item['title'], item['absences']
+        person Person absences of person
+        archangel Archangel absences of archangel
+        zorro Zorro absences of zorro
 
     Check filtering:
 
         >>> for item in view.getItems('zo'):
-        ...     print item['person'], item['title']
-        ...     print ('HR: %d, section: %d'
-        ...            % (item['hr_absences'], item['section_absences']))
-        Zorro Zorro
-        HR: 1, section: 0
+        ...     print item['person'], item['title'], item['absences']
+        zorro Zorro absences of zorro
 
     """
 
@@ -2994,14 +2991,17 @@ def doctest_AttendancePanelView_update():
         ...     AttendancePanelView
         >>> from schooltool.attendance.interfaces import IUnresolvedAbsenceCache
 
+        >>> har = HomeroomAttendanceRecordStub(None, some_dt, None)
+        >>> sar = SectionAttendanceRecordStub(None, some_dt, None)
+
         >>> app = None
         >>> request = TestRequest()
         >>> view = AttendancePanelView(app, request)
         >>> def getItemsStub(search_str):
         ...     print 'getItems(%r)' % search_str
-        ...     return [{'title': 'Person'},
-        ...             {'title': 'Archangel'},
-        ...             {'title': 'Zorro'}]
+        ...     return [{'title': 'Person', 'absences': [har]},
+        ...             {'title': 'Archangel', 'absences': [sar]},
+        ...             {'title': 'Zorro', 'absences': [sar, har, sar]}]
         >>> view.getItems = getItemsStub
 
     We call update():
@@ -3015,17 +3015,21 @@ def doctest_AttendancePanelView_update():
         10
         >>> [item['title'] for item in view.batch]
         ['Archangel', 'Person', 'Zorro']
+        >>> [item['hr_absences'] for item in view.batch]
+        [0, 1, 1]
+        >>> [item['section_absences'] for item in view.batch]
+        [1, 0, 2]
 
     Let's chect that arguments in the request are reacted to:
 
         >>> request.form['batch_start'] = 2
-        >>> request.form['batch_size'] = 2
+        >>> request.form['batch_size'] = 3
         >>> view.update()
         getItems('')
         >>> view.batch.start
         2
         >>> view.batch.size
-        2
+        3
         >>> [item['title'] for item in view.batch]
         ['Zorro']
 
@@ -3044,6 +3048,28 @@ def doctest_AttendancePanelView_update():
         getItems('')
         >>> request.form['SEARCH']
         ''
+
+    """
+
+
+def doctest_AttendancePanelView_countAbsences():
+    r"""Tests for AttendancePanelView.countAbsences
+
+        >>> from schooltool.attendance.browser.attendance \
+        ...         import AttendancePanelView
+        >>> view = AttendancePanelView(None, None)
+        >>> har = HomeroomAttendanceRecordStub(None, some_dt, None)
+        >>> sar = SectionAttendanceRecordStub(None, some_dt, None)
+
+        >>> view.countAbsences([])
+        (0, 0)
+        >>> view.countAbsences([har])
+        (1, 0)
+        >>> view.countAbsences([sar])
+        (0, 1)
+
+        >>> view.countAbsences([sar, har, har, sar, sar])
+        (2, 3)
 
     """
 

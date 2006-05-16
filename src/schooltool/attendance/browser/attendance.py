@@ -950,21 +950,19 @@ class AttendancePanelView(BrowserView):
 
     __used_for__ = ISchoolToolApplication
 
-    def getItems(self, search_str):
+    def getItems(self, search_str=''):
+        """Return persons matching a search string with their absence records.
+        """
         cache = IUnresolvedAbsenceCache(self.context)
-        subjects = [(self.context['persons'][username], absences)
-                    for username, absences in iter(cache)]
-        # TODO: It would be more efficient to only calculate stats for
-        # the given person.
+        person_container = self.context['persons']
+        subjects = [(person_container[username], absences)
+                    for username, absences in cache]
+        lowercased_search_str = search_str.lower()
         return [{'title': person.title,
                  'person': person,
-                 'hr_absences':
-                    len(filter(IHomeroomAttendanceRecord.providedBy, absences)),
-                 'section_absences':
-                    len(filter(ISectionAttendanceRecord.providedBy, absences))
-                 }
+                 'absences': absences}
                 for person, absences in subjects
-                if search_str.lower() in person.title.lower()]
+                if lowercased_search_str in person.title.lower()]
 
     def update(self):
         if 'CLEAR_SEARCH' in self.request:
@@ -974,3 +972,13 @@ class AttendancePanelView(BrowserView):
         start = int(self.request.get('batch_start', 0))
         size = int(self.request.get('batch_size', 10))
         self.batch = Batch(results, start, size, sort_by='title')
+        for record in self.batch:
+            n_hr, n_section = self.countAbsences(record['absences'])
+            record['hr_absences'] = n_hr
+            record['section_absences'] = n_section
+
+    def countAbsences(self, absences):
+        """Count the number of homeroom and section absences."""
+        return (len(filter(IHomeroomAttendanceRecord.providedBy, absences)),
+                len(filter(ISectionAttendanceRecord.providedBy, absences)))
+
