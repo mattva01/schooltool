@@ -9,6 +9,8 @@ from zope.lifecycleevent import ObjectModifiedEvent
 from zope.interface.common import idatetime
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.app.form.browser.interfaces import ITerms
+from zope.app.publisher.browser.menu import getMenu, BrowserMenu
+
 from schooltool.traverser.traverser import SingleAttributeTraverserPlugin
 from schooltool.person.browser.person import PersonAddView as PersonAddViewBase
 from schooltool.person.interfaces import IReadPerson
@@ -27,6 +29,10 @@ class AttributeEditForm(form.PageEditForm):
         raise NotImplementedError
 
     def legend(self):
+        # optional
+        return None
+
+    def getMenu(self):
         # optional
         return None
     
@@ -62,7 +68,19 @@ class AttributeEditForm(form.PageEditForm):
         self.request.response.redirect(url)
         return ''
 
+class AttributeMenu(BrowserMenu):
+    def getMenuItems(self, object, request):
+        obj_url = zapi.absoluteURL(object.__parent__, request)
+        items = super(AttributeMenu, self).getMenuItems(object, request)
+        for item in items:
+            if item['action'].startswith('/'):
+                item['action'] = '%s%s' % (obj_url, item['action'])
+        return items
+    
 class PersonEditForm(AttributeEditForm):
+
+    def getMenu(self):
+        return getMenu('person_edit_menu', self.context, self.request)
 
     def fullname(self):
         return IReadPerson(self.context.__parent__).title
@@ -113,15 +131,16 @@ emergency2_traverser = SingleAttributeTraverserPlugin('emergency2')
 emergency3_traverser = SingleAttributeTraverserPlugin('emergency3')
 
 class ContactInfoEdit(PersonEditForm):
-    # XXX title should be different depending on which attribute we're
-    # viewing (parental contact, emergency contact, etc). How to
-    # accomplish that without having to duplicate views or interfaces?
+    # XXX need to distinguish between the different contact informations
+    # somehow. Is there a sane way to do this without introducing an
+    # abundance of views *and* interfaces *and* change the content
+    # model?
     def title(self):
-        return _(u'Change contact information for ${fullname}',
+        return _(u"Change contact information for ${fullname}",
                  mapping={'fullname': self.fullname()})
     
     form_fields = form.Fields(interfaces.IContactInfo)
-    
+
 class ContactInfoDisplay(PageDisplayForm):
     form_fields = form.Fields(interfaces.IContactInfo)
     

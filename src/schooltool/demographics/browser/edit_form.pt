@@ -3,6 +3,22 @@
 <metal:nothing metal:fill-slot="content-header" />
 <metal:block metal:fill-slot="body">
 
+  <tal:block define="menu view/getMenu | nothing;" condition="menu">
+  <div style="margin-bottom: 5px">
+    <tal:block repeat="menuitem menu">
+      <a 
+        i18n:translate=""
+        tal:content="string:${menuitem/title}"
+        tal:attributes="
+          href string:${menuitem/action};
+          title menuitem/description;
+          id python: menuitem['selected'] and 'selected' or None"
+        />
+      <tal:block condition="not: repeat/menuitem/end">-</tal:block>
+    </tal:block>
+  </div>
+  </tal:block>
+
   <form action="." method="post"
         tal:attributes="action request/URL"
         class="standalone" enctype="multipart/form-data">
@@ -25,6 +41,7 @@
       <input type="submit" id="form.actions.cancel" name="form.actions.cancel" value="Cancel" class="button-cancel" />
     </div>
   </form>
+
 </metal:block>
 </body>
 </html>

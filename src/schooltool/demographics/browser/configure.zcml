@@ -115,25 +115,24 @@
        default schooltool.person.Person -->
   <configure package="schooltool.person.browser">
   
-   <!-- add form -->
+  <!-- add form -->
     <page
-        name="add.html"
-        for="schooltool.person.interfaces.IPersonContainer"
-        class="schooltool.demographics.browser.personform.PersonAddView"
-        template="person_add.pt"
-        permission="schooltool.create"
-        menu="schooltool_actions" title="New Person" />
+      name="add.html"
+      for="schooltool.person.interfaces.IPersonContainer"
+      class="schooltool.demographics.browser.personform.PersonAddView"
+      template="person_add.pt"
+      permission="schooltool.create"
+      menu="schooltool_actions" title="New Person" />
 
     <!-- csv importer -->
     <page
-        name="person-csvimport.html"
-        for="schooltool.person.interfaces.IPersonContainer"
-        class="schooltool.demographics.browser.csvimport.PersonCSVImportView"
-        template="person-csvimport.pt"
-        permission="schooltool.create"
-        menu="schooltool_actions"
-        title="Import Persons"
-        />
+      name="person-csvimport.html"
+      for="schooltool.person.interfaces.IPersonContainer"
+      class="schooltool.demographics.browser.csvimport.PersonCSVImportView"
+      template="person-csvimport.pt"
+      permission="schooltool.create"
+      menu="schooltool_actions"
+      title="Import Persons" />
   </configure>
 
   <!-- to get simple drop down lists in widgets -->
@@ -149,5 +148,67 @@
      class=".table.PersonTable"
      permission="schooltool.view"
      />
+
+  <!-- menu for different screens -->
+  <menu
+    id="person_edit_menu"
+    title="Schooltool Person Menu"
+    class=".personform.AttributeMenu"
+  />
+
+  <menuItems
+    for="*"
+    menu="person_edit_menu"
+    >
+
+    <menuItem
+      title="name info"
+      action="/nameinfo/@@edit.html"
+      permission="schooltool.edit"
+      />
+
+    <menuItem
+      title="demographics"
+      action="/demographics/@@edit.html"
+      permission="schooltool.edit"
+     />
+
+    <menuItem
+      title="schooldata" 
+      action="/schooldata/@@edit.html"
+      permission="schooltool.edit"
+     />
+
+    <menuItem
+      title="parent1"
+      action="/parent1/@@edit.html"
+      permission="schooltool.edit"
+     />
+
+    <menuItem
+      title="parent2"
+      action="/parent2/@@edit.html"
+      permission="schooltool.edit"
+     />
+
+    <menuItem
+      title="emergency1"
+      action="/emergency1/@@edit.html"
+      permission="schooltool.edit"
+     />
+
+    <menuItem
+      title="emergency2"
+      action="/emergency3/@@edit.html"
+      permission="schooltool.edit"
+     />
+
+    <menuItem
+      title="emergency3"
+      action="/emergency3/@@edit.html"
+      permission="schooltool.edit"
+     />
+
+  </menuItems>
 
 </configure>
