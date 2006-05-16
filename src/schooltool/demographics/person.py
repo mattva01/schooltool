@@ -1,4 +1,5 @@
-import datetime
+from pytz import utc
+from datetime import datetime
 from persistent import Persistent
 from zope.interface import implements
 from zope import schema
@@ -12,7 +13,7 @@ class Person(PersonBase):
 
     def __init__(self, username=None, title=None):
         super(Person, self).__init__(username, title)
-        self.modified = datetime.datetime.utcnow()
+        self.modified = now()
         self.nameinfo = NameInfo()
         locate(self.nameinfo, self, 'nameinfo')
         self.demographics = Demographics()
@@ -59,5 +60,7 @@ def initializeSchemaAttributes(iface, obj):
         field.set(obj, field.default)
 
 def personModifiedSubscriber(person, event):
-    person.modified = datetime.datetime.utcnow()
+    person.modified = now()
 
+def now():
+    return utc.localize(datetime.utcnow())

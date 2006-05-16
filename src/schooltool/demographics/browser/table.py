@@ -6,6 +6,7 @@ from zc.table.interfaces import IColumn, ISortableColumn
 from zc.table import table, column
 from zc.table.column import GetterColumn
 from schooltool.batching import Batch
+from schooltool.app.browser import ViewPreferences
 
 class TablePage(BrowserPage):
     """Base class to easily created table-driven views.
@@ -71,10 +72,9 @@ class PersonTable(TablePage):
             getter=lambda i, f: i.title,
             subsort=True)
         directlyProvides(prefix, ISortableColumn)
-        modified = GetterColumn(
+        modified = ModifiedColumn(
             name='modified',
             title=u'Modified',
-            getter=lambda i, f: i.modified,
             subsort=True)
         directlyProvides(modified, ISortableColumn)
         
@@ -98,3 +98,16 @@ class DisplayColumn(column.Column):
     def renderCell(self, item, formatter):
         return '<a href="%s">Display</a>' % (
             zapi.absoluteURL(item, formatter.request) + '/nameinfo')
+
+class ModifiedColumn(column.SortingColumn):
+    _renderDatetime = None
+
+    def getSortKey(self, item, formatter):
+        return item.modified
+    
+    def renderCell(self, item, formatter):
+        # cache _renderDatetime for performance
+        if self._renderDatetime is None:
+            self._renderDatetime = ViewPreferences(
+                formatter.request).renderDatetime
+        return self._renderDatetime(item.modified)
