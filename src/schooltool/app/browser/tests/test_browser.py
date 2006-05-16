@@ -329,7 +329,10 @@ def doctest_ViewPrefences():
         '%Y-%m-%d'
         >>> prefs.first_day_of_week
         0
-
+        >>> from pytz import utc
+        >>> prefs.renderDatetime(datetime(2005, 1, 7, 14, 15, tzinfo=utc))
+        '2005-01-07 14:15'
+        
     We have no principal (anonymous user) and no SchoolTool site (test
     environment):
 

@@ -237,6 +237,9 @@ class ViewPreferences(object):
             self.first_day_of_week = calendar.MONDAY
             self.timezone = timezone('UTC')
 
+    def renderDatetime(self, dt):
+        dt = dt.astimezone(self.timezone)
+        return dt.strftime('%s %s' % (self.dateformat, self.timeformat))
 
 def same(obj1, obj2):
     """Return True if the references obj1 and obj2 point to the same object.
