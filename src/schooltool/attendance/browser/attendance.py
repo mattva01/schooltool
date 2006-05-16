@@ -570,7 +570,39 @@ class NoSectionMeetingToday(Exception):
     """There are no section meetings today."""
 
 
-class StudentAttendanceView(BrowserView):
+class AttendanceInheritanceMixin(object):
+    """Mixin that helps collapse related homeroom and section absences."""
+
+    def hasParentHomeroom(self, section_ar, homeroom_attendance):
+        """Does a section absence/tardy have a parent homeroom absence/tardy?"""
+        if not ISectionAttendanceRecord.providedBy(section_ar):
+            return False
+        hr_ar = homeroom_attendance.getHomeroomPeriodForRecord(section_ar)
+        if not hr_ar.isAbsent() and not hr_ar.isTardy():
+            return False
+        return self.inheritsFrom(hr_ar, section_ar)
+
+    def inheritsFrom(self, homeroom_ar, section_ar):
+        """Should section_ar inherit its status from homeroom_ar?"""
+        if homeroom_ar.isAbsent():
+            return True
+
+        assert homeroom_ar.isTardy()
+        arrival = section_ar.late_arrival or (section_ar.datetime +
+                                              section_ar.duration)
+        if arrival - self.homeroomTardyGracePeriod > homeroom_ar.late_arrival:
+            return False
+
+        return True
+
+    @property
+    def homeroomTardyGracePeriod(self):
+        app = ISchoolToolApplication(None)
+        minutes = IAttendancePreferences(app).homeroomTardyGracePeriod
+        return datetime.timedelta(minutes=minutes)
+
+
+class StudentAttendanceView(BrowserView, AttendanceInheritanceMixin):
     """Attendance view for a student.
 
     Lists pending unexcused attendance incidents, and a summary of absences and
@@ -833,22 +865,6 @@ class StudentAttendanceView(BrowserView):
             days[-1].append(ar)
         return days
 
-    def inheritsFrom(self, homeroom_ar, section_ar):
-        """Return True if section_ar should inherit its status from homeroom_ar."""
-        assert homeroom_ar.isAbsent() or homeroom_ar.isTardy()
-        if homeroom_ar.isAbsent():
-            return True
-
-        arrival = section_ar.late_arrival or (section_ar.datetime +
-                                              section_ar.duration)
-        app = ISchoolToolApplication(None)
-        minutes = IAttendancePreferences(app).homeroomTardyGracePeriod
-        delta = datetime.timedelta(minutes=minutes)
-        if arrival - delta > homeroom_ar.late_arrival:
-            return False
-
-        return True
-
     def getInheritingRecords(self, homeroom_ar, day):
         """Filter out inheriting attendance records in a day."""
         homeroom_attendance = IHomeroomAttendance(self.context)
@@ -860,27 +876,19 @@ class StudentAttendanceView(BrowserView):
                     records.append(ar)
         return records
 
-    def hasParentHomeroom(self, section_ar, day):
-        """Check whether section_ar has a parent homeroom in a day."""
-        if IHomeroomAttendanceRecord.providedBy(section_ar):
-            return False
-        homeroom_attendance = IHomeroomAttendance(self.context)
-        hr_ar = homeroom_attendance.getHomeroomPeriodForRecord(section_ar)
-        if hr_ar not in day:
-            # This means hr_ar is not absent/tardy and we do not want to
-            # suppress section absences/tardies.
-            return False
-        return self.inheritsFrom(hr_ar, section_ar)
-
     def hideInheritingRecords(self, days):
         """Remove inheriting absences from days in the list.
 
         Days is a list of days where each day is a list of attendance
         records: [[ar, ar, ar], [ar, ar]].
         """
-        return [[ar for ar in day if not self.hasParentHomeroom(ar, day)]
+        # TODO: make days a flat list
+        homeroom_attendance = IHomeroomAttendance(self.context)
+        return [[ar for ar in day
+                 if not self.hasParentHomeroom(ar, homeroom_attendance)]
                 for day in days]
 
+    # TODO: make it work on flat lists when I get rid of pigeonholing
     def flattenDays(self, days):
         """Flatten a list of days into a list of attendance record dicts."""
         l = []
@@ -896,15 +904,18 @@ class StudentAttendanceView(BrowserView):
 
     def unresolvedAbsencesForDisplay(self):
         """Return only non inheriting unresolved absences."""
+        # TODO: get rid of pigeonholing
         days = self.pigeonholeAttendanceRecords()
         days = self.hideInheritingRecords(days)
         return self.flattenDays(days)
 
     def unresolvedAbsences(self):
         """Return all unresolved absences and tardies."""
+        # TODO: why pigeonhole if you flatten immediatelly?
         days = self.pigeonholeAttendanceRecords()
         return self.flattenDays(days)
 
+    # TODO: use @collect
     def absencesForTerm(self, term):
         """Return all absences and tardies in a term."""
         homeroom_attendance = IHomeroomAttendance(self.context)
@@ -944,7 +955,7 @@ class StudentAttendanceView(BrowserView):
         return n_absences, n_tardies
 
 
-class AttendancePanelView(BrowserView):
+class AttendancePanelView(BrowserView, AttendanceInheritanceMixin):
     """A control panel for tracking global attendance."""
 
     __used_for__ = ISchoolToolApplication
@@ -972,12 +983,20 @@ class AttendancePanelView(BrowserView):
         size = int(self.request.get('batch_size', 10))
         self.batch = Batch(results, start, size, sort_by='title')
         for record in self.batch:
-            n_hr, n_section = self.countAbsences(record['absences'])
+            homeroom_attendance = IHomeroomAttendance(record['person'])
+            n_hr, n_section = self.countAbsences(record['absences'],
+                                                 homeroom_attendance)
             record['hr_absences'] = n_hr
             record['section_absences'] = n_section
 
-    def countAbsences(self, absences):
+    def countAbsences(self, absences, homeroom_attendance):
         """Count the number of homeroom and section absences."""
-        return (len(filter(IHomeroomAttendanceRecord.providedBy, absences)),
-                len(filter(ISectionAttendanceRecord.providedBy, absences)))
+        n_hr = n_section = 0
+        for ar in absences:
+            if IHomeroomAttendanceRecord.providedBy(ar):
+                n_hr += 1
+            elif ISectionAttendanceRecord.providedBy(ar):
+                if not self.hasParentHomeroom(ar, homeroom_attendance):
+                    n_section += 1
+        return n_hr, n_section
 
