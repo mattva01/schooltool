@@ -144,6 +144,10 @@ ul.section-list a {
     font-weight: normal;
 }
 
+a#selected {
+   background: #cccccc;
+}
+
 /* timetable display */
 
 table.timetable {

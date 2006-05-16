@@ -70,10 +70,17 @@ class AttributeEditForm(form.PageEditForm):
 
 class AttributeMenu(BrowserMenu):
     def getMenuItems(self, object, request):
+        # all rather hackish, but functional
         obj_url = zapi.absoluteURL(object.__parent__, request)
         items = super(AttributeMenu, self).getMenuItems(object, request)
         for item in items:
-            if item['action'].startswith('/'):
+            action = item['action']
+            if action.startswith('/'):
+                # determine which attribute we're viewing by looking at
+                # the action supplied..
+                attribute_name = action.split('/')[1]
+                if attribute_name == object.__name__:
+                    item['selected'] = True
                 item['action'] = '%s%s' % (obj_url, item['action'])
         return items
     

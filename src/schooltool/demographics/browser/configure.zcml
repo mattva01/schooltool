@@ -199,7 +199,7 @@
 
     <menuItem
       title="emergency2"
-      action="/emergency3/@@edit.html"
+      action="/emergency2/@@edit.html"
       permission="schooltool.edit"
      />
 
