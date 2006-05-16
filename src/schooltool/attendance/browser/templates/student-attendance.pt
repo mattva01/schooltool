@@ -149,7 +149,7 @@
 <tal:if_detailed_summary_wanted define="term view/term_for_detailed_summary"
                                 condition="term">
 <h2 tal:content="term/title">(term)</h2>
-<tal:block tal:define="absences python:list(view.absencesForTerm(term))">
+<tal:block tal:define="absences python:view.absencesForTerm(term)">
 <ul tal:condition="absences">
   <li tal:repeat="absence absences"
       tal:content="absence"

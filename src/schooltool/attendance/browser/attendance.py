@@ -45,6 +45,7 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.security.proxy import removeSecurityProxy
 from zope.i18n import translate
 
+from schooltool.common import collect
 from schooltool.batching.batch import Batch
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import ICompositeTimetables
@@ -882,13 +883,11 @@ class StudentAttendanceView(BrowserView, AttendanceInheritanceMixin):
         Days is a list of days where each day is a list of attendance
         records: [[ar, ar, ar], [ar, ar]].
         """
-        # TODO: make days a flat list
         homeroom_attendance = IHomeroomAttendance(self.context)
         return [[ar for ar in day
                  if not self.hasParentHomeroom(ar, homeroom_attendance)]
                 for day in days]
 
-    # TODO: make it work on flat lists when I get rid of pigeonholing
     def flattenDays(self, days):
         """Flatten a list of days into a list of attendance record dicts."""
         l = []
@@ -904,18 +903,16 @@ class StudentAttendanceView(BrowserView, AttendanceInheritanceMixin):
 
     def unresolvedAbsencesForDisplay(self):
         """Return only non inheriting unresolved absences."""
-        # TODO: get rid of pigeonholing
         days = self.pigeonholeAttendanceRecords()
         days = self.hideInheritingRecords(days)
         return self.flattenDays(days)
 
     def unresolvedAbsences(self):
         """Return all unresolved absences and tardies."""
-        # TODO: why pigeonhole if you flatten immediatelly?
         days = self.pigeonholeAttendanceRecords()
         return self.flattenDays(days)
 
-    # TODO: use @collect
+    @collect
     def absencesForTerm(self, term):
         """Return all absences and tardies in a term."""
         homeroom_attendance = IHomeroomAttendance(self.context)
