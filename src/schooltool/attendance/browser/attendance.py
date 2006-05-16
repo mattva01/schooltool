@@ -592,16 +592,17 @@ class StudentAttendanceView(BrowserView):
         self.errors = []
         self.tardy_error = None
 
-        # hand craft dropdown widget from dict
+        # hand craft a drop-down widget from a dict
         app = ISchoolToolApplication(None)
         code_dict = IAttendancePreferences(app).attendanceStatusCodes
-        code_items = sorted((i[1], i[0]) for i in code_dict.items())
+        code_items = sorted((v, k) for k, v in code_dict.items())
         code_vocabulary = SimpleVocabulary.fromItems(code_items)
         self.code = ''
         code_field = Choice(__name__='code', title=u'Set status:',
                             required=False,
                             vocabulary=code_vocabulary).bind(self)
-        self.code_widget = DropdownWidget(code_field, code_vocabulary, self.request)
+        self.code_widget = DropdownWidget(code_field, code_vocabulary,
+                                          self.request)
 
         if 'UPDATE' not in self.request:
             return
@@ -621,7 +622,9 @@ class StudentAttendanceView(BrowserView):
                         ar['attendance_record'],
                         ar['day'])
                     for iar in inheriting_ars:
-                        self._process(iar, translate(self.formatAttendanceRecord(iar)),
+                        self._process(iar,
+                                      translate(self.formatAttendanceRecord(
+                                                                    iar)),
                                       explanation, resolve, code, late_arrival)
 
     def _process(self, ar, text, explanation, resolve, code, late_arrival):
@@ -808,15 +811,13 @@ class StudentAttendanceView(BrowserView):
         """Return an interleaved list of unresolved absence records."""
         homeroom_attendance = IHomeroomAttendance(self.context)
         section_attendance = ISectionAttendance(self.context)
+        def unresolved(ar):
+            return (ar.isAbsent() or ar.isTardy()) and not ar.isExplained()
+        return self.interleaveAttendanceRecords(
+                            filter(unresolved, homeroom_attendance),
+                            filter(unresolved, section_attendance))
 
-        records = []
-        for ar in self.interleaveAttendanceRecords(homeroom_attendance,
-                                                   section_attendance):
-            if (ar.isAbsent() or ar.isTardy()) and not ar.isExplained():
-                records.append(ar)
-        return records
-
-    def pigeonHoleAttendanceRecords(self):
+    def pigeonholeAttendanceRecords(self):
         """Divide attendance records into a list of days.
 
         Returns a list of lists, in which every sublist has attendance
@@ -833,7 +834,7 @@ class StudentAttendanceView(BrowserView):
         return days
 
     def inheritsFrom(self, homeroom_ar, section_ar):
-        """Return True if section_ar should inherit it's status from homeroom_ar."""
+        """Return True if section_ar should inherit its status from homeroom_ar."""
         assert homeroom_ar.isAbsent() or homeroom_ar.isTardy()
         if homeroom_ar.isAbsent():
             return True
@@ -865,7 +866,11 @@ class StudentAttendanceView(BrowserView):
             return False
         homeroom_attendance = IHomeroomAttendance(self.context)
         hr_ar = homeroom_attendance.getHomeroomPeriodForRecord(section_ar)
-        return hr_ar in day and self.inheritsFrom(hr_ar, section_ar)
+        if hr_ar not in day:
+            # This means hr_ar is not absent/tardy and we do not want to
+            # suppress section absences/tardies.
+            return False
+        return self.inheritsFrom(hr_ar, section_ar)
 
     def hideInheritingRecords(self, days):
         """Remove inheriting absences from days in the list.
@@ -873,14 +878,8 @@ class StudentAttendanceView(BrowserView):
         Days is a list of days where each day is a list of attendance
         records: [[ar, ar, ar], [ar, ar]].
         """
-        new_days = []
-        for day in days:
-            new_day = []
-            for ar in list(day):
-                if not self.hasParentHomeroom(ar, day):
-                    new_day.append(ar)
-            new_days.append(new_day)
-        return new_days
+        return [[ar for ar in day if not self.hasParentHomeroom(ar, day)]
+                for day in days]
 
     def flattenDays(self, days):
         """Flatten a list of days into a list of attendance record dicts."""
@@ -891,19 +890,19 @@ class StudentAttendanceView(BrowserView):
                           'text': self.formatAttendanceRecord(ar),
                           'attendance_record': ar,
                           'explanation': self.outstandingExplanation(ar),
-                          'day': day
+                          'day': day,
                           })
         return l
 
     def unresolvedAbsencesForDisplay(self):
         """Return only non inheriting unresolved absences."""
-        days = self.pigeonHoleAttendanceRecords()
+        days = self.pigeonholeAttendanceRecords()
         days = self.hideInheritingRecords(days)
         return self.flattenDays(days)
 
     def unresolvedAbsences(self):
         """Return all unresolved absences and tardies."""
-        days = self.pigeonHoleAttendanceRecords()
+        days = self.pigeonholeAttendanceRecords()
         return self.flattenDays(days)
 
     def absencesForTerm(self, term):

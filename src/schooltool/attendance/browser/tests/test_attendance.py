@@ -2083,8 +2083,8 @@ def doctest_StudentAttendanceView_unresolvedAttendanceRecords():
     """
 
 
-def doctest_StudentAttendanceView_pigeonHoleAttendanceRecords():
-    """Tests for StudentAttendanceView.pigeonHoleAttendanceRecords
+def doctest_StudentAttendanceView_pigeonholeAttendanceRecords():
+    """Tests for StudentAttendanceView.pigeonholeAttendanceRecords
 
         >>> from schooltool.attendance.browser.attendance import StudentAttendanceView
         >>> view = StudentAttendanceView(None, None)
@@ -2100,7 +2100,7 @@ def doctest_StudentAttendanceView_pigeonHoleAttendanceRecords():
 
         >>> attendance_records = []
         >>> view.unresolvedAttendanceRecords = lambda : attendance_records
-        >>> view.pigeonHoleAttendanceRecords()
+        >>> view.pigeonholeAttendanceRecords()
         []
 
     If there are any attendance records they are placed into sublists
@@ -2113,7 +2113,7 @@ def doctest_StudentAttendanceView_pigeonHoleAttendanceRecords():
         ...                       AttendanceRecordStub('ar5', 2005, 1, 3),
         ...                       AttendanceRecordStub('ar6', 2005, 1, 4)]
         >>> view.unresolvedAttendanceRecords = lambda : attendance_records
-        >>> view.pigeonHoleAttendanceRecords()
+        >>> view.pigeonholeAttendanceRecords()
         [[ar1, ar2], [ar3, ar4], [ar5], [ar6]]
 
     """
@@ -2322,7 +2322,7 @@ def doctest_StudentAttendanceView_unresolvedAbsencesForDisplay():
 
         >>> from schooltool.attendance.browser.attendance import StudentAttendanceView
         >>> view = StudentAttendanceView(None, None)
-        >>> view.pigeonHoleAttendanceRecords = lambda: 'list of days'
+        >>> view.pigeonholeAttendanceRecords = lambda: 'list of days'
         >>> def hideInheritingRecords(days):
         ...     return "%s without ineriting records" % days
         >>> view.hideInheritingRecords = hideInheritingRecords
