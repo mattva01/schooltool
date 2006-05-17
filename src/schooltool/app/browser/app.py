@@ -88,9 +88,9 @@ class ContainerView(BrowserView):
         size = int(self.request.get('batch_size', 10))
         self.batch = Batch(results, start, size, sort_by='title')
 
+    @property
     def canModify(self):
         return canAccess(self.context, '__delitem__')
-    canModify = property(canModify)
 
 
 class ContainerDeleteView(BrowserView):
