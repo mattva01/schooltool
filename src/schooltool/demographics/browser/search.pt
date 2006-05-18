@@ -1,0 +1,34 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<body>
+<metal:nothing metal:fill-slot="content-header" />
+<metal:block metal:fill-slot="body" tal:define="batch view/batch">
+
+  <form action="." method="get"
+        tal:attributes="action request/URL"
+        class="standalone" enctype="multipart/form-data">
+    <fieldset>
+      <div metal:use-macro="context/@@form_macros/widget_rows" />
+    </fieldset>
+    <div class="controls">
+      <input tal:repeat="action view/actions" 
+        tal:replace="structure action/render" />
+    </div>
+  </form>
+
+  <tal:if tal:condition="batch" tal:define="extra_url view/extraUrl">
+    <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+    <div class="count">
+      <span i18n:translate="">Showing</span>
+      <span tal:content="python:len(batch)"/>
+      <span i18n:translate="">of</span>
+      <span tal:content="python:len(batch.list)"/>
+      <span i18n:translate="">items</span>
+    </div>
+    <tal:block replace="structure view/table" />
+  </tal:if>
+
+  <p tal:condition="python:not batch and view.search_data" i18n:translate="">There were no results.</p>
+
+</metal:block>
+</body>
+</html>

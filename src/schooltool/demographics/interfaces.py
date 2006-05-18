@@ -165,3 +165,12 @@ class IContactInfo(Interface):
         title=_(u"Notes"),
         required=False,
         )
+
+
+class ISearch(Interface):
+
+    fulltext = schema.TextLine(
+        title=_(u"Text"),
+        required=False,
+        )
+

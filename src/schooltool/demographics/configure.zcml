@@ -74,7 +74,6 @@
 
   <include package=".browser" />
 
-
   <!-- sample data -->
   <configure
       xmlns:zcml="http://namespaces.zope.org/zcml"
@@ -100,4 +99,16 @@
 
   </configure>
 
+  <!-- install catalog -->
+
+  <subscriber
+      for="schooltool.app.interfaces.ISchoolToolApplication zope.app.container.interfaces.IObjectAddedEvent"
+      handler=".catalog.catalogSetUpSubscriber"
+      />
+
+  <!-- search adapter -->
+  <adapter
+      factory=".catalog.Search"
+      />
+    
 </configure>

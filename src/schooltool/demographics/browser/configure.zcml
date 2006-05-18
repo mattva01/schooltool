@@ -149,6 +149,13 @@
      permission="schooltool.view"
      />
 
+  <page
+     for="schooltool.person.interfaces.IPersonContainer"
+     name="search.html"
+     class=".table.SearchTable"
+     permission="schooltool.view"
+     />
+
   <!-- menu for different screens -->
   <menu
     id="person_edit_menu"
