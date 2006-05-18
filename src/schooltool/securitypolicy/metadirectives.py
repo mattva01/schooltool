@@ -24,14 +24,13 @@ $Id$
 """
 
 from zope.interface import Interface
-from zope.configuration.fields import Tokens, GlobalObject
-from zope.schema import Id
+from zope.configuration.fields import Tokens, GlobalObject, PythonIdentifier
 from zope.security.zcml import Permission
 
 
 class ICrowdDirective(Interface):
 
-    name = Id(
+    name = PythonIdentifier(
         title=u"Name",
         description=u"Identifier of the crowd")
 
@@ -49,7 +48,7 @@ class IAllowDirective(Interface):
 
     crowds = Tokens(
         title=u"Crowds",
-        value_type=Id(title=u"Crowd"),
+        value_type=PythonIdentifier(title=u"Crowd"),
         required=True)
 
     permission = Permission(
