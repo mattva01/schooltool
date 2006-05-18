@@ -125,6 +125,7 @@ class SampleAttendancePlugin(object):
                 for student in section.members:
 
                     present = self.rng.random() > self.absence_rate
+                    tardy = self.rng.random() < self.tardy_rate
 
                     datestr = meeting.dtstart.strftime("%Y-%m-%d")
                     hr_absence = (datestr in hr_absences and
@@ -133,6 +134,11 @@ class SampleAttendancePlugin(object):
                     if hr_absence:
                         present = False
                         hr_explanation = hr_absences[datestr][student.__name__]
+                    elif homeroom and not tardy:
+                        present = True
+
+                    if not present and not hr_absence:
+                        explanation = self.generateExplanation()
 
                     def recordStatus(attendance):
                         attendance.record(section, meeting.dtstart,
@@ -143,19 +149,16 @@ class SampleAttendancePlugin(object):
                             self.applyExplanation(record, hr_explanation)
                         return record
 
-
                     attendances = [ISectionAttendance(student)]
-
                     if homeroom:
                         attendances.append(IHomeroomAttendance(student))
 
-                    tardy = self.rng.random() < self.tardy_rate
                     for attendance in attendances:
                         ar = recordStatus(attendance)
                         if not present and not hr_absence:
                             if tardy:
                                 ar.makeTardy(meeting.dtstart + datetime.timedelta(minutes=15))
-                            self.applyExplanation(ar, self.generateExplanation())
+                            self.applyExplanation(ar, explanation)
 
             # The transaction commit keeps the memory usage low, but at a cost
             # of running time and disk space.
