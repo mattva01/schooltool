@@ -397,8 +397,10 @@ class StandaloneServer(object):
             # savepoint to make sure that the app object has
             # a _p_jar. This is needed to make things like
             # KeyReference work, which in turn is needed to
-            # make the catalog work
-            transaction.savepoint()
+            # make the catalog work. We make this savepoint
+            # optimistic because it will then work with any registered
+            # data managers that do not support this feature.
+            transaction.savepoint(optimistic=True)
             notify(ObjectAddedEvent(app))
             self.restoreManagerUser(app)
         elif not ISchoolToolApplication.providedBy(app_obj):
