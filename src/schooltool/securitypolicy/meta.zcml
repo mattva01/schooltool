@@ -1,0 +1,20 @@
+<configure xmlns="http://namespaces.zope.org/meta">
+
+  <directives namespace="http://schooltool.org/securitypolicy">
+
+    <directive
+      name="crowd"
+      schema=".metadirectives.ICrowdDirective"
+      handler=".metaconfigure.crowd"
+      />
+
+    <directive
+      name="allow"
+      schema=".metadirectives.IAllowDirective"
+      handler=".metaconfigure.allow"
+      />
+
+  </directives>
+
+</configure>
+

@@ -1,0 +1,161 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:security="http://schooltool.org/securitypolicy"
+           i18n_domain="schooltool">
+
+  <!-- Basically a copy of zope.app.securitypolicy/securitypolicy.zcml  -->
+  <securityPolicy
+    component=".policy.SchoolToolSecurityPolicy" />
+
+
+  <!-- Some basic crowds -->
+  <security:crowd
+      name="everybody"
+      factory=".crowds.EverybodyCrowd" />
+
+  <security:crowd
+      name="anonymous"
+      factory=".crowds.AnonymousCrowd" />
+
+  <security:crowd
+      name="authenticated"
+      factory=".crowds.AuthenticatedCrowd" />
+
+  <security:crowd
+      name="owner"
+      factory=".crowds.OwnerCrowd" />
+
+  <security:crowd
+      name="administration"
+      factory=".crowds.AdministrationCrowd" />
+
+  <security:crowd
+      name="manager"
+      factory=".crowds.ManagerCrowd" />
+
+  <security:crowd
+      name="administrators"
+      factory=".crowds.AdministratorsCrowd" />
+
+  <security:crowd
+      name="clerks"
+      factory=".crowds.ClerksCrowd" />
+
+
+
+  <security:allow
+      interface="schooltool.app.interfaces.ISchoolToolApplication"
+      crowds="everybody"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.app.interfaces.ISchoolToolApplication"
+      crowds="everybody"
+      permission="schooltool.viewCalendar" />
+
+  <security:allow
+      interface="schooltool.person.interfaces.IPersonContainer"
+      crowds="administration"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.person.interfaces.IPersonContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
+
+  <security:allow
+      interface="schooltool.person.interfaces.IPerson"
+      crowds="administration owner"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.person.interfaces.IPerson"
+      crowds="administration"
+      permission="schooltool.edit" />
+
+  <security:allow
+      interface="schooltool.group.interfaces.IGroupContainer"
+      crowds="administration"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.group.interfaces.IGroupContainer"
+      crowds="administration"
+      permission="schooltool.view" />
+
+  <security:allow
+      interface="schooltool.group.interfaces.IGroup"
+      crowds="administration"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.group.interfaces.IGroup"
+      crowds="administration"
+      permission="schooltool.edit" />
+
+  <security:allow
+      interface="schooltool.resource.interfaces.IResourceContainer"
+      crowds="administration"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.resource.interfaces.IResourceContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
+
+  <security:allow
+      interface="schooltool.resource.interfaces.IResource"
+      crowds="administration"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.resource.interfaces.IResource"
+      crowds="administration"
+      permission="schooltool.edit" />
+
+  <security:allow
+      interface="schooltool.course.interfaces.ICourseContainer"
+      crowds="administration"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.course.interfaces.ICourseContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
+
+  <security:allow
+      interface="schooltool.course.interfaces.ICourse"
+      crowds="administration authenticated"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.course.interfaces.ICourse"
+      crowds="administration authenticated"
+      permission="schooltool.edit" />
+
+  <security:allow
+      interface="schooltool.course.interfaces.ISectionContainer"
+      crowds="administration"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.course.interfaces.ISectionContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
+
+  <security:allow
+      interface="schooltool.course.interfaces.ISection"
+      crowds="administration"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.course.interfaces.ISection"
+      crowds="administration"
+      permission="schooltool.edit" />
+
+  <security:allow
+      interface="schooltool.group.interfaces.IGroup"
+      crowds="everybody"
+      permission="schooltool.view" /> <!-- XXX -->
+
+
+  <security:allow
+      crowds="manager administrators clerks"
+      permission="schooltool.viewAttendance" />
+  <security:allow
+      crowds="everybody"
+      permission="zope.View" />
+  <security:allow
+      crowds="everybody"
+      permission="zope.app.dublincore.view" />
+
+</configure>
