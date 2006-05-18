@@ -26,14 +26,13 @@ import datetime
 import random
 import itertools
 import email.Utils
+
+from pytz import utc
 from zope.interface import implements
-from pytz import timezone
+
 from schooltool.calendar.interfaces import ICalendar, ICalendarEvent
 from schooltool.calendar.mixins import CalendarEventMixin, CalendarMixin
 
-__metaclass__ = type
-
-utc = timezone('UTC')
 
 class SimpleCalendarEvent(CalendarEventMixin):
     """A simple implementation of ICalendarEvent.
@@ -67,6 +66,7 @@ class SimpleCalendarEvent(CalendarEventMixin):
         'FakeRecurrance'
 
     We're going to store all datetime objects in UTC
+
         >>> e2.dtstart.tzname()
         'UTC'
 

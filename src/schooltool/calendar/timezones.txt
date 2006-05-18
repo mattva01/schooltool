@@ -39,7 +39,7 @@ Converting timezones
 --------------------
 
 There are two kinds of timezone conversion: you might have a naïve
-timezone and want to apply a certain timezone for it, of you might
+datetime and want to apply a certain timezone for it, of you might
 want to express a timezone-aware datetime in another timezone.
 
 For the latter, use ``astimezone``:
@@ -108,9 +108,9 @@ the user's preferred timezone differ from that.
 If you need a date for today to be displayed for the user do this::
 
     >>> from datetime import datetime
-    >>> from pytz import timezone
+    >>> from pytz import utc, timezone
     >>> def today(self, tz):
-    ...     current_time = timezone('UTC').localize(datetime.utcnow())
+    ...     current_time = utc.localize(datetime.utcnow())
     ...     return current_time.astimezone(tz).date()
 
 Here's an example of how the correct date usage can be tested.  These
@@ -120,7 +120,7 @@ Line, so the dates in these timezones are always different::
     >>> from schooltool.app.browser.cal import CalendarViewBase
     >>> view = CalendarViewBase(None, TestRequest())
 
-    >>> current_time = timezone('UTC').localize(datetime.utcnow())
+    >>> current_time = utc.localize(datetime.utcnow())
 
     >>> tz = timezone('Etc/GMT+12')
     >>> today_date = current_time.astimezone(tz).date()
@@ -136,8 +136,9 @@ Line, so the dates in these timezones are always different::
 
 If you want to store a date of an event - store::
 
-    >>> timezone('UTC').localize(datetime.datetime.utcnow())
+    >>> utc.localize(datetime.datetime.utcnow())
 
 and display only the date part to the user, using::
 
     >>> dt.astimezone(user_tz).date()
+

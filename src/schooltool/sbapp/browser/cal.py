@@ -23,7 +23,7 @@ $Id$
 """
 
 from datetime import datetime, time, timedelta
-from pytz import timezone
+from pytz import utc
 
 from zope.publisher.browser import BrowserView
 from zope.security.proxy import removeSecurityProxy
@@ -32,8 +32,6 @@ from zope.security.checker import canAccess
 from schooltool.app.browser import ViewPreferences
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.person.interfaces import IPerson
-
-utc = timezone('UTC')
 
 
 class DailyCalendarRowsView(BrowserView):

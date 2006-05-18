@@ -69,13 +69,13 @@ There is some trickery to make empty calendars work:
 $Id$
 """
 
-import pytz
 import datetime
 import calendar
 import re
 from cStringIO import StringIO
 from sets import Set
 
+import pytz
 from schooltool.calendar.simple import SimpleCalendarEvent
 from schooltool.calendar.vcal_dict import timezone_map
 
@@ -99,6 +99,8 @@ def convert_event_to_vfb(event):
 
     """
     # XXX: not handling recurrence yet
+    # XXX: shouldn't assume event.dtstart is in UTC
+    assert event.dtstart.tzname() == 'UTC'
     return ["FREEBUSY:%s/%s00Z" % (ical_datetime(event.dtstart),
                                ical_datetime(event.dtstart + event.duration))]
 
@@ -179,6 +181,8 @@ def convert_event_to_ical(event):
     if event.allday:
         dtstart = 'DTSTART;VALUE=DATE:%s' % ical_date(event.dtstart)
     else:
+        # XXX: shouldn't assume event.dtstart is in UTC
+        assert event.dtstart.tzname() == 'UTC'
         dtstart = 'DTSTART:%sZ' % ical_datetime(event.dtstart)
     result += [dtstart,
                "DURATION:%s" % ical_duration(event.duration),

@@ -4483,7 +4483,7 @@ def doctest_AtomCalendarView():
     create ISO8601 date format for Atom spec
     TODO: this should probably go in schooltool.calendar.utils
 
-        >>> dt = datetime(2005, 03, 29, 15, 33, 22)
+        >>> dt = datetime(2005, 03, 29, 15, 33, 22, tzinfo=utc)
         >>> view.w3cdtf_datetime(dt)
         '2005-03-29T15:33:22Z'
 

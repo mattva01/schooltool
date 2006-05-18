@@ -23,11 +23,10 @@ $Id$
 """
 
 import datetime
-from pytz import timezone
+from pytz import utc
 from zope.interface import implements
 from schooltool.calendar.interfaces import IExpandedCalendarEvent
 
-utc = timezone('UTC')
 
 class CalendarMixin(object):
     """Mixin for implementing ICalendar methods.
@@ -416,11 +415,10 @@ class ExpandedCalendarEvent(CalendarEventMixin):
     implements(IExpandedCalendarEvent)
 
     def __init__(self, event, dtstart):
-        self.__dict__["original"] = event
-        self.__dict__["dtstart"] = dtstart
-        if self.dtstart.tzname() not in (None, 'UTC'):
+        if dtstart.tzname() not in (None, 'UTC'):
             raise ValueError, 'Can not store non UTC time info'
-        self.dtstart.replace(tzinfo=utc)
+        self.__dict__["original"] = event
+        self.__dict__["dtstart"] = dtstart.replace(tzinfo=utc)
 
     def __getattr__(self, name):
         return getattr(self.original, name)
