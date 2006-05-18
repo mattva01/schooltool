@@ -16,6 +16,7 @@ from schooltool.person.browser.person import PersonAddView as PersonAddViewBase
 from schooltool.person.interfaces import IReadPerson
 from schooltool.demographics.person import Person
 from schooltool.demographics import interfaces
+from schooltool.demographics.browser.widget import FancyDateWidget
 from schooltool import SchoolToolMessage as _
 
 class PageDisplayForm(form.PageDisplayForm):
@@ -115,7 +116,8 @@ class DemographicsEdit(PersonEditForm):
                  mapping={'fullname': self.fullname()})
     
     form_fields = form.Fields(interfaces.IDemographics)
-
+    form_fields["birth_date"].custom_widget = FancyDateWidget    
+    
 class DemographicsDisplay(PageDisplayForm):
     form_fields = form.Fields(interfaces.IDemographics)
 
@@ -127,6 +129,7 @@ class SchoolDataEdit(PersonEditForm):
                  mapping={'fullname': self.fullname()})
     
     form_fields = form.Fields(interfaces.ISchoolData)
+    form_fields["enrollment_date"].custom_widget = FancyDateWidget
     
 class SchoolDataDisplay(PageDisplayForm):
     form_fields = form.Fields(interfaces.ISchoolData)
