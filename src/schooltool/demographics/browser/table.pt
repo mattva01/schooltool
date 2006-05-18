@@ -2,20 +2,10 @@
 <body>
 <metal:nothing metal:fill-slot="content-header" />
 <metal:block metal:fill-slot="body" tal:define="batch view/batch">
+  
+  <metal:block use-macro="view/@@table_macros/table" />
 
-  <tal:if tal:condition="batch" tal:define="extra_url view/extraUrl">
-    <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
-    <div class="count">
-      <span i18n:translate="">Showing</span>
-      <span tal:content="python:len(batch)"/>
-      <span i18n:translate="">of</span>
-      <span tal:content="python:len(batch.list)"/>
-      <span i18n:translate="">items</span>
-    </div>
-    <tal:block replace="structure view/table" />
-  </tal:if>
-
-  <p tal:condition="not:batch" i18n:translate="">There are none.</p>
+  <p tal:condition="not:batch" i18n:translate="">There are no persons.</p>
 
 </metal:block>
 </body>

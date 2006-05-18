@@ -3,6 +3,9 @@ from zope.publisher.browser import BrowserPage
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.app import zapi
 from zope.formlib import form
+from zope.security.checker import canAccess
+from zope.security.proxy import removeSecurityProxy
+from zope.app.dependable.interfaces import IDependable
 from zc.table.interfaces import IColumn, ISortableColumn
 from zc.table import table, column
 from zc.table.column import GetterColumn
@@ -24,7 +27,7 @@ class TablePage(BrowserPage):
     """
     
     __call__ = ViewPageTemplateFile('table.pt')
-
+    
     def __init__(self, context, request):
         super(TablePage, self).__init__(context, request)
         self.batch_start = int(request.form.get('batch_start', 0))
@@ -88,6 +91,7 @@ class PersonTable(TablePage):
         directlyProvides(modified, ISortableColumn)
         
         return [
+            DeleteCheckBoxColumn(name='delete', title=u''),
             username,
             full_name,
             modified,
@@ -97,6 +101,10 @@ class PersonTable(TablePage):
 
     def values(self):
         return self.context.values()
+
+    @property
+    def canModify(self):
+        return canAccess(self.context, '__delitem__')
     
 class SearchTable(form.FormBase, PersonTable):
     form_fields = form.Fields(interfaces.ISearch, render_context=False)
@@ -142,6 +150,26 @@ class DisplayColumn(column.Column):
     def renderCell(self, item, formatter):
         return '<a href="%s">Display</a>' % (
             zapi.absoluteURL(item, formatter.request) + '/nameinfo')
+
+class DeleteCheckBoxColumn(column.Column):
+    def renderCell(self, item, formatter):
+        if self.hasDependents(item):
+            return (
+                '<input type="checkbox" name="delete.%s" disabled="disabled" />'
+                % item.username)
+        else:
+            return '<input type="checkbox" name="delete.%s" />' % item.username
+
+    def hasDependents(self, item):
+        # We cannot adapt security-proxied objects to IDependable.  Unwrapping
+        # is safe since we do not modify anything, and the information whether
+        # an object can be deleted or not is not classified.
+        unwrapped_context = removeSecurityProxy(item)
+        dependable = IDependable(unwrapped_context, None)
+        if dependable is None:
+            return False
+        else:
+            return bool(dependable.dependents())
 
 class ModifiedColumn(column.SortingColumn):
     _renderDatetime = None

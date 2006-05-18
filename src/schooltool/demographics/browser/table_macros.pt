@@ -1,0 +1,20 @@
+<metal:block define-macro="table" i18n:domain="schooltool">
+  <tal:if tal:condition="batch" tal:define="extra_url view/extraUrl">
+    <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+    <div class="count">
+      <span i18n:translate="">Showing</span>
+      <span tal:content="python:len(batch)"/>
+      <span i18n:translate="">of</span>
+      <span tal:content="python:len(batch.list)"/>
+      <span i18n:translate="">items</span>
+    </div>
+
+    <form tal:condition="view/canModify"
+          method="post"
+          tal:attributes="action string:${context/@@absolute_url}/delete.html">  
+    <tal:block replace="structure view/table" />
+    <input type="submit" class="button-cancel" value="Delete"
+      i18n:attributes="value delete-button;" />
+    </form>
+  </tal:if>
+</metal:block>

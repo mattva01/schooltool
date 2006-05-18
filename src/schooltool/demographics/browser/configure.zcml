@@ -150,6 +150,13 @@
      />
 
   <page
+    name="table_macros"
+    for="*"
+    permission="zope.View"
+    template="table_macros.pt"
+    />
+
+  <page
      for="schooltool.person.interfaces.IPersonContainer"
      name="search.html"
      class=".table.SearchTable"
