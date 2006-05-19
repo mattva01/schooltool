@@ -87,6 +87,18 @@ class PersonTable(TablePage):
             getter=lambda i, f: i.title,
             subsort=True)
         directlyProvides(full_name, ISortableColumn)
+        birth_date = DateColumn(
+            name='birth_date',
+            title=u'Birth',
+            getter=lambda i, f: i.demographics.birth_date,
+            subsort=True)
+        directlyProvides(birth_date, ISortableColumn)
+        enrollment_date = DateColumn(
+            name='enrollment_date',
+            title=u'Enrollment',
+            getter=lambda i, f: i.schooldata.enrollment_date,
+            subsort=True)
+        directlyProvides(enrollment_date, ISortableColumn)
         modified = ModifiedColumn(
             name='modified',
             title=u'Modified',
@@ -97,6 +109,8 @@ class PersonTable(TablePage):
             DeleteCheckBoxColumn(name='delete', title=u''),
             username,
             full_name,
+            birth_date,
+            enrollment_date,
             modified,
             EditColumn(name='edit', title=u'Edit'),
             DisplayColumn(name='display', title=u'Display')
@@ -186,3 +200,12 @@ class ModifiedColumn(column.SortingColumn):
             self._renderDatetime = ViewPreferences(
                 formatter.request).renderDatetime
         return self._renderDatetime(item.modified)
+
+class DateColumn(column.GetterColumn):
+    """ Column for rendering dates when None values can be around. """
+
+    def getSortKey(self, item, formatter):
+        if self.getter(item, formatter) is None:
+            return date.min
+        else:
+            return self.getter(item, formatter)
