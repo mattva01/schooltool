@@ -5,28 +5,7 @@
 
   <metal:block use-macro="view/@@menu_macros/tab_menu" />
 
-  <form action="." method="post"
-        tal:attributes="action request/URL"
-        class="standalone" enctype="multipart/form-data">
-    
-    <h3 tal:content="view/title">
-    </h3>
-
-    <div class="info" tal:condition="view/status" tal:content="view/status" />
-
-    <fieldset>
-      <legend tal:define="legend view/legend" 
-              tal:condition="legend" tal:content="legend">
-      </legend>
-
-      <div metal:use-macro="context/@@form_macros/widget_rows" />
-    </fieldset>
-
-    <div class="controls">
-      <input type="submit" id="form.actions.apply" name="form.actions.apply" value="Apply" class="button-ok" />
-      <input type="submit" id="form.actions.cancel" name="form.actions.cancel" value="Cancel" class="button-cancel" />
-    </div>
-  </form>
+  <metal:block use-macro="view/@@formlib_macros/edit" />
 
 </metal:block>
 </body>

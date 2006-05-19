@@ -79,6 +79,14 @@
       layer="schooltool.skin.ISchoolToolLayer"
       />
 
+  <page
+      name="formlib_macros"
+      for="*"
+      permission="zope.View"
+      template="templates/formlib_macros.pt"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+
   <icon
       name="zmi_icon"
       for="schooltool.app.interfaces.ISchoolToolApplication"
