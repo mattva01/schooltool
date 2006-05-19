@@ -35,10 +35,13 @@ class TablePage(BrowserPage):
         self._cached_values = None
         
     def table(self):
-        formatter = table.StandaloneSortFormatter(
+        formatter = table.StandaloneFullFormatter(
             self.context, self.request, self.cached_values(),
             columns=self.columns(),
             batch_start=self.batch_start, batch_size=self.batch_size)
+        # set CSS class for the zc.table generated tables, to differentiate it
+        # from other tables.
+        formatter.cssClasses['table'] = 'data'
         return formatter()
 
     def batch(self):

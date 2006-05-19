@@ -233,3 +233,17 @@ table.container td {
 table.container th {
     text-align: left;
 }
+
+/* Styles for the zc tables */
+
+table.data {
+    border-collapse: collapse;
+}
+
+tr.odd {
+    background-color: transparent;
+}
+
+tr.even {
+    background-color: #EAE8E3;
+}
