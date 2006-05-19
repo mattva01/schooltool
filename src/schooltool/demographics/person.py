@@ -35,7 +35,15 @@ class NameInfo(Persistent):
     implements(interfaces.INameInfo, ILocation)
 
     def __init__(self):
-        initializeSchemaAttributes(interfaces.INameInfo, self)
+        initializeSchemaAttributes(interfaces.INameInfo, self, ['full_name'])
+
+    def _get_full_name(self):
+        return self.__parent__.title
+
+    def _set_full_name(self, s):
+        self.__parent__.title = s
+
+    full_name = property(_get_full_name, _set_full_name)
 
 class Demographics(Persistent):
     implements(interfaces.IDemographics, ILocation)
@@ -55,8 +63,11 @@ class ContactInfo(Persistent):
     def __init__(self):
         initializeSchemaAttributes(interfaces.IContactInfo, self)
         
-def initializeSchemaAttributes(iface, obj):
+def initializeSchemaAttributes(iface, obj, suppress=None):
+    suppress = suppress or []
     for field in schema.getFields(iface).values():
+        if field.__name__ in suppress:
+            continue
         field.set(obj, field.default)
 
 def personModifiedSubscriber(person, event):
