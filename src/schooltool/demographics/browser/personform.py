@@ -11,6 +11,7 @@ from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.app.form.browser.interfaces import ITerms
 from zope.app.publisher.browser.menu import getMenu, BrowserMenu
 
+from schooltool.skin.form import AttributeEditForm
 from schooltool.traverser.traverser import SingleAttributeTraverserPlugin
 from schooltool.person.browser.person import PersonAddView as PersonAddViewBase
 from schooltool.person.interfaces import IReadPerson
@@ -24,53 +25,6 @@ class PersonDisplayForm(form.PageDisplayForm):
 
     def getMenu(self):
         return getMenu('person_display_menu', self.context, self.request)
-
-class AttributeEditForm(form.PageEditForm):
-    template = ViewPageTemplateFile('edit_form.pt')
-
-    def title(self):
-        # must be subclassed
-        raise NotImplementedError
-
-    def legend(self):
-        # optional
-        return None
-
-    def getMenu(self):
-        # optional
-        return None
-    
-    @form.action(_("Apply"), condition=form.haveInputWidgets)
-    def handle_edit_action(self, action, data):
-        if not form.applyChanges(self.context, self.form_fields, data,
-                                 self.adapters):
-            self.status = _('No changes')
-            return
-        
-        # notify parent that we were modified
-        event.notify(ObjectModifiedEvent(self.context.__parent__))
-        formatter = self.request.locale.dates.getFormatter(
-            'dateTime', 'medium')
-        
-        try:
-            time_zone = idatetime.ITZInfo(self.request)
-        except TypeError:
-            time_zone = pytz.UTC
-
-        self.status = _(
-            "Updated on ${date_time}",
-            mapping={
-              'date_time':
-              formatter.format(datetime.datetime.now(time_zone))
-              }
-            )
-        
-    @form.action(_("Cancel"), condition=form.haveInputWidgets)
-    def handle_cancel_action(self, action, data):
-        # redirect to parent
-        url = zapi.absoluteURL(self.context.__parent__, self.request)
-        self.request.response.redirect(url)
-        return ''
 
 class AttributeMenu(BrowserMenu):
     def getMenuItems(self, object, request):

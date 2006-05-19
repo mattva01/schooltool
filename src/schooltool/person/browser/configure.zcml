@@ -103,6 +103,15 @@
       />
 
   <page
+     name="password_edit.html"
+     for="..interfaces.IPerson"
+     class=".person.PersonPasswordEditView"
+     permission="zope.View"
+     menu="schooltool_actions"
+     title="Edit Password"
+     />
+
+  <page
       name="photo"
       for="..interfaces.IPerson"
       class=".person.PersonPhotoView"

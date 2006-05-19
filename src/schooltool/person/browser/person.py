@@ -33,15 +33,17 @@ from zope.app.form.interfaces import WidgetsError
 from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.publisher.browser import BrowserView
 from zope.viewlet.interfaces import IViewletManager
+from zope.formlib import form
 
 from schooltool import SchoolToolMessage as _
+from schooltool.skin.form import BasicForm
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.browser.app import ContainerView, ContainerDeleteView
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonPreferences
 from schooltool.person.interfaces import IPersonContainer, IPersonContained
 from schooltool.person.person import Person
-
+from schooltool.widget.password import PasswordConfirmationWidget
 
 class PersonContainerView(ContainerView):
     """A Person Container view."""
@@ -275,6 +277,36 @@ class PersonEditView(BrowserView):
         if 'CANCEL' in self.request:
             url = zapi.absoluteURL(self.context, self.request)
             self.request.response.redirect(url)
+
+class IPasswordEditForm(Interface):
+    """Schema for a person's edit form."""
+
+    password = Password(
+        title=_("Password"),
+        required=False)
+    
+class PersonPasswordEditView(BasicForm):
+    form_fields = form.Fields(IPasswordEditForm, render_context=False)
+    form_fields['password'].custom_widget = PasswordConfirmationWidget
+    
+    def title(self):
+        return _("Edit password")
+
+    @form.action(_("Apply"))
+    def handle_edit_action(self, action, data):
+        if not data['password']:
+            self.status = _("No new password was supplied so "
+                            "original password is unchanged")
+            return
+        self.context.setPassword(data['password'])
+        self.status = _('Changed password')
+
+    @form.action(_("Cancel"))
+    def handle_cancel_action(self, action, data):
+        # redirect to parent
+        url = zapi.absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
+        return ''
 
 class IPersonInfoManager(IViewletManager):
     """Provides a viewlet hook for the information on a Person's page."""
