@@ -5,6 +5,8 @@
 <body>
 <metal:block metal:fill-slot="body">
 
+  <metal:block use-macro="view/@@menu_macros/tab_menu" />
+
   <table class="listing">
     <thead>
       <tr>
@@ -14,8 +16,7 @@
     </thead>
     <tbody>
       <tal:block repeat="widget view/widgets">
-        <tr tal:define="odd repeat/widget/odd"
-          tal:attributes="class python: odd and 'odd' or 'even'">
+        <tr>
           <td class="fieldname">
             <tal:block content="widget/label"/>
           </td>

@@ -19,8 +19,11 @@ from schooltool.demographics import interfaces
 from schooltool.demographics.browser.widget import FancyDateWidget
 from schooltool import SchoolToolMessage as _
 
-class PageDisplayForm(form.PageDisplayForm):
+class PersonDisplayForm(form.PageDisplayForm):
     template = ViewPageTemplateFile('display_form.pt')
+
+    def getMenu(self):
+        return getMenu('person_display_menu', self.context, self.request)
 
 class AttributeEditForm(form.PageEditForm):
     template = ViewPageTemplateFile('edit_form.pt')
@@ -105,7 +108,7 @@ class NameInfoEdit(PersonEditForm):
     
     form_fields = form.Fields(interfaces.INameInfo)
 
-class NameInfoDisplay(PageDisplayForm):
+class NameInfoDisplay(PersonDisplayForm):
     form_fields = form.Fields(interfaces.INameInfo)
 
 demographics_traverser = SingleAttributeTraverserPlugin('demographics')
@@ -118,7 +121,7 @@ class DemographicsEdit(PersonEditForm):
     form_fields = form.Fields(interfaces.IDemographics)
     form_fields["birth_date"].custom_widget = FancyDateWidget    
     
-class DemographicsDisplay(PageDisplayForm):
+class DemographicsDisplay(PersonDisplayForm):
     form_fields = form.Fields(interfaces.IDemographics)
 
 schooldata_traverser = SingleAttributeTraverserPlugin('schooldata')
@@ -131,7 +134,7 @@ class SchoolDataEdit(PersonEditForm):
     form_fields = form.Fields(interfaces.ISchoolData)
     form_fields["enrollment_date"].custom_widget = FancyDateWidget
     
-class SchoolDataDisplay(PageDisplayForm):
+class SchoolDataDisplay(PersonDisplayForm):
     form_fields = form.Fields(interfaces.ISchoolData)
 
 parent1_traverser = SingleAttributeTraverserPlugin('parent1')
@@ -151,7 +154,7 @@ class ContactInfoEdit(PersonEditForm):
     
     form_fields = form.Fields(interfaces.IContactInfo)
 
-class ContactInfoDisplay(PageDisplayForm):
+class ContactInfoDisplay(PersonDisplayForm):
     form_fields = form.Fields(interfaces.IContactInfo)
     
 class PersonAddView(PersonAddViewBase):

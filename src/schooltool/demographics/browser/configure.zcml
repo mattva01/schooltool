@@ -157,6 +157,13 @@
     />
 
   <page
+    name="menu_macros"
+    for="*"
+    permission="zope.View"
+    template="menu_macros.pt"
+    />
+
+  <page
      for="schooltool.person.interfaces.IPersonContainer"
      name="search.html"
      class=".table.SearchTable"
@@ -221,6 +228,67 @@
       title="emergency3"
       action="/emergency3/@@edit.html"
       permission="schooltool.edit"
+     />
+
+  </menuItems>
+
+  <menu
+    id="person_display_menu"
+    title="Schooltool Person Display Menu"
+    class=".personform.AttributeMenu"
+  />
+
+  <menuItems
+    for="*"
+    menu="person_display_menu"
+    >
+
+    <menuItem
+      title="name info"
+      action="/nameinfo"
+      permission="schooltool.view"
+      />
+
+    <menuItem
+      title="demographics"
+      action="/demographics"
+      permission="schooltool.view"
+     />
+
+    <menuItem
+      title="schooldata" 
+      action="/schooldata"
+      permission="schooltool.view"
+     />
+
+    <menuItem
+      title="parent1"
+      action="/parent1"
+      permission="schooltool.view"
+     />
+
+    <menuItem
+      title="parent2"
+      action="/parent2"
+      permission="schooltool.view"
+     />
+
+    <menuItem
+      title="emergency1"
+      action="/emergency1"
+      permission="schooltool.view"
+     />
+
+    <menuItem
+      title="emergency2"
+      action="/emergency2"
+      permission="schooltool.view"
+     />
+
+    <menuItem
+      title="emergency3"
+      action="/emergency3"
+      permission="schooltool.view"
      />
 
   </menuItems>
