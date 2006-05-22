@@ -279,50 +279,27 @@ But should be capable of viewing relationships:
                   xlink:href="http://localhost/persons/pete"/>
     <BLANKLINE>
 
-We can give him needed permissions though:
+We can give him needed permissions though, by adding him to a manager group:
 
     >>> print rest("""
-    ... POST /persons/acl HTTP/1.1
+    ... POST /persons/john/relationships HTTP/1.1
     ... Authorization: Basic manager:schooltool
+    ... Content-Type: text/xml
     ...
-    ... <acl xmlns="http://schooltool.org/ns/model/0.1">
-    ...   <principal id="sb.group.a-group">
-    ...     <permission id="schooltool.view" />
-    ...     <permission id="schooltool.edit" />
-    ...     <permission id="schooltool.create" />
-    ...     <permission id="schooltool.viewCalendar" setting="on" />
-    ...     <permission id="schooltool.addEvent" />
-    ...     <permission id="schooltool.modifyEvent" />
-    ...     <permission id="schooltool.controlAccess" />
-    ...     <permission id="schooltool.manageMembership" setting="on" />
-    ...   </principal>
-    ...   <principal id="sb.person.john">
-    ...     <permission id="schooltool.view" />
-    ...     <permission id="schooltool.edit" />
-    ...     <permission id="schooltool.create" />
-    ...     <permission id="schooltool.viewCalendar" />
-    ...     <permission id="schooltool.addEvent" />
-    ...     <permission id="schooltool.modifyEvent" />
-    ...     <permission id="schooltool.controlAccess" setting="on" />
-    ...     <permission id="schooltool.manageMembership" setting="on" />
-    ...   </principal>
-    ...   <principal id="sb.person.pete">
-    ...     <permission id="schooltool.view" />
-    ...     <permission id="schooltool.edit" />
-    ...     <permission id="schooltool.create" />
-    ...     <permission id="schooltool.viewCalendar" />
-    ...     <permission id="schooltool.addEvent" />
-    ...     <permission id="schooltool.modifyEvent" />
-    ...     <permission id="schooltool.controlAccess" setting="on" />
-    ...     <permission id="schooltool.manageMembership" setting="on" />
-    ...   </principal>
-    ... </acl>
+    ... <relationship xmlns="http://schooltool.org/ns/model/0.1"
+    ...               xmlns:xlink="http://www.w3.org/1999/xlink"
+    ...               xlink:type="simple"
+    ...               xlink:role="http://schooltool.org/ns/membership/group"
+    ...               xlink:arcrole="http://schooltool.org/ns/membership"
+    ...               xlink:href="http://localhost/groups/manager"/>
     ... """)
-    HTTP/1.1 200 Ok
-    Content-Length: 19
-    Set-Cookie: ...
+    HTTP/1.1 201 Created
+    Content-Length: ...
+    Content-Type: text/plain; charset=UTF-8
+    Location: http://localhost/persons/john/relationships/2
+    ...
     <BLANKLINE>
-    Permissions updated
+    Relationship created: http://localhost/persons/john/relationships/2
 
 John should now be capable of adding himself back into the group:
 
@@ -340,10 +317,10 @@ John should now be capable of adding himself back into the group:
     ... """)
     HTTP/1.1 201 Created
     ...
-    Location: http://localhost/persons/john/relationships/2
+    Location: http://localhost/persons/john/relationships/3
     ...
     <BLANKLINE>
-    Relationship created: http://localhost/persons/john/relationships/2
+    Relationship created: http://localhost/persons/john/relationships/3
 
 He can delete the other relationship now too:
 

@@ -70,10 +70,3 @@ def addGroupContainerToApplication(event):
     for id, title, description in default_groups:
         group = app['groups'][id] = Group(title, description)
         IDependable(group).addDependent('')
-    roles = IPrincipalRoleManager(app)
-    roles.assignRoleToPrincipal('schooltool.manager', 'sb.group.manager')
-    roles.assignRoleToPrincipal('schooltool.administrator',
-                                'sb.group.administrators')
-    roles.assignRoleToPrincipal('schooltool.teacher', 'sb.group.teachers')
-    roles.assignRoleToPrincipal('schooltool.clerk', 'sb.group.clerks')
-

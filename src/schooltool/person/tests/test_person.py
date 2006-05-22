@@ -33,45 +33,6 @@ from schooltool.testing.setup import setUpLocalGrants
 from schooltool.testing import setup as sbsetup
 
 
-def doctest_personPermissionsSubscriber():
-    r"""
-    Set up:
-
-        >>> root = setup.placefulSetUp(True)
-
-        >>> from schooltool.app.app import SchoolToolApplication
-        >>> from schooltool.group.group import Group, GroupContainer
-        >>> from schooltool.person.person import Person, PersonContainer
-        >>> setUpLocalGrants()
-        >>> root['sb'] = SchoolToolApplication()
-        >>> root['sb']['persons'] = PersonContainer()
-        >>> root['sb']['groups'] = GroupContainer()
-
-        >>> group = Group('slackers')
-        >>> root['sb']['groups']['slackers'] = group
-
-    Call our subscriber:
-
-        >>> from schooltool.app.security import groupPermissionsSubscriber
-        >>> groupPermissionsSubscriber(group, ObjectAddedEvent(group))
-
-    Check that the group has a view permission on self:
-
-        >>> from zope.app.securitypolicy.interfaces import \
-        ...     IPrincipalPermissionManager
-        >>> map = IPrincipalPermissionManager(group)
-        >>> perms = map.getPermissionsForPrincipal('sb.group.slackers')
-        >>> perms.sort()
-        >>> pprint(perms)
-        [('schooltool.view', PermissionSetting: Allow),
-         ('schooltool.viewCalendar', PermissionSetting: Allow)]
-
-    Clean up:
-
-        >>> setup.placefulTearDown()
-    """
-
-
 def doctest_PersonContainer():
     """Tests for PersonContainer
 

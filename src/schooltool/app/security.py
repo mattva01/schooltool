@@ -35,7 +35,6 @@ from zope.location.interfaces import ILocation
 from zope.app.security.interfaces import IAuthentication, ILoginPassword
 from zope.app.security.interfaces import IAuthenticatedGroup, IEveryoneGroup
 from zope.app.session.interfaces import ISession
-from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.interface import implements
 from zope.security.interfaces import IGroupAwarePrincipal
 from zope.security.checker import ProxyFactory
@@ -205,41 +204,3 @@ def authSetUpSubscriber(app, event):
     This is a handler for IObjectAddedEvent.
     """
     setUpLocalAuth(app)
-
-    # Grant schooltool.view on the application and
-    # schooltool.viewCalendar on the application calendar to
-    # all authenticated users
-    allusers = zapi.queryUtility(IAuthenticatedGroup)
-    if allusers is not None:
-        perms = IPrincipalPermissionManager(app)
-        perms.grantPermissionToPrincipal('schooltool.view',
-                                         allusers.id)
-
-
-def groupPermissionsSubscriber(group, event):
-    """Grant default permissions to all new groups"""
-    map = IPrincipalPermissionManager(group)
-    principalid = 'sb.group.' + group.__name__
-    map.grantPermissionToPrincipal('schooltool.view', principalid)
-    map.grantPermissionToPrincipal('schooltool.viewCalendar',
-                                   principalid)
-
-
-def applicationCalendarPermissionsSubscriber(app, event):
-    """Set the default permissions for schooltool.
-
-    By default view and viewCalendar are granted for unauthenticated users to
-    the top level application so that everyone can see the front page and the
-    the sitewide calendar without logging in.
-    """
-    calendar = ISchoolToolCalendar(app)
-    app_calendar_perms = IPrincipalPermissionManager(calendar)
-    
-    unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
-    app_calendar_perms.grantPermissionToPrincipal('schooltool.viewCalendar',
-                                                  unauthenticated.id)
-    
-    authenticated = zapi.queryUtility(IAuthenticatedGroup)
-    cal_perms = IPrincipalPermissionManager(calendar)
-    app_calendar_perms.grantPermissionToPrincipal('schooltool.viewCalendar',
-                                                  authenticated.id)

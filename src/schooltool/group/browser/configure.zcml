@@ -55,7 +55,7 @@
       manager="schooltool.skin.INavigationManager"
       template="templates/navigationViewlet.pt"
       class="schooltool.skin.NavigationViewlet"
-      permission="zope.View"
+      permission="schooltool.viewAttendance"
       link="groups"
       title="Groups"
       order="20"

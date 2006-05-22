@@ -23,8 +23,6 @@ $Id$
 
 """
 
-from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
-
 from schooltool.course.interfaces import ICourse, ISection
 from schooltool.person.interfaces import IPerson
 from schooltool.group.interfaces import IGroup
@@ -66,28 +64,6 @@ def enforceInstructionConstraints(event):
                                   ' and one section.')
     if not ISection.providedBy(event[URISection]):
         raise InvalidRelationship('Sections must provide ISection.')
-
-
-def setInstructorPermissions(event):
-    """Assign section access to section instructors."""
-
-    if event.rel_type != URIInstruction:
-        return
-
-    if IRelationshipAddedEvent.providedBy(event):
-        map = IPrincipalPermissionManager(event[URISection])
-        principalid = 'sb.person.' + event[URIInstructor].__name__
-        map.grantPermissionToPrincipal('schooltool.view', principalid)
-        map.grantPermissionToPrincipal('schooltool.viewCalendar', principalid)
-        map.grantPermissionToPrincipal('schooltool.viewAttendance', principalid)
-        map.grantPermissionToPrincipal('schooltool.addEvent', principalid)
-    elif IRelationshipRemovedEvent.providedBy(event):
-        map = IPrincipalPermissionManager(event[URISection])
-        principalid = 'sb.person.' + event[URIInstructor].__name__
-        map.denyPermissionToPrincipal('schooltool.view', principalid)
-        map.denyPermissionToPrincipal('schooltool.viewCalendar', principalid)
-        map.denyPermissionToPrincipal('schooltool.viewAttendance', principalid)
-        map.denyPermissionToPrincipal('schooltool.addEvent', principalid)
 
 
 def updateInstructorCalendars(event):
@@ -157,20 +133,6 @@ CourseSections = RelationshipSchema(URICourseSections,
 # schooltool.app.membership).
 #
 
-def grantViewPermissionToMember(member, map):
-    """Allow a member to view the calendar of a section."""
-    memberid = 'sb.person.' + member.username
-    map.grantPermissionToPrincipal('schooltool.view', memberid)
-    map.grantPermissionToPrincipal('schooltool.viewCalendar',
-                                   memberid)
-
-def unsetViewPermissionToMember(member, map):
-    """Unset a member's permission to view the calendar of a section."""
-    memberid = 'sb.person.' + member.username
-    map.unsetPermissionForPrincipal('schooltool.view', memberid)
-    map.unsetPermissionForPrincipal('schooltool.viewCalendar',
-                                   memberid)
-
 def updateStudentCalendars(event):
     """Add section's calendar to students overlaid calendars."""
 
@@ -185,15 +147,11 @@ def updateStudentCalendars(event):
 
     member = event[URIMember]
 
-    section_map = IPrincipalPermissionManager(section)
-
     if IRelationshipAddedEvent.providedBy(event):
         if IPerson.providedBy(member) and \
                             section.calendar not in member.overlaid_calendars:
             overlay_info = member.overlaid_calendars.add(section.calendar)
             IShowTimetables(overlay_info).showTimetables = False
-
-            grantViewPermissionToMember(member, section_map)
 
         elif IGroup.providedBy(member):
             for person in member.members:
@@ -205,21 +163,14 @@ def updateStudentCalendars(event):
                     overlay_info = person.overlaid_calendars.add(section.calendar)
                     IShowTimetables(overlay_info).showTimetables = False
 
-                    grantViewPermissionToMember(person, section_map)
-
     elif IRelationshipRemovedEvent.providedBy(event):
         if IPerson.providedBy(member):
-            unsetViewPermissionToMember(member, section_map)
-
             if section.calendar in member.overlaid_calendars:
                 member.overlaid_calendars.remove(section.calendar)
 
         elif IGroup.providedBy(member):
             for person in member.members:
                 if IPerson.providedBy(person):
-
-                    unsetViewPermissionToMember(person, section_map)
-
                     if section.calendar in person.overlaid_calendars:
                         person.overlaid_calendars.remove(section.calendar)
 

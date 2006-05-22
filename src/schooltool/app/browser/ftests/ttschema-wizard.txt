@@ -693,6 +693,7 @@ The schema is now created:
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/xml; charset=UTF-8
+    ...
     <BLANKLINE>
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
       <title>Rotating 3</title>

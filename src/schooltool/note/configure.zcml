@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
-<configure 
+<configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:security="http://schooltool.org/securitypolicy"
     i18n_domain="schooltool">
 
   <adapter
@@ -81,5 +82,14 @@
       permission="zope.Public"
       name="POST"
       />
+
+  <security:crowd
+      name="note_viewers"
+      factory=".note.NoteCrowd" />
+
+  <security:allow
+      interface=".interfaces.INote"
+      permission="schooltool.view"
+      crowds="note_viewers" />
 
 </configure>

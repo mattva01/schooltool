@@ -51,14 +51,14 @@
   <permission id="schooltool.create"  title="Create new objects" />
   <permission id="schooltool.manageMembership"  title="Manage membership" />
 
-  <role id="schooltool.manager" title="Manager" />
-  <role id="schooltool.administrator" title="School administrator" />
-  <role id="schooltool.teacher" title="Teacher" />
-  <role id="schooltool.clerk" title="Clerk" />
+<!--   <role id="schooltool.manager" title="Manager" /> -->
+<!--   <role id="schooltool.administrator" title="School administrator" /> -->
+<!--   <role id="schooltool.teacher" title="Teacher" /> -->
+<!--   <role id="schooltool.clerk" title="Clerk" /> -->
 
-  <grant permission="schooltool.viewAttendance" role="schooltool.manager" />
-  <grant permission="schooltool.viewAttendance" role="schooltool.administrator" />
-  <grant permission="schooltool.viewAttendance" role="schooltool.clerk" />
+<!--   <grant permission="schooltool.viewAttendance" role="schooltool.manager" /> -->
+<!--   <grant permission="schooltool.viewAttendance" role="schooltool.administrator" /> -->
+<!--   <grant permission="schooltool.viewAttendance" role="schooltool.clerk" /> -->
 
 
   <!-- Utilities -->

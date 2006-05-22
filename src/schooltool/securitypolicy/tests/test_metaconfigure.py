@@ -27,17 +27,13 @@ from zope.testing import doctest
 from zope.interface import implements, Interface
 from zope.app.testing import setup
 from zope.component import getAdapter
+from schooltool.securitypolicy import metaconfigure as mc
 
 
 def doctest_handle_allow():
     """Tests for handle_allow.
 
         >>> from schooltool.securitypolicy import metaconfigure as mc
-
-        >>> oldRegisterCrowdAdapter = mc.registerCrowdAdapter
-        >>> oldCrowdMap = mc.crowdmap
-        >>> oldObjCrowds = mc.objcrowds
-        >>> oldPermCrowds = mc.permcrowds
 
         >>> mc.crowdmap = {'cr1': 'fac1', 'cr2': 'fac2', 'cr3': 'fac3'}
         >>> def registerCrowdAdapterStub(iface, permission):
@@ -68,13 +64,6 @@ def doctest_handle_allow():
         >>> mc.handle_allow(None, ['cr2'], 'my.permission')
         >>> mc.permcrowds
         {'my.permission': ['fac1', 'fac2']}
-
-    Clean up:
-
-        >>> mc.registerCrowdAdapter = oldRegisterCrowdAdapter
-        >>> mc.crowdmap = oldCrowdMap
-        >>> mc.objcrowds = oldObjCrowds
-        >>> mc.permcrowds = oldPermCrowds
 
     """
 
@@ -140,22 +129,32 @@ def test_registerCrowdAdapter():
         contains(r00t)
         True
 
-    Clean up:
-
-        >>> metaconfigure.objcrowds = oldObjCrowds
 
     """
 
+class Fixture(object):
 
-def setUp(test=None):
-    setup.placelessSetUp()
+    def setUp(self, test=None):
+        setup.placelessSetUp()
+        self.oldRegisterCrowdAdapter = mc.registerCrowdAdapter
+        self.oldCrowdMap = mc.crowdmap
+        self.oldObjCrowds = mc.objcrowds
+        self.oldPermCrowds = mc.permcrowds
 
-def tearDown(test=None):
-    setup.placelessTearDown()
+        mc.objcrowds = {}
+        mc.permcrowds = {}
+        mc.crowdmap = {}
 
+    def tearDown(self, test=None):
+        setup.placelessTearDown()
+        mc.registerCrowdAdapter = self.oldRegisterCrowdAdapter
+        mc.crowdmap = self.oldCrowdMap
+        mc.objcrowds = self.oldObjCrowds
+        mc.permcrowds = self.oldPermCrowds
 
 def test_suite():
+    f = Fixture()
     return unittest.TestSuite([
             doctest.DocTestSuite(optionflags=doctest.ELLIPSIS,
-                                 setUp=setUp, tearDown=tearDown)])
+                                 setUp=f.setUp, tearDown=f.tearDown)])
 

@@ -197,17 +197,6 @@
       />
 
   <page
-      for="zope.annotation.interfaces.IAnnotatable"
-      name="acl.html"
-      layer="schooltool.skin.ISchoolToolLayer"
-      class=".app.ACLView"
-      template="templates/acl.pt"
-      permission="schooltool.controlAccess"
-      title="Set Up Access"
-      menu="schooltool_actions"
-      />
-
-  <page
       name="delete.html"
       for="zope.app.container.interfaces.IContainer"
       class="schooltool.app.browser.app.ContainerDeleteView"
@@ -479,12 +468,6 @@
         title="Errors"
         parent="schooltool/browser"
         doc_path="ftests/errors.txt" />
-
-    <apidoc:bookchapter
-        id="acl"
-        title="ACL"
-        parent="schooltool/browser"
-        doc_path="ftests/acl.txt" />
 
     <apidoc:bookchapter
         id="cal"

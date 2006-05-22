@@ -116,16 +116,6 @@
       />
 
   <subscriber
-      for="schooltool.group.interfaces.IGroup zope.app.container.interfaces.IObjectAddedEvent"
-      handler=".security.groupPermissionsSubscriber"
-      />
-
-  <subscriber
-      for="schooltool.app.interfaces.ISchoolToolApplication zope.app.container.interfaces.IObjectAddedEvent"
-      handler=".security.applicationCalendarPermissionsSubscriber"
-      />
-
-  <subscriber
       for="schooltool.relationship.interfaces.IBeforeRelationshipEvent"
       handler=".membership.enforceMembershipConstraints"
       />
@@ -134,16 +124,6 @@
       for="schooltool.relationship.interfaces.IBeforeRelationshipEvent"
       handler=".relationships.enforceInstructionConstraints"
     />
-
-  <subscriber
-      for="schooltool.relationship.interfaces.IRelationshipAddedEvent"
-      handler=".relationships.setInstructorPermissions"
-      />
-
-  <subscriber
-      for="schooltool.relationship.interfaces.IRelationshipRemovedEvent"
-      handler=".relationships.setInstructorPermissions"
-      />
 
   <subscriber
       for="schooltool.relationship.interfaces.IRelationshipAddedEvent"

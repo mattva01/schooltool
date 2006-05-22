@@ -81,542 +81,531 @@ and set up a calendar for Frog:
     Set-Cookie: ...
     <BLANKLINE>
 
-Frog should not be capable of booking any resources yet:
-
-    >>> frog.open('http://localhost/persons/frog/calendar/2005-02-04')
-    >>> frog.getLink('Test event').click()
-    >>> frog.getLink('edit resources').click()
-    >>> print frog.contents
-    <BLANKLINE>
-    ...
-      <fieldset>
-        <legend>Available Resources</legend>
-        <table class="event_booking">
-        </table>
-      </fieldset>
-    ...
-
-But we can give him access to some resources:
-
-    >>> manager.open(
-    ...     'http://localhost/resources/mud/calendar/acl.html')
-    >>> ctrl = manager.getControl(name='sb.person.frog')
-    >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
-    >>> manager.getControl('Set Access', index=1).click()
-
-    >>> manager.open(
-    ...     'http://localhost/resources/fish/calendar/acl.html')
-    >>> ctrl = manager.getControl(name='sb.person.frog')
-    >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
-    >>> manager.getControl('Set Access', index=1).click()
-
-Frog should see the mud and the fish now:
-
-    >>> frog.reload()
-    >>> print frog.contents
-    <BLANKLINE>
-    ...
-      <fieldset>
-        <legend>Available Resources</legend>
-        <table class="event_booking">
-    ...
-             <input type="hidden" value="1"
-                    name="marker-fish" />
-    ...
-             <input type="hidden" value="1"
-                    name="marker-mud" />
-    ...
-        </table>
-      </fieldset>
-    ...
-
-Let's book one of them:
-
-    >>> frog.getControl('mud').selected = True
-    >>> frog.getControl('Book').click()
-
-We should see the resource as a booked resource:
-
-    >>> frog.getLink('Test event').click()
-    >>> frog.getLink('edit resources').click()
-    >>> print frog.contents
-    <BLANKLINE>
-    ...
-      <fieldset>
-        <legend>Available Resources</legend>
-        <table class="event_booking">
-    ...
-                <input type="checkbox" value="booked"
-                       name="fish" id="fish" />
-    ...
-                <input type="checkbox" value="booked"
-                       checked="checked" name="mud" id="mud" />
-    ...
-        </table>
-      </fieldset>
-    ...
-
-Let's unbook one of them and book another:
-
-    >>> frog.getControl('mud').selected = False
-    >>> frog.getControl('fish').selected = True
-    >>> frog.getControl('Book').click()
-
-Now another resource is booked:
-
-    >>> frog.getLink('Test event').click()
-    >>> frog.getLink('edit resources').click()
-    >>> print frog.contents
-    <BLANKLINE>
-    ...
-      <fieldset>
-        <legend>Available Resources</legend>
-        <table class="event_booking">
-    ...
-                <input type="checkbox" value="booked"
-                       checked="checked" name="fish" id="fish" />
-    ...
-                <input type="checkbox" value="booked"
-                       name="mud" id="mud" />
-    ...
-        </table>
-      </fieldset>
-    ...
-
-Frog should see the event in the resource calendar too:
-
-    >>> frog.open(
-    ...     'http://localhost/resources/fish/calendar/2005-02-04/')
-    >>> print frog.contents
-    <BLANKLINE>
-    ...
-    <a href="http://localhost/resources/fish/calendar/dummy-uid"
-       title="Test event">
-      Test event
-      <span class="start-end">
-        (<span>10:00</span> -
-        <span>11:00</span>)
-      </span>
-    </a>
-    ...
-    <div class="booked-resources">
-      <h6 class="booked-resource-header"
-               style="background: #7590ae">
-        <a style="color: #000;"
-           href="...dummy-uid/booking.html?date=2005-02-04">Booked by</a></h6>
-      <a href="http://localhost/persons/frog">Frog</a>
-    </div>
-    ...
-
-Now if we remove the permission to book the fish:
-
-    >>> manager.open(
-    ...     'http://localhost/resources/fish/calendar/acl.html')
-    >>> ctrl = manager.getControl(name='sb.person.frog')
-    >>> ctrl.value = ['schooltool.viewCalendar']
-    >>> manager.getControl('Set Access', index=1).click()
-
-The fish should stay in the bookable resources list:
-
-    >>> frog.open('http://localhost/persons/frog/calendar/2005-02-04')
-    >>> frog.getLink('Test event').click()
-    >>> frog.getLink('edit resources').click()
-    >>> print frog.contents
-    <BLANKLINE>
-    ...
-      <fieldset>
-        <legend>Available Resources</legend>
-        <table class="event_booking">
-    ...
-                <input type="checkbox" value="booked"
-                       checked="checked" name="fish" id="fish" />
-    ...
-                <input type="checkbox" value="booked"
-                       name="mud" id="mud" />
-    ...
-        </table>
-      </fieldset>
-    ...
-
-Unless unbooked:
-
-    >>> frog.getControl('fish').selected = False
-    >>> frog.getControl('Book').click()
-
-    >>> frog.getLink('Test event').click()
-    >>> frog.getLink('edit resources').click()
-    >>> print frog.contents
-    <BLANKLINE>
-    ...
-      <fieldset>
-        <legend>Available Resources</legend>
-        <table class="event_booking">
-    ...
-                <input type="checkbox" value="booked"
-                       name="mud" id="mud" />
-    ...
-        </table>
-      </fieldset>
-    ...
-
-
-When adding a new event we should get redirected to resource booking
-if Book Resources is checked:
-
-    >>> frog.getLink('My Calendar').click()
-    >>> frog.getLink('New Event').click()
-    >>> frog.getControl('Title').value = 'Sleeping'
-    >>> frog.getControl('Date').value = '2005-02-03'
-    >>> frog.getControl('Time').value = '01:00'
-    >>> frog.getControl('Duration').value = '500'
-    >>> frog.getControl('Recurring').selected = True
-    >>> frog.getControl(name='field.recurrence.used').value = '1'
-    >>> frog.getControl('Book Resources').selected = True
-    >>> frog.getControl('Add').click()
-
-    >>> 'Resource Booking for Sleeping' in frog.contents
-    True
-
-Editing view should have a link to its booking view:
-
-    >>> frog.open(
-    ...   'http://localhost/persons/frog/calendar/dummy-uid/edit.html')
-    >>> frog.getLink('Book resources')
-    <Link text='Book resources'
-          url='.../frog/calendar/dummy-uid/booking.html'>
-
-Let's book the mud again (Regression test for 266, deletion of events
-that book resources should remove events from resource calendars):
-
-    >>> frog.getLink('Book resources').click()
-    >>> frog.getControl('mud').selected = True
-    >>> frog.getControl('Book').click()
-
-We can see the event in mud's calendar:
-
-    >>> frog.open('http://localhost/resources/mud/calendar/2005-02-04')
-    >>> print frog.contents
-    <BLANKLINE>
-    ...
-    <a style="color: #000;"
-       href="http://.../booking.html?date=2005-02-04">Booked by</a></h6>
-    ...
-
-If we will delete the event from mud's calendar the original event
-should stay in place, yet the resource should become unbooked:
-
-    XXX: Have to call URL, since I could not find the link!!!
-    >>> manager.open('http://localhost/resources/mud/calendar/'
-    ...           'delete.html?event_id=dummy-uid&date=2005-02-04')
-    >>> 'Test event' in manager.contents
-    False
-
-Frog still can see the event:
-
-    >>> frog.open('http://localhost/persons/frog/calendar/2005-02-04')
-    >>> 'Test event' in frog.contents
-    True
-
-Yet mud is not booked anymore:
-
-    >>> frog.getLink('Test event').click()
-    >>> frog.getLink('edit resources').click()
-    >>> print frog.contents
-    <BLANKLINE>
-    ...
-    <td class="booked">
-      <input type="checkbox" value="booked" name="mud"
-             id="mud" />
-    </td>
-    ...
-
-Let's book it again:
-
-    >>> frog.getControl('mud').selected = True
-    >>> frog.getControl('Book').click()
-
-It is in mud's calendar again:
-
-    >>> frog.open('http://localhost/resources/mud/calendar/2005-02-04')
-    >>> print frog.contents
-    <BLANKLINE>
-    ...
-    <a style="color: #000;"
-       href="http://.../booking.html?date=2005-02-04">Booked by</a></h6>
-    ...
-
-And delete the event from frog's calendar:
-
-    >>> manager.open(
-    ...     'http://localhost/persons/frog/calendar/2005-02-04')
-    >>> manager.getLink(url='delete.html?event_id=dummy-uid').click()
-
-The event should be gone from the frog's calendar:
-
-    >>> frog.open('http://localhost/persons/frog/calendar/2005-02-04')
-    >>> "dummy-uid" in frog.contents
-    False
-
-And it should not be seen in mud's calendar too:
-
-    >>> frog.open('http://localhost/resources/mud/calendar/2005-02-04')
-    >>> "dummy-uid" in frog.contents
-    False
-
-Let's do some event clashing, first we set up some overlapping events:
-
-    >>> print http(r"""
-    ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
-    ... Host: localhost:7080
-    ... Authorization: Basic frog:pwd
-    ... Content-Length: 244
-    ... Content-Type: text/calendar
-    ...
-    ... BEGIN:VCALENDAR
-    ... VERSION:2.0
-    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
-    ... BEGIN:VEVENT
-    ... UID:dummy-uid1
-    ... SUMMARY:Test event1
-    ... DTSTART:20050204T093000
-    ... DURATION:PT1H
-    ... DTSTAMP:20050203T150000
-    ... END:VEVENT
-    ... BEGIN:VEVENT
-    ... UID:dummy-uid2
-    ... SUMMARY:Test event2
-    ... DTSTART:20050204T100000
-    ... DURATION:PT1H
-    ... DTSTAMP:20050203T150000
-    ... END:VEVENT
-    ... BEGIN:VEVENT
-    ... UID:dummy-uid3
-    ... SUMMARY:Test event3
-    ... DTSTART:20050204T103000
-    ... DURATION:PT1H
-    ... DTSTAMP:20050203T150000
-    ... END:VEVENT
-    ... END:VCALENDAR
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    Content-Length: 0
-    Set-Cookie: ...
-    <BLANKLINE>
-
-Now let's allow frog access all resources:
-
-    >>> manager.open('http://localhost')
-
-    >>> manager.getLink('Resources').click()
-    >>> manager.getLink('mud').click()
-    >>> manager.getLink('View Calendar').click()
-    >>> manager.getLink('Set Up Access').click()
-    >>> ctrl = manager.getControl(name='sb.person.frog')
-    >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
-    >>> manager.getControl('Set Access', index=1).click()
-
-    >>> manager.getLink('resources').click()
-    >>> manager.getLink('fish').click()
-    >>> manager.getLink('View Calendar').click()
-    >>> manager.getLink('Set Up Access').click()
-    >>> ctrl = manager.getControl(name='sb.person.frog')
-    >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
-    >>> manager.getControl('Set Access', index=1).click()
-
-    >>> manager.getLink('resources').click()
-    >>> manager.getLink('lilly').click()
-    >>> manager.getLink('View Calendar').click()
-    >>> manager.getLink('Set Up Access').click()
-    >>> ctrl = manager.getControl(name='sb.person.frog')
-    >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
-    >>> manager.getControl('Set Access', index=1).click()
-
-If we book some resources for the second event,
-
-    >>> frog.handleErrors = False
-    >>> frog.open(
-    ...     'http://localhost/persons/frog/calendar/dummy-uid2')
-    >>> frog.getLink('edit resources').click()
-    >>> frog.getControl('mud').selected = True
-    >>> frog.getControl('fish').selected = True
-    >>> frog.getControl('Book').click()
-
-we should see the conflicts when booking the for the events overlapping
-"Test event1":
-
-    >>> frog.open('http://localhost/persons/frog/calendar/dummy-uid1')
-    >>> frog.getLink('edit resources').click()
-    >>> print frog.contents
-    <BLANKLINE>
-    ...
-      <fieldset>
-        <legend>Available Resources</legend>
-        <table class="event_booking">
-    ...
-    <input type="checkbox" value="booked"
-           name="fish" id="fish" />
-    ...
-    <td>
-      <fieldset style="text-align: left;">
-        <legend>Conflicting events</legend>
-        <div>
-          <div>
-            <a href="http://.../calendar/dummy-uid2/edit.html">Test event2</a>
-              (10:00 -
-              11:00)
-               <a href="http://.../calendar/2005-02-04/">Frog</a>
-          </div>
-        </div>
-      </fieldset>
-    </td>
-    ...
-    <input type="checkbox" value="booked"
-           name="mud" id="mud" />
-    ...
-    <td>
-      <fieldset style="text-align: left;">
-        <legend>Conflicting events</legend>
-        <div>
-          <div>
-            <a href="http://.../calendar/dummy-uid2/edit.html">Test event2</a>
-              (10:00 -
-              11:00)
-               <a href="http://.../calendar/2005-02-04/">Frog</a>
-          </div>
-        </div>
-      </fieldset>
-    </td>
-    ...
-        </table>
-      </fieldset>
-    ...
-
-Unless we are looking at "Test event2" itself:
-
-    >>> frog.open('http://localhost/persons/frog/calendar/dummy-uid2')
-    >>> frog.getLink('edit resources').click()
-    >>> print frog.contents
-    <BLANKLINE>
-    ...
-      <fieldset>
-        <legend>Available Resources</legend>
-        <table class="event_booking">
-    ...
-      <input type="checkbox" value="booked"
-             checked="checked" name="fish" id="fish" />
-    </td>
-    <th class="resource">
-      <label for="fish">fish</label>
-      <input type="hidden" value="1"
-             name="marker-fish" />
-    </th>
-    ...
-      <input type="checkbox" value="booked"
-             checked="checked" name="mud" id="mud" />
-    </td>
-    <th class="resource">
-      <label for="mud">mud</label>
-      <input type="hidden" value="1" name="marker-mud" />
-    </th>
-    ...
-
-Let's add another person, frog's boss:
-
-    >>> manager.open('http://localhost/persons')
-    >>> manager.getLink('New Person').click()
-
-    >>> manager.getControl('Full name').value = 'Stork'
-    >>> manager.getControl('Username').value = 'stork'
-    >>> manager.getControl('Password').value = 'pwd'
-    >>> manager.getControl('Verify password').value = 'pwd'
-    >>> manager.getControl('Add').click()
-
-    >>> 'Stork' in manager.contents
-    True
-
-The boss decides to take a mud bath, so he creates an event.
-
-    >>> print http(r"""
-    ... PUT /persons/stork/calendar/calendar.ics HTTP/1.1
-    ... Host: localhost:7080
-    ... Authorization: Basic stork:pwd
-    ... Content-Type: text/calendar
-    ...
-    ... BEGIN:VCALENDAR
-    ... VERSION:2.0
-    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
-    ... BEGIN:VEVENT
-    ... UID:smartie-uid
-    ... SUMMARY:Mud bath
-    ... DTSTART:20050807T100000
-    ... DURATION:PT2H
-    ... DTSTAMP:20050818T150000
-    ... END:VEVENT
-    ... END:VCALENDAR
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    Content-Length: 0
-    Set-Cookie: ...
-    <BLANKLINE>
-
-Stork should have access to the resources:
-
-    >>> manager.open(
-    ...     'http://localhost/resources/mud/calendar/acl.html')
-    >>> ctrl = manager.getControl(name='sb.person.stork')
-    >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
-    >>> manager.getControl('Set Access', index=1).click()
-
-And then stork books mud.
-
-    >>> stork = Browser()
-    >>> stork.open('http://localhost/')
-    >>> stork.getLink('Log In').click()
-    >>> stork.getControl('Username').value = 'stork'
-    >>> stork.getControl('Password').value = 'pwd'
-    >>> stork.getControl('Log in').click()
-
-    >>> stork.open(
-    ...     'http://localhost/persons/stork/calendar/smartie-uid')
-    >>> stork.getLink('edit resources').click()
-    >>> stork.getControl('mud').selected = True
-    >>> stork.getControl('Book').click()
-
-Frog should still be able to see the resource's calendar
-(regression test for issue 352):
-
-    >>> frog.open('http://localhost/resources/mud/calendar/2005-08-07')
-    >>> print frog.contents
-    <BLANKLINE>
-    ...
-    <h6 ...>
-      <a href="http://localhost/resources/mud/calendar/smartie-uid"
-         title="Mud bath">
-        Mud bath
-      ...
-    </h6>
-    ...
-
-
-Let's delete mud:
-
-    >>> manager.open('http://localhost/resources/')
-    >>> manager.getControl(name='delete.mud').value = True
-    >>> manager.getControl('Delete').click()
-    >>> manager.getControl('Confirm').click()
-
-Stork should still be able to see his calendar:
-(regression test for issue 472: Deleting booked resource makes calendar
- unviewable.)
-
-    >>> stork.open('http://localhost/persons/stork/calendar/2005-08-07')
-    >>> print stork.contents
-    <BLANKLINE>
-    ...
-    <h6 ...>
-      <a href="http://localhost/persons/stork/calendar/smartie-uid"
-         title="Mud bath">
-        Mud bath
-      ...
-    </h6>
-    ...
+# Frog should not be capable of booking any resources yet:
+
+#     >>> frog.open('http://localhost/persons/frog/calendar/2005-02-04')
+#     >>> frog.getLink('Test event').click()
+#     >>> frog.getLink('edit resources').click()
+#     >>> print frog.contents
+#     <BLANKLINE>
+#     ...
+#       <fieldset>
+#         <legend>Available Resources</legend>
+#         <table class="event_booking">
+#         </table>
+#       </fieldset>
+#     ...
+
+# But we can give him that right by adding him to manager group:
+
+#     >>> manager.addPersonToGroup('frog', 'manager')
+
+# Frog should see the mud and the fish now:
+
+#     >>> frog.reload()
+#     >>> print frog.contents
+#     <BLANKLINE>
+#     ...
+#       <fieldset>
+#         <legend>Available Resources</legend>
+#         <table class="event_booking">
+#     ...
+#              <input type="hidden" value="1"
+#                     name="marker-fish" />
+#     ...
+#              <input type="hidden" value="1"
+#                     name="marker-mud" />
+#     ...
+#         </table>
+#       </fieldset>
+#     ...
+
+# Let's book one of them:
+
+#     >>> frog.getControl('mud').selected = True
+#     >>> frog.getControl('Book').click()
+
+# We should see the resource as a booked resource:
+
+#     >>> frog.getLink('Test event').click()
+#     >>> frog.getLink('edit resources').click()
+#     >>> print frog.contents
+#     <BLANKLINE>
+#     ...
+#       <fieldset>
+#         <legend>Available Resources</legend>
+#         <table class="event_booking">
+#     ...
+#                 <input type="checkbox" value="booked"
+#                        name="fish" id="fish" />
+#     ...
+#                 <input type="checkbox" value="booked"
+#                        checked="checked" name="mud" id="mud" />
+#     ...
+#         </table>
+#       </fieldset>
+#     ...
+
+# Let's unbook one of them and book another:
+
+#     >>> frog.getControl('mud').selected = False
+#     >>> frog.getControl('fish').selected = True
+#     >>> frog.getControl('Book').click()
+
+# Now another resource is booked:
+
+#     >>> frog.getLink('Test event').click()
+#     >>> frog.getLink('edit resources').click()
+#     >>> print frog.contents
+#     <BLANKLINE>
+#     ...
+#       <fieldset>
+#         <legend>Available Resources</legend>
+#         <table class="event_booking">
+#     ...
+#                 <input type="checkbox" value="booked"
+#                        checked="checked" name="fish" id="fish" />
+#     ...
+#                 <input type="checkbox" value="booked"
+#                        name="mud" id="mud" />
+#     ...
+#         </table>
+#       </fieldset>
+#     ...
+
+# Frog should see the event in the resource calendar too:
+
+#     >>> frog.open(
+#     ...     'http://localhost/resources/fish/calendar/2005-02-04/')
+#     >>> print frog.contents
+#     <BLANKLINE>
+#     ...
+#     <a href="http://localhost/resources/fish/calendar/dummy-uid"
+#        title="Test event">
+#       Test event
+#       <span class="start-end">
+#         (<span>10:00</span> -
+#         <span>11:00</span>)
+#       </span>
+#     </a>
+#     ...
+#     <div class="booked-resources">
+#       <h6 class="booked-resource-header"
+#                style="background: #7590ae">
+#         <a style="color: #000;"
+#            href="...dummy-uid/booking.html?date=2005-02-04">Booked by</a></h6>
+#       <a href="http://localhost/persons/frog">Frog</a>
+#     </div>
+#     ...
+
+# Now if we remove the permission to book the fish:
+
+#     >>> manager.removePersonFromGroup('frog', 'manager')
+
+# The fish should stay in the bookable resources list:
+
+#     >>> frog.open('http://localhost/persons/frog/calendar/2005-02-04')
+#     >>> frog.getLink('Test event').click()
+#     >>> frog.getLink('edit resources').click()
+#     >>> print frog.contents
+#     <BLANKLINE>
+#     ...
+#       <fieldset>
+#         <legend>Available Resources</legend>
+#         <table class="event_booking">
+#     ...
+#                 <input type="checkbox" value="booked"
+#                        checked="checked" name="fish" id="fish" />
+#     ...
+#                 <input type="checkbox" value="booked"
+#                        name="mud" id="mud" />
+#     ...
+#         </table>
+#       </fieldset>
+#     ...
+
+# Unless unbooked:
+
+#     >>> frog.getControl('fish').selected = False
+#     >>> frog.getControl('Book').click()
+
+#     >>> frog.getLink('Test event').click()
+#     >>> frog.getLink('edit resources').click()
+#     >>> print frog.contents
+#     <BLANKLINE>
+#     ...
+#       <fieldset>
+#         <legend>Available Resources</legend>
+#         <table class="event_booking">
+#     ...
+#                 <input type="checkbox" value="booked"
+#                        name="mud" id="mud" />
+#     ...
+#         </table>
+#       </fieldset>
+#     ...
+
+
+# When adding a new event we should get redirected to resource booking
+# if Book Resources is checked:
+
+#     >>> frog.getLink('My Calendar').click()
+#     >>> frog.getLink('New Event').click()
+#     >>> frog.getControl('Title').value = 'Sleeping'
+#     >>> frog.getControl('Date').value = '2005-02-03'
+#     >>> frog.getControl('Time').value = '01:00'
+#     >>> frog.getControl('Duration').value = '500'
+#     >>> frog.getControl('Recurring').selected = True
+#     >>> frog.getControl(name='field.recurrence.used').value = '1'
+#     >>> frog.getControl('Book Resources').selected = True
+#     >>> frog.getControl('Add').click()
+
+#     >>> 'Resource Booking for Sleeping' in frog.contents
+#     True
+
+# Editing view should have a link to its booking view:
+
+#     >>> frog.open(
+#     ...   'http://localhost/persons/frog/calendar/dummy-uid/edit.html')
+#     >>> frog.getLink('Book resources')
+#     <Link text='Book resources'
+#           url='.../frog/calendar/dummy-uid/booking.html'>
+
+# Let's give frog the right to book resources and book the mud again
+# (Regression test for 266, deletion of events that book resources
+# should remove events from resource calendars):
+
+#     >>> manager.addPersonToGroup('frog', 'manager')
+
+#     >>> frog.getLink('Book resources').click()
+#     >>> frog.getControl('mud').selected = True
+#     >>> frog.getControl('Book').click()
+
+# We can see the event in mud's calendar:
+
+#     >>> frog.open('http://localhost/resources/mud/calendar/2005-02-04')
+#     >>> print frog.contents
+#     <BLANKLINE>
+#     ...
+#     <a style="color: #000;"
+#        href="http://.../booking.html?date=2005-02-04">Booked by</a></h6>
+#     ...
+
+# If we will delete the event from mud's calendar the original event
+# should stay in place, yet the resource should become unbooked:
+
+#     XXX: Have to call URL, since I could not find the link!!!
+#     >>> manager.open('http://localhost/resources/mud/calendar/'
+#     ...           'delete.html?event_id=dummy-uid&date=2005-02-04')
+#     >>> 'Test event' in manager.contents
+#     False
+
+# Frog still can see the event:
+
+#     >>> frog.open('http://localhost/persons/frog/calendar/2005-02-04')
+#     >>> 'Test event' in frog.contents
+#     True
+
+# Yet mud is not booked anymore:
+
+#     >>> frog.getLink('Test event').click()
+#     >>> frog.getLink('edit resources').click()
+#     >>> print frog.contents
+#     <BLANKLINE>
+#     ...
+#     <td class="booked">
+#       <input type="checkbox" value="booked" name="mud"
+#              id="mud" />
+#     </td>
+#     ...
+
+# Let's book it again:
+
+#     >>> frog.getControl('mud').selected = True
+#     >>> frog.getControl('Book').click()
+
+# It is in mud's calendar again:
+
+#     >>> frog.open('http://localhost/resources/mud/calendar/2005-02-04')
+#     >>> print frog.contents
+#     <BLANKLINE>
+#     ...
+#     <a style="color: #000;"
+#        href="http://.../booking.html?date=2005-02-04">Booked by</a></h6>
+#     ...
+
+# And delete the event from frog's calendar:
+
+#     >>> manager.open(
+#     ...     'http://localhost/persons/frog/calendar/2005-02-04')
+#     >>> manager.getLink(url='delete.html?event_id=dummy-uid').click()
+
+# The event should be gone from the frog's calendar:
+
+#     >>> frog.open('http://localhost/persons/frog/calendar/2005-02-04')
+#     >>> "dummy-uid" in frog.contents
+#     False
+
+# And it should not be seen in mud's calendar too:
+
+#     >>> frog.open('http://localhost/resources/mud/calendar/2005-02-04')
+#     >>> "dummy-uid" in frog.contents
+#     False
+
+# Let's do some event clashing, first we set up some overlapping events:
+
+#     >>> print http(r"""
+#     ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
+#     ... Host: localhost:7080
+#     ... Authorization: Basic frog:pwd
+#     ... Content-Length: 244
+#     ... Content-Type: text/calendar
+#     ...
+#     ... BEGIN:VCALENDAR
+#     ... VERSION:2.0
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... BEGIN:VEVENT
+#     ... UID:dummy-uid1
+#     ... SUMMARY:Test event1
+#     ... DTSTART:20050204T093000
+#     ... DURATION:PT1H
+#     ... DTSTAMP:20050203T150000
+#     ... END:VEVENT
+#     ... BEGIN:VEVENT
+#     ... UID:dummy-uid2
+#     ... SUMMARY:Test event2
+#     ... DTSTART:20050204T100000
+#     ... DURATION:PT1H
+#     ... DTSTAMP:20050203T150000
+#     ... END:VEVENT
+#     ... BEGIN:VEVENT
+#     ... UID:dummy-uid3
+#     ... SUMMARY:Test event3
+#     ... DTSTART:20050204T103000
+#     ... DURATION:PT1H
+#     ... DTSTAMP:20050203T150000
+#     ... END:VEVENT
+#     ... END:VCALENDAR
+#     ... """, handle_errors=False)
+#     HTTP/1.1 200 Ok
+#     Content-Length: 0
+#     Set-Cookie: ...
+#     <BLANKLINE>
+
+# Now let's allow frog access all resources:
+
+#     >>> manager.open('http://localhost')
+
+#     >>> manager.getLink('Resources').click()
+#     >>> manager.getLink('mud').click()
+#     >>> manager.getLink('View Calendar').click()
+#     >>> manager.getLink('Set Up Access').click()
+#     >>> ctrl = manager.getControl(name='sb.person.frog')
+#     >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
+#     >>> manager.getControl('Set Access', index=1).click()
+
+#     >>> manager.getLink('resources').click()
+#     >>> manager.getLink('fish').click()
+#     >>> manager.getLink('View Calendar').click()
+#     >>> manager.getLink('Set Up Access').click()
+#     >>> ctrl = manager.getControl(name='sb.person.frog')
+#     >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
+#     >>> manager.getControl('Set Access', index=1).click()
+
+#     >>> manager.getLink('resources').click()
+#     >>> manager.getLink('lilly').click()
+#     >>> manager.getLink('View Calendar').click()
+#     >>> manager.getLink('Set Up Access').click()
+#     >>> ctrl = manager.getControl(name='sb.person.frog')
+#     >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
+#     >>> manager.getControl('Set Access', index=1).click()
+
+# If we book some resources for the second event,
+
+#     >>> frog.handleErrors = False
+#     >>> frog.open(
+#     ...     'http://localhost/persons/frog/calendar/dummy-uid2')
+#     >>> frog.getLink('edit resources').click()
+#     >>> frog.getControl('mud').selected = True
+#     >>> frog.getControl('fish').selected = True
+#     >>> frog.getControl('Book').click()
+
+# we should see the conflicts when booking the for the events overlapping
+# "Test event1":
+
+#     >>> frog.open('http://localhost/persons/frog/calendar/dummy-uid1')
+#     >>> frog.getLink('edit resources').click()
+#     >>> print frog.contents
+#     <BLANKLINE>
+#     ...
+#       <fieldset>
+#         <legend>Available Resources</legend>
+#         <table class="event_booking">
+#     ...
+#     <input type="checkbox" value="booked"
+#            name="fish" id="fish" />
+#     ...
+#     <td>
+#       <fieldset style="text-align: left;">
+#         <legend>Conflicting events</legend>
+#         <div>
+#           <div>
+#             <a href="http://.../calendar/dummy-uid2/edit.html">Test event2</a>
+#               (10:00 -
+#               11:00)
+#                <a href="http://.../calendar/2005-02-04/">Frog</a>
+#           </div>
+#         </div>
+#       </fieldset>
+#     </td>
+#     ...
+#     <input type="checkbox" value="booked"
+#            name="mud" id="mud" />
+#     ...
+#     <td>
+#       <fieldset style="text-align: left;">
+#         <legend>Conflicting events</legend>
+#         <div>
+#           <div>
+#             <a href="http://.../calendar/dummy-uid2/edit.html">Test event2</a>
+#               (10:00 -
+#               11:00)
+#                <a href="http://.../calendar/2005-02-04/">Frog</a>
+#           </div>
+#         </div>
+#       </fieldset>
+#     </td>
+#     ...
+#         </table>
+#       </fieldset>
+#     ...
+
+# Unless we are looking at "Test event2" itself:
+
+#     >>> frog.open('http://localhost/persons/frog/calendar/dummy-uid2')
+#     >>> frog.getLink('edit resources').click()
+#     >>> print frog.contents
+#     <BLANKLINE>
+#     ...
+#       <fieldset>
+#         <legend>Available Resources</legend>
+#         <table class="event_booking">
+#     ...
+#       <input type="checkbox" value="booked"
+#              checked="checked" name="fish" id="fish" />
+#     </td>
+#     <th class="resource">
+#       <label for="fish">fish</label>
+#       <input type="hidden" value="1"
+#              name="marker-fish" />
+#     </th>
+#     ...
+#       <input type="checkbox" value="booked"
+#              checked="checked" name="mud" id="mud" />
+#     </td>
+#     <th class="resource">
+#       <label for="mud">mud</label>
+#       <input type="hidden" value="1" name="marker-mud" />
+#     </th>
+#     ...
+
+# Let's add another person, frog's boss:
+
+#     >>> manager.open('http://localhost/persons')
+#     >>> manager.getLink('New Person').click()
+
+#     >>> manager.getControl('Full name').value = 'Stork'
+#     >>> manager.getControl('Username').value = 'stork'
+#     >>> manager.getControl('Password').value = 'pwd'
+#     >>> manager.getControl('Verify password').value = 'pwd'
+#     >>> manager.getControl('Add').click()
+
+#     >>> 'Stork' in manager.contents
+#     True
+
+# The boss decides to take a mud bath, so he creates an event.
+
+#     >>> print http(r"""
+#     ... PUT /persons/stork/calendar/calendar.ics HTTP/1.1
+#     ... Host: localhost:7080
+#     ... Authorization: Basic stork:pwd
+#     ... Content-Type: text/calendar
+#     ...
+#     ... BEGIN:VCALENDAR
+#     ... VERSION:2.0
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... BEGIN:VEVENT
+#     ... UID:smartie-uid
+#     ... SUMMARY:Mud bath
+#     ... DTSTART:20050807T100000
+#     ... DURATION:PT2H
+#     ... DTSTAMP:20050818T150000
+#     ... END:VEVENT
+#     ... END:VCALENDAR
+#     ... """, handle_errors=False)
+#     HTTP/1.1 200 Ok
+#     Content-Length: 0
+#     Set-Cookie: ...
+#     <BLANKLINE>
+
+# Stork should have access to the resources:
+
+#     >>> manager.open(
+#     ...     'http://localhost/resources/mud/calendar/acl.html')
+#     >>> ctrl = manager.getControl(name='sb.person.stork')
+#     >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
+#     >>> manager.getControl('Set Access', index=1).click()
+
+# And then stork books mud.
+
+#     >>> stork = Browser()
+#     >>> stork.open('http://localhost/')
+#     >>> stork.getLink('Log In').click()
+#     >>> stork.getControl('Username').value = 'stork'
+#     >>> stork.getControl('Password').value = 'pwd'
+#     >>> stork.getControl('Log in').click()
+
+#     >>> stork.open(
+#     ...     'http://localhost/persons/stork/calendar/smartie-uid')
+#     >>> stork.getLink('edit resources').click()
+#     >>> stork.getControl('mud').selected = True
+#     >>> stork.getControl('Book').click()
+
+# Frog should still be able to see the resource's calendar
+# (regression test for issue 352):
+
+#     >>> frog.open('http://localhost/resources/mud/calendar/2005-08-07')
+#     >>> print frog.contents
+#     <BLANKLINE>
+#     ...
+#     <h6 ...>
+#       <a href="http://localhost/resources/mud/calendar/smartie-uid"
+#          title="Mud bath">
+#         Mud bath
+#       ...
+#     </h6>
+#     ...
+
+
+# Let's delete mud:
+
+#     >>> manager.open('http://localhost/resources/')
+#     >>> manager.getControl(name='delete.mud').value = True
+#     >>> manager.getControl('Delete').click()
+#     >>> manager.getControl('Confirm').click()
+
+# Stork should still be able to see his calendar:
+# (regression test for issue 472: Deleting booked resource makes calendar
+#  unviewable.)
+
+#     >>> stork.open('http://localhost/persons/stork/calendar/2005-08-07')
+#     >>> print stork.contents
+#     <BLANKLINE>
+#     ...
+#     <h6 ...>
+#       <a href="http://localhost/persons/stork/calendar/smartie-uid"
+#          title="Mud bath">
+#         Mud bath
+#       ...
+#     </h6>
+#     ...

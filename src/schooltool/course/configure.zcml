@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
-<configure xmlns="http://namespaces.zope.org/zope">
+<configure
+    xmlns:security="http://schooltool.org/securitypolicy"
+    xmlns="http://namespaces.zope.org/zope">
 
   <!-- Course Content Components -->
 
@@ -152,5 +154,32 @@
   <!-- Views -->
   <include package=".browser" />
   <include package=".rest" />
+
+  <!-- Security -->
+  <security:allow
+      interface="schooltool.course.interfaces.ISectionContainer"
+      crowds="administration"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.course.interfaces.ISectionContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.course.interfaces.ISectionContainer"
+      crowds="administration"
+      permission="schooltool.create" />
+
+  <security:allow
+      interface="schooltool.course.interfaces.ISection"
+      crowds="administration authenticated"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.course.interfaces.ISection"
+      crowds="administration"
+      permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.course.interfaces.ISection"
+      crowds="administration"
+      permission="schooltool.manageMembership" />
 
 </configure>

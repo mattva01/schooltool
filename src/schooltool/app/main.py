@@ -424,9 +424,6 @@ class StandaloneServer(object):
             IDependable(manager).addDependent('')
         manager = app['persons'][MANAGER_USERNAME]
         manager.setPassword(MANAGER_PASSWORD)
-        roles = IPrincipalRoleManager(app)
-        roles.assignRoleToPrincipal(
-            'zope.Manager', 'sb.person.' + MANAGER_USERNAME)
 
     def main(self, argv=sys.argv):
         """Start the SchoolTool server."""

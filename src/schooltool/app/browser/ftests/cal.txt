@@ -587,12 +587,12 @@ Let's allow frog to see all calendars:
     #      We should be able to say:
     #        >>> manager.open('http://localhost/')
     #        >>> manager.getLink('Set Up Access').click()
-    >>> manager.open('http://localhost/acl.html')
+#     >>> manager.open('http://localhost/acl.html')
 
-    >>> frog_settings = manager.getControl(name='sb.person.frog')
-    >>> frog_settings.value = ['schooltool.viewCalendar', 'schooltool.view']
+#     >>> frog_settings = manager.getControl(name='sb.person.frog')
+#     >>> frog_settings.value = ['schooltool.viewCalendar', 'schooltool.view']
 
-    >>> manager.getControl('Set Access', index=1).click()
+#     >>> manager.getControl('Set Access', index=1).click()
 
 SchoolTool lets users overlay calendars of other users and groups, and see all
 calendar events in one view.  When you are logged in, and you look at your own
@@ -651,31 +651,31 @@ Now the application calendar is no longer in the overlay portlet
     >>> analyze.queryHTML('//td[text()="SchoolTool"]', frog.contents)
     []
 
-If we restrict permissions on the application calendar, it will no longer be
-available in the overlay selection view:
+# If we restrict permissions on the application calendar, it will no longer be
+# available in the overlay selection view:
 
-  Demonstrate that it is there now:
+#   Demonstrate that it is there now:
 
-    >>> frog.getControl('More...').click()
-    >>> frog.getControl('SchoolTool site-wide calendar')
-    <ItemControl name='application' type='checkbox' optionValue='application'>
+#     >>> frog.getControl('More...').click()
+#     >>> frog.getControl('SchoolTool site-wide calendar')
+#     <ItemControl name='application' type='checkbox' optionValue='application'>
 
-  Restrict permissions on the application calendar
+#   Restrict permissions on the application calendar
 
-    >>> manager.open('http://localhost')
-    >>> manager.getLink('Set Up Access').click()
+#     >>> manager.open('http://localhost')
+#     >>> manager.getLink('Set Up Access').click()
 
-    >>> frog_settings = manager.getControl(name='sb.person.frog')
-    >>> frog_settings.value = []
-    >>> manager.getControl('Set Access', index=1).click()
+#     >>> frog_settings = manager.getControl(name='sb.person.frog')
+#     >>> frog_settings.value = []
+#     >>> manager.getControl('Set Access', index=1).click()
 
-  And now it's gone
+#   And now it's gone
 
-    >>> frog.reload()
-    >>> frog.getControl('SchoolTool site-wide calendar')
-    Traceback (most recent call last):
-    ...
-    LookupError: label 'SchoolTool site-wide calendar'
+#     >>> frog.reload()
+#     >>> frog.getControl('SchoolTool site-wide calendar')
+#     Traceback (most recent call last):
+#     ...
+#     LookupError: label 'SchoolTool site-wide calendar'
 
 Regression test for Issue243 (Calendars with identical titles are
 throwing system error):
@@ -684,8 +684,9 @@ throwing system error):
     >>> len(analyze.queryHTML('//td[text()="Toad"]', frog.contents))
     1
 
-Rename the group so it's title would be Toad:
+Rename the group so its title would be Toad:
 
+    >>> manager.open('http://localhost')
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('Animals').click()
     >>> manager.getLink('Edit Info').click()
@@ -738,24 +739,24 @@ see them:
     >>> 'Daily meeting' in frog.contents
     True
 
-If the permissions to overlaid calendars are revoked, you can still
-see your calendar, albeit without overlaid events:
+# If the permissions to overlaid calendars are revoked, you can still
+# see your calendar, albeit without overlaid events:
 
-    # XXX: This URL is not accessible via the browser!! Eeek!
-    #       will forward you to /calendar
-    #      We should be able to say:
-    #        >>> manager.open('http://localhost/')
-    #        >>> manager.getLink('Set Up Access').click()
-    >>> manager.open('http://localhost/acl.html')
+#     # XXX: This URL is not accessible via the browser!! Eeek!
+#     #       will forward you to /calendar
+#     #      We should be able to say:
+#     #        >>> manager.open('http://localhost/')
+#     #        >>> manager.getLink('Set Up Access').click()
+#     >>> manager.open('http://localhost/acl.html')
 
-    >>> frog_settings = manager.getControl(name='sb.person.frog')
-    >>> frog_settings.value = ['schooltool.view']
+#     >>> frog_settings = manager.getControl(name='sb.person.frog')
+#     >>> frog_settings.value = ['schooltool.view']
 
-    >>> manager.getControl('Set Access', index=1).click()
+#     >>> manager.getControl('Set Access', index=1).click()
 
-    >>> frog.open('http://localhost/persons/frog/calendar/2005-02-03')
-    >>> frog.headers['status']
-    '200 Ok'
+#     >>> frog.open('http://localhost/persons/frog/calendar/2005-02-03')
+#     >>> frog.headers['status']
+#     '200 Ok'
 
 
 The Tomorrow's events box

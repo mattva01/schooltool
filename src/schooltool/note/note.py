@@ -135,3 +135,12 @@ class Note(persistent.Persistent):
         self.owner = owner
         self.unique_id = '%d.%d' %(datetime.datetime.utcnow().microsecond,
                                    random.randrange(10 ** 6, 10 ** 7))
+
+from schooltool.securitypolicy.crowds import Crowd
+class NoteCrowd(Crowd):
+    def contains(self, principal):
+        if self.context.privacy == 'private':
+            return IPerson(self.principal) == self.context.owner
+        else:
+            return True
+

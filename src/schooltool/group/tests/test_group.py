@@ -81,17 +81,6 @@ def doctest_addGroupContainerToApplication():
         >>> setup.setUpAnnotations()
         >>> setup.setUpDependable()
         >>> setup.setUpTraversal()
-        >>> from zope.annotation.interfaces import IAnnotatable
-        >>> from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
-        >>> from zope.interface import implements
-        >>> class RoleManagerStub:
-        ...     implements(IPrincipalRoleManager)
-        ...     def __init__(self, *args, **kw):
-        ...         pass
-        ...     def assignRoleToPrincipal(self, role, principal):
-        ...         print 'Assign role=%s, principal=%s' % (role, principal)
-        >>> ztapi.provideAdapter(IAnnotatable, IPrincipalRoleManager,
-        ...                      RoleManagerStub)
 
     addGroupContainerToApplication is a subscriber for IObjectAddedEvent.
 
@@ -107,10 +96,6 @@ def doctest_addGroupContainerToApplication():
     When you call the subscriber
 
         >>> addGroupContainerToApplication(event)
-        Assign role=schooltool.manager, principal=sb.group.manager
-        Assign role=schooltool.administrator, principal=sb.group.administrators
-        Assign role=schooltool.teacher, principal=sb.group.teachers
-        Assign role=schooltool.clerk, principal=sb.group.clerks
 
     it adds a container for groups
 

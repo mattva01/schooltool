@@ -51,24 +51,34 @@
       interface="schooltool.app.interfaces.ISchoolToolApplication"
       crowds="everybody"
       permission="schooltool.viewCalendar" />
-
   <security:allow
-      interface="schooltool.person.interfaces.IPersonContainer"
+      interface="schooltool.app.interfaces.ISchoolToolApplication"
       crowds="administration"
-      permission="schooltool.view" />
+      permission="schooltool.viewAttendance" />
   <security:allow
-      interface="schooltool.person.interfaces.IPersonContainer"
-      crowds="administration"
-      permission="schooltool.edit" />
-
-  <security:allow
-      interface="schooltool.person.interfaces.IPerson"
-      crowds="administration owner"
-      permission="schooltool.view" />
-  <security:allow
-      interface="schooltool.person.interfaces.IPerson"
+      interface="schooltool.app.interfaces.ISchoolToolApplication"
       crowds="administration"
       permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.app.interfaces.ISchoolToolApplication"
+      crowds="administration"
+      permission="schooltool.addEvent" />
+  <security:allow
+      interface="schooltool.app.interfaces.ISchoolToolApplication"
+      crowds="administration"
+      permission="schooltool.modifyEvent" />
+  <security:allow
+      interface="schooltool.app.interfaces.ISchoolToolApplication"
+      crowds="administration"
+      permission="schooltool.create" />
+  <security:allow
+      interface="schooltool.app.interfaces.ISchoolToolApplication"
+      crowds="administration"
+      permission="zope.ManageSite" />
+  <security:allow
+      interface="schooltool.app.interfaces.ISchoolToolApplication"
+      crowds="administration"
+      permission="zope.app.introspector.Introspect" />
 
   <security:allow
       interface="schooltool.group.interfaces.IGroupContainer"
@@ -78,6 +88,10 @@
       interface="schooltool.group.interfaces.IGroupContainer"
       crowds="administration"
       permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.group.interfaces.IGroupContainer"
+      crowds="administration"
+      permission="schooltool.create" />
 
   <security:allow
       interface="schooltool.group.interfaces.IGroup"
@@ -87,6 +101,10 @@
       interface="schooltool.group.interfaces.IGroup"
       crowds="administration"
       permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.group.interfaces.IGroup"
+      crowds="administration"
+      permission="schooltool.manageMembership" />
 
   <security:allow
       interface="schooltool.resource.interfaces.IResourceContainer"
@@ -96,6 +114,10 @@
       interface="schooltool.resource.interfaces.IResourceContainer"
       crowds="administration"
       permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.resource.interfaces.IResourceContainer"
+      crowds="administration"
+      permission="schooltool.create" />
 
   <security:allow
       interface="schooltool.resource.interfaces.IResource"
@@ -114,6 +136,10 @@
       interface="schooltool.course.interfaces.ICourseContainer"
       crowds="administration"
       permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.course.interfaces.ICourseContainer"
+      crowds="administration"
+      permission="schooltool.create" />
 
   <security:allow
       interface="schooltool.course.interfaces.ICourse"
@@ -123,24 +149,10 @@
       interface="schooltool.course.interfaces.ICourse"
       crowds="administration authenticated"
       permission="schooltool.edit" />
-
   <security:allow
-      interface="schooltool.course.interfaces.ISectionContainer"
-      crowds="administration"
-      permission="schooltool.view" />
-  <security:allow
-      interface="schooltool.course.interfaces.ISectionContainer"
-      crowds="administration"
-      permission="schooltool.edit" />
-
-  <security:allow
-      interface="schooltool.course.interfaces.ISection"
-      crowds="administration"
-      permission="schooltool.view" />
-  <security:allow
-      interface="schooltool.course.interfaces.ISection"
-      crowds="administration"
-      permission="schooltool.edit" />
+      interface="schooltool.course.interfaces.ICourse"
+      crowds="administration authenticated"
+      permission="schooltool.manageMembership" />
 
   <security:allow
       interface="schooltool.group.interfaces.IGroup"
@@ -149,13 +161,87 @@
 
 
   <security:allow
+      interface="schooltool.term.interfaces.ITermContainer"
+      crowds="administration"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.term.interfaces.ITermContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.term.interfaces.ITermContainer"
+      crowds="administration"
+      permission="schooltool.create" />
+
+  <security:allow
+      interface="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      crowds="administration"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      crowds="administration"
+      permission="schooltool.create" />
+
+  <security:allow
+      interface="schooltool.level.level.LevelContainer"
+      crowds="administration"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.level.level.LevelContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.level.level.LevelContainer"
+      crowds="administration"
+      permission="schooltool.create" />
+
+  <security:allow
+      interface="schooltool.requirement.interfaces.IRequirement"
+      crowds="administration"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.requirement.interfaces.IRequirement"
+      crowds="administration"
+      permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.requirement.interfaces.IRequirement"
+      crowds="administration"
+      permission="schooltool.create" />
+
+  <security:allow
       crowds="manager administrators clerks"
       permission="schooltool.viewAttendance" />
   <security:allow
       crowds="everybody"
       permission="zope.View" />
   <security:allow
+      crowds="administration"
+      permission="zope.ManageApplication" />
+  <security:allow
+      crowds="administration"
+      permission="zope.ManageServices" />
+  <security:allow
+      crowds="administration"
+      permission="zope.app.dublincore.change" />
+  <security:allow
       crowds="everybody"
       permission="zope.app.dublincore.view" />
+
+  <security:allow
+      crowds="everybody"
+      permission="schooltool.addEvent" />
+
+  <security:allow
+      crowds="everybody"
+      permission="schooltool.modifyEvent" />
+
+  <security:allow
+      interface="schooltool.app.interfaces.ISchoolToolCalendar"
+      crowds="everybody"
+      permission="schooltool.edit" />
 
 </configure>

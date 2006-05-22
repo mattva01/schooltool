@@ -1,5 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:security="http://schooltool.org/securitypolicy"
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:apidoc="http://namespaces.zope.org/apidoc">
 
@@ -183,5 +184,9 @@
       name="restviews.html"
       template="restdoc.pt"
       />
+
+  <security:allow
+      crowds="administration"
+      permission="zope.app.apidoc.UseAPIDoc" />
 
 </configure>

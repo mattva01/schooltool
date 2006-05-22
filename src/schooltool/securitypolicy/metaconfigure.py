@@ -81,8 +81,6 @@ def handle_allow(iface, crowdnames, permission):
 
 
 def handle_crowd(name, factory):
-    if name in crowdmap:
-        raise ConfigurationError("duplicate crowd id: %s" % name)
     crowdmap[name] = factory
 
 
