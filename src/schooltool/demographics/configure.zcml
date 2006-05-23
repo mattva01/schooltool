@@ -99,16 +99,16 @@
 
   </configure>
 
-  <!-- install catalog -->
+  <!-- install intids and catalog -->
 
   <subscriber
       for="schooltool.app.interfaces.ISchoolToolApplication zope.app.container.interfaces.IObjectAddedEvent"
-      handler=".catalog.catalogSetUpSubscriber"
+      handler=".utility.catalogSetUpSubscriber"
       />
 
   <!-- search adapter -->
   <adapter
-      factory=".catalog.Search"
+      factory=".utility.Search"
       />
     
 </configure>
