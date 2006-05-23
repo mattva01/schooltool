@@ -9,11 +9,10 @@
       <span i18n:translate="">items</span>
     </div>
 
-    <form tal:condition="view/canModify"
-          method="post"
+    <form method="post"
           tal:attributes="action string:${context/@@absolute_url}/delete.html">  
     <tal:block replace="structure view/table" />
-    <input type="submit" class="button-cancel" value="Delete"
+    <input tal:condition="view/canModify" type="submit" class="button-cancel" value="Delete"
       i18n:attributes="value delete-button;" />
     </form>
   </tal:if>
