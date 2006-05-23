@@ -5,7 +5,7 @@
 
   <form action="." method="get"
         tal:attributes="action request/URL"
-        class="standalone" enctype="multipart/form-data">
+        class="standalone">
     <fieldset>
       <div metal:use-macro="context/@@form_macros/widget_rows" />
     </fieldset>
