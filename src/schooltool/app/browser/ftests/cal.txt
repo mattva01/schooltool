@@ -498,6 +498,7 @@ Let's enter some invalid values:
     ...
     ...<input class="textType" id="field.duration" name="field.duration" size="10" type="text" value="500h"  />
     ...</div>
+      <span class="clear"></span>
       <div class="error"><span class="error">Invalid integer data</span></div>
     ...
 
