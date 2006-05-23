@@ -17,6 +17,7 @@
 $Id$
 """
 import sys, os
+import site
 
 # Check the minimum python version
 if sys.version_info < (2, 4):
@@ -32,7 +33,8 @@ SOFTWARE_HOME = r"<<SCHOOLTOOL_SOFTWARE_HOME>>"
 instance_lib = os.path.join(here, "lib", "python")
 
 sys.path[:0] = [instance_lib, SOFTWARE_HOME]
-
+site.addsitedir(SOFTWARE_HOME)
+site.addsitedir(instance_lib)
 
 from schooltool.testing import test
 
