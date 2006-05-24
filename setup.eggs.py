@@ -81,6 +81,6 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     package_dir={'': 'src'},
     packages=find_packages('src'),
     install_requires=['zc.table >= 0.5', 'zc.catalog >= 0.1',
-                      'hurry.query >= 0.9'],
-    dependency_links=['http://download.zope.org/distribution/',],
+                      'hurry.query >= 0.9', 'zc.datetimewidget >= 0.5'],
+    dependency_links=['http://download.zope.org/distribution/'],
     )

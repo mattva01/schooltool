@@ -35,7 +35,6 @@ from schooltool.traverser.traverser import SingleAttributeTraverserPlugin
 from schooltool.person.interfaces import IReadPerson
 from schooltool.demographics.person import Person
 from schooltool.demographics import interfaces
-from schooltool.demographics.browser.widget import FancyDateWidget
 from schooltool import SchoolToolMessage as _
 
 class PersonDisplayForm(form.PageDisplayForm):
@@ -91,7 +90,6 @@ class DemographicsEdit(PersonEditForm):
                  mapping={'fullname': self.fullname()})
     
     form_fields = form.Fields(interfaces.IDemographics)
-    form_fields["birth_date"].custom_widget = FancyDateWidget    
     
 class DemographicsDisplay(PersonDisplayForm):
     form_fields = form.Fields(interfaces.IDemographics)
@@ -104,7 +102,6 @@ class SchoolDataEdit(PersonEditForm):
                  mapping={'fullname': self.fullname()})
     
     form_fields = form.Fields(interfaces.ISchoolData)
-    form_fields["enrollment_date"].custom_widget = FancyDateWidget
     
 class SchoolDataDisplay(PersonDisplayForm):
     form_fields = form.Fields(interfaces.ISchoolData)
