@@ -81,6 +81,17 @@
       permission="zope.View"
       />
 
+  <!-- csv importer -->
+  <page
+      name="person-csvimport.html"
+      for="..interfaces.IPersonContainer"
+      class=".csvimport.PersonCSVImportView"
+      template="person-csvimport.pt"
+      permission="schooltool.create"
+      menu="schooltool_actions"
+      title="Import Persons" 
+      />
+
   <!-- FIXME: zope.View is certainly not the right permission. -->
   <!-- How can we say "a person may only edit their own preferences"? -->
   <page

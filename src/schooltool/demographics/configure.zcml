@@ -24,6 +24,11 @@
   </class>
 
   <subscriber
+      for="schooltool.app.interfaces.ISchoolToolApplication zope.app.container.interfaces.IObjectAddedEvent"
+      handler=".utility.personFactorySetUpSubscriber"
+      />
+
+  <subscriber
     for="schooltool.person.interfaces.IPerson zope.lifecycleevent.interfaces.IObjectModifiedEvent"
     handler=".person.personModifiedSubscriber"
    />

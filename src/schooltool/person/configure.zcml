@@ -41,6 +41,13 @@
         set_schema=".interfaces.IPerson" />
   </class>
 
+<!--
+  <subscriber
+      for="schooltool.app.interfaces.ISchoolToolApplication zope.app.container.interfaces.IObjectAddedEvent"
+      handler=".utility.personFactorySetUpSubscriber"
+      />
+-->
+
   <class class=".preference.PersonPreferences">
     <require
         permission="schooltool.view"

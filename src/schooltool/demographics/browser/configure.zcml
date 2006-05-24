@@ -124,15 +124,6 @@
       permission="schooltool.create"
       menu="schooltool_actions" title="New Person" />
 
-    <!-- csv importer -->
-    <page
-      name="person-csvimport.html"
-      for="schooltool.person.interfaces.IPersonContainer"
-      class="schooltool.demographics.browser.csvimport.PersonCSVImportView"
-      template="person-csvimport.pt"
-      permission="schooltool.create"
-      menu="schooltool_actions"
-      title="Import Persons" />
   </configure>
 
   <!-- to get simple drop down lists in widgets -->

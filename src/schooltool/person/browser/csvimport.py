@@ -21,8 +21,11 @@ csv importing.
 
 $Id$
 """
+from zope.component import getUtility
+
 from schooltool.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView
 from schooltool.person.person import Person
+from schooltool.person.interfaces import IPersonFactory
 
 from schooltool import SchoolToolMessage as _
 
@@ -70,8 +73,9 @@ class PersonCSVImporter(BaseCSVImporter):
             self.container[data[0]] = obj
 
     def personFactory(self, username, title):
-        return Person(username=username, title=title)
-    
+        factory = getUtility(IPersonFactory)
+        return factory(username=username, title=title)
+
 class PersonCSVImportView(BaseCSVImportView):
     """View for Person CSV importer."""
 

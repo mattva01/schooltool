@@ -120,6 +120,11 @@ class IPerson(IReadPerson, IWritePerson, IAttributeAnnotatable):
     """
 
 
+class IPersonFactory(zope.interface.Interface):
+    def __call__(*args, **kw):
+        """Create a new Person instance.
+        """
+
 class IPersonContainer(container.interfaces.IContainer):
     """Container of persons."""
 

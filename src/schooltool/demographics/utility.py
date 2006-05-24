@@ -17,6 +17,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
+from persistent import Persistent
+from zope.app.container.contained import Contained
 from zope.app.intid.interfaces import IIntIds
 from zope.app.intid import IntIds
 from zope.app.catalog.interfaces import ICatalog
@@ -26,10 +28,12 @@ from zope.app.catalog.field import FieldIndex
 from zope.interface import implements
 from zope.component import adapts
 
-from schooltool.utility import UtilitySpecification, MultiUtilitySetUp
+from schooltool.utility import UtilitySpecification, UtilitySetUp,\
+     MultiUtilitySetUp
 
 from schooltool.demographics.interfaces import ISearch
-from schooltool.person.interfaces import IPerson
+from schooltool.demographics.person import Person
+from schooltool.person.interfaces import IPerson, IPersonFactory
 
 class Search(object):
     implements(ISearch)
@@ -49,4 +53,12 @@ catalogSetUpSubscriber = MultiUtilitySetUp(
     UtilitySpecification(IntIds, IIntIds),
     UtilitySpecification(Catalog, ICatalog, 'demographics_catalog',
                          setUp=catalogSetUp),
+    )
+
+class PersonFactory(Persistent, Contained):
+    def __call__(self, *args, **kw):
+        return Person(*args, **kw)
+
+personFactorySetUpSubscriber = UtilitySetUp(
+    PersonFactory, IPersonFactory, override=True,
     )

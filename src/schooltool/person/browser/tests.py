@@ -390,6 +390,10 @@ def doctest_PersonCSVImporter():
 
     Create a person container and an importer
 
+        >>> from zope.component import provideUtility
+        >>> from schooltool.person.utility import PersonFactory
+        >>> from schooltool.person.interfaces import IPersonFactory
+        >>> provideUtility(PersonFactory(), IPersonFactory)
         >>> from schooltool.person.browser.csvimport import \
         ...     PersonCSVImporter
         >>> from schooltool.person.person import PersonContainer
@@ -437,61 +441,6 @@ def doctest_PersonCSVImporter():
         [u'Duplicate username: jdoe, Jim Doe']
 
     """
-
-
-def doctest_PersonCSVImportView():
-    r"""Tests for PersonCSVImportView
-
-    We'll create a person csv import view
-
-        >>> from schooltool.person.browser.csvimport import PersonCSVImportView
-        >>> from schooltool.person.person import PersonContainer
-        >>> from zope.publisher.browser import TestRequest
-        >>> container = PersonContainer()
-        >>> request = TestRequest()
-
-    Now we'll try a text import.  Note that the description is not required
-
-        >>> request.form = {'csvtext' : "aperson, A Person, secret\nanother, A Nother Person With No Password",
-        ...                 'charset' : 'UTF-8',
-        ...                 'UPDATE_SUBMIT': 1}
-        >>> view = PersonCSVImportView(container, request)
-        >>> view.update()
-        >>> [person for person in container]
-        [u'another', u'aperson']
-
-    If no data is provided, we naturally get an error
-
-        >>> request.form = {'charset' : 'UTF-8', 'UPDATE_SUBMIT': 1}
-        >>> view.update()
-        >>> view.errors
-        [u'No data provided']
-
-    We also get an error if a line starts with a comma (no title)
-
-        >>> request.form = {'csvtext' : ", No username provided here, secret",
-        ...                 'charset' : 'UTF-8',
-        ...                 'UPDATE_SUBMIT': 1}
-        >>> view = PersonCSVImportView(container, request)
-        >>> view.update()
-        >>> view.errors
-        [u'Failed to import CSV text', u'username may not be empty']
-
-
-    Duplicate usernames are not imported, the error is noted to the user.
-
-        >>> request.form = {'csvtext' : "student1, Student 1, secret\nstudent2, Student 2, secret\nstudent1, Student 100",
-        ...                 'charset' : 'UTF-8',
-        ...                 'UPDATE_SUBMIT': 1}
-        >>> view = PersonCSVImportView(container, request)
-        >>> view.update()
-        >>> [person for person in container]
-        [u'another', u'aperson', u'student1', u'student2']
-        >>> view.errors
-        [u'Failed to import CSV text', u'Duplicate username: ${username}']
-
-    """
-
 
 def test_suite():
     suite = unittest.TestSuite()
