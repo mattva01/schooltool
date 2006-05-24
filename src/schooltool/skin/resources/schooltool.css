@@ -95,10 +95,12 @@ p.hint {
    floating and can break the layout of the whole page.
    For more information: 
    http://www.complexspiral.com/publications/containing-floats/ */
-span.clear {
+div.clear {
     display: block;
     clear: left;
-    margin: -0.66em 0;
+    margin: 0;
+    line-height: 0;
+    height: 0;
     visibility: hidden;
 }
 

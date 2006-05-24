@@ -12,7 +12,7 @@
     <input type="text" style="width:100%" tal:replace="structure widget" />
     <metal:block define-slot="extra" />
   </div>
-  <span class="clear"></span>
+  <div class="clear">&nbsp;</div>
   <div class="error" tal:define="error widget/error"
     tal:condition="error" tal:content="structure error">
     The Error
