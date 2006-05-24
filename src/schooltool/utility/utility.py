@@ -1,5 +1,6 @@
 from zope.app import zapi
 from zope.app.component.hooks import getSite, setSite
+from zope.component import queryUtility
 
 class UtilitySpecification(object):
     def __init__(self, factory, iface, name='', setUp=None,
@@ -17,25 +18,39 @@ class UtilitySpecification(object):
 def setUpUtilities(site, specs):
     setSite(site)
     try:
+        manager = site.getSiteManager()
         default = zapi.traverse(site, '++etc++site/default')
         for spec in specs:
-            if spec.storage_name in default:
-                if not spec.override:
-                    return
-                manager.unregisterUtility(default[spec.storage_name],
-                                          spec.iface)
-                del default[spec.storage_name]
+            local_utility = getLocalUtility(default, spec)    
+            if local_utility is not None:
+                if spec.override:
+                    # override existing utility
+                    name = local_utility.__name__
+                    manager.unregisterUtility(name,
+                                              spec.iface)
+                    del default[name]
+                else:
+                    # do not register this utility; we already got it
+                    continue
             utility = spec.factory()
             default[spec.storage_name] = utility
             if spec.setUp is not None:
                 spec.setUp(utility)
-            manager = site.getSiteManager()
             manager.registerUtility(utility, spec.iface, spec.utility_name)
     finally:
         # we clean up as other bootstrapping code might otherwise get
         # confused...
         setSite(None)
-    
+
+def getLocalUtility(default, spec):
+    util = queryUtility(spec.iface, name=spec.utility_name, default=None)
+    if util is None:
+        return util
+    if util.__parent__ is default:
+        return util
+    else:
+        return None
+
 class UtilitySetUp(UtilitySpecification):        
     """Set up a single utility.
     """

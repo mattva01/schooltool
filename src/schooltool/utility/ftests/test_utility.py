@@ -79,6 +79,43 @@ def doctest_multipleUtilityRegistration():
       
     """
 
+def doctest_utilityOverride():
+    """
+    Let's create a utility::
+
+      >>> from persistent import Persistent
+      >>> from zope.app.container.contained import Contained
+      >>> from zope.interface import Interface, implements
+      >>> class IMyUtility(Interface):
+      ...     pass
+      >>> class MyUtility1(Persistent, Contained):
+      ...     implements(IMyUtility)
+
+    Let's register it::
+
+      >>> from schooltool.utility import UtilitySetUp
+      >>> setup = UtilitySetUp(MyUtility1, IMyUtility)
+      >>> from zope.app.component.hooks import getSite, setSite
+      >>> site = getSite()
+      >>> setup(site, None)
+      >>> setSite(site)
+
+    And let's register another one, overriding the first::
+
+      >>> class MyUtility2(Persistent, Contained):
+      ...   implements(IMyUtility)
+      >>> setup2 = UtilitySetUp(MyUtility2, IMyUtility, override=True)
+      >>> setup2(site, None)
+      >>> setSite(site)
+      
+    Now we expect there to be only MyUtility2::
+
+      >>> from zope.component import getUtility
+      >>> util = getUtility(IMyUtility)
+      >>> isinstance(util, MyUtility2)
+      True
+    """
+
 def sitePlacefulSetUp(*args):
     setup.placefulSetUp(site=True)
 
