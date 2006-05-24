@@ -216,6 +216,14 @@ def doctest_PersonEditView():
 def doctest_PersonAddView():
     r"""Test for PersonAddView
 
+    Make sure we have the PersonFactory utility available:
+    
+        >>> from zope.component import provideUtility
+        >>> from schooltool.person.utility import PersonFactory
+        >>> from schooltool.person.interfaces import IPersonFactory
+        >>> provideUtility(PersonFactory(), IPersonFactory)
+
+    
     We need some setup to make traversal work in a unit test.
 
         >>> class FakeURL:
@@ -388,12 +396,16 @@ def doctest_PersonPreferencesView():
 def doctest_PersonCSVImporter():
     r"""Tests for PersonCSVImporter.
 
-    Create a person container and an importer
-
+    Make sure we have the PersonFactory utility available:
+    
         >>> from zope.component import provideUtility
         >>> from schooltool.person.utility import PersonFactory
         >>> from schooltool.person.interfaces import IPersonFactory
         >>> provideUtility(PersonFactory(), IPersonFactory)
+        
+    Create a person container and an importer
+
+
         >>> from schooltool.person.browser.csvimport import \
         ...     PersonCSVImporter
         >>> from schooltool.person.person import PersonContainer

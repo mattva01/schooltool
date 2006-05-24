@@ -74,6 +74,15 @@
       />
 
   <page
+      name="add.html"
+      for="schooltool.person.interfaces.IPersonContainer"
+      class=".person.PersonAddView"
+      template="person_add.pt"
+      permission="schooltool.create"
+      menu="schooltool_actions" title="New Person" 
+      />
+
+  <page
       name="delete.html"
       for="..interfaces.IPersonContainer"
       class=".person.PersonContainerDeleteView"

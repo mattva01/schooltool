@@ -32,7 +32,6 @@ from zope.app.publisher.browser.menu import getMenu, BrowserMenu
 
 from schooltool.skin.form import AttributeEditForm
 from schooltool.traverser.traverser import SingleAttributeTraverserPlugin
-from schooltool.person.browser.person import PersonAddView as PersonAddViewBase
 from schooltool.person.interfaces import IReadPerson
 from schooltool.demographics.person import Person
 from schooltool.demographics import interfaces
@@ -129,9 +128,6 @@ class ContactInfoEdit(PersonEditForm):
 
 class ContactInfoDisplay(PersonDisplayForm):
     form_fields = form.Fields(interfaces.IContactInfo)
-    
-class PersonAddView(PersonAddViewBase):
-    _factory = Person
 
 class Term(object):
     def __init__(self, title, value):

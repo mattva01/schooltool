@@ -111,21 +111,6 @@
       permission="schooltool.view"
       />
 
-  <!-- make sure we add demographics.person.Person instead of
-       default schooltool.person.Person -->
-  <configure package="schooltool.person.browser">
-  
-  <!-- add form -->
-    <page
-      name="add.html"
-      for="schooltool.person.interfaces.IPersonContainer"
-      class="schooltool.demographics.browser.personform.PersonAddView"
-      template="person_add.pt"
-      permission="schooltool.create"
-      menu="schooltool_actions" title="New Person" />
-
-  </configure>
-
   <!-- to get simple drop down lists in widgets -->
   <zope:adapter
       for="zope.schema.interfaces.IIterableSource

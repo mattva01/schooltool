@@ -34,12 +34,13 @@ from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.publisher.browser import BrowserView
 from zope.viewlet.interfaces import IViewletManager
 from zope.formlib import form
+from zope.component import getUtility
 
 from schooltool import SchoolToolMessage as _
 from schooltool.skin.form import BasicForm
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.browser.app import ContainerView, ContainerDeleteView
-from schooltool.person.interfaces import IPerson
+from schooltool.person.interfaces import IPerson, IPersonFactory
 from schooltool.person.interfaces import IPersonPreferences
 from schooltool.person.interfaces import IPersonContainer, IPersonContained
 from schooltool.person.person import Person
@@ -156,7 +157,6 @@ class PersonAddView(AddView):
 
     # Override some fields of AddView
     schema = IPersonAddForm
-    _factory = Person
     _arguments = ['title', 'username', 'password', 'photo']
     _keyword_arguments = []
     _set_before_add = [] # getFieldNamesInOrder(schema)
@@ -182,6 +182,9 @@ class PersonAddView(AddView):
         person.photo = photo
         return person
 
+    def _factory(self, username, title):
+        return getUtility(IPersonFactory)(username, title)
+        
     def add(self, person):
         """Add `person` to the container.
 
