@@ -9,57 +9,57 @@ We can add a person:
   >>> browser.addHeader('Authorization', 'Basic manager:schooltool')
   >>> browser.open('http://localhost/persons/@@add.html')
   >>> title = browser.getControl(name='field.title')
-  >>> title.value = 'foo'
+  >>> title.value = 'foobar'
   >>> username = browser.getControl(name='field.username')
-  >>> username.value = 'foo'
+  >>> username.value = 'foobar'
   >>> browser.getControl('Add').click()
 
 And we can edit its name info:
 
-  >>> browser.open('http://localhost/persons/foo/nameinfo/@@edit.html')
+  >>> browser.open('http://localhost/persons/foobar/nameinfo/@@edit.html')
   >>> full_name = browser.getControl(name='form.full_name')
   >>> full_name.value = 'Someone Schooltool'
   >>> browser.getControl('Apply').click()
-  >>> browser.open('http://localhost/persons/foo/nameinfo/@@edit.html')
+  >>> browser.open('http://localhost/persons/foobar/nameinfo/@@edit.html')
   >>> browser.getControl(name='form.full_name').value
   'Someone Schooltool'
 
 We can also view the name info:
 
-  >>> browser.open('http://localhost/persons/foo/nameinfo')
+  >>> browser.open('http://localhost/persons/foobar/nameinfo')
   >>> 'Someone Schooltool' in browser.contents
   True
 
 We can edit its demographics:
 
-  >>> browser.open('http://localhost/persons/foo/demographics/@@edit.html')
+  >>> browser.open('http://localhost/persons/foobar/demographics/@@edit.html')
   >>> previous_school = browser.getControl(name='form.previous_school')
   >>> previous_school.value = 'Some text'
   >>> browser.getControl('Apply').click()
 
 and view it:
 
-  >>> browser.open('http://localhost/persons/foo/demographics')
+  >>> browser.open('http://localhost/persons/foobar/demographics')
   >>> 'Some text' in browser.contents
   True
 
 and its school data:
   
-  >>> browser.open('http://localhost/persons/foo/schooldata/@@edit.html')
+  >>> browser.open('http://localhost/persons/foobar/schooldata/@@edit.html')
   >>> id = browser.getControl(name='form.id')
   >>> id.value = 'ABC'
   >>> browser.getControl('Apply').click()
-  >>> browser.open('http://loaclhost/persons/foo/schooldata')
+  >>> browser.open('http://loaclhost/persons/foobar/schooldata')
   >>> 'ABC' in browser.contents
   True
 
 and various parent and emergency contact screens:
 
-  >>> browser.open('http://localhost/persons/foo/parent1/@@edit.html')
-  >>> browser.open('http://localhost/persons/foo/parent2/@@edit.html')
-  >>> browser.open('http://localhost/persons/foo/emergency1/@@edit.html')
-  >>> browser.open('http://localhost/persons/foo/emergency2/@@edit.html')
-  >>> browser.open('http://localhost/persons/foo/emergency3/@@edit.html')
+  >>> browser.open('http://localhost/persons/foobar/parent1/@@edit.html')
+  >>> browser.open('http://localhost/persons/foobar/parent2/@@edit.html')
+  >>> browser.open('http://localhost/persons/foobar/emergency1/@@edit.html')
+  >>> browser.open('http://localhost/persons/foobar/emergency2/@@edit.html')
+  >>> browser.open('http://localhost/persons/foobar/emergency3/@@edit.html')
 
 We can also add people as CSV data:
 
@@ -80,5 +80,26 @@ We can also see the persons added so far in tabular display:
   True
   >>> 'beta' in browser.contents
   True
-  >>> 'foo' in browser.contents
+  >>> 'foobar' in browser.contents
   True
+
+We can search for the persons:
+
+  >>> browser.open('http://localhost/persons/@@search.html')
+  >>> sb = browser.getControl(name="form.fulltext")
+  >>> sb.value = '*a*'
+  >>> browser.getControl(name="form.actions.submit").click()
+
+Check that the persons appeared on the output of the search:
+
+  >>> 'alpha' in browser.contents
+  True
+
+NOTE: shouldn't beta be there also ?
+
+Check that the search didn't return un-matching cases:
+
+  >>> 'foobar' in browser.contents
+  False
+
+
