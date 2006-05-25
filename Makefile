@@ -13,8 +13,8 @@ PYTHONPATH:=$(PYTHONPATH):src:Zope3/src
 SETUPFLAGS=
 
 # Which part of the Zope3 repository do we track
-Z3_VERSION=trunk
-#Z3_VERSION=branches/3.2
+#Z3_VERSION=trunk
+Z3_VERSION=branches/3.3
 #Z3_VERSION=tags/3.2.0
 
 .PHONY: all
