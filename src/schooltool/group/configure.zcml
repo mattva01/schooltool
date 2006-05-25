@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:security="http://schooltool.org/securitypolicy"
            i18n_domain="schooltool">
 
   <interface
@@ -57,5 +58,10 @@
         />
 
   </configure>
+
+  <security:setting
+      key="members_can_edit_group_info"
+      text="Members can edit Group information."
+      default="False" />
 
 </configure>
