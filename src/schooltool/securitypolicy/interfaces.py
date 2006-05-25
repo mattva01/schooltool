@@ -24,7 +24,25 @@ $Id$
 """
 
 from zope.interface import Interface
+from zope.schema import Dict, Bool, TextLine
 from zope.interface import Attribute
+from zope.configuration.fields import PythonIdentifier
+
+
+class ICrowdsUtility(Interface):
+    """Crowds Utility holds registered security information"""
+
+    crowdmap = Dict(
+        title=u"Crowd Map",
+        description=u"Maps crowd names to crowd factories")
+
+    objcrowds = Dict(
+        title=u"Object Crowd Factories",
+        description=u"Maps (interface, permission)s to crowd factories")
+
+    permcrowds = Dict(
+        title=u"Permission Crowd Factories",
+        description=u"Maps permissions to crowd factories")
 
 
 class ICrowd(Interface):
@@ -53,12 +71,12 @@ class IAccessControlCustomisations(Interface):
 class IAccessControlSetting(Interface):
     """An access control customisation setting."""
 
-    key = PythonIdentifier("""A key that identified the setting.
+    key = PythonIdentifier(description=u"""A key that identified the setting.
                            For example: 'members_manage_groups',
-                           'teachers_edit_person_info''
+                           'teachers_edit_person_info'
                            """)
-    default = Bool("The default value for the setting.")
-    text = TextLine("Description of the setting for the user interface.")
+    default = Bool(title=u"The default value for the setting.")
+    text = TextLine(title=u"Description of the setting for the user interface.")
 
     def getValue():
         """Return the value of the setting.
