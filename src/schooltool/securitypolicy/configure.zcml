@@ -7,6 +7,10 @@
   <securityPolicy
     component=".policy.SchoolToolSecurityPolicy" />
 
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".customisation.getAccessControlCustomisations"
+      provides=".interfaces.IAccessControlCustomisations" />
 
   <!-- Some basic crowds -->
   <security:crowd

@@ -14,7 +14,12 @@
       handler=".metaconfigure.allow"
       />
 
+    <directive
+      name="setting"
+      schema=".metadirectives.ISettingDirective"
+      handler=".metaconfigure.setting"
+      />
+
   </directives>
 
 </configure>
-

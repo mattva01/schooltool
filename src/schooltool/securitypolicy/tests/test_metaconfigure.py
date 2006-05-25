@@ -25,6 +25,7 @@ $Id$
 import unittest
 from zope.testing import doctest
 from zope.interface import implements, Interface
+from zope.interface.verify import verifyObject
 from zope.app.testing import setup
 from zope.component import getAdapter
 from schooltool.securitypolicy import metaconfigure as mc
@@ -132,6 +133,76 @@ def test_registerCrowdAdapter():
 
     """
 
+
+def doctest_AccessControlSetting():
+    """Tests for AccessControlSetting.
+
+        >>> from schooltool.securitypolicy.metaconfigure import AccessControlSetting
+        >>> setting = AccessControlSetting("key", "Some text", False)
+
+    Setting should implement the IAccessControlSetting interface:
+
+        >>> from schooltool.securitypolicy.interfaces import IAccessControlSetting
+        >>> verifyObject(IAccessControlSetting, setting)
+        True
+
+    getValue is just a wrapper for the get method of the
+    adapter from schooltool application to IAccessControlCustomisations:
+
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
+        >>> from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
+        >>> class CustomisationsStub(object):
+        ...     implements(IAccessControlCustomisations)
+        ...     def get(self, key):
+        ...         return "Value for setting: %s" % key
+
+        >>> class AppStub(object):
+        ...     implements(ISchoolToolApplication)
+        ...     def __conform__(self, iface):
+        ...         if iface == IAccessControlCustomisations:
+        ...             return CustomisationsStub()
+
+        >>> from zope.component import provideAdapter
+        >>> provideAdapter(lambda context: AppStub(),
+        ...                adapts=[None],
+        ...                provides=ISchoolToolApplication)
+
+        >>> setting.getValue()
+        'Value for setting: key'
+
+    """
+
+
+def doctest_handle_setting():
+    """Tests for handle_setting.
+
+        >>> from schooltool.securitypolicy.metaconfigure import handle_setting
+
+    Handle setting should register a subscriber adapter for
+    IAccessControlSetting interface, initially there are no subscribers:
+
+        >>> from zope.component import subscribers
+        >>> from schooltool.securitypolicy.interfaces import IAccessControlSetting
+        >>> subscribers([None], IAccessControlSetting)
+        []
+
+        >>> handle_setting("key", "text", False)
+
+    Now we should have one:
+
+        >>> subscribers([None], IAccessControlSetting)
+        [<AccessControlSetting key=key, text=text, default=False>]
+
+    Let's add another one:
+
+        >>> handle_setting("another_key", "more text", True)
+        >>> subscribers([None], IAccessControlSetting)
+        [<AccessControlSetting key=key, text=text, default=False>,
+         <AccessControlSetting key=another_key, text=more text, default=True>]
+
+    """
+
+
 class Fixture(object):
 
     def setUp(self, test=None):
@@ -155,6 +226,7 @@ class Fixture(object):
 def test_suite():
     f = Fixture()
     return unittest.TestSuite([
-            doctest.DocTestSuite(optionflags=doctest.ELLIPSIS,
+            doctest.DocTestSuite(optionflags=doctest.ELLIPSIS |
+                                             doctest.NORMALIZE_WHITESPACE,
                                  setUp=f.setUp, tearDown=f.tearDown)])
 

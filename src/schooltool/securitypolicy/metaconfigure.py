@@ -25,9 +25,14 @@ $Id$
 
 from zope.configuration.exceptions import ConfigurationError
 from zope.component import provideAdapter
+from zope.interface import implements
+from zope.component import provideSubscriptionAdapter
 from schooltool.securitypolicy.policy import permcrowds
 from schooltool.securitypolicy.crowds import Crowd
 from schooltool.securitypolicy.interfaces import ICrowd
+from schooltool.securitypolicy.interfaces import IAccessControlSetting
+from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
+from schooltool.app.interfaces import ISchoolToolApplication
 
 
 crowdmap = {} # crowd_name -> crowd_factory
@@ -96,3 +101,33 @@ def allow(_context, interface=None, crowds=None, permission=None):
     # TODO: discriminator
     _context.action(discriminator=None, callable=handle_allow,
                     args=(interface, crowds, permission))
+
+
+class AccessControlSetting(object):
+    implements(IAccessControlSetting)
+
+    def __init__(self, key, text, default):
+        self.key = key
+        self.text = text
+        self.default = default
+
+    def getValue(self):
+        app = ISchoolToolApplication(None)
+        customisations = IAccessControlCustomisations(app)
+        return customisations.get(self.key)
+
+    def __repr__(self):
+        return "<AccessControlSetting key=%s, text=%s, default=%s>" % (self.key,
+                                                                       self.text,
+                                                                       self.default)
+
+def handle_setting(key, text, default):
+    def accessControlSettingFactory(context=None):
+        return AccessControlSetting(key, text, default)
+    provideSubscriptionAdapter(accessControlSettingFactory,
+                               adapts=[None],
+                               provides=IAccessControlSetting)
+
+def setting(_context, key=None, text=None, default=None):
+    _context.action(discriminator=None, callable=handle_setting,
+                    args=(key, text, default))

@@ -24,7 +24,9 @@ $Id$
 """
 
 from zope.interface import Interface
-from zope.configuration.fields import Tokens, GlobalObject, PythonIdentifier
+from zope.configuration.fields import (Tokens, GlobalObject, PythonIdentifier,
+                                       Bool)
+from zope.schema import TextLine
 from zope.security.zcml import Permission
 
 
@@ -54,3 +56,17 @@ class IAllowDirective(Interface):
     permission = Permission(
         title=u"Permission",
         required=True)
+
+
+class ISettingDirective(Interface):
+
+    key = PythonIdentifier(
+        title=u"Key")
+
+    text = TextLine(
+        title=u"Text")
+
+    default = Bool(
+        title=u"Default setting",
+        required=True,
+        default=False)

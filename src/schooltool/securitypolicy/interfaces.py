@@ -24,6 +24,7 @@ $Id$
 """
 
 from zope.interface import Interface
+from zope.interface import Attribute
 
 
 class ICrowd(Interface):
@@ -34,3 +35,34 @@ class ICrowd(Interface):
 
     def contains(principal):
         """Return True if principal is in the crowd."""
+
+
+class IAccessControlCustomisations(Interface):
+    """Access Control Customisation storage."""
+
+    def get(key):
+        """Return a value of a setting stored under the key."""
+
+    def set(key, value):
+        """Set the value of a setting stored under the key."""
+
+    def __iter__():
+        """Iterate through all customisation settings."""
+
+
+class IAccessControlSetting(Interface):
+    """An access control customisation setting."""
+
+    key = PythonIdentifier("""A key that identified the setting.
+                           For example: 'members_manage_groups',
+                           'teachers_edit_person_info''
+                           """)
+    default = Bool("The default value for the setting.")
+    text = TextLine("Description of the setting for the user interface.")
+
+    def getValue():
+        """Return the value of the setting.
+
+        Return the default if it is not set in the
+        AccessControlCusomisations storage.
+        """
