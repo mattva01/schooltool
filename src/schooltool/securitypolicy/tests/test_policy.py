@@ -43,6 +43,11 @@ class Obj(object):
 class AnotherObj(object):
     pass
 
+class PermCrowd(Crowd):
+    adapts(IObj)
+    def contains(seld, principal):
+        return principal == 'roodkcab'
+
 
 class ObjCrowd(Crowd):
     adapts(IObj)
@@ -58,6 +63,11 @@ class ParticipationStub(object):
 def test_SchoolToolSecurityPolicy():
     """
 
+        >>> from schooltool.securitypolicy.metaconfigure import CrowdsUtility
+        >>> from schooltool.securitypolicy.interfaces import ICrowdsUtility
+        >>> cru = CrowdsUtility()
+        >>> ztapi.provideUtility(ICrowdsUtility, cru)
+
     Let's construct a security policy.
 
         >>> from schooltool.securitypolicy import policy
@@ -70,6 +80,13 @@ def test_SchoolToolSecurityPolicy():
 
         >>> sp.checkPermission('perm', obj)
         False
+
+    Test generic (interface independent) permissions:
+
+        >>> cru.permcrowds['perm'] = [PermCrowd]
+        >>> participation.principal = 'roodkcab'
+        >>> sp.checkPermission('perm', obj)
+        True
 
     If we provide a different principal, things work out differently:
 

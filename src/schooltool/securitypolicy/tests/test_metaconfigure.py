@@ -27,73 +27,46 @@ from zope.testing import doctest
 from zope.interface import implements, Interface
 from zope.interface.verify import verifyObject
 from zope.app.testing import setup
+from zope.app.testing import ztapi
 from zope.component import getAdapter
 from schooltool.securitypolicy import metaconfigure as mc
+from schooltool.securitypolicy.metaconfigure import CrowdsUtility
+from schooltool.securitypolicy.interfaces import ICrowdsUtility
+from zope.app import zapi
 
 
-def doctest_handle_allow():
-    """Tests for handle_allow.
+def doctest_CrowdsUtility():
+    """Doctest for CrowdsUtility.
 
-        >>> from schooltool.securitypolicy import metaconfigure as mc
-
-        >>> mc.crowdmap = {'cr1': 'fac1', 'cr2': 'fac2', 'cr3': 'fac3'}
-        >>> def registerCrowdAdapterStub(iface, permission):
-        ...     print 'registerCrowdAdapter' + str((iface, permission))
-
-        >>> mc.registerCrowdAdapter = registerCrowdAdapterStub
-
-    First check a simple declaration:
-
-        >>> mc.handle_allow('iface', ['cr1', 'cr2'], 'my.permission')
-        registerCrowdAdapter('iface', 'my.permission')
-
-        >>> mc.objcrowds
-        {('iface', 'my.permission'): ['fac1', 'fac2']}
-
-    Another call will not invoke registerCrowdAdapter again:
-
-        >>> mc.handle_allow('iface', ['cr3'], 'my.permission')
-        >>> mc.objcrowds
-        {('iface', 'my.permission'): ['fac1', 'fac2', 'fac3']}
-
-    Let's check the case when an interface is not provided:
-
-        >>> mc.handle_allow(None, ['cr1'], 'my.permission')
-        >>> mc.permcrowds
-        {'my.permission': ['fac1']}
-
-        >>> mc.handle_allow(None, ['cr2'], 'my.permission')
-        >>> mc.permcrowds
-        {'my.permission': ['fac1', 'fac2']}
-
+        >>> cru = CrowdsUtility()
+        >>> verifyObject(ICrowdsUtility, cru)
+        True
     """
 
 
-def doctest_handle_crowd():
-    """Tests for handle_crowd.
+def doctest_getCrowdsUtility():
+    """Doctest for getCrowdsUtility.
 
-        >>> from schooltool.securitypolicy.metaconfigure import handle_crowd
-        >>> from schooltool.securitypolicy.metaconfigure import crowdmap
-        >>> crowdmap
-        {}
-        >>> handle_crowd('drunkards', 'brewery')
-        >>> crowdmap
-        {'drunkards': 'brewery'}
+        >>> from schooltool.securitypolicy.metaconfigure import getCrowdsUtility
+        >>> zapi.queryUtility(ICrowdsUtility) is None
+        True
 
-    Clean up:
+        >>> cru = getCrowdsUtility()
+        >>> print cru
+        <schooltool.securitypolicy.metaconfigure.CrowdsUtility object ...>
 
-        >>> crowdmap.clear()
-
+        >>> zapi.queryUtility(ICrowdsUtility) is cru
+        True
     """
 
 
-def test_registerCrowdAdapter():
-    """Tests for registerCrowdAdapter.
+def doctest_registerCrowdAdapter():
+    """Doctests for registerCrowdAdapter.
 
         >>> from schooltool.securitypolicy import metaconfigure
         >>> from schooltool.securitypolicy.interfaces import ICrowd
-
-        >>> oldObjCrowds = metaconfigure.objcrowds
+        >>> cru = CrowdsUtility()
+        >>> ztapi.provideUtility(ICrowdsUtility, cru)
 
         >>> class IMyObject(Interface):
         ...     pass
@@ -120,7 +93,7 @@ def test_registerCrowdAdapter():
         ...     def contains(self, principal):
         ...         print 'contains(%s)' % principal
         ...         return principal == 'r00t'
-        >>> metaconfigure.objcrowds = {(IMyObject, 'perm'): [CrowdStub]}
+        >>> cru.objcrowds = {(IMyObject, 'perm'): [CrowdStub]}
 
         >>> adapter.contains('some principal')
         contains(some principal)
@@ -129,13 +102,103 @@ def test_registerCrowdAdapter():
         >>> adapter.contains('r00t')
         contains(r00t)
         True
+    """
 
+
+def doctest_handle_crowd():
+    """Doctest for handle_crowd
+
+        >>> from schooltool.securitypolicy.metaconfigure import handle_crowd
+        >>> cru = CrowdsUtility()
+        >>> ztapi.provideUtility(ICrowdsUtility, cru)
+
+        >>> handle_crowd('cr1', 'fac1')
+        >>> print sorted(cru.crowdmap.keys())
+        ['cr1']
+        >>> cru.crowdmap['cr1']
+        'fac1'
+    """
+
+
+def doctest_handle_allow():
+    """Tests for handle_allow.
+
+        >>> from schooltool.securitypolicy import metaconfigure as mc
+
+        >>> cru = CrowdsUtility()
+        >>> cru.crowdmap = {'cr1': 'fac1',
+        ...                 'cr2': 'fac2',
+        ...                 'cr3': 'fac3'}
+        >>> ztapi.provideUtility(ICrowdsUtility, cru)
+        >>> def registerCrowdAdapterStub(iface, permission):
+        ...     print 'registerCrowdAdapter' + str((iface, permission))
+
+        >>> mc.registerCrowdAdapter = registerCrowdAdapterStub
+
+    First check a simple declaration:
+
+        >>> mc.handle_allow('iface', 'cr1', 'my.permission')
+        registerCrowdAdapter('iface', 'my.permission')
+        >>> mc.handle_allow('iface', 'cr2', 'my.permission')
+
+        >>> cru.objcrowds
+        {('iface', 'my.permission'): ['fac1', 'fac2']}
+
+    Another call will not invoke registerCrowdAdapter again:
+
+        >>> mc.handle_allow('iface', 'cr3', 'my.permission')
+        >>> cru.objcrowds
+        {('iface', 'my.permission'): ['fac1', 'fac2', 'fac3']}
+
+    Let's check the case when an interface is not provided:
+
+        >>> mc.handle_allow(None, 'cr1', 'my.permission')
+        >>> cru.permcrowds
+        {'my.permission': ['fac1']}
+
+        >>> mc.handle_allow(None, 'cr2', 'my.permission')
+        >>> cru.permcrowds
+        {'my.permission': ['fac1', 'fac2']}
+
+    """
+
+
+def doctest_crowd():
+    """Doctests for crowd
+
+        >>> from schooltool.securitypolicy.metaconfigure import crowd
+        >>> class ContextStub(object):
+        ...     def action(self, discriminator, callable, args):
+        ...         print discriminator
+        ...         print callable
+        ...         print args
+
+        >>> _context = ContextStub()
+        >>> crowd(_context, 'ipqs', 'ipqsfactory')
+        ('Crowd', 'ipqs')
+        <function handle_crowd at ...>
+        ('ipqs', 'ipqsfactory')
+    """
+
+
+def doctest_allow():
+    """Doctests for allow
+
+        >>> from schooltool.securitypolicy.metaconfigure import allow
+        >>> class ContextStub(object):
+        ...     def action(self, discriminator, callable, args):
+        ...         print discriminator, callable, args
+
+        >>> _context = ContextStub()
+        >>> allow(_context, 'interface', ['ipqs', 'ecug'], 'do')
+        ('Allow', 'interface', 'ipqs', 'do') <function handle_allow ...> ('interface', 'ipqs', 'do')
+        ('Allow', 'interface', 'ecug', 'do') <function handle_allow ...> ('interface', 'ecug', 'do')
 
     """
 
 
 def doctest_AccessControlSetting():
-    """Tests for AccessControlSetting.
+    """Doctests for AccessControlSetting.
 
         >>> from schooltool.securitypolicy.metaconfigure import AccessControlSetting
         >>> setting = AccessControlSetting("key", "Some text", False)
@@ -208,20 +271,11 @@ class Fixture(object):
     def setUp(self, test=None):
         setup.placelessSetUp()
         self.oldRegisterCrowdAdapter = mc.registerCrowdAdapter
-        self.oldCrowdMap = mc.crowdmap
-        self.oldObjCrowds = mc.objcrowds
-        self.oldPermCrowds = mc.permcrowds
-
-        mc.objcrowds = {}
-        mc.permcrowds = {}
-        mc.crowdmap = {}
 
     def tearDown(self, test=None):
         setup.placelessTearDown()
         mc.registerCrowdAdapter = self.oldRegisterCrowdAdapter
-        mc.crowdmap = self.oldCrowdMap
-        mc.objcrowds = self.oldObjCrowds
-        mc.permcrowds = self.oldPermCrowds
+
 
 def test_suite():
     f = Fixture()

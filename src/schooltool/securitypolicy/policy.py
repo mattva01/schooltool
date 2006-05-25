@@ -27,9 +27,8 @@ from zope.security.simplepolicies import ParanoidSecurityPolicy
 from zope.component import queryAdapter
 from zope.traversing.api import getParent
 from schooltool.securitypolicy.crowds import ICrowd
+from schooltool.securitypolicy.metaconfigure import getCrowdsUtility
 
-
-permcrowds = {} # a global map: permission -> crowd_factory
 
 class SchoolToolSecurityPolicy(ParanoidSecurityPolicy):
     """Crowd-based security policy."""
@@ -40,7 +39,7 @@ class SchoolToolSecurityPolicy(ParanoidSecurityPolicy):
         #print 'Checking, perm=%s, obj=%s' % (permission, obj)
 
         # First, check the generic, interface-independent permissions.
-        crowdclasses = permcrowds.get(permission, [])
+        crowdclasses = getCrowdsUtility().permcrowds.get(permission, [])
         for crowdcls in crowdclasses:
             crowd = crowdcls(obj)
             #print ' generic crowd: %s' % crowdcls.__name__
