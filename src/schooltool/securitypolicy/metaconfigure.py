@@ -132,6 +132,11 @@ class AccessControlSetting(object):
         customisations = IAccessControlCustomisations(app)
         return customisations.get(self.key)
 
+    def setValue(self, value):
+        app = ISchoolToolApplication(None)
+        customisations = IAccessControlCustomisations(app)
+        return customisations.set(self.key, value)
+
     def __repr__(self):
         return "<AccessControlSetting key=%s, text=%s, default=%s>" % (
                 self.key, self.text, self.default)

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <page
+      name="access_control.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class=".views.AccessControlView"
+      template="templates/access_control.pt"
+      permission="schooltool.view"
+      menu="schooltool_actions"
+      title="Access Control"
+      />
+
+  <configure package="schooltool.skin">
+    <viewlet
+        name="access_control_customisation"
+        for="*"
+        manager="schooltool.skin.INavigationManager"
+        template="templates/navigationViewlet.pt"
+        class="schooltool.skin.NavigationViewlet"
+        permission="schooltool.view"
+        link="access_control.html"
+        title="Access Control"
+        order="100"
+        />
+  </configure>
+
+</configure>

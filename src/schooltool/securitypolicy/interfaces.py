@@ -84,3 +84,6 @@ class IAccessControlSetting(Interface):
         Return the default if it is not set in the
         AccessControlCusomisations storage.
         """
+
+    def setValue(value):
+        """Set the value of the setting."""

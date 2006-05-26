@@ -23,6 +23,7 @@ $Id$
 """
 
 from zope.publisher.browser import BrowserView
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
@@ -35,3 +36,12 @@ class AccessControlView(BrowserView):
         app = ISchoolToolApplication(None)
         customisations = IAccessControlCustomisations(app)
         return list(customisations)
+
+    def update(self):
+        prefix = 'setting.'
+        if 'UPDATE_SUBMIT' in self.request:
+            for setting in self.settings():
+                setting.setValue(prefix + setting.key in self.request)
+        elif 'CANCEL' in self.request:
+            url = absoluteURL(self.context, self.request)
+            self.request.response.redirect(url)

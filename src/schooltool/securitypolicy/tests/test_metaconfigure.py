@@ -218,6 +218,8 @@ def doctest_AccessControlSetting():
         ...     implements(IAccessControlCustomisations)
         ...     def get(self, key):
         ...         return "Value for setting: %s" % key
+        ...     def set(self, key, value):
+        ...         return "Setting value of %s to %s" % (key, value)
 
         >>> class AppStub(object):
         ...     implements(ISchoolToolApplication)
@@ -232,6 +234,11 @@ def doctest_AccessControlSetting():
 
         >>> setting.getValue()
         'Value for setting: key'
+
+    We can set the value of the setting directly as well:
+
+        >>> setting.setValue("new value")
+        'Setting value of key to new value'
 
     """
 
