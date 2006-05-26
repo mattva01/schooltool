@@ -157,6 +157,11 @@ class SearchTable(form.FormBase, PersonTable):
     def values(self):
         if not self.search_data:
             return []
+        # XXX Some search problems seem to occur in the underlying Zope 3
+        # text index code:
+        # - *a* matches "Alpha" but not "Beta"
+        # - queries smaller than three letters result in a parsetree.ParseError
+        #   exception.
         q = zapi.getUtility(IQuery)
         return q.searchResults(
             query.Text(('demographics_catalog', 'fulltext'),
