@@ -57,7 +57,8 @@ class TablePage(BrowserPage):
         formatter = table.StandaloneFullFormatter(
             self.context, self.request, self.cached_values(),
             columns=self.columns(),
-            batch_start=self.batch_start, batch_size=self.batch_size)
+            batch_start=self.batch_start, batch_size=self.batch_size,
+            sort_on=self.sortOn())
         # set CSS class for the zc.table generated tables, to differentiate it
         # from other tables.
         formatter.cssClasses['table'] = 'data'
@@ -90,6 +91,10 @@ class TablePage(BrowserPage):
             return ''
         l = ['sort_on:list=%s' % o for o in sort_on]
         return '&' + '&'.join(l)
+
+    def sortOn(self):
+        """ Default sort on. """
+        return ()
     
 class PersonTable(TablePage):
     
@@ -138,6 +143,9 @@ class PersonTable(TablePage):
     def values(self):
         return self.context.values()
 
+    def sortOn(self):
+        return (("modified", True),)
+
     @property
     def canModify(self):
         return canAccess(self.context, '__delitem__')
@@ -181,6 +189,9 @@ class SearchTable(form.FormBase, PersonTable):
             return ''
         return '&' + '&'.join(['%s=%s' % (key, value)
                                for (key, value) in result])
+
+    def sortOn(self):
+        return (("modified", True),)
     
 class EditColumn(column.Column):
     def renderCell(self, item, formatter):
