@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/zope"
-           xmlns:i18n="http://namespaces.zope.org/i18n">
+           xmlns:security="http://schooltool.org/securitypolicy">
 
   <!-- Adapters -->
 
@@ -185,7 +185,7 @@
   </class>
 
   <class class=".cal.Calendar">
-    <require permission="schooltool.viewCalendar"
+    <require permission="schooltool.view"
              interface="schooltool.calendar.interfaces.ICalendar"
              attributes="title __cmp__" />
     <require permission="schooltool.addEvent"
@@ -219,6 +219,21 @@
   <include package=".rest" />
 
   <!-- Security declarations for calendaring -->
+
+  <security:crowd
+      name="calendar_viewers"
+      factory=".security.CalendarViewersCrowd" />
+
+  <security:allow
+      interface=".interfaces.ISchoolToolCalendar"
+      permission="schooltool.view"
+      crowds="administration calendar_viewers" />
+
+  <security:setting
+      key="everyone_can_view_app_calendar"
+      text="Everyone can view the application calendar."
+      default="True"
+      />
 
   <!-- XXX It feels wrong to tweak permissions of objects in a sibling. -->
 

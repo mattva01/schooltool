@@ -59,9 +59,16 @@
 
   </configure>
 
+  <!-- Security settings -->
+
   <security:setting
       key="members_can_edit_group_info"
-      text="Members can edit Group information."
+      text="Members can edit group information."
+      default="False" />
+
+  <security:setting
+      key="everyone_can_view_group_calendar"
+      text="Everyone can view group calendars."
       default="False" />
 
 </configure>

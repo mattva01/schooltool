@@ -45,6 +45,7 @@ from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolAuthentication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.person.interfaces import IPerson
+from schooltool.securitypolicy.crowds import Crowd
 
 
 class Principal(Contained):
@@ -204,3 +205,25 @@ def authSetUpSubscriber(app, event):
     This is a handler for IObjectAddedEvent.
     """
     setUpLocalAuth(app)
+
+
+class CalendarViewersCrowd(Crowd):
+    """A crowd that contains principals who are allowed to view the context.
+
+    XXX This will soon be refactored to use adapters instead of doing
+    dispatch using providedBy.
+    """
+
+    def contains(self, principal):
+        from schooltool.group.interfaces import IGroup
+        from schooltool.app.interfaces import ISchoolToolApplication
+        from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
+
+        app = ISchoolToolApplication(None)
+        customizations = IAccessControlCustomisations(app)
+        if IGroup.providedBy(self.context.__parent__):
+            return customizations.get('everyone_can_view_group_calendar')
+        elif ISchoolToolApplication.providedBy(self.context.__parent__):
+            return customizations.get('everyone_can_view_app_calendar')
+        else:
+            return True
