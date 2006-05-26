@@ -22,7 +22,7 @@ import datetime
 from zope.app import zapi
 from zope.interface import implements
 from zope import event
-from zope.formlib import form, namedtemplate
+from zope.formlib import form
 from zope.formlib.interfaces import IAction
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.interface.common import idatetime
