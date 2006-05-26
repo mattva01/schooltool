@@ -14,7 +14,7 @@
            class="row">
         <input type="checkbox"
                tal:attributes="checked setting/getValue;
-                               name setting/key;
+                               name string:setting.${setting/key};
                                id setting/key" />
         <label tal:content="setting/text"
                tal:attributes="for setting/key"/>
