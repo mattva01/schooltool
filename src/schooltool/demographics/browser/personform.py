@@ -144,15 +144,3 @@ class Terms(object):
 
     def getValue(self, token):
         return token
-
-@namedtemplate.implementation(IAction)
-def render_submit_button(self):
-    if not self.available():
-        return ''
-    label = self.label
-    if isinstance(label, zope.i18nmessageid.Message):
-        label = zope.i18n.translate(self.label, context=self.form.request)
-    return ('<input type="submit" id="%s" name="%s" value="%s"'
-            ' class="button-ok" />' %
-            (self.__name__, self.__name__, label)
-            )
