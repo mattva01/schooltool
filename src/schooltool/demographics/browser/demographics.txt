@@ -6,6 +6,7 @@ We can add a person:
 
   >>> from zope.testbrowser.testing import Browser
   >>> browser = Browser()
+  >>> browser.handleErrors = False
   >>> browser.addHeader('Authorization', 'Basic manager:schooltool')
   >>> browser.open('http://localhost/persons/@@add.html')
   >>> title = browser.getControl(name='field.title')
@@ -56,6 +57,10 @@ and its school data:
 and various parent and emergency contact screens:
 
   >>> browser.open('http://localhost/persons/foobar/parent1/@@edit.html')
+  >>> name = browser.getControl(name='form.name')
+  >>> name.value = 'Zorro'
+  >>> browser.getControl('Apply').click()
+
   >>> browser.open('http://localhost/persons/foobar/parent2/@@edit.html')
   >>> browser.open('http://localhost/persons/foobar/emergency1/@@edit.html')
   >>> browser.open('http://localhost/persons/foobar/emergency2/@@edit.html')
@@ -100,6 +105,44 @@ NOTE: shouldn't beta be there also ?
 Check that the search didn't return un-matching cases:
 
   >>> 'foobar' in browser.contents
+  False
+
+We can also search on parents:
+
+  >>> browser.open('http://localhost/persons/@@search.html')
+  >>> sb = browser.getControl(name='form.parentName')
+  >>> sb.value = 'Zorro'
+  >>> browser.getControl(name='form.actions.submit').click()
+
+Check that we found foobar, whose parent is Zorro:
+
+  >>> 'foobar' in browser.contents
+  True
+
+But not alpha or beta:
+
+  >>> 'alpha' in browser.contents
+  False
+  >>> 'beta' in browser.contents
+  False
+
+We can also do the same for the student id ABC:
+
+  >>> browser.open('http://localhost/persons/@@search.html')
+  >>> id = browser.getControl(name='form.studentId')
+  >>> id.value = 'ABC'
+  >>> browser.getControl(name='form.actions.submit').click()
+
+Check that we found foobar, whose student id is ABC:
+
+  >>> 'foobar' in browser.contents
+  True
+
+But not alpha or beta:
+
+  >>> 'alpha' in browser.contents
+  False
+  >>> 'beta' in browser.contents
   False
 
 There's a quick search form in the table view:

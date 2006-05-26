@@ -171,9 +171,30 @@ class SearchTable(form.FormBase, PersonTable):
         # - queries smaller than three letters result in a parsetree.ParseError
         #   exception.
         q = zapi.getUtility(IQuery)
-        return q.searchResults(
-            query.Text(('demographics_catalog', 'fulltext'),
-                       self.search_data['fulltext']))
+        s = None
+        fulltext = self.search_data['fulltext']
+        if fulltext:
+            s = query.Text(('demographics_catalog', 'fulltext'),
+                           fulltext)
+        parentName = self.search_data['parentName']
+        if parentName:
+            t = query.Text(('demographics_catalog', 'parentName'),
+                               parentName)
+            if s is None:
+                s = t
+            else:
+                s = s & t
+        studentId = self.search_data['studentId']
+        if studentId:
+            t = query.Eq(('demographics_catalog', 'studentId'), studentId)
+            if s is None:
+                s = t
+            else:
+                s = s & t
+        # if we have no query at all
+        if not s:
+            return []
+        return q.searchResults(s)
 
     def extraUrl(self):
         result = super(SearchTable, self).extraUrl()

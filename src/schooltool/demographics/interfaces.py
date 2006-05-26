@@ -193,3 +193,14 @@ class ISearch(Interface):
         required=False,
         )
 
+    parentName = schema.TextLine(
+        title=_(u"Name of parent"),
+        required=False,
+        )
+    
+    studentId = schema.TextLine(
+        title=_(u"Student ID"),
+        required=False,
+        )
+
+    

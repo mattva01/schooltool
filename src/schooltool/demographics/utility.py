@@ -45,10 +45,27 @@ class Search(object):
     @property
     def fulltext(self):
         return [self.context.title]
-    
+
+    @property
+    def parentName(self):
+        result = []
+        if self.context.parent1.name:
+            result.append(self.context.parent1.name)
+        if self.context.parent2.name:
+            result.append(self.context.parent2.name)
+        return result
+
+    @property
+    def studentId(self):
+        if not self.context.schooldata.id:
+            return ''
+        return self.context.schooldata.id
+
 def catalogSetUp(catalog):
     catalog['fulltext'] = TextIndex('fulltext', ISearch)
-
+    catalog['parentName'] = TextIndex('parentName', ISearch)
+    catalog['studentId'] = FieldIndex('studentId', ISearch)
+    
 catalogSetUpSubscriber = MultiUtilitySetUp(
     UtilitySpecification(IntIds, IIntIds),
     UtilitySpecification(Catalog, ICatalog, 'demographics_catalog',

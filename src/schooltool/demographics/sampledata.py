@@ -40,6 +40,14 @@ from schooltool.app.cal import CalendarEvent
 # XXX: Eek, st.person depends on st.term only because of this import!
 from schooltool.term.daterange import DateRange
 
+class ChoiceGenerator(object):
+    def __init__(self, seed, choices):
+        self.random = random.Random()
+        self.random.seed(seed)
+        self.choices = choices
+        
+    def generate(self):
+        return self.random.choice(self.choices)
 
 class SampleStudents(object):
 
@@ -53,6 +61,9 @@ class SampleStudents(object):
 
     def generate(self, app, seed=None):
         namegen = NameGenerator(str(seed) + self.name)
+        prefixgen = ChoiceGenerator(str(seed), ['Mr', 'Mrs', 'Miss', ''])
+        gendergen = ChoiceGenerator(str(seed), ['male', 'female'])
+
         # some of the tests (e.g., for groups) are set up on the assumption that
         # we won't populate the student group as we create students.  This
         # is annoying, since we end up with an empty student group.  I'm not
@@ -63,18 +74,24 @@ class SampleStudents(object):
         except KeyError:
             stud_group = False
         for i in range(self.power):
-            name = namegen.generate()
+            first_name, last_name, full_name = namegen.generate()
             person_id = 'student%03d' % i
-            person = Person(person_id, title=name)
+            person = Person(person_id, title=full_name)
+            person.nameinfo.prefix = prefixgen.generate()
+            person.nameinfo.first_name = first_name
+            person.nameinfo.last_name = last_name
             person.setPassword(person_id)
             # Without removeSecurityProxy we can't add members a
             # group.
             if stud_group:
                 removeSecurityProxy(students.members).add(person)
-
+                
+            person.demographics.gender = gendergen.generate()
+            person.schooldata.id = person_id
+            person.parent1.name = namegen.generate()[2]
+            person.parent2.name = namegen.generate()[2]
             app['persons'][person_id] = person
-
-
+            
 class SampleTeachers(object):
     implements(ISampleDataPlugin)
 
@@ -88,9 +105,9 @@ class SampleTeachers(object):
         namegen = NameGenerator(str(seed) + self.name)
         teachers = app['groups']['teachers']
         for i in range(self.power):
-            name = namegen.generate()
+            first_name, last_name, full_name = namegen.generate()
             person_id = 'teacher%03d' % i
-            person = Person(person_id, title=name)
+            person = Person(person_id, title=full_name)
             person.setPassword(person_id)
             # Without removeSecurityProxy we can't add members a
             # group.

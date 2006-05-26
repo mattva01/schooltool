@@ -48,5 +48,11 @@ class NameGenerator(object):
         return [line.strip() for line in lines]
 
     def generate(self):
-        return "%s %s" % (self.random.choice(self.first_names),
-                          self.random.choice(self.last_names))
+        """Generates name information, returns tuple of
+        first name, last name, full name
+        """
+        first_name = self.random.choice(self.first_names)
+        last_name = self.random.choice(self.last_names)
+        full_name = "%s %s" % (first_name, last_name)
+        return first_name, last_name, full_name
+    

@@ -13,6 +13,14 @@
 	   name="form.fulltext"
 	   size="20" type="text"
 	   value=""/>
+    <input type="hidden"
+	   id="form.parentName"
+	   name="form.parentName"
+	   value=""/>
+    <input type="hidden"
+           id="form.studentId"
+           name="form.studentId"
+           value=""/>
     <input type="submit"
 	   id="form.actions.submit"
 	   name="form.actions.submit"

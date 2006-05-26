@@ -58,9 +58,9 @@ def doctest_NameGenerator():
 
         >>> gen.random.seed(42)
         >>> gen.generate()
-        'Margarita Austin'
+        ('Margarita', 'Austin', 'Margarita Austin')
         >>> gen.generate()
-        'Erin Duncan'
+        ('Erin', 'Duncan', 'Erin Duncan')
 
     The names can and will repeat:
 
@@ -68,7 +68,7 @@ def doctest_NameGenerator():
         >>> count = 0
         >>> while True:
         ...     count +=1
-        ...     name = gen.generate()
+        ...     first_name, last_name, name = gen.generate()
         ...     if name in seen:
         ...         break
         ...     else:
@@ -81,7 +81,7 @@ def doctest_NameGenerator():
 
         >>> seen = set()
         >>> for i in range(1000):
-        ...     seen.add(gen.generate())
+        ...     seen.add(gen.generate()[2])
         >>> 1000 - len(seen)
         3
 
