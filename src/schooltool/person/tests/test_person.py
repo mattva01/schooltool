@@ -121,6 +121,15 @@ def doctest_Person():
         >>> person.checkPassword(u'\u1234')
         True
 
+    Persons are comparable (by username):
+
+        >>> person == person
+        True
+        >>> person == Person('person')
+        True
+        >>> person == 'foo'
+        False
+
     Persons have a calendar:
 
         >>> setup.placelessSetUp()

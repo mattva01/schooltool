@@ -98,4 +98,9 @@
       crowds="administration"
       permission="schooltool.manageMembership" />
 
+  <adapter
+      factory=".person.PersonCalendarCrowd"
+      provides="schooltool.app.interfaces.ICalendarParentCrowd"
+      name="schooltool.view" />
+
 </configure>

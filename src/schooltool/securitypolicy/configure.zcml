@@ -45,8 +45,6 @@
       name="clerks"
       factory=".crowds.ClerksCrowd" />
 
-
-
   <security:allow
       interface="schooltool.app.interfaces.ISchoolToolApplication"
       crowds="everybody"

@@ -62,13 +62,13 @@
   <!-- Security settings -->
 
   <security:setting
-      key="members_can_edit_group_info"
-      text="Members can edit group information."
-      default="False" />
-
-  <security:setting
       key="everyone_can_view_group_calendar"
       text="Everyone can view group calendars."
       default="False" />
+
+  <adapter
+      factory=".group.GroupCalendarCrowd"
+      provides="schooltool.app.interfaces.ICalendarParentCrowd"
+      name="schooltool.view" />
 
 </configure>

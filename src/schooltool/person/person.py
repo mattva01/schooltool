@@ -31,6 +31,7 @@ from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container import btree
 from zope.app.container.contained import Contained
 from zope.app.container.interfaces import IObjectAddedEvent
+from zope.component import adapts
 
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
@@ -38,6 +39,9 @@ from schooltool.app.membership import URIMembership, URIMember, URIGroup
 from schooltool.app.overlay import OverlaidCalendarsProperty
 from schooltool.person import interfaces
 from schooltool.relationship import RelationshipProperty
+from schooltool.securitypolicy.crowds import Crowd
+from schooltool.person.interfaces import IPerson
+from schooltool.app.security import ICalendarParentCrowd
 
 
 class PersonContainer(btree.BTreeContainer):
@@ -69,7 +73,7 @@ class Person(Persistent, Contained):
     def __init__(self, username=None, title=None):
         self.title = title
         self.username = username
-        
+
     def setPassword(self, password):
         self._hashed_password = hash_password(password)
 
@@ -79,7 +83,13 @@ class Person(Persistent, Contained):
 
     def hasPassword(self):
         return self._hashed_password is not None
-    
+
+    def __eq__(self, other):
+        if not IPerson.providedBy(other):
+            return False
+        return self.username == other.username
+
+
 def hash_password(password):
     r"""Compute a SHA-1 hash of a given password.
 
@@ -128,3 +138,11 @@ def personAppCalendarOverlaySubscriber(person, event):
 
 def addPersonContainerToApplication(event):
     event.object['persons'] = PersonContainer()
+
+
+class PersonCalendarCrowd(Crowd):
+    adapts(IPerson)
+    implements(ICalendarParentCrowd)
+
+    def contains(self, principal):
+        return self.context == IPerson(principal)

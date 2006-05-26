@@ -235,6 +235,10 @@
       default="True"
       />
 
+  <adapter factory=".security.ApplicationCalendarCrowd"
+           provides=".security.ICalendarParentCrowd"
+           name="schooltool.view" />
+
   <!-- XXX It feels wrong to tweak permissions of objects in a sibling. -->
 
   <class class="schooltool.calendar.mixins.ExpandedCalendarEvent">

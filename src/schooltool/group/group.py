@@ -24,8 +24,9 @@ $Id$
 __docformat__ = 'restructuredtext'
 from persistent import Persistent
 
-from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
 from zope.interface import implements
+from zope.component import adapts
+from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.dependable.interfaces import IDependable
 from zope.app.container import btree
@@ -33,7 +34,7 @@ from zope.app.container.contained import Contained
 
 from schooltool.relationship import RelationshipProperty
 from schooltool.app.membership import URIMembership, URIMember, URIGroup
-
+from schooltool.app.security import CalendarParentCrowd
 from schooltool.group import interfaces
 
 
@@ -70,3 +71,8 @@ def addGroupContainerToApplication(event):
     for id, title, description in default_groups:
         group = app['groups'][id] = Group(title, description)
         IDependable(group).addDependent('')
+
+
+class GroupCalendarCrowd(CalendarParentCrowd):
+    adapts(interfaces.IGroup)
+    setting_key = 'everyone_can_view_group_calendar'

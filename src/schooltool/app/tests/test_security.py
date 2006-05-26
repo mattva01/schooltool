@@ -24,6 +24,7 @@ $Id$
 
 import unittest
 
+from zope.interface import Interface, implements
 from zope.testing import doctest
 from zope.app.testing import setup, ztapi
 from zope.app import zapi
@@ -32,6 +33,8 @@ from zope.component.interfaces import ComponentLookupError
 from zope.app.security.interfaces import IAuthentication
 from zope.app.container.contained import ObjectAddedEvent
 
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
 from schooltool.testing.setup import setUpLocalGrants
 from schooltool.testing import setup as sbsetup
 
@@ -69,10 +72,100 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
         authSetUpSubscriber(self.app, event)
 
 
+def doctest_CalendarParentCrowd():
+    """Tests for CalendarParentCrowd.
+
+    Some setup:
+
+        >>> class CustomisationsStub(object):
+        ...     implements(IAccessControlCustomisations)
+        ...     def get(self, key):
+        ...         print 'Getting %s' % key
+        ...         return True
+
+        >>> class AppStub(object):
+        ...     implements(ISchoolToolApplication)
+        ...     def __conform__(self, iface):
+        ...         if iface == IAccessControlCustomisations:
+        ...             return CustomisationsStub()
+
+        >>> from zope.component import provideAdapter
+        >>> provideAdapter(lambda context: AppStub(),
+        ...                adapts=[None],
+        ...                provides=ISchoolToolApplication)
+
+        >>> from schooltool.app.security import CalendarParentCrowd
+
+    Off we go:
+
+        >>> crowd = CalendarParentCrowd(object())
+        >>> crowd.setting_key = 'key'
+        >>> crowd.contains(object())
+        Getting key
+        True
+
+    """
+
+
+def doctest_CalendarViewersCrowd():
+    """Tests for CalendarParentCrowd.
+
+        >>> setup.placelessSetUp()
+
+        >>> class CalendarStub:
+        ...     def __init__(self, parent):
+        ...         self.__parent__ = parent
+
+        >>> from schooltool.app.security import CalendarViewersCrowd
+        >>> crowd = CalendarViewersCrowd(CalendarStub(None))
+
+    First, fire a blank (no adapters registered):
+
+        >>> crowd.contains(object())
+        False
+
+    OK, let's try with an adaptable object now:
+
+        >>> from schooltool.app.interfaces import ICalendarParentCrowd
+
+        >>> class ParentCrowdStub(object):
+        ...     implements(ICalendarParentCrowd)
+        ...     def __init__(self, context):
+        ...         print 'Getting adapter for %s' % context
+        ...     def contains(self, principal):
+        ...         print 'Checking %s' % principal
+        ...         return True
+
+        >>> class IOwner(Interface):
+        ...     pass
+
+        >>> class OwnerStub(object):
+        ...     implements(IOwner)
+
+        >>> from zope.component import provideAdapter
+        >>> provideAdapter(ParentCrowdStub, adapts=[IOwner],
+        ...                provides=ICalendarParentCrowd,
+        ...                name='schooltool.view')
+
+    Let's try now with the adapter:
+
+        >>> crowd = CalendarViewersCrowd(CalendarStub(OwnerStub()))
+        >>> crowd.contains('some principal')
+        Getting adapter for <...OwnerStub ...>
+        Checking some principal
+        True
+
+    We're done.
+
+        >>> setup.placefulTearDown()
+
+    """
+
+
 def test_suite():
     return unittest.TestSuite([
         unittest.makeSuite(TestAuthSetUpSubscriber),
-        doctest.DocTestSuite(),
+        doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
         doctest.DocFileSuite('../security.txt', optionflags=doctest.ELLIPSIS),
         ])
 

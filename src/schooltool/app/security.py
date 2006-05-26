@@ -36,6 +36,7 @@ from zope.app.security.interfaces import IAuthentication, ILoginPassword
 from zope.app.security.interfaces import IAuthenticatedGroup, IEveryoneGroup
 from zope.app.session.interfaces import ISession
 from zope.interface import implements
+from zope.component import adapts, queryAdapter
 from zope.security.interfaces import IGroupAwarePrincipal
 from zope.security.checker import ProxyFactory
 from zope.publisher.interfaces.browser import IBrowserRequest
@@ -46,6 +47,9 @@ from schooltool.app.interfaces import ISchoolToolAuthentication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.person.interfaces import IPerson
 from schooltool.securitypolicy.crowds import Crowd
+from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import ICalendarParentCrowd
 
 
 class Principal(Contained):
@@ -207,23 +211,41 @@ def authSetUpSubscriber(app, event):
     setUpLocalAuth(app)
 
 
+class CalendarParentCrowd(Crowd):
+    """A base class for calendar parent crowds.
+
+    You only need to override `setting_key` which indicates the key
+    of the corresponding security setting.
+    """
+
+    implements(ICalendarParentCrowd)
+
+    setting_key = None # override in subclasses
+
+    def contains(self, principal):
+        """Return the value of the related setting (True or False)."""
+        app = ISchoolToolApplication(None)
+        customizations = IAccessControlCustomisations(app)
+        return customizations.get(self.setting_key)
+
+
+class ApplicationCalendarCrowd(CalendarParentCrowd):
+    adapts(ISchoolToolApplication)
+    setting_key = 'everyone_can_view_app_calendar'
+
+
 class CalendarViewersCrowd(Crowd):
     """A crowd that contains principals who are allowed to view the context.
 
-    XXX This will soon be refactored to use adapters instead of doing
-    dispatch using providedBy.
+    This crowd adapts the parent of the calendar to ICalendarParentCrowd and
+    uses that to decide on the result.
     """
 
     def contains(self, principal):
-        from schooltool.group.interfaces import IGroup
-        from schooltool.app.interfaces import ISchoolToolApplication
-        from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
-
-        app = ISchoolToolApplication(None)
-        customizations = IAccessControlCustomisations(app)
-        if IGroup.providedBy(self.context.__parent__):
-            return customizations.get('everyone_can_view_group_calendar')
-        elif ISchoolToolApplication.providedBy(self.context.__parent__):
-            return customizations.get('everyone_can_view_app_calendar')
+        parent = self.context.__parent__
+        pcrowd = queryAdapter(parent, ICalendarParentCrowd, 'schooltool.view',
+                              default=None)
+        if pcrowd is not None:
+            return pcrowd.contains(principal)
         else:
-            return True
+            return False
