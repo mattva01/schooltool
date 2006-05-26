@@ -102,4 +102,13 @@ Check that the search didn't return un-matching cases:
   >>> 'foobar' in browser.contents
   False
 
-
+There's a quick search form in the table view:
+ 
+  >>> browser.open('http://localhost/persons/@@table.html')
+  >>> sb = browser.getControl(name="form.fulltext")
+  >>> sb.value = '*a*'
+  >>> browser.getControl(name="form.actions.submit").click()
+  >>> 'alpha' in browser.contents
+  True
+  >>> 'foobar' in browser.contents
+  False
