@@ -1,41 +1,18 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
-<head>
-  <title metal:fill-slot="title" i18n:translate="">Display</title>
-</head>
-<body>
-<metal:block metal:fill-slot="body">
+  <head>
+    <title metal:fill-slot="title" i18n:translate="">Display</title>
+  </head>
+  <body>
+    <metal:block metal:fill-slot="body">
+      <metal:block use-macro="view/@@menu_macros/tab_menu" />
 
-  <metal:block use-macro="view/@@menu_macros/tab_menu" />
-
-  <table class="listing">
-    <thead>
-      <tr>
-        <th class="label-column">&nbsp;</th>
-        <th>&nbsp;</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tal:block repeat="widget view/widgets">
-        <tr>
-          <td class="fieldname">
-            <tal:block content="widget/label"/>
-          </td>
-          <td>
-            <input tal:replace="structure widget" />
-          </td>
-        </tr>
-      </tal:block>
-    </tbody>
-    <tfoot>
-      <tr class="controls">
-        <td colspan="2" class="align-right">
-          <input tal:repeat="action view/actions" 
-            tal:replace="structure action/render" />
-        </td>
-      </tr>
-    </tfoot>
-  </table>
-
-</metal:block>
-</body>
+      <fieldset>	
+	<div class="row" tal:repeat="widget view/widgets">
+	  <div class="label" tal:content="widget/label"/>
+	  <div class="field"><tal:block replace="structure widget" />&nbsp;</div>
+	  <div class="clear"/>
+	</div>
+      </fieldset>
+    </metal:block>
+  </body>
 </html>

@@ -73,13 +73,13 @@ class NameInfoEdit(PersonEditForm):
     def title(self):
         return _(u'Change name information for ${fullname}',
                  mapping={'fullname':self.fullname()})
-
-    def legend(self):
-        return _(u'Name information')
     
     form_fields = form.Fields(interfaces.INameInfo)
 
 class NameInfoDisplay(PersonDisplayForm):
+    def title(self):
+        return _(u'Change name')
+    
     form_fields = form.Fields(interfaces.INameInfo)
 
 demographics_traverser = SingleAttributeTraverserPlugin('demographics')
@@ -92,6 +92,8 @@ class DemographicsEdit(PersonEditForm):
     form_fields = form.Fields(interfaces.IDemographics)
     
 class DemographicsDisplay(PersonDisplayForm):
+    def title(self):
+        return _(u'Demographics')
     form_fields = form.Fields(interfaces.IDemographics)
 
 schooldata_traverser = SingleAttributeTraverserPlugin('schooldata')
@@ -104,6 +106,9 @@ class SchoolDataEdit(PersonEditForm):
     form_fields = form.Fields(interfaces.ISchoolData)
     
 class SchoolDataDisplay(PersonDisplayForm):
+    def title(self):
+        return _(u'School data')
+    
     form_fields = form.Fields(interfaces.ISchoolData)
 
 parent1_traverser = SingleAttributeTraverserPlugin('parent1')
@@ -124,6 +129,9 @@ class ContactInfoEdit(PersonEditForm):
     form_fields = form.Fields(interfaces.IContactInfo)
 
 class ContactInfoDisplay(PersonDisplayForm):
+    def title(self):
+        return _(u"Contact information")
+    
     form_fields = form.Fields(interfaces.IContactInfo)
 
 class Term(object):

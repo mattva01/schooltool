@@ -89,29 +89,29 @@ PRE {
 	margin-top: 2em;
 }
 
-FORM.standalone {
+FORM.standalone, div.standalone {
 	width: 40em;
 	margin: auto;
 }
 
-FORM.standalone FIELDSET {
+FORM.standalone FIELDSET, div.standalone FIELDSET {
 	margin: 1em;
 }
 
-FORM.standalone h3 {
+FORM.standalone h3, div.standalone h3 {
 	margin: 0;
 	padding: 0.25em;
 }
 
-FORM.standalone .row {
+FORM.standalone .row, div.standalone .row {
 	margin: 0.5em 0em;
 }
 
-FORM.standalone > .row {
+FORM.standalone > .row, div.standalone > .row {
 	margin: 0.5em;
 }
 
-FORM.standalone .controls {
+FORM.standalone .controls, div.standalone .controls {
 	margin: 0.5em 1em 1em 1em;
 }
 
@@ -186,36 +186,36 @@ DIV.search-results {
 	background: #eae8e3;
 }
 
-FORM.standalone {
+FORM.standalone, div.standalone {
 	background: #eae8e3;
 	border: 1px #bab5ab solid;
 }
 
-FORM.standalone h3 {
+FORM.standalone h3, div.standalone h3 {
 	background: #bab5ab;
 }
 
-FORM.standalone FIELDSET {
+FORM.standalone FIELDSET, div.standalone FIELDSET {
 	border: 1px #bab5ab solid;
 	/* Mozilla's default padding for fieldsets -- makes it nice in MSIE too */
 	padding: 0.35em 0.625em 0.75em 0.625em;
 }
 
-FORM.standalone p {
+FORM.standalone p, div.standalone p {
 	margin: 0.5em;
 }
 
-FORM.standalone p.hint {
+FORM.standalone p.hint, div.standalone p.hint {
 	font-size: 80%;
 	font-style: italic;
 	color: #bab5ab;
 }
 
-FORM.standalone .controls INPUT {
+FORM.standalone .controls INPUT, div.standalone .controls INPUT {
 	background: #fff;
 }
 
-FORM.standalone DIV.label {
+FORM.standalone DIV.label, div.standalone DIV.label {
 	width: 10em;
 	padding-top: 0.5ex;
 }
