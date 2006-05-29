@@ -90,14 +90,14 @@
       name="simpleadd.html"
       for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
       class=".schema.SimpleTimetableSchemaAdd"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       />
 
   <page
       name="complexadd.html"
       for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
       class=".schema.AdvancedTimetableSchemaAdd"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       />
 
   <page
@@ -113,7 +113,7 @@
       name="special.html"
       for="schooltool.timetable.interfaces.ITimetableSchema"
       class=".SpecialDayView"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       menu="schooltool_actions"
       title="Change Timetable for One Day"
       />
@@ -140,7 +140,7 @@
       name="add.html"
       for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
       class=".ttwizard.TimetableSchemaWizard"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       menu="schooltool_actions"
       title="New Timetable"
       />
