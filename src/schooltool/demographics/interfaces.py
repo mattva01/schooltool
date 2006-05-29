@@ -64,7 +64,28 @@ class INameInfo(Interface):
 
 class SourceList(list):
     implements(IIterableSource)
-    
+
+ethnicitySource = SourceList([
+    'American Indian or Alaska Native',
+    'Asian',
+    'Black or African American',
+    'Native Hawaiian or Other Pacific Islander',
+    'White'])
+
+languageSource = SourceList([
+    'English',
+    'Spanish',
+    'Chinese',
+    'German',
+    'Tagalog',
+    'Vietnamese',
+    'Italian',
+    'Korean',
+    'Russian',
+    'Polish',
+    'Arabic',
+    ])
+
 class IDemographics(Interface):
     # XXX how to translate male and female? in widget?
     gender = schema.Choice(
@@ -80,13 +101,13 @@ class IDemographics(Interface):
 
     ethnicity = schema.Choice(
         title=_(u"Ethnicity"),
-        source=SourceList(['foo', 'bar']),
+        source=ethnicitySource,
         required=False,
         )
 
     primary_language = schema.Choice(
         title=_(u"Primary language"),
-        source=SourceList(['qux', 'hoi']),
+        source=languageSource,
         required=False,
         )
 
@@ -133,6 +154,14 @@ class ISchoolData(Interface):
         required=False,
         )
 
+relationshipToStudentSource = SourceList([
+    'parent',
+    'guardian',
+    'grandparent',
+    'step-parent',
+    'friend of family',
+    'other'])
+
 class IContactInfo(Interface):
     name = schema.TextLine(
         title=_(u"Name"),
@@ -141,7 +170,7 @@ class IContactInfo(Interface):
 
     relationship_to_student = schema.Choice(
         title=_(u"Relationship to student"),
-        source=SourceList(['parent', 'guardian', 'grandparent']),
+        source=relationshipToStudentSource,
         required=False,
         )
 
