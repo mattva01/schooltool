@@ -235,6 +235,15 @@
       default="True"
       />
 
+  <security:crowd
+      name="group_members"
+      factory=".membership.GroupMemberCrowd" />
+
+  <security:allow
+      interface="schooltool.group.interfaces.IGroup"
+      permission="schooltool.view"
+      crowds="group_members" />
+
   <adapter factory=".security.ApplicationCalendarCrowd"
            provides=".security.ICalendarParentCrowd"
            name="schooltool.view" />

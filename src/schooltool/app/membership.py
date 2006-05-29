@@ -112,12 +112,16 @@ That's all.
 
 import sets
 
+from zope.component import adapts
+
 from schooltool.relationship import URIObject, RelationshipSchema
 from schooltool.relationship import getRelatedObjects
 from schooltool.relationship.interfaces import IBeforeRelationshipEvent
 from schooltool.relationship.interfaces import InvalidRelationship
 from schooltool.resource.interfaces import IResource
 from schooltool.group.interfaces import IGroup
+from schooltool.person.interfaces import IPerson
+from schooltool.securitypolicy.crowds import Crowd
 
 
 URIMembership = URIObject('http://schooltool.org/ns/membership',
@@ -212,3 +216,44 @@ def isTransitiveMember(obj, group):
                 seen.add(id(new_group))
                 queue.append(new_group)
     return False
+
+
+class GroupMemberCrowd(Crowd):
+    """Crowd that contains all the members of the group.
+
+        >>> from schooltool.app.membership import GroupMemberCrowd
+        >>> class GroupStub(object):
+        ...     def __init__(self, members):
+        ...         self.members = members
+        >>> class PrincipalStub(object):
+        ...     def __init__(self, name):
+        ...         self.name = name
+        ...     def __conform__(self, iface):
+        ...         if iface == IPerson:
+        ...             return self.name
+        >>> group = GroupStub(["Petras"])
+        >>> crowd = GroupMemberCrowd(group)
+
+    If person is not a member of the group return False:
+
+        >>> crowd.contains(PrincipalStub("Jonas"))
+        False
+
+    If the person is in the member list of the context group return
+    True:
+
+        >>> crowd.contains(PrincipalStub("Petras"))
+        True
+
+    Some principals might not adapt to IPerson, they should be
+    rejected:
+
+        >>> crowd.contains("Foo")
+        False
+
+    """
+
+    adapts(IGroup)
+
+    def contains(self, principal):
+        return IPerson(principal, None) in self.context.members

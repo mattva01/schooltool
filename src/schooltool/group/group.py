@@ -33,6 +33,11 @@ from zope.app.container import btree
 from zope.app.container.contained import Contained
 
 from schooltool.relationship import RelationshipProperty
+from schooltool.securitypolicy.crowds import Crowd
+from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
+from schooltool.app.interfaces import ICalendarParentCrowd
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.membership import GroupMemberCrowd
 from schooltool.app.membership import URIMembership, URIMember, URIGroup
 from schooltool.app.security import CalendarParentCrowd
 from schooltool.group import interfaces
@@ -73,6 +78,14 @@ def addGroupContainerToApplication(event):
         IDependable(group).addDependent('')
 
 
-class GroupCalendarCrowd(CalendarParentCrowd):
+class GroupCalendarCrowd(Crowd):
+    implements(ICalendarParentCrowd)
     adapts(interfaces.IGroup)
-    setting_key = 'everyone_can_view_group_calendar'
+
+    def contains(self, principal):
+        """Return the value of the related setting (True or False)."""
+        app = ISchoolToolApplication(None)
+        customizations = IAccessControlCustomisations(app)
+        setting = customizations.get('everyone_can_view_group_calendar')
+
+        return setting or GroupMemberCrowd(self.context).contains(principal)

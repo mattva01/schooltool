@@ -30,8 +30,11 @@ from zope.testing import doctest
 from zope.app.testing import setup, ztapi
 from zope.app.container.contained import ObjectAddedEvent
 from zope.traversing.interfaces import IContainmentRoot
+from zope.interface import implements
 
 from schooltool.testing.util import run_unit_tests
+from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
+from schooltool.app.interfaces import ISchoolToolApplication
 
 
 def doctest_GroupContainer():
@@ -50,6 +53,7 @@ def doctest_GroupContainer():
         ...    def makeTestObject(self):
         ...        return GroupContainer()
         >>> run_unit_tests(Test)
+
     """
 
 
@@ -69,6 +73,7 @@ def doctest_Group():
         'Illuminati'
         >>> illuminati.description
         'Secret Group'
+
     """
 
 
@@ -118,6 +123,69 @@ def doctest_addGroupContainerToApplication():
         >>> from zope.app.dependable.interfaces import IDependable
         >>> for group in app['groups'].values():
         ...     assert IDependable(group).dependents() == (u'/groups/',)
+
+    Clean up
+
+        >>> setup.placelessTearDown()
+
+    """
+
+
+def doctest_GroupCalendarCrowd():
+    """Tests for CalendarParentCrowd.
+
+    Some setup:
+
+        >>> setup.placelessSetUp()
+
+        >>> setting = True
+        >>> class CustomisationsStub(object):
+        ...     implements(IAccessControlCustomisations)
+        ...     def get(self, key):
+        ...         print 'Getting %s' % key
+        ...         return setting
+
+        >>> class AppStub(object):
+        ...     implements(ISchoolToolApplication)
+        ...     def __conform__(self, iface):
+        ...         if iface == IAccessControlCustomisations:
+        ...             return CustomisationsStub()
+
+        >>> from zope.component import provideAdapter
+        >>> provideAdapter(lambda context: AppStub(),
+        ...                adapts=[None],
+        ...                provides=ISchoolToolApplication)
+
+        >>> from schooltool.group.group import GroupCalendarCrowd
+
+    Off we go:
+
+        >>> class GroupStub(object):
+        ...     class members(object):
+        ...         def __contains__(self, item):
+        ...             print "Checking for membership of %s in a group" % item
+        ...             return True
+        ...     members = members()
+
+        >>> crowd = GroupCalendarCrowd(GroupStub())
+        >>> crowd.contains("Principal")
+        Getting everyone_can_view_group_calendar
+        True
+
+    If setting is set to False, we should still check for membership:
+
+        >>> from schooltool.person.interfaces import IPerson
+        >>> class PrincipalStub(object):
+        ...     def __init__(self, name):
+        ...         self.name = name
+        ...     def __conform__(self, iface):
+        ...         if iface == IPerson: return "IPerson(%s)" % self.name
+
+        >>> setting = False
+        >>> crowd.contains(PrincipalStub("Principal"))
+        Getting everyone_can_view_group_calendar
+        Checking for membership of IPerson(Principal) in a group
+        True
 
     Clean up
 
