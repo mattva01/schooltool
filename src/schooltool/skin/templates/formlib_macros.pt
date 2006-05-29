@@ -17,11 +17,14 @@
     </fieldset>
 
     <div class="controls">
-      <input type="submit" id="form.actions.apply" name="form.actions.apply" value="Apply" class="button-ok" 
-        title="Shortcut: Alt-A" accesskey="A" 
-        i18n:attributes="value submit-button; accesskey" />
-      <input type="submit" id="form.actions.cancel" name="form.actions.cancel" value="Cancel" class="button-cancel" 
-        i18n:attributes="value cancel-button" />
+      <metal:block define-slot="controls">
+        <input type="submit" id="form.actions.apply" name="form.actions.apply" value="Apply" class="button-ok" 
+          title="Shortcut: Alt-A" accesskey="A" 
+          i18n:attributes="value submit-button; accesskey" />
+        <input type="submit" id="form.actions.cancel" name="form.actions.cancel" value="Cancel" class="button-cancel" 
+          i18n:attributes="value cancel-button" />
+      </metal:block>
     </div>
+
   </form>
 </metal:block>

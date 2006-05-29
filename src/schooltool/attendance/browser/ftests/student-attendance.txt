@@ -93,8 +93,8 @@ Let's also create a teacher for the section
     >>> manager.getControl('Full name').value = 'Great Teacher Largo'
     >>> manager.getControl('Username').value = 'largo'
     >>> manager.getControl('Password').value = 'sittinghorse'
-    >>> manager.getControl('Verify password').value = 'sittinghorse'
-    >>> manager.getControl(name='group.teachers').value = True
+    >>> manager.getControl('Confirm').value = 'sittinghorse'
+    >>> manager.getControl(name='form.groups').value = ['teachers']
     >>> manager.getControl('Add').click()
 
     >>> manager.open('http://localhost/sections/dancing1a')
@@ -109,8 +109,8 @@ Create some students
     >>> manager.getControl('Full name').value = 'Joniukas'
     >>> manager.getControl('Username').value = 'joniukas'
     >>> manager.getControl('Password').value = 'gretute'
-    >>> manager.getControl('Verify password').value = 'gretute'
-    >>> manager.getControl(name='group.students').value = True
+    >>> manager.getControl('Confirm').value = 'gretute'
+    >>> manager.getControl(name='form.groups').value = ['students']
     >>> manager.getControl('Add').click()
 
     >>> manager.getLink('Persons').click()
@@ -118,8 +118,8 @@ Create some students
     >>> manager.getControl('Full name').value = 'Gretute'
     >>> manager.getControl('Username').value = 'gretute'
     >>> manager.getControl('Password').value = 'tenerife'
-    >>> manager.getControl('Verify password').value = 'tenerife'
-    >>> manager.getControl(name='group.students').value = True
+    >>> manager.getControl('Confirm').value = 'tenerife'
+    >>> manager.getControl(name='form.groups').value = ['students']
     >>> manager.getControl('Add').click()
 
 Add them to dancing section

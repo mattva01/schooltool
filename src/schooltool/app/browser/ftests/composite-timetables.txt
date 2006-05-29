@@ -92,18 +92,8 @@ Add Schema:
 
 Let's create a person so that we can fool around with his calendar:
 
-    >>> print http(r"""
-    ... POST /persons/add.html HTTP/1.1
-    ... Authorization: Basic manager:schooltool
-    ... Content-Length: 112
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=John&field.username=john&field.password=pwd&field.verify_password=pwd&field.photo=&UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/persons
-    ...
+    >>> from schooltool.app.browser.ftests import setup
+    >>> setup.addPerson('John', 'john', 'pwd')
 
 Add 2 groups:
 

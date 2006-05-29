@@ -19,7 +19,7 @@ We add a person
     >>> manager.getControl('Full name').value = 'Some User'
     >>> manager.getControl('Username').value = 'user'
     >>> manager.getControl('Password').value = 'secret'
-    >>> manager.getControl('Verify password').value = 'secret'
+    >>> manager.getControl('Confirm').value = 'secret'
     >>> manager.getControl('Add').click()
 
 We have the views ``@@login.html`` and ``@@logout.html`` on the main

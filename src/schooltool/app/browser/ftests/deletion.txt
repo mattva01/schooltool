@@ -38,7 +38,7 @@ We add a person
 
     >>> manager.getControl('Full name').value = 'person1'
     >>> manager.getControl('Username').value = 'person'
-    >>> manager.getControl('group1').click()
+    >>> manager.getControl(name='form.groups').value = ['group1'] 
     >>> manager.getControl('Add').click()
 
     >>> 'person1' in manager.contents

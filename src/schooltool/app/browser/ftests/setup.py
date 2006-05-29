@@ -49,7 +49,7 @@ def addPerson(name, username=None, password=None):
     manager.getControl('Full name').value = name
     manager.getControl('Username').value = username
     manager.getControl('Password').value = password
-    manager.getControl('Verify password').value = password
+    manager.getControl('Confirm').value = password
     manager.getControl('Add').click()
     assert name in manager.contents
 

@@ -30,11 +30,11 @@ We will need a user and a group:
     >>> manager_browser.getControl('Full name').value = 'Stephan Richter'
     >>> manager_browser.getControl('Username').value = 'srichter'
     >>> manager_browser.getControl('Password').value = 'foobar'
-    >>> manager_browser.getControl('Verify password').value = 'foobar'
+    >>> manager_browser.getControl('Confirm').value = 'foobar'
 
   (we'll have to add the user to the group)
 
-    >>> manager_browser.getControl(name='group.a-group').value = True
+    >>> manager_browser.getControl(name='form.groups').value = ['a-group']
 
     >>> manager_browser.getControl('Add').click()
 

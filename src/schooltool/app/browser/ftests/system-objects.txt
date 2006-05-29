@@ -32,7 +32,7 @@ the default system objects:
     >>> manager_browser.getControl('Full name').value = 'Stephan Richter'
     >>> manager_browser.getControl('Username').value = 'srichter'
     >>> manager_browser.getControl('Password').value = 'foobar'
-    >>> manager_browser.getControl('Verify password').value = 'foobar'
+    >>> manager_browser.getControl('Confirm').value = 'foobar'
     >>> manager_browser.getControl('Add').click()
 
 Test

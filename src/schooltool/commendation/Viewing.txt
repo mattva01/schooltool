@@ -153,7 +153,7 @@ The first step is to create a person ...
   >>> manager.getControl('Full name').value = 'Tom Hoffman'
   >>> manager.getControl('Username').value = 'tha1'
   >>> manager.getControl('Password').value = 'myohmy'
-  >>> manager.getControl('Verify password').value = 'myohmy'
+  >>> manager.getControl('Confirm').value = 'myohmy'
   >>> manager.getControl('Add').click()
 
 to whom we attach a bunch of commendations:

@@ -23,11 +23,15 @@ $Id$
 """
 from zope.interface import Interface
 from zope.publisher.interfaces import NotFound
-from zope.schema import Password, TextLine, Bytes, Bool
+from zope.schema import Password, TextLine, Bytes, Bool, List, Choice
 from zope.schema.interfaces import ValidationError
+from zope.schema.interfaces import IIterableSource
+from zope.schema.interfaces import ITitledTokenizedTerm
 from zope.security.proxy import removeSecurityProxy
 from zope.app import zapi
 from zope.app.form.browser.add import AddView
+from zope.app.form.browser.source import SourceMultiCheckBoxWidget as SourceMultiCheckBoxWidget_
+from zope.app.form.browser.interfaces import ITerms
 from zope.app.form.interfaces import IInputWidget
 from zope.app.form.interfaces import WidgetsError
 from zope.app.form.utility import getWidgetsData, setUpWidgets
@@ -35,7 +39,8 @@ from zope.publisher.browser import BrowserView
 from zope.viewlet.interfaces import IViewletManager
 from zope.formlib import form
 from zope.component import getUtility
-
+from zope.interface import implements
+from zope.app.pagetemplate import ViewPageTemplateFile
 from schooltool import SchoolToolMessage as _
 from schooltool.skin.form import BasicForm
 from schooltool.app.app import getSchoolToolApplication
@@ -45,6 +50,10 @@ from schooltool.person.interfaces import IPersonPreferences
 from schooltool.person.interfaces import IPersonContainer, IPersonContained
 from schooltool.person.person import Person
 from schooltool.widget.password import PasswordConfirmationWidget
+
+def SourceMultiCheckBoxWidget(field, request):
+    source = field.value_type.source
+    return SourceMultiCheckBoxWidget_(field, source, request)
 
 class PersonContainerView(ContainerView):
     """A Person Container view."""
@@ -121,7 +130,40 @@ class PersonPreferencesView(BrowserView):
                 if field in data: # skip non-fields
                     setattr(prefs, field, data[field])
 
+# Should this be moved to a interface.py file ?
+class IGroupsSource(IIterableSource):
+    pass
 
+class GroupsSource(object):
+    implements(IGroupsSource)
+
+    def __iter__(self):
+        return iter(getSchoolToolApplication()['groups'].values())
+
+    def __len__(self):
+        return len(getSchoolToolApplication()['groups'].values())
+
+class GroupsTerm(object):
+    implements(ITitledTokenizedTerm)
+    
+    def __init__(self, title, token, value):
+        self.title = title
+        self.token = token
+        self.value = value
+        
+class GroupsTerms(object):
+    implements(ITerms)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+        
+    def getTerm(self, value):
+        return GroupsTerm(value.title, value.__name__, value)
+
+    def getValue(self, token):
+        return getSchoolToolApplication()['groups'][token]
+        
 class IPersonAddForm(Interface):
     """Schema for person adding form."""
 
@@ -137,79 +179,86 @@ class IPersonAddForm(Interface):
         title=_("Password"),
         required=False)
 
-    verify_password = Password(
-        title=_("Verify password"),
-        required=False)
-
     photo = Bytes(
         title=_("Photo"),
         required=False,
         description=_("""Photo (in JPEG format)"""))
 
+    groups = List(
+        title=_("Groups"),
+        required=False,
+        description=_("Add the person to the selected groups."),
+        value_type=Choice(source=GroupsSource()))
 
-class PersonAddView(AddView):
+class PersonAddView(BasicForm):
     """A view for adding a person."""
 
-    __used_for__ = IPersonContainer
+    template = ViewPageTemplateFile('person_add.pt')
+    
+    form_fields = form.Fields(IPersonAddForm, render_context=False)
+    form_fields['password'].custom_widget = PasswordConfirmationWidget
+    form_fields['groups'].custom_widget = SourceMultiCheckBoxWidget
 
-    # Form error message for the page template
-    error = None
+    def title(self):
+        return _("Add person")
 
-    # Override some fields of AddView
-    schema = IPersonAddForm
-    _arguments = ['title', 'username', 'password', 'photo']
-    _keyword_arguments = []
-    _set_before_add = [] # getFieldNamesInOrder(schema)
-    _set_after_add = []
-
-    def createAndAdd(self, data):
-        """Create a Person from form data and add it to the container."""
-        if data['password'] != data['verify_password']:
-            self.error = _("Passwords do not match!")
-            raise WidgetsError([ValidationError(self.error)])
-        elif data['username'] in self.context:
-            self.error = _('This username is already used!')
-            raise WidgetsError([ValidationError(self.error)])
-        return AddView.createAndAdd(self, data)
+    @form.action(_("Apply"))
+    def handle_apply_action(self, action, data):        
+        if data['username'] in self.context:
+            self.status = _("This username is already used!")
+            return
+        person = self.createPerson(data['title'],
+                                   data['username'],
+                                   data['password'],
+                                   data['photo'])
+        self.addPersonToGroups(person, data['groups'])
+        self.addPerson(person)
+        url = zapi.absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
+        return ''
+    
+    @form.action(_("Cancel"))
+    def handle_cancel_action(self, action, data):
+        # XXX validation upon cancellation doesn't make any sense
+        # how to make this work properly?
+        url = zapi.absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
+        return ''
 
     def getAllGroups(self):
         """Return a list of all groups in the system."""
         return getSchoolToolApplication()['groups'].values()
-
-    def create(self, title, username, password, photo):
+    
+    def _factory(self, username, title):
+        return getUtility(IPersonFactory)(username, title)
+    
+    def createPerson(self, title, username, password, photo):
         person = self._factory(username=username, title=title)
         person.setPassword(password)
         person.photo = photo
         return person
 
-    def _factory(self, username, title):
-        return getUtility(IPersonFactory)(username, title)
-        
-    def add(self, person):
+    def addPersonToGroups(self, person, groups):
+        for group in groups:
+            person.groups.add(group)
+    
+    def addPerson(self, person):
         """Add `person` to the container.
 
         Uses the username of `person` as the object ID (__name__).
         """
-        person_groups = removeSecurityProxy(person.groups)
-        for group in self.getAllGroups():
-            if 'group.' + group.__name__ in self.request:
-                person.groups.add(removeSecurityProxy(group))
         name = person.username
         self.context[name] = person
         return person
 
-    def update(self):
-        if 'CANCEL' in self.request:
-            url = zapi.absoluteURL(self.context, self.request)
-            self.request.response.redirect(url)
+##     def update(self):
+##         if 'CANCEL' in self.request:
+##             url = zapi.absoluteURL(self.context, self.request)
+##             self.request.response.redirect(url)
 
-        return AddView.update(self)
+##         return AddView.update(self)
 
-    def nextURL(self):
-        """See zope.app.container.interfaces.IAdding"""
-        return zapi.absoluteURL(self.context, self.request)
-
-
+    
 class IPersonEditForm(Interface):
     """Schema for a person's edit form."""
 

@@ -109,7 +109,7 @@ Before we can do anything, we have to create a student:
     >>> browser.getControl('Full name').value = 'Stephan Richter'
     >>> browser.getControl('Username').value = 'srichter'
     >>> browser.getControl('Password').value = 'foobar'
-    >>> browser.getControl('Verify password').value = 'foobar'
+    >>> browser.getControl('Confirm').value = 'foobar'
     >>> browser.getControl('Photo').value = StringIO.StringIO()
     >>> browser.getControl('Add').click()
 
@@ -252,7 +252,7 @@ cleaner, we create a new student first:
     >>> browser.getControl('Full name').value = 'Tom Hoffman'
     >>> browser.getControl('Username').value = 'tom'
     >>> browser.getControl('Password').value = 'foobar'
-    >>> browser.getControl('Verify password').value = 'foobar'
+    >>> browser.getControl('Confirm').value = 'foobar'
     >>> browser.getControl('Photo').value = StringIO.StringIO()
     >>> browser.getControl('Add').click()
 

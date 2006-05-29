@@ -30,7 +30,7 @@ Let's create a person for use in tests:
     >>> manager.getControl('Full name').value = 'Frog'
     >>> manager.getControl('Username').value = 'frog'
     >>> manager.getControl('Password').value = 'pwd'
-    >>> manager.getControl('Verify password').value = 'pwd'
+    >>> manager.getControl('Confirm').value = 'pwd'
     >>> manager.getControl('Add').click()
 
 And a group:
@@ -192,7 +192,7 @@ We will need to define a person who will be a learner.
     >>> manager.getControl('Full name').value = 'Tadpole'
     >>> manager.getControl('Username').value = 'tadpole'
     >>> manager.getControl('Password').value = 'pwd'
-    >>> manager.getControl('Verify password').value = 'pwd'
+    >>> manager.getControl('Confirm').value = 'pwd'
     >>> manager.getControl('Add').click()
 
 We will also need a course.

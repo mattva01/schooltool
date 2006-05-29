@@ -1,0 +1,75 @@
+===============
+Person add form
+===============
+
+Let's try to add a user:
+
+    >>> from zope.testbrowser.testing import Browser
+    >>> browser = Browser()
+    >>> browser.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> browser.open('http://localhost/persons/@@add.html')
+  
+    >>> form = {'form.title': u'John Doe',
+    ...         'form.username': u'jdoe',
+    ...         'form.password': u'secret',
+    ...         'form.password.confirm': u'secret'}
+    >>> for name, value in form.items():
+    ...     control = browser.getControl(name=name)
+    ...     control.value = value
+    >>> browser.getControl('Add').click()
+
+    >>> pc = getRootFolder()['persons']
+    >>> 'jdoe' in pc
+    True
+    >>> person = pc['jdoe']
+    >>> person.title
+    u'John Doe'
+    >>> person.username
+    u'jdoe'
+    >>> person.checkPassword('secret')
+    True
+    >>> person.photo is None
+    True
+
+If we try to add a user with the same login, we get a nice error message:
+
+    >>> browser.open('http://localhost/persons/@@add.html')
+  
+    >>> form = {'form.title': u'John Doe',
+    ...         'form.username': u'jdoe',
+    ...         'form.password': u'secret',
+    ...         'form.password.confirm': u'secret'}
+    >>> for name, value in form.items():
+    ...     control = browser.getControl(name=name)
+    ...     control.value = value
+    >>> browser.getControl('Add').click()
+    >>> 'This username is already used!' in browser.contents
+    True
+
+We can select groups that the user should be in.  First, let's create a
+group:
+
+    >>> app = getRootFolder()
+    >>> from schooltool.group.group import Group
+    >>> pov = app['groups']['pov'] = Group('PoV')
+
+Now let's add a person in that group:
+
+    >>> browser.open('http://localhost/persons/@@add.html')
+    >>> form = {'form.title': u'Gintas',
+    ...         'form.username': u'gintas',
+    ...         'form.password': u'denied',
+    ...         'form.password.confirm': u'denied'}
+    >>> for name, value in form.items():
+    ...     control = browser.getControl(name=name)
+    ...     control.value = value
+    >>> groups = browser.getControl(name='form.groups')
+    >>> groups.value = ['pov']
+    >>> browser.getControl('Add').click()
+
+Now the person belongs to the group that we have selected:
+
+    >>> list(pc['gintas'].groups) == [pov]
+    True
+
+

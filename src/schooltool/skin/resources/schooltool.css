@@ -111,6 +111,10 @@ div.label {
     padding-top: 0.5ex;
 }
 
+div.value {
+    margin-left: 10em;
+}
+
 table.timetable input.text {
     width: 7em;
 }

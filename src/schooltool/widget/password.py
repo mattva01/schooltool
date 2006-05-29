@@ -24,19 +24,23 @@ class PasswordConfirmationWidget(PasswordWidget):
                 style=self.style,
                 size=self.displayWidth,
                 extra=self.extra)
+        confirm_name = self.name + '.confirm'
         confirm_tag = renderElement(
                 self.tag,
                 type=self.type,
-                name=self.name + '.confirm',
-                id=self.name + '.confirm',
+                name=confirm_name,
+                id=confirm_name,
                 value=self.default,
                 cssClass=self.cssClass,
                 style=self.style,
                 size=self.displayWidth,
                 extra=self.extra)
-        return translate(_(u"${password} Confirm: ${confirm}",
-                           mapping={'password': password_tag,
-                                    'confirm': confirm_tag}))
+        return translate(
+            _(u'${password} <label for="${label}" title="">Confirm</label> ${confirm}',
+            mapping={
+            'label': confirm_name,
+            'password': password_tag,
+            'confirm': confirm_tag}))
 
     def _toFieldValue(self, input):
         """Check whether the confirmation field value is identical to

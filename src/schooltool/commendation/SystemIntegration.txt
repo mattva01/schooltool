@@ -229,7 +229,7 @@ Now that we are locked in, we have to create
   >>> manager.getControl('Full name').value = 'Tom Hoffman'
   >>> manager.getControl('Username').value = 'tha1'
   >>> manager.getControl('Password').value = 'myohmy'
-  >>> manager.getControl('Verify password').value = 'myohmy'
+  >>> manager.getControl('Confirm').value = 'myohmy'
   >>> manager.getControl('Add').click()
 
 - a course,

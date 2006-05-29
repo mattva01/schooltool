@@ -22,7 +22,7 @@ Let's quickly create a user to run the tests with:
     >>> manager.getControl('Full name').value = 'Frog'
     >>> manager.getControl('Username').value = 'frog'
     >>> manager.getControl('Password').value = 'pwd'
-    >>> manager.getControl('Verify password').value = 'pwd'
+    >>> manager.getControl('Confirm').value = 'pwd'
     >>> manager.getControl('Add').click()
 
 Now we log in as the frog:
@@ -116,7 +116,7 @@ Now the person adding works:
     >>> frog.getControl('Full name').value = 'Snake'
     >>> frog.getControl('Username').value = 'snake'
     >>> frog.getControl('Password').value = 'badger'
-    >>> frog.getControl('Verify password').value = 'badger'
+    >>> frog.getControl('Confirm').value = 'badger'
     >>> frog.getControl('Add').click()
 
     >>> 'Snake' in frog.contents
