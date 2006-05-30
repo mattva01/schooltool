@@ -9,14 +9,13 @@ The security system of SchoolBell consists of:
 
  * SchoolToolAuthenticationUtility
  * views for login/logout
- * a view for editing the ACL
+ * a custom security policy
 
 The login/logout views store/reset the authentication data in the
 session.  The authentication utility authenticates the request
 according to the data stored in the session.
 
-The ACL view is a facade for the local grants mechanism, allowing the
-admin to set permissions on individual objects for persons and groups.
+The security policy is documented in src/schooltool/securitypolicy/README.txt
 
 
 SchoolBell authentication utility
