@@ -150,7 +150,7 @@ The groups of the SchoolBell instance are also principals:
     >>> group.members.add(person)
 
 And the user principal has a list ids of group principals he belongs
-to.  This list is used by the Zope Security Policy:
+to.  This list is used by the security policy:
 
     >>> from zope.security.interfaces import IGroupAwarePrincipal
     >>> p = auth.getPrincipal('sb.person.frog')
