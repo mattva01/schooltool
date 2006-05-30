@@ -9,6 +9,9 @@ the three-tier group-role-permission model (i.e, a principal can belong to a
 group, roles can be assigned to a group or a principal, and permissions can be
 assigned to a role).  Instead, we have a two-tier crowd-permission model.
 
+Notably local grants have also been removed, although it is easy to implement
+similar functionality using crowds.
+
 Crowds
 ------
 
