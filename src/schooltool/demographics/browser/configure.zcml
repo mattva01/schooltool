@@ -126,13 +126,6 @@
      />
 
   <page
-    name="table_macros"
-    for="*"
-    permission="zope.View"
-    template="table_macros.pt"
-    />
-
-  <page
     name="menu_macros"
     for="*"
     permission="zope.View"
