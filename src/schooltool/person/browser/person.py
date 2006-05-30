@@ -277,15 +277,6 @@ class IPersonEditForm(Interface):
         required=False,
         description=_("""Check this to clear the photo"""))
 
-    new_password = Password(
-        title=_("New password"),
-        required=False)
-
-    verify_password = Password(
-        title=_("Verify password"),
-        required=False)
-
-
 class PersonEditView(BrowserView):
     """A view for editing a person."""
 
@@ -306,16 +297,6 @@ class PersonEditView(BrowserView):
                 data = getWidgetsData(self, IPersonEditForm)
             except WidgetsError:
                 return # Errors will be displayed next to widgets
-
-            # If any of the password fields is set
-            if data.get('new_password') or data.get('verify_password'):
-                # We compare them
-                if data['new_password'] != data['verify_password']:
-                    self.error = _("Passwords do not match.")
-                    return
-
-                self.context.setPassword(data['new_password'])
-                self.message = _("Password was successfully changed!")
 
             self.context.title = data['title']
             if data.get('photo'):

@@ -155,34 +155,6 @@ def doctest_PersonEditView():
         >>> print person.photo
         None
 
-    You can set a person's password
-
-        >>> person.setPassword('lala')
-        >>> request = TestRequest(form={'UPDATE_SUBMIT': True,
-        ...                             'field.title': person.title,
-        ...                             'field.new_password': 'bar',
-        ...                             'field.verify_password': 'bar'})
-        >>> view = PersonEditView(person, request)
-
-        >>> view.update()
-        >>> view.message
-        u'Password was successfully changed!'
-        >>> person.checkPassword('bar')
-        True
-
-    Unless new password and confirm password do not match
-
-        >>> person.setPassword('lala')
-        >>> request = TestRequest(form={'UPDATE_SUBMIT': True,
-        ...                             'field.title': person.title,
-        ...                             'field.new_password': 'bara',
-        ...                             'field.verify_password': 'bar'})
-        >>> view = PersonEditView(person, request)
-
-        >>> view.update()
-        >>> view.error
-        u'Passwords do not match.'
-
     If the form contains errors, it is redisplayed
 
         >>> request = TestRequest(form={'UPDATE_SUBMIT': True,

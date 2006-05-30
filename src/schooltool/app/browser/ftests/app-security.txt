@@ -202,22 +202,10 @@ The user can edit his own info:
     >>> frog.getLink('edit name').click()
 
     >>> frog.getControl('Full name').value = 'Toad'
-    >>> frog.getControl('New password').value = 'newpwd'
-    >>> frog.getControl('Verify password').value = 'newpwd'
     >>> frog.getControl('Apply').click()
 
     >>> 'Toad' in frog.contents
     True
-    >>> 'Password was successfully changed!' in frog.contents
-    True
-
-We need to log in again:
-
-    >>> frog.getLink('Log Out').click()
-    >>> frog.getLink('Log In').click()
-    >>> frog.getControl('Username').value = 'frog'
-    >>> frog.getControl('Password').value = 'newpwd'
-    >>> frog.getControl('Log in').click()
 
 But we can revoke that permission from him:
 
@@ -234,8 +222,6 @@ Now he can't edit the info:
     >>> frog.getLink('edit name').click()
 
     >>> frog.getControl('Full name').value = 'Mr. Toad'
-    >>> frog.getControl('New password').value = 'whatever'
-    >>> frog.getControl('Verify password').value = 'whatever'
     >>> frog.getControl('Apply').click()
 
     >>> print frog.url
