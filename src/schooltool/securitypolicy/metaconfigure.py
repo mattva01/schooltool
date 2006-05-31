@@ -23,7 +23,6 @@ $Id$
 
 """
 
-from zope.configuration.exceptions import ConfigurationError
 from zope.app import zapi
 from zope.interface import implements
 from zope.component import provideAdapter
@@ -55,6 +54,23 @@ def getCrowdsUtility():
     return utility
 
 
+class AggregateCrowdAdapter(Crowd):
+    """A base class for aggregating crowds.
+
+    Override crowdFactories to specify which crowds to aggregate.
+    """
+
+    def contains(self, principal):
+        for crowdcls in self.crowdFactories():
+            crowd = crowdcls(self.context)
+            if crowd.contains(principal):
+                return True
+        return False
+
+    def crowdFactories(self):
+        raise NotImplementedError("override this in subclasses")
+
+
 def registerCrowdAdapter(iface, permission):
     """Register an adapter to ICrowd for iface.
 
@@ -62,15 +78,10 @@ def registerCrowdAdapter(iface, permission):
     global objcrowds.  You should not call this function several times
     for the same (iface, permission).
     """
-    class AggregateCrowdAdapter(Crowd):
-        def contains(self, principal):
-            crowd_factories = getCrowdsUtility().objcrowds[(iface, permission)]
-            for crowdcls in crowd_factories:
-                crowd = crowdcls(self.context)
-                if crowd.contains(principal):
-                    return True
-            return False
-    provideAdapter(AggregateCrowdAdapter, provides=ICrowd, adapts=[iface],
+    class AggregateUtilityCrowd(AggregateCrowdAdapter):
+        def crowdFactories(self):
+            return getCrowdsUtility().objcrowds[(iface, permission)]
+    provideAdapter(AggregateUtilityCrowd, provides=ICrowd, adapts=[iface],
                    name=permission)
 
 
@@ -106,15 +117,13 @@ def handle_allow(iface, crowdname, permission):
 
 
 def crowd(_context, name, factory):
-    # TODO: raise ConfigurationError if arguments are invalid
-    _context.action(discriminator=('Crowd', name), callable=handle_crowd,
+    _context.action(discriminator=('crowd', name), callable=handle_crowd,
                     args=(name, factory))
 
 
 def allow(_context, interface=None, crowds=None, permission=None):
-    # TODO: raise ConfigurationError if arguments are invalid
     for crowd in crowds:
-        _context.action(discriminator=('Allow', interface, crowd, permission),
+        _context.action(discriminator=('allow', interface, crowd, permission),
                         callable=handle_allow,
                         args=(interface, crowd, permission))
 
@@ -150,5 +159,23 @@ def handle_setting(key, text, default):
                                provides=IAccessControlSetting)
 
 def setting(_context, key=None, text=None, default=None):
-    _context.action(discriminator=None, callable=handle_setting,
-                    args=(key, text, default))
+    _context.action(discriminator=('setting', key),
+                    callable=handle_setting, args=(key, text, default))
+
+
+def handle_aggregate_crowd(name, crowd_names):
+    crowdmap = getCrowdsUtility().crowdmap
+    try:
+        crowds = [crowdmap[crowd_name] for crowd_name in crowd_names]
+    except KeyError:
+        raise ValueError("invalid crowd id", crowd_name)
+
+    class AggregateCrowdFactory(AggregateCrowdAdapter):
+        def crowdFactories(self):
+            return crowds
+    handle_crowd(name, AggregateCrowdFactory)
+
+
+def aggregate_crowd(_context, name, crowds):
+    _context.action(discriminator=('crowd', name),
+                    callable=handle_aggregate_crowd, args=(name, crowds))

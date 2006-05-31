@@ -30,12 +30,8 @@
       factory=".crowds.OwnerCrowd" />
 
   <security:crowd
-      name="administration"
-      factory=".crowds.AdministrationCrowd" />
-
-  <security:crowd
-      name="manager"
-      factory=".crowds.ManagerCrowd" />
+      name="managers"
+      factory=".crowds.ManagersCrowd" />
 
   <security:crowd
       name="administrators"
@@ -44,6 +40,18 @@
   <security:crowd
       name="clerks"
       factory=".crowds.ClerksCrowd" />
+
+  <security:crowd
+      name="teachers"
+      factory=".crowds.TeachersCrowd" />
+
+  <security:crowd
+      name="manager_backdoor"
+      factory=".crowds.ManagerBackdoorCrowd" />
+
+  <security:aggregate_crowd
+      name="administration"
+      crowds="manager_backdoor administrators clerks teachers managers" />
 
   <security:allow
       interface="schooltool.app.interfaces.ISchoolToolApplication"
@@ -215,7 +223,7 @@
       permission="schooltool.create" />
 
   <security:allow
-      crowds="manager administrators clerks"
+      crowds="managers administrators clerks"
       permission="schooltool.viewAttendance" />
   <security:allow
       crowds="everybody"

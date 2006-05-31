@@ -20,6 +20,12 @@
       handler=".metaconfigure.setting"
       />
 
+    <directive
+      name="aggregate_crowd"
+      schema=".metadirectives.IAggregateCrowdDirective"
+      handler=".metaconfigure.aggregate_crowd"
+      />
+
   </directives>
 
 </configure>

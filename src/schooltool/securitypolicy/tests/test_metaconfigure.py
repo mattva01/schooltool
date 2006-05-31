@@ -57,6 +57,7 @@ def doctest_getCrowdsUtility():
 
         >>> zapi.queryUtility(ICrowdsUtility) is cru
         True
+
     """
 
 
@@ -82,7 +83,17 @@ def doctest_registerCrowdAdapter():
         >>> obj = MyObject()
         >>> adapter = getAdapter(obj, ICrowd, name='perm')
         >>> adapter
-        <...AggregateCrowdAdapter...>
+        <...Aggregate...>
+
+        >>> cru.objcrowds = {(IMyObject, 'perm'): ['crowd A', 'crowd B']}
+        >>> adapter.crowdFactories()
+        ['crowd A', 'crowd B']
+
+    """
+
+
+def doctest_AggregateCrowdAdapter():
+    """Doctests for AggregateCrowdAdapter.
 
     What's so special about this adapter?  It aggregates crowds retrieved from
     objcrowds:
@@ -93,7 +104,13 @@ def doctest_registerCrowdAdapter():
         ...     def contains(self, principal):
         ...         print 'contains(%s)' % principal
         ...         return principal == 'r00t'
-        >>> cru.objcrowds = {(IMyObject, 'perm'): [CrowdStub]}
+
+    The crowdFactories method is normally overridden:
+
+        >>> from schooltool.securitypolicy import metaconfigure
+        >>> adapter = metaconfigure.AggregateCrowdAdapter(object())
+
+        >>> adapter.crowdFactories = lambda: [CrowdStub]
 
         >>> adapter.contains('some principal')
         contains(some principal)
@@ -102,6 +119,7 @@ def doctest_registerCrowdAdapter():
         >>> adapter.contains('r00t')
         contains(r00t)
         True
+
     """
 
 
@@ -163,36 +181,69 @@ def doctest_handle_allow():
     """
 
 
+class ContextStub(object):
+    def action(self, discriminator, callable, args):
+        print discriminator
+        print callable
+        print args
+
+
 def doctest_crowd():
     """Doctests for crowd
 
         >>> from schooltool.securitypolicy.metaconfigure import crowd
-        >>> class ContextStub(object):
-        ...     def action(self, discriminator, callable, args):
-        ...         print discriminator
-        ...         print callable
-        ...         print args
 
         >>> _context = ContextStub()
         >>> crowd(_context, 'ipqs', 'ipqsfactory')
-        ('Crowd', 'ipqs')
+        ('crowd', 'ipqs')
         <function handle_crowd at ...>
         ('ipqs', 'ipqsfactory')
     """
 
 
+def doctest_handle_aggregate_crowd():
+    """Doctests for handle_aggregate_crowd.
+
+        >>> cru = CrowdsUtility()
+        >>> cru.crowdmap['old1'] = 'crowd A'
+        >>> cru.crowdmap['old2'] = 'crowd B'
+        >>> ztapi.provideUtility(ICrowdsUtility, cru)
+
+        >>> from schooltool.securitypolicy import metaconfigure
+        >>> metaconfigure.handle_aggregate_crowd('newcrowd', ['old1', 'old2'])
+
+        >>> factory = cru.crowdmap['newcrowd']
+        >>> factory(None).crowdFactories()
+        ['crowd A', 'crowd B']
+
+    """
+
+
+def doctest_aggregate_crowd():
+    """Doctests for aggregate_crowd.
+
+        >>> from schooltool.securitypolicy.metaconfigure import aggregate_crowd
+        >>> _context = ContextStub()
+        >>> aggregate_crowd(_context, 'newcrowd', ['old1', 'old2'])
+        ('crowd', 'newcrowd')
+          <function handle_aggregate_crowd ...>
+          ('newcrowd', ['old1', 'old2'])
+
+    """
+
+
 def doctest_allow():
-    """Doctests for allow
+    """Doctests for allow.
 
         >>> from schooltool.securitypolicy.metaconfigure import allow
-        >>> class ContextStub(object):
-        ...     def action(self, discriminator, callable, args):
-        ...         print discriminator, callable, args
-
         >>> _context = ContextStub()
         >>> allow(_context, 'interface', ['ipqs', 'ecug'], 'do')
-        ('Allow', 'interface', 'ipqs', 'do') <function handle_allow ...> ('interface', 'ipqs', 'do')
-        ('Allow', 'interface', 'ecug', 'do') <function handle_allow ...> ('interface', 'ecug', 'do')
+        ('allow', 'interface', 'ipqs', 'do')
+          <function handle_allow ...>
+          ('interface', 'ipqs', 'do')
+        ('allow', 'interface', 'ecug', 'do')
+          <function handle_allow ...>
+          ('interface', 'ecug', 'do')
 
     """
 

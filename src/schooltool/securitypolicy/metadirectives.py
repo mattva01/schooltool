@@ -30,9 +30,12 @@ from zope.schema import TextLine
 from zope.security.zcml import Permission
 
 
+CrowdId = PythonIdentifier
+
+
 class ICrowdDirective(Interface):
 
-    name = PythonIdentifier(
+    name = CrowdId(
         title=u"Name",
         description=u"Identifier of the crowd")
 
@@ -50,7 +53,7 @@ class IAllowDirective(Interface):
 
     crowds = Tokens(
         title=u"Crowds",
-        value_type=PythonIdentifier(title=u"Crowd"),
+        value_type=CrowdId(title=u"Crowd"),
         required=True)
 
     permission = Permission(
@@ -70,3 +73,15 @@ class ISettingDirective(Interface):
         title=u"Default setting",
         required=True,
         default=False)
+
+
+class IAggregateCrowdDirective(Interface):
+
+    name = CrowdId(
+        title=u"Name",
+        description=u"Identifier of the crowd")
+
+    crowds = Tokens(
+        title=u"Crowds",
+        value_type=CrowdId(title=u"Crowd"),
+        required=True)

@@ -46,22 +46,12 @@ class EverybodyCrowd(Crowd):
         return True
 
 
-class AuthenticatedCrowd(Crowd):
-    """Authenticated users."""
-
-    def contains(self, principal):
-        return 'zope.Authenticated' in principal.groups
-
-
-class AnonymousCrowd(Crowd):
-    """Anonymous users."""
-
-    def contains(self, principal):
-        return 'zope.Anybody' in principal.groups
-
-
 class OwnerCrowd(Crowd):
-    """ TODO """
+    """Crowd of owners.
+
+    The crowd tries to adapt the context to IPerson.  If adaptation succeeds,
+    it compares the obtained person with the current principal.
+    """
 
     def contains(self, principal):
         from schooltool.person.interfaces import IPerson
@@ -80,7 +70,17 @@ class _GroupCrowd(Crowd):
         return self.group in principal.groups
 
 
-class ManagerCrowd(_GroupCrowd):
+class AuthenticatedCrowd(_GroupCrowd):
+    """Authenticated users."""
+
+    group = 'zope.Authenticated'
+
+class AnonymousCrowd(Crowd):
+    """Anonymous users."""
+
+    group = 'zope.Anybody'
+
+class ManagersCrowd(_GroupCrowd):
     group = 'sb.group.manager'
 
 class AdministratorsCrowd(_GroupCrowd):
@@ -89,18 +89,15 @@ class AdministratorsCrowd(_GroupCrowd):
 class ClerksCrowd(_GroupCrowd):
     group = 'sb.group.clerks'
 
+class TeachersCrowd(_GroupCrowd):
+    group = 'sb.group.teachers'
 
-class AdministrationCrowd(Crowd):
-    """Administration crowd.
 
-    A person is in this crowd if she is one of administrators, clerks,
-    managers or teachers.
-    """
+class ManagerBackdoorCrowd(Crowd):
+
+    # XXX At the moment the manager is not always a member of the manager group.
+    # This hack will go away soon.
 
     def contains(self, principal):
-        if hasattr(principal, '_person') and principal._person.__name__ == 'manager':
-            return True # XXX backdoor for manager
-        for crowd_id in ['administrators', 'clerks', 'manager', 'teachers']:
-            if ('sb.group.%s' % crowd_id) in principal.groups:
-                return True
-        return False
+        return (hasattr(principal, '_person')
+                and principal._person.__name__ == 'manager')
