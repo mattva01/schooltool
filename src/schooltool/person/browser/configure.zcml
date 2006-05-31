@@ -73,9 +73,9 @@
       title="View"
       />
 
-  <zope:adapter for="schooltool.person.browser.person.IGroupsSource
+  <zope:adapter for=".person.IGroupsSource
 		     zope.publisher.interfaces.browser.IBrowserRequest"
-		factory="schooltool.person.browser.person.GroupsTerms"/>
+		factory=".person.GroupsTerms"/>
   <page
       name="delete.html"
       for="..interfaces.IPersonContainer"
