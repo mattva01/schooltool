@@ -3,6 +3,14 @@
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
+  <page
+      name="add.html"
+      for="schooltool.person.interfaces.IPersonContainer"
+      class=".personform.PersonAddView"
+      permission="schooltool.create"
+      menu="schooltool_actions" title="New Person" 
+      />
+
   <zope:subscriber
       for="schooltool.person.interfaces.IPerson zope.publisher.interfaces.IPublisherRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"

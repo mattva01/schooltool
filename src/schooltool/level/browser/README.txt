@@ -101,20 +101,8 @@ The Academic Career of a Student
 
 Before we can do anything, we have to create a student:
 
-    >>> import StringIO
-
-    >>> browser.getLink('Persons').click()
-    >>> browser.getLink('New Person').click()
-
-    >>> browser.getControl('Full name').value = 'Stephan Richter'
-    >>> browser.getControl('Username').value = 'srichter'
-    >>> browser.getControl('Password').value = 'foobar'
-    >>> browser.getControl('Confirm').value = 'foobar'
-    >>> browser.getControl('Photo').value = StringIO.StringIO()
-    >>> browser.getControl('Add').click()
-
-    >>> 'Stephan Richter' in browser.contents
-    True
+    >>> from schooltool.app.browser.ftests.setup import addPerson
+    >>> addPerson('Stephan Richter', 'srichter', 'foobar')
 
 Now we go to the manager group, and walk the student through the academic
 career:
@@ -246,24 +234,11 @@ And a second time ...
 Let's now do this again in a student-specific UI. To make the walkthrough
 cleaner, we create a new student first:
 
-    >>> browser.getLink('Persons').click()
-    >>> browser.getLink('New Person').click()
-
-    >>> browser.getControl('Full name').value = 'Tom Hoffman'
-    >>> browser.getControl('Username').value = 'tom'
-    >>> browser.getControl('Password').value = 'foobar'
-    >>> browser.getControl('Confirm').value = 'foobar'
-    >>> browser.getControl('Photo').value = StringIO.StringIO()
-    >>> browser.getControl('Add').click()
-
-    >>> print browser.contents
-    <BLANKLINE>
-    ...
-    <a href="http://localhost/persons/tom">Tom Hoffman</a>
-    ...
+    >>> addPerson('Tom Hoffman', 'tom', 'foobar')
 
 Now we enter the new student and look at his academic career:
 
+    >>> browser.open('http://localhost/persons')
     >>> browser.getLink('Tom Hoffman').click()
     >>> browser.getLink('Academic Record').click()
 

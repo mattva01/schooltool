@@ -73,14 +73,6 @@
       title="View"
       />
 
-  <page
-      name="add.html"
-      for="schooltool.person.interfaces.IPersonContainer"
-      class=".person.PersonAddView"
-      permission="schooltool.create"
-      menu="schooltool_actions" title="New Person" 
-      />
-
   <zope:adapter for="schooltool.person.browser.person.IGroupsSource
 		     zope.publisher.interfaces.browser.IBrowserRequest"
 		factory="schooltool.person.browser.person.GroupsTerms"/>

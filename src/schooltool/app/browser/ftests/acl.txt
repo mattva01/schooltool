@@ -13,17 +13,8 @@ First, log in
 
 Let's create a person so that we can fool around with his calendar:
 
-    >>> manager.getLink('Persons').click()
-    >>> manager.getLink('New Person').click()
-
-    >>> manager.getControl('Full name').value = 'Frog'
-    >>> manager.getControl('Username').value = 'frog'
-    >>> manager.getControl('Password').value = 'pwd'
-    >>> manager.getControl('Confirm').value = 'pwd'
-    >>> manager.getControl('Add').click()
-
-    >>> 'Frog' in manager.contents
-    True
+    >>> from schooltool.app.browser.ftests.setup import addPerson
+    >>> addPerson('Frog', 'frog', 'pwd')
 
 After logging in the frog
 

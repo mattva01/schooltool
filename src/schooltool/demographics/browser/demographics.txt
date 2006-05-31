@@ -9,10 +9,9 @@ We can add a person:
   >>> browser.handleErrors = False
   >>> browser.addHeader('Authorization', 'Basic manager:schooltool')
   >>> browser.open('http://localhost/persons/@@add.html')
-  >>> title = browser.getControl(name='form.title')
-  >>> title.value = 'foobar'
-  >>> username = browser.getControl(name='form.username')
-  >>> username.value = 'foobar'
+  >>> browser.getControl(name='form.title').value = 'foobar'
+  >>> browser.getControl(name='form.username').value = 'foobar'
+  >>> browser.getControl(name='form.last_name').value = 'barson'
   >>> browser.getControl('Add').click()
 
 And we can edit its name info:

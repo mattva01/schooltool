@@ -33,19 +33,12 @@ We add a group
 
 We add a person
 
-    >>> manager.getLink('Persons').click()
-    >>> manager.getLink('New Person').click()
-
-    >>> manager.getControl('Full name').value = 'person1'
-    >>> manager.getControl('Username').value = 'person'
-    >>> manager.getControl(name='form.groups').value = ['group1'] 
-    >>> manager.getControl('Add').click()
-
-    >>> 'person1' in manager.contents
-    True
+    >>> from schooltool.app.browser.ftests.setup import addPerson
+    >>> addPerson('person1', 'person', groups=['group1'])
 
 We look at the groups of the person we added
 
+    >>> manager.open('http://localhost/persons')
     >>> manager.getLink('person1').click()
     >>> 'group1' in manager.contents
     True

@@ -26,6 +26,7 @@ from zope.formlib import form
 from zope.formlib.interfaces import IAction
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.interface.common import idatetime
+from zope.schema import TextLine
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.app.form.browser.interfaces import ITerms
 from zope.app.publisher.browser.menu import getMenu, BrowserMenu
@@ -152,3 +153,22 @@ class Terms(object):
 
     def getValue(self, token):
         return token
+
+from schooltool.person.browser.person import IPersonAddForm as IPersonAddForm_
+from schooltool.person.browser.person import PersonAddView as PersonAddView_
+from schooltool.person.browser.person import setUpPersonAddCustomWidgets
+
+class IPersonAddForm(IPersonAddForm_):
+    
+    last_name = TextLine(
+        title=_("Last name"))
+    
+class PersonAddView(PersonAddView_):
+
+    form_fields = form.Fields(IPersonAddForm, render_context=False)
+    form_fields = form_fields.select('title', 'last_name', 'username',
+                                     'password', 'photo', 'groups')
+    setUpPersonAddCustomWidgets(form_fields)
+    
+    def initPerson(self, person, data):
+        person.nameinfo.last_name = data['last_name']

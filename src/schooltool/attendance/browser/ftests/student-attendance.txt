@@ -88,14 +88,9 @@ Let's schedule the section
 
 Let's also create a teacher for the section
 
-    >>> manager.getLink('Persons').click()
-    >>> manager.getLink('New Person').click()
-    >>> manager.getControl('Full name').value = 'Great Teacher Largo'
-    >>> manager.getControl('Username').value = 'largo'
-    >>> manager.getControl('Password').value = 'sittinghorse'
-    >>> manager.getControl('Confirm').value = 'sittinghorse'
-    >>> manager.getControl(name='form.groups').value = ['teachers']
-    >>> manager.getControl('Add').click()
+    >>> from schooltool.app.browser.ftests.setup import addPerson
+    >>> addPerson('Great Teacher Largo', 'largo', 'sittinghorse',
+    ...     groups=['teachers'])
 
     >>> manager.open('http://localhost/sections/dancing1a')
     >>> manager.getLink('edit instructors').click()
@@ -104,23 +99,8 @@ Let's also create a teacher for the section
 
 Create some students
 
-    >>> manager.getLink('Persons').click()
-    >>> manager.getLink('New Person').click()
-    >>> manager.getControl('Full name').value = 'Joniukas'
-    >>> manager.getControl('Username').value = 'joniukas'
-    >>> manager.getControl('Password').value = 'gretute'
-    >>> manager.getControl('Confirm').value = 'gretute'
-    >>> manager.getControl(name='form.groups').value = ['students']
-    >>> manager.getControl('Add').click()
-
-    >>> manager.getLink('Persons').click()
-    >>> manager.getLink('New Person').click()
-    >>> manager.getControl('Full name').value = 'Gretute'
-    >>> manager.getControl('Username').value = 'gretute'
-    >>> manager.getControl('Password').value = 'tenerife'
-    >>> manager.getControl('Confirm').value = 'tenerife'
-    >>> manager.getControl(name='form.groups').value = ['students']
-    >>> manager.getControl('Add').click()
+    >>> addPerson('Joniukas', 'joniukas', 'gretute', groups=['students'])
+    >>> addPerson('Gretute', 'gretute', 'tenerife', groups=['students'])
 
 Add them to dancing section
 

@@ -32,7 +32,7 @@ def logIn(username, password=None):
     return browser
 
 
-def addPerson(name, username=None, password=None):
+def addPerson(name, username=None, password=None, groups=None, browser=None):
     """Add a person.
 
     If username is not specified, it will be taken to be name.lower().
@@ -43,16 +43,20 @@ def addPerson(name, username=None, password=None):
         username = name.lower()
     if not password:
         password = username + 'pwd'
-    manager = logInManager()
-    manager.getLink('Persons').click()
-    manager.getLink('New Person').click()
-    manager.getControl('Full name').value = name
-    manager.getControl('Username').value = username
-    manager.getControl('Password').value = password
-    manager.getControl('Confirm').value = password
-    manager.getControl('Add').click()
-    assert name in manager.contents
-
+    if browser is None:
+        browser = logInManager()
+    browser.getLink('Persons').click()
+    browser.getLink('New Person').click()
+    browser.getControl('Full name').value = name
+    # XXX Last name is a required field defined by demographics
+    browser.getControl('Last name').value = 'Fake'
+    browser.getControl('Username').value = username
+    browser.getControl('Password').value = password
+    browser.getControl('Confirm').value = password
+    if groups:
+        browser.getControl(name='form.groups').value = groups
+    browser.getControl('Add').click()
+    assert name in browser.contents
 
 def addResource(title):
     """Add a resource."""

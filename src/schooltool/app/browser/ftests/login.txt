@@ -13,14 +13,8 @@ We have an app instance:
 
 We add a person
 
-    >>> manager.getLink('Persons').click()
-    >>> manager.getLink('New Person').click()
-
-    >>> manager.getControl('Full name').value = 'Some User'
-    >>> manager.getControl('Username').value = 'user'
-    >>> manager.getControl('Password').value = 'secret'
-    >>> manager.getControl('Confirm').value = 'secret'
-    >>> manager.getControl('Add').click()
+    >>> from schooltool.app.browser.ftests.setup import addPerson
+    >>> addPerson('Some User', 'user', 'secret')
 
 We have the views ``@@login.html`` and ``@@logout.html`` on the main
 application object. Those views log in or log out the user of the session.

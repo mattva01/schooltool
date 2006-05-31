@@ -148,16 +148,12 @@ a browser:
 
 The first step is to create a person ...
 
-  >>> manager.getLink('persons').click()
-  >>> manager.getLink('New Person').click()
-  >>> manager.getControl('Full name').value = 'Tom Hoffman'
-  >>> manager.getControl('Username').value = 'tha1'
-  >>> manager.getControl('Password').value = 'myohmy'
-  >>> manager.getControl('Confirm').value = 'myohmy'
-  >>> manager.getControl('Add').click()
+  >>> from schooltool.app.browser.ftests.setup import addPerson
+  >>> addPerson('Tom Hoffman', 'tha1', 'myohmy')
 
 to whom we attach a bunch of commendations:
 
+  >>> manager.open('http://localhost/persons')
   >>> manager.getLink('Tom Hoffman').click()
 
   >>> manager.getLink('Add Commendation').click()

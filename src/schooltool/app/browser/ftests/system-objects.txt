@@ -27,13 +27,8 @@ the default system objects:
     >>> manager_browser.getControl('Title').value = 'A Group'
     >>> manager_browser.getControl('Add').click()
 
-    >>> manager_browser.getLink('Persons').click()
-    >>> manager_browser.getLink('New Person').click()
-    >>> manager_browser.getControl('Full name').value = 'Stephan Richter'
-    >>> manager_browser.getControl('Username').value = 'srichter'
-    >>> manager_browser.getControl('Password').value = 'foobar'
-    >>> manager_browser.getControl('Confirm').value = 'foobar'
-    >>> manager_browser.getControl('Add').click()
+    >>> from schooltool.app.browser.ftests.setup import addPerson
+    >>> addPerson('Stephan Richter', 'srichter', 'foobar')
 
 Test
 ----

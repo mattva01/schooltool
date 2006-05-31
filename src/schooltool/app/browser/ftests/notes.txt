@@ -12,12 +12,8 @@ Set up
 
 We add a person
 
-    >>> manager.getLink('Persons').click()
-    >>> manager.getLink('New Person').click()
-
-    >>> manager.getControl('Full name').value = 'person1'
-    >>> manager.getControl('Username').value = 'person'
-    >>> manager.getControl('Add').click()
+    >>> from schooltool.app.browser.ftests.setup import addPerson
+    >>> addPerson('person1', 'person', 'pwd')
 
 
 Test
@@ -25,6 +21,7 @@ Test
 
 Add a note to the person
 
+    >>> manager.open('http://localhost')
     >>> manager.getLink('Persons').click()
     >>> manager.getLink('person1').click()
     >>> manager.getLink('New Note').click()
@@ -84,14 +81,8 @@ Make sure the note is there when we view it:
 
 Add a user who won't be able to see the private note:
 
-    >>> manager.getLink('Persons').click()
-    >>> manager.getLink('New Person').click()
-
-    >>> manager.getControl('Full name').value = 'Frog'
-    >>> manager.getControl('Username').value = 'frog'
-    >>> manager.getControl('Password').value = 'pwd'
-    >>> manager.getControl('Confirm').value = 'pwd'
-    >>> manager.getControl('Add').click()
+    >>> from schooltool.app.browser.ftests.setup import addPerson
+    >>> addPerson('Frog', 'frog', 'pwd')
 
 View the page as our new user and we will only see the first (public) note:
 

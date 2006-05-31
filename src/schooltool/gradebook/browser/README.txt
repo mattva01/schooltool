@@ -110,39 +110,11 @@ let's add a section for our course:
 
 But what would a section be without some students and a teacher?
 
-    >>> manager.getLink('Persons').click()
-
-    >>> manager.getLink('New Person').click()
-    >>> manager.getControl('Full name').value = 'Paul Cardune'
-    >>> manager.getControl('Username').value = 'paul'
-    >>> manager.getControl('Password').value = 'pwd'
-    >>> manager.getControl('Confirm').value = 'pwd'
-    >>> manager.getControl(name='form.groups').value = ['students']
-    >>> manager.getControl('Add').click()
-
-    >>> manager.getLink('New Person').click()
-    >>> manager.getControl('Full name').value = 'Tom Hoffman'
-    >>> manager.getControl('Username').value = 'tom'
-    >>> manager.getControl('Password').value = 'pwd'
-    >>> manager.getControl('Confirm').value = 'pwd'
-    >>> manager.getControl(name='form.groups').value = ['students']
-    >>> manager.getControl('Add').click()
-
-    >>> manager.getLink('New Person').click()
-    >>> manager.getControl('Full name').value = 'Claudia Richter'
-    >>> manager.getControl('Username').value = 'claudia'
-    >>> manager.getControl('Password').value = 'pwd'
-    >>> manager.getControl('Confirm').value = 'pwd'
-    >>> manager.getControl(name='form.groups').value = ['students']
-    >>> manager.getControl('Add').click()
-
-    >>> manager.getLink('New Person').click()
-    >>> manager.getControl('Full name').value = 'Stephan Richter'
-    >>> manager.getControl('Username').value = 'stephan'
-    >>> manager.getControl('Password').value = 'pwd'
-    >>> manager.getControl('Confirm').value = 'pwd'
-    >>> manager.getControl(name='form.groups').value = ['teachers']
-    >>> manager.getControl('Add').click()
+    >>> from schooltool.app.browser.ftests.setup import addPerson
+    >>> addPerson('Paul Cardune', 'paul', 'pwd', groups=['students'])
+    >>> addPerson('Tom Hoffman', 'tom', 'pwd', groups=['students'])
+    >>> addPerson('Claudia Richter', 'claudia', 'pwd', groups=['students'])
+    >>> addPerson('Stephan Richter', 'stephan', 'pwd', groups=['teachers'])
 
 Now we can add those people to the section:
 

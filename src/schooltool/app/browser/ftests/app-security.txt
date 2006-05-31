@@ -16,14 +16,8 @@ for that.
 
 Let's quickly create a user to run the tests with:
 
-    >>> manager.getLink('Persons').click()
-    >>> manager.getLink('New Person').click()
-
-    >>> manager.getControl('Full name').value = 'Frog'
-    >>> manager.getControl('Username').value = 'frog'
-    >>> manager.getControl('Password').value = 'pwd'
-    >>> manager.getControl('Confirm').value = 'pwd'
-    >>> manager.getControl('Add').click()
+    >>> from schooltool.app.browser.ftests.setup import addPerson
+    >>> addPerson('Frog', 'frog', 'pwd')
 
 Now we log in as the frog:
 
@@ -110,17 +104,7 @@ Let's grant the permission to the user:
 
 Now the person adding works:
 
-    >>> frog.getLink('Persons').click()
-    >>> frog.getLink('New Person').click()
-
-    >>> frog.getControl('Full name').value = 'Snake'
-    >>> frog.getControl('Username').value = 'snake'
-    >>> frog.getControl('Password').value = 'badger'
-    >>> frog.getControl('Confirm').value = 'badger'
-    >>> frog.getControl('Add').click()
-
-    >>> 'Snake' in frog.contents
-    True
+    >>> addPerson('Snake', 'snake', 'badger', browser=frog)
 
 And a group:
 
@@ -146,6 +130,7 @@ And a resource too:
 
 Lets try deleting the snake:
 
+    >>> frog.open('http://localhost')
     >>> frog.getLink('Persons').click()
     >>> frog.getControl(name='delete.snake').value = '1'
     >>> frog.getControl('Delete').click()

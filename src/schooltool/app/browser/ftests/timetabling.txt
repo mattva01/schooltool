@@ -24,14 +24,8 @@ Prologue
 
 Let's create a person for use in tests:
 
-    >>> manager.getLink('Persons').click()
-    >>> manager.getLink('New Person').click()
-
-    >>> manager.getControl('Full name').value = 'Frog'
-    >>> manager.getControl('Username').value = 'frog'
-    >>> manager.getControl('Password').value = 'pwd'
-    >>> manager.getControl('Confirm').value = 'pwd'
-    >>> manager.getControl('Add').click()
+    >>> from schooltool.app.browser.ftests.setup import addPerson
+    >>> addPerson('Frog', 'frog', 'pwd')
 
 And a group:
 
@@ -186,14 +180,7 @@ Importing timetables
 
 We will need to define a person who will be a learner.
 
-    >>> manager.getLink('Persons').click()
-    >>> manager.getLink('New Person').click()
-
-    >>> manager.getControl('Full name').value = 'Tadpole'
-    >>> manager.getControl('Username').value = 'tadpole'
-    >>> manager.getControl('Password').value = 'pwd'
-    >>> manager.getControl('Confirm').value = 'pwd'
-    >>> manager.getControl('Add').click()
+    >>> addPerson('Tadpole', 'tadpole', 'pwd')
 
 We will also need a course.
 

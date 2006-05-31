@@ -19,30 +19,12 @@ We will obviously need a SchoolTool instance.
 
 Let's create a person so that we can fool around with his calendar:
 
-    >>> manager.getLink('Persons').click()
-    >>> manager.getLink('New Person').click()
-
-    >>> manager.getControl('Full name').value = 'Frog'
-    >>> manager.getControl('Username').value = 'frog'
-    >>> manager.getControl('Password').value = 'pwd'
-    >>> manager.getControl('Confirm').value = 'pwd'
-
-    >>> manager.getControl('Add').click()
-    >>> 'Frog' in manager.contents
-    True
+    >>> from schooltool.app.browser.ftests import setup
+    >>> setup.addPerson('Frog', 'frog', 'pwd')
 
 Let's create more persons so that we can test access control.
-
-    >>> manager.getLink('New Person').click()
-
-    >>> manager.getControl('Full name').value = 'Toad'
-    >>> manager.getControl('Username').value = 'toad'
-    >>> manager.getControl('Password').value = 'doat'
-    >>> manager.getControl('Confirm').value = 'doat'
-
-    >>> manager.getControl('Add').click()
-    >>> 'Toad' in manager.contents
-    True
+     
+    >>> setup.addPerson('Toad', 'toad', 'doat')
 
 
 Adding new events
@@ -68,6 +50,7 @@ Let the Frog add an ordinary event that takes place on 3rd February, 2005:
 
 Let's grant the Toad the viewCalendar permission on Frog's calendar:
 
+    >>> manager.open('http://localhost/persons')
     >>> manager.getLink('Frog').click()
     >>> manager.getLink('View Calendar').click()
     >>> manager.getLink('Set Up Access').click()

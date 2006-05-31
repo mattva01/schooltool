@@ -8,9 +8,13 @@ Let's try to add a user:
     >>> browser = Browser()
     >>> browser.addHeader('Authorization', 'Basic manager:schooltool')
     >>> browser.open('http://localhost/persons/@@add.html')
-  
+
+(XXX last_name dependency in schooltool.person, while last_name is
+ introduced by schooltool.demographics...)
+
     >>> form = {'form.title': u'John Doe',
     ...         'form.username': u'jdoe',
+    ...         'form.last_name': 'Doe',
     ...         'form.password': u'secret',
     ...         'form.password.confirm': u'secret'}
     >>> for name, value in form.items():
@@ -37,6 +41,7 @@ If we try to add a user with the same login, we get a nice error message:
   
     >>> form = {'form.title': u'John Doe',
     ...         'form.username': u'jdoe',
+    ...         'form.last_name': 'Doe',
     ...         'form.password': u'secret',
     ...         'form.password.confirm': u'secret'}
     >>> for name, value in form.items():
@@ -58,6 +63,7 @@ Now let's add a person in that group:
     >>> browser.open('http://localhost/persons/@@add.html')
     >>> form = {'form.title': u'Gintas',
     ...         'form.username': u'gintas',
+    ...         'form.last_name': 'Lastname',
     ...         'form.password': u'denied',
     ...         'form.password.confirm': u'denied'}
     >>> for name, value in form.items():

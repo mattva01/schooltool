@@ -14,30 +14,12 @@ Set up
 
 Let's create a person so that we can fool around with his calendar:
 
-    >>> manager.getLink('Persons').click()
-    >>> manager.getLink('New Person').click()
-
-    >>> manager.getControl('Full name').value = 'Frog'
-    >>> manager.getControl('Username').value = 'frog'
-    >>> manager.getControl('Password').value = 'pwd'
-    >>> manager.getControl('Confirm').value = 'pwd'
-
-    >>> manager.getControl('Add').click()
-    >>> 'Frog' in manager.contents
-    True
+    >>> from schooltool.app.browser.ftests.setup import addPerson
+    >>> addPerson('Frog', 'frog', 'pwd')
 
 Let's create a second person so that we can test access control.
 
-    >>> manager.getLink('New Person').click()
-
-    >>> manager.getControl('Full name').value = 'Toad'
-    >>> manager.getControl('Username').value = 'toad'
-    >>> manager.getControl('Password').value = 'doat'
-    >>> manager.getControl('Confirm').value = 'doat'
-
-    >>> manager.getControl('Add').click()
-    >>> 'Toad' in manager.contents
-    True
+    >>> addPerson('Toad', 'toad', 'doat')
 
 Also, let's create a group:
 

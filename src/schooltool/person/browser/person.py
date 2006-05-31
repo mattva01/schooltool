@@ -190,15 +190,18 @@ class IPersonAddForm(Interface):
         description=_("Add the person to the selected groups."),
         value_type=Choice(source=GroupsSource()))
 
+def setUpPersonAddCustomWidgets(form_fields):
+    form_fields['password'].custom_widget = PasswordConfirmationWidget
+    form_fields['groups'].custom_widget = SourceMultiCheckBoxWidget
+
 class PersonAddView(BasicForm):
     """A view for adding a person."""
 
     template = ViewPageTemplateFile('person_add.pt')
     
     form_fields = form.Fields(IPersonAddForm, render_context=False)
-    form_fields['password'].custom_widget = PasswordConfirmationWidget
-    form_fields['groups'].custom_widget = SourceMultiCheckBoxWidget
-
+    setUpPersonAddCustomWidgets(form_fields)
+    
     def title(self):
         return _("Add person")
 
@@ -206,29 +209,32 @@ class PersonAddView(BasicForm):
     def handle_apply_action(self, action, data):        
         if data['username'] in self.context:
             self.status = _("This username is already used!")
-            return
+            return None
         person = self.createPerson(data['title'],
                                    data['username'],
                                    data['password'],
                                    data['photo'])
         self.addPersonToGroups(person, data['groups'])
+        self.initPerson(person, data)
         self.addPerson(person)
-        url = zapi.absoluteURL(self.context, self.request)
-        self.request.response.redirect(url)
-        return ''
-    
+        return self._redirect()
+            
     @form.action(_("Cancel"))
     def handle_cancel_action(self, action, data):
         # XXX validation upon cancellation doesn't make any sense
         # how to make this work properly?
+        return self._redirect()
+
+    def initPerson(self, person, data):
+        """Override this in subclasses to do further initialization.
+        """
+        pass
+
+    def _redirect(self):
         url = zapi.absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
         return ''
 
-    def getAllGroups(self):
-        """Return a list of all groups in the system."""
-        return getSchoolToolApplication()['groups'].values()
-    
     def _factory(self, username, title):
         return getUtility(IPersonFactory)(username, title)
     
@@ -250,14 +256,6 @@ class PersonAddView(BasicForm):
         name = person.username
         self.context[name] = person
         return person
-
-##     def update(self):
-##         if 'CANCEL' in self.request:
-##             url = zapi.absoluteURL(self.context, self.request)
-##             self.request.response.redirect(url)
-
-##         return AddView.update(self)
-
     
 class IPersonEditForm(Interface):
     """Schema for a person's edit form."""
