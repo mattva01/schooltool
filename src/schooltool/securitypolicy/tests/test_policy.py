@@ -174,6 +174,46 @@ def test_SchoolToolSecurityPolicy_checkByAdaptation():
     """
 
 
+def test_SchoolToolSecurityPolicy_checkCrowds():
+    """Tests for SchoolToolSecurityPolicy.checkCrowds.
+
+    Check crowds just check whether any principal is contained in at
+    least one of the crowds constructed from a crowdcls list passed to
+    it:
+
+        >>> class NegativeCrowdStub(object):
+        ...     def __init__(self, context):
+        ...         pass
+        ...     def contains(self, principal):
+        ...         return False
+        >>> class CrowdStub(NegativeCrowdStub):
+        ...     def contains(self, principal):
+        ...         return principal == 'john'
+
+        >>> class ParticipationStub(object):
+        ...     interaction = None
+        ...     def __init__(self, principal):
+        ...         self.principal = principal
+
+        >>> from schooltool.securitypolicy import policy
+        >>> sp = policy.SchoolToolSecurityPolicy(ParticipationStub('john'),
+        ...                                      ParticipationStub('pete'))
+
+        >>> sp.checkCrowds([NegativeCrowdStub, NegativeCrowdStub], object())
+        False
+
+        >>> sp.checkCrowds([NegativeCrowdStub, CrowdStub], object())
+        True
+
+    If john is not logged in, we'd still get False:
+
+        >>> sp = policy.SchoolToolSecurityPolicy(ParticipationStub('pete'))
+        >>> sp.checkCrowds([NegativeCrowdStub, CrowdStub], object())
+        False
+
+    """
+
+
 def setUp(test=None):
     setup.placelessSetUp()
 
