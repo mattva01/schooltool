@@ -1264,8 +1264,12 @@ class DailyCalendarRowsView(BrowserView):
         day2 = dayend.astimezone(tttz).date()
 
         def resolvePeriods(date):
+            term = getTermForDate(date)
+            if not term:
+                return []
+
+            periods = ttschema.model.periodsInDay(term, ttschema, date)
             result = []
-            periods = ttschema.model.periodsInDay(schooldays, ttschema, date)
             for id, tstart, duration in  periods:
                 dtstart = datetime.combine(date, tstart)
                 dtstart = tttz.localize(dtstart)

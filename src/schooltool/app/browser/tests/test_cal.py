@@ -4894,17 +4894,21 @@ class TestDailyCalendarRowsView_getPeriodsForDay(NiceDiffsMixin,
 
         from schooltool.term.term import Term
         self.term1 = Term('Sample', date(2004, 9, 1), date(2004, 12, 20))
+        self.term1.schooldays = [('A', time(9,0), timedelta(minutes=115)),
+                                 ('B', time(11,0), timedelta(minutes=115)),
+                                 ('C', time(13,0), timedelta(minutes=115)),
+                                 ('D', time(15,0), timedelta(minutes=115)),]
         self.term2 = Term('Sample', date(2005, 1, 1), date(2005, 6, 1))
+        self.term2.schooldays = []
         app["terms"]['2004-fall'] = self.term1
         app["terms"]['2005-spring'] = self.term2
 
         class TimetableModelStub:
             def periodsInDay(this, schooldays, ttschema, date):
-                if schooldays == self.term1 and ttschema == self.tt:
-                    return  [('A', time(9,0), timedelta(minutes=115)),
-                             ('B', time(11,0), timedelta(minutes=115)),
-                             ('C', time(13,0), timedelta(minutes=115)),
-                             ('D', time(15,0), timedelta(minutes=115)),]
+                if date not in schooldays:
+                    raise "This date is not in the current term!"
+                if ttschema == self.tt:
+                    return schooldays.schooldays
                 else:
                     return []
 
@@ -4965,6 +4969,26 @@ class TestDailyCalendarRowsView_getPeriodsForDay(NiceDiffsMixin,
         self.app["ttschemas"].default_id = None
         self.assertEquals(view.getPeriodsForDay(date(2004, 10, 14)),
                           [])
+
+    def test_getPeriodsForLastDayOfTerm(self):
+        from schooltool.app.browser.cal import DailyCalendarRowsView
+        view = DailyCalendarRowsView(None, TestRequest())
+        # We need the start date and the end date different
+        view.getPersonTimezone = lambda: timezone('America/Chicago')
+        self.assertEquals(view.getPeriodsForDay(date(2005, 6, 1)), [])
+
+    def test_getPeriodsForDayBetweenTerms(self):
+        from schooltool.term.term import Term
+        term3 = Term('Sample', date(2005, 6, 2), date(2005, 8, 1))
+        self.app["terms"]['2005-autumn'] = term3
+        term3.schooldays = [('A', time(9,0), timedelta(minutes=115))]
+        self.term2.schooldays = [('B', time(10,0), timedelta(minutes=115))]
+
+        from schooltool.app.browser.cal import DailyCalendarRowsView
+        view = DailyCalendarRowsView(None, TestRequest())
+        # We need the start date and the end date different
+        view.getPersonTimezone = lambda: timezone('America/Chicago')
+        self.assertEquals(len(view.getPeriodsForDay(date(2005, 6, 1))), 1)
 
 
 def doctest_CalendarSTOverlayView():
