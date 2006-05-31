@@ -61,7 +61,7 @@ class ParticipationStub(object):
 
 
 def test_SchoolToolSecurityPolicy():
-    """
+    """Tests for SchoolToolSecurityPolicy.
 
         >>> from schooltool.securitypolicy.metaconfigure import CrowdsUtility
         >>> from schooltool.securitypolicy.interfaces import ICrowdsUtility
@@ -109,7 +109,9 @@ def test_SchoolToolSecurityPolicy():
         >>> obj2.__parent__ = None
         >>> directlyProvides(obj2, IContainmentRoot)
         >>> sp.checkPermission('perm', obj3)
-        False
+        Traceback (most recent call last):
+            ...
+        AssertionError: ('no crowd found for', None, 'perm')
 
     """
 

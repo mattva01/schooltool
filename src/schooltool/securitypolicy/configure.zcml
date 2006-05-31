@@ -69,10 +69,7 @@
       interface="schooltool.app.interfaces.ISchoolToolApplication"
       crowds="administration"
       permission="schooltool.edit" />
-  <security:allow
-      interface="schooltool.app.interfaces.ISchoolToolApplication"
-      crowds="administration"
-      permission="schooltool.addEvent" />
+
   <security:allow
       interface="schooltool.app.interfaces.ISchoolToolApplication"
       crowds="administration"

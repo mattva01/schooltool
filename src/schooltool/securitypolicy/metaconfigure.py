@@ -25,9 +25,9 @@ $Id$
 
 from zope.app import zapi
 from zope.interface import implements
-from zope.component import provideAdapter
-from zope.interface import implements
-from zope.component import provideSubscriptionAdapter
+from zope.component import provideAdapter, provideSubscriptionAdapter
+from zope.security.zcml import permission
+
 from schooltool.securitypolicy.crowds import Crowd
 from schooltool.securitypolicy.interfaces import ICrowd
 from schooltool.securitypolicy.interfaces import ICrowdsUtility
@@ -117,6 +117,9 @@ def handle_allow(iface, crowdname, permission):
 
 
 def crowd(_context, name, factory):
+    # Declare the permission corresponding to this crowd.
+    permission(_context, id='crowd.%s' % name, title=u'', description=u'')
+    # Declare the crowd.
     _context.action(discriminator=('crowd', name), callable=handle_crowd,
                     args=(name, factory))
 

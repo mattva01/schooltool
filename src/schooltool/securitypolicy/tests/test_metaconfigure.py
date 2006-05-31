@@ -186,6 +186,7 @@ class ContextStub(object):
         print discriminator
         print callable
         print args
+        print '---'
 
 
 def doctest_crowd():
@@ -195,9 +196,13 @@ def doctest_crowd():
 
         >>> _context = ContextStub()
         >>> crowd(_context, 'ipqs', 'ipqsfactory')
+        ('utility', <InterfaceClass ...IPermission>, 'crowd.ipqs')
+          ...
+        ---
         ('crowd', 'ipqs')
-        <function handle_crowd at ...>
-        ('ipqs', 'ipqsfactory')
+          <function handle_crowd at ...>
+          ('ipqs', 'ipqsfactory')
+        ---
     """
 
 
@@ -228,6 +233,7 @@ def doctest_aggregate_crowd():
         ('crowd', 'newcrowd')
           <function handle_aggregate_crowd ...>
           ('newcrowd', ['old1', 'old2'])
+        ---
 
     """
 
@@ -241,9 +247,11 @@ def doctest_allow():
         ('allow', 'interface', 'ipqs', 'do')
           <function handle_allow ...>
           ('interface', 'ipqs', 'do')
+        ---
         ('allow', 'interface', 'ecug', 'do')
           <function handle_allow ...>
           ('interface', 'ecug', 'do')
+        ---
 
     """
 
