@@ -12,7 +12,16 @@ We can add a person:
   >>> browser.getControl(name='form.title').value = 'foobar'
   >>> browser.getControl(name='form.username').value = 'foobar'
   >>> browser.getControl(name='form.last_name').value = 'barson'
+  >>> browser.getControl(name="form.password").value = "barfoo"
+  >>> browser.getControl(name="form.password.confirm").value = "barfoo"
   >>> browser.getControl('Add').click()
+
+Try logging in with the shinny new usen:
+
+  >>> ubrowser = Browser()
+  >>> ubrowser.handleErrors = False
+  >>> ubrowser.addHeader('Authorization', 'Basic foobar:barfoo')
+  >>> ubrowser.open('http://localhost/')
 
 And we can edit its name info:
 
@@ -155,6 +164,18 @@ There's a quick search form in the table view:
   >>> 'foobar' in browser.contents
   False
 
+Try seeing the table of persons with a nolmal user:
+
+  >>> ubrowser.open('http://localhost/persons/@@table.html')
+  >>> "foobar" in ubrowser.contents
+  True
+  >>> "manager" in ubrowser.contents
+  True
+  >>> "alpha" in ubrowser.contents
+  True
+  >>> "beta" in ubrowser.contents
+  True
+
 The user alpha is not a teacher:
 
   >>> browser.open("http://localhost/persons/alpha/")
@@ -230,5 +251,4 @@ Now let's try removing the team and see that nothing crashes:
   >>> "Gamma" in browser.contents
   False
   >>> "Invalid group" in browser.contents
-  True 
-
+  True
