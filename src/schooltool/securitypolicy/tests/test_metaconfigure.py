@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.securitypolicy.policy
+Unit tests for schooltool.securitypolicy.metaconfigure
 
 $Id$
 """
@@ -88,37 +88,6 @@ def doctest_registerCrowdAdapter():
         >>> cru.objcrowds = {(IMyObject, 'perm'): ['crowd A', 'crowd B']}
         >>> adapter.crowdFactories()
         ['crowd A', 'crowd B']
-
-    """
-
-
-def doctest_AggregateCrowdAdapter():
-    """Doctests for AggregateCrowdAdapter.
-
-    What's so special about this adapter?  It aggregates crowds retrieved from
-    objcrowds:
-
-        >>> class CrowdStub(object):
-        ...     def __init__(self, context):
-        ...         pass
-        ...     def contains(self, principal):
-        ...         print 'contains(%s)' % principal
-        ...         return principal == 'r00t'
-
-    The crowdFactories method is normally overridden:
-
-        >>> from schooltool.securitypolicy import metaconfigure
-        >>> adapter = metaconfigure.AggregateCrowdAdapter(object())
-
-        >>> adapter.crowdFactories = lambda: [CrowdStub]
-
-        >>> adapter.contains('some principal')
-        contains(some principal)
-        False
-
-        >>> adapter.contains('r00t')
-        contains(r00t)
-        True
 
     """
 

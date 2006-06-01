@@ -28,7 +28,7 @@ from zope.interface import implements
 from zope.component import provideAdapter, provideSubscriptionAdapter
 from zope.security.zcml import permission
 
-from schooltool.securitypolicy.crowds import Crowd
+from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
 from schooltool.securitypolicy.interfaces import ICrowd
 from schooltool.securitypolicy.interfaces import ICrowdsUtility
 from schooltool.securitypolicy.interfaces import IAccessControlSetting
@@ -54,23 +54,6 @@ def getCrowdsUtility():
     return utility
 
 
-class AggregateCrowdAdapter(Crowd):
-    """A base class for aggregating crowds.
-
-    Override crowdFactories to specify which crowds to aggregate.
-    """
-
-    def contains(self, principal):
-        for crowdcls in self.crowdFactories():
-            crowd = crowdcls(self.context)
-            if crowd.contains(principal):
-                return True
-        return False
-
-    def crowdFactories(self):
-        raise NotImplementedError("override this in subclasses")
-
-
 def registerCrowdAdapter(iface, permission):
     """Register an adapter to ICrowd for iface.
 
@@ -78,7 +61,7 @@ def registerCrowdAdapter(iface, permission):
     global objcrowds.  You should not call this function several times
     for the same (iface, permission).
     """
-    class AggregateUtilityCrowd(AggregateCrowdAdapter):
+    class AggregateUtilityCrowd(AggregateCrowd):
         def crowdFactories(self):
             return getCrowdsUtility().objcrowds[(iface, permission)]
     provideAdapter(AggregateUtilityCrowd, provides=ICrowd, adapts=[iface],
@@ -171,7 +154,7 @@ def handle_aggregate_crowd(name, crowd_names):
     except KeyError:
         raise ValueError("invalid crowd id", crowd_name)
 
-    class AggregateCrowdFactory(AggregateCrowdAdapter):
+    class AggregateCrowdFactory(AggregateCrowd):
         def crowdFactories(self):
             return crowds
     handle_crowd(name, AggregateCrowdFactory)

@@ -26,6 +26,7 @@ import zope.interface
 
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container import btree, contained
+from zope.component import adapts
 
 from schooltool.relationship import RelationshipProperty
 from schooltool.app import membership
@@ -37,6 +38,10 @@ from schooltool.resource.interfaces import IResource
 from schooltool import SchoolToolMessage as _
 from schooltool.app import relationships
 from schooltool.course import interfaces, booking
+from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
+from schooltool.course.interfaces import ISection
+from schooltool.person.interfaces import IPerson
+
 
 
 class Section(Persistent, contained.Contained):
@@ -95,3 +100,29 @@ class SectionContainer(btree.BTreeContainer):
 
 def addSectionContainerToApplication(event):
     event.object['sections'] = SectionContainer()
+
+
+class InstructorsCrowd(Crowd):
+    """Crowd of instructors of a section."""
+    adapts(ISection)
+    def contains(self, principal):
+        return IPerson(principal, None) in self.context.instructors
+
+
+class LearnersCrowd(Crowd):
+    """Crowd of learners of a section.
+
+    At the moment only direct members of a section are considered as
+    learners.
+    """
+    adapts(ISection)
+    def contains(self, principal):
+        return IPerson(principal, None) in self.context.members
+
+
+class SectionCalendarViewers(AggregateCrowd):
+    """Crowd of those who can see the section calendar."""
+    adapts(ISection)
+    def crowdFactories(self):
+        return [InstructorsCrowd, LearnersCrowd]
+

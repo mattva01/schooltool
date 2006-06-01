@@ -24,6 +24,7 @@ $Id$
 """
 
 from zope.interface import implements
+from zope.security.proxy import removeSecurityProxy
 from schooltool.securitypolicy.interfaces import ICrowd
 
 
@@ -33,10 +34,29 @@ class Crowd(object):
     implements(ICrowd)
 
     def __init__(self, context):
-        self.context = context
+        # As crowds are used in our security policy we have to trust
+        # them
+        self.context = removeSecurityProxy(context)
 
     def contains(self, principal):
         raise NotImplementedError()
+
+
+class AggregateCrowd(Crowd):
+    """A base class for aggregating crowds.
+
+    Override crowdFactories to specify which crowds to aggregate.
+    """
+
+    def contains(self, principal):
+        for crowdcls in self.crowdFactories():
+            crowd = crowdcls(self.context)
+            if crowd.contains(principal):
+                return True
+        return False
+
+    def crowdFactories(self):
+        raise NotImplementedError("override this in subclasses")
 
 
 class EverybodyCrowd(Crowd):

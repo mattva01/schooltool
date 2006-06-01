@@ -170,251 +170,251 @@ Looking at the section:
     <BLANKLINE>
     ...
 
-Students aren't given the option to change the location:
+# Students aren't given the option to change the location:
 
-    >>> frog.open('http://localhost/sections/his1')
-    >>> frog.headers['status']
-    '200 Ok'
-    >>> "change location" not in frog.contents
-    True
-
-The section's edit view:
-
-    >>> print http(r"""
-    ... GET /sections/his1/@@edit.html HTTP/1.1
-    ... Authorization: Basic manager:schooltool
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-
-# Frog can't see the section's calendar by default
-
-#     >>> frog.open('http://localhost/sections/his1/calendar')
-#     >>> print frog.url
-#     http://localhost/@@login.html?forbidden=yes&nexturl=...
-
-# Frog's overlay portlet has just his own calendar and application
-# calendar:
-
-#     >>> frog.getLink('My Calendar').click()
-#     >>> def print_portlet(contents):
-#     ...     print analyze.queryHTML(
-#     ...         'id("portlet-calendar-overlay")//table[@class="overlays"]', contents)[0]
-
-#     >>> print_portlet(frog.contents)
-#     <table class="overlays"><tr><th style="text-align: center">
-#               <acronym title="Personal calendar">Cal</acronym>
-#             </th>
-#             <th><acronym title="Timetable calendar">TT</acronym></th>
-#             <th></th>
-#             <th></th>
-#           </tr><tr style="background: #9db8d2"><td><input type="checkbox" checked disabled></td>
-#             <td><input type="checkbox" name="my_timetable" checked></td>
-#             <td style="width: 100%">My Calendar</td>
-#             <td></td>
-#           </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/"></td>
-#             <td><input type="checkbox" name="overlay_timetables:list" checked value="/"></td>
-#             <td style="width: 100%">SchoolTool</td>
-#             <td><a class="go" style="background: #c1665a;
-#                 color: #c1665a" href="http://localhost/calendar">...</a></td>
-#         </tr></table>
-
-# As does Toad's:
-
-#     >>> toad = Browser()
-#     >>> toad.open('http://localhost/')
-#     >>> toad.getLink('Log In').click()
-#     >>> toad.getControl('Username').value = 'toad'
-#     >>> toad.getControl('Password').value = 'doat'
-#     >>> toad.getControl('Log in').click()
-
-#     >>> toad.getLink('My Calendar').click()
-#     >>> print_portlet(toad.contents)
-#     <table class="overlays"><tr><th style="text-align: center">
-#               <acronym title="Personal calendar">Cal</acronym>
-#             </th>
-#             <th><acronym title="Timetable calendar">TT</acronym></th>
-#             <th></th>
-#             <th></th>
-#           </tr><tr style="background: #9db8d2"><td><input type="checkbox" checked disabled></td>
-#             <td><input type="checkbox" name="my_timetable" checked></td>
-#             <td style="width: 100%">My Calendar</td>
-#             <td></td>
-#           </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/"></td>
-#             <td><input type="checkbox" name="overlay_timetables:list" checked value="/"></td>
-#             <td style="width: 100%">SchoolTool</td>
-#             <td><a class="go" style="background: #c1665a;
-#                 color: #c1665a" href="http://localhost/calendar">...</a></td>
-#         </tr></table>
-
-# Adding a teacher:
-
-#     >>> manager.getLink('edit instructors').click()
-#     >>> manager.getControl(name='add_item.frog').value = True
-#     >>> manager.getControl('Add').click()
-
-#     >>> print manager.contents
-#     <BLANKLINE>
-#     ...
-#       <legend>Current Instructors</legend>
-#     ...
-#     Frog
-#     ...
-#       <legend>Available Instructors</legend>
-#     ...
-
-# Now Frog is in the Instructors div
-
-#     >>> manager.getControl('Cancel').click()
-#     >>> print manager.contents
-#     <!DOCTYPE ...>
-#     ...
-#     ...Section of
-#     <BLANKLINE>
-#           <a href="http://localhost/courses/history">History</a>
-#     <BLANKLINE>
-#     ...
-#           <h3>Instructors</h3>
-#           <ul>
-#             <li>
-#               <a href="http://localhost/persons/frog">Frog</a>
-#             </li>
-#           </ul>
-#     ...
-
-# Frog can see the calendar now
-
-#     >>> frog.open('http://localhost/sections/his1/calendar')
-#     >>> 'Calendar for HIS1' in frog.contents
+#     >>> frog.open('http://localhost/sections/his1')
+#     >>> frog.headers['status']
+#     '200 Ok'
+#     >>> "change location" not in frog.contents
 #     True
 
-# And Frog's overlay portlet shows the section:
+# The section's edit view:
 
-#     >>> frog.getLink('My Calendar').click()
-#     >>> print_portlet(frog.contents)
-#     <table class="overlays"><tr><th style="text-align: center">
-#               <acronym title="Personal calendar">Cal</acronym>
-#             </th>
-#             <th><acronym title="Timetable calendar">TT</acronym></th>
-#             <th></th>
-#             <th></th>
-#           </tr><tr style="background: #9db8d2"><td><input type="checkbox" checked disabled></td>
-#             <td><input type="checkbox" name="my_timetable" checked></td>
-#             <td style="width: 100%">My Calendar</td>
-#             <td></td>
-#           </tr><tr style="background: #eed680"><td><input type="checkbox" name="overlay:list" checked value="/sections/his1"></td>
-#             <td><input type="checkbox" name="overlay_timetables:list" value="/sections/his1"></td>
-#             <td style="width: 100%">Frog -- History</td>
-#             <td><a class="go" style="background: #d1940c;
-#                 color: #d1940c" href="http://localhost/sections/his1/calendar">...</a></td>
-#         </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/"></td>
-#             <td><input type="checkbox" name="overlay_timetables:list" checked value="/"></td>
-#             <td style="width: 100%">SchoolTool</td>
-#             <td><a class="go" style="background: #c1665a;
-#                 color: #c1665a" href="http://localhost/calendar">...</a></td>
-#         </tr></table>
-
-# If we fire Frog, in hopes of getting Salamander to step in:
-
-#     >>> manager.getLink('edit instructors').click()
-#     >>> manager.getControl(name='remove_item.frog').value = True
-#     >>> manager.getControl('Remove').click()
-
-# Frog can't see the section's calendar any more
-
-#     >>> frog.open('http://localhost/sections/his1/calendar')
-#     >>> print frog.url
-#     http://localhost/@@login.html?forbidden=yes&nexturl=...
-
-# and he's no longer an instructor:
-
-#     >>> manager.getControl('Cancel').click()
-#     >>> print manager.contents
-#     <!DOCTYPE ...>
-#     ...
-#           <h3>Instructors</h3>
-#           <ul>
-#           </ul>
+#     >>> print http(r"""
+#     ... GET /sections/his1/@@edit.html HTTP/1.1
+#     ... Authorization: Basic manager:schooltool
+#     ... """)
+#     HTTP/1.1 200 Ok
 #     ...
 
-# And the section's calendar is no longer in his overlay portlet.
+Frog can't see the section's calendar by default
 
-#     >>> frog.getLink('My Calendar').click()
-#     >>> print_portlet(frog.contents)
-#     <table class="overlays"><tr><th style="text-align: center">
-#               <acronym title="Personal calendar">Cal</acronym>
-#             </th>
-#             <th><acronym title="Timetable calendar">TT</acronym></th>
-#             <th></th>
-#             <th></th>
-#           </tr><tr style="background: #9db8d2"><td><input type="checkbox" checked disabled></td>
-#             <td><input type="checkbox" name="my_timetable" checked></td>
-#             <td style="width: 100%">My Calendar</td>
-#             <td></td>
-#           </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/"></td>
-#             <td><input type="checkbox" name="overlay_timetables:list" checked value="/"></td>
-#             <td style="width: 100%">SchoolTool</td>
-#             <td><a class="go" style="background: #c1665a;
-#                 color: #c1665a" href="http://localhost/calendar">...</a></td>
-#         </tr></table>
+    >>> frog.open('http://localhost/sections/his1/calendar')
+    >>> print frog.url
+    http://localhost/@@login.html?forbidden=yes&nexturl=...
 
-# Adding a student:
+Frog's overlay portlet has just his own calendar and application
+calendar:
 
-#     >>> manager.getLink('edit individuals').click()
-#     >>> manager.getControl(name='add_item.toad').value = True
-#     >>> manager.getControl('Add').click()
-#     >>> manager.getLink('HIS1').click()
+    >>> frog.getLink('My Calendar').click()
+    >>> def print_portlet(contents):
+    ...     print analyze.queryHTML(
+    ...         'id("portlet-calendar-overlay")//table[@class="overlays"]', contents)[0]
 
-# Now toad is in the Students div
+    >>> print_portlet(frog.contents)
+    <table class="overlays"><tr><th style="text-align: center">
+              <acronym title="Personal calendar">Cal</acronym>
+            </th>
+            <th><acronym title="Timetable calendar">TT</acronym></th>
+            <th></th>
+            <th></th>
+          </tr><tr style="background: #9db8d2"><td><input type="checkbox" checked disabled></td>
+            <td><input type="checkbox" name="my_timetable" checked></td>
+            <td style="width: 100%">My Calendar</td>
+            <td></td>
+          </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" checked value="/"></td>
+            <td style="width: 100%">SchoolTool</td>
+            <td><a class="go" style="background: #c1665a;
+                color: #c1665a" href="http://localhost/calendar">...</a></td>
+        </tr></table>
 
-#     >>> print manager.contents
-#     <BLANKLINE>
-#     ...
-#     ...Section of
-#     <BLANKLINE>
-#         <a href="http://localhost/courses/history">History</a>
-#     <BLANKLINE>
-#     ...
-#           <h3>Students</h3>
-#           <ul>
-#             <li class="individual">
-#               <a href="http://localhost/persons/toad">Toad</a>
-#             </li>
-#           </ul>
-#     ...
+As does Toad's:
+
+    >>> toad = Browser()
+    >>> toad.open('http://localhost/')
+    >>> toad.getLink('Log In').click()
+    >>> toad.getControl('Username').value = 'toad'
+    >>> toad.getControl('Password').value = 'doat'
+    >>> toad.getControl('Log in').click()
+
+    >>> toad.getLink('My Calendar').click()
+    >>> print_portlet(toad.contents)
+    <table class="overlays"><tr><th style="text-align: center">
+              <acronym title="Personal calendar">Cal</acronym>
+            </th>
+            <th><acronym title="Timetable calendar">TT</acronym></th>
+            <th></th>
+            <th></th>
+          </tr><tr style="background: #9db8d2"><td><input type="checkbox" checked disabled></td>
+            <td><input type="checkbox" name="my_timetable" checked></td>
+            <td style="width: 100%">My Calendar</td>
+            <td></td>
+          </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" checked value="/"></td>
+            <td style="width: 100%">SchoolTool</td>
+            <td><a class="go" style="background: #c1665a;
+                color: #c1665a" href="http://localhost/calendar">...</a></td>
+        </tr></table>
+
+Adding a teacher:
+
+    >>> manager.getLink('edit instructors').click()
+    >>> manager.getControl(name='add_item.frog').value = True
+    >>> manager.getControl('Add').click()
+
+    >>> print manager.contents
+    <BLANKLINE>
+    ...
+      <legend>Current Instructors</legend>
+    ...
+    Frog
+    ...
+      <legend>Available Instructors</legend>
+    ...
+
+Now Frog is in the Instructors div
+
+    >>> manager.getControl('Cancel').click()
+    >>> print manager.contents
+    <!DOCTYPE ...>
+    ...
+    ...Section of
+    <BLANKLINE>
+          <a href="http://localhost/courses/history">History</a>
+    <BLANKLINE>
+    ...
+          <h3>Instructors</h3>
+          <ul>
+            <li>
+              <a href="http://localhost/persons/frog">Frog</a>
+            </li>
+          </ul>
+    ...
+
+Frog can see the calendar now
+
+    >>> frog.open('http://localhost/sections/his1/calendar')
+    >>> 'Calendar for HIS1' in frog.contents
+    True
+
+And Frog's overlay portlet shows the section:
+
+    >>> frog.getLink('My Calendar').click()
+    >>> print_portlet(frog.contents)
+    <table class="overlays"><tr><th style="text-align: center">
+              <acronym title="Personal calendar">Cal</acronym>
+            </th>
+            <th><acronym title="Timetable calendar">TT</acronym></th>
+            <th></th>
+            <th></th>
+          </tr><tr style="background: #9db8d2"><td><input type="checkbox" checked disabled></td>
+            <td><input type="checkbox" name="my_timetable" checked></td>
+            <td style="width: 100%">My Calendar</td>
+            <td></td>
+          </tr><tr style="background: #eed680"><td><input type="checkbox" name="overlay:list" checked value="/sections/his1"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" value="/sections/his1"></td>
+            <td style="width: 100%">Frog -- History</td>
+            <td><a class="go" style="background: #d1940c;
+                color: #d1940c" href="http://localhost/sections/his1/calendar">...</a></td>
+        </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" checked value="/"></td>
+            <td style="width: 100%">SchoolTool</td>
+            <td><a class="go" style="background: #c1665a;
+                color: #c1665a" href="http://localhost/calendar">...</a></td>
+        </tr></table>
+
+If we fire Frog, in hopes of getting Salamander to step in:
+
+    >>> manager.getLink('edit instructors').click()
+    >>> manager.getControl(name='remove_item.frog').value = True
+    >>> manager.getControl('Remove').click()
+
+Frog can't see the section's calendar any more
+
+    >>> frog.open('http://localhost/sections/his1/calendar')
+    >>> print frog.url
+    http://localhost/@@login.html?forbidden=yes&nexturl=...
+
+and he's no longer an instructor:
+
+    >>> manager.getControl('Cancel').click()
+    >>> print manager.contents
+    <!DOCTYPE ...>
+    ...
+          <h3>Instructors</h3>
+          <ul>
+          </ul>
+    ...
+
+And the section's calendar is no longer in his overlay portlet.
+
+    >>> frog.getLink('My Calendar').click()
+    >>> print_portlet(frog.contents)
+    <table class="overlays"><tr><th style="text-align: center">
+              <acronym title="Personal calendar">Cal</acronym>
+            </th>
+            <th><acronym title="Timetable calendar">TT</acronym></th>
+            <th></th>
+            <th></th>
+          </tr><tr style="background: #9db8d2"><td><input type="checkbox" checked disabled></td>
+            <td><input type="checkbox" name="my_timetable" checked></td>
+            <td style="width: 100%">My Calendar</td>
+            <td></td>
+          </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" checked value="/"></td>
+            <td style="width: 100%">SchoolTool</td>
+            <td><a class="go" style="background: #c1665a;
+                color: #c1665a" href="http://localhost/calendar">...</a></td>
+        </tr></table>
+
+Adding a student:
+
+    >>> manager.getLink('edit individuals').click()
+    >>> manager.getControl(name='add_item.toad').value = True
+    >>> manager.getControl('Add').click()
+    >>> manager.getLink('HIS1').click()
+
+Now toad is in the Students div
+
+    >>> print manager.contents
+    <BLANKLINE>
+    ...
+    ...Section of
+    <BLANKLINE>
+        <a href="http://localhost/courses/history">History</a>
+    <BLANKLINE>
+    ...
+          <h3>Students</h3>
+          <ul>
+            <li class="individual">
+              <a href="http://localhost/persons/toad">Toad</a>
+            </li>
+          </ul>
+    ...
 
 
-# Toad can see the calendar now:
+Toad can see the calendar now:
 
-#     >>> toad.open('http://localhost/sections/his1/calendar')
-#     >>> print toad.url
-#     http://localhost/sections/his1/calendar
+    >>> toad.open('http://localhost/sections/his1/calendar')
+    >>> print toad.url
+    http://localhost/sections/his1/calendar
 
-# And Toad's overlay portlet shows the section:
+And Toad's overlay portlet shows the section:
 
-#     >>> toad.open('http://localhost/persons/toad/calendar')
-#     >>> print_portlet(toad.contents)
-#     <table class="overlays"><tr><th style="text-align: center">
-#               <acronym title="Personal calendar">Cal</acronym>
-#             </th>
-#             <th><acronym title="Timetable calendar">TT</acronym></th>
-#             <th></th>
-#             <th></th>
-#           </tr><tr style="background: #9db8d2"><td><input type="checkbox" checked disabled></td>
-#             <td><input type="checkbox" name="my_timetable" checked></td>
-#             <td style="width: 100%">My Calendar</td>
-#             <td></td>
-#           </tr><tr style="background: #eed680"><td><input type="checkbox" name="overlay:list" checked value="/sections/his1"></td>
-#             <td><input type="checkbox" name="overlay_timetables:list" value="/sections/his1"></td>
-#             <td style="width: 100%"> -- History</td>
-#             <td><a class="go" style="background: #d1940c;
-#                 color: #d1940c" href="http://localhost/sections/his1/calendar">...</a></td>
-#         </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/"></td>
-#             <td><input type="checkbox" name="overlay_timetables:list" checked value="/"></td>
-#             <td style="width: 100%">SchoolTool</td>
-#             <td><a class="go" style="background: #c1665a;
-#                 color: #c1665a" href="http://localhost/calendar">...</a></td>
-#         </tr></table>
+    >>> toad.open('http://localhost/persons/toad/calendar')
+    >>> print_portlet(toad.contents)
+    <table class="overlays"><tr><th style="text-align: center">
+              <acronym title="Personal calendar">Cal</acronym>
+            </th>
+            <th><acronym title="Timetable calendar">TT</acronym></th>
+            <th></th>
+            <th></th>
+          </tr><tr style="background: #9db8d2"><td><input type="checkbox" checked disabled></td>
+            <td><input type="checkbox" name="my_timetable" checked></td>
+            <td style="width: 100%">My Calendar</td>
+            <td></td>
+          </tr><tr style="background: #eed680"><td><input type="checkbox" name="overlay:list" checked value="/sections/his1"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" value="/sections/his1"></td>
+            <td style="width: 100%"> -- History</td>
+            <td><a class="go" style="background: #d1940c;
+                color: #d1940c" href="http://localhost/sections/his1/calendar">...</a></td>
+        </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" checked value="/"></td>
+            <td style="width: 100%">SchoolTool</td>
+            <td><a class="go" style="background: #c1665a;
+                color: #c1665a" href="http://localhost/calendar">...</a></td>
+        </tr></table>
 
 
 Epilogue

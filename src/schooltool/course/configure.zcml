@@ -156,6 +156,27 @@
   <include package=".rest" />
 
   <!-- Security -->
+
+  <security:crowd
+      name="section_instructors"
+      factory=".section.InstructorsCrowd" />
+
+  <security:crowd
+      name="section_learners"
+      factory=".section.LearnersCrowd" />
+
+  <adapter
+      trusted="yes"
+      factory=".section.SectionCalendarViewers"
+      provides="schooltool.app.interfaces.ICalendarParentCrowd"
+      name="schooltool.view" />
+
+  <adapter
+      trusted="yes"
+      factory=".section.InstructorsCrowd"
+      provides="schooltool.app.interfaces.ICalendarParentCrowd"
+      name="schooltool.edit" />
+
   <security:allow
       interface="schooltool.course.interfaces.ISectionContainer"
       crowds="administration"
@@ -171,15 +192,15 @@
 
   <security:allow
       interface="schooltool.course.interfaces.ISection"
-      crowds="administration authenticated"
+      crowds="administration section_instructors section_learners"
       permission="schooltool.view" />
   <security:allow
       interface="schooltool.course.interfaces.ISection"
-      crowds="administration"
+      crowds="administration section_instructors"
       permission="schooltool.edit" />
   <security:allow
       interface="schooltool.course.interfaces.ISection"
-      crowds="administration"
+      crowds="administration section_instructors"
       permission="schooltool.manageMembership" />
 
 </configure>
