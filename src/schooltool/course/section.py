@@ -41,6 +41,7 @@ from schooltool.course import interfaces, booking
 from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
 from schooltool.course.interfaces import ISection
 from schooltool.person.interfaces import IPerson
+from schooltool.app.security import CalendarParentCrowd
 
 
 
@@ -120,9 +121,14 @@ class LearnersCrowd(Crowd):
         return IPerson(principal, None) in self.context.members
 
 
+class SectionCalendarSettingCrowd(CalendarParentCrowd):
+    adapts(ISection)
+    setting_key = 'everyone_can_view_section_info'
+
+
 class SectionCalendarViewers(AggregateCrowd):
     """Crowd of those who can see the section calendar."""
     adapts(ISection)
-    def crowdFactories(self):
-        return [InstructorsCrowd, LearnersCrowd]
 
+    def crowdFactories(self):
+        return [InstructorsCrowd, LearnersCrowd, SectionCalendarSettingCrowd]

@@ -165,6 +165,10 @@
       name="section_learners"
       factory=".section.LearnersCrowd" />
 
+  <security:crowd
+      name="configurable_section_viewers"
+      factory=".section.SectionCalendarSettingCrowd" />
+
   <adapter
       trusted="yes"
       factory=".section.SectionCalendarViewers"
@@ -179,7 +183,7 @@
 
   <security:allow
       interface="schooltool.course.interfaces.ISectionContainer"
-      crowds="administration"
+      crowds="administration configurable_section_viewers"
       permission="schooltool.view" />
   <security:allow
       interface="schooltool.course.interfaces.ISectionContainer"
@@ -192,7 +196,7 @@
 
   <security:allow
       interface="schooltool.course.interfaces.ISection"
-      crowds="administration section_instructors section_learners"
+      crowds="administration section_instructors section_learners configurable_section_viewers"
       permission="schooltool.view" />
   <security:allow
       interface="schooltool.course.interfaces.ISection"
@@ -202,5 +206,10 @@
       interface="schooltool.course.interfaces.ISection"
       crowds="administration section_instructors"
       permission="schooltool.manageMembership" />
+
+  <security:setting
+      key="everyone_can_view_section_info"
+      text="Everyone can view section information and calendars"
+      default="False" />
 
 </configure>
