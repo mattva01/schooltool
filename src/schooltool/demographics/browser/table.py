@@ -49,6 +49,12 @@ class PersonTable(TablePage):
             getter=lambda i, f: i.title,
             subsort=True)
         directlyProvides(full_name, ISortableColumn)
+        last_name = GetterColumn(
+            name='last_name',
+            title=u'Last name',
+            getter=lambda i, f: i.nameinfo.last_name,
+            subsort=True)
+        directlyProvides(last_name, ISortableColumn)
         birth_date = DateColumn(
             name='birth_date',
             title=u'Birth',
@@ -71,6 +77,7 @@ class PersonTable(TablePage):
             DeleteCheckBoxColumn(name='delete', title=u''),
             username,
             full_name,
+            last_name,
             birth_date,
             enrollment_date,
             modified,
