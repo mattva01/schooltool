@@ -126,6 +126,20 @@
       factory=".personform.Terms"
       />
 
+  <!-- list of teachers -->
+  <zope:adapter 
+      for="schooltool.demographics.interfaces.ITeachersSource
+	   zope.publisher.interfaces.browser.IBrowserRequest"
+           factory=".personform.TeachersTerms"
+      />
+
+  <!-- list of groups -->
+  <zope:adapter 
+      for="schooltool.demographics.interfaces.IGroupsSource
+	   zope.publisher.interfaces.browser.IBrowserRequest"
+           factory=".personform.GroupsTerms"
+      />
+
   <page
      for="schooltool.person.interfaces.IPersonContainer"
      name="table.html"

@@ -21,6 +21,7 @@ from zope.interface import Interface, implements
 from zope import schema
 from zope.schema.interfaces import IIterableSource
 
+from schooltool.app.app import ISchoolToolApplication
 from schooltool import SchoolToolMessage as _
 
 class INameInfo(Interface):
@@ -121,6 +122,37 @@ class IDemographics(Interface):
         required=False
         )
 
+class ITeachersSource(IIterableSource):
+    pass
+
+class IGroupsSource(IIterableSource):
+    pass
+
+class TeachersSource(object):
+    implements(ITeachersSource)
+
+    def teachers(self):
+        teachers = []
+        for teacher in ISchoolToolApplication(
+            None)['groups']['teachers'].members:
+            teachers.append(teacher.__name__)
+        return teachers
+
+    def __iter__(self):
+        return iter(self.teachers())
+
+    def __len__(self):
+        return len(self.teachers())
+
+class GroupsSource(object):
+    implements(IGroupsSource)
+
+    def __iter__(self):
+        return iter(ISchoolToolApplication(None)['groups'].keys())
+
+    def __len__(self):
+        return len(ISchoolToolApplication(None)['groups'].keys())
+
 class ISchoolData(Interface):
     id = schema.TextLine(
         title=_(u"ID"),
@@ -139,13 +171,13 @@ class ISchoolData(Interface):
 
     advisor = schema.Choice(
         title=_(u"Advisor"),
-        source=SourceList(['alpha', 'beta']),
+        source=TeachersSource(),
         required=False,
         )
 
     team = schema.Choice(
         title=_(u"Team"),
-        source=SourceList(['gamma', 'delta']),
+        source=GroupsSource(),
         required=False,
         )
 

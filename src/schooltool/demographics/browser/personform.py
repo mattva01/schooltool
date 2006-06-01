@@ -30,6 +30,8 @@ from zope.schema import TextLine
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.app.form.browser.interfaces import ITerms
 from zope.app.publisher.browser.menu import getMenu, BrowserMenu
+from zope.schema.interfaces import ITitledTokenizedTerm
+from zope.app.form.browser.interfaces import ITerms
 
 from schooltool.skin.form import AttributeEditForm
 from schooltool.traverser.traverser import SingleAttributeTraverserPlugin
@@ -37,6 +39,7 @@ from schooltool.person.interfaces import IReadPerson
 from schooltool.demographics.person import Person
 from schooltool.demographics import interfaces
 from schooltool import SchoolToolMessage as _
+from schooltool.app.app import ISchoolToolApplication
 
 class PersonDisplayForm(form.PageDisplayForm):
     template = ViewPageTemplateFile('display_form.pt')
@@ -172,3 +175,55 @@ class PersonAddView(PersonAddView_):
     
     def initPerson(self, person, data):
         person.nameinfo.last_name = data['last_name']
+
+class TeachersTerm(object):
+    implements(ITitledTokenizedTerm)
+    
+    def __init__(self, value):
+        persons = ISchoolToolApplication(None)['persons']
+        if value in persons:
+            self.title = persons[value].title
+        else:
+            self.title = _(
+                u"Invalid teacher. Possible causes: deleted or renamed.")
+        self.token = value
+        self.value = value
+        
+class TeachersTerms(object):
+    implements(ITerms)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+        
+    def getTerm(self, value):
+        return TeachersTerm(value)
+
+    def getValue(self, token):
+        return token
+
+class GroupsTerm(object):
+    implements(ITitledTokenizedTerm)
+    
+    def __init__(self, value):
+        groups = ISchoolToolApplication(None)['groups']
+        if value in groups:
+            self.title = groups[value].title
+        else:
+            self.title = _(
+                u"Invalid group. Possible causes: deleted or renamed.")
+        self.token = value
+        self.value = value
+        
+class GroupsTerms(object):
+    implements(ITerms)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+        
+    def getTerm(self, value):
+        return GroupsTerm(value)
+
+    def getValue(self, token):
+        return token

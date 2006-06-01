@@ -154,3 +154,81 @@ There's a quick search form in the table view:
   True
   >>> 'foobar' in browser.contents
   False
+
+The user alpha is not a teacher:
+
+  >>> browser.open("http://localhost/persons/alpha/")
+  >>> "Teachers" in browser.contents
+  False
+
+but it can be:
+
+  >>> browser.open('http://localhost/persons/alpha/@@groups.html')
+  >>> 'Teachers' in browser.contents
+  True
+  >>> tc = browser.getControl(name="add_group.teachers")
+  >>> tc.value = True
+  >>> browser.getControl(name="ADD_GROUPS").click()
+
+Now it should be a teacher:
+
+  >>> browser.open("http://localhost/persons/alpha/")
+  >>> "Teachers" in browser.contents
+  True
+
+Let's make alpha the advisor of beta:
+
+  >>> browser.open("http://localhost/persons/beta/schooldata/")
+  >>> "alpha" in browser.contents
+  False
+  >>> browser.open("http://localhost/persons/beta/schooldata/@@edit.html")
+  >>> adv = browser.getControl(name="form.advisor")
+  >>> adv.value = ["alpha"]
+  >>> browser.getControl(name="form.actions.apply").click()
+  >>> browser.open("http://localhost/persons/beta/schooldata/")
+  >>> "Alpha" in browser.contents
+  True
+
+Let's put beta in the beta team:
+
+  >>> browser.open("http://localhost/groups/+/addSchoolToolGroup.html")
+  >>> t = browser.getControl(name="field.title")
+  >>> t.value = "Gamma"
+  >>> browser.getControl("Add").click()
+  >>> browser.open("http://localhost/persons/beta/schooldata/")
+  >>> "Gamma" in browser.contents
+  False
+  >>> browser.open("http://localhost/persons/beta/schooldata/@@edit.html")
+  >>> adv = browser.getControl(name="form.team")
+  >>> adv.value = ["gamma"]
+  >>> browser.getControl(name="form.actions.apply").click()
+  >>> browser.open("http://localhost/persons/beta/schooldata/")
+  >>> "Gamma" in browser.contents
+  True
+
+Let's try removing the advisor and see that nothing crashes:
+
+  >>> browser.open("http://localhost/persons/@@table.html")
+  >>> delete = browser.getControl(name="delete.alpha")
+  >>> delete.value = True
+  >>> browser.getControl("Delete").click()
+  >>> browser.getControl("Confirm").click()  
+  >>> browser.open("http://localhost/persons/beta/schooldata/")
+  >>> "Alpha" in browser.contents
+  False
+  >>> "Invalid teacher" in browser.contents
+  True
+
+Now let's try removing the team and see that nothing crashes:
+
+  >>> browser.open("http://localhost/groups")
+  >>> delete = browser.getControl(name="delete.gamma")
+  >>> delete.value = True
+  >>> browser.getControl("Delete").click()
+  >>> browser.getControl("Confirm").click()  
+  >>> browser.open("http://localhost/persons/beta/schooldata/")
+  >>> "Gamma" in browser.contents
+  False
+  >>> "Invalid group" in browser.contents
+  True 
+

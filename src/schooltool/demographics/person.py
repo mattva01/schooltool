@@ -81,7 +81,7 @@ class ContactInfo(Persistent):
 
     def __init__(self):
         initializeSchemaAttributes(interfaces.IContactInfo, self)
-        
+
 def initializeSchemaAttributes(iface, obj, suppress=None):
     suppress = suppress or []
     for field in schema.getFields(iface).values():
@@ -94,3 +94,4 @@ def personModifiedSubscriber(person, event):
 
 def now():
     return utc.localize(datetime.utcnow())
+
