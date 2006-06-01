@@ -117,8 +117,6 @@ def handle_allow(iface, crowdname, permission):
 
 
 def crowd(_context, name, factory):
-    # Declare the permission corresponding to this crowd.
-    permission(_context, id='crowd.%s' % name, title=u'', description=u'')
     # Declare the crowd.
     _context.action(discriminator=('crowd', name), callable=handle_crowd,
                     args=(name, factory))

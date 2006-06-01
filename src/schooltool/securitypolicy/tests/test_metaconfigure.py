@@ -196,9 +196,6 @@ def doctest_crowd():
 
         >>> _context = ContextStub()
         >>> crowd(_context, 'ipqs', 'ipqsfactory')
-        ('utility', <InterfaceClass ...IPermission>, 'crowd.ipqs')
-          ...
-        ---
         ('crowd', 'ipqs')
           <function handle_crowd at ...>
           ('ipqs', 'ipqsfactory')

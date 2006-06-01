@@ -84,24 +84,10 @@ def test_SchoolToolSecurityPolicy_checkPermission():
         checkByAdaptation('perm', <...Obj object ...>)
         False
 
-    Permission identifies the crowd
-    -------------------------------
-
-        >>> cru.crowdmap['managers'] = '<managers crowd factory>'
-        >>> sp.checkPermission('crowd.managers', obj)
-        checkCrowds(['<managers crowd factory>'], <...Obj object ...>)
-        False
-
-    If checkCrowds returns True, checkPermission will agree:
-
-        >>> checkcrowds_returns = True
-        >>> sp.checkPermission('crowd.managers', obj)
-        checkCrowds(['<managers crowd factory>'], <...Obj object ...>)
-        True
-
     Interface-independent permissions
     ---------------------------------
 
+        >>> checkcrowds_returns = True
         >>> cru.permcrowds['perm'] = ['crowd factory']
         >>> sp.checkPermission('perm', obj)
         checkCrowds(['crowd factory'], <...Obj object ...>)

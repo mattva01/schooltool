@@ -37,13 +37,6 @@ class SchoolToolSecurityPolicy(ParanoidSecurityPolicy):
         """Return True if principal has permission on object."""
         # TODO: Implement caching -- gintas
 
-        # If permission identifies a crowd, look it up directly.
-        if permission.startswith('crowd.'):
-            crowdname = permission[len('crowd.'):]
-            crowdcls = getCrowdsUtility().crowdmap[crowdname]
-            # TODO: Do parent traversal?  That might be tricky...
-            return self.checkCrowds([crowdcls], obj)
-
         # Check the generic, interface-independent permissions.
         crowdclasses = getCrowdsUtility().permcrowds.get(permission, [])
         if self.checkCrowds(crowdclasses, obj):
