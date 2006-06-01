@@ -24,6 +24,11 @@ $Id$
 
 import unittest
 from zope.testing import doctest
+from zope.app.testing import setup
+
+from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
+from schooltool.app.interfaces import ISchoolToolApplication
+from zope.interface import implements
 
 
 def doctest_AggregateCrowd():
@@ -53,6 +58,46 @@ def doctest_AggregateCrowd():
         >>> adapter.contains('r00t')
         contains(r00t)
         True
+
+    """
+
+
+def doctest_ConfigurableCrowd():
+    """Tests for ConfigurableCrowd.
+
+    Some setup:
+
+        >>> setup.placelessSetUp()
+        >>> class CustomisationsStub(object):
+        ...     implements(IAccessControlCustomisations)
+        ...     def get(self, key):
+        ...         print 'Getting %s' % key
+        ...         return True
+
+        >>> class AppStub(object):
+        ...     implements(ISchoolToolApplication)
+        ...     def __conform__(self, iface):
+        ...         if iface == IAccessControlCustomisations:
+        ...             return CustomisationsStub()
+
+        >>> from zope.component import provideAdapter
+        >>> provideAdapter(lambda context: AppStub(),
+        ...                adapts=[None],
+        ...                provides=ISchoolToolApplication)
+
+        >>> from schooltool.app.security import ConfigurableCrowd
+
+    Off we go:
+
+        >>> crowd = ConfigurableCrowd(object())
+        >>> crowd.setting_key = 'key'
+        >>> crowd.contains(object())
+        Getting key
+        True
+
+    Clean up:
+
+        >>> setup.placelessTearDown()
 
     """
 

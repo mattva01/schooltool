@@ -72,41 +72,6 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
         authSetUpSubscriber(self.app, event)
 
 
-def doctest_ConfigurableCrowd():
-    """Tests for ConfigurableCrowd.
-
-    Some setup:
-
-        >>> class CustomisationsStub(object):
-        ...     implements(IAccessControlCustomisations)
-        ...     def get(self, key):
-        ...         print 'Getting %s' % key
-        ...         return True
-
-        >>> class AppStub(object):
-        ...     implements(ISchoolToolApplication)
-        ...     def __conform__(self, iface):
-        ...         if iface == IAccessControlCustomisations:
-        ...             return CustomisationsStub()
-
-        >>> from zope.component import provideAdapter
-        >>> provideAdapter(lambda context: AppStub(),
-        ...                adapts=[None],
-        ...                provides=ISchoolToolApplication)
-
-        >>> from schooltool.app.security import ConfigurableCrowd
-
-    Off we go:
-
-        >>> crowd = ConfigurableCrowd(object())
-        >>> crowd.setting_key = 'key'
-        >>> crowd.contains(object())
-        Getting key
-        True
-
-    """
-
-
 def doctest_CalendarViewersCrowd():
     """Tests for CalendarViewersCrowd.
 

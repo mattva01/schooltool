@@ -26,6 +26,8 @@ $Id$
 from zope.interface import implements
 from zope.security.proxy import removeSecurityProxy
 from schooltool.securitypolicy.interfaces import ICrowd
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
 
 
 class Crowd(object):
@@ -57,6 +59,22 @@ class AggregateCrowd(Crowd):
 
     def crowdFactories(self):
         raise NotImplementedError("override this in subclasses")
+
+
+class ConfigurableCrowd(Crowd):
+    """A base class for calendar parent crowds.
+
+    You only need to override `setting_key` which indicates the key
+    of the corresponding security setting.
+    """
+
+    setting_key = None # override in subclasses
+
+    def contains(self, principal):
+        """Return the value of the related setting (True or False)."""
+        app = ISchoolToolApplication(None)
+        customizations = IAccessControlCustomisations(app)
+        return customizations.get(self.setting_key)
 
 
 class EverybodyCrowd(Crowd):

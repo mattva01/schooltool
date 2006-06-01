@@ -50,6 +50,7 @@ from schooltool.securitypolicy.crowds import Crowd
 from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ICalendarParentCrowd
+from schooltool.securitypolicy.crowds import ConfigurableCrowd
 
 
 class Principal(Contained):
@@ -209,22 +210,6 @@ def authSetUpSubscriber(app, event):
     This is a handler for IObjectAddedEvent.
     """
     setUpLocalAuth(app)
-
-
-class ConfigurableCrowd(Crowd):
-    """A base class for calendar parent crowds.
-
-    You only need to override `setting_key` which indicates the key
-    of the corresponding security setting.
-    """
-
-    setting_key = None # override in subclasses
-
-    def contains(self, principal):
-        """Return the value of the related setting (True or False)."""
-        app = ISchoolToolApplication(None)
-        customizations = IAccessControlCustomisations(app)
-        return customizations.get(self.setting_key)
 
 
 class ApplicationCalendarCrowd(ConfigurableCrowd):
