@@ -39,7 +39,7 @@ from schooltool.app.interfaces import ICalendarParentCrowd
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.membership import GroupMemberCrowd
 from schooltool.app.membership import URIMembership, URIMember, URIGroup
-from schooltool.app.security import CalendarParentCrowd
+from schooltool.app.security import ConfigurableCrowd
 from schooltool.group import interfaces
 
 

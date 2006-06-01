@@ -72,8 +72,8 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
         authSetUpSubscriber(self.app, event)
 
 
-def doctest_CalendarParentCrowd():
-    """Tests for CalendarParentCrowd.
+def doctest_ConfigurableCrowd():
+    """Tests for ConfigurableCrowd.
 
     Some setup:
 
@@ -94,11 +94,11 @@ def doctest_CalendarParentCrowd():
         ...                adapts=[None],
         ...                provides=ISchoolToolApplication)
 
-        >>> from schooltool.app.security import CalendarParentCrowd
+        >>> from schooltool.app.security import ConfigurableCrowd
 
     Off we go:
 
-        >>> crowd = CalendarParentCrowd(object())
+        >>> crowd = ConfigurableCrowd(object())
         >>> crowd.setting_key = 'key'
         >>> crowd.contains(object())
         Getting key
@@ -108,7 +108,7 @@ def doctest_CalendarParentCrowd():
 
 
 def doctest_CalendarViewersCrowd():
-    """Tests for CalendarParentCrowd.
+    """Tests for CalendarViewersCrowd.
 
         >>> setup.placelessSetUp()
 

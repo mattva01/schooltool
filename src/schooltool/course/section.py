@@ -41,8 +41,7 @@ from schooltool.course import interfaces, booking
 from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
 from schooltool.course.interfaces import ISection
 from schooltool.person.interfaces import IPerson
-from schooltool.app.security import CalendarParentCrowd
-
+from schooltool.app.security import ConfigurableCrowd
 
 
 class Section(Persistent, contained.Contained):
@@ -121,7 +120,7 @@ class LearnersCrowd(Crowd):
         return IPerson(principal, None) in self.context.members
 
 
-class SectionCalendarSettingCrowd(CalendarParentCrowd):
+class SectionCalendarSettingCrowd(ConfigurableCrowd):
     adapts(ISection)
     setting_key = 'everyone_can_view_section_info'
 

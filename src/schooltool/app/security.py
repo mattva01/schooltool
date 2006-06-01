@@ -211,14 +211,12 @@ def authSetUpSubscriber(app, event):
     setUpLocalAuth(app)
 
 
-class CalendarParentCrowd(Crowd):
+class ConfigurableCrowd(Crowd):
     """A base class for calendar parent crowds.
 
     You only need to override `setting_key` which indicates the key
     of the corresponding security setting.
     """
-
-    implements(ICalendarParentCrowd)
 
     setting_key = None # override in subclasses
 
@@ -229,7 +227,7 @@ class CalendarParentCrowd(Crowd):
         return customizations.get(self.setting_key)
 
 
-class ApplicationCalendarCrowd(CalendarParentCrowd):
+class ApplicationCalendarCrowd(ConfigurableCrowd):
     adapts(ISchoolToolApplication)
     setting_key = 'everyone_can_view_app_calendar'
 

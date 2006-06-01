@@ -132,7 +132,7 @@ def doctest_addGroupContainerToApplication():
 
 
 def doctest_GroupCalendarCrowd():
-    """Tests for CalendarParentCrowd.
+    """Tests for ConfigurableCrowd.
 
     Some setup:
 
