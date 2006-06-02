@@ -106,6 +106,8 @@ class DemographicsDisplay(PersonDisplayForm):
 schooldata_traverser = SingleAttributeTraverserPlugin('schooldata')
 
 class SchoolDataEdit(PersonEditForm):
+    template = ViewPageTemplateFile("schooldata_edit.pt")
+    
     def title(self):
         return _(u'Change school data for ${fullname}',
                  mapping={'fullname': self.fullname()})
@@ -113,6 +115,8 @@ class SchoolDataEdit(PersonEditForm):
     form_fields = form.Fields(interfaces.ISchoolData)
     
 class SchoolDataDisplay(PersonDisplayForm):
+    template = ViewPageTemplateFile("schooldata_view.pt")
+    
     def title(self):
         return _(u'School data')
     
