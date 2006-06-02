@@ -44,6 +44,9 @@ from schooltool.app.app import ISchoolToolApplication
 class PersonDisplayForm(form.PageDisplayForm):
     template = ViewPageTemplateFile('display_form.pt')
 
+    def actualContext(self):
+        return self.context.__parent__
+    
     def getMenu(self):
         return getMenu('person_display_menu', self.context, self.request)
 
