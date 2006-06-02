@@ -28,3 +28,12 @@
 
   </form>
 </metal:block>
+<metal:block define-macro="display">
+  <fieldset>	
+    <div class="row" tal:repeat="widget view/widgets">
+      <div class="label" tal:content="widget/label"/>
+      <div class="field"><tal:block replace="structure widget" />&nbsp;</div>
+      <div class="clear"/>
+    </div>
+  </fieldset>
+</metal:block>

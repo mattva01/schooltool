@@ -5,14 +5,7 @@
   <body>
     <metal:block metal:fill-slot="body">
       <metal:block use-macro="view/@@menu_macros/tab_menu" />
-
-      <fieldset>	
-	<div class="row" tal:repeat="widget view/widgets">
-	  <div class="label" tal:content="widget/label"/>
-	  <div class="field"><tal:block replace="structure widget" />&nbsp;</div>
-	  <div class="clear"/>
-	</div>
-      </fieldset>
+      <metal:block use-macro="view/@@formlib_macros/display" />
     </metal:block>
   </body>
 </html>

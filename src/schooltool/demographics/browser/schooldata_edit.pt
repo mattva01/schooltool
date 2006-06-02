@@ -5,11 +5,11 @@
   <body>
     <metal:block metal:fill-slot="body">
       <metal:block use-macro="view/@@menu_macros/tab_menu" />
-
       <metal:block use-macro="view/@@formlib_macros/edit" />
-
-      <tal:block define="context python:context.__parent__"
-		 tal:replace="structure provider:schooltool.person.Info"/>
+      <fieldset>
+	<tal:block define="context python:context.__parent__"
+		   tal:replace="structure provider:schooltool.person.Info"/>
+      </fieldset>
     </metal:block>
   </body>
 </html>
