@@ -46,4 +46,4 @@ def evolve(context):
             map = IPrincipalPermissionManager(section)
             for instructor in section.instructors:
                 principalid = 'sb.person.' + instructor.__name__
-            map.grantPermissionToPrincipal('schooltool.viewAttendance', principalid)
+                map.grantPermissionToPrincipal('schooltool.viewAttendance', principalid)
