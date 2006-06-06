@@ -196,6 +196,7 @@ class Term(object):
     """Simplistic term that uses value as token.
     """
     def __init__(self, value):
+        self.title = value
         self.token = value
         self.value = value
         
