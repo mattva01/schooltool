@@ -25,6 +25,8 @@ from schooltool.app.app import ISchoolToolApplication
 from schooltool import SchoolToolMessage as _
 
 class INameInfo(Interface):
+    """Name information for a person.
+    """
 
     prefix = schema.TextLine(
         title=_(u"Prefix"),
@@ -63,8 +65,12 @@ class INameInfo(Interface):
         required=True,
         )
 
+
 class SourceList(list):
+    """A simple list-based source for Choice fields.
+    """
     implements(IIterableSource)
+
 
 ethnicitySource = SourceList([
     'American Indian or Alaska Native',
@@ -72,6 +78,7 @@ ethnicitySource = SourceList([
     'Black or African American',
     'Native Hawaiian or Other Pacific Islander',
     'White'])
+
 
 languageSource = SourceList([
     'English',
@@ -87,7 +94,11 @@ languageSource = SourceList([
     'Arabic',
     ])
 
+
 class IDemographics(Interface):
+    """Demographical information about a person.
+    """
+
     # XXX how to translate male and female? in widget?
     gender = schema.Choice(
         title=_(u"Gender"),
@@ -122,11 +133,14 @@ class IDemographics(Interface):
         required=False
         )
 
-class ITeachersSource(IIterableSource):
-    pass
 
+class ITeachersSource(IIterableSource):
+    """A source of names of teachers.
+    """
+    
 class IGroupsSource(IIterableSource):
-    pass
+    """A source of names of groups.
+    """
 
 class TeachersSource(object):
     implements(ITeachersSource)
@@ -144,6 +158,7 @@ class TeachersSource(object):
     def __len__(self):
         return len(self.teachers())
 
+
 class GroupsSource(object):
     implements(IGroupsSource)
 
@@ -154,6 +169,8 @@ class GroupsSource(object):
         return len(ISchoolToolApplication(None)['groups'].keys())
 
 class ISchoolData(Interface):
+    """School-specific data for a person.
+    """
     id = schema.TextLine(
         title=_(u"ID"),
         required=False,
@@ -186,6 +203,7 @@ class ISchoolData(Interface):
         required=False,
         )
 
+
 relationshipToStudentSource = SourceList([
     'parent',
     'guardian',
@@ -194,7 +212,13 @@ relationshipToStudentSource = SourceList([
     'friend of family',
     'other'])
 
+
 class IContactInfo(Interface):
+    """Contact information for a person.
+
+    A person can have more than one contact informations at the
+    same time.
+    """
     name = schema.TextLine(
         title=_(u"Name"),
         required=False,
@@ -248,6 +272,8 @@ class IContactInfo(Interface):
 
 
 class ISearch(Interface):
+    """Particular aspects of a person that can be indexed for search.
+    """
 
     fulltext = schema.TextLine(
         title=_(u"Text"),
