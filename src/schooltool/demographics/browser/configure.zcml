@@ -19,6 +19,24 @@
       />
 
   <page
+      name="index.html"
+      for="schooltool.person.interfaces.IPerson"
+      class=".personform.PersonView"
+      permission="zope.View"
+      menu="schooltool_actions"
+      title="View"
+      />
+
+  <page
+      name="edit.html"
+      for="schooltool.person.interfaces.IPerson"
+      class=".personform.PersonEditView"
+      permission="zope.View"
+      menu="schooltool_actions"
+      title="Edit"
+      />
+
+  <page
       for="..interfaces.INameInfo"
       name="edit.html"
       class=".personform.NameInfoEdit"

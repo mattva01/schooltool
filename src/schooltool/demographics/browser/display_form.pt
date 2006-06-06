@@ -6,6 +6,10 @@
     <metal:block metal:fill-slot="body">
       <metal:block use-macro="view/@@menu_macros/tab_menu" />
       <metal:block use-macro="view/@@formlib_macros/display" />
+
+    <tal:block replace="structure context/__parent__/@@notes|nothing" />
+
     </metal:block>
+
   </body>
 </html>

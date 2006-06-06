@@ -63,16 +63,6 @@
       add="zope.View"
       />
 
-  <page
-      name="index.html"
-      for="..interfaces.IPerson"
-      class=".person.PersonView"
-      template="person.pt"
-      permission="zope.View"
-      menu="zmi_views"
-      title="View"
-      />
-
   <zope:adapter for=".person.IGroupsSource
 		     zope.publisher.interfaces.browser.IBrowserRequest"
 		factory=".person.GroupsTerms"/>
@@ -105,16 +95,6 @@
       permission="zope.View"
       menu="schooltool_actions"
       title="Change Preferences" />
-
-  <page
-      name="edit.html"
-      for="..interfaces.IPerson"
-      class=".person.PersonEditView"
-      template="person_edit.pt"
-      permission="zope.View"
-      menu="schooltool_actions"
-      title="Edit Info"
-      />
 
   <page
      name="password_edit.html"

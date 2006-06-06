@@ -122,15 +122,12 @@ The introspector allows you to look at the current object, without any
 security constraints. The actual functionality of the introspector is part of
 the Zope 3 core and is simply "repackaged" for SchoolTool.
 
-The first step is to get to the object we would like to introspect. For
-example, let's see what the SchoolTool Manager looks like:
+The first step is to get to the object we would like to
+introspect. For example, let's see what the SchoolTool Manager looks
+like. We can open the introspector using the Developer Tools menu in
+the top-right corner:
 
-    >>> browser.getLink('SchoolTool Manager').click()
-
-Now we can open the introspector using the Developer Tools menu in the
-top-right corner:
-
-    >>> browser.getLink('Introspector').click()
+    >>> browser.open('http://localhost/persons/manager/@@introspector.html')
 
 Let me explain some of the features now. The headline gives you the class of
 the object, followed by the name:
@@ -186,25 +183,27 @@ The final section of the introspector shows you a list of annotations, if they
 are inspectable. Since the attribute annotations are inspectable, we can see a
 range of annotation keys and their values:
 
+    >>> f = open('/tmp/dump.txt', 'w')
+    >>> f.write(browser.contents)
+    >>> f.close()
     >>> print browser.contents.strip()
     <!DOC...
     ...
     <h2>Annotations</h2>
     <div class="indent">
       <ul class="attr-list">
-    ...
-    <li>
-      <b>
-        <code>'schooltool.app.PersonPreferences'</code>
-      </b>
-      <br />
-      <a href="++annotations++schooltool.app.PersonPreferences/@@introspector.html">
-        <code>&lt;schooltool.person.preference.PersonPreferences object ...&gt;</code>
-      </a>
-      (<span>type:</span>
-       <a href=".../Code/schooltool/person/preference/PersonPreferences/index.html">
-         <code>PersonPreferences</code></a>)
-    </li>
+        <li>
+          <b>
+            <code>'schooltool.app.PersonPreferences'</code>
+          </b>
+          <br />
+          <a href="++annotations++schooltool.app.PersonPreferences/@@introspector.html">
+            <code>&lt;schooltool.person.preference.PersonPreferences object at ...&gt;</code>
+          </a>
+            (<span>type:</span>
+            <a href="http://localhost/++apidoc++/Code/schooltool/person/preference/PersonPreferences/index.html">
+              <code>PersonPreferences</code></a>)
+        </li>
     ...
 
 The best part about it is that you can usually click on the annotation value

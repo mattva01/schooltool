@@ -183,9 +183,8 @@ Editing things -- schooltool.edit permission
 
 The user can edit his own info:
 
-    >>> frog.getLink('Frog').click()
-    >>> frog.getLink('edit name').click()
 
+    >>> frog.open('http://localhost/persons/frog/edit.html')
     >>> frog.getControl('Full name').value = 'Toad'
     >>> frog.getControl('Apply').click()
 
@@ -203,15 +202,9 @@ But we can revoke that permission from him:
 
 Now he can't edit the info:
 
-    >>> frog.getLink('Toad').click()
-    >>> frog.getLink('edit name').click()
-
-    >>> frog.getControl('Full name').value = 'Mr. Toad'
-    >>> frog.getControl('Apply').click()
-
-    >>> print frog.url
-    http...?forbidden=yes&nexturl=http%3A//.../persons/frog/%40%40edit.html
-
+    >>> frog.open('http://localhost/persons/frog/edit.html')
+    >>> 'Please log in' in frog.contents
+    True
 
 But still can see his calendar (regression test for Issue354 User
 can't View calendar without Edit permission):

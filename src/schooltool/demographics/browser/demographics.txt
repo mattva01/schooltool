@@ -193,7 +193,7 @@ but it can be:
 
 Now it should be a teacher:
 
-  >>> browser.open("http://localhost/persons/alpha/")
+  >>> browser.open("http://localhost/persons/alpha/schooldata")
   >>> "Teachers" in browser.contents
   True
 

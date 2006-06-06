@@ -32,6 +32,7 @@ from zope.app.form.browser.interfaces import ITerms
 from zope.app.publisher.browser.menu import getMenu, BrowserMenu
 from zope.schema.interfaces import ITitledTokenizedTerm
 from zope.app.form.browser.interfaces import ITerms
+from zope.publisher.browser import BrowserView
 
 from schooltool.skin.form import AttributeEditForm
 from schooltool.traverser.traverser import SingleAttributeTraverserPlugin
@@ -76,6 +77,17 @@ class PersonEditForm(AttributeEditForm):
         
 nameinfo_traverser = SingleAttributeTraverserPlugin('nameinfo')
 
+class PersonView(BrowserView):
+    def __call__(self):
+        url = zapi.absoluteURL(self.context.nameinfo, self.request)
+        return self.request.response.redirect(url)
+
+class PersonEditView(BrowserView):
+    def __call__(self):
+        url = (zapi.absoluteURL(self.context.nameinfo, self.request) +
+               '/edit.html')
+        return self.request.response.redirect(url)
+    
 class NameInfoEdit(PersonEditForm):
     def title(self):
         return _(u'Change name information for ${fullname}',

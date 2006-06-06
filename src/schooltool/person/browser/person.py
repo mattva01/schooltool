@@ -72,15 +72,6 @@ class PersonContainerDeleteView(ContainerDeleteView):
         person = IPerson(self.request.principal, None)
         return person in self.itemsToDelete
 
-
-class PersonView(BrowserView):
-    """A Person info view."""
-
-    __used_for__ = IPersonContained
-
-    def __init__(self, context, request):
-        BrowserView.__init__(self, context, request)
-
 class PersonPhotoView(BrowserView):
     """View that returns photo of a Person."""
 
@@ -257,58 +248,6 @@ class PersonAddView(BasicForm):
         self.context[name] = person
         return person
     
-class IPersonEditForm(Interface):
-    """Schema for a person's edit form."""
-
-    title = TextLine(
-        title=_("Full name"),
-        description=_("Name that should be displayed"))
-
-    photo = Bytes(
-        title=_("New photo"),
-        required=False,
-        description=_(
-            """A small picture (about 48x48 pixels in JPEG format)"""))
-
-    clear_photo = Bool(
-        title=_("Clear photo"),
-        required=False,
-        description=_("""Check this to clear the photo"""))
-
-class PersonEditView(BrowserView):
-    """A view for editing a person."""
-
-    __used_for__ = IPersonContained
-
-    error = None
-    message = None
-
-    def __init__(self, context, request):
-        BrowserView.__init__(self, context, request)
-        setUpWidgets(self, IPersonEditForm, IInputWidget,
-                     initial={'title': self.context.title,
-                              'photo': self.context.photo})
-
-    def update(self):
-        if 'UPDATE_SUBMIT' in self.request:
-            try:
-                data = getWidgetsData(self, IPersonEditForm)
-            except WidgetsError:
-                return # Errors will be displayed next to widgets
-
-            self.context.title = data['title']
-            if data.get('photo'):
-                self.context.photo = data['photo']
-
-            if data.get('clear_photo'):
-                self.context.photo = None
-                # Uncheck the checkbox before rendering the form
-                self.clear_photo_widget.setRenderedValue(False)
-
-        if 'CANCEL' in self.request:
-            url = zapi.absoluteURL(self.context, self.request)
-            self.request.response.redirect(url)
-
 class IPasswordEditForm(Interface):
     """Schema for a person's edit form."""
 

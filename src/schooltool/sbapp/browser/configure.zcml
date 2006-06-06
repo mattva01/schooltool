@@ -86,6 +86,7 @@
 
   <!-- XXX: Needs to be here until we switch to viewlet system or -->
   <!--      write a macro -->
+   <!--
   <page
       name="index.html"
       for="schooltool.person.interfaces.IPerson"
@@ -96,5 +97,6 @@
       title="View"
       layer=".skin.ISchoolBellLayer"
       />
+  -->
 
 </configure>
