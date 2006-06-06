@@ -83,6 +83,11 @@ class ContactInfo(Persistent):
         initializeSchemaAttributes(interfaces.IContactInfo, self)
 
 def initializeSchemaAttributes(iface, obj, suppress=None):
+    """Initialize an object given the schema attributes in an interface.
+
+    The names of the attributes given in suppress are not initialized.
+    This can be useful in case that attribute is managed by a property.
+    """
     suppress = suppress or []
     for field in schema.getFields(iface).values():
         if field.__name__ in suppress:
