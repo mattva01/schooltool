@@ -33,7 +33,10 @@ from schooltool.app.browser import ViewPreferences
 from schooltool.demographics import interfaces
 from schooltool.skin.table import TablePage
 
+
 class PersonTable(TablePage):
+    """Browse persons in a table.
+    """
     __call__ = ViewPageTemplateFile('table.pt')
         
     def columns(self):
@@ -94,8 +97,11 @@ class PersonTable(TablePage):
     @property
     def canModify(self):
         return canAccess(self.context, '__delitem__')
-    
+
+
 class SearchTable(form.FormBase, PersonTable):
+    """Browse person search results in a table.
+    """
     form_fields = form.Fields(interfaces.ISearch, render_context=False)
     template = ViewPageTemplateFile('search.pt')
     
@@ -159,17 +165,26 @@ class SearchTable(form.FormBase, PersonTable):
     def sortOn(self):
         return (("modified", True),)
     
+
 class EditColumn(column.Column):
+    """Table column that displays edit link.
+    """
     def renderCell(self, item, formatter):
         return '<a href="%s">Edit</a>' % (
             zapi.absoluteURL(item, formatter.request) + '/nameinfo/@@edit.html')
 
+
 class DisplayColumn(column.Column):
+    """Table column that displays display link.
+    """
     def renderCell(self, item, formatter):
         return '<a href="%s">Display</a>' % (
             zapi.absoluteURL(item, formatter.request) + '/nameinfo')
 
+
 class DeleteCheckBoxColumn(column.Column):
+    """Table column that displays delete checkbox.
+    """
     def renderCell(self, item, formatter):
         if self.hasDependents(item):
             return (
@@ -189,7 +204,10 @@ class DeleteCheckBoxColumn(column.Column):
         else:
             return bool(dependable.dependents())
 
+
 class ModifiedColumn(column.SortingColumn):
+    """Table column that displays modified date, sortable.
+    """
     _renderDatetime = None
 
     def getSortKey(self, item, formatter):
@@ -202,8 +220,12 @@ class ModifiedColumn(column.SortingColumn):
                 formatter.request).renderDatetime
         return self._renderDatetime(item.modified)
 
+
 class DateColumn(column.GetterColumn):
-    """ Column for rendering dates when None values can be around. """
+    """Table column that displays dates.
+
+    Sortable even when None values are around.
+    """
 
     def getSortKey(self, item, formatter):
         if self.getter(item, formatter) is None:
