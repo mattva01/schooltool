@@ -50,6 +50,7 @@ class Person(PersonBase):
         self.emergency3 = ContactInfo()
         locate(self.emergency3, self, 'emergency3')
 
+
 class NameInfo(Persistent):
     implements(interfaces.INameInfo, ILocation)
 
@@ -64,11 +65,13 @@ class NameInfo(Persistent):
 
     full_name = property(_get_full_name, _set_full_name)
 
+
 class Demographics(Persistent):
     implements(interfaces.IDemographics, ILocation)
 
     def __init__(self):
         initializeSchemaAttributes(interfaces.IDemographics, self)
+
 
 class SchoolData(Persistent):
     implements(interfaces.ISchoolData, ILocation)
@@ -76,11 +79,13 @@ class SchoolData(Persistent):
     def __init__(self):
         initializeSchemaAttributes(interfaces.ISchoolData, self)
 
+
 class ContactInfo(Persistent):
     implements(interfaces.IContactInfo, ILocation)
 
     def __init__(self):
         initializeSchemaAttributes(interfaces.IContactInfo, self)
+
 
 def initializeSchemaAttributes(iface, obj, suppress=None):
     """Initialize an object given the schema attributes in an interface.
@@ -94,9 +99,10 @@ def initializeSchemaAttributes(iface, obj, suppress=None):
             continue
         field.set(obj, field.default)
 
+
 def personModifiedSubscriber(person, event):
     person.modified = now()
 
+
 def now():
     return utc.localize(datetime.utcnow())
-
