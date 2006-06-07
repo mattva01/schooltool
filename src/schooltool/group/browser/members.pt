@@ -10,7 +10,7 @@
 <h3 i18n:translate="">
   Members of <span i18n:name="title" tal:replace="context/title" />
 </h3>
-<fieldset tal:define="members view/getMembers">
+<fieldset tal:define="members view/getSelectedItems">
   <legend i18n:translate="">Current Members</legend>
   <p tal:condition="not:members" i18n:translate="">
     There are none.
@@ -18,13 +18,13 @@
   <tal:if condition="members">
     <div tal:repeat="member members/sortby:title">
       <label>
-        <input tal:attributes="name string:REMOVE_MEMBER.${member/__name__}"
+        <input tal:attributes="name string:remove_item.${member/__name__}"
           type="checkbox" />
         <span tal:replace="member/title" />
       </label>
     </div>
     <div class="controls">
-      <input type="submit" class="button-ok" name="REMOVE_MEMBERS"
+      <input type="submit" class="button-ok" name="REMOVE_ITEMS"
         value="Remove Members"
         title="Shortcut: Alt-R" accesskey="R"
         i18n:attributes="value submit-button; accesskey" />
@@ -61,14 +61,14 @@
     <div class="member_list">
       <div tal:repeat="member batch">
         <label>
-          <input tal:attributes="name string:ADD_MEMBER.${member/__name__}"
+          <input tal:attributes="name string:add_item.${member/__name__}"
             type="checkbox" />
           <span tal:replace="member/title" />
         </label>
       </div>
     </div>
     <div class="controls">
-      <input type="submit" class="button-ok" name="ADD_MEMBERS"
+      <input type="submit" class="button-ok" name="ADD_ITEMS"
              value="Add Members"
         tal:condition="batch"
         title="Shortcut: Alt-A" accesskey="A"

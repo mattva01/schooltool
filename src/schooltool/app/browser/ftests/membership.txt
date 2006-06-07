@@ -80,7 +80,7 @@ Let's go to a group, and look at its members.
     True
 
     # Only shows first ten persons
-    >>> checkbox = '<input type="checkbox" name="ADD_MEMBER.person%.3i" />'
+    >>> checkbox = '<input type="checkbox" name="add_item.person%.3i" />'
     >>> for i in [1, 3, 4, 8, 9, 10, 11, 13, 14, 15]:
     ...     if checkbox %i not in manager.contents:
     ...        print checkbox %i
@@ -93,9 +93,9 @@ Let's add a few members.
     >>> manager.getControl('Add Members').click()
 
     >>> body = manager.contents
-    >>> 'name="REMOVE_MEMBER.person001"' in body
+    >>> 'name="remove_item.person001"' in body
     True
-    >>> 'name="REMOVE_MEMBER.person011"' in body
+    >>> 'name="remove_item.person011"' in body
     True
 
 We can perform a search and limit the list in the 'Add Members' box. This
@@ -104,16 +104,16 @@ particular bit also serves as a regression test for issue 341.
     >>> manager.getControl(name='SEARCH').value = 'D.'
     >>> manager.getControl('Find Now').click()
 
-    >>> 'name="ADD_MEMBER.person013"' in manager.contents
+    >>> 'name="add_item.person013"' in manager.contents
     True
-    >>> 'name="ADD_MEMBER.person005"' in manager.contents
+    >>> 'name="add_item.person005"' in manager.contents
     False
 
 But the search does not affect the already existing member list:
 
-    >>> 'name="REMOVE_MEMBER.person001"' in manager.contents
+    >>> 'name="remove_item.person001"' in manager.contents
     True
-    >>> 'name="REMOVE_MEMBER.person011"' in manager.contents
+    >>> 'name="remove_item.person011"' in manager.contents
     True
 
 
