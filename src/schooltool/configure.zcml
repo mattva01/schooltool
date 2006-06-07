@@ -45,7 +45,6 @@
   <permission id="schooltool.edit" title="Edit Info" />
   <permission id="schooltool.viewCalendar"  title="View calendar" />
   <permission id="schooltool.viewAttendance"  title="View attendance" />
-  <permission id="schooltool.addEvent"  title="Add Event" />
   <permission id="schooltool.modifyEvent"  title="Modify Event" />
   <permission id="schooltool.controlAccess"  title="Set up access" />
   <permission id="schooltool.create"  title="Create new objects" />

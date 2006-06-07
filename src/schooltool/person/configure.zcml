@@ -103,4 +103,9 @@
       provides="schooltool.app.interfaces.ICalendarParentCrowd"
       name="schooltool.view" />
 
+  <adapter
+      factory=".person.getCalendarOwner"
+      provides=".interfaces.IPerson"
+      for="schooltool.app.interfaces.ISchoolToolCalendar" />
+
 </configure>

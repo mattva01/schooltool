@@ -146,3 +146,7 @@ class PersonCalendarCrowd(Crowd):
 
     def contains(self, principal):
         return self.context == IPerson(principal)
+
+
+def getCalendarOwner(calendar):
+    return IPerson(calendar.__parent__, None)

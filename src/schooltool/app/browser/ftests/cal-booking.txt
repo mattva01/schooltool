@@ -81,122 +81,126 @@ and set up a calendar for Frog:
     Set-Cookie: ...
     <BLANKLINE>
 
-# Frog should not be capable of booking any resources yet:
+Frog should not be capable of booking any resources yet:
 
-#     >>> frog.open('http://localhost/persons/frog/calendar/2005-02-04')
-#     >>> frog.getLink('Test event').click()
-#     >>> frog.getLink('edit resources').click()
-#     >>> print frog.contents
-#     <BLANKLINE>
-#     ...
-#       <fieldset>
-#         <legend>Available Resources</legend>
-#         <table class="event_booking">
-#         </table>
-#       </fieldset>
-#     ...
+    >>> frog.open('http://localhost/persons/frog/calendar/2005-02-04')
+    >>> frog.getLink('Test event').click()
+    >>> frog.getLink('edit resources').click()
+    >>> print frog.contents
+    <BLANKLINE>
+    ...
+      <fieldset>
+        <legend>Available Resources</legend>
+        <table class="event_booking">
+        </table>
+      </fieldset>
+    ...
 
-# But we can give him that right by adding him to manager group:
+# But we can give him that right by making him a leader of that
+# resource:
+# XXX at the moment i am just making frog an admin
 
-#     >>> manager.addPersonToGroup('frog', 'manager')
+    >>> manager.open('http://localhost/persons/frog/@@groups.html')
+    >>> manager.getControl('Managers').click()
+    >>> manager.getControl('Add').click()
 
-# Frog should see the mud and the fish now:
+Frog should see the mud and the fish now:
 
-#     >>> frog.reload()
-#     >>> print frog.contents
-#     <BLANKLINE>
-#     ...
-#       <fieldset>
-#         <legend>Available Resources</legend>
-#         <table class="event_booking">
-#     ...
-#              <input type="hidden" value="1"
-#                     name="marker-fish" />
-#     ...
-#              <input type="hidden" value="1"
-#                     name="marker-mud" />
-#     ...
-#         </table>
-#       </fieldset>
-#     ...
+    >>> frog.reload()
+    >>> print frog.contents
+    <BLANKLINE>
+    ...
+      <fieldset>
+        <legend>Available Resources</legend>
+        <table class="event_booking">
+    ...
+             <input type="hidden" value="1"
+                    name="marker-fish" />
+    ...
+             <input type="hidden" value="1"
+                    name="marker-mud" />
+    ...
+        </table>
+      </fieldset>
+    ...
 
-# Let's book one of them:
+Let's book one of them:
 
-#     >>> frog.getControl('mud').selected = True
-#     >>> frog.getControl('Book').click()
+    >>> frog.getControl('mud').selected = True
+    >>> frog.getControl('Book').click()
 
-# We should see the resource as a booked resource:
+We should see the resource as a booked resource:
 
-#     >>> frog.getLink('Test event').click()
-#     >>> frog.getLink('edit resources').click()
-#     >>> print frog.contents
-#     <BLANKLINE>
-#     ...
-#       <fieldset>
-#         <legend>Available Resources</legend>
-#         <table class="event_booking">
-#     ...
-#                 <input type="checkbox" value="booked"
-#                        name="fish" id="fish" />
-#     ...
-#                 <input type="checkbox" value="booked"
-#                        checked="checked" name="mud" id="mud" />
-#     ...
-#         </table>
-#       </fieldset>
-#     ...
+    >>> frog.getLink('Test event').click()
+    >>> frog.getLink('edit resources').click()
+    >>> print frog.contents
+    <BLANKLINE>
+    ...
+      <fieldset>
+        <legend>Available Resources</legend>
+        <table class="event_booking">
+    ...
+                <input type="checkbox" value="booked"
+                       name="fish" id="fish" />
+    ...
+                <input type="checkbox" value="booked"
+                       checked="checked" name="mud" id="mud" />
+    ...
+        </table>
+      </fieldset>
+    ...
 
-# Let's unbook one of them and book another:
+Let's unbook one of them and book another:
 
-#     >>> frog.getControl('mud').selected = False
-#     >>> frog.getControl('fish').selected = True
-#     >>> frog.getControl('Book').click()
+    >>> frog.getControl('mud').selected = False
+    >>> frog.getControl('fish').selected = True
+    >>> frog.getControl('Book').click()
 
-# Now another resource is booked:
+Now another resource is booked:
 
-#     >>> frog.getLink('Test event').click()
-#     >>> frog.getLink('edit resources').click()
-#     >>> print frog.contents
-#     <BLANKLINE>
-#     ...
-#       <fieldset>
-#         <legend>Available Resources</legend>
-#         <table class="event_booking">
-#     ...
-#                 <input type="checkbox" value="booked"
-#                        checked="checked" name="fish" id="fish" />
-#     ...
-#                 <input type="checkbox" value="booked"
-#                        name="mud" id="mud" />
-#     ...
-#         </table>
-#       </fieldset>
-#     ...
+    >>> frog.getLink('Test event').click()
+    >>> frog.getLink('edit resources').click()
+    >>> print frog.contents
+    <BLANKLINE>
+    ...
+      <fieldset>
+        <legend>Available Resources</legend>
+        <table class="event_booking">
+    ...
+                <input type="checkbox" value="booked"
+                       checked="checked" name="fish" id="fish" />
+    ...
+                <input type="checkbox" value="booked"
+                       name="mud" id="mud" />
+    ...
+        </table>
+      </fieldset>
+    ...
 
-# Frog should see the event in the resource calendar too:
+Frog should see the event in the resource calendar too:
 
-#     >>> frog.open(
-#     ...     'http://localhost/resources/fish/calendar/2005-02-04/')
-#     >>> print frog.contents
-#     <BLANKLINE>
-#     ...
-#     <a href="http://localhost/resources/fish/calendar/dummy-uid"
-#        title="Test event">
-#       Test event
-#       <span class="start-end">
-#         (<span>10:00</span> -
-#         <span>11:00</span>)
-#       </span>
-#     </a>
-#     ...
-#     <div class="booked-resources">
-#       <h6 class="booked-resource-header"
-#                style="background: #7590ae">
-#         <a style="color: #000;"
-#            href="...dummy-uid/booking.html?date=2005-02-04">Booked by</a></h6>
-#       <a href="http://localhost/persons/frog">Frog</a>
-#     </div>
-#     ...
+    >>> frog.open(
+    ...     'http://localhost/resources/fish/calendar/2005-02-04/')
+    >>> print frog.contents
+    <BLANKLINE>
+    ...
+    <a href="http://localhost/resources/fish/calendar/dummy-uid"
+       title="Test event">
+      Test event
+      <span class="start-end">
+        (<span>10:00</span> -
+        <span>11:00</span>)
+      </span>
+    </a>
+    ...
+    <div class="booked-resources">
+      <h6 class="booked-resource-header"
+               style="background: #7590ae">
+        <a style="color: #000;"
+           href="...dummy-uid/booking.html?date=2005-02-04">Booked by</a></h6>
+      <a href="http://localhost/persons/frog">Frog</a>
+    </div>
+    ...
 
 # Now if we remove the permission to book the fish:
 

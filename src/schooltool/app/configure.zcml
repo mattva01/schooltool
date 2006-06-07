@@ -188,7 +188,7 @@
     <require permission="schooltool.view"
              interface="schooltool.calendar.interfaces.ICalendar"
              attributes="title __cmp__" />
-    <require permission="schooltool.addEvent"
+    <require permission="schooltool.edit"
              attributes="addEvent" />
     <require permission="schooltool.modifyEvent"
              attributes="clear removeEvent" />

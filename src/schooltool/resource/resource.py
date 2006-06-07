@@ -30,6 +30,7 @@ from zope.app.container import btree
 from zope.app.container.contained import Contained
 
 from schooltool.resource import interfaces
+from schooltool.securitypolicy.crowds import ConfigurableCrowd
 
 
 class ResourceContainer(btree.BTreeContainer):
@@ -54,3 +55,7 @@ class Resource(Persistent, Contained):
 
 def addResourceContainerToApplication(event):
     event.object['resources'] = ResourceContainer()
+
+
+class ResourceCalendarCrowd(ConfigurableCrowd):
+    setting = "everyone_can_view_resource_calendar"

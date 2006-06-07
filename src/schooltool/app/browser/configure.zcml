@@ -337,7 +337,7 @@
   <menuItem
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       menu="schooltool_actions" title="New Event"
-      action="add.html" permission="schooltool.addEvent" />
+      action="add.html" permission="schooltool.edit" />
 
   <page
       name="delete.html"
@@ -376,7 +376,7 @@
                          recurrence_type interval range until count monthly
                          exceptions weekdays"
       content_factory="schooltool.app.cal.CalendarEvent"
-      permission="schooltool.addEvent"
+      permission="schooltool.edit"
       template="templates/event_add.pt"
       class=".cal.CalendarEventAddView">
 

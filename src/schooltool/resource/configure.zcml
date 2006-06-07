@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:security="http://schooltool.org/securitypolicy"
            i18n_domain="schooltool">
 
   <interface
@@ -57,5 +58,32 @@
 
   <include package=".browser" />
   <include package=".rest" />
+
+  <security:allow
+      interface="schooltool.resource.interfaces.IResourceContainer"
+      crowds="administration"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.resource.interfaces.IResourceContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.resource.interfaces.IResourceContainer"
+      crowds="administration"
+      permission="schooltool.create" />
+
+  <security:allow
+      interface="schooltool.resource.interfaces.IResource"
+      crowds="administration"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.resource.interfaces.IResource"
+      crowds="administration"
+      permission="schooltool.edit" />
+
+  <security:setting
+      key="everyone_can_view_resource_calendar"
+      text="Calendars for resources are public"
+      default="False" />
 
 </configure>

@@ -114,28 +114,6 @@
       permission="schooltool.manageMembership" />
 
   <security:allow
-      interface="schooltool.resource.interfaces.IResourceContainer"
-      crowds="administration"
-      permission="schooltool.view" />
-  <security:allow
-      interface="schooltool.resource.interfaces.IResourceContainer"
-      crowds="administration"
-      permission="schooltool.edit" />
-  <security:allow
-      interface="schooltool.resource.interfaces.IResourceContainer"
-      crowds="administration"
-      permission="schooltool.create" />
-
-  <security:allow
-      interface="schooltool.resource.interfaces.IResource"
-      crowds="administration"
-      permission="schooltool.view" />
-  <security:allow
-      interface="schooltool.resource.interfaces.IResource"
-      crowds="administration"
-      permission="schooltool.edit" />
-
-  <security:allow
       interface="schooltool.course.interfaces.ICourseContainer"
       crowds="administration"
       permission="schooltool.view" />
@@ -240,15 +218,11 @@
 
   <security:allow
       crowds="everybody"
-      permission="schooltool.addEvent" />
-
-  <security:allow
-      crowds="everybody"
       permission="schooltool.modifyEvent" />
 
   <security:allow
       interface="schooltool.app.interfaces.ISchoolToolCalendar"
-      crowds="everybody"
+      crowds="administration owner"
       permission="schooltool.edit" />
 
 </configure>

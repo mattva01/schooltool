@@ -6,65 +6,65 @@ This test verifies the security checking for calendars.
 Set up
 ------
 
-# We will obviously need a SchoolTool instance.
+We will obviously need a SchoolTool instance.
 
-#     >>> from zope.testbrowser.testing import Browser
-#     >>> manager = Browser()
-#     >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
-#     >>> manager.handleErrors = False
-#     >>> manager.open('http://localhost/')
+    >>> from zope.testbrowser.testing import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/')
 
-#     >>> 'SchoolTool' in manager.contents
-#     True
+    >>> 'SchoolTool' in manager.contents
+    True
 
-# Let's create a person so that we can fool around with his calendar:
+Let's create a person so that we can fool around with his calendar:
 
-#     >>> manager.getLink('Persons').click()
-#     >>> manager.getLink('New Person').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
 
-#     >>> manager.getControl('Full name').value = 'Frog'
-#     >>> manager.getControl('Username').value = 'frog'
-#     >>> manager.getControl('Password').value = 'pwd'
-#     >>> manager.getControl('Verify password').value = 'pwd'
+    >>> manager.getControl('Full name').value = 'Frog'
+    >>> manager.getControl('Username').value = 'frog'
+    >>> manager.getControl('Password').value = 'pwd'
+    >>> manager.getControl('Verify password').value = 'pwd'
 
-#     >>> manager.getControl('Add').click()
-#     >>> 'Frog' in manager.contents
-#     True
+    >>> manager.getControl('Add').click()
+    >>> 'Frog' in manager.contents
+    True
 
-# Let's create more persons so that we can test access control.
+Let's create more persons so that we can test access control.
 
-#     >>> manager.getLink('New Person').click()
+    >>> manager.getLink('New Person').click()
 
-#     >>> manager.getControl('Full name').value = 'Toad'
-#     >>> manager.getControl('Username').value = 'toad'
-#     >>> manager.getControl('Password').value = 'doat'
-#     >>> manager.getControl('Verify password').value = 'doat'
+    >>> manager.getControl('Full name').value = 'Toad'
+    >>> manager.getControl('Username').value = 'toad'
+    >>> manager.getControl('Password').value = 'doat'
+    >>> manager.getControl('Verify password').value = 'doat'
 
-#     >>> manager.getControl('Add').click()
-#     >>> 'Toad' in manager.contents
-#     True
+    >>> manager.getControl('Add').click()
+    >>> 'Toad' in manager.contents
+    True
 
 
-# Adding new events
-# -----------------
+Adding new events
+-----------------
 
-# Let the Frog add an ordinary event that takes place on 3rd February, 2005:
+Let the Frog add an ordinary event that takes place on 3rd February, 2005:
 
-#     >>> frog = Browser()
-#     >>> frog.open('http://localhost/')
-#     >>> frog.getLink('Log In').click()
-#     >>> frog.getControl('Username').value = 'frog'
-#     >>> frog.getControl('Password').value = 'pwd'
-#     >>> frog.getControl('Log in').click()
+    >>> frog = Browser()
+    >>> frog.open('http://localhost/')
+    >>> frog.getLink('Log In').click()
+    >>> frog.getControl('Username').value = 'frog'
+    >>> frog.getControl('Password').value = 'pwd'
+    >>> frog.getControl('Log in').click()
 
-#     >>> frog.getLink('New Event').click()
+    >>> frog.getLink('New Event').click()
 
-#     >>> frog.getControl('Title').value = 'Sleeping'
-#     >>> frog.getControl('Date').value = '2005-02-03'
-#     >>> frog.getControl('Time').value = '01:00'
-#     >>> frog.getControl('Duration').value = '500'
+    >>> frog.getControl('Title').value = 'Sleeping'
+    >>> frog.getControl('Date').value = '2005-02-03'
+    >>> frog.getControl('Time').value = '01:00'
+    >>> frog.getControl('Duration').value = '500'
 
-#     >>> frog.getControl('Add').click()
+    >>> frog.getControl('Add').click()
 
 # Let's grant the Toad the viewCalendar permission on Frog's calendar:
 
