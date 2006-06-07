@@ -24,12 +24,14 @@ $Id$
 __docformat__ = 'restructuredtext'
 from persistent import Persistent
 
+from zope.component import adapts
 from zope.interface import implements
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container import btree
 from zope.app.container.contained import Contained
 
 from schooltool.app.app import Asset
+from schooltool.app.security import LeaderCrowd
 from schooltool.resource import interfaces
 from schooltool.securitypolicy.crowds import ConfigurableCrowd
 
@@ -58,5 +60,12 @@ def addResourceContainerToApplication(event):
     event.object['resources'] = ResourceContainer()
 
 
-class ResourceCalendarCrowd(ConfigurableCrowd):
-    setting = "everyone_can_view_resource_calendar"
+class ResourceCalendarCrowd(ConfigurableCrowd, LeaderCrowd):
+
+    adapts(interfaces.IResource)
+
+    setting_key = "everyone_can_view_resource_calendar"
+
+    def contains(self, principal):
+        return (ConfigurableCrowd.contains(self, principal) or
+                LeaderCrowd.contains(self, principal))

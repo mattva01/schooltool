@@ -225,6 +225,10 @@
       factory=".security.CalendarViewersCrowd" />
 
   <security:crowd
+      name="calendar_editors"
+      factory=".security.CalendarEditorsCrowd" />
+
+  <security:crowd
       name="leaders"
       factory=".security.LeaderCrowd" />
 
@@ -232,6 +236,11 @@
       interface=".interfaces.ISchoolToolCalendar"
       permission="schooltool.view"
       crowds="administration calendar_viewers" />
+
+  <security:allow
+      interface=".interfaces.ISchoolToolCalendar"
+      permission="schooltool.edit"
+      crowds="administration owner calendar_editors" />
 
   <security:setting
       key="everyone_can_view_app_calendar"

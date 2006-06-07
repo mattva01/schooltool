@@ -218,8 +218,8 @@ class ApplicationCalendarCrowd(ConfigurableCrowd):
     setting_key = 'everyone_can_view_app_calendar'
 
 
-class CalendarViewersCrowd(Crowd):
-    """A crowd that contains principals who are allowed to view the context.
+class CalendarAccessorsCrowd(Crowd):
+    """A crowd that contains principals who are allowed to access the context.
 
     This crowd adapts the parent of the calendar to ICalendarParentCrowd and
     uses that to decide on the result.
@@ -233,6 +233,13 @@ class CalendarViewersCrowd(Crowd):
             return pcrowd.contains(principal)
         else:
             return False
+
+
+class CalendarViewersCrowd(CalendarAccessorsCrowd):
+    perm = 'schooltool.view'
+
+class CalendarEditorsCrowd(CalendarAccessorsCrowd):
+    perm = 'schooltool.view'
 
 
 class LeaderCrowd(Crowd):

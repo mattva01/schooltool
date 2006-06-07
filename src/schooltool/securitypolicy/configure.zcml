@@ -220,9 +220,4 @@
       crowds="everybody"
       permission="schooltool.modifyEvent" />
 
-  <security:allow
-      interface="schooltool.app.interfaces.ISchoolToolCalendar"
-      crowds="administration owner"
-      permission="schooltool.edit" />
-
 </configure>

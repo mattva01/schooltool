@@ -37,6 +37,13 @@
       factory="schooltool.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
+  <adapter factory=".resource.ResourceCalendarCrowd"
+           provides="schooltool.app.security.ICalendarParentCrowd"
+           name="schooltool.view" />
+  <adapter factory=".resource.ResourceCalendarCrowd"
+           provides="schooltool.app.security.ICalendarParentCrowd"
+           name="schooltool.edit" />
+
   <!-- Application hook -->
   <subscriber
       for="schooltool.app.interfaces.IApplicationInitializationEvent"
@@ -74,11 +81,11 @@
 
   <security:allow
       interface="schooltool.resource.interfaces.IResource"
-      crowds="administration"
+      crowds="administration leaders"
       permission="schooltool.view" />
   <security:allow
       interface="schooltool.resource.interfaces.IResource"
-      crowds="administration"
+      crowds="administration leaders"
       permission="schooltool.edit" />
 
   <security:setting

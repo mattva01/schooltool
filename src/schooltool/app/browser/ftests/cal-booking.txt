@@ -96,12 +96,15 @@ Frog should not be capable of booking any resources yet:
       </fieldset>
     ...
 
-# But we can give him that right by making him a leader of that
-# resource:
-# XXX at the moment i am just making frog an admin
+But we can give him that right by making him a leader of that
+resource:
 
-    >>> manager.open('http://localhost/persons/frog/@@groups.html')
-    >>> manager.getControl('Managers').click()
+    >>> manager.open('http://localhost/resources/mud/@@leaders.html')
+    >>> manager.getControl('Frog').click()
+    >>> manager.getControl('Add').click()
+
+    >>> manager.open('http://localhost/resources/fish/@@leaders.html')
+    >>> manager.getControl('Frog').click()
     >>> manager.getControl('Add').click()
 
 Frog should see the mud and the fish now:
