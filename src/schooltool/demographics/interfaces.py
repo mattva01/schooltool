@@ -46,7 +46,7 @@ class INameInfo(Interface):
 
     last_name = schema.TextLine(
         title=_(u"Last name"),
-        required=False,
+        required=True,
         )
 
     suffix = schema.TextLine(
