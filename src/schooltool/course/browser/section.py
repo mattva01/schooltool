@@ -51,9 +51,7 @@ from schooltool.app.relationships import URISection
 from schooltool.course import booking
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.timetable.interfaces import ICompositeTimetables
-
-# XXX would be nice to get rid of these
-from schooltool.group.browser.group import RelationshipViewBase
+from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.timetable.browser import TimetableConflictMixin
 
 

@@ -145,6 +145,64 @@ class BaseEditView(EditView):
             return status
 
 
+class RelationshipViewBase(BrowserView):
+    """A base class for views that add/remove members from a relationship."""
+
+    def add(self, item):
+        """Add an item to the list of selected items."""
+        # Only those who can edit this section will see the view so it
+        # is safe to remove the security proxy here
+        collection = removeSecurityProxy(self.getCollection())
+        collection.add(item)
+
+    def remove(self, item):
+        """Remove an item from selected items."""
+        # Only those who can edit this section will see the view so it
+        # is safe to remove the security proxy here
+        collection = removeSecurityProxy(self.getCollection())
+        collection.remove(item)
+
+    def getCollection(self):
+        """Return the backend storage for related objects."""
+        raise NotImplementedError("Subclasses should override this method.")
+
+    def getSelectedItems(self):
+        """Return a sequence of items that are already selected."""
+        return self.getCollection()
+
+    def getAvailableItems(self):
+        """Return a sequence of items that can be selected."""
+        raise NotImplementedError("Subclasses should override this method.")
+
+    def updateBatch(self, lst):
+        start = int(self.request.get('batch_start', 0))
+        size = int(self.request.get('batch_size', 10))
+        self.batch = Batch(lst, start, size, sort_by='title')
+
+    def update(self):
+        context_url = zapi.absoluteURL(self.context, self.request)
+        if 'ADD_ITEMS' in self.request:
+            for item in self.getAvailableItems():
+                if 'add_item.' + item.__name__ in self.request:
+                    self.add(removeSecurityProxy(item))
+        elif 'REMOVE_ITEMS' in self.request:
+            for item in self.getSelectedItems():
+                if 'remove_item.' + item.__name__ in self.request:
+                    self.remove(removeSecurityProxy(item))
+        elif 'CANCEL' in self.request:
+            self.request.response.redirect(context_url)
+
+        if 'SEARCH' in self.request and 'CLEAR_SEARCH' not in self.request:
+            searchstr = self.request['SEARCH'].lower()
+            results = [item for item in self.getAvailableItems()
+                       if searchstr in item.title.lower()]
+        else:
+            self.request.form['SEARCH'] = ''
+            results = self.getAvailableItems()
+
+        self.updateBatch(results)
+
+
 class LoginView(BrowserView):
     """A login view"""
 
