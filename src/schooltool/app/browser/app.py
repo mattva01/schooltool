@@ -152,6 +152,10 @@ class RelationshipViewBase(BrowserView):
 
     __call__ = ViewPageTemplateFile('templates/edit_relationships.pt')
 
+    title = None
+    current_title = None
+    available_title = None
+
     def add(self, item):
         """Add an item to the list of selected items."""
         # Only those who can edit this section will see the view so it

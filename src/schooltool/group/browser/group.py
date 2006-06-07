@@ -25,7 +25,6 @@ from zope.security import checkPermission
 from zope.security.proxy import removeSecurityProxy
 from zope.app import zapi
 from zope.publisher.browser import BrowserView
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from schooltool import SchoolToolMessage as _
 from schooltool.batching import Batch
@@ -55,7 +54,11 @@ class GroupListView(RelationshipViewBase):
 
     __used_for__ = IGroupMember
 
-    __call__ = ViewPageTemplateFile('groups.pt') # XXX
+    @property
+    def title(self):
+        return _("Groups of ${person}", mapping={'person': self.context.title})
+    current_title = _("Current Groups")
+    available_title = _("Available Groups")
 
     def getSelectedItems(self):
         """Return a list of groups the current user is a member of."""
@@ -89,7 +92,11 @@ class MemberViewPersons(RelationshipViewBase):
 
     __used_for__ = IGroupContained
 
-    __call__ = ViewPageTemplateFile('members.pt') # XXX
+    @property
+    def title(self):
+        return _("Members of ${group}", mapping={'group': self.context.title})
+    current_title = _("Current Members")
+    available_title = _("Add Members")
 
     def getSelectedItems(self):
         """Return a list of current group memebers."""

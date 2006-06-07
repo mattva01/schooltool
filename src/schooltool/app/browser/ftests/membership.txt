@@ -90,7 +90,7 @@ Let's add a few members.
     >>> manager.getControl('Q. Bert').click()
     >>> manager.getControl('A. Bert').click()
 
-    >>> manager.getControl('Add Members').click()
+    >>> manager.getControl('Add').click()
 
     >>> body = manager.contents
     >>> 'name="remove_item.person001"' in body
