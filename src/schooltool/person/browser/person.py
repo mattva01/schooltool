@@ -55,15 +55,6 @@ def SourceMultiCheckBoxWidget(field, request):
     source = field.value_type.source
     return SourceMultiCheckBoxWidget_(field, source, request)
 
-class PersonContainerView(ContainerView):
-    """A Person Container view."""
-
-    __used_for__ = IPersonContainer
-
-    index_title = _("Person index")
-    add_title = _("Add a new person")
-    add_url = "add.html"
-
 
 class PersonContainerDeleteView(ContainerDeleteView):
     """A view for deleting users from PersonContainer."""
