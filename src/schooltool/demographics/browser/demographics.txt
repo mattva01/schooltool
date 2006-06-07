@@ -33,6 +33,17 @@ And we can edit its name info:
   >>> browser.getControl(name='form.full_name').value
   'Someone Schooltool'
 
+We can also go there by browsing the table:
+
+  >>> browser.open('http://localhost/persons')
+  >>> browser.getLink('Someone Schooltool').click()
+  >>> 'Prefix' in browser.contents
+  True
+  >>> 'Full name' in browser.contents
+  True
+  >>> 'Someone Schooltool' in browser.contents
+  True
+
 We can also view the name info:
 
   >>> browser.open('http://localhost/persons/foobar/nameinfo')
@@ -88,7 +99,7 @@ We can browse to the nameinfo of the newly added persons:
 
 We can also see the persons added so far in tabular display:
 
-  >>> browser.open('http://localhost/persons/@@table.html')
+  >>> browser.open('http://localhost/persons')
   >>> 'alpha' in browser.contents
   True
   >>> 'beta' in browser.contents
@@ -155,7 +166,7 @@ But not alpha or beta:
 
 There's a quick search form in the table view:
  
-  >>> browser.open('http://localhost/persons/@@table.html')
+  >>> browser.open('http://localhost/persons')
   >>> sb = browser.getControl(name="form.fulltext")
   >>> sb.value = '*a*'
   >>> browser.getControl(name="form.actions.submit").click()
@@ -164,9 +175,9 @@ There's a quick search form in the table view:
   >>> 'foobar' in browser.contents
   False
 
-Try seeing the table of persons with a nolmal user:
+Try seeing the table of persons with a normal user:
 
-  >>> ubrowser.open('http://localhost/persons/@@table.html')
+  >>> ubrowser.open('http://localhost/persons')
   >>> "foobar" in ubrowser.contents
   True
   >>> "manager" in ubrowser.contents
@@ -227,9 +238,9 @@ Let's put beta in the beta team:
   >>> "Gamma" in browser.contents
   True
 
-Let's try removing the advisor and see that nothing crashes:
+Let's try removing the advisor and see that nothing goes wrong:
 
-  >>> browser.open("http://localhost/persons/@@table.html")
+  >>> browser.open("http://localhost/persons")
   >>> delete = browser.getControl(name="delete.alpha")
   >>> delete.value = True
   >>> browser.getControl("Delete").click()
@@ -240,7 +251,7 @@ Let's try removing the advisor and see that nothing crashes:
   >>> "Invalid teacher" in browser.contents
   True
 
-Now let's try removing the team and see that nothing crashes:
+Now let's try removing the team and see that nothing goes wrong:
 
   >>> browser.open("http://localhost/groups")
   >>> delete = browser.getControl(name="delete.gamma")

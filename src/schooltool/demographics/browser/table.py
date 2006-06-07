@@ -46,18 +46,11 @@ class PersonTable(TablePage):
             getter=lambda i, f: i.username,
             subsort=True)
         directlyProvides(username, ISortableColumn)
-        full_name = GetterColumn(
+        full_name = FullnameColumn(
             name='full_name',
             title=u'Full name',
-            getter=lambda i, f: i.title,
             subsort=True)
         directlyProvides(full_name, ISortableColumn)
-        last_name = GetterColumn(
-            name='last_name',
-            title=u'Last name',
-            getter=lambda i, f: i.nameinfo.last_name,
-            subsort=True)
-        directlyProvides(last_name, ISortableColumn)
         birth_date = DateColumn(
             name='birth_date',
             title=u'Birth',
@@ -80,7 +73,6 @@ class PersonTable(TablePage):
             DeleteCheckBoxColumn(name='delete', title=u''),
             username,
             full_name,
-            last_name,
             birth_date,
             enrollment_date,
             modified,
@@ -173,7 +165,6 @@ class EditColumn(column.Column):
         return '<a href="%s">Edit</a>' % (
             zapi.absoluteURL(item, formatter.request) + '/nameinfo/@@edit.html')
 
-
 class DisplayColumn(column.Column):
     """Table column that displays display link.
     """
@@ -204,6 +195,18 @@ class DeleteCheckBoxColumn(column.Column):
         else:
             return bool(dependable.dependents())
 
+
+class FullnameColumn(column.SortingColumn):
+    """Table column that displays full name as link.
+    """
+    def getSortKey(self, item, formatter):
+        return item.nameinfo.last_name
+
+    def renderCell(self, item, formatter):
+        return '<a href="%s">%s</a>' % (
+            zapi.absoluteURL(item, formatter.request) +
+            '/nameinfo',
+            item.title)
 
 class ModifiedColumn(column.SortingColumn):
     """Table column that displays modified date, sortable.

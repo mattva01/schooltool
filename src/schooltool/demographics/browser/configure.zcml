@@ -160,7 +160,7 @@
 
   <page
      for="schooltool.person.interfaces.IPersonContainer"
-     name="table.html"
+     name="index.html"
      class=".table.PersonTable"
      permission="schooltool.view"
      />

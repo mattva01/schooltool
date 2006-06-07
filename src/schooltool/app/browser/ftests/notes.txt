@@ -113,6 +113,7 @@ View the page as our new user and we will only see the first (public) note:
 
 Notes can also be deleted, but only by the person who created the note:
 
+    >>> frog.getLink(url='edit.html').click()
     >>> frog.getLink(url='DELETE_NOTE').click()
     Traceback (most recent call last):
     ...

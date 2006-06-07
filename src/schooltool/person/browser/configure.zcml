@@ -23,6 +23,7 @@
 
   <configure package="schooltool.skin">
 
+  <!--
     <page
         name="index.html"
         for="schooltool.person.interfaces.IPersonContainer"
@@ -32,6 +33,7 @@
         menu="zmi_views"
         title="View"
         />
+  -->
 
     <viewlet
       name="persons"
