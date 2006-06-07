@@ -77,7 +77,6 @@
       name="groups.html"
       for="..interfaces.IGroupMember"
       class=".group.GroupListView"
-      template="groups.pt"
       permission="schooltool.manageMembership"
       menu="schooltool_actions"
       title="Change Membership"
