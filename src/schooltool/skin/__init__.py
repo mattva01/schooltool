@@ -25,3 +25,4 @@ from skin import ISchoolToolLayer, ISchoolToolSkin
 from skin import INavigationManager
 from skin import ICSSManager, IJavaScriptManager, IHeaderManager
 from skin import OrderedViewletManager, NavigationViewlet
+from skin import TopLevelContainerNavigationViewlet

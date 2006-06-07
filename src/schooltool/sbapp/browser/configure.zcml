@@ -26,7 +26,7 @@
       layer=".skin.ISchoolBellLayer"
       class="schooltool.app.browser.overlay.CalendarOverlayView"
       template="templates/calendar_overlay.pt"
-      permission="zope.View"
+      permission="schooltool.view"
       />
 
   <page
@@ -34,7 +34,7 @@
       name="calendar_list"
       layer=".skin.ISchoolBellLayer"
       class=".cal.CalendarListView"
-      permission="zope.View"
+      permission="schooltool.view"
       />
 
   <page
@@ -42,7 +42,7 @@
       name="daily_calendar_rows"
       layer=".skin.ISchoolBellLayer"
       class=".cal.DailyCalendarRowsView"
-      permission="zope.View"
+      permission="schooltool.view"
       />
 
 <!-- Skin and resources -->
@@ -91,7 +91,7 @@
       for="schooltool.person.interfaces.IPerson"
       class="schooltool.person.browser.person.PersonView"
       template="templates/person.pt"
-      permission="zope.View"
+      permission="schooltool.view"
       menu="zmi_views"
       title="View"
       layer=".skin.ISchoolBellLayer"

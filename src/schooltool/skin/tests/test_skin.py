@@ -118,6 +118,40 @@ def doctest_NavigationViewlet_appURL():
 
     """
 
+def doctest_NavigationViewletCrowd():
+    """Tests for NavigationViewletCrowd.
+
+        >>> setup.placelessSetUp()
+        >>> from schooltool.skin.skin import NavigationViewletCrowd
+
+        >>> class StubCrowd(object):
+        ...     def __init__(self, context):
+        ...         self.context = context
+        ...     def contains(self, principal):
+        ...         return "Crowd on %s contains %s" % (self.context, principal)
+
+        >>> from zope.component import provideAdapter
+        >>> from zope.interface import Interface
+        >>> from schooltool.securitypolicy.interfaces import ICrowd
+        >>> provideAdapter(StubCrowd,
+        ...                (Interface, ), ICrowd, name='schooltool.view')
+
+        >>> class ViewletStub(object):
+        ...     def actualContext(self):
+        ...         return "Actual context object"
+
+    The crowd delegates the permission check to the ICrowd based on
+    the actualContext object of the viewlet:
+
+        >>> crowd = NavigationViewletCrowd(ViewletStub())
+        >>> crowd.contains("The principal")
+        'Crowd on Actual context object contains The principal'
+
+        >>> setup.placelessTearDown()
+
+    """
+
+
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(),

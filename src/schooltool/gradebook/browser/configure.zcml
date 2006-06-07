@@ -23,7 +23,7 @@
         manager="schooltool.skin.INavigationManager"
         template="templates/navigationViewlet.pt"
         class="schooltool.skin.NavigationViewlet"
-        permission="zope.View"
+        permission="schooltool.view"
         link="categories.html"
         title="Activity Categories"
         order="200"
@@ -68,7 +68,7 @@
       for="..interfaces.IActivities"
       class=".activity.ActivitiesView"
       template="activities_overview.pt"
-      permission="zope.View"
+      permission="schooltool.view"
       />
 
   <defaultView
@@ -81,7 +81,7 @@
       title="Activities"
       for="schooltool.course.interfaces.ICourse"
       action="activities/index.html"
-      permission="zope.View"
+      permission="schooltool.view"
       />
 
   <menuItem
@@ -89,7 +89,7 @@
       title="Activities"
       for="schooltool.course.interfaces.ISection"
       action="activities/index.html"
-      permission="zope.View"
+      permission="schooltool.view"
       />
 
   <menuItem
@@ -97,7 +97,7 @@
       title="Activities"
       for="..interfaces.IGradebook"
       action="../activities/index.html"
-      permission="zope.View"
+      permission="schooltool.view"
       />
 
   <menuItem
@@ -123,7 +123,7 @@
       title="Gradebook"
       for="schooltool.course.interfaces.ISection"
       action="gradebook/index.html"
-      permission="zope.View"
+      permission="schooltool.view"
       />
 
   <page

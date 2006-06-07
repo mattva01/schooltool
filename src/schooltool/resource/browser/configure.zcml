@@ -19,7 +19,7 @@
         for="schooltool.resource.interfaces.IResourceContainer"
         class="schooltool.resource.browser.resource.ResourceContainerView"
         template="templates/container.pt"
-        permission="zope.View"
+        permission="schooltool.view"
         menu="zmi_views"
         title="View"
         />
@@ -56,8 +56,8 @@
       for="*"
       manager="schooltool.skin.INavigationManager"
       template="templates/navigationViewlet.pt"
-      class="schooltool.skin.NavigationViewlet"
-      permission="zope.View"
+      class="schooltool.skin.TopLevelContainerNavigationViewlet"
+      permission="schooltool.view"
       link="resources"
       title="Resources"
       order="60"
@@ -68,7 +68,7 @@
 
   <containerViews
       for="..interfaces.IResourceContainer"
-      contents="zope.View"
+      contents="schooltool.view"
       add="schooltool.create"
       />
 
@@ -92,7 +92,7 @@
       for="..interfaces.IResource"
       class=".resource.ResourceView"
       template="resource.pt"
-      permission="zope.View"
+      permission="schooltool.view"
       menu="zmi_views"
       title="View"
       />

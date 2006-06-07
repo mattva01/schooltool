@@ -75,12 +75,44 @@ class OrderedViewletManager(ViewletManagerBase):
 
         return sorted(viewlets, key=key_func)
 
+from schooltool.securitypolicy.crowds import Crowd
+from zope.component import adapts
+from schooltool.securitypolicy.interfaces import ICrowd
+from schooltool.app.interfaces import ISchoolToolApplication
+from zope.component import queryAdapter
 
 class NavigationViewlet(object):
     """A navigation viewlet base class."""
 
+    def actualContext(self):
+        return ISchoolToolApplication(None)
+
     def appURL(self):
         return zapi.absoluteURL(getSchoolToolApplication(), self.request)
+
+
+class TopLevelContainerNavigationViewlet(NavigationViewlet):
+    """A base class of navigation viewlet for top level containers."""
+
+    def actualContext(self):
+        """Actual context is the container this viewlet links to."""
+        return ISchoolToolApplication(None)[self.link]
+
+
+class NavigationViewletCrowd(Crowd):
+    """A crowd for navigation viewlets.
+
+    Checks permissions on the actual context not the parent. Parents
+    of viewlets are pretty useless in this case as NavigationViewlets
+    are used in a global navigation menu.
+    """
+
+    def contains(self, principal):
+        context = self.context.actualContext()
+        crowd = queryAdapter(context, ICrowd, name='schooltool.view',
+                             default=None)
+        result = crowd.contains(principal)
+        return result
 
 
 class ISchoolToolLayer(ILayer, IBrowserRequest):

@@ -28,7 +28,7 @@
         for="schooltool.person.interfaces.IPersonContainer"
         class="schooltool.person.browser.person.PersonContainerView"
         template="templates/container.pt"
-        permission="zope.View"
+        permission="schooltool.view"
         menu="zmi_views"
         title="View"
         />
@@ -38,8 +38,8 @@
       for="*"
       manager="schooltool.skin.INavigationManager"
       template="templates/navigationViewlet.pt"
-      class="schooltool.skin.NavigationViewlet"
-      permission="zope.View"
+      class="schooltool.skin.TopLevelContainerNavigationViewlet"
+      permission="schooltool.view"
       link="persons"
       title="Persons"
       order="10"
@@ -59,8 +59,8 @@
 
   <containerViews
       for="..interfaces.IPersonContainer"
-      contents="zope.ManageContent"
-      add="zope.View"
+      contents="schooltool.view"
+      add="schooltool.edit"
       />
 
   <page
@@ -68,7 +68,7 @@
       for="..interfaces.IPerson"
       class=".person.PersonView"
       template="person.pt"
-      permission="zope.View"
+      permission="schooltool.view"
       menu="zmi_views"
       title="View"
       />
@@ -78,17 +78,15 @@
       for="..interfaces.IPersonContainer"
       class=".person.PersonContainerDeleteView"
       template="person_container_delete.pt"
-      permission="zope.View"
+      permission="schooltool.edit"
       />
 
-  <!-- FIXME: zope.View is certainly not the right permission. -->
-  <!-- How can we say "a person may only edit their own preferences"? -->
   <page
       name="preferences.html"
       for="..interfaces.IPerson"
       class=".person.PersonPreferencesView"
       template="person_preferences.pt"
-      permission="zope.View"
+      permission="schooltool.edit"
       menu="schooltool_actions"
       title="Change Preferences" />
 
@@ -97,7 +95,7 @@
       for="..interfaces.IPerson"
       class=".person.PersonEditView"
       template="person_edit.pt"
-      permission="zope.View"
+      permission="schooltool.view"
       menu="schooltool_actions"
       title="Edit Info"
       />
@@ -106,7 +104,7 @@
       name="photo"
       for="..interfaces.IPerson"
       class=".person.PersonPhotoView"
-      permission="zope.View" />
+      permission="schooltool.view" />
 
   <!-- Register Context-Help screens -->
 

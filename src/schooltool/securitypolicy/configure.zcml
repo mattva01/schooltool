@@ -115,7 +115,7 @@
 
   <security:allow
       interface="schooltool.course.interfaces.ICourseContainer"
-      crowds="administration"
+      crowds="administration everybody"
       permission="schooltool.view" />
   <security:allow
       interface="schooltool.course.interfaces.ICourseContainer"
@@ -160,7 +160,7 @@
 
   <security:allow
       interface="schooltool.timetable.interfaces.ITimetableSchemaContainer"
-      crowds="administration"
+      crowds="administration everybody"
       permission="schooltool.view" />
   <security:allow
       interface="schooltool.timetable.interfaces.ITimetableSchemaContainer"
@@ -173,7 +173,7 @@
 
   <security:allow
       interface="schooltool.level.level.LevelContainer"
-      crowds="administration"
+      crowds="administration everybody"
       permission="schooltool.view" />
   <security:allow
       interface="schooltool.level.level.LevelContainer"

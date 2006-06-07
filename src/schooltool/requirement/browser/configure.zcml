@@ -48,7 +48,7 @@
       for="schooltool.requirement.interfaces.IRequirement"
       class="schooltool.requirement.browser.requirement.RequirementView"
       template="requirement.pt"
-      permission="zope.View"
+      permission="schooltool.view"
       menu="zmi_views"
       title="View"
       />
@@ -57,13 +57,13 @@
       name="treenode"
       for="schooltool.requirement.interfaces.IRequirement"
       template="treenode.pt"
-      permission="zope.View"
+      permission="schooltool.view"
       />
 
   <containerViews
       for="..interfaces.IRequirement"
       contents="zope.ManageContent"
-      add="zope.View"
+      add="schooltool.edit"
       />
 
   <menuItem
