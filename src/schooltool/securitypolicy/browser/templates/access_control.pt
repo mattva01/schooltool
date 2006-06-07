@@ -1,0 +1,33 @@
+<tal:defs define="dummy view/update" />
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Access control</title>
+</head>
+<body>
+<metal:block metal:fill-slot="body">
+
+  <form method="post" tal:attributes="action request/URL"
+        class="standalone">
+    <fieldset>
+      <label i18n:translate="">Access Control</label>
+      <div tal:repeat="setting view/settings"
+           class="row">
+        <input type="checkbox"
+               tal:attributes="checked setting/getValue;
+                               name string:setting.${setting/key};
+                               id setting/key" />
+        <label tal:content="setting/text"
+               tal:attributes="for setting/key"/>
+      </div>
+      <div class="controls">
+        <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Apply"
+               title="Shortcut: Alt-A" accesskey="A"
+               i18n:attributes="value submit-button; accesskey" />
+        <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+               i18n:attributes="value cancel-button" />
+      </div>
+    </fieldset>
+  </form>
+</metal:block>
+</body>
+</html>

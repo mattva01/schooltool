@@ -28,8 +28,8 @@
       for="*"
       manager="schooltool.skin.INavigationManager"
       template="templates/navigationViewlet.pt"
-      class="schooltool.skin.NavigationViewlet"
-      permission="zope.View"
+      class="schooltool.skin.TopLevelContainerNavigationViewlet"
+      permission="schooltool.view"
       link="persons"
       title="Persons"
       order="10"
@@ -49,8 +49,8 @@
 
   <containerViews
       for="..interfaces.IPersonContainer"
-      contents="zope.ManageContent"
-      add="zope.View"
+      contents="schooltool.view"
+      add="schooltool.edit"
       />
 
   <zope:adapter for=".person.IGroupsSource
@@ -61,7 +61,7 @@
       for="..interfaces.IPersonContainer"
       class=".person.PersonContainerDeleteView"
       template="person_container_delete.pt"
-      permission="zope.View"
+      permission="schooltool.edit"
       />
 
   <!-- csv importer -->
@@ -75,14 +75,12 @@
       title="Import Persons" 
       />
 
-  <!-- FIXME: zope.View is certainly not the right permission. -->
-  <!-- How can we say "a person may only edit their own preferences"? -->
   <page
       name="preferences.html"
       for="..interfaces.IPerson"
       class=".person.PersonPreferencesView"
       template="person_preferences.pt"
-      permission="zope.View"
+      permission="schooltool.edit"
       menu="schooltool_actions"
       title="Change Preferences" />
 
@@ -90,7 +88,7 @@
      name="password_edit.html"
      for="..interfaces.IPerson"
      class=".person.PersonPasswordEditView"
-     permission="zope.View"
+     permission="schooltool.edit"
      menu="schooltool_actions"
      title="Edit Password"
      />
@@ -99,7 +97,7 @@
       name="photo"
       for="..interfaces.IPerson"
       class=".person.PersonPhotoView"
-      permission="zope.View" />
+      permission="schooltool.view" />
 
   <!-- Register Context-Help screens -->
 

@@ -94,6 +94,9 @@ class IReadPerson(IGroupMember):
         a new password to setPassword.
         """
 
+    def __eq__(other):
+        """Compare two persons."""
+
 
 class IWritePerson(zope.interface.Interface):
     """Protected part of IPerson."""

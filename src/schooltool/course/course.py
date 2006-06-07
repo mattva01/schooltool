@@ -29,6 +29,7 @@ from zope.app.container import btree, contained
 
 from schooltool.relationship import RelationshipProperty
 from schooltool.app import relationships
+from schooltool.app.app import Asset
 from schooltool.course import interfaces
 
 class CourseContainer(btree.BTreeContainer):
@@ -38,7 +39,7 @@ class CourseContainer(btree.BTreeContainer):
                               IAttributeAnnotatable)
 
 
-class Course(Persistent, contained.Contained):
+class Course(Persistent, contained.Contained, Asset):
 
     zope.interface.implements(interfaces.ICourseContained,
                               IAttributeAnnotatable)

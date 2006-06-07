@@ -36,6 +36,7 @@ from schooltool.course.interfaces import ISection
 
 from schooltool.group.interfaces import IGroupMember
 from schooltool.group.interfaces import IGroupContainer, IGroupContained
+from schooltool.app.browser.app import RelationshipViewBase
 
 
 class GroupContainerView(ContainerView):
@@ -48,54 +49,30 @@ class GroupContainerView(ContainerView):
     add_url = "+/addSchoolToolGroup.html"
 
 
-class GroupListView(BrowserView):
+class GroupListView(RelationshipViewBase):
     """View for managing groups that a person or a resource belongs to."""
 
     __used_for__ = IGroupMember
 
-    def getCurrentGroups(self):
+    @property
+    def title(self):
+        return _("Groups of ${person}", mapping={'person': self.context.title})
+    current_title = _("Current Groups")
+    available_title = _("Available Groups")
+
+    def getSelectedItems(self):
         """Return a list of groups the current user is a member of."""
         return self.context.groups
 
-    def getPotentialGroups(self):
+    def getAvailableItems(self):
         """Return a list of groups the current user is not a member of."""
         groups = getSchoolToolApplication()['groups']
         return [group for group in groups.values()
                 if checkPermission('schooltool.manageMembership', group)
                 and group not in self.context.groups]
 
-    def update(self):
-        context_url = zapi.absoluteURL(self.context, self.request)
-        if 'ADD_GROUPS' in self.request:
-            context_groups = removeSecurityProxy(self.context.groups)
-            for group in self.getPotentialGroups():
-                # add() could throw an exception, but at the moment the
-                # constraints are never violated, so we ignore the problem.
-                if 'add_group.' + group.__name__ in self.request:
-                    group = removeSecurityProxy(group)
-                    context_groups.add(group)
-        elif 'REMOVE_GROUPS' in self.request:
-            context_groups = removeSecurityProxy(self.context.groups)
-            for group in self.getCurrentGroups():
-                # add() could throw an exception, but at the moment the
-                # constraints are never violated, so we ignore the problem.
-                if 'remove_group.' + group.__name__ in self.request:
-                    group = removeSecurityProxy(group)
-                    context_groups.remove(group)
-        elif 'CANCEL' in self.request:
-            self.request.response.redirect(context_url)
-
-        if 'SEARCH' in self.request and 'CLEAR_SEARCH' not in self.request:
-            searchstr = self.request['SEARCH'].lower()
-            results = [item for item in self.getPotentialGroups()
-                       if searchstr in item.title.lower()]
-        else:
-            self.request.form['SEARCH'] = ''
-            results = self.getPotentialGroups()
-
-        start = int(self.request.get('batch_start', 0))
-        size = int(self.request.get('batch_size', 10))
-        self.batch = Batch(results, start, size, sort_by='title')
+    def getCollection(self):
+        return self.context.groups
 
 
 class GroupView(BrowserView):
@@ -110,58 +87,29 @@ class GroupView(BrowserView):
         return filter(IResource.providedBy, self.context.members)
 
 
-class MemberViewPersons(BrowserView):
+class MemberViewPersons(RelationshipViewBase):
     """View class for adding / removing members to / from a group."""
 
     __used_for__ = IGroupContained
 
-    def getMembers(self):
+    @property
+    def title(self):
+        return _("Members of ${group}", mapping={'group': self.context.title})
+    current_title = _("Current Members")
+    available_title = _("Add Members")
+
+    def getSelectedItems(self):
         """Return a list of current group memebers."""
         return filter(IPerson.providedBy, self.context.members)
 
-    def getPotentialMembers(self):
+    def getAvailableItems(self):
         """Return a list of all possible members."""
         container = getSchoolToolApplication()['persons']
-        return [m for m in container.values() if m not in self.context.members]
+        return [m for m in container.values()
+                if m not in self.getCollection()]
 
-    def searchPotentialMembers(self, s):
-        """Return a list of possible members with a `s` in their title."""
-        potentials = self.getPotentialMembers()
-        return [m for m in potentials if s.lower() in m.title.lower()]
-
-    def updateBatch(self, lst):
-        start = int(self.request.get('batch_start', 0))
-        size = int(self.request.get('batch_size', 10))
-        self.batch = Batch(lst, start, size, sort_by='title')
-
-    def update(self):
-        context_url = zapi.absoluteURL(self.context, self.request)
-        if 'DONE' in self.request:
-            self.request.response.redirect(context_url)
-        elif 'ADD_MEMBERS' in self.request:
-            context_members = removeSecurityProxy(self.context.members)
-            for member in self.getPotentialMembers():
-                # add() could throw an exception, but at the moment the
-                # constraints are never violated, so we ignore the problem.
-                if 'ADD_MEMBER.' + member.__name__ in self.request:
-                    member = removeSecurityProxy(member)
-                    context_members.add(member)
-        elif 'REMOVE_MEMBERS' in self.request:
-            context_members = removeSecurityProxy(self.context.members)
-            for member in self.getMembers():
-                # remove() could throw an exception, but at the moment the
-                # constraints are never violated, so we ignore the problem.
-                if 'REMOVE_MEMBER.' + member.__name__ in self.request:
-                    member = removeSecurityProxy(member)
-                    context_members.remove(member)
-
-        results = self.getPotentialMembers()
-        if 'SEARCH' in self.request and 'CLEAR_SEARCH' not in self.request:
-            results = self.searchPotentialMembers(self.request.get('SEARCH'))
-        else:
-            self.request.form['SEARCH'] = ''
-
-        self.updateBatch(results)
+    def getCollection(self):
+        return self.context.members
 
 
 class GroupAddView(BaseAddView):
@@ -173,11 +121,11 @@ class GroupEditView(BaseEditView):
 
     __used_for__ = IGroupContained
 
+
 class GroupsViewlet(BrowserView):
     """A viewlet showing the groups a person is in."""
 
     def memberOf(self):
         """Seperate out generic groups from sections."""
-
         return [group for group in self.context.groups if not
                 ISection.providedBy(group)]

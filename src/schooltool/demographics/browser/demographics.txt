@@ -202,17 +202,18 @@ There's a quick search form in the table view:
   >>> 'foobar' in browser.contents
   False
 
-Try seeing the table of persons with a normal user:
+# XXX At the moment you can't make personal information public
+# Try seeing the table of persons with a normal user:
 
-  >>> ubrowser.open('http://localhost/persons')
-  >>> "foobar" in ubrowser.contents
-  True
-  >>> "manager" in ubrowser.contents
-  True
-  >>> "alpha" in ubrowser.contents
-  True
-  >>> "beta" in ubrowser.contents
-  True
+#   >>> ubrowser.open('http://localhost/persons')
+#   >>> "foobar" in ubrowser.contents
+#   True
+#   >>> "manager" in ubrowser.contents
+#   True
+#   >>> "alpha" in ubrowser.contents
+#   True
+#   >>> "beta" in ubrowser.contents
+#   True
 
 The user alpha is not a teacher:
 
@@ -225,9 +226,8 @@ but it can be:
   >>> browser.open('http://localhost/persons/alpha/@@groups.html')
   >>> 'Teachers' in browser.contents
   True
-  >>> tc = browser.getControl(name="add_group.teachers")
-  >>> tc.value = True
-  >>> browser.getControl(name="ADD_GROUPS").click()
+  >>> tc = browser.getControl("Teachers").click()
+  >>> browser.getControl("Add").click()
 
 Now it should be a teacher:
 

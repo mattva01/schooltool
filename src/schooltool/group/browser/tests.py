@@ -68,8 +68,7 @@ def doctest_GroupListView():
         ...         return False
         ...
         >>> from zope.security.management import setSecurityPolicy
-        >>> from zope.security.management import newInteraction
-        >>> from zope.security.management import endInteraction
+        >>> from zope.security.management import newInteraction, endInteraction
         >>> prev = setSecurityPolicy(SecurityPolicy)
         >>> endInteraction()
         >>> newInteraction()
@@ -86,14 +85,14 @@ def doctest_GroupListView():
 
     First, all groups the person is not a member of should be listed:
 
-        >>> group_titles = [g.title for g in view.getPotentialGroups()]
+        >>> group_titles = [g.title for g in view.getAvailableItems()]
         >>> group_titles.sort()
         >>> group_titles
         ['Etria', 'Others', 'PoV']
 
     As well as all groups the person is currently a member of:
 
-        >>> group_titles = [g.title for g in view.getCurrentGroups()]
+        >>> group_titles = [g.title for g in view.getSelectedItems()]
         >>> group_titles.sort()
         >>> group_titles
         []
@@ -101,7 +100,7 @@ def doctest_GroupListView():
     Let's tell the person to join PoV:
 
         >>> request = TestRequest()
-        >>> request.form = {'add_group.pov': 'on', 'ADD_GROUPS': 'Apply'}
+        >>> request.form = {'add_item.pov': 'on', 'ADD_ITEMS': 'Apply'}
         >>> view = GroupListView(person, request)
         >>> view.update()
 
@@ -113,7 +112,7 @@ def doctest_GroupListView():
     Had we decided to make the guy join Etria but then changed our mind:
 
         >>> request = TestRequest()
-        >>> request.form = {'remove_group.pov': 'on', 'add_group.etria': 'on',
+        >>> request.form = {'remove_item.pov': 'on', 'add_group.etria': 'on',
         ...                 'CANCEL': 'Cancel'}
         >>> view = GroupListView(person, request)
         >>> view.update()
@@ -134,7 +133,7 @@ def doctest_GroupListView():
     to The World.
 
         >>> request = TestRequest()
-        >>> request.form = {'remove_group.pov': 'on', 'REMOVE_GROUPS': 'Apply'}
+        >>> request.form = {'remove_item.pov': 'on', 'REMOVE_ITEMS': 'Apply'}
         >>> view = GroupListView(person, request)
         >>> view.update()
 
@@ -183,20 +182,13 @@ def doctest_MemberListView():
     First, all persons should be listed (the page template puts them in
     alphabetical order later):
 
-        >>> sorted([g.title for g in view.getPotentialMembers()])
+        >>> sorted([g.title for g in view.getAvailableItems()])
         ['Albertas', 'Gintas', 'Ignas']
-
-    We can search persons not in the group
-
-        >>> sorted([g.title for g in view.searchPotentialMembers('al')])
-        ['Albertas']
-        >>> sorted([g.title for g in view.searchPotentialMembers('i')])
-        ['Gintas', 'Ignas']
 
     Let's make Ignas a member of PoV:
 
         >>> request = TestRequest()
-        >>> request.form = {'ADD_MEMBER.ignas': 'on', 'ADD_MEMBERS': 'Apply'}
+        >>> request.form = {'add_item.ignas': 'on', 'ADD_ITEMS': 'Apply'}
         >>> view = MemberViewPersons(pov, request)
         >>> view.update()
 
@@ -205,15 +197,10 @@ def doctest_MemberListView():
         >>> sorted([person.title for person in pov.members])
         ['Ignas']
 
-    Search again to make sure members do not appear in the results:
-
-        >>> sorted([g.title for g in view.searchPotentialMembers('as')])
-        ['Albertas', 'Gintas']
-
     We can cancel an action if we want to:
 
         >>> request = TestRequest()
-        >>> request.form = {'ADD_MEMBER.gintas': 'on', 'DONE': 'Done'}
+        >>> request.form = {'add_item.gintas': 'on', 'CANCEL': 'Cancel'}
         >>> view = MemberViewPersons(pov, request)
         >>> view.update()
         >>> sorted([person.title for person in pov.members])
@@ -226,14 +213,14 @@ def doctest_MemberListView():
     Let's remove Ignas from PoV (he went home early today);
 
         >>> request = TestRequest()
-        >>> request.form = {'REMOVE_MEMBER.ignas': 'on', 'REMOVE_MEMBERS': 'Apply'}
+        >>> request.form = {'remove_item.ignas': 'on', 'REMOVE_ITEMS': 'Apply'}
         >>> view = MemberViewPersons(pov, request)
         >>> view.update()
 
     and add Albert, who came in late and has to work after-hours:
 
         >>> request = TestRequest()
-        >>> request.form = {'ADD_MEMBER.alga': 'on', 'ADD_MEMBERS': 'Apply'}
+        >>> request.form = {'add_item.alga': 'on', 'ADD_ITEMS': 'Apply'}
         >>> view = MemberViewPersons(pov, request)
         >>> view.update()
 
@@ -245,7 +232,7 @@ def doctest_MemberListView():
     Click 'Done' when we are finished and we go back to the group view
 
         >>> request = TestRequest()
-        >>> request.form = {'DONE': 'Done'}
+        >>> request.form = {'CANCEL': 'Cancel'}
         >>> view = MemberViewPersons(pov, request)
         >>> view.update()
         >>> request.response.getStatus()

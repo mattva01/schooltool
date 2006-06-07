@@ -492,22 +492,6 @@ def doctest_bootstrapSchoolTool():
         >>> manager.checkPassword('schooltool')
         True
 
-    This user has a grant for zope.Manager role
-
-        >>> from zope.app.securitypolicy.interfaces import \
-        ...     IPrincipalRoleManager
-        >>> grants = IPrincipalRoleManager(app)
-        >>> grants.getRolesForPrincipal('sb.person.manager')
-        [('zope.Manager', PermissionSetting: Allow)]
-
-    All users have a 'schooltool.view' permission:
-
-        >>> from zope.app.securitypolicy.interfaces import \
-        ...     IPrincipalPermissionMap
-        >>> grants = IPrincipalPermissionMap(app)
-        >>> grants.getPermissionsForPrincipal('zope.Authenticated')
-        [('schooltool.view', PermissionSetting: Allow)]
-
     bootstrapSchoolTool doesn't do anything if it finds the root object already
     present in the database.
 
@@ -592,43 +576,29 @@ def doctest_restoreManagerUser():
         >>> manager.checkPassword('schooltool')
         True
 
-    This user has a grant for zope.Manager role
-
-        >>> from zope.app.securitypolicy.interfaces import \
-        ...     IPrincipalRoleManager
-        >>> grants = IPrincipalRoleManager(app)
-        >>> grants.getRolesForPrincipal('sb.person.manager')
-        [('zope.Manager', PermissionSetting: Allow)]
-
     To prevent this user from being deleted we add a dependency
 
         >>> from zope.app.dependable.interfaces import IDependable
         >>> IDependable(manager).dependents()
         (u'/persons/',)
 
-    Let's break the manager user by forgetting his password and
-    revoking his permissions:
+    Let's break the manager user by forgetting his password:
 
         >>> marker = object()
         >>> manager.calendar = marker
         >>> manager.setPassword('randomrandom')
-        >>> grants.removeRoleFromPrincipal('zope.Manager', 'sb.person.manager')
 
         >>> manager.checkPassword('schooltool')
         False
-        >>> grants.getRolesForPrincipal('sb.person.manager')
-        [('zope.Manager', PermissionSetting: Deny)]
 
     If we call restoreManagerUser again, the object remains the same,
-    but its password and permissions get reset:
+    but its password gets reset:
 
         >>> server.restoreManagerUser(app)
 
         >>> manager = app['persons']['manager']
         >>> manager.checkPassword('schooltool')
         True
-        >>> grants.getRolesForPrincipal('sb.person.manager')
-        [('zope.Manager', PermissionSetting: Allow)]
 
     The manager is the same:
 

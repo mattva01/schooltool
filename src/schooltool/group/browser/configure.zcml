@@ -18,7 +18,7 @@
         for="schooltool.group.interfaces.IGroupContainer"
         class="schooltool.group.browser.group.GroupContainerView"
         template="templates/container.pt"
-        permission="zope.View"
+        permission="schooltool.view"
         menu="zmi_views"
         title="View"
         />
@@ -54,8 +54,8 @@
       for="*"
       manager="schooltool.skin.INavigationManager"
       template="templates/navigationViewlet.pt"
-      class="schooltool.skin.NavigationViewlet"
-      permission="zope.View"
+      class="schooltool.skin.TopLevelContainerNavigationViewlet"
+      permission="schooltool.view"
       link="groups"
       title="Groups"
       order="20"
@@ -69,7 +69,7 @@
       manager="schooltool.person.browser.person.IPersonInfoManager"
       template="groupsviewlet.pt"
       class="schooltool.group.browser.group.GroupsViewlet"
-      permission="zope.View"
+      permission="schooltool.view"
       order="30"
       />
 
@@ -77,7 +77,6 @@
       name="groups.html"
       for="..interfaces.IGroupMember"
       class=".group.GroupListView"
-      template="groups.pt"
       permission="schooltool.manageMembership"
       menu="schooltool_actions"
       title="Change Membership"
@@ -85,8 +84,8 @@
 
   <containerViews
       for="..interfaces.IGroupContainer"
-      contents="zope.ManageContent"
-      add="zope.View"
+      contents="schooltool.view"
+      add="schooltool.edit"
       />
 
   <menuItem
@@ -109,7 +108,7 @@
       for="..interfaces.IGroup"
       class=".group.GroupView"
       template="group.pt"
-      permission="zope.View"
+      permission="schooltool.view"
       menu="zmi_views"
       title="View"
       />
@@ -118,7 +117,6 @@
       name="members_persons.html"
       for="..interfaces.IGroup"
       class=".group.MemberViewPersons"
-      template="members.pt"
       permission="schooltool.manageMembership"
       menu="schooltool_actions"
       title="Add/Remove Members"

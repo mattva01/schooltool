@@ -23,15 +23,36 @@ $Id$
 
 """
 
-from zope.configuration.exceptions import ConfigurationError
-from zope.component import provideAdapter
-from schooltool.securitypolicy.policy import permcrowds
-from schooltool.securitypolicy.crowds import Crowd
+from zope.app import zapi
+from zope.interface import implements
+from zope.component import provideAdapter, provideSubscriptionAdapter
+from zope.security.zcml import permission
+
+from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
 from schooltool.securitypolicy.interfaces import ICrowd
+from schooltool.securitypolicy.interfaces import ICrowdsUtility
+from schooltool.securitypolicy.interfaces import IAccessControlSetting
+from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
+from schooltool.app.interfaces import ISchoolToolApplication
 
 
-crowdmap = {} # crowd_name -> crowd_factory
-objcrowds = {} # (interface, permission) -> crowd_factory
+class CrowdsUtility(object):
+    implements(ICrowdsUtility)
+
+    def __init__(self):
+        self.crowdmap = {}   # crowd_name -> crowd_factory
+        self.objcrowds = {}  # (interface, permission) -> crowd_factory
+        self.permcrowds = {} # permission -> crowd_factory
+
+
+def getCrowdsUtility():
+    """Helper - returns crowds utility and registers new one if missing."""
+    utility = zapi.queryUtility(ICrowdsUtility)
+    if not utility:
+        utility = CrowdsUtility()
+        zapi.getGlobalSiteManager().registerUtility(utility, ICrowdsUtility)
+    return utility
+
 
 def registerCrowdAdapter(iface, permission):
     """Register an adapter to ICrowd for iface.
@@ -40,61 +61,105 @@ def registerCrowdAdapter(iface, permission):
     global objcrowds.  You should not call this function several times
     for the same (iface, permission).
     """
-    class AggregateCrowdAdapter(Crowd):
-        def contains(self, principal):
-            crowd_factories = objcrowds[(iface, permission)]
-            #print '  aggregate: ' + ', '.join(crowd.__name__ for crowd in crowd_factories)
-            for crowdcls in crowd_factories:
-                crowd = crowdcls(self.context)
-                if crowd.contains(principal):
-                    return True
-            return False
-    provideAdapter(AggregateCrowdAdapter, provides=ICrowd, adapts=[iface],
+    class AggregateUtilityCrowd(AggregateCrowd):
+        def crowdFactories(self):
+            return getCrowdsUtility().objcrowds[(iface, permission)]
+    provideAdapter(AggregateUtilityCrowd, provides=ICrowd, adapts=[iface],
                    name=permission)
 
 
-def handle_allow(iface, crowdnames, permission):
+def handle_crowd(name, factory):
+    """Handler for the ZCML <crowd> directive."""
+    getCrowdsUtility().crowdmap[name] = factory
+
+
+def handle_allow(iface, crowdname, permission):
     """Handler for the ZCML <allow> directive.
 
     iface is the interface for which the security declaration is issued,
-    crowdnames is a list of strings,
+    crowdname is a string,
     permission is an identifier for a permission.
 
-    The function adds the given crowd factories to the global objcrowds
-    and registers an adapter to ICrowd if it was not registered before.
+    The function registers the given crowd factory in the ICrowdsUtility
+    utility and registers an adapter to ICrowd if it was not registered before.
 
     iface may be None.  In that case permcrowds is updated instead.
     """
-    #print 'handle_allow', iface, crowdnames, permission
 
-    crowds = [crowdmap[crowdname] for crowdname in crowdnames]
+    utility = getCrowdsUtility()
+    factory = utility.crowdmap[crowdname]
     if iface is None:
-        global permcrowds
-        permcrowds.setdefault(permission, []).extend(crowds)
+        utility.permcrowds.setdefault(permission, []).append(factory)
         return
 
-    global objcrowds
+    objcrowds = utility.objcrowds
     if (iface, permission) not in objcrowds:
         registerCrowdAdapter(iface, permission)
         objcrowds[(iface, permission)] = []
-    objcrowds[(iface, permission)].extend(crowds)
-
-
-def handle_crowd(name, factory):
-    if name in crowdmap:
-        raise ConfigurationError("duplicate crowd id: %s" % name)
-    crowdmap[name] = factory
+    objcrowds[(iface, permission)].append(factory)
 
 
 def crowd(_context, name, factory):
-    # TODO: raise ConfigurationError if arguments are invalid
-    # TODO: discriminator
-    _context.action(discriminator=None, callable=handle_crowd,
+    # Declare the crowd.
+    _context.action(discriminator=('crowd', name), callable=handle_crowd,
                     args=(name, factory))
 
 
 def allow(_context, interface=None, crowds=None, permission=None):
-    # TODO: raise ConfigurationError if arguments are invalid
-    # TODO: discriminator
-    _context.action(discriminator=None, callable=handle_allow,
-                    args=(interface, crowds, permission))
+    for crowd in crowds:
+        _context.action(discriminator=('allow', interface, crowd, permission),
+                        callable=handle_allow,
+                        args=(interface, crowd, permission))
+
+
+class AccessControlSetting(object):
+    implements(IAccessControlSetting)
+
+    def __init__(self, key, text, default):
+        self.key = key
+        self.text = text
+        self.default = default
+
+    def getValue(self):
+        app = ISchoolToolApplication(None)
+        customisations = IAccessControlCustomisations(app)
+        return customisations.get(self.key)
+
+    def setValue(self, value):
+        app = ISchoolToolApplication(None)
+        customisations = IAccessControlCustomisations(app)
+        return customisations.set(self.key, value)
+
+    def __repr__(self):
+        return "<AccessControlSetting key=%s, text=%s, default=%s>" % (
+                self.key, self.text, self.default)
+
+
+def handle_setting(key, text, default):
+    def accessControlSettingFactory(context=None):
+        return AccessControlSetting(key, text, default)
+    provideSubscriptionAdapter(accessControlSettingFactory,
+                               adapts=[None],
+                               provides=IAccessControlSetting)
+
+def setting(_context, key=None, text=None, default=None):
+    _context.action(discriminator=('setting', key),
+                    callable=handle_setting, args=(key, text, default))
+
+
+def handle_aggregate_crowd(name, crowd_names):
+    crowdmap = getCrowdsUtility().crowdmap
+    try:
+        crowds = [crowdmap[crowd_name] for crowd_name in crowd_names]
+    except KeyError:
+        raise ValueError("invalid crowd id", crowd_name)
+
+    class AggregateCrowdFactory(AggregateCrowd):
+        def crowdFactories(self):
+            return crowds
+    handle_crowd(name, AggregateCrowdFactory)
+
+
+def aggregate_crowd(_context, name, crowds):
+    _context.action(discriminator=('crowd', name),
+                    callable=handle_aggregate_crowd, args=(name, crowds))

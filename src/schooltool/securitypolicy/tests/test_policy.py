@@ -44,19 +44,18 @@ class AnotherObj(object):
     pass
 
 
-class ObjCrowd(Crowd):
-    adapts(IObj)
-    def contains(self, principal):
-        return principal == 'root'
-
-
 class ParticipationStub(object):
     interaction = None
     principal = 'guest'
 
 
-def test_SchoolToolSecurityPolicy():
-    """
+def test_SchoolToolSecurityPolicy_checkPermission():
+    """Tests for SchoolToolSecurityPolicy.
+
+        >>> from schooltool.securitypolicy.metaconfigure import CrowdsUtility
+        >>> from schooltool.securitypolicy.interfaces import ICrowdsUtility
+        >>> cru = CrowdsUtility()
+        >>> ztapi.provideUtility(ICrowdsUtility, cru)
 
     Let's construct a security policy.
 
@@ -64,17 +63,79 @@ def test_SchoolToolSecurityPolicy():
         >>> participation = ParticipationStub()
         >>> sp = policy.SchoolToolSecurityPolicy(participation)
 
-    First without any declarations checkPermission should deny access:
+        >>> byadaptation_returns = False
+        >>> def checkByAdaptationStub(permission, obj):
+        ...     print 'checkByAdaptation' + str((permission, obj))
+        ...     return byadaptation_returns
+        >>> sp.checkByAdaptation = checkByAdaptationStub
+
+        >>> checkcrowds_returns = False
+        >>> def checkCrowdsStub(crowdclasses, obj):
+        ...     print 'checkCrowds' + str((crowdclasses, obj))
+        ...     return checkcrowds_returns
+        >>> sp.checkCrowds = checkCrowdsStub
+
+    First, we test the path where no crowds accept the principal:
 
         >>> obj = Obj()
 
         >>> sp.checkPermission('perm', obj)
+        checkCrowds([], <...test_policy.Obj object ...>)
+        checkByAdaptation('perm', <...Obj object ...>)
         False
 
-    If we provide a different principal, things work out differently:
+    Interface-independent permissions
+    ---------------------------------
 
-        >>> participation.principal = 'root'
+        >>> checkcrowds_returns = True
+        >>> cru.permcrowds['perm'] = ['crowd factory']
         >>> sp.checkPermission('perm', obj)
+        checkCrowds(['crowd factory'], <...Obj object ...>)
+        True
+
+    Another case: checkCrowds fails, but checkByAdaptation returns True:
+
+        >>> checkcrowds_returns = False
+        >>> byadaptation_returns = True
+
+        >>> sp.checkPermission('perm', obj)
+        checkCrowds(['crowd factory'], <...Obj object ...>)
+        checkByAdaptation('perm', <...Obj object...>)
+        True
+
+    """
+
+
+def test_SchoolToolSecurityPolicy_checkByAdaptation():
+    """Tests for SchoolToolSecurityPolicy.checkByAdaptation.
+
+        >>> from schooltool.securitypolicy.metaconfigure import CrowdsUtility
+        >>> from schooltool.securitypolicy.interfaces import ICrowdsUtility
+        >>> cru = CrowdsUtility()
+        >>> ztapi.provideUtility(ICrowdsUtility, cru)
+
+    Let's construct a security policy.
+
+        >>> from schooltool.securitypolicy import policy
+        >>> participation = ParticipationStub()
+        >>> sp = policy.SchoolToolSecurityPolicy(participation)
+
+        >>> obj = Obj()
+
+    First, check the straightforward case
+
+        >>> contains_returns = False
+        >>> class ObjCrowd(Crowd):
+        ...     adapts(IObj)
+        ...     def contains(self, principal):
+        ...         return contains_returns
+        >>> ztapi.provideAdapter(IObj, ICrowd, ObjCrowd, 'perm')
+
+        >>> sp.checkByAdaptation('perm', obj)
+        False
+
+        >>> contains_returns = True
+        >>> sp.checkByAdaptation('perm', obj)
         True
 
     If no crowd is found for a given object, its parents are checked instead:
@@ -92,6 +153,48 @@ def test_SchoolToolSecurityPolicy():
         >>> obj2.__parent__ = None
         >>> directlyProvides(obj2, IContainmentRoot)
         >>> sp.checkPermission('perm', obj3)
+        Traceback (most recent call last):
+            ...
+        AssertionError: ('no crowd found for', None, 'perm')
+
+    """
+
+
+def test_SchoolToolSecurityPolicy_checkCrowds():
+    """Tests for SchoolToolSecurityPolicy.checkCrowds.
+
+    Check crowds just check whether any principal is contained in at
+    least one of the crowds constructed from a crowdcls list passed to
+    it:
+
+        >>> class NegativeCrowdStub(object):
+        ...     def __init__(self, context):
+        ...         pass
+        ...     def contains(self, principal):
+        ...         return False
+        >>> class CrowdStub(NegativeCrowdStub):
+        ...     def contains(self, principal):
+        ...         return principal == 'john'
+
+        >>> class ParticipationStub(object):
+        ...     interaction = None
+        ...     def __init__(self, principal):
+        ...         self.principal = principal
+
+        >>> from schooltool.securitypolicy import policy
+        >>> sp = policy.SchoolToolSecurityPolicy(ParticipationStub('john'),
+        ...                                      ParticipationStub('pete'))
+
+        >>> sp.checkCrowds([NegativeCrowdStub, NegativeCrowdStub], object())
+        False
+
+        >>> sp.checkCrowds([NegativeCrowdStub, CrowdStub], object())
+        True
+
+    If john is not logged in, we'd still get False:
+
+        >>> sp = policy.SchoolToolSecurityPolicy(ParticipationStub('pete'))
+        >>> sp.checkCrowds([NegativeCrowdStub, CrowdStub], object())
         False
 
     """
@@ -99,7 +202,6 @@ def test_SchoolToolSecurityPolicy():
 
 def setUp(test=None):
     setup.placelessSetUp()
-    ztapi.provideAdapter(IObj, ICrowd, ObjCrowd, 'perm')
 
 def tearDown(test=None):
     setup.placelessTearDown()
@@ -108,4 +210,7 @@ def tearDown(test=None):
 def test_suite():
     return unittest.TestSuite([
             doctest.DocTestSuite(optionflags=doctest.ELLIPSIS,
-                                 setUp=setUp, tearDown=tearDown)])
+                                 setUp=setUp, tearDown=tearDown),
+            doctest.DocFileSuite('../README.txt',
+                                 optionflags=doctest.ELLIPSIS)
+           ])

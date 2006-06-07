@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:security="http://schooltool.org/securitypolicy"
            i18n_domain="schooltool">
 
   <interface
@@ -26,7 +27,7 @@
 
     <allow attributes="__cmp__" />
     <require permission="schooltool.view"
-             attributes="title description groups members" />
+             attributes="title description groups members leaders" />
     <require permission="schooltool.edit"
              set_schema=".interfaces.IGroup" />
   </class>
@@ -57,5 +58,17 @@
         />
 
   </configure>
+
+  <!-- Security settings -->
+
+  <security:setting
+      key="everyone_can_view_group_calendar"
+      text="Everyone can view group calendars."
+      default="False" />
+
+  <adapter
+      factory=".group.GroupCalendarCrowd"
+      provides="schooltool.app.interfaces.ICalendarParentCrowd"
+      name="schooltool.view" />
 
 </configure>

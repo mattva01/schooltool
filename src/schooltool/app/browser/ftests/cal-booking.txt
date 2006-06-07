@@ -90,19 +90,16 @@ Frog should not be capable of booking any resources yet:
       </fieldset>
     ...
 
-But we can give him access to some resources:
+But we can give him that right by making him a leader of that
+resource:
 
-    >>> manager.open(
-    ...     'http://localhost/resources/mud/calendar/acl.html')
-    >>> ctrl = manager.getControl(name='sb.person.frog')
-    >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
-    >>> manager.getControl('Set Access', index=1).click()
+    >>> manager.open('http://localhost/resources/mud/@@leaders.html')
+    >>> manager.getControl('Frog').click()
+    >>> manager.getControl('Add').click()
 
-    >>> manager.open(
-    ...     'http://localhost/resources/fish/calendar/acl.html')
-    >>> ctrl = manager.getControl(name='sb.person.frog')
-    >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
-    >>> manager.getControl('Set Access', index=1).click()
+    >>> manager.open('http://localhost/resources/fish/@@leaders.html')
+    >>> manager.getControl('Frog').click()
+    >>> manager.getControl('Add').click()
 
 Frog should see the mud and the fish now:
 
@@ -204,11 +201,9 @@ Frog should see the event in the resource calendar too:
 
 Now if we remove the permission to book the fish:
 
-    >>> manager.open(
-    ...     'http://localhost/resources/fish/calendar/acl.html')
-    >>> ctrl = manager.getControl(name='sb.person.frog')
-    >>> ctrl.value = ['schooltool.viewCalendar']
-    >>> manager.getControl('Set Access', index=1).click()
+    >>> manager.open('http://localhost/resources/fish/@@leaders.html')
+    >>> manager.getControl('Frog').click()
+    >>> manager.getControl('Remove').click()
 
 The fish should stay in the bookable resources list:
 
@@ -279,8 +274,8 @@ Editing view should have a link to its booking view:
     <Link text='Book resources'
           url='.../frog/calendar/dummy-uid/booking.html'>
 
-Let's book the mud again (Regression test for 266, deletion of events
-that book resources should remove events from resource calendars):
+Let's book the mud again (Regression test for 266, deletion of events that book
+resources should remove events from resource calendars):
 
     >>> frog.getLink('Book resources').click()
     >>> frog.getControl('mud').selected = True
@@ -404,26 +399,10 @@ Now let's allow frog access all resources:
     >>> manager.getLink('Resources').click()
     >>> manager.getLink('mud').click()
     >>> manager.getLink('View Calendar').click()
-    >>> manager.getLink('Set Up Access').click()
-    >>> ctrl = manager.getControl(name='sb.person.frog')
-    >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
-    >>> manager.getControl('Set Access', index=1).click()
 
-    >>> manager.getLink('resources').click()
-    >>> manager.getLink('fish').click()
-    >>> manager.getLink('View Calendar').click()
-    >>> manager.getLink('Set Up Access').click()
-    >>> ctrl = manager.getControl(name='sb.person.frog')
-    >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
-    >>> manager.getControl('Set Access', index=1).click()
-
-    >>> manager.getLink('resources').click()
-    >>> manager.getLink('lilly').click()
-    >>> manager.getLink('View Calendar').click()
-    >>> manager.getLink('Set Up Access').click()
-    >>> ctrl = manager.getControl(name='sb.person.frog')
-    >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
-    >>> manager.getControl('Set Access', index=1).click()
+    >>> manager.open('http://localhost/resources/fish/@@leaders.html')
+    >>> manager.getControl('Frog').click()
+    >>> manager.getControl('Add').click()
 
 If we book some resources for the second event,
 
@@ -545,11 +524,9 @@ The boss decides to take a mud bath, so he creates an event.
 
 Stork should have access to the resources:
 
-    >>> manager.open(
-    ...     'http://localhost/resources/mud/calendar/acl.html')
-    >>> ctrl = manager.getControl(name='sb.person.stork')
-    >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
-    >>> manager.getControl('Set Access', index=1).click()
+    >>> manager.open('http://localhost/resources/mud/@@leaders.html')
+    >>> manager.getControl('Stork').click()
+    >>> manager.getControl('Add').click()
 
 And then stork books mud.
 
@@ -580,7 +557,6 @@ Frog should still be able to see the resource's calendar
       ...
     </h6>
     ...
-
 
 Let's delete mud:
 

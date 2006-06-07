@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
-<configure xmlns="http://namespaces.zope.org/zope">
+<configure
+    xmlns:security="http://schooltool.org/securitypolicy"
+    xmlns="http://namespaces.zope.org/zope">
 
   <!-- Course Content Components -->
 
@@ -25,7 +27,7 @@
     <implements
         interface="schooltool.note.interfaces.IHaveNotes" />
     <require permission="schooltool.view"
-             attributes="title description sections __cmp__" />
+             attributes="title description sections leaders __cmp__" />
     <require permission="schooltool.edit"
              set_schema=".interfaces.ICourse" />
   </class>
@@ -152,5 +154,62 @@
   <!-- Views -->
   <include package=".browser" />
   <include package=".rest" />
+
+  <!-- Security -->
+
+  <security:crowd
+      name="section_instructors"
+      factory=".section.InstructorsCrowd" />
+
+  <security:crowd
+      name="section_learners"
+      factory=".section.LearnersCrowd" />
+
+  <security:crowd
+      name="configurable_section_viewers"
+      factory=".section.SectionCalendarSettingCrowd" />
+
+  <adapter
+      trusted="yes"
+      factory=".section.SectionCalendarViewers"
+      provides="schooltool.app.interfaces.ICalendarParentCrowd"
+      name="schooltool.view" />
+
+  <adapter
+      trusted="yes"
+      factory=".section.InstructorsCrowd"
+      provides="schooltool.app.interfaces.ICalendarParentCrowd"
+      name="schooltool.edit" />
+
+  <security:allow
+      interface="schooltool.course.interfaces.ISectionContainer"
+      crowds="administration configurable_section_viewers"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.course.interfaces.ISectionContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.course.interfaces.ISectionContainer"
+      crowds="administration"
+      permission="schooltool.create" />
+
+  <security:allow
+      interface="schooltool.course.interfaces.ISection"
+      crowds="administration section_instructors section_learners configurable_section_viewers"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.course.interfaces.ISection"
+      crowds="administration section_instructors"
+      permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.course.interfaces.ISection"
+      crowds="administration section_instructors"
+      permission="schooltool.manageMembership" />
+
+  <security:setting
+      key="everyone_can_view_section_info"
+      text="Everyone can view section information and calendars"
+      default="False" />
 
 </configure>

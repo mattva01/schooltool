@@ -24,7 +24,10 @@ $Id$
 """
 
 from zope.interface import implements
+from zope.security.proxy import removeSecurityProxy
 from schooltool.securitypolicy.interfaces import ICrowd
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
 
 
 class Crowd(object):
@@ -33,10 +36,45 @@ class Crowd(object):
     implements(ICrowd)
 
     def __init__(self, context):
-        self.context = context
+        # As crowds are used in our security policy we have to trust
+        # them
+        self.context = removeSecurityProxy(context)
 
     def contains(self, principal):
         raise NotImplementedError()
+
+
+class AggregateCrowd(Crowd):
+    """A base class for aggregating crowds.
+
+    Override crowdFactories to specify which crowds to aggregate.
+    """
+
+    def contains(self, principal):
+        for crowdcls in self.crowdFactories():
+            crowd = crowdcls(self.context)
+            if crowd.contains(principal):
+                return True
+        return False
+
+    def crowdFactories(self):
+        raise NotImplementedError("override this in subclasses")
+
+
+class ConfigurableCrowd(Crowd):
+    """A base class for calendar parent crowds.
+
+    You only need to override `setting_key` which indicates the key
+    of the corresponding security setting.
+    """
+
+    setting_key = None # override in subclasses
+
+    def contains(self, principal):
+        """Return the value of the related setting (True or False)."""
+        app = ISchoolToolApplication(None)
+        customizations = IAccessControlCustomisations(app)
+        return customizations.get(self.setting_key)
 
 
 class EverybodyCrowd(Crowd):
@@ -46,22 +84,12 @@ class EverybodyCrowd(Crowd):
         return True
 
 
-class AuthenticatedCrowd(Crowd):
-    """Authenticated users."""
-
-    def contains(self, principal):
-        return 'zope.Authenticated' in principal.groups
-
-
-class AnonymousCrowd(Crowd):
-    """Anonymous users."""
-
-    def contains(self, principal):
-        return 'zope.Anybody' in principal.groups
-
-
 class OwnerCrowd(Crowd):
-    """ TODO """
+    """Crowd of owners.
+
+    The crowd tries to adapt the context to IPerson.  If adaptation succeeds,
+    it compares the obtained person with the current principal.
+    """
 
     def contains(self, principal):
         from schooltool.person.interfaces import IPerson
@@ -80,7 +108,17 @@ class _GroupCrowd(Crowd):
         return self.group in principal.groups
 
 
-class ManagerCrowd(_GroupCrowd):
+class AuthenticatedCrowd(_GroupCrowd):
+    """Authenticated users."""
+
+    group = 'zope.Authenticated'
+
+class AnonymousCrowd(Crowd):
+    """Anonymous users."""
+
+    group = 'zope.Anybody'
+
+class ManagersCrowd(_GroupCrowd):
     group = 'sb.group.manager'
 
 class AdministratorsCrowd(_GroupCrowd):
@@ -89,18 +127,15 @@ class AdministratorsCrowd(_GroupCrowd):
 class ClerksCrowd(_GroupCrowd):
     group = 'sb.group.clerks'
 
+class TeachersCrowd(_GroupCrowd):
+    group = 'sb.group.teachers'
 
-class AdministrationCrowd(Crowd):
-    """Administration crowd.
 
-    A person is in this crowd if she is one of administrators, clerks,
-    managers or teachers.
-    """
+class ManagerBackdoorCrowd(Crowd):
+
+    # XXX At the moment the manager is not always a member of the manager group.
+    # This hack will go away soon.
 
     def contains(self, principal):
-        if hasattr(principal, '_person') and principal._person.__name__ == 'manager':
-            return True # XXX backdoor for manager
-        for crowd_id in ['administrators', 'clerks', 'manager', 'teachers']:
-            if ('sb.group.%s' % crowd_id) in principal.groups:
-                return True
-        return False
+        return (hasattr(principal, '_person')
+                and principal._person.__name__ == 'manager')

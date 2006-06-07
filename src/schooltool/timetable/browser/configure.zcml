@@ -32,7 +32,7 @@
       name="schedule.html"
       for="schooltool.course.interfaces.ISection"
       class="schooltool.timetable.browser.SectionTimetableSetupView"
-      permission="zope.View"
+      permission="schooltool.view"
       menu="schooltool_actions"
       title="Schedule" />
 
@@ -40,7 +40,7 @@
       name="schedule.html"
       for="schooltool.person.interfaces.IPerson"
       class="schooltool.timetable.browser.PersonTimetableSetupView"
-      permission="zope.View"
+      permission="schooltool.view"
       menu="schooltool_actions"
       title="Schedule" />
 
@@ -48,7 +48,7 @@
       name="schedule.html"
       for="schooltool.resource.interfaces.IResource"
       class="schooltool.timetable.browser.ResourceTimetableSetupView"
-      permission="zope.View"
+      permission="schooltool.view"
       menu="schooltool_actions"
       title="Schedule" />
 
@@ -57,7 +57,7 @@
       for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
       class=".schema.TimetableSchemaContainerView"
       template="templates/timetable-schema-container.pt"
-      permission="zope.View"
+      permission="schooltool.view"
       menu="zmi_views"
       title="View"
       />
@@ -78,8 +78,8 @@
       for="*"
       manager="schooltool.skin.INavigationManager"
       template="templates/navigationViewlet.pt"
-      class="schooltool.skin.NavigationViewlet"
-      permission="zope.View"
+      class="schooltool.skin.TopLevelContainerNavigationViewlet"
+      permission="schooltool.view"
       link="ttschemas"
       title="School Timetables"
       order="80"
@@ -90,14 +90,14 @@
       name="simpleadd.html"
       for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
       class=".schema.SimpleTimetableSchemaAdd"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       />
 
   <page
       name="complexadd.html"
       for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
       class=".schema.AdvancedTimetableSchemaAdd"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       />
 
   <page
@@ -113,7 +113,7 @@
       name="special.html"
       for="schooltool.timetable.interfaces.ITimetableSchema"
       class=".SpecialDayView"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       menu="schooltool_actions"
       title="Change Timetable for One Day"
       />
@@ -140,7 +140,7 @@
       name="add.html"
       for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
       class=".ttwizard.TimetableSchemaWizard"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       menu="schooltool_actions"
       title="New Timetable"
       />

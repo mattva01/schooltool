@@ -24,6 +24,7 @@ $Id$
 
 import unittest
 
+from zope.interface import Interface, implements
 from zope.testing import doctest
 from zope.app.testing import setup, ztapi
 from zope.app import zapi
@@ -32,6 +33,8 @@ from zope.component.interfaces import ComponentLookupError
 from zope.app.security.interfaces import IAuthentication
 from zope.app.container.contained import ObjectAddedEvent
 
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
 from schooltool.testing.setup import setUpLocalGrants
 from schooltool.testing import setup as sbsetup
 
@@ -51,15 +54,6 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
                              AuthenticatedGroup('zope.authenticated',
                                                 'Authenticated users',
                                                 ''))
-        # Local permission grants for principals
-        from zope.annotation.interfaces import IAnnotatable
-        from zope.app.securitypolicy.interfaces import \
-             IPrincipalPermissionManager
-        from zope.app.securitypolicy.principalpermission import \
-             AnnotationPrincipalPermissionManager
-        setup.setUpAnnotations()
-        ztapi.provideAdapter(IAnnotatable, IPrincipalPermissionManager,
-                             AnnotationPrincipalPermissionManager)
 
     def tearDown(self):
         setup.placefulTearDown()
@@ -73,93 +67,70 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
         auth1 = zapi.getUtility(IAuthentication, context=self.app)
         self.assert_(auth is auth1)
 
-        from zope.app.securitypolicy.interfaces import \
-             IPrincipalPermissionManager
-        from zope.app.security.settings import Allow
-        perms = IPrincipalPermissionManager(self.app)
-        self.assert_(('schooltool.view', Allow) in
-                     perms.getPermissionsForPrincipal('zope.authenticated'))
-
         # If we fire the event again, it does not fail.  Such events
         # are fired when the object is copied and pasted.
         authSetUpSubscriber(self.app, event)
 
-def doctest_applicationCalendarPermissionsSubscriber():
-    r"""
-    Set up:
 
-        >>> from schooltool.app.security import \
-        ...      applicationCalendarPermissionsSubscriber
-        >>> root = setup.placefulSetUp(True)
-        >>> sbsetup.setUpCalendaring()
-        >>> setUpLocalGrants()
-        >>> st = sbsetup.createSchoolToolApplication()
+def doctest_CalendarViewersCrowd():
+    """Tests for CalendarViewersCrowd.
 
-        >>> root['sb'] = st
+        >>> setup.placelessSetUp()
 
-        >>> from zope.app.security.interfaces import IUnauthenticatedGroup
-        >>> from zope.app.security.principalregistry import UnauthenticatedGroup
-        >>> ztapi.provideUtility(IUnauthenticatedGroup,
-        ...                      UnauthenticatedGroup('zope.unauthenticated',
-        ...                                         'Unauthenticated users',
-        ...                                         ''))
+        >>> class CalendarStub:
+        ...     def __init__(self, parent):
+        ...         self.__parent__ = parent
 
-        >>> from zope.app.security.interfaces import IAuthenticatedGroup
-        >>> from zope.app.security.principalregistry import AuthenticatedGroup
-        >>> ztapi.provideUtility(IAuthenticatedGroup,
-        ...                      AuthenticatedGroup('zope.authenticated',
-        ...                                         'Authenticated users',
-        ...                                         ''))
+        >>> from schooltool.app.security import CalendarViewersCrowd
+        >>> crowd = CalendarViewersCrowd(CalendarStub(None))
 
-        >>> from zope.annotation.interfaces import IAnnotatable
-        >>> from zope.app.securitypolicy.interfaces import \
-        ...      IPrincipalPermissionManager
-        >>> from zope.app.securitypolicy.principalpermission import \
-        ...      AnnotationPrincipalPermissionManager
-        >>> setup.setUpAnnotations()
-        >>> ztapi.provideAdapter(IAnnotatable, IPrincipalPermissionManager,
-        ...                      AnnotationPrincipalPermissionManager)
+    First, fire a blank (no adapters registered):
 
-    Call our subscriber:
+        >>> crowd.contains(object())
+        False
 
-        >>> applicationCalendarPermissionsSubscriber(st, ObjectAddedEvent(st))
+    OK, let's try with an adaptable object now:
 
-    Check that unauthenticated has only viewCalendar permission on st.calendar:
+        >>> from schooltool.app.interfaces import ICalendarParentCrowd
 
-        >>> from zope.app.securitypolicy.interfaces import \
-        ...         IPrincipalPermissionManager
-        >>> unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
+        >>> class ParentCrowdStub(object):
+        ...     implements(ICalendarParentCrowd)
+        ...     def __init__(self, context):
+        ...         print 'Getting adapter for %s' % context
+        ...     def contains(self, principal):
+        ...         print 'Checking %s' % principal
+        ...         return True
 
-        >>> from schooltool.app.interfaces import ISchoolToolCalendar
-        >>> map = IPrincipalPermissionManager(ISchoolToolCalendar(st))
-        >>> print map.getPermissionsForPrincipal(unauthenticated.id)
-        [('schooltool.viewCalendar', PermissionSetting: Allow)]
+        >>> class IOwner(Interface):
+        ...     pass
 
-    And has no permissions on the app itself:
+        >>> class OwnerStub(object):
+        ...     implements(IOwner)
 
-        >>> map = IPrincipalPermissionManager(st)
-        >>> print map.getPermissionsForPrincipal(unauthenticated.id)
-        []
+        >>> from zope.component import provideAdapter
+        >>> provideAdapter(ParentCrowdStub, adapts=[IOwner],
+        ...                provides=ICalendarParentCrowd,
+        ...                name='schooltool.view')
 
-    Authenticated users should be allowed to see the application calendar too:
+    Let's try now with the adapter:
 
-        >>> authenticated = zapi.queryUtility(IAuthenticatedGroup)
+        >>> crowd = CalendarViewersCrowd(CalendarStub(OwnerStub()))
+        >>> crowd.contains('some principal')
+        Getting adapter for <...OwnerStub ...>
+        Checking some principal
+        True
 
-        >>> from schooltool.app.interfaces import ISchoolToolCalendar
-        >>> map = IPrincipalPermissionManager(ISchoolToolCalendar(st))
-        >>> print map.getPermissionsForPrincipal(authenticated.id)
-        [('schooltool.viewCalendar', PermissionSetting: Allow)]
-
-    Clean up:
+    We're done.
 
         >>> setup.placefulTearDown()
+
     """
 
 
 def test_suite():
     return unittest.TestSuite([
         unittest.makeSuite(TestAuthSetUpSubscriber),
-        doctest.DocTestSuite(),
+        doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
         doctest.DocFileSuite('../security.txt', optionflags=doctest.ELLIPSIS),
         ])
 

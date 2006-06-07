@@ -152,23 +152,6 @@ Looking at the section:
     <BLANKLINE>
     ...
 
-Students aren't given the option to change the location:
-
-    >>> frog.open('http://localhost/sections/his1')
-    >>> frog.headers['status']
-    '200 Ok'
-    >>> "change location" not in frog.contents
-    True
-
-The section's edit view:
-
-    >>> print http(r"""
-    ... GET /sections/his1/@@edit.html HTTP/1.1
-    ... Authorization: Basic manager:schooltool
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-
 Frog can't see the section's calendar by default
 
     >>> frog.open('http://localhost/sections/his1/calendar')
@@ -397,6 +380,28 @@ And Toad's overlay portlet shows the section:
             <td><a class="go" style="background: #c1665a;
                 color: #c1665a" href="http://localhost/calendar">...</a></td>
         </tr></table>
+
+Though students can't see the section list (nor sections themselves) by
+default:
+
+    >>> frog.open('http://localhost/sections/his1')
+    >>> print frog.url
+    http://localhost/@@login.html?forbidden=yes&nexturl=...
+
+we can give them the permission:
+
+    >>> url = manager.url
+    >>> manager.open('http://localhost/access_control.html')
+    >>> manager.getControl('Everyone can view section information and calendars').click()
+    >>> manager.getControl('Apply').click()
+
+Students still aren't given the option to change the location:
+
+    >>> frog.open('http://localhost/sections/his1')
+    >>> print frog.url
+    http://localhost/sections/his1
+    >>> "change location" not in frog.contents
+    True
 
 
 Epilogue

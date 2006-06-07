@@ -24,16 +24,22 @@ $Id$
 __docformat__ = 'restructuredtext'
 from persistent import Persistent
 
-from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
 from zope.interface import implements
+from zope.component import adapts
+from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.dependable.interfaces import IDependable
 from zope.app.container import btree
 from zope.app.container.contained import Contained
 
 from schooltool.relationship import RelationshipProperty
+from schooltool.securitypolicy.crowds import Crowd
+from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
+from schooltool.app.interfaces import ICalendarParentCrowd
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.membership import GroupMemberCrowd
 from schooltool.app.membership import URIMembership, URIMember, URIGroup
-
+from schooltool.app.security import ConfigurableCrowd
 from schooltool.group import interfaces
 
 
@@ -43,7 +49,8 @@ class GroupContainer(btree.BTreeContainer):
     implements(interfaces.IGroupContainer, IAttributeAnnotatable)
 
 
-class Group(Persistent, Contained):
+from schooltool.app.app import Asset
+class Group(Persistent, Contained, Asset):
     """Group."""
 
     implements(interfaces.IGroup, interfaces.IGroupContained,
@@ -70,10 +77,16 @@ def addGroupContainerToApplication(event):
     for id, title, description in default_groups:
         group = app['groups'][id] = Group(title, description)
         IDependable(group).addDependent('')
-    roles = IPrincipalRoleManager(app)
-    roles.assignRoleToPrincipal('schooltool.manager', 'sb.group.manager')
-    roles.assignRoleToPrincipal('schooltool.administrator',
-                                'sb.group.administrators')
-    roles.assignRoleToPrincipal('schooltool.teacher', 'sb.group.teachers')
-    roles.assignRoleToPrincipal('schooltool.clerk', 'sb.group.clerks')
 
+
+class GroupCalendarCrowd(Crowd):
+    implements(ICalendarParentCrowd)
+    adapts(interfaces.IGroup)
+
+    def contains(self, principal):
+        """Return the value of the related setting (True or False)."""
+        app = ISchoolToolApplication(None)
+        customizations = IAccessControlCustomisations(app)
+        setting = customizations.get('everyone_can_view_group_calendar')
+
+        return setting or GroupMemberCrowd(self.context).contains(principal)

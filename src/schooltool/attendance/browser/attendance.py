@@ -244,14 +244,6 @@ class AttendanceCalendarEventViewlet(object):
     Adds an Attendance link to all section meeting events.
     """
 
-    def _canSee(self, section):
-        """Hack: check if we have schooltool.viewAttendance on section."""
-        map = IPrincipalPermissionManager(section)
-        principal = self.request.principal
-        permissions = map.getPermissionsForPrincipal(principal.id)
-        setting = PermissionSetting('Allow')
-        return ('schooltool.viewAttendance', setting) in permissions
-
     def attendanceLink(self):
         """Construct the URL for the attendance form for a section meeting.
 
@@ -263,8 +255,6 @@ class AttendanceCalendarEventViewlet(object):
             return None
         section = calendar_event.activity.owner
         if not ISection.providedBy(section):
-            return None
-        if not self._canSee(section):
             return None
         return '%s/attendance/%s/%s' % (
                     zapi.absoluteURL(section, self.request),

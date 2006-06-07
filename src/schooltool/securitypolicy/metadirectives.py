@@ -24,13 +24,18 @@ $Id$
 """
 
 from zope.interface import Interface
-from zope.configuration.fields import Tokens, GlobalObject, PythonIdentifier
+from zope.configuration.fields import (Tokens, GlobalObject, PythonIdentifier,
+                                       Bool)
+from zope.schema import TextLine
 from zope.security.zcml import Permission
+
+
+CrowdId = PythonIdentifier
 
 
 class ICrowdDirective(Interface):
 
-    name = PythonIdentifier(
+    name = CrowdId(
         title=u"Name",
         description=u"Identifier of the crowd")
 
@@ -48,9 +53,35 @@ class IAllowDirective(Interface):
 
     crowds = Tokens(
         title=u"Crowds",
-        value_type=PythonIdentifier(title=u"Crowd"),
+        value_type=CrowdId(title=u"Crowd"),
         required=True)
 
     permission = Permission(
         title=u"Permission",
+        required=True)
+
+
+class ISettingDirective(Interface):
+
+    key = PythonIdentifier(
+        title=u"Key")
+
+    text = TextLine(
+        title=u"Text")
+
+    default = Bool(
+        title=u"Default setting",
+        required=True,
+        default=False)
+
+
+class IAggregateCrowdDirective(Interface):
+
+    name = CrowdId(
+        title=u"Name",
+        description=u"Identifier of the crowd")
+
+    crowds = Tokens(
+        title=u"Crowds",
+        value_type=CrowdId(title=u"Crowd"),
         required=True)

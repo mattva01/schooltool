@@ -60,12 +60,14 @@ When we click 'Add Period', we get an extra period!
 
 Finally we post the completed form:
 
-    # Make sure we have five days
+Make sure we have five days
+
     >>> manager.getControl('Add day').click()
     >>> manager.getControl('Add day').click()
     >>> manager.getControl('Add day').click()
 
-    # Make sure we have 4 periods
+Make sure we have 4 periods
+
     >>> manager.getControl('Add period').click()
     >>> manager.getControl('Add period').click()
 
@@ -161,13 +163,15 @@ Lets add one more schema:
     >>> manager.getLink('advanced adding form').click()
     >>> manager.getControl('Title').value = 'Schema 2'
 
-    # Add enough days
+Add enough days
+
     >>> manager.getControl('Add day').click()
     >>> manager.getControl('Add day').click()
     >>> manager.getControl('Add day').click()
     >>> manager.getControl('Add day').click()
 
-    # Have enough periods
+Have enough periods
+
     >>> manager.getControl('Add period').click()
     >>> manager.getControl('Add period').click()
     >>> manager.getControl('Add period').click()

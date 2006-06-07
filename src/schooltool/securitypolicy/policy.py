@@ -27,9 +27,8 @@ from zope.security.simplepolicies import ParanoidSecurityPolicy
 from zope.component import queryAdapter
 from zope.traversing.api import getParent
 from schooltool.securitypolicy.crowds import ICrowd
+from schooltool.securitypolicy.metaconfigure import getCrowdsUtility
 
-
-permcrowds = {} # a global map: permission -> crowd_factory
 
 class SchoolToolSecurityPolicy(ParanoidSecurityPolicy):
     """Crowd-based security policy."""
@@ -37,17 +36,21 @@ class SchoolToolSecurityPolicy(ParanoidSecurityPolicy):
     def checkPermission(self, permission, obj):
         """Return True if principal has permission on object."""
         # TODO: Implement caching -- gintas
-        #print 'Checking, perm=%s, obj=%s' % (permission, obj)
 
-        # First, check the generic, interface-independent permissions.
-        crowdclasses = permcrowds.get(permission, [])
-        for crowdcls in crowdclasses:
-            crowd = crowdcls(obj)
-            #print ' generic crowd: %s' % crowdcls.__name__
-            for participation in self.participations:
-                if crowd.contains(participation.principal):
-                    return True
+#         if 'PersonTable' in str(obj):
+#             import pdb; pdb.set_trace()
+#             import sys
+#             print >> sys.stderr, permission, obj
 
+        # Check the generic, interface-independent permissions.
+        crowdclasses = getCrowdsUtility().permcrowds.get(permission, [])
+        if self.checkCrowds(crowdclasses, obj):
+            return True
+
+        # No quick method worked, look up the crowd by adaptation.
+        return self.checkByAdaptation(permission, obj)
+
+    def checkByAdaptation(self, permission, obj):
         crowd = queryAdapter(obj, ICrowd, name=permission, default=None)
         # If there is no crowd that has the given permission on this
         # object, try to look up a crowd that includes the parent.
@@ -55,13 +58,19 @@ class SchoolToolSecurityPolicy(ParanoidSecurityPolicy):
             obj = getParent(obj)
             crowd = queryAdapter(obj, ICrowd, name=permission, default=None)
         if crowd is None: # no crowds found
-            #print ' FAILED! denied %s' % permission
-            return False
-        #print ' specific crowd: %s' % crowd.__class__.__name__
+            raise AssertionError('no crowd found for', obj, permission)
 
         for participation in self.participations:
             if crowd.contains(participation.principal):
                 return True
+        else:
+            return False
 
-        #print ' FAILED! denied %s' % permission
+    def checkCrowds(self, crowdclasses, obj):
+        """Check if an object is in any of the given crowds."""
+        for participation in self.participations:
+            for crowdcls in crowdclasses:
+                crowd = crowdcls(obj)
+                if crowd.contains(participation.principal):
+                    return True
         return False

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/zope"
-           xmlns:i18n="http://namespaces.zope.org/i18n">
+           xmlns:security="http://schooltool.org/securitypolicy">
 
   <!-- Adapters -->
 
@@ -116,16 +116,6 @@
       />
 
   <subscriber
-      for="schooltool.group.interfaces.IGroup zope.app.container.interfaces.IObjectAddedEvent"
-      handler=".security.groupPermissionsSubscriber"
-      />
-
-  <subscriber
-      for="schooltool.app.interfaces.ISchoolToolApplication zope.app.container.interfaces.IObjectAddedEvent"
-      handler=".security.applicationCalendarPermissionsSubscriber"
-      />
-
-  <subscriber
       for="schooltool.relationship.interfaces.IBeforeRelationshipEvent"
       handler=".membership.enforceMembershipConstraints"
       />
@@ -134,16 +124,6 @@
       for="schooltool.relationship.interfaces.IBeforeRelationshipEvent"
       handler=".relationships.enforceInstructionConstraints"
     />
-
-  <subscriber
-      for="schooltool.relationship.interfaces.IRelationshipAddedEvent"
-      handler=".relationships.setInstructorPermissions"
-      />
-
-  <subscriber
-      for="schooltool.relationship.interfaces.IRelationshipRemovedEvent"
-      handler=".relationships.setInstructorPermissions"
-      />
 
   <subscriber
       for="schooltool.relationship.interfaces.IRelationshipAddedEvent"
@@ -205,10 +185,10 @@
   </class>
 
   <class class=".cal.Calendar">
-    <require permission="schooltool.viewCalendar"
+    <require permission="schooltool.view"
              interface="schooltool.calendar.interfaces.ICalendar"
              attributes="title __cmp__" />
-    <require permission="schooltool.addEvent"
+    <require permission="schooltool.edit"
              attributes="addEvent" />
     <require permission="schooltool.modifyEvent"
              attributes="clear removeEvent" />
@@ -239,6 +219,47 @@
   <include package=".rest" />
 
   <!-- Security declarations for calendaring -->
+
+  <security:crowd
+      name="calendar_viewers"
+      factory=".security.CalendarViewersCrowd" />
+
+  <security:crowd
+      name="calendar_editors"
+      factory=".security.CalendarEditorsCrowd" />
+
+  <security:crowd
+      name="leaders"
+      factory=".security.LeaderCrowd" />
+
+  <security:allow
+      interface=".interfaces.ISchoolToolCalendar"
+      permission="schooltool.view"
+      crowds="administration calendar_viewers" />
+
+  <security:allow
+      interface=".interfaces.ISchoolToolCalendar"
+      permission="schooltool.edit"
+      crowds="administration owner calendar_editors" />
+
+  <security:setting
+      key="everyone_can_view_app_calendar"
+      text="Everyone can view the application calendar."
+      default="True"
+      />
+
+  <security:crowd
+      name="group_members"
+      factory=".membership.GroupMemberCrowd" />
+
+  <security:allow
+      interface="schooltool.group.interfaces.IGroup"
+      permission="schooltool.view"
+      crowds="group_members" />
+
+  <adapter factory=".security.ApplicationCalendarCrowd"
+           provides=".security.ICalendarParentCrowd"
+           name="schooltool.view" />
 
   <!-- XXX It feels wrong to tweak permissions of objects in a sibling. -->
 

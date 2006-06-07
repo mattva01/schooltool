@@ -23,7 +23,7 @@ Let's create a person so that we can fool around with his calendar:
     >>> setup.addPerson('Frog', 'frog', 'pwd')
 
 Let's create more persons so that we can test access control.
-     
+
     >>> setup.addPerson('Toad', 'toad', 'doat')
 
 
@@ -48,424 +48,424 @@ Let the Frog add an ordinary event that takes place on 3rd February, 2005:
 
     >>> frog.getControl('Add').click()
 
-Let's grant the Toad the viewCalendar permission on Frog's calendar:
+# Let's grant the Toad the viewCalendar permission on Frog's calendar:
 
-    >>> manager.open('http://localhost/persons')
-    >>> manager.getLink('Frog').click()
-    >>> manager.getLink('View Calendar').click()
-    >>> manager.getLink('Set Up Access').click()
+#     >>> manager.open('http://localhost/persons')
+#     >>> manager.getLink('Frog').click()
+#     >>> manager.getLink('View Calendar').click()
+#     >>> manager.getLink('Set Up Access').click()
 
-    >>> toad_settings = manager.getControl(name='sb.person.toad')
-    >>> toad_settings.value = ['schooltool.viewCalendar']
+#     >>> toad_settings = manager.getControl(name='sb.person.toad')
+#     >>> toad_settings.value = ['schooltool.viewCalendar']
 
-    >>> manager.getControl('Set Access', index=0).click()
+#     >>> manager.getControl('Set Access', index=0).click()
 
-Toad should still not even see the new event links (but span tags instead):
-
-    >>> toad = Browser()
-    >>> toad.open('http://localhost/')
-    >>> toad.getLink('Log In').click()
-    >>> toad.getControl('Username').value = 'toad'
-    >>> toad.getControl('Password').value = 'doat'
-    >>> toad.getControl('Log in').click()
-
-    # Sigh, there is really no way to get to Frog's calendar :-(
-    >>> toad.handleErrors = False
-    >>> toad.open('http://localhost/persons/frog/calendar/')
-
-Now let Toad try to add an event on Frog's calendar (even though there is no
-link for it):
-
-    >>> toad.open('http://localhost/persons/frog/calendar/add.html')
-    Traceback (most recent call last):
-    ...
-    Unauthorized: (..., 'schooltool.addEvent')
-
-Let's grant the Toad the addEvent permission on Frog's calendar:
-
-    >>> manager.getLink('Set Up Access').click()
+# Toad should still not even see the new event links (but span tags instead):
+
+#     >>> toad = Browser()
+#     >>> toad.open('http://localhost/')
+#     >>> toad.getLink('Log In').click()
+#     >>> toad.getControl('Username').value = 'toad'
+#     >>> toad.getControl('Password').value = 'doat'
+#     >>> toad.getControl('Log in').click()
+
+#     # Sigh, there is really no way to get to Frog's calendar :-(
+#     >>> toad.handleErrors = False
+#     >>> toad.open('http://localhost/persons/frog/calendar/')
+
+# Now let Toad try to add an event on Frog's calendar (even though there is no
+# link for it):
+
+#     >>> toad.open('http://localhost/persons/frog/calendar/add.html')
+#     Traceback (most recent call last):
+#     ...
+#     Unauthorized: (..., 'schooltool.addEvent')
+
+# Let's grant the Toad the addEvent permission on Frog's calendar:
+
+#     >>> manager.getLink('Set Up Access').click()
 
-    >>> toad_settings = manager.getControl(name='sb.person.toad')
-    >>> toad_settings.value = ['schooltool.viewCalendar', 'schooltool.addEvent']
+#     >>> toad_settings = manager.getControl(name='sb.person.toad')
+#     >>> toad_settings.value = ['schooltool.viewCalendar', 'schooltool.addEvent']
 
-    >>> manager.getControl('Set Access', index=0).click()
-
-Now the Toad can add events to Frog's calendar:
+#     >>> manager.getControl('Set Access', index=0).click()
+
+# Now the Toad can add events to Frog's calendar:
 
-    >>> toad.open('http://localhost/persons/frog/calendar/add.html')
+#     >>> toad.open('http://localhost/persons/frog/calendar/add.html')
 
-    >>> toad.getControl('Title').value = 'Dreaming'
-    >>> toad.getControl('Date').value = '2005-02-03'
-    >>> toad.getControl('Time').value = '01:00'
-    >>> toad.getControl('Duration').value = '500'
+#     >>> toad.getControl('Title').value = 'Dreaming'
+#     >>> toad.getControl('Date').value = '2005-02-03'
+#     >>> toad.getControl('Time').value = '01:00'
+#     >>> toad.getControl('Duration').value = '500'
 
-    >>> toad.getControl('Add').click()
+#     >>> toad.getControl('Add').click()
 
 
-Editing events
---------------
+# Editing events
+# --------------
 
-Let's add a calendar through iCalendar PUT view (so we would know the event id):
+# Let's add a calendar through iCalendar PUT view (so we would know the event id):
 
-    >>> print http(r"""
-    ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Length: 244
-    ... Content-Type: text/calendar
-    ...
-    ... BEGIN:VCALENDAR
-    ... VERSION:2.0
-    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
-    ... BEGIN:VEVENT
-    ... UID:dummy-uid
-    ... SUMMARY:Empty calendar
-    ... DTSTART:20050204T100000
-    ... DURATION:PT1H
-    ... DTSTAMP:20050203T150000
-    ... END:VEVENT
-    ... END:VCALENDAR
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    Content-Length: 0
-    Set-Cookie: ...
-    <BLANKLINE>
-
-Let the Frog modify this event:
-
-    >>> frog.open('http://localhost/persons/frog/calendar/'
-    ...           'dummy-uid/edit.html?date=2005-02-04')
-
-    >>> frog.getControl('Title').value = 'Sleeping'
-    >>> frog.getControl('Date').value = '2005-02-03'
-    >>> frog.getControl('Time').value = '01:00'
-    >>> frog.getControl('Duration').value = '500'
-    >>> frog.getControl(name="field.duration_type").value = ['minutes']
-
-    >>> frog.getControl('Update', index=1).click()
-
-Now let the Toad try and modify the event too:
-
-    >>> toad.open('http://localhost/persons/frog/calendar/'
-    ...           'dummy-uid/edit.html?date=2005-02-04')
-    Traceback (most recent call last):
-    ...
-    Unauthorized: (..., 'schooltool.modifyEvent')
-
-Toad should not see the event delete link
-
-    >>> toad.open('http://localhost/persons/frog/calendar/2005-02-03')
-    >>> print toad.contents
-    <BLANKLINE>
-    ...
-    <h6 style="background: #7590ae">
-      <a href="http://localhost/persons/frog/calendar/dummy-uid"
-         title="Sleeping">
-        Sleeping
-        <span class="start-end">
-          (<span>01:00</span>
-             -
-           <span>09:20</span>)
-        </span>
-      </a>
-    </h6>
-    ...
-
-Let's grant Toad the `modifyEvent` permission on Frog's calendar:
-
-    >>> manager.getLink('Set Up Access').click()
-
-    >>> toad_settings = manager.getControl(name='sb.person.toad')
-    >>> toad_settings.value = ['schooltool.viewCalendar',
-    ...                        'schooltool.addEvent',
-    ...                        'schooltool.modifyEvent']
-
-    >>> manager.getControl('Set Access', index=0).click()
-
-Now let the Toad try and modify the event too:
-
-    >>> toad.open('http://localhost/persons/frog/calendar/'
-    ...           'dummy-uid/edit.html?date=2005-02-04')
-
-    >>> toad.getControl('Title').value = 'Sleeping'
-    >>> toad.getControl('Date').value = '2005-02-03'
-    >>> toad.getControl('Time').value = '01:00'
-    >>> toad.getControl('Duration').value = '500'
-
-    >>> toad.getControl('Update', index=1).click()
-
-
-Uploading iCalendar files
--------------------------
-
-Random anonymous persons cannot see or overwrite someone's calendar
-
-    >>> anonymous = Browser()
-    >>> anonymous.handleErrors = False
-    >>> anonymous.open('http://localhost/persons/frog/calendar.ics')
-    Traceback (most recent call last):
-    ...
-    Unauthorized: (..., 'schooltool.viewCalendar')
-
-    >>> print http(r"""
-    ... PUT /persons/frog/calendar.ics HTTP/1.1
-    ... Host: localhost:7080
-    ... Content-Length: 244
-    ... Content-Type: text/calendar
-    ...
-    ... BEGIN:VCALENDAR
-    ... VERSION:2.0
-    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
-    ... BEGIN:VEVENT
-    ... UID:empty-calendar-placeholder@schooltool.org
-    ... SUMMARY:Empty calendar
-    ... DTSTART:20050204T100000
-    ... DURATION:PT1H
-    ... DTSTAMP:20050203T150000
-    ... END:VEVENT
-    ... END:VCALENDAR
-    ... """, handle_errors=False)
-    Traceback (most recent call last):
-    ...
-    Unauthorized: (..., 'schooltool.viewCalendar')
-
-The manager now allows Toad to only see Frog's calendar, but not modify it:
-
-    >>> manager.getLink('Set Up Access').click()
-
-    >>> toad_settings = manager.getControl(name='sb.person.toad')
-    >>> toad_settings.value = ['schooltool.viewCalendar']
-
-    >>> manager.getControl('Set Access', index=0).click()
-
-    >>> toad.open('http://localhost/persons/frog/calendar/')
-    >>> toad.headers['status']
-    '200 Ok'
-
-    >>> toad.open('http://localhost/persons/frog/calendar.ics')
-    >>> toad.headers['status']
-    '200 Ok'
-
-So Toad cannot modify the calendar.
-
-    >>> print http(r"""
-    ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
-    ... Authorization: Basic toad:doat
-    ... Content-Length: 244
-    ... Content-Type: text/calendar
-    ...
-    ... BEGIN:VCALENDAR
-    ... VERSION:2.0
-    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
-    ... BEGIN:VEVENT
-    ... UID:some-uid@example.com
-    ... SUMMARY:Sample event
-    ... DTSTART:20050204T100000
-    ... DURATION:PT1H
-    ... DTSTAMP:20050203T150000
-    ... END:VEVENT
-    ... END:VCALENDAR
-    ... """, handle_errors=False)
-    Traceback (most recent call last):
-    ...
-    Unauthorized: (..., 'schooltool.addEvent')
-
-Unless the manager grants him modification permissions too.
-
-    >>> manager.getLink('Set Up Access').click()
-    >>> toad_settings = manager.getControl(name='sb.person.toad')
-    >>> toad_settings.value = ['schooltool.viewCalendar',
-    ...                        'schooltool.addEvent',
-    ...                        'schooltool.modifyEvent']
-    >>> manager.getControl('Set Access', index=0).click()
-
-    >>> print http(r"""
-    ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
-    ... Authorization: Basic toad:doat
-    ... Content-Length: 244
-    ... Content-Type: text/calendar
-    ...
-    ... BEGIN:VCALENDAR
-    ... VERSION:2.0
-    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
-    ... BEGIN:VEVENT
-    ... UID:some-uid@example.com
-    ... SUMMARY:Sample event
-    ... DTSTART:20050204T100000
-    ... DURATION:PT1H
-    ... DTSTAMP:20050203T150000
-    ... END:VEVENT
-    ... END:VCALENDAR
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    ...
-
-The permissions are more finely-grained: If Toad has the `addEvent`
-permission, but not modifyEvent, he can only add new events, but not modify or
-delete existing ones.
-
-    >>> manager.getLink('Set Up Access').click()
-    >>> toad_settings = manager.getControl(name='sb.person.toad')
-    >>> toad_settings.value = ['schooltool.viewCalendar',
-    ...                        'schooltool.addEvent']
-    >>> manager.getControl('Set Access', index=0).click()
-
-Modification: forbidden
-
-    >>> print http(r"""
-    ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
-    ... Authorization: Basic toad:doat
-    ... Content-Length: 244
-    ... Content-Type: text/calendar
-    ...
-    ... BEGIN:VCALENDAR
-    ... VERSION:2.0
-    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
-    ... BEGIN:VEVENT
-    ... UID:some-uid@example.com
-    ... SUMMARY:Sample event (modified)
-    ... DTSTART:20050204T100000
-    ... DURATION:PT1H
-    ... DTSTAMP:20050203T150000
-    ... END:VEVENT
-    ... END:VCALENDAR
-    ... """)
-    HTTP/1.1 401 Unauthorized
-    ...
-
-Removal: forbidden
-
-    >>> print http(r"""
-    ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
-    ... Authorization: Basic toad:doat
-    ... Content-Length: 244
-    ... Content-Type: text/calendar
-    ...
-    ... BEGIN:VCALENDAR
-    ... VERSION:2.0
-    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
-    ... BEGIN:VEVENT
-    ... UID:empty-calendar-placeholder@schooltool.org
-    ... SUMMARY:Empty calendar
-    ... DTSTART:20050204T100000
-    ... DURATION:PT1H
-    ... DTSTAMP:20050203T150000
-    ... END:VEVENT
-    ... END:VCALENDAR
-    ... """)
-    HTTP/1.1 401 Unauthorized
-    ...
-
-Addition: allowed
-
-    >>> print http(r"""
-    ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
-    ... Authorization: Basic toad:doat
-    ... Content-Length: 244
-    ... Content-Type: text/calendar
-    ...
-    ... BEGIN:VCALENDAR
-    ... VERSION:2.0
-    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
-    ... BEGIN:VEVENT
-    ... UID:some-uid2@example.com
-    ... SUMMARY:New event
-    ... DTSTART:20050204T120000
-    ... DURATION:PT1H
-    ... DTSTAMP:20050203T150000
-    ... END:VEVENT
-    ... BEGIN:VEVENT
-    ... UID:some-uid@example.com
-    ... SUMMARY:Sample event
-    ... DTSTART:20050204T100000
-    ... DURATION:PT1H
-    ... DTSTAMP:20050203T150000
-    ... END:VEVENT
-    ... END:VCALENDAR
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-
-Now let's allow modification, but not addition
-
-    >>> manager.getLink('Set Up Access').click()
-    >>> toad_settings = manager.getControl(name='sb.person.toad')
-    >>> toad_settings.value = ['schooltool.viewCalendar',
-    ...                        'schooltool.modifyEvent']
-    >>> manager.getControl('Set Access', index=0).click()
-
-Removal: allowed
-
-    >>> print http(r"""
-    ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
-    ... Authorization: Basic toad:doat
-    ... Content-Length: 244
-    ... Content-Type: text/calendar
-    ...
-    ... BEGIN:VCALENDAR
-    ... VERSION:2.0
-    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
-    ... BEGIN:VEVENT
-    ... UID:some-uid@example.com
-    ... SUMMARY:Sample event
-    ... DTSTART:20050204T100000
-    ... DURATION:PT1H
-    ... DTSTAMP:20050203T150000
-    ... END:VEVENT
-    ... END:VCALENDAR
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-
-Modification: allowed
-
-    >>> print http(r"""
-    ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
-    ... Authorization: Basic toad:doat
-    ... Content-Length: 244
-    ... Content-Type: text/calendar
-    ...
-    ... BEGIN:VCALENDAR
-    ... VERSION:2.0
-    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
-    ... BEGIN:VEVENT
-    ... UID:some-uid@example.com
-    ... SUMMARY:Sample event (modified)
-    ... DTSTART:20050204T100000
-    ... DURATION:PT2H
-    ... DTSTAMP:20050203T150000
-    ... END:VEVENT
-    ... END:VCALENDAR
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-
-Addition: not allowed
-
-    >>> print http(r"""
-    ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
-    ... Authorization: Basic toad:doat
-    ... Content-Length: 244
-    ... Content-Type: text/calendar
-    ...
-    ... BEGIN:VCALENDAR
-    ... VERSION:2.0
-    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
-    ... BEGIN:VEVENT
-    ... UID:some-uid@example.com
-    ... SUMMARY:Sample event (modified)
-    ... DTSTART:20050204T100000
-    ... DURATION:PT2H
-    ... DTSTAMP:20050203T150000
-    ... END:VEVENT
-    ... BEGIN:VEVENT
-    ... UID:some-uid2@example.com
-    ... SUMMARY:New event
-    ... DTSTART:20050204T120000
-    ... DURATION:PT1H
-    ... DTSTAMP:20050203T150000
-    ... END:VEVENT
-    ... END:VCALENDAR
-    ... """)
-    HTTP/1.1 401 Unauthorized
-    ...
+#     >>> print http(r"""
+#     ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
+#     ... Authorization: Basic frog:pwd
+#     ... Content-Length: 244
+#     ... Content-Type: text/calendar
+#     ...
+#     ... BEGIN:VCALENDAR
+#     ... VERSION:2.0
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... BEGIN:VEVENT
+#     ... UID:dummy-uid
+#     ... SUMMARY:Empty calendar
+#     ... DTSTART:20050204T100000
+#     ... DURATION:PT1H
+#     ... DTSTAMP:20050203T150000
+#     ... END:VEVENT
+#     ... END:VCALENDAR
+#     ... """, handle_errors=False)
+#     HTTP/1.1 200 Ok
+#     Content-Length: 0
+#     Set-Cookie: ...
+#     <BLANKLINE>
+
+# Let the Frog modify this event:
+
+#     >>> frog.open('http://localhost/persons/frog/calendar/'
+#     ...           'dummy-uid/edit.html?date=2005-02-04')
+
+#     >>> frog.getControl('Title').value = 'Sleeping'
+#     >>> frog.getControl('Date').value = '2005-02-03'
+#     >>> frog.getControl('Time').value = '01:00'
+#     >>> frog.getControl('Duration').value = '500'
+#     >>> frog.getControl(name="field.duration_type").value = ['minutes']
+
+#     >>> frog.getControl('Update', index=1).click()
+
+# Now let the Toad try and modify the event too:
+
+#     >>> toad.open('http://localhost/persons/frog/calendar/'
+#     ...           'dummy-uid/edit.html?date=2005-02-04')
+#     Traceback (most recent call last):
+#     ...
+#     Unauthorized: (..., 'schooltool.modifyEvent')
+
+# Toad should not see the event delete link
+
+#     >>> toad.open('http://localhost/persons/frog/calendar/2005-02-03')
+#     >>> print toad.contents
+#     <BLANKLINE>
+#     ...
+#     <h6 style="background: #7590ae">
+#       <a href="http://localhost/persons/frog/calendar/dummy-uid"
+#          title="Sleeping">
+#         Sleeping
+#         <span class="start-end">
+#           (<span>01:00</span>
+#              -
+#            <span>09:20</span>)
+#         </span>
+#       </a>
+#     </h6>
+#     ...
+
+# Let's grant Toad the `modifyEvent` permission on Frog's calendar:
+
+#     >>> manager.getLink('Set Up Access').click()
+
+#     >>> toad_settings = manager.getControl(name='sb.person.toad')
+#     >>> toad_settings.value = ['schooltool.viewCalendar',
+#     ...                        'schooltool.addEvent',
+#     ...                        'schooltool.modifyEvent']
+
+#     >>> manager.getControl('Set Access', index=0).click()
+
+# Now let the Toad try and modify the event too:
+
+#     >>> toad.open('http://localhost/persons/frog/calendar/'
+#     ...           'dummy-uid/edit.html?date=2005-02-04')
+
+#     >>> toad.getControl('Title').value = 'Sleeping'
+#     >>> toad.getControl('Date').value = '2005-02-03'
+#     >>> toad.getControl('Time').value = '01:00'
+#     >>> toad.getControl('Duration').value = '500'
+
+#     >>> toad.getControl('Update', index=1).click()
+
+
+# Uploading iCalendar files
+# -------------------------
+
+# Random anonymous persons cannot see or overwrite someone's calendar
+
+#     >>> anonymous = Browser()
+#     >>> anonymous.handleErrors = False
+#     >>> anonymous.open('http://localhost/persons/frog/calendar.ics')
+#     Traceback (most recent call last):
+#     ...
+#     Unauthorized: (..., 'schooltool.viewCalendar')
+
+#     >>> print http(r"""
+#     ... PUT /persons/frog/calendar.ics HTTP/1.1
+#     ... Host: localhost:7080
+#     ... Content-Length: 244
+#     ... Content-Type: text/calendar
+#     ...
+#     ... BEGIN:VCALENDAR
+#     ... VERSION:2.0
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... BEGIN:VEVENT
+#     ... UID:empty-calendar-placeholder@schooltool.org
+#     ... SUMMARY:Empty calendar
+#     ... DTSTART:20050204T100000
+#     ... DURATION:PT1H
+#     ... DTSTAMP:20050203T150000
+#     ... END:VEVENT
+#     ... END:VCALENDAR
+#     ... """, handle_errors=False)
+#     Traceback (most recent call last):
+#     ...
+#     Unauthorized: (..., 'schooltool.viewCalendar')
+
+# The manager now allows Toad to only see Frog's calendar, but not modify it:
+
+#     >>> manager.getLink('Set Up Access').click()
+
+#     >>> toad_settings = manager.getControl(name='sb.person.toad')
+#     >>> toad_settings.value = ['schooltool.viewCalendar']
+
+#     >>> manager.getControl('Set Access', index=0).click()
+
+#     >>> toad.open('http://localhost/persons/frog/calendar/')
+#     >>> toad.headers['status']
+#     '200 Ok'
+
+#     >>> toad.open('http://localhost/persons/frog/calendar.ics')
+#     >>> toad.headers['status']
+#     '200 Ok'
+
+# So Toad cannot modify the calendar.
+
+#     >>> print http(r"""
+#     ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
+#     ... Authorization: Basic toad:doat
+#     ... Content-Length: 244
+#     ... Content-Type: text/calendar
+#     ...
+#     ... BEGIN:VCALENDAR
+#     ... VERSION:2.0
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... BEGIN:VEVENT
+#     ... UID:some-uid@example.com
+#     ... SUMMARY:Sample event
+#     ... DTSTART:20050204T100000
+#     ... DURATION:PT1H
+#     ... DTSTAMP:20050203T150000
+#     ... END:VEVENT
+#     ... END:VCALENDAR
+#     ... """, handle_errors=False)
+#     Traceback (most recent call last):
+#     ...
+#     Unauthorized: (..., 'schooltool.addEvent')
+
+# Unless the manager grants him modification permissions too.
+
+#     >>> manager.getLink('Set Up Access').click()
+#     >>> toad_settings = manager.getControl(name='sb.person.toad')
+#     >>> toad_settings.value = ['schooltool.viewCalendar',
+#     ...                        'schooltool.addEvent',
+#     ...                        'schooltool.modifyEvent']
+#     >>> manager.getControl('Set Access', index=0).click()
+
+#     >>> print http(r"""
+#     ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
+#     ... Authorization: Basic toad:doat
+#     ... Content-Length: 244
+#     ... Content-Type: text/calendar
+#     ...
+#     ... BEGIN:VCALENDAR
+#     ... VERSION:2.0
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... BEGIN:VEVENT
+#     ... UID:some-uid@example.com
+#     ... SUMMARY:Sample event
+#     ... DTSTART:20050204T100000
+#     ... DURATION:PT1H
+#     ... DTSTAMP:20050203T150000
+#     ... END:VEVENT
+#     ... END:VCALENDAR
+#     ... """, handle_errors=False)
+#     HTTP/1.1 200 Ok
+#     ...
+
+# The permissions are more finely-grained: If Toad has the `addEvent`
+# permission, but not modifyEvent, he can only add new events, but not modify or
+# delete existing ones.
+
+#     >>> manager.getLink('Set Up Access').click()
+#     >>> toad_settings = manager.getControl(name='sb.person.toad')
+#     >>> toad_settings.value = ['schooltool.viewCalendar',
+#     ...                        'schooltool.addEvent']
+#     >>> manager.getControl('Set Access', index=0).click()
+
+# Modification: forbidden
+
+#     >>> print http(r"""
+#     ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
+#     ... Authorization: Basic toad:doat
+#     ... Content-Length: 244
+#     ... Content-Type: text/calendar
+#     ...
+#     ... BEGIN:VCALENDAR
+#     ... VERSION:2.0
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... BEGIN:VEVENT
+#     ... UID:some-uid@example.com
+#     ... SUMMARY:Sample event (modified)
+#     ... DTSTART:20050204T100000
+#     ... DURATION:PT1H
+#     ... DTSTAMP:20050203T150000
+#     ... END:VEVENT
+#     ... END:VCALENDAR
+#     ... """)
+#     HTTP/1.1 401 Unauthorized
+#     ...
+
+# Removal: forbidden
+
+#     >>> print http(r"""
+#     ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
+#     ... Authorization: Basic toad:doat
+#     ... Content-Length: 244
+#     ... Content-Type: text/calendar
+#     ...
+#     ... BEGIN:VCALENDAR
+#     ... VERSION:2.0
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... BEGIN:VEVENT
+#     ... UID:empty-calendar-placeholder@schooltool.org
+#     ... SUMMARY:Empty calendar
+#     ... DTSTART:20050204T100000
+#     ... DURATION:PT1H
+#     ... DTSTAMP:20050203T150000
+#     ... END:VEVENT
+#     ... END:VCALENDAR
+#     ... """)
+#     HTTP/1.1 401 Unauthorized
+#     ...
+
+# Addition: allowed
+
+#     >>> print http(r"""
+#     ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
+#     ... Authorization: Basic toad:doat
+#     ... Content-Length: 244
+#     ... Content-Type: text/calendar
+#     ...
+#     ... BEGIN:VCALENDAR
+#     ... VERSION:2.0
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... BEGIN:VEVENT
+#     ... UID:some-uid2@example.com
+#     ... SUMMARY:New event
+#     ... DTSTART:20050204T120000
+#     ... DURATION:PT1H
+#     ... DTSTAMP:20050203T150000
+#     ... END:VEVENT
+#     ... BEGIN:VEVENT
+#     ... UID:some-uid@example.com
+#     ... SUMMARY:Sample event
+#     ... DTSTART:20050204T100000
+#     ... DURATION:PT1H
+#     ... DTSTAMP:20050203T150000
+#     ... END:VEVENT
+#     ... END:VCALENDAR
+#     ... """)
+#     HTTP/1.1 200 Ok
+#     ...
+
+# Now let's allow modification, but not addition
+
+#     >>> manager.getLink('Set Up Access').click()
+#     >>> toad_settings = manager.getControl(name='sb.person.toad')
+#     >>> toad_settings.value = ['schooltool.viewCalendar',
+#     ...                        'schooltool.modifyEvent']
+#     >>> manager.getControl('Set Access', index=0).click()
+
+# Removal: allowed
+
+#     >>> print http(r"""
+#     ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
+#     ... Authorization: Basic toad:doat
+#     ... Content-Length: 244
+#     ... Content-Type: text/calendar
+#     ...
+#     ... BEGIN:VCALENDAR
+#     ... VERSION:2.0
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... BEGIN:VEVENT
+#     ... UID:some-uid@example.com
+#     ... SUMMARY:Sample event
+#     ... DTSTART:20050204T100000
+#     ... DURATION:PT1H
+#     ... DTSTAMP:20050203T150000
+#     ... END:VEVENT
+#     ... END:VCALENDAR
+#     ... """)
+#     HTTP/1.1 200 Ok
+#     ...
+
+# Modification: allowed
+
+#     >>> print http(r"""
+#     ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
+#     ... Authorization: Basic toad:doat
+#     ... Content-Length: 244
+#     ... Content-Type: text/calendar
+#     ...
+#     ... BEGIN:VCALENDAR
+#     ... VERSION:2.0
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... BEGIN:VEVENT
+#     ... UID:some-uid@example.com
+#     ... SUMMARY:Sample event (modified)
+#     ... DTSTART:20050204T100000
+#     ... DURATION:PT2H
+#     ... DTSTAMP:20050203T150000
+#     ... END:VEVENT
+#     ... END:VCALENDAR
+#     ... """)
+#     HTTP/1.1 200 Ok
+#     ...
+
+# Addition: not allowed
+
+#     >>> print http(r"""
+#     ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
+#     ... Authorization: Basic toad:doat
+#     ... Content-Length: 244
+#     ... Content-Type: text/calendar
+#     ...
+#     ... BEGIN:VCALENDAR
+#     ... VERSION:2.0
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... BEGIN:VEVENT
+#     ... UID:some-uid@example.com
+#     ... SUMMARY:Sample event (modified)
+#     ... DTSTART:20050204T100000
+#     ... DURATION:PT2H
+#     ... DTSTAMP:20050203T150000
+#     ... END:VEVENT
+#     ... BEGIN:VEVENT
+#     ... UID:some-uid2@example.com
+#     ... SUMMARY:New event
+#     ... DTSTART:20050204T120000
+#     ... DURATION:PT1H
+#     ... DTSTAMP:20050203T150000
+#     ... END:VEVENT
+#     ... END:VCALENDAR
+#     ... """)
+#     HTTP/1.1 401 Unauthorized
+#     ...
 

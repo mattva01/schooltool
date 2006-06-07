@@ -45,13 +45,14 @@ from schooltool.common import collect
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.calendar.interfaces import IExpandedCalendarEvent
 from schooltool.course.interfaces import ISection, ISectionContainer
-from schooltool.timetable.browser import TimetableConflictMixin
 from schooltool.relationship.relationship import getRelatedObjects
 from schooltool.app.membership import URIGroup
 from schooltool.app.relationships import URISection
 from schooltool.course import booking
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.timetable.interfaces import ICompositeTimetables
+from schooltool.app.browser.app import RelationshipViewBase
+from schooltool.timetable.browser import TimetableConflictMixin
 
 
 def same(a, b):
@@ -151,33 +152,11 @@ class SectionEditView(BaseEditView):
     __used_for__ = ISection
 
 
-class RelationshipEditingViewBase(BrowserView, TimetableConflictMixin):
+class ConflictDisplayMixin(TimetableConflictMixin):
+    """A mixin for use in views that display event conflicts."""
 
-    def add(self, item):
-        """Add an item to the list of selected items."""
-        # Only those who can edit this section will see the view so it
-        # is safe to remove the security proxy here
-        collection = removeSecurityProxy(self.getCollection())
-        collection.add(item)
-
-    def remove(self, item):
-        """Remove an item from selected items."""
-        # Only those who can edit this section will see the view so it
-        # is safe to remove the security proxy here
-        collection = removeSecurityProxy(self.getCollection())
-        collection.remove(item)
-
-    def getCollection(self):
-        """Return the backend storage for related objects."""
-        raise NotImplementedError("Subclasses should override this method.")
-
-    def getSelectedItems(self):
-        """Return a sequence of items that are already selected."""
-        return self.getCollection()
-
-    def getAvailableItems(self):
-        """Return a sequence of items that can be selected."""
-        raise NotImplementedError("Subclasses should override this method.")
+    def __init__(self, context):
+        self.context = context
 
     def getConflictingSections(self, item):
         """Return a sequence of sections that conflict with item.
@@ -197,6 +176,9 @@ class RelationshipEditingViewBase(BrowserView, TimetableConflictMixin):
         result.sort(key=lambda x: (x['day_id'], x['period_id'],
                                    x['section'].label))
         return result
+
+    def getSections(self, items):
+        raise NotImplementedError("Subclasses should override this method.")
 
     @collect
     def _findConflicts(self, timetable_events, calendar_events):
@@ -249,44 +231,27 @@ class RelationshipEditingViewBase(BrowserView, TimetableConflictMixin):
         return self._groupConflicts(conflicts)
 
     def update(self):
-        # This method is rather similar to GroupListView.update().
-        context_url = zapi.absoluteURL(self.context, self.request)
-        if 'ADD_ITEMS' in self.request:
-            for item in self.getAvailableItems():
-                if 'add_item.' + item.__name__ in self.request:
-                    item = removeSecurityProxy(item)
-                    self.add(item)
-        elif 'REMOVE_ITEMS' in self.request:
-            for item in self.getSelectedItems():
-                if 'remove_item.' + item.__name__ in self.request:
-                    item = removeSecurityProxy(item)
-                    self.remove(item)
-        elif 'CANCEL' in self.request:
-            self.request.response.redirect(context_url)
-
-        if 'SEARCH' in self.request and 'CLEAR_SEARCH' not in self.request:
-            searchstr = self.request['SEARCH'].lower()
-            results = [item for item in self.getAvailableItems()
-                       if searchstr in item.title.lower()]
-        else:
-            self.request.form['SEARCH'] = ''
-            results = self.getAvailableItems()
-
-        start = int(self.request.get('batch_start', 0))
-        size = int(self.request.get('batch_size', 10))
-        term = self.getTerm()
+        """Set self.busy_periods."""
         ttschema = self.getSchema()
         if ttschema:
+            term = self.getTerm()
             section_map = self.sectionMap(term, ttschema)
             self.busy_periods = [(key, sections)
                                  for key, sections in section_map.items()
                                  if self.context in sections]
         else:
             self.busy_periods = []
-        self.batch = Batch(results, start, size, sort_by='title')
 
 
-class SectionInstructorView(RelationshipEditingViewBase):
+class RelationshipEditConfView(RelationshipViewBase, ConflictDisplayMixin):
+    """A relationship editing view that displays conflicts."""
+
+    def update(self):
+        RelationshipViewBase.update(self)
+        ConflictDisplayMixin.update(self)
+
+
+class SectionInstructorView(RelationshipEditConfView, ConflictDisplayMixin):
     """View for adding instructors to a Section."""
 
     __used_for__ = ISection
@@ -305,12 +270,12 @@ class SectionInstructorView(RelationshipEditingViewBase):
     def getAvailableItems(self):
         """Return a list of all possible members."""
         container = getSchoolToolApplication()['persons']
-        selected_items = Set(self.getSelectedItems())
+        selected_items = set(self.getSelectedItems())
         return [p for p in container.values()
                 if p not in selected_items]
 
 
-class SectionLearnerView(RelationshipEditingViewBase):
+class SectionLearnerView(RelationshipEditConfView):
     """View for adding learners to a Section.  """
 
     __used_for__ = ISection
@@ -338,7 +303,7 @@ class SectionLearnerView(RelationshipEditingViewBase):
                 if p not in selected_items]
 
 
-class SectionLearnerGroupView(RelationshipEditingViewBase):
+class SectionLearnerGroupView(RelationshipEditConfView):
     """View for adding learners to a Section."""
 
     __used_for__ = ISection
@@ -365,7 +330,7 @@ class SectionLearnerGroupView(RelationshipEditingViewBase):
         return [p for p in container.values()
                 if p not in selected_items]
 
-class SectionResourceView(RelationshipEditingViewBase):
+class SectionResourceView(RelationshipEditConfView):
     """View for adding learners to a Section."""
 
     __used_for__ = ISection

@@ -24,6 +24,25 @@ $Id$
 """
 
 from zope.interface import Interface
+from zope.schema import Dict, Bool, TextLine
+from zope.interface import Attribute
+from zope.configuration.fields import PythonIdentifier
+
+
+class ICrowdsUtility(Interface):
+    """Crowds Utility holds registered security information"""
+
+    crowdmap = Dict(
+        title=u"Crowd Map",
+        description=u"Maps crowd names to crowd factories")
+
+    objcrowds = Dict(
+        title=u"Object Crowd Factories",
+        description=u"Maps (interface, permission)s to crowd factories")
+
+    permcrowds = Dict(
+        title=u"Permission Crowd Factories",
+        description=u"Maps permissions to crowd factories")
 
 
 class ICrowd(Interface):
@@ -34,3 +53,37 @@ class ICrowd(Interface):
 
     def contains(principal):
         """Return True if principal is in the crowd."""
+
+
+class IAccessControlCustomisations(Interface):
+    """Access Control Customisation storage."""
+
+    def get(key):
+        """Return a value of a setting stored under the key."""
+
+    def set(key, value):
+        """Set the value of a setting stored under the key."""
+
+    def __iter__():
+        """Iterate through all customisation settings."""
+
+
+class IAccessControlSetting(Interface):
+    """An access control customisation setting."""
+
+    key = PythonIdentifier(description=u"""A key that identified the setting.
+                           For example: 'members_manage_groups',
+                           'teachers_edit_person_info'
+                           """)
+    default = Bool(title=u"The default value for the setting.")
+    text = TextLine(title=u"Description of the setting for the user interface.")
+
+    def getValue():
+        """Return the value of the setting.
+
+        Return the default if it is not set in the
+        AccessControlCusomisations storage.
+        """
+
+    def setValue(value):
+        """Set the value of the setting."""

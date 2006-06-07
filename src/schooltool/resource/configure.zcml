@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:security="http://schooltool.org/securitypolicy"
            i18n_domain="schooltool">
 
   <interface
@@ -26,7 +27,7 @@
 
     <allow attributes="__cmp__" />
     <require permission="schooltool.view"
-             attributes="title description groups isLocation" />
+             attributes="title description groups leaders isLocation" />
     <require permission="schooltool.edit"
              set_schema=".interfaces.IResource" />
   </class>
@@ -35,6 +36,13 @@
       for=".interfaces.IResourceContainer"
       factory="schooltool.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
+
+  <adapter factory=".resource.ResourceCalendarCrowd"
+           provides="schooltool.app.security.ICalendarParentCrowd"
+           name="schooltool.view" />
+  <adapter factory=".resource.ResourceCalendarCrowd"
+           provides="schooltool.app.security.ICalendarParentCrowd"
+           name="schooltool.edit" />
 
   <!-- Application hook -->
   <subscriber
@@ -57,5 +65,32 @@
 
   <include package=".browser" />
   <include package=".rest" />
+
+  <security:allow
+      interface="schooltool.resource.interfaces.IResourceContainer"
+      crowds="administration"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.resource.interfaces.IResourceContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.resource.interfaces.IResourceContainer"
+      crowds="administration"
+      permission="schooltool.create" />
+
+  <security:allow
+      interface="schooltool.resource.interfaces.IResource"
+      crowds="administration leaders"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.resource.interfaces.IResource"
+      crowds="administration leaders"
+      permission="schooltool.edit" />
+
+  <security:setting
+      key="everyone_can_view_resource_calendar"
+      text="Calendars for resources are public"
+      default="False" />
 
 </configure>

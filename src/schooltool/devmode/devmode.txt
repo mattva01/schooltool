@@ -514,73 +514,73 @@ also get a list of containers from which the verb is valid:
     </div>
     ...
 
-Following the HTTP verbs, all identifiable name traversers are listed,
-including the access control list, `acl`:
+# Following the HTTP verbs, all identifiable name traversers are listed,
+# including the access control list, `acl`:
 
 
-    >>> print browser.contents
-    <!DOC...
-    ...
-    <div class="indent">
-      <h3>acl</h3>
-      <div class="indent">
-        <div>
-          <i>Resolves to:</i>
-          <a href="...">schooltool.app.rest.acl.ACLAdapter</a>
-        </div>
-        <div>
-          <i>Registered at:</i>
-          <a href="...">Zope3/.../schooltool/app/rest/configure.zcml</a>
-          <span class="small">
-           (line 67)</span>
-        </div>
-      </div>
-    </div>
-    ...
+#     >>> print browser.contents
+#     <!DOC...
+#     ...
+#     <div class="indent">
+#       <h3>acl</h3>
+#       <div class="indent">
+#         <div>
+#           <i>Resolves to:</i>
+#           <a href="...">schooltool.app.rest.acl.ACLAdapter</a>
+#         </div>
+#         <div>
+#           <i>Registered at:</i>
+#           <a href="...">Zope3/.../schooltool/app/rest/configure.zcml</a>
+#           <span class="small">
+#            (line 67)</span>
+#         </div>
+#       </div>
+#     </div>
+#     ...
 
-However, the link to the resolved component does not link the the class
-documentation, but another RESTive view documentation screen. This is to allow
-the inspection of the complete RESTive API:
+# However, the link to the resolved component does not link the the class
+# documentation, but another RESTive view documentation screen. This is to allow
+# the inspection of the complete RESTive API:
 
-    >>> browser.getLink('schooltool.app.rest.acl.ACLAdapter').click()
-    >>> browser.url
-    '.../++apidoc++/Code/schooltool/app/rest/acl/ACLAdapter/restviews.html'
+#     >>> browser.getLink('schooltool.app.rest.acl.ACLAdapter').click()
+#     >>> browser.url
+#     '.../++apidoc++/Code/schooltool/app/rest/acl/ACLAdapter/restviews.html'
 
-In the ACL view, you can also see an example of a 'POST' view:
+# In the ACL view, you can also see an example of a 'POST' view:
 
-    >>> print browser.contents
-    <!DOC...
-    ...
-    <div class="indent">
-      <h3>POST</h3>
-      <div class="indent">
-        <div>
-          <i>Registered at:</i>
-          <a href="...">Zope3/.../schooltool/app/rest/configure.zcml</a>
-          <span class="small">
-            (line 176)</span>
-        </div>
-        <div>
-          <i>Factory path:</i>
-          <a href="...">schooltool.app.rest.acl.ACLView</a>
-        </div>
-        <div>
-          <i>Template:</i>
-          Zope3/.../schooltool/app/rest/templates/acl.pt
-        </div>
-        <div>
-          <i>Permission:</i>
-          n/a
-        </div>
-        <div>
-          <i><b>Schema:</b></i>
-          <div class="indent">
-            <pre style="font-size: 100%; margin: 0">...</pre>
-          </div>
-        </div>
-      </div>
-    </div>
-    ...
+#     >>> print browser.contents
+#     <!DOC...
+#     ...
+#     <div class="indent">
+#       <h3>POST</h3>
+#       <div class="indent">
+#         <div>
+#           <i>Registered at:</i>
+#           <a href="...">Zope3/.../schooltool/app/rest/configure.zcml</a>
+#           <span class="small">
+#             (line 176)</span>
+#         </div>
+#         <div>
+#           <i>Factory path:</i>
+#           <a href="...">schooltool.app.rest.acl.ACLView</a>
+#         </div>
+#         <div>
+#           <i>Template:</i>
+#           Zope3/.../schooltool/app/rest/templates/acl.pt
+#         </div>
+#         <div>
+#           <i>Permission:</i>
+#           n/a
+#         </div>
+#         <div>
+#           <i><b>Schema:</b></i>
+#           <div class="indent">
+#             <pre style="font-size: 100%; margin: 0">...</pre>
+#           </div>
+#         </div>
+#       </div>
+#     </div>
+#     ...
 
 
 Book

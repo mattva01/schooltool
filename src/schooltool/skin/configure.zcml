@@ -205,4 +205,10 @@
       permission="zope.Public"
       />
 
+
+  <zope:adapter
+      for=".skin.NavigationViewlet"
+      name="schooltool.view"
+      factory=".skin.NavigationViewletCrowd" />
+
 </configure>

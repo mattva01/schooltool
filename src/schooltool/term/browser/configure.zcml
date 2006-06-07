@@ -8,7 +8,7 @@
       for="..interfaces.ITermContainer"
       class=".term.TermContainerView"
       template="term-container.pt"
-      permission="zope.View"
+      permission="schooltool.view"
       menu="zmi_views"
       title="View"
       />
@@ -18,7 +18,7 @@
       for="..interfaces.ITermContainer"
       class="schooltool.timetable.browser.schema.TimetableDependentDeleteView"
       template="term-container-delete.pt"
-      permission="zope.View"
+      permission="schooltool.view"
       menu="zmi_views"
       title="View"
       />
@@ -38,8 +38,8 @@
       for="*"
       manager="schooltool.skin.INavigationManager"
       template="templates/navigationViewlet.pt"
-      class="schooltool.skin.NavigationViewlet"
-      permission="zope.View"
+      class="schooltool.skin.TopLevelContainerNavigationViewlet"
+      permission="schooltool.view"
       link="terms"
       title="Terms"
       order="70"
@@ -51,7 +51,7 @@
       for="..interfaces.ITerm"
       class=".term.TermView"
       template="term.pt"
-      permission="zope.View"
+      permission="schooltool.view"
       menu="zmi_views" title="View"
       />
 

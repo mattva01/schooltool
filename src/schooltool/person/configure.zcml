@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:security="http://schooltool.org/securitypolicy"
            xmlns:browser="http://namespaces.zope.org/browser"
            i18n_domain="schooltool">
 
@@ -66,11 +67,6 @@
 
   <subscriber
       for="schooltool.person.interfaces.IPerson zope.app.container.interfaces.IObjectAddedEvent"
-      handler=".security.personPermissionsSubscriber"
-      />
-
-  <subscriber
-      for="schooltool.person.interfaces.IPerson zope.app.container.interfaces.IObjectAddedEvent"
       handler=".person.personAppCalendarOverlaySubscriber"
       />
 
@@ -82,5 +78,41 @@
 
   <include package=".browser" />
   <include package=".rest" />
+
+  <security:allow
+      interface="schooltool.person.interfaces.IPersonContainer"
+      crowds="administration"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.person.interfaces.IPersonContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.person.interfaces.IPersonContainer"
+      crowds="administration"
+      permission="schooltool.create" />
+
+  <security:allow
+      interface="schooltool.person.interfaces.IPerson"
+      crowds="administration owner authenticated"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.person.interfaces.IPerson"
+      crowds="administration authenticated"
+      permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.person.interfaces.IPerson"
+      crowds="administration"
+      permission="schooltool.manageMembership" />
+
+  <adapter
+      factory=".person.PersonCalendarCrowd"
+      provides="schooltool.app.interfaces.ICalendarParentCrowd"
+      name="schooltool.view" />
+
+  <adapter
+      factory=".person.getCalendarOwner"
+      provides=".interfaces.IPerson"
+      for="schooltool.app.interfaces.ISchoolToolCalendar" />
 
 </configure>

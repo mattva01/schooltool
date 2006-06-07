@@ -137,15 +137,9 @@ Now we can add those people to the section:
     >>> manager.getControl('Add').click()
     >>> manager.getControl('Cancel').click()
 
-The instructor must also receive management access to the section in order to
-manipulate activities and other section data:
 
-    >>> manager.getLink('Set Up Access').click()
-    >>> manager.getControl(name='sb.person.stephan').value = [
-    ...     'schooltool.viewCalendar', 'schooltool.view',
-    ...     'schooltool.edit', 'schooltool.create']
-    >>> manager.getControl('Set Access', index=0).click()
-
+Instructor should be automatically capable of manipulating activities
+and other section data.
 
 Gradbook Management
 -------------------

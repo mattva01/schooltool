@@ -605,13 +605,6 @@ def doctest_AttendanceCalendarEventViewlet():
         >>> viewlet.attendanceLink()
         'http://127.0.0.1/sections/math4a/attendance/2005-12-16/P4'
 
-    Unless you are not authorised:
-
-        >>> viewlet.request.principal.id = 'guest'
-        >>> print viewlet.attendanceLink()
-        None
-        >>> viewlet.request.principal.id = 'manager' # restore
-
     The date in the link depends on the configured timezone
 
         >>> tokyo = timezone('Asia/Tokyo')

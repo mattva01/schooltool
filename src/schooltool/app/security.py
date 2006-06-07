@@ -35,8 +35,8 @@ from zope.location.interfaces import ILocation
 from zope.app.security.interfaces import IAuthentication, ILoginPassword
 from zope.app.security.interfaces import IAuthenticatedGroup, IEveryoneGroup
 from zope.app.session.interfaces import ISession
-from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.interface import implements
+from zope.component import adapts, queryAdapter
 from zope.security.interfaces import IGroupAwarePrincipal
 from zope.security.checker import ProxyFactory
 from zope.publisher.interfaces.browser import IBrowserRequest
@@ -44,8 +44,14 @@ from zope.app.security.interfaces import IUnauthenticatedGroup
 
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolAuthentication
+from schooltool.app.interfaces import IAsset
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.person.interfaces import IPerson
+from schooltool.securitypolicy.crowds import Crowd
+from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import ICalendarParentCrowd
+from schooltool.securitypolicy.crowds import ConfigurableCrowd
 
 
 class Principal(Contained):
@@ -206,40 +212,40 @@ def authSetUpSubscriber(app, event):
     """
     setUpLocalAuth(app)
 
-    # Grant schooltool.view on the application and
-    # schooltool.viewCalendar on the application calendar to
-    # all authenticated users
-    allusers = zapi.queryUtility(IAuthenticatedGroup)
-    if allusers is not None:
-        perms = IPrincipalPermissionManager(app)
-        perms.grantPermissionToPrincipal('schooltool.view',
-                                         allusers.id)
+
+class ApplicationCalendarCrowd(ConfigurableCrowd):
+    adapts(ISchoolToolApplication)
+    setting_key = 'everyone_can_view_app_calendar'
 
 
-def groupPermissionsSubscriber(group, event):
-    """Grant default permissions to all new groups"""
-    map = IPrincipalPermissionManager(group)
-    principalid = 'sb.group.' + group.__name__
-    map.grantPermissionToPrincipal('schooltool.view', principalid)
-    map.grantPermissionToPrincipal('schooltool.viewCalendar',
-                                   principalid)
+class CalendarAccessorsCrowd(Crowd):
+    """A crowd that contains principals who are allowed to access the context.
 
-
-def applicationCalendarPermissionsSubscriber(app, event):
-    """Set the default permissions for schooltool.
-
-    By default view and viewCalendar are granted for unauthenticated users to
-    the top level application so that everyone can see the front page and the
-    the sitewide calendar without logging in.
+    This crowd adapts the parent of the calendar to ICalendarParentCrowd and
+    uses that to decide on the result.
     """
-    calendar = ISchoolToolCalendar(app)
-    app_calendar_perms = IPrincipalPermissionManager(calendar)
-    
-    unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
-    app_calendar_perms.grantPermissionToPrincipal('schooltool.viewCalendar',
-                                                  unauthenticated.id)
-    
-    authenticated = zapi.queryUtility(IAuthenticatedGroup)
-    cal_perms = IPrincipalPermissionManager(calendar)
-    app_calendar_perms.grantPermissionToPrincipal('schooltool.viewCalendar',
-                                                  authenticated.id)
+
+    def contains(self, principal):
+        parent = self.context.__parent__
+        pcrowd = queryAdapter(parent, ICalendarParentCrowd, 'schooltool.view',
+                              default=None)
+        if pcrowd is not None:
+            return pcrowd.contains(principal)
+        else:
+            return False
+
+
+class CalendarViewersCrowd(CalendarAccessorsCrowd):
+    perm = 'schooltool.view'
+
+class CalendarEditorsCrowd(CalendarAccessorsCrowd):
+    perm = 'schooltool.view'
+
+
+class LeaderCrowd(Crowd):
+    """A crowd that contains leaders of an object."""
+
+    def contains(self, principal):
+        assert IAsset.providedBy(self.context)
+        person = IPerson(principal, None)
+        return person in self.context.leaders

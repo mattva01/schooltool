@@ -12,7 +12,7 @@
         for="schooltool.level.interfaces.ILevelContainer"
         class="schooltool.level.browser.level.LevelContainerView"
         template="templates/container.pt"
-        permission="zope.View"
+        permission="schooltool.view"
         menu="zmi_views" title="View"
         />
 
@@ -21,8 +21,8 @@
       for="*"
       manager="schooltool.skin.INavigationManager"
       template="templates/navigationViewlet.pt"
-      class="schooltool.skin.NavigationViewlet"
-      permission="zope.View"
+      class="schooltool.skin.TopLevelContainerNavigationViewlet"
+      permission="schooltool.view"
       link="levels"
       title="Levels"
       order="90"
@@ -32,8 +32,8 @@
 
   <containerViews
       for="..interfaces.ILevelContainer"
-      contents="zope.ManageContent"
-      add="zope.View"
+      contents="schooltool.view"
+      add="schooltool.edit"
       />
 
   <page
@@ -41,7 +41,7 @@
       for="..interfaces.ILevelContainer"
       class=".level.LevelValidationView"
       template="level_validation.pt"
-      permission="zope.View"
+      permission="schooltool.view"
       menu="schooltool_actions" title="Validate Levels"
       />
 
@@ -105,7 +105,7 @@
       name="index.html"
       for="..interfaces.ILevel"
       template="level.pt"
-      permission="zope.View"
+      permission="schooltool.view"
       menu="zmi_views" title="View"
       />
 
@@ -143,7 +143,7 @@
       for="schooltool.person.interfaces.IPerson"
       template="record.pt"
       class=".record.AcademicRecordView"
-      permission="zope.View"
+      permission="schooltool.view"
       menu="schooltool_actions" title="Academic Record"
       />
 

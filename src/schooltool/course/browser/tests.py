@@ -446,8 +446,8 @@ def doctest_SectionEditView():
     """
 
 
-def doctest_RelationshipEditingViewBase():
-    r"""Tests for RelationshipEditingViewBase.
+def doctest_ConflictDisplayMixin():
+    r"""Tests for ConflictDisplayMixin.
 
         >>> app = setup.setUpSchoolToolSite()
 
@@ -468,11 +468,11 @@ def doctest_RelationshipEditingViewBase():
     Inheriting views must implement getCollection() and
     getAvailableItems():
 
-        >>> from schooltool.course.browser.section import RelationshipEditingViewBase
+        >>> from schooltool.course.browser.section import ConflictDisplayMixin
         >>> class SchemaStub(ItemStub):
         ...     def items(self):
         ...         return []
-        >>> class RelationshipView(RelationshipEditingViewBase):
+        >>> class RelationshipView(ConflictDisplayMixin):
         ...     def getCollection(self):
         ...         return RelationshipPropertyStub()
         ...     def getAvailableItems(self):
@@ -537,15 +537,15 @@ def doctest_RelationshipEditingViewBase():
     """
 
 
-def doctest_RelationshipEditingViewBase_no_timetables():
-    r"""Tests for RelationshipEditingViewBase.
+def doctest_ConflictDisplayMixin_no_timetables():
+    r"""Tests for ConflictDisplayMixin.
 
-    RelationshipEditingViewBase should work even if there are no timetables
+    ConflictDisplayMixin should work even if there are no timetables
     defined.
 
-        >>> from schooltool.course.browser.section import RelationshipEditingViewBase
+        >>> from schooltool.course.browser.section import ConflictDisplayMixin
         >>> app = setup.setUpSchoolToolSite()
-        >>> view = RelationshipEditingViewBase(app, TestRequest())
+        >>> view = ConflictDisplayMixin(app)
         >>> view.getSchema = lambda: None
         >>> view.getAvailableItems = lambda: []
 
@@ -554,8 +554,8 @@ def doctest_RelationshipEditingViewBase_no_timetables():
     """
 
 
-def doctest_RelationshipEditingViewBase_getConflictingSections():
-    r"""Tests for RelationshipEditingViewBase.getConflictingSections
+def doctest_ConflictDisplayMixin_getConflictingSections():
+    r"""Tests for ConflictDisplayMixin.getConflictingSections
 
         >>> class SectionStub(object):
         ...     def __init__(self, label):
@@ -571,8 +571,8 @@ def doctest_RelationshipEditingViewBase_getConflictingSections():
         ...     print "Called getSections on", item
         ...     return [context, section2]
 
-        >>> from schooltool.course.browser.section import RelationshipEditingViewBase
-        >>> view = RelationshipEditingViewBase(context, None)
+        >>> from schooltool.course.browser.section import ConflictDisplayMixin
+        >>> view = ConflictDisplayMixin(context)
         >>> view.getSections = getSectionsStub
         >>> view.busy_periods = [(('d1', 'a'), [section1]),
         ...                      (('d2', 'b'), [section1, context]),
@@ -590,11 +590,11 @@ def doctest_RelationshipEditingViewBase_getConflictingSections():
     """
 
 
-def doctest_RelationshipEditingViewBase_findConflicts():
-    """Tests for RelationshipEditingViewBase._findConflists
+def doctest_ConflictDisplayMixin():
+    """Tests for ConflictDisplayMixin._findConflists
 
-        >>> from schooltool.course.browser.section import RelationshipEditingViewBase
-        >>> view = RelationshipEditingViewBase(None, None)
+        >>> from schooltool.course.browser.section import ConflictDisplayMixin
+        >>> view = ConflictDisplayMixin(None)
         >>> view._findConflicts([], [])
         []
 
@@ -632,13 +632,13 @@ def doctest_RelationshipEditingViewBase_findConflicts():
     """
 
 
-def doctest_RelationshipEditingViewBase_groupConflicts():
-    """Tests for RelationshipEditingViewBase._groupConflicts
+def doctest_ConflictDisplayMixin_groupConflicts():
+    """Tests for ConflictDisplayMixin._groupConflicts
 
     Given an empty list the function should return an empty list:
 
-        >>> from schooltool.course.browser.section import RelationshipEditingViewBase
-        >>> view = RelationshipEditingViewBase(None, None)
+        >>> from schooltool.course.browser.section import ConflictDisplayMixin
+        >>> view = ConflictDisplayMixin(None)
         >>> view._groupConflicts([])
         []
 
@@ -655,8 +655,8 @@ def doctest_RelationshipEditingViewBase_groupConflicts():
 
     """
 
-def doctest_RelationshipEditingViewBase_getConflictingEvents():
-    """Tests for RelationshipEditingViewBase.getConflictingEvents
+def doctest_ConflictDisplayMixin_getConflictingEvents():
+    """Tests for ConflictDisplayMixin.getConflictingEvents
 
         >>> from schooltool.timetable.interfaces import ICompositeTimetables
         >>> from schooltool.app.interfaces import ISchoolToolCalendar
@@ -685,8 +685,8 @@ def doctest_RelationshipEditingViewBase_getConflictingEvents():
     First let's try it out with a section without events in its
     timetable:
 
-        >>> from schooltool.course.browser.section import RelationshipEditingViewBase
-        >>> view = RelationshipEditingViewBase(TimetabledStub([]), None)
+        >>> from schooltool.course.browser.section import ConflictDisplayMixin
+        >>> view = ConflictDisplayMixin(TimetabledStub([]))
         >>> view.getConflictingEvents(TimetabledStub([]))
         []
 
@@ -709,7 +709,7 @@ def doctest_RelationshipEditingViewBase_getConflictingEvents():
     If there are no events in the item calendar, an empty list is
     returned:
 
-        >>> view = RelationshipEditingViewBase(TimetabledStub(events), None)
+        >>> view = ConflictDisplayMixin(TimetabledStub(events))
         >>> view.getConflictingEvents(TimetabledStub([]))
         Expanding from 10 to 33
         []
@@ -717,7 +717,7 @@ def doctest_RelationshipEditingViewBase_getConflictingEvents():
     The calendar was expanded from the dtstart of the first event till
     the dtend of the last one. This works with only one event too:
 
-        >>> view = RelationshipEditingViewBase(TimetabledStub(events[-1:]), None)
+        >>> view = ConflictDisplayMixin(TimetabledStub(events[-1:]))
         >>> view.getConflictingEvents(TimetabledStub([]))
         Expanding from 20 to 23
         []

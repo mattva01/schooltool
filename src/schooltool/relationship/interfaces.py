@@ -176,4 +176,3 @@ class IRelationshipSchema(Interface):
 
     def unlink(**parties):
         """Break a relationship."""
-

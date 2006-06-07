@@ -41,12 +41,14 @@ from zope.app.security.interfaces import IAuthentication
 from zope.app.security.interfaces import IAuthenticatedGroup
 from zope.app.security.interfaces import IUnauthenticatedGroup
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from schooltool import SchoolToolMessage as _
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolCalendar
+from schooltool.app.interfaces import IAsset
 from schooltool.batching import Batch
 from schooltool.batching.browser import MultiBatchViewMixin
 from schooltool.person.interfaces import IPerson
@@ -145,6 +147,70 @@ class BaseEditView(EditView):
             return status
 
 
+class RelationshipViewBase(BrowserView):
+    """A base class for views that add/remove members from a relationship."""
+
+    __call__ = ViewPageTemplateFile('templates/edit_relationships.pt')
+
+    title = None
+    current_title = None
+    available_title = None
+
+    def add(self, item):
+        """Add an item to the list of selected items."""
+        # Only those who can edit this section will see the view so it
+        # is safe to remove the security proxy here
+        collection = removeSecurityProxy(self.getCollection())
+        collection.add(item)
+
+    def remove(self, item):
+        """Remove an item from selected items."""
+        # Only those who can edit this section will see the view so it
+        # is safe to remove the security proxy here
+        collection = removeSecurityProxy(self.getCollection())
+        collection.remove(item)
+
+    def getCollection(self):
+        """Return the backend storage for related objects."""
+        raise NotImplementedError("Subclasses should override this method.")
+
+    def getSelectedItems(self):
+        """Return a sequence of items that are already selected."""
+        return self.getCollection()
+
+    def getAvailableItems(self):
+        """Return a sequence of items that can be selected."""
+        raise NotImplementedError("Subclasses should override this method.")
+
+    def updateBatch(self, lst):
+        start = int(self.request.get('batch_start', 0))
+        size = int(self.request.get('batch_size', 10))
+        self.batch = Batch(lst, start, size, sort_by='title')
+
+    def update(self):
+        context_url = zapi.absoluteURL(self.context, self.request)
+        if 'ADD_ITEMS' in self.request:
+            for item in self.getAvailableItems():
+                if 'add_item.' + item.__name__ in self.request:
+                    self.add(removeSecurityProxy(item))
+        elif 'REMOVE_ITEMS' in self.request:
+            for item in self.getSelectedItems():
+                if 'remove_item.' + item.__name__ in self.request:
+                    self.remove(removeSecurityProxy(item))
+        elif 'CANCEL' in self.request:
+            self.request.response.redirect(context_url)
+
+        if 'SEARCH' in self.request and 'CLEAR_SEARCH' not in self.request:
+            searchstr = self.request['SEARCH'].lower()
+            results = [item for item in self.getAvailableItems()
+                       if searchstr in item.title.lower()]
+        else:
+            self.request.form['SEARCH'] = ''
+            results = self.getAvailableItems()
+
+        self.updateBatch(results)
+
+
 class LoginView(BrowserView):
     """A login view"""
 
@@ -184,126 +250,6 @@ class LogoutView(BrowserView):
         auth.clearCredentials(self.request)
         url = zapi.absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
-
-
-class ACLViewBase(object):
-    """A base view for both browser and restive access control views."""
-
-    permissions = [
-        ('schooltool.view', _('View')),
-        ('schooltool.edit', _('Edit')),
-        ('schooltool.create', _('Create new objects')),
-        ('schooltool.viewCalendar', _('View calendar')),
-        ('schooltool.addEvent', _('Add events')),
-        ('schooltool.modifyEvent', _('Modify/delete events')),
-        ('schooltool.controlAccess', _('Control access')),
-        ('schooltool.manageMembership', _('Manage membership')),
-        ]
-    permission_ids = [permission for permission, title in permissions]
-    del permission, title # list comprehensions clutter local scope
-
-    def getPersons(self):
-        app = getSchoolToolApplication()
-        map = IPrincipalPermissionManager(self.context)
-        auth = zapi.getUtility(IAuthentication)
-        result = []
-        for person in app['persons'].values():
-            pid = auth.person_prefix + person.__name__
-            result.append({'title': person.title, 'id': pid})
-        return result
-    persons = property(getPersons)
-
-    def permsForPrincipal(self, principalid):
-        """Return a list of permissions allowed for principal."""
-        permission_bits = hasPermissions(self.permission_ids, self.context,
-                                         principalid)
-        return [perm for perm, has in zip(self.permission_ids, permission_bits)
-                if has]
-
-    def getGroups(self):
-        app = getSchoolToolApplication()
-        auth = zapi.getUtility(IAuthentication)
-        map = IPrincipalPermissionManager(self.context)
-        result = []
-        all = zapi.queryUtility(IAuthenticatedGroup)
-        if all is not None:
-            result.append({'title': _('Authenticated users'),
-                           'id': all.id})
-        unauth = zapi.queryUtility(IUnauthenticatedGroup)
-        if unauth is not None:
-            result.append({'title': _('Unauthenticated users'),
-                           'id': unauth.id})
-        for group in app['groups'].values():
-            pid = auth.group_prefix + group.__name__
-            result.append({'title': group.title,
-                           'id': pid})
-        return result
-    groups = property(getGroups)
-
-    def applyPermissionChanges(self, principalid, permissions):
-        """Apply new permission settings for a single principal.
-
-        Make it so `principal` has exactly the permissions specified
-        in `permissions` (and not more) on self.context.
-
-        If the requested permission grant on self.context matches the
-        one on self.context.__parent__, this method removes any
-        specific local grants from self.context.  Otherwise, it adds a
-        local grant that either grants or denies the permission
-        directly on self.context.
-        """
-        parent = self.context.__parent__
-        manager = IPrincipalPermissionManager(self.context)
-        # ACL views are protected by schoolbell.controlAccess, so
-        # removeSecurityProxy does not lead to privilege escalation
-        # problems.
-        manager = removeSecurityProxy(manager)
-        permission_bits = hasPermissions(self.permission_ids, parent,
-                                         principalid)
-        for permission, in_parent in zip(self.permission_ids, permission_bits):
-            requested = permission in permissions
-            if requested and not in_parent:
-                manager.grantPermissionToPrincipal(permission, principalid)
-            elif not requested and in_parent:
-                manager.denyPermissionToPrincipal(permission, principalid)
-            else:
-                manager.unsetPermissionForPrincipal(permission, principalid)
-
-
-class ACLView(BrowserView, ACLViewBase, MultiBatchViewMixin):
-    """A view for editing SchoolBell-relevant local grants"""
-
-    def __init__(self, context, request):
-        BrowserView.__init__(self, context, request)
-        MultiBatchViewMixin.__init__(self, ['groups', 'persons'])
-
-    def update(self):
-        if 'UPDATE_SUBMIT' in self.request or 'CANCEL' in self.request:
-            url = zapi.absoluteURL(self.context, self.request)
-            self.request.response.redirect(url)
-
-        if 'UPDATE_SUBMIT' in self.request:
-            for info in self.persons + self.groups:
-                principalid = info['id']
-                if 'marker-' + principalid not in self.request:
-                    continue # skip this principal
-                permissions = self.request.get(principalid, [])
-                if isinstance(permissions, basestring):
-                    permissions = [permissions]
-                self.applyPermissionChanges(principalid, permissions)
-
-        MultiBatchViewMixin.update(self)
-
-        self.updateBatch('persons', self.persons)
-        self.updateBatch('groups', self.groups)
-
-        for infodict in itertools.chain(self.batches['persons'],
-                                        self.batches['groups']):
-            infodict['perms'] = self.permsForPrincipal(infodict['id'])
-
-    def __call__(self):
-        self.update()
-        return self.index()
 
 
 class ApplicationPreferencesView(BrowserView):
@@ -358,3 +304,21 @@ def hasPermissions(permissions, object, principalid):
     interaction = getSecurityPolicy()(participation)
     return [interaction.checkPermission(permission, object)
             for permission in permissions]
+
+
+class LeaderView(RelationshipViewBase):
+
+    __used_for__ = IAsset
+
+    title = _("Leaders")
+    current_title = _("Current leaders")
+    available_title = _("Available leaders")
+
+    def getCollection(self):
+        return self.context.leaders
+
+    def getAvailableItems(self):
+        container = getSchoolToolApplication()['persons']
+        selected_items = set(self.getSelectedItems())
+        return [p for p in container.values()
+                if p not in selected_items]

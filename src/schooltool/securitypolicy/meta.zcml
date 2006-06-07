@@ -14,7 +14,18 @@
       handler=".metaconfigure.allow"
       />
 
+    <directive
+      name="setting"
+      schema=".metadirectives.ISettingDirective"
+      handler=".metaconfigure.setting"
+      />
+
+    <directive
+      name="aggregate_crowd"
+      schema=".metadirectives.IAggregateCrowdDirective"
+      handler=".metaconfigure.aggregate_crowd"
+      />
+
   </directives>
 
 </configure>
-

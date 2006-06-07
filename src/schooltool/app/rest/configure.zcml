@@ -4,14 +4,6 @@
 
 <!-- Security Declarations -->
 
-  <class class=".acl.ACLAdapter">
-    <require
-        permission="schooltool.controlAccess"
-        attributes="context" />
-  </class>
-
-  <adapter factory=".acl.ACLAdapter" locate="true" />
-
   <class class="schooltool.relationship.relationship.LinkSet">
     <allow
        interface="schooltool.relationship.interfaces.IRelationshipLinks"
@@ -62,14 +54,6 @@
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory="zope.app.http.traversal.ContainerTraverser"
       permission="zope.Public"
-      />
-
-  <subscriber
-      for="zope.annotation.interfaces.IAnnotatable
-           zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".acl.ACLTraverser"
-      permission="schooltool.controlAccess"
       />
 
   <subscriber
@@ -153,33 +137,6 @@
       factory=".app.CalendarView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
-      />
-
-  <class class="schooltool.app.rest.acl.ACLView">
-    <require
-      permission="schooltool.controlAccess"
-      interface="schooltool.app.rest.acl.IACLView"
-      />
-  </class>
-
-  <!-- XXX: Changed factory from ACLViewFactory to ACLView -->
-  <view
-      for="schooltool.app.rest.acl.IACLAdapter"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      factory=".acl.ACLView"
-      permission="schooltool.controlAccess"
-      allowed_interface="schooltool.app.rest.acl.IACLView"
-      name="GET"
-      />
-
-  <!-- XXX: Changed factory from ACLViewFactory to ACLView -->
-  <view
-      for="schooltool.app.rest.acl.IACLAdapter"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      factory=".acl.ACLView"
-      permission="schooltool.controlAccess"
-      allowed_interface="schooltool.app.rest.acl.IACLView"
-      name="POST"
       />
 
   <class class="schooltool.app.rest.relationships.RelationshipsView">
@@ -306,12 +263,6 @@
         title="Errors"
         parent="schooltool/rest"
         doc_path="ftests/errors.txt" />
-
-    <apidoc:bookchapter
-        id="acl"
-        title="ACL"
-        parent="schooltool/rest"
-        doc_path="ftests/acl.txt" />
 
     <apidoc:bookchapter
         id="app"
