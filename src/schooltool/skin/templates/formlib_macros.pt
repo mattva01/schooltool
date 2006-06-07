@@ -32,7 +32,12 @@
   <fieldset>	
     <div class="row" tal:repeat="widget view/widgets">
       <div class="label" tal:content="widget/label"/>
-      <div class="field"><tal:block replace="structure widget" />&nbsp;</div>
+      <tal:block condition="repeat/widget/even">
+        <div class="field-even"><tal:block replace="structure widget" />&nbsp;</div>
+      </tal:block>
+      <tal:block condition="not: repeat/widget/even">
+        <div class="field-odd"><tal:block replace="structure widget" />&nbsp;</div>
+      </tal:block>
       <div class="clear"/>
     </div>
   </fieldset>
