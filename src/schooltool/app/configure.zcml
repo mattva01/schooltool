@@ -224,6 +224,10 @@
       name="calendar_viewers"
       factory=".security.CalendarViewersCrowd" />
 
+  <security:crowd
+      name="leaders"
+      factory=".security.LeaderCrowd" />
+
   <security:allow
       interface=".interfaces.ISchoolToolCalendar"
       permission="schooltool.view"

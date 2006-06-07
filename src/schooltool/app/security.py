@@ -44,6 +44,7 @@ from zope.app.security.interfaces import IUnauthenticatedGroup
 
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolAuthentication
+from schooltool.app.interfaces import IAsset
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.person.interfaces import IPerson
 from schooltool.securitypolicy.crowds import Crowd
@@ -232,3 +233,12 @@ class CalendarViewersCrowd(Crowd):
             return pcrowd.contains(principal)
         else:
             return False
+
+
+class LeaderCrowd(Crowd):
+    """A crowd that contains leaders of an object."""
+
+    def contains(self, principal):
+        assert IAsset.providedBy(self.context)
+        person = IPerson(principal, None)
+        return person in self.context.leaders
