@@ -4,6 +4,13 @@
            i18n_domain="schooltool">
 
   <page
+      name="demographics_macros"
+      for="*"
+      permission="zope.Public"
+      template="demographics_macros.pt"
+      />
+
+  <page
       name="add.html"
       for="schooltool.person.interfaces.IPersonContainer"
       class=".personform.PersonAddView"

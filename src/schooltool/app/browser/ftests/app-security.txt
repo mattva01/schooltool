@@ -186,7 +186,7 @@ The user can edit his own info:
 
     >>> frog.open('http://localhost/persons/frog/edit.html')
     >>> frog.getControl('Full name').value = 'Toad'
-    >>> frog.getControl('Apply').click()
+    >>> frog.getControl(name='form.actions.apply').click()
 
     >>> 'Toad' in frog.contents
     True

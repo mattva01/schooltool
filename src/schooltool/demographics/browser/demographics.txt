@@ -28,7 +28,7 @@ And we can edit its name info:
   >>> browser.open('http://localhost/persons/foobar/nameinfo/@@edit.html')
   >>> full_name = browser.getControl(name='form.full_name')
   >>> full_name.value = 'Someone Schooltool'
-  >>> browser.getControl('Apply').click()
+  >>> browser.getControl(name='form.actions.apply').click()
   >>> browser.open('http://localhost/persons/foobar/nameinfo/@@edit.html')
   >>> browser.getControl(name='form.full_name').value
   'Someone Schooltool'
@@ -55,7 +55,7 @@ We can edit its demographics:
   >>> browser.open('http://localhost/persons/foobar/demographics/@@edit.html')
   >>> previous_school = browser.getControl(name='form.previous_school')
   >>> previous_school.value = 'Some text'
-  >>> browser.getControl('Apply').click()
+  >>> browser.getControl(name='form.actions.apply').click()
 
 and view it:
 
@@ -68,22 +68,50 @@ and its school data:
   >>> browser.open('http://localhost/persons/foobar/schooldata/@@edit.html')
   >>> id = browser.getControl(name='form.id')
   >>> id.value = 'ABC'
-  >>> browser.getControl('Apply').click()
-  >>> browser.open('http://loaclhost/persons/foobar/schooldata')
+  >>> browser.getControl(name='form.actions.apply').click()
+  >>> browser.open('http://localhost/persons/foobar/schooldata')
   >>> 'ABC' in browser.contents
   True
 
 and various parent and emergency contact screens:
 
   >>> browser.open('http://localhost/persons/foobar/parent1/@@edit.html')
-  >>> name = browser.getControl(name='form.name')
-  >>> name.value = 'Zorro'
-  >>> browser.getControl('Apply').click()
+  >>> name = browser.getControl(name='form.name').value = 'Zorro'
+  >>> browser.getControl(name='form.actions.apply').click()
 
   >>> browser.open('http://localhost/persons/foobar/parent2/@@edit.html')
   >>> browser.open('http://localhost/persons/foobar/emergency1/@@edit.html')
   >>> browser.open('http://localhost/persons/foobar/emergency2/@@edit.html')
   >>> browser.open('http://localhost/persons/foobar/emergency3/@@edit.html')
+
+It's possible to submit screen by screen by using the Apply and Next
+button:
+
+  >>> browser.open('http://localhost/persons/foobar/@@edit.html')
+  >>> browser.getControl('Prefix').value = 'Mrs'
+  >>> browser.getControl('Apply and Next').click()
+  >>> browser.getControl('Gender').value = ['female']
+  >>> browser.getControl('Apply and Next').click()
+  >>> browser.getControl('Enrollment date').value = '2006-06-08'
+  >>> browser.getControl('Apply and Next').click()
+  >>> browser.getControl('Relationship to student').value = ['parent']
+  >>> browser.getControl('Apply and Next').click()
+  >>> browser.getControl('Relationship to student').value = ['parent']
+  >>> browser.getControl('Apply and Next').click()
+  >>> browser.getControl('Relationship to student').value = ['other']
+  >>> browser.getControl('Apply and Next').click()
+  >>> browser.getControl('Relationship to student').value = ['other']
+  >>> browser.getControl('Apply and Next').click()
+  >>> browser.getControl('Relationship to student').value = ['other']
+  >>> browser.getControl('Apply and Next').click()
+
+at the last 'Apply and Next', we go to the person's display form for
+name info::
+
+  >>> browser.url
+  'http://localhost/persons/foobar/nameinfo'
+  >>> 'Mrs' in browser.contents
+  True
 
 We can also add people as CSV data:
 
@@ -129,8 +157,7 @@ Check that the search didn't return un-matching cases:
 We can also search on parents:
 
   >>> browser.open('http://localhost/persons/@@search.html')
-  >>> sb = browser.getControl(name='form.parentName')
-  >>> sb.value = 'Zorro'
+  >>> browser.getControl(name='form.parentName').value = 'Zorro'
   >>> browser.getControl(name='form.actions.submit').click()
 
 Check that we found foobar, whose parent is Zorro:

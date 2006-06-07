@@ -28,6 +28,7 @@
 
   </form>
 </metal:block>
+
 <metal:block define-macro="display">
   <fieldset>	
     <div class="row" tal:repeat="widget view/widgets">

@@ -54,6 +54,10 @@ class EditForm(form.PageEditForm):
     
     @form.action(_("Apply"), condition=form.haveInputWidgets)
     def handle_edit_action(self, action, data):
+        self.edit_action(action, data)
+
+    # a separate method so it can be called by actions on subclasses as well
+    def edit_action(self, action, data):
         if not form.applyChanges(self.context, self.form_fields, data,
                                  self.adapters):
             self.status = _('No changes')
@@ -79,11 +83,14 @@ class EditForm(form.PageEditForm):
         
     @form.action(_("Cancel"), condition=form.haveInputWidgets)
     def handle_cancel_action(self, action, data):
+        self.cancel_action(action, data)
+
+    def cancel_action(self, action, data): 
         # redirect to parent
         url = zapi.absoluteURL(self.actualContext(), self.request)
         self.request.response.redirect(url)
         return ''
-
+       
 class AttributeEditForm(EditForm):
     """A form that can be used when editing an attribute of the actual
     content object.

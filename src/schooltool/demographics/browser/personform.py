@@ -80,17 +80,49 @@ class AttributeMenu(BrowserMenu):
                 item['action'] = '%s%s' % (obj_url, item['action'])
         return items
 
-    
 class PersonEditForm(AttributeEditForm):
     """Base class of all person edit forms.
     """
+    template = ViewPageTemplateFile('edit_form.pt')
+    
     def getMenu(self):
         return getMenu('person_edit_menu', self.context, self.request)
 
     def fullname(self):
         return IReadPerson(self.context.__parent__).title
-        
 
+    @form.action(_('Apply'), name='apply')
+    def handle_apply(self, action, data):
+        self.edit_action(action, data)
+        
+    @form.action(_('Apply and Next'), name='apply_and_next')
+    def handle_apply_next(self, action, data):
+        self.edit_action(action, data)
+        # if we succeeded we'll have a status
+        if self.status:
+            next = self.getNextMenuUrl()
+            if next:
+                return self.request.response.redirect(next)
+            else:
+                return ''
+
+    @form.action(_('Cancel'), name='cancel')
+    def handle_cancel(self, action, data):
+        self.cancel_action(action, data)
+    
+    def getNextMenuUrl(self):
+        menu = self.getMenu()
+        base_url = zapi.absoluteURL(self.context, self.request)
+        url =  base_url + '/@@' + self.__name__
+        return_next = False
+        for entry in menu:
+            if return_next:
+                return entry['action']
+            if entry['action'] == url:
+                return_next = True
+        url = zapi.absoluteURL(self.actualContext(), self.request)
+        return url + '/nameinfo'
+    
 nameinfo_traverser = SingleAttributeTraverserPlugin('nameinfo')
 
 
@@ -105,7 +137,7 @@ class PersonView(BrowserView):
 class PersonEditView(BrowserView):
     """The default edit view of the person. Redirects to the edit view
     of nameinfo.
-    """
+    """        
     def __call__(self):
         url = (zapi.absoluteURL(self.context.nameinfo, self.request) +
                '/edit.html')
@@ -113,6 +145,7 @@ class PersonEditView(BrowserView):
     
 
 class NameInfoEdit(PersonEditForm):
+        
     def title(self):
         return _(u'Change name information for ${fullname}',
                  mapping={'fullname':self.fullname()})
