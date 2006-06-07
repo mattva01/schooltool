@@ -16,7 +16,7 @@ We can add a person:
   >>> browser.getControl(name="form.password.confirm").value = "barfoo"
   >>> browser.getControl('Add').click()
 
-Try logging in with the shinny new usen:
+Try logging in with the shinny new user:
 
   >>> ubrowser = Browser()
   >>> ubrowser.handleErrors = False
@@ -64,7 +64,7 @@ and view it:
   True
 
 and its school data:
-  
+
   >>> browser.open('http://localhost/persons/foobar/schooldata/@@edit.html')
   >>> id = browser.getControl(name='form.id')
   >>> id.value = 'ABC'
@@ -192,7 +192,7 @@ But not alpha or beta:
   False
 
 There's a quick search form in the table view:
- 
+
   >>> browser.open('http://localhost/persons')
   >>> sb = browser.getControl(name="form.fulltext")
   >>> sb.value = '*a*'
@@ -271,7 +271,7 @@ Let's try removing the advisor and see that nothing goes wrong:
   >>> delete = browser.getControl(name="delete.alpha")
   >>> delete.value = True
   >>> browser.getControl("Delete").click()
-  >>> browser.getControl("Confirm").click()  
+  >>> browser.getControl("Confirm").click()
   >>> browser.open("http://localhost/persons/beta/schooldata/")
   >>> "Alpha" in browser.contents
   False
@@ -284,7 +284,7 @@ Now let's try removing the team and see that nothing goes wrong:
   >>> delete = browser.getControl(name="delete.gamma")
   >>> delete.value = True
   >>> browser.getControl("Delete").click()
-  >>> browser.getControl("Confirm").click()  
+  >>> browser.getControl("Confirm").click()
   >>> browser.open("http://localhost/persons/beta/schooldata/")
   >>> "Gamma" in browser.contents
   False
