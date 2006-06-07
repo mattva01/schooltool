@@ -27,7 +27,7 @@
     <implements
         interface="schooltool.note.interfaces.IHaveNotes" />
     <require permission="schooltool.view"
-             attributes="title description sections __cmp__" />
+             attributes="title description sections leaders __cmp__" />
     <require permission="schooltool.edit"
              set_schema=".interfaces.ICourse" />
   </class>

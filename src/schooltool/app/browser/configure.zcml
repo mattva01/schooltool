@@ -438,6 +438,16 @@
       title="Import Sections"
       />
 
+  <page
+      for="schooltool.app.interfaces.IAsset"
+      name="leaders.html"
+      layer="schooltool.skin.ISchoolToolLayer"
+      class=".app.LeaderView"
+      permission="schooltool.edit"
+      menu="schooltool_actions"
+      title="Edit Leaders"
+      />
+
   <!-- Documentation -->
 
   <configure

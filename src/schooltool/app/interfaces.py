@@ -180,3 +180,9 @@ class ICalendarParentCrowd(ICrowd):
 
     This is just a marker interface.
     """
+
+
+class IAsset(zope.interface.Interface):
+    """An asset of a leader."""
+
+    leaders = zope.interface.Attribute("Leaders of this asset")

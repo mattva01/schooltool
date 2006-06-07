@@ -49,7 +49,8 @@ class GroupContainer(btree.BTreeContainer):
     implements(interfaces.IGroupContainer, IAttributeAnnotatable)
 
 
-class Group(Persistent, Contained):
+from schooltool.app.app import Asset
+class Group(Persistent, Contained, Asset):
     """Group."""
 
     implements(interfaces.IGroup, interfaces.IGroupContained,

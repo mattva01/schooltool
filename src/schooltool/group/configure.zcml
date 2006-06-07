@@ -27,7 +27,7 @@
 
     <allow attributes="__cmp__" />
     <require permission="schooltool.view"
-             attributes="title description groups members" />
+             attributes="title description groups members leaders" />
     <require permission="schooltool.edit"
              set_schema=".interfaces.IGroup" />
   </class>

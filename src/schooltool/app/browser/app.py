@@ -41,12 +41,14 @@ from zope.app.security.interfaces import IAuthentication
 from zope.app.security.interfaces import IAuthenticatedGroup
 from zope.app.security.interfaces import IUnauthenticatedGroup
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from schooltool import SchoolToolMessage as _
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolCalendar
+from schooltool.app.interfaces import IAsset
 from schooltool.batching import Batch
 from schooltool.batching.browser import MultiBatchViewMixin
 from schooltool.person.interfaces import IPerson
@@ -147,6 +149,8 @@ class BaseEditView(EditView):
 
 class RelationshipViewBase(BrowserView):
     """A base class for views that add/remove members from a relationship."""
+
+    __call__ = ViewPageTemplateFile('templates/edit_relationships.pt')
 
     def add(self, item):
         """Add an item to the list of selected items."""
@@ -296,3 +300,21 @@ def hasPermissions(permissions, object, principalid):
     interaction = getSecurityPolicy()(participation)
     return [interaction.checkPermission(permission, object)
             for permission in permissions]
+
+
+class LeaderView(RelationshipViewBase):
+
+    __used_for__ = IAsset
+
+    title = _("Leaders")
+    current_title = _("Current leaders")
+    available_title = _("Available leaders")
+
+    def getCollection(self):
+        return self.context.leaders
+
+    def getAvailableItems(self):
+        container = getSchoolToolApplication()['persons']
+        selected_items = set(self.getSelectedItems())
+        return [p for p in container.values()
+                if p not in selected_items]

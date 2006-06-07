@@ -50,6 +50,7 @@ class IResource(zope.interface.Interface):
         required=False,
         default=False)
 
+
 class IResourceContainer(container.interfaces.IContainer):
     """Container of resources."""
 

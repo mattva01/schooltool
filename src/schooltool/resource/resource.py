@@ -29,6 +29,7 @@ from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container import btree
 from zope.app.container.contained import Contained
 
+from schooltool.app.app import Asset
 from schooltool.resource import interfaces
 from schooltool.securitypolicy.crowds import ConfigurableCrowd
 
@@ -39,7 +40,7 @@ class ResourceContainer(btree.BTreeContainer):
     implements(interfaces.IResourceContainer, IAttributeAnnotatable)
 
 
-class Resource(Persistent, Contained):
+class Resource(Persistent, Contained, Asset):
     """Resource."""
 
     implements(interfaces.IResourceContained, IAttributeAnnotatable)

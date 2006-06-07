@@ -46,6 +46,10 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import IShowTimetables
 from schooltool.app.interfaces import ApplicationInitializationEvent
+from schooltool.app import relationships
+from schooltool.app.interfaces import IAsset
+from schooltool.relationship.relationship import RelationshipProperty
+
 
 SHOW_TIMETABLES_KEY = 'schooltool.timetable.showTimetables'
 
@@ -171,6 +175,16 @@ class ApplicationPreferences(Persistent):
     weekstart = calendar.MONDAY
 
     frontPageCalendar = True
+
+
+class Asset(object):
+    """A mixin for objects that may act as assets."""
+
+    implements(IAsset)
+
+    leaders = RelationshipProperty(relationships.URILeadership,
+                                   relationships.URIAsset,
+                                   relationships.URILeader)
 
 
 def getApplicationPreferences(app):

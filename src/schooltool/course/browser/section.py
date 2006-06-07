@@ -270,7 +270,7 @@ class SectionInstructorView(RelationshipEditConfView, ConflictDisplayMixin):
     def getAvailableItems(self):
         """Return a list of all possible members."""
         container = getSchoolToolApplication()['persons']
-        selected_items = Set(self.getSelectedItems())
+        selected_items = set(self.getSelectedItems())
         return [p for p in container.values()
                 if p not in selected_items]
 

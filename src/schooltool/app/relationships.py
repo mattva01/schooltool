@@ -174,3 +174,18 @@ def updateStudentCalendars(event):
                     if section.calendar in person.overlaid_calendars:
                         person.overlaid_calendars.remove(section.calendar)
 
+
+#
+# The leadership relationship
+#
+
+URILeadership = URIObject('http://schooltool.org/ns/leadership',
+                          'Leadership', 'The leadership relationship.')
+URILeader = URIObject('http://schooltool.org/ns/leadership/leader',
+                      'Leader', 'A role of a leader of an asset.')
+URIAsset = URIObject('http://schooltool.org/ns/leadership/asset',
+                     'Asset', 'An asset of a leader.')
+
+Leadership = RelationshipSchema(URILeadership,
+                                leader=URILeader,
+                                asset=URIAsset)
