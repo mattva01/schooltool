@@ -265,10 +265,10 @@ tr.even {
     background-color: #EAE8E3;
 }
 
-div.field-even {
-    background-color: transparent;
+div.field-odd {
+   background-color: transparent;
 }
 
-div.field-odd {
-    background-color: #EAE8E3;
+div.field-even {
+    background-color: #EAE8E3; 
 }
