@@ -62,13 +62,8 @@
   <!-- Security settings -->
 
   <security:setting
-      key="everyone_can_view_group_calendar"
-      text="Everyone can view group calendars."
-      default="False" />
-
-  <security:setting
-      key="members_can_edit_group_calendar"
-      text="Group members can edit group calendars."
+      key="everyone_can_view_group_list"
+      text="Everyone can view group lists."
       default="False" />
 
   <security:setting
@@ -77,8 +72,13 @@
       default="False" />
 
   <security:setting
-      key="everyone_can_view_group_list"
-      text="Everyone can view group information."
+      key="everyone_can_view_group_calendar"
+      text="Everyone can view group calendars."
+      default="False" />
+
+  <security:setting
+      key="members_can_edit_group_calendar"
+      text="Group members can edit group calendars."
       default="False" />
 
   <security:crowd

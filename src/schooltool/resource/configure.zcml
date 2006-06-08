@@ -37,10 +37,57 @@
       factory="schooltool.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
-  <adapter factory=".resource.ResourceCalendarCrowd"
+  <!-- security -->
+
+  <security:setting
+      key="everyone_can_view_resource_list"
+      text="Everyone can view resource lists."
+      default="False" />
+
+  <security:setting
+      key="everyone_can_view_resource_info"
+      text="Everyone can view resource information."
+      default="False" />
+
+  <security:setting
+      key="everyone_can_view_resource_calendar"
+      text="Everyone can view resource calendars."
+      default="False" />
+
+  <security:crowd
+      name="resource_viewers"
+      factory=".resource.ResourceViewersCrowd" />
+
+  <security:crowd
+      name="resource_list_viewers"
+      factory=".resource.ResourceContainerViewersCrowd" />
+
+  <security:allow
+      interface="schooltool.resource.interfaces.IResourceContainer"
+      crowds="administration resource_list_viewers"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.resource.interfaces.IResourceContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.resource.interfaces.IResourceContainer"
+      crowds="administration"
+      permission="schooltool.create" />
+
+  <security:allow
+      interface="schooltool.resource.interfaces.IResource"
+      crowds="administration leaders resource_viewers"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.resource.interfaces.IResource"
+      crowds="administration leaders"
+      permission="schooltool.edit" />
+
+  <adapter factory=".resource.ResourceCalendarViewersCrowd"
            provides="schooltool.app.security.ICalendarParentCrowd"
            name="schooltool.view" />
-  <adapter factory=".resource.ResourceCalendarCrowd"
+  <adapter factory=".resource.ResourceCalendarEditorsCrowd"
            provides="schooltool.app.security.ICalendarParentCrowd"
            name="schooltool.edit" />
 
@@ -65,32 +112,5 @@
 
   <include package=".browser" />
   <include package=".rest" />
-
-  <security:allow
-      interface="schooltool.resource.interfaces.IResourceContainer"
-      crowds="administration"
-      permission="schooltool.view" />
-  <security:allow
-      interface="schooltool.resource.interfaces.IResourceContainer"
-      crowds="administration"
-      permission="schooltool.edit" />
-  <security:allow
-      interface="schooltool.resource.interfaces.IResourceContainer"
-      crowds="administration"
-      permission="schooltool.create" />
-
-  <security:allow
-      interface="schooltool.resource.interfaces.IResource"
-      crowds="administration leaders"
-      permission="schooltool.view" />
-  <security:allow
-      interface="schooltool.resource.interfaces.IResource"
-      crowds="administration leaders"
-      permission="schooltool.edit" />
-
-  <security:setting
-      key="everyone_can_view_resource_calendar"
-      text="Calendars for resources are public"
-      default="False" />
 
 </configure>
