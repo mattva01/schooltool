@@ -45,13 +45,9 @@
       name="teachers"
       factory=".crowds.TeachersCrowd" />
 
-  <security:crowd
-      name="manager_backdoor"
-      factory=".crowds.ManagerBackdoorCrowd" />
-
   <security:aggregate_crowd
       name="administration"
-      crowds="manager_backdoor administrators clerks teachers managers" />
+      crowds="administrators clerks teachers managers" />
 
   <security:allow
       interface="schooltool.app.interfaces.ISchoolToolApplication"

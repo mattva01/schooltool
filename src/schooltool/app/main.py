@@ -424,6 +424,9 @@ class StandaloneServer(object):
             IDependable(manager).addDependent('')
         manager = app['persons'][MANAGER_USERNAME]
         manager.setPassword(MANAGER_PASSWORD)
+        manager_group = app['groups']['manager']
+        if manager not in manager_group.members:
+            manager_group.members.add(manager)
 
     def main(self, argv=sys.argv):
         """Start the SchoolTool server."""

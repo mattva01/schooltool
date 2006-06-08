@@ -576,6 +576,11 @@ def doctest_restoreManagerUser():
         >>> manager.checkPassword('schooltool')
         True
 
+    Manager is by default member of 'manager' group:
+
+        >>> manager in app['groups']['manager'].members
+        True
+
     To prevent this user from being deleted we add a dependency
 
         >>> from zope.app.dependable.interfaces import IDependable

@@ -130,12 +130,3 @@ class ClerksCrowd(_GroupCrowd):
 class TeachersCrowd(_GroupCrowd):
     group = 'sb.group.teachers'
 
-
-class ManagerBackdoorCrowd(Crowd):
-
-    # XXX At the moment the manager is not always a member of the manager group.
-    # This hack will go away soon.
-
-    def contains(self, principal):
-        return (hasattr(principal, '_person')
-                and principal._person.__name__ == 'manager')
