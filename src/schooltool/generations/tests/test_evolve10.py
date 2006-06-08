@@ -29,7 +29,6 @@ from zope.testing import doctest
 from zope.app.container.btree import BTreeContainer
 from zope.interface import implements
 
-from schooltool.resource.resource import Resource
 from schooltool.app import membership
 from schooltool.course.section import Section
 from schooltool.generations.tests import ContextStub
@@ -55,21 +54,25 @@ def doctest_evolve10():
         >>> class TimetableStub:
         ...     pass
 
-        >>> class TimetabledStub:
-        ...     implements(ITimetables, IHaveTimetables)
-        ...     timetables = {'foo.bar': TimetableStub(),
-        ...                   'baz.quux': TimetableStub()}
-        ...     def __init__(self, name):
+        >>> from zope.annotation.interfaces import IAnnotations
+        >>> from schooltool.timetable import TIMETABLES_KEY
+        >>> class TimetabledStub(object):
+        ...     implements(IHaveTimetables)
+        ...     def __init__(self, name=None):
+        ...        timetables = {'foo.bar': TimetableStub(),
+        ...                       'baz.quux': TimetableStub()}
+        ...        self.annotations = {TIMETABLES_KEY: timetables}
         ...        self.name = name
         ...     def __repr__(self):
         ...        return 'Timetabled(%r)' % self.name
+        ...     def __conform__(self, iface):
+        ...         if iface == IAnnotations:
+        ...             return self.annotations
 
-        >>> class MockSchoolTool(dict):
+        >>> class MockSchoolTool(TimetabledStub, dict):
         ...     implements(ISchoolToolApplication, IApplicationPreferences,
-        ...                IHaveTimetables, ITimetables)
+        ...                IHaveTimetables)
         ...     timezone = 'Asia/Tokyo'
-        ...     timetables = {'foo.bar': TimetableStub(),
-        ...                   'baz.quux': TimetableStub()}
 
         >>> context = ContextStub()
         >>> app = MockSchoolTool()
@@ -97,8 +100,9 @@ def doctest_evolve10():
         >>> evolve(context)
 
         >>> for ob in app, s1, s2, r1, p1, g1:
-        ...    assert ob.timetables['foo.bar'].timezone == 'Asia/Tokyo', ob
-        ...    assert ob.timetables['baz.quux'].timezone == 'Asia/Tokyo', ob
+        ...    timetables = IAnnotations(ob)[TIMETABLES_KEY]
+        ...    assert timetables['foo.bar'].timezone == 'Asia/Tokyo', ob
+        ...    assert timetables['baz.quux'].timezone == 'Asia/Tokyo', ob
         >>> for ob in app['ttschemas'].values():
         ...    assert ob.timezone == 'Asia/Tokyo'
 

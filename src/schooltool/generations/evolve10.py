@@ -30,7 +30,8 @@ from zope.app.generations.utility import findObjectsProviding
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
-from schooltool.timetable.interfaces import ITimetables, IHaveTimetables
+from schooltool.timetable.interfaces import IHaveTimetables
+from schooltool.timetable import TimetablesAdapter
 from schooltool.group.group import Group
 
 
@@ -42,9 +43,9 @@ def evolve(context):
         for tts in app['ttschemas'].values():
             tts.timezone = tz
 
-        for tt in ITimetables(app).timetables.values():
+        for tt in TimetablesAdapter(app).timetables.values():
             tt.timezone = tz
 
         for obj in findObjectsProviding(root, IHaveTimetables):
-            for tt in ITimetables(obj).timetables.values():
+            for tt in TimetablesAdapter(obj).timetables.values():
                 tt.timezone = tz
