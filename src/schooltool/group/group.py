@@ -110,5 +110,12 @@ class GroupCalendarEditorsCrowd(Crowd):
 
     def contains(self, principal):
         """Return the value of the related setting (True or False)."""
+        app = ISchoolToolApplication(None)
+        customizations = IAccessControlCustomisations(app)
+        setting = customizations.get('members_can_edit_group_calendar')
+        if setting and GroupMemberCrowd(self.context).contains(principal):
+            return True
+
+        # Fall back to schooltool.edit for IGroup
         crowd = getAdapter(self.context, ICrowd, name='schooltool.edit')
         return crowd.contains(principal)

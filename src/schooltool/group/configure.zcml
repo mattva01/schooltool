@@ -67,6 +67,11 @@
       default="False" />
 
   <security:setting
+      key="members_can_edit_group_calendar"
+      text="Group members can edit group calendars."
+      default="False" />
+
+  <security:setting
       key="everyone_can_view_group_info"
       text="Everyone can view group information."
       default="False" />
