@@ -34,16 +34,6 @@ from schooltool.app.interfaces import ISchoolToolApplication
 
 
 def evolve(context):
-    root = context.connection.root()[ZopePublication.root_name]
-    for app in findObjectsProviding(root, ISchoolToolApplication):
-        roles = IPrincipalRoleManager(app)
-        roles.assignRoleToPrincipal('schooltool.manager', 'sb.group.manager')
-        roles.assignRoleToPrincipal('schooltool.administrator',
-                                    'sb.group.administrators')
-        roles.assignRoleToPrincipal('schooltool.teacher', 'sb.group.teachers')
-        roles.assignRoleToPrincipal('schooltool.clerk', 'sb.group.clerks')
-        for section in app['sections'].values():
-            map = IPrincipalPermissionManager(section)
-            for instructor in section.instructors:
-                principalid = 'sb.person.' + instructor.__name__
-                map.grantPermissionToPrincipal('schooltool.viewAttendance', principalid)
+    # this used to evolve role and permission settings but this has
+    # become obsolete after the new security policy was put into place
+    return

@@ -28,8 +28,6 @@ from zope.app.testing import setup
 from zope.testing import doctest
 from zope.interface import implements
 
-from schooltool.generations.tests import ContextStub
-
 
 def setUp(test):
     setup.placelessSetUp()
@@ -43,58 +41,8 @@ def tearDown(test):
 def doctest_evolve11():
     """Evolution to generation 11.
 
-        >>> from schooltool.app.interfaces import ISchoolToolApplication
-        >>> from schooltool.course.interfaces import ISection
-        >>> from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
-        >>> from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
-        >>> from zope.interface import implements
-        >>> from zope.app.testing import ztapi
-
-        >>> class RoleManagerStub:
-        ...     implements(IPrincipalRoleManager)
-        ...     def __init__(self, *args, **kw):
-        ...         pass
-        ...     def assignRoleToPrincipal(self, role, principal):
-        ...         print 'Assign role=%s, principal=%s' % (role, principal)
-        >>> class PermissionManagerStub:
-        ...     implements(IPrincipalPermissionManager)
-        ...     def __init__(self, parent, *args, **kw):
-        ...         self.__name__ = parent.__name__
-        ...     def grantPermissionToPrincipal(self, permission, principal):
-        ...         print '%s assign permission=%s, principal=%s' % (
-        ...               self.__name__, permission, principal)
-
-        >>> ztapi.provideAdapter(ISchoolToolApplication, IPrincipalRoleManager,
-        ...                      RoleManagerStub)
-        >>> ztapi.provideAdapter(ISection, IPrincipalPermissionManager,
-        ...                      PermissionManagerStub)
-
-        >>> class MockSchoolTool(dict):
-        ...     implements(ISchoolToolApplication)
-
-        >>> class PersonStub:
-        ...     def __init__(self, title):
-        ...         self.__name__ = title
-        >>> class SectionStub:
-        ...     implements(ISection)
-        ...     __name__ = 'section1'
-        ...     instructors = [PersonStub('teacher')]
-
-        >>> context = ContextStub()
-        >>> app = MockSchoolTool()
-        >>> from schooltool.person.person import PersonContainer
-        >>> app['sections'] = {'section1': SectionStub()}
-        >>> context.root_folder['app'] = app
-
-    Shazam!
-
-        >>> from schooltool.generations.evolve11 import evolve
-        >>> evolve(context)
-        Assign role=schooltool.manager, principal=sb.group.manager
-        Assign role=schooltool.administrator, principal=sb.group.administrators
-        Assign role=schooltool.teacher, principal=sb.group.teachers
-        Assign role=schooltool.clerk, principal=sb.group.clerks
-        section1 assign permission=schooltool.viewAttendance, principal=sb.person.teacher
+    We used to test things here, but since the rewrite of the security
+    system this entire evolution became unnecessary.
     """
 
 
