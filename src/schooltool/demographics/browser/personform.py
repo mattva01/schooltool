@@ -49,7 +49,7 @@ class PersonDisplayForm(form.PageDisplayForm):
 
     def actualContext(self):
         return self.context.__parent__
-    
+
     def getMenu(self):
         return getMenu('person_display_menu', self.context, self.request)
 
@@ -64,7 +64,7 @@ class AttributeMenu(BrowserMenu):
 
     * can show which attribute is currently highlighted
     """
-    
+
     def getMenuItems(self, object, request):
         # all rather hackish, but functional
         obj_url = zapi.absoluteURL(object.__parent__, request)
@@ -84,7 +84,7 @@ class PersonEditForm(AttributeEditForm):
     """Base class of all person edit forms.
     """
     template = ViewPageTemplateFile('edit_form.pt')
-    
+
     def getMenu(self):
         return getMenu('person_edit_menu', self.context, self.request)
 
@@ -94,7 +94,7 @@ class PersonEditForm(AttributeEditForm):
     @form.action(_('Apply'), name='apply')
     def handle_apply(self, action, data):
         self.edit_action(action, data)
-        
+
     @form.action(_('Apply and Next'), name='apply_and_next')
     def handle_apply_next(self, action, data):
         self.edit_action(action, data)
@@ -109,7 +109,7 @@ class PersonEditForm(AttributeEditForm):
     @form.action(_('Cancel'), name='cancel')
     def handle_cancel(self, action, data):
         self.cancel_action(action, data)
-    
+
     def getNextMenuUrl(self):
         menu = self.getMenu()
         base_url = zapi.absoluteURL(self.context, self.request)
@@ -122,7 +122,7 @@ class PersonEditForm(AttributeEditForm):
                 return_next = True
         url = zapi.absoluteURL(self.actualContext(), self.request)
         return url + '/nameinfo'
-    
+
 nameinfo_traverser = SingleAttributeTraverserPlugin('nameinfo')
 
 
@@ -137,26 +137,26 @@ class PersonView(BrowserView):
 class PersonEditView(BrowserView):
     """The default edit view of the person. Redirects to the edit view
     of nameinfo.
-    """        
+    """
     def __call__(self):
         url = (zapi.absoluteURL(self.context.nameinfo, self.request) +
                '/edit.html')
         return self.request.response.redirect(url)
-    
+
 
 class NameInfoEdit(PersonEditForm):
-        
+
     def title(self):
         return _(u'Change name information for ${fullname}',
                  mapping={'fullname':self.fullname()})
-    
+
     form_fields = form.Fields(interfaces.INameInfo)
 
 
 class NameInfoDisplay(PersonDisplayForm):
     def title(self):
         return _(u'Change name')
-    
+
     form_fields = form.Fields(interfaces.INameInfo)
 
 
@@ -167,9 +167,9 @@ class DemographicsEdit(PersonEditForm):
     def title(self):
         return _(u'Change demographics for ${fullname}',
                  mapping={'fullname': self.fullname()})
-    
+
     form_fields = form.Fields(interfaces.IDemographics)
-    
+
 
 class DemographicsDisplay(PersonDisplayForm):
     def title(self):
@@ -182,20 +182,20 @@ schooldata_traverser = SingleAttributeTraverserPlugin('schooldata')
 
 class SchoolDataEdit(PersonEditForm):
     template = ViewPageTemplateFile("schooldata_edit.pt")
-    
+
     def title(self):
         return _(u'Change school data for ${fullname}',
                  mapping={'fullname': self.fullname()})
-    
+
     form_fields = form.Fields(interfaces.ISchoolData)
-    
+
 
 class SchoolDataDisplay(PersonDisplayForm):
     template = ViewPageTemplateFile("schooldata_view.pt")
-    
+
     def title(self):
         return _(u'School data')
-    
+
     form_fields = form.Fields(interfaces.ISchoolData)
 
 
@@ -214,14 +214,14 @@ class ContactInfoEdit(PersonEditForm):
     def title(self):
         return _(u"Change contact information for ${fullname}",
                  mapping={'fullname': self.fullname()})
-    
+
     form_fields = form.Fields(interfaces.IContactInfo)
 
 
 class ContactInfoDisplay(PersonDisplayForm):
     def title(self):
         return _(u"Contact information")
-    
+
     form_fields = form.Fields(interfaces.IContactInfo)
 
 
@@ -232,7 +232,7 @@ class Term(object):
         self.title = value
         self.token = value
         self.value = value
-        
+
 
 class Terms(object):
     """Simplistic term that just uses the value as the token.
@@ -242,7 +242,7 @@ class Terms(object):
     def __init__(self, context, request):
         self.context = context
         self.request = request
-        
+
     def getTerm(self, value):
         return Term(value)
 
@@ -259,7 +259,7 @@ class IPersonAddForm(IPersonAddForm_):
     """
     last_name = TextLine(
         title=_("Last name"))
-    
+
 
 class PersonAddView(PersonAddView_):
     """Like schooltool.app.person's addform, but add last_name field.
@@ -279,7 +279,7 @@ class TeachersTerm(object):
     """A term for displaying a teacher.
     """
     implements(ITitledTokenizedTerm)
-    
+
     def __init__(self, value):
         persons = ISchoolToolApplication(None)['persons']
         if value in persons:
@@ -289,7 +289,7 @@ class TeachersTerm(object):
                 u"Invalid teacher. Possible causes: deleted or renamed.")
         self.token = value
         self.value = value
-        
+
 
 class TeachersTerms(object):
     """Displaying teachers.
@@ -299,7 +299,7 @@ class TeachersTerms(object):
     def __init__(self, context, request):
         self.context = context
         self.request = request
-        
+
     def getTerm(self, value):
         return TeachersTerm(value)
 
@@ -311,7 +311,7 @@ class GroupsTerm(object):
     """A term for displaying a group.
     """
     implements(ITitledTokenizedTerm)
-    
+
     def __init__(self, value):
         groups = ISchoolToolApplication(None)['groups']
         if value in groups:
@@ -331,7 +331,7 @@ class GroupsTerms(object):
     def __init__(self, context, request):
         self.context = context
         self.request = request
-        
+
     def getTerm(self, value):
         return GroupsTerm(value)
 

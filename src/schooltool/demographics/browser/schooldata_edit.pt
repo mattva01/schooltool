@@ -13,8 +13,8 @@
       </metal:block>
 
       <fieldset>
-	<tal:block define="context python:context.__parent__"
-		   tal:replace="structure provider:schooltool.person.Info"/>
+        <tal:block define="context python:context.__parent__"
+                   tal:replace="structure provider:schooltool.person.Info"/>
       </fieldset>
     </metal:block>
   </body>

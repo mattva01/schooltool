@@ -2,29 +2,29 @@
 <body>
 <metal:nothing metal:fill-slot="content-header" />
 <metal:block metal:fill-slot="body" tal:define="batch view/batch">
-   
+
   <metal:block use-macro="view/@@table_macros/table" />
 
   <p tal:condition="not:batch" i18n:translate="">There are no persons.</p>
 
   <form action="@@search.html" method="get">
-    <input class="textType" 
-	   id="form.fulltext"
-	   name="form.fulltext"
-	   size="20" type="text"
-	   value=""/>
+    <input class="textType"
+           id="form.fulltext"
+           name="form.fulltext"
+           size="20" type="text"
+           value=""/>
     <input type="hidden"
-	   id="form.parentName"
-	   name="form.parentName"
-	   value=""/>
+           id="form.parentName"
+           name="form.parentName"
+           value=""/>
     <input type="hidden"
            id="form.studentId"
            name="form.studentId"
            value=""/>
     <input type="submit"
-	   id="form.actions.submit"
-	   name="form.actions.submit"
-	   value="Search" class="button" />
+           id="form.actions.submit"
+           name="form.actions.submit"
+           value="Search" class="button" />
   </form>
 
 </metal:block>

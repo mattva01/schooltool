@@ -38,7 +38,7 @@ class PersonTable(TablePage):
     """Browse persons in a table.
     """
     __call__ = ViewPageTemplateFile('table.pt')
-        
+
     def columns(self):
         username = GetterColumn(
             name='username',
@@ -68,7 +68,7 @@ class PersonTable(TablePage):
             title=u'Modified',
             subsort=True)
         directlyProvides(modified, ISortableColumn)
-        
+
         return [
             DeleteCheckBoxColumn(name='delete', title=u''),
             username,
@@ -96,15 +96,15 @@ class SearchTable(form.FormBase, PersonTable):
     """
     form_fields = form.Fields(interfaces.ISearch, render_context=False)
     template = ViewPageTemplateFile('search.pt')
-    
+
     def __init__(self, context, request):
         super(SearchTable, self).__init__(context, request)
         self.search_data = {}
-   
+
     @form.action("submit")
     def handle_submit(self, action, data):
         self.search_data = data
-        
+
     def values(self):
         if not self.search_data:
             return []
@@ -156,7 +156,7 @@ class SearchTable(form.FormBase, PersonTable):
 
     def sortOn(self):
         return (("modified", True),)
-    
+
 
 class EditColumn(column.Column):
     """Table column that displays edit link.
@@ -215,7 +215,7 @@ class ModifiedColumn(column.SortingColumn):
 
     def getSortKey(self, item, formatter):
         return item.modified
-    
+
     def renderCell(self, item, formatter):
         # cache _renderDatetime for performance
         if self._renderDatetime is None:

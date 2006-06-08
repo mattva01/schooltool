@@ -15,7 +15,7 @@
       for="schooltool.person.interfaces.IPersonContainer"
       class=".personform.PersonAddView"
       permission="schooltool.create"
-      menu="schooltool_actions" title="New Person" 
+      menu="schooltool_actions" title="New Person"
       />
 
   <zope:subscriber
@@ -152,14 +152,14 @@
       />
 
   <!-- list of teachers -->
-  <zope:adapter 
+  <zope:adapter
       for="schooltool.demographics.interfaces.ITeachersSource
 	   zope.publisher.interfaces.browser.IBrowserRequest"
            factory=".personform.TeachersTerms"
       />
 
   <!-- list of groups -->
-  <zope:adapter 
+  <zope:adapter
       for="schooltool.demographics.interfaces.IGroupsSource
 	   zope.publisher.interfaces.browser.IBrowserRequest"
            factory=".personform.GroupsTerms"
@@ -211,7 +211,7 @@
      />
 
     <menuItem
-      title="schooldata" 
+      title="schooldata"
       action="/schooldata/@@edit.html"
       permission="schooltool.edit"
      />
@@ -272,7 +272,7 @@
      />
 
     <menuItem
-      title="schooldata" 
+      title="schooldata"
       action="/schooldata"
       permission="schooltool.view"
      />
