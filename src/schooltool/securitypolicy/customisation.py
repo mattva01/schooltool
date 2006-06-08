@@ -24,22 +24,26 @@ $Id$
 
 from zope.interface import implements
 from zope.annotation.interfaces import IAnnotations
+from zope.component import subscribers
+from persistent import Persistent
+from persistent.dict import PersistentDict
 from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
 from schooltool.securitypolicy.interfaces import IAccessControlSetting
-from zope.component import subscribers
 
 
-class AccessControlCustomisations(object):
+class AccessControlCustomisations(Persistent):
     implements(IAccessControlCustomisations)
 
     def __init__(self):
-        self._settings = {}
+        self._settings = PersistentDict()
 
     def _getSetting(self, key):
         for setting in self:
             if setting.key == key:
                 return setting
-        raise KeyError("There is no AccessControlSetting associated with this key.")
+        else:
+            raise KeyError("there is no AccessControlSetting"
+                           " associated with this key.")
 
     def get(self, key):
         return self._settings.get(key, self._getSetting(key).default)
