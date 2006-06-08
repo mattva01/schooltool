@@ -26,6 +26,7 @@ import calendar
 from persistent import Persistent
 from zope.interface import implements
 from zope.annotation.interfaces import IAnnotations
+from zope.location.location import ILocation
 
 from schooltool.securitypolicy.crowds import ConfigurableCrowd
 from schooltool.person import interfaces
@@ -35,8 +36,9 @@ PERSON_PREFERENCES_KEY = 'schooltool.app.PersonPreferences'
 
 class PersonPreferences(Persistent):
 
-    implements(interfaces.IPersonPreferences)
+    implements(interfaces.IPersonPreferences, ILocation)
 
+    __name__ = 'preferences'
     __parent__ = None
 
     timezone = "UTC"

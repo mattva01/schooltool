@@ -116,28 +116,26 @@ def doctest_PersonPhotoView():
 def doctest_PersonPreferencesView():
     """
 
-        >>> from schooltool.person.browser.person import \\
-        ...     PersonPreferencesView
+        >>> from schooltool.person.browser.person import PersonPreferencesView
         >>> from schooltool.person.person import Person
-        >>> from schooltool.person.preference import getPersonPreferences
-        >>> from schooltool.person.interfaces import IPerson
-        >>> from schooltool.person.interfaces import IPersonPreferences
-
-        >>> setup.setUpAnnotations()
-
-        # Usually registered for IHavePreferences
-        >>> ztapi.provideAdapter(IPerson, IPersonPreferences,
-        ...                      getPersonPreferences)
+        >>> from schooltool.person.preference import PersonPreferences
 
         >>> person = Person()
+        >>> prefs = PersonPreferences()
+        >>> prefs.__parent__ = person
         >>> request = TestRequest()
 
-        >>> view = PersonPreferencesView(person, request)
+        >>> view = PersonPreferencesView(prefs, request)
 
-    Cancel a change TODO: set view.message
+    Cancel a change: (TODO: set view.message)
 
         >>> request = TestRequest(form={'CANCEL': 'Cancel'})
-        >>> view = PersonPreferencesView(person, request)
+        >>> view = PersonPreferencesView(prefs, request)
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('Location')
+        'http://127.0.0.1'
 
     Let's see if posting works properly:
 
@@ -147,15 +145,15 @@ def doctest_PersonPreferencesView():
         ...                             'field.dateformat': '%d %B, %Y',
         ...                             'field.weekstart': '6',
         ...                             'field.cal_periods': True})
-        >>> view = PersonPreferencesView(person, request)
+        >>> view = PersonPreferencesView(prefs, request)
 
         >>> view.update()
 
-        >>> prefs = getPersonPreferences(person)
         >>> prefs.timezone, prefs.timeformat, prefs.dateformat, prefs.weekstart
         ('Europe/Vilnius', '%H:%M', '%d %B, %Y', 6)
 
     """
+
 
 def doctest_PersonCSVImporter():
     r"""Tests for PersonCSVImporter.

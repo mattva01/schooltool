@@ -219,7 +219,7 @@ And now it starts all over again:
     <h1>
       Object Introspector:
       <a href=".../index.html">schooltool.person.preference.PersonPreferences</a>
-      ( ++annotations++schooltool.app.PersonPreferences )
+      ( preferences )
     </h1>
     <em>
       Parent:

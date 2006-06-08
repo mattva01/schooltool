@@ -76,13 +76,19 @@
       />
 
   <page
-      name="preferences.html"
-      for="..interfaces.IPerson"
+      name="index.html"
+      for="..interfaces.IPersonPreferences"
       class=".person.PersonPreferencesView"
       template="person_preferences.pt"
-      permission="schooltool.edit"
+      permission="schooltool.edit" />
+
+  <menuItem
+      for="..interfaces.IHavePreferences"
       menu="schooltool_actions"
-      title="Change Preferences" />
+      title="Change Preferences"
+      action="preferences"
+      permission="schooltool.edit"
+      />
 
   <page
      name="password_edit.html"
@@ -98,6 +104,14 @@
       for="..interfaces.IPerson"
       class=".person.PersonPhotoView"
       permission="schooltool.view" />
+
+  <zope:subscriber
+      for="..interfaces.IHavePreferences
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".person.PreferencesTraverserPlugin"
+      permission="zope.Public"
+      />
 
   <!-- Register Context-Help screens -->
 

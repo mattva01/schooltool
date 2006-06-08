@@ -50,6 +50,7 @@ from schooltool.person.interfaces import IPersonPreferences
 from schooltool.person.interfaces import IPersonContainer, IPersonContained
 from schooltool.person.person import Person
 from schooltool.widget.password import PasswordConfirmationWidget
+from schooltool.traverser.traverser import AdapterTraverserPlugin
 
 def SourceMultiCheckBoxWidget(field, request):
     source = field.value_type.source
@@ -89,17 +90,15 @@ class PersonPreferencesView(BrowserView):
 
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)
-
-        prefs = self.schema(self.context)
+        self.person = self.context.__parent__
         initial = {}
         for field in self.schema:
-            initial[field] = getattr(prefs, field)
-
+            initial[field] = getattr(context, field)
         setUpWidgets(self, self.schema, IInputWidget, initial=initial)
 
     def update(self):
         if 'CANCEL' in self.request:
-            url = zapi.absoluteURL(self.context, self.request)
+            url = zapi.absoluteURL(self.person, self.request)
             self.request.response.redirect(url)
         elif 'UPDATE_SUBMIT' in self.request:
             try:
@@ -107,10 +106,14 @@ class PersonPreferencesView(BrowserView):
             except WidgetsError:
                 return # Errors will be displayed next to widgets
 
-            prefs = self.schema(self.context)
             for field in self.schema:
                 if field in data: # skip non-fields
-                    setattr(prefs, field, data[field])
+                    setattr(self.context, field, data[field])
+
+
+PreferencesTraverserPlugin = AdapterTraverserPlugin(
+    'preferences', IPersonPreferences)
+
 
 # Should this be moved to a interface.py file ?
 class IGroupsSource(IIterableSource):
