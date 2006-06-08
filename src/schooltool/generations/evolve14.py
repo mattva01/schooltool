@@ -58,7 +58,7 @@ def evolve(context):
             new_person.photo = person.photo
             new_person._hashed_password = person._hashed_password
             new_person.overlaid_calendars = person.overlaid_calendars
-            new_person.__annotations = person.__annotations__
+            new_person.__annotations__ = person.__annotations__
             del persons[name]
             persons[name] = new_person
             # reestablish dependents if they are available

@@ -29,12 +29,14 @@ from zope.testing import doctest
 from zope.interface import implements
 from zope.component import adapts, provideAdapter
 from zope.app.container.ordered import OrderedContainer
+from zope.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 
 from schooltool.generations.tests import ContextStub
 from schooltool.app.interfaces import ISchoolToolApplication
 
 class StudentStub(object):
-
+    implements(IAttributeAnnotatable)
+    
     def __init__(self, name):
         self.__name__ = name
         self.username = name
@@ -43,7 +45,8 @@ class StudentStub(object):
         self._hashed_password = None
         self.groups = []
         self.overlaid_calendars = None
-        self.__annotations__ = None
+        # initialize annotations
+        IAnnotations(self)['foo'] = 'init'
         
     def __repr__(self):
         return self.__name__
@@ -68,6 +71,14 @@ def doctest_evolve14():
         >>> hasattr(s1, 'nameinfo')
         False
 
+       Make sure arbitrary annotations carry over too:
+
+        >>> from zope.annotation.interfaces import IAnnotations
+        >>> from zope.annotation.attribute import AttributeAnnotations
+        >>> IAnnotations(s1)['test'] = 'Bar'
+
+       Now evolve:
+       
         >>> from schooltool.generations.evolve14 import evolve
         >>> evolve(context)
         >>> s1 = app['persons']['s1']
@@ -76,6 +87,8 @@ def doctest_evolve14():
 
         >>> s1.username == 's1'
         True
+        >>> IAnnotations(s1)['test']
+        'Bar'
     """
 
 def setUp(test):
