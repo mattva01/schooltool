@@ -66,9 +66,40 @@
       text="Everyone can view group calendars."
       default="False" />
 
+  <security:allow
+      interface="schooltool.group.interfaces.IGroupContainer"
+      crowds="administration"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.group.interfaces.IGroupContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.group.interfaces.IGroupContainer"
+      crowds="administration"
+      permission="schooltool.create" />
+
+  <security:allow
+      interface="schooltool.group.interfaces.IGroup"
+      crowds="administration leaders"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.group.interfaces.IGroup"
+      crowds="administration leaders"
+      permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.group.interfaces.IGroup"
+      crowds="administration leaders"
+      permission="schooltool.manageMembership" />
+
   <adapter
-      factory=".group.GroupCalendarCrowd"
+      factory=".group.GroupCalendarViewersCrowd"
       provides="schooltool.app.interfaces.ICalendarParentCrowd"
       name="schooltool.view" />
+
+  <adapter
+      factory=".group.GroupCalendarEditorsCrowd"
+      provides="schooltool.app.interfaces.ICalendarParentCrowd"
+      name="schooltool.edit" />
 
 </configure>
