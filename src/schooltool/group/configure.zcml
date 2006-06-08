@@ -66,9 +66,27 @@
       text="Everyone can view group calendars."
       default="False" />
 
+  <security:setting
+      key="everyone_can_view_group_info"
+      text="Everyone can view group information."
+      default="False" />
+
+  <security:setting
+      key="everyone_can_view_group_list"
+      text="Everyone can view group information."
+      default="False" />
+
+  <security:crowd
+      name="group_viewers"
+      factory=".group.GroupViewersCrowd" />
+
+  <security:crowd
+      name="group_list_viewers"
+      factory=".group.GroupContainerViewersCrowd" />
+
   <security:allow
       interface="schooltool.group.interfaces.IGroupContainer"
-      crowds="administration"
+      crowds="administration group_list_viewers"
       permission="schooltool.view" />
   <security:allow
       interface="schooltool.group.interfaces.IGroupContainer"
@@ -81,7 +99,7 @@
 
   <security:allow
       interface="schooltool.group.interfaces.IGroup"
-      crowds="administration leaders"
+      crowds="administration leaders group_viewers"
       permission="schooltool.view" />
   <security:allow
       interface="schooltool.group.interfaces.IGroup"

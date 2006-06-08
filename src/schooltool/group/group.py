@@ -81,6 +81,14 @@ def addGroupContainerToApplication(event):
         IDependable(group).addDependent('')
 
 
+class GroupContainerViewersCrowd(ConfigurableCrowd):
+    setting_key = 'everyone_can_view_group_list'
+
+
+class GroupViewersCrowd(ConfigurableCrowd):
+    setting_key = 'everyone_can_view_group_info'
+
+
 class GroupCalendarViewersCrowd(Crowd):
     implements(ICalendarParentCrowd)
     adapts(interfaces.IGroup)
