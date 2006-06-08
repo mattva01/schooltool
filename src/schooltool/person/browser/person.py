@@ -127,25 +127,25 @@ class GroupsSource(object):
 
 class GroupsTerm(object):
     implements(ITitledTokenizedTerm)
-    
+
     def __init__(self, title, token, value):
         self.title = title
         self.token = token
         self.value = value
-        
+
 class GroupsTerms(object):
     implements(ITerms)
 
     def __init__(self, context, request):
         self.context = context
         self.request = request
-        
+
     def getTerm(self, value):
         return GroupsTerm(value.title, value.__name__, value)
 
     def getValue(self, token):
         return getSchoolToolApplication()['groups'][token]
-        
+
 class IPersonAddForm(Interface):
     """Schema for person adding form."""
 
@@ -180,15 +180,15 @@ class PersonAddView(BasicForm):
     """A view for adding a person."""
 
     template = ViewPageTemplateFile('person_add.pt')
-    
+
     form_fields = form.Fields(IPersonAddForm, render_context=False)
     setUpPersonAddCustomWidgets(form_fields)
-    
+
     def title(self):
         return _("Add person")
 
     @form.action(_("Apply"))
-    def handle_apply_action(self, action, data):        
+    def handle_apply_action(self, action, data):
         if data['username'] in self.context:
             self.status = _("This username is already used!")
             return None
@@ -200,7 +200,7 @@ class PersonAddView(BasicForm):
         self.initPerson(person, data)
         self.addPerson(person)
         return self._redirect()
-            
+
     @form.action(_("Cancel"))
     def handle_cancel_action(self, action, data):
         # XXX validation upon cancellation doesn't make any sense
@@ -219,7 +219,7 @@ class PersonAddView(BasicForm):
 
     def _factory(self, username, title):
         return getUtility(IPersonFactory)(username, title)
-    
+
     def createPerson(self, title, username, password, photo):
         person = self._factory(username=username, title=title)
         person.setPassword(password)
@@ -229,7 +229,7 @@ class PersonAddView(BasicForm):
     def addPersonToGroups(self, person, groups):
         for group in groups:
             person.groups.add(group)
-    
+
     def addPerson(self, person):
         """Add `person` to the container.
 
@@ -238,18 +238,18 @@ class PersonAddView(BasicForm):
         name = person.username
         self.context[name] = person
         return person
-    
+
 class IPasswordEditForm(Interface):
     """Schema for a person's edit form."""
 
     password = Password(
         title=_("Password"),
         required=False)
-    
+
 class PersonPasswordEditView(BasicForm):
     form_fields = form.Fields(IPasswordEditForm, render_context=False)
     form_fields['password'].custom_widget = PasswordConfirmationWidget
-    
+
     def title(self):
         return _("Edit password")
 

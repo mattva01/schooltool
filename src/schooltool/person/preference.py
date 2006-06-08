@@ -27,6 +27,7 @@ from persistent import Persistent
 from zope.interface import implements
 from zope.annotation.interfaces import IAnnotations
 
+from schooltool.securitypolicy.crowds import ConfigurableCrowd
 from schooltool.person import interfaces
 
 PERSON_PREFERENCES_KEY = 'schooltool.app.PersonPreferences'
@@ -56,3 +57,8 @@ def getPersonPreferences(person):
         prefs.__parent__ = person
         annotations[PERSON_PREFERENCES_KEY] = prefs
         return prefs
+
+
+class PersonPreferencesCrowd(ConfigurableCrowd):
+
+    setting_key = 'persons_can_set_their_preferences'

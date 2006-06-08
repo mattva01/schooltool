@@ -54,8 +54,8 @@
       />
 
   <zope:adapter for=".person.IGroupsSource
-		     zope.publisher.interfaces.browser.IBrowserRequest"
-		factory=".person.GroupsTerms"/>
+                     zope.publisher.interfaces.browser.IBrowserRequest"
+                factory=".person.GroupsTerms"/>
   <page
       name="delete.html"
       for="..interfaces.IPersonContainer"

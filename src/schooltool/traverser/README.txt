@@ -176,7 +176,7 @@ Now we register this adapter under the traversal name ``some``:
     ...     AdapterTraverserPlugin('some', ISomeAdapter),
     ...     (IMyContainer, IPublisherRequest))
 
-So here the result:
+So here is the result:
 
     >>> traverser.publishTraverse(request, 'some')
     <SomeAdapter object at ...>
