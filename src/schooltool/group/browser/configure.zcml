@@ -5,7 +5,7 @@
 
   <!-- Group Traverser -->
   <zope:view
-      for="..interfaces.IGroup"
+      for="..interfaces.IBaseGroup"
       type="zope.publisher.interfaces.browser.IBrowserRequest"
       provides="zope.publisher.interfaces.browser.IBrowserPublisher"
       factory="schooltool.traverser.browser.PluggableBrowserTraverser"
@@ -115,7 +115,7 @@
 
   <page
       name="members_persons.html"
-      for="..interfaces.IGroup"
+      for="..interfaces.IBaseGroup"
       class=".group.MemberViewPersons"
       permission="schooltool.manageMembership"
       menu="schooltool_actions"

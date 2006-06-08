@@ -34,7 +34,7 @@ from schooltool.person.interfaces import IPerson
 from schooltool.resource.interfaces import IResource
 from schooltool.course.interfaces import ISection
 
-from schooltool.group.interfaces import IGroupMember
+from schooltool.group.interfaces import IGroupMember, IGroup
 from schooltool.group.interfaces import IGroupContainer, IGroupContained
 from schooltool.app.browser.app import RelationshipViewBase
 
@@ -127,5 +127,5 @@ class GroupsViewlet(BrowserView):
 
     def memberOf(self):
         """Seperate out generic groups from sections."""
-        return [group for group in self.context.groups if not
-                ISection.providedBy(group)]
+        return [group for group in self.context.groups if
+                IGroup.providedBy(group)]

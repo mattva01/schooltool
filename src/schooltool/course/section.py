@@ -31,7 +31,7 @@ from zope.component import adapts
 from schooltool.relationship import RelationshipProperty
 from schooltool.app import membership
 from schooltool.app.cal import Calendar
-from schooltool.group.interfaces import IGroup
+from schooltool.group.interfaces import IBaseGroup as IGroup
 from schooltool.person.interfaces import IPerson
 from schooltool.resource.interfaces import IResource
 

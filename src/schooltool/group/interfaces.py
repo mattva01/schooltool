@@ -36,7 +36,7 @@ class IGroupMember(zope.interface.Interface):
     groups = zope.interface.Attribute("""Groups (see IRelationshipProperty)""")
 
 
-class IGroup(zope.interface.Interface):
+class IBaseGroup(zope.interface.Interface):
     """Group."""
 
     title = zope.schema.TextLine(
@@ -51,6 +51,8 @@ class IGroup(zope.interface.Interface):
     members = zope.interface.Attribute(
         """Members of the group (see IRelationshipProperty)""")
 
+class IGroup(IBaseGroup):
+    """Group."""
 
 class IGroupContainer(IContainer):
     """Container of groups."""

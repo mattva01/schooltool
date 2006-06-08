@@ -119,7 +119,7 @@ from schooltool.relationship import getRelatedObjects
 from schooltool.relationship.interfaces import IBeforeRelationshipEvent
 from schooltool.relationship.interfaces import InvalidRelationship
 from schooltool.resource.interfaces import IResource
-from schooltool.group.interfaces import IGroup
+from schooltool.group.interfaces import IBaseGroup as IGroup
 from schooltool.person.interfaces import IPerson
 from schooltool.securitypolicy.crowds import Crowd
 
