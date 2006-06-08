@@ -25,6 +25,6 @@ $Id$
 from zope.app.generations.generations import SchemaManager
 
 schemaManager = SchemaManager(
-    minimum_generation=14,
-    generation=14,
+    minimum_generation=15,
+    generation=15,
     package_name='schooltool.generations')
