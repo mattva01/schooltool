@@ -58,7 +58,8 @@
       />
 
   <zope:subscriber
-      for="schooltool.person.interfaces.IPerson zope.publisher.interfaces.IPublisherRequest"
+      for="schooltool.person.interfaces.IPerson
+           zope.publisher.interfaces.IPublisherRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".personform.demographics_traverser"
       permission="zope.Public"
@@ -79,7 +80,8 @@
       />
 
   <zope:subscriber
-      for="schooltool.person.interfaces.IPerson zope.publisher.interfaces.IPublisherRequest"
+      for="schooltool.person.interfaces.IPerson
+           zope.publisher.interfaces.IPublisherRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".personform.schooldata_traverser"
       permission="zope.Public"
@@ -100,31 +102,36 @@
       />
 
   <zope:subscriber
-      for="schooltool.person.interfaces.IPerson zope.publisher.interfaces.IPublisherRequest"
+      for="schooltool.person.interfaces.IPerson
+           zope.publisher.interfaces.IPublisherRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".personform.parent1_traverser"
       permission="zope.Public"
       />
   <zope:subscriber
-      for="schooltool.person.interfaces.IPerson zope.publisher.interfaces.IPublisherRequest"
+      for="schooltool.person.interfaces.IPerson
+           zope.publisher.interfaces.IPublisherRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".personform.parent2_traverser"
       permission="zope.Public"
       />
   <zope:subscriber
-      for="schooltool.person.interfaces.IPerson zope.publisher.interfaces.IPublisherRequest"
+      for="schooltool.person.interfaces.IPerson
+           zope.publisher.interfaces.IPublisherRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".personform.emergency1_traverser"
       permission="zope.Public"
       />
   <zope:subscriber
-      for="schooltool.person.interfaces.IPerson zope.publisher.interfaces.IPublisherRequest"
+      for="schooltool.person.interfaces.IPerson
+           zope.publisher.interfaces.IPublisherRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".personform.emergency2_traverser"
       permission="zope.Public"
       />
   <zope:subscriber
-      for="schooltool.person.interfaces.IPerson zope.publisher.interfaces.IPublisherRequest"
+      for="schooltool.person.interfaces.IPerson
+           zope.publisher.interfaces.IPublisherRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".personform.emergency3_traverser"
       permission="zope.Public"
