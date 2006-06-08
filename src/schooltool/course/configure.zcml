@@ -212,4 +212,30 @@
       text="Everyone can view section information and calendars"
       default="False" />
 
+  <security:allow
+      interface="schooltool.course.interfaces.ICourseContainer"
+      crowds="administration everybody"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.course.interfaces.ICourseContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.course.interfaces.ICourseContainer"
+      crowds="administration"
+      permission="schooltool.create" />
+
+  <security:allow
+      interface="schooltool.course.interfaces.ICourse"
+      crowds="administration authenticated leaders"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.course.interfaces.ICourse"
+      crowds="administration authenticated leaders"
+      permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.course.interfaces.ICourse"
+      crowds="administration authenticated leaders"
+      permission="schooltool.manageMembership" />
+
 </configure>

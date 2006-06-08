@@ -92,6 +92,11 @@
       crowds="administration leaders"
       permission="schooltool.manageMembership" />
 
+  <security:allow
+      interface="schooltool.group.interfaces.IGroup"
+      crowds="everybody"
+      permission="schooltool.view" /> <!-- XXX -->
+
   <adapter
       factory=".group.GroupCalendarViewersCrowd"
       provides="schooltool.app.interfaces.ICalendarParentCrowd"

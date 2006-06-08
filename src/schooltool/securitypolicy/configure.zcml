@@ -87,37 +87,6 @@
       crowds="administration"
       permission="zope.app.introspector.Introspect" />
 
-  <security:allow
-      interface="schooltool.course.interfaces.ICourseContainer"
-      crowds="administration everybody"
-      permission="schooltool.view" />
-  <security:allow
-      interface="schooltool.course.interfaces.ICourseContainer"
-      crowds="administration"
-      permission="schooltool.edit" />
-  <security:allow
-      interface="schooltool.course.interfaces.ICourseContainer"
-      crowds="administration"
-      permission="schooltool.create" />
-
-  <security:allow
-      interface="schooltool.course.interfaces.ICourse"
-      crowds="administration authenticated"
-      permission="schooltool.view" />
-  <security:allow
-      interface="schooltool.course.interfaces.ICourse"
-      crowds="administration authenticated"
-      permission="schooltool.edit" />
-  <security:allow
-      interface="schooltool.course.interfaces.ICourse"
-      crowds="administration authenticated"
-      permission="schooltool.manageMembership" />
-
-  <security:allow
-      interface="schooltool.group.interfaces.IGroup"
-      crowds="everybody"
-      permission="schooltool.view" /> <!-- XXX -->
-
 
   <security:allow
       interface="schooltool.term.interfaces.ITermContainer"
