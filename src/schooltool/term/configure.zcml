@@ -53,6 +53,22 @@
 
   </configure>
 
+  <!-- security -->
+
+  <security:allow
+      interface="schooltool.term.interfaces.ITermContainer"
+      crowds="everybody"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.term.interfaces.ITermContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.term.interfaces.ITermContainer"
+      crowds="administration"
+      permission="schooltool.create" />
+
+
   <include package=".browser" />
   <include package=".rest" />
 

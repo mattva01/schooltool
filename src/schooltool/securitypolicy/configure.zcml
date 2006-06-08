@@ -83,20 +83,6 @@
       crowds="administration"
       permission="zope.app.introspector.Introspect" />
 
-
-  <security:allow
-      interface="schooltool.term.interfaces.ITermContainer"
-      crowds="administration"
-      permission="schooltool.view" />
-  <security:allow
-      interface="schooltool.term.interfaces.ITermContainer"
-      crowds="administration"
-      permission="schooltool.edit" />
-  <security:allow
-      interface="schooltool.term.interfaces.ITermContainer"
-      crowds="administration"
-      permission="schooltool.create" />
-
   <security:allow
       interface="schooltool.timetable.interfaces.ITimetableSchemaContainer"
       crowds="administration everybody"
