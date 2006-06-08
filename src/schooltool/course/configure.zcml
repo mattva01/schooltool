@@ -227,7 +227,7 @@
 
   <security:allow
       interface="schooltool.course.interfaces.ICourse"
-      crowds="administration authenticated leaders"
+      crowds="everybody"
       permission="schooltool.view" />
   <security:allow
       interface="schooltool.course.interfaces.ICourse"
