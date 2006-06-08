@@ -76,7 +76,7 @@ def doctest_AccessControlCustomisations():
         >>> customisations.get("key3")
         Traceback (most recent call last):
         ...
-        KeyError: 'There is no AccessControlSetting associated with this key.'
+        KeyError: 'there is no AccessControlSetting associated with this key.'
 
     We can assign some value to existing keys by using the set method:
 
@@ -93,7 +93,7 @@ def doctest_AccessControlCustomisations():
         >>> customisations.set("key3", True)
         Traceback (most recent call last):
         ...
-        KeyError: 'There is no AccessControlSetting associated with this key.'
+        KeyError: 'there is no AccessControlSetting associated with this key.'
 
     """
 
