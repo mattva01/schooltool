@@ -8,7 +8,7 @@
       for="schooltool.app.interfaces.ISchoolToolApplication"
       class=".views.AccessControlView"
       template="templates/access_control.pt"
-      permission="schooltool.view"
+      permission="schooltool.edit"
       menu="schooltool_actions"
       title="Access Control"
       />
@@ -20,7 +20,7 @@
         manager="schooltool.skin.INavigationManager"
         template="templates/navigationViewlet.pt"
         class="schooltool.skin.NavigationViewlet"
-        permission="schooltool.view"
+        permission="schooltool.edit"
         link="access_control.html"
         title="Access Control"
         order="100"
