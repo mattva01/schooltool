@@ -22,14 +22,19 @@ SchoolTool skin.
 $Id$
 """
 
-from zope.interface import Interface
-from zope.interface import implements
+from zope.component import adapts, getAdapter
+from zope.interface import Interface, implements
 from zope.schema import Object
 from zope.publisher.interfaces.browser import ILayer, IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.viewlet.interfaces import IViewletManager
 from zope.viewlet.manager import ViewletManagerBase
 from zope.app import zapi
+
+from schooltool.securitypolicy.crowds import Crowd
+from schooltool.securitypolicy.interfaces import ICrowd
+from schooltool.app.interfaces import ISchoolToolApplication
+
 
 from schooltool.app.app import getSchoolToolApplication
 
@@ -75,11 +80,6 @@ class OrderedViewletManager(ViewletManagerBase):
 
         return sorted(viewlets, key=key_func)
 
-from schooltool.securitypolicy.crowds import Crowd
-from zope.component import adapts
-from schooltool.securitypolicy.interfaces import ICrowd
-from schooltool.app.interfaces import ISchoolToolApplication
-from zope.component import queryAdapter
 
 class NavigationViewlet(object):
     """A navigation viewlet base class."""
@@ -109,10 +109,8 @@ class NavigationViewletCrowd(Crowd):
 
     def contains(self, principal):
         context = self.context.actualContext()
-        crowd = queryAdapter(context, ICrowd, name='schooltool.view',
-                             default=None)
-        result = crowd.contains(principal)
-        return result
+        crowd = getAdapter(context, ICrowd, name='schooltool.view')
+        return crowd.contains(principal)
 
 
 class ISchoolToolLayer(ILayer, IBrowserRequest):
