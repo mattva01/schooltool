@@ -102,7 +102,7 @@ class TopLevelContainerNavigationViewlet(NavigationViewlet):
 class NavigationViewletCrowd(Crowd):
     """A crowd for navigation viewlets.
 
-    Checks permissions on the actual context not the parent. Parents
+    Checks permissions on the actual context rather than the parent. Parents
     of viewlets are pretty useless in this case as NavigationViewlets
     are used in a global navigation menu.
     """
