@@ -16,7 +16,7 @@ We can add a person:
   >>> browser.getControl(name="form.password.confirm").value = "barfoo"
   >>> browser.getControl('Add').click()
 
-Try logging in with the shinny new user:
+Try logging in with the shiny new user:
 
   >>> ubrowser = Browser()
   >>> ubrowser.handleErrors = False
@@ -202,18 +202,23 @@ There's a quick search form in the table view:
   >>> 'foobar' in browser.contents
   False
 
-# XXX At the moment you can't make personal information public
-# Try seeing the table of persons with a normal user:
+Allow normal users to view the table of persons:
 
-#   >>> ubrowser.open('http://localhost/persons')
-#   >>> "foobar" in ubrowser.contents
-#   True
-#   >>> "manager" in ubrowser.contents
-#   True
-#   >>> "alpha" in ubrowser.contents
-#   True
-#   >>> "beta" in ubrowser.contents
-#   True
+  >>> browser.open('http://localhost/access_control.html')
+  >>> browser.getControl('Everyone can view the list of persons').click()
+  >>> browser.getControl('Apply').click()
+
+Try seeing the table of persons with a normal user:
+
+  >>> ubrowser.open('http://localhost/persons')
+  >>> "foobar" in ubrowser.contents
+  True
+  >>> "manager" in ubrowser.contents
+  True
+  >>> "alpha" in ubrowser.contents
+  True
+  >>> "beta" in ubrowser.contents
+  True
 
 The user alpha is not a teacher:
 

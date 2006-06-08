@@ -79,9 +79,18 @@
   <include package=".browser" />
   <include package=".rest" />
 
+  <security:setting
+      key="everyone_can_view_person_list"
+      text="Everyone can view the list of persons"
+      default="False" />
+
+  <security:crowd
+      name="person_list_viewers"
+      factory=".person.PersonListViewersCrowd" />
+
   <security:allow
       interface="schooltool.person.interfaces.IPersonContainer"
-      crowds="administration"
+      crowds="administration person_list_viewers"
       permission="schooltool.view" />
   <security:allow
       interface="schooltool.person.interfaces.IPersonContainer"

@@ -42,6 +42,7 @@ from schooltool.relationship import RelationshipProperty
 from schooltool.securitypolicy.crowds import Crowd
 from schooltool.person.interfaces import IPerson
 from schooltool.app.security import ICalendarParentCrowd
+from schooltool.securitypolicy.crowds import ConfigurableCrowd
 
 
 class PersonContainer(btree.BTreeContainer):
@@ -150,3 +151,9 @@ class PersonCalendarCrowd(Crowd):
 
 def getCalendarOwner(calendar):
     return IPerson(calendar.__parent__, None)
+
+
+class PersonListViewersCrowd(ConfigurableCrowd):
+    """The crowd of people who can view the person list."""
+
+    setting_key = 'everyone_can_view_person_list'
