@@ -179,3 +179,7 @@ class IPersonPreferences(ICalendarDisplayPreferences):
     cal_periods = zope.schema.Bool(
         title=_("Show periods"),
         description=_("Show period names in daily view"))
+
+    cal_public = zope.schema.Bool(
+        title=_("Make calendar public"),
+        description=_("Make calendar public"))

@@ -47,6 +47,7 @@ class PersonPreferences(Persistent):
     weekstart = calendar.MONDAY
     # XXX: Only available in schooltool, but that's okay for now.
     cal_periods = True
+    cal_public = False
 
 
 def getPersonPreferences(person):
