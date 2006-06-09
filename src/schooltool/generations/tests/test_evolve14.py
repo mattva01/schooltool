@@ -44,7 +44,7 @@ class StudentStub(object):
         self.photo = None
         self._hashed_password = None
         self.groups = []
-        self.overlaid_calendars = None
+        self.overlaid_calendars = []
         # initialize annotations
         IAnnotations(self)['foo'] = 'init'
         

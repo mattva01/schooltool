@@ -24,6 +24,7 @@ schooltool.person.person.Person
 
 $Id: evolve13.py 5946 2006-04-18 15:47:33Z ignas $
 """
+from BTrees.OOBTree import OOBTree
 
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.generations.utility import findObjectsProviding
@@ -53,12 +54,28 @@ def evolve(context):
             related = list(person.groups)
             for relation in related:
                 person.groups.remove(relation)
-                
+            # also remove all overlaid calendars to reestablish them later
+            # XXX horrible way to remove calendars; due to some magic
+            # in the calendar overlays just removing the items we
+            # get when we do list(persons.overlaid_calendar) doesn't work
+            cal_infos = list(person.overlaid_calendars)
+            for cal_info in cal_infos:
+                person.overlaid_calendars.remove(cal_info.calendar)
             new_person = Person(person.username, person.title)
             new_person.photo = person.photo
             new_person._hashed_password = person._hashed_password
-            new_person.overlaid_calendars = person.overlaid_calendars
-            new_person.__annotations__ = person.__annotations__
+
+            # We create a new __annotations__ dict as it gets modified
+            # by del persons[name] (a new schooltool calendar is
+            # created on access just to get cleared by the event
+            # subscriber). So sharing the same annotation OOBTree
+            # might lead to various weird bugs.
+            new_person.__annotations__ = OOBTree()
+            for key, annotation in person.__annotations__.items():
+                new_person.__annotations__[key] = annotation
+                if hasattr(annotation, '__parent__') and annotation.__parent__ is person:
+                    annotation.__parent__ = new_person
+
             del persons[name]
             persons[name] = new_person
             # reestablish dependents if they are available
@@ -67,3 +84,6 @@ def evolve(context):
             # reestablish relationships
             for relation in related:
                 new_person.groups.add(relation)
+            for cal_info in cal_infos:
+                new_person.overlaid_calendars.add(cal_info.calendar)
+

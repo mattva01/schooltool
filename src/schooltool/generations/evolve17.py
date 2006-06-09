@@ -30,6 +30,7 @@ from zope.lifecycleevent import ObjectModifiedEvent
 from zope.app.container.contained import ObjectAddedEvent
 from zope import event
 from zope.app.component.hooks import setSite
+from zope.app.intid import addIntIdSubscriber
 
 from schooltool.demographics.utility import catalogSetUpSubscriber,\
      personFactorySetUpSubscriber
@@ -45,5 +46,4 @@ def evolve(context):
         setSite(app)
         for person in app['persons'].values():
             person.nameinfo.last_name = 'Last name unknown'
-            event.notify(ObjectAddedEvent(person))
-    
+            addIntIdSubscriber(person, None)
