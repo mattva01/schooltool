@@ -177,11 +177,6 @@ from schooltool.timetable.model import TimetableCalendarEvent
 # BBB: Make sure the old data object references are still there.
 from zope.deprecation import deprecated
 
-from schooltool.term.term import TermContainer, Term
-deprecated(('TermContainer', 'Term'),
-           'This class has moved to schooltool.term.term. '
-           'The reference will be gone in 0.15')
-
 # Those classes are added from the schema module to avoid recursive imports
 deprecated(('TimetableSchemaContainer', 'TimetableSchema',
             'TimetableSchemaDay'),
