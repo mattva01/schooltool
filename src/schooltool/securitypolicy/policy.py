@@ -37,11 +37,6 @@ class SchoolToolSecurityPolicy(ParanoidSecurityPolicy):
         """Return True if principal has permission on object."""
         # TODO: Implement caching -- gintas
 
-#         if 'PersonTable' in str(obj):
-#             import pdb; pdb.set_trace()
-#             import sys
-#             print >> sys.stderr, permission, obj
-
         # Check the generic, interface-independent permissions.
         crowdclasses = getCrowdsUtility().permcrowds.get(permission, [])
         if self.checkCrowds(crowdclasses, obj):
