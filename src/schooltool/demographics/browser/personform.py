@@ -26,14 +26,16 @@ from zope.formlib import form
 from zope.formlib.interfaces import IAction
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.interface.common import idatetime
-from zope.schema import TextLine
+from zope.schema import TextLine, Password
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.app.form.browser.interfaces import ITerms
 from zope.app.publisher.browser.menu import getMenu, BrowserMenu
 from zope.schema.interfaces import ITitledTokenizedTerm
 from zope.app.form.browser.interfaces import ITerms
 from zope.publisher.browser import BrowserView
+from zope.component import getUtility
 
+from schooltool.person.interfaces import IPersonFactory
 from schooltool.skin.form import AttributeEditForm
 from schooltool.traverser.traverser import SingleAttributeTraverserPlugin
 from schooltool.person.interfaces import IReadPerson
@@ -41,6 +43,8 @@ from schooltool.demographics.person import Person
 from schooltool.demographics import interfaces
 from schooltool import SchoolToolMessage as _
 from schooltool.app.app import ISchoolToolApplication
+from schooltool.skin.form import BasicForm
+from schooltool.widget.password import PasswordConfirmationWidget
 
 class PersonDisplayForm(form.PageDisplayForm):
     """Base class for all person display forms.
@@ -249,32 +253,75 @@ class Terms(object):
     def getValue(self, token):
         return token
 
-from schooltool.person.browser.person import IPersonAddForm as IPersonAddForm_
-from schooltool.person.browser.person import PersonAddView as PersonAddView_
-from schooltool.person.browser.person import setUpPersonAddCustomWidgets
 
-
-class IPersonAddForm(IPersonAddForm_):
+class IPersonAddForm(interfaces.INameInfo):
     """Like schooltool.app.person's addform, but add the last name field.
     """
-    last_name = TextLine(
-        title=_("Last name"))
+    username = TextLine(
+        title=_("Username"),
+        description=_("Username"),
+        required=True)
+
+    password = Password(
+        title=_("Password"),
+        required=False)
 
 
-class PersonAddView(PersonAddView_):
+class PersonAddView(BasicForm):
     """Like schooltool.app.person's addform, but add last_name field.
     """
+    template = ViewPageTemplateFile('person_add.pt')
+    
     form_fields = form.Fields(IPersonAddForm, render_context=False)
-    form_fields = form_fields.select('title', 'last_name', 'username',
-                                     'password', 'photo', 'groups')
-    # use the setup code from schooltool.app.person
-    setUpPersonAddCustomWidgets(form_fields)
-
-    # extra initialization
-    def initPerson(self, person, data):
+    form_fields['password'].custom_widget = PasswordConfirmationWidget
+    
+    @form.action(_("Apply"))
+    def handle_apply_action(self, action, data):
+        if data['username'] in self.context:
+            self.status = _("This username is already used!")
+            return None
+        person = self.createPerson(data['full_name'],
+                                   data['username'],
+                                   data['password'])
         person.nameinfo.last_name = data['last_name']
+        self.addPerson(person)
+        url = (zapi.absoluteURL(person, self.request) +
+               '/demographics/@@edit.html')
+        self.request.response.redirect(url)
+        return ''
 
+    @form.action(_("Cancel"))
+    def handle_cancel_action(self, action, data):
+        # XXX validation upon cancellation doesn't make any sense
+        # how to make this work properly?
+        return self._redirect()
 
+    def _redirect(self):
+        url = zapi.absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
+        return ''
+
+    def _factory(self, username, title):
+        return getUtility(IPersonFactory)(username, title)
+
+    def createPerson(self, title, username, password):
+        person = self._factory(username=username, title=title)
+        person.setPassword(password)
+        return person
+
+    def addPersonToGroups(self, person, groups):
+        for group in groups:
+            person.groups.add(group)
+
+    def addPerson(self, person):
+        """Add `person` to the container.
+
+        Uses the username of `person` as the object ID (__name__).
+        """
+        name = person.username
+        self.context[name] = person
+        return person
+    
 class TeachersTerm(object):
     """A term for displaying a teacher.
     """

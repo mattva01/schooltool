@@ -53,11 +53,15 @@ def addPerson(name, username=None, password=None, groups=None, browser=None):
     browser.getControl('Username').value = username
     browser.getControl('Password').value = password
     browser.getControl('Confirm').value = password
-    if groups:
-        browser.getControl(name='form.groups').value = groups
     browser.getControl('Add').click()
-    assert name in browser.contents
-
+    if groups:
+        browser.getLink('schooldata').click()
+        browser.getLink('edit groups').click()
+        for group in groups:
+            browser.getControl(name='add_item.%s' % group).value = True
+        browser.getControl('Add').click()
+    browser.open('http://localhost/persons')
+    
 def addResource(title):
     """Add a resource."""
     manager = logInManager()
