@@ -191,6 +191,8 @@
      name="search.html"
      class=".table.SearchTable"
      permission="schooltool.view"
+     menu="schooltool_actions"
+     title="Search"
      />
 
   <!-- menu for different screens -->

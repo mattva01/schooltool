@@ -277,11 +277,13 @@ class ISearch(Interface):
 
     fulltext = schema.TextLine(
         title=_(u"Text"),
+        description=_(u"Full text search in name"),
         required=False,
         )
 
     parentName = schema.TextLine(
         title=_(u"Name of parent"),
+        description=_(u"Full text search in parent names"),
         required=False,
         )
     

@@ -3,6 +3,10 @@
 <metal:nothing metal:fill-slot="content-header" />
 <metal:block metal:fill-slot="body" tal:define="batch view/batch">
 
+  <p i18n:translate="">Search for persons here. Note that in fulltext
+  fields you can use wildcard characters such as *. For example, to search for everyone with John
+  in their name, use <em>*john*</em>.</p>
+
   <form action="." method="get"
         tal:attributes="action request/URL"
         class="standalone">
