@@ -1,17 +1,70 @@
-<html metal:use-macro="context/@@standard_macros/page"
-      i18n:domain="schooltool">
-<head>
-  <title metal:fill-slot="title" i18n:translate="">
-    Dashboard
-  </title>
-</head>
-<body>
 
-<h1 metal:fill-slot="content-header"
-    i18n:translate="">Dashboard</h1>
+<script type="text/javascript">
+  maxHeight = 75; //height it should go to in percent
+  opened = false;
+  moving = false;
+  function mouseDaemon(){
+    if (opened == false && moving == false){
+      moving = true;
+      openDash();
+      opened = true;
+    }
+    else if (moving == false){
+      moving = true;
+      closeDash();
+      opened = false;
+    }
+  }
+  function openDash(){
+    tab = document.getElementById('dashboardTab').style;
+    content = document.getElementById('dashboardContents').style;
+    content.display = '';
+    if (parseInt(content.height) < maxHeight){
+      content.height = parseInt(content.height)+10+'%';
+      tab.bottom = parseInt(tab.bottom)+10+'%';
+      blah = setTimeout("openDash();",20);
+    }
+    else moving = false;
+  }
+  function closeDash(){
+    tab = document.getElementById('dashboardTab').style;
+    content = document.getElementById('dashboardContents').style;
+    content.display = '';
+    if (parseInt(content.height) > 0){
+      content.height = parseInt(content.height)-10+'%';
+      tab.bottom = parseInt(tab.bottom)-10+'%';
+      blah = setTimeout("closeDash();",20);
+    }
+    else {content.display = 'none'; moving = false; }
+  }
+</script>
 
-<div metal:fill-slot="body"
-     tal:content="structure provider:schooltool.dashboard" />
+<span style="position: fixed;
+             bottom: 0px;
+             width: 20%;
+             right: 40%;
+             background:#fef;
+             text-align: center;
+             font-weight: bold;
+             z-index: 99;
+             border: solid 2px #000;
+             border-bottom: 0px;"
+      id="dashboardTab" onclick="mouseDaemon()">
+      Dashboard</span>
 
-</body>
-</html>
+<div id="dashboardContents"
+     style="position: fixed;
+            bottom: 0px;
+            width: 80%;
+            right: 10%;
+            height: 0%;
+            background: #fef;
+            text-align: center;
+            z-index: 98;
+            display: none;
+            border: solid 2px #000;
+            border-bottom: 0px;
+            overflow: auto;
+            text-align: left;">
+  <div tal:content="structure provider:schooltool.dashboard" />
+</div>

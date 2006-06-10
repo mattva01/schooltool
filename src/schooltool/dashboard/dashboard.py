@@ -76,14 +76,34 @@ class DashboardCategory(viewlet.ViewletBase):
         return int(self.weight)
 
     def isAvailable(self):
-        """See interfaces.IDashboardCategory"""
         return True
 
 
-class SectionsCategory(DashboardCategory):
+class PersonDashboardCategory(DashboardCategory):
+    """A person-centric dashboard category.
+
+    It is aware of person objects, and is only available for
+    schooltool users.
+    """
+
+    def __init__(self, context, request, view, manager):
+        super(PersonDashboardCategory, self).__init__(context, request,
+                                                      view, manager)
+        # Since unauthenticated users cannot be adapted to Person object,
+        # we must catch the exception
+        try:
+            self.context = schooltool.person.interfaces.IPerson(self.request.principal)
+        except TypeError:
+            self.context = None
+
+    def isAvailable(self):
+        return self.context != None
+
+class SectionsCategory(PersonDashboardCategory):
 
     def getSections(self):
         person = schooltool.person.interfaces.IPerson(self.request.principal)
         for section in ISchoolToolApplication(None)['sections'].values():
             if person in section.members:
                 yield section
+

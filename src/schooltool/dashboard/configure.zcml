@@ -7,13 +7,21 @@
       name="dashboard.html"
       for="schooltool.app.interfaces.ISchoolToolApplication"
       template="dashboard.pt"
-      permission="zope.View"
+      permission="schooltool.view"
+      />
+
+  <viewlet
+      name="dashboard"
+      for="*"
+      manager="schooltool.skin.IHeaderManager"
+      template="dashboard.pt"
+      permission="schooltool.view"
       />
 
   <viewletManager
       name="schooltool.dashboard"
-      for="schooltool.app.interfaces.ISchoolToolApplication"
-      permission="zope.Public"
+      for="*"
+      permission="schooltool.view"
       class=".dashboard.Dashboard"
       provides=".interfaces.IDashboard"
       template="dashboard_manager.pt"
@@ -25,7 +33,7 @@
       manager=".interfaces.IDashboard"
       template="sections.pt"
       class=".dashboard.SectionsCategory"
-      permission="zope.View"
+      permission="schooltool.edit"
       title="My Sections"
       weight="10"
       />
@@ -36,7 +44,7 @@
       manager=".interfaces.IDashboard"
       template="term.pt"
       class=".dashboard.DashboardCategory"
-      permission="zope.View"
+      permission="schooltool.view"
       title="Term Administration"
       weight="50"
       />
@@ -47,7 +55,7 @@
       manager=".interfaces.IDashboard"
       template="school.pt"
       class=".dashboard.DashboardCategory"
-      permission="zope.View"
+      permission="schooltool.view"
       title="School Administration"
       weight="200"
       />
