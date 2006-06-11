@@ -39,32 +39,38 @@
   }
 </script>
 
-<span style="position: fixed;
-             bottom: 0px;
-             width: 20%;
-             right: 40%;
-             background:#fef;
-             text-align: center;
-             font-weight: bold;
-             z-index: 99;
-             border: solid 2px #000;
-             border-bottom: 0px;"
+<style type="text/css">
+  .dashboardButton {
+    position: fixed;
+    width: 20%;
+    right: 40%;
+    background:#fff;
+    text-align: center;
+    font-weight: bold;
+    z-index: 99;
+    border: solid 2px #000;
+    border-bottom: 0px;
+  }
+  div .dashboardContents {
+    position: fixed;
+    bottom: 0px;
+    width: 80%;
+    right: 10%;
+    background: #fff;
+    text-align: center;
+    z-index: 98;
+    border: solid 2px #000;
+    border-bottom: 0px;
+    overflow: auto;
+    text-align: left;
+  }
+</style>
+
+<span style="bottom: 0px;" class="dashboardButton"
       id="dashboardTab" onclick="mouseDaemon()">
       Dashboard</span>
 
-<div id="dashboardContents"
-     style="position: fixed;
-            bottom: 0px;
-            width: 80%;
-            right: 10%;
-            height: 0%;
-            background: #fef;
-            text-align: center;
-            z-index: 98;
-            display: none;
-            border: solid 2px #000;
-            border-bottom: 0px;
-            overflow: auto;
-            text-align: left;">
+<div id="dashboardContents" class="dashboardContents"
+     style="height: 0%; display: none;">
   <div tal:content="structure provider:schooltool.dashboard" />
 </div>
