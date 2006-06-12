@@ -27,7 +27,7 @@ $Id$
 
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.generations.utility import findObjectsProviding
-from schooltool.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import ISchoolToolApplication
 
 import schooltool.app
 import schooltool.level.level

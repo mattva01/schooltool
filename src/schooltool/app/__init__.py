@@ -62,11 +62,6 @@ deprecated(('CourseContainer', 'Course'),
            'This class has moved to schooltool.course.course. '
            'The reference will be gone in 0.15')
 
-from schooltool.course.section import SectionContainer, Section
-deprecated(('SectionContainer', 'Section'),
-           'This class has moved to schooltool.course.section. '
-           'The reference will be gone in 0.15')
-
 ##############################################################################
 
 
@@ -103,3 +98,8 @@ def registerTestSetup():
 
 registerTestSetup()
 del registerTestSetup
+
+from schooltool.course.section import SectionContainer, Section
+deprecated(('SectionContainer', 'Section'),
+           'This class has moved to schooltool.course.section. '
+           'The reference will be gone in 0.15')

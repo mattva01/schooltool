@@ -174,16 +174,6 @@ from schooltool.timetable.model import TimetableCalendarEvent
 
 
 ##############################################################################
-# BBB: Make sure the old data object references are still there.
-from zope.deprecation import deprecated
-
-# Those classes are added from the schema module to avoid recursive imports
-deprecated(('TimetableSchemaContainer', 'TimetableSchema',
-            'TimetableSchemaDay'),
-           'This class has moved to schooltool.timetable.schema. '
-           'The reference will be gone in 0.15')
-
-##############################################################################
 
 #
 # Timetabling
@@ -696,3 +686,21 @@ def registerTestSetup():
 
 registerTestSetup()
 del registerTestSetup
+
+##############################################################################
+# BBB: Make sure the old data object references are still there.
+from zope.deprecation import deprecated
+
+from schooltool.term.term import TermContainer, Term
+deprecated(('TermContainer', 'Term'),
+           'This class has moved to schooltool.term.term. '
+           'The reference will be gone in 0.15')
+
+from schooltool.timetable.schema import (TimetableSchemaContainer,
+                                         TimetableSchema,
+                                         TimetableSchemaDay)
+
+deprecated(('TimetableSchemaContainer', 'TimetableSchema',
+            'TimetableSchemaDay'),
+           'This class has moved to schooltool.timetable.schema. '
+           'The reference will be gone in 0.15')

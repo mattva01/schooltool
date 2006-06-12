@@ -160,13 +160,3 @@ class TimetableSchemaContainer(BTreeContainer):
 
     def getDefault(self):
         return self[self.default_id]
-
-
-##############################################################################
-# BBB: Make sure the old data object references are still there.
-#      Needs to be here to avoid circular imports.
-from schooltool import timetable
-timetable.TimetableSchemaContainer = TimetableSchemaContainer
-timetable.TimetableSchema = TimetableSchema
-timetable.TimetableSchemaDay = TimetableSchemaDay
-##############################################################################
