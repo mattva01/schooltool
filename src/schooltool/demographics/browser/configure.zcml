@@ -14,7 +14,7 @@
       name="add.html"
       for="schooltool.person.interfaces.IPersonContainer"
       class=".personform.PersonAddView"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       menu="schooltool_actions" title="New Person"
       />
 

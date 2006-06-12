@@ -227,7 +227,7 @@ class CalendarAccessorsCrowd(Crowd):
 
     def contains(self, principal):
         parent = self.context.__parent__
-        pcrowd = queryAdapter(parent, ICalendarParentCrowd, 'schooltool.view',
+        pcrowd = queryAdapter(parent, ICalendarParentCrowd, self.perm,
                               default=None)
         if pcrowd is not None:
             return pcrowd.contains(principal)
@@ -239,7 +239,7 @@ class CalendarViewersCrowd(CalendarAccessorsCrowd):
     perm = 'schooltool.view'
 
 class CalendarEditorsCrowd(CalendarAccessorsCrowd):
-    perm = 'schooltool.view'
+    perm = 'schooltool.edit'
 
 
 class LeaderCrowd(Crowd):

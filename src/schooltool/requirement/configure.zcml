@@ -42,7 +42,7 @@
         set_schema=".interfaces.IRequirement"
         />
     <require
-        permission="schooltool.create"
+        permission="schooltool.edit"
         interface="zope.app.container.interfaces.IWriteContainer"
         />
   </class>

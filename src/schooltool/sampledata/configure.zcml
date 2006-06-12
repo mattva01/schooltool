@@ -8,7 +8,7 @@
       name="sampledata.html"
       for="schooltool.app.interfaces.ISchoolToolApplication"
       class=".browser.SampleDataView"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       />
 
 </configure>

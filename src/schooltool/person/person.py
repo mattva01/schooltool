@@ -43,6 +43,7 @@ from schooltool.securitypolicy.crowds import Crowd
 from schooltool.person.interfaces import IPerson
 from schooltool.app.security import ICalendarParentCrowd
 from schooltool.securitypolicy.crowds import ConfigurableCrowd
+from schooltool.person.interfaces import IPersonPreferences
 
 
 class PersonContainer(btree.BTreeContainer):
@@ -146,7 +147,8 @@ class PersonCalendarCrowd(Crowd):
     implements(ICalendarParentCrowd)
 
     def contains(self, principal):
-        return self.context == IPerson(principal, None)
+        cal_public = IPersonPreferences(self.context).cal_public
+        return cal_public or self.context == IPerson(principal, None)
 
 
 def getCalendarOwner(calendar):

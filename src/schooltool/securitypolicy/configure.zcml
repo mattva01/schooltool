@@ -69,14 +69,6 @@
   <security:allow
       interface="schooltool.app.interfaces.ISchoolToolApplication"
       crowds="administration"
-      permission="schooltool.modifyEvent" />
-  <security:allow
-      interface="schooltool.app.interfaces.ISchoolToolApplication"
-      crowds="administration"
-      permission="schooltool.create" />
-  <security:allow
-      interface="schooltool.app.interfaces.ISchoolToolApplication"
-      crowds="administration"
       permission="zope.ManageSite" />
   <security:allow
       interface="schooltool.app.interfaces.ISchoolToolApplication"
@@ -91,10 +83,6 @@
       interface="schooltool.timetable.interfaces.ITimetableSchemaContainer"
       crowds="administration"
       permission="schooltool.edit" />
-  <security:allow
-      interface="schooltool.timetable.interfaces.ITimetableSchemaContainer"
-      crowds="administration"
-      permission="schooltool.create" />
 
   <security:allow
       interface="schooltool.level.level.LevelContainer"
@@ -104,10 +92,6 @@
       interface="schooltool.level.level.LevelContainer"
       crowds="administration"
       permission="schooltool.edit" />
-  <security:allow
-      interface="schooltool.level.level.LevelContainer"
-      crowds="administration"
-      permission="schooltool.create" />
 
   <security:allow
       interface="schooltool.requirement.interfaces.IRequirement"
@@ -117,10 +101,6 @@
       interface="schooltool.requirement.interfaces.IRequirement"
       crowds="administration"
       permission="schooltool.edit" />
-  <security:allow
-      interface="schooltool.requirement.interfaces.IRequirement"
-      crowds="administration"
-      permission="schooltool.create" />
 
   <security:allow
       crowds="managers administrators clerks"
@@ -140,9 +120,5 @@
   <security:allow
       crowds="everybody"
       permission="zope.app.dublincore.view" />
-
-  <security:allow
-      crowds="everybody"
-      permission="schooltool.modifyEvent" />
 
 </configure>

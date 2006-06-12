@@ -8,7 +8,7 @@
       name="setupdata.html"
       for="schooltool.app.interfaces.ISchoolToolApplication"
       class=".browser.SetupDataView"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       />
 
 </configure>

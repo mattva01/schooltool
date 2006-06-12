@@ -75,7 +75,7 @@
         fields="title isInitial previousLevel nextLevel"
         arguments="title"
         content_factory="schooltool.level.level.Level"
-        permission="schooltool.create"
+        permission="schooltool.edit"
         template="templates/simple_add.pt"
         class="schooltool.level.browser.level.LevelAddView"
         />

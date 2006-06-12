@@ -249,7 +249,7 @@
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".pdfcal.DailyPDFCalendarView"
       attribute="pdfdata"
-      permission="schooltool.viewCalendar"
+      permission="schooltool.view"
       menu="zmi_views"
       title="Calendar (Daily, PDF)"
       />
@@ -259,7 +259,7 @@
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".cal.WeeklyCalendarView"
       template="templates/cal_weekly.pt"
-      permission="schooltool.viewCalendar"
+      permission="schooltool.view"
       menu="zmi_views"
       title="Calendar (Weekly)"
       />
@@ -344,7 +344,7 @@
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".cal.EventDeleteView"
       template="templates/recevent_delete.pt"
-      permission="schooltool.modifyEvent"
+      permission="schooltool.edit"
       />
 
   <menuItem
@@ -393,7 +393,7 @@
               recurrence location description recurrence_type interval
               range until count monthly exceptions weekdays"
       class=".cal.CalendarEventEditView"
-      permission="schooltool.modifyEvent"
+      permission="schooltool.edit"
       template="templates/event_add.pt">
 
     <widget field="description" height="5" />
@@ -432,7 +432,7 @@
       for="schooltool.course.interfaces.ISectionContainer"
       class="schooltool.app.browser.csvimport.TimetableCSVImportView"
       template="templates/timetables-csvimport.pt"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       layer="schooltool.skin.ISchoolToolLayer"
       menu="schooltool_actions"
       title="Import Sections"

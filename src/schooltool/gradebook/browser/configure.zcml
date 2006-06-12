@@ -42,7 +42,7 @@
         fields="title description category scoresystem"
         arguments="title category scoresystem"
         content_factory="schooltool.gradebook.activity.Activity"
-        permission="schooltool.create"
+        permission="schooltool.edit"
         template="templates/simple_add.pt"
         class="schooltool.gradebook.browser.activity.ActivityAddView">
       <widget field="description" height="5" />
@@ -105,7 +105,7 @@
       title="New Activity"
       for="..interfaces.IActivities"
       action="+/addActivity.html"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       />
 
   <!-- Gradebook -->

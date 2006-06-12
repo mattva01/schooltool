@@ -95,7 +95,7 @@
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"
              attributes="keys values items __iter__ __len__ validate" />
-    <require permission="schooltool.create"
+    <require permission="schooltool.edit"
              interface="zope.app.container.interfaces.IWriteContainer" />
   </class>
 

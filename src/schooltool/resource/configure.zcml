@@ -12,7 +12,7 @@
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"
              attributes="keys values items __iter__ __len__" />
-    <require permission="schooltool.create"
+    <require permission="schooltool.edit"
              interface="zope.app.container.interfaces.IWriteContainer" />
   </class>
 
@@ -70,10 +70,6 @@
       interface="schooltool.resource.interfaces.IResourceContainer"
       crowds="administration"
       permission="schooltool.edit" />
-  <security:allow
-      interface="schooltool.resource.interfaces.IResourceContainer"
-      crowds="administration"
-      permission="schooltool.create" />
 
   <security:allow
       interface="schooltool.resource.interfaces.IResource"

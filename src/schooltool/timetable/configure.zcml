@@ -92,7 +92,7 @@
       />
 
   <class class=".schema.TimetableSchemaContainer">
-    <require permission="schooltool.create"
+    <require permission="schooltool.edit"
              interface="zope.app.container.interfaces.IWriteContainer"
              set_attributes="default_id" />
     <require permission="zope.View"

@@ -190,7 +190,7 @@
              attributes="title __cmp__" />
     <require permission="schooltool.edit"
              attributes="addEvent" />
-    <require permission="schooltool.modifyEvent"
+    <require permission="schooltool.edit"
              attributes="clear removeEvent" />
   </class>
 
@@ -199,7 +199,7 @@
     <require permission="schooltool.viewCalendar"
              interface="schooltool.calendar.interfaces.ICalendarEvent"
              attributes="resources" />
-    <require permission="schooltool.modifyEvent"
+    <require permission="schooltool.edit"
              set_schema="schooltool.calendar.interfaces.ICalendarEvent"
              attributes="bookResource unbookResource"
              set_attributes="__parent__" />
@@ -307,7 +307,7 @@
       class="schooltool.app.overlay.BoundOverlaidCalendarsProperty">
     <allow attributes="__iter__ __contains__" />
     <require
-        permission="schooltool.viewCalendar"
+        permission="schooltool.view"
         attributes="add remove" />
   </class>
 

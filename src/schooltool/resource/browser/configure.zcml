@@ -33,7 +33,7 @@
         content_factory="schooltool.resource.resource.Resource"
         template="templates/simple_add.pt"
         class="schooltool.resource.browser.resource.ResourceAddView"
-        permission="schooltool.create">
+        permission="schooltool.edit">
       <widget field="description" height="5" />
     </addform>
 
@@ -69,7 +69,7 @@
   <containerViews
       for="..interfaces.IResourceContainer"
       contents="schooltool.view"
-      add="schooltool.create"
+      add="schooltool.edit"
       />
 
   <menuItem
@@ -83,7 +83,7 @@
       title="SchoolBell Resource"
       description="A Resource"
       class="..resource.Resource"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       view="addSchoolToolResource.html"
       />
 
@@ -102,7 +102,7 @@
       for="..interfaces.IResourceContainer"
       class=".csvimport.ResourceCSVImportView"
       template="resource-csvimport.pt"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       menu="schooltool_actions"
       title="Import Resources"
       />

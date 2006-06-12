@@ -70,7 +70,7 @@
       for="..interfaces.IPersonContainer"
       class=".csvimport.PersonCSVImportView"
       template="person-csvimport.pt"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       menu="schooltool_actions"
       title="Import Persons" 
       />

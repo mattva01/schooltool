@@ -72,8 +72,8 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
         authSetUpSubscriber(self.app, event)
 
 
-def doctest_CalendarViewersCrowd():
-    """Tests for CalendarViewersCrowd.
+def doctest_CalendarAccesorsCrowd():
+    """Tests for CalendarAccesorsCrowd.
 
         >>> setup.placelessSetUp()
 
@@ -81,8 +81,9 @@ def doctest_CalendarViewersCrowd():
         ...     def __init__(self, parent):
         ...         self.__parent__ = parent
 
-        >>> from schooltool.app.security import CalendarViewersCrowd
-        >>> crowd = CalendarViewersCrowd(CalendarStub(None))
+        >>> from schooltool.app.security import CalendarAccessorsCrowd
+        >>> crowd = CalendarAccessorsCrowd(CalendarStub(None))
+        >>> crowd.perm = "schooltool.view"
 
     First, fire a blank (no adapters registered):
 
@@ -114,7 +115,28 @@ def doctest_CalendarViewersCrowd():
 
     Let's try now with the adapter:
 
+        >>> from schooltool.app.security import CalendarViewersCrowd
         >>> crowd = CalendarViewersCrowd(CalendarStub(OwnerStub()))
+        >>> crowd.contains('some principal')
+        Getting adapter for <...OwnerStub ...>
+        Checking some principal
+        True
+
+    Let's try another name:
+
+        >>> from schooltool.app.security import CalendarEditorsCrowd
+        >>> crowd = CalendarEditorsCrowd(CalendarStub(OwnerStub()))
+        >>> crowd.perm = 'schooltool.edit'
+        >>> crowd.contains('some principal')
+        False
+
+    Now with an adapter in place:
+
+        >>> from zope.component import provideAdapter
+        >>> provideAdapter(ParentCrowdStub, adapts=[IOwner],
+        ...                provides=ICalendarParentCrowd,
+        ...                name='schooltool.edit')
+        >>> crowd = CalendarEditorsCrowd(CalendarStub(OwnerStub()))
         >>> crowd.contains('some principal')
         Getting adapter for <...OwnerStub ...>
         Checking some principal

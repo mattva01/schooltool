@@ -22,7 +22,7 @@
   <class class=".note.Note">
     <require permission="zope.Public"
              interface=".interfaces.INote" />
-    <require permission="schooltool.create"
+    <require permission="schooltool.edit"
              set_schema=".interfaces.INote" />
   </class>
 

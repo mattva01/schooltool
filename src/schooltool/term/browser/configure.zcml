@@ -28,7 +28,7 @@
       for="..interfaces.ITermContainer"
       class=".term.TermAddView"
       template="term_add_edit.pt"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       menu="schooltool_actions" title="New Term"
       />
 
@@ -68,7 +68,7 @@
       name="emergency.html"
       for="..interfaces.ITerm"
       class=".emergency.EmergencyDayView"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       menu="schooltool_actions"
       title="Cancel School in Emergency"
       />

@@ -24,7 +24,7 @@
         arguments="title"
         set_after_add="title"
         content_factory="schooltool.requirement.requirement.Requirement"
-        permission="schooltool.create"
+        permission="schooltool.edit"
         template="templates/simple_add.pt"
         class="schooltool.requirement.browser.requirement.RequirementAddView">
     </addform>

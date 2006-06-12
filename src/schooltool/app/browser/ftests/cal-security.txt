@@ -48,58 +48,66 @@ Let the Frog add an ordinary event that takes place on 3rd February, 2005:
 
     >>> frog.getControl('Add').click()
 
-# Let's grant the Toad the viewCalendar permission on Frog's calendar:
+Let's make Frog's calendar public:
 
-#     >>> manager.open('http://localhost/persons')
-#     >>> manager.getLink('Frog').click()
-#     >>> manager.getLink('View Calendar').click()
-#     >>> manager.getLink('Set Up Access').click()
+    >>> frog.getLink('Frog').click()
+    >>> frog.getLink('Change Preferences').click()
+    >>> frog.getControl('Make calendar public').click()
+    >>> frog.getControl('Apply').click()
 
-#     >>> toad_settings = manager.getControl(name='sb.person.toad')
-#     >>> toad_settings.value = ['schooltool.viewCalendar']
+Toad should still not even see the new event links (but span tags instead):
 
-#     >>> manager.getControl('Set Access', index=0).click()
+    >>> toad = Browser()
+    >>> toad.open('http://localhost/')
+    >>> toad.getLink('Log In').click()
+    >>> toad.getControl('Username').value = 'toad'
+    >>> toad.getControl('Password').value = 'doat'
+    >>> toad.getControl('Log in').click()
 
-# Toad should still not even see the new event links (but span tags instead):
+    # Sigh, there is really no way to get to Frog's calendar :-(
+    >>> toad.handleErrors = False
+    >>> toad.open('http://localhost/persons/frog/calendar/2005-02-03')
 
-#     >>> toad = Browser()
-#     >>> toad.open('http://localhost/')
-#     >>> toad.getLink('Log In').click()
-#     >>> toad.getControl('Username').value = 'toad'
-#     >>> toad.getControl('Password').value = 'doat'
-#     >>> toad.getControl('Log in').click()
+    >>> print toad.contents
+    <BLANKLINE>
+    ...
+      <h6 style="background: #7590ae">
+        <a href="http://localhost/persons/frog/calendar/..."
+           title="Sleeping">
+          Sleeping
+          <span class="start-end">
+            (<span>01:00</span>
+              - <span>09:20</span>)
+          </span>
+        </a>
+      </h6>
+    ...
 
-#     # Sigh, there is really no way to get to Frog's calendar :-(
-#     >>> toad.handleErrors = False
-#     >>> toad.open('http://localhost/persons/frog/calendar/')
+Now let Toad try to add an event on Frog's calendar (even though there is no
+link for it):
 
-# Now let Toad try to add an event on Frog's calendar (even though there is no
-# link for it):
+    >>> toad.open('http://localhost/persons/frog/calendar/add.html')
+    Traceback (most recent call last):
+    ...
+    Unauthorized: (..., 'schooltool.edit')
 
-#     >>> toad.open('http://localhost/persons/frog/calendar/add.html')
-#     Traceback (most recent call last):
-#     ...
-#     Unauthorized: (..., 'schooltool.addEvent')
+Let's make Toad a manager (that should give him the permission to add
+events to Frog's calendar):
 
-# Let's grant the Toad the addEvent permission on Frog's calendar:
+    >>> manager.open('http://localhost/groups/manager/@@members_persons.html')
+    >>> manager.getControl('Toad').click()
+    >>> manager.getControl('Add').click()
 
-#     >>> manager.getLink('Set Up Access').click()
+Now the Toad can add events to Frog's calendar:
 
-#     >>> toad_settings = manager.getControl(name='sb.person.toad')
-#     >>> toad_settings.value = ['schooltool.viewCalendar', 'schooltool.addEvent']
+    >>> toad.open('http://localhost/persons/frog/calendar/add.html')
 
-#     >>> manager.getControl('Set Access', index=0).click()
+    >>> toad.getControl('Title').value = 'Dreaming'
+    >>> toad.getControl('Date').value = '2005-02-03'
+    >>> toad.getControl('Time').value = '01:00'
+    >>> toad.getControl('Duration').value = '500'
 
-# Now the Toad can add events to Frog's calendar:
-
-#     >>> toad.open('http://localhost/persons/frog/calendar/add.html')
-
-#     >>> toad.getControl('Title').value = 'Dreaming'
-#     >>> toad.getControl('Date').value = '2005-02-03'
-#     >>> toad.getControl('Time').value = '01:00'
-#     >>> toad.getControl('Duration').value = '500'
-
-#     >>> toad.getControl('Add').click()
+    >>> toad.getControl('Add').click()
 
 
 # Editing events
@@ -149,7 +157,7 @@ Let the Frog add an ordinary event that takes place on 3rd February, 2005:
 #     ...           'dummy-uid/edit.html?date=2005-02-04')
 #     Traceback (most recent call last):
 #     ...
-#     Unauthorized: (..., 'schooltool.modifyEvent')
+#     Unauthorized: (..., 'schooltool.edit')
 
 # Toad should not see the event delete link
 

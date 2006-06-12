@@ -13,7 +13,7 @@
         fields="title description"
         set_before_add="title"
         content_factory="schooltool.course.course.Course"
-        permission="schooltool.create"
+        permission="schooltool.edit"
         template="templates/simple_add.pt"
         class="schooltool.course.browser.course.CourseAddView">
         <widget field="description" height="5" />
@@ -78,8 +78,8 @@
 
   <containerViews
       for="..interfaces.ICourseContainer"
-      contents="zope.ManageContent"
-      add="zope.View"
+      contents="schooltool.view"
+      add="schooltool.edit"
       />
 
   <page
@@ -87,7 +87,7 @@
       for="..interfaces.ICourseContainer"
       class=".csvimport.CourseCSVImportView"
       template="templates/course-csvimport.pt"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       menu="schooltool_actions"
       title="Import Courses"
       layer="schooltool.skin.ISchoolToolLayer"
@@ -123,8 +123,8 @@
 
   <containerViews
       for="..interfaces.ISectionContainer"
-      contents="zope.ManageContent"
-      add="zope.View"
+      contents="schooltool.view"
+      add="schooltool.edit"
       />
 
   <addform
@@ -135,7 +135,7 @@
       set_before_add="title"
       template="templates/section_add.pt"
       content_factory="..section.Section"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       class=".section.SectionAddView">
     <widget field="description" height="5" />
   </addform>

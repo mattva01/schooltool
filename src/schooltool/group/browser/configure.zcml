@@ -30,7 +30,7 @@
         fields="title description"
         set_before_add="title description"
         content_factory="schooltool.group.group.Group"
-        permission="schooltool.create"
+        permission="schooltool.edit"
         template="templates/simple_add.pt"
         class="schooltool.group.browser.group.GroupAddView">
       <widget field="description" height="5" />
@@ -99,7 +99,7 @@
       title="SchoolBell Group"
       description="A Group"
       class="..group.Group"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       view="addSchoolToolGroup.html"
       />
 
@@ -127,7 +127,7 @@
       for="..interfaces.IGroupContainer"
       class=".csvimport.GroupCSVImportView"
       template="group-csvimport.pt"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       menu="schooltool_actions"
       title="Import Groups"
       />
