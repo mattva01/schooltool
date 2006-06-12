@@ -112,29 +112,27 @@ class CommendationAddView(AddView):
 
     def add(self, comm):
         """Add ``comm`` to the object."""
-        # Get the commendations adapter for the context object.
-        commendations = interfaces.ICommendations(self.context)
         # It is often not necessary/desirable to ask the user for the name of
         # the component, since it is immaterial to the interaction of the user
         # with the application. For those scenarios Zope 3 provides a
         # component that will choose the name for you. It is simply an adapter
         # from the container to ``INameChooser`` and is used as shown below.
-        chooser = container.interfaces.INameChooser(commendations)
-        commendations[chooser.chooseName('', comm)] = comm
+        chooser = container.interfaces.INameChooser(self.context)
+        self.context[chooser.chooseName('', comm)] = comm
         return comm
 
     def update(self):
         """Process the form data and actions."""
-        # We extend the ``update()`` method by supporting a cancel action,
-        # which willbring us back to the context's default view.
+        # We extend the ``update()`` method by supporting a cancel
+        # action, which willbring us back to the context's parent's
+        # default view.
         if 'CANCEL' in self.request:
-            url = zapi.absoluteURL(self.context, self.request)
-            return self.request.response.redirect(url)
+            return self.request.response.redirect(self.nextURL())
         return super(CommendationAddView, self).update()
 
     def nextURL(self):
         """See zope.app.container.interfaces.IAdding"""
-        return zapi.absoluteURL(self.context, self.request)
+        return zapi.absoluteURL(self.context.__parent__, self.request)
 
 
 class CommendationsView(browser.BrowserView):
@@ -145,11 +143,7 @@ class CommendationsView(browser.BrowserView):
 
     def __init__(self, context, request):
         super(CommendationsView, self).__init__(context, request)
-        # Since this is a view for ``IHaveCommendations`` components and not
-        # for ``ICommendations`` components, we have to explicitely look up
-        # the commendations and store them in a class attribute.
-        commendations = interfaces.ICommendations(context)
-        self.commendations = commendations.values()
+        self.commendations = self.context.values()
 
 
 class CommendationsOverview(browser.BrowserView):

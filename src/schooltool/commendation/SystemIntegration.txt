@@ -112,7 +112,9 @@ support the additional "Cancel" button.
   >>> request = TestRequest(form={'CANCEL': True})
 
   >>> from schooltool.commendation import browser
-  >>> addform = browser.CommendationAddView(st['persons']['sue'], request)
+  >>> from schooltool.commendation.interfaces import ICommendations
+  >>> commendations = ICommendations(st['persons']['sue'])
+  >>> addform = browser.CommendationAddView(commendations, request)
 
   >>> addform.update()
   'http://127.0.0.1/persons/sue'
@@ -186,7 +188,8 @@ hidden in an annotation, the commendations view is registered for
 commendations and stores them in an attribute. This is done in the
 ``CommendationsView`` class.
 
-  >>> overview = browser.CommendationsView(st['persons']['sue'], request)
+  >>> commendations = ICommendations(st['persons']['sue'])
+  >>> overview = browser.CommendationsView(commendations, request)
   >>> list(overview.commendations)
   [<Commendation u'good job' by u'<unknown>'>]
 
@@ -274,18 +277,18 @@ Now we should be able to add commendations to
   >>> manager.getLink('Groups').click()
   >>> manager.getLink('Students').click()
   >>> manager.getLink('Add Commendation')
-  <Link text='Add Commendation' url='...groups/students/@@addCommendation.html'>
+  <Link text='Add Commendation' url='...groups/students/commendations/@@addCommendation.html'>
   >>> manager.getLink('View Commendations')
-  <Link text='View Commendations' url='...groups/students/@@commendations.html'>
+  <Link text='View Commendations' url='...groups/students/commendations'>
 
 - and sections.
 
   >>> manager.getLink('Sections').click()
   >>> manager.getLink('Sec-A').click()
   >>> manager.getLink('Add Commendation')
-  <Link text='Add Commendation' url='...tions/math101-A/@@addCommendation.html'>
+  <Link text='Add Commendation' url='...tions/math101-A/commendations/@@addCommendation.html'>
   >>> manager.getLink('View Commendations')
-  <Link text='View Commendations' url='...tions/math101-A/@@commendations.html'>
+  <Link text='View Commendations' url='...tions/math101-A/commendations'>
 
 Also, not just everybody can add new commendations. For example Tom Hoffman,
 one of the students, cannot add new commendations:
@@ -299,25 +302,25 @@ one of the students, cannot add new commendations:
   >>> tom.getControl('Log in').click()
 
   >>> tom.handleErrors = False
-  >>> tom.open('http://localhost/persons/manager/@@addCommendation.html')
+  >>> tom.open('http://localhost/persons/manager/commendations/@@addCommendation.html')
   Traceback (most recent call last):
   ...
   Unauthorized: ...
 
-  >>> tom.open('http://localhost/groups/students/@@addCommendation.html')
+  >>> tom.open('http://localhost/groups/students/commendations/@@addCommendation.html')
   Traceback (most recent call last):
   ...
   Unauthorized: ...
 
-  >>> tom.open('http://localhost/sections/math101-A/@@addCommendation.html')
+  >>> tom.open('http://localhost/sections/math101-A/commendations/@@addCommendation.html')
   Traceback (most recent call last):
   ...
   Unauthorized: ...
 
 On the other hand, since the commendations are public, he can view them:
 
-  >>> tom.open('http://localhost/persons/manager/@@commendations.html')
-  >>> tom.open('http://localhost/groups/students/@@commendations.html')
-  >>> tom.open('http://localhost/sections/math101-A/@@commendations.html')
+  >>> tom.open('http://localhost/persons/manager/commendations')
+  >>> tom.open('http://localhost/groups/students/commendations')
+  >>> tom.open('http://localhost/sections/math101-A/commendations')
 
 And that's all.

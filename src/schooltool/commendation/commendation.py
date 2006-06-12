@@ -28,8 +28,11 @@ import zope.security
 from zope.schema import fieldproperty
 from zope import annotation
 from zope.app.container import btree, contained
+
 from schooltool.app import app
 from schooltool.commendation import interfaces
+from schooltool.traverser.traverser import AdapterTraverserPlugin
+from schooltool.commendation.interfaces import ICommendations
 
 # Annotations are identified using annotation keys that must be truly
 # unique. Thus it is a good idea to make the Python path of the pacakge the
@@ -82,6 +85,8 @@ class Commendations(btree.BTreeContainer):
     '''A simple implementation of ``ICommendations``.'''
     zope.interface.implements(interfaces.ICommendations)
 
+    title = "commendations"
+
     def __repr__(self):
         return '<%s for %r>' %(self.__class__.__name__, self.__parent__)
 
@@ -97,6 +102,7 @@ def getCommendations(context):
         # can create URLs and do local component lookups.
         annotations[CommendationsKey] = Commendations()
         annotations[CommendationsKey].__parent__ = context
+        annotations[CommendationsKey].__name__ = 'commendations'
         return annotations[CommendationsKey]
 
 
@@ -110,3 +116,7 @@ def cacheCommendation(commendation, event):
     if CommendationsCacheKey not in annotations:
         annotations[CommendationsCacheKey] = persistent.list.PersistentList()
     annotations[CommendationsCacheKey].append(commendation)
+
+
+CommendationsTraverserPlugin = AdapterTraverserPlugin(
+    'commendations', ICommendations)

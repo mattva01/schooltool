@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:security="http://schooltool.org/securitypolicy"
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="commendation">
 
@@ -22,15 +23,25 @@
 
   <class class=".commendation.Commendations">
     <allow interface="zope.app.container.interfaces.IReadContainer" />
-    <require permission="schooltool.create"
+    <require permission="schooltool.edit"
              interface="zope.app.container.interfaces.IWriteContainer" />
   </class>
 
   <class class=".commendation.Commendation">
     <allow interface=".interfaces.ICommendation" />
-    <require permission="schooltool.create"
+    <require permission="schooltool.edit"
              set_schema=".interfaces.ICommendation" />
   </class>
+
+  <security:allow
+      interface="schooltool.commendation.interfaces.ICommendations"
+      crowds="administration"
+      permission="schooltool.view" />
+
+  <security:allow
+      interface="schooltool.commendation.interfaces.ICommendations"
+      crowds="administration"
+      permission="schooltool.edit" />
 
   <!-- Commendation Adapter -->
 
@@ -51,6 +62,14 @@
 
   <!-- Browser UI -->
 
+  <subscriber
+      for=".interfaces.IHaveCommendations
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".commendation.CommendationsTraverserPlugin"
+      permission="zope.Public"
+      />
+
   <browser:page
       name="details"
       for=".interfaces.ICommendation"
@@ -60,8 +79,8 @@
       />
 
   <browser:page
-      name="commendations.html"
-      for=".interfaces.IHaveCommendations"
+      name="index.html"
+      for=".interfaces.ICommendations"
       class=".browser.CommendationsView"
       template="commendations.pt"
       permission="zope.Public"
@@ -69,14 +88,30 @@
       title="View Commendations"
       />
 
+  <browser:menuItem
+      for=".interfaces.IHaveCommendations"
+      menu="schooltool_actions"
+      title="View Commendations"
+      action="commendations"
+      permission="zope.View"
+      />
+
   <browser:page
       name="addCommendation.html"
-      for=".interfaces.IHaveCommendations"
+      for=".interfaces.ICommendations"
       template="commendation_add.pt"
       class=".browser.CommendationAddView"
-      permission="schooltool.create"
+      permission="schooltool.edit"
       menu="schooltool_actions"
       title="Add Commendation"
+      />
+
+  <browser:menuItem
+      for=".interfaces.IHaveCommendations"
+      menu="schooltool_actions"
+      title="Add Commendation"
+      action="commendations/@@addCommendation.html"
+      permission="schooltool.edit"
       />
 
   <browser:page
@@ -95,7 +130,7 @@
       manager="schooltool.skin.INavigationManager"
       template="templates/navigationViewlet.pt"
       class="schooltool.skin.NavigationViewlet"
-      permission="zope.View"
+      permission="schooltool.edit"
       link="@@commendations.html"
       title="All Commendations"
       order="100"
