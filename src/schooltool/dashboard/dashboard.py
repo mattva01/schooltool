@@ -24,6 +24,7 @@ __docformat__ = 'reStructuredText'
 import zope.component
 import zope.interface
 from zope.viewlet import manager, viewlet
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 import schooltool.person
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -70,6 +71,9 @@ class DashboardCategory(viewlet.ViewletBase):
 
     # See interfaces.IDashboardCategory
     title = ''
+
+    def appURL(self):
+        return absoluteURL(ISchoolToolApplication(None), self.request)
 
     def getWeight(self):
         """See interfaces.IDashboardCategory"""

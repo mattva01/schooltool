@@ -1,16 +1,19 @@
 <ul style="list-style: disc; left-padding: 2em;">
   <li>
-    <a href="courses" i18n:translate="">
+    <a tal:attributes="href string:${view/appURL}/courses"
+       href="courses" i18n:translate="">
       Courses
     </a>
   </li>
   <li>
-    <a href="sections" i18n:translate="">
+    <a tal:attributes="href string:${view/appURL}/sections"
+       href="sections" i18n:translate="">
       Sections
     </a>
   </li>
   <li>
-    <a href="terms" i18n:translate="">
+    <a tal:attributes="href string:${view/appURL}/terms"
+       href="terms" i18n:translate="">
       Terms
     </a>
   </li>

@@ -1,21 +1,25 @@
 <ul style="list-style: disc; left-padding: 2em;">
   <li>
-    <a href="levels" i18n:translate="">
+    <a tal:attributes="href string:${view/appURL}/levels"
+       href="levels" i18n:translate="">
       Levels
     </a>
   </li>
   <li>
-    <a href="@@categories.html" i18n:translate="">
+    <a tal:attributes="href string:${view/appURL}/@@categories.html"
+       href="@@categories.html" i18n:translate="">
       Activity Categories
     </a>
   </li>
   <li>
-    <a href="ttschemas" i18n:translate="">
+    <a tal:attributes="href string:${view/appURL}/ttschemas"
+       href="ttschemas" i18n:translate="">
       School Timetables
     </a>
   </li>
   <li>
-    <a href="@@categories.html" i18n:translate="">
+    <a tal:attributes="href string:${view/appURL}/resources"
+       href="resources" i18n:translate="">
       Resources
     </a>
   </li>
