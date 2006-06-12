@@ -6,7 +6,7 @@
   <page
       name="dashboard.html"
       for="schooltool.app.interfaces.ISchoolToolApplication"
-      template="dashboard.pt"
+      template="dashboardpage.pt"
       permission="schooltool.view"
       />
 

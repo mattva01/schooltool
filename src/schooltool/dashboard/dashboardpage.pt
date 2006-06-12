@@ -1,0 +1,41 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" tal:content="context/title" />
+</head>
+<body>
+<h1 metal:fill-slot="content-header">Dashboard</h1>
+
+<metal:block metal:fill-slot="body">
+<style type="text/css">
+  .dashboardButton {
+    position: fixed;
+    width: 20%;
+    right: 40%;
+    background:#fff;
+    text-align: center;
+    font-weight: bold;
+    z-index: 99;
+    border: solid 2px #000;
+    border-bottom: 0px;
+  }
+  div .dashboardContents {
+    position: fixed;
+    bottom: 0px;
+    width: 80%;
+    right: 10%;
+    background: #fff;
+    text-align: center;
+    z-index: 98;
+    border: solid 2px #000;
+    border-bottom: 0px;
+    overflow: auto;
+    text-align: left;
+  }
+</style>
+
+<div id="dashboardContents">
+  <div tal:content="structure provider:schooltool.dashboard" />
+</div>
+</metal:block>
+</body>
+</html>

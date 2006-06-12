@@ -66,10 +66,12 @@
   }
 </style>
 
-<span style="bottom: 0px;" class="dashboardButton"
+<a style="bottom: 0px;" class="dashboardButton" tal:attributes="href string:${context/schooltool:app/@@absolute_url}/@@dashboard.html"
       id="dashboardTab" onclick="mouseDaemon()">
-      Dashboard</span>
-
+      Dashboard</a>
+<script type="text/javascript">
+document.getElementById('dashboardTab').href="javascript:void(0)";
+</script>
 <div id="dashboardContents" class="dashboardContents"
      style="height: 0%; display: none;">
   <div tal:content="structure provider:schooltool.dashboard" />
