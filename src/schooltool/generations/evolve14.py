@@ -37,7 +37,7 @@ from schooltool.demographics.person import Person
 DEPENDABLE_KEY = 'zope.app.dependable.Dependents'
 
 def evolve(context):
-    root = context.connection.root()[ZopePublication.root_name]    
+    root = context.connection.root()[ZopePublication.root_name]
     for app in findObjectsProviding(root, ISchoolToolApplication):
         persons = app['persons']
         for name, person in persons.items():
@@ -71,9 +71,13 @@ def evolve(context):
             # subscriber). So sharing the same annotation OOBTree
             # might lead to various weird bugs.
             new_person.__annotations__ = OOBTree()
-            for key, annotation in person.__annotations__.items():
+            for key, annotation in list(person.__annotations__.items()):
                 new_person.__annotations__[key] = annotation
-                if hasattr(annotation, '__parent__') and annotation.__parent__ is person:
+                # we don't want annotations affected by actions
+                # performed with the old person object
+                del person.__annotations__[key]
+                if (hasattr(annotation, '__parent__') and
+                    annotation.__parent__ is person):
                     annotation.__parent__ = new_person
 
             del persons[name]
