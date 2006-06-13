@@ -100,7 +100,7 @@
      />
 
   <page
-      name="photo"
+      name="photo.jpg"
       for="..interfaces.IPerson"
       class=".person.PersonPhotoView"
       permission="schooltool.view" />

@@ -57,6 +57,7 @@ class EditForm(form.PageEditForm):
         self.edit_action(action, data)
 
     # a separate method so it can be called by actions on subclasses as well
+    # or, alternatively, be overridden by subclasses
     def edit_action(self, action, data):
         if not form.applyChanges(self.context, self.form_fields, data,
                                  self.adapters):

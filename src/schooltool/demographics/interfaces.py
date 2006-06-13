@@ -65,7 +65,12 @@ class INameInfo(Interface):
         required=True,
         )
 
-
+    photo = schema.Bytes(
+        title=_("Photo"),
+        required=False,
+        description=_("""Photo (in JPEG format)"""),
+        )
+    
 class SourceList(list):
     """A simple list-based source for Choice fields.
     """

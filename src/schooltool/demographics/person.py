@@ -55,7 +55,8 @@ class NameInfo(Persistent):
     implements(interfaces.INameInfo, ILocation)
 
     def __init__(self):
-        initializeSchemaAttributes(interfaces.INameInfo, self, ['full_name'])
+        initializeSchemaAttributes(interfaces.INameInfo, self,
+                                   ['full_name', 'photo'])
 
     def _get_full_name(self):
         return self.__parent__.title
@@ -65,7 +66,14 @@ class NameInfo(Persistent):
 
     full_name = property(_get_full_name, _set_full_name)
 
+    def _get_photo(self):
+        return self.__parent__.photo
 
+    def _set_photo(self, d):
+        self.__parent__.photo = d
+        
+    photo = property(_get_photo, _set_photo)
+    
 class Demographics(Persistent):
     implements(interfaces.IDemographics, ILocation)
 

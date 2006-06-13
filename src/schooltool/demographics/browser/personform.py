@@ -26,7 +26,7 @@ from zope.formlib import form
 from zope.formlib.interfaces import IAction
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.interface.common import idatetime
-from zope.schema import TextLine, Password
+from zope.schema import TextLine, Password, getFields
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.app.form.browser.interfaces import ITerms
 from zope.app.publisher.browser.menu import getMenu, BrowserMenu
@@ -115,6 +115,8 @@ class PersonEditForm(AttributeEditForm):
         self.cancel_action(action, data)
 
     def getNextMenuUrl(self):
+        """Given current menu we're in, get the URL for the next one.
+        """
         menu = self.getMenu()
         base_url = zapi.absoluteURL(self.context, self.request)
         url =  base_url + '/@@' + self.__name__
@@ -156,13 +158,20 @@ class NameInfoEdit(PersonEditForm):
 
     form_fields = form.Fields(interfaces.INameInfo)
 
-
+    def edit_action(self, action, data):
+        # not uploading a photo results in no changes
+        if not data['photo']:
+            data['photo'] = self.context.photo
+        super(NameInfoEdit, self).edit_action(action, data)
+        
 class NameInfoDisplay(PersonDisplayForm):
+    template = ViewPageTemplateFile("nameinfo_view.pt")
+    
     def title(self):
         return _(u'Change name')
 
     form_fields = form.Fields(interfaces.INameInfo)
-
+    form_fields = form_fields.omit('photo')
 
 demographics_traverser = SingleAttributeTraverserPlugin('demographics')
 
@@ -280,10 +289,18 @@ class PersonAddView(BasicForm):
         if data['username'] in self.context:
             self.status = _("This username is already used!")
             return None
-        person = self.createPerson(data['full_name'],
-                                   data['username'],
-                                   data['password'])
-        person.nameinfo.last_name = data['last_name']
+        person = self._factory(data['username'], data['full_name'])
+        if data['password']:
+            person.setPassword(data['password'])
+
+        # get data pertaining to nameinfo
+        nameinfo_data = {}
+        for key in getFields(interfaces.INameInfo).keys():
+            nameinfo_data[key] = data[key]
+        # set them on nameinfo
+        form.applyChanges(person.nameinfo, NameInfoEdit.form_fields,
+                          nameinfo_data)
+
         self.addPerson(person)
         url = (zapi.absoluteURL(person, self.request) +
                '/demographics/@@edit.html')
@@ -303,15 +320,6 @@ class PersonAddView(BasicForm):
 
     def _factory(self, username, title):
         return getUtility(IPersonFactory)(username, title)
-
-    def createPerson(self, title, username, password):
-        person = self._factory(username=username, title=title)
-        person.setPassword(password)
-        return person
-
-    def addPersonToGroups(self, person, groups):
-        for group in groups:
-            person.groups.add(group)
 
     def addPerson(self, person):
         """Add `person` to the container.

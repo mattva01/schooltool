@@ -1,7 +1,4 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
-  <head>
-    <title metal:fill-slot="title" i18n:translate="">Display</title>
-  </head>
   <body>
     <metal:block metal:fill-slot="body">
       <metal:block use-macro="view/@@menu_macros/tab_menu" />
