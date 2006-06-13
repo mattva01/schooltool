@@ -1,10 +1,19 @@
 
+<script type="text/javascript" tal:content="view/dynamicVariables">
+</script>
+
 <script type="text/javascript">
   maxHeight = 75; //height it should go to in percent
   opened = false;
   moving = false;
-  function mouseDaemon(){
+  written = false;
+  function mouseDaemon(url){
     if (opened == false && moving == false){
+      if (written == false){
+        document.getElementById('dashboardContents').innerHTML = 'loading...'
+        getDashboardContent();
+        written = true;
+      }
       moving = true;
       openDash();
       opened = true;
@@ -37,6 +46,48 @@
     }
     else {content.display = 'none'; moving = false; }
   }
+
+// This function tries to create an XMLHttpRequest object for use with
+// AJAX enabled pages.  It is meant to be compatible between browsers.
+function getHttpRequest(){
+    var http_request = false;
+
+    if (window.XMLHttpRequest) { // Mozilla, Safari, ...
+        http_request = new XMLHttpRequest();
+        if (http_request.overrideMimeType) {
+            http_request.overrideMimeType('text/xml');
+        }
+        } else if (window.ActiveXObject) {
+            try {
+                http_request = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
+                try {
+                http_request = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch (e) {}
+            }
+        }
+    if (!http_request) {
+        alert('Unable to create http_request object.  Your browser may not be supported.  Disable javascript to stop seeing these messages.');
+        return false;
+    }
+    return http_request;
+}
+
+  function getDashboardContent(){
+    http_request = getHttpRequest();
+    http_request.onreadystatechange = function() { alertContents(http_request); };
+    http_request.open('GET', ajaxURL, true);
+    http_request.send(null);
+  }
+
+  function alertContents(http_request) {
+    if (http_request.readyState == 4 ) {
+      if (http_request.status == 200)
+        document.getElementById('dashboardContents').innerHTML = http_request.responseText;
+      else
+        alert(http_request.status);
+    }
+  }
 </script>
 
 <style type="text/css">
@@ -67,12 +118,11 @@
 </style>
 
 <a style="bottom: 0px;" class="dashboardButton" tal:attributes="href string:${context/schooltool:app/@@absolute_url}/@@dashboard.html"
-      id="dashboardTab" onclick="mouseDaemon()">
+      id="dashboardTab">
       Dashboard</a>
 <script type="text/javascript">
-document.getElementById('dashboardTab').href="javascript:void(0)";
+document.getElementById('dashboardTab').href="javascript:mouseDaemon()";
 </script>
 <div id="dashboardContents" class="dashboardContents"
      style="height: 0%; display: none;">
-  <div tal:content="structure provider:schooltool.dashboard" />
 </div>

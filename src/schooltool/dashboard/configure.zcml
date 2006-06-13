@@ -9,6 +9,12 @@
       template="dashboardpage.pt"
       permission="schooltool.view"
       />
+  <page
+      name="dashboardContent"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      template="dashContent.pt"
+      permission="schooltool.view"
+      />
 
   <viewlet
       name="dashboard"
@@ -16,6 +22,7 @@
       manager="schooltool.skin.IHeaderManager"
       template="dashboard.pt"
       permission="schooltool.view"
+      class="schooltool.dashboard.dashboard.DashboardTabView"
       />
 
   <viewletManager

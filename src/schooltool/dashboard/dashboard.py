@@ -62,6 +62,13 @@ class Dashboard(manager.ViewletManagerBase):
         super(Dashboard, self).update()
         self.createTable()
 
+class DashboardTabView(object):
+
+    def dynamicVariables(self):
+        return """
+            var ajaxURL = '%s/dashboardContent';
+            """ % (absoluteURL(ISchoolToolApplication(None), self.request))
+
 
 class DashboardCategory(viewlet.ViewletBase):
     zope.interface.implements(interfaces.IDashboardCategory)
