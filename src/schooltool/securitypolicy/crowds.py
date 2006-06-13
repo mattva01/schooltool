@@ -26,7 +26,6 @@ $Id$
 from zope.interface import implements
 from zope.security.proxy import removeSecurityProxy
 from schooltool.securitypolicy.interfaces import ICrowd
-from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
 
 
@@ -72,6 +71,8 @@ class ConfigurableCrowd(Crowd):
 
     def contains(self, principal):
         """Return the value of the related setting (True or False)."""
+        # XXX avoid a circular import
+        from schooltool.app.interfaces import ISchoolToolApplication
         app = ISchoolToolApplication(None)
         customizations = IAccessControlCustomisations(app)
         return customizations.get(self.setting_key)
