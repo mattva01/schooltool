@@ -141,7 +141,7 @@
 
   <class class="schooltool.app.rest.relationships.RelationshipsView">
     <allow attributes="GET" />
-    <require permission="schooltool.manageMembership"
+    <require permission="schooltool.edit"
              attributes="POST" />
   </class>
 
@@ -161,7 +161,7 @@
 
   <class class="schooltool.app.rest.relationships.LinkView">
     <allow attributes="GET info" />
-    <require permission="schooltool.manageMembership"
+    <require permission="schooltool.edit"
              attributes="DELETE" />
   </class>
 

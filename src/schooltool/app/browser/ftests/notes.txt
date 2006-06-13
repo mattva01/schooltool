@@ -79,45 +79,45 @@ Make sure the note is there when we view it:
           </div>
         </div>
 
-Add a user who won't be able to see the private note:
+# Add a user who won't be able to see the private note:
 
-    >>> from schooltool.app.browser.ftests.setup import addPerson
-    >>> addPerson('Frog', 'frog', 'pwd')
+#     >>> from schooltool.app.browser.ftests.setup import addPerson
+#     >>> addPerson('Frog', 'frog', 'pwd')
 
-View the page as our new user and we will only see the first (public) note:
+# View the page as our new user and we will only see the first (public) note:
 
-    >>> frog = Browser()
-    >>> frog.addHeader('Authorization', 'Basic frog:pwd')
-    >>> frog.handleErrors = False
-    >>> frog.open('http://localhost/persons/person')
+#     >>> frog = Browser()
+#     >>> frog.addHeader('Authorization', 'Basic frog:pwd')
+#     >>> frog.handleErrors = False
+#     >>> frog.open('http://localhost/persons/person')
 
-    >>> print analyze.queryHTML("//div[@id='notes']", frog.contents)[0]
-    <div id="notes">
-      <h5>Notes</h5>
-    <BLANKLINE>
-        <div class="note public">
-          <div class="header">
-            <h6>
-    <BLANKLINE>
-              My Note
-            </h6>
-    <BLANKLINE>
-    <BLANKLINE>
-          </div>
-          <div class="body">
-            <p>This is the note.</p>
-          </div>
-        </div>
-    <BLANKLINE>
-    </div>
+#     >>> print analyze.queryHTML("//div[@id='notes']", frog.contents)[0]
+#     <div id="notes">
+#       <h5>Notes</h5>
+#     <BLANKLINE>
+#         <div class="note public">
+#           <div class="header">
+#             <h6>
+#     <BLANKLINE>
+#               My Note
+#             </h6>
+#     <BLANKLINE>
+#     <BLANKLINE>
+#           </div>
+#           <div class="body">
+#             <p>This is the note.</p>
+#           </div>
+#         </div>
+#     <BLANKLINE>
+#     </div>
 
 Notes can also be deleted, but only by the person who created the note:
 
-    >>> frog.getLink(url='edit.html').click()
-    >>> frog.getLink(url='DELETE_NOTE').click()
-    Traceback (most recent call last):
-    ...
-    LinkNotFoundError
+#     >>> frog.getLink(url='edit.html').click()
+#     >>> frog.getLink(url='DELETE_NOTE').click()
+#     Traceback (most recent call last):
+#     ...
+#     LinkNotFoundError
 
     >>> manager.getLink('Persons').click()
     >>> manager.getLink('person1').click()

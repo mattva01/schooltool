@@ -106,10 +106,6 @@
       interface="schooltool.group.interfaces.IGroup"
       crowds="administration leaders"
       permission="schooltool.edit" />
-  <security:allow
-      interface="schooltool.group.interfaces.IGroup"
-      crowds="administration leaders"
-      permission="schooltool.manageMembership" />
 
   <security:allow
       interface="schooltool.group.interfaces.IGroup"

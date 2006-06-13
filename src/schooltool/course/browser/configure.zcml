@@ -105,7 +105,7 @@
       for="..interfaces.ISectionContainer"
       class=".section.SectionContainerView"
       template="templates/section_container.pt"
-      permission="zope.View"
+      permission="schooltool.view"
       menu="zmi_views"
       title="View"
       />
@@ -159,7 +159,7 @@
       for="..interfaces.ISection"
       class=".section.SectionInstructorView"
       template="templates/edit_relationships.pt"
-      permission="schooltool.manageMembership"
+      permission="schooltool.edit"
       />
 
   <page
@@ -167,7 +167,7 @@
       for="..interfaces.ISection"
       class=".section.SectionResourceView"
       template="templates/edit_relationships.pt"
-      permission="schooltool.manageMembership"
+      permission="schooltool.edit"
       />
 
   <page
@@ -175,7 +175,7 @@
       for="..interfaces.ISection"
       class=".section.SectionLearnerView"
       template="templates/edit_relationships.pt"
-      permission="schooltool.manageMembership"
+      permission="schooltool.edit"
       />
 
   <page
@@ -183,7 +183,7 @@
       for="..interfaces.ISection"
       class=".section.SectionLearnerGroupView"
       template="templates/edit_relationships.pt"
-      permission="schooltool.manageMembership"
+      permission="schooltool.edit"
       />
 
 </configure>

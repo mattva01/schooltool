@@ -256,14 +256,14 @@ class EventForDisplay(object):
         self.request = request
         self.source_calendar = source_calendar
         if canAccess(source_calendar, '__iter__'):
-            # Due to limitations in the default Zope 3 security policy, a
-            # calendar event inherits permissions from the calendar of its
-            # __parent__.  However if there's an event that books a resource,
-            # and the authenticated user has schooltool.viewCalendar access
-            # for the resource's calendar, she should be able to view this
-            # event when it comes from the resource's calendar.  For this
-            # reason we have to remove the security proxy and check the
-            # permission manually.
+            # Due to limitations in the default Zope 3 security
+            # policy, a calendar event inherits permissions from the
+            # calendar of its __parent__.  However if there's an event
+            # that books a resource, and the authenticated user has
+            # schooltool.view access for the resource's calendar, she
+            # should be able to view this event when it comes from the
+            # resource's calendar.  For this reason we have to remove
+            # the security proxy and check the permission manually.
             event = removeSecurityProxy(event)
         self.context = event
         self.dtend = event.dtstart + event.duration

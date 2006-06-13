@@ -43,7 +43,7 @@
         name="calendar_selection.html"
         class=".overlay.CalendarSelectionView"
         template="templates/calendar_selection.pt"
-        permission="schooltool.edit"
+        permission="schooltool.editCalendarOverlays"
         />
   </configure>
 
@@ -87,7 +87,7 @@
       menu="schooltool_actions"
       title="Change Preferences"
       action="preferences"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       />
 
   <page

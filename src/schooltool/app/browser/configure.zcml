@@ -166,7 +166,7 @@
       for="schooltool.person.interfaces.IPerson"
       class="schooltool.app.browser.app.ApplicationPreferencesView"
       template="templates/application_preferences.pt"
-      permission="schooltool.manageMembership"
+      permission="schooltool.edit"
       menu="schooltool_actions"
       title="Change Site Preferences" />
 
@@ -230,7 +230,7 @@
       menu="schooltool_actions"
       title="View Calendar"
       for="schooltool.app.interfaces.IHaveCalendar"
-      permission="schooltool.viewCalendar"
+      permission="schooltool.view"
       action="calendar"
       />
 
@@ -239,7 +239,7 @@
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".cal.DailyCalendarView"
       template="templates/cal_daily.pt"
-      permission="schooltool.viewCalendar"
+      permission="schooltool.view"
       menu="zmi_views"
       title="Calendar (Daily)"
       />
@@ -269,7 +269,7 @@
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".pdfcal.WeeklyPDFCalendarView"
       attribute="pdfdata"
-      permission="schooltool.viewCalendar"
+      permission="schooltool.view"
       menu="zmi_views"
       title="Calendar (Weekly, PDF)"
       />
@@ -279,7 +279,7 @@
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".cal.MonthlyCalendarView"
       template="templates/cal_monthly.pt"
-      permission="schooltool.viewCalendar"
+      permission="schooltool.view"
       menu="zmi_views"
       title="Calendar (Monthly)"
       />
@@ -289,7 +289,7 @@
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".pdfcal.MonthlyPDFCalendarView"
       attribute="pdfdata"
-      permission="schooltool.viewCalendar"
+      permission="schooltool.view"
       menu="zmi_views"
       title="Calendar (Monthly, PDF)"
       />
@@ -299,7 +299,7 @@
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".cal.YearlyCalendarView"
       template="templates/cal_yearly.pt"
-      permission="schooltool.viewCalendar"
+      permission="schooltool.view"
       menu="zmi_views"
       title="Calendar (Yearly)"
       />
@@ -309,7 +309,7 @@
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".cal.AtomCalendarView"
       template="templates/cal_atom.pt"
-      permission="schooltool.viewCalendar"
+      permission="schooltool.view"
       menu="zmi_views"
       title="Atom View"
       />
@@ -317,7 +317,7 @@
   <page
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       name="calendar.ics"
-      permission="schooltool.viewCalendar"
+      permission="schooltool.view"
       class="schooltool.calendar.browser.CalendarICalendarView"
       attribute="show"
       menu="zmi_views"
@@ -350,7 +350,7 @@
   <menuItem
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       menu="schooltool_actions" title="Open in iCal"
-      action="calendar.ics" permission="schooltool.viewCalendar" />
+      action="calendar.ics" permission="schooltool.view" />
 
 
   <!-- Calendar event views -->

@@ -63,7 +63,7 @@ def doctest_GroupListView():
         >>> class SecurityPolicy(object):
         ...     def checkPermission(self, perm,  obj, interaction=None):
         ...         if (obj in (world, etria, pov) and
-        ...             perm == 'schooltool.manageMembership'):
+        ...             perm == 'schooltool.edit'):
         ...             return True
         ...         return False
         ...

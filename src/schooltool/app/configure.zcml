@@ -21,7 +21,7 @@
         permission="schooltool.view"
         interface=".interfaces.IShowTimetables" />
     <require
-        permission="schooltool.viewCalendar"
+        permission="schooltool.view"
         set_schema=".interfaces.IShowTimetables" />
   </class>
 
@@ -196,7 +196,7 @@
 
   <class class=".cal.CalendarEvent">
     <implements interface="schooltool.note.interfaces.IHaveNotes" />
-    <require permission="schooltool.viewCalendar"
+    <require permission="schooltool.view"
              interface="schooltool.calendar.interfaces.ICalendarEvent"
              attributes="resources" />
     <require permission="schooltool.edit"
@@ -208,8 +208,7 @@
   <class class=".app.ApplicationPreferences">
     <require permission="zope.Public"
              interface=".interfaces.IApplicationPreferences" />
-    <!-- Not really appropriate permission to require -->
-    <require permission="schooltool.manageMembership"
+    <require permission="schooltool.edit"
              set_schema=".interfaces.IApplicationPreferences" />
   </class>
 
@@ -264,7 +263,7 @@
   <!-- XXX It feels wrong to tweak permissions of objects in a sibling. -->
 
   <class class="schooltool.calendar.mixins.ExpandedCalendarEvent">
-    <require permission="schooltool.viewCalendar"
+    <require permission="schooltool.view"
              interface="schooltool.calendar.interfaces.IExpandedCalendarEvent"
              attributes="resources"
              />
@@ -316,7 +315,7 @@
         permission="schooltool.view"
         interface="schooltool.app.overlay.ICalendarOverlayInfo"/>
     <require
-        permission="schooltool.viewCalendar"
+        permission="schooltool.editCalendarOverlays"
         set_schema="schooltool.app.overlay.ICalendarOverlayInfo"/>
   </class>
 

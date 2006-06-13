@@ -81,7 +81,10 @@ class PersonTable(TablePage):
             ]
 
     def values(self):
-        return self.context.values()
+        # XXX removeSecurityProxy is safe as people who can see this
+        # view should have access to all the shown properties
+        items = removeSecurityProxy(self.context).values()
+        return items
 
     def sortOn(self):
         return (("modified", True),)

@@ -198,10 +198,6 @@
       interface="schooltool.course.interfaces.ISection"
       crowds="administration section_instructors"
       permission="schooltool.edit" />
-  <security:allow
-      interface="schooltool.course.interfaces.ISection"
-      crowds="administration section_instructors"
-      permission="schooltool.manageMembership" />
 
   <security:setting
       key="everyone_can_view_section_info"
@@ -225,9 +221,5 @@
       interface="schooltool.course.interfaces.ICourse"
       crowds="administration authenticated leaders"
       permission="schooltool.edit" />
-  <security:allow
-      interface="schooltool.course.interfaces.ICourse"
-      crowds="administration authenticated leaders"
-      permission="schooltool.manageMembership" />
 
 </configure>

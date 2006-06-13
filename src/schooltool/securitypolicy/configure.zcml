@@ -55,14 +55,6 @@
       permission="schooltool.view" />
   <security:allow
       interface="schooltool.app.interfaces.ISchoolToolApplication"
-      crowds="everybody"
-      permission="schooltool.viewCalendar" />
-  <security:allow
-      interface="schooltool.app.interfaces.ISchoolToolApplication"
-      crowds="administration"
-      permission="schooltool.viewAttendance" />
-  <security:allow
-      interface="schooltool.app.interfaces.ISchoolToolApplication"
       crowds="administration"
       permission="schooltool.edit" />
 
@@ -103,8 +95,14 @@
       permission="schooltool.edit" />
 
   <security:allow
-      crowds="managers administrators clerks"
-      permission="schooltool.viewAttendance" />
+      interface="schooltool.relationship.interfaces.IRelationshipLink"
+      crowds="administration owner"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.relationship.interfaces.IRelationshipLink"
+      crowds="administration owner"
+      permission="schooltool.edit" />
+
   <security:allow
       crowds="everybody"
       permission="zope.View" />

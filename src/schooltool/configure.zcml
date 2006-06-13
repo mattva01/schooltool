@@ -43,20 +43,7 @@
 
   <permission id="schooltool.view" title="View" />
   <permission id="schooltool.edit" title="Edit Info" />
-  <permission id="schooltool.viewCalendar"  title="View calendar" />
-  <permission id="schooltool.viewAttendance"  title="View attendance" />
-  <permission id="schooltool.controlAccess"  title="Set up access" />
-  <permission id="schooltool.manageMembership"  title="Manage membership" />
-
-<!--   <role id="schooltool.manager" title="Manager" /> -->
-<!--   <role id="schooltool.administrator" title="School administrator" /> -->
-<!--   <role id="schooltool.teacher" title="Teacher" /> -->
-<!--   <role id="schooltool.clerk" title="Clerk" /> -->
-
-<!--   <grant permission="schooltool.viewAttendance" role="schooltool.manager" /> -->
-<!--   <grant permission="schooltool.viewAttendance" role="schooltool.administrator" /> -->
-<!--   <grant permission="schooltool.viewAttendance" role="schooltool.clerk" /> -->
-
+  <permission id="schooltool.editCalendarOverlays" title="Edit Calendar Overlays" />
 
   <!-- Utilities -->
 

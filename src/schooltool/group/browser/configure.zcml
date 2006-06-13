@@ -77,7 +77,7 @@
       name="groups.html"
       for="..interfaces.IGroupMember"
       class=".group.GroupListView"
-      permission="schooltool.manageMembership"
+      permission="schooltool.edit"
       menu="schooltool_actions"
       title="Change Membership"
       />
@@ -117,7 +117,7 @@
       name="members_persons.html"
       for="..interfaces.IBaseGroup"
       class=".group.MemberViewPersons"
-      permission="schooltool.manageMembership"
+      permission="schooltool.edit"
       menu="schooltool_actions"
       title="Add/Remove Members"
       />

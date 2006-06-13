@@ -111,16 +111,16 @@
 
   <security:allow
       interface="schooltool.person.interfaces.IPerson"
-      crowds="administration owner authenticated"
+      crowds="administration owner"
       permission="schooltool.view" />
   <security:allow
       interface="schooltool.person.interfaces.IPerson"
-      crowds="administration authenticated"
+      crowds="administration"
       permission="schooltool.edit" />
   <security:allow
       interface="schooltool.person.interfaces.IPerson"
-      crowds="administration"
-      permission="schooltool.manageMembership" />
+      crowds="owner"
+      permission="schooltool.editCalendarOverlays" />
 
   <adapter
       factory=".person.PersonCalendarCrowd"
