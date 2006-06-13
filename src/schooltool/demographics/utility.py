@@ -74,7 +74,9 @@ catalogSetUpSubscriber = MultiUtilitySetUp(
 
 class PersonFactory(Persistent, Contained):
     def __call__(self, *args, **kw):
-        return Person(*args, **kw)
+        result = Person(*args, **kw)
+        result.nameinfo.last_name = u'Unknown last name'
+        return result
 
 personFactorySetUpSubscriber = UtilitySetUp(
     PersonFactory, IPersonFactory, override=True,

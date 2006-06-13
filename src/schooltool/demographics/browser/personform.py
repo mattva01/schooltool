@@ -163,6 +163,7 @@ class NameInfoEdit(PersonEditForm):
         if not data['photo']:
             data['photo'] = self.context.photo
         super(NameInfoEdit, self).edit_action(action, data)
+
         
 class NameInfoDisplay(PersonDisplayForm):
     template = ViewPageTemplateFile("nameinfo_view.pt")
@@ -172,6 +173,7 @@ class NameInfoDisplay(PersonDisplayForm):
 
     form_fields = form.Fields(interfaces.INameInfo)
     form_fields = form_fields.omit('photo')
+
 
 demographics_traverser = SingleAttributeTraverserPlugin('demographics')
 
