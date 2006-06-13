@@ -29,7 +29,6 @@ from zope.traversing.api import getParent
 from schooltool.securitypolicy.crowds import ICrowd
 from schooltool.securitypolicy.metaconfigure import getCrowdsUtility
 
-import sys
 
 class SchoolToolSecurityPolicy(ParanoidSecurityPolicy):
     """Crowd-based security policy."""
