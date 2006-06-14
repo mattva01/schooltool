@@ -26,8 +26,10 @@ import zope.interface
 from schooltool.requirement import interfaces, scoresystem
 from schooltool import SchoolToolMessage as _
 
+
 class IActivities(interfaces.IRequirement):
     '''A list of activities that must be fulfilled in a course or section.'''
+
 
 class IActivity(interfaces.IRequirement):
     '''An activity to be graded'''
@@ -52,6 +54,7 @@ class IActivity(interfaces.IRequirement):
         title=_("Date"),
         description=_("The date the activity was created."),
         required=True)
+
 
 class IGradebook(zope.interface.Interface):
     """The gradebook of a section.
@@ -96,8 +99,8 @@ class IGradebook(zope.interface.Interface):
         """Compute the total score for a student.
 
         Return a percentile in the form of a decimal.
-        """        
-        
+        """
+
     def getSortKey(person):
         """Get the sortkey for the gradebook table."""
 
@@ -108,7 +111,8 @@ class IGradebook(zope.interface.Interface):
         sort by student title or the hash of the activity. The second entry
         specifies whether the sorting is reversed.
         """
-    
+
+
 class IStatistics(zope.interface.Interface):
     """Statistics for the gradebook"""
 
