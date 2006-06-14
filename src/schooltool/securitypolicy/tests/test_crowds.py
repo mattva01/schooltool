@@ -102,6 +102,89 @@ def doctest_ConfigurableCrowd():
     """
 
 
+def doctest_ParentCrowd():
+    """Tests for ParentCrowd.
+
+        >>> setup.placelessSetUp()
+
+        >>> from schooltool.securitypolicy.interfaces import ICrowd
+        >>> class ICalendarParentCrowd(ICrowd):
+        ...     pass
+        >>> class CalendarStub(object):
+        ...     def __init__(self, parent):
+        ...         self.__parent__ = parent
+
+        >>> from schooltool.securitypolicy.crowds import ParentCrowd
+        >>> CalendarViewersCrowd = ParentCrowd(ICalendarParentCrowd,
+        ...                                    'schooltool.view')
+        >>> crowd = CalendarViewersCrowd(CalendarStub(None))
+        >>> crowd.perm = "schooltool.view"
+
+    First, fire a blank (no adapters registered):
+
+        >>> crowd.contains(object())
+        False
+
+    OK, let's try with an adaptable object now:
+
+        >>> from schooltool.app.interfaces import ICalendarParentCrowd
+
+        >>> class ParentCrowdStub(object):
+        ...     implements(ICalendarParentCrowd)
+        ...     def __init__(self, context):
+        ...         print 'Getting adapter for %s' % context
+        ...     def contains(self, principal):
+        ...         print 'Checking %s' % principal
+        ...         return True
+
+        >>> from zope.interface import Interface
+        >>> class IOwner(Interface):
+        ...     pass
+
+        >>> class OwnerStub(object):
+        ...     implements(IOwner)
+
+        >>> from zope.component import provideAdapter
+        >>> provideAdapter(ParentCrowdStub, adapts=[IOwner],
+        ...                provides=ICalendarParentCrowd,
+        ...                name='schooltool.view')
+
+    Let's try now with the adapter:
+
+        >>> from schooltool.app.security import CalendarViewersCrowd
+        >>> crowd = CalendarViewersCrowd(CalendarStub(OwnerStub()))
+        >>> crowd.contains('some principal')
+        Getting adapter for <...OwnerStub ...>
+        Checking some principal
+        True
+
+    Let's try another name:
+
+        >>> CalendarEditorsCrowd = ParentCrowd(ICalendarParentCrowd,
+        ...                                    'schooltool.edit')
+        >>> crowd = CalendarEditorsCrowd(CalendarStub(OwnerStub()))
+        >>> crowd.contains('some principal')
+        False
+
+    Now with an adapter in place:
+
+        >>> from zope.component import provideAdapter
+        >>> provideAdapter(ParentCrowdStub, adapts=[IOwner],
+        ...                provides=ICalendarParentCrowd,
+        ...                name='schooltool.edit')
+        >>> crowd = CalendarEditorsCrowd(CalendarStub(OwnerStub()))
+        >>> crowd.contains('some principal')
+        Getting adapter for <...OwnerStub ...>
+        Checking some principal
+        True
+
+    We're done.
+
+        >>> setup.placefulTearDown()
+
+    """
+
+
 def test_suite():
     return unittest.TestSuite([
             doctest.DocTestSuite(optionflags=doctest.ELLIPSIS |
