@@ -36,7 +36,7 @@ from zope.app.security.interfaces import IAuthentication, ILoginPassword
 from zope.app.security.interfaces import IAuthenticatedGroup, IEveryoneGroup
 from zope.app.session.interfaces import ISession
 from zope.interface import implements
-from zope.component import adapts, queryAdapter
+from zope.component import adapts
 from zope.security.interfaces import IGroupAwarePrincipal
 from zope.security.checker import ProxyFactory
 from zope.publisher.interfaces.browser import IBrowserRequest
@@ -51,7 +51,7 @@ from schooltool.securitypolicy.crowds import Crowd
 from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ICalendarParentCrowd
-from schooltool.securitypolicy.crowds import ConfigurableCrowd
+from schooltool.securitypolicy.crowds import ConfigurableCrowd, ParentCrowd
 
 
 class Principal(Contained):
@@ -218,28 +218,12 @@ class ApplicationCalendarCrowd(ConfigurableCrowd):
     setting_key = 'everyone_can_view_app_calendar'
 
 
-class CalendarAccessorsCrowd(Crowd):
-    """A crowd that contains principals who are allowed to access the context.
-
-    This crowd adapts the parent of the calendar to ICalendarParentCrowd and
-    uses that to decide on the result.
-    """
-
-    def contains(self, principal):
-        parent = self.context.__parent__
-        pcrowd = queryAdapter(parent, ICalendarParentCrowd, self.perm,
-                              default=None)
-        if pcrowd is not None:
-            return pcrowd.contains(principal)
-        else:
-            return False
+CalendarViewersCrowd = ParentCrowd(
+    ICalendarParentCrowd, 'schooltool.view')
 
 
-class CalendarViewersCrowd(CalendarAccessorsCrowd):
-    perm = 'schooltool.view'
-
-class CalendarEditorsCrowd(CalendarAccessorsCrowd):
-    perm = 'schooltool.edit'
+CalendarEditorsCrowd = ParentCrowd(
+    ICalendarParentCrowd, 'schooltool.edit')
 
 
 class LeaderCrowd(Crowd):

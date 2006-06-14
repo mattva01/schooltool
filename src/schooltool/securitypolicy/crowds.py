@@ -25,6 +25,8 @@ $Id$
 
 from zope.interface import implements
 from zope.security.proxy import removeSecurityProxy
+from zope.component import adapts, queryAdapter
+
 from schooltool.securitypolicy.interfaces import ICrowd
 from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
 
@@ -131,3 +133,25 @@ class ClerksCrowd(_GroupCrowd):
 class TeachersCrowd(_GroupCrowd):
     group = 'sb.group.teachers'
 
+
+class ParentCrowdTemplate(Crowd):
+    """A crowd that contains principals who are allowed to access the context."""
+
+    interface = None
+    permission = ''
+
+    def contains(self, principal):
+        parent = self.context.__parent__
+        pcrowd = queryAdapter(parent, self.interface, self.permission,
+                              default=None)
+        if pcrowd is not None:
+            return pcrowd.contains(principal)
+        else:
+            return False
+
+
+def ParentCrowd(interface, permission):
+    return type('ParentCrowd',
+                (ParentCrowdTemplate,),
+                {'interface': interface,
+                 'permission': permission})

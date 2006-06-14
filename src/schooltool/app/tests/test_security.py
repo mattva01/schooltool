@@ -81,8 +81,8 @@ def doctest_CalendarAccesorsCrowd():
         ...     def __init__(self, parent):
         ...         self.__parent__ = parent
 
-        >>> from schooltool.app.security import CalendarAccessorsCrowd
-        >>> crowd = CalendarAccessorsCrowd(CalendarStub(None))
+        >>> from schooltool.app.security import CalendarViewersCrowd
+        >>> crowd = CalendarViewersCrowd(CalendarStub(None))
         >>> crowd.perm = "schooltool.view"
 
     First, fire a blank (no adapters registered):
@@ -126,7 +126,6 @@ def doctest_CalendarAccesorsCrowd():
 
         >>> from schooltool.app.security import CalendarEditorsCrowd
         >>> crowd = CalendarEditorsCrowd(CalendarStub(OwnerStub()))
-        >>> crowd.perm = 'schooltool.edit'
         >>> crowd.contains('some principal')
         False
 
