@@ -248,6 +248,50 @@ def doctest_Section():
 
     """
 
+def doctest_PersonInstructorCrowd():
+    """Unit test for the PersonInstructorCrowd
+
+        >>> from schooltool.relationship.tests import setUp, tearDown
+        >>> setUp()
+
+    We'll need a section, a group, and a couple of persons:
+
+        >>> from schooltool.course.section import Section
+        >>> from schooltool.person.person import Person
+        >>> from schooltool.group.group import Group
+        >>> section = Section(title="section 1", description="advanced")
+        >>> teacher = Person('teacher', 'Mr. Jones')
+        >>> p1 = Person('p1','First')
+        >>> p2 = Person('p2','Second')
+        >>> group = Group('group','Group')
+
+    Let the first pupil be a direct member of the section, and the
+    second -- via a group:
+
+        >>> section.instructors.add(teacher)
+        >>> section.members.add(p1)
+        >>> section.members.add(group)
+        >>> group.members.add(p2)
+
+    The PersonInstructorCrowd should contain teacher for both p1 and p2:
+
+        >>> from schooltool.course.section import PersonInstructorsCrowd
+        >>> PersonInstructorsCrowd(p1).contains(teacher)
+        True
+        >>> PersonInstructorsCrowd(p2).contains(teacher)
+        True
+
+    However, non-teachers are not in the crowd:
+
+        >>> PersonInstructorsCrowd(p2).contains(p2)
+        False
+        >>> PersonInstructorsCrowd(p2).contains(p1)
+        False
+
+    Cleanup.
+
+        >>> tearDown()
+    """
 
 def test_suite():
     return unittest.TestSuite([

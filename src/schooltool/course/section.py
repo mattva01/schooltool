@@ -42,6 +42,7 @@ from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
 from schooltool.course.interfaces import ISection
 from schooltool.person.interfaces import IPerson
 from schooltool.app.security import ConfigurableCrowd
+from schooltool.relationship.relationship import getRelatedObjects
 
 
 class Section(Persistent, contained.Contained):
@@ -107,6 +108,28 @@ class InstructorsCrowd(Crowd):
     adapts(ISection)
     def contains(self, principal):
         return IPerson(principal, None) in self.context.instructors
+
+
+class PersonInstructorsCrowd(Crowd):
+    """Crowd of instructors of a person."""
+    adapts(IPerson)
+
+    def _getSections(self, ob):
+        return [section for section in getRelatedObjects(ob, membership.URIGroup)
+                if ISection.providedBy(section)]
+
+    def contains(self, principal):
+        user = IPerson(principal, None)
+        # First check the the sections a pupil is in directly
+        for section in self._getSections(self.context):
+            if user in section.instructors:
+                return True
+        # Now check the section membership via groups
+        for group in self.context.groups:
+            for section in self._getSections(group):
+                if user in section.instructors:
+                    return True
+        return False
 
 
 class LearnersCrowd(Crowd):
