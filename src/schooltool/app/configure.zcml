@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<configure xmlns="http://namespaces.zope.org/zope"
-           xmlns:security="http://schooltool.org/securitypolicy">
+<configure xmlns="http://namespaces.zope.org/zope">
+
+  <include file="security.zcml" />
 
   <!-- Adapters -->
 
@@ -216,49 +217,6 @@
 
   <include package=".browser" />
   <include package=".rest" />
-
-  <!-- Security declarations for calendaring -->
-
-  <security:crowd
-      name="calendar_viewers"
-      factory=".security.CalendarViewersCrowd" />
-
-  <security:crowd
-      name="calendar_editors"
-      factory=".security.CalendarEditorsCrowd" />
-
-  <security:crowd
-      name="leaders"
-      factory=".security.LeaderCrowd" />
-
-  <security:allow
-      interface=".interfaces.ISchoolToolCalendar"
-      permission="schooltool.view"
-      crowds="administration calendar_viewers" />
-
-  <security:allow
-      interface=".interfaces.ISchoolToolCalendar"
-      permission="schooltool.edit"
-      crowds="administration owner calendar_editors" />
-
-  <security:setting
-      key="everyone_can_view_app_calendar"
-      text="Everyone can view the application calendar."
-      default="True"
-      />
-
-  <security:crowd
-      name="group_members"
-      factory=".membership.GroupMemberCrowd" />
-
-  <security:allow
-      interface="schooltool.group.interfaces.IGroup"
-      permission="schooltool.view"
-      crowds="group_members" />
-
-  <adapter factory=".security.ApplicationCalendarCrowd"
-           provides=".security.ICalendarParentCrowd"
-           name="schooltool.view" />
 
   <!-- XXX It feels wrong to tweak permissions of objects in a sibling. -->
 

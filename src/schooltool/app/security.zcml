@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<configure xmlns="http://schooltool.org/securitypolicy"
+           xmlns:zope="http://namespaces.zope.org/zope">
+
+  <crowd
+      name="leaders"
+      factory=".security.LeaderCrowd" />
+
+  <crowd
+      name="group_members"
+      factory=".membership.GroupMemberCrowd" />
+
+  <allow
+      interface="schooltool.group.interfaces.IGroup"
+      permission="schooltool.view"
+      crowds="group_members" />
+
+  <!-- Security declarations for calendaring -->
+
+  <zope:adapter
+      factory=".security.ApplicationCalendarCrowd"
+      provides=".security.ICalendarParentCrowd"
+      name="schooltool.view" />
+
+  <crowd
+      name="calendar_viewers"
+      factory=".security.CalendarViewersCrowd" />
+
+  <crowd
+      name="calendar_editors"
+      factory=".security.CalendarEditorsCrowd" />
+
+  <allow
+      interface=".interfaces.ISchoolToolCalendar"
+      permission="schooltool.view"
+      crowds="administration calendar_viewers" />
+
+  <allow
+      interface=".interfaces.ISchoolToolCalendar"
+      permission="schooltool.edit"
+      crowds="administration owner calendar_editors" />
+
+  <setting
+      key="everyone_can_view_app_calendar"
+      text="Everyone can view the application calendar."
+      default="True"
+      />
+
+</configure>

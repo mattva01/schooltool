@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<configure xmlns="http://schooltool.org/securitypolicy"
+           xmlns:zope="http://namespaces.zope.org/zope">
+
+  <!-- Security -->
+
+  <crowd
+      name="section_instructors"
+      factory=".section.InstructorsCrowd" />
+
+  <crowd
+      name="section_learners"
+      factory=".section.LearnersCrowd" />
+
+  <crowd
+      name="configurable_section_viewers"
+      factory=".section.SectionCalendarSettingCrowd" />
+
+  <zope:adapter
+      trusted="yes"
+      factory=".section.SectionCalendarViewers"
+      provides="schooltool.app.interfaces.ICalendarParentCrowd"
+      name="schooltool.view" />
+
+  <zope:adapter
+      trusted="yes"
+      factory=".section.InstructorsCrowd"
+      provides="schooltool.app.interfaces.ICalendarParentCrowd"
+      name="schooltool.edit" />
+
+  <allow
+      interface="schooltool.course.interfaces.ISectionContainer"
+      crowds="administration configurable_section_viewers"
+      permission="schooltool.view" />
+  <allow
+      interface="schooltool.course.interfaces.ISectionContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
+
+  <allow
+      interface="schooltool.course.interfaces.ISection"
+      crowds="administration section_instructors section_learners configurable_section_viewers"
+      permission="schooltool.view" />
+  <allow
+      interface="schooltool.course.interfaces.ISection"
+      crowds="administration section_instructors"
+      permission="schooltool.edit" />
+
+  <setting
+      key="everyone_can_view_section_info"
+      text="Everyone can view section information and calendars"
+      default="False" />
+
+  <allow
+      interface="schooltool.course.interfaces.ICourseContainer"
+      crowds="administration everybody"
+      permission="schooltool.view" />
+  <allow
+      interface="schooltool.course.interfaces.ICourseContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
+
+  <allow
+      interface="schooltool.course.interfaces.ICourse"
+      crowds="everybody"
+      permission="schooltool.view" />
+  <allow
+      interface="schooltool.course.interfaces.ICourse"
+      crowds="administration authenticated leaders"
+      permission="schooltool.edit" />
+
+</configure>
