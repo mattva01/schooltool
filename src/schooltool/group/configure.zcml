@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/zope"
-           xmlns:security="http://schooltool.org/securitypolicy"
            i18n_domain="schooltool">
+
+  <include file="security.zcml" />
 
   <interface
       interface=".interfaces.IGroupContainer"
@@ -58,68 +59,5 @@
         />
 
   </configure>
-
-  <!-- Security settings -->
-
-  <security:setting
-      key="everyone_can_view_group_list"
-      text="Everyone can view group lists."
-      default="False" />
-
-  <security:setting
-      key="everyone_can_view_group_info"
-      text="Everyone can view group information."
-      default="False" />
-
-  <security:setting
-      key="everyone_can_view_group_calendar"
-      text="Everyone can view group calendars."
-      default="False" />
-
-  <security:setting
-      key="members_can_edit_group_calendar"
-      text="Group members can edit group calendars."
-      default="False" />
-
-  <security:crowd
-      name="group_viewers"
-      factory=".group.GroupViewersCrowd" />
-
-  <security:crowd
-      name="group_list_viewers"
-      factory=".group.GroupContainerViewersCrowd" />
-
-  <security:allow
-      interface="schooltool.group.interfaces.IGroupContainer"
-      crowds="administration group_list_viewers"
-      permission="schooltool.view" />
-  <security:allow
-      interface="schooltool.group.interfaces.IGroupContainer"
-      crowds="administration"
-      permission="schooltool.edit" />
-
-  <security:allow
-      interface="schooltool.group.interfaces.IGroup"
-      crowds="administration leaders group_viewers"
-      permission="schooltool.view" />
-  <security:allow
-      interface="schooltool.group.interfaces.IGroup"
-      crowds="administration leaders"
-      permission="schooltool.edit" />
-
-  <security:allow
-      interface="schooltool.group.interfaces.IGroup"
-      crowds="everybody"
-      permission="schooltool.view" /> <!-- XXX -->
-
-  <adapter
-      factory=".group.GroupCalendarViewersCrowd"
-      provides="schooltool.app.interfaces.ICalendarParentCrowd"
-      name="schooltool.view" />
-
-  <adapter
-      factory=".group.GroupCalendarEditorsCrowd"
-      provides="schooltool.app.interfaces.ICalendarParentCrowd"
-      name="schooltool.edit" />
 
 </configure>

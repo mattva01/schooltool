@@ -15,6 +15,24 @@
       permission="schooltool.view"
       crowds="group_members" />
 
+  <allow
+      interface="schooltool.app.interfaces.ISchoolToolApplication"
+      crowds="everybody"
+      permission="schooltool.view" />
+  <allow
+      interface="schooltool.app.interfaces.ISchoolToolApplication"
+      crowds="administration"
+      permission="schooltool.edit" />
+
+  <allow
+      interface="schooltool.app.interfaces.ISchoolToolApplication"
+      crowds="administration"
+      permission="zope.ManageSite" />
+  <allow
+      interface="schooltool.app.interfaces.ISchoolToolApplication"
+      crowds="administration"
+      permission="zope.app.introspector.Introspect" />
+
   <!-- Security declarations for calendaring -->
 
   <zope:adapter

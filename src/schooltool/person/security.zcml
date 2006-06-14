@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<configure xmlns="http://schooltool.org/securitypolicy"
+           xmlns:zope="http://namespaces.zope.org/zope">
+
+  <setting
+      key="everyone_can_view_person_list"
+      text="Everyone can view the list of persons"
+      default="False" />
+
+  <setting
+      key="persons_can_set_their_preferences"
+      text="Persons can set their own preferences"
+      default="True" />
+
+  <crowd
+      name="person_list_viewers"
+      factory=".person.PersonListViewersCrowd" />
+
+  <crowd
+      name="person_prefs_editors"
+      factory=".preference.PersonPreferencesCrowd" />
+
+  <allow
+      interface="schooltool.person.interfaces.IPersonContainer"
+      crowds="administration person_list_viewers"
+      permission="schooltool.view" />
+  <allow
+      interface="schooltool.person.interfaces.IPersonContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
+
+  <allow
+      interface="schooltool.person.interfaces.IPerson"
+      crowds="administration owner"
+      permission="schooltool.view" />
+  <allow
+      interface="schooltool.person.interfaces.IPerson"
+      crowds="administration"
+      permission="schooltool.edit" />
+  <allow
+      interface="schooltool.person.interfaces.IPerson"
+      crowds="owner"
+      permission="schooltool.editCalendarOverlays" />
+
+  <zope:adapter
+      factory=".person.PersonCalendarCrowd"
+      provides="schooltool.app.interfaces.ICalendarParentCrowd"
+      name="schooltool.view" />
+
+  <allow
+      interface="schooltool.person.interfaces.IPersonPreferences"
+      crowds="everybody"
+      permission="schooltool.view" /> <!-- XXX -->
+  <allow
+      interface="schooltool.person.interfaces.IPersonPreferences"
+      crowds="person_prefs_editors"
+      permission="schooltool.edit" />
+
+</configure>

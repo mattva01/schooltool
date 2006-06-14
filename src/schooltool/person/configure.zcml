@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/zope"
-           xmlns:security="http://schooltool.org/securitypolicy"
            xmlns:browser="http://namespaces.zope.org/browser"
            i18n_domain="schooltool">
+
+  <include file="security.zcml" />
 
   <interface
       interface=".interfaces.IPersonContainer"
@@ -80,61 +81,6 @@
       factory=".person.getCalendarOwner"
       provides=".interfaces.IPerson"
       for="schooltool.app.interfaces.ISchoolToolCalendar" />
-
-  <!-- Security -->
-  <security:setting
-      key="everyone_can_view_person_list"
-      text="Everyone can view the list of persons"
-      default="False" />
-
-  <security:setting
-      key="persons_can_set_their_preferences"
-      text="Persons can set their own preferences"
-      default="True" />
-
-  <security:crowd
-      name="person_list_viewers"
-      factory=".person.PersonListViewersCrowd" />
-
-  <security:crowd
-      name="person_prefs_editors"
-      factory=".preference.PersonPreferencesCrowd" />
-
-  <security:allow
-      interface="schooltool.person.interfaces.IPersonContainer"
-      crowds="administration person_list_viewers"
-      permission="schooltool.view" />
-  <security:allow
-      interface="schooltool.person.interfaces.IPersonContainer"
-      crowds="administration"
-      permission="schooltool.edit" />
-
-  <security:allow
-      interface="schooltool.person.interfaces.IPerson"
-      crowds="administration owner"
-      permission="schooltool.view" />
-  <security:allow
-      interface="schooltool.person.interfaces.IPerson"
-      crowds="administration"
-      permission="schooltool.edit" />
-  <security:allow
-      interface="schooltool.person.interfaces.IPerson"
-      crowds="owner"
-      permission="schooltool.editCalendarOverlays" />
-
-  <adapter
-      factory=".person.PersonCalendarCrowd"
-      provides="schooltool.app.interfaces.ICalendarParentCrowd"
-      name="schooltool.view" />
-
-  <security:allow
-      interface="schooltool.person.interfaces.IPersonPreferences"
-      crowds="everybody"
-      permission="schooltool.view" /> <!-- XXX -->
-  <security:allow
-      interface="schooltool.person.interfaces.IPersonPreferences"
-      crowds="person_prefs_editors"
-      permission="schooltool.edit" />
 
   <include package=".browser" />
   <include package=".rest" />

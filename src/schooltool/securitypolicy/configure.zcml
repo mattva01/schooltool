@@ -50,24 +50,6 @@
       crowds="administrators clerks teachers managers" />
 
   <security:allow
-      interface="schooltool.app.interfaces.ISchoolToolApplication"
-      crowds="everybody"
-      permission="schooltool.view" />
-  <security:allow
-      interface="schooltool.app.interfaces.ISchoolToolApplication"
-      crowds="administration"
-      permission="schooltool.edit" />
-
-  <security:allow
-      interface="schooltool.app.interfaces.ISchoolToolApplication"
-      crowds="administration"
-      permission="zope.ManageSite" />
-  <security:allow
-      interface="schooltool.app.interfaces.ISchoolToolApplication"
-      crowds="administration"
-      permission="zope.app.introspector.Introspect" />
-
-  <security:allow
       interface="schooltool.timetable.interfaces.ITimetableSchemaContainer"
       crowds="administration everybody"
       permission="schooltool.view" />
