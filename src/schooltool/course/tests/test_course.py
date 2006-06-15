@@ -248,6 +248,7 @@ def doctest_Section():
 
     """
 
+
 def doctest_PersonInstructorCrowd():
     """Unit test for the PersonInstructorCrowd
 
@@ -292,6 +293,7 @@ def doctest_PersonInstructorCrowd():
 
         >>> tearDown()
     """
+
 
 def test_suite():
     return unittest.TestSuite([
