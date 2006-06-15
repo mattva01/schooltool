@@ -2,6 +2,8 @@
 
 <configure xmlns="http://namespaces.zope.org/zope">
 
+  <include file="security.zcml" />
+
   <adapter
       for=".interfaces.IHaveRequirement"
       provides=".interfaces.IRequirement"

@@ -284,4 +284,3 @@ class requirementNamespace(object):
     def traverse(self, name, ignore):
         reqs = interfaces.IRequirement(self.context)
         return reqs
-

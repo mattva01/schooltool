@@ -68,15 +68,6 @@
       permission="schooltool.edit" />
 
   <security:allow
-      interface="schooltool.requirement.interfaces.IRequirement"
-      crowds="administration"
-      permission="schooltool.view" />
-  <security:allow
-      interface="schooltool.requirement.interfaces.IRequirement"
-      crowds="administration"
-      permission="schooltool.edit" />
-
-  <security:allow
       interface="schooltool.relationship.interfaces.IRelationshipLink"
       crowds="administration owner"
       permission="schooltool.view" />
