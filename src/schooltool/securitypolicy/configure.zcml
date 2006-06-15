@@ -99,6 +99,11 @@
       permission="schooltool.add" />
 
   <security:allow
+      interface="schooltool.attendance.interfaces.IUnresolvedAbsenceCache"
+      crowds="administration"
+      permission="schooltool.edit" />
+
+  <security:allow
       crowds="everybody"
       permission="zope.View" />
   <security:allow

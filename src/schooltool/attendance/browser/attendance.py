@@ -43,6 +43,7 @@ from zope.schema import getFieldNamesInOrder
 from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.security.proxy import removeSecurityProxy
+from zope.security import checkPermission
 from zope.i18n import translate
 
 from schooltool.common import collect
@@ -609,11 +610,22 @@ class StudentAttendanceView(BrowserView, AttendanceInheritanceMixin):
         self.update()
         return self.template()
 
+    def canUpdate(self):
+        return checkPermission('schooltool.edit',
+                               ISectionAttendance(self.context))
+
     def update(self):
         """Process the form."""
         self.statuses = []
         self.errors = []
         self.tardy_error = None
+
+        if 'UPDATE' not in self.request:
+            return
+        if not self.canUpdate():
+            self.errors.append(_('You are not allowed to modify'
+                                 'attendance information.'))
+            return
 
         # hand craft a drop-down widget from a dict
         app = ISchoolToolApplication(None)
@@ -627,8 +639,6 @@ class StudentAttendanceView(BrowserView, AttendanceInheritanceMixin):
         self.code_widget = DropdownWidget(code_field, code_vocabulary,
                                           self.request)
 
-        if 'UPDATE' not in self.request:
-            return
         code = ''
         if self.code_widget.hasInput():
             code = self.code_widget.getInputValue()

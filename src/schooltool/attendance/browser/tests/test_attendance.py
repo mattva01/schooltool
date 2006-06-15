@@ -2616,6 +2616,11 @@ def doctest_StudentAttendanceView_update():
         ...        import StudentAttendanceView
         >>> request = TestRequest()
         >>> view = StudentAttendanceView(None, request)
+
+    For the purpose of this test let's allow everyone to update
+    attendance information:
+
+        >>> view.canUpdate = lambda: True
         >>> def _process(ar, text, explanation, resolve, code, late_arrival):
         ...     print ar
         ...     if explanation: print 'Explaining %s: %s' % (text, explanation)
@@ -2702,6 +2707,16 @@ def doctest_StudentAttendanceView_update():
         >>> view.update()
         <ar123>
         Converting Attendance Record #123 to tardy on 15:56
+
+    If updating of the attendance information is not allowed update
+    should not perform anything, but appends an error message to
+    errors list:
+
+        >>> view = StudentAttendanceView(None, request)
+        >>> view.canUpdate = lambda: False
+        >>> view.update()
+        >>> view.errors
+        [u'You are not allowed to modifyattendance information.']
 
     """
 

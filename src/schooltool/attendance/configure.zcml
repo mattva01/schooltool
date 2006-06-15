@@ -40,7 +40,8 @@
   />
 
   <class class=".attendance.UnresolvedAbsenceCache">
-    <allow interface=".interfaces.IUnresolvedAbsenceCache" />
+    <require permission="schooltool.edit"
+             interface=".interfaces.IUnresolvedAbsenceCache" />
   </class>
 
   <class class=".attendance.HomeroomAttendance">
