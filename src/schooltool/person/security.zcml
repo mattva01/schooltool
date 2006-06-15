@@ -8,6 +8,11 @@
       default="False" />
 
   <setting
+      key="everyone_can_view_person_info"
+      text="Everyone can view info of persons"
+      default="False" />
+
+  <setting
       key="persons_can_set_their_preferences"
       text="Persons can set their own preferences"
       default="True" />
@@ -15,6 +20,10 @@
   <crowd
       name="person_list_viewers"
       factory=".person.PersonListViewersCrowd" />
+
+  <crowd
+      name="person_info_viewers"
+      factory=".person.PersonInfoViewersCrowd" />
 
   <crowd
       name="person_prefs_editors"
@@ -31,7 +40,7 @@
 
   <allow
       interface="schooltool.person.interfaces.IPerson"
-      crowds="administration owner"
+      crowds="administration owner person_info_viewers"
       permission="schooltool.view" />
   <allow
       interface="schooltool.person.interfaces.IPerson"

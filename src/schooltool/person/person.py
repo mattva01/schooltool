@@ -159,3 +159,9 @@ class PersonListViewersCrowd(ConfigurableCrowd):
     """The crowd of people who can view the person list."""
 
     setting_key = 'everyone_can_view_person_list'
+
+
+class PersonInfoViewersCrowd(ConfigurableCrowd):
+    """The crowd of people who can view the info of a person."""
+
+    setting_key = 'everyone_can_view_person_info'
