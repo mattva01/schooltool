@@ -705,3 +705,7 @@ class AttendanceCalendarProvider(object):
 
         if self._isLookingAtOwnCalendar(user):
             yield (ISectionAttendance(user).makeCalendar(), '#aa0000', '#ff0000')
+
+
+def getAttendanceOwner(attendance):
+    return IPerson(attendance.person, None)

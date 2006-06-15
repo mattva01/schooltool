@@ -4,7 +4,10 @@
            i18n_domain="schooltool">
 
   <class class=".attendance.SectionAttendance">
-    <allow interface=".interfaces.ISectionAttendance" />
+    <require permission="schooltool.view"
+             interface=".interfaces.IReadSectionAttendance" />
+    <require permission="schooltool.add"
+             interface=".interfaces.IAddAttendance" />
   </class>
 
   <class class=".attendance.SectionAttendanceRecord">
@@ -41,7 +44,10 @@
   </class>
 
   <class class=".attendance.HomeroomAttendance">
-    <allow interface=".interfaces.IHomeroomAttendance" />
+    <require permission="schooltool.view"
+             interface=".interfaces.IReadHomeroomAttendance" />
+    <require permission="schooltool.add"
+             interface=".interfaces.IAddAttendance" />
   </class>
 
   <class class=".attendance.HomeroomAttendanceRecord">
@@ -143,7 +149,11 @@
         provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
         name="attendance"
         />
-
   </configure>
+
+  <adapter
+      factory=".attendance.getAttendanceOwner"
+      provides="schooltool.person.interfaces.IPerson"
+      for="schooltool.attendance.interfaces.IAttendance " />
 
 </configure>

@@ -43,6 +43,7 @@
 
   <permission id="schooltool.view" title="View" />
   <permission id="schooltool.edit" title="Edit Info" />
+  <permission id="schooltool.add" title="Add Info" />
   <permission id="schooltool.editCalendarOverlays" title="Edit Calendar Overlays" />
 
   <!-- Utilities -->

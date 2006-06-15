@@ -86,6 +86,19 @@
       permission="schooltool.edit" />
 
   <security:allow
+      interface="schooltool.attendance.interfaces.IAttendance"
+      crowds="administration owner"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.attendance.interfaces.IAttendance"
+      crowds="administration"
+      permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.attendance.interfaces.IAttendance"
+      crowds="administration"
+      permission="schooltool.add" />
+
+  <security:allow
       crowds="everybody"
       permission="zope.View" />
   <security:allow

@@ -82,8 +82,17 @@ class IAttendance(Interface):
         """
 
 
-class ISectionAttendance(IAttendance):
-    """A set of all student's section attendance records."""
+class IAddAttendance(Interface):
+
+    def record(section, datetime, duration, period_id, present):
+        """Record the student's absence or presence.
+
+        You can record the absence or presence only once for a given
+        (section, datetime) pair.
+        """
+
+
+class IReadSectionAttendance(IAttendance):
 
     def get(section, datetime):
         """Return the attendance record for a specific section meeting.
@@ -95,19 +104,19 @@ class ISectionAttendance(IAttendance):
     def getAllForDay(date):
         """Return all recorded attendance records for a specific day."""
 
-    def record(section, datetime, duration, period_id, present):
-        """Record the student's absence or presence.
 
-        You can record the absence or presence only once for a given
-        (section, datetime) pair.
-        """
+class ISectionAttendance(IReadSectionAttendance, IAddAttendance):
+    """A set of all student's section attendance records."""
 
 
-class IHomeroomAttendance(ISectionAttendance):
-    """A set of all student's homeroom attendance records."""
+class IReadHomeroomAttendance(IReadSectionAttendance):
 
     def getHomeroomPeriodForRecord(section_attendance_record):
         """Return homeroom AR that the given section AR belongs to."""
+
+
+class IHomeroomAttendance(IReadHomeroomAttendance, IAddAttendance):
+    """A set of all student's homeroom attendance records."""
 
 
 NEW = 'NEW'

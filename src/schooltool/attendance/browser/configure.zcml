@@ -50,7 +50,7 @@
       name="attendance.html"
       for="schooltool.person.interfaces.IPerson"
       class="schooltool.attendance.browser.attendance.StudentAttendanceView"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       menu="schooltool_actions"
       title="Attendance"
       />
