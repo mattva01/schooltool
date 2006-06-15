@@ -1,0 +1,96 @@
+Functional test for instructor access to students' data
+=======================================================
+
+    >>> from zope.testbrowser.testing import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/')
+    >>> 'SchoolTool' in manager.contents
+    True
+
+Let's create a coupe of persons who will be students and teachers:
+
+    >>> from schooltool.app.browser.ftests.setup import addPerson
+    >>> addPerson('Frog', 'frog', 'pwd')
+    >>> addPerson('Toad', 'toad', 'doat')
+
+Also, let's create a group:
+
+    >>> manager.getLink('Groups').click()
+    >>> manager.getLink('New Group').click()
+
+    >>> manager.getControl('Title').value = 'Animals'
+    >>> manager.getControl('Add').click()
+
+    >>> 'Animals' in manager.contents
+    True
+
+We'll need a course and a section:
+
+    >>> manager.getLink('Courses').click()
+    >>> manager.getLink('New Course').click()
+    >>> manager.getControl('Title').value = 'History'
+    >>> manager.getControl('Add').click()
+
+    >>> 'History' in manager.contents
+    True
+
+    >>> manager.getLink('History').click()
+    >>> manager.getLink('New Section').click()
+    >>> manager.getControl('Code').value = 'HIS1'
+    >>> manager.getControl('Description').value = 'Section1'
+    >>> manager.getControl('Add').click()
+
+Let's make the frog a teacher:
+
+    >>> manager.getLink('(HIS1)').click()
+    >>> manager.getLink('edit instructors').click()
+    >>> manager.getControl(name='add_item.frog').value = True
+    >>> manager.getControl('Add').click()
+    >>> manager.getControl('Cancel').click()
+    >>> print manager.contents
+    <!DOCTYPE ...>
+    ...
+          <h3>Instructors</h3>
+          <ul>
+            <li>
+              <a href="http://localhost/persons/frog">Frog</a>
+            </li>
+          </ul>
+    ...
+
+The frog cannot see the toad's personal info:
+
+    >>> frog = Browser()
+    >>> frog.open('http://localhost/')
+    >>> frog.getLink('Log In').click()
+    >>> frog.getControl('Username').value = 'frog'
+    >>> frog.getControl('Password').value = 'pwd'
+    >>> frog.getControl('Log in').click()
+
+    >>> frog.open('http://localhost/persons/toad/nameinfo')
+    >>> print frog.url
+    http://localhost/@@login.html?forbidden=yes&nexturl=...
+
+Let's make toad join the section:
+
+    >>> manager.getLink('edit individuals').click()
+    >>> manager.getControl(name='add_item.toad').value = True
+    >>> manager.getControl('Add').click()
+    >>> manager.getLink('HIS1').click()
+
+Now frog can see the demographics of toad alright:
+
+    >>> frog.open('http://localhost/persons/toad')
+    >>> print frog.url
+    http://localhost/persons/toad/nameinfo
+    >>> print frog.contents
+    <BLANKLINE>
+    ...
+        <div class="row">
+          <div class="label">Full name</div>
+            <div class="field-odd">Toad&nbsp;</div>
+          <div class="clear" />
+        </div>
+    ...

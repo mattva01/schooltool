@@ -9,6 +9,10 @@
       factory=".section.InstructorsCrowd" />
 
   <crowd
+      name="person_instructors"
+      factory=".section.PersonInstructorsCrowd" />
+
+  <crowd
       name="section_learners"
       factory=".section.LearnersCrowd" />
 
@@ -68,5 +72,11 @@
       interface="schooltool.course.interfaces.ICourse"
       crowds="administration authenticated leaders"
       permission="schooltool.edit" />
+
+  <!-- Grant read access to person's data to his instructors -->
+  <allow
+      interface="schooltool.person.interfaces.IPerson"
+      crowds="person_instructors"
+      permission="schooltool.view" />
 
 </configure>
