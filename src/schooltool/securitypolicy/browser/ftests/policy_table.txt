@@ -1,0 +1,102 @@
+Functional doctest for schooltool security policy
+=================================================
+
+This test verifies the security policy.
+
+Set up
+------
+
+We will obviously need a SchoolTool instance.
+
+    >>> from schooltool.app.browser.ftests import setup
+    >>> from zope.testbrowser.testing import Browser
+    >>> manager = setup.logInManager()
+
+    >>> 'SchoolTool' in manager.contents
+    True
+
+Let's create some persons:
+
+    >>> setup.addPerson('Student1', 'student1', 'student1', groups=['students'])
+    >>> setup.addPerson('Student2', 'student2', 'student2', groups=['students'])
+    >>> setup.addPerson('Student3', 'student3', 'student3', groups=['students'])
+    >>> setup.addPerson('Teacher1', 'teacher1', 'teacher1', groups=['teachers'])
+    >>> setup.addPerson('Teacher2', 'teacher2', 'teacher2', groups=['teachers'])
+    >>> setup.addPerson('Teacher3', 'teacher3', 'teacher3', groups=['teachers'])
+
+Create anonymous browser:
+
+    >>> alien = Browser()
+    >>> alien.handleErrors = False
+    >>> alien.open('http://localhost/')
+
+Can we see person container? (Manager can view/edit as he just created
+persons).
+
+    >>> student1 = setup.logIn('student1', 'student1')
+    >>> student1.getLink('persons').click()
+    Traceback (most recent call last):
+    ...
+    Unauthorized: (<...>, 'browserDefault', 'schooltool.view')
+
+Anonymous users can't see this link at all:
+
+    >>> alien.getLink('persons')
+    Traceback (most recent call last):
+    ...
+    LinkNotFoundError
+
+Manager can let everybody access person list:
+
+    >>> manager.getLink('Access Control').click()
+    >>> manager.getControl('Everyone can view the list of persons').click()
+    >>> manager.getControl('Apply').click()
+
+    >>> student1 = setup.logIn('student1', 'student1')
+    >>> student1.getLink('persons').click()
+    >>> 'student3' in student1.contents
+    True
+    >>> 'Delete' not in student1.contents
+    True
+
+    >>> alien.reload()
+    >>> alien.getLink('Persons').click()
+    >>> 'student3' in alien.contents
+    True
+
+Person data:
+
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('Student3').click()
+    >>> 'student3' in manager.contents
+    True
+    >>> manager.open('/persons/student3/nameinfo/@@edit.html')
+    >>> manager.getControl('Preferred name').value = 'Trinity'
+    >>> manager.getControl('Apply', index=0).click()
+
+    >>> alien.getLink('Persons').click()
+    >>> alien.getLink('Student3').click()
+    Traceback (most recent call last):
+    ...
+    Unauthorized: (<schooltool.demographics.person.Person...>, 'nameinfo', 'schooltool.view')
+
+    >>> student1.getLink('Persons').click()
+    >>> student1.getLink('Student3').click()
+    Traceback (most recent call last):
+    ...
+    Unauthorized: (<schooltool.demographics.person.Person...>, 'nameinfo', 'schooltool.view')
+
+Owner:
+
+    >>> student1.open('http://localhost/')
+    >>> student1.getLink('Persons').click()
+    >>> student1.getLink('Student1').click()
+    >>> 'Student1' in student1.contents
+    True
+
+He still can't edit it:
+
+    >>> student1.open('/persons/student1/nameinfo/@@edit.html')
+    Traceback (most recent call last):
+    ...
+    Unauthorized: (<zope.app.publisher.browser.viewmeta.NameInfoEdit...>, 'browserDefault', 'schooltool.edit')
