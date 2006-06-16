@@ -63,8 +63,34 @@ Set up activities and put marks:
     >>> manager.getLink('history-6a').click()
     >>> manager.getLink('Gradebook').click()
     >>> manager.getLink('SchoolTool origin').click()
+    Traceback (most recent call last):
+    ...
+    Unauthorized: ...
+
+Administration can't grade students by default, but can give itself
+the permission to do it:
+
+    >>> manager.open('http://localhost')
+    >>> manager.getLink('Access Control').click()
+    >>> manager.getControl('Administration can grade students').click()
+    >>> manager.getControl('Apply').click()
+
+And try again:
+
+    >>> manager.getLink('SchoolTool').click()
+    >>> manager.getLink('Courses').click()
+    >>> manager.getLink('History 6').click()
+    >>> manager.getLink('history-6a').click()
+    >>> manager.getLink('Gradebook').click()
+    >>> manager.getLink('SchoolTool origin').click()
     >>> manager.getControl(name='student1').value = '8'
     >>> manager.getControl('Update').click()
+
+Let's set the setting back to cover our tracks:
+
+    >>> manager.getLink('Access Control').click()
+    >>> manager.getControl('Administration can grade students').click()
+    >>> manager.getControl('Apply').click()
 
 Set up leader for everything:
 
@@ -90,7 +116,7 @@ Manager can see almost everything:
     >>> column(manager, 'student1', 'history6a')
     course: view edit
     course activities: view edit
-    gradebook scores: view edit
+    gradebook scores: view
     group calendar: view edit
     group container: view edit
     group data: view edit
@@ -274,7 +300,7 @@ Instructor looking at his student and section:
     timetables: view
 
 XXX: should be "section activities: view edit" (bug in activities)
-XXX: should be "gradebook scores: view" (can't reacher edit scores for his
+XXX: should be "gradebook scores: view" (can't teacher edit scores for his
 student)
 XXX: "person attendance:" (not sure this is true)
 

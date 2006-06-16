@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <configure
+    xmlns:security="http://schooltool.org/securitypolicy"
     xmlns="http://namespaces.zope.org/zope">
 
   <!-- Category Vocabulary -->
@@ -67,8 +68,11 @@
 
   <class class=".gradebook.Gradebook">
     <require
+        permission="schooltool.view"
+        interface=".interfaces.IReadGradebook" />
+    <require
         permission="schooltool.edit"
-        interface=".interfaces.IGradebook" />
+        interface=".interfaces.IEditGradebook" />
   </class>
 
   <!-- This adapter locates itself. -->
@@ -83,7 +87,7 @@
 
   <class class=".statistic.Statistics">
     <require
-        permission="schooltool.edit"
+        permission="schooltool.view"
         interface=".interfaces.IStatistics" />
   </class>
 
@@ -93,6 +97,12 @@
       factory=".statistic.Statistics"
       locate="true"
       trusted="true"
+      />
+
+  <adapter
+      for=".interfaces.IGradebook"
+      provides="schooltool.course.interfaces.ISection"
+      factory=".gradebook.getGradebookSection"
       />
 
   <!-- Pluggable traverser plugins for HTTP paths -->
@@ -134,5 +144,24 @@
   </configure>
 
   <include package=".browser" />
+
+  <security:setting
+      key="administration_can_grade_students"
+      text="Administration can grade students"
+      default="False" />
+
+  <security:crowd
+      name="grade_editors"
+      factory=".gradebook.GradebookEditorsCrowd" />
+
+  <security:allow
+      interface="schooltool.gradebook.interfaces.IGradebook"
+      permission="schooltool.view"
+      crowds="administration section_instructors" />
+
+  <security:allow
+      interface="schooltool.gradebook.interfaces.IGradebook"
+      permission="schooltool.edit"
+      crowds="section_instructors grade_editors" />
 
 </configure>

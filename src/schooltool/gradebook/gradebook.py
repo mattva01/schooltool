@@ -33,6 +33,11 @@ from zope.app.keyreference.interfaces import IKeyReference
 
 from schooltool import course, requirement
 from schooltool.traverser import traverser
+from schooltool.securitypolicy.crowds import ConfigurableCrowd
+from schooltool.securitypolicy.crowds import AggregateCrowd
+from schooltool.securitypolicy.crowds import ManagersCrowd
+from schooltool.securitypolicy.crowds import ClerksCrowd
+from schooltool.securitypolicy.crowds import AdministratorsCrowd
 
 from schooltool.gradebook import interfaces
 
@@ -150,3 +155,21 @@ class Gradebook(object):
 # HTTP pluggable traverser plugin
 GradebookTraverserPlugin = traverser.AdapterTraverserPlugin(
     'gradebook', interfaces.IGradebook)
+
+
+def getGradebookSection(gradebook):
+    """Adapt IGradebook to ISection."""
+    return course.interfaces.ISection(gradebook.context)
+
+
+class GradebookEditorsCrowd(AggregateCrowd, ConfigurableCrowd):
+
+    setting_key = 'administration_can_grade_students'
+
+    def crowdFactories(self):
+        return [ManagersCrowd, AdministratorsCrowd, ClerksCrowd]
+
+    def contains(self, principal):
+        """Return the value of the related setting (True or False)."""
+        return (ConfigurableCrowd.contains(self, principal) and
+                AggregateCrowd.contains(self, principal))

@@ -105,9 +105,8 @@ def addSectionContainerToApplication(event):
 
 class InstructorsCrowd(Crowd):
     """Crowd of instructors of a section."""
-    adapts(ISection)
     def contains(self, principal):
-        return IPerson(principal, None) in self.context.instructors
+        return IPerson(principal, None) in ISection(self.context).instructors
 
 
 class PersonInstructorsCrowd(Crowd):

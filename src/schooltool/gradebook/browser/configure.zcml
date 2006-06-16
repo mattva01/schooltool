@@ -115,7 +115,7 @@
       for="..interfaces.IGradebook"
       class=".gradebook.GradebookOverview"
       template="gradebook_overview.pt"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       />
 
   <menuItem

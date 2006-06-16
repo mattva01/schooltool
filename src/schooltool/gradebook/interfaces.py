@@ -56,12 +56,16 @@ class IActivity(interfaces.IRequirement):
         required=True)
 
 
-class IGradebook(zope.interface.Interface):
-    """The gradebook of a section.
+class IEditGradebook(zope.interface.Interface):
 
-    The gradebook provides an API that allows the user to treat it like a
-    gradebook spreadsheet/table.
-    """
+    def evaluate(student, activity, score, evaluator=None):
+        """Evaluate a student for an activity"""
+
+    def removeEvaluation(student, activity):
+        """Remove evaluation."""
+
+
+class IReadGradebook(zope.interface.Interface):
 
     activities = zope.schema.List(
         title=_('Activities'),
@@ -77,11 +81,6 @@ class IGradebook(zope.interface.Interface):
     def getEvaluation(student, activity, default=None):
         """Get the evaluation of a student for a given activity."""
 
-    def evaluate(student, activity, score, evaluator=None):
-        """Evaluate a student for an activity"""
-
-    def removeEvaluation(student, activity):
-        """Remove evaluation."""
 
     def getEvaluationsForStudent(student):
         """Get the evaluations of the section for this student.
@@ -111,6 +110,14 @@ class IGradebook(zope.interface.Interface):
         sort by student title or the hash of the activity. The second entry
         specifies whether the sorting is reversed.
         """
+
+
+class IGradebook(IReadGradebook, IEditGradebook):
+    """The gradebook of a section.
+
+    The gradebook provides an API that allows the user to treat it like a
+    gradebook spreadsheet/table.
+    """
 
 
 class IStatistics(zope.interface.Interface):
