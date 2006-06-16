@@ -62,6 +62,8 @@ from schooltool.attendance.interfaces import IAbsenceExplanation
 from schooltool.attendance.interfaces import UNKNOWN, PRESENT, ABSENT, TARDY
 from schooltool.attendance.interfaces import NEW, ACCEPTED, REJECTED
 from schooltool.attendance.interfaces import AttendanceError
+from schooltool.course.section import PersonInstructorsCrowd
+from schooltool.securitypolicy.crowds import ConfigurableCrowd
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.person.interfaces import IPerson
 
@@ -709,3 +711,9 @@ class AttendanceCalendarProvider(object):
 
 def getAttendanceOwner(attendance):
     return IPerson(attendance.person, None)
+
+
+class AttendanceEditorsCrowd(ConfigurableCrowd, PersonInstructorsCrowd):
+    """The crowd of people who can view the info of a person."""
+
+    setting_key = 'teachers_can_modify_attendance_records'

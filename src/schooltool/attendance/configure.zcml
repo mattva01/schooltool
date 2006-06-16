@@ -158,17 +158,26 @@
       provides="schooltool.person.interfaces.IPerson"
       for="schooltool.attendance.interfaces.IAttendance " />
 
+  <security:crowd
+      factory=".attendance.AttendanceEditorsCrowd"
+      name="attendance_editors" />
+
   <security:allow
       interface="schooltool.attendance.interfaces.IAttendance"
       crowds="administration owner person_instructors"
       permission="schooltool.view" />
   <security:allow
       interface="schooltool.attendance.interfaces.IAttendance"
-      crowds="administration"
+      crowds="administration attendance_editors"
       permission="schooltool.edit" />
   <security:allow
       interface="schooltool.attendance.interfaces.IAttendance"
       crowds="administration person_instructors"
       permission="schooltool.add" />
+
+  <security:setting
+      key="teachers_can_modify_attendance_records"
+      text="Teachers can modify attendance records"
+      default="False" />
 
 </configure>
