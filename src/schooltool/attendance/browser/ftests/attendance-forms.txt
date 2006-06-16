@@ -290,20 +290,34 @@ Attendance view
 
 A student's page contains an "Attendance" action in the menu.
 
-    >>> harvie = Browser()
-    >>> harvie.handleErrors = False
-    >>> harvie.addHeader('Authorization', 'Basic harvie:facts')
-    >>> harvie.open('http://localhost/persons/joniukas')
-    >>> harvie.getLink('Attendance', url='@@attendance.html').click()
+    >>> joniukas = Browser()
+    >>> joniukas.handleErrors = False
+    >>> joniukas.addHeader('Authorization', 'Basic joniukas:gretute')
+    >>> joniukas.open('http://localhost/persons/joniukas')
+    >>> joniukas.getLink('Attendance', url='@@attendance.html').click()
 
 If you go there, you see a list of unresolved absences
 
-    >>> print harvie.contents
+    >>> print joniukas.contents
     <BLANKLINE>
     ...
     <h2>Attendance of Joniukas</h2>
     ...
     ...2005-12-12 09:30: late for Great Teacher Largo -- Dancing 1...
+
+
+Even if the teachers are allowed to resolve the absences (regression test)
+
+    >>> manager.open('http://localhost/access_control.html')
+    >>> manager.getControl('Teachers can modify attendance records').click()
+    >>> manager.getControl('Apply').click()
+
+the student of course can't resolve the absences himself:
+
+    >>> joniukas.getControl('late for Great Teacher Largo').click()
+    >>> joniukas.getControl('Update').click()
+    >>> 'You are not allowed to modify' in joniukas.contents
+    True
 
 
 Retroactive attendance form

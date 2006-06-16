@@ -89,14 +89,13 @@ We also need a term and a timetable
 
 Let's make largo a teacher for the section:
 
-
     >>> manager.open('http://localhost/sections/dancing1a')
     >>> manager.getLink('edit instructors').click()
     >>> manager.getControl('Great Teacher Largo').selected = True
     >>> manager.getControl('Add').click()
 
-XXX ignas: do we really want to allow teachers schedule sections?
-Let's schedule the section
+XXX ignas: do we really want to allow teachers to schedule sections?
+Let's schedule the section:
 
     >>> largo = Browser()
     >>> largo.addHeader('Authorization', 'Basic largo:sittinghorse')

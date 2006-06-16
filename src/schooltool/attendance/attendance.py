@@ -713,7 +713,12 @@ def getAttendanceOwner(attendance):
     return IPerson(attendance.person, None)
 
 
-class AttendanceEditorsCrowd(ConfigurableCrowd, PersonInstructorsCrowd):
+class AttendanceEditorsCrowd(ConfigurableCrowd):
     """The crowd of people who can view the info of a person."""
 
     setting_key = 'teachers_can_modify_attendance_records'
+
+    def contains(self, principal):
+        """Return the value of the related setting (True or False)."""
+        return (ConfigurableCrowd.contains(self, principal) and
+                PersonInstructorsCrowd(self.context).contains(principal))
