@@ -24,6 +24,7 @@ from zope.component import adapts
 from zope.interface import implements
 
 from schooltool.course.interfaces import ISection
+from schooltool.course.section import LearnersCrowd
 from schooltool.course.section import InstructorsCrowd
 from schooltool.course.section import SectionCalendarSettingCrowd
 from schooltool.requirement.interfaces import IRequirement
@@ -103,4 +104,4 @@ class SectionRequirementViewersCrowd(AggregateCrowd):
     implements(IRequirementParentCrowd)
 
     def crowdFactories(self):
-        return [SectionCalendarSettingCrowd, InstructorsCrowd]
+        return [SectionCalendarSettingCrowd, InstructorsCrowd, LearnersCrowd]
