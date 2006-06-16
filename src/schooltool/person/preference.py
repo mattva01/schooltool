@@ -28,6 +28,7 @@ from zope.interface import implements
 from zope.annotation.interfaces import IAnnotations
 from zope.location.location import ILocation
 
+from schooltool.securitypolicy.crowds import OwnerCrowd
 from schooltool.securitypolicy.crowds import ConfigurableCrowd
 from schooltool.person import interfaces
 
@@ -62,6 +63,16 @@ def getPersonPreferences(person):
         return prefs
 
 
-class PersonPreferencesCrowd(ConfigurableCrowd):
+def getPreferencesOwner(preferences):
+    """Adapt IPersonPreferences to IPerson"""
+    return interfaces.IPerson(preferences.__parent__)
+
+
+class PersonPreferencesEditorsCrowd(ConfigurableCrowd):
 
     setting_key = 'persons_can_set_their_preferences'
+
+    def contains(self, principal):
+        """Return the value of the related setting (True or False)."""
+        return (ConfigurableCrowd.contains(self, principal) and
+                OwnerCrowd(self.context).contains(principal))

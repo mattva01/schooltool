@@ -27,7 +27,7 @@
 
   <crowd
       name="person_prefs_editors"
-      factory=".preference.PersonPreferencesCrowd" />
+      factory=".preference.PersonPreferencesEditorsCrowd" />
 
   <allow
       interface="schooltool.person.interfaces.IPersonContainer"
@@ -58,11 +58,11 @@
 
   <allow
       interface="schooltool.person.interfaces.IPersonPreferences"
-      crowds="everybody"
+      crowds="administration owner"
       permission="schooltool.view" /> <!-- XXX -->
   <allow
       interface="schooltool.person.interfaces.IPersonPreferences"
-      crowds="person_prefs_editors"
+      crowds="administration person_prefs_editors"
       permission="schooltool.edit" />
 
 </configure>

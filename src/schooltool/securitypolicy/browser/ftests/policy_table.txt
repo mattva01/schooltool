@@ -228,36 +228,38 @@ Student looking at another student and not his section:
 
 Instructor looking at his student and section:
 
-XXX section activities should be True True
+XXX section activities should be True True (bug in activities)
+XXX gradebook scores: True False (can't reacher edit scores for his student)
+XXX person attendance: False False (not sure this is true)
 
-#   >>> instructor = setup.logIn('instructor1', 'instructor1')
-#   >>> column(instructor, 'student1', 'history6a')
-#   course: True False
-#   course activities: True False
-#   gradebook scores: True False
-#   group calendar: False False
-#   group container: False False
-#   group data: False False
-#   level: True False
-#   overlay calendar: None False
-#   permissions: False False
-#   person attendance: False False
-#   person calendar: False False
-#   person container: False False
-#   person data: True False
-#   person preferences: False False
-#   resource calendar: False False
-#   resource container: False False
-#   resource data: False False
-#   schooltool: True None
-#   schooltool calendar: True False
-#   schooltool info: False False
-#   section: True True
-#   section activities: False False
-#   section attendance: True True
-#   section calendar: True True
-#   term: True False
-#   timetables: True False
+    >>> instructor = setup.logIn('instructor1', 'instructor1')
+    >>> column(instructor, 'student1', 'history6a')
+    course: True False
+    course activities: True False
+    gradebook scores: False False
+    group calendar: False False
+    group container: False False
+    group data: False False
+    level: True False
+    overlay calendar: None False
+    permissions: False False
+    person attendance: True False
+    person calendar: False False
+    person container: False False
+    person data: True False
+    person preferences: False False
+    resource calendar: False False
+    resource container: False False
+    resource data: False False
+    schooltool: True None
+    schooltool calendar: True False
+    schooltool info: False False
+    section: True True
+    section activities: False False
+    section attendance: True True
+    section calendar: True True
+    term: True False
+    timetables: True False
 
 Configurable options
 ====================

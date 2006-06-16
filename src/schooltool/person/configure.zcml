@@ -82,6 +82,11 @@
       provides=".interfaces.IPerson"
       for="schooltool.app.interfaces.ISchoolToolCalendar" />
 
+  <adapter
+      factory=".preference.getPreferencesOwner"
+      provides=".interfaces.IPerson"
+      for="schooltool.person.interfaces.IPersonPreferences" />
+
   <include package=".browser" />
   <include package=".rest" />
 
