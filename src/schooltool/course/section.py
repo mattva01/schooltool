@@ -112,7 +112,6 @@ class InstructorsCrowd(Crowd):
 
 class PersonInstructorsCrowd(Crowd):
     """Crowd of instructors of a person."""
-    adapts(IPerson)
 
     def _getSections(self, ob):
         return [section for section in getRelatedObjects(ob, membership.URIGroup)
@@ -120,12 +119,13 @@ class PersonInstructorsCrowd(Crowd):
 
     def contains(self, principal):
         user = IPerson(principal, None)
+        person = IPerson(self.context)
         # First check the the sections a pupil is in directly
-        for section in self._getSections(self.context):
+        for section in self._getSections(person):
             if user in section.instructors:
                 return True
         # Now check the section membership via groups
-        for group in self.context.groups:
+        for group in person.groups:
             for section in self._getSections(group):
                 if user in section.instructors:
                     return True

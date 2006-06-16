@@ -30,12 +30,22 @@ A manager logs in
     >>> manager.handleErrors = False
     >>> manager.open('http://localhost/')
 
-and creates a course and a section
+create a teacher
+
+    >>> from schooltool.app.browser.ftests.setup import addPerson
+    >>> addPerson('Great Teacher Largo', 'largo', 'sittinghorse',
+    ...     groups=['teachers'])
+
+and creates a course:
 
     >>> manager.getLink('Courses').click()
     >>> manager.getLink('New Course').click()
     >>> manager.getControl('Title').value = 'Dancing 1'
     >>> manager.getControl('Add').click()
+
+add a section:
+
+    >>> manager.getLink('Courses').click()
     >>> manager.getLink('Dancing 1').click()
     >>> manager.getLink('New Section').click()
     >>> manager.getControl('Code').value = 'dancing-1a'
@@ -77,25 +87,28 @@ We also need a term and a timetable
     >>> manager.getControl(name='homeroom_4_09:30-10:25').value = True
     >>> manager.getControl('Next').click()
 
-Let's schedule the section
+Let's make largo a teacher for the section:
 
-    >>> manager.open('http://localhost/sections/dancing1a')
-    >>> manager.getLink('Schedule').click()
-
-    >>> manager.getControl(name="Monday.09:30-10:25").value = True
-    >>> manager.getControl(name="Wednesday.11:35-12:20").value = True
-    >>> manager.getControl('Save').click()
-
-Let's also create a teacher for the section
-
-    >>> from schooltool.app.browser.ftests.setup import addPerson
-    >>> addPerson('Great Teacher Largo', 'largo', 'sittinghorse',
-    ...     groups=['teachers'])
 
     >>> manager.open('http://localhost/sections/dancing1a')
     >>> manager.getLink('edit instructors').click()
     >>> manager.getControl('Great Teacher Largo').selected = True
     >>> manager.getControl('Add').click()
+
+XXX ignas: do we really want to allow teachers schedule sections?
+Let's schedule the section
+
+    >>> largo = Browser()
+    >>> largo.addHeader('Authorization', 'Basic largo:sittinghorse')
+    >>> largo.handleErrors = False
+    >>> largo.open('http://localhost/')
+
+    >>> largo.open('http://localhost/sections/dancing1a')
+    >>> largo.getLink('Schedule').click()
+
+    >>> largo.getControl(name="Monday.09:30-10:25").value = True
+    >>> largo.getControl(name="Wednesday.11:35-12:20").value = True
+    >>> largo.getControl('Save').click()
 
 Create some students
 
@@ -104,36 +117,36 @@ Create some students
 
 Add them to dancing section
 
-    >>> manager.open('http://localhost/sections/dancing1a')
-    >>> manager.getLink('edit individuals').click()
-    >>> manager.getControl('Joniukas').selected = True
-    >>> manager.getControl('Gretute').selected = True
-    >>> manager.getControl('Add').click()
+    >>> largo.open('http://localhost/sections/dancing1a')
+    >>> largo.getLink('edit individuals').click()
+    >>> largo.getControl('Joniukas').selected = True
+    >>> largo.getControl('Gretute').selected = True
+    >>> largo.getControl('Add').click()
 
 And register some absences
 
-    >>> manager.open('http://localhost/sections/dancing1a'
-    ...              '/attendance/2005-11-14/09:30-10:25')
-    >>> manager.getControl(name='joniukas_check').value=True
-    >>> manager.getControl('Mark as absent').click()
+    >>> largo.open('http://localhost/sections/dancing1a'
+    ...            '/attendance/2005-11-14/09:30-10:25')
+    >>> largo.getControl(name='joniukas_check').value=True
+    >>> largo.getControl('Mark as absent').click()
 
-    >>> manager.open('http://localhost/sections/dancing1a'
-    ...              '/attendance/2005-11-16/11:35-12:20')
-    >>> manager.getControl(name='joniukas_check').value=True
-    >>> manager.getControl('Mark as absent').click()
+    >>> largo.open('http://localhost/sections/dancing1a'
+    ...            '/attendance/2005-11-16/11:35-12:20')
+    >>> largo.getControl(name='joniukas_check').value=True
+    >>> largo.getControl('Mark as absent').click()
 
-    >>> manager.open('http://localhost/sections/dancing1a'
-    ...              '/attendance/2005-11-21/09:30-10:25')
-    >>> manager.getControl(name='joniukas_check').value=True
-    >>> manager.getControl('Mark as absent').click()
+    >>> largo.open('http://localhost/sections/dancing1a'
+    ...            '/attendance/2005-11-21/09:30-10:25')
+    >>> largo.getControl(name='joniukas_check').value=True
+    >>> largo.getControl('Mark as absent').click()
 
-    >>> manager.open('http://localhost/sections/dancing1a'
-    ...              '/attendance/2005-11-23/11:35-12:20')
-    >>> manager.getControl(name='joniukas_check').value=True
-    >>> manager.getControl('Mark as absent').click()
-    >>> manager.getControl(name='joniukas_check').value=True
-    >>> manager.getControl('Arrived at').value = '11:45'
-    >>> manager.getControl('Make tardy').click()
+    >>> largo.open('http://localhost/sections/dancing1a'
+    ...            '/attendance/2005-11-23/11:35-12:20')
+    >>> largo.getControl(name='joniukas_check').value=True
+    >>> largo.getControl('Mark as absent').click()
+    >>> largo.getControl(name='joniukas_check').value=True
+    >>> largo.getControl('Arrived at').value = '11:45'
+    >>> largo.getControl('Make tardy').click()
 
 
 Attendance view
@@ -141,12 +154,12 @@ Attendance view
 
 A student's page contains an "Attendance" action in the menu.
 
-    >>> manager.open('http://localhost/persons/joniukas')
-    >>> manager.getLink('Attendance', url='@@attendance.html').click()
+    >>> largo.open('http://localhost/persons/joniukas')
+    >>> largo.getLink('Attendance', url='@@attendance.html').click()
 
     >>> from schooltool.testing.util import normalize_xml
     >>> for node in analyze.queryHTML('//table[@class="attendance_summary_per_term"]',
-    ...                       manager.contents):
+    ...                       largo.contents):
     ...     print normalize_xml(node, compact=True)
     <table class="attendance_summary_per_term">
       <tr>

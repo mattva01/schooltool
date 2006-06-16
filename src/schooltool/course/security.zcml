@@ -6,11 +6,7 @@
 
   <crowd
       name="section_instructors"
-      factory=".section.InstructorsCrowd" />
-
-  <crowd
-      name="person_instructors"
-      factory=".section.PersonInstructorsCrowd" />
+      factory="schooltool.course.section.InstructorsCrowd" />
 
   <crowd
       name="section_learners"
@@ -28,6 +24,7 @@
 
   <zope:adapter
       trusted="yes"
+      for=".interfaces.ISection"
       factory=".section.InstructorsCrowd"
       provides="schooltool.app.interfaces.ICalendarParentCrowd"
       name="schooltool.edit" />

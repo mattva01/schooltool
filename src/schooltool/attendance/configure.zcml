@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:wfmc="http://namespaces.zope.org/wfmc"
+           xmlns:security="http://schooltool.org/securitypolicy"
            i18n_domain="schooltool">
 
   <class class=".attendance.SectionAttendance">
@@ -156,5 +157,18 @@
       factory=".attendance.getAttendanceOwner"
       provides="schooltool.person.interfaces.IPerson"
       for="schooltool.attendance.interfaces.IAttendance " />
+
+  <security:allow
+      interface="schooltool.attendance.interfaces.IAttendance"
+      crowds="administration owner person_instructors"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.attendance.interfaces.IAttendance"
+      crowds="administration"
+      permission="schooltool.edit" />
+  <security:allow
+      interface="schooltool.attendance.interfaces.IAttendance"
+      crowds="administration person_instructors"
+      permission="schooltool.add" />
 
 </configure>
