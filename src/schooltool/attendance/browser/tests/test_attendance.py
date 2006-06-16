@@ -2716,7 +2716,7 @@ def doctest_StudentAttendanceView_update():
         >>> view.canUpdate = lambda: False
         >>> view.update()
         >>> view.errors
-        [u'You are not allowed to modifyattendance information.']
+        [u'You are not allowed to modify attendance information.']
 
     """
 

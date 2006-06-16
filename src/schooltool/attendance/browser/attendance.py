@@ -637,7 +637,7 @@ class StudentAttendanceView(BrowserView, AttendanceInheritanceMixin):
             return
         if not self.canUpdate():
             self.errors.append(_('You are not allowed to modify'
-                                 'attendance information.'))
+                                 ' attendance information.'))
             return
 
         code = ''
