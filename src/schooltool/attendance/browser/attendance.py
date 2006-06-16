@@ -620,13 +620,6 @@ class StudentAttendanceView(BrowserView, AttendanceInheritanceMixin):
         self.errors = []
         self.tardy_error = None
 
-        if 'UPDATE' not in self.request:
-            return
-        if not self.canUpdate():
-            self.errors.append(_('You are not allowed to modify'
-                                 'attendance information.'))
-            return
-
         # hand craft a drop-down widget from a dict
         app = ISchoolToolApplication(None)
         code_dict = IAttendancePreferences(app).attendanceStatusCodes
@@ -638,6 +631,14 @@ class StudentAttendanceView(BrowserView, AttendanceInheritanceMixin):
                             vocabulary=code_vocabulary).bind(self)
         self.code_widget = DropdownWidget(code_field, code_vocabulary,
                                           self.request)
+
+
+        if 'UPDATE' not in self.request:
+            return
+        if not self.canUpdate():
+            self.errors.append(_('You are not allowed to modify'
+                                 'attendance information.'))
+            return
 
         code = ''
         if self.code_widget.hasInput():
