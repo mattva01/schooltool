@@ -186,9 +186,7 @@ def resource_calendar_edit(browser):
 
 
 def section_view(browser):
-    go_home(browser)
-    browser.getLink('Sections').click()
-    browser.getLink('history-6a').click()
+    browser.open('http://localhost/sections/history6a')
     return 'Section of' in browser.contents
 
 def section_edit(browser):
