@@ -122,6 +122,7 @@ def setUpTimetabling(username, password=None):
     manager.getLink('New Course').click()
 
     manager.getControl('Title').value = 'History 6'
+    manager.getControl('Identifier').value = 'history6'
     manager.getControl('Description').value = 'History for the sixth class'
     manager.getControl('Add').click()
 
@@ -130,6 +131,7 @@ def setUpTimetabling(username, password=None):
     manager.getLink('History 6').click()
     manager.getLink('New Section').click()
     manager.getControl('Code').value = 'history-6a'
+    manager.getControl('Identifier').value = 'history6a'
     manager.getControl('Description').value = 'History for the class 6A'
     manager.getControl('Add').click()
 

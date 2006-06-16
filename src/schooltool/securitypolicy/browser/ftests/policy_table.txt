@@ -9,6 +9,8 @@ Set up
 We will obviously need a SchoolTool instance.
 
     >>> from schooltool.app.browser.ftests import setup
+    >>> from schooltool.securitypolicy.browser.ftests.helpers import column
+    >>> from schooltool.securitypolicy.browser.ftests import helpers
     >>> from zope.testbrowser.testing import Browser
     >>> manager = setup.logInManager()
 
@@ -24,79 +26,120 @@ Let's create some persons:
     >>> setup.addPerson('Teacher2', 'teacher2', 'teacher2', groups=['teachers'])
     >>> setup.addPerson('Teacher3', 'teacher3', 'teacher3', groups=['teachers'])
 
+    >>> setup.setUpTimetabling('instructor1', 'instructor1')
+
+Section and resources:
+
+    >>> manager.getLink('SchoolTool').click()
+    >>> manager.getLink('Resources').click()
+    >>> manager.getLink('New Resource').click()
+    >>> manager.getControl('Title').value = 'Time travel machine'
+    >>> manager.getControl('Identifier').value = 'ttm'
+    >>> manager.getControl('Add').click()
+
+    >>> manager.getLink('Sections').click()
+    >>> manager.getLink('history-6a').click()
+    >>> manager.getLink('edit individuals').click()
+    >>> manager.getControl('Student1').click()
+    >>> manager.getControl('Add').click()
+    >>> manager.getLink('history-6a').click()
+    >>> manager.getLink('book resources').click()
+    >>> manager.getControl('Time travel machine').click()
+    >>> manager.getControl('Add').click()
+
+Set up activities and put marks:
+
+    >>> manager.getLink('SchoolTool').click()
+    >>> manager.getLink('Courses').click()
+    >>> manager.getLink('History 6').click()
+    >>> manager.getLink('history-6a').click()
+    >>> manager.getLink('Activities').click()
+    >>> manager.getLink('New Activity').click()
+    >>> manager.getControl('Title').value = 'SchoolTool origin'
+    >>> manager.getControl('Custom score system').click()
+    >>> manager.getControl('Minimum').value = '1'
+    >>> manager.getControl('Maximum').value = '5'
+    >>> manager.getControl('Identifier').value = 'storig'
+    >>> manager.getControl('Add').click()
+    >>> manager.getLink('history-6a').click()
+    >>> manager.getLink('Gradebook').click()
+    >>> manager.getLink('SchoolTool origin').click()
+    >>> manager.getControl(name='student1').value = '8'
+    >>> manager.getControl('Update').click()
+
+Manager can see almost everything:
+
+    >>> column(manager, 'student1', 'history6a')
+    gradebook scores: True True
+    group calendar: True True
+    group container: True True
+    group data: True True
+    overlay calendar: None False
+    person attendance: True False
+    person calendar: True True
+    person container: True True
+    person data: True True
+    person preferences: True True
+    resource calendar: True True
+    resource container: True True
+    resource data: True True
+    section attendance: True True
+
 Create anonymous browser:
 
     >>> alien = Browser()
     >>> alien.handleErrors = False
     >>> alien.open('http://localhost/')
+    >>> column(alien, 'student1', 'history6a')
+    gradebook scores: False False
+    group calendar: False False
+    group container: False False
+    group data: False False
+    overlay calendar: None False
+    person attendance: False False
+    person calendar: False False
+    person container: False False
+    person data: False False
+    person preferences: False False
+    resource calendar: False False
+    resource container: False False
+    resource data: False False
+    section attendance: False False
 
-Can we see person container? (Manager can view/edit as he just created
-persons).
-
-    >>> student1 = setup.logIn('student1', 'student1')
-    >>> student1.getLink('persons').click()
-    Traceback (most recent call last):
-    ...
-    Unauthorized: (<...>, 'browserDefault', 'schooltool.view')
-
-Anonymous users can't see this link at all:
-
-    >>> alien.getLink('persons')
-    Traceback (most recent call last):
-    ...
-    LinkNotFoundError
-
-Manager can let everybody access person list:
-
-    >>> manager.getLink('Access Control').click()
-    >>> manager.getControl('Everyone can view the list of persons').click()
-    >>> manager.getControl('Apply').click()
+Student looking at another student:
 
     >>> student1 = setup.logIn('student1', 'student1')
-    >>> student1.getLink('persons').click()
-    >>> 'student3' in student1.contents
-    True
-    >>> 'Delete' not in student1.contents
-    True
+    >>> column(student1, 'student2', 'history6a')
+    gradebook scores: False False
+    group calendar: False False
+    group container: False False
+    group data: False False
+    overlay calendar: None False
+    person attendance: False False
+    person calendar: False False
+    person container: False False
+    person data: False False
+    person preferences: False False
+    resource calendar: False False
+    resource container: False False
+    resource data: False False
+    section attendance: False False
 
-    >>> alien.reload()
-    >>> alien.getLink('Persons').click()
-    >>> 'student3' in alien.contents
-    True
+Student looking at himself:
 
-Person data:
+    >>> column(student1, 'student1', 'history6a')
+    gradebook scores: False False
+    group calendar: False False
+    group container: False False
+    group data: False False
+    overlay calendar: None True
+    person attendance: True False
+    person calendar: True True
+    person container: False False
+    person data: True False
+    person preferences: True True
+    resource calendar: False False
+    resource container: False False
+    resource data: False False
+    section attendance: False False
 
-    >>> manager.getLink('Persons').click()
-    >>> manager.getLink('Student3').click()
-    >>> 'student3' in manager.contents
-    True
-    >>> manager.open('/persons/student3/nameinfo/@@edit.html')
-    >>> manager.getControl('Preferred name').value = 'Trinity'
-    >>> manager.getControl('Apply', index=0).click()
-
-    >>> alien.getLink('Persons').click()
-    >>> alien.getLink('Student3').click()
-    Traceback (most recent call last):
-    ...
-    Unauthorized: (<schooltool.demographics.person.Person...>, 'nameinfo', 'schooltool.view')
-
-    >>> student1.getLink('Persons').click()
-    >>> student1.getLink('Student3').click()
-    Traceback (most recent call last):
-    ...
-    Unauthorized: (<schooltool.demographics.person.Person...>, 'nameinfo', 'schooltool.view')
-
-Owner:
-
-    >>> student1.open('http://localhost/')
-    >>> student1.getLink('Persons').click()
-    >>> student1.getLink('Student1').click()
-    >>> 'Student1' in student1.contents
-    True
-
-He still can't edit it:
-
-    >>> student1.open('/persons/student1/nameinfo/@@edit.html')
-    Traceback (most recent call last):
-    ...
-    Unauthorized: (<zope.app.publisher.browser.viewmeta.NameInfoEdit...>, 'browserDefault', 'schooltool.edit')
