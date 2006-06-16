@@ -76,7 +76,7 @@ class RequirementRequirementViewersCrowd(ParentCrowdTemplate):
     adapts(IRequirement)
     implements(IRequirementParentCrowd)
 
-    permission = 'schooltool.edit'
+    permission = 'schooltool.view'
     interface = IRequirementParentCrowd
 
 
