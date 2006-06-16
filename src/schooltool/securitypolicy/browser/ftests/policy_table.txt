@@ -300,9 +300,7 @@ Instructor looking at his student and section:
     timetables: view
 
 XXX: should be "section activities: view edit" (bug in activities)
-XXX: should be "gradebook scores: view" (can't teacher edit scores for his
-student)
-XXX: "person attendance:" (not sure this is true)
+XXX: should be "gradebook scores: view edit" (bug in activities)
 
 Leader stuff:
 
