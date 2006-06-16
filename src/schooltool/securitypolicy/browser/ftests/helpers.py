@@ -445,20 +445,8 @@ def raw_column(browser, subject, section):
 
 def column(browser, *args):
     result = raw_column(browser, *args)
-    for i in sorted(result.items()):
-        out = '%s:' % i[0]
-        if i[1][0]:
-            out += ' view'
-        if i[1][1]:
-            out += ' edit'
-        print out
-
-def column2(browser, *args):
-    result = raw_column(browser, *args)
-    for i in sorted(result.items()):
-        out = '%s:' % i[0]
-        if i[1][0]:
-            out += ' view'
-        if i[1][1]:
-            out += ' edit'
-        print '%s: %s %s' % (i[0], i[1][0], i[1][1])
+    for name, (view, edit) in sorted(result.items()):
+        sview = view and 'view' or ''
+        sedit = edit and 'edit' or ''
+        out = '%-20s %-5s %-5s' % (name + ':', sview, sedit)
+        print out.strip()

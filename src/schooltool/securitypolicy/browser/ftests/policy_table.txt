@@ -116,32 +116,32 @@ Set up leader for everything:
 Manager can see almost everything:
 
     >>> column(manager, 'student1', 'history6a')
-    course: view edit
-    course activities: view edit
-    gradebook scores: view
-    group calendar: view edit
-    group container: view edit
-    group data: view edit
-    level: view edit
+    course:              view  edit
+    course activities:   view  edit
+    gradebook scores:    view
+    group calendar:      view  edit
+    group container:     view  edit
+    group data:          view  edit
+    level:               view  edit
     overlay calendar:
-    permissions: view edit
-    person attendance: view
-    person calendar: view edit
-    person container: view edit
-    person data: view edit
-    person preferences: view edit
-    resource calendar: view edit
-    resource container: view edit
-    resource data: view edit
-    schooltool: view
-    schooltool calendar: view edit
-    schooltool info: view edit
-    section: view edit
-    section activities: view edit
-    section attendance: view edit
-    section calendar: view edit
-    term: view edit
-    timetables: view edit
+    permissions:         view  edit
+    person attendance:   view
+    person calendar:     view  edit
+    person container:    view  edit
+    person data:         view  edit
+    person preferences:  view  edit
+    resource calendar:   view  edit
+    resource container:  view  edit
+    resource data:       view  edit
+    schooltool:          view
+    schooltool calendar: view  edit
+    schooltool info:     view  edit
+    section:             view  edit
+    section activities:  view  edit
+    section attendance:  view  edit
+    section calendar:    view  edit
+    term:                view  edit
+    timetables:          view  edit
 
 Create anonymous browser:
 
@@ -150,13 +150,13 @@ Create anonymous browser:
     >>> alien.open('http://localhost/')
 
     >>> column(alien, 'student1', 'history6a')
-    course: view
-    course activities: view
+    course:              view
+    course activities:   view
     gradebook scores:
     group calendar:
     group container:
     group data:
-    level: view
+    level:               view
     overlay calendar:
     permissions:
     person attendance:
@@ -175,19 +175,19 @@ Create anonymous browser:
     section attendance:
     section calendar:
     term: view
-    timetables: view
+    timetables:          view
 
 Student looking at another student:
 
     >>> student1 = setup.logIn('student1', 'student1')
     >>> column(student1, 'student2', 'history6a')
-    course: view
-    course activities: view
+    course:              view
+    course activities:   view
     gradebook scores:
     group calendar:
     group container:
     group data:
-    level: view
+    level:               view
     overlay calendar:
     permissions:
     person attendance:
@@ -198,54 +198,54 @@ Student looking at another student:
     resource calendar:
     resource container:
     resource data:
-    schooltool: view
+    schooltool:          view
     schooltool calendar: view
     schooltool info:
-    section: view
+    section:             view
     section activities:
     section attendance:
-    section calendar: view
-    term: view
-    timetables: view
+    section calendar:    view
+    term:                view
+    timetables:          view
 
 XXX: above should be: "section activities: view"
 
 Student looking at himself (his section):
 
     >>> column(student1, 'student1', 'history6a')
-    course: view
-    course activities: view
+    course:              view
+    course activities:   view
     gradebook scores:
     group calendar:
     group container:
     group data:
-    level: view
-    overlay calendar: edit
+    level:               view
+    overlay calendar:          edit
     permissions:
-    person attendance: view
-    person calendar: view edit
+    person attendance:   view
+    person calendar:     view  edit
     person container:
     person data: view
-    person preferences: view edit
+    person preferences:  view  edit
     resource calendar:
     resource container:
     resource data:
-    schooltool: view
+    schooltool:          view
     schooltool calendar: view
     schooltool info:
-    section: view
+    section:             view
     section activities:
     section attendance:
-    section calendar: view
-    term: view
-    timetables: view
+    section calendar:    view
+    term:                view
+    timetables:          view
 
 Student looking at another student and not his section:
 
     >>> student2 = setup.logIn('student2', 'student2')
     >>> column(student2, 'student1', 'history6a')
-    course: view
-    course activities: view
+    course:              view
+    course activities:   view
     gradebook scores:
     group calendar:
     group container:
@@ -268,39 +268,39 @@ Student looking at another student and not his section:
     section activities:
     section attendance:
     section calendar:
-    term: view
-    timetables: view
+    term:                view
+    timetables:          view
 
 Instructor looking at his student and section:
 
     >>> instructor = setup.logIn('instructor1', 'instructor1')
     >>> column(instructor, 'student1', 'history6a')
-    course: view
-    course activities: view
+    course:              view
+    course activities:   view
     gradebook scores:
     group calendar:
     group container:
     group data:
-    level: view
+    level:               view
     overlay calendar:
     permissions:
-    person attendance: view
+    person attendance:   view
     person calendar:
     person container:
-    person data: view
+    person data:         view
     person preferences:
     resource calendar:
     resource container:
     resource data:
-    schooltool: view
+    schooltool:          view
     schooltool calendar: view
     schooltool info:
-    section: view edit
+    section:             view  edit
     section activities:
-    section attendance: view edit
-    section calendar: view edit
-    term: view
-    timetables: view
+    section attendance:  view  edit
+    section calendar:    view  edit
+    term:                view
+    timetables:          view
 
 XXX: should be "section activities: view edit" (bug in activities)
 XXX: should be "gradebook scores: view edit" (bug in activities)
@@ -309,13 +309,13 @@ Group member:
 
     >>> teacher3 = setup.logIn('teacher3', 'teacher3')
     >>> column(teacher3, 'student1', 'history6a')
-    course: view
-    course activities: view
+    course:              view
+    course activities:   view
     gradebook scores:
-    group calendar: view
+    group calendar:      view
     group container:
-    group data: view
-    level: view
+    group data:          view
+    level:               view
     overlay calendar:
     permissions:
     person attendance:
@@ -326,27 +326,27 @@ Group member:
     resource calendar:
     resource container:
     resource data:
-    schooltool: view
+    schooltool:          view
     schooltool calendar: view
     schooltool info:
     section:
     section activities:
     section attendance:
     section calendar:
-    term: view
-    timetables: view
+    term:                view
+    timetables:          view
 
 Leader stuff:
 
 #   >>> leader = setup.logIn('teacher2', 'teacher2')
 #   >>> column(leader, 'student1', 'history6a')
-#   course: view edit
-#   course activities: view edit
+#   course:              view  edit
+#   course activities:   view  edit
 #   gradebook scores:
-#   group calendar: view edit
+#   group calendar:      view  edit
 #   group container:
-#   group data: view edit
-#   level: view
+#   group data:          view  edit
+#   level:               view
 #   overlay calendar:
 #   permissions:
 #   person attendance:
@@ -354,18 +354,18 @@ Leader stuff:
 #   person container:
 #   person data:
 #   person preferences:
-#   resource calendar: view edit
+#   resource calendar:   view  edit
 #   resource container:
-#   resource data: view edit
-#   schooltool: view
+#   resource data:       view  edit
+#   schooltool:          view
 #   schooltool calendar: view
 #   schooltool info:
 #   section:
 #   section activities:
 #   section attendance:
 #   section calendar:
-#   term: view
-#   timetables: view
+#   term:                view
+#   timetables:          view
 
 
 Configurable options
