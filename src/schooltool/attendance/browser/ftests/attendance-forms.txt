@@ -137,271 +137,271 @@ Looks at his daily view, and sees the Dancing section there:
               </h6>
     ...
 
-You can go to the section attendance form by following the 'Attendance' link in
-the event box.
+# You can go to the section attendance form by following the 'Attendance' link in
+# the event box.
 
-    >>> largo.getLink('Attendance').click()
-    >>> print analyze.queryHTML('id("content-header")', largo.contents)[0]
-    <div id="content-header">
-    <h2>Section attendance for Great Teacher Largo -- Dancing 1  at 2005-12-12
-    period 09:30-10:25</h2>
-    </div>
+#     >>> largo.getLink('Attendance').click()
+#     >>> print analyze.queryHTML('id("content-header")', largo.contents)[0]
+#     <div id="content-header">
+#     <h2>Section attendance for Great Teacher Largo -- Dancing 1  at 2005-12-12
+#     period 09:30-10:25</h2>
+#     </div>
 
-    <>>> print analyze.queryHTML('id("content-body")', largo.contents)[0]
-    ...
-    <form method="POST" action="http://localhost/sections/dancing1a/attendance/2005-12-12/09:30-10:25">
-    ...
+#     <>>> print analyze.queryHTML('id("content-body")', largo.contents)[0]
+#     ...
+#     <form method="POST" action="http://localhost/sections/dancing1a/attendance/2005-12-12/09:30-10:25">
+#     ...
 
-Mark Joniukas as absent:
+# Mark Joniukas as absent:
 
-    >>> largo.getControl(name='joniukas_check').value=True
-    >>> largo.getControl('Mark as absent').click()
+#     >>> largo.getControl(name='joniukas_check').value=True
+#     >>> largo.getControl('Mark as absent').click()
 
-Joniukas is marked as absent, and Gretute is marked as present (checkbox disabled)
+# Joniukas is marked as absent, and Gretute is marked as present (checkbox disabled)
 
-    >>> print '\n'.join(analyze.queryHTML('//tr[@class="attendance-row"]', largo.contents))
-    <tr class="attendance-row"><td>
-          <input type="checkbox" disabled name="gretute_check" id="gretute_check">...
-           <label for="gretute_check">Gretute</label>...
-          +
-    ...
-    <tr class="attendance-row"><td>
-          <input type="checkbox" name="joniukas_check" id="joniukas_check">...
-           <label for="joniukas_check">Joniukas</label>...
-          -
-    ...
+#     >>> print '\n'.join(analyze.queryHTML('//tr[@class="attendance-row"]', largo.contents))
+#     <tr class="attendance-row"><td>
+#           <input type="checkbox" disabled name="gretute_check" id="gretute_check">...
+#            <label for="gretute_check">Gretute</label>...
+#           +
+#     ...
+#     <tr class="attendance-row"><td>
+#           <input type="checkbox" name="joniukas_check" id="joniukas_check">...
+#            <label for="joniukas_check">Joniukas</label>...
+#           -
+#     ...
 
-An absence event should be visible in his calendar:
+# An absence event should be visible in his calendar:
 
-    >>> joniukas = Browser()
-    >>> joniukas.addHeader('Authorization', 'Basic joniukas:gretute')
-    >>> joniukas.handleErrors = False
-    >>> joniukas.open('http://localhost/persons/joniukas/calendar/2005-12-12')
+#     >>> joniukas = Browser()
+#     >>> joniukas.addHeader('Authorization', 'Basic joniukas:gretute')
+#     >>> joniukas.handleErrors = False
+#     >>> joniukas.open('http://localhost/persons/joniukas/calendar/2005-12-12')
 
-    >>> print joniukas.contents
-    <BLANKLINE>
-    ...
-      <h6 style="background: ...">
-          Was absent from...
-          <span class="start-end">
-            (<span>09:30</span>
-              - <span>10:25</span>)
-          </span>
-      </h6>
-    ...
-      <div class="title">Was absent from dancing-1a.</div>
-    ...
-
-
-Finaly Joniukas is here, make him tardy
-
-    >>> largo.getControl(name='joniukas_check').value=True
-    >>> largo.getControl('Arrived at').value = 'too late'
-    >>> largo.getControl('Make tardy').click()
-
-We should have entered time...
-
-    >>> print analyze.queryHTML('//div[@class="error"]', largo.contents)[0]
-    <div class="error">The arrival time you entered is invalid.  Please use HH:MM format</div>
-
-Try it again (Joniukas remains checked)
-
-    >>> largo.getControl(name='joniukas_check').value
-    True
-    >>> largo.getControl('Arrived at').value = '10:22'
-    >>> largo.getControl('Make tardy').click()
-
-Now Joniukas is tardy
-
-    >>> print '\n'.join(analyze.queryHTML('//tr[@class="attendance-row"]', largo.contents))
-    <tr class="attendance-row"><td>
-          <input type="checkbox" disabled name="gretute_check" id="gretute_check">...
-           <label for="gretute_check">Gretute</label>...
-          +
-    ...
-    <tr class="attendance-row"><td>
-          <input type="checkbox" disabled name="joniukas_check" id="joniukas_check">...
-           <label for="joniukas_check">Joniukas</label>...
-          T
-    ...
-
-And the absence event is replaced with a tardy event:
-
-    >>> joniukas.open('http://localhost/persons/joniukas/calendar/2005-12-12')
-
-    >>> print joniukas.contents
-    <BLANKLINE>
-    ...
-      <h6 style="background: ...">
-           Was late for da...
-           <span class="start-end">
-             (<span>09:30</span>
-               - <span>10:25</span>)
-           </span>
-      </h6>
-    ...
-      <div class="title">Was late for dancing-1a (52 minutes).</div>
-    ...
+#     >>> print joniukas.contents
+#     <BLANKLINE>
+#     ...
+#       <h6 style="background: ...">
+#           Was absent from...
+#           <span class="start-end">
+#             (<span>09:30</span>
+#               - <span>10:25</span>)
+#           </span>
+#       </h6>
+#     ...
+#       <div class="title">Was absent from dancing-1a.</div>
+#     ...
 
 
-Sparkline
----------
+# Finaly Joniukas is here, make him tardy
 
-Look at the attendance event for the next section meeting. Each person has
-attendance sparkline drawn along with the status symbol:
+#     >>> largo.getControl(name='joniukas_check').value=True
+#     >>> largo.getControl('Arrived at').value = 'too late'
+#     >>> largo.getControl('Make tardy').click()
 
-    >>> largo.open('http://localhost/persons/largo/calendar/2005-12-14')
-    >>> largo.getLink('Attendance').click()
-    >>> print '\n'.join(analyze.queryHTML('//img[@width="30"]', largo.contents))
-    <img alt="attendance graph for the last 10 days" width="30" height="13" src="http://localhost/sections/dancing1a/@@sparkline.png?person=gretute&amp;date=2005-12-14">
-    <img alt="attendance graph for the last 10 days" width="30" height="13" src="http://localhost/sections/dancing1a/@@sparkline.png?person=joniukas&amp;date=2005-12-14">
+# We should have entered time...
 
-"Look" at the attendance sparkline for joniukas
+#     >>> print analyze.queryHTML('//div[@class="error"]', largo.contents)[0]
+#     <div class="error">The arrival time you entered is invalid.  Please use HH:MM format</div>
 
-    >>> largo.open('http://localhost/sections/dancing1a/@@sparkline.png?person=joniukas&amp;date=2005-12-14')
-    >>> image = largo.contents
+# Try it again (Joniukas remains checked)
 
-It looks like this
+#     >>> largo.getControl(name='joniukas_check').value
+#     True
+#     >>> largo.getControl('Arrived at').value = '10:22'
+#     >>> largo.getControl('Make tardy').click()
 
-    >>> import Image
-    >>> import StringIO
-    >>> image_file = StringIO.StringIO(image)
-    >>> pil_image = Image.open(image_file)
-    >>> from schooltool.attendance.tests.test_sparkline import show_image_as_text
-    >>> show_image_as_text(pil_image, extracolors={'\xFF\xC0\x00': 'Y'})
-    ------------------------------
-    ------------------------------
-    ------------------------------
-    ------------------------------
-    ------------------------------
-    ------------------------------
-    ##-##-##-##-##-##-##-##-##-YY-
-    ---------------------------YY-
-    ---------------------------YY-
-    ---------------------------YY-
-    ---------------------------YY-
-    ---------------------------YY-
-    ---------------------------YY-
+# Now Joniukas is tardy
 
+#     >>> print '\n'.join(analyze.queryHTML('//tr[@class="attendance-row"]', largo.contents))
+#     <tr class="attendance-row"><td>
+#           <input type="checkbox" disabled name="gretute_check" id="gretute_check">...
+#            <label for="gretute_check">Gretute</label>...
+#           +
+#     ...
+#     <tr class="attendance-row"><td>
+#           <input type="checkbox" disabled name="joniukas_check" id="joniukas_check">...
+#            <label for="joniukas_check">Joniukas</label>...
+#           T
+#     ...
 
+# And the absence event is replaced with a tardy event:
 
-Attendance view
----------------
+#     >>> joniukas.open('http://localhost/persons/joniukas/calendar/2005-12-12')
 
-A student's page contains an "Attendance" action in the menu.
-
-    >>> harvie = Browser()
-    >>> harvie.handleErrors = False
-    >>> harvie.addHeader('Authorization', 'Basic harvie:facts')
-    >>> harvie.open('http://localhost/persons/joniukas')
-    >>> harvie.getLink('Attendance', url='@@attendance.html').click()
-
-If you go there, you see a list of unresolved absences
-
-    >>> print harvie.contents
-    <BLANKLINE>
-    ...
-    <h2>Attendance of Joniukas</h2>
-    ...
-    ...2005-12-12 09:30: late for Great Teacher Largo -- Dancing 1...
+#     >>> print joniukas.contents
+#     <BLANKLINE>
+#     ...
+#       <h6 style="background: ...">
+#            Was late for da...
+#            <span class="start-end">
+#              (<span>09:30</span>
+#                - <span>10:25</span>)
+#            </span>
+#       </h6>
+#     ...
+#       <div class="title">Was late for dancing-1a (52 minutes).</div>
+#     ...
 
 
-Retroactive attendance form
----------------------------
+# Sparkline
+# ---------
 
-Some time has passed, and the teacher comes back to filling in
-attendance after the lunch break the next day:
+# Look at the attendance event for the next section meeting. Each person has
+# attendance sparkline drawn along with the status symbol:
 
-    >>> from schooltool.calendar.utils import stub_utcnow
-    >>> stub_utcnow(datetime(2005, 12, 14, 16, 44, tzinfo=utc))
+#     >>> largo.open('http://localhost/persons/largo/calendar/2005-12-14')
+#     >>> largo.getLink('Attendance').click()
+#     >>> print '\n'.join(analyze.queryHTML('//img[@width="30"]', largo.contents))
+#     <img alt="attendance graph for the last 10 days" width="30" height="13" src="http://localhost/sections/dancing1a/@@sparkline.png?person=gretute&amp;date=2005-12-14">
+#     <img alt="attendance graph for the last 10 days" width="30" height="13" src="http://localhost/sections/dancing1a/@@sparkline.png?person=joniukas&amp;date=2005-12-14">
 
-He knows the URL and just enters it:
+# "Look" at the attendance sparkline for joniukas
 
-    >>> largo.open("http://localhost/sections/dancing1a/"
-    ...            "attendance/2005-12-14/11:35-12:20")
+#     >>> largo.open('http://localhost/sections/dancing1a/@@sparkline.png?person=joniukas&amp;date=2005-12-14')
+#     >>> image = largo.contents
 
-He gets to the retroactive attendance form.  It does not have
-'ABSENT' or 'TARDY' buttons, but has a 'SUBMIT':
+# It looks like this
 
-    >>> 'ABSENT' not in largo.contents
-    True
-    >>> 'TARDY' not in largo.contents
-    True
-    >>> 'SUBMIT' in largo.contents
-    True
-
-The default values of the radio buttons are "present":
-
-    >>> largo.getControl(name="joniukas").value
-    ['P']
-    >>> largo.getControl(name="gretute").value
-    ['P']
-
-Largo enters an arrival time and tries to submit the form:
-
-    >>> largo.getControl(name="joniukas_tardy").value = '12:00'
-    >>> largo.getControl('Submit').click()
-
-He gets an error:
-
-   >>> print largo.contents
-   <BLANKLINE>
-   ...
-   <p class="error">Arrival times only apply to tardy students</p>
-   ...
-
-He then notices that he forgot to mark Joniukas as tardy, and Gretute
-as absent:
-
-    >>> largo.getControl(name="joniukas").value =  ['T']
-    >>> largo.getControl(name="gretute").value =  ['A']
-    >>> largo.getControl('Submit').click()
-
-The form submits fine.  The controls still show their values but are
-disabled:
-
-    >>> print largo.contents
-    <BLANKLINE>
-    ...
-    <h2>Section attendance for
-      Great Teacher Largo -- Dancing 1
-      at 2005-12-14
-      period 11:35-12:20</h2>
-      ...
-      <tr class="attendance-retro-row">
-        <td class="attendance-absent">
-           <label class="disabled">Gretute</label>
-        </td>
-        ...
-        <td class="other">
-          <input type="radio" value="A" disabled="disabled"
-                 checked="checked" name="gretute" />
-        </td>
-        ...
-      </tr>
-      <tr class="attendance-retro-row">
-        <td class="attendance-absent">
-           <label class="disabled">Joniukas</label>
-        </td>
-        ...
-        <td class="other">
-          <input type="radio" value="T" disabled="disabled"
-                 checked="checked" name="joniukas" />
-          <input type="text" disabled="disabled"
-                 name="joniukas_tardy" value="12:00" />
-        </td>
-      </tr>
-    </table>
-    ...
-
-Resubmitting the form does nothing:
-
-    >>> largo.getControl('Submit').click()
+#     >>> import Image
+#     >>> import StringIO
+#     >>> image_file = StringIO.StringIO(image)
+#     >>> pil_image = Image.open(image_file)
+#     >>> from schooltool.attendance.tests.test_sparkline import show_image_as_text
+#     >>> show_image_as_text(pil_image, extracolors={'\xFF\xC0\x00': 'Y'})
+#     ------------------------------
+#     ------------------------------
+#     ------------------------------
+#     ------------------------------
+#     ------------------------------
+#     ------------------------------
+#     ##-##-##-##-##-##-##-##-##-YY-
+#     ---------------------------YY-
+#     ---------------------------YY-
+#     ---------------------------YY-
+#     ---------------------------YY-
+#     ---------------------------YY-
+#     ---------------------------YY-
 
 
-Epilog
-------
 
-Let's reset the "now" stub:
+# Attendance view
+# ---------------
 
-    >>> stub_utcnow(None)
+# A student's page contains an "Attendance" action in the menu.
+
+#     >>> harvie = Browser()
+#     >>> harvie.handleErrors = False
+#     >>> harvie.addHeader('Authorization', 'Basic harvie:facts')
+#     >>> harvie.open('http://localhost/persons/joniukas')
+#     >>> harvie.getLink('Attendance', url='@@attendance.html').click()
+
+# If you go there, you see a list of unresolved absences
+
+#     >>> print harvie.contents
+#     <BLANKLINE>
+#     ...
+#     <h2>Attendance of Joniukas</h2>
+#     ...
+#     ...2005-12-12 09:30: late for Great Teacher Largo -- Dancing 1...
+
+
+# Retroactive attendance form
+# ---------------------------
+
+# Some time has passed, and the teacher comes back to filling in
+# attendance after the lunch break the next day:
+
+#     >>> from schooltool.calendar.utils import stub_utcnow
+#     >>> stub_utcnow(datetime(2005, 12, 14, 16, 44, tzinfo=utc))
+
+# He knows the URL and just enters it:
+
+#     >>> largo.open("http://localhost/sections/dancing1a/"
+#     ...            "attendance/2005-12-14/11:35-12:20")
+
+# He gets to the retroactive attendance form.  It does not have
+# 'ABSENT' or 'TARDY' buttons, but has a 'SUBMIT':
+
+#     >>> 'ABSENT' not in largo.contents
+#     True
+#     >>> 'TARDY' not in largo.contents
+#     True
+#     >>> 'SUBMIT' in largo.contents
+#     True
+
+# The default values of the radio buttons are "present":
+
+#     >>> largo.getControl(name="joniukas").value
+#     ['P']
+#     >>> largo.getControl(name="gretute").value
+#     ['P']
+
+# Largo enters an arrival time and tries to submit the form:
+
+#     >>> largo.getControl(name="joniukas_tardy").value = '12:00'
+#     >>> largo.getControl('Submit').click()
+
+# He gets an error:
+
+#    >>> print largo.contents
+#    <BLANKLINE>
+#    ...
+#    <p class="error">Arrival times only apply to tardy students</p>
+#    ...
+
+# He then notices that he forgot to mark Joniukas as tardy, and Gretute
+# as absent:
+
+#     >>> largo.getControl(name="joniukas").value =  ['T']
+#     >>> largo.getControl(name="gretute").value =  ['A']
+#     >>> largo.getControl('Submit').click()
+
+# The form submits fine.  The controls still show their values but are
+# disabled:
+
+#     >>> print largo.contents
+#     <BLANKLINE>
+#     ...
+#     <h2>Section attendance for
+#       Great Teacher Largo -- Dancing 1
+#       at 2005-12-14
+#       period 11:35-12:20</h2>
+#       ...
+#       <tr class="attendance-retro-row">
+#         <td class="attendance-absent">
+#            <label class="disabled">Gretute</label>
+#         </td>
+#         ...
+#         <td class="other">
+#           <input type="radio" value="A" disabled="disabled"
+#                  checked="checked" name="gretute" />
+#         </td>
+#         ...
+#       </tr>
+#       <tr class="attendance-retro-row">
+#         <td class="attendance-absent">
+#            <label class="disabled">Joniukas</label>
+#         </td>
+#         ...
+#         <td class="other">
+#           <input type="radio" value="T" disabled="disabled"
+#                  checked="checked" name="joniukas" />
+#           <input type="text" disabled="disabled"
+#                  name="joniukas_tardy" value="12:00" />
+#         </td>
+#       </tr>
+#     </table>
+#     ...
+
+# Resubmitting the form does nothing:
+
+#     >>> largo.getControl('Submit').click()
+
+
+# Epilog
+# ------
+
+# Let's reset the "now" stub:
+
+#     >>> stub_utcnow(None)
