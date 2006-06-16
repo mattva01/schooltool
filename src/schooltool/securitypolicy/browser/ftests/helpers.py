@@ -115,8 +115,7 @@ def group_container_edit(browser):
 
 def group_data_view(browser):
     go_home(browser)
-    browser.getLink('Groups').click()
-    browser.getLink('Teachers').click()
+    browser.open('http://localhost/groups/teachers')
     return 'Teacher1' in browser.contents
 
 def group_data_edit(browser):
@@ -446,4 +445,19 @@ def raw_column(browser, subject, section):
 def column(browser, *args):
     result = raw_column(browser, *args)
     for i in sorted(result.items()):
+        out = '%s:' % i[0]
+        if i[1][0]:
+            out += ' view'
+        if i[1][1]:
+            out += ' edit'
+        print out
+
+def column2(browser, *args):
+    result = raw_column(browser, *args)
+    for i in sorted(result.items()):
+        out = '%s:' % i[0]
+        if i[1][0]:
+            out += ' view'
+        if i[1][1]:
+            out += ' edit'
         print '%s: %s %s' % (i[0], i[1][0], i[1][1])

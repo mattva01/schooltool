@@ -66,35 +66,54 @@ Set up activities and put marks:
     >>> manager.getControl(name='student1').value = '8'
     >>> manager.getControl('Update').click()
 
+Set up leader for everything:
+
+    >>> manager.open('http://localhost/')
+    >>> manager.getLink('Groups').click()
+    >>> manager.getLink('Teachers').click()
+    >>> manager.getLink('Edit Leaders').click()
+    >>> manager.getControl('Teacher2').click()
+    >>> manager.getControl('Add').click()
+    >>> manager.getLink('Resources').click()
+    >>> manager.getLink('Time travel machine').click()
+    >>> manager.getLink('Edit Leaders').click()
+    >>> manager.getControl('Teacher2').click()
+    >>> manager.getControl('Add').click()
+    >>> manager.getLink('Courses').click()
+    >>> manager.getLink('History 6').click()
+    >>> manager.getLink('Edit Leaders').click()
+    >>> manager.getControl('Teacher2').click()
+    >>> manager.getControl('Add').click()
+
 Manager can see almost everything:
 
     >>> column(manager, 'student1', 'history6a')
-    course: True True
-    course activities: True True
-    gradebook scores: True True
-    group calendar: True True
-    group container: True True
-    group data: True True
-    level: True True
-    overlay calendar: None False
-    permissions: True True
-    person attendance: True False
-    person calendar: True True
-    person container: True True
-    person data: True True
-    person preferences: True True
-    resource calendar: True True
-    resource container: True True
-    resource data: True True
-    schooltool: True None
-    schooltool calendar: True True
-    schooltool info: True True
-    section: True True
-    section activities: True True
-    section attendance: True True
-    section calendar: True True
-    term: True True
-    timetables: True True
+    course: view edit
+    course activities: view edit
+    gradebook scores: view edit
+    group calendar: view edit
+    group container: view edit
+    group data: view edit
+    level: view edit
+    overlay calendar:
+    permissions: view edit
+    person attendance: view
+    person calendar: view edit
+    person container: view edit
+    person data: view edit
+    person preferences: view edit
+    resource calendar: view edit
+    resource container: view edit
+    resource data: view edit
+    schooltool: view
+    schooltool calendar: view edit
+    schooltool info: view edit
+    section: view edit
+    section activities: view edit
+    section attendance: view edit
+    section calendar: view edit
+    term: view edit
+    timetables: view edit
 
 Create anonymous browser:
 
@@ -102,72 +121,69 @@ Create anonymous browser:
     >>> alien.handleErrors = False
     >>> alien.open('http://localhost/')
     >>> column(alien, 'student1', 'history6a')
-    course: True False
-    course activities: True False
-    gradebook scores: False False
-    group calendar: False False
-    group container: False False
-    group data: False False
-    level: True False
-    overlay calendar: None False
-    permissions: False False
-    person attendance: False False
-    person calendar: False False
-    person container: False False
-    person data: False False
-    person preferences: False False
-    resource calendar: False False
-    resource container: False False
-    resource data: False False
-    schooltool: True None
-    schooltool calendar: True False
-    schooltool info: False False
-    section: False False
-    section activities: False False
-    section attendance: False False
-    section calendar: False False
-    term: True False
-    timetables: True False
+    course: view
+    course activities: view
+    gradebook scores:
+    group calendar:
+    group container:
+    group data:
+    level: view
+    overlay calendar:
+    permissions:
+    person attendance:
+    person calendar:
+    person container:
+    person data:
+    person preferences:
+    resource calendar:
+    resource container:
+    resource data:
+    schooltool: view
+    schooltool calendar: view
+    schooltool info:
+    section:
+    section activities:
+    section attendance:
+    section calendar:
+    term: view
+    timetables: view
 
 Student looking at another student:
 
     >>> student1 = setup.logIn('student1', 'student1')
-
-XXX section activities should be True False
-
     >>> column(student1, 'student2', 'history6a')
-    course: True False
-    course activities: True False
-    gradebook scores: False False
-    group calendar: False False
-    group container: False False
-    group data: False False
-    level: True False
-    overlay calendar: None False
-    permissions: False False
-    person attendance: False False
-    person calendar: False False
-    person container: False False
-    person data: False False
-    person preferences: False False
-    resource calendar: False False
-    resource container: False False
-    resource data: False False
-    schooltool: True None
-    schooltool calendar: True False
-    schooltool info: False False
-    section: True False
-    section activities: False False
-    section attendance: False False
-    section calendar: True False
-    term: True False
-    timetables: True False
+    course: view
+    course activities: view
+    gradebook scores:
+    group calendar:
+    group container:
+    group data:
+    level: view
+    overlay calendar:
+    permissions:
+    person attendance:
+    person calendar:
+    person container:
+    person data:
+    person preferences:
+    resource calendar:
+    resource container:
+    resource data:
+    schooltool: view
+    schooltool calendar: view
+    schooltool info:
+    section: view
+    section activities:
+    section attendance:
+    section calendar: view
+    term: view
+    timetables: view
+
+XXX: above should be: "section activities: view"
 
 Student looking at himself (his section):
 
-XXX section activities should be True False
-
-    >>> column(student1, 'student1', 'history6a')
+    >>> helpers.column2(student1, 'student1', 'history6a')
     course: True False
     course activities: True False
     gradebook scores: False False
@@ -199,67 +215,100 @@ Student looking at another student and not his section:
 
     >>> student2 = setup.logIn('student2', 'student2')
     >>> column(student2, 'student1', 'history6a')
-    course: True False
-    course activities: True False
-    gradebook scores: False False
-    group calendar: False False
-    group container: False False
-    group data: False False
-    level: True False
-    overlay calendar: None False
-    permissions: False False
-    person attendance: False False
-    person calendar: False False
-    person container: False False
-    person data: False False
-    person preferences: False False
-    resource calendar: False False
-    resource container: False False
-    resource data: False False
-    schooltool: True None
-    schooltool calendar: True False
-    schooltool info: False False
-    section: False False
-    section activities: False False
-    section attendance: False False
-    section calendar: False False
-    term: True False
-    timetables: True False
+    course: view
+    course activities: view
+    gradebook scores:
+    group calendar:
+    group container:
+    group data:
+    level: view
+    overlay calendar:
+    permissions:
+    person attendance:
+    person calendar:
+    person container:
+    person data:
+    person preferences:
+    resource calendar:
+    resource container:
+    resource data:
+    schooltool: view
+    schooltool calendar: view
+    schooltool info:
+    section:
+    section activities:
+    section attendance:
+    section calendar:
+    term: view
+    timetables: view
 
 Instructor looking at his student and section:
 
-XXX section activities should be True True (bug in activities)
-XXX gradebook scores: True False (can't reacher edit scores for his student)
-XXX person attendance: False False (not sure this is true)
-
     >>> instructor = setup.logIn('instructor1', 'instructor1')
     >>> column(instructor, 'student1', 'history6a')
-    course: True False
-    course activities: True False
-    gradebook scores: False False
-    group calendar: False False
-    group container: False False
-    group data: False False
-    level: True False
-    overlay calendar: None False
-    permissions: False False
-    person attendance: True False
-    person calendar: False False
-    person container: False False
-    person data: True False
-    person preferences: False False
-    resource calendar: False False
-    resource container: False False
-    resource data: False False
-    schooltool: True None
-    schooltool calendar: True False
-    schooltool info: False False
-    section: True True
-    section activities: False False
-    section attendance: True True
-    section calendar: True True
-    term: True False
-    timetables: True False
+    course: view
+    course activities: view
+    gradebook scores:
+    group calendar:
+    group container:
+    group data:
+    level: view
+    overlay calendar:
+    permissions:
+    person attendance: view
+    person calendar:
+    person container:
+    person data: view
+    person preferences:
+    resource calendar:
+    resource container:
+    resource data:
+    schooltool: view
+    schooltool calendar: view
+    schooltool info:
+    section: view edit
+    section activities:
+    section attendance: view edit
+    section calendar: view edit
+    term: view
+    timetables: view
+
+XXX: should be "section activities: view edit" (bug in activities)
+XXX: should be "gradebook scores: view" (can't reacher edit scores for his
+student)
+XXX: "person attendance:" (not sure this is true)
+
+Leader stuff:
+
+#   >>> leader = setup.logIn('teacher2', 'teacher2')
+#   >>> column(leader, 'student1', 'history6a')
+#   course: view edit
+#   course activities: view edit
+#   gradebook scores:
+#   group calendar: view edit
+#   group container:
+#   group data: view edit
+#   level: view
+#   overlay calendar:
+#   permissions:
+#   person attendance:
+#   person calendar:
+#   person container:
+#   person data:
+#   person preferences:
+#   resource calendar: view edit
+#   resource container:
+#   resource data: view edit
+#   schooltool: view
+#   schooltool calendar: view
+#   schooltool info:
+#   section:
+#   section activities:
+#   section attendance:
+#   section calendar:
+#   term: view
+#   timetables: view
+
 
 Configurable options
 ====================
