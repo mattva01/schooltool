@@ -31,6 +31,7 @@ from zope.app.testing import ztapi, setup
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.dependable.interfaces import IDependable
 from zope.i18n import translate
+from zope.traversing.interfaces import ITraversable, IPathAdapter
 
 from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.testing import setup as sbsetup
@@ -174,11 +175,8 @@ def doctest_SortBy():
         >>> from schooltool.app.browser import SortBy
         >>> adapter = SortBy([])
 
-        >>> from zope.traversing.interfaces import IPathAdapter
         >>> verifyObject(IPathAdapter, adapter)
         True
-
-        >>> from zope.traversing.interfaces import ITraversable
         >>> verifyObject(ITraversable, adapter)
         True
 
@@ -226,6 +224,30 @@ def doctest_SortBy():
         orange
         pear
         pear
+
+    """
+
+
+def doctest_CanAccess():
+    """Tests for CanAccess adapter.
+
+        >>> from schooltool.app.browser import CanAccess
+        >>> context = object()
+
+    Let's create the adapter:
+
+        >>> adapter = CanAccess(context)
+        >>> adapter.context is context
+        True
+
+    The adapter's traverse() method simply calls canAccess on the context.
+    Its functionality is tested in functional tests already and is too much
+    trouble to unit test, so we just check the interface:
+
+        >>> verifyObject(ITraversable, adapter)
+        True
+        >>> verifyObject(IPathAdapter, adapter)
+        True
 
     """
 

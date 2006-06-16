@@ -17,7 +17,8 @@
       <div tal:define="sections context/sections">
         <h3 i18n:translate="">Sections</h3>
         <div class="section-list">
-          <tal:loop tal:repeat="section sections/sortby:label">
+          <tal:loop repeat="section sections/sortby:label">
+          <tal:if condition="section/can_access:label">
 
             <tal:comment condition="nothing">
                XXX This should be moved into a macro
@@ -29,6 +30,7 @@
                              calendar section/calendar|nothing">
 
               <tal:loop repeat="instructor instructors">
+                <tal:if condition="instructor/can_access:photo">
                 <tal:if condition="instructor/photo">
                   <div class="instructor">
                     <img src="photo" class="person-photo" alt="photo"
@@ -38,6 +40,7 @@
                   <a href="" tal:content="instructor/title"
                      tal:attributes="href instructor/@@absolute_url" />
                   </div>
+                </tal:if>
                 </tal:if>
               </tal:loop>
 
@@ -54,6 +57,7 @@
 
             </div>
 
+          </tal:if>
           </tal:loop>
 
         </div>

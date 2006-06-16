@@ -36,11 +36,23 @@
 
  <!-- TALES path expressions -->
 
+  <zope:class class=".SortBy">
+    <allow interface="zope.traversing.interfaces.ITraversable" />
+  </zope:class>
+
   <zope:adapter
       for="*"
       name="sortby"
       provides="zope.traversing.interfaces.IPathAdapter"
       factory=".SortBy"
+      trusted="yes"
+      />
+
+  <zope:adapter
+      for="*"
+      name="can_access"
+      provides="zope.traversing.interfaces.IPathAdapter"
+      factory=".CanAccess"
       />
 
   <zope:adapter

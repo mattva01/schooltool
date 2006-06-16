@@ -52,7 +52,7 @@ def doctest_ApplicationView():
         ...                      IApplicationPreferences,
         ...                      getApplicationPreferences)
 
-    Now lets create a view
+    Now let's create a view
 
         >>> from schooltool.app.browser.app import ApplicationView
         >>> request = TestRequest()

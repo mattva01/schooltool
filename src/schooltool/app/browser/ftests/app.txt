@@ -247,6 +247,16 @@ Now Frog is in the Instructors div
           </ul>
     ...
 
+Toad should still be able to see the course view even though it is
+showing bits of frog's personal information as well as the section
+list:
+
+    >>> toad.getLink('SchoolTool').click()
+    >>> toad.getLink('Courses').click()
+    >>> toad.getLink('History').click()
+    >>> print toad.url
+    http://localhost/courses/history
+
 Frog can see the calendar now
 
     >>> frog.open('http://localhost/sections/his1/calendar')

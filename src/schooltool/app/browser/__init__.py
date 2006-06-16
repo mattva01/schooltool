@@ -34,6 +34,7 @@ from zope.app.security.interfaces import IUnauthenticatedPrincipal
 from zope.app.dependable.interfaces import IDependable
 from zope.tales.interfaces import ITALESFunctionNamespace
 from zope.security.proxy import removeSecurityProxy
+from zope.security.checker import canAccess
 
 from pytz import timezone
 
@@ -189,6 +190,27 @@ class SortBy(object):
             items = [(item[name], item) for item in iterable]
         items.sort()
         return [row[-1] for row in items]
+
+
+class CanAccess(object):
+    """TALES path adapter for checking access rights.
+
+    In a page template this adapter can be used lik this:
+
+        <p tal:condition="context/can_access:title"
+           tal:content="context/title" />
+
+    """
+
+    adapts(None)
+    implements(IPathAdapter, ITraversable)
+
+    def __init__(self, context):
+        self.context = context
+
+    def traverse(self, name, furtherPath=()):
+        """Returns True if self.context.(name) can be accessed."""
+        return canAccess(self.context, name)
 
 
 class SchoolToolSized(object):
