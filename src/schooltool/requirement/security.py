@@ -23,8 +23,12 @@ $Id$
 from zope.component import adapts
 from zope.interface import implements
 
+from schooltool.course.interfaces import ISection
+from schooltool.course.section import InstructorsCrowd
+from schooltool.course.section import SectionCalendarSettingCrowd
 from schooltool.requirement.interfaces import IRequirement
 from schooltool.securitypolicy.crowds import ParentCrowd
+from schooltool.securitypolicy.crowds import AggregateCrowd
 from schooltool.app.security import LeaderCrowd
 from schooltool.securitypolicy.crowds import EverybodyCrowd
 from schooltool.securitypolicy.crowds import ParentCrowdTemplate
@@ -85,3 +89,18 @@ class CourseRequirementViewersCrowd(EverybodyCrowd):
     """People who can view requirements of a course"""
     adapts(ICourse)
     implements(IRequirementParentCrowd)
+
+
+class SectionRequirementEditorsCrowd(InstructorsCrowd):
+    """People who can edit requirements of a section"""
+    adapts(ISection)
+    implements(IRequirementParentCrowd)
+
+
+class SectionRequirementViewersCrowd(AggregateCrowd):
+    """People who can view requirements of a course"""
+    adapts(ISection)
+    implements(IRequirementParentCrowd)
+
+    def crowdFactories(self):
+        return [SectionCalendarSettingCrowd, InstructorsCrowd]
