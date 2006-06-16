@@ -26,6 +26,7 @@ from persistent import Persistent
 
 from zope.interface import implements
 from zope.component import adapts
+from zope.component import getAdapter
 from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.dependable.interfaces import IDependable
