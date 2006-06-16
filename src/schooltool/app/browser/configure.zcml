@@ -57,6 +57,20 @@
 
   <zope:adapter
       for="*"
+      name="filter_accessible"
+      provides="zope.traversing.interfaces.IPathAdapter"
+      factory=".FilterAccessible"
+      />
+
+  <zope:adapter
+      for="*"
+      name="sorted_filter_accessible"
+      provides="zope.traversing.interfaces.IPathAdapter"
+      factory=".SortedFilterAccessible"
+      />
+
+  <zope:adapter
+      for="*"
       name="schooltool"
       provides="zope.traversing.interfaces.IPathAdapter"
       factory=".SchoolToolAPI"

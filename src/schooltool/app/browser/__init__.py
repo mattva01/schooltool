@@ -149,7 +149,16 @@ class SchoolToolAPI(object):
     has_dependents = property(has_dependents)
 
 
-class SortBy(object):
+class PathAdapterUtil(object):
+
+    adapts(None)
+    implements(IPathAdapter, ITraversable)
+
+    def __init__(self, context):
+        self.context = context
+
+
+class SortBy(PathAdapterUtil):
     """TALES path adapter for sorting lists.
 
     In a page template you can use it as follows:
@@ -165,12 +174,6 @@ class SortBy(object):
     You can sort arbitrary iterables, not just lists.  The sort key
     can refer to a dictionary key, or an object attribute.
     """
-
-    adapts(None)
-    implements(IPathAdapter, ITraversable)
-
-    def __init__(self, context):
-        self.context = context
 
     def traverse(self, name, furtherPath=()):
         """Return self.context sorted by a given key."""
@@ -192,25 +195,51 @@ class SortBy(object):
         return [row[-1] for row in items]
 
 
-class CanAccess(object):
+class CanAccess(PathAdapterUtil):
     """TALES path adapter for checking access rights.
 
-    In a page template this adapter can be used lik this:
+    In a page template this adapter can be used like this:
 
         <p tal:condition="context/can_access:title"
            tal:content="context/title" />
 
     """
 
-    adapts(None)
-    implements(IPathAdapter, ITraversable)
-
-    def __init__(self, context):
-        self.context = context
-
     def traverse(self, name, furtherPath=()):
         """Returns True if self.context.(name) can be accessed."""
         return canAccess(self.context, name)
+
+
+class FilterAccessible(PathAdapterUtil):
+    """TALES path adapter for XXX
+
+    In a page template this adapter can be used like this:
+
+        <p tal:repeat="group context/groups/filter_accessible:title"
+           tal:content="group/title" />
+
+    """
+
+    def traverse(self, name, furtherPath=()):
+        """XXX"""
+        return [item for item in self.context
+                if canAccess(item, name)]
+
+
+class SortedFilterAccessible(PathAdapterUtil):
+    """TALES path adapter for XXX
+
+    In a page template this adapter can be used like this:
+
+        <p tal:repeat="group context/groups/sorted_filter_accessible:title"
+           tal:content="group/title" />
+
+    """
+
+    def traverse(self, name, furtherPath=()):
+        """XXX"""
+        filtered = FilterAccessible(self.context).traverse(name)
+        return SortBy(filtered).traverse(name)
 
 
 class SchoolToolSized(object):
@@ -262,6 +291,7 @@ class ViewPreferences(object):
     def renderDatetime(self, dt):
         dt = dt.astimezone(self.timezone)
         return dt.strftime('%s %s' % (self.dateformat, self.timeformat))
+
 
 def same(obj1, obj2):
     """Return True if the references obj1 and obj2 point to the same object.

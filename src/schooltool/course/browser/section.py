@@ -80,12 +80,10 @@ class SectionView(BrowserView):
     __used_for__ = ISection
 
     def getPersons(self):
-        members = removeSecurityProxy(self.context.members)
-        return filter(IPerson.providedBy, members)
+        return filter(IPerson.providedBy, self.context.members)
 
     def getGroups(self):
-        members = removeSecurityProxy(self.context.members)
-        return filter(IGroup.providedBy, members)
+        return filter(IGroup.providedBy, self.context.members)
 
 
 class SectionAddView(AddView):

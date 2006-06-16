@@ -32,7 +32,7 @@
     <div class="info-block" tal:define="resources context/resources">
       <h3 i18n:translate="">Resources</h3>
       <ul>
-        <li tal:repeat="obj resources/sortby:title">
+        <li tal:repeat="obj resources/sorted_filter_accessible:title">
           <a tal:attributes="href obj/@@absolute_url"
              tal:content="obj/title" />
         </li>
@@ -49,7 +49,7 @@
     <div class="info-block" tal:define="instructors context/instructors">
       <h3 i18n:translate="">Instructors</h3>
       <ul>
-        <li tal:repeat="obj instructors/sortby:title">
+        <li tal:repeat="obj instructors/sorted_filter_accessible:title">
           <a tal:attributes="href obj/@@absolute_url"
              tal:content="obj/title" />
         </li>
@@ -68,7 +68,7 @@
                      persons view/getPersons">
       <h3 i18n:translate="">Students</h3>
       <ul>
-        <li class="group" tal:repeat="group groups/sortby:title">
+        <li class="group" tal:repeat="group groups/sorted_filter_accessible:title">
           <a tal:attributes="href group/@@absolute_url"
              tal:content="group/title" />
           <ul tal:condition="group/members">
@@ -78,7 +78,8 @@
             </li>
           </ul>
         </li>
-        <li class="individual" tal:repeat="person persons/sortby:title">
+
+        <li class="individual" tal:repeat="person persons/sorted_filter_accessible:title">
           <a tal:attributes="href person/@@absolute_url"
              tal:content="person/title" />
         </li>
