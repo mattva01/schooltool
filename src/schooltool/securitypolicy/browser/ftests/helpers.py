@@ -116,7 +116,7 @@ def group_container_edit(browser):
 def group_data_view(browser):
     go_home(browser)
     browser.open('http://localhost/groups/teachers')
-    return 'Teacher1' in browser.contents
+    return 'Teachers' in browser.contents
 
 def group_data_edit(browser):
     group_data_view(browser)
@@ -141,9 +141,8 @@ def group_calendar_edit(browser):
 
 
 def resource_container_view(browser):
-    go_home(browser)
-    browser.getLink('Resources').click()
-    return 'Time travel machine' in browser.contents
+    browser.open('http://localhost/resources/')
+    return 'Resources' in browser.contents
 
 def resource_container_edit(browser):
     resource_container_view(browser)
@@ -235,9 +234,11 @@ def course_view(browser):
 
 def course_edit(browser):
     course_view(browser)
-    browser.getLink('New Section').click()
-    browser.getControl('Code').value = 'edited-history'
+    browser.getLink('Edit Leaders').click()
+    browser.getControl('Frog').click()
     browser.getControl('Add').click()
+    browser.getControl('Frog').click()
+    browser.getControl('Remove').click()
     return 'History 6' in browser.contents
 
 

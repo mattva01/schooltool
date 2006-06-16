@@ -48,11 +48,6 @@
       crowds="administration leaders"
       permission="schooltool.edit" />
 
-  <allow
-      interface="schooltool.group.interfaces.IGroup"
-      crowds="everybody"
-      permission="schooltool.view" /> <!-- XXX -->
-
   <zope:adapter
       factory=".group.GroupCalendarViewersCrowd"
       provides="schooltool.app.interfaces.ICalendarParentCrowd"

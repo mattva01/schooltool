@@ -10,6 +10,7 @@ We will obviously need a SchoolTool instance.
 
     >>> from schooltool.app.browser.ftests import setup
     >>> from schooltool.securitypolicy.browser.ftests.helpers import column
+    >>> from schooltool.securitypolicy.browser.ftests.helpers import do_test
     >>> from schooltool.securitypolicy.browser.ftests import helpers
     >>> from zope.testbrowser.testing import Browser
     >>> manager = setup.logInManager()
@@ -24,6 +25,7 @@ Let's create some persons:
     >>> setup.addPerson('Student3', 'student3', 'student3', groups=['students'])
     >>> setup.addPerson('Teacher1', 'teacher1', 'teacher1', groups=['teachers'])
     >>> setup.addPerson('Teacher2', 'teacher2', 'teacher2', groups=['teachers'])
+    >>> setup.addPerson('Teacher3', 'teacher3', 'teacher3', groups=['teachers'])
 
     >>> setup.setUpTimetabling('instructor1', 'instructor1')
 
@@ -146,6 +148,7 @@ Create anonymous browser:
     >>> alien = Browser()
     >>> alien.handleErrors = False
     >>> alien.open('http://localhost/')
+
     >>> column(alien, 'student1', 'history6a')
     course: view
     course activities: view
@@ -209,33 +212,33 @@ XXX: above should be: "section activities: view"
 
 Student looking at himself (his section):
 
-    >>> helpers.column2(student1, 'student1', 'history6a')
-    course: True False
-    course activities: True False
-    gradebook scores: False False
-    group calendar: False False
-    group container: False False
-    group data: False False
-    level: True False
-    overlay calendar: None True
-    permissions: False False
-    person attendance: True False
-    person calendar: True True
-    person container: False False
-    person data: True False
-    person preferences: True True
-    resource calendar: False False
-    resource container: False False
-    resource data: False False
-    schooltool: True None
-    schooltool calendar: True False
-    schooltool info: False False
-    section: True False
-    section activities: False False
-    section attendance: False False
-    section calendar: True False
-    term: True False
-    timetables: True False
+    >>> column(student1, 'student1', 'history6a')
+    course: view
+    course activities: view
+    gradebook scores:
+    group calendar:
+    group container:
+    group data:
+    level: view
+    overlay calendar: edit
+    permissions:
+    person attendance: view
+    person calendar: view edit
+    person container:
+    person data: view
+    person preferences: view edit
+    resource calendar:
+    resource container:
+    resource data:
+    schooltool: view
+    schooltool calendar: view
+    schooltool info:
+    section: view
+    section activities:
+    section attendance:
+    section calendar: view
+    term: view
+    timetables: view
 
 Student looking at another student and not his section:
 
@@ -302,6 +305,37 @@ Instructor looking at his student and section:
 XXX: should be "section activities: view edit" (bug in activities)
 XXX: should be "gradebook scores: view edit" (bug in activities)
 
+Group member:
+
+    >>> teacher3 = setup.logIn('teacher3', 'teacher3')
+    >>> column(teacher3, 'student1', 'history6a')
+    course: view
+    course activities: view
+    gradebook scores:
+    group calendar: view
+    group container:
+    group data: view
+    level: view
+    overlay calendar:
+    permissions:
+    person attendance:
+    person calendar:
+    person container:
+    person data:
+    person preferences:
+    resource calendar:
+    resource container:
+    resource data:
+    schooltool: view
+    schooltool calendar: view
+    schooltool info:
+    section:
+    section activities:
+    section attendance:
+    section calendar:
+    term: view
+    timetables: view
+
 Leader stuff:
 
 #   >>> leader = setup.logIn('teacher2', 'teacher2')
@@ -345,5 +379,87 @@ Make personal calendar public:
     >>> student1.getControl('Make calendar public').click()
     >>> student1.getControl('Apply').click()
     >>> helpers.person_calendar_view(alien, 'student1')
+    True
+
+Site wide access control:
+
+    >>> manager.open('http://localhost/')
+    >>> manager.getLink('Access Control').click()
+
+    >>> manager.getControl('Everyone can view the application calendar').click()
+    >>> manager.getControl('Apply').click()
+    >>> do_test(helpers.schooltool_calendar_view, alien)
+    False
+
+    >>> manager.getControl('Everyone can view the application calendar').click()
+    >>> manager.getControl('Everyone can view section information and ').click()
+    >>> manager.getControl('Apply').click()
+    >>> column(alien, 'student1', 'history6a')
+    course: view
+    course activities: view
+    gradebook scores:
+    group calendar:
+    group container:
+    group data:
+    level: view
+    overlay calendar:
+    permissions:
+    person attendance:
+    person calendar: view
+    person container:
+    person data:
+    person preferences:
+    resource calendar:
+    resource container:
+    resource data:
+    schooltool: view
+    schooltool calendar: view
+    schooltool info:
+    section: view
+    section activities:
+    section attendance:
+    section calendar: view
+    term: view
+    timetables: view
+
+    >>> manager.getControl('Everyone can view section information and ').click()
+
+#   >>> manager.getControl('Everyone can view group lists').click()
+#   >>> manager.getControl('Apply').click()
+#   >>> do_test(helpers.group_container_view, alien)
+#   True
+
+#   >>> manager.getControl('Everyone can view group lists').click()
+
+    >>> manager.getControl('Everyone can view group information').click()
+    >>> manager.getControl('Apply').click()
+    >>> do_test(helpers.group_data_view, alien)
+    True
+
+    >>> manager.getControl('Everyone can view group information').click()
+    >>> manager.getControl('Everyone can view group calendars').click()
+    >>> manager.getControl('Apply').click()
+    >>> do_test(helpers.group_calendar_view, alien)
+    True
+
+    >>> manager.getControl('Everyone can view group calendars').click()
+
+#   >>> manager.getControl('Everyone can view resource lists').click()
+#   >>> manager.getControl('Apply').click()
+#   >>> do_test(helpers.resource_container_view, alien)
+#   True
+
+#   >>> manager.getControl('Everyone can view resource lists').click()
+
+#   >>> manager.getControl('Everyone can view resource information').click()
+#   >>> manager.getControl('Apply').click()
+#   >>> do_test(helpers.resource_data_view, alien)
+#   True
+
+#   >>> manager.getControl('Everyone can view resource information').click()
+
+    >>> manager.getControl('Everyone can view resource calendars').click()
+    >>> manager.getControl('Apply').click()
+    >>> do_test(helpers.resource_calendar_view, alien)
     True
 
