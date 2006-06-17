@@ -183,15 +183,15 @@ class Requirement(persistent.Persistent,
             for base in self.bases:
                 if key in base:
                     return InheritedRequirement(base[key], self, key)
-        raise KeyError, key
+            else:
+                raise KeyError(key)
 
     def get(self, key, default=None):
         """See interface `IReadContainer`"""
         try:
             return self[key]
         except KeyError:
-            pass
-        return default
+            return default
 
     def values(self):
         """See interface `IReadContainer`"""
@@ -208,7 +208,7 @@ class Requirement(persistent.Persistent,
 
     def __contains__(self, key):
         """See interface `IReadContainer`"""
-        return key in self.keys()
+        return key in self._data
 
     has_key = __contains__
 
@@ -256,7 +256,7 @@ class Requirement(persistent.Persistent,
         zope.app.container.contained.notifyContainerModified(self)
 
     def __repr__(self):
-        return '%s(%r)' %(self.__class__.__name__, self.title)
+        return '%s(%r)' % (self.__class__.__name__, self.title)
 
 
 def getRequirement(context):
