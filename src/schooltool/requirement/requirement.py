@@ -183,8 +183,7 @@ class Requirement(persistent.Persistent,
             for base in self.bases:
                 if key in base:
                     return InheritedRequirement(base[key], self, key)
-            else:
-                raise KeyError(key)
+            raise KeyError(key)
 
     def get(self, key, default=None):
         """See interface `IReadContainer`"""
@@ -208,7 +207,7 @@ class Requirement(persistent.Persistent,
 
     def __contains__(self, key):
         """See interface `IReadContainer`"""
-        return key in self._data
+        return key in self.keys()
 
     has_key = __contains__
 

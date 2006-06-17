@@ -2,7 +2,7 @@
 Requirement API
 ===============
 
-Requirements are used to descibe an academic accomplishment.
+Requirements are used to describe an academic accomplishment.
 
   >>> from schooltool.requirement import interfaces, requirement
 
