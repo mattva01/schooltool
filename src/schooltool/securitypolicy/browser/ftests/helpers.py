@@ -4,13 +4,11 @@ Helper functions for functional tests.
 $Id$
 """
 
-def go_home(browser):
-    browser.open('http://localhost/')
-
+from zope.security.interfaces import Unauthorized
+from mechanize import LinkNotFoundError
 
 def person_container_view(browser, subject):
-    go_home(browser)
-    browser.getLink('Persons').click()
+    browser.open('http://localhost/persons')
     if subject in browser.contents:
         return True
 
@@ -78,7 +76,7 @@ def calendar_overlays_edit(browser, subject):
     browser.open('http://localhost/persons/%s/calendar' % subject)
     browser.getControl('Apply').click()
     browser.getControl('More...').click()
-    browser.getControl('SchoolTool  site-wide calendar').click()
+    browser.getControl('SchoolTool site-wide calendar').click()
     browser.getControl('Apply').click()
     return 'Calendar for' in browser.contents
 
@@ -97,8 +95,7 @@ def person_preferences_edit(browser, subject):
 
 
 def group_container_view(browser):
-    go_home(browser)
-    browser.getLink('Groups').click()
+    browser.open('http://localhost/groups')
     return 'Teachers' in browser.contents
 
 def group_container_edit(browser):
@@ -114,7 +111,6 @@ def group_container_edit(browser):
 
 
 def group_data_view(browser):
-    go_home(browser)
     browser.open('http://localhost/groups/teachers')
     return 'Teachers' in browser.contents
 
@@ -157,8 +153,7 @@ def resource_container_edit(browser):
 
 
 def resource_data_view(browser):
-    go_home(browser)
-    browser.getLink('Resources').click()
+    browser.open('http://localhost/resources/')
     browser.getLink('Time travel machine').click()
     return 'Time travel machine' in browser.contents
 
@@ -227,14 +222,16 @@ def section_calendar_edit(browser):
 
 
 def course_view(browser):
-    go_home(browser)
-    browser.getLink('Courses').click()
+    browser.open('http://localhost/courses')
     browser.getLink('History 6').click()
     return 'History 6' in browser.contents
 
 def course_edit(browser):
     course_view(browser)
-    browser.getLink('Edit Leaders').click()
+    try:
+        browser.getLink('Edit Leaders').click()
+    except LinkNotFoundError:
+        return False
     browser.getControl('Frog').click()
     browser.getControl('Add').click()
     browser.getControl('Frog').click()
@@ -248,7 +245,10 @@ def course_activities_view(browser):
 
 def course_activities_edit(browser):
     course_activities_view(browser)
-    browser.getLink('New Activity').click()
+    try:
+        browser.getLink('New Activity').click()
+    except LinkNotFoundError:
+        return False
     browser.getControl('Title').value = 'Natural History'
     browser.getControl('Identifier').value = 'nathist'
     browser.getControl('Custom score system').click()
@@ -259,7 +259,7 @@ def course_activities_edit(browser):
 
 
 def schooltool_view(browser):
-    go_home(browser)
+    browser.open('http://localhost/')
     return 'SchoolTool' in browser.contents
 
 
@@ -283,19 +283,24 @@ def schooltool_calendar_view(browser):
 def schooltool_calendar_edit(browser):
     schooltool_calendar_view(browser)
     browser.getLink('9:00').click()
-    browser.getControl('Title').value = 'Test event'
+    try:
+        browser.getControl('Title').value = 'Test event'
+    except LookupError:
+        return False # XXX is this right? -- gintas
     browser.getControl('Add').click()
     return 'Calendar for' in browser.contents
 
 
 def timetables_view(browser):
-    go_home(browser)
-    browser.getLink('School Timetables').click()
+    browser.open('http://localhost/ttschemas')
     return 'School Timetables' in browser.contents
 
 def timetables_edit(browser):
     timetables_view(browser)
-    browser.getLink('New Timetable').click()
+    try:
+        browser.getLink('New Timetable').click()
+    except LinkNotFoundError:
+        return False
     browser.getControl('Title').value = 'test timetable'
     browser.getControl('Next').click()
     browser.getControl('Days of the week').click()
@@ -307,7 +312,7 @@ def timetables_edit(browser):
 
 
 def level_view(browser):
-    go_home(browser)
+    browser.open('http://localhost/levels')
     browser.getLink('Levels').click()
     return 'Level index' in browser.contents
 
@@ -324,9 +329,8 @@ def level_edit(browser):
 
 
 def permissions_view(browser):
-    go_home(browser)
-    browser.getLink('Access Control').click()
-    return 'Access Control' in browser.contents
+    browser.open('http://localhost/access_control.html')
+    return 'Everyone can view the application calendar' in browser.contents
 
 def permissions_edit(browser):
     permissions_view(browser)
@@ -334,13 +338,12 @@ def permissions_edit(browser):
     browser.getControl('Apply').click()
     browser.getControl('Everyone can view the application calendar').click()
     browser.getControl('Apply').click()
-    return 'Access Control' in browser.contents
+    return 'Everyone can view the application calendar' in browser.contents
 
 
 def term_view(browser):
-    go_home(browser)
-    browser.getLink('Terms').click()
-    return 'Terms' in browser.contents
+    browser.open('http://localhost/terms')
+    return 'Terms' in browser.contents # XXX not too specific -- gintas
 
 def term_edit(browser):
     term_view(browser)
@@ -356,8 +359,12 @@ def term_edit(browser):
 def do_test(func, *args):
     try:
         return bool(func(*args))
-    except Exception, e:
+    except Unauthorized, e:
         return False
+    except Exception, e:
+        pass # XXX to be removed -- gintas
+#        import sys
+#        print >> sys.stderr, 'Failed:', func, args, e.__class__
 
 
 def raw_column(browser, subject, section):
@@ -443,8 +450,8 @@ def raw_column(browser, subject, section):
     return result
 
 
-def column(browser, *args):
-    result = raw_column(browser, *args)
+def column(browser, subject, section):
+    result = raw_column(browser, subject, section)
     for name, (view, edit) in sorted(result.items()):
         sview = view and 'view' or ''
         sedit = edit and 'edit' or ''
