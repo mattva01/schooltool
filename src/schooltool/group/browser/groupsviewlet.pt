@@ -2,7 +2,7 @@
      tal:define="groups view/memberOf">
   <h5 i18n:translate="">Groups</h5>
   <ul tal:condition="groups">
-    <tal:loop repeat="group groups">
+    <tal:loop repeat="group groups/sorted_filter_accessible:title">
       <li>
         <a title=""
           tal:attributes="href group/@@absolute_url;

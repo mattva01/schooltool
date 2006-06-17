@@ -19,7 +19,7 @@ def person_container_edit(browser, subject):
 
 def person_data_view(browser, subject):
     browser.open('http://localhost/persons/%s/' % subject)
-    return subject in browser.contents
+    return 'name info' in browser.contents
 
 def person_data_edit(browser, subject):
     browser.open('http://localhost/persons/%s/@@edit.html' % subject)
@@ -96,7 +96,7 @@ def person_preferences_edit(browser, subject):
 
 def group_container_view(browser):
     browser.open('http://localhost/groups')
-    return 'Teachers' in browser.contents
+    return 'Group index' in browser.contents
 
 def group_container_edit(browser):
     group_container_view(browser)
@@ -153,8 +153,7 @@ def resource_container_edit(browser):
 
 
 def resource_data_view(browser):
-    browser.open('http://localhost/resources/')
-    browser.getLink('Time travel machine').click()
+    browser.open('http://localhost/resources/ttm')
     return 'Time travel machine' in browser.contents
 
 def resource_data_edit(browser):

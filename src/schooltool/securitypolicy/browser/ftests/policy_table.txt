@@ -148,7 +148,6 @@ Create anonymous browser:
     >>> alien = Browser()
     >>> alien.handleErrors = False
     >>> alien.open('http://localhost/')
-
     >>> column(alien, 'student1', 'history6a')
     course:              view
     course activities:   view
@@ -302,8 +301,8 @@ Instructor looking at his student and section:
     term:                view
     timetables:          view
 
-XXX: should be "section activities: view edit" (bug in activities)
-XXX: should be "gradebook scores: view edit" (bug in activities)
+XXX should be "gradebook scores:    view  edit"
+XXX should be "section activities:  view  edit"
 
 Group member:
 
@@ -338,35 +337,37 @@ Group member:
 
 Leader stuff:
 
-#   >>> leader = setup.logIn('teacher2', 'teacher2')
-#   >>> column(leader, 'student1', 'history6a')
-#   course:              view  edit
-#   course activities:   view  edit
-#   gradebook scores:
-#   group calendar:      view  edit
-#   group container:
-#   group data:          view  edit
-#   level:               view
-#   overlay calendar:
-#   permissions:
-#   person attendance:
-#   person calendar:
-#   person container:
-#   person data:
-#   person preferences:
-#   resource calendar:   view  edit
-#   resource container:
-#   resource data:       view  edit
-#   schooltool:          view
-#   schooltool calendar: view
-#   schooltool info:
-#   section:
-#   section activities:
-#   section attendance:
-#   section calendar:
-#   term:                view
-#   timetables:          view
+    >>> leader = setup.logIn('teacher2', 'teacher2')
+    >>> column(leader, 'student1', 'history6a')
+    course:              view
+    course activities:   view  edit
+    gradebook scores:
+    group calendar:      view  edit
+    group container:
+    group data:          view
+    level:               view
+    overlay calendar:
+    permissions:
+    person attendance:
+    person calendar:
+    person container:
+    person data:
+    person preferences:
+    resource calendar:   view  edit
+    resource container:
+    resource data:       view  edit
+    schooltool:          view
+    schooltool calendar: view
+    schooltool info:
+    section:
+    section activities:
+    section attendance:
+    section calendar:
+    term:                view
+    timetables:          view
 
+XXX should be "course:              view  edit"
+XXX should be "group data:          view  edit"
 
 Configurable options
 ====================
@@ -446,20 +447,58 @@ Site wide access control:
 
 #   >>> manager.getControl('Everyone can view resource lists').click()
 #   >>> manager.getControl('Apply').click()
-#   >>> do_test(helpers.resource_container_view, alien)
+#   >>> helpers.resource_container_view(alien)
 #   True
 
 #   >>> manager.getControl('Everyone can view resource lists').click()
 
-#   >>> manager.getControl('Everyone can view resource information').click()
-#   >>> manager.getControl('Apply').click()
-#   >>> do_test(helpers.resource_data_view, alien)
-#   True
+    >>> manager.getControl('Everyone can view resource information').click()
+    >>> manager.getControl('Apply').click()
+    >>> helpers.resource_data_view(alien)
+    True
 
-#   >>> manager.getControl('Everyone can view resource information').click()
+    >>> manager.getControl('Everyone can view resource information').click()
 
     >>> manager.getControl('Everyone can view resource calendars').click()
     >>> manager.getControl('Apply').click()
-    >>> do_test(helpers.resource_calendar_view, alien)
+    >>> helpers.resource_calendar_view(alien)
     True
+
+    >>> manager.getControl('Everyone can view resource calendars').click()
+
+    >>> manager.getControl('Everyone can view the list of persons').click()
+    >>> manager.getControl('Apply').click()
+    >>> helpers.person_container_view(alien, 'student1')
+    True
+
+    >>> manager.getControl('Everyone can view the list of persons').click()
+
+    >>> manager.getControl('Everyone can view info of persons').click()
+    >>> manager.getControl('Apply').click()
+    >>> helpers.person_data_view(alien, 'student1')
+    True
+
+    >>> manager.getControl('Everyone can view info of persons').click()
+    >>> manager.getControl('Persons can set their own preferences').click()
+    >>> manager.getControl('Apply').click()
+    >>> do_test(helpers.person_preferences_view, student1, 'student1')
+    False
+
+XXX: preferences should be still viewable
+
+    >>> do_test(helpers.person_preferences_edit, student1, 'student1')
+    False
+
+    >>> manager.getControl('Persons can set their own preferences').click()
+    >>> manager.getControl('Group members can edit group calendars').click()
+    >>> manager.getControl('Apply').click()
+    >>> helpers.group_calendar_edit(teacher3)
+    True
+
+    >>> manager.getControl('Group members can edit group calendars').click()
+    >>> manager.getControl('Administration can grade students').click()
+    >>> manager.getControl('Apply').click()
+
+#   >>> helpers.gradebook_scores_edit(manager, 'history6a')
+#   True
 
