@@ -81,20 +81,28 @@ def doctest_main():
         ...     assert opts is options
         >>> def run_stub():
         ...     print "Running..."
+        >>> def before_run_stub(options, db):
+        ...     print "before Running..."
+        >>> def after_run_stub(options):
+        ...     print "after Running..."
         >>> from schooltool.app import main
         >>> from schooltool.app.main import StandaloneServer
         >>> server = StandaloneServer()
         >>> old_run = main.run
         >>> server.load_options = load_options_stub
         >>> server.setup = setup_stub
+        >>> server.beforeRun = before_run_stub
+        >>> server.afterRun = after_run_stub
         >>> main.run = run_stub
 
     Now we will run main().
 
         >>> server.main(['sb.py', '-d'])
         Performing setup...
+        before Running...
         Startup time: ... sec real, ... sec CPU
         Running...
+        after Running...
 
     Clean up
 
@@ -164,7 +172,11 @@ def doctest_load_options():
           -c, --config xxx       use this configuration file instead of the default
           -h, --help             show this help message
           -d, --daemon           go to background after starting
-          -r, --restore-manager  restore the manager user with the default password
+          -r, --restore-manager password
+                                 restore the manager user with the provided password
+                                 (read password from the standart input if 'password'
+                                 is '-')
+          --manage               only do management tasks, don't run the server
         [exited with status 0]
 
     Here's what happens, when you use an unknown command line option.
@@ -333,7 +345,6 @@ def doctest_setup():
     - sets up loggers
     - configures Zope 3 components
     - opens the database (optionally packs it)
-    - starts tcp servers
 
     It is difficult to unit test, but we'll try.
 
@@ -431,6 +442,50 @@ def doctest_setup():
 
         >>> for logger in [logger1, logger3]:
         ...     logger.setLevel(0)
+
+        >>> setup.placelessTearDown()
+
+    """
+
+
+def doctest_before_afterRun():
+    """Tests for beforeRun(options, db) and afterRun(options)
+
+        >>> from zope.app.testing import setup
+        >>> setup.placelessSetUp()
+
+    beforeRun(options, db) starts tcp server
+
+        >>> from schooltool.app.main import Options, StandaloneServer
+        >>> from ZODB.MappingStorage import MappingStorage
+        >>> from ZODB.DB import DB
+        >>> options = Options()
+        >>> class DatabaseConfigStub:
+        ...     def open(self):
+        ...         return DB(MappingStorage())
+        >>> class ConfigStub:
+        ...     web = []
+        ...     rest = []
+        ...     listen = []
+        ...     thread_pool_size = 1
+        ...     database = DatabaseConfigStub()
+        ...     pid_file = ''
+        ...     path = []
+        ...     error_log_file = ['STDERR']
+        ...     web_access_log_file = ['STDOUT']
+        ...     attendance_log_file = ['STDOUT']
+        ...     lang = 'lt'
+        ...     reportlab_fontdir = ''
+        ...     devmode = False
+        ...     site_definition = findSiteZCML()
+        >>> options.config = ConfigStub()
+        >>> db = object()
+
+    And go!
+
+        >>> server = StandaloneServer()
+        >>> server.beforeRun(options, db)
+        >>> server.afterRun(options)
 
         >>> setup.placelessTearDown()
 
@@ -570,7 +625,7 @@ def doctest_restoreManagerUser():
 
     When we call restoreManagerUser, it gets created:
 
-        >>> server.restoreManagerUser(app)
+        >>> server.restoreManagerUser(app, 'schooltool')
 
         >>> manager = app['persons']['manager']
         >>> manager.checkPassword('schooltool')
@@ -599,7 +654,7 @@ def doctest_restoreManagerUser():
     If we call restoreManagerUser again, the object remains the same,
     but its password gets reset:
 
-        >>> server.restoreManagerUser(app)
+        >>> server.restoreManagerUser(app, 'schooltool')
 
         >>> manager = app['persons']['manager']
         >>> manager.checkPassword('schooltool')

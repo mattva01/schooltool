@@ -74,7 +74,11 @@ Options:
   -c, --config xxx       use this configuration file instead of the default
   -h, --help             show this help message
   -d, --daemon           go to background after starting
-  -r, --restore-manager  restore the manager user with the default password
+  -r, --restore-manager password
+                         restore the manager user with the provided password
+                         (read password from the standart input if 'password'
+                         is '-')
+  --manage               only do management tasks, don't run the server
 """).strip()
 
 
@@ -118,6 +122,8 @@ class Options(object):
     config = None
     pack = False
     restore_manager = False
+    manager_password = MANAGER_PASSWORD
+    manage = False
 
     def __init__(self):
         dirname = os.path.dirname(__file__)
@@ -339,10 +345,11 @@ class StandaloneServer(object):
         # Parse command line
         progname = os.path.basename(argv[0])
         try:
-            opts, args = getopt.gnu_getopt(argv[1:], 'c:hdr',
+            opts, args = getopt.gnu_getopt(argv[1:], 'c:hdr:',
                                            ['config=', 'pack',
                                             'help', 'daemon',
-                                            'restore-manager'])
+                                            'restore-manager=',
+                                            'manage'])
         except getopt.error, e:
             print >> sys.stderr, _("%s: %s") % (progname, e)
             print >> sys.stderr, _("Run %s -h for help.") % progname
@@ -364,6 +371,15 @@ class StandaloneServer(object):
                     options.daemon = True
             if k in ('-r', '--restore-manager'):
                 options.restore_manager = True
+                if v != '-':
+                    options.manager_password = v
+                else:
+                    print 'Manager password: ',
+                    password = sys.stdin.readline().strip('\r\n')
+                    options.manager_password = password
+            if k in ('--manage'):
+                options.manage = True
+                options.daemon = False
 
         # Read configuration file
         schema = ZConfig.loadSchema(self.ZCONFIG_SCHEMA)
@@ -402,7 +418,7 @@ class StandaloneServer(object):
             # data managers that do not support this feature.
             transaction.savepoint(optimistic=True)
             notify(ObjectAddedEvent(app))
-            self.restoreManagerUser(app)
+            self.restoreManagerUser(app, MANAGER_PASSWORD)
         elif not ISchoolToolApplication.providedBy(app_obj):
             transaction.abort()
             connection.close()
@@ -410,7 +426,7 @@ class StandaloneServer(object):
         transaction.commit()
         connection.close()
 
-    def restoreManagerUser(self, app):
+    def restoreManagerUser(self, app, password):
         """Ensure there is a manager user
 
         Create a user if needed, set password to default, grant
@@ -423,7 +439,7 @@ class StandaloneServer(object):
             app['persons'][MANAGER_USERNAME] = manager
             IDependable(manager).addDependent('')
         manager = app['persons'][MANAGER_USERNAME]
-        manager.setPassword(MANAGER_PASSWORD)
+        manager.setPassword(password)
         manager_group = app['groups']['manager']
         if manager not in manager_group.members:
             manager_group.members.add(manager)
@@ -432,13 +448,14 @@ class StandaloneServer(object):
         """Start the SchoolTool server."""
         t0, c0 = time.time(), time.clock()
         options = self.load_options(argv)
-        self.setup(options)
-        t1, c1 = time.time(), time.clock()
-        print _("Startup time: %.3f sec real, %.3f sec CPU") % (t1 - t0,
-                                                                c1 - c0)
-        run()
-        if options.config.pid_file:
-            os.unlink(options.config.pid_file)
+        db = self.setup(options)
+        if not options.manage:
+            self.beforeRun(options, db)
+            t1, c1 = time.time(), time.clock()
+            print _("Startup time: %.3f sec real, %.3f sec CPU") % (t1 - t0,
+                                                                    c1 - c0)
+            run()
+            self.afterRun(options)
 
     def setup(self, options):
         """Configure SchoolTool."""
@@ -495,10 +512,12 @@ class StandaloneServer(object):
             connection = db.open()
             root = connection.root()
             app = root[ZopePublication.root_name]
-            self.restoreManagerUser(app)
+            self.restoreManagerUser(app, options.manager_password)
             transaction.commit()
             connection.close()
+        return db
 
+    def beforeRun(self, options, db):
         if options.daemon:
             daemonize()
 
@@ -526,7 +545,9 @@ class StandaloneServer(object):
             print >> pidfile, os.getpid()
             pidfile.close()
 
-        return db
+    def afterRun(self, options):
+        if options.config.pid_file:
+            os.unlink(options.config.pid_file)
 
     def configureReportlab(self, fontdir):
         """Configure reportlab given a path to TrueType fonts.

@@ -64,12 +64,18 @@ def doctest_main():
         ...     assert opts is options
         >>> def run_stub():
         ...     print "Running..."
+        >>> def before_run_stub(options, db):
+        ...     print "before Running..."
+        >>> def after_run_stub(options):
+        ...     print "after Running..."
         >>> from schooltool.app import main
         >>> from schooltool.sbapp.main import StandaloneServer
         >>> server = StandaloneServer()
         >>> old_run = main.run
         >>> server.load_options = load_options_stub
         >>> server.setup = setup_stub
+        >>> server.beforeRun = before_run_stub
+        >>> server.afterRun = after_run_stub
         >>> main.run = run_stub
 
     Now we will run main().
@@ -151,7 +157,11 @@ def doctest_load_options():
           -c, --config xxx       use this configuration file instead of the default
           -h, --help             show this help message
           -d, --daemon           go to background after starting
-          -r, --restore-manager  restore the manager user with the default password
+          -r, --restore-manager password
+                                 restore the manager user with the provided password
+                                 (read password from the standart input if 'password'
+                                 is '-')
+          --manage               only do management tasks, don't run the server
         [exited with status 0]
 
     Here's what happens, when you use an unknown command line option.
