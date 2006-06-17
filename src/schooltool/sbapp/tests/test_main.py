@@ -114,7 +114,8 @@ def doctest_load_options():
 
         >>> from schooltool.sbapp.main import StandaloneServer
         >>> server = StandaloneServer()
-        >>> o = server.load_options(['sb.py', '-c', sample_config_file, '-r'])
+        >>> o = server.load_options(['sb.py', '-c', sample_config_file,
+        ...                          '-r schooltool'])
         Reading configuration from ...sample.conf
 
     Some options come from the command line
