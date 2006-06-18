@@ -28,6 +28,7 @@ import unittest
 from zope.testing import doctest
 from zope.interface import implements
 from zope.app.testing import ztapi
+from zope.component import provideAdapter
 
 from schooltool.app.interfaces import IShowTimetables
 
@@ -166,11 +167,24 @@ def doctest_CourseSections():
     """
 
 
+def getSectionCalendar(section):
+    return section.calendar
+
+
+from zope.annotation.interfaces import IAttributeAnnotatable
+class CalendarStub(object):
+    implements(IAttributeAnnotatable)
+    def __init__(self, section):
+        self.title = section.title
+
+
 def doctest_updateInstructorCalendars():
     r"""
         >>> from schooltool.app.relationships import updateInstructorCalendars
         >>> from schooltool.app.relationships import URIInstruction
         >>> from schooltool.app.relationships import URISection, URIInstructor
+        >>> from schooltool.app.interfaces import ISchoolToolCalendar
+        >>> from schooltool.course.interfaces import ISection
         >>> from schooltool.relationship.interfaces import \
         ...                                         IRelationshipAddedEvent
         >>> from schooltool.relationship.interfaces import \
@@ -179,6 +193,10 @@ def doctest_updateInstructorCalendars():
         >>> from schooltool.course.section import Section
         >>> from schooltool.relationship.tests import setUp, tearDown
         >>> setUp()
+
+        >>> provideAdapter(getSectionCalendar,
+        ...                adapts=(ISection,),
+        ...                provides=ISchoolToolCalendar)
 
         >>> from schooltool.app.overlay import CalendarOverlayInfo
         >>> ztapi.provideAdapter(CalendarOverlayInfo, IShowTimetables,
@@ -199,6 +217,7 @@ def doctest_updateInstructorCalendars():
         >>> [cal.calendar.title for cal in person.overlaid_calendars]
         []
         >>> section = Section(title="SectionA")
+        >>> section.calendar = CalendarStub(section)
 
     When the person is made the instructor of a section the sections calendar
     is added to the overlaid calendars:
@@ -229,6 +248,7 @@ def doctest_updateInstructorCalendars():
     If a person allready has that calendar nothing changes:
 
         >>> sectionb = Section(title="SectionB")
+        >>> sectionb.calendar = CalendarStub(sectionb)
         >>> person.overlaid_calendars.add(sectionb.calendar)
         <...CalendarOverlayInfo object at ...>
         >>> [cal.calendar.title for cal in person.overlaid_calendars]
@@ -284,8 +304,12 @@ def doctest_updateStudentCalendars():
         >>> from schooltool.person.person import Person
         >>> from schooltool.relationship.tests import setUp, tearDown
         >>> setUp()
-        >>> from schooltool.testing.setup import setUpLocalGrants
-        >>> setUpLocalGrants()
+
+        >>> from schooltool.course.interfaces import ISection
+        >>> from schooltool.app.interfaces import ISchoolToolCalendar
+        >>> provideAdapter(getSectionCalendar,
+        ...                adapts=(ISection,),
+        ...                provides=ISchoolToolCalendar)
 
         >>> from schooltool.app.overlay import CalendarOverlayInfo
         >>> ztapi.provideAdapter(CalendarOverlayInfo, IShowTimetables,
@@ -307,6 +331,7 @@ def doctest_updateStudentCalendars():
         >>> [cal.calendar.title for cal in person.overlaid_calendars]
         []
         >>> section = Section(title="SectionA")
+        >>> section.calendar = CalendarStub(section)
 
     When the person is made a member of a section the sections calendar
     is added to the overlaid calendars:
@@ -337,6 +362,7 @@ def doctest_updateStudentCalendars():
     If a person already has that calendar nothing changes:
 
         >>> sectionb = Section(title="SectionB")
+        >>> sectionb.calendar = CalendarStub(sectionb)
         >>> person.overlaid_calendars.add(sectionb.calendar)
         <...CalendarOverlayInfo object at ...>
         >>> [cal.calendar.title for cal in person.overlaid_calendars]
@@ -395,6 +421,7 @@ def doctest_updateStudentCalendars():
         >>> freshmen = Group()
         >>> freshmen.members.add(student)
         >>> section = Section("Freshmen Math")
+        >>> section.calendar = CalendarStub(section)
         >>> add = AddEventStub()
         >>> add[URIMember] = freshmen
         >>> add[URIGroup] = section

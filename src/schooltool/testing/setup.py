@@ -46,20 +46,6 @@ def setUpSessions():
     ztapi.provideUtility(ISessionDataContainer, sdc)
 
 
-# --------------------- Local Permission Manager Setup ---------------------
-from zope.annotation.interfaces import IAnnotatable
-from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
-from zope.app.securitypolicy.principalpermission import \
-     AnnotationPrincipalPermissionManager
-from zope.app.testing import setup
-def setUpLocalGrants():
-    """Set up annotations and AnnotatationPrincipalPermissionManager"""
-    setup.setUpAnnotations()
-    setup.setUpTraversal()
-    ztapi.provideAdapter(IAnnotatable, IPrincipalPermissionManager,
-                         AnnotationPrincipalPermissionManager)
-
-
 # --------------------- Create a SchoolBell application --------------------
 from schooltool.app.app import SchoolToolApplication
 def createSchoolToolApplication():

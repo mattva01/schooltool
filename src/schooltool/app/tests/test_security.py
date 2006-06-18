@@ -35,7 +35,6 @@ from zope.app.container.contained import ObjectAddedEvent
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
-from schooltool.testing.setup import setUpLocalGrants
 from schooltool.testing import setup as sbsetup
 
 

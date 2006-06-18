@@ -55,7 +55,6 @@ class Section(Persistent, contained.Contained):
     def __init__(self, title="Section", description=None, schedule=None):
         self.title = title
         self.description = description
-        self.calendar = Calendar(self)
 
     @property
     def label(self):

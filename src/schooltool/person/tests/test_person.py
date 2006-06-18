@@ -29,7 +29,6 @@ from zope.testing import doctest
 from zope.app.container.contained import ObjectAddedEvent
 from zope.app.testing import setup
 
-from schooltool.testing.setup import setUpLocalGrants
 from schooltool.testing import setup as sbsetup
 
 
