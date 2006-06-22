@@ -1,3 +1,4 @@
+#!/usr/bin/python
 #
 # SchoolTool - common information systems platform for school administration
 # Copyright (c) 2003 Shuttleworth Foundation
@@ -17,28 +18,11 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Functional test for migrating from v. 0.10 to 0.11
+Functional test for migration from arbitrary Data.fs (given on command line).
 
 $Id$
 """
-import os
+import setup
 import sys
-import shutil
-import tempfile
 
-tempdir = tempfile.mkdtemp()
-
-mydir = os.path.dirname(sys.argv[0])
-shutil.copy(os.path.join(mydir, 'Data.fs-0.10'),
-            os.path.join(tempdir, 'Data.fs'))
-
-script_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
-basedir = os.path.abspath(
-    os.path.dirname(os.path.dirname(os.path.dirname(script_dir))))
-
-sys.path.insert(0, os.path.join(basedir, 'src'))
-sys.path.insert(0, os.path.join(basedir, 'Zope3', 'src'))
-
-os.chdir(tempdir)
-import schooltool.main
-schooltool.main.StandaloneServer().main()
+setup.runSchoolToolWith(sys.argv[1])
