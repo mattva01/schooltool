@@ -27,4 +27,4 @@ from zope.app.generations.generations import SchemaManager
 schemaManager = SchemaManager(
     minimum_generation=8,
     generation=8,
-    package_name='schoolbell.app.generations')
+    package_name='schooltool.sbapp.generations')
