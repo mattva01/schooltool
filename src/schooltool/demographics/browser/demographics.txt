@@ -152,20 +152,20 @@ We can also add people as CSV data:
 
   >>> browser.open('http://localhost/persons/@@person-csvimport.html')
   >>> csv = browser.getControl(name='csvtext')
-  >>> csv.value = 'alpha, Alpha\nbeta, Beta'
+  >>> csv.value = 'delta, Delta\nomega, Omega'
   >>> browser.getControl(name="UPDATE_SUBMIT").click()
 
 We can browse to the nameinfo of the newly added persons:
 
-  >>> browser.open('http://localhost/persons/alpha/nameinfo')
-  >>> browser.open('http://localhost/persons/beta/nameinfo')
+  >>> browser.open('http://localhost/persons/delta/nameinfo')
+  >>> browser.open('http://localhost/persons/omega/nameinfo')
 
 We can also see the persons added so far in tabular display:
 
   >>> browser.open('http://localhost/persons')
-  >>> 'alpha' in browser.contents
+  >>> 'delta' in browser.contents
   True
-  >>> 'beta' in browser.contents
+  >>> 'omega' in browser.contents
   True
   >>> 'foobar' in browser.contents
   True
@@ -179,10 +179,10 @@ We can search for the persons:
 
 Check that the persons appeared on the output of the search:
 
-  >>> 'alpha' in browser.contents
+  >>> 'delta' in browser.contents
   True
 
-NOTE: shouldn't beta be there also ?
+NOTE: shouldn't omega be there also ?
 
 Check that the search didn't return un-matching cases:
 
@@ -200,11 +200,11 @@ Check that we found foobar, whose parent is Zorro:
   >>> 'foobar' in browser.contents
   True
 
-But not alpha or beta:
+But not delta or omega:
 
-  >>> 'alpha' in browser.contents
+  >>> 'delta' in browser.contents
   False
-  >>> 'beta' in browser.contents
+  >>> 'omega' in browser.contents
   False
 
 We can also do the same for the student id ABC:
@@ -219,11 +219,11 @@ Check that we found foobar, whose student id is ABC:
   >>> 'foobar' in browser.contents
   True
 
-But not alpha or beta:
+But not delta or omega:
 
-  >>> 'alpha' in browser.contents
+  >>> 'delta' in browser.contents
   False
-  >>> 'beta' in browser.contents
+  >>> 'omega' in browser.contents
   False
 
 There's a quick search form in the table view:
@@ -232,7 +232,7 @@ There's a quick search form in the table view:
   >>> sb = browser.getControl(name="form.fulltext")
   >>> sb.value = '*a*'
   >>> browser.getControl(name="form.actions.submit").click()
-  >>> 'alpha' in browser.contents
+  >>> 'delta' in browser.contents
   True
   >>> 'foobar' in browser.contents
   False
@@ -250,20 +250,20 @@ Try seeing the table of persons with a normal user:
   True
   >>> "manager" in ubrowser.contents
   True
-  >>> "alpha" in ubrowser.contents
+  >>> "delta" in ubrowser.contents
   True
-  >>> "beta" in ubrowser.contents
+  >>> "omega" in ubrowser.contents
   True
 
-The user alpha is not a teacher:
+The user delta is not a teacher:
 
-  >>> browser.open("http://localhost/persons/alpha/")
+  >>> browser.open("http://localhost/persons/delta/")
   >>> "Teachers" in browser.contents
   False
 
 but it can be:
 
-  >>> browser.open('http://localhost/persons/alpha/@@groups.html')
+  >>> browser.open('http://localhost/persons/delta/@@groups.html')
   >>> 'Teachers' in browser.contents
   True
   >>> tc = browser.getControl("Teachers").click()
@@ -271,49 +271,49 @@ but it can be:
 
 Now it should be a teacher:
 
-  >>> browser.open("http://localhost/persons/alpha/schooldata")
+  >>> browser.open("http://localhost/persons/delta/schooldata")
   >>> "Teachers" in browser.contents
   True
 
-Let's make alpha the advisor of beta:
+Let's make delta the advisor of omega:
 
-  >>> browser.open("http://localhost/persons/beta/schooldata/")
-  >>> "alpha" in browser.contents
+  >>> browser.open("http://localhost/persons/omega/schooldata/")
+  >>> "delta" in browser.contents
   False
-  >>> browser.open("http://localhost/persons/beta/schooldata/@@edit.html")
+  >>> browser.open("http://localhost/persons/omega/schooldata/@@edit.html")
   >>> adv = browser.getControl(name="form.advisor")
-  >>> adv.value = ["alpha"]
+  >>> adv.value = ["delta"]
   >>> browser.getControl(name="form.actions.apply").click()
-  >>> browser.open("http://localhost/persons/beta/schooldata/")
-  >>> "Alpha" in browser.contents
+  >>> browser.open("http://localhost/persons/omega/schooldata/")
+  >>> "Delta" in browser.contents
   True
 
-Let's put beta in the beta team:
+Let's put omega in the omega team:
 
   >>> browser.open("http://localhost/groups/+/addSchoolToolGroup.html")
   >>> t = browser.getControl(name="field.title")
   >>> t.value = "Gamma"
   >>> browser.getControl("Add").click()
-  >>> browser.open("http://localhost/persons/beta/schooldata/")
+  >>> browser.open("http://localhost/persons/omega/schooldata/")
   >>> "Gamma" in browser.contents
   False
-  >>> browser.open("http://localhost/persons/beta/schooldata/@@edit.html")
+  >>> browser.open("http://localhost/persons/omega/schooldata/@@edit.html")
   >>> adv = browser.getControl(name="form.team")
   >>> adv.value = ["gamma"]
   >>> browser.getControl(name="form.actions.apply").click()
-  >>> browser.open("http://localhost/persons/beta/schooldata/")
+  >>> browser.open("http://localhost/persons/omega/schooldata/")
   >>> "Gamma" in browser.contents
   True
 
 Let's try removing the advisor and see that nothing goes wrong:
 
   >>> browser.open("http://localhost/persons")
-  >>> delete = browser.getControl(name="delete.alpha")
+  >>> delete = browser.getControl(name="delete.delta")
   >>> delete.value = True
   >>> browser.getControl("Delete").click()
   >>> browser.getControl("Confirm").click()
-  >>> browser.open("http://localhost/persons/beta/schooldata/")
-  >>> "Alpha" in browser.contents
+  >>> browser.open("http://localhost/persons/omega/schooldata/")
+  >>> "Delta" in browser.contents
   False
   >>> "Invalid teacher" in browser.contents
   True
@@ -325,7 +325,7 @@ Now let's try removing the team and see that nothing goes wrong:
   >>> delete.value = True
   >>> browser.getControl("Delete").click()
   >>> browser.getControl("Confirm").click()
-  >>> browser.open("http://localhost/persons/beta/schooldata/")
+  >>> browser.open("http://localhost/persons/omega/schooldata/")
   >>> "Gamma" in browser.contents
   False
   >>> "Invalid group" in browser.contents
