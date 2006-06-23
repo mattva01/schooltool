@@ -53,9 +53,11 @@ from schooltool.app.interfaces import IHaveCalendar
 def fixAnnotations(obj):
     if not hasattr(obj, '__annotations__'):
         return
-    for key, data in obj.__annotations__.items():
-        if key.startswith('schoolbell'):
-            obj.__annotations__['schooltool'+key[10:]] = data
+    items = list(obj.__annotations__.items())
+    for key, data in items:
+        old_key = 'schoolbell'
+        if key.startswith(old_key):
+            obj.__annotations__['schooltool'+key[len(old_key):]] = data
             del obj.__annotations__[key]
 
 
