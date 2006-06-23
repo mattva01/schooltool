@@ -28,7 +28,6 @@ from zope.app.publication.zopepublication import ZopePublication
 from zope.app.generations.utility import findObjectsProviding
 
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.group.group import Group
 
 
 def evolve(context):

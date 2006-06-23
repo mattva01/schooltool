@@ -32,7 +32,6 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.timetable.interfaces import IHaveTimetables
 from schooltool.timetable import TimetablesAdapter
-from schooltool.group.group import Group
 
 
 def evolve(context):
