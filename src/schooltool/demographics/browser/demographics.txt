@@ -32,7 +32,7 @@ We expect no photo to be there yet as we didn't upload one:
   >>> browser.open('http://localhost/persons/foobar/nameinfo')
   >>> 'photo.jpg' in browser.contents
   False
-  
+
 Try logging in with the shiny new user:
 
   >>> ubrowser = Browser()
@@ -45,7 +45,7 @@ And we can edit its name info (also adding a photo):
   >>> from StringIO import StringIO
   >>> browser.open('http://localhost/persons/foobar/nameinfo/@@edit.html')
   >>> browser.getControl(name='form.full_name').value = 'Someone Schooltool'
-  >>> browser.getControl(name='form.photo').add_file(StringIO('my_photo'), 
+  >>> browser.getControl(name='form.photo').add_file(StringIO('my_photo'),
   ...     'binary/octet-stream', 'test.jpg')
   >>> browser.getControl(name='form.actions.apply').click()
   >>> browser.open('http://localhost/persons/foobar/nameinfo/@@edit.html')
@@ -174,15 +174,13 @@ We can search for the persons:
 
   >>> browser.open('http://localhost/persons/@@search.html')
   >>> sb = browser.getControl(name="form.fulltext")
-  >>> sb.value = '*a*'
+  >>> sb.value = '*d*'
   >>> browser.getControl(name="form.actions.submit").click()
 
 Check that the persons appeared on the output of the search:
 
   >>> 'delta' in browser.contents
   True
-
-NOTE: shouldn't omega be there also ?
 
 Check that the search didn't return un-matching cases:
 
@@ -230,7 +228,7 @@ There's a quick search form in the table view:
 
   >>> browser.open('http://localhost/persons')
   >>> sb = browser.getControl(name="form.fulltext")
-  >>> sb.value = '*a*'
+  >>> sb.value = '*d*'
   >>> browser.getControl(name="form.actions.submit").click()
   >>> 'delta' in browser.contents
   True
