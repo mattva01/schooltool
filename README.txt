@@ -53,12 +53,14 @@ System requirements
 - Python 2.4 (http://www.python.org/)
   (Debian users will need either python2.4 and python2.4-xml packages)
 
-- Zope 3.2 (http://www.zope.org/Products/Zope3)
-
 - libxml2 Python bindings (http://xmlsoft.org/).  Windows users can find
   binaries here:  http://users.skynet.be/sbi/libxml-python/
 
 - the Python Imaging Library (PIL) (http://www.pythonware.com/products/pil/)
+
+- (usually included) Zope 3.2 (http://www.zope.org/Products/Zope3)
+  In most cases the current Zope is included with a SchoolTool download,
+  the exception being a "minimal" tarball distribution.
 
 - (optional) the ReportLab Toolkit (http://www.reportlab.org), and
   Arial and Times New Roman TrueType fonts.  ReportLab is only needed if
@@ -75,7 +77,9 @@ make install dance. So, going through it:
 $ ./configure --prefix=${libs}
 
 where ${libs} is the location where you want to install the libraries
-(it can be anywhere).
+(it can be anywhere).  For testing, ${libs} can simply be a directory
+in your home.  Otherwise you might want this to be /usr/local, /opt,
+or some other traditional location.
 
 $ make
 $ make install
@@ -83,12 +87,12 @@ $ make install
 Change directory to the installed libraries:
 
 $ cd ${libs}
-$ PYTHONPATH=lib/python easy_install -f http://download.zope.org/distribution --install-dir lib/python zc.table
 
-If you don't have the command `easy_install`, please see the following
-instructions on how to install it:
+The next step requires an up to date install of the Python setuputils.  See:
 
 http://peak.telecommunity.com/DevCenter/EasyInstall#installing-easy-install
+
+$ PYTHONPATH=lib/python easy_install -f http://download.zope.org/distribution --install-dir lib/python zc.table zc.datetimewidget hurry.query
 
 Now from the installed libraries, we can test the installation by running:
 
