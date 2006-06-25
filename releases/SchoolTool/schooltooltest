@@ -23,6 +23,7 @@ Test script to run the unit and functional tests in a Zope installation.
 $Id$
 """
 import sys, os
+import site
 
 here = os.path.dirname(os.path.realpath(__file__))
 here = os.path.dirname(here)
@@ -32,6 +33,7 @@ if sys.platform in ("win32",):
 else:
     lib = os.path.join(here, "lib", "python")
 sys.path.insert(0, lib)
+site.addsitedir(lib)
 
 ftesting = os.path.join(here, "schooltool-skel", "etc", "ftesting.zcml")
 
