@@ -97,19 +97,10 @@
                tal:replace="structure provider:schooltool.Navigation"
                tal:on-error="nothing" />
 
-          <tal:block define="actual_context python:hasattr(view, 'actualContext') and view.actualContext() or context">
-          <div class="portlet"
-               tal:condition="actual_context/@@view_get_menu/schooltool_actions">
-            <h4 i18n:translate="">Actions</h4>
-            <ul>
-              <li tal:repeat="view actual_context/@@view_get_menu/schooltool_actions">
-                <a tal:attributes="href
-                             string:${actual_context/@@absolute_url}/${view/action}"
-                   tal:content="view/title" i18n:translate="" />
-              </li>
-            </ul>
-          </div>
-          </tal:block>
+          <div metal:define-slot="actions-box"
+               tal:replace="structure provider:schooltool.Actions"
+               tal:on-error="nothing" />
+
           <metal:block define-slot="column-left-extra"/>
         </div>
       </metal:block>

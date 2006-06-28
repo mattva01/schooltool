@@ -36,6 +36,7 @@ from schooltool.app.browser.interfaces import IEventForDisplay
 from schooltool.skin.skin import OrderedViewletManager
 from schooltool.skin.skin import ISchoolToolSkin
 
+
 class ICalendarEventViewletManager(IViewletManager):
     """Provides a viewlet hook for daily calendar events."""
 
@@ -50,6 +51,7 @@ class CalendarEventViewletManager(OrderedViewletManager):
     """Viewlet manager for displaying of additional event information."""
 
     implements(ICalendarEventContext)
+
 
 # did not move this into schooltool.skin because this actually
 # enables the skin, doesn't define it.

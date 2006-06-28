@@ -1,0 +1,16 @@
+<tal:block i18n:domain="schooltool"
+           define="actual_context python:hasattr(view.__parent__, 'actualContext')
+                   and view.__parent__.actualContext() or context">
+
+  <div class="portlet"
+       tal:condition="actual_context/@@view_get_menu/schooltool_actions">
+  <h4 i18n:translate="">Actions</h4>
+  <ul>
+    <li tal:repeat="view actual_context/@@view_get_menu/schooltool_actions">
+      <a tal:attributes="href
+                   string:${actual_context/@@absolute_url}/${view/action}"
+         tal:content="view/title" i18n:translate="" />
+    </li>
+  </ul>
+  </div>
+</tal:block>

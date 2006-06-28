@@ -35,8 +35,8 @@ from schooltool.securitypolicy.crowds import Crowd
 from schooltool.securitypolicy.interfaces import ICrowd
 from schooltool.app.interfaces import ISchoolToolApplication
 
-
 from schooltool.app.app import getSchoolToolApplication
+
 
 class IJavaScriptManager(IViewletManager):
     """Provides a viewlet hook for the javascript link entries."""
@@ -52,6 +52,10 @@ class IHeaderManager(IViewletManager):
 
 class INavigationManager(IViewletManager):
     """Provides a viewlet hook for the navigation section of a page."""
+
+
+class IActionMenuManager(IViewletManager):
+    """Provides a viewlet hook for the action menu."""
 
 
 class OrderedViewletManager(ViewletManagerBase):
@@ -97,6 +101,10 @@ class TopLevelContainerNavigationViewlet(NavigationViewlet):
     def actualContext(self):
         """Actual context is the container this viewlet links to."""
         return ISchoolToolApplication(None)[self.link]
+
+
+class ActionMenuViewletManager(OrderedViewletManager):
+    """Viewlet manager for displaying the action menu."""
 
 
 class NavigationViewletCrowd(Crowd):

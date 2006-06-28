@@ -6,6 +6,14 @@
   <!-- Viewlet Managers -->
 
   <viewletManager
+      name="schooltool.Actions"
+      permission="zope.Public"
+      provides=".skin.IActionMenuManager"
+      class=".skin.ActionMenuViewletManager"
+      template="templates/actions.pt"
+      />
+
+  <viewletManager
       name="schooltool.CSS"
       permission="zope.Public"
       provides=".skin.ICSSManager"
