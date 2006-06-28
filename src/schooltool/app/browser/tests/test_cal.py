@@ -1404,6 +1404,40 @@ class TestCalendarViewBase(unittest.TestCase):
 
         self.assertEqualEventLists(days[0].events, [e3, e4])
 
+    def test_getDays_allday(self):
+        from schooltool.app.browser.cal import CalendarViewBase
+        from schooltool.app.cal import Calendar
+        app = sbsetup.setUpSchoolToolSite()
+        sbsetup.setUpTimetabling()
+
+        event = createEvent('2004-08-10', "1d", "e0", allday=True)
+
+        cal = Calendar(Person())
+        cal.addEvent(event)
+
+        request = TestRequest()
+        view = CalendarViewBase(cal, request)
+
+        days = view._getDays(date(2004, 8, 9), date(2004, 8, 10))
+        self.assertEquals(len(days[0].events), 0)
+
+        days = view._getDays(date(2004, 8, 10), date(2004, 8, 11))
+        self.assertEquals(len(days[0].events), 1)
+
+        days = view._getDays(date(2004, 8, 11), date(2004, 8, 12))
+        self.assertEquals(len(days[0].events), 0)
+
+        view.timezone = timezone('Europe/Vilnius')
+
+        days = view._getDays(date(2004, 8, 9), date(2004, 8, 10))
+        self.assertEquals(len(days[0].events), 0)
+
+        days = view._getDays(date(2004, 8, 10), date(2004, 8, 11))
+        self.assertEquals(len(days[0].events), 1)
+
+        days = view._getDays(date(2004, 8, 11), date(2004, 8, 12))
+        self.assertEquals(len(days[0].events), 0)
+
     def test_getJumpToYears(self):
         from schooltool.app.cal import Calendar
         from schooltool.app.browser.cal import CalendarViewBase
