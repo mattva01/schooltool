@@ -27,6 +27,7 @@ $Id$
 
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.generations.utility import findObjectsProviding
+from zope.annotation.interfaces import IAnnotations
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.attendance.interfaces import IUnresolvedAbsenceCache
@@ -34,14 +35,44 @@ from schooltool.attendance.interfaces import IHomeroomAttendance
 from schooltool.attendance.interfaces import ISectionAttendance
 
 
+AbsenceCacheKey = 'schooltool.attendance.absencecache'
+
+
+class NullAbsenceCache(object):
+    def add(self, student, record):
+        pass
+
+
+def getUnresolvedAbsenceCache(app):
+    """Extract the absence cache from the application.
+
+    Internally the cache is stored as an annotation on the administrators'
+    group.
+    """
+    admin = app['groups']['administrators']
+    annotations = IAnnotations(admin)
+    if AbsenceCacheKey not in annotations:
+        return NullAbsenceCache()
+    return annotations[AbsenceCacheKey]
+
+SECTION_ATTENDANCE_KEY = 'schooltool.attendance.SectionAttendance'
+HOMEROOM_ATTENDANCE_KEY = 'schooltool.attendance.HomeroomAttendance'
+
+def getRecords(obj, key):
+    annotations = IAnnotations(obj)
+    attendance = annotations.get(key, [])
+    return attendance and list(attendance._records)
+
 def evolve(context):
     root = context.connection.root()[ZopePublication.root_name]
     for app in findObjectsProviding(root, ISchoolToolApplication):
-        cache = IUnresolvedAbsenceCache(app)
+        cache = getUnresolvedAbsenceCache(app)
         for student in app['persons'].values():
-            homeroom_records = list(IHomeroomAttendance(student))
-            section_records = list(ISectionAttendance(student))
-            for record in  homeroom_records + section_records:
+            annotations = IAnnotations(student)
+            homeroom_records = getRecords(student, HOMEROOM_ATTENDANCE_KEY)
+            section_records = getRecords(student, SECTION_ATTENDANCE_KEY)
+            for record in homeroom_records + section_records:
                 if ((record.isAbsent() or record.isTardy()) and
                     not record.isExplained()):
-                    cache.add(student, record.attendance_record)
+                    cache.add(student, record)
+

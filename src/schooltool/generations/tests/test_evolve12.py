@@ -30,6 +30,7 @@ from zope.testing import doctest
 from zope.interface import implements
 from zope.component import adapts, provideAdapter
 from zope.app.container.ordered import OrderedContainer
+from zope.annotation.interfaces import IAnnotations
 
 from schooltool.generations.tests import ContextStub
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -44,9 +45,22 @@ class StudentStub(object):
         self.__name__ = name
         self._section_attendance = []
         self._homeroom_attendance = []
+        self.ha = HomeroomAttendanceStub(self)
+        self.sa = SectionAttendanceStub(self)
 
     def __repr__(self):
         return self.__name__
+
+    def __conform__(self, iface):
+        if iface == IAnnotations:
+            return {'schooltool.attendance.SectionAttendance': self.sa,
+                    'schooltool.attendance.HomeroomAttendance': self.ha}
+
+
+class AdminGroupStub(object):
+    def __conform__(self, iface):
+        if iface == IAnnotations:
+            return {'schooltool.attendance.absencecache': UnresolvedAbsenceCacheStub()}
 
 
 class AppStub(dict):
@@ -58,14 +72,13 @@ class AppStub(dict):
         self['persons'] = OrderedContainer()
         for name in ['s1', 's2', 's3']:
             self['persons'][name] = StudentStub(name)
+        self['groups'] = {}
+        self['groups']['administrators'] = AdminGroupStub()
 
 
 class UnresolvedAbsenceCacheStub(object):
     adapts(AppStub)
     implements(IUnresolvedAbsenceCache)
-
-    def __init__(self, app):
-        self.app = app
 
     def add(self, student, ar):
         print "cache.add(%r, %r)" % (student, ar)
@@ -78,9 +91,9 @@ class HomeroomAttendanceStub(object):
     def __init__(self, student):
         self.student = student
 
-    def __iter__(self):
-        return itertools.imap(AttendanceLoggingProxyStub,
-                              self.student._homeroom_attendance)
+    @property
+    def _records(self):
+        return self.student._homeroom_attendance
 
 
 class SectionAttendanceStub(object):
@@ -90,9 +103,9 @@ class SectionAttendanceStub(object):
     def __init__(self, student):
         self.student = student
 
-    def __iter__(self):
-        return itertools.imap(AttendanceLoggingProxyStub,
-                              self.student._section_attendance)
+    @property
+    def _records(self):
+        return self.student._section_attendance
 
 
 class AttendanceRecordStub(object):
@@ -114,19 +127,8 @@ class AttendanceRecordStub(object):
         return what
 
 
-class AttendanceLoggingProxyStub(object):
-    def __init__(self, ar):
-        self.attendance_record = ar
-    def __getattr__(self, name):
-        return getattr(self.attendance_record, name)
-
-
 def doctest_evolve12():
     """Evolution to generation 12.
-
-        >>> provideAdapter(UnresolvedAbsenceCacheStub)
-        >>> provideAdapter(HomeroomAttendanceStub)
-        >>> provideAdapter(SectionAttendanceStub)
 
         >>> context = ContextStub()
         >>> context.root_folder['app'] = app = AppStub()
