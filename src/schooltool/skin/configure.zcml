@@ -5,10 +5,13 @@
 
   <!-- Viewlet Managers -->
 
+  <zope:interface
+      interface=".skin.IActionMenuContext"
+      type="zope.contentprovider.interfaces.ITALNamespaceData" />
+
   <viewletManager
       name="schooltool.Actions"
       permission="zope.Public"
-      provides=".skin.IActionMenuManager"
       class=".skin.ActionMenuViewletManager"
       template="templates/actions.pt"
       />
@@ -212,7 +215,6 @@
       template="templates/unauthorized.pt"
       permission="zope.Public"
       />
-
 
   <zope:adapter
       for=".skin.NavigationViewlet"

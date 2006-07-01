@@ -25,11 +25,12 @@ $Id$
 import unittest
 import pprint
 
-from zope.interface import providedBy
+from zope.interface import providedBy, Interface, implements
 from zope.testing import doctest
 from zope.app.testing import setup
 from zope.publisher.browser import TestRequest
 from zope.app.publication.zopepublication import BeforeTraverseEvent
+from zope.component import provideAdapter, adapts
 
 from schooltool.testing.setup import setUpSchoolToolSite
 
@@ -148,6 +149,102 @@ def doctest_NavigationViewletCrowd():
         'Crowd on Actual context object contains The principal'
 
         >>> setup.placelessTearDown()
+
+    """
+
+
+def doctest_ActionMenuViewletManager():
+    """Tests for ActionMenuViewletManager.
+
+         >>> setup.placelessSetUp()
+         >>> from schooltool.skin.skin import ActionMenuViewletManager
+         >>> context = "context"
+         >>> request = TestRequest()
+         >>> manager = ActionMenuViewletManager(context, request, None)
+
+         >>> from zope.publisher.interfaces.browser import IBrowserRequest
+         >>> from schooltool.skin.interfaces import IBreadcrumbInfo
+         >>> class StubBreadcrumbInfo(object):
+         ...     adapts(Interface, IBrowserRequest)
+         ...     implements(IBreadcrumbInfo)
+         ...     def __init__(self, context, request):
+         ...         self.name = "Breadcrumb name"
+
+         >>> provideAdapter(StubBreadcrumbInfo)
+
+    Viewlet managers title is taken from it's contexts breadcrumb info:
+
+         >>> manager.title()
+         'Breadcrumb name'
+
+    subItems is a shortctut that gets subitems for the managers context:
+
+         >>> manager.getSubItems = lambda context: ["Sub menu items for", context]
+         >>> manager.subItems()
+         ['Sub menu items for', 'context']
+
+         >>> setup.placelessTearDown()
+
+    """
+
+
+def doctest_ActionMenuViewletManager_update():
+    """Tests for ActionMenuViewletManager.update.
+
+         >>> setup.placelessSetUp()
+         >>> from schooltool.skin.skin import ActionMenuViewletManager
+         >>> context = "context"
+         >>> request = TestRequest()
+         >>> manager = ActionMenuViewletManager(context, request, None)
+
+    Viewlet managers title is taken from it's contexts breadcrumb info:
+
+         >>> class TargetStub(object):
+         ...      __parent__ = "parent"
+         >>> target = TargetStub()
+         >>> manager.getSubItems = lambda context: ["foo", "bar"]
+         >>> import sys
+         >>> manager.orderedViewletManagerUpdate = lambda: sys.stdout.write(
+         ...                                           "OrderedViewletManager.update()")
+         >>> manager.__parent__ = ActionMenuViewletManager(None, None, None)
+         >>> manager.target = target
+
+    If we are not displaying a top level menu and the current target
+    is not in the list of it's parents subitems:
+
+         >>> manager.update()
+         OrderedViewletManager.update()
+
+    Target becomes the context:
+
+         >>> target is manager.context
+         True
+
+    If we are displaying a top level menu we should still have the
+    target becoming new context:
+
+         >>> manager.context = None
+         >>> manager.update()
+         OrderedViewletManager.update()
+
+         >>> target is manager.context
+         True
+
+    But if the manager is being displayed to display a top level menu,
+    and the item is in it's parents subitem list:
+
+         >>> manager.getSubItems = lambda context: ["foo", "bar", target]
+         >>> manager.__parent__ = None
+
+         >>> manager.update()
+         OrderedViewletManager.update()
+
+    We should get menu items of the targets parent:
+
+         >>> target.__parent__ is manager.context
+         True
+
+         >>> setup.placelessTearDown()
 
     """
 

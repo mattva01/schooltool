@@ -34,6 +34,7 @@ from zope.app import zapi
 from schooltool.securitypolicy.crowds import Crowd
 from schooltool.securitypolicy.interfaces import ICrowd
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.skin.interfaces import IBreadcrumbInfo
 
 from schooltool.app.app import getSchoolToolApplication
 
@@ -56,6 +57,20 @@ class INavigationManager(IViewletManager):
 
 class IActionMenuManager(IViewletManager):
     """Provides a viewlet hook for the action menu."""
+
+    def title():
+        """Title that will be displayed before the action menu or submenu."""
+
+    def subItems():
+        """Sub items that will have their own menus in the main action menu.
+
+        Returns a list of ISubMenuItem objects.
+        """
+
+class IActionMenuContext(Interface):
+    """Schema for attributes required by ActionMenuViewletManager."""
+
+    target = Object(Interface)
 
 
 class OrderedViewletManager(ViewletManagerBase):
@@ -103,8 +118,48 @@ class TopLevelContainerNavigationViewlet(NavigationViewlet):
         return ISchoolToolApplication(None)[self.link]
 
 
+class ISubMenuItem(Interface):
+    """Marker interface for objects that will be displayed as items in submenus.
+    """
+
 class ActionMenuViewletManager(OrderedViewletManager):
     """Viewlet manager for displaying the action menu."""
+
+    implements(IActionMenuContext, IActionMenuManager)
+
+    def title(self):
+        breadcrumb = zapi.getMultiAdapter((self.context, self.request),
+                                          IBreadcrumbInfo)
+        return breadcrumb.name
+
+    def getSubItems(self, context):
+        """Collect all items that should be displayed in the submenu of context.
+
+        Submenu items are registered as subscribers with interface
+        ISubMenuItem.
+        """
+        return [item for item in zapi.subscribers((context, ), ISubMenuItem)]
+
+    def update(self):
+        # set the right context for menu items that will be set up by
+        # OrderedViewletManager.update
+        self.context = self.target
+
+        # We could just check for ISubMenuItem on self.context, though
+        # that would be less reliable.
+        in_submenu_of_parent = self.context in self.getSubItems(self.context.__parent__)
+        displayed_in_submenu = IActionMenuManager.providedBy(self.__parent__)
+        if (in_submenu_of_parent and not displayed_in_submenu):
+            # display menu as if looking at the parent object
+            self.context = self.context.__parent__
+        self.orderedViewletManagerUpdate()
+
+    def orderedViewletManagerUpdate(self):
+        OrderedViewletManager.update(self)
+
+    def subItems(self):
+        """See zope.contentprovider.interfaces.IContentProvider"""
+        return self.getSubItems(self.context)
 
 
 class NavigationViewletCrowd(Crowd):

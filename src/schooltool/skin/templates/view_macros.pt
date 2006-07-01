@@ -97,9 +97,12 @@
                tal:replace="structure provider:schooltool.Navigation"
                tal:on-error="nothing" />
 
-          <div metal:define-slot="actions-box"
-               tal:replace="structure provider:schooltool.Actions"
-               tal:on-error="nothing" />
+          <tal:block define="target python:hasattr(view, 'actualContext')
+                                           and view.actualContext() or context">
+            <div metal:define-slot="actions-box"
+                 tal:replace="structure provider:schooltool.Actions"
+                 tal:on-error="nothing"/>
+          </tal:block>
 
           <metal:block define-slot="column-left-extra"/>
         </div>
