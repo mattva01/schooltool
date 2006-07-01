@@ -419,12 +419,12 @@ going through every combination here, since we know the sub-widgets work:
   ...     'field.field.min': '0',
   ...     'field.field.max': '10'})
   >>> widget = browser.scoresystem.ScoreSystemWidget(field, request)
-  >>> print widget()
+  >>> print widget() # doctest: +REPORT_NDIFF
   <fieldset>
   <div>
   <div class="value">
   <select id="field.field.existing" name="field.field.existing" size="1" >
-  <option selected="selected" value="">(no value)</option>
+  <option value="">(no value)</option>
   <option value="Letter Grade">Letter Grade</option>
   <option value="Pass/Fail">Pass/Fail</option>
   <option value="Percent">Percent</option>
