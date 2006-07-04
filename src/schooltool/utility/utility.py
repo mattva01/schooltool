@@ -27,7 +27,7 @@ class UtilitySpecification(object):
         self.factory = factory
         self.setUp = setUp
         self.iface = iface
-        self.utility_name = name 
+        self.utility_name = name
         self.override = override
 
 def setUpUtilities(site, specs):
@@ -36,7 +36,7 @@ def setUpUtilities(site, specs):
         manager = site.getSiteManager()
         default = zapi.traverse(site, '++etc++site/default')
         for spec in specs:
-            local_utility = getLocalUtility(default, spec)    
+            local_utility = getLocalUtility(default, spec)
             if local_utility is not None:
                 if spec.override:
                     # override existing utility
@@ -66,12 +66,12 @@ def getLocalUtility(default, spec):
     else:
         return None
 
-class UtilitySetUp(UtilitySpecification):        
+class UtilitySetUp(UtilitySpecification):
     """Set up a single utility.
     """
     def __call__(self, site, event):
         setUpUtilities(site, [self])
-        
+
 class MultiUtilitySetUp(object):
     """Set up multiple related utilities that need to be in order.
 
@@ -79,6 +79,6 @@ class MultiUtilitySetUp(object):
     """
     def __init__(self, *specifications):
         self.specifications = specifications
-        
+
     def __call__(self, site, event):
         setUpUtilities(site, self.specifications)
