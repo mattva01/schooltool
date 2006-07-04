@@ -4,6 +4,7 @@ from zope.testing import doctest
 from zope.app.testing import setup
 from zope.app.component.hooks import getSite, setSite
 
+
 def doctest_utilityRegistration():
     """
     We set up the IntIds utility::
@@ -24,14 +25,15 @@ def doctest_utilityRegistration():
     gets rid of the site using setSite() afterwards as this disrupts
     other schooltool setup code. This may be a bug somewhere in
     schooltool the utility setup code works around.
-    
+
     We now expect the utility to be available::
-    
+
       >>> from zope.component import getUtility
       >>> util = getUtility(IIntIds)
       >>> IIntIds.providedBy(util)
       True
     """
+
 
 def doctest_multipleUtilityRegistration():
     """
@@ -55,7 +57,7 @@ def doctest_multipleUtilityRegistration():
       >>> from zope.interface import Interface
       >>> def catalogSetUp(catalog):
       ...     catalog['myindex'] = FieldIndex(Interface, 'foo')
-      
+
     Now let's set these up as utilities::
 
       >>> from schooltool.utility import UtilitySpecification
@@ -66,7 +68,7 @@ def doctest_multipleUtilityRegistration():
       >>> site = getSite()
       >>> setup(site, None)
       >>> setSite(site)
-      
+
     We'll check whether the utilities are available::
 
       >>> from zope.component import getUtility
@@ -76,8 +78,9 @@ def doctest_multipleUtilityRegistration():
       >>> catalog = getUtility(ICatalog)
       >>> ICatalog.providedBy(catalog)
       True
-      
+
     """
+
 
 def doctest_utilityOverride():
     """
@@ -107,7 +110,7 @@ def doctest_utilityOverride():
       >>> setup2 = UtilitySetUp(MyUtility2, IMyUtility, override=True)
       >>> setup2(site, None)
       >>> setSite(site)
-      
+
     Now we expect there to be only MyUtility2::
 
       >>> from zope.component import getUtility
@@ -116,12 +119,13 @@ def doctest_utilityOverride():
       True
     """
 
+
 def sitePlacefulSetUp(*args):
     setup.placefulSetUp(site=True)
 
 def sitePlacefulTearDown(*args):
     setup.placefulTearDown()
-    
+
 def test_suite():
     return unittest.TestSuite([
         doctest.DocTestSuite(setUp=sitePlacefulSetUp,
