@@ -138,7 +138,7 @@ class ActionMenuViewletManager(OrderedViewletManager):
         Submenu items are registered as subscribers with interface
         ISubMenuItem.
         """
-        return [item for item in zapi.subscribers((context, ), ISubMenuItem)]
+        return list(zapi.subscribers((context, ), ISubMenuItem))
 
     def update(self):
         # set the right context for menu items that will be set up by
@@ -147,7 +147,8 @@ class ActionMenuViewletManager(OrderedViewletManager):
 
         # We could just check for ISubMenuItem on self.context, though
         # that would be less reliable.
-        in_submenu_of_parent = self.context in self.getSubItems(self.context.__parent__)
+        sub_items = self.getSubItems(self.context.__parent__)
+        in_submenu_of_parent = self.context in sub_items
         displayed_in_submenu = IActionMenuManager.providedBy(self.__parent__)
         if (in_submenu_of_parent and not displayed_in_submenu):
             # display menu as if looking at the parent object
