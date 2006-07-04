@@ -133,6 +133,7 @@
 
   <!-- Actions menu -->
 
+  <!-- TODO: remove this menu - 2006-07-04 gintas -->
   <menu id="schooltool_actions" title="Actions" />
 
   <!-- Adapters -->
@@ -193,8 +194,7 @@
       class="schooltool.app.browser.app.ApplicationPreferencesView"
       template="templates/application_preferences.pt"
       permission="schooltool.edit"
-      menu="schooltool_actions"
-      title="Change Site Preferences" />
+      />
 
 
   <!-- Make index.html the default ZMI view for ISchoolToolApplication -->
@@ -252,13 +252,74 @@
       permission="zope.Public"
       />
 
-  <menuItem
-      menu="schooltool_actions"
-      title="View Calendar"
+  <configure package="schooltool.skin">
+    <viewlet
+      name="view-calendar"
       for="schooltool.app.interfaces.IHaveCalendar"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
       permission="schooltool.view"
-      action="calendar"
+      link="calendar"
+      title="View Calendar"
+      order="10"
       />
+
+    <viewlet
+      name="new-event"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.edit"
+      link="add.html"
+      title="New Event"
+      order="20"
+      />
+
+    <viewlet
+      name="open-in-ical"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.view"
+      link="calendar.ics"
+      title="Open in iCal"
+      order="20"
+      />
+
+    <viewlet
+      name="timetables-csvimport"
+      for="schooltool.course.interfaces.ISectionContainer"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.edit"
+      link="@@timetables-csvimport.html"
+      title="Import Sections"
+      order="50"
+      />
+
+    <viewlet
+      name="edit-leaders"
+      for="schooltool.app.interfaces.IAsset"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.edit"
+      link="@@leaders.html"
+      title="Edit Leaders"
+      order="40"
+      />
+
+    <viewlet
+      name="site-preferences"
+      for="schooltool.person.interfaces.IPerson"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.edit"
+      link="@@site-preferences.html"
+      title="Change Site Preferences"
+      order="50"
+      />
+
+  </configure>
 
   <page
       name="daily.html"
@@ -360,11 +421,6 @@
       title="Free/Busy"
       />
 
-  <menuItem
-      for="schooltool.app.interfaces.ISchoolToolCalendar"
-      menu="schooltool_actions" title="New Event"
-      action="add.html" permission="schooltool.edit" />
-
   <page
       name="delete.html"
       for="schooltool.app.interfaces.ISchoolToolCalendar"
@@ -372,12 +428,6 @@
       template="templates/recevent_delete.pt"
       permission="schooltool.edit"
       />
-
-  <menuItem
-      for="schooltool.app.interfaces.ISchoolToolCalendar"
-      menu="schooltool_actions" title="Open in iCal"
-      action="calendar.ics" permission="schooltool.view" />
-
 
   <!-- Calendar event views -->
 
@@ -460,8 +510,6 @@
       template="templates/timetables-csvimport.pt"
       permission="schooltool.edit"
       layer="schooltool.skin.ISchoolToolLayer"
-      menu="schooltool_actions"
-      title="Import Sections"
       />
 
   <page
@@ -470,8 +518,6 @@
       layer="schooltool.skin.ISchoolToolLayer"
       class=".app.LeaderView"
       permission="schooltool.edit"
-      menu="schooltool_actions"
-      title="Edit Leaders"
       />
 
   <!-- Documentation -->
