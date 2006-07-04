@@ -38,7 +38,7 @@ from schooltool.person.interfaces import IPerson, IPersonFactory
 class Search(object):
     implements(ISearch)
     adapts(IPerson)
-    
+
     def __init__(self, context):
         self.context = context
 
@@ -65,7 +65,7 @@ def catalogSetUp(catalog):
     catalog['fulltext'] = TextIndex('fulltext', ISearch)
     catalog['parentName'] = TextIndex('parentName', ISearch)
     catalog['studentId'] = FieldIndex('studentId', ISearch)
-    
+
 catalogSetUpSubscriber = MultiUtilitySetUp(
     UtilitySpecification(IntIds, IIntIds),
     UtilitySpecification(Catalog, ICatalog, 'demographics_catalog',
