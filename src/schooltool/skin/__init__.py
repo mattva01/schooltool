@@ -22,7 +22,7 @@ $Id: breadcrumbs.py 5675 2006-01-23 03:08:51Z srichter $
 """
 
 from skin import ISchoolToolLayer, ISchoolToolSkin
-from skin import INavigationManager
+from skin import INavigationManager, IActionMenuManager
 from skin import ICSSManager, IJavaScriptManager, IHeaderManager
 from skin import OrderedViewletManager, NavigationViewlet
 from skin import TopLevelContainerNavigationViewlet

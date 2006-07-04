@@ -71,9 +71,20 @@
       class=".csvimport.PersonCSVImportView"
       template="person-csvimport.pt"
       permission="schooltool.edit"
-      menu="schooltool_actions"
-      title="Import Persons" 
       />
+
+  <configure package="schooltool.skin">
+    <viewlet
+      name="person-csvimport"
+      for="schooltool.person.interfaces.IPersonContainer"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.edit"
+      link="@@person-csvimport.html"
+      title="Import Persons"
+      order="10"
+      />
+  </configure>
 
   <page
       name="index.html"

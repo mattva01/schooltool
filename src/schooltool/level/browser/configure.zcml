@@ -28,6 +28,38 @@
       order="90"
       />
 
+    <viewlet
+      name="validate-levels"
+      for="schooltool.level.interfaces.ILevelContainer"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.edit"
+      link="@@validate.html"
+      title="Validate Levels"
+      order="50"
+      />
+
+    <viewlet
+      name="new-level"
+      for="schooltool.level.interfaces.ILevelContainer"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.edit"
+      link="+/addSchoolToolLevel.html"
+      title="New Level"
+      order="30"
+      />
+
+    <viewlet
+      name="edit-level-info"
+      for="schooltool.level.interfaces.ILevel"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.edit"
+      link="@@edit.html"
+      title="Edit Info"
+      order="10"
+      />
   </configure>
 
   <containerViews
@@ -42,7 +74,6 @@
       class=".level.LevelValidationView"
       template="level_validation.pt"
       permission="schooltool.view"
-      menu="schooltool_actions" title="Validate Levels"
       />
 
   <!-- Level Graph Validation Error Views -->
@@ -89,17 +120,9 @@
         template="templates/simple_edit.pt"
         class="schooltool.level.browser.level.LevelEditView"
         permission="schooltool.edit"
-        menu="schooltool_actions" title="Edit Info"
         />
 
   </configure>
-
-  <menuItem
-      menu="schooltool_actions"
-      title="New Level"
-      for="..interfaces.ILevelContainer"
-      action="+/addSchoolToolLevel.html"
-      />
 
   <page
       name="index.html"

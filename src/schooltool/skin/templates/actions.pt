@@ -2,19 +2,24 @@
            tal:define="url view/context/@@absolute_url;
                        actions view/context/@@view_get_menu/schooltool_actions">
 
-  <div class="portlet"
-       tal:condition="actions">
+<div class="portlet">
+<!--      tal:condition="actions"> -->
   <h4 tal:content="view/title">Actions</h4>
-  <ul>
+  <ul> <!-- old-style menu actions (obsolete) -->
     <li tal:repeat="view actions">
       <a tal:attributes="href
                    string:${url}/${view/action}"
          tal:content="view/title" i18n:translate="" />
     </li>
   </ul>
+  <ul> <!-- new-style viewlet actions -->
+    <tal:block
+        repeat="viewlet options/viewlets"
+        replace="structure viewlet/render" />
+  </ul>
   <tal:block tal:repeat="target view/subItems">
     <div tal:replace="structure provider:schooltool.Actions"
          tal:on-error="nothing" />
   </tal:block>
-  </div>
+</div>
 </tal:block>
