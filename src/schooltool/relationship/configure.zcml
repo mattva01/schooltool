@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<configure 
+<configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:security="http://schooltool.org/securitypolicy"
     i18n_domain="schooltool">
 
   <class
@@ -36,5 +37,14 @@
         parent="schoolbell"
         />
   </configure>
+
+  <security:allow
+      interface="schooltool.relationship.interfaces.IRelationshipLink"
+      crowds="administration owner"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.relationship.interfaces.IRelationshipLink"
+      crowds="administration owner"
+      permission="schooltool.edit" />
 
 </configure>

@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:security="http://schooltool.org/securitypolicy"
            xmlns:i18n="http://namespaces.zope.org/i18n"
            i18n_domain="schooltool">
 
@@ -168,5 +169,14 @@
 
   <include package=".browser" />
   <include package=".rest" />
+
+  <security:allow
+      interface="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      crowds="administration everybody"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
 
 </configure>

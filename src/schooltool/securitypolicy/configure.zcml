@@ -50,38 +50,6 @@
       crowds="administrators clerks managers" />
 
   <security:allow
-      interface="schooltool.timetable.interfaces.ITimetableSchemaContainer"
-      crowds="administration everybody"
-      permission="schooltool.view" />
-  <security:allow
-      interface="schooltool.timetable.interfaces.ITimetableSchemaContainer"
-      crowds="administration"
-      permission="schooltool.edit" />
-
-  <security:allow
-      interface="schooltool.level.level.LevelContainer"
-      crowds="administration everybody"
-      permission="schooltool.view" />
-  <security:allow
-      interface="schooltool.level.level.LevelContainer"
-      crowds="administration"
-      permission="schooltool.edit" />
-
-  <security:allow
-      interface="schooltool.relationship.interfaces.IRelationshipLink"
-      crowds="administration owner"
-      permission="schooltool.view" />
-  <security:allow
-      interface="schooltool.relationship.interfaces.IRelationshipLink"
-      crowds="administration owner"
-      permission="schooltool.edit" />
-
-  <security:allow
-      interface="schooltool.attendance.interfaces.IUnresolvedAbsenceCache"
-      crowds="administration"
-      permission="schooltool.edit" />
-
-  <security:allow
       crowds="everybody"
       permission="zope.View" />
   <security:allow

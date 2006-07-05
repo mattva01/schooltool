@@ -35,7 +35,6 @@ class SchoolToolSecurityPolicy(ParanoidSecurityPolicy):
 
     def checkPermission(self, permission, obj):
         """Return True if principal has permission on object."""
-        # TODO: Implement caching -- gintas
 
         # Check the generic, interface-independent permissions.
         crowdclasses = getCrowdsUtility().permcrowds.get(permission, [])

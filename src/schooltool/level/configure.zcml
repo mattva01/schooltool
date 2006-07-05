@@ -1,5 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:security="http://schooltool.org/securitypolicy"
     xmlns:wfmc="http://namespaces.zope.org/wfmc"
     >
 
@@ -171,5 +172,14 @@
   <!-- Views -->
   <include package=".browser" />
   <include package=".rest" />
+
+  <security:allow
+      interface="schooltool.level.level.LevelContainer"
+      crowds="administration everybody"
+      permission="schooltool.view" />
+  <security:allow
+      interface="schooltool.level.level.LevelContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
 
 </configure>

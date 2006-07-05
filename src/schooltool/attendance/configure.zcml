@@ -180,4 +180,9 @@
       text="Teachers can modify attendance records"
       default="False" />
 
+  <security:allow
+      interface="schooltool.attendance.interfaces.IUnresolvedAbsenceCache"
+      crowds="administration"
+      permission="schooltool.edit" />
+
 </configure>
