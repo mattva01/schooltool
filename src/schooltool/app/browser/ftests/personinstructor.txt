@@ -90,7 +90,7 @@ Now frog can see the demographics of toad alright:
     ...
         <div class="row">
           <div class="label">Full name</div>
-            <div class="field-odd">Toad&nbsp;</div>
+            <div class="field-even">Toad&nbsp;</div>
           <div class="clear" />
         </div>
     ...
