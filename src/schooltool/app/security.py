@@ -124,10 +124,15 @@ class SchoolToolAuthenticationUtility(Persistent, Contained):
             next = getNextUtility(self, IAuthentication)
             return next.unauthorized(id, request)
         app = getSchoolToolApplication()
-        url = zapi.absoluteURL(app, request)
-
+        app_url = zapi.absoluteURL(app, request)
+        query_string = request.getHeader('QUERY_STRING')
+        if query_string:
+            query_string = "?%s" % query_string
+        else:
+            query_string = ""
+        full_url = "%s%s" % (str(request.URL), query_string)
         request.response.redirect("%s/@@login.html?forbidden=yes&nexturl=%s"
-                                  % (url, urllib.quote(str(request.URL))))
+                                  % (app_url, urllib.quote(full_url)))
 
     def getPrincipal(self, id):
         """Get principal meta-data.
