@@ -124,6 +124,10 @@
       file="resources/icon.png"
       />
 
+  <resourceDirectory
+      directory="resources/FCKeditor"
+      name="FCKeditor" />
+
   <resource
       name="logo.png"
       file="resources/schooltool.png"

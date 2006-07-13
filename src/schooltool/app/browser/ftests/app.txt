@@ -101,8 +101,7 @@ The section container view points to the timetable import form:
     >>> print manager.contents
     <!DOCTYPE ...>
     ...
-    <a href="http://localhost/sections/@@timetables-csvimport.html">Import
-    Sections</a>
+    <a ... href="http://localhost/sections/@@timetables-csvimport.html">Import Sections</a>
     ...
 
 This is a school, so we should add some courses
