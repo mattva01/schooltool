@@ -101,6 +101,7 @@
       name="edit-person-password"
       for="schooltool.person.interfaces.IPerson"
       manager="schooltool.skin.IActionMenuManager"
+      class="schooltool.person.browser.person.PasswordEditMenuItem"
       template="templates/actionsViewlet.pt"
       permission="schooltool.view"
       link="@@password_edit.html"

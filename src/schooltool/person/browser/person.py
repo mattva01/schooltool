@@ -41,6 +41,8 @@ from zope.formlib import form
 from zope.component import getUtility
 from zope.interface import implements
 from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.security.management import checkPermission
+from zope.viewlet.viewlet import ViewletBase
 
 from schooltool import SchoolToolMessage as _
 from schooltool.skin.form import BasicForm
@@ -53,6 +55,7 @@ from schooltool.person.interfaces import IPersonContainer, IPersonContained
 from schooltool.person.person import Person
 from schooltool.widget.password import PasswordConfirmationWidget
 from schooltool.traverser.traverser import AdapterTraverserPlugin
+from schooltool.person.interfaces import IPasswordWriter
 
 
 def SourceMultiCheckBoxWidget(field, request):
@@ -192,3 +195,11 @@ class PersonPasswordEditView(BasicForm):
 
 class IPersonInfoManager(IViewletManager):
     """Provides a viewlet hook for the information on a Person's page."""
+
+
+class PasswordEditMenuItem(ViewletBase):
+    """Viewlet that is visible if user can change the password of the context."""
+
+    def render(self):
+        if checkPermission('schooltool.edit', IPasswordWriter(self.context)):
+            return super(PasswordEditMenuItem, self).render()
