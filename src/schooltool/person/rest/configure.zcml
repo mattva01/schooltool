@@ -5,12 +5,6 @@
 
 <!-- Adapters -->
 
-  <class class=".person.PersonPasswordWriter">
-    <allow interface=".interfaces.IPasswordWriter" />
-  </class>
-
-  <adapter factory=".person.PersonPasswordWriter" />
-
   <class class=".preference.PersonPreferencesAdapter">
     <allow
         interface=".interfaces.IPersonPreferencesAdapter" />
@@ -110,7 +104,7 @@
       />
 
   <view
-      for=".interfaces.IPasswordWriter"
+      for="schooltool.person.interfaces.IPasswordWriter"
       name="PUT"
       factory=".person.PasswordWriterView"
       type="zope.publisher.interfaces.http.IHTTPRequest"

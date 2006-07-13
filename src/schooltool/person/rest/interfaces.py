@@ -23,12 +23,6 @@ $Id$
 """
 from zope.interface import Interface, Attribute
 
-class IPasswordWriter(Interface):
-    """Interface for setting a password for a person through REST."""
-
-    def setPassword(password):
-        """Set the password of the person."""
-
 
 class IPersonPhoto(Interface):
     """Interface for writing and reading of Person photo."""

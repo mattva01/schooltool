@@ -35,16 +35,16 @@ from zope.app.testing import ztapi, setup
 from schooltool.app.rest.testing import ApplicationObjectViewTestMixin
 from schooltool.app.rest.testing import ContainerViewTestMixin
 from schooltool.app.rest.testing import FileFactoriesSetUp
+from schooltool.person.interfaces import IPasswordWriter
 from schooltool.person.interfaces import IPersonContainer
 from schooltool.person.person import PersonContainer, Person
-from schooltool.person.rest.interfaces import IPasswordWriter
+from schooltool.person.person import PersonPasswordWriter
 from schooltool.person.rest.interfaces import IPersonPhoto
+from schooltool.person.rest.person import PasswordWriterView
 from schooltool.person.rest.person import PersonContainerView, PersonView
-from schooltool.person.rest.person import PersonPasswordWriter
+from schooltool.person.rest.person import PersonFile, PersonFileFactory
 from schooltool.person.rest.person import PersonPhotoAdapter
 from schooltool.person.rest.person import PersonPhotoView
-from schooltool.person.rest.person import PersonFile, PersonFileFactory
-from schooltool.person.rest.person import PasswordWriterView
 from schooltool.person.rest.preference import PersonPreferencesView
 
 
@@ -152,20 +152,6 @@ class TestPersonView(ApplicationObjectViewTestMixin, unittest.TestCase):
                </person>""")
 
 
-class TestPersonPasswordWriter(unittest.TestCase):
-
-    def testSetPassword(self):
-        person =  Person("Frog")
-        passwordWriter = PersonPasswordWriter(person)
-        passwordWriter.setPassword("gorf")
-        self.assert_(person.checkPassword("gorf"))
-
-    def testConformance(self):
-        person =  Person("Frog")
-        passwordWriter = PersonPasswordWriter(person)
-        self.assert_(verifyObject(IPasswordWriter, passwordWriter))
-
-
 class TestPersonPasswordWriterView(ApplicationObjectViewTestMixin,
                                    unittest.TestCase):
 
@@ -264,7 +250,7 @@ def doctest_PersonPasswordHttpTraverser():
 
     This traverser allows you to access the password of the person:
 
-        >>> from schooltool.person.rest.person import PersonPasswordWriter
+        >>> from schooltool.person.person import PersonPasswordWriter
         >>> zope.component.provideAdapter(PersonPasswordWriter)
 
         >>> from schooltool.person.rest.person import \
@@ -287,7 +273,7 @@ def doctest_PersonPasswordHttpTraverser():
     Now access the password:
 
         >>> traverser.publishTraverse(request, 'password')
-        <schooltool.person.rest.person.PersonPasswordWriter ...>
+        <schooltool.person.person.PersonPasswordWriter ...>
     """
 
 
@@ -457,7 +443,6 @@ def test_suite():
                      TestPersonFileFactory,
                      TestPersonFile,
                      TestPersonView,
-                     TestPersonPasswordWriter,
                      TestPersonPasswordWriterView,
                      TestPersonPhotoAdapter,
                      TestPersonPhotoView)])

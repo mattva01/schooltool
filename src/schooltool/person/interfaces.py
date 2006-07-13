@@ -51,6 +51,13 @@ def vocabulary(choices):
         [zope.schema.vocabulary.SimpleTerm(v, title=t) for v, t in choices])
 
 
+class IPasswordWriter(zope.interface.Interface):
+    """Interface for setting a password for a person."""
+
+    def setPassword(password):
+        """Set the password of the person."""
+
+
 class IHavePreferences(IAnnotatable):
     """An object that can have preferences. Namely a Person."""
 

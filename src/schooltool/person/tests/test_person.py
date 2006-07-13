@@ -29,6 +29,10 @@ from zope.testing import doctest
 from zope.app.container.contained import ObjectAddedEvent
 from zope.app.testing import setup
 
+from schooltool.person.person import Person
+from schooltool.person.person import PersonPasswordWriter
+from schooltool.person.interfaces import IPasswordWriter
+
 from schooltool.testing import setup as sbsetup
 
 
@@ -197,10 +201,26 @@ def doctest_PersonPreferences():
 
     """
 
+
+class TestPersonPasswordWriter(unittest.TestCase):
+
+    def testSetPassword(self):
+        person =  Person("Frog")
+        passwordWriter = PersonPasswordWriter(person)
+        passwordWriter.setPassword("gorf")
+        self.assert_(person.checkPassword("gorf"))
+
+    def testConformance(self):
+        person =  Person("Frog")
+        passwordWriter = PersonPasswordWriter(person)
+        self.assert_(verifyObject(IPasswordWriter, passwordWriter))
+
+
 def test_suite():
     return unittest.TestSuite([
         doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
         doctest.DocTestSuite('schooltool.person.person'),
+        unittest.makeSuite(TestPersonPasswordWriter)
         ])
 
 

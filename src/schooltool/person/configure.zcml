@@ -29,6 +29,12 @@
       type="zope.app.content.interfaces.IContentType"
       />
 
+  <class class=".person.PersonPasswordWriter">
+    <allow interface=".interfaces.IPasswordWriter" />
+  </class>
+
+  <adapter factory=".person.PersonPasswordWriter" />
+
   <class class=".person.Person">
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />
     <implements interface="schooltool.note.interfaces.IHaveNotes" />

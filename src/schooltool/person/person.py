@@ -44,6 +44,7 @@ from schooltool.person.interfaces import IPerson
 from schooltool.app.security import ICalendarParentCrowd
 from schooltool.securitypolicy.crowds import ConfigurableCrowd
 from schooltool.person.interfaces import IPersonPreferences
+from schooltool.person.interfaces import IPasswordWriter
 
 
 class PersonContainer(btree.BTreeContainer):
@@ -153,6 +154,19 @@ class PersonCalendarCrowd(Crowd):
 
 def getCalendarOwner(calendar):
     return IPerson(calendar.__parent__, None)
+
+
+class PersonPasswordWriter(object):
+    """Adapter of person to IPasswordWriter."""
+    adapts(IPerson)
+    implements(IPasswordWriter)
+
+    def __init__(self, person):
+        self.person = person
+
+    def setPassword(self, password):
+        """See IPasswordWriter."""
+        self.person.setPassword(password)
 
 
 class PersonListViewersCrowd(ConfigurableCrowd):

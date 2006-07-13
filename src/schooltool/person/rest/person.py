@@ -31,9 +31,10 @@ from schooltool.app.rest.app import ApplicationObjectFileFactory
 from schooltool.app.rest.app import GenericContainerView
 from schooltool.traverser.traverser import AdapterTraverserPlugin
 
-from schooltool.person.interfaces import IPersonContainer, IPerson
+from schooltool.person.interfaces import (IPersonContainer, IPerson,
+                                          IPasswordWriter)
 from schooltool.person.person import Person
-from schooltool.person.rest.interfaces import IPasswordWriter, IPersonPhoto
+from schooltool.person.rest.interfaces import IPersonPhoto
 
 
 class PersonFileFactory(ApplicationObjectFileFactory):
@@ -94,19 +95,6 @@ class PersonView(View):
 
 PersonPasswordHTTPTraverser = AdapterTraverserPlugin(
     'password', IPasswordWriter)
-
-
-class PersonPasswordWriter(object):
-    """Adapter of person to IPasswordWriter."""
-    adapts(IPerson)
-    implements(IPasswordWriter)
-
-    def __init__(self, person):
-        self.person = person
-
-    def setPassword(self, password):
-        """See IPasswordWriter."""
-        self.person.setPassword(password)
 
 
 class PasswordWriterView(View):
