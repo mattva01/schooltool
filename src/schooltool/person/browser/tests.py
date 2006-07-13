@@ -166,12 +166,12 @@ def doctest_PersonCSVImporter():
     r"""Tests for PersonCSVImporter.
 
     Make sure we have the PersonFactory utility available:
-    
+
         >>> from zope.component import provideUtility
         >>> from schooltool.person.utility import PersonFactory
         >>> from schooltool.person.interfaces import IPersonFactory
         >>> provideUtility(PersonFactory(), IPersonFactory)
-        
+
     Create a person container and an importer
 
 
