@@ -389,7 +389,7 @@ factory path:
         <i>Registered at:</i>
         <a href="...">Zope3/.../schooltool/person/rest/configure.zcml</a>
        <span class="small">
-         (line 88)</span>
+         (line ...)</span>
       </div>
       <div>
         <i>Factory path:</i>
@@ -409,7 +409,7 @@ The 'PUT' view has a lot more information besides the standard information,
       <i>Registered at:</i>
       <a href="...">Zope3/.../zope/app/http/configure.zcml</a>
       <span class="small">
-        (line 34)</span>
+        (line ...)</span>
     </div>
     <div>
       <i>Factory path:</i>
@@ -434,7 +434,7 @@ a given container,
           <i>Registered at:</i>
           <a href="...">Zope3/.../schooltool/person/rest/configure.zcml</a>
           <span class="small">
-            (line 66)</span>
+            (line ...)</span>
         </div>
         <div>
           <i>Factory path:</i>
@@ -460,7 +460,7 @@ the modification adapter,
           <i>Registered at:</i>
           <a href="...">Zope3/.../schooltool/person/rest/configure.zcml</a>
           <span class="small">
-            (line 73)</span>
+            (line ...)</span>
         </div>
         <div>
           <i>Factory path:</i>
@@ -496,7 +496,7 @@ also get a list of containers from which the verb is valid:
           <i>Registered at:</i>
           <a href="...">Zope3/.../zope/app/http/configure.zcml</a>
           <span class="small">
-            (line 43)</span>
+            (line ...)</span>
         </div>
         <div>
           <i>Factory path:</i>
@@ -532,7 +532,7 @@ also get a list of containers from which the verb is valid:
 #           <i>Registered at:</i>
 #           <a href="...">Zope3/.../schooltool/app/rest/configure.zcml</a>
 #           <span class="small">
-#            (line 67)</span>
+#            (line ...)</span>
 #         </div>
 #       </div>
 #     </div>
@@ -558,7 +558,7 @@ also get a list of containers from which the verb is valid:
 #           <i>Registered at:</i>
 #           <a href="...">Zope3/.../schooltool/app/rest/configure.zcml</a>
 #           <span class="small">
-#             (line 176)</span>
+#             (line ...)</span>
 #         </div>
 #         <div>
 #           <i>Factory path:</i>
