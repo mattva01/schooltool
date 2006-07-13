@@ -41,16 +41,19 @@ from zope.formlib import form
 from zope.component import getUtility
 from zope.interface import implements
 from zope.app.pagetemplate import ViewPageTemplateFile
+
 from schooltool import SchoolToolMessage as _
 from schooltool.skin.form import BasicForm
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.browser.app import ContainerView, ContainerDeleteView
+from schooltool.person.interfaces import IPasswordWriter
 from schooltool.person.interfaces import IPerson, IPersonFactory
 from schooltool.person.interfaces import IPersonPreferences
 from schooltool.person.interfaces import IPersonContainer, IPersonContained
 from schooltool.person.person import Person
 from schooltool.widget.password import PasswordConfirmationWidget
 from schooltool.traverser.traverser import AdapterTraverserPlugin
+
 
 def SourceMultiCheckBoxWidget(field, request):
     source = field.value_type.source
@@ -63,6 +66,7 @@ class PersonContainerDeleteView(ContainerDeleteView):
     def isDeletingHimself(self):
         person = IPerson(self.request.principal, None)
         return person in self.itemsToDelete
+
 
 class PersonPhotoView(BrowserView):
     """View that returns photo of a Person."""
@@ -119,6 +123,7 @@ PreferencesTraverserPlugin = AdapterTraverserPlugin(
 class IGroupsSource(IIterableSource):
     pass
 
+
 class GroupsSource(object):
     implements(IGroupsSource)
 
@@ -128,6 +133,7 @@ class GroupsSource(object):
     def __len__(self):
         return len(getSchoolToolApplication()['groups'].values())
 
+
 class GroupsTerm(object):
     implements(ITitledTokenizedTerm)
 
@@ -135,6 +141,7 @@ class GroupsTerm(object):
         self.title = title
         self.token = token
         self.value = value
+
 
 class GroupsTerms(object):
     implements(ITerms)
@@ -149,12 +156,14 @@ class GroupsTerms(object):
     def getValue(self, token):
         return getSchoolToolApplication()['groups'][token]
 
+
 class IPasswordEditForm(Interface):
     """Schema for a person's edit form."""
 
     password = Password(
         title=_("Password"),
         required=False)
+
 
 class PersonPasswordEditView(BasicForm):
     form_fields = form.Fields(IPasswordEditForm, render_context=False)
@@ -169,7 +178,8 @@ class PersonPasswordEditView(BasicForm):
             self.status = _("No new password was supplied so "
                             "original password is unchanged")
             return
-        self.context.setPassword(data['password'])
+        writer = IPasswordWriter(self.context)
+        writer.setPassword(data['password'])
         self.status = _('Changed password')
 
     @form.action(_("Cancel"))
@@ -178,6 +188,7 @@ class PersonPasswordEditView(BasicForm):
         url = zapi.absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
         return ''
+
 
 class IPersonInfoManager(IViewletManager):
     """Provides a viewlet hook for the information on a Person's page."""
