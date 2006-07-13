@@ -102,7 +102,7 @@
       for="schooltool.person.interfaces.IPerson"
       manager="schooltool.skin.IActionMenuManager"
       template="templates/actionsViewlet.pt"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       link="@@password_edit.html"
       title="Edit Password"
       order="30"
@@ -121,7 +121,7 @@
      name="password_edit.html"
      for="..interfaces.IPerson"
      class=".person.PersonPasswordEditView"
-     permission="schooltool.edit"
+     permission="schooltool.view"
      />
 
   <page

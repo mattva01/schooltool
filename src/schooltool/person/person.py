@@ -45,6 +45,7 @@ from schooltool.app.security import ICalendarParentCrowd
 from schooltool.securitypolicy.crowds import ConfigurableCrowd
 from schooltool.person.interfaces import IPersonPreferences
 from schooltool.person.interfaces import IPasswordWriter
+from schooltool.securitypolicy.crowds import OwnerCrowd
 
 
 class PersonContainer(btree.BTreeContainer):
@@ -179,3 +180,13 @@ class PersonInfoViewersCrowd(ConfigurableCrowd):
     """The crowd of people who can view the info of a person."""
 
     setting_key = 'everyone_can_view_person_info'
+
+
+class PasswordWriterCrowd(ConfigurableCrowd):
+
+    setting_key = 'persons_can_change_their_passwords'
+
+    def contains(self, principal):
+        """Return the value of the related setting (True or False)."""
+        return (ConfigurableCrowd.contains(self, principal) and
+                OwnerCrowd(self.context.person).contains(principal))

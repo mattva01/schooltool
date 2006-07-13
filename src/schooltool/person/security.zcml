@@ -17,6 +17,11 @@
       text="Persons can set their own preferences"
       default="True" />
 
+  <setting
+      key="persons_can_change_their_passwords"
+      text="Persons can change their own passwords"
+      default="True" />
+
   <crowd
       name="person_list_viewers"
       factory=".person.PersonListViewersCrowd" />
@@ -28,6 +33,10 @@
   <crowd
       name="person_prefs_editors"
       factory=".preference.PersonPreferencesEditorsCrowd" />
+
+  <crowd
+      name="person_password_writers"
+      factory=".person.PasswordWriterCrowd" />
 
   <allow
       interface="schooltool.person.interfaces.IPersonContainer"
@@ -63,6 +72,11 @@
   <allow
       interface="schooltool.person.interfaces.IPersonPreferences"
       crowds="administration person_prefs_editors"
+      permission="schooltool.edit" />
+
+  <allow
+      interface="schooltool.person.interfaces.IPasswordWriter"
+      crowds="administration person_password_writers"
       permission="schooltool.edit" />
 
 </configure>
