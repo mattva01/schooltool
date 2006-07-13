@@ -17,6 +17,25 @@
     <script type="text/javascript" src=""
             tal:attributes="src context/++resource++calwidget-calendar.js">
     </script>
+<script type="text/javascript" src="/@@/FCKeditor/fckeditor.js"></script>
+<script type="text/javascript">
+<!--
+  function ReplaceAllTextareas() {
+    // replace all of the textareas
+    var allTextAreas = document.getElementsByTagName("textarea");
+    for (var i=0; i < allTextAreas.length; i++) {
+      ta = allTextAreas[i]
+      if (ta.className == 'FCKeditor'){
+        var oFCKeditor = new FCKeditor( allTextAreas[i].name, "100%", "400px" ) ;
+        oFCKeditor.BasePath = "/@@/FCKeditor/" ;
+        oFCKeditor.Config['SkinPath'] = "/@@/FCKeditor/editor/skins/silver/"
+        oFCKeditor.ToolbarSet = "Default";
+        oFCKeditor.ReplaceTextarea() ;
+      }
+    }
+  }
+    // -->
+</script>
     <tal:block replace="structure provider:schooltool.CSS" />
     <tal:block replace="structure provider:schooltool.JavaScript" />
     <metal:block define-slot="title">
@@ -24,7 +43,7 @@
     </metal:block>
     <metal:block metal:define-slot="extrahead" />
   </head>
-  <body>
+  <body onLoad="ReplaceAllTextareas()">
     <div id="header">
       <div class="logo">
         <a href=""
@@ -92,22 +111,23 @@
     </div>
     <div id="columns">
       <metal:block define-slot="column-left">
-        <div id="column-left">
+        <!--<div id="column-left">
           <div metal:define-slot="navigation-box"
                tal:replace="structure provider:schooltool.Navigation"
                tal:on-error="nothing" />
-
-          <tal:block define="target python:hasattr(view, 'actualContext')
-                                           and view.actualContext() or context">
-            <div metal:define-slot="actions-box"
-                 tal:replace="structure provider:schooltool.Actions"
-                 tal:on-error="nothing"/>
-          </tal:block>
-
           <metal:block define-slot="column-left-extra"/>
-        </div>
+        </div>-->
       </metal:block>
+      <div id="action-bar">
+        <tal:block define="target python:hasattr(view, 'actualContext')
+                                         and view.actualContext() or context">
+          <div metal:define-slot="actions-bar"
+               tal:replace="structure provider:schooltool.ActionsBar"
+               />
+        </tal:block>
+      </div>
       <div id="column-center">
+        <br />
         <div id="content-header">
           <metal:block define-slot="content-header"/>
         </div>

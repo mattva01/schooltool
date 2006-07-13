@@ -143,12 +143,12 @@ FORM.standalone .controls, div.standalone .controls {
 
 #column-left {
 	float: left;
-	width: 14em;
+	width: 0em;
 	margin-bottom: 5em;
 }
 
 #column-center {
-	margin-left: 14em;
+	margin-left: 0em;
 }
 
 #footer {

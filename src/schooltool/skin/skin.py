@@ -30,6 +30,7 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.viewlet.interfaces import IViewletManager
 from zope.viewlet.manager import ViewletManagerBase
 from zope.app import zapi
+from zope.app.publisher.browser.menu import getMenu
 
 from schooltool.securitypolicy.crowds import Crowd
 from schooltool.securitypolicy.interfaces import ICrowd
@@ -162,6 +163,10 @@ class ActionMenuViewletManager(OrderedViewletManager):
         """See zope.contentprovider.interfaces.IContentProvider"""
         return self.getSubItems(self.context)
 
+class ActionMenuViewlet(object):
+
+    def getMenu(self):
+        return getMenu(self.menu, self.context, self.request)
 
 class NavigationViewletCrowd(Crowd):
     """A crowd for navigation viewlets.

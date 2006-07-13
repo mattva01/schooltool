@@ -1,0 +1,107 @@
+<tal:block i18n:domain="schooltool"
+           tal:define="url view/context/@@absolute_url;
+                       actions view/context/@@view_get_menu/schooltool_actions">
+
+<style type="text/css">
+#dropdowncontainer {
+  position: absolute;
+  left: 0px;
+  clear: left;
+  z-index: 100;
+}
+#dropdowncontainer tr td {
+  vertical-align: top;
+}
+
+#dropdowncontainer tr td div{
+  border: 1px solid #aaa;
+}
+div .singleton,
+div .dropdown {
+  width: auto;
+  line-height:1.2em;
+  height:1.2em;
+  overflow:hidden;
+  text-align:left;
+  z-index:100;
+  font-weight: bold;
+}
+div .singleton:hover,
+div .dropdown:hover {
+  height: auto;
+  background:#eee;}
+
+div .singleton .title{
+  font-size: 1em;
+  padding-right: .5ex;
+  padding-left: .5ex;
+  background: #ddd;
+}
+div .singleton:hover .title{
+  background:#eee;
+}
+div .singleton a.title{
+  font-family: "Trebuchet MS", Sans-Serif;
+  text-decoration: none;
+  display: block;
+  }
+div .dropdown .title{
+  font-size: 1em;
+  padding-right: .5ex;
+  padding-left: 15px;
+  background: #ddd url('++resource++rightarrow.png') no-repeat center left;
+}
+div .dropdown:hover .title{
+  border-bottom:1px solid #aaa;
+  background: #ddd url('++resource++downarrow.png') no-repeat center left;
+}
+div .dropdown ul{ 
+  padding: 0px; 
+  margin: 0px;
+}
+
+div .dropdown a {
+  background: #eee;
+  border: 1px solid #eee;
+  border-left: 0px;
+  border-right: 0px;
+  display:block;
+  line-height:18px;
+  color:#304D6B;
+  text-decoration:none;
+  width: auto;
+  padding-left: .5ex;
+  padding-right: .5ex;
+  font-size: x-small;
+}
+div .dropdown a:hover {
+  background: #7590ae;
+  border-top: 1px #314e6c solid;
+  border-bottom: 1px #314e6c solid;
+  color: #fff !important;
+}
+</style>
+
+  <!-- old-style menu actions (obsolete) -->
+  <table id="dropdowncontainer">
+  <tr>
+    <td>
+      <div class="dropdown">
+        <h3 class="title">Navigation</h3>
+          <div tal:replace="structure provider:schooltool.Navigation"
+               tal:on-error="nothing" />
+      </div>
+    </td>
+    <td tal:condition="actions">
+      <div class="dropdown">
+        <h3 class="title">Actions</h3>
+        <a tal:repeat="view actions"
+           tal:attributes="href string:${url}/${view/action}"
+           tal:content="view/title">Item one</a>
+      </div>
+    </td>
+    <td tal:repeat="viewlet options/viewlets"
+        tal:content="structure viewlet/render" />
+  </tr>
+  </table>
+</tal:block>

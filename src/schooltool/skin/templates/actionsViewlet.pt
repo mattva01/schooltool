@@ -1,5 +1,6 @@
-<li>
+<div class="singleton">
   <a tal:attributes="href string:${context/@@absolute_url}/${view/link}"
      tal:content="view/title"
+     class="title"
      i18n:translate="">Title</a>
-</li>
+</div>

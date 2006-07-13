@@ -1,9 +1,6 @@
-<div class="portlet" i18n:domain="schooltool">
-<h4 i18n:translate="">Navigation</h4>
 <ul>
   <tal:block
       repeat="viewlet options/viewlets"
       replace="structure viewlet/render" />
 
 </ul>
-</div>

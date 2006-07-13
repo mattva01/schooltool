@@ -15,6 +15,18 @@
       class=".skin.ActionMenuViewletManager"
       template="templates/actions.pt"
       />
+  <viewletManager
+      name="schooltool.ActionsBar"
+      permission="zope.Public"
+      class=".skin.ActionMenuViewletManager"
+      template="templates/actionsbar.pt"
+      />
+  <viewletManager
+      name="schooltool.ActionsBar.SubItems"
+      permission="zope.Public"
+      class=".skin.ActionMenuViewletManager"
+      template="templates/actionsbar.pt"
+      />
 
   <viewletManager
       name="schooltool.CSS"
@@ -169,6 +181,13 @@
             layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="private-note-body-l.gif"
             file="resources/private-note-body-l.gif"
+            layer="schooltool.skin.ISchoolToolLayer" />
+
+  <resource name="rightarrow.png"
+            file="resources/rightarrow.png"
+            layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="downarrow.png"
+            file="resources/downarrow.png"
             layer="schooltool.skin.ISchoolToolLayer" />
 
   <!-- Breadcrumbs -->
