@@ -307,7 +307,7 @@ class AttendanceRecord(Persistent):
         self.explanations.append(explanation)
 
     def makeTardy(self, arrival_time):
-        assert type(arrival_time) == datetime.datetime
+        assert type(arrival_time) == datetime.datetime or arrival_time is None
         if not self.isAbsent():
             raise AttendanceError("makeTardy when status is %s, not ABSENT"
                                   % self.status)

@@ -27,12 +27,15 @@
      i18n:translate="">
 </div>
 
+<p i18n:translate="">For Tardy, enter a number of minutes late. This
+  field is optional.</p>
+
 <table class="attendance-table">
   <tr class="attendance-retro-row">
     <th i18n:translate="" class="first">Name</th>
     <th i18n:translate="" class="other">Present</th>
     <th i18n:translate="" class="other">Absent</th>
-    <th i18n:translate="" class="other">Tardy, arrival time</th>
+    <th i18n:translate="" class="other">Tardy, mins late/arrival time</th>
   </tr>
 
   <tal:loop repeat="info view/listMembers">

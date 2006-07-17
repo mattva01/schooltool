@@ -434,16 +434,12 @@ class AttendanceView(BrowserView):
                 name = person.__name__
                 arrival_string = self.request.get(name + '_tardy', '').strip()
                 if self.request.get(name) == 'T':
-                    if not arrival_string:
-                        self.arrival_errors[name] = _(
-                            'You need to provide the arrival time')
-                        continue
                     try:
                         self.arrivals[name] = self.getArrival(name + '_tardy')
                     except ValueError:
                         self.arrival_errors[name] = _(
-                            'The arrival time you entered is '
-                            'invalid.  Please use HH:MM format')
+                            'The minutes late value you entered is '
+                            'invalid.  Please use an integer number of minutes.')
                 elif arrival_string:
                     self.arrival_errors[name] = _(
                         'Arrival times only apply to tardy students')
@@ -484,11 +480,13 @@ class AttendanceView(BrowserView):
         If the time is not specified, defaults to now.
         """
         if self.request.get(field):
-            tz = ViewPreferences(self.request).timezone
-            time = parse_time(self.request[field])
-            result = datetime.datetime.combine(self.date, time)
-            return tz.localize(result)
-        return pytz.utc.localize(datetime.datetime.utcnow())
+            mins = int(self.request[field])
+            result = self.meeting.dtstart + datetime.timedelta(minutes=mins)
+            return result
+        if self.sectionMeetingFinished():
+            return None
+        else:
+            return pytz.utc.localize(datetime.datetime.utcnow())
 
     def publishTraverse(self, request, name):
         """Collect additional URL elements."""
@@ -723,16 +721,13 @@ class StudentAttendanceView(BrowserView, AttendanceInheritanceMixin):
                                  ' $absence', mapping=mapping))
             return False
 
-    def parseArrivalTime(self, date, late_arrival):
+    def parseArrivalTime(self, dt, late_arrival):
         """Converts a string HH:MM to a datetime.
 
         If the time is not specified, returns None.
         """
         if late_arrival:
-            tz = ViewPreferences(self.request).timezone
-            time = parse_time(late_arrival)
-            result = datetime.datetime.combine(date, time)
-            return tz.localize(result)
+            return dt + datetime.timedelta(minutes=int(late_arrival))
 
     def _makeTardy(self, ar, late_arrival, mapping):
         """Convert homeroom attendance record into a tardy."""
@@ -744,15 +739,10 @@ class StudentAttendanceView(BrowserView, AttendanceInheritanceMixin):
             return False
 
         try:
-            arrived = self.parseArrivalTime(ar.date, late_arrival)
+            arrived = self.parseArrivalTime(ar.datetime, late_arrival)
         except ValueError:
             self.tardy_error = _('The arrival time you entered is '
                                  'invalid.  Please use HH:MM format')
-            return False
-
-
-        if not late_arrival:
-            self.tardy_error = _('You must provide a valid arrival time.')
             return False
 
         try:

@@ -387,6 +387,15 @@ def doctest_AttendanceRecord_makeTardy():
         ...     else:
         ...         print "no AttendanceError when status=%s" % status
 
+    The arrival time can be None:
+
+        >>> ar = AttendanceRecord(None, some_dt, ABSENT, 'person')
+        >>> ar._createWorkflow('person')
+        >>> ar.makeTardy(None)
+        >>> ar.isTardy()
+        True
+        >>> ar.late_arrival
+
     """
 
 

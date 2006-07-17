@@ -144,7 +144,7 @@ And register some absences
     >>> largo.getControl(name='joniukas_check').value=True
     >>> largo.getControl('Mark as absent').click()
     >>> largo.getControl(name='joniukas_check').value=True
-    >>> largo.getControl('Arrived at').value = '11:45'
+    >>> largo.getControl('Arrived at').value = '10'
     >>> largo.getControl('Make tardy').click()
 
 

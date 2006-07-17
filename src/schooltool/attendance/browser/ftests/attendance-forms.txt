@@ -208,7 +208,7 @@ Try it again (Joniukas remains checked)
 
     >>> largo.getControl(name='joniukas_check').value
     True
-    >>> largo.getControl('Arrived at').value = '10:22'
+    >>> largo.getControl('Arrived at').value = '52'
     >>> largo.getControl('Make tardy').click()
 
 Now Joniukas is tardy
@@ -353,7 +353,7 @@ The default values of the radio buttons are "present":
 
 Largo enters an arrival time and tries to submit the form:
 
-    >>> largo.getControl(name="joniukas_tardy").value = '12:00'
+    >>> largo.getControl(name="joniukas_tardy").value = '3'
     >>> largo.getControl('Submit').click()
 
 He gets an error:
@@ -402,7 +402,7 @@ disabled:
           <input type="radio" value="T" disabled="disabled"
                  checked="checked" name="joniukas" />
           <input type="text" disabled="disabled"
-                 name="joniukas_tardy" value="12:00" />
+                 name="joniukas_tardy" value="3" />
         </td>
       </tr>
     </table>

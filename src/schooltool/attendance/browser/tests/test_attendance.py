@@ -1104,6 +1104,7 @@ def doctest_AttendanceView_update():
         ...                             'person1_check': 'on',
         ...                             'arrival': ''})
         >>> view = AttendanceView(section, request)
+        >>> view.sectionMeetingFinished = lambda: False
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
         >>> view.meeting = getPeriodEventForSection(section, view.date, 'C')
@@ -1134,7 +1135,7 @@ def doctest_AttendanceView_update():
 
         >>> request = TestRequest(form={'TARDY': 'Make tardy',
         ...                             'person2_check': 'on',
-        ...                             'arrival': '12:20'})
+        ...                             'arrival': '80'})
         >>> view = AttendanceView(section, request)
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
@@ -1155,7 +1156,7 @@ def doctest_AttendanceView_update():
 
         >>> request = TestRequest(form={'TARDY': 'Make tardy',
         ...                             'person5_check': 'on',
-        ...                             'arrival': '2200'})
+        ...                             'arrival': 'late!'})
         >>> view = AttendanceView(section, request)
         >>> view.date = datetime.date(2005, 12, 15)
         >>> view.period_id = 'C'
@@ -1166,6 +1167,28 @@ def doctest_AttendanceView_update():
 
         >>> view.error
         u'The arrival time you entered is invalid.  Please use HH:MM format'
+
+    If the arrival time is not specified on the retroactive form, no
+    arrival time is set (tardy is tardy):
+
+        >>> request = TestRequest(form={'TARDY': 'Make tardy',
+        ...                             'person5_check': 'on',
+        ...                             'arrival': ''})
+        >>> view = AttendanceView(section, request)
+        >>> view.date = datetime.date(2005, 12, 15)
+        >>> view.period_id = 'C'
+        >>> view.meeting = getPeriodEventForSection(section, view.date, 'C')
+        >>> view.sectionMeetingFinished = lambda: True
+        >>> view.homeroom = False
+
+        >>> view.update()
+
+        >>> list(ISectionAttendance(person5))
+        [SectionAttendanceRecord(<Section>,
+              datetime.datetime(2005, 12, 15, 11, 0, tzinfo=<UTC>), TARDY)]
+
+        >>> print list(ISectionAttendance(person5))[0].late_arrival
+        None
 
     """
 
@@ -1347,7 +1370,7 @@ def doctest_AttendanceView_retro_update():
     third was tardy, and we're undecided about the last one:
 
         >>> view.request = TestRequest(form={'p1': 'P', 'p2': 'A',
-        ...                                  'p3': 'T', 'p3_tardy': '10:10',
+        ...                                  'p3': 'T', 'p3_tardy': '10',
         ...                                  'p4': 'U'})
         >>> view.retro_update()
 
@@ -1359,7 +1382,7 @@ def doctest_AttendanceView_retro_update():
     Now we press the submit button:
 
         >>> view.request = TestRequest(form={'p1': 'P', 'p2': 'A',
-        ...                                  'p3': 'T', 'p3_tardy': '10:10',
+        ...                                  'p3': 'T', 'p3_tardy': '10',
         ...                                  'p4': 'U', 'SUBMIT': 'Go!'})
         >>> view.retro_update()
 
@@ -1403,19 +1426,18 @@ def doctest_AttendanceView_retro_update():
         >>> view.meeting = getPeriodEventForSection(section, view.date,
         ...                                         view.period_id)
         >>> view.homeroom = False
-        >>> view.request = TestRequest(form={'p1': 'P', 'p1_tardy': '12:34',
+        >>> view.request = TestRequest(form={'p1': 'P', 'p1_tardy': '12',
         ...                                  'p2': 'T', 'p2_tardy': '',
         ...                                  'p3': 'T', 'p3_tardy': '10 mins',
-        ...                                  'p4': 'T', 'p4_tardy': '10:10',
+        ...                                  'p4': 'T', 'p4_tardy': '10',
         ...                                  'SUBMIT': 'Go!'})
         >>> view.retro_update()
         >>> view.arrivals
-        {'p4': datetime.datetime(2005, 12, 15, 10, 10, tzinfo=<UTC>)}
+        {'p2': None, 'p4': datetime.datetime(2005, 12, 15, 11, 10, tzinfo=<UTC>)}
         >>> pprint(view.arrival_errors)
         {'p1': u'Arrival times only apply to tardy students',
-         'p2': u'You need to provide the arrival time',
-         'p3': u'The arrival time you entered is invalid.
-                 Please use HH:MM format'}
+         'p3': u'The minutes late value you entered is
+                 invalid.  Please use an integer number of minutes.'}
 
     When there were errors, even the valid record was not updated:
 
@@ -1489,9 +1511,14 @@ def doctest_AttendanceView_getArrival():
         >>> from schooltool.person.interfaces import IPersonPreferences
         >>> from schooltool.person.preference import getPersonPreferences
         >>> from schooltool.app.interfaces import ISchoolToolCalendar
+        >>> from schooltool.attendance.browser.attendance \
+        ...     import getPeriodEventForSection
         >>> ztapi.provideAdapter(IPerson, IPersonPreferences,
         ...                      getPersonPreferences)
 
+    We'll need timetables:
+
+        >>> ztapi.provideAdapter(None, ICompositeTimetables, StubTimetables)
 
     Let's create a section and a view:
 
@@ -1500,10 +1527,16 @@ def doctest_AttendanceView_getArrival():
         >>> from schooltool.course.section import Section
         >>> section = Section()
 
-    If no arrival time was entered in the form, current time with
-    timezone is returned:
+    If no arrival time was entered in the retroactive attendance form,
+    None is returned:
 
         >>> view = AttendanceView(section, TestRequest())
+        >>> view.sectionMeetingFinished = lambda: True
+        >>> view.getArrival()
+
+    In the realtime form, current time is returned:
+
+        >>> view.sectionMeetingFinished = lambda: False
         >>> tick = datetime.datetime.utcnow().replace(tzinfo=utc)
         >>> arrival = view.getArrival()
         >>> tock = datetime.datetime.utcnow().replace(tzinfo=utc)
@@ -1511,34 +1544,31 @@ def doctest_AttendanceView_getArrival():
         >>> tick <= arrival <= tock
         True
 
-    However if the time was entered in the form, that time in on the
-    date we're modifying attendance on, with the timezone of the
-    user's preference is returned:
+    A number of minutes the student was late can be entered on the
+    form:
 
-
-        >>> from schooltool.person.person import Person
-        >>> user = Person('user')
-        >>> from schooltool.person.interfaces import IPersonPreferences
-        >>> IPersonPreferences(user).timezone = 'Europe/Vilnius'
-
-        >>> request = TestRequest(form={'arrival': '22:13'})
-        >>> request.setPrincipal(user)
+        >>> request = TestRequest(form={'arrival': '5'})
         >>> view = AttendanceView(section, request)
-        >>> view.date = datetime.date(2005, 12, 29)
+
+    We'll need to know the datetime of the meeting:
+
+        >>> view.date = datetime.date(2005, 12, 15)
+        >>> view.period_id = 'C'
+        >>> view.meeting = getPeriodEventForSection(section, view.date,
+        ...                                         view.period_id)
+
         >>> view.getArrival()
-        datetime.datetime(2005, 12, 29, 22, 13,
-                          tzinfo=<DstTzInfo 'Europe/Vilnius' EET+2:00:00 STD>)
+        datetime.datetime(2005, 12, 15, 11, 5, tzinfo=<UTC>)
 
     If the time in the request is invalid, we just pass the ValueError along:
 
-        >>> request = TestRequest(form={'arrival': '2212'})
-        >>> request.setPrincipal(user)
+        >>> request = TestRequest(form={'arrival': '2212adsf'})
         >>> view = AttendanceView(section, request)
         >>> view.date = datetime.date(2005, 12, 29)
         >>> view.getArrival()
         Traceback (most recent call last):
           ...
-        ValueError: need more than 1 value to unpack
+        ValueError: invalid literal for int(): 2212adsf
 
     """
 
@@ -1944,27 +1974,22 @@ def doctest_StudentAttendanceView_parseArrivalTime():
     However if some time was given it should get parsed and combined
     with the date:
 
-        >>> from schooltool.person.person import Person
-        >>> user = Person('user')
-        >>> from schooltool.person.interfaces import IPersonPreferences
-        >>> IPersonPreferences(user).timezone = 'Europe/Vilnius'
+        >>> vno = timezone('Europe/Vilnius')
 
         >>> request = TestRequest()
-        >>> request.setPrincipal(user)
         >>> view = StudentAttendanceView(None, request)
-        >>> date = datetime.date(2005, 12, 29)
-        >>> view.parseArrivalTime(date, '22:13')
+        >>> dt = vno.localize(datetime.datetime(2005, 12, 29, 22, 0))
+        >>> view.parseArrivalTime(dt, '13')
         datetime.datetime(2005, 12, 29, 22, 13,
                           tzinfo=<DstTzInfo 'Europe/Vilnius' EET+2:00:00 STD>)
 
     If the time is invalid, we just pass the ValueError along:
 
         >>> view = StudentAttendanceView(None, request)
-        >>> date = datetime.date(2005, 12, 29)
-        >>> view.parseArrivalTime(date, '2213')
+        >>> view.parseArrivalTime(dt, 'late')
         Traceback (most recent call last):
           ...
-        ValueError: need more than 1 value to unpack
+        ValueError: ...
 
     """
 
@@ -1982,16 +2007,15 @@ def doctest_StudentAttendanceView_makeTardy():
         >>> def makeTardy(dt):
         ...     print "Made tardy %s" % dt
         >>> ar.makeTardy = makeTardy
-        >>> view.parseArrivalTime = lambda date, time: "%s %s" % (date, time)
 
-        >>> view._makeTardy(ar, "22:15", {'absence': 'THIS ABSENCE'})
-        Made tardy 2006-01-29 22:15
+        >>> view._makeTardy(ar, "15", {'absence': 'THIS ABSENCE'})
+        Made tardy 2006-01-29 00:15:00+00:00
         True
         >>> view.errors
         []
 
         >>> ar.makeTardy = ar._raiseError
-        >>> view._makeTardy(ar, "22:15", {'absence': 'THIS ABSENCE'})
+        >>> view._makeTardy(ar, "15", {'absence': 'THIS ABSENCE'})
         False
 
         >>> for err in view.errors:
@@ -2023,12 +2047,21 @@ def doctest_StudentAttendanceView_makeTardy():
     If no arrival_time was provided a different error message should
     appear:
 
+        >>> view.errors  = []
+
+        >>> view.tardy_error = None
         >>> view.parseArrivalTime = lambda date, time: None
+        >>> ar = HomeroomAttendanceRecordStub(None,
+        ...          datetime.datetime(2006, 1, 29, tzinfo=utc), ABSENT)
+        >>> ar.makeTardy = makeTardy
         >>> view._makeTardy(ar, "", {'absence': 'THIS ABSENCE'})
-        False
+        Made tardy None
+        True
 
         >>> view.tardy_error
-        u'You must provide a valid arrival time.'
+
+        >>> view.errors
+        []
 
     """
 
