@@ -1,9 +1,5 @@
 # These some packaged requirements
 #
-mechanize               ../src/mechanize
-ClientForm              ../src/ClientForm
-ClientCookie            ../src/ClientCookie
-pullparser              ../src/pulllparser
 zope.testbrowser        svn://svn.zope.org/repos/main/Zope3/branches/testbrowser-integration/src/zope/testbrowser
 #zope.testing            svn://svn.zope.org/repos/main/zope.testing/tags/initial/src/zope/testing
 
