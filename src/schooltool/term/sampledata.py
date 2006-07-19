@@ -39,6 +39,10 @@ class SampleTerms(object):
         fall.addWeekdays(0, 1, 2, 3, 4)
         app['terms']['2005-fall'] = fall
 
-        spring = term.Term('2006-spring', date(2006, 1, 26), date(2006, 5, 31))
+        spring = term.Term('2006-spring', date(2006, 1, 26), date(2006, 8, 31))
         spring.addWeekdays(0, 1, 2, 3, 4)
         app['terms']['2006-spring'] = spring
+
+        fall = term.Term('2006-fall', date(2006, 8, 21), date(2006, 12, 22))
+        fall.addWeekdays(0, 1, 2, 3, 4)
+        app['terms']['2006-fall'] = fall

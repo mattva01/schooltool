@@ -49,7 +49,7 @@ def doctest_SampleTerms():
         >>> app = stsetup.setUpSchoolToolSite()
         >>> plugin.generate(app, 42)
         >>> len(app['terms'])
-        2
+        3
 
     These terms are 90 schooldays long:
 
@@ -61,6 +61,11 @@ def doctest_SampleTerms():
         >>> spring = app['terms']['2006-spring']
         >>> schooldays = [day for day in spring if spring.isSchoolday(day)]
         >>> len(schooldays)
+        156
+
+        >>> fall6 = app['terms']['2006-fall']
+        >>> schooldays = [day for day in fall6 if fall6.isSchoolday(day)]
+        >>> len(schooldays)
         90
 
     They span these dates:
@@ -68,7 +73,9 @@ def doctest_SampleTerms():
         >>> print fall.first, fall.last
         2005-08-22 2005-12-23
         >>> print spring.first, spring.last
-        2006-01-26 2006-05-31
+        2006-01-26 2006-08-31
+        >>> print fall6.first, fall6.last
+        2006-08-21 2006-12-22
 
     """
 
