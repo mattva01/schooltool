@@ -86,7 +86,7 @@
   <tal:block condition="not:view/unknowns">
   <input type="submit" name="TARDY" value="Make tardy"
          i18n:attributes="value" />
-  <label for="arrival" i18n:translate="">Arrived at</label>
+  <label for="arrival" i18n:translate="">Minutes late:</label>
   <input type="text" id="arrival" name="arrival"
        tal:attributes="value python:view.error and request['arrival'] or ''"/>
   </tal:block>

@@ -196,7 +196,7 @@ An absence event should be visible in his calendar:
 Finaly Joniukas is here, make him tardy
 
     >>> largo.getControl(name='joniukas_check').value=True
-    >>> largo.getControl('Arrived at').value = 'too late'
+    >>> largo.getControl('Minutes late:').value = 'too late'
     >>> largo.getControl('Make tardy').click()
 
 We should have entered time...
@@ -208,7 +208,7 @@ Try it again (Joniukas remains checked)
 
     >>> largo.getControl(name='joniukas_check').value
     True
-    >>> largo.getControl('Arrived at').value = '52'
+    >>> largo.getControl('Minutes late:').value = '52'
     >>> largo.getControl('Make tardy').click()
 
 Now Joniukas is tardy
