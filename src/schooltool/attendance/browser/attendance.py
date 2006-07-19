@@ -267,7 +267,7 @@ class RealtimeInfo(object):
     """A row of information about a student for the realtime attendance form"""
 
     def __init__(self, name, title, color, symbol, disabled, sparkline_url,
-                 arrival_time):
+                 arrival_time, sort_key):
         self.name = name
         self.title = title
         self.color = color
@@ -275,6 +275,7 @@ class RealtimeInfo(object):
         self.disabled = disabled
         self.sparkline_url = sparkline_url
         self.arrival_time = arrival_time
+        self.sort_key = sort_key
 
     def __repr__(self):
         return 'RealtimeInfo(%r, %r, %r, %r, %r, %r)' % \
@@ -331,6 +332,14 @@ class AttendanceView(BrowserView):
             sparkline_url = '%s/@@sparkline.png?person=%s&date=%s' % \
                             (section_url, person.username, self.date)
 
+            if hasattr(person, 'nameinfo'):
+                sort_key = person.nameinfo.last_name, person.nameinfo.first_name
+            else:
+                # Let's handle all cases
+                names = person.title.rsplit(' ', 1)
+                names.reverse()
+                sort_key = names
+
             result.append(RealtimeInfo(
                 person.__name__, # id
                 person.title,    # title
@@ -338,10 +347,11 @@ class AttendanceView(BrowserView):
                 current_status,  # letter
                 disabled_checkbox,
                 sparkline_url,
-                ar.late_arrival
+                ar.late_arrival,
+                sort_key
                 ))
 
-        result.sort(key=lambda this: this.title)
+        result.sort(key=lambda this: this.sort_key)
         return result
 
     def getDaysAttendanceRecords(self, student, date):
