@@ -224,6 +224,28 @@ idea is that you can implement adapters that use the ``updateOrder()`` method
 to provide high-level ordering APIs if desired.
 
 
+Removing Requirements from Bases
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Removing a requirement from a base requirement tree should
+remove the key from all of its subrequirement.  This is easier to explain with
+code:
+
+  >>> mathReqs = requirement.Requirement(u'Math Reqs')
+  >>> mathReqs[u'addition'] = requirement.Requirement(u'Addition')
+  >>> mathReqs.keys()
+  [u'addition']
+  >>> algebraReqs = requirement.Requirement(u'Algebra Reqs')
+  >>> algebraReqs.addBase(mathReqs)
+  >>> algebraReqs.keys()
+  [u'addition']
+
+  >>> del mathReqs[u'addition']
+  >>> mathReqs.keys()
+  []
+  >>> algebraReqs.keys()
+  []
+
+
 Overriding Requirements
 ~~~~~~~~~~~~~~~~~~~~~~~
 

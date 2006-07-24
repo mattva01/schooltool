@@ -183,6 +183,7 @@ class Requirement(persistent.Persistent,
             for base in self.bases:
                 if key in base:
                     return InheritedRequirement(base[key], self, key)
+
             raise KeyError(key)
 
     def get(self, key, default=None):
@@ -244,7 +245,7 @@ class Requirement(persistent.Persistent,
         for base in self.bases:
             inherited_keys += base.collectKeys()
         if key not in inherited_keys:
-            self._order.remove(key)
+            self.undistributeKey(key)
 
     def updateOrder(self, order):
         """See zope.app.container.interfaces.IOrderedContainer"""
