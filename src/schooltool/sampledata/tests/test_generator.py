@@ -66,7 +66,8 @@ def doctest_generate():
         >>> import schooltool.sampledata.generator
 
         >>> app = 'app'
-        >>> result = schooltool.sampledata.generator.generate(app)
+        >>> result = schooltool.sampledata.generator.generate(app,
+        ...                 pluginNames=['p1','p2','p3'])
 
     The order of the plugins is undefined, so let's sort to see if
     they're all there.
@@ -94,7 +95,8 @@ def doctest_generate():
     Now p3 must be the first plugin run:
 
         >>> DummyPlugin.log = []
-        >>> result = schooltool.sampledata.generator.generate(app)
+        >>> result = schooltool.sampledata.generator.generate(app,
+        ...                 pluginNames=['p1','p2','p3'])
         >>> DummyPlugin.log[0]
         ('p3', 'app', None)
 
@@ -102,7 +104,8 @@ def doctest_generate():
 
         >>> p1.dependencies = 'p2',
         >>> DummyPlugin.log = []
-        >>> result = schooltool.sampledata.generator.generate(app)
+        >>> result = schooltool.sampledata.generator.generate(app,
+        ...                 pluginNames=['p1','p2','p3'])
         >>> DummyPlugin.log
         [('p3', 'app', None), ('p2', 'app', None), ('p1', 'app', None)]
 
@@ -110,10 +113,11 @@ def doctest_generate():
 
         >>> p3.dependencies = 'p1',
         >>> DummyPlugin.log = []
-        >>> result = schooltool.sampledata.generator.generate(app)
+        >>> result = schooltool.sampledata.generator.generate(app,
+        ...                 pluginNames=['p1','p2','p3'])
         Traceback (most recent call last):
           ...
-        CyclicDependencyError: cyclic dependency at 'p2'
+        CyclicDependencyError: cyclic dependency at ...
 
     """
 

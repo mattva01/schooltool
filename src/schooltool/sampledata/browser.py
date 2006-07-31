@@ -28,6 +28,7 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.sampledata.generator import generate
 
+from interfaces import ISampleDataPlugin
 
 class SampleDataView(BrowserView):
 
@@ -52,4 +53,23 @@ class SampleDataView(BrowserView):
                 zapi.absoluteURL(self.context, self.request))
         if 'SUBMIT' in self.request:
             # TODO: maybe clear database here
-            self.times = generate(self.context, self.seed)
+            self.times = generate(self.context, self.seed,
+                                  pluginNames=self._getSelectedPlugins())
+
+    def _getSelectedPlugins(self):
+        for key in self.request.keys():
+            if key.startswith('plugin'):
+                yield key.split('.')[1]
+
+    def getPluginDict(self):
+        selectedPlugins = self._getSelectedPlugins()
+        times = generate(self.context, self.seed,
+                         dry_run=True, pluginNames=selectedPlugins)
+        plugins = dict([(obj.name, False) for name, obj in
+                zapi.getUtilitiesFor(ISampleDataPlugin)])
+        if 'CLEAR' in self.request:
+            return plugins
+        for key in plugins:
+            if key in times.keys():
+                plugins[key] = True
+        return plugins

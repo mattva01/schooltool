@@ -11,15 +11,20 @@
 
 <metal:block metal:fill-slot="body">
 <tal:block condition="not: view/work_done">
-<p i18n:translate="" class="error">Warning: proceeding will populate
+<p i18n:translate="" class="error">
+Warning: proceeding will populate
 the database with randomly generated data.  Do not do this if you have
-any valuable data in your SchoolTool instance.</p>
+any valuable data in your SchoolTool instance.
+</p>
 
-<p i18n:translate="">Setting a random seed allows you to to reproduce
+<p i18n:translate="">
+Setting a random seed allows you to to reproduce
 the same set of sample data by generating it again with the same value
-of the random seed.</p>
+of the random seed.
+</p>
 
-<form tal:attributes="action request/URL" method="POST">
+<form tal:attributes="action request/URL" method="POST"
+      class="standalone">
   <div class="row">
     <div class="label">
        <label>Random seed</label>
@@ -28,6 +33,30 @@ of the random seed.</p>
        <input name="seed" tal:attributes="value view/seed"/>
     </div>
   </div>
+  <fieldset tal:define="plugins view/getPluginDict">
+    <legend i18n:translate="">Plugins</legend>
+    <div class="item_list">
+    <div tal:repeat="plugin plugins">
+      <label>
+        <input tal:attributes="name string:plugin.${plugin};
+                               checked string:yes"
+               tal:condition="python: plugins[plugin]"
+               type="checkbox" />
+        <input tal:attributes="name string:plugin.${plugin};"
+               tal:condition="python: not plugins[plugin]"
+               type="checkbox" />
+        <span tal:replace="plugin" />
+      </label>
+    </div>
+    <div class="controls">
+      <input type="submit" class="button-ok" name="DEPENDENCIES"
+             value="View Dependencies"
+             i18n:attributes="value" />
+      <input type="submit" class="button-ok" name="CLEAR"
+             value="Clear"
+             i18n:attributes="value" />
+    </div>
+  </fieldset>
   <div class="controls">
     <input type="submit" class="button-ok" name="SUBMIT"
            value="Generate" i18n:attributes="value" />

@@ -85,7 +85,9 @@ def doctest_SampleDataView_update():
     data plugins called.
 
         >>> DummyPlugin.log = []
-        >>> request = TestRequest(form={'seed': 'data', 'SUBMIT': 'Generate'})
+        >>> request = TestRequest(form={'seed': 'data', 'SUBMIT': 'Generate',
+        ...                             'plugin.work': 'checked',
+        ...                             'plugin.play': 'checked'})
         >>> view = SampleDataView(app, request)
         >>> view.update()
         >>> pprint(DummyPlugin.log)
@@ -151,7 +153,8 @@ def doctest_SampleDataView__call__():
         ...
         <h1>Sample Data Generation</h1>
         ...
-        <form method="POST" action="http://127.0.0.1">
+        <form method="POST" class="standalone"
+              action="http://127.0.0.1">
           <div class="row">
             <div class="label">
                <label>Random seed</label>
@@ -160,9 +163,31 @@ def doctest_SampleDataView__call__():
                <input name="seed" value="test" />
             </div>
           </div>
+          <fieldset>
+            <legend>Plugins</legend>
+            <div class="item_list">
+            <div>
+              <label>
+                <input type="checkbox" name="plugin.play" />
+                play
+              </label>
+            </div>
+            <div>
+              <label>
+                <input type="checkbox" name="plugin.work" />
+                work
+              </label>
+            </div>
+            <div class="controls">
+              <input type="submit" class="button-ok"
+                     name="DEPENDENCIES" value="View Dependencies" />
+              <input type="submit" class="button-ok" name="CLEAR"
+                     value="Clear" />
+            </div>
+          </div></fieldset>
           <div class="controls">
-            <input type="submit" class="button-ok"
-                   name="SUBMIT" value="Generate" />
+            <input type="submit" class="button-ok" name="SUBMIT"
+                   value="Generate" />
             <input type="submit" class="button-cancel" name="CANCEL"
                    value="Cancel" />
           </div>
@@ -171,7 +196,9 @@ def doctest_SampleDataView__call__():
 
     Let's render the view.  The default value of the seed is displayed there.
 
-        >>> request = TestRequest(form={'seed': 'test', 'SUBMIT': 'Yes'})
+        >>> request = TestRequest(form={'seed': 'test', 'SUBMIT': 'Generate',
+        ...                             'plugin.work': 'checked',
+        ...                             'plugin.play': 'checked'})
         >>> view = SampleDataView(app, request)
         >>> print view()
         <BLANKLINE>

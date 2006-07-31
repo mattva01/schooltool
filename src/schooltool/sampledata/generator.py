@@ -38,7 +38,10 @@ from schooltool.sampledata.interfaces import ISampleDataPlugin
 from schooltool.sampledata.interfaces import CyclicDependencyError
 
 
-def generate(app, seed=None):
+def getPluginList(app):
+    """Get the list of plugins with all their dependencies."""
+
+def generate(app, seed=None, dry_run=False, pluginNames=[]):
     """Generate sample data provided by all plugins.
 
     Runs the generate functions of all plugins in an order such that
@@ -85,7 +88,8 @@ def generate(app, seed=None):
             for dep in plugin.dependencies:
                 visit(dep)
             start = time.clock()
-            plugin.generate(app, seed)
+            if not dry_run:
+                plugin.generate(app, seed)
             times[name] = time.clock() - start
             status[name] = closed
 
@@ -96,7 +100,7 @@ def generate(app, seed=None):
             raise CyclicDependencyError("cyclic dependency at '%s'" % name)
 
 
-    for name in plugins:
+    for name in pluginNames:
         visit(name)
 
     return times
