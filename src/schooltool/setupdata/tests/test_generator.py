@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.sampledata.generator
+Unit tests for schooltool.setupdata.generator
 
 $Id: test_generator.py 5459 2005-12-15 17:28:45Z mg $
 """
@@ -28,12 +28,12 @@ from zope.testing import doctest
 from zope.interface import implements
 from zope.app.testing import setup, ztapi
 
-from schooltool.sampledata.interfaces  import ISampleDataPlugin
+from schooltool.setupdata.interfaces  import ISetupDataPlugin
 
 
 class DummyPlugin:
     """A dummy sample data plugin that logs the args to a class attribute"""
-    implements(ISampleDataPlugin)
+    implements(ISetupDataPlugin)
 
     log = []  # one for all
 
@@ -46,7 +46,7 @@ class DummyPlugin:
 
 
 def doctest_generate():
-    """Unit test for schooltool.sampledata.generator.generate
+    """Unit test for schooltool.setupdata.generator.generate
 
     This function finds all the utilities registered with the sample
     data plugin interface and runs the generate methods of them.
@@ -56,17 +56,17 @@ def doctest_generate():
         >>> p1 = DummyPlugin("p1", ())
         >>> p2 = DummyPlugin("p2", ())
         >>> p3 = DummyPlugin("p3", ())
-        >>> ztapi.provideUtility(ISampleDataPlugin, p1, 'p1')
-        >>> ztapi.provideUtility(ISampleDataPlugin, p2, 'p2')
-        >>> ztapi.provideUtility(ISampleDataPlugin, p3, 'p3')
+        >>> ztapi.provideUtility(ISetupDataPlugin, p1, 'p1')
+        >>> ztapi.provideUtility(ISetupDataPlugin, p2, 'p2')
+        >>> ztapi.provideUtility(ISetupDataPlugin, p3, 'p3')
 
     Now, let's run the generator:
 
         >>> DummyPlugin.log = []
-        >>> import schooltool.sampledata.generator
+        >>> import schooltool.setupdata.generator
 
         >>> app = 'app'
-        >>> result = schooltool.sampledata.generator.generate(app)
+        >>> result = schooltool.setupdata.generator.generate(app)
 
     The order of the plugins is undefined, so let's sort to see if
     they're all there.
@@ -94,7 +94,7 @@ def doctest_generate():
     Now p3 must be the first plugin run:
 
         >>> DummyPlugin.log = []
-        >>> result = schooltool.sampledata.generator.generate(app)
+        >>> result = schooltool.setupdata.generator.generate(app)
         >>> DummyPlugin.log[0]
         ('p3', 'app', None)
 
@@ -102,7 +102,7 @@ def doctest_generate():
 
         >>> p1.dependencies = 'p2',
         >>> DummyPlugin.log = []
-        >>> result = schooltool.sampledata.generator.generate(app)
+        >>> result = schooltool.setupdata.generator.generate(app)
         >>> DummyPlugin.log
         [('p3', 'app', None), ('p2', 'app', None), ('p1', 'app', None)]
 
@@ -110,10 +110,10 @@ def doctest_generate():
 
         >>> p3.dependencies = 'p1',
         >>> DummyPlugin.log = []
-        >>> result = schooltool.sampledata.generator.generate(app)
+        >>> result = schooltool.setupdata.generator.generate(app)
         Traceback (most recent call last):
           ...
-        CyclicDependencyError: cyclic dependency at 'p2'
+        CyclicDependencyError: cyclic dependency at ...
 
     """
 
