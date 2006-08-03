@@ -201,13 +201,11 @@ Student looking at another student:
     schooltool calendar: view
     schooltool info:
     section:             view
-    section activities:
+    section activities:  view
     section attendance:
     section calendar:    view
     term:                view
     timetables:          view
-
-XXX: above should be: "section activities: view"
 
 Student looking at himself (his section):
 
@@ -224,7 +222,7 @@ Student looking at himself (his section):
     person attendance:   view
     person calendar:     view  edit
     person container:
-    person data: view
+    person data:         view
     person preferences:  view  edit
     resource calendar:
     resource container:
@@ -233,7 +231,7 @@ Student looking at himself (his section):
     schooltool calendar: view
     schooltool info:
     section:             view
-    section activities:
+    section activities:  view
     section attendance:
     section calendar:    view
     term:                view
@@ -276,7 +274,7 @@ Instructor looking at his student and section:
     >>> column(instructor, 'student1', 'history6a')
     course:              view
     course activities:   view
-    gradebook scores:
+    gradebook scores:    view  edit
     group calendar:
     group container:
     group data:
@@ -295,14 +293,11 @@ Instructor looking at his student and section:
     schooltool calendar: view
     schooltool info:
     section:             view  edit
-    section activities:
+    section activities:  view  edit
     section attendance:  view  edit
     section calendar:    view  edit
     term:                view
     timetables:          view
-
-XXX should be "gradebook scores:    view  edit"
-XXX should be "section activities:  view  edit"
 
 Group member:
 
@@ -396,32 +391,32 @@ Site wide access control:
     >>> manager.getControl('Everyone can view section information and ').click()
     >>> manager.getControl('Apply').click()
     >>> column(alien, 'student1', 'history6a')
-    course: view
-    course activities: view
+    course:              view
+    course activities:   view
     gradebook scores:
     group calendar:
     group container:
     group data:
-    level: view
+    level:               view
     overlay calendar:
     permissions:
     person attendance:
-    person calendar: view
+    person calendar:     view
     person container:
     person data:
     person preferences:
     resource calendar:
     resource container:
     resource data:
-    schooltool: view
+    schooltool:          view
     schooltool calendar: view
     schooltool info:
-    section: view
-    section activities:
+    section:             view
+    section activities:  view
     section attendance:
-    section calendar: view
-    term: view
-    timetables: view
+    section calendar:    view
+    term:                view
+    timetables:          view
 
     >>> manager.getControl('Everyone can view section information and ').click()
 

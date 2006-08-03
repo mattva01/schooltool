@@ -30,7 +30,7 @@ The Sample Data Generation page appears
     <h1>Sample Data Generation</h1>
 
     >>> print analyze.queryHTML("//form", manager.contents)[0]
-    <form method="POST" action="http://localhost/@@sampledata.html">
+    <form method="POST" class="standalone" action="http://localhost/@@sampledata.html">
     ...<input name="seed" value="SchoolTool">...
     ...<input type="submit" class="button-ok" name="SUBMIT" value="Generate">...
     </form>
