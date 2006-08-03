@@ -70,6 +70,44 @@ You can also inspect and manage the bases:
   >>> sorted(pyprogram.keys())
   [u'forloop', u'iter']
 
+For solidarity's sake, lets try removing a base that has more than one item in
+it.  There was a bug related to removing bases with multiple keys.  This is
+what was happening:
+
+  >>> a = [1,2]
+  >>> for item in a: a.remove(item)
+  >>> a
+  [2]
+
+It should be:
+
+  >>> a = [1,2]
+  >>> for item in list(a): a.remove(item)
+  >>> a
+  []
+
+In terms of our requirement package, we will add another requirement to the
+program requirement (which is a base of pyprogram).
+
+  >>> program[u'whileloop'] = requirement.Requirement(u"While Loop")
+  >>> sorted(pyprogram.keys())
+  [u'forloop', u'iter', u'whileloop']
+
+  >>> pyprogram.removeBase(program)
+  >>> sorted(pyprogram.keys())
+  [u'iter']
+
+  >>> pyprogram.addBase(program)
+  >>> sorted(pyprogram.keys())
+  [u'forloop', u'iter', u'whileloop']
+
+Now we will remove what the whileloop requirement so we don't have to change
+everything in the doctest.
+
+  >>> del program['whileloop']
+  >>> sorted(pyprogram.keys())
+  [u'forloop', u'iter']
+
 Let's now look at a more advanced case. Let's say that the state of Virginia
 requires all students to take a programming class that fulfills the
 programming requirement:

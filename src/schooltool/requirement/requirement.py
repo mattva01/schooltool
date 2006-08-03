@@ -156,7 +156,7 @@ class Requirement(persistent.Persistent,
                 value.removeBase(base[name])
 
         collectedKeys = self.collectKeys()
-        for name in self._order:
+        for name in list(self._order):
             if name not in collectedKeys:
                 self.undistributeKey(name)
 
