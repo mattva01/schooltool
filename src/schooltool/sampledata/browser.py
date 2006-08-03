@@ -24,6 +24,7 @@ $Id$
 from zope.app import zapi
 from zope.publisher.browser import BrowserView
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.component import queryMultiAdapter
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.sampledata.generator import generate
@@ -61,15 +62,20 @@ class SampleDataView(BrowserView):
             if key.startswith('plugin'):
                 yield key.split('.')[1]
 
-    def getPluginDict(self):
+    def getPlugins(self):
         selectedPlugins = self._getSelectedPlugins()
         times = generate(self.context, self.seed,
                          dry_run=True, pluginNames=selectedPlugins)
-        plugins = dict([(obj.name, False) for name, obj in
-                zapi.getUtilitiesFor(ISampleDataPlugin)])
+        plugins = [obj for name, obj in zapi.getUtilitiesFor(ISampleDataPlugin)]
+        result = []
         if 'CLEAR' in self.request:
             return plugins
-        for key in plugins:
-            if key in times.keys():
-                plugins[key] = True
-        return plugins
+        for plugin in plugins:
+            data = {'name':plugin.name}
+            if plugin.name in times.keys():
+                data['selected'] = True
+                view = queryMultiAdapter((plugin, self.request),
+                                         name="options")
+                data['view'] = view
+            result.append(data)
+        return result

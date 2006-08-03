@@ -38,9 +38,6 @@ from schooltool.sampledata.interfaces import ISampleDataPlugin
 from schooltool.sampledata.interfaces import CyclicDependencyError
 
 
-def getPluginList(app):
-    """Get the list of plugins with all their dependencies."""
-
 def generate(app, seed=None, dry_run=False, pluginNames=[]):
     """Generate sample data provided by all plugins.
 

@@ -33,20 +33,34 @@ of the random seed.
        <input name="seed" tal:attributes="value view/seed"/>
     </div>
   </div>
-  <fieldset tal:define="plugins view/getPluginDict">
+  <fieldset>
     <legend i18n:translate="">Plugins</legend>
     <div class="item_list">
-    <div tal:repeat="plugin plugins">
-      <label>
-        <input tal:attributes="name string:plugin.${plugin};
-                               checked string:yes"
-               tal:condition="python: plugins[plugin]"
+    <div tal:repeat="plugin view/getPlugins">
+      <label tal:condition="python: not plugin.get('selected') 
+                                 or not plugin.get('view')">
+        <input tal:attributes="name string:plugin.${plugin/name};"
+               tal:condition="not: plugin/selected|nothing"
                type="checkbox" />
-        <input tal:attributes="name string:plugin.${plugin};"
-               tal:condition="python: not plugins[plugin]"
-               type="checkbox" />
-        <span tal:replace="plugin" />
+          <input tal:attributes="name string:plugin.${plugin/name};"
+                 tal:condition="plugin/selected|nothing"
+                 checked="yes"
+                 type="checkbox" />
+        <span tal:replace="plugin/name" />
       </label>
+      <fieldset tal:condition="python: plugin.get('selected')
+                                   and plugin.get('view')">
+        <legend>
+          <label>
+          <input tal:attributes="name string:plugin.${plugin/name};"
+                 tal:condition="plugin/selected|nothing"
+                 checked="yes"
+                 type="checkbox" />
+          <span tal:replace="plugin/name" />
+          </label>
+        </legend>
+          <div tal:replace="structure python:plugin.get('view')()"/>
+      </fieldset>
     </div>
     <div class="controls">
       <input type="submit" class="button-ok" name="DEPENDENCIES"
