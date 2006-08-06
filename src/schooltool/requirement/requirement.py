@@ -46,8 +46,7 @@ class InheritedRequirement(zope.app.container.contained.Contained):
     However, once the inherited requirement is modified by adding a
     sub-requirement, the inherited requirement is converted to a real one.
     """
-    zope.interface.implements(interfaces.IRequirement,
-                              interfaces.IInheritedRequirement)
+    zope.interface.implements(interfaces.IInheritedRequirement)
 
     def __init__(self, requirement, parent, name):
         self.original = requirement
@@ -60,8 +59,23 @@ class InheritedRequirement(zope.app.container.contained.Contained):
     def __iter__(self):
         return self.original.__iter__()
 
+    def values(self):
+        return [value for key, value in self.items()]
+
+    def __len__(self):
+        return len(self.original)
+
+    def items(self):
+        for key in self.keys():
+            yield key, InheritedRequirement(self[key],
+                                            self, key)
+
     def __repr__(self):
         return '%s(%r)' %(self.__class__.__name__, self.original)
+
+    def __getitem__(self, key):
+        return InheritedRequirement(self.original.__getitem__(key),
+                                    self, key)
 
     def __setitem__(self, key, value):
         req = self.original.__class__(self.original.title, self.original)
@@ -75,8 +89,7 @@ class InheritedRequirement(zope.app.container.contained.Contained):
 class PersistentInheritedRequirement(persistent.Persistent,
                                      InheritedRequirement):
     """A persistent version of an inherited requirement."""
-    zope.interface.implements(interfaces.IRequirement,
-                              interfaces.IInheritedRequirement)
+    zope.interface.implements(interfaces.IInheritedRequirement)
 
 def getRequirementKey(requirement):
     """Get the reference key for any requirement.

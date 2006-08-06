@@ -163,7 +163,7 @@
         />
   </class>
 
-  <!-- Those declarations should go somewhere else eventually -->
+  <!-- These declarations should go somewhere else eventually -->
 
   <class class="schooltool.app.app.SchoolToolApplication">
     <implements

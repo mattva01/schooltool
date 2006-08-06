@@ -71,7 +71,7 @@ class IRequirement(zope.app.container.interfaces.IOrderedContainer,
 ##      be that important to have a particular "contract" for
 ##      InheritedRequirements.  Especially since they already offer
 ##      IRequirement.
-class IInheritedRequirement(zope.interface.Interface):
+class IInheritedRequirement(IRequirement):
     """A marker interface for the InheritedRequirement class."""
 
 
