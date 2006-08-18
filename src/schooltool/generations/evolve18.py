@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2006 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,14 +17,22 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Generations for database version upgrades.
+Upgrade SchoolTool to generation 18.
+
+Install catalog and reindex persons.
 
 $Id$
 """
 
-from zope.app.generations.generations import SchemaManager
+from zope.app.generations.utility import findObjectsProviding
+from zope.app.publication.zopepublication import ZopePublication
+from zope.traversing.interfaces import IContainmentRoot
+from zope.interface import directlyProvidedBy
+from zope.interface import directlyProvides
 
-schemaManager = SchemaManager(
-    minimum_generation=18,
-    generation=18,
-    package_name='schooltool.generations')
+from schooltool.app.interfaces import ISchoolToolApplication
+
+def evolve(context):
+    root = context.connection.root()[ZopePublication.root_name]
+    for app in findObjectsProviding(root, ISchoolToolApplication):
+        directlyProvides(app, directlyProvidedBy(app) - IContainmentRoot)

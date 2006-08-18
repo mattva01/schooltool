@@ -40,6 +40,7 @@ from zope.app.component.site import SiteManagerContainer
 from zope.app.container import sample
 from zope.app.container.contained import NameChooser
 from zope.app.container.interfaces import INameChooser
+from zope.traversing.interfaces import IContainmentRoot
 
 from schooltool.app.overlay import ICalendarOverlayInfo
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -62,7 +63,7 @@ class SchoolToolApplication(Persistent, sample.SampleContainer,
     or it can be used as the application root object.
     """
 
-    implements(ISchoolToolApplication, IAttributeAnnotatable)
+    implements(ISchoolToolApplication, IAttributeAnnotatable, IContainmentRoot)
 
     def __init__(self):
         super(SchoolToolApplication, self).__init__()
