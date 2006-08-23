@@ -664,7 +664,7 @@ Demonstrate that it is there now:
 
     >>> frog.getControl('More...').click()
     >>> frog.getControl('SchoolTool site-wide calendar')
-    <ItemControl name='application' type='checkbox' optionValue='application'>
+    <ItemControl name='application' type='checkbox' optionValue='application' selected=False>
 
 Restrict permissions on the application calendar
 
