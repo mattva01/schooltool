@@ -29,7 +29,8 @@ import interfaces
 class Person(PersonBase):
     """Special person that adds demographics information.
     """
-
+    implements(interfaces.IDemographicsPerson)
+    
     def __init__(self, username=None, title=None):
         super(Person, self).__init__(username, title)
         self.modified = now()

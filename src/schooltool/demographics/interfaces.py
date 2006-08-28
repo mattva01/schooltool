@@ -17,13 +17,24 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-from zope.interface import Interface, implements
+from zope.interface import Interface, implements, Attribute
 from zope import schema
 from zope.schema.interfaces import IIterableSource
 
 from schooltool.app.app import ISchoolToolApplication
 from schooltool import SchoolToolMessage as _
+from schooltool.person.interfaces import IPerson
 
+class IDemographicsPerson(IPerson):
+    nameinfo = Attribute('Name info')
+    demographics = Attribute('Demographics')
+    schooldata = Attribute('School data')
+    parent1 = Attribute('Parental contact')
+    parent2 = Attribute('Parental contact')
+    emergency1 = Attribute('Emergency contact')
+    emergency2 = Attribute('Emergency contact')
+    emergency3 = Attribute('Emergency contact')
+    
 class INameInfo(Interface):
     """Name information for a person.
     """
