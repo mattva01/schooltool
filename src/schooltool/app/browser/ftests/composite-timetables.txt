@@ -43,6 +43,7 @@ Add a term:
     ... """)
     HTTP/1.1 201 Created
     Content-Length: 0
+    Location: ...
     Set-Cookie: ...
     <BLANKLINE>
 

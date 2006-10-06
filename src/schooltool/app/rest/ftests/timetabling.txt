@@ -54,6 +54,7 @@ The manager can add one.
     ... """)
     HTTP/1.1 201 Created
     Content-Length: 0
+    Location: ...
     Set-Cookie: ...
     <BLANKLINE>
 
@@ -309,6 +310,7 @@ Let's add a timetable schema:
     ... """)
     HTTP/1.1 201 Created
     Content-Length: 0
+    Location: ...
     Set-Cookie: ...
     <BLANKLINE>
 
@@ -510,6 +512,7 @@ test):
     ... """)
     HTTP/1.1 201 Created
     Content-Length: 0
+    Location: ...
     Set-Cookie: ...
     <BLANKLINE>
 
