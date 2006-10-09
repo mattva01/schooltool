@@ -6,6 +6,7 @@
 
 PYTHON=python
 ZPKG=../../zpkgtools/bin/zpkg
+TRANSLATION_DOMAINS=schoolbell schooltool
 ZOPE_REPOSITORY=svn://svn.zope.org/repos/main/
 TESTFLAGS=-w -v
 LOCALES=src/schooltool/locales/
