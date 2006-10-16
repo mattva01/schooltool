@@ -497,3 +497,31 @@ XXX: preferences should be still viewable
 #   >>> helpers.gradebook_scores_edit(manager, 'history6a')
 #   True
 
+Instructor - section relations:
+
+    >>> manager.getLink('SchoolTool').click()
+    >>> manager.getLink('Groups').click()
+    >>> manager.getLink('New Group').click()
+    >>> manager.getControl('Title').value = 'Some Students'
+    >>> manager.getControl('Identifier').value = 'somestudents'
+    >>> manager.getControl('Add').click()
+    >>> manager.getLink('Some Students').click()
+    >>> manager.getLink('edit members').click()
+    >>> manager.getControl('Student3').click()
+    >>> manager.getControl('Add').click()
+    >>> manager.getLink('Sections').click()
+    >>> manager.getLink('history-6a').click()
+    >>> manager.getLink('edit groups').click()
+    >>> manager.getControl('Some Students').click()
+    >>> manager.getControl('Add').click()
+
+Instructor should be able to see group which is member of his section:
+
+    >>> instructor = setup.logIn('instructor1', 'instructor1')
+    >>> instructor.open('http://localhost/')
+    >>> instructor.getLink('Frog').click()
+    >>> instructor.getLink('schooldata').click()
+    >>> instructor.getLink('Frog -- History 6').click()
+    >>> instructor.getLink('edit groups').click()
+    >>> 'Some Students' in instructor.contents
+    True

@@ -132,6 +132,39 @@ def doctest_addGroupContainerToApplication():
     """
 
 
+def doctest_GroupInstructorsCrowd():
+    """Tests for GroupInstructorsCrowd.
+
+        >>> from schooltool.group.group import GroupInstructorsCrowd
+        >>> from schooltool.person.interfaces import IPerson
+        >>> from schooltool.relationship.interfaces import IRelationshipLinks
+        >>> class SectionStub(object):
+        ...     members = ['good_group']
+        >>> section = SectionStub()
+        >>> class PersonLinksStub(object): 
+        ...     def getTargetsByRole(self, role, rel_type):
+        ...         print 'Relation: %s of type %s' % (role, rel_type)
+        ...         return [section] # person is instructor of the 'section'
+        >>> class PersonStub(object):
+        ...     def __conform__(self, it):
+        ...         if it is IRelationshipLinks:
+        ...             return PersonLinksStub()
+        >>> class PrincipalStub(object):
+        ...     def __conform__(self, it):
+        ...         if it is IPerson:
+        ...             return PersonStub()
+        >>> principal = PrincipalStub()
+        >>> gic = GroupInstructorsCrowd('bad_group')
+        >>> gic.contains(principal)
+        Relation: <URIObject Section> of type <URIObject Instruction>
+        False
+        >>> gic = GroupInstructorsCrowd('good_group')
+        >>> gic.contains(principal)
+        Relation: <URIObject Section> of type <URIObject Instruction>
+        True
+    """
+
+
 def doctest_GroupCalendarViewersCrowd():
     """Tests for ConfigurableCrowd.
 

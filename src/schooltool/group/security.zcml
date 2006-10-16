@@ -27,6 +27,10 @@
       factory=".group.GroupViewersCrowd" />
 
   <crowd
+      name="group_instructors"
+      factory=".group.GroupInstructorsCrowd" />
+
+  <crowd
       name="group_list_viewers"
       factory=".group.GroupContainerViewersCrowd" />
 
@@ -41,7 +45,7 @@
 
   <allow
       interface="schooltool.group.interfaces.IGroup"
-      crowds="administration leaders group_viewers"
+      crowds="administration leaders group_viewers group_instructors"
       permission="schooltool.view" />
   <allow
       interface="schooltool.group.interfaces.IGroup"

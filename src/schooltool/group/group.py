@@ -33,17 +33,21 @@ from zope.app.dependable.interfaces import IDependable
 from zope.app.container import btree
 from zope.app.container.contained import Contained
 
-from schooltool.relationship import RelationshipProperty
-from schooltool.app.security import LeaderCrowd
-from schooltool.securitypolicy.crowds import Crowd
-from schooltool.securitypolicy.interfaces import ICrowd
-from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
 from schooltool.app.interfaces import ICalendarParentCrowd
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.membership import GroupMemberCrowd
 from schooltool.app.membership import URIMembership, URIMember, URIGroup
+from schooltool.app.relationships import URIInstruction
+from schooltool.app.relationships import URISection
 from schooltool.app.security import ConfigurableCrowd
+from schooltool.app.security import LeaderCrowd
 from schooltool.group import interfaces
+from schooltool.person.interfaces import IPerson
+from schooltool.relationship import RelationshipProperty
+from schooltool.relationship.relationship import getRelatedObjects
+from schooltool.securitypolicy.crowds import Crowd
+from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
+from schooltool.securitypolicy.interfaces import ICrowd
 
 
 class GroupContainer(btree.BTreeContainer):
@@ -88,6 +92,23 @@ class GroupContainerViewersCrowd(ConfigurableCrowd):
 
 class GroupViewersCrowd(ConfigurableCrowd):
     setting_key = 'everyone_can_view_group_info'
+
+
+class GroupInstructorsCrowd(Crowd):
+    implements(ICrowd)
+    adapts(interfaces.IGroup)
+
+    def contains(self, principal):
+        person = IPerson(principal, None)
+        if not person:
+            return False
+        person_sections = getRelatedObjects(person, URISection,
+                                            rel_type=URIInstruction)
+        group = self.context
+        for section in person_sections:
+            if group in section.members:
+                return True
+        return False
 
 
 class GroupCalendarViewersCrowd(Crowd):
