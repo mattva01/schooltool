@@ -38,6 +38,8 @@ from schooltool.skin.interfaces import IBreadcrumbInfo
 
 from schooltool.app.app import getSchoolToolApplication
 
+from schooltool import SchoolToolMessage as _
+
 
 class IJavaScriptManager(IViewletManager):
     """Provides a viewlet hook for the javascript link entries."""
@@ -102,6 +104,9 @@ class OrderedViewletManager(ViewletManagerBase):
 
 class NavigationViewlet(object):
     """A navigation viewlet base class."""
+
+    def title_msgid(self):
+        return _(self.title)
 
     def actualContext(self):
         return ISchoolToolApplication(None)
