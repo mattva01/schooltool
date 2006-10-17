@@ -1,0 +1,2931 @@
+# Persian translation for schoolbell
+# Copyright (c) (c) 2006 Canonical Ltd, and Rosetta Contributors 2006
+# This file is distributed under the same license as the schoolbell package.
+# Reza Mohammadi <remohammadi@gmail.com>, 2006.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: schoolbell\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: Tue Oct 17 17:42:41 2006\n"
+"PO-Revision-Date: 2006-04-05 07:16+0000\n"
+"Last-Translator: Reza Mohammadi <remohammadi@gmail.com>\n"
+"Language-Team: Persian <fa@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: /src/schoolbell/app/interfaces.py:13
+msgid "Nickname"
+msgstr "نام مستعار"
+
+#: /src/schoolbell/app/interfaces.py:15
+msgid "A short nickname for this person."
+msgstr "یک لقب کوچک برای این فرد."
+
+#: /src/schoolbell/app/interfaces.py:18
+msgid "Primary Email"
+msgstr "پست الکترونیکی اصلی"
+
+#: /src/schoolbell/app/interfaces.py:22
+msgid "Secondary Email"
+msgstr "پست الکترونیکی دوم"
+
+#: /src/schoolbell/app/interfaces.py:26
+msgid "Primary phone"
+msgstr "تلفن اصلی"
+
+#: /src/schoolbell/app/interfaces.py:28
+msgid "Recommended telephone number."
+msgstr "شماره تلفن پیشنهادی."
+
+#: /src/schoolbell/app/interfaces.py:31
+msgid "Secondary phone"
+msgstr "تلفن دوم"
+
+#: /src/schoolbell/app/interfaces.py:33
+msgid "Secondary telephone number."
+msgstr "شماره تلفن دوم."
+
+#: /src/schoolbell/app/interfaces.py:36
+msgid "Website"
+msgstr "وب‌گاه"
+
+#: /src/schoolbell/app/interfaces.py:38
+msgid "Website or weblog."
+msgstr "وب‌گاه یا وب‌نوشت"
+
+#: /src/schoolbell/app/interfaces.py:41
+msgid "Mailing address"
+msgstr "آدرس پستی"
+
+#: /src/schooltool/app/browser/__init__.py:254
+#: /src/schooltool/sbapp/browser/templates/navigation.pt:4
+#: /src/schooltool/sbapp/browser/templates/index.pt:11
+msgid "Persons"
+msgstr "افراد"
+
+#: /src/schooltool/app/browser/__init__.py:259
+msgid "1 person"
+msgstr "۱ فرد"
+
+#. Default: ""
+#: /src/schooltool/app/browser/__init__.py:261
+msgid "${number} persons"
+msgstr "${number}I نفر"
+
+#: /src/schooltool/app/browser/app.py:231
+msgid "Username or password is incorrect"
+msgstr "نام کاربری یا گذرواژه نادرست است"
+
+#: /src/schooltool/app/browser/app.py:313
+msgid "Leaders"
+msgstr ""
+
+#: /src/schooltool/app/browser/app.py:314
+#, fuzzy
+msgid "Current leaders"
+msgstr "سال جاری"
+
+#: /src/schooltool/app/browser/app.py:315
+#, fuzzy
+msgid "Available leaders"
+msgstr "گروه‌های در دسترس"
+
+#: /src/schooltool/app/browser/cal.py:100
+msgid "March"
+msgstr "مارس"
+
+#: /src/schooltool/app/browser/cal.py:100
+msgid "January"
+msgstr "ژانویه"
+
+#: /src/schooltool/app/browser/cal.py:100
+msgid "February"
+msgstr "فوریه"
+
+#: /src/schooltool/app/browser/cal.py:101
+msgid "June"
+msgstr "ژوئن"
+
+#: /src/schooltool/app/browser/cal.py:101
+msgid "May"
+msgstr "می"
+
+#: /src/schooltool/app/browser/cal.py:101
+msgid "April"
+msgstr "آوریل"
+
+#: /src/schooltool/app/browser/cal.py:102
+msgid "August"
+msgstr "اوت"
+
+#: /src/schooltool/app/browser/cal.py:102
+msgid "September"
+msgstr "سپتامبر"
+
+#: /src/schooltool/app/browser/cal.py:102
+msgid "July"
+msgstr "جولای"
+
+#: /src/schooltool/app/browser/cal.py:1021
+msgid "The next day"
+msgstr "روز بعدی"
+
+#: /src/schooltool/app/browser/cal.py:1022
+msgid "Today"
+msgstr "امروز"
+
+#: /src/schooltool/app/browser/cal.py:1023
+msgid "The previous day"
+msgstr "روز قبلی"
+
+#: /src/schooltool/app/browser/cal.py:103
+msgid "October"
+msgstr "اکتبر"
+
+#: /src/schooltool/app/browser/cal.py:103
+msgid "December"
+msgstr "دسامبر"
+
+#: /src/schooltool/app/browser/cal.py:103
+msgid "November"
+msgstr "نوامبر"
+
+#: /src/schooltool/app/browser/cal.py:106
+#: /src/schooltool/person/interfaces.py:176
+#: /src/schooltool/timetable/browser/schema.py:95
+#: /src/schooltool/timetable/browser/schema.py:270
+msgid "Monday"
+msgstr "دوشنبه"
+
+#: /src/schooltool/app/browser/cal.py:106
+#: /src/schooltool/timetable/browser/schema.py:96
+#: /src/schooltool/timetable/browser/schema.py:271
+msgid "Tuesday"
+msgstr "سه‌شنبه"
+
+#: /src/schooltool/app/browser/cal.py:106
+#: /src/schooltool/timetable/browser/schema.py:97
+#: /src/schooltool/timetable/browser/schema.py:272
+msgid "Wednesday"
+msgstr "چهارشنبه"
+
+#: /src/schooltool/app/browser/cal.py:106
+#: /src/schooltool/timetable/browser/schema.py:98
+#: /src/schooltool/timetable/browser/schema.py:273
+msgid "Thursday"
+msgstr "پنج‌شنبه"
+
+#: /src/schooltool/app/browser/cal.py:107
+#: /src/schooltool/person/interfaces.py:175
+#: /src/schooltool/timetable/browser/schema.py:276
+msgid "Sunday"
+msgstr "یک‌شنبه"
+
+#: /src/schooltool/app/browser/cal.py:107
+#: /src/schooltool/timetable/browser/schema.py:275
+msgid "Saturday"
+msgstr "شنبه"
+
+#: /src/schooltool/app/browser/cal.py:107
+#: /src/schooltool/timetable/browser/schema.py:99
+#: /src/schooltool/timetable/browser/schema.py:274
+msgid "Friday"
+msgstr "جمعه"
+
+#: /src/schooltool/app/browser/cal.py:110
+#: /src/schooltool/app/browser/cal.py:1732
+msgid "Mon"
+msgstr "دوشنبه"
+
+#: /src/schooltool/app/browser/cal.py:110
+#: /src/schooltool/app/browser/cal.py:1733
+msgid "Tue"
+msgstr "سه‌شنبه"
+
+#: /src/schooltool/app/browser/cal.py:110
+#: /src/schooltool/app/browser/cal.py:1734
+msgid "Wed"
+msgstr "چهارشنبه"
+
+#: /src/schooltool/app/browser/cal.py:110
+#: /src/schooltool/app/browser/cal.py:1735
+msgid "Thu"
+msgstr "پنجشنبه"
+
+#: /src/schooltool/app/browser/cal.py:111
+#: /src/schooltool/app/browser/cal.py:1736
+msgid "Fri"
+msgstr "جمعه"
+
+#: /src/schooltool/app/browser/cal.py:111
+#: /src/schooltool/app/browser/cal.py:1737
+msgid "Sat"
+msgstr "شنبه"
+
+#: /src/schooltool/app/browser/cal.py:111
+#: /src/schooltool/app/browser/cal.py:1738
+msgid "Sun"
+msgstr "یکشنبه"
+
+#: /src/schooltool/app/browser/cal.py:1658
+#: /src/schooltool/app/interfaces.py:122 /src/schooltool/app/interfaces.py:133
+#: /src/schooltool/commendation/interfaces.py:48
+#: /src/schooltool/course/interfaces.py:36
+#: /src/schooltool/dashboard/interfaces.py:44
+#: /src/schooltool/group/interfaces.py:43
+#: /src/schooltool/level/interfaces.py:75
+#: /src/schooltool/level/interfaces.py:142
+#: /src/schooltool/note/interfaces.py:42
+#: /src/schooltool/resource/interfaces.py:38
+#: /src/schooltool/term/browser/term.py:63
+#: /src/schooltool/term/interfaces.py:67
+#: /src/schooltool/timetable/browser/ttwizard.py:241
+msgid "Title"
+msgstr "عنوان"
+
+#: /src/schooltool/app/browser/cal.py:1661
+msgid "All day"
+msgstr "تمام روز"
+
+#: /src/schooltool/app/browser/cal.py:1664
+#: /src/schooltool/commendation/interfaces.py:65
+#: /src/schooltool/gradebook/interfaces.py:54
+msgid "Date"
+msgstr "تاریخ"
+
+#: /src/schooltool/app/browser/cal.py:1667
+msgid "Time"
+msgstr "زمان"
+
+#: /src/schooltool/app/browser/cal.py:1668
+msgid "Start time in 24h format"
+msgstr "زمان شروع در قالب ۲۴ ساعتی"
+
+#: /src/schooltool/app/browser/cal.py:1672
+msgid "Duration"
+msgstr "مدت"
+
+#: /src/schooltool/app/browser/cal.py:1677
+msgid "Duration Type"
+msgstr "نوع مدت"
+
+#: /src/schooltool/app/browser/cal.py:1680
+msgid "Minutes"
+msgstr "دقیقه"
+
+#: /src/schooltool/app/browser/cal.py:1681
+msgid "Hours"
+msgstr "ساعت"
+
+#: /src/schooltool/app/browser/cal.py:1682
+msgid "Days"
+msgstr "روز"
+
+#: /src/schooltool/app/browser/cal.py:1685
+msgid "Location"
+msgstr "مکان"
+
+#: /src/schooltool/app/browser/cal.py:1689
+#: /src/schooltool/commendation/interfaces.py:53
+#: /src/schooltool/course/interfaces.py:40
+#: /src/schooltool/course/interfaces.py:77
+#: /src/schooltool/gradebook/interfaces.py:38
+#: /src/schooltool/group/interfaces.py:47
+#: /src/schooltool/level/interfaces.py:147
+#: /src/schooltool/resource/interfaces.py:42
+msgid "Description"
+msgstr "توضیح"
+
+#: /src/schooltool/app/browser/cal.py:1694
+msgid "Recurring"
+msgstr "مکرر"
+
+#: /src/schooltool/app/browser/cal.py:1698
+msgid "Recurs every"
+msgstr "تکرار در هر"
+
+#: /src/schooltool/app/browser/cal.py:1701
+msgid "Day"
+msgstr "روز"
+
+#: /src/schooltool/app/browser/cal.py:1702
+msgid "Week"
+msgstr "هفته"
+
+#: /src/schooltool/app/browser/cal.py:1703
+msgid "Month"
+msgstr "ماه"
+
+#: /src/schooltool/app/browser/cal.py:1704
+msgid "Year"
+msgstr "سال"
+
+#: /src/schooltool/app/browser/cal.py:1707
+msgid "Repeat every"
+msgstr "تکرار در هر"
+
+#: /src/schooltool/app/browser/cal.py:1712
+msgid "Range"
+msgstr "محدوده"
+
+#: /src/schooltool/app/browser/cal.py:1715
+msgid "Count"
+msgstr "تعداد"
+
+#: /src/schooltool/app/browser/cal.py:1716
+msgid "Until"
+msgstr "تا"
+
+#: /src/schooltool/app/browser/cal.py:1717
+msgid "forever"
+msgstr "برای همیشه"
+
+#: /src/schooltool/app/browser/cal.py:1720
+msgid "Number of events"
+msgstr "تعداد رویدادها"
+
+#: /src/schooltool/app/browser/cal.py:1724
+msgid "Repeat until"
+msgstr "تکرار تا"
+
+#: /src/schooltool/app/browser/cal.py:1728
+msgid "Weekdays"
+msgstr "روزهای هفته"
+
+#: /src/schooltool/app/browser/cal.py:1731
+msgid "Weekday"
+msgstr "روز هفته"
+
+#: /src/schooltool/app/browser/cal.py:1741
+msgid "Monthly"
+msgstr "ماهانه"
+
+#: /src/schooltool/app/browser/cal.py:1749
+msgid "Exception dates"
+msgstr "تاریخ‌های مستثتا"
+
+#: /src/schooltool/app/browser/cal.py:1828
+msgid "same weekday"
+msgstr "هر روز هفته"
+
+#: /src/schooltool/app/browser/cal.py:1833
+msgid "1st"
+msgstr "اولین"
+
+#: /src/schooltool/app/browser/cal.py:1833
+msgid "4th"
+msgstr "جهارمین"
+
+#: /src/schooltool/app/browser/cal.py:1833
+msgid "3rd"
+msgstr "سومین"
+
+#: /src/schooltool/app/browser/cal.py:1833
+msgid "2nd"
+msgstr "دومین"
+
+#: /src/schooltool/app/browser/cal.py:1834
+msgid "5th"
+msgstr "پنجمین"
+
+#: /src/schooltool/app/browser/cal.py:1848
+msgid "last weekday"
+msgstr "آخرین روز هفته"
+
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:1858
+msgid "Last ${weekday}"
+msgstr "آخرین ${weekday}I روز هفته"
+
+#: /src/schooltool/app/browser/cal.py:1881
+#: /src/schooltool/app/browser/cal.py:2187
+#: /src/schooltool/course/browser/section.py:134
+#, fuzzy
+msgid "An error occurred."
+msgstr "مشکلی پیش آمد."
+
+#: /src/schooltool/app/browser/cal.py:1914
+msgid "Invalid time"
+msgstr "زمان نادرست"
+
+#: /src/schooltool/app/browser/cal.py:1935
+msgid "End date is earlier than start date"
+msgstr "تاریخ پایان قبل از تاریخ شروع است"
+
+#: /src/schooltool/app/browser/cal.py:1944
+msgid "Invalid date.  Please specify YYYY-MM-DD, one per line."
+msgstr "تاریخ نادرست. لطفاً در هر خط به قالب YYYY-MM-DD وارد کنید."
+
+#: /src/schooltool/app/browser/cal.py:1992
+msgid "Add event"
+msgstr "اضافه کردن رویداد"
+
+#: /src/schooltool/app/browser/cal.py:1993
+msgid "Add"
+msgstr "اضافه کردن"
+
+#: /src/schooltool/app/browser/cal.py:2062
+msgid "Edit event"
+msgstr "ویرایش رویداد"
+
+#: /src/schooltool/app/browser/cal.py:2063
+msgid "Update"
+msgstr "به‌هنگام‌سازی"
+
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:2193 /src/schooltool/skin/form.py:77
+msgid "Updated on ${date_time}"
+msgstr "به‌هنگام رساندن در ${date_time}"
+
+#: /src/schooltool/app/browser/cal.py:2532
+#, fuzzy
+msgid "Calendar"
+msgstr "تقویم‌ها"
+
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:372
+msgid "${day_of_week}, ${date}"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:845
+msgid "Next week"
+msgstr "هفتهٔ بعدی"
+
+#: /src/schooltool/app/browser/cal.py:846
+msgid "Current week"
+msgstr "هفتهٔ جاری"
+
+#: /src/schooltool/app/browser/cal.py:847
+msgid "Previous week"
+msgstr "هفتهٔ قبلی"
+
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:856
+msgid "${month}, ${year} (week ${week})"
+msgstr "${month}, ${year}I (هفتهٔ ${week}I)"
+
+#: /src/schooltool/app/browser/cal.py:906
+msgid "Next month"
+msgstr "ماه بعدی"
+
+#: /src/schooltool/app/browser/cal.py:907
+msgid "Current month"
+msgstr "ماه جاری"
+
+#: /src/schooltool/app/browser/cal.py:908
+msgid "Previous month"
+msgstr "ماه قبلی"
+
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:916
+msgid "${month}, ${year}"
+msgstr "${month}, ${year}I"
+
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:938
+msgid "Week ${week_no}"
+msgstr "هفتهٔ ${week_no}I"
+
+#: /src/schooltool/app/browser/cal.py:954
+msgid "Next year"
+msgstr "سال بعد"
+
+#: /src/schooltool/app/browser/cal.py:955
+msgid "Current year"
+msgstr "سال جاری"
+
+#: /src/schooltool/app/browser/cal.py:956
+msgid "Previous year"
+msgstr "سال قبلی"
+
+#: /src/schooltool/app/browser/csvimport.py:106
+#: /src/schooltool/app/browser/csvimport.py:286
+msgid "No data provided"
+msgstr "اطلاعاتی ندارک دیده نشده است"
+
+#: /src/schooltool/app/browser/csvimport.py:113
+msgid "Could not convert data to Unicode (incorrect charset?)."
+msgstr "اطلاعات را نمی‌توان به یونی‌کد تبدیل کرد (مجموعه‌نویسهٔ نادرست؟)."
+
+#: /src/schooltool/app/browser/csvimport.py:122
+msgid "CSV file imported successfully."
+msgstr "پروندهٔ اطلاعات جداشده با کاما با موفقیت وارد گردید."
+
+#: /src/schooltool/app/browser/csvimport.py:124
+msgid "Failed to import CSV file"
+msgstr "ورود پروندهٔ اطلاعات جداشده با کاما شکست خورد"
+
+#: /src/schooltool/app/browser/csvimport.py:132
+msgid "CSV text imported successfully."
+msgstr "متن اطلاعات جداشده با کاما با موفقیت وارد گردید."
+
+#: /src/schooltool/app/browser/csvimport.py:134
+msgid "Failed to import CSV text"
+msgstr "ورود متن اطلاعات جداشده با کاما شکست خورد"
+
+#: /src/schooltool/app/browser/csvimport.py:156
+msgid "No charset specified"
+msgstr "مجموعه‌نویسه‌ای مشخص نشده است"
+
+#: /src/schooltool/app/browser/csvimport.py:161
+msgid "Unknown charset"
+msgstr "مجموعه‌نویسهٔ نامعلوم"
+
+#. Default: ""
+#: /src/schooltool/app/browser/csvimport.py:205
+msgid "Error in CSV data, line ${line_no}"
+msgstr "خطا در اطلاعات جداشده با کاما، خط ${line_no}I"
+
+#. Default: ""
+#: /src/schooltool/app/browser/csvimport.py:209
+#: /src/schooltool/app/browser/csvimport.py:514
+msgid "Conversion to unicode failed in line ${line_no}"
+msgstr "تبدیل به یونی‌کد در خط ${line_no}I با خطا مواجه شد."
+
+#: /src/schooltool/app/browser/csvimport.py:292
+msgid "Row 2 is not empty"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/app/browser/csvimport.py:328
+msgid ""
+"Wrong section header on line ${line_no} (it should contain a course id and "
+"an instructor id)"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/app/browser/csvimport.py:354
+msgid "Malformed line ${line_no} (it should contain a day id and a period id)"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/app/browser/csvimport.py:377
+msgid "Incomplete section description on line ${line}"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/app/browser/csvimport.py:382
+msgid "No students in section (line ${line})"
+msgstr ""
+
+#: /src/schooltool/app/browser/csvimport.py:462
+msgid ""
+"The first row of the CSV file must contain the term id and the timetable "
+"schema id."
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/app/browser/csvimport.py:471
+msgid "The term ${term} does not exist."
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/app/browser/csvimport.py:478
+msgid "The timetable schema ${schema} does not exist."
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/app/browser/csvimport.py:509
+#, fuzzy
+msgid "Error in timetable CSV data, line ${line_no}"
+msgstr "خطا در اطلاعات جداشده با کاما، خط ${line_no}I"
+
+#: /src/schooltool/app/browser/csvimport.py:549
+msgid "Day ids not defined in selected schema: ${args}."
+msgstr ""
+
+#: /src/schooltool/app/browser/csvimport.py:550
+msgid "Periods not defined in selected days: ${args}."
+msgstr ""
+
+#: /src/schooltool/app/browser/csvimport.py:551
+#, fuzzy
+msgid "Persons not found: ${args}."
+msgstr "اطلاعات فرد: ${title}"
+
+#: /src/schooltool/app/browser/csvimport.py:552
+msgid "Courses not found: ${args}."
+msgstr ""
+
+#: /src/schooltool/app/browser/csvimport.py:553
+msgid "Sections not found: ${args}."
+msgstr ""
+
+#: /src/schooltool/app/browser/csvimport.py:554
+msgid "Invalid records: ${args}."
+msgstr ""
+
+#: /src/schooltool/app/browser/overlay.py:209
+#: /src/schooltool/term/browser/term.py:146
+msgid "Saved changes."
+msgstr "تغییرات ذخیره گشت."
+
+#: /src/schooltool/app/browser/pdfcal.py:159
+msgid "all day"
+msgstr "تمام روز"
+
+#: /src/schooltool/app/browser/pdfcal.py:186
+msgid "Location: %s"
+msgstr "مکان: %s"
+
+#: /src/schooltool/app/browser/pdfcal.py:192
+msgid "Booked resources: %s"
+msgstr "منبع ثبت‌شده: %s"
+
+#: /src/schooltool/app/browser/pdfcal.py:207
+msgid "recurrent"
+msgstr "تکرار"
+
+#: /src/schooltool/app/browser/pdfcal.py:211
+#, fuzzy
+msgid "overlaid from %s"
+msgstr "از %s روی هم افتاده است."
+
+#: /src/schooltool/app/browser/pdfcal.py:278
+msgid "Daily calendar for %s"
+msgstr "تقویم روزانهٔ %s"
+
+#: /src/schooltool/app/browser/pdfcal.py:292
+msgid "Weekly calendar for %s"
+msgstr "تقویم هفتگیِ %s"
+
+#: /src/schooltool/app/browser/pdfcal.py:298
+msgid "Week %d (%s - %s), %d"
+msgstr "هفته %Id (%s - %s), %Id"
+
+#: /src/schooltool/app/browser/pdfcal.py:317
+msgid "Monthly calendar for %s"
+msgstr "تقویم ماهانهٔ %s"
+
+#: /src/schooltool/app/browser/pdfcal.py:57
+msgid "PDF support is disabled.  It can be enabled by your administrator."
+msgstr "پشتیبانی PDF غیرفعال است. مدیر می‌تواند آن را فعال کند."
+
+#: /src/schooltool/app/browser/tests/test_pdfcal.py:60
+msgid "Calendar for %s"
+msgstr "تقویم برای %s"
+
+#: /src/schooltool/app/interfaces.py:124 /src/schooltool/app/interfaces.py:135
+msgid ""
+"The name for the school or organization running\n"
+"            this server.  This will be displayed on the public calendar, "
+"the\n"
+"            bottom of all pages and in the page title."
+msgstr ""
+"نام مدرسه یا سازمانی که این خادم را اجرا کرده است.\n"
+"این عنوان روی تقویم عمومی، پایین همهٔ صفحات\n"
+"و در عنوان صفحه نمایش داده می‌شود."
+
+#: /src/schooltool/app/interfaces.py:140
+msgid "Front Page Calendar"
+msgstr "تقویم صفحهٔ اول"
+
+#: /src/schooltool/app/interfaces.py:141
+msgid ""
+"Display site-wide calendar as the front page of the\n"
+"            site."
+msgstr "نمایش تقویم پایگاه-گسترده به عنوان صفحهٔ اول سایت"
+
+#: /src/schooltool/app/interfaces.py:158
+msgid "Show timetables"
+msgstr ""
+
+#: /src/schooltool/app/interfaces.py:159
+msgid ""
+"\n"
+"            An option that controls whether the timetable of this "
+"calendar's\n"
+"            owner is shown in the calendar views.\n"
+"            "
+msgstr ""
+
+#: /src/schooltool/app/interfaces.py:42
+msgid "Required input is missing."
+msgstr "ورودی ضروری جا افتاده است."
+
+#: /src/schooltool/app/interfaces.py:50
+msgid "Form input is not a file object"
+msgstr ""
+
+#: /src/schooltool/app/interfaces.py:51 /src/schooltool/app/interfaces.py:55
+msgid "Invalid integer data"
+msgstr "اطلاعات عددی نادرست"
+
+#: /src/schooltool/app/interfaces.py:52
+msgid "Invalid text data"
+msgstr "اطلاعات متنی نادرست"
+
+#: /src/schooltool/app/interfaces.py:53
+msgid "Invalid textual data"
+msgstr ""
+
+#: /src/schooltool/app/interfaces.py:54
+msgid "Invalid unicode data"
+msgstr ""
+
+#: /src/schooltool/app/interfaces.py:56
+msgid "Invalid floating point data"
+msgstr ""
+
+#: /src/schooltool/app/interfaces.py:57
+msgid "Invalid datetime data"
+msgstr ""
+
+#: /src/schooltool/app/main.py:299
+msgid "Going to background, daemon pid %d"
+msgstr ""
+
+#: /src/schooltool/app/main.py:354 /src/schooltool/app/main.py:391
+#: /src/schooltool/app/main.py:394
+msgid "%s: %s"
+msgstr ""
+
+#: /src/schooltool/app/main.py:355
+msgid "Run %s -h for help."
+msgstr ""
+
+#: /src/schooltool/app/main.py:367
+msgid "%s: daemon mode not supported on your operating system."
+msgstr ""
+
+#: /src/schooltool/app/main.py:386
+msgid "Reading configuration from %s"
+msgstr ""
+
+#: /src/schooltool/app/main.py:435
+msgid "%s Manager"
+msgstr ""
+
+#: /src/schooltool/app/main.py:455
+msgid "Startup time: %.3f sec real, %.3f sec CPU"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/app/main.py:493
+msgid ""
+"Could not initialize the database:\n"
+"%s"
+msgstr ""
+
+#: /src/schooltool/app/main.py:496
+msgid ""
+"\n"
+"Perhaps another %s instance is using it?"
+msgstr ""
+
+#: /src/schooltool/app/main.py:564
+msgid ""
+"Warning: could not find the reportlab library.\n"
+"PDF support disabled."
+msgstr ""
+
+#: /src/schooltool/app/main.py:569
+msgid ""
+"Warning: font directory '%s' does not exist.\n"
+"PDF support disabled."
+msgstr ""
+
+#: /src/schooltool/app/main.py:577
+msgid ""
+"Warning: font '%s' does not exist.\n"
+"PDF support disabled."
+msgstr ""
+
+#: /src/schooltool/app/main.py:71
+msgid ""
+"\n"
+"Usage: %s [options]\n"
+"Options:\n"
+"  -c, --config xxx       use this configuration file instead of the default\n"
+"  -h, --help             show this help message\n"
+"  -d, --daemon           go to background after starting\n"
+"  -r, --restore-manager password\n"
+"                         restore the manager user with the provided "
+"password\n"
+"                         (read password from the standart input if "
+"'password'\n"
+"                         is '-')\n"
+"  --manage               only do management tasks, don't run the server\n"
+msgstr ""
+
+#: /src/schooltool/app/main.py:85
+msgid ""
+"\n"
+"No storage defined in the configuration file.\n"
+"\n"
+"If you're using the default configuration file, please edit it now and\n"
+"uncomment one of the ZODB storage sections.\n"
+msgstr ""
+
+#: /src/schooltool/app/main.py:93
+msgid ""
+"\n"
+"This is not a SchoolTool 0.11 database file, aborting.\n"
+msgstr ""
+
+#: /src/schooltool/app/main.py:98
+msgid ""
+"\n"
+"This is not a SchoolTool 0.10 database file, aborting.\n"
+"\n"
+"Please run the standalone database upgrade script.\n"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/attendance/attendance.py:390
+msgid "Explanation was accepted."
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/attendance/attendance.py:392
+msgid "Is not explanained yet."
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/attendance/attendance.py:512
+msgid "Was late for ${section} (${mins} minutes)."
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/attendance/attendance.py:518
+msgid "Was absent from ${section}."
+msgstr ""
+
+#: /src/schooltool/attendance/browser/attendance.py:428
+#: /src/schooltool/attendance/browser/attendance.py:754
+msgid "The arrival time you entered is invalid.  Please use HH:MM format"
+msgstr ""
+
+#: /src/schooltool/attendance/browser/attendance.py:450
+msgid ""
+"The minutes late value you entered is invalid.  Please use an integer number "
+"of minutes."
+msgstr ""
+
+#: /src/schooltool/attendance/browser/attendance.py:454
+msgid "Arrival times only apply to tardy students"
+msgstr ""
+
+#: /src/schooltool/attendance/browser/attendance.py:647
+msgid "You are not allowed to modify attendance information."
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/attendance/browser/attendance.py:681
+msgid "Added an explanation for $absence"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/attendance/browser/attendance.py:689
+msgid "Resolved $absence"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/attendance/browser/attendance.py:692
+msgid "Rejected explanation for $absence"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/attendance/browser/attendance.py:696
+msgid "Made $absence a tardy"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/attendance/browser/attendance.py:707
+msgid ""
+"Cannot add new explanation for $absence: old explanation not accepted/"
+"rejected"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/attendance/browser/attendance.py:718
+msgid "There are no outstanding explanations to accept for $absence"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/attendance/browser/attendance.py:729
+msgid "There are no outstanding explanations to reject for $absence"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/attendance/browser/attendance.py:745
+msgid ""
+"$absence is not a homeroom absence, only homeroom absences can be converted "
+"into tardies"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/attendance/browser/attendance.py:762
+msgid "Could not convert $absence absence intoa homeroom tardy"
+msgstr ""
+
+#: /src/schooltool/attendance/browser/attendance.py:795
+msgid "homeroom"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/attendance/browser/attendance.py:807
+msgid "$date $time: absent from $section"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/attendance/browser/attendance.py:809
+msgid "$date $time: late for $section, arrived on $late_arrival"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/attendance/browser/tests/test_attendance.py:263
+#, fuzzy
+msgid "$title"
+msgstr "عنوان"
+
+#: /src/schooltool/attendance/interfaces.py:39
+msgid "Attendance status codes"
+msgstr ""
+
+#: /src/schooltool/attendance/interfaces.py:40
+msgid "Dictionary of abbreviated attendance status codes"
+msgstr ""
+
+#: /src/schooltool/attendance/interfaces.py:44
+msgid "Retroactive attendance timeout"
+msgstr ""
+
+#: /src/schooltool/attendance/interfaces.py:45
+msgid ""
+"\n"
+"            The period of time in minutes that must pass after the\n"
+"            section meeting is completed before the attendance form\n"
+"            changes from realtime to retroactive."
+msgstr ""
+
+#: /src/schooltool/attendance/interfaces.py:52
+msgid "Homeroom tardy grace period"
+msgstr ""
+
+#: /src/schooltool/attendance/interfaces.py:53
+msgid ""
+"\n"
+"            The period of time in minutes you can be late for section after\n"
+"            beeing late for homeroom period without giving separate\n"
+"            explanation."
+msgstr ""
+
+#: /src/schooltool/commendation/browser.py:69
+msgid "<unknown>"
+msgstr ""
+
+#: /src/schooltool/commendation/interfaces.py:49
+#, fuzzy
+msgid "Title of the commendation."
+msgstr "عنوان یادداشت."
+
+#: /src/schooltool/commendation/interfaces.py:54
+msgid "A detailed description of the commendation."
+msgstr ""
+
+#: /src/schooltool/commendation/interfaces.py:58
+msgid "Scope"
+msgstr ""
+
+#: /src/schooltool/commendation/interfaces.py:59
+msgid "The scope of the commendation."
+msgstr ""
+
+#: /src/schooltool/commendation/interfaces.py:60
+msgid "school-wide"
+msgstr ""
+
+#: /src/schooltool/commendation/interfaces.py:60
+#, fuzzy
+msgid "group"
+msgstr "گروه"
+
+#: /src/schooltool/commendation/interfaces.py:60
+msgid "community"
+msgstr ""
+
+#: /src/schooltool/commendation/interfaces.py:61
+msgid "global"
+msgstr ""
+
+#: /src/schooltool/commendation/interfaces.py:61
+#, fuzzy
+msgid "national"
+msgstr "مدت"
+
+#: /src/schooltool/commendation/interfaces.py:61
+#, fuzzy
+msgid "state"
+msgstr "تاریخ"
+
+#: /src/schooltool/commendation/interfaces.py:66
+msgid "The date the commendation was issued."
+msgstr ""
+
+#: /src/schooltool/commendation/interfaces.py:71
+msgid "Grantor"
+msgstr ""
+
+#: /src/schooltool/commendation/interfaces.py:72
+msgid "The grantor of the commendation."
+msgstr ""
+
+#: /src/schooltool/course/browser/course.py:40
+#, fuzzy
+msgid "Course index"
+msgstr "ردیفِ منبع"
+
+#: /src/schooltool/course/browser/course.py:41
+#, fuzzy
+msgid "Add a new course"
+msgstr "اضافه کردن منبع جدید"
+
+#: /src/schooltool/course/browser/csvimport.py:39
+#: /src/schooltool/group/browser/csvimport.py:39
+#: /src/schooltool/person/browser/csvimport.py:43
+#: /src/schooltool/resource/browser/csvimport.py:39
+msgid "Insufficient data provided."
+msgstr "اطلاعات ناقص تدارک دیده شده‌اند."
+
+#: /src/schooltool/course/browser/csvimport.py:43
+#: /src/schooltool/group/browser/csvimport.py:43
+#: /src/schooltool/resource/browser/csvimport.py:43
+msgid "Titles may not be empty"
+msgstr "عناوین نمی‌توانند خالی باشند."
+
+#: /src/schooltool/course/browser/section.py:103
+msgid "No such course."
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:113
+msgid "Need a course ID."
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/course/browser/section.py:118
+msgid "Add a Section to ${course}"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:259
+msgid "Instructors"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:260
+#, fuzzy
+msgid "Current Instructors"
+msgstr "ماه جاری"
+
+#: /src/schooltool/course/browser/section.py:261
+#, fuzzy
+msgid "Available Instructors"
+msgstr "گروه‌های در دسترس"
+
+#: /src/schooltool/course/browser/section.py:283
+#: /src/schooltool/gradebook/interfaces.py:75
+msgid "Students"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:284
+#, fuzzy
+msgid "Current Students"
+msgstr "ماه جاری"
+
+#: /src/schooltool/course/browser/section.py:285
+#, fuzzy
+msgid "Available Students"
+msgstr "گروه‌های در دسترس"
+
+#: /src/schooltool/course/browser/section.py:311
+#: /src/schooltool/sbapp/browser/templates/navigation.pt:6
+#: /src/schooltool/sbapp/browser/templates/person.pt:36
+#: /src/schooltool/sbapp/browser/templates/index.pt:12
+msgid "Groups"
+msgstr "گروه‌ها"
+
+#: /src/schooltool/course/browser/section.py:312
+#: /src/schooltool/group/browser/group.py:60
+msgid "Current Groups"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:313
+#: /src/schooltool/group/browser/group.py:61
+msgid "Available Groups"
+msgstr "گروه‌های در دسترس"
+
+#: /src/schooltool/course/browser/section.py:338
+#: /src/schooltool/sbapp/browser/templates/navigation.pt:8
+#: /src/schooltool/sbapp/browser/templates/index.pt:13
+msgid "Resources"
+msgstr "منابع"
+
+#: /src/schooltool/course/browser/section.py:339
+#, fuzzy
+msgid "Current Resources"
+msgstr "وارد کردن منابع"
+
+#: /src/schooltool/course/browser/section.py:340
+msgid "Available Resources"
+msgstr "منابع در دسترس"
+
+#: /src/schooltool/course/browser/section.py:68
+#, fuzzy
+msgid "Section index"
+msgstr "ردیفِ فرد"
+
+#: /src/schooltool/course/browser/section.py:69
+#, fuzzy
+msgid "Add a new section"
+msgstr "اضافه کردن فرد جدید"
+
+#: /src/schooltool/course/interfaces.py:37
+#, fuzzy
+msgid "Title of the course."
+msgstr "عنوان منبع"
+
+#: /src/schooltool/course/interfaces.py:42
+#, fuzzy
+msgid "Description of the course."
+msgstr "توضیح منبع."
+
+#: /src/schooltool/course/interfaces.py:65
+msgid "Label"
+msgstr ""
+
+#: /src/schooltool/course/interfaces.py:67
+msgid ""
+"An identifier for a section, made up of instructor\n"
+"            names, courses, and meeting time."
+msgstr ""
+
+#: /src/schooltool/course/interfaces.py:72
+msgid "Code"
+msgstr ""
+
+#: /src/schooltool/course/interfaces.py:74
+msgid "ID code for the section."
+msgstr ""
+
+#: /src/schooltool/course/interfaces.py:79
+#, fuzzy
+msgid "Description of the section."
+msgstr "توضیح گروه"
+
+#. Default: ""
+#: /src/schooltool/course/section.py:63
+msgid "${instructors} -- ${courses}"
+msgstr ""
+
+#: /src/schooltool/dashboard/interfaces.py:45
+msgid "Category Title."
+msgstr ""
+
+#: /src/schooltool/dashboard/interfaces.py:49
+#: /src/schooltool/dashboard/interfaces.py:50
+#, fuzzy
+msgid "Weight"
+msgstr "وب‌گاه"
+
+#: /src/schooltool/demographics/browser/personform.py:102
+msgid "Apply and Next"
+msgstr ""
+
+#: /src/schooltool/demographics/browser/personform.py:113
+#: /src/schooltool/demographics/browser/personform.py:312
+#: /src/schooltool/person/browser/person.py:188
+#: /src/schooltool/skin/form.py:85
+msgid "Cancel"
+msgstr "انصراف"
+
+#. Default: ""
+#: /src/schooltool/demographics/browser/personform.py:156
+#, fuzzy
+msgid "Change name information for ${fullname}"
+msgstr "تغییر اطلاعات برای ${user}"
+
+#: /src/schooltool/demographics/browser/personform.py:172
+#, fuzzy
+msgid "Change name"
+msgstr "تغییر عضویت"
+
+#. Default: ""
+#: /src/schooltool/demographics/browser/personform.py:183
+#, fuzzy
+msgid "Change demographics for ${fullname}"
+msgstr "تغییر ترجیحات برای ${user}"
+
+#: /src/schooltool/demographics/browser/personform.py:191
+msgid "Demographics"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/demographics/browser/personform.py:202
+#, fuzzy
+msgid "Change school data for ${fullname}"
+msgstr "تغییر اطلاعات آشنا‌ها برای ${user}"
+
+#: /src/schooltool/demographics/browser/personform.py:212
+#, fuzzy
+msgid "School data"
+msgstr "اسکول‌تول"
+
+#. Default: ""
+#: /src/schooltool/demographics/browser/personform.py:230
+#, fuzzy
+msgid "Change contact information for ${fullname}"
+msgstr "تغییر اطلاعات آشنا‌ها برای ${user}"
+
+#: /src/schooltool/demographics/browser/personform.py:238
+msgid "Contact information"
+msgstr "اطلاعات آشناها"
+
+#: /src/schooltool/demographics/browser/personform.py:272
+#: /src/schooltool/demographics/browser/personform.py:273
+#: /src/schooltool/person/interfaces.py:78
+msgid "Username"
+msgstr "نام کاربر"
+
+#: /src/schooltool/demographics/browser/personform.py:277
+#: /src/schooltool/person/browser/person.py:167
+msgid "Password"
+msgstr "گذرواژه"
+
+#: /src/schooltool/demographics/browser/personform.py:292
+msgid "This username is already used!"
+msgstr "این نام کاربری قبلاً انتخاب شده است!"
+
+#: /src/schooltool/demographics/browser/personform.py:345
+msgid "Invalid teacher. Possible causes: deleted or renamed."
+msgstr ""
+
+#: /src/schooltool/demographics/browser/personform.py:377
+msgid "Invalid group. Possible causes: deleted or renamed."
+msgstr ""
+
+#: /src/schooltool/demographics/browser/personform.py:98
+#: /src/schooltool/demographics/browser/personform.py:289
+#: /src/schooltool/person/browser/person.py:178
+#: /src/schooltool/skin/form.py:55
+#: /src/schooltool/sbapp/browser/templates/calendar_overlay.pt:31
+msgid "Apply"
+msgstr "اعمال"
+
+#: /src/schooltool/demographics/interfaces.py:120
+msgid "Gender"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:126
+msgid "Birth date"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:131
+msgid "Ethnicity"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:137
+#, fuzzy
+msgid "Primary language"
+msgstr "تلفن اصلی"
+
+#: /src/schooltool/demographics/interfaces.py:143
+msgid "Special education"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:148
+#, fuzzy
+msgid "Previous school"
+msgstr "قبلی"
+
+#: /src/schooltool/demographics/interfaces.py:191
+msgid "ID"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:196
+msgid "Enrollment date"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:201
+msgid "Projected graduation year"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:206
+msgid "Advisor"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:212
+msgid "Team"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:218
+#, fuzzy
+msgid "Health information"
+msgstr "اطلاعات رویداد"
+
+#: /src/schooltool/demographics/interfaces.py:239
+#, fuzzy
+msgid "Name"
+msgstr "نام مستعار"
+
+#: /src/schooltool/demographics/interfaces.py:244
+msgid "Relationship to student"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:250
+#, fuzzy
+msgid "Street"
+msgstr "آغاز می‌شود"
+
+#: /src/schooltool/demographics/interfaces.py:255
+msgid "City"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:260
+#, fuzzy
+msgid "State"
+msgstr "شنبه"
+
+#: /src/schooltool/demographics/interfaces.py:265
+msgid "Postal code"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:270
+#, fuzzy
+msgid "Home phone"
+msgstr "منطقهٔ زمانی"
+
+#: /src/schooltool/demographics/interfaces.py:275
+#, fuzzy
+msgid "Work phone"
+msgstr "تلفن دوم"
+
+#: /src/schooltool/demographics/interfaces.py:280
+msgid "Cell phone"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:285
+msgid "Notes"
+msgstr "یادداشت‌ها"
+
+#: /src/schooltool/demographics/interfaces.py:295
+#, fuzzy
+msgid "Text"
+msgstr "بعدی"
+
+#: /src/schooltool/demographics/interfaces.py:296
+msgid "Full text search in name"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:301
+#, fuzzy
+msgid "Name of parent"
+msgstr "تعداد رویدادها"
+
+#: /src/schooltool/demographics/interfaces.py:302
+msgid "Full text search in parent names"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:307
+msgid "Student ID"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:43
+msgid "Prefix"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:44
+msgid "Prefix such as Mr., Mrs."
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:49
+#, fuzzy
+msgid "First name"
+msgstr "ویرایش نام"
+
+#: /src/schooltool/demographics/interfaces.py:54
+#, fuzzy
+msgid "Middle name"
+msgstr "ویرایش نام"
+
+#: /src/schooltool/demographics/interfaces.py:59
+#, fuzzy
+msgid "Last name"
+msgstr "ویرایش نام"
+
+#: /src/schooltool/demographics/interfaces.py:64
+msgid "Suffix"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:69
+#, fuzzy
+msgid "Preferred name"
+msgstr "ترجیحات من"
+
+#: /src/schooltool/demographics/interfaces.py:70
+msgid "Name by which the student prefers to be called"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:75
+#: /src/schooltool/person/interfaces.py:69
+msgid "Full name"
+msgstr "اسم کامل"
+
+#: /src/schooltool/demographics/interfaces.py:80
+#: /src/schooltool/person/interfaces.py:73
+msgid "Photo"
+msgstr "عکس"
+
+#: /src/schooltool/demographics/interfaces.py:82
+#: /src/schooltool/person/interfaces.py:75
+msgid "Photo (in JPEG format)"
+msgstr "عکس (در فرمت JPEG)"
+
+#: /src/schooltool/gradebook/activity.py:62
+#: /src/schooltool/gradebook/activity.py:78
+#: /src/schooltool/gradebook/interfaces.py:71
+msgid "Activities"
+msgstr ""
+
+#: /src/schooltool/gradebook/browser/category.py:43
+msgid "Categories"
+msgstr ""
+
+#: /src/schooltool/gradebook/browser/category.py:49
+#, fuzzy
+msgid "New Category"
+msgstr "یادداشت جدید"
+
+#: /src/schooltool/gradebook/browser/category.py:52
+msgid "Default Category"
+msgstr ""
+
+#: /src/schooltool/gradebook/browser/category.py:75
+#, fuzzy
+msgid "Categories successfully deleted."
+msgstr "متن اطلاعات جداشده با کاما با موفقیت وارد گردید."
+
+#: /src/schooltool/gradebook/browser/category.py:81
+#, fuzzy
+msgid "Category successfully added."
+msgstr "گذر‌واژه با موفقیت تغییر کرد!"
+
+#: /src/schooltool/gradebook/browser/category.py:87
+#, fuzzy
+msgid "Default category successfully changed."
+msgstr "گذر‌واژه با موفقیت تغییر کرد!"
+
+#: /src/schooltool/gradebook/browser/gradebook.py:100
+msgid "Percent Average"
+msgstr ""
+
+#: /src/schooltool/gradebook/browser/gradebook.py:102
+msgid "Median"
+msgstr ""
+
+#: /src/schooltool/gradebook/browser/gradebook.py:104
+msgid "Standard Deviation"
+msgstr ""
+
+#: /src/schooltool/gradebook/browser/gradebook.py:106
+msgid "Variance"
+msgstr ""
+
+#: /src/schooltool/gradebook/browser/gradebook.py:113
+msgid "N/A"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/gradebook/browser/gradebook.py:170
+msgid "The grade $value for activity $name is not valid."
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/gradebook/browser/gradebook.py:238
+msgid "The grade $value for $name is not valid."
+msgstr ""
+
+#: /src/schooltool/gradebook/browser/gradebook.py:98
+msgid "Average"
+msgstr ""
+
+#: /src/schooltool/gradebook/category.py:60
+msgid "Assignment"
+msgstr ""
+
+#: /src/schooltool/gradebook/category.py:61
+msgid "Essay"
+msgstr ""
+
+#: /src/schooltool/gradebook/category.py:62
+#, fuzzy
+msgid "Exam"
+msgstr "مثال:"
+
+#: /src/schooltool/gradebook/category.py:63
+msgid "Homework"
+msgstr ""
+
+#: /src/schooltool/gradebook/category.py:64
+msgid "Journal"
+msgstr ""
+
+#: /src/schooltool/gradebook/category.py:65
+msgid "Lab"
+msgstr ""
+
+#: /src/schooltool/gradebook/category.py:66
+#, fuzzy
+msgid "Presentation"
+msgstr "اطلاعات فرد"
+
+#: /src/schooltool/gradebook/category.py:67
+msgid "Project"
+msgstr ""
+
+#: /src/schooltool/gradebook/interfaces.py:39
+msgid "A detailed description of the activity."
+msgstr ""
+
+#: /src/schooltool/gradebook/interfaces.py:43
+msgid "Category"
+msgstr ""
+
+#: /src/schooltool/gradebook/interfaces.py:44
+msgid "The activity category"
+msgstr ""
+
+#: /src/schooltool/gradebook/interfaces.py:49
+msgid "Scoresystem"
+msgstr ""
+
+#: /src/schooltool/gradebook/interfaces.py:50
+msgid "The activity scoresystem."
+msgstr ""
+
+#: /src/schooltool/gradebook/interfaces.py:55
+msgid "The date the activity was created."
+msgstr ""
+
+#: /src/schooltool/gradebook/interfaces.py:72
+msgid "Activities in this gradebook."
+msgstr ""
+
+#: /src/schooltool/gradebook/interfaces.py:76
+msgid "Students in this gradebook."
+msgstr ""
+
+#: /src/schooltool/group/browser/group.py:47
+msgid "Group index"
+msgstr "ردیفِ گروه"
+
+#: /src/schooltool/group/browser/group.py:48
+msgid "Add a new group"
+msgstr "اضافه کردن گروه جدید"
+
+#. Default: ""
+#: /src/schooltool/group/browser/group.py:59
+msgid "Groups of ${person}"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/group/browser/group.py:97
+#, fuzzy
+msgid "Members of ${group}"
+msgstr "اعضای ${title}"
+
+#: /src/schooltool/group/browser/group.py:98
+msgid "Current Members"
+msgstr "اعضای فعلی"
+
+#: /src/schooltool/group/browser/group.py:99
+msgid "Add Members"
+msgstr "اضافه کردن اعضا"
+
+#: /src/schooltool/group/interfaces.py:44
+msgid "Title of the group."
+msgstr "عنوان گروه."
+
+#: /src/schooltool/group/interfaces.py:49
+msgid "Description of the group."
+msgstr "توضیح گروه"
+
+#: /src/schooltool/level/browser/level.py:41
+#, fuzzy
+msgid "Level index"
+msgstr "ردیفِ منبع"
+
+#: /src/schooltool/level/browser/level.py:42
+#, fuzzy
+msgid "Add a new level"
+msgstr "اضافه کردن منبع جدید"
+
+#: /src/schooltool/level/browser/level.py:60
+#, fuzzy
+msgid "Previous Level"
+msgstr "هفتهٔ قبلی"
+
+#: /src/schooltool/level/browser/level.py:61
+msgid ""
+"The previous level in the school. If None, then there is no previous level."
+msgstr ""
+
+#: /src/schooltool/level/browser/promotion.py:109
+#: /src/schooltool/level/browser/promotion.py:123
+msgid "No students were selected."
+msgstr ""
+
+#: /src/schooltool/level/browser/promotion.py:116
+msgid "Students successfully enrolled."
+msgstr ""
+
+#: /src/schooltool/level/browser/promotion.py:132
+#, fuzzy
+msgid "Student processes successfully updated."
+msgstr "متن اطلاعات جداشده با کاما با موفقیت وارد گردید."
+
+#: /src/schooltool/level/browser/promotion.py:57
+#, fuzzy
+msgid "Work Item successfully finished."
+msgstr "گذر‌واژه با موفقیت تغییر کرد!"
+
+#. Default: ""
+#: /src/schooltool/level/browser/promotion.py:64
+#, fuzzy
+msgid "Current Level: $level"
+msgstr "هفتهٔ جاری"
+
+#: /src/schooltool/level/browser/record.py:56
+#, fuzzy
+msgid "The status was successfully updated."
+msgstr "گذر‌واژه با موفقیت تغییر کرد!"
+
+#: /src/schooltool/level/browser/record.py:68
+msgid "The Level Process was successfully initialized."
+msgstr ""
+
+#: /src/schooltool/level/browser/record.py:79
+msgid "The Level Process was successfully removed."
+msgstr ""
+
+#: /src/schooltool/level/interfaces.py:132
+msgid "Time Stamp"
+msgstr ""
+
+#: /src/schooltool/level/interfaces.py:133
+msgid "The date and time the record was created."
+msgstr ""
+
+#: /src/schooltool/level/interfaces.py:137
+msgid "User"
+msgstr "کاربر"
+
+#: /src/schooltool/level/interfaces.py:138
+msgid "The principal id of the user making the record."
+msgstr ""
+
+#: /src/schooltool/level/interfaces.py:143
+#, fuzzy
+msgid "Title of the record."
+msgstr "عنوان منبع"
+
+#: /src/schooltool/level/interfaces.py:148
+#, fuzzy
+msgid "A detailed description of the record."
+msgstr "توضیح منبع."
+
+#: /src/schooltool/level/interfaces.py:160
+msgid "Academic History"
+msgstr ""
+
+#: /src/schooltool/level/interfaces.py:161
+msgid "The academic history of a student."
+msgstr ""
+
+#: /src/schooltool/level/interfaces.py:166
+#, fuzzy
+msgid "Status"
+msgstr "آغاز می‌شود"
+
+#: /src/schooltool/level/interfaces.py:167
+msgid "The current standing of the student in the school."
+msgstr ""
+
+#: /src/schooltool/level/interfaces.py:169
+msgid "Graduated"
+msgstr ""
+
+#: /src/schooltool/level/interfaces.py:169
+msgid "Withdrawn"
+msgstr ""
+
+#: /src/schooltool/level/interfaces.py:169
+#: /src/schooltool/level/interfaces.py:171
+msgid "Enrolled"
+msgstr ""
+
+#: /src/schooltool/level/interfaces.py:174
+msgid "Level Process"
+msgstr ""
+
+#: /src/schooltool/level/interfaces.py:175
+msgid "The workflow process of the level the student is currently completing."
+msgstr ""
+
+#: /src/schooltool/level/interfaces.py:76
+#, fuzzy
+msgid "Title of the level."
+msgstr "عنوان یادداشت."
+
+#: /src/schooltool/level/interfaces.py:80
+msgid "Is Initial Level"
+msgstr ""
+
+#: /src/schooltool/level/interfaces.py:81
+msgid "Is this level an initial level for the school."
+msgstr ""
+
+#: /src/schooltool/level/interfaces.py:86
+#, fuzzy
+msgid "Next Level"
+msgstr "هفتهٔ بعدی"
+
+#: /src/schooltool/level/interfaces.py:87
+msgid ""
+"The next level in the school. If None, then there is no following level."
+msgstr ""
+
+#: /src/schooltool/level/promotion.py:128
+msgid "Outcome"
+msgstr ""
+
+#: /src/schooltool/level/promotion.py:129
+#, fuzzy
+msgid "Outcome of the level."
+msgstr "عنوان یادداشت."
+
+#: /src/schooltool/level/promotion.py:130
+#, fuzzy
+msgid "fail"
+msgstr "روزانه"
+
+#: /src/schooltool/level/promotion.py:130
+msgid "withdraw"
+msgstr ""
+
+#: /src/schooltool/level/promotion.py:130
+#: /src/schooltool/level/promotion.py:132
+msgid "pass"
+msgstr ""
+
+#: /src/schooltool/level/promotion.py:96
+msgid "Level"
+msgstr ""
+
+#: /src/schooltool/level/promotion.py:97
+msgid "The initial level of the student in the school."
+msgstr ""
+
+#: /src/schooltool/note/interfaces.py:43
+msgid "Title of the note."
+msgstr "عنوان یادداشت."
+
+#: /src/schooltool/note/interfaces.py:46
+msgid "Body"
+msgstr "متن"
+
+#: /src/schooltool/note/interfaces.py:47
+msgid "Body of the note."
+msgstr "متن یادداشت."
+
+#: /src/schooltool/note/interfaces.py:50
+msgid "Privacy"
+msgstr "خصوصی"
+
+#: /src/schooltool/person/browser/csvimport.py:47
+msgid "username may not be empty"
+msgstr "نام کاربری نمی‌تواند خالی باشند."
+
+#: /src/schooltool/person/browser/csvimport.py:51
+msgid "fullname may not be empty"
+msgstr "نام کامل نمی‌تواند خالی باشند."
+
+#. Default: ""
+#: /src/schooltool/person/browser/csvimport.py:62
+msgid "Duplicate username: ${username}"
+msgstr "تکرار نام کاربری: ${username}"
+
+#: /src/schooltool/person/browser/person.py:176
+#, fuzzy
+msgid "Edit password"
+msgstr "گذرواژه جدید"
+
+#: /src/schooltool/person/browser/person.py:181
+msgid "No new password was supplied so original password is unchanged"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.py:186
+#, fuzzy
+msgid "Changed password"
+msgstr "تغییر گذرواژه"
+
+#: /src/schooltool/person/interfaces.py:154
+msgid "Time Zone"
+msgstr "منطقهٔ زمانی"
+
+#: /src/schooltool/person/interfaces.py:155
+msgid "Time Zone used to display your calendar"
+msgstr "منطقهٔ زمانی‌ای که برای نمایش تقویم شما استفاده می‌شود."
+
+#: /src/schooltool/person/interfaces.py:159
+#: /src/schooltool/person/interfaces.py:160
+msgid "Time Format"
+msgstr "قالب زمان"
+
+#: /src/schooltool/person/interfaces.py:161
+msgid "HH:MM"
+msgstr ""
+
+#: /src/schooltool/person/interfaces.py:162
+msgid "HH:MM am/pm"
+msgstr ""
+
+#: /src/schooltool/person/interfaces.py:165
+#: /src/schooltool/person/interfaces.py:166
+msgid "Date Format"
+msgstr "قالب تاریخ"
+
+#: /src/schooltool/person/interfaces.py:167
+msgid "MM/DD/YY"
+msgstr ""
+
+#: /src/schooltool/person/interfaces.py:168
+msgid "YYYY-MM-DD"
+msgstr ""
+
+#: /src/schooltool/person/interfaces.py:169
+msgid "Day Month, Year"
+msgstr "روز ماه، سال"
+
+#: /src/schooltool/person/interfaces.py:173
+msgid "Week starts on:"
+msgstr "هفته شروع می‌شود از:"
+
+#: /src/schooltool/person/interfaces.py:174
+msgid "Start display of weeks on Sunday or Monday"
+msgstr "نمایش هفته از روز یکشنبه شروع شود و یا دوشنبه"
+
+#: /src/schooltool/person/interfaces.py:187
+msgid "Show periods"
+msgstr ""
+
+#: /src/schooltool/person/interfaces.py:188
+msgid "Show period names in daily view"
+msgstr ""
+
+#: /src/schooltool/person/interfaces.py:191
+#: /src/schooltool/person/interfaces.py:192
+#, fuzzy
+msgid "Make calendar public"
+msgstr "نمایش تقویم"
+
+#: /src/schooltool/person/interfaces.py:70
+msgid "Name that should be displayed"
+msgstr "نامی که باید نمایش داده شود"
+
+#: /src/schooltool/requirement/browser/requirement.py:53
+#, fuzzy
+msgid "Requirement index"
+msgstr "ردیفِ منبع"
+
+#: /src/schooltool/requirement/browser/requirement.py:54
+#, fuzzy
+msgid "Add a new Requirement"
+msgstr "اضافه کردن منبع جدید"
+
+#: /src/schooltool/requirement/browser/scoresystem.py:36
+msgid "Exisiting Score System"
+msgstr ""
+
+#: /src/schooltool/requirement/browser/scoresystem.py:41
+msgid "Custom score system"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:39
+msgid "Resource index"
+msgstr "ردیفِ منبع"
+
+#: /src/schooltool/resource/browser/resource.py:40
+msgid "Add a new resource"
+msgstr "اضافه کردن منبع جدید"
+
+#: /src/schooltool/resource/interfaces.py:39
+msgid "Title of the resource."
+msgstr "عنوان منبع"
+
+#: /src/schooltool/resource/interfaces.py:44
+msgid "Description of the resource."
+msgstr "توضیح منبع."
+
+#: /src/schooltool/resource/interfaces.py:47
+msgid "A Location."
+msgstr "یک مکان."
+
+#: /src/schooltool/resource/interfaces.py:48
+msgid "Indicate this resource is a location, like a classroom."
+msgstr "مشخص می‌کند که این منبع یک مکان است، مثلاً کلاس."
+
+#: /src/schooltool/restclient/restclient.py:644
+msgid "Could not parse relationship list"
+msgstr ""
+
+#: /src/schooltool/restclient/restclient.py:660
+#, fuzzy
+msgid "Insufficient data in person info"
+msgstr "اطلاعات ناقص تدارک دیده شده‌اند."
+
+#: /src/schooltool/restclient/restclient.py:673
+#, fuzzy
+msgid "Insufficient data in group info"
+msgstr "اطلاعات ناقص تدارک دیده شده‌اند."
+
+#: /src/schooltool/restclient/restclient.py:688
+#, fuzzy
+msgid "Insufficient data in level info"
+msgstr "اطلاعات ناقص تدارک دیده شده‌اند."
+
+#: /src/schooltool/sbapp/browser/templates/calendar_overlay.pt:12
+msgid "My Calendar"
+msgstr "تقویم من"
+
+#: /src/schooltool/sbapp/browser/templates/calendar_overlay.pt:33
+msgid "More..."
+msgstr "بیشتر..."
+
+#: /src/schooltool/sbapp/browser/templates/calendar_overlay.pt:4
+msgid "Calendars"
+msgstr "تقویم‌ها"
+
+#: /src/schooltool/sbapp/browser/templates/index.pt:6
+msgid "Welcome to SchoolBell"
+msgstr "به اسکول‌بل خوش آمدید"
+
+#: /src/schooltool/sbapp/browser/templates/navigation.pt:2
+msgid "Navigation"
+msgstr "ناوش"
+
+#: /src/schooltool/sbapp/browser/templates/person.pt:11
+#, fuzzy
+msgid "photo"
+msgstr "عکس"
+
+#: /src/schooltool/sbapp/browser/templates/person.pt:15
+msgid "Username:"
+msgstr "نام کاربری:"
+
+#: /src/schooltool/sbapp/browser/templates/person.pt:18
+msgid "edit name"
+msgstr "ویرایش نام"
+
+#: /src/schooltool/sbapp/browser/templates/person.pt:18
+msgid "Change this person's name, picture, or password"
+msgstr "تغییر نام، عکس و یا گذرواژهٔ این فرد"
+
+#: /src/schooltool/sbapp/browser/templates/person.pt:4
+msgid "Person info: ${title}"
+msgstr "اطلاعات فرد: ${title}"
+
+#: /src/schooltool/sbapp/browser/templates/person.pt:47
+msgid "Manage this person's memberships"
+msgstr "مدیریت عضویت‌های این کاربر"
+
+#: /src/schooltool/sbapp/browser/templates/person.pt:47
+msgid "edit groups"
+msgstr "ویرایش گروه‌ها"
+
+#: /src/schooltool/sbapp/main.py:38
+msgid ""
+"\n"
+"This is not a SchoolBell 1.0 database file, aborting.\n"
+msgstr ""
+
+#: /src/schooltool/sbapp/main.py:43
+msgid ""
+"\n"
+"This is not a SchoolBell 1.0 database file, aborting.\n"
+"\n"
+"Please run the standalone database upgrade script.\n"
+msgstr ""
+
+#: /src/schooltool/skin/breadcrumbs.py:68
+msgid "top"
+msgstr "ابتدا"
+
+#: /src/schooltool/skin/form.py:64
+#, fuzzy
+msgid "No changes"
+msgstr "تغییرات ذخیره گشت."
+
+#: /src/schooltool/term/browser/emergency.py:100
+msgid "The replacement date you entered is invalid."
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/term/browser/emergency.py:123
+msgid "School cancelled due to emergency. Replacement day $replacement."
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/term/browser/emergency.py:133
+msgid "Replacement day for emergency day $emergency."
+msgstr ""
+
+#: /src/schooltool/term/browser/emergency.py:84
+msgid "The date you entered is invalid.  Please use the YYYY-MM-DD format."
+msgstr ""
+
+#: /src/schooltool/term/browser/emergency.py:88
+msgid "The date you entered does not belong to this term."
+msgstr ""
+
+#: /src/schooltool/term/browser/emergency.py:92
+msgid "The date you entered is not a schoolday."
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/term/browser/term.py:129
+#, fuzzy
+msgid "Change Term: $title"
+msgstr "تغییر جزئیات"
+
+#: /src/schooltool/term/browser/term.py:165
+#, fuzzy
+msgid "New term"
+msgstr "یادداشت جدید"
+
+#: /src/schooltool/term/browser/term.py:55
+#, fuzzy
+msgid "Terms"
+msgstr "مورد"
+
+#: /src/schooltool/term/browser/term.py:56
+#, fuzzy
+msgid "Add a new term"
+msgstr "اضافه کردن فرد جدید"
+
+#: /src/schooltool/term/browser/term.py:65
+#, fuzzy
+msgid "Start date"
+msgstr "آغاز می‌شود"
+
+#: /src/schooltool/term/browser/term.py:67
+#, fuzzy
+msgid "End date"
+msgstr "تاریخ‌های مستثتا"
+
+#. Default: ""
+#: /src/schooltool/timetable/browser/__init__.py:345
+msgid "${object}'s timetable"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/__init__.py:744
+#, fuzzy
+msgid "Invalid date. Please use YYYY-MM-DD format."
+msgstr "تاریخ نادرست. لطفاً در هر خط به قالب YYYY-MM-DD وارد کنید."
+
+#: /src/schooltool/timetable/browser/__init__.py:748
+msgid "The date does not belong to any term."
+msgstr ""
+
+#: /src/schooltool/timetable/browser/__init__.py:757
+msgid "Some values were invalid.  They are highlighted in red."
+msgstr ""
+
+#: /src/schooltool/timetable/browser/schema.py:155
+msgid "Please use HH:MM format for period start and end times"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/schema.py:196
+msgid "You must specify at least one period."
+msgstr ""
+
+#: /src/schooltool/timetable/browser/schema.py:217
+msgid "School Timetables"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/schema.py:218
+#, fuzzy
+msgid "Add a new schema"
+msgstr "اضافه کردن منبع جدید"
+
+#: /src/schooltool/timetable/browser/schema.py:302
+msgid "Please select a value"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/timetable/browser/schema.py:329
+#: /src/schooltool/timetable/browser/schema.py:336
+#, fuzzy
+msgid "Day ${number}"
+msgstr "${number}I نفر"
+
+#: /src/schooltool/timetable/browser/schema.py:359
+msgid "Period 1"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/timetable/browser/schema.py:369
+msgid "Period ${number}"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/timetable/browser/schema.py:74
+msgid "Timetable schema ${schema}"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:261
+msgid ""
+"Does your school's timetable cycle use days of the week, or a rotating cycle?"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:264
+#, fuzzy
+msgid "Days of the week"
+msgstr "متن یادداشت."
+
+#: /src/schooltool/timetable/browser/ttwizard.py:265
+msgid "Rotating cycle"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:288
+msgid "Enter names of days in cycle, one per line."
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:300
+msgid "Please enter at least one day name."
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:306
+msgid "Please make sure the day names are unique."
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:322
+msgid ""
+"Do classes begin and end at the same time each day in your school's "
+"timetable?"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:325
+#, fuzzy
+msgid "Same time each day"
+msgstr "هر روز هفته"
+
+#: /src/schooltool/timetable/browser/ttwizard.py:326
+msgid "Different times"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:345
+msgid ""
+"Do start and end times vary based on the day of the week (Monday - Friday) "
+"or the day in the cycle?"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:348
+msgid "Day of week"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:349
+msgid "Day in cycle"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:414
+msgid ""
+"Enter start and end times for each slot, one slot (HH:MM - HH:MM) per line."
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/timetable/browser/ttwizard.py:428
+#: /src/schooltool/timetable/browser/ttwizard.py:470
+msgid "Not a valid time slot: $slot."
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:432
+msgid "Please enter at least one time slot."
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:453
+msgid ""
+"Enter start and end times for each slot on each day, one slot (HH:MM - HH:"
+"MM) per line."
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/timetable/browser/ttwizard.py:474
+msgid "Please enter at least one time slot for $day."
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:515
+msgid ""
+"As you have selected a rotating timetable cycle and slots based on day of "
+"week, all days must have the same number of time periods."
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:528
+msgid "Do periods have names or are they simply designated by time?"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:531
+#, fuzzy
+msgid "Have names"
+msgstr "ویرایش نام"
+
+#: /src/schooltool/timetable/browser/ttwizard.py:532
+msgid "Designated by time"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:568
+msgid "Enter names of periods, one per line."
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/timetable/browser/ttwizard.py:581
+msgid "Please enter at least $number periods."
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:587
+msgid "Please make sure the period names are unique."
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:609
+msgid "Is the sequence of periods each day the same or different?"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:611
+msgid "Same"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:612
+msgid "Different"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:627
+msgid "Please put the periods in order:"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:643
+#: /src/schooltool/timetable/browser/ttwizard.py:697
+msgid "Please provide all periods."
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/timetable/browser/ttwizard.py:656
+#: /src/schooltool/timetable/browser/ttwizard.py:714
+msgid "The following periods were selected more than once: $periods"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:674
+msgid "Please put the periods in order for each day:"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/timetable/browser/ttwizard.py:710
+msgid "$period on day $day"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:731
+msgid ""
+"Do you check student attendance for the day in a homeroom period or "
+"equivalent?"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:734
+msgid "Yes"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:735
+#, fuzzy
+msgid "No"
+msgstr "یادداشت"
+
+#: /src/schooltool/timetable/browser/ttwizard.py:750
+msgid "Please indicate the homeroom period(s) for each day:"
+msgstr ""
+
+#: /src/schooltool/timetable/rest/__init__.py:267
+#, fuzzy
+msgid "Unknown day id: %r"
+msgstr "مجموعه‌نویسهٔ نامعلوم"
+
+#: /src/schooltool/timetable/rest/__init__.py:273
+msgid "Unknown period id: %r"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/widget/password.py:39
+msgid ""
+"${password} <label for=\"${label}\" title=\"\">Confirm</label> ${confirm}"
+msgstr ""
+
+#: /src/schooltool/widget/password.py:51
+msgid "Supplied passwords are not identical"
+msgstr ""
+
+#~ msgid "New photo"
+#~ msgstr "عکس جدید"
+
+#~ msgid "A small picture (about 48x48 pixels in JPEG format)"
+#~ msgstr "عکس کوچک (حدود ۴۸×۴۸ پیکسل در فرمت JPEG)"
+
+#~ msgid "Clear photo"
+#~ msgstr "پاک کردن عکس"
+
+#~ msgid "Check this to clear the photo"
+#~ msgstr "این را انتخاب کنید تا عکس پاک گردد"
+
+#~ msgid "Verify password"
+#~ msgstr "تأیید گذرواژه"
+
+#~ msgid "Passwords do not match."
+#~ msgstr "دو گذرواژه شما با هم فرق دارند."
+
+#~ msgid "Passwords do not match!"
+#~ msgstr "گذرواژه‌ها با هم یکی نیستند."
+
+#~ msgid "View"
+#~ msgstr "نما"
+
+#~ msgid "Edit"
+#~ msgstr "ویرایش"
+
+#~ msgid "Create new objects"
+#~ msgstr "ایجاد اشیای جدید"
+
+#~ msgid "Add events"
+#~ msgstr "اضافه‌کردن رویدادها"
+
+#~ msgid "Modify/delete events"
+#~ msgstr "تغییر/حذف رویدادها"
+
+#~ msgid "Control access"
+#~ msgstr "کنترل دسترسی"
+
+#~ msgid "Manage membership"
+#~ msgstr "مدیریت عضویت"
+
+#~ msgid "Authenticated users"
+#~ msgstr "کاربران تأیید شده"
+
+#~ msgid "Unauthenticated users"
+#~ msgstr "کاربران تأیید نشده"
+
+#~ msgid "Set Up Access"
+#~ msgstr "تعیین دسترسی‌ها"
+
+#~ msgid "Change Preferences"
+#~ msgstr "تغییر ترجیحات"
+
+#~ msgid "New Person"
+#~ msgstr "فرد جدید"
+
+#~ msgid "Import Persons"
+#~ msgstr "وارد کردن افراد"
+
+#~ msgid "Add a Group"
+#~ msgstr "اضافه کردن یک گروه"
+
+#~ msgid "New Group"
+#~ msgstr "گروه جدید"
+
+#~ msgid "Edit Group Information"
+#~ msgstr "ویرایش اطلاعات گروه"
+
+#~ msgid "A Group"
+#~ msgstr "یک گروه"
+
+#~ msgid "SchoolBell Group"
+#~ msgstr "گروه اسکول‌بل"
+
+#~ msgid "Add/Remove Members"
+#~ msgstr "اضافه/حذف افراد"
+
+#~ msgid "Import Groups"
+#~ msgstr "وارد کردن گروه‌ها"
+
+#~ msgid "Add a Resource"
+#~ msgstr "اضافه کردن یک منبع"
+
+#~ msgid "Edit Resource Information"
+#~ msgstr "ویرایش اطلاعات منبع"
+
+#~ msgid "New Resource"
+#~ msgstr "منبع جدید"
+
+#~ msgid "SchoolBell Resource"
+#~ msgstr "منبع اسکول‌بل"
+
+#~ msgid "A Resource"
+#~ msgstr "یک منبع"
+
+#~ msgid "Actions"
+#~ msgstr "کنش‌ها"
+
+#~ msgid "View Calendar"
+#~ msgstr "نمایش تقویم"
+
+#~ msgid "Calendar (Daily)"
+#~ msgstr "تقویم (روزانه)"
+
+#~ msgid "Calendar (Daily, PDF)"
+#~ msgstr "تقویم (روزانه، PDF)"
+
+#~ msgid "Calendar (Weekly)"
+#~ msgstr "تقویم (هفتگی)"
+
+#~ msgid "SchoolBell"
+#~ msgstr "اسکول‌بل"
+
+#~ msgid "Calendar (Weekly, PDF)"
+#~ msgstr "تقویم (هفتگی، PDF)"
+
+#~ msgid "Calendar (Monthly)"
+#~ msgstr "تقویم (ماهانه)"
+
+#~ msgid "Calendar (Monthly, PDF)"
+#~ msgstr "تقویم (ماهانه، PDF)"
+
+#~ msgid "Calendar (Yearly)"
+#~ msgstr "تقویم (سالانه)"
+
+#~ msgid "Atom View"
+#~ msgstr "نمایش اتم"
+
+#~ msgid "Free/Busy"
+#~ msgstr "آزاد/مشغول"
+
+#~ msgid "New Event"
+#~ msgstr "رویداد جدید"
+
+#~ msgid "Open in iCal"
+#~ msgstr "باز کردن در iCal"
+
+#~ msgid "Edit Event"
+#~ msgstr "ویرایش رویداد"
+
+#~ msgid "Change Site Preferences"
+#~ msgstr "تغییر ترجیحات وبگاه"
+
+#~ msgid ""
+#~ "This permission allows viewing names, titles, photos, lists of objects, "
+#~ "and other information."
+#~ msgstr ""
+#~ "این حق دسترسی اجازهٔ نمایش اسم‌ها، عنوان‌ها، عکس‌ها، لیست اشیا و دیگر اطلاعات "
+#~ "را می‌دهد."
+
+#~ msgid "Allows to edit names, titles, descriptions, photos, etc."
+#~ msgstr "اجازهٔ ویرایش اسم‌ها عنوان‌ها، توضیحات، عکس‌ها و غیره را می‌دهد."
+
+#~ msgid "Lets the user create new persons, groups, and resources."
+#~ msgstr "به کاربر اجازهٔ ایجاد افراد، گروه‌ها و منابع جدید را می‌دهد."
+
+#~ msgid "Allows viewing calendars of persons, groups, and resources."
+#~ msgstr "اجازهٔ نمایش تقویم‌های افراد، گروه‌ها و منابع را می‌دهد."
+
+#~ msgid "Allows adding new events to calendars."
+#~ msgstr "اجازهٔ اضافه کردن رویدادهای جدید به تقویم‌ها را می‌دهد."
+
+#~ msgid "Allows editing and delete events in calendars."
+#~ msgstr "اجازهٔ ویرایش و حذف رویدادها در تقویم‌ها را می‌دهد."
+
+#~ msgid "Access control for ${title}"
+#~ msgstr "کنترل دسترسی برای ${title}"
+
+#~ msgid "Allows the user to use this form (Access control)"
+#~ msgstr "به کاربر اجازهٔ استفاده از این فرم و کنترل اجازه‌ها را می‌دهد."
+
+#~ msgid ""
+#~ "Allows the user to add persons, groups and resources to groups. In order "
+#~ "to add something to a group, the user needs this permission only on the "
+#~ "group. Keep in mind that joining groups has security implications."
+#~ msgstr ""
+#~ "به کاربر اجازهٔ اضافه کردن افراد، گروه‌ها و منابع را به گروه‌ها می‌دهد. برای "
+#~ "اضافه کردن چیزی به یک گروه، کاربر تنها نیاز به این دسترسی فقط روی آن گروه "
+#~ "خاص دارد. حواستان باشد که الحاق دو گروه مستلزم رعایت نکات امنیتی است."
+
+#~ msgid "Permissions for Groups"
+#~ msgstr "دسترسی‌های گروه‌ها"
+
+#~ msgid "Access control"
+#~ msgstr "کنترل دسترسی"
+
+#~ msgid "Set Access"
+#~ msgstr "تنظیم دسترسی"
+
+#~ msgid "Permissions for Users"
+#~ msgstr "دسترسی‌های کاربران"
+
+#, fuzzy
+#~ msgid ""
+#~ "The permissions are inherited in the containment hierarchy. For example, "
+#~ "if you set a View Calendar permission for a user on the Persons Index, "
+#~ "that user will be able to see the calendars of all persons. If you want "
+#~ "the user to be able to access just a calendar of some resource, you can "
+#~ "set the View Calendar permission for that user on that resource."
+#~ msgstr ""
+#~ "اجازه‌ها به طور سلسله‌مراتبی به ارث می‌رسد. برای مثال اگر در ردیف افراد به "
+#~ "یک کاربر اجازهٔ نمایش تقویم بدهید، آن کاربر می‌تواند تقویم همهٔ افراد را "
+#~ "ببیند. اگر می‌خواهید کاربر فقط به تقویم یک منبع خاص دسترسی داشته باشد، "
+#~ "می‌توانید اجازهٔ نمایش تقویم را برای آن کاربر روی آن منبع دهید."
+
+#~ msgid "Below is a list of permission names with their respective meanings."
+#~ msgstr "در زیر لیست نام دسترسی‌ها به همراه مفهومشان را می‌توانید مشاهده کنید."
+
+#~ msgid "Change site preferences"
+#~ msgstr "تغییر ترجیحات سایت"
+
+#~ msgid "General preferences"
+#~ msgstr "ترجیحات عمومی"
+
+#~ msgid "Edit site preferences"
+#~ msgstr "ویرایش ترجیحات وبگاه"
+
+#~ msgid "Events for"
+#~ msgstr "رویداد‌ها برای"
+
+#, fuzzy
+#~ msgid "atom_description"
+#~ msgstr ""
+#~ "این یک XML در قالب اتم است. انتظار می‌رود که در یک خیر‌خوان و یا قالب‌یافته "
+#~ "در یک سایت دیگر خوانده شود. برای اطلاعات بیشتر"
+
+#, fuzzy
+#~ msgid "atom_enabled"
+#~ msgstr "Atom Enabled"
+
+#, fuzzy
+#~ msgid "atom_more_info"
+#~ msgstr "را ببینید."
+
+#~ msgid "Validate my Atom feed"
+#~ msgstr "اعتبارسنجی اتم خورد من"
+
+#~ msgid "[Valid Atom]"
+#~ msgstr "[اتم معتبر]"
+
+#~ msgid "Location: ${location}"
+#~ msgstr "محل: ${location}"
+
+#~ msgid "Select additional calendars to display"
+#~ msgstr "تقویم‌های بیشتری را جهت نمایش انتخاب کنید"
+
+#~ msgid "Hold down Ctrl or Shift to select multiple calendars."
+#~ msgstr "برای انتخاب چندتایی تقویم‌ها، دکمهٔ مهار و یا دگرساز را نگه دارید."
+
+#~ msgid "Public Calendar"
+#~ msgstr "تقویم عمومی"
+
+#, fuzzy
+#~ msgid "site-wide calendar"
+#~ msgstr "تقویم پایگاه-گسترده"
+
+#~ msgid "Select calendars to display"
+#~ msgstr "تقویم‌ها را جهت نمایش انتخاب کنید"
+
+#~ msgid "People"
+#~ msgstr "افراد"
+
+#~ msgid "There are no persons with calendars accessible to you."
+#~ msgstr "هیچ فردی با تقویم قابل دسترس برای شما وجود ندارد."
+
+#~ msgid "There are no groups with calendars accessible to you."
+#~ msgstr "هیچ گروهی با تقویم قابل دسترس برای شما وجود ندارد."
+
+#~ msgid "There are no resources with calendars accessible to you."
+#~ msgstr "هیچ منبعی با تقویم قابل دسترس برای شما وجود ندارد."
+
+#~ msgid "Showing"
+#~ msgstr "نمایش"
+
+#~ msgid "of"
+#~ msgstr "از"
+
+#~ msgid "Are you sure you want to delete selected items?"
+#~ msgstr "آیا مطمئنید که می‌خواهید مورد انتخابی را حذف کنید؟"
+
+#~ msgid "You have not selected any items."
+#~ msgstr "شما موردی انتخاب نکردید."
+
+#~ msgid "delete-button"
+#~ msgstr "حذف"
+
+#~ msgid "Exception"
+#~ msgstr "استثنا"
+
+#~ msgid "Traceback"
+#~ msgstr "مسیر طی‌شده"
+
+#~ msgid "Server Error"
+#~ msgstr "خطای کارگزار"
+
+#~ msgid ""
+#~ "An internal server error has occurred. This most likely means that you "
+#~ "have found a bug in SchoolBell. Please report it on <a href=\"http://"
+#~ "issues.schooltool.org\">the issue tracker</a>."
+#~ msgstr ""
+#~ "کارگزار دچار یک مشکل داخلی شده است. به نظر می‌آید که از اسکول‌بل یک اشکال "
+#~ "پیدا کرده‌اید. لطفاً این اشکال را در <a href=\"http://issues.schooltool.org"
+#~ "\">پی‌گیری مسائل</a> گزارش دهید"
+
+#~ msgid "All day event"
+#~ msgstr "رویداد تمام روز"
+
+#~ msgid "This is a recurring event."
+#~ msgstr "این یک رویداد مکرر است."
+
+#~ msgid "Ends"
+#~ msgstr "پایان می‌یابد"
+
+#~ msgid "edit event"
+#~ msgstr "ویرایش رویداد"
+
+#~ msgid "Change the details of this event"
+#~ msgstr "تغییر جزئیات این رویداد"
+
+#~ msgid "Scheduled resources"
+#~ msgstr "منابع زمان‌بندی شده"
+
+#~ msgid "edit resources"
+#~ msgstr "ویرایش منابع"
+
+#~ msgid "delete event"
+#~ msgstr "حذف رویداد"
+
+#~ msgid "Event details"
+#~ msgstr "جزئیات رویداد"
+
+#~ msgid "Book Resources"
+#~ msgstr "ثبت منابع"
+
+#~ msgid "Update form"
+#~ msgstr "به‌روزرسانی فرم"
+
+#~ msgid "day"
+#~ msgstr "روز"
+
+#~ msgid "week"
+#~ msgstr "هفته"
+
+#~ msgid "month"
+#~ msgstr "ماه"
+
+#~ msgid "year"
+#~ msgstr "سال"
+
+#~ msgid "Weekly"
+#~ msgstr "هفتگی"
+
+#~ msgid "This section only applies when weekly recurrence is selected."
+#~ msgstr "این قسمت فقط زمانی که تکرار هفتگی انتخاب شده اعمال می‌شود."
+
+#~ msgid "This section only applies when the monthly recurrence is selected."
+#~ msgstr "این قسمت فقط زمانی که تکرار ماهانه انتخاب شده اعمال می‌شود."
+
+#~ msgid "Day ${monthday} of every month"
+#~ msgstr "روز ${monthday}I از هر ماه"
+
+#~ msgid "${weekday} of every month"
+#~ msgstr "${weekday} از هر ماه"
+
+#~ msgid "${DYNAMIC_CONTENT} of every month"
+#~ msgstr "${DYNAMIC_CONTENT} از هر ماه"
+
+#~ msgid "Repeat"
+#~ msgstr "تکرار"
+
+#~ msgid "times"
+#~ msgstr "بار"
+
+#~ msgid "Repeat forever"
+#~ msgstr "تکرار برای همیشه"
+
+#~ msgid "Book resources"
+#~ msgstr "ثبت منابع"
+
+#~ msgid "Resource Booking for ${title}"
+#~ msgstr "ثبت منبع برای ${title}"
+
+#~ msgid "Title:"
+#~ msgstr "عنوان:"
+
+#~ msgid "Starts:"
+#~ msgstr "شروع:"
+
+#~ msgid "Ends:"
+#~ msgstr "پایان:"
+
+#~ msgid "This is a recurring event!"
+#~ msgstr "این یک رویداد تکراردار است."
+
+#~ msgid "Resource Booking"
+#~ msgstr "ثبت منابع"
+
+#~ msgid "Conflicting events"
+#~ msgstr "رویدادهای متداخل"
+
+#~ msgid "Book"
+#~ msgstr "ثبت"
+
+#~ msgid "Unicode (UTF-8)"
+#~ msgstr "یونی‌کد (UTF-8)"
+
+#~ msgid "Other (please specify)"
+#~ msgstr "غیره (لطفاً مشخص کنید)"
+
+#~ msgid "Members"
+#~ msgstr "اعضا"
+
+#~ msgid "edit members"
+#~ msgstr "ویرایش اعضا"
+
+#~ msgid "Remove"
+#~ msgstr "حذف"
+
+#~ msgid ""
+#~ "You are not allowed to access this page. You can click on the back button "
+#~ "in your browser to go back, or ask a more privileged user to log in."
+#~ msgstr ""
+#~ "شما برای دسترسی به این صفحه اجازه ندارید. می‌توانید با فشار دکمه عقب "
+#~ "مرورگر برگردید، و یا از یک کاربر با امتیاز بیشتر بخواهید که وارد شود."
+
+#~ msgid "Please log in"
+#~ msgstr "لطفاً وارد شوید"
+
+#~ msgid "Login"
+#~ msgstr "ورود"
+
+#~ msgid "User Information"
+#~ msgstr "اطلاعات کاربر"
+
+#~ msgid "Your session has expired."
+#~ msgstr "نشست شما تمام شده است."
+
+#~ msgid "There are none."
+#~ msgstr "هیچ‌کس نیست."
+
+#~ msgid "submit-button"
+#~ msgstr "تایید"
+
+#~ msgid "There are none to add."
+#~ msgstr "کسی برای اضافه کردن نیست."
+
+#~ msgid "Find Now"
+#~ msgstr "پیدا کردن"
+
+#~ msgid "Clear"
+#~ msgstr "پاک کردن"
+
+#~ msgid "cancel-button"
+#~ msgstr "انصراف"
+
+#~ msgid "Private"
+#~ msgstr "شخصی"
+
+#~ msgid "Public"
+#~ msgstr "عمومی"
+
+#~ msgid "Add note"
+#~ msgstr "اضافه کردن ویرایش"
+
+#~ msgid "add-button"
+#~ msgstr "اضافه"
+
+#~ msgid "Delete"
+#~ msgstr "حذف کردن"
+
+#~ msgid "Please note the following:"
+#~ msgstr "لطفاً به موارد زیر توجه داشته باشید:"
+
+#~ msgid "You might have misspelled the url"
+#~ msgstr "شما ممکن است در تایپ نشانی اینترنتی اشتباه کرده باشید."
+
+#~ msgid "You might be trying to access a non-existing page"
+#~ msgstr "ممکن است برای نشانی اینترنتی مورد نظر صفحه‌ای موجود نباشد"
+
+#~ msgid "Not Found"
+#~ msgstr "یافت نشد"
+
+#~ msgid "The page that you are trying to access is not available"
+#~ msgstr "صفحه‌ای که می‌خواهید به آن دسترسی پیدا کنید موجود نیست"
+
+#~ msgid "Details"
+#~ msgstr "جزئیات"
+
+#~ msgid "edit details"
+#~ msgstr "ویرایش جزئیات"
+
+#~ msgid "Modify this person's details"
+#~ msgstr "تغییر جزئیات این فرد"
+
+#~ msgid "Add person"
+#~ msgstr "اضافه کردن فرد"
+
+#~ msgid "Add to groups"
+#~ msgstr "اضافه کردن به گروه‌ها"
+
+#~ msgid "Sorry, you may not delete your own user account."
+#~ msgstr "متأسفانه شما نمی‌توانید حساب کاربری خود را حذف کنید."
+
+#~ msgid "Edit contact information"
+#~ msgstr "ویرایش اظلاعات آشنا‌ها"
+
+#~ msgid "Edit person"
+#~ msgstr "ویرایش فرد"
+
+#~ msgid "Calendar Preferences"
+#~ msgstr "ترجیحات تقویم"
+
+#~ msgid "Edit person preferences"
+#~ msgstr "ویرایش ترجیحات فرد"
+
+#~ msgid "You are trying to delete a repeating event."
+#~ msgstr "شما در تلاشید تا یک رویداد تکراردار را حذف کنید."
+
+#~ msgid "Current"
+#~ msgstr "فعلی"
+
+#~ msgid "Future"
+#~ msgstr "بعدی‌ها"
+
+#~ msgid "All"
+#~ msgstr "همه"
+
+#~ msgid "Deleting a repeating event (${event_title})"
+#~ msgstr "در حال حذف یک رویداد تکراردار (${event_title})"
+
+#~ msgid "There are ${num_errors} input errors."
+#~ msgstr "${num_errors}I مشکل ورودی وجود دارد."
+
+#~ msgid "Identifier (optional)"
+#~ msgstr "مشخصه (اختیاری)"
+
+#~ msgid "Printable version"
+#~ msgstr "نسخه مناسب چاپ"
+
+#~ msgid "View daily calendar"
+#~ msgstr "نمایش تقویم روزانه"
+
+#~ msgid "View weekly calendar"
+#~ msgstr "نمایش تقویم هفتگی"
+
+#~ msgid "View monthly calendar"
+#~ msgstr "نمایش تقویم ماهانه"
+
+#~ msgid "View yearly calendar"
+#~ msgstr "نمایش تقویم سالانه"
+
+#~ msgid "Yearly"
+#~ msgstr "سالانه"
+
+#~ msgid "Calendar for ${title} - ${calendar_title}"
+#~ msgstr "تقویمِ ${title} - ${calendar_title}"
+
+#~ msgid "Jump To ..."
+#~ msgstr "بپر به ..."
+
+#~ msgid "SchoolTool"
+#~ msgstr "اسکول‌تول"
+
+#~ msgid "Tomorrow's Events"
+#~ msgstr "رویداد‌های فردا"
+
+#~ msgid "Log in"
+#~ msgstr "ورود"
+
+#~ msgid "User:"
+#~ msgstr "کاربر:"
+
+#~ msgid "Log Out"
+#~ msgstr "خروج"
+
+#~ msgid "Edit Info"
+#~ msgstr "ویرایش اطلاعات"
+
+#~ msgid "Add Event"
+#~ msgstr "اضافه کردن رویداد"
+
+#~ msgid "Modify Event"
+#~ msgstr "تغییر رویداد"
+
+#~ msgid "Set up access"
+#~ msgstr "تنظیم دسترسی"
+
+#~ msgid "Unauthenticated Users"
+#~ msgstr "کاربران تأییدنشده"
+
+#~ msgid "Unauthenticated User"
+#~ msgstr "کاربران تأیید نشده"
+
+#~ msgid "Authenticated Users"
+#~ msgstr "کاربران تأیید شده"
+
+#~ msgid "All Users"
+#~ msgstr "همه کاربران"
