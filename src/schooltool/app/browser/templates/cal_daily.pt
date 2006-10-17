@@ -1,6 +1,6 @@
 <tal:defs define="ignored_status view/update" />
 <html metal:use-macro="view/@@schooltool_macros/calendar/page" 
-      i18n:domain="schoolbell">
+      i18n:domain="schooltool">
 <metal:block fill-slot="calendar-body">
 
 <div id="events-allday">
