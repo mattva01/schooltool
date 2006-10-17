@@ -388,9 +388,10 @@ Copyright information
 
 SchoolTool is copyright (c) 2003--2006 Shuttleworth Foundation
 
-All files in the src/schooltool directory (with some exceptions in
-src/schooltool/locales) are part of SchoolTool, and are (c) Shuttleworth
-Foundation.
+All files in the src/schooltool directory are part of SchoolTool, and
+are (c) Shuttleworth Foundation, with the exception of translations in
+src/schooltool/locales, which are under the copyright of their
+original contributors via LaunchPad at http://launchpad.net.
 
 Unless otherwise stated, files in src/schooltool are released under the
 terms of the GNU General Public License as published by the Free
