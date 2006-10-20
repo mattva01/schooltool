@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: Tue Oct 17 17:42:33 2006\n"
-"PO-Revision-Date: 2005-05-19 09:48+0000\n"
+"POT-Creation-Date: Fri Oct 20 15:20:33 2006\n"
+"PO-Revision-Date: 2006-05-08 16:39+0000\n"
 "Last-Translator: Amanpreet Singh Alam <apbrar@gmail.com>\n"
 "Language-Team: Punjabi <pa@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -437,9 +437,8 @@ msgstr ""
 #: /src/schooltool/app/browser/cal.py:1881
 #: /src/schooltool/app/browser/cal.py:2187
 #: /src/schooltool/course/browser/section.py:134
-#, fuzzy
 msgid "An error occurred."
-msgstr "ਇੱਕ ਗਲਤੀ ਆਈ ਹੈ।"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:1914
 msgid "Invalid time"
@@ -925,12 +924,14 @@ msgid "Cal"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:13
+#, fuzzy
 msgid "Personal calendar"
-msgstr ""
+msgstr "ਮਹੀਨਾਵਾਰੀ ਕੈਲੰਡਰ ਵੇਖਾਓ"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:16
+#, fuzzy
 msgid "Timetable calendar"
-msgstr ""
+msgstr "ਦਿਨ ਕੈਲੰਡਰ ਵੇਖਾਓ"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:16
 msgid "TT"
@@ -1102,13 +1103,15 @@ msgstr ""
 #: /src/schooltool/sampledata/sampledata.pt:69
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:66
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:35
+#, fuzzy
 msgid "Clear"
-msgstr ""
+msgstr "ਸਾਲ"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:67
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:95
+#, fuzzy
 msgid "There are none to add."
-msgstr ""
+msgstr "ਕੋਈ ਵੀ ਨਹੀਂ ਹੈ।"
 
 #: /src/schooltool/app/browser/templates/event.pt:15
 msgid "All day event"
@@ -1119,8 +1122,9 @@ msgid "This is a recurring event."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:33
+#, fuzzy
 msgid "Details"
-msgstr ""
+msgstr "ਰੋਜ਼"
 
 #: /src/schooltool/app/browser/templates/event.pt:37
 #, fuzzy
@@ -1282,8 +1286,9 @@ msgid "Levels"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/index.pt:6
+#, fuzzy
 msgid "Welcome to SchoolTool"
-msgstr ""
+msgstr "ਸਕੂਲ ਸੰਦ ਸਰਵਰ 'ਤੇ ਜੀ ਆਇਆਂ ਨੂੰ"
 
 #: /src/schooltool/app/browser/templates/login.pt:13
 msgid ""
@@ -1544,8 +1549,9 @@ msgid "submit-button"
 msgstr "ਪੇਸ਼-ਕਰੋ ਬਟਨ"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:20
+#, fuzzy
 msgid "Import Timetable"
-msgstr ""
+msgstr "ਸਮਾਂ-ਸਾਰਣੀ ਵੇਖਾਓ"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:24
 msgid ""
@@ -1713,9 +1719,8 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/app/interfaces.py:158
-#, fuzzy
 msgid "Show timetables"
-msgstr "ਸਮਾਂ-ਸਾਰਣੀ ਵੇਖਾਓ"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:159
 msgid ""
@@ -2140,9 +2145,8 @@ msgstr ""
 
 #. Default: ""
 #: /src/schooltool/attendance/browser/tests/test_attendance.py:263
-#, fuzzy
 msgid "$title"
-msgstr "ਨਾਂ"
+msgstr ""
 
 #: /src/schooltool/attendance/interfaces.py:39
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:18
@@ -2214,33 +2218,28 @@ msgid "Add Commendation"
 msgstr "ਨਵਾਂ ਸ਼ੈਕਸ਼ਨ ਸ਼ਾਮਿਲ"
 
 #: /src/schooltool/commendation/interfaces.py:49
-#, fuzzy
 msgid "Title of the commendation."
-msgstr "ਕੋਰਸ ਦਾ ਨਾਂ ਹੈ।"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:54
-#, fuzzy
 msgid "A detailed description of the commendation."
-msgstr "ਸ਼ੈਕਸ਼ਨ ਬਾਰੇ ਵੇਰਵਾ ਹੈ।"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:58
 msgid "Scope"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:59
-#, fuzzy
 msgid "The scope of the commendation."
-msgstr "ਸ਼ੈਕਸ਼ਨ ਬਾਰੇ ਵੇਰਵਾ ਹੈ।"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
-#, fuzzy
 msgid "school-wide"
-msgstr "ਸਕੂਲ ਦਿਨ"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
-#, fuzzy
 msgid "group"
-msgstr "ਗਰੁੱਪ"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "community"
@@ -2267,9 +2266,8 @@ msgid "Grantor"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:72
-#, fuzzy
 msgid "The grantor of the commendation."
-msgstr "ਸ਼ੈਕਸ਼ਨ ਬਾਰੇ ਵੇਰਵਾ ਹੈ।"
+msgstr ""
 
 #: /src/schooltool/configure.zcml:44
 #: /src/schooltool/app/browser/configure.zcml:202
@@ -2394,14 +2392,12 @@ msgid "Students"
 msgstr "ਵਿਦਿਆਰਥੀ"
 
 #: /src/schooltool/course/browser/section.py:284
-#, fuzzy
 msgid "Current Students"
-msgstr "ਵਿਦਿਆਰਥੀ"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:285
-#, fuzzy
 msgid "Available Students"
-msgstr "ਵਿਦਿਆਰਥੀ"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:311
 #: /src/schooltool/app/browser/templates/index.pt:13
@@ -2411,9 +2407,8 @@ msgstr "ਗਰੁੱਪ"
 
 #: /src/schooltool/course/browser/section.py:312
 #: /src/schooltool/group/browser/group.py:60
-#, fuzzy
 msgid "Current Groups"
-msgstr "ਗਰੁੱਪ ਸੋਧ"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:313
 #: /src/schooltool/group/browser/group.py:61
@@ -2428,15 +2423,13 @@ msgid "Resources"
 msgstr "ਸਰੋਤ"
 
 #: /src/schooltool/course/browser/section.py:339
-#, fuzzy
 msgid "Current Resources"
-msgstr "ਸਰੋਤ"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:340
 #: /src/schooltool/app/browser/templates/event_booking.pt:36
-#, fuzzy
 msgid "Available Resources"
-msgstr "ਸਰੋਤ"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:68
 msgid "Section index"
@@ -2476,8 +2469,9 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:4
+#, fuzzy
 msgid "Upload schooltool courses as CSV"
-msgstr ""
+msgstr "ਸਕੂਲ-ਸੰਦ ਸਮਾਂ-ਸਾਰਣੀ ਨੂੰ CSV ਦੇ ਤੌਰ 'ਤੇ ਅੱਪਲੋਡ"
 
 #: /src/schooltool/course/browser/templates/course.pt:18
 msgid "Sections"
@@ -2489,8 +2483,9 @@ msgid "photo"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/course.pt:53
+#, fuzzy
 msgid "students"
-msgstr ""
+msgstr "ਵਿਦਿਆਰਥੀ"
 
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:27
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:80
@@ -2558,8 +2553,9 @@ msgid "Identifier (optional)"
 msgstr "ਪਛਾਣ (ਚੋਣਵਾਂ)"
 
 #: /src/schooltool/course/browser/templates/section_container.pt:29
+#, fuzzy
 msgid "Section"
-msgstr ""
+msgstr "ਸ਼ੈਕਸ਼ਨ"
 
 #: /src/schooltool/course/browser/templates/section_container.pt:38
 msgid "Current Size"
@@ -2703,20 +2699,17 @@ msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:156
-#, fuzzy
 msgid "Change name information for ${fullname}"
-msgstr "${user} ਲਈ ਪਸੰਦ ਤਬਦੀਲ"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:172
-#, fuzzy
 msgid "Change name"
-msgstr "ਪਸੰਦ ਤਬਦੀਲ"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:183
-#, fuzzy
 msgid "Change demographics for ${fullname}"
-msgstr "${user} ਲਈ ਪਸੰਦ ਤਬਦੀਲ"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:191
 msgid "Demographics"
@@ -2728,9 +2721,8 @@ msgid "Change school data for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:212
-#, fuzzy
 msgid "School data"
-msgstr "ਸਕੂਲ ਦਿਨ"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:230
@@ -2803,9 +2795,8 @@ msgid "Gender"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:126
-#, fuzzy
 msgid "Birth date"
-msgstr "ਸ਼ੁਰੂਆਤੀ ਮਿਤੀ"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:131
 msgid "Ethnicity"
@@ -2828,9 +2819,8 @@ msgid "ID"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:196
-#, fuzzy
 msgid "Enrollment date"
-msgstr "ਅੰਤ ਮਿਤੀ"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:201
 msgid "Projected graduation year"
@@ -2841,9 +2831,8 @@ msgid "Advisor"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:212
-#, fuzzy
 msgid "Team"
-msgstr "ਵਾਰੀ"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:218
 msgid "Health information"
@@ -2858,9 +2847,8 @@ msgid "Name"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:244
-#, fuzzy
 msgid "Relationship to student"
-msgstr "ਸਬੰਧ"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:250
 msgid "Street"
@@ -2871,9 +2859,8 @@ msgid "City"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:260
-#, fuzzy
 msgid "State"
-msgstr "ਸ਼ੁਰੂਆਤੀ ਮਿਤੀ"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:265
 msgid "Postal code"
@@ -2898,9 +2885,8 @@ msgid "Notes"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:295
-#, fuzzy
 msgid "Text"
-msgstr "ਅੱਗੇ"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:296
 msgid "Full text search in name"
@@ -2915,9 +2901,8 @@ msgid "Full text search in parent names"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:307
-#, fuzzy
 msgid "Student ID"
-msgstr "ਵਿਦਿਆਰਥੀ"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:43
 msgid "Prefix"
@@ -2944,9 +2929,8 @@ msgid "Suffix"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:69
-#, fuzzy
 msgid "Preferred name"
-msgstr "ਮੇਰੀ ਪਸੰਦ"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:70
 msgid "Name by which the student prefers to be called"
@@ -3026,9 +3010,8 @@ msgid "Categories"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:49
-#, fuzzy
 msgid "New Category"
-msgstr "ਨਵਾਂ ਸ਼ਬਦ"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:52
 msgid "Default Category"
@@ -3186,9 +3169,8 @@ msgid "Journal"
 msgstr ""
 
 #: /src/schooltool/gradebook/category.py:65
-#, fuzzy
 msgid "Lab"
-msgstr "ਲੇਬਲ"
+msgstr ""
 
 #: /src/schooltool/gradebook/category.py:66
 msgid "Presentation"
@@ -3203,9 +3185,8 @@ msgid "Gradebook API"
 msgstr ""
 
 #: /src/schooltool/gradebook/interfaces.py:39
-#, fuzzy
 msgid "A detailed description of the activity."
-msgstr "ਸ਼ੈਕਸ਼ਨ ਬਾਰੇ ਵੇਰਵਾ ਹੈ।"
+msgstr ""
 
 #: /src/schooltool/gradebook/interfaces.py:43
 msgid "Category"
@@ -3241,8 +3222,9 @@ msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:125
 #: /src/schooltool/group/browser/group-csvimport.pt:22
+#, fuzzy
 msgid "Import Groups"
-msgstr ""
+msgstr "ਕੋਰਸ ਆਯਾਤ"
 
 #: /src/schooltool/group/browser/configure.zcml:26
 msgid "Add a Group"
@@ -3300,8 +3282,9 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/group/browser/group-csvimport.pt:4
+#, fuzzy
 msgid "Upload SchoolTool groups as CSV"
-msgstr ""
+msgstr "ਸਕੂਲ-ਸੰਦ ਸਮਾਂ-ਸਾਰਣੀ ਨੂੰ CSV ਦੇ ਤੌਰ 'ਤੇ ਅੱਪਲੋਡ"
 
 #: /src/schooltool/group/browser/group.pt:16
 msgid "Members"
@@ -3339,9 +3322,8 @@ msgid "Current Members"
 msgstr ""
 
 #: /src/schooltool/group/browser/group.py:99
-#, fuzzy
 msgid "Add Members"
-msgstr "ਵਾਰੀ ਸ਼ਾਮਿਲ"
+msgstr ""
 
 #: /src/schooltool/group/interfaces.py:44
 msgid "Title of the group."
@@ -3387,14 +3369,12 @@ msgid "None"
 msgstr ""
 
 #: /src/schooltool/level/browser/level.py:41
-#, fuzzy
 msgid "Level index"
-msgstr "ਕੋਰਸ ਤਤਕਰਾ"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:42
-#, fuzzy
 msgid "Add a new level"
-msgstr "ਇੱਕ ਨਵੀਂ ਵਾਰੀ ਸ਼ਾਮਿਲ"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:60
 msgid "Previous Level"
@@ -3566,23 +3546,20 @@ msgid "The date and time the record was created."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:137
-#, fuzzy
 msgid "User"
-msgstr "ਉਪਭੋਗੀ:"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:138
 msgid "The principal id of the user making the record."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:143
-#, fuzzy
 msgid "Title of the record."
-msgstr "ਕੋਰਸ ਦਾ ਨਾਂ ਹੈ।"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:148
-#, fuzzy
 msgid "A detailed description of the record."
-msgstr "ਕੋਰਸ ਦਾ ਵੇਰਵਾ ਹੈ।"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:160
 msgid "Academic History"
@@ -3624,9 +3601,8 @@ msgid "The workflow process of the level the student is currently completing."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:76
-#, fuzzy
 msgid "Title of the level."
-msgstr "ਕੋਰਸ ਦਾ ਨਾਂ ਹੈ।"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:80
 msgid "Is Initial Level"
@@ -3655,9 +3631,8 @@ msgid "Outcome of the level."
 msgstr ""
 
 #: /src/schooltool/level/promotion.py:130
-#, fuzzy
 msgid "fail"
-msgstr "ਰੋਜ਼"
+msgstr ""
 
 #: /src/schooltool/level/promotion.py:130
 msgid "withdraw"
@@ -3669,9 +3644,8 @@ msgid "pass"
 msgstr ""
 
 #: /src/schooltool/level/promotion.py:96
-#, fuzzy
 msgid "Level"
-msgstr "ਲੇਬਲ"
+msgstr ""
 
 #: /src/schooltool/level/promotion.py:97
 msgid "The initial level of the student in the school."
@@ -3745,8 +3719,9 @@ msgid "Duplicate username: ${username}"
 msgstr ""
 
 #: /src/schooltool/person/browser/person-csvimport.pt:22
+#, fuzzy
 msgid "Import Persons"
-msgstr ""
+msgstr "ਕੋਰਸ ਆਯਾਤ"
 
 #: /src/schooltool/person/browser/person-csvimport.pt:25
 msgid ""
@@ -3774,8 +3749,9 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/person/browser/person-csvimport.pt:4
+#, fuzzy
 msgid "Upload SchoolTool persons as CSV"
-msgstr ""
+msgstr "ਸਕੂਲ-ਸੰਦ ਸਮਾਂ-ਸਾਰਣੀ ਨੂੰ CSV ਦੇ ਤੌਰ 'ਤੇ ਅੱਪਲੋਡ"
 
 #: /src/schooltool/person/browser/person.py:176
 msgid "Edit password"
@@ -3798,8 +3774,9 @@ msgid "Change preferences for ${user}"
 msgstr "${user} ਲਈ ਪਸੰਦ ਤਬਦੀਲ"
 
 #: /src/schooltool/person/browser/person_preferences.pt:4
+#, fuzzy
 msgid "Edit person preferences"
-msgstr ""
+msgstr "ਕੈਲੰਡਰ ਪਸੰਦ"
 
 #: /src/schooltool/person/interfaces.py:154
 msgid "Time Zone"
@@ -3906,18 +3883,17 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/course_container.pt:32
 #: /src/schooltool/skin/templates/container.pt:33
 #: /src/schooltool/skin/templates/table_macros.pt:9
+#, fuzzy
 msgid "items"
-msgstr ""
+msgstr "ਵਾਰੀ"
 
 #: /src/schooltool/requirement/browser/requirement.py:53
-#, fuzzy
 msgid "Requirement index"
-msgstr "ਕੋਰਸ ਤਤਕਰਾ"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.py:54
-#, fuzzy
 msgid "Add a new Requirement"
-msgstr "ਇੱਕ ਨਵੀਂ ਵਾਰੀ ਸ਼ਾਮਿਲ"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/scoresystem.py:36
 msgid "Exisiting Score System"
@@ -3929,8 +3905,9 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:100
 #: /src/schooltool/resource/browser/resource-csvimport.pt:21
+#, fuzzy
 msgid "Import Resources"
-msgstr ""
+msgstr "ਕੋਰਸ ਆਯਾਤ"
 
 #: /src/schooltool/resource/browser/configure.zcml:27
 #, fuzzy
@@ -3984,8 +3961,9 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
+#, fuzzy
 msgid "Upload schooltool resources as CSV"
-msgstr ""
+msgstr "ਸਕੂਲ-ਸੰਦ ਸਮਾਂ-ਸਾਰਣੀ ਨੂੰ CSV ਦੇ ਤੌਰ 'ਤੇ ਅੱਪਲੋਡ"
 
 #: /src/schooltool/resource/browser/resource.py:39
 msgid "Resource index"
@@ -4015,15 +3993,17 @@ msgstr ""
 #: /src/schooltool/resource/rest/resource.pt:17
 #: /src/schooltool/group/rest/group.pt:17
 #: /src/schooltool/person/rest/person.pt:16
+#, fuzzy
 msgid "Calendar_relationships"
-msgstr ""
+msgstr "ਸਬੰਧ"
 
 #. Default: "Calendar ACL"
 #: /src/schooltool/resource/rest/resource.pt:20
 #: /src/schooltool/group/rest/group.pt:20
 #: /src/schooltool/person/rest/person.pt:19
+#, fuzzy
 msgid "Calendar_ACL"
-msgstr ""
+msgstr "ਮੇਰਾ ਕੈਲੰਡਰ"
 
 #: /src/schooltool/restclient/restclient.py:644
 msgid "Could not parse relationship list"
@@ -4112,9 +4092,8 @@ msgid "top"
 msgstr "ਉੱਪਰ"
 
 #: /src/schooltool/skin/form.py:64
-#, fuzzy
 msgid "No changes"
-msgstr "ਤਬਦੀਲੀਆਂ ਸੰਭਾਲੋ"
+msgstr ""
 
 #: /src/schooltool/skin/templates/error.pt:13
 #, fuzzy
@@ -4371,8 +4350,9 @@ msgid "Change Timetable for One Day"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/configure.zcml:139
+#, fuzzy
 msgid "New Timetable"
-msgstr ""
+msgstr "ਸਮਾਂ-ਸਾਰਣੀ ਵੇਖਾਓ"
 
 #: /src/schooltool/timetable/browser/configure.zcml:22
 msgid "View Timetables"
@@ -4509,13 +4489,15 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:22
+#, fuzzy
 msgid "Timetable"
-msgstr ""
+msgstr "ਸਮਾਂ-ਸਾਰਣੀ ਵੇਖਾਓ"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:138
+#, fuzzy
 msgid "Term"
-msgstr ""
+msgstr "ਵਾਰੀ"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:34
 msgid "Schema"
@@ -4527,8 +4509,9 @@ msgid "Scheduling for ${person}"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:43
+#, fuzzy
 msgid "Choose"
-msgstr ""
+msgstr "ਕੋਰਸ"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:54
 msgid ""
@@ -4559,8 +4542,9 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:17
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:15
+#, fuzzy
 msgid "There are no terms or timetable schemas defined."
-msgstr ""
+msgstr "ਸਮਾਂ-ਸਾਰਣੀ ਸਕੀਮ ਬਣਾਓ"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:25
 msgid "Choose schedule template"
@@ -4576,8 +4560,9 @@ msgid "Scheduling for ${section}"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:46
+#, fuzzy
 msgid "Using timetable:"
-msgstr ""
+msgstr "ਸਮਾਂ-ਸਾਰਣੀ ਵੇਖਾਓ"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:11
 msgid ""
@@ -4593,16 +4578,18 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:37
+#, fuzzy
 msgid "Period title (optional)"
-msgstr ""
+msgstr "ਪਛਾਣ (ਚੋਣਵਾਂ)"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:38
 msgid "Period start time"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:39
+#, fuzzy
 msgid "Period end time"
-msgstr ""
+msgstr "ਪੀਰੀਅਡ ${number}"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:61
 msgid "Create"
@@ -4616,8 +4603,9 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:29
+#, fuzzy
 msgid "Period title"
-msgstr ""
+msgstr "ਪੀਰੀਅਡ 1"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:30
 msgid "Original start"
@@ -4628,16 +4616,19 @@ msgid "Original end"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:32
+#, fuzzy
 msgid "New start"
-msgstr ""
+msgstr "ਨਵਾਂ ਸ਼ਬਦ"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:33
+#, fuzzy
 msgid "New end"
-msgstr ""
+msgstr "ਨਵੀਂ ਵਾਰੀ"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:63
+#, fuzzy
 msgid "Modify"
-msgstr ""
+msgstr "ਸੋਮਵਾਰ"
 
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:11
 msgid ""
@@ -4886,3 +4877,6 @@ msgstr ""
 
 #~ msgid "Locations not found: ${args}."
 #~ msgstr "ਟਿਕਾਣਾ ਨਹੀਂ ਲੱਭਿਆ: ${args}"
+
+#~ msgid "An error occured."
+#~ msgstr "ਇੱਕ ਗਲਤੀ ਆਈ ਹੈ।"

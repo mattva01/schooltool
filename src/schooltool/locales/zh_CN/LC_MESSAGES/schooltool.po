@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: Tue Oct 17 17:42:33 2006\n"
-"PO-Revision-Date: 2006-05-31 03:36+0000\n"
+"POT-Creation-Date: Fri Oct 20 15:20:33 2006\n"
+"PO-Revision-Date: 2006-05-28 16:05+0000\n"
 "Last-Translator: gnix_oag <gnix.oag@gmail.com>\n"
 "Language-Team: Chinese (China) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -18,56 +18,56 @@ msgstr ""
 
 #: /src/schoolbell/app/interfaces.py:13
 msgid "Nickname"
-msgstr "昵称"
+msgstr ""
 
 #: /src/schoolbell/app/interfaces.py:15
 msgid "A short nickname for this person."
-msgstr "一个短昵称"
+msgstr ""
 
 #: /src/schoolbell/app/interfaces.py:18
 msgid "Primary Email"
-msgstr "主 Email"
+msgstr ""
 
 #: /src/schoolbell/app/interfaces.py:22
 msgid "Secondary Email"
-msgstr "次 Email"
+msgstr ""
 
 #: /src/schoolbell/app/interfaces.py:26
 msgid "Primary phone"
-msgstr "主电话"
+msgstr ""
 
 #: /src/schoolbell/app/interfaces.py:28
 msgid "Recommended telephone number."
-msgstr "推存电话号"
+msgstr ""
 
 #: /src/schoolbell/app/interfaces.py:31
 msgid "Secondary phone"
-msgstr "次电话"
+msgstr ""
 
 #: /src/schoolbell/app/interfaces.py:33
 msgid "Secondary telephone number."
-msgstr "第二电话号"
+msgstr ""
 
 #: /src/schoolbell/app/interfaces.py:36
 msgid "Website"
-msgstr "主页"
+msgstr ""
 
 #: /src/schoolbell/app/interfaces.py:38
 msgid "Website or weblog."
-msgstr "主页或博客"
+msgstr ""
 
 #: /src/schoolbell/app/interfaces.py:41
 msgid "Mailing address"
-msgstr "邮寄地址"
+msgstr ""
 
 #: /src/schooltool/app/browser/__init__.py:254
 #: /src/schooltool/app/browser/templates/index.pt:11
 msgid "Persons"
-msgstr "人员"
+msgstr "用户"
 
 #: /src/schooltool/app/browser/__init__.py:259
 msgid "1 person"
-msgstr "人员1"
+msgstr "用户1"
 
 #. Default: ""
 #: /src/schooltool/app/browser/__init__.py:261
@@ -83,14 +83,12 @@ msgid "Leaders"
 msgstr ""
 
 #: /src/schooltool/app/browser/app.py:314
-#, fuzzy
 msgid "Current leaders"
-msgstr "今年"
+msgstr ""
 
 #: /src/schooltool/app/browser/app.py:315
-#, fuzzy
 msgid "Available leaders"
-msgstr "有效的教员"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:100
 msgid "March"
@@ -134,7 +132,7 @@ msgstr "下一日"
 
 #: /src/schooltool/app/browser/cal.py:1022
 msgid "Today"
-msgstr "今日"
+msgstr "今天"
 
 #: /src/schooltool/app/browser/cal.py:1023
 msgid "The previous day"
@@ -196,7 +194,7 @@ msgstr "星期四"
 #: /src/schooltool/term/browser/term_add_edit.pt:126
 #: /src/schooltool/term/browser/term.pt:37
 msgid "Sunday"
-msgstr "星期日"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:107
 #: /src/schooltool/timetable/browser/schema.py:275
@@ -286,25 +284,25 @@ msgstr "时间"
 
 #: /src/schooltool/app/browser/cal.py:1668
 msgid "Start time in 24h format"
-msgstr "开始时间 （24小时）"
+msgstr "开始时间"
 
 #: /src/schooltool/app/browser/cal.py:1672
 msgid "Duration"
-msgstr "时期"
+msgstr "持续时间"
 
 #: /src/schooltool/app/browser/cal.py:1677
 msgid "Duration Type"
-msgstr "时期类型"
+msgstr "持续时间类型"
 
 #: /src/schooltool/app/browser/cal.py:1680
 #: /src/schooltool/app/browser/templates/event_add.pt:168
 msgid "Minutes"
-msgstr "分"
+msgstr "分钟"
 
 #: /src/schooltool/app/browser/cal.py:1681
 #: /src/schooltool/app/browser/templates/event_add.pt:171
 msgid "Hours"
-msgstr "时"
+msgstr "小时"
 
 #: /src/schooltool/app/browser/cal.py:1682
 #: /src/schooltool/app/browser/templates/event_add.pt:175
@@ -327,7 +325,7 @@ msgstr "地点"
 #: /src/schooltool/resource/interfaces.py:42
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:24
 msgid "Description"
-msgstr "描述"
+msgstr "说明"
 
 #: /src/schooltool/app/browser/cal.py:1694
 msgid "Recurring"
@@ -361,7 +359,7 @@ msgstr "重复所有"
 
 #: /src/schooltool/app/browser/cal.py:1712
 msgid "Range"
-msgstr "行"
+msgstr "范围"
 
 #: /src/schooltool/app/browser/cal.py:1715
 msgid "Count"
@@ -386,17 +384,17 @@ msgstr "重复直到"
 
 #: /src/schooltool/app/browser/cal.py:1728
 msgid "Weekdays"
-msgstr "周"
+msgstr "每周"
 
 #: /src/schooltool/app/browser/cal.py:1731
 msgid "Weekday"
-msgstr "工作日"
+msgstr "每周"
 
 #: /src/schooltool/app/browser/cal.py:1741
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:53
 #: /src/schooltool/app/browser/templates/event_add.pt:257
 msgid "Monthly"
-msgstr "第月"
+msgstr "每月"
 
 #: /src/schooltool/app/browser/cal.py:1749
 msgid "Exception dates"
@@ -438,9 +436,8 @@ msgstr "最后${weekday}周"
 #: /src/schooltool/app/browser/cal.py:1881
 #: /src/schooltool/app/browser/cal.py:2187
 #: /src/schooltool/course/browser/section.py:134
-#, fuzzy
 msgid "An error occurred."
-msgstr "发生了一个错误"
+msgstr "发生错误"
 
 #: /src/schooltool/app/browser/cal.py:1914
 msgid "Invalid time"
@@ -510,7 +507,7 @@ msgstr "上一周"
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:856
 msgid "${month}, ${year} (week ${week})"
-msgstr "${month}, ${year} (week ${week})"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:906
 msgid "Next month"
@@ -591,7 +588,7 @@ msgstr "日历"
 #: /src/schooltool/app/browser/configure.zcml:394
 #, fuzzy
 msgid "Atom View"
-msgstr "视图"
+msgstr "查看"
 
 #: /src/schooltool/app/browser/configure.zcml:404
 #, fuzzy
@@ -620,7 +617,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/login.pt:3
 #, fuzzy
 msgid "Login"
-msgstr "登录"
+msgstr "地点"
 
 #: /src/schooltool/app/browser/configure.zcml:548
 #: /src/schooltool/app/rest/configure.zcml:261
@@ -650,7 +647,7 @@ msgstr ""
 #: /src/schooltool/app/browser/csvimport.py:106
 #: /src/schooltool/app/browser/csvimport.py:286
 msgid "No data provided"
-msgstr "没有数据提供"
+msgstr "倘若没有数据"
 
 #: /src/schooltool/app/browser/csvimport.py:113
 msgid "Could not convert data to Unicode (incorrect charset?)."
@@ -658,19 +655,19 @@ msgstr "不能转换数据编码（错误字符集）"
 
 #: /src/schooltool/app/browser/csvimport.py:122
 msgid "CSV file imported successfully."
-msgstr "导入CSV文件成功"
+msgstr "输入CSV文件成功"
 
 #: /src/schooltool/app/browser/csvimport.py:124
 msgid "Failed to import CSV file"
-msgstr "导入CSV文件失败"
+msgstr "输入CSV文件失败"
 
 #: /src/schooltool/app/browser/csvimport.py:132
 msgid "CSV text imported successfully."
-msgstr "导入CSV文本成功"
+msgstr "输入CSV文本失败"
 
 #: /src/schooltool/app/browser/csvimport.py:134
 msgid "Failed to import CSV text"
-msgstr "导入CSV文本失败"
+msgstr "输入CSV文本失败"
 
 #: /src/schooltool/app/browser/csvimport.py:156
 msgid "No charset specified"
@@ -683,58 +680,55 @@ msgstr "未知字符集"
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:205
 msgid "Error in CSV data, line ${line_no}"
-msgstr "CSV 数据的第${line_no}行错误"
+msgstr "CSV 数据的${line_no}行错误"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:209
 #: /src/schooltool/app/browser/csvimport.py:514
 msgid "Conversion to unicode failed in line ${line_no}"
-msgstr "在${line_no}行转换编码失败"
+msgstr "第 ${line_no} 行转换成 unicode 失败"
 
 #: /src/schooltool/app/browser/csvimport.py:292
 msgid "Row 2 is not empty"
-msgstr "第2行非空"
+msgstr "2行非空"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:328
-#, fuzzy
 msgid ""
 "Wrong section header on line ${line_no} (it should contain a course id and "
 "an instructor id)"
-msgstr "第${line_no}行错误（它包括天 ID、时段 ID 以及一个可选的地点 ID）"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:354
-#, fuzzy
 msgid "Malformed line ${line_no} (it should contain a day id and a period id)"
-msgstr "第${line_no}行错误（它包括天 ID、时段 ID 以及一个可选的地点 ID）"
+msgstr "畸形的${line_no} 行(it should contain a day id and a period id)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:377
 msgid "Incomplete section description on line ${line}"
-msgstr "第${line}节描述不全"
+msgstr "${line} 行的章节描述不全"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:382
-#, fuzzy
 msgid "No students in section (line ${line})"
-msgstr "第${line}节描述不全"
+msgstr ""
 
 #: /src/schooltool/app/browser/csvimport.py:462
 msgid ""
 "The first row of the CSV file must contain the term id and the timetable "
 "schema id."
-msgstr "CSV 文件第一行必须包含学期ID和时间规划表ID。"
+msgstr "CSV 文件的第一行必需有项目ID和时间安排表"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:471
 msgid "The term ${term} does not exist."
-msgstr "${term}学期不存在。"
+msgstr "术语 ${term} 不存在。"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:478
 msgid "The timetable schema ${schema} does not exist."
-msgstr "${schema}时间规划表不存在。"
+msgstr "时间计划表 ${schema} 不存在。"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:509
@@ -743,7 +737,7 @@ msgstr "在课程表 CSV 数据的第 ${line_no} 行出错"
 
 #: /src/schooltool/app/browser/csvimport.py:549
 msgid "Day ids not defined in selected schema: ${args}."
-msgstr "天 ID 没有在所选的规划中定义：${args}。"
+msgstr "天 ID 没有在所选的模式中定义：${args}。"
 
 #: /src/schooltool/app/browser/csvimport.py:550
 msgid "Periods not defined in selected days: ${args}."
@@ -751,15 +745,15 @@ msgstr "时段没有在所选的天中定义：${args}。"
 
 #: /src/schooltool/app/browser/csvimport.py:551
 msgid "Persons not found: ${args}."
-msgstr "没有找到该人员：${args}。"
+msgstr "没有找到会员：${args}。"
 
 #: /src/schooltool/app/browser/csvimport.py:552
 msgid "Courses not found: ${args}."
-msgstr "没有找到该课程：${args}。"
+msgstr "没有找到课程：${args}"
 
 #: /src/schooltool/app/browser/csvimport.py:553
 msgid "Sections not found: ${args}."
-msgstr "没有找到该节：${args}。"
+msgstr "没有找到段：${args}。"
 
 #: /src/schooltool/app/browser/csvimport.py:554
 msgid "Invalid records: ${args}."
@@ -780,11 +774,11 @@ msgstr "位置：%s"
 
 #: /src/schooltool/app/browser/pdfcal.py:192
 msgid "Booked resources: %s"
-msgstr "预定资源"
+msgstr "已入册的资源"
 
 #: /src/schooltool/app/browser/pdfcal.py:207
 msgid "recurrent"
-msgstr "定期重复"
+msgstr ""
 
 #: /src/schooltool/app/browser/pdfcal.py:211
 msgid "overlaid from %s"
@@ -792,11 +786,11 @@ msgstr "从 %s 覆盖"
 
 #: /src/schooltool/app/browser/pdfcal.py:278
 msgid "Daily calendar for %s"
-msgstr "%s的日程表"
+msgstr "%s的每日日历"
 
 #: /src/schooltool/app/browser/pdfcal.py:292
 msgid "Weekly calendar for %s"
-msgstr "%s的周日程表"
+msgstr "%s的每周日历"
 
 #: /src/schooltool/app/browser/pdfcal.py:298
 msgid "Week %d (%s - %s), %d"
@@ -804,36 +798,33 @@ msgstr "周 %d (%s - %s), %d"
 
 #: /src/schooltool/app/browser/pdfcal.py:317
 msgid "Monthly calendar for %s"
-msgstr "%s的月日程表"
+msgstr "%s的每月日历"
 
 #: /src/schooltool/app/browser/pdfcal.py:57
 msgid "PDF support is disabled.  It can be enabled by your administrator."
-msgstr "PDF 未支持。管理员能启动支持"
+msgstr "PDF 支持失效。它能被管理员激活。"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:13
-#, fuzzy
 msgid "Change site preferences"
-msgstr "修改属性"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:19
-#, fuzzy
 msgid "General preferences"
-msgstr "日程表首选项"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:34
 #: /src/schooltool/person/browser/person_preferences.pt:22
+#, fuzzy
 msgid "Calendar Preferences"
-msgstr "日程表首选项"
+msgstr "%s的日历"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:4
-#, fuzzy
 msgid "Edit site preferences"
-msgstr "编辑用户属性"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:63
-#, fuzzy
 msgid "Edit attendance preferences"
-msgstr "编辑用户属性"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:15
 #, fuzzy
@@ -855,7 +846,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/cal_atom.pt:43
 #, fuzzy
 msgid "atom_description"
-msgstr "描述"
+msgstr "说明"
 
 #. Default: "Atom Enabled"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:47
@@ -877,7 +868,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:120
 msgid "Jump To ..."
-msgstr "跳过..."
+msgstr "跳过......"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:206
 msgid "Tomorrow's Events"
@@ -886,7 +877,7 @@ msgstr "明天的事件"
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:29
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:34
 msgid "Printable version"
-msgstr "发布"
+msgstr "发布版本"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:34
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:41
@@ -898,11 +889,11 @@ msgstr "<img alt=\"x\" src=\"${DYNAMIC_CONTENT}\" />"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:37
 msgid "View daily calendar"
-msgstr "查看日程表"
+msgstr "查看日历"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:41
 msgid "Daily"
-msgstr "日"
+msgstr "每天"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:43
 msgid "View weekly calendar"
@@ -911,7 +902,7 @@ msgstr "查看周历"
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:47
 #: /src/schooltool/app/browser/templates/event_add.pt:235
 msgid "Weekly"
-msgstr "周"
+msgstr "每周"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:49
 msgid "View monthly calendar"
@@ -923,7 +914,7 @@ msgstr "查看年历"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:59
 msgid "Yearly"
-msgstr "年"
+msgstr "每年"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:69
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:83
@@ -932,11 +923,11 @@ msgstr "日历的 ${title} - ${calendar_title}"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:13
 msgid "Cal"
-msgstr "Cal"
+msgstr "Cal（Cal语言）"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:13
 msgid "Personal calendar"
-msgstr "个人日程表"
+msgstr "个人日历"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:16
 msgid "Timetable calendar"
@@ -944,16 +935,16 @@ msgstr "课程安排表"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:16
 msgid "TT"
-msgstr "TT"
+msgstr "TT （用户终端）"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:26
 #: /src/schooltool/skin/templates/view_macros.pt:76
 msgid "My Calendar"
-msgstr "我的日程表"
+msgstr "我的日历"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:4
 msgid "Calendars"
-msgstr "日程表"
+msgstr "日历"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:48
 msgid "More..."
@@ -980,7 +971,7 @@ msgstr "日程表视图"
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:4
 #, fuzzy
 msgid "Select calendars to display"
-msgstr "%s的周日程表"
+msgstr "%s的每周日历"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:42
 msgid "People"
@@ -1015,7 +1006,7 @@ msgstr ""
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:70
 #: /src/schooltool/commendation/commendation_add.pt:33
 msgid "A"
-msgstr "A"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/container_delete.pt:10
 #: /src/schooltool/person/browser/person_container_delete.pt:10
@@ -1041,8 +1032,9 @@ msgstr ""
 #: /src/schooltool/person/browser/person_container_delete.pt:30
 #: /src/schooltool/term/browser/term-container-delete.pt:29
 #: /src/schooltool/term/browser/term-container.pt:26
+#, fuzzy
 msgid "delete-button"
-msgstr "删除"
+msgstr "取消"
 
 #. Default: "Cancel"
 #: /src/schooltool/app/browser/templates/container_delete.pt:29
@@ -1082,12 +1074,12 @@ msgstr "取消"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:23
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:37
 msgid "R"
-msgstr "R"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:23
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:37
 msgid "Remove"
-msgstr "移除"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:29
 #: /src/schooltool/gradebook/browser/activities_overview.pt:51
@@ -1106,20 +1098,21 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:64
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:33
 msgid "Find Now"
-msgstr "立即查找"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:52
 #: /src/schooltool/requirement/browser/requirement.pt:33
 #: /src/schooltool/sampledata/sampledata.pt:69
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:66
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:35
+#, fuzzy
 msgid "Clear"
-msgstr "清除"
+msgstr "日历"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:67
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:95
 msgid "There are none to add."
-msgstr "没有添加任何人"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:15
 #, fuzzy
@@ -1132,7 +1125,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:33
 msgid "Details"
-msgstr "详情"
+msgstr "详细资料"
 
 #: /src/schooltool/app/browser/templates/event.pt:37
 #, fuzzy
@@ -1149,19 +1142,18 @@ msgid "edit event"
 msgstr "编辑事件"
 
 #: /src/schooltool/app/browser/templates/event.pt:53
-#, fuzzy
 msgid "Change the details of this event"
-msgstr "更改该节的讲师"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:64
 #, fuzzy
 msgid "Scheduled resources"
-msgstr "预定资源"
+msgstr "已入册的资源"
 
 #: /src/schooltool/app/browser/templates/event.pt:72
 #, fuzzy
 msgid "edit resources"
-msgstr "编辑小组"
+msgstr "已入册的资源"
 
 #: /src/schooltool/app/browser/templates/event.pt:80
 #, fuzzy
@@ -1169,19 +1161,18 @@ msgid "delete event"
 msgstr "修改/删除事件"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:137
-#, fuzzy
 msgid "Event information"
-msgstr "编辑章节信息"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:143
 #, fuzzy
 msgid "Event details"
-msgstr "编辑详细资料"
+msgstr "详细资料"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:197
 #, fuzzy
 msgid "Book Resources"
-msgstr "资源"
+msgstr "已入册的资源"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:207
 #, fuzzy
@@ -1191,7 +1182,7 @@ msgstr "更新"
 #: /src/schooltool/app/browser/templates/event_add.pt:224
 #, fuzzy
 msgid "day"
-msgstr "今日"
+msgstr "今天"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:225
 #, fuzzy
@@ -1253,12 +1244,11 @@ msgstr "重复所有"
 #: /src/schooltool/app/browser/templates/event_add.pt:346
 #, fuzzy
 msgid "Book resources"
-msgstr "预定资源"
+msgstr "已入册的资源"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:11
-#, fuzzy
 msgid "Resource Booking for ${title}"
-msgstr "用户信息：${title}"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:17
 #, fuzzy
@@ -1279,9 +1269,8 @@ msgid "This is a recurring event!"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:4
-#, fuzzy
 msgid "Resource Booking"
-msgstr "资源列表"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:55
 msgid "Conflicting events"
@@ -1294,7 +1283,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/event_info_viewlet.pt:12
 #, fuzzy
 msgid "Location: ${location}"
-msgstr "更改地址"
+msgstr "位置：%s"
 
 #: /src/schooltool/app/browser/templates/index.pt:12
 #: /src/schooltool/course/browser/templates/section_container.pt:26
@@ -1464,18 +1453,16 @@ msgid "${DYNAMIC_CONTENT}"
 msgstr "${DYNAMIC_CONTENT}"
 
 #: /src/schooltool/app/browser/templates/login.pt:35
-#, fuzzy
 msgid "User Information"
-msgstr "编辑章节信息"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/login.pt:57
 msgid "L"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/login.pt:57
-#, fuzzy
 msgid "Log in"
-msgstr "登录"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
@@ -1488,7 +1475,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:43
 #, fuzzy
 msgid "Current"
-msgstr "定期重复"
+msgstr "今年"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:45
 msgid "Future"
@@ -1568,11 +1555,11 @@ msgstr "CSV 数据"
 #: /src/schooltool/person/browser/person_preferences.pt:52
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:70
 msgid "submit-button"
-msgstr "确认"
+msgstr "提交"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:20
 msgid "Import Timetable"
-msgstr "导入课程表"
+msgstr "输入时间表"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:24
 msgid ""
@@ -1587,11 +1574,10 @@ msgid ""
 "timetables. The second row should be empty. After that, several section "
 "descriptions may follow. They are separated by an empty line."
 msgstr ""
-"文件的第一行必须饮食<strong>学期</strong>名和一个新的<strong>课程表</"
+"文件的第一行必须饮食<strong>学期</strong>名和一个新的<strong>时间表</"
 "strong>。第二行可以为空。之后可以跟随几节描述。它们用空行分开。"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:38
-#, fuzzy
 msgid ""
 "Each section description's first row contains the <strong>course id</strong> "
 "and the <strong>instructor id</strong> for the new section. Then a number of "
@@ -1601,11 +1587,6 @@ msgid ""
 "<strong>person ids</strong> may follow, the denoted persons will be added to "
 "the section as learners."
 msgstr ""
-"每一节的首行包含<strong>课程 id</strong>和<strong>教员 id</strong>，跟随"
-"<strong>周期 id</strong>和可选的<strong>地点 id</strong>,The list of period "
-"descriptions is terminated by three asterisks ('***') in the first column. "
-"After the terminator, any number of <strong>person ids</strong> may follow, "
-"the denoted persons will be added to the section as learners."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:4
 msgid "Upload SchoolTool timetable as CSV"
@@ -1637,7 +1618,6 @@ msgstr "示例："
 #.  "\"johnny\"\n"
 #.  "\"pete\""
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:51
-#, fuzzy
 msgid ""
 "\n"
 "\"2005-fall\",\"three-day\"\n"
@@ -1657,27 +1637,8 @@ msgid ""
 "\"johnny\"\n"
 "\"pete\"\n"
 msgstr ""
-"\n"
-"↵\n"
-"\"2005-fall\",\"three-day\"↵\n"
-"\"\",\"\",\"\"↵\n"
-"\"philosophy\",\"lorch\"↵\n"
-"\"Monday\",\"A\",\"room137\"↵\n"
-"\"Monday\",\"B\"↵\n"
-"\"Tuesday\",\"C\",\"room138\"↵\n"
-"\"***\"↵\n"
-"\"johnny\"↵\n"
-"\"billy\"↵\n"
-"\"\"↵\n"
-"\"literature\",\"guzman\"↵\n"
-"\"Wednesday\",\"B\"↵\n"
-"\"Wednesday\",\"C\",\"room139\"↵\n"
-"\"***\"↵\n"
-"\"johnny\"↵\n"
-"\"pete\"↵\n"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:69
-#, fuzzy
 msgid ""
 "The above example will create two new sections, one for the philosophy "
 "lecture and the other for the literature lecture. The section for the "
@@ -1685,13 +1646,6 @@ msgid ""
 "learners, and its timetable will contain three timetable activities, two on "
 "Monday. The literature section will be processed in a similar fashion."
 msgstr ""
-"The above example will create two new sections, one for the philosophy "
-"lecture and the other for the literature lecture The section for the "
-"philosophy lecture will have persons with ids 'johnny' and 'billy' as "
-"learners, and its timetable will contain three timetable activities, two on "
-"Monday (one taking place in the location denoted by the id `room137`, one "
-"without a specified location) The literature section will be processed in a "
-"similar fashion."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:78
 msgid ""
@@ -1709,7 +1663,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:46
 #: /src/schooltool/person/browser/person-csvimport.pt:44
 msgid "Upload CSV File"
-msgstr "上传 CSV 文件"
+msgstr "上载 CSV 文件"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:91
 #: /src/schooltool/resource/browser/resource-csvimport.pt:48
@@ -1745,7 +1699,7 @@ msgstr "Western (ISO-8859-1)"
 
 #: /src/schooltool/app/browser/tests/test_pdfcal.py:60
 msgid "Calendar for %s"
-msgstr "%s的日程表"
+msgstr "%s的日历"
 
 #: /src/schooltool/app/configure.zcml:293
 msgid "Security (General)"
@@ -1754,7 +1708,7 @@ msgstr ""
 #: /src/schooltool/app/configure.zcml:308
 #, fuzzy
 msgid "Booking Resources"
-msgstr "预定资源"
+msgstr "已入册的资源"
 
 #: /src/schooltool/app/interfaces.py:124 /src/schooltool/app/interfaces.py:135
 msgid ""
@@ -1770,10 +1724,9 @@ msgstr ""
 
 #: /src/schooltool/app/interfaces.py:140
 msgid "Front Page Calendar"
-msgstr "标题板日历"
+msgstr "头版日历"
 
 #: /src/schooltool/app/interfaces.py:141
-#, fuzzy
 msgid ""
 "Display site-wide calendar as the front page of the\n"
 "            site."
@@ -1782,9 +1735,8 @@ msgstr ""
 "            site."
 
 #: /src/schooltool/app/interfaces.py:158
-#, fuzzy
 msgid "Show timetables"
-msgstr "课表"
+msgstr "显示时间表"
 
 #: /src/schooltool/app/interfaces.py:159
 msgid ""
@@ -1794,6 +1746,12 @@ msgid ""
 "            owner is shown in the calendar views.\n"
 "            "
 msgstr ""
+"\n"
+"            ↵\n"
+"            An option that controls whether the timetable of this "
+"calendar's↵\n"
+"            owner is shown in the calendar views.↵\n"
+"            "
 
 #: /src/schooltool/app/interfaces.py:42
 msgid "Required input is missing."
@@ -1838,11 +1796,11 @@ msgstr "%s: %s"
 
 #: /src/schooltool/app/main.py:355
 msgid "Run %s -h for help."
-msgstr "Run %s -h for help."
+msgstr "运行 %s -h 得到帮助"
 
 #: /src/schooltool/app/main.py:367
 msgid "%s: daemon mode not supported on your operating system."
-msgstr "%s:你的OS不支持后台运行"
+msgstr "%s:%s:你的操作系统不支持守护模式"
 
 #: /src/schooltool/app/main.py:386
 msgid "Reading configuration from %s"
@@ -1854,7 +1812,7 @@ msgstr "%s 管理员"
 
 #: /src/schooltool/app/main.py:455
 msgid "Startup time: %.3f sec real, %.3f sec CPU"
-msgstr "启动时间: %.3f sec real, %.3f sec CPU"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/app/main.py:493
@@ -1897,7 +1855,6 @@ msgstr ""
 "PDF支持失效。"
 
 #: /src/schooltool/app/main.py:71
-#, fuzzy
 msgid ""
 "\n"
 "Usage: %s [options]\n"
@@ -1913,14 +1870,6 @@ msgid ""
 "                         is '-')\n"
 "  --manage               only do management tasks, don't run the server\n"
 msgstr ""
-"\n"
-"↵\n"
-"Usage: %s [options]↵\n"
-"Options:↵\n"
-"  -c, --config xxx use this configuration file instead of the default↵\n"
-"  -h, --help show this help message↵\n"
-"  -d, --daemon go to background after starting↵\n"
-"  -r, --restore-manager restore the manager user with the default password↵\n"
 
 #: /src/schooltool/app/main.py:85
 msgid ""
@@ -1938,14 +1887,13 @@ msgstr ""
 "uncomment one of the ZODB storage sections.↵\n"
 
 #: /src/schooltool/app/main.py:93
-#, fuzzy
 msgid ""
 "\n"
 "This is not a SchoolTool 0.11 database file, aborting.\n"
 msgstr ""
 "\n"
 "↵\n"
-"This is not a SchoolTool 0.10 database file, aborting.↵\n"
+"This is not a SchoolTool 0.11 database file, aborting.↵\n"
 
 #: /src/schooltool/app/main.py:98
 msgid ""
@@ -1972,44 +1920,42 @@ msgstr ""
 #: /src/schooltool/course/rest/section.pt:10
 #: /src/schooltool/person/rest/person.pt:10
 msgid "ACL"
-msgstr "ALC"
+msgstr "ALC（访问控制表）"
 
 #: /src/schooltool/app/rest/templates/app.pt:5
 msgid "Welcome to the SchoolTool server"
-msgstr "欢迎使用SchoolTool"
+msgstr "欢迎使用SchoolTool服务"
 
 #. Default: ""
 #: /src/schooltool/attendance/attendance.py:390
 msgid "Explanation was accepted."
-msgstr ""
+msgstr "公认的说明"
 
 #. Default: ""
 #: /src/schooltool/attendance/attendance.py:392
 msgid "Is not explanained yet."
-msgstr ""
+msgstr "还未说明。"
 
 #. Default: ""
 #: /src/schooltool/attendance/attendance.py:512
 msgid "Was late for ${section} (${mins} minutes)."
-msgstr ""
+msgstr "迟到${section} (${mins} minutes)。"
 
 #. Default: ""
 #: /src/schooltool/attendance/attendance.py:518
 msgid "Was absent from ${section}."
-msgstr ""
+msgstr "缺席${section}。"
 
 #: /src/schooltool/attendance/browser/attendance.py:428
 #: /src/schooltool/attendance/browser/attendance.py:754
-#, fuzzy
 msgid "The arrival time you entered is invalid.  Please use HH:MM format"
-msgstr "无效的日期参数。请用 YYYY-MM-DD 格式"
+msgstr "你输入了无效的到达时间，请用HH:MM格式"
 
 #: /src/schooltool/attendance/browser/attendance.py:450
-#, fuzzy
 msgid ""
 "The minutes late value you entered is invalid.  Please use an integer number "
 "of minutes."
-msgstr "无效的日期参数。请用 YYYY-MM-DD 格式"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/attendance.py:454
 msgid "Arrival times only apply to tardy students"
@@ -2096,14 +2042,12 @@ msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:4
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:12
-#, fuzzy
 msgid "Attendance preferences"
-msgstr "日程表首选项"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:78
-#, fuzzy
 msgid "back to site preferences"
-msgstr "编辑用户属性"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:17
 msgid "Students with unresolved absences"
@@ -2112,7 +2056,7 @@ msgstr ""
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:41
 #, fuzzy
 msgid "Person"
-msgstr "人员"
+msgstr "用户"
 
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:42
 msgid "Homeroom<br />absences"
@@ -2123,8 +2067,9 @@ msgid "Section<br />absences"
 msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/no_section_meeting.pt:11
+#, fuzzy
 msgid "Section attendance for ${section}"
-msgstr ""
+msgstr "缺席${section}。"
 
 #: /src/schooltool/attendance/browser/templates/no_section_meeting.pt:16
 msgid "This section has no meetings today."
@@ -2141,9 +2086,8 @@ msgid "Section attendance for ${section} at ${date} period ${period_id}"
 msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/real_time.pt:31
-#, fuzzy
 msgid "Legend"
-msgstr "图例："
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/real_time.pt:32
 msgid ""
@@ -2181,16 +2125,15 @@ msgstr ""
 #: /src/schooltool/attendance/browser/templates/real_time.pt:89
 #, fuzzy
 msgid "Minutes late:"
-msgstr "分"
+msgstr "分钟"
 
 #: /src/schooltool/attendance/browser/templates/retro.pt:30
 msgid "For Tardy, enter a number of minutes late. This field is optional."
 msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/retro.pt:36
-#, fuzzy
 msgid "Present"
-msgstr "定期重复"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/retro.pt:37
 msgid "Absent"
@@ -2205,14 +2148,12 @@ msgid "Submit"
 msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:133
-#, fuzzy
 msgid "Summary"
-msgstr "星期日"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:135
-#, fuzzy
 msgid "There are no terms defined."
-msgstr "没有添加任何人"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:139
 msgid "Absences"
@@ -2223,20 +2164,17 @@ msgid "Tardies"
 msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:159
-#, fuzzy
 msgid "There were no absences in this term."
-msgstr "这个日期参数不属于其它任何项"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:34
-#, fuzzy
 msgid "There are no unresolved absences."
-msgstr "没有添加任何人"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:4
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:10
-#, fuzzy
 msgid "Attendance of ${person}"
-msgstr "添加新人员"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:42
 msgid "Unresolved explained absences"
@@ -2248,9 +2186,8 @@ msgstr ""
 
 #. Default: ""
 #: /src/schooltool/attendance/browser/tests/test_attendance.py:263
-#, fuzzy
 msgid "$title"
-msgstr "标题"
+msgstr ""
 
 #: /src/schooltool/attendance/interfaces.py:39
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:18
@@ -2302,8 +2239,9 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:39
 #: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:20
 #: /src/schooltool/term/browser/term_add_edit.pt:60
+#, fuzzy
 msgid "Next"
-msgstr "下一步"
+msgstr "下一周"
 
 #: /src/schooltool/batching/macros.pt:51
 msgid "<span>x</span> &raquo;"
@@ -2319,38 +2257,32 @@ msgid "Commendation"
 msgstr "地点"
 
 #: /src/schooltool/commendation/commendation_add.pt:4
-#, fuzzy
 msgid "Add Commendation"
-msgstr "添加章节"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:49
-#, fuzzy
 msgid "Title of the commendation."
-msgstr "课程标题"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:54
-#, fuzzy
 msgid "A detailed description of the commendation."
-msgstr "该节的说明。"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:58
 msgid "Scope"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:59
-#, fuzzy
 msgid "The scope of the commendation."
-msgstr "该节的说明。"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
-#, fuzzy
 msgid "school-wide"
-msgstr "上课日"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
-#, fuzzy
 msgid "group"
-msgstr "小组"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "community"
@@ -2361,14 +2293,12 @@ msgid "global"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:61
-#, fuzzy
 msgid "national"
-msgstr "时期"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:61
-#, fuzzy
 msgid "state"
-msgstr "日期"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:66
 msgid "The date the commendation was issued."
@@ -2379,9 +2309,8 @@ msgid "Grantor"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:72
-#, fuzzy
 msgid "The grantor of the commendation."
-msgstr "该节的说明。"
+msgstr ""
 
 #: /src/schooltool/configure.zcml:44
 #: /src/schooltool/app/browser/configure.zcml:202
@@ -2407,7 +2336,7 @@ msgstr "该节的说明。"
 #: /src/schooltool/timetable/browser/configure.zcml:121
 #: /src/schooltool/timetable/browser/configure.zcml:130
 msgid "View"
-msgstr "视图"
+msgstr "查看"
 
 #: /src/schooltool/configure.zcml:45
 #: /src/schooltool/group/browser/configure.zcml:39
@@ -2427,74 +2356,77 @@ msgid "Edit Calendar Overlays"
 msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:130
+#, fuzzy
 msgid "Add a Section"
-msgstr "添加章节"
+msgstr "操作"
 
 #: /src/schooltool/course/browser/configure.zcml:143
 msgid "Edit Section Information"
-msgstr "编辑章节信息"
+msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:85
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:21
+#, fuzzy
 msgid "Import Courses"
-msgstr "导入课程"
+msgstr "导入组"
 
 #: /src/schooltool/course/browser/configure.zcml:9
 #, fuzzy
 msgid "Add a Course"
-msgstr "添加新课程"
+msgstr "课程"
 
 #: /src/schooltool/course/browser/configure.zcml:96
+#, fuzzy
 msgid "New Course"
-msgstr "新课程"
+msgstr "课程"
 
 #: /src/schooltool/course/browser/course.py:40
 msgid "Course index"
-msgstr "课程索引"
+msgstr ""
 
 #: /src/schooltool/course/browser/course.py:41
 msgid "Add a new course"
-msgstr "添加新课程"
+msgstr ""
 
 #: /src/schooltool/course/browser/csvimport.py:39
 #: /src/schooltool/group/browser/csvimport.py:39
 #: /src/schooltool/person/browser/csvimport.py:43
 #: /src/schooltool/resource/browser/csvimport.py:39
 msgid "Insufficient data provided."
-msgstr "数据条件不够"
+msgstr ""
 
 #: /src/schooltool/course/browser/csvimport.py:43
 #: /src/schooltool/group/browser/csvimport.py:43
 #: /src/schooltool/resource/browser/csvimport.py:43
 msgid "Titles may not be empty"
-msgstr "标题不能为空"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:103
 msgid "No such course."
-msgstr "没有该课程"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:113
 msgid "Need a course ID."
-msgstr "需要课程ID"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/course/browser/section.py:118
 msgid "Add a Section to ${course}"
-msgstr "向课程 ${course} 中添加章节"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:259
 #: /src/schooltool/course/browser/templates/section.pt:50
 #: /src/schooltool/course/browser/templates/section_container.pt:32
 msgid "Instructors"
-msgstr "讲师"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:260
 msgid "Current Instructors"
-msgstr "当前讲师"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:261
 msgid "Available Instructors"
-msgstr "有效的教员"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:283
 #: /src/schooltool/gradebook/interfaces.py:75
@@ -2503,61 +2435,55 @@ msgstr "有效的教员"
 #: /src/schooltool/course/browser/templates/course_container.pt:77
 #: /src/schooltool/course/browser/templates/section_container.pt:77
 msgid "Students"
-msgstr "学生"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:284
-#, fuzzy
 msgid "Current Students"
-msgstr "当前大小"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:285
-#, fuzzy
 msgid "Available Students"
-msgstr "有效的教员"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:311
 #: /src/schooltool/app/browser/templates/index.pt:13
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:56
 msgid "Groups"
-msgstr "小组"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:312
 #: /src/schooltool/group/browser/group.py:60
-#, fuzzy
 msgid "Current Groups"
-msgstr "今年"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:313
 #: /src/schooltool/group/browser/group.py:61
-#, fuzzy
 msgid "Available Groups"
-msgstr "有效的教员"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:338
 #: /src/schooltool/app/browser/templates/index.pt:14
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:70
 #: /src/schooltool/course/browser/templates/section.pt:33
 msgid "Resources"
-msgstr "资源"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:339
-#, fuzzy
 msgid "Current Resources"
-msgstr "导入资源"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:340
 #: /src/schooltool/app/browser/templates/event_booking.pt:36
-#, fuzzy
 msgid "Available Resources"
-msgstr "有效的教员"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:68
 msgid "Section index"
-msgstr "章节列表"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:69
 msgid "Add a new section"
-msgstr "添加新章节"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:24
 msgid ""
@@ -2565,8 +2491,6 @@ msgid ""
 "strong> include an optional course description. Any extra information will "
 "be discarded."
 msgstr ""
-"CSV 数据<strong>必须</strong>包含课程标题并且<strong>可以</strong>包含一个可"
-"选的课程描述。任何其他信息将被丢弃。"
 
 #. Default: ""
 #.  "Ancient History, Pre-history through 1000 A.D.\n"
@@ -2580,12 +2504,6 @@ msgid ""
 "World History, 1000 A.D. through the 20th century, text after a second "
 "comma\n"
 msgstr ""
-"\n"
-"↵\n"
-"Ancient History, Pre-history through 1000 A.D.↵\n"
-"US History↵\n"
-"World History, 1000 A.D. through the 20th century, text after a second "
-"comma↵\n"
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:36
 msgid ""
@@ -2595,28 +2513,25 @@ msgid ""
 "century' respectively. The Second course will have no description, and the "
 "extra \"text after a second comma\" text on the third course will be ignored."
 msgstr ""
-"上面的示例将创建 3 个名为 'Ancient History'、'US History' 和 'World History' "
-"的课程。第一和最后的课程分别有一段 'Pre-history through 1000 A.D.' 和 '1000 "
-"A.D. through the 20th century' 的描述。第二个课程没有描述，而在第三个课程中的"
-"其他信息 \"text after a second comma\" 将被忽略。"
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:4
+#, fuzzy
 msgid "Upload schooltool courses as CSV"
-msgstr "以 CSV 的形式上传 schooltool 课程"
+msgstr "以 CSV 上传 SchoolTool 时间表"
 
 #: /src/schooltool/course/browser/templates/course.pt:18
+#, fuzzy
 msgid "Sections"
-msgstr "节"
+msgstr "操作"
 
 #: /src/schooltool/course/browser/templates/course.pt:36
 #: /src/schooltool/demographics/browser/nameinfo_view.pt:11
-#, fuzzy
 msgid "photo"
-msgstr "照片"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/course.pt:53
 msgid "students"
-msgstr "学生"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:27
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:80
@@ -2631,112 +2546,108 @@ msgid "Conflict: <a href=\"${DYNAMIC_CONTENT}\">${DYNAMIC_CONTENT}</a>"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:13
+#, fuzzy
 msgid "Section of ${course} -- ${DYNAMIC_CONTENT}"
-msgstr "${course}的节 -- ${DYNAMIC_CONTENT}"
+msgstr "${DYNAMIC_CONTENT}"
 
 #: /src/schooltool/course/browser/templates/section.pt:22
-#, fuzzy
 msgid "edit info"
-msgstr "编辑名字"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:22
-#, fuzzy
 msgid "Change the name or description of this section."
-msgstr "改变该节的地址或名称"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:40
-#, fuzzy
 msgid "Change the resources for this section."
-msgstr "更改该节的讲师"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:40
 #, fuzzy
 msgid "book resources"
-msgstr "预定资源"
+msgstr "已入册的资源"
 
 #: /src/schooltool/course/browser/templates/section.pt:57
 msgid "Change the instructors for this section."
-msgstr "更改该节的讲师"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:57
 msgid "edit instructors"
-msgstr "编辑讲师"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:87
 msgid "edit individuals"
-msgstr "编辑个人"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:87
 msgid "Change the students in this section individually"
-msgstr "更改该节的学生"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:94
 msgid "Change the students in this section by groups"
-msgstr "更改该节的学生小组"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:94
 msgid "edit groups"
-msgstr "编辑小组"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_add.pt:50
 #: /src/schooltool/skin/templates/simple_add.pt:45
 msgid "Identifier (optional)"
-msgstr "用户ID（可选）"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_container.pt:29
+#, fuzzy
 msgid "Section"
-msgstr "节"
+msgstr "操作"
 
 #: /src/schooltool/course/browser/templates/section_container.pt:38
+#, fuzzy
 msgid "Current Size"
-msgstr "当前大小"
+msgstr "本周"
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:23
 #: /src/schooltool/course/browser/templates/section_add.pt:27
 #: /src/schooltool/skin/templates/simple_edit.pt:23
 #: /src/schooltool/skin/templates/simple_add.pt:22
 msgid "There are ${num_errors} input errors."
-msgstr "有${num_errors} 个输入错误"
+msgstr ""
 
 #: /src/schooltool/course/interfaces.py:37
 msgid "Title of the course."
-msgstr "课程标题"
+msgstr ""
 
 #: /src/schooltool/course/interfaces.py:42
 msgid "Description of the course."
-msgstr "课程描述"
+msgstr ""
 
 #: /src/schooltool/course/interfaces.py:65
 msgid "Label"
-msgstr "标签"
+msgstr ""
 
 #: /src/schooltool/course/interfaces.py:67
 msgid ""
 "An identifier for a section, made up of instructor\n"
 "            names, courses, and meeting time."
 msgstr ""
-"An identifier for a section, made up of instructor↵\n"
-"            names, courses, and meeting time."
 
 #: /src/schooltool/course/interfaces.py:72
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:23
-#, fuzzy
 msgid "Code"
-msgstr "代码"
+msgstr ""
 
 #: /src/schooltool/course/interfaces.py:74
-#, fuzzy
 msgid "ID code for the section."
-msgstr "该节的ID代码"
+msgstr ""
 
 #: /src/schooltool/course/interfaces.py:79
 msgid "Description of the section."
-msgstr "该节的说明。"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/course/section.py:63
 msgid "${instructors} -- ${courses}"
-msgstr "${instructors} -- ${courses}"
+msgstr ""
 
 #: /src/schooltool/dashboard/interfaces.py:45
 msgid "Category Title."
@@ -2744,14 +2655,13 @@ msgstr ""
 
 #: /src/schooltool/dashboard/interfaces.py:49
 #: /src/schooltool/dashboard/interfaces.py:50
-#, fuzzy
 msgid "Weight"
-msgstr "主页"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/configure.zcml:13
 #, fuzzy
 msgid "New Person"
-msgstr "人员"
+msgstr "用户"
 
 #: /src/schooltool/demographics/browser/configure.zcml:189
 #, fuzzy
@@ -2774,9 +2684,8 @@ msgstr ""
 
 #: /src/schooltool/demographics/browser/configure.zcml:222
 #: /src/schooltool/demographics/browser/configure.zcml:283
-#, fuzzy
 msgid "schooldata"
-msgstr "上课日"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/configure.zcml:228
 #: /src/schooltool/demographics/browser/configure.zcml:289
@@ -2830,24 +2739,21 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:41
 #: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:22
 msgid "Cancel"
-msgstr "取消"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:156
-#, fuzzy
 msgid "Change name information for ${fullname}"
-msgstr "更改 ${user} 属性"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:172
-#, fuzzy
 msgid "Change name"
-msgstr "修改属性"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:183
-#, fuzzy
 msgid "Change demographics for ${fullname}"
-msgstr "更改 ${user} 属性"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:191
 msgid "Demographics"
@@ -2859,9 +2765,8 @@ msgid "Change school data for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:212
-#, fuzzy
 msgid "School data"
-msgstr "上课日"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:230
@@ -2869,26 +2774,25 @@ msgid "Change contact information for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:238
-#, fuzzy
 msgid "Contact information"
-msgstr "编辑章节信息"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:272
 #: /src/schooltool/demographics/browser/personform.py:273
 #: /src/schooltool/person/interfaces.py:78
 #: /src/schooltool/app/browser/templates/login.pt:38
 msgid "Username"
-msgstr "用户名"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:277
 #: /src/schooltool/person/browser/person.py:167
 #: /src/schooltool/app/browser/templates/login.pt:44
 msgid "Password"
-msgstr "密码"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:292
 msgid "This username is already used!"
-msgstr "该用户名已使用"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:345
 msgid "Invalid teacher. Possible causes: deleted or renamed."
@@ -2911,12 +2815,11 @@ msgstr "应用"
 #: /src/schooltool/demographics/browser/display_form.pt:3
 #, fuzzy
 msgid "Display"
-msgstr "日"
+msgstr "每天"
 
 #: /src/schooltool/demographics/browser/search.pt:24
-#, fuzzy
 msgid "There were no results."
-msgstr "没有添加任何人"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/search.pt:6
 msgid ""
@@ -2926,45 +2829,40 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/demographics/browser/table.pt:8
-#, fuzzy
 msgid "There are no persons."
-msgstr "没有添加任何人"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:120
 msgid "Gender"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:126
-#, fuzzy
 msgid "Birth date"
-msgstr "开始日期"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:131
 msgid "Ethnicity"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:137
-#, fuzzy
 msgid "Primary language"
-msgstr "主电话"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:143
 msgid "Special education"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:148
-#, fuzzy
 msgid "Previous school"
-msgstr "上一月"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:191
 msgid "ID"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:196
-#, fuzzy
 msgid "Enrollment date"
-msgstr "终止日期"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:201
 msgid "Projected graduation year"
@@ -2975,28 +2873,24 @@ msgid "Advisor"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:212
-#, fuzzy
 msgid "Team"
-msgstr "项"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:218
-#, fuzzy
 msgid "Health information"
-msgstr "编辑章节信息"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:239
 #: /src/schooltool/gradebook/browser/gradebook_overview.pt:15
 #: /src/schooltool/gradebook/browser/gradebook_grade_activity.pt:32
 #: /src/schooltool/attendance/browser/templates/real_time.pt:55
 #: /src/schooltool/attendance/browser/templates/retro.pt:35
-#, fuzzy
 msgid "Name"
-msgstr "相同"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:244
-#, fuzzy
 msgid "Relationship to student"
-msgstr "关系"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:250
 msgid "Street"
@@ -3007,23 +2901,20 @@ msgid "City"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:260
-#, fuzzy
 msgid "State"
-msgstr "星期六"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:265
 msgid "Postal code"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:270
-#, fuzzy
 msgid "Home phone"
-msgstr "时区"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:275
-#, fuzzy
 msgid "Work phone"
-msgstr "次电话"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:280
 msgid "Cell phone"
@@ -3032,32 +2923,28 @@ msgstr ""
 #: /src/schooltool/demographics/interfaces.py:285
 #: /src/schooltool/app/browser/configure.zcml:536
 #: /src/schooltool/app/rest/configure.zcml:255 /src/schooltool/note/notes.pt:2
-#, fuzzy
 msgid "Notes"
-msgstr "项"
+msgstr "笔记"
 
 #: /src/schooltool/demographics/interfaces.py:295
-#, fuzzy
 msgid "Text"
-msgstr "下一步"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:296
 msgid "Full text search in name"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:301
-#, fuzzy
 msgid "Name of parent"
-msgstr "事件号"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:302
 msgid "Full text search in parent names"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:307
-#, fuzzy
 msgid "Student ID"
-msgstr "学生"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:43
 msgid "Prefix"
@@ -3068,28 +2955,24 @@ msgid "Prefix such as Mr., Mrs."
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:49
-#, fuzzy
 msgid "First name"
-msgstr "编辑名字"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:54
-#, fuzzy
 msgid "Middle name"
-msgstr "全名"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:59
-#, fuzzy
 msgid "Last name"
-msgstr "编辑名字"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:64
 msgid "Suffix"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:69
-#, fuzzy
 msgid "Preferred name"
-msgstr "我的属性"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:70
 msgid "Name by which the student prefers to be called"
@@ -3098,17 +2981,17 @@ msgstr ""
 #: /src/schooltool/demographics/interfaces.py:75
 #: /src/schooltool/person/interfaces.py:69
 msgid "Full name"
-msgstr "全名"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:80
 #: /src/schooltool/person/interfaces.py:73
 msgid "Photo"
-msgstr "照片"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:82
 #: /src/schooltool/person/interfaces.py:75
 msgid "Photo (in JPEG format)"
-msgstr "照片 （JPEG格式）"
+msgstr ""
 
 #: /src/schooltool/devmode/configure.zcml:89
 #, fuzzy
@@ -3140,7 +3023,7 @@ msgstr ""
 #: /src/schooltool/level/browser/record.pt:86
 #, fuzzy
 msgid "remove-button"
-msgstr "删除"
+msgstr "提交"
 
 #. Default: "Add"
 #: /src/schooltool/gradebook/browser/categories.pt:36
@@ -3149,8 +3032,9 @@ msgstr "删除"
 #: /src/schooltool/skin/templates/simple_add.pt:55
 #: /src/schooltool/note/note_add.pt:43
 #: /src/schooltool/commendation/commendation_add.pt:33
+#, fuzzy
 msgid "add-button"
-msgstr "添加"
+msgstr "取消"
 
 #: /src/schooltool/gradebook/browser/categories.pt:4
 #: /src/schooltool/gradebook/browser/categories.pt:15
@@ -3169,28 +3053,24 @@ msgid "Categories"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:49
-#, fuzzy
 msgid "New Category"
-msgstr "新的项"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:52
 msgid "Default Category"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:75
-#, fuzzy
 msgid "Categories successfully deleted."
-msgstr "导入CSV文本成功"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:81
-#, fuzzy
 msgid "Category successfully added."
-msgstr "密码更改成功"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:87
-#, fuzzy
 msgid "Default category successfully changed."
-msgstr "密码更改成功"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/configure.zcml:103
 msgid "New Activity"
@@ -3205,9 +3085,8 @@ msgid "Gradebook"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/configure.zcml:38
-#, fuzzy
 msgid "Add an Activity"
-msgstr "添加章节"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/configure.zcml:51
 #, fuzzy
@@ -3245,9 +3124,8 @@ msgstr ""
 
 #. Default: ""
 #: /src/schooltool/gradebook/browser/gradebook.py:238
-#, fuzzy
 msgid "The grade $value for $name is not valid."
-msgstr "更换日期参数无效"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/gradebook.py:98
 msgid "Average"
@@ -3259,9 +3137,8 @@ msgid "Grade"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:28
-#, fuzzy
 msgid "Student Name"
-msgstr "学生"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:29
 msgid "Activity Name"
@@ -3286,7 +3163,7 @@ msgstr ""
 #: /src/schooltool/gradebook/browser/gradebook_grade_activity.pt:58
 #, fuzzy
 msgid "update-button"
-msgstr "删除"
+msgstr "取消"
 
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:61
 #: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:54
@@ -3300,9 +3177,8 @@ msgstr ""
 
 #: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:13
 #: /src/schooltool/gradebook/browser/gradebook_grade_activity.pt:13
-#, fuzzy
 msgid "Grade ${name}"
-msgstr "${number}时期"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:32
 msgid "Activity"
@@ -3322,9 +3198,8 @@ msgid "Essay"
 msgstr ""
 
 #: /src/schooltool/gradebook/category.py:62
-#, fuzzy
 msgid "Exam"
-msgstr "示例："
+msgstr ""
 
 #: /src/schooltool/gradebook/category.py:63
 msgid "Homework"
@@ -3335,14 +3210,12 @@ msgid "Journal"
 msgstr ""
 
 #: /src/schooltool/gradebook/category.py:65
-#, fuzzy
 msgid "Lab"
-msgstr "标签"
+msgstr ""
 
 #: /src/schooltool/gradebook/category.py:66
-#, fuzzy
 msgid "Presentation"
-msgstr "时期"
+msgstr ""
 
 #: /src/schooltool/gradebook/category.py:67
 msgid "Project"
@@ -3353,9 +3226,8 @@ msgid "Gradebook API"
 msgstr ""
 
 #: /src/schooltool/gradebook/interfaces.py:39
-#, fuzzy
 msgid "A detailed description of the activity."
-msgstr "该节的说明。"
+msgstr ""
 
 #: /src/schooltool/gradebook/interfaces.py:43
 msgid "Category"
@@ -3392,17 +3264,15 @@ msgstr ""
 #: /src/schooltool/group/browser/configure.zcml:125
 #: /src/schooltool/group/browser/group-csvimport.pt:22
 msgid "Import Groups"
-msgstr "导入小组"
+msgstr "导入组"
 
 #: /src/schooltool/group/browser/configure.zcml:26
-#, fuzzy
 msgid "Add a Group"
-msgstr "添加新组"
+msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:39
-#, fuzzy
 msgid "Edit Group Information"
-msgstr "编辑章节信息"
+msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:76
 #, fuzzy
@@ -3410,14 +3280,13 @@ msgid "Change Membership"
 msgstr "管理全体会员"
 
 #: /src/schooltool/group/browser/configure.zcml:91
-#, fuzzy
 msgid "New Group"
-msgstr "小组"
+msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:98
 #, fuzzy
 msgid "A Group"
-msgstr "小组"
+msgstr "导入组"
 
 #: /src/schooltool/group/browser/configure.zcml:98
 msgid "SchoolBell Group"
@@ -3429,8 +3298,6 @@ msgid ""
 "strong> include an optional group description. Any extra information will be "
 "discarded."
 msgstr ""
-"CSV 数据<strong>必须</strong>包含组标题并且<strong>可以</strong>包含一个可选"
-"的组描述。任何其他信息将被丢弃。"
 
 #. Default: ""
 #.  "LUG, Linux Users Group\n"
@@ -3443,11 +3310,6 @@ msgid ""
 "Chess Club\n"
 "Sports Club, After-school sports club, <em>text after a second comma</em>\n"
 msgstr ""
-"\n"
-"↵\n"
-"LUG, Linux Users Group↵\n"
-"Chess Club↵\n"
-"Sports Club, After-school sports club, <em>text after a second comma</em>↵\n"
 
 #: /src/schooltool/group/browser/group-csvimport.pt:37
 msgid ""
@@ -3457,19 +3319,16 @@ msgid ""
 "group will have no description, and the extra \"text after a second comma\" "
 "text on the third group will be ignored."
 msgstr ""
-"上面的示例将创建 3 个名为 'LUG', 'Chess Club' 和 'Sports Club'的小组。第一和"
-"最后的组分别有一段 'Linux Users Group' 和 'After-school sports club' 的描"
-"述。'Chess Club'组没有描述，而在第三个组中的其他信息 \"text after a second "
-"comma\" 将被忽略。"
 
 #: /src/schooltool/group/browser/group-csvimport.pt:4
+#, fuzzy
 msgid "Upload SchoolTool groups as CSV"
-msgstr "以 CSV 形式上传 SchoolTool 小组"
+msgstr "以 CSV 上传 SchoolTool 时间表"
 
 #: /src/schooltool/group/browser/group.pt:16
 #, fuzzy
 msgid "Members"
-msgstr "十二月"
+msgstr "十一月"
 
 #: /src/schooltool/group/browser/group.pt:23
 #, fuzzy
@@ -3477,17 +3336,16 @@ msgid "edit members"
 msgstr "九月"
 
 #: /src/schooltool/group/browser/group.pt:23
-#, fuzzy
 msgid "Change the people who are members of this group."
-msgstr "改变该节的地址或名称"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.py:47
 msgid "Group index"
-msgstr "小组索引"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.py:48
 msgid "Add a new group"
-msgstr "添加新组"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/group/browser/group.py:59
@@ -3500,27 +3358,26 @@ msgid "Members of ${group}"
 msgstr ""
 
 #: /src/schooltool/group/browser/group.py:98
-#, fuzzy
 msgid "Current Members"
-msgstr "今年"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.py:99
-#, fuzzy
 msgid "Add Members"
-msgstr "添加事件"
+msgstr ""
 
 #: /src/schooltool/group/interfaces.py:44
 msgid "Title of the group."
-msgstr "小组的标题"
+msgstr ""
 
 #: /src/schooltool/group/interfaces.py:49
 msgid "Description of the group."
-msgstr "小组的描述"
+msgstr ""
 
 #. Default: "Calendar"
 #: /src/schooltool/group/rest/group.pt:14
+#, fuzzy
 msgid "Private_calendar"
-msgstr "个人日历"
+msgstr "日程表视图"
 
 #: /src/schooltool/help/configure.zcml:46
 msgid "Contextual Help"
@@ -3552,22 +3409,19 @@ msgstr ""
 #: /src/schooltool/level/browser/level.pt:21
 #, fuzzy
 msgid "None"
-msgstr "无"
+msgstr "笔记"
 
 #: /src/schooltool/level/browser/level.py:41
-#, fuzzy
 msgid "Level index"
-msgstr "资源列表"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:42
-#, fuzzy
 msgid "Add a new level"
-msgstr "添加一个新的类型"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:60
-#, fuzzy
 msgid "Previous Level"
-msgstr "上一周"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:61
 msgid ""
@@ -3585,7 +3439,7 @@ msgstr ""
 #: /src/schooltool/level/browser/level_validation.pt:37
 #, fuzzy
 msgid "validate-button"
-msgstr "添加"
+msgstr "提交"
 
 #: /src/schooltool/level/browser/level_validation.pt:4
 #: /src/schooltool/level/browser/level_validation.pt:8
@@ -3602,9 +3456,8 @@ msgid "O"
 msgstr ""
 
 #: /src/schooltool/level/browser/promotion.pt:21
-#, fuzzy
 msgid "Enroll Students"
-msgstr "学生"
+msgstr ""
 
 #: /src/schooltool/level/browser/promotion.pt:29
 #: /src/schooltool/level/browser/promotion.pt:59
@@ -3639,7 +3492,7 @@ msgstr ""
 #: /src/schooltool/level/browser/promotion.pt:128
 #, fuzzy
 msgid "apply-button"
-msgstr "添加"
+msgstr "取消"
 
 #: /src/schooltool/level/browser/promotion.pt:91
 msgid "Level Outcome"
@@ -3655,20 +3508,17 @@ msgid "Students successfully enrolled."
 msgstr ""
 
 #: /src/schooltool/level/browser/promotion.py:132
-#, fuzzy
 msgid "Student processes successfully updated."
-msgstr "导入CSV文本成功"
+msgstr ""
 
 #: /src/schooltool/level/browser/promotion.py:57
-#, fuzzy
 msgid "Work Item successfully finished."
-msgstr "密码更改成功"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/level/browser/promotion.py:64
-#, fuzzy
 msgid "Current Level: $level"
-msgstr "本周"
+msgstr ""
 
 #: /src/schooltool/level/browser/record.pt:107
 msgid "History"
@@ -3719,9 +3569,8 @@ msgid "initialize-button"
 msgstr "取消"
 
 #: /src/schooltool/level/browser/record.py:56
-#, fuzzy
 msgid "The status was successfully updated."
-msgstr "密码更改成功"
+msgstr ""
 
 #: /src/schooltool/level/browser/record.py:68
 msgid "The Level Process was successfully initialized."
@@ -3732,32 +3581,28 @@ msgid "The Level Process was successfully removed."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:132
-#, fuzzy
 msgid "Time Stamp"
-msgstr "时间表"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:133
 msgid "The date and time the record was created."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:137
-#, fuzzy
 msgid "User"
-msgstr "用户名："
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:138
 msgid "The principal id of the user making the record."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:143
-#, fuzzy
 msgid "Title of the record."
-msgstr "资源的标题"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:148
-#, fuzzy
 msgid "A detailed description of the record."
-msgstr "资源的描述"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:160
 msgid "Academic History"
@@ -3770,9 +3615,8 @@ msgstr ""
 #: /src/schooltool/level/interfaces.py:166
 #: /src/schooltool/level/browser/record.pt:15
 #: /src/schooltool/attendance/browser/templates/real_time.pt:56
-#, fuzzy
 msgid "Status"
-msgstr "星期六"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:167
 msgid "The current standing of the student in the school."
@@ -3800,9 +3644,8 @@ msgid "The workflow process of the level the student is currently completing."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:76
-#, fuzzy
 msgid "Title of the level."
-msgstr "注意标题"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:80
 msgid "Is Initial Level"
@@ -3813,9 +3656,8 @@ msgid "Is this level an initial level for the school."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:86
-#, fuzzy
 msgid "Next Level"
-msgstr "下一周"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:87
 msgid ""
@@ -3828,14 +3670,12 @@ msgid "Outcome"
 msgstr ""
 
 #: /src/schooltool/level/promotion.py:129
-#, fuzzy
 msgid "Outcome of the level."
-msgstr "注意标题"
+msgstr ""
 
 #: /src/schooltool/level/promotion.py:130
-#, fuzzy
 msgid "fail"
-msgstr "日"
+msgstr ""
 
 #: /src/schooltool/level/promotion.py:130
 msgid "withdraw"
@@ -3847,9 +3687,8 @@ msgid "pass"
 msgstr ""
 
 #: /src/schooltool/level/promotion.py:96
-#, fuzzy
 msgid "Level"
-msgstr "标签"
+msgstr ""
 
 #: /src/schooltool/level/promotion.py:97
 msgid "The initial level of the student in the school."
@@ -3858,36 +3697,36 @@ msgstr ""
 #: /src/schooltool/note/configure.zcml:39
 #, fuzzy
 msgid "New Note"
-msgstr "新的项"
+msgstr "笔记"
 
 #: /src/schooltool/note/interfaces.py:43
 msgid "Title of the note."
-msgstr "注意标题"
+msgstr ""
 
 #: /src/schooltool/note/interfaces.py:46
 msgid "Body"
-msgstr "正文"
+msgstr ""
 
 #: /src/schooltool/note/interfaces.py:47
 msgid "Body of the note."
-msgstr "注意正文"
+msgstr ""
 
 #: /src/schooltool/note/interfaces.py:50 /src/schooltool/note/note_add.pt:24
 msgid "Privacy"
-msgstr "保密"
+msgstr ""
 
 #: /src/schooltool/note/note_add.pt:13
+#, fuzzy
 msgid "Note"
-msgstr ""
+msgstr "笔记"
 
 #: /src/schooltool/note/note_add.pt:24
 msgid "Who can view the note"
 msgstr ""
 
 #: /src/schooltool/note/note_add.pt:30
-#, fuzzy
 msgid "Private"
-msgstr "保密"
+msgstr ""
 
 #: /src/schooltool/note/note_add.pt:31
 msgid "Public"
@@ -3896,7 +3735,7 @@ msgstr ""
 #: /src/schooltool/note/note_add.pt:4
 #, fuzzy
 msgid "Add note"
-msgstr "添加项"
+msgstr "添加事件"
 
 #: /src/schooltool/note/notes.pt:17
 #, fuzzy
@@ -3913,28 +3752,26 @@ msgstr ""
 
 #: /src/schooltool/person/browser/csvimport.py:47
 msgid "username may not be empty"
-msgstr "用户名不能为空"
+msgstr ""
 
 #: /src/schooltool/person/browser/csvimport.py:51
 msgid "fullname may not be empty"
-msgstr "全名不能为空"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/person/browser/csvimport.py:62
 msgid "Duplicate username: ${username}"
-msgstr "用户名已存在：${username}"
+msgstr ""
 
 #: /src/schooltool/person/browser/person-csvimport.pt:22
 msgid "Import Persons"
-msgstr "导入人员"
+msgstr "导入的人员"
 
 #: /src/schooltool/person/browser/person-csvimport.pt:25
 msgid ""
 "CSV data <strong>must</strong> contain a user name and a full name. An "
 "optional password <strong>may</strong> be included as well."
 msgstr ""
-"CSV 数据 <strong>必须</strong> 包含用户名和全名。<strong>也可以</strong> 包含"
-"一个可选的密码。"
 
 #. Default: ""
 #.  "jjones, Jimmy Jones\n"
@@ -3947,11 +3784,6 @@ msgid ""
 "jbjones, Jim Bob Jones, r2m45J\n"
 "howard, Howard\n"
 msgstr ""
-"\n"
-"↵\n"
-"jjones, Jimmy Jones↵\n"
-"jbjones, Jim Bob Jones, r2m45J↵\n"
-"howard, Howard↵\n"
 
 #: /src/schooltool/person/browser/person-csvimport.pt:36
 msgid ""
@@ -3959,26 +3791,23 @@ msgid ""
 "Of the three, only 'jbjones' has a password ('r2m45J') and will be able to "
 "login to the system. Note that passwords must be sent in plain text."
 msgstr ""
-"上面的示例将创建三个名为 'jjones'、'jbjones' 和 'howard' 的用户。三个中只有 "
-"'jbjones' 拥有密码 ('r2m45J') 能登录系统。注意密码必须以纯文本形式发送。"
 
 #: /src/schooltool/person/browser/person-csvimport.pt:4
+#, fuzzy
 msgid "Upload SchoolTool persons as CSV"
-msgstr "以 CSV 形式上传 SchoolTool 人户"
+msgstr "以 CSV 上传 SchoolTool 时间表"
 
 #: /src/schooltool/person/browser/person.py:176
-#, fuzzy
 msgid "Edit password"
-msgstr "新密码"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:181
 msgid "No new password was supplied so original password is unchanged"
 msgstr ""
 
 #: /src/schooltool/person/browser/person.py:186
-#, fuzzy
 msgid "Changed password"
-msgstr "新密码"
+msgstr ""
 
 #: /src/schooltool/person/browser/person_container_delete.pt:18
 msgid "Sorry, you may not delete your own user account."
@@ -3986,75 +3815,74 @@ msgstr ""
 
 #: /src/schooltool/person/browser/person_preferences.pt:14
 msgid "Change preferences for ${user}"
-msgstr "更改 ${user} 属性"
+msgstr ""
 
 #: /src/schooltool/person/browser/person_preferences.pt:4
 msgid "Edit person preferences"
-msgstr "编辑用户属性"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:154
 msgid "Time Zone"
-msgstr "时区"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:155
 msgid "Time Zone used to display your calendar"
-msgstr "在你的日历上显示时区"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:159
 #: /src/schooltool/person/interfaces.py:160
 msgid "Time Format"
-msgstr "时间格式"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:161
 msgid "HH:MM"
-msgstr "HH:MM"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:162
 msgid "HH:MM am/pm"
-msgstr "HH:MM 上午/下午"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:165
 #: /src/schooltool/person/interfaces.py:166
 msgid "Date Format"
-msgstr "日期格式"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:167
 msgid "MM/DD/YY"
-msgstr "MM/DD/YY"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:168
 msgid "YYYY-MM-DD"
-msgstr "YYYY-MM-DD"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:169
 msgid "Day Month, Year"
-msgstr "年，月日"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:173
 msgid "Week starts on:"
-msgstr "起始周："
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:174
 msgid "Start display of weeks on Sunday or Monday"
-msgstr "周起始日在星期一或星期日"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:187
 msgid "Show periods"
-msgstr "显示时期"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:188
 msgid "Show period names in daily view"
-msgstr "在日历上显示时期名"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:191
 #: /src/schooltool/person/interfaces.py:192
-#, fuzzy
 msgid "Make calendar public"
-msgstr "日程表视图"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:70
 msgid "Name that should be displayed"
-msgstr "将显示名称"
+msgstr ""
 
 #: /src/schooltool/relationship/configure.zcml:33
 #: /src/schooltool/app/rest/configure.zcml:249
@@ -4064,7 +3892,7 @@ msgstr "将显示名称"
 #: /src/schooltool/course/rest/section.pt:7
 #: /src/schooltool/person/rest/person.pt:7
 msgid "Relationships"
-msgstr "关系"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/configure.zcml:19
 #, fuzzy
@@ -4077,40 +3905,38 @@ msgid "Edit Requirement"
 msgstr "编辑事件"
 
 #: /src/schooltool/requirement/browser/configure.zcml:69
-#, fuzzy
 msgid "New Requirement"
-msgstr "新的项"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.pt:40
 #: /src/schooltool/course/browser/templates/course_container.pt:28
 #: /src/schooltool/skin/templates/container.pt:29
 #: /src/schooltool/skin/templates/table_macros.pt:5
 msgid "Showing"
-msgstr "显示"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.pt:42
 #: /src/schooltool/course/browser/templates/course_container.pt:30
 #: /src/schooltool/skin/templates/container.pt:31
 #: /src/schooltool/skin/templates/table_macros.pt:7
 msgid "of"
-msgstr "由"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.pt:44
 #: /src/schooltool/course/browser/templates/course_container.pt:32
 #: /src/schooltool/skin/templates/container.pt:33
 #: /src/schooltool/skin/templates/table_macros.pt:9
+#, fuzzy
 msgid "items"
-msgstr "项"
+msgstr "分钟"
 
 #: /src/schooltool/requirement/browser/requirement.py:53
-#, fuzzy
 msgid "Requirement index"
-msgstr "资源列表"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.py:54
-#, fuzzy
 msgid "Add a new Requirement"
-msgstr "添加一个新的类型"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/scoresystem.py:36
 msgid "Exisiting Score System"
@@ -4122,32 +3948,29 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:100
 #: /src/schooltool/resource/browser/resource-csvimport.pt:21
+#, fuzzy
 msgid "Import Resources"
-msgstr "导入资源"
+msgstr "导入的人员"
 
 #: /src/schooltool/resource/browser/configure.zcml:27
-#, fuzzy
 msgid "Add a Resource"
-msgstr "添加新资源"
+msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:40
-#, fuzzy
 msgid "Edit Resource Information"
-msgstr "编辑章节信息"
+msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:75
-#, fuzzy
 msgid "New Resource"
-msgstr "资源"
+msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:82
 msgid "SchoolBell Resource"
 msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:82
-#, fuzzy
 msgid "A Resource"
-msgstr "资源"
+msgstr ""
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:24
 msgid ""
@@ -4155,8 +3978,6 @@ msgid ""
 "strong> include an optional resource description. Any extra information will "
 "be discarded."
 msgstr ""
-"CSV 数据 <strong>必须</strong> 包含下个资料标题和<strong>也可以</strong> 包含"
-"一个资料描述，任何其它的信息会被丢弃。"
 
 #. Default: ""
 #.  "PRJ302, Overhead Projector #302\n"
@@ -4169,11 +3990,6 @@ msgid ""
 "Main Auditorium\n"
 "LC-805, Laptop Computer #805, <em>text after a second comma</em>\n"
 msgstr ""
-"\n"
-"↵\n"
-"PRJ302, Overhead Projector #302↵\n"
-"Main Auditorium↵\n"
-"LC-805, Laptop Computer #805, <em>text after a second comma</em>\n"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:36
 msgid ""
@@ -4183,71 +3999,66 @@ msgid ""
 "\"Main Auditorium\" resource will have no description, and the \"text after "
 "a second comma\" text on the third resource will be ignored."
 msgstr ""
-"上面的示例创建3个名为'PRJ302', 'Main Auditorium' 和 'LC-805'的资源，第一个和"
-"最后一个有'Overhead Projector #302' 和 'Laptop Computer #805'的描述， \"Main "
-"Auditorium\" 资料没有描述，第三个\"text after a second comma\" 文本被丢失"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
+#, fuzzy
 msgid "Upload schooltool resources as CSV"
-msgstr "以CSV形式上传schooltool资源"
+msgstr "以 CSV 上传 SchoolTool 时间表"
 
 #: /src/schooltool/resource/browser/resource.py:39
 msgid "Resource index"
-msgstr "资源列表"
+msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:40
 msgid "Add a new resource"
-msgstr "添加新资源"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:39
 msgid "Title of the resource."
-msgstr "资源的标题"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:44
 msgid "Description of the resource."
-msgstr "资源的描述"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:47
 msgid "A Location."
-msgstr "位置"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:48
 msgid "Indicate this resource is a location, like a classroom."
-msgstr "指定资源的位置，如一个教室"
+msgstr ""
 
 #. Default: "Calendar subscriptions"
 #: /src/schooltool/resource/rest/resource.pt:17
 #: /src/schooltool/group/rest/group.pt:17
 #: /src/schooltool/person/rest/person.pt:16
 msgid "Calendar_relationships"
-msgstr "Calendar_relationships"
+msgstr ""
 
 #. Default: "Calendar ACL"
 #: /src/schooltool/resource/rest/resource.pt:20
 #: /src/schooltool/group/rest/group.pt:20
 #: /src/schooltool/person/rest/person.pt:19
+#, fuzzy
 msgid "Calendar_ACL"
-msgstr "Calendar_ACL"
+msgstr "日历"
 
 #: /src/schooltool/restclient/restclient.py:644
-#, fuzzy
 msgid "Could not parse relationship list"
-msgstr "Calendar_relationships"
+msgstr ""
 
 #: /src/schooltool/restclient/restclient.py:660
-#, fuzzy
 msgid "Insufficient data in person info"
-msgstr "数据条件不够"
+msgstr ""
 
 #: /src/schooltool/restclient/restclient.py:673
-#, fuzzy
 msgid "Insufficient data in group info"
-msgstr "数据条件不够"
+msgstr ""
 
 #: /src/schooltool/restclient/restclient.py:688
-#, fuzzy
 msgid "Insufficient data in level info"
-msgstr "数据条件不够"
+msgstr ""
 
 #: /src/schooltool/sampledata/sampledata.pt:14
 msgid ""
@@ -4279,9 +4090,6 @@ msgid ""
 "\n"
 "This is not a SchoolBell 1.0 database file, aborting.\n"
 msgstr ""
-"\n"
-"↵\n"
-"This is not a SchoolBell 1.0 database file, aborting.↵\n"
 
 #: /src/schooltool/sbapp/main.py:43
 msgid ""
@@ -4290,11 +4098,6 @@ msgid ""
 "\n"
 "Please run the standalone database upgrade script.\n"
 msgstr ""
-"\n"
-"↵\n"
-"This is not a SchoolBell 1.0 database file, aborting.↵\n"
-"↵\n"
-"Please run the standalone database upgrade script.↵\n"
 
 #: /src/schooltool/securitypolicy/browser/configure.zcml:6
 #: /src/schooltool/securitypolicy/browser/templates/access_control.pt:12
@@ -4325,12 +4128,11 @@ msgstr ""
 
 #: /src/schooltool/skin/breadcrumbs.py:68
 msgid "top"
-msgstr "顶部"
+msgstr ""
 
 #: /src/schooltool/skin/form.py:64
-#, fuzzy
 msgid "No changes"
-msgstr "保存更改"
+msgstr ""
 
 #: /src/schooltool/skin/templates/error.pt:13
 #, fuzzy
@@ -4386,19 +4188,19 @@ msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:57
 msgid "Log In"
-msgstr "登录"
+msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:65
 msgid "User:"
-msgstr "用户名："
+msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:79
 msgid "Log Out"
-msgstr "注销"
+msgstr ""
 
 #: /src/schooltool/term/browser/configure.zcml:26
 msgid "New Term"
-msgstr "新条件"
+msgstr ""
 
 #: /src/schooltool/term/browser/configure.zcml:67
 msgid "Cancel School in Emergency"
@@ -4406,7 +4208,7 @@ msgstr ""
 
 #: /src/schooltool/term/browser/emergency.py:100
 msgid "The replacement date you entered is invalid."
-msgstr "更换日期参数无效"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/term/browser/emergency.py:123
@@ -4420,15 +4222,15 @@ msgstr ""
 
 #: /src/schooltool/term/browser/emergency.py:84
 msgid "The date you entered is invalid.  Please use the YYYY-MM-DD format."
-msgstr "无效的日期参数。请用 YYYY-MM-DD 格式"
+msgstr ""
 
 #: /src/schooltool/term/browser/emergency.py:88
 msgid "The date you entered does not belong to this term."
-msgstr "这个日期参数不属于其它任何项"
+msgstr ""
 
 #: /src/schooltool/term/browser/emergency.py:92
 msgid "The date you entered is not a schoolday."
-msgstr "The date you entered is not a schoolday."
+msgstr ""
 
 #: /src/schooltool/term/browser/emergency2.pt:12
 msgid ""
@@ -4443,7 +4245,7 @@ msgstr ""
 
 #: /src/schooltool/term/browser/emergency2.pt:33
 msgid "Replacement"
-msgstr "替换"
+msgstr ""
 
 #: /src/schooltool/term/browser/emergency2.pt:6
 msgid "Choose a replacement for the emergency day."
@@ -4472,45 +4274,48 @@ msgstr ""
 #. Default: ""
 #: /src/schooltool/term/browser/term.py:129
 msgid "Change Term: $title"
-msgstr "更改项: $title"
+msgstr ""
 
 #: /src/schooltool/term/browser/term.py:165
 msgid "New term"
-msgstr "新的项"
+msgstr ""
 
 #: /src/schooltool/term/browser/term.py:55
 msgid "Terms"
-msgstr "类型"
+msgstr ""
 
 #: /src/schooltool/term/browser/term.py:56
 msgid "Add a new term"
-msgstr "添加一个新的类型"
+msgstr ""
 
 #: /src/schooltool/term/browser/term.py:65
 msgid "Start date"
-msgstr "开始日期"
+msgstr ""
 
 #: /src/schooltool/term/browser/term.py:67
 msgid "End date"
-msgstr "终止日期"
+msgstr ""
 
 #: /src/schooltool/term/browser/term_add_edit.pt:115
 #: /src/schooltool/term/browser/term.pt:26
+#, fuzzy
 msgid "${month} ${year}"
-msgstr "${month} ${year}"
+msgstr "${month}, ${year}"
 
 #: /src/schooltool/term/browser/term_add_edit.pt:130
 #: /src/schooltool/term/browser/term.pt:41
+#, fuzzy
 msgid "Week ${week_number}"
-msgstr "${week_number} 周"
+msgstr "${week_no} 星期"
 
 #: /src/schooltool/term/browser/term_add_edit.pt:151
 msgid "Add term"
-msgstr "添加项"
+msgstr ""
 
 #: /src/schooltool/term/browser/term_add_edit.pt:158
+#, fuzzy
 msgid "Save changes"
-msgstr "保存更改"
+msgstr "更改已保存"
 
 #: /src/schooltool/term/browser/term_add_edit.pt:38
 msgid ""
@@ -4527,7 +4332,7 @@ msgstr ""
 #: /src/schooltool/term/browser/term_add_edit.pt:149
 #: /src/schooltool/term/browser/term_add_edit.pt:156
 msgid "Refresh"
-msgstr "更新"
+msgstr ""
 
 #: /src/schooltool/term/browser/term_add_edit.pt:70
 msgid ""
@@ -4542,17 +4347,19 @@ msgstr ""
 #: /src/schooltool/term/browser/term_add_edit.pt:81
 #: /src/schooltool/term/browser/term.pt:12
 msgid "Legend:"
-msgstr "图例："
+msgstr ""
 
 #: /src/schooltool/term/browser/term_add_edit.pt:82
 #: /src/schooltool/term/browser/term.pt:13
+#, fuzzy
 msgid "Schoolday"
-msgstr "上课日"
+msgstr "SchoolTool"
 
 #: /src/schooltool/term/browser/term_add_edit.pt:83
 #: /src/schooltool/term/browser/term.pt:14
+#, fuzzy
 msgid "Holiday"
-msgstr "假日"
+msgstr "今天"
 
 #: /src/schooltool/term/browser/term_add_edit.pt:93
 msgid "Toggle the following days of week:"
@@ -4561,86 +4368,86 @@ msgstr ""
 #. Default: ""
 #: /src/schooltool/timetable/browser/__init__.py:345
 msgid "${object}'s timetable"
-msgstr "课表的${object}"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:744
 msgid "Invalid date. Please use YYYY-MM-DD format."
-msgstr "无效时期，请用YYYY-MM-DD格式"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:748
 msgid "The date does not belong to any term."
-msgstr "这个日期不属于任何项"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:757
 msgid "Some values were invalid.  They are highlighted in red."
-msgstr "一些值无效，它们用红色突出"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/configure.zcml:112
 msgid "Change Timetable for One Day"
-msgstr "更改一天的时间表"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/configure.zcml:139
+#, fuzzy
 msgid "New Timetable"
-msgstr "新时间表"
+msgstr "显示时间表"
 
 #: /src/schooltool/timetable/browser/configure.zcml:22
+#, fuzzy
 msgid "View Timetables"
-msgstr "查看课程表"
+msgstr "显示时间表"
 
 #: /src/schooltool/timetable/browser/configure.zcml:31
 #: /src/schooltool/timetable/browser/configure.zcml:39
 #: /src/schooltool/timetable/browser/configure.zcml:47
 #: /src/schooltool/course/browser/templates/section_container.pt:35
 msgid "Schedule"
-msgstr "规划划表"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:155
 msgid "Please use HH:MM format for period start and end times"
-msgstr "学时开始时间和终止时间请用 HH:MM 格式"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:196
 msgid "You must specify at least one period."
-msgstr "你必须指定至少一个学时"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:217
 msgid "School Timetables"
-msgstr "课表"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:218
 msgid "Add a new schema"
-msgstr "添加新规划"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:302
 msgid "Please select a value"
-msgstr "请选择值"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/schema.py:329
 #: /src/schooltool/timetable/browser/schema.py:336
 msgid "Day ${number}"
-msgstr "${number}日"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:359
 msgid "Period 1"
-msgstr "1时期"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/schema.py:369
 msgid "Period ${number}"
-msgstr "${number}时期"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/schema.py:74
 msgid "Timetable schema ${schema}"
-msgstr "时间安排表 ${schema}"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:114
 msgid ""
 "Timetable day always coincides with the day of week (i.e. on Mondays the "
 "first timetable day is used, on Tuesdays the second, and so on)."
 msgstr ""
-"Timetable day always coincides with the day of week (i.e. on Mondays the "
-"first timetable day is used, on Tuesdays the second, and so on)."
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:129
 msgid ""
@@ -4662,7 +4469,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:17
 msgid "Please choose a name for the timetable schema you want to create."
-msgstr "请选择你想要创建的课表名称"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:175
 msgid ""
@@ -4677,42 +4484,43 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:197
 msgid "Create timetable schema"
-msgstr "创建课表"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:36
 msgid "First, please define the days and periods of the timetable."
-msgstr "首先，请定义课表的日期和时期"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/advancedtts.pt:51
+#: /src/schooltool/timetable/browser/templates/advancedtts.pt:155
+msgid "C"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:51
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:155
 #, fuzzy
-msgid "C"
-msgstr "复制"
-
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:51
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:155
 msgid "Copy periods from previous day"
-msgstr "从上一天复制时期"
+msgstr "上一日"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:58
 msgid "X"
-msgstr "关闭"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:58
 msgid "Remove this day"
-msgstr "移除该天"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:84
+#, fuzzy
 msgid "Add day"
-msgstr "添加天"
+msgstr "整天"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:87
 msgid "Add period"
-msgstr "添加时期"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:94
 msgid "Second, select the way timetable days are aligned with calendar days."
-msgstr "接着，select the way timetable days are aligned with calendar days."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:102
 msgid ""
@@ -4721,17 +4529,18 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:22
+#, fuzzy
 msgid "Timetable"
-msgstr "时间表"
+msgstr "输入时间表"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:138
 msgid "Term"
-msgstr "项"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:34
 msgid "Schema"
-msgstr "规划"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:4
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:10
@@ -4739,8 +4548,9 @@ msgid "Scheduling for ${person}"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:43
+#, fuzzy
 msgid "Choose"
-msgstr "选取"
+msgstr "课程"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:54
 msgid ""
@@ -4754,11 +4564,11 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:82
 msgid "none"
-msgstr "无"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:94
 msgid "Scheduling conflict."
-msgstr "时间安排冲突"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:10
 msgid "Are you sure you want to delete the selected school timetables?"
@@ -4767,7 +4577,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:107
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:108
 msgid "Save"
-msgstr "保存"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:17
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:15
@@ -4784,12 +4594,14 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:4
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:11
+#, fuzzy
 msgid "Scheduling for ${section}"
-msgstr ""
+msgstr "缺席${section}。"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:46
+#, fuzzy
 msgid "Using timetable:"
-msgstr ""
+msgstr "显示时间表"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:11
 msgid ""
@@ -4806,19 +4618,20 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:37
 msgid "Period title (optional)"
-msgstr "时期标题（可选）"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:38
 msgid "Period start time"
-msgstr "时期开始时间"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:39
 msgid "Period end time"
-msgstr "时期结束时间"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:61
+#, fuzzy
 msgid "Create"
-msgstr "创建"
+msgstr "日期"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:13
 msgid ""
@@ -4829,7 +4642,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:29
 msgid "Period title"
-msgstr "时期标题"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:30
 msgid "Original start"
@@ -4844,12 +4657,14 @@ msgid "New start"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:33
+#, fuzzy
 msgid "New end"
-msgstr ""
+msgstr "日程表视图"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:63
+#, fuzzy
 msgid "Modify"
-msgstr "修改"
+msgstr "星期一"
 
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:11
 msgid ""
@@ -4866,18 +4681,18 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:3
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:6
 msgid "Choose a special day"
-msgstr "选择一个特别的日子"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:40
 #: /src/schooltool/term/browser/emergency_select.pt:40
 #: /src/schooltool/term/browser/emergency2.pt:41
 msgid "Proceed"
-msgstr "执行"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
 #, fuzzy
 msgid "Default Timetable Schema:"
-msgstr "创建课表"
+msgstr "课程安排表"
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:46
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:53
@@ -4911,8 +4726,9 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:6
 #: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:3
 #: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:6
+#, fuzzy
 msgid "New timetable schema"
-msgstr "新课表"
+msgstr "显示时间表"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:261
 msgid ""
@@ -4925,7 +4741,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:265
 msgid "Rotating cycle"
-msgstr "重复"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:288
 msgid "Enter names of days in cycle, one per line."
@@ -4947,11 +4763,11 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:325
 msgid "Same time each day"
-msgstr "每天同时"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:326
 msgid "Different times"
-msgstr "不同时"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:345
 msgid ""
@@ -4964,15 +4780,13 @@ msgid "Day of week"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:349
-#, fuzzy
 msgid "Day in cycle"
-msgstr "重复"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:414
 msgid ""
 "Enter start and end times for each slot, one slot (HH:MM - HH:MM) per line."
 msgstr ""
-"Enter start and end times for each slot, one slot (HH:MM - HH:MM) per line."
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:428
@@ -5032,11 +4846,11 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:611
 msgid "Same"
-msgstr "相同"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:612
 msgid "Different"
-msgstr "不同"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:627
 msgid "Please put the periods in order:"
@@ -5101,89 +4915,38 @@ msgstr ""
 #~ msgid "Import Sections"
 #~ msgstr "导入章节"
 
-#~ msgid "Locations not found: ${args}."
-#~ msgstr "没有找到该地址：${args}。"
-
-#~ msgid "Manage this person's memberships"
-#~ msgstr "管理该用户属性"
-
-#~ msgid "Username:"
-#~ msgstr "用户名:"
-
-#~ msgid "Change this person's name, picture, or password"
-#~ msgstr "改变会员名称，照片，口令"
-
-#~ msgid "Modify this person's details"
-#~ msgstr "修改该用户详细资料"
-
-#~ msgid "Sections Taught"
-#~ msgstr "已教章节"
-
-#~ msgid "via group"
-#~ msgstr "通过组"
-
-#~ msgid ""
-#~ "<p> ${DYNAMIC_CONTENT} Server Running SchoolTool <span>${DYNAMIC_CONTENT}"
-#~ "</span> &copy; The Shuttleworth Foundation 2003 - <span>2005</span>: "
-#~ "Supporting Social Innovation. </p> <p> SchoolTool&trade; is a Trademark "
-#~ "of The Shuttleworth Foundation. </p>"
-#~ msgstr ""
-#~ "<p> ${DYNAMIC_CONTENT} Server Running SchoolTool <span>${DYNAMIC_CONTENT}"
-#~ "</span> &copy; The Shuttleworth Foundation 2003 - <span>2005</span>: "
-#~ "Supporting Social Innovation. </p> <p> SchoolTool&trade; is a Trademark "
-#~ "of The Shuttleworth Foundation. </p>"
-
-#~ msgid "Person index"
-#~ msgstr "人员索引"
-
-#~ msgid "New photo"
-#~ msgstr "新照片"
-
-#~ msgid "A small picture (about 48x48 pixels in JPEG format)"
-#~ msgstr "一个小的图片 (大约 48x48 象素 JPEG 格式)"
-
-#~ msgid "Clear photo"
-#~ msgstr "清除照片"
-
-#~ msgid "Check this to clear the photo"
-#~ msgstr "单击清除照片"
-
-#~ msgid "Verify password"
-#~ msgstr "确认密码"
-
-#~ msgid "Passwords do not match."
-#~ msgstr "密码未匹配"
-
-#~ msgid "Passwords do not match!"
-#~ msgstr "密码未匹配"
-
-#, fuzzy
 #~ msgid "Create new objects"
 #~ msgstr "创建新对象"
 
+#~ msgid "Add events"
+#~ msgstr "添加事件"
+
 #~ msgid "Control access"
-#~ msgstr "访问权限"
+#~ msgstr "访问控制"
 
 #~ msgid "Authenticated users"
-#~ msgstr "已认证用户"
+#~ msgstr "用户认证"
 
 #~ msgid "Unauthenticated users"
-#~ msgstr "未认证用户"
+#~ msgstr "用户未认证"
 
-#~ msgid "Unauthenticated Users"
-#~ msgstr "未认证用户"
-
-#~ msgid "Unauthenticated User"
-#~ msgstr "未认证用户"
-
-#~ msgid "Authenticated Users"
-#~ msgstr "已认证用户"
-
-#~ msgid "All Users"
-#~ msgstr "所有用户"
-
-#~ msgid "%s: warning: ignored configuration option '%s'"
-#~ msgstr "%s:警告：无效的配置选项 '%s'"
-
-#~ msgid "Welcome to the SchoolBell server"
-#~ msgstr "欢迎使用SchoolBell"
+#~ msgid ""
+#~ "\n"
+#~ "Usage: %s [options]\n"
+#~ "Options:\n"
+#~ "  -c, --config xxx       use this configuration file instead of the "
+#~ "default\n"
+#~ "  -h, --help             show this help message\n"
+#~ "  -d, --daemon           go to background after starting\n"
+#~ "  -r, --restore-manager  restore the manager user with the default "
+#~ "password\n"
+#~ msgstr ""
+#~ "\n"
+#~ "↵\n"
+#~ "Usage: %s [options]↵\n"
+#~ "Options:↵\n"
+#~ "  -c, --config xxx use this configuration file instead of the default↵\n"
+#~ "  -h, --help show this help message↵\n"
+#~ "  -d, --daemon go to background after starting↵\n"
+#~ "  -r, --restore-manager restore the manager user with the default "
+#~ "password↵\n"

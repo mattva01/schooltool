@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: Tue Oct 17 17:42:33 2006\n"
-"PO-Revision-Date: 2006-07-28 06:39+0000\n"
-"Last-Translator: cemiledilaver <cemiledilaver@yahoo.com.tr>\n"
+"POT-Creation-Date: Fri Oct 20 15:20:33 2006\n"
+"PO-Revision-Date: 2006-09-16 01:06+0000\n"
+"Last-Translator: gongan <gokhan@1mayis.net>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -84,14 +84,12 @@ msgid "Leaders"
 msgstr ""
 
 #: /src/schooltool/app/browser/app.py:314
-#, fuzzy
 msgid "Current leaders"
-msgstr "Bu hafta"
+msgstr ""
 
 #: /src/schooltool/app/browser/app.py:315
-#, fuzzy
 msgid "Available leaders"
-msgstr "Mevcut Hocalar"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:100
 msgid "March"
@@ -439,9 +437,8 @@ msgstr ""
 #: /src/schooltool/app/browser/cal.py:1881
 #: /src/schooltool/app/browser/cal.py:2187
 #: /src/schooltool/course/browser/section.py:134
-#, fuzzy
 msgid "An error occurred."
-msgstr "Bir hata oluştu"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:1914
 msgid "Invalid time"
@@ -698,21 +695,15 @@ msgstr "2. satır boş değil"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:328
-#, fuzzy
 msgid ""
 "Wrong section header on line ${line_no} (it should contain a course id and "
 "an instructor id)"
 msgstr ""
-"Hatalı satır ${line_no}(Gün id, periyod id ve yer id(isteğe bağlı) "
-"içermelidir)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:354
-#, fuzzy
 msgid "Malformed line ${line_no} (it should contain a day id and a period id)"
 msgstr ""
-"Hatalı satır ${line_no}(Gün id, periyod id ve yer id(isteğe bağlı) "
-"içermelidir)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:377
@@ -935,8 +926,9 @@ msgid "Calendar for ${title} - ${calendar_title}"
 msgstr "${title} - ${calendar_title} için Takvim"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:13
+#, fuzzy
 msgid "Cal"
-msgstr ""
+msgstr "Vazgeç"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:13
 msgid "Personal calendar"
@@ -1117,13 +1109,15 @@ msgstr "Şimdi Bul"
 #: /src/schooltool/sampledata/sampledata.pt:69
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:66
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:35
+#, fuzzy
 msgid "Clear"
-msgstr ""
+msgstr "Takvim"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:67
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:95
+#, fuzzy
 msgid "There are none to add."
-msgstr ""
+msgstr "Hiç yok"
 
 #: /src/schooltool/app/browser/templates/event.pt:15
 #, fuzzy
@@ -1569,8 +1563,9 @@ msgid "submit-button"
 msgstr "gönderme butonu"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:20
+#, fuzzy
 msgid "Import Timetable"
-msgstr ""
+msgstr "Ders Programı"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:24
 msgid ""
@@ -1722,7 +1717,7 @@ msgstr "Unicode (UTF-8)"
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:56
 #: /src/schooltool/person/browser/person-csvimport.pt:54
 msgid "Western (ISO-8859-1)"
-msgstr "Batı (ISO-8859-1)"
+msgstr "Western (ISO-8859-1)"
 
 #: /src/schooltool/app/browser/tests/test_pdfcal.py:60
 msgid "Calendar for %s"
@@ -1756,9 +1751,8 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/app/interfaces.py:158
-#, fuzzy
 msgid "Show timetables"
-msgstr "Zaman Tablolarını Göster"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:159
 msgid ""
@@ -1888,13 +1882,10 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/app/main.py:93
-#, fuzzy
 msgid ""
 "\n"
 "This is not a SchoolTool 0.11 database file, aborting.\n"
 msgstr ""
-"\n"
-"Bu bir SchoolTool 0.10 veritabanı dosyası değildir, durduruluyor.\n"
 
 #: /src/schooltool/app/main.py:98
 msgid ""
@@ -2191,9 +2182,8 @@ msgstr ""
 
 #. Default: ""
 #: /src/schooltool/attendance/browser/tests/test_attendance.py:263
-#, fuzzy
 msgid "$title"
-msgstr "Başlık"
+msgstr ""
 
 #: /src/schooltool/attendance/interfaces.py:39
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:18
@@ -2267,33 +2257,28 @@ msgid "Add Commendation"
 msgstr "Bölüm Ekle"
 
 #: /src/schooltool/commendation/interfaces.py:49
-#, fuzzy
 msgid "Title of the commendation."
-msgstr "Dersin adı."
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:54
-#, fuzzy
 msgid "A detailed description of the commendation."
-msgstr "Bölümün tanımı"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:58
 msgid "Scope"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:59
-#, fuzzy
 msgid "The scope of the commendation."
-msgstr "Bölümün tanımı"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
-#, fuzzy
 msgid "school-wide"
-msgstr "Okul günü"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
-#, fuzzy
 msgid "group"
-msgstr "Gruplar"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "community"
@@ -2304,9 +2289,8 @@ msgid "global"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:61
-#, fuzzy
 msgid "national"
-msgstr "Yer"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:61
 msgid "state"
@@ -2321,9 +2305,8 @@ msgid "Grantor"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:72
-#, fuzzy
 msgid "The grantor of the commendation."
-msgstr "Bölümün tanımı"
+msgstr ""
 
 #: /src/schooltool/configure.zcml:44
 #: /src/schooltool/app/browser/configure.zcml:202
@@ -2449,14 +2432,12 @@ msgid "Students"
 msgstr "Öğrenciler"
 
 #: /src/schooltool/course/browser/section.py:284
-#, fuzzy
 msgid "Current Students"
-msgstr "Güncel Hocalar"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:285
-#, fuzzy
 msgid "Available Students"
-msgstr "Mevcut Hocalar"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:311
 #: /src/schooltool/app/browser/templates/index.pt:13
@@ -2466,15 +2447,13 @@ msgstr "Gruplar"
 
 #: /src/schooltool/course/browser/section.py:312
 #: /src/schooltool/group/browser/group.py:60
-#, fuzzy
 msgid "Current Groups"
-msgstr "Güncel Hocalar"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:313
 #: /src/schooltool/group/browser/group.py:61
-#, fuzzy
 msgid "Available Groups"
-msgstr "Mevcut Hocalar"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:338
 #: /src/schooltool/app/browser/templates/index.pt:14
@@ -2484,15 +2463,13 @@ msgid "Resources"
 msgstr "Kaynaklar"
 
 #: /src/schooltool/course/browser/section.py:339
-#, fuzzy
 msgid "Current Resources"
-msgstr "Kaynakları Al"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:340
 #: /src/schooltool/app/browser/templates/event_booking.pt:36
-#, fuzzy
 msgid "Available Resources"
-msgstr "Mevcut Hocalar"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:68
 msgid "Section index"
@@ -2503,14 +2480,15 @@ msgid "Add a new section"
 msgstr "Yeni bir bölüm ekle"
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:24
+#, fuzzy
 msgid ""
 "CSV data <strong>must</strong> include a course title and <strong>may</"
 "strong> include an optional course description. Any extra information will "
 "be discarded."
 msgstr ""
-"CSV verisi bir ders başlığı içermek <strong> zorundadır <strong> ve "
-"opsiyonel bir ders tanımı <strong> içerebilir <strong>. Ekstra bilgi dikkate "
-"alınmayacak."
+"CSV verileri bir grup başlığı içermek <strong>zorundadır</strong> ve "
+"opsiyonel olarak grup tanımlaması <strong>içerebilir</strong>. Diğer ekstra "
+"bilgiler önemsenmeyecek."
 
 #. Default: ""
 #.  "Ancient History, Pre-history through 1000 A.D.\n"
@@ -2524,11 +2502,9 @@ msgid ""
 "World History, 1000 A.D. through the 20th century, text after a second "
 "comma\n"
 msgstr ""
-"\n"
-"Tarih Öncesi Zamanlar-M.S. 1000 arası İlk Çağ Tarihi\n"
-"M.S. 1000-20. yy. arası Amerikan Tarihi, ikinci virgülden sonraki metin\n"
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:36
+#, fuzzy
 msgid ""
 "The above example will create 3 courses titled 'Ancient History', 'US "
 "History' and 'World History'. The first and last course will have the "
@@ -2536,11 +2512,12 @@ msgid ""
 "century' respectively. The Second course will have no description, and the "
 "extra \"text after a second comma\" text on the third course will be ignored."
 msgstr ""
-"Yukarıdaki örnek 'İlk Çağ Tarihi', 'Amerikan Tarihi' ve 'Dünya Tarihi' olmak "
-"üzere üç ders başlığından oluşacaktır. İlk ve son ders 'M.S. 1000 yani İlk "
-"Çağ' ve 'M.S. 1000'den 20. yy.'a kadar olan zamanı sırayla işleyecektir. "
-"İkinci derste her hangi bir konu yok ve konusu ekstra bir metin olan "
-"\"ikinci virgülden sonraki metin\" üçüncü ders dikkate alınmayacak."
+"Yukarıda verilen örnek ile 3 grup başlığı 'LUG', 'Satranç Kulübü' ve Spor "
+"Kulübü, oluşturulmaktadır. İlk grup ve son grup sırasıyla 'Linux "
+"Kullanıcıları Grubu' ve 'Okul-sonrası sporlar kulübü' tanımlamaları "
+"alacaklar. 'Satranç Kulübü'nde herhangi bir tanımlama içermeyecektir ve "
+"ikinci virgülden sonraki üçüncü gruba ait ekstra metin dikkate "
+"alınmayacaktır."
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:4
 msgid "Upload schooltool courses as CSV"
@@ -2552,9 +2529,8 @@ msgstr "Bölümler"
 
 #: /src/schooltool/course/browser/templates/course.pt:36
 #: /src/schooltool/demographics/browser/nameinfo_view.pt:11
-#, fuzzy
 msgid "photo"
-msgstr "Yeni resim"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/course.pt:53
 msgid "students"
@@ -2626,12 +2602,14 @@ msgid "Identifier (optional)"
 msgstr "Kimlik -Identifier- (isteğe bağlı)"
 
 #: /src/schooltool/course/browser/templates/section_container.pt:29
+#, fuzzy
 msgid "Section"
-msgstr ""
+msgstr "Bölümler"
 
 #: /src/schooltool/course/browser/templates/section_container.pt:38
+#, fuzzy
 msgid "Current Size"
-msgstr ""
+msgstr "Bu hafta"
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:23
 #: /src/schooltool/course/browser/templates/section_add.pt:27
@@ -2674,7 +2652,7 @@ msgstr "Bölümün tanımı"
 #. Default: ""
 #: /src/schooltool/course/section.py:63
 msgid "${instructors} -- ${courses}"
-msgstr "${öğretmenler} -- ${dersler}"
+msgstr "${instructors} -- ${courses}"
 
 #: /src/schooltool/dashboard/interfaces.py:45
 msgid "Category Title."
@@ -2682,9 +2660,8 @@ msgstr ""
 
 #: /src/schooltool/dashboard/interfaces.py:49
 #: /src/schooltool/dashboard/interfaces.py:50
-#, fuzzy
 msgid "Weight"
-msgstr "Web Sitesi"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/configure.zcml:13
 #, fuzzy
@@ -2768,24 +2745,21 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:41
 #: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:22
 msgid "Cancel"
-msgstr ""
+msgstr "Vazgeç"
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:156
-#, fuzzy
 msgid "Change name information for ${fullname}"
-msgstr "${user} kullanıcısı için tercihleri değiştir"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:172
-#, fuzzy
 msgid "Change name"
-msgstr "Tercihleri Değiştir"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:183
-#, fuzzy
 msgid "Change demographics for ${fullname}"
-msgstr "${user} kullanıcısı için tercihleri değiştir"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:191
 msgid "Demographics"
@@ -2797,9 +2771,8 @@ msgid "Change school data for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:212
-#, fuzzy
 msgid "School data"
-msgstr "Okul günü"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:230
@@ -2807,9 +2780,8 @@ msgid "Change contact information for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:238
-#, fuzzy
 msgid "Contact information"
-msgstr "Bölüm Bilgisini Düzenle"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:272
 #: /src/schooltool/demographics/browser/personform.py:273
@@ -2873,9 +2845,8 @@ msgid "Gender"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:126
-#, fuzzy
 msgid "Birth date"
-msgstr "Başlangıç tarihi"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:131
 msgid "Ethnicity"
@@ -2890,18 +2861,16 @@ msgid "Special education"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:148
-#, fuzzy
 msgid "Previous school"
-msgstr "Geçen sene"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:191
 msgid "ID"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:196
-#, fuzzy
 msgid "Enrollment date"
-msgstr "Bitiş tarihi"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:201
 msgid "Projected graduation year"
@@ -2912,14 +2881,12 @@ msgid "Advisor"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:212
-#, fuzzy
 msgid "Team"
-msgstr "Dönem"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:218
-#, fuzzy
 msgid "Health information"
-msgstr "Bölüm Bilgisini Düzenle"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:239
 #: /src/schooltool/gradebook/browser/gradebook_overview.pt:15
@@ -2930,9 +2897,8 @@ msgid "Name"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:244
-#, fuzzy
 msgid "Relationship to student"
-msgstr "İlişkiler"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:250
 msgid "Street"
@@ -2943,23 +2909,20 @@ msgid "City"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:260
-#, fuzzy
 msgid "State"
-msgstr "Başlangıç tarihi"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:265
 msgid "Postal code"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:270
-#, fuzzy
 msgid "Home phone"
-msgstr "Saat Dilimi"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:275
-#, fuzzy
 msgid "Work phone"
-msgstr "İkinci Telefon"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:280
 msgid "Cell phone"
@@ -2972,27 +2935,24 @@ msgid "Notes"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:295
-#, fuzzy
 msgid "Text"
-msgstr "Sonraki"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:296
 msgid "Full text search in name"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:301
-#, fuzzy
 msgid "Name of parent"
-msgstr "Etkinlik Sayısı"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:302
 msgid "Full text search in parent names"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:307
-#, fuzzy
 msgid "Student ID"
-msgstr "Öğrenciler"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:43
 msgid "Prefix"
@@ -3003,28 +2963,24 @@ msgid "Prefix such as Mr., Mrs."
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:49
-#, fuzzy
 msgid "First name"
-msgstr "ismi düzelt"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:54
-#, fuzzy
 msgid "Middle name"
-msgstr "Tam isim"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:59
-#, fuzzy
 msgid "Last name"
-msgstr "ismi düzelt"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:64
 msgid "Suffix"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:69
-#, fuzzy
 msgid "Preferred name"
-msgstr "Tercihlerim"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:70
 msgid "Name by which the student prefers to be called"
@@ -3104,28 +3060,24 @@ msgid "Categories"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:49
-#, fuzzy
 msgid "New Category"
-msgstr "Yeni dönem"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:52
 msgid "Default Category"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:75
-#, fuzzy
 msgid "Categories successfully deleted."
-msgstr "CSV metni başarıyla aktarıldı."
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:81
-#, fuzzy
 msgid "Category successfully added."
-msgstr "Şifre başarıyla değiştirildi!"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:87
-#, fuzzy
 msgid "Default category successfully changed."
-msgstr "Şifre başarıyla değiştirildi!"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/configure.zcml:103
 msgid "New Activity"
@@ -3256,9 +3208,8 @@ msgid "Essay"
 msgstr ""
 
 #: /src/schooltool/gradebook/category.py:62
-#, fuzzy
 msgid "Exam"
-msgstr "Örnek:"
+msgstr ""
 
 #: /src/schooltool/gradebook/category.py:63
 msgid "Homework"
@@ -3269,9 +3220,8 @@ msgid "Journal"
 msgstr ""
 
 #: /src/schooltool/gradebook/category.py:65
-#, fuzzy
 msgid "Lab"
-msgstr "Etiket"
+msgstr ""
 
 #: /src/schooltool/gradebook/category.py:66
 msgid "Presentation"
@@ -3286,9 +3236,8 @@ msgid "Gradebook API"
 msgstr ""
 
 #: /src/schooltool/gradebook/interfaces.py:39
-#, fuzzy
 msgid "A detailed description of the activity."
-msgstr "Bölümün tanımı"
+msgstr ""
 
 #: /src/schooltool/gradebook/interfaces.py:43
 msgid "Category"
@@ -3339,7 +3288,7 @@ msgstr "Bölüm Bilgisini Düzenle"
 #: /src/schooltool/group/browser/configure.zcml:76
 #, fuzzy
 msgid "Change Membership"
-msgstr "Üyelik Yönet"
+msgstr "Üyelik Yönetimi"
 
 #: /src/schooltool/group/browser/configure.zcml:91
 #, fuzzy
@@ -3379,8 +3328,8 @@ msgstr ""
 "\n"
 "LUG, Linux Kullanıcıları Grubu\n"
 "Satranç Kulübü\n"
-"Spor Kulübü, Okul-sonrası spor kulübü, <em>ikinci virgülden sonraki metin</"
-"em>\n"
+"Sporlar Kulübü, Okul-sonrası sporlar kulübü, <em>ikinci virgülden sonraki "
+"metin</em>\n"
 
 #: /src/schooltool/group/browser/group-csvimport.pt:37
 msgid ""
@@ -3433,14 +3382,12 @@ msgid "Members of ${group}"
 msgstr ""
 
 #: /src/schooltool/group/browser/group.py:98
-#, fuzzy
 msgid "Current Members"
-msgstr "Bu hafta"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.py:99
-#, fuzzy
 msgid "Add Members"
-msgstr "Etkinler ekle"
+msgstr ""
 
 #: /src/schooltool/group/interfaces.py:44
 msgid "Title of the group."
@@ -3452,8 +3399,9 @@ msgstr "Grubun tanımı."
 
 #. Default: "Calendar"
 #: /src/schooltool/group/rest/group.pt:14
+#, fuzzy
 msgid "Private_calendar"
-msgstr ""
+msgstr "Takvimi göster"
 
 #: /src/schooltool/help/configure.zcml:46
 msgid "Contextual Help"
@@ -3483,23 +3431,21 @@ msgid "This is an initial level."
 msgstr ""
 
 #: /src/schooltool/level/browser/level.pt:21
+#, fuzzy
 msgid "None"
-msgstr ""
+msgstr "Hayır"
 
 #: /src/schooltool/level/browser/level.py:41
-#, fuzzy
 msgid "Level index"
-msgstr "Ders indeksi"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:42
-#, fuzzy
 msgid "Add a new level"
-msgstr "Yeni bir dönem ekle"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:60
-#, fuzzy
 msgid "Previous Level"
-msgstr "Geçen sene"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:61
 msgid ""
@@ -3587,20 +3533,17 @@ msgid "Students successfully enrolled."
 msgstr ""
 
 #: /src/schooltool/level/browser/promotion.py:132
-#, fuzzy
 msgid "Student processes successfully updated."
-msgstr "CSV metni başarıyla aktarıldı."
+msgstr ""
 
 #: /src/schooltool/level/browser/promotion.py:57
-#, fuzzy
 msgid "Work Item successfully finished."
-msgstr "Şifre başarıyla değiştirildi!"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/level/browser/promotion.py:64
-#, fuzzy
 msgid "Current Level: $level"
-msgstr "Bu hafta"
+msgstr ""
 
 #: /src/schooltool/level/browser/record.pt:107
 msgid "History"
@@ -3651,9 +3594,8 @@ msgid "initialize-button"
 msgstr "iptal-butonu"
 
 #: /src/schooltool/level/browser/record.py:56
-#, fuzzy
 msgid "The status was successfully updated."
-msgstr "Şifre başarıyla değiştirildi!"
+msgstr ""
 
 #: /src/schooltool/level/browser/record.py:68
 msgid "The Level Process was successfully initialized."
@@ -3664,32 +3606,28 @@ msgid "The Level Process was successfully removed."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:132
-#, fuzzy
 msgid "Time Stamp"
-msgstr "Ders Programı"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:133
 msgid "The date and time the record was created."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:137
-#, fuzzy
 msgid "User"
-msgstr "Kullanıcı"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:138
 msgid "The principal id of the user making the record."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:143
-#, fuzzy
 msgid "Title of the record."
-msgstr "Kaynağın başlığı."
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:148
-#, fuzzy
 msgid "A detailed description of the record."
-msgstr "Kaynağın tanımı."
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:160
 msgid "Academic History"
@@ -3731,9 +3669,8 @@ msgid "The workflow process of the level the student is currently completing."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:76
-#, fuzzy
 msgid "Title of the level."
-msgstr "Kaynağın başlığı."
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:80
 msgid "Is Initial Level"
@@ -3744,9 +3681,8 @@ msgid "Is this level an initial level for the school."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:86
-#, fuzzy
 msgid "Next Level"
-msgstr "Gelecek hafta"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:87
 msgid ""
@@ -3759,14 +3695,12 @@ msgid "Outcome"
 msgstr ""
 
 #: /src/schooltool/level/promotion.py:129
-#, fuzzy
 msgid "Outcome of the level."
-msgstr "Kaynağın başlığı."
+msgstr ""
 
 #: /src/schooltool/level/promotion.py:130
-#, fuzzy
 msgid "fail"
-msgstr "Günlük"
+msgstr ""
 
 #: /src/schooltool/level/promotion.py:130
 msgid "withdraw"
@@ -3778,9 +3712,8 @@ msgid "pass"
 msgstr ""
 
 #: /src/schooltool/level/promotion.py:96
-#, fuzzy
 msgid "Level"
-msgstr "Etiket"
+msgstr ""
 
 #: /src/schooltool/level/promotion.py:97
 msgid "The initial level of the student in the school."
@@ -3808,8 +3741,9 @@ msgid "Privacy"
 msgstr "Gizlilik"
 
 #: /src/schooltool/note/note_add.pt:13
+#, fuzzy
 msgid "Note"
-msgstr ""
+msgstr "Hayır"
 
 #: /src/schooltool/note/note_add.pt:24
 msgid "Who can view the note"
@@ -3898,18 +3832,16 @@ msgid "Upload SchoolTool persons as CSV"
 msgstr "SchoolTool kişilerini CSV olarak yükle."
 
 #: /src/schooltool/person/browser/person.py:176
-#, fuzzy
 msgid "Edit password"
-msgstr "Yeni Şifre"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:181
 msgid "No new password was supplied so original password is unchanged"
 msgstr ""
 
 #: /src/schooltool/person/browser/person.py:186
-#, fuzzy
 msgid "Changed password"
-msgstr "Yeni Şifre"
+msgstr ""
 
 #: /src/schooltool/person/browser/person_container_delete.pt:18
 msgid "Sorry, you may not delete your own user account."
@@ -3920,8 +3852,9 @@ msgid "Change preferences for ${user}"
 msgstr "${user} kullanıcısı için tercihleri değiştir"
 
 #: /src/schooltool/person/browser/person_preferences.pt:4
+#, fuzzy
 msgid "Edit person preferences"
-msgstr ""
+msgstr "Takvim Tercihleri"
 
 #: /src/schooltool/person/interfaces.py:154
 msgid "Time Zone"
@@ -3979,9 +3912,8 @@ msgstr "Periyot isimlerini günlük olarak görüntüle"
 
 #: /src/schooltool/person/interfaces.py:191
 #: /src/schooltool/person/interfaces.py:192
-#, fuzzy
 msgid "Make calendar public"
-msgstr "Takvimi göster"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:70
 msgid "Name that should be displayed"
@@ -4030,18 +3962,17 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/course_container.pt:32
 #: /src/schooltool/skin/templates/container.pt:33
 #: /src/schooltool/skin/templates/table_macros.pt:9
+#, fuzzy
 msgid "items"
-msgstr ""
+msgstr "Dakika"
 
 #: /src/schooltool/requirement/browser/requirement.py:53
-#, fuzzy
 msgid "Requirement index"
-msgstr "Ders indeksi"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.py:54
-#, fuzzy
 msgid "Add a new Requirement"
-msgstr "Yeni bir dönem ekle"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/scoresystem.py:36
 msgid "Exisiting Score System"
@@ -4081,11 +4012,15 @@ msgid "A Resource"
 msgstr "Kaynaklar"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:24
+#, fuzzy
 msgid ""
 "CSV data <strong>must</strong> include a resource title and <strong>may</"
 "strong> include an optional resource description. Any extra information will "
 "be discarded."
 msgstr ""
+"CSV verileri bir grup başlığı içermek <strong>zorundadır</strong> ve "
+"opsiyonel olarak grup tanımlaması <strong>içerebilir</strong>. Diğer ekstra "
+"bilgiler önemsenmeyecek."
 
 #. Default: ""
 #.  "PRJ302, Overhead Projector #302\n"
@@ -4100,6 +4035,7 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:36
+#, fuzzy
 msgid ""
 "The above example will create 3 resources titled 'PRJ302', 'Main Auditorium' "
 "and 'LC-805'. The first and last resource will have the descriptions "
@@ -4107,10 +4043,17 @@ msgid ""
 "\"Main Auditorium\" resource will have no description, and the \"text after "
 "a second comma\" text on the third resource will be ignored."
 msgstr ""
+"Yukarıda verilen örnek ile 3 grup başlığı 'LUG', 'Satranç Kulübü' ve Spor "
+"Kulübü, oluşturulmaktadır. İlk grup ve son grup sırasıyla 'Linux "
+"Kullanıcıları Grubu' ve 'Okul-sonrası sporlar kulübü' tanımlamaları "
+"alacaklar. 'Satranç Kulübü'nde herhangi bir tanımlama içermeyecektir ve "
+"ikinci virgülden sonraki üçüncü gruba ait ekstra metin dikkate "
+"alınmayacaktır."
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
+#, fuzzy
 msgid "Upload schooltool resources as CSV"
-msgstr ""
+msgstr "SchoolTool derslerini CSV olarak yükle."
 
 #: /src/schooltool/resource/browser/resource.py:39
 msgid "Resource index"
@@ -4140,34 +4083,33 @@ msgstr ""
 #: /src/schooltool/resource/rest/resource.pt:17
 #: /src/schooltool/group/rest/group.pt:17
 #: /src/schooltool/person/rest/person.pt:16
+#, fuzzy
 msgid "Calendar_relationships"
-msgstr ""
+msgstr "İlişkiler"
 
 #. Default: "Calendar ACL"
 #: /src/schooltool/resource/rest/resource.pt:20
 #: /src/schooltool/group/rest/group.pt:20
 #: /src/schooltool/person/rest/person.pt:19
+#, fuzzy
 msgid "Calendar_ACL"
-msgstr ""
+msgstr "Takvim"
 
 #: /src/schooltool/restclient/restclient.py:644
 msgid "Could not parse relationship list"
 msgstr ""
 
 #: /src/schooltool/restclient/restclient.py:660
-#, fuzzy
 msgid "Insufficient data in person info"
-msgstr "Sağlanan veri yetersiz."
+msgstr ""
 
 #: /src/schooltool/restclient/restclient.py:673
-#, fuzzy
 msgid "Insufficient data in group info"
-msgstr "Sağlanan veri yetersiz."
+msgstr ""
 
 #: /src/schooltool/restclient/restclient.py:688
-#, fuzzy
 msgid "Insufficient data in level info"
-msgstr "Sağlanan veri yetersiz."
+msgstr ""
 
 #: /src/schooltool/sampledata/sampledata.pt:14
 msgid ""
@@ -4240,9 +4182,8 @@ msgid "top"
 msgstr "başa dön"
 
 #: /src/schooltool/skin/form.py:64
-#, fuzzy
 msgid "No changes"
-msgstr "Değişiklikleri kaydet"
+msgstr ""
 
 #: /src/schooltool/skin/templates/error.pt:13
 #, fuzzy
@@ -4671,8 +4612,9 @@ msgid "Scheduling for ${person}"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:43
+#, fuzzy
 msgid "Choose"
-msgstr ""
+msgstr "Dersler"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:54
 msgid ""
@@ -4698,13 +4640,15 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:107
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:108
+#, fuzzy
 msgid "Save"
-msgstr ""
+msgstr "Aynı"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:17
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:15
+#, fuzzy
 msgid "There are no terms or timetable schemas defined."
-msgstr ""
+msgstr "Zaman tablosu şeması yarat"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:25
 msgid "Choose schedule template"
@@ -4720,8 +4664,9 @@ msgid "Scheduling for ${section}"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:46
+#, fuzzy
 msgid "Using timetable:"
-msgstr ""
+msgstr "Zaman Tablolarını Göster"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:11
 msgid ""
@@ -4737,16 +4682,18 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:37
+#, fuzzy
 msgid "Period title (optional)"
-msgstr ""
+msgstr "Kimlik -Identifier- (isteğe bağlı)"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:38
 msgid "Period start time"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:39
+#, fuzzy
 msgid "Period end time"
-msgstr ""
+msgstr "Periyot ${number}"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:61
 msgid "Create"
@@ -4760,28 +4707,29 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:29
+#, fuzzy
 msgid "Period title"
-msgstr ""
+msgstr "Periyot 1"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:30
 msgid "Original start"
-msgstr ""
+msgstr "Özgün başlangıç"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:31
 msgid "Original end"
-msgstr ""
+msgstr "Özgün son"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:32
 msgid "New start"
-msgstr ""
+msgstr "Yeni başlangıç"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:33
 msgid "New end"
-msgstr ""
+msgstr "Yeni bitiş"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:63
 msgid "Modify"
-msgstr ""
+msgstr "Değiştir"
 
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:11
 msgid ""
@@ -4804,7 +4752,7 @@ msgstr ""
 #: /src/schooltool/term/browser/emergency_select.pt:40
 #: /src/schooltool/term/browser/emergency2.pt:41
 msgid "Proceed"
-msgstr ""
+msgstr "Devam et"
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
 #, fuzzy
@@ -4883,7 +4831,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:326
 msgid "Different times"
-msgstr ""
+msgstr "Değişik zamanlar"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:345
 msgid ""
@@ -4893,7 +4841,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:348
 msgid "Day of week"
-msgstr ""
+msgstr "Haftanın Günleri"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:349
 msgid "Day in cycle"
@@ -4962,11 +4910,11 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:611
 msgid "Same"
-msgstr ""
+msgstr "Aynı"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:612
 msgid "Different"
-msgstr ""
+msgstr "Farklı"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:627
 msgid "Please put the periods in order:"
@@ -5000,11 +4948,11 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:734
 msgid "Yes"
-msgstr ""
+msgstr "Evet"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:735
 msgid "No"
-msgstr ""
+msgstr "Hayır"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:750
 msgid "Please indicate the homeroom period(s) for each day:"
@@ -5028,23 +4976,36 @@ msgstr ""
 msgid "Supplied passwords are not identical"
 msgstr ""
 
-#~ msgid "Import Sections"
-#~ msgstr "Bölüm Yükle"
-
-#~ msgid "Locations not found: ${args}."
-#~ msgstr "Yerler bulunamadı: ${args}."
-
-#~ msgid "Manage this person's memberships"
-#~ msgstr "Bu kişinin üyeliklerini yönet"
-
 #~ msgid "Username:"
 #~ msgstr "Kullanıcı Adı :"
 
 #~ msgid "Change this person's name, picture, or password"
 #~ msgstr "Bu kişinin ismini, resmini veya şifresini değiştir"
 
+#~ msgid "Manage this person's memberships"
+#~ msgstr "Bu kişinin üyeliklerini yönet"
+
+#~ msgid "Import Sections"
+#~ msgstr "Bölüm Yükle"
+
+#~ msgid ""
+#~ "Malformed line ${line_no} (it should contain a day id, a period id and "
+#~ "optionally a location id)"
+#~ msgstr ""
+#~ "Hatalı satır ${line_no}(Gün id, periyod id ve yer id(isteğe bağlı) "
+#~ "içermelidir)"
+
+#~ msgid "Locations not found: ${args}."
+#~ msgstr "Yerler bulunamadı: ${args}."
+
 #~ msgid "Person index"
 #~ msgstr "Kişi dizini"
+
+#~ msgid "New photo"
+#~ msgstr "Yeni resim"
+
+#~ msgid "New password"
+#~ msgstr "Yeni Şifre"
 
 #~ msgid "Verify password"
 #~ msgstr "Şifreyi doğrula"
@@ -5052,11 +5013,33 @@ msgstr ""
 #~ msgid "Passwords do not match."
 #~ msgstr "Şifreler eşleşmedi"
 
+#~ msgid "Password was successfully changed!"
+#~ msgstr "Şifre başarıyla değiştirildi!"
+
 #~ msgid "Create new objects"
 #~ msgstr "Yeni nesneler yarat"
+
+#~ msgid "Add events"
+#~ msgstr "Etkinlik ekle"
 
 #~ msgid "Control access"
 #~ msgstr "Erişimi kontrol et"
 
+#~ msgid "Authenticated users"
+#~ msgstr "Doğrulanmış Kullancılar"
+
+#~ msgid "Unauthenticated users"
+#~ msgstr "Doğrulanmamış Kullanıcılar"
+
+#~ msgid "An error occured."
+#~ msgstr "Bir hata oluştu"
+
 #~ msgid "All Users"
 #~ msgstr "Tüm Kullanıcılar"
+
+#~ msgid ""
+#~ "\n"
+#~ "This is not a SchoolTool 0.10 database file, aborting.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Bu bir SchoolTool 0.10 veritabanı dosyası değildir, durduruluyor.\n"

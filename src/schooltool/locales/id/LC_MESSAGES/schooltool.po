@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: Tue Oct 17 17:42:33 2006\n"
-"PO-Revision-Date: 2006-10-04 13:20+0000\n"
+"POT-Creation-Date: Fri Oct 20 15:20:33 2006\n"
+"PO-Revision-Date: 2006-07-26 07:27+0000\n"
 "Last-Translator: Toosa <pht854@yahoo.com>\n"
 "Language-Team: Indonesian <id@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr "Nama panggilan"
 
 #: /src/schoolbell/app/interfaces.py:15
 msgid "A short nickname for this person."
-msgstr "Nama kecil yang ringkas untuk personal ini"
+msgstr ""
 
 #: /src/schoolbell/app/interfaces.py:18
 msgid "Primary Email"
@@ -39,15 +39,15 @@ msgstr "Telepon utama"
 
 #: /src/schoolbell/app/interfaces.py:28
 msgid "Recommended telephone number."
-msgstr "Nomor telpon yang disarankan"
+msgstr ""
 
 #: /src/schoolbell/app/interfaces.py:31
 msgid "Secondary phone"
-msgstr "Telepon kedua"
+msgstr ""
 
 #: /src/schoolbell/app/interfaces.py:33
 msgid "Secondary telephone number."
-msgstr "Nomor dari telpon yang kedua."
+msgstr ""
 
 #: /src/schoolbell/app/interfaces.py:36
 msgid "Website"
@@ -84,14 +84,12 @@ msgid "Leaders"
 msgstr ""
 
 #: /src/schooltool/app/browser/app.py:314
-#, fuzzy
 msgid "Current leaders"
-msgstr "Tahun ini"
+msgstr ""
 
 #: /src/schooltool/app/browser/app.py:315
-#, fuzzy
 msgid "Available leaders"
-msgstr "Instruktur yang ada"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:100
 msgid "March"
@@ -286,9 +284,8 @@ msgid "Time"
 msgstr "Waktu"
 
 #: /src/schooltool/app/browser/cal.py:1668
-#, fuzzy
 msgid "Start time in 24h format"
-msgstr "Waktu dimulai dengan format 24jam"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:1672
 msgid "Duration"
@@ -333,11 +330,11 @@ msgstr "Deskripsi"
 
 #: /src/schooltool/app/browser/cal.py:1694
 msgid "Recurring"
-msgstr "Pemunculan kembali"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:1698
 msgid "Recurs every"
-msgstr "Selalu muncul setiap"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:1701
 msgid "Day"
@@ -363,7 +360,7 @@ msgstr "Ulangi setiap"
 
 #: /src/schooltool/app/browser/cal.py:1712
 msgid "Range"
-msgstr "Rentang"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:1715
 msgid "Count"
@@ -388,11 +385,11 @@ msgstr "Ulangi hingga"
 
 #: /src/schooltool/app/browser/cal.py:1728
 msgid "Weekdays"
-msgstr ""
+msgstr "Hari-hari kerja"
 
 #: /src/schooltool/app/browser/cal.py:1731
 msgid "Weekday"
-msgstr ""
+msgstr "Hari Kerja"
 
 #: /src/schooltool/app/browser/cal.py:1741
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:53
@@ -406,7 +403,7 @@ msgstr "Hari perkecualian"
 
 #: /src/schooltool/app/browser/cal.py:1828
 msgid "same weekday"
-msgstr ""
+msgstr "hari kerja yang sama"
 
 #: /src/schooltool/app/browser/cal.py:1833
 msgid "1st"
@@ -430,17 +427,16 @@ msgstr "Kelima"
 
 #: /src/schooltool/app/browser/cal.py:1848
 msgid "last weekday"
-msgstr ""
+msgstr "hari kerja yang lalu"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1858
 msgid "Last ${weekday}"
-msgstr ""
+msgstr "${weekday} terakhir"
 
 #: /src/schooltool/app/browser/cal.py:1881
 #: /src/schooltool/app/browser/cal.py:2187
 #: /src/schooltool/course/browser/section.py:134
-#, fuzzy
 msgid "An error occurred."
 msgstr "Sebuah kesalahan muncul"
 
@@ -477,7 +473,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:42
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:61
 msgid "Update"
-msgstr "Perbaharui"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:2193 /src/schooltool/skin/form.py:77
@@ -495,7 +491,7 @@ msgstr "Kalender"
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:372
 msgid "${day_of_week}, ${date}"
-msgstr "${day_of_week}, ${date}"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:845
 msgid "Next week"
@@ -534,7 +530,7 @@ msgstr "${month}, ${year}"
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:938
 msgid "Week ${week_no}"
-msgstr "Minggu ke ${week_no}"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:954
 msgid "Next year"
@@ -549,8 +545,9 @@ msgid "Previous year"
 msgstr "Tahun lalu"
 
 #: /src/schooltool/app/browser/configure.zcml:137
+#, fuzzy
 msgid "Actions"
-msgstr "Tindakan"
+msgstr "Bagian"
 
 #: /src/schooltool/app/browser/configure.zcml:184
 #: /src/schooltool/app/configure.zcml:287
@@ -622,7 +619,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/login.pt:3
 #, fuzzy
 msgid "Login"
-msgstr "Masuk"
+msgstr "Lokasi"
 
 #: /src/schooltool/app/browser/configure.zcml:548
 #: /src/schooltool/app/rest/configure.zcml:261
@@ -638,7 +635,7 @@ msgstr "Navigasi"
 #: /src/schooltool/app/rest/configure.zcml:267
 #, fuzzy
 msgid "Application"
-msgstr "Tindakan"
+msgstr "Lokasi."
 
 #: /src/schooltool/app/browser/configure.zcml:572
 #, fuzzy
@@ -661,7 +658,7 @@ msgstr "Tidak dapat mengkonversi data menjadi Unicode (charset salah?)"
 
 #: /src/schooltool/app/browser/csvimport.py:122
 msgid "CSV file imported successfully."
-msgstr ""
+msgstr "File CVS telah berhasil diimpor"
 
 #: /src/schooltool/app/browser/csvimport.py:124
 msgid "Failed to import CSV file"
@@ -669,25 +666,24 @@ msgstr ""
 
 #: /src/schooltool/app/browser/csvimport.py:132
 msgid "CSV text imported successfully."
-msgstr "Berhasil mengimpor teks CSV"
+msgstr ""
 
 #: /src/schooltool/app/browser/csvimport.py:134
 msgid "Failed to import CSV text"
-msgstr "Gagal mengimpor teks CSV"
+msgstr ""
 
 #: /src/schooltool/app/browser/csvimport.py:156
-#, fuzzy
 msgid "No charset specified"
-msgstr "Tidak ada jenis kumpulan character (charset) yang dipilih"
+msgstr ""
 
 #: /src/schooltool/app/browser/csvimport.py:161
 msgid "Unknown charset"
-msgstr "Charset yang tidak diketahui"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:205
 msgid "Error in CSV data, line ${line_no}"
-msgstr "Kesalahan pada data CSv, baris ke ${line_no}"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:209
@@ -701,46 +697,36 @@ msgstr "Baris 2 tidak kosong"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:328
-#, fuzzy
 msgid ""
 "Wrong section header on line ${line_no} (it should contain a course id and "
 "an instructor id)"
 msgstr ""
-"Bentuk yang salah pada baris ${line_no} (harus memuat identitas hari, "
-"periode dan boleh dengan identitas lokasi"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:354
-#, fuzzy
 msgid "Malformed line ${line_no} (it should contain a day id and a period id)"
 msgstr ""
-"Bentuk yang salah pada baris ${line_no} (harus memuat identitas hari, "
-"periode dan boleh dengan identitas lokasi"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:377
-#, fuzzy
 msgid "Incomplete section description on line ${line}"
-msgstr "Penjelasan bagian yang tidak lengkap pada baris ${line}"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:382
-#, fuzzy
 msgid "No students in section (line ${line})"
-msgstr "Penjelasan bagian yang tidak lengkap pada baris ${line}"
+msgstr ""
 
 #: /src/schooltool/app/browser/csvimport.py:462
 msgid ""
 "The first row of the CSV file must contain the term id and the timetable "
 "schema id."
 msgstr ""
-"Baris pertama pada file CVS harus memuat istilah identitas dan identitas "
-"skema jadwal"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:471
 msgid "The term ${term} does not exist."
-msgstr "Istilah ${term} tidak ada"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:478
@@ -750,11 +736,11 @@ msgstr "Skema jadwal ${schema} tidak ada"
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:509
 msgid "Error in timetable CSV data, line ${line_no}"
-msgstr "Kesalahan di data CSV jadwal, baris no ${line_no}"
+msgstr "Kesalahan di data jadwal CSV, baris nomor ${line_no}"
 
 #: /src/schooltool/app/browser/csvimport.py:549
 msgid "Day ids not defined in selected schema: ${args}."
-msgstr "Identitas Hari tidak terdefinisi pada skema yang terpilih: ${args}"
+msgstr ""
 
 #: /src/schooltool/app/browser/csvimport.py:550
 msgid "Periods not defined in selected days: ${args}."
@@ -774,7 +760,7 @@ msgstr "Bagian tidak ditemukan: ${args}."
 
 #: /src/schooltool/app/browser/csvimport.py:554
 msgid "Invalid records: ${args}."
-msgstr "Records tidak valid: ${args}"
+msgstr ""
 
 #: /src/schooltool/app/browser/overlay.py:209
 #: /src/schooltool/term/browser/term.py:146
@@ -791,15 +777,15 @@ msgstr "Lokasi: %s"
 
 #: /src/schooltool/app/browser/pdfcal.py:192
 msgid "Booked resources: %s"
-msgstr "Sumber daya yang sudah dipesan: %s"
+msgstr ""
 
 #: /src/schooltool/app/browser/pdfcal.py:207
 msgid "recurrent"
-msgstr "Pemunculan kembali"
+msgstr ""
 
 #: /src/schooltool/app/browser/pdfcal.py:211
 msgid "overlaid from %s"
-msgstr "Dilapisi dari %s"
+msgstr ""
 
 #: /src/schooltool/app/browser/pdfcal.py:278
 msgid "Daily calendar for %s"
@@ -819,7 +805,7 @@ msgstr "Kalender bulanan untuk %s"
 
 #: /src/schooltool/app/browser/pdfcal.py:57
 msgid "PDF support is disabled.  It can be enabled by your administrator."
-msgstr "Dukungan PDF dimatikan. Dapat diaktifkan kembali oleh administrator"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:13
 #, fuzzy
@@ -839,12 +825,12 @@ msgstr "Preferensi Kalender"
 #: /src/schooltool/app/browser/templates/application_preferences.pt:4
 #, fuzzy
 msgid "Edit site preferences"
-msgstr "Mengubah preferensi seseorang"
+msgstr "Preferensi-ku"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:63
 #, fuzzy
 msgid "Edit attendance preferences"
-msgstr "Mengubah preferensi seseorang"
+msgstr "Preferensi Kalender"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:15
 #, fuzzy
@@ -943,19 +929,20 @@ msgstr "Kalender untuk ${title} - ${calendar_title}"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:13
 msgid "Cal"
-msgstr "Kalender"
+msgstr "Kal"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:13
 msgid "Personal calendar"
 msgstr "Kalender pribadi"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:16
+#, fuzzy
 msgid "Timetable calendar"
-msgstr "Kalender jadwal"
+msgstr "Lihat kalender"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:16
 msgid "TT"
-msgstr "TT"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:26
 #: /src/schooltool/skin/templates/view_macros.pt:76
@@ -968,7 +955,7 @@ msgstr "Kalender"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:48
 msgid "More..."
-msgstr "Lebih lanjut..."
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:15
 msgid "Select additional calendars to display"
@@ -1087,8 +1074,9 @@ msgstr "tombol-delete"
 #: /src/schooltool/term/browser/emergency_select.pt:42
 #: /src/schooltool/term/browser/emergency2.pt:43
 #: /src/schooltool/commendation/commendation_add.pt:36
+#, fuzzy
 msgid "cancel-button"
-msgstr "tombol-tunda"
+msgstr "tombol-delete"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:23
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:37
@@ -1098,7 +1086,7 @@ msgstr "R"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:23
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:37
 msgid "Remove"
-msgstr "Copot"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:29
 #: /src/schooltool/gradebook/browser/activities_overview.pt:51
@@ -1109,8 +1097,9 @@ msgstr "Copot"
 #: /src/schooltool/skin/templates/container.pt:57
 #: /src/schooltool/skin/templates/table.pt:8
 #: /src/schooltool/term/browser/term-container.pt:14
+#, fuzzy
 msgid "There are none."
-msgstr ""
+msgstr "Tidak ada apa-apa untuk ditambahkan"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:50
 #: /src/schooltool/requirement/browser/requirement.pt:31
@@ -1165,9 +1154,8 @@ msgid "Change the details of this event"
 msgstr "Ganti instruktur untuk bagian ini"
 
 #: /src/schooltool/app/browser/templates/event.pt:64
-#, fuzzy
 msgid "Scheduled resources"
-msgstr "Sumber daya yang sudah dipesan: %s"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:72
 #, fuzzy
@@ -1187,7 +1175,7 @@ msgstr "Edit Informasi Bagian"
 #: /src/schooltool/app/browser/templates/event_add.pt:143
 #, fuzzy
 msgid "Event details"
-msgstr "edit detail"
+msgstr "detail"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:197
 #, fuzzy
@@ -1197,7 +1185,7 @@ msgstr "Sumber Daya"
 #: /src/schooltool/app/browser/templates/event_add.pt:207
 #, fuzzy
 msgid "Update form"
-msgstr "Perbaharui"
+msgstr "Format Tanggal"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:224
 #, fuzzy
@@ -1264,12 +1252,11 @@ msgstr "Ulangi setiap"
 #: /src/schooltool/app/browser/templates/event_add.pt:346
 #, fuzzy
 msgid "Book resources"
-msgstr "Sumber daya yang sudah dipesan: %s"
+msgstr "Sumber Daya"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:11
-#, fuzzy
 msgid "Resource Booking for ${title}"
-msgstr "Info orang: ${title}"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:17
 #, fuzzy
@@ -1292,7 +1279,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/event_booking.pt:4
 #, fuzzy
 msgid "Resource Booking"
-msgstr "Index sumberdaya"
+msgstr "Sumber Daya"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:55
 msgid "Conflicting events"
@@ -1471,8 +1458,9 @@ msgstr ""
 #: /src/schooltool/term/browser/term-container.pt:3
 #: /src/schooltool/term/browser/term-container.pt:9
 #: /src/schooltool/term/browser/term.pt:26
+#, fuzzy
 msgid "${DYNAMIC_CONTENT}"
-msgstr ""
+msgstr "<img alt=\"x\" src=\"${DYNAMIC_CONTENT}\" />"
 
 #: /src/schooltool/app/browser/templates/login.pt:35
 #, fuzzy
@@ -1486,7 +1474,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/login.pt:57
 #, fuzzy
 msgid "Log in"
-msgstr "Masuk"
+msgstr "Keluar"
 
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
@@ -1499,7 +1487,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:43
 #, fuzzy
 msgid "Current"
-msgstr "Pemunculan kembali"
+msgstr "Ukuran sekarang"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:45
 msgid "Future"
@@ -1545,7 +1533,7 @@ msgstr "Yang Lain (tolong ditentukan)"
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:63
 #: /src/schooltool/person/browser/person-csvimport.pt:61
 msgid "Other charset: ${other_charset}"
-msgstr "Charset lainnya: ${other_charset}"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:110
 #: /src/schooltool/resource/browser/resource-csvimport.pt:67
@@ -1582,34 +1570,25 @@ msgid "submit-button"
 msgstr "tombol kirim"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:20
+#, fuzzy
 msgid "Import Timetable"
-msgstr "Impor Jadwal"
+msgstr "Lihat Jadwal Mata Pelajaran"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:24
-#, fuzzy
 msgid ""
 "You can create the CSV file in a spreadsheet and export it in CSV (Comma-"
 "Separated Values) format. The structure of the table is described below."
 msgstr ""
-"Anda dapat membuat file CSV dalam bentuk lembar kerja dan mengekspornya "
-"dalam bentuk format CSV (Comma-Separated Values/Pemisah nilai dengan tanda "
-"koma). Struktur tabel dimaksud akan dijelaskan di bawah ini."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:30
-#, fuzzy
 msgid ""
 "The first row of the file must contain the name of the <strong>term</strong> "
 "and the <strong>timetable schema</strong> which will be used for the new "
 "timetables. The second row should be empty. After that, several section "
 "descriptions may follow. They are separated by an empty line."
 msgstr ""
-"Baris pertama dari file harus memuat nama dari <strong>term</strong> dan "
-"<strong>skema jadwal</strong> yang akan digunakan untuk jadwal yang baru. "
-"Baris kedua harus kosong. Setelah itu, beberapa penjelasan bagian "
-"mengikutinya. Mereka dipisahkan oleh baris kosong."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:38
-#, fuzzy
 msgid ""
 "Each section description's first row contains the <strong>course id</strong> "
 "and the <strong>instructor id</strong> for the new section. Then a number of "
@@ -1619,19 +1598,10 @@ msgid ""
 "<strong>person ids</strong> may follow, the denoted persons will be added to "
 "the section as learners."
 msgstr ""
-"Pada setiap bagian penjelasan, baris pertama akan mengandung <strong>course "
-"id</strong> dan <strong>instructor id</strong> untuk bagian yang baru "
-"berikutnya. Kemudian ada sejumlah baris, yang tiap barisnya memiliki sebuah "
-"<strong>day id</strong>, <strong>period id</strong> dan diikuti oleh "
-"<strong>location id</strong> yang boleh diisi atau dikosongkan saja. Daftar "
-"penjelasan periode ditutup oleh tiga buah tanda asterik ('***') pada kolom "
-"pertama. Setelah tanda penutup tersebut, bisa diikuti oleh sembarang angka "
-"<strong>person ids</strong>, orang yang ditandai tersebut akan ditambahkan "
-"pada bagian itu sebagai pembelajar/siswa."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:4
 msgid "Upload SchoolTool timetable as CSV"
-msgstr "Unggah jadwal SchoolTool sebagai CSV"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:49
 #: /src/schooltool/resource/browser/resource-csvimport.pt:29
@@ -1698,7 +1668,6 @@ msgstr ""
 "\"pete\"\n"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:69
-#, fuzzy
 msgid ""
 "The above example will create two new sections, one for the philosophy "
 "lecture and the other for the literature lecture. The section for the "
@@ -1706,13 +1675,6 @@ msgid ""
 "learners, and its timetable will contain three timetable activities, two on "
 "Monday. The literature section will be processed in a similar fashion."
 msgstr ""
-"Contoh di atas akan membuat dua buah bagian, satu untuk pengajaran filosofi "
-"dan yang lainnya untuk pengajaran kepustakaan. Bagian pengajaran filosofi "
-"akan memiliki dua orang dengan tanda pengenal (id) 'johnny' dan 'billy' "
-"sebagai siswa, dan jadwalnya memuat tiga buah jadwal kegiatan, dua buah di "
-"hari Senin (yang satu berada di ruangan dengan kode ruang 'room137', dan "
-"satu lagi di tempat yang tidak dirinci dimana). Bagian kepustakaan akan di "
-"proses dengan cara yang serupa."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:78
 msgid ""
@@ -1723,13 +1685,6 @@ msgid ""
 "containing the person ids is processed, the other columns are ignored. You "
 "can import the same data several times without any side effects."
 msgstr ""
-"Catatan, bahwa hanya identitas dari objek-objek yang akan digunakan di file, "
-"bukan judulnya. Jika sebuah barus diakhiri dengan sel yang kosong (misalnya, "
-"<em>\"philosophy\",\"lorch\",\"\",\"\"</em>), sel-sel tersebut akan "
-"dihilangkan. Anda bisa memisahkan bagian penjelasan dengan menggunakan lebih "
-"dari satu baris. Dalam daftar siswa, hanya kolom yang pertama yang "
-"mengandung tanda identitas siswa yang diproses, kolom lainnya di abaikan. "
-"Anda dapat mengimpor data yang sama beberapa kali tanpa efek samping apapun."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:89
 #: /src/schooltool/resource/browser/resource-csvimport.pt:46
@@ -1784,37 +1739,29 @@ msgstr ""
 #: /src/schooltool/app/configure.zcml:308
 #, fuzzy
 msgid "Booking Resources"
-msgstr "Sumber daya yang sudah dipesan: %s"
+msgstr "Sumber Daya"
 
 #: /src/schooltool/app/interfaces.py:124 /src/schooltool/app/interfaces.py:135
-#, fuzzy
 msgid ""
 "The name for the school or organization running\n"
 "            this server.  This will be displayed on the public calendar, "
 "the\n"
 "            bottom of all pages and in the page title."
 msgstr ""
-"Nama Sekolah atau Organisasi yang menjalankan↵\n"
-"            server ini. Nama ini akan ditampilkan di kalender publik↵\n"
-"            di bagian bawah setiap halaman dan di halam judul."
 
 #: /src/schooltool/app/interfaces.py:140
 msgid "Front Page Calendar"
-msgstr "Halaman Muka dari Kalender"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:141
-#, fuzzy
 msgid ""
 "Display site-wide calendar as the front page of the\n"
 "            site."
 msgstr ""
-"Menampilkan kalender secara melebar sebagai halaman depan dari situs ↵\n"
-"            ."
 
 #: /src/schooltool/app/interfaces.py:158
-#, fuzzy
 msgid "Show timetables"
-msgstr "Jadwal Sekolah"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:159
 msgid ""
@@ -1831,36 +1778,35 @@ msgstr "Input yang diperlukan tidak ada."
 
 #: /src/schooltool/app/interfaces.py:50
 msgid "Form input is not a file object"
-msgstr "Formulir masukan bukanlah sebuah objek file"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:51 /src/schooltool/app/interfaces.py:55
 msgid "Invalid integer data"
-msgstr "Data bilangan bulat yang salah"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:52
 msgid "Invalid text data"
-msgstr "Data teks yang salah"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:53
 msgid "Invalid textual data"
-msgstr "Data tekstual yang salah"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:54
 msgid "Invalid unicode data"
-msgstr "Data unicode yang salah"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:56
 msgid "Invalid floating point data"
-msgstr "Data pecahan yang salah"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:57
 msgid "Invalid datetime data"
-msgstr "Data datetime yang salah"
+msgstr ""
 
 #: /src/schooltool/app/main.py:299
-#, fuzzy
 msgid "Going to background, daemon pid %d"
-msgstr "Menuju ke latar belakang, daemon pid %d"
+msgstr ""
 
 #: /src/schooltool/app/main.py:354 /src/schooltool/app/main.py:391
 #: /src/schooltool/app/main.py:394
@@ -1869,23 +1815,23 @@ msgstr "%s: %s"
 
 #: /src/schooltool/app/main.py:355
 msgid "Run %s -h for help."
-msgstr "Jalankan %s -h untuk pertolongan"
+msgstr ""
 
 #: /src/schooltool/app/main.py:367
 msgid "%s: daemon mode not supported on your operating system."
-msgstr "%s: modus daemon tidak didukung di sistem operasi Anda."
+msgstr ""
 
 #: /src/schooltool/app/main.py:386
 msgid "Reading configuration from %s"
-msgstr "Konfigurasi pembacaan dari %s"
+msgstr ""
 
 #: /src/schooltool/app/main.py:435
 msgid "%s Manager"
-msgstr "Manajer %s"
+msgstr ""
 
 #: /src/schooltool/app/main.py:455
 msgid "Startup time: %.3f sec real, %.3f sec CPU"
-msgstr "Waktu mulai: %.3f detik sebenarnya, %.3f detik CPU"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/app/main.py:493
@@ -1901,36 +1847,26 @@ msgid ""
 "\n"
 "Perhaps another %s instance is using it?"
 msgstr ""
-"\n"
-"↵\n"
-"Mungkin %s instan lainnya sedang menggunakannya?"
 
 #: /src/schooltool/app/main.py:564
 msgid ""
 "Warning: could not find the reportlab library.\n"
 "PDF support disabled."
 msgstr ""
-"Perhatian: tidak ditemukan pustaka laporan lab.↵\n"
-"Dukungan PDF dinonaktifkan."
 
 #: /src/schooltool/app/main.py:569
 msgid ""
 "Warning: font directory '%s' does not exist.\n"
 "PDF support disabled."
 msgstr ""
-"Perhatian: direktori font '%s' tidak ditemukan.↵\n"
-"Dukungan PDF dinonaktifkan."
 
 #: /src/schooltool/app/main.py:577
 msgid ""
 "Warning: font '%s' does not exist.\n"
 "PDF support disabled."
 msgstr ""
-"Perhatian: font '%s' tidak ditemukan.↵\n"
-"Dukungan PDF dinonaktifkan."
 
 #: /src/schooltool/app/main.py:71
-#, fuzzy
 msgid ""
 "\n"
 "Usage: %s [options]\n"
@@ -1946,17 +1882,8 @@ msgid ""
 "                         is '-')\n"
 "  --manage               only do management tasks, don't run the server\n"
 msgstr ""
-"\n"
-"↵\n"
-"Pemakaian: %s [pilihan]↵\n"
-"Pilihan:↵\n"
-"  -c, --config xxx gunakan file konfigurasi ini dari pada yang defaultt↵\n"
-"  -h, --help menampilkan pesan pertolongan ini↵\n"
-"  -d, --daemon menuju ke latar belakang setelah memulai↵\n"
-"  -r, --restore-manager mengembalikan manajer user dengan password default↵\n"
 
 #: /src/schooltool/app/main.py:85
-#, fuzzy
 msgid ""
 "\n"
 "No storage defined in the configuration file.\n"
@@ -1964,37 +1891,20 @@ msgid ""
 "If you're using the default configuration file, please edit it now and\n"
 "uncomment one of the ZODB storage sections.\n"
 msgstr ""
-"\n"
-"↵\n"
-"Tidak ada satupun media penyimpan di file konfigurasi.↵\n"
-"↵\n"
-"Jika Anda sedang menggunakan file konfigurasi default, silahkan diedit "
-"sekarang dan↵\n"
-"hapus tanda catatan dari salah satu bagian media penyimpan ZODB.↵\n"
 
 #: /src/schooltool/app/main.py:93
-#, fuzzy
 msgid ""
 "\n"
 "This is not a SchoolTool 0.11 database file, aborting.\n"
 msgstr ""
-"\n"
-"↵\n"
-"Ini bukanlah file database SchoolBell 0.10, sedang digagalkan.↵\n"
 
 #: /src/schooltool/app/main.py:98
-#, fuzzy
 msgid ""
 "\n"
 "This is not a SchoolTool 0.10 database file, aborting.\n"
 "\n"
 "Please run the standalone database upgrade script.\n"
 msgstr ""
-"\n"
-"↵\n"
-"Ini bukan file database SchoolTool 0.10, digagalkan.↵\n"
-"↵\n"
-"Silahkan jalankan script peningkatan database standalone.↵\n"
 
 #: /src/schooltool/app/rest/configure.zcml:244
 msgid "REST Interface"
@@ -2031,22 +1941,19 @@ msgstr ""
 
 #. Default: ""
 #: /src/schooltool/attendance/attendance.py:518
-#, fuzzy
 msgid "Was absent from ${section}."
-msgstr "Penjadwalan untuk ${section}"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/attendance.py:428
 #: /src/schooltool/attendance/browser/attendance.py:754
-#, fuzzy
 msgid "The arrival time you entered is invalid.  Please use HH:MM format"
-msgstr "Tanggal yang Anda masukkan salah. Silahkan gunakan bentuk YYYY-MM-DD"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/attendance.py:450
-#, fuzzy
 msgid ""
 "The minutes late value you entered is invalid.  Please use an integer number "
 "of minutes."
-msgstr "Tanggal yang Anda masukkan salah. Silahkan gunakan bentuk YYYY-MM-DD"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/attendance.py:454
 msgid "Arrival times only apply to tardy students"
@@ -2140,7 +2047,7 @@ msgstr "Preferensi Kalender"
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:78
 #, fuzzy
 msgid "back to site preferences"
-msgstr "Mengubah preferensi seseorang"
+msgstr "Ubah Preferensi"
 
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:17
 msgid "Students with unresolved absences"
@@ -2160,9 +2067,8 @@ msgid "Section<br />absences"
 msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/no_section_meeting.pt:11
-#, fuzzy
 msgid "Section attendance for ${section}"
-msgstr "Penjadwalan untuk ${section}"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/no_section_meeting.pt:16
 msgid "This section has no meetings today."
@@ -2179,9 +2085,8 @@ msgid "Section attendance for ${section} at ${date} period ${period_id}"
 msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/real_time.pt:31
-#, fuzzy
 msgid "Legend"
-msgstr "Lambang:"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/real_time.pt:32
 msgid ""
@@ -2226,9 +2131,8 @@ msgid "For Tardy, enter a number of minutes late. This field is optional."
 msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/retro.pt:36
-#, fuzzy
 msgid "Present"
-msgstr "Pemunculan kembali"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/retro.pt:37
 msgid "Absent"
@@ -2261,9 +2165,8 @@ msgid "Tardies"
 msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:159
-#, fuzzy
 msgid "There were no absences in this term."
-msgstr "Tanggal yang Anda masukkan bukan milik dari termin ini."
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:34
 #, fuzzy
@@ -2274,7 +2177,7 @@ msgstr "Tidak ada apa-apa untuk ditambahkan"
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:10
 #, fuzzy
 msgid "Attendance of ${person}"
-msgstr "Jadwal untuk ${person}"
+msgstr "Tambahkan orang baru"
 
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:42
 msgid "Unresolved explained absences"
@@ -2286,9 +2189,8 @@ msgstr ""
 
 #. Default: ""
 #: /src/schooltool/attendance/browser/tests/test_attendance.py:263
-#, fuzzy
 msgid "$title"
-msgstr "Judul"
+msgstr ""
 
 #: /src/schooltool/attendance/interfaces.py:39
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:18
@@ -2340,8 +2242,9 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:39
 #: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:20
 #: /src/schooltool/term/browser/term_add_edit.pt:60
+#, fuzzy
 msgid "Next"
-msgstr ""
+msgstr "Minggu depan"
 
 #: /src/schooltool/batching/macros.pt:51
 msgid "<span>x</span> &raquo;"
@@ -2362,33 +2265,28 @@ msgid "Add Commendation"
 msgstr "Tambahkan Sebuah Bagian Baru"
 
 #: /src/schooltool/commendation/interfaces.py:49
-#, fuzzy
 msgid "Title of the commendation."
-msgstr "Judul mata pelajaran"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:54
-#, fuzzy
 msgid "A detailed description of the commendation."
-msgstr "Deskripsi bagian ini"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:58
 msgid "Scope"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:59
-#, fuzzy
 msgid "The scope of the commendation."
-msgstr "Deskripsi bagian ini"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
-#, fuzzy
 msgid "school-wide"
-msgstr "Hari sekolah"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
-#, fuzzy
 msgid "group"
-msgstr "Grup"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "community"
@@ -2399,14 +2297,12 @@ msgid "global"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:61
-#, fuzzy
 msgid "national"
-msgstr "Durasi"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:61
-#, fuzzy
 msgid "state"
-msgstr "Tanggal"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:66
 msgid "The date the commendation was issued."
@@ -2417,9 +2313,8 @@ msgid "Grantor"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:72
-#, fuzzy
 msgid "The grantor of the commendation."
-msgstr "Deskripsi bagian ini"
+msgstr ""
 
 #: /src/schooltool/configure.zcml:44
 #: /src/schooltool/app/browser/configure.zcml:202
@@ -2454,7 +2349,7 @@ msgstr "Lihat"
 #: /src/schooltool/level/browser/level.pt:35
 #, fuzzy
 msgid "Edit Info"
-msgstr "Edit"
+msgstr "Ubah"
 
 #: /src/schooltool/configure.zcml:46
 msgid "Add Info"
@@ -2475,7 +2370,7 @@ msgstr "Edit Informasi Bagian"
 #: /src/schooltool/course/browser/configure.zcml:85
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:21
 msgid "Import Courses"
-msgstr "Import Mata Pelajaran"
+msgstr "Impor Mata Pelajaran"
 
 #: /src/schooltool/course/browser/configure.zcml:9
 #, fuzzy
@@ -2513,7 +2408,7 @@ msgstr "Tidak ada mata pelajaran tersebut"
 
 #: /src/schooltool/course/browser/section.py:113
 msgid "Need a course ID."
-msgstr "Memerlukan Identitas mata pelajaran"
+msgstr "Identitas mata pelajaran diperlukan"
 
 #. Default: ""
 #: /src/schooltool/course/browser/section.py:118
@@ -2524,7 +2419,7 @@ msgstr "Tambahkan bagian ke ${course}"
 #: /src/schooltool/course/browser/templates/section.pt:50
 #: /src/schooltool/course/browser/templates/section_container.pt:32
 msgid "Instructors"
-msgstr "Pengajar"
+msgstr "Instruktur"
 
 #: /src/schooltool/course/browser/section.py:260
 msgid "Current Instructors"
@@ -2544,14 +2439,12 @@ msgid "Students"
 msgstr "murid-murid"
 
 #: /src/schooltool/course/browser/section.py:284
-#, fuzzy
 msgid "Current Students"
-msgstr "Ukuran sekarang"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:285
-#, fuzzy
 msgid "Available Students"
-msgstr "Instruktur yang ada"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:311
 #: /src/schooltool/app/browser/templates/index.pt:13
@@ -2561,15 +2454,13 @@ msgstr "Grup"
 
 #: /src/schooltool/course/browser/section.py:312
 #: /src/schooltool/group/browser/group.py:60
-#, fuzzy
 msgid "Current Groups"
-msgstr "Tahun ini"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:313
 #: /src/schooltool/group/browser/group.py:61
-#, fuzzy
 msgid "Available Groups"
-msgstr "Instruktur yang ada"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:338
 #: /src/schooltool/app/browser/templates/index.pt:14
@@ -2579,15 +2470,13 @@ msgid "Resources"
 msgstr "Sumber Daya"
 
 #: /src/schooltool/course/browser/section.py:339
-#, fuzzy
 msgid "Current Resources"
-msgstr "Import Sumber Daya"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:340
 #: /src/schooltool/app/browser/templates/event_booking.pt:36
-#, fuzzy
 msgid "Available Resources"
-msgstr "Instruktur yang ada"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:68
 msgid "Section index"
@@ -2598,15 +2487,11 @@ msgid "Add a new section"
 msgstr "Tambahkan bagian baru"
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:24
-#, fuzzy
 msgid ""
 "CSV data <strong>must</strong> include a course title and <strong>may</"
 "strong> include an optional course description. Any extra information will "
 "be discarded."
 msgstr ""
-"Data CVS <strong>harus</strong> mengandung sebuah judul kursus dan "
-"<strong>boleh</strong> ada atau tidak memuat penjelasan tentang kursusnya. "
-"Informasi tambahan lainnya akan diabaikan."
 
 #. Default: ""
 #.  "Ancient History, Pre-history through 1000 A.D.\n"
@@ -2633,16 +2518,10 @@ msgid ""
 "century' respectively. The Second course will have no description, and the "
 "extra \"text after a second comma\" text on the third course will be ignored."
 msgstr ""
-"Contoh di atas akan menghasilkan 3 buah kursus yang berjudul 'Ancient "
-"History', \"US History' dan 'World History'. Kursus yang pertama dan yang "
-"terakhir akan memiliki penjelasan 'Pra-sejarah sampai dengan 1000 setelah "
-"masehi dan 1000 setelah masehi hingga abad ke-20 secara berurutan. Kursus "
-"yang kedua tidak ada penjelasan, dan teks tambahan setelah titik koma, teks "
-"yang berada pada kursus yang ke-tiga akan diabaikan"
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:4
 msgid "Upload schooltool courses as CSV"
-msgstr "Unduh pelajaran schooltool sebagai CSV"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/course.pt:18
 msgid "Sections"
@@ -2650,13 +2529,12 @@ msgstr "Bagian"
 
 #: /src/schooltool/course/browser/templates/course.pt:36
 #: /src/schooltool/demographics/browser/nameinfo_view.pt:11
-#, fuzzy
 msgid "photo"
-msgstr "Foto"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/course.pt:53
 msgid "students"
-msgstr "murid"
+msgstr "murid-murid"
 
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:27
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:80
@@ -2671,9 +2549,8 @@ msgid "Conflict: <a href=\"${DYNAMIC_CONTENT}\">${DYNAMIC_CONTENT}</a>"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:13
-#, fuzzy
 msgid "Section of ${course} -- ${DYNAMIC_CONTENT}"
-msgstr "Bagian dari ${course} -- ${DYNAMIC_CONTENT}"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:22
 #, fuzzy
@@ -2693,7 +2570,7 @@ msgstr "Ganti instruktur untuk bagian ini"
 #: /src/schooltool/course/browser/templates/section.pt:40
 #, fuzzy
 msgid "book resources"
-msgstr "Sumber daya yang sudah dipesan: %s"
+msgstr "Sumber Daya"
 
 #: /src/schooltool/course/browser/templates/section.pt:57
 msgid "Change the instructors for this section."
@@ -2704,17 +2581,18 @@ msgid "edit instructors"
 msgstr "edit instruktur"
 
 #: /src/schooltool/course/browser/templates/section.pt:87
-#, fuzzy
 msgid "edit individuals"
-msgstr "mengubah secara sendiri-sendiri"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:87
+#, fuzzy
 msgid "Change the students in this section individually"
-msgstr "Mengubah data siswa di seksi ini satu persatu"
+msgstr "Ganti instruktur untuk bagian ini"
 
 #: /src/schooltool/course/browser/templates/section.pt:94
+#, fuzzy
 msgid "Change the students in this section by groups"
-msgstr "Mengubah data siswa di seksi ini berdasarkan grup"
+msgstr "Ganti instruktur untuk bagian ini"
 
 #: /src/schooltool/course/browser/templates/section.pt:94
 msgid "edit groups"
@@ -2738,7 +2616,7 @@ msgstr "Ukuran sekarang"
 #: /src/schooltool/skin/templates/simple_edit.pt:23
 #: /src/schooltool/skin/templates/simple_add.pt:22
 msgid "There are ${num_errors} input errors."
-msgstr "Ditemukan ${num_errors} kesalahan pemasukkan"
+msgstr ""
 
 #: /src/schooltool/course/interfaces.py:37
 msgid "Title of the course."
@@ -2753,13 +2631,10 @@ msgid "Label"
 msgstr "Label"
 
 #: /src/schooltool/course/interfaces.py:67
-#, fuzzy
 msgid ""
 "An identifier for a section, made up of instructor\n"
 "            names, courses, and meeting time."
 msgstr ""
-"Sebuah penanda untuk sebuah bagian, dibuat oleh instruktur↵\n"
-"            nama, kursus, dan waktu rapat."
 
 #: /src/schooltool/course/interfaces.py:72
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:23
@@ -2768,7 +2643,7 @@ msgstr "Kode"
 
 #: /src/schooltool/course/interfaces.py:74
 msgid "ID code for the section."
-msgstr "Kode ID ubt"
+msgstr ""
 
 #: /src/schooltool/course/interfaces.py:79
 msgid "Description of the section."
@@ -2785,9 +2660,8 @@ msgstr ""
 
 #: /src/schooltool/dashboard/interfaces.py:49
 #: /src/schooltool/dashboard/interfaces.py:50
-#, fuzzy
 msgid "Weight"
-msgstr "Website"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/configure.zcml:13
 #, fuzzy
@@ -2815,9 +2689,8 @@ msgstr ""
 
 #: /src/schooltool/demographics/browser/configure.zcml:222
 #: /src/schooltool/demographics/browser/configure.zcml:283
-#, fuzzy
 msgid "schooldata"
-msgstr "Hari sekolah"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/configure.zcml:228
 #: /src/schooltool/demographics/browser/configure.zcml:289
@@ -2831,21 +2704,18 @@ msgstr ""
 
 #: /src/schooltool/demographics/browser/configure.zcml:240
 #: /src/schooltool/demographics/browser/configure.zcml:301
-#, fuzzy
 msgid "emergency1"
-msgstr "Hari darurat"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/configure.zcml:246
 #: /src/schooltool/demographics/browser/configure.zcml:307
-#, fuzzy
 msgid "emergency2"
-msgstr "Hari darurat"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/configure.zcml:252
 #: /src/schooltool/demographics/browser/configure.zcml:313
-#, fuzzy
 msgid "emergency3"
-msgstr "Hari darurat"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/configure.zcml:260
 msgid "Schooltool Person Display Menu"
@@ -2855,7 +2725,7 @@ msgstr ""
 #: /src/schooltool/gradebook/browser/configure.zcml:51
 #: /src/schooltool/term/browser/configure.zcml:58
 msgid "Edit"
-msgstr "Edit"
+msgstr "Ubah"
 
 #: /src/schooltool/demographics/browser/personform.py:102
 msgid "Apply and Next"
@@ -2878,20 +2748,17 @@ msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:156
-#, fuzzy
 msgid "Change name information for ${fullname}"
-msgstr "Merubah preferensi untuk ${pengguna}"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:172
-#, fuzzy
 msgid "Change name"
-msgstr "Ubah Preferensi"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:183
-#, fuzzy
 msgid "Change demographics for ${fullname}"
-msgstr "Merubah preferensi untuk ${pengguna}"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:191
 msgid "Demographics"
@@ -2903,9 +2770,8 @@ msgid "Change school data for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:212
-#, fuzzy
 msgid "School data"
-msgstr "Hari sekolah"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:230
@@ -2913,9 +2779,8 @@ msgid "Change contact information for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:238
-#, fuzzy
 msgid "Contact information"
-msgstr "Edit Informasi Bagian"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:272
 #: /src/schooltool/demographics/browser/personform.py:273
@@ -2948,7 +2813,7 @@ msgstr ""
 #: /src/schooltool/skin/form.py:55
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:46
 msgid "Apply"
-msgstr "Lakukan"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/schooldata_view.pt:3
 #: /src/schooltool/demographics/browser/nameinfo_view.pt:3
@@ -2979,36 +2844,32 @@ msgid "Gender"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:126
-#, fuzzy
 msgid "Birth date"
-msgstr "Tanggal mulai"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:131
 msgid "Ethnicity"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:137
-#, fuzzy
 msgid "Primary language"
-msgstr "Telepon utama"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:143
 msgid "Special education"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:148
-#, fuzzy
 msgid "Previous school"
-msgstr "Bulan lalu"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:191
 msgid "ID"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:196
-#, fuzzy
 msgid "Enrollment date"
-msgstr "Tanggal terakhir"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:201
 msgid "Projected graduation year"
@@ -3019,28 +2880,24 @@ msgid "Advisor"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:212
-#, fuzzy
 msgid "Team"
-msgstr "Termin"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:218
-#, fuzzy
 msgid "Health information"
-msgstr "Edit Informasi Bagian"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:239
 #: /src/schooltool/gradebook/browser/gradebook_overview.pt:15
 #: /src/schooltool/gradebook/browser/gradebook_grade_activity.pt:32
 #: /src/schooltool/attendance/browser/templates/real_time.pt:55
 #: /src/schooltool/attendance/browser/templates/retro.pt:35
-#, fuzzy
 msgid "Name"
-msgstr "Nama panggilan"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:244
-#, fuzzy
 msgid "Relationship to student"
-msgstr "Hubungan"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:250
 msgid "Street"
@@ -3051,23 +2908,20 @@ msgid "City"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:260
-#, fuzzy
 msgid "State"
-msgstr "Sab"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:265
 msgid "Postal code"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:270
-#, fuzzy
 msgid "Home phone"
-msgstr "Zona waktu"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:275
-#, fuzzy
 msgid "Work phone"
-msgstr "Telepon kedua"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:280
 msgid "Cell phone"
@@ -3076,9 +2930,8 @@ msgstr ""
 #: /src/schooltool/demographics/interfaces.py:285
 #: /src/schooltool/app/browser/configure.zcml:536
 #: /src/schooltool/app/rest/configure.zcml:255 /src/schooltool/note/notes.pt:2
-#, fuzzy
 msgid "Notes"
-msgstr "buah"
+msgstr "Catatan"
 
 #: /src/schooltool/demographics/interfaces.py:295
 msgid "Text"
@@ -3089,18 +2942,16 @@ msgid "Full text search in name"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:301
-#, fuzzy
 msgid "Name of parent"
-msgstr "Jumlah events"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:302
 msgid "Full text search in parent names"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:307
-#, fuzzy
 msgid "Student ID"
-msgstr "murid-murid"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:43
 msgid "Prefix"
@@ -3111,28 +2962,24 @@ msgid "Prefix such as Mr., Mrs."
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:49
-#, fuzzy
 msgid "First name"
-msgstr "edit nama"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:54
-#, fuzzy
 msgid "Middle name"
-msgstr "Nama lengkap"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:59
-#, fuzzy
 msgid "Last name"
-msgstr "edit nama"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:64
 msgid "Suffix"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:69
-#, fuzzy
 msgid "Preferred name"
-msgstr "Preferensi-ku"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:70
 msgid "Name by which the student prefers to be called"
@@ -3192,8 +3039,9 @@ msgstr "tombol-delete"
 #: /src/schooltool/skin/templates/simple_add.pt:55
 #: /src/schooltool/note/note_add.pt:43
 #: /src/schooltool/commendation/commendation_add.pt:33
+#, fuzzy
 msgid "add-button"
-msgstr "tambah-tombol"
+msgstr "tombol-delete"
 
 #: /src/schooltool/gradebook/browser/categories.pt:4
 #: /src/schooltool/gradebook/browser/categories.pt:15
@@ -3205,35 +3053,31 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
 #, fuzzy
 msgid "change-button"
-msgstr "tombol-tunda"
+msgstr "ganti lokasi"
 
 #: /src/schooltool/gradebook/browser/category.py:43
 msgid "Categories"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:49
-#, fuzzy
 msgid "New Category"
-msgstr "Termin baru"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:52
 msgid "Default Category"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:75
-#, fuzzy
 msgid "Categories successfully deleted."
-msgstr "Berhasil mengimpor teks CSV"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:81
-#, fuzzy
 msgid "Category successfully added."
-msgstr "Password telah diganti"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:87
-#, fuzzy
 msgid "Default category successfully changed."
-msgstr "Password telah diganti"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/configure.zcml:103
 msgid "New Activity"
@@ -3287,9 +3131,8 @@ msgstr ""
 
 #. Default: ""
 #: /src/schooltool/gradebook/browser/gradebook.py:238
-#, fuzzy
 msgid "The grade $value for $name is not valid."
-msgstr "Tanggal pengganti yang Anda masukkan salah."
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/gradebook.py:98
 msgid "Average"
@@ -3342,9 +3185,8 @@ msgstr ""
 
 #: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:13
 #: /src/schooltool/gradebook/browser/gradebook_grade_activity.pt:13
-#, fuzzy
 msgid "Grade ${name}"
-msgstr "Periode ${number}"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:32
 msgid "Activity"
@@ -3364,9 +3206,8 @@ msgid "Essay"
 msgstr ""
 
 #: /src/schooltool/gradebook/category.py:62
-#, fuzzy
 msgid "Exam"
-msgstr "Contoh:"
+msgstr ""
 
 #: /src/schooltool/gradebook/category.py:63
 msgid "Homework"
@@ -3377,14 +3218,12 @@ msgid "Journal"
 msgstr ""
 
 #: /src/schooltool/gradebook/category.py:65
-#, fuzzy
 msgid "Lab"
-msgstr "Label"
+msgstr ""
 
 #: /src/schooltool/gradebook/category.py:66
-#, fuzzy
 msgid "Presentation"
-msgstr "Durasi"
+msgstr ""
 
 #: /src/schooltool/gradebook/category.py:67
 msgid "Project"
@@ -3395,9 +3234,8 @@ msgid "Gradebook API"
 msgstr ""
 
 #: /src/schooltool/gradebook/interfaces.py:39
-#, fuzzy
 msgid "A detailed description of the activity."
-msgstr "Deskripsi bagian ini"
+msgstr ""
 
 #: /src/schooltool/gradebook/interfaces.py:43
 msgid "Category"
@@ -3434,7 +3272,7 @@ msgstr ""
 #: /src/schooltool/group/browser/configure.zcml:125
 #: /src/schooltool/group/browser/group-csvimport.pt:22
 msgid "Import Groups"
-msgstr "Import Grup"
+msgstr "Impor Grup"
 
 #: /src/schooltool/group/browser/configure.zcml:26
 #, fuzzy
@@ -3449,7 +3287,7 @@ msgstr "Edit Informasi Bagian"
 #: /src/schooltool/group/browser/configure.zcml:76
 #, fuzzy
 msgid "Change Membership"
-msgstr "Ubah Preferensi"
+msgstr "Pengelolaan keanggotaan"
 
 #: /src/schooltool/group/browser/configure.zcml:91
 #, fuzzy
@@ -3466,15 +3304,11 @@ msgid "SchoolBell Group"
 msgstr ""
 
 #: /src/schooltool/group/browser/group-csvimport.pt:25
-#, fuzzy
 msgid ""
 "CSV data <strong>must</strong> include a group title and <strong>may</"
 "strong> include an optional group description. Any extra information will be "
 "discarded."
 msgstr ""
-"Data CSV <strong>harus</strong> termasuk judul grupnya dan <strong>boleh</"
-"strong> memasukkan penjelasan tentang grup sebagai suatu pilihan. Sembarang "
-"informasi tambahan lainnya akan diabaikan."
 
 #. Default: ""
 #.  "LUG, Linux Users Group\n"
@@ -3495,7 +3329,6 @@ msgstr ""
 "kedua</em>\n"
 
 #: /src/schooltool/group/browser/group-csvimport.pt:37
-#, fuzzy
 msgid ""
 "The above example will create 3 groups titled 'LUG', 'Chess Club' and "
 "'Sports Club'. The first and last group will have the descriptions 'Linux "
@@ -3503,26 +3336,20 @@ msgid ""
 "group will have no description, and the extra \"text after a second comma\" "
 "text on the third group will be ignored."
 msgstr ""
-"Contoh di atas akan membuat 3 buah grup dengan judul 'LUG', 'Chess Club' dan "
-"'Sports Club'. Grup yang pertama dan yang terakhir akan mempunyai penjelasan "
-"'Linux Users Group' dan 'After-school sports club'. Grup 'Chess Club' tidak "
-"memiliki penjelasan, dan tambahan teks \"text after a second comma\" pada "
-"grup ke tiga akan diabaikan."
 
 #: /src/schooltool/group/browser/group-csvimport.pt:4
-#, fuzzy
 msgid "Upload SchoolTool groups as CSV"
-msgstr "Upload SchoolTool grup sebagai CSV"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.pt:16
 #, fuzzy
 msgid "Members"
-msgstr "Desember"
+msgstr "November"
 
 #: /src/schooltool/group/browser/group.pt:23
 #, fuzzy
 msgid "edit members"
-msgstr "September"
+msgstr "edit nama"
 
 #: /src/schooltool/group/browser/group.pt:23
 #, fuzzy
@@ -3531,7 +3358,7 @@ msgstr "Ganti lokasi atau nama dari bagian ini"
 
 #: /src/schooltool/group/browser/group.py:47
 msgid "Group index"
-msgstr "Index grup"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.py:48
 msgid "Add a new group"
@@ -3539,9 +3366,8 @@ msgstr "Tambahkan grup baru"
 
 #. Default: ""
 #: /src/schooltool/group/browser/group.py:59
-#, fuzzy
 msgid "Groups of ${person}"
-msgstr "Jadwal untuk ${person}"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/group/browser/group.py:97
@@ -3549,28 +3375,26 @@ msgid "Members of ${group}"
 msgstr ""
 
 #: /src/schooltool/group/browser/group.py:98
-#, fuzzy
 msgid "Current Members"
-msgstr "Tahun ini"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.py:99
-#, fuzzy
 msgid "Add Members"
-msgstr "Tambahkan events"
+msgstr ""
 
 #: /src/schooltool/group/interfaces.py:44
 msgid "Title of the group."
-msgstr "Judul grup"
+msgstr ""
 
 #: /src/schooltool/group/interfaces.py:49
 msgid "Description of the group."
-msgstr "Penjelasan tentang grup"
+msgstr ""
 
 #. Default: "Calendar"
 #: /src/schooltool/group/rest/group.pt:14
 #, fuzzy
 msgid "Private_calendar"
-msgstr "Kalender_pribadi"
+msgstr "Lihat kalender"
 
 #: /src/schooltool/help/configure.zcml:46
 msgid "Contextual Help"
@@ -3599,23 +3423,21 @@ msgid "This is an initial level."
 msgstr ""
 
 #: /src/schooltool/level/browser/level.pt:21
+#, fuzzy
 msgid "None"
-msgstr ""
+msgstr "Tidak"
 
 #: /src/schooltool/level/browser/level.py:41
-#, fuzzy
 msgid "Level index"
-msgstr "Index sumberdaya"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:42
-#, fuzzy
 msgid "Add a new level"
-msgstr "Menambah sebuah termin baru"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:60
-#, fuzzy
 msgid "Previous Level"
-msgstr "Minggu lalu"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:61
 msgid ""
@@ -3633,7 +3455,7 @@ msgstr ""
 #: /src/schooltool/level/browser/level_validation.pt:37
 #, fuzzy
 msgid "validate-button"
-msgstr "tambah-tombol"
+msgstr "tombol-delete"
 
 #: /src/schooltool/level/browser/level_validation.pt:4
 #: /src/schooltool/level/browser/level_validation.pt:8
@@ -3664,7 +3486,7 @@ msgstr ""
 #: /src/schooltool/level/browser/promotion.pt:44
 #, fuzzy
 msgid "enroll-button"
-msgstr "tombol-tunda"
+msgstr "tombol-delete"
 
 #: /src/schooltool/level/browser/promotion.pt:44
 msgid "E"
@@ -3687,7 +3509,7 @@ msgstr ""
 #: /src/schooltool/level/browser/promotion.pt:128
 #, fuzzy
 msgid "apply-button"
-msgstr "tambah-tombol"
+msgstr "tombol-delete"
 
 #: /src/schooltool/level/browser/promotion.pt:91
 msgid "Level Outcome"
@@ -3703,20 +3525,17 @@ msgid "Students successfully enrolled."
 msgstr ""
 
 #: /src/schooltool/level/browser/promotion.py:132
-#, fuzzy
 msgid "Student processes successfully updated."
-msgstr "Berhasil mengimpor teks CSV"
+msgstr ""
 
 #: /src/schooltool/level/browser/promotion.py:57
-#, fuzzy
 msgid "Work Item successfully finished."
-msgstr "Password telah diganti"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/level/browser/promotion.py:64
-#, fuzzy
 msgid "Current Level: $level"
-msgstr "Minggu ini"
+msgstr ""
 
 #: /src/schooltool/level/browser/record.pt:107
 msgid "History"
@@ -3764,12 +3583,11 @@ msgstr ""
 #: /src/schooltool/level/browser/record.pt:99
 #, fuzzy
 msgid "initialize-button"
-msgstr "tombol-tunda"
+msgstr "tombol-delete"
 
 #: /src/schooltool/level/browser/record.py:56
-#, fuzzy
 msgid "The status was successfully updated."
-msgstr "Password telah diganti"
+msgstr ""
 
 #: /src/schooltool/level/browser/record.py:68
 msgid "The Level Process was successfully initialized."
@@ -3780,32 +3598,28 @@ msgid "The Level Process was successfully removed."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:132
-#, fuzzy
 msgid "Time Stamp"
-msgstr "Jadwal"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:133
 msgid "The date and time the record was created."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:137
-#, fuzzy
 msgid "User"
-msgstr "User:"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:138
 msgid "The principal id of the user making the record."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:143
-#, fuzzy
 msgid "Title of the record."
-msgstr "Judul dari sumberdaya"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:148
-#, fuzzy
 msgid "A detailed description of the record."
-msgstr "Penjelasan dari sumberdaya"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:160
 msgid "Academic History"
@@ -3818,9 +3632,8 @@ msgstr ""
 #: /src/schooltool/level/interfaces.py:166
 #: /src/schooltool/level/browser/record.pt:15
 #: /src/schooltool/attendance/browser/templates/real_time.pt:56
-#, fuzzy
 msgid "Status"
-msgstr "Sab"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:167
 msgid "The current standing of the student in the school."
@@ -3848,9 +3661,8 @@ msgid "The workflow process of the level the student is currently completing."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:76
-#, fuzzy
 msgid "Title of the level."
-msgstr "Judul dari catatan."
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:80
 msgid "Is Initial Level"
@@ -3861,9 +3673,8 @@ msgid "Is this level an initial level for the school."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:86
-#, fuzzy
 msgid "Next Level"
-msgstr "Minggu depan"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:87
 msgid ""
@@ -3876,14 +3687,12 @@ msgid "Outcome"
 msgstr ""
 
 #: /src/schooltool/level/promotion.py:129
-#, fuzzy
 msgid "Outcome of the level."
-msgstr "Judul dari catatan."
+msgstr ""
 
 #: /src/schooltool/level/promotion.py:130
-#, fuzzy
 msgid "fail"
-msgstr "Harian"
+msgstr ""
 
 #: /src/schooltool/level/promotion.py:130
 msgid "withdraw"
@@ -3895,9 +3704,8 @@ msgid "pass"
 msgstr ""
 
 #: /src/schooltool/level/promotion.py:96
-#, fuzzy
 msgid "Level"
-msgstr "Label"
+msgstr ""
 
 #: /src/schooltool/level/promotion.py:97
 msgid "The initial level of the student in the school."
@@ -3906,7 +3714,7 @@ msgstr ""
 #: /src/schooltool/note/configure.zcml:39
 #, fuzzy
 msgid "New Note"
-msgstr "Termin baru"
+msgstr "Foto baru"
 
 #: /src/schooltool/note/interfaces.py:43
 msgid "Title of the note."
@@ -3918,15 +3726,16 @@ msgstr "Body"
 
 #: /src/schooltool/note/interfaces.py:47
 msgid "Body of the note."
-msgstr "Bagian utama dari catatan."
+msgstr ""
 
 #: /src/schooltool/note/interfaces.py:50 /src/schooltool/note/note_add.pt:24
 msgid "Privacy"
 msgstr "Prifasi"
 
 #: /src/schooltool/note/note_add.pt:13
+#, fuzzy
 msgid "Note"
-msgstr ""
+msgstr "Catatan"
 
 #: /src/schooltool/note/note_add.pt:24
 msgid "Who can view the note"
@@ -3944,7 +3753,7 @@ msgstr ""
 #: /src/schooltool/note/note_add.pt:4
 #, fuzzy
 msgid "Add note"
-msgstr "Tambah termin"
+msgstr "Tambahkan events"
 
 #: /src/schooltool/note/notes.pt:17
 #, fuzzy
@@ -3982,8 +3791,6 @@ msgid ""
 "CSV data <strong>must</strong> contain a user name and a full name. An "
 "optional password <strong>may</strong> be included as well."
 msgstr ""
-"Data CSV <strong>harus</strong> memuat nama pengguna dan nama lengkapnya. "
-"Kata kunci sebagai pilihan  <strong>boleh</strong> dimasukkan juga."
 
 #. Default: ""
 #.  "jjones, Jimmy Jones\n"
@@ -4014,21 +3821,19 @@ msgstr ""
 
 #: /src/schooltool/person/browser/person-csvimport.pt:4
 msgid "Upload SchoolTool persons as CSV"
-msgstr "Upload orang SchoolTool sebagai CSV"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:176
-#, fuzzy
 msgid "Edit password"
-msgstr "Password baru"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:181
 msgid "No new password was supplied so original password is unchanged"
 msgstr ""
 
 #: /src/schooltool/person/browser/person.py:186
-#, fuzzy
 msgid "Changed password"
-msgstr "Password baru"
+msgstr ""
 
 #: /src/schooltool/person/browser/person_container_delete.pt:18
 msgid "Sorry, you may not delete your own user account."
@@ -4041,7 +3846,7 @@ msgstr "Merubah preferensi untuk ${pengguna}"
 #: /src/schooltool/person/browser/person_preferences.pt:4
 #, fuzzy
 msgid "Edit person preferences"
-msgstr "Mengubah preferensi seseorang"
+msgstr "Preferensi Kalender"
 
 #: /src/schooltool/person/interfaces.py:154
 msgid "Time Zone"
@@ -4087,22 +3892,20 @@ msgstr "Minggu dimulai pada:"
 
 #: /src/schooltool/person/interfaces.py:174
 msgid "Start display of weeks on Sunday or Monday"
-msgstr "Memulai tampilan mingguan dengan hari Minggu atau Senin"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:187
 msgid "Show periods"
 msgstr "Lihat periode"
 
 #: /src/schooltool/person/interfaces.py:188
-#, fuzzy
 msgid "Show period names in daily view"
-msgstr "Tampilkan nama periode dalam tampilan harian"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:191
 #: /src/schooltool/person/interfaces.py:192
-#, fuzzy
 msgid "Make calendar public"
-msgstr "Lihat kalender"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:70
 msgid "Name that should be displayed"
@@ -4130,7 +3933,7 @@ msgstr ""
 #: /src/schooltool/requirement/browser/configure.zcml:69
 #, fuzzy
 msgid "New Requirement"
-msgstr "Termin baru"
+msgstr "Semester baru"
 
 #: /src/schooltool/requirement/browser/requirement.pt:40
 #: /src/schooltool/course/browser/templates/course_container.pt:28
@@ -4150,18 +3953,17 @@ msgstr "dari"
 #: /src/schooltool/course/browser/templates/course_container.pt:32
 #: /src/schooltool/skin/templates/container.pt:33
 #: /src/schooltool/skin/templates/table_macros.pt:9
+#, fuzzy
 msgid "items"
-msgstr "buah"
+msgstr "Menit"
 
 #: /src/schooltool/requirement/browser/requirement.py:53
-#, fuzzy
 msgid "Requirement index"
-msgstr "Index sumberdaya"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.py:54
-#, fuzzy
 msgid "Add a new Requirement"
-msgstr "Menambah sebuah termin baru"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/scoresystem.py:36
 msgid "Exisiting Score System"
@@ -4174,7 +3976,7 @@ msgstr ""
 #: /src/schooltool/resource/browser/configure.zcml:100
 #: /src/schooltool/resource/browser/resource-csvimport.pt:21
 msgid "Import Resources"
-msgstr "Import Sumber Daya"
+msgstr "Impor Sumber Daya"
 
 #: /src/schooltool/resource/browser/configure.zcml:27
 #, fuzzy
@@ -4206,9 +4008,6 @@ msgid ""
 "strong> include an optional resource description. Any extra information will "
 "be discarded."
 msgstr ""
-"Data CSV <strong>harus</strong> termasuk judul sumber daya dan <strong>bisa</"
-"strong> memasukkan penjelasan sumber daya lainnya sebagai sebuah pilihan. "
-"Informasi tambahan lainnya akan diabaikan."
 
 #. Default: ""
 #.  "PRJ302, Overhead Projector #302\n"
@@ -4227,7 +4026,6 @@ msgstr ""
 "LC-805, komputer laptop #805, <em>teks setelah koma kedua</em>\n"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:36
-#, fuzzy
 msgid ""
 "The above example will create 3 resources titled 'PRJ302', 'Main Auditorium' "
 "and 'LC-805'. The first and last resource will have the descriptions "
@@ -4235,20 +4033,14 @@ msgid ""
 "\"Main Auditorium\" resource will have no description, and the \"text after "
 "a second comma\" text on the third resource will be ignored."
 msgstr ""
-"Contoh di atas akan membuat 3 buah sumber daya, masing-masing berjudul "
-"'PRJ302', 'Main Auditorium' dan 'LC-805'. Sumber daya yang pertama dan yang "
-"terakhir mempunyai penjelasan 'Overhead Projector #302' dan 'Laptop Computer "
-"#805'. Sumber daya \"Main Auditorium\" tidak memiliki penjelasan, dan teks "
-"\"text after a second comma\" pada sumber daya yang ke tiga akan diabaikan."
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
-#, fuzzy
 msgid "Upload schooltool resources as CSV"
-msgstr "Mengunggah bahan-bahan schooltool sebagai CSV"
+msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:39
 msgid "Resource index"
-msgstr "Index sumberdaya"
+msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:40
 msgid "Add a new resource"
@@ -4256,11 +4048,11 @@ msgstr "Tambahkan resource baru"
 
 #: /src/schooltool/resource/interfaces.py:39
 msgid "Title of the resource."
-msgstr "Judul dari sumberdaya"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:44
 msgid "Description of the resource."
-msgstr "Penjelasan dari sumberdaya"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:47
 msgid "A Location."
@@ -4269,42 +4061,38 @@ msgstr "Lokasi."
 #: /src/schooltool/resource/interfaces.py:48
 msgid "Indicate this resource is a location, like a classroom."
 msgstr ""
-"Menunjukkan bahwa sumberdaya ini adalah  sebuah lokasi, misalnya: sebuah "
-"ruang kelas"
 
 #. Default: "Calendar subscriptions"
 #: /src/schooltool/resource/rest/resource.pt:17
 #: /src/schooltool/group/rest/group.pt:17
 #: /src/schooltool/person/rest/person.pt:16
+#, fuzzy
 msgid "Calendar_relationships"
-msgstr "Kalender_keterhubungan"
+msgstr "Hubungan"
 
 #. Default: "Calendar ACL"
 #: /src/schooltool/resource/rest/resource.pt:20
 #: /src/schooltool/group/rest/group.pt:20
 #: /src/schooltool/person/rest/person.pt:19
+#, fuzzy
 msgid "Calendar_ACL"
-msgstr "Kalender_ACL"
+msgstr "Kalender"
 
 #: /src/schooltool/restclient/restclient.py:644
-#, fuzzy
 msgid "Could not parse relationship list"
-msgstr "Kalender_keterhubungan"
+msgstr ""
 
 #: /src/schooltool/restclient/restclient.py:660
-#, fuzzy
 msgid "Insufficient data in person info"
-msgstr "Data yang diberikan tidak cukup"
+msgstr ""
 
 #: /src/schooltool/restclient/restclient.py:673
-#, fuzzy
 msgid "Insufficient data in group info"
-msgstr "Data yang diberikan tidak cukup"
+msgstr ""
 
 #: /src/schooltool/restclient/restclient.py:688
-#, fuzzy
 msgid "Insufficient data in level info"
-msgstr "Data yang diberikan tidak cukup"
+msgstr ""
 
 #: /src/schooltool/sampledata/sampledata.pt:14
 msgid ""
@@ -4332,28 +4120,18 @@ msgid "View Dependencies"
 msgstr ""
 
 #: /src/schooltool/sbapp/main.py:38
-#, fuzzy
 msgid ""
 "\n"
 "This is not a SchoolBell 1.0 database file, aborting.\n"
 msgstr ""
-"\n"
-"↵\n"
-"Ini bukanlah file database SchoolBell 1.0, sedang digagalkan.↵\n"
 
 #: /src/schooltool/sbapp/main.py:43
-#, fuzzy
 msgid ""
 "\n"
 "This is not a SchoolBell 1.0 database file, aborting.\n"
 "\n"
 "Please run the standalone database upgrade script.\n"
 msgstr ""
-"\n"
-"↵\n"
-"Ini bukanlah file database SchoolBell 1.0, sedang digagalkan.↵\n"
-"↵\n"
-"Silahkan jalankan skrip peningkatan/upgrade database standalone.↵\n"
 
 #: /src/schooltool/securitypolicy/browser/configure.zcml:6
 #: /src/schooltool/securitypolicy/browser/templates/access_control.pt:12
@@ -4387,9 +4165,8 @@ msgid "top"
 msgstr "atas"
 
 #: /src/schooltool/skin/form.py:64
-#, fuzzy
 msgid "No changes"
-msgstr "Simpan hasil perubahan"
+msgstr ""
 
 #: /src/schooltool/skin/templates/error.pt:13
 #, fuzzy
@@ -4444,8 +4221,9 @@ msgid "SchoolTool&trade; is a Trademark of The Shuttleworth Foundation."
 msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:57
+#, fuzzy
 msgid "Log In"
-msgstr "Masuk"
+msgstr "Keluar"
 
 #: /src/schooltool/skin/templates/view_macros.pt:65
 msgid "User:"
@@ -4461,33 +4239,33 @@ msgstr "Semester baru"
 
 #: /src/schooltool/term/browser/configure.zcml:67
 msgid "Cancel School in Emergency"
-msgstr "Tunda Sekolah dalam keadaan darurat"
+msgstr ""
 
 #: /src/schooltool/term/browser/emergency.py:100
 msgid "The replacement date you entered is invalid."
-msgstr "Tanggal pengganti yang Anda masukkan salah."
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/term/browser/emergency.py:123
 msgid "School cancelled due to emergency. Replacement day $replacement."
-msgstr "Sekolah ditunda karena alasan darurat. Hari pengganti $replacement."
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/term/browser/emergency.py:133
 msgid "Replacement day for emergency day $emergency."
-msgstr "Hari pengganti dari hari darurat $emergency."
+msgstr ""
 
 #: /src/schooltool/term/browser/emergency.py:84
 msgid "The date you entered is invalid.  Please use the YYYY-MM-DD format."
-msgstr "Tanggal yang Anda masukkan salah. Silahkan gunakan bentuk YYYY-MM-DD"
+msgstr ""
 
 #: /src/schooltool/term/browser/emergency.py:88
 msgid "The date you entered does not belong to this term."
-msgstr "Tanggal yang Anda masukkan bukan milik dari termin ini."
+msgstr ""
 
 #: /src/schooltool/term/browser/emergency.py:92
 msgid "The date you entered is not a schoolday."
-msgstr "Tanggal yang Anda masukkan bukan hari sekolah."
+msgstr ""
 
 #: /src/schooltool/term/browser/emergency2.pt:12
 msgid ""
@@ -4497,35 +4275,34 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/term/browser/emergency2.pt:28
+#, fuzzy
 msgid "Please enter the replacement date below."
-msgstr "Silahkan masukkan tanggal pengganti di bawah ini"
+msgstr "Silahkan masukkan paling tidak sebanyak $number periode"
 
 #: /src/schooltool/term/browser/emergency2.pt:33
 msgid "Replacement"
-msgstr "Pengganti"
+msgstr ""
 
 #: /src/schooltool/term/browser/emergency2.pt:6
 msgid "Choose a replacement for the emergency day."
-msgstr "Pilih pengganti untuk hari darurat"
+msgstr ""
 
 #: /src/schooltool/term/browser/emergency_select.pt:11
 msgid ""
 "This form allows you to mark a date as an emergency non-schoolday and add a "
 "replacement day to the term."
 msgstr ""
-"Formulir ini memperbolehkan Anda menandai sebuah tanggal sebagai hari "
-"darurat yang bukan hari sekolah dan menambah sebuah pengganti hari pada "
-"terminnya."
 
 #: /src/schooltool/term/browser/emergency_select.pt:24
+#, fuzzy
 msgid "Please enter the emergency date below."
-msgstr "Silahkan masukkan tanggal darurat di bawah ini"
+msgstr "Silahkan masukkan paling tidak sebanyak $number periode"
 
 #: /src/schooltool/term/browser/emergency_select.pt:3
 #: /src/schooltool/term/browser/emergency_select.pt:6
 #: /src/schooltool/term/browser/emergency2.pt:3
 msgid "Emergency day"
-msgstr "Hari darurat"
+msgstr ""
 
 #: /src/schooltool/term/browser/term-container-delete.pt:10
 msgid "Are you sure you want to delete the selected terms?"
@@ -4534,45 +4311,47 @@ msgstr ""
 #. Default: ""
 #: /src/schooltool/term/browser/term.py:129
 msgid "Change Term: $title"
-msgstr "Ubah termin: $title"
+msgstr ""
 
 #: /src/schooltool/term/browser/term.py:165
 msgid "New term"
-msgstr "Termin baru"
+msgstr ""
 
 #: /src/schooltool/term/browser/term.py:55
 msgid "Terms"
-msgstr "Termin"
+msgstr ""
 
 #: /src/schooltool/term/browser/term.py:56
 msgid "Add a new term"
-msgstr "Menambah sebuah termin baru"
+msgstr ""
 
 #: /src/schooltool/term/browser/term.py:65
 msgid "Start date"
-msgstr "Tanggal mulai"
+msgstr ""
 
 #: /src/schooltool/term/browser/term.py:67
 msgid "End date"
-msgstr "Tanggal terakhir"
+msgstr ""
 
 #: /src/schooltool/term/browser/term_add_edit.pt:115
 #: /src/schooltool/term/browser/term.pt:26
+#, fuzzy
 msgid "${month} ${year}"
-msgstr ""
+msgstr "${month}, ${year}"
 
 #: /src/schooltool/term/browser/term_add_edit.pt:130
 #: /src/schooltool/term/browser/term.pt:41
 msgid "Week ${week_number}"
-msgstr "Minggu ${week_number}"
+msgstr ""
 
 #: /src/schooltool/term/browser/term_add_edit.pt:151
 msgid "Add term"
-msgstr "Tambah termin"
+msgstr ""
 
 #: /src/schooltool/term/browser/term_add_edit.pt:158
+#, fuzzy
 msgid "Save changes"
-msgstr "Simpan hasil perubahan"
+msgstr "Perubahan tersimpan"
 
 #: /src/schooltool/term/browser/term_add_edit.pt:38
 msgid ""
@@ -4580,49 +4359,44 @@ msgid ""
 "inclusive (e.g., 2004-09-01 to 2004-12-31). Dates must be specified in YYYY-"
 "MM-DD format."
 msgstr ""
-"Pertama, silahkan beri nama dan tentukan periode terminnya. please name and "
-"define the time period of the term. The date range is inclusive (e.g., 2004-"
-"09-01 to 2004-12-31). Dates must be specified in YYYY-MM-DD format."
 
 #: /src/schooltool/term/browser/term_add_edit.pt:44
-#, fuzzy
 msgid "The date range is inclusive (e.g., 2004-09-01 to 2004-12-31)."
-msgstr "Rentangan data tertutup (misalnya, 2004-09-01 to 2004-12-31)."
+msgstr ""
 
 #: /src/schooltool/term/browser/term_add_edit.pt:64
 #: /src/schooltool/term/browser/term_add_edit.pt:149
 #: /src/schooltool/term/browser/term_add_edit.pt:156
 #, fuzzy
 msgid "Refresh"
-msgstr "Refresh"
+msgstr "Sumber Daya"
 
 #: /src/schooltool/term/browser/term_add_edit.pt:70
 msgid ""
 "Second, please specify which days are school days, and which days are "
 "holidays."
 msgstr ""
-"Kedua, silahkan tentukan mana yang hari-hari sekolah, dan yang mana hari-"
-"hari libur."
 
 #: /src/schooltool/term/browser/term_add_edit.pt:74
 msgid "Please specify which days are school days, and which days are holidays."
 msgstr ""
-"Silahkan tentukan yang mana yang hari sekolah, dan mana yang hari libur"
 
 #: /src/schooltool/term/browser/term_add_edit.pt:81
 #: /src/schooltool/term/browser/term.pt:12
 msgid "Legend:"
-msgstr "Lambang:"
+msgstr ""
 
 #: /src/schooltool/term/browser/term_add_edit.pt:82
 #: /src/schooltool/term/browser/term.pt:13
+#, fuzzy
 msgid "Schoolday"
-msgstr "Hari sekolah"
+msgstr "SchoolTool"
 
 #: /src/schooltool/term/browser/term_add_edit.pt:83
 #: /src/schooltool/term/browser/term.pt:14
+#, fuzzy
 msgid "Holiday"
-msgstr ""
+msgstr "Hari ini"
 
 #: /src/schooltool/term/browser/term_add_edit.pt:93
 msgid "Toggle the following days of week:"
@@ -4631,28 +4405,28 @@ msgstr ""
 #. Default: ""
 #: /src/schooltool/timetable/browser/__init__.py:345
 msgid "${object}'s timetable"
-msgstr "Jadwal milik ${object}"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:744
 msgid "Invalid date. Please use YYYY-MM-DD format."
-msgstr "Tanggal salah. Mohon gunakan bentuk YYYY-MM-DD."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:748
 msgid "The date does not belong to any term."
-msgstr "Tanggal ini bukan milik batas waktu manapun."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:757
 msgid "Some values were invalid.  They are highlighted in red."
 msgstr ""
-"Beberapa nilai tidak benar. Nilai tersebut ditandai dengan warna merah."
 
 #: /src/schooltool/timetable/browser/configure.zcml:112
 msgid "Change Timetable for One Day"
-msgstr "Mengubah Jadwal untuk Satu Hari"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/configure.zcml:139
+#, fuzzy
 msgid "New Timetable"
-msgstr "Jadwal baru"
+msgstr "Lihat Jadwal Mata Pelajaran"
 
 #: /src/schooltool/timetable/browser/configure.zcml:22
 msgid "View Timetables"
@@ -4663,47 +4437,47 @@ msgstr "Lihat Jadwal Mata Pelajaran"
 #: /src/schooltool/timetable/browser/configure.zcml:47
 #: /src/schooltool/course/browser/templates/section_container.pt:35
 msgid "Schedule"
-msgstr "Jadwal"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:155
 msgid "Please use HH:MM format for period start and end times"
-msgstr "Mohon gunakan bentuk HH:MM untuk mulainya periode dan akhir waktu."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:196
 msgid "You must specify at least one period."
-msgstr "Anda harus menyatakan paling tidak satu buah periode."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:217
 msgid "School Timetables"
-msgstr "Jadwal Sekolah"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:218
 msgid "Add a new schema"
-msgstr "Menambah sebuah skema"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:302
 msgid "Please select a value"
-msgstr "Silahkan pilih sebuah nilai"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/schema.py:329
 #: /src/schooltool/timetable/browser/schema.py:336
 msgid "Day ${number}"
-msgstr "Hari ${number}"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:359
 msgid "Period 1"
-msgstr "Periode 1"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/schema.py:369
 msgid "Period ${number}"
-msgstr "Periode ${number}"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/schema.py:74
 msgid "Timetable schema ${schema}"
-msgstr "Skema Jadwal ${schema}"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:114
 msgid ""
@@ -4731,7 +4505,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:17
 msgid "Please choose a name for the timetable schema you want to create."
-msgstr "Silahkan pilih sebuah nama untuk skema jadwal yang Anda ingin buat"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:175
 msgid ""
@@ -4746,12 +4520,11 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:197
 msgid "Create timetable schema"
-msgstr "Membuat skema jadwal"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:36
 msgid "First, please define the days and periods of the timetable."
 msgstr ""
-"Pertama, silahkan tentukan hari-hari dan periode-periode dari jadwalnya."
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:51
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:155
@@ -4760,58 +4533,62 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:51
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:155
+#, fuzzy
 msgid "Copy periods from previous day"
-msgstr "Salin periode-periode dari hari sebelumnya"
+msgstr "Kemarin"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:58
 msgid "X"
-msgstr "X"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:58
 msgid "Remove this day"
-msgstr "Hapus yang hari ini"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:84
+#, fuzzy
 msgid "Add day"
-msgstr "Tambahkan hari"
+msgstr "Semua hari"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:87
+#, fuzzy
 msgid "Add period"
-msgstr "Tambahkan periode"
+msgstr "Lihat periode"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:94
 msgid "Second, select the way timetable days are aligned with calendar days."
-msgstr "Kedua, Pilih cara tampil hari jadwal dengan hari kalender"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:102
 msgid ""
 "Note: if a section appears in more than one slot, all of them have to be set "
 "to <em>none</em> to remove it."
 msgstr ""
-"Catatan: Jika sebuah bagian muncul di lebih dari sat sekat (slot), semuanya "
-"harus di atur ke <em>none</em> untuk menghilangkannya."
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:22
+#, fuzzy
 msgid "Timetable"
-msgstr "Jadwal"
+msgstr "Lihat Jadwal Mata Pelajaran"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:138
+#, fuzzy
 msgid "Term"
-msgstr "Termin"
+msgstr "Semester baru"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:34
 msgid "Schema"
-msgstr "Skema"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:4
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:10
 msgid "Scheduling for ${person}"
-msgstr "Jadwal untuk ${person}"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:43
+#, fuzzy
 msgid "Choose"
-msgstr "Pilih"
+msgstr "Pelajaran"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:54
 msgid ""
@@ -4821,7 +4598,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:73
 msgid "as part of"
-msgstr "sebagai bagian dari"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:82
 msgid "none"
@@ -4837,30 +4614,32 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:107
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:108
+#, fuzzy
 msgid "Save"
-msgstr ""
+msgstr "Sama"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:17
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:15
 msgid "There are no terms or timetable schemas defined."
-msgstr "Tidak ada termin atau skema jadwal yang sudah ditentukan"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:25
 msgid "Choose schedule template"
-msgstr "Pilih template penjadwalan"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:27
 msgid "For term(s):"
-msgstr "Untuk termin:"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:4
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:11
 msgid "Scheduling for ${section}"
-msgstr "Penjadwalan untuk ${section}"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:46
+#, fuzzy
 msgid "Using timetable:"
-msgstr "Menggunakan daftar pelajaran"
+msgstr "Lihat Jadwal Mata Pelajaran"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:11
 msgid ""
@@ -4876,20 +4655,22 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:37
+#, fuzzy
 msgid "Period title (optional)"
-msgstr "Judul periode (pilihan)"
+msgstr "Pengenal (opsional)"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:38
 msgid "Period start time"
-msgstr "Waktu awal periode"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:39
 msgid "Period end time"
-msgstr "Waktu akhir periode"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:61
+#, fuzzy
 msgid "Create"
-msgstr "Membuat"
+msgstr "Tanggal"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:13
 msgid ""
@@ -4897,34 +4678,32 @@ msgid ""
 "the form below. In order to remove a period from the day, just delete the "
 "period's start and end times."
 msgstr ""
-"Anda dapat memulai dan mengakhiri periode-periode waktu untuk "
-"${DYNAMIC_CONTENT} di dalam formulir di bawah ini. Kalau ingin menghilangkan "
-"sebuah periode dari suatu hari, hapus saja awal periodenya dan waktu "
-"berakhirnya."
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:29
 msgid "Period title"
-msgstr "Judul periode"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:30
 msgid "Original start"
-msgstr "Awal yang asli"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:31
 msgid "Original end"
-msgstr "Akhir yang asli"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:32
 msgid "New start"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:33
+#, fuzzy
 msgid "New end"
-msgstr ""
+msgstr "Semester baru"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:63
+#, fuzzy
 msgid "Modify"
-msgstr ""
+msgstr "Senin"
 
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:11
 msgid ""
@@ -4947,12 +4726,11 @@ msgstr ""
 #: /src/schooltool/term/browser/emergency_select.pt:40
 #: /src/schooltool/term/browser/emergency2.pt:41
 msgid "Proceed"
-msgstr "Teruskan"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
-#, fuzzy
 msgid "Default Timetable Schema:"
-msgstr "Membuat skema jadwal"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:46
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:53
@@ -4986,8 +4764,9 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:6
 #: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:3
 #: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:6
+#, fuzzy
 msgid "New timetable schema"
-msgstr ""
+msgstr "Lihat Jadwal Mata Pelajaran"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:261
 msgid ""
@@ -5089,77 +4868,80 @@ msgstr ""
 #: /src/schooltool/timetable/browser/ttwizard.py:568
 msgid "Enter names of periods, one per line."
 msgstr ""
+"Masukkan nama-nama periode, masing-masing satu baris untuk satu periode"
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:581
 msgid "Please enter at least $number periods."
-msgstr ""
+msgstr "Silahkan masukkan paling tidak sebanyak $number periode"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:587
 msgid "Please make sure the period names are unique."
-msgstr ""
+msgstr "Mohon pastikan nama periodenya unik"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:609
 msgid "Is the sequence of periods each day the same or different?"
-msgstr ""
+msgstr "Apakah urutan periode setiap harinya adalah sama atau berbeda?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:611
 msgid "Same"
-msgstr ""
+msgstr "Sama"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:612
 msgid "Different"
-msgstr ""
+msgstr "Berbeda"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:627
 msgid "Please put the periods in order:"
-msgstr ""
+msgstr "Silahkan masukkan periode secara berurutan"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:643
 #: /src/schooltool/timetable/browser/ttwizard.py:697
 msgid "Please provide all periods."
-msgstr ""
+msgstr "Silahkan berikan seluruh periode"
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:656
 #: /src/schooltool/timetable/browser/ttwizard.py:714
 msgid "The following periods were selected more than once: $periods"
-msgstr ""
+msgstr "Periode-periode berikut ini dipilih lebih dari satu kali: $periods"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:674
 msgid "Please put the periods in order for each day:"
-msgstr ""
+msgstr "Silahkan letakkan setiap periode secara berurut untuk setiap harinya:"
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:710
 msgid "$period on day $day"
-msgstr ""
+msgstr "$period pada hari $day"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:731
 msgid ""
 "Do you check student attendance for the day in a homeroom period or "
 "equivalent?"
 msgstr ""
+"Apakah Anda memeriksa kehadiran siswa hari itu di dalam periode homeroom "
+"atau ekuivalen?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:734
 msgid "Yes"
-msgstr ""
+msgstr "Ya"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:735
 msgid "No"
-msgstr ""
+msgstr "Tidak"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:750
 msgid "Please indicate the homeroom period(s) for each day:"
-msgstr ""
+msgstr "Silahkan tunjukkan periode(s) homeroom untuk setiap harinya:"
 
 #: /src/schooltool/timetable/rest/__init__.py:267
 msgid "Unknown day id: %r"
-msgstr ""
+msgstr "Hari yang tidak diketahi id: %r"
 
 #: /src/schooltool/timetable/rest/__init__.py:273
 msgid "Unknown period id: %r"
-msgstr ""
+msgstr "Periode yang tidak diketahi id: %"
 
 #. Default: ""
 #: /src/schooltool/widget/password.py:39
@@ -5171,49 +4953,23 @@ msgstr ""
 msgid "Supplied passwords are not identical"
 msgstr ""
 
-#~ msgid "Import Sections"
-#~ msgstr "Import Bagian"
-
-#~ msgid "Locations not found: ${args}."
-#~ msgstr "Lokasi tidak ditemukan: ${args}."
-
-#~ msgid "Manage this person's memberships"
-#~ msgstr "Atur keanggotaan orang ini"
-
 #~ msgid "Username:"
-#~ msgstr "Nama user:"
+#~ msgstr "Username:"
 
 #~ msgid "Change this person's name, picture, or password"
 #~ msgstr "Ganti nama, foto, atau password orang ini"
 
+#~ msgid "Manage this person's memberships"
+#~ msgstr "Atur keanggotaan orang ini"
+
+#~ msgid "Import Sections"
+#~ msgstr "Impor Bagian"
+
+#~ msgid "Locations not found: ${args}."
+#~ msgstr "Lokasi tidak ditemukan: ${args}."
+
 #~ msgid "Modify this person's details"
 #~ msgstr "modifikasi detail orang ini"
-
-#~ msgid "Sections Taught"
-#~ msgstr "Bagian pengajaran"
-
-#~ msgid "via group"
-#~ msgstr "melalui grup"
-
-#~ msgid ""
-#~ "<p> ${DYNAMIC_CONTENT} Server Running SchoolTool <span>${DYNAMIC_CONTENT}"
-#~ "</span> &copy; The Shuttleworth Foundation 2003 - <span>2005</span>: "
-#~ "Supporting Social Innovation. </p> <p> SchoolTool&trade; is a Trademark "
-#~ "of The Shuttleworth Foundation. </p>"
-#~ msgstr ""
-#~ "<p> ${DYNAMIC_CONTENT} Server Menjalankan SchoolTool <span>"
-#~ "${DYNAMIC_CONTENT}</span> &copy; The Shuttleworth Foundation 2003 - "
-#~ "<span>2005</span>: Mendukung Inovasi Sosial. </p> <p> SchoolTool&trade; "
-#~ "adalah merek milik The Shuttleworth Foundation. </p>"
-
-#~ msgid "Person index"
-#~ msgstr "Index personal"
-
-#~ msgid "Add a new person"
-#~ msgstr "Tambahkan orang baru"
-
-#~ msgid "New photo"
-#~ msgstr "Foto baru"
 
 #~ msgid "A small picture (about 48x48 pixels in JPEG format)"
 #~ msgstr "Foto kecil (sekitar 48x48 piksel dalam format JPEG)"
@@ -5221,14 +4977,17 @@ msgstr ""
 #~ msgid "Clear photo"
 #~ msgstr "Bersihkan foto"
 
-#~ msgid "Check this to clear the photo"
-#~ msgstr "Pilih ini untuk menghapus foto"
+#~ msgid "New password"
+#~ msgstr "Password baru"
 
 #~ msgid "Verify password"
 #~ msgstr "Verifikasi password"
 
 #~ msgid "Passwords do not match."
 #~ msgstr "Password tidak sama"
+
+#~ msgid "Password was successfully changed!"
+#~ msgstr "Password telah diganti"
 
 #~ msgid "Passwords do not match!"
 #~ msgstr "Password tidak sama!"
@@ -5237,29 +4996,16 @@ msgstr ""
 #~ msgstr "Buat obyek baru"
 
 #~ msgid "Control access"
-#~ msgstr "Akses kendali"
+#~ msgstr "Pengendali akses"
 
 #~ msgid "Authenticated users"
 #~ msgstr "Pengguna terautentikasi"
 
-#, fuzzy
 #~ msgid "Unauthenticated users"
-#~ msgstr "Pengguna yang belum diperiksa"
+#~ msgstr "Penggunan yang sudah diautentikasi"
 
-#~ msgid "Unauthenticated Users"
-#~ msgstr "Pengguna yang tidak dikenali"
-
-#~ msgid "Unauthenticated User"
-#~ msgstr "Pengguna yang dikenali"
-
-#~ msgid "Authenticated Users"
-#~ msgstr "Pengguna resmi"
-
-#~ msgid "All Users"
-#~ msgstr "Semua pengguna"
-
-#~ msgid "%s: warning: ignored configuration option '%s'"
-#~ msgstr "%s: bahaya: mengabaikan pilihan konfigurasi '%s'"
+#~ msgid "An error occured."
+#~ msgstr "Sebuah kesalahan muncul"
 
 #~ msgid "Welcome to the SchoolBell server"
 #~ msgstr "Selamat datang di server SchoolBell"

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: Tue Oct 17 17:42:33 2006\n"
-"PO-Revision-Date: 2005-08-31 13:10+0000\n"
+"POT-Creation-Date: Fri Oct 20 15:20:33 2006\n"
+"PO-Revision-Date: 2006-05-08 16:46+0000\n"
 "Last-Translator: Salvör <salvor@gmail.com>\n"
 "Language-Team: Icelandic <is@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -437,9 +437,8 @@ msgstr ""
 #: /src/schooltool/app/browser/cal.py:1881
 #: /src/schooltool/app/browser/cal.py:2187
 #: /src/schooltool/course/browser/section.py:134
-#, fuzzy
 msgid "An error occurred."
-msgstr "Villa hefur komið upp."
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:1914
 msgid "Invalid time"
@@ -691,21 +690,15 @@ msgstr "Röð 2 er ekki auð"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:328
-#, fuzzy
 msgid ""
 "Wrong section header on line ${line_no} (it should contain a course id and "
 "an instructor id)"
 msgstr ""
-"Ekki rétt uppbyggð lína ${line_no} (hún ætti að innihalda auðkenni dags, "
-"auðkenni tímabils og ef vill auðkenni staðar)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:354
-#, fuzzy
 msgid "Malformed line ${line_no} (it should contain a day id and a period id)"
 msgstr ""
-"Ekki rétt uppbyggð lína ${line_no} (hún ætti að innihalda auðkenni dags, "
-"auðkenni tímabils og ef vill auðkenni staðar)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:377
@@ -714,9 +707,8 @@ msgstr "Ófullgerð lýsing á kafla í línu ${line}"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:382
-#, fuzzy
 msgid "No students in section (line ${line})"
-msgstr "Ófullgerð lýsing á kafla í línu ${line}"
+msgstr ""
 
 #: /src/schooltool/app/browser/csvimport.py:462
 msgid ""
@@ -822,8 +814,9 @@ msgstr "Breyta uppsetningu,"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:34
 #: /src/schooltool/person/browser/person_preferences.pt:22
+#, fuzzy
 msgid "Calendar Preferences"
-msgstr ""
+msgstr "Breyta uppsetningu,"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:4
 #, fuzzy
@@ -896,16 +889,18 @@ msgid "<img alt=\"x\" src=\"${DYNAMIC_CONTENT}\" />"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:37
+#, fuzzy
 msgid "View daily calendar"
-msgstr ""
+msgstr "Stundatöfludagatal"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:41
 msgid "Daily"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:43
+#, fuzzy
 msgid "View weekly calendar"
-msgstr ""
+msgstr "Stundatöfludagatal"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:47
 #: /src/schooltool/app/browser/templates/event_add.pt:235
@@ -913,12 +908,14 @@ msgid "Weekly"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:49
+#, fuzzy
 msgid "View monthly calendar"
-msgstr ""
+msgstr "Persónulegt dagatal"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:55
+#, fuzzy
 msgid "View yearly calendar"
-msgstr ""
+msgstr "Stundatöfludagatal"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:59
 msgid "Yearly"
@@ -1111,8 +1108,9 @@ msgstr ""
 #: /src/schooltool/sampledata/sampledata.pt:69
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:66
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:35
+#, fuzzy
 msgid "Clear"
-msgstr ""
+msgstr "Dagatöl"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:67
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:95
@@ -1275,16 +1273,18 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/index.pt:12
 #: /src/schooltool/course/browser/templates/section_container.pt:26
+#, fuzzy
 msgid "Courses"
-msgstr ""
+msgstr "Nýtt námskeið"
 
 #: /src/schooltool/app/browser/templates/index.pt:15
 msgid "Levels"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/index.pt:6
+#, fuzzy
 msgid "Welcome to SchoolTool"
-msgstr ""
+msgstr "Skólatól"
 
 #: /src/schooltool/app/browser/templates/login.pt:13
 msgid ""
@@ -1544,8 +1544,9 @@ msgid "submit-button"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:20
+#, fuzzy
 msgid "Import Timetable"
-msgstr ""
+msgstr "Ný stundatafla"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:24
 msgid ""
@@ -1713,9 +1714,8 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/app/interfaces.py:158
-#, fuzzy
 msgid "Show timetables"
-msgstr "Skoða stundatöflur"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:159
 msgid ""
@@ -2303,8 +2303,9 @@ msgid "Edit Calendar Overlays"
 msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:130
+#, fuzzy
 msgid "Add a Section"
-msgstr ""
+msgstr "Bæta við nýjum kafla"
 
 #: /src/schooltool/course/browser/configure.zcml:143
 msgid "Edit Section Information"
@@ -2397,9 +2398,8 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:312
 #: /src/schooltool/group/browser/group.py:60
-#, fuzzy
 msgid "Current Groups"
-msgstr "Flytja inn hópa"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:313
 #: /src/schooltool/group/browser/group.py:61
@@ -2414,9 +2414,8 @@ msgid "Resources"
 msgstr ""
 
 #: /src/schooltool/course/browser/section.py:339
-#, fuzzy
 msgid "Current Resources"
-msgstr "Flytja inn námu"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:340
 #: /src/schooltool/app/browser/templates/event_booking.pt:36
@@ -2465,8 +2464,9 @@ msgid "Upload schooltool courses as CSV"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/course.pt:18
+#, fuzzy
 msgid "Sections"
-msgstr ""
+msgstr "Kaflayfirlit"
 
 #: /src/schooltool/course/browser/templates/course.pt:36
 #: /src/schooltool/demographics/browser/nameinfo_view.pt:11
@@ -2540,8 +2540,9 @@ msgid "Identifier (optional)"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_container.pt:29
+#, fuzzy
 msgid "Section"
-msgstr ""
+msgstr "Kaflayfirlit"
 
 #: /src/schooltool/course/browser/templates/section_container.pt:38
 msgid "Current Size"
@@ -2687,9 +2688,8 @@ msgid "Change name information for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:172
-#, fuzzy
 msgid "Change name"
-msgstr "Breyta uppsetningu,"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:183
@@ -2989,9 +2989,8 @@ msgid "Categories"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:49
-#, fuzzy
 msgid "New Category"
-msgstr "Nýtt námskeið"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:52
 msgid "Default Category"
@@ -3309,8 +3308,9 @@ msgstr ""
 
 #. Default: "Calendar"
 #: /src/schooltool/group/rest/group.pt:14
+#, fuzzy
 msgid "Private_calendar"
-msgstr ""
+msgstr "Persónulegt dagatal"
 
 #: /src/schooltool/help/configure.zcml:46
 msgid "Contextual Help"
@@ -3342,14 +3342,12 @@ msgid "None"
 msgstr ""
 
 #: /src/schooltool/level/browser/level.py:41
-#, fuzzy
 msgid "Level index"
-msgstr "Námskeiðsyfirlit"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:42
-#, fuzzy
 msgid "Add a new level"
-msgstr "Bæta við nýju námskeiði"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:60
 msgid "Previous Level"
@@ -3737,8 +3735,9 @@ msgid "Sorry, you may not delete your own user account."
 msgstr ""
 
 #: /src/schooltool/person/browser/person_preferences.pt:14
+#, fuzzy
 msgid "Change preferences for ${user}"
-msgstr ""
+msgstr "Breyta uppsetningu,"
 
 #: /src/schooltool/person/browser/person_preferences.pt:4
 msgid "Edit person preferences"
@@ -3853,14 +3852,12 @@ msgid "items"
 msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.py:53
-#, fuzzy
 msgid "Requirement index"
-msgstr "Námskeiðsyfirlit"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.py:54
-#, fuzzy
 msgid "Add a new Requirement"
-msgstr "Bæta við nýju námskeiði"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/scoresystem.py:36
 msgid "Exisiting Score System"
@@ -3965,27 +3962,25 @@ msgstr ""
 #: /src/schooltool/resource/rest/resource.pt:20
 #: /src/schooltool/group/rest/group.pt:20
 #: /src/schooltool/person/rest/person.pt:19
+#, fuzzy
 msgid "Calendar_ACL"
-msgstr ""
+msgstr "Dagatöl"
 
 #: /src/schooltool/restclient/restclient.py:644
 msgid "Could not parse relationship list"
 msgstr ""
 
 #: /src/schooltool/restclient/restclient.py:660
-#, fuzzy
 msgid "Insufficient data in person info"
-msgstr "Ófullnægjandi gögn."
+msgstr ""
 
 #: /src/schooltool/restclient/restclient.py:673
-#, fuzzy
 msgid "Insufficient data in group info"
-msgstr "Ófullnægjandi gögn."
+msgstr ""
 
 #: /src/schooltool/restclient/restclient.py:688
-#, fuzzy
 msgid "Insufficient data in level info"
-msgstr "Ófullnægjandi gögn."
+msgstr ""
 
 #: /src/schooltool/sampledata/sampledata.pt:14
 msgid ""
@@ -4274,8 +4269,9 @@ msgstr ""
 
 #: /src/schooltool/term/browser/term_add_edit.pt:82
 #: /src/schooltool/term/browser/term.pt:13
+#, fuzzy
 msgid "Schoolday"
-msgstr ""
+msgstr "Skólatól"
 
 #: /src/schooltool/term/browser/term_add_edit.pt:83
 #: /src/schooltool/term/browser/term.pt:14
@@ -4446,13 +4442,15 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:22
+#, fuzzy
 msgid "Timetable"
-msgstr ""
+msgstr "Ný stundatafla"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:138
+#, fuzzy
 msgid "Term"
-msgstr ""
+msgstr "Nýtt tímabil"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:34
 msgid "Schema"
@@ -4513,8 +4511,9 @@ msgid "Scheduling for ${section}"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:46
+#, fuzzy
 msgid "Using timetable:"
-msgstr ""
+msgstr "Skoða stundatöflur"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:11
 msgid ""
@@ -4569,8 +4568,9 @@ msgid "New start"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:33
+#, fuzzy
 msgid "New end"
-msgstr ""
+msgstr "Nýtt tímabil"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:63
 msgid "Modify"
@@ -4636,8 +4636,9 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:6
 #: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:3
 #: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:6
+#, fuzzy
 msgid "New timetable schema"
-msgstr ""
+msgstr "Ný stundatafla"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:261
 msgid ""
@@ -4821,5 +4822,15 @@ msgstr ""
 msgid "Supplied passwords are not identical"
 msgstr ""
 
+#~ msgid ""
+#~ "Malformed line ${line_no} (it should contain a day id, a period id and "
+#~ "optionally a location id)"
+#~ msgstr ""
+#~ "Ekki rétt uppbyggð lína ${line_no} (hún ætti að innihalda auðkenni dags, "
+#~ "auðkenni tímabils og ef vill auðkenni staðar)"
+
 #~ msgid "Locations not found: ${args}."
 #~ msgstr "Staðir finnast ekki: ${args}."
+
+#~ msgid "An error occured."
+#~ msgstr "Villa hefur komið upp."

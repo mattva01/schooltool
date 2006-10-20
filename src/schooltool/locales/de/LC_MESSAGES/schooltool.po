@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: Tue Oct 17 17:42:33 2006\n"
-"PO-Revision-Date: 2006-01-23 00:42+0000\n"
-"Last-Translator: White Rabbit <ht57@gmx.de>\n"
+"POT-Creation-Date: Fri Oct 20 15:20:33 2006\n"
+"PO-Revision-Date: 2006-07-18 08:50+0000\n"
+"Last-Translator: turbo24prg <turbo24prg@web.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -68,7 +68,7 @@ msgstr "Personen"
 
 #: /src/schooltool/app/browser/__init__.py:259
 msgid "1 person"
-msgstr "1 Person"
+msgstr "Eine Person"
 
 #. Default: ""
 #: /src/schooltool/app/browser/__init__.py:261
@@ -84,14 +84,12 @@ msgid "Leaders"
 msgstr ""
 
 #: /src/schooltool/app/browser/app.py:314
-#, fuzzy
 msgid "Current leaders"
-msgstr "Aktuelles Jahr"
+msgstr ""
 
 #: /src/schooltool/app/browser/app.py:315
-#, fuzzy
 msgid "Available leaders"
-msgstr "Verfügbare Lehrer"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:100
 msgid "March"
@@ -271,7 +269,7 @@ msgstr "Überschrift"
 #: /src/schooltool/app/browser/templates/cal_monthly.pt:39
 #: /src/schooltool/app/browser/templates/cal_weekly.pt:42
 msgid "All day"
-msgstr "Alle Tage"
+msgstr "Ganzer Tag"
 
 #: /src/schooltool/app/browser/cal.py:1664
 #: /src/schooltool/commendation/interfaces.py:65
@@ -287,7 +285,7 @@ msgstr "Zeit"
 
 #: /src/schooltool/app/browser/cal.py:1668
 msgid "Start time in 24h format"
-msgstr "Starzeit im 24-Stunden-Format"
+msgstr "Startzeit im 24-Stunden-Format"
 
 #: /src/schooltool/app/browser/cal.py:1672
 msgid "Duration"
@@ -332,9 +330,10 @@ msgstr "Beschreibung"
 
 #: /src/schooltool/app/browser/cal.py:1694
 msgid "Recurring"
-msgstr "Wiederholung"
+msgstr "Wiederkehrend"
 
 #: /src/schooltool/app/browser/cal.py:1698
+#, fuzzy
 msgid "Recurs every"
 msgstr "Wiederholt sich alle/jeden"
 
@@ -357,8 +356,9 @@ msgid "Year"
 msgstr "Jahr"
 
 #: /src/schooltool/app/browser/cal.py:1707
+#, fuzzy
 msgid "Repeat every"
-msgstr "Wiederholt sich jeden"
+msgstr "Wiederhol jeden"
 
 #: /src/schooltool/app/browser/cal.py:1712
 msgid "Range"
@@ -374,7 +374,7 @@ msgstr "bis"
 
 #: /src/schooltool/app/browser/cal.py:1717
 msgid "forever"
-msgstr "für immer"
+msgstr "endlos"
 
 #: /src/schooltool/app/browser/cal.py:1720
 msgid "Number of events"
@@ -387,7 +387,7 @@ msgstr "Wiederholen bis"
 
 #: /src/schooltool/app/browser/cal.py:1728
 msgid "Weekdays"
-msgstr "Wochentage"
+msgstr "Wochentags"
 
 #: /src/schooltool/app/browser/cal.py:1731
 msgid "Weekday"
@@ -408,24 +408,29 @@ msgid "same weekday"
 msgstr "selber Wochentag"
 
 #: /src/schooltool/app/browser/cal.py:1833
+#, fuzzy
 msgid "1st"
-msgstr "Erster"
+msgstr "1."
 
 #: /src/schooltool/app/browser/cal.py:1833
+#, fuzzy
 msgid "4th"
-msgstr "vierte"
+msgstr "4."
 
 #: /src/schooltool/app/browser/cal.py:1833
+#, fuzzy
 msgid "3rd"
-msgstr "dritte"
+msgstr "3."
 
 #: /src/schooltool/app/browser/cal.py:1833
+#, fuzzy
 msgid "2nd"
-msgstr "zweite"
+msgstr "2."
 
 #: /src/schooltool/app/browser/cal.py:1834
+#, fuzzy
 msgid "5th"
-msgstr "fünfte"
+msgstr "5."
 
 #: /src/schooltool/app/browser/cal.py:1848
 msgid "last weekday"
@@ -441,35 +446,38 @@ msgstr "Letzter ${weekday}"
 #: /src/schooltool/course/browser/section.py:134
 #, fuzzy
 msgid "An error occurred."
-msgstr "Es ist ein Fehler aufgetreten"
+msgstr "Ein Fehler ist aufgetreten."
 
 #: /src/schooltool/app/browser/cal.py:1914
+#, fuzzy
 msgid "Invalid time"
-msgstr "Ungültige Zeitangabe"
+msgstr "Ungültige Zeit"
 
 #: /src/schooltool/app/browser/cal.py:1935
+#, fuzzy
 msgid "End date is earlier than start date"
-msgstr "Enddatum ist vor dem Startdatum"
+msgstr "Das Enddatum liegt zeitlich vor dem Anfangsdatum"
 
 #: /src/schooltool/app/browser/cal.py:1944
 msgid "Invalid date.  Please specify YYYY-MM-DD, one per line."
 msgstr ""
-"Ungültiges Datum.\n"
+"Ungültiges Datum.\r\n"
 "Format ist: JJJJ-MM-TT, eines pro Zeile"
 
 #: /src/schooltool/app/browser/cal.py:1992
 msgid "Add event"
-msgstr "Termin anlegen"
+msgstr "Ereignis hinzufügen"
 
 #: /src/schooltool/app/browser/cal.py:1993
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:62
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:90
+#, fuzzy
 msgid "Add"
 msgstr "Hinzufügen"
 
 #: /src/schooltool/app/browser/cal.py:2062
 msgid "Edit event"
-msgstr "Termin bearbeiten"
+msgstr "Ereignis bearbeiten"
 
 #: /src/schooltool/app/browser/cal.py:2063
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:29
@@ -477,13 +485,14 @@ msgstr "Termin bearbeiten"
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:185
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:42
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:61
+#, fuzzy
 msgid "Update"
 msgstr "Aktualisieren"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:2193 /src/schooltool/skin/form.py:77
 msgid "Updated on ${date_time}"
-msgstr "Daten am ${date_time} geändert"
+msgstr "Aktualisiert am ${date_time}"
 
 #: /src/schooltool/app/browser/cal.py:2532
 #: /src/schooltool/app/browser/configure.zcml:554
@@ -508,7 +517,7 @@ msgstr "Aktuelle Woche"
 
 #: /src/schooltool/app/browser/cal.py:847
 msgid "Previous week"
-msgstr "Vorherige Woche"
+msgstr "Letzte Woche"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:856
@@ -524,8 +533,9 @@ msgid "Current month"
 msgstr "Aktueller Monat"
 
 #: /src/schooltool/app/browser/cal.py:908
+#, fuzzy
 msgid "Previous month"
-msgstr "Vorheriger Monat"
+msgstr "Letzter Monat"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:916
@@ -546,8 +556,9 @@ msgid "Current year"
 msgstr "Aktuelles Jahr"
 
 #: /src/schooltool/app/browser/cal.py:956
+#, fuzzy
 msgid "Previous year"
-msgstr "Vorheriges Jahr"
+msgstr "Letztes Jahr"
 
 #: /src/schooltool/app/browser/configure.zcml:137
 msgid "Actions"
@@ -594,7 +605,7 @@ msgstr "Kalender"
 #: /src/schooltool/app/browser/configure.zcml:394
 #, fuzzy
 msgid "Atom View"
-msgstr "Ansehen"
+msgstr "Ansicht"
 
 #: /src/schooltool/app/browser/configure.zcml:404
 #, fuzzy
@@ -608,12 +619,12 @@ msgstr ""
 #: /src/schooltool/app/browser/configure.zcml:444
 #, fuzzy
 msgid "Add Event"
-msgstr "Termin anlegen"
+msgstr "Ereignis hinzufügen"
 
 #: /src/schooltool/app/browser/configure.zcml:463
 #, fuzzy
 msgid "Edit Event"
-msgstr "Termin bearbeiten"
+msgstr "Ereignis bearbeiten"
 
 #: /src/schooltool/app/browser/configure.zcml:530
 msgid "Browser UI"
@@ -700,21 +711,15 @@ msgstr "Reihe 2 ist nicht leer"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:328
-#, fuzzy
 msgid ""
 "Wrong section header on line ${line_no} (it should contain a course id and "
 "an instructor id)"
 msgstr ""
-"Fehler in Zeile ${line_no} (Eine Tag-Id, eine Unterrichtsstunde-Id und "
-"optional eine Ort-Id muss enthalten sein)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:354
-#, fuzzy
 msgid "Malformed line ${line_no} (it should contain a day id and a period id)"
 msgstr ""
-"Fehler in Zeile ${line_no} (Eine Tag-Id, eine Unterrichtsstunde-Id und "
-"optional eine Ort-Id muss enthalten sein)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:377
@@ -723,9 +728,8 @@ msgstr "Unvollständige Sektionsbeschreibung in Zeile ${line}"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:382
-#, fuzzy
 msgid "No students in section (line ${line})"
-msgstr "Unvollständige Sektionsbeschreibung in Zeile ${line}"
+msgstr ""
 
 #: /src/schooltool/app/browser/csvimport.py:462
 msgid ""
@@ -1135,7 +1139,7 @@ msgstr "Niemand zum hinzufügen."
 #: /src/schooltool/app/browser/templates/event.pt:15
 #, fuzzy
 msgid "All day event"
-msgstr "Termin anlegen"
+msgstr "Ereignis hinzufügen"
 
 #: /src/schooltool/app/browser/templates/event.pt:20
 msgid "This is a recurring event."
@@ -1157,7 +1161,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/event.pt:53
 #, fuzzy
 msgid "edit event"
-msgstr "Termin bearbeiten"
+msgstr "Ereignis bearbeiten"
 
 #: /src/schooltool/app/browser/templates/event.pt:53
 #, fuzzy
@@ -1259,7 +1263,7 @@ msgstr "Kalender ansehen"
 #: /src/schooltool/app/browser/templates/event_add.pt:325
 #, fuzzy
 msgid "Repeat forever"
-msgstr "Wiederholt sich jeden"
+msgstr "Wiederhol jeden"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:346
 #, fuzzy
@@ -1508,7 +1512,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:47
 #, fuzzy
 msgid "All"
-msgstr "Alle Tage"
+msgstr "Ganzer Tag"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:6
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:16
@@ -1806,9 +1810,8 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/app/interfaces.py:158
-#, fuzzy
 msgid "Show timetables"
-msgstr "Schul Stundenpläne"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:159
 msgid ""
@@ -1922,7 +1925,6 @@ msgstr ""
 "PDF Unterstützung ist abgeschaltet."
 
 #: /src/schooltool/app/main.py:71
-#, fuzzy
 msgid ""
 "\n"
 "Usage: %s [options]\n"
@@ -1938,15 +1940,6 @@ msgid ""
 "                         is '-')\n"
 "  --manage               only do management tasks, don't run the server\n"
 msgstr ""
-"\n"
-"Aufruf: %s [Optionen]\n"
-"Optionen:\n"
-"  -c, --config xxx verwendet diese Konfigurationsdatei statt der "
-"Standardkonfiguration \n"
-"  -h, --help zeigt diesen Hilfetext an\n"
-"  -d, --daemon Programm geht nach dem Start in den Hintergrund\n"
-"  -r, --restore-manager stellt die Manager Benutzerkennung mit dem "
-"Standardpasswort wieder her\n"
 
 #: /src/schooltool/app/main.py:85
 msgid ""
@@ -1964,13 +1957,10 @@ msgstr ""
 "Kommentarzeichen bei einer der 'ZODB Storage' Abschnitte.\n"
 
 #: /src/schooltool/app/main.py:93
-#, fuzzy
 msgid ""
 "\n"
 "This is not a SchoolTool 0.11 database file, aborting.\n"
 msgstr ""
-"\n"
-"Dies ist keine SchoolTool 0.10 Datenbank, Abbruch.\n"
 
 #: /src/schooltool/app/main.py:98
 msgid ""
@@ -2019,26 +2009,19 @@ msgstr ""
 
 #. Default: ""
 #: /src/schooltool/attendance/attendance.py:518
-#, fuzzy
 msgid "Was absent from ${section}."
-msgstr "Planung für ${section}"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/attendance.py:428
 #: /src/schooltool/attendance/browser/attendance.py:754
-#, fuzzy
 msgid "The arrival time you entered is invalid.  Please use HH:MM format"
 msgstr ""
-"Das eingegebene Datum ist ungültig. Bitte verwenden Sie das Format JJJJ-MM-"
-"TT."
 
 #: /src/schooltool/attendance/browser/attendance.py:450
-#, fuzzy
 msgid ""
 "The minutes late value you entered is invalid.  Please use an integer number "
 "of minutes."
 msgstr ""
-"Das eingegebene Datum ist ungültig. Bitte verwenden Sie das Format JJJJ-MM-"
-"TT."
 
 #: /src/schooltool/attendance/browser/attendance.py:454
 msgid "Arrival times only apply to tardy students"
@@ -2278,9 +2261,8 @@ msgstr ""
 
 #. Default: ""
 #: /src/schooltool/attendance/browser/tests/test_attendance.py:263
-#, fuzzy
 msgid "$title"
-msgstr "Überschrift"
+msgstr ""
 
 #: /src/schooltool/attendance/interfaces.py:39
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:18
@@ -2318,7 +2300,7 @@ msgstr ""
 #: /src/schooltool/batching/macros.pt:28 /src/schooltool/batching/macros.pt:35
 #, fuzzy
 msgid "Previous"
-msgstr "Vorheriges Jahr"
+msgstr "Letztes Jahr"
 
 #: /src/schooltool/batching/macros.pt:36
 msgid "&laquo; <span>x</span> <span>${DYNAMIC_CONTENT}</span>"
@@ -2354,33 +2336,28 @@ msgid "Add Commendation"
 msgstr "Unterteilung hinzufügen"
 
 #: /src/schooltool/commendation/interfaces.py:49
-#, fuzzy
 msgid "Title of the commendation."
-msgstr "Name des Kurses."
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:54
-#, fuzzy
 msgid "A detailed description of the commendation."
-msgstr "Beschreibung der Sektion."
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:58
 msgid "Scope"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:59
-#, fuzzy
 msgid "The scope of the commendation."
-msgstr "Beschreibung der Sektion."
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
-#, fuzzy
 msgid "school-wide"
-msgstr "Schultag"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
-#, fuzzy
 msgid "group"
-msgstr "Gruppen"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "community"
@@ -2391,14 +2368,12 @@ msgid "global"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:61
-#, fuzzy
 msgid "national"
-msgstr "Dauer"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:61
-#, fuzzy
 msgid "state"
-msgstr "Datum"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:66
 msgid "The date the commendation was issued."
@@ -2409,9 +2384,8 @@ msgid "Grantor"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:72
-#, fuzzy
 msgid "The grantor of the commendation."
-msgstr "Beschreibung der Sektion."
+msgstr ""
 
 #: /src/schooltool/configure.zcml:44
 #: /src/schooltool/app/browser/configure.zcml:202
@@ -2437,7 +2411,7 @@ msgstr "Beschreibung der Sektion."
 #: /src/schooltool/timetable/browser/configure.zcml:121
 #: /src/schooltool/timetable/browser/configure.zcml:130
 msgid "View"
-msgstr "Ansehen"
+msgstr "Ansicht"
 
 #: /src/schooltool/configure.zcml:45
 #: /src/schooltool/group/browser/configure.zcml:39
@@ -2446,7 +2420,7 @@ msgstr "Ansehen"
 #: /src/schooltool/level/browser/level.pt:35
 #, fuzzy
 msgid "Edit Info"
-msgstr "Termin bearbeiten"
+msgstr "Ereignis bearbeiten"
 
 #: /src/schooltool/configure.zcml:46
 msgid "Add Info"
@@ -2536,14 +2510,12 @@ msgid "Students"
 msgstr "Studenten"
 
 #: /src/schooltool/course/browser/section.py:284
-#, fuzzy
 msgid "Current Students"
-msgstr "Aktuelle Größe"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:285
-#, fuzzy
 msgid "Available Students"
-msgstr "Verfügbare Lehrer"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:311
 #: /src/schooltool/app/browser/templates/index.pt:13
@@ -2553,15 +2525,13 @@ msgstr "Gruppen"
 
 #: /src/schooltool/course/browser/section.py:312
 #: /src/schooltool/group/browser/group.py:60
-#, fuzzy
 msgid "Current Groups"
-msgstr "Aktuelles Jahr"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:313
 #: /src/schooltool/group/browser/group.py:61
-#, fuzzy
 msgid "Available Groups"
-msgstr "Verfügbare Lehrer"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:338
 #: /src/schooltool/app/browser/templates/index.pt:14
@@ -2571,15 +2541,13 @@ msgid "Resources"
 msgstr "Quellen"
 
 #: /src/schooltool/course/browser/section.py:339
-#, fuzzy
 msgid "Current Resources"
-msgstr "Ressourcen importieren"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:340
 #: /src/schooltool/app/browser/templates/event_booking.pt:36
-#, fuzzy
 msgid "Available Resources"
-msgstr "Verfügbare Lehrer"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:68
 msgid "Section index"
@@ -2641,9 +2609,8 @@ msgstr "Untergruppen"
 
 #: /src/schooltool/course/browser/templates/course.pt:36
 #: /src/schooltool/demographics/browser/nameinfo_view.pt:11
-#, fuzzy
 msgid "photo"
-msgstr "Foto"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/course.pt:53
 msgid "students"
@@ -2775,9 +2742,8 @@ msgstr ""
 
 #: /src/schooltool/dashboard/interfaces.py:49
 #: /src/schooltool/dashboard/interfaces.py:50
-#, fuzzy
 msgid "Weight"
-msgstr "Webseite"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/configure.zcml:13
 #, fuzzy
@@ -2868,20 +2834,17 @@ msgstr "Abbruch"
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:156
-#, fuzzy
 msgid "Change name information for ${fullname}"
-msgstr "Die Einstellungen für ${user} ändern."
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:172
-#, fuzzy
 msgid "Change name"
-msgstr "Hat Namen"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:183
-#, fuzzy
 msgid "Change demographics for ${fullname}"
-msgstr "Die Einstellungen für ${user} ändern."
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:191
 msgid "Demographics"
@@ -2893,9 +2856,8 @@ msgid "Change school data for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:212
-#, fuzzy
 msgid "School data"
-msgstr "Schultag"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:230
@@ -2903,9 +2865,8 @@ msgid "Change contact information for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:238
-#, fuzzy
 msgid "Contact information"
-msgstr "Unterteilung bearbeiten"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:272
 #: /src/schooltool/demographics/browser/personform.py:273
@@ -2969,36 +2930,32 @@ msgid "Gender"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:126
-#, fuzzy
 msgid "Birth date"
-msgstr "Anfangsdatum"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:131
 msgid "Ethnicity"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:137
-#, fuzzy
 msgid "Primary language"
-msgstr "Erste Telefonnummer"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:143
 msgid "Special education"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:148
-#, fuzzy
 msgid "Previous school"
-msgstr "Vorheriger Monat"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:191
 msgid "ID"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:196
-#, fuzzy
 msgid "Enrollment date"
-msgstr "Enddatum"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:201
 msgid "Projected graduation year"
@@ -3009,28 +2966,24 @@ msgid "Advisor"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:212
-#, fuzzy
 msgid "Team"
-msgstr "Bedingung"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:218
-#, fuzzy
 msgid "Health information"
-msgstr "Unterteilung bearbeiten"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:239
 #: /src/schooltool/gradebook/browser/gradebook_overview.pt:15
 #: /src/schooltool/gradebook/browser/gradebook_grade_activity.pt:32
 #: /src/schooltool/attendance/browser/templates/real_time.pt:55
 #: /src/schooltool/attendance/browser/templates/retro.pt:35
-#, fuzzy
 msgid "Name"
-msgstr "Gleich"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:244
-#, fuzzy
 msgid "Relationship to student"
-msgstr "Beziehungen"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:250
 msgid "Street"
@@ -3041,23 +2994,20 @@ msgid "City"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:260
-#, fuzzy
 msgid "State"
-msgstr "Sa"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:265
 msgid "Postal code"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:270
-#, fuzzy
 msgid "Home phone"
-msgstr "Zeitzone"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:275
-#, fuzzy
 msgid "Work phone"
-msgstr "Zweite Telefonnummer"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:280
 msgid "Cell phone"
@@ -3066,32 +3016,28 @@ msgstr ""
 #: /src/schooltool/demographics/interfaces.py:285
 #: /src/schooltool/app/browser/configure.zcml:536
 #: /src/schooltool/app/rest/configure.zcml:255 /src/schooltool/note/notes.pt:2
-#, fuzzy
 msgid "Notes"
-msgstr "Elemente"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:295
-#, fuzzy
 msgid "Text"
-msgstr "Weiter"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:296
 msgid "Full text search in name"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:301
-#, fuzzy
 msgid "Name of parent"
-msgstr "Anzahl der Ereignisse"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:302
 msgid "Full text search in parent names"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:307
-#, fuzzy
 msgid "Student ID"
-msgstr "Studenten"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:43
 msgid "Prefix"
@@ -3102,28 +3048,24 @@ msgid "Prefix such as Mr., Mrs."
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:49
-#, fuzzy
 msgid "First name"
-msgstr "Namen ändern"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:54
-#, fuzzy
 msgid "Middle name"
-msgstr "Vollständiger Name"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:59
-#, fuzzy
 msgid "Last name"
-msgstr "Namen ändern"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:64
 msgid "Suffix"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:69
-#, fuzzy
 msgid "Preferred name"
-msgstr "Meine Einstellungen"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:70
 msgid "Name by which the student prefers to be called"
@@ -3203,28 +3145,24 @@ msgid "Categories"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:49
-#, fuzzy
 msgid "New Category"
-msgstr "Neue Frist"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:52
 msgid "Default Category"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:75
-#, fuzzy
 msgid "Categories successfully deleted."
-msgstr "CSV Text erfolgreich importiert"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:81
-#, fuzzy
 msgid "Category successfully added."
-msgstr "Das Passwort wurde erfolgreich geändert."
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:87
-#, fuzzy
 msgid "Default category successfully changed."
-msgstr "Das Passwort wurde erfolgreich geändert."
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/configure.zcml:103
 msgid "New Activity"
@@ -3246,7 +3184,7 @@ msgstr "Unterteilung hinzufügen"
 #: /src/schooltool/gradebook/browser/configure.zcml:51
 #, fuzzy
 msgid "Edit Activity"
-msgstr "Termin bearbeiten"
+msgstr "Ereignis bearbeiten"
 
 #: /src/schooltool/gradebook/browser/configure.zcml:8
 msgid "Activity Categories"
@@ -3279,9 +3217,8 @@ msgstr ""
 
 #. Default: ""
 #: /src/schooltool/gradebook/browser/gradebook.py:238
-#, fuzzy
 msgid "The grade $value for $name is not valid."
-msgstr "Der eingegebene Ersatztermin ist ungültig."
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/gradebook.py:98
 msgid "Average"
@@ -3356,9 +3293,8 @@ msgid "Essay"
 msgstr ""
 
 #: /src/schooltool/gradebook/category.py:62
-#, fuzzy
 msgid "Exam"
-msgstr "Beispiel:"
+msgstr ""
 
 #: /src/schooltool/gradebook/category.py:63
 msgid "Homework"
@@ -3369,14 +3305,12 @@ msgid "Journal"
 msgstr ""
 
 #: /src/schooltool/gradebook/category.py:65
-#, fuzzy
 msgid "Lab"
-msgstr "Beschriftung"
+msgstr ""
 
 #: /src/schooltool/gradebook/category.py:66
-#, fuzzy
 msgid "Presentation"
-msgstr "Dauer"
+msgstr ""
 
 #: /src/schooltool/gradebook/category.py:67
 msgid "Project"
@@ -3387,9 +3321,8 @@ msgid "Gradebook API"
 msgstr ""
 
 #: /src/schooltool/gradebook/interfaces.py:39
-#, fuzzy
 msgid "A detailed description of the activity."
-msgstr "Beschreibung der Sektion."
+msgstr ""
 
 #: /src/schooltool/gradebook/interfaces.py:43
 msgid "Category"
@@ -3441,7 +3374,7 @@ msgstr "Unterteilung bearbeiten"
 #: /src/schooltool/group/browser/configure.zcml:76
 #, fuzzy
 msgid "Change Membership"
-msgstr "Mitgliedschaften bearbeiten"
+msgstr "Mitgliedschaft verwalten"
 
 #: /src/schooltool/group/browser/configure.zcml:91
 #, fuzzy
@@ -3504,12 +3437,12 @@ msgstr "SchoolTool Gruppen als CSV hochladen"
 #: /src/schooltool/group/browser/group.pt:16
 #, fuzzy
 msgid "Members"
-msgstr "Dezember"
+msgstr "November"
 
 #: /src/schooltool/group/browser/group.pt:23
 #, fuzzy
 msgid "edit members"
-msgstr "September"
+msgstr "Namen ändern"
 
 #: /src/schooltool/group/browser/group.pt:23
 #, fuzzy
@@ -3526,9 +3459,8 @@ msgstr "Eine neue Gruppe hinzufügen"
 
 #. Default: ""
 #: /src/schooltool/group/browser/group.py:59
-#, fuzzy
 msgid "Groups of ${person}"
-msgstr "Planung für ${person}"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/group/browser/group.py:97
@@ -3536,14 +3468,12 @@ msgid "Members of ${group}"
 msgstr ""
 
 #: /src/schooltool/group/browser/group.py:98
-#, fuzzy
 msgid "Current Members"
-msgstr "Aktuelles Jahr"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.py:99
-#, fuzzy
 msgid "Add Members"
-msgstr "Neuen Termin hinzufügen"
+msgstr ""
 
 #: /src/schooltool/group/interfaces.py:44
 msgid "Title of the group."
@@ -3565,12 +3495,12 @@ msgstr ""
 #: /src/schooltool/level/browser/configure.zcml:102
 #, fuzzy
 msgid "Add a Level"
-msgstr "Termin anlegen"
+msgstr "Ereignis hinzufügen"
 
 #: /src/schooltool/level/browser/configure.zcml:114
 #, fuzzy
 msgid "Edit Level"
-msgstr "Termin bearbeiten"
+msgstr "Ereignis bearbeiten"
 
 #: /src/schooltool/level/browser/configure.zcml:137
 #: /src/schooltool/level/browser/promotion.pt:10
@@ -3591,19 +3521,16 @@ msgid "None"
 msgstr "keine"
 
 #: /src/schooltool/level/browser/level.py:41
-#, fuzzy
 msgid "Level index"
-msgstr "Quellenverzeichnis"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:42
-#, fuzzy
 msgid "Add a new level"
-msgstr "Neue Bedingung hinzufügen"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:60
-#, fuzzy
 msgid "Previous Level"
-msgstr "Vorherige Woche"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:61
 msgid ""
@@ -3691,20 +3618,17 @@ msgid "Students successfully enrolled."
 msgstr ""
 
 #: /src/schooltool/level/browser/promotion.py:132
-#, fuzzy
 msgid "Student processes successfully updated."
-msgstr "CSV Text erfolgreich importiert"
+msgstr ""
 
 #: /src/schooltool/level/browser/promotion.py:57
-#, fuzzy
 msgid "Work Item successfully finished."
-msgstr "Das Passwort wurde erfolgreich geändert."
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/level/browser/promotion.py:64
-#, fuzzy
 msgid "Current Level: $level"
-msgstr "Aktuelle Woche"
+msgstr ""
 
 #: /src/schooltool/level/browser/record.pt:107
 msgid "History"
@@ -3755,9 +3679,8 @@ msgid "initialize-button"
 msgstr "Abbrechen"
 
 #: /src/schooltool/level/browser/record.py:56
-#, fuzzy
 msgid "The status was successfully updated."
-msgstr "Das Passwort wurde erfolgreich geändert."
+msgstr ""
 
 #: /src/schooltool/level/browser/record.py:68
 msgid "The Level Process was successfully initialized."
@@ -3768,32 +3691,28 @@ msgid "The Level Process was successfully removed."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:132
-#, fuzzy
 msgid "Time Stamp"
-msgstr "Stundenplan"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:133
 msgid "The date and time the record was created."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:137
-#, fuzzy
 msgid "User"
-msgstr "Benutzer:"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:138
 msgid "The principal id of the user making the record."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:143
-#, fuzzy
 msgid "Title of the record."
-msgstr "Quellenname"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:148
-#, fuzzy
 msgid "A detailed description of the record."
-msgstr "Beschreibung der Quelle."
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:160
 msgid "Academic History"
@@ -3806,9 +3725,8 @@ msgstr ""
 #: /src/schooltool/level/interfaces.py:166
 #: /src/schooltool/level/browser/record.pt:15
 #: /src/schooltool/attendance/browser/templates/real_time.pt:56
-#, fuzzy
 msgid "Status"
-msgstr "Sa"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:167
 msgid "The current standing of the student in the school."
@@ -3836,9 +3754,8 @@ msgid "The workflow process of the level the student is currently completing."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:76
-#, fuzzy
 msgid "Title of the level."
-msgstr "Name der Notiz."
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:80
 msgid "Is Initial Level"
@@ -3849,9 +3766,8 @@ msgid "Is this level an initial level for the school."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:86
-#, fuzzy
 msgid "Next Level"
-msgstr "Nächste Woche"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:87
 msgid ""
@@ -3864,14 +3780,12 @@ msgid "Outcome"
 msgstr ""
 
 #: /src/schooltool/level/promotion.py:129
-#, fuzzy
 msgid "Outcome of the level."
-msgstr "Name der Notiz."
+msgstr ""
 
 #: /src/schooltool/level/promotion.py:130
-#, fuzzy
 msgid "fail"
-msgstr "Täglich"
+msgstr ""
 
 #: /src/schooltool/level/promotion.py:130
 msgid "withdraw"
@@ -3883,9 +3797,8 @@ msgid "pass"
 msgstr ""
 
 #: /src/schooltool/level/promotion.py:96
-#, fuzzy
 msgid "Level"
-msgstr "Beschriftung"
+msgstr ""
 
 #: /src/schooltool/level/promotion.py:97
 msgid "The initial level of the student in the school."
@@ -3913,8 +3826,9 @@ msgid "Privacy"
 msgstr "Datenschutz"
 
 #: /src/schooltool/note/note_add.pt:13
+#, fuzzy
 msgid "Note"
-msgstr ""
+msgstr "Nein"
 
 #: /src/schooltool/note/note_add.pt:24
 msgid "Who can view the note"
@@ -4006,18 +3920,16 @@ msgid "Upload SchoolTool persons as CSV"
 msgstr "SchoolTool Personen als CSV hochladen"
 
 #: /src/schooltool/person/browser/person.py:176
-#, fuzzy
 msgid "Edit password"
-msgstr "Neues Passwort"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:181
 msgid "No new password was supplied so original password is unchanged"
 msgstr ""
 
 #: /src/schooltool/person/browser/person.py:186
-#, fuzzy
 msgid "Changed password"
-msgstr "Neues Passwort"
+msgstr ""
 
 #: /src/schooltool/person/browser/person_container_delete.pt:18
 msgid "Sorry, you may not delete your own user account."
@@ -4087,9 +3999,8 @@ msgstr "Zeige den Namen des Zeitraums in der Tagesansicht"
 
 #: /src/schooltool/person/interfaces.py:191
 #: /src/schooltool/person/interfaces.py:192
-#, fuzzy
 msgid "Make calendar public"
-msgstr "Kalender ansehen"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:70
 msgid "Name that should be displayed"
@@ -4108,12 +4019,12 @@ msgstr "Beziehungen"
 #: /src/schooltool/requirement/browser/configure.zcml:19
 #, fuzzy
 msgid "Add a Requirement"
-msgstr "Termin anlegen"
+msgstr "Ereignis hinzufügen"
 
 #: /src/schooltool/requirement/browser/configure.zcml:32
 #, fuzzy
 msgid "Edit Requirement"
-msgstr "Termin bearbeiten"
+msgstr "Ereignis bearbeiten"
 
 #: /src/schooltool/requirement/browser/configure.zcml:69
 #, fuzzy
@@ -4142,14 +4053,12 @@ msgid "items"
 msgstr "Elemente"
 
 #: /src/schooltool/requirement/browser/requirement.py:53
-#, fuzzy
 msgid "Requirement index"
-msgstr "Quellenverzeichnis"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.py:54
-#, fuzzy
 msgid "Add a new Requirement"
-msgstr "Neue Bedingung hinzufügen"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/scoresystem.py:36
 msgid "Exisiting Score System"
@@ -4271,24 +4180,20 @@ msgid "Calendar_ACL"
 msgstr "Kalender_ACL"
 
 #: /src/schooltool/restclient/restclient.py:644
-#, fuzzy
 msgid "Could not parse relationship list"
-msgstr "Kalender_Beziehungen"
+msgstr ""
 
 #: /src/schooltool/restclient/restclient.py:660
-#, fuzzy
 msgid "Insufficient data in person info"
-msgstr "Nicht genügend Daten angegeben"
+msgstr ""
 
 #: /src/schooltool/restclient/restclient.py:673
-#, fuzzy
 msgid "Insufficient data in group info"
-msgstr "Nicht genügend Daten angegeben"
+msgstr ""
 
 #: /src/schooltool/restclient/restclient.py:688
-#, fuzzy
 msgid "Insufficient data in level info"
-msgstr "Nicht genügend Daten angegeben"
+msgstr ""
 
 #: /src/schooltool/sampledata/sampledata.pt:14
 msgid ""
@@ -4368,9 +4273,8 @@ msgid "top"
 msgstr "oben"
 
 #: /src/schooltool/skin/form.py:64
-#, fuzzy
 msgid "No changes"
-msgstr "Änderungen speichern"
+msgstr ""
 
 #: /src/schooltool/skin/templates/error.pt:13
 #, fuzzy
@@ -5052,14 +4956,12 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:348
-#, fuzzy
 msgid "Day of week"
-msgstr "Tage der Woche"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:349
-#, fuzzy
 msgid "Day in cycle"
-msgstr "Rotierender Zyklus"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:414
 msgid ""
@@ -5173,16 +5075,15 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:734
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:735
 msgid "No"
-msgstr ""
+msgstr "Nein"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:750
-#, fuzzy
 msgid "Please indicate the homeroom period(s) for each day:"
-msgstr "Bitte ordnen sie die Unterrichtsstunden für jeden Tag:"
+msgstr ""
 
 #: /src/schooltool/timetable/rest/__init__.py:267
 msgid "Unknown day id: %r"
@@ -5202,20 +5103,27 @@ msgstr ""
 msgid "Supplied passwords are not identical"
 msgstr ""
 
-#~ msgid "Import Sections"
-#~ msgstr "Unterteilungen importieren"
-
-#~ msgid "Locations not found: ${args}."
-#~ msgstr "Standort nicht gefunden: ${args}"
-
-#~ msgid "Manage this person's memberships"
-#~ msgstr "Mitgliedschaften dieser Person verwalten"
-
 #~ msgid "Username:"
 #~ msgstr "Benutzername:"
 
 #~ msgid "Change this person's name, picture, or password"
 #~ msgstr "Name, Bild oder Passwort der Person ändern"
+
+#~ msgid "Manage this person's memberships"
+#~ msgstr "Mitgliedschaften dieser Person verwalten"
+
+#~ msgid "Import Sections"
+#~ msgstr "Unterteilungen importieren"
+
+#~ msgid ""
+#~ "Malformed line ${line_no} (it should contain a day id, a period id and "
+#~ "optionally a location id)"
+#~ msgstr ""
+#~ "Fehler in Zeile ${line_no} (Eine Tag-Id, eine Unterrichtsstunde-Id und "
+#~ "optional eine Ort-Id muss enthalten sein)"
+
+#~ msgid "Locations not found: ${args}."
+#~ msgstr "Standort nicht gefunden: ${args}"
 
 #~ msgid "Modify this person's details"
 #~ msgstr "Personendetails bearbeiten"
@@ -5237,6 +5145,9 @@ msgstr ""
 #~ "<span>2005</span>: Soziale Innovationen unterstützen. </p> <p> "
 #~ "SchoolTool&trade; ist eine Schutzmarke der  Shuttleworth Foundation. </p>"
 
+#~ msgid "My Preferences"
+#~ msgstr "Meine Einstellungen"
+
 #~ msgid "Person index"
 #~ msgstr "Personenverzeichnis"
 
@@ -5255,17 +5166,26 @@ msgstr ""
 #~ msgid "Check this to clear the photo"
 #~ msgstr "Klicken sie hier um das Foto zu löschen."
 
+#~ msgid "New password"
+#~ msgstr "Neues Passwort"
+
 #~ msgid "Verify password"
 #~ msgstr "Passwort wiederholen:"
 
 #~ msgid "Passwords do not match."
 #~ msgstr "Die Passwörter stimmen nicht überein."
 
+#~ msgid "Password was successfully changed!"
+#~ msgstr "Das Passwort wurde erfolgreich geändert."
+
 #~ msgid "Passwords do not match!"
 #~ msgstr "Die Passwörter stimmen nicht überein!"
 
 #~ msgid "Create new objects"
 #~ msgstr "Neue Objekte anlegen"
+
+#~ msgid "Add events"
+#~ msgstr "Neuen Termin hinzufügen"
 
 #~ msgid "Control access"
 #~ msgstr "Zugriffskontrolle"
@@ -5275,6 +5195,9 @@ msgstr ""
 
 #~ msgid "Unauthenticated users"
 #~ msgstr "Unbestätigte Benutzer"
+
+#~ msgid "An error occured."
+#~ msgstr "Es ist ein Fehler aufgetreten"
 
 #~ msgid "Unauthenticated Users"
 #~ msgstr "Unbeglaubigte Benutzer"
@@ -5291,5 +5214,33 @@ msgstr ""
 #~ msgid "%s: warning: ignored configuration option '%s'"
 #~ msgstr "%s: warnung: Option der Konfiguration '%s' ignoriert"
 
+#~ msgid ""
+#~ "\n"
+#~ "Usage: %s [options]\n"
+#~ "Options:\n"
+#~ "  -c, --config xxx       use this configuration file instead of the "
+#~ "default\n"
+#~ "  -h, --help             show this help message\n"
+#~ "  -d, --daemon           go to background after starting\n"
+#~ "  -r, --restore-manager  restore the manager user with the default "
+#~ "password\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Aufruf: %s [Optionen]\n"
+#~ "Optionen:\n"
+#~ "  -c, --config xxx verwendet diese Konfigurationsdatei statt der "
+#~ "Standardkonfiguration \n"
+#~ "  -h, --help zeigt diesen Hilfetext an\n"
+#~ "  -d, --daemon Programm geht nach dem Start in den Hintergrund\n"
+#~ "  -r, --restore-manager stellt die Manager Benutzerkennung mit dem "
+#~ "Standardpasswort wieder her\n"
+
 #~ msgid "Welcome to the SchoolBell server"
 #~ msgstr "Willkommen auf dem SchoolBell Server"
+
+#~ msgid ""
+#~ "\n"
+#~ "This is not a SchoolTool 0.10 database file, aborting.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Dies ist keine SchoolTool 0.10 Datenbank, Abbruch.\n"

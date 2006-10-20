@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: Tue Oct 17 17:42:33 2006\n"
-"PO-Revision-Date: 2005-10-26 10:27+0000\n"
+"POT-Creation-Date: Fri Oct 20 15:20:33 2006\n"
+"PO-Revision-Date: 2006-07-29 09:55+0000\n"
 "Last-Translator: Saulius Šopaga <saulius.shopaga@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -73,25 +73,23 @@ msgstr "1 asmuo"
 #. Default: ""
 #: /src/schooltool/app/browser/__init__.py:261
 msgid "${number} persons"
-msgstr "${number} asmenų"
+msgstr "${number} asmenys(ų)"
 
 #: /src/schooltool/app/browser/app.py:231
 msgid "Username or password is incorrect"
-msgstr "Vardas arba slaptažodis neteisingi"
+msgstr "Vardas arba slaptažodis klaidingi"
 
 #: /src/schooltool/app/browser/app.py:313
 msgid "Leaders"
 msgstr ""
 
 #: /src/schooltool/app/browser/app.py:314
-#, fuzzy
 msgid "Current leaders"
-msgstr "Šie metai"
+msgstr ""
 
 #: /src/schooltool/app/browser/app.py:315
-#, fuzzy
 msgid "Available leaders"
-msgstr "Laisvi mokytojai"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:100
 msgid "March"
@@ -139,7 +137,7 @@ msgstr "Ši diena"
 
 #: /src/schooltool/app/browser/cal.py:1023
 msgid "The previous day"
-msgstr "Vakarykštė diena"
+msgstr "Diena prieš"
 
 #: /src/schooltool/app/browser/cal.py:103
 msgid "October"
@@ -439,9 +437,8 @@ msgstr "Paskutinis ${weekday}"
 #: /src/schooltool/app/browser/cal.py:1881
 #: /src/schooltool/app/browser/cal.py:2187
 #: /src/schooltool/course/browser/section.py:134
-#, fuzzy
 msgid "An error occurred."
-msgstr "Klaida."
+msgstr "Klaida"
 
 #: /src/schooltool/app/browser/cal.py:1914
 msgid "Invalid time"
@@ -592,7 +589,7 @@ msgstr "Kalendorius"
 #: /src/schooltool/app/browser/configure.zcml:394
 #, fuzzy
 msgid "Atom View"
-msgstr "Rodyti"
+msgstr "Rodymas"
 
 #: /src/schooltool/app/browser/configure.zcml:404
 #, fuzzy
@@ -698,21 +695,15 @@ msgstr "2-a eilutė netuščia"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:328
-#, fuzzy
 msgid ""
 "Wrong section header on line ${line_no} (it should contain a course id and "
 "an instructor id)"
 msgstr ""
-"Klaida eilutėje ${line_no} (joje turi būti dienos ID, pamokos ID ir galimas "
-"patalpos ID)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:354
-#, fuzzy
 msgid "Malformed line ${line_no} (it should contain a day id and a period id)"
-msgstr ""
-"Klaida eilutėje ${line_no} (joje turi būti dienos ID, pamokos ID ir galimas "
-"patalpos ID)"
+msgstr "Klaida eilutėje ${line_no} (reikia dienos id ir pamokos id)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:377
@@ -721,9 +712,8 @@ msgstr "Nepilnas kurso aprašymas ${line} eilutėje"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:382
-#, fuzzy
 msgid "No students in section (line ${line})"
-msgstr "Nepilnas kurso aprašymas ${line} eilutėje"
+msgstr ""
 
 #: /src/schooltool/app/browser/csvimport.py:462
 msgid ""
@@ -866,8 +856,9 @@ msgstr "Aprašymas"
 
 #. Default: "Atom Enabled"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:47
+#, fuzzy
 msgid "atom_enabled"
-msgstr ""
+msgstr "nacionalinis"
 
 #. Default: "for more info."
 #: /src/schooltool/app/browser/templates/cal_atom.pt:50
@@ -1173,7 +1164,7 @@ msgstr "Redaguoti grupes"
 #: /src/schooltool/app/browser/templates/event.pt:80
 #, fuzzy
 msgid "delete event"
-msgstr "Keisti/ištrinti renginius"
+msgstr "Keisti/ištrinti įvykius"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:137
 #, fuzzy
@@ -1309,8 +1300,9 @@ msgid "Courses"
 msgstr "Dalykai"
 
 #: /src/schooltool/app/browser/templates/index.pt:15
+#, fuzzy
 msgid "Levels"
-msgstr ""
+msgstr "Kitas lygmuo"
 
 #: /src/schooltool/app/browser/templates/index.pt:6
 msgid "Welcome to SchoolTool"
@@ -1711,9 +1703,11 @@ msgid ""
 "containing the person ids is processed, the other columns are ignored. You "
 "can import the same data several times without any side effects."
 msgstr ""
-"Rašomi ne komponentų vardai, o jų ID. Kursų aprašymus gali skirti daugiau "
-"nei viena tuščia eilutė. Mokinių sąraše iš asmenų ID, įtraukiamas tik "
-"pirmojo lauko įrašas - po vieną mokinį eilutėje."
+"Rašomi ne komponentų vardai, o jų ID. Jei eilutė baigiasi tuščiu langeliu "
+"(pvz. <em>\"Lietuvių kalba\",\"J.Petraitis\",\"\",\"\"</em>), tai toks "
+"įrašas bus pašalintas. Kursų aprašymus gali skirti daugiau nei viena tuščia "
+"eilutė. Mokinių sąraše įtraukiami po vieną eilutėje. Tuos pačius duomenis "
+"galima įkelti kiek norima kartų nekeičiant prieš tai įkeltų duomenų."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:89
 #: /src/schooltool/resource/browser/resource-csvimport.pt:46
@@ -1721,7 +1715,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:46
 #: /src/schooltool/person/browser/person-csvimport.pt:44
 msgid "Upload CSV File"
-msgstr "Nusiųsti CSV failą"
+msgstr "Įkelti CSV failą"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:91
 #: /src/schooltool/resource/browser/resource-csvimport.pt:48
@@ -1729,7 +1723,7 @@ msgstr "Nusiųsti CSV failą"
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:48
 #: /src/schooltool/person/browser/person-csvimport.pt:46
 msgid "CSV File"
-msgstr "CSV Failas"
+msgstr "CSV rinkmena"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:96
 #: /src/schooltool/resource/browser/resource-csvimport.pt:53
@@ -1737,7 +1731,7 @@ msgstr "CSV Failas"
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:53
 #: /src/schooltool/person/browser/person-csvimport.pt:51
 msgid "Charset:"
-msgstr "Simbolių lentelė:"
+msgstr "Koduotė:"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:98
 #: /src/schooltool/resource/browser/resource-csvimport.pt:55
@@ -1745,7 +1739,7 @@ msgstr "Simbolių lentelė:"
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:55
 #: /src/schooltool/person/browser/person-csvimport.pt:53
 msgid "Unicode (UTF-8)"
-msgstr "Unicode (UTF-8)"
+msgstr "Unikodas (UTF-8)"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:99
 #: /src/schooltool/resource/browser/resource-csvimport.pt:56
@@ -1753,7 +1747,7 @@ msgstr "Unicode (UTF-8)"
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:56
 #: /src/schooltool/person/browser/person-csvimport.pt:54
 msgid "Western (ISO-8859-1)"
-msgstr "Western (ISO-8859-1)"
+msgstr "Vakarų (ISO-8859-1)"
 
 #: /src/schooltool/app/browser/tests/test_pdfcal.py:60
 msgid "Calendar for %s"
@@ -1792,9 +1786,8 @@ msgstr ""
 "            svetainei."
 
 #: /src/schooltool/app/interfaces.py:158
-#, fuzzy
 msgid "Show timetables"
-msgstr "Šablonai tvarkaraščiui"
+msgstr "Rodyti tvarkaraščius"
 
 #: /src/schooltool/app/interfaces.py:159
 msgid ""
@@ -1804,6 +1797,10 @@ msgid ""
 "            owner is shown in the calendar views.\n"
 "            "
 msgstr ""
+"\n"
+"            Parinktis, valdanti šio kalendoriaus savininko\n"
+"            tvarkaraščio rodymą kalendoriuje.\n"
+"            "
 
 #: /src/schooltool/app/interfaces.py:42
 msgid "Required input is missing."
@@ -1906,7 +1903,6 @@ msgstr ""
 "PDF palaikymas išjungtas."
 
 #: /src/schooltool/app/main.py:71
-#, fuzzy
 msgid ""
 "\n"
 "Usage: %s [options]\n"
@@ -1922,14 +1918,6 @@ msgid ""
 "                         is '-')\n"
 "  --manage               only do management tasks, don't run the server\n"
 msgstr ""
-"\n"
-"Naudojimas: %s [parametrai]\n"
-"Parametrai:\n"
-"  -c, --config xxx naudoti šį konfiguracijos failą vietoje numatytojo\n"
-"  -h, --help iškviesti šį pagalbos tekstą\n"
-"  -d, --deamon veikti foniniu režimu po paleisties\n"
-"  -r, --restore-manager atstatyti vartotoją manager su numatytuoju "
-"slaptažodžiu\n"
 
 #: /src/schooltool/app/main.py:85
 msgid ""
@@ -1946,13 +1934,12 @@ msgstr ""
 "pašalinti komentaro žymes vienam iš ZODB saugyklos aprašų.\n"
 
 #: /src/schooltool/app/main.py:93
-#, fuzzy
 msgid ""
 "\n"
 "This is not a SchoolTool 0.11 database file, aborting.\n"
 msgstr ""
 "\n"
-"Tai ne SchoolTool 0.10 duomenų bazės failas.\n"
+"Tai ne SchoolTool 0.11 duomenų bazės rinkmena, todėl sustota.\n"
 
 #: /src/schooltool/app/main.py:98
 msgid ""
@@ -1987,40 +1974,38 @@ msgstr "Jus sveikina SchoolTool tarnybinė stotis"
 #. Default: ""
 #: /src/schooltool/attendance/attendance.py:390
 msgid "Explanation was accepted."
-msgstr ""
+msgstr "Pasiaiškinimas priimtas."
 
 #. Default: ""
 #: /src/schooltool/attendance/attendance.py:392
 msgid "Is not explanained yet."
-msgstr ""
+msgstr "Dar nėra pasiaiškinimo."
 
 #. Default: ""
 #: /src/schooltool/attendance/attendance.py:512
 msgid "Was late for ${section} (${mins} minutes)."
-msgstr ""
+msgstr "Vėluota į ${section} (${mins} min.)"
 
 #. Default: ""
 #: /src/schooltool/attendance/attendance.py:518
-#, fuzzy
 msgid "Was absent from ${section}."
-msgstr "${section} tvarkaraštis"
+msgstr "Nedalyvavo ${section}."
 
 #: /src/schooltool/attendance/browser/attendance.py:428
 #: /src/schooltool/attendance/browser/attendance.py:754
-#, fuzzy
 msgid "The arrival time you entered is invalid.  Please use HH:MM format"
-msgstr "Įvesta data netinkama. Naudokite YYYY-MM-DD formatą."
+msgstr ""
+"Jūsų įvestą atvykimo laiką reikia taisyti. Teisingas formatas yra HH:MM"
 
 #: /src/schooltool/attendance/browser/attendance.py:450
-#, fuzzy
 msgid ""
 "The minutes late value you entered is invalid.  Please use an integer number "
 "of minutes."
-msgstr "Įvesta data netinkama. Naudokite YYYY-MM-DD formatą."
+msgstr ""
 
 #: /src/schooltool/attendance/browser/attendance.py:454
 msgid "Arrival times only apply to tardy students"
-msgstr ""
+msgstr "Atvykimo laikas nurodomas tik pavėlavusiems"
 
 #: /src/schooltool/attendance/browser/attendance.py:647
 msgid "You are not allowed to modify attendance information."
@@ -2029,22 +2014,22 @@ msgstr ""
 #. Default: ""
 #: /src/schooltool/attendance/browser/attendance.py:681
 msgid "Added an explanation for $absence"
-msgstr ""
+msgstr "Pridėtas pasiaiškinimas $absence"
 
 #. Default: ""
 #: /src/schooltool/attendance/browser/attendance.py:689
 msgid "Resolved $absence"
-msgstr ""
+msgstr "Išsiaiškintas $absence"
 
 #. Default: ""
 #: /src/schooltool/attendance/browser/attendance.py:692
 msgid "Rejected explanation for $absence"
-msgstr ""
+msgstr "Atmestas $absence paaiškinimas"
 
 #. Default: ""
 #: /src/schooltool/attendance/browser/attendance.py:696
 msgid "Made $absence a tardy"
-msgstr ""
+msgstr "Laikyti $absence pavėlavimu"
 
 #. Default: ""
 #: /src/schooltool/attendance/browser/attendance.py:707
@@ -2052,16 +2037,18 @@ msgid ""
 "Cannot add new explanation for $absence: old explanation not accepted/"
 "rejected"
 msgstr ""
+"Neleidžiama įtraukti naują paaiškinimą $absence: ankstesnis paaiškinimas "
+"nepriimtas ar atmestas"
 
 #. Default: ""
 #: /src/schooltool/attendance/browser/attendance.py:718
 msgid "There are no outstanding explanations to accept for $absence"
-msgstr ""
+msgstr "Nėra neperžiūrėtų $absence paaiškinimų patvirtinimui"
 
 #. Default: ""
 #: /src/schooltool/attendance/browser/attendance.py:729
 msgid "There are no outstanding explanations to reject for $absence"
-msgstr ""
+msgstr "Nėra neperžiūrėtų $absence paaiškinimų atmetimui"
 
 #. Default: ""
 #: /src/schooltool/attendance/browser/attendance.py:745
@@ -2069,31 +2056,34 @@ msgid ""
 "$absence is not a homeroom absence, only homeroom absences can be converted "
 "into tardies"
 msgstr ""
+"$absence nėra sąšaukos praleidimas, tik sąšaukos praleidimai gali būti "
+"pakeisti į pavėlavimus"
 
 #. Default: ""
 #: /src/schooltool/attendance/browser/attendance.py:762
 msgid "Could not convert $absence absence intoa homeroom tardy"
-msgstr ""
+msgstr "Negalimas $absence praleidimo pakeitimas į vėlavimą sąšaukon"
 
 #: /src/schooltool/attendance/browser/attendance.py:795
 msgid "homeroom"
-msgstr ""
+msgstr "sąšauka"
 
 #. Default: ""
 #: /src/schooltool/attendance/browser/attendance.py:807
 msgid "$date $time: absent from $section"
-msgstr ""
+msgstr "$date $time: praleista $section"
 
 #. Default: ""
 #: /src/schooltool/attendance/browser/attendance.py:809
 msgid "$date $time: late for $section, arrived on $late_arrival"
-msgstr ""
+msgstr "$date $time: pavėlavimas $section, atvykimo laikas $late_arrival"
 
 #: /src/schooltool/attendance/browser/configure.zcml:14
 #: /src/schooltool/attendance/browser/configure.zcml:49
 #: /src/schooltool/attendance/browser/templates/section-attendance-viewlet.pt:1
+#, fuzzy
 msgid "Attendance"
-msgstr ""
+msgstr "Lankomumo žymių kodai"
 
 #: /src/schooltool/attendance/browser/configure.zcml:58
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:4
@@ -2113,8 +2103,9 @@ msgid "back to site preferences"
 msgstr "Keisti parinktis asmeniui"
 
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:17
+#, fuzzy
 msgid "Students with unresolved absences"
-msgstr ""
+msgstr "Išsiaiškintas $absence"
 
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:41
 #, fuzzy
@@ -2198,11 +2189,12 @@ msgstr ""
 #: /src/schooltool/attendance/browser/templates/retro.pt:36
 #, fuzzy
 msgid "Present"
-msgstr "periodinis"
+msgstr "Pristatymas"
 
 #: /src/schooltool/attendance/browser/templates/retro.pt:37
+#, fuzzy
 msgid "Absent"
-msgstr ""
+msgstr "Užduotis"
 
 #: /src/schooltool/attendance/browser/templates/retro.pt:38
 msgid "Tardy, mins late/arrival time"
@@ -2247,31 +2239,32 @@ msgid "Attendance of ${person}"
 msgstr "${person} darbotvarkė"
 
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:42
+#, fuzzy
 msgid "Unresolved explained absences"
-msgstr ""
+msgstr "Išsiaiškintas $absence"
 
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:85
+#, fuzzy
 msgid "Unresolved unexplained absences"
-msgstr ""
+msgstr "Išsiaiškintas $absence"
 
 #. Default: ""
 #: /src/schooltool/attendance/browser/tests/test_attendance.py:263
-#, fuzzy
 msgid "$title"
-msgstr "Pavadinimas"
+msgstr "$title"
 
 #: /src/schooltool/attendance/interfaces.py:39
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:18
 msgid "Attendance status codes"
-msgstr ""
+msgstr "Lankomumo žymių kodai"
 
 #: /src/schooltool/attendance/interfaces.py:40
 msgid "Dictionary of abbreviated attendance status codes"
-msgstr ""
+msgstr "Lankomumo žymių kodų santrumpų žodynas"
 
 #: /src/schooltool/attendance/interfaces.py:44
 msgid "Retroactive attendance timeout"
-msgstr ""
+msgstr "Lankomumo pratęsimo laikas"
 
 #: /src/schooltool/attendance/interfaces.py:45
 msgid ""
@@ -2280,10 +2273,14 @@ msgid ""
 "            section meeting is completed before the attendance form\n"
 "            changes from realtime to retroactive."
 msgstr ""
+"\n"
+"            Laiko tarpas minutėmis, turintis praeiti po to, kai baigėsi\n"
+"            kurso pamoka, kad lankomumo forma pasikeistų\n"
+"            iš \"realaus laiko\" į \"praėjusio įvykio\" būseną."
 
 #: /src/schooltool/attendance/interfaces.py:52
 msgid "Homeroom tardy grace period"
-msgstr ""
+msgstr "Sąšaukos leistina vėlavimo trukmė"
 
 #: /src/schooltool/attendance/interfaces.py:53
 msgid ""
@@ -2319,12 +2316,12 @@ msgstr ""
 
 #: /src/schooltool/commendation/browser.py:69
 msgid "<unknown>"
-msgstr ""
+msgstr "<nežinomas>"
 
 #: /src/schooltool/commendation/commendation_add.pt:13
 #, fuzzy
 msgid "Commendation"
-msgstr "Patalpa"
+msgstr "nacionalinis"
 
 #: /src/schooltool/commendation/commendation_add.pt:4
 #, fuzzy
@@ -2332,64 +2329,56 @@ msgid "Add Commendation"
 msgstr "Pridėti Kursą"
 
 #: /src/schooltool/commendation/interfaces.py:49
-#, fuzzy
 msgid "Title of the commendation."
-msgstr "Kurso pavadinimas"
+msgstr "Pagyrimo antraštė"
 
 #: /src/schooltool/commendation/interfaces.py:54
-#, fuzzy
 msgid "A detailed description of the commendation."
-msgstr "Kurso aprašymas"
+msgstr "Pagyrimo smulkus aprašymas"
 
 #: /src/schooltool/commendation/interfaces.py:58
 msgid "Scope"
-msgstr ""
+msgstr "Sritis"
 
 #: /src/schooltool/commendation/interfaces.py:59
-#, fuzzy
 msgid "The scope of the commendation."
-msgstr "Kurso aprašymas"
+msgstr "Pagyrimo sritis"
 
 #: /src/schooltool/commendation/interfaces.py:60
-#, fuzzy
 msgid "school-wide"
-msgstr "Darbo diena"
+msgstr "Mokyklos mąstu"
 
 #: /src/schooltool/commendation/interfaces.py:60
-#, fuzzy
 msgid "group"
-msgstr "Grupės"
+msgstr "grupė"
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "community"
-msgstr ""
+msgstr "bendruomenė"
 
 #: /src/schooltool/commendation/interfaces.py:61
 msgid "global"
-msgstr ""
+msgstr "visuotinas"
 
 #: /src/schooltool/commendation/interfaces.py:61
-#, fuzzy
 msgid "national"
-msgstr "Trukmė"
+msgstr "nacionalinis"
 
 #: /src/schooltool/commendation/interfaces.py:61
-#, fuzzy
 msgid "state"
-msgstr "Data"
+msgstr "rajono"
 
 #: /src/schooltool/commendation/interfaces.py:66
 msgid "The date the commendation was issued."
-msgstr ""
+msgstr "rašto išdavimo data"
 
 #: /src/schooltool/commendation/interfaces.py:71
 msgid "Grantor"
-msgstr ""
+msgstr "Suteikėjas"
 
 #: /src/schooltool/commendation/interfaces.py:72
-#, fuzzy
 msgid "The grantor of the commendation."
-msgstr "Kurso aprašymas"
+msgstr ""
 
 #: /src/schooltool/configure.zcml:44
 #: /src/schooltool/app/browser/configure.zcml:202
@@ -2415,7 +2404,7 @@ msgstr "Kurso aprašymas"
 #: /src/schooltool/timetable/browser/configure.zcml:121
 #: /src/schooltool/timetable/browser/configure.zcml:130
 msgid "View"
-msgstr "Rodyti"
+msgstr "Rodymas"
 
 #: /src/schooltool/configure.zcml:45
 #: /src/schooltool/group/browser/configure.zcml:39
@@ -2514,14 +2503,12 @@ msgid "Students"
 msgstr "Mokiniai"
 
 #: /src/schooltool/course/browser/section.py:284
-#, fuzzy
 msgid "Current Students"
-msgstr "Nustatytas dydis"
+msgstr "Mokiniai"
 
 #: /src/schooltool/course/browser/section.py:285
-#, fuzzy
 msgid "Available Students"
-msgstr "Laisvi mokytojai"
+msgstr "Galimi mokiniai"
 
 #: /src/schooltool/course/browser/section.py:311
 #: /src/schooltool/app/browser/templates/index.pt:13
@@ -2531,15 +2518,13 @@ msgstr "Grupės"
 
 #: /src/schooltool/course/browser/section.py:312
 #: /src/schooltool/group/browser/group.py:60
-#, fuzzy
 msgid "Current Groups"
-msgstr "Šie metai"
+msgstr "Esamos grupės"
 
 #: /src/schooltool/course/browser/section.py:313
 #: /src/schooltool/group/browser/group.py:61
-#, fuzzy
 msgid "Available Groups"
-msgstr "Laisvi mokytojai"
+msgstr "Galimos grupės"
 
 #: /src/schooltool/course/browser/section.py:338
 #: /src/schooltool/app/browser/templates/index.pt:14
@@ -2549,15 +2534,13 @@ msgid "Resources"
 msgstr "Resursai"
 
 #: /src/schooltool/course/browser/section.py:339
-#, fuzzy
 msgid "Current Resources"
-msgstr "Įkelti Resursus"
+msgstr "Dabartiniai resursai"
 
 #: /src/schooltool/course/browser/section.py:340
 #: /src/schooltool/app/browser/templates/event_booking.pt:36
-#, fuzzy
 msgid "Available Resources"
-msgstr "Laisvi mokytojai"
+msgstr "Laisvi resursai"
 
 #: /src/schooltool/course/browser/section.py:68
 msgid "Section index"
@@ -2618,9 +2601,8 @@ msgstr "Kursai"
 
 #: /src/schooltool/course/browser/templates/course.pt:36
 #: /src/schooltool/demographics/browser/nameinfo_view.pt:11
-#, fuzzy
 msgid "photo"
-msgstr "Nuotrauka"
+msgstr "nuotrauka"
 
 #: /src/schooltool/course/browser/templates/course.pt:53
 msgid "students"
@@ -2746,13 +2728,12 @@ msgstr "${instructors} -- ${courses}"
 
 #: /src/schooltool/dashboard/interfaces.py:45
 msgid "Category Title."
-msgstr ""
+msgstr "Kategorijos antraštė."
 
 #: /src/schooltool/dashboard/interfaces.py:49
 #: /src/schooltool/dashboard/interfaces.py:50
-#, fuzzy
 msgid "Weight"
-msgstr "Svetainė"
+msgstr "Svoris"
 
 #: /src/schooltool/demographics/browser/configure.zcml:13
 #, fuzzy
@@ -2820,7 +2801,7 @@ msgstr ""
 #: /src/schooltool/gradebook/browser/configure.zcml:51
 #: /src/schooltool/term/browser/configure.zcml:58
 msgid "Edit"
-msgstr "Keisti"
+msgstr "Taisa"
 
 #: /src/schooltool/demographics/browser/personform.py:102
 msgid "Apply and Next"
@@ -2843,20 +2824,17 @@ msgstr "Atšaukti"
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:156
-#, fuzzy
 msgid "Change name information for ${fullname}"
-msgstr "Keisti nustatymus ${user}"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:172
-#, fuzzy
 msgid "Change name"
-msgstr "Turi vardus"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:183
-#, fuzzy
 msgid "Change demographics for ${fullname}"
-msgstr "Keisti nustatymus ${user}"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:191
 msgid "Demographics"
@@ -2868,9 +2846,8 @@ msgid "Change school data for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:212
-#, fuzzy
 msgid "School data"
-msgstr "Darbo diena"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:230
@@ -2878,9 +2855,8 @@ msgid "Change contact information for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:238
-#, fuzzy
 msgid "Contact information"
-msgstr "Keisti Kurso duomenis"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:272
 #: /src/schooltool/demographics/browser/personform.py:273
@@ -2944,36 +2920,32 @@ msgid "Gender"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:126
-#, fuzzy
 msgid "Birth date"
-msgstr "Pradžios data"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:131
 msgid "Ethnicity"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:137
-#, fuzzy
 msgid "Primary language"
-msgstr "Telefono nr."
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:143
 msgid "Special education"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:148
-#, fuzzy
 msgid "Previous school"
-msgstr "Ankstesnis mėnuo"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:191
 msgid "ID"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:196
-#, fuzzy
 msgid "Enrollment date"
-msgstr "Pabaigos data"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:201
 msgid "Projected graduation year"
@@ -2984,28 +2956,24 @@ msgid "Advisor"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:212
-#, fuzzy
 msgid "Team"
-msgstr "Semestras"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:218
-#, fuzzy
 msgid "Health information"
-msgstr "Keisti Kurso duomenis"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:239
 #: /src/schooltool/gradebook/browser/gradebook_overview.pt:15
 #: /src/schooltool/gradebook/browser/gradebook_grade_activity.pt:32
 #: /src/schooltool/attendance/browser/templates/real_time.pt:55
 #: /src/schooltool/attendance/browser/templates/retro.pt:35
-#, fuzzy
 msgid "Name"
-msgstr "Ta pati"
+msgstr "Vardas"
 
 #: /src/schooltool/demographics/interfaces.py:244
-#, fuzzy
 msgid "Relationship to student"
-msgstr "Pavaldumo ryšiai"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:250
 msgid "Street"
@@ -3016,23 +2984,20 @@ msgid "City"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:260
-#, fuzzy
 msgid "State"
-msgstr "Št"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:265
 msgid "Postal code"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:270
-#, fuzzy
 msgid "Home phone"
-msgstr "Laiko juosta"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:275
-#, fuzzy
 msgid "Work phone"
-msgstr "Papildomas telefonas"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:280
 msgid "Cell phone"
@@ -3041,64 +3006,56 @@ msgstr ""
 #: /src/schooltool/demographics/interfaces.py:285
 #: /src/schooltool/app/browser/configure.zcml:536
 #: /src/schooltool/app/rest/configure.zcml:255 /src/schooltool/note/notes.pt:2
-#, fuzzy
 msgid "Notes"
-msgstr "elementai"
+msgstr "Pastabos"
 
 #: /src/schooltool/demographics/interfaces.py:295
-#, fuzzy
 msgid "Text"
-msgstr "Toliau"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:296
 msgid "Full text search in name"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:301
-#, fuzzy
 msgid "Name of parent"
-msgstr "Viso renginių"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:302
 msgid "Full text search in parent names"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:307
-#, fuzzy
 msgid "Student ID"
-msgstr "Mokiniai"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:43
 msgid "Prefix"
-msgstr ""
+msgstr "Titulas"
 
 #: /src/schooltool/demographics/interfaces.py:44
 msgid "Prefix such as Mr., Mrs."
-msgstr ""
+msgstr "Asmenvardžio priešdėlis"
 
 #: /src/schooltool/demographics/interfaces.py:49
-#, fuzzy
 msgid "First name"
-msgstr "Redaguoti vardą"
+msgstr "Vardas"
 
 #: /src/schooltool/demographics/interfaces.py:54
-#, fuzzy
 msgid "Middle name"
-msgstr "Vardas ir pavardė"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:59
-#, fuzzy
 msgid "Last name"
-msgstr "Redaguoti vardą"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:64
 msgid "Suffix"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:69
-#, fuzzy
 msgid "Preferred name"
-msgstr "Mano Nustatymai"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:70
 msgid "Name by which the student prefers to be called"
@@ -3137,7 +3094,7 @@ msgstr ""
 #: /src/schooltool/gradebook/browser/activities_overview.pt:4
 #: /src/schooltool/gradebook/browser/activities_overview.pt:8
 msgid "Activities"
-msgstr ""
+msgstr "Dalyvavimas"
 
 #: /src/schooltool/gradebook/browser/activities_overview.pt:41
 msgid "(inherited)"
@@ -3163,8 +3120,9 @@ msgstr "Pridėti"
 
 #: /src/schooltool/gradebook/browser/categories.pt:4
 #: /src/schooltool/gradebook/browser/categories.pt:15
+#, fuzzy
 msgid "Manage Activity Categories"
-msgstr ""
+msgstr "Veiklos kategorija"
 
 #. Default: "Change"
 #: /src/schooltool/gradebook/browser/categories.pt:45
@@ -3175,35 +3133,32 @@ msgstr "Atšaukti"
 
 #: /src/schooltool/gradebook/browser/category.py:43
 msgid "Categories"
-msgstr ""
+msgstr "Kategorijos"
 
 #: /src/schooltool/gradebook/browser/category.py:49
-#, fuzzy
 msgid "New Category"
-msgstr "Naujas semestras"
+msgstr "Nauja Kategorija"
 
 #: /src/schooltool/gradebook/browser/category.py:52
 msgid "Default Category"
-msgstr ""
+msgstr "Numatytoji Kategorija"
 
 #: /src/schooltool/gradebook/browser/category.py:75
-#, fuzzy
 msgid "Categories successfully deleted."
-msgstr "CSV tekstas sėkmingai įkeltas"
+msgstr "Kategorijos sėkmingai pašalintos"
 
 #: /src/schooltool/gradebook/browser/category.py:81
-#, fuzzy
 msgid "Category successfully added."
-msgstr "Slaptažodis sėkmingai pakeistas!"
+msgstr "Kategorija sėkmingai pridėta"
 
 #: /src/schooltool/gradebook/browser/category.py:87
-#, fuzzy
 msgid "Default category successfully changed."
-msgstr "Slaptažodis sėkmingai pakeistas!"
+msgstr "Numatytoji kategorija sėkmingai pakeista"
 
 #: /src/schooltool/gradebook/browser/configure.zcml:103
+#, fuzzy
 msgid "New Activity"
-msgstr ""
+msgstr "Dalyvavimas"
 
 #: /src/schooltool/gradebook/browser/configure.zcml:121
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:5
@@ -3224,43 +3179,43 @@ msgid "Edit Activity"
 msgstr "Redaguoti renginį"
 
 #: /src/schooltool/gradebook/browser/configure.zcml:8
+#, fuzzy
 msgid "Activity Categories"
-msgstr ""
+msgstr "Veiklos kategorija"
 
 #: /src/schooltool/gradebook/browser/gradebook.py:100
 msgid "Percent Average"
-msgstr ""
+msgstr "Procentinis vidurkis"
 
 #: /src/schooltool/gradebook/browser/gradebook.py:102
 msgid "Median"
-msgstr ""
+msgstr "Mediana"
 
 #: /src/schooltool/gradebook/browser/gradebook.py:104
 msgid "Standard Deviation"
-msgstr ""
+msgstr "Standartinis nuokrypis"
 
 #: /src/schooltool/gradebook/browser/gradebook.py:106
 msgid "Variance"
-msgstr ""
+msgstr "Variantiškumas"
 
 #: /src/schooltool/gradebook/browser/gradebook.py:113
 msgid "N/A"
-msgstr ""
+msgstr "nėra"
 
 #. Default: ""
 #: /src/schooltool/gradebook/browser/gradebook.py:170
 msgid "The grade $value for activity $name is not valid."
-msgstr ""
+msgstr "Įvertinimas $value veiklai $name negalimas."
 
 #. Default: ""
 #: /src/schooltool/gradebook/browser/gradebook.py:238
-#, fuzzy
 msgid "The grade $value for $name is not valid."
-msgstr "Įvesta pavadavimo data netinkama"
+msgstr "Įvertinimas $value $name negalimas."
 
 #: /src/schooltool/gradebook/browser/gradebook.py:98
 msgid "Average"
-msgstr ""
+msgstr "Vidurkis"
 
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:12
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:32
@@ -3273,8 +3228,9 @@ msgid "Student Name"
 msgstr "Mokiniai"
 
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:29
+#, fuzzy
 msgid "Activity Name"
-msgstr ""
+msgstr "Dalyvavimas"
 
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:30
 msgid "(Due) Date"
@@ -3314,8 +3270,9 @@ msgid "Grade ${name}"
 msgstr "Pamoka ${number}"
 
 #: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:32
+#, fuzzy
 msgid "Activity"
-msgstr ""
+msgstr "Dalyvavimas"
 
 #: /src/schooltool/gradebook/browser/gradebook_overview.pt:16
 #: /src/schooltool/gradebook/browser/gradebook_overview.pt:27
@@ -3324,71 +3281,67 @@ msgstr ""
 
 #: /src/schooltool/gradebook/category.py:60
 msgid "Assignment"
-msgstr ""
+msgstr "Užduotis"
 
 #: /src/schooltool/gradebook/category.py:61
 msgid "Essay"
-msgstr ""
+msgstr "Esė"
 
 #: /src/schooltool/gradebook/category.py:62
-#, fuzzy
 msgid "Exam"
-msgstr "Pavyzdys:"
+msgstr "Egzaminas"
 
 #: /src/schooltool/gradebook/category.py:63
 msgid "Homework"
-msgstr ""
+msgstr "Namų darbas"
 
 #: /src/schooltool/gradebook/category.py:64
 msgid "Journal"
-msgstr ""
+msgstr "Dienoraštis"
 
 #: /src/schooltool/gradebook/category.py:65
-#, fuzzy
 msgid "Lab"
-msgstr "Žymė"
+msgstr "Laboratorinis"
 
 #: /src/schooltool/gradebook/category.py:66
-#, fuzzy
 msgid "Presentation"
-msgstr "Trukmė"
+msgstr "Pristatymas"
 
 #: /src/schooltool/gradebook/category.py:67
 msgid "Project"
-msgstr ""
+msgstr "Projektas"
 
 #: /src/schooltool/gradebook/configure.zcml:138
 msgid "Gradebook API"
 msgstr ""
 
 #: /src/schooltool/gradebook/interfaces.py:39
-#, fuzzy
 msgid "A detailed description of the activity."
-msgstr "Kurso aprašymas"
+msgstr "Smulkus veiklos aprašymas"
 
 #: /src/schooltool/gradebook/interfaces.py:43
 msgid "Category"
-msgstr ""
+msgstr "Kategorija"
 
 #: /src/schooltool/gradebook/interfaces.py:44
 msgid "The activity category"
-msgstr ""
+msgstr "Veiklos kategorija"
 
 #: /src/schooltool/gradebook/interfaces.py:49
 msgid "Scoresystem"
-msgstr ""
+msgstr "Vertinimo sistema"
 
 #: /src/schooltool/gradebook/interfaces.py:50
 msgid "The activity scoresystem."
-msgstr ""
+msgstr "Veiklos vertinimo sistema"
 
 #: /src/schooltool/gradebook/interfaces.py:55
 msgid "The date the activity was created."
-msgstr ""
+msgstr "Veiklos sukūrimo data"
 
 #: /src/schooltool/gradebook/interfaces.py:72
 msgid "Activities in this gradebook."
-msgstr ""
+msgstr "Veiklos šioje pažymių knygelėje"
 
 #: /src/schooltool/gradebook/interfaces.py:76
 msgid "Students in this gradebook."
@@ -3416,7 +3369,7 @@ msgstr "Keisti Kurso duomenis"
 #: /src/schooltool/group/browser/configure.zcml:76
 #, fuzzy
 msgid "Change Membership"
-msgstr "Tvarkyti narystę grupėse"
+msgstr "Tvarkyti narystę"
 
 #: /src/schooltool/group/browser/configure.zcml:91
 #, fuzzy
@@ -3477,12 +3430,12 @@ msgstr "Įkelti SchoolTool grupes CSV formatu"
 #: /src/schooltool/group/browser/group.pt:16
 #, fuzzy
 msgid "Members"
-msgstr "Gruodis"
+msgstr "Lapkritis"
 
 #: /src/schooltool/group/browser/group.pt:23
 #, fuzzy
 msgid "edit members"
-msgstr "Rugsėjis"
+msgstr "Redaguoti vardą"
 
 #: /src/schooltool/group/browser/group.pt:23
 #, fuzzy
@@ -3499,9 +3452,8 @@ msgstr "Pridėti naują grupę"
 
 #. Default: ""
 #: /src/schooltool/group/browser/group.py:59
-#, fuzzy
 msgid "Groups of ${person}"
-msgstr "${person} darbotvarkė"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/group/browser/group.py:97
@@ -3509,14 +3461,12 @@ msgid "Members of ${group}"
 msgstr ""
 
 #: /src/schooltool/group/browser/group.py:98
-#, fuzzy
 msgid "Current Members"
-msgstr "Šie metai"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.py:99
-#, fuzzy
 msgid "Add Members"
-msgstr "Įtraukti renginius"
+msgstr ""
 
 #: /src/schooltool/group/interfaces.py:44
 msgid "Title of the group."
@@ -3538,7 +3488,7 @@ msgstr ""
 #: /src/schooltool/level/browser/configure.zcml:102
 #, fuzzy
 msgid "Add a Level"
-msgstr "Įtraukti renginį"
+msgstr "Pridėti lygmenį"
 
 #: /src/schooltool/level/browser/configure.zcml:114
 #, fuzzy
@@ -3555,8 +3505,9 @@ msgid "Academic Record"
 msgstr ""
 
 #: /src/schooltool/level/browser/level.pt:15
+#, fuzzy
 msgid "This is an initial level."
-msgstr ""
+msgstr "Tai pradinis lygmuo"
 
 #: /src/schooltool/level/browser/level.pt:21
 #, fuzzy
@@ -3564,24 +3515,21 @@ msgid "None"
 msgstr "joks"
 
 #: /src/schooltool/level/browser/level.py:41
-#, fuzzy
 msgid "Level index"
-msgstr "Resurso indeksas"
+msgstr "Klasės indeksas"
 
 #: /src/schooltool/level/browser/level.py:42
-#, fuzzy
 msgid "Add a new level"
-msgstr "Pridėti naują semestrą"
+msgstr "Pridėti lygmenį"
 
 #: /src/schooltool/level/browser/level.py:60
-#, fuzzy
 msgid "Previous Level"
-msgstr "Ankstesnė savaitė"
+msgstr "Ankstesnis lygmuo"
 
 #: /src/schooltool/level/browser/level.py:61
 msgid ""
 "The previous level in the school. If None, then there is no previous level."
-msgstr ""
+msgstr "Ankstesnis lygmuo mokykloje. \"Nėra\", jei tai pradinis lygmuo."
 
 #: /src/schooltool/level/browser/level_validation.pt:15
 msgid ""
@@ -3632,12 +3580,14 @@ msgid "E"
 msgstr ""
 
 #: /src/schooltool/level/browser/promotion.pt:51
+#, fuzzy
 msgid "Initialize Students"
-msgstr ""
+msgstr "Galimi mokiniai"
 
 #: /src/schooltool/level/browser/promotion.pt:60
+#, fuzzy
 msgid "Inital Level"
-msgstr ""
+msgstr "Tai pradinis lygmuo"
 
 #: /src/schooltool/level/browser/promotion.pt:84
 msgid "I"
@@ -3657,27 +3607,24 @@ msgstr ""
 #: /src/schooltool/level/browser/promotion.py:109
 #: /src/schooltool/level/browser/promotion.py:123
 msgid "No students were selected."
-msgstr ""
+msgstr "Nepasirinkta nė vieno mokinio"
 
 #: /src/schooltool/level/browser/promotion.py:116
 msgid "Students successfully enrolled."
-msgstr ""
+msgstr "Mokiniai sėkmingai įtraukti."
 
 #: /src/schooltool/level/browser/promotion.py:132
-#, fuzzy
 msgid "Student processes successfully updated."
-msgstr "CSV tekstas sėkmingai įkeltas"
+msgstr ""
 
 #: /src/schooltool/level/browser/promotion.py:57
-#, fuzzy
 msgid "Work Item successfully finished."
-msgstr "Slaptažodis sėkmingai pakeistas!"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/level/browser/promotion.py:64
-#, fuzzy
 msgid "Current Level: $level"
-msgstr "Ši savaitė"
+msgstr "Esamas lygmuo: $level"
 
 #: /src/schooltool/level/browser/record.pt:107
 msgid "History"
@@ -3728,9 +3675,8 @@ msgid "initialize-button"
 msgstr "Atšaukti"
 
 #: /src/schooltool/level/browser/record.py:56
-#, fuzzy
 msgid "The status was successfully updated."
-msgstr "Slaptažodis sėkmingai pakeistas!"
+msgstr "Statusas sėkmingai atnaujintas"
 
 #: /src/schooltool/level/browser/record.py:68
 msgid "The Level Process was successfully initialized."
@@ -3741,32 +3687,28 @@ msgid "The Level Process was successfully removed."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:132
-#, fuzzy
 msgid "Time Stamp"
-msgstr "Pamokų tvarkaraštis"
+msgstr "Laiko žyma"
 
 #: /src/schooltool/level/interfaces.py:133
 msgid "The date and time the record was created."
-msgstr ""
+msgstr "Įrašo sukūrimo data ir laikas"
 
 #: /src/schooltool/level/interfaces.py:137
-#, fuzzy
 msgid "User"
-msgstr "Vartotojas:"
+msgstr "Naudotojas"
 
 #: /src/schooltool/level/interfaces.py:138
 msgid "The principal id of the user making the record."
-msgstr ""
+msgstr "Naudotojo id, atsakingo už įrašus"
 
 #: /src/schooltool/level/interfaces.py:143
-#, fuzzy
 msgid "Title of the record."
-msgstr "Resurso pavadinimas"
+msgstr "Įrašo antraštė"
 
 #: /src/schooltool/level/interfaces.py:148
-#, fuzzy
 msgid "A detailed description of the record."
-msgstr "Resurso aprašymas"
+msgstr "Įrašo išsamus aprašymas"
 
 #: /src/schooltool/level/interfaces.py:160
 msgid "Academic History"
@@ -3779,9 +3721,8 @@ msgstr ""
 #: /src/schooltool/level/interfaces.py:166
 #: /src/schooltool/level/browser/record.pt:15
 #: /src/schooltool/attendance/browser/templates/real_time.pt:56
-#, fuzzy
 msgid "Status"
-msgstr "Št"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:167
 msgid "The current standing of the student in the school."
@@ -3809,27 +3750,26 @@ msgid "The workflow process of the level the student is currently completing."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:76
-#, fuzzy
 msgid "Title of the level."
-msgstr "Pastabos pavadinimas"
+msgstr "lygmens vardas"
 
 #: /src/schooltool/level/interfaces.py:80
 msgid "Is Initial Level"
-msgstr ""
+msgstr "Tai pradinis lygmuo"
 
 #: /src/schooltool/level/interfaces.py:81
 msgid "Is this level an initial level for the school."
-msgstr ""
+msgstr "Tai pradinis mokymosi lygmuo mokykloje"
 
 #: /src/schooltool/level/interfaces.py:86
-#, fuzzy
 msgid "Next Level"
-msgstr "Kita savaitė"
+msgstr "Kitas lygmuo"
 
 #: /src/schooltool/level/interfaces.py:87
 msgid ""
 "The next level in the school. If None, then there is no following level."
 msgstr ""
+"Kitas lygmuo, užbaigus šį lygmenį. \"Nėra\", jei tai baigiamasis lygmuo."
 
 #: /src/schooltool/level/promotion.py:128
 #: /src/schooltool/level/browser/promotion.pt:101
@@ -3837,18 +3777,16 @@ msgid "Outcome"
 msgstr ""
 
 #: /src/schooltool/level/promotion.py:129
-#, fuzzy
 msgid "Outcome of the level."
-msgstr "Pastabos pavadinimas"
+msgstr ""
 
 #: /src/schooltool/level/promotion.py:130
-#, fuzzy
 msgid "fail"
-msgstr "Diena po dienos"
+msgstr "neišlaikė"
 
 #: /src/schooltool/level/promotion.py:130
 msgid "withdraw"
-msgstr ""
+msgstr "išvyko"
 
 #: /src/schooltool/level/promotion.py:130
 #: /src/schooltool/level/promotion.py:132
@@ -3856,9 +3794,8 @@ msgid "pass"
 msgstr ""
 
 #: /src/schooltool/level/promotion.py:96
-#, fuzzy
 msgid "Level"
-msgstr "Žymė"
+msgstr ""
 
 #: /src/schooltool/level/promotion.py:97
 msgid "The initial level of the student in the school."
@@ -3886,8 +3823,9 @@ msgid "Privacy"
 msgstr "Privatumas"
 
 #: /src/schooltool/note/note_add.pt:13
+#, fuzzy
 msgid "Note"
-msgstr ""
+msgstr "Pastabos"
 
 #: /src/schooltool/note/note_add.pt:24
 msgid "Who can view the note"
@@ -3977,18 +3915,16 @@ msgid "Upload SchoolTool persons as CSV"
 msgstr "Įkelti SchoolTool asmenis CSV formatu"
 
 #: /src/schooltool/person/browser/person.py:176
-#, fuzzy
 msgid "Edit password"
-msgstr "Naujas slaptažodis"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:181
 msgid "No new password was supplied so original password is unchanged"
 msgstr ""
 
 #: /src/schooltool/person/browser/person.py:186
-#, fuzzy
 msgid "Changed password"
-msgstr "Naujas slaptažodis"
+msgstr ""
 
 #: /src/schooltool/person/browser/person_container_delete.pt:18
 msgid "Sorry, you may not delete your own user account."
@@ -4058,9 +3994,8 @@ msgstr "Rodyti pamokos vardą dienos rodinyje"
 
 #: /src/schooltool/person/interfaces.py:191
 #: /src/schooltool/person/interfaces.py:192
-#, fuzzy
 msgid "Make calendar public"
-msgstr "Rodyti kalendorių"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:70
 msgid "Name that should be displayed"
@@ -4079,17 +4014,17 @@ msgstr "Pavaldumo ryšiai"
 #: /src/schooltool/requirement/browser/configure.zcml:19
 #, fuzzy
 msgid "Add a Requirement"
-msgstr "Įtraukti renginį"
+msgstr "Pridėti naują Reikalavimą"
 
 #: /src/schooltool/requirement/browser/configure.zcml:32
 #, fuzzy
 msgid "Edit Requirement"
-msgstr "Redaguoti renginį"
+msgstr "Pridėti naują Reikalavimą"
 
 #: /src/schooltool/requirement/browser/configure.zcml:69
 #, fuzzy
 msgid "New Requirement"
-msgstr "Naujas semestras"
+msgstr "Pridėti naują Reikalavimą"
 
 #: /src/schooltool/requirement/browser/requirement.pt:40
 #: /src/schooltool/course/browser/templates/course_container.pt:28
@@ -4113,18 +4048,16 @@ msgid "items"
 msgstr "elementai"
 
 #: /src/schooltool/requirement/browser/requirement.py:53
-#, fuzzy
 msgid "Requirement index"
-msgstr "Resurso indeksas"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.py:54
-#, fuzzy
 msgid "Add a new Requirement"
-msgstr "Pridėti naują semestrą"
+msgstr "Pridėti naują Reikalavimą"
 
 #: /src/schooltool/requirement/browser/scoresystem.py:36
 msgid "Exisiting Score System"
-msgstr ""
+msgstr "Esanti Vertinimo Sistema"
 
 #: /src/schooltool/requirement/browser/scoresystem.py:41
 msgid "Custom score system"
@@ -4239,24 +4172,20 @@ msgid "Calendar_ACL"
 msgstr "Calendar_ACL"
 
 #: /src/schooltool/restclient/restclient.py:644
-#, fuzzy
 msgid "Could not parse relationship list"
-msgstr "Calendar_relationships"
+msgstr ""
 
 #: /src/schooltool/restclient/restclient.py:660
-#, fuzzy
 msgid "Insufficient data in person info"
-msgstr "Nepakanka duomenų."
+msgstr "Trūkta asmens duomenų"
 
 #: /src/schooltool/restclient/restclient.py:673
-#, fuzzy
 msgid "Insufficient data in group info"
-msgstr "Nepakanka duomenų."
+msgstr ""
 
 #: /src/schooltool/restclient/restclient.py:688
-#, fuzzy
 msgid "Insufficient data in level info"
-msgstr "Nepakanka duomenų."
+msgstr ""
 
 #: /src/schooltool/sampledata/sampledata.pt:14
 msgid ""
@@ -4335,9 +4264,8 @@ msgid "top"
 msgstr "viršus"
 
 #: /src/schooltool/skin/form.py:64
-#, fuzzy
 msgid "No changes"
-msgstr "Išsaugoti"
+msgstr ""
 
 #: /src/schooltool/skin/templates/error.pt:13
 #, fuzzy
@@ -4930,8 +4858,9 @@ msgid "Timetables for ${object}"
 msgstr "${object} tvarkaraščiai"
 
 #: /src/schooltool/timetable/browser/templates/timetableschema.pt:31
+#, fuzzy
 msgid "Homeroom"
-msgstr ""
+msgstr "sąšauka"
 
 #: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:3
 #: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:6
@@ -5002,14 +4931,12 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:348
-#, fuzzy
 msgid "Day of week"
-msgstr "Savaitinis"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:349
-#, fuzzy
 msgid "Day in cycle"
-msgstr "Slenkantis"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:414
 msgid ""
@@ -5112,20 +5039,19 @@ msgstr "$day dienos $period"
 msgid ""
 "Do you check student attendance for the day in a homeroom period or "
 "equivalent?"
-msgstr ""
+msgstr "Ar yra sąšaukos laikas mokinio dienos lankomumui žymėti?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:734
 msgid "Yes"
-msgstr ""
+msgstr "Taip"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:735
 msgid "No"
-msgstr ""
+msgstr "Ne"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:750
-#, fuzzy
 msgid "Please indicate the homeroom period(s) for each day:"
-msgstr "Įveskite pamokas pagal eilę kiekvienai dienai:"
+msgstr "Nurodykite sąšaukos laiką(us) kiekvienai dienai:"
 
 #: /src/schooltool/timetable/rest/__init__.py:267
 msgid "Unknown day id: %r"
@@ -5145,20 +5071,27 @@ msgstr ""
 msgid "Supplied passwords are not identical"
 msgstr ""
 
-#~ msgid "Import Sections"
-#~ msgstr "Įkelti Kursus"
-
-#~ msgid "Locations not found: ${args}."
-#~ msgstr "Nėra tokių patalpų: §{args}."
-
-#~ msgid "Manage this person's memberships"
-#~ msgstr "Tvarkyti šio asmens priklausomybę grupėms"
-
 #~ msgid "Username:"
 #~ msgstr "Vartotojas:"
 
 #~ msgid "Change this person's name, picture, or password"
 #~ msgstr "Pakeisti asmens vardą, nuotrauką ar slaptažodį"
+
+#~ msgid "Manage this person's memberships"
+#~ msgstr "Tvarkyti šio asmens priklausomybę grupėms"
+
+#~ msgid "Import Sections"
+#~ msgstr "Įkelti Kursus"
+
+#~ msgid ""
+#~ "Malformed line ${line_no} (it should contain a day id, a period id and "
+#~ "optionally a location id)"
+#~ msgstr ""
+#~ "Klaida eilutėje ${line_no} (joje turi būti dienos ID, pamokos ID ir "
+#~ "galimas patalpos ID)"
+
+#~ msgid "Locations not found: ${args}."
+#~ msgstr "Nėra tokių patalpų: §{args}."
 
 #~ msgid "Modify this person's details"
 #~ msgstr "Pakeisti šio asmens kontaktinius duomenis"
@@ -5180,6 +5113,9 @@ msgstr ""
 #~ "span>: Socialinių inovacijų palaikymas. </p> <p> SchoolTool&trade; yra "
 #~ "prekinis Shuttleworth Fondo ženklas. </p>"
 
+#~ msgid "My Preferences"
+#~ msgstr "Mano Nustatymai"
+
 #~ msgid "Person index"
 #~ msgstr "Asmens indeksas"
 
@@ -5198,26 +5134,38 @@ msgstr ""
 #~ msgid "Check this to clear the photo"
 #~ msgstr "Pažymėkite laukelį norėdami ištrinti nuotrauką"
 
+#~ msgid "New password"
+#~ msgstr "Naujas slaptažodis"
+
 #~ msgid "Verify password"
 #~ msgstr "Patvirtinti slaptažodį"
 
 #~ msgid "Passwords do not match."
 #~ msgstr "Slaptažodžiai nesutampa"
 
+#~ msgid "Password was successfully changed!"
+#~ msgstr "Slaptažodis sėkmingai pakeistas!"
+
 #~ msgid "Passwords do not match!"
 #~ msgstr "Slaptažodžiai nesutampa!"
 
 #~ msgid "Create new objects"
-#~ msgstr "Sukurti naujus objektus"
+#~ msgstr "Sukurti naują objektą"
+
+#~ msgid "Add events"
+#~ msgstr "Pridėti įvykius"
 
 #~ msgid "Control access"
 #~ msgstr "Prieeigos valdymas"
 
 #~ msgid "Authenticated users"
-#~ msgstr "Vartotojai"
+#~ msgstr "Prisijungę naudotojai"
 
 #~ msgid "Unauthenticated users"
-#~ msgstr "Kiti"
+#~ msgstr "Neregistruoti naudotojai"
+
+#~ msgid "An error occured."
+#~ msgstr "Klaida."
 
 #~ msgid "Unauthenticated Users"
 #~ msgstr "Neidentifikuoti vartotojai"
@@ -5234,8 +5182,35 @@ msgstr ""
 #~ msgid "%s: warning: ignored configuration option '%s'"
 #~ msgstr "%s: dėmesio: konfiguracijos nustatymas '%s' atmestas"
 
+#~ msgid ""
+#~ "\n"
+#~ "Usage: %s [options]\n"
+#~ "Options:\n"
+#~ "  -c, --config xxx       use this configuration file instead of the "
+#~ "default\n"
+#~ "  -h, --help             show this help message\n"
+#~ "  -d, --daemon           go to background after starting\n"
+#~ "  -r, --restore-manager  restore the manager user with the default "
+#~ "password\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Naudojimas: %s [parametrai]\n"
+#~ "Parametrai:\n"
+#~ "  -c, --config xxx naudoti šį konfiguracijos failą vietoje numatytojo\n"
+#~ "  -h, --help iškviesti šį pagalbos tekstą\n"
+#~ "  -d, --deamon veikti foniniu režimu po paleisties\n"
+#~ "  -r, --restore-manager atstatyti vartotoją manager su numatytuoju "
+#~ "slaptažodžiu\n"
+
 #~ msgid "Welcome to the SchoolBell server"
 #~ msgstr "Jus sveikina SchoolBell tarnybinė stotis"
+
+#~ msgid ""
+#~ "\n"
+#~ "This is not a SchoolTool 0.10 database file, aborting.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Tai ne SchoolTool 0.10 duomenų bazės failas.\n"
 
 #~ msgid ""
 #~ "You can create the CSV file in a spreadsheet and export it in CSV (Comma- "
