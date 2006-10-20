@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: Tue Oct 17 17:42:33 2006\n"
-"PO-Revision-Date: 2005-08-24 22:55+0000\n"
+"POT-Creation-Date: Fri Oct 20 15:20:33 2006\n"
+"PO-Revision-Date: 2006-05-08 16:44+0000\n"
 "Last-Translator: hennko <hennko@gmail.com>\n"
 "Language-Team: Estonian <et@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -437,9 +437,8 @@ msgstr ""
 #: /src/schooltool/app/browser/cal.py:1881
 #: /src/schooltool/app/browser/cal.py:2187
 #: /src/schooltool/course/browser/section.py:134
-#, fuzzy
 msgid "An error occurred."
-msgstr "Tekkis tõrge"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:1914
 msgid "Invalid time"
@@ -694,21 +693,15 @@ msgstr "Rida 2 ei ole tühi"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:328
-#, fuzzy
 msgid ""
 "Wrong section header on line ${line_no} (it should contain a course id and "
 "an instructor id)"
 msgstr ""
-"Valesti koostatud rida ${line_no} (see peaks sisaldma päeva id, tunni id ja "
-"võimalusel asukoha id)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:354
-#, fuzzy
 msgid "Malformed line ${line_no} (it should contain a day id and a period id)"
 msgstr ""
-"Valesti koostatud rida ${line_no} (see peaks sisaldma päeva id, tunni id ja "
-"võimalusel asukoha id)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:377
@@ -717,9 +710,8 @@ msgstr "Mitte komplektne sektsiooni kirjeldus real ${line}"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:382
-#, fuzzy
 msgid "No students in section (line ${line})"
-msgstr "Mitte komplektne sektsiooni kirjeldus real ${line}"
+msgstr ""
 
 #: /src/schooltool/app/browser/csvimport.py:462
 msgid ""
@@ -897,8 +889,9 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:47
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:53
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:59
+#, fuzzy
 msgid "<img alt=\"x\" src=\"${DYNAMIC_CONTENT}\" />"
-msgstr ""
+msgstr "${DYNAMIC_CONTENT}"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:37
 msgid "View daily calendar"
@@ -943,8 +936,9 @@ msgid "Personal calendar"
 msgstr "Kasutaja kalender"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:16
+#, fuzzy
 msgid "Timetable calendar"
-msgstr ""
+msgstr "Näita päeva kalendrit"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:16
 msgid "TT"
@@ -1116,8 +1110,9 @@ msgstr ""
 #: /src/schooltool/sampledata/sampledata.pt:69
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:66
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:35
+#, fuzzy
 msgid "Clear"
-msgstr ""
+msgstr "Kalendrid"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:67
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:95
@@ -1733,9 +1728,8 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/app/interfaces.py:158
-#, fuzzy
 msgid "Show timetables"
-msgstr "Kooli tunniplaanid"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:159
 msgid ""
@@ -2158,9 +2152,8 @@ msgstr ""
 
 #. Default: ""
 #: /src/schooltool/attendance/browser/tests/test_attendance.py:263
-#, fuzzy
 msgid "$title"
-msgstr "Pealkiri"
+msgstr ""
 
 #: /src/schooltool/attendance/interfaces.py:39
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:18
@@ -2232,33 +2225,28 @@ msgid "Add Commendation"
 msgstr "Lisa uus sektsioon"
 
 #: /src/schooltool/commendation/interfaces.py:49
-#, fuzzy
 msgid "Title of the commendation."
-msgstr "Kursuse pealkiri"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:54
-#, fuzzy
 msgid "A detailed description of the commendation."
-msgstr "Sektsiooni kirjeldus"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:58
 msgid "Scope"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:59
-#, fuzzy
 msgid "The scope of the commendation."
-msgstr "Sektsiooni kirjeldus"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
-#, fuzzy
 msgid "school-wide"
-msgstr "Koolipäev"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
-#, fuzzy
 msgid "group"
-msgstr "Grupid"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "community"
@@ -2285,9 +2273,8 @@ msgid "Grantor"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:72
-#, fuzzy
 msgid "The grantor of the commendation."
-msgstr "Sektsiooni kirjeldus"
+msgstr ""
 
 #: /src/schooltool/configure.zcml:44
 #: /src/schooltool/app/browser/configure.zcml:202
@@ -2412,14 +2399,12 @@ msgid "Students"
 msgstr "Õppurid"
 
 #: /src/schooltool/course/browser/section.py:284
-#, fuzzy
 msgid "Current Students"
-msgstr "Õppurid"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:285
-#, fuzzy
 msgid "Available Students"
-msgstr "Õppurid"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:311
 #: /src/schooltool/app/browser/templates/index.pt:13
@@ -2429,9 +2414,8 @@ msgstr "Grupid"
 
 #: /src/schooltool/course/browser/section.py:312
 #: /src/schooltool/group/browser/group.py:60
-#, fuzzy
 msgid "Current Groups"
-msgstr "Impordi grupid"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:313
 #: /src/schooltool/group/browser/group.py:61
@@ -2446,15 +2430,13 @@ msgid "Resources"
 msgstr "Vahendid"
 
 #: /src/schooltool/course/browser/section.py:339
-#, fuzzy
 msgid "Current Resources"
-msgstr "Impordi vahendid"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:340
 #: /src/schooltool/app/browser/templates/event_booking.pt:36
-#, fuzzy
 msgid "Available Resources"
-msgstr "Vahendid"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:68
 msgid "Section index"
@@ -2494,8 +2476,9 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:4
+#, fuzzy
 msgid "Upload schooltool courses as CSV"
-msgstr ""
+msgstr "Lae SchoolTool tunniplaanid ülesse kui CSV"
 
 #: /src/schooltool/course/browser/templates/course.pt:18
 msgid "Sections"
@@ -2507,8 +2490,9 @@ msgid "photo"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/course.pt:53
+#, fuzzy
 msgid "students"
-msgstr ""
+msgstr "Õppurid"
 
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:27
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:80
@@ -2523,8 +2507,9 @@ msgid "Conflict: <a href=\"${DYNAMIC_CONTENT}\">${DYNAMIC_CONTENT}</a>"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:13
+#, fuzzy
 msgid "Section of ${course} -- ${DYNAMIC_CONTENT}"
-msgstr ""
+msgstr "${DYNAMIC_CONTENT}"
 
 #: /src/schooltool/course/browser/templates/section.pt:22
 #, fuzzy
@@ -2547,16 +2532,18 @@ msgid "book resources"
 msgstr "Vahendid"
 
 #: /src/schooltool/course/browser/templates/section.pt:57
+#, fuzzy
 msgid "Change the instructors for this section."
-msgstr ""
+msgstr "Muuda selles sektsioonis õppureid grupi järgi"
 
 #: /src/schooltool/course/browser/templates/section.pt:57
 msgid "edit instructors"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:87
+#, fuzzy
 msgid "edit individuals"
-msgstr ""
+msgstr "muuda üksikasju"
 
 #: /src/schooltool/course/browser/templates/section.pt:87
 #, fuzzy
@@ -2573,12 +2560,14 @@ msgstr "muuda gruppe"
 
 #: /src/schooltool/course/browser/templates/section_add.pt:50
 #: /src/schooltool/skin/templates/simple_add.pt:45
+#, fuzzy
 msgid "Identifier (optional)"
-msgstr ""
+msgstr "Perioodi pealkiri (mittekohustuslik)"
 
 #: /src/schooltool/course/browser/templates/section_container.pt:29
+#, fuzzy
 msgid "Section"
-msgstr ""
+msgstr "Sektsioon"
 
 #: /src/schooltool/course/browser/templates/section_container.pt:38
 msgid "Current Size"
@@ -2726,9 +2715,8 @@ msgid "Change name information for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:172
-#, fuzzy
 msgid "Change name"
-msgstr "Muuda eelistusi"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:183
@@ -2745,9 +2733,8 @@ msgid "Change school data for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:212
-#, fuzzy
 msgid "School data"
-msgstr "Koolipäev"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:230
@@ -2818,9 +2805,8 @@ msgid "Gender"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:126
-#, fuzzy
 msgid "Birth date"
-msgstr "Alguskuupäev"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:131
 msgid "Ethnicity"
@@ -2843,9 +2829,8 @@ msgid "ID"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:196
-#, fuzzy
 msgid "Enrollment date"
-msgstr "Lõppkuupäev"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:201
 msgid "Projected graduation year"
@@ -2856,9 +2841,8 @@ msgid "Advisor"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:212
-#, fuzzy
 msgid "Team"
-msgstr "Semester"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:218
 msgid "Health information"
@@ -2873,9 +2857,8 @@ msgid "Name"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:244
-#, fuzzy
 msgid "Relationship to student"
-msgstr "Seosed"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:250
 msgid "Street"
@@ -2886,9 +2869,8 @@ msgid "City"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:260
-#, fuzzy
 msgid "State"
-msgstr "Salvesta"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:265
 msgid "Postal code"
@@ -2913,9 +2895,8 @@ msgid "Notes"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:295
-#, fuzzy
 msgid "Text"
-msgstr "Järgmine"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:296
 msgid "Full text search in name"
@@ -2930,9 +2911,8 @@ msgid "Full text search in parent names"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:307
-#, fuzzy
 msgid "Student ID"
-msgstr "Õppurid"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:43
 msgid "Prefix"
@@ -2943,28 +2923,24 @@ msgid "Prefix such as Mr., Mrs."
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:49
-#, fuzzy
 msgid "First name"
-msgstr "muuda nime"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:54
-#, fuzzy
 msgid "Middle name"
-msgstr "muuda nime"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:59
-#, fuzzy
 msgid "Last name"
-msgstr "muuda nime"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:64
 msgid "Suffix"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:69
-#, fuzzy
 msgid "Preferred name"
-msgstr "Minu eelistused"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:70
 msgid "Name by which the student prefers to be called"
@@ -3044,9 +3020,8 @@ msgid "Categories"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:49
-#, fuzzy
 msgid "New Category"
-msgstr "Uus periood"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:52
 msgid "Default Category"
@@ -3192,9 +3167,8 @@ msgid "Essay"
 msgstr ""
 
 #: /src/schooltool/gradebook/category.py:62
-#, fuzzy
 msgid "Exam"
-msgstr "Näidis:"
+msgstr ""
 
 #: /src/schooltool/gradebook/category.py:63
 msgid "Homework"
@@ -3205,9 +3179,8 @@ msgid "Journal"
 msgstr ""
 
 #: /src/schooltool/gradebook/category.py:65
-#, fuzzy
 msgid "Lab"
-msgstr "Silt"
+msgstr ""
 
 #: /src/schooltool/gradebook/category.py:66
 msgid "Presentation"
@@ -3222,9 +3195,8 @@ msgid "Gradebook API"
 msgstr ""
 
 #: /src/schooltool/gradebook/interfaces.py:39
-#, fuzzy
 msgid "A detailed description of the activity."
-msgstr "Sektsiooni kirjeldus"
+msgstr ""
 
 #: /src/schooltool/gradebook/interfaces.py:43
 msgid "Category"
@@ -3319,8 +3291,9 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/group/browser/group-csvimport.pt:4
+#, fuzzy
 msgid "Upload SchoolTool groups as CSV"
-msgstr ""
+msgstr "Lae SchoolTool tunniplaanid ülesse kui CSV"
 
 #: /src/schooltool/group/browser/group.pt:16
 msgid "Members"
@@ -3358,9 +3331,8 @@ msgid "Current Members"
 msgstr ""
 
 #: /src/schooltool/group/browser/group.py:99
-#, fuzzy
 msgid "Add Members"
-msgstr "Lisa tähtaeg"
+msgstr ""
 
 #: /src/schooltool/group/interfaces.py:44
 msgid "Title of the group."
@@ -3372,8 +3344,9 @@ msgstr ""
 
 #. Default: "Calendar"
 #: /src/schooltool/group/rest/group.pt:14
+#, fuzzy
 msgid "Private_calendar"
-msgstr ""
+msgstr "Kasutaja kalender"
 
 #: /src/schooltool/help/configure.zcml:46
 msgid "Contextual Help"
@@ -3407,14 +3380,12 @@ msgid "None"
 msgstr "pole"
 
 #: /src/schooltool/level/browser/level.py:41
-#, fuzzy
 msgid "Level index"
-msgstr "Kursuse indeks"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:42
-#, fuzzy
 msgid "Add a new level"
-msgstr "Lisa uus periood"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:60
 msgid "Previous Level"
@@ -3578,32 +3549,28 @@ msgid "The Level Process was successfully removed."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:132
-#, fuzzy
 msgid "Time Stamp"
-msgstr "Tunniplaan"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:133
 msgid "The date and time the record was created."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:137
-#, fuzzy
 msgid "User"
-msgstr "Kasutaja"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:138
 msgid "The principal id of the user making the record."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:143
-#, fuzzy
 msgid "Title of the record."
-msgstr "Kursuse pealkiri"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:148
-#, fuzzy
 msgid "A detailed description of the record."
-msgstr "Kursuse kirjeldus"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:160
 msgid "Academic History"
@@ -3645,9 +3612,8 @@ msgid "The workflow process of the level the student is currently completing."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:76
-#, fuzzy
 msgid "Title of the level."
-msgstr "Kursuse pealkiri"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:80
 msgid "Is Initial Level"
@@ -3676,9 +3642,8 @@ msgid "Outcome of the level."
 msgstr ""
 
 #: /src/schooltool/level/promotion.py:130
-#, fuzzy
 msgid "fail"
-msgstr "Päevane"
+msgstr ""
 
 #: /src/schooltool/level/promotion.py:130
 msgid "withdraw"
@@ -3690,9 +3655,8 @@ msgid "pass"
 msgstr ""
 
 #: /src/schooltool/level/promotion.py:96
-#, fuzzy
 msgid "Level"
-msgstr "Silt"
+msgstr ""
 
 #: /src/schooltool/level/promotion.py:97
 msgid "The initial level of the student in the school."
@@ -3808,8 +3772,9 @@ msgstr ""
 "lihttekstina."
 
 #: /src/schooltool/person/browser/person-csvimport.pt:4
+#, fuzzy
 msgid "Upload SchoolTool persons as CSV"
-msgstr ""
+msgstr "Lae SchoolTool tunniplaanid ülesse kui CSV"
 
 #: /src/schooltool/person/browser/person.py:176
 msgid "Edit password"
@@ -3828,8 +3793,9 @@ msgid "Sorry, you may not delete your own user account."
 msgstr ""
 
 #: /src/schooltool/person/browser/person_preferences.pt:14
+#, fuzzy
 msgid "Change preferences for ${user}"
-msgstr ""
+msgstr "Muuda eelistusi"
 
 #: /src/schooltool/person/browser/person_preferences.pt:4
 msgid "Edit person preferences"
@@ -3941,18 +3907,17 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/course_container.pt:32
 #: /src/schooltool/skin/templates/container.pt:33
 #: /src/schooltool/skin/templates/table_macros.pt:9
+#, fuzzy
 msgid "items"
-msgstr ""
+msgstr "Tingimused"
 
 #: /src/schooltool/requirement/browser/requirement.py:53
-#, fuzzy
 msgid "Requirement index"
-msgstr "Kursuse indeks"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.py:54
-#, fuzzy
 msgid "Add a new Requirement"
-msgstr "Lisa uus periood"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/scoresystem.py:36
 msgid "Exisiting Score System"
@@ -4019,8 +3984,9 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
+#, fuzzy
 msgid "Upload schooltool resources as CSV"
-msgstr ""
+msgstr "Lae SchoolTool tunniplaanid ülesse kui CSV"
 
 #: /src/schooltool/resource/browser/resource.py:39
 msgid "Resource index"
@@ -4050,15 +4016,17 @@ msgstr ""
 #: /src/schooltool/resource/rest/resource.pt:17
 #: /src/schooltool/group/rest/group.pt:17
 #: /src/schooltool/person/rest/person.pt:16
+#, fuzzy
 msgid "Calendar_relationships"
-msgstr ""
+msgstr "Seosed"
 
 #. Default: "Calendar ACL"
 #: /src/schooltool/resource/rest/resource.pt:20
 #: /src/schooltool/group/rest/group.pt:20
 #: /src/schooltool/person/rest/person.pt:19
+#, fuzzy
 msgid "Calendar_ACL"
-msgstr ""
+msgstr "Kalendrid"
 
 #: /src/schooltool/restclient/restclient.py:644
 msgid "Could not parse relationship list"
@@ -4147,9 +4115,8 @@ msgid "top"
 msgstr "ülesse"
 
 #: /src/schooltool/skin/form.py:64
-#, fuzzy
 msgid "No changes"
-msgstr "Salvesta muudatused"
+msgstr ""
 
 #: /src/schooltool/skin/templates/error.pt:13
 #, fuzzy
@@ -4596,8 +4563,9 @@ msgstr "Salvesta"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:17
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:15
+#, fuzzy
 msgid "There are no terms or timetable schemas defined."
-msgstr ""
+msgstr "Loo tunniplaani visand"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:25
 msgid "Choose schedule template"
@@ -4613,8 +4581,9 @@ msgid "Scheduling for ${section}"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:46
+#, fuzzy
 msgid "Using timetable:"
-msgstr ""
+msgstr "Vaata tunniplaane"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:11
 msgid ""
@@ -4653,8 +4622,9 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:29
+#, fuzzy
 msgid "Period title"
-msgstr ""
+msgstr "Perioodi lõppemise aeg"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:30
 msgid "Original start"
@@ -4665,16 +4635,19 @@ msgid "Original end"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:32
+#, fuzzy
 msgid "New start"
-msgstr ""
+msgstr "Uus periood"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:33
+#, fuzzy
 msgid "New end"
-msgstr ""
+msgstr "Uus periood"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:63
+#, fuzzy
 msgid "Modify"
-msgstr ""
+msgstr "Esmaspäev"
 
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:11
 msgid ""
@@ -4923,20 +4896,33 @@ msgstr ""
 msgid "Supplied passwords are not identical"
 msgstr ""
 
-#~ msgid "Import Sections"
-#~ msgstr "Impordi sektsioonid"
-
-#~ msgid "Locations not found: ${args}."
-#~ msgstr "Kohta ei leitud"
-
 #~ msgid "Username:"
 #~ msgstr "Kasutajanimi"
 
 #~ msgid "Change this person's name, picture, or password"
 #~ msgstr "Muuda selle kasutaja nime, pilti, või salasõna"
 
+#~ msgid "Import Sections"
+#~ msgstr "Impordi sektsioonid"
+
+#~ msgid ""
+#~ "Malformed line ${line_no} (it should contain a day id, a period id and "
+#~ "optionally a location id)"
+#~ msgstr ""
+#~ "Valesti koostatud rida ${line_no} (see peaks sisaldma päeva id, tunni id "
+#~ "ja võimalusel asukoha id)"
+
+#~ msgid "Locations not found: ${args}."
+#~ msgstr "Kohta ei leitud"
+
 #~ msgid "Modify this person's details"
 #~ msgstr "Muuda selle kasutaja üksikasju"
+
+#~ msgid "My Preferences"
+#~ msgstr "Minu eelistused"
+
+#~ msgid "An error occured."
+#~ msgstr "Tekkis tõrge"
 
 #~ msgid "Unauthenticated Users"
 #~ msgstr "Autoriseerimata kasutaja"

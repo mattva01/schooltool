@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: Tue Oct 17 17:42:33 2006\n"
-"PO-Revision-Date: 2006-08-11 15:20+0000\n"
-"Last-Translator: vsh <vsh@iki.fi>\n"
+"POT-Creation-Date: Fri Oct 20 15:20:33 2006\n"
+"PO-Revision-Date: 2006-07-24 13:44+0000\n"
+"Last-Translator: Akerchri <christer.akers@vgcom.fi>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -88,14 +88,12 @@ msgid "Leaders"
 msgstr ""
 
 #: /src/schooltool/app/browser/app.py:314
-#, fuzzy
 msgid "Current leaders"
-msgstr "Kuluva vuosi"
+msgstr ""
 
 #: /src/schooltool/app/browser/app.py:315
-#, fuzzy
 msgid "Available leaders"
-msgstr "Saatavissa olevat opettajat"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:100
 msgid "March"
@@ -135,7 +133,7 @@ msgstr "Heinäkuu"
 
 #: /src/schooltool/app/browser/cal.py:1021
 msgid "The next day"
-msgstr "Huomenna"
+msgstr "Seyraava päivä"
 
 #: /src/schooltool/app/browser/cal.py:1022
 msgid "Today"
@@ -166,7 +164,7 @@ msgstr "Marraskuu"
 #: /src/schooltool/term/browser/term.pt:31
 #, fuzzy
 msgid "Monday"
-msgstr "Ma"
+msgstr "Maanantai"
 
 #: /src/schooltool/app/browser/cal.py:106
 #: /src/schooltool/timetable/browser/schema.py:96
@@ -175,7 +173,7 @@ msgstr "Ma"
 #: /src/schooltool/term/browser/term_add_edit.pt:121
 #: /src/schooltool/term/browser/term.pt:32
 msgid "Tuesday"
-msgstr "Ti"
+msgstr "Tiistai"
 
 #: /src/schooltool/app/browser/cal.py:106
 #: /src/schooltool/timetable/browser/schema.py:97
@@ -184,7 +182,7 @@ msgstr "Ti"
 #: /src/schooltool/term/browser/term_add_edit.pt:122
 #: /src/schooltool/term/browser/term.pt:33
 msgid "Wednesday"
-msgstr "Ke"
+msgstr "Keskiviikko"
 
 #: /src/schooltool/app/browser/cal.py:106
 #: /src/schooltool/timetable/browser/schema.py:98
@@ -193,7 +191,7 @@ msgstr "Ke"
 #: /src/schooltool/term/browser/term_add_edit.pt:123
 #: /src/schooltool/term/browser/term.pt:34
 msgid "Thursday"
-msgstr "To"
+msgstr "Torstai"
 
 #: /src/schooltool/app/browser/cal.py:107
 #: /src/schooltool/person/interfaces.py:175
@@ -202,7 +200,7 @@ msgstr "To"
 #: /src/schooltool/term/browser/term_add_edit.pt:126
 #: /src/schooltool/term/browser/term.pt:37
 msgid "Sunday"
-msgstr "Su"
+msgstr "Sunnuntai"
 
 #: /src/schooltool/app/browser/cal.py:107
 #: /src/schooltool/timetable/browser/schema.py:275
@@ -210,7 +208,7 @@ msgstr "Su"
 #: /src/schooltool/term/browser/term_add_edit.pt:125
 #: /src/schooltool/term/browser/term.pt:36
 msgid "Saturday"
-msgstr "La"
+msgstr "Lauantai"
 
 #: /src/schooltool/app/browser/cal.py:107
 #: /src/schooltool/timetable/browser/schema.py:99
@@ -219,7 +217,7 @@ msgstr "La"
 #: /src/schooltool/term/browser/term_add_edit.pt:124
 #: /src/schooltool/term/browser/term.pt:35
 msgid "Friday"
-msgstr "Pe"
+msgstr "Perjantai"
 
 #: /src/schooltool/app/browser/cal.py:110
 #: /src/schooltool/app/browser/cal.py:1732
@@ -270,7 +268,7 @@ msgstr "Su"
 #: /src/schooltool/term/interfaces.py:67
 #: /src/schooltool/timetable/browser/ttwizard.py:241
 msgid "Title"
-msgstr "Titteli"
+msgstr "Otsikko"
 
 #: /src/schooltool/app/browser/cal.py:1661
 #: /src/schooltool/app/browser/templates/cal_monthly.pt:39
@@ -306,17 +304,17 @@ msgstr "Kestotyyppi"
 #: /src/schooltool/app/browser/cal.py:1680
 #: /src/schooltool/app/browser/templates/event_add.pt:168
 msgid "Minutes"
-msgstr "Minuutit"
+msgstr "Minuuttia"
 
 #: /src/schooltool/app/browser/cal.py:1681
 #: /src/schooltool/app/browser/templates/event_add.pt:171
 msgid "Hours"
-msgstr "Tunnit"
+msgstr "Tuntia"
 
 #: /src/schooltool/app/browser/cal.py:1682
 #: /src/schooltool/app/browser/templates/event_add.pt:175
 msgid "Days"
-msgstr "Päivät"
+msgstr "Päiviä"
 
 #: /src/schooltool/app/browser/cal.py:1685
 #: /src/schooltool/app/browser/templates/event.pt:48
@@ -338,7 +336,7 @@ msgstr "Kuvaus"
 
 #: /src/schooltool/app/browser/cal.py:1694
 msgid "Recurring"
-msgstr "Toistuen"
+msgstr "Toistuva"
 
 #: /src/schooltool/app/browser/cal.py:1698
 msgid "Recurs every"
@@ -368,11 +366,11 @@ msgstr "Toistuu joka"
 
 #: /src/schooltool/app/browser/cal.py:1712
 msgid "Range"
-msgstr ""
+msgstr "Väli"
 
 #: /src/schooltool/app/browser/cal.py:1715
 msgid "Count"
-msgstr "Lukumäärä"
+msgstr "Laske"
 
 #: /src/schooltool/app/browser/cal.py:1716
 msgid "Until"
@@ -417,24 +415,24 @@ msgstr "sama arkipäivä"
 
 #: /src/schooltool/app/browser/cal.py:1833
 msgid "1st"
-msgstr "1n"
+msgstr "1."
 
 #: /src/schooltool/app/browser/cal.py:1833
 msgid "4th"
-msgstr "4s"
+msgstr "4."
 
 #: /src/schooltool/app/browser/cal.py:1833
 #, fuzzy
 msgid "3rd"
-msgstr "3s"
+msgstr "3."
 
 #: /src/schooltool/app/browser/cal.py:1833
 msgid "2nd"
-msgstr "2n"
+msgstr "2."
 
 #: /src/schooltool/app/browser/cal.py:1834
 msgid "5th"
-msgstr "5s"
+msgstr "5."
 
 #: /src/schooltool/app/browser/cal.py:1848
 msgid "last weekday"
@@ -448,23 +446,22 @@ msgstr "Viimeinen ${arkipäivä}"
 #: /src/schooltool/app/browser/cal.py:1881
 #: /src/schooltool/app/browser/cal.py:2187
 #: /src/schooltool/course/browser/section.py:134
-#, fuzzy
 msgid "An error occurred."
-msgstr "On tapahtunut virhe"
+msgstr "Virhe taphtui"
 
 #: /src/schooltool/app/browser/cal.py:1914
 msgid "Invalid time"
-msgstr "Kellonaika ei kelpää"
+msgstr "Virhellinen aika"
 
 #: /src/schooltool/app/browser/cal.py:1935
 msgid "End date is earlier than start date"
-msgstr "Loppupäivämäärä on aiemmin kuin alkupäivämäärä"
+msgstr "Loppupäivämäärä on ennnen aloituspäivämäärä"
 
 #: /src/schooltool/app/browser/cal.py:1944
 #, fuzzy
 msgid "Invalid date.  Please specify YYYY-MM-DD, one per line."
 msgstr ""
-"Päivämäärä ei kelpää. Olkaa hyvä ja määritelkää VVVV-KK-PP,riviä kohti."
+"Päivämäärä virhellinen. Olkaa hyvä ja määritelkää VVVV-KK-PP,riviä kohti."
 
 #: /src/schooltool/app/browser/cal.py:1992
 msgid "Add event"
@@ -487,7 +484,7 @@ msgstr "Muokkaa tapahtuma"
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:42
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:61
 msgid "Update"
-msgstr "Päivittää"
+msgstr "Päivitä"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:2193 /src/schooltool/skin/form.py:77
@@ -506,11 +503,11 @@ msgstr "Kalenteri"
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:372
 msgid "${day_of_week}, ${date}"
-msgstr ""
+msgstr "{viikko päivä}, ${pvm}"
 
 #: /src/schooltool/app/browser/cal.py:845
 msgid "Next week"
-msgstr "Ensiviikko"
+msgstr "Ensi viikko"
 
 #: /src/schooltool/app/browser/cal.py:846
 msgid "Current week"
@@ -527,7 +524,7 @@ msgstr "${kuukausi}, ${vuosi} (viikko ${viikko})"
 
 #: /src/schooltool/app/browser/cal.py:906
 msgid "Next month"
-msgstr "Ensikuu"
+msgstr "Seuraava kuukausi"
 
 #: /src/schooltool/app/browser/cal.py:907
 msgid "Current month"
@@ -535,7 +532,7 @@ msgstr "Nykyinen kuukausi"
 
 #: /src/schooltool/app/browser/cal.py:908
 msgid "Previous month"
-msgstr "Viimekuu"
+msgstr "Edellinen kuukausi"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:916
@@ -549,7 +546,7 @@ msgstr "Viikko ${viikko_no}"
 
 #: /src/schooltool/app/browser/cal.py:954
 msgid "Next year"
-msgstr "Ensi vuonna"
+msgstr "Seuraava vuosi"
 
 #: /src/schooltool/app/browser/cal.py:955
 msgid "Current year"
@@ -557,19 +554,19 @@ msgstr "Kuluva vuosi"
 
 #: /src/schooltool/app/browser/cal.py:956
 msgid "Previous year"
-msgstr "Edellisvuonna"
+msgstr "Edellinen vuosi"
 
 #: /src/schooltool/app/browser/configure.zcml:137
 #, fuzzy
 msgid "Actions"
-msgstr "Toiminnat"
+msgstr "Tehtävät"
 
 #: /src/schooltool/app/browser/configure.zcml:184
 #: /src/schooltool/app/configure.zcml:287
 #: /src/schooltool/skin/templates/view_macros.pt:33
 #, fuzzy
 msgid "SchoolTool"
-msgstr "Koulu Työkalu"
+msgstr "SchoolTool"
 
 #: /src/schooltool/app/browser/configure.zcml:324
 #, fuzzy
@@ -646,13 +643,13 @@ msgstr ""
 #: /src/schooltool/skin/templates/navigation.pt:2
 #, fuzzy
 msgid "Navigation"
-msgstr "Navigointi"
+msgstr "Selaaminen"
 
 #: /src/schooltool/app/browser/configure.zcml:566
 #: /src/schooltool/app/rest/configure.zcml:267
 #, fuzzy
 msgid "Application"
-msgstr "Toiminnat"
+msgstr "Tehtävät"
 
 #: /src/schooltool/app/browser/configure.zcml:572
 #, fuzzy
@@ -666,7 +663,7 @@ msgstr ""
 #: /src/schooltool/app/browser/csvimport.py:106
 #: /src/schooltool/app/browser/csvimport.py:286
 msgid "No data provided"
-msgstr "Mitään dataa ei toimitettu"
+msgstr "Dataa ei annettu"
 
 #: /src/schooltool/app/browser/csvimport.py:113
 #, fuzzy
@@ -676,21 +673,21 @@ msgstr "Ei voitu muuntaa dataa Unicodeksi (väärä merkkijono)"
 #: /src/schooltool/app/browser/csvimport.py:122
 #, fuzzy
 msgid "CSV file imported successfully."
-msgstr "CSV-tiedosto tuotu onnistuneisti."
+msgstr "CSV-tiedosto tuotu onnistuneesti."
 
 #: /src/schooltool/app/browser/csvimport.py:124
 #, fuzzy
 msgid "Failed to import CSV file"
-msgstr "Epäonnistuttuna tuomaan CSV-tiedostoa"
+msgstr "CSV-tiedoston lataus epäonnistui"
 
 #: /src/schooltool/app/browser/csvimport.py:132
 msgid "CSV text imported successfully."
-msgstr "CSV textin tuonti onnistui"
+msgstr "CSV textin lataus onnistui"
 
 #: /src/schooltool/app/browser/csvimport.py:134
 #, fuzzy
 msgid "Failed to import CSV text"
-msgstr "CSV tekstin tuonti epäonnistui"
+msgstr "CSV tekstin lataus epäonnistui"
 
 #: /src/schooltool/app/browser/csvimport.py:156
 msgid "No charset specified"
@@ -710,7 +707,7 @@ msgstr "Virhe CSV data:ssa, rivi ${rivi_no}"
 #: /src/schooltool/app/browser/csvimport.py:514
 #, fuzzy
 msgid "Conversion to unicode failed in line ${line_no}"
-msgstr "Muuntaminen unicode:n epäonnistui rivissa, ${rivi_no}"
+msgstr "Muuntaminen unicode:n epäonnistui rivillä, ${rivi_no}"
 
 #: /src/schooltool/app/browser/csvimport.py:292
 #, fuzzy
@@ -719,33 +716,26 @@ msgstr "Rivi 2 ei ole tyhjä"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:328
-#, fuzzy
 msgid ""
 "Wrong section header on line ${line_no} (it should contain a course id and "
 "an instructor id)"
 msgstr ""
-"Epämuodostunut linja ${line_no} (sen pitäisi sisältää päivän id, kausi id ja "
-"omavalintaisesti sijainti id)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:354
-#, fuzzy
 msgid "Malformed line ${line_no} (it should contain a day id and a period id)"
-msgstr ""
-"Epämuodostunut linja ${line_no} (sen pitäisi sisältää päivän id, kausi id ja "
-"omavalintaisesti sijainti id)"
+msgstr "Epäonistunut rivi ${line_no} (tulee olla päivä id ja jakso id)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:377
 #, fuzzy
 msgid "Incomplete section description on line ${line}"
-msgstr "Epätäydellinen osuuskuvaus kytkettynä ${line}"
+msgstr "Epätäydellinen osuus-kuvaus rivillä ${line}"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:382
-#, fuzzy
 msgid "No students in section (line ${line})"
-msgstr "Epätäydellinen osuuskuvaus kytkettynä ${line}"
+msgstr ""
 
 #: /src/schooltool/app/browser/csvimport.py:462
 #, fuzzy
@@ -753,56 +743,61 @@ msgid ""
 "The first row of the CSV file must contain the term id and the timetable "
 "schema id."
 msgstr ""
-"CSV-tiedoston ensimmäisen rivin täytyy sisältää lukukauden tunnus ja "
-"aikataulukaavion tunnus."
+"CSV-tiedoston ensimmäisen rivin täytyy sisältää termin id, ja aikataulu "
+"kaavion id."
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:471
 #, fuzzy
 msgid "The term ${term} does not exist."
-msgstr "Lukukautta ${term} ei ole olemassa."
+msgstr "Termi ${term} ei ole olemassa."
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:478
+#, fuzzy
 msgid "The timetable schema ${schema} does not exist."
-msgstr "Aikataulukaaviota ${schema} ei ole olemassa."
+msgstr "Aikataulu kaavio ${schema} ei ole olemassa."
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:509
+#, fuzzy
 msgid "Error in timetable CSV data, line ${line_no}"
-msgstr "Virhe aikataulun CSV-tiedoissa, rivi ${line_no}"
+msgstr "Virhe aikataulu-CSV-datassa, rivi ${line_no}"
 
 #: /src/schooltool/app/browser/csvimport.py:549
 #, fuzzy
 msgid "Day ids not defined in selected schema: ${args}."
-msgstr "Päivätunnuksia ei ole määritelty valitussa kaaviossa: ${args}."
+msgstr "Päivä id ei määritelty valitussa kaaviossa: ${args}."
 
 #: /src/schooltool/app/browser/csvimport.py:550
 #, fuzzy
 msgid "Periods not defined in selected days: ${args}."
-msgstr "Jaksoja ei ole määritelty valittuina päivinä: ${args}."
+msgstr "Jaksot eivät määritelty valittujen päivien yhteydessä: ${args}."
 
 #: /src/schooltool/app/browser/csvimport.py:551
+#, fuzzy
 msgid "Persons not found: ${args}."
-msgstr "Henkilöitä ei löydetty: ${args}."
+msgstr "Henkilöt eivät löytyneet: ${args}."
 
 #: /src/schooltool/app/browser/csvimport.py:552
+#, fuzzy
 msgid "Courses not found: ${args}."
-msgstr "Kursseja ei löydetty: ${args}."
+msgstr "Kurssit eivät löytyneet: ${args}."
 
 #: /src/schooltool/app/browser/csvimport.py:553
+#, fuzzy
 msgid "Sections not found: ${args}."
-msgstr "Kappaleita ei löydetty: ${args}."
+msgstr "Kappaleet eivät löytyneet: ${args}."
 
 #: /src/schooltool/app/browser/csvimport.py:554
 #, fuzzy
 msgid "Invalid records: ${args}."
-msgstr "Invalidiasiakirjat: ${args}."
+msgstr "Väärät tapahtumat: ${args}."
 
 #: /src/schooltool/app/browser/overlay.py:209
 #: /src/schooltool/term/browser/term.py:146
 msgid "Saved changes."
-msgstr "Tallenettu muutokset"
+msgstr "Muutokset tallennettu."
 
 #: /src/schooltool/app/browser/pdfcal.py:159
 msgid "all day"
@@ -814,7 +809,7 @@ msgstr "Sijainti: %s"
 
 #: /src/schooltool/app/browser/pdfcal.py:192
 msgid "Booked resources: %s"
-msgstr "Varattu resurssit: %s"
+msgstr "Varatut resurssit: %s"
 
 #: /src/schooltool/app/browser/pdfcal.py:207
 msgid "recurrent"
@@ -878,12 +873,12 @@ msgstr "Muokkaa henkilöä, etusijat"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:15
 #, fuzzy
 msgid "[Schooltool.org]"
-msgstr "Koulu Työkalu"
+msgstr "SchoolTool"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:15
 #, fuzzy
 msgid "Schooltool"
-msgstr "Koulu Työkalu"
+msgstr "SchoolTool"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:22
 msgid "Events for"
@@ -917,11 +912,11 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:120
 msgid "Jump To ..."
-msgstr "Hyppää ..."
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:206
 msgid "Tomorrow's Events"
-msgstr "Huomisen tapahtumat"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:29
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:34
@@ -943,23 +938,28 @@ msgid "View daily calendar"
 msgstr "Näyttää päivittäistä kalenteria"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:41
+#, fuzzy
 msgid "Daily"
 msgstr "Päivittäin"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:43
+#, fuzzy
 msgid "View weekly calendar"
-msgstr "Näytä kalenteri viikoittain"
+msgstr "Näytä kalenteri viikkoitain"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:47
 #: /src/schooltool/app/browser/templates/event_add.pt:235
+#, fuzzy
 msgid "Weekly"
-msgstr "Viikoittain"
+msgstr "Viikkoittain"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:49
+#, fuzzy
 msgid "View monthly calendar"
 msgstr "Näytä kalenteri kuukausittain"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:55
+#, fuzzy
 msgid "View yearly calendar"
 msgstr "Näytä kalenteri vuosittain"
 
@@ -1123,8 +1123,9 @@ msgstr "poistaa-painike"
 #: /src/schooltool/term/browser/emergency_select.pt:42
 #: /src/schooltool/term/browser/emergency2.pt:43
 #: /src/schooltool/commendation/commendation_add.pt:36
+#, fuzzy
 msgid "cancel-button"
-msgstr ""
+msgstr "lisää-painike"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:23
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:37
@@ -1134,6 +1135,7 @@ msgstr "V"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:23
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:37
+#, fuzzy
 msgid "Remove"
 msgstr "Poista"
 
@@ -1146,8 +1148,9 @@ msgstr "Poista"
 #: /src/schooltool/skin/templates/container.pt:57
 #: /src/schooltool/skin/templates/table.pt:8
 #: /src/schooltool/term/browser/term-container.pt:14
+#, fuzzy
 msgid "There are none."
-msgstr ""
+msgstr "Ei ole mitään lisättävä"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:50
 #: /src/schooltool/requirement/browser/requirement.pt:31
@@ -1162,13 +1165,15 @@ msgstr "Etsi nyt"
 #: /src/schooltool/sampledata/sampledata.pt:69
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:66
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:35
+#, fuzzy
 msgid "Clear"
 msgstr "Tyhjennä"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:67
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:95
+#, fuzzy
 msgid "There are none to add."
-msgstr "Ei ole mitään lisättävää."
+msgstr "Ei ole mitään lisättävä"
 
 #: /src/schooltool/app/browser/templates/event.pt:15
 #, fuzzy
@@ -1180,8 +1185,9 @@ msgid "This is a recurring event."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:33
+#, fuzzy
 msgid "Details"
-msgstr "Lisätiedot"
+msgstr "Tiedot"
 
 #: /src/schooltool/app/browser/templates/event.pt:37
 #, fuzzy
@@ -1205,7 +1211,7 @@ msgstr "Vaihtakaa opettajia täksi osuudeksi."
 #: /src/schooltool/app/browser/templates/event.pt:64
 #, fuzzy
 msgid "Scheduled resources"
-msgstr "Varattu resurssit: %s"
+msgstr "Varatut resurssit: %s"
 
 #: /src/schooltool/app/browser/templates/event.pt:72
 #, fuzzy
@@ -1225,7 +1231,7 @@ msgstr "Muokkaa kappaletietoa"
 #: /src/schooltool/app/browser/templates/event_add.pt:143
 #, fuzzy
 msgid "Event details"
-msgstr "muokkaa lisätietoja"
+msgstr "muokkaa tiedot"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:197
 #, fuzzy
@@ -1235,7 +1241,7 @@ msgstr "Resurssit"
 #: /src/schooltool/app/browser/templates/event_add.pt:207
 #, fuzzy
 msgid "Update form"
-msgstr "Päivittää"
+msgstr "Päivitä"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:224
 #, fuzzy
@@ -1302,7 +1308,7 @@ msgstr "Toistuu joka"
 #: /src/schooltool/app/browser/templates/event_add.pt:346
 #, fuzzy
 msgid "Book resources"
-msgstr "Varattu resurssit: %s"
+msgstr "Varatut resurssit: %s"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:11
 #, fuzzy
@@ -1312,7 +1318,7 @@ msgstr "Henkilötiedot: ${title}"
 #: /src/schooltool/app/browser/templates/event_booking.pt:17
 #, fuzzy
 msgid "Title:"
-msgstr "Titteli"
+msgstr "Otsikko"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:21
 #, fuzzy
@@ -1343,10 +1349,11 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/event_info_viewlet.pt:12
 #, fuzzy
 msgid "Location: ${location}"
-msgstr "muuta sijainti"
+msgstr "muuttaa sijainti"
 
 #: /src/schooltool/app/browser/templates/index.pt:12
 #: /src/schooltool/course/browser/templates/section_container.pt:26
+#, fuzzy
 msgid "Courses"
 msgstr "Kurssit"
 
@@ -1355,8 +1362,9 @@ msgid "Levels"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/index.pt:6
+#, fuzzy
 msgid "Welcome to SchoolTool"
-msgstr "Tervetuloa SchoolTool:iin"
+msgstr "Tervetuloa KouluTyökaluun"
 
 #: /src/schooltool/app/browser/templates/login.pt:13
 msgid ""
@@ -1622,12 +1630,14 @@ msgstr "CSV Data"
 #: /src/schooltool/person/browser/person-csvimport.pt:70
 #: /src/schooltool/person/browser/person_preferences.pt:52
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:70
+#, fuzzy
 msgid "submit-button"
-msgstr "lähetä-nappi"
+msgstr "poistaa-painike"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:20
+#, fuzzy
 msgid "Import Timetable"
-msgstr "Tuo aikataulu"
+msgstr "Tuo Aikataulu"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:24
 #, fuzzy
@@ -1672,8 +1682,9 @@ msgstr "Vie Koulu Työkalu aikataulu CSV muodossa"
 #: /src/schooltool/group/browser/group-csvimport.pt:30
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:29
 #: /src/schooltool/person/browser/person-csvimport.pt:29
+#, fuzzy
 msgid "Example:"
-msgstr "Esimerkki:"
+msgstr "Esimerkki"
 
 #. Default: ""
 #.  "\"2005-fall\",\"three-day\"\n"
@@ -1769,16 +1780,18 @@ msgstr ""
 #: /src/schooltool/group/browser/group-csvimport.pt:46
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:46
 #: /src/schooltool/person/browser/person-csvimport.pt:44
+#, fuzzy
 msgid "Upload CSV File"
-msgstr "Vie CSV tiedosto"
+msgstr "Vie CSV kansio"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:91
 #: /src/schooltool/resource/browser/resource-csvimport.pt:48
 #: /src/schooltool/group/browser/group-csvimport.pt:48
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:48
 #: /src/schooltool/person/browser/person-csvimport.pt:46
+#, fuzzy
 msgid "CSV File"
-msgstr "CSV tiedosto"
+msgstr "CSV kansio"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:96
 #: /src/schooltool/resource/browser/resource-csvimport.pt:53
@@ -1819,7 +1832,7 @@ msgstr ""
 #: /src/schooltool/app/configure.zcml:308
 #, fuzzy
 msgid "Booking Resources"
-msgstr "Varattu resurssit: %s"
+msgstr "Varatut resurssit: %s"
 
 #: /src/schooltool/app/interfaces.py:124 /src/schooltool/app/interfaces.py:135
 #, fuzzy
@@ -1845,9 +1858,8 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/app/interfaces.py:158
-#, fuzzy
 msgid "Show timetables"
-msgstr "Koulun aikataulut"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:159
 msgid ""
@@ -1868,7 +1880,7 @@ msgstr ""
 
 #: /src/schooltool/app/interfaces.py:51 /src/schooltool/app/interfaces.py:55
 msgid "Invalid integer data"
-msgstr "Viallinen"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:52
 msgid "Invalid text data"
@@ -1925,8 +1937,6 @@ msgid ""
 "Could not initialize the database:\n"
 "%s"
 msgstr ""
-"Tietokannan initialisoiniti epäonnistui:\n"
-"%s"
 
 #: /src/schooltool/app/main.py:496
 msgid ""
@@ -1979,13 +1989,10 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/app/main.py:93
-#, fuzzy
 msgid ""
 "\n"
 "This is not a SchoolTool 0.11 database file, aborting.\n"
 msgstr ""
-"\n"
-"Tämä ei ole SchoolBell 1.0 tietotakantatiedosto, keskeytetään.\n"
 
 #: /src/schooltool/app/main.py:98
 msgid ""
@@ -2007,11 +2014,12 @@ msgstr ""
 #: /src/schooltool/course/rest/section.pt:10
 #: /src/schooltool/person/rest/person.pt:10
 msgid "ACL"
-msgstr ""
+msgstr "ACL"
 
 #: /src/schooltool/app/rest/templates/app.pt:5
+#, fuzzy
 msgid "Welcome to the SchoolTool server"
-msgstr "Tervetuloa SchoolTool palvelimelle"
+msgstr "Tervetuloa KouluTyökaluun"
 
 #. Default: ""
 #: /src/schooltool/attendance/attendance.py:390
@@ -2035,18 +2043,14 @@ msgstr ""
 
 #: /src/schooltool/attendance/browser/attendance.py:428
 #: /src/schooltool/attendance/browser/attendance.py:754
-#, fuzzy
 msgid "The arrival time you entered is invalid.  Please use HH:MM format"
 msgstr ""
-"Syöttämänne päivämäärä on kelpaamaton. Käyttäkää VVVV-KK-PP formaattia."
 
 #: /src/schooltool/attendance/browser/attendance.py:450
-#, fuzzy
 msgid ""
 "The minutes late value you entered is invalid.  Please use an integer number "
 "of minutes."
 msgstr ""
-"Syöttämänne päivämäärä on kelpaamaton. Käyttäkää VVVV-KK-PP formaattia."
 
 #: /src/schooltool/attendance/browser/attendance.py:454
 msgid "Arrival times only apply to tardy students"
@@ -2217,7 +2221,7 @@ msgstr ""
 #: /src/schooltool/attendance/browser/templates/real_time.pt:89
 #, fuzzy
 msgid "Minutes late:"
-msgstr "Minuutit"
+msgstr "Minuuttia"
 
 #: /src/schooltool/attendance/browser/templates/retro.pt:30
 msgid "For Tardy, enter a number of minutes late. This field is optional."
@@ -2243,12 +2247,12 @@ msgstr ""
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:133
 #, fuzzy
 msgid "Summary"
-msgstr "Su"
+msgstr "Sunnuntai"
 
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:135
 #, fuzzy
 msgid "There are no terms defined."
-msgstr "Ei ole mitään lisättävää."
+msgstr "Ei ole mitään lisättävä"
 
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:139
 msgid "Absences"
@@ -2259,14 +2263,13 @@ msgid "Tardies"
 msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:159
-#, fuzzy
 msgid "There were no absences in this term."
-msgstr "Syöttämänne päivämäärä ei kuulu tähän jaksoon."
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:34
 #, fuzzy
 msgid "There are no unresolved absences."
-msgstr "Ei ole mitään lisättävää."
+msgstr "Ei ole mitään lisättävä"
 
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:4
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:10
@@ -2284,9 +2287,8 @@ msgstr ""
 
 #. Default: ""
 #: /src/schooltool/attendance/browser/tests/test_attendance.py:263
-#, fuzzy
 msgid "$title"
-msgstr "Titteli"
+msgstr ""
 
 #: /src/schooltool/attendance/interfaces.py:39
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:18
@@ -2324,7 +2326,7 @@ msgstr ""
 #: /src/schooltool/batching/macros.pt:28 /src/schooltool/batching/macros.pt:35
 #, fuzzy
 msgid "Previous"
-msgstr "Edellisvuonna"
+msgstr "Edellinen vuosi"
 
 #: /src/schooltool/batching/macros.pt:36
 msgid "&laquo; <span>x</span> <span>${DYNAMIC_CONTENT}</span>"
@@ -2338,8 +2340,9 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:39
 #: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:20
 #: /src/schooltool/term/browser/term_add_edit.pt:60
+#, fuzzy
 msgid "Next"
-msgstr ""
+msgstr "Ensi viikko"
 
 #: /src/schooltool/batching/macros.pt:51
 msgid "<span>x</span> &raquo;"
@@ -2360,32 +2363,28 @@ msgid "Add Commendation"
 msgstr "Lisätkää kappaletta"
 
 #: /src/schooltool/commendation/interfaces.py:49
-#, fuzzy
 msgid "Title of the commendation."
-msgstr "Kurssin titteli."
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:54
-#, fuzzy
 msgid "A detailed description of the commendation."
-msgstr "Jaoksen kuvaus."
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:58
 msgid "Scope"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:59
-#, fuzzy
 msgid "The scope of the commendation."
-msgstr "Jaoksen kuvaus."
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "school-wide"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
-#, fuzzy
 msgid "group"
-msgstr "Ryhmät"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "community"
@@ -2396,14 +2395,12 @@ msgid "global"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:61
-#, fuzzy
 msgid "national"
-msgstr "Kesto"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:61
-#, fuzzy
 msgid "state"
-msgstr "Päivämäärä"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:66
 msgid "The date the commendation was issued."
@@ -2414,9 +2411,8 @@ msgid "Grantor"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:72
-#, fuzzy
 msgid "The grantor of the commendation."
-msgstr "Jaoksen kuvaus."
+msgstr ""
 
 #: /src/schooltool/configure.zcml:44
 #: /src/schooltool/app/browser/configure.zcml:202
@@ -2481,19 +2477,21 @@ msgstr "Tuo kurssit"
 #: /src/schooltool/course/browser/configure.zcml:9
 #, fuzzy
 msgid "Add a Course"
-msgstr "Lisää uusi kurssi"
+msgstr "Syöttäkää CSV-data"
 
 #: /src/schooltool/course/browser/configure.zcml:96
 msgid "New Course"
 msgstr "Uusi kurssi"
 
 #: /src/schooltool/course/browser/course.py:40
+#, fuzzy
 msgid "Course index"
-msgstr "Kurssihakemisto"
+msgstr "Muu merkistö: ${other_charset}"
 
 #: /src/schooltool/course/browser/course.py:41
+#, fuzzy
 msgid "Add a new course"
-msgstr "Lisää uusi kurssi"
+msgstr "Syöttäkää CSV-data"
 
 #: /src/schooltool/course/browser/csvimport.py:39
 #: /src/schooltool/group/browser/csvimport.py:39
@@ -2511,17 +2509,20 @@ msgid "Titles may not be empty"
 msgstr "Nimikkeet eivät saata olla tyhjä"
 
 #: /src/schooltool/course/browser/section.py:103
+#, fuzzy
 msgid "No such course."
-msgstr "Ei sellaista kurssia."
+msgstr "Ei sellainen kurssi."
 
 #: /src/schooltool/course/browser/section.py:113
+#, fuzzy
 msgid "Need a course ID."
-msgstr "Tarvitaan kurssitunnus."
+msgstr "Tarvitaan kurssi-tunnus"
 
 #. Default: ""
 #: /src/schooltool/course/browser/section.py:118
+#, fuzzy
 msgid "Add a Section to ${course}"
-msgstr "Lisää uusi kappale ${course}"
+msgstr "Lisää uusi kappale ${kurssi}"
 
 #: /src/schooltool/course/browser/section.py:259
 #: /src/schooltool/course/browser/templates/section.pt:50
@@ -2549,56 +2550,54 @@ msgid "Students"
 msgstr "Opiskelijat"
 
 #: /src/schooltool/course/browser/section.py:284
-#, fuzzy
 msgid "Current Students"
-msgstr "Nykyinen koko"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:285
-#, fuzzy
 msgid "Available Students"
-msgstr "Saatavissa olevat opettajat"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:311
 #: /src/schooltool/app/browser/templates/index.pt:13
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:56
+#, fuzzy
 msgid "Groups"
 msgstr "Ryhmät"
 
 #: /src/schooltool/course/browser/section.py:312
 #: /src/schooltool/group/browser/group.py:60
-#, fuzzy
 msgid "Current Groups"
-msgstr "Kuluva vuosi"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:313
 #: /src/schooltool/group/browser/group.py:61
-#, fuzzy
 msgid "Available Groups"
-msgstr "Saatavissa olevat opettajat"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:338
 #: /src/schooltool/app/browser/templates/index.pt:14
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:70
 #: /src/schooltool/course/browser/templates/section.pt:33
+#, fuzzy
 msgid "Resources"
 msgstr "Resurssit"
 
 #: /src/schooltool/course/browser/section.py:339
-#, fuzzy
 msgid "Current Resources"
-msgstr "Tuo resursseja"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:340
 #: /src/schooltool/app/browser/templates/event_booking.pt:36
-#, fuzzy
 msgid "Available Resources"
-msgstr "Saatavissa olevat opettajat"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:68
+#, fuzzy
 msgid "Section index"
-msgstr "Kappalehakemisto"
+msgstr "CSV Data"
 
 #: /src/schooltool/course/browser/section.py:69
+#, fuzzy
 msgid "Add a new section"
 msgstr "Lisää uusi kappale"
 
@@ -2627,12 +2626,13 @@ msgid ""
 "comma\n"
 msgstr ""
 "\n"
-"Muinaishistoria, Esihistoria vuoteen 1000 jKr.\n"
-"Yhdysvaltojen historia\n"
-"Maailmanhistoria, Vuodesta 1000 jKr 20. vuosisadalle, toisen pilkun "
-"jälkeinen teksti\n"
+"Varhaishistoria, Pre-history 1000:n ajan A.D.\n"
+"Yhdysvaltalainen History\n"
+"Maailmanhistoria, 1000 jKr. 20:n vuosisadan välityksellä, toisen pilkun "
+"jälkeen teksti\n"
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:36
+#, fuzzy
 msgid ""
 "The above example will create 3 courses titled 'Ancient History', 'US "
 "History' and 'World History'. The first and last course will have the "
@@ -2640,16 +2640,17 @@ msgid ""
 "century' respectively. The Second course will have no description, and the "
 "extra \"text after a second comma\" text on the third course will be ignored."
 msgstr ""
-"Yllämainittu esimerkki luo 3 kurssia nimeltään, 'Muinaishistoria', "
-"'Yhdysvaltojen historia' ja 'Maailmanhistoria'. Ensimmäisellä ja viimeisellä "
-"kurssilla on kuvaukset 'Esihistoria vuoteen 1000 jKr.' ja 'Vuodesta 1000 jKr "
-"20. vuosisadalle'. Toisella kurssilla ei ole mitään kuvausta ja ylimääräinen "
-"teksti 'toisen pilkun jälkeinen teksti' kolmannella kurssilla jätetään "
-"huomiotta."
+"Yllämainittu esimerkki luo 3 kurssia nimeltään, 'Vanhan ajan historia', "
+"'USAn historia' ja 'Maailmanhistoria'. Ensimmäisellä ja viimeisellä "
+"kurssilla on kuvaukset 'Pre-history 1000:n ajan jKr.', ja '1000 jKr., 20:n "
+"vuosisadan välityksellä', vastaavasti. Toisella kurssilla ei ole mitään "
+"kuvausta ja ylimääräinen teksti \"teksti toinen pilkun jälkeen\" kolmannella "
+"kurssilla jätetään huomiotta."
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:4
+#, fuzzy
 msgid "Upload schooltool courses as CSV"
-msgstr "Vie SchoolTool kurssit CSV muodossa"
+msgstr "Kopioikaa schooltool kurssit CSV"
 
 #: /src/schooltool/course/browser/templates/course.pt:18
 msgid "Sections"
@@ -2657,9 +2658,8 @@ msgstr "Kappaleet"
 
 #: /src/schooltool/course/browser/templates/course.pt:36
 #: /src/schooltool/demographics/browser/nameinfo_view.pt:11
-#, fuzzy
 msgid "photo"
-msgstr "Valokuva"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/course.pt:53
 msgid "students"
@@ -2684,12 +2684,12 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/section.pt:22
 #, fuzzy
 msgid "edit info"
-msgstr "muokkaa nimeä"
+msgstr "Muokkaa nimi"
 
 #: /src/schooltool/course/browser/templates/section.pt:22
 #, fuzzy
 msgid "Change the name or description of this section."
-msgstr "Muuta tämän kappaleen sijaintia tai nimeä."
+msgstr "Muuttakaa tämän osuuden sijaintia tai nimeä."
 
 #: /src/schooltool/course/browser/templates/section.pt:40
 #, fuzzy
@@ -2699,7 +2699,7 @@ msgstr "Vaihtakaa opettajia täksi osuudeksi."
 #: /src/schooltool/course/browser/templates/section.pt:40
 #, fuzzy
 msgid "book resources"
-msgstr "Varattu resurssit: %s"
+msgstr "Varatut resurssit: %s"
 
 #: /src/schooltool/course/browser/templates/section.pt:57
 #, fuzzy
@@ -2714,12 +2714,12 @@ msgstr "muokkaa opettajia"
 #: /src/schooltool/course/browser/templates/section.pt:87
 #, fuzzy
 msgid "edit individuals"
-msgstr "muokkaa henkilöitä"
+msgstr "muokkaa henkilöt"
 
 #: /src/schooltool/course/browser/templates/section.pt:87
 #, fuzzy
 msgid "Change the students in this section individually"
-msgstr "Muuta opiskelijoita tässä osuudessa yksitellen"
+msgstr "Muuttakaa opiskelijoita tässä osuudessa yksitellen"
 
 #: /src/schooltool/course/browser/templates/section.pt:94
 #, fuzzy
@@ -2757,11 +2757,11 @@ msgstr "On olemassa ${num_errors} syötetty virheet"
 
 #: /src/schooltool/course/interfaces.py:37
 msgid "Title of the course."
-msgstr "Kurssin titteli."
+msgstr ""
 
 #: /src/schooltool/course/interfaces.py:42
 msgid "Description of the course."
-msgstr "Kurssin kuvaus."
+msgstr ""
 
 #: /src/schooltool/course/interfaces.py:65
 msgid "Label"
@@ -2776,15 +2776,15 @@ msgstr ""
 #: /src/schooltool/course/interfaces.py:72
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:23
 msgid "Code"
-msgstr "Koodi"
+msgstr ""
 
 #: /src/schooltool/course/interfaces.py:74
 msgid "ID code for the section."
-msgstr "Jaoksen ID koodi."
+msgstr ""
 
 #: /src/schooltool/course/interfaces.py:79
 msgid "Description of the section."
-msgstr "Jaoksen kuvaus."
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/course/section.py:63
@@ -2798,9 +2798,8 @@ msgstr ""
 
 #: /src/schooltool/dashboard/interfaces.py:49
 #: /src/schooltool/dashboard/interfaces.py:50
-#, fuzzy
 msgid "Weight"
-msgstr "Web-sivu"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/configure.zcml:13
 #, fuzzy
@@ -2887,20 +2886,17 @@ msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:156
-#, fuzzy
 msgid "Change name information for ${fullname}"
-msgstr "Vaihda etusijoja ${käyttäjä}"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:172
-#, fuzzy
 msgid "Change name"
-msgstr "Muuttakaa etusijoja"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:183
-#, fuzzy
 msgid "Change demographics for ${fullname}"
-msgstr "Vaihda etusijoja ${käyttäjä}"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:191
 msgid "Demographics"
@@ -2912,9 +2908,8 @@ msgid "Change school data for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:212
-#, fuzzy
 msgid "School data"
-msgstr "Koulun aikataulut"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:230
@@ -2922,9 +2917,8 @@ msgid "Change contact information for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:238
-#, fuzzy
 msgid "Contact information"
-msgstr "Muokkaa kappaletietoa"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:272
 #: /src/schooltool/demographics/browser/personform.py:273
@@ -2960,7 +2954,7 @@ msgstr ""
 #: /src/schooltool/skin/form.py:55
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:46
 msgid "Apply"
-msgstr "Toteuta"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/schooldata_view.pt:3
 #: /src/schooltool/demographics/browser/nameinfo_view.pt:3
@@ -2972,7 +2966,7 @@ msgstr "Päivittäin"
 #: /src/schooltool/demographics/browser/search.pt:24
 #, fuzzy
 msgid "There were no results."
-msgstr "Ei ole mitään lisättävää."
+msgstr "Ei ole mitään lisättävä"
 
 #: /src/schooltool/demographics/browser/search.pt:6
 msgid ""
@@ -2984,43 +2978,39 @@ msgstr ""
 #: /src/schooltool/demographics/browser/table.pt:8
 #, fuzzy
 msgid "There are no persons."
-msgstr "Ei ole mitään lisättävää."
+msgstr "Ei ole mitään lisättävä"
 
 #: /src/schooltool/demographics/interfaces.py:120
 msgid "Gender"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:126
-#, fuzzy
 msgid "Birth date"
-msgstr "Aloituspäivämäärä"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:131
 msgid "Ethnicity"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:137
-#, fuzzy
 msgid "Primary language"
-msgstr "Ensisijainen puhelin"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:143
 msgid "Special education"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:148
-#, fuzzy
 msgid "Previous school"
-msgstr "Viimekuu"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:191
 msgid "ID"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:196
-#, fuzzy
 msgid "Enrollment date"
-msgstr "Lopetuspäivämäärä"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:201
 msgid "Projected graduation year"
@@ -3035,23 +3025,20 @@ msgid "Team"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:218
-#, fuzzy
 msgid "Health information"
-msgstr "Muokkaa kappaletietoa"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:239
 #: /src/schooltool/gradebook/browser/gradebook_overview.pt:15
 #: /src/schooltool/gradebook/browser/gradebook_grade_activity.pt:32
 #: /src/schooltool/attendance/browser/templates/real_time.pt:55
 #: /src/schooltool/attendance/browser/templates/retro.pt:35
-#, fuzzy
 msgid "Name"
-msgstr "Lempinimi"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:244
-#, fuzzy
 msgid "Relationship to student"
-msgstr "Yhteyssuhteet"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:250
 msgid "Street"
@@ -3062,23 +3049,20 @@ msgid "City"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:260
-#, fuzzy
 msgid "State"
-msgstr "La"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:265
 msgid "Postal code"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:270
-#, fuzzy
 msgid "Home phone"
-msgstr "Aikavyöhyke"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:275
-#, fuzzy
 msgid "Work phone"
-msgstr "Toissijainen puhelin"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:280
 msgid "Cell phone"
@@ -3087,9 +3071,8 @@ msgstr ""
 #: /src/schooltool/demographics/interfaces.py:285
 #: /src/schooltool/app/browser/configure.zcml:536
 #: /src/schooltool/app/rest/configure.zcml:255 /src/schooltool/note/notes.pt:2
-#, fuzzy
 msgid "Notes"
-msgstr "kohdteet"
+msgstr "Muistiinpanot"
 
 #: /src/schooltool/demographics/interfaces.py:295
 msgid "Text"
@@ -3100,18 +3083,16 @@ msgid "Full text search in name"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:301
-#, fuzzy
 msgid "Name of parent"
-msgstr "Tapahtumien"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:302
 msgid "Full text search in parent names"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:307
-#, fuzzy
 msgid "Student ID"
-msgstr "Opiskelijat"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:43
 msgid "Prefix"
@@ -3122,28 +3103,24 @@ msgid "Prefix such as Mr., Mrs."
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:49
-#, fuzzy
 msgid "First name"
-msgstr "muokkaa nimeä"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:54
-#, fuzzy
 msgid "Middle name"
-msgstr "Täydellinen nimi"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:59
-#, fuzzy
 msgid "Last name"
-msgstr "muokkaa nimeä"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:64
 msgid "Suffix"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:69
-#, fuzzy
 msgid "Preferred name"
-msgstr "muokkaa nimeä"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:70
 msgid "Name by which the student prefers to be called"
@@ -3227,28 +3204,24 @@ msgid "Categories"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:49
-#, fuzzy
 msgid "New Category"
-msgstr "Uusi jakso"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:52
 msgid "Default Category"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:75
-#, fuzzy
 msgid "Categories successfully deleted."
-msgstr "CSV textin tuonti onnistui"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:81
-#, fuzzy
 msgid "Category successfully added."
-msgstr "Salasanaa muutettiin onnistuneesti!"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:87
-#, fuzzy
 msgid "Default category successfully changed."
-msgstr "Salasanaa muutettiin onnistuneesti!"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/configure.zcml:103
 msgid "New Activity"
@@ -3303,9 +3276,8 @@ msgstr ""
 
 #. Default: ""
 #: /src/schooltool/gradebook/browser/gradebook.py:238
-#, fuzzy
 msgid "The grade $value for $name is not valid."
-msgstr "Syöttämänne korvaava päivämäärä on kelpaamaton."
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/gradebook.py:98
 msgid "Average"
@@ -3379,9 +3351,8 @@ msgid "Essay"
 msgstr ""
 
 #: /src/schooltool/gradebook/category.py:62
-#, fuzzy
 msgid "Exam"
-msgstr "Esimerkki:"
+msgstr ""
 
 #: /src/schooltool/gradebook/category.py:63
 msgid "Homework"
@@ -3396,9 +3367,8 @@ msgid "Lab"
 msgstr ""
 
 #: /src/schooltool/gradebook/category.py:66
-#, fuzzy
 msgid "Presentation"
-msgstr "Kesto"
+msgstr ""
 
 #: /src/schooltool/gradebook/category.py:67
 msgid "Project"
@@ -3409,9 +3379,8 @@ msgid "Gradebook API"
 msgstr ""
 
 #: /src/schooltool/gradebook/interfaces.py:39
-#, fuzzy
 msgid "A detailed description of the activity."
-msgstr "Jaoksen kuvaus."
+msgstr ""
 
 #: /src/schooltool/gradebook/interfaces.py:43
 msgid "Category"
@@ -3463,7 +3432,7 @@ msgstr "Muokkaa kappaletietoa"
 #: /src/schooltool/group/browser/configure.zcml:76
 #, fuzzy
 msgid "Change Membership"
-msgstr "Jäsenyyksien hallinta"
+msgstr "Jäsenyyden Hallinta"
 
 #: /src/schooltool/group/browser/configure.zcml:91
 #, fuzzy
@@ -3480,20 +3449,22 @@ msgid "SchoolBell Group"
 msgstr ""
 
 #: /src/schooltool/group/browser/group-csvimport.pt:25
+#, fuzzy
 msgid ""
 "CSV data <strong>must</strong> include a group title and <strong>may</"
 "strong> include an optional group description. Any extra information will be "
 "discarded."
 msgstr ""
-"CSV tiedon <strong>täytyy</strong> sisältää ryhmän otsikko ja se "
-"<strong>voi</strong> sisältää valinnaisen ryhmäkuvauksen. Ylimääräiset "
-"tiedot hylätään."
+"CSV data <strong>must</strong> käsitää ryhmän otsikko, ja <strong>may</"
+"strong> käsittäkää valinnainen ryhmäkuvaus. Yhtään ylimääräistä tietoa "
+"hylätään."
 
 #. Default: ""
 #.  "LUG, Linux Users Group\n"
 #.  "Chess Club\n"
 #.  "Sports Club, After-school sports club, <em>text after a second comma</em>"
 #: /src/schooltool/group/browser/group-csvimport.pt:32
+#, fuzzy
 msgid ""
 "\n"
 "LUG, Linux Users Group\n"
@@ -3501,12 +3472,13 @@ msgid ""
 "Sports Club, After-school sports club, <em>text after a second comma</em>\n"
 msgstr ""
 "\n"
-"LUG, Linux Users Group\n"
-"Shakkikerho\n"
-"Urheiluseura, koulupäivän jälkeinen tapahtuma, <em>toisen pilkun jälkeinen "
-"teksti</em>\n"
+"LUG, Linux Users Group \n"
+"Chess Club \n"
+"Urheiluseura, koulupäivän jälkeen tapahtuva urheiluseura,<em>-teksti toisen "
+"pilkun jälkeen</em>\n"
 
 #: /src/schooltool/group/browser/group-csvimport.pt:37
+#, fuzzy
 msgid ""
 "The above example will create 3 groups titled 'LUG', 'Chess Club' and "
 "'Sports Club'. The first and last group will have the descriptions 'Linux "
@@ -3514,30 +3486,32 @@ msgid ""
 "group will have no description, and the extra \"text after a second comma\" "
 "text on the third group will be ignored."
 msgstr ""
-"Yllämainittu esimerkki luo 3 ryhmää nimeltään, 'LUG', 'Shakkikerho' ja "
-"'Urheiluseura'. Ensimmäisellä ja viimeisellä ryhmällä on kuvaukset, 'Linuxin "
-"käyttäjien ryhmä' ja 'koulupäivän jälkeinen tapahtuma'. 'Shakkikerho' "
-"ryhmällä ei ole mitään kuvausta ja ylimääräinen 'toisen pilkun jälkeinen "
-"teksti' kolmannella ryhmällä jätetään huomiotta."
+"Yllämainittu esimerkki luo 3 ryhmää nimeltään, 'LUG', 'shakkikerho' ja "
+"'urheilukerho'. Ensimmäisellä ja viimeisellä ryhmällä on vastaavasti "
+"kuvaukset, 'Linuxin käyttäjien ryhmä' ja 'koulupäivän jälkeen tapahtuvaa "
+"urheiluseuraa'. 'Shakkikerho'ryhmällä ei ole mitään kuvausta ja ylimääräinen "
+"\"teksti toinen pilkku jälkeen\" teksti kolmannella ryhmällä jätetään "
+"huomiotta."
 
 #: /src/schooltool/group/browser/group-csvimport.pt:4
+#, fuzzy
 msgid "Upload SchoolTool groups as CSV"
-msgstr "Vie SchoolTool ryhmät CSV muodossa"
+msgstr "Vie Koulu Työkalu ryhmät CSV muodossa"
 
 #: /src/schooltool/group/browser/group.pt:16
 #, fuzzy
 msgid "Members"
-msgstr "Joulukuu"
+msgstr "Marraskuu"
 
 #: /src/schooltool/group/browser/group.pt:23
 #, fuzzy
 msgid "edit members"
-msgstr "Syyskuu"
+msgstr "Muokkaa nimi"
 
 #: /src/schooltool/group/browser/group.pt:23
 #, fuzzy
 msgid "Change the people who are members of this group."
-msgstr "Muuta tämän kappaleen sijaintia tai nimeä."
+msgstr "Muuttakaa tämän osuuden sijaintia tai nimeä."
 
 #: /src/schooltool/group/browser/group.py:47
 #, fuzzy
@@ -3560,14 +3534,12 @@ msgid "Members of ${group}"
 msgstr ""
 
 #: /src/schooltool/group/browser/group.py:98
-#, fuzzy
 msgid "Current Members"
-msgstr "Kuluva vuosi"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.py:99
-#, fuzzy
 msgid "Add Members"
-msgstr "Lisää tapahtumat"
+msgstr ""
 
 #: /src/schooltool/group/interfaces.py:44
 msgid "Title of the group."
@@ -3579,8 +3551,9 @@ msgstr "Ryhmän kuvaus"
 
 #. Default: "Calendar"
 #: /src/schooltool/group/rest/group.pt:14
+#, fuzzy
 msgid "Private_calendar"
-msgstr ""
+msgstr "Näytä kalenteri"
 
 #: /src/schooltool/help/configure.zcml:46
 msgid "Contextual Help"
@@ -3610,23 +3583,21 @@ msgid "This is an initial level."
 msgstr ""
 
 #: /src/schooltool/level/browser/level.pt:21
+#, fuzzy
 msgid "None"
-msgstr ""
+msgstr "Muistiinpanot"
 
 #: /src/schooltool/level/browser/level.py:41
-#, fuzzy
 msgid "Level index"
-msgstr "Resurssi indeksi"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:42
-#, fuzzy
 msgid "Add a new level"
-msgstr "Lisää uusi resurssi"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:60
-#, fuzzy
 msgid "Previous Level"
-msgstr "Viime viikko"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:61
 msgid ""
@@ -3714,20 +3685,17 @@ msgid "Students successfully enrolled."
 msgstr ""
 
 #: /src/schooltool/level/browser/promotion.py:132
-#, fuzzy
 msgid "Student processes successfully updated."
-msgstr "CSV textin tuonti onnistui"
+msgstr ""
 
 #: /src/schooltool/level/browser/promotion.py:57
-#, fuzzy
 msgid "Work Item successfully finished."
-msgstr "Salasanaa muutettiin onnistuneesti!"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/level/browser/promotion.py:64
-#, fuzzy
 msgid "Current Level: $level"
-msgstr "Nykyinen viikko"
+msgstr ""
 
 #: /src/schooltool/level/browser/record.pt:107
 msgid "History"
@@ -3778,9 +3746,8 @@ msgid "initialize-button"
 msgstr "poistaa-painike"
 
 #: /src/schooltool/level/browser/record.py:56
-#, fuzzy
 msgid "The status was successfully updated."
-msgstr "Salasanaa muutettiin onnistuneesti!"
+msgstr ""
 
 #: /src/schooltool/level/browser/record.py:68
 msgid "The Level Process was successfully initialized."
@@ -3799,23 +3766,20 @@ msgid "The date and time the record was created."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:137
-#, fuzzy
 msgid "User"
-msgstr "Käyttäjä"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:138
 msgid "The principal id of the user making the record."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:143
-#, fuzzy
 msgid "Title of the record."
-msgstr "Resurssin nimike."
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:148
-#, fuzzy
 msgid "A detailed description of the record."
-msgstr "Resurssin kuvaus."
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:160
 msgid "Academic History"
@@ -3828,9 +3792,8 @@ msgstr ""
 #: /src/schooltool/level/interfaces.py:166
 #: /src/schooltool/level/browser/record.pt:15
 #: /src/schooltool/attendance/browser/templates/real_time.pt:56
-#, fuzzy
 msgid "Status"
-msgstr "La"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:167
 msgid "The current standing of the student in the school."
@@ -3858,9 +3821,8 @@ msgid "The workflow process of the level the student is currently completing."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:76
-#, fuzzy
 msgid "Title of the level."
-msgstr "Muistiinpanon nimike."
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:80
 msgid "Is Initial Level"
@@ -3871,9 +3833,8 @@ msgid "Is this level an initial level for the school."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:86
-#, fuzzy
 msgid "Next Level"
-msgstr "Ensiviikko"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:87
 msgid ""
@@ -3886,14 +3847,12 @@ msgid "Outcome"
 msgstr ""
 
 #: /src/schooltool/level/promotion.py:129
-#, fuzzy
 msgid "Outcome of the level."
-msgstr "Muistiinpanon nimike."
+msgstr ""
 
 #: /src/schooltool/level/promotion.py:130
-#, fuzzy
 msgid "fail"
-msgstr "Päivittäin"
+msgstr ""
 
 #: /src/schooltool/level/promotion.py:130
 msgid "withdraw"
@@ -3915,7 +3874,7 @@ msgstr ""
 #: /src/schooltool/note/configure.zcml:39
 #, fuzzy
 msgid "New Note"
-msgstr "Uusi jakso"
+msgstr "Uusi valokuva"
 
 #: /src/schooltool/note/interfaces.py:43
 msgid "Title of the note."
@@ -3935,8 +3894,9 @@ msgid "Privacy"
 msgstr "yksityisyys"
 
 #: /src/schooltool/note/note_add.pt:13
+#, fuzzy
 msgid "Note"
-msgstr ""
+msgstr "Muistiinpanot"
 
 #: /src/schooltool/note/note_add.pt:24
 msgid "Who can view the note"
@@ -3985,6 +3945,7 @@ msgid "Duplicate username: ${username}"
 msgstr "Kaksois käyttäjänimi: ${käyttäjänimi}"
 
 #: /src/schooltool/person/browser/person-csvimport.pt:22
+#, fuzzy
 msgid "Import Persons"
 msgstr "Tuo henkilöjä"
 
@@ -3993,8 +3954,6 @@ msgid ""
 "CSV data <strong>must</strong> contain a user name and a full name. An "
 "optional password <strong>may</strong> be included as well."
 msgstr ""
-"CSV datan <strong>täytyy</strong> sisältää käyttäjänimi ja koko nimi. "
-"Vaihtoehtoisen salasanan <strong>voi</strong> myös lisätä."
 
 #. Default: ""
 #.  "jjones, Jimmy Jones\n"
@@ -4014,28 +3973,23 @@ msgid ""
 "Of the three, only 'jbjones' has a password ('r2m45J') and will be able to "
 "login to the system. Note that passwords must be sent in plain text."
 msgstr ""
-"Ylläoleva esimerkki luo kolme käyttäjää. \"jjones\", \"jbjones\" ja \"howard"
-"\". Näistä kolmesta vain \"jbjones\":lla on salasana (r2m45J) ja hän on "
-"ainoa joka voi kirjautua sisään järjestelmään. Huomaa, että salasanat täytyy "
-"lähettää paljaana tekstinä."
 
 #: /src/schooltool/person/browser/person-csvimport.pt:4
+#, fuzzy
 msgid "Upload SchoolTool persons as CSV"
-msgstr "Lähetä SchoolTool henkilöt CSV:nä"
+msgstr "Vie Koulu Työkalu ryhmät CSV muodossa"
 
 #: /src/schooltool/person/browser/person.py:176
-#, fuzzy
 msgid "Edit password"
-msgstr "Uusi salasana"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:181
 msgid "No new password was supplied so original password is unchanged"
 msgstr ""
 
 #: /src/schooltool/person/browser/person.py:186
-#, fuzzy
 msgid "Changed password"
-msgstr "Uusi salasana"
+msgstr ""
 
 #: /src/schooltool/person/browser/person_container_delete.pt:18
 msgid "Sorry, you may not delete your own user account."
@@ -4103,17 +4057,16 @@ msgstr "Viikkojen alku-näytteillepano sunnuntaina tai maanantai"
 
 #: /src/schooltool/person/interfaces.py:187
 msgid "Show periods"
-msgstr "Näytä jaksot"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:188
 msgid "Show period names in daily view"
-msgstr "Näytä jaksojen nimet päivittäisessä näkemyksessä"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:191
 #: /src/schooltool/person/interfaces.py:192
-#, fuzzy
 msgid "Make calendar public"
-msgstr "Näytä kalenteri"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:70
 #, fuzzy
@@ -4128,7 +4081,7 @@ msgstr "Nimi, joka pitäisi näyttää"
 #: /src/schooltool/course/rest/section.pt:7
 #: /src/schooltool/person/rest/person.pt:7
 msgid "Relationships"
-msgstr "Yhteyssuhteet"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/configure.zcml:19
 #, fuzzy
@@ -4141,23 +4094,22 @@ msgid "Edit Requirement"
 msgstr "Muokkaa tapahtuma"
 
 #: /src/schooltool/requirement/browser/configure.zcml:69
-#, fuzzy
 msgid "New Requirement"
-msgstr "Uusi jakso"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.pt:40
 #: /src/schooltool/course/browser/templates/course_container.pt:28
 #: /src/schooltool/skin/templates/container.pt:29
 #: /src/schooltool/skin/templates/table_macros.pt:5
 msgid "Showing"
-msgstr "Näyttää"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.pt:42
 #: /src/schooltool/course/browser/templates/course_container.pt:30
 #: /src/schooltool/skin/templates/container.pt:31
 #: /src/schooltool/skin/templates/table_macros.pt:7
 msgid "of"
-msgstr "/"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.pt:44
 #: /src/schooltool/course/browser/templates/course_container.pt:32
@@ -4168,14 +4120,12 @@ msgid "items"
 msgstr "kohdteet"
 
 #: /src/schooltool/requirement/browser/requirement.py:53
-#, fuzzy
 msgid "Requirement index"
-msgstr "Resurssi indeksi"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.py:54
-#, fuzzy
 msgid "Add a new Requirement"
-msgstr "Lisää uusi resurssi"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/scoresystem.py:36
 msgid "Exisiting Score System"
@@ -4187,8 +4137,9 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:100
 #: /src/schooltool/resource/browser/resource-csvimport.pt:21
+#, fuzzy
 msgid "Import Resources"
-msgstr "Tuo resursseja"
+msgstr "Tuo resurssit"
 
 #: /src/schooltool/resource/browser/configure.zcml:27
 #, fuzzy
@@ -4258,8 +4209,9 @@ msgstr ""
 "\" -tekstin  kolmannella resurssilla jätetään huomiotta"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
+#, fuzzy
 msgid "Upload schooltool resources as CSV"
-msgstr ""
+msgstr "Kopioikaa schooltool kurssit CSV"
 
 #: /src/schooltool/resource/browser/resource.py:39
 #, fuzzy
@@ -4298,27 +4250,25 @@ msgstr ""
 #: /src/schooltool/resource/rest/resource.pt:20
 #: /src/schooltool/group/rest/group.pt:20
 #: /src/schooltool/person/rest/person.pt:19
+#, fuzzy
 msgid "Calendar_ACL"
-msgstr ""
+msgstr "Kalenteri"
 
 #: /src/schooltool/restclient/restclient.py:644
 msgid "Could not parse relationship list"
 msgstr ""
 
 #: /src/schooltool/restclient/restclient.py:660
-#, fuzzy
 msgid "Insufficient data in person info"
-msgstr "Riittämätön data annettu."
+msgstr ""
 
 #: /src/schooltool/restclient/restclient.py:673
-#, fuzzy
 msgid "Insufficient data in group info"
-msgstr "Riittämätön data annettu."
+msgstr ""
 
 #: /src/schooltool/restclient/restclient.py:688
-#, fuzzy
 msgid "Insufficient data in level info"
-msgstr "Riittämätön data annettu."
+msgstr ""
 
 #: /src/schooltool/sampledata/sampledata.pt:14
 msgid ""
@@ -4350,8 +4300,6 @@ msgid ""
 "\n"
 "This is not a SchoolBell 1.0 database file, aborting.\n"
 msgstr ""
-"\n"
-"Tämä ei ole SchoolBell 1.0 tietotakantatiedosto, keskeytetään.\n"
 
 #: /src/schooltool/sbapp/main.py:43
 msgid ""
@@ -4394,9 +4342,8 @@ msgid "top"
 msgstr "ylä"
 
 #: /src/schooltool/skin/form.py:64
-#, fuzzy
 msgid "No changes"
-msgstr "Tallenettu muutokset"
+msgstr ""
 
 #: /src/schooltool/skin/templates/error.pt:13
 #, fuzzy
@@ -4465,7 +4412,7 @@ msgstr "Kirjaudu ulos"
 
 #: /src/schooltool/term/browser/configure.zcml:26
 msgid "New Term"
-msgstr "Uusi jakso"
+msgstr ""
 
 #: /src/schooltool/term/browser/configure.zcml:67
 msgid "Cancel School in Emergency"
@@ -4473,13 +4420,12 @@ msgstr ""
 
 #: /src/schooltool/term/browser/emergency.py:100
 msgid "The replacement date you entered is invalid."
-msgstr "Syöttämänne korvaava päivämäärä on kelpaamaton."
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/term/browser/emergency.py:123
-#, fuzzy
 msgid "School cancelled due to emergency. Replacement day $replacement."
-msgstr "Koulu suljettu hätätilanteen vuoksi. Korvaava päivä $replacement."
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/term/browser/emergency.py:133
@@ -4489,15 +4435,14 @@ msgstr ""
 #: /src/schooltool/term/browser/emergency.py:84
 msgid "The date you entered is invalid.  Please use the YYYY-MM-DD format."
 msgstr ""
-"Syöttämänne päivämäärä on kelpaamaton. Käyttäkää VVVV-KK-PP formaattia."
 
 #: /src/schooltool/term/browser/emergency.py:88
 msgid "The date you entered does not belong to this term."
-msgstr "Syöttämänne päivämäärä ei kuulu tähän jaksoon."
+msgstr ""
 
 #: /src/schooltool/term/browser/emergency.py:92
 msgid "The date you entered is not a schoolday."
-msgstr "Syöttämänne päivämäärä ei ole koulupäivä."
+msgstr ""
 
 #: /src/schooltool/term/browser/emergency2.pt:12
 msgid ""
@@ -4545,7 +4490,7 @@ msgstr ""
 
 #: /src/schooltool/term/browser/term.py:165
 msgid "New term"
-msgstr "Uusi jakso"
+msgstr ""
 
 #: /src/schooltool/term/browser/term.py:55
 msgid "Terms"
@@ -4557,29 +4502,32 @@ msgstr ""
 
 #: /src/schooltool/term/browser/term.py:65
 msgid "Start date"
-msgstr "Aloituspäivämäärä"
+msgstr ""
 
 #: /src/schooltool/term/browser/term.py:67
 msgid "End date"
-msgstr "Lopetuspäivämäärä"
+msgstr ""
 
 #: /src/schooltool/term/browser/term_add_edit.pt:115
 #: /src/schooltool/term/browser/term.pt:26
+#, fuzzy
 msgid "${month} ${year}"
-msgstr ""
+msgstr "${kuukausi}, ${vuosi}"
 
 #: /src/schooltool/term/browser/term_add_edit.pt:130
 #: /src/schooltool/term/browser/term.pt:41
+#, fuzzy
 msgid "Week ${week_number}"
-msgstr ""
+msgstr "Viikko ${viikko_no}"
 
 #: /src/schooltool/term/browser/term_add_edit.pt:151
 msgid "Add term"
 msgstr ""
 
 #: /src/schooltool/term/browser/term_add_edit.pt:158
+#, fuzzy
 msgid "Save changes"
-msgstr ""
+msgstr "Muutokset tallennettu."
 
 #: /src/schooltool/term/browser/term_add_edit.pt:38
 msgid ""
@@ -4595,8 +4543,9 @@ msgstr ""
 #: /src/schooltool/term/browser/term_add_edit.pt:64
 #: /src/schooltool/term/browser/term_add_edit.pt:149
 #: /src/schooltool/term/browser/term_add_edit.pt:156
+#, fuzzy
 msgid "Refresh"
-msgstr ""
+msgstr "Resurssit"
 
 #: /src/schooltool/term/browser/term_add_edit.pt:70
 msgid ""
@@ -4615,13 +4564,15 @@ msgstr ""
 
 #: /src/schooltool/term/browser/term_add_edit.pt:82
 #: /src/schooltool/term/browser/term.pt:13
+#, fuzzy
 msgid "Schoolday"
-msgstr ""
+msgstr "SchoolTool"
 
 #: /src/schooltool/term/browser/term_add_edit.pt:83
 #: /src/schooltool/term/browser/term.pt:14
+#, fuzzy
 msgid "Holiday"
-msgstr ""
+msgstr "Tänään"
 
 #: /src/schooltool/term/browser/term_add_edit.pt:93
 msgid "Toggle the following days of week:"
@@ -4634,24 +4585,24 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:744
 msgid "Invalid date. Please use YYYY-MM-DD format."
-msgstr "Viallinen päivämäärä. Käytä VVVV-KK-PP formaattia."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:748
 msgid "The date does not belong to any term."
-msgstr "Päivämäärä ei kuulu mihinkään jaksoon."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:757
 msgid "Some values were invalid.  They are highlighted in red."
 msgstr ""
-"Tietyt arvot olivat kelpaamattomia. Ne ovat korostetut punaisella värillä."
 
 #: /src/schooltool/timetable/browser/configure.zcml:112
 msgid "Change Timetable for One Day"
-msgstr "Muuta yhden päivän aikataulua"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/configure.zcml:139
+#, fuzzy
 msgid "New Timetable"
-msgstr "Uusi aikataulu"
+msgstr "Katselkaa aikatauluja"
 
 #: /src/schooltool/timetable/browser/configure.zcml:22
 #, fuzzy
@@ -4667,7 +4618,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:155
 msgid "Please use HH:MM format for period start and end times"
-msgstr "Käytä TT:MM formaattia jaksojen aloitus ja lopetusaioissa."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:196
 msgid "You must specify at least one period."
@@ -4675,7 +4626,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:217
 msgid "School Timetables"
-msgstr "Koulun aikataulut"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:218
 msgid "Add a new schema"
@@ -4683,7 +4634,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:302
 msgid "Please select a value"
-msgstr "Valitse arvo"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/schema.py:329
@@ -4693,7 +4644,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:359
 msgid "Period 1"
-msgstr "Jakso 1"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/schema.py:369
@@ -4759,8 +4710,9 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:51
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:155
+#, fuzzy
 msgid "Copy periods from previous day"
-msgstr ""
+msgstr "Edellinen päivä"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:58
 msgid "X"
@@ -4771,12 +4723,14 @@ msgid "Remove this day"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:84
+#, fuzzy
 msgid "Add day"
-msgstr ""
+msgstr "Koko päivä"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:87
+#, fuzzy
 msgid "Add period"
-msgstr ""
+msgstr "Lisää uusi henkilö"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:94
 msgid "Second, select the way timetable days are aligned with calendar days."
@@ -4789,8 +4743,9 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:22
+#, fuzzy
 msgid "Timetable"
-msgstr ""
+msgstr "Katselkaa aikatauluja"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:138
@@ -4807,8 +4762,9 @@ msgid "Scheduling for ${person}"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:43
+#, fuzzy
 msgid "Choose"
-msgstr ""
+msgstr "Kurssit"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:54
 msgid ""
@@ -4856,8 +4812,9 @@ msgid "Scheduling for ${section}"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:46
+#, fuzzy
 msgid "Using timetable:"
-msgstr ""
+msgstr "Katselkaa aikatauluja"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:11
 msgid ""
@@ -4873,8 +4830,9 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:37
+#, fuzzy
 msgid "Period title (optional)"
-msgstr ""
+msgstr "Tunniste (valinnainen)"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:38
 msgid "Period start time"
@@ -4885,8 +4843,9 @@ msgid "Period end time"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:61
+#, fuzzy
 msgid "Create"
-msgstr ""
+msgstr "Päivämäärä"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:13
 msgid ""
@@ -4896,8 +4855,9 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:29
+#, fuzzy
 msgid "Period title"
-msgstr ""
+msgstr "Henkilötiedot: ${title}"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:30
 msgid "Original start"
@@ -4912,12 +4872,14 @@ msgid "New start"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:33
+#, fuzzy
 msgid "New end"
-msgstr ""
+msgstr "Näytä kalenteri"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:63
+#, fuzzy
 msgid "Modify"
-msgstr ""
+msgstr "Maanantai"
 
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:11
 msgid ""
@@ -4979,8 +4941,9 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:6
 #: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:3
 #: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:6
+#, fuzzy
 msgid "New timetable schema"
-msgstr ""
+msgstr "Katselkaa aikatauluja"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:261
 msgid ""
@@ -5164,25 +5127,31 @@ msgstr ""
 msgid "Supplied passwords are not identical"
 msgstr ""
 
-#, fuzzy
-#~ msgid "Import Sections"
-#~ msgstr "Tuo kappaleita"
-
-#~ msgid "Locations not found: ${args}."
-#~ msgstr "Sijainteja ei löydetty: ${args}."
-
-#~ msgid "Manage this person's memberships"
-#~ msgstr "Käsittele tämän henkilön jäsenyyksiä"
-
 #~ msgid "Username:"
 #~ msgstr "Käyttäjänimi"
 
+#, fuzzy
 #~ msgid "Change this person's name, picture, or password"
 #~ msgstr "Vaihda henkilön nimi, kuva, tai salasana"
 
 #, fuzzy
+#~ msgid "Import Sections"
+#~ msgstr "Lataa kappaleita"
+
+#~ msgid ""
+#~ "Malformed line ${line_no} (it should contain a day id, a period id and "
+#~ "optionally a location id)"
+#~ msgstr ""
+#~ "Epämuodostunut linja ${line_no} (sen pitäisi sisältää päivän id, kausi id "
+#~ "ja omavalintaisesti sijainti id)"
+
+#, fuzzy
+#~ msgid "Locations not found: ${args}."
+#~ msgstr "Sijainnit eivät löytyneet: ${args}."
+
+#, fuzzy
 #~ msgid "Modify this person's details"
-#~ msgstr "Muokkaa henkilön lisätietoja"
+#~ msgstr "Muuttaa henkilön tiedot"
 
 #, fuzzy
 #~ msgid "Sections Taught"
@@ -5207,10 +5176,6 @@ msgstr ""
 #~ msgid "Person index"
 #~ msgstr "henkilöindeksi"
 
-#, fuzzy
-#~ msgid "New photo"
-#~ msgstr "Uusi valokuva"
-
 #~ msgid "A small picture (about 48x48 pixels in JPEG format)"
 #~ msgstr "Pieni kuva (noin 48x48-pikselit JPEG-formaatissa)"
 
@@ -5223,12 +5188,20 @@ msgstr ""
 #~ msgstr "Ruksaa tämän poistakseen valokuvan"
 
 #, fuzzy
+#~ msgid "New password"
+#~ msgstr "Uusi salasana"
+
+#, fuzzy
 #~ msgid "Verify password"
 #~ msgstr "Tarkistakaa salasana"
 
 #, fuzzy
 #~ msgid "Passwords do not match."
 #~ msgstr "Salasanat eivät sovi yhteen."
+
+#, fuzzy
+#~ msgid "Password was successfully changed!"
+#~ msgstr "Salasanaa muutettiin onnistuneesti!"
 
 #, fuzzy
 #~ msgid "Passwords do not match!"
@@ -5239,24 +5212,16 @@ msgstr ""
 #~ msgstr "Luo uudet objektit"
 
 #, fuzzy
+#~ msgid "Add events"
+#~ msgstr "Lisää tapahtumat"
+
+#, fuzzy
 #~ msgid "Control access"
 #~ msgstr "Pääsyvalvonta"
 
 #, fuzzy
 #~ msgid "Authenticated users"
-#~ msgstr "Authentikoitu käyttäjät"
+#~ msgstr "Tunnistetut käyttäjät"
 
-#~ msgid "Unauthenticated Users"
-#~ msgstr "Kirjautumattomat käyttäjät"
-
-#~ msgid "Unauthenticated User"
-#~ msgstr "Kirjautumattomat käyttäjä"
-
-#~ msgid "Authenticated Users"
-#~ msgstr "Kirjautuneet käyttäjät"
-
-#~ msgid "All Users"
-#~ msgstr "Kaikki käyttäjät"
-
-#~ msgid "Welcome to the SchoolBell server"
-#~ msgstr "Tervetuloa SchoolBell palvelimelle"
+#~ msgid "An error occured."
+#~ msgstr "On tapahtunut virhe"

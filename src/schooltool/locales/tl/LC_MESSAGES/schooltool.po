@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: Tue Oct 17 17:42:33 2006\n"
-"PO-Revision-Date: 2006-07-23 04:51+0000\n"
+"POT-Creation-Date: Fri Oct 20 15:20:33 2006\n"
+"PO-Revision-Date: 2006-05-08 16:41+0000\n"
 "Last-Translator: Eric Pareja <xenos@upm.edu.ph>\n"
 "Language-Team: Tagalog <tl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -437,9 +437,8 @@ msgstr ""
 #: /src/schooltool/app/browser/cal.py:1881
 #: /src/schooltool/app/browser/cal.py:2187
 #: /src/schooltool/course/browser/section.py:134
-#, fuzzy
 msgid "An error occurred."
-msgstr "May kamaliang nangyari."
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:1914
 msgid "Invalid time"
@@ -546,8 +545,9 @@ msgid "Previous year"
 msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:137
+#, fuzzy
 msgid "Actions"
-msgstr ""
+msgstr "Magdagdag ng Seksyon"
 
 #: /src/schooltool/app/browser/configure.zcml:184
 #: /src/schooltool/app/configure.zcml:287
@@ -691,21 +691,15 @@ msgstr "May laman ang pangalawang hanay"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:328
-#, fuzzy
 msgid ""
 "Wrong section header on line ${line_no} (it should contain a course id and "
 "an instructor id)"
 msgstr ""
-"Mali ang anyo ng linya ${line_no} (dapat naglalaman ng id ng araw, id ng "
-"saklaw at maaaring may id ng lugar)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:354
-#, fuzzy
 msgid "Malformed line ${line_no} (it should contain a day id and a period id)"
 msgstr ""
-"Mali ang anyo ng linya ${line_no} (dapat naglalaman ng id ng araw, id ng "
-"saklaw at maaaring may id ng lugar)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:377
@@ -714,9 +708,8 @@ msgstr "Hindi buo ang paglalarawan ng seksyon sa linya ${line}"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:382
-#, fuzzy
 msgid "No students in section (line ${line})"
-msgstr "Hindi buo ang paglalarawan ng seksyon sa linya ${line}"
+msgstr ""
 
 #: /src/schooltool/app/browser/csvimport.py:462
 msgid ""
@@ -824,8 +817,9 @@ msgstr "Mag-palit ng sariling mga settings."
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:34
 #: /src/schooltool/person/browser/person_preferences.pt:22
+#, fuzzy
 msgid "Calendar Preferences"
-msgstr ""
+msgstr "Mag-palit ng sariling mga settings."
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:4
 #, fuzzy
@@ -898,16 +892,18 @@ msgid "<img alt=\"x\" src=\"${DYNAMIC_CONTENT}\" />"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:37
+#, fuzzy
 msgid "View daily calendar"
-msgstr ""
+msgstr "Kalendaryong Talaan"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:41
 msgid "Daily"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:43
+#, fuzzy
 msgid "View weekly calendar"
-msgstr ""
+msgstr "Kalendaryong Talaan"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:47
 #: /src/schooltool/app/browser/templates/event_add.pt:235
@@ -915,12 +911,14 @@ msgid "Weekly"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:49
+#, fuzzy
 msgid "View monthly calendar"
-msgstr ""
+msgstr "Kalendaryong Pansarili"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:55
+#, fuzzy
 msgid "View yearly calendar"
-msgstr ""
+msgstr "Kalendaryong Talaan"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:59
 msgid "Yearly"
@@ -1118,8 +1116,9 @@ msgstr ""
 #: /src/schooltool/sampledata/sampledata.pt:69
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:66
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:35
+#, fuzzy
 msgid "Clear"
-msgstr ""
+msgstr "Mga Kalendaryo"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:67
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:95
@@ -1283,16 +1282,18 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/index.pt:12
 #: /src/schooltool/course/browser/templates/section_container.pt:26
+#, fuzzy
 msgid "Courses"
-msgstr ""
+msgstr "Bagong Kurso"
 
 #: /src/schooltool/app/browser/templates/index.pt:15
 msgid "Levels"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/index.pt:6
+#, fuzzy
 msgid "Welcome to SchoolTool"
-msgstr ""
+msgstr "SchoolTool"
 
 #: /src/schooltool/app/browser/templates/login.pt:13
 msgid ""
@@ -1552,8 +1553,9 @@ msgid "submit-button"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:20
+#, fuzzy
 msgid "Import Timetable"
-msgstr ""
+msgstr "Tignan ang talaan ng oras"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:24
 msgid ""
@@ -1581,8 +1583,9 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:4
+#, fuzzy
 msgid "Upload SchoolTool timetable as CSV"
-msgstr ""
+msgstr "Magpadala ng mga kursong pang-schooltool bilang CSV"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:49
 #: /src/schooltool/resource/browser/resource-csvimport.pt:29
@@ -1722,9 +1725,8 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/app/interfaces.py:158
-#, fuzzy
 msgid "Show timetables"
-msgstr "Tignan ang talaan ng oras"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:159
 msgid ""
@@ -2017,7 +2019,7 @@ msgstr ""
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:41
 #, fuzzy
 msgid "Person"
-msgstr "Magangkat ng mga Tao"
+msgstr "Mag-angkat ng mga Tao"
 
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:42
 msgid "Homeroom<br />absences"
@@ -2328,7 +2330,7 @@ msgstr "Mag-angkat ng mga Kurso"
 #: /src/schooltool/course/browser/configure.zcml:9
 #, fuzzy
 msgid "Add a Course"
-msgstr "Magdagdag ng bagong kurso"
+msgstr "Mag-dagdag ng bagong kurso"
 
 #: /src/schooltool/course/browser/configure.zcml:96
 msgid "New Course"
@@ -2340,7 +2342,7 @@ msgstr "Listahan ng Kurso"
 
 #: /src/schooltool/course/browser/course.py:41
 msgid "Add a new course"
-msgstr "Magdagdag ng bagong kurso"
+msgstr "Mag-dagdag ng bagong kurso"
 
 #: /src/schooltool/course/browser/csvimport.py:39
 #: /src/schooltool/group/browser/csvimport.py:39
@@ -2366,7 +2368,7 @@ msgstr "Kailangan ng ID ng kurso."
 #. Default: ""
 #: /src/schooltool/course/browser/section.py:118
 msgid "Add a Section to ${course}"
-msgstr "Magdagdag ng Seksyon para sa ${course}"
+msgstr "Mag-dagdag ng Seksyon para sa ${course}"
 
 #: /src/schooltool/course/browser/section.py:259
 #: /src/schooltool/course/browser/templates/section.pt:50
@@ -2407,9 +2409,8 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:312
 #: /src/schooltool/group/browser/group.py:60
-#, fuzzy
 msgid "Current Groups"
-msgstr "Magangkat ng mga Grupo"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:313
 #: /src/schooltool/group/browser/group.py:61
@@ -2424,9 +2425,8 @@ msgid "Resources"
 msgstr ""
 
 #: /src/schooltool/course/browser/section.py:339
-#, fuzzy
 msgid "Current Resources"
-msgstr "Mag-angkat ng mga Kagamitan"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:340
 #: /src/schooltool/app/browser/templates/event_booking.pt:36
@@ -2439,7 +2439,7 @@ msgstr "Listahan ng Seksyon"
 
 #: /src/schooltool/course/browser/section.py:69
 msgid "Add a new section"
-msgstr "Magdagdag ng bagong seksyon"
+msgstr "Mag-dagdag ng bagong seksyon"
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:24
 #, fuzzy
@@ -2493,8 +2493,9 @@ msgid "Upload schooltool courses as CSV"
 msgstr "Magpadala ng mga kursong pang-schooltool bilang CSV"
 
 #: /src/schooltool/course/browser/templates/course.pt:18
+#, fuzzy
 msgid "Sections"
-msgstr ""
+msgstr "Mag-angkat ng mga Seksyon"
 
 #: /src/schooltool/course/browser/templates/course.pt:36
 #: /src/schooltool/demographics/browser/nameinfo_view.pt:11
@@ -2569,8 +2570,9 @@ msgid "Identifier (optional)"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_container.pt:29
+#, fuzzy
 msgid "Section"
-msgstr ""
+msgstr "Magdagdag ng Seksyon"
 
 #: /src/schooltool/course/browser/templates/section_container.pt:38
 msgid "Current Size"
@@ -2717,9 +2719,8 @@ msgid "Change name information for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:172
-#, fuzzy
 msgid "Change name"
-msgstr "Mag-palit ng sariling mga settings."
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:183
@@ -2894,9 +2895,8 @@ msgstr ""
 #: /src/schooltool/demographics/interfaces.py:285
 #: /src/schooltool/app/browser/configure.zcml:536
 #: /src/schooltool/app/rest/configure.zcml:255 /src/schooltool/note/notes.pt:2
-#, fuzzy
 msgid "Notes"
-msgstr "na mga aytem"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:295
 msgid "Text"
@@ -2915,9 +2915,8 @@ msgid "Full text search in parent names"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:307
-#, fuzzy
 msgid "Student ID"
-msgstr "mga mag-aaral"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:43
 msgid "Prefix"
@@ -3022,9 +3021,8 @@ msgid "Categories"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:49
-#, fuzzy
 msgid "New Category"
-msgstr "Bagong Kurso"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:52
 msgid "Default Category"
@@ -3168,9 +3166,8 @@ msgid "Essay"
 msgstr ""
 
 #: /src/schooltool/gradebook/category.py:62
-#, fuzzy
 msgid "Exam"
-msgstr "Halimbawa:"
+msgstr ""
 
 #: /src/schooltool/gradebook/category.py:63
 msgid "Homework"
@@ -3235,7 +3232,7 @@ msgstr ""
 #: /src/schooltool/group/browser/configure.zcml:125
 #: /src/schooltool/group/browser/group-csvimport.pt:22
 msgid "Import Groups"
-msgstr "Magangkat ng mga Grupo"
+msgstr "Mag-angkat ng mga Grupo"
 
 #: /src/schooltool/group/browser/configure.zcml:26
 msgid "Add a Group"
@@ -3258,7 +3255,7 @@ msgstr "Bagong Kurso"
 #: /src/schooltool/group/browser/configure.zcml:98
 #, fuzzy
 msgid "A Group"
-msgstr "Magangkat ng mga Grupo"
+msgstr "Mag-angkat ng mga Grupo"
 
 #: /src/schooltool/group/browser/configure.zcml:98
 msgid "SchoolBell Group"
@@ -3288,6 +3285,7 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/group/browser/group-csvimport.pt:37
+#, fuzzy
 msgid ""
 "The above example will create 3 groups titled 'LUG', 'Chess Club' and "
 "'Sports Club'. The first and last group will have the descriptions 'Linux "
@@ -3295,10 +3293,17 @@ msgid ""
 "group will have no description, and the extra \"text after a second comma\" "
 "text on the third group will be ignored."
 msgstr ""
+"Ang halimbawa sa itaas ay lilikha ng 3 kurso na nagngangalang 'Sinaunang "
+"Kasaysayan', 'Kasaysayan ng Estados Unidos' at 'Kasaysayan ng Mundo'. Ang "
+"una at huling kurso ay may paglalarawan na 'Kasaysayan bago mag-1000 A.D.' "
+"at '1000 A.D. hanggang ika-20 na siglo'. Ang pangalawang kurso ay walang "
+"paglalarawan, at ang ekstra na 'teksto matapos ng pangalawang kuwit' sa "
+"pangatlong kurso ay hindi gagamitin."
 
 #: /src/schooltool/group/browser/group-csvimport.pt:4
+#, fuzzy
 msgid "Upload SchoolTool groups as CSV"
-msgstr ""
+msgstr "Magpadala ng mga kursong pang-schooltool bilang CSV"
 
 #: /src/schooltool/group/browser/group.pt:16
 msgid "Members"
@@ -3348,8 +3353,9 @@ msgstr ""
 
 #. Default: "Calendar"
 #: /src/schooltool/group/rest/group.pt:14
+#, fuzzy
 msgid "Private_calendar"
-msgstr ""
+msgstr "Kalendaryong Pansarili"
 
 #: /src/schooltool/help/configure.zcml:46
 msgid "Contextual Help"
@@ -3381,14 +3387,12 @@ msgid "None"
 msgstr ""
 
 #: /src/schooltool/level/browser/level.py:41
-#, fuzzy
 msgid "Level index"
-msgstr "Listahan ng Kurso"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:42
-#, fuzzy
 msgid "Add a new level"
-msgstr "Magdagdag ng bagong kurso"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:60
 msgid "Previous Level"
@@ -3729,7 +3733,7 @@ msgstr ""
 
 #: /src/schooltool/person/browser/person-csvimport.pt:22
 msgid "Import Persons"
-msgstr "Magangkat ng mga Tao"
+msgstr "Mag-angkat ng mga Tao"
 
 #: /src/schooltool/person/browser/person-csvimport.pt:25
 msgid ""
@@ -3757,8 +3761,9 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/person/browser/person-csvimport.pt:4
+#, fuzzy
 msgid "Upload SchoolTool persons as CSV"
-msgstr ""
+msgstr "Magpadala ng mga kursong pang-schooltool bilang CSV"
 
 #: /src/schooltool/person/browser/person.py:176
 msgid "Edit password"
@@ -3777,8 +3782,9 @@ msgid "Sorry, you may not delete your own user account."
 msgstr ""
 
 #: /src/schooltool/person/browser/person_preferences.pt:14
+#, fuzzy
 msgid "Change preferences for ${user}"
-msgstr ""
+msgstr "Mag-palit ng sariling mga settings."
 
 #: /src/schooltool/person/browser/person_preferences.pt:4
 msgid "Edit person preferences"
@@ -3860,7 +3866,7 @@ msgstr ""
 #: /src/schooltool/requirement/browser/configure.zcml:19
 #, fuzzy
 msgid "Add a Requirement"
-msgstr "Magdagdag ng bagong kurso"
+msgstr "Mag-dagdag ng bagong kurso"
 
 #: /src/schooltool/requirement/browser/configure.zcml:32
 msgid "Edit Requirement"
@@ -3896,14 +3902,12 @@ msgid "items"
 msgstr "na mga aytem"
 
 #: /src/schooltool/requirement/browser/requirement.py:53
-#, fuzzy
 msgid "Requirement index"
-msgstr "Listahan ng Kurso"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.py:54
-#, fuzzy
 msgid "Add a new Requirement"
-msgstr "Magdagdag ng bagong kurso"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/scoresystem.py:36
 msgid "Exisiting Score System"
@@ -3922,7 +3926,7 @@ msgstr "Mag-angkat ng mga Kagamitan"
 #: /src/schooltool/resource/browser/configure.zcml:27
 #, fuzzy
 msgid "Add a Resource"
-msgstr "Magdagdag ng bagong kurso"
+msgstr "Mag-dagdag ng bagong kurso"
 
 #: /src/schooltool/resource/browser/configure.zcml:40
 msgid "Edit Resource Information"
@@ -3943,11 +3947,15 @@ msgid "A Resource"
 msgstr "Mag-angkat ng mga Kagamitan"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:24
+#, fuzzy
 msgid ""
 "CSV data <strong>must</strong> include a resource title and <strong>may</"
 "strong> include an optional resource description. Any extra information will "
 "be discarded."
 msgstr ""
+"<strong>Kinakailangan</strong> na kasama ang pangalan ng kurso ang datos ng "
+"CSV at <strong>maaaring</strong> kasama din ang opsyonal na paglalarawan ng "
+"kurso. Mga ekstra na impormasyon ay hindi gagamitin."
 
 #. Default: ""
 #.  "PRJ302, Overhead Projector #302\n"
@@ -3962,6 +3970,7 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:36
+#, fuzzy
 msgid ""
 "The above example will create 3 resources titled 'PRJ302', 'Main Auditorium' "
 "and 'LC-805'. The first and last resource will have the descriptions "
@@ -3969,10 +3978,17 @@ msgid ""
 "\"Main Auditorium\" resource will have no description, and the \"text after "
 "a second comma\" text on the third resource will be ignored."
 msgstr ""
+"Ang halimbawa sa itaas ay lilikha ng 3 kurso na nagngangalang 'Sinaunang "
+"Kasaysayan', 'Kasaysayan ng Estados Unidos' at 'Kasaysayan ng Mundo'. Ang "
+"una at huling kurso ay may paglalarawan na 'Kasaysayan bago mag-1000 A.D.' "
+"at '1000 A.D. hanggang ika-20 na siglo'. Ang pangalawang kurso ay walang "
+"paglalarawan, at ang ekstra na 'teksto matapos ng pangalawang kuwit' sa "
+"pangatlong kurso ay hindi gagamitin."
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
+#, fuzzy
 msgid "Upload schooltool resources as CSV"
-msgstr ""
+msgstr "Magpadala ng mga kursong pang-schooltool bilang CSV"
 
 #: /src/schooltool/resource/browser/resource.py:39
 msgid "Resource index"
@@ -4009,8 +4025,9 @@ msgstr ""
 #: /src/schooltool/resource/rest/resource.pt:20
 #: /src/schooltool/group/rest/group.pt:20
 #: /src/schooltool/person/rest/person.pt:19
+#, fuzzy
 msgid "Calendar_ACL"
-msgstr ""
+msgstr "Mga Kalendaryo"
 
 #: /src/schooltool/restclient/restclient.py:644
 msgid "Could not parse relationship list"
@@ -4316,8 +4333,9 @@ msgstr ""
 
 #: /src/schooltool/term/browser/term_add_edit.pt:82
 #: /src/schooltool/term/browser/term.pt:13
+#, fuzzy
 msgid "Schoolday"
-msgstr ""
+msgstr "SchoolTool"
 
 #: /src/schooltool/term/browser/term_add_edit.pt:83
 #: /src/schooltool/term/browser/term.pt:14
@@ -4350,8 +4368,9 @@ msgid "Change Timetable for One Day"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/configure.zcml:139
+#, fuzzy
 msgid "New Timetable"
-msgstr ""
+msgstr "Tignan ang talaan ng oras"
 
 #: /src/schooltool/timetable/browser/configure.zcml:22
 msgid "View Timetables"
@@ -4474,8 +4493,9 @@ msgid "Add day"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:87
+#, fuzzy
 msgid "Add period"
-msgstr ""
+msgstr "Magdagdag ng Seksyon"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:94
 msgid "Second, select the way timetable days are aligned with calendar days."
@@ -4488,13 +4508,15 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:22
+#, fuzzy
 msgid "Timetable"
-msgstr ""
+msgstr "Tignan ang talaan ng oras"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:138
+#, fuzzy
 msgid "Term"
-msgstr ""
+msgstr "Bagong"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:34
 msgid "Schema"
@@ -4555,8 +4577,9 @@ msgid "Scheduling for ${section}"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:46
+#, fuzzy
 msgid "Using timetable:"
-msgstr ""
+msgstr "Tignan ang talaan ng oras"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:11
 msgid ""
@@ -4611,8 +4634,9 @@ msgid "New start"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:33
+#, fuzzy
 msgid "New end"
-msgstr ""
+msgstr "Bagong"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:63
 msgid "Modify"
@@ -4678,8 +4702,9 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:6
 #: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:3
 #: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:6
+#, fuzzy
 msgid "New timetable schema"
-msgstr ""
+msgstr "Tignan ang talaan ng oras"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:261
 msgid ""
@@ -4863,8 +4888,15 @@ msgstr ""
 msgid "Supplied passwords are not identical"
 msgstr ""
 
-#~ msgid "Import Sections"
-#~ msgstr "Mag-angkat ng mga Seksyon"
+#~ msgid ""
+#~ "Malformed line ${line_no} (it should contain a day id, a period id and "
+#~ "optionally a location id)"
+#~ msgstr ""
+#~ "Mali ang anyo ng linya ${line_no} (dapat naglalaman ng id ng araw, id ng "
+#~ "saklaw at maaaring may id ng lugar)"
 
 #~ msgid "Locations not found: ${args}."
 #~ msgstr "Hindi nakita ang mga lugar: ${args}"
+
+#~ msgid "An error occured."
+#~ msgstr "May kamaliang nangyari."

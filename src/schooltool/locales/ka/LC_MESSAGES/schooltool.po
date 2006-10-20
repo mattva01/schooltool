@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: Tue Oct 17 17:42:33 2006\n"
-"PO-Revision-Date: 2006-05-27 01:08+0000\n"
+"POT-Creation-Date: Fri Oct 20 15:20:33 2006\n"
+"PO-Revision-Date: 2006-05-08 16:47+0000\n"
 "Last-Translator: Vladimer Sichinava <alinux@siena.linux.it>\n"
 "Language-Team: Georgian <ka@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -84,9 +84,8 @@ msgid "Leaders"
 msgstr ""
 
 #: /src/schooltool/app/browser/app.py:314
-#, fuzzy
 msgid "Current leaders"
-msgstr "მიმდინარე ზომა"
+msgstr ""
 
 #: /src/schooltool/app/browser/app.py:315
 msgid "Available leaders"
@@ -553,21 +552,19 @@ msgstr ""
 #: /src/schooltool/app/configure.zcml:287
 #: /src/schooltool/skin/templates/view_macros.pt:33
 msgid "SchoolTool"
-msgstr "სასკოლო ხელსაწყო"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:324
-#, fuzzy
 msgid "Calendar (Daily)"
-msgstr "კალენდრები"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:334
 msgid "Calendar (Daily, PDF)"
 msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:344
-#, fuzzy
 msgid "Calendar (Weekly)"
-msgstr "კალენდრები"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:354
 msgid "Calendar (Weekly, PDF)"
@@ -582,18 +579,16 @@ msgid "Calendar (Monthly, PDF)"
 msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:384
-#, fuzzy
 msgid "Calendar (Yearly)"
-msgstr "კალენდრები"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:394
 msgid "Atom View"
 msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:404
-#, fuzzy
 msgid "iCalendar"
-msgstr "კალენდრები"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:414
 msgid "Free/Busy"
@@ -624,7 +619,7 @@ msgstr ""
 #: /src/schooltool/app/browser/configure.zcml:560
 #: /src/schooltool/skin/templates/navigation.pt:2
 msgid "Navigation"
-msgstr "ნავიგაცია"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:566
 #: /src/schooltool/app/rest/configure.zcml:267
@@ -632,9 +627,8 @@ msgid "Application"
 msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:572
-#, fuzzy
 msgid "Calendar Widget"
-msgstr "კალენდრები"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:578
 msgid "Templates"
@@ -686,36 +680,29 @@ msgstr ""
 
 #: /src/schooltool/app/browser/csvimport.py:292
 msgid "Row 2 is not empty"
-msgstr "მე-2 რიგი ცარიელი არაა"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:328
-#, fuzzy
 msgid ""
 "Wrong section header on line ${line_no} (it should contain a course id and "
 "an instructor id)"
 msgstr ""
-"შეცდომა ${line_no} სტრიქონში (უნდა შეიცავდეს დღის, პერიოდის და არააუცილებელ "
-"მდებარეობის იდენტიფიკატორებს)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:354
-#, fuzzy
 msgid "Malformed line ${line_no} (it should contain a day id and a period id)"
 msgstr ""
-"შეცდომა ${line_no} სტრიქონში (უნდა შეიცავდეს დღის, პერიოდის და არააუცილებელ "
-"მდებარეობის იდენტიფიკატორებს)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:377
 msgid "Incomplete section description on line ${line}"
-msgstr "არასრული სექციის აღწერა ${line} სტრიქონში"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:382
-#, fuzzy
 msgid "No students in section (line ${line})"
-msgstr "არასრული სექციის აღწერა ${line} სტრიქონში"
+msgstr ""
 
 #: /src/schooltool/app/browser/csvimport.py:462
 msgid ""
@@ -726,17 +713,17 @@ msgstr ""
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:471
 msgid "The term ${term} does not exist."
-msgstr "ტერმინი ${term} არ არსებობს."
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:478
 msgid "The timetable schema ${schema} does not exist."
-msgstr "ცხრილის სქემა ${schema} არ არსებობს"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:509
 msgid "Error in timetable CSV data, line ${line_no}"
-msgstr "ცხრილის CSV მონაცემებში შეცდომაა, სტრიქონი ${line_no}"
+msgstr ""
 
 #: /src/schooltool/app/browser/csvimport.py:549
 msgid "Day ids not defined in selected schema: ${args}."
@@ -752,15 +739,15 @@ msgstr ""
 
 #: /src/schooltool/app/browser/csvimport.py:552
 msgid "Courses not found: ${args}."
-msgstr "კურსები ნაპოვნი არ არის: ${args}"
+msgstr ""
 
 #: /src/schooltool/app/browser/csvimport.py:553
 msgid "Sections not found: ${args}."
-msgstr "სექციები ნაპოვნი არ არის: ${args}"
+msgstr ""
 
 #: /src/schooltool/app/browser/csvimport.py:554
 msgid "Invalid records: ${args}."
-msgstr "არასწორი ჩანაწერები: ${args}"
+msgstr ""
 
 #: /src/schooltool/app/browser/overlay.py:209
 #: /src/schooltool/term/browser/term.py:146
@@ -808,39 +795,33 @@ msgid "PDF support is disabled.  It can be enabled by your administrator."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:13
-#, fuzzy
 msgid "Change site preferences"
-msgstr "პარამეტრების ცვლილება"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:19
-#, fuzzy
 msgid "General preferences"
-msgstr "კალენდარის პარამეტრები"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:34
 #: /src/schooltool/person/browser/person_preferences.pt:22
 msgid "Calendar Preferences"
-msgstr "კალენდარის პარამეტრები"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:4
-#, fuzzy
 msgid "Edit site preferences"
-msgstr "პიროვნების პარამეტრები"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:63
-#, fuzzy
 msgid "Edit attendance preferences"
-msgstr "პიროვნების პარამეტრები"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:15
-#, fuzzy
 msgid "[Schooltool.org]"
-msgstr "სასკოლო ხელსაწყო"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:15
-#, fuzzy
 msgid "Schooltool"
-msgstr "სასკოლო ხელსაწყო"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:22
 msgid "Events for"
@@ -927,17 +908,16 @@ msgid "Calendar for ${title} - ${calendar_title}"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:13
-#, fuzzy
 msgid "Cal"
-msgstr "კალ"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:13
 msgid "Personal calendar"
-msgstr "პერსონალური კალენდარი"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:16
 msgid "Timetable calendar"
-msgstr "ცხრილის კალენდარი"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:16
 msgid "TT"
@@ -950,7 +930,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:4
 msgid "Calendars"
-msgstr "კალენდრები"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:48
 msgid "More..."
@@ -965,14 +945,12 @@ msgid "Hold down Ctrl or Shift to select multiple calendars."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:32
-#, fuzzy
 msgid "Public Calendar"
-msgstr "კალენდრები"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:37
-#, fuzzy
 msgid "site-wide calendar"
-msgstr "ცხრილის კალენდარი"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:4
 msgid "Select calendars to display"
@@ -1142,36 +1120,32 @@ msgid "edit event"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:53
-#, fuzzy
 msgid "Change the details of this event"
-msgstr "ამ სექციაში სტუდენტების ჯგუფური ცვლილება"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:64
 msgid "Scheduled resources"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:72
-#, fuzzy
 msgid "edit resources"
-msgstr "ჯგუფების რედაქტირება"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:80
 msgid "delete event"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:137
-#, fuzzy
 msgid "Event information"
-msgstr "სექციის რედაქტირება"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:143
 msgid "Event details"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:197
-#, fuzzy
 msgid "Book Resources"
-msgstr "რესურსები"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:207
 msgid "Update form"
@@ -1224,23 +1198,20 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/event_add.pt:307
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:32
 #: /src/schooltool/term/browser/emergency_select.pt:32
-#, fuzzy
 msgid "[popup calendar]"
-msgstr "პერსონალური კალენდარი"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:325
 msgid "Repeat forever"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:346
-#, fuzzy
 msgid "Book resources"
-msgstr "რესურსები"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:11
-#, fuzzy
 msgid "Resource Booking for ${title}"
-msgstr "ინფორმაცია პიროვნებაზე: ${title}"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:17
 msgid "Title:"
@@ -1259,9 +1230,8 @@ msgid "This is a recurring event!"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:4
-#, fuzzy
 msgid "Resource Booking"
-msgstr "რესურსები"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:55
 msgid "Conflicting events"
@@ -1277,8 +1247,9 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/index.pt:12
 #: /src/schooltool/course/browser/templates/section_container.pt:26
+#, fuzzy
 msgid "Courses"
-msgstr "კურსები"
+msgstr "ახალი გაკვეთილი"
 
 #: /src/schooltool/app/browser/templates/index.pt:15
 msgid "Levels"
@@ -1286,7 +1257,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/index.pt:6
 msgid "Welcome to SchoolTool"
-msgstr "კეთილი იყოს თქვენი მობრძანება SchoolTool-ში"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/login.pt:13
 msgid ""
@@ -1443,9 +1414,8 @@ msgid "${DYNAMIC_CONTENT}"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/login.pt:35
-#, fuzzy
 msgid "User Information"
-msgstr "სექციის რედაქტირება"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/login.pt:57
 msgid "L"
@@ -1464,9 +1434,8 @@ msgid "You are trying to delete a repeating event."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:43
-#, fuzzy
 msgid "Current"
-msgstr "მიმდინარე ზომა"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:45
 msgid "Future"
@@ -1545,7 +1514,7 @@ msgstr ""
 #: /src/schooltool/person/browser/person_preferences.pt:52
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:70
 msgid "submit-button"
-msgstr "გააქტიურება"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:20
 msgid "Import Timetable"
@@ -1586,7 +1555,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:29
 #: /src/schooltool/person/browser/person-csvimport.pt:29
 msgid "Example:"
-msgstr "მაგალითი"
+msgstr ""
 
 #. Default: ""
 #.  "\"2005-fall\",\"three-day\"\n"
@@ -1651,7 +1620,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:46
 #: /src/schooltool/person/browser/person-csvimport.pt:44
 msgid "Upload CSV File"
-msgstr "CSV ფაილის ატვირთვა"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:91
 #: /src/schooltool/resource/browser/resource-csvimport.pt:48
@@ -1659,7 +1628,7 @@ msgstr "CSV ფაილის ატვირთვა"
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:48
 #: /src/schooltool/person/browser/person-csvimport.pt:46
 msgid "CSV File"
-msgstr "CSV ფაილი"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:96
 #: /src/schooltool/resource/browser/resource-csvimport.pt:53
@@ -1667,7 +1636,7 @@ msgstr "CSV ფაილი"
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:53
 #: /src/schooltool/person/browser/person-csvimport.pt:51
 msgid "Charset:"
-msgstr "კოდირება:"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:98
 #: /src/schooltool/resource/browser/resource-csvimport.pt:55
@@ -1694,9 +1663,8 @@ msgid "Security (General)"
 msgstr ""
 
 #: /src/schooltool/app/configure.zcml:308
-#, fuzzy
 msgid "Booking Resources"
-msgstr "რესურსები"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:124 /src/schooltool/app/interfaces.py:135
 msgid ""
@@ -1717,9 +1685,8 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/app/interfaces.py:158
-#, fuzzy
 msgid "Show timetables"
-msgstr "დროის განრიგის ნახვა"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:159
 msgid ""
@@ -1996,23 +1963,20 @@ msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:4
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:12
-#, fuzzy
 msgid "Attendance preferences"
-msgstr "კალენდარის პარამეტრები"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:78
-#, fuzzy
 msgid "back to site preferences"
-msgstr "პიროვნების პარამეტრები"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:17
 msgid "Students with unresolved absences"
 msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:41
-#, fuzzy
 msgid "Person"
-msgstr "წევრების იმპორტი"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:42
 msgid "Homeroom<br />absences"
@@ -2208,9 +2172,8 @@ msgid "Commendation"
 msgstr ""
 
 #: /src/schooltool/commendation/commendation_add.pt:4
-#, fuzzy
 msgid "Add Commendation"
-msgstr "სექციის დამატება"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:49
 msgid "Title of the commendation."
@@ -2233,9 +2196,8 @@ msgid "school-wide"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
-#, fuzzy
 msgid "group"
-msgstr "ჯგუფები"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "community"
@@ -2308,35 +2270,35 @@ msgid "Edit Calendar Overlays"
 msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:130
+#, fuzzy
 msgid "Add a Section"
-msgstr "სექციის დამატება"
+msgstr "დაამატე ახალი სექცია"
 
 #: /src/schooltool/course/browser/configure.zcml:143
 msgid "Edit Section Information"
-msgstr "სექციის რედაქტირება"
+msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:85
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:21
 msgid "Import Courses"
-msgstr "კურსების იმპორტი"
+msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:9
 #, fuzzy
 msgid "Add a Course"
-msgstr "კურსის დამატება"
+msgstr "ახალი გაკვეთილი"
 
 #: /src/schooltool/course/browser/configure.zcml:96
 msgid "New Course"
 msgstr "ახალი გაკვეთილი"
 
 #: /src/schooltool/course/browser/course.py:40
-#, fuzzy
 msgid "Course index"
-msgstr "კურსების სია"
+msgstr ""
 
 #: /src/schooltool/course/browser/course.py:41
 msgid "Add a new course"
-msgstr "კურსის დამატება"
+msgstr ""
 
 #: /src/schooltool/course/browser/csvimport.py:39
 #: /src/schooltool/group/browser/csvimport.py:39
@@ -2353,16 +2315,16 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:103
 msgid "No such course."
-msgstr "ასეთი კურსი არ არსებობს."
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:113
 msgid "Need a course ID."
-msgstr "საჭიროა კურსის ID"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/course/browser/section.py:118
 msgid "Add a Section to ${course}"
-msgstr "სექციის კურსში დამატება: ${course}"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:259
 #: /src/schooltool/course/browser/templates/section.pt:50
@@ -2385,62 +2347,55 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/course_container.pt:77
 #: /src/schooltool/course/browser/templates/section_container.pt:77
 msgid "Students"
-msgstr "სტუდენტები"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:284
-#, fuzzy
 msgid "Current Students"
-msgstr "მიმდინარე ზომა"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:285
-#, fuzzy
 msgid "Available Students"
-msgstr "სტუდენტები"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:311
 #: /src/schooltool/app/browser/templates/index.pt:13
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:56
 msgid "Groups"
-msgstr "ჯგუფები"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:312
 #: /src/schooltool/group/browser/group.py:60
-#, fuzzy
 msgid "Current Groups"
-msgstr "ჯგუფბის იმპორტი"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:313
 #: /src/schooltool/group/browser/group.py:61
-#, fuzzy
 msgid "Available Groups"
-msgstr "ჯგუფის გავლით"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:338
 #: /src/schooltool/app/browser/templates/index.pt:14
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:70
 #: /src/schooltool/course/browser/templates/section.pt:33
 msgid "Resources"
-msgstr "რესურსები"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:339
-#, fuzzy
 msgid "Current Resources"
-msgstr "რესურსების იმპორტი"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:340
 #: /src/schooltool/app/browser/templates/event_booking.pt:36
-#, fuzzy
 msgid "Available Resources"
-msgstr "რესურსები"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:68
-#, fuzzy
 msgid "Section index"
-msgstr "სექციების სია"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:69
 msgid "Add a new section"
-msgstr "ახალი სექციის დამატება"
+msgstr "დაამატე ახალი სექცია"
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:24
 msgid ""
@@ -2473,11 +2428,11 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:4
 msgid "Upload schooltool courses as CSV"
-msgstr "schooltool კურსების CSV ფაილად ატვირთვა"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/course.pt:18
 msgid "Sections"
-msgstr "სექციები"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/course.pt:36
 #: /src/schooltool/demographics/browser/nameinfo_view.pt:11
@@ -2486,7 +2441,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/course.pt:53
 msgid "students"
-msgstr "სტუდენტები"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:27
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:80
@@ -2505,24 +2460,20 @@ msgid "Section of ${course} -- ${DYNAMIC_CONTENT}"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:22
-#, fuzzy
 msgid "edit info"
-msgstr "ჯგუფების რედაქტირება"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:22
-#, fuzzy
 msgid "Change the name or description of this section."
-msgstr "ამ სექციაში სტუდენტების ჯგუფური ცვლილება"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:40
-#, fuzzy
 msgid "Change the resources for this section."
-msgstr "ამ სექციაში სტუდენტების ჯგუფური ცვლილება"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:40
-#, fuzzy
 msgid "book resources"
-msgstr "რესურსები"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:57
 msgid "Change the instructors for this section."
@@ -2538,15 +2489,15 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:87
 msgid "Change the students in this section individually"
-msgstr "ამ სექციაში სტუდენტების ინდივიდუალური ცვლილება"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:94
 msgid "Change the students in this section by groups"
-msgstr "ამ სექციაში სტუდენტების ჯგუფური ცვლილება"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:94
 msgid "edit groups"
-msgstr "ჯგუფების რედაქტირება"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_add.pt:50
 #: /src/schooltool/skin/templates/simple_add.pt:45
@@ -2555,18 +2506,18 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_container.pt:29
 msgid "Section"
-msgstr "სექცია"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_container.pt:38
 msgid "Current Size"
-msgstr "მიმდინარე ზომა"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:23
 #: /src/schooltool/course/browser/templates/section_add.pt:27
 #: /src/schooltool/skin/templates/simple_edit.pt:23
 #: /src/schooltool/skin/templates/simple_add.pt:22
 msgid "There are ${num_errors} input errors."
-msgstr "შეტანის დროს მოხდა ${num_errors} შეცდომა."
+msgstr ""
 
 #: /src/schooltool/course/interfaces.py:37
 msgid "Title of the course."
@@ -2602,7 +2553,7 @@ msgstr ""
 #. Default: ""
 #: /src/schooltool/course/section.py:63
 msgid "${instructors} -- ${courses}"
-msgstr "${instructors} -- ${courses}"
+msgstr ""
 
 #: /src/schooltool/dashboard/interfaces.py:45
 msgid "Category Title."
@@ -2697,20 +2648,17 @@ msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:156
-#, fuzzy
 msgid "Change name information for ${fullname}"
-msgstr "პარამეტრების შეცლა. მომხმარებელი ${user}"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:172
-#, fuzzy
 msgid "Change name"
-msgstr "პარამეტრების ცვლილება"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:183
-#, fuzzy
 msgid "Change demographics for ${fullname}"
-msgstr "პარამეტრების შეცლა. მომხმარებელი ${user}"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:191
 msgid "Demographics"
@@ -2731,9 +2679,8 @@ msgid "Change contact information for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:238
-#, fuzzy
 msgid "Contact information"
-msgstr "სექციის რედაქტირება"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:272
 #: /src/schooltool/demographics/browser/personform.py:273
@@ -2766,7 +2713,7 @@ msgstr ""
 #: /src/schooltool/skin/form.py:55
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:46
 msgid "Apply"
-msgstr "გააქტიურება"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/schooldata_view.pt:3
 #: /src/schooltool/demographics/browser/nameinfo_view.pt:3
@@ -2786,9 +2733,8 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/demographics/browser/table.pt:8
-#, fuzzy
 msgid "There are no persons."
-msgstr "შეტანის დროს მოხდა ${num_errors} შეცდომა."
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:120
 msgid "Gender"
@@ -2835,9 +2781,8 @@ msgid "Team"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:218
-#, fuzzy
 msgid "Health information"
-msgstr "სექციის რედაქტირება"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:239
 #: /src/schooltool/gradebook/browser/gradebook_overview.pt:15
@@ -2902,9 +2847,8 @@ msgid "Full text search in parent names"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:307
-#, fuzzy
 msgid "Student ID"
-msgstr "სტუდენტები"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:43
 msgid "Prefix"
@@ -2954,9 +2898,8 @@ msgid "Photo (in JPEG format)"
 msgstr ""
 
 #: /src/schooltool/devmode/configure.zcml:89
-#, fuzzy
 msgid "Configure"
-msgstr "კურსები"
+msgstr ""
 
 #: /src/schooltool/devmode/configure.zcml:97
 msgid "Error List"
@@ -2981,9 +2924,8 @@ msgstr ""
 #: /src/schooltool/gradebook/browser/categories.pt:27
 #: /src/schooltool/level/browser/record.pt:71
 #: /src/schooltool/level/browser/record.pt:86
-#, fuzzy
 msgid "remove-button"
-msgstr "გააქტიურება"
+msgstr ""
 
 #. Default: "Add"
 #: /src/schooltool/gradebook/browser/categories.pt:36
@@ -2993,7 +2935,7 @@ msgstr "გააქტიურება"
 #: /src/schooltool/note/note_add.pt:43
 #: /src/schooltool/commendation/commendation_add.pt:33
 msgid "add-button"
-msgstr "დამატება"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/categories.pt:4
 #: /src/schooltool/gradebook/browser/categories.pt:15
@@ -3003,18 +2945,16 @@ msgstr ""
 #. Default: "Change"
 #: /src/schooltool/gradebook/browser/categories.pt:45
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
-#, fuzzy
 msgid "change-button"
-msgstr "დამატება"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:43
 msgid "Categories"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:49
-#, fuzzy
 msgid "New Category"
-msgstr "ახალი გაკვეთილი"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:52
 msgid "Default Category"
@@ -3047,7 +2987,7 @@ msgstr ""
 #: /src/schooltool/gradebook/browser/configure.zcml:38
 #, fuzzy
 msgid "Add an Activity"
-msgstr "სექციის დამატება"
+msgstr "დაამატე ახალი სექცია"
 
 #: /src/schooltool/gradebook/browser/configure.zcml:51
 msgid "Edit Activity"
@@ -3097,9 +3037,8 @@ msgid "Grade"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:28
-#, fuzzy
 msgid "Student Name"
-msgstr "სტუდენტები"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:29
 msgid "Activity Name"
@@ -3122,9 +3061,8 @@ msgstr ""
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:64
 #: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:54
 #: /src/schooltool/gradebook/browser/gradebook_grade_activity.pt:58
-#, fuzzy
 msgid "update-button"
-msgstr "დამატება"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:61
 #: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:54
@@ -3159,9 +3097,8 @@ msgid "Essay"
 msgstr ""
 
 #: /src/schooltool/gradebook/category.py:62
-#, fuzzy
 msgid "Exam"
-msgstr "მაგალითი"
+msgstr ""
 
 #: /src/schooltool/gradebook/category.py:63
 msgid "Homework"
@@ -3226,32 +3163,28 @@ msgstr ""
 #: /src/schooltool/group/browser/configure.zcml:125
 #: /src/schooltool/group/browser/group-csvimport.pt:22
 msgid "Import Groups"
-msgstr "ჯგუფბის იმპორტი"
+msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:26
-#, fuzzy
 msgid "Add a Group"
-msgstr "ჯგუფის გავლით"
+msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:39
-#, fuzzy
 msgid "Edit Group Information"
-msgstr "სექციის რედაქტირება"
+msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:76
-#, fuzzy
 msgid "Change Membership"
-msgstr "პარამეტრების ცვლილება"
+msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:91
 #, fuzzy
 msgid "New Group"
-msgstr "ჯგუფები"
+msgstr "ახალი გაკვეთილი"
 
 #: /src/schooltool/group/browser/configure.zcml:98
-#, fuzzy
 msgid "A Group"
-msgstr "ჯგუფები"
+msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:98
 msgid "SchoolBell Group"
@@ -3284,23 +3217,18 @@ msgid ""
 "group will have no description, and the extra \"text after a second comma\" "
 "text on the third group will be ignored."
 msgstr ""
-"ზემოთ მოყვენილი მაგალითი შექმნის 3 ჯგუფს სახელად ’LUG’, 'Chess Club' და "
-"’Sports Club’. პირველს და მესამეს ექნებათ აღწერები 'Linux Users Group' და "
-"'After-school sports club' შესაბამისად. მეორე ჯგუფს აღწერა არ ექნება, ხოლო "
-"მესამე ჯგუფის ჩანაწერში მეორე მძიმის მომდევნო ტექსტი იგნორირებულ იქნება."
 
 #: /src/schooltool/group/browser/group-csvimport.pt:4
 msgid "Upload SchoolTool groups as CSV"
-msgstr "SchoolTool ჯგუფების CSV ფაილად ატვირთვა"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.pt:16
 msgid "Members"
 msgstr ""
 
 #: /src/schooltool/group/browser/group.pt:23
-#, fuzzy
 msgid "edit members"
-msgstr "ჯგუფების რედაქტირება"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.pt:23
 msgid "Change the people who are members of this group."
@@ -3325,9 +3253,8 @@ msgid "Members of ${group}"
 msgstr ""
 
 #: /src/schooltool/group/browser/group.py:98
-#, fuzzy
 msgid "Current Members"
-msgstr "მიმდინარე ზომა"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.py:99
 msgid "Add Members"
@@ -3376,14 +3303,12 @@ msgid "None"
 msgstr ""
 
 #: /src/schooltool/level/browser/level.py:41
-#, fuzzy
 msgid "Level index"
-msgstr "კურსების სია"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:42
-#, fuzzy
 msgid "Add a new level"
-msgstr "კურსის დამატება"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:60
 msgid "Previous Level"
@@ -3403,9 +3328,8 @@ msgstr ""
 
 #. Default: "Validate"
 #: /src/schooltool/level/browser/level_validation.pt:37
-#, fuzzy
 msgid "validate-button"
-msgstr "დამატება"
+msgstr ""
 
 #: /src/schooltool/level/browser/level_validation.pt:4
 #: /src/schooltool/level/browser/level_validation.pt:8
@@ -3413,18 +3337,16 @@ msgid "Level Validation"
 msgstr ""
 
 #: /src/schooltool/level/browser/promotion.pt:100
-#, fuzzy
 msgid "Current Level"
-msgstr "მიმდინარე ზომა"
+msgstr ""
 
 #: /src/schooltool/level/browser/promotion.pt:128
 msgid "O"
 msgstr ""
 
 #: /src/schooltool/level/browser/promotion.pt:21
-#, fuzzy
 msgid "Enroll Students"
-msgstr "სტუდენტები"
+msgstr ""
 
 #: /src/schooltool/level/browser/promotion.pt:29
 #: /src/schooltool/level/browser/promotion.pt:59
@@ -3434,9 +3356,8 @@ msgstr ""
 
 #. Default: "Enroll"
 #: /src/schooltool/level/browser/promotion.pt:44
-#, fuzzy
 msgid "enroll-button"
-msgstr "დამატება"
+msgstr ""
 
 #: /src/schooltool/level/browser/promotion.pt:44
 msgid "E"
@@ -3457,9 +3378,8 @@ msgstr ""
 #. Default: "Apply"
 #: /src/schooltool/level/browser/promotion.pt:84
 #: /src/schooltool/level/browser/promotion.pt:128
-#, fuzzy
 msgid "apply-button"
-msgstr "დამატება"
+msgstr ""
 
 #: /src/schooltool/level/browser/promotion.pt:91
 msgid "Level Outcome"
@@ -3531,9 +3451,8 @@ msgstr ""
 
 #. Default: "Initialize"
 #: /src/schooltool/level/browser/record.pt:99
-#, fuzzy
 msgid "initialize-button"
-msgstr "გააქტიურება"
+msgstr ""
 
 #: /src/schooltool/level/browser/record.py:56
 msgid "The status was successfully updated."
@@ -3729,7 +3648,7 @@ msgstr ""
 
 #: /src/schooltool/person/browser/person-csvimport.pt:22
 msgid "Import Persons"
-msgstr "წევრების იმპორტი"
+msgstr ""
 
 #: /src/schooltool/person/browser/person-csvimport.pt:25
 msgid ""
@@ -3778,11 +3697,11 @@ msgstr ""
 
 #: /src/schooltool/person/browser/person_preferences.pt:14
 msgid "Change preferences for ${user}"
-msgstr "პარამეტრების შეცლა. მომხმარებელი ${user}"
+msgstr ""
 
 #: /src/schooltool/person/browser/person_preferences.pt:4
 msgid "Edit person preferences"
-msgstr "პიროვნების პარამეტრები"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:154
 msgid "Time Zone"
@@ -3858,9 +3777,8 @@ msgid "Relationships"
 msgstr ""
 
 #: /src/schooltool/requirement/browser/configure.zcml:19
-#, fuzzy
 msgid "Add a Requirement"
-msgstr "კურსის დამატება"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/configure.zcml:32
 msgid "Edit Requirement"
@@ -3892,14 +3810,12 @@ msgid "items"
 msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.py:53
-#, fuzzy
 msgid "Requirement index"
-msgstr "კურსების სია"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.py:54
-#, fuzzy
 msgid "Add a new Requirement"
-msgstr "კურსის დამატება"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/scoresystem.py:36
 msgid "Exisiting Score System"
@@ -3912,31 +3828,28 @@ msgstr ""
 #: /src/schooltool/resource/browser/configure.zcml:100
 #: /src/schooltool/resource/browser/resource-csvimport.pt:21
 msgid "Import Resources"
-msgstr "რესურსების იმპორტი"
+msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:27
-#, fuzzy
 msgid "Add a Resource"
-msgstr "კურსის დამატება"
+msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:40
-#, fuzzy
 msgid "Edit Resource Information"
-msgstr "სექციის რედაქტირება"
+msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:75
 #, fuzzy
 msgid "New Resource"
-msgstr "რესურსები"
+msgstr "ახალი გაკვეთილი"
 
 #: /src/schooltool/resource/browser/configure.zcml:82
 msgid "SchoolBell Resource"
 msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:82
-#, fuzzy
 msgid "A Resource"
-msgstr "რესურსები"
+msgstr ""
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:24
 msgid ""
@@ -4099,9 +4012,8 @@ msgid "No changes"
 msgstr ""
 
 #: /src/schooltool/skin/templates/error.pt:13
-#, fuzzy
 msgid "Exception"
-msgstr "სექცია"
+msgstr ""
 
 #: /src/schooltool/skin/templates/error.pt:18
 msgid "Traceback"
@@ -4351,7 +4263,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/configure.zcml:22
 msgid "View Timetables"
-msgstr "დროის განრიგის ნახვა"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/configure.zcml:31
 #: /src/schooltool/timetable/browser/configure.zcml:39
@@ -4638,9 +4550,8 @@ msgid "Proceed"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
-#, fuzzy
 msgid "Default Timetable Schema:"
-msgstr "ცხრილის კალენდარი"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:46
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:53
@@ -4858,16 +4769,3 @@ msgstr ""
 #: /src/schooltool/widget/password.py:51
 msgid "Supplied passwords are not identical"
 msgstr ""
-
-#~ msgid "Import Sections"
-#~ msgstr "სექციების იმპორტი"
-
-#, fuzzy
-#~ msgid "Locations not found: ${args}."
-#~ msgstr "მდებარეობები ნაპოვნი არ არის: ${args}"
-
-#~ msgid "Modify this person's details"
-#~ msgstr "პიროვნების მონაცემების შეცვლა"
-
-#~ msgid "Sections Taught"
-#~ msgstr "გავლილი სექციები"

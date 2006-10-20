@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: Tue Oct 17 17:42:33 2006\n"
-"PO-Revision-Date: 2005-12-06 17:25+0000\n"
+"POT-Creation-Date: Fri Oct 20 15:20:33 2006\n"
+"PO-Revision-Date: 2006-05-08 16:45+0000\n"
 "Last-Translator: astarbe <astarbe@gmail.com>\n"
 "Language-Team: Basque <eu@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -545,8 +545,9 @@ msgid "Previous year"
 msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:137
+#, fuzzy
 msgid "Actions"
-msgstr ""
+msgstr "Atalak"
 
 #: /src/schooltool/app/browser/configure.zcml:184
 #: /src/schooltool/app/configure.zcml:287
@@ -806,8 +807,9 @@ msgstr "Preferentziak Aldatu"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:34
 #: /src/schooltool/person/browser/person_preferences.pt:22
+#, fuzzy
 msgid "Calendar Preferences"
-msgstr ""
+msgstr "Preferentziak Aldatu"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:4
 #, fuzzy
@@ -1466,8 +1468,9 @@ msgstr ""
 #: /src/schooltool/group/browser/group-csvimport.pt:57
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:57
 #: /src/schooltool/person/browser/person-csvimport.pt:55
+#, fuzzy
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "Western (ISO-8859-1)"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:101
 #: /src/schooltool/resource/browser/resource-csvimport.pt:58
@@ -1528,8 +1531,9 @@ msgid "submit-button"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:20
+#, fuzzy
 msgid "Import Timetable"
-msgstr ""
+msgstr "Egutegia Ikusi"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:24
 msgid ""
@@ -1557,8 +1561,9 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:4
+#, fuzzy
 msgid "Upload SchoolTool timetable as CSV"
-msgstr ""
+msgstr "SchoolTool pertsonak CSV bezala igo"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:49
 #: /src/schooltool/resource/browser/resource-csvimport.pt:29
@@ -1697,9 +1702,8 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/app/interfaces.py:158
-#, fuzzy
 msgid "Show timetables"
-msgstr "Egutegia Ikusi"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:159
 msgid ""
@@ -1857,8 +1861,9 @@ msgid "ACL"
 msgstr ""
 
 #: /src/schooltool/app/rest/templates/app.pt:5
+#, fuzzy
 msgid "Welcome to the SchoolTool server"
-msgstr ""
+msgstr "SchoolToolera ongietorria"
 
 #. Default: ""
 #: /src/schooltool/attendance/attendance.py:390
@@ -2213,9 +2218,8 @@ msgid "school-wide"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
-#, fuzzy
 msgid "group"
-msgstr "Taldeak"
+msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "community"
@@ -2384,9 +2388,8 @@ msgstr "Taldeak"
 
 #: /src/schooltool/course/browser/section.py:312
 #: /src/schooltool/group/browser/group.py:60
-#, fuzzy
 msgid "Current Groups"
-msgstr "Taldeak importatu"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:313
 #: /src/schooltool/group/browser/group.py:61
@@ -2401,15 +2404,13 @@ msgid "Resources"
 msgstr "Baliabideak"
 
 #: /src/schooltool/course/browser/section.py:339
-#, fuzzy
 msgid "Current Resources"
-msgstr "Baliabideak importatu"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:340
 #: /src/schooltool/app/browser/templates/event_booking.pt:36
-#, fuzzy
 msgid "Available Resources"
-msgstr "Baliabideak"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:68
 #, fuzzy
@@ -2530,8 +2531,9 @@ msgid "Identifier (optional)"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_container.pt:29
+#, fuzzy
 msgid "Section"
-msgstr ""
+msgstr "Atalak"
 
 #: /src/schooltool/course/browser/templates/section_container.pt:38
 msgid "Current Size"
@@ -2677,9 +2679,8 @@ msgid "Change name information for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:172
-#, fuzzy
 msgid "Change name"
-msgstr "Preferentziak Aldatu"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:183
@@ -2705,9 +2706,8 @@ msgid "Change contact information for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:238
-#, fuzzy
 msgid "Contact information"
-msgstr "Sailaki informazio editatu"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/personform.py:272
 #: /src/schooltool/demographics/browser/personform.py:273
@@ -2808,9 +2808,8 @@ msgid "Team"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:218
-#, fuzzy
 msgid "Health information"
-msgstr "Sailaki informazio editatu"
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:239
 #: /src/schooltool/gradebook/browser/gradebook_overview.pt:15
@@ -2982,9 +2981,8 @@ msgid "Categories"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:49
-#, fuzzy
 msgid "New Category"
-msgstr "Ikastaro berria"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:52
 msgid "Default Category"
@@ -3127,9 +3125,8 @@ msgid "Essay"
 msgstr ""
 
 #: /src/schooltool/gradebook/category.py:62
-#, fuzzy
 msgid "Exam"
-msgstr "Adibidea:"
+msgstr ""
 
 #: /src/schooltool/gradebook/category.py:63
 msgid "Homework"
@@ -3337,14 +3334,12 @@ msgid "None"
 msgstr ""
 
 #: /src/schooltool/level/browser/level.py:41
-#, fuzzy
 msgid "Level index"
-msgstr "Ikastaro indizea"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:42
-#, fuzzy
 msgid "Add a new level"
-msgstr "Ikastaro bat gehitu"
+msgstr ""
 
 #: /src/schooltool/level/browser/level.py:60
 msgid "Previous Level"
@@ -3732,8 +3727,9 @@ msgid "Sorry, you may not delete your own user account."
 msgstr ""
 
 #: /src/schooltool/person/browser/person_preferences.pt:14
+#, fuzzy
 msgid "Change preferences for ${user}"
-msgstr ""
+msgstr "Preferentziak Aldatu"
 
 #: /src/schooltool/person/browser/person_preferences.pt:4
 msgid "Edit person preferences"
@@ -3847,14 +3843,12 @@ msgid "items"
 msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.py:53
-#, fuzzy
 msgid "Requirement index"
-msgstr "Ikastaro indizea"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.py:54
-#, fuzzy
 msgid "Add a new Requirement"
-msgstr "Ikastaro bat gehitu"
+msgstr ""
 
 #: /src/schooltool/requirement/browser/scoresystem.py:36
 msgid "Exisiting Score System"
@@ -3922,8 +3916,9 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
+#, fuzzy
 msgid "Upload schooltool resources as CSV"
-msgstr ""
+msgstr "Schooltool kurtsoak CSV bezaal igo"
 
 #: /src/schooltool/resource/browser/resource.py:39
 msgid "Resource index"
@@ -4246,8 +4241,9 @@ msgstr ""
 #: /src/schooltool/term/browser/term_add_edit.pt:64
 #: /src/schooltool/term/browser/term_add_edit.pt:149
 #: /src/schooltool/term/browser/term_add_edit.pt:156
+#, fuzzy
 msgid "Refresh"
-msgstr ""
+msgstr "Baliabideak"
 
 #: /src/schooltool/term/browser/term_add_edit.pt:70
 msgid ""
@@ -4266,8 +4262,9 @@ msgstr ""
 
 #: /src/schooltool/term/browser/term_add_edit.pt:82
 #: /src/schooltool/term/browser/term.pt:13
+#, fuzzy
 msgid "Schoolday"
-msgstr ""
+msgstr "IkastolakoTresna"
 
 #: /src/schooltool/term/browser/term_add_edit.pt:83
 #: /src/schooltool/term/browser/term.pt:14
@@ -4300,8 +4297,9 @@ msgid "Change Timetable for One Day"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/configure.zcml:139
+#, fuzzy
 msgid "New Timetable"
-msgstr ""
+msgstr "Egutegia Ikusi"
 
 #: /src/schooltool/timetable/browser/configure.zcml:22
 msgid "View Timetables"
@@ -4424,8 +4422,9 @@ msgid "Add day"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:87
+#, fuzzy
 msgid "Add period"
-msgstr ""
+msgstr "Sail bat gehitu"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:94
 msgid "Second, select the way timetable days are aligned with calendar days."
@@ -4438,8 +4437,9 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:22
+#, fuzzy
 msgid "Timetable"
-msgstr ""
+msgstr "Egutegia Ikusi"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:138
@@ -4456,8 +4456,9 @@ msgid "Scheduling for ${person}"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:43
+#, fuzzy
 msgid "Choose"
-msgstr ""
+msgstr "Kurtsoak"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:54
 msgid ""
@@ -4505,8 +4506,9 @@ msgid "Scheduling for ${section}"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:46
+#, fuzzy
 msgid "Using timetable:"
-msgstr ""
+msgstr "Egutegia Ikusi"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:11
 msgid ""
@@ -4627,8 +4629,9 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:6
 #: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:3
 #: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:6
+#, fuzzy
 msgid "New timetable schema"
-msgstr ""
+msgstr "Egutegia Ikusi"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:261
 msgid ""
