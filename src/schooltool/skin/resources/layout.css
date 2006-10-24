@@ -855,7 +855,6 @@ A.button-ok {
 }
 
 #calendar-view-day .event {
-	display: block;
 	position: absolute;
 	margin-left: 5em;
 	width: 20em;
@@ -863,19 +862,25 @@ A.button-ok {
 	border: 1px #4b6983 solid;
 	background: #9db8d2;
 	opacity: 0.85;
-	z-index: 1;
-	overflow: hidden;
+}
+
+#calendar-view-day .expanded {
+        overflow: visible;
+        display: block;
+	opacity: 1;
+	z-index: 9;
+ 	height: auto !important;
+}
+
+#calendar-view-day .contracted {
+        z-index: 1;
+        overflow: hidden;
+        display: block;
 }
 
 #calendar-view-day .other {
 	background: #e0b6af;
 	border: 1px #884631 solid;
-}
-
-#calendar-view-day .event:hover {
-	opacity: 1;
-	z-index: 9;
-	height: auto !important;
 }
 
 #calendar-view-day .event H6 {
