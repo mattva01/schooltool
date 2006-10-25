@@ -38,14 +38,6 @@
 
   <page
       name="schedule.html"
-      for="schooltool.person.interfaces.IPerson"
-      class="schooltool.timetable.browser.PersonTimetableSetupView"
-      permission="schooltool.view"
-      menu="schooltool_actions"
-      title="Schedule" />
-
-  <page
-      name="schedule.html"
       for="schooltool.resource.interfaces.IResource"
       class="schooltool.timetable.browser.ResourceTimetableSetupView"
       permission="schooltool.view"
