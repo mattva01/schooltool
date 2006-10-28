@@ -13,15 +13,15 @@ class TablePage(BrowserPage):
     objects and values() must return an iterable of objects in the
     table.
     """
-    
+
     __call__ = ViewPageTemplateFile('templates/table.pt')
-    
+
     def __init__(self, context, request):
         super(TablePage, self).__init__(context, request)
         self.batch_start = int(request.form.get('batch_start', 0))
         self.batch_size = int(request.form.get('batch_size', 10))
         self._cached_values = None
-        
+
     def table(self):
         formatter = table.StandaloneFullFormatter(
             self.context, self.request, self.cached_values(),
@@ -44,13 +44,13 @@ class TablePage(BrowserPage):
         if self._cached_values is None:
             self._cached_values = self.values()
         return self._cached_values
-    
+
     def values(self):
         raise NotImplementedError
 
     def columns(self):
         raise NotImplementedError
-    
+
     def extraUrl(self):
         return self.sortOptions()
 
