@@ -34,7 +34,7 @@ class IDemographicsPerson(IPerson):
     emergency1 = Attribute('Emergency contact')
     emergency2 = Attribute('Emergency contact')
     emergency3 = Attribute('Emergency contact')
-    
+
 class INameInfo(Interface):
     """Name information for a person.
     """
@@ -44,12 +44,12 @@ class INameInfo(Interface):
         description=_(u"Prefix such as Mr., Mrs."),
         required=False,
         )
-    
+
     first_name = schema.TextLine(
         title=_(u"First name"),
         required=False,
         )
-        
+
     middle_name = schema.TextLine(
         title=_(u"Middle name"),
         required=False,
@@ -70,7 +70,7 @@ class INameInfo(Interface):
         description=_(u"Name by which the student prefers to be called"),
         required=False,
         )
-    
+
     full_name = schema.TextLine(
         title=_(u"Full name"),
         required=True,
@@ -81,7 +81,7 @@ class INameInfo(Interface):
         required=False,
         description=_("""Photo (in JPEG format)"""),
         )
-    
+
 class SourceList(list):
     """A simple list-based source for Choice fields.
     """
@@ -143,7 +143,7 @@ class IDemographics(Interface):
         title=_(u"Special education"),
         required=False
         )
-    
+
     previous_school = schema.Text(
         title=_(u"Previous school"),
         required=False
@@ -153,7 +153,7 @@ class IDemographics(Interface):
 class ITeachersSource(IIterableSource):
     """A source of names of teachers.
     """
-    
+
 class IGroupsSource(IIterableSource):
     """A source of names of groups.
     """
@@ -302,10 +302,10 @@ class ISearch(Interface):
         description=_(u"Full text search in parent names"),
         required=False,
         )
-    
+
     studentId = schema.TextLine(
         title=_(u"Student ID"),
         required=False,
         )
 
-    
+
