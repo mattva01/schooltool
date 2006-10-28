@@ -553,7 +553,7 @@ def doctest_WeeklyPDFCalendarView():
         >>> len(tables)
         2
         >>> tables[0].text
-        u'2005-07-01, Friday'
+        '2005-07-01, Friday'
         >>> tables[1]
         Table(...
         ...
@@ -569,12 +569,12 @@ def doctest_WeeklyPDFCalendarView():
         >>> len(tables)
         4
         >>> tables[0].text
-        u'2005-07-01, Friday'
+        '2005-07-01, Friday'
         >>> tables[1]
         Table(...
         ...
         >>> tables[2].text
-        u'2005-07-03, Sunday'
+        '2005-07-03, Sunday'
         >>> tables[3]
         Table(...
         ...
@@ -624,7 +624,7 @@ def doctest_MonthlyPDFCalendarView():
         >>> len(tables)
         2
         >>> tables[0].text
-        u'2005-07-01, Friday'
+        '2005-07-01, Friday'
         >>> tables[1]
         Table(...
         ...
@@ -648,12 +648,12 @@ def doctest_MonthlyPDFCalendarView():
         >>> len(tables)
         4
         >>> tables[0].text
-        u'2005-07-01, Friday'
+        '2005-07-01, Friday'
         >>> tables[1]
         Table(...
         ...
         >>> tables[2].text
-        u'2005-07-31, Sunday'
+        '2005-07-31, Sunday'
         >>> tables[3]
         Table(...
         ...
