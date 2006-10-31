@@ -1,0 +1,15 @@
+<tal:block i18n:domain="schooltool">
+    <input type="text" name="SEARCH_TITLE"
+           tal:attributes="value request/SEARCH_TITLE|nothing"/>
+    <select name="SEARCH_GROUP">
+      <option i18n:translate="">All groups</option>
+      <option tal:repeat="group view/groups"
+              tal:content="group/title"
+              tal:attributes="value group/id;
+                              selected python:group['id'] == request.get('SEARCH_GROUP')"/>
+    </select>
+    <input type="submit" name="SEARCH_BUTTON" value="Find Now"
+           i18n:attributes="value"/>
+    <input type="submit" name="CLEAR_SEARCH" value="Clear"
+           i18n:attributes="value"/>
+</tal:block>

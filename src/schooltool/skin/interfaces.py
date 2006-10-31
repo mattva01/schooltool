@@ -53,3 +53,12 @@ class IBreadcrumbInfo(Interface):
         description=u'Tells whether the breadcrumb link should active.',
         required=True,
         default=True)
+
+
+class IFilterWidget(Interface):
+
+    def render(self):
+        """Render the HTML representation of the filtering widget. """
+
+    def filter(self, list):
+        """Process the list leaving only those elements that match the query."""

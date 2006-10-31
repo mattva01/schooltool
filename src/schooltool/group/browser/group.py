@@ -64,9 +64,12 @@ class GroupListView(RelationshipViewBase):
         """Return a list of groups the current user is a member of."""
         return self.context.groups
 
+    def getAvailableItemsContainer(self):
+        return getSchoolToolApplication()['groups']
+
     def getAvailableItems(self):
         """Return a list of groups the current user is not a member of."""
-        groups = getSchoolToolApplication()['groups']
+        groups = self.getAvailableItemsContainer()
         return [group for group in groups.values()
                 if checkPermission('schooltool.edit', group)
                    and group not in self.context.groups]
@@ -102,9 +105,12 @@ class MemberViewPersons(RelationshipViewBase):
         """Return a list of current group memebers."""
         return filter(IPerson.providedBy, self.context.members)
 
+    def getAvailableItemsContainer(self):
+        return getSchoolToolApplication()['persons']
+
     def getAvailableItems(self):
         """Return a list of all possible members."""
-        container = getSchoolToolApplication()['persons']
+        container = self.getAvailableItemsContainer()
         return [m for m in container.values()
                 if m not in self.getCollection()]
 

@@ -1,0 +1,8 @@
+<tal:block i18n:domain="schooltool">
+    <input type="text" name="SEARCH"
+           tal:attributes="value request/SEARCH|nothing"/>
+    <input type="submit" name="SEARCH_BUTTON" value="Find Now"
+           i18n:attributes="value"/>
+    <input type="submit" name="CLEAR_SEARCH" value="Clear"
+           i18n:attributes="value"/>
+</tal:block>

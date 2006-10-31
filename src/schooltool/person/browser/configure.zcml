@@ -156,4 +156,9 @@
 
   </configure>
 
+  <zope:adapter
+      for="schooltool.person.interfaces.IPersonContainer
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".person.PersonFilterWidget" />
+
 </configure>

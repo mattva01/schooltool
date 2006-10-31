@@ -101,7 +101,7 @@ Let's add a few members.
 We can perform a search and limit the list in the 'Add Members' box. This
 particular bit also serves as a regression test for issue 341.
 
-    >>> manager.getControl(name='SEARCH').value = 'D.'
+    >>> manager.getControl(name='SEARCH_TITLE').value = 'D.'
     >>> manager.getControl('Find Now').click()
 
     >>> 'name="add_item.person013"' in manager.contents

@@ -78,6 +78,7 @@ def doctest_GroupListView():
         >>> from schooltool.group.browser.group import GroupListView
         >>> request = TestRequest()
         >>> view = GroupListView(person, request)
+        >>> view.filter = lambda l: l
 
     Rendering the view does no harm:
 
@@ -102,6 +103,7 @@ def doctest_GroupListView():
         >>> request = TestRequest()
         >>> request.form = {'add_item.pov': 'on', 'ADD_ITEMS': 'Apply'}
         >>> view = GroupListView(person, request)
+        >>> view.filter = lambda l: l
         >>> view.update()
 
     He should have joined:
@@ -115,6 +117,7 @@ def doctest_GroupListView():
         >>> request.form = {'remove_item.pov': 'on', 'add_group.etria': 'on',
         ...                 'CANCEL': 'Cancel'}
         >>> view = GroupListView(person, request)
+        >>> view.filter = lambda l: l
         >>> view.update()
 
     Nothing would have happened!
@@ -135,6 +138,7 @@ def doctest_GroupListView():
         >>> request = TestRequest()
         >>> request.form = {'remove_item.pov': 'on', 'REMOVE_ITEMS': 'Apply'}
         >>> view = GroupListView(person, request)
+        >>> view.filter = lambda l: l
         >>> view.update()
 
     Mission successful:
@@ -174,6 +178,7 @@ def doctest_MemberListView():
         >>> from schooltool.group.browser.group import MemberViewPersons
         >>> request = TestRequest()
         >>> view = MemberViewPersons(pov, request)
+        >>> view.filter = lambda l: l
 
     Rendering the view does no harm:
 
@@ -190,6 +195,7 @@ def doctest_MemberListView():
         >>> request = TestRequest()
         >>> request.form = {'add_item.ignas': 'on', 'ADD_ITEMS': 'Apply'}
         >>> view = MemberViewPersons(pov, request)
+        >>> view.filter = lambda l: l
         >>> view.update()
 
     He should have joined:
@@ -202,6 +208,7 @@ def doctest_MemberListView():
         >>> request = TestRequest()
         >>> request.form = {'add_item.gintas': 'on', 'CANCEL': 'Cancel'}
         >>> view = MemberViewPersons(pov, request)
+        >>> view.filter = lambda l: l
         >>> view.update()
         >>> sorted([person.title for person in pov.members])
         ['Ignas']
@@ -215,6 +222,7 @@ def doctest_MemberListView():
         >>> request = TestRequest()
         >>> request.form = {'remove_item.ignas': 'on', 'REMOVE_ITEMS': 'Apply'}
         >>> view = MemberViewPersons(pov, request)
+        >>> view.filter = lambda l: l
         >>> view.update()
 
     and add Albert, who came in late and has to work after-hours:
@@ -222,6 +230,7 @@ def doctest_MemberListView():
         >>> request = TestRequest()
         >>> request.form = {'add_item.alga': 'on', 'ADD_ITEMS': 'Apply'}
         >>> view = MemberViewPersons(pov, request)
+        >>> view.filter = lambda l: l
         >>> view.update()
 
     Mission accomplished:
@@ -234,6 +243,7 @@ def doctest_MemberListView():
         >>> request = TestRequest()
         >>> request.form = {'CANCEL': 'Cancel'}
         >>> view = MemberViewPersons(pov, request)
+        >>> view.filter = lambda l: l
         >>> view.update()
         >>> request.response.getStatus()
         302

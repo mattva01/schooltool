@@ -37,6 +37,7 @@ from zope.app.form.browser.editview import EditView
 from zope.app.form.interfaces import IInputWidget
 from zope.app.form.interfaces import WidgetsError
 from zope.publisher.browser import BrowserView
+from zope.component import queryMultiAdapter
 from zope.app.security.interfaces import IAuthentication
 from zope.app.security.interfaces import IAuthenticatedGroup
 from zope.app.security.interfaces import IUnauthenticatedGroup
@@ -52,6 +53,7 @@ from schooltool.app.interfaces import IAsset
 from schooltool.batching import Batch
 from schooltool.batching.browser import MultiBatchViewMixin
 from schooltool.person.interfaces import IPerson
+from schooltool.skin.interfaces import IFilterWidget
 
 
 class ApplicationView(BrowserView):
@@ -182,13 +184,25 @@ class RelationshipViewBase(BrowserView):
         """Return a sequence of items that can be selected."""
         raise NotImplementedError("Subclasses should override this method.")
 
+    def getAvailableItemsContainer(self):
+        """Returns the backend storage for available items."""
+        raise NotImplementedError("Subclasses should override this method.")
+
     def updateBatch(self, lst):
         start = int(self.request.get('batch_start', 0))
         size = int(self.request.get('batch_size', 10))
         self.batch = Batch(lst, start, size, sort_by='title')
 
+    def filter(self, list):
+        return self.filter_widget.filter(list)
+
     def update(self):
         context_url = zapi.absoluteURL(self.context, self.request)
+
+        self.filter_widget = queryMultiAdapter((self.getAvailableItemsContainer(),
+                                                self.request),
+                                               IFilterWidget)
+
         if 'ADD_ITEMS' in self.request:
             for item in self.getAvailableItems():
                 if 'add_item.' + item.__name__ in self.request:
@@ -200,14 +214,7 @@ class RelationshipViewBase(BrowserView):
         elif 'CANCEL' in self.request:
             self.request.response.redirect(context_url)
 
-        if 'SEARCH' in self.request and 'CLEAR_SEARCH' not in self.request:
-            searchstr = self.request['SEARCH'].lower()
-            results = [item for item in self.getAvailableItems()
-                       if searchstr in item.title.lower()]
-        else:
-            self.request.form['SEARCH'] = ''
-            results = self.getAvailableItems()
-
+        results = self.filter(self.getAvailableItems())
         self.updateBatch(results)
 
 
@@ -317,8 +324,11 @@ class LeaderView(RelationshipViewBase):
     def getCollection(self):
         return self.context.leaders
 
+    def getAvailableItemsContainer(self):
+        return getSchoolToolApplication()['persons']
+
     def getAvailableItems(self):
-        container = getSchoolToolApplication()['persons']
+        container = self.getAvailableItemsContainer()
         selected_items = set(self.getSelectedItems())
         return [p for p in container.values()
                 if p not in selected_items]

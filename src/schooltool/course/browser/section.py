@@ -250,6 +250,13 @@ class RelationshipEditConfView(RelationshipViewBase, ConflictDisplayMixin):
         RelationshipViewBase.update(self)
         ConflictDisplayMixin.update(self)
 
+    def getAvailableItems(self):
+        """Return a list of all possible members."""
+        container = self.getAvailableItemsContainer()
+        selected_items = Set(self.getSelectedItems())
+        return [p for p in container.values()
+                if p not in selected_items]
+
 
 class SectionInstructorView(RelationshipEditConfView, ConflictDisplayMixin):
     """View for adding instructors to a Section."""
@@ -267,12 +274,8 @@ class SectionInstructorView(RelationshipEditConfView, ConflictDisplayMixin):
     def getCollection(self):
         return self.context.instructors
 
-    def getAvailableItems(self):
-        """Return a list of all possible members."""
-        container = getSchoolToolApplication()['persons']
-        selected_items = set(self.getSelectedItems())
-        return [p for p in container.values()
-                if p not in selected_items]
+    def getAvailableItemsContainer(self):
+        return getSchoolToolApplication()['persons']
 
 
 class SectionLearnerView(RelationshipEditConfView):
@@ -295,12 +298,8 @@ class SectionLearnerView(RelationshipEditConfView):
         """Return a list of selected members."""
         return filter(IPerson.providedBy, self.getCollection())
 
-    def getAvailableItems(self):
-        """Return a list of all possible members."""
-        container = getSchoolToolApplication()['persons']
-        selected_items = Set(self.getSelectedItems())
-        return [p for p in container.values()
-                if p not in selected_items]
+    def getAvailableItemsContainer(self):
+        return getSchoolToolApplication()['persons']
 
 
 class SectionLearnerGroupView(RelationshipEditConfView):
@@ -323,12 +322,9 @@ class SectionLearnerGroupView(RelationshipEditConfView):
         """Return a list of selected members."""
         return filter(IGroup.providedBy, self.getCollection())
 
-    def getAvailableItems(self):
-        """Return a list of all possible members."""
-        container = getSchoolToolApplication()['groups']
-        selected_items = Set(self.getSelectedItems())
-        return [p for p in container.values()
-                if p not in selected_items]
+    def getAvailableItemsContainer(self):
+        return getSchoolToolApplication()['groups']
+
 
 class SectionResourceView(RelationshipEditConfView):
     """View for adding learners to a Section."""
@@ -345,9 +341,5 @@ class SectionResourceView(RelationshipEditConfView):
     def getCollection(self):
         return self.context.resources
 
-    def getAvailableItems(self):
-        """Return a list of all possible members."""
-        container = getSchoolToolApplication()['resources']
-        selected_items = Set(self.getSelectedItems())
-        return [p for p in container.values()
-                if p not in selected_items]
+    def getAvailableItemsContainer(self):
+        return getSchoolToolApplication()['resources']
