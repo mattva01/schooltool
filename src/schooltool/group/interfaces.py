@@ -51,8 +51,10 @@ class IBaseGroup(zope.interface.Interface):
     members = zope.interface.Attribute(
         """Members of the group (see IRelationshipProperty)""")
 
+
 class IGroup(IBaseGroup):
     """Group."""
+
 
 class IGroupContainer(IContainer):
     """Container of groups."""
