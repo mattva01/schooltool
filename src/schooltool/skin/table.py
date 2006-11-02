@@ -123,4 +123,6 @@ class FilterWidget(object):
         return 'SEARCH' in self.request
 
     def extra_url(self):
-        return '&SEARCH=%s' % self.request.get('SEARCH')
+        if 'SEARCH' in self.request:
+            return '&SEARCH=%s' % self.request.get('SEARCH')
+        return ''

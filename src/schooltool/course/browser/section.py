@@ -42,7 +42,6 @@ from schooltool.person.interfaces import IPerson
 
 from schooltool import SchoolToolMessage as _
 from schooltool.common import collect
-from schooltool.app.app import getSchoolToolApplication
 from schooltool.calendar.interfaces import IExpandedCalendarEvent
 from schooltool.course.interfaces import ISection, ISectionContainer
 from schooltool.relationship.relationship import getRelatedObjects
@@ -53,6 +52,7 @@ from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.timetable.browser import TimetableConflictMixin
+from schooltool.app.interfaces import ISchoolToolApplication
 
 
 def same(a, b):
@@ -275,7 +275,7 @@ class SectionInstructorView(RelationshipEditConfView, ConflictDisplayMixin):
         return self.context.instructors
 
     def getAvailableItemsContainer(self):
-        return getSchoolToolApplication()['persons']
+        return ISchoolToolApplication(None)['persons']
 
 
 class SectionLearnerView(RelationshipEditConfView):
@@ -299,7 +299,7 @@ class SectionLearnerView(RelationshipEditConfView):
         return filter(IPerson.providedBy, self.getCollection())
 
     def getAvailableItemsContainer(self):
-        return getSchoolToolApplication()['persons']
+        return ISchoolToolApplication(None)['persons']
 
 
 class SectionLearnerGroupView(RelationshipEditConfView):
@@ -323,7 +323,7 @@ class SectionLearnerGroupView(RelationshipEditConfView):
         return filter(IGroup.providedBy, self.getCollection())
 
     def getAvailableItemsContainer(self):
-        return getSchoolToolApplication()['groups']
+        return ISchoolToolApplication(None)['groups']
 
 
 class SectionResourceView(RelationshipEditConfView):
@@ -342,4 +342,4 @@ class SectionResourceView(RelationshipEditConfView):
         return self.context.resources
 
     def getAvailableItemsContainer(self):
-        return getSchoolToolApplication()['resources']
+        return ISchoolToolApplication(None)['resources']

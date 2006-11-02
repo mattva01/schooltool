@@ -28,6 +28,7 @@ from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.traversing.interfaces import IContainmentRoot
+from zope.component import provideAdapter
 
 from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.testing import setup
@@ -45,6 +46,8 @@ def doctest_GroupListView():
     One requirement: the person has to know where he is.
 
         >>> app = setup.setUpSchoolToolSite()
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
+        >>> provideAdapter(lambda context: app, (None,), ISchoolToolApplication)
         >>> app['persons']['ignas'] = person
 
     We will be testing the person's awareness of the world, so we will
@@ -168,6 +171,8 @@ def doctest_MemberListView():
     We need these objects to live in an application:
 
         >>> app = setup.setUpSchoolToolSite()
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
+        >>> provideAdapter(lambda context: app, (None,), ISchoolToolApplication)
         >>> app['groups']['pov'] = pov
         >>> app['persons']['gintas'] = gintas
         >>> app['persons']['ignas'] = ignas

@@ -64,9 +64,16 @@ def doctest_FilterWidget():
         >>> widget.extra_url()
         '&SEARCH=lamb'
 
+    If there is no query in the request - an empty string get seturned:
+
+        >>> request.form = {}
+        >>> widget.extra_url()
+        ''
+
     Filtering is done by skipping any entry that doesn't contain the
     query string in it's title:
 
+        >>> request.form = {'SEARCH': 'lamb'}
         >>> widget.filter(widget.context)
         [<ItemStub lambda>]
 

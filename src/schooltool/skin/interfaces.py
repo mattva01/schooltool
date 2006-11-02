@@ -57,8 +57,14 @@ class IBreadcrumbInfo(Interface):
 
 class IFilterWidget(Interface):
 
-    def render(self):
+    def render():
         """Render the HTML representation of the filtering widget. """
 
-    def filter(self, list):
+    def filter(list):
         """Process the list leaving only those elements that match the query."""
+
+    def active():
+        """Returns True if there is at least one search parameter in the request."""
+
+    def extra_url():
+        """String that should be appended to the url to preserve query parameters."""

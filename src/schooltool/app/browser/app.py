@@ -325,7 +325,7 @@ class LeaderView(RelationshipViewBase):
         return self.context.leaders
 
     def getAvailableItemsContainer(self):
-        return getSchoolToolApplication()['persons']
+        return ISchoolToolApplication(None)['persons']
 
     def getAvailableItems(self):
         container = self.getAvailableItemsContainer()

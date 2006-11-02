@@ -217,7 +217,6 @@ class PersonFilterWidget(FilterWidget):
 
     def groups(self):
         groups = []
-        from schooltool.app.app import getSchoolToolApplication
         for id, group in ISchoolToolApplication(None)['groups'].items():
             if len(group.members) > 0:
                 groups.append({'id': id,
@@ -238,7 +237,6 @@ class PersonFilterWidget(FilterWidget):
                        if searchstr in item.title.lower()]
 
         if 'SEARCH_GROUP' in self.request:
-            from schooltool.app.app import getSchoolToolApplication
             group = ISchoolToolApplication(None)['groups'].get(self.request['SEARCH_GROUP'])
             if not group:
                 return results

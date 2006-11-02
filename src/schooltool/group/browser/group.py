@@ -28,7 +28,7 @@ from zope.publisher.browser import BrowserView
 
 from schooltool import SchoolToolMessage as _
 from schooltool.batching import Batch
-from schooltool.app.app import getSchoolToolApplication
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.browser.app import ContainerView, BaseAddView, BaseEditView
 from schooltool.person.interfaces import IPerson
 from schooltool.resource.interfaces import IResource
@@ -65,7 +65,7 @@ class GroupListView(RelationshipViewBase):
         return self.context.groups
 
     def getAvailableItemsContainer(self):
-        return getSchoolToolApplication()['groups']
+        return ISchoolToolApplication(None)['groups']
 
     def getAvailableItems(self):
         """Return a list of groups the current user is not a member of."""
@@ -106,7 +106,7 @@ class MemberViewPersons(RelationshipViewBase):
         return filter(IPerson.providedBy, self.context.members)
 
     def getAvailableItemsContainer(self):
-        return getSchoolToolApplication()['persons']
+        return ISchoolToolApplication(None)['persons']
 
     def getAvailableItems(self):
         """Return a list of all possible members."""
