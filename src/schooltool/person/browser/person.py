@@ -46,7 +46,7 @@ from zope.viewlet.viewlet import ViewletBase
 
 from schooltool import SchoolToolMessage as _
 from schooltool.skin.form import BasicForm
-from schooltool.app.app import getSchoolToolApplication
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.browser.app import ContainerView, ContainerDeleteView
 from schooltool.person.interfaces import IPasswordWriter
 from schooltool.person.interfaces import IPerson, IPersonFactory
@@ -56,6 +56,7 @@ from schooltool.person.person import Person
 from schooltool.widget.password import PasswordConfirmationWidget
 from schooltool.traverser.traverser import AdapterTraverserPlugin
 from schooltool.person.interfaces import IPasswordWriter
+from schooltool.skin.table import FilterWidget
 
 
 def SourceMultiCheckBoxWidget(field, request):
@@ -131,10 +132,10 @@ class GroupsSource(object):
     implements(IGroupsSource)
 
     def __iter__(self):
-        return iter(getSchoolToolApplication()['groups'].values())
+        return iter(ISchoolToolApplication(None)['groups'].values())
 
     def __len__(self):
-        return len(getSchoolToolApplication()['groups'].values())
+        return len(ISchoolToolApplication(None)['groups'].values())
 
 
 class GroupsTerm(object):
@@ -157,7 +158,7 @@ class GroupsTerms(object):
         return GroupsTerm(value.title, value.__name__, value)
 
     def getValue(self, token):
-        return getSchoolToolApplication()['groups'][token]
+        return ISchoolToolApplication(None)['groups'][token]
 
 
 class IPasswordEditForm(Interface):
@@ -203,3 +204,57 @@ class PasswordEditMenuItem(ViewletBase):
     def render(self):
         if checkPermission('schooltool.edit', IPasswordWriter(self.context)):
             return super(PasswordEditMenuItem, self).render()
+
+
+class PersonFilterWidget(FilterWidget):
+    """A filter widget for persons.
+
+    Filters the list of available persons by title or groups they belong to.
+    """
+
+    template = ViewPageTemplateFile('person_filter.pt')
+    parameters = ['SEARCH_TITLE', 'SEARCH_GROUP']
+
+    def groups(self):
+        groups = []
+        for id, group in ISchoolToolApplication(None)['groups'].items():
+            if len(group.members) > 0:
+                groups.append({'id': id,
+                               'title': "%s (%s)" % (group.title, len(group.members))})
+        return groups
+
+    def filter(self, list):
+        if 'CLEAR_SEARCH' in self.request:
+            for parameter in self.parameters:
+                self.request.form[parameter] = ''
+            return list
+
+        results = list
+
+        if 'SEARCH_TITLE' in self.request:
+            searchstr = self.request['SEARCH_TITLE'].lower()
+            results = [item for item in results
+                       if searchstr in item.title.lower()]
+
+        if 'SEARCH_GROUP' in self.request:
+            group = ISchoolToolApplication(None)['groups'].get(self.request['SEARCH_GROUP'])
+            if not group:
+                return results
+
+            results = [item for item in results
+                       if group in item.groups]
+
+        return results
+
+    def active(self):
+        for parameter in self.parameters:
+            if parameter in self.request:
+                return True
+        return False
+
+    def extra_url(self):
+        url = ""
+        for parameter in self.parameters:
+            if parameter in self.request:
+                url += '&%s=%s' % (parameter, self.request.get(parameter))
+        return url

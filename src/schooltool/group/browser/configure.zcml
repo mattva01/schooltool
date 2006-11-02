@@ -132,4 +132,9 @@
       title="Import Groups"
       />
 
+  <zope:adapter
+      for="schooltool.group.interfaces.IGroupContainer
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory="schooltool.skin.table.FilterWidget" />
+
 </configure>

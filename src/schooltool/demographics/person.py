@@ -30,7 +30,7 @@ class Person(PersonBase):
     """Special person that adds demographics information.
     """
     implements(interfaces.IDemographicsPerson)
-    
+
     def __init__(self, username=None, title=None):
         super(Person, self).__init__(username, title)
         self.modified = now()
@@ -72,9 +72,10 @@ class NameInfo(Persistent):
 
     def _set_photo(self, d):
         self.__parent__.photo = d
-        
+
     photo = property(_get_photo, _set_photo)
-    
+
+
 class Demographics(Persistent):
     implements(interfaces.IDemographics, ILocation)
 

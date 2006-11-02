@@ -527,6 +527,58 @@ def doctest_ApplicationPreferencesView():
 
     """
 
+def doctest_RelationshipViewBase():
+    """Test for RelationshipViewBase.
+
+    Let's create the view first:
+
+        >>> from schooltool.app.browser.app import RelationshipViewBase
+        >>> from zope.publisher.browser import TestRequest
+        >>> request = TestRequest()
+        >>> view = RelationshipViewBase(None, request)
+
+    Filter is a shorthand that applies filter function of the active
+    filter widget:
+
+        >>> from schooltool.skin.interfaces import IFilterWidget
+        >>> from zope.interface import implements
+        >>> class StubFilterWidget(object):
+        ...     implements(IFilterWidget)
+        ...     def __init__(self, context, request):
+        ...         self.context, self.request = context, request
+        ...     def filter(self, list):
+        ...         print "Filtering: %s" % list
+        ...         return [item for item in list if 's' in item]
+        >>> view.filter_widget = StubFilterWidget(None, None)
+
+        >>> view.filter(['list', 'of', 'items'])
+        Filtering: ['list', 'of', 'items']
+        ['list', 'items']
+
+    The widget is acquired on update by adapting the container of
+    available items and the request to the search widget:
+
+        >>> from zope.component import provideAdapter
+        >>> from zope.publisher.interfaces.browser import IBrowserRequest
+        >>> from zope.interface import Interface
+        >>> provideAdapter(StubFilterWidget, adapts=(Interface, IBrowserRequest))
+
+        >>> view.getAvailableItemsContainer = lambda : "Container of available items"
+        >>> view.getAvailableItems = lambda: ['available', 'items']
+        >>> view.update()
+        Filtering: ['available', 'items']
+
+        >>> view.filter_widget.context
+        'Container of available items'
+        >>> view.filter_widget.request is request
+        True
+
+    The batch gets updated with filtered available items:
+
+        >>> list(view.batch)
+        ['items']
+
+    """
 
 def test_suite():
     optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF

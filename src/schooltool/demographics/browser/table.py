@@ -29,6 +29,7 @@ from zc.table.column import GetterColumn
 from zope.app.pagetemplate import ViewPageTemplateFile
 from hurry.query.interfaces import IQuery
 from hurry.query import query
+
 from schooltool.app.browser import ViewPreferences
 from schooltool.demographics import interfaces
 from schooltool.skin.table import TablePage
@@ -54,13 +55,13 @@ class PersonTable(TablePage):
         birth_date = DateColumn(
             name='birth_date',
             title=u'Birth',
-            getter=lambda i, f: i.demographics.birth_date,
+            getter=lambda i, f: (i.demographics.birth_date or ''),
             subsort=True)
         directlyProvides(birth_date, ISortableColumn)
         enrollment_date = DateColumn(
             name='enrollment_date',
             title=u'Enrollment',
-            getter=lambda i, f: i.schooldata.enrollment_date,
+            getter=lambda i, f: (i.schooldata.enrollment_date or ''),
             subsort=True)
         directlyProvides(enrollment_date, ISortableColumn)
         modified = ModifiedColumn(

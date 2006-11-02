@@ -552,8 +552,8 @@ def doctest_WeeklyPDFCalendarView():
         >>> tables = view.buildEventTables(date(2005, 7, 1))
         >>> len(tables)
         2
-        >>> tables[0].text
-        u'2005-07-01, Friday'
+        >>> print tables[0].text
+        2005-07-01, Friday
         >>> tables[1]
         Table(...
         ...
@@ -568,13 +568,13 @@ def doctest_WeeklyPDFCalendarView():
         >>> tables = view.buildEventTables(date(2005, 7, 1))
         >>> len(tables)
         4
-        >>> tables[0].text
-        u'2005-07-01, Friday'
+        >>> print tables[0].text
+        2005-07-01, Friday
         >>> tables[1]
         Table(...
         ...
-        >>> tables[2].text
-        u'2005-07-03, Sunday'
+        >>> print tables[2].text
+        2005-07-03, Sunday
         >>> tables[3]
         Table(...
         ...
@@ -623,8 +623,8 @@ def doctest_MonthlyPDFCalendarView():
         >>> tables = view.buildEventTables(date(2005, 7, 1))
         >>> len(tables)
         2
-        >>> tables[0].text
-        u'2005-07-01, Friday'
+        >>> print tables[0].text
+        2005-07-01, Friday
         >>> tables[1]
         Table(...
         ...
@@ -647,13 +647,13 @@ def doctest_MonthlyPDFCalendarView():
         >>> tables = view.buildEventTables(date(2005, 7, 1))
         >>> len(tables)
         4
-        >>> tables[0].text
-        u'2005-07-01, Friday'
+        >>> print tables[0].text
+        2005-07-01, Friday
         >>> tables[1]
         Table(...
         ...
-        >>> tables[2].text
-        u'2005-07-31, Sunday'
+        >>> print tables[2].text
+        2005-07-31, Sunday
         >>> tables[3]
         Table(...
         ...

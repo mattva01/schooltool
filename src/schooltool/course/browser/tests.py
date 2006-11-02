@@ -741,9 +741,10 @@ def doctest_SectionInstructorView():
 
     First we need to set up some persons:
 
-        >>> from schooltool.app.app import SchoolToolApplication
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
         >>> from schooltool.person.person import Person
         >>> school = setup.setUpSchoolToolSite()
+        >>> provideAdapter(lambda context: school, (None,), ISchoolToolApplication)
         >>> persons = school['persons']
         >>> directlyProvides(school, IContainmentRoot)
         >>> persons['smith'] = Person('smith', 'John Smith')
@@ -778,9 +779,10 @@ def doctest_SectionLearnerView():
 
     First we need to set up some persons:
 
-        >>> from schooltool.app.app import SchoolToolApplication
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
         >>> from schooltool.person.person import Person
         >>> school = setup.setUpSchoolToolSite()
+        >>> provideAdapter(lambda context: school, (None,), ISchoolToolApplication)
         >>> persons = school['persons']
         >>> directlyProvides(school, IContainmentRoot)
         >>> smith = persons['smith'] = Person('smith', 'John Smith')
@@ -824,9 +826,10 @@ def doctest_SectionLearnerGroupView():
 
     First we need to set up some groups:
 
-        >>> from schooltool.app.app import SchoolToolApplication
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
         >>> from schooltool.group.group import Group
         >>> school = setup.setUpSchoolToolSite()
+        >>> provideAdapter(lambda context: school, (None,), ISchoolToolApplication)
         >>> groups = school['groups']
         >>> directlyProvides(school, IContainmentRoot)
         >>> frogs = groups['frogs'] = Group('frogs', 'Bunch of frogs')
@@ -870,9 +873,10 @@ def doctest_SectionResourceView():
 
     First we need to set up some persons:
 
-        >>> from schooltool.app.app import SchoolToolApplication
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
         >>> from schooltool.resource.resource import Resource
         >>> school = setup.setUpSchoolToolSite()
+        >>> provideAdapter(lambda context: school, (None,), ISchoolToolApplication)
         >>> resources = school['resources']
         >>> directlyProvides(school, IContainmentRoot)
         >>> rock = resources['rock'] = Resource('rock')

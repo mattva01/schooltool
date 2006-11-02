@@ -28,6 +28,7 @@ from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.traversing.interfaces import IContainmentRoot
+from zope.component import provideAdapter
 
 from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.testing import setup
@@ -45,6 +46,8 @@ def doctest_GroupListView():
     One requirement: the person has to know where he is.
 
         >>> app = setup.setUpSchoolToolSite()
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
+        >>> provideAdapter(lambda context: app, (None,), ISchoolToolApplication)
         >>> app['persons']['ignas'] = person
 
     We will be testing the person's awareness of the world, so we will
@@ -78,6 +81,7 @@ def doctest_GroupListView():
         >>> from schooltool.group.browser.group import GroupListView
         >>> request = TestRequest()
         >>> view = GroupListView(person, request)
+        >>> view.filter = lambda l: l
 
     Rendering the view does no harm:
 
@@ -102,6 +106,7 @@ def doctest_GroupListView():
         >>> request = TestRequest()
         >>> request.form = {'add_item.pov': 'on', 'ADD_ITEMS': 'Apply'}
         >>> view = GroupListView(person, request)
+        >>> view.filter = lambda l: l
         >>> view.update()
 
     He should have joined:
@@ -115,6 +120,7 @@ def doctest_GroupListView():
         >>> request.form = {'remove_item.pov': 'on', 'add_group.etria': 'on',
         ...                 'CANCEL': 'Cancel'}
         >>> view = GroupListView(person, request)
+        >>> view.filter = lambda l: l
         >>> view.update()
 
     Nothing would have happened!
@@ -135,6 +141,7 @@ def doctest_GroupListView():
         >>> request = TestRequest()
         >>> request.form = {'remove_item.pov': 'on', 'REMOVE_ITEMS': 'Apply'}
         >>> view = GroupListView(person, request)
+        >>> view.filter = lambda l: l
         >>> view.update()
 
     Mission successful:
@@ -164,6 +171,8 @@ def doctest_MemberListView():
     We need these objects to live in an application:
 
         >>> app = setup.setUpSchoolToolSite()
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
+        >>> provideAdapter(lambda context: app, (None,), ISchoolToolApplication)
         >>> app['groups']['pov'] = pov
         >>> app['persons']['gintas'] = gintas
         >>> app['persons']['ignas'] = ignas
@@ -174,6 +183,7 @@ def doctest_MemberListView():
         >>> from schooltool.group.browser.group import MemberViewPersons
         >>> request = TestRequest()
         >>> view = MemberViewPersons(pov, request)
+        >>> view.filter = lambda l: l
 
     Rendering the view does no harm:
 
@@ -190,6 +200,7 @@ def doctest_MemberListView():
         >>> request = TestRequest()
         >>> request.form = {'add_item.ignas': 'on', 'ADD_ITEMS': 'Apply'}
         >>> view = MemberViewPersons(pov, request)
+        >>> view.filter = lambda l: l
         >>> view.update()
 
     He should have joined:
@@ -202,6 +213,7 @@ def doctest_MemberListView():
         >>> request = TestRequest()
         >>> request.form = {'add_item.gintas': 'on', 'CANCEL': 'Cancel'}
         >>> view = MemberViewPersons(pov, request)
+        >>> view.filter = lambda l: l
         >>> view.update()
         >>> sorted([person.title for person in pov.members])
         ['Ignas']
@@ -215,6 +227,7 @@ def doctest_MemberListView():
         >>> request = TestRequest()
         >>> request.form = {'remove_item.ignas': 'on', 'REMOVE_ITEMS': 'Apply'}
         >>> view = MemberViewPersons(pov, request)
+        >>> view.filter = lambda l: l
         >>> view.update()
 
     and add Albert, who came in late and has to work after-hours:
@@ -222,6 +235,7 @@ def doctest_MemberListView():
         >>> request = TestRequest()
         >>> request.form = {'add_item.alga': 'on', 'ADD_ITEMS': 'Apply'}
         >>> view = MemberViewPersons(pov, request)
+        >>> view.filter = lambda l: l
         >>> view.update()
 
     Mission accomplished:
@@ -234,6 +248,7 @@ def doctest_MemberListView():
         >>> request = TestRequest()
         >>> request.form = {'CANCEL': 'Cancel'}
         >>> view = MemberViewPersons(pov, request)
+        >>> view.filter = lambda l: l
         >>> view.update()
         >>> request.response.getStatus()
         302

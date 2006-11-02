@@ -223,6 +223,100 @@ def doctest_PersonCSVImporter():
 
     """
 
+
+def doctest_PersonFilterWidget():
+    """Doctest for PersonFilterWidget.
+
+    Let's create the PersonFilterWidget:
+
+        >>> from zope.publisher.browser import TestRequest
+        >>> from schooltool.person.browser.person import PersonFilterWidget
+        >>> class PersonStub(object):
+        ...     def __init__(self, title, groups):
+        ...         self.title = title
+        ...         self.groups = groups
+        ...     def __repr__(self):
+        ...         return '<ItemStub %s>' % self.title
+        >>> container = [PersonStub(title, groups)
+        ...              for title, groups in [('alpha', ['a']),
+        ...                                    ('beta', ['b', 'c']),
+        ...                                    ('lambda', ['d', 'b'])]]
+        >>> request = TestRequest()
+        >>> widget = PersonFilterWidget(container, request)
+
+    The state of the widget (whether it will filter the data or not)
+    is determined by checking whether there is at least one query
+    parameter in the request:
+
+        >>> widget.active()
+        False
+
+        >>> request.form = {'SEARCH_TITLE': 'lamb'}
+        >>> widget.active()
+        True
+
+        >>> request.form = {'SEARCH_GROUP': 'lamb'}
+        >>> widget.active()
+        True
+
+    The information that we got from the request can be appended to
+    the url:
+
+        >>> widget.extra_url()
+        '&SEARCH_GROUP=lamb'
+
+        >>> request.form = {'SEARCH_TITLE': 'lamb', 'SEARCH_GROUP': 'a'}
+        >>> widget.extra_url()
+        '&SEARCH_TITLE=lamb&SEARCH_GROUP=a'
+
+    Filtering is done by skipping any entry that doesn't contain the
+    query string in it's title, or are not in the target group:
+
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
+        >>> from zope.component import adapts
+        >>> from zope.interface import implements, Interface
+        >>> class StubApplication(dict):
+        ...     implements(ISchoolToolApplication)
+        ...     adapts(Interface)
+        ...     def __init__(self, context):
+        ...         self['groups'] = {'a': 'a', 'b': 'b', 'c': 'c'}
+        >>> from zope.component import provideAdapter
+        >>> provideAdapter(StubApplication)
+
+        >>> request.form = {'SEARCH_TITLE': 'lamb'}
+        >>> widget.filter(widget.context)
+        [<ItemStub lambda>]
+
+        >>> request.form = {'SEARCH_GROUP': 'b'}
+        >>> widget.filter(widget.context)
+        [<ItemStub beta>, <ItemStub lambda>]
+
+        >>> request.form = {'SEARCH_GROUP': 'b',
+        ...                 'SEARCH_TITLE': 'bet'}
+        >>> widget.filter(widget.context)
+        [<ItemStub beta>]
+
+   The search is case insensitive:
+
+        >>> request.form = {'SEARCH_TITLE': 'AlphA'}
+        >>> widget.filter(widget.context)
+        [<ItemStub alpha>]
+
+    If clear search button is clicked, the form attribute is cleared,
+    and all items are displayed:
+
+        >>> request.form['CLEAR_SEARCH'] = 'Yes'
+
+        >>> widget.filter(widget.context)
+        [<ItemStub alpha>, <ItemStub beta>, <ItemStub lambda>]
+        >>> request.form['SEARCH_TITLE']
+        ''
+
+        >>> request.form['SEARCH_GROUP']
+        ''
+
+    """
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite(
