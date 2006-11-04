@@ -30,9 +30,11 @@ import zope.event
 import zope.interface
 import zope.app.container.contained
 import zope.lifecycleevent
+from zope import component
 from zope import annotation
 from zope.app import zapi
 from zope.app.keyreference.interfaces import IKeyReference
+from zope.app.container.interfaces import IObjectRemovedEvent
 
 from schooltool.requirement import interfaces
 
@@ -287,6 +289,19 @@ def getRequirement(context):
 # Convention to make adapter introspectable
 getRequirement.factory = Requirement
 
+@component.adapter(IObjectRemovedEvent)
+def garbageCollect(event):
+    """Removes all references to uncontained requirements.
+
+    When requirements that were contained in other requirements are deleted,
+    references to the deleted requirement still exist if that requirement
+    inherited from another requirement.  This ObjectRemovedEvent subscriber
+    removes those references so the deleted requirement is deleted forever.
+    """
+
+    if interfaces.IRequirement.providedBy(event.object):
+        for base in event.object.bases:
+            event.object.removeBase(base)
 
 class requirementNamespace(object):
     """Used to traverse to the requirements of an object"""

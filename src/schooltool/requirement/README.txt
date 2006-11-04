@@ -101,7 +101,7 @@ program requirement (which is a base of pyprogram).
   >>> sorted(pyprogram.keys())
   [u'forloop', u'iter', u'whileloop']
 
-Now we will remove what the whileloop requirement so we don't have to change
+Now we will remove the whileloop requirement so we don't have to change
 everything in the doctest.
 
   >>> del program['whileloop']
@@ -288,7 +288,7 @@ Overriding Requirements
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Now let's have a look at a case where the more specific requirement overrides
-the a dependency requirement of one of its bases. First we create a global
+a dependency requirement of one of its bases. First we create a global
 citizenship requirement that requires a person to be "good" globally.
 
   >>> citizenship = requirement.Requirement(u'Global Citizenship')
@@ -454,6 +454,51 @@ the same:
   >>> key2 = hash(requirement.getRequirementKey(dog[u'categories']))
   >>> key1 == key2
   True
+
+
+Handling Sub Requirements
+~~~~~~~~~~~~~~~~~~~~~~~~~
+__Note__: You probably want to skip this section, if you read this file for
+          the first time. It is not important for your understanding of the
+          package.
+
+Requirements do not only keep track of what other requirements they are
+inheriting from (in the list of bases), but also the requirements that inherit
+it.  In terms of object oriented programming, Requirements keep track of both
+base classes and direct subclasses.
+
+  >>> mathreq = requirement.Requirement(u"Math Requirements")
+  >>> algebra = requirement.Requirement(u"Algebra Requirements")
+  >>> algebra.addBase(mathreq)
+
+Here we have created a general math requirement from which the algebra
+requirement inherits.  All requirements that inherit from mathreq are stored
+in a list called subs.
+
+  >>> algebra in mathreq.subs
+  True
+
+When we remove the mathreq base from algebra, then algebra should also be
+removed from mathreq.subs
+
+  >>> algebra.removeBase(mathreq)
+  >>> algebra in mathreq.subs
+  False
+
+When requirements get deleted, they should also be removed from whatever subs
+they are in.  But this only makes sense in the context of containment where we
+really do not care about objects which can not be located with a url.  Thus,
+to enable this feature, we have to register a subcriber to ObjectRemovedEvent.
+
+  >>> from zope import component
+  >>> component.provideHandler(requirement.garbageCollect)
+
+  >>> algebra.addBase(mathreq)
+  >>> highSchoolMath = requirement.Requirement("High School Math")
+  >>> highSchoolMath['algebra'] = algebra
+  >>> del highSchoolMath['algebra']
+  >>> algebra in mathreq.subs
+  False
 
 
 Requirement Adapters

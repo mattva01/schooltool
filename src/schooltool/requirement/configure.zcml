@@ -31,6 +31,11 @@
       factory=".requirement.requirementNamespace"
       />
 
+  <subscriber
+      for="zope.app.container.interfaces.IObjectRemovedEvent"
+      handler=".requirement.garbageCollect"
+      />
+
   <!-- Requirement Content -->
 
   <class class=".requirement.Requirement">
