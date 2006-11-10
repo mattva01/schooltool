@@ -174,7 +174,7 @@ We can search for the persons:
 
   >>> browser.open('http://localhost/persons/@@search.html')
   >>> sb = browser.getControl(name="form.fulltext")
-  >>> sb.value = '*d*'
+  >>> sb.value = 'delt'
   >>> browser.getControl(name="form.actions.submit").click()
 
 Check that the persons appeared on the output of the search:
@@ -228,7 +228,7 @@ There's a quick search form in the table view:
 
   >>> browser.open('http://localhost/persons')
   >>> sb = browser.getControl(name="form.fulltext")
-  >>> sb.value = '*d*'
+  >>> sb.value = 'del*'
   >>> browser.getControl(name="form.actions.submit").click()
   >>> 'delta' in browser.contents
   True

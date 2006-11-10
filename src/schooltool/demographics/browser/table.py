@@ -121,6 +121,8 @@ class SearchTable(form.FormBase, PersonTable):
         s = None
         fulltext = self.search_data['fulltext']
         if fulltext:
+            if not fulltext.endswith('*'):
+                fulltext += "*"
             s = query.Text(('demographics_catalog', 'fulltext'),
                            fulltext)
         parentName = self.search_data['parentName']
