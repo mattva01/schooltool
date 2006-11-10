@@ -282,7 +282,7 @@ Instructor looking at his student and section:
     overlay calendar:
     permissions:
     person attendance:   view
-    person calendar:
+    person calendar:     view
     person container:
     person data:         view
     person preferences:
