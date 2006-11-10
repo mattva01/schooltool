@@ -235,6 +235,11 @@ There's a quick search form in the table view:
   >>> 'foobar' in browser.contents
   False
 
+The form is not reset so your query stays visible:
+
+  >>> sb.value
+  'del*'
+
 Allow normal users to view the table of persons:
 
   >>> browser.open('http://localhost/access_control.html')

@@ -108,6 +108,10 @@ class SearchTable(form.FormBase, PersonTable):
     @form.action("submit")
     def handle_submit(self, action, data):
         self.search_data = data
+        self.form_reset = False
+
+    def setUpWidgets(self, ignore_request=False):
+        form.FormBase.setUpWidgets(self, ignore_request)
 
     def values(self):
         if not self.search_data:
