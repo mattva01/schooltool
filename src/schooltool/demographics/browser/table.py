@@ -108,6 +108,10 @@ class SearchTable(form.FormBase, PersonTable):
     @form.action("submit")
     def handle_submit(self, action, data):
         self.search_data = data
+        self.form_reset = False
+
+    def setUpWidgets(self, ignore_request=False):
+        form.FormBase.setUpWidgets(self, ignore_request)
 
     def values(self):
         if not self.search_data:
@@ -121,6 +125,8 @@ class SearchTable(form.FormBase, PersonTable):
         s = None
         fulltext = self.search_data['fulltext']
         if fulltext:
+            if not fulltext.endswith('*'):
+                fulltext += "*"
             s = query.Text(('demographics_catalog', 'fulltext'),
                            fulltext)
         parentName = self.search_data['parentName']
