@@ -276,17 +276,6 @@
       />
 
     <viewlet
-      name="open-in-ical"
-      for="schooltool.app.interfaces.ISchoolToolCalendar"
-      manager="schooltool.skin.IActionMenuManager"
-      template="templates/actionsViewlet.pt"
-      permission="schooltool.view"
-      link="calendar.ics"
-      title="Open in iCal"
-      order="20"
-      />
-
-    <viewlet
       name="timetables-csvimport"
       for="schooltool.course.interfaces.ISectionContainer"
       manager="schooltool.skin.IActionMenuManager"

@@ -8,6 +8,7 @@
   <include file="site.zcml" />
 
   <include package="zope.testbrowser.ftests" file="ftesting.zcml" />
+  <include package="schooltool.app.browser.ftests" file="ftesting.zcml" />
   <include files="package-includes/*-ftesting.zcml" />
 
 </configure>

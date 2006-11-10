@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <configure package="schooltool.skin">
+    <viewlet
+      name="open-in-ical"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.view"
+      link="calendar.ics"
+      title="Open in iCal"
+      order="20"
+      />
+  </configure>
+
+</configure>
