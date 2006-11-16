@@ -63,10 +63,11 @@ def doctest_CalendarEvent():
         >>> verifyObject(ISchoolToolCalendarEvent, event)
         True
 
-    It has a name, which is equal to its unique id, and can have a parent:
+    It has a name, which is equal to base64 of the unique id, and can
+    have a parent:
 
         >>> event.__name__
-        '*the* event'
+        'KnRoZSogZXZlbnQ='
         >>> event.__parent__ is None
         True
 

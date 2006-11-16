@@ -321,7 +321,7 @@ road, let's create a recurring event.
     ... VERSION:2.0
     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
     ... BEGIN:VEVENT
-    ... UID:sleepdaily@event
+    ... UID:lalala/fooo
     ... SUMMARY:Sleep alot
     ... DTSTART:20070205T100000
     ... DURATION:PT1H
@@ -349,6 +349,11 @@ It recurs
     >>> frog.open('http://localhost/persons/frog/calendar/2007-02-06')
     >>> 'Sleep alot' in frog.contents
     True
+
+Regression test for events with ids that have slashes in them:
+
+    >>> frog.open('http://localhost/persons/frog/calendar/2007-02-06')
+    >>> frog.getLink('Sleep alot').click()
 
     >>> import re
     >>> frog.open('http://localhost/persons/frog/calendar/2007-w6')
@@ -421,7 +426,7 @@ Let's add a calendar through iCalendar PUT view (so we would know the event id):
 Let's see what the breadcrumbs are for this event:
 
     >>> frog.open('http://localhost/'
-    ...           'persons/frog/calendar/dummy-uid/edit.html')
+    ...           'persons/frog/calendar/ZHVtbXktdWlk/edit.html')
     >>> print analyze.queryHTML('//div[@class="breadcrumbs"]',
     ...                         frog.contents)[0].replace(u'\u00bb'.encode('UTF-8'), '&#187;')
     <div class="breadcrumbs">
@@ -433,13 +438,13 @@ Let's see what the breadcrumbs are for this event:
       &#187;
       <a href="http://localhost/persons/frog/calendar">Calendar</a>
       &#187;
-      <a href="http://localhost/persons/frog/calendar/dummy-uid/edit.html">Important event</a>
+      <a href="http://localhost/persons/frog/calendar/ZHVtbXktdWlk/edit.html">Important event</a>
     </div>
 
 Let Frog modify this event:
 
     >>> frog.open('http://localhost/'
-    ...           'persons/frog/calendar/dummy-uid/edit.html?date=2005-02-04')
+    ...           'persons/frog/calendar/ZHVtbXktdWlk/edit.html?date=2005-02-04')
     >>> frog.getControl('Title').value = 'Sleeping'
     >>> frog.getControl('Date').value = '2005-02-03'
     >>> frog.getControl('Time').value = '01:00'
@@ -450,7 +455,7 @@ Let's check the new values.  Also, notice that the date value from the
 request got into a hidden field:
 
     >>> frog.open('http://localhost/'
-    ...           'persons/frog/calendar/dummy-uid/edit.html')
+    ...           'persons/frog/calendar/ZHVtbXktdWlk/edit.html')
     >>> 'Sleeping' in frog.contents
     True
     >>> '2005-02-03' in frog.contents
@@ -463,7 +468,7 @@ request got into a hidden field:
 Let's enter some invalid values:
 
     >>> frog.open('http://localhost/'
-    ...           'persons/frog/calendar/dummy-uid/edit.html?date=2005-02-04')
+    ...           'persons/frog/calendar/ZHVtbXktdWlk/edit.html?date=2005-02-04')
 
     >>> frog.getControl('Date').value = '20050203'
     >>> frog.getControl('Time').value = '0100'
@@ -487,7 +492,7 @@ Let's enter some invalid values:
 If we cancel the form - we should be redirected to the day "date" tells us:
 
     >>> frog.open('http://localhost/'
-    ...           'persons/frog/calendar/dummy-uid/edit.html?date=2005-02-07')
+    ...           'persons/frog/calendar/ZHVtbXktdWlk/edit.html?date=2005-02-07')
     >>> frog.getControl('Cancel').click()
 
     # XXX: This test says nothing; in fact it shows that this feature does not
@@ -498,7 +503,7 @@ If we cancel the form - we should be redirected to the day "date" tells us:
 Let's change the recurrence of the event a bit more this time:
 
     >>> frog.open('http://localhost/'
-    ...           'persons/frog/calendar/dummy-uid/edit.html')
+    ...           'persons/frog/calendar/ZHVtbXktdWlk/edit.html')
 
     >>> frog.getControl('Recurring').click()
     >>> frog.getControl(name='field.recurrence_type').value = ['monthly']
@@ -511,7 +516,7 @@ Let's change the recurrence of the event a bit more this time:
 Let's check the new values:
 
     >>> frog.open('http://localhost/'
-    ...           'persons/frog/calendar/dummy-uid/edit.html')
+    ...           'persons/frog/calendar/ZHVtbXktdWlk/edit.html')
 
     >>> frog.getControl('Recurring').selected
     True

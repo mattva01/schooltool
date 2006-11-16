@@ -181,7 +181,7 @@ Frog should see the event in the resource calendar too:
     >>> print frog.contents
     <BLANKLINE>
     ...
-    <a href="http://localhost/resources/fish/calendar/dummy-uid"
+    <a href="http://localhost/resources/fish/calendar/ZHVtbXktdWlk"
        title="Test event">
       Test event
       <span class="start-end">
@@ -194,7 +194,7 @@ Frog should see the event in the resource calendar too:
       <h6 class="booked-resource-header"
                style="background: #7590ae">
         <a style="color: #000;"
-           href="...dummy-uid/booking.html?date=2005-02-04">Booked by</a></h6>
+           href="...ZHVtbXktdWlk/booking.html?date=2005-02-04">Booked by</a></h6>
       <a href="http://localhost/persons/frog">Frog</a>
     </div>
     ...
@@ -269,10 +269,10 @@ if Book Resources is checked:
 Editing view should have a link to its booking view:
 
     >>> frog.open(
-    ...   'http://localhost/persons/frog/calendar/dummy-uid/edit.html')
+    ...   'http://localhost/persons/frog/calendar/ZHVtbXktdWlk/edit.html')
     >>> frog.getLink('Book resources')
     <Link text='Book resources'
-          url='.../frog/calendar/dummy-uid/booking.html'>
+          url='.../frog/calendar/ZHVtbXktdWlk/booking.html'>
 
 Let's book the mud again (Regression test for 266, deletion of events that book
 resources should remove events from resource calendars):
@@ -408,7 +408,7 @@ If we book some resources for the second event,
 
     >>> frog.handleErrors = False
     >>> frog.open(
-    ...     'http://localhost/persons/frog/calendar/dummy-uid2')
+    ...     'http://localhost/persons/frog/calendar/ZHVtbXktdWlkMg%3D%3D')
     >>> frog.getLink('edit resources').click()
     >>> frog.getControl('mud').selected = True
     >>> frog.getControl('fish').selected = True
@@ -417,7 +417,7 @@ If we book some resources for the second event,
 we should see the conflicts when booking the for the events overlapping
 "Test event1":
 
-    >>> frog.open('http://localhost/persons/frog/calendar/dummy-uid1')
+    >>> frog.open('http://localhost/persons/frog/calendar/ZHVtbXktdWlkMQ%3D%3D')
     >>> frog.getLink('edit resources').click()
     >>> print frog.contents
     <BLANKLINE>
@@ -434,7 +434,7 @@ we should see the conflicts when booking the for the events overlapping
         <legend>Conflicting events</legend>
         <div>
           <div>
-            <a href="http://.../calendar/dummy-uid2/edit.html">Test event2</a>
+            <a href="http://.../calendar/ZHVtbXktdWlkMg%3D%3D/edit.html">Test event2</a>
               (10:00 -
               11:00)
                <a href="http://.../calendar/2005-02-04/">Frog</a>
@@ -451,7 +451,7 @@ we should see the conflicts when booking the for the events overlapping
         <legend>Conflicting events</legend>
         <div>
           <div>
-            <a href="http://.../calendar/dummy-uid2/edit.html">Test event2</a>
+            <a href="http://.../calendar/ZHVtbXktdWlkMg%3D%3D/edit.html">Test event2</a>
               (10:00 -
               11:00)
                <a href="http://.../calendar/2005-02-04/">Frog</a>
@@ -466,7 +466,7 @@ we should see the conflicts when booking the for the events overlapping
 
 Unless we are looking at "Test event2" itself:
 
-    >>> frog.open('http://localhost/persons/frog/calendar/dummy-uid2')
+    >>> frog.open('http://localhost/persons/frog/calendar/ZHVtbXktdWlkMg%3D%3D')
     >>> frog.getLink('edit resources').click()
     >>> print frog.contents
     <BLANKLINE>
@@ -538,7 +538,7 @@ And then stork books mud.
     >>> stork.getControl('Log in').click()
 
     >>> stork.open(
-    ...     'http://localhost/persons/stork/calendar/smartie-uid')
+    ...     'http://localhost/persons/stork/calendar/c21hcnRpZS11aWQ%3D')
     >>> stork.getLink('edit resources').click()
     >>> stork.getControl('mud').selected = True
     >>> stork.getControl('Book').click()
@@ -551,7 +551,7 @@ Frog should still be able to see the resource's calendar
     <BLANKLINE>
     ...
     <h6 ...>
-      <a href="http://localhost/resources/mud/calendar/smartie-uid"
+      <a href="http://localhost/resources/mud/calendar/c21hcnRpZS11aWQ%3D"
          title="Mud bath">
         Mud bath
       ...
@@ -574,7 +574,7 @@ Stork should still be able to see his calendar:
     <BLANKLINE>
     ...
     <h6 ...>
-      <a href="http://localhost/persons/stork/calendar/smartie-uid"
+      <a href="http://localhost/persons/stork/calendar/c21hcnRpZS11aWQ%3D"
          title="Mud bath">
         Mud bath
       ...
