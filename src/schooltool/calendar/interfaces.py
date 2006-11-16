@@ -22,19 +22,7 @@ Interface definitions for SchoolBell calendars.
 There are two interfaces for calendars: `ICalendar` for read-only calendars,
 and `IEditCalendar` for read-write calendars.
 
-Semantically calendars are unordered sets of events.  Events themselves
-(`ICalendarEvent`) are immutable and comparable.  If you have an editable
-calendar, and want to change an event in it, you need to create a new event
-object and put it into the calendar:
-
-    calendar.removeEvent(event)
-    replacement_event = event.replace(title=u"New title", ...)
-    calendar.addEvent(replacement_event)
-
-XXX mg: Why not make calendar events mutable?
-
-Calendar events have globally unique IDs.  If you are changing an event in the
-fashion demonstrated above, you should preserve its unique_id attribute.
+Semantically calendars are unordered sets of events.
 
 $Id$
 """
@@ -274,7 +262,7 @@ class IMonthlyRecurrenceRule(IRecurrenceRule):
 class ICalendarEvent(Interface):
     """A calendar event.
 
-    Calendar events are immutable and comparable.
+    Calendar events are comparable.
 
     Events are compared in chronological order, so lists of events can be
     sorted.  If two events start at the same time, they are ordered according
@@ -285,13 +273,6 @@ class ICalendarEvent(Interface):
     and they will not be equal if any their attributes are different.
     Semantically these objects are different versions of the same calendar
     event.
-
-    If you need to modify a calendar event in a calendar, you should do
-    the following:
-
-        calendar.removeEvent(event)
-        replacement_event = event.replace(title=u"New title", ...)
-        calendar.addEvent(replacement_event)
 
     """
 
@@ -344,19 +325,6 @@ class ICalendarEvent(Interface):
     allday = Bool(
         title=u"All Day Event",
         required=False)
-
-    def replace(**kw):
-        """Return a calendar event with new specified fields.
-
-        This is useful for editing calendars.  For example, to change the
-        title and location of an event in a calendar, you would do
-
-            calendar.removeEvent(event)
-            replacement_event = event.replace(title=u"New title",
-                                              location=None)
-            calendar.addEvent(replacement_event)
-
-        """
 
     def __eq__(other):
         """See if self == other."""
@@ -428,17 +396,3 @@ class IExpandedCalendarEvent(ICalendarEvent):
         description=u"""
         The recurring event that generated this occurrence.
         """)
-
-    def replace(**kw):
-        """Return a calendar event with new specified fields.
-
-            expanded_event.replace(**kw)
-
-        is (almost) equivalent to
-
-            expanded_event.original.replace(**kw)
-
-        In other words, the returned event will not provide
-        IExpandedCalendarEvent and its dtstart attribute will be the date and
-        time of the original event rather than this specific occurrence.
-        """

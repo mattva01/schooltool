@@ -23,6 +23,7 @@ $Id$
 """
 
 import urllib
+import base64
 import calendar
 from datetime import datetime, date, time, timedelta
 from sets import Set
@@ -169,9 +170,14 @@ class CalendarTraverser(object):
             return view
 
         try:
-            return self.context.find(name)
-        except KeyError:
+            event_id = base64.decodestring(name)
+        except:
             raise NotFound(self.context, name, request)
+
+        try:
+            return self.context.find(event_id)
+        except KeyError:
+            raise NotFound(self.context, event_id, request)
 
     def getHTMLViewByDate(self, request, name):
         """Get HTML view name from URL component."""
@@ -304,7 +310,7 @@ class EventForDisplay(object):
         if self.context.__parent__ is None:
             return None
         return '%s/%s' % (zapi.absoluteURL(self.source_calendar, self.request),
-                          self.unique_id)
+                          urllib.quote(self.__name__))
 
     def editLink(self):
         """Return the URL where you can edit this event.
@@ -2023,7 +2029,8 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
     def add(self, event):
         """Add the event to a calendar."""
         self.context.addEvent(event)
-        uid = self._event_uid = event.unique_id
+        uid = event.unique_id
+        self._event_name = event.__name__
         session_data = ISession(self.request)['schooltool.calendar']
         session_data.setdefault('added_event_uids', set()).add(uid)
         return event
@@ -2043,7 +2050,7 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
         """Return the URL to be displayed after the add operation."""
         if "field.book" in self.request:
             url = absoluteURL(self.context, self.request)
-            return '%s/%s/booking.html' % (url, self._event_uid)
+            return '%s/%s/booking.html' % (url, self._event_name)
         else:
             return absoluteURL(self.context, self.request)
 

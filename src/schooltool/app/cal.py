@@ -21,6 +21,7 @@ SchoolBell calendaring objects.
 
 $Id$
 """
+import base64
 
 from persistent.dict import PersistentDict
 from persistent import Persistent
@@ -56,7 +57,7 @@ class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
     def __init__(self, *args, **kwargs):
         resources = kwargs.pop('resources', ())
         SimpleCalendarEvent.__init__(self, *args, **kwargs)
-        self.__name__ = self.unique_id
+        self.__name__ = base64.encodestring(self.unique_id).replace('\n', '')
         self._resources = ()
         for resource in resources:
             self.bookResource(resource)

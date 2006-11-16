@@ -110,7 +110,7 @@ $ ./bin/test -ufv --testschooltool
 
 Then you can start the server:
 
-$ ./bin/schooltool-server
+$ ./bin/schooltool
 
 
 Building SchoolTool from a subversion checkout

@@ -267,50 +267,6 @@ class CalendarEventMixin(object):
             # At least one occurrence exists.
             return True
 
-    def replace(self, **kw):
-        r"""Return a copy of this event with some attributes replaced.
-
-            >>> from schooltool.calendar.interfaces import ICalendarEvent
-            >>> from zope.schema import getFieldNames
-            >>> all_attrs = getFieldNames(ICalendarEvent)
-            >>> class Event(CalendarEventMixin):
-            ...     def __init__(self, **kw):
-            ...         for attr in all_attrs:
-            ...             setattr(self, attr, '%s_default_value' % attr)
-            ...         for attr, value in kw.items():
-            ...             setattr(self, attr, value)
-
-            >>> from datetime import datetime, timedelta
-            >>> e1 = Event(dtstart=datetime(2004, 12, 15, 18, 57,tzinfo=utc),
-            ...            duration=timedelta(minutes=15),
-            ...            title='Work on schooltool.calendar.simple',
-            ...            location=None)
-
-            >>> e2 = e1.replace(location=u'Matar\u00f3')
-            >>> e2 == e1
-            False
-            >>> e2.title == e1.title
-            True
-            >>> e2.location
-            u'Matar\xf3'
-
-            >>> e3 = e2.replace(location=None)
-            >>> e3 == e1
-            True
-
-        """
-        # The import is here to avoid cyclic dependencies
-        from schooltool.calendar.simple import SimpleCalendarEvent
-        for attr in ['dtstart', 'duration', 'title', 'description', 'location',
-                     'unique_id', 'recurrence', 'allday']:
-            kw.setdefault(attr, getattr(self, attr))
-        # We explicitly return SimpleCalendarEvent instead of using
-        # self.__class__ here because self.class might be unsuitable.  E.g.
-        # if we have a calendar event class that inherits from SQLObject,
-        # instantiating new instances will implicitly create new rows in
-        # a relational database table.
-        return SimpleCalendarEvent(**kw)
-
     def expand(self, first, last):
         """Return an iterator over all expanded events in a given time period.
 

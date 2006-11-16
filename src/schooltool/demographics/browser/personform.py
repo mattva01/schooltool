@@ -34,6 +34,7 @@ from zope.schema.interfaces import ITitledTokenizedTerm
 from zope.app.form.browser.interfaces import ITerms
 from zope.publisher.browser import BrowserView
 from zope.component import getUtility
+from zope.exceptions.interfaces import UserError
 
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.skin.form import AttributeEditForm
@@ -164,10 +165,10 @@ class NameInfoEdit(PersonEditForm):
             data['photo'] = self.context.photo
         super(NameInfoEdit, self).edit_action(action, data)
 
-        
+
 class NameInfoDisplay(PersonDisplayForm):
     template = ViewPageTemplateFile("nameinfo_view.pt")
-    
+
     def title(self):
         return _(u'Change name')
 
@@ -282,15 +283,23 @@ class PersonAddView(BasicForm):
     """Like schooltool.app.person's addform, but add last_name field.
     """
     template = ViewPageTemplateFile('person_add.pt')
-    
+
     form_fields = form.Fields(IPersonAddForm, render_context=False)
     form_fields['password'].custom_widget = PasswordConfirmationWidget
-    
+
     @form.action(_("Apply"))
     def handle_apply_action(self, action, data):
         if data['username'] in self.context:
             self.status = _("This username is already used!")
             return None
+
+        try:
+            from zope.app.container.interfaces import INameChooser
+            INameChooser(self.context).checkName(data['username'], None)
+        except UserError:
+            self.status = _("Names cannot begin with '+' or '@' or contain '/'")
+            return None
+
         person = self._factory(data['username'], data['full_name'])
         if data['password']:
             person.setPassword(data['password'])
@@ -331,7 +340,7 @@ class PersonAddView(BasicForm):
         name = person.username
         self.context[name] = person
         return person
-    
+
 class TeachersTerm(object):
     """A term for displaying a teacher.
     """

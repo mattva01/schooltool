@@ -104,6 +104,7 @@ class EventStub(object):
         self.owner = owner
         self.resources = resources
         self.unique_id = unique_id
+        self.__name__ = unique_id[::-1]
 
 
 def doctest_ToCalendarTraverser():
@@ -286,7 +287,9 @@ def doctest_CalendarTraverser():
         ...                       timedelta(hours=2), "Some event",
         ...                       unique_id="it's me!")
         >>> cal.addEvent(event)
-        >>> traverser.publishTraverse(request, "it's me!") is event
+        >>> event.__name__
+        'aXQncyBtZSE='
+        >>> traverser.publishTraverse(request, 'aXQncyBtZSE=') is event
         True
 
     """
@@ -471,7 +474,7 @@ def doctest_EventForDisplay_viewLink():
         >>> calendar.addEvent(event)
         >>> e = EventForDisplay(event, request, color1, color2, calendar, utc)
         >>> print e.viewLink()
-        http://127.0.0.1/calendar/xyzzy
+        http://127.0.0.1/calendar/eHl6enk%3D
 
     """
 
@@ -500,14 +503,14 @@ def doctest_EventForDisplay_editLink():
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> e = EventForDisplay(event, request, color1, color2, calendar, utc)
         >>> print e.editLink()
-        http://127.0.0.1/calendar/xyzzy/edit.html?date=2005-09-26
+        http://127.0.0.1/calendar/eHl6enk%3D/edit.html?date=2005-09-26
 
     Note that if you're in a different time zone, the date may be different
 
         >>> e = EventForDisplay(event, request, color1, color2, calendar,
         ...                     timezone('Asia/Tokyo'))
         >>> print e.editLink()
-        http://127.0.0.1/calendar/xyzzy/edit.html?date=2005-09-27
+        http://127.0.0.1/calendar/eHl6enk%3D/edit.html?date=2005-09-27
 
     """
 
@@ -570,14 +573,14 @@ def doctest_EventForDisplay_bookingLink():
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> e = EventForDisplay(event, request, color1, color2, calendar, utc)
         >>> print e.bookingLink()
-        http://127.0.0.1/calendar/xyzzy/booking.html?date=2005-12-12
+        http://127.0.0.1/calendar/eHl6enk%3D/booking.html?date=2005-12-12
 
     Note that if you're in a different time zone, the date may be different
 
         >>> e = EventForDisplay(event, request, color1, color2, calendar,
         ...                     timezone('Asia/Tokyo'))
         >>> print e.bookingLink()
-        http://127.0.0.1/calendar/xyzzy/booking.html?date=2005-12-13
+        http://127.0.0.1/calendar/eHl6enk%3D/booking.html?date=2005-12-13
 
     """
 
@@ -3173,7 +3176,7 @@ def doctest_TestCalendarEventBookingView():
     And you have been redirected back to the calendar:
 
         >>> request.response.getHeader('Location')
-        'http://127.0.0.1/persons/ignas/calendar/ev1/@@edit.html'
+        'http://127.0.0.1/persons/ignas/calendar/ZXYx/@@edit.html'
 
     The view also follows PersonPreferences timeformat and dateformat settings.
     To demonstrate these we need to setup PersonPreferences:
