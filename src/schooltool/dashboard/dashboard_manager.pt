@@ -9,13 +9,9 @@
     <td tal:repeat="column view/table" valign="top"
         style="width: 50%; padding: 1em;">
       <tal:block repeat="category column">
-        <!--<fieldset tal:condition="category">
-          <legend tal:content="category/title">Management</legend>
-          <tal:block replace="structure category/render" />
-        </fieldset>-->
-          <h5 tal:content="category/title"
-              tal:condition="category/title">Management</h5>
-          <tal:block replace="structure category/render" />
+          <h5 tal:content="category/title">Management</h5>
+          <tal:block replace="structure category/content|nothing" />
+          <tal:block replace="category/error|nothing" />
       </tal:block>
     </td>
   </tr>
