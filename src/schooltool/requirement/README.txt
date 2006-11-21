@@ -418,6 +418,35 @@ inherited requirement wrappers for every level of inheritance:
   >>> hound[u'categories']
   InheritedRequirement(InheritedRequirement(Requirement(u'Categories')))
 
+Another complicated case is when requirements are added to a base using keys
+that already exist. This is sort of the reverse of overriding a
+requirement.
+
+  >>> courseReq = requirement.Requirement(u'Course Requirements')
+  >>> secReq = requirement.Requirement(u'Section Requirements')
+  >>> secReq.addBase(courseReq)
+
+Normally we would add requirements to the group of course requiremnts, then
+later override or add to these requirments as needed in the group of section
+requirements. Instead we will add to the section requirements first, then add
+requirements using the same keys to the course grouping.  The original section
+requirements should then inherit from the course requirements.
+
+  >>> secReq[u'behavior'] = requirement.Requirement(u'Do not be tardy')
+  >>> secReq[u'behavior'].bases
+  []
+  >>> courseReq[u'behavior'] = requirement.Requirement(u'Good Behavior')
+
+Had we done this requirements in the opposite order, then the 'Do not
+be tardy' requirements would inherit from the 'Good Behavior' requirements.
+We want to have this behavior regardless of the order in which we create the
+requirements.
+
+  >>> secReq[u'behavior'].bases
+  [Requirement(u'Good Behavior')]
+  >>> secReq.keys()
+  [u'behavior']
+
 A simple helper function is used to unwrap requirements:
 
   >>> requirement.unwrapRequirement(mamal[u'categories'])
