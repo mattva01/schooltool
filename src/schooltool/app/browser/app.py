@@ -240,21 +240,26 @@ class RelationshipViewBase(BrowserView):
     def filter(self, list):
         return self.filter_widget.filter(list)
 
-    def columns(self):
-        return []
+    def columnsForAvailable(self):
+        return [GetterLabelColumn(prefix="add_item",
+                                  name='title',
+                                  title=u"Title",
+                                  getter=lambda i, f: i.title,
+                                  subsort=True)]
+
+    def columnsForSelected(self):
+        return [GetterLabelColumn(prefix="remove_item",
+                                  name='title',
+                                  title=u"Title",
+                                  getter=lambda i, f: i.title,
+                                  subsort=True)]
 
     def sortOn(self):
         return (("title", False),)
 
     def renderAvailableTable(self):
-        prefix = "add_item"
-        columns = [CheckboxColumn(prefix=prefix, name='add', title=u''),
-                   GetterLabelColumn(prefix=prefix,
-                                     name='title',
-                                     title=u"Title",
-                                     getter=lambda i, f: i.title,
-                                     subsort=True)]
-        columns.extend(self.columns())
+        columns = [CheckboxColumn(prefix="add_item", name='add', title=u'')]
+        columns.extend(self.columnsForAvailable())
         formatter = table.FormFullFormatter(
             self.context, self.request, self.filter(self.getAvailableItems()),
             columns=columns,
@@ -265,14 +270,8 @@ class RelationshipViewBase(BrowserView):
         return formatter()
 
     def renderSelectedTable(self):
-        prefix = "remove_item"
-        columns = [CheckboxColumn(prefix=prefix, name='remove', title=u''),
-                   GetterLabelColumn(prefix=prefix,
-                                     name='title',
-                                     title=u"Title",
-                                     getter=lambda i, f: i.title,
-                                     subsort=True)]
-        columns.extend(self.columns())
+        columns = [CheckboxColumn(prefix="remove_item", name='remove', title=u'')]
+        columns.extend(self.columnsForSelected())
         formatter = table.FormFullFormatter(
             self.context, self.request, self.getSelectedItems(),
             columns=columns,
