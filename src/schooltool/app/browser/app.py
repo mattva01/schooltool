@@ -24,6 +24,10 @@ $Id$
 
 import itertools
 
+from zc.table import column
+from zc.table import table
+from zc.table.column import GetterColumn
+from zc.table.interfaces import ISortableColumn
 from zope.schema import getFieldNamesInOrder
 from zope.interface import implements
 from zope.security.checker import canAccess
@@ -149,6 +153,46 @@ class BaseEditView(EditView):
             return status
 
 
+class CheckboxColumn(column.Column):
+    """A columns with a checkbox
+
+    The name and id of the checkbox are composed of the prefix keyword
+    argument and __name__ of the item being displayed.
+    """
+
+    def __init__(self, prefix, name, title):
+        super(CheckboxColumn, self).__init__(name=name, title=title)
+        self.prefix = prefix
+
+    def renderCell(self, item, formatter):
+        id = "%s.%s" % (self.prefix, item.__name__)
+        return '<input type="checkbox" name="%s" id="%s" />' % (id, id)
+
+
+class GetterLabelColumn(GetterColumn):
+    """A getter column with label wrapped around it
+
+    The id of the input the label should be for is composed of the
+    prefix keyword argument and __name__ of the item being displayed.
+    """
+
+    implements(ISortableColumn)
+
+    def __init__(self, **kwargs):
+        self.prefix = kwargs.pop('prefix', "")
+        super(GetterLabelColumn, self).__init__(**kwargs)
+
+    def renderCell(self, item, formatter):
+        if self.prefix:
+            prefix = self.prefix + "."
+        else:
+            prefix = self.prefix
+        content = super(GetterLabelColumn, self).renderCell(item, formatter)
+        return '<label for="%s%s">%s</label>' % (prefix,
+                                                 item.__name__,
+                                                 content)
+
+
 class RelationshipViewBase(BrowserView):
     """A base class for views that add/remove members from a relationship."""
 
@@ -189,12 +233,53 @@ class RelationshipViewBase(BrowserView):
         raise NotImplementedError("Subclasses should override this method.")
 
     def updateBatch(self, lst):
-        start = int(self.request.get('batch_start', 0))
-        size = int(self.request.get('batch_size', 10))
-        self.batch = Batch(lst, start, size, sort_by='title')
+        self.batch_start = int(self.request.get('batch_start', 0))
+        self.batch_size = int(self.request.get('batch_size', 10))
+        self.batch = Batch(lst, self.batch_start, self.batch_size, sort_by='title')
 
     def filter(self, list):
         return self.filter_widget.filter(list)
+
+    def columns(self):
+        return []
+
+    def sortOn(self):
+        return (("title", False),)
+
+    def renderAvailableTable(self):
+        prefix = "add_item"
+        columns = [CheckboxColumn(prefix=prefix, name='add', title=u''),
+                   GetterLabelColumn(prefix=prefix,
+                                     name='title',
+                                     title=u"Title",
+                                     getter=lambda i, f: i.title,
+                                     subsort=True)]
+        columns.extend(self.columns())
+        formatter = table.StandaloneFullFormatter(
+            self.context, self.request, self.filter(self.getAvailableItems()),
+            columns=columns,
+            batch_start=self.batch_start, batch_size=self.batch_size,
+            sort_on=self.sortOn(),
+            prefix="available")
+        formatter.cssClasses['table'] = 'data'
+        return formatter()
+
+    def renderSelectedTable(self):
+        prefix = "remove_item"
+        columns = [CheckboxColumn(prefix=prefix, name='remove', title=u''),
+                   GetterLabelColumn(prefix=prefix,
+                                     name='title',
+                                     title=u"Title",
+                                     getter=lambda i, f: i.title,
+                                     subsort=True)]
+        columns.extend(self.columns())
+        formatter = table.StandaloneFullFormatter(
+            self.context, self.request, self.getSelectedItems(),
+            columns=columns,
+            sort_on=self.sortOn(),
+            prefix="selected")
+        formatter.cssClasses['table'] = 'data'
+        return formatter()
 
     def update(self):
         context_url = zapi.absoluteURL(self.context, self.request)

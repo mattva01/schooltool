@@ -7,18 +7,12 @@
 <metal:block metal:fill-slot="body"
              tal:define="batch view/batch">
 
-<form method="post" tal:attributes="action request/URL" class="standalone">
+<form method="get" tal:attributes="action request/URL" class="standalone">
 <h3 i18n:translate="" tal:content="view/title" />
 <fieldset tal:define="items view/getSelectedItems">
   <tal:if condition="items">
     <legend i18n:translate="" tal:content="view/current_title" />
-    <div tal:repeat="item items/sortby:title">
-      <label>
-        <input tal:attributes="name string:remove_item.${item/__name__}"
-          type="checkbox" />
-        <span tal:replace="item/title" />
-      </label>
-    </div>
+    <tal:block replace="structure view/renderSelectedTable" />
     <div class="controls">
       <input type="submit" class="button-ok" name="REMOVE_ITEMS"
         value="Remove"
@@ -44,13 +38,7 @@
       </tal:if>
     </tal:if>
     <tal:block replace="structure view/filter_widget/render" />
-    <div tal:repeat="item batch" tal:condition="batch">
-      <label>
-        <input tal:attributes="name string:add_item.${item/__name__}"
-               type="checkbox" />
-        <span tal:replace="item/title" />
-      </label>
-    </div>
+    <tal:block replace="structure view/renderAvailableTable" />
     <div class="controls">
       <input type="submit" class="button-ok" name="ADD_ITEMS"
              value="Add" tal:condition="batch"

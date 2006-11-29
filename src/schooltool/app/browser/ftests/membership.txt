@@ -80,9 +80,10 @@ Let's go to a group, and look at its members.
     True
 
     # Only shows first ten persons
-    >>> checkbox = '<input type="checkbox" name="add_item.person%.3i" />'
+    >>> checkbox = '<input type="checkbox" name="%s" id="%s" />'
     >>> for i in [1, 3, 4, 8, 9, 10, 11, 13, 14, 15]:
-    ...     if checkbox %i not in manager.contents:
+    ...     id = "add_item.person%.3i" % i
+    ...     if checkbox % (id, id) not in manager.contents:
     ...        print checkbox %i
 
 Let's add a few members.
