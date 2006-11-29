@@ -7,7 +7,7 @@
 <metal:block metal:fill-slot="body"
              tal:define="batch view/batch">
 
-<form method="get" tal:attributes="action request/URL" class="standalone">
+<form method="post" tal:attributes="action request/URL" class="standalone">
 <h3 i18n:translate="" tal:content="view/title" />
 <fieldset tal:define="items view/getSelectedItems">
   <tal:if condition="items">

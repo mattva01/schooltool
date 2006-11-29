@@ -255,7 +255,7 @@ class RelationshipViewBase(BrowserView):
                                      getter=lambda i, f: i.title,
                                      subsort=True)]
         columns.extend(self.columns())
-        formatter = table.StandaloneFullFormatter(
+        formatter = table.FormFullFormatter(
             self.context, self.request, self.filter(self.getAvailableItems()),
             columns=columns,
             batch_start=self.batch_start, batch_size=self.batch_size,
@@ -273,7 +273,7 @@ class RelationshipViewBase(BrowserView):
                                      getter=lambda i, f: i.title,
                                      subsort=True)]
         columns.extend(self.columns())
-        formatter = table.StandaloneFullFormatter(
+        formatter = table.FormFullFormatter(
             self.context, self.request, self.getSelectedItems(),
             columns=columns,
             sort_on=self.sortOn(),
