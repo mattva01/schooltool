@@ -168,9 +168,9 @@ def doctest_PersonCSVImporter():
     Make sure we have the PersonFactory utility available:
 
         >>> from zope.component import provideUtility
-        >>> from schooltool.person.utility import PersonFactory
+        >>> from schooltool.person.utility import PersonFactoryUtility
         >>> from schooltool.person.interfaces import IPersonFactory
-        >>> provideUtility(PersonFactory(), IPersonFactory)
+        >>> provideUtility(PersonFactoryUtility(), IPersonFactory)
 
     Create a person container and an importer
 

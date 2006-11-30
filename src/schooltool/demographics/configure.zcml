@@ -23,10 +23,10 @@
         set_attributes="modified" />
   </class>
 
-  <subscriber
-      for="schooltool.app.interfaces.ISchoolToolApplication zope.app.container.interfaces.IObjectAddedEvent"
-      handler=".utility.personFactorySetUpSubscriber"
-      />
+  <utility
+     factory=".utility.PersonFactoryUtility"
+     provides="schooltool.person.interfaces.IPersonFactory"
+     />
 
   <subscriber
     for="schooltool.person.interfaces.IPerson zope.lifecycleevent.interfaces.IObjectModifiedEvent"
@@ -115,5 +115,5 @@
   <adapter
       factory=".utility.Search"
       />
-    
+
 </configure>

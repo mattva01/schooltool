@@ -17,31 +17,36 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Upgrade SchoolTool to generation 17.
+Upgrade SchoolTool to generation 20.
 
-Install catalog and reindex persons.
+Remove local IPersonFactory utility.
 
-$Id: evolve17.py 6212 2006-06-08 13:01:04Z vidas $
+$Id$
 """
 
-from zope.app.generations.utility import findObjectsProviding
 from zope.app.publication.zopepublication import ZopePublication
-from zope.lifecycleevent import ObjectModifiedEvent
-from zope.app.container.contained import ObjectAddedEvent
-from zope import event
+from zope.app.generations.utility import findObjectsProviding
 from zope.app.component.hooks import setSite
-from zope.app.intid import addIntIdSubscriber
+from zope.app import zapi
+from zope.component import queryUtility
+from zope.app.container.interfaces import IContained
 
-from schooltool.demographics.utility import catalogSetUpSubscriber
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.person.interfaces import IPersonFactory
+
 
 def evolve(context):
     root = context.connection.root()[ZopePublication.root_name]
     for app in findObjectsProviding(root, ISchoolToolApplication):
-        # install the utilities
-        catalogSetUpSubscriber(app, None)
-        # catalog all persons
         setSite(app)
-        for person in app['persons'].values():
-            person.nameinfo.last_name = 'Last name unknown'
-            addIntIdSubscriber(person, None)
+        manager = app.getSiteManager()
+        default = zapi.traverse(app, '++etc++site/default')
+
+        local_utility = queryUtility(IPersonFactory, default=None)
+        if (local_utility is not None and
+            IContained.providedBy(local_utility) and
+            local_utility.__parent__ is default):
+            name = local_utility.__name__
+            manager.unregisterUtility(local_utility, IPersonFactory)
+            del default[name]
+        setSite(None)
