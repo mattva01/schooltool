@@ -40,7 +40,7 @@ from zope.i18n import translate
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.attendance.interfaces import IAttendancePreferences
-from schooltool.term.daterange import DateRange
+from schooltool.common import DateRange
 from schooltool.timetable import ICompositeTimetables
 from schooltool.timetable import TimetableActivity
 from schooltool.timetable.model import TimetableCalendarEvent

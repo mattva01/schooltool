@@ -35,19 +35,17 @@ from schooltool.sampledata.name import NameGenerator
 from schooltool.demographics.person import Person
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.cal import CalendarEvent
-
-
-# XXX: Eek, st.person depends on st.term only because of this import!
-from schooltool.term.daterange import DateRange
+from schooltool.common import DateRange
 
 class ChoiceGenerator(object):
     def __init__(self, seed, choices):
         self.random = random.Random()
         self.random.seed(seed)
         self.choices = choices
-        
+
     def generate(self):
         return self.random.choice(self.choices)
+
 
 class SampleStudents(object):
 
@@ -85,13 +83,14 @@ class SampleStudents(object):
             # group.
             if stud_group:
                 removeSecurityProxy(students.members).add(person)
-                
+
             person.demographics.gender = gendergen.generate()
             person.schooldata.id = person_id
             person.parent1.name = namegen.generate()[2]
             person.parent2.name = namegen.generate()[2]
             app['persons'][person_id] = person
-            
+
+
 class SampleTeachers(object):
     implements(ISampleDataPlugin)
 
@@ -108,6 +107,8 @@ class SampleTeachers(object):
             first_name, last_name, full_name = namegen.generate()
             person_id = 'teacher%03d' % i
             person = Person(person_id, title=full_name)
+            person.nameinfo.first_name = first_name
+            person.nameinfo.last_name = last_name
             person.setPassword(person_id)
             # Without removeSecurityProxy we can't add members a
             # group.

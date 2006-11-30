@@ -29,34 +29,7 @@ from zope.app.container.interfaces import IContainer, IContained
 from zope.location.interfaces import ILocation
 
 from schooltool import SchoolToolMessage as _
-
-
-class IDateRange(zope.interface.Interface):
-    """A range of dates (inclusive).
-
-    If r is an IDateRange, then the following invariant holds:
-    r.first <= r.last
-
-    Note that empty date ranges cannot be represented.
-    """
-
-    first = zope.schema.Date(
-        title=u"The first day of the period of time covered.")
-
-    last = zope.schema.Date(
-        title=u"The last day of the period covered.")
-
-    def __iter__():
-        """Iterate over all dates in the range from the first to the last."""
-
-    def __contains__(date):
-        """Return True if the date is within the range, otherwise False.
-
-        Raises a TypeError if date is not a datetime.date.
-        """
-
-    def __len__():
-        """Return the number of dates covered by the range."""
+from schooltool.common import IDateRange
 
 
 class ITerm(IDateRange, IContained):
