@@ -218,8 +218,8 @@ def doctest_setup():
 
     It is difficult to unit test, but we'll try.
 
-        >>> from zope.app.testing import setup
-        >>> setup.placelessSetUp()
+        >>> from zope.testing import cleanup
+        >>> cleanup.setUp()
 
         >>> from schooltool.sbapp.main import Options, StandaloneServer
         >>> from ZODB.MappingStorage import MappingStorage
@@ -300,7 +300,7 @@ def doctest_setup():
         >>> for logger in [logger1, logger3]:
         ...     logger.setLevel(0)
 
-        >>> setup.placelessTearDown()
+        >>> cleanup.tearDown()
 
     """
 

@@ -28,6 +28,7 @@ import unittest
 
 from zope.testing import doctest
 from zope.app import zapi
+from zope.testing import cleanup
 from zope.traversing.interfaces import IContainmentRoot
 from zope.interface import directlyProvides
 
@@ -337,8 +338,8 @@ def doctest_setLanguage():
 def doctest_setup():
     """Tests for setup()
 
-        >>> from zope.app.testing import setup
-        >>> setup.placelessSetUp()
+        >>> from zope.testing import cleanup
+        >>> cleanup.setUp()
 
     setup() does everything except enter the main application loop:
 
@@ -443,7 +444,7 @@ def doctest_setup():
         >>> for logger in [logger1, logger3]:
         ...     logger.setLevel(0)
 
-        >>> setup.placelessTearDown()
+        >>> cleanup.tearDown()
 
     """
 
@@ -495,8 +496,7 @@ def doctest_before_afterRun():
 def doctest_bootstrapSchoolTool():
     r"""Tests for bootstrapSchoolTool()
 
-        >>> from zope.app.testing import setup
-        >>> setup.placelessSetUp()
+        >>> cleanup.setUp()
 
     Normally, bootstrapSchoolTool is called when Zope 3 is fully configured
 
@@ -591,17 +591,14 @@ def doctest_bootstrapSchoolTool():
 
         >>> transaction.abort()
         >>> connection.close()
-
-        >>> setup.placelessTearDown()
-
+        >>> cleanup.tearDown()
     """
 
 
 def doctest_restoreManagerUser():
     r"""Unit test for StandaloneServer.restoreManagerUser
 
-        >>> from zope.app.testing import setup
-        >>> setup.placelessSetUp()
+        >>> cleanup.setUp()
 
     We need a configured server:
 
@@ -610,11 +607,28 @@ def doctest_restoreManagerUser():
         >>> server.siteConfigFile = findSiteZCML()
         >>> server.configure()
 
-    We also need an application:
+    We also need an application (we are doing the full set up in here
+    because else person factory local utility is not being
+    registered):
+
+        >>> import transaction
+        >>> from zope.app.container.contained import ObjectAddedEvent
+        >>> from zope.event import notify
+        >>> from zope.app.publication.zopepublication import ZopePublication
+        >>> from ZODB.DB import DB
+        >>> from ZODB.MappingStorage import MappingStorage
+
+        >>> db = DB(MappingStorage())
+        >>> connection = db.open()
+        >>> root = connection.root()
 
         >>> from schooltool.app.app import SchoolToolApplication
         >>> app = SchoolToolApplication()
         >>> directlyProvides(app, IContainmentRoot)
+        >>> root[ZopePublication.root_name] = app
+
+        >>> save_point = transaction.savepoint(optimistic=True)
+        >>> notify(ObjectAddedEvent(app))
 
     Initially, there's no manager user in the database:
 
@@ -667,7 +681,9 @@ def doctest_restoreManagerUser():
 
     Cleanup:
 
-        >>> setup.placelessTearDown()
+        >>> transaction.abort()
+        >>> connection.close()
+        >>> cleanup.tearDown()
     """
 
 

@@ -52,12 +52,14 @@ from zope.traversing.interfaces import IContainmentRoot
 from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
 from zope.app.container.contained import ObjectAddedEvent
 from zope.app.dependable.interfaces import IDependable
+from zope.app.component.hooks import setSite
+from zope.component import getUtility
 
 from schooltool.app.app import SchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.demographics.person import Person
 from schooltool.app.rest import restServerType
 from schooltool.app.browser import pdfcal
+from schooltool.person.interfaces import IPersonFactory
 
 MANAGER_USERNAME = 'manager'
 MANAGER_PASSWORD = 'schooltool'
@@ -432,10 +434,18 @@ class StandaloneServer(object):
         Create a user if needed, set password to default, grant
         manager permissions
         """
+        # set the site so that catalog utilities and person factory
+        # utilities and subscribers were available
+        setSite(app)
         _('%s Manager') # mark for l10n
         manager_title = catalog.ugettext('%s Manager') % self.system_name
         if MANAGER_USERNAME not in app['persons']:
-            manager = Person(MANAGER_USERNAME, manager_title)
+            factory = getUtility(IPersonFactory)
+            manager = factory(MANAGER_USERNAME, manager_title)
+            # XXX depends on the person created by the facotory having
+            # nameinfo
+            manager.nameinfo.fisrt_name = self.system_name
+            manager.nameinfo.last_name = "Manager"
             app['persons'][MANAGER_USERNAME] = manager
             IDependable(manager).addDependent('')
         manager = app['persons'][MANAGER_USERNAME]
@@ -443,6 +453,7 @@ class StandaloneServer(object):
         manager_group = app['groups']['manager']
         if manager not in manager_group.members:
             manager_group.members.add(manager)
+        setSite(None)
 
     def main(self, argv=sys.argv):
         """Start the SchoolTool server."""

@@ -90,4 +90,3 @@ class HelpLink(object):
         if self.show:
             return self.template()
         return u''
-

@@ -28,12 +28,11 @@ from zope.app.catalog.field import FieldIndex
 from zope.interface import implements
 from zope.component import adapts
 
-from schooltool.utility import UtilitySpecification, UtilitySetUp,\
-     MultiUtilitySetUp
+from schooltool.utility import UtilitySpecification, MultiUtilitySetUp
 
 from schooltool.demographics.interfaces import ISearch
 from schooltool.demographics.person import Person
-from schooltool.person.interfaces import IPerson, IPersonFactory
+from schooltool.person.interfaces import IPerson
 
 class Search(object):
     implements(ISearch)
@@ -73,11 +72,11 @@ catalogSetUpSubscriber = MultiUtilitySetUp(
     )
 
 class PersonFactory(Persistent, Contained):
+    """BBB: as old utilities are persistent, we need this here."""
+
+
+class PersonFactoryUtility(object):
     def __call__(self, *args, **kw):
         result = Person(*args, **kw)
         result.nameinfo.last_name = u'Unknown last name'
         return result
-
-personFactorySetUpSubscriber = UtilitySetUp(
-    PersonFactory, IPersonFactory, override=True,
-    )

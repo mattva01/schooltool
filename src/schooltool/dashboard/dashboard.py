@@ -46,7 +46,15 @@ class Dashboard(manager.ViewletManagerBase):
     def createTable(self):
         self.table = [[], []]
         for index in range(len(self.viewlets)):
-            self.table[index%2].append(self.viewlets[index])
+            try:
+                html = {'title':self.viewlets[index].title,
+                        'content':self.viewlets[index].render()}
+            except Exception, e:
+                import pdb; pdb.set_trace()
+                html = {'title':self.viewlets[index].title,
+                        'error':"An %s error occurred: %s" %
+                        (e.__class__.__name__, str(e))}
+            self.table[index%2].append(html)
 
     def filter(self, viewlets):
         """Filter by by availability."""

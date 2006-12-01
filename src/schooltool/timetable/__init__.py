@@ -592,11 +592,11 @@ class CompositeTimetables(object):
     def __init__(self, context):
         self.context = context
 
-    def getCompositeTimetable(self, period_id, schema_id):
+    def getCompositeTimetable(self, term_id, schema_id):
         timetables = []
         # Get the timetables from timetable source subscription adapters
         for adapter in zapi.subscribers((self.context, ), ITimetableSource):
-            tt = adapter.getTimetable(period_id, schema_id)
+            tt = adapter.getTimetable(term_id, schema_id)
             if tt is not None:
                 timetables.append(tt)
 
@@ -611,7 +611,7 @@ class CompositeTimetables(object):
         parent = TimetableDict()
         parent.__parent__ = self.context
         parent.__name__ = 'composite-timetables'
-        parent[".".join((period_id, schema_id))] = result
+        parent[".".join((term_id, schema_id))] = result
 
         return result
 

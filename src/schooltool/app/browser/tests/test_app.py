@@ -527,6 +527,65 @@ def doctest_ApplicationPreferencesView():
 
     """
 
+
+def doctest_CheckboxColumn():
+    """Tests for CheckboxColumn.
+
+    Let's try creating a CheckboxColumn first:
+
+        >>> from schooltool.app.browser.app import CheckboxColumn
+        >>> column = CheckboxColumn("prefix", "name", "title")
+        >>> column.title
+        'title'
+        >>> column.name
+        'name'
+        >>> column.prefix
+        'prefix'
+
+        >>> class ItemStub(object):
+        ...     __name__ = "itemStub"
+        >>> column.renderCell(ItemStub(), None)
+        '<input type="checkbox" name="prefix.itemStub" id="prefix.itemStub" />'
+
+    """
+
+
+def doctest_GetterLabelColumn():
+    """Tests for GetterLabelColumn.
+
+    Let's try creating a GetterLabelColumn first:
+
+        >>> from schooltool.app.browser.app import GetterLabelColumn
+        >>> column = GetterLabelColumn(prefix='some_prefix',
+        ...                            name='title',
+        ...                            title=u"Title",
+        ...                            getter=lambda i, f: i.title,
+        ...                            subsort=True)
+        >>> column.prefix
+        'some_prefix'
+
+    We want to be able to sort by this column:
+
+        >>> from zc.table.interfaces import ISortableColumn
+        >>> ISortableColumn.providedBy(column)
+        True
+
+        >>> class ItemStub(object):
+        ...     __name__ = "item_stub"
+        ...     title = "Title of The Item"
+        >>> column.renderCell(ItemStub(), None)
+        u'<label for="some_prefix.item_stub">Title of The Item</label>'
+
+    If there is not prefix set, we plain __name__ of the item is used
+    as the id:
+
+        >>> column.prefix = ""
+        >>> column.renderCell(ItemStub(), None)
+        u'<label for="item_stub">Title of The Item</label>'
+
+    """
+
+
 def doctest_RelationshipViewBase():
     """Test for RelationshipViewBase.
 

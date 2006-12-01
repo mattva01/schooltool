@@ -68,10 +68,10 @@ def doctest_SampleStudents():
         >>> for i in range(5):
         ...     print app['persons']['student%03d' % i].title
         Freja Freeman
-        Klara Phillips
-        Cath Rodriguez
         Daniela Petersen
-        Gabbie Cunningham
+        Jeffery Hardy
+        Thelma Vaughn
+        Pip Stewart
 
     The students get their passwords set the same as their logins:
 
@@ -116,12 +116,14 @@ def doctest_SampleTeachers():
     Teachers' names are different from the students' names above:
 
         >>> for i in range(5):
-        ...     print app['persons']['teacher%03d' % i].title
-        Catherine Martin
-        Kimmy Cooper
-        Helen Patterson
-        Iris Laurent
-        Philippa Stewart
+        ...     teacher = app['persons']['teacher%03d' % i]
+        ...     print teacher.title, (teacher.nameinfo.first_name,
+        ...                           teacher.nameinfo.last_name)
+        Catherine Martin ('Catherine', 'Martin')
+        Kimmy Cooper ('Kimmy', 'Cooper')
+        Helen Patterson ('Helen', 'Patterson')
+        Iris Laurent ('Iris', 'Laurent')
+        Philippa Stewart ('Philippa', 'Stewart')
 
     The teachers get their passwords set the same as their logins:
 
@@ -174,16 +176,16 @@ def doctest_SamplePersonalEvents():
         ...     person = app['persons']['student%03d' % i]
         ...     calendar = ISchoolToolCalendar(person)
         ...     print len(calendar)
-        142
-        124
-        149
-        140
-        131
+        233
+        250
+        227
+        252
+        248
 
         >>> person = app['persons']['teacher000']
         >>> calendar = ISchoolToolCalendar(person)
         >>> len(calendar)
-        154
+        240
 
         >>> events = list(calendar)
         >>> events.sort()
@@ -191,11 +193,11 @@ def doctest_SamplePersonalEvents():
         ...     print event.dtstart,
         ...     print event.duration,
         ...     print event.title
-        2005-08-22 10:30:00+00:00 5:00:00 Birding
-        2005-08-23 23:30:00+00:00 3:30:00 Soccer
-        2005-08-24 20:30:00+00:00 0:30:00 Flashmob
-        2005-08-27 06:00:00+00:00 3:30:00 Circus
-        2005-08-29 14:00:00+00:00 6:00:00 Boating
+        2005-08-24 12:00:00+00:00 5:00:00 Tribal dances
+        2005-08-25 17:30:00+00:00 1:30:00 Dentist
+        2005-08-27 11:30:00+00:00 4:00:00 Concert
+        2005-08-28 23:30:00+00:00 3:30:00 Quake tournament
+        2005-08-29 19:00:00+00:00 6:00:00 Boating
     """
 
 

@@ -97,7 +97,7 @@
     <utility
         factory=".sampledata.SampleCourses"
         provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
-        name="couses"
+        name="courses"
         />
 
     <utility

@@ -351,3 +351,4 @@ class TimetableCalendarEvent(CalendarEvent):
     @property
     def owner(self):
         return self.activity.owner
+

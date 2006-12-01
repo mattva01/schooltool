@@ -210,6 +210,7 @@ def setUpLocalAuth(site, auth=None):
     manager = site.getSiteManager()
     manager.registerUtility(auth, IAuthentication)
 
+
 def authSetUpSubscriber(app, event):
     """Set up local authentication for newly added SchoolTool apps.
 

@@ -137,7 +137,8 @@ class Requirement(persistent.Persistent,
 
     def distributeKey(self, key):
         """See interfaces.IExtendedRequirement"""
-        self._order.append(key)
+        if key not in self._order:
+            self._order.append(key)
         for sub in self.subs:
             sub.distributeKey(key)
 
@@ -230,7 +231,9 @@ class Requirement(persistent.Persistent,
         for base in self.bases:
             if key in base:
                 object.addBase(base[key])
-
+        for sub in self.subs:
+            if key in sub:
+                sub[key].addBase(object)
         # Now set the item
         if object.__parent__:
             newobject = PersistentInheritedRequirement(object, self, key)

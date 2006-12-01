@@ -383,61 +383,6 @@ The Term Event Vocabulary
 -------------------------
 
 
-The ``DateRange`` Component
----------------------------
-
-Date ranges are low-level components that represent a date span. They are
-mainly used to implement the date handling in terms:
-
-  >>> january = term.DateRange(date(2003, 1, 1), date(2003, 1, 31))
-  >>> interfaces.IDateRange.providedBy(january)
-
-You can use date ranges to check whether a certain date is within the range:
-
-  >>> date(2002, 12, 31) in january
-  False
-  >>> date(2003, 2, 1) in january
-  False
-  >>> date(2003, 1, 1) in january
-  True
-  >>> date(2003, 1, 12) in january
-  True
-  >>> date(2003, 1, 31) in january
-  True
-
-You can ask the date range for the amount of dates it includes.
-
-  >>> days = list(january)
-  >>> len(days)
-  31
-  >>> len(january)
-  31
-
-As you can see, the boundary dates are inclusive. You can also iterate through
-all the dates in the date range.
-
-  >>> days = daterange.DateRange(
-  ...     datetime.date(2003, 1, 1), datetime.date(2003, 1, 2))
-  >>> list(days)
-  [date(2003, 1, 1), date(2003, 1, 2)]
-
-  >>> days = daterange.DateRange(
-  ...     datetime.date(2003, 1, 1), datetime.date(2003, 1, 1))
-  >>> list(days)
-  [date(2003, 1, 1)]
-
-If the beginning of the of the date range is later than the end, a value error
-is raised:
-
-  >>> daterange.DateRange(datetime.date(2003, 1, 2), datetime.date(2003, 1, 1))
-  Traceback (most recent call last):
-  ...
-  ValueError: Last date datetime.date(2003, 1, 1) less than
-              first date datetime.date(2003, 1, 2)
-
-
-
-
 Setting Up the Year at FHS
 --------------------------
 
@@ -469,6 +414,6 @@ the event, and causes the section to ask the term what 'report requirements'
 it has, if any for that term.  Those events are added in a special category to
 the gradebook for the section.
 
-Requirements may need to be wrapped to prevent name duplication. 
+Requirements may need to be wrapped to prevent name duplication.
 
 When I set up a term, I indicate what info, if any is reported each term

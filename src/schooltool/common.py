@@ -25,6 +25,9 @@ import locale
 import datetime
 import urllib
 
+from zope.schema import Date
+from zope.interface import Interface, implements
+
 __metaclass__ = type
 
 
@@ -418,3 +421,111 @@ def collect(fn):
     collector.__name__ = fn.__name__
     collector.__doc__ = fn.__doc__
     return collector
+
+
+class IDateRange(Interface):
+    """A range of dates (inclusive).
+
+    If r is an IDateRange, then the following invariant holds:
+    r.first <= r.last
+
+    Note that empty date ranges cannot be represented.
+    """
+
+    first = Date(
+        title=u"The first day of the period of time covered.")
+
+    last = Date(
+        title=u"The last day of the period covered.")
+
+    def __iter__():
+        """Iterate over all dates in the range from the first to the last."""
+
+    def __contains__(date):
+        """Return True if the date is within the range, otherwise False.
+
+        Raises a TypeError if date is not a datetime.date.
+        """
+
+    def __len__():
+        """Return the number of dates covered by the range."""
+
+
+class DateRange(object):
+    """A date range implementation using the standard datetime module.
+
+    Date ranges are low-level components that represent a date
+    span. They are mainly used to implement the date handling in
+    terms:
+
+      >>> january = DateRange(datetime.date(2003, 1, 1), datetime.date(2003, 1, 31))
+      >>> IDateRange.providedBy(january)
+      True
+
+    You can use date ranges to check whether a certain date is within
+    the range:
+
+      >>> datetime.date(2002, 12, 31) in january
+      False
+      >>> datetime.date(2003, 2, 1) in january
+      False
+      >>> datetime.date(2003, 1, 1) in january
+      True
+      >>> datetime.date(2003, 1, 12) in january
+      True
+      >>> datetime.date(2003, 1, 31) in january
+      True
+
+    You can ask the date range for the amount of dates it includes.
+
+      >>> days = list(january)
+      >>> len(days)
+      31
+      >>> len(january)
+      31
+
+    As you can see, the boundary dates are inclusive. You can also
+    iterate through all the dates in the date range.
+
+      >>> days = DateRange(
+      ...     datetime.date(2003, 1, 1), datetime.date(2003, 1, 2))
+      >>> list(days)
+      [datetime.date(2003, 1, 1), datetime.date(2003, 1, 2)]
+
+      >>> days = DateRange(
+      ...     datetime.date(2003, 1, 1), datetime.date(2003, 1, 1))
+      >>> list(days)
+      [datetime.date(2003, 1, 1)]
+
+    If the beginning of the of the date range is later than the end, a
+    value error is raised:
+
+      >>> DateRange(datetime.date(2003, 1, 2),
+      ...           datetime.date(2003, 1, 1)) # doctest: +NORMALIZE_WHITESPACE
+      Traceback (most recent call last):
+      ...
+      ValueError: Last date datetime.date(2003, 1, 1) less than
+                  first date datetime.date(2003, 1, 2)
+
+    """
+    implements(IDateRange)
+
+    def __init__(self, first, last):
+        self.first = first
+        self.last = last
+        if last < first:
+            raise ValueError("Last date %r less than first date %r" %
+                             (last, first))
+
+    def __iter__(self):
+        date = self.first
+        while date <= self.last:
+            yield date
+            date += datetime.date.resolution
+
+    def __len__(self):
+        return (self.last - self.first).days + 1
+
+    def __contains__(self, date):
+        return self.first <= date <= self.last
+

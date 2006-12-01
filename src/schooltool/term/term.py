@@ -29,11 +29,12 @@ from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container import contained, btree
 
 from schooltool.app.app import getSchoolToolApplication
+from schooltool.common import DateRange
 
-from schooltool.term import interfaces, daterange
+from schooltool.term import interfaces
 
 
-class Term(daterange.DateRange, contained.Contained, persistent.Persistent):
+class Term(DateRange, contained.Contained, persistent.Persistent):
 
     zope.interface.implements(interfaces.ITerm, interfaces.ITermWrite)
 

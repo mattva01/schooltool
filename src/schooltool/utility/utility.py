@@ -19,6 +19,7 @@
 
 from zope.app import zapi
 from zope.app.component.hooks import getSite, setSite
+from zope.app.component.interfaces import ISite
 from zope.component import queryUtility
 
 
@@ -52,6 +53,9 @@ class UtilitySpecification(object):
 
 
 def setUpUtilities(site, specs):
+    if not ISite.providedBy(site):
+        site.setSiteManager(LocalSiteManager(site))
+
     setSite(site)
     try:
         manager = site.getSiteManager()
