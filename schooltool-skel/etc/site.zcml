@@ -17,6 +17,7 @@
   <include package="zope.app.keyreference" />
   <include package="zope.app.intid" />
   <include package="zope.app.catalog" />
+  <include package="zope.app.file" />
 
   <!-- set up custom security policy -->
   <include package="schooltool.securitypolicy" file="meta.zcml" />
