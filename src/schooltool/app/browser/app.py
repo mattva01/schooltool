@@ -28,6 +28,7 @@ from zc.table import column
 from zc.table import table
 from zc.table.column import GetterColumn
 from zc.table.interfaces import ISortableColumn
+from zope.component import getUtility
 from zope.schema import getFieldNamesInOrder
 from zope.interface import implements
 from zope.security.checker import canAccess
@@ -58,6 +59,7 @@ from schooltool.batching import Batch
 from schooltool.batching.browser import MultiBatchViewMixin
 from schooltool.person.interfaces import IPerson
 from schooltool.skin.interfaces import IFilterWidget
+from schooltool.person.interfaces import IPersonFactory
 
 
 class ApplicationView(BrowserView):
@@ -169,28 +171,27 @@ class CheckboxColumn(column.Column):
         return '<input type="checkbox" name="%s" id="%s" />' % (id, id)
 
 
-class GetterLabelColumn(GetterColumn):
-    """A getter column with label wrapped around it
-
-    The id of the input the label should be for is composed of the
-    prefix keyword argument and __name__ of the item being displayed.
-    """
+class LabelColumn(object):
+    """Decorator for zc.table columns that adds a label tag for them."""
 
     implements(ISortableColumn)
 
-    def __init__(self, **kwargs):
-        self.prefix = kwargs.pop('prefix', "")
-        super(GetterLabelColumn, self).__init__(**kwargs)
+    def __init__(self, wrapped, prefix):
+        self._wrapped = wrapped
+        self._prefix = prefix
 
     def renderCell(self, item, formatter):
-        if self.prefix:
-            prefix = self.prefix + "."
+        if self._prefix:
+            prefix = self._prefix + "."
         else:
-            prefix = self.prefix
-        content = super(GetterLabelColumn, self).renderCell(item, formatter)
+            prefix = self._prefix
+        content = self._wrapped.renderCell(item, formatter)
         return '<label for="%s%s">%s</label>' % (prefix,
-                                                 item.__name__,
-                                                 content)
+                                                  item.__name__,
+                                                  content)
+
+    def __getattr__(self, name):
+        return getattr(self._wrapped, name)
 
 
 class RelationshipViewBase(BrowserView):
@@ -241,25 +242,22 @@ class RelationshipViewBase(BrowserView):
         return self.filter_widget.filter(list)
 
     def columnsForAvailable(self):
-        return [GetterLabelColumn(prefix="add_item",
-                                  name='title',
-                                  title=u"Title",
-                                  getter=lambda i, f: i.title,
-                                  subsort=True)]
+        return [GetterColumn(name='title',
+                             title=u"Title",
+                             getter=lambda i, f: i.title,
+                             subsort=True)]
 
-    def columnsForSelected(self):
-        return [GetterLabelColumn(prefix="remove_item",
-                                  name='title',
-                                  title=u"Title",
-                                  getter=lambda i, f: i.title,
-                                  subsort=True)]
+    columnsForSelected = columnsForAvailable
 
     def sortOn(self):
         return (("title", False),)
 
     def renderAvailableTable(self):
-        columns = [CheckboxColumn(prefix="add_item", name='add', title=u'')]
-        columns.extend(self.columnsForAvailable())
+        prefix = "add_item"
+        columns = [CheckboxColumn(prefix=prefix, name='add', title=u'')]
+        available_columns = self.columnsForAvailable()
+        available_columns[0] = LabelColumn(available_columns[0], prefix)
+        columns.extend(available_columns)
         formatter = table.FormFullFormatter(
             self.context, self.request, self.filter(self.getAvailableItems()),
             columns=columns,
@@ -270,8 +268,11 @@ class RelationshipViewBase(BrowserView):
         return formatter()
 
     def renderSelectedTable(self):
-        columns = [CheckboxColumn(prefix="remove_item", name='remove', title=u'')]
-        columns.extend(self.columnsForSelected())
+        prefix = "remove_item"
+        columns = [CheckboxColumn(prefix=prefix, name='remove', title=u'')]
+        selected_columns = self.columnsForSelected()
+        selected_columns[0] = LabelColumn(selected_columns[0], prefix)
+        columns.extend(selected_columns)
         formatter = table.FormFullFormatter(
             self.context, self.request, self.getSelectedItems(),
             columns=columns,
@@ -416,3 +417,11 @@ class LeaderView(RelationshipViewBase):
         selected_items = set(self.getSelectedItems())
         return [p for p in container.values()
                 if p not in selected_items]
+
+    def columnsForAvailable(self):
+        return getUtility(IPersonFactory).columns()
+
+    columnsForSelected = columnsForAvailable
+
+    def sortOn(self):
+        return getUtility(IPersonFactory).sortOn()
