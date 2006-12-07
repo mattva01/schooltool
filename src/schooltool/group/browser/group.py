@@ -25,6 +25,7 @@ from zope.security import checkPermission
 from zope.security.proxy import removeSecurityProxy
 from zope.app import zapi
 from zope.publisher.browser import BrowserView
+from zope.component import getUtility
 
 from schooltool import SchoolToolMessage as _
 from schooltool.batching import Batch
@@ -33,6 +34,7 @@ from schooltool.app.browser.app import ContainerView, BaseAddView, BaseEditView
 from schooltool.person.interfaces import IPerson
 from schooltool.resource.interfaces import IResource
 from schooltool.course.interfaces import ISection
+from schooltool.person.interfaces import IPersonFactory
 
 from schooltool.group.interfaces import IGroupMember, IGroup
 from schooltool.group.interfaces import IGroupContainer, IGroupContained
@@ -116,6 +118,14 @@ class MemberViewPersons(RelationshipViewBase):
 
     def getCollection(self):
         return self.context.members
+
+    def columnsForAvailable(self):
+        return getUtility(IPersonFactory).columns()
+
+    columnsForSelected = columnsForAvailable
+
+    def sortOn(self):
+        return getUtility(IPersonFactory).sortOn()
 
 
 class GroupAddView(BaseAddView):

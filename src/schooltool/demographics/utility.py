@@ -106,5 +106,6 @@ class PersonFactoryUtility(object):
 
     def __call__(self, *args, **kw):
         result = Person(*args, **kw)
+        result.nameinfo.first_name = result.title
         result.nameinfo.last_name = u'Unknown last name'
         return result

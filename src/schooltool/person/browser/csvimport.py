@@ -74,7 +74,8 @@ class PersonCSVImporter(BaseCSVImporter):
 
     def personFactory(self, username, title):
         factory = getUtility(IPersonFactory)
-        return factory(username=username, title=title)
+        person = factory(username=username, title=title)
+        return person
 
 class PersonCSVImportView(BaseCSVImportView):
     """View for Person CSV importer."""
