@@ -29,7 +29,7 @@ class BasicForm(form.FormBase):
     def getMenu(self):
         # optional
         return None
-    
+
 class EditForm(form.PageEditForm):
     """Formlib-based edit form in schooltool style.
     """
@@ -51,7 +51,7 @@ class EditForm(form.PageEditForm):
         # subclass could turn this into self.context.__parent__ for
         # attribute editing
         return self.context
-    
+
     @form.action(_("Apply"), condition=form.haveInputWidgets)
     def handle_edit_action(self, action, data):
         self.edit_action(action, data)
@@ -68,7 +68,7 @@ class EditForm(form.PageEditForm):
         event.notify(ObjectModifiedEvent(self.actualContext()))
         formatter = self.request.locale.dates.getFormatter(
             'dateTime', 'medium')
-        
+
         try:
             time_zone = idatetime.ITZInfo(self.request)
         except TypeError:
@@ -81,17 +81,17 @@ class EditForm(form.PageEditForm):
               formatter.format(datetime.datetime.now(time_zone))
               }
             )
-        
+
     @form.action(_("Cancel"), condition=form.haveInputWidgets)
     def handle_cancel_action(self, action, data):
         self.cancel_action(action, data)
 
-    def cancel_action(self, action, data): 
+    def cancel_action(self, action, data):
         # redirect to parent
         url = zapi.absoluteURL(self.actualContext(), self.request)
         self.request.response.redirect(url)
         return ''
-       
+
 class AttributeEditForm(EditForm):
     """A form that can be used when editing an attribute of the actual
     content object.
