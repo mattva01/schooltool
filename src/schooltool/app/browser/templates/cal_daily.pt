@@ -16,7 +16,7 @@
       <metal:block use-macro="template/macros/event-delete-button" />
 
       <p tal:condition="event/description"
-         tal:content="event/description">
+         tal:content="structure event/description">
         (description)
       </p>
     </div>

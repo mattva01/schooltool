@@ -15,7 +15,7 @@
     <div><strong i18n:translate="">All day event</strong></div>
   </tal:if>
 
-  <p style="width:62%; font-size:85%" tal:content="context/description|nothing" />
+  <p style="width:62%; font-size:85%" tal:content="structure context/description|nothing" />
   <p tal:condition="context/recurrence">
     <em i18n:translate="">
       This is a recurring event.

@@ -122,6 +122,11 @@
       file="resources/schooltool.css"
       layer="schooltool.skin.ISchoolToolLayer" />
 
+  <resource
+      name="editor_config.js"
+      file="resources/editor_config.js"
+      layer="schooltool.skin.ISchoolToolLayer" />
+
   <resource name="layout.css" file="resources/layout.css"
             layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="schooltool.js" file="resources/schooltool.js"

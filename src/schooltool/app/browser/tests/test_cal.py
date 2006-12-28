@@ -27,6 +27,7 @@ from datetime import datetime, date, timedelta, time
 from pytz import timezone, utc
 
 from zope.i18n import translate
+from zope.interface import Interface
 from zope.interface import directlyProvides, implements
 from zope.component import provideSubscriptionAdapter
 from zope.interface.verify import verifyObject
@@ -40,6 +41,7 @@ from zope.app.session.interfaces import ISession
 from zope.publisher.interfaces.http import IHTTPRequest
 
 import schooltool.app # sacrifice to appease circular import gods
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common import parse_datetime
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 from schooltool.timetable import SequentialDaysTimetableModel
@@ -85,10 +87,19 @@ def dt(timestr):
     return dt.replace(tzinfo=utc)
 
 
+class ApplicationStub(object):
+    implements(ISchoolToolApplication, IContainmentRoot)
+    def __init__(self, context):
+        pass
+
+
 def setUp(test=None):
     browserSetUp(test)
     sbsetup.setUpCalendaring()
     sbsetup.setUpSessions()
+
+    ztapi.provideAdapter(Interface, ISchoolToolApplication,
+                         ApplicationStub)
 
 
 class EventStub(object):
