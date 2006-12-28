@@ -301,6 +301,14 @@ def doctest_SampleTimetables_assignPeriodToSection():
 def doctest_SampleSectionAssignments():
     """A sample data plugin that creates events in section calendars
 
+        >>> from zope.component import provideSubscriptionAdapter
+        >>> from schooltool.timetable.interfaces import ITimetableReplacedEvent
+        >>> from schooltool.timetable.model import handleTimetableReplacedEvent
+        >>> from zope.component import provideHandler
+        >>> provideHandler(handleTimetableReplacedEvent,
+        ...                adapts=[ITimetableReplacedEvent])
+
+
         >>> from schooltool.course.sampledata import SampleSectionAssignments
         >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
         >>> plugin = SampleSectionAssignments()
@@ -313,7 +321,7 @@ def doctest_SampleSectionAssignments():
         >>> plugin.dependencies
         ('section_timetables', 'resources')
 
-        >>> app = stsetup.setUpSchoolToolSite()
+        >>> app = ISchoolToolApplication(None)
 
         >>> from schooltool.course.course import Course
         >>> from schooltool.course.section import Section
@@ -355,10 +363,11 @@ def doctest_SampleSectionAssignments():
         >>> Timetable = app['ttschemas'].getDefault().createTimetable
         >>> for sect in (s0, s1, s2, s3, s4, s5, s6, s7, s8):
         ...     timetables = ITimetables(sect).timetables
-        ...     tt = timetables['2005-fall.simple'] = Timetable()
+        ...     tt = Timetable()
         ...     for day in range(1, 7):
         ...         activity = TimetableActivity('Stuff', owner=sect)
-        ...         tt['Day %d' % day].add('A', activity)
+        ...         tt['Day %d' % day].add('A', activity, send_events=False)
+        ...     timetables['2005-fall.simple'] = tt
 
     Now, let's run the plugin:
 
@@ -369,44 +378,49 @@ def doctest_SampleSectionAssignments():
 
         >>> from schooltool.app.interfaces import ISchoolToolCalendar
         >>> len(ISchoolToolCalendar(s0))
-        7
+        97
         >>> len(ISchoolToolCalendar(s1))
-        8
+        98
         >>> len(ISchoolToolCalendar(s2))
-        7
+        97
 
     These events have random titles and times coinciding with section
     timetable events:
 
+        >>> from schooltool.timetable.interfaces import ITimetableCalendarEvent
         >>> for ev in sorted(ISchoolToolCalendar(s8)):
+        ...     if ITimetableCalendarEvent.providedBy(ev):
+        ...         continue
         ...     resources = [res.__name__ for res in ev.resources]
         ...     print ev.dtstart, ev.title, resources
-        2005-08-31 13:30:00+00:00 Quiz [u'projector01']
-        2005-09-07 08:00:00+00:00 Quiz [u'projector01']
-        2005-09-22 09:00:00+00:00 Lab work [u'projector01']
-        2005-11-10 10:00:00+00:00 Read the book [u'projector00']
-        2005-11-11 09:00:00+00:00 Homework [u'projector00']
-        2005-11-24 12:30:00+00:00 Read the book [u'projector00']
-        2005-12-13 11:00:00+00:00 Homework [u'projector00']
-        2005-12-14 10:00:00+00:00 Quiz [u'projector00']
-        2005-12-15 09:00:00+00:00 Homework [u'projector00']
+        2005-09-14 09:00:00+00:00 Quiz [u'projector00']
+        2005-09-16 13:30:00+00:00 Lab work [u'projector01']
+        2005-09-23 08:00:00+00:00 Homework [u'projector00']
+        2005-10-10 09:00:00+00:00 Quiz [u'projector01']
+        2005-10-24 11:00:00+00:00 Read the book [u'projector00']
+        2005-11-01 11:00:00+00:00 Read the book [u'projector00']
+        2005-12-07 09:00:00+00:00 Homework [u'projector01']
+        2005-12-09 13:30:00+00:00 Homework [u'projector01']
+        2005-12-22 10:00:00+00:00 Quiz [u'projector00']
 
     Resources must have events in calendars.
 
         >>> projector = app['resources']['projector00']
         >>> calendar = ISchoolToolCalendar(projector)
         >>> for ev in sorted(calendar)[0:10]:
+        ...     if ITimetableCalendarEvent.providedBy(ev):
+        ...         continue
         ...     print ev.dtstart, ev.duration, ev.title
         2005-08-23 13:30:00+00:00 1:00:00 Quiz
-        2005-08-24 12:30:00+00:00 0:55:00 Deadline for essay
-        2005-08-26 10:00:00+00:00 0:55:00 Read the book
-        2005-08-29 09:00:00+00:00 0:55:00 Quiz
-        2005-08-31 13:30:00+00:00 1:00:00 Quiz
-        2005-09-01 12:30:00+00:00 0:55:00 Homework
-        2005-09-02 11:00:00+00:00 0:55:00 Homework
-        2005-09-05 10:00:00+00:00 0:55:00 Homework
-        2005-09-07 08:00:00+00:00 0:55:00 Assignment
-        2005-09-12 11:00:00+00:00 0:55:00 Homework
+        2005-08-26 10:00:00+00:00 0:55:00 Quiz
+        2005-08-29 09:00:00+00:00 0:55:00 Deadline for essay
+        2005-08-31 13:30:00+00:00 1:00:00 Homework
+        2005-09-01 12:30:00+00:00 0:55:00 Deadline for essay
+        2005-09-05 10:00:00+00:00 0:55:00 Deadline for project
+        2005-09-06 09:00:00+00:00 0:55:00 Homework
+        2005-09-07 08:00:00+00:00 0:55:00 Quiz
+        2005-09-14 09:00:00+00:00 0:55:00 Quiz
+        2005-09-16 13:30:00+00:00 1:00:00 Deadline for essay
 
     """
 

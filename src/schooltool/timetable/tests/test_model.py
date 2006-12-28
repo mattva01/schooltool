@@ -710,6 +710,149 @@ class TestTimetableCalendarEvent(unittest.TestCase):
         self.assertEqual(ev.resources, activity.resources)
 
 
+def doctest_PersistentTimetableCalendarEvent():
+    """Tests for PersistentTimetableCalendarEvent.
+
+        >>> from schooltool.timetable.model import PersistentTimetableCalendarEvent
+        >>> from schooltool.timetable.model import TimetableCalendarEvent
+        >>> class TTStub(object):
+        ...     timezone = 'utc'
+        >>> class ActivityStub(object):
+        ...     resources = ['cookie', 'parrot']
+        ...     owner = ['Long John']
+        ...     timetable = TTStub()
+        >>> activity = ActivityStub()
+        >>> ev = TimetableCalendarEvent(datetime(2004, 10, 13, 23, 0),
+        ...                             timedelta(45), "Math",
+        ...                             day_id='Day 2', period_id='Lesson 1',
+        ...                             activity=activity)
+        >>> class PTCEStub(PersistentTimetableCalendarEvent):
+        ...     def bookResource(self, resource):
+        ...         print "Booking %s" % resource
+        >>> event = PTCEStub(ev)
+        Booking cookie
+        Booking parrot
+
+        >>> event.schoolDay()
+        datetime.date(2004, 10, 13)
+
+        >>> event.activity.timetable.timezone = 'Europe/Vilnius'
+        >>> event.schoolDay()
+        datetime.date(2004, 10, 14)
+
+    """
+
+def doctest_timetableEventHandlers():
+    """
+        >>> class ApplicationStub(dict):
+        ...     implements(ISchoolToolApplication, IApplicationPreferences)
+        ...     def __call__(self, context):
+        ...         return self
+
+        >>> app = ApplicationStub()
+        >>> app['terms'] = {'term': 'Term for Fall 2006'}
+        >>> ztapi.provideAdapter(None, ISchoolToolApplication, app)
+        >>> timetable_calendar = []
+        >>> class ModelStub(object):
+        ...     def createCalendar(self, term, timetable, first=None, last=None):
+        ...         print "Creating calendar for %s" % term
+        ...         return timetable_calendar
+        >>> class TimetableStub(object):
+        ...     __name__ = 'term.schema'
+        ...     model = ModelStub()
+        >>> from schooltool.app.interfaces import ISchoolToolCalendar
+        >>> class CalendarStub(list):
+        ...     implements(ISchoolToolCalendar)
+        ...     def addEvent(self, event):
+        ...         print "Adding event %s to a calendar" % event.__name__
+        ...     def removeEvent(self, event):
+        ...         print "Removing event %s to a calendar" % event.__name__
+
+        >>> section_calendar = CalendarStub()
+        >>> class SectionStub(object):
+        ...     def __conform__(self, iface):
+        ...         if iface == ISchoolToolCalendar:
+        ...             return section_calendar
+        >>> class ActivityStub(object):
+        ...     timetable = TimetableStub()
+        ...     owner = SectionStub()
+        ...     def __eq__(self, other):
+        ...         return isinstance(other, ActivityStub)
+        >>> class EventStub(object):
+        ...     activity = ActivityStub()
+        ...     period_id = 'Period 1'
+        ...     day_id = 'Day 1'
+        >>> from schooltool.timetable.model import addEventsToCalendar
+        >>> event = EventStub()
+        >>> addEventsToCalendar(event)
+        Creating calendar for Term for Fall 2006
+
+        >>> from schooltool.timetable.interfaces import ITimetableCalendarEvent
+        >>> class TimetableEventStub(object):
+        ...     implements(ITimetableCalendarEvent)
+        ...     def __init__(self, name, activity, period_id, day_id):
+        ...         self.activity = activity
+        ...         self.period_id = period_id
+        ...         self.day_id = day_id
+        ...         self.unique_id = 'event'
+        ...         self.__name__ = name
+        ...         self.dtstart = None
+        ...         self.duration = None
+        ...         self.description = None
+        ...         self.location = None
+        ...         self.recurrence = None
+        ...         self.allday = None
+        ...         self.resources = []
+        >>> timetable_calendar = [
+        ...     TimetableEventStub('TTEvent1', ActivityStub(), 'Period 1', 'Day 1'),
+        ...     TimetableEventStub('TTEvent2', ActivityStub(), 'Period 1', 'Day 2'),
+        ...     TimetableEventStub('TTEvent3', ActivityStub(), 'Period 2', 'Day 2'),
+        ...     TimetableEventStub('TTEvent4', object(), 'Period 2', 'Day 2')]
+        >>> addEventsToCalendar(event)
+        Creating calendar for Term for Fall 2006
+        Adding event TTEvent1 to a calendar
+
+        >>> section_calendar[:] = [
+        ...     TimetableEventStub('TTEvent1', ActivityStub(), 'Period 1', 'Day 1'),
+        ...     TimetableEventStub('TTEvent2', ActivityStub(), 'Period 1', 'Day 2'),
+        ...     TimetableEventStub('TTEvent3', ActivityStub(), 'Period 2', 'Day 2'),
+        ...     TimetableEventStub('TTEvent4', ActivityStub(), 'Period 2', 'Day 2')]
+        >>> from schooltool.timetable.model import removeEventsFromCalendar
+        >>> removeEventsFromCalendar(event)
+        Removing event TTEvent1 to a calendar
+
+        >>> from schooltool.timetable import TimetableReplacedEvent
+        >>> from schooltool.timetable.model import handleTimetableRemovedEvent
+        >>> section = SectionStub()
+        >>> key = "term.schema"
+        >>> event = TimetableReplacedEvent(section, key,
+        ...                                old_timetable=ActivityStub.timetable,
+        ...                                new_timetable=None)
+        >>> handleTimetableRemovedEvent(event)
+        Removing event TTEvent1 to a calendar
+        Removing event TTEvent2 to a calendar
+        Removing event TTEvent3 to a calendar
+        Removing event TTEvent4 to a calendar
+
+        >>> event = TimetableReplacedEvent(section, key,
+        ...                                old_timetable=None,
+        ...                                new_timetable=None)
+        >>> handleTimetableRemovedEvent(event)
+
+        >>> from schooltool.timetable.model import handleTimetableAddedEvent
+        >>> event = TimetableReplacedEvent(section, key,
+        ...                                old_timetable=None,
+        ...                                new_timetable=ActivityStub.timetable)
+        >>> handleTimetableAddedEvent(event)
+        Creating calendar for Term for Fall 2006
+        Adding event TTEvent1 to a calendar
+        Adding event TTEvent2 to a calendar
+        Adding event TTEvent3 to a calendar
+        Adding event TTEvent4 to a calendar
+
+    """
+
+
 def test_suite():
     return unittest.TestSuite([
         doctest.DocTestSuite(setUp=setup.placelessSetUp,

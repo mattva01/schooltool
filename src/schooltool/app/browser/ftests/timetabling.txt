@@ -306,12 +306,14 @@ this section too:
     >>> print analyze.queryHTML('//h6[fn:contains(text(), "Swimming")]',
     ...                         manager.contents)[0]
     <h6 style="background: #7590ae">
-      Swimming
-      <span class="start-end">
-        (<span>09:00</span>
-           -
-         <span>10:00</span>)
-      </span>
+      <a href="http://localhost/sections/swimming--frog/calendar/..." title="Swimming">
+        Swimming
+        <span class="start-end">
+          (<span>09:00</span>
+             -
+           <span>10:00</span>)
+        </span>
+      </a>
     </h6>
 
 Epilogue

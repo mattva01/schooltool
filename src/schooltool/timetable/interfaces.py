@@ -685,18 +685,9 @@ class ITimetableSource(Interface):
     composite timetable of the context.
     """
 
-    def getTimetable(term_id, schema_id):
-        """Return a timetable to be merged to the composite timetable
-        of the context.
-
-        Can return None if this adapter can not contribute to the
-        timetable of this object.
-        """
-
-    def listTimetables():
-        """Return a sequence of timetable keys for which getTimetable
-        would return not a None.
-        """
+    def getTimetableSourceObjects():
+        """Return objects calendars of which will be merged to the composite
+        timetable of the context."""
 
 
 class ITimetableReplacedEvent(Interface):

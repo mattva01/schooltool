@@ -836,197 +836,78 @@ class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
         self.assertEqual(tm.timetables.__parent__, content)
 
 
-class TestCompositeTimetables(NiceDiffsMixin, EqualsSortedMixin,
-                              unittest.TestCase):
+def doctest_CompositeTimetables():
+    """Tests for CompositeTimetables.
 
-    def setUp(self):
-        from schooltool.relationship.tests import setUpRelationships
-        from schooltool.timetable.interfaces import ITimetableSource
-        from schooltool.timetable.interfaces import IHaveTimetables
-        from schooltool.timetable.interfaces import ICompositeTimetables
-        from schooltool.timetable.source import MembershipTimetableSource
-        from schooltool.timetable.source import OwnedTimetableSource
-        from schooltool.timetable import TimetablesAdapter
-        from schooltool.timetable import CompositeTimetables
+    First let's create the adapter:
 
-        self.site = setup.placefulSetUp(True)
-        setup.setUpAnnotations()
-        setUpRelationships()
+       >>> from schooltool.timetable import CompositeTimetables
+       >>> ct = CompositeTimetables("context")
 
-        ztapi.subscribe((IHaveTimetables, ), ITimetableSource,
-                        MembershipTimetableSource)
-        ztapi.subscribe((IOwnTimetables, ), ITimetableSource,
-                        OwnedTimetableSource)
-        ztapi.provideAdapter(IHaveTimetables, ICompositeTimetables,
-                             CompositeTimetables)
-        ztapi.provideAdapter(IOwnTimetables, ITimetables,
-                             TimetablesAdapter)
+    When there are no source objecs we get an empty ImmutableCalendar:
 
-    def tearDown(self):
-        setup.placefulTearDown()
+       >>> ct._collectSourceObjects = lambda: []
+       >>> calendar = ct.makeTimetableCalendar()
+       >>> list(calendar)
+       []
 
-    def newTimetable(self):
-        from schooltool.timetable import Timetable, TimetableDay
-        tt = Timetable(("A", "B"))
-        tt["A"] = TimetableDay(["Green", "Blue"])
-        tt["B"] = TimetableDay(["Green", "Blue"])
-        return tt
+       >>> calendar
+       <schooltool.calendar.simple.ImmutableCalendar object at ...>
 
-    def newTimetableSchema(self):
-        from schooltool.timetable.schema import TimetableSchema
-        from schooltool.timetable.schema import TimetableSchemaDay
-        tt = TimetableSchema(("A", "B"))
-        tt["A"] = TimetableSchemaDay(["Green", "Blue"])
-        tt["B"] = TimetableSchemaDay(["Green", "Blue"])
-        return tt
+    The calendar is located, and has it's parent and __name__ set:
 
-    def test_composite_table_own(self):
-        content = ContentStub()
-        ct = ICompositeTimetables(content)
-        tm = ITimetables(content)
+       >>> ILocation.providedBy(calendar)
+       True
+       >>> calendar.__parent__
+       'context'
+       >>> calendar.__name__
+       'timetable-calendar'
 
-        self.assertEqual(tm.timetables, {})
-        self.assertEqual(ct.getCompositeTimetable("a", "b"), None)
-        self.assertEqual(ct.listCompositeTimetables(), Set())
+    Let's try non empty calendars:
 
-        tt = tm.timetables["2003 fall.sequential"] = self.newTimetable()
+       >>> class SourceStub(object):
+       ...     def __init__(self, events):
+       ...         self.calendar = CalendarStub(events)
+       ...     def __conform__(self, iface):
+       ...         if iface == ISchoolToolCalendar:
+       ...             return self.calendar
 
-        result = ct.getCompositeTimetable("2003 fall", "sequential")
-        self.assertEqual(result, tt)
-        self.assert_(result is not tt)
+       >>> from schooltool.app.interfaces import ISchoolToolCalendar
+       >>> class CalendarStub(list):
+       ...     implements(ISchoolToolCalendar)
+       ...     def __init__(self, events):
+       ...         for event in events:
+       ...             self.append(event)
 
-        self.assertEqual(ct.listCompositeTimetables(),
-                         Set([("2003 fall", "sequential")]))
+       >>> from schooltool.timetable.interfaces import ITimetableCalendarEvent
+       >>> class TTEv(object):
+       ...     implements(ITimetableCalendarEvent)
+       ...     def __init__(self, title, day):
+       ...         self.title = title
+       ...         self.day = day
+       ...     def __cmp__(self, other):
+       ...         return self.title > other.title
+       ...     def __repr__(self):
+       ...         return self.title
+       ...     def schoolDay(self):
+       ...         return self.day
 
-    def test_composite_table_related(self):
-        from schooltool.timetable import TimetableActivity
-        from schooltool.app.membership import Membership
+       >>> s1 = SourceStub([TTEv("e1", 1), TTEv("e2", 2), TTEv("e3", 3), object()])
+       >>> s2 = SourceStub([object(), TTEv("e4", 5), TTEv("e5", 4), TTEv("e6", 0)])
+       >>> ct._collectSourceObjects = lambda: [s1, s2]
 
-        content = ContentStub()
-        ct = ICompositeTimetables(content)
-        tm = ITimetables(content)
-        parent = Parent()
-        Membership(group=parent, member=content)
+    If we do not set date limits - we get all the events from both
+    calendars:
 
-        composite = self.newTimetable()
-        english = TimetableActivity("English")
-        composite["A"].add("Green", english)
+       >>> sorted(list(ct.makeTimetableCalendar()))
+       [e1, e2, e3, e4, e5, e6]
 
-        def newComposite(term_id, schema_id):
-            if (term_id, schema_id) == ("2003 fall", "sequential"):
-                return composite
-            else:
-                return None
+    We can limit the amount of events retrieved:
 
-        def listComposites():
-            return Set([("2003 fall", "sequential")])
+       >>> sorted(list(ct.makeTimetableCalendar(first=2, last=4)))
+       [e2, e3, e5]
 
-        parent.getCompositeTimetable = newComposite
-        parent.listCompositeTimetables = listComposites
-
-        result = ct.getCompositeTimetable("2003 fall", "sequential")
-        self.assertEqual(result, composite)
-        self.assert_(result is not composite)
-        self.assertEqual(ct.listCompositeTimetables(),
-                         Set([("2003 fall", "sequential")]))
-
-        # Now test with our object having a private timetable
-        private = self.newTimetable()
-        math = TimetableActivity("Math")
-        private["B"].add("Blue", math)
-        tm.timetables["2003 fall.sequential"] = private
-
-        result = ct.getCompositeTimetable("2003 fall", "sequential")
-        expected = composite.cloneEmpty()
-        expected.update(composite)
-        expected.update(private)
-        self.assertEqual(result, expected)
-        self.assertEqual(ct.listCompositeTimetables(),
-                         Set([("2003 fall", "sequential")]))
-
-    def test_paths(self):
-        content = ContentStub()
-        content.__name__ = 'stub'
-        content.__parent__ = self.site
-        ct = ICompositeTimetables(content)
-        tm = ITimetables(content)
-        tt = tm.timetables["2003-fall.sequential"] = self.newTimetable()
-        tt1 = ct.getCompositeTimetable("2003-fall", "sequential")
-
-        self.assertEqual(getPath(tt),
-                         '/stub/timetables/2003-fall.sequential')
-        self.assertEqual(getPath(tt1),
-                         '/stub/composite-timetables/2003-fall.sequential')
-
-    def test_makeTimetableCalendar(self):
-        from schooltool.timetable import TimetableActivity
-        from schooltool.app.cal import Calendar, CalendarEvent
-
-        app = stsetup.setUpSchoolToolSite()
-
-        term = app["terms"]['2003 fall'] = TermStub()
-        tss = app["ttschemas"]
-        tss['sequential'] = self.newTimetableSchema()
-        tss['other'] = self.newTimetableSchema()
-        tss['and another'] = self.newTimetableSchema()
-        ct = ICompositeTimetables(ContentStub())
-
-        tt1 = self.newTimetable()
-        tt1["A"].add("Green", TimetableActivity("AG"))
-        cal1 = Calendar(None)
-        ev1 = CalendarEvent(datetime(2003, 11, 26, 12, 00),
-                            timedelta(minutes=30), "AG")
-        cal1.addEvent(ev1)
-
-        tt2 = self.newTimetable()
-        tt2["A"].add("Blue", TimetableActivity("AB"))
-        cal2 = Calendar(None)
-        ev2 = CalendarEvent(datetime(2003, 11, 26, 13, 00),
-                            timedelta(minutes=30), "AB")
-        cal2.addEvent(ev2)
-
-        ttdict = {"2003 fall.sequential": tt1,
-                  "2003 fall.other": tt2}
-        ct.getCompositeTimetable = lambda p, s: ttdict.get("%s.%s" % (p, s))
-        ct.listCompositeTimetables = lambda: [k.split(".")
-                                              for k in ttdict.keys()]
-
-        class TimetableModelStub:
-            def createCalendar(this_self, schoolday_model, tt, first=None,
-                               last=None):
-                self.assert_(schoolday_model is term)
-                if tt is tt1:
-                    return cal1
-                elif tt is tt2:
-                    return cal2
-                else:
-                    self.fail("what is %r?" % tt)
-
-        tt1.model = TimetableModelStub()
-        tt2.model = TimetableModelStub()
-        cal = ct.makeTimetableCalendar()
-        self.assertEqualSorted(list(cal), list(cal1) + list(cal2))
-        self.assert_(cal.__parent__ is ct.context)
-
-    def test_makeTimetableCalendar_with_filtering(self):
-        from schooltool.timetable import TimetablesAdapter
-        from schooltool.timetable import CompositeTimetables
-
-        class TimetableModelStub:
-            def createCalendar(self, term, timetable, first=None, last=None):
-                return ['%s--%s' % (first, last)]
-
-        class TimetableStub:
-            model = TimetableModelStub()
-
-        content = ContentStub()
-        ct = CompositeTimetables(content)
-        fake_term_container = {'term1': 'term1'}
-        ct._getTermContainer = lambda: fake_term_container
-        ct.listCompositeTimetables = lambda: [('term1', 'schema1')]
-        ct.getCompositeTimetable = lambda tid, sid: TimetableStub()
-        cal = ct.makeTimetableCalendar(first='last year', last='next week')
-        self.assertEquals(list(cal), ['last year--next week'])
+    """
 
 
 def doctest_findRelatedTimetables_forSchoolTimetables():
@@ -1298,7 +1179,6 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestSchooldaySlot))
     suite.addTest(unittest.makeSuite(TestSchooldayTemplate))
     suite.addTest(unittest.makeSuite(TestTimetablesAdapter))
-    suite.addTest(unittest.makeSuite(TestCompositeTimetables))
     return suite
 
 if __name__ == '__main__':
