@@ -202,7 +202,7 @@ class SampleSectionAssignments(object):
 
         for section in app['sections'].values():
             calendar = ISchoolToolCalendar(section)
-            for event in list(calendar):
+            for event in sorted(calendar):
                 if (ITimetableCalendarEvent.providedBy(event) and
                     self.random.randrange(13) == 7): # is today lucky?
                     title = self.random.choice(self.excuses)

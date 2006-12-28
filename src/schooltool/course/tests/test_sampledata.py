@@ -393,15 +393,15 @@ def doctest_SampleSectionAssignments():
         ...         continue
         ...     resources = [res.__name__ for res in ev.resources]
         ...     print ev.dtstart, ev.title, resources
-        2005-09-14 09:00:00+00:00 Quiz [u'projector00']
-        2005-09-16 13:30:00+00:00 Lab work [u'projector01']
-        2005-09-23 08:00:00+00:00 Homework [u'projector00']
-        2005-10-10 09:00:00+00:00 Quiz [u'projector01']
-        2005-10-24 11:00:00+00:00 Read the book [u'projector00']
-        2005-11-01 11:00:00+00:00 Read the book [u'projector00']
-        2005-12-07 09:00:00+00:00 Homework [u'projector01']
-        2005-12-09 13:30:00+00:00 Homework [u'projector01']
-        2005-12-22 10:00:00+00:00 Quiz [u'projector00']
+        2005-08-31 13:30:00+00:00 Quiz [u'projector01']
+        2005-09-07 08:00:00+00:00 Quiz [u'projector01']
+        2005-09-22 09:00:00+00:00 Lab work [u'projector01']
+        2005-11-10 10:00:00+00:00 Read the book [u'projector00']
+        2005-11-11 09:00:00+00:00 Homework [u'projector00']
+        2005-11-24 12:30:00+00:00 Read the book [u'projector00']
+        2005-12-13 11:00:00+00:00 Homework [u'projector00']
+        2005-12-14 10:00:00+00:00 Quiz [u'projector00']
+        2005-12-15 09:00:00+00:00 Homework [u'projector00']
 
     Resources must have events in calendars.
 
@@ -412,15 +412,15 @@ def doctest_SampleSectionAssignments():
         ...         continue
         ...     print ev.dtstart, ev.duration, ev.title
         2005-08-23 13:30:00+00:00 1:00:00 Quiz
-        2005-08-26 10:00:00+00:00 0:55:00 Quiz
-        2005-08-29 09:00:00+00:00 0:55:00 Deadline for essay
-        2005-08-31 13:30:00+00:00 1:00:00 Homework
-        2005-09-01 12:30:00+00:00 0:55:00 Deadline for essay
-        2005-09-05 10:00:00+00:00 0:55:00 Deadline for project
-        2005-09-06 09:00:00+00:00 0:55:00 Homework
-        2005-09-07 08:00:00+00:00 0:55:00 Quiz
-        2005-09-14 09:00:00+00:00 0:55:00 Quiz
-        2005-09-16 13:30:00+00:00 1:00:00 Deadline for essay
+        2005-08-24 12:30:00+00:00 0:55:00 Deadline for essay
+        2005-08-26 10:00:00+00:00 0:55:00 Read the book
+        2005-08-29 09:00:00+00:00 0:55:00 Quiz
+        2005-08-31 13:30:00+00:00 1:00:00 Quiz
+        2005-09-01 12:30:00+00:00 0:55:00 Homework
+        2005-09-02 11:00:00+00:00 0:55:00 Homework
+        2005-09-05 10:00:00+00:00 0:55:00 Homework
+        2005-09-07 08:00:00+00:00 0:55:00 Assignment
+        2005-09-12 11:00:00+00:00 0:55:00 Homework
 
     """
 
