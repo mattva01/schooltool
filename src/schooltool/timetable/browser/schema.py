@@ -72,7 +72,7 @@ class TimetableSchemaView(TimetableView):
 
     def title(self):
         msg = _("Timetable schema ${schema}",
-                mapping = {'schema': self.context.__name__})
+                mapping = {'schema': self.context.title})
         return msg
 
     @property

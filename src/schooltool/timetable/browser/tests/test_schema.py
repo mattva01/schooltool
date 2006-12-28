@@ -417,6 +417,7 @@ def doctest_TimetableSchemaView():
 
         >>> tts = TimetableSchema(['day 1', 'day 2'])
         >>> tts.__name__ = 'some-schema'
+        >>> tts.title = "Some Schema"
         >>> tts['day 1'] = ttd1 = TimetableSchemaDay(['A', 'B'])
         >>> tts['day 2'] = ttd2 = TimetableSchemaDay(['A', 'B'])
 
@@ -426,7 +427,7 @@ def doctest_TimetableSchemaView():
     title() returns the view's title:
 
         >>> translate(view.title())
-        u'Timetable schema some-schema'
+        u'Timetable schema Some Schema'
 
     ``rows()`` delegates the job to ``format_timetable_for_presentation``:
 
