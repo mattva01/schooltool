@@ -99,6 +99,8 @@ def doctest_CSVStudent():
         >>> person.nameinfo.last_name
         u'\u012e\u0161\u016b\u0173\u017e'
 
+        >>> person.schooldata.grade_section is appStub["groups"]["1a"]
+        True
 
     """
 
@@ -364,15 +366,32 @@ def doctest_LyceumScheduling_schedule_section():
         ...     def __init__(self, title):
         ...         self.title = title
 
+        >>> class GroupStub(object):
+        ...     def __init__(self, title):
+        ...         self.title = title
+        ...         self.members = []
+
         >>> from schooltool.timetable.interfaces import ITimetables
         >>> from zope.interface import implements
         >>> class TimetablesStub(object):
         ...     implements(ITimetables)
         ...     timetables = {}
 
+        >>> class MemberList(list):
+        ...     def __init__(self, members):
+        ...         for member in members:
+        ...             self.append(member)
+        ...     def add(self, member):
+        ...         self.append(member)
+
         >>> class SectionStub(object):
         ...     courses = [TitleStub('History 1')]
-        ...     members = [TitleStub('1a'), TitleStub('1b')]
+        ...     a1 = GroupStub('1a')
+        ...     a1.members.append(TitleStub('John'))
+        ...     a1.members.append(TitleStub('Peter'))
+        ...     b1 = GroupStub('1b')
+        ...     b1.members.append(TitleStub('Ann'))
+        ...     members = MemberList([a1, b1])
         ...     def __conform__(self, iface):
         ...         if iface == ITimetables:
         ...             return TimetablesStub()
@@ -382,7 +401,8 @@ def doctest_LyceumScheduling_schedule_section():
         >>> class DayStub(object):
         ...     def __init__(self, title):
         ...         self.title = title
-        ...     def add(self, period_id, activity):
+        ...     def add(self, period_id, activity, send_events=True):
+        ...         assert send_events == False
         ...         print 'Adding %s on %s - %s' % (activity, self.title, period_id)
         >>> class TimetableStub(dict):
         ...     def __init__(self):
@@ -404,6 +424,12 @@ def doctest_LyceumScheduling_schedule_section():
         Adding TimetableActivity('History (1a, 1b)', <Section title=History (1a, 1b)>, None) on Monday - 1 pamoka
         Adding TimetableActivity('History (1a, 1b)', <Section title=History (1a, 1b)>, None) on Tuesday - 2 pamoka
         Adding TimetableActivity('History (1a, 1b)', <Section title=History (1a, 1b)>, None) on Thursday - 2 pamoka
+
+    Group members were added to sections, groups themselves were
+    removed from there:
+
+        >>> [m.title for m in app['sections'][sid].members]
+        ['John', 'Peter', 'Ann']
 
     """
 

@@ -66,6 +66,7 @@ class CSVStudent(object):
         person.nameinfo.last_name = self.surname
         app['persons'][user_name] = person
         group = removeSecurityProxy(app['groups'][self.group_id])
+        person.schooldata.grade_section = group
         group.members.add(person)
 
 
@@ -272,21 +273,25 @@ class LyceumScheduling(object):
         for term in removeSecurityProxy(app['terms']).values():
             key = '%s.%s' % (term.__name__, ttschema_id)
             timetable = ttschema.createTimetable()
-            ITimetables(sob).timetables[key] = timetable
             for id, period, _ in  meetings:
                 day_id = days[id-1]
                 act = TimetableActivity(title=activity_title, owner=sob)
-                timetable[day_id].add('%d pamoka' % period, act)
+                timetable[day_id].add('%d pamoka' % period, act, send_events=False)
+            ITimetables(sob).timetables[key] = timetable
+        for group in list(sob.members):
+            for person in group.members:
+                sob.members.add(person)
+            sob.members.remove(group)
 
     section_factory = Section
 
     def generate(self, app):
         sections = self.create_sections()
         # schedule the section
+        unscheduled_sections = {}
         for section, meetings in sections.items():
             course_id, teacher, groups = section
             teacher = CSVTeacher(teacher)
-            unscheduled_sections = {}
             current_room = None
             grp = parse_groups(groups)[0]
             if grp[0] in '12':
@@ -315,5 +320,5 @@ class LyceumScheduling(object):
                         sob = removeSecurityProxy(app['sections'][sid])
                     sob.instructors.add(removeSecurityProxy(app['persons'][teacher.user_name]))
 
-            for sid, meetings in unscheduled_sections.items():
-                self.schedule_section(app, sid, meetings)
+        for sid, meetings in unscheduled_sections.items():
+            self.schedule_section(app, sid, meetings)
