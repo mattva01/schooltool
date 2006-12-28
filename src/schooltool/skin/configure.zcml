@@ -221,4 +221,13 @@
       name="schooltool.view"
       factory=".skin.NavigationViewletCrowd" />
 
+  <viewlet
+      name="language_selector"
+      for="*"
+      manager="schooltool.skin.IHeaderManager"
+      template="templates/language_selector.pt"
+      permission="schooltool.view"
+      class="schooltool.skin.skin.LanguageSelectorViewlet"
+      />
+
 </configure>

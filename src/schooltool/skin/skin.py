@@ -25,12 +25,15 @@ $Id$
 from zope.component import adapts, getAdapter
 from zope.interface import Interface, implements
 from zope.schema import Object
+from zope.i18n.interfaces import IUserPreferredLanguages
 from zope.publisher.interfaces.browser import ILayer, IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.viewlet.interfaces import IViewletManager
 from zope.viewlet.manager import ViewletManagerBase
+from zope.publisher.browser import BrowserView
 from zope.app import zapi
 
+from schooltool.app.interfaces import ICookieLanguageSelector
 from schooltool.securitypolicy.crowds import Crowd
 from schooltool.securitypolicy.interfaces import ICrowd
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -188,3 +191,16 @@ class ISchoolToolLayer(ILayer, IBrowserRequest):
 
 class ISchoolToolSkin(ISchoolToolLayer, IDefaultBrowserLayer):
     """The SchoolTool skin"""
+
+
+class LanguageSelectorViewlet(BrowserView):
+
+    def selected_lang(self):
+        upl = IUserPreferredLanguages(self.request)
+        return upl.getSelectedLanguage()
+
+    def languages(self):
+        upl = IUserPreferredLanguages(self.request)
+        if ICookieLanguageSelector.providedBy(upl):
+            return upl.getLanguageList()
+        return None

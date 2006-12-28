@@ -328,6 +328,21 @@ def doctest_setLanguage():
         >>> IUserPreferredLanguages(request).getPreferredLanguages()
         ('lt',)
 
+    If the language list contains more than one language, you get a
+    cookie language selector:
+
+        >>> from schooltool.app.interfaces import ICookieLanguageSelector
+        >>> setLanguage('en, lt')
+        >>> upl = IUserPreferredLanguages(request)
+        >>> ICookieLanguageSelector.providedBy(upl)
+        True
+
+        >>> upl.getLanguageList()
+        ['en', 'lt']
+
+        >>> upl.getPreferredLanguages()
+        ('en',)
+
     We're done.
 
         >>> setup.placelessTearDown()

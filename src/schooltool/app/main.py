@@ -60,6 +60,7 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.rest import restServerType
 from schooltool.app.browser import pdfcal
 from schooltool.person.interfaces import IPersonFactory
+from schooltool.app.interfaces import ICookieLanguageSelector
 
 MANAGER_USERNAME = 'manager'
 MANAGER_PASSWORD = 'schooltool'
@@ -135,10 +136,41 @@ class Options(object):
             self.config_file = os.path.join(dirname,
                                             self.config_filename + '.in')
 
+
+class CookieLanguageSelector(object):
+    implements(ICookieLanguageSelector)
+
+    def getLanguageList(self):
+        return self.available_languages
+
+    def getSelectedLanguage(self):
+        return self.context.cookies.get("schooltool.lang", self.available_languages[0])
+
+    def setSelectedLanguage(self, lang):
+        self.context.response.setCookie("schooltool.lang", lang)
+
+
 def setLanguage(lang):
     """Set the language for the user interface."""
     if lang == 'auto':
         return # language is negotiated at runtime through Accept-Language.
+
+    if len(lang.split(",")) > 1:
+
+        class CookiePreferredLanguage(CookieLanguageSelector):
+            adapts(IHTTPRequest)
+            implements(IUserPreferredLanguages)
+
+            def __init__(self, context):
+                self.context = context
+                self.available_languages = [language.strip()
+                                            for language in lang.split(",")]
+
+            def getPreferredLanguages(self):
+                return (self.getSelectedLanguage(),)
+
+        provideAdapter(CookiePreferredLanguage, provides=IUserPreferredLanguages)
+        return
 
     class SinglePreferredLanguage(object):
 
