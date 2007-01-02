@@ -70,11 +70,11 @@ from schooltool.app.browser.overlay import CalendarOverlayView
 from schooltool.app.browser.interfaces import ICalendarProvider
 from schooltool.app.browser.interfaces import IEventForDisplay
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
-from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IHaveCalendar, IShowTimetables
 from schooltool.calendar.interfaces import ICalendar
+from schooltool.calendar.interfaces import IEditCalendar
 from schooltool.calendar.recurrent import DailyRecurrenceRule
 from schooltool.calendar.recurrent import YearlyRecurrenceRule
 from schooltool.calendar.recurrent import MonthlyRecurrenceRule
@@ -311,8 +311,17 @@ class EventForDisplay(object):
         """
         if self.context.__parent__ is None:
             return None
-        return '%s/%s' % (zapi.absoluteURL(self.source_calendar, self.request),
-                          urllib.quote(self.__name__))
+
+        if IEditCalendar.providedBy(self.source_calendar):
+            # display the link of the source calendar (the event is a
+            # booking event)
+            return '%s/%s' % (zapi.absoluteURL(self.source_calendar, self.request),
+                              urllib.quote(self.__name__))
+
+        # if event is comming from an immutable (readonly) calendar,
+        # display the absolute url of the event itself
+        return zapi.absoluteURL(self, self.request)
+
 
     def editLink(self):
         """Return the URL where you can edit this event.

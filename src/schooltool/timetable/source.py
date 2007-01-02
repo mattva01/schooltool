@@ -24,6 +24,7 @@ $Id$
 from sets import Set
 from zope.interface import implements
 from zope.component import adapts
+from zope.app import zapi
 
 from schooltool.timetable.interfaces import IHaveTimetables
 from schooltool.timetable.interfaces import ICompositeTimetables
@@ -38,7 +39,7 @@ class BaseRelationshipTimetableSource(object):
     """A timetable source for composing timetables over relationships.
 
     Subclasses must provide a role attribute, with a URI of the role
-    of the related objects, timetables of which will be added.
+    of the related objects that will be added.
     """
 
     implements(ITimetableSource)
@@ -47,27 +48,15 @@ class BaseRelationshipTimetableSource(object):
     def __init__(self, context):
         self.context = context
 
-    def getTimetable(self, term, schema):
-        timetables = []
-        for obj in getRelatedObjects(self.context, self.role):
-            tt = ICompositeTimetables(obj).getCompositeTimetable(term, schema)
-            if tt is not None:
-                timetables.append(tt)
+    def getTimetableSourceObjects(self):
+        """Recursivelly collects all the objects for timetables."""
+        objects = getRelatedObjects(self.context, self.role)
+        objs = []
+        for obj in objects:
+            for adapter in zapi.subscribers((obj, ), ITimetableSource):
+                objs.extend(adapter.getTimetableSourceObjects())
 
-        if not timetables:
-            return None
-
-        result = timetables[0].cloneEmpty()
-        for tt in timetables:
-            result.update(tt)
-
-        return result
-
-    def listTimetables(self):
-        keys = Set()
-        for obj in getRelatedObjects(self.context, self.role):
-            keys.update(ICompositeTimetables(obj).listCompositeTimetables())
-        return keys
+        return list(set(objs))
 
 
 class MembershipTimetableSource(BaseRelationshipTimetableSource):
@@ -92,14 +81,5 @@ class OwnedTimetableSource(object):
     def __init__(self, context):
         self.context = context
 
-    def getTimetable(self, term, schema):
-        try:
-            return ITimetables(self.context).timetables["%s.%s" % (term, schema)]
-        except KeyError:
-            pass
-
-        return None
-
-    def listTimetables(self):
-        return Set([tuple(k.split("."))
-                    for k in ITimetables(self.context).timetables.keys()])
+    def getTimetableSourceObjects(self):
+        return [self.context]

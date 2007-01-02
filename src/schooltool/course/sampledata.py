@@ -39,6 +39,7 @@ from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable import TimetableActivity
 from schooltool.app.cal import CalendarEvent
 from schooltool.app.interfaces import ISchoolToolCalendar
+from schooltool.timetable.interfaces import ITimetableCalendarEvent
 
 
 class SampleCourses(object):
@@ -130,10 +131,10 @@ class SampleTimetables(object):
         course = getRelatedObjects(section, URICourse)[0]
         for ttname in '2005-fall.simple', '2006-spring.simple':
             timetable = app['ttschemas'].getDefault().createTimetable()
-            ITimetables(section).timetables[ttname] = timetable
             for day_id in timetable.keys():
                 activity = TimetableActivity(course.title, owner=section)
-                timetable[day_id].add(period, activity)
+                timetable[day_id].add(period, activity, send_events=False)
+            ITimetables(section).timetables[ttname] = timetable
 
     def generate(self, app, seed=None):
         # Let's assign a period for each teacher's sections
@@ -200,10 +201,10 @@ class SampleSectionAssignments(object):
         self.taken_projectors = set()
 
         for section in app['sections'].values():
-            ttcal = ICompositeTimetables(section).makeTimetableCalendar()
             calendar = ISchoolToolCalendar(section)
-            for event in ttcal:
-                if self.random.randrange(13) == 7: # is today lucky?
+            for event in sorted(calendar):
+                if (ITimetableCalendarEvent.providedBy(event) and
+                    self.random.randrange(13) == 7): # is today lucky?
                     title = self.random.choice(self.excuses)
                     ev = CalendarEvent(event.dtstart, event.duration, title)
                     projector = self._findProjector(ev, projectors)

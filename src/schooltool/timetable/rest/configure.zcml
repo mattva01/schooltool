@@ -123,12 +123,4 @@
       permission="zope.Public"
       />
 
-  <view
-      for="schooltool.timetable.interfaces.ICompositeTimetables"
-      name="GET"
-      factory=".CompositeTimetablesView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
 </configure>

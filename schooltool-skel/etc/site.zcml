@@ -19,6 +19,7 @@
   <include package="zope.app.keyreference" />
   <include package="zope.app.intid" />
   <include package="zope.app.catalog" />
+  <include package="zope.app.file" />
   <include package="zope.mimetype" />
   <include package="zope.file" />
   <include package="zope.html" />

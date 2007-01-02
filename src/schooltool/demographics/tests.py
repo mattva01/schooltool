@@ -201,6 +201,28 @@ def doctest_SamplePersonalEvents():
     """
 
 
+def doctest_PersonFactoryUtility():
+    """Tests for PersonFactoryUtility.
+
+        >>> from schooltool.demographics.utility import PersonFactoryUtility
+        >>> factory = PersonFactoryUtility()
+
+        >>> from schooltool.person.interfaces import IPersonFactory
+        >>> from zope.interface.verify import verifyObject
+        >>> verifyObject(IPersonFactory, factory)
+        True
+
+        >>> for column in factory.columns():
+        ...     print "%s, %s" % (column.name, column.title)
+        first_name, Name
+        last_name, Surname
+
+        >>> factory.sortOn()
+        (('last_name', False),)
+
+    """
+
+
 def test_suite():
     return unittest.TestSuite([
         doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,

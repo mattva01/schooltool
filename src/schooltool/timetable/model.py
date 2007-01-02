@@ -48,6 +48,7 @@ from schooltool.app.cal import CalendarEvent
 from schooltool.calendar.simple import ImmutableCalendar
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
+from schooltool.app.interfaces import ISchoolToolCalendar
 
 from schooltool.timetable.interfaces import IWeekdayBasedTimetableModel
 from schooltool.timetable.interfaces import IDayIdBasedTimetableModel
@@ -352,3 +353,95 @@ class TimetableCalendarEvent(CalendarEvent):
     def owner(self):
         return self.activity.owner
 
+
+class PersistentTimetableCalendarEvent(CalendarEvent):
+    implements(ITimetableCalendarEvent)
+
+    day_id = property(lambda self: self._day_id)
+    period_id = property(lambda self: self._period_id)
+    activity = property(lambda self: self._activity)
+    title = property(lambda self: self.activity.title)
+    resources = property(lambda self: self._resources)
+
+    def __init__(self, event):
+        self.unique_id = event.unique_id
+        self.__name__ = event.__name__
+        self._day_id = event.day_id
+        self._period_id = event.period_id
+        self._activity = event.activity
+
+        self.dtstart = event.dtstart
+        self.duration = event.duration
+        self.description = event.description
+        self.location = event.location
+        self.recurrence = event.recurrence
+        self.allday = event.allday
+
+        resources = list(event.resources)
+        self._resources = ()
+        for resource in resources:
+            self.bookResource(resource)
+
+    def schoolDay(self):
+        tz_id = self.activity.timetable.timezone
+        timezone = pytz.timezone(tz_id)
+        return self.dtstart.astimezone(timezone).date()
+
+
+def addEventsToCalendar(event):
+    timetable = event.activity.timetable
+
+    term_id, schema_id = timetable.__name__.split(".")
+    terms = ISchoolToolApplication(None)["terms"]
+    term = terms[term_id]
+    calendar = timetable.model.createCalendar(term, timetable)
+    section_calendar = ISchoolToolCalendar(event.activity.owner)
+    for cal_event in calendar:
+        if (cal_event.activity == event.activity and
+            cal_event.period_id == event.period_id and
+            cal_event.day_id == event.day_id):
+            tt_event = PersistentTimetableCalendarEvent(cal_event)
+            section_calendar.addEvent(tt_event)
+
+
+def removeEventsFromCalendar(event):
+    timetable = event.activity.timetable
+
+    events = []
+    section_calendar = ISchoolToolCalendar(event.activity.owner)
+
+    for cal_event in list(section_calendar):
+        if ITimetableCalendarEvent.providedBy(cal_event):
+            if (cal_event.activity == event.activity and
+                cal_event.period_id == event.period_id and
+                cal_event.day_id == event.day_id and
+                cal_event.activity.timetable is event.activity.timetable):
+                section_calendar.removeEvent(cal_event)
+
+
+def handleTimetableRemovedEvent(event):
+    section_calendar = ISchoolToolCalendar(event.object)
+    for cal_event in list(section_calendar):
+        if ITimetableCalendarEvent.providedBy(cal_event):
+            if (cal_event.activity.timetable is event.old_timetable):
+                section_calendar.removeEvent(cal_event)
+
+
+def handleTimetableAddedEvent(event):
+    timetable = event.new_timetable
+    term_id, schema_id = event.key.split(".")
+    terms = ISchoolToolApplication(None)["terms"]
+    term = terms[term_id]
+    calendar = timetable.model.createCalendar(term, timetable)
+
+    section_calendar = ISchoolToolCalendar(event.object)
+    for cal_event in calendar:
+        tt_event = PersistentTimetableCalendarEvent(cal_event)
+        section_calendar.addEvent(tt_event)
+
+
+def handleTimetableReplacedEvent(event):
+    if event.old_timetable:
+        handleTimetableRemovedEvent(event)
+    if event.new_timetable:
+        handleTimetableAddedEvent(event)

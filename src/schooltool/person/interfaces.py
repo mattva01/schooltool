@@ -131,9 +131,16 @@ class IPerson(IReadPerson, IWritePerson, IAttributeAnnotatable):
 
 
 class IPersonFactory(zope.interface.Interface):
+
     def __call__(*args, **kw):
-        """Create a new Person instance.
-        """
+        """Create a new Person instance."""
+
+    def columns():
+        """Return a list of default columns for person lists."""
+
+    def sortOn():
+        """Return the default sort order for persons."""
+
 
 class IPersonContainer(container.interfaces.IContainer):
     """Container of persons."""

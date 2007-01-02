@@ -241,7 +241,6 @@ class TimetableFileFactory(object):
         return self.parseXML(name, data)
 
     def parseXML(self, name, xml):
-
         doc = XMLDocument(xml, self.schema)
 
         try:
@@ -272,7 +271,8 @@ class TimetableFileFactory(object):
                         #XXX Ftest it!
                         raise RestError(_("Unknown period id: %r") % period_id)
                     for activity in period.query('tt:activity'):
-                        ttday.add(period_id, self._parseActivity(activity))
+                        ttday.add(period_id, self._parseActivity(activity),
+                                  send_events=False)
             all_periods = sets.Set()
             for day_id, ttday in tt.items():
                 all_periods.update(ttday.keys())
@@ -313,7 +313,8 @@ class TimetableFileFactory(object):
         # removeSecurityProxy needed because we will put the TimetableActivity
         # into ZODB
         owner = removeSecurityProxy(self.context.__parent__)
-        return TimetableActivity(title, owner, resources)
+        # XXX resources are ignored at the moment
+        return TimetableActivity(title, owner)
 
 
 class TimetablePUT(object):
@@ -513,11 +514,3 @@ class TimetableDictView(View):
         return timetables
 
     timetables = property(_timetables)
-
-
-class CompositeTimetablesView(TimetableDictView):
-    """View listing composite timebables of CompositeTimetabled"""
-
-    def getTimetables(self):
-        return [self.context.getCompositeTimetable(term, schema)
-                for term, schema in self.context.listCompositeTimetables()]

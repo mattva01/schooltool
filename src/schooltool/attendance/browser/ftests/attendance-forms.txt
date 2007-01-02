@@ -127,14 +127,16 @@ Looks at his daily view, and sees the Dancing section there:
     >>> print analyze.queryHTML('id("content-body")', largo.contents)[0]
     <div id="content-body">
     ...
-              <h6 style="background: #...">
-                  Dancing 1
-                  <span class="start-end">
-                    (<span>09:30</span>
-                       -
-                     <span>10:25</span>)
-                  </span>
-              </h6>
+      <h6 style="background: #...">
+        <a href="http://localhost/sections/dancing1a/calendar/..." title="Dancing 1">
+          Dancing 1
+          <span class="start-end">
+            (<span>09:30</span>
+             -
+            <span>10:25</span>)
+          </span>
+        </a>
+      </h6>
     ...
 
 You can go to the section attendance form by following the 'Attendance' link in

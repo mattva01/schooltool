@@ -636,14 +636,22 @@ class SectionTimetableSetupView(TimetableSetupViewBase):
         if 'SAVE' in self.request:
             section = removeSecurityProxy(self.context)
             for key in self.ttkeys:
-                timetable =  self.ttschema.createTimetable()
-                ITimetables(section).timetables[key] = timetable
+                if ITimetables(section).timetables.get(key, None):
+                    timetable = ITimetables(section).timetables[key]
+                else:
+                    timetable = self.ttschema.createTimetable()
+                    ITimetables(section).timetables[key] = timetable
                 for day_id, day in timetable.items():
-                    for period_id in day.periods:
+                    for period_id, period in list(day.items()):
                         if '.'.join((day_id, period_id)) in self.request:
-                            act =  TimetableActivity(title=course_title,
-                                                     owner=section)
-                            timetable[day_id].add(period_id, act)
+                            if not period:
+                                act = TimetableActivity(title=course_title,
+                                                         owner=section)
+                                day.add(period_id, act)
+                        else:
+                            if period:
+                                for act in list(period):
+                                    day.remove(period_id, act)
 
             # TODO: find a better place to redirect to
             self.request.response.redirect(

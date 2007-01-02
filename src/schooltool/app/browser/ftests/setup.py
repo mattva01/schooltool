@@ -48,6 +48,7 @@ def addPerson(name, username=None, password=None, groups=None, browser=None):
     browser.getLink('Persons').click()
     browser.getLink('New Person').click()
     browser.getControl('Full name').value = name
+    browser.getControl('First name').value = name
     # XXX Last name is a required field defined by demographics
     browser.getControl('Last name').value = 'Fake'
     browser.getControl('Username').value = username

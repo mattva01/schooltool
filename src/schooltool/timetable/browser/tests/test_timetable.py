@@ -720,21 +720,13 @@ def doctest_SectionTimetableSetupView():
 
         >>> view = SectionTimetableSetupView(context, request)
 
-    The first time we view the page all the events are off:
+    First we submit the view::
 
-        >>> print view()
-        ...
-        <BLANKLINE>
-        ...
-                            id="Mon.9:00" value="Mon.9:00"
-        ...
-                            id="Mon.10:00" value="Mon.10:00"
-        ...
-                            id="Tue.9:00" value="Tue.9:00"
-        ...
-                            id="Tue.10:00" value="Tue.10:00"
-        ...
-
+        >>> result = view()
+        >>> view.request.response.getStatus()
+        302
+        >>> view.request.response.getHeader('location')
+        'http://127.0.0.1/sections/math/timetables/2005-fall.default'
 
     Now we have a schedule for our course:
 
@@ -747,15 +739,9 @@ def doctest_SectionTimetableSetupView():
         >>> ITimetables(math).timetables['2005-fall.default']['Tue']['10:00']
         Set([])
 
-        >>> request = TestRequest(form={'ttschema': 'default',
-        ...                             'term': '2005-fall',
-        ...                             'Mon.9:00':'ON',
-        ...                             'SAVE': 'Save'})
+    All the periods that were 'ON' are now checked:
 
-    Since we don't have an update() method, we call the page again to see our
-    last changes, all the periods that were 'ON' are now checked:
-
-        >>> view = SectionTimetableSetupView(context, request)
+        >>> view = SectionTimetableSetupView(context, TestRequest())
         >>> print view()
         ...
         <BLANKLINE>
@@ -772,9 +758,15 @@ def doctest_SectionTimetableSetupView():
     To remove a period from our schedule we create a new save request without
     that period listed.
 
+        >>> request = TestRequest(form={'ttschema': 'default',
+        ...                             'term': '2005-fall',
+        ...                             'Mon.9:00':'ON',
+        ...                             'SAVE': 'Save'})
         >>> view = SectionTimetableSetupView(context, request)
+        >>> result = view()
+
+        >>> view = SectionTimetableSetupView(context, TestRequest())
         >>> print view()
-        ...
         <BLANKLINE>
         ...
                             checked="checked" id="Mon.9:00"
@@ -790,7 +782,6 @@ def doctest_SectionTimetableSetupView():
 
         >>> ITimetables(math).timetables['2005-fall.default']['Tue']['9:00']
         Set([])
-
 
     """
 

@@ -37,136 +37,47 @@ from schooltool.timetable import TimetablesAdapter
 from zope.interface.verify import verifyObject
 
 
-class BaseTimetableSourceTest(object):
+def doctest_RelationshipTimetableSources(object):
+    """Tests for RelationshipTimetableSources.
 
-    def setUp(self):
-        from schooltool.relationship.tests import setUpRelationships
+        >>> from schooltool.relationship.tests import setUpRelationships
+        >>> site = setup.placefulSetUp(True)
+        >>> setup.setUpAnnotations()
+        >>> setUpRelationships()
 
-        self.site = setup.placefulSetUp(True)
-        setup.setUpAnnotations()
-        setUpRelationships()
-        ztapi.provideAdapter(IOwnTimetables, ITimetables,
-                             TimetablesAdapter)
-        class CompositeTimetablesStub(object):
-            def __init__(self, context):
-                self.context = context
-            def listCompositeTimetables(self):
-                return self.context.listCompositeTimetables()
-            def getCompositeTimetable(self, *args):
-                return self.context.getCompositeTimetable(*args)
-        ztapi.provideAdapter(IHaveTimetables, ICompositeTimetables,
-                             CompositeTimetablesStub)
+        >>> from schooltool.app.membership import Membership
+        >>> o1 = ContentStub()
+        >>> o2 = Parent()
+        >>> Membership(member=o1, group=o2)
+        >>> o3 = Parent()
+        >>> Membership(member=o2, group=o3)
+        >>> o4 = Parent()
+        >>> Membership(member=o2, group=o4)
+        >>> o5 = Parent()
+        >>> Membership(member=o1, group=o5)
 
-    def tearDown(self):
-        setup.placefulTearDown()
+        >>> from schooltool.timetable.interfaces import ITimetableSource
+        >>> from zope.component import provideSubscriptionAdapter
+        >>> from schooltool.timetable.source import MembershipTimetableSource
+        >>> provideSubscriptionAdapter(MembershipTimetableSource,
+        ...                            adapts=[None],
+        ...                            provides=ITimetableSource)
+        >>> from schooltool.timetable.source import OwnedTimetableSource
+        >>> provideSubscriptionAdapter(OwnedTimetableSource,
+        ...                            adapts=[None],
+        ...                            provides=ITimetableSource)
 
-    def test(self):
-        from schooltool.timetable.interfaces import ITimetableSource
-        context = ContentStub()
-        adapter = self.createAdapter(context)
-        verifyObject(ITimetableSource, adapter)
+        >>> mts = MembershipTimetableSource(o1)
+        >>> l = mts.getTimetableSourceObjects()
+        >>> sorted(l) == sorted([o2, o3, o4, o5])
+        True
 
-    def newTimetable(self):
-        from schooltool.timetable import Timetable, TimetableDay
-        tt = Timetable(("A", "B"))
-        tt["A"] = TimetableDay(["Green", "Blue"])
-        tt["B"] = TimetableDay(["Green", "Blue"])
-        return tt
+        >>> mts = MembershipTimetableSource(o2)
+        >>> l = mts.getTimetableSourceObjects()
+        >>> sorted(l) == sorted([o3, o4])
+        True
 
-    def test_getTimetable(self):
-        from schooltool.timetable import TimetableActivity
-
-        content = ContentStub()
-        parent = Parent()
-        self.createRelationship(content, parent)
-
-        composite = self.newTimetable()
-        english = TimetableActivity("English")
-        composite["A"].add("Green", english)
-
-        def newComposite(term_id, schema_id):
-            if (term_id, schema_id) == ("2003 fall", "sequential"):
-                return composite
-            else:
-                return None
-
-        parent.getCompositeTimetable = newComposite
-        parent.listCompositeTimetables = (
-            lambda: Set([("2003 fall", "sequential")]))
-
-        adapter = self.createAdapter(content)
-        result = adapter.getTimetable("2003 fall", "sequential")
-        self.assertEqual(result, composite)
-
-        # nonexising
-        result = adapter.getTimetable("2005 fall", "sequential")
-        self.assertEqual(result, None)
-
-        # let's try it with two timetables
-        otherparent = Parent()
-        self.createRelationship(content, otherparent)
-
-        othertt = self.newTimetable()
-        math = TimetableActivity("Math")
-        othertt["A"].add("Blue", math)
-
-        otherparent.getCompositeTimetable = lambda x, y: othertt
-
-        expected = composite.cloneEmpty()
-        expected.update(composite)
-        expected.update(othertt)
-
-        result = adapter.getTimetable("2003 fall", "sequential")
-        self.assertEqual(result, expected)
-
-    def test_listTimetables(self):
-        content = ContentStub()
-
-        adapter = self.createAdapter(content)
-        self.assertEqual(adapter.listTimetables(), Set())
-
-        parent = Parent()
-        self.createRelationship(content, parent)
-
-        parent.listCompositeTimetables = (
-            lambda: Set([("2003 fall", "sequential")]))
-
-        self.assertEqual(adapter.listTimetables(),
-                         Set([("2003 fall", "sequential")]))
-
-        otherparent = Parent()
-        self.createRelationship(content, otherparent)
-
-        otherparent.listCompositeTimetables = (
-            lambda: Set([("2005 fall", "sequential")]))
-
-        self.assertEqual(adapter.listTimetables(),
-                         Set([("2003 fall", "sequential"),
-                              ("2005 fall", "sequential")]))
-
-
-class TestMembershipTimetableSource(BaseTimetableSourceTest,
-                                    unittest.TestCase):
-
-    def createAdapter(self, context):
-        from schooltool.timetable.source import MembershipTimetableSource
-        return MembershipTimetableSource(context)
-
-    def createRelationship(self, context, related):
-        from schooltool.app.membership import Membership
-        Membership(group=related, member=context)
-
-
-class TestInstructionTimetableSource(BaseTimetableSourceTest,
-                                     unittest.TestCase):
-
-    def createAdapter(self, context):
-        from schooltool.timetable.source import InstructionTimetableSource
-        return InstructionTimetableSource(context)
-
-    def createRelationship(self, context, related):
-        from schooltool.app.relationships import Instruction
-        Instruction(instructor=context, section=related)
+    """
 
 
 def doctest_OwnedTimetableSource():
@@ -179,37 +90,21 @@ def doctest_OwnedTimetableSource():
 
         >>> class TTOwnerStub(object):
         ...     implements(IOwnTimetables)
-        ...     timetables = Timetables()
-        ...     def __conform__(self, iface):
-        ...         if iface == ITimetables:
-        ...             return self.timetables
 
         >>> owner = TTOwnerStub()
         >>> source = OwnedTimetableSource(owner)
-
-        >>> source.getTimetable("2003", "autumn") is None
+        >>> source.getTimetableSourceObjects() == [owner]
         True
-
-        >>> source.listTimetables()
-        Set([])
-
-        >>> ITimetables(owner).timetables = {'2003.autumn': "a timetable",
-        ...                                  '2005.spring': "a pine corn"}
-        >>> source.listTimetables()
-        Set([('2003', 'autumn'), ('2005', 'spring')])
-
-        >>> source.getTimetable("2003", "autumn")
-        'a timetable'
 
     """
 
 
 def test_suite():
-    return unittest.TestSuite([
-        doctest.DocTestSuite(setUp=setup.placelessSetUp,
-                             tearDown=setup.placelessTearDown),
-        unittest.makeSuite(TestMembershipTimetableSource),
-        unittest.makeSuite(TestInstructionTimetableSource)])
+    return doctest.DocTestSuite(setUp=setup.placelessSetUp,
+                                tearDown=setup.placelessTearDown,
+                                optionflags=doctest.ELLIPSIS|doctest.REPORT_NDIFF|
+                                            doctest.NORMALIZE_WHITESPACE|
+                                            doctest.REPORT_ONLY_FIRST_FAILURE)
     return suite
 
 if __name__ == '__main__':

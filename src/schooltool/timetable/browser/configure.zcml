@@ -137,4 +137,14 @@
       title="New Timetable"
       />
 
+  <!-- ttevent -->
+
+   <page
+      for="schooltool.timetable.interfaces.ITimetableCalendarEvent"
+      name="edit.html"
+      layer="schooltool.skin.ISchoolToolLayer"
+      class=".event.TimetableEventEditView"
+      permission="schooltool.edit"
+      />
+
 </configure>

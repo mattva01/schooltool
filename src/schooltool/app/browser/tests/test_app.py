@@ -550,38 +550,45 @@ def doctest_CheckboxColumn():
     """
 
 
-def doctest_GetterLabelColumn():
-    """Tests for GetterLabelColumn.
+def doctest_LabelColumn():
+    """Tests for LabelColumn.
 
-    Let's try creating a GetterLabelColumn first:
+    Let's try creating a LabelColumn first:
 
-        >>> from schooltool.app.browser.app import GetterLabelColumn
-        >>> column = GetterLabelColumn(prefix='some_prefix',
-        ...                            name='title',
-        ...                            title=u"Title",
-        ...                            getter=lambda i, f: i.title,
-        ...                            subsort=True)
-        >>> column.prefix
+        >>> class ColumnStub(object):
+        ...     title = "The title"
+        ...     def __init__(self):
+        ...         self.__name__ = "name"
+        ...     def renderCell(self, item, formatter):
+        ...         return item.title
+        >>> column = ColumnStub()
+
+        >>> from schooltool.app.browser.app import LabelColumn
+        >>> lc = LabelColumn(column, prefix='some_prefix')
+        >>> lc._prefix
         'some_prefix'
 
     We want to be able to sort by this column:
 
         >>> from zc.table.interfaces import ISortableColumn
-        >>> ISortableColumn.providedBy(column)
+        >>> ISortableColumn.providedBy(lc)
         True
 
         >>> class ItemStub(object):
         ...     __name__ = "item_stub"
         ...     title = "Title of The Item"
         >>> column.renderCell(ItemStub(), None)
-        u'<label for="some_prefix.item_stub">Title of The Item</label>'
+        'Title of The Item'
+
+        >>> lc.renderCell(ItemStub(), None)
+        '<label for="some_prefix.item_stub">Title of The Item</label>'
 
     If there is not prefix set, we plain __name__ of the item is used
     as the id:
 
-        >>> column.prefix = ""
-        >>> column.renderCell(ItemStub(), None)
-        u'<label for="item_stub">Title of The Item</label>'
+        >>> lc._prefix = ""
+        >>> lc.renderCell(ItemStub(), None)
+        '<label for="item_stub">Title of The Item</label>'
 
     """
 

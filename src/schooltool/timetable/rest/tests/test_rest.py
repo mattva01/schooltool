@@ -410,39 +410,12 @@ class TestTimetableDictView(TimetableTestMixin, unittest.TestCase):
                </timetables>""")
 
 
-class TestCompositeTimetablesView(TimetableTestMixin, unittest.TestCase):
-
-    def createView(self, context, request):
-        from schooltool.timetable.rest import CompositeTimetablesView
-        return CompositeTimetablesView(context, request)
-
-    def setUp(self):
-        TimetableTestMixin.setUp(self)
-        tt = self.createEmpty()
-        self.tt = ITimetables(self.section).timetables["2003 fall.schema1"] = tt
-
-        class CompositeTimetablesStub(object):
-            def getCompositeTimetable(self, term, schema):
-                if (term, schema) == ("2003 fall", "schema1"):
-                    return tt
-            def listCompositeTimetables(self):
-                return [("2003 fall", "schema1")]
-
-        self.section = CompositeTimetablesStub()
-
-    def test_getTimetables(self):
-        view = self.createView(self.section, TestRequest())
-        timetables = view.getTimetables()
-        self.assertEquals(len(timetables), 1)
-
-
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestTimetableReadView))
     suite.addTest(unittest.makeSuite(TestTimetableFileFactory))
     suite.addTest(unittest.makeSuite(TestTimetablePUT))
     suite.addTest(unittest.makeSuite(TestTimetableDictView))
-    suite.addTest(unittest.makeSuite(TestCompositeTimetablesView))
     suite.addTest(DocTestSuite(optionflags=ELLIPSIS))
     suite.addTest(DocTestSuite('schooltool.timetable.rest',
                                setUp=setUp, tearDown=placelesssetup.tearDown,

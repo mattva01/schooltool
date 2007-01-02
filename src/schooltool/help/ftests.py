@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2006 Shuttleworth Foundation
+# Copyright (c) 2005 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,34 +17,28 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for course and section implementations.
+Functional tests for schooltool.help.
 
 $Id$
 """
 
-
 import unittest
 from zope.testing import doctest
-from zope.interface.verify import verifyObject
-from schooltool.timetable.tests.test_source import BaseTimetableSourceTest
+from zope.app.testing.functional import FunctionalDocFileSuite
 
-
-class TestBookingTimetableSource(BaseTimetableSourceTest, unittest.TestCase):
-
-    def createAdapter(self, context):
-        from schooltool.course.booking import BookingTimetableSource
-        return BookingTimetableSource(context)
-
-    def createRelationship(self, context, related):
-        from schooltool.course.booking import SectionBooking
-        SectionBooking(section=related, resource=context)
-
+from schooltool.testing import analyze
+from schooltool.testing.functional import load_ftesting_zcml
+from schooltool.testing.functional import collect_ftests
 
 
 def test_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestBookingTimetableSource))
-    return suite
+    load_ftesting_zcml()
+    optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
+                   doctest.NORMALIZE_WHITESPACE |
+                   doctest.REPORT_ONLY_FIRST_FAILURE)
+    return FunctionalDocFileSuite(
+        'integration.txt', optionflags=optionflags,
+        globs={'analyze': analyze})
 
 
 if __name__ == '__main__':

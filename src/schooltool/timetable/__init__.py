@@ -145,7 +145,9 @@ from schooltool.calendar.simple import ImmutableCalendar
 
 # appease the gods of circular imports
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
+from schooltool.app.interfaces import ISchoolToolCalendar
 
+from schooltool.timetable.interfaces import ITimetableCalendarEvent
 from schooltool.timetable.interfaces import IBookResources
 from schooltool.timetable.interfaces import ITimetable, ITimetableWrite
 from schooltool.timetable.interfaces import ITimetableDay, ITimetableDayWrite
@@ -235,7 +237,7 @@ class Timetable(Persistent):
         if self.cloneEmpty() != other.cloneEmpty():
             raise ValueError("Timetables have different schemas")
         for day, period, activity in other.activities():
-            self[day].add(period, activity, False)
+            self[day].add(period, activity, send_events=False)
 
     def cloneEmpty(self):
         other = Timetable(self.day_ids)
@@ -312,6 +314,7 @@ class TimetableDay(Persistent):
         if not ITimetableActivity.providedBy(activity):
             raise TypeError("TimetableDay can only contain ITimetableActivity"
                             " objects (got %r)" % (activity, ))
+
         if activity.timetable is None:
             activity = activity.replace(timetable=self.timetable)
         self.activities[period].add(activity)
@@ -592,47 +595,26 @@ class CompositeTimetables(object):
     def __init__(self, context):
         self.context = context
 
-    def getCompositeTimetable(self, term_id, schema_id):
-        timetables = []
-        # Get the timetables from timetable source subscription adapters
+    def _collectSourceObjects(self):
+        objs = []
         for adapter in zapi.subscribers((self.context, ), ITimetableSource):
-            tt = adapter.getTimetable(term_id, schema_id)
-            if tt is not None:
-                timetables.append(tt)
-
-        if not timetables:
-            return None
-
-        # Aggregate results
-        result = timetables[0].cloneEmpty()
-        for tt in timetables:
-            result.update(tt)
-
-        parent = TimetableDict()
-        parent.__parent__ = self.context
-        parent.__name__ = 'composite-timetables'
-        parent[".".join((term_id, schema_id))] = result
-
-        return result
-
-    def listCompositeTimetables(self):
-        keys = Set()
-        for adapter in zapi.subscribers((self.context, ), ITimetableSource):
-            keys |= adapter.listTimetables()
-        return keys
-
-    def _getTermContainer(self):
-        """Return the term container."""
-        return getSchoolToolApplication()["terms"]
+            objs.extend(adapter.getTimetableSourceObjects())
+        return set(objs)
 
     def makeTimetableCalendar(self, first=None, last=None):
+
+        limited = (first is not None and
+                   last is not None)
+        def inRange(event):
+            return first <= event.schoolDay() <= last
+
         events = []
-        terms = self._getTermContainer()
-        for term_id, schema_id in self.listCompositeTimetables():
-            term = terms[term_id]
-            tt = self.getCompositeTimetable(term_id, schema_id)
-            cal = tt.model.createCalendar(term, tt, first, last)
-            events.extend(cal)
+        for obj in self._collectSourceObjects():
+            cal = ISchoolToolCalendar(obj)
+            for event in cal:
+                if (ITimetableCalendarEvent.providedBy(event) and
+                    (not limited or inRange(event))):
+                    events.append(event)
         result = ImmutableCalendar(events)
         # Parent is needed so that we can find out the owner of this calendar.
         directlyProvides(result, ILocation)

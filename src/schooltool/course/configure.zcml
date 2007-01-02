@@ -142,15 +142,6 @@
       component=".booking.URISection"
       name="http://schooltool.org/ns/sectionbooking/section" />
 
-  <!-- Timetable source subscriber -->
-
-  <subscriber
-      for="schooltool.timetable.interfaces.IHaveTimetables"
-      provides="schooltool.timetable.interfaces.ITimetableSource"
-      factory=".booking.BookingTimetableSource"
-      permission="zope.Public"
-      />
-
   <!-- Views -->
   <include package=".browser" />
   <include package=".rest" />

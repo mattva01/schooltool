@@ -27,12 +27,17 @@ from zope.app.catalog.text import TextIndex
 from zope.app.catalog.field import FieldIndex
 from zope.interface import implements
 from zope.component import adapts
+from zope.interface import directlyProvides
+
+from zc.table.column import GetterColumn
+from zc.table.interfaces import ISortableColumn
 
 from schooltool.utility import UtilitySpecification, MultiUtilitySetUp
 
 from schooltool.demographics.interfaces import ISearch
 from schooltool.demographics.person import Person
 from schooltool.person.interfaces import IPerson
+from schooltool.person.interfaces import IPersonFactory
 
 class Search(object):
     implements(ISearch)
@@ -76,7 +81,31 @@ class PersonFactory(Persistent, Contained):
 
 
 class PersonFactoryUtility(object):
+
+    implements(IPersonFactory)
+
+    def columns(self):
+        first_name = GetterColumn(
+            name='first_name',
+            title=u'Name',
+            getter=lambda i, f: i.nameinfo.first_name,
+            subsort=True)
+        directlyProvides(first_name, ISortableColumn)
+
+        last_name = GetterColumn(
+            name='last_name',
+            title=u'Surname',
+            getter=lambda i, f: i.nameinfo.last_name,
+            subsort=True)
+        directlyProvides(last_name, ISortableColumn)
+
+        return [first_name, last_name]
+
+    def sortOn(self):
+        return (("last_name", False),)
+
     def __call__(self, *args, **kw):
         result = Person(*args, **kw)
+        result.nameinfo.first_name = result.title
         result.nameinfo.last_name = u'Unknown last name'
         return result

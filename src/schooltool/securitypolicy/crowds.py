@@ -116,7 +116,7 @@ class AuthenticatedCrowd(_GroupCrowd):
 
     group = 'zope.Authenticated'
 
-class AnonymousCrowd(Crowd):
+class AnonymousCrowd(_GroupCrowd):
     """Anonymous users."""
 
     group = 'zope.Anybody'

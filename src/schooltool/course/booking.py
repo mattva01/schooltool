@@ -22,14 +22,8 @@ Resource booking for sections.
 $Id$
 """
 
-from zope.interface import implements
-from zope.component import adapts
-
-from schooltool.timetable.source import BaseRelationshipTimetableSource
 from schooltool.relationship.uri import URIObject
 from schooltool.relationship.relationship import RelationshipSchema
-from schooltool.timetable.interfaces import ITimetableSource
-from schooltool.resource.interfaces import IResource
 
 
 URISectionBooking = URIObject('http://schooltool.org/ns/sectionbooking',
@@ -44,11 +38,3 @@ URIResource = URIObject('http://schooltool.org/ns/sectionbooking/resource',
 SectionBooking = RelationshipSchema(URISectionBooking,
                                     section=URISection,
                                     resource=URIResource)
-
-
-class BookingTimetableSource(BaseRelationshipTimetableSource):
-
-    implements(ITimetableSource)
-    adapts(IResource)
-
-    role = URISection

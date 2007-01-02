@@ -80,6 +80,13 @@
     <allow interface=".interfaces.ITimetableCalendarEvent" />
   </class>
 
+  <class class=".model.PersistentTimetableCalendarEvent">
+    <allow interface=".interfaces.ITimetableCalendarEvent" />
+    <require
+       permission="schooltool.edit"
+       set_schema=".interfaces.ITimetableCalendarEvent" />
+  </class>
+
   <class class=".TimetableDict">
     <require permission="schooltool.edit"
              interface="zope.app.container.interfaces.IWriteContainer" />
@@ -178,5 +185,17 @@
       interface="schooltool.timetable.interfaces.ITimetableSchemaContainer"
       crowds="administration"
       permission="schooltool.edit" />
+
+  <subscriber
+      for="schooltool.timetable.interfaces.ITimetableActivityAddedEvent"
+      handler=".model.addEventsToCalendar" />
+
+  <subscriber
+      for="schooltool.timetable.interfaces.ITimetableActivityRemovedEvent"
+      handler=".model.removeEventsFromCalendar" />
+
+  <subscriber
+      for="schooltool.timetable.interfaces.ITimetableReplacedEvent"
+      handler=".model.handleTimetableReplacedEvent" />
 
 </configure>

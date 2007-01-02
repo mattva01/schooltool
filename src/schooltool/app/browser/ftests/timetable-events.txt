@@ -21,14 +21,16 @@ Looks at his daily view:
     >>> print analyze.queryHTML('id("content-body")', frog.contents)[0]
     <div id="content-body">
     ...
-              <h6 style="background: #...">
-                  History 6
-                  <span class="start-end">
-                    (<span>11:35</span>
-                       -
-                     <span>12:20</span>)
-                  </span>
-              </h6>
+      <h6 style="background: #...">
+        <a href="http://localhost/sections/history6a/calendar/..." title="History 6">
+          History 6
+          <span class="start-end">
+            (<span>11:35</span>
+               -
+             <span>12:20</span>)
+          </span>
+        </a>
+      </h6>
     ...
 
 And tries to get an overview of the whole week:

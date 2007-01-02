@@ -27,19 +27,83 @@ and book it for our history class:
     HTTP/1.1 201 Created
     ...
 
-Section events should be visible in the calendar of the resource:
+And reschedule the section:
+XXX we have to do this because semantics of adding resources to a
+section are not clear anymore with per-event booking available.
 
     >>> manager = setup.logInManager()
+    >>> manager.open('http://localhost/sections/history6a')
+    >>> manager.getLink('Schedule').click()
+
+    >>> manager.getControl(name="Monday.09:30-10:25").value = False
+    >>> manager.getControl(name="Wednesday.11:35-12:20").value = False
+    >>> manager.getControl('Save').click()
+
+    >>> manager.open('http://localhost/sections/history6a')
+    >>> manager.getLink('Schedule').click()
+    >>> manager.getControl(name="Monday.09:30-10:25").value = True
+    >>> manager.getControl(name="Wednesday.11:35-12:20").value = True
+    >>> manager.getControl('Save').click()
+
+Section events should be visible in the calendar of the resource:
+
     >>> manager.open('http://localhost/resources/a-resource/calendar/2005-09-07')
     >>> print analyze.queryHTML('id("content-body")', manager.contents)[0]
     <div id="content-body">
     ...
-              <h6 style="background: #...">
-                  History 6
-                  <span class="start-end">
-                    (<span>11:35</span>
-                       -
-                     <span>12:20</span>)
-                  </span>
-              </h6>
+        <a href="http://localhost/resources/a-resource/calendar/..." title="History 6">
+          History 6
+          <span class="start-end">
+            (<span>11:35</span>
+               -
+             <span>12:20</span>)
+          </span>
+        </a>
+    ...
+
+They are editable:
+
+    >>> manager.getLink('History 6').click()
+    >>> manager.getLink('edit event').click()
+    >>> manager.getControl('Description').value = "Assignement."
+    >>> manager.getControl('Apply').click()
+    >>> print analyze.queryHTML('id("content-body")', manager.contents)[0]
+    <div id="content-body">
+    ...
+        <a href="http://localhost/sections/history6a/calendar/..." title="History 6">
+          History 6
+          <span class="start-end">
+            (<span>11:35</span>
+              - <span>12:20</span>)
+          </span>
+        </a>
+    ...
+      <div class="description">Assignement.</div>
+    ...
+
+Now if we will unschedule the other activity this one should retain
+it's description:
+
+    >>> manager.open('http://localhost/sections/history6a')
+    >>> manager.getLink('Schedule').click()
+    >>> manager.getControl(name="Monday.09:30-10:25").value = False
+    >>> manager.getControl(name="Wednesday.11:35-12:20").value = True
+    >>> manager.getControl('Save').click()
+
+Let's look at it:
+
+    >>> manager.open('http://localhost/resources/a-resource/calendar/2005-09-07')
+    >>> print analyze.queryHTML('id("content-body")', manager.contents)[0]
+    <div id="content-body">
+    ...
+        <a href="http://localhost/resources/a-resource/calendar/..." title="History 6">
+          History 6
+          <span class="start-end">
+            (<span>11:35</span>
+               -
+             <span>12:20</span>)
+          </span>
+        </a>
+    ...
+      <div class="description">Assignement.</div>
     ...

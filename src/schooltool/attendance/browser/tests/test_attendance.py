@@ -39,6 +39,7 @@ from zope.i18n import translate
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
+from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.attendance.interfaces import IAttendancePreferences
 from schooltool.common import DateRange
 from schooltool.timetable import ICompositeTimetables
@@ -125,9 +126,11 @@ class TimetableActivityStub(object):
         self.title = title
 
 
-class StubTimetables(object):
+class StubCalendar(object):
+
     adapts(Interface)
-    implements(ICompositeTimetables)
+    implements(ISchoolToolCalendar)
+
     def __init__(self, context):
         self.context = context
         self._tt = TimetableStub({
@@ -135,7 +138,7 @@ class StubTimetables(object):
                         'D2': TimetableDayStub(['B', 'C'], ['B']),
                    })
 
-    def makeTimetableCalendar(self, first, last):
+    def __iter__(self):
         events = [
             TimetableCalendarEvent(
                 datetime.datetime(2005, 12, 14, 10, 00, tzinfo=utc),
@@ -158,7 +161,18 @@ class StubTimetables(object):
                 "Arts", day_id='D2', period_id="C",
                 activity=TimetableActivityStub(self._tt, "Arts")),
             ]
-        return ImmutableCalendar([e for e in events
+        return iter(events)
+
+
+class StubTimetables(object):
+    adapts(Interface)
+    implements(ICompositeTimetables)
+    def __init__(self, context):
+        self.context = context
+
+    def makeTimetableCalendar(self, first, last):
+        calendar = StubCalendar(self.context)
+        return ImmutableCalendar([e for e in calendar
                                   if first <= e.dtstart.date() <= last])
 
 

@@ -31,6 +31,7 @@ from zope.app.form.browser.add import AddView
 from zope.app.form.interfaces import WidgetsError
 from zope.app.form.utility import getWidgetsData
 from zope.publisher.browser import BrowserView
+from zope.component import getUtility
 
 from schooltool.person.interfaces import IPerson
 from schooltool.group.interfaces import IGroup
@@ -39,6 +40,7 @@ from schooltool.timetable.interfaces import ITimetables
 from schooltool.app.browser.app import ContainerView, BaseEditView
 from schooltool.group.interfaces import IGroup
 from schooltool.person.interfaces import IPerson
+from schooltool.person.interfaces import IPersonFactory
 
 from schooltool import SchoolToolMessage as _
 from schooltool.common import collect
@@ -277,6 +279,14 @@ class SectionInstructorView(RelationshipEditConfView, ConflictDisplayMixin):
     def getAvailableItemsContainer(self):
         return ISchoolToolApplication(None)['persons']
 
+    def columnsForAvailable(self):
+        return getUtility(IPersonFactory).columns()
+
+    columnsForSelected = columnsForAvailable
+
+    def sortOn(self):
+        return getUtility(IPersonFactory).sortOn()
+
 
 class SectionLearnerView(RelationshipEditConfView):
     """View for adding learners to a Section.  """
@@ -300,6 +310,14 @@ class SectionLearnerView(RelationshipEditConfView):
 
     def getAvailableItemsContainer(self):
         return ISchoolToolApplication(None)['persons']
+
+    def columnsForAvailable(self):
+        return getUtility(IPersonFactory).columns()
+
+    columnsForSelected = columnsForAvailable
+
+    def sortOn(self):
+        return getUtility(IPersonFactory).sortOn()
 
 
 class SectionLearnerGroupView(RelationshipEditConfView):

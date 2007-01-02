@@ -23,10 +23,7 @@
         set_attributes="modified" />
   </class>
 
-  <utility
-     factory=".utility.PersonFactoryUtility"
-     provides="schooltool.person.interfaces.IPersonFactory"
-     />
+  <utility factory=".utility.PersonFactoryUtility" />
 
   <subscriber
     for="schooltool.person.interfaces.IPerson zope.lifecycleevent.interfaces.IObjectModifiedEvent"
