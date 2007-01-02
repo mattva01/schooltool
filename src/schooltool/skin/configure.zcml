@@ -122,6 +122,11 @@
       file="resources/schooltool.css"
       layer="schooltool.skin.ISchoolToolLayer" />
 
+  <resource
+      name="editor_config.js"
+      file="resources/editor_config.js"
+      layer="schooltool.skin.ISchoolToolLayer" />
+
   <resource name="layout.css" file="resources/layout.css"
             layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="schooltool.js" file="resources/schooltool.js"
@@ -220,5 +225,14 @@
       for=".skin.NavigationViewlet"
       name="schooltool.view"
       factory=".skin.NavigationViewletCrowd" />
+
+  <viewlet
+      name="language_selector"
+      for="*"
+      manager="schooltool.skin.IHeaderManager"
+      template="templates/language_selector.pt"
+      permission="schooltool.view"
+      class="schooltool.skin.skin.LanguageSelectorViewlet"
+      />
 
 </configure>

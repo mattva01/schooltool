@@ -249,6 +249,50 @@ def doctest_ActionMenuViewletManager_update():
     """
 
 
+def doctest_LanguageSelectorViewlet():
+    """
+
+         >>> from schooltool.skin.skin import LanguageSelectorViewlet
+         >>> from zope.publisher.browser import TestRequest
+         >>> viewlet = LanguageSelectorViewlet(None, TestRequest())
+
+         >>> from zope.i18n.interfaces import IUserPreferredLanguages
+         >>> class UPL(object):
+         ...     implements(IUserPreferredLanguages)
+         ...     adapts(Interface)
+         ...     def __init__(self, request):
+         ...         pass
+
+     If ICookieLanguageSelector is not provided by the
+     UserPreferedLanguages adapter - no languages are in the list:
+
+         >>> provideAdapter(UPL)
+         >>> viewlet.languages() is None
+         True
+
+     If adapter provides ICookieLanguageSelector viewlet returns
+     whatever is given by the CookieLanguageSelector:
+
+         >>> from zope.publisher.interfaces.http import IHTTPRequest
+         >>> from schooltool.app.interfaces import ICookieLanguageSelector
+         >>> class CookieLanguageSelector(UPL):
+         ...     implements(ICookieLanguageSelector)
+         ...     adapts(IHTTPRequest)
+         ...     def getLanguageList(self):
+         ...         return ["lt", "en"]
+         ...     def getSelectedLanguage(self):
+         ...         return "lt"
+         >>> provideAdapter(CookieLanguageSelector, provides=IUserPreferredLanguages)
+
+         >>> viewlet.languages()
+         ['lt', 'en']
+
+         >>> viewlet.selected_lang()
+         'lt'
+
+    """
+
+
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(),

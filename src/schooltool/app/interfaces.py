@@ -186,3 +186,15 @@ class IAsset(zope.interface.Interface):
     """An asset of a leader."""
 
     leaders = zope.interface.Attribute("Leaders of this asset")
+
+
+class ICookieLanguageSelector(zope.interface.Interface):
+
+    def getLanguageList():
+        """Return the list of available languages."""
+
+    def getSelectedLanguage():
+        """Return the language that is currently selected."""
+
+    def setSelectedLanguage():
+        """Set the selected language into a cookie."""

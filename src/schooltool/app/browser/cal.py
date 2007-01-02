@@ -58,6 +58,7 @@ from zope.filerepresentation.interfaces import IWriteFile, IReadFile
 from zope.app.session.interfaces import ISession
 from zope.traversing.api import getPath
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.html.field import HtmlFragment
 
 from schooltool import SchoolToolMessage as _
 
@@ -91,6 +92,7 @@ from schooltool.person.interfaces import vocabulary
 from schooltool.resource.interfaces import IResource
 from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.term.term import getTermForDate
+from schooltool.app.interfaces import ISchoolToolApplication
 
 
 #
@@ -1700,7 +1702,7 @@ class ICalendarEventAddForm(Interface):
         title=_("Location"),
         required=False)
 
-    description = Text(
+    description = HtmlFragment(
         title=_("Description"),
         required=False)
 
@@ -1797,6 +1799,13 @@ class CalendarEventViewMixin(object):
         except WidgetInputError, e:
             # getInputValue might raise an exception on invalid input
             errors.append(e)
+
+    def setUpEditorWidget(self, editor):
+        editor.editorWidth = 430
+        editor.editorHeight = 300
+        editor.toolbarConfiguration = "schooltool"
+        url = zapi.absoluteURL(ISchoolToolApplication(None), self.request)
+        editor.configurationPath = (url + '/@@/editor_config.js')
 
     def weekdayChecked(self, weekday):
         """Return True if the given weekday should be checked.
@@ -2024,6 +2033,7 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
             today = date.today().strftime("%Y-%m-%d")
             request.form["field.start_date"] = today
         super(AddView, self).__init__(context, request)
+        self.setUpEditorWidget(self.description_widget)
 
     def create(self, **kwargs):
         """Create an event."""
@@ -2082,6 +2092,7 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
         prefs = ViewPreferences(request)
         self.timezone = prefs.timezone
         EditView.__init__(self, context, request)
+        self.setUpEditorWidget(self.description_widget)
 
     def keyword_arguments(self):
         """Wraps fieldNames under another name.
