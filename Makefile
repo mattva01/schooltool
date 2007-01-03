@@ -228,10 +228,8 @@ extract-rosetta-tarball:
 
 .PHONY: update-rosetta-translations
 update-rosetta-translations:
-	[ -e rosetta-schooltool.tar.gz ]
-	[ -e rosetta-schoolbell.tar.gz ]
-	$(MAKE) DOMAIN=schoolbell extract-rosetta-tarball
-	$(MAKE) DOMAIN=schooltool extract-rosetta-tarball
+	[ ! -e rosetta-schooltool.tar.gz ] || $(MAKE) DOMAIN=schooltool extract-rosetta-tarball
+	[ ! -e rosetta-schoolbell.tar.gz ] || $(MAKE) DOMAIN=schoolbell extract-rosetta-tarball
 	$(MAKE) PYTHON=$(PYTHON) extract-translations update-translations
 	# remove .po~ and .mo files so they are not accidentally committed
 	find $(LOCALES) \( -name '*.po~' -o -name '*.mo' \) -exec rm -f {} \;
