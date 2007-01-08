@@ -94,7 +94,7 @@ testall: build
 
 .PHONY: ftest
 ftest: build
-	$(PYTHON) test.py $(TESTFLAGS) -f --at-level 1 schooltool 
+	$(PYTHON) test.py $(TESTFLAGS) -f --at-level 2 schooltool 
 
 .PHONY: run
 run: build
