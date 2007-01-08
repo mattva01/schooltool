@@ -26,6 +26,7 @@ import os
 import unittest
 
 from zope.testing import doctest
+from zope.app.testing.functional import ZCMLLayer as _ZCMLLayer
 from zope.app.testing.functional import FunctionalTestSetup
 from zope.app.testing.functional import FunctionalDocFileSuite
 from zope.app.appsetup.interfaces import IDatabaseOpenedEvent
@@ -67,27 +68,26 @@ def schooltool_db_setup(event):
         server = schooltool.app.main.StandaloneServer()
         server.bootstrapSchoolTool(event.database)
 
+class ZCMLLayer(_ZCMLLayer):
 
-def load_ftesting_zcml():
-    """Find SchoolTool's ftesting.zcml and load it.
+    def setUp(self):
+        # SchoolTool needs to bootstrap the database first, before the Zope 3
+        # IDatabaseOpenedEvent gets a chance to create its own root folder and
+        # stuff.  Unfortunatelly, we cannot install a IDatabaseOpenedEvent
+        # subscriber via ftesting.zcml and ensure it will get called first.
+        # Instead we place our own subscriber directly into zope.event.subscribers,
+        # where it gets a chance to intercept IDatabaseOpenedEvent before the
+        # Zope 3 event dispatcher sees it.
+        install_db_bootstrap_hook()
+        try:
+            _ZCMLLayer.setUp(self)
+        finally:
+            uninstall_db_bootstrap_hook()
 
-    Can be safely called more than once.
-    """
-    # SchoolTool needs to bootstrap the database first, before the Zope 3
-    # IDatabaseOpenedEvent gets a chance to create its own root folder and
-    # stuff.  Unfortunatelly, we cannot install a IDatabaseOpenedEvent
-    # subscriber via ftesting.zcml and ensure it will get called first.
-    # Instead we place our own subscriber directly into zope.event.subscribers,
-    # where it gets a chance to intercept IDatabaseOpenedEvent before the
-    # Zope 3 event dispatcher sees it.
-    install_db_bootstrap_hook()
-    try:
-        FunctionalTestSetup(find_ftesting_zcml())
-    finally:
-        uninstall_db_bootstrap_hook()
+functional_layer = ZCMLLayer(find_ftesting_zcml(), __name__, 'functional_layer')
 
 
-def collect_ftests(package=None, level=None):
+def collect_ftests(package=None, level=None, layer=None, filenames=None):
     """Collect all functional doctest files in a given package.
 
     If `package` is None, looks up the call stack for the right module.
@@ -96,8 +96,9 @@ def collect_ftests(package=None, level=None):
     """
     package = doctest._normalize_module(package)
     testdir = os.path.dirname(package.__file__)
-    filenames = [fn for fn in os.listdir(testdir)
-                 if fn.endswith('.txt') and not fn.startswith('.')]
+    if filenames is None:
+        filenames = [fn for fn in os.listdir(testdir)
+                     if fn.endswith('.txt') and not fn.startswith('.')]
     optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
                    doctest.NORMALIZE_WHITESPACE |
                    doctest.REPORT_ONLY_FIRST_FAILURE)
@@ -109,6 +110,8 @@ def collect_ftests(package=None, level=None):
                                               'rest': rest})
         if level is not None:
             suite.level = level
+        if layer is None:
+            suite.layer = functional_layer
         suites.append(suite)
     return unittest.TestSuite(suites)
 
