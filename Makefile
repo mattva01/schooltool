@@ -11,7 +11,7 @@ ZOPE_REPOSITORY=svn://svn.zope.org/repos/main/
 ZOPE_HTML_REPOSITORY=svn://svn.zope.org/repos/main/zope.html/
 ZOPE_FILE_REPOSITORY=svn://svn.zope.org/repos/main/zope.file/
 ZOPE_MIMETYPE_REPOSITORY=svn://svn.zope.org/repos/main/zope.mimetype/
-TESTFLAGS=-w -v
+TESTFLAGS=-v
 LOCALES=src/schooltool/locales/
 PYTHONPATH:=$(PYTHONPATH):src:Zope3/src
 SETUPFLAGS=
@@ -86,15 +86,15 @@ realclean: clean cleandb
 
 .PHONY: test
 test: build
-	$(PYTHON) test.py $(TESTFLAGS) -s src/schooltool
+	$(PYTHON) test.py $(TESTFLAGS) -u schooltool
 
 .PHONY: testall
 testall: build
-	$(PYTHON) test.py $(TESTFLAGS)
+	$(PYTHON) test.py $(TESTFLAGS) 
 
 .PHONY: ftest
 ftest: build
-	$(PYTHON) test.py $(TESTFLAGS) -s src/schooltool -f --level 2
+	$(PYTHON) test.py $(TESTFLAGS) -f --at-level 1 schooltool 
 
 .PHONY: run
 run: build
@@ -103,7 +103,7 @@ run: build
 .PHONY: coverage
 coverage: build
 	rm -rf coverage
-	$(PYTHON) test.py $(TESTFLAGS) --coverage -s src/schooltool
+	$(PYTHON) test.py $(TESTFLAGS) --coverage=coverage -s src/schooltool
 
 .PHONY: coverage-reports-html
 coverage-reports-html:

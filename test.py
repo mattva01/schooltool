@@ -31,14 +31,22 @@ if sys.version_info < (2, 4):
     sys.exit(1)
 
 here = os.path.dirname(os.path.realpath(__file__))
+
+# Remove this directory from path:
+sys.path[:] = [p for p in sys.path if os.path.abspath(p) != here]
+
+src = os.path.join(here, 'src')
 # Replace the directory of this wrapper script with SchoolTool and Zope 3
 # source directories
-sys.path[:1] = [os.path.join(here, 'src'), os.path.join(here, 'Zope3', 'src')]
+sys.path[:1] = [src, os.path.join(here, 'Zope3', 'src')]
 import site
 site.addsitedir(os.path.join(here, 'Zope3', 'src'))
 
-from schooltool.testing import test
+from zope.testing import testrunner
+
+defaults = ['--tests-pattern', '^f?tests$', '--test-path', src]
+defaults += ['-m', 'schooltool']
 
 if __name__ == '__main__':
-    exitcode = test.main(sys.argv)
+    exitcode = testrunner.run(defaults)
     sys.exit(exitcode)
