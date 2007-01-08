@@ -23,22 +23,12 @@ $Id$
 """
 
 import unittest
-from zope.testing import doctest
-from zope.app.testing.functional import FunctionalDocFileSuite
 
-from schooltool.testing import analyze
-from schooltool.testing.functional import load_ftesting_zcml
 from schooltool.testing.functional import collect_ftests
 
 
 def test_suite():
-    load_ftesting_zcml()
-    optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
-                   doctest.NORMALIZE_WHITESPACE |
-                   doctest.REPORT_ONLY_FIRST_FAILURE)
-    return FunctionalDocFileSuite(
-        'README.txt', optionflags=optionflags,
-        globs={'analyze': analyze})
+    return collect_ftests(filenames=['README.txt'])
 
 
 if __name__ == '__main__':
