@@ -41,6 +41,7 @@ src = os.path.join(here, 'src')
 sys.path[:1] = [src, os.path.join(here, 'Zope3', 'src')]
 import site
 site.addsitedir(os.path.join(here, 'Zope3', 'src'))
+site.addsitedir(os.path.join(here, 'src'))
 
 from zope.testing import testrunner
 

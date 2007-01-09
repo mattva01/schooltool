@@ -63,7 +63,7 @@ build: zope3-checkout zpkgsetup-checkout zope-addons-checkout
 	test -d Zope3 && cd Zope3 && $(PYTHON) setup.py build_ext -i
 	$(PYTHON) setup.py $(SETUPFLAGS) \
                 build_ext -i install_data --install-dir .
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) setup.eggs.py develop -S Zope3/src --install-dir Zope3/src
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) setup.eggs.py develop -S src --install-dir src
 	$(PYTHON) bin/remove-stale-bytecode.py
 
 .PHONY: clean
