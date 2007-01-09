@@ -1,33 +1,60 @@
 #!/usr/bin/env python
+#
+# SchoolTool - common information systems platform for school administration
+# Copyright (c) 2003 Shuttleworth Foundation
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
 """
 A script to start the schooltool server from the source directory.
 """
 
 import sys
-import os.path
+import os
+import site
 
 if sys.version_info < (2, 4):
     print >> sys.stderr, '%s: need Python 2.4 or later.' % sys.argv[0]
     print >> sys.stderr, 'Your python is %s' % sys.version
     sys.exit(1)
 
-# find the schooltool config file if it exists
-dirname = os.path.dirname(__file__)
-config_file = os.path.join(dirname, 'schooltool.conf')
+here = os.path.dirname(os.path.realpath(__file__))
+
+# find the config file
+config_file = os.path.join(here, 'schooltool.conf')
 if not os.path.exists(config_file):
-    config_file = os.path.join(dirname, 'schooltool.conf.in')
+    config_file = os.path.join(here, 'schooltool.conf.in')
 
 # Change the default config file name by prepending a command-line argument
 sys.argv.insert(1, '--config=' + config_file)
 
-import os
-basedir = os.path.abspath(os.path.dirname(sys.argv[0]))
-del sys.path[0]
-sys.path.insert(0, os.path.join(basedir, 'src'))
-z3dir = os.path.join(basedir, 'Zope3', 'src')
-sys.path.insert(0, z3dir)
-import site
-site.addsitedir(z3dir)
+# Remove this directory from path:
+sys.path[:] = [p for p in sys.path if os.path.abspath(p) != here]
 
+# add the src, eggs and Zope3/src to the python path and as sites so that eggs work
+src = os.path.join(here, 'src')
+z3src = os.path.join(here, 'Zope3', 'src')
+eggs = os.path.join(here, 'eggs')
+sys.path.insert(0, z3src)
+sys.path.insert(0, eggs)
+sys.path.insert(0, src)
+import site
+site.addsitedir(z3src)
+site.addsitedir(src)
+site.addsitedir(eggs)
+
+# Now run the app
 import schooltool.app.main
 schooltool.app.main.StandaloneServer().main()

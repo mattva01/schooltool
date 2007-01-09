@@ -23,7 +23,9 @@ SchoolTool test script.
 $Id$
 """
 
-import sys, os
+import sys
+import os
+import site
 
 if sys.version_info < (2, 4):
     print >> sys.stderr, '%s: need Python 2.4 or later.' % sys.argv[0]
@@ -35,13 +37,17 @@ here = os.path.dirname(os.path.realpath(__file__))
 # Remove this directory from path:
 sys.path[:] = [p for p in sys.path if os.path.abspath(p) != here]
 
+# add the src, eggs and Zope3/src to the python path and as sites so that eggs work
 src = os.path.join(here, 'src')
-# Replace the directory of this wrapper script with SchoolTool and Zope 3
-# source directories
-sys.path[:1] = [src, os.path.join(here, 'Zope3', 'src')]
+z3src = os.path.join(here, 'Zope3', 'src')
+eggs = os.path.join(here, 'eggs')
+sys.path.insert(0, z3src)
+sys.path.insert(0, eggs)
+sys.path.insert(0, src)
 import site
-site.addsitedir(os.path.join(here, 'Zope3', 'src'))
-site.addsitedir(os.path.join(here, 'src'))
+site.addsitedir(z3src)
+site.addsitedir(src)
+site.addsitedir(eggs)
 
 from zope.testing import testrunner
 
