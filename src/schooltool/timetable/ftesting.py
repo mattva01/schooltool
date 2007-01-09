@@ -17,19 +17,17 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Functional tests for schooltool.timetable.
+Functional Testing Utilities for timetabling
 
 $Id$
 """
+import os
 
-import unittest
+from schooltool.testing.functional import ZCMLLayer
 
-from schooltool.testing.functional import collect_ftests
-from schooltool.timetable.ftesting import timetable_functional_layer
+dir = os.path.abspath(os.path.dirname(__file__))
+filename = os.path.join(dir, 'ftesting.zcml')
 
-def test_suite():
-    return collect_ftests(layer=timetable_functional_layer)
-
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')
+timetable_functional_layer = ZCMLLayer(filename,
+                                       __name__,
+                                       'timetable_functional_layer')
