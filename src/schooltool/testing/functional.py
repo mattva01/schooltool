@@ -112,6 +112,8 @@ def collect_ftests(package=None, level=None, layer=None, filenames=None):
             suite.level = level
         if layer is None:
             suite.layer = functional_layer
+        else:
+            suite.layer = layer
         suites.append(suite)
     return unittest.TestSuite(suites)
 

@@ -1,0 +1,51 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns:meta="http://namespaces.zope.org/meta"
+           i18n_domain="zope">
+
+  <meta:provides feature="devmode" />
+
+  <include package="zope.app" />
+  <include package="zope.app.authentication" file="password.zcml" />
+  <include package="zope.app.wfmc" file="meta.zcml" />
+  <include package="zope.viewlet" file="meta.zcml" />
+
+  <include package="zope.app.session" />
+  <include package="zope.app.server" />
+  <include package="zope.app.http" />
+  <include package="zope.contentprovider" />
+  <include package="zope.viewlet" />
+  <include package="zope.formlib" />
+  <include package="zope.app.keyreference" />
+  <include package="zope.app.intid" />
+  <include package="zope.app.catalog" />
+  <include package="zope.app.file" />
+
+  <!-- set up custom security policy -->
+  <include package="schooltool.securitypolicy" file="meta.zcml" />
+  <include package="schooltool.securitypolicy"/>
+
+  <!-- Workaround to shut down a DeprecationWarning that appears because we do
+       not include zope.app.onlinehelp and the rotterdam skin tries to look for
+       this menu -->
+  <browser:menu id="help_actions" />
+
+  <!-- pull in some meta configuration needed by schooltool. -->
+  <include package="zc.resourcelibrary" file="meta.zcml" />
+
+  <!-- pull in some configuration needed by schooltool. -->
+  <include package="zc.resourcelibrary" file="configure.zcml" />
+  <include package="zc.table" file="configure.zcml" />
+  <include package="zc.catalog" file="configure.zcml" />
+  <include package="hurry.query" file="configure.zcml" />
+  <include package="zc.datetimewidget" file="configure.zcml" />
+  <includeOverrides package="zc.datetimewidget" file="overrides.zcml" />
+
+  <unauthenticatedPrincipal id="zope.anybody" title="Unauthenticated User" />
+  <unauthenticatedGroup id="zope.Anybody" title="Unauthenticated Users" />
+  <authenticatedGroup id="zope.Authenticated" title="Authenticated Users" />
+  <everybodyGroup id="zope.Everybody" title="All Users" />
+
+  <include package="zope.testbrowser.ftests" file="ftesting.zcml" />
+
+</configure>
