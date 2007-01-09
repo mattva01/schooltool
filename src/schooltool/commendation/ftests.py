@@ -22,11 +22,21 @@ Functional tests for schooltool.commendation
 $Id$
 """
 import unittest
+import os
 
 from schooltool.testing.functional import collect_ftests
+from schooltool.testing.functional import ZCMLLayer
+
+dir = os.path.abspath(os.path.dirname(__file__))
+filename = os.path.join(dir, 'ftesting.zcml')
+
+commendation_functional_layer = ZCMLLayer(filename,
+                                          __name__,
+                                          'commendation_functional_layer')
 
 def test_suite():
-    return collect_ftests(filenames=['SystemIntegration.txt', 'Viewing.txt'])
+    return collect_ftests(filenames=['SystemIntegration.txt', 'Viewing.txt'],
+                          layer=commendation_functional_layer)
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')

@@ -25,10 +25,10 @@ $Id$
 import unittest
 
 from schooltool.testing.functional import collect_ftests
-
+from schooltool.attendance.ftesting import attendance_functional_layer
 
 def test_suite():
-    return collect_ftests()
+    return collect_ftests(layer=attendance_functional_layer)
 
 
 if __name__ == '__main__':

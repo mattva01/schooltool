@@ -9,9 +9,6 @@
 
   <include package="schooltool" />
 
-  <include package="schooltool.help" />
-  <include package="schooltool.attendance" />
-  <include package="schooltool.commendation" />
   <include package="schooltool.course" />
   <include package="schooltool.dashboard" />
   <include package="schooltool.devmode" />
