@@ -5,17 +5,29 @@
 
   <meta:provides feature="devmode" />
 
-  <include files="package-includes/*-meta.zcml" />
+  <include package="schooltool.help" file="meta.zcml" />
 
   <include package="schooltool" />
 
-  <include files="package-includes/*-configure.zcml" />
-
-  <!-- Provide local overrides of standard configurations-->
-  <includeOverrides files="package-includes/*-overrides.zcml" />
+  <include package="schooltool.help" />
+  <include package="schooltool.attendance" />
+  <include package="schooltool.commendation" />
+  <include package="schooltool.course" />
+  <include package="schooltool.dashboard" />
+  <include package="schooltool.devmode" />
+  <include package="schooltool.gradebook" />
+  <include package="schooltool.level" />
+  <include package="schooltool.note" />
+  <include package="schooltool.requirement" />
+  <include package="schooltool.term" />
+  <include package="schooltool.timetable" />
 
   <include package="zope.testbrowser.ftests" file="ftesting.zcml" />
-  <include files="package-includes/*-ftesting.zcml" />
-  <includeOverrides files="package-includes/*-ftesting-overrides.zcml" />
+
+  <include package="schooltool.batching.ftests" />
+  <include package="schooltool.app.browser.ftests" file="brokenview-ftesting.zcml" />
+
+  <!-- Provide local overrides of standard configurations-->
+  <includeOverrides package="schooltool.devmode" file="overrides.zcml" />
 
 </configure>
