@@ -12,10 +12,11 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Run tests in a Zope instance home.
+"""Run tests in a SchoolTool instance home.
 
 $Id$
 """
+
 import sys, os
 import site
 
@@ -36,35 +37,27 @@ sys.path[:0] = [instance_lib, SOFTWARE_HOME]
 site.addsitedir(SOFTWARE_HOME)
 site.addsitedir(instance_lib)
 
-from schooltool.testing import test
+from zope.testing import testrunner
 
+defaults = ['--tests-pattern', '^f?tests$']
 
-testschooltool = "--testschooltool" in sys.argv[1:]
-if testschooltool:
+test_lib = instance_lib
+
+if testschooltool = "--testschooltool" in sys.argv[1:]:
     sys.argv.remove("--testschooltool")
     test_lib = SOFTWARE_HOME
-    # We only want to run schooltool tests; but allow it to be overridden
-    if '-search-in' not in sys.argv and '--s' not in sys.argv:
-        additional = ["-s", os.path.join(test_lib, "schooltool")]
-else:
-    test_lib = instance_lib
-    additional = []
+    # We only want to run schooltool tests
+    defaults += ['-m', 'schooltool']
 
-# XXX - this monkey patch is a temporary solution until the zope test runner
-# can cope with different ftesting.zcml's for different levels.
-test.Options.basedir = test_lib
+defaults += ['-test-path', test_lib]
 
-args = sys.argv[:1] + additional + sys.argv[1:]
-test.__doc__ += """
-
-One additional options are supported:
-
---testschooltool
-    When specified, the tests for the installed SchoolTool software are run
-    instead of the tests for the software installed in the instance.
-    This is useful to determine the effects of additional software
-    installation and configuration changes on the base Zope software.
-    Unlike other options, this cannot be abbreviated.
-
+# Add our extra option to the help of the testrunner.
+testrunner.searching.add_option("--testschooltool", help="""\
+When specified, the tests for the installed SchoolTool software are run
+instead of the tests for the software installed in the instance.
+This is useful to determine the effects of additional software
+installation and configuration changes on the base Zope software.
+Unlike other options, this cannot be abbreviated.
 """
-test.main(args)
+
+sys.exit(testrunner.run(defaults))
