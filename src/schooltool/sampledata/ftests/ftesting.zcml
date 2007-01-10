@@ -1,0 +1,22 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:meta="http://namespaces.zope.org/meta"
+           i18n_domain="zope">
+
+  <meta:provides feature="devmode" />
+
+  <include package="schooltool.help" file="meta.zcml" />
+
+  <include package="schooltool" />
+
+  <include package="schooltool.course" />
+  <include package="schooltool.term" />
+  <include package="schooltool.timetable" />
+  <include package="schooltool.attendance" />
+  <include package="schooltool.devmode" />
+
+  <include package="zope.testbrowser.ftests" file="ftesting.zcml" />
+
+  <!-- Provide local overrides of standard configurations-->
+  <includeOverrides package="schooltool.devmode" file="overrides.zcml" />
+
+</configure>

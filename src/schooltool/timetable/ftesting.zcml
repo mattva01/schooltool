@@ -1,5 +1,4 @@
 <configure xmlns="http://namespaces.zope.org/zope"
-           xmlns:browser="http://namespaces.zope.org/browser"
            i18n_domain="zope">
 
   <include package="schooltool" />
@@ -9,7 +8,5 @@
   <include package="schooltool.timetable" />
 
   <include package="zope.testbrowser.ftests" file="ftesting.zcml" />
-
-  <include package="schooltool.app.browser.ftests" file="brokenview-ftesting.zcml" />
 
 </configure>

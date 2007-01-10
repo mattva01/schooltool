@@ -36,6 +36,7 @@ from zope.app.testing import ztapi
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.location.interfaces import ILocation
 from zope.testing import doctest
+from zope.component import eventtesting
 
 from schooltool import timetable
 from schooltool.timetable.interfaces import ITimetables
@@ -260,20 +261,10 @@ class TestTimetable(unittest.TestCase):
 
 class EventTestMixin(PlacelessSetup):
 
-    def setUp(self):
-        from zope.event import subscribers
-        PlacelessSetup.setUp(self)
-        self.events = []
-        def subscriber(event):
-            self.events.append(event)
-        subscribers.append(subscriber)
-
     def checkOneEventReceived(self):
-        self.assertEquals(len(self.events), 1, self.events)
-        return self.events[0]
-
-    def clearEvents(self):
-        self.events[:] = []
+        events = eventtesting.getEvents()
+        self.assertEquals(len(events), 1, events)
+        return events[0]
 
 
 class TestTimetableDay(EventTestMixin, unittest.TestCase):
@@ -339,7 +330,7 @@ class TestTimetableDay(EventTestMixin, unittest.TestCase):
         math = ActivityStub()
         self.assertRaises(ValueError, td.add, "Mo", math)
 
-        self.events[:] = []
+        eventtesting.clearEvents()
 
         td.add("1", math)
         e1 = self.checkOneEventReceived()
@@ -357,7 +348,7 @@ class TestTimetableDay(EventTestMixin, unittest.TestCase):
         self.assertEqual(result, [('1', Set([math])), ('2', Set([])),
                                   ('3', Set([])), ('4', Set([]))])
         english = ActivityStub()
-        self.clearEvents()
+        eventtesting.clearEvents()
         td.add("2", english)
         e2 = self.checkOneEventReceived()
         self.assertEquals(e2.period_id, '2')
@@ -370,7 +361,7 @@ class TestTimetableDay(EventTestMixin, unittest.TestCase):
         # test clear()
         self.assertEqual(Set(td["2"]), Set([english]))
         self.assertRaises(ValueError, td.clear, "Mo")
-        self.clearEvents()
+        eventtesting.clearEvents()
         td.clear("2")
         e2 = self.checkOneEventReceived()
         self.assert_(ITimetableActivityRemovedEvent.providedBy(e2))
@@ -387,7 +378,7 @@ class TestTimetableDay(EventTestMixin, unittest.TestCase):
         self.assertEqual(result, [('1', Set([english, math])),
                                   ('2', Set([])), ('3', Set([])),
                                   ('4', Set([]))])
-        self.clearEvents()
+        eventtesting.clearEvents()
         td.remove("1", math)
         e3 = self.checkOneEventReceived()
         self.assert_(ITimetableActivityRemovedEvent.providedBy(e3))
@@ -755,6 +746,7 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
         from schooltool.timetable import TimetableDict
         from schooltool.timetable.interfaces import ITimetableReplacedEvent
 
+        eventtesting.clearEvents()
         td = TimetableDict()
         item = TimetableStub()
         td['aa.bb'] = item
@@ -765,7 +757,7 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
         self.assert_(e.old_timetable is None)
         self.assert_(e.new_timetable is item)
 
-        self.clearEvents()
+        eventtesting.clearEvents()
         item2 = TimetableStub()
         td['aa.bb'] = item2
         e = self.checkOneEventReceived()
@@ -775,7 +767,7 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
         self.assert_(e.old_timetable is item)
         self.assert_(e.new_timetable is item2)
 
-        self.clearEvents()
+        eventtesting.clearEvents()
         del td['aa.bb']
         e = self.checkOneEventReceived()
         self.assert_(ITimetableReplacedEvent.providedBy(e))
@@ -789,10 +781,11 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
         td = TimetableDict()
         td['a.b'] = TimetableStub()
         td['b.c'] = TimetableStub()
-        self.clearEvents()
+        eventtesting.clearEvents()
         td.clear()
         self.assertEquals(list(td.keys()), [])
-        self.assertEquals(len(self.events), 2)
+        events = eventtesting.getEvents()
+        self.assertEquals(len(events), 2)
 
     def test_validation(self):
         from schooltool.timetable import TimetableDict

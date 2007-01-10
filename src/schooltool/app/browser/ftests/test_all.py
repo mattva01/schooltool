@@ -28,7 +28,6 @@ from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.browser import BrowserView
 
-from schooltool.testing.functional import load_ftesting_zcml
 from schooltool.testing.functional import collect_ftests
 
 
@@ -46,7 +45,6 @@ class BrokenView(BrowserView):
 
 
 def test_suite():
-    load_ftesting_zcml()
     return collect_ftests()
 
 

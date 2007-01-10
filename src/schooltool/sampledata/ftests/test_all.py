@@ -23,14 +23,21 @@ $Id$
 """
 
 import unittest
+import os
 
-from schooltool.testing.functional import load_ftesting_zcml
 from schooltool.testing.functional import collect_ftests
+from schooltool.testing.functional import ZCMLLayer
 
+dir = os.path.abspath(os.path.dirname(__file__))
+filename = os.path.join(dir, 'ftesting.zcml')
+
+sampledata_functional_layer = ZCMLLayer(filename,
+                                        __name__,
+                                        'sampledata_functional_layer')
 
 def test_suite():
-    load_ftesting_zcml()
-    return collect_ftests(level=2) # 'cause it is slow and a memory hog
+    return collect_ftests(layer=sampledata_functional_layer,
+                          level=2) # 'cause it is slow and a memory hog
 
 
 if __name__ == '__main__':

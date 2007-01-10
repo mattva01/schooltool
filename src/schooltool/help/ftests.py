@@ -23,23 +23,21 @@ $Id$
 """
 
 import unittest
-from zope.testing import doctest
-from zope.app.testing.functional import FunctionalDocFileSuite
+import os
 
-from schooltool.testing import analyze
-from schooltool.testing.functional import load_ftesting_zcml
 from schooltool.testing.functional import collect_ftests
+from schooltool.testing.functional import ZCMLLayer
 
+dir = os.path.abspath(os.path.dirname(__file__))
+filename = os.path.join(dir, 'ftesting.zcml')
+
+help_functional_layer = ZCMLLayer(filename,
+                                  __name__,
+                                  'help_functional_layer')
 
 def test_suite():
-    load_ftesting_zcml()
-    optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
-                   doctest.NORMALIZE_WHITESPACE |
-                   doctest.REPORT_ONLY_FIRST_FAILURE)
-    return FunctionalDocFileSuite(
-        'integration.txt', optionflags=optionflags,
-        globs={'analyze': analyze})
-
+    return collect_ftests(filenames=['integration.txt', 'help.txt'],
+                          layer=help_functional_layer)
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')

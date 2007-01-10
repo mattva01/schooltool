@@ -24,20 +24,12 @@ $Id$
 
 import unittest
 
-from zope.testing import doctest
-from zope.app.testing.functional import FunctionalDocFileSuite
-
-from schooltool.testing.functional import load_ftesting_zcml
+from schooltool.testing.functional import collect_ftests
 
 
 def test_suite():
-    load_ftesting_zcml()
-    optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
-                   doctest.NORMALIZE_WHITESPACE |
-                   doctest.REPORT_ONLY_FIRST_FAILURE)
-    suite = FunctionalDocFileSuite('../README.txt', optionflags=optionflags)
-    suite.level = 500 # 'cause it doesn't work yet
-    return suite
+    # 500 'cause it doesn't work yet
+    return collect_ftests(filenames=['../README.txt'], level=500)
 
 
 if __name__ == '__main__':
