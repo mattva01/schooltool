@@ -84,7 +84,9 @@ class ZCMLLayer(_ZCMLLayer):
         finally:
             uninstall_db_bootstrap_hook()
 
-functional_layer = ZCMLLayer(find_ftesting_zcml(), __name__, 'functional_layer')
+app_functional_layer = ZCMLLayer(find_ftesting_zcml(),
+                                 __name__,
+                                 'app_functional_layer')
 
 
 def collect_ftests(package=None, level=None, layer=None, filenames=None):
@@ -111,7 +113,7 @@ def collect_ftests(package=None, level=None, layer=None, filenames=None):
         if level is not None:
             suite.level = level
         if layer is None:
-            suite.layer = functional_layer
+            suite.layer = app_functional_layer
         else:
             suite.layer = layer
         suites.append(suite)

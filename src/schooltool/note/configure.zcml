@@ -92,4 +92,25 @@
       permission="schooltool.view"
       crowds="note_viewers" />
 
+  <!-- Documentation -->
+
+  <configure
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      xmlns:apidoc="http://namespaces.zope.org/apidoc"
+      zcml:condition="have apidoc">
+
+    <apidoc:bookchapter
+        id="notes"
+        title="Notes"
+        parent="notes/"
+        doc_path="notes_browser.txt" />
+
+    <apidoc:bookchapter
+        id="notes"
+        title="Notes"
+        parent="notes/"
+        doc_path="notes_rest.txt" />
+
+  </configure>
+
 </configure>

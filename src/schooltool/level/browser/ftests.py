@@ -21,14 +21,14 @@ Functional tests for schooltool.level.
 
 $Id$
 """
-
 import unittest
 
 from schooltool.testing.functional import collect_ftests
-
+from schooltool.level.ftesting import level_functional_layer
 
 def test_suite():
-    return collect_ftests(filenames=['README.txt'])
+    return collect_ftests(filenames=['README.txt'],
+                          layer=level_functional_layer)
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')

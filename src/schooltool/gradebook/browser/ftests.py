@@ -17,16 +17,26 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Functional tests for schooltool.level.
+Functional tests for schooltool.gradebook.
 
 $Id$
 """
+
 import unittest
+import os
 
 from schooltool.testing.functional import collect_ftests
+from schooltool.testing.functional import ZCMLLayer
+
+dir = os.path.abspath(os.path.dirname(__file__))
+filename = os.path.join(dir, 'ftesting.zcml')
+
+gradebook_functional_layer = ZCMLLayer(filename,
+                                       __name__,
+                                       'gradebook_functional_layer')
 
 def test_suite():
-    return collect_ftests()
+    return collect_ftests(layer=gradebook_functional_layer)
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')

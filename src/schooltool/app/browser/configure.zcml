@@ -534,12 +534,6 @@
         doc_path="ftests/README.txt" />
 
     <apidoc:bookchapter
-        id="notes"
-        title="Notes"
-        parent="schooltool/browser"
-        doc_path="ftests/notes.txt" />
-
-    <apidoc:bookchapter
         id="login"
         title="Login"
         parent="schooltool/browser"
