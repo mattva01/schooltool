@@ -13,40 +13,39 @@ Let's create a resource:
 and book it for our history class:
 
     >>> print rest("""
-    ... POST /sections/history6a/relationships HTTP/1.1
+    ... PUT  /sections/history6a/timetables/2005-fall.default HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
-    ... <relationship xmlns="http://schooltool.org/ns/model/0.1"
-    ...               xmlns:xlink="http://www.w3.org/1999/xlink"
-    ...               xlink:type="simple"
-    ...               xlink:role="http://schooltool.org/ns/sectionbooking/resource"
-    ...               xlink:arcrole="http://schooltool.org/ns/sectionbooking"
-    ...               xlink:href="http://localhost/resources/a-resource"/>
-    ... """, handle_errors=False)
-    HTTP/1.1 201 Created
+    ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
+    ...            xmlns:xlink="http://www.w3.org/1999/xlink">
+    ...   <timezone name="UTC"/>
+    ...   <day id="Monday">
+    ...     <period id="09:30-10:25">
+    ...       <activity title="History 6">
+    ...           <resource xlink:type="simple"
+    ...                     xlink:title="Resrouce"
+    ...                     xlink:href="/resources/a-resource" />
+    ...       </activity>
+    ...     </period>
+    ...   </day>
+    ...   <day id="Wednesday">
+    ...     <period id="11:35-12:20">
+    ...       <activity title="History 6">
+    ...           <resource xlink:type="simple"
+    ...                     xlink:title="Resrouce"
+    ...                     xlink:href="/resources/a-resource" />
+    ...       </activity>
+    ...     </period>
+    ...   </day>
+    ... </timetable>""", handle_errors=False)
+    HTTP/1.1 200 Ok
     ...
 
-And reschedule the section:
-XXX we have to do this because semantics of adding resources to a
-section are not clear anymore with per-event booking available.
-
-    >>> manager = setup.logInManager()
-    >>> manager.open('http://localhost/sections/history6a')
-    >>> manager.getLink('Schedule').click()
-
-    >>> manager.getControl(name="Monday.09:30-10:25").value = False
-    >>> manager.getControl(name="Wednesday.11:35-12:20").value = False
-    >>> manager.getControl('Save').click()
-
-    >>> manager.open('http://localhost/sections/history6a')
-    >>> manager.getLink('Schedule').click()
-    >>> manager.getControl(name="Monday.09:30-10:25").value = True
-    >>> manager.getControl(name="Wednesday.11:35-12:20").value = True
-    >>> manager.getControl('Save').click()
 
 Section events should be visible in the calendar of the resource:
 
+    >>> manager = setup.logInManager()
     >>> manager.open('http://localhost/resources/a-resource/calendar/2005-09-07')
     >>> print analyze.queryHTML('id("content-body")', manager.contents)[0]
     <div id="content-body">

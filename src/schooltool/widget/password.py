@@ -35,6 +35,7 @@ class PasswordConfirmationWidget(PasswordWidget):
                 style=self.style,
                 size=self.displayWidth,
                 extra=self.extra)
+        # XXX we don't want label in the translatable string
         return translate(
             _(u'${password} <label for="${label}" title="">Confirm</label> ${confirm}',
             mapping={
