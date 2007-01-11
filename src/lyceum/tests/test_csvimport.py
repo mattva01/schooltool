@@ -72,6 +72,14 @@ def doctest_CSVStudent():
         ...         self.append(item)
         >>> appStub = {'persons': {},
         ...            'groups': {'1a': GroupStub('1a')}}
+
+        >>> from zope.annotation.interfaces import IAnnotations
+        >>> def stubAnnotations(context):
+        ...     if not hasattr(context, '_annotations'):
+        ...         context._annotations = {}
+        ...     return context._annotations
+        >>> provideAdapter(stubAnnotations, adapts=(None,), provides=IAnnotations)
+
         >>> class StubNameChooser(object):
         ...     def __init__(self, context):
         ...         pass
@@ -101,6 +109,11 @@ def doctest_CSVStudent():
 
         >>> person.schooldata.grade_section is appStub["groups"]["1a"]
         True
+
+    Timetables are not show by default:
+
+        >>> IAnnotations(person)
+        {'schooltool.app.browser.cal.show_my_timetable': False}
 
     """
 
@@ -361,7 +374,7 @@ def doctest_LyceumScheduling_schedule_section():
         >>> ttschema_id = 'ttschema1'
         >>> app = {}
         >>> app['sections'] = {}
-        >>> sid = 'history-1 1a 311'
+        >>> sid = 'history-1 1a john'
         >>> class TitleStub(object):
         ...     def __init__(self, title):
         ...         self.title = title
@@ -414,16 +427,19 @@ def doctest_LyceumScheduling_schedule_section():
         ...     def createTimetable(self):
         ...         return TimetableStub()
         >>> app['ttschemas'] = {ttschema_id: TTSchemaStub()}
+
+        >>> app['resources'] = {"201": "Room 201"}
+
         >>> class TermStub(object):
         ...     __name__ = 'term1'
         >>> app['terms'] = {'term1': TermStub()}
-        >>> meet1 = (1, 1, ttschema_id)
-        >>> meet2 = (2, 2, ttschema_id)
-        >>> meet3 = (4, 2, ttschema_id)
+        >>> meet1 = (1, 1, ttschema_id, "201")
+        >>> meet2 = (2, 2, ttschema_id, "201")
+        >>> meet3 = (4, 2, ttschema_id, "")
         >>> plugin.schedule_section(app, sid, [meet1, meet2, meet3])
-        Adding TimetableActivity('History (1a, 1b)', <Section title=History (1a, 1b)>, None) on Monday - 1 pamoka
-        Adding TimetableActivity('History (1a, 1b)', <Section title=History (1a, 1b)>, None) on Tuesday - 2 pamoka
-        Adding TimetableActivity('History (1a, 1b)', <Section title=History (1a, 1b)>, None) on Thursday - 2 pamoka
+        Adding TimetableActivity('History (1a, 1b)', <Section title=History (1a, 1b)>, None, ('Room 201',)) on Monday - 1 pamoka
+        Adding TimetableActivity('History (1a, 1b)', <Section title=History (1a, 1b)>, None, ('Room 201',)) on Tuesday - 2 pamoka
+        Adding TimetableActivity('History (1a, 1b)', <Section title=History (1a, 1b)>, None, ()) on Thursday - 2 pamoka
 
     Group members were added to sections, groups themselves were
     removed from there:
@@ -477,54 +493,53 @@ def doctest_LyceumScheduling_generate():
         >>> app['courses']['history-1'] = 'History 1'
         >>> plugin.generate(app)
         >>> print sorted(app['sections'].items())
-        [(u'history-1 1a 311', <Section history-1 1a 311
+        [(u'history-1 1a bduh', <Section history-1 1a bduh
               Courses=[History 1]
-              Resources=[Room 311]
+              Resources=[]
               Members=[1a]
               Instructors=[Teacher Bduh]
               scheduled=True>),
-         (u'history-1 1b 311', <Section history-1 1b 311
+         (u'history-1 1b bduh', <Section history-1 1b bduh
               Courses=[History 1]
-              Resources=[Room 311]
+              Resources=[]
               Members=[1b]
               Instructors=[Teacher Bduh]
               scheduled=True>),
-         (u'history-1 1c 311', <Section history-1 1c 311
-              Courses=[History 1]
-              Resources=[Room 311]
-              Members=[1c]
-              Instructors=[Teacher Bduh]
-              scheduled=True>),
-         (u'history-1 1d 311', <Section history-1 1d 311
-              Courses=[History 1]
-              Resources=[Room 311]
-              Members=[1d]
-              Instructors=[Teacher Bduh]
-              scheduled=True>),
-         (u'science-2 2a 212', <Section science-2 2a 212
-              Courses=[Science 2]
-              Resources=[Room 212]
-              Members=[2a]
-              Instructors=[Teacher Rmah]
-              scheduled=True>),
-         (u'science-2 2b 212', <Section science-2 2b 212
-              Courses=[Science 2]
-              Resources=[Room 212]
-              Members=[2b]
-              Instructors=[Teacher Rmah]
-              scheduled=True>),
-         (u'science-2 2c 212', <Section science-2 2c 212
-              Courses=[Science 2]
-              Resources=[Room 212]
-              Members=[2c]
-              Instructors=[Teacher Rmah]
-              scheduled=True>),
-         (u'science-2 2d 212', <Section science-2 2d 212
-              Courses=[Science 2]
-              Resources=[Room 212]
-              Members=[2d]
-              Instructors=[Teacher Rmah]
-              scheduled=True>)]
+         (u'history-1 1c bduh', <Section history-1 1c bduh Courses=[History 1]
+             Resources=[]
+             Members=[1c]
+             Instructors=[Teacher Bduh]
+             scheduled=True>),
+        (u'history-1 1d bduh', <Section history-1 1d bduh
+             Courses=[History 1]
+             Resources=[]
+             Members=[1d]
+             Instructors=[Teacher Bduh]
+             scheduled=True>),
+         (u'science-2 2a rmah', <Section science-2 2a rmah
+             Courses=[Science 2]
+             Resources=[]
+             Members=[2a]
+             Instructors=[Teacher Rmah]
+             scheduled=True>),
+         (u'science-2 2b rmah', <Section science-2 2b rmah
+             Courses=[Science 2]
+             Resources=[]
+             Members=[2b]
+             Instructors=[Teacher Rmah]
+             scheduled=True>),
+         (u'science-2 2c rmah', <Section science-2 2c rmah
+             Courses=[Science 2]
+             Resources=[]
+             Members=[2c]
+             Instructors=[Teacher Rmah]
+             scheduled=True>),
+         (u'science-2 2d rmah', <Section science-2 2d rmah
+             Courses=[Science 2]
+             Resources=[]
+             Members=[2d]
+             Instructors=[Teacher Rmah]
+             scheduled=True>)]
 
     """
 

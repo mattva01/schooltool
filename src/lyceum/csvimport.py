@@ -67,6 +67,12 @@ class CSVStudent(object):
         app['persons'][user_name] = person
         group = removeSecurityProxy(app['groups'][self.group_id])
         person.schooldata.grade_section = group
+
+        from zope.annotation.interfaces import IAnnotations
+        annotations = IAnnotations(person)
+        from schooltool.app.browser.cal import CalendarSTOverlayView
+        annotations[CalendarSTOverlayView.SHOW_TIMETABLE_KEY] = False
+
         group.members.add(person)
 
 
@@ -273,10 +279,15 @@ class LyceumScheduling(object):
         for term in removeSecurityProxy(app['terms']).values():
             key = '%s.%s' % (term.__name__, ttschema_id)
             timetable = ttschema.createTimetable()
-            for id, period, _ in  meetings:
+            for id, period, _, room in  meetings:
                 day_id = days[id-1]
-                act = TimetableActivity(title=activity_title, owner=sob)
-                timetable[day_id].add('%d pamoka' % period, act, send_events=False)
+                resources = []
+                if room != '':
+                    resources = [removeSecurityProxy(app['resources'][room])]
+                act = TimetableActivity(title=activity_title, owner=sob,
+                                        resources=resources)
+                timetable[day_id].add('%d pamoka' % period, act,
+                                      send_events=False)
             ITimetables(sob).timetables[key] = timetable
         for group in list(sob.members):
             for person in group.members:
@@ -299,25 +310,19 @@ class LyceumScheduling(object):
             else:
                 ttschema = 'iiiiv-kursui'
             for day, period, room in sorted(meetings, key=lambda meeting: meeting[2].id):
-                sid = (course_id + ' ' + groups + ' ' + room.id).strip()
-                meeting = (day, period, ttschema)
+                sid = (course_id + ' ' + groups + ' ' + teacher.user_name).strip()
+                meeting = (day, period, ttschema, room.id)
                 if sid not in unscheduled_sections:
                     unscheduled_sections[sid] = [meeting]
                 else:
                     unscheduled_sections[sid].append(meeting)
-                if room.id != current_room:
-                    current_room = room.id
-                    if sid not in app['sections']:
-                        sob = self.section_factory()
-                        app['sections'][sid] = sob
-                        course = removeSecurityProxy(app['courses'][course_id])
-                        sob.courses.add(course)
-                        if room.id != '':
-                            sob.resources.add(removeSecurityProxy(app['resources'][room.id]))
-                        for group_id in parse_groups(groups):
-                            sob.members.add(removeSecurityProxy(app['groups'][group_id]))
-                    else:
-                        sob = removeSecurityProxy(app['sections'][sid])
+                if sid not in app['sections']:
+                    sob = self.section_factory()
+                    app['sections'][sid] = sob
+                    course = removeSecurityProxy(app['courses'][course_id])
+                    sob.courses.add(course)
+                    for group_id in parse_groups(groups):
+                        sob.members.add(removeSecurityProxy(app['groups'][group_id]))
                     sob.instructors.add(removeSecurityProxy(app['persons'][teacher.user_name]))
 
         for sid, meetings in unscheduled_sections.items():
