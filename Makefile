@@ -8,9 +8,6 @@ PYTHON=python
 ZPKG=../../zpkgtools/bin/zpkg
 TRANSLATION_DOMAINS=schoolbell schooltool
 ZOPE_REPOSITORY=svn://svn.zope.org/repos/main/
-ZOPE_HTML_REPOSITORY=svn://svn.zope.org/repos/main/zope.html/
-ZOPE_FILE_REPOSITORY=svn://svn.zope.org/repos/main/zope.file/
-ZOPE_MIMETYPE_REPOSITORY=svn://svn.zope.org/repos/main/zope.mimetype/
 TESTFLAGS=-v
 LOCALES=src/schooltool/locales/
 PYTHONPATH:=$(PYTHONPATH):src:eggs:Zope3/src
@@ -32,18 +29,6 @@ zope3-checkout:
 zope3-update:
 	svn up Zope3
 
-.PHONY: zope-addons-checkout
-zope-addons-checkout:
-	-test -d Zope3/src/zope/html || svn co $(ZOPE_HTML_REPOSITORY)/trunk/src/zope/html Zope3/src/zope/html
-	-test -d Zope3/src/zope/file || svn co $(ZOPE_FILE_REPOSITORY)/trunk/src/zope/file Zope3/src/zope/file
-	-test -d Zope3/src/zope/mimetype || svn co $(ZOPE_MIMETYPE_REPOSITORY)/trunk/src/zope/mimetype Zope3/src/zope/mimetype
-
-.PHONY: zope-addons-update
-zope-addons-update:
-	svn up Zope3/src/zope/html
-	svn up Zope3/src/zope/file
-	svn up Zope3/src/zope/mimetype
-
 .PHONY: zpkgsetup-checkout
 zpkgsetup-checkout:
 	-test -d buildsupport/zpkgsetup || svn co $(ZOPE_REPOSITORY)/zpkgtools/trunk/zpkgsetup buildsupport/zpkgsetup
@@ -53,13 +38,13 @@ zpkgsetup-update:
 	svn up buildsupport/zpkgsetup
 
 .PHONY: checkout
-checkout: zope3-checkout zpkgsetup-checkout zope-addons-checkout
+checkout: zope3-checkout zpkgsetup-checkout
 
 .PHONY: update
-update: checkout zope3-update zpkgsetup-update zope-addons-update
+update: checkout zope3-update zpkgsetup-update
 
 .PHONY: build
-build: zope3-checkout zpkgsetup-checkout zope-addons-checkout
+build: zope3-checkout zpkgsetup-checkout
 	test -d Zope3 && cd Zope3 && $(PYTHON) setup.py build_ext -i
 	$(PYTHON) setup.py $(SETUPFLAGS) \
                 build_ext -i install_data --install-dir .
@@ -105,8 +90,7 @@ run: build
 .PHONY: coverage
 coverage: build
 	rm -rf coverage
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) test.py $(TESTFLAGS) --coverage=coverage -s src/schooltool
-
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) test.py $(TESTFLAGS) --coverage=coverage schooltool
 .PHONY: coverage-reports-html
 coverage-reports-html:
 	rm -rf coverage/reports
