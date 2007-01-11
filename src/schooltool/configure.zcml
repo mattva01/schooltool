@@ -25,6 +25,14 @@
   <include package="zope.file" />
   <include package="zope.html" />
 
+  <!-- set up an adapter from zope.i18n locale to a zope.ucol collator -->
+
+  <adapter
+      for="zope.i18n.interfaces.locales.ILocale"
+      provides="zope.i18n.interfaces.locales.ICollator "
+      factory="zope.ucol.localeadapter.LocaleCollator"
+      />
+
   <!-- pull in some configuration needed by schooltool. -->
   <include package="zc.resourcelibrary" file="configure.zcml" />
   <include package="zc.table" file="configure.zcml" />

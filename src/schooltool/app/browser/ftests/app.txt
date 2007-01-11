@@ -351,13 +351,9 @@ Now toad is in the Students div
     <BLANKLINE>
     ...
           <h3>Students</h3>
-          <ul>
-            <li class="individual">
-              <a href="http://localhost/persons/toad">Toad</a>
-            </li>
-          </ul>
     ...
-
+          <a href="http://localhost/persons/toad">Toad</a>
+    ...
 
 Toad can see the calendar now:
 

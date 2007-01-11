@@ -24,10 +24,8 @@ $Id$
 
 import itertools
 
-from zc.table import column
 from zc.table import table
 from zc.table.column import GetterColumn
-from zc.table.interfaces import ISortableColumn
 from zope.component import getUtility
 from zope.schema import getFieldNamesInOrder
 from zope.interface import implements
@@ -58,8 +56,10 @@ from schooltool.app.interfaces import IAsset
 from schooltool.batching import Batch
 from schooltool.batching.browser import MultiBatchViewMixin
 from schooltool.person.interfaces import IPerson
-from schooltool.skin.interfaces import IFilterWidget
 from schooltool.person.interfaces import IPersonFactory
+from schooltool.skin.interfaces import IFilterWidget
+from schooltool.skin.table import CheckboxColumn
+from schooltool.skin.table import LabelColumn
 
 
 class ApplicationView(BrowserView):
@@ -153,45 +153,6 @@ class BaseEditView(EditView):
                 url = zapi.absoluteURL(self.context, self.request)
                 self.request.response.redirect(url)
             return status
-
-
-class CheckboxColumn(column.Column):
-    """A columns with a checkbox
-
-    The name and id of the checkbox are composed of the prefix keyword
-    argument and __name__ of the item being displayed.
-    """
-
-    def __init__(self, prefix, name, title):
-        super(CheckboxColumn, self).__init__(name=name, title=title)
-        self.prefix = prefix
-
-    def renderCell(self, item, formatter):
-        id = "%s.%s" % (self.prefix, item.__name__)
-        return '<input type="checkbox" name="%s" id="%s" />' % (id, id)
-
-
-class LabelColumn(object):
-    """Decorator for zc.table columns that adds a label tag for them."""
-
-    implements(ISortableColumn)
-
-    def __init__(self, wrapped, prefix):
-        self._wrapped = wrapped
-        self._prefix = prefix
-
-    def renderCell(self, item, formatter):
-        if self._prefix:
-            prefix = self._prefix + "."
-        else:
-            prefix = self._prefix
-        content = self._wrapped.renderCell(item, formatter)
-        return '<label for="%s%s">%s</label>' % (prefix,
-                                                  item.__name__,
-                                                  content)
-
-    def __getattr__(self, name):
-        return getattr(self._wrapped, name)
 
 
 class RelationshipViewBase(BrowserView):

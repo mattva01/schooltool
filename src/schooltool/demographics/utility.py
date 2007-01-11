@@ -29,7 +29,6 @@ from zope.interface import implements
 from zope.component import adapts
 from zope.interface import directlyProvides
 
-from zc.table.column import GetterColumn
 from zc.table.interfaces import ISortableColumn
 
 from schooltool.utility import UtilitySpecification, MultiUtilitySetUp
@@ -38,6 +37,7 @@ from schooltool.demographics.interfaces import ISearch
 from schooltool.demographics.person import Person
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonFactory
+from schooltool.skin.table import LocaleAwareGetterColumn
 
 class Search(object):
     implements(ISearch)
@@ -85,14 +85,14 @@ class PersonFactoryUtility(object):
     implements(IPersonFactory)
 
     def columns(self):
-        first_name = GetterColumn(
+        first_name = LocaleAwareGetterColumn(
             name='first_name',
             title=u'Name',
             getter=lambda i, f: i.nameinfo.first_name,
             subsort=True)
         directlyProvides(first_name, ISortableColumn)
 
-        last_name = GetterColumn(
+        last_name = LocaleAwareGetterColumn(
             name='last_name',
             title=u'Surname',
             getter=lambda i, f: i.nameinfo.last_name,

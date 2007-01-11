@@ -33,6 +33,8 @@ from zope.app.form.utility import getWidgetsData
 from zope.publisher.browser import BrowserView
 from zope.component import getUtility
 
+from zc.table import table
+
 from schooltool.person.interfaces import IPerson
 from schooltool.group.interfaces import IGroup
 from schooltool.batching import Batch
@@ -55,6 +57,7 @@ from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.timetable.browser import TimetableConflictMixin
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.skin.table import URLColumn
 
 
 def same(a, b):
@@ -81,8 +84,20 @@ class SectionView(BrowserView):
 
     __used_for__ = ISection
 
+    def renderPersonTable(self):
+        factory = getUtility(IPersonFactory)
+        columns = [URLColumn(column, self.request) for column in
+                   factory.columns()]
+        formatter = table.StandaloneFullFormatter(
+            self.context, self.request, self.getPersons(),
+            columns=columns,
+            sort_on=factory.sortOn())
+        formatter.cssClasses['table'] = 'data'
+        return formatter()
+
     def getPersons(self):
-        return filter(IPerson.providedBy, self.context.members)
+        return map(removeSecurityProxy,
+                   filter(IPerson.providedBy, self.context.members))
 
     def getGroups(self):
         return filter(IGroup.providedBy, self.context.members)

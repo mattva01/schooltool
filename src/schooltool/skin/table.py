@@ -20,13 +20,21 @@
 
 $Id$
 """
+import locale
+
 from zope.interface import implements
+from zope.i18n.interfaces.locales import ICollator
 from zope.publisher.browser import BrowserPage
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zc.table import table
+from zc.table import column
+from zc.table.interfaces import ISortableColumn
+from zc.table.column import GetterColumn
+from zope.app import zapi
 
 from schooltool.batching import Batch
 from schooltool.skin.interfaces import IFilterWidget
+from schooltool.attendance.attendance import getRequestFromInteraction
 
 
 class TablePage(BrowserPage):
@@ -126,3 +134,75 @@ class FilterWidget(object):
         if 'SEARCH' in self.request:
             return '&SEARCH=%s' % self.request.get('SEARCH')
         return ''
+
+
+class CheckboxColumn(column.Column):
+    """A columns with a checkbox
+
+    The name and id of the checkbox are composed of the prefix keyword
+    argument and __name__ of the item being displayed.
+    """
+
+    def __init__(self, prefix, name, title):
+        super(CheckboxColumn, self).__init__(name=name, title=title)
+        self.prefix = prefix
+
+    def renderCell(self, item, formatter):
+        id = "%s.%s" % (self.prefix, item.__name__)
+        return '<input type="checkbox" name="%s" id="%s" />' % (id, id)
+
+
+class LabelColumn(object):
+    """Decorator for zc.table columns that adds a label tag for them."""
+
+    implements(ISortableColumn)
+
+    def __init__(self, wrapped, prefix):
+        self._wrapped = wrapped
+        self._prefix = prefix
+
+    def renderCell(self, item, formatter):
+        if self._prefix:
+            prefix = self._prefix + "."
+        else:
+            prefix = self._prefix
+        content = self._wrapped.renderCell(item, formatter)
+        return '<label for="%s%s">%s</label>' % (prefix,
+                                                  item.__name__,
+                                                  content)
+
+    def __getattr__(self, name):
+        return getattr(self._wrapped, name)
+
+
+class URLColumn(object):
+    """Decorator for zc.table columns that adds an A tag for them.
+
+    The link will be the absolute URL of the item.
+    """
+
+    implements(ISortableColumn)
+
+    def __init__(self, wrapped, request):
+        self._wrapped = wrapped
+        self.request = request
+
+    def renderCell(self, item, formatter):
+        content = self._wrapped.renderCell(item, formatter)
+        url = zapi.absoluteURL(item, self.request)
+        return '<a href="%s">%s</a>' % (url, content)
+
+    def __getattr__(self, name):
+        return getattr(self._wrapped, name)
+
+
+class LocaleAwareGetterColumn(GetterColumn):
+    """Getter columnt that has locale aware sorting."""
+
+    implements(ISortableColumn)
+
+    def getSortKey(self, item, formatter):
+        request = getRequestFromInteraction()
+        collater = ICollator(request.locale)
+        s = self.getter(item, formatter)
+        return s and collater.key(s)
