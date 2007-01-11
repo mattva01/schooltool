@@ -118,6 +118,7 @@ def date_to_schoolday_end(date):
     return date_to_schoolday_start(date) + datetime.timedelta(days=1)
 
 
+# XXX move it to some utils or common file
 def getRequestFromInteraction(request_type=IApplicationRequest):
     """Extract the browser request from the current interaction.
 

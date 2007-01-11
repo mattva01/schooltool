@@ -95,6 +95,157 @@ def doctest_FilterWidget():
     """
 
 
+def doctest_CheckboxColumn():
+    """Tests for CheckboxColumn.
+
+    Let's try creating a CheckboxColumn first:
+
+        >>> from schooltool.skin.table import CheckboxColumn
+        >>> column = CheckboxColumn("prefix", "name", "title")
+        >>> column.title
+        'title'
+        >>> column.name
+        'name'
+        >>> column.prefix
+        'prefix'
+
+        >>> class ItemStub(object):
+        ...     __name__ = "itemStub"
+        >>> column.renderCell(ItemStub(), None)
+        '<input type="checkbox" name="prefix.itemStub" id="prefix.itemStub" />'
+
+    """
+
+
+def doctest_LabelColumn():
+    """Tests for LabelColumn.
+
+    Let's try creating a LabelColumn first:
+
+        >>> class ColumnStub(object):
+        ...     title = "The title"
+        ...     def __init__(self):
+        ...         self.__name__ = "name"
+        ...     def renderCell(self, item, formatter):
+        ...         return item.title
+        >>> column = ColumnStub()
+
+        >>> from schooltool.skin.table import LabelColumn
+        >>> lc = LabelColumn(column, prefix='some_prefix')
+        >>> lc._prefix
+        'some_prefix'
+
+    We want to be able to sort by this column:
+
+        >>> from zc.table.interfaces import ISortableColumn
+        >>> ISortableColumn.providedBy(lc)
+        True
+
+        >>> class ItemStub(object):
+        ...     __name__ = "item_stub"
+        ...     title = "Title of The Item"
+        >>> column.renderCell(ItemStub(), None)
+        'Title of The Item'
+
+        >>> lc.renderCell(ItemStub(), None)
+        '<label for="some_prefix.item_stub">Title of The Item</label>'
+
+    If there is not prefix set, we plain __name__ of the item is used
+    as the id:
+
+        >>> lc._prefix = ""
+        >>> lc.renderCell(ItemStub(), None)
+        '<label for="item_stub">Title of The Item</label>'
+
+    """
+
+
+def doctest_URLColumn():
+    """Tests for URLColumn.
+
+    Let's try creating a URLColumn first:
+
+        >>> class ColumnStub(object):
+        ...     title = "The title"
+        ...     def __init__(self):
+        ...         self.__name__ = "name"
+        ...     def renderCell(self, item, formatter):
+        ...         return item.title
+        >>> column = ColumnStub()
+
+        >>> from schooltool.skin.table import LabelColumn
+        >>> lc = LabelColumn(column, prefix='some_prefix')
+        >>> lc._prefix
+        'some_prefix'
+
+    We want to be able to sort by this column:
+
+        >>> from zc.table.interfaces import ISortableColumn
+        >>> ISortableColumn.providedBy(lc)
+        True
+
+        >>> class ItemStub(object):
+        ...     __name__ = "item_stub"
+        ...     title = "Title of The Item"
+        >>> column.renderCell(ItemStub(), None)
+        'Title of The Item'
+
+        >>> lc.renderCell(ItemStub(), None)
+        '<label for="some_prefix.item_stub">Title of The Item</label>'
+
+    If there is not prefix set, we plain __name__ of the item is used
+    as the id:
+
+        >>> lc._prefix = ""
+        >>> lc.renderCell(ItemStub(), None)
+        '<label for="item_stub">Title of The Item</label>'
+
+    """
+
+
+def doctest_LocaleAwareGetterColumn():
+    """Tests for LocaleAwareGetterColumn.
+
+    Provide an interaction:
+
+        >>> from zope.security.management import restoreInteraction
+        >>> from zope.security.management import endInteraction
+        >>> from zope.security.management import newInteraction
+
+        >>> endInteraction()
+        >>> from zope.publisher.browser import TestRequest
+        >>> request = TestRequest()
+        >>> newInteraction(request)
+
+    Register collation adapter:
+
+        >>> from zope.i18n.interfaces.locales import ICollator
+        >>> from zope.i18n.interfaces.locales import ILocale
+        >>> from zope.component import provideAdapter
+        >>> from zope.interface import implements
+        >>> from zope.component import adapts
+        >>> class CollatorAdapterStub(object):
+        ...     implements(ICollator)
+        ...     adapts(ILocale)
+        ...     def __init__(self, context):
+        ...         self.context = context
+        ...     def key(self, string):
+        ...         return "CollatorKey(%s)" % string
+        >>> provideAdapter(CollatorAdapterStub)
+
+    Let's try creating a LocaleAwareGetterColumn first:
+
+        >>> from schooltool.skin.table import LocaleAwareGetterColumn
+        >>> lac = LocaleAwareGetterColumn()
+        >>> formatter = lambda s: s
+        >>> item = "Item"
+        >>> lac.getSortKey(item, formatter)
+        'CollatorKey(Item)'
+
+        >>> restoreInteraction()
+
+    """
+
 def test_suite():
     optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF
                    | doctest.REPORT_ONLY_FIRST_FAILURE)

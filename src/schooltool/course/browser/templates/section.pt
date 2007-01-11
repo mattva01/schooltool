@@ -79,10 +79,8 @@
           </ul>
         </li>
 
-        <li class="individual" tal:repeat="person persons/sorted_filter_accessible:title">
-          <a tal:attributes="href person/@@absolute_url"
-             tal:content="person/title" />
-        </li>
+        <tal:block tal:replace="structure view/renderPersonTable" />
+
       </ul>
       <a class="modify" href=""
          title="Change the students in this section individually"
