@@ -361,23 +361,23 @@ class TimetableActivity(object):
 
     implements(ITimetableActivity)
 
-    def __init__(self, title=None, owner=None, timetable=None):
+    def __init__(self, title=None, owner=None, timetable=None, resources=None):
         self._title = title
         self._owner = owner
         self._timetable = timetable
+        if resources:
+            self._resources = tuple(resources)
+        else:
+            self._resources = ()
 
     title = property(lambda self: self._title)
     owner = property(lambda self: self._owner)
     timetable = property(lambda self: self._timetable)
-
-    @property
-    def resources(self):
-        resource_booker = IBookResources(self.owner, None)
-        return resource_booker and resource_booker.resources or []
+    resources = property(lambda self: self._resources)
 
     def __repr__(self):
-        return ("TimetableActivity(%r, %r, %r)"
-                % (self.title, self.owner, self.timetable))
+        return ("TimetableActivity(%r, %r, %r, %r)"
+                % (self.title, self.owner, self.timetable, self.resources))
 
     def __eq__(self, other):
         # Is it really a good idea to ignore self.timetable?
@@ -394,11 +394,14 @@ class TimetableActivity(object):
     def __hash__(self):
         return hash((self.title, self.owner))
 
-    def replace(self, title=Unchanged, owner=Unchanged, timetable=Unchanged):
+    def replace(self, title=Unchanged, owner=Unchanged, timetable=Unchanged,
+                resources=Unchanged):
         if title is Unchanged: title = self.title
         if owner is Unchanged: owner = self.owner
         if timetable is Unchanged: timetable = self.timetable
-        return TimetableActivity(title=title, owner=owner, timetable=timetable)
+        if resources is Unchanged: resources = self.resources
+        return TimetableActivity(title=title, owner=owner, timetable=timetable,
+                                 resources=resources)
 
 
 class TimetableReplacedEvent(object):

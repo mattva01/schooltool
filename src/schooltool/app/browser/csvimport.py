@@ -433,6 +433,8 @@ class TimetableCSVImporter(object):
 
         # Add timetable activities.
         for day_id, period_id in periods:
+            # XXX no resource booking in here, the form is not used
+            # anyway though
             act = TimetableActivity(title=course.title, owner=section)
             tt[day_id].add(period_id, act)
 

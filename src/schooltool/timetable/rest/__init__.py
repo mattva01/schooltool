@@ -313,8 +313,7 @@ class TimetableFileFactory(object):
         # removeSecurityProxy needed because we will put the TimetableActivity
         # into ZODB
         owner = removeSecurityProxy(self.context.__parent__)
-        # XXX resources are ignored at the moment
-        return TimetableActivity(title, owner)
+        return TimetableActivity(title, owner, resources=resources)
 
 
 class TimetablePUT(object):

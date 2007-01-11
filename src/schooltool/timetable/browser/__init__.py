@@ -645,8 +645,12 @@ class SectionTimetableSetupView(TimetableSetupViewBase):
                     for period_id, period in list(day.items()):
                         if '.'.join((day_id, period_id)) in self.request:
                             if not period:
+                                # XXX Resource list is being copied
+                                # from section as this view can't do
+                                # proper resource booking
                                 act = TimetableActivity(title=course_title,
-                                                         owner=section)
+                                                        owner=section,
+                                                        resources=section.resources)
                                 day.add(period_id, act)
                         else:
                             if period:
