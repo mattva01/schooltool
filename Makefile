@@ -105,8 +105,7 @@ run: build
 .PHONY: coverage
 coverage: build
 	rm -rf coverage
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) test.py $(TESTFLAGS) --coverage=coverage -s src/schooltool
-
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) test.py $(TESTFLAGS) --coverage=coverage schooltool
 .PHONY: coverage-reports-html
 coverage-reports-html:
 	rm -rf coverage/reports
