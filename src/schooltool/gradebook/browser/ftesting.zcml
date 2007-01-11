@@ -1,5 +1,4 @@
 <configure xmlns="http://namespaces.zope.org/zope"
-           xmlns:browser="http://namespaces.zope.org/browser"
            i18n_domain="zope">
 
   <include package="schooltool" />
@@ -7,11 +6,10 @@
   <include package="schooltool.course" />
   <include package="schooltool.term" />
   <include package="schooltool.timetable" />
+  <include package="schooltool.attendance" />
+  <include package="schooltool.requirement" />
+  <include package="schooltool.gradebook" />
 
   <include package="zope.testbrowser.ftests" file="ftesting.zcml" />
-
-  <include package="schooltool.timetable" file="timetable-ftesting.zcml" />
-  <include package="schooltool.app.browser.ftests" file="ftesting.zcml" />
-  <include package="schooltool.app.browser.ftests" file="brokenview-ftesting.zcml" />
 
 </configure>

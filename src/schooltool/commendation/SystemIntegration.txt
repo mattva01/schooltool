@@ -223,6 +223,7 @@ We get setup by accessing the site and logging in as the manager:
   >>> manager.getControl('Password').value = 'schooltool'
   >>> manager.getControl('Log in').click()
 
+
 Now that we are locked in, we have to create
 
 - a student,
@@ -261,6 +262,7 @@ Now we should be able to add commendations to
   >>> manager.getControl('Add').click()
 
   >>> manager.getLink('View Commendations').click()
+
   >>> print analyze.queryHTML('//div[@class="commendation"]',
   ...                         manager.contents)[0]
   <div class="commendation">

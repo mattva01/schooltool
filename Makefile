@@ -11,9 +11,9 @@ ZOPE_REPOSITORY=svn://svn.zope.org/repos/main/
 ZOPE_HTML_REPOSITORY=svn://svn.zope.org/repos/main/zope.html/
 ZOPE_FILE_REPOSITORY=svn://svn.zope.org/repos/main/zope.file/
 ZOPE_MIMETYPE_REPOSITORY=svn://svn.zope.org/repos/main/zope.mimetype/
-TESTFLAGS=-w -v
+TESTFLAGS=-v
 LOCALES=src/schooltool/locales/
-PYTHONPATH:=$(PYTHONPATH):src:Zope3/src
+PYTHONPATH:=$(PYTHONPATH):src:eggs:Zope3/src
 SETUPFLAGS=
 
 # Which part of the Zope3 repository do we track
@@ -63,7 +63,8 @@ build: zope3-checkout zpkgsetup-checkout zope-addons-checkout
 	test -d Zope3 && cd Zope3 && $(PYTHON) setup.py build_ext -i
 	$(PYTHON) setup.py $(SETUPFLAGS) \
                 build_ext -i install_data --install-dir .
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) setup.eggs.py develop -S Zope3/src --install-dir Zope3/src
+	test -d eggs || mkdir eggs
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) setup.eggs.py develop -S eggs --install-dir eggs
 	$(PYTHON) bin/remove-stale-bytecode.py
 
 .PHONY: clean
@@ -83,27 +84,28 @@ realclean: clean cleandb
 	rm -f scripts/import-sampleschool
 	rm -f MANIFEST
 	rm -rf dist
+	rm -rf eggs
 
 .PHONY: test
 test: build
-	$(PYTHON) test.py $(TESTFLAGS) -s src/schooltool
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) test.py $(TESTFLAGS) -u schooltool
 
 .PHONY: testall
 testall: build
-	$(PYTHON) test.py $(TESTFLAGS)
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) test.py $(TESTFLAGS) 
 
 .PHONY: ftest
 ftest: build
-	$(PYTHON) test.py $(TESTFLAGS) -s src/schooltool -f --level 2
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) test.py $(TESTFLAGS) -f --at-level 2 schooltool 
 
 .PHONY: run
 run: build
-	$(PYTHON) schooltool-server.py
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) schooltool-server.py
 
 .PHONY: coverage
 coverage: build
 	rm -rf coverage
-	$(PYTHON) test.py $(TESTFLAGS) --coverage -s src/schooltool
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) test.py $(TESTFLAGS) --coverage=coverage -s src/schooltool
 
 .PHONY: coverage-reports-html
 coverage-reports-html:

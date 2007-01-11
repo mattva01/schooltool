@@ -17,29 +17,27 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Functional tests for schooltool.level.
+Functional tests for schooltool.requirement.
 
 $Id$
 """
 
 import unittest
-from zope.testing import doctest
-from zope.app.testing.functional import FunctionalDocFileSuite
+import os
 
-from schooltool.testing import analyze
-from schooltool.testing.functional import load_ftesting_zcml
 from schooltool.testing.functional import collect_ftests
+from schooltool.testing.functional import ZCMLLayer
 
+dir = os.path.abspath(os.path.dirname(__file__))
+filename = os.path.join(dir, 'ftesting.zcml')
+
+requirement_functional_layer = ZCMLLayer(filename,
+                                         __name__,
+                                         'requirement_functional_layer')
 
 def test_suite():
-    load_ftesting_zcml()
-    optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
-                   doctest.NORMALIZE_WHITESPACE |
-                   doctest.REPORT_ONLY_FIRST_FAILURE)
-    return FunctionalDocFileSuite(
-        'README.txt', optionflags=optionflags,
-        globs={'analyze': analyze})
-
+    return collect_ftests(filenames=['README.txt'],
+                          layer=requirement_functional_layer)
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')

@@ -253,12 +253,6 @@
         doc_path="ftests/relationships.txt" />
 
     <apidoc:bookchapter
-        id="notes"
-        title="Notes"
-        parent="schooltool/rest"
-        doc_path="ftests/notes.txt" />
-
-    <apidoc:bookchapter
         id="errors"
         title="Errors"
         parent="schooltool/rest"

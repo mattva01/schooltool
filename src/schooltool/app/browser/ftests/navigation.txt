@@ -45,9 +45,6 @@ a portlet with the navigation links depending on the authorized user.
     ...                         manager.contents)[0]
     <a href="http://localhost/ttschemas">School Timetables</a>
 
-    >>> print analyze.queryHTML('//a[text()="Levels"]', manager.contents)[0]
-    <a href="http://localhost/levels">Levels</a>
-
 The main technical challenge in this view is finding the nearest
 ``ISchoolToolApplication`` instance, and providing the links relative to
 it.
@@ -72,7 +69,4 @@ it.
     >>> print analyze.queryHTML('//a[text()="School Timetables"]',
     ...                         manager.contents)[0]
     <a href="http://localhost/ttschemas">School Timetables</a>
-
-    >>> print analyze.queryHTML('//a[text()="Levels"]', manager.contents)[0]
-    <a href="http://localhost/levels">Levels</a>
 
