@@ -30,6 +30,12 @@ if sys.version_info < (2, 4):
     print >> sys.stderr, 'Your python is %s' % sys.version
     sys.exit(1)
 
+import site
+site.addsitedir('eggs')
+
+import pkg_resources
+pkg_resources.require("setuptools>=0.6a11")
+
 import os
 from setuptools import setup, find_packages
 
