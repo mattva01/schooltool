@@ -39,13 +39,16 @@ The list of persons should have a disabled checkbox next to the manager user
     >>> f = open('/tmp/dump.html', 'w')
     >>> f.write(manager_browser.contents)
     >>> f.close()
-    >>> for td in analyze.queryHTML('//table/tbody/tr/td[input[@type="checkbox"]]',
+
+    >>> for td in analyze.queryHTML('//form/div[input[@type="checkbox"]]',
     ...                             manager_browser.contents):
     ...     print td
-    <td>
-      <input type="checkbox" name="delete.srichter"></td>
-    <td>
-      <input type="checkbox" name="delete.manager" disabled></td>
+    <div>
+      <input type="checkbox" disabled name="delete.manager"><a href="http://localhost/persons/manager">SchoolTool Manager</a>
+    </div>
+    <div>
+      <input type="checkbox" name="delete.srichter"><a href="http://localhost/persons/srichter">Stephan Richter</a>
+    </div>
 
 The list of groups should have a disabled checkbox next to the default groups
 

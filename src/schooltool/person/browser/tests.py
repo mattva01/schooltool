@@ -113,6 +113,248 @@ def doctest_PersonPhotoView():
 
     """
 
+
+def doctest_PersonEditView():
+    r"""Test for PersonEditView
+
+    PersonEditView is a view on IPerson.
+
+        >>> from schooltool.person.browser.person import PersonEditView
+        >>> from schooltool.person.person import Person
+        >>> person = Person()
+
+    Let's try creating one
+
+        >>> request = TestRequest()
+        >>> view = PersonEditView(person, request)
+
+    You can change person's title and photo
+
+        >>> request = TestRequest(form={'UPDATE_SUBMIT': True,
+        ...                             'field.title': u'newTitle',
+        ...                             'field.photo': 'PHOTO'})
+        >>> view = PersonEditView(person, request)
+
+        >>> view.update()
+        >>> view.message
+        >>> person.title
+        u'newTitle'
+        >>> person.photo
+        'PHOTO'
+
+    You can clear the person's photo:
+        >>> request = TestRequest(form={'UPDATE_SUBMIT': True,
+        ...                             'field.title':u'newTitle',
+        ...                             'field.clear_photo':'on'})
+        >>> view = PersonEditView(person, request)
+
+        >>> view.update()
+        >>> view.message
+        >>> person.title
+        u'newTitle'
+        >>> print person.photo
+        None
+
+    You can set a person's password
+
+        >>> person.setPassword('lala')
+        >>> request = TestRequest(form={'UPDATE_SUBMIT': True,
+        ...                             'field.title': person.title,
+        ...                             'field.new_password': 'bar',
+        ...                             'field.verify_password': 'bar'})
+        >>> view = PersonEditView(person, request)
+
+        >>> view.update()
+        >>> view.message
+        u'Password was successfully changed!'
+        >>> person.checkPassword('bar')
+        True
+
+    Unless new password and confirm password do not match
+
+        >>> person.setPassword('lala')
+        >>> request = TestRequest(form={'UPDATE_SUBMIT': True,
+        ...                             'field.title': person.title,
+        ...                             'field.new_password': 'bara',
+        ...                             'field.verify_password': 'bar'})
+        >>> view = PersonEditView(person, request)
+
+        >>> view.update()
+        >>> view.error
+        u'Passwords do not match.'
+
+    If the form contains errors, it is redisplayed
+
+        >>> request = TestRequest(form={'UPDATE_SUBMIT': True,
+        ...                             'field.title': '',
+        ...                             'field.new_password': 'xyzzy',
+        ...                             'field.verify_password': 'xyzzy'})
+        >>> view = PersonEditView(person, request)
+
+        >>> view.update()
+        >>> person.title
+        u'newTitle'
+
+        >>> bool(view.title_widget.error())
+        True
+
+    We can cancel an action if we want to:
+
+        >>> directlyProvides(person, IContainmentRoot)
+        >>> request = TestRequest()
+        >>> request.form = {'CANCEL': 'Cancel'}
+        >>> view = PersonEditView(person, request)
+        >>> view.update()
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('Location')
+        'http://127.0.0.1'
+
+    """
+
+
+def doctest_PersonAddView():
+    r"""Test for PersonAddView
+
+    Make sure we have the PersonFactory utility available:
+
+        >>> from zope.component import provideUtility
+        >>> from schooltool.person.utility import PersonFactoryUtility
+        >>> from schooltool.person.interfaces import IPersonFactory
+        >>> provideUtility(PersonFactoryUtility(), IPersonFactory)
+
+    We need some setup to make traversal work in a unit test.
+
+        >>> class FakeURL:
+        ...     def __init__(self, context, request): pass
+        ...     def __call__(self): return "http://localhost/frogpond/persons"
+        ...
+        >>> from schooltool.person.interfaces import IPersonContainer
+        >>> from zope.traversing.browser.interfaces import IAbsoluteURL
+        >>> ztapi.browserViewProviding(IPersonContainer, FakeURL, \
+        ...                            providing=IAbsoluteURL)
+
+    Let's create a PersonContainer
+
+        >>> from schooltool.app.app import SchoolToolApplication
+        >>> app = sbsetup.setUpSchoolToolSite()
+        >>> pc = app['persons']
+
+        >>> from zope.component import provideAdapter
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
+        >>> provideAdapter(lambda context: app,
+        ...                adapts=[None],
+        ...                provides=ISchoolToolApplication)
+
+    Now let's create a PersonAddView for the container
+
+        >>> from schooltool.person.browser.person import PersonAddView
+        >>> view = PersonAddView(pc, TestRequest())
+        >>> view.update()
+
+    Let's try to add a user:
+
+        >>> request = TestRequest(form={'field.title': u'John Doe',
+        ...                             'field.username': u'jdoe',
+        ...                             'field.password': u'secret',
+        ...                             'field.verify_password': u'secret',
+        ...                             'field.photo': u'',
+        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> view = PersonAddView(pc, request)
+        >>> view.update()
+        ''
+        >>> print view.errors
+        ()
+        >>> print view.error
+        None
+        >>> 'jdoe' in pc
+        True
+        >>> person = pc['jdoe']
+        >>> person.title
+        u'John Doe'
+        >>> person.username
+        u'jdoe'
+        >>> person.checkPassword('secret')
+        True
+        >>> person.photo is None
+        True
+
+    If we try to add a user with the same login, we get a nice error message:
+
+        >>> request = TestRequest(form={'field.title': u'Another John Doe',
+        ...                             'field.username': u'jdoe',
+        ...                             'field.password': u'pass',
+        ...                             'field.verify_password': u'pass',
+        ...                             'field.photo': None,
+        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> view = PersonAddView(pc, request)
+        >>> view.update()
+        u'An error occurred.'
+        >>> view.error
+        u'This username is already used!'
+
+    Let's try to add user with different password and verify_password fields:
+
+        >>> request = TestRequest(form={'field.title': u'Coo Guy',
+        ...                             'field.username': u'coo',
+        ...                             'field.password': u'secret',
+        ...                             'field.verify_password': u'plain',
+        ...                             'field.photo': None,
+        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> view = PersonAddView(pc, request)
+        >>> view.update()
+        u'An error occurred.'
+        >>> view.error
+        u'Passwords do not match!'
+        >>> 'coo' in pc
+        False
+
+    We can select groups that the user should be in.  First, let's create a
+    group:
+
+        >>> from schooltool.group.group import Group
+        >>> pov = app['groups']['pov'] = Group('PoV')
+
+    Now, let's create and render a view:
+
+        >>> request = TestRequest(form={'field.title': u'Gintas',
+        ...                             'field.username': u'gintas',
+        ...                             'field.password': u'denied',
+        ...                             'field.verify_password': u'denied',
+        ...                             'field.photo': ':)',
+        ...                             'group.pov': 'on',
+        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> view = PersonAddView(pc, request)
+        >>> view.update()
+        ''
+        >>> print view.errors
+        ()
+        >>> print view.error
+        None
+
+        >>> pc['gintas'].photo
+        ':)'
+
+    Now the person belongs to the group that we have selected:
+
+        >>> list(pc['gintas'].groups) == [pov]
+        True
+
+    We can cancel an action if we want to:
+
+        >>> directlyProvides(pc, IContainmentRoot)
+        >>> request = TestRequest()
+        >>> request.form = {'CANCEL': 'Cancel'}
+        >>> view = PersonAddView(pc, request)
+        >>> view.update()
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('Location')
+        'http://127.0.0.1/persons'
+
+    """
+
+
 def doctest_PersonPreferencesView():
     """
 

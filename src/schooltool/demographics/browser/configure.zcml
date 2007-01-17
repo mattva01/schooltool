@@ -10,37 +10,11 @@
       template="demographics_macros.pt"
       />
 
-  <page
-      name="add.html"
-      for="schooltool.person.interfaces.IPersonContainer"
-      class=".personform.PersonAddView"
-      permission="schooltool.edit"
-      menu="schooltool_actions" title="New Person"
-      />
-
   <zope:subscriber
       for="schooltool.person.interfaces.IPerson zope.publisher.interfaces.IPublisherRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".personform.nameinfo_traverser"
       permission="zope.Public"
-      />
-
-  <page
-      name="index.html"
-      for="schooltool.person.interfaces.IPerson"
-      class=".personform.PersonView"
-      permission="zope.View"
-      menu="schooltool_actions"
-      title="View"
-      />
-
-  <page
-      name="edit.html"
-      for="schooltool.person.interfaces.IPerson"
-      class=".personform.PersonEditView"
-      permission="zope.View"
-      menu="schooltool_actions"
-      title="Edit"
       />
 
   <page
@@ -171,13 +145,6 @@
            zope.publisher.interfaces.browser.IBrowserRequest"
            factory=".personform.GroupsTerms"
       />
-
-  <page
-     for="schooltool.person.interfaces.IPersonContainer"
-     name="index.html"
-     class=".table.PersonTable"
-     permission="schooltool.view"
-     />
 
   <page
     name="menu_macros"

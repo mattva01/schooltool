@@ -20,14 +20,16 @@ We will obviously need a SchoolTool instance.
 
 Let's create some persons:
 
-    >>> setup.addPerson('Student1', 'student1', 'student1', groups=['students'])
-    >>> setup.addPerson('Student2', 'student2', 'student2', groups=['students'])
-    >>> setup.addPerson('Student3', 'student3', 'student3', groups=['students'])
-    >>> setup.addPerson('Teacher1', 'teacher1', 'teacher1', groups=['teachers'])
-    >>> setup.addPerson('Teacher2', 'teacher2', 'teacher2', groups=['teachers'])
-    >>> setup.addPerson('Teacher3', 'teacher3', 'teacher3', groups=['teachers'])
+    >>> from schooltool.demographics.browser.ftests import addPerson
+    >>> addPerson('Student1', 'student1', 'student1', groups=['students'])
+    >>> addPerson('Student2', 'student2', 'student2', groups=['students'])
+    >>> addPerson('Student3', 'student3', 'student3', groups=['students'])
+    >>> addPerson('Teacher1', 'teacher1', 'teacher1', groups=['teachers'])
+    >>> addPerson('Teacher2', 'teacher2', 'teacher2', groups=['teachers'])
+    >>> addPerson('Teacher3', 'teacher3', 'teacher3', groups=['teachers'])
 
-    >>> setup.setUpTimetabling('instructor1', 'instructor1')
+    >>> addPerson('Frog', 'instructor1', 'instructor1')
+    >>> setup.setUpTimetabling('instructor1')
 
 Section and resources:
 

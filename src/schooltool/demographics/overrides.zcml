@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           i18n_domain="schooltool">
+
+  <browser:page
+      name="index.html"
+      for="schooltool.person.interfaces.IPerson"
+      class=".browser.personform.PersonView"
+      permission="zope.View"
+      menu="schooltool_actions"
+      title="View"
+      />
+
+  <browser:page
+      name="edit.html"
+      for="schooltool.person.interfaces.IPerson"
+      class=".browser.personform.PersonEditView"
+      permission="zope.View"
+      menu="schooltool_actions"
+      title="Edit"
+      />
+
+
+  <browser:page
+      name="add.html"
+      for="schooltool.person.interfaces.IPersonContainer"
+      class=".browser.personform.PersonAddView"
+      permission="schooltool.edit"
+      menu="schooltool_actions" title="New Person"
+      />
+
+  <browser:page
+     for="schooltool.person.interfaces.IPersonContainer"
+     name="index.html"
+     class=".browser.table.PersonTable"
+     permission="schooltool.view"
+     />
+
+  <utility factory=".utility.PersonFactoryUtility" />
+
+</configure>

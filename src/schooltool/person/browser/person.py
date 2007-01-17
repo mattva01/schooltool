@@ -258,3 +258,181 @@ class PersonFilterWidget(FilterWidget):
             if parameter in self.request:
                 url += '&%s=%s' % (parameter, self.request.get(parameter))
         return url
+
+class IPersonAddForm(Interface):
+    """Schema for person adding form."""
+
+    title = TextLine(
+        title=_("Full name"),
+        description=_("Name that should be displayed"))
+
+    username = TextLine(
+        title=_("Username"),
+        description=_("Username"))
+
+    password = Password(
+        title=_("Password"),
+        required=False)
+
+    verify_password = Password(
+        title=_("Verify password"),
+        required=False)
+
+    photo = Bytes(
+        title=_("Photo"),
+        required=False,
+        description=_("""Photo (in JPEG format)"""))
+
+
+class PersonAddView(AddView):
+    """A view for adding a person."""
+
+    __used_for__ = IPersonContainer
+
+    # Form error message for the page template
+    error = None
+
+    # Override some fields of AddView
+    schema = IPersonAddForm
+    _arguments = ['title', 'username', 'password', 'photo']
+    _keyword_arguments = []
+    _set_before_add = [] # getFieldNamesInOrder(schema)
+    _set_after_add = []
+
+    def createAndAdd(self, data):
+        """Create a Person from form data and add it to the container."""
+        if data['password'] != data['verify_password']:
+            self.error = _("Passwords do not match!")
+            raise WidgetsError([ValidationError(self.error)])
+        elif data['username'] in self.context:
+            self.error = _('This username is already used!')
+            raise WidgetsError([ValidationError(self.error)])
+        return AddView.createAndAdd(self, data)
+
+    def getAllGroups(self):
+        """Return a list of all groups in the system."""
+        return ISchoolToolApplication(None)['groups'].values()
+
+    def create(self, title, username, password, photo):
+        person = self._factory(username=username, title=title)
+        person.setPassword(password)
+        person.photo = photo
+        return person
+
+    def _factory(self, username, title):
+        return getUtility(IPersonFactory)(username, title)
+
+    def add(self, person):
+        """Add `person` to the container.
+
+        Uses the username of `person` as the object ID (__name__).
+        """
+        person_groups = removeSecurityProxy(person.groups)
+        for group in self.getAllGroups():
+            if 'group.' + group.__name__ in self.request:
+                person.groups.add(removeSecurityProxy(group))
+        name = person.username
+        self.context[name] = person
+        return person
+
+    def update(self):
+        if 'CANCEL' in self.request:
+            url = zapi.absoluteURL(self.context, self.request)
+            self.request.response.redirect(url)
+
+        return AddView.update(self)
+
+    def nextURL(self):
+        """See zope.app.container.interfaces.IAdding"""
+        return zapi.absoluteURL(self.context, self.request)
+
+
+class IPersonEditForm(Interface):
+    """Schema for a person's edit form."""
+
+    title = TextLine(
+        title=_("Full name"),
+        description=_("Name that should be displayed"))
+
+    photo = Bytes(
+        title=_("New photo"),
+        required=False,
+        description=_(
+            """A small picture (about 48x48 pixels in JPEG format)"""))
+
+    clear_photo = Bool(
+        title=_("Clear photo"),
+        required=False,
+        description=_("""Check this to clear the photo"""))
+
+    new_password = Password(
+        title=_("New password"),
+        required=False)
+
+    verify_password = Password(
+        title=_("Verify password"),
+        required=False)
+
+
+class PersonEditView(BrowserView):
+    """A view for editing a person."""
+
+    __used_for__ = IPersonContained
+
+    error = None
+    message = None
+
+    def __init__(self, context, request):
+        BrowserView.__init__(self, context, request)
+        setUpWidgets(self, IPersonEditForm, IInputWidget,
+                     initial={'title': self.context.title,
+                              'photo': self.context.photo})
+
+    def update(self):
+        if 'UPDATE_SUBMIT' in self.request:
+            try:
+                data = getWidgetsData(self, IPersonEditForm)
+            except WidgetsError:
+                return # Errors will be displayed next to widgets
+
+            # If any of the password fields is set
+            if data.get('new_password') or data.get('verify_password'):
+                # We compare them
+                if data['new_password'] != data['verify_password']:
+                    self.error = _("Passwords do not match.")
+                    return
+
+                self.context.setPassword(data['new_password'])
+                self.message = _("Password was successfully changed!")
+
+            self.context.title = data['title']
+            if data.get('photo'):
+                self.context.photo = data['photo']
+
+            if data.get('clear_photo'):
+                self.context.photo = None
+                # Uncheck the checkbox before rendering the form
+                self.clear_photo_widget.setRenderedValue(False)
+
+        if 'CANCEL' in self.request:
+            url = zapi.absoluteURL(self.context, self.request)
+            self.request.response.redirect(url)
+
+
+class PersonContainerView(ContainerView):
+    """A Person Container view."""
+
+    __used_for__ = IPersonContainer
+
+    index_title = _("Person index")
+    add_title = _("Add a new person")
+    add_url = "+/addSchoolToolPerson.html"
+
+
+class PersonView(BrowserView):
+    """A Person info view."""
+
+    __used_for__ = IPersonContained
+
+    def __init__(self, context, request):
+        BrowserView.__init__(self, context, request)

@@ -161,4 +161,36 @@
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory=".person.PersonFilterWidget" />
 
+  <configure package="schooltool.skin">
+
+    <page
+        name="index.html"
+        for="schooltool.person.interfaces.IPersonContainer"
+        class="schooltool.person.browser.person.PersonContainerView"
+        template="templates/container.pt"
+        permission="schooltool.view"
+        menu="zmi_views"
+        title="View"
+        />
+
+  </configure>
+
+  <page
+     name="add.html"
+     for="..interfaces.IPersonContainer"
+     class=".person.PersonAddView"
+     template="person_add.pt"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="New Person" />
+
+  <page
+      name="index.html"
+      for="..interfaces.IPerson"
+      class=".person.PersonView"
+      template="person.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
 </configure>
