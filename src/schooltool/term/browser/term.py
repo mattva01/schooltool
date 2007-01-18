@@ -37,7 +37,7 @@ from zope.app.form.utility import getWidgetsData
 from zope.app.form.utility import setUpEditWidgets
 from zope.publisher.browser import BrowserView
 
-from schooltool.app.browser.app import ContainerView
+from schooltool.skin.containers import ContainerView
 from schooltool.app.browser.cal import month_names
 from schooltool.calendar.utils import parse_date
 from schooltool.calendar.utils import next_month, week_start

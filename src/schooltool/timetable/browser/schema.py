@@ -38,7 +38,7 @@ from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces.browser import IBrowserRequest
 
 from schooltool import SchoolToolMessage as _
-from schooltool.app.browser.app import ContainerView, ContainerDeleteView
+from schooltool.skin.containers import ContainerView, ContainerDeleteView
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot

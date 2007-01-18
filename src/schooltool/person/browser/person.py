@@ -47,7 +47,7 @@ from zope.viewlet.viewlet import ViewletBase
 from schooltool import SchoolToolMessage as _
 from schooltool.skin.form import BasicForm
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.browser.app import ContainerView, ContainerDeleteView
+from schooltool.skin.containers import ContainerView, ContainerDeleteView
 from schooltool.person.interfaces import IPasswordWriter
 from schooltool.person.interfaces import IPerson, IPersonFactory
 from schooltool.person.interfaces import IPersonPreferences

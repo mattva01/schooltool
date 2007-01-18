@@ -25,7 +25,8 @@ $Id$
 from zope.publisher.browser import BrowserView
 
 from schooltool import SchoolToolMessage as _
-from schooltool.app.browser.app import ContainerView, BaseAddView, BaseEditView
+from schooltool.skin.containers import ContainerView
+from schooltool.app.browser.app import BaseAddView, BaseEditView
 
 from schooltool.resource.interfaces import IResourceContainer
 from schooltool.resource.interfaces import IResourceContained

@@ -82,7 +82,7 @@ def doctest_ContainerView():
 
     Let's create some persons to toy with in a person container:
 
-        >>> from schooltool.app.browser.app import ContainerView
+        >>> from schooltool.skin.containers import ContainerView
         >>> from schooltool.person.person import Person, PersonContainer
         >>> from schooltool.person.interfaces import IPerson
         >>> setup.setUpAnnotations()
@@ -136,7 +136,7 @@ def doctest_ContainerDeleteView():
 
     Let's create some persons to delete from a person container:
 
-        >>> from schooltool.app.browser.app import ContainerDeleteView
+        >>> from schooltool.skin.containers import ContainerDeleteView
         >>> from schooltool.person.person import Person, PersonContainer
         >>> from schooltool.person.interfaces import IPerson
         >>> setup.setUpAnnotations()

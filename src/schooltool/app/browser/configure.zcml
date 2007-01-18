@@ -225,7 +225,7 @@
   <page
       name="delete.html"
       for="zope.app.container.interfaces.IContainer"
-      class="schooltool.app.browser.app.ContainerDeleteView"
+      class="schooltool.skin.containers.ContainerDeleteView"
       template="templates/container_delete.pt"
       permission="zope.View"
       />

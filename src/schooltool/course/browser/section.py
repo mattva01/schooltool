@@ -39,7 +39,8 @@ from schooltool.person.interfaces import IPerson
 from schooltool.group.interfaces import IGroup
 from schooltool.batching import Batch
 from schooltool.timetable.interfaces import ITimetables
-from schooltool.app.browser.app import ContainerView, BaseEditView
+from schooltool.skin.containers import ContainerView
+from schooltool.app.browser.app import BaseEditView
 from schooltool.group.interfaces import IGroup
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonFactory

@@ -30,7 +30,8 @@ from zope.component import getUtility
 from schooltool import SchoolToolMessage as _
 from schooltool.batching import Batch
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.browser.app import ContainerView, BaseAddView, BaseEditView
+from schooltool.skin.containers import ContainerView
+from schooltool.app.browser.app import BaseAddView, BaseEditView
 from schooltool.person.interfaces import IPerson
 from schooltool.resource.interfaces import IResource
 from schooltool.course.interfaces import ISection

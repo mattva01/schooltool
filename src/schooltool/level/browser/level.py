@@ -32,8 +32,9 @@ from zope.publisher import browser
 from schooltool.level import interfaces
 from schooltool import SchoolToolMessage as _
 from schooltool.app.browser import app
+from schooltool.skin.containers import ContainerView
 
-class LevelContainerView(app.ContainerView):
+class LevelContainerView(ContainerView):
     """A Level Container view."""
 
     __used_for__ = interfaces.ILevelContainer
