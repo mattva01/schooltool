@@ -17,7 +17,7 @@
 
   <configure package="schooltool.skin">
 
-    <viewlet
+    <navigationViewlet
         name="categories"
         for="*"
         manager="schooltool.skin.INavigationManager"

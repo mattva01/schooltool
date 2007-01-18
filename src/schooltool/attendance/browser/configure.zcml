@@ -65,7 +65,7 @@
       title="Attendance Control Panel"
       />
 
-  <browser:viewlet
+  <browser:navigationViewlet
       name="attendance_control_panel"
       for="*"
       manager="schooltool.skin.INavigationManager"

@@ -23,7 +23,7 @@
 
   <configure package="schooltool.skin">
 
-    <viewlet
+    <navigationViewlet
       name="persons"
       for="*"
       manager="schooltool.skin.INavigationManager"
@@ -75,7 +75,7 @@
 
   <configure package="schooltool.skin">
 
-    <viewlet
+    <navigationViewlet
       name="person-csvimport"
       for="schooltool.person.interfaces.IPersonContainer"
       manager="schooltool.skin.IActionMenuManager"
@@ -86,7 +86,7 @@
       order="10"
       />
 
-    <viewlet
+    <navigationViewlet
       name="change-person-preferences"
       for="schooltool.person.interfaces.IHavePreferences"
       manager="schooltool.skin.IActionMenuManager"
@@ -97,7 +97,7 @@
       order="20"
       />
 
-    <viewlet
+    <navigationViewlet
       name="edit-person-password"
       for="schooltool.person.interfaces.IPerson"
       manager="schooltool.skin.IActionMenuManager"

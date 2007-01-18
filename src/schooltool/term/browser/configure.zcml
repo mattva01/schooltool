@@ -33,7 +33,7 @@
       />
 
   <configure package="schooltool.skin">
-    <viewlet
+    <navigationViewlet
       name="terms"
       for="*"
       manager="schooltool.skin.INavigationManager"

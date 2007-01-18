@@ -49,7 +49,7 @@
         title="Edit Info"
         />
 
-    <viewlet
+    <navigationViewlet
       name="groups"
       for="*"
       manager="schooltool.skin.INavigationManager"

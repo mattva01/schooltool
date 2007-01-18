@@ -16,7 +16,7 @@
         menu="zmi_views" title="View"
         />
 
-    <viewlet
+    <navigationViewlet
       name="levels"
       for="*"
       manager="schooltool.skin.INavigationManager"
@@ -28,7 +28,7 @@
       order="90"
       />
 
-    <viewlet
+    <navigationViewlet
       name="validate-levels"
       for="schooltool.level.interfaces.ILevelContainer"
       manager="schooltool.skin.IActionMenuManager"
@@ -39,7 +39,7 @@
       order="50"
       />
 
-    <viewlet
+    <navigationViewlet
       name="new-level"
       for="schooltool.level.interfaces.ILevelContainer"
       manager="schooltool.skin.IActionMenuManager"
@@ -50,7 +50,7 @@
       order="30"
       />
 
-    <viewlet
+    <navigationViewlet
       name="edit-level-info"
       for="schooltool.level.interfaces.ILevel"
       manager="schooltool.skin.IActionMenuManager"

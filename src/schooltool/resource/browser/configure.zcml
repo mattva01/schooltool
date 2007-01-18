@@ -51,7 +51,7 @@
       <widget field="description" height="5" />
     </editform>
 
-    <viewlet
+    <navigationViewlet
       name="resources"
       for="*"
       manager="schooltool.skin.INavigationManager"

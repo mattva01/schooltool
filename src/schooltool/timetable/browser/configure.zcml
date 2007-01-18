@@ -73,7 +73,7 @@
       />
 
   <configure package="schooltool.skin">
-    <viewlet
+    <navigationViewlet
       name="ttschemas"
       for="*"
       manager="schooltool.skin.INavigationManager"

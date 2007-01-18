@@ -124,7 +124,7 @@
 
   <configure package="schooltool.skin">
 
-    <browser:viewlet
+    <browser:navigationViewlet
       name="commendations"
       for="*"
       manager="schooltool.skin.INavigationManager"

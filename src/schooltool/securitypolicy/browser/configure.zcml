@@ -14,7 +14,7 @@
       />
 
   <configure package="schooltool.skin">
-    <viewlet
+    <navigationViewlet
         name="access_control_customisation"
         for="*"
         manager="schooltool.skin.INavigationManager"

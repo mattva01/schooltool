@@ -19,7 +19,7 @@
         <widget field="description" height="5" />
     </addform>
 
-    <viewlet
+    <navigationViewlet
       name="courses"
       for="*"
       manager="schooltool.skin.INavigationManager"
@@ -31,7 +31,7 @@
       order="40"
       />
 
-    <viewlet
+    <navigationViewlet
       name="sections"
       for="*"
       manager="schooltool.skin.INavigationManager"

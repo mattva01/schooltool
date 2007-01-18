@@ -253,7 +253,7 @@
       />
 
   <configure package="schooltool.skin">
-    <viewlet
+    <navigationViewlet
       name="view-calendar"
       for="schooltool.app.interfaces.IHaveCalendar"
       manager="schooltool.skin.IActionMenuManager"
@@ -264,7 +264,7 @@
       order="10"
       />
 
-    <viewlet
+    <navigationViewlet
       name="new-event"
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       manager="schooltool.skin.IActionMenuManager"
@@ -275,7 +275,7 @@
       order="20"
       />
 
-    <viewlet
+    <navigationViewlet
       name="open-in-ical"
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       manager="schooltool.skin.IActionMenuManager"
@@ -286,7 +286,7 @@
       order="20"
       />
 
-    <viewlet
+    <navigationViewlet
       name="timetables-csvimport"
       for="schooltool.course.interfaces.ISectionContainer"
       manager="schooltool.skin.IActionMenuManager"
@@ -297,7 +297,7 @@
       order="50"
       />
 
-    <viewlet
+    <navigationViewlet
       name="edit-leaders"
       for="schooltool.app.interfaces.IAsset"
       manager="schooltool.skin.IActionMenuManager"
@@ -308,7 +308,7 @@
       order="40"
       />
 
-    <viewlet
+    <navigationViewlet
       name="site-preferences"
       for="schooltool.person.interfaces.IPerson"
       manager="schooltool.skin.IActionMenuManager"
