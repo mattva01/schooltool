@@ -222,14 +222,6 @@
       permission="zope.Public"
       />
 
-  <page
-      name="delete.html"
-      for="zope.app.container.interfaces.IContainer"
-      class="schooltool.skin.containers.ContainerDeleteView"
-      template="templates/container_delete.pt"
-      permission="zope.View"
-      />
-
   <!-- Calendar views -->
 
   <!-- Sigh. Cannot specify multiple for and permission in subsscriber ;-( -->
@@ -317,6 +309,14 @@
       link="@@site-preferences.html"
       title="Change Site Preferences"
       order="50"
+      />
+
+    <page
+      name="delete.html"
+      for="zope.app.container.interfaces.IContainer"
+      class="schooltool.skin.containers.ContainerDeleteView"
+      template="templates/container_delete.pt"
+      permission="zope.View"
       />
 
   </configure>
