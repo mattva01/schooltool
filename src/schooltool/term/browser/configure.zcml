@@ -3,15 +3,19 @@
     xmlns="http://namespaces.zope.org/browser"
     i18n_domain="schooltool">
 
-  <page
-      name="index.html"
-      for="..interfaces.ITermContainer"
-      class=".term.TermContainerView"
-      template="term-container.pt"
-      permission="schooltool.view"
-      menu="zmi_views"
-      title="View"
-      />
+  <configure package="schooltool.skin">
+
+    <page
+       name="index.html"
+       for="schooltool.term.interfaces.ITermContainer"
+       class="schooltool.term.browser.term.TermContainerView"
+       template="templates/container.pt"
+       permission="schooltool.view"
+       menu="zmi_views"
+       title="View"
+       />
+
+  </configure>
 
   <page
       name="delete.html"
