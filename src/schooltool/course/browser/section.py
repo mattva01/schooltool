@@ -72,8 +72,6 @@ class SectionContainerView(ContainerView):
     __used_for__ = ISectionContainer
 
     index_title = _("Section index")
-    add_title = _("Add a new section")
-    add_url = "+/addSchoolToolSection.html"
 
     # XXX: very hacky, but necessary for now. :-(
     def getTimetables(self, obj):

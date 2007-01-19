@@ -38,8 +38,6 @@ class ResourceContainerView(ContainerView):
     __used_for__ = IResourceContainer
 
     index_title = _("Resource index")
-    add_title = _("Add a new resource")
-    add_url = "+/addSchoolToolResource.html"
 
 
 class ResourceView(BrowserView):

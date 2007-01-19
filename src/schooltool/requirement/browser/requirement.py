@@ -52,8 +52,6 @@ class RequirementView(schooltool.skin.containers.ContainerView):
     __used_for__ = schooltool.requirement.interfaces.IRequirement
 
     index_title = _("Requirement index")
-    add_title = _("Add a new Requirement")
-    add_url = "+/addRequirement.html"
 
     def __init__(self, context, request, depth=None):
         schooltool.skin.containers.ContainerView.__init__(self, context,

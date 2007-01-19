@@ -35,8 +35,6 @@ class ContainerView(BrowserView):
     page template:
 
         `index_title` -- Title of the index page.
-        `add_title` -- Title for the adding link.
-        `add_url` -- URL of the adding link.
 
     """
 

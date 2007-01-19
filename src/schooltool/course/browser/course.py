@@ -38,8 +38,6 @@ class CourseContainerView(ContainerView):
     __used_for__ = ICourseContainer
 
     index_title = _("Course index")
-    add_title = _("Add a new course")
-    add_url = "+/addSchoolToolCourse.html"
 
 
 class CourseView(BrowserView):

@@ -48,8 +48,6 @@ class GroupContainerView(ContainerView):
     __used_for__ = IGroupContainer
 
     index_title = _("Group index")
-    add_title = _("Add a new group")
-    add_url = "+/addSchoolToolGroup.html"
 
 
 class GroupListView(RelationshipViewBase):

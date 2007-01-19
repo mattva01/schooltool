@@ -215,8 +215,6 @@ class TimetableSchemaContainerView(ContainerView):
     __used_for__ = ITimetableSchemaContainer
 
     index_title = _("School Timetables")
-    add_title = _("Add a new schema")
-    add_url = "add.html"
 
     def update(self):
         if 'UPDATE_SUBMIT' in self.request:

@@ -53,8 +53,6 @@ class TermContainerView(ContainerView):
     __used_for__ = ITermContainer
 
     index_title = _("Terms")
-    add_title = _("Add a new term")
-    add_url = "new.html"
 
 
 class ITermForm(Interface):

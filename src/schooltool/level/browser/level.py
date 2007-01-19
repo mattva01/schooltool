@@ -40,8 +40,6 @@ class LevelContainerView(ContainerView):
     __used_for__ = interfaces.ILevelContainer
 
     index_title = _("Level index")
-    add_title = _("Add a new level")
-    add_url = "+/addSchoolToolLevel.html"
 
 
 class LevelValidationView(browser.BrowserView):
