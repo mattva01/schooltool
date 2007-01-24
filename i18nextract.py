@@ -93,7 +93,7 @@ class POTMaker(extract.POTMaker):
     def _getProductVersion(self):
         return "SchoolTool Version %s" % get_version()
 
-def py_strings(dir, domain="zope", exclude=()):
+def py_strings(dir, domain="zope", exclude=(), verify_domain=False):
     """Retrieve all Python messages from `dir` that are in the `domain`.
     """
     eater = extract.TokenEater()
@@ -101,27 +101,31 @@ def py_strings(dir, domain="zope", exclude=()):
     for filename in find_files(
             dir, '*.py', exclude=('extract.py', 'pygettext.py')+tuple(exclude)):
 
-        common_path_lengths = [
-            len(os.path.commonprefix([os.path.abspath(filename), path]))
-            for path in sys.path]
-        l = sorted(common_path_lengths)[-1]
-        import_name = filename[l+1:-3].replace("/", ".").replace(".__init__", "")
+        if verify_domain:
+            common_path_lengths = [
+                len(os.path.commonprefix([os.path.abspath(filename), path]))
+                for path in sys.path]
+            l = sorted(common_path_lengths)[-1]
+            # remove .py ending from filenames
+            # replace all path separators with a dot
+            # remove the __init__ from the import path
+            import_name = filename[l+1:-3].replace(os.path.sep, ".").replace(".__init__", "")
 
-        try:
-            module = __import__(import_name, *_import_chickens)
-        except ImportError, e:
-            # XXX if we can't import it - we assume that the domain is
-            # the right one
-            print >> sys.stderr, "Could not import %s" % import_name
-        else:
-            mf = getattr(module, '_', None)
-            # XXX if _ is has no _domain set we assume that the domain
-            # is the right one, so if you are using something non
-            # MessageFactory you should set it's _domain attribute.
-            if hasattr(mf, '_domain'):
-                if mf._domain != domain:
-                    # domain mismatch - skip
-                    continue
+            try:
+                module = __import__(import_name, *_import_chickens)
+            except ImportError, e:
+                # XXX if we can't import it - we assume that the domain is
+                # the right one
+                print >> sys.stderr, "Could not import %s" % import_name
+            else:
+                mf = getattr(module, '_', None)
+                # XXX if _ is has no _domain set we assume that the domain
+                # is the right one, so if you are using something non
+                # MessageFactory you should set it's _domain attribute.
+                if hasattr(mf, '_domain'):
+                    if mf._domain != domain:
+                        # domain mismatch - skip
+                        continue
 
         fp = open(filename)
 
@@ -140,7 +144,7 @@ def write_pot(output_dir, path, domain, base_dir, site_zcml):
     # Create the POT
     output_file = os.path.join(path, output_dir, domain + '.pot')
     maker = POTMaker(output_file, path)
-    maker.add(py_strings(path, domain), base_dir)
+    maker.add(py_strings(path, domain, verify_domain=True), base_dir)
     maker.add(extract.zcml_strings(path, domain, site_zcml=site_zcml), base_dir)
     maker.add(extract.tal_strings(path, domain), base_dir)
     maker.write()
