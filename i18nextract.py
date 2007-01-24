@@ -111,12 +111,12 @@ def py_strings(dir, domain="zope", exclude=()):
         except ImportError, e:
             # XXX if we can't import it - we assume that the domain is
             # the right one
-            print "Could not import %s" % import_name
+            print >> sys.stderr, "Could not import %s" % import_name
         else:
             mf = getattr(module, '_', None)
             # XXX if _ is has no _domain set we assume that the domain
             # is the right one, so if you are using something non
-            # MessageFactory you should set it's _domain attribute
+            # MessageFactory you should set it's _domain attribute.
             if hasattr(mf, '_domain'):
                 if mf._domain != domain:
                     # domain mismatch - skip
