@@ -69,10 +69,3 @@ class IFilterWidget(Interface):
     def extra_url():
         """String that should be appended to the url to preserve query parameters."""
 
-class IDateFormatter( Interface ):
-
-    def __call__():
-        """
-        Localize a date
-        """
-

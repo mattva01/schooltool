@@ -238,7 +238,6 @@
       for="datetime.date"
       type="zope.publisher.interfaces.browser.IBrowserRequest"
       name="fullDate"
-      provides=".interfaces.IDateFormatter"
       factory=".dateformatter.DateFormatterFullView"
       permission="zope.Public"
       />
@@ -247,7 +246,6 @@
       for="datetime.date"
       type="zope.publisher.interfaces.browser.IBrowserRequest"
       name="mediumDate"
-      provides=".interfaces.IDateFormatter"
       factory=".dateformatter.DateFormatterMediumView"
       permission="zope.Public"
       />
@@ -256,12 +254,9 @@
       for="datetime.date"
       type="zope.publisher.interfaces.browser.IBrowserRequest"
       name="shortDate"
-      provides=".interfaces.IDateFormatter"
       factory=".dateformatter.DateFormatterShortView"
       permission="zope.Public"
       />
-
-
 
   <viewlet
       name="language_selector"

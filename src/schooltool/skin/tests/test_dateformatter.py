@@ -38,19 +38,17 @@ from schooltool.skin.dateformatter import DateFormatterShortView
 from schooltool.skin.dateformatter import LocaleLookupMixin
 
 
-
-
 def doctest_DateFormatterView():
     r"""Test for DateFormatterView
 
-        Let's say we need to localize the 1 december 2006
+    Let's say we need to localize the 1 december 2006
 
-        We create 2 clients, one english, one french
+    We create 2 clients, one english, one french:
 
         >>> english_request = TestRequest(environ={'HTTP_ACCEPT_LANGUAGE':'en'})
         >>> french_request = TestRequest(environ={'HTTP_ACCEPT_LANGUAGE':'fr,en'})
 
-        We setup the date
+    We setup the date:
 
         >>> date = datetime.date(2006, 12, 1)
         >>> date
@@ -58,37 +56,37 @@ def doctest_DateFormatterView():
         >>> isinstance(date, datetime.date)
         True
 
-        We take the Full format of a date
+    We take the Full format of a date:
 
         >>> view = DateFormatterFullView(date, english_request)
         >>> view()
         u'Friday, December 1, 2006'
 
-        and in french:
+    and in french:
 
         >>> view = DateFormatterFullView(date, french_request)
         >>> view()
         u'vendredi 1 d\xe9cembre 2006'
 
-        We take the medium format of a date
+    We take the medium format of a date
 
         >>> view = DateFormatterMediumView(date, english_request)
         >>> view()
         u'Dec 1, 2006'
 
-        and in french:
+    and in french:
 
         >>> view = DateFormatterMediumView(date, french_request)
         >>> view()
         u'1 d\xe9c. 06'
 
-        We take the short format of a date
+    We take the short format of a date
 
         >>> view = DateFormatterShortView(date, english_request)
         >>> view()
         u'12/1/06'
 
-        and in French:
+    and in French:
 
         >>> view = DateFormatterShortView(date, french_request)
         >>> view()
@@ -97,10 +95,11 @@ def doctest_DateFormatterView():
     """
 
 def doctest_LocaleLookupMixin():
-    r"""
-        Let's try first to use the mixin without a view and thus without 
-        a request attribute. This will fail as there is no request attribute
-        provided
+    r"""Tests for LocaleLookupMixin
+
+    Let's try first to use the mixin without a view and thus without
+    a request attribute. This will fail as there is no request attribute
+    provided
 
         >>> mixin = LocaleLookupMixin()
         >>> mixin.getLocale()
@@ -108,48 +107,49 @@ def doctest_LocaleLookupMixin():
             ...
         NotImplementedError: LocaleLookupMixin need to be applied on a view
 
-        Now let's play with a real view which will use our LocaleLookupMixin
+    Now let's play with a real view which will use our LocaleLookupMixin
 
         >>> from zope.publisher.browser import BrowserView
         >>> class FooView(BrowserView, LocaleLookupMixin):
         ...     pass
 
-        Let's create a dummy context for the view
+    Let's create a dummy context for the view
 
         >>> class FooContext(object):
         ...     pass
         >>> barObj = FooContext()
 
-        Let's create two simple request
+    Let's create two simple request
 
         >>> french_request = TestRequest(environ={'HTTP_ACCEPT_LANGUAGE':'fr,en'})
 
-        We can now іnstanciate the view
+    We can now instanciate the view
 
         >>> v = FooView(barObj, french_request)
 
         >>> locale = v.getLocale()
 
-        We have then an instance of the Locale class
+    We have then an instance of the Locale class
 
         >>> locale
         <zope.i18n.locales.Locale object ...>
 
-        Which is french as in our request
+    Which is french as in our request
 
         >>> locale.getLocaleID()
         u'fr'
 
-        Now let's see what happen is no locale is defined in the request
+    Now let's see what happen is no locale is defined in the request
+
         >>> simple_request = TestRequest()
 
-        We don't have any language defined:
+    We don't have any language defined:
 
         >>> simple_request.locale.id.language is None
         True
 
-        Let's see how the Mixin will behave, it should return an english
-        locale by default:
+    Let's see how the Mixin will behave, it should return an english
+    locale by default:
 
         >>> v = FooView(barObj, simple_request)
         >>> locale = v.getLocale()

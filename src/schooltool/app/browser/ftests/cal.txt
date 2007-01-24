@@ -358,7 +358,7 @@ Regression test for events with ids that have slashes in them:
     >>> import re
     >>> frog.open('http://localhost/persons/frog/calendar/2007-w6')
     >>> len(re.findall('Sleep alot', frog.contents))
-    7
+    14
 
     >>> frog.open('http://localhost/persons/frog/calendar/2007-02')
     >>> len(re.findall('Sleep alot', frog.contents))
