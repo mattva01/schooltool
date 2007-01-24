@@ -70,6 +70,7 @@ locale_charset = locale.getpreferredencoding()
 localedir = os.path.join(os.path.dirname(__file__), '..', 'locales')
 catalog = gettext.translation('schooltool', localedir, fallback=True)
 _ = lambda us: catalog.ugettext(us).encode(locale_charset, 'replace')
+_._domain = 'schooltool'
 
 st_usage_message = _("""
 Usage: %s [options]

@@ -114,10 +114,10 @@ def py_strings(dir, domain="zope", exclude=()):
             print "Could not import %s" % import_name
         else:
             mf = getattr(module, '_', None)
-            # XXX if _ is not a MessageFactory, we assume that the
-            # domain is the right one, thus strings in
-            # schooltool.app.main will be in all the pot files
-            if isinstance(mf, MessageFactory):
+            # XXX if _ is has no _domain set we assume that the domain
+            # is the right one, so if you are using something non
+            # MessageFactory you should set it's _domain attribute
+            if hasattr(mf, '_domain'):
                 if mf._domain != domain:
                     # domain mismatch - skip
                     continue
