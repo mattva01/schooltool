@@ -1,0 +1,16 @@
+<configure
+  xmlns:zcml="http://namespaces.zope.org/zcml"
+  xmlns:browser="http://namespaces.zope.org/browser"
+  xmlns:help="http://namespaces.zope.org/help"
+  zcml:condition="have context-help"
+  i18n_domain="schooltool">
+
+    <help:register
+          id="group"
+	  title="Group Container - Contents"
+	  doc_path="group_container.stx"
+	  for="schooltool.group.interfaces.IGroupContainer"
+	  view="index.html"
+      />
+
+</configure>

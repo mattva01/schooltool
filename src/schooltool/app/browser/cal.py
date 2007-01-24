@@ -386,10 +386,6 @@ class CalendarDay(object):
         self.date = date
         self.events = events
         day_of_week = day_of_week_names[date.weekday()]
-        self.title = _('${day_of_week}, ${date}',
-                       mapping = {'day_of_week': day_of_week,
-                                  'date': date.strftime('%Y-%m-%d')})
-        # XXX Shouldn't we use a i18n formatter for the date in the title?
 
     def __cmp__(self, other):
         return cmp(self.date, other.date)
@@ -438,8 +434,8 @@ class CalendarViewBase(BrowserView):
             return url + '.pdf'
 
     def dayTitle(self, day):
-        dayformat = '%A, ' + self.dateformat
-        return u'' + day.strftime(dayformat)
+        formatter = zapi.getMultiAdapter((day, self.request), name='fullDate')
+        return formatter()
 
     __url = None
 

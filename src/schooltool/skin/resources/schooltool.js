@@ -35,7 +35,7 @@ function popUp(url) {
 					menubar=0,	\
 					statusbar=0,	\
 					height = 500,	\
-					width = 400,	\
+					width = 600,	\
 					resizable = 0" );
 }
 

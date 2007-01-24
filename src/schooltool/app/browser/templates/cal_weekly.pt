@@ -11,7 +11,7 @@
             tal:attributes="class python:' '.join(filter(None, ['day-title',
                                                    start and 'first' or '',
                                                    day.today()]))">
-          <a tal:content="day/title" i18n:translate=""
+          <a tal:content="day/date/@@fullDate"
              tal:attributes="href python:view.calURL('daily', day.date)" />
         </th>
       </tal:loop>
@@ -27,7 +27,6 @@
                    class python:start and 'first' or '';
                    style string:background: ${event/color1};;
                                 border-color: ${event/color2};
-                   title event/title;
                    href event/editLink">
               <span tal:content="event/shortTitle"/>
               <tal:if condition="not:event/allday">
