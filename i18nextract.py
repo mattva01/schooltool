@@ -28,6 +28,7 @@ $Id$
 import os
 import sys
 import tokenize
+import optparse
 
 from zope.i18nmessageid.message import MessageFactory
 from zope.app.locales.pygettext import make_escapes
@@ -144,19 +145,27 @@ def write_pot(output_dir, path, domain, base_dir, site_zcml):
     maker.add(extract.tal_strings(path, domain), base_dir)
     maker.write()
 
+def parse_args(argv):
+    """Parse the command line arguments"""
+    parser = optparse.OptionParser(usage="usage: %prog [options]")
+    # XXX ! separate these
+    parser.add_option("--domain", dest="domain", default=None,
+                      help="The domain that should be extracted")
+    parser.add_option("--zcml", dest="zcml", default=None,
+                      help="ZCML file to start the extraction")
+    options, args = parser.parse_args(argv)
+    assert len(args) == 1
+    assert options.domain is not None
+    assert options.zcml is not None
+    return options
+
 if __name__ == '__main__':
     here = os.path.abspath(os.path.dirname(__file__))
     path = os.path.join(here, 'src')
+    # get the command line arguments
+    options = parse_args(sys.argv)
     base_dir = here # Comments are relative to the source checkouts so we are
                     # sure we don't have any absolute paths in there.
     output_dir = os.path.join(here, 'src', 'schooltool', 'locales')
-    # SchoolTool
-    domain = 'schooltool'
-    site_zcml = os.path.join(here, 'schooltool-skel', 'etc', 'site.zcml')
-    write_pot(output_dir, path, domain, base_dir, site_zcml)
-    print 'Extracted %s.pot to %s' % (domain, output_dir)
-    # SchoolBell
-    domain = 'schoolbell'
-    site_zcml = os.path.join(here, 'schoolbell-site.zcml')
-    write_pot(output_dir, path, domain, base_dir, site_zcml)
-    print 'Extracted %s.pot to %s' % (domain, output_dir)
+    write_pot(output_dir, path, options.domain, base_dir, options.zcml)
+    print 'Extracted %s.pot to %s' % (options.domain, output_dir)
