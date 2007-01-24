@@ -1,3 +1,4 @@
+<tal:block i18n:domain="schooltool">
 <metal:block define-macro="edit">
   <form action="." method="post"
         tal:attributes="action request/URL"
@@ -43,3 +44,4 @@
     </div>
   </fieldset>
 </metal:block>
+</tal:block>

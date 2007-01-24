@@ -1,1 +1,1 @@
-<div tal:content="structure provider:schooltool.dashboard" />
+<div i18n:domain="schooltool" tal:content="structure provider:schooltool.dashboard" />

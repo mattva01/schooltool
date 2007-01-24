@@ -1,4 +1,5 @@
-<div id="message" tal:define="level context/level">
+<div id="message" tal:define="level context/level"
+     i18n:domain="schooltool">
   <h1 i18n:translate="">A Level Loop Error was detected.</h1>
 
   <h5 i18n:translate="">Details</h5>

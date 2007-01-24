@@ -1,4 +1,5 @@
-<ul style="list-style: disc; left-padding: 2em;">
+<ul style="list-style: disc; left-padding: 2em;"
+    i18n:domain="schooltool">
   <li tal:repeat="section view/getSections">
     <a href=""
        tal:attributes="href section/@@absolute_url"

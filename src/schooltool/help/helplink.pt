@@ -4,4 +4,5 @@
    tal:attributes="href python:'javascript:popUp('+ url + ')';
                    title view/title"
    i18n:translate=""
+   i18n:domain="schooltool"
    >Help</a>

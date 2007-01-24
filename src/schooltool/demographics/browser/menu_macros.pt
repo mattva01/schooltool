@@ -1,4 +1,5 @@
-<metal:block define-macro="tab_menu">
+<metal:block define-macro="tab_menu"
+             i18n:domain="schooltool">
   <tal:block define="menu view/getMenu | nothing;" condition="menu">
   <div style="margin-bottom: 5px">
     <tal:block repeat="menuitem menu">
