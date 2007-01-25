@@ -28,6 +28,7 @@ from zope.app.catalog.field import FieldIndex
 from zope.interface import implements
 from zope.component import adapts
 from zope.interface import directlyProvides
+from zope.i18n import translate
 
 from zc.table.interfaces import ISortableColumn
 
@@ -87,14 +88,14 @@ class PersonFactoryUtility(object):
     def columns(self):
         first_name = LocaleAwareGetterColumn(
             name='first_name',
-            title=u'Name',
+            title=_(u'Name'),
             getter=lambda i, f: i.nameinfo.first_name,
             subsort=True)
         directlyProvides(first_name, ISortableColumn)
 
         last_name = LocaleAwareGetterColumn(
             name='last_name',
-            title=u'Surname',
+            title=_(u'Surname'),
             getter=lambda i, f: i.nameinfo.last_name,
             subsort=True)
         directlyProvides(last_name, ISortableColumn)
@@ -107,5 +108,5 @@ class PersonFactoryUtility(object):
     def __call__(self, *args, **kw):
         result = Person(*args, **kw)
         result.nameinfo.first_name = result.title
-        result.nameinfo.last_name = u'Unknown last name'
+        result.nameinfo.last_name = translate(_(u'Unknown last name'))
         return result

@@ -16,23 +16,26 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
+from datetime import date
 
-from zope.interface import implements, directlyProvides
+from zope.interface import directlyProvides
 from zope.app import zapi
 from zope.formlib import form
 from zope.security.checker import canAccess
 from zope.security.proxy import removeSecurityProxy
 from zope.app.dependable.interfaces import IDependable
-from zc.table.interfaces import IColumn, ISortableColumn
+from zc.table.interfaces import ISortableColumn
 from zc.table import column
 from zc.table.column import GetterColumn
 from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.i18n import translate
 from hurry.query.interfaces import IQuery
 from hurry.query import query
 
 from schooltool.app.browser import ViewPreferences
 from schooltool.demographics import interfaces
 from schooltool.skin.table import TablePage
+from schooltool import SchoolToolMessage as _
 
 
 class PersonTable(TablePage):
@@ -43,30 +46,30 @@ class PersonTable(TablePage):
     def columns(self):
         username = GetterColumn(
             name='username',
-            title=u'Username',
+            title=_(u'Username'),
             getter=lambda i, f: i.username,
             subsort=True)
         directlyProvides(username, ISortableColumn)
         full_name = FullnameColumn(
             name='full_name',
-            title=u'Full name',
+            title=_(u'Full name'),
             subsort=True)
         directlyProvides(full_name, ISortableColumn)
         birth_date = DateColumn(
             name='birth_date',
-            title=u'Birth',
+            title=_(u'Birth'),
             getter=lambda i, f: (i.demographics.birth_date or ''),
             subsort=True)
         directlyProvides(birth_date, ISortableColumn)
         enrollment_date = DateColumn(
             name='enrollment_date',
-            title=u'Enrollment',
+            title=_(u'Enrollment'),
             getter=lambda i, f: (i.schooldata.enrollment_date or ''),
             subsort=True)
         directlyProvides(enrollment_date, ISortableColumn)
         modified = ModifiedColumn(
             name='modified',
-            title=u'Modified',
+            title=_(u'Modified'),
             subsort=True)
         directlyProvides(modified, ISortableColumn)
 
@@ -77,8 +80,8 @@ class PersonTable(TablePage):
             birth_date,
             enrollment_date,
             modified,
-            EditColumn(name='edit', title=u'Edit'),
-            DisplayColumn(name='display', title=u'Display')
+            EditColumn(name='edit', title=_(u'Edit')),
+            DisplayColumn(name='display', title=_(u'Display'))
             ]
 
     def values(self):
@@ -172,15 +175,17 @@ class EditColumn(column.Column):
     """Table column that displays edit link.
     """
     def renderCell(self, item, formatter):
-        return '<a href="%s">Edit</a>' % (
-            zapi.absoluteURL(item, formatter.request) + '/nameinfo/@@edit.html')
+        return '<a href="%s">%s</a>' % (
+            zapi.absoluteURL(item, formatter.request) + '/nameinfo/@@edit.html',
+            translate(_("Edit")))
 
 class DisplayColumn(column.Column):
     """Table column that displays display link.
     """
     def renderCell(self, item, formatter):
-        return '<a href="%s">Display</a>' % (
-            zapi.absoluteURL(item, formatter.request) + '/nameinfo')
+        return '<a href="%s">%s</a>' % (
+            zapi.absoluteURL(item, formatter.request) + '/nameinfo',
+            translate(_("Display")))
 
 
 class DeleteCheckBoxColumn(column.Column):

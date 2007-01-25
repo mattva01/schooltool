@@ -89,25 +89,25 @@ class SourceList(list):
 
 
 ethnicitySource = SourceList([
-    'American Indian or Alaska Native',
-    'Asian',
-    'Black or African American',
-    'Native Hawaiian or Other Pacific Islander',
-    'White'])
+    _('American Indian or Alaska Native'),
+    _('Asian'),
+    _('Black or African American'),
+    _('Native Hawaiian or Other Pacific Islander'),
+    _('White')])
 
 
 languageSource = SourceList([
-    'English',
-    'Spanish',
-    'Chinese',
-    'German',
-    'Tagalog',
-    'Vietnamese',
-    'Italian',
-    'Korean',
-    'Russian',
-    'Polish',
-    'Arabic',
+    _('English'),
+    _('Spanish'),
+    _('Chinese'),
+    _('German'),
+    _('Tagalog'),
+    _('Vietnamese'),
+    _('Italian'),
+    _('Korean'),
+    _('Russian'),
+    _('Polish'),
+    _('Arabic'),
     ])
 
 
@@ -115,10 +115,9 @@ class IDemographics(Interface):
     """Demographical information about a person.
     """
 
-    # XXX how to translate male and female? in widget?
     gender = schema.Choice(
         title=_(u"Gender"),
-        source=SourceList(['male', 'female']),
+        source=SourceList([_('male'), _('female')]),
         required=False,
         )
 
@@ -221,12 +220,12 @@ class ISchoolData(Interface):
 
 
 relationshipToStudentSource = SourceList([
-    'parent',
-    'guardian',
-    'grandparent',
-    'step-parent',
-    'friend of family',
-    'other'])
+    _('parent'),
+    _('guardian'),
+    _('grandparent'),
+    _('step-parent'),
+    _('friend of family'),
+    _('other')])
 
 
 class IContactInfo(Interface):

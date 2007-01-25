@@ -17,21 +17,14 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-import pytz
-import datetime
 from zope.app import zapi
 from zope.interface import implements
-from zope import event
 from zope.formlib import form
-from zope.formlib.interfaces import IAction
-from zope.lifecycleevent import ObjectModifiedEvent
-from zope.interface.common import idatetime
 from zope.schema import TextLine, Password, getFields
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.app.form.browser.interfaces import ITerms
 from zope.app.publisher.browser.menu import getMenu, BrowserMenu
 from zope.schema.interfaces import ITitledTokenizedTerm
-from zope.app.form.browser.interfaces import ITerms
 from zope.publisher.browser import BrowserView
 from zope.component import getUtility
 from zope.exceptions.interfaces import UserError
@@ -40,12 +33,12 @@ from schooltool.person.interfaces import IPersonFactory
 from schooltool.skin.form import AttributeEditForm
 from schooltool.traverser.traverser import SingleAttributeTraverserPlugin
 from schooltool.person.interfaces import IReadPerson
-from schooltool.demographics.person import Person
 from schooltool.demographics import interfaces
 from schooltool import SchoolToolMessage as _
 from schooltool.app.app import ISchoolToolApplication
 from schooltool.skin.form import BasicForm
 from schooltool.widget.password import PasswordConfirmationWidget
+
 
 class PersonDisplayForm(form.PageDisplayForm):
     """Base class for all person display forms.
@@ -84,6 +77,7 @@ class AttributeMenu(BrowserMenu):
                     item['selected'] = True
                 item['action'] = '%s%s' % (obj_url, item['action'])
         return items
+
 
 class PersonEditForm(AttributeEditForm):
     """Base class of all person edit forms.
@@ -244,6 +238,8 @@ class ContactInfoDisplay(PersonDisplayForm):
 class Term(object):
     """Simplistic term that uses value as token.
     """
+    implements(ITitledTokenizedTerm)
+
     def __init__(self, value):
         self.title = value
         self.token = value
@@ -340,6 +336,7 @@ class PersonAddView(BasicForm):
         name = person.username
         self.context[name] = person
         return person
+
 
 class TeachersTerm(object):
     """A term for displaying a teacher.
