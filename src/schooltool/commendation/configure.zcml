@@ -3,7 +3,7 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:security="http://schooltool.org/securitypolicy"
     xmlns:browser="http://namespaces.zope.org/browser"
-    i18n_domain="commendation">
+    i18n_domain="schooltool.commendation">
 
   <!-- Declare commendation-capable components -->
 
