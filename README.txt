@@ -56,7 +56,7 @@ System requirements
 - libxml2 Python bindings (http://xmlsoft.org/).  Windows users can find
   binaries here:  http://users.skynet.be/sbi/libxml-python/
 
-- libicu36-dev
+- libicu-dev: International Components for Unicode libraries
 
 - the Python Imaging Library (PIL) (http://www.pythonware.com/products/pil/)
 
