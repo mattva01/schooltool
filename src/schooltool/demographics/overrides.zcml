@@ -5,25 +5,6 @@
            i18n_domain="schooltool">
 
   <browser:page
-      name="index.html"
-      for="schooltool.person.interfaces.IPerson"
-      class=".browser.personform.PersonView"
-      permission="zope.View"
-      menu="schooltool_actions"
-      title="View"
-      />
-
-  <browser:page
-      name="edit.html"
-      for="schooltool.person.interfaces.IPerson"
-      class=".browser.personform.PersonEditView"
-      permission="zope.View"
-      menu="schooltool_actions"
-      title="Edit"
-      />
-
-
-  <browser:page
       name="add.html"
       for="schooltool.person.interfaces.IPersonContainer"
       class=".browser.personform.PersonAddView"
@@ -36,6 +17,15 @@
      name="index.html"
      class=".browser.table.PersonTable"
      permission="schooltool.view"
+     />
+
+  <browser:page
+     for="schooltool.person.interfaces.IPersonContainer"
+     name="search.html"
+     class=".table.SearchTable"
+     permission="schooltool.view"
+     menu="schooltool_actions"
+     title="Search"
      />
 
   <utility factory=".utility.PersonFactoryUtility" />

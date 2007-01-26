@@ -109,6 +109,7 @@
   <include package=".relationship" />
   <include package=".app" />
   <include package=".person" />
+  <include package=".demographics" />
   <include package=".group" />
   <include package=".resource" />
   <include package=".securitypolicy.browser" />

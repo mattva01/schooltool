@@ -423,6 +423,10 @@ class PersonContainerView(TableContainerView):
         factory = getUtility(IPersonFactory)
         return factory.columns()
 
+    def sortOn(self):
+        factory = getUtility(IPersonFactory)
+        return factory.sortOn()
+
     def isDeletingHimself(self):
         person = IPerson(self.request.principal, None)
         return person in self.itemsToDelete
