@@ -23,7 +23,7 @@ $Id$
 """
 from zope.interface import Interface
 from zope.publisher.interfaces import NotFound
-from zope.schema import Password, TextLine, Bytes, Bool, List, Choice
+from zope.schema import Password, TextLine, Bytes, Bool
 from zope.schema.interfaces import ValidationError
 from zope.schema.interfaces import IIterableSource
 from zope.schema.interfaces import ITitledTokenizedTerm
@@ -47,29 +47,19 @@ from zope.viewlet.viewlet import ViewletBase
 from schooltool import SchoolToolMessage as _
 from schooltool.skin.form import BasicForm
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.skin.containers import ContainerView, ContainerDeleteView
 from schooltool.person.interfaces import IPasswordWriter
 from schooltool.person.interfaces import IPerson, IPersonFactory
 from schooltool.person.interfaces import IPersonPreferences
 from schooltool.person.interfaces import IPersonContainer, IPersonContained
-from schooltool.person.person import Person
 from schooltool.widget.password import PasswordConfirmationWidget
 from schooltool.traverser.traverser import AdapterTraverserPlugin
-from schooltool.person.interfaces import IPasswordWriter
 from schooltool.skin.table import FilterWidget
+from schooltool.skin.containers import TableContainerView
 
 
 def SourceMultiCheckBoxWidget(field, request):
     source = field.value_type.source
     return SourceMultiCheckBoxWidget_(field, source, request)
-
-
-class PersonContainerDeleteView(ContainerDeleteView):
-    """A view for deleting users from PersonContainer."""
-
-    def isDeletingHimself(self):
-        person = IPerson(self.request.principal, None)
-        return person in self.itemsToDelete
 
 
 class PersonPhotoView(BrowserView):
@@ -419,14 +409,23 @@ class PersonEditView(BrowserView):
             self.request.response.redirect(url)
 
 
-class PersonContainerView(ContainerView):
+class PersonContainerView(TableContainerView):
     """A Person Container view."""
 
     __used_for__ = IPersonContainer
 
+    from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+    delete_template = ViewPageTemplateFile("person_container_delete.pt")
+
     index_title = _("Person index")
-    add_title = _("Add a new person")
-    add_url = "+/addSchoolToolPerson.html"
+
+    def columns(self):
+        factory = getUtility(IPersonFactory)
+        return factory.columns()
+
+    def isDeletingHimself(self):
+        person = IPerson(self.request.principal, None)
+        return person in self.itemsToDelete
 
 
 class PersonView(BrowserView):

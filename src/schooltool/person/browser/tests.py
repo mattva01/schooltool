@@ -32,13 +32,13 @@ from zope.traversing.interfaces import IContainmentRoot
 from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.testing import setup as sbsetup
 
-def doctest_PersonContainerDeleteView():
-    r"""Test for PersonContainerDeleteView
+def doctest_PersonContainerView():
+    r"""Test for PersonContainerView
 
     Let's create some persons to delete from a person container:
 
         >>> from schooltool.person.browser.person import \
-        ...     PersonContainerDeleteView
+        ...     PersonContainerView
         >>> from schooltool.person.person import Person, PersonContainer
         >>> from schooltool.person.interfaces import IPerson
         >>> setup.setUpAnnotations()
@@ -50,8 +50,27 @@ def doctest_PersonContainerDeleteView():
         >>> personContainer['john'] = Person('john', 'Long John')
         >>> personContainer['frog'] = Person('frog', 'Frog Man')
         >>> personContainer['toad'] = Person('toad', 'Taodsworth')
+
+    Provide a filter widget for PersonContainer:
+
+        >>> from zope.component import provideAdapter
+        >>> from schooltool.skin.interfaces import IFilterWidget
+        >>> from zope.interface import implements
+        >>> class FilterWidget(object):
+        ...     implements(IFilterWidget)
+        ...     def __init__(self, context, request):
+        ...         self.request = request
+        ...     def filter(self, list):
+        ...         return list
+
+        >>> from schooltool.person.interfaces import IPersonContainer
+        >>> from zope.publisher.interfaces.browser import IBrowserRequest
+        >>> provideAdapter(FilterWidget, adapts=[IPersonContainer,
+        ...                                      IBrowserRequest],
+        ...                              provides=IFilterWidget)
+
         >>> request = TestRequest()
-        >>> view = PersonContainerDeleteView(personContainer, request)
+        >>> view = PersonContainerView(personContainer, request)
 
     Our user is not trying to delete anything yet:
 

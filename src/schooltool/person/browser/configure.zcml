@@ -56,13 +56,6 @@
   <zope:adapter for=".person.IGroupsSource
                      zope.publisher.interfaces.browser.IBrowserRequest"
                 factory=".person.GroupsTerms"/>
-  <page
-      name="delete.html"
-      for="..interfaces.IPersonContainer"
-      class=".person.PersonContainerDeleteView"
-      template="person_container_delete.pt"
-      permission="schooltool.edit"
-      />
 
   <!-- csv importer -->
   <page
