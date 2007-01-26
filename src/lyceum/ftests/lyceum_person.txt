@@ -1,0 +1,21 @@
+Functional doctest for SchoolTool Lycem Person
+==============================================
+
+Let's log in with the manager account:
+
+    >>> from zope.testbrowser.testing import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/')
+
+Let's create a lyceum person so that we can fool around with him:
+
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+    >>> manager.getControl('Full name').value = "Jonas Petraitis"
+
+    >>> manager.getControl('Username').value = "jonas"
+    >>> manager.getControl('Password').value = "pwd"
+    >>> manager.getControl('Verify password').value = "pwd"
+    >>> manager.getControl('Add').click()

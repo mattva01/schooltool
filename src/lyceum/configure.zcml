@@ -4,6 +4,26 @@
            xmlns:i18n="http://namespaces.zope.org/i18n"
            i18n_domain="schooltool">
 
+  <class class=".person.LyceumPerson">
+    <implements interface="schooltool.app.interfaces.IHaveCalendar" />
+    <implements interface="schooltool.note.interfaces.IHaveNotes" />
+    <implements interface="schooltool.person.interfaces.IHavePreferences" />
+    <require
+        permission="schooltool.view"
+        interface="schooltool.person.interfaces.IReadPerson"
+        attributes="__cmp__" />
+    <require
+        permission="schooltool.edit"
+        interface="schooltool.person.interfaces.IWritePerson"
+        set_schema="schooltool.person.interfaces.IPerson" />
+    <require
+        permission="schooltool.view"
+        attributes="nameinfo demographics schooldata parent1 parent2 emergency1 emergency2 emergency3 modified" />
+    <require
+        permission="schooltool.edit"
+        set_attributes="modified" />
+  </class>
+
   <utility
      factory=".csvimport.LyceumGroupsAndStudents"
      provides="schooltool.setupdata.interfaces.ISetupDataPlugin"
