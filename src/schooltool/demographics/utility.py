@@ -28,7 +28,6 @@ from zope.app.catalog.field import FieldIndex
 from zope.interface import implements
 from zope.component import adapts
 from zope.interface import directlyProvides
-from zope.i18n import translate
 
 from zc.table.interfaces import ISortableColumn
 
@@ -39,6 +38,8 @@ from schooltool.demographics.person import Person
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.skin.table import LocaleAwareGetterColumn
+from schooltool import SchoolToolMessage as _
+
 
 class Search(object):
     implements(ISearch)
@@ -108,5 +109,5 @@ class PersonFactoryUtility(object):
     def __call__(self, *args, **kw):
         result = Person(*args, **kw)
         result.nameinfo.first_name = result.title
-        result.nameinfo.last_name = translate(_(u'Unknown last name'))
+        result.nameinfo.last_name = u'Unknown last name'
         return result
