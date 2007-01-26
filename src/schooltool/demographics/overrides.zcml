@@ -40,4 +40,41 @@
 
   <utility factory=".utility.PersonFactoryUtility" />
 
+  <!-- sample data -->
+  <configure
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      zcml:condition="have devmode">
+
+    <utility
+        factory=".sampledata.SampleStudents"
+        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
+        name="students"
+        />
+
+    <utility
+        factory=".sampledata.SampleTeachers"
+        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
+        name="teachers"
+        />
+
+    <utility
+        factory=".sampledata.SamplePersonalEvents"
+        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
+        name="personal_events"
+        />
+
+  </configure>
+
+  <!-- install intids and catalog -->
+
+  <subscriber
+      for="schooltool.app.interfaces.ISchoolToolApplication zope.app.container.interfaces.IObjectAddedEvent"
+      handler=".utility.catalogSetUpSubscriber"
+      />
+
+  <!-- search adapter -->
+  <adapter
+      factory=".utility.Search"
+      />
+
 </configure>
