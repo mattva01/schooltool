@@ -1,4 +1,5 @@
-<ul style="list-style: disc; left-padding: 2em;">
+<ul style="list-style: disc; left-padding: 2em;"
+    i18n:domain="schooltool">
   <li>
     <a tal:attributes="href string:${view/appURL}/courses"
        href="courses" i18n:translate="">

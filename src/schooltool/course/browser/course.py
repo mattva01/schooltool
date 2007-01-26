@@ -24,7 +24,7 @@ $Id$
 from zope.app import zapi
 from zope.app.form.browser.add import AddView
 from zope.publisher.browser import BrowserView
-from schooltool.app.browser.app import ContainerView
+from schooltool.skin.containers import ContainerView
 
 from schooltool import SchoolToolMessage as _
 from schooltool.course.interfaces import ICourse, ICourseContainer, ISection
@@ -38,8 +38,6 @@ class CourseContainerView(ContainerView):
     __used_for__ = ICourseContainer
 
     index_title = _("Course index")
-    add_title = _("Add a new course")
-    add_url = "+/addSchoolToolCourse.html"
 
 
 class CourseView(BrowserView):

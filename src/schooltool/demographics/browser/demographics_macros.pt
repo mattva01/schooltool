@@ -1,4 +1,5 @@
-<metal:block define-macro="next_controls">
+<metal:block define-macro="next_controls"
+             i18n:domain="schooltool">
         <input type="submit" id="form.actions.apply" name="form.actions.apply" value="Apply" class="button-ok" 
           title="Shortcut: Alt-A" accesskey="A" 
           i18n:attributes="value submit-button; accesskey" />

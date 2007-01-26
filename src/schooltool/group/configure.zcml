@@ -3,6 +3,7 @@
            i18n_domain="schooltool">
 
   <include file="security.zcml" />
+  <include package=".help" />
 
   <interface
       interface=".interfaces.IGroupContainer"

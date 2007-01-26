@@ -1,4 +1,4 @@
-
+<tal:block i18n:domain="schooltool">
 <script type="text/javascript" tal:content="view/dynamicVariables">
 </script>
 
@@ -118,11 +118,12 @@ function getHttpRequest(){
 </style>
 
 <a style="bottom: 0px;" class="dashboardButton" tal:attributes="href string:${context/schooltool:app/@@absolute_url}/@@dashboard.html"
-      id="dashboardTab">
-      Dashboard</a>
+   i18n:translate=""
+   id="dashboardTab">Dashboard</a>
 <script type="text/javascript">
 document.getElementById('dashboardTab').href="javascript:mouseDaemon()";
 </script>
 <div id="dashboardContents" class="dashboardContents"
      style="height: 0%; display: none;">
 </div>
+</tal:block>

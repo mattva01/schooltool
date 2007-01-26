@@ -1,5 +1,6 @@
 <div class="info-block person-groups"
-     tal:define="groups view/memberOf">
+     tal:define="groups view/memberOf"
+     i18n:domain="schooltool">
   <h5 i18n:translate="">Groups</h5>
   <ul tal:condition="groups">
     <tal:loop repeat="group groups/sorted_filter_accessible:title">

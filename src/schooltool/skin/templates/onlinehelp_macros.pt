@@ -1,0 +1,81 @@
+﻿<metal:block define-macro="page">
+<metal:block define-slot="doctype">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+</metal:block>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xml:lang="en"
+    lang="en"
+    i18n:domain="schooltool"
+    tal:define="sitemgmt python:'/++etc++site/' in str(request.URL)">
+
+  <head>
+    <title metal:define-slot="title"
+           tal:content="string:Z3: ${context/zope:title_or_name}">SchoolTool Onlinehelp</title>
+
+    <script type="text/javascript" src="tree.js"
+            tal:attributes="src string:${context/++resource++tree.js}" >
+    </script>
+
+    <style type="text/css" media="all"
+           tal:content="string:@import url(${context/++resource++onlinehelp.css});">
+      @import url(./onlinehelp.css);
+    </style>
+
+    <style type="text/css" media="all"
+           tal:content="string:@import url(${context/++resource++tree.css});">
+      @import url(./tree.css);
+    </style>
+
+    <style type="text/css" media="all"
+           tal:content="string:@import url(${context/++resource++layout.css});">
+      @import url(./layout.css);
+    </style>
+
+    <style type="text/css" media="all"
+           tal:content="string:@import url(${context/++resource++help.css});">
+      @import url(./help.css);
+    </style>
+
+    <meta http-equiv="Content-Type"
+          content="text/html;charset=utf-8" />
+
+    <metal:block define-slot="headers" />
+    <metal:block define-slot="style_slot" />
+    <metal:block define-slot="ecmascript_slot" />
+
+    <link rel="icon" type="image/png" href="favicon.ico"
+          tal:attributes="href context/++resource++favicon.ico"/>
+
+  </head>
+
+  <body onload="buildTrees();">
+
+    <div class="headline">
+        <div class="title" i18n:translate="">SchoolTool Onlinehelp</div>
+    </div>
+
+    <!-- get rid of the crapy divs where place the content below the tree box
+         if somebody has a better solution, fell free the change it.
+         But I don't whana see the content below the navigation box. -->
+    <table class="layout" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td class="navigation" nowrap="nowrap">
+                <metal:block define-slot="navigation ">
+                <metal:navigation use-macro="views/onlinehelp_navigation_macros/navigation" />
+                </metal:block>
+            </td>
+            <td class="content">
+                <metal:block define-slot="body">
+                    content
+                </metal:block>
+            </td>
+        </tr>
+    </table>
+
+    <div id="footer" metal:define-macro="footer" />
+  </body>
+
+</html>
+
+</metal:block>

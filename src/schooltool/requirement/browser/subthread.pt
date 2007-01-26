@@ -1,5 +1,5 @@
 <tal:define define="dummy view/update"/>
-<ul>
+<ul i18n:domain="schooltool">
   <li tal:repeat="item view/listContentInfo">
     <div tal:replace="structure item/child/@@treenode"
          tal:on-error="nothing"/>

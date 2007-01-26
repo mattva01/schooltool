@@ -22,14 +22,10 @@ SchoolTool application views.
 $Id$
 """
 
-import itertools
-
 from zc.table import table
 from zc.table.column import GetterColumn
 from zope.component import getUtility
-from zope.schema import getFieldNamesInOrder
 from zope.interface import implements
-from zope.security.checker import canAccess
 from zope.security.interfaces import IParticipation
 from zope.security.management import getSecurityPolicy
 from zope.security.proxy import removeSecurityProxy
@@ -42,9 +38,6 @@ from zope.app.form.interfaces import WidgetsError
 from zope.publisher.browser import BrowserView
 from zope.component import queryMultiAdapter
 from zope.app.security.interfaces import IAuthentication
-from zope.app.security.interfaces import IAuthenticatedGroup
-from zope.app.security.interfaces import IUnauthenticatedGroup
-from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from schooltool import SchoolToolMessage as _
@@ -54,7 +47,6 @@ from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IAsset
 from schooltool.batching import Batch
-from schooltool.batching.browser import MultiBatchViewMixin
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.skin.interfaces import IFilterWidget
@@ -71,60 +63,6 @@ class ApplicationView(BrowserView):
             url = zapi.absoluteURL(ISchoolToolCalendar(self.context),
                                    self.request)
             self.request.response.redirect(url)
-
-
-class ContainerView(BrowserView):
-    """A base view for all containers.
-
-    Subclasses must provide the following attributes that are used in the
-    page template:
-
-        `index_title` -- Title of the index page.
-        `add_title` -- Title for the adding link.
-        `add_url` -- URL of the adding link.
-
-    """
-
-    def update(self):
-        if 'SEARCH' in self.request and 'CLEAR_SEARCH' not in self.request:
-            searchstr = self.request['SEARCH'].lower()
-            results = [item for item in self.context.values()
-                       if searchstr in item.title.lower()]
-        else:
-            self.request.form['SEARCH'] = ''
-            results = self.context.values()
-
-        start = int(self.request.get('batch_start', 0))
-        size = int(self.request.get('batch_size', 10))
-        self.batch = Batch(results, start, size, sort_by='title')
-
-    @property
-    def canModify(self):
-        return canAccess(self.context, '__delitem__')
-
-
-class ContainerDeleteView(BrowserView):
-    """A view for deleting items from container."""
-
-    def listIdsForDeletion(self):
-        return [key for key in self.context
-                if "delete.%s" % key in self.request]
-
-    def _listItemsForDeletion(self):
-        return [self.context[key] for key in self.listIdsForDeletion()]
-
-    itemsToDelete = property(_listItemsForDeletion)
-
-    def update(self):
-        if 'UPDATE_SUBMIT' in self.request:
-            for key in self.listIdsForDeletion():
-                del self.context[key]
-            self.request.response.redirect(self.nextURL())
-        elif 'CANCEL' in self.request:
-            self.request.response.redirect(self.nextURL())
-
-    def nextURL(self):
-        return zapi.absoluteURL(self.context, self.request)
 
 
 class BaseAddView(AddView):

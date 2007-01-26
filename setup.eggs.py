@@ -90,6 +90,6 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zc.table >= 0.5', 'zc.catalog >= 0.1',
                       'hurry.query >= 0.9', 'zc.datetimewidget >= 0.5',
                       'zope.ucol >= 1.0', 'zope.html >= 0.0.1'],
-    dependency_links=['http://ignas.pov.lt/',
+    dependency_links=['http://ftp.schooltool.org/schooltool/eggs/',
                       'http://download.zope.org/distribution/'],
     )

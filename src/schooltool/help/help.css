@@ -2,7 +2,7 @@ BODY {
     font-family: Verdana, Helvetica, Arial, Sans-Serif;
     background: #fff;
     color: #000;
-    min-width: 300px;
+    min-width: 600px;
 }
 
 table.header {
@@ -23,4 +23,13 @@ td.close {
 
 div.content {
     padding: 0.7em;
+}
+
+.headline {
+    background: #990000;
+}
+
+UL{
+    padding-left:3px;
+    font-size:11px;
 }

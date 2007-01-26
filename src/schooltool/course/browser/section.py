@@ -39,7 +39,8 @@ from schooltool.person.interfaces import IPerson
 from schooltool.group.interfaces import IGroup
 from schooltool.batching import Batch
 from schooltool.timetable.interfaces import ITimetables
-from schooltool.app.browser.app import ContainerView, BaseEditView
+from schooltool.skin.containers import ContainerView
+from schooltool.app.browser.app import BaseEditView
 from schooltool.group.interfaces import IGroup
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonFactory
@@ -71,8 +72,6 @@ class SectionContainerView(ContainerView):
     __used_for__ = ISectionContainer
 
     index_title = _("Section index")
-    add_title = _("Add a new section")
-    add_url = "+/addSchoolToolSection.html"
 
     # XXX: very hacky, but necessary for now. :-(
     def getTimetables(self, obj):

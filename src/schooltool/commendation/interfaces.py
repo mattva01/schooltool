@@ -38,7 +38,7 @@ from zope.app import container
 # In order for the string extraction tools to find the translatable strings,
 # they have to be wrapped by ``_()``, namely a callable called ``_``
 # (underscore).
-_ = zope.i18nmessageid.MessageFactory("commendation")
+_ = zope.i18nmessageid.MessageFactory("schooltool.commendation")
 
 
 class ICommendation(zope.interface.Interface):

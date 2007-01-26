@@ -30,6 +30,8 @@ from zope.publisher.interfaces.browser import ILayer, IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.viewlet.interfaces import IViewletManager
 from zope.viewlet.manager import ViewletManagerBase
+from zope.viewlet.metadirectives import IViewletDirective
+from zope.configuration.fields import MessageID
 from zope.publisher.browser import BrowserView
 from zope.app import zapi
 
@@ -204,3 +206,15 @@ class LanguageSelectorViewlet(BrowserView):
         if ICookieLanguageSelector.providedBy(upl):
             return upl.getLanguageList()
         return None
+
+
+class INavigationMenuItemDirective(IViewletDirective):
+    """An interface that makes title attribute of a viewlet translatable."""
+
+    title = MessageID(
+        title=u"The title for the menu item",
+        required=True
+        )
+
+# Arbitrary keys and values are allowed to be passed to the viewlet.
+INavigationMenuItemDirective.setTaggedValue('keyword_arguments', True)

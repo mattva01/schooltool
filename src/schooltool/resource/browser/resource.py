@@ -25,20 +25,19 @@ $Id$
 from zope.publisher.browser import BrowserView
 
 from schooltool import SchoolToolMessage as _
-from schooltool.app.browser.app import ContainerView, BaseAddView, BaseEditView
+from schooltool.skin.containers import TableContainerView
+from schooltool.app.browser.app import BaseAddView, BaseEditView
 
 from schooltool.resource.interfaces import IResourceContainer
 from schooltool.resource.interfaces import IResourceContained
 
 
-class ResourceContainerView(ContainerView):
+class ResourceContainerView(TableContainerView):
     """A Resource Container view."""
 
     __used_for__ = IResourceContainer
 
     index_title = _("Resource index")
-    add_title = _("Add a new resource")
-    add_url = "+/addSchoolToolResource.html"
 
 
 class ResourceView(BrowserView):

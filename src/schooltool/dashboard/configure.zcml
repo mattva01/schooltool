@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <configure
     xmlns="http://namespaces.zope.org/browser"
-    xmlns:zope="http://namespaces.zope.org/zope">
+    xmlns:zope="http://namespaces.zope.org/zope"
+    i18n_domain="schooltool">
 
   <page
       name="dashboard.html"
@@ -34,7 +35,7 @@
       template="dashboard_manager.pt"
       />
 
-  <viewlet
+  <navigationViewlet
       name="sections"
       for="*"
       manager=".interfaces.IDashboard"
@@ -45,7 +46,7 @@
       weight="10"
       />
 
-  <viewlet
+  <navigationViewlet
       name="term_admin"
       for="*"
       manager=".interfaces.IDashboard"
@@ -56,7 +57,7 @@
       weight="50"
       />
 
-  <viewlet
+  <navigationViewlet
       name="school_admin"
       for="*"
       manager=".interfaces.IDashboard"

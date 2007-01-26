@@ -222,14 +222,6 @@
       permission="zope.Public"
       />
 
-  <page
-      name="delete.html"
-      for="zope.app.container.interfaces.IContainer"
-      class="schooltool.app.browser.app.ContainerDeleteView"
-      template="templates/container_delete.pt"
-      permission="zope.View"
-      />
-
   <!-- Calendar views -->
 
   <!-- Sigh. Cannot specify multiple for and permission in subsscriber ;-( -->
@@ -253,7 +245,7 @@
       />
 
   <configure package="schooltool.skin">
-    <viewlet
+    <navigationViewlet
       name="view-calendar"
       for="schooltool.app.interfaces.IHaveCalendar"
       manager="schooltool.skin.IActionMenuManager"
@@ -264,7 +256,7 @@
       order="10"
       />
 
-    <viewlet
+    <navigationViewlet
       name="new-event"
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       manager="schooltool.skin.IActionMenuManager"
@@ -275,7 +267,7 @@
       order="20"
       />
 
-    <viewlet
+    <navigationViewlet
       name="timetables-csvimport"
       for="schooltool.course.interfaces.ISectionContainer"
       manager="schooltool.skin.IActionMenuManager"
@@ -286,7 +278,7 @@
       order="50"
       />
 
-    <viewlet
+    <navigationViewlet
       name="edit-leaders"
       for="schooltool.app.interfaces.IAsset"
       manager="schooltool.skin.IActionMenuManager"
@@ -297,7 +289,7 @@
       order="40"
       />
 
-    <viewlet
+    <navigationViewlet
       name="site-preferences"
       for="schooltool.person.interfaces.IPerson"
       manager="schooltool.skin.IActionMenuManager"
@@ -306,6 +298,14 @@
       link="@@site-preferences.html"
       title="Change Site Preferences"
       order="50"
+      />
+
+    <page
+      name="delete.html"
+      for="zope.app.container.interfaces.IContainer"
+      class="schooltool.skin.containers.ContainerDeleteView"
+      template="templates/container_delete.pt"
+      permission="zope.View"
       />
 
   </configure>

@@ -914,7 +914,7 @@ def doctest_TimetableDependentDeleteView():
         >>> from schooltool.timetable.browser.schema \
         ...     import TimetableDependentDeleteView
         >>> request = TestRequest(form={'delete.simple': 'on',
-        ...                             'UPDATE_SUBMIT': 'Delete'})
+        ...                             'CONFIRM': 'Confirm'})
         >>> view = TimetableDependentDeleteView(app['ttschemas'],
         ...                                           request)
         >>> view.update()

@@ -17,7 +17,6 @@
         name="index.html"
         for="schooltool.group.interfaces.IGroupContainer"
         class="schooltool.group.browser.group.GroupContainerView"
-        template="templates/container.pt"
         permission="schooltool.view"
         menu="zmi_views"
         title="View"
@@ -49,7 +48,7 @@
         title="Edit Info"
         />
 
-    <viewlet
+    <navigationViewlet
       name="groups"
       for="*"
       manager="schooltool.skin.INavigationManager"

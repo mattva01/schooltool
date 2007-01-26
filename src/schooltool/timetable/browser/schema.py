@@ -38,7 +38,7 @@ from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces.browser import IBrowserRequest
 
 from schooltool import SchoolToolMessage as _
-from schooltool.app.browser.app import ContainerView, ContainerDeleteView
+from schooltool.skin.containers import ContainerView, ContainerDeleteView
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot
@@ -215,8 +215,6 @@ class TimetableSchemaContainerView(ContainerView):
     __used_for__ = ITimetableSchemaContainer
 
     index_title = _("School Timetables")
-    add_title = _("Add a new schema")
-    add_url = "add.html"
 
     def update(self):
         if 'UPDATE_SUBMIT' in self.request:
@@ -238,7 +236,7 @@ class TimetableDependentDeleteView(ContainerDeleteView):
         return findRelatedTimetables(obj)
 
     def update(self):
-        if 'UPDATE_SUBMIT' in self.request:
+        if 'CONFIRM' in self.request:
             for key in self.listIdsForDeletion():
                 for tt in findRelatedTimetables(self.context[key]):
                     ttdict = getParent(tt)

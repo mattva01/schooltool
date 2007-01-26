@@ -32,15 +32,15 @@ from zope.publisher import browser
 from schooltool.level import interfaces
 from schooltool import SchoolToolMessage as _
 from schooltool.app.browser import app
+from schooltool.skin.containers import TableContainerView
 
-class LevelContainerView(app.ContainerView):
+
+class LevelContainerView(TableContainerView):
     """A Level Container view."""
 
     __used_for__ = interfaces.ILevelContainer
 
     index_title = _("Level index")
-    add_title = _("Add a new level")
-    add_url = "+/addSchoolToolLevel.html"
 
 
 class LevelValidationView(browser.BrowserView):

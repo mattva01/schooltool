@@ -18,7 +18,6 @@
         name="index.html"
         for="schooltool.resource.interfaces.IResourceContainer"
         class="schooltool.resource.browser.resource.ResourceContainerView"
-        template="templates/container.pt"
         permission="schooltool.view"
         menu="zmi_views"
         title="View"
@@ -51,7 +50,7 @@
       <widget field="description" height="5" />
     </editform>
 
-    <viewlet
+    <navigationViewlet
       name="resources"
       for="*"
       manager="schooltool.skin.INavigationManager"

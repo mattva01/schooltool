@@ -11,7 +11,7 @@
             tal:attributes="class python:' '.join(filter(None, ['day-title',
                                                    start and 'first' or '',
                                                    day.today()]))">
-          <a tal:content="day/title" i18n:translate=""
+          <a tal:content="day/date/@@fullDate"
              tal:attributes="href python:view.calURL('daily', day.date)" />
         </th>
       </tal:loop>

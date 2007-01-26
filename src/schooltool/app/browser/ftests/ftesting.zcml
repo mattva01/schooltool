@@ -4,7 +4,7 @@
            i18n_domain="schooltool">
 
   <configure package="schooltool.skin">
-    <viewlet
+    <navigationViewlet
       name="open-in-ical"
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       manager="schooltool.skin.IActionMenuManager"

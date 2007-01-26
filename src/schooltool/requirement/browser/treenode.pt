@@ -1,3 +1,5 @@
 <a href=""
+   i18n:domain="schooltool"
+   i18n:translate=""
    tal:attributes="href context/@@absolute_url"
-        tal:content="context/title">Requirement Title</a>
+   tal:content="context/title">Requirement Title</a>

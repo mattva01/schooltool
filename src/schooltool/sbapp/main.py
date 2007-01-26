@@ -32,8 +32,9 @@ from schooltool.app import main
 locale_charset = locale.getpreferredencoding()
 
 localedir = os.path.join(os.path.dirname(__file__), '..', 'locales')
-catalog = gettext.translation('schooltool', localedir, fallback=True)
+catalog = gettext.translation('schoolbell', localedir, fallback=True)
 _ = lambda us: catalog.ugettext(us).encode(locale_charset, 'replace')
+_._domain = 'schoolbell'
 
 sb_incompatible_db_error_msg = _("""
 This is not a SchoolBell 1.0 database file, aborting.

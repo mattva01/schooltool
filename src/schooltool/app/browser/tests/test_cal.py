@@ -25,6 +25,7 @@ import unittest
 import calendar
 from datetime import datetime, date, timedelta, time
 from pytz import timezone, utc
+from schooltool.app.browser.cal import DailyCalendarView
 
 from zope.i18n import translate
 from zope.interface import Interface
@@ -646,16 +647,12 @@ def doctest_CalendarDay():
         >>> day1 = CalendarDay(date(2004, 8, 5))
         >>> day1.date
         datetime.date(2004, 8, 5)
-        >>> translate(day1.title)
-        u'Thursday, 2004-08-05'
         >>> day1.events
         []
 
         >>> day2 = CalendarDay(date(2004, 7, 15), ["abc", "def"])
         >>> day2.date
         datetime.date(2004, 7, 15)
-        >>> translate(day2.title)
-        u'Thursday, 2004-07-15'
         >>> day2.events
         ['abc', 'def']
 
@@ -825,28 +822,30 @@ class TestCalendarViewBase(unittest.TestCase):
         ztapi.provideAdapter(IPerson, IPersonPreferences,
                              getPersonPreferences)
 
+        from zope.publisher.interfaces import IRequest
+        import zope.component
+        from zope.interface import Interface
+        class TestDateFormatterFullView( BrowserView ):
+            """
+            A Stub view for formating the date
+            """
+            def __call__(self):
+                return unicode(self.context.strftime("%A, %B%e, %Y"))
+
+        zope.component.provideAdapter(TestDateFormatterFullView,
+                                      [date, IRequest], Interface,
+                                      name='fullDate')
+
+
         request1 = TestRequest()
         request1.setPrincipal(PrincipalStub())
         view1 = CalendarViewBase(None, request1)
         dt = datetime(2004, 7, 1)
-        self.assertEquals(view1.dayTitle(dt), "Thursday, 2004-07-01")
+        self.assertEquals(view1.dayTitle(dt), u'Thursday, July 1, 2004')
 
         request2 = TestRequest()
         request2.setPrincipal(PrincipalStub())
         self.assertEquals(view1.timezone.tzname(datetime.utcnow()), 'UTC')
-
-        # set the dateformat preference to the long format and change the
-        # timezone preference
-
-        prefs = IPersonPreferences(request2.principal._person)
-        prefs.dateformat = "%d %B, %Y"
-        prefs.timezone = "US/Eastern"
-
-        view2 = CalendarViewBase(None, request2)
-
-        self.assertEquals(view2.dayTitle(dt), "Thursday, 01 July, 2004")
-        self.assertEquals(view2.timezone.zone,
-                          'US/Eastern')
 
     def test_prev_next(self):
         from schooltool.app.browser.cal import CalendarViewBase
@@ -3437,12 +3436,26 @@ class TestDailyCalendarView(unittest.TestCase):
         view.update()
         self.assertEquals(view.cursor, date.today())
 
+        from zope.publisher.interfaces import IRequest
+        import zope.component
+        from zope.interface import Interface
+
+        class TestDateFormatterFullView( BrowserView ):
+            """
+            A Stub view for formating the date
+            """
+            def __call__(self):
+                return unicode(self.context.strftime("%A, %B%e, %Y"))
+
+        zope.component.provideAdapter(TestDateFormatterFullView, 
+                                          [date, IRequest], Interface, name='fullDate')
+
         view.request = TestRequest(form={'date': '2005-01-06'})
         view.update()
-        self.assertEquals(view.title(), "Thursday, 2005-01-06")
+        self.assertEquals(view.title(), u'Thursday, January 6, 2005')
         view.request = TestRequest(form={'date': '2005-01-07'})
         view.update()
-        self.assertEquals(view.title(), "Friday, 2005-01-07")
+        self.assertEquals(view.title(), u'Friday, January 7, 2005')
 
     def test__setRange(self):
         from schooltool.app.browser.cal import DailyCalendarView

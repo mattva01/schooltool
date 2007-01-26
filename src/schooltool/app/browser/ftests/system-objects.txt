@@ -44,34 +44,44 @@ The list of persons should have a disabled checkbox next to the manager user
     ...                             manager_browser.contents):
     ...     print td
     <div>
-      <input type="checkbox" disabled name="delete.manager"><a href="http://localhost/persons/manager">SchoolTool Manager</a>
+        <input type="checkbox" disabled name="delete.manager"><a href="http://localhost/persons/manager">SchoolTool Manager</a>
     </div>
     <div>
-      <input type="checkbox" name="delete.srichter"><a href="http://localhost/persons/srichter">Stephan Richter</a>
+        <input type="checkbox" name="delete.srichter"><a href="http://localhost/persons/srichter">Stephan Richter</a>
     </div>
 
 The list of groups should have a disabled checkbox next to the default groups
 
     >>> manager_browser.open('http://localhost/groups')
-    >>> for div in analyze.queryHTML('//form/div[input[@type="checkbox"]]',
-    ...                              manager_browser.contents):
-    ...     print div
-    <div>
-      <input type="checkbox" name="delete.a-group"><a href="http://localhost/groups/a-group">A Group</a>
-    </div>
-    <div>
-      <input type="checkbox" disabled name="delete.clerks"><a href="http://localhost/groups/clerks">Clerks</a>
-    </div>
-    <div>
-      <input type="checkbox" disabled name="delete.administrators"><a href="http://localhost/groups/administrators">School Administrators</a>
-    </div>
-    <div>
-      <input type="checkbox" disabled name="delete.manager"><a href="http://localhost/groups/manager">Site Managers</a>
-    </div>
-    <div>
-      <input type="checkbox" disabled name="delete.students"><a href="http://localhost/groups/students">Students</a>
-    </div>
-    <div>
-      <input type="checkbox" disabled name="delete.teachers"><a href="http://localhost/groups/teachers">Teachers</a>
-    </div>
-
+    >>> for td in analyze.queryHTML('//table//tr/td', manager_browser.contents):
+    ...     print td
+    <td>
+          <input type="checkbox" name="delete.a-group" id="delete.a-group"></td>
+    <td>
+          <a href="http://localhost/groups/a-group">A Group</a>
+    </td>
+    <td>
+          <input type="checkbox" name="delete.clerks" id="delete.clerks" disabled></td>
+    <td>
+          <a href="http://localhost/groups/clerks">Clerks</a>
+    </td>
+    <td>
+          <input type="checkbox" name="delete.administrators" id="delete.administrators" disabled></td>
+    <td>
+          <a href="http://localhost/groups/administrators">School Administrators</a>
+    </td>
+    <td>
+          <input type="checkbox" name="delete.manager" id="delete.manager" disabled></td>
+    <td>
+          <a href="http://localhost/groups/manager">Site Managers</a>
+    </td>
+    <td>
+          <input type="checkbox" name="delete.students" id="delete.students" disabled></td>
+    <td>
+          <a href="http://localhost/groups/students">Students</a>
+    </td>
+    <td>
+          <input type="checkbox" name="delete.teachers" id="delete.teachers" disabled></td>
+    <td>
+          <a href="http://localhost/groups/teachers">Teachers</a>
+    </td>

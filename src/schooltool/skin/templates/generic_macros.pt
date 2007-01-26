@@ -1,3 +1,4 @@
+<tal:block i18n:domain="schooltool">
 <metal:block define-macro="stylesheets">
     <link rel="stylesheet" type="text/css" href="schooltool.css"
           tal:attributes="href context/++resource++schooltool.css"/>
@@ -11,3 +12,4 @@
   <span i18n:translate="">Server Running SchoolTool</span>
   <span tal:content="modules/schooltool/get_version"/>
 </metal:block>
+</tal:block>

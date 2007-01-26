@@ -56,6 +56,8 @@ System requirements
 - libxml2 Python bindings (http://xmlsoft.org/).  Windows users can find
   binaries here:  http://users.skynet.be/sbi/libxml-python/
 
+- libicu-dev: International Components for Unicode libraries (http://icu.sourceforge.net/download/)
+
 - the Python Imaging Library (PIL) (http://www.pythonware.com/products/pil/)
 
 - (usually included) Zope 3.2 (http://www.zope.org/Products/Zope3)

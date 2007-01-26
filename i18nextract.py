@@ -27,6 +27,14 @@ $Id$
 """
 import os
 import sys
+import tokenize
+import optparse
+
+from zope.i18nmessageid.message import MessageFactory
+from zope.app.locales.pygettext import make_escapes
+from zope.app.locales.extract import find_files
+
+_import_chickens = {}, {}, ("*",) # dead chickens needed by __import__
 
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -85,28 +93,83 @@ class POTMaker(extract.POTMaker):
     def _getProductVersion(self):
         return "SchoolTool Version %s" % get_version()
 
+def py_strings(dir, domain="zope", exclude=(), verify_domain=False):
+    """Retrieve all Python messages from `dir` that are in the `domain`.
+    """
+    eater = extract.TokenEater()
+    make_escapes(0)
+    for filename in find_files(
+            dir, '*.py', exclude=('extract.py', 'pygettext.py')+tuple(exclude)):
+
+        if verify_domain:
+            common_path_lengths = [
+                len(os.path.commonprefix([os.path.abspath(filename), path]))
+                for path in sys.path]
+            l = sorted(common_path_lengths)[-1]
+            # remove .py ending from filenames
+            # replace all path separators with a dot
+            # remove the __init__ from the import path
+            import_name = filename[l+1:-3].replace(os.path.sep, ".").replace(".__init__", "")
+
+            try:
+                module = __import__(import_name, *_import_chickens)
+            except ImportError, e:
+                # XXX if we can't import it - we assume that the domain is
+                # the right one
+                print >> sys.stderr, "Could not import %s" % import_name
+            else:
+                mf = getattr(module, '_', None)
+                # XXX if _ is has no _domain set we assume that the domain
+                # is the right one, so if you are using something non
+                # MessageFactory you should set it's _domain attribute.
+                if hasattr(mf, '_domain'):
+                    if mf._domain != domain:
+                        # domain mismatch - skip
+                        continue
+
+        fp = open(filename)
+
+        try:
+            eater.set_filename(filename)
+            try:
+                tokenize.tokenize(fp.readline, eater)
+            except tokenize.TokenError, e:
+                print >> sys.stderr, '%s: %s, line %d, column %d' % (
+                    e[0], filename, e[1][0], e[1][1])
+        finally:
+            fp.close()
+    return eater.getCatalog()
+
 def write_pot(output_dir, path, domain, base_dir, site_zcml):
     # Create the POT
     output_file = os.path.join(path, output_dir, domain + '.pot')
     maker = POTMaker(output_file, path)
-    maker.add(extract.py_strings(path, domain), base_dir)
+    maker.add(py_strings(path, domain, verify_domain=True), base_dir)
     maker.add(extract.zcml_strings(path, domain, site_zcml=site_zcml), base_dir)
     maker.add(extract.tal_strings(path, domain), base_dir)
     maker.write()
 
+def parse_args(argv):
+    """Parse the command line arguments"""
+    parser = optparse.OptionParser(usage="usage: %prog [options]")
+    # XXX ! separate these
+    parser.add_option("--domain", dest="domain", default=None,
+                      help="The domain that should be extracted")
+    parser.add_option("--zcml", dest="zcml", default=None,
+                      help="ZCML file to start the extraction")
+    options, args = parser.parse_args(argv)
+    assert len(args) == 1
+    assert options.domain is not None
+    assert options.zcml is not None
+    return options
+
 if __name__ == '__main__':
     here = os.path.abspath(os.path.dirname(__file__))
     path = os.path.join(here, 'src')
+    # get the command line arguments
+    options = parse_args(sys.argv)
     base_dir = here # Comments are relative to the source checkouts so we are
                     # sure we don't have any absolute paths in there.
     output_dir = os.path.join(here, 'src', 'schooltool', 'locales')
-    # SchoolTool
-    domain = 'schooltool'
-    site_zcml = os.path.join(here, 'schooltool-skel', 'etc', 'site.zcml')
-    write_pot(output_dir, path, domain, base_dir, site_zcml)
-    print 'Extracted %s.pot to %s' % (domain, output_dir)
-    # SchoolBell
-    domain = 'schoolbell'
-    site_zcml = os.path.join(here, 'schoolbell-site.zcml')
-    write_pot(output_dir, path, domain, base_dir, site_zcml)
-    print 'Extracted %s.pot to %s' % (domain, output_dir)
+    write_pot(output_dir, path, options.domain, base_dir, options.zcml)
+    print 'Extracted %s.pot to %s' % (options.domain, output_dir)

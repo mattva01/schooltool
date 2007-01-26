@@ -68,3 +68,4 @@ class IFilterWidget(Interface):
 
     def extra_url():
         """String that should be appended to the url to preserve query parameters."""
+

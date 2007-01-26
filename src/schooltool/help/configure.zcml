@@ -1,6 +1,7 @@
 <configure
     xmlns="http://namespaces.zope.org/browser"
     xmlns:zope="http://namespaces.zope.org/zope"
+    xmlns:security="http://schooltool.org/securitypolicy"
     i18n_domain="schooltool">
 
   <zope:adapter
@@ -51,5 +52,15 @@
 
   </configure>
 
+  <!-- Online help security -->
+  <security:allow
+           interface="zope.app.onlinehelp.interfaces.IOnlineHelp"
+           crowds="anonymous"
+           permission="schooltool.view" />
+
+  <security:allow
+            interface="zope.app.onlinehelp.interfaces.IOnlineHelp"
+            crowds="anonymous"
+            permission="schooltool.edit" />
 
 </configure>

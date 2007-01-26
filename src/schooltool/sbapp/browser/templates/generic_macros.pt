@@ -1,3 +1,4 @@
+<tal:block i18n:domain="schooltool">
 <metal:block define-macro="stylesheets">
 </metal:block>
 
@@ -9,3 +10,4 @@
   <span i18n:translate="">Server Running SchoolBell</span>
   <span tal:content="modules/schooltool/sbapp/VERSION"/>
 </metal:block>
+</tal:block>

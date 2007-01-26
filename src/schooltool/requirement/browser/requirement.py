@@ -29,6 +29,7 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from schooltool import SchoolToolMessage as _
 import schooltool.app.browser.app
 import schooltool.requirement.interfaces
+import schooltool.skin.containers
 from schooltool.batching import Batch
 
 
@@ -45,17 +46,15 @@ class RequirementAddView(AddView):
             return AddView.update(self)
 
 
-class RequirementView(schooltool.app.browser.app.ContainerView):
+class RequirementView(schooltool.skin.containers.ContainerView):
     """A Requirement view."""
 
     __used_for__ = schooltool.requirement.interfaces.IRequirement
 
     index_title = _("Requirement index")
-    add_title = _("Add a new Requirement")
-    add_url = "+/addRequirement.html"
 
     def __init__(self, context, request, depth=None):
-        schooltool.app.browser.app.ContainerView.__init__(self, context,
+        schooltool.skin.containers.ContainerView.__init__(self, context,
                                                           request)
         self.depth = depth
         if self.depth is None:

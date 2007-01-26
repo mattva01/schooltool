@@ -25,8 +25,7 @@ $Id$
 
 from zope.interface import Interface
 from zope.configuration.fields import (Tokens, GlobalObject, PythonIdentifier,
-                                       Bool)
-from zope.schema import TextLine
+                                       Bool, MessageID)
 from zope.security.zcml import Permission
 
 
@@ -66,7 +65,7 @@ class ISettingDirective(Interface):
     key = PythonIdentifier(
         title=u"Key")
 
-    text = TextLine(
+    text = MessageID(
         title=u"Text")
 
     default = Bool(

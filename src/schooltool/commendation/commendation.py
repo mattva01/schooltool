@@ -33,6 +33,7 @@ from schooltool.app import app
 from schooltool.commendation import interfaces
 from schooltool.traverser.traverser import AdapterTraverserPlugin
 from schooltool.commendation.interfaces import ICommendations
+from schooltool.commendation.interfaces import _
 
 # Annotations are identified using annotation keys that must be truly
 # unique. Thus it is a good idea to make the Python path of the pacakge the
@@ -69,7 +70,7 @@ class Commendation(persistent.Persistent, contained.Contained):
         if interaction and interaction.participations:
             self.grantor = interaction.participations[0].principal.id
         else:
-            self.grantor = u'<unknown>'
+            self.grantor = _('<unknown>')
         self.title = title
         self.description = description
         self.scope = scope
@@ -85,7 +86,7 @@ class Commendations(btree.BTreeContainer):
     '''A simple implementation of ``ICommendations``.'''
     zope.interface.implements(interfaces.ICommendations)
 
-    title = "commendations"
+    title = _("commendations")
 
     def __repr__(self):
         return '<%s for %r>' %(self.__class__.__name__, self.__parent__)

@@ -1,4 +1,5 @@
-<div class="devtools">
+<div class="devtools"
+     i18n:domain="schooltool">
 
   <div class="header" style="clear: both">
     <a href="javascript:switchDisplay('devtools')"
@@ -7,17 +8,17 @@
            style="vertical-align: middle"
            alt="(>)"
            tal:attributes="id string:devtools.arrow" />
-      <h4>Developer Tools</h4>
+      <h4 i18n:translate="">Developer Tools</h4>
     </a>
   </div>
 
   <div id="devtools" style="display:none;">
     <div class="body">
-      <a href="/++etc++site/default/RootErrorReportingUtility">Errors</a>
-      <a href="@@introspector.html">Introspector</a>
-      <a href="/++apidoc++/@@index.html">API Docs</a>
-      <a href="/@@sampledata.html">Sample data</a>
-      <a href="/@@setupdata.html">Setup data</a>
+      <a href="/++etc++site/default/RootErrorReportingUtility" i18n:translate="">Errors</a>
+      <a href="@@introspector.html" i18n:translate="">Introspector</a>
+      <a href="/++apidoc++/@@index.html" i18n:translate="">API Docs</a>
+      <a href="/@@sampledata.html" i18n:translate="">Sample data</a>
+      <a href="/@@setupdata.html" i18n:translate="">Setup data</a>
     </div>
   </div>
 

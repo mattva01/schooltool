@@ -38,6 +38,8 @@ from schooltool.demographics.person import Person
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.skin.table import LocaleAwareGetterColumn
+from schooltool import SchoolToolMessage as _
+
 
 class Search(object):
     implements(ISearch)
@@ -87,14 +89,14 @@ class PersonFactoryUtility(object):
     def columns(self):
         first_name = LocaleAwareGetterColumn(
             name='first_name',
-            title=u'Name',
+            title=_(u'Name'),
             getter=lambda i, f: i.nameinfo.first_name,
             subsort=True)
         directlyProvides(first_name, ISortableColumn)
 
         last_name = LocaleAwareGetterColumn(
             name='last_name',
-            title=u'Surname',
+            title=_(u'Surname'),
             getter=lambda i, f: i.nameinfo.last_name,
             subsort=True)
         directlyProvides(last_name, ISortableColumn)
