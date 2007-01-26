@@ -236,7 +236,7 @@ class TimetableDependentDeleteView(ContainerDeleteView):
         return findRelatedTimetables(obj)
 
     def update(self):
-        if 'UPDATE_SUBMIT' in self.request:
+        if 'CONFIRM' in self.request:
             for key in self.listIdsForDeletion():
                 for tt in findRelatedTimetables(self.context[key]):
                     ttdict = getParent(tt)

@@ -22,10 +22,18 @@ SchoolTool skin containers
 $Id$
 """
 from zope.app import zapi
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.component import queryMultiAdapter
 from zope.publisher.browser import BrowserView
 from zope.security.checker import canAccess
 
+from zc.table import table
+from zc.table.column import GetterColumn
+
 from schooltool.batching.batch import Batch
+from schooltool.demographics.browser.table import DependableCheckboxColumn
+from schooltool.skin.interfaces import IFilterWidget
+from schooltool.skin.table import URLColumn
 
 
 class ContainerView(BrowserView):
@@ -69,7 +77,7 @@ class ContainerDeleteView(BrowserView):
     itemsToDelete = property(_listItemsForDeletion)
 
     def update(self):
-        if 'UPDATE_SUBMIT' in self.request:
+        if 'CONFIRM' in self.request:
             for key in self.listIdsForDeletion():
                 del self.context[key]
             self.request.response.redirect(self.nextURL())
@@ -80,3 +88,83 @@ class ContainerDeleteView(BrowserView):
         return zapi.absoluteURL(self.context, self.request)
 
 
+class TableContainerView(BrowserView):
+    """A base view for containers that use zc.table to display items.
+
+    Subclasses must provide the following attributes that are used in the
+    page template:
+
+        `index_title` -- Title of the index page.
+
+    """
+
+    template = ViewPageTemplateFile('templates/table_container.pt')
+    delete_template = ViewPageTemplateFile('templates/container_delete.pt')
+
+    def __init__(self, context, request):
+        self.request = request
+        self.context = context
+
+        self.filter_widget = queryMultiAdapter((self.context, self.request),
+                                               IFilterWidget)
+        results = self.filter(self.context.values())
+        self.batch_start = int(self.request.get('batch_start', 0))
+        self.batch_size = int(self.request.get('batch_size', 10))
+        self.batch = Batch(results, self.batch_start, self.batch_size, sort_by='title')
+
+        if 'DELETE' in self.request:
+            self.template = self.delete_template
+
+    def __call__(self):
+        # XXX update should be in here but as the container_delete
+        # template is shared with the ContainerDeleteView and update
+        # is called in the template we are not doing it here
+        return self.template()
+
+    def update(self):
+        if 'CONFIRM' in self.request:
+            for key in self.listIdsForDeletion():
+                del self.context[key]
+
+    def filter(self, list):
+        return self.filter_widget.filter(list)
+
+    @property
+    def canModify(self):
+        return canAccess(self.context, '__delitem__')
+
+    def columns(self):
+        return [GetterColumn(name='title',
+                             title=u"Title",
+                             getter=lambda i, f: i.title,
+                             subsort=True)]
+
+    def sortOn(self):
+        return (("title", False),)
+
+
+    def listIdsForDeletion(self):
+        return [key for key in self.context
+                if "delete.%s" % key in self.request]
+
+    def _listItemsForDeletion(self):
+        return [self.context[key] for key in self.listIdsForDeletion()]
+
+    itemsToDelete = property(_listItemsForDeletion)
+
+    def renderTable(self):
+        columns = []
+        if self.canModify:
+            columns.append(DependableCheckboxColumn(prefix="delete",
+                                                    name='delete_checkbox',
+                                                    title=u''))
+        available_columns = map(lambda column: URLColumn(column, self.request),
+                                self.columns())
+        columns.extend(available_columns)
+        formatter = table.FormFullFormatter(
+            self.context, self.request, self.filter(self.context.values()),
+            columns=columns,
+            batch_start=self.batch_start, batch_size=self.batch_size,
+            sort_on=self.sortOn())
+        formatter.cssClasses['table'] = 'data'
+        return formatter()

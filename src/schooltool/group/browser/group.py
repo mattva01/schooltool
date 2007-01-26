@@ -30,7 +30,7 @@ from zope.component import getUtility
 from schooltool import SchoolToolMessage as _
 from schooltool.batching import Batch
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.skin.containers import ContainerView
+from schooltool.skin.containers import TableContainerView
 from schooltool.app.browser.app import BaseAddView, BaseEditView
 from schooltool.person.interfaces import IPerson
 from schooltool.resource.interfaces import IResource
@@ -42,7 +42,7 @@ from schooltool.group.interfaces import IGroupContainer, IGroupContained
 from schooltool.app.browser.app import RelationshipViewBase
 
 
-class GroupContainerView(ContainerView):
+class GroupContainerView(TableContainerView):
     """A Group Container view."""
 
     __used_for__ = IGroupContainer

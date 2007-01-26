@@ -35,24 +35,40 @@ from zope.app.form.browser.submit import Update
 from zope.app.form.interfaces import WidgetsError
 from zope.app.form.utility import getWidgetsData
 from zope.app.form.utility import setUpEditWidgets
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserView
 
-from schooltool.skin.containers import ContainerView
+from schooltool.skin.containers import TableContainerView
 from schooltool.app.browser.cal import month_names
 from schooltool.calendar.utils import parse_date
 from schooltool.calendar.utils import next_month, week_start
+from schooltool.timetable import findRelatedTimetables
 from schooltool.term.interfaces import ITermContainer, ITerm
 from schooltool.term.term import Term
 
 from schooltool import SchoolToolMessage as _
 
 
-class TermContainerView(ContainerView):
+class TermContainerView(TableContainerView):
     """Term container view."""
+    # XXX ftest deletion!
 
     __used_for__ = ITermContainer
 
+    delete_template = ViewPageTemplateFile("term-container-delete.pt")
+
     index_title = _("Terms")
+
+    def timetables(self, obj):
+        return findRelatedTimetables(obj)
+
+    def update(self):
+        if 'CONFIRM' in self.request:
+            for key in self.listIdsForDeletion():
+                for tt in findRelatedTimetables(self.context[key]):
+                    ttdict = getParent(tt)
+                    del ttdict[getName(tt)]
+                del self.context[key]
 
 
 class ITermForm(Interface):

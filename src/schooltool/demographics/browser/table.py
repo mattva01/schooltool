@@ -74,7 +74,7 @@ class PersonTable(TablePage):
         directlyProvides(modified, ISortableColumn)
 
         return [
-            DeleteCheckBoxColumn(name='delete', title=u''),
+            DependableCheckboxColumn(name='delete', prefix="delete", title=u''),
             username,
             full_name,
             birth_date,
@@ -188,16 +188,21 @@ class DisplayColumn(column.Column):
             translate(_("Display")))
 
 
-class DeleteCheckBoxColumn(column.Column):
-    """Table column that displays delete checkbox.
+from schooltool.skin.table import CheckboxColumn
+class DependableCheckboxColumn(CheckboxColumn):
+    """A column that displays a checkbox that is disabled if item has dependables.
+
+    The name and id of the checkbox are composed of the prefix keyword
+    argument and __name__ of the item being displayed.
     """
+
     def renderCell(self, item, formatter):
+        id = "%s.%s" % (self.prefix, item.__name__)
+
         if self.hasDependents(item):
-            return (
-                '<input type="checkbox" name="delete.%s" disabled="disabled" />'
-                % item.username)
+            return '<input type="checkbox" name="%s" id="%s" disabled="disabled" />' % (id, id)
         else:
-            return '<input type="checkbox" name="delete.%s" />' % item.username
+            return '<input type="checkbox" name="%s" id="%s" />' % (id, id)
 
     def hasDependents(self, item):
         # We cannot adapt security-proxied objects to IDependable.  Unwrapping

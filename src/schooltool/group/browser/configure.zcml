@@ -17,7 +17,6 @@
         name="index.html"
         for="schooltool.group.interfaces.IGroupContainer"
         class="schooltool.group.browser.group.GroupContainerView"
-        template="templates/container.pt"
         permission="schooltool.view"
         menu="zmi_views"
         title="View"

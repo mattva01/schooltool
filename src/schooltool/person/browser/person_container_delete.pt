@@ -27,7 +27,7 @@
            tal:attributes="href obj/@@absolute_url">Some Object</a>
       </li>
       <div class="controls">
-        <input type="submit" class="button-cancel" name="UPDATE_SUBMIT" value="Confirm"
+        <input type="submit" class="button-cancel" name="CONFIRM" value="Confirm"
                i18n:attributes="value delete-button;" />
         <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
                i18n:attributes="value cancel-button" />

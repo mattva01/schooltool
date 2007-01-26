@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <configure
     xmlns="http://namespaces.zope.org/browser"
+    xmlns:zope="http://namespaces.zope.org/zope"
     i18n_domain="schooltool">
 
   <configure package="schooltool.skin">
@@ -9,23 +10,12 @@
        name="index.html"
        for="schooltool.term.interfaces.ITermContainer"
        class="schooltool.term.browser.term.TermContainerView"
-       template="templates/container.pt"
        permission="schooltool.view"
        menu="zmi_views"
        title="View"
        />
 
   </configure>
-
-  <page
-      name="delete.html"
-      for="..interfaces.ITermContainer"
-      class="schooltool.timetable.browser.schema.TimetableDependentDeleteView"
-      template="term-container-delete.pt"
-      permission="schooltool.view"
-      menu="zmi_views"
-      title="View"
-      />
 
   <page
       name="add.html"
@@ -76,5 +66,10 @@
       menu="schooltool_actions"
       title="Cancel School in Emergency"
       />
+
+  <zope:adapter
+      for="schooltool.term.interfaces.ITermContainer
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory="schooltool.skin.table.FilterWidget" />
 
 </configure>

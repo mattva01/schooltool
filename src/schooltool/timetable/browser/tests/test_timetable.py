@@ -92,8 +92,6 @@ def createDayTemplate(periods):
     return day
 
 
-
-
 def doctest_TimetablesTraverser():
     """Tests for TimetablesTraverser.
 
@@ -162,6 +160,7 @@ def doctest_TimetableView():
         [[{'period': 'A', 'activity': 'Something'}]]
 
     """
+
 
 def doctest_ResourceTimetableSetupiew():
     """Doctest for the ResourceTimetableSetupView.
