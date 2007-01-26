@@ -19,5 +19,21 @@
 from schooltool.person.person import Person
 
 class PersonFactoryUtility(object):
+
+    def columns(self):
+        from schooltool.skin.table import LocaleAwareGetterColumn
+        title = LocaleAwareGetterColumn(
+            name='title',
+            title=u'Full Name',
+            getter=lambda i, f: i.title,
+            subsort=True)
+        from zc.table.interfaces import ISortableColumn
+        from zope.interface import directlyProvides
+        directlyProvides(title, ISortableColumn)
+        return [title]
+
+    def sortOn(self):
+        return (("title", False),)
+
     def __call__(self, *args, **kw):
         return Person(*args, **kw)

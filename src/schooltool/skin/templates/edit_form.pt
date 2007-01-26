@@ -3,8 +3,6 @@
 <metal:nothing metal:fill-slot="content-header" />
 <metal:block metal:fill-slot="body">
 
-  <metal:block use-macro="view/@@menu_macros/tab_menu" />
-
   <metal:block use-macro="view/@@formlib_macros/edit" />
 
 </metal:block>

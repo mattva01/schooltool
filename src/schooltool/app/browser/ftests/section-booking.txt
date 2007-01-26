@@ -4,6 +4,7 @@ Tests for resource booking in timetable events
 A manager logs in and sets up timetabling:
 
     >>> from schooltool.app.browser.ftests import setup
+    >>> setup.addPerson('Frog', 'frog')
     >>> setup.setUpTimetabling(username='frog')
 
 Let's create a resource:

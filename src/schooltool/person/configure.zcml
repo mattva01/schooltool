@@ -52,12 +52,10 @@
         set_schema=".interfaces.IPerson" />
   </class>
 
-<!--
   <utility
      factory=".utility.PersonFactoryUtility"
      provides="schooltool.person.interfaces.IPersonFactory"
      />
--->
 
   <class class=".preference.PersonPreferences">
     <require

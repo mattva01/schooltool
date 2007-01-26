@@ -40,7 +40,7 @@ We look at the groups of the person we added
 
     >>> manager.open('http://localhost/persons')
     >>> manager.getLink('person1').click()
-    >>> manager.getLink('schooldata').click()
+
     >>> 'group1' in manager.contents
     True
 

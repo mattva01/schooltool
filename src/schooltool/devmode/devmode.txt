@@ -137,7 +137,7 @@ the object, followed by the name:
     ...
     <h1>
       Object Introspector:
-      <a href="...person/Person/index.html">schooltool.demographics.person.Person</a>
+      <a href="...person/Person/index.html">schooltool.person.person.Person</a>
       ( manager )
     </h1>
     ...

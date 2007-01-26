@@ -11,23 +11,8 @@
       />
 
   <page
-      name="add.html"
-      for="schooltool.person.interfaces.IPersonContainer"
-      class=".personform.PersonAddView"
-      permission="schooltool.edit"
-      menu="schooltool_actions" title="New Person"
-      />
-
-  <zope:subscriber
-      for="schooltool.person.interfaces.IPerson zope.publisher.interfaces.IPublisherRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".personform.nameinfo_traverser"
-      permission="zope.Public"
-      />
-
-  <page
       name="index.html"
-      for="schooltool.person.interfaces.IPerson"
+      for="schooltool.demographics.interfaces.IDemographicsPerson"
       class=".personform.PersonView"
       permission="zope.View"
       menu="schooltool_actions"
@@ -36,11 +21,18 @@
 
   <page
       name="edit.html"
-      for="schooltool.person.interfaces.IPerson"
+      for="schooltool.demographics.interfaces.IDemographicsPerson"
       class=".personform.PersonEditView"
       permission="zope.View"
       menu="schooltool_actions"
       title="Edit"
+      />
+
+  <zope:subscriber
+      for="schooltool.demographics.interfaces.IDemographicsPerson zope.publisher.interfaces.IPublisherRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".personform.nameinfo_traverser"
+      permission="zope.Public"
       />
 
   <page
@@ -58,7 +50,7 @@
       />
 
   <zope:subscriber
-      for="schooltool.person.interfaces.IPerson
+      for="schooltool.demographics.interfaces.IDemographicsPerson
            zope.publisher.interfaces.IPublisherRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".personform.demographics_traverser"
@@ -80,7 +72,7 @@
       />
 
   <zope:subscriber
-      for="schooltool.person.interfaces.IPerson
+      for="schooltool.demographics.interfaces.IDemographicsPerson
            zope.publisher.interfaces.IPublisherRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".personform.schooldata_traverser"
@@ -102,35 +94,35 @@
       />
 
   <zope:subscriber
-      for="schooltool.person.interfaces.IPerson
+      for="schooltool.demographics.interfaces.IDemographicsPerson
            zope.publisher.interfaces.IPublisherRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".personform.parent1_traverser"
       permission="zope.Public"
       />
   <zope:subscriber
-      for="schooltool.person.interfaces.IPerson
+      for="schooltool.demographics.interfaces.IDemographicsPerson
            zope.publisher.interfaces.IPublisherRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".personform.parent2_traverser"
       permission="zope.Public"
       />
   <zope:subscriber
-      for="schooltool.person.interfaces.IPerson
+      for="schooltool.demographics.interfaces.IDemographicsPerson
            zope.publisher.interfaces.IPublisherRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".personform.emergency1_traverser"
       permission="zope.Public"
       />
   <zope:subscriber
-      for="schooltool.person.interfaces.IPerson
+      for="schooltool.demographics.interfaces.IDemographicsPerson
            zope.publisher.interfaces.IPublisherRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".personform.emergency2_traverser"
       permission="zope.Public"
       />
   <zope:subscriber
-      for="schooltool.person.interfaces.IPerson
+      for="schooltool.demographics.interfaces.IDemographicsPerson
            zope.publisher.interfaces.IPublisherRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".personform.emergency3_traverser"
@@ -173,27 +165,11 @@
       />
 
   <page
-     for="schooltool.person.interfaces.IPersonContainer"
-     name="index.html"
-     class=".table.PersonTable"
-     permission="schooltool.view"
-     />
-
-  <page
     name="menu_macros"
     for="*"
     permission="zope.View"
     template="menu_macros.pt"
     />
-
-  <page
-     for="schooltool.person.interfaces.IPersonContainer"
-     name="search.html"
-     class=".table.SearchTable"
-     permission="schooltool.view"
-     menu="schooltool_actions"
-     title="Search"
-     />
 
   <!-- menu for different screens -->
   <menu

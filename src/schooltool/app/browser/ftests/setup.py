@@ -48,21 +48,19 @@ def addPerson(name, username=None, password=None, groups=None, browser=None):
     browser.getLink('Persons').click()
     browser.getLink('New Person').click()
     browser.getControl('Full name').value = name
-    browser.getControl('First name').value = name
-    # XXX Last name is a required field defined by demographics
-    browser.getControl('Last name').value = 'Fake'
     browser.getControl('Username').value = username
     browser.getControl('Password').value = password
-    browser.getControl('Confirm').value = password
+    browser.getControl('Verify password').value = password
     browser.getControl('Add').click()
+
     if groups:
-        browser.getLink('schooldata').click()
+        browser.open('http://localhost/persons/%s' % username)
         browser.getLink('edit groups').click()
         for group in groups:
             browser.getControl(name='add_item.%s' % group).value = True
         browser.getControl('Add').click()
     browser.open('http://localhost/persons')
-    
+
 def addResource(title):
     """Add a resource."""
     manager = logInManager()
@@ -73,13 +71,11 @@ def addResource(title):
     assert title in manager.contents
 
 
-def setUpTimetabling(username, password=None):
+def setUpTimetabling(username):
     """Create the infrastructure for functional tests involving timetables.
 
-    Creates a non-admin user with given username and password.
+    Creates it for the given user.
     """
-    # Let's add a user:
-    addPerson('Frog', username, password)
 
     # We will need a term and a School timetable:
     manager = logInManager()

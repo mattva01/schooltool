@@ -475,10 +475,6 @@ class StandaloneServer(object):
         if MANAGER_USERNAME not in app['persons']:
             factory = getUtility(IPersonFactory)
             manager = factory(MANAGER_USERNAME, manager_title)
-            # XXX depends on the person created by the facotory having
-            # nameinfo
-            manager.nameinfo.fisrt_name = self.system_name
-            manager.nameinfo.last_name = "Manager"
             app['persons'][MANAGER_USERNAME] = manager
             IDependable(manager).addDependent('')
         manager = app['persons'][MANAGER_USERNAME]

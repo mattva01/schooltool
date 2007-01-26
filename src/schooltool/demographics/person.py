@@ -16,15 +16,17 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-
 from pytz import utc
 from datetime import datetime
 from persistent import Persistent
+
 from zope.interface import implements
 from zope import schema
 from zope.location import locate, ILocation
-from schooltool.person.person import Person as PersonBase
+
 import interfaces
+from schooltool.person.person import Person as PersonBase
+
 
 class Person(PersonBase):
     """Special person that adds demographics information.
