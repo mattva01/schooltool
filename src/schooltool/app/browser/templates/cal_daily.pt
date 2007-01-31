@@ -57,9 +57,9 @@
   <tal:each_row repeat="hour hours">
     <tal:each_column repeat="event hour/cols">
       <tal:if_have_an_event condition="event">
-        <div class="event"
-             onmouseover="this.style.zIndex=9; this.style.overflow='visible'; this.style.display='block';"
-             onmouseout="this.style.zIndex=1; this.style.overflow='hidden'; this.style.display='block';"
+        <div class="event contracted"
+             onmouseover="this.className='event expanded'"
+             onmouseout="this.className='event contracted'"
              tal:define="num repeat/event/index;
                          unit python:compress and '%' or 'em';
                          indent python:compress and 15 or 20.5;
@@ -73,8 +73,9 @@
                              top: ${top}em">
           <metal:block use-macro="template/macros/event-title-bar" />
           <metal:block use-macro="template/macros/event-delete-button" />
-
-          <tal:block replace="structure provider:schooltool.CalendarEvent" />
+          <div class="event-body">
+            <tal:block replace="structure provider:schooltool.CalendarEvent" />
+          </div>
         </div>
       </tal:if_have_an_event>
     </tal:each_column>
