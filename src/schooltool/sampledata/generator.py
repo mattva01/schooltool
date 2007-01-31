@@ -33,7 +33,10 @@ interface schooltool.sampledata.interfaces.ISampleDataGeneratorPlugin.
 $Id$
 """
 import time
+
+import transaction
 from zope.app import zapi
+
 from schooltool.sampledata.interfaces import ISampleDataPlugin
 from schooltool.sampledata.interfaces import CyclicDependencyError
 
@@ -87,6 +90,10 @@ def generate(app, seed=None, dry_run=False, pluginNames=[]):
             start = time.clock()
             if not dry_run:
                 plugin.generate(app, seed)
+                # Some plugins can generate a lot of data, so we are
+                # using savepoints to save on memory consuption.
+                transaction.savepoint(optimistic=True)
+
             times[name] = time.clock() - start
             status[name] = closed
 

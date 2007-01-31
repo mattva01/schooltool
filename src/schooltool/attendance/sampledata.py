@@ -160,9 +160,10 @@ class SampleAttendancePlugin(object):
                                 ar.makeTardy(meeting.dtstart + datetime.timedelta(minutes=15))
                             self.applyExplanation(ar, explanation)
 
-            # The transaction commit keeps the memory usage low, but at a cost
-            # of running time and disk space.
-            transaction.commit()
+            # Use a savepoint to keep memory usage low, yet still be
+            # able to rollback whole sample data generation if
+            # something fails.
+            transaction.savepoint(optimistic=True)
 
     def generate(self, app, seed=None):
         # You cannot store proxied objects in the ZODB.  It is safe to
