@@ -54,4 +54,9 @@
      name="lyceum_scheduling"
      />
 
+  <adapter
+      factory=".person.LyceumPersonCalendarCrowd"
+      provides="schooltool.app.interfaces.ICalendarParentCrowd"
+      name="schooltool.view" />
+
 </configure>
