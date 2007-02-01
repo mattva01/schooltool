@@ -11,7 +11,6 @@
   <include package="zope.testbrowser.ftests" file="ftesting.zcml" />
 
   <include package="schooltool.timetable" file="timetable-ftesting.zcml" />
-  <include package="schooltool.app.browser.ftests" file="ftesting.zcml" />
   <include package="schooltool.app.browser.ftests" file="brokenview-ftesting.zcml" />
 
 </configure>

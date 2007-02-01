@@ -6,4 +6,15 @@
 
   <utility factory=".person.PersonFactoryUtility" />
 
+  <configure package="schooltool.skin">
+
+    <browser:navigationViewlet
+      name="open-in-ical"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      manager="schooltool.skin.IActionMenuManager"
+      class="schooltool.skin.skin.DisableNavigationViewlet"
+      permission="schooltool.view" />
+
+  </configure>
+
 </configure>
