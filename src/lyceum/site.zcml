@@ -1,0 +1,16 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           i18n_domain="zope">
+
+  <include package="schooltool.help" file="meta.zcml" />
+
+  <include package="schooltool" />
+
+  <include package="schooltool.course" />
+  <include package="schooltool.term" />
+  <include package="schooltool.timetable" />
+  <include package="schooltool.demographics" />
+  <include package="lyceum" />
+
+  <includeOverrides package="lyceum" file="overrides.zcml" />
+
+</configure>
