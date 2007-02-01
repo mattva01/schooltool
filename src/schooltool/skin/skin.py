@@ -22,7 +22,7 @@ SchoolTool skin.
 $Id$
 """
 
-from zope.component import adapts, getAdapter
+from zope.component import getAdapter
 from zope.interface import Interface, implements
 from zope.schema import Object
 from zope.i18n.interfaces import IUserPreferredLanguages
@@ -160,6 +160,10 @@ class ActionMenuViewletManager(OrderedViewletManager):
             self.context = self.context.__parent__
         self.orderedViewletManagerUpdate()
 
+    def filter(self, viewlets):
+        return [(name, viewlet) for (name, viewlet) in viewlets
+                if not IDisableViewlet.providedBy(viewlet)]
+
     def orderedViewletManagerUpdate(self):
         OrderedViewletManager.update(self)
 
@@ -208,8 +212,16 @@ class INavigationMenuItemDirective(IViewletDirective):
 
     title = MessageID(
         title=u"The title for the menu item",
-        required=True
+        required=False
         )
 
 # Arbitrary keys and values are allowed to be passed to the viewlet.
 INavigationMenuItemDirective.setTaggedValue('keyword_arguments', True)
+
+
+class IDisableViewlet(Interface):
+    pass
+
+
+class DisableNavigationViewlet(BrowserView):
+    implements(IDisableViewlet)
