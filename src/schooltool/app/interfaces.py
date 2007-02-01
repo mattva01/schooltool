@@ -33,7 +33,6 @@ from zope.app.security.interfaces import IAuthentication, ILogout
 from schooltool import SchoolToolMessage as _
 from schooltool.calendar.interfaces import IEditCalendar, ICalendarEvent
 from schooltool.person.interfaces import ICalendarDisplayPreferences
-from schooltool.securitypolicy.interfaces import ICrowd
 
 
 # Dirty hacks that provide sensible i10n for widget error messages.
@@ -175,11 +174,14 @@ class ISchoolToolAuthentication(IAuthentication, ILogout):
         """Forget the username and password stored in a session"""
 
 
-class ICalendarParentCrowd(ICrowd):
+class ICalendarParentCrowd(zope.interface.Interface):
     """A crowd object that is used on a calendar's parent.
 
     This is just a marker interface.
     """
+
+    def contains(principal):
+        """Return True if principal is in the crowd."""
 
 
 class IAsset(zope.interface.Interface):
