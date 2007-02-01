@@ -22,7 +22,7 @@
   <browser:page
      for="schooltool.person.interfaces.IPersonContainer"
      name="search.html"
-     class=".table.SearchTable"
+     class=".browser.table.SearchTable"
      permission="schooltool.view"
      menu="schooltool_actions"
      title="Search"
