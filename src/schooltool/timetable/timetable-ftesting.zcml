@@ -7,8 +7,19 @@
       name="schedule.html"
       for="schooltool.person.interfaces.IPerson"
       class="schooltool.timetable.browser.PersonTimetableSetupView"
+      permission="schooltool.view" />
+
+  <configure package="schooltool.skin">
+    <navigationViewlet
+      name="schedule-student"
+      for="schooltool.person.interfaces.IPerson"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
       permission="schooltool.view"
-      menu="schooltool_actions"
-      title="Schedule" />
+      link="schedule.html"
+      title="Schedule"
+      order="10"
+      />
+  </configure>
 
 </configure>
