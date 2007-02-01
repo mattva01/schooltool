@@ -12,7 +12,4 @@
   <!-- Provide local overrides of standard configurations-->
   <includeOverrides files="package-includes/*-overrides.zcml" />
 
-  <include package="lyceum" file="configure.zcml" />
-  <includeOverrides package="lyceum" file="overrides.zcml" />
-
 </configure>
