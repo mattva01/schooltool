@@ -88,7 +88,7 @@ run: build
 	PYTHONPATH=$(PYTHONPATH) $(PYTHON) schooltool-server.py
 
 .PHONY: lyceum_run
-run_lyceum: build
+lyceum_run: build
 	PYTHONPATH=$(PYTHONPATH) $(PYTHON) schooltool-server.py -c src/lyceum/schooltool.conf
 
 .PHONY: coverage
