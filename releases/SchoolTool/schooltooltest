@@ -35,19 +35,11 @@ else:
 sys.path.insert(0, lib)
 site.addsitedir(lib)
 
-ftesting = os.path.join(here, "schooltool-skel", "etc", "ftesting.zcml")
+from zope.testing import testrunner
 
-from schooltool.testing import test
-
-# XXX - this monkey patch is a temporary solution until the zope test runner
-# can cope with different ftesting.zcml's for different levels.
-test.Options.basedir = lib
+defaults = ['--tests-pattern', '^f?tests$', '--test-path', lib]
+defaults += ['-m', 'schooltool']
 
 if __name__ == '__main__':
-    args = sys.argv[:1]
-    # We only want to run schooltool tests; but allow it to be overridden
-    if '--search-in' not in sys.argv and '-s' not in sys.argv:
-        args += ["--search-in", os.path.join(lib, "schooltool")]
-    args += sys.argv[1:]
-    exitcode = test.main(args)
+    exitcode = testrunner.run(defaults)
     sys.exit(exitcode)
