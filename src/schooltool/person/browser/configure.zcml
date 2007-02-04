@@ -177,6 +177,16 @@
      menu="schooltool_actions" title="New Person" />
 
   <page
+     name="edit.html"
+     for="..interfaces.IPerson"
+     class=".person.PersonEditView"
+     template="person_edit.pt"
+     permission="schooltool.edit"
+     menu="schooltool_actions"
+     title="Edit"
+     />
+
+  <page
       name="index.html"
       for="..interfaces.IPerson"
       class=".person.PersonView"
