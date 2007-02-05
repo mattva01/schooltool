@@ -470,11 +470,10 @@ class StandaloneServer(object):
         # set the site so that catalog utilities and person factory
         # utilities and subscribers were available
         setSite(app)
-        _('%s Manager') # mark for l10n
-        manager_title = catalog.ugettext('%s Manager') % self.system_name
         if MANAGER_USERNAME not in app['persons']:
             factory = getUtility(IPersonFactory)
-            manager = factory(MANAGER_USERNAME, manager_title)
+            manager = factory.createManagerUser(MANAGER_USERNAME,
+                                                self.system_name)
             app['persons'][MANAGER_USERNAME] = manager
             IDependable(manager).addDependent('')
         manager = app['persons'][MANAGER_USERNAME]

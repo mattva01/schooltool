@@ -16,19 +16,21 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
+from zc.table.interfaces import ISortableColumn
+from zope.interface import directlyProvides
+
+from schooltool.skin.table import LocaleAwareGetterColumn
 from schooltool.person.person import Person
+
 
 class PersonFactoryUtility(object):
 
     def columns(self):
-        from schooltool.skin.table import LocaleAwareGetterColumn
         title = LocaleAwareGetterColumn(
             name='title',
             title=u'Full Name',
             getter=lambda i, f: i.title,
             subsort=True)
-        from zc.table.interfaces import ISortableColumn
-        from zope.interface import directlyProvides
         directlyProvides(title, ISortableColumn)
         return [title]
 
@@ -37,3 +39,7 @@ class PersonFactoryUtility(object):
 
     def __call__(self, *args, **kw):
         return Person(*args, **kw)
+
+    def createManagerUser(self, username, system_name):
+        result = self(username, "%s %s" % (system_name, "Manager"))
+        return result

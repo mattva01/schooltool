@@ -111,3 +111,9 @@ class PersonFactoryUtility(object):
         result.nameinfo.first_name = result.title
         result.nameinfo.last_name = u'Unknown last name'
         return result
+
+    def createManagerUser(self, username, system_name):
+        result = self(username, "%s %s" % (system_name, "Manager"))
+        result.nameinfo.first_name = system_name
+        result.nameinfo.last_name = "Manager"
+        return result
