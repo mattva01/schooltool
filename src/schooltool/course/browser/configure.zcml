@@ -61,7 +61,7 @@
       class=".course.CourseView"
       template="templates/course.pt"
       permission="zope.View"
-      menu="zmi_views"
+      menu="schooltool_actions"
       title="View"
       layer="schooltool.skin.ISchoolToolLayer"
       />
@@ -72,7 +72,7 @@
       class=".course.CourseContainerView"
       template="templates/course_container.pt"
       permission="zope.View"
-      menu="zmi_views"
+      menu="schooltool_actions"
       title="View"
       />
 

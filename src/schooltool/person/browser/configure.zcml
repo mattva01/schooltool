@@ -192,7 +192,7 @@
       class=".person.PersonView"
       template="person.pt"
       permission="zope.View"
-      menu="zmi_views"
+      menu="schooltool_actions"
       title="View"
       />
 
