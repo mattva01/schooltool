@@ -33,9 +33,11 @@ lit_map = {0x0020: u'-',
            0x0173: u'u',
            0x017e: u'z'}
 
-tvarkarastis_template = os.path.join(os.path.dirname(__file__), "tvarkarastis%s.csv")
+tvarkarastis_template = os.path.join(os.path.dirname(__file__), "csv",
+                                     "tvarkarastis%s.csv")
 tvarkarastis_csvs = map(load_csv, [tvarkarastis_template % n for n in range(1,6)])
-klases_csv = load_csv(os.path.join(os.path.dirname(__file__), "klases.csv"))[2:]
+klases_csv = load_csv(os.path.join(os.path.dirname(__file__), "csv",
+                                   "klases.csv"))[2:]
 
 merged_tvarkarastis_csvs = []
 for lst in tvarkarastis_csvs:
