@@ -93,8 +93,8 @@ def doctest_CSVStudent():
     A person object has been created and added to the container:
 
         >>> appStub
-        {'persons': {u'-acee-isuuz': <schooltool.demographics.person.Person object at ...>},
-         'groups': {'1a': [<schooltool.demographics.person.Person object at ...>]}}
+        {'persons': {u'-acee-isuuz': <lyceum.person.LyceumPerson object at ...>},
+         'groups': {'1a': [<lyceum.person.LyceumPerson object at ...>]}}
 
         >>> person = appStub['persons'][u'-acee-isuuz']
         >>> person.title
@@ -102,12 +102,12 @@ def doctest_CSVStudent():
         >>> person.username
         u'-acee-isuuz'
 
-        >>> person.nameinfo.first_name
+        >>> person.first_name
         u' \u0105\u010d\u0117\u0119'
-        >>> person.nameinfo.last_name
+        >>> person.last_name
         u'\u012e\u0161\u016b\u0173\u017e'
 
-        >>> person.schooldata.grade_section is appStub["groups"]["1a"]
+        >>> person.gradeclass is appStub["groups"]["1a"]
         True
 
     Timetables are not show by default:

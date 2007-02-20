@@ -1,28 +1,10 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/zope"
-           xmlns:browser="http://namespaces.zope.org/browser"
            xmlns:i18n="http://namespaces.zope.org/i18n"
            i18n_domain="schooltool">
 
   <utility factory=".person.PersonFactoryUtility" />
 
-  <configure package="schooltool.skin">
-
-    <browser:navigationViewlet
-      name="open-in-ical"
-      for="schooltool.app.interfaces.ISchoolToolCalendar"
-      manager="schooltool.skin.IActionMenuManager"
-      class="schooltool.skin.skin.DisableNavigationViewlet"
-      permission="schooltool.view" />
-
-    <browser:navigationViewlet
-      name="schedule-student"
-      for="schooltool.person.interfaces.IPerson"
-      manager="schooltool.skin.IActionMenuManager"
-      class="schooltool.skin.skin.DisableNavigationViewlet"
-      permission="schooltool.view"
-      />
-
-  </configure>
+  <include package="lyceum.browser" file="overrides.zcml" />
 
 </configure>

@@ -1,0 +1,41 @@
+<metal:block use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+
+  <metal:block fill-slot="title">
+    <title i18n:translate="">Person info: <span tal:replace="context/title"
+        i18n:name="title"/></title>
+  </metal:block>
+
+  <metal:block fill-slot="content-header">
+
+    <tal:if condition="context/photo">
+      <img src="photo" class="person-photo" alt="photo" i18n:attributes="alt"
+           tal:attributes="src string:${context/@@absolute_url}/photo" />
+    </tal:if>
+    <h1 tal:content="context/title" />
+    <strong i18n:translate="">Username:</strong>
+    <span tal:replace="context/zope:name">not_doe</span>
+    <br />
+    <a class="modify" href=""
+       title="Change this person's name, picture, or password"
+       tal:attributes="href string:${context/@@absolute_url}/@@edit.html"
+       i18n:attributes="title"
+       i18n:translate="">
+       edit name
+    </a>
+
+  </metal:block>
+
+  <metal:block metal:fill-slot="body">
+
+    <tal:block replace="structure context/@@notes|nothing"/>
+
+    <div class="person-info">
+      <div class="info-block">
+        <h5 i18n:translate="">Details</h5>
+      </div>
+      <tal:block tal:replace="structure provider:schooltool.person.Info"/>
+    </div>
+
+  </metal:block>
+
+</metal:block>

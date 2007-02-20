@@ -17,8 +17,11 @@
         interface="schooltool.person.interfaces.IWritePerson"
         set_schema="schooltool.person.interfaces.IPerson" />
     <require
+        permission="schooltool.edit"
+        set_schema="lyceum.person.ILyceumPerson" />
+    <require
         permission="schooltool.view"
-        attributes="nameinfo demographics schooldata parent1 parent2 emergency1 emergency2 emergency3 modified" />
+        interface="lyceum.person.ILyceumPerson" />
     <require
         permission="schooltool.edit"
         set_attributes="modified" />
@@ -58,5 +61,17 @@
       factory=".person.LyceumPersonCalendarCrowd"
       provides="schooltool.app.interfaces.ICalendarParentCrowd"
       name="schooltool.view" />
+
+  <utility
+     factory=".vocabularies.gradeClassVocabularyFactory"
+     provides="zope.schema.interfaces.IVocabularyFactory"
+     name="lyceum.grade_class_source" />
+
+  <utility
+     factory=".vocabularies.advisorVocabularyFactory"
+     provides="zope.schema.interfaces.IVocabularyFactory"
+     name="lyceum.advisor_source" />
+
+  <include package="lyceum.browser" />
 
 </configure>

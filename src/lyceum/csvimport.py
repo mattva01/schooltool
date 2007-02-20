@@ -6,12 +6,13 @@ from zope.exceptions.interfaces import UserError
 from zope.app.container.interfaces import INameChooser
 
 from schooltool.timetable.interfaces import ITimetables
-from schooltool.demographics.person import Person
 from schooltool.group.group import Group
 from schooltool.course.section import Section
 from schooltool.course.course import Course
 from schooltool.resource.resource import Resource
 from schooltool.timetable import TimetableActivity
+
+from lyceum.person import LyceumPerson
 
 
 def encode_row(row):
@@ -63,12 +64,10 @@ class CSVStudent(object):
         except UserError:
             user_name = INameChooser(app['persons']).chooseName(self.user_name, None)
 
-        person = Person(user_name, self.title)
-        person.nameinfo.first_name = self.name
-        person.nameinfo.last_name = self.surname
+        person = LyceumPerson(user_name, self.name, self.surname)
         app['persons'][user_name] = person
         group = removeSecurityProxy(app['groups'][self.group_id])
-        person.schooldata.grade_section = group
+        person.gradeclass = group
 
         from zope.annotation.interfaces import IAnnotations
         annotations = IAnnotations(person)

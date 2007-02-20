@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           i18n_domain="schooltool">
+
+  <zope:configure package="schooltool.skin">
+
+    <navigationViewlet
+      name="open-in-ical"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      manager="schooltool.skin.IActionMenuManager"
+      class="schooltool.skin.skin.DisableNavigationViewlet"
+      permission="schooltool.view" />
+
+    <navigationViewlet
+      name="schedule-student"
+      for="schooltool.person.interfaces.IPerson"
+      manager="schooltool.skin.IActionMenuManager"
+      class="schooltool.skin.skin.DisableNavigationViewlet"
+      permission="schooltool.view"
+      />
+
+    <navigationViewlet
+      name="ttschemas"
+      for="*"
+      manager="schooltool.skin.INavigationManager"
+      class="schooltool.skin.skin.DisableNavigationViewlet"
+      permission="schooltool.view"
+      link="ttschemas"
+      />
+
+  </zope:configure>
+
+  <page
+     name="add.html"
+     for="schooltool.person.interfaces.IPersonContainer"
+     class=".person.PersonAddView"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="New Person" />
+
+</configure>

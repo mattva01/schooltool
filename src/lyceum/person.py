@@ -25,7 +25,6 @@ $Id$
 from zope.interface import implements
 from zope.component import adapts
 from zope.interface import directlyProvides
-from zope.interface import Interface
 
 from zc.table.interfaces import ISortableColumn
 
@@ -34,15 +33,30 @@ from schooltool.person.interfaces import IPersonFactory
 from schooltool.course.section import PersonInstructorsCrowd
 from schooltool.person.person import PersonCalendarCrowd
 from schooltool.skin.table import LocaleAwareGetterColumn
+
+from lyceum.interfaces import ILyceumPerson
 from lyceum import LyceumMessage as _
-
-
-class ILyceumPerson(Interface):
-    """Marker interface for Lyceum specific person."""
 
 
 class LyceumPerson(Person):
     implements(ILyceumPerson)
+
+    gender = None
+    gradeclass = None
+    birth_date = None
+    advisor = None
+
+    def __init__(self, username, first_name, last_name,
+                 email=None, phone=None):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.username = username
+        self.email = email
+        self.phone = phone
+
+    @property
+    def title(self):
+        return "%s %s" % (self.last_name, self.first_name)
 
 
 class PersonFactoryUtility(object):
@@ -50,17 +64,26 @@ class PersonFactoryUtility(object):
     implements(IPersonFactory)
 
     def columns(self):
-        title = LocaleAwareGetterColumn(
-            name='title',
-            title=_(u'Full Name'),
-            getter=lambda i, f: i.title,
+        first_name = LocaleAwareGetterColumn(
+            name='first_name',
+            title=_(u'First Name'),
+            getter=lambda i, f: i.first_name,
             subsort=True)
-        directlyProvides(title, ISortableColumn)
+        directlyProvides(first_name, ISortableColumn)
+        last_name = LocaleAwareGetterColumn(
+            name='last_name',
+            title=_(u'Last Name'),
+            getter=lambda i, f: i.last_name,
+            subsort=True)
+        directlyProvides(last_name, ISortableColumn)
 
-        return [title]
+        return [first_name, last_name]
+
+    def createManagerUser(self, username, system_name):
+        return self(username, system_name, "Administratorius")
 
     def sortOn(self):
-        return (("title", False),)
+        return (("last_name", False),)
 
     def groupBy(self):
         return (("grade", False),)
@@ -71,7 +94,10 @@ class PersonFactoryUtility(object):
 
 
 class LyceumPersonCalendarCrowd(PersonCalendarCrowd):
-    """Crowd that allows instructor of a person access persons calendar"""
+    """Crowd that allows instructor of a person access persons calendar.
+
+    XXX write functional test.
+    """
     adapts(ILyceumPerson)
 
     def contains(self, principal):
