@@ -1,0 +1,23 @@
+<metal:block use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+
+  <metal:block fill-slot="title">
+    <title i18n:translate="">Import school data from CSV<span tal:replace="context/title"
+        i18n:name="title"/></title>
+  </metal:block>
+
+  <metal:block fill-slot="content-header">
+
+    <p>Populate an empty SchoolTool instance with data from CSV.</p>
+  </metal:block>
+
+  <metal:block metal:fill-slot="body">
+    <form tal:attributes="action request/URL" method="POST">
+      <div class="controls">
+        <input type="submit" id="IMPORT" name="IMPORT" value="Import" class="button-ok"
+               title="Shortcut: Alt-I" accesskey="I"
+               i18n:attributes="value submit-button; accesskey" />
+      </div>
+    </form>
+  </metal:block>
+
+</metal:block>

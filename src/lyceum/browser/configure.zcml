@@ -21,6 +21,27 @@
       title="Edit"
       />
 
+  <page
+      name="csv_import.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class=".csvimport.LyceumCSVImportView"
+      permission="schooltool.edit"
+      />
+
+  <zope:configure package="schooltool.skin">
+    <navigationViewlet
+        name="lyceum_cvs_import"
+        for="*"
+        manager="schooltool.skin.INavigationManager"
+        template="templates/navigationViewlet.pt"
+        class="schooltool.skin.NavigationViewlet"
+        permission="schooltool.edit"
+        link="csv_import.html"
+        title="CSV Import"
+        order="100"
+        />
+  </zope:configure>
+
   <!-- list of persons -->
   <zope:adapter
       for="lyceum.interfaces.ILyceumPersonSource
