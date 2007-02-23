@@ -25,10 +25,9 @@ from zope.publisher.browser import BrowserView
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from lyceum.csvimport import LyceumGroupsAndStudents
-from lyceum.csvimport import LyceumTeachers
-from lyceum.csvimport import LyceumCourses
-from lyceum.csvimport import LyceumResources
-from lyceum.csvimport import LyceumScheduling
+from lyceum.csvimport import (LyceumTeachers, LyceumSchoolTimetables,
+                              LyceumCourses, LyceumResources, LyceumScheduling,
+                              LyceumTerms)
 
 
 class LyceumCSVImportView(BrowserView):
@@ -37,11 +36,14 @@ class LyceumCSVImportView(BrowserView):
 
     def __call__(self):
         if 'IMPORT' in self.request:
-            generators = [LyceumGroupsAndStudents(),
+            generators = [LyceumSchoolTimetables(),
+                          LyceumTerms(),
+                          LyceumGroupsAndStudents(),
                           LyceumTeachers(),
                           LyceumCourses(),
                           LyceumResources(),
-                          LyceumScheduling()]
+                          LyceumScheduling(),
+                          ]
             for generator in generators:
                 generator.generate(self.context)
         return self.template()

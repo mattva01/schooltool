@@ -544,6 +544,159 @@ def doctest_LyceumScheduling_generate():
     """
 
 
+def doctest_LyceumSchoolTimetables():
+    """Tests for Lyceum SchoolTimetable generation.
+
+    First we will need an application:
+
+        >>> class AppStub(dict):
+        ...     def __init__(self):
+        ...         self['ttschemas'] = {}
+        >>> app = AppStub()
+
+    We create our generator, and generate the data:
+
+        >>> from lyceum.csvimport import LyceumSchoolTimetables
+        >>> generator = LyceumSchoolTimetables()
+        >>> generator.generate(app)
+
+    We get two SchoolTimetables:
+
+        >>> sorted(app['ttschemas'].keys())
+        ['i-ii-kursui', 'iii-iv-kursui']
+
+        >>> timetable = app['ttschemas']['i-ii-kursui']
+
+    With tiles, day ids and period names set:
+
+        >>> timetable.title
+        'I-II kursui'
+        >>> timetable.day_ids
+        ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+        >>> timetable.days['Monday'].periods
+        ('1 pamoka', '2 pamoka', '3 pamoka', '4 pamoka', '5 pamoka',
+         '6 pamoka', '7 pamoka', '8 pamoka', '9 pamoka', '10 pamoka')
+
+    The model is weekly, with all the days having the same DayTemplate:
+
+        >>> model = timetable.model
+        >>> model.dayTemplates
+        {None: <schooltool.timetable.SchooldayTemplate object at ...}
+
+        >>> for day in model.dayTemplates[None]:
+        ...     print day.tstart, day.duration
+        08:00:00 0:45:00
+        08:55:00 0:45:00
+        09:50:00 0:45:00
+        11:05:00 0:45:00
+        12:00:00 0:45:00
+        13:05:00 0:45:00
+        14:00:00 0:45:00
+        14:55:00 0:45:00
+        15:50:00 0:45:00
+        16:40:00 0:45:00
+
+    The timezone is UTC:
+
+        >>> timetable.timezone
+        'UTC'
+
+    """
+
+
+def doctest_LyceumTerms_addTerm():
+    """Tests for LyceumTerm.addTerm
+
+    AddTerm adds a new term to the term container in the application:
+
+        >>> class AppStub(dict):
+        ...     def __init__(self):
+        ...         self['terms'] = {}
+        >>> app = AppStub()
+
+        >>> from schooltool.common import DateRange
+        >>> from lyceum.csvimport import LyceumTerms
+        >>> from datetime import date
+
+    Ranges of dates that are holidays for students are stored in the
+    holidays attrribute of the generator:
+
+        >>> generator = LyceumTerms()
+        >>> generator.holidays = [DateRange(date(2003, 1, 2), date(2003, 1, 2))]
+
+    We must pass it the start and end dates, title and an id:
+
+        >>> first = date(2003, 1, 1)
+        >>> last = date(2003, 1, 5)
+        >>> generator.addTerm(app, "Term title", "term-id", first, last)
+
+    We get a term added to the app:
+
+        >>> sorted(app['terms'].keys())
+        ['term-id']
+
+    With proper first and last date:
+
+        >>> term = app['terms']['term-id']
+        >>> term.first
+        datetime.date(2003, 1, 1)
+        >>> term.last
+        datetime.date(2003, 1, 5)
+
+    Saturdays, Sundays and dates in holiday ranges are set to be
+    holidays:
+
+        >>> for date in term:
+        ...     if term.isSchoolday(date):
+        ...         print "Schoolday, %s" % date
+        ...     else:
+        ...         print "Holiday, %s" % date
+        Schoolday, 2003-01-01
+        Holiday, 2003-01-02
+        Schoolday, 2003-01-03
+        Holiday, 2003-01-04
+        Holiday, 2003-01-05
+
+    """
+
+
+def doctest_LyceumTerms_generate():
+    """Tests for Lyceum Term generation.
+
+    LyceumTerms generator creates default terms for lyceum schooltool
+    instance:
+
+        >>> class AppStub(dict):
+        ...     def __init__(self):
+        ...         self['terms'] = {}
+        >>> app = AppStub()
+
+        >>> from lyceum.csvimport import LyceumTerms
+        >>> generator = LyceumTerms()
+        >>> generator.generate(app)
+
+    We get two terms created by default:
+
+        >>> sorted(app['terms'].keys())
+        ['2006-ruduo', '2007-pavasaris']
+
+    With appropriate start and end dates:
+
+        >>> term = app['terms']['2006-ruduo']
+        >>> term.first
+        datetime.date(2006, 9, 1)
+        >>> term.last
+        datetime.date(2007, 1, 26)
+
+        >>> term = app['terms']['2007-pavasaris']
+        >>> term.first
+        datetime.date(2007, 1, 29)
+        >>> term.last
+        datetime.date(2007, 6, 15)
+
+    """
+
+
 def setUp(test):
     setup.placelessSetUp()
 

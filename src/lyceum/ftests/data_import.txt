@@ -1,0 +1,175 @@
+Functional doctest for SchoolTool CSV Import
+============================================
+
+Let's log in with the manager account:
+
+    >>> from zope.testbrowser.testing import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/')
+
+Go to the CSV import view and import the data:
+
+    >>> manager.getLink('CSV Import').click()
+    >>> manager.getControl('Import').click()
+
+We should have a couple of terms now:
+
+    >>> manager.getLink('Terms').click()
+    >>> '2006 Ruduo' in manager.contents
+    True
+    >>> '2007 Pavasaris' in manager.contents
+    True
+
+Lets examine a term to see if it was created properly:
+
+    >>> manager.getLink('2006 Ruduo').click()
+    >>> manager.getLink('Edit').click()
+    >>> manager.getControl('Start date').value
+    '2006-09-01'
+    >>> manager.getControl('End date').value
+    '2007-01-26'
+
+We should have two School Timetables as well:
+
+    >>> manager.getLink('School Timetables').click()
+    >>> print manager.contents
+    <BLANKLINE>
+    ...
+            <select name="ttschema" size="1" id="ttschema">
+              <option value="">Not Selected</option>
+              <option selected="selected" value="i-ii-kursui">I-II kursui</option>
+              <option value="iii-iv-kursui">III-IV kursui</option>
+            </select>
+    ...
+
+We have some students and teachers:
+
+    >>> manager.getLink('Persons').click()
+    >>> print manager.contents
+    <BLANKLINE>
+    ...
+    <select name="SEARCH_GROUP">
+      <option>All groups</option>
+      <option value="1a">1a (1)</option>
+      <option value="1b">1b (1)</option>
+      <option value="1c">1c (1)</option>
+      <option value="1d">1d (1)</option>
+      <option value="2a">2a (1)</option>
+      <option value="2b">2b (1)</option>
+      <option value="2c">2c (1)</option>
+      <option value="2d">2d (1)</option>
+      <option value="manager">Site Managers (1)</option>
+      <option value="teachers">Teachers (3)</option>
+    </select>
+    ...
+
+Courses and sections as well:
+
+    >>> manager.getLink('Courses').click()
+    >>> print manager.contents
+    <BLANKLINE>
+    ...
+    <div class="course">
+        <input type="checkbox" name="delete.history-1" />
+        <a href="http://localhost/courses/history-1">History 1</a>
+        <ul class="section-list">
+          <li>
+            <a href="http://localhost/sections/history-1%201b%20bduh"
+               title="History (1b)">Duh B. -- History 1</a>
+            <span class="hint">
+              (1 <span>Students</span>)
+            </span>
+          </li>
+    ...
+        </ul>
+      </div>
+      <div class="course">
+        <input type="checkbox" name="delete.science-2" />
+        <a href="http://localhost/courses/science-2">Science 2</a>
+        <ul class="section-list">
+          <li>
+            <a href="http://localhost/sections/science-2%202a%20rmah"
+               title="Science (2a)">Mah R. -- Science 2</a>
+            <span class="hint">
+              (1 <span>Students</span>)
+            </span>
+          </li>
+    ...
+        </ul>
+      </div>
+    ...
+
+Teachers have schedules:
+
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('B.').click()
+    >>> manager.getLink('View Calendar').click()
+    >>> manager.open(manager.url + '/2007-02-21')
+    >>> for link in analyze.queryHTML('//div[@class="event contracted"]/h6/a', manager.contents):
+    ...     print link
+    <a href="http://localhost/sections/history-1%201a%20bduh/calendar/..." title="History (1a)">
+          History (1a)
+          <span class="start-end">
+            (<span>08:00</span> - <span>08:45</span>)
+          </span>
+    </a>
+    <a href="http://localhost/sections/history-1%201a%20bduh/calendar/..." title="History (1a)">
+          History (1a)
+          <span class="start-end">
+            (<span>08:55</span> - <span>09:40</span>)
+          </span>
+    </a>
+    <a href="http://localhost/sections/history-1%201b%20bduh/calendar/..." title="History (1b)">
+          History (1b)
+          <span class="start-end">
+            (<span>09:50</span> - <span>10:35</span>)
+          </span>
+    </a>
+    <a href="http://localhost/sections/history-1%201c%20bduh/calendar/..." title="History (1c)">
+          History (1c)
+          <span class="start-end">
+            (<span>11:05</span> - <span>11:50</span>)
+          </span>
+    </a>
+    <a href="http://localhost/sections/history-1%201d%20bduh/calendar/..." title="History (1d)">
+          History (1d)
+          <span class="start-end">
+            (<span>12:00</span> - <span>12:45</span>)
+          </span>
+    </a>
+    <a href="http://localhost/sections/history-1%201d%20bduh/calendar/..." title="History (1d)">
+          History (1d)
+          <span class="start-end">
+            (<span>13:05</span> - <span>13:50</span>)
+          </span>
+    </a>
+    <a href="http://localhost/sections/history-1%201c%20bduh/calendar/..." title="History (1c)">
+          History (1c)
+          <span class="start-end">
+            (<span>14:00</span> - <span>14:45</span>)
+          </span>
+    </a>
+
+Students are too:
+
+    >>> manager.getLink('persons').click()
+    >>> manager.getLink('Zomie').click()
+    >>> manager.getLink('View Calendar').click()
+    >>> manager.open(manager.url + '/2007-02-21')
+    >>> for link in analyze.queryHTML('//div[@class="event contracted"]/h6/a', manager.contents):
+    ...     print link
+    <a href="http://localhost/sections/science-2%202a%20rmah/calendar/..." title="Science (2a)">
+          Science (2a)
+          <span class="start-end">
+            (<span>12:00</span>
+              - <span>12:45</span>)
+          </span>
+        </a>
+    <a href="http://localhost/sections/science-2%202a%20rmah/calendar/..." title="Science (2a)">
+          Science (2a)
+          <span class="start-end">
+            (<span>13:05</span> - <span>13:50</span>)
+          </span>
+    </a>

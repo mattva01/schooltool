@@ -1,16 +1,24 @@
 import csv
 import os
+from datetime import time, timedelta, date
 
 from zope.security.proxy import removeSecurityProxy
 from zope.exceptions.interfaces import UserError
 from zope.app.container.interfaces import INameChooser
 
-from schooltool.timetable.interfaces import ITimetables
-from schooltool.group.group import Group
-from schooltool.course.section import Section
+from schooltool.common import DateRange
 from schooltool.course.course import Course
+from schooltool.course.section import Section
+from schooltool.group.group import Group
 from schooltool.resource.resource import Resource
+from schooltool.term.term import Term
+from schooltool.timetable import SchooldaySlot
+from schooltool.timetable import SchooldayTemplate
 from schooltool.timetable import TimetableActivity
+from schooltool.timetable.interfaces import ITimetables
+from schooltool.timetable.model import WeeklyTimetableModel
+from schooltool.timetable.schema import TimetableSchema
+from schooltool.timetable.schema import TimetableSchemaDay
 
 from lyceum.person import LyceumPerson
 
@@ -307,9 +315,9 @@ class LyceumScheduling(object):
             current_room = None
             grp = parse_groups(groups)[0]
             if grp[0] in '12':
-                ttschema = 'iii-kursui'
+                ttschema = 'i-ii-kursui'
             else:
-                ttschema = 'iiiiv-kursui'
+                ttschema = 'iii-iv-kursui'
             for day, period, room in sorted(meetings, key=lambda meeting: meeting[2].id):
                 sid = (course_id + ' ' + groups + ' ' + teacher.user_name).strip()
                 meeting = (day, period, ttschema, room.id)
@@ -328,3 +336,67 @@ class LyceumScheduling(object):
 
         for sid, meetings in unscheduled_sections.items():
             self.schedule_section(app, sid, meetings)
+
+
+class LyceumSchoolTimetables(object):
+
+    def generateSchoolDayTemplate(self, lesson_starts, period_length=45):
+        template = SchooldayTemplate()
+        for lesson_time in lesson_starts:
+            template.add(SchooldaySlot(time(*lesson_time),
+                                       timedelta(minutes=period_length)))
+        return template
+
+    def generateSchoolTimetable(self, app, title, id, lesson_starts):
+        periods = ['%d pamoka' % n for n in range(1, 11)]
+        template = self.generateSchoolDayTemplate(lesson_starts)
+        model = WeeklyTimetableModel(day_templates={None: template})
+        ttschema = TimetableSchema(days, title=title, model=model)
+        for day in days:
+            ttschema[day] = TimetableSchemaDay(tuple(periods))
+        app['ttschemas'][id] = ttschema
+
+    def generate(self, app):
+
+        lesson_starts = [(8, 0), (8, 55), (9, 50),
+                         (11, 5), (12, 0), (13, 5),
+                         (14, 0), (14, 55), (15, 50), (16, 40)]
+
+        self.generateSchoolTimetable(app, "I-II kursui", 'i-ii-kursui',
+                                     lesson_starts)
+
+        lesson_starts[3] = (10, 45)
+        self.generateSchoolTimetable(app, "III-IV kursui", 'iii-iv-kursui',
+                                     lesson_starts)
+
+
+class LyceumTerms(object):
+
+    def __init__(self):
+        self.holidays = []
+        self.holidays.append(DateRange(date(2006, 10, 30), date(2006, 11, 5)))
+        self.holidays.append(DateRange(date(2006, 12, 24), date(2007, 1, 6)))
+        self.holidays.append(DateRange(date(2007, 4, 2), date(2007, 4, 9)))
+
+    def addTerm(self, app, title, id, first, last):
+        term = Term(title, first, last)
+        for date in term:
+            term.add(date)
+
+        for holiday in self.holidays:
+            for day in holiday:
+                if day in term:
+                    term.remove(day)
+
+        term.removeWeekdays(5)
+        term.removeWeekdays(6)
+        app['terms'][id] = term
+
+    def generate(self, app):
+        first = date(2006, 9, 1)
+        last = date(2007, 1, 26)
+        self.addTerm(app, "2006 Ruduo", "2006-ruduo", first, last)
+
+        first = date(2007, 1, 29)
+        last = date(2007, 6, 15)
+        self.addTerm(app, "2007 Pavasaris", "2007-pavasaris", first, last)
