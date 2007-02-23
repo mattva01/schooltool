@@ -108,6 +108,30 @@ And make 1a his grade:
     >>> manager.getControl('Grade').value = ['1a']
     >>> manager.getControl('Apply').click()
 
+If our teacher logs in he should not see some things that he can't
+do. For example he should not see the link School Timetable as it is
+quite useless to them at the moment:
 
+    >>> teacher = Browser()
+    >>> teacher.handleErrors = False
+    >>> teacher.open('http://localhost/')
+    >>> teacher.getLink('Log In').click()
 
-#    >>> startServer(http, manager.url, "manager", "schooltool")
+    >>> teacher.getControl('Username').value = "teacher"
+    >>> teacher.getControl('Password').value = "pwd"
+    >>> teacher.getControl('Log in').click()
+
+    >>> teacher.getLink('Teacherus Teache').click()
+
+    >>> teacher.getLink('School Timetables')
+    Traceback (most recent call last):
+    ...
+    LinkNotFoundError
+
+Teacher should not see the edit link as he can't change his name, nor
+surname:
+
+    >>> teacher.getLink(url='teacher/@@edit.html')
+    Traceback (most recent call last):
+    ...
+    LinkNotFoundError
