@@ -21,13 +21,17 @@
       permission="schooltool.view"
       />
 
+    <!-- Set more restrictive permissions for SchoolTimetable list -->
     <navigationViewlet
       name="ttschemas"
       for="*"
       manager="schooltool.skin.INavigationManager"
-      class="schooltool.skin.skin.DisableNavigationViewlet"
-      permission="schooltool.view"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.skin.TopLevelContainerNavigationViewlet"
+      permission="schooltool.edit"
       link="ttschemas"
+      title="School Timetables"
+      order="80"
       />
 
   </zope:configure>
