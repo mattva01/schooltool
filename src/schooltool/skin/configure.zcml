@@ -232,7 +232,7 @@
   <zope:adapter
       for=".skin.NavigationViewlet"
       name="schooltool.view"
-     factory=".skin.NavigationViewletCrowd" />
+      factory=".skin.NavigationViewletCrowd" />
 
   <zope:view
       for="datetime.date"
