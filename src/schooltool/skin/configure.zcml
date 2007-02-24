@@ -42,6 +42,13 @@
       class=".skin.OrderedViewletManager"
       />
 
+  <viewletManager
+      name="schooltool.ActionsBar"
+      permission="zope.Public"
+      class=".skin.ActionMenuViewletManager"
+      template="templates/actionsbar.pt"
+      />
+
   <!-- Skin and resources -->
 
   <zope:interface
@@ -149,6 +156,9 @@
             layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="sidebar-background.png"
             file="resources/sidebar-background.png"
+            layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="sidebar-background-top.png"
+            file="resources/sidebar-background-top.png"
             layer="schooltool.skin.ISchoolToolLayer" />
 
   <resource name="previous.png" file="resources/previous.png"

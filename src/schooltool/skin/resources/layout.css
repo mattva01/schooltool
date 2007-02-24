@@ -145,10 +145,11 @@ FORM.standalone .controls, div.standalone .controls {
 	float: left;
 	width: 14em;
 	margin-bottom: 5em;
+        margin-top: 2em;
 }
 
 #column-center {
-	margin-left: 14em;
+	margin-left: 0em;
 }
 
 #footer {
@@ -362,6 +363,17 @@ A.button-ok {
 /*
 * Left Column and portlets
 */
+#column-left-top {
+    background: url(++resource++sidebar-background-top.png) top right no-repeat;
+	position: relative;
+	top: 0;
+	right: 0;
+	width: 100%;
+	padding-top: 20px;
+	padding-right: 3px;
+	margin: 0;
+	margin-bottom: -0.5em;
+}
 
 #column-left {
 	background: #eae8e3 url(++resource++sidebar-background.png) bottom right no-repeat;
@@ -440,6 +452,10 @@ A.button-ok {
 }
 
 #content-header H1 {
+}
+
+#content-body {
+  margin-top: 20px;
 }
 
 #breadcrumbs {

@@ -95,15 +95,24 @@
     </metal:block>
 
     <metal:block fill-slot="column-left-extra">
-      <div metal:use-macro="view/@@schooltool_macros/calendar/portlets"/>
+      <div id="column-left">
+        <div id="column-left-top"></div>
+        <div metal:use-macro="view/@@schooltool_macros/calendar/portlets"/>
+      </div>
     </metal:block>
-
-    <metal:block fill-slot="body">
-        <div metal:use-macro="view/@@schooltool_macros/calendar/mode"/>
-        <div class="calcontent">
-          <div metal:use-macro="view/@@schooltool_macros/calendar/navigation" />
-          <div metal:define-slot="calendar-body"/>
+    <metal:block fill-slot="content">
+      <div id="column-center" style="margin-left: 14em;">
+        <div id="content-header">
+          <metal:block define-slot="content-header"/>
         </div>
+        <div id="content-body">
+         <div metal:use-macro="view/@@schooltool_macros/calendar/mode"/>
+         <div class="calcontent">
+           <div metal:use-macro="view/@@schooltool_macros/calendar/navigation" />
+           <div metal:define-slot="calendar-body"/>
+         </div>
+        </div>
+      </div>
     </metal:block>
   </html>
 </metal:block>

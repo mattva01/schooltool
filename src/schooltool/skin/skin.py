@@ -77,7 +77,6 @@ class IActionMenuContext(Interface):
 
     target = Object(Interface)
 
-
 class OrderedViewletManager(ViewletManagerBase):
     """Viewlet manager that orders viewlets by their 'order' attribute.
 
@@ -170,6 +169,12 @@ class ActionMenuViewletManager(OrderedViewletManager):
     def subItems(self):
         """See zope.contentprovider.interfaces.IContentProvider"""
         return self.getSubItems(self.context)
+
+
+class ActionMenuViewlet(object):
+
+    def getMenu(self):
+        return getMenu(self.menu, self.context, self.request)
 
 
 class NavigationViewletCrowd(Crowd):
