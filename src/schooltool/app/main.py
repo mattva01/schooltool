@@ -55,6 +55,7 @@ from zope.app.dependable.interfaces import IDependable
 from zope.app.component.hooks import setSite
 from zope.component import getUtility
 from schooltool.app.interfaces import ApplicationInitializationEvent
+from schooltool.app.interfaces import IPluginInitialization
 from schooltool.app.interfaces import ISchoolToolInitializationUtility
 from zope.component import getAdapters
 from zope.interface import directlyProvidedBy
@@ -454,6 +455,11 @@ class StandaloneServer(object):
             initializationUtility.initializeApplication(app)
 
             notify(ApplicationInitializationEvent(app))
+
+            # Initialize plugins
+            # TODO: maybe notify(PluginInitializationEvent)
+            for name, initializer in getAdapters((app, ), IPluginInitialization):
+                initializer()
 
             directlyProvides(app, directlyProvidedBy(app) + IContainmentRoot)
             root[ZopePublication.root_name] = app

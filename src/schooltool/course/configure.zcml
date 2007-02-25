@@ -32,10 +32,10 @@
              set_schema=".interfaces.ICourse" />
   </class>
 
-  <subscriber
-      for="schooltool.app.interfaces.IApplicationInitializationEvent"
-      handler=".course.addCourseContainerToApplication"
-      />
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".course.CoursePluginInitializer"
+      name="schooltool.course" />
 
   <adapter
       for=".interfaces.ICourseContainer"

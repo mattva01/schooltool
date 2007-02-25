@@ -31,6 +31,7 @@ from schooltool.relationship import RelationshipProperty
 from schooltool.app import relationships
 from schooltool.app.app import Asset
 from schooltool.course import interfaces
+from schooltool.app.interfaces import IPluginInitialization
 
 class CourseContainer(btree.BTreeContainer):
     """Container of Courses."""
@@ -53,5 +54,11 @@ class Course(Persistent, contained.Contained, Asset):
         self.description = description
 
 
-def addCourseContainerToApplication(event):
-    event.object['courses'] = CourseContainer()
+class CoursePluginInitializer(object):
+    zope.interface.implements(IPluginInitialization)
+
+    def __init__(self, app):
+        self.app = app
+
+    def __call__(self):
+        self.app['courses'] = CourseContainer()
