@@ -36,7 +36,7 @@
         <div tal:condition="view/getResourceUtility">
           <tal:block replace="structure view/renderResourceTable" />
         </div>
-      <div>
+      </div>
   </form>
 </metal:block>
 </body>

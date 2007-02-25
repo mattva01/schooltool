@@ -28,20 +28,28 @@ from zope.app.form.browser.interfaces import ITerms
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtilitiesFor
 from zope.component import getUtility
+
+from zope.component import queryAdapter
 from zope.component import queryMultiAdapter
 from zope.component import queryUtility
 from zope.formlib import form
 from zope.interface import Interface
 from zope.interface import implements
+from zope.component import adapts
 from zope.publisher.browser import BrowserView
 from zope.schema.interfaces import ITitledTokenizedTerm
 
 from schooltool.app.browser.app import BaseEditView
+from schooltool.app.interfaces import ISchoolToolApplication
+from zc.table.column import GetterColumn
+
 from schooltool.resource.interfaces import IResourceContained
 from schooltool.resource.interfaces import IResourceContainer
 from schooltool.resource.interfaces import IResourceFactoryUtility
 from schooltool.resource.interfaces import IResourceTypeInformation
 from schooltool.resource.interfaces import IResourceTypeSource
+from schooltool.resource.interfaces import IResourceSubTypes
+from schooltool.resource.types import EquipmentFactoryUtility
 from schooltool.skin.interfaces import IFilterWidget
 from schooltool.skin.table import CheckboxColumn
 from schooltool.skin.table import FilterWidget
@@ -76,7 +84,7 @@ class ResourceContainerView(form.FormBase):
 
     def __init__(self, context, request):
         form.FormBase.__init__(self, context, request)
-        self.resourceType = self.request.get('resources.type')
+        self.resourceType = self.request.get('resources.type','|').split('|')[0]
         self.filter_widget = queryMultiAdapter((self.getResourceUtility(),
                                                 self.request), IFilterWidget)
 
@@ -117,6 +125,20 @@ class ResourceContainerView(form.FormBase):
 class EquipmentTypeFilter(FilterWidget):
     """Equipment Type Filter"""
 
+    def filter(self, list):
+        if 'SEARCH' in self.request and 'CLEAR_SEARCH' not in self.request:
+            searchstr = self.request['SEARCH'].lower()
+            results = [item for item in list
+                       if (searchstr in item.title.lower() and
+                           self.request.get('resources.type','|').split('|')[1] ==
+        item.type)]
+        else:
+            self.request.form['SEARCH'] = ''
+            results = list
+
+        return results
+
+
 
 class LocationTypeFilter(FilterWidget):
     """Location Type Filter"""
@@ -146,7 +168,20 @@ class ResourceTypeSource(object):
     def __init__(self, context):
         self.context = context
         utilities = sorted(getUtilitiesFor(IResourceFactoryUtility))
-        self.types = [name for name, utility in utilities]
+        self.types = {}
+        for name, utility in utilities:
+            if IResourceSubTypes.providedBy(utility):
+                subTypeAdapter = utility
+            else:
+                subTypeAdapter = queryAdapter(utility, IResourceSubTypes,
+                                          default=None)
+                if subTypeAdapter != None:
+                    subTypeAdapter = subTypeAdapter()
+            self.types[(name,name)] = name
+            if subTypeAdapter:
+                subTypes = subTypeAdapter
+                for type in subTypes.types():
+                    self.types[(name, type)] = name
 
     def __contains__(self, value):
         return value in self.types
@@ -157,16 +192,18 @@ class ResourceTypeSource(object):
     def __iter__(self):
         return iter(self.types)
 
+    def get(self, type):
+        return self.types.get(type)
 
 class ResourceTypeTerm(object):
     """Term for displaying of a resource type."""
 
     implements(ITitledTokenizedTerm)
 
-    def __init__(self, value):
+    def __init__(self, value, title):
         self.value = value
         self.token = value
-        self.title = getUtility(IResourceFactoryUtility, name=value).title
+        self.title = title#getUtility(IResourceFactoryUtility, name=value).title
 
 
 class ResourceTypeTerms(object):
@@ -181,7 +218,8 @@ class ResourceTypeTerms(object):
     def getTerm(self, value):
         if value not in self.context:
             raise LookupError(value)
-        return ResourceTypeTerm(value)
+        return ResourceTypeTerm('%s|%s' % (value[0],value[1]),
+                                value[1])
 
     def getValue(self, token):
         if token not in self.context:

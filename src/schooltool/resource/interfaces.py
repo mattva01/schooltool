@@ -76,7 +76,7 @@ class IEquipment(IResourceContained):
     type = zope.schema.TextLine(
         title=_("Equipment Type"),
         description=_("Type of equipment (i.e. camcorder, computer, etc.)"),
-        required=False)
+        required=True)
 
     manufacturer = zope.schema.TextLine(
         title=_("Manufacturer"),
@@ -125,3 +125,10 @@ class IResourceFactoryUtility(zope.interface.Interface):
 
 class IResourceTypeSource(zope.schema.interfaces.IIterableSource):
     """Marker interface for a source of resource types."""
+
+
+class IResourceSubTypes(zope.interface.Interface):
+    """Contains a list of sub types for a given type."""
+
+    def types():
+        """returns Types among a type (subtypes)"""

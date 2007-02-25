@@ -30,9 +30,11 @@ from zc.table.column import GetterColumn
 from zc.table.interfaces import ISortableColumn
 
 from schooltool import SchoolToolMessage as _
+from schooltool.app.app import getSchoolToolApplication
 from schooltool.resource.interfaces import (IResource, IResourceFactoryUtility,
                                             ILocation, IEquipment,
-                                            IResourceTypeInformation)
+                                            IResourceTypeInformation,
+                                            IResourceSubTypes)
 from schooltool.skin.table import LocaleAwareGetterColumn
 
 
@@ -72,9 +74,17 @@ class LocationFactoryUtility(ResourceFactoryUtility):
 
 
 class EquipmentFactoryUtility(ResourceFactoryUtility):
-    implements(IResourceFactoryUtility)
+    implements(IResourceSubTypes, IResourceFactoryUtility)
 
     title = _("Equipment")
+
+    def types(self):
+        app = getSchoolToolApplication()
+        types = set()
+        for resource in app['resources'].values():
+            if IEquipment.providedBy(resource):
+                types.add(resource.type)
+        return list(types)
 
     def columns(self):
         title = LocaleAwareGetterColumn(
@@ -113,7 +123,6 @@ class EquipmentFactoryUtility(ResourceFactoryUtility):
             getter=lambda i, f: i.purchaseDate,
             subsort=True)
         directlyProvides(purchaseDate, ISortableColumn)
-
         return [title, type, manufacturer, model, serialNumber, purchaseDate]
 
 
