@@ -53,12 +53,14 @@ class Resource(Persistent, Contained, Asset):
         self.description = description
         self.notes = u""
 
+
 class Location(Resource):
     """Location."""
 
     implements(interfaces.ILocation)
 
     capacity = None
+
 
 class Equipment(Resource):
     """Equipment."""

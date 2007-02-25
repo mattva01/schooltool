@@ -96,3 +96,27 @@ class IEquipment(IResourceContained):
         title=_("Purchase Date"),
         description=_("Purchase Date of Equipment"),
         required=False)
+
+
+class IResourceTypeInformation(zope.interface.Interface):
+
+    id = zope.schema.TextLine(
+        title=_("Id of the resource type."),
+        description=_("""Used for lookup of named utilities that have resource
+        type specific information."""))
+
+    title = zope.schema.TextLine(
+        title=_("The title of a resource type."),
+        description=_("""A string that will be displayed to users in tables or
+        resource type selection widgets."""))
+
+
+class IResourceFactoryUtility(zope.interface.Interface):
+
+    title = zope.schema.TextLine(
+        title=_("The title of a resource type."),
+        description=_("""A string that will be displayed to users in tables or
+        resource type selection widgets."""))
+
+    def columns():
+        """Default columns for display of this resource in a table."""

@@ -73,6 +73,32 @@
 
   </configure>
 
+  <!-- resource types -->
+
+  <utility
+      factory=".types.ResourceFactoryUtility"
+      name="resource"
+      />
+
+  <utility
+      factory=".types.LocationResourceFactoryUtility"
+      name="location"
+      />
+
+  <utility
+      factory=".types.EquipmentResourceFactoryUtility"
+      name="equipment"
+      />
+
+  <adapter
+      factory=".types.ResourceTypeAdapter" />
+
+  <adapter
+      factory=".types.LocationResourceTypeAdapter" />
+
+  <adapter
+      factory=".types.EquipmentResourceTypeAdapter" />
+
   <include package=".browser" />
   <include package=".rest" />
 
