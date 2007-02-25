@@ -76,7 +76,7 @@
 
   <utility
      factory=".utilities.SchoolToolInitializationUtility"
-     provides="schooltool.app.interfaces.ISchoolToolApplicationInitializationUtility "
+     provides="schooltool.app.interfaces.ISchoolToolInitializationUtility "
      name="lyceum"
      />
 

@@ -25,6 +25,7 @@ $Id$
 from zope.interface import directlyProvidedBy
 
 from lyceum.interfaces import ISchoolToolLyceumApplication
+from zope.interface import directlyProvides
 
 
 class SchoolToolInitializationUtility(object):
