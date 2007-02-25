@@ -15,16 +15,18 @@
         tal:attributes="action request/URL">
 
       <!-- Type Searching -->
-      <tal:block repeat="widget view/widgets">
-        <label tal:attributes="for widget/name; title widget/label"
-               i18n:attributes="title"
-               i18n:translate="">
-            <span tal:replace="widget/label" i18n:translate="" />
-            <input tal:replace="structure widget" />
-        </label>
-      </tal:block>
-      <input tal:repeat="action view/actions"
-             tal:replace="structure action/render" />
+      <div class="oneline-form">
+        <tal:block repeat="widget view/widgets">
+          <label tal:attributes="for widget/name; title widget/label"
+                 i18n:attributes="title"
+                 i18n:translate=""
+                 tal:content="widget/label">
+          </label>
+              <input tal:replace="structure widget" />
+        </tal:block>
+        <input tal:repeat="action view/actions"
+               tal:replace="structure action/render" />
+      </div>
 
       <!-- Filtering viewlet by type -->
       <div tal:define="factory view/getResourceUtility"

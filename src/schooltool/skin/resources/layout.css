@@ -115,6 +115,14 @@ FORM.standalone .controls, div.standalone .controls {
 	margin: 0.5em 1em 1em 1em;
 }
 
+FORM div.oneline-form div{
+  display: inline;
+}
+
+FORM div.oneline-form div.value{
+  margin: 0;
+}
+
 #header {
 }
 
@@ -187,7 +195,7 @@ DIV.search-results {
 	background: #eae8e3;
 }
 
-FORM.standalone, div.standalone {
+FORM.standalone, div.standalone, FORM div.oneline-form{
 	background: #eae8e3;
 	border: 1px #bab5ab solid;
 }
