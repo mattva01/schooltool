@@ -253,7 +253,7 @@ class ShowTimetables(object):
     showTimetables = property(getShowTimetables, setShowTimetables)
 
 
-class SchoolToolApplicationInitializationUtility(object):
+class SchoolToolInitializationUtility(object):
 
     def initializeApplication(self, app):
         """Perform school specific initialization.

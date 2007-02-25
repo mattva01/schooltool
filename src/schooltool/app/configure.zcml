@@ -110,8 +110,8 @@
       name="http://schooltool.org/ns/membership/group" />
 
   <utility
-      provides="schooltool.app.interfaces.ISchoolToolApplicationInitializationUtility"
-      factory=".app.SchoolToolApplicationInitializationUtility" />
+      provides="schooltool.app.interfaces.ISchoolToolInitializationUtility"
+      factory=".app.SchoolToolInitializationUtility" />
 
   <!-- Event Subscribers -->
 
