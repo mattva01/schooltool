@@ -4,6 +4,15 @@
 site-definition schooltool-skel/etc/site.zcml
 
 #
+# school-type
+#
+# The school type to be used when initializing the database.
+#
+# Example:
+#   school-type lyceum
+
+
+#
 # path /path/to/add
 # path /another/path/to/add
 #
