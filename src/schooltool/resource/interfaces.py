@@ -120,3 +120,7 @@ class IResourceFactoryUtility(zope.interface.Interface):
 
     def columns():
         """Default columns for display of this resource in a table."""
+
+
+class IResourceTypeSource(zope.schema.interfaces.IIterableSource):
+    """Marker interface for a source of resource types."""

@@ -27,24 +27,28 @@ from zope.formlib import form
 from zope.interface import Interface
 from zope import schema
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.app.form.browser.interfaces import ITerms
+from zope.component import getUtilitiesFor
+from zope.component import getUtility
+from zope.interface import implements
+from zope.schema.interfaces import ITitledTokenizedTerm
 
-from schooltool import SchoolToolMessage as _
-from schooltool.skin.containers import TableContainerView
-from schooltool.app.browser.app import BaseAddView, BaseEditView
+from schooltool.app.browser.app import BaseEditView
 from zc.table.column import GetterColumn
 
 from schooltool.resource.interfaces import IResourceContainer
 from schooltool.resource.interfaces import IResourceContained
+from schooltool.resource.interfaces import IResourceFactoryUtility
+from schooltool.resource.interfaces import IResourceTypeSource
 from schooltool import SchoolToolMessage as _
 
-from schooltool.demographics.interfaces import SourceList
 
 class IResourceTypeSchema(Interface):
     """Schema for resource container view forms."""
 
     type = schema.Choice(title=_(u"Type"),
                          description=_("Type of Resource"),
-                         source=SourceList([_('Projector'),_('Computer Lab')])
+                         source="resource_types"
                          )
 
 class ResourceContainerView(form.FormBase):
@@ -93,3 +97,54 @@ class ResourceEditView(BaseEditView):
     """A view for editing resource info."""
 
     __used_for__ = IResourceContained
+
+
+class ResourceTypeSource(object):
+    """Source that displays all the available resoure types."""
+
+    implements(IResourceTypeSource)
+
+    def __init__(self, context):
+        self.context = context
+        utilities = sorted(getUtilitiesFor(IResourceFactoryUtility))
+        self.types = [name for name, utility in utilities]
+
+    def __contains__(self, value):
+        return value in self.types
+
+    def __len__(self):
+        len(self.types)
+
+    def __iter__(self):
+        return iter(self.types)
+
+
+class ResourceTypeTerm(object):
+    """Term for displaying of a resource type."""
+
+    implements(ITitledTokenizedTerm)
+
+    def __init__(self, value):
+        self.value = value
+        self.token = value
+        self.title = getUtility(IResourceFactoryUtility, name=value).title
+
+
+class ResourceTypeTerms(object):
+    """Terms implementation for resource types."""
+
+    implements(ITerms)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def getTerm(self, value):
+        if value not in self.context:
+            raise LookupError(value)
+        return ResourceTypeTerm(value)
+
+    def getValue(self, token):
+        if token not in self.context:
+            raise LookupError(token)
+        return token
