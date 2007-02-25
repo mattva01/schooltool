@@ -11,8 +11,7 @@
     tal:content="view/index_title" i18n:translate="">Contents</h1>
 
 <metal:block metal:fill-slot="body">
-  <form method="GET" enctype="multipart/form-data"
-        tal:attributes="action view/context/@@absolute_url">
+  <form method="GET" tal:attributes="action view/context/@@absolute_url">
 
       <!-- Type Searching -->
       <div class="oneline-form">
