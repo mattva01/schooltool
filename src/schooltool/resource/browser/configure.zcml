@@ -12,6 +12,27 @@
       permission="zope.Public"
       />
 
+  <page
+      name="filter_form"
+      for="schooltool.resource.types.ResourceFactoryUtility"
+      permission="schooltool.view"
+      class=".resource.ResourceTypeFilter"
+      />
+
+  <page
+      name="filter_form"
+      for="schooltool.resource.types.LocationFactoryUtility"
+      permission="schooltool.view"
+      class=".resource.LocationTypeFilter"
+      />
+
+  <page
+      name="filter_form"
+      for="schooltool.resource.types.EquipmentFactoryUtility"
+      permission="schooltool.view"
+      class=".resource.EquipmentTypeFilter"
+      />
+
   <configure package="schooltool.skin">
 
     <page

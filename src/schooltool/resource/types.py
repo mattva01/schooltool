@@ -40,13 +40,13 @@ class ResourceFactoryUtility(object):
         return []
 
 
-class LocationResourceFactoryUtility(ResourceFactoryUtility):
+class LocationFactoryUtility(ResourceFactoryUtility):
     implements(IResourceFactoryUtility)
 
     title = _("Location")
 
 
-class EquipmentResourceFactoryUtility(ResourceFactoryUtility):
+class EquipmentFactoryUtility(ResourceFactoryUtility):
     implements(IResourceFactoryUtility)
 
     title = _("Equipment")
@@ -66,13 +66,13 @@ class ResourceTypeAdapter(object):
         queryUtility(IResourceFactoryUtility, name=self.id)
 
 
-class LocationResourceTypeAdapter(ResourceTypeAdapter):
+class LocationTypeAdapter(ResourceTypeAdapter):
     adapts(ILocation)
 
     id = "location"
 
 
-class EquipmentResourceTypeAdapter(ResourceTypeAdapter):
+class EquipmentTypeAdapter(ResourceTypeAdapter):
     adapts(IEquipment)
 
     id = "equipment"

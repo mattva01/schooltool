@@ -81,12 +81,12 @@
       />
 
   <utility
-      factory=".types.LocationResourceFactoryUtility"
+      factory=".types.LocationFactoryUtility"
       name="location"
       />
 
   <utility
-      factory=".types.EquipmentResourceFactoryUtility"
+      factory=".types.EquipmentFactoryUtility"
       name="equipment"
       />
 
@@ -94,10 +94,10 @@
       factory=".types.ResourceTypeAdapter" />
 
   <adapter
-      factory=".types.LocationResourceTypeAdapter" />
+      factory=".types.LocationTypeAdapter" />
 
   <adapter
-      factory=".types.EquipmentResourceTypeAdapter" />
+      factory=".types.EquipmentTypeAdapter" />
 
   <include package=".browser" />
   <include package=".rest" />

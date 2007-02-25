@@ -11,8 +11,10 @@
     tal:content="view/index_title" i18n:translate="">Contents</h1>
 
 <metal:block metal:fill-slot="body">
-  <form method="POST" enctype="multipart/form-data" class="standalone"
+  <form method="POST" enctype="multipart/form-data"
         tal:attributes="action request/URL">
+
+      <!-- Type Searching -->
       <tal:block repeat="widget view/widgets">
         <label tal:attributes="for widget/name; title widget/label"
                i18n:attributes="title"
@@ -23,6 +25,16 @@
       </tal:block>
       <input tal:repeat="action view/actions"
              tal:replace="structure action/render" />
+
+      <!-- Filtering viewlet by type -->
+      <div tal:define="factory view/getResourceUtility"
+           tal:condition="factory"
+           tal:content="structure factory/@@filter_form"/>
+
+      <div>
+        <div tal:condition="not:view/getResourceUtility"
+             i18n:translate="">Please select a resource type</div>
+      <div>
   </form>
 </metal:block>
 </body>

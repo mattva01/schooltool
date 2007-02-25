@@ -40,6 +40,7 @@ from schooltool.resource.interfaces import IResourceContainer
 from schooltool.resource.interfaces import IResourceContained
 from schooltool.resource.interfaces import IResourceFactoryUtility
 from schooltool.resource.interfaces import IResourceTypeSource
+
 from schooltool import SchoolToolMessage as _
 
 
@@ -64,28 +65,36 @@ class ResourceContainerView(form.FormBase):
         form.Action('Search', success='handle_search_action'))
     template = ViewPageTemplateFile("resourcecontainer.pt")
 
+    resourceType = None
+
     def handle_search_action(self, action, data):
         self.resourceType = self.request.get('resources.type')
 
-    def columns(self):
-        return (GetterColumn(name='title',
-                             title=u'Title',
-                             getter=lambda i,f: getattr(i,'title',u''),
-                             subsort=True),
-                GetterColumn(name='type',
-                             title=u'Type',
-                             getter=lambda i,f: getattr(i,'type',u''),
-                             subsort=True),
-                GetterColumn(name='model',
-                             title=u'Model',
-                             getter=lambda i,f: getattr(i,'model',u''),
-                             subsort=True),
-                GetterColumn(name='manufacturer',
-                             title=u'Manufacturer',
-                             getter=lambda i,f: getattr(i,'manufacturer',u''),
-                             subsort=True),
-                )
+    def getResourceUtility(self):
+        if self.resourceType:
+            return getUtility(IResourceFactoryUtility,
+                              name=self.resourceType)
+        else:
+            return None
 
+
+class EquipmentTypeFilter(object):
+    """Equipment Type Filter"""
+
+    def __call__(self):
+        return "I am the equipment Filter!"
+
+class LocationTypeFilter(object):
+    """Location Type Filter"""
+
+    def __call__(self):
+        return "I am the location filter!"
+
+class ResourceTypeFilter(object):
+    """Resource Type Filter"""
+
+    def __call__(self):
+        return "I am the resource type filter."
 
 class ResourceView(BrowserView):
     """A Resource info view."""
