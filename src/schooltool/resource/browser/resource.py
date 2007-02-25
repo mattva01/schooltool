@@ -27,6 +27,7 @@ from zope.publisher.browser import BrowserView
 from schooltool import SchoolToolMessage as _
 from schooltool.skin.containers import TableContainerView
 from schooltool.app.browser.app import BaseAddView, BaseEditView
+from zc.table.column import GetterColumn
 
 from schooltool.resource.interfaces import IResourceContainer
 from schooltool.resource.interfaces import IResourceContained
@@ -38,6 +39,25 @@ class ResourceContainerView(TableContainerView):
     __used_for__ = IResourceContainer
 
     index_title = _("Resource index")
+
+    def columns(self):
+        return (GetterColumn(name='title',
+                             title=u'Title',
+                             getter=lambda i,f: getattr(i,'title',u''),
+                             subsort=True),
+                GetterColumn(name='type',
+                             title=u'Type',
+                             getter=lambda i,f: getattr(i,'type',u''),
+                             subsort=True),
+                GetterColumn(name='model',
+                             title=u'Model',
+                             getter=lambda i,f: getattr(i,'model',u''),
+                             subsort=True),
+                GetterColumn(name='manufacturer',
+                             title=u'Manufacturer',
+                             getter=lambda i,f: getattr(i,'manufacturer',u''),
+                             subsort=True),
+                )
 
 
 class ResourceView(BrowserView):

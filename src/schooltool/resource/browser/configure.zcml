@@ -55,7 +55,7 @@
         label="Add a Location"
         name="addSchoolToolLocation.html"
         schema="schooltool.resource.interfaces.ILocation"
-        fields="title description notes capacity"
+        fields="title description capacity notes"
         set_before_add="title description capacity notes"
         content_factory="schooltool.resource.resource.Location"
         template="templates/simple_add.pt"

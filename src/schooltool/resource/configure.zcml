@@ -28,7 +28,7 @@
 
     <allow attributes="__cmp__" />
     <require permission="schooltool.view"
-             attributes="title description groups leaders" />
+             attributes="title description notes groups leaders" />
     <require permission="schooltool.edit"
              set_schema=".interfaces.IResource" />
   </class>
@@ -44,7 +44,7 @@
   <class class=".resource.Equipment">
     <require like_class=".resource.Resource" />
     <require permission="schooltool.view"
-             attributes="manufacturer model serialNumber purchaseDate" />
+             attributes="type manufacturer model serialNumber purchaseDate" />
     <require permission="schooltool.edit"
              set_schema=".interfaces.IEquipment" />
   </class>
