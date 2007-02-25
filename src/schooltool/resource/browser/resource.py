@@ -77,8 +77,11 @@ class ResourceContainerView(form.FormBase):
     prefix = "resources"
     form_fields = form.Fields(IResourceTypeSchema)
     actions = form.Actions(
-        form.Action('Search', success='handle_search_action'))
+        form.Action('Search', success='handle_search_action'),
+        form.Action('Delete', success='handle_delete_action'))
+
     template = ViewPageTemplateFile("resourcecontainer.pt")
+    delete_template = ViewPageTemplateFile('container_delete.pt')
 
     resourceType = None
 
@@ -87,6 +90,20 @@ class ResourceContainerView(form.FormBase):
         self.resourceType = self.request.get('resources.type','|').split('|')[0]
         self.filter_widget = queryMultiAdapter((self.getResourceUtility(),
                                                 self.request), IFilterWidget)
+        if 'resources.actions.delete' in self.request:
+            self.template = self.delete_template
+
+    def listIdsForDeletion(self):
+        return [key for key in self.context
+                if "delete.%s" % key in self.request]
+
+    def _listItemsForDeletion(self):
+        return [self.context[key] for key in self.listIdsForDeletion()]
+
+    itemsToDelete = property(_listItemsForDeletion)
+
+    def handle_delete_action(self, action, data):
+        pass
 
     def handle_search_action(self, action, data):
         pass
@@ -107,10 +124,10 @@ class ResourceContainerView(form.FormBase):
         return self.filter_widget.filter(items)
 
     def renderResourceTable(self):
-        prefix = "book_item"
-        columns = [CheckboxColumn(prefix=prefix, name='book', title=u'')]
+        columns = [CheckboxColumn(prefix="delete", name='delete', title=u'')]
         available_columns = self.columns()
-        available_columns[0] = LabelColumn(available_columns[0], prefix)
+        from schooltool.skin.table import URLColumn
+        available_columns[0] = URLColumn(available_columns[0], self.request)
 
         columns.extend(available_columns)
         formatter = table.StandaloneFullFormatter(

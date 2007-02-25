@@ -105,6 +105,8 @@ Set up leader for everything:
     >>> manager.getControl('Teacher2').click()
     >>> manager.getControl('Add').click()
     >>> manager.getLink('Resources').click()
+    >>> manager.getControl('Type').value = ['resource']
+    >>> manager.getControl('Search').click()
     >>> manager.getLink('Time travel machine').click()
     >>> manager.getLink('Edit Leaders').click()
     >>> manager.getControl('Teacher2').click()

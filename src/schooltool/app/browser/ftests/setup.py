@@ -68,6 +68,8 @@ def addResource(title):
     manager.getLink('New Resource').click()
     manager.getControl('Title').value = title
     manager.getControl('Add').click()
+    manager.getControl('Type').value = ['resource']
+    manager.getControl('Search').click()
     assert title in manager.contents
 
 
