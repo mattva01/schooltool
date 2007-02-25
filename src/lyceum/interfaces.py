@@ -27,6 +27,7 @@ from zope.interface import Interface
 from zope.schema.interfaces import IIterableSource
 
 from schooltool.demographics.interfaces import SourceList
+from schooltool.app.interfaces import ISchoolToolApplication
 
 from lyceum import LyceumMessage as _
 
@@ -85,3 +86,7 @@ class ILyceumPerson(Interface):
         source="lyceum.advisor_source",
         required=False,
         )
+
+
+class ISchoolToolLyceumApplication(ISchoolToolApplication):
+    """Marker interface for lyceum specific school."""

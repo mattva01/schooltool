@@ -74,4 +74,10 @@
 
   <include package="lyceum.browser" />
 
+  <utility
+     factory=".utilities.SchoolToolInitializationUtility"
+     provides="schooltool.app.interfaces.ISchoolToolApplicationInitializationUtility "
+     name="lyceum"
+     />
+
 </configure>

@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2007 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,27 +17,18 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Functional tests for schooltool.lyceum.
+Utilities for Lyceum specific code.
 
 $Id$
+
 """
+from zope.interface import directlyProvidedBy
 
-import unittest
-import os
+from lyceum.interfaces import ISchoolToolLyceumApplication
 
-from schooltool.testing.functional import collect_ftests
-from schooltool.testing.functional import ZCMLLayer
 
-dir = os.path.abspath(os.path.dirname(__file__))
-filename = os.path.join(dir, 'ftesting.zcml')
+class SchoolToolInitializationUtility(object):
 
-lyceum_functional_layer = ZCMLLayer(filename,
-                                    __name__,
-                                    'lyceum_functional_layer',
-                                    school_type='lyceum')
-
-def test_suite():
-    return collect_ftests(layer=lyceum_functional_layer)
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')
+    def initializeApplication(self, app):
+        directlyProvides(app,
+                         directlyProvidedBy(app) + ISchoolToolLyceumApplication)
