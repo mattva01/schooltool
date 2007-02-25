@@ -1,0 +1,54 @@
+Functional doctests for creating different resources
+====================================================
+
+This test shows how different types of resources can be created and accessed
+through the browser.
+
+Set up
+------
+
+    >>> from zope.testbrowser.testing import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/')
+
+Creating Resources
+------------------
+
+We can create generic resources
+
+    >>> manager.getLink('Resources').click()
+
+    >>> manager.getLink('New Resource').click()
+    >>> manager.getControl('Title').value = 'Book'
+    >>> manager.getControl('Add').click()
+    >>> 'Book' in manager.contents
+    True
+
+We can create Location resources, which also have a capacity option
+
+    >>> manager.getLink('New Location').click()
+    >>> manager.getControl('Title').value = 'Room 101'
+    >>> manager.getControl('Capacity').value = '10'
+    >>> manager.getControl('Add').click()
+    >>> 'Room 101' in manager.contents
+    True
+
+We can create Equipment resources also:
+
+    >>> manager.getLink('New Equipment').click()
+    >>> manager.getControl('Title').value = 'Projector'
+    >>> manager.getControl('Manufacturer').value = 'Sony'
+    >>> manager.getControl('Model').value = 'RS-1'
+    >>> manager.getControl('Serial Number').value = 'ABC123-987'
+    >>> manager.getControl('Purchase Date') != None
+    True
+    >>> manager.getControl('Add').click()
+    >>> 'Projector' in manager.contents
+    True
+
+
+Creating Resources
+------------------
+

@@ -33,6 +33,22 @@
              set_schema=".interfaces.IResource" />
   </class>
 
+  <class class=".resource.Location">
+    <require like_class=".resource.Resource" />
+    <require permission="schooltool.view"
+             attributes="capacity" />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.ILocation" />
+  </class>
+
+  <class class=".resource.Equipment">
+    <require like_class=".resource.Resource" />
+    <require permission="schooltool.view"
+             attributes="manufacturer model serialNumber purchaseDate" />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.IEquipment" />
+  </class>
+
   <adapter
       for=".interfaces.IResourceContainer"
       factory="schooltool.app.app.SimpleNameChooser"

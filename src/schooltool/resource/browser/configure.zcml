@@ -27,11 +27,11 @@
         label="Add a Resource"
         name="addSchoolToolResource.html"
         schema="schooltool.resource.interfaces.IResource"
-        fields="title description"
-        set_before_add="title description"
+        fields="title description notes"
+        set_before_add="title description notes"
         content_factory="schooltool.resource.resource.Resource"
         template="templates/simple_add.pt"
-        class="schooltool.resource.browser.resource.ResourceAddView"
+        class="schooltool.app.browser.app.BaseAddView"
         permission="schooltool.edit">
       <widget field="description" height="5" />
     </addform>
@@ -41,6 +41,63 @@
         name="edit.html"
         label="Edit Resource Information"
         schema="schooltool.resource.interfaces.IResource"
+        fields="title description notes"
+        permission="schooltool.edit"
+        template="templates/simple_edit.pt"
+        class="schooltool.resource.browser.resource.ResourceEditView"
+        menu="schooltool_actions"
+        title="Edit Info">
+      <widget field="description" height="5" />
+    </editform>
+
+    <!-- Location forms -->
+    <addform
+        label="Add a Location"
+        name="addSchoolToolLocation.html"
+        schema="schooltool.resource.interfaces.ILocation"
+        fields="title description notes capacity"
+        set_before_add="title description notes capacity"
+        content_factory="schooltool.resource.resource.Location"
+        template="templates/simple_add.pt"
+        class="schooltool.app.browser.app.BaseAddView"
+        permission="schooltool.edit">
+      <widget field="description" height="5" />
+    </addform>
+
+    <editform
+        for="schooltool.resource.interfaces.ILocation"
+        name="edit.html"
+        label="Edit Location Information"
+        schema="schooltool.resource.interfaces.ILocation"
+        fields="title description"
+        permission="schooltool.edit"
+        template="templates/simple_edit.pt"
+        class="schooltool.resource.browser.resource.ResourceEditView"
+        menu="schooltool_actions"
+        title="Edit Info">
+      <widget field="description" height="5" />
+    </editform>
+
+    <!-- Equipment forms -->
+    <addform
+        label="Add an Equipment"
+        name="addSchoolToolEquipment.html"
+        schema="schooltool.resource.interfaces.IEquipment"
+        fields="title description notes manufacturer model serialNumber
+                purchaseDate"
+        set_before_add="title description notes manufacturer model serialNumber purchaseDate"
+        content_factory="schooltool.resource.resource.Equipment"
+        template="templates/simple_add.pt"
+        class="schooltool.app.browser.app.BaseAddView"
+        permission="schooltool.edit">
+      <widget field="description" height="5" />
+    </addform>
+
+    <editform
+        for="schooltool.resource.interfaces.IEquipment"
+        name="edit.html"
+        label="Edit Equipment Information"
+        schema="schooltool.resource.interfaces.IEquipment"
         fields="title description"
         permission="schooltool.edit"
         template="templates/simple_edit.pt"
@@ -76,6 +133,20 @@
       title="New Resource"
       for="..interfaces.IResourceContainer"
       action="+/addSchoolToolResource.html"
+      />
+
+  <menuItem
+      menu="schooltool_actions"
+      title="New Location"
+      for="..interfaces.IResourceContainer"
+      action="+/addSchoolToolLocation.html"
+      />
+
+  <menuItem
+      menu="schooltool_actions"
+      title="New Equipment"
+      for="..interfaces.IResourceContainer"
+      action="+/addSchoolToolEquipment.html"
       />
 
   <addMenuItem

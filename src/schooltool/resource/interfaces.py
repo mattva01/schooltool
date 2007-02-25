@@ -83,11 +83,6 @@ class IEquipment(IResourceContained):
         required=False)
 
     serialNumber = zope.schema.TextLine(
-        title=_("SerialNumber"),
-        description=_("SerialNumber of Equipment"),
-        required=False)
-
-    serialNumber = zope.schema.TextLine(
         title=_("Serial Number"),
         description=_("Serial Number of Equipment"),
         required=False)

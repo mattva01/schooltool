@@ -46,10 +46,6 @@ class ResourceView(BrowserView):
     __used_for__ = IResourceContained
 
 
-class ResourceAddView(BaseAddView):
-    """A view for adding a resource."""
-
-
 class ResourceEditView(BaseEditView):
     """A view for editing resource info."""
 
