@@ -68,9 +68,10 @@ def doctest_ResourceCSVImporter():
 
     Check that descriptions were imported properly
 
+        >>> from schooltool.resource.interfaces import ILocation
         >>> [resource.description for resource in container.values()]
         ['Resource 1 Description', '', 'Resource 3 Description', '']
-        >>> [resource.isLocation for resource in container.values()]
+        >>> [ILocation.providedBy(resource) for resource in container.values()]
         [False, False, True, True]
 
     """

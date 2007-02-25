@@ -28,7 +28,7 @@
 
     <allow attributes="__cmp__" />
     <require permission="schooltool.view"
-             attributes="title description groups leaders isLocation" />
+             attributes="title description groups leaders" />
     <require permission="schooltool.edit"
              set_schema=".interfaces.IResource" />
   </class>

@@ -43,12 +43,10 @@ class IResource(zope.interface.Interface):
         required=False,
         description=_("Description of the resource."))
 
-    isLocation = zope.schema.Bool(
-        title=_("A Location."),
-        description=_(
-            """Indicate this resource is a location, like a classroom."""),
+    notes = zope.schema.Text(
+        title=_("Notes"),
         required=False,
-        default=False)
+        description=_("Notes for the resource."))
 
 
 class IResourceContainer(container.interfaces.IContainer):
@@ -61,3 +59,40 @@ class IResourceContained(IResource, container.interfaces.IContained):
     """Resource contained in an IResourceContainer."""
 
     container.constraints.containers(IResourceContainer)
+
+
+class ILocation(IResourceContained):
+    """Location."""
+
+    capacity = zope.schema.Int(
+        title=_("Capacity"),
+        description=_("Capacity of the room"),
+        required=False)
+
+class IEquipment(IResourceContained):
+    """Equipment."""
+
+    manufacturer = zope.schema.TextLine(
+        title=_("Manufacturer"),
+        description=_("Manufacturer of Equipment"),
+        required=False)
+
+    model = zope.schema.TextLine(
+        title=_("Model"),
+        description=_("Model of Equipment"),
+        required=False)
+
+    serialNumber = zope.schema.TextLine(
+        title=_("SerialNumber"),
+        description=_("SerialNumber of Equipment"),
+        required=False)
+
+    serialNumber = zope.schema.TextLine(
+        title=_("Serial Number"),
+        description=_("Serial Number of Equipment"),
+        required=False)
+
+    purchaseDate = zope.schema.Date(
+        title=_("Purchase Date"),
+        description=_("Purchase Date of Equipment"),
+        required=False)

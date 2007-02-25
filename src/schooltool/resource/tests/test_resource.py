@@ -64,11 +64,45 @@ def doctest_Resource():
         >>> blender.description
         "It's broken."
 
-    Resources can be tagged as locations, the default is false:
+        >>> blender.notes
+        u''
 
-        >>> blender.isLocation
-        False
+    """
 
+def doctest_Location():
+    r"""Test for Location
+
+        >>> from schooltool.resource.interfaces import ILocation
+        >>> from schooltool.resource.resource import Location
+        >>> room = Location()
+        >>> verifyObject(ILocation, room)
+        True
+
+    Locations have several standard peices of information associated with
+    them:
+
+        >>> room.capacity
+    """
+
+def doctest_Equipment():
+    r"""Test for Equipment
+
+        >>> from schooltool.resource.interfaces import IEquipment
+        >>> from schooltool.resource.resource import Equipment
+        >>> projector = Equipment()
+        >>> verifyObject(IEquipment, projector)
+        True
+
+    In addition to standard attributes, equipment also has the following
+    attributes:
+
+        >>> projector.manufacturer
+        u''
+        >>> projector.model
+        u''
+        >>> projector.serialNumber
+        u''
+        >>> projector.purchaseDate
     """
 
 def test_suite():

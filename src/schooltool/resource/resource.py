@@ -48,13 +48,27 @@ class Resource(Persistent, Contained, Asset):
 
     implements(interfaces.IResourceContained, IAttributeAnnotatable)
 
-    # BBB: ...
-    isLocation = False # backwards compatibility
-
-    def __init__(self, title=None, description=None, isLocation=False):
+    def __init__(self, title=None, description=None):
         self.title = title
         self.description = description
-        self.isLocation = isLocation
+        self.notes = u""
+
+class Location(Resource):
+    """Location."""
+
+    implements(interfaces.ILocation)
+
+    capacity = None
+
+class Equipment(Resource):
+    """Equipment."""
+
+    implements(interfaces.IEquipment)
+
+    manufacturer = u""
+    model = u""
+    serialNumber = u""
+    purchaseDate = None
 
 
 def addResourceContainerToApplication(event):

@@ -166,10 +166,6 @@ class TestResourceView(ApplicationObjectViewTestMixin, unittest.TestCase):
             """<resource xmlns:xlink="http://www.w3.org/1999/xlink">
                    <title>Root resource</title>
                    <description/>
-                   <isLocation>
-                     False
-                   </isLocation>
-
                    <relationships xlink:href="http://127.0.0.1/resources/root/relationships"
                                   xlink:title="Relationships" xlink:type="simple"/>
                    <acl xlink:href="http://127.0.0.1/resources/root/acl" xlink:title="ACL"
@@ -195,7 +191,6 @@ class TestResourceView(ApplicationObjectViewTestMixin, unittest.TestCase):
             """<resource xmlns:xlink="http://www.w3.org/1999/xlink">
                    <title>Root resource</title>
                    <description>Foo</description>
-                   <isLocation>False</isLocation>
                    <relationships xlink:href="http://127.0.0.1/resources/root/relationships"
                                   xlink:title="Relationships" xlink:type="simple"/>
                    <acl xlink:href="http://127.0.0.1/resources/root/acl" xlink:title="ACL"
@@ -209,31 +204,31 @@ class TestResourceView(ApplicationObjectViewTestMixin, unittest.TestCase):
                         xlink:title="Calendar ACL" xlink:type="simple"/>
                </resource>""")
 
-    def testGETIsLocation(self):
+##     def testGETIsLocation(self):
 
-        self.testObject.isLocation = True
+##         self.testObject.isLocation = True
 
-        result, response = self.get()
+##         result, response = self.get()
 
-        self.assertEquals(response.getHeader('content-type'),
-                          "text/xml; charset=UTF-8")
-        self.assertEqualsXML(result,
-            """<resource xmlns:xlink="http://www.w3.org/1999/xlink">
-                   <title>Root resource</title>
-                   <description/>
-                   <isLocation>True</isLocation>
-                   <relationships xlink:href="http://127.0.0.1/resources/root/relationships"
-                                  xlink:title="Relationships" xlink:type="simple"/>
-                   <acl xlink:href="http://127.0.0.1/resources/root/acl" xlink:title="ACL"
-                        xlink:type="simple"/>
-                   <calendar xlink:href="http://127.0.0.1/resources/root/calendar"
-                             xlink:title="Calendar" xlink:type="simple"/>
-                   <relationships
-                                  xlink:href="http://127.0.0.1/resources/root/calendar/relationships"
-                                  xlink:title="Calendar subscriptions" xlink:type="simple"/>
-                   <acl xlink:href="http://127.0.0.1/resources/root/calendar/acl"
-                        xlink:title="Calendar ACL" xlink:type="simple"/>
-               </resource>""")
+##         self.assertEquals(response.getHeader('content-type'),
+##                           "text/xml; charset=UTF-8")
+##         self.assertEqualsXML(result,
+##             """<resource xmlns:xlink="http://www.w3.org/1999/xlink">
+##                    <title>Root resource</title>
+##                    <description/>
+##                    <isLocation>True</isLocation>
+##                    <relationships xlink:href="http://127.0.0.1/resources/root/relationships"
+##                                   xlink:title="Relationships" xlink:type="simple"/>
+##                    <acl xlink:href="http://127.0.0.1/resources/root/acl" xlink:title="ACL"
+##                         xlink:type="simple"/>
+##                    <calendar xlink:href="http://127.0.0.1/resources/root/calendar"
+##                              xlink:title="Calendar" xlink:type="simple"/>
+##                    <relationships
+##                                   xlink:href="http://127.0.0.1/resources/root/calendar/relationships"
+##                                   xlink:title="Calendar subscriptions" xlink:type="simple"/>
+##                    <acl xlink:href="http://127.0.0.1/resources/root/calendar/acl"
+##                         xlink:title="Calendar ACL" xlink:type="simple"/>
+##                </resource>""")
 
 
 def test_suite():

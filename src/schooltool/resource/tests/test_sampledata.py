@@ -41,6 +41,7 @@ def tearDown(test):
 def doctest_SampleResources():
     """A sample data plugin that generates resources
 
+        >>> from schooltool.resource.interfaces import ILocation
         >>> from schooltool.resource.sampledata import SampleResources
         >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
         >>> plugin = SampleResources()
@@ -57,10 +58,10 @@ def doctest_SampleResources():
         88
 
         >>> for i in range(64):
-        ...     assert app['resources']['room%02d' % i].isLocation
+        ...     assert ILocation.providedBy(app['resources']['room%02d' % i])
 
         >>> for i in range(24):
-        ...     assert not app['resources']['projector%02d' % i].isLocation
+        ...     assert not ILocation.providedBy(app['resources']['projector%02d' % i])
 
 
     """
