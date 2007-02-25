@@ -12,25 +12,22 @@
       permission="zope.Public"
       />
 
-  <page
-      name="filter_form"
-      for="schooltool.resource.types.ResourceFactoryUtility"
-      permission="schooltool.view"
-      class=".resource.ResourceTypeFilter"
+  <zope:adapter
+      for="schooltool.resource.types.ResourceFactoryUtility
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".resource.ResourceTypeFilter"
       />
 
-  <page
-      name="filter_form"
-      for="schooltool.resource.types.LocationFactoryUtility"
-      permission="schooltool.view"
-      class=".resource.LocationTypeFilter"
+  <zope:adapter
+      for="schooltool.resource.types.LocationFactoryUtility
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".resource.LocationTypeFilter"
       />
 
-  <page
-      name="filter_form"
-      for="schooltool.resource.types.EquipmentFactoryUtility"
-      permission="schooltool.view"
-      class=".resource.EquipmentTypeFilter"
+  <zope:adapter
+      for="schooltool.resource.types.EquipmentFactoryUtility
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".resource.EquipmentTypeFilter"
       />
 
   <configure package="schooltool.skin">

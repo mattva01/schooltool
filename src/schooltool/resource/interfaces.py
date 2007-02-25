@@ -69,6 +69,7 @@ class ILocation(IResourceContained):
         description=_("Capacity of the room"),
         required=False)
 
+
 class IEquipment(IResourceContained):
     """Equipment."""
 

@@ -22,24 +22,30 @@ group views.
 $Id$
 """
 
-from zope.publisher.browser import BrowserView
-from zope.formlib import form
-from zope.interface import Interface
+from zc.table import table
 from zope import schema
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.form.browser.interfaces import ITerms
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtilitiesFor
 from zope.component import getUtility
+from zope.component import queryMultiAdapter
+from zope.component import queryUtility
+from zope.formlib import form
+from zope.interface import Interface
 from zope.interface import implements
+from zope.publisher.browser import BrowserView
 from zope.schema.interfaces import ITitledTokenizedTerm
 
 from schooltool.app.browser.app import BaseEditView
-from zc.table.column import GetterColumn
-
-from schooltool.resource.interfaces import IResourceContainer
 from schooltool.resource.interfaces import IResourceContained
+from schooltool.resource.interfaces import IResourceContainer
 from schooltool.resource.interfaces import IResourceFactoryUtility
+from schooltool.resource.interfaces import IResourceTypeInformation
 from schooltool.resource.interfaces import IResourceTypeSource
+from schooltool.skin.interfaces import IFilterWidget
+from schooltool.skin.table import CheckboxColumn
+from schooltool.skin.table import FilterWidget
+from schooltool.skin.table import LabelColumn
 
 from schooltool import SchoolToolMessage as _
 
@@ -51,6 +57,7 @@ class IResourceTypeSchema(Interface):
                          description=_("Type of Resource"),
                          source="resource_types"
                          )
+
 
 class ResourceContainerView(form.FormBase):
     """A Resource Container view."""
@@ -67,34 +74,57 @@ class ResourceContainerView(form.FormBase):
 
     resourceType = None
 
-    def handle_search_action(self, action, data):
+    def __init__(self, context, request):
+        form.FormBase.__init__(self, context, request)
         self.resourceType = self.request.get('resources.type')
+        self.filter_widget = queryMultiAdapter((self.getResourceUtility(),
+                                                self.request), IFilterWidget)
+
+    def handle_search_action(self, action, data):
+        pass
 
     def getResourceUtility(self):
-        if self.resourceType:
-            return getUtility(IResourceFactoryUtility,
-                              name=self.resourceType)
-        else:
-            return None
+        return queryUtility(IResourceFactoryUtility,
+                            name=self.resourceType, default=None)
+
+    def columns(self):
+        return self.getResourceUtility().columns()
+
+    def sortOn(self):
+        return (('title', False), )
+
+    def filter(self, values):
+        items = [resource for resource in values
+                 if IResourceTypeInformation(resource).id == self.resourceType]
+        return self.filter_widget.filter(items)
+
+    def renderResourceTable(self):
+        prefix = "book_item"
+        columns = [CheckboxColumn(prefix=prefix, name='book', title=u'')]
+        available_columns = self.columns()
+        available_columns[0] = LabelColumn(available_columns[0], prefix)
+
+        columns.extend(available_columns)
+        formatter = table.StandaloneFullFormatter(
+            self.context, self.request, self.filter(self.context.values()),
+            columns=columns,
+            sort_on=self.sortOn(),
+            prefix="available")
+        formatter.cssClasses['table'] = 'data'
+        return formatter()
 
 
-class EquipmentTypeFilter(object):
+class EquipmentTypeFilter(FilterWidget):
     """Equipment Type Filter"""
 
-    def __call__(self):
-        return "I am the equipment Filter!"
 
-class LocationTypeFilter(object):
+class LocationTypeFilter(FilterWidget):
     """Location Type Filter"""
 
-    def __call__(self):
-        return "I am the location filter!"
 
-class ResourceTypeFilter(object):
+class ResourceTypeFilter(FilterWidget):
     """Resource Type Filter"""
 
-    def __call__(self):
-        return "I am the resource type filter."
 
 class ResourceView(BrowserView):
     """A Resource info view."""

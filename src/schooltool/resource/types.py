@@ -21,14 +21,19 @@ Registration of types of resources.
 
 $Id$
 """
-from zope.interface import implements
 from zope.component import adapts
 from zope.component import queryUtility
+from zope.interface import directlyProvides
+from zope.interface import implements
+
+from zc.table.column import GetterColumn
+from zc.table.interfaces import ISortableColumn
 
 from schooltool import SchoolToolMessage as _
 from schooltool.resource.interfaces import (IResource, IResourceFactoryUtility,
                                             ILocation, IEquipment,
                                             IResourceTypeInformation)
+from schooltool.skin.table import LocaleAwareGetterColumn
 
 
 class ResourceFactoryUtility(object):
@@ -37,19 +42,79 @@ class ResourceFactoryUtility(object):
     title = _("Resource")
 
     def columns(self):
-        return []
-
+        title = LocaleAwareGetterColumn(
+            name='title',
+            title=_(u'Title'),
+            getter=lambda i, f: i.title,
+            subsort=True)
+        directlyProvides(title, ISortableColumn)
+        return [title]
 
 class LocationFactoryUtility(ResourceFactoryUtility):
     implements(IResourceFactoryUtility)
 
     title = _("Location")
 
+    def columns(self):
+        title = LocaleAwareGetterColumn(
+            name='title',
+            title=_(u'Title'),
+            getter=lambda i, f: i.title,
+            subsort=True)
+        directlyProvides(title, ISortableColumn)
+        capacity = GetterColumn(
+            name='capacity',
+            title=_(u'Capacity'),
+            getter=lambda i, f: i.capacity,
+            subsort=True)
+        directlyProvides(capacity, ISortableColumn)
+        return [title, capacity]
+
 
 class EquipmentFactoryUtility(ResourceFactoryUtility):
     implements(IResourceFactoryUtility)
 
     title = _("Equipment")
+
+    def columns(self):
+        title = LocaleAwareGetterColumn(
+            name='title',
+            title=_(u'Title'),
+            getter=lambda i, f: i.title,
+            subsort=True)
+        directlyProvides(title, ISortableColumn)
+        type = GetterColumn(
+            name='type',
+            title=_(u'Type'),
+            getter=lambda i, f: i.type,
+            subsort=True)
+        directlyProvides(type, ISortableColumn)
+        manufacturer = GetterColumn(
+            name='manufacturer',
+            title=_(u'Manufacturer'),
+            getter=lambda i, f: i.manufacturer,
+            subsort=True)
+        directlyProvides(manufacturer, ISortableColumn)
+        model = GetterColumn(
+            name='model',
+            title=_(u'Model'),
+            getter=lambda i, f: i.model,
+            subsort=True)
+        directlyProvides(model, ISortableColumn)
+        serialNumber = GetterColumn(
+            name='serialNumber',
+            title=_(u'Serial Number'),
+            getter=lambda i, f: i.serialNumber,
+            subsort=True)
+        directlyProvides(serialNumber, ISortableColumn)
+        purchaseDate = GetterColumn(
+            name='purchaseDate',
+            title=_(u'Purchase Date'),
+            getter=lambda i, f: i.purchaseDate,
+            subsort=True)
+        directlyProvides(purchaseDate, ISortableColumn)
+
+        return [title, type, manufacturer, model, serialNumber, purchaseDate]
 
 
 class ResourceTypeAdapter(object):
