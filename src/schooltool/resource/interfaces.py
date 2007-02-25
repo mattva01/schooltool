@@ -72,6 +72,11 @@ class ILocation(IResourceContained):
 class IEquipment(IResourceContained):
     """Equipment."""
 
+    type = zope.schema.TextLine(
+        title=_("Equipment Type"),
+        description=_("Type of equipment (i.e. camcorder, computer, etc.)"),
+        required=False)
+
     manufacturer = zope.schema.TextLine(
         title=_("Manufacturer"),
         description=_("Manufacturer of Equipment"),

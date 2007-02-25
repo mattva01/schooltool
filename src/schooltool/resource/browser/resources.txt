@@ -38,14 +38,15 @@ We can create Location resources, which also have a capacity option
 We can create Equipment resources also:
 
     >>> manager.getLink('New Equipment').click()
-    >>> manager.getControl('Title').value = 'Projector'
+    >>> manager.getControl('Title').value = 'Projector 1'
+    >>> manager.getControl('Equipment Type').value = 'Projector'
     >>> manager.getControl('Manufacturer').value = 'Sony'
     >>> manager.getControl('Model').value = 'RS-1'
     >>> manager.getControl('Serial Number').value = 'ABC123-987'
     >>> manager.getControl('Purchase Date') != None
     True
     >>> manager.getControl('Add').click()
-    >>> 'Projector' in manager.contents
+    >>> 'Projector 1' in manager.contents
     True
 
 

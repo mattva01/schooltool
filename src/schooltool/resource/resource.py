@@ -65,6 +65,7 @@ class Equipment(Resource):
 
     implements(interfaces.IEquipment)
 
+    type = u""
     manufacturer = u""
     model = u""
     serialNumber = u""
