@@ -23,6 +23,10 @@ $Id$
 """
 
 from zope.publisher.browser import BrowserView
+from zope.formlib import form
+from zope.interface import Interface
+from zope import schema
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from schooltool import SchoolToolMessage as _
 from schooltool.skin.containers import TableContainerView
@@ -31,14 +35,33 @@ from zc.table.column import GetterColumn
 
 from schooltool.resource.interfaces import IResourceContainer
 from schooltool.resource.interfaces import IResourceContained
+from schooltool import SchoolToolMessage as _
 
+from schooltool.demographics.interfaces import SourceList
 
-class ResourceContainerView(TableContainerView):
+class IResourceTypeSchema(Interface):
+    """Schema for resource container view forms."""
+
+    type = schema.Choice(title=_(u"Type"),
+                         description=_("Type of Resource"),
+                         source=SourceList([_('Projector'),_('Computer Lab')])
+                         )
+
+class ResourceContainerView(form.FormBase):
     """A Resource Container view."""
 
     __used_for__ = IResourceContainer
 
     index_title = _("Resource index")
+
+    prefix = "resources"
+    form_fields = form.Fields(IResourceTypeSchema)
+    actions = form.Actions(
+        form.Action('Search', success='handle_search_action'))
+    template = ViewPageTemplateFile("resourcecontainer.pt")
+
+    def handle_search_action(self, action, data):
+        self.resourceType = self.request.get('resources.type')
 
     def columns(self):
         return (GetterColumn(name='title',
