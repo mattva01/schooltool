@@ -385,6 +385,7 @@ def doctest_setup():
         ...     lang = 'lt'
         ...     reportlab_fontdir = ''
         ...     devmode = False
+        ...     school_type = ''
         ...     site_definition = findSiteZCML()
         >>> options.config = ConfigStub()
 
@@ -638,7 +639,9 @@ def doctest_restoreManagerUser():
         >>> root = connection.root()
 
         >>> from schooltool.app.app import SchoolToolApplication
+        >>> from schooltool.app.interfaces import ApplicationInitializationEvent
         >>> app = SchoolToolApplication()
+        >>> notify(ApplicationInitializationEvent(app))
         >>> directlyProvides(app, IContainmentRoot)
         >>> root[ZopePublication.root_name] = app
 

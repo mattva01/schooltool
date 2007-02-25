@@ -54,6 +54,10 @@ from zope.app.container.contained import ObjectAddedEvent
 from zope.app.dependable.interfaces import IDependable
 from zope.app.component.hooks import setSite
 from zope.component import getUtility
+from schooltool.app.interfaces import ApplicationInitializationEvent
+from schooltool.app.interfaces import ISchoolToolInitializationUtility
+from zope.component import getAdapters
+from zope.interface import directlyProvidedBy
 
 from schooltool.app.app import SchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -432,7 +436,7 @@ class StandaloneServer(object):
 
         return options
 
-    def bootstrapSchoolTool(self, db):
+    def bootstrapSchoolTool(self, db, school_type=""):
         """Bootstrap SchoolTool database."""
         connection = db.open()
         root = connection.root()
@@ -443,7 +447,15 @@ class StandaloneServer(object):
         app_obj = root.get(ZopePublication.root_name)
         if app_obj is None:
             app = SchoolToolApplication()
-            directlyProvides(app, IContainmentRoot)
+
+            # Run school specific initialization code
+            initializationUtility = getUtility(
+                ISchoolToolInitializationUtility, name=school_type)
+            initializationUtility.initializeApplication(app)
+
+            notify(ApplicationInitializationEvent(app))
+
+            directlyProvides(app, directlyProvidedBy(app) + IContainmentRoot)
             root[ZopePublication.root_name] = app
             # savepoint to make sure that the app object has
             # a _p_jar. This is needed to make things like
@@ -537,7 +549,7 @@ class StandaloneServer(object):
             sys.exit(1)
 
         try:
-            self.bootstrapSchoolTool(db)
+            self.bootstrapSchoolTool(db, options.config.school_type)
         except IncompatibleDatabase:
             print >> sys.stderr, self.incompatible_db_error_msg
             sys.exit(1)

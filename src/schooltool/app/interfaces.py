@@ -200,3 +200,9 @@ class ICookieLanguageSelector(zope.interface.Interface):
 
     def setSelectedLanguage():
         """Set the selected language into a cookie."""
+
+
+class ISchoolToolInitializationUtility(zope.interface.Interface):
+
+    def initializeApplication(app):
+        """Perform school specific initialization. """

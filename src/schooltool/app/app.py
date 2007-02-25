@@ -49,6 +49,7 @@ from schooltool.app.interfaces import IShowTimetables
 from schooltool.app.interfaces import ApplicationInitializationEvent
 from schooltool.app import relationships
 from schooltool.app.interfaces import IAsset
+from schooltool.app.interfaces import ISchoolToolInitializationUtility
 from schooltool.relationship.relationship import RelationshipProperty
 
 
@@ -67,7 +68,6 @@ class SchoolToolApplication(Persistent, sample.SampleContainer,
 
     def __init__(self):
         super(SchoolToolApplication, self).__init__()
-        notify(ApplicationInitializationEvent(self))
 
     def _newContainerData(self):
         return PersistentDict()
@@ -251,3 +251,12 @@ class ShowTimetables(object):
         self.annotations[SHOW_TIMETABLES_KEY] = value
 
     showTimetables = property(getShowTimetables, setShowTimetables)
+
+
+class SchoolToolApplicationInitializationUtility(object):
+
+    def initializeApplication(self, app):
+        """Perform school specific initialization.
+
+        By default schooltool does not do any specific initialization.
+        """

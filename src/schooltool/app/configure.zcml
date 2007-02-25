@@ -109,6 +109,10 @@
       component=".membership.URIGroup"
       name="http://schooltool.org/ns/membership/group" />
 
+  <utility
+      provides="schooltool.app.interfaces.ISchoolToolApplicationInitializationUtility"
+      factory=".app.SchoolToolApplicationInitializationUtility" />
+
   <!-- Event Subscribers -->
 
   <subscriber

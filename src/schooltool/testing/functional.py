@@ -51,24 +51,11 @@ def find_ftesting_zcml():
             raise RuntimeError("I can't find ftesting.zcml!")
 
 
-def install_db_bootstrap_hook():
-    """Install schooltool_db_setup into zope.event.subscribers."""
-    zope.event.subscribers.insert(0, schooltool_db_setup)
-
-
-def uninstall_db_bootstrap_hook():
-    """Remove schooltool_db_setup from zope.event.subscribers."""
-    zope.event.subscribers.remove(schooltool_db_setup)
-
-
-def schooltool_db_setup(event):
-    """IDatabaseOpenedEvent handler that bootstraps SchoolTool."""
-    if IDatabaseOpenedEvent.providedBy(event):
-        import schooltool.app.main
-        server = schooltool.app.main.StandaloneServer()
-        server.bootstrapSchoolTool(event.database)
-
 class ZCMLLayer(_ZCMLLayer):
+
+    def __init__(self, *args, **kwargs):
+        self.school_type = kwargs.pop("school_type", "")
+        _ZCMLLayer.__init__(self, *args, **kwargs)
 
     def setUp(self):
         # SchoolTool needs to bootstrap the database first, before the Zope 3
@@ -78,6 +65,22 @@ class ZCMLLayer(_ZCMLLayer):
         # Instead we place our own subscriber directly into zope.event.subscribers,
         # where it gets a chance to intercept IDatabaseOpenedEvent before the
         # Zope 3 event dispatcher sees it.
+
+        def install_db_bootstrap_hook():
+            """Install schooltool_db_setup into zope.event.subscribers."""
+            zope.event.subscribers.insert(0, schooltool_db_setup)
+
+        def uninstall_db_bootstrap_hook():
+            """Remove schooltool_db_setup from zope.event.subscribers."""
+            zope.event.subscribers.remove(schooltool_db_setup)
+
+        def schooltool_db_setup(event, school_type=""):
+            """IDatabaseOpenedEvent handler that bootstraps SchoolTool."""
+            if IDatabaseOpenedEvent.providedBy(event):
+                import schooltool.app.main
+                server = schooltool.app.main.StandaloneServer()
+                server.bootstrapSchoolTool(event.database, self.school_type)
+
         install_db_bootstrap_hook()
         try:
             _ZCMLLayer.setUp(self)
@@ -87,7 +90,6 @@ class ZCMLLayer(_ZCMLLayer):
 app_functional_layer = ZCMLLayer(find_ftesting_zcml(),
                                  __name__,
                                  'app_functional_layer')
-
 
 def collect_ftests(package=None, level=None, layer=None, filenames=None):
     """Collect all functional doctest files in a given package.
@@ -118,4 +120,3 @@ def collect_ftests(package=None, level=None, layer=None, filenames=None):
             suite.layer = layer
         suites.append(suite)
     return unittest.TestSuite(suites)
-
