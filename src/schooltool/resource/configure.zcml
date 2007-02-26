@@ -78,11 +78,13 @@
   <utility
       factory=".types.ResourceFactoryUtility"
       name="resource"
+      provides=".interfaces.IResourceFactoryUtility"
       />
 
   <utility
       factory=".types.LocationFactoryUtility"
       name="location"
+      provides=".interfaces.IResourceFactoryUtility"
       />
 
   <utility

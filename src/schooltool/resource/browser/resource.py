@@ -44,7 +44,7 @@ from schooltool.app.browser.app import BaseEditView
 from schooltool.app.interfaces import ISchoolToolApplication
 from zc.table.column import GetterColumn
 
-from schooltool.resource.interfaces import IResourceContained
+from schooltool.resource.interfaces import IBaseResourceContained
 from schooltool.resource.interfaces import IResourceContainer
 from schooltool.resource.interfaces import IResourceFactoryUtility
 from schooltool.resource.interfaces import IResourceTypeInformation
@@ -170,13 +170,13 @@ class ResourceTypeFilter(FilterWidget):
 class ResourceView(BrowserView):
     """A Resource info view."""
 
-    __used_for__ = IResourceContained
+    __used_for__ = IBaseResourceContained
 
 
 class ResourceEditView(BaseEditView):
     """A view for editing resource info."""
 
-    __used_for__ = IResourceContained
+    __used_for__ = IBaseResourceContained
 
 
 class ResourceTypeSource(object):

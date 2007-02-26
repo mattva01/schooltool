@@ -32,9 +32,10 @@ We can create Location resources, which also have a capacity option
 
     >>> manager.getLink('New Location').click()
     >>> manager.getControl('Title').value = 'Room 101'
+    >>> manager.getControl('Type').value = 'class room'
     >>> manager.getControl('Capacity').value = '10'
     >>> manager.getControl('Add').click()
-    >>> manager.getControl('Type').value = ['location|location']
+    >>> manager.getControl('Type').value = ['location|class room']
     >>> manager.getControl('Search').click()
     >>> 'Room 101' in manager.contents
     True

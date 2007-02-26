@@ -39,7 +39,18 @@ from schooltool.skin.table import LocaleAwareGetterColumn
 
 
 class ResourceFactoryUtility(object):
-    implements(IResourceFactoryUtility)
+    implements(IResourceSubTypes, IResourceFactoryUtility)
+
+    def __init__(self):
+        self.interface = IResource
+
+    def types(self):
+        app = getSchoolToolApplication()
+        types = set()
+        for resource in app['resources'].values():
+            if self.interface.providedBy(resource):
+                types.add(resource.type)
+        return list(types)
 
     title = _("Resource")
 
@@ -56,6 +67,9 @@ class LocationFactoryUtility(ResourceFactoryUtility):
     implements(IResourceFactoryUtility)
 
     title = _("Location")
+
+    def __init__(self):
+        self.interface = ILocation
 
     def columns(self):
         title = LocaleAwareGetterColumn(
@@ -74,17 +88,12 @@ class LocationFactoryUtility(ResourceFactoryUtility):
 
 
 class EquipmentFactoryUtility(ResourceFactoryUtility):
-    implements(IResourceSubTypes, IResourceFactoryUtility)
+    implements(IResourceFactoryUtility)
 
     title = _("Equipment")
 
-    def types(self):
-        app = getSchoolToolApplication()
-        types = set()
-        for resource in app['resources'].values():
-            if IEquipment.providedBy(resource):
-                types.add(resource.type)
-        return list(types)
+    def __init__(self):
+        self.interface = IEquipment
 
     def columns(self):
         title = LocaleAwareGetterColumn(

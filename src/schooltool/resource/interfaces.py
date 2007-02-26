@@ -30,13 +30,18 @@ from zope.app import container
 
 from schooltool import SchoolToolMessage as _
 
-
-class IResource(zope.interface.Interface):
+class IBaseResource(zope.interface.Interface):
     """Resource."""
 
     title = zope.schema.TextLine(
         title=_("Title"),
         description=_("Title of the resource."))
+
+    type = zope.schema.TextLine(
+        title=_("Resource Type"),
+        description=_("Type of resource"),
+        required=True)
+
 
     description = zope.schema.Text(
         title=_("Description"),
@@ -52,17 +57,25 @@ class IResource(zope.interface.Interface):
 class IResourceContainer(container.interfaces.IContainer):
     """Container of resources."""
 
-    container.constraints.contains(IResource)
+    container.constraints.contains(IBaseResource)
 
 
-class IResourceContained(IResource, container.interfaces.IContained):
+class IBaseResourceContained(IBaseResource, container.interfaces.IContained):
     """Resource contained in an IResourceContainer."""
 
     container.constraints.containers(IResourceContainer)
 
+class IResource(IBaseResourceContained):
+    """Marker for a regular old resource"""
 
-class ILocation(IResourceContained):
+class ILocation(IBaseResourceContained):
     """Location."""
+
+    type = zope.schema.TextLine(
+        title=_("Location Type"),
+        description=_("Type of location (i.e. computer lab, class room, etc.)"),
+        required=True)
+
 
     capacity = zope.schema.Int(
         title=_("Capacity"),
@@ -70,7 +83,7 @@ class ILocation(IResourceContained):
         required=False)
 
 
-class IEquipment(IResourceContained):
+class IEquipment(IBaseResourceContained):
     """Equipment."""
 
     type = zope.schema.TextLine(

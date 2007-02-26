@@ -43,18 +43,24 @@ class ResourceContainer(btree.BTreeContainer):
     implements(interfaces.IResourceContainer, IAttributeAnnotatable)
 
 
-class Resource(Persistent, Contained, Asset):
-    """Resource."""
+class BaseResource(Persistent, Contained, Asset):
+    """Base Resource."""
 
-    implements(interfaces.IResourceContained, IAttributeAnnotatable)
+    implements(interfaces.IBaseResource, IAttributeAnnotatable)
 
     def __init__(self, title=None, description=None):
         self.title = title
         self.description = description
         self.notes = u""
+        self.type = u"resource"
+
+class Resource(BaseResource):
+    """Resource."""
+
+    implements(interfaces.IResource)
 
 
-class Location(Resource):
+class Location(BaseResource):
     """Location."""
 
     implements(interfaces.ILocation)
@@ -62,7 +68,7 @@ class Location(Resource):
     capacity = None
 
 
-class Equipment(Resource):
+class Equipment(BaseResource):
     """Equipment."""
 
     implements(interfaces.IEquipment)
