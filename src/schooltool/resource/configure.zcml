@@ -28,7 +28,7 @@
 
     <allow attributes="__cmp__" />
     <require permission="schooltool.view"
-             attributes="title description notes groups leaders" />
+             attributes="title type description notes groups leaders" />
     <require permission="schooltool.edit"
              set_schema=".interfaces.IResource" />
   </class>

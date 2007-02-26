@@ -65,10 +65,10 @@ class IBaseResourceContained(IBaseResource, container.interfaces.IContained):
 
     container.constraints.containers(IResourceContainer)
 
-class IResource(IBaseResourceContained):
+class IResource(IBaseResource):
     """Marker for a regular old resource"""
 
-class ILocation(IBaseResourceContained):
+class ILocation(IBaseResource):
     """Location."""
 
     type = zope.schema.TextLine(
@@ -83,7 +83,7 @@ class ILocation(IBaseResourceContained):
         required=False)
 
 
-class IEquipment(IBaseResourceContained):
+class IEquipment(IBaseResource):
     """Equipment."""
 
     type = zope.schema.TextLine(

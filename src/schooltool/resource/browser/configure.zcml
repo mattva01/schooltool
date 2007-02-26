@@ -181,10 +181,21 @@
       name="index.html"
       for="..interfaces.IResource"
       class=".resource.ResourceView"
-      template="resource.pt"
       permission="schooltool.view"
-      menu="zmi_views"
-      title="View"
+      />
+
+  <page
+      name="index.html"
+      for="..interfaces.ILocation"
+      class=".resource.LocationView"
+      permission="schooltool.view"
+      />
+
+  <page
+      name="index.html"
+      for="..interfaces.IEquipment"
+      class=".resource.EquipmentView"
+      permission="schooltool.view"
       />
 
   <page

@@ -34,7 +34,7 @@ from zope.component import queryMultiAdapter
 from zope.component import queryUtility
 from zope.formlib import form
 from zope.interface import Interface
-from zope.interface import implements
+from zope.interface import implements, providedBy
 from zope.component import adapts
 from zope.publisher.browser import BrowserView
 from zope.schema.interfaces import ITitledTokenizedTerm
@@ -44,12 +44,10 @@ from schooltool.app.browser.app import BaseEditView
 from schooltool.app.interfaces import ISchoolToolApplication
 from zc.table.column import GetterColumn
 
-from schooltool.resource.interfaces import IBaseResourceContained
-from schooltool.resource.interfaces import IResourceContainer
-from schooltool.resource.interfaces import IResourceFactoryUtility
-from schooltool.resource.interfaces import IResourceTypeInformation
-from schooltool.resource.interfaces import IResourceTypeSource
-from schooltool.resource.interfaces import IResourceSubTypes
+from schooltool.resource.interfaces import (IBaseResourceContained,
+             IResourceContainer, IResourceFactoryUtility,
+             IResourceTypeInformation, IResourceTypeSource, IResourceSubTypes,
+             IResource, IEquipment, ILocation)
 from schooltool.resource.types import EquipmentFactoryUtility
 from schooltool.skin.interfaces import IFilterWidget
 from schooltool.skin.table import CheckboxColumn
@@ -168,11 +166,27 @@ class ResourceTypeFilter(FilterWidget):
     """Resource Type Filter"""
 
 
-class ResourceView(BrowserView):
+class ResourceView(form.DisplayFormBase):
     """A Resource info view."""
 
-    __used_for__ = IBaseResourceContained
+    __used_for__ = IResource
 
+    form_fields = form.Fields(IResource)
+
+    template = ViewPageTemplateFile("resource.pt")
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+class LocationView(ResourceView):
+    """A location info view."""
+    __used_for__ = ILocation
+    form_fields = form.Fields(ILocation)
+class EquipmentView(ResourceView):
+    """A equipment info view."""
+    __used_for__ = IEquipment
+    form_fields = form.Fields(IEquipment)
 
 class ResourceEditView(BaseEditView):
     """A view for editing resource info."""
