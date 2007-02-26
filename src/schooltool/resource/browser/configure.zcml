@@ -30,6 +30,25 @@
       factory=".resource.EquipmentTypeFilter"
       />
 
+  <viewlet
+      name="resource-booking-info"
+      for="*"
+      manager="schooltool.app.browser.skin.ICalendarEventViewletManager"
+      template="event_booking_viewlet.pt"
+      permission="zope.Public"
+      order="20"
+      />
+
+  <viewlet
+      name="resource-booking-edit"
+      for="schooltool.resource.booking.IBookingCalendar"
+      class="schooltool.app.browser.skin.CalendarEventBookingViewlet"
+      manager="schooltool.app.browser.skin.ICalendarEventViewletManager"
+      template="event_edit_booking_viewlet.pt"
+      permission="zope.Public"
+      order="30"
+      />
+
   <configure package="schooltool.skin">
 
     <page

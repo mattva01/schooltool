@@ -33,6 +33,7 @@ from zope.publisher.browser import applySkin
 from zope.publisher.interfaces.browser import IBrowserRequest
 
 from schooltool.app.browser.interfaces import IEventForDisplay
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin.skin import OrderedViewletManager
 from schooltool.skin.skin import ISchoolToolSkin
 
@@ -45,6 +46,15 @@ class ICalendarEventContext(Interface):
     """Schema for attributes required by CalendarEventViewletManager."""
 
     event = Object(IEventForDisplay)
+
+class CalendarEventBookingViewlet(object):
+    """
+    This is the view class for the booking viewlet on the CalendarEventView
+    """
+
+    def listResources(self):
+        resources = ISchoolToolApplication(None)['resources']
+        return [(resourceId, resource) for (resourceId,resource) in resources.items()]
 
 
 class CalendarEventViewletManager(OrderedViewletManager):

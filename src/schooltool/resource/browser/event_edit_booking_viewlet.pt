@@ -1,0 +1,25 @@
+<tal:block define="event view/manager/event;
+                   resources event/getBookedResources;
+                   booker event/getBooker;
+                   listResources view/listResources"
+            condition="event">
+    <div class="body">
+      <form>
+       <h6 class="booked-resource-header"
+             tal:attributes="style string:background: ${event/color2}">
+                 <a style="color: #000;"
+                        tal:attributes="href event/bookingLink">Add a
+                        resource</a></h6>
+
+        <input id="BOOK_A_RESOURCE" type="hidden"/>
+          <ul>
+            <li tal:repeat="resource listResources">
+                <a href="" tal:define="resourceId python:resource[0]"
+                           tal:content="python:resource[1].title"
+                           tal:attributes="href string:${event/viewLink}/booking.html?BOOK1RESOURCE=1&add_item.${resourceId}=1"/>
+            </li>
+          </ul>
+
+      </form>
+    </div>
+</tal:block>

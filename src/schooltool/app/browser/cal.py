@@ -2404,6 +2404,7 @@ class CalendarEventBookingView(CalendarEventView):
     def update(self):
         """Book/unbook resources according to the request."""
         start_date = self.context.dtstart.strftime("%Y-%m-%d")
+        #import pdb;pdb.set_trace()
         self.filter_widget = queryMultiAdapter((self.getAvailableItemsContainer(),
                                                 self.request),
                                                 IFilterWidget)
@@ -2412,7 +2413,7 @@ class CalendarEventBookingView(CalendarEventView):
             url = absoluteURL(self.context, self.request)
             self.request.response.redirect(self.nextURL())
 
-        elif "BOOK" in self.request: # and not self.update_status:
+        elif "BOOK" in self.request or "BOOK1RESOURCE" in self.request: # and not self.update_status:
             self.update_status = ''
             sb = getSchoolToolApplication()
             for res_id, resource in sb["resources"].items():
@@ -2423,7 +2424,8 @@ class CalendarEventBookingView(CalendarEventView):
                         event = removeSecurityProxy(self.context)
                         event.bookResource(resource)
             self.clearJustAddedStatus()
-        #    self.request.response.redirect(self.nextURL())
+            if "BOOK1RESOURCE" in self.request:
+                self.request.response.redirect(self.nextURL())
 
         elif "UNBOOK" in self.request:
             self.update_status = ''
