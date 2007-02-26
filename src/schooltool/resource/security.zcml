@@ -37,11 +37,11 @@
       permission="schooltool.edit" />
 
   <allow
-      interface="schooltool.resource.interfaces.IResource"
+      interface="schooltool.resource.interfaces.IBaseResource"
       crowds="administration leaders resource_viewers"
       permission="schooltool.view" />
   <allow
-      interface="schooltool.resource.interfaces.IResource"
+      interface="schooltool.resource.interfaces.IBaseResource"
       crowds="administration leaders"
       permission="schooltool.edit" />
 
