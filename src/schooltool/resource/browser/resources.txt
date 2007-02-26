@@ -23,7 +23,7 @@ We can create generic resources
     >>> manager.getLink('New Resource').click()
     >>> manager.getControl('Title').value = 'Book'
     >>> manager.getControl('Add').click()
-    >>> manager.getControl('Type').value = ['resource|resource']
+    >>> manager.getControl('Type').value = ['resource|Resource']
     >>> manager.getControl('Search').click()
     >>> 'Book' in manager.contents
     True

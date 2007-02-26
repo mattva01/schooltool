@@ -146,12 +146,12 @@ def resource_container_edit(browser):
     browser.getControl('Title').value = 'Test Resource'
     browser.getControl('Identifier').value = 'testresource'
     browser.getControl('Add').click()
-    browser.getControl('Type').value = ['resource']
+    browser.getControl('Type').value = ['resource|Resource']
     browser.getControl('Search').click()
     browser.getControl(name='delete.testresource').value = True
     browser.getControl('Delete').click()
     browser.getControl('Confirm').click()
-    browser.getControl('Type').value = ['resource']
+    browser.getControl('Type').value = ['resource|Resource']
     browser.getControl('Search').click()
     return 'Time travel machine' in browser.contents
 

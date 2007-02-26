@@ -35,6 +35,7 @@ from schooltool.app.security import LeaderCrowd
 from schooltool.app.interfaces import ICalendarParentCrowd
 from schooltool.resource import interfaces
 from schooltool.securitypolicy.crowds import ConfigurableCrowd
+from schooltool import SchoolToolMessage as _
 
 
 class ResourceContainer(btree.BTreeContainer):
@@ -48,11 +49,13 @@ class BaseResource(Persistent, Contained, Asset):
 
     implements(interfaces.IBaseResource, IAttributeAnnotatable)
 
+    type = _(u"Resource")
+
     def __init__(self, title=None, description=None):
         self.title = title
         self.description = description
         self.notes = u""
-        self.type = u"resource"
+
 
 class Resource(BaseResource):
     """Resource."""

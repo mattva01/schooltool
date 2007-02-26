@@ -202,6 +202,7 @@ class ResourceTypeSource(object):
     def __init__(self, context):
         self.context = context
         utilities = sorted(getUtilitiesFor(IResourceFactoryUtility))
+
         self.types = []
         for name, utility in utilities:
             if IResourceSubTypes.providedBy(utility):
@@ -211,13 +212,11 @@ class ResourceTypeSource(object):
                                           default=None)
                 if subTypeAdapter != None:
                     subTypeAdapter = subTypeAdapter()
-            typeHeader = [name,name,'clickable']
+
+            typeHeader = [name, utility.title, 'unclickable']
             self.types.append(typeHeader)
-            if subTypeAdapter:
-                typeHeader[2] = 'unclickable'
-                subTypes = subTypeAdapter
-                for type in subTypes.types():
-                    self.types.append([name, type,'clickable'])
+            for subtype in subTypeAdapter.types():
+                self.types.append([name, subtype, 'clickable'])
 
     def __contains__(self, value):
         return value in self.types
