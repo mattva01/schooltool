@@ -168,9 +168,10 @@
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
   </class>
 
-  <class class="schooltool.resource.resource.Resource">
+  <class class="schooltool.resource.resource.BaseResource">
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
   </class>
+  
 
   <!-- Core and Domain content objects -->
 

@@ -18,7 +18,7 @@
   </class>
 
   <interface
-      interface=".interfaces.IResource"
+      interface=".interfaces.IBaseResource"
       type="zope.app.content.interfaces.IContentType"
       />
 
@@ -34,6 +34,8 @@
   </class>
 
   <class class=".resource.Location">
+    <implements interface="schooltool.app.interfaces.IHaveCalendar" />
+    <implements interface="schooltool.note.interfaces.IHaveNotes" />
     <require like_class=".resource.Resource" />
     <require permission="schooltool.view"
              attributes="capacity" />
@@ -42,6 +44,8 @@
   </class>
 
   <class class=".resource.Equipment">
+    <implements interface="schooltool.app.interfaces.IHaveCalendar" />
+    <implements interface="schooltool.note.interfaces.IHaveNotes" />
     <require like_class=".resource.Resource" />
     <require permission="schooltool.view"
              attributes="type manufacturer model serialNumber purchaseDate" />
