@@ -102,6 +102,33 @@
   <adapter
       factory=".types.EquipmentTypeAdapter" />
 
+  <adapter
+      for="schooltool.resource.interfaces.IResourceContainer"
+      factory=".booking.ResourceBookingCalendar"
+      provides=".booking.IBookingCalendar" />
+
+  <subscriber
+      for=".interfaces.IResourceContainer
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".booking.ResourceBookingTraverserPlugin"
+      permission="zope.Public"
+      />
+
+
+  <class class=".booking.ResourceBookingCalendar">
+    <require permission="schooltool.view"
+             interface=".interfaces.IBookingCalendar"
+             attributes="__cmp__" />
+  </class>
+
+  <subscriber
+      for="schooltool.resource.interfaces.IBookingCalendar
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.app.browser.interfaces.ICalendarProvider"
+      factory=".booking.ResourceBookingCalendarProvider"
+      />
+
   <include package=".browser" />
   <include package=".rest" />
 

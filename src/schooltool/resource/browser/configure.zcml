@@ -223,4 +223,38 @@
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory=".resource.ResourceTypeTerms" />
 
+  <zope:configure package="schooltool.app.browser">
+    <page
+       name="daily.html"
+       for="schooltool.resource.interfaces.IBookingCalendar"
+       class="schooltool.resource.browser.booking.DailyBookingCalendarView"
+       template="templates/cal_daily.pt"
+       permission="schooltool.view"
+       />
+
+    <page
+       name="weekly.html"
+       for="schooltool.resource.interfaces.IBookingCalendar"
+       class="schooltool.resource.browser.booking.WeeklyBookingCalendarView"
+       template="templates/cal_weekly.pt"
+       permission="schooltool.view"
+       />
+
+    <page
+       name="monthly.html"
+       for="schooltool.resource.interfaces.IBookingCalendar"
+       class="schooltool.resource.browser.booking.MonthlyBookingCalendarView"
+       template="templates/cal_monthly.pt"
+       permission="schooltool.view"
+       />
+
+    <page
+       name="yearly.html"
+       for="schooltool.resource.interfaces.IBookingCalendar"
+       class="schooltool.resource.browser.booking.YearlyBookingCalendarView"
+       template="templates/cal_yearly.pt"
+       permission="schooltool.view"
+       />
+  </zope:configure>
+
 </configure>

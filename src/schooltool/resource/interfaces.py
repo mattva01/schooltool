@@ -28,7 +28,10 @@ import zope.schema
 import zope.app.container.constraints
 from zope.app import container
 
+from schooltool.calendar.interfaces import ICalendarEvent
+from schooltool.calendar.interfaces import ICalendar
 from schooltool import SchoolToolMessage as _
+
 
 class IBaseResource(zope.interface.Interface):
     """Resource."""
@@ -145,3 +148,12 @@ class IResourceSubTypes(zope.interface.Interface):
 
     def types():
         """returns Types among a type (subtypes)"""
+
+
+class IBookingCalendar(ICalendar):
+
+    title = zope.interface.Attribute("")
+
+
+class IBookingCalendarEvent(ICalendarEvent):
+    """Event that represents a possible booking."""

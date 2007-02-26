@@ -153,7 +153,7 @@ class ToCalendarTraverser(object):
 class CalendarTraverser(object):
     """A smart calendar traverser that can handle dates in the URL."""
 
-    adapts(IHaveCalendar)
+    adapts(ICalendar)
     implements(IBrowserPublisher)
 
     queryMultiAdapter = staticmethod(queryMultiAdapter)

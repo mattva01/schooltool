@@ -237,7 +237,7 @@
       />
 
   <zope:view
-      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      for="schooltool.calendar.interfaces.ICalendar"
       type="zope.publisher.interfaces.browser.IBrowserRequest"
       provides="zope.publisher.interfaces.browser.IBrowserPublisher"
       factory=".cal.CalendarTraverser"
@@ -494,7 +494,7 @@
       />
 
   <page
-      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      for="schooltool.calendar.interfaces.ICalendar"
       name="daily_calendar_rows"
       layer="schooltool.skin.ISchoolToolLayer"
       class=".cal.DailyCalendarRowsView"
