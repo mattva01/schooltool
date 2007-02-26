@@ -31,12 +31,12 @@
 function popUp(url) {
 	window.open( url, "myWindow", "status = 1,	\
 					toolbar=0,	\
-					scrollbars=0,	\
+					scrollbars=1,	\
 					menubar=0,	\
 					statusbar=0,	\
 					height = 500,	\
-					width = 600,	\
-					resizable = 0" );
+					width = 650,	\
+					resizable = 1" );
 }
 
 function jumpTo(box) {
