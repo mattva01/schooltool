@@ -5,13 +5,13 @@
   zcml:condition="have context-help"
   i18n_domain="schooltool">
 
-    <help:register
-        id="coursecontainer_index"
-        title="Course Container - Contents"
-        doc_path="course_container.pt"
-        for="schooltool.course.interfaces.ICourseContainer"
-        view="index.html"
-        class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic"
-        />
+  <help:register
+      id="coursecontainer_index"
+      title="Course Container - Contents"
+      doc_path="course_container.pt"
+      for="schooltool.course.interfaces.ICourseContainer"
+      view="index.html"
+      class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic"
+      />
 
 </configure>
