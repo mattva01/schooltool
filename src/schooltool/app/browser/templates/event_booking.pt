@@ -4,7 +4,8 @@
   <title metal:fill-slot="title" i18n:translate="">Resource Booking</title>
 </head>
 <body>
-<metal:block metal:fill-slot="body">
+<metal:block metal:fill-slot="body"
+            tal:define="batch view/batch">
 
 <form tal:attributes="action request/URL" method="post" class="standalone booking_form">
   <h3 i18n:translate="">
@@ -32,12 +33,57 @@
 
   <input type="hidden" tal:condition="request/date|nothing"
          name="date" tal:attributes="value request/date" />
-  <fieldset>
-    <legend i18n:translate="">Available Resources</legend>
+    <!-- tal:block content="view/renderUnavailableResourceTable" / FIX ME -->
+
+    <fieldset tal:condition="view/hasBookedItems">
+      <legend i18n:translate="">Booked resources</legend>
+
+      <tal:block replace="structure view/renderBookedTable" />
+        <div class="controls">
+          <input type="submit" class="button-ok" name="UNBOOK"
+                 value="UnBook"
+                 title="Shortcut: Alt-A" accesskey="A"
+                 i18n:attributes="value; accesskey" />
+        </div>
+
+    </fieldset>
+
+    <fieldset>
+      <legend i18n:translate="">Available resources</legend>
+      <div class="item_list">
+        <tal:if tal:condition="batch">
+          <tal:if condition="view/filter_widget/active">
+            <tal:block define="extra_url view/filter_widget/extra_url">
+              <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+            </tal:block>
+          </tal:if>
+          <tal:if condition="not:view/filter_widget/active">
+            <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+          </tal:if>
+        </tal:if>
+        <tal:block replace="structure view/filter_widget/render" />
+        <tal:block replace="structure view/renderAvailableTable" />
+        <div class="controls">
+          <input type="submit" class="button-ok" name="BOOK"
+                 value="Book" tal:condition="batch"
+                 title="Shortcut: Alt-A" accesskey="A"
+                 i18n:attributes="value; accesskey" />
+          <input type="submit" class="button-cancel" name="CANCEL"
+                 value="Cancel"
+                 title="Shortcut: Alt-C" accesskey="C"
+                 i18n:attributes="value; accesskey" />
+
+        </div>
+        <p tal:condition="not:batch" i18n:translate="">
+          There are none to add.
+        </p>
+      </div>
+    </fieldset>
+
     <table class="event_booking">
       <tal:block tal:repeat="resource view/availableResources/sortby:title">
         <tr tal:attributes="class repeat/resource/parity">
-          <td class="booked">
+          <!-- td class="booked">
             <input type="checkbox"
                    value="booked"
                    tal:attributes="name resource/zope:name;
@@ -48,7 +94,7 @@
             <label tal:attributes="for resource/zope:name" tal:content="resource/title">Resource foo</label>
             <input type="hidden" tal:attributes="name string:marker-${resource/zope:name}"
                    value="1" />
-          </th>
+          </th -->
           <td tal:define="conflicting_events python:view.getConflictingEvents(resource)"
               tal:condition="conflicting_events">
             <fieldset style="text-align: left;">
@@ -76,14 +122,6 @@
         </tr>
       </tal:block>
     </table>
-  </fieldset>
-
-  <div class="controls">
-    <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Book"
-           i18n:attributes="value" />
-    <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
-           i18n:attributes="value cancel-button" />
-  </div>
 
 </form>
 </metal:block>

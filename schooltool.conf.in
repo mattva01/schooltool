@@ -300,4 +300,4 @@ attendance-log-file schooltool-skel/log/attendance.log
 # Default:
 #   devmode off
 #
-#devmode on
+devmode on

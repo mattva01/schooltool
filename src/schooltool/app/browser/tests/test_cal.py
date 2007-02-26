@@ -73,6 +73,7 @@ from schooltool.person.interfaces import IPersonPreferences
 from schooltool.app.browser.cal import CalendarListSubscriber
 from schooltool.app.browser.interfaces import ICalendarProvider
 
+from schooltool.skin.table import LabelColumn
 
 class PrincipalStub:
 
@@ -3074,7 +3075,14 @@ def doctest_TestCalendarEventBookingView():
 
         >>> request = TestRequest()
         >>> view = CalendarEventBookingView(event, request)
-
+        >>> class StubResourceContainer(object):
+        ...     def filter(self, list):
+        ...         return list
+        ...     def values(self):
+        ...         return []
+        >>> def stubItemsContainer(self):
+        ...     return StubResourceContainer()
+        >>> CalendarEventBookingView.getAvailableItemsContainer = stubItemsContainer
         >>> view.update()
         >>> view.errors
         ()
@@ -3105,22 +3113,10 @@ def doctest_TestCalendarEventBookingView():
 
     Now let's book some resources for our event:
 
-        >>> request = TestRequest(form={'marker-res0': '1',
-        ...                             'marker-res1': '1',
-        ...                             'res2': 'booked',
-        ...                             'marker-res2': '1',
-        ...                             'marker-res3': '1',
-        ...                             'res4': 'booked',
-        ...                             'marker-res4': '1',
-        ...                             'marker-res5': '1',
-        ...                             'marker-res6': '1',
-        ...                             'marker-res7': '1',
-        ...                             'marker-res8': '1',
-        ...                             'marker-res9': '1',
-        ...                             'UPDATE_SUBMIT': 'Set'})
-
+        >>> request = TestRequest(form={'add_item.res2': '1',
+        ...                             'add_item.res4': '1',
+        ...                             'BOOK': 'Set'})
         >>> view = CalendarEventBookingView(event, request)
-
         >>> view.update()
         ''
 
@@ -3133,24 +3129,23 @@ def doctest_TestCalendarEventBookingView():
 
     Now let's unbook a resource and book a new one:
 
-        >>> request = TestRequest(form={'marker-res0': '1',
-        ...                             'marker-res1': '1',
-        ...                             'marker-res2': '1',
-        ...                             'res3': 'booked',
-        ...                             'marker-res3': '1',
-        ...                             'res4': 'booked',
-        ...                             'marker-res4': '1',
-        ...                             'marker-res5': '1',
-        ...                             'marker-res6': '1',
-        ...                             'marker-res7': '1',
-        ...                             'marker-res8': '1',
-        ...                             'marker-res9': '1',
-        ...                             'UPDATE_SUBMIT': 'Set'})
+        >>> request = TestRequest(form={'add_item.res3': '1',
+        ...                             'add_item.res4': '1',
+        ...                             'BOOK': 'Set'})
 
         >>> view = CalendarEventBookingView(event, request)
-
         >>> view.update()
         ''
+        >>> [resource.title for resource in view.availableResources
+        ...                 if view.hasBooked(resource)]
+        ['res2', 'res3', 'res4']
+
+        >>> request = TestRequest(form={'remove_item.res2':'1',
+        ...                            'UNBOOK': 'Set'})
+        >>> view = CalendarEventBookingView(event, request)
+        >>> view.update()
+        ''
+
 
     We should see resource 3 in the list now:
 
@@ -3175,7 +3170,6 @@ def doctest_TestCalendarEventBookingView():
 
         >>> view = CalendarEventBookingView(event, request)
         >>> view.update()
-        ''
 
     Nothing has changed, see?
 
@@ -3186,7 +3180,7 @@ def doctest_TestCalendarEventBookingView():
     And you have been redirected back to the calendar:
 
         >>> request.response.getHeader('Location')
-        'http://127.0.0.1/persons/ignas/calendar/ZXYx/@@edit.html'
+        'http://127.0.0.1/persons/ignas/calendar'
 
     The view also follows PersonPreferences timeformat and dateformat settings.
     To demonstrate these we need to setup PersonPreferences:
@@ -3199,7 +3193,6 @@ def doctest_TestCalendarEventBookingView():
         >>> request.setPrincipal(person)
         >>> view = CalendarEventBookingView(event, request)
         >>> view.update()
-        ''
 
     Without the preferences set, we get the default start and end time
     formatting:

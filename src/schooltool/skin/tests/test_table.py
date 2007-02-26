@@ -111,9 +111,29 @@ def doctest_CheckboxColumn():
 
         >>> class ItemStub(object):
         ...     __name__ = "itemStub"
+        >>> column.isDisabled(ItemStub())
+        False
         >>> column.renderCell(ItemStub(), None)
         '<input type="checkbox" name="prefix.itemStub" id="prefix.itemStub" />'
 
+    Let's try to disable the check box if the name of the item is 'foo'
+
+        >>> def isDisabled(item):
+        ...     if item.__name__ == 'foo':
+        ...         return True
+        ...     return False
+        >>> class ItemStub(object):
+        ...     __name__ = "itemStub"
+        >>> column = CheckboxColumn("prefix", "name", "title",
+        ...                         isDisabled=isDisabled)
+        >>> column.isDisabled(ItemStub())
+        False
+        >>> fooStub = ItemStub()
+        >>> fooStub.__name__ = 'foo'
+        >>> column.isDisabled(fooStub)
+        True
+        >>> column.renderCell(fooStub, None)
+        ''
     """
 
 
