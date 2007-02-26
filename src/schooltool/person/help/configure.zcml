@@ -1,0 +1,17 @@
+<configure
+  xmlns:zcml="http://namespaces.zope.org/zcml"
+  xmlns:browser="http://namespaces.zope.org/browser"
+  xmlns:help="http://namespaces.zope.org/help"
+  zcml:condition="have context-help"
+  i18n_domain="schooltool">
+
+  <help:register
+      id="personcontainer_index"
+      title="Person Container - Contents"
+      doc_path="person_container.pt"
+      for="schooltool.person.interfaces.IPersonContainer"
+      view="index.html"
+      class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic"
+      />
+
+</configure>
