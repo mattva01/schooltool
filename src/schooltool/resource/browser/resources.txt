@@ -23,7 +23,7 @@ We can create generic resources
     >>> manager.getLink('New Resource').click()
     >>> manager.getControl('Title').value = 'Book'
     >>> manager.getControl('Add').click()
-    >>> manager.getControl('Type').value = ['resource']
+    >>> manager.getControl('Type').value = ['resource|resource']
     >>> manager.getControl('Search').click()
     >>> 'Book' in manager.contents
     True
@@ -34,7 +34,7 @@ We can create Location resources, which also have a capacity option
     >>> manager.getControl('Title').value = 'Room 101'
     >>> manager.getControl('Capacity').value = '10'
     >>> manager.getControl('Add').click()
-    >>> manager.getControl('Type').value = ['location']
+    >>> manager.getControl('Type').value = ['location|location']
     >>> manager.getControl('Search').click()
     >>> 'Room 101' in manager.contents
     True
@@ -50,7 +50,7 @@ We can create Equipment resources also:
     >>> manager.getControl('Purchase Date') != None
     True
     >>> manager.getControl('Add').click()
-    >>> manager.getControl('Type').value = ['equipment']
+    >>> manager.getControl('Type').value = ['equipment|Projector']
     >>> manager.getControl('Search').click()
     >>> 'Projector 1' in manager.contents
     True

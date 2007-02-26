@@ -25,7 +25,7 @@ Now let's create some resources that can be booked:
     >>> manager.getLink('New Resource').click()
     >>> manager.getControl('Title').value = 'lilly'
     >>> manager.getControl('Add').click()
-    >>> manager.getControl('Type').value = ['resource']
+    >>> manager.getControl('Type').value = ['resource|resource']
     >>> manager.getControl('Search').click()
     >>> 'lilly' in manager.contents
     True
@@ -33,7 +33,7 @@ Now let's create some resources that can be booked:
     >>> manager.getLink('New Resource').click()
     >>> manager.getControl('Title').value = 'mud'
     >>> manager.getControl('Add').click()
-    >>> manager.getControl('Type').value = ['resource']
+    >>> manager.getControl('Type').value = ['resource|resource']
     >>> manager.getControl('Search').click()
     >>> 'mud' in manager.contents
     True
@@ -41,7 +41,7 @@ Now let's create some resources that can be booked:
     >>> manager.getLink('New Resource').click()
     >>> manager.getControl('Title').value = 'fish'
     >>> manager.getControl('Add').click()
-    >>> manager.getControl('Type').value = ['resource']
+    >>> manager.getControl('Type').value = ['resource|resource']
     >>> manager.getControl('Search').click()
     >>> 'fish' in manager.contents
     True
@@ -403,7 +403,7 @@ Now let's allow frog access all resources:
     >>> manager.open('http://localhost')
 
     >>> manager.getLink('Resources').click()
-    >>> manager.getControl('Type').value = ['resource']
+    >>> manager.getControl('Type').value = ['resource|resource']
     >>> manager.getControl('Search').click()
     >>> manager.getLink('mud').click()
     >>> manager.getLink('View Calendar').click()
@@ -569,7 +569,7 @@ Frog should still be able to see the resource's calendar
 Let's delete mud:
 
     >>> manager.open('http://localhost/resources/')
-    >>> manager.getControl('Type').value = ['resource']
+    >>> manager.getControl('Type').value = ['resource|resource']
     >>> manager.getControl('Search').click()
     >>> manager.getControl(name='delete.mud').value = True
     >>> manager.getControl('Delete').click()

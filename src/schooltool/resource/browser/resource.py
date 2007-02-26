@@ -38,6 +38,7 @@ from zope.interface import implements
 from zope.component import adapts
 from zope.publisher.browser import BrowserView
 from zope.schema.interfaces import ITitledTokenizedTerm
+from zope.schema.interfaces import IVocabularyFactory
 
 from schooltool.app.browser.app import BaseEditView
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -90,6 +91,9 @@ class ResourceContainerView(form.FormBase):
         self.resourceType = self.request.get('resources.type','|').split('|')[0]
         self.filter_widget = queryMultiAdapter((self.getResourceUtility(),
                                                 self.request), IFilterWidget)
+        self.typeVocabulary = queryUtility(IVocabularyFactory,
+                                           name="resource_types")(self.context)
+
         if 'resources.actions.delete' in self.request:
             self.template = self.delete_template
 
@@ -155,8 +159,6 @@ class EquipmentTypeFilter(FilterWidget):
 
         return results
 
-
-
 class LocationTypeFilter(FilterWidget):
     """Location Type Filter"""
 
@@ -185,7 +187,7 @@ class ResourceTypeSource(object):
     def __init__(self, context):
         self.context = context
         utilities = sorted(getUtilitiesFor(IResourceFactoryUtility))
-        self.types = {}
+        self.types = []
         for name, utility in utilities:
             if IResourceSubTypes.providedBy(utility):
                 subTypeAdapter = utility
@@ -194,11 +196,13 @@ class ResourceTypeSource(object):
                                           default=None)
                 if subTypeAdapter != None:
                     subTypeAdapter = subTypeAdapter()
-            self.types[(name,name)] = name
+            typeHeader = [name,name,'clickable']
+            self.types.append(typeHeader)
             if subTypeAdapter:
+                typeHeader[2] = 'unclickable'
                 subTypes = subTypeAdapter
                 for type in subTypes.types():
-                    self.types[(name, type)] = name
+                    self.types.append([name, type,'clickable'])
 
     def __contains__(self, value):
         return value in self.types
@@ -209,9 +213,6 @@ class ResourceTypeSource(object):
     def __iter__(self):
         return iter(self.types)
 
-    def get(self, type):
-        return self.types.get(type)
-
 class ResourceTypeTerm(object):
     """Term for displaying of a resource type."""
 
@@ -220,7 +221,7 @@ class ResourceTypeTerm(object):
     def __init__(self, value, title):
         self.value = value
         self.token = value
-        self.title = title#getUtility(IResourceFactoryUtility, name=value).title
+        self.title = title
 
 
 class ResourceTypeTerms(object):

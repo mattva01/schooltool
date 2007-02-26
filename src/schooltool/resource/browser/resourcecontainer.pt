@@ -15,14 +15,39 @@
 
       <!-- Type Searching -->
       <div class="oneline-form">
-        <tal:block repeat="widget view/widgets">
-          <label tal:attributes="for widget/name; title widget/label"
-                 i18n:attributes="title"
-                 i18n:translate=""
-                 tal:content="widget/label">
-          </label>
-              <input tal:replace="structure widget" />
+      <label for="resources.type" title="Type"
+             i18n:translate="">Type</label>
+      <select id="resources.type" name="resources.type" size="1">
+        <tal:block repeat="term python:iter(view.typeVocabulary)">
+          <tal:block
+                   define="optionValue python:'%s|%s'%(term[0],term[1]);
+                           optionContent python:term[1];
+                           clickable python:term[2]=='clickable';
+                           selected python:request.get('resources.type') == optionValue">
+          <tal:if condition="not: selected">
+            <option tal:content="optionContent"
+                    tal:condition="clickable"
+                    tal:attributes="value optionValue">type</option>
+            <option tal:content="optionContent"
+                    tal:condition="not:clickable"
+                    disabled="disabled"
+                    class="dropdown-header"
+                    tal:attributes="value optionValue">type</option>
+          </tal:if>
+          <tal:if condition="selected">
+            <option tal:content="optionContent"
+                    tal:condition="clickable"
+                    selected="selected"
+                    tal:attributes="value optionValue">type</option>
+            <option tal:content="optionContent"
+                    tal:condition="not:clickable"
+                    disabled="disabled"
+                    class="dropdown-header"
+                    tal:attributes="value optionValue">type</option>
+          </tal:if>
+          </tal:block>
         </tal:block>
+      </select>
         <input tal:repeat="action view/actions"
                tal:replace="structure action/render" />
       </div>

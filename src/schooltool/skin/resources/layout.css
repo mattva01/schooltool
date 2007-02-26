@@ -257,6 +257,13 @@ OPTION {
 	border-bottom: 1px #eae8e3 solid;
 }
 
+OPTION.dropdown-header {
+        border-bottom: 1px #000 solid;
+        background: #ddd;
+        color: #000;
+        font-weight: bold;
+}
+
 INPUT[type=text]:focus,
 INPUT[type=password]:focus,
 INPUT[type=submit]:focus,
