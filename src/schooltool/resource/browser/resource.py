@@ -77,10 +77,11 @@ class ResourceContainerView(form.FormBase):
 
     prefix = "resources"
     form_fields = form.Fields(IResourceTypeSchema)
-    actions = form.Actions(
-        form.Action('Search', success='handle_search_action'),
-        form.Action('Delete', success='handle_delete_action'))
+    searchActions = form.Actions(
+        form.Action('Search', success='handle_search_action'),)
 
+    actions = form.Actions(
+                form.Action('Delete', success='handle_delete_action'),)
     template = ViewPageTemplateFile("resourcecontainer.pt")
     delete_template = ViewPageTemplateFile('container_delete.pt')
 

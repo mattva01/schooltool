@@ -48,7 +48,7 @@
           </tal:block>
         </tal:block>
       </select>
-        <input tal:repeat="action view/actions"
+        <input tal:repeat="action view/searchActions"
                tal:replace="structure action/render" />
       </div>
 
@@ -62,6 +62,8 @@
           <tal:block replace="structure view/renderResourceTable" />
         </div>
       </div>
+        <input tal:repeat="action view/actions"
+               tal:replace="structure action/render" />
   </form>
 </metal:block>
 </body>
