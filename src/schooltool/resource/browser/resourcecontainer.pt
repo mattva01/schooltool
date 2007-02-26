@@ -18,7 +18,7 @@
       <label for="resources.type" title="Type"
              i18n:translate="">Type</label>
       <select id="resources.type" name="resources.type" size="1">
-        <tal:block repeat="term python:iter(view.typeVocabulary)">
+        <tal:block repeat="term view/getSubTypes">
           <tal:block
                    define="optionValue python:'%s|%s'%(term[0],term[1]);
                            optionContent python:term[1];

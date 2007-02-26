@@ -111,13 +111,7 @@ Frog should not be capable of booking any resources yet:
     >>> frog.getLink('edit resources').click()
     >>> print frog.contents
     <BLANKLINE>
-    ...
-      <fieldset>
-        <legend>Available Resources</legend>
-        <table class="event_booking">
-        </table>
-      </fieldset>
-    ...
+    ...<legend>Available resources</legend>...
 
 But we can give him that right by making him a leader of that
 resource:
@@ -137,7 +131,7 @@ Frog should see the mud and the fish now:
     <BLANKLINE>
     ...
       <fieldset>
-        <legend>Available Resources</legend>
+          <legend>Available resources</legend>
         <table class="event_booking">
     ...
              <input type="hidden" value="1"
@@ -163,7 +157,7 @@ We should see the resource as a booked resource:
     <BLANKLINE>
     ...
       <fieldset>
-        <legend>Available Resources</legend>
+        <legend>Available resources</legend>
         <table class="event_booking">
     ...
                 <input type="checkbox" value="booked"
@@ -190,7 +184,7 @@ Now another resource is booked:
     <BLANKLINE>
     ...
       <fieldset>
-        <legend>Available Resources</legend>
+        <legend>Available resources</legend>
         <table class="event_booking">
     ...
                 <input type="checkbox" value="booked"
@@ -267,7 +261,7 @@ Unless unbooked:
     <BLANKLINE>
     ...
       <fieldset>
-        <legend>Available Resources</legend>
+        <legend>Available resources</legend>
         <table class="event_booking">
     ...
                 <input type="checkbox" value="booked"
@@ -454,7 +448,7 @@ we should see the conflicts when booking the for the events overlapping
     <BLANKLINE>
     ...
       <fieldset>
-        <legend>Available Resources</legend>
+        <legend>Available resources</legend>
         <table class="event_booking">
     ...
     <input type="checkbox" value="booked"
@@ -503,7 +497,7 @@ Unless we are looking at "Test event2" itself:
     <BLANKLINE>
     ...
       <fieldset>
-        <legend>Available Resources</legend>
+        <legend>Available resources</legend>
         <table class="event_booking">
     ...
       <input type="checkbox" value="booked"

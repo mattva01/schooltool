@@ -39,6 +39,8 @@ from zope.component import adapts
 from zope.publisher.browser import BrowserView
 from zope.schema.interfaces import ITitledTokenizedTerm
 from zope.schema.interfaces import IVocabularyFactory
+from zope.app.zapi import absoluteURL
+from zope.app.session.interfaces import ISession
 
 from schooltool.app.browser.app import BaseEditView
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -57,15 +59,6 @@ from schooltool.skin.table import LabelColumn
 from schooltool import SchoolToolMessage as _
 
 
-class IResourceTypeSchema(Interface):
-    """Schema for resource container view forms."""
-
-    type = schema.Choice(title=_(u"Type"),
-                         description=_("Type of Resource"),
-                         source="resource_types"
-                         )
-
-
 class ResourceContainerView(form.FormBase):
     """A Resource Container view."""
 
@@ -74,12 +67,13 @@ class ResourceContainerView(form.FormBase):
     index_title = _("Resource index")
 
     prefix = "resources"
-    form_fields = form.Fields(IResourceTypeSchema)
+    form_fields = form.Fields()
     searchActions = form.Actions(
         form.Action('Search', success='handle_search_action'),)
 
     actions = form.Actions(
-                form.Action('Delete', success='handle_delete_action'),)
+                form.Action('Delete', success='handle_delete_action'),
+                form.Action('Book', success='handle_book_action'))
     template = ViewPageTemplateFile("resourcecontainer.pt")
     delete_template = ViewPageTemplateFile('container_delete.pt')
 
@@ -90,11 +84,26 @@ class ResourceContainerView(form.FormBase):
         self.resourceType = self.request.get('resources.type','|').split('|')[0]
         self.filter_widget = queryMultiAdapter((self.getResourceUtility(),
                                                 self.request), IFilterWidget)
-        self.typeVocabulary = queryUtility(IVocabularyFactory,
-                                           name="resource_types")(self.context)
 
-        if 'resources.actions.delete' in self.request:
-            self.template = self.delete_template
+
+    def getSubTypes(self):
+        utilities = sorted(getUtilitiesFor(IResourceFactoryUtility))
+
+        self.types = []
+        for name, utility in utilities:
+            if IResourceSubTypes.providedBy(utility):
+                subTypeAdapter = utility
+            else:
+                subTypeAdapter = queryAdapter(utility, IResourceSubTypes,
+                                          default=None)
+                if subTypeAdapter != None:
+                    subTypeAdapter = subTypeAdapter()
+
+            typeHeader = [name, utility.title, 'unclickable']
+            self.types.append(typeHeader)
+            for subtype in subTypeAdapter.types():
+                self.types.append([name, subtype, 'clickable'])
+        return self.types
 
     def listIdsForDeletion(self):
         return [key for key in self.context
@@ -106,10 +115,17 @@ class ResourceContainerView(form.FormBase):
     itemsToDelete = property(_listItemsForDeletion)
 
     def handle_delete_action(self, action, data):
-        pass
+        self.template = self.delete_template
 
     def handle_search_action(self, action, data):
         pass
+
+    def handle_book_action(self, action, data):
+        sessionWrapper = ISession(self.request)
+        session = sessionWrapper['schooltool.resource']
+        session['bookingSelection'] = [''.join(key.split('.')[1:]) for key in self.request if key.startswith('delete.')]
+        url = '%s/booking?' % absoluteURL(self.context, self.request)
+        return self.request.response.redirect(url)
 
     def getResourceUtility(self):
         return queryUtility(IResourceFactoryUtility,
@@ -192,68 +208,3 @@ class ResourceEditView(BaseEditView):
     """A view for editing resource info."""
 
     __used_for__ = IBaseResourceContained
-
-
-class ResourceTypeSource(object):
-    """Source that displays all the available resoure types."""
-
-    implements(IResourceTypeSource)
-
-    def __init__(self, context):
-        self.context = context
-        utilities = sorted(getUtilitiesFor(IResourceFactoryUtility))
-
-        self.types = []
-        for name, utility in utilities:
-            if IResourceSubTypes.providedBy(utility):
-                subTypeAdapter = utility
-            else:
-                subTypeAdapter = queryAdapter(utility, IResourceSubTypes,
-                                          default=None)
-                if subTypeAdapter != None:
-                    subTypeAdapter = subTypeAdapter()
-
-            typeHeader = [name, utility.title, 'unclickable']
-            self.types.append(typeHeader)
-            for subtype in subTypeAdapter.types():
-                self.types.append([name, subtype, 'clickable'])
-
-    def __contains__(self, value):
-        return value in self.types
-
-    def __len__(self):
-        len(self.types)
-
-    def __iter__(self):
-        return iter(self.types)
-
-class ResourceTypeTerm(object):
-    """Term for displaying of a resource type."""
-
-    implements(ITitledTokenizedTerm)
-
-    def __init__(self, value, title):
-        self.value = value
-        self.token = value
-        self.title = title
-
-
-class ResourceTypeTerms(object):
-    """Terms implementation for resource types."""
-
-    implements(ITerms)
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-
-    def getTerm(self, value):
-        if value not in self.context:
-            raise LookupError(value)
-        return ResourceTypeTerm('%s|%s' % (value[0],value[1]),
-                                value[1])
-
-    def getValue(self, token):
-        if token not in self.context:
-            raise LookupError(token)
-        return token

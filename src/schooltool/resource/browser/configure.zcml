@@ -213,16 +213,6 @@
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory="schooltool.skin.table.FilterWidget" />
 
-  <zope:utility
-     component=".resource.ResourceTypeSource"
-     provides="zope.schema.interfaces.IVocabularyFactory"
-     name="resource_types" />
-
-  <zope:adapter
-      for="schooltool.resource.interfaces.IResourceTypeSource
-           zope.publisher.interfaces.browser.IBrowserRequest"
-      factory=".resource.ResourceTypeTerms" />
-
   <zope:configure package="schooltool.app.browser">
     <page
        name="daily.html"
