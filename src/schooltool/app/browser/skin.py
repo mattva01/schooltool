@@ -47,14 +47,15 @@ class ICalendarEventContext(Interface):
 
     event = Object(IEventForDisplay)
 
+
 class CalendarEventBookingViewlet(object):
     """
     This is the view class for the booking viewlet on the CalendarEventView
     """
 
     def listResources(self):
-        resources = ISchoolToolApplication(None)['resources']
-        return [(resourceId, resource) for (resourceId,resource) in resources.items()]
+        return [(resource.__name__, resource)
+                for resource in self.manager.event.context.resources]
 
 
 class CalendarEventViewletManager(OrderedViewletManager):

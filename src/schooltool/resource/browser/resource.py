@@ -28,7 +28,6 @@ from zope.app.form.browser.interfaces import ITerms
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtilitiesFor
 from zope.component import getUtility
-
 from zope.component import queryAdapter
 from zope.component import queryMultiAdapter
 from zope.component import queryUtility
@@ -42,10 +41,11 @@ from zope.schema.interfaces import IVocabularyFactory
 from zope.app.zapi import absoluteURL
 from zope.app.session.interfaces import ISession
 
-from schooltool.app.browser.app import BaseEditView
-from schooltool.app.interfaces import ISchoolToolApplication
 from zc.table.column import GetterColumn
 
+from schooltool.app.browser.app import BaseEditView
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.resource.interfaces import IBookingCalendar
 from schooltool.resource.interfaces import (IBaseResourceContained,
              IResourceContainer, IResourceFactoryUtility,
              IResourceTypeInformation, IResourceTypeSource, IResourceSubTypes,
@@ -123,8 +123,10 @@ class ResourceContainerView(form.FormBase):
     def handle_book_action(self, action, data):
         sessionWrapper = ISession(self.request)
         session = sessionWrapper['schooltool.resource']
-        session['bookingSelection'] = [''.join(key.split('.')[1:]) for key in self.request if key.startswith('delete.')]
-        url = '%s/booking?' % absoluteURL(self.context, self.request)
+        session['bookingSelection'] = [''.join(key.split('.')[1:])
+                                       for key in self.request
+                                       if key.startswith('delete.')]
+        url = absoluteURL(IBookingCalendar(self.context), self.request)
         return self.request.response.redirect(url)
 
     def getResourceUtility(self):
@@ -166,8 +168,7 @@ class EquipmentTypeFilter(FilterWidget):
             searchstr = self.request['SEARCH'].lower()
             results = [item for item in list
                        if (searchstr in item.title.lower() and
-                           self.request.get('resources.type','|').split('|')[1] ==
-        item.type)]
+                           self.request.get('resources.type','|').split('|')[1] == item.type)]
         else:
             self.request.form['SEARCH'] = ''
             results = list

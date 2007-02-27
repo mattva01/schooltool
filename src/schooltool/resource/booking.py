@@ -25,12 +25,16 @@ from datetime import datetime, timedelta
 from pytz import utc
 
 from zope.interface import implements
+from zope.app.session.interfaces import ISession
 
 from schooltool.calendar.simple import ImmutableCalendar
 from schooltool.resource.interfaces import IBookingCalendar
 from schooltool.calendar.simple import SimpleCalendarEvent
 from schooltool.traverser.traverser import AdapterTraverserPlugin
 from schooltool.resource.interfaces import IBookingCalendarEvent
+from schooltool.app.interfaces import ISchoolToolCalendar
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.person.interfaces import IPerson
 
 
 class BookingCalendarEvent(SimpleCalendarEvent):
@@ -46,12 +50,8 @@ class ResourceBookingCalendar(ImmutableCalendar):
         self.__name__ = 'booking'
         self.title = "Booking Calendar"
 
-        # XXX A test event for functional testing
-        dt = utc.localize(datetime(2007, 2, 26))
-        event = BookingCalendarEvent(dt, timedelta(minutes=45),
-                                     "Camera", unique_id="fooo")
-        event.__parent__ = None
-        self._events = (event, )
+    def __iter__(self):
+        return iter([])
 
 
 ResourceBookingTraverserPlugin = AdapterTraverserPlugin(
@@ -64,11 +64,41 @@ class ResourceBookingCalendarProvider(object):
         self.context = context
         self.request = request
 
+    def getBookingCalendar(self, calendar, *calendars):
+        events = []
+        for event in calendar:
+            resources = []
+            for resource_calendar in calendars:
+                evts = list(resource_calendar.expand(event.dtstart,
+                                                     event.dtstart + event.duration))
+                if not list(evts):
+                    resources.append(resource_calendar.__parent__)
+
+            if resources:
+                event = BookingCalendarEvent(event.dtstart,
+                                             event.duration,
+                                             event.title,
+                                             description=event.description,
+                                             unique_id=event.unique_id)
+                event.resources = resources
+                event.__parent__ = None
+                events.append(event)
+
+        return ImmutableCalendar(events)
+
     def getCalendars(self):
         """Get a list of calendars to display.
 
         Yields tuples (calendar, color1, color2).
         """
-        # XXX or maybe collect all the booking calendars and return
-        # them?
-        yield (self.context, '#9db8d2', '#7590ae')
+        session = ISession(self.request)['schooltool.resource']
+
+        rc = ISchoolToolApplication(None)['resources']
+        resource_calendars = [ISchoolToolCalendar(rc[resource_id])
+                              for resource_id in session['bookingSelection']]
+        person_calendar = ISchoolToolCalendar(IPerson(self.request.principal))
+        booking_calendar = self.getBookingCalendar(person_calendar,
+                                                   *resource_calendars)
+
+        yield (booking_calendar, '#9db8d2', '#7590ae')
+        yield (self.context, '#aec9e3', '#88a1bd')
