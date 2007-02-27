@@ -50,10 +50,10 @@ def doctest_ResourceContainer():
 def doctest_Resource():
     r"""Tests for Resource
 
-        >>> from schooltool.resource.interfaces import IBaseResourceContained
+        >>> from schooltool.resource.interfaces import IResource
         >>> from schooltool.resource.resource import Resource
         >>> resource = Resource()
-        >>> verifyObject(IBaseResourceContained, resource)
+        >>> verifyObject(IResource, resource)
         True
 
     Resources can have titles and descriptions too
@@ -82,6 +82,7 @@ def doctest_Location():
     them:
 
         >>> room.capacity
+
     """
 
 def doctest_Equipment():
