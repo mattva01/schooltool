@@ -28,6 +28,7 @@ from schooltool.calendar.simple import ImmutableCalendar
 from schooltool.resource.interfaces import IBookingCalendar
 from schooltool.calendar.simple import SimpleCalendarEvent
 from schooltool.resource.interfaces import IBookingCalendarEvent
+from schooltool.resource.interfaces import IBookingTimetableEvent
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPerson
@@ -36,7 +37,15 @@ from schooltool.attendance.attendance import getRequestFromInteraction
 from schooltool.traverser.traverser import NameTraverserPlugin
 
 
-def createBookingCalendar(calendar, calendars):
+class BookingCalendarEvent(SimpleCalendarEvent):
+    implements(IBookingCalendarEvent)
+
+
+class BookingTimetableEvent(SimpleCalendarEvent):
+    implements(IBookingTimetableEvent)
+
+
+def createBookingCalendar(calendar, calendars, event_factory=BookingCalendarEvent):
     events = []
     for event in calendar:
         resources = []
@@ -47,11 +56,10 @@ def createBookingCalendar(calendar, calendars):
                 resources.append(resource_calendar.__parent__)
 
         if resources:
-            event = BookingCalendarEvent(event.dtstart,
-                                         event.duration,
-                                         event.title,
-                                         description=event.description,
-                                         unique_id=event.unique_id)
+            event = event_factory(event.dtstart, event.duration,
+                                  event.title,
+                                  description=event.description,
+                                  unique_id=event.unique_id)
             event.resources = resources
             event.__parent__ = None
             events.append(event)
@@ -65,10 +73,6 @@ def getSelectedResourceCalendars(request):
     resource_calendars = [ISchoolToolCalendar(rc[resource_id])
                           for resource_id in session['bookingSelection']]
     return resource_calendars
-
-
-class BookingCalendarEvent(SimpleCalendarEvent):
-    implements(IBookingCalendarEvent)
 
 
 class ResourceBookingCalendar(ImmutableCalendar):
@@ -118,7 +122,8 @@ class ResourceBookingCalendar(ImmutableCalendar):
         resource_calendars = getSelectedResourceCalendars(self.request)
         # XXX should skip person resources
         booking_calendar = createBookingCalendar(timetable_calendar,
-                                                 resource_calendars)
+                                                 resource_calendars,
+                                                 event_factory=BookingTimetableEvent)
         return booking_calendar.expand(start, end)
 
     def __iter__(self):

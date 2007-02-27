@@ -25,17 +25,15 @@ $Id$
 from zope.interface import Interface
 from zope.interface import implements
 from zope.schema import Object
-from zope.publisher.interfaces.browser import ILayer, IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.viewlet.interfaces import IViewletManager
-from zope.viewlet.manager import ViewletManagerBase
 from zope.publisher.browser import applySkin
-from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.app.browser.interfaces import IEventForDisplay
-from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin.skin import OrderedViewletManager
 from schooltool.skin.skin import ISchoolToolSkin
+from schooltool.resource.interfaces import IBookingCalendarEvent
 
 
 class ICalendarEventViewletManager(IViewletManager):
@@ -52,6 +50,20 @@ class CalendarEventBookingViewlet(object):
     """
     This is the view class for the booking viewlet on the CalendarEventView
     """
+
+    def bookingUrl(self, resource_id):
+        url = absoluteURL(self.context, self.request)
+        url = "%s/book_one_resource.html?resource_id=%s" % (url, resource_id)
+        event = self.manager.event.context
+
+        if IBookingCalendarEvent.providedBy(event):
+            url = "%s&event_id=%s" % (url, event.unique_id)
+        else:
+            url = "%s&date=%s&time=%s&title=%s&duration=%s" % (
+                url, event.dtstart.date(), event.dtstart.time(),
+                event.title, event.duration)
+
+        return url
 
     def listResources(self):
         return [{'id': resource.__name__, 'title': resource.title}

@@ -156,4 +156,8 @@ class IBookingCalendar(ICalendar):
 
 
 class IBookingCalendarEvent(ICalendarEvent):
-    """Event that represents a possible booking."""
+    """Event that represents a possible booking on an existing event."""
+
+
+class IBookingTimetableEvent(ICalendarEvent):
+    """Event that represents a possible booking in a timetable slot."""

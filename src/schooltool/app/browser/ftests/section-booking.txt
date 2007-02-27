@@ -116,4 +116,7 @@ Let's look at it:
     >>> manager.getControl('Type').value = ['resource|Resource']
     >>> manager.getControl('Search').click()
 
+    >>> from schooltool.testing.server import startServer
+    >>> startServer(http, manager.url, 'manager', 'schooltool')
+
 # XXX make booking work, and make booking filter resources properly

@@ -10,11 +10,7 @@
   <ul>
     <li tal:repeat="resource listResources">
       <a href="" tal:content="resource/title"
-         tal:attributes="href
-                         string:book_one_resource.html?resource_id=${resource/id}&event_id=${event/unique_id}"/>
-    </li>
-    <li>
-      <a href="book_one_resource.html?resource_id=mud&date=2005-09-01&time=20:20&title=Period1">Mud</a>
+         tal:attributes="href python:view.bookingUrl(resource['id'])"/>
     </li>
   </ul>
 </div>
