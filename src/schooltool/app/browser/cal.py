@@ -2426,7 +2426,6 @@ class CalendarEventBookingView(CalendarEventView):
     def update(self):
         """Book/unbook resources according to the request."""
         start_date = self.context.dtstart.strftime("%Y-%m-%d")
-        #import pdb;pdb.set_trace()
         self.filter_widget = queryMultiAdapter((self.getAvailableItemsContainer(),
                                                 self.request),
                                                 IFilterWidget)
