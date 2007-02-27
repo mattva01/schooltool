@@ -111,7 +111,9 @@ Frog should not be capable of booking any resources yet:
     >>> frog.getLink('edit resources').click()
     >>> print frog.contents
     <BLANKLINE>
-    ...<legend>Available resources</legend>...
+    ...
+    <legend>Available resources</legend>
+    ...
 
 But we can give him that right by making him a leader of that
 resource:
@@ -132,15 +134,13 @@ Frog should see the mud and the fish now:
     ...
       <fieldset>
           <legend>Available resources</legend>
-        <table class="event_booking">
     ...
-             <input type="hidden" value="1"
-                    name="marker-fish" />
+          <input type="checkbox" name="add_item.fish" id="add_item.fish" />
     ...
-             <input type="hidden" value="1"
-                    name="marker-mud" />
+          <input type="checkbox" name="add_item.mud" id="add_item.mud" />
     ...
         </table>
+    ...
       </fieldset>
     ...
 
@@ -151,51 +151,31 @@ Let's book one of them:
 
 We should see the resource as a booked resource:
 
+    >>> frog.open('http://localhost/persons/frog/calendar/2005-02-04')
     >>> frog.getLink('Test event').click()
     >>> frog.getLink('edit resources').click()
     >>> print frog.contents
     <BLANKLINE>
     ...
-      <fieldset>
-        <legend>Available resources</legend>
-        <table class="event_booking">
+        <input type="checkbox" name="remove_item.mud" id="remove_item.mud" />
     ...
-                <input type="checkbox" value="booked"
-                       name="fish" id="fish" />
+
+     <fieldset>
+          <legend>Available resources</legend>
     ...
-                <input type="checkbox" value="booked"
-                       checked="checked" name="mud" id="mud" />
+          <input type="checkbox" name="add_item.fish" id="add_item.fish"/>
     ...
-        </table>
       </fieldset>
     ...
 
 Let's unbook one of them and book another:
 
-    >>> frog.getControl('mud').selected = False
+    >>> frog.getControl('mud').selected = True
+    >>> frog.getControl('UnBook').click()
     >>> frog.getControl('fish').selected = True
     >>> frog.getControl('Book').click()
 
-Now another resource is booked:
-
-    >>> frog.getLink('Test event').click()
-    >>> frog.getLink('edit resources').click()
-    >>> print frog.contents
-    <BLANKLINE>
-    ...
-      <fieldset>
-        <legend>Available resources</legend>
-        <table class="event_booking">
-    ...
-                <input type="checkbox" value="booked"
-                       checked="checked" name="fish" id="fish" />
-    ...
-                <input type="checkbox" value="booked"
-                       name="mud" id="mud" />
-    ...
-        </table>
-      </fieldset>
-    ...
+Now another resource is booked
 
 Frog should see the event in the resource calendar too:
 
@@ -237,39 +217,19 @@ The fish should stay in the bookable resources list:
     <BLANKLINE>
     ...
       <fieldset>
-        <legend>Available Resources</legend>
-        <table class="event_booking">
+        <legend>Booked resources</legend>
     ...
-                <input type="checkbox" value="booked"
-                       checked="checked" name="fish" id="fish" />
+        <input type="checkbox" name="remove_item.fish" id="remove_item.fish" />
     ...
-                <input type="checkbox" value="booked"
-                       name="mud" id="mud" />
-    ...
-        </table>
       </fieldset>
     ...
 
 Unless unbooked:
 
-    >>> frog.getControl('fish').selected = False
-    >>> frog.getControl('Book').click()
-
-    >>> frog.getLink('Test event').click()
-    >>> frog.getLink('edit resources').click()
-    >>> print frog.contents
-    <BLANKLINE>
-    ...
-      <fieldset>
-        <legend>Available resources</legend>
-        <table class="event_booking">
-    ...
-                <input type="checkbox" value="booked"
-                       name="mud" id="mud" />
-    ...
-        </table>
-      </fieldset>
-    ...
+    >>> frog.getControl('fish').selected = True
+    >>> frog.getControl('UnBook').click()
+    >>> 'name="add_item.fish" id="add_item.fish"' not in frog.contents
+    True
 
 
 When adding a new event we should get redirected to resource booking
@@ -336,10 +296,7 @@ Yet mud is not booked anymore:
     >>> print frog.contents
     <BLANKLINE>
     ...
-    <td class="booked">
-      <input type="checkbox" value="booked" name="mud"
-             id="mud" />
-    </td>
+          <input type="checkbox" name="add_item.mud" id="add_item.mud" />
     ...
 
 Let's book it again:
@@ -439,84 +396,14 @@ If we book some resources for the second event,
     >>> frog.getControl('fish').selected = True
     >>> frog.getControl('Book').click()
 
-we should see the conflicts when booking the for the events overlapping
-"Test event1":
-
-    >>> frog.open('http://localhost/persons/frog/calendar/ZHVtbXktdWlkMQ%3D%3D')
-    >>> frog.getLink('edit resources').click()
-    >>> print frog.contents
-    <BLANKLINE>
-    ...
-      <fieldset>
-        <legend>Available resources</legend>
-        <table class="event_booking">
-    ...
-    <input type="checkbox" value="booked"
-           name="fish" id="fish" />
-    ...
-    <td>
-      <fieldset style="text-align: left;">
-        <legend>Conflicting events</legend>
-        <div>
-          <div>
-            <a href="http://.../calendar/ZHVtbXktdWlkMg%3D%3D/edit.html">Test event2</a>
-              (10:00 -
-              11:00)
-               <a href="http://.../calendar/2005-02-04/">Frog</a>
-          </div>
-        </div>
-      </fieldset>
-    </td>
-    ...
-    <input type="checkbox" value="booked"
-           name="mud" id="mud" />
-    ...
-    <td>
-      <fieldset style="text-align: left;">
-        <legend>Conflicting events</legend>
-        <div>
-          <div>
-            <a href="http://.../calendar/ZHVtbXktdWlkMg%3D%3D/edit.html">Test event2</a>
-              (10:00 -
-              11:00)
-               <a href="http://.../calendar/2005-02-04/">Frog</a>
-          </div>
-        </div>
-      </fieldset>
-    </td>
-    ...
-        </table>
-      </fieldset>
-    ...
-
 Unless we are looking at "Test event2" itself:
 
     >>> frog.open('http://localhost/persons/frog/calendar/ZHVtbXktdWlkMg%3D%3D')
     >>> frog.getLink('edit resources').click()
-    >>> print frog.contents
-    <BLANKLINE>
-    ...
-      <fieldset>
-        <legend>Available resources</legend>
-        <table class="event_booking">
-    ...
-      <input type="checkbox" value="booked"
-             checked="checked" name="fish" id="fish" />
-    </td>
-    <th class="resource">
-      <label for="fish">fish</label>
-      <input type="hidden" value="1"
-             name="marker-fish" />
-    </th>
-    ...
-      <input type="checkbox" value="booked"
-             checked="checked" name="mud" id="mud" />
-    </td>
-    <th class="resource">
-      <label for="mud">mud</label>
-      <input type="hidden" value="1" name="marker-mud" />
-    </th>
-    ...
+    >>> 'type="checkbox" name="remove_item.fish"' in frog.contents
+    True
+    >>> 'type="checkbox" name="remove_item.mud"' in frog.contents
+    True
 
 Let's add another person, frog's boss:
 

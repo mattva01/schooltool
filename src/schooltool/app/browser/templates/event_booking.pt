@@ -33,7 +33,6 @@
 
   <input type="hidden" tal:condition="request/date|nothing"
          name="date" tal:attributes="value request/date" />
-    <!-- tal:block content="view/renderUnavailableResourceTable" / FIX ME -->
 
     <fieldset tal:condition="view/hasBookedItems">
       <legend i18n:translate="">Booked resources</legend>
@@ -79,50 +78,7 @@
         </p>
       </div>
     </fieldset>
-
-    <table class="event_booking">
-      <tal:block tal:repeat="resource view/availableResources/sortby:title">
-        <tr tal:attributes="class repeat/resource/parity">
-          <!-- td class="booked">
-            <input type="checkbox"
-                   value="booked"
-                   tal:attributes="name resource/zope:name;
-                                   id resource/zope:name;
-                                   checked python: view.hasBooked(resource)" />
-          </td>
-          <th class="resource">
-            <label tal:attributes="for resource/zope:name" tal:content="resource/title">Resource foo</label>
-            <input type="hidden" tal:attributes="name string:marker-${resource/zope:name}"
-                   value="1" />
-          </th -->
-          <td tal:define="conflicting_events python:view.getConflictingEvents(resource)"
-              tal:condition="conflicting_events">
-            <fieldset style="text-align: left;">
-              <legend i18n:translate="">Conflicting events</legend>
-              <div>
-                <div tal:repeat="event conflicting_events">
-                  <tal:if condition="event/context/__parent__">
-                    <a tal:attributes="href string:${event/context/@@absolute_url}/edit.html" tal:content="event/shortTitle" />
-                  </tal:if>
-                  <tal:if condition="not:event/context/__parent__">
-                    <a tal:attributes="href string:${event/context/activity/owner/@@absolute_url}/resources.html" tal:content="event/shortTitle" />
-                  </tal:if>
-                    (<span tal:replace="python:event.dtstart.strftime('%H:%M')"/> -
-                    <span tal:replace="python:event.dtend.strftime('%H:%M')"/>)
-                    <tal:block tal:define="owner python: event.context.__parent__
-                                                           and event.context.__parent__.__parent__
-                                                           or event.context.activity.owner">
-                      <a tal:define="owner_url string:${owner/@@absolute_url}/calendar"
-                         tal:attributes="href python: '%s/%s/' % (owner_url, context.dtstart.strftime('%Y-%m-%d'))" tal:content="owner/title">A Dude</a>
-                    </tal:block>
-                </div>
-              </div>
-            </fieldset>
-          </td>
-        </tr>
-      </tal:block>
-    </table>
-
+ 
 </form>
 </metal:block>
 </body>

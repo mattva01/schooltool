@@ -3080,9 +3080,10 @@ def doctest_TestCalendarEventBookingView():
         ...         return list
         ...     def values(self):
         ...         return []
-        >>> def stubItemsContainer(self):
+        >>> def stubItemsContainer():
         ...     return StubResourceContainer()
-        >>> CalendarEventBookingView.getAvailableItemsContainer = stubItemsContainer
+        >>> view.getAvailableItemsContainer = stubItemsContainer
+        >>> view.filter = lambda list: list
         >>> view.update()
         >>> view.errors
         ()
@@ -3117,6 +3118,8 @@ def doctest_TestCalendarEventBookingView():
         ...                             'add_item.res4': '1',
         ...                             'BOOK': 'Set'})
         >>> view = CalendarEventBookingView(event, request)
+        >>> view.getAvailableItemsContainer = stubItemsContainer
+        >>> view.filter = lambda list: list
         >>> view.update()
         ''
 
@@ -3134,6 +3137,8 @@ def doctest_TestCalendarEventBookingView():
         ...                             'BOOK': 'Set'})
 
         >>> view = CalendarEventBookingView(event, request)
+        >>> view.getAvailableItemsContainer = stubItemsContainer
+        >>> view.filter = lambda list: list
         >>> view.update()
         ''
         >>> [resource.title for resource in view.availableResources
@@ -3143,9 +3148,10 @@ def doctest_TestCalendarEventBookingView():
         >>> request = TestRequest(form={'remove_item.res2':'1',
         ...                            'UNBOOK': 'Set'})
         >>> view = CalendarEventBookingView(event, request)
+        >>> view.getAvailableItemsContainer = stubItemsContainer
+        >>> view.filter = lambda list: list
         >>> view.update()
         ''
-
 
     We should see resource 3 in the list now:
 
@@ -3169,6 +3175,8 @@ def doctest_TestCalendarEventBookingView():
         ...                             'CANCEL': 'Cancel'})
 
         >>> view = CalendarEventBookingView(event, request)
+        >>> view.getAvailableItemsContainer = stubItemsContainer
+        >>> view.filter = lambda list: list
         >>> view.update()
 
     Nothing has changed, see?
@@ -3192,6 +3200,8 @@ def doctest_TestCalendarEventBookingView():
         ...                      getPersonPreferences)
         >>> request.setPrincipal(person)
         >>> view = CalendarEventBookingView(event, request)
+        >>> view.getAvailableItemsContainer = stubItemsContainer
+        >>> view.filter = lambda list: list
         >>> view.update()
 
     Without the preferences set, we get the default start and end time

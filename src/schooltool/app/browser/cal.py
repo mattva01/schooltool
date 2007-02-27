@@ -2354,7 +2354,12 @@ class CalendarEventBookingView(CalendarEventView):
                              )]
 
     def getBookedItems(self):
-        return self.context.resources
+        return removeSecurityProxy(self.context.resources)
+
+    def updateBatch(self, lst):
+        self.batch_start = int(self.request.get('batch_start', 0))
+        self.batch_size = int(self.request.get('batch_size', 10))
+        self.batch = Batch(lst, self.batch_start, self.batch_size, sort_by='title')
 
     def renderBookedTable(self):
         prefix = "remove_item"
@@ -2363,10 +2368,10 @@ class CalendarEventBookingView(CalendarEventView):
                              title=u"Title",
                              getter=lambda i, f: i.title,
                              subsort=True),]
+        columns[1] = LabelColumn(columns[1], prefix)
         formatter = table.FormFullFormatter(
             self.context, self.request, self.getBookedItems(),
             columns=columns,
-            batch_start=self.batch_start, batch_size=self.batch_size,
             sort_on=self.sortOn(),
             prefix="booked")
         formatter.cssClasses['table'] = 'data'
@@ -2398,17 +2403,12 @@ class CalendarEventBookingView(CalendarEventView):
     def getAvailableItems(self):
         container = self.getAvailableItemsContainer()
         bookedItems = set(self.getBookedItems())
-        allItems = set(container.values())
+        allItems = set(self.availableResources)
         return list(allItems - bookedItems)
 
     def filter(self, list):
         return self.filter_widget.filter(list)
 
-
-    def updateBatch(self, lst):
-        self.batch_start = int(self.request.get('batch_start', 0))
-        self.batch_size = int(self.request.get('batch_size', 10))
-        self.batch = Batch(lst, self.batch_start, self.batch_size, sort_by='title')
 
     def justAddedThisEvent(self):
         session_data = ISession(self.request)['schooltool.calendar']
@@ -2456,8 +2456,8 @@ class CalendarEventBookingView(CalendarEventView):
                         # Always allow unbooking, even if permission to
                         # book that specific resource was revoked.
                         self.context.unbookResource(resource)
-
-        self.updateBatch(self.getAvailableItems())
+        self.updateBatch(self.filter(self.availableResources))
+        #self.updateBatch(self.renderAvailableTable())
         return self.update_status
 
     @property
