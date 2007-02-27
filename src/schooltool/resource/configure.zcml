@@ -36,6 +36,7 @@
   <class class=".resource.Location">
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />
     <implements interface="schooltool.note.interfaces.IHaveNotes" />
+
     <require like_class=".resource.Resource" />
     <require permission="schooltool.view"
              attributes="capacity" />
@@ -46,6 +47,7 @@
   <class class=".resource.Equipment">
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />
     <implements interface="schooltool.note.interfaces.IHaveNotes" />
+
     <require like_class=".resource.Resource" />
     <require permission="schooltool.view"
              attributes="type manufacturer model serialNumber purchaseDate" />
