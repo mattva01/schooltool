@@ -2260,6 +2260,27 @@ class EventForBookingDisplay(object):
             self.shortTitle = self.title
         self.unique_id = self.context.unique_id
 
+class CalendarEventBookOneResourceView(BrowserView):
+    """
+    A view to book a resource to an event
+    """
+    errors = ()
+    update_status = None
+
+    def __call__(self):
+        self.update_status = ''
+        sb = getSchoolToolApplication()
+        cal = ISchoolToolCalendar(IPerson(self.request.principal))
+        event = cal.find(self.request['event_id'])
+        if event:
+            for res_id, resource in sb["resources"].items():
+                if res_id == self.request['resource_id']:
+                    event.bookResource(resource)
+        self.request.response.redirect(self.nextURL(event))
+
+    def nextURL(self, event):
+        """Return the URL to be displayed after the add operation."""
+        return absoluteURL(event, self.request)
 
 class CalendarEventBookingView(CalendarEventView):
     """A view for booking resources."""
@@ -2309,7 +2330,6 @@ class CalendarEventBookingView(CalendarEventView):
             owner_name = owner.title
             status[owner_name] = owner_url
         return status
-
 
     def columnsForAvailable(self):
 
@@ -2413,19 +2433,16 @@ class CalendarEventBookingView(CalendarEventView):
             url = absoluteURL(self.context, self.request)
             self.request.response.redirect(self.nextURL())
 
-        elif "BOOK" in self.request or "BOOK1RESOURCE" in self.request: # and not self.update_status:
+        elif "BOOK" in self.request: # and not self.update_status:
             self.update_status = ''
             sb = getSchoolToolApplication()
             for res_id, resource in sb["resources"].items():
                 if 'add_item.%s' % res_id in self.request:
-                    #import pdb;pdb.set_trace()
                     booked = self.hasBooked(resource)
                     if not booked:
                         event = removeSecurityProxy(self.context)
                         event.bookResource(resource)
             self.clearJustAddedStatus()
-            if "BOOK1RESOURCE" in self.request:
-                self.request.response.redirect(self.nextURL())
 
         elif "UNBOOK" in self.request:
             self.update_status = ''

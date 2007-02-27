@@ -16,7 +16,8 @@
             <li tal:repeat="resource listResources">
                 <a href="" tal:define="resourceId python:resource[0]"
                            tal:content="python:resource[1].title"
-                           tal:attributes="href string:${event/viewLink}/booking.html?BOOK1RESOURCE=1&add_item.${resourceId}=1"/>
+                           tal:attributes="href
+                           string:book_one_resource.html?resource_id=${resourceId}&event_id=${event/unique_id}"/>
             </li>
           </ul>
 

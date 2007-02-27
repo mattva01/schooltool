@@ -46,7 +46,7 @@ And a few events to our calendar:
 
     >>> manager.getLink('New Event').click()
     >>> manager.getControl('Title').value = "Some other big event"
-    >>> manager.getControl('Date').value = "2005-01-15"
+    >>> manager.getControl('Date').value = "2005-01-16"
     >>> manager.getControl('Time').value = "17:35"
     >>> manager.getControl('Add').click()
 
@@ -77,7 +77,7 @@ And a couple of events to our resource calendars:
     >>> manager.getControl('Time').value = "10:55"
     >>> manager.getControl('Add').click()
 
-Now if we go to the resource container and select both resrouces for
+Now if we go to the resource container and select both resources for
 booking:
 
     >>> manager.getLink('Resources').click()
@@ -96,3 +96,20 @@ the third one should :
 
     >>> manager.handleErrors = False
     >>> manager.open("%s/%s" % (manager.url, '2005-01-15'))
+    >>> manager.getLink('fish').click()
+
+Now we should have booked a 'fish' for the '2005-01-15' and we have
+been redirected on the 2005-01-15 view:
+
+    >>> print analyze.queryHTML('//h1', manager.contents)[0]
+    <h1>
+    Some big event - Saturday, 2005-01-15
+    </h1>
+
+And the fish resource is well booked:
+
+    >>> print analyze.queryHTML('//ul', manager.contents)[0]
+    <ul><li>
+            <a href="http://localhost/resources/fish">fish</a>
+        </li>
+    </ul>
