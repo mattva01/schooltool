@@ -3,24 +3,20 @@
                    booker event/getBooker;
                    listResources view/listResources"
             condition="event">
-    <div class="body">
-      <form>
-       <h6 class="booked-resource-header"
-             tal:attributes="style string:background: ${event/color2}">
-                 <a style="color: #000;"
-                        tal:attributes="href event/bookingLink">Add a
-                        resource</a></h6>
-
-        <input id="BOOK_A_RESOURCE" type="hidden"/>
-          <ul>
-            <li tal:repeat="resource listResources">
-                <a href="" tal:define="resourceId python:resource[0]"
-                           tal:content="python:resource[1].title"
-                           tal:attributes="href
-                           string:book_one_resource.html?resource_id=${resourceId}&event_id=${event/unique_id}"/>
-            </li>
-          </ul>
-
-      </form>
-    </div>
+<div class="booked-resources"
+     i18n:domain="schooltool">
+  <h6 class="booked-resource-header"
+      tal:attributes="style string:background: ${event/color2}">Add a resource</h6>
+  <ul>
+    <li tal:repeat="resource listResources">
+      <a href="" tal:define="resourceId python:resource[0]"
+         tal:content="python:resource[1].title"
+         tal:attributes="href
+                         string:book_one_resource.html?resource_id=${resourceId}&event_id=${event/unique_id}"/>
+    </li>
+    <li>
+      <a href="book_one_resource.html?resource_id=mud&date=2005-09-01&time=20:20&title=Period1">Mud</a>
+    </li>
+  </ul>
+</div>
 </tal:block>
