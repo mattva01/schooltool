@@ -1,0 +1,98 @@
+Functional test for Resource booking through the resource container
+===================================================================
+
+Let's log in:
+
+    >>> from zope.testbrowser.testing import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/')
+
+And add a couple of resources to book:
+
+    >>> manager.getLink('Resources').click()
+    >>> manager.getLink('New Location').click()
+    >>> manager.getControl('Title').value = 'mud'
+    >>> manager.getControl('Type').value = 'Computer Lab'
+    >>> manager.getControl('Add').click()
+    >>> manager.getControl('Type').value = ['location|Computer Lab']
+    >>> manager.getControl('Search').click()
+    >>> 'mud' in manager.contents
+    True
+
+    >>> manager.getLink('New Resource').click()
+    >>> manager.getControl('Title').value = 'fish'
+    >>> manager.getControl('Add').click()
+    >>> manager.getControl('Type').value = ['resource|Resource']
+    >>> manager.getControl('Search').click()
+    >>> 'fish' in manager.contents
+    True
+
+And a few events to our calendar:
+
+    >>> manager.getLink('My Calendar').click()
+    >>> manager.getLink('New Event').click()
+    >>> manager.getControl('Title').value = "Some big event"
+    >>> manager.getControl('Date').value = "2005-01-15"
+    >>> manager.getControl('Time').value = "10:15"
+    >>> manager.getControl('Add').click()
+
+    >>> manager.getLink('New Event').click()
+    >>> manager.getControl('Title').value = "Some other big event"
+    >>> manager.getControl('Date').value = "2005-01-15"
+    >>> manager.getControl('Time').value = "12:35"
+    >>> manager.getControl('Add').click()
+
+    >>> manager.getLink('New Event').click()
+    >>> manager.getControl('Title').value = "Some other big event"
+    >>> manager.getControl('Date').value = "2005-01-15"
+    >>> manager.getControl('Time').value = "17:35"
+    >>> manager.getControl('Add').click()
+
+And a couple of events to our resource calendars:
+
+    >>> manager.getLink('Resources').click()
+    >>> manager.getControl('Type').value = ['resource|Resource']
+    >>> manager.getControl('Search').click()
+    >>> manager.getLink('fish').click()
+    >>> manager.getLink('View Calendar').click()
+
+    >>> manager.getLink('New Event').click()
+    >>> manager.getControl('Title').value = "A small event"
+    >>> manager.getControl('Date').value = "2005-01-15"
+    >>> manager.getControl('Time').value = "11:55"
+    >>> manager.getControl('Add').click()
+
+
+    >>> manager.getLink('Resources').click()
+    >>> manager.getControl('Type').value = ['location|Computer Lab']
+    >>> manager.getControl('Search').click()
+    >>> manager.getLink('mud').click()
+    >>> manager.getLink('View Calendar').click()
+
+    >>> manager.getLink('New Event').click()
+    >>> manager.getControl('Title').value = "Another small event"
+    >>> manager.getControl('Date').value = "2005-01-15"
+    >>> manager.getControl('Time').value = "10:55"
+    >>> manager.getControl('Add').click()
+
+Now if we go to the resource container and select both resrouces for
+booking:
+
+    >>> manager.getLink('Resources').click()
+    >>> manager.getControl('Type').value = ['resource|Resource']
+    >>> manager.getControl('Search').click()
+    >>> manager.getControl(name='delete.fish').value = ['delete.mud']
+    >>> manager.getControl(name='delete.fish').value = ['delete.fish']
+
+And go to their booking calendar:
+
+    >>> manager.getControl('Book').click()
+
+When we select the right date we should see 3 booking events, the
+first one should have only fish available, the second one only mud and
+the third one should :
+
+    >>> manager.handleErrors = False
+    >>> manager.open("%s/%s" % (manager.url, '2005-01-15'))
