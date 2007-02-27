@@ -116,4 +116,9 @@ Let's look at it:
     >>> manager.getControl('Type').value = ['resource|Resource']
     >>> manager.getControl('Search').click()
 
+    >>> manager.getControl(name='delete.mud').value = ['delete.mud']
+    >>> manager.getControl(name='delete.a-resource').value = ['delete.a-resource']
+    >>> manager.getControl('Book').click()
+    >>> manager.open("%s/2005-09-07" % manager.url)
+
 # XXX make booking work, and make booking filter resources properly
