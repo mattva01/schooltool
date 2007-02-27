@@ -54,7 +54,7 @@ class CalendarEventBookingViewlet(object):
     """
 
     def listResources(self):
-        return [(resource.__name__, resource)
+        return [{'id': resource.__name__, 'title': resource.title}
                 for resource in self.manager.event.context.resources]
 
 

@@ -9,10 +9,9 @@
       tal:attributes="style string:background: ${event/color2}">Add a resource</h6>
   <ul>
     <li tal:repeat="resource listResources">
-      <a href="" tal:define="resourceId python:resource[0]"
-         tal:content="python:resource[1].title"
+      <a href="" tal:content="resource/title"
          tal:attributes="href
-                         string:book_one_resource.html?resource_id=${resourceId}&event_id=${event/unique_id}"/>
+                         string:book_one_resource.html?resource_id=${resource/id}&event_id=${event/unique_id}"/>
     </li>
     <li>
       <a href="book_one_resource.html?resource_id=mud&date=2005-09-01&time=20:20&title=Period1">Mud</a>
