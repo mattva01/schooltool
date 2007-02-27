@@ -62,7 +62,6 @@ from zope.html.field import HtmlFragment
 from zc.table.column import GetterColumn
 from zc.table import table
 
-
 from schooltool import SchoolToolMessage as _
 
 from schooltool.skin.interfaces import IBreadcrumbInfo
@@ -1527,6 +1526,7 @@ class CalendarListSubscriber(object):
 # Calendar modification views
 #
 
+
 class EventDeleteView(BrowserView):
     """A view for deleting events."""
 
@@ -2260,6 +2260,7 @@ class EventForBookingDisplay(object):
             self.shortTitle = self.title
         self.unique_id = self.context.unique_id
 
+
 class CalendarEventBookOneResourceView(BrowserView):
     """
     A view to book a resource to an event
@@ -2281,6 +2282,7 @@ class CalendarEventBookOneResourceView(BrowserView):
     def nextURL(self, event):
         """Return the URL to be displayed after the add operation."""
         return absoluteURL(event, self.request)
+
 
 class CalendarEventBookingView(CalendarEventView):
     """A view for booking resources."""

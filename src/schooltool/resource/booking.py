@@ -21,20 +21,50 @@ Resource Booking caledar and events
 
 $Id$
 """
-from datetime import datetime, timedelta
-from pytz import utc
-
 from zope.interface import implements
 from zope.app.session.interfaces import ISession
 
 from schooltool.calendar.simple import ImmutableCalendar
 from schooltool.resource.interfaces import IBookingCalendar
 from schooltool.calendar.simple import SimpleCalendarEvent
-from schooltool.traverser.traverser import AdapterTraverserPlugin
 from schooltool.resource.interfaces import IBookingCalendarEvent
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPerson
+from schooltool.timetable import TimetableActivity
+from schooltool.attendance.attendance import getRequestFromInteraction
+from schooltool.traverser.traverser import NameTraverserPlugin
+
+
+def createBookingCalendar(calendar, calendars):
+    events = []
+    for event in calendar:
+        resources = []
+        for resource_calendar in calendars:
+            evts = list(resource_calendar.expand(event.dtstart,
+                                                 event.dtstart + event.duration))
+            if not list(evts):
+                resources.append(resource_calendar.__parent__)
+
+        if resources:
+            event = BookingCalendarEvent(event.dtstart,
+                                         event.duration,
+                                         event.title,
+                                         description=event.description,
+                                         unique_id=event.unique_id)
+            event.resources = resources
+            event.__parent__ = None
+            events.append(event)
+
+    return ImmutableCalendar(events)
+
+
+def getSelectedResourceCalendars(request):
+    rc = ISchoolToolApplication(None)['resources']
+    session = ISession(request)['schooltool.resource']
+    resource_calendars = [ISchoolToolCalendar(rc[resource_id])
+                          for resource_id in session['bookingSelection']]
+    return resource_calendars
 
 
 class BookingCalendarEvent(SimpleCalendarEvent):
@@ -50,12 +80,65 @@ class ResourceBookingCalendar(ImmutableCalendar):
         self.__name__ = 'booking'
         self.title = "Booking Calendar"
 
+    def createFullTimetable(self, school_timetable):
+        timetable = school_timetable.createTimetable()
+
+        # must be set so event ids would get generated properly
+        timetable.__parent__ = self
+        timetable.__name__ = "booking-timetable"
+
+        for day_id, day in timetable.items():
+            for period_id in day.keys():
+                act = TimetableActivity(title=period_id, owner=None)
+                day.add(period_id, act, send_events=False)
+
+        return timetable
+
+    def expand(self, start, end):
+        app = ISchoolToolApplication(None)
+        terms = app["terms"]
+        school_timetables = app['ttschemas']
+
+        events = []
+        for term in terms.values():
+            # XXX dates on the edges might be broken add 1 day of
+            # padding
+            if (term.first > end.date()) or (term.last < start.date()):
+                # skip non overlapping terms
+                continue
+
+            timetable = self.createFullTimetable(school_timetables.getDefault())
+            calendar = timetable.model.createCalendar(term, timetable,
+                                                      start.date(),
+                                                      end.date())
+            events.extend(calendar.expand(start, end))
+
+        timetable_calendar = ImmutableCalendar(events)
+
+        resource_calendars = getSelectedResourceCalendars(self.request)
+        # XXX should skip person resources
+        booking_calendar = createBookingCalendar(timetable_calendar,
+                                                 resource_calendars)
+        return booking_calendar.expand(start, end)
+
     def __iter__(self):
         return iter([])
 
 
-ResourceBookingTraverserPlugin = AdapterTraverserPlugin(
-    'booking', IBookingCalendar)
+class ResourceBookingTraverserPlugin(NameTraverserPlugin):
+    """Traverse to an adapter by name."""
+
+    traversalName = 'booking'
+
+    def _traverse(self, request, name):
+        from zope.component import queryAdapter
+        bookingCalendar = queryAdapter(self.context, IBookingCalendar, name='')
+        if bookingCalendar is None:
+            from zope.publisher.interfaces import NotFound
+            raise NotFound(self.context, name, request)
+
+        bookingCalendar.request = request
+        return bookingCalendar
 
 
 class ResourceBookingCalendarProvider(object):
@@ -64,41 +147,14 @@ class ResourceBookingCalendarProvider(object):
         self.context = context
         self.request = request
 
-    def getBookingCalendar(self, calendar, *calendars):
-        events = []
-        for event in calendar:
-            resources = []
-            for resource_calendar in calendars:
-                evts = list(resource_calendar.expand(event.dtstart,
-                                                     event.dtstart + event.duration))
-                if not list(evts):
-                    resources.append(resource_calendar.__parent__)
-
-            if resources:
-                event = BookingCalendarEvent(event.dtstart,
-                                             event.duration,
-                                             event.title,
-                                             description=event.description,
-                                             unique_id=event.unique_id)
-                event.resources = resources
-                event.__parent__ = None
-                events.append(event)
-
-        return ImmutableCalendar(events)
-
     def getCalendars(self):
         """Get a list of calendars to display.
 
         Yields tuples (calendar, color1, color2).
         """
-        session = ISession(self.request)['schooltool.resource']
-
-        rc = ISchoolToolApplication(None)['resources']
-        resource_calendars = [ISchoolToolCalendar(rc[resource_id])
-                              for resource_id in session['bookingSelection']]
         person_calendar = ISchoolToolCalendar(IPerson(self.request.principal))
-        booking_calendar = self.getBookingCalendar(person_calendar,
-                                                   *resource_calendars)
-
+        resource_calendars = getSelectedResourceCalendars(self.request)
+        booking_calendar = createBookingCalendar(person_calendar,
+                                                 resource_calendars)
         yield (booking_calendar, '#9db8d2', '#7590ae')
-        yield (self.context, '#aec9e3', '#88a1bd')
+        yield (self.context, '#bfdaf4', '#99b2ce')

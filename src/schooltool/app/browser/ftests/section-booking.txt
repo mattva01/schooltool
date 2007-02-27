@@ -107,3 +107,13 @@ Let's look at it:
     ...
       <div class="description">Assignement.</div>
     ...
+
+    >>> manager.getLink('Resources').click()
+    >>> manager.getLink('New Resource').click()
+    >>> manager.getControl('Title').value = "Mud"
+    >>> manager.getControl('Add').click()
+
+    >>> manager.getControl('Type').value = ['resource|Resource']
+    >>> manager.getControl('Search').click()
+
+# XXX make booking work, and make booking filter resources properly

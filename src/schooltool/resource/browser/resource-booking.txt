@@ -83,16 +83,14 @@ booking:
     >>> manager.getLink('Resources').click()
     >>> manager.getControl('Type').value = ['resource|Resource']
     >>> manager.getControl('Search').click()
-    >>> manager.getControl(name='delete.fish').value = ['delete.mud']
+
     >>> manager.getControl(name='delete.fish').value = ['delete.fish']
 
 And go to their booking calendar:
 
     >>> manager.getControl('Book').click()
 
-When we select the right date we should see 3 booking events, the
-first one should have only fish available, the second one only mud and
-the third one should :
+When we select the right date we should see a booking event:
 
     >>> manager.handleErrors = False
     >>> manager.open("%s/%s" % (manager.url, '2005-01-15'))
