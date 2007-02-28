@@ -5,6 +5,11 @@
     Contents
   </title>
 </head>
+<script type="text/javascript" metal:fill-slot="extrahead">
+function searchSelected(selectedResource){
+    window.location = "index.html?resources.type="+selectedResource;
+}
+</script>
 <body>
 
 <h1 metal:fill-slot="content-header"
@@ -17,7 +22,9 @@
       <div class="oneline-form">
       <label for="resources.type" title="Type"
              i18n:translate="">Type</label>
-      <select id="resources.type" name="resources.type" size="1">
+      <select id="resources.type" name="resources.type" size="1"
+              onchange="javascript:searchSelected(this.options[this.selectedIndex].value)">
+        <option selected="1" tal:condition="python:not request.get('resources.type', None)"></option>
         <tal:block repeat="term view/getSubTypes">
           <tal:block
                    define="optionValue python:'%s|%s'%(term[0],term[1]);
@@ -62,7 +69,8 @@
           <tal:block replace="structure view/renderResourceTable" />
         </div>
       </div>
-        <input tal:repeat="action view/actions"
+        <input tal:condition="python:request.get('resources.type', False)"
+               tal:repeat="action view/actions"
                tal:replace="structure action/render" />
   </form>
 </metal:block>

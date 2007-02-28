@@ -33,16 +33,16 @@ filter box available:
     <BLANKLINE>
     ...
     <select id="resources.type" name="resources.type" size="1">
-            <option disabled="disabled"
+                <option disabled="disabled"
                     class="dropdown-header"
                     value="equipment|Equipment">Equipment</option>
-            <option disabled="disabled"
+                <option disabled="disabled"
                     class="dropdown-header"
                     value="location|Location">Location</option>
-            <option disabled="disabled"
+                <option disabled="disabled"
                     class="dropdown-header"
                     value="resource|Resource">Resource</option>
-            <option value="resource|Resource">Resource</option>
+                <option value="resource|Resource">Resource</option>
     </select>
     ...
 
