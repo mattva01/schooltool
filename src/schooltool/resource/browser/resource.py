@@ -159,6 +159,12 @@ class ResourceContainerView(form.FormBase):
 
 class BaseTypeFilter(FilterWidget):
     """Base Type Filter"""
+
+    def render(self):
+        if 'CLEAR_SEARCH' in self.request:
+            self.request.form['SEARCH'] = ''
+        return self.template()
+
     def filter(self, list):
         resourceType = self.request.get('resources.type','|').split('|')[0]
         list = [resource for resource in list
@@ -172,10 +178,10 @@ class BaseTypeFilter(FilterWidget):
             results = [item for item in list
                        if self.request.get('resources.type','|').split('|')[1] == item.type]
         else:
-            self.request.form['SEARCH'] = ''
             results = list
 
         return results
+
 
 class EquipmentTypeFilter(BaseTypeFilter):
     """Equipment Type Filter"""
