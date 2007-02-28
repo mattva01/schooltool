@@ -7,7 +7,7 @@
 </head>
 <script type="text/javascript" metal:fill-slot="extrahead">
 function searchSelected(selectedResource){
-    window.location = "index.html?resources.type="+selectedResource;
+    this.form.submit();
 }
 </script>
 <body>
@@ -23,7 +23,7 @@ function searchSelected(selectedResource){
       <label for="resources.type" title="Type"
              i18n:translate="">Type</label>
       <select id="resources.type" name="resources.type" size="1"
-              onchange="javascript:searchSelected(this.options[this.selectedIndex].value)">
+              onchange="javascript:this.form.submit()">
         <option selected="1" tal:condition="python:not request.get('resources.type', None)"></option>
         <tal:block repeat="term view/getSubTypes">
           <tal:block

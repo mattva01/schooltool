@@ -140,9 +140,7 @@ class ResourceContainerView(form.FormBase):
         return (('title', False), )
 
     def filter(self, values):
-        items = [resource for resource in values
-                 if IResourceTypeInformation(resource).id == self.resourceType]
-        return self.filter_widget.filter(items)
+        return self.filter_widget.filter(values)
 
     def renderResourceTable(self):
         columns = [CheckboxColumn(prefix="delete", name='delete', title=u'')]
@@ -159,30 +157,34 @@ class ResourceContainerView(form.FormBase):
         formatter.cssClasses['table'] = 'data'
         return formatter()
 
-
-class EquipmentTypeFilter(FilterWidget):
-    """Equipment Type Filter"""
-
+class BaseTypeFilter(FilterWidget):
+    """Base Type Filter"""
     def filter(self, list):
+        resourceType = self.request.get('resources.type','|').split('|')[0]
+        list = [resource for resource in list
+                 if IResourceTypeInformation(resource).id == resourceType]
         if 'SEARCH' in self.request and 'CLEAR_SEARCH' not in self.request:
             searchstr = self.request['SEARCH'].lower()
             results = [item for item in list
                        if (searchstr in item.title.lower() and
                            self.request.get('resources.type','|').split('|')[1] == item.type)]
+        elif 'resources.type' in self.request:
+            results = [item for item in list
+                       if self.request.get('resources.type','|').split('|')[1] == item.type]
         else:
             self.request.form['SEARCH'] = ''
             results = list
 
         return results
 
+class EquipmentTypeFilter(BaseTypeFilter):
+    """Equipment Type Filter"""
 
-class LocationTypeFilter(FilterWidget):
+class LocationTypeFilter(BaseTypeFilter):
     """Location Type Filter"""
 
-
-class ResourceTypeFilter(FilterWidget):
+class ResourceTypeFilter(BaseTypeFilter):
     """Resource Type Filter"""
-
 
 class ResourceView(form.DisplayFormBase):
     """A Resource info view."""
