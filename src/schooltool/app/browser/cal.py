@@ -102,6 +102,7 @@ from schooltool.term.term import getTermForDate
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.resource.interfaces import IBaseResource
 from schooltool.resource.interfaces import IBookingCalendar
+from schooltool.resource.interfaces import IResourceTypeInformation
 
 
 #
@@ -2377,10 +2378,13 @@ class CalendarEventBookingView(CalendarEventView):
                 return ", ".join(url)
             else:
                 return 'Free'
-
         return [GetterColumn(name='title',
                              title=u"Title",
                              getter=lambda i, f: i.title,
+                             subsort=True),
+                GetterColumn(name='type',
+                             title=u"Type",
+                             getter=lambda i, f: IResourceTypeInformation(i).title,
                              subsort=True),
                 GetterColumn(title="Booked by others",
                              cell_formatter=statusFormatter,

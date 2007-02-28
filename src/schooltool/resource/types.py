@@ -146,7 +146,7 @@ class ResourceTypeAdapter(object):
 
     @property
     def title(self):
-        queryUtility(IResourceFactoryUtility, name=self.id)
+        return queryUtility(IResourceFactoryUtility, name=self.id).title
 
 
 class LocationTypeAdapter(ResourceTypeAdapter):
