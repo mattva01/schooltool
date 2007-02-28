@@ -494,3 +494,86 @@ Stork should still be able to see his calendar:
       ...
     </h6>
     ...
+
+Now, let's test the paging, for that we'll need to create a profuse amount of resources.
+
+    >>> manager.open('http://localhost/resources')
+    >>> manager.getLink('Import Resources').click()
+    >>> moofest = """mooa
+    ... moob
+    ... mooc
+    ... mood
+    ... mooe
+    ... moof
+    ... moog
+    ... mooh
+    ... mooi
+    ... mooj
+    ... mook
+    ... mool
+    ... moom
+    ... moon
+    ... """
+    >>> manager.getControl('CSV Data').value = moofest
+    >>> manager.getControl('Submit').click()
+
+Now let's create an event for the manager.
+
+    >>> manager.getLink('My Calendar').click()
+    >>> manager.getLink('New Event').click()
+    >>> manager.getControl('Title').value = 'Moo Fest'
+    >>> manager.getControl('Date').value = '2005-02-03'
+    >>> manager.getControl('Time').value = '01:00'
+    >>> manager.getControl('Duration').value = '500'
+    >>> manager.getControl('Recurring').selected = True
+    >>> manager.getControl(name='field.recurrence.used').value = '1'
+    >>> manager.getControl('Book Resources').selected = True
+    >>> manager.getControl('Add').click()
+
+Now on to play with the paging! The default batch size is 10, keeping in mind the 2 reources created before
+the 11 item should be `mooi`.
+
+    >>> manager.getLink('2').click()
+    >>> print manager.contents
+    <BLANKLINE>
+    ...
+    <input type="checkbox" name="add_item.mooi" id="add_item.mooi" />
+    ...
+
+Howevever, `mooa` should not be in the list.
+
+    >>> '<input type="checkbox" name="add_item.mooa" id="add_item.mooa" />' not in manager.contents
+    True
+
+Let's test the searching, we have a bunch of moos, so let's search for `moo`.
+Now `mooj` should be the tenth in the item and `mooa` should be the first.
+
+    >>> manager.getControl(name="SEARCH").value = "moo"
+    >>> manager.getControl(name="SEARCH_BUTTON").click()
+    >>> print manager.contents
+    <BLANKLINE>
+    ...
+    <input type="checkbox" name="add_item.mooa" id="add_item.mooa" />    
+    ...
+    <input type="checkbox" name="add_item.mooj" id="add_item.mooj" />
+    ...
+
+The item `mud` should not be in the list.
+
+    >>> '<input type="checkbox" name="add_item.mud" id="add_item.mud" />' not in manager.contents
+    True
+
+Let's search for something specific.
+
+    >>> manager.getControl(name="SEARCH").value = "fish"
+    >>> manager.getControl(name="SEARCH_BUTTON").click()
+    >>> print manager.contents
+    <BLANKLINE>
+    ...
+    <input type="checkbox" name="add_item.fish" id="add_item.fish" />    
+    ...
+
+We shouldn't have any extra items after the search query:
+
+    >>> '<input type="checkbox" name="add_item.mud" id="add_item.mud" />' not in manager.contents
+    True

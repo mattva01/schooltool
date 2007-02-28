@@ -432,6 +432,12 @@ class CalendarViewBase(BrowserView):
 
         self._days_cache = None
 
+    def eventAddLink(self, hour):
+        url = "%s/add.html?field.start_date=%s&field.start_time=%s&field.duration=%s"
+        url = url % (absoluteURL(self.context, self.request),
+                     self.cursor, hour['time'], hour['duration'])
+        return url
+
     def pdfURL(self):
         if pdfcal.disabled:
             return None
@@ -2402,7 +2408,7 @@ class CalendarEventBookingView(CalendarEventView):
         available_columns[0] = LabelColumn(available_columns[0], prefix)
         columns.extend(available_columns)
         formatter = table.FormFullFormatter(
-            self.context, self.request, self.getAvailableItems(),
+            self.context, self.request, self.filter(self.availableResources),
             columns=columns,
             batch_start=self.batch_start, batch_size=self.batch_size,
             sort_on=self.sortOn(),
@@ -2485,7 +2491,9 @@ class CalendarEventBookingView(CalendarEventView):
                 # A calendar event in a resource's calendar shouldn't book
                 # that resource, it would be silly.
                 return False
-            return self.canBook(resource) or self.hasBooked(resource)
+            if self.canBook(resource) and not self.hasBooked(resource):
+                return True
+            return False
         return filter(isBookable, sb['resources'].values())
 
     def canBook(self, resource):

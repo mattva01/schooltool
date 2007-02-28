@@ -137,8 +137,8 @@ We are now redirected to the event:
 
     >>> print analyze.queryHTML('//h1', manager.contents)[0]
     <h1>
-    09:30-10:25 - Wednesday, 2005-09-07
-      </h1>
+       09:30-10:25 - Wednesday, 2005-09-07
+    </h1>
 
 And the resource is added:
 
