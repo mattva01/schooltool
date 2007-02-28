@@ -27,6 +27,7 @@ from zope.testing import doctest
 
 from schooltool.app.browser.testing import setUp, tearDown
 
+
 def doctest_ResourceView():
     r"""Test for ResourceView
 
@@ -76,6 +77,7 @@ def doctest_ResourceCSVImporter():
 
     """
 
+
 def doctest_ResourceCSVImportView():
     r"""
     We'll create a resource csv import view
@@ -114,7 +116,6 @@ def doctest_ResourceCSVImportView():
         [u'Failed to import CSV text', u'Titles may not be empty']
 
     """
-
 
 
 def test_suite():

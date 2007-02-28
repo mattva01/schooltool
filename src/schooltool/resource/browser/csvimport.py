@@ -33,6 +33,7 @@ def resourceFactory(self, title=u"", description=u"", isLocation=False):
     else:
         return Resource(title=title, description=description)
 
+
 class ResourceCSVImporter(BaseCSVImporter):
     """Resource CSV Importer"""
 

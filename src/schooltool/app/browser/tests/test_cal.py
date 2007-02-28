@@ -419,7 +419,7 @@ def doctest_EventForDisplay_getBooker_getBookedResources():
     event:
 
         >>> efd = EFD()
-        >>> efd.getBookedResources()
+        >>> sorted(efd.getBookedResources())
         ['res1', 'res2']
 
     getBooker returns the owner of the event:
@@ -3125,8 +3125,7 @@ def doctest_TestCalendarEventBookingView():
 
     A couple of resources should be booked now:
 
-        >>> [resource.title for resource in view.availableResources
-        ...                 if view.hasBooked(resource)]
+        >>> sorted([resource.title for resource in view.getBookedItems()])
         ['res2', 'res4']
 
 
@@ -3141,8 +3140,7 @@ def doctest_TestCalendarEventBookingView():
         >>> view.filter = lambda list: list
         >>> view.update()
         ''
-        >>> [resource.title for resource in view.availableResources
-        ...                 if view.hasBooked(resource)]
+        >>> sorted([resource.title for resource in view.getBookedItems()])
         ['res2', 'res3', 'res4']
 
         >>> request = TestRequest(form={'remove_item.res2':'1',
@@ -3155,8 +3153,7 @@ def doctest_TestCalendarEventBookingView():
 
     We should see resource 3 in the list now:
 
-        >>> [resource.title for resource in view.availableResources
-        ...                 if view.hasBooked(resource)]
+        >>> sorted([resource.title for resource in view.getBookedItems()])
         ['res3', 'res4']
 
     If you don't feel very brave, use the Cancel button:
@@ -3181,8 +3178,7 @@ def doctest_TestCalendarEventBookingView():
 
     Nothing has changed, see?
 
-        >>> [resource.title for resource in view.availableResources
-        ...                 if view.hasBooked(resource)]
+        >>> sorted([resource.title for resource in view.getBookedItems()])
         ['res3', 'res4']
 
     And you have been redirected back to the calendar:

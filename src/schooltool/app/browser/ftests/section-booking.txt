@@ -133,17 +133,17 @@ Let's add the Mud resource:
 
     >>> manager.getLink('Mud').click()
 
-We are now redirected to the event:
+We are now redirected to the event edit view:
 
-    >>> print analyze.queryHTML('//h1', manager.contents)[0]
-    <h1>
-       09:30-10:25 - Wednesday, 2005-09-07
-    </h1>
+
+    >>> manager.getControl('Title').value
+    '09:30-10:25'
+
+    >>> manager.getControl('Date').value
+    '2005-09-07'
 
 And the resource is added:
 
-    >>> print analyze.queryHTML('//ul', manager.contents)[0]
-    <ul><li>
-            <a href="http://localhost/resources/mud">Mud</a>
-        </li>
-    </ul>
+    >>> manager.getLink('Book resources').click()
+    >>> print analyze.queryHTML('//label[@for="remove_item.mud"]', manager.contents)[0]
+    <label for="remove_item.mud">Mud</label>

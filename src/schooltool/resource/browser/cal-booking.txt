@@ -32,7 +32,9 @@ filter box available:
     >>> print manager.contents
     <BLANKLINE>
     ...
-    <select id="resources.type" name="resources.type" size="1">
+          <select id="resources.type" name="resources.type" size="1"
+                onchange="javascript:searchSelected(this.options[this.selectedIndex].value)">
+                <option selected="1"></option>
                 <option disabled="disabled"
                     class="dropdown-header"
                     value="equipment|Equipment">Equipment</option>

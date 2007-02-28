@@ -99,15 +99,15 @@ When we select the right date we should see a booking event:
 Now we should have booked a 'fish' for the '2005-01-15' and we have
 been redirected on the 2005-01-15 view:
 
-    >>> print analyze.queryHTML('//h1', manager.contents)[0]
-    <h1>
-    Some big event - Saturday, 2005-01-15
-    </h1>
+    >>> manager.getControl('Title').value
+    'Some big event'
+
+    >>> manager.getControl('Date').value
+    '2005-01-15'
 
 And the fish resource is well booked:
 
-    >>> print analyze.queryHTML('//ul', manager.contents)[0]
-    <ul><li>
-            <a href="http://localhost/resources/fish">fish</a>
-        </li>
-    </ul>
+    >>> manager.getLink('Book resources').click()
+    >>> print analyze.queryHTML('//label[@for="remove_item.fish"]', manager.contents)[0]
+    <label for="remove_item.fish">fish</label>
+

@@ -100,6 +100,8 @@ from schooltool.resource.interfaces import IResource
 from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.term.term import getTermForDate
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.resource.interfaces import IBaseResource
+from schooltool.resource.interfaces import IBookingCalendar
 
 
 #
@@ -433,9 +435,19 @@ class CalendarViewBase(BrowserView):
         self._days_cache = None
 
     def eventAddLink(self, hour):
-        url = "%s/add.html?field.start_date=%s&field.start_time=%s&field.duration=%s"
-        url = url % (absoluteURL(self.context, self.request),
-                     self.cursor, hour['time'], hour['duration'])
+        item = self.context.__parent__
+        if IBaseResource.providedBy(item):
+            rc = ISchoolToolApplication(None)['resources']
+            booking_calendar = IBookingCalendar(rc)
+            url = absoluteURL(booking_calendar, self.request)
+            url = "%s/book_one_resource.html?resource_id=%s" % (url, item.__name__)
+            url = "%s&start_date=%s&start_time=%s:00&title=%s&duration=%s" % (
+                url, self.cursor, hour['time'],
+                _("Unnamed Event"), hour['duration']*60)
+        else:
+            url = "%s/add.html?field.start_date=%s&field.start_time=%s&field.duration=%s"
+            url = url % (absoluteURL(self.context, self.request),
+                         self.cursor, hour['time'], hour['duration'])
         return url
 
     def pdfURL(self):
@@ -2287,7 +2299,7 @@ class CalendarEventBookOneResourceView(BrowserView):
             start_time = self.request.get('start_time')
             title = self.request.get('title')
             start_datetime = "%s %s" % (start_date, start_time)
-            start_datetime = datetime(*strptime(start_datetime, 
+            start_datetime = datetime(*strptime(start_datetime,
                                                 "%Y-%m-%d %H:%M:%S")[0:6])
             duration = timedelta(seconds=int(self.request.get('duration')))
             event = CalendarEvent(dtstart = start_datetime,
@@ -2303,7 +2315,7 @@ class CalendarEventBookOneResourceView(BrowserView):
 
     def nextURL(self, event):
         """Return the URL to be displayed after the add operation."""
-        return absoluteURL(event, self.request)
+        return "%s/edit.html" % absoluteURL(event, self.request)
 
 
 class CalendarEventBookingView(CalendarEventView):
@@ -2355,7 +2367,7 @@ class CalendarEventBookingView(CalendarEventView):
             status[owner_name] = owner_url
         return status
 
-    def columnsForAvailable(self):
+    def columns(self):
 
         def statusFormatter(value, item, formatter):
             url = []
@@ -2385,12 +2397,10 @@ class CalendarEventBookingView(CalendarEventView):
 
     def renderBookedTable(self):
         prefix = "remove_item"
-        columns = [CheckboxColumn(prefix=prefix, name='remove', title=u''),
-                   GetterColumn(name='title',
-                             title=u"Title",
-                             getter=lambda i, f: i.title,
-                             subsort=True),]
-        columns[1] = LabelColumn(columns[1], prefix)
+        columns = [CheckboxColumn(prefix=prefix, name='remove', title=u'')]
+        available_columns = self.columns()
+        available_columns[0] = LabelColumn(available_columns[0], prefix)
+        columns.extend(available_columns)
         formatter = table.FormFullFormatter(
             self.context, self.request, self.getBookedItems(),
             columns=columns,
@@ -2402,9 +2412,9 @@ class CalendarEventBookingView(CalendarEventView):
 
     def renderAvailableTable(self):
         prefix = "add_item"
-        columns = [CheckboxColumn(prefix=prefix, name='add', title=u'', 
+        columns = [CheckboxColumn(prefix=prefix, name='add', title=u'',
                                   isDisabled=self.getConflictingEvents)]
-        available_columns = self.columnsForAvailable()
+        available_columns = self.columns()
         available_columns[0] = LabelColumn(available_columns[0], prefix)
         columns.extend(available_columns)
         formatter = table.FormFullFormatter(
@@ -2484,7 +2494,7 @@ class CalendarEventBookingView(CalendarEventView):
     @property
     def availableResources(self):
         """Gives us a list of all bookable resources."""
-        sb = getSchoolToolApplication()
+        sb = getSchoolToolApplication(None)
         calendar_owner = removeSecurityProxy(self.context.__parent__.__parent__)
         def isBookable(resource):
             if resource is calendar_owner:

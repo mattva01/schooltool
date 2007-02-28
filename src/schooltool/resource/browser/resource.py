@@ -175,6 +175,7 @@ class EquipmentTypeFilter(FilterWidget):
 
         return results
 
+
 class LocationTypeFilter(FilterWidget):
     """Location Type Filter"""
 
@@ -196,14 +197,18 @@ class ResourceView(form.DisplayFormBase):
         self.context = context
         self.request = request
 
+
 class LocationView(ResourceView):
     """A location info view."""
     __used_for__ = ILocation
     form_fields = form.Fields(ILocation)
+
+
 class EquipmentView(ResourceView):
     """A equipment info view."""
     __used_for__ = IEquipment
     form_fields = form.Fields(IEquipment)
+
 
 class ResourceEditView(BaseEditView):
     """A view for editing resource info."""

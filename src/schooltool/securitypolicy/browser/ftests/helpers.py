@@ -177,7 +177,7 @@ def resource_calendar_edit(browser):
     resource_calendar_view(browser)
     browser.getLink('9:00').click()
     browser.getControl('Title').value = 'Test event'
-    browser.getControl('Add').click()
+    browser.getControl(name='UPDATE_SUBMIT').click()
     return 'Calendar for' in browser.contents
 
 
