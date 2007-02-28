@@ -55,13 +55,12 @@ class CalendarEventBookingViewlet(object):
         url = absoluteURL(self.context, self.request)
         url = "%s/book_one_resource.html?resource_id=%s" % (url, resource_id)
         event = self.manager.event.context
-
         if IBookingCalendarEvent.providedBy(event):
             url = "%s&event_id=%s" % (url, event.unique_id)
         else:
-            url = "%s&date=%s&time=%s&title=%s&duration=%s" % (
+            url = "%s&start_date=%s&start_time=%s&title=%s&duration=%s" % (
                 url, event.dtstart.date(), event.dtstart.time(),
-                event.title, event.duration)
+                event.title, event.duration.seconds)
 
         return url
 

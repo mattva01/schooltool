@@ -27,6 +27,7 @@ import base64
 import calendar
 from datetime import datetime, date, time, timedelta
 from sets import Set
+from time import strptime
 
 import transaction
 from pytz import timezone, utc
@@ -73,6 +74,7 @@ from schooltool.app.browser import pdfcal
 from schooltool.app.browser.overlay import CalendarOverlayView
 from schooltool.app.browser.interfaces import ICalendarProvider
 from schooltool.app.browser.interfaces import IEventForDisplay
+from schooltool.app.cal import CalendarEvent
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
@@ -2272,7 +2274,21 @@ class CalendarEventBookOneResourceView(BrowserView):
         self.update_status = ''
         sb = getSchoolToolApplication()
         cal = ISchoolToolCalendar(IPerson(self.request.principal))
-        event = cal.find(self.request['event_id'])
+        if self.request.has_key('event_id'):
+            event = cal.find(self.request['event_id'])
+        else:
+            start_date = self.request.get('start_date')
+            start_time = self.request.get('start_time')
+            title = self.request.get('title')
+            start_datetime = "%s %s" % (start_date, start_time)
+            start_datetime = datetime(*strptime(start_datetime, 
+                                                "%Y-%m-%d %H:%M:%S")[0:6])
+            duration = timedelta(seconds=int(self.request.get('duration')))
+            event = CalendarEvent(dtstart = start_datetime,
+                                  duration = duration,
+                                  title = title)
+            cal.addEvent(event)
+
         if event:
             for res_id, resource in sb["resources"].items():
                 if res_id == self.request['resource_id']:

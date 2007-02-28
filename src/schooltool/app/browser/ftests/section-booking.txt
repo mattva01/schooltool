@@ -121,4 +121,29 @@ Let's look at it:
     >>> manager.getControl('Book').click()
     >>> manager.open("%s/2005-09-07" % manager.url)
 
-# XXX make booking work, and make booking filter resources properly
+There should be two resources available to add there:
+
+
+    >>> manager.getLink('Mud').text
+    'Mud'
+    >>> manager.getLink('A resource').text
+    'A resource'
+
+Let's add the Mud resource:
+
+    >>> manager.getLink('Mud').click()
+
+We are now redirected to the event:
+
+    >>> print analyze.queryHTML('//h1', manager.contents)[0]
+    <h1>
+    09:30-10:25 - Wednesday, 2005-09-07
+      </h1>
+
+And the resource is added:
+
+    >>> print analyze.queryHTML('//ul', manager.contents)[0]
+    <ul><li>
+            <a href="http://localhost/resources/mud">Mud</a>
+        </li>
+    </ul>
