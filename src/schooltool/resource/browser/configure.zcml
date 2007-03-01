@@ -230,7 +230,7 @@
   <zope:adapter
       for="schooltool.resource.interfaces.IResourceContainer
            zope.publisher.interfaces.browser.IBrowserRequest"
-      factory="schooltool.skin.table.FilterWidget" />
+      factory=".resource.ResourceContainerFilterWidget" />
 
   <zope:configure package="schooltool.app.browser">
     <page

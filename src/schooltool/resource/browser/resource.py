@@ -23,38 +23,26 @@ $Id$
 """
 
 from zc.table import table
-from zope import schema
-from zope.app.form.browser.interfaces import ITerms
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtilitiesFor
-from zope.component import getUtility
 from zope.component import queryAdapter
 from zope.component import queryMultiAdapter
 from zope.component import queryUtility
 from zope.formlib import form
-from zope.interface import Interface
-from zope.interface import implements, providedBy
-from zope.component import adapts
-from zope.publisher.browser import BrowserView
-from zope.schema.interfaces import ITitledTokenizedTerm
-from zope.schema.interfaces import IVocabularyFactory
 from zope.app.zapi import absoluteURL
 from zope.app.session.interfaces import ISession
 
-from zc.table.column import GetterColumn
 
 from schooltool.app.browser.app import BaseEditView
-from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.resource.interfaces import IBookingCalendar
 from schooltool.resource.interfaces import (IBaseResourceContained,
-             IResourceContainer, IResourceFactoryUtility,
-             IResourceTypeInformation, IResourceTypeSource, IResourceSubTypes,
+             IResourceContainer, IResourceTypeInformation, IResourceSubTypes,
              IResource, IEquipment, ILocation)
-from schooltool.resource.types import EquipmentFactoryUtility
 from schooltool.skin.interfaces import IFilterWidget
 from schooltool.skin.table import CheckboxColumn
 from schooltool.skin.table import FilterWidget
-from schooltool.skin.table import LabelColumn
+from schooltool.person.browser.person import PersonFilterWidget
+from schooltool.resource.interfaces import IResourceFactoryUtility
 
 from schooltool import SchoolToolMessage as _
 
@@ -186,11 +174,14 @@ class BaseTypeFilter(FilterWidget):
 class EquipmentTypeFilter(BaseTypeFilter):
     """Equipment Type Filter"""
 
+
 class LocationTypeFilter(BaseTypeFilter):
     """Location Type Filter"""
 
+
 class ResourceTypeFilter(BaseTypeFilter):
     """Resource Type Filter"""
+
 
 class ResourceView(form.DisplayFormBase):
     """A Resource info view."""
@@ -222,3 +213,40 @@ class ResourceEditView(BaseEditView):
     """A view for editing resource info."""
 
     __used_for__ = IBaseResourceContained
+
+
+class ResourceContainerFilterWidget(PersonFilterWidget):
+
+    template = ViewPageTemplateFile('resource_filter.pt')
+    parameters = ['SEARCH_TITLE', 'SEARCH_TYPE']
+
+    def types(self):
+        utilities = sorted(getUtilitiesFor(IResourceFactoryUtility))
+        types = []
+        for name, utility in utilities:
+            types.append({'title': utility.title,
+                          'id': name})
+        return types
+
+    def filter(self, list):
+        if 'CLEAR_SEARCH' in self.request:
+            for parameter in self.parameters:
+                self.request.form[parameter] = ''
+            return list
+
+        results = list
+
+        if 'SEARCH_TITLE' in self.request:
+            searchstr = self.request['SEARCH_TITLE'].lower()
+            results = [item for item in results
+                       if searchstr in item.title.lower()]
+
+        if 'SEARCH_TYPE' in self.request:
+            type = self.request['SEARCH_TYPE']
+            if not type:
+                return results
+
+            results = [item for item in results
+                       if IResourceTypeInformation(item).id == type]
+
+        return results

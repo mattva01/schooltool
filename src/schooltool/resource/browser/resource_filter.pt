@@ -1,0 +1,15 @@
+<tal:block i18n:domain="schooltool">
+    <input type="text" name="SEARCH"
+           tal:attributes="value request/SEARCH|nothing"/>
+    <select name="SEARCH_TYPE">
+      <option value="" i18n:translate="">All types</option>
+      <option tal:repeat="type view/types"
+              tal:content="type/title"
+              tal:attributes="value type/id;
+                              selected python:type['id'] == request.get('SEARCH_TYPE')"/>
+    </select>
+    <input type="submit" name="SEARCH_BUTTON" value="Find Now"
+           i18n:attributes="value"/>
+    <input type="submit" name="CLEAR_SEARCH" value="Clear"
+           i18n:attributes="value"/>
+</tal:block>
