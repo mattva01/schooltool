@@ -55,8 +55,8 @@ function searchSelected(selectedResource){
           </tal:block>
         </tal:block>
       </select>
-        <input tal:repeat="action view/searchActions"
-               tal:replace="structure action/render" />
+      <input tal:repeat="action view/searchActions"
+             tal:replace="structure action/render" />
       </div>
 
       <!-- Filtering viewlet by type -->
@@ -69,9 +69,11 @@ function searchSelected(selectedResource){
           <tal:block replace="structure view/renderResourceTable" />
         </div>
       </div>
+      <div class="controls">
         <input tal:condition="python:request.get('resources.type', False)"
                tal:repeat="action view/actions"
                tal:replace="structure action/render" />
+      </div>
   </form>
 </metal:block>
 </body>
