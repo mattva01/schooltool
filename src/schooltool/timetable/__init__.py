@@ -166,6 +166,7 @@ from schooltool.timetable.interfaces import ITimetableSchema
 from schooltool.timetable.interfaces import Unchanged
 from schooltool.term.interfaces import ITerm
 from schooltool.app.app import getSchoolToolApplication
+from schooltool.app.app import InitBase
 
 # Imports for ZODB compatibility
 from schooltool.timetable.model import BaseTimetableModel
@@ -655,9 +656,11 @@ def findRelatedTimetables(ob):
     return result
 
 
-def addToApplication(event):
-    from schooltool.timetable.schema import TimetableSchemaContainer
-    event.object['ttschemas'] = TimetableSchemaContainer()
+class TimetableInit(InitBase):
+
+    def __call__(self):
+        from schooltool.timetable.schema import TimetableSchemaContainer
+        self.app['ttschemas'] = TimetableSchemaContainer()
 
 
 def registerTestSetup():

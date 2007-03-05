@@ -31,6 +31,7 @@ from zope.app.container import btree
 from zope.app.container.contained import Contained
 
 from schooltool.app.app import Asset
+from schooltool.app.app import InitBase
 from schooltool.app.security import LeaderCrowd
 from schooltool.app.interfaces import ICalendarParentCrowd
 from schooltool.resource import interfaces
@@ -57,8 +58,10 @@ class Resource(Persistent, Contained, Asset):
         self.isLocation = isLocation
 
 
-def addResourceContainerToApplication(event):
-    event.object['resources'] = ResourceContainer()
+class ResourceInit(InitBase):
+
+    def __call__(self):
+        self.app['resources'] = ResourceContainer()
 
 
 class ResourceViewersCrowd(ConfigurableCrowd):

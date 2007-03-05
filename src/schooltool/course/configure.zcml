@@ -34,7 +34,7 @@
 
   <adapter
       for="schooltool.app.interfaces.ISchoolToolApplication"
-      factory=".course.CoursePluginInitializer"
+      factory=".course.CourseInit"
       name="schooltool.course" />
 
   <adapter
@@ -79,10 +79,10 @@
              set_schema=".interfaces.ISection" />
   </class>
 
-  <subscriber
-      for="schooltool.app.interfaces.IApplicationInitializationEvent"
-      handler=".section.addSectionContainerToApplication"
-      />
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".section.SectionInit"
+      name="schooltool.section" />
 
   <adapter
       for=".interfaces.ISectionContainer"

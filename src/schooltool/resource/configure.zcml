@@ -39,9 +39,10 @@
       provides="zope.app.container.interfaces.INameChooser" />
 
   <!-- Application hook -->
-  <subscriber
-      for="schooltool.app.interfaces.IApplicationInitializationEvent"
-      handler=".resource.addResourceContainerToApplication"
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".resource.ResourceInit"
+      name="schooltool.resources"
       />
 
   <!-- sample data -->

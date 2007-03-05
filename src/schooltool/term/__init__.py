@@ -25,10 +25,14 @@ holiday.
 
 $Id$
 """
+from schooltool.app.app import InitBase
 
-def addToApplication(event):
-    from schooltool.term.term import TermContainer
-    event.object['terms'] = TermContainer()
+
+class TermInit(InitBase):
+
+    def __call__(self):
+        from schooltool.term.term import TermContainer
+        self.app['terms'] = TermContainer()
 
 
 def registerTestSetup():

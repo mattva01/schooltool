@@ -31,6 +31,7 @@ from zope.component import adapts
 from schooltool.relationship import RelationshipProperty
 from schooltool.app import membership
 from schooltool.app.cal import Calendar
+from schooltool.app.app import InitBase
 from schooltool.group.interfaces import IBaseGroup as IGroup
 from schooltool.person.interfaces import IPerson
 from schooltool.resource.interfaces import IResource
@@ -98,8 +99,10 @@ class SectionContainer(btree.BTreeContainer):
                               IAttributeAnnotatable)
 
 
-def addSectionContainerToApplication(event):
-    event.object['sections'] = SectionContainer()
+class SectionInit(InitBase):
+
+    def __call__(self):
+        self.app['sections'] = SectionContainer()
 
 
 class InstructorsCrowd(Crowd):

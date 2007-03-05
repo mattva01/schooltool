@@ -40,10 +40,10 @@
       provides="zope.app.container.interfaces.INameChooser" />
 
   <!-- Application hook -->
-  <subscriber
-      for="schooltool.app.interfaces.IApplicationInitializationEvent"
-      handler=".group.addGroupContainerToApplication"
-      />
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".group.GroupInit"
+      name="schooltool.group" />
 
   <include package=".browser" />
   <include package=".rest" />

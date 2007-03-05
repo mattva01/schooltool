@@ -79,9 +79,10 @@
       />
 
   <!-- Application hook -->
-  <subscriber
-      for="schooltool.app.interfaces.IApplicationInitializationEvent"
-      handler=".person.addPersonContainerToApplication"
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".person.PersonInit"
+      name="schooltool.persons"
       />
 
   <adapter

@@ -159,6 +159,10 @@
       for="zope.app.container.interfaces.IObjectRemovedEvent"
       handler=".cal.clearCalendarOnDeletion" />
 
+  <subscriber
+      for="schooltool.app.interfaces.IApplicationInitializationEvent"
+      handler=".main.initializeSchoolToolPlugins" />
+
   <!-- Timetables for content components -->
   <class class="schooltool.app.app.SchoolToolApplication">
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />

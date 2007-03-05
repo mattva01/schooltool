@@ -5,9 +5,10 @@
     i18n_domain="schooltool">
 
   <!-- Application hook -->
-  <subscriber
-      for="schooltool.app.interfaces.IApplicationInitializationEvent"
-      handler=".addToApplication"
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".TermInit"
+      name="schooltool.terms"
       />
 
   <adapter

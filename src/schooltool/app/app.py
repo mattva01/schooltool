@@ -43,6 +43,7 @@ from zope.app.container.interfaces import INameChooser
 from zope.traversing.interfaces import IContainmentRoot
 
 from schooltool.app.overlay import ICalendarOverlayInfo
+from schooltool.app.interfaces import IPluginInit
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import IShowTimetables
@@ -260,3 +261,14 @@ class SchoolToolInitializationUtility(object):
 
         By default schooltool does not do any specific initialization.
         """
+
+
+class InitBase(object):
+
+    implements(IPluginInit)
+
+    def __init__(self, app):
+        self.app = app
+
+    def __call__(self):
+        raise NotImplementedError("Foo Bar")

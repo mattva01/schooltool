@@ -21,7 +21,9 @@ By default, some categories should be available in the vocabulary. Since this
 is a test, we have to set them up manually:
 
     >>> from schooltool.testing import registry
-    >>> registry.setupDefaultCategories(school)
+    >>> from schooltool.gradebook.gradebook import GradebookInit
+    >>> plugin = GradebookInit(school)
+    >>> plugin()
 
 The categories are managed by a special option storage vocabulary. As soon as
 the SchoolTool application is registered as a site, the vocabulary can be

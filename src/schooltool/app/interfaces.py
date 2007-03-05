@@ -208,7 +208,7 @@ class ISchoolToolInitializationUtility(zope.interface.Interface):
         """Perform school specific initialization. """
 
 
-class IPluginInitialization(zope.interface.Interface):
+class IPluginInit(zope.interface.Interface):
 
     def __call__():
         """Perform plugin specific initialization."""

@@ -53,17 +53,3 @@ def getCategories(app):
     if VOCABULARY_NAME not in storage:
         storage[VOCABULARY_NAME] = optionstorage.OptionDict()
     return storage[VOCABULARY_NAME]
-
-
-def addDefaultCategoriesToApplication(event):
-    dict = getCategories(event.object)
-    dict.addValue('assignment', 'en', _('Assignment'))
-    dict.addValue('essay', 'en', _('Essay'))
-    dict.addValue('exam', 'en', _('Exam'))
-    dict.addValue('homework', 'en', _('Homework'))
-    dict.addValue('journal', 'en', _('Journal'))
-    dict.addValue('lab', 'en', _('Lab'))
-    dict.addValue('presentation', 'en', _('Presentation'))
-    dict.addValue('project', 'en', _('Project'))
-    dict.setDefaultLanguage('en')
-    dict.setDefaultKey('assignment')
