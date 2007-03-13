@@ -32,6 +32,7 @@ from zope.app.container.contained import Contained
 
 from schooltool.app.app import Asset
 from schooltool.app.security import LeaderCrowd
+from schooltool.securitypolicy.crowds import TeachersCrowd
 from schooltool.app.interfaces import ICalendarParentCrowd
 from schooltool.resource import interfaces
 from schooltool.securitypolicy.crowds import ConfigurableCrowd
@@ -106,10 +107,15 @@ class ResourceCalendarViewersCrowd(ConfigurableCrowd):
 
     def contains(self, principal):
         return (ConfigurableCrowd.contains(self, principal) or
-                LeaderCrowd(self.context).contains(principal))
+                LeaderCrowd(self.context).contains(principal) or
+                TeachersCrowd(self.context).contains(principal))
 
 
 class ResourceCalendarEditorsCrowd(LeaderCrowd):
 
     adapts(interfaces.IResource)
     implements(ICalendarParentCrowd)
+
+    def contains(self, principal):
+        return (LeaderCrowd.contains(self, principal) or
+                TeachersCrowd(self.context).contains(principal))

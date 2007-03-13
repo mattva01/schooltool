@@ -321,7 +321,7 @@ Group member:
     person container:
     person data:
     person preferences:
-    resource calendar:
+    resource calendar:   view  edit
     resource container:
     resource data:
     schooltool:          view
