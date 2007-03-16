@@ -69,7 +69,7 @@ class ResourceContainerView(form.FormBase):
 
     def __init__(self, context, request):
         form.FormBase.__init__(self, context, request)
-        self.resourceType = self.request.get('resources.type','|').split('|')[0]
+        self.resourceType = self.request.get('SEARCH_TYPE','|').split('|')[0]
         self.filter_widget = queryMultiAdapter((self.getResourceUtility(),
                                                 self.request), IFilterWidget)
 
@@ -154,17 +154,17 @@ class BaseTypeFilter(FilterWidget):
         return self.template()
 
     def filter(self, list):
-        resourceType = self.request.get('resources.type','|').split('|')[0]
+        resourceType = self.request.get('SEARCH_TYPE','|').split('|')[0]
         list = [resource for resource in list
                  if IResourceTypeInformation(resource).id == resourceType]
         if 'SEARCH' in self.request and 'CLEAR_SEARCH' not in self.request:
             searchstr = self.request['SEARCH'].lower()
             results = [item for item in list
                        if (searchstr in item.title.lower() and
-                           self.request.get('resources.type','|').split('|')[1] == item.type)]
-        elif 'resources.type' in self.request:
+                           self.request.get('SEARCH_TYPE','|').split('|')[1] == item.type)]
+        elif 'SEARCH_TYPE' in self.request:
             results = [item for item in list
-                       if self.request.get('resources.type','|').split('|')[1] == item.type]
+                       if self.request.get('SEARCH_TYPE','|').split('|')[1] == item.type]
         else:
             results = list
 
@@ -224,9 +224,22 @@ class ResourceContainerFilterWidget(PersonFilterWidget):
         utilities = sorted(getUtilitiesFor(IResourceFactoryUtility))
         types = []
         for name, utility in utilities:
-            types.append({'title': utility.title,
-                          'id': name})
+            if IResourceSubTypes.providedBy(utility):
+                subTypeAdapter = utility
+            else:
+                subTypeAdapter = queryAdapter(utility, IResourceSubTypes,
+                                          default=None)
+                if subTypeAdapter != None:
+                    subTypeAdapter = subTypeAdapter()
+
+            typeHeader = {'id':name,
+                          'title':utility.title,
+                          'clickable':False}
+            types.append(typeHeader)
+            for subtype in subTypeAdapter.types():
+                types.append({'id':name, 'title':subtype, 'clickable':True})
         return types
+
 
     def filter(self, list):
         if 'CLEAR_SEARCH' in self.request:
@@ -245,8 +258,11 @@ class ResourceContainerFilterWidget(PersonFilterWidget):
             type = self.request['SEARCH_TYPE']
             if not type:
                 return results
-
-            results = [item for item in results
-                       if IResourceTypeInformation(item).id == type]
+            type = type.split('|')[0]
+            utility = queryUtility(IResourceFactoryUtility,
+                                   name=type, default=None)
+            filter_widget = queryMultiAdapter((utility,self.request), IFilterWidget)
+            if filter_widget:
+                results = filter_widget.filter(results)
 
         return results

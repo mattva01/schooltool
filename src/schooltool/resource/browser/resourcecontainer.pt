@@ -20,17 +20,17 @@ function searchSelected(selectedResource){
 
       <!-- Type Searching -->
       <div class="oneline-form">
-      <label for="resources.type" title="Type"
+      <label for="SEARCH_TYPE" title="Type"
              i18n:translate="">Type</label>
-      <select id="resources.type" name="resources.type" size="1"
+      <select id="SEARCH_TYPE" name="SEARCH_TYPE" size="1"
               onchange="javascript:this.form.submit()">
-        <option selected="1" tal:condition="python:not request.get('resources.type', None)">Choose One</option>
+        <option selected="1" tal:condition="python:not request.get('SEARCH_TYPE', None)">Choose One</option>
         <tal:block repeat="term view/getSubTypes">
           <tal:block
                    define="optionValue python:'%s|%s'%(term[0],term[1]);
                            optionContent python:term[1];
                            clickable python:term[2]=='clickable';
-                           selected python:request.get('resources.type') == optionValue">
+                           selected python:request.get('SEARCH_TYPE') == optionValue">
           <tal:if condition="not: selected">
             <option tal:content="optionContent"
                     tal:condition="clickable"
@@ -70,7 +70,7 @@ function searchSelected(selectedResource){
         </div>
       </div>
       <div class="controls">
-        <input tal:condition="python:request.get('resources.type', False)"
+        <input tal:condition="python:request.get('SEARCH_TYPE', False)"
                tal:repeat="action view/actions"
                tal:replace="structure action/render" />
       </div>
