@@ -1,5 +1,3 @@
-<li i18n:domain="schooltool">
   <a tal:attributes="href string:${context/@@absolute_url}/${view/link}"
      tal:content="view/title"
      i18n:translate="">Title</a>
-</li>

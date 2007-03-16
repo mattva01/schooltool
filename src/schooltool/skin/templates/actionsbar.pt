@@ -12,16 +12,16 @@
                tal:on-error="nothing" />
       </div>
     </td>
-    <td tal:condition="actions">
+    <td tal:condition="python:actions or options['viewlets']">
       <div class="dropdown">
         <h3 class="title">Actions</h3>
         <a tal:repeat="view actions"
            tal:attributes="href string:${url}/${view/action}"
            tal:content="view/title">Item one</a>
+        <tal:block repeat="viewlet options/viewlets"
+                   content="structure viewlet/render" />
       </div>
     </td>
-    <td tal:repeat="viewlet options/viewlets"
-        tal:content="structure viewlet/render" />
   </tr>
   </table>
 </tal:block>
