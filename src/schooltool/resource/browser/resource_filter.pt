@@ -1,5 +1,5 @@
 <tal:block i18n:domain="schooltool">
-    <input type="text" name="SEARCH"
+    <input type="text" name="SEARCH_TITLE"
            tal:attributes="value request/SEARCH|nothing"/>
     <select name="SEARCH_TYPE">
       <option value="" i18n:translate="">All types</option>

@@ -550,12 +550,12 @@ Howevever, `mooa` should not be in the list.
 Let's test the searching, we have a bunch of moos, so let's search for `moo`.
 Now `mooj` should be the tenth in the item and `mooa` should be the first.
 
-    >>> manager.getControl(name="SEARCH").value = "moo"
+    >>> manager.getControl(name="SEARCH_TITLE").value = "moo"
     >>> manager.getControl(name="SEARCH_BUTTON").click()
     >>> print manager.contents
     <BLANKLINE>
     ...
-    <input type="checkbox" name="add_item.mooa" id="add_item.mooa" />    
+    <input type="checkbox" name="add_item.mooa" id="add_item.mooa" />
     ...
     <input type="checkbox" name="add_item.mooj" id="add_item.mooj" />
     ...
@@ -567,12 +567,12 @@ The item `mud` should not be in the list.
 
 Let's search for something specific.
 
-    >>> manager.getControl(name="SEARCH").value = "fish"
+    >>> manager.getControl(name="SEARCH_TITLE").value = "fish"
     >>> manager.getControl(name="SEARCH_BUTTON").click()
     >>> print manager.contents
     <BLANKLINE>
     ...
-    <input type="checkbox" name="add_item.fish" id="add_item.fish" />    
+    <input type="checkbox" name="add_item.fish" id="add_item.fish" />
     ...
 
 We shouldn't have any extra items after the search query:
