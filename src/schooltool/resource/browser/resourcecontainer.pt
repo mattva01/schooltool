@@ -24,7 +24,7 @@ function searchSelected(selectedResource){
              i18n:translate="">Type</label>
       <select id="resources.type" name="resources.type" size="1"
               onchange="javascript:this.form.submit()">
-        <option selected="1" tal:condition="python:not request.get('resources.type', None)"></option>
+        <option selected="1" tal:condition="python:not request.get('resources.type', None)">Choose One</option>
         <tal:block repeat="term view/getSubTypes">
           <tal:block
                    define="optionValue python:'%s|%s'%(term[0],term[1]);
