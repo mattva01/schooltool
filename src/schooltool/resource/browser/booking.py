@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Resource Booking caledar views.
+Group Timetable caledar views.
 
 $Id$
 """
@@ -26,6 +26,7 @@ from schooltool.app.browser.cal import DailyCalendarView
 from schooltool.app.browser.cal import WeeklyCalendarView
 from schooltool.app.browser.cal import MonthlyCalendarView
 from schooltool.app.browser.cal import YearlyCalendarView
+from schooltool.app.browser.cal import EventForDisplay
 
 
 class BookingCalendarViewBase(CalendarViewBase):
@@ -38,7 +39,6 @@ class BookingCalendarViewBase(CalendarViewBase):
         """
         for calendar, color1, color2 in self.getCalendars():
             for event in calendar.expand(start_dt, end_dt):
-                from schooltool.app.browser.cal import EventForDisplay
                 yield EventForDisplay(event, self.request, color1, color2,
                                       calendar, self.timezone)
 
