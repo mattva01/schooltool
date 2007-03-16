@@ -34,7 +34,7 @@ filter box available:
     ...
           <select id="resources.type" name="resources.type" size="1"
                   onchange="javascript:this.form.submit()">
-                <option selected="1"></option>
+                <option selected="1">Choose One</option>
                 <option disabled="disabled"
                     class="dropdown-header"
                     value="equipment|Equipment">Equipment</option>
