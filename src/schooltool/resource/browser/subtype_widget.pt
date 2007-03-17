@@ -1,0 +1,13 @@
+<input type="text"
+       tal:attributes="id string:${view/name}.newSubType;
+		       name string:${view/name}.newSubType;
+		       value: view/_getFormValue"
+       />
+
+<select tal:attributes="id string:${view/name};
+			name string:${view/name}">
+  <option value="">Choose One</option>
+  <option tal:repeat="type view/subTypes"
+	  tal:attributes="value type"
+	  tal:content="type">subtype</option>
+</select>

@@ -31,7 +31,7 @@ from zope.component import queryUtility
 from zope.formlib import form
 from zope.app.zapi import absoluteURL
 from zope.app.session.interfaces import ISession
-
+from zope.app.form.browser import widget
 
 from schooltool.app.browser.app import BaseEditView
 from schooltool.resource.interfaces import IBookingCalendar
@@ -181,6 +181,29 @@ class LocationTypeFilter(BaseTypeFilter):
 
 class ResourceTypeFilter(BaseTypeFilter):
     """Resource Type Filter"""
+
+
+class ResourceSubTypeWidget(widget.SimpleInputWidget):
+
+    __call__ = ViewPageTemplateFile('subtype_widget.pt')
+
+    def subTypes(self):
+        util = queryUtility(IResourceFactoryUtility, name=self.utility, default=None)
+        if IResourceSubTypes.providedBy(util):
+            subtypes = util
+        else:
+            subtypes = queryAdapter(util, IResourceSubTypes, default=None)
+        if subtypes is not None:
+            return subtypes.types()
+        return []
+
+    def hasInput(self):
+        return self.request.get(self.name,None) != '' or self.request.get(self.name+'.newSubType',None)
+
+    def getInputValue(self):
+        subType = self.request.get(self.name)
+        newSubType = self.request.get(self.name+'.newSubType')
+        return newSubType or subType
 
 
 class ResourceView(form.DisplayFormBase):

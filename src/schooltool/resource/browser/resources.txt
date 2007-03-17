@@ -32,7 +32,8 @@ We can create Location resources, which also have a capacity option
 
     >>> manager.getLink('New Location').click()
     >>> manager.getControl('Title').value = 'Room 101'
-    >>> manager.getControl('Type').value = 'class room'
+    >>> manager.getControl(name='field.type.newSubType').value = 'class room'
+    >>> manager.getControl('Type').value = ['']
     >>> manager.getControl('Capacity').value = '10'
     >>> manager.getControl('Add').click()
     >>> manager.getControl('Type').value = ['location|class room']
@@ -44,7 +45,7 @@ We can create Equipment resources also:
 
     >>> manager.getLink('New Equipment').click()
     >>> manager.getControl('Title').value = 'Projector 1'
-    >>> manager.getControl('Equipment Type').value = 'Projector'
+    >>> manager.getControl(name='field.type.newSubType').value = 'Projector'
     >>> manager.getControl('Manufacturer').value = 'Sony'
     >>> manager.getControl('Model').value = 'RS-1'
     >>> manager.getControl('Serial Number').value = 'ABC123-987'
@@ -54,4 +55,21 @@ We can create Equipment resources also:
     >>> manager.getControl('Type').value = ['equipment|Projector']
     >>> manager.getControl('Search').click()
     >>> 'Projector 1' in manager.contents
+    True
+
+If we go back and add more resources that have type fields, then we
+can choose an existing type from a drop down box.
+
+    >>> manager.getLink('New Equipment').click()
+    >>> manager.getControl('Title').value = 'Projector 2'
+    >>> manager.getControl('Type').value = ['Projector']
+    >>> manager.getControl('Manufacturer').value = 'Sony'
+    >>> manager.getControl('Model').value = 'RS-1'
+    >>> manager.getControl('Serial Number').value = 'ABC123-9876'
+    >>> manager.getControl('Purchase Date') != None
+    True
+    >>> manager.getControl('Add').click()
+    >>> manager.getControl('Type').value = ['equipment|Projector']
+    >>> manager.getControl('Search').click()
+    >>> 'Projector 2' in manager.contents
     True

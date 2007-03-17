@@ -14,7 +14,7 @@ And add a couple of resources to book:
     >>> manager.getLink('Resources').click()
     >>> manager.getLink('New Location').click()
     >>> manager.getControl('Title').value = 'mud'
-    >>> manager.getControl('Type').value = 'Computer Lab'
+    >>> manager.getControl(name='field.type.newSubType').value = 'Computer Lab'
     >>> manager.getControl('Add').click()
     >>> manager.getControl('Type').value = ['location|Computer Lab']
     >>> manager.getControl('Search').click()

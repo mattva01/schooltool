@@ -99,6 +99,9 @@
         class="schooltool.app.browser.app.BaseAddView"
         permission="schooltool.edit">
       <widget field="description" height="5" />
+      <widget field="type"
+	      class="schooltool.resource.browser.resource.ResourceSubTypeWidget"
+	      utility="location"/>
     </addform>
 
     <editform
@@ -113,6 +116,9 @@
         menu="schooltool_actions"
         title="Edit Info">
       <widget field="description" height="5" />
+      <widget field="type"
+	      class="schooltool.resource.browser.resource.ResourceSubTypeWidget"
+	      utility="location"/>
     </editform>
 
     <!-- Equipment forms -->
@@ -129,6 +135,9 @@
         class="schooltool.app.browser.app.BaseAddView"
         permission="schooltool.edit">
       <widget field="description" height="5" />
+      <widget field="type"
+	      class="schooltool.resource.browser.resource.ResourceSubTypeWidget"
+	      utility="equipment"/>
     </addform>
 
     <editform
@@ -144,6 +153,9 @@
         menu="schooltool_actions"
         title="Edit Info">
       <widget field="description" height="5" />
+      <widget field="type"
+	      class="schooltool.resource.browser.resource.ResourceSubTypeWidget"
+	      utility="equipment"/>
     </editform>
 
     <navigationViewlet
