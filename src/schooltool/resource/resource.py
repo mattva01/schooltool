@@ -36,6 +36,7 @@ from schooltool.securitypolicy.crowds import TeachersCrowd
 from schooltool.app.interfaces import ICalendarParentCrowd
 from schooltool.resource import interfaces
 from schooltool.securitypolicy.crowds import ConfigurableCrowd
+from schooltool.securitypolicy.crowds import AuthenticatedCrowd
 from schooltool import SchoolToolMessage as _
 
 
@@ -108,6 +109,7 @@ class ResourceCalendarViewersCrowd(ConfigurableCrowd):
     def contains(self, principal):
         return (ConfigurableCrowd.contains(self, principal) or
                 LeaderCrowd(self.context).contains(principal) or
+                AuthenticatedCrowd(self.context).contains(principal) or
                 TeachersCrowd(self.context).contains(principal))
 
 
