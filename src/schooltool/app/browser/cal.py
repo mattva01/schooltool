@@ -2223,7 +2223,13 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
             return self.updateForm()
         elif 'CANCEL' in self.request:
             self.update_status = ''
-            self.request.response.redirect(self.nextURL())
+            if 'fromResourceBooking' in self.request:
+                calURL = absoluteURL(self.context.__parent__, self.request)
+                nextURL = calURL+'/delete.html?event_id=%s&date=%s' % (self.context.unique_id,
+                                                                       start_date)
+                self.request.response.redirect(nextURL)
+            else:
+                self.request.response.redirect(self.nextURL())
             return self.update_status
         elif "UPDATE_SUBMIT" in self.request:
             # Replicating EditView functionality
@@ -2316,7 +2322,7 @@ class CalendarEventBookOneResourceView(BrowserView):
 
     def nextURL(self, event):
         """Return the URL to be displayed after the add operation."""
-        return "%s/edit.html" % absoluteURL(event, self.request)
+        return "%s/edit.html?fromResourceBooking=True" % absoluteURL(event, self.request)
 
 
 class CalendarEventBookingView(CalendarEventView):
