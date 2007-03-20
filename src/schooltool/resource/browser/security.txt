@@ -152,7 +152,7 @@ Check to see that the classroom is booked as well.
       <h6 class="booked-resource-header"
           style="background: #7590ae">
         <a style="color: #000;"
-           href="http://localhost/persons/teacher/calendar/.../booking.html?date=2007-03-18">Booked resources</a></h6>
+           href="http://localhost/persons/teacher/calendar/.../booking.html?date=...">Booked resources</a></h6>
     <BLANKLINE>
         <a href="http://localhost/resources/classroom">Classroom</a>
     ...
