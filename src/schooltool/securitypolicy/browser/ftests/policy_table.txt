@@ -198,9 +198,9 @@ Student looking at another student:
     person container:
     person data:
     person preferences:
-    resource calendar:
-    resource container:
-    resource data:
+    resource calendar:   view
+    resource container:  view
+    resource data:       view
     schooltool:          view
     schooltool calendar: view
     schooltool info:
@@ -228,9 +228,9 @@ Student looking at himself (his section):
     person container:
     person data:         view
     person preferences:  view  edit
-    resource calendar:
-    resource container:
-    resource data:
+    resource calendar:   view
+    resource container:  view
+    resource data:       view
     schooltool:          view
     schooltool calendar: view
     schooltool info:
@@ -251,7 +251,7 @@ Student looking at another student and not his section:
     group calendar:
     group container:
     group data:
-    level: view
+    level:               view
     overlay calendar:
     permissions:
     person attendance:
@@ -259,10 +259,10 @@ Student looking at another student and not his section:
     person container:
     person data:
     person preferences:
-    resource calendar:
-    resource container:
-    resource data:
-    schooltool: view
+    resource calendar:   view
+    resource container:  view
+    resource data:       view
+    schooltool:          view
     schooltool calendar: view
     schooltool info:
     section:
@@ -290,9 +290,9 @@ Instructor looking at his student and section:
     person container:
     person data:         view
     person preferences:
-    resource calendar:
-    resource container:
-    resource data:
+    resource calendar:   view
+    resource container:  view
+    resource data:       view
     schooltool:          view
     schooltool calendar: view
     schooltool info:
@@ -322,8 +322,8 @@ Group member:
     person data:
     person preferences:
     resource calendar:   view  edit
-    resource container:
-    resource data:
+    resource container:  view
+    resource data:       view
     schooltool:          view
     schooltool calendar: view
     schooltool info:
@@ -353,7 +353,7 @@ Leader stuff:
     person data:
     person preferences:
     resource calendar:   view  edit
-    resource container:
+    resource container:  view
     resource data:       view  edit
     schooltool:          view
     schooltool calendar: view
