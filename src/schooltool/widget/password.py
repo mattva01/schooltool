@@ -12,7 +12,7 @@ class PasswordConfirmationWidget(PasswordWidget):
     default = ''
     type = 'password'
     displayWidth = 15
-    
+
     def __call__(self):
         password_tag = renderElement(
                 self.tag,
@@ -41,7 +41,8 @@ class PasswordConfirmationWidget(PasswordWidget):
             mapping={
             'label': confirm_name,
             'password': password_tag,
-            'confirm': confirm_tag}))
+            'confirm': confirm_tag}),
+            context=self.request)
 
     def _toFieldValue(self, input):
         """Check whether the confirmation field value is identical to
