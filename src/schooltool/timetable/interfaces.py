@@ -657,7 +657,7 @@ class ICompositeTimetables(Interface):
 
     def getCompositeTimetable(term_id, tt_schema_id):
         """Return a composite timetable for a given object with a
-        given timetable schema for a given time period id.
+        given timetable schema for a given term id.
 
         The timetable returned includes the events from the timetables
         of parent groups, groups taught, etc.
