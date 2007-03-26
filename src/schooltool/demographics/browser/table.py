@@ -177,7 +177,7 @@ class EditColumn(column.Column):
     def renderCell(self, item, formatter):
         return '<a href="%s">%s</a>' % (
             zapi.absoluteURL(item, formatter.request) + '/nameinfo/@@edit.html',
-            translate(_("Edit")))
+            translate(_("Edit"), formatter.request))
 
 class DisplayColumn(column.Column):
     """Table column that displays display link.
@@ -185,7 +185,7 @@ class DisplayColumn(column.Column):
     def renderCell(self, item, formatter):
         return '<a href="%s">%s</a>' % (
             zapi.absoluteURL(item, formatter.request) + '/nameinfo',
-            translate(_("Display")))
+            translate(_("Display"), formatter.request))
 
 
 from schooltool.skin.table import CheckboxColumn
