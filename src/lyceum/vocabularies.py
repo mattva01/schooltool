@@ -26,6 +26,7 @@ from zope.interface import implements
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPerson
+from schooltool.group.interfaces import IGroup
 
 from lyceum.interfaces import IGroupSource
 from lyceum.interfaces import ILyceumPersonSource
@@ -45,7 +46,9 @@ class GradeClassSource(object):
 
     def __iter__(self):
         if IPerson.providedBy(self.context):
-            groups = [group.__name__ for group in self.context.groups]
+            groups = [group.__name__
+                      for group in self.context.groups
+                      if IGroup.providedBy(group)]
         else:
             groups = list(ISchoolToolApplication(None)['groups'])
 

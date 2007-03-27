@@ -50,7 +50,13 @@ def doctest_GradeClassSource():
     If the context of the vocabulary is a person - list all the groups
     he belongs to as possible grade classes:
 
+        >>> from schooltool.group.interfaces import IGroup
         >>> class GroupStub(object):
+        ...     implements(IGroup)
+        ...     def __init__(self, name):
+        ...         self.__name__ = name
+
+        >>> class SectionStub(object):
         ...     def __init__(self, name):
         ...         self.__name__ = name
 
@@ -59,6 +65,7 @@ def doctest_GradeClassSource():
         ...     implements(IPerson)
         ...     def __init__(self):
         ...         self.groups = map(GroupStub, ['g2', 'g1'])
+        ...         self.groups.extend(map(SectionStub, ['s1', 's2']))
 
         >>> person = PersonStub()
         >>> source = GradeClassSource(person)
