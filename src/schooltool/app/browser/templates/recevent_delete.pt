@@ -1,9 +1,7 @@
-<tal:defs define="event view/handleEvent"
-          condition="event">
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head >
   <title metal:fill-slot="title" i18n:translate="">
-    Deleting a repeating event (<span tal:replace="event/title"
+    Deleting a repeating event (<span tal:replace="view/event/title"
                                       i18n:name="event_title" />)
   </title>
 </head>
@@ -13,7 +11,7 @@
   <form method="post" tal:attributes="action request/URL" class="standalone">
 
     <h3 i18n:translate="">
-      Deleting a repeating event (<span tal:replace="event/title"
+      Deleting a repeating event (<span tal:replace="view/event/title"
                                         i18n:name="event_title" />)
     </h3>
 
@@ -40,13 +38,13 @@
     </fieldset>
 
     <div class="controls">
-      <input class="button" type="submit" name="CURRENT" value="Current"
+      <input class="button-cancel" type="submit" name="CURRENT" value="Current"
              i18n:attributes="value" />
-      <input class="button" type="submit" name="FUTURE" value="Future"
+      <input class="button-cancel" type="submit" name="FUTURE" value="Future"
              i18n:attributes="value" />
-      <input class="button" type="submit" name="ALL" value="All"
+      <input class="button-cancel" type="submit" name="ALL" value="All"
              i18n:attributes="value" />
-      <input class="button" type="submit" name="CANCEL" value="Cancel"
+      <input class="button-cancel" type="submit" name="CANCEL" value="Cancel"
              i18n:attributes="value" />
     </div>
   </form>
@@ -54,4 +52,3 @@
 
 </body>
 </html>
-</tal:defs>

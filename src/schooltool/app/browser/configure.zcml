@@ -237,6 +237,15 @@
       />
 
   <zope:view
+      for="schooltool.calendar.interfaces.ICalendar"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory=".cal.CalendarTraverser"
+      permission="zope.Public"
+      />
+
+
+  <zope:view
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       type="zope.publisher.interfaces.browser.IBrowserRequest"
       provides="zope.publisher.interfaces.browser.IBrowserPublisher"
@@ -425,7 +434,6 @@
       name="delete.html"
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".cal.EventDeleteView"
-      template="templates/recevent_delete.pt"
       permission="schooltool.edit"
       />
 
@@ -494,7 +502,7 @@
       />
 
   <page
-      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      for="schooltool.calendar.interfaces.ICalendar"
       name="daily_calendar_rows"
       layer="schooltool.skin.ISchoolToolLayer"
       class=".cal.DailyCalendarRowsView"
