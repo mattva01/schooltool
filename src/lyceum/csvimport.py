@@ -1,3 +1,26 @@
+#
+# SchoolTool - common information systems platform for school administration
+# Copyright (c) 2005 Shuttleworth Foundation
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+"""
+Lyceum person csv import functionality.
+
+$Id$
+"""
 import csv
 import os
 from datetime import time, timedelta, date
@@ -5,6 +28,7 @@ from datetime import time, timedelta, date
 from zope.security.proxy import removeSecurityProxy
 from zope.exceptions.interfaces import UserError
 from zope.app.container.interfaces import INameChooser
+from zope.annotation.interfaces import IAnnotations
 
 from schooltool.common import DateRange
 from schooltool.course.course import Course
@@ -19,6 +43,7 @@ from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.model import WeeklyTimetableModel
 from schooltool.timetable.schema import TimetableSchema
 from schooltool.timetable.schema import TimetableSchemaDay
+from schooltool.app.browser.cal import CalendarSTOverlayView
 
 from lyceum.person import LyceumPerson
 
@@ -77,9 +102,7 @@ class CSVStudent(object):
         group = removeSecurityProxy(app['groups'][self.group_id])
         person.gradeclass = group
 
-        from zope.annotation.interfaces import IAnnotations
         annotations = IAnnotations(person)
-        from schooltool.app.browser.cal import CalendarSTOverlayView
         annotations[CalendarSTOverlayView.SHOW_TIMETABLE_KEY] = False
 
         group.members.add(person)
