@@ -9,8 +9,10 @@
   <include package="schooltool.term" />
   <include package="schooltool.timetable" />
   <include package="schooltool.demographics" />
+  <include package="schooltool.devmode" />
   <include package="lyceum" />
 
+  <includeOverrides package="schooltool.devmode" file="overrides.zcml" />
   <includeOverrides package="lyceum" file="overrides.zcml" />
 
 </configure>
