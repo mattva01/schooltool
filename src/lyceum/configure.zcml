@@ -72,6 +72,24 @@
      provides="zope.schema.interfaces.IVocabularyFactory"
      name="lyceum.advisor_source" />
 
+  <adapter
+      for="schooltool.group.interfaces.IGroup"
+      factory=".group_calendar.GroupTimetableCalendar"
+      provides=".interfaces.IGroupTimetableCalendar" />
+
+  <class class=".group_calendar.GroupTimetableCalendar">
+    <require permission="schooltool.view"
+             interface=".interfaces.IGroupTimetableCalendar" />
+  </class>
+
+  <subscriber
+      for="schooltool.group.interfaces.IGroup
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".group_calendar.GroupTimetableCalendarTraverserPlugin"
+      permission="zope.Public"
+      />
+
   <include package="lyceum.browser" />
 
   <utility
