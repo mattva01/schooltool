@@ -95,4 +95,4 @@ class ISchoolToolLyceumApplication(ISchoolToolApplication):
 
 class IGroupTimetableCalendar(ICalendar):
 
-    attribute = TextLine(title=_(u"Title of the calendar"))
+    title = TextLine(title=_(u"Title of the calendar"))
