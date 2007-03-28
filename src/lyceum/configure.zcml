@@ -80,4 +80,10 @@
      name="lyceum"
      />
 
+  <utility
+      name="lyceum"
+      provides="zope.app.generations.interfaces.ISchemaManager"
+      component=".generations.schemaManager"
+      />
+
 </configure>
