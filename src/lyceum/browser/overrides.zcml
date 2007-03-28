@@ -43,4 +43,12 @@
      permission="schooltool.edit"
      menu="schooltool_actions" title="New Person" />
 
+  <page
+      for="schooltool.calendar.interfaces.ICalendar"
+      name="daily_calendar_rows"
+      layer="schooltool.skin.ISchoolToolLayer"
+      class=".calendar.LyceumDailyCalendarRowsView"
+      permission="zope.View"
+      />
+
 </configure>
