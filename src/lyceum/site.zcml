@@ -9,7 +9,10 @@
   <include package="schooltool.term" />
   <include package="schooltool.timetable" />
   <include package="schooltool.demographics" />
-  <include package="schooltool.devmode" />
+  <include
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      zcml:condition="have devmode"
+      package="schooltool.devmode" />
   <include package="lyceum" />
 
   <includeOverrides package="schooltool.devmode" file="overrides.zcml" />
