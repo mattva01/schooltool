@@ -28,6 +28,7 @@ from zope.schema.interfaces import IIterableSource
 
 from schooltool.demographics.interfaces import SourceList
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.calendar.interfaces import ICalendar
 
 from lyceum import LyceumMessage as _
 
@@ -90,3 +91,8 @@ class ILyceumPerson(Interface):
 
 class ISchoolToolLyceumApplication(ISchoolToolApplication):
     """Marker interface for lyceum specific school."""
+
+
+class IGroupTimetableCalendar(ICalendar):
+
+    attribute = TextLine(title=_(u"Title of the calendar"))
