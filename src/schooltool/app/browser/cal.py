@@ -1339,8 +1339,6 @@ class DailyCalendarRowsView(BrowserView):
     def _addPeriodsToRows(self, rows, periods, events):
         """Populate the row list with rows from periods."""
         tz = self.getPersonTimezone()
-        timetable = getSchoolToolApplication()['ttschemas'].getDefault()
-        tttz = timezone(timetable.timezone)
 
         # Put starts and ends of periods into rows
         for period in periods:
