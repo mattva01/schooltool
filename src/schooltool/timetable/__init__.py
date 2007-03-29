@@ -599,7 +599,7 @@ class CompositeTimetables(object):
     def __init__(self, context):
         self.context = context
 
-    def _collectSourceObjects(self):
+    def collectTimetableSourceObjects(self):
         objs = []
         for adapter in zapi.subscribers((self.context, ), ITimetableSource):
             objs.extend(adapter.getTimetableSourceObjects())
@@ -613,7 +613,7 @@ class CompositeTimetables(object):
             return first <= event.schoolDay() <= last
 
         events = []
-        for obj in self._collectSourceObjects():
+        for obj in self.collectTimetableSourceObjects():
             cal = ISchoolToolCalendar(obj)
             for event in cal:
                 if (ITimetableCalendarEvent.providedBy(event) and
