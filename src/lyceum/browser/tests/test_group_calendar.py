@@ -23,7 +23,6 @@ $Id$
 """
 import unittest
 
-from zope.component import provideAdapter
 from zope.app.testing import setup
 from zope.testing import doctest
 
@@ -79,7 +78,7 @@ def doctest_GroupTimetableCalendarViewBase():
         >>> class CTTStub(object):
         ...     def __init__(self, tt_event_sources):
         ...         self.tt_event_sources = tt_event_sources
-        ...     def _collectSourceObjects(self):
+        ...     def collectTimetableSourceObjects(self):
         ...         return self.tt_event_sources
 
         >>> from schooltool.timetable.interfaces import ICompositeTimetables

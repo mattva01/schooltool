@@ -49,8 +49,8 @@ class GroupTimetableCalendarViewBase(CalendarViewBase):
 
         sources = set()
         for member in group.members:
-            ct = removeSecurityProxy(ICompositeTimetables(member))
-            objs = ct._collectSourceObjects()
+            ct = ICompositeTimetables(member)
+            objs = ct.collectTimetableSourceObjects()
             for obj in objs:
                 sources.add(obj)
 
