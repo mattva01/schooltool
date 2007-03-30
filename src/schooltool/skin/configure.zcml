@@ -35,7 +35,15 @@
       />
 
   <viewletManager
-      name="schooltool.Navigation"
+      name="schooltool.MenuBar"
+      permission="zope.Public"
+      provides=".skin.IMenuBarMenuManager"
+      class=".skin.MenuBarMenuViewletManager"
+      template="templates/menubar.pt"
+      />
+
+  <viewletManager
+      name="schooltool.NavigationMenu"
       permission="zope.Public"
       provides=".skin.INavigationManager"
       template="templates/navigation.pt"
@@ -43,7 +51,7 @@
       />
 
   <viewletManager
-      name="schooltool.ActionsBar"
+      name="schooltool.ActionsMenu"
       permission="zope.Public"
       class=".skin.ActionMenuViewletManager"
       template="templates/actionsbar.pt"

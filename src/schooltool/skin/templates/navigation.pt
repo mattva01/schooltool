@@ -1,2 +1,6 @@
-<tal:block repeat="viewlet options/viewlets"
-           content="structure viewlet/render">Title</tal:block>
+<div class="dropdown">
+  <h3 class="title">Navigation</h3>
+  <tal:block repeat="viewlet options/viewlets"
+	     content="structure viewlet/render" />
+</div>
+

@@ -3,7 +3,6 @@
                        actions view/context/@@view_get_menu/schooltool_actions">
 
 <div class="portlet">
-<!--      tal:condition="actions"> -->
   <h4 tal:content="view/title">Actions</h4>
   <ul> <!-- old-style menu actions (obsolete) -->
     <li tal:repeat="view actions">
