@@ -11,6 +11,8 @@
     <link type="text/css" rel="stylesheet" href="calwidget-calendar.css"
           tal:attributes="href context/++resource++calwidget-calendar.css" />
     <metal:block use-macro="view/@@schooltool_macros/generic/stylesheets" />
+    <script type="text/javascript" src="/@@/mochikit.js">
+    </script>
     <script type="text/javascript" src="schooltool.js"
             tal:attributes="src context/++resource++schooltool.js">
     </script>

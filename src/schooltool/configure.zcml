@@ -25,6 +25,7 @@
   <include package="zope.mimetype" />
   <include package="zope.file" />
   <include package="zope.html" />
+  <include package="z3c.javascript.mochikit" />
 
   <!-- set up an adapter from zope.i18n locale to a zope.ucol collator -->
 
