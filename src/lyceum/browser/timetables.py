@@ -26,6 +26,7 @@ from pytz import utc
 
 from zope.publisher.browser import BrowserView
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.security.proxy import removeSecurityProxy
 from zope.i18n import translate
 
 from schooltool.timetable.interfaces import ICompositeTimetables
@@ -71,7 +72,7 @@ class PersonTimetableView(BrowserView):
         school_timetables = ISchoolToolApplication(None)['ttschemas']
         composite_timetable = school_timetables[self.schooltt_ids[0]].createTimetable()
         for object in self.collectTimetableSourceObjects():
-            ttables = ITimetables(object).timetables
+            ttables = removeSecurityProxy(ITimetables(object).timetables)
             for id in self.schooltt_ids:
                 tt_id = "%s.%s" % (self.term_id(), id)
                 if tt_id in ttables:

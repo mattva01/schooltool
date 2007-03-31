@@ -55,7 +55,8 @@ class GroupTimetableCalendarViewBase(CalendarViewBase):
                 sources.add(obj)
 
         for source in sources:
-            for event in ISchoolToolCalendar(source).expand(start_dt, end_dt):
+            calendar = removeSecurityProxy(ISchoolToolCalendar(source))
+            for event in calendar.expand(start_dt, end_dt):
                 yield self.eventForDisplayFactory(event)
 
     def canAddEvents(self):

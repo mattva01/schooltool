@@ -173,3 +173,26 @@ Students are too:
             (<span>13:05</span> - <span>13:50</span>)
           </span>
     </a>
+
+As students can't log in unauthenticated persons still should be able
+to access some data, so if manager sets some permissions not just
+group calendars but group timetables should become visible to
+unauthenticated users:
+
+    >>> manager.open('http://localhost')
+    >>> manager.getLink('Access Control').click()
+    >>> manager.getControl('Everyone can view group lists.').click()
+    >>> manager.getControl('Everyone can view group information.').click()
+    >>> manager.getControl('Everyone can view group calendars.').click()
+    >>> manager.getControl('Apply').click()
+
+    >>> student = Browser()
+    >>> student.handleErrors = False
+    >>> student.open('http://localhost/')
+    >>> student.getLink('Groups').click()
+    >>> student.getLink('1a').click()
+    >>> student.getLink('View Timetable').click()
+
+Group timetable calendar should be visible as well:
+
+    >>> student.getLink('Timetable Calendar').click()
