@@ -7,7 +7,7 @@
       name="index.html"
       for="lyceum.person.ILyceumPerson"
       class=".person.PersonView"
-      permission="zope.View"
+      permission="schooltool.view"
       menu="schooltool_actions"
       title="View"
       />
@@ -40,6 +40,37 @@
         title="CSV Import"
         order="100"
         />
+
+    <navigationViewlet
+        name="timetable_calendar"
+        for="schooltool.group.interfaces.IGroup "
+        manager="schooltool.skin.IActionMenuManager"
+        template="templates/actionsViewlet.pt"
+        permission="schooltool.view"
+        link="tt_calendar"
+        title="Timetable Calendar"
+        order="20" />
+
+    <navigationViewlet
+        name="view_person_timetable"
+        for="lyceum.person.ILyceumPerson"
+        manager="schooltool.skin.IActionMenuManager"
+        template="templates/actionsViewlet.pt"
+        permission="schooltool.view"
+        link="view_timetable.html"
+        title="View Timetable"
+        order="50" />
+
+    <navigationViewlet
+        name="view_group_timetable"
+        for="schooltool.group.interfaces.IGroup"
+        manager="schooltool.skin.IActionMenuManager"
+        template="templates/actionsViewlet.pt"
+        permission="schooltool.view"
+        link="view_timetable.html"
+        title="View Timetable"
+        order="50" />
+
   </zope:configure>
 
   <!-- list of persons -->
@@ -58,5 +89,53 @@
 
   <!-- person add form adapter -->
   <zope:adapter factory=".person.PersonAddFormAdapter" />
+
+  <page
+      name="view_timetable.html"
+      for="lyceum.person.ILyceumPerson"
+      class=".timetables.PersonTimetableView"
+      permission="schooltool.view"
+      />
+
+  <page
+      name="view_timetable.html"
+      for="schooltool.group.interfaces.IGroup"
+      class=".timetables.GroupTimetableView"
+      permission="schooltool.view"
+      />
+
+  <zope:configure package="schooltool.app.browser">
+    <page
+       name="daily.html"
+       for="lyceum.interfaces.IGroupTimetableCalendar"
+       class="lyceum.browser.group_calendar.DailyGroupTimetableCalendarView"
+       template="templates/cal_daily.pt"
+       permission="schooltool.view"
+       />
+
+    <page
+       name="weekly.html"
+       for="lyceum.interfaces.IGroupTimetableCalendar"
+       class="lyceum.browser.group_calendar.WeeklyGroupTimetableCalendarView"
+       template="templates/cal_weekly.pt"
+       permission="schooltool.view"
+       />
+
+    <page
+       name="monthly.html"
+       for="lyceum.interfaces.IGroupTimetableCalendar"
+       class="lyceum.browser.group_calendar.MonthlyGroupTimetableCalendarView"
+       template="templates/cal_monthly.pt"
+       permission="schooltool.view"
+       />
+
+    <page
+       name="yearly.html"
+       for="lyceum.interfaces.IGroupTimetableCalendar"
+       class="lyceum.browser.group_calendar.YearlyGroupTimetableCalendarView"
+       template="templates/cal_yearly.pt"
+       permission="schooltool.view"
+       />
+  </zope:configure>
 
 </configure>

@@ -100,12 +100,11 @@ class CSVStudent(object):
         person = LyceumPerson(user_name, self.name, self.surname)
         app['persons'][user_name] = person
         group = removeSecurityProxy(app['groups'][self.group_id])
-        person.gradeclass = group
+        group.members.add(person)
+        person.gradeclass = self.group_id
 
         annotations = IAnnotations(person)
         annotations[CalendarSTOverlayView.SHOW_TIMETABLE_KEY] = False
-
-        group.members.add(person)
 
 
 class LyceumGroupsAndStudents(object):

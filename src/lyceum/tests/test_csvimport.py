@@ -107,8 +107,8 @@ def doctest_CSVStudent():
         >>> person.last_name
         u'\u012e\u0161\u016b\u0173\u017e'
 
-        >>> person.gradeclass is appStub["groups"]["1a"]
-        True
+        >>> person.gradeclass
+        '1a'
 
     Timetables are not show by default:
 

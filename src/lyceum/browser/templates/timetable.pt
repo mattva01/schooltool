@@ -1,0 +1,32 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<body>
+<metal:nothing metal:fill-slot="content-header" />
+<metal:block metal:fill-slot="body">
+  <table style="width: 90%">
+
+    <tr tal:repeat="row view/rows">
+      <td tal:repeat="column row" style="vertical-align: top;">
+        <tal:if condition="column">
+          <h1 tal:content="column/title" />
+
+          <table class="timetable">
+            <tr tal:repeat="period column/periods">
+              <th tal:content="period/title" class="period" width="35%" style="vertical-align: top;" />
+              <td>
+                <div tal:repeat="activity period/activities" style="width: 100%;">
+                  <span tal:content="activity/title" style="float: left;" />
+                  <strong style="float: right;" tal:repeat="resource activity/resources" tal:content="resource/title" />
+                  <div style="float:clear;">&nbsp;</div>
+                </div>
+              </td>
+            </tr>
+          </table>
+
+        </tal:if>
+      </td>
+    </tr>
+
+  </table>
+</metal:block>
+</body>
+</html>
