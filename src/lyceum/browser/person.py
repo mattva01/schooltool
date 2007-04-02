@@ -41,7 +41,7 @@ from schooltool.skin.form import BasicForm
 from schooltool.skin.form import EditForm
 from schooltool.widget.password import PasswordConfirmationWidget
 
-from lyceum.interfaces import ILyceumPerson
+from lyceum.person.interfaces import ILyceumPerson
 from lyceum import LyceumMessage as _
 
 

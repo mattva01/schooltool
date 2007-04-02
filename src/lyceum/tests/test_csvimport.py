@@ -93,8 +93,8 @@ def doctest_CSVStudent():
     A person object has been created and added to the container:
 
         >>> appStub
-        {'persons': {u'-acee-isuuz': <lyceum.person.LyceumPerson object at ...>},
-         'groups': {'1a': [<lyceum.person.LyceumPerson object at ...>]}}
+        {'persons': {u'-acee-isuuz': <lyceum.person.person.LyceumPerson object at ...>},
+         'groups': {'1a': [<lyceum.person.person.LyceumPerson object at ...>]}}
 
         >>> person = appStub['persons'][u'-acee-isuuz']
         >>> person.title

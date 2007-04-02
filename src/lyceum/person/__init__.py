@@ -16,34 +16,5 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-"""
-Interfaces for Lyceum specific code.
 
-$Id$
-
-"""
-from zope.schema import TextLine
-from zope.schema.interfaces import IIterableSource
-
-from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.calendar.interfaces import ICalendar
-
-from lyceum import LyceumMessage as _
-
-
-class ILyceumPersonSource(IIterableSource):
-    """Marker interface for sources that list lyceum persons."""
-
-
-# XXX should be in skin or common, or more properly - core
-class IGroupSource(IIterableSource):
-    """Marker interface for sources that list schooltool groups."""
-
-
-class ISchoolToolLyceumApplication(ISchoolToolApplication):
-    """Marker interface for lyceum specific school."""
-
-
-class IGroupTimetableCalendar(ICalendar):
-
-    title = TextLine(title=_(u"Title of the calendar"))
+from lyceum.person.person import LyceumPerson

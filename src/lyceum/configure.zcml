@@ -4,29 +4,6 @@
            xmlns:i18n="http://namespaces.zope.org/i18n"
            i18n_domain="schooltool">
 
-  <class class=".person.LyceumPerson">
-    <implements interface="schooltool.app.interfaces.IHaveCalendar" />
-    <implements interface="schooltool.note.interfaces.IHaveNotes" />
-    <implements interface="schooltool.person.interfaces.IHavePreferences" />
-    <require
-        permission="schooltool.view"
-        interface="schooltool.person.interfaces.IReadPerson"
-        attributes="__cmp__" />
-    <require
-        permission="schooltool.edit"
-        interface="schooltool.person.interfaces.IWritePerson"
-        set_schema="schooltool.person.interfaces.IPerson" />
-    <require
-        permission="schooltool.edit"
-        set_schema="lyceum.person.ILyceumPerson" />
-    <require
-        permission="schooltool.view"
-        interface="lyceum.person.ILyceumPerson" />
-    <require
-        permission="schooltool.edit"
-        set_attributes="modified" />
-  </class>
-
   <utility
      factory=".csvimport.LyceumGroupsAndStudents"
      provides="schooltool.setupdata.interfaces.ISetupDataPlugin"
@@ -57,11 +34,6 @@
      name="lyceum_scheduling"
      />
 
-  <adapter
-      factory=".person.LyceumPersonCalendarCrowd"
-      provides="schooltool.app.interfaces.ICalendarParentCrowd"
-      name="schooltool.view" />
-
   <utility
      factory=".vocabularies.gradeClassVocabularyFactory"
      provides="zope.schema.interfaces.IVocabularyFactory"
@@ -90,8 +62,6 @@
       permission="zope.Public"
       />
 
-  <include package="lyceum.browser" />
-
   <utility
      factory=".utilities.SchoolToolInitializationUtility"
      provides="schooltool.app.interfaces.ISchoolToolInitializationUtility "
@@ -103,5 +73,8 @@
       provides="zope.app.generations.interfaces.ISchemaManager"
       component=".generations.schemaManager"
       />
+
+  <include package="lyceum.person" />
+  <include package="lyceum.browser" />
 
 </configure>

@@ -5,7 +5,7 @@
 
   <page
       name="index.html"
-      for="lyceum.person.ILyceumPerson"
+      for="lyceum.person.interfaces.ILyceumPerson"
       class=".person.PersonView"
       permission="schooltool.view"
       menu="schooltool_actions"
@@ -14,7 +14,7 @@
 
   <page
       name="edit.html"
-      for="lyceum.person.ILyceumPerson"
+      for="lyceum.person.interfaces.ILyceumPerson"
       class=".person.PersonEditView"
       permission="schooltool.edit"
       menu="schooltool_actions"
@@ -53,7 +53,7 @@
 
     <navigationViewlet
         name="view_person_timetable"
-        for="lyceum.person.ILyceumPerson"
+        for="lyceum.person.interfaces.ILyceumPerson"
         manager="schooltool.skin.IActionMenuManager"
         template="templates/actionsViewlet.pt"
         permission="schooltool.view"
@@ -92,7 +92,7 @@
 
   <page
       name="view_timetable.html"
-      for="lyceum.person.ILyceumPerson"
+      for="lyceum.person.interfaces.ILyceumPerson"
       class=".timetables.PersonTimetableView"
       permission="schooltool.view"
       />

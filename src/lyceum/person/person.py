@@ -34,7 +34,7 @@ from schooltool.course.section import PersonInstructorsCrowd
 from schooltool.person.person import PersonCalendarCrowd
 from schooltool.skin.table import LocaleAwareGetterColumn
 
-from lyceum.interfaces import ILyceumPerson
+from lyceum.person.interfaces import ILyceumPerson
 from lyceum import LyceumMessage as _
 
 

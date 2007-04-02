@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           i18n_domain="schooltool">
+
+  <class class=".person.LyceumPerson">
+    <implements interface="schooltool.app.interfaces.IHaveCalendar" />
+    <implements interface="schooltool.note.interfaces.IHaveNotes" />
+    <implements interface="schooltool.person.interfaces.IHavePreferences" />
+    <require
+        permission="schooltool.view"
+        interface="schooltool.person.interfaces.IReadPerson"
+        attributes="__cmp__" />
+    <require
+        permission="schooltool.edit"
+        interface="schooltool.person.interfaces.IWritePerson"
+        set_schema="schooltool.person.interfaces.IPerson" />
+    <require
+        permission="schooltool.edit"
+        set_schema="lyceum.person.interfaces.ILyceumPerson" />
+    <require
+        permission="schooltool.view"
+        interface="lyceum.person.interfaces.ILyceumPerson" />
+    <require
+        permission="schooltool.edit"
+        set_attributes="modified" />
+  </class>
+
+  <adapter
+      factory=".person.LyceumPersonCalendarCrowd"
+      provides="schooltool.app.interfaces.ICalendarParentCrowd"
+      name="schooltool.view" />
+
+</configure>
