@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool.lyceum">
+
+  <page
+      name="index.html"
+      for="lyceum.person.interfaces.ILyceumPerson"
+      class=".person.PersonView"
+      permission="schooltool.view"
+      menu="schooltool_actions"
+      title="View"
+      />
+
+  <page
+      name="edit.html"
+      for="lyceum.person.interfaces.ILyceumPerson"
+      class=".person.PersonEditView"
+      permission="schooltool.edit"
+      menu="schooltool_actions"
+      title="Edit"
+      />
+
+  <!-- list of persons -->
+  <zope:adapter
+      for="lyceum.interfaces.ILyceumPersonSource
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".person.PersonTerms"
+      />
+
+  <!-- list of groups -->
+  <zope:adapter
+      for="lyceum.interfaces.IGroupSource
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".person.GroupTerms"
+      />
+
+  <!-- person add form adapter -->
+  <zope:adapter factory=".person.PersonAddFormAdapter" />
+
+</configure>

@@ -32,4 +32,6 @@
       provides="schooltool.app.interfaces.ICalendarParentCrowd"
       name="schooltool.view" />
 
+  <include package="lyceum.person.browser" />
+
 </configure>
