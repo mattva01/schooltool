@@ -195,4 +195,4 @@ unauthenticated users:
 
 Group timetable calendar should be visible as well:
 
-    >>> student.getLink('Timetable Calendar').click()
+    >>> student.getLink('Member Calendar').click()

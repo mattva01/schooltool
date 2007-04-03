@@ -27,6 +27,8 @@ from pytz import utc
 from zope.app.testing import setup
 from zope.testing import doctest
 from zope.testing.doctestunit import pprint
+from zope.interface import implements
+from zope.component import provideAdapter
 
 
 def doctest_PersonTimetableView_collectTimetableSourceObjects():
@@ -87,7 +89,6 @@ def doctest_PersonTimetableView_days():
     """Tests for PersonTimetableView days.
 
         >>> from schooltool.app.interfaces import ISchoolToolApplication
-        >>> from zope.interface import implements
 
         >>> class EmptyTimetableStub(dict):
         ...     pass
@@ -154,6 +155,23 @@ def doctest_PersonTimetableView_days():
 
     """
 
+class TimetableStub(dict):
+    _activities = []
+    def activities(self):
+        return self._activities
+
+
+class TimetableDayStub(object):
+    def __init__(self, day_id):
+        self.day_id = day_id
+        self.periods = []
+    def add(self, period, activity, send_events):
+        self.periods.append([('id', period),
+                             ('activity', activity),
+                             ('sent_events', send_events)])
+    def __repr__(self):
+        return '<Day id=%s periods=%s>' % (self.day_id, self.periods)
+
 
 def doctest_PersonTimetableView_makeCompositeTimetable():
     """Tests PersonTimetableView makeCompositeTimetable.
@@ -163,8 +181,6 @@ def doctest_PersonTimetableView_makeCompositeTimetable():
         ...     def createTimetable(self):
         ...         return timetable
 
-        >>> from zope.component import provideAdapter
-        >>> from zope.interface import implements
         >>> from schooltool.app.interfaces import ISchoolToolApplication
         >>> class AppStub(dict):
         ...     implements(ISchoolToolApplication)
@@ -189,11 +205,6 @@ def doctest_PersonTimetableView_makeCompositeTimetable():
     But if there are source objects all the activites in them are put
     into the result timetable.
 
-        >>> class TimetableStub(dict):
-        ...     _activities = []
-        ...     def activities(self):
-        ...         return self._activities
-
         >>> class TimetablesStub(object):
         ...     def __init__(self):
         ...         self.timetables = {'term.i-ii-kursui': TimetableStub()}
@@ -205,17 +216,6 @@ def doctest_PersonTimetableView_makeCompositeTimetable():
         ...     def __conform__(self, iface):
         ...         if iface == ITimetables:
         ...             return self.timetables
-
-        >>> class TimetableDayStub(object):
-        ...     def __init__(self, day_id):
-        ...         self.day_id = day_id
-        ...         self.periods = []
-        ...     def add(self, period, activity, send_events):
-        ...         self.periods.append([('id', period),
-        ...                              ('activity', activity),
-        ...                              ('sent_events', send_events)])
-        ...     def __repr__(self):
-        ...         return '<Day id=%s periods=%s>' % (self.day_id, self.periods)
 
      The initial timetable that we normaly get out of the school
      timetable storage is empty, but has 3 days:
@@ -311,6 +311,80 @@ def doctest_GroupTimetableView():
         >>> group.members = [Member("s1", "s2"), Member("s2", "s3")]
         >>> sorted(list(view.collectTimetableSourceObjects()))
         ['s1', 's2', 's3']
+
+    """
+
+
+def doctest_ResourceTimetableView():
+    """Tests for ResourceTimetableView.
+
+        >>> events = []
+
+        >>> from schooltool.app.interfaces import ISchoolToolCalendar
+        >>> from lyceum.browser.timetables import ResourceTimetableView
+        >>> class PersonStub(object):
+        ...     def __conform__(self, iface):
+        ...         if iface == ISchoolToolCalendar:
+        ...             return events
+
+        >>> view = ResourceTimetableView(PersonStub(), None)
+        >>> view.schooltt_ids
+        ['i-ii-kursui', 'iii-iv-kursui']
+
+        >>> class STTStub(object):
+        ...     def createTimetable(self):
+        ...         timetable = TimetableStub()
+        ...         timetable["Monday"] = TimetableDayStub("Monday")
+        ...         timetable["Tuesday"] = TimetableDayStub("Tuseday")
+        ...         timetable["Wednesday"] = TimetableDayStub("Wednesday")
+        ...         return timetable
+
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
+        >>> class AppStub(dict):
+        ...     implements(ISchoolToolApplication)
+        ...     def __init__(self, context):
+        ...         self['ttschemas'] = {'i-ii-kursui': STTStub()}
+
+        >>> provideAdapter(AppStub, adapts=[None])
+
+    If there are no events in the calendar, the timetable is empty:
+
+        >>> pprint(view.makeCompositeTimetable())
+        {'Monday': <Day id=Monday periods=[]>,
+         'Tuesday': <Day id=Tuseday periods=[]>,
+         'Wednesday': <Day id=Wednesday periods=[]>}
+
+    Non-timetable events are ignored as well:
+
+        >>> events = ["event1", "event2"]
+        >>> pprint(view.makeCompositeTimetable())
+        {'Monday': <Day id=Monday periods=[]>,
+         'Tuesday': <Day id=Tuseday periods=[]>,
+         'Wednesday': <Day id=Wednesday periods=[]>}
+
+    Now if there are timetable events, their activities get added to
+    the composite timetable:
+
+        >>> from schooltool.timetable.interfaces import ITimetableCalendarEvent
+        >>> class TTEventStub(object):
+        ...     implements(ITimetableCalendarEvent)
+        ...     def __init__(self, day_id, period_id, activity):
+        ...         self.day_id = day_id
+        ...         self.period_id = period_id
+        ...         self.activity = activity
+        >>> events = [TTEventStub("Monday", "Period 1", "History"),
+        ...           TTEventStub("Tuesday", "Period 2", "Art"),
+        ...           TTEventStub("Wednesday", "Period 1", "English")]
+        >>> pprint(view.makeCompositeTimetable())
+        {'Monday': <Day id=Monday periods=[[('id', 'Period 1'),
+                                            ('activity', 'History'),
+                                            ('sent_events', False)]]>,
+         'Tuesday': <Day id=Tuseday periods=[[('id', 'Period 2'),
+                                              ('activity', 'Art'),
+                                              ('sent_events', False)]]>,
+         'Wednesday': <Day id=Wednesday periods=[[('id', 'Period 1'),
+                                                  ('activity', 'English'),
+                                                  ('sent_events', False)]]>}
 
     """
 

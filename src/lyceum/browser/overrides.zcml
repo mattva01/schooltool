@@ -21,6 +21,25 @@
       permission="schooltool.view"
       />
 
+    <navigationViewlet
+      name="schedule-resource"
+      for="schooltool.resource.interfaces.IResource"
+      manager="schooltool.skin.IActionMenuManager"
+      class="schooltool.skin.skin.DisableNavigationViewlet"
+      permission="schooltool.view"
+      />
+
+    <navigationViewlet
+      name="view-calendar"
+      for="schooltool.group.interfaces.IGroup"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.edit"
+      link="calendar"
+      title="View Calendar"
+      order="10"
+      />
+
     <!-- Set more restrictive permissions for SchoolTimetable list -->
     <navigationViewlet
       name="ttschemas"
@@ -31,6 +50,19 @@
       permission="schooltool.edit"
       link="ttschemas"
       title="School Timetables"
+      order="80"
+      />
+
+    <!-- Set more restrictive permissions for SchoolTimetable list -->
+    <navigationViewlet
+      name="courses"
+      for="*"
+      manager="schooltool.skin.INavigationManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.skin.TopLevelContainerNavigationViewlet"
+      permission="schooltool.edit"
+      link="courses"
+      title="Courses"
       order="80"
       />
 

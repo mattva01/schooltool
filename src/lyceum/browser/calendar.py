@@ -27,6 +27,10 @@ from schooltool.timetable.interfaces import ITimetableCalendarEvent
 
 class LyceumDailyCalendarRowsView(DailyCalendarRowsView):
 
+    def getPeriods(self, cursor):
+        """Return the data we get from getPeriodsForDay."""
+        return self.getPeriodsForDay(cursor)
+
     def _addPeriodsToRows(self, rows, periods, events):
         """Add periods to rows and shift them a bit according to the events.
 

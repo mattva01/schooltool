@@ -30,8 +30,10 @@ from zope.security.proxy import removeSecurityProxy
 from zope.i18n import translate
 
 from schooltool.timetable.interfaces import ICompositeTimetables
+from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.timetable.interfaces import ITimetables
+from schooltool.timetable.interfaces import ITimetableCalendarEvent
 
 from schooltool import SchoolToolMessage as _
 
@@ -117,3 +119,21 @@ class GroupTimetableView(PersonTimetableView):
             for object in ct.collectTimetableSourceObjects():
                 objects.add(object)
         return objects
+
+
+class ResourceTimetableView(PersonTimetableView):
+
+    @property
+    def schooltt_ids(self):
+        return ['i-ii-kursui', 'iii-iv-kursui']
+
+    def makeCompositeTimetable(self):
+        school_timetables = ISchoolToolApplication(None)['ttschemas']
+        composite_timetable = school_timetables[self.schooltt_ids[0]].createTimetable()
+
+        for event in ISchoolToolCalendar(self.context):
+            if ITimetableCalendarEvent.providedBy(event):
+                composite_timetable[event.day_id].add(event.period_id,
+                                                      event.activity,
+                                                      send_events=False)
+        return composite_timetable

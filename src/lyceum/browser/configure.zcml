@@ -30,7 +30,7 @@
         template="templates/actionsViewlet.pt"
         permission="schooltool.view"
         link="tt_calendar"
-        title="Timetable Calendar"
+        title="Member Calendar"
         order="20" />
 
     <navigationViewlet
@@ -53,6 +53,16 @@
         title="View Timetable"
         order="50" />
 
+    <navigationViewlet
+        name="view_resource_timetable"
+        for="schooltool.resource.interfaces.IResource"
+        manager="schooltool.skin.IActionMenuManager"
+        template="templates/actionsViewlet.pt"
+        permission="schooltool.view"
+        link="view_timetable.html"
+        title="View Timetable"
+        order="50" />
+
   </zope:configure>
 
   <page
@@ -66,6 +76,13 @@
       name="view_timetable.html"
       for="schooltool.group.interfaces.IGroup"
       class=".timetables.GroupTimetableView"
+      permission="schooltool.view"
+      />
+
+  <page
+      name="view_timetable.html"
+      for="schooltool.resource.interfaces.IResource"
+      class=".timetables.ResourceTimetableView"
       permission="schooltool.view"
       />
 
