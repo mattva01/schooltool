@@ -738,7 +738,8 @@ class CalendarViewBase(BrowserView):
     def getJumpToYears(self):
         """Return jump targets for five years centered on the current year."""
         this_year = datetime.today().year
-        return [{'label': year,
+        return [{'selected': year == this_year,
+                 'label': year,
                  'href': self.calURL('yearly', date(year, 1, 1))}
                 for year in range(this_year - 2, this_year + 3)]
 
