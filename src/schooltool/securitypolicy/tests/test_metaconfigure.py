@@ -113,9 +113,9 @@ def doctest_handle_allow():
         >>> from schooltool.securitypolicy import metaconfigure as mc
 
         >>> cru = CrowdsUtility()
-        >>> cru.crowdmap = {'cr1': 'fac1',
-        ...                 'cr2': 'fac2',
-        ...                 'cr3': 'fac3'}
+        >>> cru.crowdmap = {'cr1': (lambda x: 'fac1'),
+        ...                 'cr2': (lambda x: 'fac2'),
+        ...                 'cr3': (lambda x: 'fac3')}
         >>> ztapi.provideUtility(ICrowdsUtility, cru)
         >>> def registerCrowdAdapterStub(iface, permission):
         ...     print 'registerCrowdAdapter' + str((iface, permission))
@@ -124,28 +124,47 @@ def doctest_handle_allow():
 
     First check a simple declaration:
 
+        >>> def printCrowds(crowds):
+        ...     for key, factories in crowds.items():
+        ...         print key, [fac(None) for fac in factories]
+
         >>> mc.handle_allow('iface', 'cr1', 'my.permission')
         registerCrowdAdapter('iface', 'my.permission')
         >>> mc.handle_allow('iface', 'cr2', 'my.permission')
 
-        >>> cru.objcrowds
-        {('iface', 'my.permission'): ['fac1', 'fac2']}
+        >>> printCrowds(cru.objcrowds)
+        ('iface', 'my.permission') ['fac1', 'fac2']
 
     Another call will not invoke registerCrowdAdapter again:
 
         >>> mc.handle_allow('iface', 'cr3', 'my.permission')
+        >>> printCrowds(cru.objcrowds)
+        ('iface', 'my.permission') ['fac1', 'fac2', 'fac3']
+
+     Passing a name that does not exist yet to the allow declaration
+     will work as the actual lookup is postponed:
+
+        >>> mc.handle_allow('iface', 'cr4', 'my.permission')
         >>> cru.objcrowds
-        {('iface', 'my.permission'): ['fac1', 'fac2', 'fac3']}
+        {('iface', 'my.permission'):
+         [<function ...>, <function ...>, <function ...>, <function ...>]}
+
+     But if you will try actually accessing it you will get a key error:
+
+        >>> printCrowds(cru.objcrowds)
+        Traceback (most recent call last):
+        ...
+        KeyError: 'cr4'
 
     Let's check the case when an interface is not provided:
 
         >>> mc.handle_allow(None, 'cr1', 'my.permission')
-        >>> cru.permcrowds
-        {'my.permission': ['fac1']}
+        >>> printCrowds(cru.permcrowds)
+        my.permission ['fac1']
 
         >>> mc.handle_allow(None, 'cr2', 'my.permission')
-        >>> cru.permcrowds
-        {'my.permission': ['fac1', 'fac2']}
+        >>> printCrowds(cru.permcrowds)
+        my.permission ['fac1', 'fac2']
 
     """
 
