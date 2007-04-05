@@ -119,3 +119,6 @@ class ICalendarProvider(Interface):
 
         Yields tuples (calendar, color1, color2).
         """
+
+class ICalendarMenuViewlet(Interface):
+    """Marker interface so we could use custom crowd for View Calendar menu item"""

@@ -59,6 +59,7 @@ from zope.app.session.interfaces import ISession
 from zope.traversing.api import getPath
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.html.field import HtmlFragment
+from zope.component import queryAdapter
 
 from schooltool import SchoolToolMessage as _
 
@@ -94,6 +95,9 @@ from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.term.term import getTermForDate
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.attendance.interfaces import IAttendanceCalendarEvent
+from schooltool.securitypolicy.crowds import Crowd
+from schooltool.securitypolicy.interfaces import ICrowd
+from schooltool.app.browser.interfaces import ICalendarMenuViewlet
 
 
 #
@@ -2569,3 +2573,18 @@ class CalendarEventBreadcrumbInfo(breadcrumbs.GenericBreadcrumbInfo):
         return '%s/%s/edit.html' %(parent_info.url, name)
 
 CalendarBreadcrumbInfo = breadcrumbs.CustomNameBreadCrumbInfo(_('Calendar'))
+
+
+class CalendarActionMenuViewlet(object):
+    implements(ICalendarMenuViewlet)
+
+
+class CalendarMenuViewletCrowd(Crowd):
+    adapts(ICalendarMenuViewlet)
+
+    def contains(self, principal):
+        """Returns true if you have the permission to see the calendar."""
+        crowd = queryAdapter(ISchoolToolCalendar(self.context.context),
+                             ICrowd,
+                             name="schooltool.view")
+        return crowd.contains(principal)

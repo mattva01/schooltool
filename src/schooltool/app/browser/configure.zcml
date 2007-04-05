@@ -258,6 +258,7 @@
       name="view-calendar"
       for="schooltool.app.interfaces.IHaveCalendar"
       manager="schooltool.skin.IActionMenuManager"
+      class="schooltool.app.browser.cal.CalendarActionMenuViewlet"
       template="templates/actionsViewlet.pt"
       permission="schooltool.view"
       link="calendar"
@@ -593,5 +594,9 @@
       provides=".cal.ICalendarProvider"
       factory=".cal.CalendarListSubscriber"
       />
+
+  <zope:adapter
+      factory=".cal.CalendarMenuViewletCrowd"
+      name="schooltool.view" />
 
 </configure>
