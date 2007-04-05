@@ -84,6 +84,7 @@
       for="schooltool.person.interfaces.IHavePreferences"
       manager="schooltool.skin.IActionMenuManager"
       template="templates/actionsViewlet.pt"
+      class="schooltool.person.browser.person.PreferencesActionMenuViewlet"
       permission="schooltool.view"
       link="preferences"
       title="Change Preferences"
@@ -195,5 +196,9 @@
       menu="schooltool_actions"
       title="View"
       />
+
+  <zope:adapter
+      factory=".person.PreferencesMenuViewletCrowd"
+      name="schooltool.view" />
 
 </configure>
