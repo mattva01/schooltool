@@ -3,12 +3,18 @@
      i18n:domain="schooltool">
   <h5 i18n:translate="">Sections Taught</h5>
   <ul tal:condition="sections">
-    <tal:loop repeat="group sections">
+    <tal:loop repeat="item sections">
       <li>
-        <a title=""
-          tal:attributes="href group/@@absolute_url;
-          title group/description|group/title"
-          tal:content="group/label" i18n:translate=""></a>
+        <tal:if condition="item/section/can_access:title"
+                tal:define="section item/section">
+          <a title=""
+             tal:attributes="href section/@@absolute_url;
+                             title section/description|section/title"
+             tal:content="section/label" i18n:translate=""></a>
+        </tal:if>
+        <tal:if condition="not:item/section/can_access:title">
+          <span tal:replace="item/title" />
+        </tal:if>
       </li>
     </tal:loop>
   </ul>
