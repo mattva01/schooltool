@@ -2498,13 +2498,12 @@ class CalendarEventBookingView(CalendarEventView):
                         # book that specific resource was revoked.
                         self.context.unbookResource(resource)
         self.updateBatch(self.filter(self.availableResources))
-        #self.updateBatch(self.renderAvailableTable())
         return self.update_status
 
     @property
     def availableResources(self):
         """Gives us a list of all bookable resources."""
-        sb = getSchoolToolApplication(None)
+        sb = getSchoolToolApplication()
         calendar_owner = removeSecurityProxy(self.context.__parent__.__parent__)
         def isBookable(resource):
             if resource is calendar_owner:
