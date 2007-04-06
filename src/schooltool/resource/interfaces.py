@@ -68,8 +68,10 @@ class IBaseResourceContained(IBaseResource, container.interfaces.IContained):
 
     container.constraints.containers(IResourceContainer)
 
+
 class IResource(IBaseResource):
     """Marker for a regular old resource"""
+
 
 class ILocation(IBaseResource):
     """Location."""
