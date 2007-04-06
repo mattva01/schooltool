@@ -520,7 +520,7 @@ class TimetableSetupViewBase(BrowserView, TimetableConflictMixin):
 class ResourceTimetableSetupView(TimetableSetupViewBase):
     """A view for scheduling a resource."""
 
-    __used_for__ = IResource
+    __used_for__ = IBaseResource
 
     template = ViewPageTemplateFile('templates/person-timetable-setup.pt')
 
