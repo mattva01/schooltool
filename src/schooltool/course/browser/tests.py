@@ -965,6 +965,7 @@ def doctest_CoursesViewlet():
         >>> section2.members.add(student)
         >>> student_view.isTeacher()
         False
+
         >>> student_view.isLearner()
         True
 

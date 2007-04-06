@@ -28,8 +28,8 @@ from zope.security.proxy import removeSecurityProxy
 
 from schooltool.skin.containers import ContainerView
 from schooltool.course.interfaces import ICourse, ICourseContainer, ISection
-from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.relationships import URIInstruction, URISection
+from schooltool.app.membership import URIGroup, URIMembership
 from schooltool.relationship import getRelatedObjects
 
 from schooltool import SchoolToolMessage as _
@@ -91,16 +91,14 @@ class CoursesViewlet(BrowserView):
     def learnerOf(self):
         """Get the sections the person is a member of."""
         results = []
-        sections = getSchoolToolApplication()['sections'].values()
-        groups = self.memberOf()
-        for section in sections:
-            if self.context in section.members:
-                results.append({'section': section, 'group': None})
-            # XXX isTransitiveMember works in the test fixture but not in the
-            # application, working around it for the time being.
-            for group in groups:
-                if group in section.members:
-                    results.append({'section': section,
-                                    'group': group})
+
+        for item in self.context.groups:
+            if ISection.providedBy(item):
+                results.append({'section': item, 'group': None})
+            else:
+                group_sections = getRelatedObjects(item, URIGroup,
+                                                   rel_type=URIMembership)
+                for section in group_sections:
+                    results.append({'section': section, 'group': item})
 
         return results
