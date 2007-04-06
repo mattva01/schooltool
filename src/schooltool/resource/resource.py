@@ -64,6 +64,9 @@ class Resource(BaseResource):
 
     implements(interfaces.IResource)
 
+    # BBB so that evolution scripts would work
+    isLocation = None
+
 
 class Location(BaseResource):
     """Location."""
@@ -101,7 +104,7 @@ class ResourceContainerViewersCrowd(ConfigurableCrowd):
 
 class ResourceCalendarViewersCrowd(ConfigurableCrowd):
 
-    adapts(interfaces.IResource)
+    adapts(interfaces.IBaseResource)
     implements(ICalendarParentCrowd)
 
     setting_key = "everyone_can_view_resource_calendar"
@@ -115,7 +118,7 @@ class ResourceCalendarViewersCrowd(ConfigurableCrowd):
 
 class ResourceCalendarEditorsCrowd(LeaderCrowd):
 
-    adapts(interfaces.IResource)
+    adapts(interfaces.IBaseResource)
     implements(ICalendarParentCrowd)
 
     def contains(self, principal):
