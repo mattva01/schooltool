@@ -58,7 +58,6 @@ from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.timetable.browser import TimetableConflictMixin
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.skin.table import URLColumn
 
 
 def same(a, b):
@@ -85,11 +84,9 @@ class SectionView(BrowserView):
 
     def renderPersonTable(self):
         factory = getUtility(IPersonFactory)
-        columns = [URLColumn(column, self.request) for column in
-                   factory.columns()]
         formatter = table.StandaloneFullFormatter(
             self.context, self.request, self.getPersons(),
-            columns=columns,
+            columns=factory.columns(),
             sort_on=factory.sortOn())
         formatter.cssClasses['table'] = 'data'
         return formatter()

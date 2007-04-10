@@ -117,88 +117,28 @@ def doctest_CheckboxColumn():
     """
 
 
-def doctest_LabelColumn():
-    """Tests for LabelColumn.
+def doctest_label_cell_formatter_factory():
+    """Tests for label_cell_formatter_factory.
 
-    Let's try creating a LabelColumn first:
+    Let's create a label formatter:
 
-        >>> class ColumnStub(object):
-        ...     title = "The title"
-        ...     def __init__(self):
-        ...         self.__name__ = "name"
-        ...     def renderCell(self, item, formatter):
-        ...         return item.title
-        >>> column = ColumnStub()
+        >>> from schooltool.skin.table import label_cell_formatter_factory
+        >>> formatter = label_cell_formatter_factory()
 
-        >>> from schooltool.skin.table import LabelColumn
-        >>> lc = LabelColumn(column, prefix='some_prefix')
-        >>> lc._prefix
-        'some_prefix'
-
-    We want to be able to sort by this column:
-
-        >>> from zc.table.interfaces import ISortableColumn
-        >>> ISortableColumn.providedBy(lc)
-        True
+    And render it:
 
         >>> class ItemStub(object):
         ...     __name__ = "item_stub"
-        ...     title = "Title of The Item"
-        >>> column.renderCell(ItemStub(), None)
-        'Title of The Item'
 
-        >>> lc.renderCell(ItemStub(), None)
-        '<label for="some_prefix.item_stub">Title of The Item</label>'
-
-    If there is not prefix set, we plain __name__ of the item is used
-    as the id:
-
-        >>> lc._prefix = ""
-        >>> lc.renderCell(ItemStub(), None)
+        >>> formatter("Title of The Item", ItemStub(), "formatter")
         '<label for="item_stub">Title of The Item</label>'
 
-    """
+    If we pass a prefix to the formatter factory, we get a label with
+    the prefix before the item id:
 
-
-def doctest_URLColumn():
-    """Tests for URLColumn.
-
-    Let's try creating a URLColumn first:
-
-        >>> class ColumnStub(object):
-        ...     title = "The title"
-        ...     def __init__(self):
-        ...         self.__name__ = "name"
-        ...     def renderCell(self, item, formatter):
-        ...         return item.title
-        >>> column = ColumnStub()
-
-        >>> from schooltool.skin.table import LabelColumn
-        >>> lc = LabelColumn(column, prefix='some_prefix')
-        >>> lc._prefix
-        'some_prefix'
-
-    We want to be able to sort by this column:
-
-        >>> from zc.table.interfaces import ISortableColumn
-        >>> ISortableColumn.providedBy(lc)
-        True
-
-        >>> class ItemStub(object):
-        ...     __name__ = "item_stub"
-        ...     title = "Title of The Item"
-        >>> column.renderCell(ItemStub(), None)
-        'Title of The Item'
-
-        >>> lc.renderCell(ItemStub(), None)
+        >>> formatter = label_cell_formatter_factory("some_prefix")
+        >>> formatter("Title of The Item", ItemStub(), "formatter")
         '<label for="some_prefix.item_stub">Title of The Item</label>'
-
-    If there is not prefix set, we plain __name__ of the item is used
-    as the id:
-
-        >>> lc._prefix = ""
-        >>> lc.renderCell(ItemStub(), None)
-        '<label for="item_stub">Title of The Item</label>'
 
     """
 

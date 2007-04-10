@@ -152,48 +152,19 @@ class CheckboxColumn(column.Column):
         return '<input type="checkbox" name="%s" id="%s" />' % (id, id)
 
 
-class LabelColumn(object):
-    """Decorator for zc.table columns that adds a label tag for them."""
-
-    implements(ISortableColumn)
-
-    def __init__(self, wrapped, prefix):
-        self._wrapped = wrapped
-        self._prefix = prefix
-
-    def renderCell(self, item, formatter):
-        if self._prefix:
-            prefix = self._prefix + "."
-        else:
-            prefix = self._prefix
-        content = self._wrapped.renderCell(item, formatter)
+def label_cell_formatter_factory(prefix=""):
+    if prefix:
+        prefix = prefix + "."
+    def label_cell_formatter(value, item, formatter):
         return '<label for="%s%s">%s</label>' % (prefix,
-                                                  item.__name__,
-                                                  content)
-
-    def __getattr__(self, name):
-        return getattr(self._wrapped, name)
+                                                 item.__name__,
+                                                 value)
+    return label_cell_formatter
 
 
-class URLColumn(object):
-    """Decorator for zc.table columns that adds an A tag for them.
-
-    The link will be the absolute URL of the item.
-    """
-
-    implements(ISortableColumn)
-
-    def __init__(self, wrapped, request):
-        self._wrapped = wrapped
-        self.request = request
-
-    def renderCell(self, item, formatter):
-        content = self._wrapped.renderCell(item, formatter)
-        url = zapi.absoluteURL(item, self.request)
-        return '<a href="%s">%s</a>' % (url, content)
-
-    def __getattr__(self, name):
-        return getattr(self._wrapped, name)
+def url_cell_formatter(value, item, formatter):
+    url = zapi.absoluteURL(item, formatter.request)
+    return '<a href="%s">%s</a>' % (url, value)
 
 
 class LocaleAwareGetterColumn(GetterColumn):

@@ -51,7 +51,7 @@ from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.skin.interfaces import IFilterWidget
 from schooltool.skin.table import CheckboxColumn
-from schooltool.skin.table import LabelColumn
+from schooltool.skin.table import label_cell_formatter_factory
 
 
 class ApplicationView(BrowserView):
@@ -155,7 +155,7 @@ class RelationshipViewBase(BrowserView):
         prefix = "add_item"
         columns = [CheckboxColumn(prefix=prefix, name='add', title=u'')]
         available_columns = self.columnsForAvailable()
-        available_columns[0] = LabelColumn(available_columns[0], prefix)
+        available_columns[0].cell_formatter = label_cell_formatter_factory(prefix)
         columns.extend(available_columns)
         formatter = table.FormFullFormatter(
             self.context, self.request, self.filter(self.getAvailableItems()),
@@ -170,7 +170,7 @@ class RelationshipViewBase(BrowserView):
         prefix = "remove_item"
         columns = [CheckboxColumn(prefix=prefix, name='remove', title=u'')]
         selected_columns = self.columnsForSelected()
-        selected_columns[0] = LabelColumn(selected_columns[0], prefix)
+        selected_columns[0].cell_formatter = label_cell_formatter_factory(prefix)
         columns.extend(selected_columns)
         formatter = table.FormFullFormatter(
             self.context, self.request, self.getSelectedItems(),

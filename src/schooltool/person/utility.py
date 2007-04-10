@@ -17,6 +17,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 from schooltool.person.person import Person
+from schooltool.skin.table import url_cell_formatter
+
 
 class PersonFactoryUtility(object):
 
@@ -26,6 +28,7 @@ class PersonFactoryUtility(object):
             name='title',
             title=u'Full Name',
             getter=lambda i, f: i.title,
+            cell_formatter=url_cell_formatter,
             subsort=True)
         from zc.table.interfaces import ISortableColumn
         from zope.interface import directlyProvides

@@ -33,7 +33,7 @@ from zc.table.column import GetterColumn
 from schooltool.batching.batch import Batch
 from schooltool.demographics.browser.table import DependableCheckboxColumn
 from schooltool.skin.interfaces import IFilterWidget
-from schooltool.skin.table import URLColumn
+from schooltool.skin.table import url_cell_formatter
 
 
 class ContainerView(BrowserView):
@@ -137,6 +137,7 @@ class TableContainerView(BrowserView):
         return [GetterColumn(name='title',
                              title=u"Title",
                              getter=lambda i, f: i.title,
+                             cell_formatter=url_cell_formatter,
                              subsort=True)]
 
     def sortOn(self):
@@ -158,9 +159,7 @@ class TableContainerView(BrowserView):
             columns.append(DependableCheckboxColumn(prefix="delete",
                                                     name='delete_checkbox',
                                                     title=u''))
-        available_columns = map(lambda column: URLColumn(column, self.request),
-                                self.columns())
-        columns.extend(available_columns)
+        columns.extend(self.columns())
         formatter = table.FormFullFormatter(
             self.context, self.request, self.results,
             columns=columns,

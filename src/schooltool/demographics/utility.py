@@ -38,6 +38,7 @@ from schooltool.demographics.person import Person
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.skin.table import LocaleAwareGetterColumn
+from schooltool.skin.table import url_cell_formatter
 from schooltool import SchoolToolMessage as _
 
 
@@ -91,6 +92,7 @@ class PersonFactoryUtility(object):
             name='first_name',
             title=_(u'Name'),
             getter=lambda i, f: i.nameinfo.first_name,
+            cell_formatter=url_cell_formatter,
             subsort=True)
         directlyProvides(first_name, ISortableColumn)
 
@@ -98,6 +100,7 @@ class PersonFactoryUtility(object):
             name='last_name',
             title=_(u'Surname'),
             getter=lambda i, f: i.nameinfo.last_name,
+            cell_formatter=url_cell_formatter,
             subsort=True)
         directlyProvides(last_name, ISortableColumn)
 
