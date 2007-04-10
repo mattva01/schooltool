@@ -414,7 +414,6 @@ class PersonContainerView(TableContainerView):
 
     __used_for__ = IPersonContainer
 
-    from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
     delete_template = ViewPageTemplateFile("person_container_delete.pt")
 
     index_title = _("Person index")
