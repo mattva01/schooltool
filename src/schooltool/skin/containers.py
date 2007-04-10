@@ -107,10 +107,10 @@ class TableContainerView(BrowserView):
 
         self.filter_widget = queryMultiAdapter((self.context, self.request),
                                                IFilterWidget)
-        results = self.filter(self.context.values())
+        self.results = self.filter(self.context.values())
         self.batch_start = int(self.request.get('batch_start', 0))
         self.batch_size = int(self.request.get('batch_size', 10))
-        self.batch = Batch(results, self.batch_start, self.batch_size, sort_by='title')
+        self.batch = Batch(self.results, self.batch_start, self.batch_size)
 
         if 'DELETE' in self.request:
             self.template = self.delete_template
@@ -162,7 +162,7 @@ class TableContainerView(BrowserView):
                                 self.columns())
         columns.extend(available_columns)
         formatter = table.FormFullFormatter(
-            self.context, self.request, self.filter(self.context.values()),
+            self.context, self.request, self.results,
             columns=columns,
             batch_start=self.batch_start, batch_size=self.batch_size,
             sort_on=self.sortOn())
