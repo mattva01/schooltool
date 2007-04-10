@@ -82,13 +82,29 @@ class Batch(object):
             num += 1
         return num
 
-    def batches(self):
-        batch = Batch(self.list, 0, self.size)
-        result = [batch]
-        while batch.next():
-            result.append(batch.next())
-            batch = batch.next()
-        return result
+    def batch_urls(self, base_url, extra_url, batch_name=None):
+        urls = []
+        start = 0
+        num = 1
+        while len(self.list) > start:
+            css_class = None
+            if (self.start == start):
+                css_class = 'current'
+            if batch_name:
+                href = '%s?batch_start.%s=%s&batch_size.%s=%s%s' % (
+                    base_url, batch_name, start, batch_name, self.size, extra_url)
+            else:
+                href = '%s?batch_start=%s&batch_size=%s%s' % (base_url,
+                                                              start,
+                                                              self.size,
+                                                              extra_url)
+            urls.append({'href': href,
+                         'num': num,
+                         'class': css_class})
+            num += 1
+            start += self.size
+
+        return urls
 
     def _sortBy(self, attribute):
         """Sort the full batch list by specified attribute"""
