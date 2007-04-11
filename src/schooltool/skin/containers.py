@@ -26,9 +26,11 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import queryMultiAdapter
 from zope.publisher.browser import BrowserView
 from zope.security.checker import canAccess
+from zope.interface import directlyProvides
 
 from zc.table import table
 from zc.table.column import GetterColumn
+from zc.table.interfaces import ISortableColumn
 
 from schooltool.batching.batch import Batch
 from schooltool.demographics.browser.table import DependableCheckboxColumn
@@ -134,11 +136,13 @@ class TableContainerView(BrowserView):
         return canAccess(self.context, '__delitem__')
 
     def columns(self):
-        return [GetterColumn(name='title',
+        title = GetterColumn(name='title',
                              title=u"Title",
                              getter=lambda i, f: i.title,
                              cell_formatter=url_cell_formatter,
-                             subsort=True)]
+                             subsort=True)
+        directlyProvides(title, ISortableColumn)
+        return [title]
 
     def sortOn(self):
         return (("title", False),)
