@@ -216,19 +216,22 @@ class DependableCheckboxColumn(CheckboxColumn):
             return bool(dependable.dependents())
 
 
-class FullnameColumn(column.SortingColumn):
+class FullnameColumn(column.GetterColumn):
     """Table column that displays full name as link.
     """
     def getSortKey(self, item, formatter):
         return item.nameinfo.last_name
 
-    def renderCell(self, item, formatter):
-        return '<a href="%s">%s</a>' % (
-            zapi.absoluteURL(item, formatter.request) +
-            '/nameinfo',
-            item.title)
+    def getter(self, item, formatter):
+        return item.title
 
-class ModifiedColumn(column.SortingColumn):
+    def cell_formatter(self, value, item, formatter):
+        return '<a href="%s">%s</a>' % (
+            zapi.absoluteURL(item, formatter.request) + '/nameinfo',
+            value)
+
+
+class ModifiedColumn(column.GetterColumn):
     """Table column that displays modified date, sortable.
     """
     _renderDatetime = None
@@ -236,12 +239,15 @@ class ModifiedColumn(column.SortingColumn):
     def getSortKey(self, item, formatter):
         return item.modified
 
-    def renderCell(self, item, formatter):
+    def getter(self, item, formatter):
+        return item.modified
+
+    def cell_formatter(self, value, item, formatter):
         # cache _renderDatetime for performance
         if self._renderDatetime is None:
             self._renderDatetime = ViewPreferences(
                 formatter.request).renderDatetime
-        return self._renderDatetime(item.modified)
+        return self._renderDatetime(value)
 
 
 class DateColumn(column.GetterColumn):
