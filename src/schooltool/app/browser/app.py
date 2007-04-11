@@ -23,6 +23,7 @@ $Id$
 """
 
 from zc.table import table
+from zc.table.interfaces import ISortableColumn
 from zc.table.column import GetterColumn
 from zope.component import getUtility
 from zope.interface import implements
@@ -39,6 +40,7 @@ from zope.publisher.browser import BrowserView
 from zope.component import queryMultiAdapter
 from zope.app.security.interfaces import IAuthentication
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.interface import directlyProvides
 
 from schooltool import SchoolToolMessage as _
 from schooltool.app.app import getSchoolToolApplication
@@ -135,16 +137,18 @@ class RelationshipViewBase(BrowserView):
     def updateBatch(self, lst):
         self.batch_start = int(self.request.get('batch_start', 0))
         self.batch_size = int(self.request.get('batch_size', 10))
-        self.batch = Batch(lst, self.batch_start, self.batch_size, sort_by='title')
+        self.batch = Batch(lst, self.batch_start, self.batch_size)
 
     def filter(self, list):
         return self.filter_widget.filter(list)
 
     def columnsForAvailable(self):
-        return [GetterColumn(name='title',
+        title = GetterColumn(name='title',
                              title=u"Title",
                              getter=lambda i, f: i.title,
-                             subsort=True)]
+                             subsort=True)
+        directlyProvides(title, ISortableColumn)
+        return [title]
 
     columnsForSelected = columnsForAvailable
 
