@@ -41,7 +41,7 @@ from schooltool.course.booking import URISection
 from schooltool.course.interfaces import ISection
 from schooltool.person.interfaces import IPerson
 from schooltool.relationship.relationship import getRelatedObjects
-from schooltool.resource.interfaces import IResource
+from schooltool.resource.interfaces import IBaseResource
 from schooltool.term.term import getNextTermForDate, getTermForDate
 from schooltool.timetable import SchooldaySlot
 from schooltool.timetable import Timetable, TimetableDay
