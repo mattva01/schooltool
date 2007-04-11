@@ -21,7 +21,9 @@
 $Id$
 """
 import unittest
+
 from zope.testing import doctest, doctestunit
+
 from schooltool.app.browser.testing import setUp, tearDown
 
 
@@ -161,7 +163,6 @@ def doctest_LocaleAwareGetterColumn():
 
         >>> from zope.i18n.interfaces.locales import ICollator
         >>> from zope.i18n.interfaces.locales import ILocale
-        >>> from zope.component import provideAdapter
         >>> from zope.interface import implements
         >>> from zope.component import adapts
         >>> class CollatorAdapterStub(object):
@@ -171,6 +172,7 @@ def doctest_LocaleAwareGetterColumn():
         ...         self.context = context
         ...     def key(self, string):
         ...         return "CollatorKey(%s)" % string
+        >>> from zope.component import provideAdapter
         >>> provideAdapter(CollatorAdapterStub)
 
     Let's try creating a LocaleAwareGetterColumn first:
@@ -186,9 +188,369 @@ def doctest_LocaleAwareGetterColumn():
 
     """
 
+
+def doctest_SchoolToolTableFormatter():
+    """Tests for SchoolToolTableFormatter.
+
+    First some set up so we could render actual tables:
+
+        >>> from zope.component import provideAdapter
+        >>> from zope.interface import Interface
+        >>> class ResourcePathStub(object):
+        ...     def __init__(self, context):
+        ...         pass
+        ...     def __call__(self):
+        ...         return ""
+        >>> provideAdapter(ResourcePathStub,
+        ...                adapts=[Interface],
+        ...                provides=Interface,
+        ...                name="zc.table")
+
+    A table formatter is meant to make rendering of tables more
+    standard and convenient. All you need to do is create a table
+    formatter, though usualy it is an adapter on the container and
+    request, but for the testing purposes we will create it directly:
+
+        >>> from schooltool.skin.table import SchoolToolTableFormatter
+        >>> container = {}
+        >>> from zope.publisher.browser import TestRequest
+        >>> request = TestRequest()
+        >>> formatter = SchoolToolTableFormatter(container, request)
+
+        >>> from schooltool.skin.interfaces import ITableFormatter
+        >>> from zope.interface.verify import verifyObject
+        >>> verifyObject(ITableFormatter, formatter)
+        True
+
+    Before rendering the table we must set it up, we will provide a
+    fake filter function so we would not have to set up FilterWidgets
+    yet:
+
+        >>> formatter.setUp(filter=lambda list: list)
+
+        >>> print formatter.render()
+        <BLANKLINE>
+        <table class="data">
+          <thead>
+            <tr>
+              <th>
+        <BLANKLINE>
+                    <span class="zc-table-sortable" ...>
+                        Title</span> <img src="/sort_arrows_down.gif" class="sort-indicator" alt="(descending)"/>
+        <BLANKLINE>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+        <input type="hidden" name=".sort_on:tokens" id=".sort_on" value="title" />
+        <BLANKLINE>
+
+    The table has no items though, but these items are sorted by title
+    by default.
+
+
+    Lets add some items to play around with:
+
+        >>> class ItemStub(object):
+        ...     def __init__(self, title, email):
+        ...         self.title, self.email = title, email
+        ...         self.__name__ = self.title.lower()
+
+        >>> pete = container['pete'] = ItemStub('Pete', 'pete@example.com')
+        >>> john = container['john'] = ItemStub('John', 'john@example.com')
+        >>> toad = container['toad'] = ItemStub('Toad', 'toad@example.com')
+        >>> frog = container['frog'] = ItemStub('Frog', 'frog@example.com')
+
+    Now the table has all 4 of them:
+
+        >>> formatter.setUp(filter=lambda list: list)
+        >>> print formatter.render()
+        <BLANKLINE>
+        ...
+        <tbody>
+        <tr class="odd">
+          <td>
+            Frog
+          </td>
+        </tr>
+        <tr class="even">
+          <td>
+            John
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>
+            Pete
+          </td>
+        </tr>
+        <tr class="even">
+          <td>
+            Toad
+          </td>
+        </tr>
+        </tbody>
+        ...
+
+    Lets provide a filter widget so we would not have to supply the filter function all the time:
+
+        >>> from schooltool.skin.interfaces import IFilterWidget
+        >>> from zope.interface import implements
+        >>> class FilterWidget(object):
+        ...     implements(IFilterWidget)
+        ...     def __init__(self, context, request):
+        ...         self.request = request
+        ...     def filter(self, list):
+        ...         if 'SEARCH' in self.request:
+        ...             return [item for item in list
+        ...                     if self.request['SEARCH'] in item.title.lower()]
+        ...         return list
+
+        >>> from zope.interface import Interface
+        >>> from zope.publisher.interfaces.browser import IBrowserRequest
+        >>> provideAdapter(FilterWidget, adapts=[Interface, IBrowserRequest],
+        ...                              provides=IFilterWidget)
+
+    Now if we will put a SEARCH string into the request, we will only
+    get part of the items:
+
+        >>> request.form = {'SEARCH': 'o'}
+        >>> formatter.setUp()
+        >>> print formatter.render()
+        <BLANKLINE>
+        ...
+        <tbody>
+        <tr class="odd">
+          <td>
+            Frog
+          </td>
+        </tr>
+        <tr class="even">
+          <td>
+            John
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>
+            Toad
+          </td>
+        </tr>
+        </tbody>
+        ...
+
+    We can limit items that are being displayed ourselves as well:
+
+        >>> request.form = {}
+        >>> formatter.setUp(items=[frog, toad])
+        >>> print formatter.render()
+        <BLANKLINE>
+        ...
+        <tbody>
+        <tr class="odd">
+          <td>
+            Frog
+          </td>
+        </tr>
+        <tr class="even">
+          <td>
+            Toad
+          </td>
+        </tr>
+        </tbody>
+        ...
+
+    We can provide custom columns to the formatter if we want:
+
+        >>> from zc.table.column import GetterColumn
+        >>> email = GetterColumn(name='email',
+        ...                      title=u"Email",
+        ...                      getter=lambda i, f: i.email,
+        ...                      subsort=True)
+        >>> from zope.interface import directlyProvides
+        >>> from zc.table.interfaces import ISortableColumn
+        >>> directlyProvides(email, ISortableColumn)
+        >>> formatter.setUp(columns=[email], sort_on=(("email", False),))
+        >>> print formatter.render()
+        <BLANKLINE>
+        ...
+        <tbody>
+        <tr class="odd">
+          <td>
+            frog@example.com
+          </td>
+        </tr>
+        <tr class="even">
+          <td>
+            john@example.com
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>
+            pete@example.com
+          </td>
+        </tr>
+        <tr class="even">
+          <td>
+            toad@example.com
+          </td>
+        </tr>
+        </tbody>
+        ...
+
+    We could of course add the column after the title:
+
+        >>> formatter.setUp(columns_after=[email])
+        >>> print formatter.render()
+        <BLANKLINE>
+        ...
+        <tbody>
+        <tr class="odd">
+          <td>
+            Frog
+          </td>
+          <td>
+            frog@example.com
+          </td>
+        </tr>
+        <tr class="even">
+          <td>
+            John
+          </td>
+          <td>
+            john@example.com
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>
+            Pete
+          </td>
+          <td>
+            pete@example.com
+          </td>
+        </tr>
+        <tr class="even">
+          <td>
+            Toad
+          </td>
+          <td>
+            toad@example.com
+          </td>
+        </tr>
+        </tbody>
+        ...
+
+    Now let's add a checkbox before the Title column:
+
+        >>> from schooltool.skin.table import CheckboxColumn
+        >>> checkbox = CheckboxColumn("delete", "delete", "Delete")
+        >>> formatter.setUp(columns_before=[checkbox], columns_after=[email],
+        ...                 items=[frog, john])
+        >>> print formatter.render()
+        <BLANKLINE>
+        ...
+        <tbody>
+        <tr class="odd">
+          <td>
+            <input type="checkbox" name="delete.frog" id="delete.frog" />
+          </td>
+          <td>
+            Frog
+          </td>
+          <td>
+            frog@example.com
+          </td>
+        </tr>
+        <tr class="even">
+          <td>
+            <input type="checkbox" name="delete.john" id="delete.john" />
+          </td>
+          <td>
+            John
+          </td>
+          <td>
+            john@example.com
+          </td>
+        </tr>
+        </tbody>
+        ...
+
+    We can pass custom formatters for the default columns if we want:
+
+        >>> from schooltool.skin.table import label_cell_formatter_factory
+        >>> label_formatter = label_cell_formatter_factory("delete")
+        >>> formatter.setUp(columns_before=[checkbox], columns_after=[email],
+        ...                 items=[frog, john], formatters=[label_formatter])
+        >>> print formatter.render()
+        <BLANKLINE>
+        ...
+        <tbody>
+        <tr class="odd">
+          <td>
+            <input type="checkbox" name="delete.frog" id="delete.frog" />
+          </td>
+          <td>
+            <label for="delete.frog">Frog</label>
+          </td>
+          <td>
+            frog@example.com
+          </td>
+        </tr>
+        <tr class="even">
+          <td>
+            <input type="checkbox" name="delete.john" id="delete.john" />
+          </td>
+          <td>
+            <label for="delete.john">John</label>
+          </td>
+          <td>
+            john@example.com
+          </td>
+        </tr>
+        </tbody>
+        ...
+
+    We can alter the batch size and starting point through the request
+
+        >>> request.form = {'batch_start': '2',
+        ...                 'batch_size': '2'}
+        >>> formatter.setUp()
+        >>> print formatter.render()
+        <BLANKLINE>
+        <table class="data">
+          <thead>
+            <tr>
+              <th>
+        <BLANKLINE>
+                    <span class="zc-table-sortable" ...>
+                        Title</span> <img src="/sort_arrows_down.gif" class="sort-indicator" alt="(descending)"/>
+        <BLANKLINE>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+          <tr class="odd">
+            <td>
+              Pete
+            </td>
+          </tr>
+          <tr class="even">
+            <td>
+              Toad
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <input type="hidden" name=".sort_on:tokens" id=".sort_on" value="title" />
+        <BLANKLINE>
+
+    """
+
+
 def test_suite():
     optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF
-                   | doctest.REPORT_ONLY_FIRST_FAILURE)
+                   | doctest.REPORT_ONLY_FIRST_FAILURE
+                   | doctest.NORMALIZE_WHITESPACE)
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
                                        globs={'pprint': doctestunit.pprint},

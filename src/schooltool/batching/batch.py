@@ -21,6 +21,9 @@ Batching for schooltool.
 
 $Id$
 """
+from zope.interface import implements
+
+from schooltool.batching.interfaces import IBatch
 
 
 class Batch(object):
@@ -28,6 +31,7 @@ class Batch(object):
 
     See schooltool.batching.interfaces.IBatch.
     """
+    implements(IBatch)
 
     def __init__(self, iterable, start, size, sort_by=None):
         self.list = list(iterable)

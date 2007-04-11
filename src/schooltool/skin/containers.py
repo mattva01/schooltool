@@ -26,16 +26,11 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import queryMultiAdapter
 from zope.publisher.browser import BrowserView
 from zope.security.checker import canAccess
-from zope.interface import directlyProvides
-
-from zc.table import table
-from zc.table.column import GetterColumn
-from zc.table.interfaces import ISortableColumn
 
 from schooltool.batching.batch import Batch
 from schooltool.demographics.browser.table import DependableCheckboxColumn
-from schooltool.skin.interfaces import IFilterWidget
 from schooltool.skin.table import url_cell_formatter
+from schooltool.skin.interfaces import ITableFormatter
 
 
 class ContainerView(BrowserView):
@@ -106,18 +101,19 @@ class TableContainerView(BrowserView):
     def __init__(self, context, request):
         self.request = request
         self.context = context
-
-        self.filter_widget = queryMultiAdapter((self.context, self.request),
-                                               IFilterWidget)
-        self.results = self.filter(self.context.values())
-        self.batch_start = int(self.request.get('batch_start', 0))
-        self.batch_size = int(self.request.get('batch_size', 10))
-        self.batch = Batch(self.results, self.batch_start, self.batch_size)
-
-        if 'DELETE' in self.request:
-            self.template = self.delete_template
+        self.table = queryMultiAdapter((context, request), ITableFormatter)
 
     def __call__(self):
+        if 'DELETE' in self.request:
+            return self.delete_template()
+
+        columns_before = []
+        if self.canModify():
+            columns_before = [DependableCheckboxColumn(prefix="delete",
+                                                       name='delete_checkbox',
+                                                       title=u'')]
+        self.table.setUp(formatters=[url_cell_formatter],
+                         columns_before=columns_before)
         # XXX update should be in here but as the container_delete
         # template is shared with the ContainerDeleteView and update
         # is called in the template we are not doing it here
@@ -128,25 +124,8 @@ class TableContainerView(BrowserView):
             for key in self.listIdsForDeletion():
                 del self.context[key]
 
-    def filter(self, list):
-        return self.filter_widget.filter(list)
-
-    @property
     def canModify(self):
         return canAccess(self.context, '__delitem__')
-
-    def columns(self):
-        title = GetterColumn(name='title',
-                             title=u"Title",
-                             getter=lambda i, f: i.title,
-                             cell_formatter=url_cell_formatter,
-                             subsort=True)
-        directlyProvides(title, ISortableColumn)
-        return [title]
-
-    def sortOn(self):
-        return (("title", False),)
-
 
     def listIdsForDeletion(self):
         return [key for key in self.context
@@ -156,18 +135,3 @@ class TableContainerView(BrowserView):
         return [self.context[key] for key in self.listIdsForDeletion()]
 
     itemsToDelete = property(_listItemsForDeletion)
-
-    def renderTable(self):
-        columns = []
-        if self.canModify:
-            columns.append(DependableCheckboxColumn(prefix="delete",
-                                                    name='delete_checkbox',
-                                                    title=u''))
-        columns.extend(self.columns())
-        formatter = table.FormFullFormatter(
-            self.context, self.request, self.results,
-            columns=columns,
-            batch_start=self.batch_start, batch_size=self.batch_size,
-            sort_on=self.sortOn())
-        formatter.cssClasses['table'] = 'data'
-        return formatter()

@@ -20,21 +20,25 @@
 
 $Id$
 """
-import locale
-
 from zope.interface import implements
+from zope.interface import directlyProvides
 from zope.i18n.interfaces.locales import ICollator
 from zope.publisher.browser import BrowserPage
 from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zc.table import table
 from zc.table import column
 from zc.table.interfaces import ISortableColumn
 from zc.table.column import GetterColumn
 from zope.app import zapi
+from zope.component import adapts
+from zope.component import queryMultiAdapter
+from zope.interface import Interface
 
 from schooltool.batching import Batch
 from schooltool.skin.interfaces import IFilterWidget
 from schooltool.attendance.attendance import getRequestFromInteraction
+from schooltool.skin.interfaces import ITableFormatter
 
 
 class TablePage(BrowserPage):
@@ -177,3 +181,75 @@ class LocaleAwareGetterColumn(GetterColumn):
         collater = ICollator(request.locale)
         s = self.getter(item, formatter)
         return s and collater.key(s)
+
+
+class SchoolToolTableFormatter(object):
+    adapts(Interface, IBrowserRequest)
+    implements(ITableFormatter)
+
+    filter_widget = None
+    batch = None
+
+    def __init__(self, context, request):
+        self.context, self.request = context, request
+
+    def columns(self):
+        title = GetterColumn(name='title',
+                             title=u"Title",
+                             getter=lambda i, f: i.title,
+                             subsort=True)
+        directlyProvides(title, ISortableColumn)
+        return [title]
+
+    def items(self):
+        return self.context.values()
+
+    def filter(self, items):
+        return self.filter_widget.filter(items)
+
+    def sortOn(self):
+        return (("title", False),)
+
+    def setUp(self, items=None, filter=None, columns=None,
+              columns_before=[], columns_after=[], sort_on=None,
+              prefix="", formatters=[],
+              table_formatter=table.FormFullFormatter):
+
+        self.filter_widget = queryMultiAdapter((self.context, self.request),
+                                               IFilterWidget)
+
+        self._table_formatter = table_formatter
+
+        if not columns:
+            columns = self.columns()
+
+        if formatters:
+            for formatter, column in zip(formatters, columns):
+                column.cell_formatter = formatter
+
+        self._columns = columns_before[:] + columns[:] + columns_after[:]
+
+        if not items:
+            items = self.items()
+
+        if not filter:
+            filter = self.filter
+
+        self._items = filter(items)
+
+        self.batch_start = int(self.request.get('batch_start', 0))
+        self.batch_size = int(self.request.get('batch_size', 10))
+        self.batch = Batch(self._items, self.batch_start, self.batch_size)
+
+        self._sort_on = sort_on or self.sortOn()
+        self._prefix = prefix
+
+    def render(self):
+        formatter = self._table_formatter(
+            self.context, self.request, self._items,
+            columns=self._columns,
+            batch_start=self.batch_start, batch_size=self.batch_size,
+            sort_on=self._sort_on,
+            prefix=self._prefix)
+        formatter.cssClasses['table'] = 'data'
+        return formatter()
