@@ -20,6 +20,8 @@
 
 $Id$
 """
+import urllib
+
 from zope.interface import implements
 from zope.interface import directlyProvides
 from zope.i18n.interfaces.locales import ICollator
@@ -255,6 +257,14 @@ class SchoolToolTableFormatter(object):
         self.batch = Batch(self._items, self.batch_start, self.batch_size)
 
         self._sort_on = sort_on or self.sortOn()
+
+    def extra_url(self):
+        extra = ""
+        for key, value in self.request.form.items():
+            if key.endswith("sort_on"):
+                values = [urllib.quote(token) for token in value]
+                extra += "&%s:tokens=%s" % (key, " ".join(values))
+        return extra
 
     def render(self):
         formatter = self._table_formatter(

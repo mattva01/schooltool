@@ -14,14 +14,9 @@
              tal:define="batch view/table/batch;
                          canModify view/canModify">
   <tal:if tal:condition="batch">
-    <tal:if condition="request/SEARCH|nothing">
-      <tal:block define="extra_url python:'&SEARCH=%s' % request.get('SEARCH')">
-        <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
-      </tal:block>
-    </tal:if>
-    <tal:if condition="not:request/SEARCH|nothing">
+    <tal:block define="extra_url string:${view/table/filter_widget/extra_url}${view/table/extra_url}">
       <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
-    </tal:if>
+    </tal:block>
   </tal:if>
   <form method="post" tal:attributes="action string:${context/@@absolute_url}">
     <tal:block tal:replace="structure view/table/filter_widget/render" />

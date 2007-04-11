@@ -134,7 +134,7 @@ class RelationshipViewBase(BrowserView):
         container = self.getAvailableItemsContainer()
         formatter = queryMultiAdapter((container, self.request),
                                       ITableFormatter)
-        columns_before = [CheckboxColumn(prefix=prefix)]
+        columns_before = [CheckboxColumn(prefix=prefix, title="")]
         formatters = [label_cell_formatter_factory(prefix)]
         formatter.setUp(formatters=formatters,
                         columns_before=columns_before,

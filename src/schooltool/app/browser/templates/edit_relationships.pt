@@ -29,14 +29,9 @@
   <div class="item_list">
     <tal:if tal:condition="batch"
             tal:define="batch_name string:add_item">
-      <tal:if condition="view/available_table/filter_widget/active">
-        <tal:block define="extra_url view/available_table/filter_widget/extra_url">
-          <div metal:use-macro="view/@@batch_macros/multi-batch-navigation"/>
-        </tal:block>
-      </tal:if>
-      <tal:if condition="not:view/available_table/filter_widget/active">
+      <tal:block define="extra_url string:${view/available_table/filter_widget/extra_url}${view/available_table/extra_url}">
         <div metal:use-macro="view/@@batch_macros/multi-batch-navigation"/>
-      </tal:if>
+      </tal:block>
     </tal:if>
     <tal:block replace="structure view/available_table/filter_widget/render" />
     <tal:block replace="structure view/available_table/render" />
