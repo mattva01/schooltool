@@ -276,7 +276,7 @@ def doctest_MemberViewPersons_updateBatch():
     updateBatch takes a list of persons, and creates a Batch object
     from that list.
 
-        >>> view.updateBatch([ignas, alga, gintas])
+        >>> view.updateBatch([alga, gintas, ignas])
         >>> [p.title for p in view.batch]
         ['Albertas', 'Gintas', 'Ignas']
 
