@@ -154,6 +154,11 @@
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory=".person.PersonFilterWidget" />
 
+  <zope:adapter
+      for="schooltool.person.interfaces.IPersonContainer
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".person.PersonTableFormatter" />
+
   <configure package="schooltool.skin">
 
     <page

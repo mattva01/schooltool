@@ -34,7 +34,7 @@ from zc.table.column import GetterColumn
 from zope.app import zapi
 from zope.component import adapts
 from zope.component import queryMultiAdapter
-from zope.interface import Interface
+from zope.app.container.interfaces import IContainer
 from zope.security.proxy import removeSecurityProxy
 from zope.app.dependable.interfaces import IDependable
 
@@ -151,7 +151,6 @@ class LocaleAwareGetterColumn(GetterColumn):
 
 
 class SchoolToolTableFormatter(object):
-    adapts(Interface, IBrowserRequest)
     implements(ITableFormatter)
 
     filter_widget = None

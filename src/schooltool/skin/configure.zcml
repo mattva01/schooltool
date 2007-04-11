@@ -259,7 +259,4 @@
       class="schooltool.skin.skin.LanguageSelectorViewlet"
       />
 
-  <zope:adapter
-      factory=".table.SchoolToolTableFormatter" />
-
 </configure>

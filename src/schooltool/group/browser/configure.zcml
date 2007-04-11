@@ -136,4 +136,9 @@
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory="schooltool.skin.table.FilterWidget" />
 
+  <zope:adapter
+      for="schooltool.group.interfaces.IGroupContainer
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory="schooltool.skin.table.SchoolToolTableFormatter " />
+
 </configure>

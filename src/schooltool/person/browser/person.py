@@ -54,6 +54,7 @@ from schooltool.person.interfaces import IPersonContainer, IPersonContained
 from schooltool.widget.password import PasswordConfirmationWidget
 from schooltool.traverser.traverser import AdapterTraverserPlugin
 from schooltool.skin.table import FilterWidget
+from schooltool.skin.table import SchoolToolTableFormatter
 from schooltool.skin.containers import TableContainerView
 
 
@@ -249,6 +250,17 @@ class PersonFilterWidget(FilterWidget):
                 url += '&%s=%s' % (parameter, self.request.get(parameter))
         return url
 
+
+class PersonTableFormatter(SchoolToolTableFormatter):
+    """Person container specific table formatter."""
+
+    def columns(self):
+        return getUtility(IPersonFactory).columns()
+
+    def sortOn(self):
+        return getUtility(IPersonFactory).sortOn()
+
+
 class IPersonAddForm(Interface):
     """Schema for person adding form."""
 
@@ -417,14 +429,6 @@ class PersonContainerView(TableContainerView):
     delete_template = ViewPageTemplateFile("person_container_delete.pt")
 
     index_title = _("Person index")
-
-    def columns(self):
-        factory = getUtility(IPersonFactory)
-        return factory.columns()
-
-    def sortOn(self):
-        factory = getUtility(IPersonFactory)
-        return factory.sortOn()
 
     def isDeletingHimself(self):
         person = IPerson(self.request.principal, None)
