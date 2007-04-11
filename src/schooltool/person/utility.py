@@ -22,12 +22,12 @@ from zope.interface import directlyProvides
 
 from schooltool.person.person import Person
 from schooltool.skin.table import url_cell_formatter
+from schooltool.skin.table import LocaleAwareGetterColumn
 
 
 class PersonFactoryUtility(object):
 
     def columns(self):
-        from schooltool.skin.table import LocaleAwareGetterColumn
         title = LocaleAwareGetterColumn(
             name='title',
             title=u'Full Name',
