@@ -397,52 +397,30 @@ def doctest_RelationshipViewBase():
         >>> request = TestRequest()
         >>> view = RelationshipViewBase(None, request)
 
-    Filter is a shorthand that applies filter function of the active
-    filter widget:
+    Update method of our view should process the form and perform
+    necessary actions, like add items to the collections and most
+    importantly to set up available and selected item tables:
 
-        >>> from schooltool.skin.interfaces import IFilterWidget
-        >>> from zope.interface import implements
-        >>> class StubFilterWidget(object):
-        ...     implements(IFilterWidget)
-        ...     def __init__(self, context, request):
-        ...         self.context, self.request = context, request
-        ...     def filter(self, list):
-        ...         print "Filtering: %s" % list
-        ...         return [item for item in list if 's' in item]
-        >>> view.filter_widget = StubFilterWidget(None, None)
-
-        >>> view.filter(['list', 'of', 'items'])
-        Filtering: ['list', 'of', 'items']
-        ['list', 'items']
-
-    The widget is acquired on update by adapting the container of
-    available items and the request to the search widget:
-
-        >>> from zope.component import provideAdapter
-        >>> from zope.publisher.interfaces.browser import IBrowserRequest
-        >>> from zope.interface import Interface
-        >>> provideAdapter(StubFilterWidget, adapts=(Interface, IBrowserRequest))
-
-        >>> view.getAvailableItemsContainer = lambda : "Container of available items"
-        >>> view.getAvailableItems = lambda: ['available', 'items']
+        >>> from zope.testing.doctestunit import pprint
+        >>> def FakeTableSetUp(**kwargs):
+        ...     print "Setting up table:"
+        ...     pprint(kwargs)
+        >>> view.createTableFormatter = FakeTableSetUp
+        >>> view.getAvailableItems = lambda: "<Available Items>"
+        >>> view.getSelectedItems = lambda: "<Selected Items>"
         >>> view.update()
-        Filtering: ['available', 'items']
-
-        >>> view.filter_widget.context
-        'Container of available items'
-        >>> view.filter_widget.request is request
-        True
-
-    The batch gets updated with filtered available items:
-
-        >>> list(view.batch)
-        ['items']
+        Setting up table: {'items': '<Available Items>', 'prefix': 'add_item'}
+        Setting up table: {'batch_size': 0,
+                           'filter': <function <lambda> at ...>,
+                           'items': '<Selected Items>',
+                           'prefix': 'remove_item'}
 
     """
 
 def test_suite():
     optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF
-                   | doctest.REPORT_ONLY_FIRST_FAILURE)
+                   | doctest.REPORT_ONLY_FIRST_FAILURE
+                   | doctest.NORMALIZE_WHITESPACE)
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
                                        optionflags=optionflags))

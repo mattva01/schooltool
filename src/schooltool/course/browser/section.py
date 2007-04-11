@@ -290,14 +290,6 @@ class SectionInstructorView(RelationshipEditConfView, ConflictDisplayMixin):
     def getAvailableItemsContainer(self):
         return ISchoolToolApplication(None)['persons']
 
-    def columnsForAvailable(self):
-        return getUtility(IPersonFactory).columns()
-
-    columnsForSelected = columnsForAvailable
-
-    def sortOn(self):
-        return getUtility(IPersonFactory).sortOn()
-
 
 class SectionLearnerView(RelationshipEditConfView):
     """View for adding learners to a Section.  """
@@ -321,14 +313,6 @@ class SectionLearnerView(RelationshipEditConfView):
 
     def getAvailableItemsContainer(self):
         return ISchoolToolApplication(None)['persons']
-
-    def columnsForAvailable(self):
-        return getUtility(IPersonFactory).columns()
-
-    columnsForSelected = columnsForAvailable
-
-    def sortOn(self):
-        return getUtility(IPersonFactory).sortOn()
 
 
 class SectionLearnerGroupView(RelationshipEditConfView):

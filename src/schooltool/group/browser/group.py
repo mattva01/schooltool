@@ -118,14 +118,6 @@ class MemberViewPersons(RelationshipViewBase):
     def getCollection(self):
         return self.context.members
 
-    def columnsForAvailable(self):
-        return getUtility(IPersonFactory).columns()
-
-    columnsForSelected = columnsForAvailable
-
-    def sortOn(self):
-        return getUtility(IPersonFactory).sortOn()
-
 
 class GroupAddView(BaseAddView):
     """A view for adding a group."""

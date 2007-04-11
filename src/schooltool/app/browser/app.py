@@ -22,9 +22,6 @@ SchoolTool application views.
 $Id$
 """
 
-from zc.table import table
-from zc.table.interfaces import ISortableColumn
-from zc.table.column import GetterColumn
 from zope.component import getUtility
 from zope.interface import implements
 from zope.security.interfaces import IParticipation
@@ -40,7 +37,6 @@ from zope.publisher.browser import BrowserView
 from zope.component import queryMultiAdapter
 from zope.app.security.interfaces import IAuthentication
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
-from zope.interface import directlyProvides
 
 from schooltool import SchoolToolMessage as _
 from schooltool.app.app import getSchoolToolApplication
@@ -48,12 +44,11 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IAsset
-from schooltool.batching import Batch
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonFactory
-from schooltool.skin.interfaces import IFilterWidget
 from schooltool.skin.table import CheckboxColumn
 from schooltool.skin.table import label_cell_formatter_factory
+from schooltool.skin.interfaces import ITableFormatter
 
 
 class ApplicationView(BrowserView):
@@ -134,62 +129,20 @@ class RelationshipViewBase(BrowserView):
         """Returns the backend storage for available items."""
         raise NotImplementedError("Subclasses should override this method.")
 
-    def updateBatch(self, lst):
-        self.batch_start = int(self.request.get('batch_start', 0))
-        self.batch_size = int(self.request.get('batch_size', 10))
-        self.batch = Batch(lst, self.batch_start, self.batch_size)
-
-    def filter(self, list):
-        return self.filter_widget.filter(list)
-
-    def columnsForAvailable(self):
-        title = GetterColumn(name='title',
-                             title=u"Title",
-                             getter=lambda i, f: i.title,
-                             subsort=True)
-        directlyProvides(title, ISortableColumn)
-        return [title]
-
-    columnsForSelected = columnsForAvailable
-
-    def sortOn(self):
-        return (("title", False),)
-
-    def renderAvailableTable(self):
-        prefix = "add_item"
-        columns = [CheckboxColumn(prefix=prefix, name='add', title=u'')]
-        available_columns = self.columnsForAvailable()
-        available_columns[0].cell_formatter = label_cell_formatter_factory(prefix)
-        columns.extend(available_columns)
-        formatter = table.FormFullFormatter(
-            self.context, self.request, self.filter(self.getAvailableItems()),
-            columns=columns,
-            batch_start=self.batch_start, batch_size=self.batch_size,
-            sort_on=self.sortOn(),
-            prefix="available")
-        formatter.cssClasses['table'] = 'data'
-        return formatter()
-
-    def renderSelectedTable(self):
-        prefix = "remove_item"
-        columns = [CheckboxColumn(prefix=prefix, name='remove', title=u'')]
-        selected_columns = self.columnsForSelected()
-        selected_columns[0].cell_formatter = label_cell_formatter_factory(prefix)
-        columns.extend(selected_columns)
-        formatter = table.FormFullFormatter(
-            self.context, self.request, self.getSelectedItems(),
-            columns=columns,
-            sort_on=self.sortOn(),
-            prefix="selected")
-        formatter.cssClasses['table'] = 'data'
-        return formatter()
+    def createTableFormatter(self, **kwargs):
+        prefix = kwargs['prefix']
+        container = self.getAvailableItemsContainer()
+        formatter = queryMultiAdapter((container, self.request),
+                                      ITableFormatter)
+        columns_before = [CheckboxColumn(prefix=prefix)]
+        formatters = [label_cell_formatter_factory(prefix)]
+        formatter.setUp(formatters=formatters,
+                        columns_before=columns_before,
+                        **kwargs)
+        return formatter
 
     def update(self):
         context_url = zapi.absoluteURL(self.context, self.request)
-
-        self.filter_widget = queryMultiAdapter((self.getAvailableItemsContainer(),
-                                                self.request),
-                                               IFilterWidget)
 
         if 'ADD_ITEMS' in self.request:
             for item in self.getAvailableItems():
@@ -202,8 +155,15 @@ class RelationshipViewBase(BrowserView):
         elif 'CANCEL' in self.request:
             self.request.response.redirect(context_url)
 
-        results = self.filter(self.getAvailableItems())
-        self.updateBatch(results)
+        self.available_table = self.createTableFormatter(
+            items=self.getAvailableItems(),
+            prefix="add_item")
+
+        self.selected_table = self.createTableFormatter(
+            filter=lambda l: l,
+            items=self.getSelectedItems(),
+            prefix="remove_item",
+            batch_size=0)
 
 
 class LoginView(BrowserView):
@@ -320,11 +280,3 @@ class LeaderView(RelationshipViewBase):
         selected_items = set(self.getSelectedItems())
         return [p for p in container.values()
                 if p not in selected_items]
-
-    def columnsForAvailable(self):
-        return getUtility(IPersonFactory).columns()
-
-    columnsForSelected = columnsForAvailable
-
-    def sortOn(self):
-        return getUtility(IPersonFactory).sortOn()

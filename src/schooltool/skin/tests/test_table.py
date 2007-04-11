@@ -226,7 +226,7 @@ def doctest_SchoolToolTableFormatter():
     fake filter function so we would not have to set up FilterWidgets
     yet:
 
-        >>> formatter.setUp(filter=lambda list: list)
+        >>> formatter.setUp()
 
         >>> print formatter.render()
         <BLANKLINE>
@@ -265,7 +265,7 @@ def doctest_SchoolToolTableFormatter():
 
     Now the table has all 4 of them:
 
-        >>> formatter.setUp(filter=lambda list: list)
+        >>> formatter.setUp()
         >>> print formatter.render()
         <BLANKLINE>
         ...
@@ -293,7 +293,7 @@ def doctest_SchoolToolTableFormatter():
         </tbody>
         ...
 
-    Lets provide a filter widget so we would not have to supply the filter function all the time:
+    Lets provide a filter widget:
 
         >>> from schooltool.skin.interfaces import IFilterWidget
         >>> from zope.interface import implements

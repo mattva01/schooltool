@@ -60,6 +60,13 @@ def doctest_GroupListView():
         >>> canonical = app['groups']['canonical'] = Group("Canonical")
         >>> ms = app['groups']['ms'] = Group("The Enemy")
 
+    And we need a table formatter to display our groups:
+
+        >>> from schooltool.skin.table import SchoolToolTableFormatter
+        >>> from schooltool.skin.interfaces import ITableFormatter
+        >>> from zope.publisher.interfaces.browser import IBrowserRequest
+        >>> provideAdapter(SchoolToolTableFormatter, (None, IBrowserRequest), ITableFormatter)
+
     Let's set up a security policy that lets the person join only
     Etria, Others and PoV:
 
@@ -69,7 +76,7 @@ def doctest_GroupListView():
         ...             perm == 'schooltool.edit'):
         ...             return True
         ...         return False
-        ...
+
         >>> from zope.security.management import setSecurityPolicy
         >>> from zope.security.management import newInteraction, endInteraction
         >>> prev = setSecurityPolicy(SecurityPolicy)
@@ -178,6 +185,13 @@ def doctest_MemberListView():
         >>> app['persons']['ignas'] = ignas
         >>> app['persons']['alga'] = alga
 
+    And we need a table formatter to display our persons:
+
+        >>> from schooltool.skin.table import SchoolToolTableFormatter
+        >>> from schooltool.skin.interfaces import ITableFormatter
+        >>> from zope.publisher.interfaces.browser import IBrowserRequest
+        >>> provideAdapter(SchoolToolTableFormatter, (None, IBrowserRequest), ITableFormatter)
+
     Let's create a view for our group:
 
         >>> from schooltool.group.browser.group import MemberViewPersons
@@ -256,29 +270,6 @@ def doctest_MemberListView():
         'http://127.0.0.1/groups/pov'
 
     TODO: check resource view
-
-    """
-
-def doctest_MemberViewPersons_updateBatch():
-    r"""Test for MemberViewPersons.updateBatch.
-
-        >>> from schooltool.group.browser.group import MemberViewPersons
-        >>> from schooltool.group.group import Group
-        >>> from schooltool.person.person import Person
-        >>> pov = Group('PoV')
-        >>> gintas = Person('gintas', 'Gintas')
-        >>> ignas = Person('ignas', 'Ignas')
-        >>> alga = Person('alga', 'Albertas')
-
-        >>> request = TestRequest()
-        >>> view = MemberViewPersons(pov, request)
-
-    updateBatch takes a list of persons, and creates a Batch object
-    from that list.
-
-        >>> view.updateBatch([alga, gintas, ignas])
-        >>> [p.title for p in view.batch]
-        ['Albertas', 'Gintas', 'Ignas']
 
     """
 

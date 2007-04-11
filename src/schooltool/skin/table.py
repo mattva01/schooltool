@@ -147,7 +147,7 @@ class CheckboxColumn(column.Column):
     argument and __name__ of the item being displayed.
     """
 
-    def __init__(self, prefix, name, title):
+    def __init__(self, prefix, name=None, title=None):
         super(CheckboxColumn, self).__init__(name=name, title=title)
         self.prefix = prefix
 
@@ -205,7 +205,11 @@ class SchoolToolTableFormatter(object):
         return self.context.values()
 
     def filter(self, items):
-        return self.filter_widget.filter(items)
+        # if there is no filter widget, we just return all the items
+        if self.filter_widget:
+            return self.filter_widget.filter(items)
+        else:
+            return items
 
     def sortOn(self):
         return (("title", False),)
@@ -213,7 +217,8 @@ class SchoolToolTableFormatter(object):
     def setUp(self, items=None, filter=None, columns=None,
               columns_before=[], columns_after=[], sort_on=None,
               prefix="", formatters=[],
-              table_formatter=table.FormFullFormatter):
+              table_formatter=table.FormFullFormatter,
+              batch_size=10):
 
         self.filter_widget = queryMultiAdapter((self.context, self.request),
                                                IFilterWidget)
@@ -229,7 +234,7 @@ class SchoolToolTableFormatter(object):
 
         self._columns = columns_before[:] + columns[:] + columns_after[:]
 
-        if not items:
+        if items is None:
             items = self.items()
 
         if not filter:
@@ -237,12 +242,19 @@ class SchoolToolTableFormatter(object):
 
         self._items = filter(items)
 
-        self.batch_start = int(self.request.get('batch_start', 0))
-        self.batch_size = int(self.request.get('batch_size', 10))
+        self._prefix = prefix
+
+        if batch_size == 0:
+            batch_size = len(list(self._items))
+
+        if prefix:
+            prefix = "." + prefix
+
+        self.batch_start = int(self.request.get('batch_start' + prefix, 0))
+        self.batch_size = int(self.request.get('batch_size' + prefix, batch_size))
         self.batch = Batch(self._items, self.batch_start, self.batch_size)
 
         self._sort_on = sort_on or self.sortOn()
-        self._prefix = prefix
 
     def render(self):
         formatter = self._table_formatter(
