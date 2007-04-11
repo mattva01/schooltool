@@ -21,27 +21,38 @@ from datetime import date
 from zope.interface import directlyProvides
 from zope.app import zapi
 from zope.formlib import form
-from zope.security.checker import canAccess
-from zope.security.proxy import removeSecurityProxy
-from zope.app.dependable.interfaces import IDependable
 from zc.table.interfaces import ISortableColumn
 from zc.table import column
+from zc.table import table
 from zc.table.column import GetterColumn
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.i18n import translate
 from hurry.query.interfaces import IQuery
 from hurry.query import query
+from zope.security.proxy import removeSecurityProxy
 
 from schooltool.app.browser import ViewPreferences
+from schooltool.person.browser.person import PersonContainerView
+from schooltool.skin.table import DependableCheckboxColumn
 from schooltool.demographics import interfaces
-from schooltool.skin.table import TablePage
 from schooltool import SchoolToolMessage as _
 
 
-class PersonTable(TablePage):
+class PersonTable(PersonContainerView):
     """Browse persons in a table.
     """
-    __call__ = ViewPageTemplateFile('table.pt')
+    template = ViewPageTemplateFile('table.pt')
+
+    def setUpTableFormatter(self, formatter):
+        columns_before = []
+        if self.canModify():
+            columns_before = [DependableCheckboxColumn(prefix="delete",
+                                                       name='delete_checkbox',
+                                                       title=u'')]
+        formatter.setUp(items=removeSecurityProxy(self.context).values(),
+                        columns=self.columns(),
+                        sort_on=self.sortOn(),
+                        columns_before=columns_before)
 
     def columns(self):
         username = GetterColumn(
@@ -74,7 +85,6 @@ class PersonTable(TablePage):
         directlyProvides(modified, ISortableColumn)
 
         return [
-            DependableCheckboxColumn(name='delete', prefix="delete", title=u''),
             username,
             full_name,
             birth_date,
@@ -84,18 +94,8 @@ class PersonTable(TablePage):
             DisplayColumn(name='display', title=_(u'Display'))
             ]
 
-    def values(self):
-        # XXX removeSecurityProxy is safe as people who can see this
-        # view should have access to all the shown properties
-        items = removeSecurityProxy(self.context).values()
-        return items
-
     def sortOn(self):
         return (("modified", True),)
-
-    @property
-    def canModify(self):
-        return canAccess(self.context, '__delitem__')
 
 
 class SearchTable(form.FormBase, PersonTable):
@@ -108,10 +108,23 @@ class SearchTable(form.FormBase, PersonTable):
         super(SearchTable, self).__init__(context, request)
         self.search_data = {}
 
+    def setUpTableFormatter(self, formatter):
+        columns_before = []
+        if self.canModify():
+            columns_before = [DependableCheckboxColumn(prefix="delete",
+                                                       name='delete_checkbox',
+                                                       title=u'')]
+        formatter.setUp(items=self.values(),
+                        columns=self.columns(),
+                        sort_on=self.sortOn(),
+                        columns_before=columns_before,
+                        table_formatter=table.StandaloneFullFormatter)
+
     @form.action("submit")
     def handle_submit(self, action, data):
         self.search_data = data
         self.form_reset = False
+        self.setUpTableFormatter(self.table)
 
     def setUpWidgets(self, ignore_request=False):
         form.FormBase.setUpWidgets(self, ignore_request)
@@ -153,8 +166,7 @@ class SearchTable(form.FormBase, PersonTable):
         return q.searchResults(s)
 
     def extraUrl(self):
-        result = super(SearchTable, self).extraUrl()
-        return result + self.searchOptions()
+        return self.searchOptions()
 
     def searchOptions(self):
         result = []
@@ -167,9 +179,6 @@ class SearchTable(form.FormBase, PersonTable):
         return '&' + '&'.join(['%s=%s' % (key, value)
                                for (key, value) in result])
 
-    def sortOn(self):
-        return (("modified", True),)
-
 
 class EditColumn(column.Column):
     """Table column that displays edit link.
@@ -179,6 +188,7 @@ class EditColumn(column.Column):
             zapi.absoluteURL(item, formatter.request) + '/nameinfo/@@edit.html',
             translate(_("Edit")))
 
+
 class DisplayColumn(column.Column):
     """Table column that displays display link.
     """
@@ -186,34 +196,6 @@ class DisplayColumn(column.Column):
         return '<a href="%s">%s</a>' % (
             zapi.absoluteURL(item, formatter.request) + '/nameinfo',
             translate(_("Display")))
-
-
-from schooltool.skin.table import CheckboxColumn
-class DependableCheckboxColumn(CheckboxColumn):
-    """A column that displays a checkbox that is disabled if item has dependables.
-
-    The name and id of the checkbox are composed of the prefix keyword
-    argument and __name__ of the item being displayed.
-    """
-
-    def renderCell(self, item, formatter):
-        id = "%s.%s" % (self.prefix, item.__name__)
-
-        if self.hasDependents(item):
-            return '<input type="checkbox" name="%s" id="%s" disabled="disabled" />' % (id, id)
-        else:
-            return '<input type="checkbox" name="%s" id="%s" />' % (id, id)
-
-    def hasDependents(self, item):
-        # We cannot adapt security-proxied objects to IDependable.  Unwrapping
-        # is safe since we do not modify anything, and the information whether
-        # an object can be deleted or not is not classified.
-        unwrapped_context = removeSecurityProxy(item)
-        dependable = IDependable(unwrapped_context, None)
-        if dependable is None:
-            return False
-        else:
-            return bool(dependable.dependents())
 
 
 class FullnameColumn(column.GetterColumn):

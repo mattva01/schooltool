@@ -25,7 +25,6 @@ import urllib
 from zope.interface import implements
 from zope.interface import directlyProvides
 from zope.i18n.interfaces.locales import ICollator
-from zope.publisher.browser import BrowserPage
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zc.table import table
@@ -36,74 +35,13 @@ from zope.app import zapi
 from zope.component import adapts
 from zope.component import queryMultiAdapter
 from zope.interface import Interface
+from zope.security.proxy import removeSecurityProxy
+from zope.app.dependable.interfaces import IDependable
 
 from schooltool.batching import Batch
 from schooltool.skin.interfaces import IFilterWidget
 from schooltool.attendance.attendance import getRequestFromInteraction
 from schooltool.skin.interfaces import ITableFormatter
-
-
-class TablePage(BrowserPage):
-    """Base class to easily created table-driven views.
-
-    Has support for batching and sorting.
-
-    Subclass and define columns() and values() to make this work for
-    your own data. columns() must return a list of zc.table column
-    objects and values() must return an iterable of objects in the
-    table.
-    """
-
-    __call__ = ViewPageTemplateFile('templates/table.pt')
-
-    def __init__(self, context, request):
-        super(TablePage, self).__init__(context, request)
-        self.batch_start = int(request.form.get('batch_start', 0))
-        self.batch_size = int(request.form.get('batch_size', 10))
-        self._cached_values = None
-
-    def table(self):
-        formatter = table.StandaloneFullFormatter(
-            self.context, self.request, self.cached_values(),
-            columns=self.columns(),
-            batch_start=self.batch_start, batch_size=self.batch_size,
-            sort_on=self.sortOn())
-        # set CSS class for the zc.table generated tables, to differentiate it
-        # from other tables.
-        formatter.cssClasses['table'] = 'data'
-        return formatter()
-
-    def batch(self):
-        # XXX note that the schooltool.batching system is *only* used to
-        # provide enough information for the batch navigation macros. We
-        # actually use the zc.table system for the actual batching
-        # bit
-        return Batch(self.cached_values(), self.batch_start, self.batch_size)
-
-    def cached_values(self):
-        if self._cached_values is None:
-            self._cached_values = self.values()
-        return self._cached_values
-
-    def values(self):
-        raise NotImplementedError
-
-    def columns(self):
-        raise NotImplementedError
-
-    def extraUrl(self):
-        return self.sortOptions()
-
-    def sortOptions(self):
-        sort_on = self.request.form.get('sort_on', None)
-        if not sort_on:
-            return ''
-        l = ['sort_on:list=%s' % o for o in sort_on]
-        return '&' + '&'.join(l)
-
-    def sortOn(self):
-        """ Default sort on. """
-        return ()
 
 
 class FilterWidget(object):
@@ -166,6 +104,33 @@ def label_cell_formatter_factory(prefix=""):
                                                  item.__name__,
                                                  value)
     return label_cell_formatter
+
+
+class DependableCheckboxColumn(CheckboxColumn):
+    """A column that displays a checkbox that is disabled if item has dependables.
+
+    The name and id of the checkbox are composed of the prefix keyword
+    argument and __name__ of the item being displayed.
+    """
+
+    def renderCell(self, item, formatter):
+        id = "%s.%s" % (self.prefix, item.__name__)
+
+        if self.hasDependents(item):
+            return '<input type="checkbox" name="%s" id="%s" disabled="disabled" />' % (id, id)
+        else:
+            return '<input type="checkbox" name="%s" id="%s" />' % (id, id)
+
+    def hasDependents(self, item):
+        # We cannot adapt security-proxied objects to IDependable.  Unwrapping
+        # is safe since we do not modify anything, and the information whether
+        # an object can be deleted or not is not classified.
+        unwrapped_context = removeSecurityProxy(item)
+        dependable = IDependable(unwrapped_context, None)
+        if dependable is None:
+            return False
+        else:
+            return bool(dependable.dependents())
 
 
 def url_cell_formatter(value, item, formatter):

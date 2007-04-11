@@ -28,7 +28,7 @@ from zope.publisher.browser import BrowserView
 from zope.security.checker import canAccess
 
 from schooltool.batching.batch import Batch
-from schooltool.demographics.browser.table import DependableCheckboxColumn
+from schooltool.skin.table import DependableCheckboxColumn
 from schooltool.skin.table import url_cell_formatter
 from schooltool.skin.interfaces import ITableFormatter
 
@@ -103,17 +103,20 @@ class TableContainerView(BrowserView):
         self.context = context
         self.table = queryMultiAdapter((context, request), ITableFormatter)
 
-    def __call__(self):
-        if 'DELETE' in self.request:
-            return self.delete_template()
-
+    def setUpTableFormatter(self, formatter):
         columns_before = []
         if self.canModify():
             columns_before = [DependableCheckboxColumn(prefix="delete",
                                                        name='delete_checkbox',
                                                        title=u'')]
-        self.table.setUp(formatters=[url_cell_formatter],
-                         columns_before=columns_before)
+        formatter.setUp(formatters=[url_cell_formatter],
+                        columns_before=columns_before)
+
+    def __call__(self):
+        if 'DELETE' in self.request:
+            return self.delete_template()
+
+        self.setUpTableFormatter(self.table)
         # XXX update should be in here but as the container_delete
         # template is shared with the ContainerDeleteView and update
         # is called in the template we are not doing it here
