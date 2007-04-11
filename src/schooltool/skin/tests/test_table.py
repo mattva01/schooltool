@@ -236,7 +236,7 @@ def doctest_SchoolToolTableFormatter():
               <th>
         <BLANKLINE>
                     <span class="zc-table-sortable" ...>
-                        Title</span> <img src="/sort_arrows_down.gif" class="sort-indicator" alt="(descending)"/>
+                        Title</span> <img src="/sort_arrows_down.gif" ... alt="(descending)"/>
         <BLANKLINE>
               </th>
             </tr>
@@ -523,7 +523,7 @@ def doctest_SchoolToolTableFormatter():
               <th>
         <BLANKLINE>
                     <span class="zc-table-sortable" ...>
-                        Title</span> <img src="/sort_arrows_down.gif" class="sort-indicator" alt="(descending)"/>
+                        Title</span> <img src="/sort_arrows_down.gif" ... alt="(descending)"/>
         <BLANKLINE>
               </th>
             </tr>
