@@ -94,6 +94,16 @@
       provides=".interfaces.IPerson"
       for="schooltool.person.interfaces.IPersonPreferences" />
 
+  <subscriber
+      for="schooltool.app.interfaces.ICatalogSetUpEvent"
+      handler=".person.catalogSetUpSubscriber"
+      />
+
+  <adapter
+      for=".interfaces.IPersonContainer"
+      factory=".person.getPersonContainerCatalog"
+      provides="zope.app.catalog.interfaces.ICatalog" />
+
   <include package=".browser" />
   <include package=".rest" />
 
