@@ -45,6 +45,12 @@
       handler=".group.addGroupContainerToApplication"
       />
 
+  <!-- Catalog set up -->
+  <subscriber
+      for="schooltool.app.interfaces.ICatalogSetUpEvent"
+      handler=".group.catalogSetUpSubscriber"
+      />
+
   <include package=".browser" />
   <include package=".rest" />
 
