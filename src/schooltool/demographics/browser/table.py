@@ -43,14 +43,19 @@ class PersonTable(PersonContainerView):
     """
     template = ViewPageTemplateFile('table.pt')
 
+    def __init__(self, context, request):
+        # anyone who can see this view can see infomration for the
+        # container and persons in it
+        context = removeSecurityProxy(context)
+        super(PersonTable, self).__init__(context, request)
+
     def setUpTableFormatter(self, formatter):
         columns_before = []
         if self.canModify():
             columns_before = [DependableCheckboxColumn(prefix="delete",
                                                        name='delete_checkbox',
                                                        title=u'')]
-        formatter.setUp(items=removeSecurityProxy(self.context).values(),
-                        columns=self.columns(),
+        formatter.setUp(columns=self.columns(),
                         sort_on=self.sortOn(),
                         columns_before=columns_before)
 
