@@ -123,7 +123,10 @@ class RelationshipViewBase(BrowserView):
 
     def getAvailableItems(self):
         """Return a sequence of items that can be selected."""
-        raise NotImplementedError("Subclasses should override this method.")
+        container = self.getAvailableItemsContainer()
+        selected_items = set(self.getSelectedItems())
+        return [p for p in container.values()
+                if p not in selected_items]
 
     def getAvailableItemsContainer(self):
         """Returns the backend storage for available items."""
@@ -279,8 +282,3 @@ class LeaderView(RelationshipViewBase):
     def getAvailableItemsContainer(self):
         return ISchoolToolApplication(None)['persons']
 
-    def getAvailableItems(self):
-        container = self.getAvailableItemsContainer()
-        selected_items = set(self.getSelectedItems())
-        return [p for p in container.values()
-                if p not in selected_items]

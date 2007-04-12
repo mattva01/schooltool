@@ -263,13 +263,6 @@ class RelationshipEditConfView(RelationshipViewBase, ConflictDisplayMixin):
         RelationshipViewBase.update(self)
         ConflictDisplayMixin.update(self)
 
-    def getAvailableItems(self):
-        """Return a list of all possible members."""
-        container = self.getAvailableItemsContainer()
-        selected_items = Set(self.getSelectedItems())
-        return [p for p in container.values()
-                if p not in selected_items]
-
 
 class SectionInstructorView(RelationshipEditConfView, ConflictDisplayMixin):
     """View for adding instructors to a Section."""

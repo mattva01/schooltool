@@ -64,12 +64,6 @@ class GroupListView(RelationshipViewBase):
     def getAvailableItemsContainer(self):
         return ISchoolToolApplication(None)['groups']
 
-    def getAvailableItems(self):
-        """Return a list of groups the current user is not a member of."""
-        groups = self.getAvailableItemsContainer()
-        return [group for group in groups.values()
-                if group not in self.context.groups]
-
     def getCollection(self):
         return self.context.groups
 
@@ -103,12 +97,6 @@ class MemberViewPersons(RelationshipViewBase):
 
     def getAvailableItemsContainer(self):
         return ISchoolToolApplication(None)['persons']
-
-    def getAvailableItems(self):
-        """Return a list of all possible members."""
-        container = self.getAvailableItemsContainer()
-        return [m for m in container.values()
-                if m not in self.getCollection()]
 
     def getCollection(self):
         return self.context.members
