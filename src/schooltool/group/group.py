@@ -33,6 +33,7 @@ from zope.app.container import btree
 from zope.app.container.contained import Contained
 from zope.app.catalog.interfaces import ICatalog
 from zope.app.catalog.catalog import Catalog
+from zope.component import getUtility
 
 from zc.catalog.catalogindex import ValueIndex
 
@@ -53,6 +54,9 @@ from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
 from schooltool.securitypolicy.interfaces import ICrowd
 from schooltool.group.interfaces import IGroup
 from schooltool.utility.utility import UtilitySetUp
+
+
+GROUP_CATALOG_KEY = 'schooltool.group'
 
 
 class GroupContainer(btree.BTreeContainer):
@@ -154,4 +158,8 @@ def catalogSetUp(catalog):
 
 
 catalogSetUpSubscriber = UtilitySetUp(
-    Catalog, ICatalog, 'schooltool.group', setUp=catalogSetUp)
+    Catalog, ICatalog, GROUP_CATALOG_KEY, setUp=catalogSetUp)
+
+
+def getGroupContainerCatalog(container):
+    return getUtility(ICatalog, GROUP_CATALOG_KEY)

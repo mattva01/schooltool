@@ -51,6 +51,11 @@
       handler=".group.catalogSetUpSubscriber"
       />
 
+  <adapter
+      for=".interfaces.IGroupContainer"
+      factory=".group.getGroupContainerCatalog"
+      provides="zope.app.catalog.interfaces.ICatalog" />
+
   <include package=".browser" />
   <include package=".rest" />
 
