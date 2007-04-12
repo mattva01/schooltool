@@ -22,13 +22,10 @@ group views.
 $Id$
 """
 from zope.security import checkPermission
-from zope.security.proxy import removeSecurityProxy
-from zope.app import zapi
 from zope.publisher.browser import BrowserView
 from zope.component import getUtility
 
 from schooltool import SchoolToolMessage as _
-from schooltool.batching import Batch
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin.containers import TableContainerView
 from schooltool.app.browser.app import BaseAddView, BaseEditView
@@ -37,7 +34,7 @@ from schooltool.resource.interfaces import IResource
 from schooltool.course.interfaces import ISection
 from schooltool.person.interfaces import IPersonFactory
 
-from schooltool.group.interfaces import IGroupMember, IGroup
+from schooltool.group.interfaces import IGroupMember
 from schooltool.group.interfaces import IGroupContainer, IGroupContained
 from schooltool.app.browser.app import RelationshipViewBase
 
@@ -63,7 +60,8 @@ class GroupListView(RelationshipViewBase):
 
     def getSelectedItems(self):
         """Return a list of groups the current user is a member of."""
-        return self.context.groups
+        return [group for group in self.context.groups
+                if not ISection.providedBy(group)]
 
     def getAvailableItemsContainer(self):
         return ISchoolToolApplication(None)['groups']
@@ -143,4 +141,4 @@ class GroupsViewlet(BrowserView):
     def memberOf(self):
         """Seperate out generic groups from sections."""
         return [group for group in self.context.groups if
-                IGroup.providedBy(group)]
+                not ISection.providedBy(group)]
