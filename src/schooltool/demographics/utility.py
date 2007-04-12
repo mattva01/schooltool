@@ -31,7 +31,7 @@ from zope.interface import directlyProvides
 
 from zc.table.interfaces import ISortableColumn
 
-from schooltool.utility import UtilitySpecification, MultiUtilitySetUp
+from schooltool.utility import UtilitySpecification, UtilitySetUp
 
 from schooltool.demographics.interfaces import ISearch
 from schooltool.demographics.person import Person
@@ -73,11 +73,8 @@ def catalogSetUp(catalog):
     catalog['parentName'] = TextIndex('parentName', ISearch)
     catalog['studentId'] = FieldIndex('studentId', ISearch)
 
-catalogSetUpSubscriber = MultiUtilitySetUp(
-    UtilitySpecification(IntIds, IIntIds),
-    UtilitySpecification(Catalog, ICatalog, 'demographics_catalog',
-                         setUp=catalogSetUp),
-    )
+catalogSetUpSubscriber = UtilitySetUp(
+    Catalog, ICatalog, 'demographics_catalog', setUp=catalogSetUp)
 
 class PersonFactory(Persistent, Contained):
     """BBB: as old utilities are persistent, we need this here."""

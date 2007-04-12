@@ -49,11 +49,14 @@ from zope.app.server.wsgi import http
 from zope.app.appsetup import DatabaseOpened, ProcessStarting
 from zope.app.publication.zopepublication import ZopePublication
 from zope.traversing.interfaces import IContainmentRoot
-from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
 from zope.app.container.contained import ObjectAddedEvent
 from zope.app.dependable.interfaces import IDependable
 from zope.app.component.hooks import setSite
 from zope.component import getUtility
+from zope.app.intid import IntIds
+from zope.app.intid.interfaces import IIntIds
+from zope.app.component.interfaces import ISite
+from zope.app.component.site import LocalSiteManager
 
 from schooltool.app.app import SchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -61,6 +64,11 @@ from schooltool.app.rest import restServerType
 from schooltool.app.browser import pdfcal
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.app.interfaces import ICookieLanguageSelector
+from schooltool.app.interfaces import CatalogSetUpEvent
+from schooltool.app.interfaces import ApplicationInitializationEvent
+from schooltool.utility.utility import setUpUtilities
+from schooltool.utility.utility import UtilitySpecification
+
 
 MANAGER_USERNAME = 'manager'
 MANAGER_PASSWORD = 'schooltool'
@@ -452,7 +460,33 @@ class StandaloneServer(object):
             # optimistic because it will then work with any registered
             # data managers that do not support this feature.
             transaction.savepoint(optimistic=True)
+
+            # set up the site so that local utility setups and catalog
+            # indexing would work properly
+            if not ISite.providedBy(app):
+                app.setSiteManager(LocalSiteManager(app))
+
+            setSite(app)
+
+            # We must set up the int ids utility before setting up any
+            # of the plugin specific catalogs, as catalogs rely on
+            # IntIds being present
+            setUpUtilities(app, [UtilitySpecification(IntIds, IIntIds)])
+
+            # tell plugins to initialize their catalogs, must be done
+            # before initializing plugins themselves or else all the
+            # initial groups, persons, resources will not get indexed
+            notify(CatalogSetUpEvent(app))
+
+            # initialize plugins themselves
+            notify(ApplicationInitializationEvent(app))
+
             notify(ObjectAddedEvent(app))
+
+            # unset the site so we would not confuse other
+            # bootstraping code
+            setSite(None)
+
             self.restoreManagerUser(app, MANAGER_PASSWORD)
         elif not ISchoolToolApplication.providedBy(app_obj):
             transaction.abort()

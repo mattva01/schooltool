@@ -628,6 +628,7 @@ def doctest_restoreManagerUser():
 
         >>> import transaction
         >>> from zope.app.container.contained import ObjectAddedEvent
+        >>> from schooltool.app.interfaces import ApplicationInitializationEvent
         >>> from zope.event import notify
         >>> from zope.app.publication.zopepublication import ZopePublication
         >>> from ZODB.DB import DB
@@ -643,6 +644,7 @@ def doctest_restoreManagerUser():
         >>> root[ZopePublication.root_name] = app
 
         >>> save_point = transaction.savepoint(optimistic=True)
+        >>> notify(ApplicationInitializationEvent(app))
         >>> notify(ObjectAddedEvent(app))
 
     Initially, there's no manager user in the database:

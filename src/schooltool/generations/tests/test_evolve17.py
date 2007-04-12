@@ -72,12 +72,12 @@ def doctest_evolve():
       >>> provideAdapter(Search, [IPerson], ISearch)
 
     Do the evolution:
-    
+
       >>> from schooltool.generations.evolve17 import evolve
       >>> evolve(context)
-      
+
     We expect the utilities to be installed:
- 
+
       >>> from zope.component import getUtility
       >>> utility = getUtility(IIntIds)
       >>> IIntIds.providedBy(utility)
@@ -98,13 +98,13 @@ def doctest_evolve():
       >>> results = catalog.searchResults(studentId=('c', 'c'))
       >>> [item.title for item in results]
       []
-    
+
     Since the last name is required now but we don't know what
     last name people had, we expect to see 'Last name unknown':
 
       >>> app['persons']['alpha'].nameinfo.last_name
       'Last name unknown'
-      
+
     """
 
 from zope.app.keyreference.interfaces import IKeyReference
@@ -135,14 +135,14 @@ def setUp(test):
 
     # this is code to set up the catalog for unit testing. it could
     # be extracted and put into general setup functionality
-    
+
     # Make sure objects can be keyreferenced - necessary for int ids to
     # work:
-    
+
     from zope.component import provideAdapter
     from persistent.interfaces import IPersistent
     provideAdapter(StupidKeyReference, [IPersistent], IKeyReference)
-      
+
     # Provide the int id subscribers:
 
     from zope.component import provideHandler
@@ -170,7 +170,7 @@ def setUp(test):
                    [IObjectModifiedEvent])
     provideHandler(catalog.unindexDocSubscriber,
                    [IIntIdRemovedEvent])
-    
+
 def tearDown(test):
     setup.placefulTearDown()
 

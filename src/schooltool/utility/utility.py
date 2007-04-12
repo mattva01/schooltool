@@ -44,6 +44,8 @@ class UtilitySpecification(object):
                  override=False, storage_name=None):
         if storage_name is None:
             storage_name = iface.__module__ + '.' + iface.__name__
+            if name:
+                storage_name += '.' + name
         self.storage_name = storage_name
         self.factory = factory
         self.setUp = setUp
@@ -53,33 +55,24 @@ class UtilitySpecification(object):
 
 
 def setUpUtilities(site, specs):
-    if not ISite.providedBy(site):
-        site.setSiteManager(LocalSiteManager(site))
-
-    setSite(site)
-    try:
-        manager = site.getSiteManager()
-        default = zapi.traverse(site, '++etc++site/default')
-        for spec in specs:
-            local_utility = getLocalUtility(default, spec)
-            if local_utility is not None:
-                if spec.override:
-                    # override existing utility
-                    name = local_utility.__name__
-                    manager.unregisterUtility(name, spec.iface)
-                    del default[name]
-                else:
-                    # do not register this utility; we already got it
-                    continue
-            utility = spec.factory()
-            default[spec.storage_name] = utility
-            if spec.setUp is not None:
-                spec.setUp(utility)
-            manager.registerUtility(utility, spec.iface, spec.utility_name)
-    finally:
-        # we clean up as other bootstrapping code might otherwise get
-        # confused...
-        setSite(None)
+   manager = site.getSiteManager()
+   default = zapi.traverse(site, '++etc++site/default')
+   for spec in specs:
+       local_utility = getLocalUtility(default, spec)
+       if local_utility is not None:
+           if spec.override:
+               # override existing utility
+               name = local_utility.__name__
+               manager.unregisterUtility(name, spec.iface)
+               del default[name]
+           else:
+               # do not register this utility; we already got it
+               continue
+       utility = spec.factory()
+       default[spec.storage_name] = utility
+       if spec.setUp is not None:
+           spec.setUp(utility)
+       manager.registerUtility(utility, spec.iface, spec.utility_name)
 
 
 def getLocalUtility(default, spec):
@@ -93,7 +86,8 @@ def getLocalUtility(default, spec):
 class UtilitySetUp(UtilitySpecification):
     """Set up a single utility."""
 
-    def __call__(self, site, event):
+    def __call__(self, event):
+        site = event.object
         setUpUtilities(site, [self])
 
 
@@ -106,5 +100,6 @@ class MultiUtilitySetUp(object):
     def __init__(self, *specifications):
         self.specifications = specifications
 
-    def __call__(self, site, event):
+    def __call__(self, event):
+        site = event.object
         setUpUtilities(site, self.specifications)

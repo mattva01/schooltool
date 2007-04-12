@@ -67,7 +67,6 @@ class SchoolToolApplication(Persistent, sample.SampleContainer,
 
     def __init__(self):
         super(SchoolToolApplication, self).__init__()
-        notify(ApplicationInitializationEvent(self))
 
     def _newContainerData(self):
         return PersistentDict()

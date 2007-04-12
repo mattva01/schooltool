@@ -59,13 +59,24 @@ textwidgets_strings=[_('Form input is not a file object'),
 # Events
 
 class IApplicationInitializationEvent(IObjectEvent):
-    """The SchoolTool application is being initiazed.
+    """The SchoolTool application is being initialized.
 
-    Usually subscribers add soemthing to the initialization process.
+    Usually subscribers add something to the initialization process.
     """
 
 class ApplicationInitializationEvent(ObjectEvent):
     zope.interface.implements(IApplicationInitializationEvent)
+
+
+
+class ICatalogSetUpEvent(IObjectEvent):
+    """The SchoolTool catalogs are being initialized.
+
+    Subscribers should set up their catalogs.
+    """
+
+class CatalogSetUpEvent(ObjectEvent):
+    zope.interface.implements(ICatalogSetUpEvent)
 
 
 class ISchoolToolCalendar(IEditCalendar, ILocation):

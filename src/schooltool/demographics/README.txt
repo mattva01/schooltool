@@ -47,7 +47,7 @@ table (including sortability of such columns). This is arranged in
 The container also has a search page attached to it. The catalog and
 its indexes are defined in ``schooltool.demographics.utility``. Also
 there is the implementation of the ``ISearch`` interface, which
-provides the data that is calaloged. The search screen itself is in
+provides the data that is cataloged. The search screen itself is in
 ``schooltool.demographics.browser.table``.
 
 Customizability
