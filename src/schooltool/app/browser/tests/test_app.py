@@ -409,8 +409,7 @@ def doctest_RelationshipViewBase():
         >>> view.getAvailableItems = lambda: "<Available Items>"
         >>> view.getSelectedItems = lambda: "<Selected Items>"
         >>> view.update()
-        Setting up table: {'items': '<Available Items>',
-                           'ommit': '<Selected Items>',
+        Setting up table: {'ommit': '<Selected Items>',
                            'prefix': 'add_item'}
         Setting up table: {'batch_size': 0,
                            'filter': <function <lambda> at ...>,

@@ -162,7 +162,6 @@ class RelationshipViewBase(BrowserView):
             self.request.response.redirect(context_url)
 
         self.available_table = self.createTableFormatter(
-            items=self.getAvailableItems(),
             ommit=self.getOmmitedItems(),
             prefix="add_item")
 
