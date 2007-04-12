@@ -214,26 +214,23 @@ class PersonFilterWidget(FilterWidget):
                                'title': "%s (%s)" % (group.title, len(group.members))})
         return groups
 
-    def filter(self, list):
+    def filter(self, items):
         if 'CLEAR_SEARCH' in self.request:
             for parameter in self.parameters:
                 self.request.form[parameter] = ''
-            return list
+            return items
 
-        results = list
+        results = items
+
+        if 'SEARCH_GROUP' in self.request:
+            group = ISchoolToolApplication(None)['groups'].get(self.request['SEARCH_GROUP'])
+            if group:
+                results = list(group.members)
 
         if 'SEARCH_TITLE' in self.request:
             searchstr = self.request['SEARCH_TITLE'].lower()
             results = [item for item in results
                        if searchstr in item.title.lower()]
-
-        if 'SEARCH_GROUP' in self.request:
-            group = ISchoolToolApplication(None)['groups'].get(self.request['SEARCH_GROUP'])
-            if not group:
-                return results
-
-            results = [item for item in results
-                       if group in item.groups]
 
         return results
 

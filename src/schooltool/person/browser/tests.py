@@ -478,12 +478,23 @@ def doctest_PersonFilterWidget():
         ...     def __init__(self, title, groups):
         ...         self.title = title
         ...         self.groups = groups
+        ...         for group in groups:
+        ...             group.add(self)
         ...     def __repr__(self):
         ...         return '<ItemStub %s>' % self.title
+        >>> class GroupStub(object):
+        ...     def __init__(self, title):
+        ...         self.title = title
+        ...         self.members = []
+        ...     def add(self, member):
+        ...         self.members.append(member)
+        >>> a = GroupStub('a')
+        >>> b = GroupStub('b')
+        >>> c = GroupStub('c')
         >>> container = [PersonStub(title, groups)
-        ...              for title, groups in [('alpha', ['a']),
-        ...                                    ('beta', ['b', 'c']),
-        ...                                    ('lambda', ['d', 'b'])]]
+        ...              for title, groups in [('alpha', [a]),
+        ...                                    ('beta', [b, c]),
+        ...                                    ('lambda', [b])]]
         >>> request = TestRequest()
         >>> widget = PersonFilterWidget(container, request)
 
@@ -522,7 +533,7 @@ def doctest_PersonFilterWidget():
         ...     implements(ISchoolToolApplication)
         ...     adapts(Interface)
         ...     def __init__(self, context):
-        ...         self['groups'] = {'a': 'a', 'b': 'b', 'c': 'c'}
+        ...         self['groups'] = {'a': a, 'b': b, 'c': c}
         >>> from zope.component import provideAdapter
         >>> provideAdapter(StubApplication)
 
