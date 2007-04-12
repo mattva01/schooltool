@@ -21,33 +21,25 @@ course browser views.
 
 $Id$
 """
-from sets import Set
-
 from zope.security.proxy import removeSecurityProxy
-from zope.security.checker import canWrite
 from zope.app import zapi
 from zope.app.component.hooks import getSite
 from zope.app.form.browser.add import AddView
 from zope.app.form.interfaces import WidgetsError
 from zope.app.form.utility import getWidgetsData
 from zope.publisher.browser import BrowserView
-from zope.component import getUtility
+from zope.component import getMultiAdapter
 
 from zc.table import table
 
 from schooltool.person.interfaces import IPerson
 from schooltool.group.interfaces import IGroup
-from schooltool.batching import Batch
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.skin.containers import ContainerView
 from schooltool.app.browser.app import BaseEditView
-from schooltool.group.interfaces import IGroup
-from schooltool.person.interfaces import IPerson
-from schooltool.person.interfaces import IPersonFactory
 
 from schooltool import SchoolToolMessage as _
 from schooltool.common import collect
-from schooltool.calendar.interfaces import IExpandedCalendarEvent
 from schooltool.course.interfaces import ISection, ISectionContainer
 from schooltool.relationship.relationship import getRelatedObjects
 from schooltool.app.membership import URIGroup
@@ -58,6 +50,7 @@ from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.timetable.browser import TimetableConflictMixin
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.skin.interfaces import ITableFormatter
 
 
 def same(a, b):
@@ -83,13 +76,11 @@ class SectionView(BrowserView):
     __used_for__ = ISection
 
     def renderPersonTable(self):
-        factory = getUtility(IPersonFactory)
-        formatter = table.StandaloneFullFormatter(
-            self.context, self.request, self.getPersons(),
-            columns=factory.columns(),
-            sort_on=factory.sortOn())
-        formatter.cssClasses['table'] = 'data'
-        return formatter()
+        persons = ISchoolToolApplication(None)['persons']
+        formatter = getMultiAdapter((persons, self.request), ITableFormatter)
+        formatter.setUp(table_formatter=table.StandaloneFullFormatter,
+                        items=self.getPersons())
+        return formatter.render()
 
     def getPersons(self):
         return map(removeSecurityProxy,
