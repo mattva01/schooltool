@@ -141,6 +141,9 @@ class RelationshipViewBase(BrowserView):
                         **kwargs)
         return formatter
 
+    def getOmmitedItems(self):
+        return self.getSelectedItems()
+
     def update(self):
         context_url = zapi.absoluteURL(self.context, self.request)
 
@@ -157,6 +160,7 @@ class RelationshipViewBase(BrowserView):
 
         self.available_table = self.createTableFormatter(
             items=self.getAvailableItems(),
+            ommit=self.getOmmitedItems(),
             prefix="add_item")
 
         self.selected_table = self.createTableFormatter(

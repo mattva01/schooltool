@@ -206,6 +206,11 @@ class SchoolToolTableFormatter(object):
     def items(self):
         return self.context.values()
 
+    def ommit(self, items, ommited_items):
+        ommited_items = set(ommited_items)
+        return [item for item in items
+                if item not in ommited_items]
+
     def filter(self, items):
         # if there is no filter widget, we just return all the items
         if self.filter_widget:
@@ -216,10 +221,9 @@ class SchoolToolTableFormatter(object):
     def sortOn(self):
         return (("title", False),)
 
-    def setUp(self, items=None, filter=None, columns=None,
-              columns_before=[], columns_after=[], sort_on=None,
-              prefix="", formatters=[],
-              table_formatter=table.FormFullFormatter,
+    def setUp(self, items=None, ommit=[], filter=None, columns=None,
+              columns_before=[], columns_after=[], sort_on=None, prefix="",
+              formatters=[], table_formatter=table.FormFullFormatter,
               batch_size=10):
 
         self.filter_widget = queryMultiAdapter((self.context, self.request),
@@ -242,7 +246,7 @@ class SchoolToolTableFormatter(object):
         if not filter:
             filter = self.filter
 
-        self._items = filter(items)
+        self._items = filter(self.ommit(items, ommit))
 
         self._prefix = prefix
 
@@ -299,6 +303,14 @@ class IndexedTableFormatter(SchoolToolTableFormatter):
                     'catalog': catalog,
                     'key': value})
         return results
+
+
+    def ommit(self, items, ommited_items):
+        ommited_items = self.indexItems(ommited_items)
+        ommited_ids = set([item['id'] for item in ommited_items])
+        return [item for item in items
+                if item['id'] not in ommited_ids]
+
 
     def indexItems(self, items):
         """Convert a list of objects to a list of index dicts"""

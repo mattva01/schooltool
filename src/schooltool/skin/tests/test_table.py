@@ -863,6 +863,7 @@ def doctest_IndexedTableFormatter_setUp():
     constructor of the parent class we must process them:
 
         >>> formatter.items = lambda: []
+        >>> formatter.ommit = lambda list, ommit: list
         >>> formatter.wrapColumns = lambda list: list and list[:3] + ['wrapped'] + list[-1:] or []
         >>> formatter.columns = lambda: ['A', 'list', 'of', 'columns']
         >>> formatter.setUp()

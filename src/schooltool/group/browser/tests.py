@@ -67,22 +67,6 @@ def doctest_GroupListView():
         >>> from zope.publisher.interfaces.browser import IBrowserRequest
         >>> provideAdapter(SchoolToolTableFormatter, (None, IBrowserRequest), ITableFormatter)
 
-    Let's set up a security policy that lets the person join only
-    Etria, Others and PoV:
-
-        >>> class SecurityPolicy(object):
-        ...     def checkPermission(self, perm,  obj, interaction=None):
-        ...         if (obj in (world, etria, pov) and
-        ...             perm == 'schooltool.edit'):
-        ...             return True
-        ...         return False
-
-        >>> from zope.security.management import setSecurityPolicy
-        >>> from zope.security.management import newInteraction, endInteraction
-        >>> prev = setSecurityPolicy(SecurityPolicy)
-        >>> endInteraction()
-        >>> newInteraction()
-
     Let's create a view for a person:
 
         >>> from schooltool.group.browser.group import GroupListView
@@ -96,16 +80,12 @@ def doctest_GroupListView():
 
     First, all groups the person is not a member of should be listed:
 
-        >>> group_titles = [g.title for g in view.getAvailableItems()]
-        >>> group_titles.sort()
-        >>> group_titles
-        ['Etria', 'Others', 'PoV']
+        >>> sorted([g.title for g in view.getAvailableItems()])
+        ['Canonical', 'Etria', 'Others', 'PoV', 'The Enemy']
 
     As well as all groups the person is currently a member of:
 
-        >>> group_titles = [g.title for g in view.getSelectedItems()]
-        >>> group_titles.sort()
-        >>> group_titles
+        >>> sorted([g.title for g in view.getSelectedItems()])
         []
 
     Let's tell the person to join PoV:
@@ -155,8 +135,6 @@ def doctest_GroupListView():
 
         >>> [group.title for group in person.groups]
         []
-
-        >>> endInteraction()
 
     """
 
