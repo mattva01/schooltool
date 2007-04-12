@@ -89,3 +89,16 @@ class ITableFormatter(Interface):
 
     def render():
         """Render the table for display in a view."""
+
+
+class IIndexedColumn(Interface):
+    """A column that operates on index dicts instead of objects.
+
+    Index dicts are composed this way:
+
+    context - the container containing items
+    id      - the int id of the object
+    catalog - the catalog that is storing relevant indexes
+    key     - the key by which the object can be retrieved from the context
+
+    """

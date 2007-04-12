@@ -26,22 +26,22 @@ from zope.interface import implements
 from zope.interface import directlyProvides
 from zope.i18n.interfaces.locales import ICollator
 from zope.app.pagetemplate import ViewPageTemplateFile
-from zope.publisher.interfaces.browser import IBrowserRequest
 from zc.table import table
 from zc.table import column
 from zc.table.interfaces import ISortableColumn
 from zc.table.column import GetterColumn
 from zope.app import zapi
-from zope.component import adapts
 from zope.component import queryMultiAdapter
-from zope.app.container.interfaces import IContainer
 from zope.security.proxy import removeSecurityProxy
 from zope.app.dependable.interfaces import IDependable
+from zope.app.catalog.interfaces import ICatalog
+from zope.component import getUtility
+from zope.app.intid.interfaces import IIntIds
 
 from schooltool.batching import Batch
 from schooltool.skin.interfaces import IFilterWidget
-from schooltool.attendance.attendance import getRequestFromInteraction
 from schooltool.skin.interfaces import ITableFormatter
+from schooltool.skin.interfaces import IIndexedColumn
 
 
 class FilterWidget(object):
@@ -78,6 +78,25 @@ class FilterWidget(object):
         if 'SEARCH' in self.request:
             return '&SEARCH=%s' % self.request.get('SEARCH')
         return ''
+
+
+class IndexedFilterWidget(FilterWidget):
+
+    def filter(self, list):
+        catalog = ICatalog(self.context)
+        index = catalog['title']
+        if 'SEARCH' in self.request and 'CLEAR_SEARCH' not in self.request:
+            searchstr = self.request['SEARCH'].lower()
+            results = []
+            for item in list:
+                title = index.documents_to_values[item['id']]
+                if searchstr in title.lower():
+                    results.append(item)
+        else:
+            self.request.form['SEARCH'] = ''
+            results = list
+
+        return results
 
 
 class CheckboxColumn(column.Column):
@@ -144,10 +163,27 @@ class LocaleAwareGetterColumn(GetterColumn):
     implements(ISortableColumn)
 
     def getSortKey(self, item, formatter):
-        request = getRequestFromInteraction()
-        collater = ICollator(request.locale)
+        collator = ICollator(formatter.request.locale)
         s = self.getter(item, formatter)
-        return s and collater.key(s)
+        return s and collator.key(s)
+
+
+class IndexedGetterColumn(GetterColumn):
+    implements(IIndexedColumn, ISortableColumn)
+
+    def __init__(self, **kwargs):
+        self.index = kwargs.pop('index')
+        super(IndexedGetterColumn, self).__init__(**kwargs)
+
+    def renderCell(self, item, formatter):
+        item = item['context'][item['key']]
+        value = self.getter(item, formatter)
+        return self.cell_formatter(value, item, formatter)
+
+    def getSortKey(self, item, formatter):
+        id = item['id']
+        index = item['catalog'][self.index]
+        return index.documents_to_values[id]
 
 
 class SchoolToolTableFormatter(object):
@@ -239,3 +275,76 @@ class SchoolToolTableFormatter(object):
             prefix=self._prefix)
         formatter.cssClasses['table'] = 'data'
         return formatter()
+
+
+class IndexedTableFormatter(SchoolToolTableFormatter):
+
+    def columns(self):
+        return [IndexedGetterColumn(name='title',
+                                    title=u"Title",
+                                    getter=lambda i, f: i.title,
+                                    cell_formatter=url_cell_formatter,
+                                    index='title')]
+
+    def items(self):
+        """Return a list of index dicts for all the items in the context container"""
+        catalog = ICatalog(self.context)
+        index = catalog['__name__']
+
+        results = []
+        for id, value in index.documents_to_values.items():
+            results.append({
+                    'context': self.context,
+                    'id': id,
+                    'catalog': catalog,
+                    'key': value})
+        return results
+
+    def indexItems(self, items):
+        """Convert a list of objects to a list of index dicts"""
+        int_ids = getUtility(IIntIds)
+        catalog = ICatalog(self.context)
+        results = []
+        for item in items:
+            results.append({
+                    'context': self.context,
+                    'id': int_ids.getId(item),
+                    'catalog': catalog,
+                    'key': item.__name__})
+        return results
+
+    def wrapColumn(self, column):
+        """Wrap a normal column to work with index dicts"""
+        original_renderCell = column.renderCell
+        def unindexingRenderCell(item, formatter):
+            item = item['context'][item['key']]
+            return original_renderCell(item, formatter)
+        column.renderCell = unindexingRenderCell
+        return column
+
+    def wrapColumns(self, columns):
+        """Wrap all not indexed columns to work with index dicts"""
+        wrapped_columns = []
+        for column in columns:
+            if IIndexedColumn.providedBy(column):
+                wrapped_columns.append(column)
+            else:
+                wrapped_columns.append(self.wrapColumn(column))
+        return wrapped_columns
+
+    def setUp(self, **kwargs):
+        items = kwargs.pop('items', None)
+        columns = kwargs.pop('columns', None)
+        columns_before = kwargs.pop('columns_before', [])
+        columns_after = kwargs.pop('columns_after', [])
+
+        if items is not None:
+            items = self.indexItems(items)
+        if columns is None:
+            columns = self.columns()
+
+        super(IndexedTableFormatter, self).setUp(items=items,
+                columns=self.wrapColumns(columns),
+                columns_before=self.wrapColumns(columns_before),
+                columns_after=self.wrapColumns(columns_after),
+                **kwargs)

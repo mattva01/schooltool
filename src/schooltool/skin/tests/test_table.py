@@ -23,6 +23,7 @@ $Id$
 import unittest
 
 from zope.testing import doctest, doctestunit
+from zope.testing.doctestunit import pprint
 
 from schooltool.app.browser.testing import setUp, tearDown
 
@@ -97,6 +98,74 @@ def doctest_FilterWidget():
     """
 
 
+def doctest_IndexedFilterWidget():
+    """Doctest for IndexedFilterWidget.
+
+    First we need a container with a catalog associated with it:
+
+        >>> from zope.app.catalog.interfaces import ICatalog
+        >>> from zope.interface import implements
+        >>> class IndexStub(object):
+        ...     def __init__(self):
+        ...         self.documents_to_values = {}
+
+    Our catalog has an index for title attribute:
+
+        >>> class CatalogStub(dict):
+        ...     implements(ICatalog)
+        ...     def __init__(self):
+        ...         self['title'] = IndexStub()
+
+        >>> catalog = CatalogStub()
+
+        >>> class ContainerStub(object):
+        ...     def __conform__(self, iface):
+        ...         if iface == ICatalog:
+        ...             return catalog
+
+    Let's create the IndexedFilterWidget:
+
+        >>> from zope.publisher.browser import TestRequest
+        >>> from schooltool.skin.table import IndexedFilterWidget
+
+        >>> container = ContainerStub()
+        >>> request = TestRequest()
+        >>> widget = IndexedFilterWidget(container, request)
+
+    Indexed filter widgets do not get items themselves, as filtering
+    through normal object attributes would be just too slow, instead
+    they get dicts with item int ids in them. All the information used
+    for filtering is stored in the catalog associated with the context
+    container:
+
+        >>> catalog['title'].documents_to_values[5] = 'Lambda'
+        >>> catalog['title'].documents_to_values[6] = 'Alpha'
+        >>> catalog['title'].documents_to_values[7] = 'Beta'
+
+        >>> items = [{'id': 5}, {'id': 6}, {'id': 7}]
+        >>> request.form = {'SEARCH': 'lamb'}
+        >>> widget.filter(items)
+        [{'id': 5}]
+
+   The search is case insensitive:
+
+        >>> request.form = {'SEARCH': 'AlphA'}
+        >>> widget.filter(items)
+        [{'id': 6}]
+
+    If clear search button is clicked, the form attribute is cleared,
+    and all items are displayed:
+
+        >>> request.form['CLEAR_SEARCH'] = 'Yes'
+
+        >>> widget.filter(items)
+        [{'id': 5}, {'id': 6}, {'id': 7}]
+        >>> request.form['SEARCH']
+        ''
+
+    """
+
+
 def doctest_CheckboxColumn():
     """Tests for CheckboxColumn.
 
@@ -150,14 +219,8 @@ def doctest_LocaleAwareGetterColumn():
 
     Provide an interaction:
 
-        >>> from zope.security.management import restoreInteraction
-        >>> from zope.security.management import endInteraction
-        >>> from zope.security.management import newInteraction
-
-        >>> endInteraction()
         >>> from zope.publisher.browser import TestRequest
         >>> request = TestRequest()
-        >>> newInteraction(request)
 
     Register collation adapter:
 
@@ -179,12 +242,62 @@ def doctest_LocaleAwareGetterColumn():
 
         >>> from schooltool.skin.table import LocaleAwareGetterColumn
         >>> lac = LocaleAwareGetterColumn()
-        >>> formatter = lambda s: s
+        >>> class FormatterStub(object):
+        ...     request = request
+        >>> formatter = FormatterStub()
         >>> item = "Item"
         >>> lac.getSortKey(item, formatter)
         'CollatorKey(Item)'
 
-        >>> restoreInteraction()
+    """
+
+
+def doctest_IndexedGetterColumn():
+    """Tests for IndexedGetterColumn.
+
+    Indexed columnt requires an additional keyword argument (index)
+    for it's constructor:
+
+        >>> from schooltool.skin.table import IndexedGetterColumn
+        >>> column = IndexedGetterColumn(index='title', getter=lambda i, f: i.title)
+        >>> column.index
+        'title'
+
+    Items used by this column are not ordinary objects, but rather
+    index dicts:
+
+        >>> class IndexStub(object):
+        ...     def __init__(self):
+        ...         self.documents_to_values = {}
+        >>> index = IndexStub()
+        >>> index.documents_to_values[5] = 'Peter'
+
+        >>> context = {}
+        >>> catalog = {'title': index}
+        >>> item = {'id': 5,
+        ...         'context': context,
+        ...         'catalog': catalog,
+        ...         'key': 'peter'}
+
+    The key of the index is used when getting the sort key of the
+    column, so the only object touched is the index in the catalog,
+    the Peter object is not used when sorting in any way:
+
+        >>> column.getSortKey(item, None)
+        'Peter'
+
+    As we are rendering only a small set of items we are using the
+    real object for that, because indexed information used for
+    sorting/filtering might be different from the one that is being
+    displayed:
+
+        >>> class PersonStub(object):
+        ...     def __init__(self, title):
+        ...         self.title = title
+
+        >>> context['peter'] = PersonStub('Mr. Peter')
+        >>> column.renderCell(item, None)
+        u'Mr. Peter'
 
     """
 
@@ -543,6 +656,244 @@ def doctest_SchoolToolTableFormatter():
         </table>
         <input type="hidden" name=".sort_on:tokens" id=".sort_on" value="title" />
         <BLANKLINE>
+
+    """
+
+
+def doctest_IndexedTableFormatter_columns():
+    """Tests for IndexedTableFormatter.columns.
+
+    The default column for an indexed table formatter is an indexed
+    getter column set to display the title of objects:
+
+        >>> from schooltool.skin.table import IndexedTableFormatter
+        >>> formatter = IndexedTableFormatter(None, None)
+        >>> columns = formatter.columns()
+        >>> columns
+        [<schooltool.skin.table.IndexedGetterColumn object at ...>]
+
+        >>> columns[0].title
+        u'Title'
+        >>> columns[0].index
+        'title'
+
+    """
+
+
+def doctest_IndexedTableFormatter_items():
+    """Tests for IndexedTableFormatter.items.
+
+        >>> class IndexStub(object):
+        ...     def __init__(self):
+        ...         self.documents_to_values = {}
+        >>> index = IndexStub()
+
+        >>> from zope.app.catalog.interfaces import ICatalog
+        >>> from zope.interface import implements
+        >>> class CatalogStub(dict):
+        ...     implements(ICatalog)
+        ...     def __init__(self):
+        ...         self['__name__'] = index
+        ...     def __repr__(self):
+        ...         return '<Catalog>'
+        >>> catalog = CatalogStub()
+
+        >>> class ContainerStub(object):
+        ...     def __conform__(self, iface):
+        ...         if iface == ICatalog:
+        ...             return catalog
+        ...     def __repr__(self):
+        ...         return '<Container>'
+
+    The IndexedTableFormatter relies on catalog to list all the items
+    so if there are no indexed items we get an empty list:
+
+        >>> from schooltool.skin.table import IndexedTableFormatter
+        >>> formatter = IndexedTableFormatter(ContainerStub(), None)
+        >>> formatter.items()
+        []
+
+    Let's index some objects:
+
+        >>> index.documents_to_values[1] = 'peter'
+        >>> index.documents_to_values[2] = 'john'
+        >>> index.documents_to_values[3] = 'ted'
+
+    Now we should get a list of index dicts:
+
+        >>> pprint(formatter.items())
+        [{'catalog': <Catalog>,
+          'context': <Container>,
+          'id': 1,
+          'key': 'peter'},
+         {'catalog': <Catalog>,
+          'context': <Container>,
+          'id': 2,
+          'key': 'john'},
+         {'catalog': <Catalog>,
+          'context': <Container>,
+          'id': 3,
+          'key': 'ted'}]
+
+    """
+
+
+def doctest_IndexedTableFormatter_indexItems():
+    """Tests for IndexedTableFormatter.indexItems.
+
+        >>> from zope.app.catalog.interfaces import ICatalog
+        >>> class ContainerStub(object):
+        ...     def __conform__(self, iface):
+        ...         if iface == ICatalog:
+        ...             return '<Catalog>'
+        ...     def __repr__(self):
+        ...         return '<Container>'
+        >>> from schooltool.skin.table import IndexedTableFormatter
+        >>> formatter = IndexedTableFormatter(ContainerStub(), None)
+
+    The formatter has a function that converts a list of objects into
+    a list of index dicts that can be displayed by Indexed columns and
+    filtered by indexed filter widgets:
+
+        >>> class IntIdsStub(object):
+        ...     def getId(self, obj):
+        ...         return obj.id
+        >>> from zope.app.intid.interfaces import IIntIds
+        >>> from zope.component import provideUtility
+        >>> provideUtility(IntIdsStub(), IIntIds)
+
+        >>> class ItemStub(object):
+        ...     def __init__(self, name, id):
+        ...         self.__name__, self.id = name, id
+
+        >>> items = [ItemStub('pete', 1), ItemStub('john', 2)]
+        >>> pprint(formatter.indexItems(items))
+        [{'catalog': '<Catalog>',
+          'context': <Container>,
+          'id': 1,
+          'key': 'pete'},
+         {'catalog': '<Catalog>',
+          'context': <Container>,
+          'id': 2,
+          'key': 'john'}]
+
+    """
+
+
+def doctest_IndexedTableFormatter_wrapColumn():
+    """Tests for IndexedTableFormatter.wrapColumn.
+
+        >>> from schooltool.skin.table import IndexedTableFormatter
+        >>> formatter = IndexedTableFormatter(None, None)
+
+        >>> from zc.table.column import GetterColumn
+        >>> column = GetterColumn(getter=lambda i, f: i.title)
+
+    Normal columns accept objects and have a way of displaying the
+    relevant data. For example this getter column when it gets a
+    person passed will display its title:
+
+        >>> class PersonStub(object):
+        ...     def __init__(self, title):
+        ...         self.title = title
+
+        >>> item = PersonStub('Pete')
+        >>> column.renderCell(item, None)
+        u'Pete'
+
+    But as our indexed table formatter is manipulating index dicts, we
+    must wrap normal columns to use them on our data:
+
+        >>> container = {'pete': item}
+        >>> key = 'pete'
+        >>> index_dict = {'context': container, 'key': key}
+        >>> column = formatter.wrapColumn(column)
+        >>> column.renderCell(index_dict, None)
+        u'Pete'
+
+    """
+
+
+def doctest_IndexedTableFormatter_wrapColumns():
+    """Tests for IndexedTableFormatter.wrapColumns.
+
+        >>> from schooltool.skin.table import IndexedTableFormatter
+        >>> formatter = IndexedTableFormatter(None, None)
+        >>> formatter.wrapColumn = lambda column: "<Wrapped %s>" % column
+
+    Wrap columns function wraps all the columns that do not implement
+    IIndexedColumn and returns the new list of columns. If there were
+    no columns passed to it - you get an empty list:
+
+        >>> formatter.wrapColumns([])
+        []
+
+    Now let's pass it some real column stubs:
+
+        >>> from zope.interface import implements
+        >>> from schooltool.skin.interfaces import IIndexedColumn
+        >>> class IndexedColumnStub(object):
+        ...     implements(IIndexedColumn)
+        ...     def __repr__(self):
+        ...         return "<IndexedColumn>"
+        >>> class NonIndexedColumnStub(object):
+        ...     def __repr__(self):
+        ...         return "<NonIndexedColumn>"
+
+    We are getting all our non-indexed columns wrapped:
+
+        >>> formatter.wrapColumns([IndexedColumnStub()])
+        [<IndexedColumn>]
+
+        >>> formatter.wrapColumns([IndexedColumnStub(), NonIndexedColumnStub()])
+        [<IndexedColumn>, '<Wrapped <NonIndexedColumn>>']
+
+    """
+
+
+def doctest_IndexedTableFormatter_setUp():
+    """Tests for IndexedTableFormatter.setUp.
+
+        >>> from schooltool.skin.table import IndexedTableFormatter
+        >>> from zope.publisher.browser import TestRequest
+        >>> formatter = IndexedTableFormatter(None, TestRequest())
+
+    Our IndexedTableFormatter can only work with index dicts and
+    IndexedColumns, so before passing all the columns and items to the
+    constructor of the parent class we must process them:
+
+        >>> formatter.items = lambda: []
+        >>> formatter.wrapColumns = lambda list: list and list[:3] + ['wrapped'] + list[-1:] or []
+        >>> formatter.columns = lambda: ['A', 'list', 'of', 'columns']
+        >>> formatter.setUp()
+
+    If no keyword parameters were passed, only the columns returned by
+    the columns method get wrapped. We do this so that you could
+    inherit from IndexedTableFormatter and provide your own columns
+    method that has any columns you need (no performance penalty will
+    occur unless you try sorting on an unindexed column):
+
+        >>> formatter._columns
+        ['A', 'list', 'of', 'wrapped', 'columns']
+
+    If we have some after or before columns or if we pass some columns
+    to the setUp they will be wrapped too:
+
+        >>> formatter.wrapColumns = lambda list: list and ['<'] + list + ['>'] or []
+        >>> formatter.setUp(columns_before=['before'],
+        ...                 columns=['custom', 'columns'],
+        ...                 columns_after=['after'])
+        >>> formatter._columns
+        ['<', 'before', '>', '<', 'custom', 'columns', '>', '<', 'after', '>']
+
+        >>> formatter.indexItems = lambda list: ["Indexed %s" % item for item in list]
+
+    If we pass some items to the formatter, they should be converted
+    into index dicts:
+
+        >>> formatter.setUp(items=["Pete", "John"])
+        >>> formatter._items
+        ['Indexed Pete', 'Indexed John']
 
     """
 
