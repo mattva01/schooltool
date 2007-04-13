@@ -25,6 +25,6 @@ $Id$
 from zope.app.generations.generations import SchemaManager
 
 schemaManager = SchemaManager(
-    minimum_generation=0,
-    generation=0,
+    minimum_generation=1,
+    generation=1,
     package_name='lyceum.generations')

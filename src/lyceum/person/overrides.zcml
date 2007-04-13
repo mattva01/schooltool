@@ -10,6 +10,11 @@
       name="person_info_viewers"
       factory=".security.PersonInfoViewersCrowd" />
 
+  <adapter
+      for="schooltool.person.interfaces.IPersonContainer"
+      factory=".person.getPersonContainerCatalog"
+      provides="zope.app.catalog.interfaces.ICatalog" />
+
   <include package=".browser" file="overrides.zcml" />
 
 </configure>

@@ -24,18 +24,24 @@ $Id$
 """
 from zope.interface import implements
 from zope.component import adapts
-from zope.interface import directlyProvides
+from zope.app.catalog.interfaces import ICatalog
+from zope.app.catalog.catalog import Catalog
+from zope.component import getUtility
 
-from zc.table.interfaces import ISortableColumn
+from zc.catalog.catalogindex import ValueIndex
 
 from schooltool.person.person import Person
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.course.section import PersonInstructorsCrowd
 from schooltool.person.person import PersonCalendarCrowd
-from schooltool.skin.table import LocaleAwareGetterColumn
+from schooltool.skin.table import IndexedLocaleAwareGetterColumn
+from schooltool.utility.utility import UtilitySetUp
 
 from lyceum.person.interfaces import ILyceumPerson
 from lyceum import LyceumMessage as _
+
+
+PERSON_CATALOG_KEY = 'lyceum.person'
 
 
 class LyceumPerson(Person):
@@ -64,18 +70,18 @@ class PersonFactoryUtility(object):
     implements(IPersonFactory)
 
     def columns(self):
-        first_name = LocaleAwareGetterColumn(
+        first_name = IndexedLocaleAwareGetterColumn(
+            index='first_name',
             name='first_name',
             title=_(u'First Name'),
             getter=lambda i, f: i.first_name,
             subsort=True)
-        directlyProvides(first_name, ISortableColumn)
-        last_name = LocaleAwareGetterColumn(
+        last_name = IndexedLocaleAwareGetterColumn(
+            index='last_name',
             name='last_name',
             title=_(u'Last Name'),
             getter=lambda i, f: i.last_name,
             subsort=True)
-        directlyProvides(last_name, ISortableColumn)
 
         return [first_name, last_name]
 
@@ -103,3 +109,18 @@ class LyceumPersonCalendarCrowd(PersonCalendarCrowd):
     def contains(self, principal):
         return (PersonCalendarCrowd.contains(self, principal) or
                 PersonInstructorsCrowd(self.context).contains(principal))
+
+
+def catalogSetUp(catalog):
+    catalog['__name__'] = ValueIndex('__name__', ILyceumPerson)
+    catalog['title'] = ValueIndex('title', ILyceumPerson)
+    catalog['first_name'] = ValueIndex('first_name', ILyceumPerson)
+    catalog['last_name'] = ValueIndex('last_name', ILyceumPerson)
+
+
+catalogSetUpSubscriber = UtilitySetUp(
+    Catalog, ICatalog, PERSON_CATALOG_KEY, setUp=catalogSetUp)
+
+
+def getPersonContainerCatalog(container):
+    return getUtility(ICatalog, PERSON_CATALOG_KEY)

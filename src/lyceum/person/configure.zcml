@@ -32,6 +32,11 @@
       provides="schooltool.app.interfaces.ICalendarParentCrowd"
       name="schooltool.view" />
 
+  <subscriber
+      for="schooltool.app.interfaces.ICatalogSetUpEvent"
+      handler=".person.catalogSetUpSubscriber"
+      />
+
   <include package="lyceum.person.browser" />
 
 </configure>
