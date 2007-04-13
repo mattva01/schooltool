@@ -36,6 +36,7 @@ from schooltool.course.section import PersonInstructorsCrowd
 from schooltool.person.person import PersonCalendarCrowd
 from schooltool.skin.table import IndexedLocaleAwareGetterColumn
 from schooltool.utility.utility import UtilitySetUp
+from schooltool.skin.table import url_cell_formatter
 
 from lyceum.person.interfaces import ILyceumPerson
 from lyceum import LyceumMessage as _
@@ -73,12 +74,14 @@ class PersonFactoryUtility(object):
         first_name = IndexedLocaleAwareGetterColumn(
             index='first_name',
             name='first_name',
+            cell_formatter=url_cell_formatter,
             title=_(u'First Name'),
             getter=lambda i, f: i.first_name,
             subsort=True)
         last_name = IndexedLocaleAwareGetterColumn(
             index='last_name',
             name='last_name',
+            cell_formatter=url_cell_formatter,
             title=_(u'Last Name'),
             getter=lambda i, f: i.last_name,
             subsort=True)
