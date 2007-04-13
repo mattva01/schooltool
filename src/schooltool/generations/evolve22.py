@@ -29,6 +29,8 @@ from zope.app.catalog.interfaces import ICatalog
 from zope.app.catalog.catalog import Catalog
 from zope.app.component.hooks import setSite
 from zope.app.intid import addIntIdSubscriber
+from zope.app.intid.interfaces import IIntIds
+from zope.app.intid import IntIds
 
 from zc.catalog.catalogindex import ValueIndex
 
@@ -48,7 +50,8 @@ def evolve(context):
     for app in findObjectsProviding(root, ISchoolToolApplication):
         # install the utilities
         setSite(app)
-        setUpUtilities(app, [UtilitySpecification(Catalog, ICatalog,
+        setUpUtilities(app, [UtilitySpecification(IntIds, IIntIds),
+                             UtilitySpecification(Catalog, ICatalog,
                                                   'schooltool.group',
                                                   setUp=catalogSetUp)])
         # catalog all groups
