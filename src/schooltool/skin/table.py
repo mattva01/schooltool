@@ -188,10 +188,13 @@ class IndexedGetterColumn(GetterColumn):
 
 class IndexedLocaleAwareGetterColumn(IndexedGetterColumn):
 
+    _cached_collator = None
+
     def getSortKey(self, item, formatter):
+        if not self._cached_collator:
+            self._cached_collator = ICollator(formatter.request.locale)
         s = super(IndexedLocaleAwareGetterColumn, self).getSortKey(item, formatter)
-        collator = ICollator(formatter.request.locale)
-        return s and collator.key(s)
+        return s and self._cached_collator.key(s)
 
 
 class SchoolToolTableFormatter(object):
