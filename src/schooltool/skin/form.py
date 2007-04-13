@@ -64,8 +64,7 @@ class EditForm(form.PageEditForm):
             self.status = _('No changes')
             return
 
-        # notify context that we were modified
-        event.notify(ObjectModifiedEvent(self.actualContext()))
+        event.notify(ObjectModifiedEvent(self.context))
         formatter = self.request.locale.dates.getFormatter(
             'dateTime', 'medium')
 

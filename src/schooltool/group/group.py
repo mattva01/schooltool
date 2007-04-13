@@ -27,11 +27,15 @@ from persistent import Persistent
 from zope.interface import implements
 from zope.component import adapts
 from zope.component import getAdapter
-from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.dependable.interfaces import IDependable
 from zope.app.container import btree
 from zope.app.container.contained import Contained
+from zope.app.catalog.interfaces import ICatalog
+from zope.app.catalog.catalog import Catalog
+from zope.component import getUtility
+
+from zc.catalog.catalogindex import ValueIndex
 
 from schooltool.app.app import InitBase
 from schooltool.app.interfaces import ICalendarParentCrowd
@@ -49,6 +53,11 @@ from schooltool.relationship.relationship import getRelatedObjects
 from schooltool.securitypolicy.crowds import Crowd
 from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
 from schooltool.securitypolicy.interfaces import ICrowd
+from schooltool.group.interfaces import IGroup
+from schooltool.utility.utility import UtilitySetUp
+
+
+GROUP_CATALOG_KEY = 'schooltool.group'
 
 
 class GroupContainer(btree.BTreeContainer):
@@ -142,3 +151,16 @@ class GroupCalendarEditorsCrowd(Crowd):
         # Fall back to schooltool.edit for IGroup
         crowd = getAdapter(self.context, ICrowd, name='schooltool.edit')
         return crowd.contains(principal)
+
+
+def catalogSetUp(catalog):
+    catalog['__name__'] = ValueIndex('__name__', IGroup)
+    catalog['title'] = ValueIndex('title', IGroup)
+
+
+catalogSetUpSubscriber = UtilitySetUp(
+    Catalog, ICatalog, GROUP_CATALOG_KEY, setUp=catalogSetUp)
+
+
+def getGroupContainerCatalog(container):
+    return getUtility(ICatalog, GROUP_CATALOG_KEY)

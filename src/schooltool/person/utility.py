@@ -16,22 +16,21 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-from zc.table.interfaces import ISortableColumn
-from zope.interface import directlyProvides
-
-from schooltool.skin.table import LocaleAwareGetterColumn
 from schooltool.person.person import Person
+from schooltool.skin.table import url_cell_formatter
+from schooltool.skin.table import IndexedLocaleAwareGetterColumn
 
 
 class PersonFactoryUtility(object):
 
     def columns(self):
-        title = LocaleAwareGetterColumn(
+        title = IndexedLocaleAwareGetterColumn(
+            index='title',
             name='title',
             title=u'Full Name',
             getter=lambda i, f: i.title,
+            cell_formatter=url_cell_formatter,
             subsort=True)
-        directlyProvides(title, ISortableColumn)
         return [title]
 
     def sortOn(self):

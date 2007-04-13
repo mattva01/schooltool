@@ -188,51 +188,57 @@ def doctest_TableContainerView():
         >>> personContainer['toad'] = Person('toad', 'Taodsworth')
         >>> request = TestRequest()
 
-    Provide a filter widget for PersonContainer:
+    The table view is using the ITableFormatter adapter to lookup the
+    approrpiate table formatter for the container:
 
         >>> from zope.component import provideAdapter
-        >>> from schooltool.skin.interfaces import IFilterWidget
+        >>> from schooltool.skin.interfaces import ITableFormatter
         >>> from zope.interface import implements
-        >>> class FilterWidget(object):
-        ...     implements(IFilterWidget)
+        >>> class TableFormatter(object):
+        ...     implements(ITableFormatter)
         ...     def __init__(self, context, request):
         ...         self.request = request
-        ...     def filter(self, list):
-        ...         if 'SEARCH' in self.request:
-        ...             return [item for item in list
-        ...                     if self.request['SEARCH'] in item.title.lower()]
-        ...         return list
+        ...     def setUp(self, **kwargs):
+        ...         print "Setting up table formatter: %s" % kwargs
 
         >>> from schooltool.person.interfaces import IPersonContainer
         >>> from zope.publisher.interfaces.browser import IBrowserRequest
-        >>> provideAdapter(FilterWidget, adapts=[IPersonContainer,
-        ...                                      IBrowserRequest],
-        ...                              provides=IFilterWidget)
+        >>> provideAdapter(TableFormatter, adapts=[IPersonContainer,
+        ...                                        IBrowserRequest],
+        ...                                provides=ITableFormatter)
+
+    By default the template that displays a list of items is being
+    used:
 
         >>> view = TableContainerView(personContainer, request)
+        >>> view.canModify = lambda: False
+        >>> view.template = lambda: "The table template."
+        >>> view.delete_template = lambda: "The delete template."
+        >>> result = view()
+        Setting up table formatter:
+         {'columns_before': [],
+          'formatters': [<function url_cell_formatter at ...>]}
 
-    After calling update, we should have a batch setup with everyone in it:
+        >>> result
+        'The table template.'
 
-        >>> view.update()
-        >>> [p.title for p in view.batch]
-        ['Frog Man', 'Long John', 'Pete Parrot', 'Taodsworth']
+    If we can modify the list that is being displayed, an additional
+    columns is added before the default columns:
 
+        >>> view.canModify = lambda: True
+        >>> result = view()
+        Setting up table formatter: {'columns_before': [<....DependableCheckboxColumn object at ...>],
+                                     'formatters': [<function url_cell_formatter at ...>]}
 
-    We can alter the batch size and starting point through the request
+        >>> result
+        'The table template.'
 
-        >>> request.form = {'batch_start': '2',
-        ...                 'batch_size': '2'}
-        >>> view = TableContainerView(personContainer, request)
-        >>> view.update()
-        >>> [p.title for p in view.batch]
-        ['Pete Parrot', 'Taodsworth']
 
     If there 'DELETE' button is pressed, a different template is used:
 
         >>> request.form = {'delete.pete': 'on', 'DELETE': 'Delete'}
-        >>> view = TableContainerView(personContainer, request)
-        >>> view.template.filename == view.delete_template.filename
-        True
+        >>> view()
+        'The delete template.'
 
     We should have the list of all the Ids of items that are going to
     be deleted from container:
@@ -278,7 +284,8 @@ def doctest_TableContainerView():
 
 def test_suite():
     optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF
-                   | doctest.REPORT_ONLY_FIRST_FAILURE)
+                   | doctest.REPORT_ONLY_FIRST_FAILURE
+                   | doctest.NORMALIZE_WHITESPACE)
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
                                        optionflags=optionflags))

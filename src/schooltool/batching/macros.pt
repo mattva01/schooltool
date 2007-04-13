@@ -67,62 +67,55 @@ Batch navigation shows up if:
       </tal:comment>
 
       <tal:if define="cur batch/num;
-                      total batch/numBatches"
+                      total batch/numBatches;
+                      urls python:batch.batch_urls(base_url, extra_url)"
               condition="python:total > 11">
 
         <tal:if condition="python:cur <= 6">
-          <span tal:repeat="b python:batch.batches()[:9]">
-            <metal:macro use-macro="view/@@batch_macros/batch-navigation-link"/>
+          <span tal:repeat="b python:urls[:9]">
+            <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
           </span>
           <span class="separator">...</span>
-          <tal:block define="b python:batch.batches()[-1]">
-            <metal:macro use-macro="view/@@batch_macros/batch-navigation-link"/>
+          <tal:block define="b python:urls[-1]">
+            <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
           </tal:block>
         </tal:if>
 
         <tal:if condition="python:cur < (total - 4) and (cur > 6)">
-          <tal:block define="b python:batch.batches()[0]">
-            <metal:macro use-macro="view/@@batch_macros/batch-navigation-link"/>
+          <tal:block define="b python:urls[0]">
+            <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
           </tal:block>
           <span class="separator">...</span>
-          <span tal:repeat="b python:batch.batches()[cur - 4: cur + 3]">
-            <metal:macro use-macro="view/@@batch_macros/batch-navigation-link"/>
+          <span tal:repeat="b python:urls[cur - 4: cur + 3]">
+            <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
           </span>
           <span class="separator">...</span>
-          <tal:block define="b python:batch.batches()[-1]">
-            <metal:macro use-macro="view/@@batch_macros/batch-navigation-link"/>
+          <tal:block define="b python:urls[-1]">
+            <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
           </tal:block>
         </tal:if>
 
         <tal:if condition="python:cur >= total - 4">
-          <tal:block define="b python:batch.batches()[0]">
-            <metal:macro use-macro="view/@@batch_macros/batch-navigation-link"/>
+          <tal:block define="b python:urls[0]">
+            <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
           </tal:block>
           <span class="separator">...</span>
-          <span tal:repeat="b python:batch.batches()[-8:]">
-            <metal:macro use-macro="view/@@batch_macros/batch-navigation-link"/>
+          <span tal:repeat="b python:urls[-8:]">
+            <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
           </span>
         </tal:if>
 
       </tal:if>
 
       <tal:if condition="not:python:batch.numBatches() > 11">
-        <span tal:repeat="b batch/batches">
-          <metal:macro use-macro="view/@@batch_macros/batch-navigation-link"/>
+        <span tal:repeat="b python:batch.batch_urls(base_url, extra_url)">
+          <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
         </span>
       </tal:if>
     </tal:if>
 
   </div>
 
-</metal:block>
-
-<metal:block define-macro="batch-navigation-link">
-  <a tal:attributes="
-    href python:'%s?batch_start=%s&batch_size=%s%s' % (base_url, b.start, batch_size, extra_url);
-    class python:batch == b and 'current' or None"
-    tal:content="b/num">
-  </a>
 </metal:block>
 
 <metal:block define-macro="batch-navigation-all-or-less">
@@ -180,60 +173,54 @@ It follows the same guidelins as batch-navigation with the addition of:
         class="next">Next &raquo;</span>
 
       <tal:if define="cur batch/num;
-                      total batch/numBatches"
+                      total batch/numBatches;
+                      urls python:batch.batch_urls(base_url, extra_url, batch_name)"
               condition="python:total > 11">
 
         <tal:if condition="python:cur <= 6">
-          <span tal:repeat="b python:batch.batches()[:9]">
-            <metal:macro use-macro="view/@@batch_macros/multi-batch-navigation-link"/>
+          <span tal:repeat="b python:urls[:9]">
+              <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
           </span>
           <span class="separator">...</span>
-          <tal:block define="b python:batch.batches()[-1]">
-            <metal:macro use-macro="view/@@batch_macros/multi-batch-navigation-link"/>
+          <tal:block define="b python:urls[-1]">
+              <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
           </tal:block>
         </tal:if>
 
         <tal:if condition="python:cur < (total - 4) and (cur > 6)">
-          <tal:block define="b python:batch.batches()[0]">
-            <metal:macro use-macro="view/@@batch_macros/multi-batch-navigation-link"/>
+          <tal:block define="b python:urls[0]">
+              <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
           </tal:block>
           <span class="separator">...</span>
-          <span tal:repeat="b python:batch.batches()[cur - 4: cur + 3]">
-            <metal:macro use-macro="view/@@batch_macros/multi-batch-navigation-link"/>
+          <span tal:repeat="b python:urls[cur - 4: cur + 3]">
+              <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
           </span>
           <span class="separator">...</span>
-          <tal:block define="b python:batch.batches()[-1]">
-            <metal:macro use-macro="view/@@batch_macros/multi-batch-navigation-link"/>
+          <tal:block define="b python:urls[-1]">
+              <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
           </tal:block>
         </tal:if>
 
         <tal:if condition="python:cur >= total - 4">
-          <tal:block define="b python:batch.batches()[0]">
-            <metal:macro use-macro="view/@@batch_macros/multi-batch-navigation-link"/>
+          <tal:block define="b python:urls[0]">
+              <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
           </tal:block>
           <span class="separator">...</span>
-          <span tal:repeat="b python:batch.batches()[-8:]">
-            <metal:macro use-macro="view/@@batch_macros/multi-batch-navigation-link"/>
+          <span tal:repeat="b python:urls[-8:]">
+              <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
           </span>
         </tal:if>
 
       </tal:if>
 
       <tal:if condition="not:python:batch.numBatches() > 11">
-        <span tal:repeat="b batch/batches">
-          <metal:macro use-macro="view/@@batch_macros/multi-batch-navigation-link"/>
+        <span tal:repeat="b python:batch.batch_urls(base_url, extra_url, batch_name)">
+            <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
         </span>
       </tal:if>
     </tal:if>
   </div>
 
-</metal:block>
-
-<metal:block define-macro="multi-batch-navigation-link">
-  <a tal:attributes="href python:'%s?batch_start.%s=%s&batch_size.%s=%s%s' % (base_url, batch_name, b.start, batch_name, batch_size, extra_url);
-    class python:batch == b and 'current' or None"
-    tal:content="b/num">
-  </a>
 </metal:block>
 
 <metal:block define-macro="multi-batch-navigation-all-or-less">

@@ -5,14 +5,14 @@
 </head>
 <body>
 <metal:block metal:fill-slot="body"
-             tal:define="batch view/batch">
+             tal:define="batch view/available_table/batch">
 
 <form method="post" tal:attributes="action request/URL" class="standalone">
 <h3 i18n:translate="" tal:content="view/title" />
 <fieldset tal:define="items view/getSelectedItems">
   <tal:if condition="items">
     <legend i18n:translate="" tal:content="view/current_title" />
-    <tal:block replace="structure view/renderSelectedTable" />
+    <tal:block replace="structure view/selected_table/render" />
     <div class="controls">
       <input type="submit" class="button-ok" name="REMOVE_ITEMS"
         value="Remove"
@@ -27,18 +27,14 @@
 <fieldset>
   <legend i18n:translate="" tal:content="view/available_title" />
   <div class="item_list">
-    <tal:if tal:condition="batch">
-      <tal:if condition="view/filter_widget/active">
-        <tal:block define="extra_url view/filter_widget/extra_url">
-          <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
-        </tal:block>
-      </tal:if>
-      <tal:if condition="not:view/filter_widget/active">
-        <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
-      </tal:if>
+    <tal:if tal:condition="batch"
+            tal:define="batch_name string:add_item">
+      <tal:block define="extra_url string:${view/available_table/filter_widget/extra_url}${view/available_table/extra_url}">
+        <div metal:use-macro="view/@@batch_macros/multi-batch-navigation"/>
+      </tal:block>
     </tal:if>
-    <tal:block replace="structure view/filter_widget/render" />
-    <tal:block replace="structure view/renderAvailableTable" />
+    <tal:block replace="structure view/available_table/filter_widget/render" />
+    <tal:block replace="structure view/available_table/render" />
     <div class="controls">
       <input type="submit" class="button-ok" name="ADD_ITEMS"
              value="Add" tal:condition="batch"

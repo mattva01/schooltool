@@ -72,4 +72,9 @@
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory="schooltool.skin.table.FilterWidget" />
 
+  <zope:adapter
+      for="schooltool.term.interfaces.ITermContainer
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory="schooltool.skin.table.SchoolToolTableFormatter " />
+
 </configure>

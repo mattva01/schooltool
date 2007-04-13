@@ -50,7 +50,6 @@ class Dashboard(manager.ViewletManagerBase):
                 html = {'title':self.viewlets[index].title,
                         'content':self.viewlets[index].render()}
             except Exception, e:
-                import pdb; pdb.set_trace()
                 html = {'title':self.viewlets[index].title,
                         'error':"An %s error occurred: %s" %
                         (e.__class__.__name__, str(e))}

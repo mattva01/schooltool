@@ -2,7 +2,7 @@ import unittest
 
 from zope.testing import doctest
 from zope.app.testing import setup
-from zope.app.component.hooks import getSite, setSite
+from zope.app.component.hooks import getSite
 
 
 def doctest_utilityRegistration():
@@ -14,17 +14,13 @@ def doctest_utilityRegistration():
       >>> from zope.app.intid.interfaces import IIntIds
       >>> setup = UtilitySetUp(IntIds, IIntIds)
 
-    We'll pass through None as the event, as it's not in use,
-    and the site::
-
+      >>> from schooltool.app.interfaces import CatalogSetUpEvent
       >>> site = getSite()
-      >>> setup(site, None)
-      >>> setSite(site)
+      >>> event = CatalogSetUpEvent(site)
 
-    Note that we have to restore the site - the setup functionality
-    gets rid of the site using setSite() afterwards as this disrupts
-    other schooltool setup code. This may be a bug somewhere in
-    schooltool the utility setup code works around.
+    We'll pass the event to the setup::
+
+      >>> setup(event)
 
     We now expect the utility to be available::
 
@@ -32,6 +28,7 @@ def doctest_utilityRegistration():
       >>> util = getUtility(IIntIds)
       >>> IIntIds.providedBy(util)
       True
+
     """
 
 
@@ -65,9 +62,11 @@ def doctest_multipleUtilityRegistration():
       >>> setup = MultiUtilitySetUp(
       ...    UtilitySpecification(IntIds, IIntIds),
       ...    UtilitySpecification(Catalog, ICatalog, setUp=catalogSetUp))
+
+      >>> from schooltool.app.interfaces import CatalogSetUpEvent
       >>> site = getSite()
-      >>> setup(site, None)
-      >>> setSite(site)
+      >>> event = CatalogSetUpEvent(site)
+      >>> setup(event)
 
     We'll check whether the utilities are available::
 
@@ -96,20 +95,20 @@ def doctest_utilityOverride():
 
     Let's register it::
 
+      >>> from schooltool.app.interfaces import CatalogSetUpEvent
       >>> from schooltool.utility import UtilitySetUp
       >>> setup = UtilitySetUp(MyUtility1, IMyUtility)
-      >>> from zope.app.component.hooks import getSite, setSite
+      >>> from zope.app.component.hooks import getSite
       >>> site = getSite()
-      >>> setup(site, None)
-      >>> setSite(site)
+      >>> event = CatalogSetUpEvent(site)
+      >>> setup(event)
 
     And let's register another one, overriding the first::
 
       >>> class MyUtility2(Persistent, Contained):
       ...   implements(IMyUtility)
       >>> setup2 = UtilitySetUp(MyUtility2, IMyUtility, override=True)
-      >>> setup2(site, None)
-      >>> setSite(site)
+      >>> setup2(event)
 
     Now we expect there to be only MyUtility2::
 
@@ -117,6 +116,7 @@ def doctest_utilityOverride():
       >>> util = getUtility(IMyUtility)
       >>> isinstance(util, MyUtility2)
       True
+
     """
 
 

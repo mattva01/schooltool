@@ -106,14 +106,6 @@
       layer="schooltool.skin.ISchoolToolLayer"
       />
 
-  <page
-      name="table_macros"
-      for="*"
-      permission="zope.View"
-      template="templates/table_macros.pt"
-      layer="schooltool.skin.ISchoolToolLayer"
-    />
-
   <icon
       name="zmi_icon"
       for="schooltool.app.interfaces.ISchoolToolApplication"

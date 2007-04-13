@@ -23,16 +23,14 @@ $Id$
 """
 from zope.security import checkPermission
 from zope.publisher.browser import BrowserView
-from zope.component import getUtility
 
 from schooltool import SchoolToolMessage as _
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin.containers import TableContainerView
 from schooltool.app.browser.app import BaseAddView, BaseEditView
 from schooltool.person.interfaces import IPerson
-from schooltool.resource.interfaces import IResource
 from schooltool.course.interfaces import ISection
-from schooltool.person.interfaces import IPersonFactory
+from schooltool.resource.interfaces import IResource
 
 from schooltool.group.interfaces import IGroupMember
 from schooltool.group.interfaces import IGroupContainer, IGroupContained
@@ -65,13 +63,6 @@ class GroupListView(RelationshipViewBase):
 
     def getAvailableItemsContainer(self):
         return ISchoolToolApplication(None)['groups']
-
-    def getAvailableItems(self):
-        """Return a list of groups the current user is not a member of."""
-        groups = self.getAvailableItemsContainer()
-        return [group for group in groups.values()
-                if checkPermission('schooltool.edit', group)
-                   and group not in self.context.groups]
 
     def getCollection(self):
         return self.context.groups
@@ -107,22 +98,8 @@ class MemberViewPersons(RelationshipViewBase):
     def getAvailableItemsContainer(self):
         return ISchoolToolApplication(None)['persons']
 
-    def getAvailableItems(self):
-        """Return a list of all possible members."""
-        container = self.getAvailableItemsContainer()
-        return [m for m in container.values()
-                if m not in self.getCollection()]
-
     def getCollection(self):
         return self.context.members
-
-    def columnsForAvailable(self):
-        return getUtility(IPersonFactory).columns()
-
-    columnsForSelected = columnsForAvailable
-
-    def sortOn(self):
-        return getUtility(IPersonFactory).sortOn()
 
 
 class GroupAddView(BaseAddView):

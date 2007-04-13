@@ -55,10 +55,10 @@
 
   </configure>
 
-  <!-- install intids and catalog -->
+  <!-- install catalog -->
 
   <subscriber
-      for="schooltool.app.interfaces.ISchoolToolApplication zope.app.container.interfaces.IObjectAddedEvent"
+      for="schooltool.app.interfaces.ICatalogSetUpEvent"
       handler=".utility.catalogSetUpSubscriber"
       />
 

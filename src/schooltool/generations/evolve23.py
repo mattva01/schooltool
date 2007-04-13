@@ -17,34 +17,30 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Upgrade SchoolTool to generation 17.
+Upgrade SchoolTool to generation 23.
 
-Install catalog and reindex persons.
+Install catalog for persons and reindex them.
 
-$Id: evolve17.py 6212 2006-06-08 13:01:04Z vidas $
+$Id$
 """
-
 from zope.app.generations.utility import findObjectsProviding
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.catalog.interfaces import ICatalog
 from zope.app.catalog.catalog import Catalog
 from zope.app.component.hooks import setSite
 from zope.app.intid import addIntIdSubscriber
-from zope.app.catalog.text import TextIndex
-from zope.app.catalog.field import FieldIndex
-from zope.app.intid.interfaces import IIntIds
-from zope.app.intid import IntIds
+
+from zc.catalog.catalogindex import ValueIndex
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.utility.utility import setUpUtilities
 from schooltool.utility.utility import UtilitySpecification
-from schooltool.demographics.interfaces import ISearch
+from schooltool.person.interfaces import IPerson
 
 
 def catalogSetUp(catalog):
-    catalog['fulltext'] = TextIndex('fulltext', ISearch)
-    catalog['parentName'] = TextIndex('parentName', ISearch)
-    catalog['studentId'] = FieldIndex('studentId', ISearch)
+    catalog['__name__'] = ValueIndex('__name__', IPerson)
+    catalog['title'] = ValueIndex('title', IPerson)
 
 
 def evolve(context):
@@ -52,11 +48,9 @@ def evolve(context):
     for app in findObjectsProviding(root, ISchoolToolApplication):
         # install the utilities
         setSite(app)
-        setUpUtilities(app, [UtilitySpecification(IntIds, IIntIds),
-                             UtilitySpecification(Catalog, ICatalog,
-                                                  'demographics_catalog',
+        setUpUtilities(app, [UtilitySpecification(Catalog, ICatalog,
+                                                  'schooltool.person',
                                                   setUp=catalogSetUp)])
         # catalog all persons
         for person in app['persons'].values():
-            person.nameinfo.last_name = 'Last name unknown'
             addIntIdSubscriber(person, None)

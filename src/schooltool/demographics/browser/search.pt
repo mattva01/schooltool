@@ -1,7 +1,7 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <body>
 <metal:nothing metal:fill-slot="content-header" />
-<metal:block metal:fill-slot="body" tal:define="batch view/batch">
+<metal:block metal:fill-slot="body" tal:define="batch view/table/batch">
 
   <p i18n:translate="">Search for persons here. Note that in fulltext
   fields you can use wildcard characters such as *. For example, to search for everyone with John
@@ -19,12 +19,26 @@
     </div>
   </form>
 
-  <form method="post"
-        tal:attributes="action string:${context/@@absolute_url}/delete.html">
-    <metal:block use-macro="view/@@table_macros/table" />
+  <tal:if tal:condition="batch">
+    <tal:block define="extra_url string:${view/table/extra_url}${view/extraUrl}">
+      <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+    </tal:block>
+  </tal:if>
+  <form method="post" tal:attributes="action string:${context/@@absolute_url}">
     <tal:if condition="batch">
-      <input tal:condition="view/canModify" type="submit" class="button-cancel" value="Delete"
-             i18n:attributes="value delete-button;" />
+      <div class="count">
+        <span i18n:translate="">Showing</span>
+        <span tal:content="python:len(batch)"/>
+        <span i18n:translate="">of</span>
+        <span tal:content="python:len(batch.list)"/>
+        <span i18n:translate="">items</span>
+      </div>
+        <tal:block replace="structure view/table/render" />
+        <div class="controls" tal:condition="view/canModify">
+          <input type="submit" class="button-cancel" value="Delete"
+                 name="DELETE"
+                 i18n:attributes="value delete-button;" />
+        </div>
     </tal:if>
   </form>
 

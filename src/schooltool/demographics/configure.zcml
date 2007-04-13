@@ -24,8 +24,33 @@
   </class>
 
   <subscriber
-    for="schooltool.person.interfaces.IPerson zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+    for="schooltool.person.interfaces.IPerson
+         zope.lifecycleevent.interfaces.IObjectModifiedEvent"
     handler=".person.personModifiedSubscriber"
+   />
+
+  <subscriber
+    for="schooltool.demographics.interfaces.IDemographics
+         zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+    handler=".person.personDemographicsModifiedSubscriber"
+   />
+
+  <subscriber
+    for="schooltool.demographics.interfaces.INameInfo
+         zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+    handler=".person.personDemographicsModifiedSubscriber"
+   />
+
+  <subscriber
+    for="schooltool.demographics.interfaces.ISchoolData
+         zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+    handler=".person.personDemographicsModifiedSubscriber"
+   />
+
+  <subscriber
+    for="schooltool.demographics.interfaces.IContactInfo
+         zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+    handler=".person.personDemographicsModifiedSubscriber"
    />
 
   <class class=".person.NameInfo">

@@ -20,84 +20,28 @@
 
 $Id$
 """
-import locale
+import urllib
 
 from zope.interface import implements
+from zope.interface import directlyProvides
 from zope.i18n.interfaces.locales import ICollator
-from zope.publisher.browser import BrowserPage
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zc.table import table
 from zc.table import column
 from zc.table.interfaces import ISortableColumn
 from zc.table.column import GetterColumn
 from zope.app import zapi
+from zope.component import queryMultiAdapter
+from zope.security.proxy import removeSecurityProxy
+from zope.app.dependable.interfaces import IDependable
+from zope.app.catalog.interfaces import ICatalog
+from zope.component import getUtility
+from zope.app.intid.interfaces import IIntIds
 
 from schooltool.batching import Batch
 from schooltool.skin.interfaces import IFilterWidget
-from schooltool.attendance.attendance import getRequestFromInteraction
-
-
-class TablePage(BrowserPage):
-    """Base class to easily created table-driven views.
-
-    Has support for batching and sorting.
-
-    Subclass and define columns() and values() to make this work for
-    your own data. columns() must return a list of zc.table column
-    objects and values() must return an iterable of objects in the
-    table.
-    """
-
-    __call__ = ViewPageTemplateFile('templates/table.pt')
-
-    def __init__(self, context, request):
-        super(TablePage, self).__init__(context, request)
-        self.batch_start = int(request.form.get('batch_start', 0))
-        self.batch_size = int(request.form.get('batch_size', 10))
-        self._cached_values = None
-
-    def table(self):
-        formatter = table.StandaloneFullFormatter(
-            self.context, self.request, self.cached_values(),
-            columns=self.columns(),
-            batch_start=self.batch_start, batch_size=self.batch_size,
-            sort_on=self.sortOn())
-        # set CSS class for the zc.table generated tables, to differentiate it
-        # from other tables.
-        formatter.cssClasses['table'] = 'data'
-        return formatter()
-
-    def batch(self):
-        # XXX note that the schooltool.batching system is *only* used to
-        # provide enough information for the batch navigation macros. We
-        # actually use the zc.table system for the actual batching
-        # bit
-        return Batch(self.cached_values(), self.batch_start, self.batch_size)
-
-    def cached_values(self):
-        if self._cached_values is None:
-            self._cached_values = self.values()
-        return self._cached_values
-
-    def values(self):
-        raise NotImplementedError
-
-    def columns(self):
-        raise NotImplementedError
-
-    def extraUrl(self):
-        return self.sortOptions()
-
-    def sortOptions(self):
-        sort_on = self.request.form.get('sort_on', None)
-        if not sort_on:
-            return ''
-        l = ['sort_on:list=%s' % o for o in sort_on]
-        return '&' + '&'.join(l)
-
-    def sortOn(self):
-        """ Default sort on. """
-        return ()
+from schooltool.skin.interfaces import ITableFormatter
+from schooltool.skin.interfaces import IIndexedColumn
 
 
 class FilterWidget(object):
@@ -136,6 +80,25 @@ class FilterWidget(object):
         return ''
 
 
+class IndexedFilterWidget(FilterWidget):
+
+    def filter(self, list):
+        catalog = ICatalog(self.context)
+        index = catalog['title']
+        if 'SEARCH' in self.request and 'CLEAR_SEARCH' not in self.request:
+            searchstr = self.request['SEARCH'].lower()
+            results = []
+            for item in list:
+                title = index.documents_to_values[item['id']]
+                if searchstr in title.lower():
+                    results.append(item)
+        else:
+            self.request.form['SEARCH'] = ''
+            results = list
+
+        return results
+
+
 class CheckboxColumn(column.Column):
     """A columns with a checkbox
 
@@ -143,7 +106,7 @@ class CheckboxColumn(column.Column):
     argument and __name__ of the item being displayed.
     """
 
-    def __init__(self, prefix, name, title):
+    def __init__(self, prefix, name=None, title=None):
         super(CheckboxColumn, self).__init__(name=name, title=title)
         self.prefix = prefix
 
@@ -152,48 +115,46 @@ class CheckboxColumn(column.Column):
         return '<input type="checkbox" name="%s" id="%s" />' % (id, id)
 
 
-class LabelColumn(object):
-    """Decorator for zc.table columns that adds a label tag for them."""
-
-    implements(ISortableColumn)
-
-    def __init__(self, wrapped, prefix):
-        self._wrapped = wrapped
-        self._prefix = prefix
-
-    def renderCell(self, item, formatter):
-        if self._prefix:
-            prefix = self._prefix + "."
-        else:
-            prefix = self._prefix
-        content = self._wrapped.renderCell(item, formatter)
+def label_cell_formatter_factory(prefix=""):
+    if prefix:
+        prefix = prefix + "."
+    def label_cell_formatter(value, item, formatter):
         return '<label for="%s%s">%s</label>' % (prefix,
-                                                  item.__name__,
-                                                  content)
-
-    def __getattr__(self, name):
-        return getattr(self._wrapped, name)
+                                                 item.__name__,
+                                                 value)
+    return label_cell_formatter
 
 
-class URLColumn(object):
-    """Decorator for zc.table columns that adds an A tag for them.
+class DependableCheckboxColumn(CheckboxColumn):
+    """A column that displays a checkbox that is disabled if item has dependables.
 
-    The link will be the absolute URL of the item.
+    The name and id of the checkbox are composed of the prefix keyword
+    argument and __name__ of the item being displayed.
     """
 
-    implements(ISortableColumn)
-
-    def __init__(self, wrapped, request):
-        self._wrapped = wrapped
-        self.request = request
-
     def renderCell(self, item, formatter):
-        content = self._wrapped.renderCell(item, formatter)
-        url = zapi.absoluteURL(item, self.request)
-        return '<a href="%s">%s</a>' % (url, content)
+        id = "%s.%s" % (self.prefix, item.__name__)
 
-    def __getattr__(self, name):
-        return getattr(self._wrapped, name)
+        if self.hasDependents(item):
+            return '<input type="checkbox" name="%s" id="%s" disabled="disabled" />' % (id, id)
+        else:
+            return '<input type="checkbox" name="%s" id="%s" />' % (id, id)
+
+    def hasDependents(self, item):
+        # We cannot adapt security-proxied objects to IDependable.  Unwrapping
+        # is safe since we do not modify anything, and the information whether
+        # an object can be deleted or not is not classified.
+        unwrapped_context = removeSecurityProxy(item)
+        dependable = IDependable(unwrapped_context, None)
+        if dependable is None:
+            return False
+        else:
+            return bool(dependable.dependents())
+
+
+def url_cell_formatter(value, item, formatter):
+    url = zapi.absoluteURL(item, formatter.request)
+    return '<a href="%s">%s</a>' % (url, value)
 
 
 class LocaleAwareGetterColumn(GetterColumn):
@@ -202,7 +163,219 @@ class LocaleAwareGetterColumn(GetterColumn):
     implements(ISortableColumn)
 
     def getSortKey(self, item, formatter):
-        request = getRequestFromInteraction()
-        collater = ICollator(request.locale)
+        collator = ICollator(formatter.request.locale)
         s = self.getter(item, formatter)
-        return s and collater.key(s)
+        return s and collator.key(s)
+
+
+class IndexedGetterColumn(GetterColumn):
+    implements(IIndexedColumn, ISortableColumn)
+
+    def __init__(self, **kwargs):
+        self.index = kwargs.pop('index')
+        super(IndexedGetterColumn, self).__init__(**kwargs)
+
+    def renderCell(self, item, formatter):
+        item = item['context'][item['key']]
+        value = self.getter(item, formatter)
+        return self.cell_formatter(value, item, formatter)
+
+    def getSortKey(self, item, formatter):
+        id = item['id']
+        index = item['catalog'][self.index]
+        return index.documents_to_values[id]
+
+
+class IndexedLocaleAwareGetterColumn(IndexedGetterColumn):
+
+    _cached_collator = None
+
+    def getSortKey(self, item, formatter):
+        if not self._cached_collator:
+            self._cached_collator = ICollator(formatter.request.locale)
+        s = super(IndexedLocaleAwareGetterColumn, self).getSortKey(item, formatter)
+        return s and self._cached_collator.key(s)
+
+
+class SchoolToolTableFormatter(object):
+    implements(ITableFormatter)
+
+    filter_widget = None
+    batch = None
+
+    def __init__(self, context, request):
+        self.context, self.request = context, request
+
+    def columns(self):
+        title = GetterColumn(name='title',
+                             title=u"Title",
+                             getter=lambda i, f: i.title,
+                             subsort=True)
+        directlyProvides(title, ISortableColumn)
+        return [title]
+
+    def items(self):
+        return self.context.values()
+
+    def ommit(self, items, ommited_items):
+        ommited_items = set(ommited_items)
+        return [item for item in items
+                if item not in ommited_items]
+
+    def filter(self, items):
+        # if there is no filter widget, we just return all the items
+        if self.filter_widget:
+            return self.filter_widget.filter(items)
+        else:
+            return items
+
+    def sortOn(self):
+        return (("title", False),)
+
+    def setUp(self, items=None, ommit=[], filter=None, columns=None,
+              columns_before=[], columns_after=[], sort_on=None, prefix="",
+              formatters=[], table_formatter=table.FormFullFormatter,
+              batch_size=10):
+
+        self.filter_widget = queryMultiAdapter((self.context, self.request),
+                                               IFilterWidget)
+
+        self._table_formatter = table_formatter
+
+        if not columns:
+            columns = self.columns()
+
+        if formatters:
+            for formatter, column in zip(formatters, columns):
+                column.cell_formatter = formatter
+
+        self._columns = columns_before[:] + columns[:] + columns_after[:]
+
+        if items is None:
+            items = self.items()
+
+        if not filter:
+            filter = self.filter
+
+        self._items = filter(self.ommit(items, ommit))
+
+        self._prefix = prefix
+
+        if batch_size == 0:
+            batch_size = len(list(self._items))
+
+        if prefix:
+            prefix = "." + prefix
+
+        self.batch_start = int(self.request.get('batch_start' + prefix, 0))
+        self.batch_size = int(self.request.get('batch_size' + prefix, batch_size))
+        self.batch = Batch(self._items, self.batch_start, self.batch_size)
+
+        self._sort_on = sort_on or self.sortOn()
+
+    def extra_url(self):
+        extra = ""
+        for key, value in self.request.form.items():
+            if key.endswith("sort_on"):
+                values = [urllib.quote(token) for token in value]
+                extra += "&%s:tokens=%s" % (key, " ".join(values))
+        return extra
+
+    def render(self):
+        formatter = self._table_formatter(
+            self.context, self.request, self._items,
+            columns=self._columns,
+            batch_start=self.batch_start, batch_size=self.batch_size,
+            sort_on=self._sort_on,
+            prefix=self._prefix)
+        formatter.cssClasses['table'] = 'data'
+        return formatter()
+
+
+class IndexedTableFormatter(SchoolToolTableFormatter):
+
+    def columns(self):
+        return [IndexedGetterColumn(name='title',
+                                    title=u"Title",
+                                    getter=lambda i, f: i.title,
+                                    cell_formatter=url_cell_formatter,
+                                    index='title')]
+
+    def items(self):
+        """Return a list of index dicts for all the items in the context container"""
+        catalog = ICatalog(self.context)
+        index = catalog['__name__']
+
+        results = []
+        for id, value in index.documents_to_values.items():
+            results.append({
+                    'context': self.context,
+                    'id': id,
+                    'catalog': catalog,
+                    'key': value})
+        return results
+
+
+    def ommit(self, items, ommited_items):
+        ommited_items = self.indexItems(ommited_items)
+        ommited_ids = set([item['id'] for item in ommited_items])
+        return [item for item in items
+                if item['id'] not in ommited_ids]
+
+
+    def indexItems(self, items):
+        """Convert a list of objects to a list of index dicts"""
+        int_ids = getUtility(IIntIds)
+        catalog = ICatalog(self.context)
+        results = []
+        for item in items:
+            results.append({
+                    'context': self.context,
+                    'id': int_ids.getId(item),
+                    'catalog': catalog,
+                    'key': item.__name__})
+        return results
+
+    def wrapColumn(self, column):
+        """Wrap a normal column to work with index dicts"""
+        original_renderCell = column.renderCell
+        def unindexingRenderCell(item, formatter):
+            item = item['context'][item['key']]
+            return original_renderCell(item, formatter)
+        column.renderCell = unindexingRenderCell
+
+        if ISortableColumn.providedBy(column):
+            original_getSortKey = column.getSortKey
+            def unindexingGetSortKey(item, formatter):
+                item = item['context'][item['key']]
+                return original_getSortKey(item, formatter)
+            column.getSortKey = unindexingGetSortKey
+
+        return column
+
+    def wrapColumns(self, columns):
+        """Wrap all not indexed columns to work with index dicts"""
+        wrapped_columns = []
+        for column in columns:
+            if IIndexedColumn.providedBy(column):
+                wrapped_columns.append(column)
+            else:
+                wrapped_columns.append(self.wrapColumn(column))
+        return wrapped_columns
+
+    def setUp(self, **kwargs):
+        items = kwargs.pop('items', None)
+        columns = kwargs.pop('columns', None)
+        columns_before = kwargs.pop('columns_before', [])
+        columns_after = kwargs.pop('columns_after', [])
+
+        if items is not None:
+            items = self.indexItems(items)
+        if columns is None:
+            columns = self.columns()
+
+        super(IndexedTableFormatter, self).setUp(items=items,
+                columns=self.wrapColumns(columns),
+                columns_before=self.wrapColumns(columns_before),
+                columns_after=self.wrapColumns(columns_after),
+                **kwargs)

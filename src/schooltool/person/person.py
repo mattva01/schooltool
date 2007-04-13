@@ -26,12 +26,15 @@ import sha
 from persistent import Persistent
 
 from zope.interface import implements
-from zope import schema
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container import btree
 from zope.app.container.contained import Contained
-from zope.app.container.interfaces import IObjectAddedEvent
 from zope.component import adapts
+from zope.app.catalog.interfaces import ICatalog
+from zope.app.catalog.catalog import Catalog
+from zope.component import getUtility
+
+from zc.catalog.catalogindex import ValueIndex
 
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
@@ -46,6 +49,9 @@ from schooltool.securitypolicy.crowds import ConfigurableCrowd
 from schooltool.person.interfaces import IPersonPreferences
 from schooltool.person.interfaces import IPasswordWriter
 from schooltool.securitypolicy.crowds import OwnerCrowd
+from schooltool.utility.utility import UtilitySetUp
+
+PERSON_CATALOG_KEY = 'schooltool.person'
 
 
 class PersonContainer(btree.BTreeContainer):
@@ -193,3 +199,16 @@ class PasswordWriterCrowd(ConfigurableCrowd):
         """Return the value of the related setting (True or False)."""
         return (ConfigurableCrowd.contains(self, principal) and
                 OwnerCrowd(self.context.person).contains(principal))
+
+
+def catalogSetUp(catalog):
+    catalog['__name__'] = ValueIndex('__name__', IPerson)
+    catalog['title'] = ValueIndex('title', IPerson)
+
+
+catalogSetUpSubscriber = UtilitySetUp(
+    Catalog, ICatalog, PERSON_CATALOG_KEY, setUp=catalogSetUp)
+
+
+def getPersonContainerCatalog(container):
+    return getUtility(ICatalog, PERSON_CATALOG_KEY)

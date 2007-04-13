@@ -20,9 +20,11 @@ from pytz import utc
 from datetime import datetime
 from persistent import Persistent
 
+from zope.lifecycleevent import ObjectModifiedEvent
 from zope.interface import implements
 from zope import schema
 from zope.location import locate, ILocation
+from zope.event import notify
 
 import interfaces
 from schooltool.person.person import Person as PersonBase
@@ -114,6 +116,11 @@ def initializeSchemaAttributes(iface, obj, suppress=None):
 
 def personModifiedSubscriber(person, event):
     person.modified = now()
+
+
+def personDemographicsModifiedSubscriber(demographics, event):
+    # notify the owner of the demographics that we were modified
+    notify(ObjectModifiedEvent(demographics.__parent__))
 
 
 def now():

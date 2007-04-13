@@ -67,7 +67,7 @@
       permission="schooltool.view" />
   <allow
       interface="schooltool.course.interfaces.ICourse"
-      crowds="administration authenticated leaders"
+      crowds="administration leaders"
       permission="schooltool.edit" />
 
   <!-- Grant read access to person's data to his instructors -->

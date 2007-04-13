@@ -51,24 +51,6 @@ def doctest_PersonContainerView():
         >>> personContainer['frog'] = Person('frog', 'Frog Man')
         >>> personContainer['toad'] = Person('toad', 'Taodsworth')
 
-    Provide a filter widget for PersonContainer:
-
-        >>> from zope.component import provideAdapter
-        >>> from schooltool.skin.interfaces import IFilterWidget
-        >>> from zope.interface import implements
-        >>> class FilterWidget(object):
-        ...     implements(IFilterWidget)
-        ...     def __init__(self, context, request):
-        ...         self.request = request
-        ...     def filter(self, list):
-        ...         return list
-
-        >>> from schooltool.person.interfaces import IPersonContainer
-        >>> from zope.publisher.interfaces.browser import IBrowserRequest
-        >>> provideAdapter(FilterWidget, adapts=[IPersonContainer,
-        ...                                      IBrowserRequest],
-        ...                              provides=IFilterWidget)
-
         >>> request = TestRequest()
         >>> view = PersonContainerView(personContainer, request)
 
@@ -488,20 +470,61 @@ def doctest_PersonCSVImporter():
 def doctest_PersonFilterWidget():
     """Doctest for PersonFilterWidget.
 
+    For this test we will need a catalog with an index for person
+    titles:
+
+        >>> from zope.app.catalog.interfaces import ICatalog
+        >>> class IndexStub(object):
+        ...     documents_to_values = {}
+        >>> index = IndexStub()
+
+        >>> class CatalogStub(dict):
+        ...     def __init__(self):
+        ...         self['title'] = index
+        >>> catalog = CatalogStub()
+
+   Some persons:
+
+        >>> class PersonStub(object):
+        ...     def __init__(self, title, groups):
+        ...         self.title = title
+        ...         self.__name__ = title
+        ...         for group in groups:
+        ...             group.add(self)
+        ...     def __repr__(self):
+        ...         return '<ItemStub %s>' % self.title
+
+   Some groups:
+
+        >>> class GroupStub(object):
+        ...     def __init__(self, title):
+        ...         self.title = title
+        ...         self.members = []
+        ...     def add(self, member):
+        ...         self.members.append(member)
+        >>> a = GroupStub('a')
+        >>> b = GroupStub('b')
+        >>> c = GroupStub('c')
+
+   Container with some persons in it:
+
+        >>> class ContainerStub(dict):
+        ...     def __init__(self):
+        ...         persons = [('alpha', [a]),
+        ...                    ('beta', [b, c]),
+        ...                    ('lambda', [b])]
+        ...         for id, (title, groups) in enumerate(persons):
+        ...             self[title] = PersonStub(title, groups)
+        ...             index.documents_to_values[id] = title
+        ...     def __conform__(self, iface):
+        ...         if iface == ICatalog:
+        ...             return catalog
+
     Let's create the PersonFilterWidget:
 
         >>> from zope.publisher.browser import TestRequest
         >>> from schooltool.person.browser.person import PersonFilterWidget
-        >>> class PersonStub(object):
-        ...     def __init__(self, title, groups):
-        ...         self.title = title
-        ...         self.groups = groups
-        ...     def __repr__(self):
-        ...         return '<ItemStub %s>' % self.title
-        >>> container = [PersonStub(title, groups)
-        ...              for title, groups in [('alpha', ['a']),
-        ...                                    ('beta', ['b', 'c']),
-        ...                                    ('lambda', ['d', 'b'])]]
+        >>> container = ContainerStub()
         >>> request = TestRequest()
         >>> widget = PersonFilterWidget(container, request)
 
@@ -540,36 +563,40 @@ def doctest_PersonFilterWidget():
         ...     implements(ISchoolToolApplication)
         ...     adapts(Interface)
         ...     def __init__(self, context):
-        ...         self['groups'] = {'a': 'a', 'b': 'b', 'c': 'c'}
+        ...         self['groups'] = {'a': a, 'b': b, 'c': c}
         >>> from zope.component import provideAdapter
         >>> provideAdapter(StubApplication)
 
+        >>> items = [{'id': 0, 'key': 'alpha'},
+        ...          {'id': 1, 'key': 'beta'},
+        ...          {'id': 2, 'key': 'lambda'}]
+
         >>> request.form = {'SEARCH_TITLE': 'lamb'}
-        >>> widget.filter(widget.context)
-        [<ItemStub lambda>]
+        >>> widget.filter(items)
+        [{'id': 2, 'key': 'lambda'}]
 
         >>> request.form = {'SEARCH_GROUP': 'b'}
-        >>> widget.filter(widget.context)
-        [<ItemStub beta>, <ItemStub lambda>]
+        >>> widget.filter(items)
+        [{'id': 1, 'key': 'beta'}, {'id': 2, 'key': 'lambda'}]
 
         >>> request.form = {'SEARCH_GROUP': 'b',
         ...                 'SEARCH_TITLE': 'bet'}
-        >>> widget.filter(widget.context)
-        [<ItemStub beta>]
+        >>> widget.filter(items)
+        [{'id': 1, 'key': 'beta'}]
 
    The search is case insensitive:
 
         >>> request.form = {'SEARCH_TITLE': 'AlphA'}
-        >>> widget.filter(widget.context)
-        [<ItemStub alpha>]
+        >>> widget.filter(items)
+        [{'id': 0, 'key': 'alpha'}]
 
     If clear search button is clicked, the form attribute is cleared,
     and all items are displayed:
 
         >>> request.form['CLEAR_SEARCH'] = 'Yes'
 
-        >>> widget.filter(widget.context)
-        [<ItemStub alpha>, <ItemStub beta>, <ItemStub lambda>]
+        >>> widget.filter(items)
+        [{'id': 0, 'key': 'alpha'}, {'id': 1, 'key': 'beta'}, {'id': 2, 'key': 'lambda'}]
         >>> request.form['SEARCH_TITLE']
         ''
 

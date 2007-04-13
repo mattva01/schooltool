@@ -45,6 +45,7 @@ from zope.security.management import checkPermission
 from zope.viewlet.viewlet import ViewletBase
 from zope.component import queryAdapter
 from zope.component import adapts
+from zope.app.catalog.interfaces import ICatalog
 
 from schooltool import SchoolToolMessage as _
 from schooltool.skin.form import BasicForm
@@ -55,7 +56,8 @@ from schooltool.person.interfaces import IPersonPreferences
 from schooltool.person.interfaces import IPersonContainer, IPersonContained
 from schooltool.widget.password import PasswordConfirmationWidget
 from schooltool.traverser.traverser import AdapterTraverserPlugin
-from schooltool.skin.table import FilterWidget
+from schooltool.skin.table import IndexedFilterWidget
+from schooltool.skin.table import IndexedTableFormatter
 from schooltool.skin.containers import TableContainerView
 from schooltool.securitypolicy.crowds import Crowd
 from schooltool.securitypolicy.interfaces import ICrowd
@@ -200,7 +202,7 @@ class PasswordEditMenuItem(ViewletBase):
             return super(PasswordEditMenuItem, self).render()
 
 
-class PersonFilterWidget(FilterWidget):
+class PersonFilterWidget(IndexedFilterWidget):
     """A filter widget for persons.
 
     Filters the list of available persons by title or groups they belong to.
@@ -217,28 +219,32 @@ class PersonFilterWidget(FilterWidget):
                                'title': "%s (%s)" % (group.title, len(group.members))})
         return groups
 
-    def filter(self, list):
+    def filter(self, items):
         if 'CLEAR_SEARCH' in self.request:
             for parameter in self.parameters:
                 self.request.form[parameter] = ''
-            return list
-
-        results = list
-
-        if 'SEARCH_TITLE' in self.request:
-            searchstr = self.request['SEARCH_TITLE'].lower()
-            results = [item for item in results
-                       if searchstr in item.title.lower()]
+            return items
 
         if 'SEARCH_GROUP' in self.request:
             group = ISchoolToolApplication(None)['groups'].get(self.request['SEARCH_GROUP'])
-            if not group:
-                return results
+            if group:
+                keys = set([person.__name__ for person in group.members])
+                items = [item for item in items
+                         if item['key'] in keys]
 
-            results = [item for item in results
-                       if group in item.groups]
+        catalog = ICatalog(self.context)
+        index = catalog['title']
 
-        return results
+        if 'SEARCH_TITLE' in self.request:
+            searchstr = self.request['SEARCH_TITLE'].lower()
+            results = []
+            for item in items:
+                title = index.documents_to_values[item['id']]
+                if searchstr in title.lower():
+                    results.append(item)
+            items = results
+
+        return items
 
     def active(self):
         for parameter in self.parameters:
@@ -252,6 +258,17 @@ class PersonFilterWidget(FilterWidget):
             if parameter in self.request:
                 url += '&%s=%s' % (parameter, self.request.get(parameter))
         return url
+
+
+class PersonTableFormatter(IndexedTableFormatter):
+    """Person container specific table formatter."""
+
+    def columns(self):
+        return getUtility(IPersonFactory).columns()
+
+    def sortOn(self):
+        return getUtility(IPersonFactory).sortOn()
+
 
 class IPersonAddForm(Interface):
     """Schema for person adding form."""
@@ -418,18 +435,9 @@ class PersonContainerView(TableContainerView):
 
     __used_for__ = IPersonContainer
 
-    from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
     delete_template = ViewPageTemplateFile("person_container_delete.pt")
 
     index_title = _("Person index")
-
-    def columns(self):
-        factory = getUtility(IPersonFactory)
-        return factory.columns()
-
-    def sortOn(self):
-        factory = getUtility(IPersonFactory)
-        return factory.sortOn()
 
     def isDeletingHimself(self):
         person = IPerson(self.request.principal, None)

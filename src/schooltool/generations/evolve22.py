@@ -17,34 +17,32 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Upgrade SchoolTool to generation 17.
+Upgrade SchoolTool to generation 22.
 
-Install catalog and reindex persons.
+Install catalog  for groups and reindex them.
 
-$Id: evolve17.py 6212 2006-06-08 13:01:04Z vidas $
+$Id$
 """
-
 from zope.app.generations.utility import findObjectsProviding
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.catalog.interfaces import ICatalog
 from zope.app.catalog.catalog import Catalog
 from zope.app.component.hooks import setSite
 from zope.app.intid import addIntIdSubscriber
-from zope.app.catalog.text import TextIndex
-from zope.app.catalog.field import FieldIndex
 from zope.app.intid.interfaces import IIntIds
 from zope.app.intid import IntIds
+
+from zc.catalog.catalogindex import ValueIndex
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.utility.utility import setUpUtilities
 from schooltool.utility.utility import UtilitySpecification
-from schooltool.demographics.interfaces import ISearch
+from schooltool.group.interfaces import IGroup
 
 
 def catalogSetUp(catalog):
-    catalog['fulltext'] = TextIndex('fulltext', ISearch)
-    catalog['parentName'] = TextIndex('parentName', ISearch)
-    catalog['studentId'] = FieldIndex('studentId', ISearch)
+    catalog['__name__'] = ValueIndex('__name__', IGroup)
+    catalog['title'] = ValueIndex('title', IGroup)
 
 
 def evolve(context):
@@ -54,9 +52,8 @@ def evolve(context):
         setSite(app)
         setUpUtilities(app, [UtilitySpecification(IntIds, IIntIds),
                              UtilitySpecification(Catalog, ICatalog,
-                                                  'demographics_catalog',
+                                                  'schooltool.group',
                                                   setUp=catalogSetUp)])
-        # catalog all persons
-        for person in app['persons'].values():
-            person.nameinfo.last_name = 'Last name unknown'
-            addIntIdSubscriber(person, None)
+        # catalog all groups
+        for group in app['groups'].values():
+            addIntIdSubscriber(group, None)

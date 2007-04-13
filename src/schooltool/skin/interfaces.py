@@ -21,9 +21,11 @@ Interfaces for SchoolTool calendar browser views.
 
 $Id$
 """
-
-from zope.schema import Object, Datetime, TextLine, Bool, URI
+from zope.schema import Object, TextLine, Bool, URI
 from zope.interface import Interface, Attribute
+
+from schooltool.batching.interfaces import IBatch
+
 
 class IBreadcrumbs(Interface):
     """An object providing breadcrumbs.
@@ -69,3 +71,34 @@ class IFilterWidget(Interface):
     def extra_url():
         """String that should be appended to the url to preserve query parameters."""
 
+
+class ITableFormatter(Interface):
+
+    batch = Object(schema=IBatch)
+
+    filter_widget = Object(schema=IFilterWidget)
+
+    def setUp(items=None, filter=None, columns=None, columns_before=None,
+              columns_after=None, sort_on=None, prefix="", formatters=None,
+              table_formatter=None):
+        """Populate the table with items, set up the variables for table formatter.
+
+        After calling this method you have batch and filter_widget set
+        up as well, so you can render them in the view as well.
+        """
+
+    def render():
+        """Render the table for display in a view."""
+
+
+class IIndexedColumn(Interface):
+    """A column that operates on index dicts instead of objects.
+
+    Index dicts are composed this way:
+
+    context - the container containing items
+    id      - the int id of the object
+    catalog - the catalog that is storing relevant indexes
+    key     - the key by which the object can be retrieved from the context
+
+    """

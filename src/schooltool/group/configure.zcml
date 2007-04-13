@@ -45,6 +45,17 @@
       factory=".group.GroupInit"
       name="schooltool.group" />
 
+  <!-- Catalog set up -->
+  <subscriber
+      for="schooltool.app.interfaces.ICatalogSetUpEvent"
+      handler=".group.catalogSetUpSubscriber"
+      />
+
+  <adapter
+      for=".interfaces.IGroupContainer"
+      factory=".group.getGroupContainerCatalog"
+      provides="zope.app.catalog.interfaces.ICatalog" />
+
   <include package=".browser" />
   <include package=".rest" />
 

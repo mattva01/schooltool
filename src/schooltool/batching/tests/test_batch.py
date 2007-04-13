@@ -142,11 +142,47 @@ def doctest_Batch():
       >>> batch1 != batch2
       False
 
-    We can also loop through the batches using the batches() method
+    We can also loop through the urls for all the batches using the
+    batch_urls() method:
 
       >>> batch = Batch(testData, 0, 3)
-      >>> [[item for item in b] for b in batch.batches()]
-      [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12], [13, 14]]
+      >>> from zope.testing.doctestunit import pprint
+      >>> pprint(batch.batch_urls("base_url.html", "&extra_info=True"))
+      [{'class': 'current',
+        'href': 'base_url.html?batch_start=0&batch_size=3&extra_info=True',
+        'num': 1},
+       {'class': None,
+        'href': 'base_url.html?batch_start=3&batch_size=3&extra_info=True',
+        'num': 2},
+       {'class': None,
+        'href': 'base_url.html?batch_start=6&batch_size=3&extra_info=True',
+        'num': 3},
+       {'class': None,
+        'href': 'base_url.html?batch_start=9&batch_size=3&extra_info=True',
+        'num': 4},
+       {'class': None,
+        'href': 'base_url.html?batch_start=12&batch_size=3&extra_info=True',
+        'num': 5}]
+
+    If we pass the name of the batch we get it built into the url:
+
+      >>> pprint(batch.batch_urls("base_url.html", "&extra_info=True", "b1"))
+      [{'class': 'current',
+        'href': 'base_url.html?batch_start.b1=0&batch_size.b1=3&extra_info=True',
+        'num': 1},
+       {'class': None,
+        'href': 'base_url.html?batch_start.b1=3&batch_size.b1=3&extra_info=True',
+        'num': 2},
+       {'class': None,
+        'href': 'base_url.html?batch_start.b1=6&batch_size.b1=3&extra_info=True',
+        'num': 3},
+       {'class': None,
+        'href': 'base_url.html?batch_start.b1=9&batch_size.b1=3&extra_info=True',
+        'num': 4},
+       {'class': None,
+        'href': 'base_url.html?batch_start.b1=12&batch_size.b1=3&extra_info=True',
+        'num': 5}]
+
 
     By default, items are presented in the same order they are passed to Batch
 
@@ -157,14 +193,14 @@ def doctest_Batch():
       >>> data = [Foo('aaa'), Foo('zzz'), Foo('ccc'), Foo('mmm')]
       >>> batch = Batch(data, 0, 2)
 
-      >>> [[item.title for item in b] for b in batch.batches()]
-      [['aaa', 'zzz'], ['ccc', 'mmm']]
+      >>> [item.title for item in batch.list]
+      ['aaa', 'zzz', 'ccc', 'mmm']
 
     If we pass an attribute name to the constructor we can sort our batch
 
       >>> batch = Batch(data, 0, 2, sort_by='title')
-      >>> [[item.title for item in b] for b in batch.batches()]
-      [['aaa', 'ccc'], ['mmm', 'zzz']]
+      >>> [item.title for item in batch.list]
+      ['aaa', 'ccc', 'mmm', 'zzz']
 
     We can also sort dicts
 
@@ -174,15 +210,15 @@ def doctest_Batch():
       [{'n': 3}, {'n': 4}, {'n': 5}, {'n': 0}, {'n': 1}, {'n': 2}]
 
       >>> batch = Batch(dict_data, 0, 2, sort_by='n')
-      >>> [[item for item in b] for b in batch.batches()]
-      [[{'n': 0}, {'n': 1}], [{'n': 2}, {'n': 3}], [{'n': 4}, {'n': 5}]]
+      >>> [item for item in batch.list]
+      [{'n': 0}, {'n': 1}, {'n': 2}, {'n': 3}, {'n': 4}, {'n': 5}]
 
 
     We can also take an iterator
 
       >>> batch = Batch(iter([i for i in range(10)]), 0, 5)
-      >>> [[item for item in b] for b in batch.batches()]
-      [[0, 1, 2, 3, 4], [5, 6, 7, 8, 9]]
+      >>> [item for item in batch.list]
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
     """
 
