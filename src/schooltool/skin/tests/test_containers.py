@@ -192,7 +192,7 @@ def doctest_TableContainerView():
     approrpiate table formatter for the container:
 
         >>> from zope.component import provideAdapter
-        >>> from schooltool.skin.interfaces import ITableFormatter
+        >>> from schooltool.table.interfaces import ITableFormatter
         >>> from zope.interface import implements
         >>> class TableFormatter(object):
         ...     implements(ITableFormatter)

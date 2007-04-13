@@ -38,10 +38,10 @@ from zope.app.catalog.interfaces import ICatalog
 from zope.component import getUtility
 from zope.app.intid.interfaces import IIntIds
 
-from schooltool.batching import Batch
-from schooltool.skin.interfaces import IFilterWidget
-from schooltool.skin.interfaces import ITableFormatter
-from schooltool.skin.interfaces import IIndexedColumn
+from schooltool.table.batch import Batch
+from schooltool.table.interfaces import IFilterWidget
+from schooltool.table.interfaces import ITableFormatter
+from schooltool.table.interfaces import IIndexedColumn
 
 
 class FilterWidget(object):
@@ -259,35 +259,32 @@ class SchoolToolTableFormatter(object):
 
         self._items = filter(self.ommit(items, ommit))
 
-        self._prefix = prefix
+        self.prefix = prefix
 
         if batch_size == 0:
             batch_size = len(list(self._items))
 
-        if prefix:
-            prefix = "." + prefix
-
-        self.batch_start = int(self.request.get('batch_start' + prefix, 0))
-        self.batch_size = int(self.request.get('batch_size' + prefix, batch_size))
-        self.batch = Batch(self._items, self.batch_start, self.batch_size)
+        self.batch = Batch(self, batch_size=batch_size)
 
         self._sort_on = sort_on or self.sortOn()
 
     def extra_url(self):
-        extra = ""
+        extra_url = ""
+        if self.filter_widget:
+            extra_url += self.filter_widget.extra_url()
         for key, value in self.request.form.items():
             if key.endswith("sort_on"):
                 values = [urllib.quote(token) for token in value]
-                extra += "&%s:tokens=%s" % (key, " ".join(values))
-        return extra
+                extra_url += "&%s:tokens=%s" % (key, " ".join(values))
+        return extra_url
 
     def render(self):
         formatter = self._table_formatter(
             self.context, self.request, self._items,
             columns=self._columns,
-            batch_start=self.batch_start, batch_size=self.batch_size,
+            batch_start=self.batch.start, batch_size=self.batch.size,
             sort_on=self._sort_on,
-            prefix=self._prefix)
+            prefix=self.prefix)
         formatter.cssClasses['table'] = 'data'
         return formatter()
 

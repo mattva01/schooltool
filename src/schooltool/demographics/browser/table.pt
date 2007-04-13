@@ -13,18 +13,14 @@
 <metal:block metal:fill-slot="body"
              tal:define="batch view/table/batch;
                          canModify view/canModify">
-  <tal:if tal:condition="batch">
-    <tal:block define="extra_url string:${view/table/extra_url}">
-      <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
-    </tal:block>
-  </tal:if>
+  <tal:block replace="batch/render" />
   <form method="post" tal:attributes="action string:${context/@@absolute_url}">
     <tal:if condition="batch">
       <div class="count">
         <span i18n:translate="">Showing</span>
-        <span tal:content="python:len(batch)"/>
+        <span tal:content="batch/length"/>
         <span i18n:translate="">of</span>
-        <span tal:content="python:len(batch.list)"/>
+        <span tal:content="batch/full_size"/>
         <span i18n:translate="">items</span>
       </div>
         <tal:block replace="structure view/table/render" />

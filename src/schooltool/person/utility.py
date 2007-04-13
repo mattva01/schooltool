@@ -21,8 +21,8 @@ from zc.table.interfaces import ISortableColumn
 from zope.interface import directlyProvides
 
 from schooltool.person.person import Person
-from schooltool.skin.table import url_cell_formatter
-from schooltool.skin.table import IndexedLocaleAwareGetterColumn
+from schooltool.table.table import url_cell_formatter
+from schooltool.table.table import IndexedLocaleAwareGetterColumn
 
 
 class PersonFactoryUtility(object):

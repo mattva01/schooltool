@@ -46,9 +46,9 @@ from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IAsset
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonFactory
-from schooltool.skin.table import CheckboxColumn
-from schooltool.skin.table import label_cell_formatter_factory
-from schooltool.skin.interfaces import ITableFormatter
+from schooltool.table.table import CheckboxColumn
+from schooltool.table.table import label_cell_formatter_factory
+from schooltool.table.interfaces import ITableFormatter
 
 
 class ApplicationView(BrowserView):

@@ -54,8 +54,8 @@ from schooltool.person.interfaces import IPersonPreferences
 from schooltool.person.interfaces import IPersonContainer, IPersonContained
 from schooltool.widget.password import PasswordConfirmationWidget
 from schooltool.traverser.traverser import AdapterTraverserPlugin
-from schooltool.skin.table import IndexedFilterWidget
-from schooltool.skin.table import IndexedTableFormatter
+from schooltool.table.table import IndexedFilterWidget
+from schooltool.table.table import IndexedTableFormatter
 from schooltool.skin.containers import TableContainerView
 
 

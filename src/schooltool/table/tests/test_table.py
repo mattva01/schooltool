@@ -34,7 +34,7 @@ def doctest_FilterWidget():
     Let's create the FilterWidget:
 
         >>> from zope.publisher.browser import TestRequest
-        >>> from schooltool.skin.table import FilterWidget
+        >>> from schooltool.table.table import FilterWidget
         >>> class ItemStub(object):
         ...     def __init__(self, title):
         ...         self.title = title
@@ -126,7 +126,7 @@ def doctest_IndexedFilterWidget():
     Let's create the IndexedFilterWidget:
 
         >>> from zope.publisher.browser import TestRequest
-        >>> from schooltool.skin.table import IndexedFilterWidget
+        >>> from schooltool.table.table import IndexedFilterWidget
 
         >>> container = ContainerStub()
         >>> request = TestRequest()
@@ -171,7 +171,7 @@ def doctest_CheckboxColumn():
 
     Let's try creating a CheckboxColumn first:
 
-        >>> from schooltool.skin.table import CheckboxColumn
+        >>> from schooltool.table.table import CheckboxColumn
         >>> column = CheckboxColumn("prefix", "name", "title")
         >>> column.title
         'title'
@@ -193,7 +193,7 @@ def doctest_label_cell_formatter_factory():
 
     Let's create a label formatter:
 
-        >>> from schooltool.skin.table import label_cell_formatter_factory
+        >>> from schooltool.table.table import label_cell_formatter_factory
         >>> formatter = label_cell_formatter_factory()
 
     And render it:
@@ -244,7 +244,7 @@ def doctest_LocaleAwareGetterColumn():
     Now when we try to get the sort key instead of getting the
     attribute of the object, we will get a collator key:
 
-        >>> from schooltool.skin.table import LocaleAwareGetterColumn
+        >>> from schooltool.table.table import LocaleAwareGetterColumn
         >>> lac = LocaleAwareGetterColumn()
         >>> item = "Item"
         >>> lac.getSortKey(item, formatter)
@@ -259,7 +259,7 @@ def doctest_IndexedGetterColumn():
     Indexed column requires an additional keyword argument (index)
     for it's constructor:
 
-        >>> from schooltool.skin.table import IndexedGetterColumn
+        >>> from schooltool.table.table import IndexedGetterColumn
         >>> column = IndexedGetterColumn(index='title', getter=lambda i, f: i.title)
         >>> column.index
         'title'
@@ -333,7 +333,7 @@ def doctest_IndexedLocaleAwareGetterColumn():
     Indexed column requires an additional keyword argument (index)
     for it's constructor:
 
-        >>> from schooltool.skin.table import IndexedLocaleAwareGetterColumn
+        >>> from schooltool.table.table import IndexedLocaleAwareGetterColumn
         >>> column = IndexedLocaleAwareGetterColumn(index='title',
         ...                                         getter=lambda i, f: i.title)
         >>> column.index
@@ -358,7 +358,7 @@ def doctest_IndexedLocaleAwareGetterColumn():
     The sort key for this column is not the title of the object, but
     rather a collator key derived from the title:
 
-        >>> from schooltool.skin.table import LocaleAwareGetterColumn
+        >>> from schooltool.table.table import LocaleAwareGetterColumn
         >>> column.getSortKey(item, formatter)
         'CollatorKey(Peter)'
 
@@ -387,13 +387,13 @@ def doctest_SchoolToolTableFormatter():
     formatter, though usualy it is an adapter on the container and
     request, but for the testing purposes we will create it directly:
 
-        >>> from schooltool.skin.table import SchoolToolTableFormatter
+        >>> from schooltool.table.table import SchoolToolTableFormatter
         >>> container = {}
         >>> from zope.publisher.browser import TestRequest
         >>> request = TestRequest()
         >>> formatter = SchoolToolTableFormatter(container, request)
 
-        >>> from schooltool.skin.interfaces import ITableFormatter
+        >>> from schooltool.table.interfaces import ITableFormatter
         >>> from zope.interface.verify import verifyObject
         >>> verifyObject(ITableFormatter, formatter)
         True
@@ -471,7 +471,7 @@ def doctest_SchoolToolTableFormatter():
 
     Lets provide a filter widget:
 
-        >>> from schooltool.skin.interfaces import IFilterWidget
+        >>> from schooltool.table.interfaces import IFilterWidget
         >>> from zope.interface import implements
         >>> class FilterWidget(object):
         ...     implements(IFilterWidget)
@@ -482,6 +482,8 @@ def doctest_SchoolToolTableFormatter():
         ...             return [item for item in list
         ...                     if self.request['SEARCH'] in item.title.lower()]
         ...         return list
+        ...     def extra_url(self):
+        ...         return "&search_info"
 
         >>> from zope.interface import Interface
         >>> from zope.publisher.interfaces.browser import IBrowserRequest
@@ -618,7 +620,7 @@ def doctest_SchoolToolTableFormatter():
 
     Now let's add a checkbox before the Title column:
 
-        >>> from schooltool.skin.table import CheckboxColumn
+        >>> from schooltool.table.table import CheckboxColumn
         >>> checkbox = CheckboxColumn("delete", "delete", "Delete")
         >>> formatter.setUp(columns_before=[checkbox], columns_after=[email],
         ...                 items=[frog, john])
@@ -653,7 +655,7 @@ def doctest_SchoolToolTableFormatter():
 
     We can pass custom formatters for the default columns if we want:
 
-        >>> from schooltool.skin.table import label_cell_formatter_factory
+        >>> from schooltool.table.table import label_cell_formatter_factory
         >>> label_formatter = label_cell_formatter_factory("delete")
         >>> formatter.setUp(columns_before=[checkbox], columns_after=[email],
         ...                 items=[frog, john], formatters=[label_formatter])
@@ -729,11 +731,11 @@ def doctest_IndexedTableFormatter_columns():
     The default column for an indexed table formatter is an indexed
     getter column set to display the title of objects:
 
-        >>> from schooltool.skin.table import IndexedTableFormatter
+        >>> from schooltool.table.table import IndexedTableFormatter
         >>> formatter = IndexedTableFormatter(None, None)
         >>> columns = formatter.columns()
         >>> columns
-        [<schooltool.skin.table.IndexedGetterColumn object at ...>]
+        [<schooltool.table.table.IndexedGetterColumn object at ...>]
 
         >>> columns[0].title
         u'Title'
@@ -771,7 +773,7 @@ def doctest_IndexedTableFormatter_items():
     The IndexedTableFormatter relies on catalog to list all the items
     so if there are no indexed items we get an empty list:
 
-        >>> from schooltool.skin.table import IndexedTableFormatter
+        >>> from schooltool.table.table import IndexedTableFormatter
         >>> formatter = IndexedTableFormatter(ContainerStub(), None)
         >>> formatter.items()
         []
@@ -811,7 +813,7 @@ def doctest_IndexedTableFormatter_indexItems():
         ...             return '<Catalog>'
         ...     def __repr__(self):
         ...         return '<Container>'
-        >>> from schooltool.skin.table import IndexedTableFormatter
+        >>> from schooltool.table.table import IndexedTableFormatter
         >>> formatter = IndexedTableFormatter(ContainerStub(), None)
 
     The formatter has a function that converts a list of objects into
@@ -846,7 +848,7 @@ def doctest_IndexedTableFormatter_indexItems():
 def doctest_IndexedTableFormatter_wrapColumn():
     """Tests for IndexedTableFormatter.wrapColumn.
 
-        >>> from schooltool.skin.table import IndexedTableFormatter
+        >>> from schooltool.table.table import IndexedTableFormatter
         >>> formatter = IndexedTableFormatter(None, None)
 
         >>> from zc.table.column import GetterColumn
@@ -895,7 +897,7 @@ def doctest_IndexedTableFormatter_wrapColumn():
 def doctest_IndexedTableFormatter_wrapColumns():
     """Tests for IndexedTableFormatter.wrapColumns.
 
-        >>> from schooltool.skin.table import IndexedTableFormatter
+        >>> from schooltool.table.table import IndexedTableFormatter
         >>> formatter = IndexedTableFormatter(None, None)
         >>> formatter.wrapColumn = lambda column: "<Wrapped %s>" % column
 
@@ -909,7 +911,7 @@ def doctest_IndexedTableFormatter_wrapColumns():
     Now let's pass it some real column stubs:
 
         >>> from zope.interface import implements
-        >>> from schooltool.skin.interfaces import IIndexedColumn
+        >>> from schooltool.table.interfaces import IIndexedColumn
         >>> class IndexedColumnStub(object):
         ...     implements(IIndexedColumn)
         ...     def __repr__(self):
@@ -932,7 +934,7 @@ def doctest_IndexedTableFormatter_wrapColumns():
 def doctest_IndexedTableFormatter_setUp():
     """Tests for IndexedTableFormatter.setUp.
 
-        >>> from schooltool.skin.table import IndexedTableFormatter
+        >>> from schooltool.table.table import IndexedTableFormatter
         >>> from zope.publisher.browser import TestRequest
         >>> formatter = IndexedTableFormatter(None, TestRequest())
 

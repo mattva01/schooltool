@@ -11,21 +11,18 @@
     tal:content="view/index_title" i18n:translate="">Contents</h1>
 
 <metal:block metal:fill-slot="body"
-             tal:define="batch view/table/batch;
-                         canModify view/canModify">
-  <tal:if tal:condition="batch">
-    <tal:block define="extra_url string:${view/table/filter_widget/extra_url}${view/table/extra_url}">
-      <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
-    </tal:block>
+             tal:define="canModify view/canModify">
+  <tal:if tal:condition="view/table/batch">
+    <tal:block replace="structure view/table/batch/render" />
   </tal:if>
   <form method="post" tal:attributes="action string:${context/@@absolute_url}">
     <tal:block tal:replace="structure view/table/filter_widget/render" />
-    <tal:if condition="batch">
+    <tal:if condition="view/table/batch">
       <div class="count">
         <span i18n:translate="">Showing</span>
-        <span tal:content="python:len(batch)"/>
+        <span tal:content="view/table/batch/length"/>
         <span i18n:translate="">of</span>
-        <span tal:content="python:len(batch.list)"/>
+        <span tal:content="view/table/batch/full_size"/>
         <span i18n:translate="">items</span>
       </div>
         <tal:block replace="structure view/table/render" />
@@ -36,7 +33,7 @@
         </div>
     </tal:if>
   </form>
-  <p tal:condition="not:batch" i18n:translate="">There are none.</p>
+  <p tal:condition="not:view/table/batch" i18n:translate="">There are none.</p>
 </metal:block>
 </body>
 </html>

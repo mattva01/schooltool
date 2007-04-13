@@ -62,8 +62,8 @@ def doctest_GroupListView():
 
     And we need a table formatter to display our groups:
 
-        >>> from schooltool.skin.table import SchoolToolTableFormatter
-        >>> from schooltool.skin.interfaces import ITableFormatter
+        >>> from schooltool.table.table import SchoolToolTableFormatter
+        >>> from schooltool.table.interfaces import ITableFormatter
         >>> from zope.publisher.interfaces.browser import IBrowserRequest
         >>> provideAdapter(SchoolToolTableFormatter, (None, IBrowserRequest), ITableFormatter)
 
@@ -165,8 +165,8 @@ def doctest_MemberListView():
 
     And we need a table formatter to display our persons:
 
-        >>> from schooltool.skin.table import SchoolToolTableFormatter
-        >>> from schooltool.skin.interfaces import ITableFormatter
+        >>> from schooltool.table.table import SchoolToolTableFormatter
+        >>> from schooltool.table.interfaces import ITableFormatter
         >>> from zope.publisher.interfaces.browser import IBrowserRequest
         >>> provideAdapter(SchoolToolTableFormatter, (None, IBrowserRequest), ITableFormatter)
 

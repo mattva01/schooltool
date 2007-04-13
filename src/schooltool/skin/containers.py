@@ -28,9 +28,9 @@ from zope.publisher.browser import BrowserView
 from zope.security.checker import canAccess
 
 from schooltool.batching.batch import Batch
-from schooltool.skin.table import DependableCheckboxColumn
-from schooltool.skin.table import url_cell_formatter
-from schooltool.skin.interfaces import ITableFormatter
+from schooltool.table.table import DependableCheckboxColumn
+from schooltool.table.table import url_cell_formatter
+from schooltool.table.interfaces import ITableFormatter
 
 
 class ContainerView(BrowserView):

@@ -134,11 +134,11 @@
   <zope:adapter
       for="schooltool.group.interfaces.IGroupContainer
            zope.publisher.interfaces.browser.IBrowserRequest"
-      factory="schooltool.skin.table.IndexedFilterWidget" />
+      factory="schooltool.table.table.IndexedFilterWidget" />
 
   <zope:adapter
       for="schooltool.group.interfaces.IGroupContainer
            zope.publisher.interfaces.browser.IBrowserRequest"
-      factory="schooltool.skin.table.IndexedTableFormatter " />
+      factory="schooltool.table.table.IndexedTableFormatter " />
 
 </configure>
