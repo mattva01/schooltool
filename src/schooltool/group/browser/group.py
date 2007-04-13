@@ -21,8 +21,10 @@ group views.
 
 $Id$
 """
-from zope.security import checkPermission
 from zope.publisher.browser import BrowserView
+from zope.component import getMultiAdapter
+
+from zc.table import table
 
 from schooltool import SchoolToolMessage as _
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -31,6 +33,7 @@ from schooltool.app.browser.app import BaseAddView, BaseEditView
 from schooltool.person.interfaces import IPerson
 from schooltool.course.interfaces import ISection
 from schooltool.resource.interfaces import IResource
+from schooltool.skin.interfaces import ITableFormatter
 
 from schooltool.group.interfaces import IGroupMember
 from schooltool.group.interfaces import IGroupContainer, IGroupContained
@@ -72,6 +75,14 @@ class GroupView(BrowserView):
     """A Group info view."""
 
     __used_for__ = IGroupContained
+
+    def renderPersonTable(self):
+        persons = ISchoolToolApplication(None)['persons']
+        formatter = getMultiAdapter((persons, self.request), ITableFormatter)
+        formatter.setUp(table_formatter=table.StandaloneFullFormatter,
+                        items=self.getPersons(),
+                        batch_size=0)
+        return formatter.render()
 
     def getPersons(self):
         return filter(IPerson.providedBy, self.context.members)
