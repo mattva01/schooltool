@@ -186,6 +186,14 @@ class IndexedGetterColumn(GetterColumn):
         return index.documents_to_values[id]
 
 
+class IndexedLocaleAwareGetterColumn(IndexedGetterColumn):
+
+    def getSortKey(self, item, formatter):
+        s = super(IndexedLocaleAwareGetterColumn, self).getSortKey(item, formatter)
+        collator = ICollator(formatter.request.locale)
+        return s and collator.key(s)
+
+
 class SchoolToolTableFormatter(object):
     implements(ITableFormatter)
 
@@ -332,6 +340,14 @@ class IndexedTableFormatter(SchoolToolTableFormatter):
             item = item['context'][item['key']]
             return original_renderCell(item, formatter)
         column.renderCell = unindexingRenderCell
+
+        if ISortableColumn.providedBy(column):
+            original_getSortKey = column.getSortKey
+            def unindexingGetSortKey(item, formatter):
+                item = item['context'][item['key']]
+                return original_getSortKey(item, formatter)
+            column.getSortKey = unindexingGetSortKey
+
         return column
 
     def wrapColumns(self, columns):

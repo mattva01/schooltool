@@ -217,10 +217,13 @@ def doctest_label_cell_formatter_factory():
 def doctest_LocaleAwareGetterColumn():
     """Tests for LocaleAwareGetterColumn.
 
-    Provide an interaction:
+    Create a formatter with a request:
 
         >>> from zope.publisher.browser import TestRequest
         >>> request = TestRequest()
+        >>> class FormatterStub(object):
+        ...     request = request
+        >>> formatter = FormatterStub()
 
     Register collation adapter:
 
@@ -238,13 +241,11 @@ def doctest_LocaleAwareGetterColumn():
         >>> from zope.component import provideAdapter
         >>> provideAdapter(CollatorAdapterStub)
 
-    Let's try creating a LocaleAwareGetterColumn first:
+    Now when we try to get the sort key instead of getting the
+    attribute of the object, we will get a collator key:
 
         >>> from schooltool.skin.table import LocaleAwareGetterColumn
         >>> lac = LocaleAwareGetterColumn()
-        >>> class FormatterStub(object):
-        ...     request = request
-        >>> formatter = FormatterStub()
         >>> item = "Item"
         >>> lac.getSortKey(item, formatter)
         'CollatorKey(Item)'
@@ -255,7 +256,7 @@ def doctest_LocaleAwareGetterColumn():
 def doctest_IndexedGetterColumn():
     """Tests for IndexedGetterColumn.
 
-    Indexed columnt requires an additional keyword argument (index)
+    Indexed column requires an additional keyword argument (index)
     for it's constructor:
 
         >>> from schooltool.skin.table import IndexedGetterColumn
@@ -298,6 +299,68 @@ def doctest_IndexedGetterColumn():
         >>> context['peter'] = PersonStub('Mr. Peter')
         >>> column.renderCell(item, None)
         u'Mr. Peter'
+
+    """
+
+
+def doctest_IndexedLocaleAwareGetterColumn():
+    """Tests for IndexedLocaleAwareGetterColumn.
+
+    Create a formatter with a request:
+
+        >>> from zope.publisher.browser import TestRequest
+        >>> request = TestRequest()
+        >>> class FormatterStub(object):
+        ...     request = request
+        >>> formatter = FormatterStub()
+
+    Register collation adapter:
+
+        >>> from zope.i18n.interfaces.locales import ICollator
+        >>> from zope.i18n.interfaces.locales import ILocale
+        >>> from zope.interface import implements
+        >>> from zope.component import adapts
+        >>> class CollatorAdapterStub(object):
+        ...     implements(ICollator)
+        ...     adapts(ILocale)
+        ...     def __init__(self, context):
+        ...         self.context = context
+        ...     def key(self, string):
+        ...         return "CollatorKey(%s)" % string
+        >>> from zope.component import provideAdapter
+        >>> provideAdapter(CollatorAdapterStub)
+
+    Indexed column requires an additional keyword argument (index)
+    for it's constructor:
+
+        >>> from schooltool.skin.table import IndexedLocaleAwareGetterColumn
+        >>> column = IndexedLocaleAwareGetterColumn(index='title',
+        ...                                         getter=lambda i, f: i.title)
+        >>> column.index
+        'title'
+
+    Items used by this column are not ordinary objects, but rather
+    index dicts:
+
+        >>> class IndexStub(object):
+        ...     def __init__(self):
+        ...         self.documents_to_values = {}
+        >>> index = IndexStub()
+        >>> index.documents_to_values[5] = 'Peter'
+
+        >>> context = {}
+        >>> catalog = {'title': index}
+        >>> item = {'id': 5,
+        ...         'context': context,
+        ...         'catalog': catalog,
+        ...         'key': 'peter'}
+
+    The sort key for this column is not the title of the object, but
+    rather a collator key derived from the title:
+
+        >>> from schooltool.skin.table import LocaleAwareGetterColumn
+        >>> column.getSortKey(item, formatter)
+        'CollatorKey(Peter)'
 
     """
 
@@ -810,6 +873,21 @@ def doctest_IndexedTableFormatter_wrapColumn():
         >>> column = formatter.wrapColumn(column)
         >>> column.renderCell(index_dict, None)
         u'Pete'
+
+    Columns that implement ISortableColumn will get their getSortKey
+    wrapped as well:
+
+        >>> from zc.table.interfaces import ISortableColumn
+        >>> from zope.interface import directlyProvides
+        >>> column = GetterColumn(getter=lambda i, f: i.title)
+        >>> directlyProvides(column, ISortableColumn)
+
+        >>> column.getSortKey(item, None)
+        'Pete'
+
+        >>> column = formatter.wrapColumn(column)
+        >>> column.getSortKey(index_dict, None)
+        'Pete'
 
     """
 

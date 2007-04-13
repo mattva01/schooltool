@@ -43,6 +43,7 @@ from zope.interface import implements
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.security.management import checkPermission
 from zope.viewlet.viewlet import ViewletBase
+from zope.app.catalog.interfaces import ICatalog
 
 from schooltool import SchoolToolMessage as _
 from schooltool.skin.form import BasicForm
@@ -53,8 +54,8 @@ from schooltool.person.interfaces import IPersonPreferences
 from schooltool.person.interfaces import IPersonContainer, IPersonContained
 from schooltool.widget.password import PasswordConfirmationWidget
 from schooltool.traverser.traverser import AdapterTraverserPlugin
-from schooltool.skin.table import FilterWidget
-from schooltool.skin.table import SchoolToolTableFormatter
+from schooltool.skin.table import IndexedFilterWidget
+from schooltool.skin.table import IndexedTableFormatter
 from schooltool.skin.containers import TableContainerView
 
 
@@ -197,7 +198,7 @@ class PasswordEditMenuItem(ViewletBase):
             return super(PasswordEditMenuItem, self).render()
 
 
-class PersonFilterWidget(FilterWidget):
+class PersonFilterWidget(IndexedFilterWidget):
     """A filter widget for persons.
 
     Filters the list of available persons by title or groups they belong to.
@@ -220,19 +221,26 @@ class PersonFilterWidget(FilterWidget):
                 self.request.form[parameter] = ''
             return items
 
-        results = items
-
         if 'SEARCH_GROUP' in self.request:
             group = ISchoolToolApplication(None)['groups'].get(self.request['SEARCH_GROUP'])
             if group:
-                results = list(group.members)
+                keys = set([person.__name__ for person in group.members])
+                items = [item for item in items
+                         if item['key'] in keys]
+
+        catalog = ICatalog(self.context)
+        index = catalog['title']
 
         if 'SEARCH_TITLE' in self.request:
             searchstr = self.request['SEARCH_TITLE'].lower()
-            results = [item for item in results
-                       if searchstr in item.title.lower()]
+            results = []
+            for item in items:
+                title = index.documents_to_values[item['id']]
+                if searchstr in title.lower():
+                    results.append(item)
+            items = results
 
-        return results
+        return items
 
     def active(self):
         for parameter in self.parameters:
@@ -248,7 +256,7 @@ class PersonFilterWidget(FilterWidget):
         return url
 
 
-class PersonTableFormatter(SchoolToolTableFormatter):
+class PersonTableFormatter(IndexedTableFormatter):
     """Person container specific table formatter."""
 
     def columns(self):

@@ -22,19 +22,19 @@ from zope.interface import directlyProvides
 
 from schooltool.person.person import Person
 from schooltool.skin.table import url_cell_formatter
-from schooltool.skin.table import LocaleAwareGetterColumn
+from schooltool.skin.table import IndexedLocaleAwareGetterColumn
 
 
 class PersonFactoryUtility(object):
 
     def columns(self):
-        title = LocaleAwareGetterColumn(
+        title = IndexedLocaleAwareGetterColumn(
+            index='title',
             name='title',
             title=u'Full Name',
             getter=lambda i, f: i.title,
             cell_formatter=url_cell_formatter,
             subsort=True)
-        directlyProvides(title, ISortableColumn)
         return [title]
 
     def sortOn(self):
