@@ -12,9 +12,7 @@
 
 <metal:block metal:fill-slot="body"
              tal:define="canModify view/canModify">
-  <tal:if tal:condition="view/table/batch">
-    <tal:block replace="structure view/table/batch/render" />
-  </tal:if>
+  <tal:block replace="structure view/table/batch/render" />
   <form method="post" tal:attributes="action string:${context/@@absolute_url}">
     <tal:block tal:replace="structure view/table/filter_widget/render" />
     <tal:if condition="view/table/batch">
