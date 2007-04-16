@@ -21,7 +21,7 @@ Views for SchoolTool attendance
 
 $Id$
 """
-
+import urllib
 import datetime
 import itertools
 import pytz
@@ -47,7 +47,7 @@ from zope.security import checkPermission
 from zope.i18n import translate
 
 from schooltool.common import collect
-from schooltool.batching.batch import Batch
+from schooltool.table.batch import IterableBatch
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.timetable.interfaces import ITimetableCalendarEvent
@@ -977,9 +977,13 @@ class AttendancePanelView(BrowserView, AttendanceInheritanceMixin):
             self.request.form['SEARCH'] = ''
         search_str = self.request.get('SEARCH', '')
         results = self.getItems(search_str)
-        start = int(self.request.get('batch_start', 0))
-        size = int(self.request.get('batch_size', 10))
-        self.batch = Batch(results, start, size, sort_by='title')
+
+        extra_url = ""
+        if search_str:
+            extra_url = "&SEARCH=%s" % urllib.quote(self.request['SEARCH'])
+
+        self.batch = IterableBatch(results, self.request, sort_by='title',
+                                   extra_url=extra_url)
         for record in self.batch:
             homeroom_attendance = IHomeroomAttendance(record['person'])
             n_hr, n_section = self.countAbsences(record['absences'],

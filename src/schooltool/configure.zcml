@@ -105,7 +105,6 @@
   <!-- *Core* sub-packages -->
 
   <include package=".skin" />
-  <include package=".batching" />
   <include package=".relationship" />
   <include package=".app" />
   <include package=".person" />

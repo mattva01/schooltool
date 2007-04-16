@@ -21,13 +21,15 @@ SchoolTool skin containers
 
 $Id$
 """
+import urllib
+
 from zope.app import zapi
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import queryMultiAdapter
 from zope.publisher.browser import BrowserView
 from zope.security.checker import canAccess
 
-from schooltool.batching.batch import Batch
+from schooltool.table.batch import IterableBatch
 from schooltool.table.table import DependableCheckboxColumn
 from schooltool.table.table import url_cell_formatter
 from schooltool.table.interfaces import ITableFormatter
@@ -48,13 +50,14 @@ class ContainerView(BrowserView):
             searchstr = self.request['SEARCH'].lower()
             results = [item for item in self.context.values()
                        if searchstr in item.title.lower()]
+            extra_url = "&SEARCH=%s" % urllib.quote(self.request['SEARCH'])
         else:
             self.request.form['SEARCH'] = ''
             results = self.context.values()
+            extra_url = ""
 
-        start = int(self.request.get('batch_start', 0))
-        size = int(self.request.get('batch_size', 10))
-        self.batch = Batch(results, start, size, sort_by='title')
+        self.batch = IterableBatch(results, self.request, sort_by='title',
+                                   extra_url=extra_url)
 
     @property
     def canModify(self):

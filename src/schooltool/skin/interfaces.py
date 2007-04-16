@@ -24,8 +24,6 @@ $Id$
 from zope.schema import Object, TextLine, Bool, URI
 from zope.interface import Interface, Attribute
 
-from schooltool.batching.interfaces import IBatch
-
 
 class IBreadcrumbs(Interface):
     """An object providing breadcrumbs.

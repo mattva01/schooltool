@@ -107,3 +107,37 @@ class Batch(object):
             start += self.size
 
         return urls
+
+
+class IterableBatch(Batch):
+
+    def __init__(self, items, request, extra_url=None, batch_size=10,
+                 sort_by=None, name=None):
+        self.context = None
+        self.items = items
+        self.request = request
+
+        if name:
+            self.name = "." + name
+        else:
+            self.name = ""
+
+        def key(obj):
+            try:
+                return obj.get(sort_by)
+            except AttributeError:
+                return getattr(obj, sort_by)
+
+        item_list = sorted(items, key=key)
+        self.full_size = len(item_list)
+        self.extra_url = extra_url or ""
+        self.base_url = self.request.URL
+
+
+        self.start = int(self.request.get('batch_start' + self.name, 0))
+        self.size = int(self.request.get('batch_size' + self.name, batch_size))
+        self.list = item_list[self.start:self.start + self.size]
+        self.length = len(self.list)
+
+    def __iter__(self):
+        return iter(self.list)
