@@ -37,6 +37,7 @@ from zope.app.dependable.interfaces import IDependable
 from zope.app.catalog.interfaces import ICatalog
 from zope.component import getUtility
 from zope.app.intid.interfaces import IIntIds
+from zope.component import queryUtility
 
 from schooltool.table.batch import Batch
 from schooltool.table.interfaces import IFilterWidget
@@ -176,7 +177,7 @@ class IndexedGetterColumn(GetterColumn):
         super(IndexedGetterColumn, self).__init__(**kwargs)
 
     def renderCell(self, item, formatter):
-        item = item['context'][item['key']]
+        item = queryUtility(IIntIds).getObject(item['id'])
         value = self.getter(item, formatter)
         return self.cell_formatter(value, item, formatter)
 
@@ -301,24 +302,19 @@ class IndexedTableFormatter(SchoolToolTableFormatter):
     def items(self):
         """Return a list of index dicts for all the items in the context container"""
         catalog = ICatalog(self.context)
-        index = catalog['__name__']
-
+        index = catalog.values()[0]
         results = []
         for id, value in index.documents_to_values.items():
             results.append({
-                    'context': self.context,
                     'id': id,
-                    'catalog': catalog,
-                    'key': value})
+                    'catalog': catalog})
         return results
-
 
     def ommit(self, items, ommited_items):
         ommited_items = self.indexItems(ommited_items)
         ommited_ids = set([item['id'] for item in ommited_items])
         return [item for item in items
                 if item['id'] not in ommited_ids]
-
 
     def indexItems(self, items):
         """Convert a list of objects to a list of index dicts"""
@@ -327,24 +323,22 @@ class IndexedTableFormatter(SchoolToolTableFormatter):
         results = []
         for item in items:
             results.append({
-                    'context': self.context,
                     'id': int_ids.getId(item),
-                    'catalog': catalog,
-                    'key': item.__name__})
+                    'catalog': catalog})
         return results
 
     def wrapColumn(self, column):
         """Wrap a normal column to work with index dicts"""
         original_renderCell = column.renderCell
         def unindexingRenderCell(item, formatter):
-            item = item['context'][item['key']]
+            item = queryUtility(IIntIds).getObject(item['id'])
             return original_renderCell(item, formatter)
         column.renderCell = unindexingRenderCell
 
         if ISortableColumn.providedBy(column):
             original_getSortKey = column.getSortKey
             def unindexingGetSortKey(item, formatter):
-                item = item['context'][item['key']]
+                item = queryUtility(IIntIds).getObject(item['id'])
                 return original_getSortKey(item, formatter)
             column.getSortKey = unindexingGetSortKey
 

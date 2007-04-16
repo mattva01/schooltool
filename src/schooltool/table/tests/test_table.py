@@ -25,6 +25,10 @@ import unittest
 from zope.testing import doctest, doctestunit
 from zope.testing.doctestunit import pprint
 
+from zope.app.intid.interfaces import IIntIds
+from zope.component import provideUtility
+from zope.component import provideAdapter
+
 from schooltool.app.browser.testing import setUp, tearDown
 
 
@@ -238,7 +242,6 @@ def doctest_LocaleAwareGetterColumn():
         ...         self.context = context
         ...     def key(self, string):
         ...         return "CollatorKey(%s)" % string
-        >>> from zope.component import provideAdapter
         >>> provideAdapter(CollatorAdapterStub)
 
     Now when we try to get the sort key instead of getting the
@@ -267,18 +270,23 @@ def doctest_IndexedGetterColumn():
     Items used by this column are not ordinary objects, but rather
     index dicts:
 
+
         >>> class IndexStub(object):
         ...     def __init__(self):
         ...         self.documents_to_values = {}
         >>> index = IndexStub()
         >>> index.documents_to_values[5] = 'Peter'
 
-        >>> context = {}
+        >>> int_ids = {}
+        >>> class IntIdsStub(object):
+        ...     def getObject(self, id):
+        ...         return int_ids[id]
+        >>> from zope.component import provideUtility
+        >>> provideUtility(IntIdsStub(), IIntIds)
+
         >>> catalog = {'title': index}
         >>> item = {'id': 5,
-        ...         'context': context,
-        ...         'catalog': catalog,
-        ...         'key': 'peter'}
+        ...         'catalog': catalog}
 
     The key of the index is used when getting the sort key of the
     column, so the only object touched is the index in the catalog,
@@ -295,8 +303,7 @@ def doctest_IndexedGetterColumn():
         >>> class PersonStub(object):
         ...     def __init__(self, title):
         ...         self.title = title
-
-        >>> context['peter'] = PersonStub('Mr. Peter')
+        >>> int_ids[5] = PersonStub('Mr. Peter')
         >>> column.renderCell(item, None)
         u'Mr. Peter'
 
@@ -327,7 +334,6 @@ def doctest_IndexedLocaleAwareGetterColumn():
         ...         self.context = context
         ...     def key(self, string):
         ...         return "CollatorKey(%s)" % string
-        >>> from zope.component import provideAdapter
         >>> provideAdapter(CollatorAdapterStub)
 
     Indexed column requires an additional keyword argument (index)
@@ -351,9 +357,7 @@ def doctest_IndexedLocaleAwareGetterColumn():
         >>> context = {}
         >>> catalog = {'title': index}
         >>> item = {'id': 5,
-        ...         'context': context,
-        ...         'catalog': catalog,
-        ...         'key': 'peter'}
+        ...         'catalog': catalog}
 
     The sort key for this column is not the title of the object, but
     rather a collator key derived from the title:
@@ -370,7 +374,6 @@ def doctest_SchoolToolTableFormatter():
 
     First some set up so we could render actual tables:
 
-        >>> from zope.component import provideAdapter
         >>> from zope.interface import Interface
         >>> class ResourcePathStub(object):
         ...     def __init__(self, context):
@@ -788,17 +791,11 @@ def doctest_IndexedTableFormatter_items():
 
         >>> pprint(formatter.items())
         [{'catalog': <Catalog>,
-          'context': <Container>,
-          'id': 1,
-          'key': 'peter'},
+          'id': 1},
          {'catalog': <Catalog>,
-          'context': <Container>,
-          'id': 2,
-          'key': 'john'},
+          'id': 2},
          {'catalog': <Catalog>,
-          'context': <Container>,
-          'id': 3,
-          'key': 'ted'}]
+          'id': 3}]
 
     """
 
@@ -823,8 +820,6 @@ def doctest_IndexedTableFormatter_indexItems():
         >>> class IntIdsStub(object):
         ...     def getId(self, obj):
         ...         return obj.id
-        >>> from zope.app.intid.interfaces import IIntIds
-        >>> from zope.component import provideUtility
         >>> provideUtility(IntIdsStub(), IIntIds)
 
         >>> class ItemStub(object):
@@ -834,13 +829,9 @@ def doctest_IndexedTableFormatter_indexItems():
         >>> items = [ItemStub('pete', 1), ItemStub('john', 2)]
         >>> pprint(formatter.indexItems(items))
         [{'catalog': '<Catalog>',
-          'context': <Container>,
-          'id': 1,
-          'key': 'pete'},
+          'id': 1},
          {'catalog': '<Catalog>',
-          'context': <Container>,
-          'id': 2,
-          'key': 'john'}]
+          'id': 2}]
 
     """
 
@@ -869,9 +860,14 @@ def doctest_IndexedTableFormatter_wrapColumn():
     But as our indexed table formatter is manipulating index dicts, we
     must wrap normal columns to use them on our data:
 
-        >>> container = {'pete': item}
-        >>> key = 'pete'
-        >>> index_dict = {'context': container, 'key': key}
+        >>> int_ids = {}
+        >>> class IntIdsStub(object):
+        ...     def getObject(self, id):
+        ...         return int_ids[id]
+        >>> provideUtility(IntIdsStub(), IIntIds)
+
+        >>> int_ids[5] = item
+        >>> index_dict = {'id': 5}
         >>> column = formatter.wrapColumn(column)
         >>> column.renderCell(index_dict, None)
         u'Pete'
@@ -985,7 +981,6 @@ def test_suite():
                    | doctest.NORMALIZE_WHITESPACE)
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
-                                       globs={'pprint': doctestunit.pprint},
                                        optionflags=optionflags))
     return suite
 
