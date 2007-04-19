@@ -13,8 +13,6 @@
   <include package="schooltool.timetable" />
   <include package="schooltool.devmode" />
 
-  <include package="zope.testbrowser.ftests" file="ftesting.zcml" />
-
   <!-- Provide local overrides of standard configurations-->
   <includeOverrides package="schooltool.devmode" file="overrides.zcml" />
 

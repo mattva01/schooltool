@@ -7,8 +7,6 @@
   <include package="schooltool.term" />
   <include package="schooltool.timetable" />
 
-  <include package="zope.testbrowser.ftests" file="ftesting.zcml" />
-
   <include package="schooltool.batching.ftests" />
 
 </configure>
