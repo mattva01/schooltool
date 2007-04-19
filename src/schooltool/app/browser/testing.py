@@ -23,6 +23,7 @@ $Id$
 """
 import os.path
 import zope.component
+import transaction
 from zope.interface import implements, Interface
 from zope.app.testing import setup, ztapi
 from zope.app.form.interfaces import IInputWidget
@@ -220,5 +221,6 @@ def setUp(test=None):
 
 def tearDown(test=None):
     """Tear down the test fixture for schooltool.app.browser doctests."""
+    transaction.abort()
     setup.placefulTearDown()
 
