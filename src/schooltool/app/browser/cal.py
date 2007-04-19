@@ -27,7 +27,6 @@ import base64
 import calendar
 from datetime import datetime, date, time, timedelta
 from sets import Set
-from time import strptime
 
 import transaction
 from pytz import timezone, utc
@@ -74,7 +73,6 @@ from schooltool.app.browser import pdfcal
 from schooltool.app.browser.overlay import CalendarOverlayView
 from schooltool.app.browser.interfaces import ICalendarProvider
 from schooltool.app.browser.interfaces import IEventForDisplay
-from schooltool.app.cal import CalendarEvent
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
@@ -96,7 +94,6 @@ from schooltool.calendar.utils import week_start, prev_month, next_month
 from schooltool.course.interfaces import ISection
 from schooltool.person.interfaces import IPerson, IPersonPreferences
 from schooltool.person.interfaces import vocabulary
-from schooltool.resource.interfaces import IResource
 from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.term.term import getTermForDate
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -1254,10 +1251,6 @@ class DailyCalendarView(CalendarViewBase):
         return max(minheight,
                    self.snapToGrid(dtend) - self.snapToGrid(event.dtstart))
 
-    def isResourceCalendar(self):
-        """Return True if we are showing a calendar of some resource."""
-        return IResource.providedBy(self.context.__parent__)
-
     def getAllDayEvents(self):
         """Get a list of EventForDisplay objects for the all-day events at the
         cursors current position.
@@ -2223,10 +2216,8 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
             return self.updateForm()
         elif 'CANCEL' in self.request:
             self.update_status = ''
-            if 'fromResourceBooking' in self.request:
-                calURL = absoluteURL(self.context.__parent__, self.request)
-                nextURL = calURL+'/delete.html?event_id=%s&date=%s' % (self.context.unique_id,
-                                                                       start_date)
+            if 'cancel_url' in self.request:
+                nextURL = self.request['cancel_url']
                 self.request.response.redirect(nextURL)
             else:
                 self.request.response.redirect(self.nextURL())
@@ -2288,43 +2279,6 @@ class EventForBookingDisplay(object):
         self.unique_id = self.context.unique_id
 
 
-class CalendarEventBookOneResourceView(BrowserView):
-    """
-    A view to book a resource to an event
-    """
-    errors = ()
-    update_status = None
-
-    def __call__(self):
-        self.update_status = ''
-        sb = getSchoolToolApplication()
-        cal = ISchoolToolCalendar(IPerson(self.request.principal))
-        if self.request.has_key('event_id'):
-            event = cal.find(self.request['event_id'])
-        else:
-            start_date = self.request.get('start_date')
-            start_time = self.request.get('start_time')
-            title = self.request.get('title')
-            start_datetime = "%s %s" % (start_date, start_time)
-            start_datetime = datetime(*strptime(start_datetime,
-                                                "%Y-%m-%d %H:%M:%S")[0:6])
-            duration = timedelta(seconds=int(self.request.get('duration')))
-            event = CalendarEvent(dtstart = start_datetime,
-                                  duration = duration,
-                                  title = title)
-            cal.addEvent(event)
-
-        if event:
-            for res_id, resource in sb["resources"].items():
-                if res_id == self.request['resource_id']:
-                    event.bookResource(resource)
-        self.request.response.redirect(self.nextURL(event))
-
-    def nextURL(self, event):
-        """Return the URL to be displayed after the add operation."""
-        return "%s/edit.html?fromResourceBooking=True" % absoluteURL(event, self.request)
-
-
 class CalendarEventBookingView(CalendarEventView):
     """A view for booking resources."""
 
@@ -2359,7 +2313,7 @@ class CalendarEventBookingView(CalendarEventView):
         return bool(self.context.resources)
 
     def bookingStatus(self, item, formatter):
-        conflicts = self.getConflictingEvents(item)
+        conflicts = list(self.getConflictingEvents(item))
         status = {}
         for conflict in conflicts:
             if conflict.context.__parent__ and conflict.context.__parent__.__parent__:

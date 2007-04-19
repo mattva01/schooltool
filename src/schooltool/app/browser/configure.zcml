@@ -485,14 +485,6 @@
       />
 
   <page
-      for="schooltool.resource.interfaces.IBookingCalendar"
-      name="book_one_resource.html"
-      layer="schooltool.skin.ISchoolToolLayer"
-      class=".cal.CalendarEventBookOneResourceView"
-      permission="zope.View"
-      />
-
-  <page
       for="*"
       name="calendar_overlay"
       layer="schooltool.skin.ISchoolToolLayer"

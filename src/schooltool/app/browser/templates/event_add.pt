@@ -336,9 +336,9 @@
           <div metal:use-macro="context/@@form_macros/datepicker_widget" />
         </div>
       </div>
-      <input type="hidden" tal:condition="request/fromResourceBooking|nothing"
-             tal:attributes="value request/fromResourceBooking"
-             name="fromResourceBooking" />
+      <input type="hidden" tal:condition="request/cancel_url|nothing"
+             tal:attributes="value request/cancel_url"
+             name="cancel_url" />
     </fieldset>
     <div class="controls">
       <input type="submit" class="button-ok" name="UPDATE_SUBMIT"

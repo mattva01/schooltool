@@ -276,6 +276,15 @@
        template="templates/cal_yearly.pt"
        permission="schooltool.view"
        />
+
   </zope:configure>
+
+  <page
+      for="schooltool.resource.interfaces.IBookingCalendar"
+      name="book_one_resource.html"
+      layer="schooltool.skin.ISchoolToolLayer"
+      class=".booking.CalendarEventBookOneResourceView"
+      permission="zope.View"
+      />
 
 </configure>
