@@ -75,13 +75,14 @@ class IActionMenuManager(IViewletManager):
 
 
 class IMenuBarMenuManager(IViewletManager):
-    """Provides a viewlet hook for the entire menu bar.""" 
+    """Provides a viewlet hook for the entire menu bar."""
 
 
 class IActionMenuContext(Interface):
     """Schema for attributes required by ActionMenuViewletManager."""
 
     target = Object(Interface)
+
 
 class OrderedViewletManager(ViewletManagerBase):
     """Viewlet manager that orders viewlets by their 'order' attribute.
@@ -137,9 +138,6 @@ class MenuBarMenuViewletManager(OrderedViewletManager):
     """Viewlet manager for displaying the various menus at the top of a page."""
 
     implements(IMenuBarMenuManager)
-
-    def actualContext(self):
-        return self.context
 
 
 class ActionMenuViewletManager(OrderedViewletManager):
