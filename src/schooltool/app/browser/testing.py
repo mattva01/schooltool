@@ -218,6 +218,13 @@ def setUp(test=None):
         skin.ICSSManager,
         name=name)
 
+    name = 'schooltool.MenuBar'
+    zope.component.provideAdapter(
+        manager.ViewletManager(name, skin.skin.IMenuBarMenuManager),
+        (Interface, IDefaultBrowserLayer, IBrowserView),
+        skin.skin.IMenuBarMenuManager,
+        name=name)
+
 
 def tearDown(test=None):
     """Tear down the test fixture for schooltool.app.browser doctests."""

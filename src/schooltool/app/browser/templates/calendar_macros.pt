@@ -219,8 +219,7 @@
           <a href="" title=""
              tal:attributes="title event/title;
                              style string:color: ${event/color2};
-                             href event/context/@@absolute_url"
-             tal:on-error="event/title">
+                             href event/context/@@absolute_url">
             <strong tal:content="
                 python: event.dtstart.astimezone(
                             view.timezone).strftime('%H:%M')" />

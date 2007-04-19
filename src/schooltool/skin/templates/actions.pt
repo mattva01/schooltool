@@ -17,8 +17,7 @@
         replace="structure viewlet/render" />
   </ul>
   <tal:block tal:repeat="target view/subItems">
-    <div tal:replace="structure provider:schooltool.Actions"
-         tal:on-error="nothing" />
+    <div tal:replace="structure provider:schooltool.Actions" />
   </tal:block>
 </div>
 </tal:block>

@@ -6,9 +6,7 @@
   <table id="dropdowncontainer">
   <tr>
     <td tal:content="structure provider:schooltool.NavigationMenu" />
-    <tal:block define="target python:hasattr(view, 'actualContext')
-		       and view.actualContext() or context">
-
+    <tal:block define="target view/__parent__/actualContext|nocall:context">
       <td tal:content="structure provider:schooltool.ActionsMenu" />
     </tal:block>
     <td tal:repeat="viewlet options/viewlets"
