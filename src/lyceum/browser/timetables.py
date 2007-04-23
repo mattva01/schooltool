@@ -23,6 +23,7 @@ $Id$
 """
 from datetime import datetime
 from pytz import utc
+from pytz import timezone
 
 from zope.publisher.browser import BrowserView
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
@@ -137,3 +138,83 @@ class ResourceTimetableView(PersonTimetableView):
                                                       event.activity,
                                                       send_events=False)
         return composite_timetable
+
+
+class SchoolWeekdayTimetable(object):
+
+    template = ViewPageTemplateFile('templates/weekday-timetable.pt')
+
+    def defaultTimetable(self):
+        school_timetables = ISchoolToolApplication(None)['ttschemas']
+        return school_timetables['i-ii-kursui']
+
+    def day_ids(self):
+        return self.defaultTimetable().keys()
+
+    def __call__(self):
+        tz = timezone(self.defaultTimetable().timezone)
+        weekday = tz.localize(datetime.utcnow()).date().weekday()
+        self.day_id = self.day_ids()[min(weekday, 4)]
+        if ('WEEKDAY' in self.request and
+            self.request['WEEKDAY'] in self.day_ids()):
+            self.day_id = self.request['WEEKDAY']
+        return self.template()
+
+    def term_id(self):
+        dt = datetime.utcnow()
+        date = utc.localize(dt).date()
+        terms = ISchoolToolApplication(None)["terms"]
+        for term_id, term in terms.items():
+            if date in term:
+                return term_id
+        else:
+            return None
+
+    @property
+    def schooltt_ids(self):
+        return ['i-ii-kursui', 'iii-iv-kursui']
+
+    def collectTimetableSourceObjects(self, group):
+        objects = set()
+        for person in group.members:
+            ct = ICompositeTimetables(person)
+            for object in ct.collectTimetableSourceObjects():
+                objects.add(object)
+        return objects
+
+    def makeCompositeTimetables(self):
+        school_timetables = ISchoolToolApplication(None)['ttschemas']
+        groups = ISchoolToolApplication(None)['groups'].items()
+        composite_timetables = {}
+        for group_id, group in groups:
+            composite_timetable = school_timetables[self.schooltt_ids[0]].createTimetable()
+            for object in self.collectTimetableSourceObjects(group):
+                ttables = removeSecurityProxy(ITimetables(object).timetables)
+                for id in self.schooltt_ids:
+                    tt_id = "%s.%s" % (self.term_id(), id)
+                    if tt_id in ttables:
+                        for day, period, activity in ttables[tt_id].activities():
+                            composite_timetable[day].add(period, activity, send_events=False)
+            composite_timetables[group_id] = composite_timetable
+        return composite_timetables
+
+    def days(self):
+        groups = ISchoolToolApplication(None)['groups']
+        timetables = self.makeCompositeTimetables()
+        for id, timetable in sorted(timetables.items()):
+            if not (id[0] in '1234' or id in ['TB1', 'TB2']):
+                continue
+            week_day = {}
+            week_day['title'] = groups[id].title
+            week_day['periods'] = []
+            day = timetable[self.day_id]
+            for period in day.periods:
+                period_dict = {}
+                period_dict['title'] = period
+                period_dict['activities'] = day[period]
+                week_day['periods'].append(period_dict)
+            yield week_day
+
+    def rows(self):
+        i = self.days()
+        return map(None, i, i)

@@ -63,6 +63,18 @@
         title="View Timetable"
         order="50" />
 
+    <navigationViewlet
+        name="view_application_timetable"
+        for="*"
+        manager="schooltool.skin.INavigationManager"
+        template="templates/navigationViewlet.pt"
+        class="schooltool.skin.NavigationViewlet"
+        permission="schooltool.view"
+        link="view_timetable.html"
+        title="View Timetable"
+        order="110"
+        />
+
   </zope:configure>
 
   <page
@@ -83,6 +95,13 @@
       name="view_timetable.html"
       for="schooltool.resource.interfaces.IResource"
       class=".timetables.ResourceTimetableView"
+      permission="schooltool.view"
+      />
+
+  <page
+      name="view_timetable.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class=".timetables.SchoolWeekdayTimetable"
       permission="schooltool.view"
       />
 
