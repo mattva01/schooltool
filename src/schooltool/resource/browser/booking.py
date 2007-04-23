@@ -21,11 +21,14 @@ Group Timetable caledar views.
 
 $Id$
 """
+import urllib
 from datetime import datetime, timedelta
 from time import strptime
 
 from zope.publisher.browser import BrowserView
 from zope.traversing.browser.absoluteurl import absoluteURL
+from zope.security.interfaces import Unauthorized
+from zope.security.checker import canAccess
 
 from schooltool.app.browser.cal import CalendarViewBase
 from schooltool.app.browser.cal import DailyCalendarView
@@ -76,16 +79,16 @@ class MonthlyBookingCalendarView(MonthlyCalendarView, BookingCalendarViewBase):
 class YearlyBookingCalendarView(YearlyCalendarView, BookingCalendarViewBase):
     pass
 
-import urllib
+
 class CalendarEventBookOneResourceView(BrowserView):
     """A view to book a resource to an event."""
-    errors = ()
-    update_status = None
 
     def __call__(self):
-        self.update_status = ''
         app = ISchoolToolApplication(None)
-        cal = ISchoolToolCalendar(IPerson(self.request.principal))
+        person = IPerson(self.request.principal, None)
+        if not person:
+            raise Unauthorized("Only logged in users can book resources.")
+        cal = ISchoolToolCalendar(person)
         if self.request.has_key('event_id'):
             event = cal.find(self.request['event_id'])
         else:
@@ -104,6 +107,10 @@ class CalendarEventBookOneResourceView(BrowserView):
         if event:
             for res_id, resource in app["resources"].items():
                 if res_id == self.request['resource_id']:
+                    resource_calendar = ISchoolToolCalendar(resource)
+                    if not canAccess(resource_calendar, "addEvent"):
+                        raise Unauthorized("You don't have the right to"
+                                           " book this resource!")
                     event.bookResource(resource)
         self.request.response.redirect(self.nextURL(event))
 
