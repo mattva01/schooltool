@@ -1050,6 +1050,49 @@ class TestCalendarViewBase(unittest.TestCase):
         self.assertEquals(result, expected,
                           '%s != %s' % (fmt(result), fmt(expected)))
 
+    def doctest_eventAddLink(self):
+        """Tests for CalendarViewBase.eventAddLink.
+
+            >>> from schooltool.app.browser.cal import CalendarViewBase
+            >>> from schooltool.app.cal import Calendar
+
+            >>> setup.placefulSetUp()
+            >>> app = sbsetup.setUpSchoolToolSite()
+            >>> directlyProvides(app, IContainmentRoot)
+            >>> ztapi.provideAdapter(Interface, ISchoolToolApplication,
+            ...                      lambda x: app)
+            >>> from schooltool.resource.interfaces import IBookingCalendar
+            >>> from schooltool.resource.interfaces import IResourceContainer
+            >>> from schooltool.resource.booking import ResourceBookingCalendar
+            >>> ztapi.provideAdapter(IResourceContainer, IBookingCalendar,
+            ...                      ResourceBookingCalendar)
+
+            >>> app['persons']['john'] = person = Person("john")
+            >>> calendar = Calendar(person)
+            >>> vb = CalendarViewBase(calendar, TestRequest())
+
+        For persons or groups the link points to the add event view of
+        the calendar you are looking at:
+
+            >>> vb.cursor = date(2005, 1, 1)
+            >>> vb.eventAddLink({'time': '5:00', 'duration': 45})
+            'http://127.0.0.1/persons/john/calendar/add.html?field.start_date=2005-01-01&field.start_time=5:00&field.duration=45'
+
+        The link should be quite different if this calendar belongs to
+        a resource rather than a person. The link points to the
+        resource booking calendar:
+
+            >>> from schooltool.resource.resource import Resource
+            >>> app['resources']['chair'] = resource = Resource("chair")
+            >>> calendar = Calendar(resource)
+            >>> vb = CalendarViewBase(calendar, TestRequest())
+
+            >>> vb.cursor = date(2005, 1, 1)
+            >>> vb.eventAddLink({'time': '5:00', 'duration': 45})
+            u'http://127.0.0.1/resources/booking/book_one_resource.html?resource_id=chair&start_date=2005-01-01&start_time=5:00:00&title=Unnamed Event&duration=2700'
+
+        """
+
     def doctest_pigeonhole(self):
         r"""Test for CalendarViewBase.pigeonhole().
 
