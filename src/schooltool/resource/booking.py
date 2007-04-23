@@ -23,6 +23,7 @@ $Id$
 """
 from zope.interface import implements
 from zope.app.session.interfaces import ISession
+from zope.location.location import locate
 
 from schooltool.calendar.simple import ImmutableCalendar
 from schooltool.resource.interfaces import IBookingCalendar
@@ -85,11 +86,12 @@ class ResourceBookingCalendar(ImmutableCalendar):
         self.title = "Booking Calendar"
 
     def createFullTimetable(self, school_timetable):
+        """Create a timetable with an activity for every possible period"""
         timetable = school_timetable.createTimetable()
 
-        # must be set so event ids would get generated properly
-        timetable.__parent__ = self
-        timetable.__name__ = "booking-timetable"
+        # must be set so event ids would get generated properly, as
+        # the ids use the absolutePath.
+        locate(timetable, self, 'booking-timetable')
 
         for day_id, day in timetable.items():
             for period_id in day.keys():
@@ -105,8 +107,8 @@ class ResourceBookingCalendar(ImmutableCalendar):
 
         events = []
         for term in terms.values():
-            # XXX dates on the edges might be broken add 1 day of
-            # padding
+            # date component of these timestamps are in the right
+            # timezone already.
             if (term.first > end.date()) or (term.last < start.date()):
                 # skip non overlapping terms
                 continue
@@ -120,7 +122,6 @@ class ResourceBookingCalendar(ImmutableCalendar):
         timetable_calendar = ImmutableCalendar(events)
 
         resource_calendars = getSelectedResourceCalendars(self.request)
-        # XXX should skip person resources
         booking_calendar = createBookingCalendar(timetable_calendar,
                                                  resource_calendars,
                                                  event_factory=BookingTimetableEvent)
