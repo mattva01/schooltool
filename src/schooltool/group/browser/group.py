@@ -74,10 +74,8 @@ class GroupView(BrowserView):
     __used_for__ = IGroupContained
 
     def getPersons(self):
+        # XXX should use table views
         return filter(IPerson.providedBy, self.context.members)
-
-    def getResources(self):
-        return filter(IResource.providedBy, self.context.members)
 
 
 class MemberViewPersons(RelationshipViewBase):

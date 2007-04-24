@@ -59,11 +59,15 @@ from zope.app.session.interfaces import ISession
 from zope.traversing.api import getPath
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.html.field import HtmlFragment
+from zc.table.column import GetterColumn
+from zc.table import table
 
 from schooltool import SchoolToolMessage as _
 
 from schooltool.skin.interfaces import IBreadcrumbInfo
 from schooltool.skin import breadcrumbs
+from schooltool.table.table import CheckboxColumn
+from schooltool.table.interfaces import IFilterWidget
 from schooltool.app.browser import ViewPreferences, same
 from schooltool.app.browser import pdfcal
 from schooltool.app.browser.overlay import CalendarOverlayView
@@ -73,6 +77,8 @@ from schooltool.app.interfaces import ISchoolToolCalendarEvent
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IHaveCalendar, IShowTimetables
+from schooltool.table.batch import IterableBatch
+from schooltool.table.table import label_cell_formatter_factory
 from schooltool.calendar.interfaces import ICalendar
 from schooltool.calendar.interfaces import IEditCalendar
 from schooltool.calendar.recurrent import DailyRecurrenceRule
@@ -89,10 +95,12 @@ from schooltool.calendar.utils import week_start, prev_month, next_month
 from schooltool.course.interfaces import ISection
 from schooltool.person.interfaces import IPerson, IPersonPreferences
 from schooltool.person.interfaces import vocabulary
-from schooltool.resource.interfaces import IResource
 from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.term.term import getTermForDate
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.resource.interfaces import IBaseResource
+from schooltool.resource.interfaces import IBookingCalendar
+from schooltool.resource.interfaces import IResourceTypeInformation
 
 
 #
@@ -147,7 +155,7 @@ class ToCalendarTraverser(object):
 class CalendarTraverser(object):
     """A smart calendar traverser that can handle dates in the URL."""
 
-    adapts(IHaveCalendar)
+    adapts(ICalendar)
     implements(IBrowserPublisher)
 
     queryMultiAdapter = staticmethod(queryMultiAdapter)
@@ -424,6 +432,22 @@ class CalendarViewBase(BrowserView):
         self.timezone = prefs.timezone
 
         self._days_cache = None
+
+    def eventAddLink(self, hour):
+        item = self.context.__parent__
+        if IBaseResource.providedBy(item):
+            rc = ISchoolToolApplication(None)['resources']
+            booking_calendar = IBookingCalendar(rc)
+            url = absoluteURL(booking_calendar, self.request)
+            url = "%s/book_one_resource.html?resource_id=%s" % (url, item.__name__)
+            url = "%s&start_date=%s&start_time=%s:00&title=%s&duration=%s" % (
+                url, self.cursor, hour['time'],
+                _("Unnamed Event"), hour['duration']*60)
+        else:
+            url = "%s/add.html?field.start_date=%s&field.start_time=%s&field.duration=%s"
+            url = url % (absoluteURL(self.context, self.request),
+                         self.cursor, hour['time'], hour['duration'])
+        return url
 
     def pdfURL(self):
         if pdfcal.disabled:
@@ -1228,10 +1252,6 @@ class DailyCalendarView(CalendarViewBase):
         return max(minheight,
                    self.snapToGrid(dtend) - self.snapToGrid(event.dtstart))
 
-    def isResourceCalendar(self):
-        """Return True if we are showing a calendar of some resource."""
-        return IResource.providedBy(self.context.__parent__)
-
     def getAllDayEvents(self):
         """Get a list of EventForDisplay objects for the all-day events at the
         cursors current position.
@@ -1520,6 +1540,7 @@ class CalendarListSubscriber(object):
 #
 # Calendar modification views
 #
+
 
 class EventDeleteView(BrowserView):
     """A view for deleting events."""
@@ -2196,7 +2217,11 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
             return self.updateForm()
         elif 'CANCEL' in self.request:
             self.update_status = ''
-            self.request.response.redirect(self.nextURL())
+            if 'cancel_url' in self.request:
+                nextURL = self.request['cancel_url']
+                self.request.response.redirect(nextURL)
+            else:
+                self.request.response.redirect(self.nextURL())
             return self.update_status
         elif "UPDATE_SUBMIT" in self.request:
             # Replicating EditView functionality
@@ -2285,6 +2310,103 @@ class CalendarEventBookingView(CalendarEventView):
             return
         raise Unauthorized("user not allowed to book")
 
+    def hasBookedItems(self):
+        return bool(self.context.resources)
+
+    def bookingStatus(self, item, formatter):
+        conflicts = list(self.getConflictingEvents(item))
+        status = {}
+        for conflict in conflicts:
+            if conflict.context.__parent__ and conflict.context.__parent__.__parent__:
+                zapi.absoluteURL(self.context, self.request)
+                owner = conflict.context.__parent__.__parent__
+                url = zapi.absoluteURL(owner, self.request)
+            else:
+                owner = conflict.context.activity.owner
+                url = owner.absolute_url()
+            owner_url = "%s/calendar" % url
+            owner_name = owner.title
+            status[owner_name] = owner_url
+        return status
+
+    def columns(self):
+
+        def statusFormatter(value, item, formatter):
+            url = []
+            if value:
+                for eventOwner, ownerCalendar in value.items():
+                    url.append('<a href="%s">%s</a>' % (ownerCalendar, eventOwner))
+                return ", ".join(url)
+            else:
+                return 'Free'
+        return [GetterColumn(name='title',
+                             title=u"Title",
+                             getter=lambda i, f: i.title,
+                             subsort=True),
+                GetterColumn(name='type',
+                             title=u"Type",
+                             getter=lambda i, f: IResourceTypeInformation(i).title,
+                             subsort=True),
+                GetterColumn(title="Booked by others",
+                             cell_formatter=statusFormatter,
+                             getter=self.bookingStatus
+                             )]
+
+    def getBookedItems(self):
+        return removeSecurityProxy(self.context.resources)
+
+    def updateBatch(self, lst):
+        extra_url = ""
+        if self.filter_widget:
+            extra_url = self.filter_widget.extra_url()
+        self.batch = IterableBatch(lst, self.request, sort_by='title', extra_url=extra_url)
+
+    def renderBookedTable(self):
+        prefix = "remove_item"
+        columns = [CheckboxColumn(prefix=prefix, name='remove', title=u'')]
+        available_columns = self.columns()
+        available_columns[0].cell_formatter = label_cell_formatter_factory(prefix)
+        columns.extend(available_columns)
+        formatter = table.FormFullFormatter(
+            self.context, self.request, self.getBookedItems(),
+            columns=columns,
+            sort_on=self.sortOn(),
+            prefix="booked")
+        formatter.cssClasses['table'] = 'data'
+        return formatter()
+
+    def renderAvailableTable(self):
+        prefix = "add_item"
+        columns = [CheckboxColumn(prefix=prefix, name='add', title=u'',
+                                  isDisabled=self.getConflictingEvents)]
+        available_columns = self.columns()
+        available_columns[0].cell_formatter = label_cell_formatter_factory(prefix)
+        columns.extend(available_columns)
+        formatter = table.FormFullFormatter(
+            self.context, self.request, self.filter(self.availableResources),
+            columns=columns,
+            batch_start=self.batch.start, batch_size=self.batch.size,
+            sort_on=self.sortOn(),
+            prefix="available")
+        formatter.cssClasses['table'] = 'data'
+        return formatter()
+
+    def sortOn(self):
+        return (("title", False),)
+
+    def getAvailableItemsContainer(self):
+        return ISchoolToolApplication(None)['resources']
+
+    def getAvailableItems(self):
+        container = self.getAvailableItemsContainer()
+        bookedItems = set(self.getBookedItems())
+        allItems = set(self.availableResources)
+        return list(allItems - bookedItems)
+
+    def filter(self, list):
+        return self.filter_widget.filter(list)
+
+
     def justAddedThisEvent(self):
         session_data = ISession(self.request)['schooltool.calendar']
         added_event_ids = session_data.get('added_event_uids', [])
@@ -2301,31 +2423,36 @@ class CalendarEventBookingView(CalendarEventView):
     def update(self):
         """Book/unbook resources according to the request."""
         start_date = self.context.dtstart.strftime("%Y-%m-%d")
+        self.filter_widget = queryMultiAdapter((self.getAvailableItemsContainer(),
+                                                self.request),
+                                                IFilterWidget)
 
         if 'CANCEL' in self.request:
             url = absoluteURL(self.context, self.request)
-            self.request.response.redirect('%s/@@edit.html' % url)
-            self.clearJustAddedStatus()
-            return ''
-        elif "UPDATE_SUBMIT" in self.request and not self.update_status:
+            self.request.response.redirect(self.nextURL())
+
+        elif "BOOK" in self.request: # and not self.update_status:
             self.update_status = ''
             sb = getSchoolToolApplication()
             for res_id, resource in sb["resources"].items():
-                if 'marker-%s' % res_id in self.request:
+                if 'add_item.%s' % res_id in self.request:
                     booked = self.hasBooked(resource)
-                    checked = res_id in self.request
-                    if booked and not checked:
-                        # Always allow unbooking, even if permission to
-                        # book that specific resource was revoked.
-                        self.context.unbookResource(resource)
-                    elif not booked and checked and self.canBook(resource):
-                        # We check in the view that the principal
-                        # has either addEvent or modifyEvent as required
+                    if not booked:
                         event = removeSecurityProxy(self.context)
                         event.bookResource(resource)
             self.clearJustAddedStatus()
-            self.request.response.redirect(self.nextURL())
 
+        elif "UNBOOK" in self.request:
+            self.update_status = ''
+            sb = getSchoolToolApplication()
+            for res_id, resource in sb["resources"].items():
+                if 'remove_item.%s' % res_id in self.request:
+                    booked = self.hasBooked(resource)
+                    if booked:
+                        # Always allow unbooking, even if permission to
+                        # book that specific resource was revoked.
+                        self.context.unbookResource(resource)
+        self.updateBatch(self.filter(self.availableResources))
         return self.update_status
 
     @property
@@ -2338,7 +2465,9 @@ class CalendarEventBookingView(CalendarEventView):
                 # A calendar event in a resource's calendar shouldn't book
                 # that resource, it would be silly.
                 return False
-            return self.canBook(resource) or self.hasBooked(resource)
+            if self.canBook(resource) and not self.hasBooked(resource):
+                return True
+            return False
         return filter(isBookable, sb['resources'].values())
 
     def canBook(self, resource):

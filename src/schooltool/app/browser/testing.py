@@ -23,6 +23,7 @@ $Id$
 """
 import os.path
 import zope.component
+import transaction
 from zope.interface import implements, Interface
 from zope.app.testing import setup, ztapi
 from zope.app.form.interfaces import IInputWidget
@@ -164,7 +165,7 @@ def setUp(test=None):
     for name in ['layout.css', 'schooltool.css', 'schooltool.js',
                  'logo.png', 'next.png', 'prev.png', 'favicon.ico',
                  'calwidget-calendar.js', 'calwidget-calendar.css',
-                 'calwidget-icon.gif']:
+                 'calwidget-icon.gif', 'mochikit.js']:
         ztapi.browserResource(name, ResourceStub)
 
     # menus
@@ -213,8 +214,16 @@ def setUp(test=None):
         skin.ICSSManager,
         name=name)
 
+    name = 'schooltool.MenuBar'
+    zope.component.provideAdapter(
+        manager.ViewletManager(name, skin.skin.IMenuBarMenuManager),
+        (Interface, IDefaultBrowserLayer, IBrowserView),
+        skin.skin.IMenuBarMenuManager,
+        name=name)
+
 
 def tearDown(test=None):
     """Tear down the test fixture for schooltool.app.browser doctests."""
+    transaction.abort()
     setup.placefulTearDown()
 

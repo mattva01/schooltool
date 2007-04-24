@@ -8,6 +8,4 @@
   <include package="schooltool.timetable" />
   <include package="schooltool.attendance" />
 
-  <include package="zope.testbrowser.ftests" file="ftesting.zcml" />
-
 </configure>

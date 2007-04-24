@@ -3,7 +3,6 @@
                        actions view/context/@@view_get_menu/schooltool_actions">
 
 <div class="portlet">
-<!--      tal:condition="actions"> -->
   <h4 tal:content="view/title">Actions</h4>
   <ul> <!-- old-style menu actions (obsolete) -->
     <li tal:repeat="view actions">
@@ -18,8 +17,7 @@
         replace="structure viewlet/render" />
   </ul>
   <tal:block tal:repeat="target view/subItems">
-    <div tal:replace="structure provider:schooltool.Actions"
-         tal:on-error="nothing" />
+    <div tal:replace="structure provider:schooltool.Actions" />
   </tal:block>
 </div>
 </tal:block>

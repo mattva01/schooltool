@@ -106,14 +106,21 @@ class CheckboxColumn(column.Column):
     The name and id of the checkbox are composed of the prefix keyword
     argument and __name__ of the item being displayed.
     """
-
-    def __init__(self, prefix, name=None, title=None):
+    def __init__(self, prefix, name=None, title=None, isDisabled=None):
         super(CheckboxColumn, self).__init__(name=name, title=title)
         self.prefix = prefix
+        if isDisabled:
+            self.isDisabled = isDisabled
+
+    def isDisabled(self, item):
+        return False
 
     def renderCell(self, item, formatter):
-        id = "%s.%s" % (self.prefix, item.__name__)
-        return '<input type="checkbox" name="%s" id="%s" />' % (id, id)
+        if not self.isDisabled(item):
+            id = "%s.%s" % (self.prefix, item.__name__)
+            return '<input type="checkbox" name="%s" id="%s" />' % (id, id)
+        else:
+            return ''
 
 
 def label_cell_formatter_factory(prefix=""):

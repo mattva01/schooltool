@@ -1,0 +1,17 @@
+<tal:block define="event view/manager/event;
+                   resources event/getBookedResources;
+                   booker event/getBooker;
+                   listResources view/listResources"
+            condition="event">
+<div class="booked-resources"
+     i18n:domain="schooltool">
+  <h6 class="booked-resource-header"
+      tal:attributes="style string:background: ${event/color2}">Add a resource</h6>
+  <ul>
+    <li tal:repeat="resource listResources">
+      <a href="" tal:content="resource/title"
+         tal:attributes="href python:view.bookingUrl(resource['id'])"/>
+    </li>
+  </ul>
+</div>
+</tal:block>

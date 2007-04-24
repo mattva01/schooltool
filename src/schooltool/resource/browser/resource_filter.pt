@@ -1,0 +1,41 @@
+<tal:block i18n:domain="schooltool">
+    <input type="text" name="SEARCH_TITLE"
+           tal:attributes="value request/SEARCH|nothing"/>
+    <select name="SEARCH_TYPE">
+
+      <option selected="1" tal:condition="python:not request.get('SEARCH_TYPE', None)">Choose One</option>
+      <tal:block repeat="type view/types">
+        <tal:block
+                 define="optionValue string:${type/id}|${type/title};
+                         optionContent type/title;
+                         clickable type/clickable;
+                         selected python:request.get('SEARCH_TYPE') == optionValue">
+        <tal:if condition="not: selected">
+          <option tal:content="optionContent"
+                  tal:condition="clickable"
+                  tal:attributes="value optionValue">type</option>
+          <option tal:content="optionContent"
+                  tal:condition="not:clickable"
+                  disabled="disabled"
+                  class="dropdown-header"
+                  tal:attributes="value optionValue">type</option>
+        </tal:if>
+        <tal:if condition="selected">
+          <option tal:content="optionContent"
+                  tal:condition="clickable"
+                  selected="selected"
+                  tal:attributes="value optionValue">type</option>
+          <option tal:content="optionContent"
+                  tal:condition="not:clickable"
+                  disabled="disabled"
+                  class="dropdown-header"
+                  tal:attributes="value optionValue">type</option>
+        </tal:if>
+        </tal:block>
+      </tal:block>
+    </select>
+    <input type="submit" name="SEARCH_BUTTON" value="Find Now"
+           i18n:attributes="value"/>
+    <input type="submit" name="CLEAR_SEARCH" value="Clear"
+           i18n:attributes="value"/>
+</tal:block>

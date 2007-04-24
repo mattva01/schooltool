@@ -40,7 +40,7 @@ The list of persons should have a disabled checkbox next to the manager user
     >>> f.write(manager_browser.contents)
     >>> f.close()
 
-    >>> for td in analyze.queryHTML('//table//tr/td', manager_browser.contents):
+    >>> for td in analyze.queryHTML('//table[@class="data"]//tr/td', manager_browser.contents):
     ...     print td
     <td>
           <input type="checkbox" name="delete.manager" id="delete.manager" disabled></td>
@@ -56,7 +56,7 @@ The list of persons should have a disabled checkbox next to the manager user
 The list of groups should have a disabled checkbox next to the default groups
 
     >>> manager_browser.open('http://localhost/groups')
-    >>> for td in analyze.queryHTML('//table//tr/td', manager_browser.contents):
+    >>> for td in analyze.queryHTML('//table[@class="data"]//tr/td', manager_browser.contents):
     ...     print td
     <td>
           <input type="checkbox" name="delete.a-group" id="delete.a-group"></td>

@@ -35,11 +35,26 @@
       />
 
   <viewletManager
-      name="schooltool.Navigation"
+      name="schooltool.MenuBar"
+      permission="zope.Public"
+      provides=".skin.IMenuBarMenuManager"
+      class=".skin.MenuBarMenuViewletManager"
+      template="templates/menubar.pt"
+      />
+
+  <viewletManager
+      name="schooltool.NavigationMenu"
       permission="zope.Public"
       provides=".skin.INavigationManager"
       template="templates/navigation.pt"
       class=".skin.OrderedViewletManager"
+      />
+
+  <viewletManager
+      name="schooltool.ActionsMenu"
+      permission="zope.Public"
+      class=".skin.ActionMenuViewletManager"
+      template="templates/actionsbar.pt"
       />
 
   <!-- Skin and resources -->
@@ -141,6 +156,9 @@
             layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="sidebar-background.png"
             file="resources/sidebar-background.png"
+            layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="sidebar-background-top.png"
+            file="resources/sidebar-background-top.png"
             layer="schooltool.skin.ISchoolToolLayer" />
 
   <resource name="previous.png" file="resources/previous.png"

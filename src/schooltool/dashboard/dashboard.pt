@@ -25,8 +25,8 @@
     }
   }
   function openDash(){
-    tab = document.getElementById('dashboardTab').style;
-    content = document.getElementById('dashboardContents').style;
+    tab = $('dashboardTab').style;
+    content = $('dashboardContents').style;
     content.display = '';
     if (parseInt(content.height) < maxHeight){
       content.height = parseInt(content.height)+10+'%';
@@ -36,8 +36,8 @@
     else moving = false;
   }
   function closeDash(){
-    tab = document.getElementById('dashboardTab').style;
-    content = document.getElementById('dashboardContents').style;
+    tab = $('dashboardTab').style;
+    content = $('dashboardContents').style;
     content.display = '';
     if (parseInt(content.height) > 0){
       content.height = parseInt(content.height)-10+'%';
@@ -47,46 +47,13 @@
     else {content.display = 'none'; moving = false; }
   }
 
-// This function tries to create an XMLHttpRequest object for use with
-// AJAX enabled pages.  It is meant to be compatible between browsers.
-function getHttpRequest(){
-    var http_request = false;
-
-    if (window.XMLHttpRequest) { // Mozilla, Safari, ...
-        http_request = new XMLHttpRequest();
-        if (http_request.overrideMimeType) {
-            http_request.overrideMimeType('text/xml');
-        }
-        } else if (window.ActiveXObject) {
-            try {
-                http_request = new ActiveXObject("Msxml2.XMLHTTP");
-            } catch (e) {
-                try {
-                http_request = new ActiveXObject("Microsoft.XMLHTTP");
-                } catch (e) {}
-            }
-        }
-    if (!http_request) {
-        alert('Unable to create http_request object.  Your browser may not be supported.  Disable javascript to stop seeing these messages.');
-        return false;
-    }
-    return http_request;
-}
-
   function getDashboardContent(){
-    http_request = getHttpRequest();
-    http_request.onreadystatechange = function() { alertContents(http_request); };
-    http_request.open('GET', ajaxURL, true);
-    http_request.send(null);
+    deferred = doSimpleXMLHttpRequest(ajaxURL);
+    deferred.addCallback(alertContents);
   }
 
   function alertContents(http_request) {
-    if (http_request.readyState == 4 ) {
-      if (http_request.status == 200)
-        document.getElementById('dashboardContents').innerHTML = http_request.responseText;
-      else
-        alert(http_request.status);
-    }
+    $('dashboardContents').innerHTML = http_request.responseText;
   }
 </script>
 
@@ -95,11 +62,11 @@ function getHttpRequest(){
     position: fixed;
     width: 20%;
     right: 40%;
-    background:#fff;
+    background: #EAE8E3;
     text-align: center;
     font-weight: bold;
     z-index: 99;
-    border: solid 2px #000;
+    border: solid 0px #000;
     border-bottom: 0px;
   }
   div .dashboardContents {
@@ -108,9 +75,10 @@ function getHttpRequest(){
     width: 80%;
     right: 10%;
     background: #fff;
+    background: #EAE8E3;
     text-align: center;
     z-index: 98;
-    border: solid 2px #000;
+    border: solid 1px #BAB5AB;
     border-bottom: 0px;
     overflow: auto;
     text-align: left;
@@ -120,10 +88,11 @@ function getHttpRequest(){
 <a style="bottom: 0px;" class="dashboardButton" tal:attributes="href string:${context/schooltool:app/@@absolute_url}/@@dashboard.html"
    i18n:translate=""
    id="dashboardTab">Dashboard</a>
-<script type="text/javascript">
-document.getElementById('dashboardTab').href="javascript:mouseDaemon()";
-</script>
 <div id="dashboardContents" class="dashboardContents"
      style="height: 0%; display: none;">
 </div>
+<script type="text/javascript">
+$('dashboardTab').href="javascript:mouseDaemon()";
+roundElement($('dashboardTab'), {corners: "top", border: "#BAB5AB"});
+</script>
 </tal:block>

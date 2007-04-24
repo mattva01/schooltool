@@ -6,11 +6,12 @@
   i18n_domain="schooltool">
 
     <help:register
-          id="group"
-	  title="Group Container - Contents"
-	  doc_path="group_container.stx"
-	  for="schooltool.group.interfaces.IGroupContainer"
-	  view="index.html"
+        id="group"
+        title="Group Container - Contents"
+        doc_path="group_container.pt"
+        for="schooltool.group.interfaces.IGroupContainer"
+        view="index.html"
+        class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic"
       />
 
 </configure>

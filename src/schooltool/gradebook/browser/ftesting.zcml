@@ -10,6 +10,4 @@
   <include package="schooltool.requirement" />
   <include package="schooltool.gradebook" />
 
-  <include package="zope.testbrowser.ftests" file="ftesting.zcml" />
-
 </configure>

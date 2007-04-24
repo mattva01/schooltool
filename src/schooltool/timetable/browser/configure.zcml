@@ -57,7 +57,7 @@
 
   <page
       name="schedule.html"
-      for="schooltool.resource.interfaces.IResource"
+      for="schooltool.resource.interfaces.IBaseResource"
       class="schooltool.timetable.browser.ResourceTimetableSetupView"
       permission="schooltool.view"
       menu="schooltool_actions"

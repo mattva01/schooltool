@@ -1,0 +1,16 @@
+<tal:block i18n:domain="schooltool"
+           tal:define="url view/context/@@absolute_url;
+                       actions view/context/@@view_get_menu/schooltool_actions">
+
+  <!-- old-style menu actions (obsolete) -->
+  <table id="dropdowncontainer">
+  <tr>
+    <td tal:content="structure provider:schooltool.NavigationMenu" />
+    <tal:block define="target view/__parent__/actualContext|nocall:context">
+      <td tal:content="structure provider:schooltool.ActionsMenu" />
+    </tal:block>
+    <td tal:repeat="viewlet options/viewlets"
+        tal:content="structure viewlet/render">viewlet</td>
+  </tr>
+  </table>
+</tal:block>

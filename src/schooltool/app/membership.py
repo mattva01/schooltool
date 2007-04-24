@@ -118,7 +118,7 @@ from schooltool.relationship import URIObject, RelationshipSchema
 from schooltool.relationship import getRelatedObjects
 from schooltool.relationship.interfaces import IBeforeRelationshipEvent
 from schooltool.relationship.interfaces import InvalidRelationship
-from schooltool.resource.interfaces import IResource
+from schooltool.resource.interfaces import IBaseResource
 from schooltool.group.interfaces import IBaseGroup as IGroup
 from schooltool.person.interfaces import IPerson
 from schooltool.securitypolicy.crowds import Crowd
@@ -138,6 +138,8 @@ Membership = RelationshipSchema(URIMembership,
 
 def enforceMembershipConstraints(event):
     """Enforce membership constraints (IBeforeRelationshipEvent subscriber)."""
+    # XXX look through all the IBeforeRelationshipEvent subscribers,
+    # if there are any, and convert them to something different.
     if not IBeforeRelationshipEvent.providedBy(event):
         return
     if event.rel_type != URIMembership:
@@ -146,7 +148,7 @@ def enforceMembershipConstraints(event):
         (event.role1, event.role2) != (URIGroup, URIMember)):
         raise InvalidRelationship('Membership must have one member'
                                   ' and one group.')
-    if IResource.providedBy(event[URIMember]):
+    if IBaseResource.providedBy(event[URIMember]):
         raise InvalidRelationship("Resources cannot be members of a group.")
     if not IGroup.providedBy(event[URIGroup]):
         raise InvalidRelationship('Groups must provide IGroup.')

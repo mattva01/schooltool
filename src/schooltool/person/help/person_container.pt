@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" metal:use-macro="view/@@schooltool_macros/onlinehelp/page">
+      <head>
+      <title metal:fill-slot="title" i18n:translate="">Person Container</title>
+</head>
+<body metal:fill-slot="body" tal:omit-tag="">
+
+<p>Use this page to browse and find individual persons.</p>
+
+<p>To sort the list, click on the <b>Title</b> header, and change the order
+of persons from descending to ascending order.</p>
+
+<p>To search for a user, use the <b>Search</b> box at the bottom of the page
+to look through all of the people in the system.</p>
+
+<p>To view the details of a certain person, click on the name (or the
+<b>Display</b> link).</p>
+
+<p>The <b>Edit</b> link next to the <b>Display</b> links to a page to edit the
+information of a certain user.</p>
+
+<p>Separate <q>batches</q> of the Person list can be accessed through the 
+<b>Next 10</b> (and <b>Previous</b>) and links in the blue bar.</p>
+
+<p>A <b>Show All</b> button is also there to show all of the people on a
+single page.</p>
+
+</body>
+</html>

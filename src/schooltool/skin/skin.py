@@ -34,6 +34,7 @@ from zope.viewlet.metadirectives import IViewletDirective
 from zope.configuration.fields import MessageID
 from zope.publisher.browser import BrowserView
 from zope.app import zapi
+from zope.app.publisher.browser.menu import getMenu
 
 from schooltool.app.interfaces import ICookieLanguageSelector
 from schooltool.securitypolicy.crowds import Crowd
@@ -71,6 +72,11 @@ class IActionMenuManager(IViewletManager):
 
         Returns a list of ISubMenuItem objects.
         """
+
+
+class IMenuBarMenuManager(IViewletManager):
+    """Provides a viewlet hook for the entire menu bar."""
+
 
 class IActionMenuContext(Interface):
     """Schema for attributes required by ActionMenuViewletManager."""
@@ -127,6 +133,13 @@ class ISubMenuItem(Interface):
     """Marker interface for objects that will be displayed as items in submenus.
     """
 
+
+class MenuBarMenuViewletManager(OrderedViewletManager):
+    """Viewlet manager for displaying the various menus at the top of a page."""
+
+    implements(IMenuBarMenuManager)
+
+
 class ActionMenuViewletManager(OrderedViewletManager):
     """Viewlet manager for displaying the action menu."""
 
@@ -170,6 +183,12 @@ class ActionMenuViewletManager(OrderedViewletManager):
     def subItems(self):
         """See zope.contentprovider.interfaces.IContentProvider"""
         return self.getSubItems(self.context)
+
+
+class ActionMenuViewlet(object):
+
+    def getMenu(self):
+        return getMenu(self.menu, self.context, self.request)
 
 
 class NavigationViewletCrowd(Crowd):

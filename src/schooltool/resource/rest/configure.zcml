@@ -11,7 +11,7 @@
       />
 
   <view
-      for="..interfaces.IResource"
+      for="..interfaces.IBaseResource"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides="zope.publisher.interfaces.http.IHTTPPublisher"
       factory="schooltool.traverser.traverser.PluggableTraverser"

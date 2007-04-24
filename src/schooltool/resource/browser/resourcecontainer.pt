@@ -1,0 +1,80 @@
+<tal:define define="dummy view/update"/>
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" tal:content="view/index_title" i18n:translate="">
+    Contents
+  </title>
+</head>
+<script type="text/javascript" metal:fill-slot="extrahead">
+function searchSelected(selectedResource){
+    this.form.submit();
+}
+</script>
+<body>
+
+<h1 metal:fill-slot="content-header"
+    tal:content="view/index_title" i18n:translate="">Contents</h1>
+
+<metal:block metal:fill-slot="body">
+  <form method="GET" tal:attributes="action view/context/@@absolute_url">
+
+      <!-- Type Searching -->
+      <div class="oneline-form">
+      <label for="SEARCH_TYPE" title="Type"
+             i18n:translate="">Type</label>
+      <select id="SEARCH_TYPE" name="SEARCH_TYPE" size="1"
+              onchange="javascript:this.form.submit()">
+        <option selected="1" tal:condition="python:not request.get('SEARCH_TYPE', None)">Choose One</option>
+        <tal:block repeat="term view/getSubTypes">
+          <tal:block
+                   define="optionValue python:'%s|%s'%(term[0],term[1]);
+                           optionContent python:term[1];
+                           clickable python:term[2]=='clickable';
+                           selected python:request.get('SEARCH_TYPE') == optionValue">
+          <tal:if condition="not: selected">
+            <option tal:content="optionContent"
+                    tal:condition="clickable"
+                    tal:attributes="value optionValue">type</option>
+            <option tal:content="optionContent"
+                    tal:condition="not:clickable"
+                    disabled="disabled"
+                    class="dropdown-header"
+                    tal:attributes="value optionValue">type</option>
+          </tal:if>
+          <tal:if condition="selected">
+            <option tal:content="optionContent"
+                    tal:condition="clickable"
+                    selected="selected"
+                    tal:attributes="value optionValue">type</option>
+            <option tal:content="optionContent"
+                    tal:condition="not:clickable"
+                    disabled="disabled"
+                    class="dropdown-header"
+                    tal:attributes="value optionValue">type</option>
+          </tal:if>
+          </tal:block>
+        </tal:block>
+      </select>
+      <input tal:repeat="action view/searchActions"
+             tal:replace="structure action/render" />
+      </div>
+
+      <!-- Filtering viewlet by type -->
+      <div tal:define="factory view/getResourceUtility"
+           tal:condition="factory"
+           tal:content="structure view/filter_widget/render"/>
+
+      <div>
+        <div tal:condition="view/getResourceUtility">
+          <tal:block replace="structure view/renderResourceTable" />
+        </div>
+      </div>
+      <div class="controls">
+        <input tal:condition="python:request.get('SEARCH_TYPE', False)"
+               tal:repeat="action view/actions"
+               tal:replace="structure action/render" />
+      </div>
+  </form>
+</metal:block>
+</body>
+</html>

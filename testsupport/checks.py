@@ -24,7 +24,7 @@ import sys
 import sets
 import logging
 
-from schooltool.testing.test import name_of_test
+name_of_test = str
 
 __metaclass__ = type
 
@@ -63,6 +63,9 @@ class TransactionChecks:
         txn = transaction.get()
         if txn._resources:
             warn("%s left an unclean transaction" % name_of_test(test))
+            txn.abort()
+        if txn.isDoomed():
+            warn("%s left a doomed transaction" % name_of_test(test))
             txn.abort()
 
 

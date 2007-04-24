@@ -25,18 +25,49 @@ Now let's create some resources that can be booked:
     >>> manager.getLink('New Resource').click()
     >>> manager.getControl('Title').value = 'lilly'
     >>> manager.getControl('Add').click()
+
+After adding a lilly we should see the Resource in the resource type
+filter box available:
+
+    >>> print manager.contents
+    <BLANKLINE>
+    ...
+          <select id="SEARCH_TYPE" name="SEARCH_TYPE" size="1"
+                  onchange="javascript:this.form.submit()">
+                <option selected="1">Choose One</option>
+                <option disabled="disabled"
+                    class="dropdown-header"
+                    value="equipment|Equipment">Equipment</option>
+                <option disabled="disabled"
+                    class="dropdown-header"
+                    value="location|Location">Location</option>
+                <option disabled="disabled"
+                    class="dropdown-header"
+                    value="resource|Resource">Resource</option>
+                <option value="resource|Resource">Resource</option>
+    </select>
+    ...
+
+Let's click on it:
+
+    >>> manager.getControl('Type').value = ['resource|Resource']
+    >>> manager.getControl('Search').click()
     >>> 'lilly' in manager.contents
     True
 
     >>> manager.getLink('New Resource').click()
     >>> manager.getControl('Title').value = 'mud'
     >>> manager.getControl('Add').click()
+    >>> manager.getControl('Type').value = ['resource|Resource']
+    >>> manager.getControl('Search').click()
     >>> 'mud' in manager.contents
     True
 
     >>> manager.getLink('New Resource').click()
     >>> manager.getControl('Title').value = 'fish'
     >>> manager.getControl('Add').click()
+    >>> manager.getControl('Type').value = ['resource|Resource']
+    >>> manager.getControl('Search').click()
     >>> 'fish' in manager.contents
     True
 
@@ -79,15 +110,17 @@ Frog should not be capable of booking any resources yet:
 
     >>> frog.open('http://localhost/persons/frog/calendar/2005-02-04')
     >>> frog.getLink('Test event').click()
+
+    >>> import traceback
+    >>> from zope.exceptions.exceptionformatter import print_exception
+    >>> traceback.print_exception = print_exception
+
+    >>> frog.handleErrors = False
     >>> frog.getLink('edit resources').click()
     >>> print frog.contents
     <BLANKLINE>
     ...
-      <fieldset>
-        <legend>Available Resources</legend>
-        <table class="event_booking">
-        </table>
-      </fieldset>
+    <legend>Available resources</legend>
     ...
 
 But we can give him that right by making him a leader of that
@@ -108,16 +141,14 @@ Frog should see the mud and the fish now:
     <BLANKLINE>
     ...
       <fieldset>
-        <legend>Available Resources</legend>
-        <table class="event_booking">
+          <legend>Available resources</legend>
     ...
-             <input type="hidden" value="1"
-                    name="marker-fish" />
+          <input type="checkbox" name="add_item.fish" id="add_item.fish" />
     ...
-             <input type="hidden" value="1"
-                    name="marker-mud" />
+          <input type="checkbox" name="add_item.mud" id="add_item.mud" />
     ...
         </table>
+    ...
       </fieldset>
     ...
 
@@ -128,51 +159,31 @@ Let's book one of them:
 
 We should see the resource as a booked resource:
 
+    >>> frog.open('http://localhost/persons/frog/calendar/2005-02-04')
     >>> frog.getLink('Test event').click()
     >>> frog.getLink('edit resources').click()
     >>> print frog.contents
     <BLANKLINE>
     ...
-      <fieldset>
-        <legend>Available Resources</legend>
-        <table class="event_booking">
+        <input type="checkbox" name="remove_item.mud" id="remove_item.mud" />
     ...
-                <input type="checkbox" value="booked"
-                       name="fish" id="fish" />
+
+     <fieldset>
+          <legend>Available resources</legend>
     ...
-                <input type="checkbox" value="booked"
-                       checked="checked" name="mud" id="mud" />
+          <input type="checkbox" name="add_item.fish" id="add_item.fish"/>
     ...
-        </table>
       </fieldset>
     ...
 
 Let's unbook one of them and book another:
 
-    >>> frog.getControl('mud').selected = False
+    >>> frog.getControl('mud').selected = True
+    >>> frog.getControl('UnBook').click()
     >>> frog.getControl('fish').selected = True
     >>> frog.getControl('Book').click()
 
-Now another resource is booked:
-
-    >>> frog.getLink('Test event').click()
-    >>> frog.getLink('edit resources').click()
-    >>> print frog.contents
-    <BLANKLINE>
-    ...
-      <fieldset>
-        <legend>Available Resources</legend>
-        <table class="event_booking">
-    ...
-                <input type="checkbox" value="booked"
-                       checked="checked" name="fish" id="fish" />
-    ...
-                <input type="checkbox" value="booked"
-                       name="mud" id="mud" />
-    ...
-        </table>
-      </fieldset>
-    ...
+Now another resource is booked
 
 Frog should see the event in the resource calendar too:
 
@@ -199,6 +210,17 @@ Frog should see the event in the resource calendar too:
     </div>
     ...
 
+If Frog decides to book another resource from the resource's calendar,
+and then changes his mind by clicking on Cancel, the resource won't be
+booked.
+
+    >>> frog.open('http://localhost/resources/fish/calendar')
+    >>> frog.getLink('10:00').click()
+    >>> frog.getControl('Title').value="Canceled Event"
+    >>> frog.getControl('Cancel').click()
+    >>> 'Canceled Event' not in frog.contents
+    True
+
 Now if we remove the permission to book the fish:
 
     >>> manager.open('http://localhost/resources/fish/@@leaders.html')
@@ -214,39 +236,19 @@ The fish should stay in the bookable resources list:
     <BLANKLINE>
     ...
       <fieldset>
-        <legend>Available Resources</legend>
-        <table class="event_booking">
+        <legend>Booked resources</legend>
     ...
-                <input type="checkbox" value="booked"
-                       checked="checked" name="fish" id="fish" />
+        <input type="checkbox" name="remove_item.fish" id="remove_item.fish" />
     ...
-                <input type="checkbox" value="booked"
-                       name="mud" id="mud" />
-    ...
-        </table>
       </fieldset>
     ...
 
 Unless unbooked:
 
-    >>> frog.getControl('fish').selected = False
-    >>> frog.getControl('Book').click()
-
-    >>> frog.getLink('Test event').click()
-    >>> frog.getLink('edit resources').click()
-    >>> print frog.contents
-    <BLANKLINE>
-    ...
-      <fieldset>
-        <legend>Available Resources</legend>
-        <table class="event_booking">
-    ...
-                <input type="checkbox" value="booked"
-                       name="mud" id="mud" />
-    ...
-        </table>
-      </fieldset>
-    ...
+    >>> frog.getControl('fish').selected = True
+    >>> frog.getControl('UnBook').click()
+    >>> 'name="add_item.fish" id="add_item.fish"' not in frog.contents
+    True
 
 
 When adding a new event we should get redirected to resource booking
@@ -313,10 +315,7 @@ Yet mud is not booked anymore:
     >>> print frog.contents
     <BLANKLINE>
     ...
-    <td class="booked">
-      <input type="checkbox" value="booked" name="mud"
-             id="mud" />
-    </td>
+          <input type="checkbox" name="add_item.mud" id="add_item.mud" />
     ...
 
 Let's book it again:
@@ -397,6 +396,8 @@ Now let's allow frog access all resources:
     >>> manager.open('http://localhost')
 
     >>> manager.getLink('Resources').click()
+    >>> manager.getControl('Type').value = ['resource|Resource']
+    >>> manager.getControl('Search').click()
     >>> manager.getLink('mud').click()
     >>> manager.getLink('View Calendar').click()
 
@@ -414,84 +415,14 @@ If we book some resources for the second event,
     >>> frog.getControl('fish').selected = True
     >>> frog.getControl('Book').click()
 
-we should see the conflicts when booking the for the events overlapping
-"Test event1":
-
-    >>> frog.open('http://localhost/persons/frog/calendar/ZHVtbXktdWlkMQ%3D%3D')
-    >>> frog.getLink('edit resources').click()
-    >>> print frog.contents
-    <BLANKLINE>
-    ...
-      <fieldset>
-        <legend>Available Resources</legend>
-        <table class="event_booking">
-    ...
-    <input type="checkbox" value="booked"
-           name="fish" id="fish" />
-    ...
-    <td>
-      <fieldset style="text-align: left;">
-        <legend>Conflicting events</legend>
-        <div>
-          <div>
-            <a href="http://.../calendar/ZHVtbXktdWlkMg%3D%3D/edit.html">Test event2</a>
-              (10:00 -
-              11:00)
-               <a href="http://.../calendar/2005-02-04/">Frog</a>
-          </div>
-        </div>
-      </fieldset>
-    </td>
-    ...
-    <input type="checkbox" value="booked"
-           name="mud" id="mud" />
-    ...
-    <td>
-      <fieldset style="text-align: left;">
-        <legend>Conflicting events</legend>
-        <div>
-          <div>
-            <a href="http://.../calendar/ZHVtbXktdWlkMg%3D%3D/edit.html">Test event2</a>
-              (10:00 -
-              11:00)
-               <a href="http://.../calendar/2005-02-04/">Frog</a>
-          </div>
-        </div>
-      </fieldset>
-    </td>
-    ...
-        </table>
-      </fieldset>
-    ...
-
 Unless we are looking at "Test event2" itself:
 
     >>> frog.open('http://localhost/persons/frog/calendar/ZHVtbXktdWlkMg%3D%3D')
     >>> frog.getLink('edit resources').click()
-    >>> print frog.contents
-    <BLANKLINE>
-    ...
-      <fieldset>
-        <legend>Available Resources</legend>
-        <table class="event_booking">
-    ...
-      <input type="checkbox" value="booked"
-             checked="checked" name="fish" id="fish" />
-    </td>
-    <th class="resource">
-      <label for="fish">fish</label>
-      <input type="hidden" value="1"
-             name="marker-fish" />
-    </th>
-    ...
-      <input type="checkbox" value="booked"
-             checked="checked" name="mud" id="mud" />
-    </td>
-    <th class="resource">
-      <label for="mud">mud</label>
-      <input type="hidden" value="1" name="marker-mud" />
-    </th>
-    ...
+    >>> 'type="checkbox" name="remove_item.fish"' in frog.contents
+    True
+    >>> 'type="checkbox" name="remove_item.mud"' in frog.contents
+    True
 
 Let's add another person, frog's boss:
 
@@ -561,6 +492,8 @@ Frog should still be able to see the resource's calendar
 Let's delete mud:
 
     >>> manager.open('http://localhost/resources/')
+    >>> manager.getControl('Type').value = ['resource|Resource']
+    >>> manager.getControl('Search').click()
     >>> manager.getControl(name='delete.mud').value = True
     >>> manager.getControl('Delete').click()
     >>> manager.getControl('Confirm').click()
@@ -580,3 +513,86 @@ Stork should still be able to see his calendar:
       ...
     </h6>
     ...
+
+Now, let's test the paging, for that we'll need to create a profuse amount of resources.
+
+    >>> manager.open('http://localhost/resources')
+    >>> manager.getLink('Import Resources').click()
+    >>> moofest = """mooa
+    ... moob
+    ... mooc
+    ... mood
+    ... mooe
+    ... moof
+    ... moog
+    ... mooh
+    ... mooi
+    ... mooj
+    ... mook
+    ... mool
+    ... moom
+    ... moon
+    ... """
+    >>> manager.getControl('CSV Data').value = moofest
+    >>> manager.getControl('Submit').click()
+
+Now let's create an event for the manager.
+
+    >>> manager.getLink('My Calendar').click()
+    >>> manager.getLink('New Event').click()
+    >>> manager.getControl('Title').value = 'Moo Fest'
+    >>> manager.getControl('Date').value = '2005-02-03'
+    >>> manager.getControl('Time').value = '01:00'
+    >>> manager.getControl('Duration').value = '500'
+    >>> manager.getControl('Recurring').selected = True
+    >>> manager.getControl(name='field.recurrence.used').value = '1'
+    >>> manager.getControl('Book Resources').selected = True
+    >>> manager.getControl('Add').click()
+
+Now on to play with the paging! The default batch size is 10, keeping in mind the 2 reources created before
+the 11 item should be `mooi`.
+
+    >>> manager.getLink('2').click()
+    >>> print manager.contents
+    <BLANKLINE>
+    ...
+    <input type="checkbox" name="add_item.mooi" id="add_item.mooi" />
+    ...
+
+Howevever, `mooa` should not be in the list.
+
+    >>> '<input type="checkbox" name="add_item.mooa" id="add_item.mooa" />' not in manager.contents
+    True
+
+Let's test the searching, we have a bunch of moos, so let's search for `moo`.
+Now `mooj` should be the tenth in the item and `mooa` should be the first.
+
+    >>> manager.getControl(name="SEARCH_TITLE").value = "moo"
+    >>> manager.getControl(name="SEARCH_BUTTON").click()
+    >>> print manager.contents
+    <BLANKLINE>
+    ...
+    <input type="checkbox" name="add_item.mooa" id="add_item.mooa" />
+    ...
+    <input type="checkbox" name="add_item.mooj" id="add_item.mooj" />
+    ...
+
+The item `mud` should not be in the list.
+
+    >>> '<input type="checkbox" name="add_item.mud" id="add_item.mud" />' not in manager.contents
+    True
+
+Let's search for something specific.
+
+    >>> manager.getControl(name="SEARCH_TITLE").value = "fish"
+    >>> manager.getControl(name="SEARCH_BUTTON").click()
+    >>> print manager.contents
+    <BLANKLINE>
+    ...
+    <input type="checkbox" name="add_item.fish" id="add_item.fish" />
+    ...
+
+We shouldn't have any extra items after the search query:
+
+    >>> '<input type="checkbox" name="add_item.mud" id="add_item.mud" />' not in manager.contents
+    True
