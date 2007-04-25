@@ -1256,7 +1256,7 @@ def doctest_VTimezone():
         >>> vtz = VTimezone.parse(rows)
 
         >>> vtz.tzid
-        u'Europe/Berlin'
+        'Europe/Berlin'
         >>> vtz.tznames
         [u'CET']
 
@@ -1279,7 +1279,7 @@ def doctest_VTimezone():
         >>> rows = RowParser.parse(example_vtimezone.splitlines())
         >>> vtz = VTimezone.parse(rows)
         >>> vtz.tzid
-        u'Evolution-blahblah@@obscure_Europe/Berlin'
+        'Evolution-blahblah@@obscure_Europe/Berlin'
         >>> vtz.x_lic_location
         u'Europe/Berlin'
 
@@ -1404,7 +1404,7 @@ def doctest_VCalendar():
         >>> rows = list(RowParser.parse(example_ical.splitlines()))
         >>> vcal = VCalendar.parse(rows)
         >>> pprint(vcal.timezones)
-        {u'EUROPE/BERLIN': <DstTzInfo 'Europe/Berlin' CET+1:00:00 STD>,
+        {'EUROPE/BERLIN': <DstTzInfo 'Europe/Berlin' CET+1:00:00 STD>,
          'UTC': <UTC>}
         >>> vcal.events
         [<schooltool.calendar.icalendar.VEvent object at ...>]
@@ -1442,7 +1442,7 @@ def doctest_VCalendar():
         >>> rows = list(RowParser.parse(example_ical.splitlines()))
         >>> vcal = VCalendar.parse(rows)
         >>> pprint(vcal.timezones)
-        {u'EUROPE/BERLIN': <DstTzInfo 'Europe/Berlin' CET+1:00:00 STD>,
+        {'EUROPE/BERLIN': <DstTzInfo 'Europe/Berlin' CET+1:00:00 STD>,
          'UTC': <UTC>}
         >>> vcal.events
         [<schooltool.calendar.icalendar.VEvent object at ...>]
