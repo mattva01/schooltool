@@ -16,8 +16,22 @@ SETUPFLAGS=
 .PHONY: all
 all: build
 
+.PHONY: zpkgsetup-checkout
+zpkgsetup-checkout:
+	-test -d buildsupport/zpkgsetup || svn co $(ZOPE_REPOSITORY)/zpkgtools/trunk/zpkgsetup buildsupport/zpkgsetup
+
+.PHONY: zpkgsetup-update
+zpkgsetup-update:
+	svn up buildsupport/zpkgsetup
+
+.PHONY: checkout
+checkout: zpkgsetup-checkout
+
+.PHONY: update
+update: checkout zpkgsetup-update
+
 .PHONY: build
-build:
+build: zpkgsetup-checkout
 	$(PYTHON) setup.py $(SETUPFLAGS) \
                 build_ext -i install_data --install-dir .
 	test -d eggs || mkdir eggs
