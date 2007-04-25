@@ -15,7 +15,7 @@
 
   <p tal:condition="not:batch" i18n:translate="">There are none.</p>
   <tal:if tal:condition="batch">
-    <tal:block replace="view/batch/render" />
+    <tal:block replace="structure view/batch/render" />
     <div metal:use-macro="view/@@view_macros/batch-search"/>
     <div class="count">
       <span i18n:translate="">Showing</span>

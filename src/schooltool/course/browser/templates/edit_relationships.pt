@@ -49,7 +49,7 @@
 <fieldset>
   <legend i18n:translate="" tal:content="view/available_title" />
   <div class="item_list">
-    <tal:block replace="view/batch/render" />
+    <tal:block replace="structure view/batch/render" />
     <input type="text" name="SEARCH"
       tal:attributes="value request/SEARCH|nothing"/>
     <input type="submit" name="SEARCH_BUTTON" value="Find Now"

@@ -13,7 +13,7 @@
 <metal:block metal:fill-slot="body"
              tal:define="batch view/table/batch;
                          canModify view/canModify">
-  <tal:block replace="batch/render" />
+  <tal:block replace="structure batch/render" />
   <form method="post" tal:attributes="action string:${context/@@absolute_url}">
     <tal:if condition="batch">
       <div class="count">

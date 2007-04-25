@@ -13,7 +13,7 @@
 <metal:block metal:fill-slot="body"
              tal:define="batch view/batch;
                          canModify view/canModify">
-  <tal:block replace="view/batch/render" />
+  <tal:block replace="structure view/batch/render" />
   <div metal:use-macro="view/@@view_macros/batch-search"/>
   <tal:if condition="batch">
     <div class="count">

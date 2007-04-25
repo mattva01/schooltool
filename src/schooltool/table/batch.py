@@ -53,7 +53,7 @@ class Batch(object):
         self.length = len(item_list[self.start:self.start + self.size])
 
     def render(self):
-        if self.size > self.full_size or self.needsBatch:
+        if self.size < self.full_size or self.needsBatch:
             return self.template()
         else:
             return ''

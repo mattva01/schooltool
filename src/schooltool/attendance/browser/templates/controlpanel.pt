@@ -16,7 +16,7 @@
 <fieldset tal:define="batch view/batch">
   <legend i18n:translate="">Students with unresolved absences</legend>
 
-  <tal:block replace="view/batch/render" />
+  <tal:block replace="structure view/batch/render" />
 
   <div class="batch-search">
     <input id="batch-search-box" type="text" name="SEARCH"
