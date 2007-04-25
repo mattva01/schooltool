@@ -57,12 +57,12 @@
 
   <!-- Utilities -->
 
-  <localUtility class=".security.SchoolToolAuthenticationUtility">
+  <class class=".security.SchoolToolAuthenticationUtility">
     <require
         permission="zope.ManageServices"
         interface="zope.app.security.interfaces.IAuthentication"
         />
-  </localUtility>
+  </class>
 
   <utility
       provides="schooltool.relationship.interfaces.IRelationshipSchema"

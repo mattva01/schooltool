@@ -30,7 +30,6 @@ from zope.app.component import getNextUtility
 from zope.app.component.interfaces import ISite
 from zope.app.component.site import LocalSiteManager
 from zope.app.container.contained import Contained
-from zope.app.container.interfaces import IObjectAddedEvent
 from zope.location.interfaces import ILocation
 from zope.app.security.interfaces import IAuthentication, ILoginPassword
 from zope.app.security.interfaces import IAuthenticatedGroup, IEveryoneGroup
@@ -40,15 +39,13 @@ from zope.component import adapts
 from zope.security.interfaces import IGroupAwarePrincipal
 from zope.security.checker import ProxyFactory
 from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.app.security.interfaces import IUnauthenticatedGroup
+from zope.annotation.interfaces import IAttributeAnnotatable
 
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolAuthentication
 from schooltool.app.interfaces import IAsset
-from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.person.interfaces import IPerson
 from schooltool.securitypolicy.crowds import Crowd
-from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ICalendarParentCrowd
 from schooltool.securitypolicy.crowds import ConfigurableCrowd, ParentCrowd
@@ -79,7 +76,7 @@ class SchoolToolAuthenticationUtility(Persistent, Contained):
     in the session.
     """
 
-    implements(ISchoolToolAuthentication, ILocation)
+    implements(ISchoolToolAuthentication, ILocation, IAttributeAnnotatable)
 
     person_prefix = "sb.person."
     group_prefix = "sb.group."

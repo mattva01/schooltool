@@ -45,13 +45,10 @@ sys.path[:] = [p for p in sys.path if os.path.abspath(p) != here]
 
 # add the src, eggs and Zope3/src to the python path and as sites so that eggs work
 src = os.path.join(here, 'src')
-z3src = os.path.join(here, 'Zope3', 'src')
 eggs = os.path.join(here, 'eggs')
-sys.path.insert(0, z3src)
 sys.path.insert(0, eggs)
 sys.path.insert(0, src)
 import site
-site.addsitedir(z3src)
 site.addsitedir(src)
 site.addsitedir(eggs)
 

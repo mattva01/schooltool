@@ -10,42 +10,14 @@ TRANSLATION_DOMAINS=schoolbell schooltool
 ZOPE_REPOSITORY=svn://svn.zope.org/repos/main/
 TESTFLAGS=-v
 LOCALES=src/schooltool/locales/
-PYTHONPATH:=$(PYTHONPATH):src:eggs:Zope3/src
+PYTHONPATH:=$(PYTHONPATH):src:eggs
 SETUPFLAGS=
-
-# Which part of the Zope3 repository do we track
-#Z3_VERSION=trunk
-Z3_VERSION=branches/3.3
-#Z3_VERSION=tags/3.2.0
 
 .PHONY: all
 all: build
 
-.PHONY: zope3-checkout
-zope3-checkout:
-	-test -d Zope3 || svn co $(ZOPE_REPOSITORY)/Zope3/${Z3_VERSION} Zope3
-
-.PHONY: zope3-update
-zope3-update:
-	svn up Zope3
-
-.PHONY: zpkgsetup-checkout
-zpkgsetup-checkout:
-	-test -d buildsupport/zpkgsetup || svn co $(ZOPE_REPOSITORY)/zpkgtools/trunk/zpkgsetup buildsupport/zpkgsetup
-
-.PHONY: zpkgsetup-update
-zpkgsetup-update:
-	svn up buildsupport/zpkgsetup
-
-.PHONY: checkout
-checkout: zope3-checkout zpkgsetup-checkout
-
-.PHONY: update
-update: checkout zope3-update zpkgsetup-update
-
 .PHONY: build
-build: zope3-checkout zpkgsetup-checkout
-	test -d Zope3 && cd Zope3 && $(PYTHON) setup.py build_ext -i
+build:
 	$(PYTHON) setup.py $(SETUPFLAGS) \
                 build_ext -i install_data --install-dir .
 	test -d eggs || mkdir eggs
@@ -113,15 +85,6 @@ edit-coverage-reports:
 .PHONY: vi-coverage-reports
 vi-coverage-reports:
 	@cd coverage && vi '+/^>>>>>>/' `ls schooltool* | grep -v tests | xargs grep -l '^>>>>>>'`
-
-Zope3/principals.zcml:
-	cp Zope3/sample_principals.zcml $@
-
-Zope3/package-includes/schoolbell-configure.zcml:
-	echo '<include package="schoolbell.app" />' > $@
-
-Zope3/package-includes/schooltool-configure.zcml:
-	echo '<include package="schooltool" />' > $@
 
 .PHONY: dist
 dist: realclean update-translations

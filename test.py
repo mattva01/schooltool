@@ -26,6 +26,22 @@ $Id$
 import sys
 import os
 import site
+from StringIO import StringIO
+import pytz
+
+try:
+    pytz.timezone('Europe/Vilnius')
+except IOError:
+    from pkg_resources import resource_stream
+    def open_resource(name):
+        f = open('/usr/share/zoneinfo/' + name, "rb")
+        return StringIO(f.read())
+    pytz.open_resource = open_resource
+    try:
+        pytz.timezone('Europe/Vilnius')
+    except IOError:
+        print >> sys.stderr, '%s: broken pytz detected, monkeypatching failed.' % sys.argv[0]
+        sys.exit(1)
 
 if sys.version_info < (2, 4):
     print >> sys.stderr, '%s: need Python 2.4 or later.' % sys.argv[0]
@@ -37,15 +53,12 @@ here = os.path.dirname(os.path.realpath(__file__))
 # Remove this directory from path:
 sys.path[:] = [p for p in sys.path if os.path.abspath(p) != here]
 
-# add the src, eggs and Zope3/src to the python path and as sites so that eggs work
+# add the src and eggs to the python path and as sites so that eggs work
 src = os.path.join(here, 'src')
-z3src = os.path.join(here, 'Zope3', 'src')
 eggs = os.path.join(here, 'eggs')
-sys.path.insert(0, z3src)
 sys.path.insert(0, eggs)
 sys.path.insert(0, src)
 import site
-site.addsitedir(z3src)
 site.addsitedir(src)
 site.addsitedir(eggs)
 
