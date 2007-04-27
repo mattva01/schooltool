@@ -5,9 +5,7 @@
 # $Id$
 
 PYTHON=python
-ZPKG=../../zpkgtools/bin/zpkg
 TRANSLATION_DOMAINS=schoolbell schooltool
-ZOPE_REPOSITORY=svn://svn.zope.org/repos/main/
 TESTFLAGS=-v
 LOCALES=src/schooltool/locales/
 PYTHONPATH:=$(PYTHONPATH):src:eggs
@@ -16,26 +14,10 @@ SETUPFLAGS=
 .PHONY: all
 all: build
 
-.PHONY: zpkgsetup-checkout
-zpkgsetup-checkout:
-	-test -d buildsupport/zpkgsetup || svn co $(ZOPE_REPOSITORY)/zpkgtools/trunk/zpkgsetup buildsupport/zpkgsetup
-
-.PHONY: zpkgsetup-update
-zpkgsetup-update:
-	svn up buildsupport/zpkgsetup
-
-.PHONY: checkout
-checkout: zpkgsetup-checkout
-
-.PHONY: update
-update: checkout zpkgsetup-update
-
 .PHONY: build
-build: zpkgsetup-checkout
-	$(PYTHON) setup.py $(SETUPFLAGS) \
-                build_ext -i install_data --install-dir .
+build: 
 	test -d eggs || mkdir eggs
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) setup.eggs.py develop -S eggs --install-dir eggs
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) setup.py develop -S eggs --install-dir eggs
 	$(PYTHON) bin/remove-stale-bytecode.py
 
 .PHONY: clean
@@ -102,19 +84,21 @@ vi-coverage-reports:
 
 .PHONY: dist
 dist: realclean update-translations
+	# XXX make me work with eggs
 	$(ZPKG) -x reportlab -C releases/SchoolTool.cfg
 
 .PHONY: signtar
 signtar: dist
+	# XXX make me work with eggs
 	md5sum dist/SchoolTool*.tgz > dist/md5sum
 	gpg --clearsign dist/md5sum
 	mv dist/md5sum.asc dist/md5sum
 
 .PHONY: extract-translations
 extract-translations: build
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) i18nextract.py --domain=schooltool --zcml=`pwd`/schooltool-skel/etc/site.zcml
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) i18nextract.py --domain=schoolbell --zcml=`pwd`/schoolbell-site.zcml
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) i18nextract.py --domain=schooltool.commendation --zcml=`pwd`/src/schooltool/commendation/ftesting.zcml
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) utilities/i18nextract.py --domain=schooltool --zcml=`pwd`/schooltool-skel/etc/site.zcml
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) utilities/i18nextract.py --domain=schoolbell --zcml=`pwd`/schoolbell-site.zcml
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) utilities/i18nextract.py --domain=schooltool.commendation --zcml=`pwd`/src/schooltool/commendation/ftesting.zcml
 
 .PHONY: update-translations
 update-translations:
