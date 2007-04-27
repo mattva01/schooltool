@@ -23,6 +23,7 @@ $Id$
 """
 import os.path
 import zope.component
+import transaction
 from zope.interface import implements, Interface
 from zope.app.testing import setup, ztapi
 from zope.app.form.interfaces import IInputWidget
@@ -147,10 +148,6 @@ def setUp(test=None):
     ztapi.browserView(None, 'generic_macros',
                       SimpleViewClass("../../skin/templates/generic_macros.pt"))
 
-    # batching macros
-    ztapi.browserView(None, 'batch_macros',
-                      SimpleViewClass("../../batching/macros.pt"))
-
     # form macros
     ztapi.browserView(None, 'form_macros', FormMacros)
     import zope.app.form.browser
@@ -168,7 +165,7 @@ def setUp(test=None):
     for name in ['layout.css', 'schooltool.css', 'schooltool.js',
                  'logo.png', 'next.png', 'prev.png', 'favicon.ico',
                  'calwidget-calendar.js', 'calwidget-calendar.css',
-                 'calwidget-icon.gif', 'print.css']:
+                 'calwidget-icon.gif', 'print.css', 'mochikit.js']:
         ztapi.browserResource(name, ResourceStub)
 
     # menus
@@ -217,8 +214,16 @@ def setUp(test=None):
         skin.ICSSManager,
         name=name)
 
+    name = 'schooltool.MenuBar'
+    zope.component.provideAdapter(
+        manager.ViewletManager(name, skin.skin.IMenuBarMenuManager),
+        (Interface, IDefaultBrowserLayer, IBrowserView),
+        skin.skin.IMenuBarMenuManager,
+        name=name)
+
 
 def tearDown(test=None):
     """Tear down the test fixture for schooltool.app.browser doctests."""
+    transaction.abort()
     setup.placefulTearDown()
 

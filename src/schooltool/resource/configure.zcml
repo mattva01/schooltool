@@ -18,7 +18,7 @@
   </class>
 
   <interface
-      interface=".interfaces.IResource"
+      interface=".interfaces.IBaseResource"
       type="zope.app.content.interfaces.IContentType"
       />
 
@@ -28,9 +28,31 @@
 
     <allow attributes="__cmp__" />
     <require permission="schooltool.view"
-             attributes="title description groups leaders isLocation" />
+             attributes="title type description notes groups leaders" />
     <require permission="schooltool.edit"
              set_schema=".interfaces.IResource" />
+  </class>
+
+  <class class=".resource.Location">
+    <implements interface="schooltool.app.interfaces.IHaveCalendar" />
+    <implements interface="schooltool.note.interfaces.IHaveNotes" />
+
+    <require like_class=".resource.Resource" />
+    <require permission="schooltool.view"
+             attributes="capacity" />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.ILocation" />
+  </class>
+
+  <class class=".resource.Equipment">
+    <implements interface="schooltool.app.interfaces.IHaveCalendar" />
+    <implements interface="schooltool.note.interfaces.IHaveNotes" />
+
+    <require like_class=".resource.Resource" />
+    <require permission="schooltool.view"
+             attributes="type manufacturer model serialNumber purchaseDate" />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.IEquipment" />
   </class>
 
   <adapter
@@ -57,6 +79,69 @@
         />
 
   </configure>
+
+  <!-- resource types -->
+
+  <utility
+      factory=".types.ResourceFactoryUtility"
+      name="resource"
+      provides=".interfaces.IResourceFactoryUtility"
+      />
+
+  <utility
+      factory=".types.LocationFactoryUtility"
+      name="location"
+      provides=".interfaces.IResourceFactoryUtility"
+      />
+
+  <utility
+      factory=".types.EquipmentFactoryUtility"
+      name="equipment"
+      provides=".interfaces.IResourceFactoryUtility"
+      />
+
+  <adapter
+      factory=".types.ResourceTypeAdapter" />
+
+  <adapter
+      factory=".types.LocationTypeAdapter" />
+
+  <adapter
+      factory=".types.EquipmentTypeAdapter" />
+
+  <adapter
+      for="schooltool.resource.interfaces.IResourceContainer"
+      factory=".booking.ResourceBookingCalendar"
+      provides=".booking.IBookingCalendar" />
+
+  <subscriber
+      for=".interfaces.IResourceContainer
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".booking.ResourceBookingTraverserPlugin"
+      permission="zope.Public"
+      />
+
+
+  <class class=".booking.ResourceBookingCalendar">
+    <require permission="schooltool.view"
+             interface=".interfaces.IBookingCalendar"
+             attributes="__cmp__" />
+  </class>
+
+  <class class=".booking.BookingCalendarEvent">
+    <require permission="schooltool.view"
+             interface=".interfaces.IBookingCalendarEvent"
+             />
+  </class>
+
+
+  <subscriber
+      for="schooltool.resource.interfaces.IBookingCalendar
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.app.browser.interfaces.ICalendarProvider"
+      factory=".booking.ResourceBookingCalendarProvider"
+      />
 
   <include package=".browser" />
   <include package=".rest" />

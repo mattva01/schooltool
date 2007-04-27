@@ -22,15 +22,22 @@ csv importing.
 $Id$
 """
 from schooltool.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView
-from schooltool.resource.resource import Resource
+from schooltool.resource.resource import Resource, Location
 
 from schooltool import SchoolToolMessage as _
+
+
+def resourceFactory(self, title=u"", description=u"", isLocation=False):
+    if isLocation:
+        return Location(title=title, description=description)
+    else:
+        return Resource(title=title, description=description)
 
 
 class ResourceCSVImporter(BaseCSVImporter):
     """Resource CSV Importer"""
 
-    factory = Resource
+    factory = resourceFactory
 
     def createAndAdd(self, data, dry_run=True):
         """Create objects and add them to the container."""

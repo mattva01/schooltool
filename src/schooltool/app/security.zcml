@@ -28,10 +28,15 @@
       interface="schooltool.app.interfaces.ISchoolToolApplication"
       crowds="administration"
       permission="zope.ManageSite" />
-  <allow
-      interface="schooltool.app.interfaces.ISchoolToolApplication"
-      crowds="administration"
-      permission="zope.app.introspector.Introspect" />
+
+  <zope:configure
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      zcml:condition="have devmode">
+    <allow
+       interface="schooltool.app.interfaces.ISchoolToolApplication"
+       crowds="administration"
+       permission="zope.app.apidoc.UseAPIDoc" />
+  </zope:configure>
 
   <!-- Security declarations for calendaring -->
 

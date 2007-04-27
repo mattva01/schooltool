@@ -5,11 +5,48 @@
 
   <!-- Resource Traverser -->
   <zope:view
-      for="..interfaces.IResource"
+      for="..interfaces.IBaseResource"
       type="zope.publisher.interfaces.browser.IBrowserRequest"
       provides="zope.publisher.interfaces.browser.IBrowserPublisher"
       factory="schooltool.traverser.browser.PluggableBrowserTraverser"
       permission="zope.Public"
+      />
+
+  <zope:adapter
+      for="schooltool.resource.types.ResourceFactoryUtility
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".resource.ResourceTypeFilter"
+      />
+
+  <zope:adapter
+      for="schooltool.resource.types.LocationFactoryUtility
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".resource.LocationTypeFilter"
+      />
+
+  <zope:adapter
+      for="schooltool.resource.types.EquipmentFactoryUtility
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".resource.EquipmentTypeFilter"
+      />
+
+  <viewlet
+      name="resource-booking-info"
+      for="*"
+      manager="schooltool.app.browser.skin.ICalendarEventViewletManager"
+      template="event_booking_viewlet.pt"
+      permission="zope.Public"
+      order="20"
+      />
+
+  <viewlet
+      name="resource-booking-edit"
+      for="schooltool.resource.booking.IBookingCalendar"
+      class="schooltool.app.browser.skin.CalendarEventBookingViewlet"
+      manager="schooltool.app.browser.skin.ICalendarEventViewletManager"
+      template="event_edit_booking_viewlet.pt"
+      permission="zope.Public"
+      order="30"
       />
 
   <configure package="schooltool.skin">
@@ -27,11 +64,11 @@
         label="Add a Resource"
         name="addSchoolToolResource.html"
         schema="schooltool.resource.interfaces.IResource"
-        fields="title description isLocation"
-        set_before_add="title description isLocation"
+        fields="title description notes"
+        set_before_add="title description notes"
         content_factory="schooltool.resource.resource.Resource"
         template="templates/simple_add.pt"
-        class="schooltool.resource.browser.resource.ResourceAddView"
+        class="schooltool.app.browser.app.BaseAddView"
         permission="schooltool.edit">
       <widget field="description" height="5" />
     </addform>
@@ -41,13 +78,84 @@
         name="edit.html"
         label="Edit Resource Information"
         schema="schooltool.resource.interfaces.IResource"
-        fields="title description isLocation"
+        fields="title description notes"
         permission="schooltool.edit"
         template="templates/simple_edit.pt"
         class="schooltool.resource.browser.resource.ResourceEditView"
         menu="schooltool_actions"
         title="Edit Info">
       <widget field="description" height="5" />
+    </editform>
+
+    <!-- Location forms -->
+    <addform
+        label="Add a Location"
+        name="addSchoolToolLocation.html"
+        schema="schooltool.resource.interfaces.ILocation"
+        fields="title type description capacity notes"
+        set_before_add="title type description capacity notes"
+        content_factory="schooltool.resource.resource.Location"
+        template="templates/simple_add.pt"
+        class="schooltool.app.browser.app.BaseAddView"
+        permission="schooltool.edit">
+      <widget field="description" height="5" />
+      <widget field="type"
+	      class="schooltool.resource.browser.resource.ResourceSubTypeWidget"
+	      utility="location"/>
+    </addform>
+
+    <editform
+        for="schooltool.resource.interfaces.ILocation"
+        name="edit.html"
+        label="Edit Location Information"
+        schema="schooltool.resource.interfaces.ILocation"
+        fields="title type description capacity notes"
+        permission="schooltool.edit"
+        template="templates/simple_edit.pt"
+        class="schooltool.resource.browser.resource.ResourceEditView"
+        menu="schooltool_actions"
+        title="Edit Info">
+      <widget field="description" height="5" />
+      <widget field="type"
+	      class="schooltool.resource.browser.resource.ResourceSubTypeWidget"
+	      utility="location"/>
+    </editform>
+
+    <!-- Equipment forms -->
+    <addform
+        label="Add an Equipment"
+        name="addSchoolToolEquipment.html"
+        schema="schooltool.resource.interfaces.IEquipment"
+        fields="title description type manufacturer model serialNumber
+                purchaseDate notes"
+        set_before_add="title description notes type manufacturer model
+                        serialNumber purchaseDate"
+        content_factory="schooltool.resource.resource.Equipment"
+        template="templates/simple_add.pt"
+        class="schooltool.app.browser.app.BaseAddView"
+        permission="schooltool.edit">
+      <widget field="description" height="5" />
+      <widget field="type"
+	      class="schooltool.resource.browser.resource.ResourceSubTypeWidget"
+	      utility="equipment"/>
+    </addform>
+
+    <editform
+        for="schooltool.resource.interfaces.IEquipment"
+        name="edit.html"
+        label="Edit Equipment Information"
+        schema="schooltool.resource.interfaces.IEquipment"
+        fields="title description type manufacturer model serialNumber
+                purchaseDate notes"
+        permission="schooltool.edit"
+        template="templates/simple_edit.pt"
+        class="schooltool.resource.browser.resource.ResourceEditView"
+        menu="schooltool_actions"
+        title="Edit Info">
+      <widget field="description" height="5" />
+      <widget field="type"
+	      class="schooltool.resource.browser.resource.ResourceSubTypeWidget"
+	      utility="equipment"/>
     </editform>
 
     <navigationViewlet
@@ -78,6 +186,20 @@
       action="+/addSchoolToolResource.html"
       />
 
+  <menuItem
+      menu="schooltool_actions"
+      title="New Location"
+      for="..interfaces.IResourceContainer"
+      action="+/addSchoolToolLocation.html"
+      />
+
+  <menuItem
+      menu="schooltool_actions"
+      title="New Equipment"
+      for="..interfaces.IResourceContainer"
+      action="+/addSchoolToolEquipment.html"
+      />
+
   <addMenuItem
       title="SchoolBell Resource"
       description="A Resource"
@@ -90,10 +212,21 @@
       name="index.html"
       for="..interfaces.IResource"
       class=".resource.ResourceView"
-      template="resource.pt"
       permission="schooltool.view"
-      menu="zmi_views"
-      title="View"
+      />
+
+  <page
+      name="index.html"
+      for="..interfaces.ILocation"
+      class=".resource.LocationView"
+      permission="schooltool.view"
+      />
+
+  <page
+      name="index.html"
+      for="..interfaces.IEquipment"
+      class=".resource.EquipmentView"
+      permission="schooltool.view"
       />
 
   <page
@@ -109,11 +242,54 @@
   <zope:adapter
       for="schooltool.resource.interfaces.IResourceContainer
            zope.publisher.interfaces.browser.IBrowserRequest"
-      factory="schooltool.skin.table.FilterWidget" />
+      factory=".resource.ResourceContainerFilterWidget" />
 
   <zope:adapter
       for="schooltool.resource.interfaces.IResourceContainer
            zope.publisher.interfaces.browser.IBrowserRequest"
-      factory="schooltool.skin.table.SchoolToolTableFormatter " />
+      factory="schooltool.table.table.SchoolToolTableFormatter " />
+
+  <zope:configure package="schooltool.app.browser">
+    <page
+       name="daily.html"
+       for="schooltool.resource.interfaces.IBookingCalendar"
+       class="schooltool.resource.browser.booking.DailyBookingCalendarView"
+       template="templates/cal_daily.pt"
+       permission="schooltool.view"
+       />
+
+    <page
+       name="weekly.html"
+       for="schooltool.resource.interfaces.IBookingCalendar"
+       class="schooltool.resource.browser.booking.WeeklyBookingCalendarView"
+       template="templates/cal_weekly.pt"
+       permission="schooltool.view"
+       />
+
+    <page
+       name="monthly.html"
+       for="schooltool.resource.interfaces.IBookingCalendar"
+       class="schooltool.resource.browser.booking.MonthlyBookingCalendarView"
+       template="templates/cal_monthly.pt"
+       permission="schooltool.view"
+       />
+
+    <page
+       name="yearly.html"
+       for="schooltool.resource.interfaces.IBookingCalendar"
+       class="schooltool.resource.browser.booking.YearlyBookingCalendarView"
+       template="templates/cal_yearly.pt"
+       permission="schooltool.view"
+       />
+
+  </zope:configure>
+
+  <page
+      for="schooltool.resource.interfaces.IBookingCalendar"
+      name="book_one_resource.html"
+      layer="schooltool.skin.ISchoolToolLayer"
+      class=".booking.CalendarEventBookOneResourceView"
+      permission="zope.View"
+      />
 
 </configure>

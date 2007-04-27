@@ -142,9 +142,11 @@ def doctest_SchoolToolAPI_authenticated():
 
         >>> from schooltool.person.person import Person
         >>> SchoolToolAPI(Person()).authenticated
+        ... # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
         Traceback (most recent call last):
           ...
         TypeError: schooltool:authenticated can only be applied to a principal
+        but was applied on <schooltool.person.person.Person object at ...>
 
     """
 

@@ -743,6 +743,7 @@ class VCalendar(object):
 class VTimezone(object):
 
     def __init__(self, tzid, tznames, x_lic_location=None):
+        tzid = tzid.encode('US-ASCII')
         self.tzid = tzid
         self.tznames = tznames
         self.x_lic_location = x_lic_location

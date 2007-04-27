@@ -33,7 +33,7 @@ from schooltool.app.browser.app import BaseAddView, BaseEditView
 from schooltool.person.interfaces import IPerson
 from schooltool.course.interfaces import ISection
 from schooltool.resource.interfaces import IResource
-from schooltool.skin.interfaces import ITableFormatter
+from schooltool.table.interfaces import ITableFormatter
 
 from schooltool.group.interfaces import IGroupMember
 from schooltool.group.interfaces import IGroupContainer, IGroupContained
@@ -85,10 +85,8 @@ class GroupView(BrowserView):
         return formatter.render()
 
     def getPersons(self):
+        # XXX should use table views
         return filter(IPerson.providedBy, self.context.members)
-
-    def getResources(self):
-        return filter(IResource.providedBy, self.context.members)
 
 
 class MemberViewPersons(RelationshipViewBase):

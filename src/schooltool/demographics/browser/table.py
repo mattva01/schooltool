@@ -33,7 +33,7 @@ from zope.security.proxy import removeSecurityProxy
 
 from schooltool.app.browser import ViewPreferences
 from schooltool.person.browser.person import PersonContainerView
-from schooltool.skin.table import DependableCheckboxColumn
+from schooltool.table.table import DependableCheckboxColumn
 from schooltool.demographics import interfaces
 from schooltool import SchoolToolMessage as _
 

@@ -29,7 +29,7 @@
 
   <allow
       interface="schooltool.resource.interfaces.IResourceContainer"
-      crowds="administration resource_list_viewers"
+      crowds="administration resource_list_viewers authenticated"
       permission="schooltool.view" />
   <allow
       interface="schooltool.resource.interfaces.IResourceContainer"
@@ -37,11 +37,11 @@
       permission="schooltool.edit" />
 
   <allow
-      interface="schooltool.resource.interfaces.IResource"
-      crowds="administration leaders resource_viewers"
+      interface="schooltool.resource.interfaces.IBaseResource"
+      crowds="administration leaders resource_viewers authenticated"
       permission="schooltool.view" />
   <allow
-      interface="schooltool.resource.interfaces.IResource"
+      interface="schooltool.resource.interfaces.IBaseResource"
       crowds="administration leaders"
       permission="schooltool.edit" />
 

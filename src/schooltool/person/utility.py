@@ -17,8 +17,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 from schooltool.person.person import Person
-from schooltool.skin.table import url_cell_formatter
-from schooltool.skin.table import IndexedLocaleAwareGetterColumn
+from schooltool.table.table import url_cell_formatter
+from schooltool.table.table import IndexedLocaleAwareGetterColumn
 
 
 class PersonFactoryUtility(object):

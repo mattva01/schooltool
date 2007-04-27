@@ -50,7 +50,7 @@ from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.timetable.browser import TimetableConflictMixin
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.skin.interfaces import ITableFormatter
+from schooltool.table.interfaces import ITableFormatter
 
 
 def same(a, b):

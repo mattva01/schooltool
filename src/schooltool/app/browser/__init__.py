@@ -107,9 +107,11 @@ class SchoolToolAPI(object):
             </tal:span>
 
         """
+        if self.context is None: # no one is logged in
+            return False
         if not IPrincipal.providedBy(self.context):
             raise TypeError("schooltool:authenticated can only be applied"
-                            " to a principal")
+                            " to a principal but was applied on %r" % self.context)
         return not IUnauthenticatedPrincipal.providedBy(self.context)
     authenticated = property(authenticated)
 

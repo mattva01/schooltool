@@ -12,6 +12,4 @@
 
   <includeOverrides package="schooltool.demographics" file="overrides.zcml" />
 
-  <include package="zope.testbrowser.ftests" file="ftesting.zcml" />
-
 </configure>

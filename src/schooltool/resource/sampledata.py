@@ -25,7 +25,7 @@ $Id$
 from zope.interface import implements
 
 from schooltool.sampledata.interfaces import ISampleDataPlugin
-from schooltool.resource.resource import Resource
+from schooltool.resource.resource import Resource, Location
 
 
 class SampleResources(object):
@@ -37,8 +37,7 @@ class SampleResources(object):
 
     def generate(self, app, seed=None):
         for i in range(64):
-            app['resources']['room%02d' % i] = Resource(title='Room %02d' % i,
-                                                        isLocation=True)
+            app['resources']['room%02d' % i] = Location(title='Room %02d' % i)
         for i in range(24):
             resource = Resource(title='Projector %02d' % i)
             app['resources']['projector%02d' % i] = resource

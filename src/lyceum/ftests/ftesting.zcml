@@ -13,6 +13,4 @@
 
   <includeOverrides package="lyceum" file="overrides.zcml" />
 
-  <include package="zope.testbrowser.ftests" file="ftesting.zcml" />
-
 </configure>

@@ -37,8 +37,8 @@ from schooltool.demographics.interfaces import ISearch
 from schooltool.demographics.person import Person
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonFactory
-from schooltool.skin.table import LocaleAwareGetterColumn
-from schooltool.skin.table import url_cell_formatter
+from schooltool.table.table import LocaleAwareGetterColumn
+from schooltool.table.table import url_cell_formatter
 from schooltool import SchoolToolMessage as _
 
 

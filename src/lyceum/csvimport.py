@@ -34,7 +34,7 @@ from schooltool.common import DateRange
 from schooltool.course.course import Course
 from schooltool.course.section import Section
 from schooltool.group.group import Group
-from schooltool.resource.resource import Resource
+from schooltool.resource.resource import Location
 from schooltool.term.term import Term
 from schooltool.timetable import SchooldaySlot
 from schooltool.timetable import SchooldayTemplate
@@ -258,7 +258,7 @@ class LyceumResources(object):
         rooms = set(rooms)
         for room in rooms:
             room = CSVRoom(room)
-            app['resources'][room.id] = Resource(title=room.title, isLocation=True)
+            app['resources'][room.id] = Location(title=room.title)
 
 
 days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']

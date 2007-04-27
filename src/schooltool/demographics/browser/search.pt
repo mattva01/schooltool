@@ -1,7 +1,7 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <body>
 <metal:nothing metal:fill-slot="content-header" />
-<metal:block metal:fill-slot="body" tal:define="batch view/table/batch">
+<metal:block metal:fill-slot="body">
 
   <p i18n:translate="">Search for persons here. Note that in fulltext
   fields you can use wildcard characters such as *. For example, to search for everyone with John
@@ -19,18 +19,14 @@
     </div>
   </form>
 
-  <tal:if tal:condition="batch">
-    <tal:block define="extra_url string:${view/table/extra_url}${view/extraUrl}">
-      <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
-    </tal:block>
-  </tal:if>
+  <tal:block replace="view/table/batch" />
   <form method="post" tal:attributes="action string:${context/@@absolute_url}">
-    <tal:if condition="batch">
+    <tal:if condition="view/table/batch">
       <div class="count">
         <span i18n:translate="">Showing</span>
-        <span tal:content="python:len(batch)"/>
+        <span tal:content="view/table/batch/length"/>
         <span i18n:translate="">of</span>
-        <span tal:content="python:len(batch.list)"/>
+        <span tal:content="view/table/batch/full_size"/>
         <span i18n:translate="">items</span>
       </div>
         <tal:block replace="structure view/table/render" />
@@ -42,7 +38,7 @@
     </tal:if>
   </form>
 
-  <p tal:condition="python:not batch and view.search_data" i18n:translate="">There were no results.</p>
+  <p tal:condition="python:not view.table.batch and view.search_data" i18n:translate="">There were no results.</p>
 
 </metal:block>
 </body>

@@ -1,9 +1,0 @@
-<tal:block define="batch view/batch">
-
-  <metal:macro use-macro="view/@@batch_macros/batch-navigation"/>
-
-  <ul>
-    <li tal:repeat="item batch" tal:content="item"/>
-  </ul>
-
-</tal:block>

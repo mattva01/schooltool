@@ -418,7 +418,7 @@ def doctest_EventForDisplay_getBooker_getBookedResources():
     event:
 
         >>> efd = EFD()
-        >>> efd.getBookedResources()
+        >>> sorted(efd.getBookedResources())
         ['res1', 'res2']
 
     getBooker returns the owner of the event:
@@ -1048,6 +1048,49 @@ class TestCalendarViewBase(unittest.TestCase):
         fmt = lambda x: '[%s]' % ', '.join([e.title for e in x])
         self.assertEquals(result, expected,
                           '%s != %s' % (fmt(result), fmt(expected)))
+
+    def doctest_eventAddLink(self):
+        """Tests for CalendarViewBase.eventAddLink.
+
+            >>> from schooltool.app.browser.cal import CalendarViewBase
+            >>> from schooltool.app.cal import Calendar
+
+            >>> setup.placefulSetUp()
+            >>> app = sbsetup.setUpSchoolToolSite()
+            >>> directlyProvides(app, IContainmentRoot)
+            >>> ztapi.provideAdapter(Interface, ISchoolToolApplication,
+            ...                      lambda x: app)
+            >>> from schooltool.resource.interfaces import IBookingCalendar
+            >>> from schooltool.resource.interfaces import IResourceContainer
+            >>> from schooltool.resource.booking import ResourceBookingCalendar
+            >>> ztapi.provideAdapter(IResourceContainer, IBookingCalendar,
+            ...                      ResourceBookingCalendar)
+
+            >>> app['persons']['john'] = person = Person("john")
+            >>> calendar = Calendar(person)
+            >>> vb = CalendarViewBase(calendar, TestRequest())
+
+        For persons or groups the link points to the add event view of
+        the calendar you are looking at:
+
+            >>> vb.cursor = date(2005, 1, 1)
+            >>> vb.eventAddLink({'time': '5:00', 'duration': 45})
+            'http://127.0.0.1/persons/john/calendar/add.html?field.start_date=2005-01-01&field.start_time=5:00&field.duration=45'
+
+        The link should be quite different if this calendar belongs to
+        a resource rather than a person. The link points to the
+        resource booking calendar:
+
+            >>> from schooltool.resource.resource import Resource
+            >>> app['resources']['chair'] = resource = Resource("chair")
+            >>> calendar = Calendar(resource)
+            >>> vb = CalendarViewBase(calendar, TestRequest())
+
+            >>> vb.cursor = date(2005, 1, 1)
+            >>> vb.eventAddLink({'time': '5:00', 'duration': 45})
+            u'http://127.0.0.1/resources/booking/book_one_resource.html?resource_id=chair&start_date=2005-01-01&start_time=5:00:00&title=Unnamed Event&duration=2700'
+
+        """
 
     def doctest_pigeonhole(self):
         r"""Test for CalendarViewBase.pigeonhole().
@@ -3074,7 +3117,15 @@ def doctest_TestCalendarEventBookingView():
 
         >>> request = TestRequest()
         >>> view = CalendarEventBookingView(event, request)
-
+        >>> class StubResourceContainer(object):
+        ...     def filter(self, list):
+        ...         return list
+        ...     def values(self):
+        ...         return []
+        >>> def stubItemsContainer():
+        ...     return StubResourceContainer()
+        >>> view.getAvailableItemsContainer = stubItemsContainer
+        >>> view.filter = lambda list: list
         >>> view.update()
         >>> view.errors
         ()
@@ -3105,57 +3156,46 @@ def doctest_TestCalendarEventBookingView():
 
     Now let's book some resources for our event:
 
-        >>> request = TestRequest(form={'marker-res0': '1',
-        ...                             'marker-res1': '1',
-        ...                             'res2': 'booked',
-        ...                             'marker-res2': '1',
-        ...                             'marker-res3': '1',
-        ...                             'res4': 'booked',
-        ...                             'marker-res4': '1',
-        ...                             'marker-res5': '1',
-        ...                             'marker-res6': '1',
-        ...                             'marker-res7': '1',
-        ...                             'marker-res8': '1',
-        ...                             'marker-res9': '1',
-        ...                             'UPDATE_SUBMIT': 'Set'})
-
+        >>> request = TestRequest(form={'add_item.res2': '1',
+        ...                             'add_item.res4': '1',
+        ...                             'BOOK': 'Set'})
         >>> view = CalendarEventBookingView(event, request)
-
+        >>> view.getAvailableItemsContainer = stubItemsContainer
+        >>> view.filter = lambda list: list
         >>> view.update()
         ''
 
     A couple of resources should be booked now:
 
-        >>> [resource.title for resource in view.availableResources
-        ...                 if view.hasBooked(resource)]
+        >>> sorted([resource.title for resource in view.getBookedItems()])
         ['res2', 'res4']
 
 
     Now let's unbook a resource and book a new one:
 
-        >>> request = TestRequest(form={'marker-res0': '1',
-        ...                             'marker-res1': '1',
-        ...                             'marker-res2': '1',
-        ...                             'res3': 'booked',
-        ...                             'marker-res3': '1',
-        ...                             'res4': 'booked',
-        ...                             'marker-res4': '1',
-        ...                             'marker-res5': '1',
-        ...                             'marker-res6': '1',
-        ...                             'marker-res7': '1',
-        ...                             'marker-res8': '1',
-        ...                             'marker-res9': '1',
-        ...                             'UPDATE_SUBMIT': 'Set'})
+        >>> request = TestRequest(form={'add_item.res3': '1',
+        ...                             'add_item.res4': '1',
+        ...                             'BOOK': 'Set'})
 
         >>> view = CalendarEventBookingView(event, request)
+        >>> view.getAvailableItemsContainer = stubItemsContainer
+        >>> view.filter = lambda list: list
+        >>> view.update()
+        ''
+        >>> sorted([resource.title for resource in view.getBookedItems()])
+        ['res2', 'res3', 'res4']
 
+        >>> request = TestRequest(form={'remove_item.res2':'1',
+        ...                            'UNBOOK': 'Set'})
+        >>> view = CalendarEventBookingView(event, request)
+        >>> view.getAvailableItemsContainer = stubItemsContainer
+        >>> view.filter = lambda list: list
         >>> view.update()
         ''
 
     We should see resource 3 in the list now:
 
-        >>> [resource.title for resource in view.availableResources
-        ...                 if view.hasBooked(resource)]
+        >>> sorted([resource.title for resource in view.getBookedItems()])
         ['res3', 'res4']
 
     If you don't feel very brave, use the Cancel button:
@@ -3174,19 +3214,19 @@ def doctest_TestCalendarEventBookingView():
         ...                             'CANCEL': 'Cancel'})
 
         >>> view = CalendarEventBookingView(event, request)
+        >>> view.getAvailableItemsContainer = stubItemsContainer
+        >>> view.filter = lambda list: list
         >>> view.update()
-        ''
 
     Nothing has changed, see?
 
-        >>> [resource.title for resource in view.availableResources
-        ...                 if view.hasBooked(resource)]
+        >>> sorted([resource.title for resource in view.getBookedItems()])
         ['res3', 'res4']
 
     And you have been redirected back to the calendar:
 
         >>> request.response.getHeader('Location')
-        'http://127.0.0.1/persons/ignas/calendar/ZXYx/@@edit.html'
+        'http://127.0.0.1/persons/ignas/calendar'
 
     The view also follows PersonPreferences timeformat and dateformat settings.
     To demonstrate these we need to setup PersonPreferences:
@@ -3198,8 +3238,9 @@ def doctest_TestCalendarEventBookingView():
         ...                      getPersonPreferences)
         >>> request.setPrincipal(person)
         >>> view = CalendarEventBookingView(event, request)
+        >>> view.getAvailableItemsContainer = stubItemsContainer
+        >>> view.filter = lambda list: list
         >>> view.update()
-        ''
 
     Without the preferences set, we get the default start and end time
     formatting:

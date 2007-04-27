@@ -187,7 +187,8 @@ class ICalendarDisplayPreferences(zope.interface.Interface):
     weekstart = zope.schema.Choice(
         title=_("Week starts on:"),
         description=_("Start display of weeks on Sunday or Monday"),
-        vocabulary=vocabulary([(calendar.SUNDAY, _("Sunday")),
+        vocabulary=vocabulary([(calendar.SATURDAY, _("Saturday")),
+                               (calendar.SUNDAY, _("Sunday")),
                                (calendar.MONDAY, _("Monday"))]))
 
 

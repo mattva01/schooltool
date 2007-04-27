@@ -62,8 +62,8 @@ def doctest_GroupListView():
 
     And we need a table formatter to display our groups:
 
-        >>> from schooltool.skin.table import SchoolToolTableFormatter
-        >>> from schooltool.skin.interfaces import ITableFormatter
+        >>> from schooltool.table.table import SchoolToolTableFormatter
+        >>> from schooltool.table.interfaces import ITableFormatter
         >>> from zope.publisher.interfaces.browser import IBrowserRequest
         >>> provideAdapter(SchoolToolTableFormatter, (None, IBrowserRequest), ITableFormatter)
 
@@ -165,8 +165,8 @@ def doctest_MemberListView():
 
     And we need a table formatter to display our persons:
 
-        >>> from schooltool.skin.table import SchoolToolTableFormatter
-        >>> from schooltool.skin.interfaces import ITableFormatter
+        >>> from schooltool.table.table import SchoolToolTableFormatter
+        >>> from schooltool.table.interfaces import ITableFormatter
         >>> from zope.publisher.interfaces.browser import IBrowserRequest
         >>> provideAdapter(SchoolToolTableFormatter, (None, IBrowserRequest), ITableFormatter)
 
@@ -265,14 +265,10 @@ def doctest_GroupView():
 
     Let's relate some objects to our group:
 
-        >>> from schooltool.resource.resource import Resource
         >>> from schooltool.person.person import Person
         >>> group.members.add(Person(title='First'))
         >>> group.members.add(Person(title='Last'))
         >>> group.members.add(Person(title='Intermediate'))
-        >>> group.members.add(Resource(title='Average'))
-        >>> group.members.add(Resource(title='Another'))
-        >>> group.members.add(Resource(title='The last'))
 
     A person list from that view should be sorted by title.
 
@@ -280,13 +276,6 @@ def doctest_GroupView():
         >>> titles.sort()
         >>> titles
         ['First', 'Intermediate', 'Last']
-
-    Same for the resource list.
-
-        >>> titles = [resource.title for resource in view.getResources()]
-        >>> titles.sort()
-        >>> titles
-        ['Another', 'Average', 'The last']
 
     """
 

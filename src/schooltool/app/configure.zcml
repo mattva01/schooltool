@@ -57,12 +57,12 @@
 
   <!-- Utilities -->
 
-  <localUtility class=".security.SchoolToolAuthenticationUtility">
+  <class class=".security.SchoolToolAuthenticationUtility">
     <require
         permission="zope.ManageServices"
         interface="zope.app.security.interfaces.IAuthentication"
         />
-  </localUtility>
+  </class>
 
   <utility
       provides="schooltool.relationship.interfaces.IRelationshipSchema"
@@ -176,9 +176,10 @@
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
   </class>
 
-  <class class="schooltool.resource.resource.Resource">
+  <class class="schooltool.resource.resource.BaseResource">
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
   </class>
+  
 
   <!-- Core and Domain content objects -->
 

@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" metal:use-macro="view/@@schooltool_macros/onlinehelp/page">
+      <head>
+      <title metal:fill-slot="title" i18n:translate="">Person Container</title>
+</head>
+<body metal:fill-slot="body" tal:omit-tag="">
+
+<p>Use this page to keep track of <b>groups</b> of Persons.</p>
+
+<p><b>Groups</b> that have been added are not part of the essential
+groups (<b>Teachers</b>, <b>Students</b>, <b>Site Managers</b>, <b>School
+Administrators</b>, or <b>Clerks</b>).  They can be selected by the checkbox
+next to them and removed by pressing the <b>Delete</b> button at the bottom
+of the page.</p>
+
+<p>To look for for a group, use the search box to the left of the <b>Find
+Now</b> button to look through the entire list of groups for the search
+criterion.</p>
+
+<p>The <b>Clear</b> button empties the search box of current entries.</p>
+
+<p>To view the persons in a certain group, click on the name of the group.</p>
+
+<p>To sort the list, click on the <b>Title</b> header to change the order of
+groups from descending to ascending order, and vice versa.</p>
+
+<p>Separate <q>batches</q> of the Group list can be accessed through the
+<b>Next 10</b> (and <b>Previous</b>) and links in the blue bar.</p>
+
+<p>A <b>Show All</b> button is also there to show all of the groups on a
+single page.</p>
+
+</body>
+</html>
+

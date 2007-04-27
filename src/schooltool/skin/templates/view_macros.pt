@@ -13,6 +13,9 @@
     <link rel="stylesheet" type="text/css" media="print"
           tal:attributes="href context/++resource++print.css" />
     <metal:block use-macro="view/@@schooltool_macros/generic/stylesheets" />
+    <script type="text/javascript" src="mochikit.js"
+            tal:attributes="src context/++resource++mochikit.js">
+    </script>
     <script type="text/javascript" src="schooltool.js"
             tal:attributes="src context/++resource++schooltool.js">
     </script>
@@ -52,8 +55,7 @@
         </div>
         <div
           tal:define="user request/principal;
-                      url context/schooltool:app/@@absolute_url"
-          tal:on-error="nothing">
+                      url context/schooltool:app/@@absolute_url">
 
           <tal:if condition="not:user/schooltool:authenticated">
             <a id="tools-login" i18n:translate=""
@@ -86,6 +88,9 @@
             </span>
           </tal:if>
 
+          <!-- XXX either all modules should include Help, or core
+          should provide a dummy replacement, because eating errors is
+          a bad idea -->
           <tal:block replace="structure provider:schooltool.Help"
                      on-error="nothing" />
 
@@ -93,30 +98,23 @@
       </div>
     </div>
     <div id="columns">
+      <div id="action-bar">
+	<div metal:define-slot="actions-bar"
+	     tal:replace="structure provider:schooltool.MenuBar" />
+      </div>
       <metal:block define-slot="column-left">
-        <div id="column-left">
-          <div metal:define-slot="navigation-box"
-               tal:replace="structure provider:schooltool.Navigation"
-               tal:on-error="nothing" />
-
-          <tal:block define="target python:hasattr(view, 'actualContext')
-                                           and view.actualContext() or context">
-            <div metal:define-slot="actions-box"
-                 tal:replace="structure provider:schooltool.Actions"
-                 tal:on-error="nothing"/>
-          </tal:block>
-
-          <metal:block define-slot="column-left-extra"/>
+        <metal:block define-slot="column-left-extra"/>
+      </metal:block>
+      <metal:block define-slot="content">
+        <div id="column-center">
+          <div id="content-header">
+            <metal:block define-slot="content-header"/>
+          </div>
+          <div id="content-body">
+            <metal:block define-slot="body"/>
+          </div>
         </div>
       </metal:block>
-      <div id="column-center">
-        <div id="content-header">
-          <metal:block define-slot="content-header"/>
-        </div>
-        <div id="content-body">
-          <metal:block define-slot="body"/>
-        </div>
-      </div>
       <div class="clearer">&nbsp;</div>
     </div>
     <div id="footer">

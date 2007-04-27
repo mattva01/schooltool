@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+      metal:use-macro="view/@@schooltool_macros/onlinehelp/page">
+      <head>
+      <title metal:fill-slot="title"
+                   i18n:translate="">Z3 CSS: Styles</title>
+</head>
+<body metal:fill-slot="body" tal:omit-tag="">
+
+<p>Use this page to organize courses listed in the system.</p>
+
+<p>To look for for a course, use the search box to the left of the <b>Find
+Now</b> button to look through the entire list of courses for the search
+criterion.</p>
+
+<p>To show a list of the different sections of a course, click on the name
+of the course.</p>
+
+<p>The <b>Clear</b> button empties the search box of current entries.</p>
+
+<p>To show the lists of students in a particular class, click on the
+<em>teacher -- course</em> link. The number of students is also listed next
+to the teacher and the course.</p>
+
+<p>Separate <q>batches</q> of the Course list can be accessed through the
+<b>Next 10</b> (and <b>Previous</b>) and links in the blue bar.</p>
+
+<p>A <b>Show All</b> button is also there to show all of the courses on a
+single page.</p>
+
+</body>
+</html>

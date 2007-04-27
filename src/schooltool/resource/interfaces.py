@@ -28,36 +28,138 @@ import zope.schema
 import zope.app.container.constraints
 from zope.app import container
 
+from schooltool.calendar.interfaces import ICalendarEvent
+from schooltool.calendar.interfaces import ICalendar
 from schooltool import SchoolToolMessage as _
 
 
-class IResource(zope.interface.Interface):
+class IBaseResource(zope.interface.Interface):
     """Resource."""
 
     title = zope.schema.TextLine(
         title=_("Title"),
         description=_("Title of the resource."))
 
+    type = zope.schema.TextLine(
+        title=_("Resource Type"),
+        description=_("Type of resource"),
+        required=True)
+
+
     description = zope.schema.Text(
         title=_("Description"),
         required=False,
         description=_("Description of the resource."))
 
-    isLocation = zope.schema.Bool(
-        title=_("A Location."),
-        description=_(
-            """Indicate this resource is a location, like a classroom."""),
+    notes = zope.schema.Text(
+        title=_("Notes"),
         required=False,
-        default=False)
+        description=_("Notes for the resource."))
 
 
 class IResourceContainer(container.interfaces.IContainer):
     """Container of resources."""
 
-    container.constraints.contains(IResource)
+    container.constraints.contains(IBaseResource)
 
 
-class IResourceContained(IResource, container.interfaces.IContained):
+class IBaseResourceContained(IBaseResource, container.interfaces.IContained):
     """Resource contained in an IResourceContainer."""
 
     container.constraints.containers(IResourceContainer)
+
+
+class IResource(IBaseResource):
+    """Marker for a regular old resource"""
+
+
+class ILocation(IBaseResource):
+    """Location."""
+
+    type = zope.schema.TextLine(
+        title=_("Location Type"),
+        description=_("Type of location (i.e. computer lab, class room, etc.)"),
+        required=True)
+
+
+    capacity = zope.schema.Int(
+        title=_("Capacity"),
+        description=_("Capacity of the room"),
+        required=False)
+
+
+class IEquipment(IBaseResource):
+    """Equipment."""
+
+    type = zope.schema.TextLine(
+        title=_("Equipment Type"),
+        description=_("Type of equipment (i.e. camcorder, computer, etc.)"),
+        required=True)
+
+    manufacturer = zope.schema.TextLine(
+        title=_("Manufacturer"),
+        description=_("Manufacturer of Equipment"),
+        required=False)
+
+    model = zope.schema.TextLine(
+        title=_("Model"),
+        description=_("Model of Equipment"),
+        required=False)
+
+    serialNumber = zope.schema.TextLine(
+        title=_("Serial Number"),
+        description=_("Serial Number of Equipment"),
+        required=False)
+
+    purchaseDate = zope.schema.Date(
+        title=_("Purchase Date"),
+        description=_("Purchase Date of Equipment"),
+        required=False)
+
+
+class IResourceTypeInformation(zope.interface.Interface):
+
+    id = zope.schema.TextLine(
+        title=_("Id of the resource type."),
+        description=_("""Used for lookup of named utilities that have resource
+        type specific information."""))
+
+    title = zope.schema.TextLine(
+        title=_("The title of a resource type."),
+        description=_("""A string that will be displayed to users in tables or
+        resource type selection widgets."""))
+
+
+class IResourceFactoryUtility(zope.interface.Interface):
+
+    title = zope.schema.TextLine(
+        title=_("The title of a resource type."),
+        description=_("""A string that will be displayed to users in tables or
+        resource type selection widgets."""))
+
+    def columns():
+        """Default columns for display of this resource in a table."""
+
+
+class IResourceTypeSource(zope.schema.interfaces.IIterableSource):
+    """Marker interface for a source of resource types."""
+
+
+class IResourceSubTypes(zope.interface.Interface):
+    """Contains a list of sub types for a given type."""
+
+    def types():
+        """returns Types among a type (subtypes)"""
+
+
+class IBookingCalendar(ICalendar):
+
+    title = zope.interface.Attribute("")
+
+
+class IBookingCalendarEvent(ICalendarEvent):
+    """Event that represents a possible booking on an existing event."""
+
+
+class IBookingTimetableEvent(ICalendarEvent):
+    """Event that represents a possible booking in a timetable slot."""

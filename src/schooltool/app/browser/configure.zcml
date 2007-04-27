@@ -25,14 +25,6 @@
       order="10"
       />
 
-  <viewlet
-      name="resource-booking-info"
-      for="*"
-      manager="schooltool.app.browser.skin.ICalendarEventViewletManager"
-      template="templates/event_booking_viewlet.pt"
-      permission="zope.Public"
-      order="20"
-      />
 
  <!-- TALES path expressions -->
 
@@ -243,7 +235,6 @@
       factory=".cal.CalendarTraverser"
       permission="zope.Public"
       />
-
 
   <zope:view
       for="schooltool.app.interfaces.ISchoolToolCalendar"

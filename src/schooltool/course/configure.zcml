@@ -146,4 +146,7 @@
   <include package=".browser" />
   <include package=".rest" />
 
+  <!-- Help files -->
+  <include package=".help" />
+
 </configure>

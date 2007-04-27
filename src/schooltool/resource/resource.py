@@ -33,9 +33,12 @@ from zope.app.container.contained import Contained
 from schooltool.app.app import Asset
 from schooltool.app.app import InitBase
 from schooltool.app.security import LeaderCrowd
+from schooltool.securitypolicy.crowds import TeachersCrowd
 from schooltool.app.interfaces import ICalendarParentCrowd
 from schooltool.resource import interfaces
 from schooltool.securitypolicy.crowds import ConfigurableCrowd
+from schooltool.securitypolicy.crowds import AuthenticatedCrowd
+from schooltool import SchoolToolMessage as _
 
 
 class ResourceContainer(btree.BTreeContainer):
@@ -44,18 +47,46 @@ class ResourceContainer(btree.BTreeContainer):
     implements(interfaces.IResourceContainer, IAttributeAnnotatable)
 
 
-class Resource(Persistent, Contained, Asset):
-    """Resource."""
+class BaseResource(Persistent, Contained, Asset):
+    """Base Resource."""
 
-    implements(interfaces.IResourceContained, IAttributeAnnotatable)
+    implements(interfaces.IBaseResource, IAttributeAnnotatable)
 
-    # BBB: ...
-    isLocation = False # backwards compatibility
+    type = _(u"Resource")
 
-    def __init__(self, title=None, description=None, isLocation=False):
+    def __init__(self, title=None, description=None):
         self.title = title
         self.description = description
-        self.isLocation = isLocation
+        self.notes = u""
+
+
+class Resource(BaseResource):
+    """Resource."""
+
+    implements(interfaces.IResource)
+
+    # BBB so that evolution scripts would work
+    isLocation = None
+
+
+class Location(BaseResource):
+    """Location."""
+
+    implements(interfaces.ILocation)
+
+    capacity = None
+
+
+class Equipment(BaseResource):
+    """Equipment."""
+
+    implements(interfaces.IEquipment)
+
+    type = u""
+    manufacturer = u""
+    model = u""
+    serialNumber = u""
+    purchaseDate = None
 
 
 class ResourceInit(InitBase):
@@ -76,17 +107,23 @@ class ResourceContainerViewersCrowd(ConfigurableCrowd):
 
 class ResourceCalendarViewersCrowd(ConfigurableCrowd):
 
-    adapts(interfaces.IResource)
+    adapts(interfaces.IBaseResource)
     implements(ICalendarParentCrowd)
 
     setting_key = "everyone_can_view_resource_calendar"
 
     def contains(self, principal):
         return (ConfigurableCrowd.contains(self, principal) or
-                LeaderCrowd(self.context).contains(principal))
+                LeaderCrowd(self.context).contains(principal) or
+                AuthenticatedCrowd(self.context).contains(principal) or
+                TeachersCrowd(self.context).contains(principal))
 
 
 class ResourceCalendarEditorsCrowd(LeaderCrowd):
 
-    adapts(interfaces.IResource)
+    adapts(interfaces.IBaseResource)
     implements(ICalendarParentCrowd)
+
+    def contains(self, principal):
+        return (LeaderCrowd.contains(self, principal) or
+                TeachersCrowd(self.context).contains(principal))

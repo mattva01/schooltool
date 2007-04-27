@@ -115,6 +115,14 @@ FORM.standalone .controls, div.standalone .controls {
 	margin: 0.5em 1em 1em 1em;
 }
 
+FORM div.oneline-form div{
+  display: inline;
+}
+
+FORM div.oneline-form div.value{
+  margin: 0;
+}
+
 #header {
 }
 
@@ -145,10 +153,11 @@ FORM.standalone .controls, div.standalone .controls {
 	float: left;
 	width: 14em;
 	margin-bottom: 5em;
+        margin-top: 2em;
 }
 
 #column-center {
-	margin-left: 14em;
+	margin-left: 0em;
 }
 
 #footer {
@@ -186,7 +195,7 @@ DIV.search-results {
 	background: #eae8e3;
 }
 
-FORM.standalone, div.standalone {
+FORM.standalone, div.standalone, FORM div.oneline-form{
 	background: #eae8e3;
 	border: 1px #bab5ab solid;
 }
@@ -246,6 +255,13 @@ SELECT {
 
 OPTION {
 	border-bottom: 1px #eae8e3 solid;
+}
+
+OPTION.dropdown-header {
+        border-bottom: 1px #000 solid;
+        background: #ddd;
+        color: #000;
+        font-weight: bold;
 }
 
 INPUT[type=text]:focus,
@@ -362,6 +378,17 @@ A.button-ok {
 /*
 * Left Column and portlets
 */
+#column-left-top {
+    background: url(++resource++sidebar-background-top.png) top right no-repeat;
+	position: relative;
+	top: 0;
+	right: 0;
+	width: 100%;
+	padding-top: 20px;
+	padding-right: 3px;
+	margin: 0;
+	margin-bottom: -0.5em;
+}
 
 #column-left {
 	background: #eae8e3 url(++resource++sidebar-background.png) bottom right no-repeat;
@@ -431,7 +458,7 @@ A.button-ok {
 */
 
 #column-center {
-	padding: 15px 20px;
+	padding: 2em 2em;
 }
 
 #content-header,
@@ -440,6 +467,10 @@ A.button-ok {
 }
 
 #content-header H1 {
+}
+
+#content-body {
+  margin-top: 20px;
 }
 
 #breadcrumbs {

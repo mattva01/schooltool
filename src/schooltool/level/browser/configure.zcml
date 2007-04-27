@@ -172,11 +172,11 @@
   <zope:adapter
       for="schooltool.level.interfaces.ILevelContainer
            zope.publisher.interfaces.browser.IBrowserRequest"
-      factory="schooltool.skin.table.FilterWidget" />
+      factory="schooltool.table.table.FilterWidget" />
 
   <zope:adapter
       for="schooltool.level.interfaces.ILevelContainer
            zope.publisher.interfaces.browser.IBrowserRequest"
-      factory="schooltool.skin.table.SchoolToolTableFormatter " />
+      factory="schooltool.table.table.SchoolToolTableFormatter " />
 
 </configure>

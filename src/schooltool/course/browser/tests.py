@@ -360,9 +360,8 @@ def doctest_SectionEditView():
 
         >>> from schooltool.app.app import SchoolToolApplication
         >>> app = setup.setUpSchoolToolSite()
-        >>> from schooltool.resource.resource import Resource
-        >>> app['resources']['room1'] = room1 = Resource("Room 1",
-        ...                                               isLocation=True)
+        >>> from schooltool.resource.resource import Location
+        >>> app['resources']['room1'] = room1 = Location("Room 1")
 
         >>> section = Section()
         >>> directlyProvides(section, IContainmentRoot)
