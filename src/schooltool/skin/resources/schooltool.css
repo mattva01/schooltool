@@ -270,7 +270,7 @@ div.field-odd {
 }
 
 div.field-even {
-    background-color: #EAE8E3; 
+    background-color: #EAE8E3;
 }
 
 /*Styles for actions bar */
@@ -306,22 +306,6 @@ div.field-even {
 #dropdowncontainer tr td div{
   border: 1px solid #aaa;
 }
-
-div .singleton,
-div .dropdown {
-  width: auto;
-  line-height:1.2em;
-  height:1.2em;
-  overflow:hidden;
-  text-align:left;
-  z-index:100;
-  font-weight: bold;
-}
-
-div .singleton:hover,
-div .dropdown:hover {
-  height: auto;
-  background:#eee;}
 
 div .singleton .title{
   font-size: 1em;
@@ -405,4 +389,19 @@ div .dropdown a:hover {
   border-top: 1px #314e6c solid;
   border-bottom: 1px #314e6c solid;
   color: #fff !important;
+}
+
+#dropdowncontainer .expanded {
+  height: auto;
+  background:#eee;
+}
+
+#dropdowncontainer .contracted {
+  width: auto;
+  line-height:1.2em;
+  height:1.2em;
+  overflow:hidden;
+  text-align:left;
+  z-index:100;
+  font-weight: bold;
 }

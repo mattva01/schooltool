@@ -34,7 +34,7 @@
          tal:condition="view/canAddEvents"
          tal:define="active python: hour['active'] and ' active' or '';
                      url python:view.eventAddLink(hour)"
-         tal:attributes="onclick url;
+         tal:attributes="onclick string:parent.location='${url}';
                          style string:top: ${hour/top}em;; height: ${hour/height}em;; cursor: pointer;
                          class string:hour ${repeat/hour/parity}${active}">
       <a class="event-new" style="width:100%; height:100%;"

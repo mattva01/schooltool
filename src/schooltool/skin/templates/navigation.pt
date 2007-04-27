@@ -1,6 +1,7 @@
-<div class="dropdown">
+<div class="dropdown contracted"
+     onmouseover="this.className='dropdown expanded'"
+     onmouseout="this.className='dropdown contracted'">
   <h3 class="title">Navigation</h3>
   <tal:block repeat="viewlet options/viewlets"
 	     content="structure viewlet/render" />
 </div>
-
