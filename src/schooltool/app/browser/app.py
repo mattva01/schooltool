@@ -59,7 +59,10 @@ class ApplicationView(BrowserView):
         if prefs.frontPageCalendar:
             url = zapi.absoluteURL(ISchoolToolCalendar(self.context),
                                    self.request)
-            self.request.response.redirect(url)
+        else:
+            url = zapi.absoluteURL(ISchoolToolApplication(self.context), 
+                                   self.request) + '/@@dashboard.html'
+        self.request.response.redirect(url)
 
 
 class BaseAddView(AddView):

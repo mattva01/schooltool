@@ -4,7 +4,7 @@
 #
 # $Id$
 
-PYTHON=python
+PYTHON=python2.4
 ZPKG=../../zpkgtools/bin/zpkg
 TRANSLATION_DOMAINS=schoolbell schooltool
 ZOPE_REPOSITORY=svn://svn.zope.org/repos/main/
