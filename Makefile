@@ -35,7 +35,6 @@ realclean: clean cleandb
 	find . \( -name '*.so' -o -name '*.pyd' \) -exec rm -f {} \;
 	rm -f *.csv tags ID *.log
 	rm -f scripts/import-sampleschool
-	rm -f MANIFEST
 	rm -rf dist
 	rm -rf eggs
 
@@ -83,14 +82,12 @@ vi-coverage-reports:
 	@cd coverage && vi '+/^>>>>>>/' `ls schooltool* | grep -v tests | xargs grep -l '^>>>>>>'`
 
 .PHONY: dist
-dist: realclean update-translations
-	# XXX make me work with eggs
-	$(ZPKG) -x reportlab -C releases/SchoolTool.cfg
+dist: realclean extract-translations update-translations
+	$(PYTHON) setup.py register sdist bdist_eg
 
 .PHONY: signtar
 signtar: dist
-	# XXX make me work with eggs
-	md5sum dist/SchoolTool*.tgz > dist/md5sum
+	md5sum dist/schooltool*.tgz > dist/md5sum
 	gpg --clearsign dist/md5sum
 	mv dist/md5sum.asc dist/md5sum
 
