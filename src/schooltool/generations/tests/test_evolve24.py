@@ -29,7 +29,7 @@ from zope.testing import doctest
 from zope.interface import implements
 from zope.component import adapts, provideAdapter
 from zope.app.container.ordered import OrderedContainer
-from zope.annotation.interfaces import IAttributeAnnotatable, IAnnotations
+from zope.annotation.interfaces import IAttributeAnnotatable
 
 from schooltool.generations.tests import ContextStub
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -45,7 +45,8 @@ class ResourceStub(object):
         self.description = description
         self.isLocation = False
         # initialize annotations
-        IAnnotations(self)['foo'] = 'init'
+        self.__annotations__ = {}
+        self.__annotations__['foo'] = 'init'
 
     def __conform__(self, iface):
         from schooltool.relationship.interfaces import IRelationshipLinks
@@ -89,12 +90,17 @@ def doctest_evolve24():
 
     Make sure arbitrary annotations carry over too:
 
-        >>> from zope.annotation.interfaces import IAnnotations
-        >>> from zope.annotation.attribute import AttributeAnnotations
         >>> class SomeAnnotation(object):
         ...     __parent__ = r1
         >>> annotation = SomeAnnotation()
-        >>> IAnnotations(r1)['test'] = annotation
+        >>> r1.__annotations__['test'] = annotation
+
+    And add a calendar:
+
+        >>> class EventStub(object):
+        ...     def __init__(self):
+        ...         self._resources = (r1, app['resources']['r2'])
+        >>> r1.__annotations__['schooltool.app.calendar.Calendar'] = [EventStub()]
 
     Now evolve:
 
@@ -115,10 +121,18 @@ def doctest_evolve24():
 
     And annotations fixed:
 
-        >>> IAnnotations(l1)['test'] is annotation
+        >>> l1.__annotations__['test'] is annotation
         True
 
-        >>> IAnnotations(l1)['test'].__parent__ is l1
+        >>> l1.__annotations__['test'].__parent__ is l1
+        True
+
+    Resource booking in calendar events were updated as well:
+
+        >>> event = l1.__annotations__['schooltool.app.calendar.Calendar'][0]
+        >>> event._resources[0] is l1
+        True
+        >>> event._resources[1] is app['resources']['r2']
         True
 
     """

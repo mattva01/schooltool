@@ -32,6 +32,7 @@ from schooltool.resource.interfaces import IResource
 from schooltool.relationship.relationship import relate
 from schooltool.relationship.relationship import unrelate
 from schooltool.relationship.interfaces import IRelationshipLinks
+from schooltool.app.interfaces import ISchoolToolCalendar
 
 
 def evolve(context):
@@ -68,6 +69,19 @@ def evolve(context):
                     if (hasattr(annotation, '__parent__') and
                         annotation.__parent__ is resource):
                         annotation.__parent__ = new_resource
+
+                calendar = new_resource.__annotations__.get(
+                    'schooltool.app.calendar.Calendar', None)
+                if calendar:
+                    for ev in calendar:
+                        new_resource_list = []
+                        for res in ev._resources:
+                            if res.__name__ == resource_id:
+                                new_resource_list.append(new_resource)
+                            else:
+                                new_resource_list.append(res)
+                        ev._resources = tuple(new_resource_list)
+
                 del resources[resource_id]
                 resources[resource_id] = new_resource
 
