@@ -85,8 +85,16 @@ vi-coverage-reports:
 dist: realclean extract-translations update-translations
 	$(PYTHON) setup.py register sdist bdist_eg
 
+.PHONY: dist/md5sum
+dist/md5sum: dist
+	# TODO: this can probably be a non _phony_ rue
+	md5sum dist/schooltool*.tgz > dist/md5sum
+	gpg --clearsign dist/md5sum
+	mv dist/md5sum.asc dist/md5sum
+
+
 .PHONY: signtar
-signtar: dist
+signtar: dist/md5sum
 	md5sum dist/schooltool*.tgz > dist/md5sum
 	gpg --clearsign dist/md5sum
 	mv dist/md5sum.asc dist/md5sum
