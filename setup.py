@@ -46,6 +46,26 @@ def get_version():
     f.close()
     return result
 
+# Define packages we want to recursively include, we do this explicitly here
+# to avoid automatic accidents
+root_packages = ['schooltool.app',
+                 'schooltool.generations',
+                 'schooltool.securitypolicy',
+                 'schooltool.skin',
+                 'schooltool.tests',
+                 'schooltool.testing',
+                 'schooltool.traverser']
+# Packages we want to non-recursively include
+packages = ['schooltool']
+
+# filter packages eliminating things that don't match
+all_packages = set(find_packages('src'))
+for package in all_packages:
+    for root_package in root_packages:
+        if package.startswith(root_package):
+            packages.append(package)
+            break
+
 # Setup SchoolTool
 setup(
     name="schooltool",
@@ -85,7 +105,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     "Topic :: Education",
     "Topic :: Office/Business :: Scheduling"],
     package_dir={'': 'src'},
-    packages=find_packages('src'),
+    packages=packages,
     install_requires=['pytz >= 2007c',
                       'zc.resourcelibrary >= 0.7dev_r72506',
                       'zc.table >= 0.7dev_r72459', 'zc.catalog >= 1.2dev',
