@@ -101,9 +101,9 @@ signtar: dist/md5sum
 
 .PHONY: extract-translations
 extract-translations: build
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) utilities/i18nextract.py --domain=schooltool --zcml=`pwd`/schooltool-skel/etc/site.zcml
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) utilities/i18nextract.py --domain=schoolbell --zcml=`pwd`/schoolbell-site.zcml
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) utilities/i18nextract.py --domain=schooltool.commendation --zcml=`pwd`/src/schooltool/commendation/ftesting.zcml
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) i18nextract.py --domain=schooltool --zcml=`pwd`/schooltool-skel/etc/site.zcml
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) i18nextract.py --domain=schoolbell --zcml=`pwd`/schoolbell-site.zcml
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) i18nextract.py --domain=schooltool.commendation --zcml=`pwd`/src/schooltool/commendation/ftesting.zcml
 
 .PHONY: update-translations
 update-translations:
