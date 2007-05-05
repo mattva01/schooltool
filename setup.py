@@ -49,14 +49,41 @@ def get_version():
 # Define packages we want to recursively include, we do this explicitly here
 # to avoid automatic accidents
 root_packages = ['schooltool.app',
+                 'schooltool.dashboard',
+                 'schooltool.demographics',
                  'schooltool.generations',
                  'schooltool.securitypolicy',
+                 'schooltool.relationship',
+                 'schooltool.course',
+                 'schooltool.timetable',
+                 'schooltool.person',
+                 'schooltool.help',
+                 'schooltool.locales',
+                 'schooltool.locales.en',
+                 'schooltool.resource',
+                 'schooltool.utility',
+                 'schooltool.term',
+                 'schooltool.table',
+                 'schooltool.group',
+                 'schooltool.widget',
+                 'schooltool.attendance',
+                 'schooltool.calendar',
                  'schooltool.skin',
                  'schooltool.tests',
                  'schooltool.testing',
-                 'schooltool.traverser']
+                 'schooltool.traverser',
+
+                 # only needed for tests
+                 'schooltool.sampledata',
+                 'schooltool.gradebook',
+                 'schooltool.requirement',
+                 'schooltool.level',
+                 ]
+
 # Packages we want to non-recursively include
 packages = ['schooltool']
+
+package_data = {'schooltool': ['*.zcml', 'version.txt']}
 
 # filter packages eliminating things that don't match
 all_packages = set(find_packages('src'))
@@ -64,7 +91,24 @@ for package in all_packages:
     for root_package in root_packages:
         if package.startswith(root_package):
             packages.append(package)
+            package_data[package] = ['*.zcml',
+                                     '*.xml',
+                                     '*.xpdl',
+                                     '*.txt', # only for tests
+                                     '*.conf', # only for tests
+                                     '*/*.ics', # only for tests
+                                     '*.pt', '*/*.pt',
+                                     '*/*.png',
+                                     '*.css', '*/*.css',
+                                     '*/*/*.css',
+                                     '*/*.js',
+                                     '*/*/*.js',
+                                     '*/*.ico',
+                                     '*/*.gif',
+                                     '*/*/*.gif']
             break
+
+package_data['schooltool.locales'].append('*/*/*.po')
 
 # Setup SchoolTool
 setup(
@@ -133,4 +177,5 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     dependency_links=['http://ftp.schooltool.org/schooltool/eggs/',
                       'http://download.zope.org/distribution/',
                       'http://eggs.carduner.net/'],
+    package_data=package_data
     )

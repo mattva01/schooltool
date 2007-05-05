@@ -26,6 +26,35 @@
              set_schema=".interfaces.INote" />
   </class>
 
+  <class class="schooltool.app.cal.CalendarEvent">
+    <implements interface="schooltool.note.interfaces.IHaveNotes" />
+  </class>
+
+  <class class="schooltool.course.course.Course">
+    <implements interface="schooltool.note.interfaces.IHaveNotes" />
+  </class>
+
+  <class class="schooltool.course.section.Section">
+    <implements interface="schooltool.note.interfaces.IHaveNotes" />
+  </class>
+
+  <class class="schooltool.person.person.Person">
+    <implements interface="schooltool.note.interfaces.IHaveNotes" />
+  </class>
+
+  <class class="schooltool.person.person.PersonContainer">
+    <implements interface="schooltool.note.interfaces.IHaveNotes" />
+  </class>
+
+  <class class="schooltool.group.group.Group">
+    <implements interface="schooltool.note.interfaces.IHaveNotes" />
+  </class>
+
+  <class class="schooltool.resource.resource.BaseResource">
+    <implements interface="schooltool.note.interfaces.IHaveNotes" />
+  </class>
+
+
   <!-- Browser UI -->
 
   <browser:page

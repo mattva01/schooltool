@@ -5,7 +5,6 @@
 
   <class class=".person.Person">
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />
-    <implements interface="schooltool.note.interfaces.IHaveNotes" />
     <implements interface="schooltool.person.interfaces.IHavePreferences" />
     <require
         permission="schooltool.view"
