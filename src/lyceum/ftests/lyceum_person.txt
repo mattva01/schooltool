@@ -34,7 +34,7 @@ Add a teacher:
 
 And add him to the teacher group:
 
-    >>> manager.getLink('View').click()
+    >>> manager.getLink('View', url='teacher').click()
     >>> manager.getLink('edit groups').click()
     >>> manager.getControl('Teachers').click()
     >>> manager.getControl('Add').click()
@@ -80,7 +80,7 @@ Let's create a lyceum student:
 
 Our student was added to the 1a group:
 
-    >>> manager.getLink('View').click()
+    >>> manager.getLink('View', url='jonas').click()
     >>> manager.getLink('edit groups').click()
     >>> manager.getControl('1a').mech_item._control.name
     'remove_item.1a'

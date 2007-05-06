@@ -191,7 +191,7 @@ unauthenticated users:
     >>> student.open('http://localhost/')
     >>> student.getLink('Groups').click()
     >>> student.getLink('1a').click()
-    >>> student.getLink('View Timetable').click()
+    >>> student.getLink('View Timetable', url='1a').click()
 
 Group timetable calendar should be visible as well:
 
