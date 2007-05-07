@@ -23,6 +23,7 @@ $Id$
 """
 from zope.publisher.browser import BrowserView
 from zope.component import getMultiAdapter
+from zope.security.checker import canAccess
 
 from zc.table import table
 
@@ -85,8 +86,8 @@ class GroupView(BrowserView):
         return formatter.render()
 
     def getPersons(self):
-        # XXX should use table views
-        return filter(IPerson.providedBy, self.context.members)
+        return [member for member in self.context.members
+                if canAccess(member, 'title')]
 
 
 class MemberViewPersons(RelationshipViewBase):
