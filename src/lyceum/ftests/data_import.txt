@@ -191,6 +191,15 @@ unauthenticated users:
     >>> student.open('http://localhost/')
     >>> student.getLink('Groups').click()
     >>> student.getLink('1a').click()
+
+Student should not see the list of members of the group:
+
+    >>> print analyze.queryHTML('//table[@class="data"]/tbody',
+    ...                         student.contents)[0]
+    <tbody></tbody>
+
+But should be able to see its timetable:
+
     >>> student.getLink('View Timetable', url='1a').click()
 
 Group timetable calendar should be visible as well:
