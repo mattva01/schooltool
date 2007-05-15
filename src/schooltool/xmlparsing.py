@@ -212,8 +212,8 @@ class XMLDocument(object):
 
             >>> doc = HTMLDocument('''<a><b><input type="text" name="foo" /></b></a>''')
             >>> nodes = doc.query('//input[@type="text"]/@name')
-            >>> print str(nodes[0])
-            name="foo"
+            >>> str(nodes[0])
+            'foo'
 
         """
         self._xpathctx.setContextNode(self._doc)
@@ -489,7 +489,7 @@ class XMLNode(object):
 
     def __str__(self):
         if self._node.type == "attribute":
-            return '%s="%s"' % (self._node.name, self._node.content)
+            return self.content
         else:
             return self._node.serialize()
 
