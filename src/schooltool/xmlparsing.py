@@ -207,6 +207,14 @@ class XMLDocument(object):
 
             >>> doc.free()
 
+        A regression testcase to see if node queries work on attribute
+        nodes in html documents:
+
+            >>> doc = HTMLDocument('''<a><b><input type="text" name="foo" /></b></a>''')
+            >>> nodes = doc.query('//input[@type="text"]/@name')
+            >>> print str(nodes[0])
+            name="foo"
+
         """
         self._xpathctx.setContextNode(self._doc)
         try:
@@ -480,7 +488,10 @@ class XMLNode(object):
                                 % xpath_query)
 
     def __str__(self):
-        return self._node.serialize()
+        if self._node.type == "attribute":
+            return '%s="%s"' % (self._node.name, self._node.content)
+        else:
+            return self._node.serialize()
 
     def __repr__(self):
         return "'%s'" %self._node.serialize()
