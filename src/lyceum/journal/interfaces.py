@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2007 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,14 +17,22 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Generations for database version upgrades.
+Lyceum journal interfaces.
 
 $Id$
+
 """
+from zope.interface import Interface
+from zope.interface import Attribute
 
-from zope.app.generations.generations import SchemaManager
 
-schemaManager = SchemaManager(
-    minimum_generation=2,
-    generation=2,
-    package_name='lyceum.generations')
+class ILyceumJournal(Interface):
+    """A journal for a section."""
+
+    section = Attribute("""Section this journal belongs to.""")
+
+    def setGrade(person, meeting, grade):
+        """Set a grade for a person participating in this meeting."""
+
+    def getGrade(person, meetgig, default=None):
+        """Retrieve a grade for a person and a meeting."""

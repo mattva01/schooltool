@@ -1,0 +1,202 @@
+Functional doctest for SchoolTool CSV Import
+============================================
+
+Let's log in with the manager account:
+
+    >>> from zope.testbrowser.testing import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/')
+
+Go to the CSV import view and import the data:
+
+    >>> manager.getLink('CSV Import').click()
+    >>> manager.getControl('Import').click()
+
+Let's give a password to a teacher:
+
+    >>> manager.getLink('Groups').click()
+    >>> manager.getLink('2').click()
+    >>> manager.getLink('Teachers').click()
+
+    >>> manager.getLink('Duh').click()
+    >>> manager.getLink('Edit Password').click()
+    >>> manager.getControl('Password').value = 'pwd'
+    >>> manager.getControl('Confirm').value = 'pwd'
+    >>> manager.getControl('Apply').click()
+
+And add one more person to the section:
+
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+    >>> manager.getControl('First name').value = "Jonas"
+    >>> manager.getControl('Last name').value = "Petraitis"
+    >>> manager.getControl('Username').value = "jonas"
+    >>> manager.getControl('Add').click()
+
+    >>> manager.getLink('Courses').click()
+    >>> manager.getLink('History', url='1b').click()
+    >>> manager.getLink('edit individuals').click()
+    >>> manager.getLink('2').click()
+    >>> manager.getControl('Jonas').click()
+    >>> manager.getControl('Add').click()
+
+Let's log in with the teacher account:
+
+    >>> teacher = Browser()
+    >>> teacher.handleErrors = False
+    >>> teacher.open('http://localhost/')
+    >>> teacher.getLink('Log In').click()
+    >>> teacher.getControl('Username').value = 'bduh'
+    >>> teacher.getControl('Password').value = 'pwd'
+    >>> teacher.getControl('Log in').click()
+
+    >>> teacher.open('http://localhost/persons/bduh/calendar/2007-05-14')
+    >>> teacher.getLink('Journal', url='1b').click()
+    >>> teacher.getLink('15').click()
+
+    >>> cells = analyze.queryHTML('//input[@type="text"]/@name', teacher.contents)
+    >>> teacher.getControl(name=cells[0]).value = '10'
+    >>> teacher.getControl(name=cells[1]).value = '5'
+    >>> teacher.getControl('Update').click()
+
+The grades should still be in the editable controls with same ids:
+
+    >>> teacher.getControl(name=cells[0]).value
+    '10'
+    >>> teacher.getControl(name=cells[1]).value
+    '5'
+
+Let's look around in the gradebook. If we click on another day, the
+term and the month that is selected should be the same:
+
+    >>> print analyze.queryHTML('//title', teacher.contents)[0]
+    <title>
+      Duh B. -- History 1 journal  for
+    May</title>
+    >>> print analyze.queryHTML('//select/option[@selected]', teacher.contents)[0]
+    <option selected value="2007-pavasaris">2007 Pavasaris</option>
+
+    >>> teacher.getLink('17').click()
+
+    >>> print analyze.queryHTML('//title', teacher.contents)[0]
+    <title>
+      Duh B. -- History 1 journal  for
+    May</title>
+    >>> print analyze.queryHTML('//select/option[@selected]', teacher.contents)[0]
+    <option selected value="2007-pavasaris">2007 Pavasaris</option>
+
+Grades are still visible in table cells:
+
+    >>> cells = analyze.queryHTML('//td/span', teacher.contents)
+    >>> cells[10]
+    '<span>10</span>'
+    >>> cells[10+22]
+    '<span>5</span>'
+
+Let's switch to another month now:
+
+    >>> teacher.getLink('April').click()
+
+We got a different month:
+
+    >>> print analyze.queryHTML('//title', teacher.contents)[0]
+    <title>
+      Duh B. -- History 1 journal  for
+    April</title>
+
+But the semester is still the same:
+
+    >>> print analyze.queryHTML('//select/option[@selected]', teacher.contents)[0]
+    <option selected value="2007-pavasaris">2007 Pavasaris</option>
+
+There are no grades in the table:
+
+    >>> cells = analyze.queryHTML('//td/span', teacher.contents)
+    >>> for cell in cells:
+    ...     if cell != '<span></span>':
+    ...         print cell
+
+Let's select a day:
+
+    >>> teacher.getLink('16').click()
+
+Month and semester still stay the same:
+
+    >>> print analyze.queryHTML('//title', teacher.contents)[0]
+    <title>
+      Duh B. -- History 1 journal  for
+    April</title>
+
+    >>> print analyze.queryHTML('//select/option[@selected]', teacher.contents)[0]
+    <option selected value="2007-pavasaris">2007 Pavasaris</option>
+
+But we get 2 cells with input boxes in them for entering of grades:
+
+    >>> cells = analyze.queryHTML('//td/input[@type="text"]', teacher.contents)
+    >>> for cell in cells:
+    ...     print cell
+    <input type="text" style="width: 1.4em" name="zombe-bain..." value="">
+    <input type="text" style="width: 1.4em" name="jonas..." value="">
+
+If we click Update, everything stays the same:
+
+    >>> teacher.getControl('Update').click()
+    >>> print analyze.queryHTML('//title', teacher.contents)[0]
+    <title>
+      Duh B. -- History 1 journal  for
+    April</title>
+
+    >>> print analyze.queryHTML('//select/option[@selected]', teacher.contents)[0]
+    <option selected value="2007-pavasaris">2007 Pavasaris</option>
+
+If we select a different term, the first month in the term should get
+activated:
+
+    >>> teacher.getControl(name='TERM').value = ['2006-ruduo']
+    >>> teacher.getControl('Update').click()
+
+    >>> print analyze.queryHTML('//title', teacher.contents)[0]
+    <title>
+      Duh B. -- History 1 journal  for
+    September</title>
+
+    >>> print analyze.queryHTML('//select/option[@selected]', teacher.contents)[0]
+    <option selected value="2006-ruduo">2006 Ruduo</option>
+
+Choosing some day should not change neither the term, nor month:
+
+    >>> teacher.getLink('13').click()
+
+    >>> print analyze.queryHTML('//title', teacher.contents)[0]
+    <title>
+      Duh B. -- History 1 journal  for
+    September</title>
+
+    >>> print analyze.queryHTML('//select/option[@selected]', teacher.contents)[0]
+    <option selected value="2006-ruduo">2006 Ruduo</option>
+
+Month switches:
+
+    >>> teacher.getLink('December').click()
+
+    >>> print analyze.queryHTML('//title', teacher.contents)[0]
+    <title>
+      Duh B. -- History 1 journal  for
+    December</title>
+
+    >>> print analyze.queryHTML('//select/option[@selected]', teacher.contents)[0]
+    <option selected value="2006-ruduo">2006 Ruduo</option>
+
+Updating should work too:
+
+    >>> teacher.getControl('Update').click()
+
+    >>> print analyze.queryHTML('//title', teacher.contents)[0]
+    <title>
+      Duh B. -- History 1 journal  for
+    December</title>
+
+    >>> print analyze.queryHTML('//select/option[@selected]', teacher.contents)[0]
+    <option selected value="2006-ruduo">2006 Ruduo</option>

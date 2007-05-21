@@ -75,6 +75,7 @@
       />
 
   <include package="lyceum.person" />
+  <include package="lyceum.journal" />
   <include package="lyceum.browser" />
 
 </configure>

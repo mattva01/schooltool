@@ -1,0 +1,1 @@
+<span tal:content="python: view.getCellValue(context)" />

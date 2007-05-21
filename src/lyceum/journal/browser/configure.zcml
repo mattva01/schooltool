@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <viewlet
+      name="journal-link"
+      for="*"
+      manager="schooltool.app.browser.skin.ICalendarEventViewletManager"
+      template="templates/section_journal_viewlet.pt"
+      class=".journal.JournalCalendarEventViewlet"
+      permission="zope.Public"
+      order="15"
+      />
+
+  <zope:view
+      for="lyceum.journal.interfaces.ILyceumJournal"
+      factory=".journal.JournalAbsoluteURL"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      provides="zope.traversing.browser.interfaces.IAbsoluteURL"
+      />
+
+  <page
+      for="lyceum.journal.interfaces.ILyceumJournal"
+      name="breadcrumbs"
+      class=".journal.JournalBreadcrumbs"
+      permission="zope.Public"
+      allowed_interface="schooltool.skin.interfaces.IBreadcrumbs"
+      />
+
+  <page
+      name="index.html"
+      for="lyceum.journal.interfaces.ILyceumJournal"
+      class=".journal.LyceumJournalView"
+      permission="schooltool.view"
+      />
+
+  <zope:adapter
+      for="lyceum.journal.interfaces.ILyceumJournal
+           zope.publisher.interfaces.http.IHTTPRequest"
+      factory=".journal.JournalBreadcrumbInfo"
+      trusted="true"
+      permission="zope.Public"
+      />
+
+  <zope:subscriber
+     for="schooltool.course.interfaces.ISection
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".journal.LyceumJournalTraverserPlugin"
+      />
+
+</configure>

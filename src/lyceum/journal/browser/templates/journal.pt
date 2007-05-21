@@ -1,0 +1,61 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title"
+         i18n:translate="">
+    <tal:block i18n:name="section" tal:replace="view/section/label" /> journal  for
+    <tal:block i18n:name="month" tal:replace="python: view.monthTitle(view.active_month)" /></title>
+
+  <title  i18n:translate=""
+    ><span i18n:name="section" i18n:translate=""
+           tal:replace="view/section/label"/> journal</title>
+</head>
+
+<metal:block metal:fill-slot="content-header">
+    <h1 i18n:translate=""><tal:block tal:replace="view/section/label" /> journal  for <tal:block tal:replace="python: view.monthTitle(view.active_month)" /></h1>
+</metal:block>
+
+<metal:block metal:fill-slot="body">
+  <form action="." method="post" tal:attributes="action request/URL">
+    <select name="TERM">
+      <option tal:repeat="term view/scheduled_terms"
+              tal:content="term/title"
+              tal:attributes="value term/__name__;
+                              selected python:term is view.getSelectedTerm()" />
+    </select>
+
+    <input tal:condition="request/month|nothing"
+           type="hidden"
+           name="month"
+           tal:attributes="value request/month" />
+    <input tal:condition="request/event_id|nothing"
+           type="hidden"
+           name="event_id"
+           tal:attributes="value request/event_id" />
+
+    <div>
+      <span tal:repeat="month_id view/monthsInSelectedTerm">
+        <tal:if condition="python: month_id != view.active_month">
+          <a tal:attributes="href python: view.monthURL(month_id)"
+             tal:content="python: view.monthTitle(month_id)" />
+        </tal:if>
+        <tal:if condition="python: month_id == view.active_month">
+          <tal:block tal:replace="python: view.monthTitle(month_id)" />
+        </tal:if>
+      </span>
+    </div>
+
+    <div class="gradebook">
+      <tal:block replace="structure view/gradebook/render" />
+    </div>
+
+    <div class="controls">
+      <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Update"
+             title="Shortcut: Alt-U" accesskey="U"
+             i18n:attributes="value update-button; accesskey" />
+      <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+             i18n:attributes="value cancel-button" />
+    </div>
+
+  </form>
+</metal:block>
+</html>

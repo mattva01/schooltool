@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<configure xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <class class="lyceum.journal.journal.LyceumJournalContainer">
+    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <require permission="schooltool.view"
+             attributes="keys values items __iter__ __len__" />
+    <require permission="schooltool.edit"
+             interface="zope.app.container.interfaces.IWriteContainer" />
+  </class>
+
+  <class class="lyceum.journal.journal.LyceumJournal">
+    <allow interface="lyceum.journal.journal.ILyceumJournal" />
+  </class>
+
+  <adapter
+      for="schooltool.course.interfaces.ISection"
+      provides="lyceum.journal.journal.ILyceumJournal"
+      factory="lyceum.journal.journal.getSectionLyceumJournal"
+      />
+
+  <adapter
+      for="schooltool.timetable.interfaces.ITimetableCalendarEvent"
+      provides="lyceum.journal.journal.ILyceumJournal"
+      factory="lyceum.journal.journal.getEventLyceumJournal"
+      />
+
+  <include package="lyceum.journal.browser" />
+
+</configure>
