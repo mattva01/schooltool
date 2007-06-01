@@ -69,16 +69,15 @@ class Batch(object):
 
     def previous_url(self):
         start = self.start - self.size
-        if start < 0:
-            return '%s?batch_start%s=%s&batch_size.%s=%s%s' % (
+        if start >= 0:
+            return '%s?batch_start%s=%s&batch_size%s=%s%s' % (
                 self.base_url, self.name, start, self.name, self.size, self.extra_url)
         return None
-
 
     def next_url(self):
         start = self.size + self.start
         if self.full_size > start:
-            return '%s?batch_start%s=%s&batch_size.%s=%s%s' % (
+            return '%s?batch_start%s=%s&batch_size%s=%s%s' % (
                 self.base_url, self.name, start, self.name, self.size, self.extra_url)
 
     def num(self):
