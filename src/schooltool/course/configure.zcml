@@ -142,6 +142,10 @@
       component=".booking.URISection"
       name="http://schooltool.org/ns/sectionbooking/section" />
 
+  <!-- Learner adapter -->
+  <adapter
+      factory=".section.PersonLearnerAdapter" />
+
   <!-- Views -->
   <include package=".browser" />
   <include package=".rest" />

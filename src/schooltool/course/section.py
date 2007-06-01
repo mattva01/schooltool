@@ -27,23 +27,22 @@ import zope.interface
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container import btree, contained
 from zope.component import adapts
+from zope.interface import implements
 
 from schooltool.relationship import RelationshipProperty
 from schooltool.app import membership
-from schooltool.app.cal import Calendar
 from schooltool.app.app import InitBase
 from schooltool.group.interfaces import IBaseGroup as IGroup
 from schooltool.person.interfaces import IPerson
-from schooltool.resource.interfaces import IResource
 
 from schooltool import SchoolToolMessage as _
 from schooltool.app import relationships
 from schooltool.course import interfaces, booking
 from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
 from schooltool.course.interfaces import ISection
-from schooltool.person.interfaces import IPerson
 from schooltool.app.security import ConfigurableCrowd
 from schooltool.relationship.relationship import getRelatedObjects
+from schooltool.course.interfaces import ILearner
 
 
 class Section(Persistent, contained.Contained):
@@ -155,3 +154,24 @@ class SectionCalendarViewers(AggregateCrowd):
 
     def crowdFactories(self):
         return [InstructorsCrowd, LearnersCrowd, SectionCalendarSettingCrowd]
+
+
+class PersonLearnerAdapter(object):
+    implements(ILearner)
+    adapts(IPerson)
+
+    def __init__(self, person):
+        self.person = person
+
+    def _getSections(self, ob):
+        return [section for section in getRelatedObjects(ob, membership.URIGroup)
+                if ISection.providedBy(section)]
+
+    def sections(self):
+        # First check the the sections a pupil is in directly
+        for section in self._getSections(self.person):
+            yield section
+        # Now check the section membership via groups
+        for group in self.person.groups:
+            for section in self._getSections(group):
+                yield section

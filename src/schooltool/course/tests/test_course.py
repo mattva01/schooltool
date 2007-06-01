@@ -295,6 +295,42 @@ def doctest_PersonInstructorCrowd():
     """
 
 
+def doctest_PersonLearnerAdapter(self):
+    """Tests for PersonLearnerAdapter.
+
+        >>> from schooltool.relationship.tests import setUp, tearDown
+        >>> setUp()
+
+    We'll need a person, a group, and a couple of sections:
+
+        >>> from schooltool.course.section import Section
+        >>> from schooltool.person.person import Person
+        >>> from schooltool.group.group import Group
+        >>> section1 = Section(title="section 1", description="advanced")
+        >>> section2 = Section(title="section 2", description="advanced")
+        >>> student = Person('student', 'Mr. Peter')
+        >>> group = Group('group','Group')
+
+     Let's add the student to the first section directly, and to the
+     second section through his group:
+
+        >>> section1.members.add(student)
+        >>> section2.members.add(group)
+        >>> group.members.add(student)
+
+    sections method of the adapter should list us both sections:
+
+        >>> from schooltool.course.section import PersonLearnerAdapter
+        >>> learner = PersonLearnerAdapter(student)
+        >>> [section.title for section in learner.sections()]
+        ['section 1', 'section 2']
+
+    Cleanup.
+
+        >>> tearDown()
+    """
+
+
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
