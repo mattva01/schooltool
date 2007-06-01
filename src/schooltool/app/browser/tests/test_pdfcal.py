@@ -458,7 +458,7 @@ def doctest_PDFCalendarViewBase_eventInfoCell():
         >>> evt.__parent__ = calendar2
         >>> paragraphs = view.eventInfoCell(evt)
         >>> paragraphs[2].text
-        '(recurrent, overlaid from Mr. X)'
+        '(recurrent, from the calendar of Mr. X)'
 
     """
 

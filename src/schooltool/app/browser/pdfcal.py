@@ -208,10 +208,12 @@ class PDFCalendarViewBase(BrowserView):
         if (not same(event.__parent__, self.context)
             and event.__parent__ is not None):
             # We have an event from an overlaid calendar.
-            tag = translate(_('overlaid from %s'), context=self.request)
+            tag = translate(_('from the calendar of ${calendar_owner}',
+                              mapping={'calendar_owner': event.__parent__.__parent__.title}),
+                            context=self.request)
             # We assume that event.__parent__ is a Calendar which belongs to
             # an object with a title.
-            tags.append(tag % event.__parent__.__parent__.title)
+            tags.append(tag)
         return tags
 
     def getTimezone(self):
