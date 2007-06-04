@@ -77,8 +77,8 @@ def doctest_Group():
     """
 
 
-def doctest_addGroupContainerToApplication():
-    """Tests for addGroupContainerToApplication
+def doctest_GroupInit():
+    """Tests for GroupInit
 
     This test needs annotations, dependencies and traversal
 
@@ -95,7 +95,7 @@ def doctest_addGroupContainerToApplication():
 
         >>> directlyProvides(app, IContainmentRoot)
 
-    When you call the subscriber
+    When you call the initialization adapter
 
         >>> plugin = GroupInit(app)
         >>> plugin()

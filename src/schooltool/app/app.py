@@ -271,4 +271,5 @@ class InitBase(object):
         self.app = app
 
     def __call__(self):
-        raise NotImplementedError("Foo Bar")
+        raise NotImplementedError("This method should be overriden by"
+                                  " inheriting classes")
