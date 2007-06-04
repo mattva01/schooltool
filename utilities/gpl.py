@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # SchoolTool - common information systems platform for school administration
 # Copyright (c) 2005 Shuttleworth Foundation
@@ -18,28 +17,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Test script to run the unit and functional tests in a Zope installation.
+XXX
 
 $Id$
 """
-import sys, os
-import site
-
-here = os.path.dirname(os.path.realpath(__file__))
-here = os.path.dirname(here)
-
-if sys.platform in ("win32",):
-    lib = os.path.join(here, "Lib", "site-packages")
-else:
-    lib = os.path.join(here, "lib", "python")
-sys.path.insert(0, lib)
-site.addsitedir(lib)
-
-from zope.testing import testrunner
-
-defaults = ['--tests-pattern', '^f?tests$', '--test-path', lib]
-defaults += ['-m', 'schooltool']
-
-if __name__ == '__main__':
-    exitcode = testrunner.run(defaults)
-    sys.exit(exitcode)
+__docformat__ = 'reStructuredText'

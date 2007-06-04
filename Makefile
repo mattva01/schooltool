@@ -4,10 +4,8 @@
 #
 # $Id$
 
-PYTHON=python
-ZPKG=../../zpkgtools/bin/zpkg
+PYTHON=python2.4
 TRANSLATION_DOMAINS=schoolbell schooltool
-ZOPE_REPOSITORY=svn://svn.zope.org/repos/main/
 TESTFLAGS=-v
 LOCALES=src/schooltool/locales/
 PYTHONPATH:=$(PYTHONPATH):src:eggs
@@ -16,26 +14,10 @@ SETUPFLAGS=
 .PHONY: all
 all: build
 
-.PHONY: zpkgsetup-checkout
-zpkgsetup-checkout:
-	-test -d buildsupport/zpkgsetup || svn co $(ZOPE_REPOSITORY)/zpkgtools/trunk/zpkgsetup buildsupport/zpkgsetup
-
-.PHONY: zpkgsetup-update
-zpkgsetup-update:
-	svn up buildsupport/zpkgsetup
-
-.PHONY: checkout
-checkout: zpkgsetup-checkout
-
-.PHONY: update
-update: checkout zpkgsetup-update
-
 .PHONY: build
-build: zpkgsetup-checkout
-	$(PYTHON) setup.py $(SETUPFLAGS) \
-                build_ext -i install_data --install-dir .
+build: 
 	test -d eggs || mkdir eggs
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) setup.eggs.py develop -S eggs --install-dir eggs
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) setup.py develop -S eggs --install-dir eggs
 	$(PYTHON) bin/remove-stale-bytecode.py
 
 .PHONY: clean
@@ -53,7 +35,6 @@ realclean: clean cleandb
 	find . \( -name '*.so' -o -name '*.pyd' \) -exec rm -f {} \;
 	rm -f *.csv tags ID *.log
 	rm -f scripts/import-sampleschool
-	rm -f MANIFEST
 	rm -rf dist
 	rm -rf eggs
 
@@ -105,12 +86,20 @@ vi-coverage-reports:
 	@cd coverage && vi '+/^>>>>>>/' `ls schooltool* | grep -v tests | xargs grep -l '^>>>>>>'`
 
 .PHONY: dist
-dist: realclean update-translations
-	$(ZPKG) -x reportlab -C releases/SchoolTool.cfg
+dist: realclean extract-translations update-translations
+	$(PYTHON) setup.py register sdist bdist_eg
+
+.PHONY: dist/md5sum
+dist/md5sum: dist
+	# TODO: this can probably be a non _phony_ rue
+	md5sum dist/schooltool*.tgz > dist/md5sum
+	gpg --clearsign dist/md5sum
+	mv dist/md5sum.asc dist/md5sum
+
 
 .PHONY: signtar
-signtar: dist
-	md5sum dist/SchoolTool*.tgz > dist/md5sum
+signtar: dist/md5sum
+	md5sum dist/schooltool*.tgz > dist/md5sum
 	gpg --clearsign dist/md5sum
 	mv dist/md5sum.asc dist/md5sum
 

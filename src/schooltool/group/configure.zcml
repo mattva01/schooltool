@@ -25,7 +25,6 @@
 
   <class class=".group.Group">
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />
-    <implements interface="schooltool.note.interfaces.IHaveNotes" />
 
     <allow attributes="__cmp__" />
     <require permission="schooltool.view"
