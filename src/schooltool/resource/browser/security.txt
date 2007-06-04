@@ -59,7 +59,10 @@ The teacher (as an authenticated user) should be able to view the
 calendar for a resource.
 
     >>> teacher.getLink('View Calendar').click()
-    >>> teacher.getLink('New Event').click()
+
+But he should not be able to add the events (even if he can guess the url):
+
+    >>> teacher.open('http://localhost/resources/classroom/calendar/add.html')
     Traceback (most recent call last):
     ...
     Unauthorized: (<...>, 'browserDefault', 'schooltool.edit')
@@ -126,11 +129,12 @@ The teacher should still be able to delete the event.
 
     >>> teacher.getLink('Classroom Event').click()
     >>> teacher.getLink('delete event').click()
+    >>> teacher.getControl('Delete').click()
     >>> 'Classroom Event' in teacher.contents
     False
 
-The teacher should also be able to schedule a new event from 
-their personal calendar.
+The teacher should also be able to schedule a new event from their
+personal calendar.
 
     >>> teacher.getLink('My Calendar').click()
     >>> teacher.getLink('New Event').click()

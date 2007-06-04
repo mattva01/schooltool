@@ -54,7 +54,7 @@ class ITableFormatter(Interface):
 
     def setUp(items=None, filter=None, columns=None, columns_before=None,
               columns_after=None, sort_on=None, prefix="", formatters=None,
-              table_formatter=None):
+              table_formatter=None, batch_size=10):
         """Populate the table with items, set up the variables for table formatter.
 
         After calling this method you have batch and filter_widget set

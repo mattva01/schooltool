@@ -79,7 +79,8 @@ class SectionView(BrowserView):
         persons = ISchoolToolApplication(None)['persons']
         formatter = getMultiAdapter((persons, self.request), ITableFormatter)
         formatter.setUp(table_formatter=table.StandaloneFullFormatter,
-                        items=self.getPersons())
+                        items=self.getPersons(),
+                        batch_size=0)
         return formatter.render()
 
     def getPersons(self):

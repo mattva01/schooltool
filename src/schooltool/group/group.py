@@ -37,6 +37,7 @@ from zope.component import getUtility
 
 from zc.catalog.catalogindex import ValueIndex
 
+from schooltool.app.app import InitBase
 from schooltool.app.interfaces import ICalendarParentCrowd
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.membership import GroupMemberCrowd
@@ -79,20 +80,20 @@ class Group(Persistent, Contained, Asset):
         self.description = description
 
 
-def addGroupContainerToApplication(event):
-    """Subscriber that adds a top-level groups container and a few groups."""
-    app = event.object
-    app['groups'] = GroupContainer()
-    default_groups =  [
-        ("manager",        "Site Managers",         "Manager Group."),
-        ("students",       "Students",              "Students."),
-        ("teachers",       "Teachers",              "Teachers."),
-        ("clerks",         "Clerks",                "Clerks."),
-        ("administrators", "School Administrators", "School Administrators."),
-    ]
-    for id, title, description in default_groups:
-        group = app['groups'][id] = Group(title, description)
-        IDependable(group).addDependent('')
+class GroupInit(InitBase):
+
+    def __call__(self):
+        self.app['groups'] = GroupContainer()
+        default_groups =  [
+            ("manager",        "Site Managers",         "Manager Group."),
+            ("students",       "Students",              "Students."),
+            ("teachers",       "Teachers",              "Teachers."),
+            ("clerks",         "Clerks",                "Clerks."),
+            ("administrators", "School Administrators", "School Administrators."),
+            ]
+        for id, title, description in default_groups:
+            group = self.app['groups'][id] = Group(title, description)
+            IDependable(group).addDependent('')
 
 
 class GroupContainerViewersCrowd(ConfigurableCrowd):

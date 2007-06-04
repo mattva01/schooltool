@@ -110,6 +110,11 @@ class OrderedViewletManager(ViewletManagerBase):
 
         return sorted(viewlets, key=key_func)
 
+    def filter(self, viewlets):
+        viewlets = ViewletManagerBase.filter(self, viewlets)
+        return [(name, viewlet) for (name, viewlet) in viewlets
+                if not IDisableViewlet.providedBy(viewlet)]
+
 
 class NavigationViewlet(object):
     """A navigation viewlet base class."""
@@ -172,10 +177,6 @@ class ActionMenuViewletManager(OrderedViewletManager):
             # display menu as if looking at the parent object
             self.context = self.context.__parent__
         self.orderedViewletManagerUpdate()
-
-    def filter(self, viewlets):
-        return [(name, viewlet) for (name, viewlet) in viewlets
-                if not IDisableViewlet.providedBy(viewlet)]
 
     def orderedViewletManagerUpdate(self):
         OrderedViewletManager.update(self)

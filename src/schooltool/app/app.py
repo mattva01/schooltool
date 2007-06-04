@@ -43,12 +43,14 @@ from zope.app.container.interfaces import INameChooser
 from zope.traversing.interfaces import IContainmentRoot
 
 from schooltool.app.overlay import ICalendarOverlayInfo
+from schooltool.app.interfaces import IPluginInit
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import IShowTimetables
 from schooltool.app.interfaces import ApplicationInitializationEvent
 from schooltool.app import relationships
 from schooltool.app.interfaces import IAsset
+from schooltool.app.interfaces import ISchoolToolInitializationUtility
 from schooltool.relationship.relationship import RelationshipProperty
 
 
@@ -250,3 +252,24 @@ class ShowTimetables(object):
         self.annotations[SHOW_TIMETABLES_KEY] = value
 
     showTimetables = property(getShowTimetables, setShowTimetables)
+
+
+class SchoolToolInitializationUtility(object):
+
+    def initializeApplication(self, app):
+        """Perform school specific initialization.
+
+        By default schooltool does not do any specific initialization.
+        """
+
+
+class InitBase(object):
+
+    implements(IPluginInit)
+
+    def __init__(self, app):
+        self.app = app
+
+    def __call__(self):
+        raise NotImplementedError("This method should be overriden by"
+                                  " inheriting classes")

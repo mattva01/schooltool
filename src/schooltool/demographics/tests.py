@@ -223,6 +223,32 @@ def doctest_PersonFactoryUtility():
     """
 
 
+def doctest_PersonFactoryUtility_createManagerUser():
+    """Tests for PersonFactoryUtility.createManagerUser
+
+    First let's create the utility:
+
+        >>> from schooltool.demographics.utility import PersonFactoryUtility
+        >>> utility = PersonFactoryUtility()
+
+    The title of the manager user is set to the system name + Manager:
+
+        >>> manager = utility.createManagerUser("manager_username", "SchoolTool")
+        >>> manager.title
+        'SchoolTool Manager'
+        >>> manager.username
+        'manager_username'
+
+    The fisrt_name and last_name are set as well:
+
+        >>> manager.nameinfo.first_name
+        'SchoolTool'
+        >>> manager.nameinfo.last_name
+        'Manager'
+
+    """
+
+
 def test_suite():
     return unittest.TestSuite([
         doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,

@@ -59,6 +59,8 @@ from zope.app.session.interfaces import ISession
 from zope.traversing.api import getPath
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.html.field import HtmlFragment
+from zope.component import queryAdapter
+
 from zc.table.column import GetterColumn
 from zc.table import table
 
@@ -98,6 +100,10 @@ from schooltool.person.interfaces import vocabulary
 from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.term.term import getTermForDate
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.attendance.interfaces import IAttendanceCalendarEvent
+from schooltool.securitypolicy.crowds import Crowd
+from schooltool.securitypolicy.interfaces import ICrowd
+from schooltool.app.browser.interfaces import ICalendarMenuViewlet
 from schooltool.resource.interfaces import IBaseResource
 from schooltool.resource.interfaces import IBookingCalendar
 from schooltool.resource.interfaces import IResourceTypeInformation
@@ -296,6 +302,12 @@ class EventForDisplay(object):
 
     def __getattr__(self, name):
         return getattr(self.context, name)
+
+    @property
+    def title(self):
+        if IAttendanceCalendarEvent.providedBy(self.context):
+            return translate(self.context.title, context=self.request)
+        return self.context.title
 
     def getBooker(self):
         """Return the booker."""
@@ -755,7 +767,8 @@ class CalendarViewBase(BrowserView):
     def getJumpToYears(self):
         """Return jump targets for five years centered on the current year."""
         this_year = datetime.today().year
-        return [{'label': year,
+        return [{'selected': year == this_year,
+                 'label': year,
                  'href': self.calURL('yearly', date(year, 1, 1))}
                 for year in range(this_year - 2, this_year + 3)]
 
@@ -1087,10 +1100,11 @@ class DailyCalendarView(CalendarViewBase):
         """
         width = [0] * 24
         daystart = datetime.combine(self.cursor, time(tzinfo=utc))
-        for event in self.dayEvents(self.cursor):
+        events = self.dayEvents(self.cursor)
+        for event in events:
             t = daystart
             dtend = daystart + timedelta(1)
-            for title, start, duration in self.calendarRows():
+            for title, start, duration in self.calendarRows(events):
                 if start <= event.dtstart < start + duration:
                     t = start
                 if start < event.dtstart + event.duration <= start + duration:
@@ -1134,7 +1148,7 @@ class DailyCalendarView(CalendarViewBase):
     __cursor = None
     __calendar_rows = None
 
-    def calendarRows(self):
+    def calendarRows(self, events):
         """Iterate over (title, start, duration) of time slots that make up
         the daily calendar.
 
@@ -1142,7 +1156,8 @@ class DailyCalendarView(CalendarViewBase):
         """
         view = zapi.getMultiAdapter((self.context, self.request),
                                     name='daily_calendar_rows')
-        return view.calendarRows(self.cursor, self.starthour, self.endhour)
+        return view.calendarRows(self.cursor, self.starthour, self.endhour,
+                                 events)
 
     def _getCurrentTime(self):
         """Returns current time localized to UTC timezone."""
@@ -1170,7 +1185,7 @@ class DailyCalendarView(CalendarViewBase):
         self._setRange(simple_events)
         slots = Slots()
         top = 0
-        for title, start, duration in self.calendarRows():
+        for title, start, duration in self.calendarRows(simple_events):
             end = start + duration
             hour = start.hour
 
@@ -1347,7 +1362,25 @@ class DailyCalendarRowsView(BrowserView):
         else:
             return []
 
-    def calendarRows(self, cursor, starthour, endhour):
+    def _addPeriodsToRows(self, rows, periods, events):
+        """Populate the row list with rows from periods."""
+        tz = self.getPersonTimezone()
+
+        # Put starts and ends of periods into rows
+        for period in periods:
+            period_id, pstart, duration = period
+            pend = (pstart + duration).astimezone(tz)
+            for point in rows[:]:
+                if pstart < point < pend:
+                    rows.remove(point)
+            if pstart not in rows:
+                rows.append(pstart)
+            if pend not in rows:
+                rows.append(pend)
+        rows.sort()
+        return rows
+
+    def calendarRows(self, cursor, starthour, endhour, events):
         """Iterate over (title, start, duration) of time slots that make up
         the daily calendar.
 
@@ -1361,21 +1394,7 @@ class DailyCalendarRowsView(BrowserView):
                 for hour in range(starthour, endhour+1)]
 
         if periods:
-            timetable = getSchoolToolApplication()['ttschemas'].getDefault()
-            tttz = timezone(timetable.timezone)
-
-            # Put starts and ends of periods into rows
-            for period in periods:
-                period_id, pstart, duration = period
-                pend = (pstart + duration).astimezone(tz)
-                for point in rows[:]:
-                    if pstart < point < pend:
-                        rows.remove(point)
-                if pstart not in rows:
-                    rows.append(pstart)
-                if pend not in rows:
-                    rows.append(pend)
-            rows.sort()
+            rows = self._addPeriodsToRows(rows, periods, events)
 
         calendarRows = []
 
@@ -1547,33 +1566,23 @@ class EventDeleteView(BrowserView):
 
     __used_for__ = ISchoolToolCalendar
 
-    def handleEvent(self):
-        """Handle a request to delete an event.
+    recevent_template = ViewPageTemplateFile("templates/recevent_delete.pt")
+    simple_event_template = ViewPageTemplateFile("templates/simple_event_delete.pt")
 
-        If the event is not recurrent, it is simply deleted, None is returned
-        and the user is redirected to the calendar view.
-
-        If the event being deleted is recurrent event, the request is checked
-        for a command.  If one is found, it is handled, the user again is
-        redirected to the calendar view.  If no commands are found in the
-        request, the recurrent event is returned to be shown in the view.
-        """
+    def __call__(self):
         event_id = self.request['event_id']
         date = parse_date(self.request['date'])
+        self.event = self._findEvent(event_id)
 
-        event = self._findEvent(event_id)
-        if event is None:
+        if self.event is None:
             # The event was not found.
             return self._redirectBack()
 
-        if event.recurrence is None or event.__parent__ != self.context:
-            # Bah, the event is not recurrent.  Easy!
-            # XXX It shouldn't be.  We should still ask for confirmation.
-            self.context.removeEvent(removeSecurityProxy(event))
-            return self._redirectBack()
+        if self.event.recurrence is None or self.event.__parent__ != self.context:
+            return self._deleteSimpleEvent(self.event)
         else:
             # The event is recurrent, we might need to show a form.
-            return self._deleteRepeatingEvent(event, date)
+            return self._deleteRepeatingEvent(self.event, date)
 
     def _findEvent(self, event_id):
         """Find an event that has the id event_id.
@@ -1606,7 +1615,19 @@ class EventDeleteView(BrowserView):
             exceptions = event.recurrence.exceptions + (date, )
             self._modifyRecurrenceRule(event, exceptions=exceptions)
         else:
-            return event # We don't know what to do, let's ask the user.
+            return self.recevent_template()
+
+        # We did our job, redirect back to the calendar view.
+        return self._redirectBack()
+
+    def _deleteSimpleEvent(self, event):
+        """Delete a simple event."""
+        if 'CANCEL' in self.request:
+            pass # Fall through and redirect back to the calendar.
+        elif 'DELETE' in self.request:
+            self.context.removeEvent(removeSecurityProxy(event))
+        else:
+            return self.simple_event_template()
 
         # We did our job, redirect back to the calendar view.
         return self._redirectBack()
@@ -2682,3 +2703,18 @@ class CalendarEventBreadcrumbInfo(breadcrumbs.GenericBreadcrumbInfo):
         return '%s/%s/edit.html' %(parent_info.url, name)
 
 CalendarBreadcrumbInfo = breadcrumbs.CustomNameBreadCrumbInfo(_('Calendar'))
+
+
+class CalendarActionMenuViewlet(object):
+    implements(ICalendarMenuViewlet)
+
+
+class CalendarMenuViewletCrowd(Crowd):
+    adapts(ICalendarMenuViewlet)
+
+    def contains(self, principal):
+        """Returns true if you have the permission to see the calendar."""
+        crowd = queryAdapter(ISchoolToolCalendar(self.context.context),
+                             ICrowd,
+                             name="schooltool.view")
+        return crowd.contains(principal)

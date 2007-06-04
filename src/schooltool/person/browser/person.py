@@ -43,6 +43,8 @@ from zope.interface import implements
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.security.management import checkPermission
 from zope.viewlet.viewlet import ViewletBase
+from zope.component import queryAdapter
+from zope.component import adapts
 from zope.app.catalog.interfaces import ICatalog
 
 from schooltool import SchoolToolMessage as _
@@ -57,6 +59,8 @@ from schooltool.traverser.traverser import AdapterTraverserPlugin
 from schooltool.table.table import IndexedFilterWidget
 from schooltool.table.table import IndexedTableFormatter
 from schooltool.skin.containers import TableContainerView
+from schooltool.securitypolicy.crowds import Crowd
+from schooltool.securitypolicy.interfaces import ICrowd
 
 
 def SourceMultiCheckBoxWidget(field, request):
@@ -447,3 +451,22 @@ class PersonView(BrowserView):
 
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)
+
+
+class IPreferencesMenuViewlet(Interface):
+    """Marker interface so we could use custom crowd for Preferences menu item"""
+
+
+class PreferencesActionMenuViewlet(object):
+    implements(IPreferencesMenuViewlet)
+
+
+class PreferencesMenuViewletCrowd(Crowd):
+    adapts(IPreferencesMenuViewlet)
+
+    def contains(self, principal):
+        """Returns true if you have the permission to see the calendar."""
+        crowd = queryAdapter(IPersonPreferences(self.context.context),
+                             ICrowd,
+                             name="schooltool.view")
+        return crowd.contains(principal)

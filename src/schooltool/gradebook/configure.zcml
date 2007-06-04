@@ -11,10 +11,10 @@
       name="schooltool.gradebook.categories"
       />
 
-  <subscriber
-      for="schooltool.app.interfaces.IApplicationInitializationEvent"
-      handler=".category.addDefaultCategoriesToApplication"
-      />
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".gradebook.GradebookInit"
+      name="schooltool.gradebook" />
 
   <!-- Activity Adapters -->
 

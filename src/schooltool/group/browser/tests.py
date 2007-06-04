@@ -270,11 +270,15 @@ def doctest_GroupView():
         >>> group.members.add(Person(title='Last'))
         >>> group.members.add(Person(title='Intermediate'))
 
-    A person list from that view should be sorted by title.
+    Only persons whose title we can see are in the list, so we must
+    define an all alowing security checker:
 
-        >>> titles = [person.title for person in view.getPersons()]
-        >>> titles.sort()
-        >>> titles
+        >>> from zope.security.checker import defineChecker, Checker
+        >>> defineChecker(Person,
+        ...               Checker({'title': 'zope.Public'},
+        ...                       {'title': 'zope.Public'}))
+
+        >>> sorted([person.title for person in view.getPersons()])
         ['First', 'Intermediate', 'Last']
 
     """

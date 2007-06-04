@@ -3753,7 +3753,7 @@ class TestDailyCalendarView(unittest.TestCase):
         cal = ISchoolToolCalendar(person)
         view = DailyCalendarView(cal, TestRequest())
         view.cursor = date(2004, 8, 12)
-        view.calendarRows = lambda: iter([
+        view.calendarRows = lambda evs: iter([
             ("B", parse_datetimetz('2004-08-12 10:00:00'), timedelta(hours=3)),
             ("C", parse_datetimetz('2004-08-12 13:00:00'), timedelta(hours=2)),
              ])
@@ -3773,7 +3773,7 @@ class TestDailyCalendarView(unittest.TestCase):
         view.cursor = date(2004, 8, 12)
         view.starthour = 10
         view.endhour = 16
-        result = list(view.calendarRows())
+        result = list(view.calendarRows([]))
         expected = [('%d:00' % hr, datetime(2004, 8, 12, hr, tzinfo=utc),
                      timedelta(0, 3600)) for hr in range(10, 16)]
         self.assertEquals(result, expected)
@@ -3956,7 +3956,7 @@ class TestDailyCalendarView(unittest.TestCase):
         from schooltool.app.browser.cal import DailyCalendarRowsView
         rows_view = DailyCalendarRowsView(view.context, view.request)
 
-        def simpleCalendarRows():
+        def simpleCalendarRows(events):
             today = datetime.combine(view.cursor, time(13, tzinfo=utc))
             durations = [0, 1800, 1351, 1349, 600, 7200]
             row_ends = [today + timedelta(seconds=sum(durations[:i+1]))
@@ -4640,7 +4640,17 @@ def doctest_EventDeleteView():
         >>> request = TestRequest(form={'event_id': 'killme',
         ...                             'date': '2005-02-03'})
         >>> view = EventDeleteView(cal, request)
-        >>> view.handleEvent()
+        >>> view.simple_event_template = lambda: 'Do you realy want to delete this event?'
+        >>> view()
+        'Do you realy want to delete this event?'
+
+    And confirm:
+
+        >>> request = TestRequest(form={'event_id': 'killme',
+        ...                             'date': '2005-02-03',
+        ...                             'DELETE': 'Delete'})
+        >>> view = EventDeleteView(cal, request)
+        >>> view()
 
         >>> martyr in cal
         False
@@ -4666,7 +4676,7 @@ def doctest_EventDeleteView():
         ...                             'date': '2005-02-03'})
         >>> request.setPrincipal(ConformantStub(None))
         >>> view = EventDeleteView(cal, request)
-        >>> view.handleEvent()
+        >>> view()
 
         >>> redirected(request)
         True
@@ -4680,14 +4690,17 @@ def doctest_EventDeleteView():
         ...                          unique_id='rec', recurrence=rrule)
         >>> cal.addEvent(recurrer)
 
-    Now, if we try to delete this event, the view will not know what to do,
-    so it will return an event to be shown for the user.
+    Now, if we try to delete this event, the view will not know what
+    to do, so it will ask the user and set the attribute event on
+    itself to the event being deleted.
 
         >>> request = TestRequest(form={'event_id': 'rec',
         ...                             'date': '2005-02-05'})
         >>> view = EventDeleteView(cal, request)
-        >>> event = view.handleEvent()
-        >>> event is recurrer
+        >>> view.recevent_template = lambda: 'What do you want to do with this event?'
+        >>> view()
+        'What do you want to do with this event?'
+        >>> view.event is recurrer
         True
         >>> redirected(request)
         False
@@ -4701,7 +4714,7 @@ def doctest_EventDeleteView():
     We can easily return back to the daily view:
 
         >>> request.form['CANCEL'] = 'Cancel'
-        >>> view.handleEvent()
+        >>> view()
         >>> redirected(request)
         True
         >>> del request.form['CANCEL']
@@ -4709,7 +4722,7 @@ def doctest_EventDeleteView():
     OK.  First, let's try and delete only the current recurrence:
 
         >>> request.form['CURRENT'] = 'Current'
-        >>> view.handleEvent()
+        >>> view()
         >>> redirected(request)
         True
 
@@ -4723,7 +4736,7 @@ def doctest_EventDeleteView():
 
         >>> del request.form['CURRENT']
         >>> request.form['FUTURE'] = 'Future'
-        >>> view.handleEvent()
+        >>> view()
         >>> redirected(request)
         True
 
@@ -4734,7 +4747,7 @@ def doctest_EventDeleteView():
 
         >>> del request.form['FUTURE']
         >>> request.form['ALL'] = 'All'
-        >>> view.handleEvent()
+        >>> view()
 
     The event has kicked the bucket:
 
@@ -4758,7 +4771,7 @@ def doctest_EventDeleteView():
 
         >>> request.form = {'event_id': 'butterfly', 'date': '2005-02-03',
         ...                 'CURRENT': 'Current'}
-        >>> view.handleEvent()
+        >>> view()
         >>> cal.find('butterfly')
         Traceback (most recent call last):
         ...
@@ -4774,7 +4787,7 @@ def doctest_EventDeleteView():
 
         >>> request.form = {'event_id': 'counted', 'date': '2005-02-08',
         ...                 'FUTURE': 'Future'}
-        >>> view.handleEvent()
+        >>> view()
         >>> cal.find('counted').recurrence
         DailyRecurrenceRule(1, None, datetime.date(2005, 2, 7), ())
 
@@ -4790,7 +4803,7 @@ def doctest_EventDeleteView():
         >>> request.setPrincipal(ConformantStub(owner))
 
         >>> view = EventDeleteView(ISchoolToolCalendar(owner), request)
-        >>> print view.handleEvent()
+        >>> print view()
         None
 
 
@@ -4800,7 +4813,7 @@ def doctest_EventDeleteView():
         >>> foe = container['foe'] = Person('foe')
         >>> view.context.__parent__ = foe
 
-        >>> print view.handleEvent()
+        >>> print view()
         None
 
     """
@@ -4865,7 +4878,7 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
         principal = Principal('person', 'Some person', person=self.person)
         request.setPrincipal(principal)
         view = DailyCalendarRowsView(ISchoolToolCalendar(self.person), request)
-        result = list(view.calendarRows(date(2004, 11, 5), 8, 19))
+        result = list(view.calendarRows(date(2004, 11, 5), 8, 19, events=[]))
 
         expected = [("1", dt('08:00'), timedelta(hours=1)),
                     ("9:00", dt('09:00'), timedelta(hours=1)),
@@ -4894,7 +4907,7 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
         km = timezone('Asia/Kamchatka')
         view.getPersonTimezone = lambda: km
 
-        result = list(view.calendarRows(date(2004, 11, 5), 8, 19))
+        result = list(view.calendarRows(date(2004, 11, 5), 8, 19, events=[]))
 
         kmdt = lambda arg: km.localize(parse_datetime('2004-11-05 %s:00' %
                                                       arg))
@@ -4931,7 +4944,7 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
         request.setPrincipal(principal)
         view = DailyCalendarRowsView(ISchoolToolCalendar(self.person), request)
 
-        result = list(view.calendarRows(date(2004, 11, 5), 8, 19))
+        result = list(view.calendarRows(date(2004, 11, 5), 8, 19, events=[]))
 
         expected = [("%d:00" % i, dt('%d:00' % i), timedelta(hours=1))
                     for i in range(8, 19)]
@@ -4943,7 +4956,7 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
         request = TestRequest()
         # do not set the principal
         view = DailyCalendarRowsView(ISchoolToolCalendar(self.person), request)
-        result = list(view.calendarRows(date(2004, 11, 5), 8, 19))
+        result = list(view.calendarRows(date(2004, 11, 5), 8, 19, events=[]))
 
         # the default is not to show periods
         expected = [("%d:00" % i, dt('%d:00' % i), timedelta(hours=1))

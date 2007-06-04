@@ -839,7 +839,7 @@ def doctest_CompositeTimetables():
 
     When there are no source objecs we get an empty ImmutableCalendar:
 
-       >>> ct._collectSourceObjects = lambda: []
+       >>> ct.collectTimetableSourceObjects = lambda: []
        >>> calendar = ct.makeTimetableCalendar()
        >>> list(calendar)
        []
@@ -887,7 +887,7 @@ def doctest_CompositeTimetables():
 
        >>> s1 = SourceStub([TTEv("e1", 1), TTEv("e2", 2), TTEv("e3", 3), object()])
        >>> s2 = SourceStub([object(), TTEv("e4", 5), TTEv("e5", 4), TTEv("e6", 0)])
-       >>> ct._collectSourceObjects = lambda: [s1, s2]
+       >>> ct.collectTimetableSourceObjects = lambda: [s1, s2]
 
     If we do not set date limits - we get all the events from both
     calendars:

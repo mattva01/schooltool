@@ -275,4 +275,13 @@
     </example>
   </key>
 
+  <key name="school-type" default="">
+    <description>
+      The school type to be used when initializing the database.
+    </description>
+    <example>
+      school-type lyceum
+    </example>
+  </key>
+
 </schema>

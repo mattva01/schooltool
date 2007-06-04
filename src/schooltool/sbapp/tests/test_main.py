@@ -242,6 +242,7 @@ def doctest_setup():
         ...     lang = 'lt'
         ...     reportlab_fontdir = ''
         ...     devmode = True
+        ...     school_type = ''
         ...     site_definition = 'schoolbell-site.zcml'
         >>> options.config = ConfigStub()
 

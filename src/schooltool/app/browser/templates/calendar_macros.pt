@@ -146,7 +146,8 @@
           <option value='' i18n:translate="">Year</option>
           <tal:loop repeat="year view/getJumpToYears">
             <option value="" i18n:translate=""
-              tal:attributes="value year/href"
+              tal:attributes="value year/href;
+                              selected year/selected"
               tal:content="year/label" />
           </tal:loop>
         </select>

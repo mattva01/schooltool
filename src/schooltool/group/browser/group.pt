@@ -14,11 +14,8 @@
 
     <div tal:define="members view/getPersons" class="info-block">
       <h5 i18n:translate="">Members</h5>
-      <ul tal:condition="members">
-        <li tal:repeat="obj members/sorted_filter_accessible:title">
-          <a tal:attributes="href obj/@@absolute_url" tal:content="obj/title" />
-        </li>
-      </ul>
+
+      <tal:block tal:replace="structure view/renderPersonTable" />
 
       <a class="modify" href=""
          title="Change the people who are members of this group."

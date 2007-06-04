@@ -135,6 +135,14 @@ class IPersonFactory(zope.interface.Interface):
     def __call__(*args, **kw):
         """Create a new Person instance."""
 
+    def createManagerUser(username, system_name):
+        """Create a person that will be the manager user.
+
+        As different persons have different required fields and
+        schooltool has to create the user automatically each person
+        factory should have person specific manager user.
+        """
+
     def columns():
         """Return a list of default columns for person lists."""
 

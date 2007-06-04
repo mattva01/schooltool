@@ -144,6 +144,8 @@
 
   <resource name="layout.css" file="resources/layout.css"
             layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="print.css" file="resources/print.css"
+            layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="schooltool.js" file="resources/schooltool.js"
             layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="favicon.ico" file="resources/favicon.ico"
@@ -242,7 +244,7 @@
   <zope:adapter
       for=".skin.NavigationViewlet"
       name="schooltool.view"
-     factory=".skin.NavigationViewletCrowd" />
+      factory=".skin.NavigationViewletCrowd" />
 
   <zope:view
       for="datetime.date"

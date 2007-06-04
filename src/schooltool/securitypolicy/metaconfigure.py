@@ -87,16 +87,19 @@ def handle_allow(iface, crowdname, permission):
     """
 
     utility = getCrowdsUtility()
-    factory = utility.crowdmap[crowdname]
+    # Postpone the named crowd lookup for the runtime, if you will
+    # misspell the name of the crowd in our allow declaration, it will
+    # go unnoticed untill someone will try to use that crowd
+    factory_getter = lambda (context): utility.crowdmap[crowdname](context)
     if iface is None:
-        utility.permcrowds.setdefault(permission, []).append(factory)
+        utility.permcrowds.setdefault(permission, []).append(factory_getter)
         return
 
     objcrowds = utility.objcrowds
     if (iface, permission) not in objcrowds:
         registerCrowdAdapter(iface, permission)
         objcrowds[(iface, permission)] = []
-    objcrowds[(iface, permission)].append(factory)
+    objcrowds[(iface, permission)].append(factory_getter)
 
 
 def crowd(_context, name, factory):

@@ -655,20 +655,8 @@ class ITimetables(Interface):
 class ICompositeTimetables(Interface):
     """An interface for objects that have composite timetables."""
 
-    def getCompositeTimetable(term_id, tt_schema_id):
-        """Return a composite timetable for a given object with a
-        given timetable schema for a given time period id.
-
-        The timetable returned includes the events from the timetables
-        of parent groups, groups taught, etc.
-
-        This function can return None if the object has no timetable.
-        """
-
-    def listCompositeTimetables():
-        """Return a sequence of (time_period_id, tt_schema_id) for all
-        available composite timetables.
-        """
+    def collectTimetableSourceObjects():
+        """Collect objects timetables of which are included in the composite timetable."""
 
     def makeTimetableCalendar(first=None, last=None):
         """Generate and return a calendar from all composite timetables.

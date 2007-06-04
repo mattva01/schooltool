@@ -656,7 +656,7 @@ class StudentAttendanceView(BrowserView, AttendanceInheritanceMixin):
         late_arrival = self.request.get('tardy_time', '')
         for ar in self.unresolvedAbsences():
             if ar['id'] in self.request.form:
-                self._process(ar['attendance_record'], translate(ar['text']),
+                self._process(ar['attendance_record'], translate(ar['text'], self.request),
                               explanation, resolve, code, late_arrival)
                 # make tardy is not inherited
                 if resolve != 'tardy':
@@ -666,7 +666,8 @@ class StudentAttendanceView(BrowserView, AttendanceInheritanceMixin):
                     for iar in inheriting_ars:
                         self._process(iar,
                                       translate(self.formatAttendanceRecord(
-                                                                    iar)),
+                                                                    iar),
+                                                self.request),
                                       explanation, resolve, code, late_arrival)
 
     def _process(self, ar, text, explanation, resolve, code, late_arrival):
@@ -792,7 +793,7 @@ class StudentAttendanceView(BrowserView, AttendanceInheritanceMixin):
         """Format an attendance record for display."""
         assert ar.isAbsent() or ar.isTardy()
         if IHomeroomAttendanceRecord.providedBy(ar):
-            title = translate(_('homeroom'))
+            title = translate(_('homeroom'), self.request)
         else:
             assert ISectionAttendanceRecord.providedBy(ar)
             title = translate(ar.section.label)

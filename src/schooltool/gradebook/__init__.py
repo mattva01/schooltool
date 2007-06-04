@@ -4,10 +4,9 @@ def registerTestSetup():
     from schooltool.testing import registry
 
     def addDefaultCategories(app):
-        class FauxEvent(object):
-            object = app
-        from schooltool.gradebook import category
-        category.addDefaultCategoriesToApplication(FauxEvent())
+        from schooltool.gradebook.gradebook import GradebookInit
+        gb_init = GradebookInit(app)
+        gb_init()
     registry.register('DefaultCategories', addDefaultCategories)
 
 registerTestSetup()

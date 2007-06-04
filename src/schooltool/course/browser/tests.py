@@ -928,9 +928,9 @@ def doctest_CoursesViewlet():
     We'll need something to teach:
 
         >>> from schooltool.course.section import Section
-        >>> sections['section'] = section = Section(title="History")
+        >>> sections['section'] = section1 = Section(title="History")
         >>> sections['section2'] = section2 = Section(title="Algebra")
-        >>> section.instructors.add(teacher)
+        >>> section1.instructors.add(teacher)
 
     Now we're teaching:
 
@@ -944,7 +944,9 @@ def doctest_CoursesViewlet():
 
         >>> section2.instructors.add(teacher)
         >>> teacher_view = CoursesViewlet(teacher, TestRequest())
-        >>> [section.title for section in teacher_view.instructorOf()]
+        >>> [item['section'].title for item in teacher_view.instructorOf()]
+        ['History', 'Algebra']
+        >>> [item['title'] for item in teacher_view.instructorOf()]
         ['History', 'Algebra']
 
     Let's create a student
@@ -959,9 +961,10 @@ def doctest_CoursesViewlet():
 
     Membership in a Section implies being a learner:
 
-        >>> section.members.add(student)
+        >>> section2.members.add(student)
         >>> student_view.isTeacher()
         False
+
         >>> student_view.isLearner()
         True
 
@@ -973,7 +976,7 @@ def doctest_CoursesViewlet():
         >>> section3.members.add(student)
         >>> student_view = CoursesViewlet(student, TestRequest())
 
-        >>> [section['section'].title for section in student_view.learnerOf()]
+        >>> [item['section'].title for item in student_view.learnerOf()]
         ['Algebra', 'English']
 
     Students can also participate in sections as part of a group, say all 10th

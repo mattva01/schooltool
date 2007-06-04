@@ -53,11 +53,16 @@ from zope.app.container.contained import ObjectAddedEvent
 from zope.app.dependable.interfaces import IDependable
 from zope.app.component.hooks import setSite
 from zope.component import getUtility
+from zope.component import getAdapters
+from zope.interface import directlyProvidedBy
 from zope.app.intid import IntIds
 from zope.app.intid.interfaces import IIntIds
 from zope.app.component.interfaces import ISite
 from zope.app.component.site import LocalSiteManager
 
+from schooltool.app.interfaces import ApplicationInitializationEvent
+from schooltool.app.interfaces import IPluginInit
+from schooltool.app.interfaces import ISchoolToolInitializationUtility
 from schooltool.app.app import SchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.rest import restServerType
@@ -65,7 +70,6 @@ from schooltool.app.browser import pdfcal
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.app.interfaces import ICookieLanguageSelector
 from schooltool.app.interfaces import CatalogSetUpEvent
-from schooltool.app.interfaces import ApplicationInitializationEvent
 from schooltool.utility.utility import setUpUtilities
 from schooltool.utility.utility import UtilitySpecification
 
@@ -350,6 +354,13 @@ def daemonize():
     os.dup(0)
 
 
+def initializeSchoolToolPlugins(event):
+
+    for name, initializer in getAdapters((event.object, ),
+                                         IPluginInit):
+        initializer()
+
+
 class StandaloneServer(object):
 
     ZCONFIG_SCHEMA = os.path.join(os.path.dirname(__file__),
@@ -440,7 +451,7 @@ class StandaloneServer(object):
 
         return options
 
-    def bootstrapSchoolTool(self, db):
+    def bootstrapSchoolTool(self, db, school_type=""):
         """Bootstrap SchoolTool database."""
         connection = db.open()
         root = connection.root()
@@ -451,7 +462,13 @@ class StandaloneServer(object):
         app_obj = root.get(ZopePublication.root_name)
         if app_obj is None:
             app = SchoolToolApplication()
-            directlyProvides(app, IContainmentRoot)
+
+            # Run school specific initialization code
+            initializationUtility = getUtility(
+                ISchoolToolInitializationUtility, name=school_type)
+            initializationUtility.initializeApplication(app)
+
+            directlyProvides(app, directlyProvidedBy(app) + IContainmentRoot)
             root[ZopePublication.root_name] = app
             # savepoint to make sure that the app object has
             # a _p_jar. This is needed to make things like
@@ -504,11 +521,10 @@ class StandaloneServer(object):
         # set the site so that catalog utilities and person factory
         # utilities and subscribers were available
         setSite(app)
-        _('%s Manager') # mark for l10n
-        manager_title = catalog.ugettext('%s Manager') % self.system_name
         if MANAGER_USERNAME not in app['persons']:
             factory = getUtility(IPersonFactory)
-            manager = factory(MANAGER_USERNAME, manager_title)
+            manager = factory.createManagerUser(MANAGER_USERNAME,
+                                                self.system_name)
             app['persons'][MANAGER_USERNAME] = manager
             IDependable(manager).addDependent('')
         manager = app['persons'][MANAGER_USERNAME]
@@ -572,7 +588,7 @@ class StandaloneServer(object):
             sys.exit(1)
 
         try:
-            self.bootstrapSchoolTool(db)
+            self.bootstrapSchoolTool(db, options.config.school_type)
         except IncompatibleDatabase:
             print >> sys.stderr, self.incompatible_db_error_msg
             sys.exit(1)

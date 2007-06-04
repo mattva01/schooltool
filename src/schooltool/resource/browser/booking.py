@@ -117,9 +117,9 @@ class CalendarEventBookOneResourceView(BrowserView):
     def nextURL(self, event):
         """Return the URL to be displayed after the add operation."""
         calURL = absoluteURL(event.__parent__, self.request)
-        cancel_url = calURL+'/delete.html?event_id=%s&date=%s' % (
+        cancel_url = calURL+'/delete.html?event_id=%s&date=%s&DELETE=Delete' % (
             event.unique_id,
             event.dtstart.strftime("%Y-%m-%d"))
         url = "%s/edit.html?cancel_url=%s" % (absoluteURL(event, self.request),
-                                               urllib.quote(cancel_url))
+                                              urllib.quote(cancel_url))
         return url

@@ -33,6 +33,7 @@ from zope.app.keyreference.interfaces import IKeyReference
 
 from schooltool import course, requirement
 from schooltool.traverser import traverser
+from schooltool.app.app import InitBase
 from schooltool.securitypolicy.crowds import ConfigurableCrowd
 from schooltool.securitypolicy.crowds import AggregateCrowd
 from schooltool.securitypolicy.crowds import ManagersCrowd
@@ -40,6 +41,8 @@ from schooltool.securitypolicy.crowds import ClerksCrowd
 from schooltool.securitypolicy.crowds import AdministratorsCrowd
 
 from schooltool.gradebook import interfaces
+from schooltool.gradebook.category import getCategories
+from schooltool import SchoolToolMessage as _
 
 GRADEBOOK_SORTING_KEY = 'schooltool.gradebook.sorting'
 
@@ -173,3 +176,20 @@ class GradebookEditorsCrowd(AggregateCrowd, ConfigurableCrowd):
         """Return the value of the related setting (True or False)."""
         return (ConfigurableCrowd.contains(self, principal) and
                 AggregateCrowd.contains(self, principal))
+
+
+class GradebookInit(InitBase):
+
+    def __call__(self):
+        from schooltool.app.interfaces import ISchoolToolApplication
+        dict = getCategories(self.app)
+        dict.addValue('assignment', 'en', _('Assignment'))
+        dict.addValue('essay', 'en', _('Essay'))
+        dict.addValue('exam', 'en', _('Exam'))
+        dict.addValue('homework', 'en', _('Homework'))
+        dict.addValue('journal', 'en', _('Journal'))
+        dict.addValue('lab', 'en', _('Lab'))
+        dict.addValue('presentation', 'en', _('Presentation'))
+        dict.addValue('project', 'en', _('Project'))
+        dict.setDefaultLanguage('en')
+        dict.setDefaultKey('assignment')

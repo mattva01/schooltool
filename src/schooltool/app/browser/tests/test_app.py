@@ -64,7 +64,7 @@ def doctest_ApplicationView():
         >>> request.response.getHeader('Location')
         'http://127.0.0.1/calendar'
 
-    If we change a the front page preference, we will be redirected to the dashboard.
+    If we change a the front page preference, we should not be redirected
 
         >>> IApplicationPreferences(app).frontPageCalendar = False
         >>> request = TestRequest()
@@ -72,10 +72,8 @@ def doctest_ApplicationView():
         >>> view.update()
 
         >>> request.response.getStatus()
-        302
-        >>> request.response.getHeader('Location')
-        'http://127.0.0.1/@@dashboard.html'
-        
+        599
+
     """
 
 

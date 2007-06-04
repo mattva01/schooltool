@@ -24,6 +24,7 @@ $Id$
 import zope.interface
 import zope.schema
 from zope.app import container
+from zope.interface import Interface
 
 from schooltool.group.interfaces import IBaseGroup as IGroup
 from schooltool import SchoolToolMessage as _
@@ -101,3 +102,9 @@ class ISectionContained(ISection, container.interfaces.IContained):
     """Sections in a SectionContainer."""
 
     container.constraints.containers(ISectionContainer)
+
+
+class ILearner(Interface):
+
+    def sections():
+        """List of all the sections this learner belongs to."""

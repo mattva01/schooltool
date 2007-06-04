@@ -1,0 +1,39 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head >
+  <title metal:fill-slot="title" i18n:translate="">
+    Deleting an event (<span tal:replace="view/event/title" i18n:name="event_title" />)
+  </title>
+</head>
+<body>
+  <metal:block metal:fill-slot="body">
+
+  <form method="post" tal:attributes="action request/URL" class="standalone">
+
+    <h3 i18n:translate="">
+      Deleting an event (<span tal:replace="view/event/title"
+                               i18n:name="event_title" />)
+    </h3>
+
+    <fieldset>
+    <p i18n:translate="">
+    Are you sure you want to delete this event?
+    </p>
+
+    <input type="hidden" name="event_id"
+           tal:attributes="value request/event_id" />
+    <input type="hidden" name="date"
+           tal:attributes="value request/date" />
+
+    </fieldset>
+
+    <div class="controls">
+      <input class="button-cancel" type="submit" name="DELETE" value="Delete"
+             i18n:attributes="value" />
+      <input class="button-cancel" type="submit" name="CANCEL" value="Cancel"
+             i18n:attributes="value" />
+    </div>
+  </form>
+  </metal:block>
+
+</body>
+</html>

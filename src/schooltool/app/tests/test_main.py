@@ -385,6 +385,7 @@ def doctest_setup():
         ...     lang = 'lt'
         ...     reportlab_fontdir = ''
         ...     devmode = False
+        ...     school_type = ''
         ...     site_definition = findSiteZCML()
         >>> options.config = ConfigStub()
 

@@ -61,7 +61,7 @@
       class=".course.CourseView"
       template="templates/course.pt"
       permission="zope.View"
-      menu="zmi_views"
+      menu="schooltool_actions"
       title="View"
       layer="schooltool.skin.ISchoolToolLayer"
       />
@@ -72,7 +72,7 @@
       class=".course.CourseContainerView"
       template="templates/course_container.pt"
       permission="zope.View"
-      menu="zmi_views"
+      menu="schooltool_actions"
       title="View"
       />
 
@@ -185,5 +185,15 @@
       template="templates/edit_relationships.pt"
       permission="schooltool.edit"
       />
+
+  <zope:adapter
+      for="schooltool.course.interfaces.ICourseContainer
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory="schooltool.table.table.FilterWidget" />
+
+  <zope:adapter
+      for="schooltool.course.interfaces.ICourseContainer
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory="schooltool.table.table.SchoolToolTableFormatter " />
 
 </configure>

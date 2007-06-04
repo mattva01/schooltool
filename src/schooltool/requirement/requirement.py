@@ -33,7 +33,7 @@ import zope.lifecycleevent
 from zope import component
 from zope import annotation
 from zope.app import zapi
-from zope.app.keyreference.interfaces import IKeyReference, NotYet
+from zope.app.keyreference.interfaces import IKeyReference
 from zope.app.container.interfaces import IObjectRemovedEvent
 
 from schooltool.requirement import interfaces
@@ -100,10 +100,7 @@ def getRequirementKey(requirement):
     unwraps the ``InheritedRequirement`` into a regular ``Requirement``.
     """
     requirement = unwrapRequirement(requirement)
-    try:
-        return IKeyReference(requirement)
-    except NotYet: # occurs when transaction hasn't been finished
-        return None
+    return IKeyReference(requirement)
 
 
 def unwrapRequirement(requirement):

@@ -146,8 +146,11 @@ def personAppCalendarOverlaySubscriber(person, event):
         pass
 
 
-def addPersonContainerToApplication(event):
-    event.object['persons'] = PersonContainer()
+from schooltool.app.app import InitBase
+class PersonInit(InitBase):
+
+    def __call__(self):
+        self.app['persons'] = PersonContainer()
 
 
 class PersonCalendarCrowd(Crowd):

@@ -191,7 +191,7 @@ class EditColumn(column.Column):
     def renderCell(self, item, formatter):
         return '<a href="%s">%s</a>' % (
             zapi.absoluteURL(item, formatter.request) + '/nameinfo/@@edit.html',
-            translate(_("Edit")))
+            translate(_("Edit"), formatter.request))
 
 
 class DisplayColumn(column.Column):
@@ -200,7 +200,7 @@ class DisplayColumn(column.Column):
     def renderCell(self, item, formatter):
         return '<a href="%s">%s</a>' % (
             zapi.absoluteURL(item, formatter.request) + '/nameinfo',
-            translate(_("Display")))
+            translate(_("Display"), formatter.request))
 
 
 class FullnameColumn(column.GetterColumn):

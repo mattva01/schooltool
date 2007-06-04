@@ -254,3 +254,7 @@ class IUnresolvedAbsenceCache(Interface):
 
 class AttendanceError(Exception):
     """Attendance tracking error."""
+
+
+class IAttendanceCalendarEvent(Interface):
+    """Marker interface for attendance events."""

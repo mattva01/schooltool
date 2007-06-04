@@ -62,8 +62,9 @@ class LevelContainer(btree.BTreeContainer):
             raise interfaces.DisconnectedLevelsError(disconnected)
 
 
-def addLevelContainerToApplication(event):
-    event.object['levels'] = LevelContainer()
+class LevelInit(app.InitBase):
+    def __call__(self):
+        self.app['levels'] = LevelContainer()
 
 
 class Level(persistent.Persistent, contained.Contained):

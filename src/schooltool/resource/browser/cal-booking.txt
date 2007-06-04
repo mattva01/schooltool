@@ -299,6 +299,7 @@ should stay in place, yet the resource should become unbooked:
     XXX: Have to call URL, since I could not find the link!!!
     >>> manager.open('http://localhost/resources/mud/calendar/'
     ...           'delete.html?event_id=dummy-uid&date=2005-02-04')
+    >>> manager.getControl('Delete').click()
     >>> 'Test event' in manager.contents
     False
 
@@ -338,6 +339,7 @@ And delete the event from frog's calendar:
     >>> manager.open(
     ...     'http://localhost/persons/frog/calendar/2005-02-04')
     >>> manager.getLink(url='delete.html?event_id=dummy-uid').click()
+    >>> manager.getControl('Delete').click()
 
 The event should be gone from the frog's calendar:
 

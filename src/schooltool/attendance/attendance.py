@@ -384,13 +384,10 @@ class AttendanceCalendarMixin(object):
 
     def incidentDescription(self, record):
         """The description of the event for the attendance record."""
-        # The mapping argument is here to suppress a spurious deprecation
-        # warning.  See Zope 3 bug http://www.zope.org/Collectors/Zope3-dev/531
-        workaround = {'': ''}
         if record.isExplained():
-            return translate(_("Explanation was accepted.", mapping=workaround))
+            return _("Explanation was accepted.")
         else:
-            return translate(_("Is not explanained yet.", mapping=workaround))
+            return _("Is not explanained yet.")
 
     def makeCalendar(self):
         events = []
@@ -403,6 +400,9 @@ class AttendanceCalendarMixin(object):
             if title:
                 description = self.incidentDescription(record)
                 event = self.makeCalendarEvent(record, title, description)
+                from schooltool.attendance.interfaces import IAttendanceCalendarEvent
+                from zope.interface import directlyProvides
+                directlyProvides(event, IAttendanceCalendarEvent)
                 event.__parent__ = None
                 events.append(event)
         return ImmutableCalendar(events)
@@ -510,14 +510,14 @@ class SectionAttendance(AttendanceBase, AttendanceCalendarMixin):
     def tardyEventTitle(self, record):
         """Produce a title for a calendar event representing a tardy."""
         minutes_late = (record.late_arrival - record.datetime).seconds / 60
-        return translate(_('Was late for ${section} (${mins} minutes).',
-                           mapping={'section': record.section.title,
-                                    'mins': minutes_late}))
+        return _('Was late for ${section} (${mins} minutes).',
+                 mapping={'section': record.section.title,
+                          'mins': minutes_late})
 
     def absenceEventTitle(self, record):
         """Produce a title for a calendar event representing an absence."""
-        return translate(_('Was absent from ${section}.',
-                           mapping={'section': record.section.title}))
+        return _('Was absent from ${section}.',
+                 mapping={'section': record.section.title})
 
     def makeCalendarEvent(self, record, title, description):
         """Produce a calendar event for an absence or a tardy."""

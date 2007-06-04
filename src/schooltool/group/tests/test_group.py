@@ -28,7 +28,6 @@ from zope.interface import directlyProvides
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
 from zope.app.testing import setup, ztapi
-from zope.app.container.contained import ObjectAddedEvent
 from zope.traversing.interfaces import IContainmentRoot
 from zope.interface import implements
 
@@ -78,8 +77,8 @@ def doctest_Group():
     """
 
 
-def doctest_addGroupContainerToApplication():
-    """Tests for addGroupContainerToApplication
+def doctest_GroupInit():
+    """Tests for GroupInit
 
     This test needs annotations, dependencies and traversal
 
@@ -88,20 +87,18 @@ def doctest_addGroupContainerToApplication():
         >>> setup.setUpDependable()
         >>> setup.setUpTraversal()
 
-    addGroupContainerToApplication is a subscriber for IObjectAddedEvent.
-
-        >>> from schooltool.group.group import addGroupContainerToApplication
+        >>> from schooltool.group.group import GroupInit
         >>> from schooltool.app.app import SchoolToolApplication
         >>> app = SchoolToolApplication()
-        >>> event = ObjectAddedEvent(app)
 
     we want app to have a location
 
         >>> directlyProvides(app, IContainmentRoot)
 
-    When you call the subscriber
+    When you call the initialization adapter
 
-        >>> addGroupContainerToApplication(event)
+        >>> plugin = GroupInit(app)
+        >>> plugin()
 
     it adds a container for groups
 

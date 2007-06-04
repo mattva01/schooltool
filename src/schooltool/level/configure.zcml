@@ -115,11 +115,11 @@
   </class>
 
   <!-- Application hook -->
-  <subscriber
-      for="schooltool.app.interfaces.IApplicationInitializationEvent"
-      handler=".level.addLevelContainerToApplication"
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".level.LevelInit"
+      name="schooltool.level"
       />
-
 
   <!-- Level vocabulary -->
   <utility

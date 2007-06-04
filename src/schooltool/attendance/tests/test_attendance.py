@@ -1064,7 +1064,8 @@ def doctest_SectionAttendance_tardyEventTitle():
         >>> minutes_late = 14
         >>> ar.makeTardy(dt + datetime.timedelta(minutes=minutes_late))
 
-        >>> print sa.tardyEventTitle(ar)
+        >>> from zope.i18n import translate
+        >>> print translate(sa.tardyEventTitle(ar))
         Was late for Lithomancy (14 minutes).
 
     """
@@ -1085,7 +1086,8 @@ def doctest_SectionAttendance_absenceEventTitle():
         >>> ar = SectionAttendanceRecord(section, dt, ABSENT, duration,
         ...                              period_id)
 
-        >>> print sa.absenceEventTitle(ar)
+        >>> from zope.i18n import translate
+        >>> print translate(sa.absenceEventTitle(ar))
         Was absent from Lithomancy.
 
     """

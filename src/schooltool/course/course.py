@@ -28,9 +28,11 @@ from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container import btree, contained
 
 from schooltool.relationship import RelationshipProperty
+from schooltool.app.app import InitBase
 from schooltool.app import relationships
 from schooltool.app.app import Asset
 from schooltool.course import interfaces
+
 
 class CourseContainer(btree.BTreeContainer):
     """Container of Courses."""
@@ -53,5 +55,7 @@ class Course(Persistent, contained.Contained, Asset):
         self.description = description
 
 
-def addCourseContainerToApplication(event):
-    event.object['courses'] = CourseContainer()
+class CourseInit(InitBase):
+
+    def __call__(self):
+        self.app['courses'] = CourseContainer()

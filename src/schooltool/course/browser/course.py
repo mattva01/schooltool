@@ -24,13 +24,16 @@ $Id$
 from zope.app import zapi
 from zope.app.form.browser.add import AddView
 from zope.publisher.browser import BrowserView
+from zope.security.proxy import removeSecurityProxy
+
 from schooltool.skin.containers import ContainerView
+from schooltool.course.interfaces import ICourse, ICourseContainer, ISection
+from schooltool.app.relationships import URIInstruction, URISection
+from schooltool.app.membership import URIGroup, URIMembership
+from schooltool.relationship import getRelatedObjects
 
 from schooltool import SchoolToolMessage as _
-from schooltool.course.interfaces import ICourse, ICourseContainer, ISection
-from schooltool.app.app import getSchoolToolApplication
-from schooltool.app.relationships import URIInstruction, URISection
-from schooltool.relationship import getRelatedObjects
+
 
 class CourseContainerView(ContainerView):
     """A Course Container view."""
@@ -58,48 +61,44 @@ class CourseAddView(AddView):
         else:
             return AddView.update(self)
 
+
 class CoursesViewlet(BrowserView):
     """A viewlet showing the courses a person is in."""
 
     def isTeacher(self):
         """Find out if the person is an instructor for any sections."""
-        if len(getRelatedObjects(self.context, URISection,
-                                 rel_type=URIInstruction)) > 0:
-            return True
-        else:
-            return False
+        return len(self.instructorOf()) > 0
 
     def isLearner(self):
         """Find out if the person is a member of any sections."""
-        for obj in self.context.groups:
-            if ISection.providedBy(obj):
-                return True
-
-        return False
+        return len(self.learnerOf()) > 0
 
     def instructorOf(self):
         """Get the sections the person instructs."""
-        return getRelatedObjects(self.context, URISection,
-                                 rel_type=URIInstruction)
+        sections = getRelatedObjects(self.context, URISection,
+                                     rel_type=URIInstruction)
+        results = []
+        for section in sections:
+            results.append({'title': removeSecurityProxy(section).title,
+                            'section': section})
+        return results
 
     def memberOf(self):
         """Seperate out generic groups from sections."""
-
-        return [group for group in self.context.groups if not
-                ISection.providedBy(group)]
+        return [group for group in self.context.groups
+                if not ISection.providedBy(group)]
 
     def learnerOf(self):
         """Get the sections the person is a member of."""
         results = []
-        sections = getSchoolToolApplication()['sections'].values()
-        for section in sections:
-            if self.context in section.members:
-                results.append({'section': section, 'group': None})
-            # XXX isTransitiveMember works in the test fixture but not in the
-            # application, working around it for the time being.
-            for group in self.memberOf():
-                if group in section.members:
-                    results.append({'section': section,
-                                    'group': group})
+
+        for item in self.context.groups:
+            if ISection.providedBy(item):
+                results.append({'section': item, 'group': None})
+            else:
+                group_sections = getRelatedObjects(item, URIGroup,
+                                                   rel_type=URIMembership)
+                for section in group_sections:
+                    results.append({'section': section, 'group': item})
 
         return results

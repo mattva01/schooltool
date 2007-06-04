@@ -166,6 +166,7 @@ from schooltool.timetable.interfaces import ITimetableSchema
 from schooltool.timetable.interfaces import Unchanged
 from schooltool.term.interfaces import ITerm
 from schooltool.app.app import getSchoolToolApplication
+from schooltool.app.app import InitBase
 
 # Imports for ZODB compatibility
 from schooltool.timetable.model import BaseTimetableModel
@@ -598,7 +599,7 @@ class CompositeTimetables(object):
     def __init__(self, context):
         self.context = context
 
-    def _collectSourceObjects(self):
+    def collectTimetableSourceObjects(self):
         objs = []
         for adapter in zapi.subscribers((self.context, ), ITimetableSource):
             objs.extend(adapter.getTimetableSourceObjects())
@@ -612,7 +613,7 @@ class CompositeTimetables(object):
             return first <= event.schoolDay() <= last
 
         events = []
-        for obj in self._collectSourceObjects():
+        for obj in self.collectTimetableSourceObjects():
             cal = ISchoolToolCalendar(obj)
             for event in cal:
                 if (ITimetableCalendarEvent.providedBy(event) and
@@ -655,9 +656,11 @@ def findRelatedTimetables(ob):
     return result
 
 
-def addToApplication(event):
-    from schooltool.timetable.schema import TimetableSchemaContainer
-    event.object['ttschemas'] = TimetableSchemaContainer()
+class TimetableInit(InitBase):
+
+    def __call__(self):
+        from schooltool.timetable.schema import TimetableSchemaContainer
+        self.app['ttschemas'] = TimetableSchemaContainer()
 
 
 def registerTestSetup():
