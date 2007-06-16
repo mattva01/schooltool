@@ -20,6 +20,12 @@ build:
 	PYTHONPATH=$(PYTHONPATH) $(PYTHON) setup.py develop -S eggs --install-dir eggs
 	$(PYTHON) bin/remove-stale-bytecode.py
 
+.PHONY: buildbot-build
+buildbot-build:
+	# Clean out the buildbot on saturdays 
+	[ `date +%u` != 6 ] || $(MAKE) PYTHON=$(PYTHON) realclean
+	$(MAKE) PYTHON=$(PYTHON) build
+
 .PHONY: clean
 clean:
 	find . \( -path './src/*.mo' -o -name '*.o' \
