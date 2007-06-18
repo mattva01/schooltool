@@ -127,7 +127,10 @@ class IterableBatch(Batch):
             except AttributeError:
                 return getattr(obj, sort_by)
 
-        item_list = sorted(items, key=key)
+        if sort_by:
+            item_list = sorted(items, key=key)
+        else:
+            item_list = items
         self.full_size = len(item_list)
         self.extra_url = extra_url or ""
         self.base_url = self.request.URL
