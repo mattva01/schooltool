@@ -127,7 +127,7 @@ class IterableBatch(Batch):
             except AttributeError:
                 return getattr(obj, sort_by)
 
-        if sort_by:
+        if sort_by is not None:
             item_list = sorted(items, key=key)
         else:
             item_list = items
