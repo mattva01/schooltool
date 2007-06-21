@@ -30,6 +30,7 @@ from zope.interface import implements
 from zope.location.interfaces import ILocation
 
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.app import InitBase
 
 from lyceum.journal.interfaces import ILyceumJournal
 
@@ -81,3 +82,9 @@ def getEventLyceumJournal(event):
     """Get the journal for a TimetableCalendarEvent."""
     section = event.activity.owner
     return ILyceumJournal(section)
+
+
+class JournalInit(InitBase):
+
+    def __call__(self):
+        self.app['lyceum.journal'] = LyceumJournalContainer()

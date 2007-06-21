@@ -27,6 +27,11 @@
       factory="lyceum.journal.journal.getEventLyceumJournal"
       />
 
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".journal.JournalInit"
+      name="lyceum.journal" />
+
   <include package="lyceum.journal.browser" />
 
 </configure>

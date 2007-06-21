@@ -33,5 +33,3 @@ class SchoolToolInitializationUtility(object):
     def initializeApplication(self, app):
         directlyProvides(app,
                          directlyProvidedBy(app) + ISchoolToolLyceumApplication)
-        from lyceum.journal.journal import LyceumJournalContainer
-        app['lyceum.journal'] = LyceumJournalContainer()
