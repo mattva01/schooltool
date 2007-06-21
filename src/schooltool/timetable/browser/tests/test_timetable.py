@@ -393,8 +393,8 @@ def doctest_PersonTimetableSetupView():
                 <td>
                   <select name="sections:list">
                     <option value="">none</option>
-                    <option value="history"> -- </option>
-                    <option selected="selected" value="math"> -- </option>
+                    <option value="history"> -- History</option>
+                    <option selected="selected" value="math"> -- Math</option>
                   </select>
         ...
         </form>
