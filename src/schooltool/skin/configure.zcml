@@ -195,6 +195,12 @@
   <resource name="private-note-body-l.gif"
             file="resources/private-note-body-l.gif"
             layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="rightarrow.png"
+            file="resources/rightarrow.png"
+            layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="downarrow.png"
+            file="resources/downarrow.png"
+            layer="schooltool.skin.ISchoolToolLayer" />
 
   <!-- Breadcrumbs -->
 
