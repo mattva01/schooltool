@@ -73,7 +73,7 @@ term and the month that is selected should be the same:
 
     >>> print analyze.queryHTML('//title', teacher.contents)[0]
     <title>
-      Duh B. -- History 1 journal  for
+      Duh B. -- History (1b) journal  for
     May</title>
     >>> print analyze.queryHTML('//select/option[@selected]', teacher.contents)[0]
     <option selected value="2007-pavasaris">2007 Pavasaris</option>
@@ -82,7 +82,7 @@ term and the month that is selected should be the same:
 
     >>> print analyze.queryHTML('//title', teacher.contents)[0]
     <title>
-      Duh B. -- History 1 journal  for
+      Duh B. -- History (1b) journal  for
     May</title>
     >>> print analyze.queryHTML('//select/option[@selected]', teacher.contents)[0]
     <option selected value="2007-pavasaris">2007 Pavasaris</option>
@@ -103,7 +103,7 @@ We got a different month:
 
     >>> print analyze.queryHTML('//title', teacher.contents)[0]
     <title>
-      Duh B. -- History 1 journal  for
+      Duh B. -- History (1b) journal  for
     April</title>
 
 But the semester is still the same:
@@ -126,7 +126,7 @@ Month and semester still stay the same:
 
     >>> print analyze.queryHTML('//title', teacher.contents)[0]
     <title>
-      Duh B. -- History 1 journal  for
+      Duh B. -- History (1b) journal  for
     April</title>
 
     >>> print analyze.queryHTML('//select/option[@selected]', teacher.contents)[0]
@@ -145,7 +145,7 @@ If we click Update, everything stays the same:
     >>> teacher.getControl('Update').click()
     >>> print analyze.queryHTML('//title', teacher.contents)[0]
     <title>
-      Duh B. -- History 1 journal  for
+      Duh B. -- History (1b) journal  for
     April</title>
 
     >>> print analyze.queryHTML('//select/option[@selected]', teacher.contents)[0]
@@ -159,7 +159,7 @@ activated:
 
     >>> print analyze.queryHTML('//title', teacher.contents)[0]
     <title>
-      Duh B. -- History 1 journal  for
+      Duh B. -- History (1b) journal  for
     September</title>
 
     >>> print analyze.queryHTML('//select/option[@selected]', teacher.contents)[0]
@@ -171,7 +171,7 @@ Choosing some day should not change neither the term, nor month:
 
     >>> print analyze.queryHTML('//title', teacher.contents)[0]
     <title>
-      Duh B. -- History 1 journal  for
+      Duh B. -- History (1b) journal  for
     September</title>
 
     >>> print analyze.queryHTML('//select/option[@selected]', teacher.contents)[0]
@@ -183,7 +183,7 @@ Month switches:
 
     >>> print analyze.queryHTML('//title', teacher.contents)[0]
     <title>
-      Duh B. -- History 1 journal  for
+      Duh B. -- History (1b) journal  for
     December</title>
 
     >>> print analyze.queryHTML('//select/option[@selected]', teacher.contents)[0]
@@ -195,7 +195,7 @@ Updating should work too:
 
     >>> print analyze.queryHTML('//title', teacher.contents)[0]
     <title>
-      Duh B. -- History 1 journal  for
+      Duh B. -- History (1b) journal  for
     December</title>
 
     >>> print analyze.queryHTML('//select/option[@selected]', teacher.contents)[0]

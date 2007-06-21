@@ -167,11 +167,9 @@ class LyceumTeachers(object):
                         teacher.addToApp(app)
 
 
-def make_course_level(cell, course):
+def make_course(cell, course):
     if cell[0] in '1234':
         level = cell[0]
-        if cell[-1] in 'AB':
-            level += cell[-1]
     else:
         level = cell[:3]
         if len(cell) > 3:
@@ -210,7 +208,7 @@ class LyceumCourses(object):
             if current_course:
                 for n, cell in enumerate(row[2:]):
                     if n % 2 == 0 and cell.strip() != '':
-                        courses.append(make_course_level(cell, current_course))
+                        courses.append(make_course(cell, current_course))
         courses = set(courses)
 
         for course in courses:
@@ -228,6 +226,25 @@ def parse_groups(groups):
         return [level + segment for segment in segments]
     else:
         return [groups[0:3].upper()]
+
+
+def normalize_groups(groups):
+    if groups[0] in '1234':
+        level = groups[0]
+        if groups[-1] in 'AB':
+            segments = groups[1:-1].strip()
+        else:
+            segments = groups[1:].strip()
+        segments = segments.replace(',', '')
+        segments = segments.replace(' ', '')
+        return level + segments
+    else:
+        return groups[0:3].upper()
+
+
+def parse_level(groups):
+    if groups[-1] in 'AB':
+        return groups[-1]
 
 
 class CSVRoom(object):
@@ -286,24 +303,29 @@ class LyceumScheduling(object):
                     current_teacher = row[1].strip()
                 for n, cell in enumerate(row[2:]):
                     if n % 2 == 0 and cell.strip() != '':
-                        course = CSVCourse(make_course_level(cell, current_course))
+                        course = CSVCourse(make_course(cell, current_course))
                         teacher, group = current_teacher, cell
                         meeting = (day + 1, n / 2 + 1, CSVRoom(row[2:][n+1]))
-                        if (course.id, teacher, group) in sections:
-                            sections[(course.id, teacher, group)].append(meeting)
+                        level = parse_level(group) or ""
+                        group = normalize_groups(group)
+                        if (course.id, teacher, group, level) in sections:
+                            sections[(course.id, teacher, group, level)].append(meeting)
                         else:
-                            sections[(course.id, teacher, group)] = [meeting]
+                            sections[(course.id, teacher, group, level)] = [meeting]
         return sections
 
-    def _create_activity_title(self, section):
+    def _create_activity_title(self, section, level):
         course_title = ' '.join(list(section.courses)[0].title.split(' ')[:-1])
         group_titles = ', '.join([group.title
                                   for group in section.members])
-        return "%s (%s)" % (course_title, group_titles)
+        if not level:
+            return "%s (%s)" % (course_title, group_titles)
+        else:
+            return "%s (%s) %s lygis" % (course_title, group_titles, level)
 
-    def schedule_section(self, app, sid, meetings):
+    def schedule_section(self, app, sid, level, meetings):
         sob = removeSecurityProxy(app['sections'][sid])
-        activity_title = self._create_activity_title(sob)
+        activity_title = self._create_activity_title(sob, level)
         sob.title = activity_title
         ttschema_id = meetings[0][2]
         ttschema = removeSecurityProxy(app['ttschemas'][ttschema_id])
@@ -332,7 +354,7 @@ class LyceumScheduling(object):
         # schedule the section
         unscheduled_sections = {}
         for section, meetings in sections.items():
-            course_id, teacher, groups = section
+            course_id, teacher, groups, level = section
             teacher = CSVTeacher(teacher)
             current_room = None
             grp = parse_groups(groups)[0]
@@ -340,13 +362,18 @@ class LyceumScheduling(object):
                 ttschema = 'i-ii-kursui'
             else:
                 ttschema = 'iii-iv-kursui'
-            for day, period, room in sorted(meetings, key=lambda meeting: meeting[2].id):
+
+            if level:
+                sid = (course_id + ' ' + groups + ' ' + level + ' ' + teacher.user_name).strip()
+            else:
                 sid = (course_id + ' ' + groups + ' ' + teacher.user_name).strip()
+
+            for day, period, room in sorted(meetings, key=lambda meeting: meeting[2].id):
                 meeting = (day, period, ttschema, room.id)
-                if sid not in unscheduled_sections:
-                    unscheduled_sections[sid] = [meeting]
+                if (sid, level) not in unscheduled_sections:
+                    unscheduled_sections[sid, level] = [meeting]
                 else:
-                    unscheduled_sections[sid].append(meeting)
+                    unscheduled_sections[sid, level].append(meeting)
                 if sid not in app['sections']:
                     sob = self.section_factory()
                     app['sections'][sid] = sob
@@ -356,8 +383,8 @@ class LyceumScheduling(object):
                         sob.members.add(removeSecurityProxy(app['groups'][group_id]))
                     sob.instructors.add(removeSecurityProxy(app['persons'][teacher.user_name]))
 
-        for sid, meetings in unscheduled_sections.items():
-            self.schedule_section(app, sid, meetings)
+        for (sid, level), meetings in unscheduled_sections.items():
+            self.schedule_section(app, sid, level, meetings)
 
 
 class LyceumSchoolTimetables(object):

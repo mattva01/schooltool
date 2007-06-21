@@ -76,8 +76,16 @@ Courses and sections as well:
         <a href="http://localhost/courses/history-1">History 1</a>
         <ul class="section-list">
           <li>
+            <a href="http://localhost/sections/history-1%201a%20bduh"
+               title="History (1a)">Duh B. -- History (1a)</a>
+            <span class="hint">
+              (1
+              <span>Students</span>)
+            </span>
+          </li>
+          <li>
             <a href="http://localhost/sections/history-1%201b%20bduh"
-               title="History (1b)">Duh B. -- History 1</a>
+               title="History (1b)">Duh B. -- History (1b)</a>
             <span class="hint">
               (1 <span>Students</span>)
             </span>
@@ -91,7 +99,7 @@ Courses and sections as well:
         <ul class="section-list">
           <li>
             <a href="http://localhost/sections/science-2%202a%20rmah"
-               title="Science (2a)">Mah R. -- Science 2</a>
+               title="Science (2a)">Mah R. -- Science (2a)</a>
             <span class="hint">
               (1 <span>Students</span>)
             </span>
@@ -107,6 +115,7 @@ Teachers have schedules:
     >>> manager.getLink('B.').click()
     >>> manager.getLink('View Calendar').click()
     >>> manager.open(manager.url + '/2007-02-21')
+
     >>> for link in analyze.queryHTML('//div[@class="event contracted"]/h6/a', manager.contents):
     ...     print link
     <a href="http://localhost/sections/history-1%201a%20bduh/calendar/..." title="History (1a)">

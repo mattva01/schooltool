@@ -217,21 +217,64 @@ def doctest_LyceumTeachers():
     """
 
 
-def doctest_make_course_level():
-    """Tests for make_course_level.
+def doctest_make_course():
+    """Tests for make_course.
 
     Create a course title from the name of the base course and the
     level extracted from a list of groups:
 
-        >>> from lyceum.csvimport import make_course_level
-        >>> make_course_level('tb1 en', 'History')
+        >>> from lyceum.csvimport import make_course
+        >>> make_course('tb1 en', 'History')
         'History tb1 en'
-        >>> make_course_level('2abd', 'English')
+        >>> make_course('2abd', 'English')
         'English 2'
-        >>> make_course_level('3d A', 'English')
-        'English 3A'
-        >>> make_course_level('tb2', 'English')
+        >>> make_course('3d A', 'English')
+        'English 3'
+        >>> make_course('tb2', 'English')
         'English tb2'
+
+    """
+
+
+def doctest_parse_level():
+    """Tests for parse_level.
+
+    parse_level returns the level (as in A, B, S) of the section:
+
+        >>> from lyceum.csvimport import parse_level
+        >>> parse_level('3d A')
+        'A'
+
+        >>> parse_level('3d') is None
+        True
+
+        >>> parse_level('2abd B')
+        'B'
+
+    """
+
+
+def doctest_normalize_groups():
+    """Tests for normalize_groups.
+
+    Normalize groups - removes the level, and translates any of the
+    formats to describe members of a section into a standard form:
+
+        >>> from lyceum.csvimport import normalize_groups
+        >>> normalize_groups('3d A')
+        '3d'
+
+        >>> normalize_groups('3d')
+        '3d'
+
+        >>> normalize_groups('2abd B')
+        '2abd'
+
+        >>> normalize_groups('2a,b,c')
+        '2abc'
+
+        >>> normalize_groups('2a b')
+        '2ab'
 
     """
 
@@ -311,55 +354,89 @@ def doctest_LyceumScheduling_create_sections():
 
         >>> from lyceum.csvimport import LyceumScheduling
         >>> plugin = LyceumScheduling()
-        >>> sorted(plugin.create_sections().items())
-        [((u'history-1', u'B. Duh', u'1a'),
-         [(1, 1, <CSVRoom 311, 311>), (1, 2, <CSVRoom 311, 311>),
-          (2, 1, <CSVRoom 311, 311>), (2, 2, <CSVRoom 311, 311>),
-          (3, 1, <CSVRoom 311, 311>), (3, 2, <CSVRoom 311, 311>),
-          (4, 1, <CSVRoom 311, 311>), (4, 2, <CSVRoom 311, 311>),
-          (5, 1, <CSVRoom 311, 311>), (5, 2, <CSVRoom 311, 311>)]),
-         ((u'history-1', u'B. Duh', u'1b'),
-         [(1, 3, <CSVRoom 311, 311>),
-          (2, 3, <CSVRoom 311, 311>),
-          (3, 3, <CSVRoom 311, 311>),
-          (4, 3, <CSVRoom 311, 311>),
-          (5, 3, <CSVRoom 311, 311>)]),
-         ((u'history-1', u'B. Duh', u'1c'),
-         [(1, 4, <CSVRoom 311, 311>), (1, 7, <CSVRoom 311, 311>),
-          (2, 4, <CSVRoom 311, 311>), (2, 7, <CSVRoom 311, 311>),
-          (3, 4, <CSVRoom 311, 311>), (3, 7, <CSVRoom 311, 311>),
-          (4, 4, <CSVRoom 311, 311>), (4, 7, <CSVRoom 311, 311>),
-          (5, 4, <CSVRoom 311, 311>), (5, 7, <CSVRoom 311, 311>)]),
-         ((u'history-1', u'B. Duh', u'1d'),
-         [(1, 5, <CSVRoom 311, 311>), (1, 6, <CSVRoom 311, 311>),
-          (2, 5, <CSVRoom 311, 311>), (2, 6, <CSVRoom 311, 311>),
-          (3, 5, <CSVRoom 311, 311>), (3, 6, <CSVRoom 311, 311>),
-          (4, 5, <CSVRoom 311, 311>), (4, 6, <CSVRoom 311, 311>),
-          (5, 5, <CSVRoom 311, 311>), (5, 6, <CSVRoom 311, 311>)]),
-         ((u'science-2', u'R. Mah', u'2a'),
-         [(1, 5, <CSVRoom 212, 212>), (1, 6, <CSVRoom 212, 212>),
-          (2, 5, <CSVRoom 212, 212>), (2, 6, <CSVRoom 212, 212>),
-          (3, 5, <CSVRoom 212, 212>), (3, 6, <CSVRoom 212, 212>),
-          (4, 5, <CSVRoom 212, 212>), (4, 6, <CSVRoom 212, 212>),
-          (5, 5, <CSVRoom 212, 212>), (5, 6, <CSVRoom 212, 212>)]),
-         ((u'science-2', u'R. Mah', u'2b'),
-         [(1, 1, <CSVRoom 212, 212>), (1, 2, <CSVRoom 212, 212>),
-          (2, 1, <CSVRoom 212, 212>), (2, 2, <CSVRoom 212, 212>),
-          (3, 1, <CSVRoom 212, 212>), (3, 2, <CSVRoom 212, 212>),
-          (4, 1, <CSVRoom 212, 212>), (4, 2, <CSVRoom 212, 212>),
-          (5, 1, <CSVRoom 212, 212>), (5, 2, <CSVRoom 212, 212>)]),
-         ((u'science-2', u'R. Mah', u'2c'),
-         [(1, 3, <CSVRoom 212, 212>), (1, 4, <CSVRoom 212, 212>),
-          (2, 3, <CSVRoom 212, 212>), (2, 4, <CSVRoom 212, 212>),
-          (3, 3, <CSVRoom 212, 212>), (3, 4, <CSVRoom 212, 212>),
-          (4, 3, <CSVRoom 212, 212>), (4, 4, <CSVRoom 212, 212>),
-          (5, 3, <CSVRoom 212, 212>), (5, 4, <CSVRoom 212, 212>)]),
-         ((u'science-2', u'R. Mah', u'2d'),
-         [(1, 7, <CSVRoom 212, 212>),
-          (2, 7, <CSVRoom 212, 212>),
-          (3, 7, <CSVRoom 212, 212>),
-          (4, 7, <CSVRoom 212, 212>),
-          (5, 7, <CSVRoom 212, 212>)])]
+        >>> from zope.app.security.tests.test_directives import pprint
+        >>> pprint(sorted(plugin.create_sections().items()))
+        [((u'history-1', u'B. Duh', u'1a', ''),
+          [(1, 1, <CSVRoom 311, 311>),
+           (1, 2, <CSVRoom 311, 311>),
+           (2, 1, <CSVRoom 311, 311>),
+           (2, 2, <CSVRoom 311, 311>),
+           (3, 1, <CSVRoom 311, 311>),
+           (3, 2, <CSVRoom 311, 311>),
+           (4, 1, <CSVRoom 311, 311>),
+           (4, 2, <CSVRoom 311, 311>),
+           (5, 1, <CSVRoom 311, 311>),
+           (5, 2, <CSVRoom 311, 311>)]),
+         ((u'history-1', u'B. Duh', u'1b', ''),
+          [(1, 3, <CSVRoom 311, 311>),
+           (2, 3, <CSVRoom 311, 311>),
+           (3, 3, <CSVRoom 311, 311>),
+           (4, 3, <CSVRoom 311, 311>),
+           (5, 3, <CSVRoom 311, 311>)]),
+         ((u'history-1', u'B. Duh', u'1c', ''),
+          [(1, 4, <CSVRoom 311, 311>),
+           (1, 7, <CSVRoom 311, 311>),
+           (2, 4, <CSVRoom 311, 311>),
+           (2, 7, <CSVRoom 311, 311>),
+           (3, 4, <CSVRoom 311, 311>),
+           (3, 7, <CSVRoom 311, 311>),
+           (4, 4, <CSVRoom 311, 311>),
+           (4, 7, <CSVRoom 311, 311>),
+           (5, 4, <CSVRoom 311, 311>),
+           (5, 7, <CSVRoom 311, 311>)]),
+         ((u'history-1', u'B. Duh', u'1d', ''),
+          [(1, 5, <CSVRoom 311, 311>),
+           (1, 6, <CSVRoom 311, 311>),
+           (2, 5, <CSVRoom 311, 311>),
+           (2, 6, <CSVRoom 311, 311>),
+           (3, 5, <CSVRoom 311, 311>),
+           (3, 6, <CSVRoom 311, 311>),
+           (4, 5, <CSVRoom 311, 311>),
+           (4, 6, <CSVRoom 311, 311>),
+           (5, 5, <CSVRoom 311, 311>),
+           (5, 6, <CSVRoom 311, 311>)]),
+         ((u'science-2', u'R. Mah', u'2a', ''),
+          [(2, 5, <CSVRoom 212, 212>),
+           (2, 6, <CSVRoom 212, 212>),
+           (3, 5, <CSVRoom 212, 212>),
+           (3, 6, <CSVRoom 212, 212>),
+           (4, 5, <CSVRoom 212, 212>),
+           (4, 6, <CSVRoom 212, 212>),
+           (5, 5, <CSVRoom 212, 212>),
+           (5, 6, <CSVRoom 212, 212>)]),
+         ((u'science-2', u'R. Mah', u'2ad', ''),
+          [(1, 5, <CSVRoom 212, 212>), (1, 6, <CSVRoom 212, 212>)]),
+         ((u'science-2', u'R. Mah', u'2b', ''),
+          [(1, 2, <CSVRoom 212, 212>),
+           (2, 1, <CSVRoom 212, 212>),
+           (2, 2, <CSVRoom 212, 212>),
+           (3, 1, <CSVRoom 212, 212>),
+           (3, 2, <CSVRoom 212, 212>),
+           (4, 1, <CSVRoom 212, 212>),
+           (4, 2, <CSVRoom 212, 212>),
+           (5, 1, <CSVRoom 212, 212>),
+           (5, 2, <CSVRoom 212, 212>)]),
+         ((u'science-2', u'R. Mah', u'2b', u'A'),
+          [(1, 1, <CSVRoom 212, 212>)]),
+         ((u'science-2', u'R. Mah', u'2c', ''),
+          [(2, 3, <CSVRoom 212, 212>),
+           (2, 4, <CSVRoom 212, 212>),
+           (3, 3, <CSVRoom 212, 212>),
+           (3, 4, <CSVRoom 212, 212>),
+           (4, 3, <CSVRoom 212, 212>),
+           (4, 4, <CSVRoom 212, 212>),
+           (5, 3, <CSVRoom 212, 212>),
+           (5, 4, <CSVRoom 212, 212>)]),
+         ((u'science-2', u'R. Mah', u'2c', u'A'),
+          [(1, 3, <CSVRoom 212, 212>)]),
+         ((u'science-2', u'R. Mah', u'2c', u'B'),
+          [(1, 4, <CSVRoom 212, 212>)]),
+         ((u'science-2', u'R. Mah', u'2d', ''),
+          [(1, 7, <CSVRoom 212, 212>),
+           (2, 7, <CSVRoom 212, 212>),
+           (3, 7, <CSVRoom 212, 212>),
+           (4, 7, <CSVRoom 212, 212>),
+           (5, 7, <CSVRoom 212, 212>)])]
 
     """
 
@@ -436,10 +513,10 @@ def doctest_LyceumScheduling_schedule_section():
         >>> meet1 = (1, 1, ttschema_id, "201")
         >>> meet2 = (2, 2, ttschema_id, "201")
         >>> meet3 = (4, 2, ttschema_id, "")
-        >>> plugin.schedule_section(app, sid, [meet1, meet2, meet3])
-        Adding TimetableActivity('History (1a, 1b)', <Section title=History (1a, 1b)>, None, ('Room 201',)) on Monday - 1 pamoka
-        Adding TimetableActivity('History (1a, 1b)', <Section title=History (1a, 1b)>, None, ('Room 201',)) on Tuesday - 2 pamoka
-        Adding TimetableActivity('History (1a, 1b)', <Section title=History (1a, 1b)>, None, ()) on Thursday - 2 pamoka
+        >>> plugin.schedule_section(app, sid, "A", [meet1, meet2, meet3])
+        Adding TimetableActivity('History (1a, 1b) A lygis', <Section title=History (1a, 1b) A lygis>, None, ('Room 201',)) on Monday - 1 pamoka
+        Adding TimetableActivity('History (1a, 1b) A lygis', <Section title=History (1a, 1b) A lygis>, None, ('Room 201',)) on Tuesday - 2 pamoka
+        Adding TimetableActivity('History (1a, 1b) A lygis', <Section title=History (1a, 1b) A lygis>, None, ()) on Thursday - 2 pamoka
 
     Group members were added to sections, groups themselves were
     removed from there:
@@ -457,7 +534,7 @@ def doctest_LyceumScheduling_generate():
 
         >>> from lyceum.csvimport import LyceumScheduling
         >>> plugin = LyceumScheduling()
-        >>> def schedule_section(app, sid, meetings):
+        >>> def schedule_section(app, sid, level, meetings):
         ...     section = app['sections'][sid]
         ...     section.title = sid
         ...     section.scheduled = True
@@ -492,7 +569,8 @@ def doctest_LyceumScheduling_generate():
         >>> app['courses']['science-2'] = 'Science 2'
         >>> app['courses']['history-1'] = 'History 1'
         >>> plugin.generate(app)
-        >>> print sorted(app['sections'].items())
+        >>> from zope.testing.doctestunit import pprint
+        >>> pprint(sorted(app['sections'].items()))
         [(u'history-1 1a bduh', <Section history-1 1a bduh
               Courses=[History 1]
               Resources=[]
@@ -505,41 +583,66 @@ def doctest_LyceumScheduling_generate():
               Members=[1b]
               Instructors=[Teacher Bduh]
               scheduled=True>),
-         (u'history-1 1c bduh', <Section history-1 1c bduh Courses=[History 1]
-             Resources=[]
-             Members=[1c]
-             Instructors=[Teacher Bduh]
-             scheduled=True>),
-        (u'history-1 1d bduh', <Section history-1 1d bduh
-             Courses=[History 1]
-             Resources=[]
-             Members=[1d]
-             Instructors=[Teacher Bduh]
-             scheduled=True>),
+         (u'history-1 1c bduh', <Section history-1 1c bduh
+              Courses=[History 1]
+              Resources=[]
+              Members=[1c]
+              Instructors=[Teacher Bduh]
+              scheduled=True>),
+         (u'history-1 1d bduh', <Section history-1 1d bduh
+              Courses=[History 1]
+              Resources=[]
+              Members=[1d]
+              Instructors=[Teacher Bduh]
+              scheduled=True>),
          (u'science-2 2a rmah', <Section science-2 2a rmah
-             Courses=[Science 2]
-             Resources=[]
-             Members=[2a]
-             Instructors=[Teacher Rmah]
-             scheduled=True>),
+              Courses=[Science 2]
+              Resources=[]
+              Members=[2a]
+              Instructors=[Teacher Rmah]
+              scheduled=True>),
+         (u'science-2 2ad rmah', <Section science-2 2ad rmah
+              Courses=[Science 2]
+              Resources=[]
+              Members=[2a,
+              2d] Instructors=[Teacher
+              Rmah] scheduled=True>),
+         (u'science-2 2b A rmah', <Section science-2 2b A rmah
+              Courses=[Science 2]
+              Resources=[]
+              Members=[2b]
+              Instructors=[Teacher Rmah]
+              scheduled=True>),
          (u'science-2 2b rmah', <Section science-2 2b rmah
-             Courses=[Science 2]
-             Resources=[]
-             Members=[2b]
-             Instructors=[Teacher Rmah]
-             scheduled=True>),
+              Courses=[Science 2]
+              Resources=[]
+              Members=[2b]
+              Instructors=[Teacher Rmah]
+              scheduled=True>),
+         (u'science-2 2c A rmah', <Section science-2 2c A rmah
+              Courses=[Science 2]
+              Resources=[]
+              Members=[2c]
+              Instructors=[Teacher Rmah]
+              scheduled=True>),
+         (u'science-2 2c B rmah', <Section science-2 2c B rmah
+              Courses=[Science 2]
+              Resources=[]
+              Members=[2c]
+              Instructors=[Teacher Rmah]
+              scheduled=True>),
          (u'science-2 2c rmah', <Section science-2 2c rmah
-             Courses=[Science 2]
-             Resources=[]
-             Members=[2c]
-             Instructors=[Teacher Rmah]
-             scheduled=True>),
+              Courses=[Science 2]
+              Resources=[]
+              Members=[2c]
+              Instructors=[Teacher Rmah]
+              scheduled=True>),
          (u'science-2 2d rmah', <Section science-2 2d rmah
-             Courses=[Science 2]
-             Resources=[]
-             Members=[2d]
-             Instructors=[Teacher Rmah]
-             scheduled=True>)]
+              Courses=[Science 2]
+              Resources=[]
+              Members=[2d]
+              Instructors=[Teacher Rmah]
+              scheduled=True>)]
 
     """
 
