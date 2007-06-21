@@ -3,13 +3,29 @@
            xmlns:browser="http://namespaces.zope.org/browser"
            i18n_domain="schooltool">
 
-  <include files="package-includes/*-meta.zcml" />
+  <include package="schooltool.help" file="meta.zcml" />
 
   <include package="schooltool" />
+
+  <include package="schooltool.attendance" />
+  <include package="schooltool.commendation" />
+  <include package="schooltool.course" />
+  <include package="schooltool.dashboard" />
+  <include xmlns:zcml="http://namespaces.zope.org/zcml"
+           zcml:condition="have devmode"
+           package="schooltool.devmode" />
+  <include package="schooltool.gradebook" />
+  <include package="schooltool.help" />
+  <include package="schooltool.level" />
+  <include package="schooltool.note" />
+  <include package="schooltool.requirement" />
+  <include package="schooltool.term" />
+  <include package="schooltool.timetable" />
 
   <include files="package-includes/*-configure.zcml" />
 
   <!-- Provide local overrides of standard configurations-->
-  <includeOverrides files="package-includes/*-overrides.zcml" />
+  <includeOverrides package="schooltool.devmode" file="overrides.zcml" />
+  <includeOverrides package="schooltool.demographics" file="overrides.zcml" />
 
 </configure>
