@@ -100,7 +100,7 @@ def doctest_AdvisorSource():
 
         >>> from lyceum.vocabularies import AdvisorSource
         >>> source = AdvisorSource(None)
-        >>> [person for person in source]
+        >>> [person.__name__ for person in source]
         ['john', 'sarrah']
 
     """

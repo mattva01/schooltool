@@ -22,6 +22,8 @@ Interfaces for Lyceum specific code.
 $Id$
 
 """
+from zope.interface import Interface
+from zope.interface import Attribute
 from zope.schema import TextLine
 from zope.schema.interfaces import IIterableSource
 
@@ -47,3 +49,19 @@ class ISchoolToolLyceumApplication(ISchoolToolApplication):
 class IGroupTimetableCalendar(ICalendar):
 
     title = TextLine(title=_(u"Title of the calendar"))
+
+
+class IStudent(Interface):
+
+    advisor = Attribute("""Advisor of a student.""")
+
+
+class IAdvisor(Interface):
+
+    students = Attribute("""Students being advised by the advisor.""")
+
+    def addStudent(student):
+        """Add a student to the advised students list."""
+
+    def removeStudent(student):
+        """Remove this student from the advised students list."""

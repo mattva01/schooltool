@@ -73,9 +73,8 @@ class AdvisorSource(object):
 
     def __iter__(self):
         app = ISchoolToolApplication(None)
-        persons = [person.__name__
-                   for person in app['groups']['teachers'].members]
-        for person in sorted(persons):
+        persons = app['groups']['teachers'].members
+        for person in sorted(persons, key=lambda p: p.__name__):
             yield person
 
 def advisorVocabularyFactory():

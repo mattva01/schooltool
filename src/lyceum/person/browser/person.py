@@ -172,9 +172,8 @@ class PersonTerm(object):
     implements(ITitledTokenizedTerm)
 
     def __init__(self, value):
-        persons = ISchoolToolApplication(None)['persons']
-        self.title = persons[value].title
-        self.token = value
+        self.title = value.title
+        self.token = value.__name__
         self.value = value
 
 
@@ -205,6 +204,12 @@ class TermsBase(object):
 class PersonTerms(TermsBase):
     """Displaying persons."""
     factory = PersonTerm
+
+    def getValue(self, token):
+        if token not in self.context:
+            raise LookupError(token)
+        app = ISchoolToolApplication(None)
+        return app['persons'][token]
 
 
 class GroupTerm(object):

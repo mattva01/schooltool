@@ -37,7 +37,11 @@ from schooltool.person.person import PersonCalendarCrowd
 from schooltool.table.table import IndexedLocaleAwareGetterColumn
 from schooltool.utility.utility import UtilitySetUp
 from schooltool.table.table import url_cell_formatter
+from schooltool.relationship.interfaces import IRelationshipLinks
 
+from lyceum.advisor import Advising, URIAdvisor, URIAdvising, URIStudent
+from lyceum.interfaces import IAdvisor
+from lyceum.interfaces import IStudent
 from lyceum.person.interfaces import ILyceumPerson
 from lyceum import LyceumMessage as _
 
@@ -51,7 +55,17 @@ class LyceumPerson(Person):
     gender = None
     gradeclass = None
     birth_date = None
-    advisor = None
+
+    def getAdvisor(self):
+        return IStudent(self).advisor
+
+    def setAdvisor(self, advisor):
+        old_advisor = IStudent(self).advisor
+        if old_advisor:
+            IAdvisor(old_advisor).removeStudent(self)
+        IAdvisor(advisor).addStudent(self)
+
+    advisor = property(getAdvisor, setAdvisor)
 
     def __init__(self, username, first_name, last_name,
                  email=None, phone=None):
