@@ -80,7 +80,6 @@ def test_SchoolToolSecurityPolicy_checkPermission():
         >>> obj = Obj()
 
         >>> sp.checkPermission('perm', obj)
-        checkCrowds([], <...test_policy.Obj object ...>)
         checkByAdaptation('perm', <...Obj object ...>)
         False
 
@@ -93,15 +92,14 @@ def test_SchoolToolSecurityPolicy_checkPermission():
         checkCrowds(['crowd factory'], <...Obj object ...>)
         True
 
-    Another case: checkCrowds fails, but checkByAdaptation returns True:
+    Another case: there is a crowd in permcrowds but checkCrowds
+    fails:
 
         >>> checkcrowds_returns = False
-        >>> byadaptation_returns = True
 
         >>> sp.checkPermission('perm', obj)
         checkCrowds(['crowd factory'], <...Obj object ...>)
-        checkByAdaptation('perm', <...Obj object...>)
-        True
+        False
 
     """
 

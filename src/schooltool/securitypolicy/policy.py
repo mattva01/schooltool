@@ -38,8 +38,8 @@ class SchoolToolSecurityPolicy(ParanoidSecurityPolicy):
 
         # Check the generic, interface-independent permissions.
         crowdclasses = getCrowdsUtility().permcrowds.get(permission, [])
-        if self.checkCrowds(crowdclasses, obj):
-            return True
+        if crowdclasses:
+            return self.checkCrowds(crowdclasses, obj)
 
         # No quick method worked, look up the crowd by adaptation.
         return self.checkByAdaptation(permission, obj)
