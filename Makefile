@@ -15,14 +15,14 @@ SETUPFLAGS=
 all: build
 
 .PHONY: build
-build: 
+build:
 	test -d eggs || mkdir eggs
 	PYTHONPATH=$(PYTHONPATH) $(PYTHON) setup.py develop -S eggs --install-dir eggs
 	$(PYTHON) bin/remove-stale-bytecode.py
 
 .PHONY: buildbot-build
 buildbot-build:
-	# Clean out the buildbot on saturdays 
+	# Clean out the buildbot on saturdays
 	[ `date +%u` != 6 ] || $(MAKE) PYTHON=$(PYTHON) realclean
 	$(MAKE) PYTHON=$(PYTHON) build
 
@@ -50,11 +50,11 @@ test: build
 
 .PHONY: testall
 testall: build
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) test.py $(TESTFLAGS) 
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) test.py $(TESTFLAGS)
 
 .PHONY: ftest
 ftest: build
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) test.py $(TESTFLAGS) -f --at-level 2 schooltool 
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) test.py $(TESTFLAGS) -f --at-level 2 schooltool
 
 .PHONY: run
 run: build
@@ -138,7 +138,7 @@ update-translations:
 # 	suitable for uploading to rosetta.
 #
 # 	$ make translation-tarballs
-# 	
+#
 # 	WARNING: Only do this if you are _sure_ you want to. you risk
 # 	overwiting translations that have been changed in rosetta. Normally it
 # 	is only necessary to upload *.pot files.
