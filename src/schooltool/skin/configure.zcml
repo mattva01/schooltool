@@ -148,6 +148,8 @@
             layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="schooltool.js" file="resources/schooltool.js"
             layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="jquery.js" file="resources/jquery.js"
+            layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="favicon.ico" file="resources/favicon.ico"
             layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="toolbar-background.png"

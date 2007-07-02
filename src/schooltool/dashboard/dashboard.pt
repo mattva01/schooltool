@@ -4,95 +4,72 @@
 
 <script type="text/javascript">
   maxHeight = 75; //height it should go to in percent
-  opened = false;
-  moving = false;
-  written = false;
-  function mouseDaemon(url){
-    if (opened == false && moving == false){
-      if (written == false){
-        document.getElementById('dashboardContents').innerHTML = 'loading...'
-        getDashboardContent();
-        written = true;
-      }
-      moving = true;
-      openDash();
-      opened = true;
-    }
-    else if (moving == false){
-      moving = true;
-      closeDash();
-      opened = false;
-    }
-  }
   function openDash(){
-    tab = $('dashboardTab').style;
-    content = $('dashboardContents').style;
-    content.display = '';
-    if (parseInt(content.height) < maxHeight){
-      content.height = parseInt(content.height)+10+'%';
-      tab.bottom = parseInt(tab.bottom)+10+'%';
-      blah = setTimeout("openDash();",20);
-    }
-    else moving = false;
+    $('#dashboardContents').html('loading...');
+    $('#dashboardContents').slideDown("fast");
+    $('#dashboardTab').unbind();
+    $('#dashboardTab').click(closeDash);
+    $.get(ajaxURL, function(data) {$('#dashboardContents').html(data);});
+    return null;
   }
+
   function closeDash(){
-    tab = $('dashboardTab').style;
-    content = $('dashboardContents').style;
-    content.display = '';
-    if (parseInt(content.height) > 0){
-      content.height = parseInt(content.height)-10+'%';
-      tab.bottom = parseInt(tab.bottom)-10+'%';
-      blah = setTimeout("closeDash();",20);
-    }
-    else {content.display = 'none'; moving = false; }
+    $('#dashboardContents').slideUp("fast");
+    $('#dashboardTab').unbind();
+    $('#dashboardTab').click(openDash);
+    return null;
   }
 
   function getDashboardContent(){
-    deferred = doSimpleXMLHttpRequest(ajaxURL);
-    deferred.addCallback(alertContents);
+    $.get(ajaxURL, alertContents);
   }
 
-  function alertContents(http_request) {
-    $('dashboardContents').innerHTML = http_request.responseText;
+  function alertContents(data) {
   }
 </script>
 
 <style type="text/css">
   .dashboardButton {
     position: fixed;
+    bottom: 0;
     width: 20%;
     right: 40%;
     background: #EAE8E3;
     text-align: center;
     font-weight: bold;
+    border: solid 1px #BAB5AB;
+    border-bottom: 0;
     z-index: 99;
-    border: solid 0px #000;
-    border-bottom: 0px;
+    cursor: pointer;
   }
   div .dashboardContents {
     position: fixed;
-    bottom: 0px;
+    left: 10%;
+    bottom: 0;
     width: 80%;
-    right: 10%;
-    background: #fff;
+    height: 70%;
+    margin: auto;
     background: #EAE8E3;
     text-align: center;
-    z-index: 98;
     border: solid 1px #BAB5AB;
-    border-bottom: 0px;
+    border-bottom: 0;
     overflow: auto;
     text-align: left;
+    z-index: 98;
   }
 </style>
-
+<noscript>
 <a style="bottom: 0px;" class="dashboardButton" tal:attributes="href string:${context/schooltool:app/@@absolute_url}/@@dashboard.html"
    i18n:translate=""
    id="dashboardTab">Dashboard</a>
-<div id="dashboardContents" class="dashboardContents"
-     style="height: 0%; display: none;">
+</noscript>
+<a class="dashboardButton"
+   i18n:translate=""
+   id="dashboardTab">Dashboard</a>
+<div id="dashboardContents" class="dashboardContents">
 </div>
 <script type="text/javascript">
-$('dashboardTab').href="javascript:mouseDaemon()";
-roundElement($('dashboardTab'), {corners: "top", border: "#BAB5AB"});
+$('#dashboardTab').click(openDash);
+$('#dashboardContents').hide();
 </script>
 </tal:block>

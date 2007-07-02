@@ -14,7 +14,7 @@
           tal:attributes="href context/++resource++print.css" />
     <metal:block use-macro="view/@@schooltool_macros/generic/stylesheets" />
     <script type="text/javascript" src="mochikit.js"
-            tal:attributes="src context/++resource++mochikit.js">
+            tal:attributes="src context/++resource++jquery.js">
     </script>
     <script type="text/javascript" src="schooltool.js"
             tal:attributes="src context/++resource++schooltool.js">
