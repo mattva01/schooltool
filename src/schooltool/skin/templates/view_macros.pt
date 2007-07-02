@@ -13,7 +13,7 @@
     <link rel="stylesheet" type="text/css" media="print"
           tal:attributes="href context/++resource++print.css" />
     <metal:block use-macro="view/@@schooltool_macros/generic/stylesheets" />
-    <script type="text/javascript" src="mochikit.js"
+    <script type="text/javascript" src="jquery.js"
             tal:attributes="src context/++resource++jquery.js">
     </script>
     <script type="text/javascript" src="schooltool.js"
