@@ -29,6 +29,7 @@ import sys
 import os
 import datetime
 import cgi
+import optparse
 
 
 class CoverageNode(dict):
@@ -291,11 +292,11 @@ def generate_htmls_from_tree(tree, path, report_path, footer=""):
     traverse_tree(tree, [], make_html)
 
 
-def make_coverage_reports(path, report_path):
+def make_coverage_reports(path, report_path, report_prefix):
     """Convert reports from ``path`` into HTML files in ``report_path``."""
     def filter_fn(filename):
         return (filename.endswith('.cover') and
-                filename.startswith('schooltool') and
+                filename.startswith(report_prefix) and
                 'tests' not in filename and
                 not filename.startswith('<'))
     filelist = get_file_list(path, filter_fn)
@@ -316,15 +317,15 @@ def get_svn_revision(path):
 
 def main():
     """Process command line arguments and produce HTML coverage reports."""
-    if len(sys.argv) > 1:
-        path = sys.argv[1]
-    else:
-        path = 'coverage'
-    if len(sys.argv) > 2:
-        report_path = sys.argv[2]
-    else:
-        report_path = 'coverage/reports'
-    make_coverage_reports(path, report_path)
+    parser = optparse.OptionParser(usage="usage: %prog [options]")
+    parser.add_option("--coverage", dest="path", default="coverage",
+        help="Folder that the .cover files are in")
+    parser.add_option("--reports", dest="report_path",
+        default="coverage/reports", help="Folder that reports should go into")
+    parser.add_option("--module", dest="prefix", default="schooltool",
+        help="Module to produce html reports for")
+    options, args = parser.parse_args(sys.argv)
+    make_coverage_reports(options.path, options.report_path, options.prefix)
 
 
 if __name__ == '__main__':
