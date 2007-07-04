@@ -25,14 +25,14 @@ __docformat__ = 'reStructuredText'
 from zope.interface import classProvides
 from zope.schema.interfaces import IVocabularyFactory
 
-import optionstorage
-from optionstorage import vocabulary, interfaces
+import z3c.optionstorage
+from z3c.optionstorage import vocabulary, interfaces
 from schooltool.app import app
 from schooltool import SchoolToolMessage as _
 
 VOCABULARY_NAME = 'schooltool.gradebook.activities'
 
-class CategoryVocabulary(optionstorage.vocabulary.OptionStorageVocabulary):
+class CategoryVocabulary(z3c.optionstorage.vocabulary.OptionStorageVocabulary):
     """Activity Categories Vocabulary"""
 
     classProvides(IVocabularyFactory)
@@ -41,7 +41,7 @@ class CategoryVocabulary(optionstorage.vocabulary.OptionStorageVocabulary):
         st = app.getSchoolToolApplication()
         if name is None:
             name = VOCABULARY_NAME
-        self.dict = optionstorage.queryOptionStorage(st, name)
+        self.dict = z3c.optionstorage.queryOptionStorage(st, name)
         # TODO: Only support English for now.
         self.language = 'en'
         self.defaultlanguage = self.dict.getDefaultLanguage()
@@ -49,7 +49,7 @@ class CategoryVocabulary(optionstorage.vocabulary.OptionStorageVocabulary):
 
 def getCategories(app):
     """Return the option dictionary for the categories."""
-    storage = optionstorage.interfaces.IOptionStorage(app)
+    storage = z3c.optionstorage.interfaces.IOptionStorage(app)
     if VOCABULARY_NAME not in storage:
-        storage[VOCABULARY_NAME] = optionstorage.OptionDict()
+        storage[VOCABULARY_NAME] = z3c.optionstorage.OptionDict()
     return storage[VOCABULARY_NAME]

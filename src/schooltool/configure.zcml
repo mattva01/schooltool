@@ -53,8 +53,8 @@
 
   <!-- Load optionstorage -->
 
-  <include package="optionstorage" file="meta.zcml" />
-  <include package="optionstorage" />
+  <include package="z3c.optionstorage" file="meta.zcml" />
+  <include package="z3c.optionstorage" />
 
   <!-- Load key references -->
 
