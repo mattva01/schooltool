@@ -5,9 +5,8 @@
 # $Id$
 
 PYTHON=python2.4
-TRANSLATION_DOMAINS=schoolbell schooltool
+TRANSLATION_DOMAINS=schoolbell schooltool schooltool.commendation
 TESTFLAGS=-v
-LOCALES=src/schooltool/locales/
 PYTHONPATH:=$(PYTHONPATH):src:eggs
 SETUPFLAGS=
 
@@ -107,16 +106,21 @@ signtar: dist/md5sum
 
 .PHONY: extract-translations
 extract-translations: build
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) i18nextract.py --domain=schooltool --zcml=`pwd`/schooltool-skel/etc/site.zcml
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) i18nextract.py --domain=schoolbell --zcml=`pwd`/schoolbell-site.zcml
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) i18nextract.py --domain=schooltool.commendation --zcml=`pwd`/src/schooltool/commendation/ftesting.zcml
+	set -e; \
+	for domain in $(TRANSLATION_DOMAINS); do \
+	    locales=src/`echo $${domain} | sed s/\\\./\\\//g`/locales; \
+	    zcml=`pwd`/src/`echo $${domain} | sed s/\\\./\\\//g`/translations.zcml; \
+	    PYTHONPATH=$(PYTHONPATH) $(PYTHON) i18nextract.py --domain=$${domain} --zcml=$${zcml} --locales=$${locales}; \
+	done
+
 
 .PHONY: update-translations
 update-translations:
 	set -e; \
 	for domain in $(TRANSLATION_DOMAINS); do \
-	    for f in $(LOCALES)/*/LC_MESSAGES/$${domain}.po; do \
-		msgmerge -qU $$f $(LOCALES)/$${domain}.pot ;\
+	    locales=src/`echo $${domain} | sed s/\\\./\\\//g`/locales; \
+	    for f in $${locales}/*/LC_MESSAGES/$${domain}.po; do \
+		msgmerge -qU $$f $${locales}/$${domain}.pot ;\
 		msgfmt -o $${f%.po}.mo $$f;\
 	    done;\
 	done
@@ -179,7 +183,7 @@ extract-rosetta-tarball:
 	mkdir translations.tmp
 	cd translations.tmp && tar -xzf ../rosetta-$(DOMAIN).tar.gz && mv */* .
 	set -e; for file in translations.tmp/*.po; do \
-	    dir=$(LOCALES)/`basename $${file} .po`/LC_MESSAGES; \
+	    dir=src/`echo $(DOMAIN) | sed s/\\\./\\\//g`/locales/`basename $${file} .po`/LC_MESSAGES; \
 	    [ -x $${dir} ] || mkdir -p $${dir}; \
 	    cp $${file} $${dir}/$(DOMAIN).po; \
 	    echo Updating $${dir}/$(DOMAIN).po; \

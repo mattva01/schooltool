@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           i18n_domain="schooltool">
+
+  <include package="schooltool.help" file="meta.zcml" />
+
+  <include package="schooltool" />
+
+  <include package="schooltool.attendance" />
+  <include package="schooltool.commendation" />
+  <include package="schooltool.course" />
+  <include package="schooltool.dashboard" />
+  <include package="schooltool.devmode" />
+  <include package="schooltool.gradebook" />
+  <include package="schooltool.help" />
+  <include package="schooltool.level" />
+  <include package="schooltool.note" />
+  <include package="schooltool.requirement" />
+  <include package="schooltool.term" />
+  <include package="schooltool.timetable" />
+
+  <!-- Provide local overrides of standard configurations-->
+  <includeOverrides package="schooltool.devmode" file="overrides.zcml" />
+  <includeOverrides package="schooltool.demographics" file="overrides.zcml" />
+
+</configure>
+

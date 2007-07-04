@@ -3,6 +3,7 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:security="http://schooltool.org/securitypolicy"
     xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="schooltool.commendation">
 
   <!-- Declare commendation-capable components -->
@@ -137,5 +138,8 @@
       />
 
   </configure>
+
+  <!-- Translations -->
+  <i18n:registerTranslations directory="locales" />
 
 </configure>

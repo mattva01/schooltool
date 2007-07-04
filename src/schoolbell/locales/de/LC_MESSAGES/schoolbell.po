@@ -1,0 +1,118 @@
+# German translation for schooltool
+# Copyright (c) 2007 Rosetta Contributors and Canonical Ltd 2007
+# This file is distributed under the same license as the schooltool package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2007.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: schooltool\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: Wed Jan 24 18:23:00 2007\n"
+"PO-Revision-Date: 2007-03-22 21:05+0000\n"
+"Last-Translator: Robin Pfeifer <robinpfeifer@web.de>\n"
+"Language-Team: German <de@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Rosetta-Export-Date: 2007-07-04 10:49:11+0000\n"
+
+#: /src/schooltool/sbapp/browser/templates/calendar_overlay.pt:12
+msgid "My Calendar"
+msgstr "Mein Kalender"
+
+#: /src/schooltool/sbapp/browser/templates/calendar_overlay.pt:31
+msgid "Apply"
+msgstr "Anwenden"
+
+#: /src/schooltool/sbapp/browser/templates/calendar_overlay.pt:33
+msgid "More..."
+msgstr "Mehr..."
+
+#: /src/schooltool/sbapp/browser/templates/calendar_overlay.pt:4
+msgid "Calendars"
+msgstr "Kalender"
+
+#: /src/schooltool/sbapp/browser/templates/index.pt:6
+msgid "Welcome to SchoolBell"
+msgstr "Willkommen bei SchoolBell"
+
+#: /src/schooltool/sbapp/browser/templates/navigation.pt:2
+msgid "Navigation"
+msgstr "Navigation"
+
+#: /src/schooltool/sbapp/browser/templates/navigation.pt:4
+#: /src/schooltool/sbapp/browser/templates/index.pt:11
+msgid "Persons"
+msgstr "Personen"
+
+#: /src/schooltool/sbapp/browser/templates/navigation.pt:6
+#: /src/schooltool/sbapp/browser/templates/person.pt:36
+#: /src/schooltool/sbapp/browser/templates/index.pt:12
+msgid "Groups"
+msgstr "Gruppen"
+
+#: /src/schooltool/sbapp/browser/templates/navigation.pt:8
+#: /src/schooltool/sbapp/browser/templates/index.pt:13
+#, fuzzy
+msgid "Resources"
+msgstr "Resourcen"
+
+#: /src/schooltool/sbapp/browser/templates/person.pt:11
+msgid "photo"
+msgstr "Foto"
+
+#: /src/schooltool/sbapp/browser/templates/person.pt:15
+msgid "Username:"
+msgstr "Benutzername"
+
+#: /src/schooltool/sbapp/browser/templates/person.pt:18
+msgid "edit name"
+msgstr "Namen ändern"
+
+#: /src/schooltool/sbapp/browser/templates/person.pt:18
+msgid "Change this person's name, picture, or password"
+msgstr "Name, Bild oder Passwort dieser Person ändern"
+
+#: /src/schooltool/sbapp/browser/templates/person.pt:4
+msgid "Person info: ${title}"
+msgstr "Personeninfo: ${title}"
+
+#: /src/schooltool/sbapp/browser/templates/person.pt:47
+msgid "edit groups"
+msgstr "Gruppen bearbeiten"
+
+#: /src/schooltool/sbapp/browser/templates/person.pt:47
+msgid "Manage this person's memberships"
+msgstr "Mitgliedschaften dieser Person verwalten"
+
+#: /src/schooltool/sbapp/main.py:39
+msgid ""
+"\n"
+"This is not a SchoolBell 1.0 database file, aborting.\n"
+msgstr ""
+"\n"
+"Dies ist keine SchoolBell 1.0 Datenbank, Abbruch.\n"
+
+#: /src/schooltool/sbapp/main.py:44
+#, fuzzy
+msgid ""
+"\n"
+"This is not a SchoolBell 1.0 database file, aborting.\n"
+"\n"
+"Please run the standalone database upgrade script.\n"
+msgstr ""
+"\n"
+"Dies ist keine SchoolBell 1.0 Datenbank, Abbruch.\n"
+"\n"
+"Bitte führen Sie das Upgrade-Skript der eigenständigen Datenbank aus.\n"
+
+#: /src/schooltool/timetable/rest/__init__.py:266
+#, fuzzy
+msgid "Unknown day id: %r"
+msgstr "Unbekannte Tages-ID: %r"
+
+#: /src/schooltool/timetable/rest/__init__.py:272
+#, fuzzy
+msgid "Unknown period id: %r"
+msgstr "Unbekannte Zeitraum-ID: %r"

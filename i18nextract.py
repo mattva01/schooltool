@@ -157,10 +157,13 @@ def parse_args(argv):
                       help="The domain that should be extracted")
     parser.add_option("--zcml", dest="zcml", default=None,
                       help="ZCML file to start the extraction")
+    parser.add_option("--locales", dest="locales", default=None,
+                      help="Locales directory to store the pot file")
     options, args = parser.parse_args(argv)
     assert len(args) == 1
     assert options.domain is not None
     assert options.zcml is not None
+    assert options.locales is not None
     return options
 
 if __name__ == '__main__':
@@ -170,6 +173,6 @@ if __name__ == '__main__':
     options = parse_args(sys.argv)
     base_dir = here # Comments are relative to the source checkouts so we are
                     # sure we don't have any absolute paths in there.
-    output_dir = os.path.join(here, 'src', 'schooltool', 'locales')
+    output_dir = os.path.abspath(options.locales)
     write_pot(output_dir, path, options.domain, base_dir, options.zcml)
     print 'Extracted %s.pot to %s' % (options.domain, output_dir)

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           i18n_domain="schoolbell">
+
+  <include package="schooltool" />
+  <include package="schooltool.sbapp" />
+
+</configure>

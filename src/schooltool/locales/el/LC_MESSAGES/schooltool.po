@@ -9,14 +9,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: el-1\n"
-"Report-Msgid-Bugs-To:\n"
-"POT-Creation-Date: Fri Oct 20 15:20:33 2006\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: Wed Jan 24 18:22:51 2007\n"
 "PO-Revision-Date: 2006-05-19 15:22+0000\n"
-"Last-Translator: Μενέλαος Μαγκλής <mmaglis@metacom.gr>\n"
+"Last-Translator: Menelaos Maglis <mmaglis@metacom.gr>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Rosetta-Export-Date: 2007-07-04 10:48:41+0000\n"
 
 #: /src/schoolbell/app/interfaces.py:13
 msgid "Nickname"
@@ -63,6 +64,7 @@ msgid "Mailing address"
 msgstr "Διεύθυνση ηλεκτρονικού ταχυδρομίου"
 
 #: /src/schooltool/app/browser/__init__.py:254
+#: /src/schooltool/person/browser/configure.zcml:26
 #: /src/schooltool/app/browser/templates/index.pt:11
 #, fuzzy
 msgid "Persons"
@@ -73,192 +75,191 @@ msgstr "Άτομα"
 msgid "1 person"
 msgstr "1 άτομο"
 
-#. Default: ""
 #: /src/schooltool/app/browser/__init__.py:261
 #, fuzzy
 msgid "${number} persons"
 msgstr "${number} άτομα"
 
-#: /src/schooltool/app/browser/app.py:231
+#: /src/schooltool/app/browser/app.py:222
 #, fuzzy
 msgid "Username or password is incorrect"
 msgstr "Όνομα χρήστη ή κωδικός πρόσβασης λανθασμένος"
 
-#: /src/schooltool/app/browser/app.py:313
+#: /src/schooltool/app/browser/app.py:304
 msgid "Leaders"
 msgstr ""
 
-#: /src/schooltool/app/browser/app.py:314
+#: /src/schooltool/app/browser/app.py:305
 msgid "Current leaders"
 msgstr ""
 
-#: /src/schooltool/app/browser/app.py:315
+#: /src/schooltool/app/browser/app.py:306
 msgid "Available leaders"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:100
+#: /src/schooltool/app/browser/cal.py:103
 msgid "March"
 msgstr "Μάρτης"
 
-#: /src/schooltool/app/browser/cal.py:100
+#: /src/schooltool/app/browser/cal.py:103
 msgid "January"
 msgstr "Ιανουάριος"
 
-#: /src/schooltool/app/browser/cal.py:100
+#: /src/schooltool/app/browser/cal.py:103
 msgid "February"
 msgstr "Φεβρουάριος"
 
-#: /src/schooltool/app/browser/cal.py:101
-msgid "June"
-msgstr "Ιούνιος"
-
-#: /src/schooltool/app/browser/cal.py:101
-msgid "May"
-msgstr "Μάιος"
-
-#: /src/schooltool/app/browser/cal.py:101
-msgid "April"
-msgstr "Απρίλιος"
-
-#: /src/schooltool/app/browser/cal.py:102
-msgid "August"
-msgstr "Αύγουστος"
-
-#: /src/schooltool/app/browser/cal.py:102
-msgid "September"
-msgstr "Σεπτέμβριος"
-
-#: /src/schooltool/app/browser/cal.py:102
-msgid "July"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:1021
+#: /src/schooltool/app/browser/cal.py:1034
 #, fuzzy
 msgid "The next day"
 msgstr "Η επόμενη μέρα"
 
-#: /src/schooltool/app/browser/cal.py:1022
+#: /src/schooltool/app/browser/cal.py:1035
 #, fuzzy
 msgid "Today"
 msgstr "Σήμερα"
 
-#: /src/schooltool/app/browser/cal.py:1023
+#: /src/schooltool/app/browser/cal.py:1036
 msgid "The previous day"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:103
-msgid "October"
-msgstr ""
+#: /src/schooltool/app/browser/cal.py:104
+msgid "June"
+msgstr "Ιούνιος"
 
-#: /src/schooltool/app/browser/cal.py:103
-msgid "December"
-msgstr "Δεκέμβριος"
+#: /src/schooltool/app/browser/cal.py:104
+msgid "May"
+msgstr "Μάιος"
 
-#: /src/schooltool/app/browser/cal.py:103
-msgid "November"
+#: /src/schooltool/app/browser/cal.py:104
+msgid "April"
+msgstr "Απρίλιος"
+
+#: /src/schooltool/app/browser/cal.py:105
+msgid "August"
+msgstr "Αύγουστος"
+
+#: /src/schooltool/app/browser/cal.py:105
+msgid "September"
+msgstr "Σεπτέμβριος"
+
+#: /src/schooltool/app/browser/cal.py:105
+msgid "July"
 msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:106
-#: /src/schooltool/person/interfaces.py:176
+msgid "October"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:106
+msgid "December"
+msgstr "Δεκέμβριος"
+
+#: /src/schooltool/app/browser/cal.py:106
+msgid "November"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:109
+#: /src/schooltool/person/interfaces.py:183
 #: /src/schooltool/timetable/browser/schema.py:95
-#: /src/schooltool/timetable/browser/schema.py:270
+#: /src/schooltool/timetable/browser/schema.py:268
 #: /src/schooltool/term/browser/term_add_edit.pt:94
 #: /src/schooltool/term/browser/term_add_edit.pt:120
 #: /src/schooltool/term/browser/term.pt:31
 msgid "Monday"
 msgstr "Δευτέρα"
 
-#: /src/schooltool/app/browser/cal.py:106
+#: /src/schooltool/app/browser/cal.py:109
 #: /src/schooltool/timetable/browser/schema.py:96
-#: /src/schooltool/timetable/browser/schema.py:271
+#: /src/schooltool/timetable/browser/schema.py:269
 #: /src/schooltool/term/browser/term_add_edit.pt:96
 #: /src/schooltool/term/browser/term_add_edit.pt:121
 #: /src/schooltool/term/browser/term.pt:32
 msgid "Tuesday"
 msgstr "Τρίτη"
 
-#: /src/schooltool/app/browser/cal.py:106
+#: /src/schooltool/app/browser/cal.py:109
 #: /src/schooltool/timetable/browser/schema.py:97
-#: /src/schooltool/timetable/browser/schema.py:272
+#: /src/schooltool/timetable/browser/schema.py:270
 #: /src/schooltool/term/browser/term_add_edit.pt:98
 #: /src/schooltool/term/browser/term_add_edit.pt:122
 #: /src/schooltool/term/browser/term.pt:33
 msgid "Wednesday"
 msgstr "Τετάρτη"
 
-#: /src/schooltool/app/browser/cal.py:106
+#: /src/schooltool/app/browser/cal.py:109
 #: /src/schooltool/timetable/browser/schema.py:98
-#: /src/schooltool/timetable/browser/schema.py:273
+#: /src/schooltool/timetable/browser/schema.py:271
 #: /src/schooltool/term/browser/term_add_edit.pt:100
 #: /src/schooltool/term/browser/term_add_edit.pt:123
 #: /src/schooltool/term/browser/term.pt:34
 msgid "Thursday"
 msgstr "Πέμπτη"
 
-#: /src/schooltool/app/browser/cal.py:107
-#: /src/schooltool/person/interfaces.py:175
-#: /src/schooltool/timetable/browser/schema.py:276
+#: /src/schooltool/app/browser/cal.py:110
+#: /src/schooltool/person/interfaces.py:182
+#: /src/schooltool/timetable/browser/schema.py:274
 #: /src/schooltool/term/browser/term_add_edit.pt:106
 #: /src/schooltool/term/browser/term_add_edit.pt:126
 #: /src/schooltool/term/browser/term.pt:37
 msgid "Sunday"
 msgstr "Κυριακή"
 
-#: /src/schooltool/app/browser/cal.py:107
-#: /src/schooltool/timetable/browser/schema.py:275
+#: /src/schooltool/app/browser/cal.py:110
+#: /src/schooltool/timetable/browser/schema.py:273
 #: /src/schooltool/term/browser/term_add_edit.pt:104
 #: /src/schooltool/term/browser/term_add_edit.pt:125
 #: /src/schooltool/term/browser/term.pt:36
 msgid "Saturday"
 msgstr "Σάββατο"
 
-#: /src/schooltool/app/browser/cal.py:107
+#: /src/schooltool/app/browser/cal.py:110
 #: /src/schooltool/timetable/browser/schema.py:99
-#: /src/schooltool/timetable/browser/schema.py:274
+#: /src/schooltool/timetable/browser/schema.py:272
 #: /src/schooltool/term/browser/term_add_edit.pt:102
 #: /src/schooltool/term/browser/term_add_edit.pt:124
 #: /src/schooltool/term/browser/term.pt:35
 msgid "Friday"
 msgstr "Παρασκευή"
 
-#: /src/schooltool/app/browser/cal.py:110
-#: /src/schooltool/app/browser/cal.py:1732
+#: /src/schooltool/app/browser/cal.py:113
+#: /src/schooltool/app/browser/cal.py:1745
 msgid "Mon"
 msgstr "Δευτ"
 
-#: /src/schooltool/app/browser/cal.py:110
-#: /src/schooltool/app/browser/cal.py:1733
+#: /src/schooltool/app/browser/cal.py:113
+#: /src/schooltool/app/browser/cal.py:1746
 msgid "Tue"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:110
-#: /src/schooltool/app/browser/cal.py:1734
+#: /src/schooltool/app/browser/cal.py:113
+#: /src/schooltool/app/browser/cal.py:1747
 msgid "Wed"
 msgstr "Τετ"
 
-#: /src/schooltool/app/browser/cal.py:110
-#: /src/schooltool/app/browser/cal.py:1735
+#: /src/schooltool/app/browser/cal.py:113
+#: /src/schooltool/app/browser/cal.py:1748
 msgid "Thu"
 msgstr "Τρι"
 
-#: /src/schooltool/app/browser/cal.py:111
-#: /src/schooltool/app/browser/cal.py:1736
+#: /src/schooltool/app/browser/cal.py:114
+#: /src/schooltool/app/browser/cal.py:1749
 msgid "Fri"
 msgstr "Παρ"
 
-#: /src/schooltool/app/browser/cal.py:111
-#: /src/schooltool/app/browser/cal.py:1737
+#: /src/schooltool/app/browser/cal.py:114
+#: /src/schooltool/app/browser/cal.py:1750
 msgid "Sat"
 msgstr "Σαβ"
 
-#: /src/schooltool/app/browser/cal.py:111
-#: /src/schooltool/app/browser/cal.py:1738
+#: /src/schooltool/app/browser/cal.py:114
+#: /src/schooltool/app/browser/cal.py:1751
 msgid "Sun"
 msgstr "Κυρ"
 
-#: /src/schooltool/app/browser/cal.py:1658
-#: /src/schooltool/app/interfaces.py:122 /src/schooltool/app/interfaces.py:133
-#: /src/schooltool/commendation/interfaces.py:48
+#: /src/schooltool/app/browser/cal.py:1671
+#: /src/schooltool/app/interfaces.py:122
+#: /src/schooltool/app/interfaces.py:133
 #: /src/schooltool/course/interfaces.py:36
 #: /src/schooltool/dashboard/interfaces.py:44
 #: /src/schooltool/group/interfaces.py:43
@@ -266,216 +267,216 @@ msgstr "Κυρ"
 #: /src/schooltool/level/interfaces.py:142
 #: /src/schooltool/note/interfaces.py:42
 #: /src/schooltool/resource/interfaces.py:38
-#: /src/schooltool/term/browser/term.py:63
-#: /src/schooltool/term/interfaces.py:67
+#: /src/schooltool/term/browser/term.py:61
+#: /src/schooltool/term/interfaces.py:40
 #: /src/schooltool/timetable/browser/ttwizard.py:241
 #, fuzzy
 msgid "Title"
 msgstr "Τίτλος"
 
-#: /src/schooltool/app/browser/cal.py:1661
+#: /src/schooltool/app/browser/cal.py:1674
 #: /src/schooltool/app/browser/templates/cal_monthly.pt:39
 #: /src/schooltool/app/browser/templates/cal_weekly.pt:42
 msgid "All day"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1664
-#: /src/schooltool/commendation/interfaces.py:65
+#: /src/schooltool/app/browser/cal.py:1677
 #: /src/schooltool/gradebook/interfaces.py:54
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:29
 #: /src/schooltool/term/browser/emergency_select.pt:29
 msgid "Date"
 msgstr "Ημαρομηνία"
 
-#: /src/schooltool/app/browser/cal.py:1667
+#: /src/schooltool/app/browser/cal.py:1680
 msgid "Time"
 msgstr "Ώρα"
 
-#: /src/schooltool/app/browser/cal.py:1668
+#: /src/schooltool/app/browser/cal.py:1681
 msgid "Start time in 24h format"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1672
+#: /src/schooltool/app/browser/cal.py:1685
 msgid "Duration"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1677
+#: /src/schooltool/app/browser/cal.py:1690
 msgid "Duration Type"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1680
+#: /src/schooltool/app/browser/cal.py:1693
 #: /src/schooltool/app/browser/templates/event_add.pt:168
 msgid "Minutes"
 msgstr "Λεπτά"
 
-#: /src/schooltool/app/browser/cal.py:1681
+#: /src/schooltool/app/browser/cal.py:1694
 #: /src/schooltool/app/browser/templates/event_add.pt:171
 msgid "Hours"
 msgstr "Ώρες"
 
-#: /src/schooltool/app/browser/cal.py:1682
+#: /src/schooltool/app/browser/cal.py:1695
 #: /src/schooltool/app/browser/templates/event_add.pt:175
 msgid "Days"
 msgstr "Ημέρες"
 
-#: /src/schooltool/app/browser/cal.py:1685
+#: /src/schooltool/app/browser/cal.py:1698
 #: /src/schooltool/app/browser/templates/event.pt:48
 #: /src/schooltool/resource/browser/resource.pt:11
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:49
 msgid "Location"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1689
-#: /src/schooltool/commendation/interfaces.py:53
+#: /src/schooltool/app/browser/cal.py:1702
 #: /src/schooltool/course/interfaces.py:40
 #: /src/schooltool/course/interfaces.py:77
 #: /src/schooltool/gradebook/interfaces.py:38
 #: /src/schooltool/group/interfaces.py:47
 #: /src/schooltool/level/interfaces.py:147
 #: /src/schooltool/resource/interfaces.py:42
+#: /src/schooltool/timetable/browser/event.py:37
+#: /src/schooltool/timetable/browser/event.py:46
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:24
 msgid "Description"
 msgstr "Περιγραφή"
 
-#: /src/schooltool/app/browser/cal.py:1694
+#: /src/schooltool/app/browser/cal.py:1707
 msgid "Recurring"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1698
+#: /src/schooltool/app/browser/cal.py:1711
 msgid "Recurs every"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1701
+#: /src/schooltool/app/browser/cal.py:1714
 msgid "Day"
 msgstr "Ημέρα"
 
-#: /src/schooltool/app/browser/cal.py:1702
+#: /src/schooltool/app/browser/cal.py:1715
 msgid "Week"
 msgstr "Εβδομάδα"
 
-#: /src/schooltool/app/browser/cal.py:1703
+#: /src/schooltool/app/browser/cal.py:1716
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:124
 msgid "Month"
 msgstr "Μήνας"
 
-#: /src/schooltool/app/browser/cal.py:1704
+#: /src/schooltool/app/browser/cal.py:1717
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:137
 msgid "Year"
 msgstr "Έτος"
 
-#: /src/schooltool/app/browser/cal.py:1707
+#: /src/schooltool/app/browser/cal.py:1720
 msgid "Repeat every"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1712
+#: /src/schooltool/app/browser/cal.py:1725
 msgid "Range"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1715
+#: /src/schooltool/app/browser/cal.py:1728
 msgid "Count"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1716
+#: /src/schooltool/app/browser/cal.py:1729
 msgid "Until"
 msgstr "Μέχρι"
 
-#: /src/schooltool/app/browser/cal.py:1717
+#: /src/schooltool/app/browser/cal.py:1730
 msgid "forever"
 msgstr "Για πάντα"
 
-#: /src/schooltool/app/browser/cal.py:1720
+#: /src/schooltool/app/browser/cal.py:1733
 msgid "Number of events"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1724
+#: /src/schooltool/app/browser/cal.py:1737
 #: /src/schooltool/app/browser/templates/event_add.pt:304
 msgid "Repeat until"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1728
+#: /src/schooltool/app/browser/cal.py:1741
 msgid "Weekdays"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1731
+#: /src/schooltool/app/browser/cal.py:1744
 msgid "Weekday"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1741
+#: /src/schooltool/app/browser/cal.py:1754
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:53
 #: /src/schooltool/app/browser/templates/event_add.pt:257
 msgid "Monthly"
 msgstr "Μηνιαία"
 
-#: /src/schooltool/app/browser/cal.py:1749
+#: /src/schooltool/app/browser/cal.py:1762
 msgid "Exception dates"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1828
+#: /src/schooltool/app/browser/cal.py:1848
 msgid "same weekday"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1833
+#: /src/schooltool/app/browser/cal.py:1853
 msgid "1st"
 msgstr "1η"
 
-#: /src/schooltool/app/browser/cal.py:1833
+#: /src/schooltool/app/browser/cal.py:1853
 msgid "4th"
 msgstr "4η"
 
-#: /src/schooltool/app/browser/cal.py:1833
+#: /src/schooltool/app/browser/cal.py:1853
 msgid "3rd"
 msgstr "3η"
 
-#: /src/schooltool/app/browser/cal.py:1833
+#: /src/schooltool/app/browser/cal.py:1853
 msgid "2nd"
 msgstr "2η"
 
-#: /src/schooltool/app/browser/cal.py:1834
+#: /src/schooltool/app/browser/cal.py:1854
 msgid "5th"
 msgstr "5η"
 
-#: /src/schooltool/app/browser/cal.py:1848
+#: /src/schooltool/app/browser/cal.py:1868
 msgid "last weekday"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:1858
+#: /src/schooltool/app/browser/cal.py:1878
 msgid "Last ${weekday}"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1881
-#: /src/schooltool/app/browser/cal.py:2187
-#: /src/schooltool/course/browser/section.py:134
+#: /src/schooltool/app/browser/cal.py:1901
+#: /src/schooltool/app/browser/cal.py:2210
+#: /src/schooltool/course/browser/section.py:150
 msgid "An error occurred."
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1914
+#: /src/schooltool/app/browser/cal.py:1934
 msgid "Invalid time"
 msgstr "Μη επιτρεπτός χρόνος"
 
-#: /src/schooltool/app/browser/cal.py:1935
+#: /src/schooltool/app/browser/cal.py:1955
 msgid "End date is earlier than start date"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1944
+#: /src/schooltool/app/browser/cal.py:1964
 #, fuzzy
 msgid "Invalid date.  Please specify YYYY-MM-DD, one per line."
 msgstr "Μη επιτρεπτός χρόνος. Παρακαλώ"
 
-#: /src/schooltool/app/browser/cal.py:1992
+#: /src/schooltool/app/browser/cal.py:2012
 msgid "Add event"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1993
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:62
+#: /src/schooltool/app/browser/cal.py:2013
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:43
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:90
 msgid "Add"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:2062
+#: /src/schooltool/app/browser/cal.py:2084
 msgid "Edit event"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:2063
+#: /src/schooltool/app/browser/cal.py:2085
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:29
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:81
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:185
@@ -485,75 +486,66 @@ msgstr ""
 msgid "Update"
 msgstr "Ενημέρωση"
 
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:2193 /src/schooltool/skin/form.py:77
+#: /src/schooltool/app/browser/cal.py:2216
+#: /src/schooltool/skin/form.py:77
 #, fuzzy
 msgid "Updated on ${date_time}"
 msgstr "Ενημέρωση την ${date_time}"
 
-#: /src/schooltool/app/browser/cal.py:2532
-#: /src/schooltool/app/browser/configure.zcml:554
+#: /src/schooltool/app/browser/cal.py:2555
+#: /src/schooltool/app/browser/configure.zcml:548
 #: /src/schooltool/app/configure.zcml:301
 #: /src/schooltool/resource/rest/resource.pt:14
 #: /src/schooltool/person/rest/person.pt:13
 msgid "Calendar"
 msgstr "Ημερολόγιο"
 
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:372
-#, fuzzy
-msgid "${day_of_week}, ${date}"
-msgstr "${day_of_week}, ${date}"
-
-#: /src/schooltool/app/browser/cal.py:845
+#: /src/schooltool/app/browser/cal.py:858
 msgid "Next week"
 msgstr "Επόμενη Εβδομάδα"
 
-#: /src/schooltool/app/browser/cal.py:846
+#: /src/schooltool/app/browser/cal.py:859
 msgid "Current week"
 msgstr "Τρέχουσα Εβδομάδα"
 
-#: /src/schooltool/app/browser/cal.py:847
+#: /src/schooltool/app/browser/cal.py:860
 msgid "Previous week"
 msgstr "Προηγούμενη Εβδομάδα"
 
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:856
+#: /src/schooltool/app/browser/cal.py:869
 #, fuzzy
 msgid "${month}, ${year} (week ${week})"
 msgstr "${month}, ${year} (Εβδομάδα ${week})"
 
-#: /src/schooltool/app/browser/cal.py:906
+#: /src/schooltool/app/browser/cal.py:919
 msgid "Next month"
 msgstr "Επόμενος μήνας"
 
-#: /src/schooltool/app/browser/cal.py:907
+#: /src/schooltool/app/browser/cal.py:920
 msgid "Current month"
 msgstr "Τρέχων Μήνας"
 
-#: /src/schooltool/app/browser/cal.py:908
+#: /src/schooltool/app/browser/cal.py:921
 msgid "Previous month"
 msgstr "Προηγούμενος Μήνας"
 
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:916
+#: /src/schooltool/app/browser/cal.py:929
 msgid "${month}, ${year}"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:938
+#: /src/schooltool/app/browser/cal.py:951
 msgid "Week ${week_no}"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:954
+#: /src/schooltool/app/browser/cal.py:967
 msgid "Next year"
 msgstr "Επόμενος χρόνος"
 
-#: /src/schooltool/app/browser/cal.py:955
+#: /src/schooltool/app/browser/cal.py:968
 msgid "Current year"
 msgstr "Τρέχον χρόνος"
 
-#: /src/schooltool/app/browser/cal.py:956
+#: /src/schooltool/app/browser/cal.py:969
 msgid "Previous year"
 msgstr "Προηγούμενος χρόνος"
 
@@ -564,99 +556,112 @@ msgstr "Ενέργειες"
 #: /src/schooltool/app/browser/configure.zcml:184
 #: /src/schooltool/app/configure.zcml:287
 #: /src/schooltool/skin/templates/view_macros.pt:33
+#: /src/schooltool/skin/templates/generic_macros.pt:8
 msgid "SchoolTool"
 msgstr "SchoolTool"
+
+#: /src/schooltool/app/browser/configure.zcml:248
+msgid "View Calendar"
+msgstr ""
+
+#: /src/schooltool/app/browser/configure.zcml:259
+msgid "New Event"
+msgstr ""
+
+#: /src/schooltool/app/browser/configure.zcml:270
+msgid "Open in iCal"
+msgstr ""
+
+#: /src/schooltool/app/browser/configure.zcml:281
+msgid "Import Sections"
+msgstr "Εισαγωγή Τμημάτων"
+
+#: /src/schooltool/app/browser/configure.zcml:292
+msgid "Edit Leaders"
+msgstr ""
+
+#: /src/schooltool/app/browser/configure.zcml:303
+msgid "Change Site Preferences"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:324
 msgid "Calendar (Daily)"
 msgstr "Ημερολόγιο (Ημερήσιο)"
 
 #: /src/schooltool/app/browser/configure.zcml:334
-#, fuzzy
 msgid "Calendar (Daily, PDF)"
-msgstr "Ημερολόγιο (Ημερήσιο)"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:344
-#, fuzzy
 msgid "Calendar (Weekly)"
-msgstr "Ημερολόγιο (Ημερήσιο)"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:354
-#, fuzzy
 msgid "Calendar (Weekly, PDF)"
-msgstr "Ημερολόγιο (Ημερήσιο)"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:364
-#, fuzzy
 msgid "Calendar (Monthly)"
-msgstr "Ημερολόγιο (Ημερήσιο)"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:374
-#, fuzzy
 msgid "Calendar (Monthly, PDF)"
-msgstr "Ημερολόγιο (Ημερήσιο)"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:384
-#, fuzzy
 msgid "Calendar (Yearly)"
-msgstr "Ημερολόγιο (Ημερήσιο)"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:394
-#, fuzzy
 msgid "Atom View"
-msgstr "Προβολή"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:404
-#, fuzzy
 msgid "iCalendar"
-msgstr "Ημερολόγιο"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:414
 msgid "Free/Busy"
 msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:444
-#, fuzzy
 msgid "Add Event"
-msgstr "Προσθήκη γεγονότων"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:463
-#, fuzzy
 msgid "Edit Event"
-msgstr "Ένα άγνωστο άτομο"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:530
 msgid "Browser UI"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:542
+#: /src/schooltool/app/browser/configure.zcml:536
 #: /src/schooltool/app/browser/templates/login.pt:3
-#, fuzzy
 msgid "Login"
-msgstr "Είσοδος"
+msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:548
-#: /src/schooltool/app/rest/configure.zcml:261
+#: /src/schooltool/app/browser/configure.zcml:542
+#: /src/schooltool/app/rest/configure.zcml:255
+#: /src/schooltool/devmode/devmode.pt:17
 msgid "Errors"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:560
+#: /src/schooltool/app/browser/configure.zcml:554
 #: /src/schooltool/skin/templates/navigation.pt:2
 msgid "Navigation"
 msgstr "Πλοήγηση"
 
-#: /src/schooltool/app/browser/configure.zcml:566
-#: /src/schooltool/app/rest/configure.zcml:267
-#, fuzzy
+#: /src/schooltool/app/browser/configure.zcml:560
+#: /src/schooltool/app/rest/configure.zcml:261
 msgid "Application"
-msgstr "Ενέργειες"
+msgstr ""
+
+#: /src/schooltool/app/browser/configure.zcml:566
+msgid "Calendar Widget"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:572
-#, fuzzy
-msgid "Calendar Widget"
-msgstr "Ημερολόγιο"
-
-#: /src/schooltool/app/browser/configure.zcml:578
 msgid "Templates"
 msgstr ""
 
@@ -695,14 +700,12 @@ msgstr "Δεν καθορίσθηκε κωδικοποίηση χαρακτήρ�
 msgid "Unknown charset"
 msgstr "Άγνωστο σύνολο χαρακτήρων"
 
-#. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:205
 msgid "Error in CSV data, line ${line_no}"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:209
-#: /src/schooltool/app/browser/csvimport.py:514
+#: /src/schooltool/app/browser/csvimport.py:516
 msgid "Conversion to unicode failed in line ${line_no}"
 msgstr "Αποτυχία μετατροπής σε unicode στη γραμμή ${line_no}"
 
@@ -710,80 +713,74 @@ msgstr "Αποτυχία μετατροπής σε unicode στη γραμμή $
 msgid "Row 2 is not empty"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:328
 msgid ""
 "Wrong section header on line ${line_no} (it should contain a course id and "
 "an instructor id)"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:354
-msgid "Malformed line ${line_no} (it should contain a day id and a period id)"
+msgid ""
+"Malformed line ${line_no} (it should contain a day id and a period id)"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:377
 msgid "Incomplete section description on line ${line}"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:382
 msgid "No students in section (line ${line})"
 msgstr ""
 
-#: /src/schooltool/app/browser/csvimport.py:462
+#: /src/schooltool/app/browser/csvimport.py:464
 msgid ""
 "The first row of the CSV file must contain the term id and the timetable "
 "schema id."
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/app/browser/csvimport.py:471
+#: /src/schooltool/app/browser/csvimport.py:473
 msgid "The term ${term} does not exist."
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/app/browser/csvimport.py:478
+#: /src/schooltool/app/browser/csvimport.py:480
 #, fuzzy
 msgid "The timetable schema ${schema} does not exist."
 msgstr "not."
 
-#. Default: ""
-#: /src/schooltool/app/browser/csvimport.py:509
+#: /src/schooltool/app/browser/csvimport.py:511
 #, fuzzy
 msgid "Error in timetable CSV data, line ${line_no}"
 msgstr "Σφάλμα in όχι"
 
-#: /src/schooltool/app/browser/csvimport.py:549
+#: /src/schooltool/app/browser/csvimport.py:551
 #, fuzzy
 msgid "Day ids not defined in selected schema: ${args}."
 msgstr "Ημέρα not in."
 
-#: /src/schooltool/app/browser/csvimport.py:550
+#: /src/schooltool/app/browser/csvimport.py:552
 #, fuzzy
 msgid "Periods not defined in selected days: ${args}."
 msgstr "not in ημέρες."
 
-#: /src/schooltool/app/browser/csvimport.py:551
+#: /src/schooltool/app/browser/csvimport.py:553
 #, fuzzy
 msgid "Persons not found: ${args}."
 msgstr "Δεν βρέθηκαν οι: ${args}."
 
-#: /src/schooltool/app/browser/csvimport.py:552
+#: /src/schooltool/app/browser/csvimport.py:554
 msgid "Courses not found: ${args}."
 msgstr "Δεν βρέθηκαν μαθήματα: ${args}."
 
-#: /src/schooltool/app/browser/csvimport.py:553
+#: /src/schooltool/app/browser/csvimport.py:555
 msgid "Sections not found: ${args}."
 msgstr "Δεν βρέθηκαν ενότητες: ${args}."
 
-#: /src/schooltool/app/browser/csvimport.py:554
+#: /src/schooltool/app/browser/csvimport.py:556
 msgid "Invalid records: ${args}."
 msgstr "Μη έγκυρες εγγραφές: ${args}."
 
 #: /src/schooltool/app/browser/overlay.py:209
-#: /src/schooltool/term/browser/term.py:146
+#: /src/schooltool/term/browser/term.py:144
 msgid "Saved changes."
 msgstr "Αποθήκευση αλλαγών"
 
@@ -828,14 +825,12 @@ msgid "PDF support is disabled.  It can be enabled by your administrator."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:13
-#, fuzzy
 msgid "Change site preferences"
-msgstr "Αλλαγή προτιμήσεων"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:19
-#, fuzzy
 msgid "General preferences"
-msgstr "Προτιμήσεις ημερολογίου"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:34
 #: /src/schooltool/person/browser/person_preferences.pt:22
@@ -843,43 +838,35 @@ msgid "Calendar Preferences"
 msgstr "Προτιμήσεις ημερολογίου"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:4
-#, fuzzy
 msgid "Edit site preferences"
-msgstr "Επεξεργασία προτιμήσεων"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:63
-#, fuzzy
 msgid "Edit attendance preferences"
-msgstr "Επεξεργασία προτιμήσεων"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:15
-#, fuzzy
 msgid "[Schooltool.org]"
-msgstr "SchoolTool"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:15
-#, fuzzy
 msgid "Schooltool"
-msgstr "SchoolTool"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:22
 msgid "Events for"
 msgstr ""
 
 #. Default: ""
-#.  "This is an Atom formatted XML site feed. It is intended to be viewed\n"
-#.  "      in a Newsreader or syndicated to another site. Please visit"
+#. "This is an Atom formatted XML site feed. It is intended to be viewed\n"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:43
-#, fuzzy
 msgid "atom_description"
-msgstr "Περιγραφή"
+msgstr ""
 
-#. Default: "Atom Enabled"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:47
 msgid "atom_enabled"
 msgstr ""
 
-#. Default: "for more info."
 #: /src/schooltool/app/browser/templates/cal_atom.pt:50
 msgid "atom_more_info"
 msgstr ""
@@ -933,9 +920,8 @@ msgid "Weekly"
 msgstr "Εβδομαδιαίως"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:49
-#, fuzzy
 msgid "View monthly calendar"
-msgstr "προβολή ημερολογίου για μια ή περισσότερες ημέρες"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:55
 msgid "View yearly calendar"
@@ -952,9 +938,8 @@ msgid "Calendar for ${title} - ${calendar_title}"
 msgstr "Ημερολόγιο για ημερολόγιο"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:13
-#, fuzzy
 msgid "Cal"
-msgstr "Ακύρωση"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:13
 msgid "Personal calendar"
@@ -990,19 +975,16 @@ msgid "Hold down Ctrl or Shift to select multiple calendars."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:32
-#, fuzzy
 msgid "Public Calendar"
-msgstr "Ημερολόγιο"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:37
-#, fuzzy
 msgid "site-wide calendar"
-msgstr "Εμφάνιση ημερολογίου"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:4
-#, fuzzy
 msgid "Select calendars to display"
-msgstr "Εβδομαδιαίο Ημερολόγιο για %s"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:42
 msgid "People"
@@ -1022,16 +1004,18 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:84
 #: /src/schooltool/app/browser/templates/application_preferences.pt:56
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:62
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:43
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
 #: /src/schooltool/securitypolicy/browser/templates/access_control.pt:23
 #: /src/schooltool/course/browser/templates/section_edit.pt:51
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:90
 #: /src/schooltool/course/browser/templates/section_add.pt:64
 #: /src/schooltool/course/browser/templates/section_add.pt:69
+#: /src/schooltool/skin/templates/formlib_macros.pt:22
 #: /src/schooltool/skin/templates/simple_edit.pt:51
 #: /src/schooltool/skin/templates/simple_add.pt:55
 #: /src/schooltool/note/note_add.pt:43
+#: /src/schooltool/demographics/browser/demographics_macros.pt:3
 #: /src/schooltool/demographics/browser/person_add.pt:8
 #: /src/schooltool/person/browser/person_preferences.pt:52
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:70
@@ -1040,40 +1024,11 @@ msgstr ""
 msgid "A"
 msgstr "A"
 
-#: /src/schooltool/app/browser/templates/container_delete.pt:10
-#: /src/schooltool/person/browser/person_container_delete.pt:10
-msgid "Are you sure you want to delete selected items?"
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/container_delete.pt:16
-#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:16
-#: /src/schooltool/person/browser/person_container_delete.pt:16
-#: /src/schooltool/term/browser/term-container-delete.pt:16
-msgid "You have not selected any items."
-msgstr ""
-
-#. Default: "Confirm"
-#: /src/schooltool/app/browser/templates/container_delete.pt:27
-#: /src/schooltool/gradebook/browser/activities_overview.pt:46
-#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
-#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
-#: /src/schooltool/course/browser/templates/course_container.pt:59
-#: /src/schooltool/course/browser/templates/section_container.pt:83
-#: /src/schooltool/skin/templates/container.pt:46
-#: /src/schooltool/skin/templates/table_macros.pt:15
-#: /src/schooltool/person/browser/person_container_delete.pt:30
-#: /src/schooltool/term/browser/term-container-delete.pt:29
-#: /src/schooltool/term/browser/term-container.pt:26
-msgid "delete-button"
-msgstr "κουμπί-διαγραφής"
-
-#. Default: "Cancel"
-#: /src/schooltool/app/browser/templates/container_delete.pt:29
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:87
 #: /src/schooltool/app/browser/templates/application_preferences.pt:59
 #: /src/schooltool/app/browser/templates/event_booking.pt:84
 #: /src/schooltool/app/browser/templates/event_add.pt:344
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:74
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:55
 #: /src/schooltool/setupdata/setupdata.pt:25
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:67
 #: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:57
@@ -1088,9 +1043,12 @@ msgstr "κουμπί-διαγραφής"
 #: /src/schooltool/course/browser/templates/section_edit.pt:54
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:102
 #: /src/schooltool/course/browser/templates/section_add.pt:75
+#: /src/schooltool/skin/templates/formlib_macros.pt:25
 #: /src/schooltool/skin/templates/simple_edit.pt:54
 #: /src/schooltool/skin/templates/simple_add.pt:58
+#: /src/schooltool/skin/templates/container_delete.pt:29
 #: /src/schooltool/note/note_add.pt:46
+#: /src/schooltool/demographics/browser/demographics_macros.pt:9
 #: /src/schooltool/demographics/browser/person_add.pt:11
 #: /src/schooltool/person/browser/person_preferences.pt:55
 #: /src/schooltool/person/browser/person_container_delete.pt:32
@@ -1102,135 +1060,116 @@ msgstr "κουμπί-διαγραφής"
 msgid "cancel-button"
 msgstr "Κουμπί ακύρωσης"
 
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:23
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:17
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:37
 msgid "R"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:23
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:17
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:37
 msgid "Remove"
 msgstr "Μετακίνηση"
 
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:29
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:23
 #: /src/schooltool/gradebook/browser/activities_overview.pt:51
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:15
 #: /src/schooltool/course/browser/templates/course_container.pt:16
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:43
 #: /src/schooltool/course/browser/templates/section_container.pt:19
 #: /src/schooltool/skin/templates/container.pt:57
-#: /src/schooltool/skin/templates/table.pt:8
-#: /src/schooltool/term/browser/term-container.pt:14
+#: /src/schooltool/skin/templates/table.pt:15
 #, fuzzy
 msgid "There are none."
 msgstr "Δεν υπάρχουν πλέον άλλες κινήσεις."
 
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:50
-#: /src/schooltool/requirement/browser/requirement.pt:31
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:64
-#: /src/schooltool/attendance/browser/templates/controlpanel.pt:33
-msgid "Find Now"
-msgstr "Βρες"
-
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:52
-#: /src/schooltool/requirement/browser/requirement.pt:33
-#: /src/schooltool/sampledata/sampledata.pt:69
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:66
-#: /src/schooltool/attendance/browser/templates/controlpanel.pt:35
-msgid "Clear"
-msgstr "Εκκαθάριση"
-
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:67
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:48
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:95
-#, fuzzy
 msgid "There are none to add."
-msgstr "Δεν υπάρχουν πλέον άλλες κινήσεις."
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:15
-#, fuzzy
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:15
 msgid "All day event"
-msgstr "Προσθήκη γεγονότων"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:20
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:21
 msgid "This is a recurring event."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:33
-#, fuzzy
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
+#: /src/schooltool/level/browser/disconnectedlevelerror_info.pt:5
+#: /src/schooltool/level/browser/levellooperror_info.pt:5
 msgid "Details"
-msgstr "Ημερησίως"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:37
-#, fuzzy
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:38
 msgid "Starts"
-msgstr "Σαβ"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:42
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:43
 msgid "Ends"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:53
-#, fuzzy
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:54
 msgid "edit event"
-msgstr "Προσθήκη γεγονότων"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:53
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:54
 msgid "Change the details of this event"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:64
-#, fuzzy
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:65
 msgid "Scheduled resources"
-msgstr "Προσθήκη πόρου"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:72
-#, fuzzy
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:73
 msgid "edit resources"
-msgstr "επεξεργασία ομάδων"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:80
-#, fuzzy
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:81
 msgid "delete event"
-msgstr "Αλλαγή/Διαγραφή γεγονότων"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:137
-#, fuzzy
 msgid "Event information"
-msgstr "Επεξεργασία Πληροφοριών Τμήματος"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:143
 msgid "Event details"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:197
-#, fuzzy
 msgid "Book Resources"
-msgstr "Πόροι"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:207
-#, fuzzy
 msgid "Update form"
-msgstr "Ενημέρωση"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:224
-#, fuzzy
 msgid "day"
-msgstr "Σήμερα"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:225
-#, fuzzy
 msgid "week"
-msgstr "Εβδομάδα"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:226
-#, fuzzy
 msgid "month"
-msgstr "Μήνας"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:227
-#, fuzzy
 msgid "year"
-msgstr "Έτος"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:236
 msgid "This section only applies when weekly recurrence is selected."
@@ -1257,41 +1196,34 @@ msgid "Repeat"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:292
-#, fuzzy
 msgid "times"
-msgstr "Ώρα"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:307
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:32
 #: /src/schooltool/term/browser/emergency_select.pt:32
-#, fuzzy
 msgid "[popup calendar]"
-msgstr "Εμφάνιση ημερολογίου"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:325
-#, fuzzy
 msgid "Repeat forever"
-msgstr "Για πάντα"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:346
-#, fuzzy
 msgid "Book resources"
-msgstr "Πόροι"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:11
-#, fuzzy
 msgid "Resource Booking for ${title}"
-msgstr "Πληροφορίες ατόμου: ${title}"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:17
-#, fuzzy
 msgid "Title:"
-msgstr "Τίτλος"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:21
-#, fuzzy
 msgid "Starts:"
-msgstr "Σαβ"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:25
 msgid "Ends:"
@@ -1302,9 +1234,8 @@ msgid "This is a recurring event!"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:4
-#, fuzzy
 msgid "Resource Booking"
-msgstr "Πόροι"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:55
 msgid "Conflicting events"
@@ -1316,15 +1247,6 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_info_viewlet.pt:12
 msgid "Location: ${location}"
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/index.pt:12
-#: /src/schooltool/course/browser/templates/section_container.pt:26
-msgid "Courses"
-msgstr "Μαθήματα"
-
-#: /src/schooltool/app/browser/templates/index.pt:15
-msgid "Levels"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/index.pt:6
@@ -1361,7 +1283,6 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/event.pt:3
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:19
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:21
-#: /src/schooltool/app/browser/templates/cal_weekly.pt:14
 #: /src/schooltool/app/browser/templates/cal_yearly.pt:16
 #: /src/schooltool/app/browser/templates/cal_yearly.pt:23
 #: /src/schooltool/app/browser/templates/event_add.pt:4
@@ -1371,7 +1292,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/event_add.pt:341
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:11
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:14
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:36
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:28
 #: /src/schooltool/app/browser/templates/event_info_viewlet.pt:14
 #: /src/schooltool/group/browser/group-csvimport.pt:13
 #: /src/schooltool/group/browser/group-csvimport.pt:16
@@ -1382,6 +1303,10 @@ msgstr ""
 #: /src/schooltool/gradebook/browser/gradebook_grade_activity.pt:17
 #: /src/schooltool/requirement/browser/requirement.pt:4
 #: /src/schooltool/requirement/browser/requirement.pt:12
+#: /src/schooltool/requirement/browser/scoresystemwidget.pt:6
+#: /src/schooltool/requirement/browser/scoresystemwidget.pt:14
+#: /src/schooltool/requirement/browser/scoresystemwidget.pt:23
+#: /src/schooltool/requirement/browser/treenode.pt:1
 #: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:11
 #: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:14
 #: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:19
@@ -1409,6 +1334,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/ttwizard_choice.pt:12
 #: /src/schooltool/timetable/browser/templates/ttwizard_choice.pt:15
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:21
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:3
 #: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:11
 #: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:14
 #: /src/schooltool/timetable/browser/templates/timetableschema.pt:3
@@ -1425,6 +1351,10 @@ msgstr ""
 #: /src/schooltool/level/browser/record.pt:61
 #: /src/schooltool/level/browser/promotion.pt:4
 #: /src/schooltool/level/browser/promotion.pt:15
+#: /src/schooltool/devmode/restdoc_macros.pt:53
+#: /src/schooltool/dashboard/dashboard_manager.pt:13
+#: /src/schooltool/help/helptopic.pt:7
+#: /src/schooltool/help/helptopic.pt:14
 #: /src/schooltool/course/browser/templates/section_edit.pt:14
 #: /src/schooltool/course/browser/templates/section_edit.pt:19
 #: /src/schooltool/course/browser/templates/course.pt:48
@@ -1433,6 +1363,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/course_container.pt:9
 #: /src/schooltool/course/browser/templates/course_container.pt:44
 #: /src/schooltool/course/browser/templates/course_container.pt:70
+#: /src/schooltool/course/browser/templates/coursesviewlet.pt:8
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:11
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:14
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:50
@@ -1441,6 +1372,8 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/section_add.pt:13
 #: /src/schooltool/skin/templates/simple_edit.pt:14
 #: /src/schooltool/skin/templates/simple_edit.pt:19
+#: /src/schooltool/skin/templates/navigationViewlet.pt:1
+#: /src/schooltool/skin/templates/actionsViewlet.pt:2
 #: /src/schooltool/skin/templates/actions.pt:10
 #: /src/schooltool/skin/templates/simple_add.pt:12
 #: /src/schooltool/skin/templates/simple_add.pt:17
@@ -1452,6 +1385,7 @@ msgstr ""
 #: /src/schooltool/skin/templates/container.pt:10
 #: /src/schooltool/skin/templates/widget_macros.pt:5
 #: /src/schooltool/skin/templates/widget_macros.pt:10
+#: /src/schooltool/demographics/browser/menu_macros.pt:6
 #: /src/schooltool/person/browser/person-csvimport.pt:13
 #: /src/schooltool/person/browser/person-csvimport.pt:16
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:48
@@ -1464,6 +1398,7 @@ msgstr ""
 #: /src/schooltool/attendance/browser/templates/retro.pt:15
 #: /src/schooltool/attendance/browser/templates/retro.pt:26
 #: /src/schooltool/attendance/browser/templates/retro.pt:78
+#: /src/schooltool/attendance/browser/templates/controlpanelViewlet.pt:1
 #: /src/schooltool/attendance/browser/templates/no_section_meeting.pt:4
 #: /src/schooltool/attendance/browser/templates/no_section_meeting.pt:11
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:4
@@ -1479,25 +1414,21 @@ msgstr ""
 #: /src/schooltool/term/browser/term_add_edit.pt:25
 #: /src/schooltool/term/browser/term_add_edit.pt:33
 #: /src/schooltool/term/browser/term_add_edit.pt:115
-#: /src/schooltool/term/browser/term-container.pt:3
-#: /src/schooltool/term/browser/term-container.pt:9
 #: /src/schooltool/term/browser/term.pt:26
 msgid "${DYNAMIC_CONTENT}"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/login.pt:35
-#, fuzzy
 msgid "User Information"
-msgstr "Επεξεργασία Πληροφοριών Τμήματος"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/login.pt:57
 msgid "L"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/login.pt:57
-#, fuzzy
 msgid "Log in"
-msgstr "Είσοδος"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
@@ -1508,9 +1439,8 @@ msgid "You are trying to delete a repeating event."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:43
-#, fuzzy
 msgid "Current"
-msgstr "Τρέχον μέγεθος"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:45
 msgid "Future"
@@ -1573,7 +1503,6 @@ msgstr "Εισαγωγή CVS δεδομένων"
 msgid "CSV Data"
 msgstr "CSV δεδομένα"
 
-#. Default: "Submit"
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:117
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:84
 #: /src/schooltool/app/browser/templates/application_preferences.pt:56
@@ -1583,26 +1512,26 @@ msgstr "CSV δεδομένα"
 #: /src/schooltool/securitypolicy/browser/templates/access_control.pt:23
 #: /src/schooltool/course/browser/templates/section_edit.pt:51
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:72
+#: /src/schooltool/skin/templates/formlib_macros.pt:22
 #: /src/schooltool/skin/templates/simple_edit.pt:51
+#: /src/schooltool/demographics/browser/demographics_macros.pt:3
+#: /src/schooltool/demographics/browser/demographics_macros.pt:6
 #: /src/schooltool/demographics/browser/person_add.pt:8
 #: /src/schooltool/person/browser/person-csvimport.pt:70
 #: /src/schooltool/person/browser/person_preferences.pt:52
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:70
-#, fuzzy
 msgid "submit-button"
-msgstr "κουμπί-διαγραφής"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:20
-#, fuzzy
 msgid "Import Timetable"
-msgstr "Ωρολόγιο πρόγραμμα"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:24
-#, fuzzy
 msgid ""
 "You can create the CSV file in a spreadsheet and export it in CSV (Comma-"
 "Separated Values) format. The structure of the table is described below."
-msgstr "Εσύ in a and in κόμμα."
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:30
 msgid ""
@@ -1616,8 +1545,8 @@ msgstr ""
 msgid ""
 "Each section description's first row contains the <strong>course id</strong> "
 "and the <strong>instructor id</strong> for the new section. Then a number of "
-"rows, each containing a <strong>day id</strong> and a <strong>period id</"
-"strong>, follows. The list of period descriptions is terminated by three "
+"rows, each containing a <strong>day id</strong> and a <strong>period "
+"id</strong>, follows. The list of period descriptions is terminated by three "
 "asterisks ('***') in the first column. After the terminator, any number of "
 "<strong>person ids</strong> may follow, the denoted persons will be added to "
 "the section as learners."
@@ -1636,22 +1565,21 @@ msgid "Example:"
 msgstr "Παράδειγμα:"
 
 #. Default: ""
-#.  "\"2005-fall\",\"three-day\"\n"
-#.  "\"\",\"\",\"\"\n"
-#.  "\"philosophy\",\"lorch\"\n"
-#.  "\"Monday\",\"A\"\n"
-#.  "\"Monday\",\"B\"\n"
-#.  "\"Tuesday\",\"C\"\n"
-#.  "\"***\"\n"
-#.  "\"johnny\"\n"
-#.  "\"billy\"\n"
-#.  "\"\"\n"
-#.  "\"literature\",\"guzman\"\n"
-#.  "\"Wednesday\",\"B\"\n"
-#.  "\"Wednesday\",\"C\"\n"
-#.  "\"***\"\n"
-#.  "\"johnny\"\n"
-#.  "\"pete\""
+#. "\"2005-fall\",\"three-day\"\n"
+#. "\"\",\"\",\"\"\n"
+#. "\"philosophy\",\"lorch\"\n"
+#. "\"Monday\",\"A\"\n"
+#. "\"Monday\",\"B\"\n"
+#. "\"Tuesday\",\"C\"\n"
+#. "\"***\"\n"
+#. "\"johnny\"\n"
+#. "\"billy\"\n"
+#. "\"\"\n"
+#. "\"literature\",\"guzman\"\n"
+#. "\"Wednesday\",\"B\"\n"
+#. "\"Wednesday\",\"C\"\n"
+#. "\"***\"\n"
+#. "\"johnny\"\n"
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:51
 msgid ""
 "\n"
@@ -1685,11 +1613,12 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:78
 msgid ""
 "Note that only ids of objects are to be used in the file, not titles. If a "
-"row ends with empty cells (e.g., <em>\"philosophy\",\"lorch\",\"\",\"\"</"
-"em>), those cells will be discarded. You may separate section descriptions "
-"by more than one line. In the list of learners, only the first column "
-"containing the person ids is processed, the other columns are ignored. You "
-"can import the same data several times without any side effects."
+"row ends with empty cells (e.g., "
+"<em>\"philosophy\",\"lorch\",\"\",\"\"</em>), those cells will be discarded. "
+"You may separate section descriptions by more than one line. In the list of "
+"learners, only the first column containing the person ids is processed, the "
+"other columns are ignored. You can import the same data several times "
+"without any side effects."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:89
@@ -1741,11 +1670,11 @@ msgid "Security (General)"
 msgstr ""
 
 #: /src/schooltool/app/configure.zcml:308
-#, fuzzy
 msgid "Booking Resources"
-msgstr "Πόροι"
+msgstr ""
 
-#: /src/schooltool/app/interfaces.py:124 /src/schooltool/app/interfaces.py:135
+#: /src/schooltool/app/interfaces.py:124
+#: /src/schooltool/app/interfaces.py:135
 msgid ""
 "The name for the school or organization running\n"
 "            this server.  This will be displayed on the public calendar, "
@@ -1784,7 +1713,8 @@ msgstr ""
 msgid "Form input is not a file object"
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:51 /src/schooltool/app/interfaces.py:55
+#: /src/schooltool/app/interfaces.py:51
+#: /src/schooltool/app/interfaces.py:55
 msgid "Invalid integer data"
 msgstr ""
 
@@ -1808,67 +1738,78 @@ msgstr ""
 msgid "Invalid datetime data"
 msgstr ""
 
-#: /src/schooltool/app/main.py:299
+#: /src/schooltool/app/main.py:102
+#, fuzzy
+msgid ""
+"\n"
+"This is not a SchoolTool 0.10 database file, aborting.\n"
+"\n"
+"Please run the standalone database upgrade script.\n"
+msgstr ""
+"\n"
+"είναι not a αρχείο ο ο\n"
+
+#: /src/schooltool/app/main.py:334
 msgid "Going to background, daemon pid %d"
 msgstr ""
 
-#: /src/schooltool/app/main.py:354 /src/schooltool/app/main.py:391
-#: /src/schooltool/app/main.py:394
+#: /src/schooltool/app/main.py:389
+#: /src/schooltool/app/main.py:426
+#: /src/schooltool/app/main.py:429
 msgid "%s: %s"
 msgstr ""
 
-#: /src/schooltool/app/main.py:355
+#: /src/schooltool/app/main.py:390
 msgid "Run %s -h for help."
 msgstr ""
 
-#: /src/schooltool/app/main.py:367
+#: /src/schooltool/app/main.py:402
 msgid "%s: daemon mode not supported on your operating system."
 msgstr ""
 
-#: /src/schooltool/app/main.py:386
+#: /src/schooltool/app/main.py:421
 msgid "Reading configuration from %s"
 msgstr ""
 
-#: /src/schooltool/app/main.py:435
+#: /src/schooltool/app/main.py:473
 msgid "%s Manager"
 msgstr ""
 
-#: /src/schooltool/app/main.py:455
+#: /src/schooltool/app/main.py:499
 msgid "Startup time: %.3f sec real, %.3f sec CPU"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/app/main.py:493
+#: /src/schooltool/app/main.py:537
 msgid ""
 "Could not initialize the database:\n"
 "%s"
 msgstr ""
 
-#: /src/schooltool/app/main.py:496
+#: /src/schooltool/app/main.py:540
 msgid ""
 "\n"
 "Perhaps another %s instance is using it?"
 msgstr ""
 
-#: /src/schooltool/app/main.py:564
+#: /src/schooltool/app/main.py:608
 msgid ""
 "Warning: could not find the reportlab library.\n"
 "PDF support disabled."
 msgstr ""
 
-#: /src/schooltool/app/main.py:569
+#: /src/schooltool/app/main.py:613
 msgid ""
 "Warning: font directory '%s' does not exist.\n"
 "PDF support disabled."
 msgstr ""
 
-#: /src/schooltool/app/main.py:577
+#: /src/schooltool/app/main.py:621
 msgid ""
 "Warning: font '%s' does not exist.\n"
 "PDF support disabled."
 msgstr ""
 
-#: /src/schooltool/app/main.py:71
+#: /src/schooltool/app/main.py:75
 msgid ""
 "\n"
 "Usage: %s [options]\n"
@@ -1885,7 +1826,7 @@ msgid ""
 "  --manage               only do management tasks, don't run the server\n"
 msgstr ""
 
-#: /src/schooltool/app/main.py:85
+#: /src/schooltool/app/main.py:89
 msgid ""
 "\n"
 "No storage defined in the configuration file.\n"
@@ -1894,22 +1835,11 @@ msgid ""
 "uncomment one of the ZODB storage sections.\n"
 msgstr ""
 
-#: /src/schooltool/app/main.py:93
+#: /src/schooltool/app/main.py:97
 msgid ""
 "\n"
 "This is not a SchoolTool 0.11 database file, aborting.\n"
 msgstr ""
-
-#: /src/schooltool/app/main.py:98
-#, fuzzy
-msgid ""
-"\n"
-"This is not a SchoolTool 0.10 database file, aborting.\n"
-"\n"
-"Please run the standalone database upgrade script.\n"
-msgstr ""
-"\n"
-"είναι not a αρχείο ο ο\n"
 
 #: /src/schooltool/app/rest/configure.zcml:244
 msgid "REST Interface"
@@ -1929,23 +1859,23 @@ msgstr ""
 msgid "Welcome to the SchoolTool server"
 msgstr "Καλώς ήλθατε στον εξυπηρετητή SchoolTool"
 
-#. Default: ""
-#: /src/schooltool/attendance/attendance.py:390
+#: /src/schooltool/app/security.zcml:61
+msgid "Everyone can view the application calendar."
+msgstr ""
+
+#: /src/schooltool/attendance/attendance.py:391
 msgid "Explanation was accepted."
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/attendance/attendance.py:392
+#: /src/schooltool/attendance/attendance.py:393
 msgid "Is not explanained yet."
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/attendance/attendance.py:512
+#: /src/schooltool/attendance/attendance.py:513
 msgid "Was late for ${section} (${mins} minutes)."
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/attendance/attendance.py:518
+#: /src/schooltool/attendance/attendance.py:519
 msgid "Was absent from ${section}."
 msgstr ""
 
@@ -1968,51 +1898,42 @@ msgstr ""
 msgid "You are not allowed to modify attendance information."
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/attendance/browser/attendance.py:681
 msgid "Added an explanation for $absence"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/attendance/browser/attendance.py:689
 msgid "Resolved $absence"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/attendance/browser/attendance.py:692
 msgid "Rejected explanation for $absence"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/attendance/browser/attendance.py:696
 msgid "Made $absence a tardy"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/attendance/browser/attendance.py:707
 msgid ""
-"Cannot add new explanation for $absence: old explanation not accepted/"
-"rejected"
+"Cannot add new explanation for $absence: old explanation not "
+"accepted/rejected"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/attendance/browser/attendance.py:718
 msgid "There are no outstanding explanations to accept for $absence"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/attendance/browser/attendance.py:729
 msgid "There are no outstanding explanations to reject for $absence"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/attendance/browser/attendance.py:745
 msgid ""
 "$absence is not a homeroom absence, only homeroom absences can be converted "
 "into tardies"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/attendance/browser/attendance.py:762
 msgid "Could not convert $absence absence intoa homeroom tardy"
 msgstr ""
@@ -2021,12 +1942,10 @@ msgstr ""
 msgid "homeroom"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/attendance/browser/attendance.py:807
 msgid "$date $time: absent from $section"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/attendance/browser/attendance.py:809
 msgid "$date $time: late for $section, arrived on $late_arrival"
 msgstr ""
@@ -2043,25 +1962,26 @@ msgstr ""
 msgid "Attendance Control Panel"
 msgstr ""
 
+#: /src/schooltool/attendance/browser/configure.zcml:68
+msgid "Attendance Panel"
+msgstr ""
+
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:4
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:12
-#, fuzzy
 msgid "Attendance preferences"
-msgstr "Προτιμήσεις ημερολογίου"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:78
-#, fuzzy
 msgid "back to site preferences"
-msgstr "Επεξεργασία προτιμήσεων"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:17
 msgid "Students with unresolved absences"
 msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:41
-#, fuzzy
 msgid "Person"
-msgstr "Άτομα"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/controlpanel.pt:42
 msgid "Homeroom<br />absences"
@@ -2127,9 +2047,8 @@ msgid "Make tardy"
 msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/real_time.pt:89
-#, fuzzy
 msgid "Minutes late:"
-msgstr "Λεπτά"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/retro.pt:30
 msgid "For Tardy, enter a number of minutes late. This field is optional."
@@ -2152,19 +2071,19 @@ msgid "Submit"
 msgstr "Υποβολή"
 
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:133
-#, fuzzy
 msgid "Summary"
-msgstr "Κυριακή"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:135
-#, fuzzy
 msgid "There are no terms defined."
-msgstr "Δεν υπάρχουν πλέον άλλες κινήσεις."
+msgstr ""
 
+#: /src/schooltool/attendance/browser/templates/student-attendance.pt:139
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:139
 msgid "Absences"
 msgstr ""
 
+#: /src/schooltool/attendance/browser/templates/student-attendance.pt:139
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:139
 msgid "Tardies"
 msgstr ""
@@ -2174,15 +2093,13 @@ msgid "There were no absences in this term."
 msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:34
-#, fuzzy
 msgid "There are no unresolved absences."
-msgstr "Δεν υπάρχουν πλέον άλλες κινήσεις."
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:4
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:10
-#, fuzzy
 msgid "Attendance of ${person}"
-msgstr "Πρόσθεσε νέο άτομο"
+msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:42
 msgid "Unresolved explained absences"
@@ -2192,9 +2109,12 @@ msgstr ""
 msgid "Unresolved unexplained absences"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/attendance/browser/tests/test_attendance.py:263
+#: /src/schooltool/attendance/browser/tests/test_attendance.py:277
 msgid "$title"
+msgstr ""
+
+#: /src/schooltool/attendance/configure.zcml:178
+msgid "Teachers can modify attendance records"
 msgstr ""
 
 #: /src/schooltool/attendance/interfaces.py:39
@@ -2230,16 +2150,17 @@ msgid ""
 "            explanation."
 msgstr ""
 
-#: /src/schooltool/batching/macros.pt:28 /src/schooltool/batching/macros.pt:35
-#, fuzzy
+#: /src/schooltool/batching/macros.pt:28
+#: /src/schooltool/batching/macros.pt:35
 msgid "Previous"
-msgstr "Προηγούμενος χρόνος"
+msgstr ""
 
 #: /src/schooltool/batching/macros.pt:36
 msgid "&laquo; <span>x</span> <span>${DYNAMIC_CONTENT}</span>"
 msgstr ""
 
-#: /src/schooltool/batching/macros.pt:46 /src/schooltool/batching/macros.pt:51
+#: /src/schooltool/batching/macros.pt:46
+#: /src/schooltool/batching/macros.pt:51
 #: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:35
 #: /src/schooltool/timetable/browser/templates/ttwizard.pt:20
 #: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:41
@@ -2254,72 +2175,15 @@ msgstr "Επόμενο"
 msgid "<span>x</span> &raquo;"
 msgstr ""
 
-#: /src/schooltool/commendation/browser.py:69
-msgid "<unknown>"
-msgstr ""
-
 #: /src/schooltool/commendation/commendation_add.pt:13
 msgid "Commendation"
 msgstr ""
 
 #: /src/schooltool/commendation/commendation_add.pt:4
-#, fuzzy
 msgid "Add Commendation"
-msgstr "_Χρήση ασφαλούς σύνδεσης:"
-
-#: /src/schooltool/commendation/interfaces.py:49
-msgid "Title of the commendation."
 msgstr ""
 
-#: /src/schooltool/commendation/interfaces.py:54
-msgid "A detailed description of the commendation."
-msgstr ""
-
-#: /src/schooltool/commendation/interfaces.py:58
-msgid "Scope"
-msgstr ""
-
-#: /src/schooltool/commendation/interfaces.py:59
-msgid "The scope of the commendation."
-msgstr ""
-
-#: /src/schooltool/commendation/interfaces.py:60
-msgid "school-wide"
-msgstr ""
-
-#: /src/schooltool/commendation/interfaces.py:60
-msgid "group"
-msgstr ""
-
-#: /src/schooltool/commendation/interfaces.py:60
-msgid "community"
-msgstr ""
-
-#: /src/schooltool/commendation/interfaces.py:61
-msgid "global"
-msgstr ""
-
-#: /src/schooltool/commendation/interfaces.py:61
-msgid "national"
-msgstr ""
-
-#: /src/schooltool/commendation/interfaces.py:61
-msgid "state"
-msgstr ""
-
-#: /src/schooltool/commendation/interfaces.py:66
-msgid "The date the commendation was issued."
-msgstr ""
-
-#: /src/schooltool/commendation/interfaces.py:71
-msgid "Grantor"
-msgstr ""
-
-#: /src/schooltool/commendation/interfaces.py:72
-msgid "The grantor of the commendation."
-msgstr ""
-
-#: /src/schooltool/configure.zcml:44
+#: /src/schooltool/configure.zcml:92
 #: /src/schooltool/app/browser/configure.zcml:202
 #: /src/schooltool/app/browser/configure.zcml:434
 #: /src/schooltool/group/browser/configure.zcml:16
@@ -2334,9 +2198,9 @@ msgstr ""
 #: /src/schooltool/level/browser/configure.zcml:10
 #: /src/schooltool/level/browser/configure.zcml:127
 #: /src/schooltool/requirement/browser/configure.zcml:46
-#: /src/schooltool/term/browser/configure.zcml:6
-#: /src/schooltool/term/browser/configure.zcml:16
-#: /src/schooltool/term/browser/configure.zcml:49
+#: /src/schooltool/term/browser/configure.zcml:8
+#: /src/schooltool/term/browser/configure.zcml:20
+#: /src/schooltool/term/browser/configure.zcml:53
 #: /src/schooltool/timetable/browser/configure.zcml:55
 #: /src/schooltool/timetable/browser/configure.zcml:65
 #: /src/schooltool/timetable/browser/configure.zcml:103
@@ -2346,20 +2210,21 @@ msgstr ""
 msgid "View"
 msgstr "Προβολή"
 
-#: /src/schooltool/configure.zcml:45
+#: /src/schooltool/configure.zcml:93
 #: /src/schooltool/group/browser/configure.zcml:39
 #: /src/schooltool/resource/browser/configure.zcml:40
 #: /src/schooltool/course/browser/configure.zcml:143
+#: /src/schooltool/level/browser/configure.zcml:53
 #: /src/schooltool/level/browser/level.pt:35
-#, fuzzy
+#: /src/schooltool/level/browser/level.pt:35
 msgid "Edit Info"
-msgstr "Επεξεργασία"
+msgstr ""
 
-#: /src/schooltool/configure.zcml:46
+#: /src/schooltool/configure.zcml:94
 msgid "Add Info"
 msgstr ""
 
-#: /src/schooltool/configure.zcml:47
+#: /src/schooltool/configure.zcml:95
 msgid "Edit Calendar Overlays"
 msgstr ""
 
@@ -2371,6 +2236,19 @@ msgstr "_Χρήση ασφαλούς σύνδεσης:"
 #: /src/schooltool/course/browser/configure.zcml:143
 msgid "Edit Section Information"
 msgstr "Επεξεργασία Πληροφοριών Τμήματος"
+
+#: /src/schooltool/course/browser/configure.zcml:22
+#: /src/schooltool/app/browser/templates/index.pt:12
+#: /src/schooltool/dashboard/term.pt:4
+#: /src/schooltool/course/browser/templates/section_container.pt:26
+msgid "Courses"
+msgstr "Μαθήματα"
+
+#: /src/schooltool/course/browser/configure.zcml:34
+#: /src/schooltool/dashboard/term.pt:10
+#: /src/schooltool/course/browser/templates/course.pt:18
+msgid "Sections"
+msgstr "Ενότητες"
 
 #: /src/schooltool/course/browser/configure.zcml:85
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:21
@@ -2389,10 +2267,6 @@ msgstr "Νέο Mάθημα"
 msgid "Course index"
 msgstr "Κατάλογος μαθημάτων"
 
-#: /src/schooltool/course/browser/course.py:41
-msgid "Add a new course"
-msgstr "Προσθήκη νέου μαθήματος"
-
 #: /src/schooltool/course/browser/csvimport.py:39
 #: /src/schooltool/group/browser/csvimport.py:39
 #: /src/schooltool/person/browser/csvimport.py:43
@@ -2406,37 +2280,36 @@ msgstr ""
 msgid "Titles may not be empty"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:103
+#: /src/schooltool/course/browser/section.py:119
 msgid "No such course."
 msgstr "Δεν υπάρχει τέτοιο μάθημα."
 
-#: /src/schooltool/course/browser/section.py:113
+#: /src/schooltool/course/browser/section.py:129
 #, fuzzy
 msgid "Need a course ID."
 msgstr "a ID."
 
-#. Default: ""
-#: /src/schooltool/course/browser/section.py:118
+#: /src/schooltool/course/browser/section.py:134
 #, fuzzy
 msgid "Add a Section to ${course}"
 msgstr "Προσθήκη a"
 
-#: /src/schooltool/course/browser/section.py:259
+#: /src/schooltool/course/browser/section.py:282
 #: /src/schooltool/course/browser/templates/section.pt:50
 #: /src/schooltool/course/browser/templates/section_container.pt:32
 #, fuzzy
 msgid "Instructors"
 msgstr "Constructors"
 
-#: /src/schooltool/course/browser/section.py:260
+#: /src/schooltool/course/browser/section.py:283
 msgid "Current Instructors"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:261
+#: /src/schooltool/course/browser/section.py:284
 msgid "Available Instructors"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:283
+#: /src/schooltool/course/browser/section.py:310
 #: /src/schooltool/gradebook/interfaces.py:75
 #: /src/schooltool/course/browser/templates/section.pt:69
 #: /src/schooltool/course/browser/templates/course_container.pt:52
@@ -2445,65 +2318,64 @@ msgstr ""
 msgid "Students"
 msgstr "Μαθητές"
 
-#: /src/schooltool/course/browser/section.py:284
+#: /src/schooltool/course/browser/section.py:311
 msgid "Current Students"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:285
+#: /src/schooltool/course/browser/section.py:312
 msgid "Available Students"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:311
+#: /src/schooltool/course/browser/section.py:342
+#: /src/schooltool/group/browser/configure.zcml:52
 #: /src/schooltool/app/browser/templates/index.pt:13
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:56
+#: /src/schooltool/group/browser/groupsviewlet.pt:4
 msgid "Groups"
 msgstr "Ομάδες"
 
-#: /src/schooltool/course/browser/section.py:312
-#: /src/schooltool/group/browser/group.py:60
+#: /src/schooltool/course/browser/section.py:343
+#: /src/schooltool/group/browser/group.py:61
 msgid "Current Groups"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:313
-#: /src/schooltool/group/browser/group.py:61
+#: /src/schooltool/course/browser/section.py:344
+#: /src/schooltool/group/browser/group.py:62
 msgid "Available Groups"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:338
+#: /src/schooltool/course/browser/section.py:366
+#: /src/schooltool/resource/browser/configure.zcml:54
 #: /src/schooltool/app/browser/templates/index.pt:14
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:70
+#: /src/schooltool/dashboard/school.pt:22
 #: /src/schooltool/course/browser/templates/section.pt:33
 msgid "Resources"
 msgstr "Πόροι"
 
-#: /src/schooltool/course/browser/section.py:339
+#: /src/schooltool/course/browser/section.py:367
 msgid "Current Resources"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:340
+#: /src/schooltool/course/browser/section.py:368
 #: /src/schooltool/app/browser/templates/event_booking.pt:36
 msgid "Available Resources"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:68
+#: /src/schooltool/course/browser/section.py:74
 msgid "Section index"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:69
-msgid "Add a new section"
-msgstr "Προσθήκη νέας ενότητας"
-
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:24
 msgid ""
-"CSV data <strong>must</strong> include a course title and <strong>may</"
-"strong> include an optional course description. Any extra information will "
-"be discarded."
+"CSV data <strong>must</strong> include a course title and "
+"<strong>may</strong> include an optional course description. Any extra "
+"information will be discarded."
 msgstr ""
 
 #. Default: ""
-#.  "Ancient History, Pre-history through 1000 A.D.\n"
-#.  "US History\n"
-#.  "World History, 1000 A.D. through the 20th century, text after a second comma"
+#. "Ancient History, Pre-history through 1000 A.D.\n"
+#. "US History\n"
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:31
 msgid ""
 "\n"
@@ -2532,10 +2404,6 @@ msgstr ""
 msgid "Upload schooltool courses as CSV"
 msgstr "Ανεβάστε τα μαθήματα ως CSV αρχείο"
 
-#: /src/schooltool/course/browser/templates/course.pt:18
-msgid "Sections"
-msgstr "Ενότητες"
-
 #: /src/schooltool/course/browser/templates/course.pt:36
 #: /src/schooltool/demographics/browser/nameinfo_view.pt:11
 msgid "photo"
@@ -2544,6 +2412,10 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/course.pt:53
 msgid "students"
 msgstr "Μαθητές"
+
+#: /src/schooltool/course/browser/templates/coursesviewlet.pt:4
+msgid "Sections Taught"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:27
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:80
@@ -2562,9 +2434,8 @@ msgid "Section of ${course} -- ${DYNAMIC_CONTENT}"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:22
-#, fuzzy
 msgid "edit info"
-msgstr "Επεξεργασία Ονόματος"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:22
 msgid "Change the name or description of this section."
@@ -2575,35 +2446,29 @@ msgid "Change the resources for this section."
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:40
-#, fuzzy
 msgid "book resources"
-msgstr "Πόροι"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:57
 msgid "Change the instructors for this section."
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:57
-#, fuzzy
 msgid "edit instructors"
-msgstr "Constructors"
+msgstr ""
 
-#: /src/schooltool/course/browser/templates/section.pt:87
+#: /src/schooltool/course/browser/templates/section.pt:85
 #, fuzzy
 msgid "edit individuals"
 msgstr "επεξεργασία"
 
-#: /src/schooltool/course/browser/templates/section.pt:87
+#: /src/schooltool/course/browser/templates/section.pt:85
 msgid "Change the students in this section individually"
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/section.pt:94
+#: /src/schooltool/course/browser/templates/section.pt:92
 msgid "Change the students in this section by groups"
 msgstr ""
-
-#: /src/schooltool/course/browser/templates/section.pt:94
-msgid "edit groups"
-msgstr "επεξεργασία ομάδων"
 
 #: /src/schooltool/course/browser/templates/section_add.pt:50
 #: /src/schooltool/skin/templates/simple_add.pt:45
@@ -2612,9 +2477,8 @@ msgid "Identifier (optional)"
 msgstr "Object Identifier (%s)"
 
 #: /src/schooltool/course/browser/templates/section_container.pt:29
-#, fuzzy
 msgid "Section"
-msgstr "Ενότητες"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_container.pt:38
 msgid "Current Size"
@@ -2660,9 +2524,16 @@ msgstr ""
 msgid "Description of the section."
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/course/section.py:63
 msgid "${instructors} -- ${courses}"
+msgstr ""
+
+#: /src/schooltool/course/security.zcml:50
+msgid "Everyone can view section information and calendars"
+msgstr ""
+
+#: /src/schooltool/dashboard/dashboard.pt:120
+msgid "Dashboard"
 msgstr ""
 
 #: /src/schooltool/dashboard/interfaces.py:45
@@ -2679,9 +2550,8 @@ msgid "New Person"
 msgstr "Νέο άτομο"
 
 #: /src/schooltool/demographics/browser/configure.zcml:189
-#, fuzzy
 msgid "Search"
-msgstr "Μάρτης"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/configure.zcml:199
 msgid "Schooltool Person Menu"
@@ -2733,19 +2603,24 @@ msgstr ""
 
 #: /src/schooltool/demographics/browser/configure.zcml:37
 #: /src/schooltool/gradebook/browser/configure.zcml:51
-#: /src/schooltool/term/browser/configure.zcml:58
+#: /src/schooltool/term/browser/configure.zcml:62
 #, fuzzy
 msgid "Edit"
 msgstr "Επεξεργασία"
 
-#: /src/schooltool/demographics/browser/personform.py:102
+#: /src/schooltool/demographics/browser/demographics_macros.pt:6
+msgid "N"
+msgstr ""
+
+#: /src/schooltool/demographics/browser/personform.py:103
 msgid "Apply and Next"
 msgstr ""
 
-#: /src/schooltool/demographics/browser/personform.py:113
-#: /src/schooltool/demographics/browser/personform.py:312
-#: /src/schooltool/person/browser/person.py:188
+#: /src/schooltool/demographics/browser/personform.py:114
+#: /src/schooltool/demographics/browser/personform.py:321
+#: /src/schooltool/person/browser/person.py:189
 #: /src/schooltool/skin/form.py:85
+#: /src/schooltool/timetable/browser/event.py:69
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:49
 #: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:37
 #: /src/schooltool/timetable/browser/templates/ttwizard.pt:22
@@ -2757,71 +2632,72 @@ msgstr ""
 msgid "Cancel"
 msgstr "Ακύρωση"
 
-#. Default: ""
-#: /src/schooltool/demographics/browser/personform.py:156
+#: /src/schooltool/demographics/browser/personform.py:157
 msgid "Change name information for ${fullname}"
 msgstr ""
 
-#: /src/schooltool/demographics/browser/personform.py:172
+#: /src/schooltool/demographics/browser/personform.py:173
 msgid "Change name"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/demographics/browser/personform.py:183
+#: /src/schooltool/demographics/browser/personform.py:184
 msgid "Change demographics for ${fullname}"
 msgstr ""
 
-#: /src/schooltool/demographics/browser/personform.py:191
+#: /src/schooltool/demographics/browser/personform.py:192
 msgid "Demographics"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/demographics/browser/personform.py:202
+#: /src/schooltool/demographics/browser/personform.py:203
 msgid "Change school data for ${fullname}"
 msgstr ""
 
-#: /src/schooltool/demographics/browser/personform.py:212
+#: /src/schooltool/demographics/browser/personform.py:213
 msgid "School data"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/demographics/browser/personform.py:230
+#: /src/schooltool/demographics/browser/personform.py:231
 msgid "Change contact information for ${fullname}"
 msgstr ""
 
-#: /src/schooltool/demographics/browser/personform.py:238
+#: /src/schooltool/demographics/browser/personform.py:239
 msgid "Contact information"
 msgstr ""
 
-#: /src/schooltool/demographics/browser/personform.py:272
 #: /src/schooltool/demographics/browser/personform.py:273
+#: /src/schooltool/demographics/browser/personform.py:274
 #: /src/schooltool/person/interfaces.py:78
 #: /src/schooltool/app/browser/templates/login.pt:38
 msgid "Username"
 msgstr "Όνομα Χρήστη"
 
-#: /src/schooltool/demographics/browser/personform.py:277
-#: /src/schooltool/person/browser/person.py:167
+#: /src/schooltool/demographics/browser/personform.py:278
+#: /src/schooltool/person/browser/person.py:168
 #: /src/schooltool/app/browser/templates/login.pt:44
 msgid "Password"
 msgstr "Κωδικός"
 
-#: /src/schooltool/demographics/browser/personform.py:292
+#: /src/schooltool/demographics/browser/personform.py:293
 msgid "This username is already used!"
 msgstr "Το όνομα χρήστη που δώσατε χρησιμοποιείται ήδη"
 
-#: /src/schooltool/demographics/browser/personform.py:345
+#: /src/schooltool/demographics/browser/personform.py:300
+msgid "Names cannot begin with '+' or '@' or contain '/'"
+msgstr ""
+
+#: /src/schooltool/demographics/browser/personform.py:354
 msgid "Invalid teacher. Possible causes: deleted or renamed."
 msgstr ""
 
-#: /src/schooltool/demographics/browser/personform.py:377
+#: /src/schooltool/demographics/browser/personform.py:386
 msgid "Invalid group. Possible causes: deleted or renamed."
 msgstr ""
 
-#: /src/schooltool/demographics/browser/personform.py:98
-#: /src/schooltool/demographics/browser/personform.py:289
-#: /src/schooltool/person/browser/person.py:178
+#: /src/schooltool/demographics/browser/personform.py:99
+#: /src/schooltool/demographics/browser/personform.py:290
+#: /src/schooltool/person/browser/person.py:179
 #: /src/schooltool/skin/form.py:55
+#: /src/schooltool/timetable/browser/event.py:64
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:46
 msgid "Apply"
 msgstr "Εφαρμογή"
@@ -2829,14 +2705,12 @@ msgstr "Εφαρμογή"
 #: /src/schooltool/demographics/browser/schooldata_view.pt:3
 #: /src/schooltool/demographics/browser/nameinfo_view.pt:3
 #: /src/schooltool/demographics/browser/display_form.pt:3
-#, fuzzy
 msgid "Display"
-msgstr "Ημερησίως"
+msgstr ""
 
-#: /src/schooltool/demographics/browser/search.pt:24
-#, fuzzy
+#: /src/schooltool/demographics/browser/search.pt:31
 msgid "There were no results."
-msgstr "Δεν υπάρχουν πλέον άλλες κινήσεις."
+msgstr ""
 
 #: /src/schooltool/demographics/browser/search.pt:6
 msgid ""
@@ -2845,10 +2719,9 @@ msgid ""
 "name, use <em>*john*</em>."
 msgstr ""
 
-#: /src/schooltool/demographics/browser/table.pt:8
-#, fuzzy
+#: /src/schooltool/demographics/browser/table.pt:15
 msgid "There are no persons."
-msgstr "Δεν υπάρχουν πλέον άλλες κινήσεις."
+msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:120
 msgid "Gender"
@@ -2939,8 +2812,8 @@ msgid "Cell phone"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:285
-#: /src/schooltool/app/browser/configure.zcml:536
-#: /src/schooltool/app/rest/configure.zcml:255 /src/schooltool/note/notes.pt:2
+#: /src/schooltool/note/configure.zcml:102
+#: /src/schooltool/note/notes.pt:2
 msgid "Notes"
 msgstr ""
 
@@ -3012,12 +2885,56 @@ msgid "Photo (in JPEG format)"
 msgstr "Φωτογραφία (σε jpeg μορφή)"
 
 #: /src/schooltool/devmode/configure.zcml:89
-#, fuzzy
 msgid "Configure"
-msgstr "Μαθήματα"
+msgstr ""
 
 #: /src/schooltool/devmode/configure.zcml:97
 msgid "Error List"
+msgstr ""
+
+#: /src/schooltool/devmode/devmode.pt:11
+msgid "Developer Tools"
+msgstr ""
+
+#: /src/schooltool/devmode/devmode.pt:18
+msgid "Introspector"
+msgstr ""
+
+#: /src/schooltool/devmode/devmode.pt:19
+msgid "API Docs"
+msgstr ""
+
+#: /src/schooltool/devmode/devmode.pt:20
+msgid "Sample data"
+msgstr ""
+
+#: /src/schooltool/devmode/devmode.pt:21
+msgid "Setup data"
+msgstr ""
+
+#: /src/schooltool/devmode/restdoc_macros.pt:15
+#: /src/schooltool/devmode/restdoc_macros.pt:31
+msgid "Factory path:"
+msgstr ""
+
+#: /src/schooltool/devmode/restdoc_macros.pt:43
+msgid "Template:"
+msgstr ""
+
+#: /src/schooltool/devmode/restdoc_macros.pt:52
+msgid "Permission:"
+msgstr ""
+
+#: /src/schooltool/devmode/restdoc_macros.pt:6
+msgid "Registered at:"
+msgstr ""
+
+#: /src/schooltool/devmode/restdoc_macros.pt:61
+msgid "Schema:"
+msgstr ""
+
+#: /src/schooltool/devmode/restdoc_macros.pt:72
+msgid "Container:"
 msgstr ""
 
 #: /src/schooltool/gradebook/activity.py:62
@@ -3035,15 +2952,27 @@ msgstr ""
 msgid "(inherited)"
 msgstr ""
 
-#. Default: "Remove"
+#: /src/schooltool/gradebook/browser/activities_overview.pt:46
+#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
+#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
+#: /src/schooltool/course/browser/templates/course_container.pt:59
+#: /src/schooltool/course/browser/templates/section_container.pt:83
+#: /src/schooltool/skin/templates/container.pt:46
+#: /src/schooltool/skin/templates/table.pt:10
+#: /src/schooltool/skin/templates/container_delete.pt:27
+#: /src/schooltool/demographics/browser/search.pt:26
+#: /src/schooltool/demographics/browser/table.pt:10
+#: /src/schooltool/person/browser/person_container_delete.pt:30
+#: /src/schooltool/term/browser/term-container-delete.pt:29
+msgid "delete-button"
+msgstr "κουμπί-διαγραφής"
+
 #: /src/schooltool/gradebook/browser/categories.pt:27
 #: /src/schooltool/level/browser/record.pt:71
 #: /src/schooltool/level/browser/record.pt:86
-#, fuzzy
 msgid "remove-button"
-msgstr "κουμπί-διαγραφής"
+msgstr ""
 
-#. Default: "Add"
 #: /src/schooltool/gradebook/browser/categories.pt:36
 #: /src/schooltool/course/browser/templates/section_add.pt:64
 #: /src/schooltool/course/browser/templates/section_add.pt:69
@@ -3058,12 +2987,10 @@ msgstr "κουμπί-προσθήκης"
 msgid "Manage Activity Categories"
 msgstr ""
 
-#. Default: "Change"
 #: /src/schooltool/gradebook/browser/categories.pt:45
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
-#, fuzzy
 msgid "change-button"
-msgstr "Κουμπί ακύρωσης"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/category.py:43
 msgid "Categories"
@@ -3102,15 +3029,16 @@ msgid "Gradebook"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/configure.zcml:38
-#, fuzzy
 msgid "Add an Activity"
-msgstr "_Χρήση ασφαλούς σύνδεσης:"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/configure.zcml:51
 msgid "Edit Activity"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/configure.zcml:8
+#: /src/schooltool/gradebook/browser/configure.zcml:20
+#: /src/schooltool/dashboard/school.pt:10
 msgid "Activity Categories"
 msgstr ""
 
@@ -3134,12 +3062,10 @@ msgstr ""
 msgid "N/A"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/gradebook/browser/gradebook.py:170
 msgid "The grade $value for activity $name is not valid."
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/gradebook/browser/gradebook.py:238
 msgid "The grade $value for $name is not valid."
 msgstr ""
@@ -3154,9 +3080,8 @@ msgid "Grade"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:28
-#, fuzzy
 msgid "Student Name"
-msgstr "Μαθητές"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:29
 msgid "Activity Name"
@@ -3174,14 +3099,12 @@ msgstr ""
 msgid "Max. Score"
 msgstr ""
 
-#. Default: "Update"
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:61
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:64
 #: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:54
 #: /src/schooltool/gradebook/browser/gradebook_grade_activity.pt:58
-#, fuzzy
 msgid "update-button"
-msgstr "κουμπί-διαγραφής"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:61
 #: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:54
@@ -3195,9 +3118,8 @@ msgstr ""
 
 #: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:13
 #: /src/schooltool/gradebook/browser/gradebook_grade_activity.pt:13
-#, fuzzy
 msgid "Grade ${name}"
-msgstr "Περίοδος ${number}"
+msgstr ""
 
 #: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:32
 msgid "Activity"
@@ -3242,6 +3164,10 @@ msgstr ""
 
 #: /src/schooltool/gradebook/configure.zcml:138
 msgid "Gradebook API"
+msgstr ""
+
+#: /src/schooltool/gradebook/configure.zcml:148
+msgid "Administration can grade students"
 msgstr ""
 
 #: /src/schooltool/gradebook/interfaces.py:39
@@ -3290,24 +3216,20 @@ msgid "Add a Group"
 msgstr "Προσθήκη μιας ομάδας"
 
 #: /src/schooltool/group/browser/configure.zcml:39
-#, fuzzy
 msgid "Edit Group Information"
-msgstr "Επεξεργασία Πληροφοριών Τμήματος"
+msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:76
-#, fuzzy
 msgid "Change Membership"
-msgstr "Αλλαγή προτιμήσεων"
+msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:91
-#, fuzzy
 msgid "New Group"
-msgstr "Ομάδες"
+msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:98
-#, fuzzy
 msgid "A Group"
-msgstr "Προσθήκη μιας ομάδας"
+msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:98
 msgid "SchoolBell Group"
@@ -3315,15 +3237,14 @@ msgstr ""
 
 #: /src/schooltool/group/browser/group-csvimport.pt:25
 msgid ""
-"CSV data <strong>must</strong> include a group title and <strong>may</"
-"strong> include an optional group description. Any extra information will be "
-"discarded."
+"CSV data <strong>must</strong> include a group title and "
+"<strong>may</strong> include an optional group description. Any extra "
+"information will be discarded."
 msgstr ""
 
 #. Default: ""
-#.  "LUG, Linux Users Group\n"
-#.  "Chess Club\n"
-#.  "Sports Club, After-school sports club, <em>text after a second comma</em>"
+#. "LUG, Linux Users Group\n"
+#. "Chess Club\n"
 #: /src/schooltool/group/browser/group-csvimport.pt:32
 msgid ""
 "\n"
@@ -3333,7 +3254,6 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/group/browser/group-csvimport.pt:37
-#, fuzzy
 msgid ""
 "The above example will create 3 groups titled 'LUG', 'Chess Club' and "
 "'Sports Club'. The first and last group will have the descriptions 'Linux "
@@ -3341,55 +3261,54 @@ msgid ""
 "group will have no description, and the extra \"text after a second comma\" "
 "text on the third group will be ignored."
 msgstr ""
-"Το παραπάνω παράδειγμα θα δημιουργήσει 3 μαθήματα με τίτλους: 'Ancient "
-"History', 'US History' και 'World History'. Το πρώτο και το τελευταίο μάθημα "
-"θα έχουν τις εξής περιγραφές: 'Pre-history through 1000 A.D.' και '1000 A.D. "
-"through the 20th century'. Το δεύτερο μάθημα δεν θα έχει περιγραφή, και το "
-"επιπλον \"text after a second comma\" κείμενο στο τρίτο μάθημα θα αγνοηθεί."
 
 #: /src/schooltool/group/browser/group-csvimport.pt:4
-#, fuzzy
 msgid "Upload SchoolTool groups as CSV"
-msgstr "Ανεβάστε τα άτομα σε CSV αρχείο"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.pt:16
-#, fuzzy
 msgid "Members"
-msgstr "Δεκέμβριος"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.pt:23
-#, fuzzy
 msgid "edit members"
-msgstr "Επεξεργασία Ονόματος"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.pt:23
 msgid "Change the people who are members of this group."
 msgstr ""
 
-#: /src/schooltool/group/browser/group.py:47
-msgid "Group index"
-msgstr ""
-
-#: /src/schooltool/group/browser/group.py:48
-msgid "Add a new group"
-msgstr "Πρόσθεσε νέα ομάδα"
-
-#. Default: ""
-#: /src/schooltool/group/browser/group.py:59
-msgid "Groups of ${person}"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/group/browser/group.py:97
+#: /src/schooltool/group/browser/group.py:101
 msgid "Members of ${group}"
 msgstr ""
 
-#: /src/schooltool/group/browser/group.py:98
+#: /src/schooltool/group/browser/group.py:102
 msgid "Current Members"
 msgstr ""
 
-#: /src/schooltool/group/browser/group.py:99
+#: /src/schooltool/group/browser/group.py:103
 msgid "Add Members"
+msgstr ""
+
+#: /src/schooltool/group/browser/group.py:50
+msgid "Group index"
+msgstr ""
+
+#: /src/schooltool/group/browser/group.py:60
+msgid "Groups of ${person}"
+msgstr ""
+
+#: /src/schooltool/group/browser/groupsviewlet.pt:15
+msgid "Manage this person's memberships"
+msgstr ""
+
+#: /src/schooltool/group/browser/groupsviewlet.pt:15
+#: /src/schooltool/course/browser/templates/section.pt:92
+msgid "edit groups"
+msgstr "επεξεργασία ομάδων"
+
+#: /src/schooltool/group/help/configure.zcml:8
+msgid "Group Container - Contents"
 msgstr ""
 
 #: /src/schooltool/group/interfaces.py:44
@@ -3400,20 +3319,37 @@ msgstr "Όνομα ομάδας"
 msgid "Description of the group."
 msgstr "Περιγραφή ομάδας"
 
-#. Default: "Calendar"
 #: /src/schooltool/group/rest/group.pt:14
-#, fuzzy
 msgid "Private_calendar"
-msgstr "Εμφάνιση ημερολογίου"
+msgstr ""
 
-#: /src/schooltool/help/configure.zcml:46
+#: /src/schooltool/group/security.zcml:10
+msgid "Everyone can view group information."
+msgstr ""
+
+#: /src/schooltool/group/security.zcml:15
+msgid "Everyone can view group calendars."
+msgstr ""
+
+#: /src/schooltool/group/security.zcml:20
+msgid "Group members can edit group calendars."
+msgstr ""
+
+#: /src/schooltool/group/security.zcml:5
+msgid "Everyone can view group lists."
+msgstr ""
+
+#: /src/schooltool/help/configure.zcml:47
 msgid "Contextual Help"
 msgstr ""
 
+#: /src/schooltool/help/helplink.pt:2
+msgid "Help"
+msgstr ""
+
 #: /src/schooltool/level/browser/configure.zcml:102
-#, fuzzy
 msgid "Add a Level"
-msgstr "Προσθήκη γεγονότων"
+msgstr ""
 
 #: /src/schooltool/level/browser/configure.zcml:114
 msgid "Edit Level"
@@ -3428,6 +3364,47 @@ msgstr ""
 msgid "Academic Record"
 msgstr ""
 
+#: /src/schooltool/level/browser/configure.zcml:19
+#: /src/schooltool/app/browser/templates/index.pt:15
+#: /src/schooltool/dashboard/school.pt:4
+msgid "Levels"
+msgstr ""
+
+#: /src/schooltool/level/browser/configure.zcml:31
+msgid "Validate Levels"
+msgstr ""
+
+#: /src/schooltool/level/browser/configure.zcml:42
+msgid "New Level"
+msgstr ""
+
+#: /src/schooltool/level/browser/disconnectedlevelerror_info.pt:20
+#: /src/schooltool/level/browser/levellooperror_info.pt:17
+msgid "Explanation"
+msgstr ""
+
+#: /src/schooltool/level/browser/disconnectedlevelerror_info.pt:21
+msgid ""
+"Disconnected levels will simply never be used, since they are not connected "
+"to a graph. This does not affect the integrity of the level graphs, but it "
+"is not desirable."
+msgstr ""
+
+#: /src/schooltool/level/browser/disconnectedlevelerror_info.pt:27
+#: /src/schooltool/level/browser/levellooperror_info.pt:24
+msgid "Solution"
+msgstr ""
+
+#: /src/schooltool/level/browser/disconnectedlevelerror_info.pt:28
+msgid ""
+"You can either <a href=\"@@index.html\">remove</a> those levels or connect "
+"them to an existing graph."
+msgstr ""
+
+#: /src/schooltool/level/browser/disconnectedlevelerror_info.pt:3
+msgid "One or more disconnected levels detected."
+msgstr ""
+
 #: /src/schooltool/level/browser/level.pt:15
 msgid "This is an initial level."
 msgstr ""
@@ -3436,19 +3413,15 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: /src/schooltool/level/browser/level.py:41
+#: /src/schooltool/level/browser/level.py:42
 msgid "Level index"
 msgstr ""
 
-#: /src/schooltool/level/browser/level.py:42
-msgid "Add a new level"
-msgstr ""
-
-#: /src/schooltool/level/browser/level.py:60
+#: /src/schooltool/level/browser/level.py:59
 msgid "Previous Level"
 msgstr ""
 
-#: /src/schooltool/level/browser/level.py:61
+#: /src/schooltool/level/browser/level.py:60
 msgid ""
 "The previous level in the school. If None, then there is no previous level."
 msgstr ""
@@ -3460,30 +3433,50 @@ msgid ""
 "Graphs</li> <li>Disconnected Levels</li> </ol>"
 msgstr ""
 
-#. Default: "Validate"
 #: /src/schooltool/level/browser/level_validation.pt:37
-#, fuzzy
 msgid "validate-button"
-msgstr "κουμπί-προσθήκης"
+msgstr ""
 
 #: /src/schooltool/level/browser/level_validation.pt:4
 #: /src/schooltool/level/browser/level_validation.pt:8
 msgid "Level Validation"
 msgstr ""
 
+#: /src/schooltool/level/browser/levellooperror_info.pt:13
+msgid ""
+"The loop was closed with level <a href=\"${DYNAMIC_CONTENT}\"> "
+"${level_title} </a> (${level_id})."
+msgstr ""
+
+#: /src/schooltool/level/browser/levellooperror_info.pt:18
+msgid ""
+"Level graphs can only be linear. If a level graph is a loop, then students "
+"will not be able to graduate, since there is never a final level that leads "
+"to graduation."
+msgstr ""
+
+#: /src/schooltool/level/browser/levellooperror_info.pt:3
+msgid "A Level Loop Error was detected."
+msgstr ""
+
+#: /src/schooltool/level/browser/levellooperror_info.pt:38
+msgid ""
+"Simply do not specify level ${next_level_title} (${next_level_id}) as the "
+"next level of <a href=\"${DYNAMIC_CONTENT}\"> ${level_title} </a> "
+"(${level_id})."
+msgstr ""
+
 #: /src/schooltool/level/browser/promotion.pt:100
-#, fuzzy
 msgid "Current Level"
-msgstr "Τρέχουσα Εβδομάδα"
+msgstr ""
 
 #: /src/schooltool/level/browser/promotion.pt:128
 msgid "O"
 msgstr ""
 
 #: /src/schooltool/level/browser/promotion.pt:21
-#, fuzzy
 msgid "Enroll Students"
-msgstr "Μαθητές"
+msgstr ""
 
 #: /src/schooltool/level/browser/promotion.pt:29
 #: /src/schooltool/level/browser/promotion.pt:59
@@ -3491,11 +3484,9 @@ msgstr "Μαθητές"
 msgid "Student Name (username)"
 msgstr ""
 
-#. Default: "Enroll"
 #: /src/schooltool/level/browser/promotion.pt:44
-#, fuzzy
 msgid "enroll-button"
-msgstr "Κουμπί ακύρωσης"
+msgstr ""
 
 #: /src/schooltool/level/browser/promotion.pt:44
 msgid "E"
@@ -3513,12 +3504,10 @@ msgstr ""
 msgid "I"
 msgstr ""
 
-#. Default: "Apply"
 #: /src/schooltool/level/browser/promotion.pt:84
 #: /src/schooltool/level/browser/promotion.pt:128
-#, fuzzy
 msgid "apply-button"
-msgstr "κουμπί-προσθήκης"
+msgstr ""
 
 #: /src/schooltool/level/browser/promotion.pt:91
 msgid "Level Outcome"
@@ -3541,7 +3530,6 @@ msgstr ""
 msgid "Work Item successfully finished."
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/level/browser/promotion.py:64
 msgid "Current Level: $level"
 msgstr ""
@@ -3588,11 +3576,9 @@ msgid ""
 "button below, the student's school career will be initialized."
 msgstr ""
 
-#. Default: "Initialize"
 #: /src/schooltool/level/browser/record.pt:99
-#, fuzzy
 msgid "initialize-button"
-msgstr "Κουμπί ακύρωσης"
+msgstr ""
 
 #: /src/schooltool/level/browser/record.py:56
 msgid "The status was successfully updated."
@@ -3666,7 +3652,8 @@ msgid "Level Process"
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:175
-msgid "The workflow process of the level the student is currently completing."
+msgid ""
+"The workflow process of the level the student is currently completing."
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:76
@@ -3720,10 +3707,13 @@ msgstr ""
 msgid "The initial level of the student in the school."
 msgstr ""
 
+#: /src/schooltool/note/configure.zcml:108
+msgid "Notes (Rest)"
+msgstr ""
+
 #: /src/schooltool/note/configure.zcml:39
-#, fuzzy
 msgid "New Note"
-msgstr "_Εισάγετε νέο κείμενο:"
+msgstr ""
 
 #: /src/schooltool/note/interfaces.py:43
 msgid "Title of the note."
@@ -3737,7 +3727,8 @@ msgstr ""
 msgid "Body of the note."
 msgstr ""
 
-#: /src/schooltool/note/interfaces.py:50 /src/schooltool/note/note_add.pt:24
+#: /src/schooltool/note/interfaces.py:50
+#: /src/schooltool/note/note_add.pt:24
 msgid "Privacy"
 msgstr ""
 
@@ -3750,31 +3741,41 @@ msgid "Who can view the note"
 msgstr ""
 
 #: /src/schooltool/note/note_add.pt:30
-#, fuzzy
 msgid "Private"
-msgstr "Δημιουργία"
+msgstr ""
 
 #: /src/schooltool/note/note_add.pt:31
 msgid "Public"
 msgstr ""
 
 #: /src/schooltool/note/note_add.pt:4
-#, fuzzy
 msgid "Add note"
-msgstr "Προσθήκη term"
+msgstr ""
 
 #: /src/schooltool/note/notes.pt:17
-#, fuzzy
 msgid "Delete"
-msgstr "Ημαρομηνία"
+msgstr ""
 
 #: /src/schooltool/note/notes.pt:8
 msgid "( p )"
 msgstr ""
 
+#: /src/schooltool/person/browser/configure.zcml:100
+msgid "Edit Password"
+msgstr ""
+
 #: /src/schooltool/person/browser/configure.zcml:149
 msgid "Person Container - Contents"
 msgstr ""
+
+#: /src/schooltool/person/browser/configure.zcml:78
+#: /src/schooltool/person/browser/person-csvimport.pt:22
+msgid "Import Persons"
+msgstr "Εισαγωγή προσώπων"
+
+#: /src/schooltool/person/browser/configure.zcml:89
+msgid "Change Preferences"
+msgstr "Αλλαγή προτιμήσεων"
 
 #: /src/schooltool/person/browser/csvimport.py:47
 msgid "username may not be empty"
@@ -3784,14 +3785,9 @@ msgstr "Το όνομα χρήστη δεν μπορεί να μένει κεν�
 msgid "fullname may not be empty"
 msgstr "Το πλήρες όνομα δεν μπορεί να μένει κενό"
 
-#. Default: ""
 #: /src/schooltool/person/browser/csvimport.py:62
 msgid "Duplicate username: ${username}"
 msgstr "Διπλό όνομα χρήστη: {username}"
-
-#: /src/schooltool/person/browser/person-csvimport.pt:22
-msgid "Import Persons"
-msgstr "Εισαγωγή προσώπων"
 
 #: /src/schooltool/person/browser/person-csvimport.pt:25
 #, fuzzy
@@ -3801,9 +3797,8 @@ msgid ""
 msgstr "<strong></strong> a and a<strong></strong>."
 
 #. Default: ""
-#.  "jjones, Jimmy Jones\n"
-#.  "jbjones, Jim Bob Jones, r2m45J\n"
-#.  "howard, Howard"
+#. "jjones, Jimmy Jones\n"
+#. "jbjones, Jim Bob Jones, r2m45J\n"
 #: /src/schooltool/person/browser/person-csvimport.pt:31
 #, fuzzy
 msgid ""
@@ -3827,20 +3822,24 @@ msgstr "τρία and τρία a and Σημείωση in κείμενο."
 msgid "Upload SchoolTool persons as CSV"
 msgstr "Ανεβάστε τα άτομα σε CSV αρχείο"
 
-#: /src/schooltool/person/browser/person.py:176
+#: /src/schooltool/person/browser/person.py:177
 msgid "Edit password"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:181
+#: /src/schooltool/person/browser/person.py:182
 msgid "No new password was supplied so original password is unchanged"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:186
+#: /src/schooltool/person/browser/person.py:187
 msgid "Changed password"
 msgstr ""
 
 #: /src/schooltool/person/browser/person_container_delete.pt:18
 msgid "Sorry, you may not delete your own user account."
+msgstr ""
+
+#: /src/schooltool/person/browser/person_filter.pt:5
+msgid "All groups"
 msgstr ""
 
 #: /src/schooltool/person/browser/person_preferences.pt:14
@@ -3852,62 +3851,62 @@ msgstr "Αλλαγή προτιμήσεων χρήστη"
 msgid "Edit person preferences"
 msgstr "Επεξεργασία προτιμήσεων"
 
-#: /src/schooltool/person/interfaces.py:154
+#: /src/schooltool/person/interfaces.py:161
 msgid "Time Zone"
 msgstr "Ζώνη Ώρας"
 
-#: /src/schooltool/person/interfaces.py:155
+#: /src/schooltool/person/interfaces.py:162
 msgid "Time Zone used to display your calendar"
 msgstr ""
 
-#: /src/schooltool/person/interfaces.py:159
-#: /src/schooltool/person/interfaces.py:160
+#: /src/schooltool/person/interfaces.py:166
+#: /src/schooltool/person/interfaces.py:167
 msgid "Time Format"
 msgstr "Μορφή ώρας"
 
-#: /src/schooltool/person/interfaces.py:161
+#: /src/schooltool/person/interfaces.py:168
 msgid "HH:MM"
 msgstr "ΩΩ:ΛΛ"
 
-#: /src/schooltool/person/interfaces.py:162
+#: /src/schooltool/person/interfaces.py:169
 msgid "HH:MM am/pm"
 msgstr "ΩΩ:ΛΛ πμ/μμ"
 
-#: /src/schooltool/person/interfaces.py:165
-#: /src/schooltool/person/interfaces.py:166
+#: /src/schooltool/person/interfaces.py:172
+#: /src/schooltool/person/interfaces.py:173
 msgid "Date Format"
 msgstr "Μορφή ημερομηνίας"
 
-#: /src/schooltool/person/interfaces.py:167
+#: /src/schooltool/person/interfaces.py:174
 msgid "MM/DD/YY"
 msgstr "ΜΜ/ΗΗ/ΧΧ"
 
-#: /src/schooltool/person/interfaces.py:168
+#: /src/schooltool/person/interfaces.py:175
 msgid "YYYY-MM-DD"
 msgstr "ΧΧΧΧ-ΜΜ-ΗΗ"
 
-#: /src/schooltool/person/interfaces.py:169
+#: /src/schooltool/person/interfaces.py:176
 msgid "Day Month, Year"
 msgstr "Ημέρα Μήνας, Χρόνος"
 
-#: /src/schooltool/person/interfaces.py:173
+#: /src/schooltool/person/interfaces.py:180
 msgid "Week starts on:"
 msgstr "Η Εβδομάδα αρχίζει την"
 
-#: /src/schooltool/person/interfaces.py:174
+#: /src/schooltool/person/interfaces.py:181
 msgid "Start display of weeks on Sunday or Monday"
 msgstr ""
 
-#: /src/schooltool/person/interfaces.py:187
+#: /src/schooltool/person/interfaces.py:194
 msgid "Show periods"
 msgstr "Εμφάνιση περιόδων"
 
-#: /src/schooltool/person/interfaces.py:188
+#: /src/schooltool/person/interfaces.py:195
 msgid "Show period names in daily view"
 msgstr "Προβολή ονομάτων περιόδων στη ημερήσια εμφάνιση"
 
-#: /src/schooltool/person/interfaces.py:191
-#: /src/schooltool/person/interfaces.py:192
+#: /src/schooltool/person/interfaces.py:198
+#: /src/schooltool/person/interfaces.py:199
 msgid "Make calendar public"
 msgstr ""
 
@@ -3915,10 +3914,27 @@ msgstr ""
 msgid "Name that should be displayed"
 msgstr ""
 
+#: /src/schooltool/person/security.zcml:10
+msgid "Everyone can view info of persons"
+msgstr ""
+
+#: /src/schooltool/person/security.zcml:15
+msgid "Persons can set their own preferences"
+msgstr ""
+
+#: /src/schooltool/person/security.zcml:20
+msgid "Persons can change their own passwords"
+msgstr ""
+
+#: /src/schooltool/person/security.zcml:5
+msgid "Everyone can view the list of persons"
+msgstr ""
+
 #: /src/schooltool/relationship/configure.zcml:33
 #: /src/schooltool/app/rest/configure.zcml:249
 #: /src/schooltool/resource/rest/resource.pt:8
-#: /src/schooltool/group/rest/group.pt:8 /src/schooltool/level/rest/level.pt:9
+#: /src/schooltool/group/rest/group.pt:8
+#: /src/schooltool/level/rest/level.pt:9
 #: /src/schooltool/course/rest/course.pt:7
 #: /src/schooltool/course/rest/section.pt:7
 #: /src/schooltool/person/rest/person.pt:7
@@ -3926,47 +3942,58 @@ msgid "Relationships"
 msgstr "Σχέσεις"
 
 #: /src/schooltool/requirement/browser/configure.zcml:19
-#, fuzzy
 msgid "Add a Requirement"
-msgstr "Προσθήκη πόρου"
+msgstr ""
 
+#: /src/schooltool/requirement/browser/configure.zcml:32
 #: /src/schooltool/requirement/browser/configure.zcml:32
 msgid "Edit Requirement"
 msgstr ""
 
 #: /src/schooltool/requirement/browser/configure.zcml:69
-#, fuzzy
 msgid "New Requirement"
-msgstr "_Εισάγετε νέο κείμενο:"
+msgstr ""
+
+#: /src/schooltool/requirement/browser/requirement.pt:31
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:64
+#: /src/schooltool/skin/templates/filter.pt:4
+#: /src/schooltool/person/browser/person_filter.pt:11
+#: /src/schooltool/attendance/browser/templates/controlpanel.pt:33
+msgid "Find Now"
+msgstr "Βρες"
+
+#: /src/schooltool/requirement/browser/requirement.pt:33
+#: /src/schooltool/sampledata/sampledata.pt:69
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:66
+#: /src/schooltool/skin/templates/filter.pt:6
+#: /src/schooltool/person/browser/person_filter.pt:13
+#: /src/schooltool/attendance/browser/templates/controlpanel.pt:35
+msgid "Clear"
+msgstr "Εκκαθάριση"
 
 #: /src/schooltool/requirement/browser/requirement.pt:40
 #: /src/schooltool/course/browser/templates/course_container.pt:28
 #: /src/schooltool/skin/templates/container.pt:29
-#: /src/schooltool/skin/templates/table_macros.pt:5
+#: /src/schooltool/skin/templates/table_macros.pt:6
 msgid "Showing"
 msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.pt:42
 #: /src/schooltool/course/browser/templates/course_container.pt:30
 #: /src/schooltool/skin/templates/container.pt:31
-#: /src/schooltool/skin/templates/table_macros.pt:7
+#: /src/schooltool/skin/templates/table_macros.pt:8
 msgid "of"
 msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.pt:44
 #: /src/schooltool/course/browser/templates/course_container.pt:32
 #: /src/schooltool/skin/templates/container.pt:33
-#: /src/schooltool/skin/templates/table_macros.pt:9
-#, fuzzy
+#: /src/schooltool/skin/templates/table_macros.pt:10
 msgid "items"
-msgstr "Λεπτά"
-
-#: /src/schooltool/requirement/browser/requirement.py:53
-msgid "Requirement index"
 msgstr ""
 
 #: /src/schooltool/requirement/browser/requirement.py:54
-msgid "Add a new Requirement"
+msgid "Requirement index"
 msgstr ""
 
 #: /src/schooltool/requirement/browser/scoresystem.py:36
@@ -3987,35 +4014,31 @@ msgid "Add a Resource"
 msgstr "Προσθήκη πόρου"
 
 #: /src/schooltool/resource/browser/configure.zcml:40
-#, fuzzy
 msgid "Edit Resource Information"
-msgstr "Επεξεργασία Πληροφοριών Τμήματος"
+msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:75
-#, fuzzy
 msgid "New Resource"
-msgstr "Πόροι"
+msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:82
 msgid "SchoolBell Resource"
 msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:82
-#, fuzzy
 msgid "A Resource"
-msgstr "Πόροι"
+msgstr ""
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:24
 msgid ""
-"CSV data <strong>must</strong> include a resource title and <strong>may</"
-"strong> include an optional resource description. Any extra information will "
-"be discarded."
+"CSV data <strong>must</strong> include a resource title and "
+"<strong>may</strong> include an optional resource description. Any extra "
+"information will be discarded."
 msgstr ""
 
 #. Default: ""
-#.  "PRJ302, Overhead Projector #302\n"
-#.  "Main Auditorium\n"
-#.  "LC-805, Laptop Computer #805, <em>text after a second comma</em>"
+#. "PRJ302, Overhead Projector #302\n"
+#. "Main Auditorium\n"
 #: /src/schooltool/resource/browser/resource-csvimport.pt:31
 msgid ""
 "\n"
@@ -4025,7 +4048,6 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:36
-#, fuzzy
 msgid ""
 "The above example will create 3 resources titled 'PRJ302', 'Main Auditorium' "
 "and 'LC-805'. The first and last resource will have the descriptions "
@@ -4033,23 +4055,13 @@ msgid ""
 "\"Main Auditorium\" resource will have no description, and the \"text after "
 "a second comma\" text on the third resource will be ignored."
 msgstr ""
-"Το παραπάνω παράδειγμα θα δημιουργήσει 3 μαθήματα με τίτλους: 'Ancient "
-"History', 'US History' και 'World History'. Το πρώτο και το τελευταίο μάθημα "
-"θα έχουν τις εξής περιγραφές: 'Pre-history through 1000 A.D.' και '1000 A.D. "
-"through the 20th century'. Το δεύτερο μάθημα δεν θα έχει περιγραφή, και το "
-"επιπλον \"text after a second comma\" κείμενο στο τρίτο μάθημα θα αγνοηθεί."
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
-#, fuzzy
 msgid "Upload schooltool resources as CSV"
-msgstr "Ανεβάστε τα μαθήματα ως CSV αρχείο"
-
-#: /src/schooltool/resource/browser/resource.py:39
-msgid "Resource index"
 msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:40
-msgid "Add a new resource"
+msgid "Resource index"
 msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:39
@@ -4068,21 +4080,29 @@ msgstr ""
 msgid "Indicate this resource is a location, like a classroom."
 msgstr ""
 
-#. Default: "Calendar subscriptions"
 #: /src/schooltool/resource/rest/resource.pt:17
 #: /src/schooltool/group/rest/group.pt:17
 #: /src/schooltool/person/rest/person.pt:16
-#, fuzzy
 msgid "Calendar_relationships"
-msgstr "Σχέσεις"
+msgstr ""
 
-#. Default: "Calendar ACL"
 #: /src/schooltool/resource/rest/resource.pt:20
 #: /src/schooltool/group/rest/group.pt:20
 #: /src/schooltool/person/rest/person.pt:19
-#, fuzzy
 msgid "Calendar_ACL"
-msgstr "Ημερολόγιο"
+msgstr ""
+
+#: /src/schooltool/resource/security.zcml:12
+msgid "Everyone can view resource information."
+msgstr ""
+
+#: /src/schooltool/resource/security.zcml:17
+msgid "Everyone can view resource calendars."
+msgstr ""
+
+#: /src/schooltool/resource/security.zcml:7
+msgid "Everyone can view resource lists."
+msgstr ""
 
 #: /src/schooltool/restclient/restclient.py:644
 msgid "Could not parse relationship list"
@@ -4125,21 +4145,16 @@ msgstr ""
 msgid "View Dependencies"
 msgstr ""
 
-#: /src/schooltool/sbapp/main.py:38
-msgid ""
-"\n"
-"This is not a SchoolBell 1.0 database file, aborting.\n"
+#: /src/schooltool/sbapp/browser/templates/generic_macros.pt:10
+msgid "Server Running SchoolBell"
 msgstr ""
 
-#: /src/schooltool/sbapp/main.py:43
-msgid ""
-"\n"
-"This is not a SchoolBell 1.0 database file, aborting.\n"
-"\n"
-"Please run the standalone database upgrade script.\n"
+#: /src/schooltool/sbapp/browser/templates/generic_macros.pt:6
+msgid "SchoolBell"
 msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/configure.zcml:6
+#: /src/schooltool/securitypolicy/browser/configure.zcml:17
 #: /src/schooltool/securitypolicy/browser/templates/access_control.pt:12
 msgid "Access Control"
 msgstr ""
@@ -4174,10 +4189,14 @@ msgstr "επάνω"
 msgid "No changes"
 msgstr ""
 
+#: /src/schooltool/skin/templates/container_delete.pt:10
+#: /src/schooltool/person/browser/person_container_delete.pt:10
+msgid "Are you sure you want to delete selected items?"
+msgstr ""
+
 #: /src/schooltool/skin/templates/error.pt:13
-#, fuzzy
 msgid "Exception"
-msgstr "Ενέργειες"
+msgstr ""
 
 #: /src/schooltool/skin/templates/error.pt:18
 msgid "Traceback"
@@ -4191,8 +4210,12 @@ msgstr ""
 #: /src/schooltool/skin/templates/error.pt:9
 msgid ""
 "An internal server error has occurred. This most likely means that you have "
-"found a bug in SchoolBell. Please report it on <a href=\"http://issues."
-"schooltool.org\">the issue tracker</a>."
+"found a bug in SchoolBell. Please report it on <a "
+"href=\"http://issues.schooltool.org\">the issue tracker</a>."
+msgstr ""
+
+#: /src/schooltool/skin/templates/generic_macros.pt:12
+msgid "Server Running SchoolTool"
 msgstr ""
 
 #: /src/schooltool/skin/templates/notfound.pt:13
@@ -4216,12 +4239,15 @@ msgstr ""
 msgid "The page that you are trying to access is not available"
 msgstr ""
 
+#: /src/schooltool/skin/templates/onlinehelp_macros.pt:55
+msgid "SchoolTool Onlinehelp"
+msgstr ""
+
 #: /src/schooltool/skin/templates/view_macros.pt:125
-#, fuzzy
 msgid ""
 "&copy; The Shuttleworth Foundation 2003 - <span>2006</span>: Supporting "
 "Social Innovation."
-msgstr "<p>&copy;<span></span></p><p>&trade; είναι a από</p>"
+msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:130
 msgid "SchoolTool&trade; is a Trademark of The Shuttleworth Foundation."
@@ -4239,12 +4265,12 @@ msgstr "Χρήστης:"
 msgid "Log Out"
 msgstr "Αποσύνδεση"
 
-#: /src/schooltool/term/browser/configure.zcml:26
+#: /src/schooltool/term/browser/configure.zcml:30
 #, fuzzy
 msgid "New Term"
 msgstr "Νέα τέρμινο"
 
-#: /src/schooltool/term/browser/configure.zcml:67
+#: /src/schooltool/term/browser/configure.zcml:71
 msgid "Cancel School in Emergency"
 msgstr ""
 
@@ -4252,12 +4278,10 @@ msgstr ""
 msgid "The replacement date you entered is invalid."
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/term/browser/emergency.py:123
 msgid "School cancelled due to emergency. Replacement day $replacement."
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/term/browser/emergency.py:133
 msgid "Replacement day for emergency day $emergency."
 msgstr ""
@@ -4284,9 +4308,8 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/term/browser/emergency2.pt:28
-#, fuzzy
 msgid "Please enter the replacement date below."
-msgstr "Εισάγετε τουλάχιστον $number περιόδους"
+msgstr ""
 
 #: /src/schooltool/term/browser/emergency2.pt:33
 msgid "Replacement"
@@ -4303,9 +4326,8 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/term/browser/emergency_select.pt:24
-#, fuzzy
 msgid "Please enter the emergency date below."
-msgstr "Εισάγετε τουλάχιστον $number περιόδους"
+msgstr ""
 
 #: /src/schooltool/term/browser/emergency_select.pt:3
 #: /src/schooltool/term/browser/emergency_select.pt:6
@@ -4317,40 +4339,35 @@ msgstr ""
 msgid "Are you sure you want to delete the selected terms?"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/term/browser/term.py:129
+#: /src/schooltool/term/browser/term.py:127
 #, fuzzy
 msgid "Change Term: $title"
 msgstr "Περίοδος"
 
-#: /src/schooltool/term/browser/term.py:165
+#: /src/schooltool/term/browser/term.py:163
 #, fuzzy
 msgid "New term"
 msgstr "_Εισάγετε νέο κείμενο:"
 
 #: /src/schooltool/term/browser/term.py:55
+#: /src/schooltool/term/browser/configure.zcml:40
+#: /src/schooltool/dashboard/term.pt:16
 msgid "Terms"
 msgstr ""
 
-#: /src/schooltool/term/browser/term.py:56
-#, fuzzy
-msgid "Add a new term"
-msgstr "Προσθήκη νέας συνεδρίας"
-
-#: /src/schooltool/term/browser/term.py:65
+#: /src/schooltool/term/browser/term.py:63
 msgid "Start date"
 msgstr "Ημερομηνία έναρξης"
 
-#: /src/schooltool/term/browser/term.py:67
+#: /src/schooltool/term/browser/term.py:65
 #, fuzzy
 msgid "End date"
 msgstr "Τέλος"
 
 #: /src/schooltool/term/browser/term_add_edit.pt:115
 #: /src/schooltool/term/browser/term.pt:26
-#, fuzzy
 msgid "${month} ${year}"
-msgstr "${month}, ${year} (Εβδομάδα ${week})"
+msgstr ""
 
 #: /src/schooltool/term/browser/term_add_edit.pt:130
 #: /src/schooltool/term/browser/term.pt:41
@@ -4367,12 +4384,11 @@ msgid "Save changes"
 msgstr "Αποθήκευση αλλαγών"
 
 #: /src/schooltool/term/browser/term_add_edit.pt:38
-#, fuzzy
 msgid ""
 "First, please name and define the time period of the term. The date range is "
 "inclusive (e.g., 2004-09-01 to 2004-12-31). Dates must be specified in YYYY-"
 "MM-DD format."
-msgstr "Πρώτη and τελεία από term είναι e in."
+msgstr ""
 
 #: /src/schooltool/term/browser/term_add_edit.pt:44
 #, fuzzy
@@ -4394,7 +4410,8 @@ msgstr ""
 "μέρες είναι διακοπές."
 
 #: /src/schooltool/term/browser/term_add_edit.pt:74
-msgid "Please specify which days are school days, and which days are holidays."
+msgid ""
+"Please specify which days are school days, and which days are holidays."
 msgstr ""
 "Παρακαλώ προσδιορίστε ποιές μέρες είναι μέρες σχολείου, και ποιές μέρες "
 "είναι διακοπές."
@@ -4406,9 +4423,8 @@ msgstr ""
 
 #: /src/schooltool/term/browser/term_add_edit.pt:82
 #: /src/schooltool/term/browser/term.pt:13
-#, fuzzy
 msgid "Schoolday"
-msgstr "SchoolTool"
+msgstr ""
 
 #: /src/schooltool/term/browser/term_add_edit.pt:83
 #: /src/schooltool/term/browser/term.pt:14
@@ -4419,20 +4435,20 @@ msgstr "Αργία"
 msgid "Toggle the following days of week:"
 msgstr "Εναλλαγή των ακόλουθων ημερών της εβδομάδας:"
 
-#. Default: ""
 #: /src/schooltool/timetable/browser/__init__.py:345
 msgid "${object}'s timetable"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/__init__.py:744
+#: /src/schooltool/timetable/browser/__init__.py:756
 msgid "Invalid date. Please use YYYY-MM-DD format."
-msgstr "Μη επιτρεπτή ημερομηνία. Παρακαλώ χρησιμοποιείστε τη μορφή: ΧΧΧΧ-ΜΜ-ΗΗ"
+msgstr ""
+"Μη επιτρεπτή ημερομηνία. Παρακαλώ χρησιμοποιείστε τη μορφή: ΧΧΧΧ-ΜΜ-ΗΗ"
 
-#: /src/schooltool/timetable/browser/__init__.py:748
+#: /src/schooltool/timetable/browser/__init__.py:760
 msgid "The date does not belong to any term."
 msgstr ""
 
-#: /src/schooltool/timetable/browser/__init__.py:757
+#: /src/schooltool/timetable/browser/__init__.py:769
 msgid "Some values were invalid.  They are highlighted in red."
 msgstr ""
 
@@ -4441,9 +4457,8 @@ msgid "Change Timetable for One Day"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/configure.zcml:139
-#, fuzzy
 msgid "New Timetable"
-msgstr "Προβολή ωρολόγιων προγραμμάτων"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/configure.zcml:22
 msgid "View Timetables"
@@ -4456,6 +4471,10 @@ msgstr "Προβολή ωρολόγιων προγραμμάτων"
 msgid "Schedule"
 msgstr "Πρόγραμμα"
 
+#: /src/schooltool/timetable/browser/event.py:43
+msgid "Modify event information"
+msgstr ""
+
 #: /src/schooltool/timetable/browser/schema.py:155
 msgid "Please use HH:MM format for period start and end times"
 msgstr ""
@@ -4465,33 +4484,28 @@ msgid "You must specify at least one period."
 msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:217
+#: /src/schooltool/timetable/browser/configure.zcml:76
+#: /src/schooltool/dashboard/school.pt:16
 msgid "School Timetables"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/schema.py:218
-msgid "Add a new schema"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/schema.py:302
+#: /src/schooltool/timetable/browser/schema.py:300
 msgid "Please select a value"
 msgstr "Παρακαλώ επιλέξτε μια τιμή"
 
-#. Default: ""
-#: /src/schooltool/timetable/browser/schema.py:329
-#: /src/schooltool/timetable/browser/schema.py:336
+#: /src/schooltool/timetable/browser/schema.py:327
+#: /src/schooltool/timetable/browser/schema.py:334
 msgid "Day ${number}"
 msgstr "Ημέρα ${number}"
 
-#: /src/schooltool/timetable/browser/schema.py:359
+#: /src/schooltool/timetable/browser/schema.py:357
 msgid "Period 1"
 msgstr "Περίοδος 1"
 
-#. Default: ""
-#: /src/schooltool/timetable/browser/schema.py:369
+#: /src/schooltool/timetable/browser/schema.py:367
 msgid "Period ${number}"
 msgstr "Περίοδος ${number}"
 
-#. Default: ""
 #: /src/schooltool/timetable/browser/schema.py:74
 msgid "Timetable schema ${schema}"
 msgstr ""
@@ -4511,43 +4525,24 @@ msgid ""
 msgstr "ημέρες ημέρες not ημέρες."
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:136
-#, fuzzy
 msgid ""
 "Third, define the time and duration of periods when they fall on certain "
 "days of week. Use one of the the following format: <tt>HH:MM</tt> (also, "
-"don't forget to specify the duration in the text box below) or <tt>HH:MM-HH:"
-"MM</tt> (when you want to specify both endpoints explicitly, e.g., 9:30-"
+"don't forget to specify the duration in the text box below) or <tt>HH:MM-"
+"HH:MM</tt> (when you want to specify both endpoints explicitly, e.g., 9:30-"
 "10:15). It is not necessary to define all periods for all days of week, "
 "omissions will just cause that period to be skipped if it happens to fall on "
 "that day of week. If the list of periods is not up to date with the changes "
 "you made in the table above, use the Update button to refresh the form."
 msgstr ""
-"Αδυναμία αποθήκευσης τιμής στο κλειδί '%s', επειδή ο εξυπηρετητής ρυθμίσεων "
-"δεν έχει εγγράψιμες βάσεις δεδομένων. Υπάρχουν μερικές κοινές αιτίες για "
-"αυτό το πρόβλημα: 1) το αρχείο διαδρομής ρυθμίσεων %s/path δεν περιέχει "
-"βάσεις δεδομένων ή δε βρέθηκε 2) με κάποιο τρόπο δημιουργήθηκαν κατά λάθος "
-"δύο διεργασίες gconfd 3) δεν έχει ρυθμιστεί σωστά το λειτουργικό σας σύστημα "
-"και έτσι το κλείδωμα αρχείου NFS δε λειτουργεί στον αρχικό σας κατάλογο ή 4) "
-"το σύστημα πελάτης NFS κόλλησε και δεν ειδοποίησε τον εξυπηρετητή κατά την "
-"επανεκκίνηση ότι πρέπει να αποδεσμευτούν τα κλειδώματα αρχείων. Αν υπάρχουν "
-"δύο διεργασίες  gconfd (ή υπήρχαν δύο κατά την εκκίνηση της δεύτερης) "
-"αποσυνδεθείτε, τερματίστε όλα τα αντίγραφα του gconfd και συνδεθείτε ξανά. "
-"Αν έχετε παραμένοντα κλειδώματα αφαιρέστε το ~/.gconf*/*lock. Ίσως το "
-"πρόβλημα να βρίσκεται αν προσπαθήσατε να χρησιμοποιήσετε το  GConf από δύο "
-"μηχανές μαζί και έτσι το  ORBit έχει ακόμα τις προεπιλεγμένες ρυθμίσεις που "
-"δεν επιτρέπουν απομακρυσμένες συνδέσεις  CORBA  - βάλτε \"ORBIIOPIPv4=1\" "
-"στο /etc/orbitrc. Και όπως πάντα, ελέξτε το αρχείο καταγραφής  user.* για "
-"λεπτομέρειες προβλημάτων που συνάντησε το gconfd. Θα πρέπει να υπάρχει μόνο "
-"ένα gconfd ανά αρχικό κατάλογο χρήστη, και θα πρέπει να του ανήκει ένα "
-"αρχείο κλειδώματος ~/.gconfd και αρχεία κλειδώματος σε ανεξάτητες τοποθεσίες "
-"όπως ~/.gconf"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:17
 #, fuzzy
 msgid "Please choose a name for the timetable schema you want to create."
 msgstr ""
-"Η εφαρμογή '%s' (%s) επιθυμεί να δημιουργήσει ένα νέο keyring με το όνομα '%"
-"s'. Θα πρέπει να επιλέξετε τον κωδικό που θέλετε να χρησιμοποιήσετε για αυτό."
+"Η εφαρμογή '%s' (%s) επιθυμεί να δημιουργήσει ένα νέο keyring με το όνομα "
+"'%s'. Θα πρέπει να επιλέξετε τον κωδικό που θέλετε να χρησιμοποιήσετε για "
+"αυτό."
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:175
 #, fuzzy
@@ -4619,14 +4614,12 @@ msgstr "Ωρολόγιο πρόγραμμα"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
 #: /src/schooltool/attendance/browser/templates/student-attendance.pt:138
-#, fuzzy
 msgid "Term"
-msgstr "Νέα τέρμινο"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:34
-#, fuzzy
 msgid "Schema"
-msgstr "Νέο σχήμα"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:4
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:10
@@ -4659,6 +4652,13 @@ msgstr ""
 msgid "Are you sure you want to delete the selected school timetables?"
 msgstr ""
 
+#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:16
+#: /src/schooltool/skin/templates/container_delete.pt:16
+#: /src/schooltool/person/browser/person_container_delete.pt:16
+#: /src/schooltool/term/browser/term-container-delete.pt:16
+msgid "You have not selected any items."
+msgstr ""
+
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:107
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:108
 msgid "Save"
@@ -4666,9 +4666,8 @@ msgstr "Αποθήκευση"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:17
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:15
-#, fuzzy
 msgid "There are no terms or timetable schemas defined."
-msgstr "Δημιουργία σχήματος ημερολογίου"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:25
 msgid "Choose schedule template"
@@ -4684,9 +4683,8 @@ msgid "Scheduling for ${section}"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:46
-#, fuzzy
 msgid "Using timetable:"
-msgstr "Προβολή ωρολόγιων προγραμμάτων"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:11
 msgid ""
@@ -4706,14 +4704,12 @@ msgid "Period title (optional)"
 msgstr "Όνομα περιόδου"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:38
-#, fuzzy
 msgid "Period start time"
-msgstr "Όνομα περιόδου"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:39
-#, fuzzy
 msgid "Period end time"
-msgstr "Όνομα περιόδου"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:61
 msgid "Create"
@@ -4739,19 +4735,16 @@ msgid "Original end"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:32
-#, fuzzy
 msgid "New start"
-msgstr "_Εισάγετε νέο κείμενο:"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:33
-#, fuzzy
 msgid "New end"
-msgstr "Νέο άτομο"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:63
-#, fuzzy
 msgid "Modify"
-msgstr "Δευτέρα"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:11
 msgid ""
@@ -4777,9 +4770,8 @@ msgid "Proceed"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
-#, fuzzy
 msgid "Default Timetable Schema:"
-msgstr "Δημιουργία σχήματος ημερολογίου"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:46
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:53
@@ -4876,7 +4868,6 @@ msgid ""
 "Enter start and end times for each slot, one slot (HH:MM - HH:MM) per line."
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:428
 #: /src/schooltool/timetable/browser/ttwizard.py:470
 msgid "Not a valid time slot: $slot."
@@ -4888,11 +4879,10 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:453
 msgid ""
-"Enter start and end times for each slot on each day, one slot (HH:MM - HH:"
-"MM) per line."
+"Enter start and end times for each slot on each day, one slot (HH:MM - "
+"HH:MM) per line."
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:474
 msgid "Please enter at least one time slot for $day."
 msgstr ""
@@ -4919,7 +4909,6 @@ msgstr ""
 msgid "Enter names of periods, one per line."
 msgstr "Εισάγεται τα ονόματα των περιόδων, ένα σε κάθε γραμμή"
 
-#. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:581
 msgid "Please enter at least $number periods."
 msgstr "Εισάγετε τουλάχιστον $number περιόδους"
@@ -4949,7 +4938,6 @@ msgstr ""
 msgid "Please provide all periods."
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:656
 #: /src/schooltool/timetable/browser/ttwizard.py:714
 msgid "The following periods were selected more than once: $periods"
@@ -4959,7 +4947,6 @@ msgstr ""
 msgid "Please put the periods in order for each day:"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:710
 msgid "$period on day $day"
 msgstr ""
@@ -4982,41 +4969,55 @@ msgstr ""
 msgid "Please indicate the homeroom period(s) for each day:"
 msgstr ""
 
-#: /src/schooltool/timetable/rest/__init__.py:267
+#: /src/schooltool/timetable/rest/__init__.py:266
 #, fuzzy
 msgid "Unknown day id: %r"
 msgstr "Άγνωστος κωδικός ημέρας: %r"
 
-#: /src/schooltool/timetable/rest/__init__.py:273
+#: /src/schooltool/timetable/rest/__init__.py:272
 #, fuzzy
 msgid "Unknown period id: %r"
 msgstr "Άγνωστος κωδικός περιόδου: %r"
 
-#. Default: ""
-#: /src/schooltool/widget/password.py:39
+#: /src/schooltool/widget/password.py:40
 msgid ""
 "${password} <label for=\"${label}\" title=\"\">Confirm</label> ${confirm}"
 msgstr ""
 
-#: /src/schooltool/widget/password.py:51
+#: /src/schooltool/widget/password.py:52
 msgid "Supplied passwords are not identical"
 msgstr ""
 
-#~ msgid "Username:"
-#~ msgstr "Όνομα Χρήστη"
+#~ msgid "Add a new course"
+#~ msgstr "Προσθήκη νέου μαθήματος"
 
-#~ msgid "Change this person's name, picture, or password"
-#~ msgstr "Άλλαξε το όνομα, την εικόνα ή τον κωδικό αυτού του ατόμου"
-
-#~ msgid "Import Sections"
-#~ msgstr "Εισαγωγή Τμημάτων"
+#~ msgid "Add a new section"
+#~ msgstr "Προσθήκη νέας ενότητας"
 
 #, fuzzy
 #~ msgid "Locations not found: ${args}."
 #~ msgstr "Το αρχείο ρυθμίσεων `%s' δε βρέθηκε: %s"
 
+#~ msgid "Username:"
+#~ msgstr "Όνομα Χρήστη"
+
+#~ msgid "edit name"
+#~ msgstr "Επεξεργασία Ονόματος"
+
+#~ msgid "Change this person's name, picture, or password"
+#~ msgstr "Άλλαξε το όνομα, την εικόνα ή τον κωδικό αυτού του ατόμου"
+
+#~ msgid "Person info: ${title}"
+#~ msgstr "Πληροφορίες ατόμου: ${title}"
+
 #~ msgid "My Preferences"
 #~ msgstr "Οι προτιμήσεις μου"
+
+#~ msgid "Add a new person"
+#~ msgstr "Πρόσθεσε νέο άτομο"
+
+#~ msgid "Add a new group"
+#~ msgstr "Πρόσθεσε νέα ομάδα"
 
 #~ msgid "New password"
 #~ msgstr "Νέος κωδικός"
@@ -5038,6 +5039,18 @@ msgstr ""
 #~ msgstr "Δημιουργία νέων αντικειμένων"
 
 #, fuzzy
+#~ msgid "View calendar"
+#~ msgstr "Εμφάνιση ημερολογίου"
+
+#, fuzzy
+#~ msgid "Add events"
+#~ msgstr "Προσθήκη γεγονότων"
+
+#, fuzzy
+#~ msgid "Modify/delete events"
+#~ msgstr "Αλλαγή/Διαγραφή γεγονότων"
+
+#, fuzzy
 #~ msgid "Control access"
 #~ msgstr "Έλεγχος πρόσβασης"
 
@@ -5052,6 +5065,10 @@ msgstr ""
 #~ msgid "An error occured."
 #~ msgstr "Προέκυψε σφάλμα."
 
+#, fuzzy
+#~ msgid "${day_of_week}, ${date}"
+#~ msgstr "${day_of_week}, ${date}"
+
 #~ msgid "All Users"
 #~ msgstr "Όλοι οι χρήστες"
 
@@ -5064,13 +5081,20 @@ msgstr ""
 #~ "είναι not a αρχείο ο\n"
 
 #, fuzzy
+#~ msgid "Add a new term"
+#~ msgstr "Προσθήκη νέας συνεδρίας"
+
+#, fuzzy
 #~ msgid "Import CSV"
 #~ msgstr "Εισα_γωγή Πιστοποιητικού"
 
+#~ msgid "New Schema"
+#~ msgstr "Νέο σχήμα"
+
 #, fuzzy
 #~ msgid ""
-#~ "The first row of the CSV file must contain the period id and the schema "
-#~ "of the timetable."
+#~ "The first row of the CSV file must contain the period id and the schema of "
+#~ "the timetable."
 #~ msgstr "πρώτη από αρχείο τελεία and από."
 
 #, fuzzy
@@ -5108,15 +5132,69 @@ msgstr ""
 
 #, fuzzy
 #~ msgid ""
-#~ "<strong>timetable.csv</strong> contains lines of comma-separated values "
-#~ "as in the following example:"
+#~ "You can create these files in a spreadsheet and export them in the comma "
+#~ "separated value format described below."
+#~ msgstr "Εσύ in a and in κόμμα."
+
+#, fuzzy
+#~ msgid ""
+#~ "<strong>timetable.csv</strong> contains lines of comma-separated values as "
+#~ "in the following example:"
 #~ msgstr "<strong></strong> περιέχει γραμμές από κόμμα in following:"
 
 #, fuzzy
 #~ msgid ""
-#~ "<strong>roster.txt</strong> contains plain text as in the following "
-#~ "example:"
+#~ "<strong>roster.txt</strong> contains plain text as in the following example:"
 #~ msgstr "<strong></strong> περιέχει κείμενο in following:"
+
+#, fuzzy
+#~ msgid "Edit person"
+#~ msgstr "Ένα άγνωστο άτομο"
+
+#, fuzzy
+#~ msgid ""
+#~ "First, please name and define the time period of the term. The date range is "
+#~ "inclusive (e.g., 2004-09-01 to 2004-12-31). Dates must be specified in YYYY- "
+#~ "MM-DD format."
+#~ msgstr "Πρώτη and τελεία από term είναι e in."
+
+#, fuzzy
+#~ msgid ""
+#~ "Third, define the time and duration of periods when they fall on certain "
+#~ "days of week. Use one of the the following format: <tt>HH:MM</tt> (also, "
+#~ "don't forget to specify the duration in the text box below) or <tt>HH:MM- "
+#~ "HH:MM</tt> (when you want to specify both endpoints explicitly, e.g., 9:30- "
+#~ "10:15). It is not necessary to define all periods for all days of week, "
+#~ "omissions will just cause that period to be skipped if it happens to fall on "
+#~ "that day of week. If the list of periods is not up to date with the changes "
+#~ "you made in the table above, use the Update button to refresh the form."
+#~ msgstr ""
+#~ "Αδυναμία αποθήκευσης τιμής στο κλειδί '%s', επειδή ο εξυπηρετητής ρυθμίσεων "
+#~ "δεν έχει εγγράψιμες βάσεις δεδομένων. Υπάρχουν μερικές κοινές αιτίες για "
+#~ "αυτό το πρόβλημα: 1) το αρχείο διαδρομής ρυθμίσεων %s/path δεν περιέχει "
+#~ "βάσεις δεδομένων ή δε βρέθηκε 2) με κάποιο τρόπο δημιουργήθηκαν κατά λάθος "
+#~ "δύο διεργασίες gconfd 3) δεν έχει ρυθμιστεί σωστά το λειτουργικό σας σύστημα "
+#~ "και έτσι το κλείδωμα αρχείου NFS δε λειτουργεί στον αρχικό σας κατάλογο ή 4) "
+#~ "το σύστημα πελάτης NFS κόλλησε και δεν ειδοποίησε τον εξυπηρετητή κατά την "
+#~ "επανεκκίνηση ότι πρέπει να αποδεσμευτούν τα κλειδώματα αρχείων. Αν υπάρχουν "
+#~ "δύο διεργασίες  gconfd (ή υπήρχαν δύο κατά την εκκίνηση της δεύτερης) "
+#~ "αποσυνδεθείτε, τερματίστε όλα τα αντίγραφα του gconfd και συνδεθείτε ξανά. "
+#~ "Αν έχετε παραμένοντα κλειδώματα αφαιρέστε το ~/.gconf*/*lock. Ίσως το "
+#~ "πρόβλημα να βρίσκεται αν προσπαθήσατε να χρησιμοποιήσετε το  GConf από δύο "
+#~ "μηχανές μαζί και έτσι το  ORBit έχει ακόμα τις προεπιλεγμένες ρυθμίσεις που "
+#~ "δεν επιτρέπουν απομακρυσμένες συνδέσεις  CORBA  - βάλτε \"ORBIIOPIPv4=1\" "
+#~ "στο /etc/orbitrc. Και όπως πάντα, ελέξτε το αρχείο καταγραφής  user.* για "
+#~ "λεπτομέρειες προβλημάτων που συνάντησε το gconfd. Θα πρέπει να υπάρχει μόνο "
+#~ "ένα gconfd ανά αρχικό κατάλογο χρήστη, και θα πρέπει να του ανήκει ένα "
+#~ "αρχείο κλειδώματος ~/.gconfd και αρχεία κλειδώματος σε ανεξάτητες τοποθεσίες "
+#~ "όπως ~/.gconf"
+
+#, fuzzy
+#~ msgid ""
+#~ "<p> &copy; The Shuttleworth Foundation 2003 - <span>2005</span>: Supporting "
+#~ "Social Innovation. </p> <p> SchoolTool&trade; is a Trademark of The "
+#~ "Shuttleworth Foundation. </p>"
+#~ msgstr "<p>&copy;<span></span></p><p>&trade; είναι a από</p>"
 
 #, fuzzy
 #~ msgid "Timetable schema name must not be empty"
