@@ -89,7 +89,7 @@ vi-coverage-reports:
 
 .PHONY: dist
 dist: realclean extract-translations update-translations
-	$(PYTHON) setup.py register sdist bdist_eg
+	$(PYTHON) setup.py register sdist bdist_egg
 
 .PHONY: dist/md5sum
 dist/md5sum: dist
