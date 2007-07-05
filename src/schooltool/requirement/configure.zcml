@@ -162,8 +162,11 @@
 
   <class class=".evaluation.Evaluation">
     <require
+	permission="schooltool.view"
+	interface=".interfaces.IEvaluation"
+	/>
+    <require
         permission="schooltool.edit"
-        interface=".interfaces.IEvaluation"
         set_schema=".interfaces.IEvaluation"
         />
   </class>
