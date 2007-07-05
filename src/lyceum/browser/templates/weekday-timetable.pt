@@ -1,4 +1,4 @@
-<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="lyceum">
 <body>
 <metal:block fill-slot="content-header">
   <h1>Timetable for:</h1>
