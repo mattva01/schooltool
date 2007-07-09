@@ -87,7 +87,7 @@ vi-coverage-reports:
 	@cd coverage && vi '+/^>>>>>>/' `ls schooltool* | grep -v tests | xargs grep -l '^>>>>>>'`
 
 .PHONY: dist
-dist: realclean extract-translations update-translations
+dist: realclean compile-translations
 	$(PYTHON) setup.py register sdist bdist_egg
 
 .PHONY: dist/md5sum
@@ -113,6 +113,15 @@ extract-translations: build
 	    PYTHONPATH=$(PYTHONPATH) $(PYTHON) i18nextract.py --domain=$${domain} --zcml=$${zcml} --locales=$${locales}; \
 	done
 
+.PHONY: compile-translations
+compile-translations:
+	set -e; \
+	for domain in $(TRANSLATION_DOMAINS); do \
+	    locales=src/`echo $${domain} | sed s/\\\./\\\//g`/locales; \
+	    for f in $${locales}/*/LC_MESSAGES/$${domain}.po; do \
+		msgfmt -o $${f%.po}.mo $$f;\
+	    done;\
+	done
 
 .PHONY: update-translations
 update-translations:
@@ -121,9 +130,9 @@ update-translations:
 	    locales=src/`echo $${domain} | sed s/\\\./\\\//g`/locales; \
 	    for f in $${locales}/*/LC_MESSAGES/$${domain}.po; do \
 		msgmerge -qU $$f $${locales}/$${domain}.pot ;\
-		msgfmt -o $${f%.po}.mo $$f;\
 	    done;\
 	done
+	$(MAKE) PYTHON=$(PYTHON) compile-translations
 
 #
 # Makefile rules for importing and exporting translations to rosetta:
