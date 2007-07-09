@@ -1,1 +1,1 @@
-<span tal:content="python: view.getCellValue(context)" />
+<tal:block replace="python: view.getCellValue(context)" />

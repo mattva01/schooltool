@@ -4,6 +4,7 @@ Functional doctest for SchoolTool CSV Import
 Let's log in with the manager account:
 
     >>> from zope.testbrowser.testing import Browser
+    >>> from lyceum.tests import printGradebookTable
     >>> manager = Browser()
     >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
     >>> manager.handleErrors = False
@@ -54,19 +55,33 @@ Let's log in with the teacher account:
 
     >>> teacher.open('http://localhost/persons/bduh/calendar/2007-05-14')
     >>> teacher.getLink('Journal', url='1b').click()
+    >>> printGradebookTable(teacher.contents)
+    +-------+------------+-----------+----+----+----+----+----+----+----+----+----+---------+----+----+----+----+----+----+----+----+----+----+----+----+----+
+    | Grade | First Name | Last Name | 01 | 02 | 03 | 04 | 07 | 08 | 09 | 10 | 11 | 14      | 15 | 16 | 17 | 18 | 21 | 22 | 23 | 24 | 25 | 28 | 29 | 30 | 31 |
+    +-------+------------+-----------+----+----+----+----+----+----+----+----+----+---------+----+----+----+----+----+----+----+----+----+----+----+----+----+
+    | 1b    | Zombe      | Bain      |    |    |    |    |    |    |    |    |    | [_____] |    |    |    |    |    |    |    |    |    |    |    |    |    |
+    |       | Jonas      | Petraitis |    |    |    |    |    |    |    |    |    | [_____] |    |    |    |    |    |    |    |    |    |    |    |    |    |
+    +-------+------------+-----------+----+----+----+----+----+----+----+----+----+---------+----+----+----+----+----+----+----+----+----+----+----+----+----+
     >>> teacher.getLink('15').click()
+    >>> printGradebookTable(teacher.contents)
+    +-------+------------+-----------+----+----+----+----+----+----+----+----+----+----+---------+----+----+----+----+----+----+----+----+----+----+----+----+
+    | Grade | First Name | Last Name | 01 | 02 | 03 | 04 | 07 | 08 | 09 | 10 | 11 | 14 | 15      | 16 | 17 | 18 | 21 | 22 | 23 | 24 | 25 | 28 | 29 | 30 | 31 |
+    +-------+------------+-----------+----+----+----+----+----+----+----+----+----+----+---------+----+----+----+----+----+----+----+----+----+----+----+----+
+    | 1b    | Zombe      | Bain      |    |    |    |    |    |    |    |    |    |    | [_____] |    |    |    |    |    |    |    |    |    |    |    |    |
+    |       | Jonas      | Petraitis |    |    |    |    |    |    |    |    |    |    | [_____] |    |    |    |    |    |    |    |    |    |    |    |    |
+    +-------+------------+-----------+----+----+----+----+----+----+----+----+----+----+---------+----+----+----+----+----+----+----+----+----+----+----+----+
 
     >>> cells = analyze.queryHTML('//input[@type="text"]/@name', teacher.contents)
     >>> teacher.getControl(name=cells[0]).value = '10'
     >>> teacher.getControl(name=cells[1]).value = '5'
     >>> teacher.getControl('Update').click()
-
-The grades should still be in the editable controls with same ids:
-
-    >>> teacher.getControl(name=cells[0]).value
-    '10'
-    >>> teacher.getControl(name=cells[1]).value
-    '5'
+    >>> printGradebookTable(teacher.contents)
+    +-------+------------+-----------+----+----+----+----+----+----+----+----+----+----+---------+----+----+----+----+----+----+----+----+----+----+----+----+
+    | Grade | First Name | Last Name | 01 | 02 | 03 | 04 | 07 | 08 | 09 | 10 | 11 | 14 | 15      | 16 | 17 | 18 | 21 | 22 | 23 | 24 | 25 | 28 | 29 | 30 | 31 |
+    +-------+------------+-----------+----+----+----+----+----+----+----+----+----+----+---------+----+----+----+----+----+----+----+----+----+----+----+----+
+    | 1b    | Zombe      | Bain      |    |    |    |    |    |    |    |    |    |    | [10___] |    |    |    |    |    |    |    |    |    |    |    |    |
+    |       | Jonas      | Petraitis |    |    |    |    |    |    |    |    |    |    | [5____] |    |    |    |    |    |    |    |    |    |    |    |    |
+    +-------+------------+-----------+----+----+----+----+----+----+----+----+----+----+---------+----+----+----+----+----+----+----+----+----+----+----+----+
 
 Let's look around in the gradebook. If we click on another day, the
 term and the month that is selected should be the same:
@@ -89,11 +104,13 @@ term and the month that is selected should be the same:
 
 Grades are still visible in table cells:
 
-    >>> cells = analyze.queryHTML('//td/span', teacher.contents)
-    >>> cells[10]
-    '<span>10</span>'
-    >>> cells[10+22]
-    '<span>5</span>'
+    >>> printGradebookTable(teacher.contents)
+    +-------+------------+-----------+----+----+----+----+----+----+----+----+----+----+----+----+---------+----+----+----+----+----+----+----+----+----+----+
+    | Grade | First Name | Last Name | 01 | 02 | 03 | 04 | 07 | 08 | 09 | 10 | 11 | 14 | 15 | 16 | 17      | 18 | 21 | 22 | 23 | 24 | 25 | 28 | 29 | 30 | 31 |
+    +-------+------------+-----------+----+----+----+----+----+----+----+----+----+----+----+----+---------+----+----+----+----+----+----+----+----+----+----+
+    | 1b    | Zombe      | Bain      |    |    |    |    |    |    |    |    |    |    | 10 |    | [_____] |    |    |    |    |    |    |    |    |    |    |
+    |       | Jonas      | Petraitis |    |    |    |    |    |    |    |    |    |    | 5  |    | [_____] |    |    |    |    |    |    |    |    |    |    |
+    +-------+------------+-----------+----+----+----+----+----+----+----+----+----+----+----+----+---------+----+----+----+----+----+----+----+----+----+----+
 
 Let's switch to another month now:
 
@@ -113,10 +130,13 @@ But the semester is still the same:
 
 There are no grades in the table:
 
-    >>> cells = analyze.queryHTML('//td/span', teacher.contents)
-    >>> for cell in cells:
-    ...     if cell != '<span></span>':
-    ...         print cell
+    >>> printGradebookTable(teacher.contents)
+    +-------+------------+-----------+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+    | Grade | First Name | Last Name | 10 | 11 | 12 | 13 | 16 | 17 | 18 | 19 | 20 | 23 | 24 | 25 | 26 | 27 | 30 |
+    +-------+------------+-----------+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+    | 1b    | Zombe      | Bain      |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+    |       | Jonas      | Petraitis |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+    +-------+------------+-----------+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
 
 Let's select a day:
 
@@ -134,11 +154,13 @@ Month and semester still stay the same:
 
 But we get 2 cells with input boxes in them for entering of grades:
 
-    >>> cells = analyze.queryHTML('//td/input[@type="text"]', teacher.contents)
-    >>> for cell in cells:
-    ...     print cell
-    <input type="text" style="width: 1.4em" name="zombe-bain..." value="">
-    <input type="text" style="width: 1.4em" name="jonas..." value="">
+    >>> printGradebookTable(teacher.contents)
+    +-------+------------+-----------+----+----+----+----+---------+----+----+----+----+----+----+----+----+----+----+
+    | Grade | First Name | Last Name | 10 | 11 | 12 | 13 | 16      | 17 | 18 | 19 | 20 | 23 | 24 | 25 | 26 | 27 | 30 |
+    +-------+------------+-----------+----+----+----+----+---------+----+----+----+----+----+----+----+----+----+----+
+    | 1b    | Zombe      | Bain      |    |    |    |    | [_____] |    |    |    |    |    |    |    |    |    |    |
+    |       | Jonas      | Petraitis |    |    |    |    | [_____] |    |    |    |    |    |    |    |    |    |    |
+    +-------+------------+-----------+----+----+----+----+---------+----+----+----+----+----+----+----+----+----+----+
 
 If we click Update, everything stays the same:
 
