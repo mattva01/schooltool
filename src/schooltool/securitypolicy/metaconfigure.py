@@ -115,6 +115,13 @@ def allow(_context, interface=None, crowds=None, permission=None):
                         args=(interface, crowd, permission))
 
 
+def deny(_context, interface=None, crowds=None, permission=None):
+    for crowd in crowds:
+        _context.action(discriminator=('allow', interface, crowd, permission),
+                        callable=lambda: None,
+                        args=())
+
+
 class AccessControlSetting(object):
     implements(IAccessControlSetting)
 

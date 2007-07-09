@@ -15,6 +15,12 @@
       />
 
     <directive
+      name="deny"
+      schema=".metadirectives.IAllowDirective"
+      handler=".metaconfigure.deny"
+      />
+
+    <directive
       name="setting"
       schema=".metadirectives.ISettingDirective"
       handler=".metaconfigure.setting"
