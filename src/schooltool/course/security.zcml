@@ -5,6 +5,10 @@
   <!-- Security -->
 
   <crowd
+      name="person_instructors"
+      factory="schooltool.course.section.PersonInstructorsCrowd" />
+
+  <crowd
       name="section_instructors"
       factory="schooltool.course.section.InstructorsCrowd" />
 

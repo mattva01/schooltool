@@ -65,11 +65,4 @@
       crowds="everybody"
       permission="zope.app.dublincore.view" />
 
-
-  <!--   XXX ignas: there must and will be a better way! -->
-
-  <security:crowd
-      name="person_instructors"
-      factory="schooltool.course.section.PersonInstructorsCrowd" />
-
 </configure>
