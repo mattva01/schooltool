@@ -183,11 +183,6 @@ class IndexedGetterColumn(GetterColumn):
         self.index = kwargs.pop('index')
         super(IndexedGetterColumn, self).__init__(**kwargs)
 
-    def renderCell(self, item, formatter):
-        item = queryUtility(IIntIds).getObject(item['id'])
-        value = self.getter(item, formatter)
-        return self.cell_formatter(value, item, formatter)
-
     def getSortKey(self, item, formatter):
         id = item['id']
         index = item['catalog'][self.index]
@@ -336,12 +331,6 @@ class IndexedTableFormatter(SchoolToolTableFormatter):
 
     def wrapColumn(self, column):
         """Wrap a normal column to work with index dicts"""
-        original_renderCell = column.renderCell
-        def unindexingRenderCell(item, formatter):
-            item = queryUtility(IIntIds).getObject(item['id'])
-            return original_renderCell(item, formatter)
-        column.renderCell = unindexingRenderCell
-
         if ISortableColumn.providedBy(column):
             original_getSortKey = column.getSortKey
             def unindexingGetSortKey(item, formatter):
@@ -377,3 +366,21 @@ class IndexedTableFormatter(SchoolToolTableFormatter):
                 columns_before=self.wrapColumns(columns_before),
                 columns_after=self.wrapColumns(columns_after),
                 **kwargs)
+
+    def wrapGetItems(self, getItems):
+        def unindexingGetItems():
+            for item in getItems():
+                item = queryUtility(IIntIds).getObject(item['id'])
+                yield item
+        return unindexingGetItems
+
+    def render(self):
+        formatter = self._table_formatter(
+            self.context, self.request, self._items,
+            columns=self._columns,
+            batch_start=self.batch.start, batch_size=self.batch.size,
+            sort_on=self._sort_on,
+            prefix=self.prefix)
+        formatter.cssClasses['table'] = 'data'
+        formatter.getItems = self.wrapGetItems(formatter.getItems)
+        return formatter()
