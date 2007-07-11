@@ -326,6 +326,7 @@ div .singleton a.title{
   }
 
 div .dropdown .title{
+  cursor: default;
   font-size: 1em;
   padding-right: .5ex;
   padding-left: 15px;
@@ -333,7 +334,6 @@ div .dropdown .title{
 }
 
 div .dropdown:hover .title{
-  border-bottom:1px solid #aaa;
   background: #ddd url('++resource++downarrow.png') no-repeat center left;
 }
 

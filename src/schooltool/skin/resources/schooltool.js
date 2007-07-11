@@ -79,3 +79,32 @@ function hideToolTip(elem) {
     tip.style.visibility = 'hidden';
     tip = null;
 }
+
+
+
+
+// Set up event handling for action bar drop downs.
+function initializeEventBindings(){
+
+  $(document).click(function(){
+    if (justClicked == false){
+    $("div.dropdown")
+      .removeClass("expanded")
+      .addClass("contracted");
+    } 
+    else {
+      justClicked = false;
+    }
+  });
+
+  $("div.dropdown").each(function(i){
+    $(this).click(function() { 
+      $(this)
+	.toggleClass("contracted")
+	.toggleClass("expanded");
+      justClicked = true;
+    });
+  });
+}
+
+$(document).ready(initializeEventBindings);

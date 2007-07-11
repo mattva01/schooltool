@@ -3,9 +3,7 @@
            tal:define="url view/context/@@absolute_url;
                        actions view/context/@@view_get_menu/schooltool_actions">
 
-  <div class="dropdown contracted"
-       onmouseover="this.className='dropdown expanded'"
-       onmouseout="this.className='dropdown contracted'">
+  <div class="dropdown contracted">
     <h3 class="title">Actions</h3>
     <!-- old-style menu actions (obsolete) -->
     <a tal:repeat="view actions"
