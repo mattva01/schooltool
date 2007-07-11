@@ -46,6 +46,7 @@ from zope.viewlet.viewlet import ViewletBase
 from zope.component import queryAdapter
 from zope.component import adapts
 from zope.app.catalog.interfaces import ICatalog
+from zope.app.intid.interfaces import IIntIds
 
 from schooltool import SchoolToolMessage as _
 from schooltool.skin.form import BasicForm
@@ -228,9 +229,11 @@ class PersonFilterWidget(IndexedFilterWidget):
         if 'SEARCH_GROUP' in self.request:
             group = ISchoolToolApplication(None)['groups'].get(self.request['SEARCH_GROUP'])
             if group:
-                keys = set([person.__name__ for person in group.members])
+                int_ids = getUtility(IIntIds)
+                keys = set([int_ids.queryId(person)
+                            for person in group.members])
                 items = [item for item in items
-                         if item['key'] in keys]
+                         if item['id'] in keys]
 
         catalog = ICatalog(self.context)
         index = catalog['title']

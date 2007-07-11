@@ -486,7 +486,8 @@ def doctest_PersonFilterWidget():
    Some persons:
 
         >>> class PersonStub(object):
-        ...     def __init__(self, title, groups):
+        ...     def __init__(self, title, groups, person_id):
+        ...         self.id = person_id
         ...         self.title = title
         ...         self.__name__ = title
         ...         for group in groups:
@@ -514,7 +515,7 @@ def doctest_PersonFilterWidget():
         ...                    ('beta', [b, c]),
         ...                    ('lambda', [b])]
         ...         for id, (title, groups) in enumerate(persons):
-        ...             self[title] = PersonStub(title, groups)
+        ...             self[title] = PersonStub(title, groups, id)
         ...             index.documents_to_values[id] = title
         ...     def __conform__(self, iface):
         ...         if iface == ICatalog:
@@ -567,28 +568,35 @@ def doctest_PersonFilterWidget():
         >>> from zope.component import provideAdapter
         >>> provideAdapter(StubApplication)
 
-        >>> items = [{'id': 0, 'key': 'alpha'},
-        ...          {'id': 1, 'key': 'beta'},
-        ...          {'id': 2, 'key': 'lambda'}]
+        >>> items = [{'id': 0},
+        ...          {'id': 1},
+        ...          {'id': 2}]
 
         >>> request.form = {'SEARCH_TITLE': 'lamb'}
         >>> widget.filter(items)
-        [{'id': 2, 'key': 'lambda'}]
+        [{'id': 2}]
+
+        >>> from zope.component import provideUtility
+        >>> from zope.app.intid.interfaces import IIntIds
+        >>> class IntIdsStub(object):
+        ...     def queryId(self, obj):
+        ...         return obj.id
+        >>> provideUtility(IntIdsStub(), IIntIds)
 
         >>> request.form = {'SEARCH_GROUP': 'b'}
         >>> widget.filter(items)
-        [{'id': 1, 'key': 'beta'}, {'id': 2, 'key': 'lambda'}]
+        [{'id': 1}, {'id': 2}]
 
         >>> request.form = {'SEARCH_GROUP': 'b',
         ...                 'SEARCH_TITLE': 'bet'}
         >>> widget.filter(items)
-        [{'id': 1, 'key': 'beta'}]
+        [{'id': 1}]
 
    The search is case insensitive:
 
         >>> request.form = {'SEARCH_TITLE': 'AlphA'}
         >>> widget.filter(items)
-        [{'id': 0, 'key': 'alpha'}]
+        [{'id': 0}]
 
     If clear search button is clicked, the form attribute is cleared,
     and all items are displayed:
@@ -596,7 +604,7 @@ def doctest_PersonFilterWidget():
         >>> request.form['CLEAR_SEARCH'] = 'Yes'
 
         >>> widget.filter(items)
-        [{'id': 0, 'key': 'alpha'}, {'id': 1, 'key': 'beta'}, {'id': 2, 'key': 'lambda'}]
+        [{'id': 0}, {'id': 1}, {'id': 2}]
         >>> request.form['SEARCH_TITLE']
         ''
 
