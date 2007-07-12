@@ -1,0 +1,20 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<body>
+<metal:nothing metal:fill-slot="content-header" />
+<metal:block metal:fill-slot="body">
+
+  <metal:block use-macro="view/@@menu_macros/tab_menu" />
+
+  <metal:block use-macro="view/@@formlib_macros/edit">
+     <metal:block fill-slot="controls">
+       <input type="submit" id="form.actions.apply" name="form.actions.apply" value="Apply" class="button-ok"
+              title="Shortcut: Alt-A" accesskey="A"
+              i18n:attributes="value submit-button; accesskey" />
+       <input type="submit" id="form.actions.cancel" name="form.actions.cancel" value="Cancel" class="button-cancel"
+              i18n:attributes="value cancel-button" />
+     </metal:block>
+  </metal:block>
+
+</metal:block>
+</body>
+</html>

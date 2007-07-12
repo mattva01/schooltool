@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:security="http://schooltool.org/securitypolicy"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           i18n_domain="schooltool">
+
+  <utility factory=".person.PersonFactoryUtility" />
+
+  <security:crowd
+      name="person_info_viewers"
+      factory=".security.PersonInfoViewersCrowd" />
+
+  <adapter
+      for="schooltool.person.interfaces.IPersonContainer"
+      factory=".person.getPersonContainerCatalog"
+      provides="zope.app.catalog.interfaces.ICatalog" />
+
+  <include package=".browser" file="overrides.zcml" />
+
+</configure>
