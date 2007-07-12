@@ -1,0 +1,225 @@
+Without existing timetables related to the term
+===============================================
+
+A manager logs in
+
+    >>> from zope.testbrowser.testing import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/')
+
+Create a term
+    >>> manager.getLink('Terms').click()
+    >>> manager.getLink('New Term').click()
+    >>> manager.getControl('Title').value = 'Term 1'
+    >>> manager.getControl('Start date').value = '2007-07-01'
+    >>> manager.getControl('End date').value = '2007-07-12'
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Saturday').click()
+    >>> manager.getControl('Sunday').click()
+    >>> manager.getControl('Add term').click()
+
+So now we have one term
+
+    >>> 'Term 1' in manager.contents
+    True
+    >>> manager.getControl(name='delete.term-1').value = True
+    >>> manager.getControl('Delete').click()
+    >>> 'Are you sure you want to delete the selected terms?' in manager.contents
+    True
+    >>> 'Term 1' in manager.contents
+    True
+    >>> print manager.contents
+    <BLANKLINE>
+    <BLANKLINE>
+    ...
+      Are you sure you want to delete the selected terms?
+    ...
+    This term is used by 0 individual timetables.
+    ...
+    >>> manager.getControl('Confirm').click()
+    >>> print manager.contents
+    <BLANKLINE>
+    <BLANKLINE>
+    ...
+      <h1>Terms</h1>
+    ...
+      <p>There are none.</p>
+    ...
+
+What now if we cancel the deletion ?
+
+Create a term
+    >>> manager.getLink('Terms').click()
+    >>> manager.getLink('New Term').click()
+    >>> manager.getControl('Title').value = 'Term 2'
+    >>> manager.getControl('Start date').value = '2007-07-01'
+    >>> manager.getControl('End date').value = '2007-07-12'
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Saturday').click()
+    >>> manager.getControl('Sunday').click()
+    >>> manager.getControl('Add term').click()
+
+So now we have one term
+
+    >>> 'Term 2' in manager.contents
+    True
+    >>> manager.getControl(name='delete.term-2').value = True
+    >>> manager.getControl('Delete').click()
+    >>> manager.getControl('Cancel').click()
+
+We cancel so the term is still there:
+
+    >>> print manager.contents
+    <BLANKLINE>
+    <BLANKLINE>
+    ...
+      <h1>Terms</h1>
+    ...
+    <a href="http://localhost/terms/term-2">Term 2</a>
+    ...
+
+
+With existing timetables related to the term
+============================================
+
+Create the timetable:
+
+    >>> manager.getLink('School Timetables').click()
+    >>> manager.getLink('New Timetable').click()
+    >>> manager.getLink('simple weekly timetable schema').click()
+    >>> manager.getControl(name='field.title').value = 'Simple Timetable'
+    >>> manager.getControl(name='field.period_name_1').value = 'A'
+    >>> manager.getControl(name='field.period_start_1').value = '9:00'
+    >>> manager.getControl(name='field.period_finish_1').value = '10:00'
+    >>> manager.getControl(name='field.period_name_2').value = 'B'
+    >>> manager.getControl(name='field.period_start_2').value = '10:30'
+    >>> manager.getControl(name='field.period_finish_2').value = '11:30'
+    >>> manager.getControl('Create').click()
+    >>> print manager.contents
+    <BLANKLINE>
+    <BLANKLINE>
+    ...
+      <h1>School Timetables</h1>
+    ...
+        <a href="http://localhost/ttschemas/simple-timetable">Simple Timetable</a>
+    ...
+
+Create a course:
+
+    >>> manager.getLink('Courses').click()
+    >>> manager.getLink('New Course').click()
+    >>> manager.getControl(name='field.title').value = 'Math course'
+    >>> manager.getControl('Add').click()
+    >>> print manager.contents
+    <BLANKLINE>
+    <BLANKLINE>
+    ...
+      <h1>Course index</h1>
+    ...
+        <a href="http://localhost/courses/math-course">Math course</a>
+    ...
+
+Create a section from the course:
+
+    >>> manager.getLink('Math course').click()
+    >>> manager.getLink('New Section').click()
+    >>> manager.getControl(name='field.title').value = 'Math 5'
+    >>> manager.getControl(name='add_input_name').value = 'MA5'
+    >>> manager.getControl('Add').click()
+
+Schedule the section in the timetable:
+
+    >>> manager.getLink('-- Math course (Math 5)').click()
+    >>> manager.getLink('Schedule').click()
+    >>> manager.getControl(name='Monday.A').value = True
+    >>> manager.getControl(name='Friday.B').value = True
+    >>> manager.getControl('Save').click()
+    >>> manager.getLink('Math 5').click()
+    >>> manager.getLink('View Timetables').click()
+    >>> print manager.contents
+    <BLANKLINE>
+    <BLANKLINE>
+    ...
+      Timetables for Math 5
+    ...
+       <a href="http://localhost/sections/MA5/timetables/term-2.simple-timetable">term-2.simple-timetable</a>
+    ...
+
+Let's do the edit:
+    >>> manager.getLink('Term').click()
+    >>> manager.getLink('Term 2').click()
+    >>> manager.getLink('Edit').click()
+    >>> print analyze.queryHTML('id("content-body")', manager.contents)[0]
+    <div id="content-body">
+    <BLANKLINE>
+    <BLANKLINE>
+    <form class="plain" method="post" action="http://localhost/terms/term-2/@@edit.html">
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+      <div class="row">
+    <BLANKLINE>
+      <div class="label">
+        <label for="field.title" title="">Title</label>
+      </div>
+      <p class="hint"></p>
+      <div class="field">
+        <input class="textType" id="field.title" name="field.title" size="20" type="text" value="Term 2"></div>
+      <div class="clear">&nbsp;</div>
+    <BLANKLINE>
+    <BLANKLINE>
+      </div>
+    <BLANKLINE>
+      <div class="controls">
+        <input type="submit" class="button-ok" name="BASIC_UPDATE_SUBMIT" value="Save changes"></div>
+    <BLANKLINE>
+    </form>
+    <BLANKLINE>
+    <BLANKLINE>
+              </div>
+
+We just get the edition of the title as there is timetable related to this term.
+
+    >>> manager.getControl(name='field.title').value = 'Term 4'
+    >>> manager.getControl('Save changes').click()
+    >>> 'Saved changes.' in manager.contents
+    True
+    >>> manager.getControl(name='field.title').value
+    'Term 4'
+
+Let's try to delete:
+
+    >>> manager.getLink('Terms').click()
+    >>> manager.getControl(name='delete.term-2').value = True
+    >>> manager.getControl('Delete').click()
+    >>> 'Are you sure you want to delete the selected terms?' in manager.contents
+    True
+    >>> 'Term 4' in manager.contents
+    True
+    >>> print manager.contents
+    <BLANKLINE>
+    <BLANKLINE>
+    ...
+      Are you sure you want to delete the selected terms?
+    ...
+    This term is used by 1 individual timetables.
+    ...
+    >>> manager.getControl('Confirm').click()
+
+So the timetables should be also deleted:
+
+    >>> manager.getLink('Section').click()
+    >>> manager.getLink('Math 5').click()
+    >>> manager.getLink('View Timetables').click()
+    >>> print manager.contents
+    <BLANKLINE>
+    <BLANKLINE>
+    ...
+    <h3>Timetables</h3>
+      <ul>
+      </ul>
+    ...
+
+

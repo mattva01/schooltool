@@ -21,9 +21,9 @@ Term implementation
 
 $Id$
 """
-import datetime
 import persistent
 
+from zope.app import zapi
 import zope.interface
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container import contained, btree
@@ -32,6 +32,7 @@ from schooltool.app.app import getSchoolToolApplication
 from schooltool.common import DateRange
 
 from schooltool.term import interfaces
+from schooltool.timetable import findRelatedTimetables
 
 
 class Term(DateRange, contained.Contained, persistent.Persistent):
@@ -134,3 +135,13 @@ def getNextTermForDate(date):
     if before:
         return max(before)[1]
     return None
+
+def clearTimetablesOnDeletion(object, event):
+    """
+    This event subscriber for term will remove all timetable
+    related to the term
+    """
+    object = event.object
+    for tt in findRelatedTimetables(object):
+        ttdict = zapi.getParent(tt)
+        del ttdict[zapi.getName(tt)]

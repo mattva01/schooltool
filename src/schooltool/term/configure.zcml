@@ -42,6 +42,11 @@
              set_schema=".interfaces.ITerm" />
   </class>
 
+  <subscriber
+      for=".interfaces.ITerm
+           zope.app.container.interfaces.IObjectRemovedEvent"
+      handler=".term.clearTimetablesOnDeletion" />
+
   <!-- sample data -->
   <configure
       xmlns:zcml="http://namespaces.zope.org/zcml"

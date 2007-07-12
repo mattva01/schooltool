@@ -45,13 +45,11 @@ from schooltool.calendar.utils import next_month, week_start
 from schooltool.timetable import findRelatedTimetables
 from schooltool.term.interfaces import ITermContainer, ITerm
 from schooltool.term.term import Term
-
 from schooltool import SchoolToolMessage as _
 
 
 class TermContainerView(TableContainerView):
     """Term container view."""
-    # XXX ftest deletion!
 
     __used_for__ = ITermContainer
 
@@ -135,6 +133,9 @@ class TermEditView(BrowserView, TermEditViewMixin):
 
     update_status = None
 
+    edit_template = ViewPageTemplateFile('term_add_edit.pt')
+    basic_edit_template = ViewPageTemplateFile('term_basic_add_edit.pt')
+
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)
         setUpEditWidgets(self, ITermForm)
@@ -144,6 +145,13 @@ class TermEditView(BrowserView, TermEditViewMixin):
                   mapping={'title': self.context.title})
         return title
 
+    def __call__(self):
+        relatedTT = findRelatedTimetables(self.context)
+        if relatedTT:
+            return self.basic_edit_template()
+        else:
+            return self.edit_template()
+
     def update(self):
         if self.update_status is not None:
             return self.update_status # We've been called before.
@@ -151,13 +159,18 @@ class TermEditView(BrowserView, TermEditViewMixin):
         self.term = self._buildTerm()
         if self.term is None:
             self.term = self.context
-        elif Update in self.request:
+        if Update in self.request:
             self.context.reset(self.term.first, self.term.last)
             for day in self.term:
                 if self.term.isSchoolday(day):
                     self.context.add(day)
             modified(self.context)
             self.update_status = _("Saved changes.")
+        elif 'BASIC_UPDATE_SUBMIT' in self.request:
+            title = self.request.get('field.title')
+            if title:
+                self.context.title = title
+                self.update_status = _("Saved changes.")
         return self.update_status
 
     def calendar(self):
