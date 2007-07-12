@@ -192,6 +192,12 @@
       handler=".model.addEventsToCalendar" />
 
   <subscriber
+      for=".interfaces.ITimetableSchema
+           zope.app.container.interfaces.IObjectRemovedEvent"
+      handler=".schema.clearTimetablesOnDeletion" />
+
+
+  <subscriber
       for="schooltool.timetable.interfaces.ITimetableActivityRemovedEvent"
       handler=".model.removeEventsFromCalendar" />
 

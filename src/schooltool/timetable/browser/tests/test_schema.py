@@ -880,6 +880,11 @@ def doctest_TimetableDependentDeleteView():
         >>> ztapi.provideAdapter(IAttributeAnnotatable, ITimetables,
         ...                      TimetablesAdapter)
         >>> setup.setUpAnnotations()
+        >>> from schooltool.timetable.schema import clearTimetablesOnDeletion
+        >>> from schooltool.timetable.interfaces import ITimetableSchema
+        >>> from zope.app.container.interfaces import IObjectRemovedEvent
+        >>> ztapi.subscribe([ITimetableSchema, IObjectRemovedEvent], None,
+        ...                 clearTimetablesOnDeletion)
 
     Now, let's create a couple of timetables to operate on:
 

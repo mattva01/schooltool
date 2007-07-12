@@ -238,9 +238,6 @@ class TimetableDependentDeleteView(ContainerDeleteView):
     def update(self):
         if 'CONFIRM' in self.request:
             for key in self.listIdsForDeletion():
-                for tt in findRelatedTimetables(self.context[key]):
-                    ttdict = getParent(tt)
-                    del ttdict[getName(tt)]
                 del self.context[key]
             self.request.response.redirect(self.nextURL())
         elif 'CANCEL' in self.request:

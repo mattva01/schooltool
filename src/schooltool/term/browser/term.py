@@ -63,11 +63,7 @@ class TermContainerView(TableContainerView):
     def update(self):
         if 'CONFIRM' in self.request:
             for key in self.listIdsForDeletion():
-                for tt in findRelatedTimetables(self.context[key]):
-                    ttdict = getParent(tt)
-                    del ttdict[getName(tt)]
                 del self.context[key]
-
 
 class ITermForm(Interface):
     """Form schema for ITerm add/edit views."""

@@ -45,7 +45,7 @@
   <subscriber
       for=".interfaces.ITerm
            zope.app.container.interfaces.IObjectRemovedEvent"
-      handler=".term.clearTimetablesOnDeletion" />
+      handler="schooltool.timetable.schema.clearTimetablesOnDeletion" />
 
   <!-- sample data -->
   <configure

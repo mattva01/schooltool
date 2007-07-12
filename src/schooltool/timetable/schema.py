@@ -27,10 +27,12 @@ from sets import Set
 
 from zope.interface import implements
 from zope.annotation.interfaces import IAttributeAnnotatable
+from zope.app import zapi
 from zope.app.container.btree import BTreeContainer
 from zope.app.container.contained import Contained
 
-from schooltool.timetable import Timetable, TimetableDay
+from schooltool.timetable import Timetable, TimetableDay, findRelatedTimetables
+
 from schooltool.timetable.interfaces import ITimetableSchema
 from schooltool.timetable.interfaces import ITimetableSchemaContained
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
@@ -160,3 +162,13 @@ class TimetableSchemaContainer(BTreeContainer):
 
     def getDefault(self):
         return self[self.default_id]
+
+def clearTimetablesOnDeletion(obj, event):
+    """
+    This event subscriber for term and schema will remove all timetable
+    related to the term
+    """
+    object = event.object
+    for tt in findRelatedTimetables(obj):
+        ttdict = zapi.getParent(tt)
+        del ttdict[zapi.getName(tt)]
