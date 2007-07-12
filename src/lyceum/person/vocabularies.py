@@ -28,8 +28,8 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPerson
 from schooltool.group.interfaces import IGroup
 
-from lyceum.interfaces import IGroupSource
-from lyceum.interfaces import ILyceumPersonSource
+from lyceum.person.interfaces import IGroupSource
+from lyceum.person.interfaces import ILyceumPersonSource
 
 
 class GradeClassSource(object):

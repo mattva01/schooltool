@@ -26,6 +26,7 @@ from zope.schema import Choice
 from zope.schema import TextLine
 from zope.interface import Interface
 from zope.interface import Attribute
+from zope.schema.interfaces import IIterableSource
 
 from schooltool.demographics.interfaces import SourceList
 
@@ -63,7 +64,7 @@ class ILyceumPerson(Interface):
 
     gradeclass = Choice(
         title=_(u"Grade"),
-        source="lyceum.grade_class_source",
+        source="lyceum.person.grade_class_source",
         required=False,
         )
 
@@ -74,9 +75,18 @@ class ILyceumPerson(Interface):
 
     advisor = Choice(
         title=_(u"Advisor"),
-        source="lyceum.advisor_source",
+        source="lyceum.person.advisor_source",
         required=False,
         )
+
+
+class ILyceumPersonSource(IIterableSource):
+    """Marker interface for sources that list lyceum persons."""
+
+
+# XXX should be in skin or common, or more properly - core
+class IGroupSource(IIterableSource):
+    """Marker interface for sources that list schooltool groups."""
 
 
 class IStudent(Interface):

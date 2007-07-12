@@ -43,6 +43,16 @@
   <adapter
       factory=".advisor.PersonStudentAdapter" />
 
+  <utility
+     factory=".vocabularies.gradeClassVocabularyFactory"
+     provides="zope.schema.interfaces.IVocabularyFactory"
+     name="lyceum.person.grade_class_source" />
+
+  <utility
+     factory=".vocabularies.advisorVocabularyFactory"
+     provides="zope.schema.interfaces.IVocabularyFactory"
+     name="lyceum.person.advisor_source" />
+
   <include package="lyceum.person.browser" />
 
 </configure>

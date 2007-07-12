@@ -33,15 +33,6 @@ from schooltool.calendar.interfaces import ICalendar
 from lyceum import LyceumMessage as _
 
 
-class ILyceumPersonSource(IIterableSource):
-    """Marker interface for sources that list lyceum persons."""
-
-
-# XXX should be in skin or common, or more properly - core
-class IGroupSource(IIterableSource):
-    """Marker interface for sources that list schooltool groups."""
-
-
 class ISchoolToolLyceumApplication(ISchoolToolApplication):
     """Marker interface for lyceum specific school."""
 

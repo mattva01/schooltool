@@ -42,7 +42,7 @@ def doctest_GradeClassSource():
 
         >>> provideAdapter(STAppStub, adapts=[None], provides=ISchoolToolApplication)
 
-        >>> from lyceum.vocabularies import GradeClassSource
+        >>> from lyceum.person.vocabularies import GradeClassSource
         >>> source = GradeClassSource(None)
         >>> [group for group in source]
         ['a', 'b', 'some-group']
@@ -98,7 +98,7 @@ def doctest_AdvisorSource():
 
         >>> provideAdapter(STAppStub, adapts=[None], provides=ISchoolToolApplication)
 
-        >>> from lyceum.vocabularies import AdvisorSource
+        >>> from lyceum.person.vocabularies import AdvisorSource
         >>> source = AdvisorSource(None)
         >>> [person.__name__ for person in source]
         ['john', 'sarrah']

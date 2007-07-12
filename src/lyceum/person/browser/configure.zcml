@@ -23,14 +23,14 @@
 
   <!-- list of persons -->
   <zope:adapter
-      for="lyceum.interfaces.ILyceumPersonSource
+      for="lyceum.person.interfaces.ILyceumPersonSource
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory=".person.PersonTerms"
       />
 
   <!-- list of groups -->
   <zope:adapter
-      for="lyceum.interfaces.IGroupSource
+      for="lyceum.person.interfaces.IGroupSource
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory=".person.GroupTerms"
       />

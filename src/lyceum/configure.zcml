@@ -34,16 +34,6 @@
      name="lyceum_scheduling"
      />
 
-  <utility
-     factory=".vocabularies.gradeClassVocabularyFactory"
-     provides="zope.schema.interfaces.IVocabularyFactory"
-     name="lyceum.grade_class_source" />
-
-  <utility
-     factory=".vocabularies.advisorVocabularyFactory"
-     provides="zope.schema.interfaces.IVocabularyFactory"
-     name="lyceum.advisor_source" />
-
   <adapter
       for="schooltool.group.interfaces.IGroup"
       factory=".group_calendar.GroupTimetableCalendar"
