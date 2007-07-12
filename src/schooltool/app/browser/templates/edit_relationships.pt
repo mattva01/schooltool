@@ -1,53 +1,53 @@
 <tal:defs define="update view/update" />
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
-<head>
-  <title metal:fill-slot="title" tal:content="context/title" />
-</head>
-<body>
-<metal:block metal:fill-slot="body"
-             tal:define="batch view/available_table/batch">
-
-<form method="post" tal:attributes="action request/URL" class="standalone">
-<h3 i18n:translate="" tal:content="view/title" />
-<fieldset tal:define="items view/getSelectedItems">
-  <tal:if condition="items">
-    <legend i18n:translate="" tal:content="view/current_title" />
-    <tal:block replace="structure view/selected_table/render" />
-    <div class="controls">
-      <input type="submit" class="button-ok" name="REMOVE_ITEMS"
-        value="Remove"
-        title="Shortcut: Alt-R" accesskey="R"
-        i18n:attributes="value; accesskey" />
-    </div>
-  </tal:if>
-  <p tal:condition="not:items" i18n:translate="">
-    There are none.
-  </p>
-</fieldset>
-<fieldset>
-  <legend i18n:translate="" tal:content="view/available_title" />
-  <div class="item_list">
-    <tal:block replace="structure view/available_table/batch/render" />
-    <tal:block replace="structure view/available_table/filter_widget/render" />
-    <tal:block replace="structure view/available_table/render" />
-    <div class="controls">
-      <input type="submit" class="button-ok" name="ADD_ITEMS"
-             value="Add" tal:condition="batch"
-             title="Shortcut: Alt-A" accesskey="A"
-             i18n:attributes="value; accesskey" />
-    </div>
-    <p tal:condition="not:batch" i18n:translate="">
-      There are none to add.
-    </p>
-  </div>
-</fieldset>
-
-<div class="controls">
-  <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
-         i18n:attributes="value cancel-button" />
-</div>
-</form>
-
-</metal:block>
-</body>
+  <head>
+    <title metal:fill-slot="title" tal:content="context/title" />
+  </head>
+  <body>
+    <metal:block metal:fill-slot="body"
+		 tal:define="batch view/available_table/batch">
+      
+      <form method="post" tal:attributes="action request/URL" class="standalone">
+	<h3 i18n:translate="" tal:content="view/title" />
+	<fieldset tal:define="items view/getSelectedItems">
+	  <tal:if condition="items">
+	    <legend i18n:translate="" tal:content="view/current_title" />
+	    <tal:block replace="structure view/selected_table/render" />
+	    <div class="controls">
+	      <input type="submit" class="button-ok" name="REMOVE_ITEMS"
+		     value="Remove"
+		     title="Shortcut: Alt-R" accesskey="R"
+		     i18n:attributes="value; accesskey" />
+	    </div>
+	  </tal:if>
+	  <p tal:condition="not:items" i18n:translate="">
+	    There are none.
+	  </p>
+	</fieldset>
+	<fieldset>
+	  <legend i18n:translate="" tal:content="view/available_title" />
+	  <div class="item_list">
+	    <tal:block replace="structure view/available_table/batch/render" />
+	    <tal:block replace="structure view/available_table/filter_widget/render" />
+	    <tal:block replace="structure view/available_table/render" />
+	    <div class="controls">
+	      <input type="submit" class="button-ok" name="ADD_ITEMS"
+		     value="Add" tal:condition="batch"
+		     title="Shortcut: Alt-A" accesskey="A"
+		     i18n:attributes="value; accesskey" />
+	    </div>
+	    <p tal:condition="not:batch" i18n:translate="">
+	      There are none to add.
+	    </p>
+	  </div>
+	</fieldset>
+	
+	<div class="controls">
+	  <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+		 i18n:attributes="value cancel-button" />
+	</div>
+      </form>
+      
+    </metal:block>
+  </body>
 </html>
