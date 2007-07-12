@@ -74,12 +74,6 @@
       component=".generations.schemaManager"
       />
 
-  <adapter
-      factory=".advisor.PersonAdvisorAdapter" />
-
-  <adapter
-      factory=".advisor.PersonStudentAdapter" />
-
   <include package="lyceum.person" />
   <include package="lyceum.journal" />
   <include package="lyceum.browser" />

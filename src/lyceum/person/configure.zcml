@@ -37,6 +37,12 @@
       handler=".person.catalogSetUpSubscriber"
       />
 
+  <adapter
+      factory=".advisor.PersonAdvisorAdapter" />
+
+  <adapter
+      factory=".advisor.PersonStudentAdapter" />
+
   <include package="lyceum.person.browser" />
 
 </configure>

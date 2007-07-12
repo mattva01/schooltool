@@ -25,6 +25,7 @@ from zope.schema import Date
 from zope.schema import Choice
 from zope.schema import TextLine
 from zope.interface import Interface
+from zope.interface import Attribute
 
 from schooltool.demographics.interfaces import SourceList
 
@@ -76,3 +77,19 @@ class ILyceumPerson(Interface):
         source="lyceum.advisor_source",
         required=False,
         )
+
+
+class IStudent(Interface):
+
+    advisor = Attribute("""Advisor of a student.""")
+
+
+class IAdvisor(Interface):
+
+    students = Attribute("""Students being advised by the advisor.""")
+
+    def addStudent(student):
+        """Add a student to the advised students list."""
+
+    def removeStudent(student):
+        """Remove this student from the advised students list."""

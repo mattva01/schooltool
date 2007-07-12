@@ -30,8 +30,8 @@ from schooltool.relationship.relationship import RelationshipSchema
 from schooltool.relationship.interfaces import IRelationshipLinks
 
 from lyceum.person.interfaces import ILyceumPerson
-from lyceum.interfaces import IAdvisor
-from lyceum.interfaces import IStudent
+from lyceum.person.interfaces import IAdvisor
+from lyceum.person.interfaces import IStudent
 
 
 URIAdvising = URIObject('http://schooltool.org/ns/lyceum/advising',

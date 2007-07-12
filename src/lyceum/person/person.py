@@ -39,9 +39,9 @@ from schooltool.utility.utility import UtilitySetUp
 from schooltool.table.table import url_cell_formatter
 from schooltool.relationship.interfaces import IRelationshipLinks
 
-from lyceum.advisor import Advising, URIAdvisor, URIAdvising, URIStudent
-from lyceum.interfaces import IAdvisor
-from lyceum.interfaces import IStudent
+from lyceum.person.advisor import Advising, URIAdvisor, URIAdvising, URIStudent
+from lyceum.person.interfaces import IAdvisor
+from lyceum.person.interfaces import IStudent
 from lyceum.person.interfaces import ILyceumPerson
 from lyceum import LyceumMessage as _
 
