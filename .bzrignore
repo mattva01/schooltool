@@ -3,10 +3,10 @@ src/schooltool/locales/schooltool.pot
 ./Zope3
 ./schoolbell.conf
 ./schooltool.conf
-schooltool-skel/etc/package-includes/*.zcml
 schooltool-skel/log/*.log
 schooltool-skel/var/Data.fs*
 schooltool-skel/var/*.pid
 schooltool-skel/var/*.log
 src/schooltool/batching/tests/sample
 src/schooltool.egg-info
+schooltool-skel/etc/plugins/*.zcml
