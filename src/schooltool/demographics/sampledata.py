@@ -57,6 +57,20 @@ class SampleStudents(object):
     # Number of persons to generate
     power = 1000
 
+    def personFactory(self, namegen, prefixgen, gendergen, count):
+        first_name, last_name, full_name = namegen.generate()
+        person_id = 'student%03d' % count
+        person = Person(person_id, title=full_name)
+        person.nameinfo.prefix = prefixgen.generate()
+        person.nameinfo.first_name = first_name
+        person.nameinfo.last_name = last_name
+        person.setPassword(person_id)
+        person.demographics.gender = gendergen.generate()
+        person.schooldata.id = person.__name__
+        person.parent1.name = namegen.generate()[2]
+        person.parent2.name = namegen.generate()[2]
+        return person
+
     def generate(self, app, seed=None):
         namegen = NameGenerator(str(seed) + self.name)
         prefixgen = ChoiceGenerator(str(seed), ['Mr', 'Mrs', 'Miss', ''])
@@ -71,24 +85,13 @@ class SampleStudents(object):
             stud_group = True
         except KeyError:
             stud_group = False
-        for i in range(self.power):
-            first_name, last_name, full_name = namegen.generate()
-            person_id = 'student%03d' % i
-            person = Person(person_id, title=full_name)
-            person.nameinfo.prefix = prefixgen.generate()
-            person.nameinfo.first_name = first_name
-            person.nameinfo.last_name = last_name
-            person.setPassword(person_id)
+        for count in range(self.power):
+            person = self.personFactory(namegen, prefixgen, gendergen, count)
             # Without removeSecurityProxy we can't add members a
             # group.
             if stud_group:
                 removeSecurityProxy(students.members).add(person)
-
-            person.demographics.gender = gendergen.generate()
-            person.schooldata.id = person_id
-            person.parent1.name = namegen.generate()[2]
-            person.parent2.name = namegen.generate()[2]
-            app['persons'][person_id] = person
+            app['persons'][person.__name__] = person
 
 
 class SampleTeachers(object):
@@ -100,20 +103,24 @@ class SampleTeachers(object):
     # Number of teachers to generate
     power = 48
 
+    def personFactory(self, namegen, count):
+        first_name, last_name, full_name = namegen.generate()
+        person_id = 'teacher%03d' % count
+        person = Person(person_id, title=full_name)
+        person.nameinfo.first_name = first_name
+        person.nameinfo.last_name = last_name
+        person.setPassword(person_id)
+        return person
+
     def generate(self, app, seed=None):
         namegen = NameGenerator(str(seed) + self.name)
         teachers = app['groups']['teachers']
-        for i in range(self.power):
-            first_name, last_name, full_name = namegen.generate()
-            person_id = 'teacher%03d' % i
-            person = Person(person_id, title=full_name)
-            person.nameinfo.first_name = first_name
-            person.nameinfo.last_name = last_name
-            person.setPassword(person_id)
+        for count in range(self.power):
+            person = self.personFactory(namegen, count)
             # Without removeSecurityProxy we can't add members a
             # group.
             removeSecurityProxy(teachers.members).add(person)
-            app['persons'][person_id] = person
+            app['persons'][person.__name__] = person
 
 
 class SamplePersonalEvents(object):

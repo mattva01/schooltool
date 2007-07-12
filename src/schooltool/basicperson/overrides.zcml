@@ -15,6 +15,24 @@
       factory=".person.getPersonContainerCatalog"
       provides="zope.app.catalog.interfaces.ICatalog" />
 
+  <configure
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      zcml:condition="have devmode">
+
+    <utility
+        factory=".sampledata.SampleBasicStudents"
+        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
+        name="students"
+        />
+
+    <utility
+        factory=".sampledata.SampleBasicTeachers"
+        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
+        name="teachers"
+        />
+
+  </configure>
+
   <include package=".browser" file="overrides.zcml" />
 
 </configure>
