@@ -2,7 +2,7 @@
 <configure xmlns="http://namespaces.zope.org/browser"
            xmlns:zope="http://namespaces.zope.org/zope"
            xmlns:i18n="http://namespaces.zope.org/i18n"
-           i18n_domain="schooltool">
+           i18n_domain="lyceum">
 
   <page
      name="add.html"

@@ -1,4 +1,4 @@
-<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="lyceum">
 <body>
 <metal:nothing metal:fill-slot="content-header" />
 <metal:block metal:fill-slot="body">
