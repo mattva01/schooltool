@@ -554,6 +554,67 @@ class PersonTimetableSetupView(TimetableSetupViewBase):
                 group_sections.append((group, section))
         return group_sections
 
+
+class TimetableAddForm(TimetableSetupViewBase):
+
+    template = ViewPageTemplateFile('templates/timetable-add.pt')
+
+    def getTerms(self):
+        """Return the chosen term."""
+        if 'terms' in self.request:
+            terms = getSchoolToolApplication()['terms']
+            requested_terms = []
+
+            # request['terms'] may be a list of strings or a single string, we
+            # need to handle both cases
+            try:
+                requested_terms = requested_terms + self.request['terms']
+            except TypeError:
+                requested_terms.append(self.request['terms'])
+            return [terms[term] for term in requested_terms]
+        else:
+            return [getNextTermForDate(datetime.date.today()),]
+
+    def __call__(self):
+        context = removeSecurityProxy(self.context)
+        self.app = getSchoolToolApplication()        
+        self.has_timetables = bool(self.app["terms"] and self.app["ttschemas"])
+        if not self.has_timetables:
+            return self.template()
+        self.terms = self.getTerms()
+        self.ttschema = self.getSchema()
+        self.ttkeys = ['.'.join((term.__name__, self.ttschema.__name__))
+                       for term in self.terms]
+        if 'SUBMIT' in self.request:
+            section = removeSecurityProxy(self.context)
+            for key in self.ttkeys:
+                if context.get(key, None):
+                    timetable = context[key]
+                else:
+                    timetable = self.ttschema.createTimetable()
+                    context[key] = timetable
+##                 for day_id, day in timetable.items():
+##                     for period_id, period in list(day.items()):
+##                         if '.'.join((day_id, period_id)) in self.request:
+##                             if not period:
+##                                 # XXX Resource list is being copied
+##                                 # from section as this view can't do
+##                                 # proper resource booking
+##                                 act = TimetableActivity(title=course_title,
+##                                                         owner=section,
+##                                                         resources=section.resources)
+##                                 day.add(period_id, act)
+##                         else:
+##                             if period:
+##                                 for act in list(period):
+##                                     day.remove(period_id, act)
+
+            # TODO: find a better place to redirect to
+            self.request.response.redirect(
+                zapi.absoluteURL(self.context, self.request))
+        return self.template()
+
+
 # XXX: remove this class soon!
 class SectionTimetableSetupView(TimetableSetupViewBase):
 

@@ -342,6 +342,36 @@ And now the timetable is updated.
           <td class="activity" width="18%"></td>
         </tr>
 
+We can add another timetable schema and then add another timetable for
+this section based on the new schema.
+
+    >>> manager.open('http://localhost/ttschemas')
+    >>> manager.getLink('New Timetable').click()
+
+    >>> manager.getControl('Title').value = 'single-period'
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Days of the week').click()
+    >>> manager.getControl('Same time each day').click()
+    >>> manager.getControl(name='field.times').value = """
+    ... 9:30-21:30
+    ... 21:35-21:45
+    ... """
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Have names').click()
+    >>> manager.getControl(name='field.periods').value = """
+    ... A
+    ... B
+    ... """
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Same').click()
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('No').click()
+
+    >>> manager.open('http://localhost:8000/sections/swimming--frog/timetables/addTimetable.html')
+    >>> manager.getControl(name='ttschema').value = ['singleperiod']
+    >>> manager.getControl('Add').click()
+    >>> manager.getLink('2005-fall.singleperiod').click()
+    >>> manager.getLink('Edit').click()
 
 The activities should show up in the calendar of the users that are in
 this section too:

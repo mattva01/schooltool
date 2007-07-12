@@ -58,6 +58,16 @@
       order="10"
       />
     <navigationViewlet
+      name="add-timetable"
+      for="schooltool.timetable.interfaces.ITimetableDict"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.edit"
+      link="addTimetable.html"
+      title="Add Timetable"
+      order="10"
+      />
+    <navigationViewlet
       name="schedule-section"
       for="schooltool.course.interfaces.ISection"
       manager="schooltool.skin.IActionMenuManager"
@@ -185,6 +195,13 @@
       template="templates/timetable_list.pt"
       permission="schooltool.view"
       menu="zmi_views" title="View"
+      />
+
+  <page
+      name="addTimetable.html"
+      for="schooltool.timetable.interfaces.ITimetableDict"
+      class=".TimetableAddForm"
+      permission="schooltool.edit"
       />
 
   <!-- ttwizard -->
