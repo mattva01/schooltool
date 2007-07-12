@@ -297,11 +297,57 @@ We can have a look at the timetable too, and see a few timetable activities:
           <td class="activity" width="18%"></td>
         </tr>
 
+We can also edit the timetable from the time table view.
+
+    >>> manager.getLink("Edit").click()
+    >>> manager.getControl(name="Wednesday.A").value = True
+    >>> manager.getControl(name="Monday.A").value = False
+    >>> manager.getControl(name="Thursday.B").value = True
+    >>> manager.getControl(name="Tuesday.B").value = False
+    >>> manager.getControl("Save").click()
+
+And now the timetable is updated.
+
+    >>> print analyze.queryHTML('//table/tr[2]', manager.contents)[0]
+    <tr><th class="period" width="2%">A</th>
+          <td class="activity" width="18%"></td>
+    <BLANKLINE>
+          <th class="period" width="2%">A</th>
+          <td class="activity" width="18%"></td>
+    <BLANKLINE>
+          <th class="period" width="2%">A</th>
+          <td class="activity" width="18%">Swimming</td>
+    <BLANKLINE>
+          <th class="period" width="2%">A</th>
+          <td class="activity" width="18%"></td>
+    <BLANKLINE>
+          <th class="period" width="2%">A</th>
+          <td class="activity" width="18%"></td>
+        </tr>
+
+    >>> print analyze.queryHTML('//table/tr[3]', manager.contents)[0]
+    <tr><th class="period" width="2%">B</th>
+          <td class="activity" width="18%"></td>
+    <BLANKLINE>
+          <th class="period" width="2%">B</th>
+          <td class="activity" width="18%"></td>
+    <BLANKLINE>
+          <th class="period" width="2%">B</th>
+          <td class="activity" width="18%"></td>
+    <BLANKLINE>
+          <th class="period" width="2%">B</th>
+          <td class="activity" width="18%">Swimming</td>
+    <BLANKLINE>
+          <th class="period" width="2%">B</th>
+          <td class="activity" width="18%"></td>
+        </tr>
+
+
 The activities should show up in the calendar of the users that are in
 this section too:
 
     >>> manager.open('http://localhost/'
-    ...              'persons/frog/calendar/2005-09-05')
+    ...              'persons/frog/calendar/2005-09-07')
 
     >>> print analyze.queryHTML('//h6[fn:contains(text(), "Swimming")]',
     ...                         manager.contents)[0]

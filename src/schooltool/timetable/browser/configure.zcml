@@ -48,6 +48,16 @@
 
   <configure package="schooltool.skin">
     <navigationViewlet
+      name="edit-section-timetable"
+      for="schooltool.timetable.interfaces.ITimetable"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.edit"
+      link="edit.html"
+      title="Edit"
+      order="10"
+      />
+    <navigationViewlet
       name="schedule-section"
       for="schooltool.course.interfaces.ISection"
       manager="schooltool.skin.IActionMenuManager"
@@ -160,6 +170,13 @@
       template="templates/timetable.pt"
       permission="schooltool.view"
       menu="zmi_views" title="View"
+      />
+
+  <page
+      name="edit.html"
+      for="schooltool.timetable.interfaces.ITimetable"
+      class=".TimetableEditView"
+      permission="schooltool.edit"
       />
 
   <page

@@ -554,7 +554,7 @@ class PersonTimetableSetupView(TimetableSetupViewBase):
                 group_sections.append((group, section))
         return group_sections
 
-
+# XXX: remove this class soon!
 class SectionTimetableSetupView(TimetableSetupViewBase):
 
     __used_for__ = ISection
@@ -662,6 +662,105 @@ class SectionTimetableSetupView(TimetableSetupViewBase):
                 zapi.absoluteURL(
                     ITimetables(self.context).timetables[self.ttkeys[0]],
                     self.request))
+
+        return self.template()
+
+
+class TimetableEditView(TimetableSetupViewBase):
+
+    __used_for__ = ISection
+
+    template = ViewPageTemplateFile('templates/timetable-edit.pt')
+
+    def getTerms(self):
+        """Return the chosen term."""
+        if 'terms' in self.request:
+            terms = getSchoolToolApplication()['terms']
+            requested_terms = []
+
+            # request['terms'] may be a list of strings or a single string, we
+            # need to handle both cases
+            try:
+                requested_terms = requested_terms + self.request['terms']
+            except TypeError:
+                requested_terms.append(self.request['terms'])
+            return [terms[term] for term in requested_terms]
+        else:
+            return [getNextTermForDate(datetime.date.today()),]
+
+    def getDays(self, ttschema):
+        """Return the current selection.
+
+        Returns a list of dicts with the following keys
+
+            title   -- title of the timetable day
+            periods -- list of timetable periods in that day
+
+        Each period is represented by a dict with the following keys
+
+            title    -- title of the period
+            selected -- a boolean whether that period is in self.context's tt
+                            for this shcema
+
+        """
+        def days(schema):
+            for day_id, day in schema.items():
+                yield {'title': day_id,
+                       'periods': list(periods(day_id, day))}
+
+        def periods(day_id, day):
+            for period_id in day.periods:
+                selected = self.context[day_id][period_id]
+                yield {'title': period_id,
+                       'selected': selected}
+
+        return list(days(ttschema))
+
+    def __call__(self):
+        self.app = getSchoolToolApplication()
+        self.has_timetables = bool(self.app["terms"] and self.app["ttschemas"])
+        if not self.has_timetables:
+            return self.template()
+        self.terms = self.getTerms()
+        self.ttschema = self.getSchema()
+        self.ttkeys = ['.'.join((term.__name__, self.ttschema.__name__))
+                       for term in self.terms]
+        self.days = self.getDays(self.ttschema)
+        #XXX dumb, this doesn't space course names
+        section = removeSecurityProxy(self.context.__parent__.__parent__)
+        course_title = ''.join([course.title
+                                for course in section.courses])
+
+        if 'CANCEL' in self.request:
+            self.request.response.redirect(
+                zapi.absoluteURL(self.context, self.request))
+        if 'SAVE' in self.request:
+            for key in self.ttkeys:
+                if ITimetables(section).timetables.get(key, None):
+                    timetable = ITimetables(section).timetables[key]
+                else:
+                    timetable = self.ttschema.createTimetable()
+                    ITimetables(section).timetables[key] = timetable
+                for day_id, day in timetable.items():
+                    for period_id, period in list(day.items()):
+                        if '.'.join((day_id, period_id)) in self.request:
+                            if not period:
+                                # XXX Resource list is being copied
+                                # from section as this view can't do
+                                # proper resource booking
+                                act = TimetableActivity(title=course_title,
+                                                        owner=section,
+                                                        resources=section.resources)
+                                day.add(period_id, act)
+                        else:
+                            if period:
+                                for act in list(period):
+                                    day.remove(period_id, act)
+
+            # TODO: find a better place to redirect to
+            self.request.response.redirect(
+                zapi.absoluteURL(self.context,
+                                 self.request))
 
         return self.template()
 
