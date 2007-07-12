@@ -5,7 +5,7 @@
 # $Id$
 
 PYTHON=python2.4
-TRANSLATION_DOMAINS=schoolbell schooltool schooltool.commendation
+TRANSLATION_DOMAINS=schooltool schooltool.commendation
 TESTFLAGS=-v
 PYTHONPATH:=$(PYTHONPATH):src:eggs
 SETUPFLAGS=
@@ -137,17 +137,17 @@ update-translations:
 #
 # Makefile rules for importing and exporting translations to rosetta:
 #
-# To create a translation templates (schooltool.pot, schoolbell.pot) for
+# To create a translation templates ($DOMAIN.pot) for
 # uploading to rosetta:
 #
 # 	1. run 'make extract-translations'
-# 	2. upload the src/schooltool/locales/{schoolbell,schooltool}.pot files
+# 	2. upload the src/schooltool/locales/DOMAIN.pot files
 # 	   to rosetta.
 #
 # To create tarballs suitable for uploading to rosetta:
 #
 # 	The following command will create tarballs in the current directory of
-# 	the form {schooltool,schoolbell}-translations.tar.gz. These should be
+# 	the form DOMAIN-translations.tar.gz. These should be
 # 	suitable for uploading to rosetta.
 #
 # 	$ make translation-tarballs
@@ -160,7 +160,7 @@ update-translations:
 #
 #	1. get a clean checkout of schooltool
 # 	2. download the tarballs of exportd PO files from rosetta and rename
-# 	   them to rosetta-schooltool.tar.gz and rosetta-schoolbell.tar.gz
+# 	   them to rosetta-DOMAIN.tar.gz
 # 	3. run 'make update-rosetta-translations'
 # 	4. use svn to add and commit any new/changed translations
 #
@@ -181,8 +181,10 @@ create-translation-tarball:
 
 .PHONY: translation-tarballs
 translation-tarballs: extract-translations update-translations
-	$(MAKE) DOMAIN=schooltool create-translation-tarball
-	$(MAKE) DOMAIN=schoolbell create-translation-tarball
+	set -e; \
+	for domain in $(TRANSLATION_DOMAINS); do \
+	    $(MAKE) DOMAIN=$$domain create-translation-tarball\
+	done
 
 .PHONY: extract-rosetta-tarball
 extract-rosetta-tarball:
@@ -201,8 +203,10 @@ extract-rosetta-tarball:
 
 .PHONY: update-rosetta-translations
 update-rosetta-translations:
-	[ ! -e rosetta-schooltool.tar.gz ] || $(MAKE) DOMAIN=schooltool extract-rosetta-tarball
-	[ ! -e rosetta-schoolbell.tar.gz ] || $(MAKE) DOMAIN=schoolbell extract-rosetta-tarball
+	set -e; \
+	for domain in $(TRANSLATION_DOMAINS); do \
+	    [ ! -e rosetta-$${domain}.tar.gz ] || $(MAKE) DOMAIN=$${domain} extract-rosetta-tarball\
+	done
 	$(MAKE) PYTHON=$(PYTHON) extract-translations update-translations
 	# remove .po~ and .mo files so they are not accidentally committed
 	find $(LOCALES) \( -name '*.po~' -o -name '*.mo' \) -exec rm -f {} \;
