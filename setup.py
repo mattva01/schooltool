@@ -21,7 +21,9 @@
 """
 SchoolTool setup script.
 """
+import os
 
+here = os.path.dirname(__file__)
 
 # Check python version
 import sys
@@ -31,16 +33,15 @@ if sys.version_info < (2, 4):
     sys.exit(1)
 
 import site
-site.addsitedir('eggs')
+site.addsitedir(os.path.join(here, 'eggs'))
 
 import pkg_resources
 pkg_resources.require("setuptools>=0.6a11")
 
-import os
 from setuptools import setup, find_packages
 
 def get_version():
-    version_file = os.path.join('src', 'schooltool', 'version.txt')
+    version_file = os.path.join(here, 'src', 'schooltool', 'version.txt')
     f = open(version_file, 'r')
     result = f.read()
     f.close()
@@ -49,29 +50,29 @@ def get_version():
 # Define packages we want to recursively include, we do this explicitly here
 # to avoid automatic accidents
 root_packages = ['schooltool.app',
+                 'schooltool.base',
+                 'schooltool.calendar',
+                 'schooltool.course',
                  'schooltool.dashboard',
                  'schooltool.demographics',
                  'schooltool.generations',
-                 'schooltool.securitypolicy',
-                 'schooltool.relationship',
-                 'schooltool.course',
-                 'schooltool.timetable',
-                 'schooltool.person',
+                 'schooltool.group',
                  'schooltool.help',
                  'schooltool.locales',
-                 'schooltool.locales.en',
+                 'schooltool.person',
                  'schooltool.resource',
-                 'schooltool.utility',
-                 'schooltool.term',
-                 'schooltool.table',
-                 'schooltool.group',
-                 'schooltool.widget',
-                 'schooltool.attendance',
-                 'schooltool.calendar',
+                 'schooltool.relationship',
+                 'schooltool.securitypolicy',
+                 'schooltool.standard',
                  'schooltool.skin',
+                 'schooltool.table',
+                 'schooltool.term',
                  'schooltool.tests',
                  'schooltool.testing',
+                 'schooltool.timetable',
                  'schooltool.traverser',
+                 'schooltool.utility',
+                 'schooltool.widget',
 
                  # only needed for tests
                  'schooltool.sampledata',
@@ -91,6 +92,24 @@ for package in all_packages:
     for root_package in root_packages:
         if package.startswith(root_package):
             packages.append(package)
+            includes = []
+            package_dir = os.path.join(here, 'src', *package.split('.'))
+            for root, dirs, files in os.walk(package_dir):
+                if '.svn' in dirs:
+                    dirs.remove('.svn')
+                
+                for file in files:
+                    print here, package_dir, root, file
+                
+                #print root, "consumes",
+                #print sum(getsize(join(root, name)) for name in files),
+                #print "bytes in", len(files), "non-directory files"
+                #if 'CVS' in dirs:
+                #dirs.remove('CVS')  # don't visit CVS directories
+
+
+
+
             package_data[package] = ['*.zcml',
                                      '*.xml',
                                      '*.xpdl',

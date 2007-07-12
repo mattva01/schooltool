@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-"""A script that generates vcal_dict.py.
+"""A module that generates vcal_dict.py.
 
 vcal_dict.py contains a dict of tuples (tzid, vcal_representation)
 indexed by their pytz id.
