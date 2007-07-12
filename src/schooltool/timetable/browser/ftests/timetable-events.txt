@@ -71,3 +71,43 @@ Year:
     >>> print_table_cell_for_day('2005-09-12')
     <a href="http://localhost/persons/frog/calendar/2005-09-12" class="cal_yearly_day_busy">12</a>
 
+
+Tests for Time Table editing
+----------------------------
+
+First log in as manager.
+
+    >>> manager = setup.logInManager()
+
+Now check the calendar for the history6a section.  We should have a
+class from 9:30 to 10:25.
+
+    >>> manager.open('http://localhost/sections/history6a/calendar/2006-01-02')
+    >>> events = analyze.queryHTML('//span[@class="start-end"]', manager.contents)
+    >>> for event in events: print event
+    <BLANKLINE>
+    ...09:30...
+    ...10:25...
+    >>> for event in events: '10:30' not in event
+    True
+
+Now we will go and modify the schedule for history6a and see if the
+calendar events are updated
+
+    >>> manager.open('http://localhost/sections/history6a/@@schedule.html')
+    >>> manager.getControl(name="Monday.09:30-10:25").value = False
+    >>> manager.getControl(name="Monday.10:30-11:25").value = True
+    >>> manager.getControl("Save").click()
+    >>> print manager.contents
+    <BLANKLINE>
+    ...<th class="period" width="2%">10:30-11:25</th>
+    <td class="activity" width="18%">History 6</td>...
+
+    >>> manager.open('http://localhost/sections/history6a/calendar/2006-01-02')
+    >>> events = analyze.queryHTML('//span[@class="start-end"]', manager.contents)
+    >>> for event in events: print event
+    <BLANKLINE>
+    ...10:30...
+    ...11:25...
+    >>> for event in events: '09:30' not in event
+    True
