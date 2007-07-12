@@ -54,7 +54,6 @@ ALLOWED_EXTENSIONS = ['txt', 'conf', 'ics' 'pt', 'png',
 # Define packages we want to recursively include, we do this explicitly here
 # to avoid automatic accidents
 root_packages = ['schooltool.app',
-                 'schooltool.base',
                  'schooltool.calendar',
                  'schooltool.course',
                  'schooltool.dashboard',
@@ -67,7 +66,6 @@ root_packages = ['schooltool.app',
                  'schooltool.resource',
                  'schooltool.relationship',
                  'schooltool.securitypolicy',
-                 'schooltool.standard',
                  'schooltool.skin',
                  'schooltool.table',
                  'schooltool.term',
@@ -78,6 +76,10 @@ root_packages = ['schooltool.app',
                  'schooltool.utility',
                  'schooltool.widget',
 
+                 # The schooltool configurations we maintain
+                 'schooltool.stapp2005',
+                 'schooltool.stapp2007',
+                 
                  # only needed for tests
                  'schooltool.sampledata',
                  'schooltool.gradebook',
