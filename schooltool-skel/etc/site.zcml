@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <configure xmlns="http://namespaces.zope.org/zope">
 
-  <include package="schooltool.standard" />
+  <include package="schooltool.stapp2007" />
 
   <include files="plugins/*.zcml" />
 
