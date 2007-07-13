@@ -110,7 +110,8 @@ def collect_ftests(package=None, level=None, layer=None, filenames=None):
                                               'rest': rest})
         if level is not None:
             suite.level = level
-        if layer is not None:
-            suite.layer = layer
+        if layer is None:
+            raise ValueError("ftests must specify an ftesting.zcml.")
+        suite.layer = layer
         suites.append(suite)
     return unittest.TestSuite(suites)
