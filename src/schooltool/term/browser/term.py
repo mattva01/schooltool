@@ -195,9 +195,22 @@ class TermAddView(AddView, TermEditViewMixin):
     _set_before_add = ()
     _set_after_add = ()
 
+    def setDefaultHoliday(self):
+        """
+        Set Saturday and Sunday as default holiday
+        """
+        date = self.term.first
+        while date <= self.term.last:
+            if date.isoweekday() in [6, 7]:
+                if self.term.isSchoolday(date):
+                    self.term.remove(date)
+            date += datetime.date.resolution
+
     def update(self):
         """Process the form."""
         self.term = self._buildTerm()
+        if self.term: # we process the term after clicking the next button
+            self.setDefaultHoliday()
         return AddView.update(self)
 
     def create(self):

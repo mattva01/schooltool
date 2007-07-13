@@ -459,6 +459,23 @@ def doctest_TermAddView_calendar():
         Week 35:  23  24  25  26  27  28  29
         Week 36:  30  31
 
+    By Default, Saturday and Sunday are not school days:
+        >>> view.setDefaultHoliday()
+        >>> date = view.term.first
+        >>> while date <= view.term.last:
+        ...     if not view.term.isSchoolday(date):
+        ...         print date
+        ...     date += datetime.date.resolution
+        2004-08-01
+        2004-08-07
+        2004-08-08
+        2004-08-14
+        2004-08-15
+        2004-08-21
+        2004-08-22
+        2004-08-28
+        2004-08-29
+
     '''
 
 
