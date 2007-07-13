@@ -46,7 +46,6 @@
       </div>
       <div class="tools">
         <div class="breadcrumbs">
-        <a tal:attributes="href context/schooltool:app/@@absolute_url" i18n:translate="">school</a> &#187
         <tal:for tal:repeat="breadcrumb context/@@breadcrumbs/crumbs">
           <tal:if condition="not:repeat/breadcrumb/start">&#187;</tal:if>
           <a tal:condition="breadcrumb/active"
