@@ -196,5 +196,6 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zope.app.zcmlfiles'],
     dependency_links=['http://ftp.schooltool.org/schooltool/eggs/',
                       'http://download.zope.org/distribution/'],
-    package_data=package_data
+    package_data=package_data,
+    include_package_data=True
     )
