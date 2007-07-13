@@ -54,6 +54,7 @@ ALLOWED_EXTENSIONS = ['txt', 'conf', 'ics', 'pt', 'png',
 # Define packages we want to recursively include, we do this explicitly here
 # to avoid automatic accidents
 root_packages = ['schooltool.app',
+                 'schooltool.attendance',
                  'schooltool.calendar',
                  'schooltool.course',
                  'schooltool.dashboard',
