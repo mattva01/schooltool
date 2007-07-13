@@ -48,8 +48,8 @@ def get_version():
     return result
 
 # allowed extensions
-ALLOWED_EXTENSIONS = ['txt', 'conf', 'ics', 'pt', 'png',
-                      'css', 'js', 'ico', 'gif', 'xml', 'xpdl', 'zcml']
+ALLOWED_EXTENSIONS = ['conf','css', 'gif', 'ico', 'ics', 'js', 'mo', 'po', 'pt',
+                      'png', 'txt', 'xml', 'xpdl', 'zcml']
 
 # Define packages we want to recursively include, we do this explicitly here
 # to avoid automatic accidents
@@ -81,7 +81,7 @@ root_packages = ['schooltool.app',
                  # The schooltool configurations we maintain
                  'schooltool.stapp2005',
                  'schooltool.stapp2007',
-                 
+
                  # only needed for tests
                  'schooltool.sampledata',
                  'schooltool.gradebook',
@@ -110,7 +110,7 @@ for package in all_packages:
                 r = root
                 while r != package_dir:
                     r, dir = os.path.split(r)
-                    prefix.insert(0, dir) 
+                    prefix.insert(0, dir)
                     assert r.startswith(package_dir)
                 if prefix:
                     prefix = os.path.join(*prefix)
