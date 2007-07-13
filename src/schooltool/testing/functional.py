@@ -87,10 +87,6 @@ class ZCMLLayer(_ZCMLLayer):
         finally:
             uninstall_db_bootstrap_hook()
 
-app_functional_layer = ZCMLLayer(find_ftesting_zcml(),
-                                 __name__,
-                                 'app_functional_layer')
-
 def collect_ftests(package=None, level=None, layer=None, filenames=None):
     """Collect all functional doctest files in a given package.
 
@@ -114,9 +110,7 @@ def collect_ftests(package=None, level=None, layer=None, filenames=None):
                                               'rest': rest})
         if level is not None:
             suite.level = level
-        if layer is None:
-            suite.layer = app_functional_layer
-        else:
+        if layer is not None:
             suite.layer = layer
         suites.append(suite)
     return unittest.TestSuite(suites)
