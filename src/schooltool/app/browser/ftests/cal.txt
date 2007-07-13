@@ -432,7 +432,7 @@ Let's see what the breadcrumbs are for this event:
     >>> print analyze.queryHTML('//div[@class="breadcrumbs"]',
     ...                         frog.contents)[0]
     <div class="breadcrumbs">
-      <a href="http://localhost">SchoolTool</a>
+      <a href="http://localhost">school</a>
       &raquo;
       <a href="http://localhost/persons">persons</a>
       &raquo;

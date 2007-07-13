@@ -7,9 +7,13 @@
 </head>
 <body>
 
+<span metal:fill-slot="zonki" i18n:translate="">
+  <img src="zonki.png" alt="SchoolTool" i18n:attributes="alt"
+    tal:attributes="src context/++resource++zonki-reading.png" /> 
+</span>
+
 <h1 metal:fill-slot="content-header"
     tal:content="view/index_title" i18n:translate="">Contents</h1>
-
 <metal:block metal:fill-slot="body"
              tal:define="canModify view/canModify">
   <tal:block replace="structure view/table/batch/render" />

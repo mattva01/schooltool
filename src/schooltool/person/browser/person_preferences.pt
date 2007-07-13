@@ -4,6 +4,12 @@
   <title metal:fill-slot="title" i18n:translate="">Edit person preferences</title>
 </head>
 <body>
+
+<span metal:fill-slot="zonki" i18n:translate="">
+  <img src="zonki.png" alt="SchoolTool" i18n:attributes="alt"
+    tal:attributes="src context/++resource++zonki-question.png" /> 
+</span>
+
 <metal:nothing metal:fill-slot="content-header" />
 <metal:block metal:fill-slot="body">
 

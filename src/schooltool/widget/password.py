@@ -35,14 +35,17 @@ class PasswordConfirmationWidget(PasswordWidget):
                 style=self.style,
                 size=self.displayWidth,
                 extra=self.extra)
-        # XXX we don't want label in the translatable string
-        return translate(
-            _(u'${password} <label for="${label}" title="">Confirm</label> ${confirm}',
-            mapping={
-            'label': confirm_name,
-            'password': password_tag,
-            'confirm': confirm_tag}),
-            context=self.request)
+
+        confirm_label = translate(_("confirm password", default="Confirm"),
+                                  context=self.request)
+        return u"""<div><div>%s</div>
+                     <br />
+                     <div class="label">
+                       <label for="%s" title="">%s</label>
+                     </div>
+                     <div>%s</div>
+                   </div>""" % (
+            password_tag, confirm_name, confirm_label, confirm_tag)
 
     def _toFieldValue(self, input):
         """Check whether the confirmation field value is identical to

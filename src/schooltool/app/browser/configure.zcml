@@ -82,6 +82,13 @@
       template="templates/calendar_macros.pt"
       />
 
+  <page
+      name="robots.txt"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      permission="zope.View"
+      class=".app.ViewRobot"
+      />
+
   <resource name="day.png" file="resources/day.png"
             layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="week.png" file="resources/week.png"
@@ -589,5 +596,13 @@
   <zope:adapter
       factory=".cal.CalendarMenuViewletCrowd"
       name="schooltool.view" />
+
+  <zope:adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication
+           zope.publisher.interfaces.http.IHTTPRequest"
+      factory=".app.SchoolBreadcrumbInfo"
+      trusted="true"
+      permission="zope.Public"
+      />
 
 </configure>

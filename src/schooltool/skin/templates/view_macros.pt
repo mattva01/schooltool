@@ -32,16 +32,21 @@
   <body>
     <div id="header">
       <div class="logo">
-        <a href=""
+        <a class="main_logo" href=""
           tal:define="url context/schooltool:app/@@absolute_url"
           tal:attributes="href url">
-          <img src="logo.png" alt="SchoolTool" i18n:attributes="alt"
-            tal:attributes="src context/++resource++logo.png"/>
+          <metal:block metal:define-slot="zonki">          
+            <img src="logo.png" alt="SchoolTool" i18n:attributes="alt"
+            tal:attributes="src context/++resource++zonki-regular.png"/>
+          </metal:block>
+          <div id="schooltool-name"><span id="logo-left">School</span><span id="logo-right">Tool</span></div>
+          <div tal:content="context/schooltool:app/title" id="school-title">My Own School</div>
         </a>
         <tal:block replace="structure provider:schooltool.Header" />
       </div>
       <div class="tools">
         <div class="breadcrumbs">
+        <a tal:attributes="href context/schooltool:app/@@absolute_url" i18n:translate="">school</a> &#187
         <tal:for tal:repeat="breadcrumb context/@@breadcrumbs/crumbs">
           <tal:if condition="not:repeat/breadcrumb/start">&#187;</tal:if>
           <a tal:condition="breadcrumb/active"

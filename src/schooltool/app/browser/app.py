@@ -22,7 +22,6 @@ SchoolTool application views.
 $Id$
 """
 
-from zope.component import getUtility
 from zope.interface import implements
 from zope.security.interfaces import IParticipation
 from zope.security.management import getSecurityPolicy
@@ -37,6 +36,7 @@ from zope.publisher.browser import BrowserView
 from zope.component import queryMultiAdapter
 from zope.app.security.interfaces import IAuthentication
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.publisher.browser import BrowserPage
 
 from schooltool import SchoolToolMessage as _
 from schooltool.app.app import getSchoolToolApplication
@@ -45,10 +45,10 @@ from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IAsset
 from schooltool.person.interfaces import IPerson
-from schooltool.person.interfaces import IPersonFactory
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.table import label_cell_formatter_factory
 from schooltool.table.interfaces import ITableFormatter
+from schooltool.skin.breadcrumbs import CustomNameBreadCrumbInfo
 
 
 class ApplicationView(BrowserView):
@@ -281,3 +281,11 @@ class LeaderView(RelationshipViewBase):
     def getAvailableItemsContainer(self):
         return ISchoolToolApplication(None)['persons']
 
+
+class ViewRobot(BrowserPage):
+
+    def __call__(self):
+        return "User-agent: *\nDisallow: /"
+
+
+SchoolBreadcrumbInfo = CustomNameBreadCrumbInfo(_('school'))

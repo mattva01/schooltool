@@ -7,6 +7,11 @@
   </head>
   <body>
 
+  <span metal:fill-slot="zonki" i18n:translate="">
+    <img src="zonki.png" alt="SchoolTool" i18n:attributes="alt"
+      tal:attributes="src context/++resource++zonki-question.png" /> 
+  </span>
+
     <metal:block metal:fill-slot="body">
 
       <div class="info" tal:condition="view/success">

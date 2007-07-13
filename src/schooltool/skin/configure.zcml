@@ -57,6 +57,7 @@
       template="templates/actionsbar.pt"
       />
 
+
   <!-- Skin and resources -->
 
   <zope:interface
@@ -142,37 +143,51 @@
       file="resources/editor_config.js"
       layer="schooltool.skin.ISchoolToolLayer" />
 
+
+  <resource name="zonki-regular.png" file="resources/zonki-regular.png"
+	    layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="zonki-reading.png" file="resources/zonki-reading.png"
+	    layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="zonki-question.png" file="resources/zonki-question.png"
+	    layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="zonki-pointing.png" file="resources/zonki-pointing.png"
+	    layer="schooltool.skin.ISchoolToolLayer" />
+  <resource name="zonki-angry.png" file="resources/zonki-angry.png"
+	    layer="schooltool.skin.ISchoolToolLayer" />
+	    
+
+  
   <resource name="layout.css" file="resources/layout.css"
-            layer="schooltool.skin.ISchoolToolLayer" />
+	    layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="print.css" file="resources/print.css"
-            layer="schooltool.skin.ISchoolToolLayer" />
+	    layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="schooltool.js" file="resources/schooltool.js"
-            layer="schooltool.skin.ISchoolToolLayer" />
+	    layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="jquery.js" file="resources/jquery.js"
-            layer="schooltool.skin.ISchoolToolLayer" />
+	    layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="favicon.ico" file="resources/favicon.ico"
-            layer="schooltool.skin.ISchoolToolLayer" />
+	    layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="toolbar-background.png"
-            file="resources/toolbar-background.png"
-            layer="schooltool.skin.ISchoolToolLayer" />
+	    file="resources/toolbar-background.png"
+	    layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="toolbar-background-hover.png"
-            file="resources/toolbar-background-hover.png"
-            layer="schooltool.skin.ISchoolToolLayer" />
+	    file="resources/toolbar-background-hover.png"
+	    layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="sidebar-background.png"
-            file="resources/sidebar-background.png"
-            layer="schooltool.skin.ISchoolToolLayer" />
+	    file="resources/sidebar-background.png"
+	    layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="sidebar-background-top.png"
-            file="resources/sidebar-background-top.png"
-            layer="schooltool.skin.ISchoolToolLayer" />
-
+	    file="resources/sidebar-background-top.png"
+	    layer="schooltool.skin.ISchoolToolLayer" />
+  
   <resource name="previous.png" file="resources/previous.png"
-            layer="schooltool.skin.ISchoolToolLayer" />
+	    layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="next.png" file="resources/next.png"
-            layer="schooltool.skin.ISchoolToolLayer" />
-
+	    layer="schooltool.skin.ISchoolToolLayer" />
+  
   <resource name="printer.png" file="resources/printer.png"
-            layer="schooltool.skin.ISchoolToolLayer" />
-
+	    layer="schooltool.skin.ISchoolToolLayer" />
+  
   <resource name="delete.png" file="resources/delete.png"
             layer="schooltool.skin.ISchoolToolLayer" />
 

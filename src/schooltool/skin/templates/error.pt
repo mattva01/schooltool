@@ -3,11 +3,17 @@
   <title metal:fill-slot="title" i18n:translate="">Server Error</title>
 </head>
 <body>
+
+<span metal:fill-slot="zonki" i18n:translate="">
+  <img src="zonki.png" alt="SchoolTool" i18n:attributes="alt"
+    tal:attributes="src context/++resource++zonki-angry.png" /> 
+</span>
+
 <h1 metal:fill-slot="content-header" i18n:translate="">Server Error</h1>
 <metal:block metal:fill-slot="body">
 
 <p i18n:translate="">An internal server error has occurred.  This most likely
-means that you have found a bug in SchoolBell.  Please report it on <a
+means that you have found a bug in SchoolTool.  Please report it on <a
 href="http://issues.schooltool.org">the issue tracker</a>.</p>
 
 <h2 i18n:translate="">Exception</h2>
