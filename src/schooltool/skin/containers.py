@@ -50,7 +50,8 @@ class ContainerView(BrowserView):
             searchstr = self.request['SEARCH'].lower()
             results = [item for item in self.context.values()
                        if searchstr in item.title.lower()]
-            extra_url = "&SEARCH=%s" % urllib.quote(self.request['SEARCH'])
+            search_string = self.request['SEARCH'].encode('utf-8')
+            extra_url = "&SEARCH=%s" % urllib.quote_plus(search_string)
         else:
             self.request.form['SEARCH'] = ''
             results = self.context.values()
