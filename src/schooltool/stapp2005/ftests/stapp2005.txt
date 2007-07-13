@@ -1,0 +1,15 @@
+Teh Schooltool Application 2005
+===============================
+
+A manager logs in
+
+    >>> from zope.testbrowser.testing import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/')
+
+Create a Basic Person
+
+    >>> manager.getLink('Persons').click()
+
