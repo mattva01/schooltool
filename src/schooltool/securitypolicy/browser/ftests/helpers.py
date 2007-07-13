@@ -182,7 +182,7 @@ def resource_calendar_edit(browser):
 
 
 def section_view(browser):
-    browser.open('http://localhost/sections/history6a')
+    browser.open('http://localhost/sections/1')
     return 'Section of' in browser.contents
 
 def section_edit(browser):
@@ -213,7 +213,7 @@ def section_activities_edit(browser):
 
 
 def section_calendar_view(browser):
-    browser.open('http://localhost/sections/history6a/calendar')
+    browser.open('http://localhost/sections/1/calendar')
     return 'Calendar for' in browser.contents
 
 def section_calendar_edit(browser):

@@ -14,7 +14,7 @@ Let's create a resource:
 and book it for our history class:
 
     >>> print rest("""
-    ... PUT  /sections/history6a/timetables/2005-fall.default HTTP/1.1
+    ... PUT  /sections/1/timetables/2005-fall.default HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
@@ -70,7 +70,7 @@ They are editable:
     >>> print analyze.queryHTML('id("content-body")', manager.contents)[0]
     <div id="content-body">
     ...
-        <a href="http://localhost/sections/history6a/calendar/..." title="History 6">
+        <a href="http://localhost/sections/1/calendar/..." title="History 6">
           History 6
           <span class="start-end">
             (<span>11:35</span>
@@ -84,7 +84,7 @@ They are editable:
 Now if we will unschedule the other activity this one should retain
 it's description:
 
-    >>> manager.open('http://localhost/sections/history6a')
+    >>> manager.open('http://localhost/sections/1')
     >>> manager.getLink('Schedule').click()
     >>> manager.getControl(name="Monday.09:30-10:25").value = False
     >>> manager.getControl(name="Wednesday.11:35-12:20").value = True

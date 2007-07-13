@@ -36,15 +36,12 @@ We'll need a course and a section:
     >>> 'History' in manager.contents
     True
 
-    >>> manager.getLink('History').click()
-    >>> manager.getLink('New Section').click()
-    >>> manager.getControl('Code').value = 'HIS1'
-    >>> manager.getControl('Description').value = 'Section1'
-    >>> manager.getControl('Add').click()
+    >>> from schooltool.app.browser.ftests import setup
+    >>> setup.addSection('History')
 
 Let's make the frog a teacher:
 
-    >>> manager.getLink('(HIS1)').click()
+    >>> manager.open('http://localhost/sections/1')
     >>> manager.getLink('edit instructors').click()
     >>> manager.getControl(name='add_item.frog').value = True
     >>> manager.getControl('Add').click()
@@ -78,7 +75,7 @@ Let's make toad join the section:
     >>> manager.getLink('edit individuals').click()
     >>> manager.getControl(name='add_item.toad').value = True
     >>> manager.getControl('Add').click()
-    >>> manager.getLink('HIS1').click()
+    >>> manager.getLink('1').click()
 
 Now frog can see the demographics of toad alright:
 

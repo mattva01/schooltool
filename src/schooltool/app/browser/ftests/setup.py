@@ -72,6 +72,22 @@ def addResource(title):
     manager.getControl('Search').click()
     assert title in manager.contents
 
+def addCourse(title, description="", identifier=""):
+    """Add a course."""
+    manager = logInManager()
+    manager.getLink('Courses').click()
+    manager.getLink('New Course').click()
+    manager.getControl('Title').value = title
+    manager.getControl('Description').value = description
+    manager.getControl('Identifier').value = identifier
+    manager.getControl('Add').click()
+
+def addSection(course):
+    """Add a section."""
+    manager = logInManager()
+    manager.getLink('Courses').click()
+    manager.getLink(course).click()
+    manager.getLink('New Section').click()    
 
 def setUpTimetabling(username):
     """Create the infrastructure for functional tests involving timetables.
@@ -120,30 +136,21 @@ def setUpTimetabling(username):
     manager.open('http://localhost/courses')
     manager.getLink('New Course').click()
 
-    manager.getControl('Title').value = 'History 6'
-    manager.getControl('Identifier').value = 'history6'
-    manager.getControl('Description').value = 'History for the sixth class'
-    manager.getControl('Add').click()
+    addCourse('History 6', 'History for the sixth class', 'history6')
 
     # And a section:
-
-    manager.getLink('History 6').click()
-    manager.getLink('New Section').click()
-    manager.getControl('Code').value = 'history-6a'
-    manager.getControl('Identifier').value = 'history6a'
-    manager.getControl('Description').value = 'History for the class 6A'
-    manager.getControl('Add').click()
+    addSection('History 6')
 
     # Let's assign Frog as a teacher for History 6:
 
-    manager.getLink(url='http://localhost/sections/history6a').click()
+    manager.open('http://localhost/sections/1')
     manager.getLink('edit instructors').click()
     manager.getControl('Frog').selected = True
     manager.getControl('Add').click()
 
     # And schedule the section:
 
-    manager.open('http://localhost/sections/history6a')
+    manager.open('http://localhost/sections/1')
     manager.getLink('Schedule').click()
 
     manager.getControl(name="Monday.09:30-10:25").value = True

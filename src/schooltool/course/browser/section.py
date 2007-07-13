@@ -29,7 +29,7 @@ from zope.app.form.interfaces import WidgetsError
 from zope.app.form.utility import getWidgetsData
 from zope.publisher.browser import BrowserView
 from zope.component import getMultiAdapter
-
+from zope.app.container.interfaces import INameChooser
 from zc.table import table
 
 from schooltool.person.interfaces import IPerson
@@ -45,6 +45,7 @@ from schooltool.relationship.relationship import getRelatedObjects
 from schooltool.app.membership import URIGroup
 from schooltool.app.relationships import URISection
 from schooltool.course import booking
+from schooltool.course.section import Section
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.app.browser.app import RelationshipViewBase
@@ -94,12 +95,19 @@ class SectionView(BrowserView):
 class SectionAddView(AddView):
     """A view for adding Sections."""
 
-    error = None
-    course = None
+    def newSectionId(self):
+        app = getSite()
+        sections = sorted(app['sections'].keys())
+        if len(sections) == 0:
+            return "1"
 
-    def validCourse(self):
-        return self.course is not None
-
+        name = sections[-1]
+        try:
+            name = str(int(name)+1)
+        except ValueError:
+            name = INameChooser(app['sections']).chooseName(name, None)
+        return name
+            
     def getCourseFromId(self, cid):
         app = getSite()
         try:
@@ -109,8 +117,6 @@ class SectionAddView(AddView):
 
     def __init__(self, context, request):
         super(AddView, self).__init__(context, request)
-        self.update_status = None
-        self.errors = None
 
         try:
             course_id = request['field.course_id']
@@ -119,36 +125,13 @@ class SectionAddView(AddView):
             return
 
         self.course = self.getCourseFromId(course_id)
-        if self.course is not None:
-            self.label = _("Add a Section to ${course}",
-                           mapping={'course': self.course.title})
 
-    def update(self):
-        if self.update_status is not None:
-            # We've been called before. Just return the previous result.
-            return self.update_status
-
-        if "UPDATE_SUBMIT" in self.request:
-            self.update_status = ''
-            try:
-                data = getWidgetsData(self, self.schema, names=self.fieldNames)
-                section = removeSecurityProxy(self.createAndAdd(data))
-                self.course.sections.add(section)
-            except WidgetsError, errors:
-                self.errors = errors
-                self.update_status = _("An error occurred.")
-                return self.update_status
-
-            self.request.response.redirect(self.nextURL())
-
-        if 'CANCEL' in self.request:
-            url = zapi.absoluteURL(self.course, self.request)
-            self.request.response.redirect(url)
-
-        return self.update_status
-
-    def nextURL(self):
-        return zapi.absoluteURL(self.course, self.request)
+    def __call__(self):
+        id = self.newSectionId()
+        section = Section(title=id)
+        self.context.add(section)
+        self.course.sections.add(section)
+        self.request.response.redirect(zapi.absoluteURL(section, self.request))
 
 
 class SectionEditView(BaseEditView):

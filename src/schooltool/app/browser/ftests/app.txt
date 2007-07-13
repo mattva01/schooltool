@@ -123,26 +123,13 @@ Let's see that course:
 
 Lets create a section to add to that course:
 
-    >>> manager.getLink('New Section').click()
-    >>> manager.getControl('Code').value = 'HIS1'
-    >>> manager.getControl('Description').value = 'Section1'
-    >>> manager.getControl('Add').click()
-
-Notice we got redirected to the course we added the section to.
-
-    >>> print manager.contents
-    <!DOCTYPE ...>
-    ...
-    ...History...
-    ...
-    ...<h3>Sections</h3>
-    ...
-    ...<p>Section1</p>
-    ...
+    >>> from schooltool.app.browser.ftests import setup
+    >>> setup.addSection('History')
 
 Looking at the section:
 
-    >>> manager.getLink('(HIS1)').click()
+    >>> manager.reload()
+    >>> manager.getLink('(1)').click()
     >>> print manager.contents
     <!DOCTYPE ...>
     ...
@@ -154,7 +141,7 @@ Looking at the section:
 
 Frog can't see the section's calendar by default
 
-    >>> frog.open('http://localhost/sections/his1/calendar')
+    >>> frog.open('http://localhost/sections/1/calendar')
     >>> print frog.url
     http://localhost/@@login.html?forbidden=yes&nexturl=...
 
@@ -259,8 +246,8 @@ list:
 
 Frog can see the calendar now
 
-    >>> frog.open('http://localhost/sections/his1/calendar')
-    >>> 'Calendar for HIS1' in frog.contents
+    >>> frog.open('http://localhost/sections/1/calendar')
+    >>> 'Calendar for 1' in frog.contents
     True
 
 And Frog's overlay portlet shows the section:
@@ -277,11 +264,11 @@ And Frog's overlay portlet shows the section:
             <td><input type="checkbox" name="my_timetable" checked></td>
             <td style="width: 100%">My Calendar</td>
             <td></td>
-          </tr><tr style="background: #eed680"><td><input type="checkbox" name="overlay:list" checked value="/sections/his1"></td>
-            <td><input type="checkbox" name="overlay_timetables:list" value="/sections/his1"></td>
+          </tr><tr style="background: #eed680"><td><input type="checkbox" name="overlay:list" checked value="/sections/1"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" value="/sections/1"></td>
             <td style="width: 100%">Frog -- History</td>
             <td><a class="go" style="background: #d1940c;
-                color: #d1940c" href="http://localhost/sections/his1/calendar">...</a></td>
+                color: #d1940c" href="http://localhost/sections/1/calendar">...</a></td>
         </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/"></td>
             <td><input type="checkbox" name="overlay_timetables:list" checked value="/"></td>
             <td style="width: 100%">SchoolTool</td>
@@ -297,7 +284,7 @@ If we fire Frog, in hopes of getting Salamander to step in:
 
 Frog can't see the section's calendar any more
 
-    >>> frog.open('http://localhost/sections/his1/calendar')
+    >>> frog.open('http://localhost/sections/1/calendar')
     >>> print frog.url
     http://localhost/@@login.html?forbidden=yes&nexturl=...
 
@@ -338,7 +325,7 @@ Adding a student:
     >>> manager.getLink('edit individuals').click()
     >>> manager.getControl(name='add_item.toad').value = True
     >>> manager.getControl('Add').click()
-    >>> manager.getLink('HIS1').click()
+    >>> manager.getLink('1').click()
 
 Now toad is in the Students div
 
@@ -357,9 +344,9 @@ Now toad is in the Students div
 
 Toad can see the calendar now:
 
-    >>> toad.open('http://localhost/sections/his1/calendar')
+    >>> toad.open('http://localhost/sections/1/calendar')
     >>> print toad.url
-    http://localhost/sections/his1/calendar
+    http://localhost/sections/1/calendar
 
 And Toad's overlay portlet shows the section:
 
@@ -375,11 +362,11 @@ And Toad's overlay portlet shows the section:
             <td><input type="checkbox" name="my_timetable" checked></td>
             <td style="width: 100%">My Calendar</td>
             <td></td>
-          </tr><tr style="background: #eed680"><td><input type="checkbox" name="overlay:list" checked value="/sections/his1"></td>
-            <td><input type="checkbox" name="overlay_timetables:list" value="/sections/his1"></td>
+          </tr><tr style="background: #eed680"><td><input type="checkbox" name="overlay:list" checked value="/sections/1"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" value="/sections/1"></td>
             <td style="width: 100%"> -- History</td>
             <td><a class="go" style="background: #d1940c;
-                color: #d1940c" href="http://localhost/sections/his1/calendar">...</a></td>
+                color: #d1940c" href="http://localhost/sections/1/calendar">...</a></td>
         </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/"></td>
             <td><input type="checkbox" name="overlay_timetables:list" checked value="/"></td>
             <td style="width: 100%">SchoolTool</td>
@@ -390,7 +377,7 @@ And Toad's overlay portlet shows the section:
 Though students can't see the section list (nor sections themselves) by
 default:
 
-    >>> frog.open('http://localhost/sections/his1')
+    >>> frog.open('http://localhost/sections/1')
     >>> print frog.url
     http://localhost/@@login.html?forbidden=yes&nexturl=...
 
@@ -403,9 +390,9 @@ we can give them the permission:
 
 Students still aren't given the option to change the location:
 
-    >>> frog.open('http://localhost/sections/his1')
+    >>> frog.open('http://localhost/sections/1')
     >>> print frog.url
-    http://localhost/sections/his1
+    http://localhost/sections/1
     >>> "change location" not in frog.contents
     True
 

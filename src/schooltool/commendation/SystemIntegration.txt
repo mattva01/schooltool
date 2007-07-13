@@ -1,5 +1,5 @@
 ===================================================
-System-Integration of Commentations into SchoolTool
+System-Integration of Commendations into SchoolTool
 ===================================================
 
 Now that we have integrated the commendations on the Python level, we need to
@@ -218,40 +218,22 @@ programmable browser. So here is a typical test:
 We get setup by accessing the site and logging in as the manager:
 
   >>> from zope.testbrowser.testing import Browser
-  >>> manager = Browser()
-  >>> manager.open('http://localhost/')
-
-  >>> manager.getLink('Log In').click()
-  >>> manager.getControl('Username').value = 'manager'
-  >>> manager.getControl('Password').value = 'schooltool'
-  >>> manager.getControl('Log in').click()
-
+  >>> from schooltool.app.browser.ftests import setup
+  >>> manager = setup.logIn("manager", "schooltool")
 
 Now that we are locked in, we have to create
 
 - a student,
 
-  >>> from schooltool.app.browser.ftests.setup import addPerson
-  >>> addPerson('Tom Hoffman', 'tha1', 'myohmy')
+  >>> setup.addPerson('Tom Hoffman', 'tha1', 'myohmy')
 
 - a course,
 
-  >>> manager.open('http://localhost/')
-  >>> manager.getLink('Courses').click()
-  >>> manager.getLink('New Course').click()
-  >>> manager.getControl('Title').value = 'Math 101'
-  >>> manager.getControl('Description').value = 'Basic Math'
-  >>> manager.getControl('Identifier').value = 'math101'
-  >>> manager.getControl('Add').click()
+  >>> setup.addCourse('Math 101', 'Basic Math', 'math101')
 
 - and a section.
 
-  >>> manager.getLink('Math 101').click()
-  >>> manager.getLink('New Section').click()
-  >>> manager.getControl('Code').value = 'Sec-A'
-  >>> manager.getControl('Description').value = 'Section A'
-  >>> manager.getControl('Identifier').value = 'math101-A'
-  >>> manager.getControl('Add').click()
+  >>> setup.addSection('Math 101')  
 
 Now we should be able to add commendations to
 
@@ -288,25 +270,18 @@ Now we should be able to add commendations to
 
 - and sections.
 
-  >>> manager.getLink('Sections').click()
-  >>> manager.getLink('Sec-A').click()
+  >>> manager.getLink('Courses').click()
+  >>> manager.getLink('Math 101').click()
+  >>> manager.getLink('-- Math 101 (1)').click()
   >>> manager.getLink('Add Commendation')
-  <Link text='Add Commendation' url='...tions/math101-A/commendations/@@addCommendation.html'>
+  <Link text='Add Commendation' url='...tions/1/commendations/@@addCommendation.html'>
   >>> manager.getLink('View Commendations')
-  <Link text='View Commendations' url='...tions/math101-A/commendations'>
+  <Link text='View Commendations' url='...tions/1/commendations'>
 
 Also, not just everybody can add new commendations. For example Tom Hoffman,
 one of the students, cannot add new commendations:
 
-  >>> tom = Browser()
-  >>> tom.open('http://localhost/')
-
-  >>> tom.getLink('Log In').click()
-  >>> tom.getControl('Username').value = 'tha1'
-  >>> tom.getControl('Password').value = 'myohmy'
-  >>> tom.getControl('Log in').click()
-
-  >>> tom.handleErrors = False
+  >>> tom = setup.logIn('tha1','myohmy')
   >>> tom.open('http://localhost/persons/manager/commendations/@@addCommendation.html')
   Traceback (most recent call last):
   ...
@@ -317,7 +292,7 @@ one of the students, cannot add new commendations:
   ...
   Unauthorized: ...
 
-  >>> tom.open('http://localhost/sections/math101-A/commendations/@@addCommendation.html')
+  >>> tom.open('http://localhost/sections/1/commendations/@@addCommendation.html')
   Traceback (most recent call last):
   ...
   Unauthorized: ...
@@ -326,6 +301,6 @@ On the other hand, since the commendations are public, he can view them:
 
   >>> tom.open('http://localhost/persons/manager/commendations')
   >>> tom.open('http://localhost/groups/students/commendations')
-  >>> tom.open('http://localhost/sections/math101-A/commendations')
+  >>> tom.open('http://localhost/sections/1/commendations')
 
 And that's all.

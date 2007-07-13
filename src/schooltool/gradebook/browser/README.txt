@@ -100,13 +100,8 @@ Term Setup
 Every term, the administrators of a school are going to setup sections. So
 let's add a section for our course:
 
-    >>> manager.getLink('Courses').click()
-    >>> manager.getLink('Physics I').click()
-
-    >>> manager.getLink('New Section').click()
-    >>> manager.getControl('Code').value = 'PHYI-1'
-    >>> manager.getControl('Description').value = 'Section 1'
-    >>> manager.getControl('Add').click()
+    >>> from schooltool.app.browser.ftests import setup
+    >>> setup.addSection('Physics I')
 
 But what would a section be without some students and a teacher?
 
@@ -120,14 +115,14 @@ Now we can add those people to the section:
 
     >>> manager.getLink('Courses').click()
     >>> manager.getLink('Physics I').click()
-    >>> manager.getLink('(PHYI-1)').click()
+    >>> manager.getLink('(1)').click()
 
     >>> manager.getLink('edit individuals').click()
     >>> manager.getControl('Paul Cardune').click()
     >>> manager.getControl('Tom Hoffman').click()
     >>> manager.getControl('Claudia Richter').click()
     >>> manager.getControl('Add').click()
-    >>> manager.getLink('PHYI-1').click()
+    >>> manager.getControl('Cancel').click()
 
     >>> 'Paul Cardune' in manager.contents
     True
@@ -156,7 +151,7 @@ Once the term started, the instructor of the section will add more activities:
     >>> stephan.getLink('SchoolTool').click()
     >>> stephan.getLink('Courses').click()
     >>> stephan.getLink('Physics I').click()
-    >>> stephan.getLink('(PHYI-1)').click()
+    >>> stephan.getLink('(1)').click()
     >>> stephan.getLink('Activities').click()
 
 Note that the final is already listed:
@@ -216,7 +211,7 @@ Also note that the final cannot be edited, since it is inherited:
     LinkNotFoundError
 
     >>> stephan.getLink('HW 1')
-    <Link text='HW 1' url='.../sections/phyi1/activities/Activity-2'>
+    <Link text='HW 1' url='.../sections/1/activities/Activity-2'>
 
 Finally, you can also delete activities that you have locally created:
 
@@ -244,7 +239,7 @@ Now that we have both, students and activities, we can enter the gradebook.
     >>> stephan.getLink('SchoolTool').click()
     >>> stephan.getLink('Courses').click()
     >>> stephan.getLink('Physics I').click()
-    >>> stephan.getLink('(PHYI-1)').click()
+    >>> stephan.getLink('(1)').click()
     >>> stephan.getLink('Gradebook').click()
 
 The initial gradebook screen is a simple spreadsheet. In order to prevent
@@ -318,7 +313,7 @@ Of course, you can also abort the grading.
     >>> stephan.getLink('Claudia Richter').click()
     >>> stephan.getControl('Cancel').click()
     >>> stephan.url
-    'http://localhost/sections/phyi1/gradebook/index.html'
+    'http://localhost/sections/1/gradebook/index.html'
 
 
 Entering Scores for a Column (Activity)
@@ -387,7 +382,7 @@ Of course, you can also abort the grading.
     >>> stephan.getLink('HW 1').click()
     >>> stephan.getControl('Cancel').click()
     >>> stephan.url
-    'http://localhost/sections/phyi1/gradebook/index.html'
+    'http://localhost/sections/1/gradebook/index.html'
 
 
 Entering Scores for a Cell (Student, Activity)
@@ -441,7 +436,7 @@ Now let's enter a new grade:
     >>> stephan.getControl('Update').click()
 
     >>> stephan.url
-    'http://localhost/sections/phyi1/gradebook/index.html'
+    'http://localhost/sections/1/gradebook/index.html'
     >>> '>86<' in stephan.contents
     True
 
@@ -452,7 +447,7 @@ Of course, you can also cancel actions:
     >>> stephan.getControl('Cancel').click()
 
     >>> stephan.url
-    'http://localhost/sections/phyi1/gradebook/index.html'
+    'http://localhost/sections/1/gradebook/index.html'
     >>> '>86<' in stephan.contents
     True
 

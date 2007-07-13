@@ -27,14 +27,9 @@ A manager logs in
 
 and creates a course and a section
 
-    >>> manager.getLink('Courses').click()
-    >>> manager.getLink('New Course').click()
-    >>> manager.getControl('Title').value = 'Dancing 1'
-    >>> manager.getControl('Add').click()
-    >>> manager.getLink('Dancing 1').click()
-    >>> manager.getLink('New Section').click()
-    >>> manager.getControl('Code').value = 'dancing-1a'
-    >>> manager.getControl('Add').click()
+    >>> from schooltool.app.browser.ftests import setup
+    >>> setup.addCourse('Dancing 1')
+    >>> setup.addSection('Dancing 1')
 
 We also need a term and a timetable
 
@@ -68,7 +63,7 @@ We also need a term and a timetable
 
 Let's schedule the section
 
-    >>> manager.open('http://localhost/sections/dancing1a')
+    >>> manager.open('http://localhost/sections/1')
     >>> manager.getLink('Schedule').click()
 
     >>> manager.getControl(name="Monday.09:30-10:25").value = True
@@ -81,7 +76,7 @@ Let's also create a teacher for the section
     >>> addPerson('Great Teacher Largo', 'largo', 'sittinghorse', 
     ...     groups=['teachers'])
 
-    >>> manager.open('http://localhost/sections/dancing1a')
+    >>> manager.open('http://localhost/sections/1')
     >>> manager.getLink('edit instructors').click()
     >>> manager.getControl('Great Teacher Largo').selected = True
     >>> manager.getControl('Add').click()
@@ -97,7 +92,7 @@ Create some students
 
 Add them to dancing section
 
-    >>> manager.open('http://localhost/sections/dancing1a')
+    >>> manager.open('http://localhost/sections/1')
     >>> manager.getLink('edit individuals').click()
     >>> manager.getControl('Joniukas').selected = True
     >>> manager.getControl('Gretute').selected = True
@@ -128,7 +123,7 @@ Looks at his daily view, and sees the Dancing section there:
     <div id="content-body">
     ...
       <h6 style="background: #...">
-        <a href="http://localhost/sections/dancing1a/calendar/..." title="Dancing 1">
+        <a href="http://localhost/sections/1/calendar/..." title="Dancing 1">
           Dancing 1
           <span class="start-end">
             (<span>09:30</span>
@@ -142,7 +137,7 @@ Looks at his daily view, and sees the Dancing section there:
 You can go to the section attendance form by following the 'Attendance' link in
 the event box.
 
-    >>> largo.getLink('Attendance', url="dancing1a").click()
+    >>> largo.getLink('Attendance', url="1").click()
     >>> print analyze.queryHTML('id("content-header")', largo.contents)[0]
     <div id="content-header">
     <h2>Section attendance for Great Teacher Largo -- Dancing 1  at 2005-12-12
@@ -151,7 +146,7 @@ the event box.
 
     <>>> print analyze.queryHTML('id("content-body")', largo.contents)[0]
     ...
-    <form method="POST" action="http://localhost/sections/dancing1a/attendance/2005-12-12/09:30-10:25">
+    <form method="POST" action="http://localhost/sections/1/attendance/2005-12-12/09:30-10:25">
     ...
 
 Mark Joniukas as absent:
@@ -191,7 +186,7 @@ An absence event should be visible in his calendar:
           </span>
       </h6>
     ...
-      <div class="title">Was absent from dancing-1a.</div>
+      <div class="title">Was absent from 1.</div>
     ...
 
 
@@ -235,14 +230,14 @@ And the absence event is replaced with a tardy event:
     <BLANKLINE>
     ...
       <h6 style="background: ...">
-           Was late for da...
+           Was late for 1...
            <span class="start-end">
              (<span>09:30</span>
                - <span>10:25</span>)
            </span>
       </h6>
     ...
-      <div class="title">Was late for dancing-1a (52 minutes).</div>
+      <div class="title">Was late for 1 (52 minutes).</div>
     ...
 
 
@@ -253,14 +248,14 @@ Look at the attendance event for the next section meeting. Each person has
 attendance sparkline drawn along with the status symbol:
 
     >>> largo.open('http://localhost/persons/largo/calendar/2005-12-14')
-    >>> largo.getLink('Attendance', url="dancing1a").click()
+    >>> largo.getLink('Attendance', url="1").click()
     >>> print '\n'.join(analyze.queryHTML('//img[@width="30"]', largo.contents))
-    <img alt="attendance graph for the last 10 days" width="30" height="13" src="http://localhost/sections/dancing1a/@@sparkline.png?person=gretute&amp;date=2005-12-14">
-    <img alt="attendance graph for the last 10 days" width="30" height="13" src="http://localhost/sections/dancing1a/@@sparkline.png?person=joniukas&amp;date=2005-12-14">
+    <img alt="attendance graph for the last 10 days" width="30" height="13" src="http://localhost/sections/1/@@sparkline.png?person=gretute&amp;date=2005-12-14">
+    <img alt="attendance graph for the last 10 days" width="30" height="13" src="http://localhost/sections/1/@@sparkline.png?person=joniukas&amp;date=2005-12-14">
 
 "Look" at the attendance sparkline for joniukas
 
-    >>> largo.open('http://localhost/sections/dancing1a/@@sparkline.png?person=joniukas&amp;date=2005-12-14')
+    >>> largo.open('http://localhost/sections/1/@@sparkline.png?person=joniukas&amp;date=2005-12-14')
     >>> image = largo.contents
 
 It looks like this
@@ -333,7 +328,7 @@ attendance after the lunch break the next day:
 
 He knows the URL and just enters it:
 
-    >>> largo.open("http://localhost/sections/dancing1a/"
+    >>> largo.open("http://localhost/sections/1/"
     ...            "attendance/2005-12-14/11:35-12:20")
 
 He gets to the retroactive attendance form.  It does not have

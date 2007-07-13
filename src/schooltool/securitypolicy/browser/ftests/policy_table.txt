@@ -41,11 +41,11 @@ Section and resources:
     >>> manager.getControl('Add').click()
 
     >>> manager.getLink('Sections').click()
-    >>> manager.getLink('history-6a').click()
+    >>> manager.getLink('1').click()
     >>> manager.getLink('edit individuals').click()
     >>> manager.getControl('Student1').click()
     >>> manager.getControl('Add').click()
-    >>> manager.getLink('history-6a').click()
+    >>> manager.getLink('1').click()
     >>> manager.getLink('book resources').click()
     >>> manager.getControl('Time travel machine').click()
     >>> manager.getControl('Add').click()
@@ -55,7 +55,7 @@ Set up activities and put marks:
     >>> manager.getLink('SchoolTool').click()
     >>> manager.getLink('Courses').click()
     >>> manager.getLink('History 6').click()
-    >>> manager.getLink('history-6a').click()
+    >>> manager.getLink('1').click()
     >>> manager.getLink('Activities').click()
     >>> manager.getLink('New Activity').click()
     >>> manager.getControl('Title').value = 'SchoolTool origin'
@@ -64,7 +64,7 @@ Set up activities and put marks:
     >>> manager.getControl('Maximum').value = '5'
     >>> manager.getControl('Identifier').value = 'storig'
     >>> manager.getControl('Add').click()
-    >>> manager.getLink('history-6a').click()
+    >>> manager.getLink('1').click()
     >>> manager.getLink('Gradebook').click()
     >>> manager.getLink('SchoolTool origin').click()
     Traceback (most recent call last):
@@ -84,7 +84,7 @@ And try again:
     >>> manager.getLink('SchoolTool').click()
     >>> manager.getLink('Courses').click()
     >>> manager.getLink('History 6').click()
-    >>> manager.getLink('history-6a').click()
+    >>> manager.getLink('1').click()
     >>> manager.getLink('Gradebook').click()
     >>> manager.getLink('SchoolTool origin').click()
     >>> manager.getControl(name='student1').value = '8'
@@ -119,7 +119,7 @@ Set up leader for everything:
 
 Manager can see almost everything:
 
-    >>> column(manager, 'student1', 'history6a')
+    >>> column(manager, 'student1', '1')
     course:              view  edit
     course activities:   view  edit
     gradebook scores:    view
@@ -152,7 +152,7 @@ Create anonymous browser:
     >>> alien = Browser()
     >>> alien.handleErrors = False
     >>> alien.open('http://localhost/')
-    >>> column(alien, 'student1', 'history6a')
+    >>> column(alien, 'student1', '1')
     course:              view
     course activities:   view
     gradebook scores:
@@ -183,7 +183,7 @@ Create anonymous browser:
 Student looking at another student:
 
     >>> student1 = setup.logIn('student1', 'student1')
-    >>> column(student1, 'student2', 'history6a')
+    >>> column(student1, 'student2', '1')
     course:              view
     course activities:   view
     gradebook scores:
@@ -213,7 +213,7 @@ Student looking at another student:
 
 Student looking at himself (his section):
 
-    >>> column(student1, 'student1', 'history6a')
+    >>> column(student1, 'student1', '1')
     course:              view
     course activities:   view
     gradebook scores:
@@ -244,7 +244,7 @@ Student looking at himself (his section):
 Student looking at another student and not his section:
 
     >>> student2 = setup.logIn('student2', 'student2')
-    >>> column(student2, 'student1', 'history6a')
+    >>> column(student2, 'student1', '1')
     course:              view
     course activities:   view
     gradebook scores:
@@ -275,7 +275,7 @@ Student looking at another student and not his section:
 Instructor looking at his student and section:
 
     >>> instructor = setup.logIn('instructor1', 'instructor1')
-    >>> column(instructor, 'student1', 'history6a')
+    >>> column(instructor, 'student1', '1')
     course:              view
     course activities:   view
     gradebook scores:    view  edit
@@ -306,7 +306,7 @@ Instructor looking at his student and section:
 Group member:
 
     >>> teacher3 = setup.logIn('teacher3', 'teacher3')
-    >>> column(teacher3, 'student1', 'history6a')
+    >>> column(teacher3, 'student1', '1')
     course:              view
     course activities:   view
     gradebook scores:
@@ -337,7 +337,7 @@ Group member:
 Leader stuff:
 
     >>> leader = setup.logIn('teacher2', 'teacher2')
-    >>> column(leader, 'student1', 'history6a')
+    >>> column(leader, 'student1', '1')
     course:              view  edit
     course activities:   view  edit
     gradebook scores:
@@ -392,7 +392,7 @@ Site wide access control:
     >>> manager.getControl('Everyone can view the application calendar').click()
     >>> manager.getControl('Everyone can view section information and ').click()
     >>> manager.getControl('Apply').click()
-    >>> column(alien, 'student1', 'history6a')
+    >>> column(alien, 'student1', '1')
     course:              view
     course activities:   view
     gradebook scores:
@@ -496,7 +496,7 @@ XXX: preferences should be still viewable
     >>> manager.getControl('Administration can grade students').click()
     >>> manager.getControl('Apply').click()
 
-#   >>> helpers.gradebook_scores_edit(manager, 'history6a')
+#   >>> helpers.gradebook_scores_edit(manager, '1')
 #   True
 
 Instructor - section relations:
@@ -512,7 +512,7 @@ Instructor - section relations:
     >>> manager.getControl('Student3').click()
     >>> manager.getControl('Add').click()
     >>> manager.getLink('Sections').click()
-    >>> manager.getLink('history-6a').click()
+    >>> manager.getLink('1').click()
     >>> manager.getLink('edit groups').click()
     >>> manager.getControl('Some Students').click()
     >>> manager.getControl('Add').click()

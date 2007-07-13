@@ -137,7 +137,7 @@
       content_factory="..section.Section"
       permission="schooltool.edit"
       class=".section.SectionAddView">
-    <widget field="description" height="5" />
+    <widget field="description" height="2" />
   </addform>
 
   <editform

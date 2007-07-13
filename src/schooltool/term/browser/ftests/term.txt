@@ -125,26 +125,22 @@ Create a section from the course:
 
     >>> manager.getLink('Math course').click()
     >>> manager.getLink('New Section').click()
-    >>> manager.getControl(name='field.title').value = 'Math 5'
-    >>> manager.getControl(name='add_input_name').value = 'MA5'
-    >>> manager.getControl('Add').click()
 
 Schedule the section in the timetable:
 
-    >>> manager.getLink('-- Math course (Math 5)').click()
     >>> manager.getLink('Schedule').click()
     >>> manager.getControl(name='Monday.A').value = True
     >>> manager.getControl(name='Friday.B').value = True
     >>> manager.getControl('Save').click()
-    >>> manager.getLink('Math 5').click()
+    >>> manager.getLink('1').click()
     >>> manager.getLink('View Timetables').click()
     >>> print manager.contents
     <BLANKLINE>
     <BLANKLINE>
     ...
-      Timetables for Math 5
+      Timetables for 1
     ...
-       <a href="http://localhost/sections/MA5/timetables/term-2.simple-timetable">term-2.simple-timetable</a>
+       <a href="http://localhost/sections/1/timetables/term-2.simple-timetable">term-2.simple-timetable</a>
     ...
 
 Let's do the edit:
@@ -211,7 +207,7 @@ Let's try to delete:
 So the timetables should be also deleted:
 
     >>> manager.getLink('Section').click()
-    >>> manager.getLink('Math 5').click()
+    >>> manager.getLink('1').click()
     >>> manager.getLink('View Timetables').click()
     >>> print manager.contents
     <BLANKLINE>

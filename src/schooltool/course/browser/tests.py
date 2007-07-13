@@ -279,68 +279,18 @@ def doctest_SectionAddView():
     of a course.  If they don't have a course, they can't be created "stand
     alone".
 
-    First a request without a course reference sets the view error.
-
-        >>> request = TestRequest()
-        >>> context = AddingStub(sections, request)
-        >>> view = SectionAddViewForTesting(context, request)
-        >>> view.error
-        u'Need a course ID.'
-
-    validCourse is used to disable the update input button:
-
-        >>> view.validCourse()
-        False
-        >>> view.update()
-
-    A request with course_id doesn't
-
         >>> request = TestRequest()
         >>> request.form = {'field.course_id' : 'algebraI'}
         >>> context = AddingStub(sections, request)
         >>> view = SectionAddViewForTesting(context, request)
-        >>> view.error is None
-        True
-        >>> view.validCourse()
-        True
-        >>> view.update()
-
-    if there's a course_id in the request that doesn't match any known courses
-    the error is different.
-
-        >>> request = TestRequest()
-        >>> request.form = {'field.course_id' : 'math'}
-        >>> context = AddingStub(sections, request)
-        >>> view = SectionAddViewForTesting(context, request)
-        >>> view.error
-        u'No such course.'
-        >>> view.validCourse()
-        False
-        >>> view.update()
-
-    Currently our course has no sections
-
-        >>> for section in course.sections:
-        ...     print section
-
-        >>> request = TestRequest()
-        >>> request.form = {'UPDATE_SUBMIT': True,
-        ...                 'field.title' : 'MAT1',
-        ...                 'field.course_id' : 'algebraI'}
-        >>> context = AddingStub(sections, request)
-        >>> view = SectionAddViewForTesting(context, request)
-        >>> view.update()
-        ''
-
-        >>> translate(view.label)
-        u'Add a Section to Algebra I'
+        >>> view()
 
     Our section is now a member of the Course, we use a generic title for
     sections
 
         >>> for section in course.sections:
         ...     print section.title
-        MAT1
+        1
 
         >>> tearDown()
 

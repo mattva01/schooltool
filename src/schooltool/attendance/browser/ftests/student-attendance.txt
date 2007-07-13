@@ -38,18 +38,12 @@ create a teacher
 
 and creates a course:
 
-    >>> manager.getLink('Courses').click()
-    >>> manager.getLink('New Course').click()
-    >>> manager.getControl('Title').value = 'Dancing 1'
-    >>> manager.getControl('Add').click()
+    >>> from schooltool.app.browser.ftests import setup
+    >>> setup.addCourse('Dancing 1')
 
 add a section:
 
-    >>> manager.getLink('Courses').click()
-    >>> manager.getLink('Dancing 1').click()
-    >>> manager.getLink('New Section').click()
-    >>> manager.getControl('Code').value = 'dancing-1a'
-    >>> manager.getControl('Add').click()
+    >>> setup.addSection('Dancing 1')
 
 We also need a term and a timetable
 
@@ -89,7 +83,7 @@ We also need a term and a timetable
 
 Let's make largo a teacher for the section:
 
-    >>> manager.open('http://localhost/sections/dancing1a')
+    >>> manager.open('http://localhost/sections/1')
     >>> manager.getLink('edit instructors').click()
     >>> manager.getControl('Great Teacher Largo').selected = True
     >>> manager.getControl('Add').click()
@@ -102,7 +96,7 @@ Let's schedule the section:
     >>> largo.handleErrors = False
     >>> largo.open('http://localhost/')
 
-    >>> largo.open('http://localhost/sections/dancing1a')
+    >>> largo.open('http://localhost/sections/1')
     >>> largo.getLink('Schedule').click()
 
     >>> largo.getControl(name="Monday.09:30-10:25").value = True
@@ -116,7 +110,7 @@ Create some students
 
 Add them to dancing section
 
-    >>> largo.open('http://localhost/sections/dancing1a')
+    >>> largo.open('http://localhost/sections/1')
     >>> largo.getLink('edit individuals').click()
     >>> largo.getControl('Joniukas').selected = True
     >>> largo.getControl('Gretute').selected = True
@@ -124,22 +118,22 @@ Add them to dancing section
 
 And register some absences
 
-    >>> largo.open('http://localhost/sections/dancing1a'
+    >>> largo.open('http://localhost/sections/1'
     ...            '/attendance/2005-11-14/09:30-10:25')
     >>> largo.getControl(name='joniukas_check').value=True
     >>> largo.getControl('Mark as absent').click()
 
-    >>> largo.open('http://localhost/sections/dancing1a'
+    >>> largo.open('http://localhost/sections/1'
     ...            '/attendance/2005-11-16/11:35-12:20')
     >>> largo.getControl(name='joniukas_check').value=True
     >>> largo.getControl('Mark as absent').click()
 
-    >>> largo.open('http://localhost/sections/dancing1a'
+    >>> largo.open('http://localhost/sections/1'
     ...            '/attendance/2005-11-21/09:30-10:25')
     >>> largo.getControl(name='joniukas_check').value=True
     >>> largo.getControl('Mark as absent').click()
 
-    >>> largo.open('http://localhost/sections/dancing1a'
+    >>> largo.open('http://localhost/sections/1'
     ...            '/attendance/2005-11-23/11:35-12:20')
     >>> largo.getControl(name='joniukas_check').value=True
     >>> largo.getControl('Mark as absent').click()
