@@ -48,7 +48,7 @@ def get_version():
     return result
 
 # allowed extensions
-ALLOWED_EXTENSIONS = ['txt', 'conf', 'ics' 'pt', 'png',
+ALLOWED_EXTENSIONS = ['txt', 'conf', 'ics', 'pt', 'png',
                       'css', 'js', 'ico', 'gif', 'xml', 'xpdl', 'zcml']
 
 # Define packages we want to recursively include, we do this explicitly here
@@ -101,8 +101,9 @@ for package in all_packages:
             includes = []
             package_dir = os.path.join(here, 'src', *package.split('.'))
             for root, dirs, files in os.walk(package_dir):
-                if '.svn' in dirs:
-                    dirs.remove('.svn')
+                if dir in set(dirs):
+                    if dir.startswith('.'):
+                        dirs.remove(dir)
                 prefix = []
                 r = root
                 while r != package_dir:
@@ -113,7 +114,7 @@ for package in all_packages:
                     prefix = os.path.join(*prefix)
                 for file in files:
                     for ext in ALLOWED_EXTENSIONS:
-                        if file.endswith('.%s' % ext):
+                        if file.endswith('.%s' % ext) and not file.startswith('.'):
                             break
                     else:
                         continue
