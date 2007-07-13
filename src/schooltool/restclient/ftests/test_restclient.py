@@ -24,12 +24,13 @@ $Id$
 
 import unittest
 
+from schooltool.app.testing import app_functional_layer
 from schooltool.testing.functional import collect_ftests
 
 
 def test_suite():
     # 500 'cause it doesn't work yet
-    return collect_ftests(filenames=['../README.txt'], level=500)
+    return collect_ftests(filenames=['../README.txt'], level=500, layer=app_functional_layer)
 
 
 if __name__ == '__main__':
