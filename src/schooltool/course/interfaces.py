@@ -70,9 +70,9 @@ class ISection(IGroup):
             names, courses, and meeting time."""))
 
     title = zope.schema.TextLine(
-        title=_("Code"),
+        title=_("Title"),
         required=True,
-        description=_("ID code for the section."))
+        description=_("Title for the section."))
 
     description = zope.schema.Text(
         title=_("Description"),
