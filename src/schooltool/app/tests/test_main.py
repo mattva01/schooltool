@@ -32,18 +32,8 @@ from zope.testing import cleanup
 from zope.traversing.interfaces import IContainmentRoot
 from zope.interface import directlyProvides
 
-
-def findSiteZCML():
-    import schooltool
-    dir = os.path.dirname(schooltool.__file__)
-    for trial in (('..', '..', 'schooltool-skel', 'etc', 'site.zcml'),
-                  ('..', '..', '..', 'schooltool-skel', 'etc', 'site.zcml'),
-                  ('..', '..', '..', 'etc', 'site.zcml')):
-        path = os.path.abspath(os.path.join(dir, *trial))
-        if os.path.exists(path):
-            return path
-    raise ValueError('`site.zcml` not found.')
-
+here = os.path.dirname(__file__)
+ftesting_zcml = os.path.join(here, '..', 'ftesting.zcml')
 
 def doctest_Options():
     """Tests for Options.
@@ -386,7 +376,7 @@ def doctest_setup():
         ...     reportlab_fontdir = ''
         ...     devmode = False
         ...     school_type = ''
-        ...     site_definition = findSiteZCML()
+        ...     site_definition = ftesting_zcml
         >>> options.config = ConfigStub()
 
     Workaround to fix a Windows failure:
@@ -494,7 +484,7 @@ def doctest_before_afterRun():
         ...     lang = 'lt'
         ...     reportlab_fontdir = ''
         ...     devmode = False
-        ...     site_definition = findSiteZCML()
+        ...     site_definition = ftesting_zcml
         >>> options.config = ConfigStub()
         >>> db = object()
 
@@ -518,7 +508,7 @@ def doctest_bootstrapSchoolTool():
 
         >>> from schooltool.app.main import StandaloneServer
         >>> server = StandaloneServer()
-        >>> server.siteConfigFile = findSiteZCML()
+        >>> server.siteConfigFile = ftesting_zcml
         >>> server.configure()
 
     When we start with an empty database, bootstrapSchoolTool creates a
@@ -620,7 +610,7 @@ def doctest_restoreManagerUser():
 
         >>> from schooltool.app.main import StandaloneServer
         >>> server = StandaloneServer()
-        >>> server.siteConfigFile = findSiteZCML()
+        >>> server.siteConfigFile = ftesting_zcml
         >>> server.configure()
 
     We also need an application (we are doing the full set up in here
