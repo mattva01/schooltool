@@ -16,7 +16,7 @@
        tal:condition="python:view.size > 10"
        class="less">Show Less</a>
 
-    <a tal:attributes="href string:${view/base_url}?batch_size.${view/name}=${view/full_size}"
+    <a tal:attributes="href string:${view/base_url}?batch_size${view/name}=${view/full_size}"
        tal:condition="python:view.size < view.full_size"
        class="all">Show All</a>
 
