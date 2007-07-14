@@ -82,7 +82,7 @@ function hideToolTip(elem) {
 
 
 
-
+var justClicked = false;
 // Set up event handling for action bar drop downs.
 function initializeEventBindings(){
 
