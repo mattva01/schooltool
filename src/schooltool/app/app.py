@@ -106,7 +106,9 @@ class SimpleNameChooser(NameChooser):
 
     SimpleNameChooser is an adapter for containers
 
-        >>> container = {}
+        >>> class ContainerStub(dict):
+        ...     __name__ = 'resources'
+        >>> container = ContainerStub()
         >>> chooser = SimpleNameChooser(container)
 
     It expects objects to have a `title` attribute, so only register it
@@ -132,12 +134,35 @@ class SimpleNameChooser(NameChooser):
         >>> chooser.chooseName('suggested-name', obj)
         'suggested-name'
 
+    Even if it has "illegal" characters:
+
+        >>> chooser.chooseName('suggested name', obj)
+        'suggested name'
+
+    But it will add a number at the end:
+
+        >>> chooser.chooseName('mr-smith', obj)
+        u'mr-smith-2'
+
     Bad names cause errors
 
         >>> chooser.chooseName('@notallowed', obj)
         Traceback (most recent call last):
           ...
         UserError: Names cannot begin with '+' or '@' or contain '/'
+
+    If the name generated from the title gets shortened too much, we
+    generate a name from the name of the context container instead:
+
+        >>> obj.title = "foo-bar-baz-boo"
+        >>> chooser.chooseName('', obj)
+        'resource'
+
+    So objects with semi empty titles get ids for them too:
+
+        >>> obj.title = '---'
+        >>> chooser.chooseName('', obj)
+        'resource'
 
     """
 
@@ -148,6 +173,8 @@ class SimpleNameChooser(NameChooser):
         if not name:
             name = u''.join([c for c in obj.title.lower()
                              if c.isalnum() or c == ' ']).replace(' ', '-')
+            if len(name) + 2 < len(obj.title) or name == '':
+                name = self.context.__name__[:-1]
         n = name
         i = 1
         while n in self.context:
