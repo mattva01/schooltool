@@ -28,3 +28,26 @@ Create a Basic Person
 Go to the person list:
 
     >>> manager.getLink('Persons').click()
+
+Both of our users are in there:
+
+    >>> manager.getLink('John')
+    <Link text='John' url='http://localhost/persons/john'>
+
+    >>> manager.getLink('Administrator', index=1)
+    <Link text='Administrator' url='http://localhost/persons/manager'>
+
+You can filter the list:
+
+    >>> manager.getControl(name='SEARCH_TITLE').value = "John"
+    >>> manager.getControl('Find Now').click()
+
+And now we only have John in there:
+
+    >>> manager.getLink('John')
+    <Link text='John' url='http://localhost/persons/john'>
+
+    >>> manager.getLink('Administrator', index=1)
+    Traceback (most recent call last):
+    ...
+    LinkNotFoundError
