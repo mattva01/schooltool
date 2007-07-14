@@ -390,6 +390,11 @@ A.button-ok {
 	border-right: 1px #800 solid;
 }
 
+
+#header .tools .breadcrumbs a {
+        text-transform: capitalize;
+}
+
 #tools-zmi-principal {
 	font-style: italic;
 }
