@@ -175,10 +175,6 @@ FORM div.oneline-form div.value{
         margin-top: 2em;
 }
 
-#column-center {
-	margin-left: 0em;
-}
-
 #footer {
 	text-align: center;
 	clear: both;
@@ -483,6 +479,11 @@ A.button-ok {
 
 #column-center {
 	padding: 2em 2em;
+        margin-left: 0em;
+}
+
+.calcontent {
+margin: -35px 0px 0px 0px;
 }
 
 #content-header,

@@ -1,3 +1,4 @@
+
 <metal:block define-macro="navigation" i18n:domain="schooltool">
   <div id="calendar-navigation-context">
     <a id="calendar-navigation-context-previous" i18n:attributes="title"
@@ -70,7 +71,6 @@
                                          tal:replace="view/title" 
                                          i18n:translate=""/>
     </title>
-
     <metal:block fill-slot="extrahead">
       <link rel="service.feed" type="application/atom+xml"
             title="Upcoming Events" href=""
@@ -78,12 +78,7 @@
     </metal:block>
 
     <metal:block fill-slot="content-header">
-      <h1 i18n:translate="">
-        Calendar for <span tal:replace="context/title"
-            i18n:name="title" /> - <span i18n:name="calendar_title"
-                                         tal:replace="view/title" 
-                                         i18n:translate=""/>
-      </h1>
+
     </metal:block>
 
     <metal:block fill-slot="navigation-box">
@@ -108,6 +103,12 @@
         <div id="content-body">
          <div metal:use-macro="view/@@schooltool_macros/calendar/mode"/>
          <div class="calcontent">
+           <h1 i18n:translate="">
+             Calendar for <span tal:replace="context/title"
+             i18n:name="title" /> - <span i18n:name="calendar_title"
+             tal:replace="view/title"
+             i18n:translate=""/>
+           </h1>
            <div metal:use-macro="view/@@schooltool_macros/calendar/navigation" />
            <div metal:define-slot="calendar-body"/>
          </div>
