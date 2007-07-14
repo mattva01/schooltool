@@ -392,6 +392,29 @@ this section too:
       </a>
     </h6>
 
+
+You can also delete timetable schemas and see that all the timetables related to
+that schema are also deleted.
+
+    >>> manager.getLink('School Timetables').click()
+    >>> manager.getControl(name='delete.default').value = True
+    >>> manager.getControl('Delete').click()
+    >>> manager.getControl('Confirm').click()
+    >>> manager.open('http://localhost:8000/sections/swimming--frog/timetables')
+    >>> 'default' not in manager.contents
+    True
+
+Alternatively, we can delete terms and everything should work out as well.
+
+    >>> manager.getLink("Terms").click()
+    >>> manager.getControl(name='delete.2005-fall').value = True
+    >>> manager.getControl("Delete").click()
+    >>> manager.getControl("Confirm").click()
+    >>> manager.open('http://localhost:8000/sections/swimming--frog/timetables')
+    >>> '2005-fall' not in manager.contents
+    True 
+
+
 Epilogue
 --------
 
