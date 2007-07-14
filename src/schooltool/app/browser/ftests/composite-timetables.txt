@@ -279,12 +279,20 @@ Rendering views
 
 Let's look at John's composite calendar:
 
-    >>> print http(r"""
-    ... GET /persons/john/calendar/2003-09-02 HTTP/1.1
-    ... Authorization: Basic john:pwd""", handle_errors=False)
-    HTTP/1.1 200 Ok
-    Content-Length: 29337
+    >>> john = Browser()
+    >>> john.addHeader('Authorization', 'Basic john:pwd')
+    >>> john.open('http://localhost/persons/john/calendar/2003-09-02')
+    >>> john.getControl(name='my_timetable').value = True
+    >>> john.getControl('Apply').click()
+
+    >>> print john.contents
+    <BLANKLINE>
     ...
+    English for boys
+    ...
+    English for tou...
+    ...
+
 
 Epilogue
 --------
