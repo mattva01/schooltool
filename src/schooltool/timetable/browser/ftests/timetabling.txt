@@ -367,7 +367,7 @@ this section based on the new schema.
     >>> manager.getControl('Next').click()
     >>> manager.getControl('No').click()
 
-    >>> manager.open('http://localhost:8000/sections/swimming--frog/timetables/addTimetable.html')
+    >>> manager.open('http://localhost/sections/swimming--frog/timetables/addTimetable.html')
     >>> manager.getControl(name='ttschema').value = ['singleperiod']
     >>> manager.getControl('Add').click()
     >>> manager.getLink('2005-fall.singleperiod').click()
@@ -400,7 +400,7 @@ that schema are also deleted.
     >>> manager.getControl(name='delete.default').value = True
     >>> manager.getControl('Delete').click()
     >>> manager.getControl('Confirm').click()
-    >>> manager.open('http://localhost:8000/sections/swimming--frog/timetables')
+    >>> manager.open('http://localhost/sections/swimming--frog/timetables')
     >>> 'default' not in manager.contents
     True
 
@@ -410,10 +410,9 @@ Alternatively, we can delete terms and everything should work out as well.
     >>> manager.getControl(name='delete.2005-fall').value = True
     >>> manager.getControl("Delete").click()
     >>> manager.getControl("Confirm").click()
-    >>> manager.open('http://localhost:8000/sections/swimming--frog/timetables')
+    >>> manager.open('http://localhost/sections/swimming--frog/timetables')
     >>> '2005-fall' not in manager.contents
-    True 
-
+    True
 
 Epilogue
 --------
