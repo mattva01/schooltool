@@ -88,7 +88,7 @@ def doctest_PersonFactoryUtility_createManagerUser():
 
         >>> manager = utility.createManagerUser("manager_username", "SchoolTool")
         >>> manager.title
-        'Administratorius SchoolTool'
+        'Administrator SchoolTool'
         >>> manager.username
         'manager_username'
 
