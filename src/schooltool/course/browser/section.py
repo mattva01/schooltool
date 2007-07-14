@@ -221,8 +221,8 @@ class ConflictDisplayMixin(TimetableConflictMixin):
     def update(self):
         """Set self.busy_periods."""
         ttschema = self.getSchema()
-        if ttschema:
-            term = self.getTerm()
+        term = self.getTerm()
+        if ttschema and term:
             section_map = self.sectionMap(term, ttschema)
             self.busy_periods = [(key, sections)
                                  for key, sections in section_map.items()

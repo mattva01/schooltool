@@ -486,7 +486,7 @@ def doctest_ConflictDisplayMixin():
     """
 
 
-def doctest_ConflictDisplayMixin_no_timetables():
+def doctest_ConflictDisplayMixin_no_timetables_terms():
     r"""Tests for ConflictDisplayMixin.
 
     ConflictDisplayMixin should work even if there are no timetables
@@ -499,6 +499,16 @@ def doctest_ConflictDisplayMixin_no_timetables():
         >>> view.getAvailableItems = lambda: []
 
         >>> view.update()
+        >>> view.busy_periods
+        []
+
+    If there are no terms, but there are timetables - it still works:
+
+        >>> view.getSchema = lambda: "I am a schema"
+        >>> view.getTerm = lambda: None
+        >>> view.update()
+        >>> view.busy_periods
+        []
 
     """
 
