@@ -290,7 +290,7 @@ def doctest_SectionAddView():
 
         >>> for section in course.sections:
         ...     print section.title
-        1
+        Algebra I (1)
 
         >>> tearDown()
 

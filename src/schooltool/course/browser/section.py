@@ -107,7 +107,7 @@ class SectionAddView(AddView):
         except ValueError:
             name = INameChooser(app['sections']).chooseName(name, None)
         return name
-            
+
     def getCourseFromId(self, cid):
         app = getSite()
         try:
@@ -131,6 +131,7 @@ class SectionAddView(AddView):
         section = Section(title=id)
         self.context.add(section)
         self.course.sections.add(section)
+        section.title = "%s (%s)" % (self.course.title, id)
         self.request.response.redirect(zapi.absoluteURL(section, self.request))
 
 

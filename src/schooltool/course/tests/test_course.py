@@ -207,28 +207,23 @@ def doctest_Section():
         Mr. Jones
 
     Sections are generally shown in the interface by their label.  Labels are
-    created from the list of instructors, courses, and XXX time (not yet).
+    created from the list of instructors and the section title.
 
         >>> from zope.i18n import translate
         >>> translate(section.label)
-        u'Mr. Jones -- '
+        u'Mr. Jones -- section 1'
 
     Labels are updated dynamically when more instructors are added.
 
         >>> section.instructors.add(Person('teacher2', 'Mrs. Smith'))
         >>> translate(section.label)
-        u'Mr. Jones Mrs. Smith -- '
+        u'Mr. Jones Mrs. Smith -- section 1'
 
-    Label s should include the courses that a Section is part of:
+    The course should be listed in courses:
 
         >>> from schooltool.course.course import Course
         >>> course = Course(title="US History")
         >>> course.sections.add(section)
-        >>> translate(section.label)
-        u'Mr. Jones Mrs. Smith -- US History'
-
-    The course should be listed in courses:
-
         >>> for course in section.courses:
         ...     print course.title
         US History

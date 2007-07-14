@@ -59,9 +59,8 @@ class Section(Persistent, contained.Contained):
     @property
     def label(self):
         instructors = " ".join([i.title for i in self.instructors])
-        courses = " ".join([c.title for c in self.courses])
-        msg = _('${instructors} -- ${courses}',
-                mapping={'instructors': instructors, 'courses': courses})
+        msg = _('${instructors} -- ${section_title}',
+                mapping={'instructors': instructors, 'section_title': self.title})
         return msg
 
     @property

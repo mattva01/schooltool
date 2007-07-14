@@ -295,18 +295,6 @@ def doctest_IndexedGetterColumn():
         >>> column.getSortKey(item, None)
         'Peter'
 
-    As we are rendering only a small set of items we are using the
-    real object for that, because indexed information used for
-    sorting/filtering might be different from the one that is being
-    displayed:
-
-        >>> class PersonStub(object):
-        ...     def __init__(self, title):
-        ...         self.title = title
-        >>> int_ids[5] = PersonStub('Mr. Peter')
-        >>> column.renderCell(item, None)
-        u'Mr. Peter'
-
     """
 
 
@@ -858,25 +846,20 @@ def doctest_IndexedTableFormatter_wrapColumn():
         u'Pete'
 
     But as our indexed table formatter is manipulating index dicts, we
-    must wrap normal columns to use them on our data:
+    must wrap columns implementing ISortableColumn so that they would
+    have direct access to data:
+
+        >>> from zc.table.interfaces import ISortableColumn
+        >>> from zope.interface import directlyProvides
 
         >>> int_ids = {}
         >>> class IntIdsStub(object):
         ...     def getObject(self, id):
         ...         return int_ids[id]
         >>> provideUtility(IntIdsStub(), IIntIds)
-
         >>> int_ids[5] = item
         >>> index_dict = {'id': 5}
-        >>> column = formatter.wrapColumn(column)
-        >>> column.renderCell(index_dict, None)
-        u'Pete'
 
-    Columns that implement ISortableColumn will get their getSortKey
-    wrapped as well:
-
-        >>> from zc.table.interfaces import ISortableColumn
-        >>> from zope.interface import directlyProvides
         >>> column = GetterColumn(getter=lambda i, f: i.title)
         >>> directlyProvides(column, ISortableColumn)
 

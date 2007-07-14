@@ -5151,7 +5151,7 @@ def doctest_CalendarSTOverlayView():
         >>> group1 = app['groups']['g1'] = Group(title="Group 1")
         >>> group2 = app['groups']['g2'] = Group(title="Group 2")
         >>> history = app['courses']['c1'] = Course(title="History")
-        >>> section = app['sections']['s1'] = Section()
+        >>> section = app['sections']['s1'] = Section(title="History")
         >>> history.sections.add(section)
 
         >>> from schooltool.app.interfaces import IShowTimetables

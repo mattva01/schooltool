@@ -81,12 +81,15 @@ class CoursesViewlet(BrowserView):
         for section in sections:
             results.append({'title': removeSecurityProxy(section).title,
                             'section': section})
+        results.sort(key=lambda s: s['section'].__name__)
         return results
 
     def memberOf(self):
         """Seperate out generic groups from sections."""
-        return [group for group in self.context.groups
-                if not ISection.providedBy(group)]
+        sections =  [group for group in self.context.groups
+                     if not ISection.providedBy(group)]
+        sections.sort(key=lambda s: s.__name__)
+        return sections
 
     def learnerOf(self):
         """Get the sections the person is a member of."""
@@ -100,5 +103,5 @@ class CoursesViewlet(BrowserView):
                                                    rel_type=URIMembership)
                 for section in group_sections:
                     results.append({'section': section, 'group': item})
-
+        results.sort(key=lambda s: s['section'].__name__)
         return results

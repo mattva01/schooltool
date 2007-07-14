@@ -87,7 +87,7 @@ def addSection(course):
     manager = logInManager()
     manager.getLink('Courses').click()
     manager.getLink(course).click()
-    manager.getLink('New Section').click()    
+    manager.getLink('New Section').click()
 
 def setUpTimetabling(username):
     """Create the infrastructure for functional tests involving timetables.

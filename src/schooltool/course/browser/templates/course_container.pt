@@ -32,7 +32,7 @@
         <a tal:content="course/title"
            tal:attributes="href course/@@absolute_url">Some Object</a>
         <ul tal:condition="course/sections|nothing" class="section-list">
-          <tal:for repeat="section course/sections">
+          <tal:for repeat="section course/sections/sortby:__name__">
           <li tal:condition="section/can_access:label">
             <a i18n:translate=""
                tal:content="section/label"
@@ -58,7 +58,7 @@
         <a tal:content="course/title"
            tal:attributes="href course/@@absolute_url">Some Object</a>
         <ul tal:condition="course/sections|nothing" class="section-list">
-          <tal:for repeat="section course/sections">
+          <tal:for repeat="section course/sections/sortby:__name__">
           <li tal:condition="section/can_access:label">
             <a i18n:translate=""
                tal:condition="section/can_access:label"

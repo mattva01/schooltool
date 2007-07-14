@@ -281,8 +281,8 @@ All the sections sohuld bee seen in the drop down lists:
             <td>
               <select name="sections:list">
                 <option value="" selected="selected">none</option>
-                <option value="birdwatching-2"> -- Birding</option>
-                <option value="birdwatching-3"> -- Birding</option>
+                <option value="birdwatching-2"> -- Birding2</option>
+                <option value="birdwatching-3"> -- Birding3</option>
               </select>
             </td>
     ...
@@ -290,7 +290,7 @@ All the sections sohuld bee seen in the drop down lists:
             <td>
               <select name="sections:list">
                 <option value="" selected="selected">none</option>
-                <option value="birdwatching-3"> -- Birding</option>
+                <option value="birdwatching-3"> -- Birding3</option>
               </select>
             </td>
     ...
@@ -298,7 +298,7 @@ All the sections sohuld bee seen in the drop down lists:
             <td>
               <select name="sections:list">
                 <option value="" selected="selected">none</option>
-                <option value="birdwatching-1"> -- Birding</option>
+                <option value="birdwatching-1"> -- Birding1</option>
               </select>
             </td>
     ...
@@ -306,8 +306,8 @@ All the sections sohuld bee seen in the drop down lists:
             <td>
               <select name="sections:list">
                 <option value="" selected="selected">none</option>
-                <option value="birdwatching-1"> -- Birding</option>
-                <option value="birdwatching-2"> -- Birding</option>
+                <option value="birdwatching-1"> -- Birding1</option>
+                <option value="birdwatching-2"> -- Birding2</option>
               </select>
             </td>
     ...
@@ -329,8 +329,8 @@ Lets add John to Birdwatching 1:
             <td>
               <select name="sections:list">
                 <option value="" selected="selected">none</option>
-                <option value="birdwatching-2"> -- Birding</option>
-                <option value="birdwatching-3"> -- Birding</option>
+                <option value="birdwatching-2"> -- Birding2</option>
+                <option value="birdwatching-3"> -- Birding3</option>
               </select>
             </td>
     ...
@@ -338,7 +338,7 @@ Lets add John to Birdwatching 1:
             <td>
               <select name="sections:list">
                 <option value="" selected="selected">none</option>
-                <option value="birdwatching-3"> -- Birding</option>
+                <option value="birdwatching-3"> -- Birding3</option>
               </select>
             </td>
     ...
@@ -347,7 +347,7 @@ Lets add John to Birdwatching 1:
               <select name="sections:list">
                 <option value="">none</option>
                 <option selected="selected"
-                        value="birdwatching-1"> -- Birding</option>
+                        value="birdwatching-1"> -- Birding1</option>
               </select>
             </td>
     ...
@@ -356,8 +356,8 @@ Lets add John to Birdwatching 1:
               <select name="sections:list">
                 <option value="">none</option>
                 <option selected="selected"
-                        value="birdwatching-1"> -- Birding</option>
-                <option value="birdwatching-2"> -- Birding</option>
+                        value="birdwatching-1"> -- Birding1</option>
+                <option value="birdwatching-2"> -- Birding2</option>
               </select>
             </td>
     ...
@@ -380,8 +380,8 @@ If john is added to bw1 and bw2 a conflict should arise:
               <select name="sections:list">
                 <option value="">none</option>
                 <option selected="selected"
-                        value="birdwatching-2"> -- Birding</option>
-                <option value="birdwatching-3"> -- Birding</option>
+                        value="birdwatching-2"> -- Birding2</option>
+                <option value="birdwatching-3"> -- Birding3</option>
               </select>
             </td>
     ...
@@ -389,7 +389,7 @@ If john is added to bw1 and bw2 a conflict should arise:
             <td>
               <select name="sections:list">
                 <option value="" selected="selected">none</option>
-                <option value="birdwatching-3"> -- Birding</option>
+                <option value="birdwatching-3"> -- Birding3</option>
               </select>
             </td>
     ...
@@ -398,7 +398,7 @@ If john is added to bw1 and bw2 a conflict should arise:
               <select name="sections:list">
                 <option value="">none</option>
                 <option selected="selected"
-                        value="birdwatching-1"> -- Birding</option>
+                        value="birdwatching-1"> -- Birding1</option>
               </select>
             </td>
     ...
@@ -408,16 +408,16 @@ If john is added to bw1 and bw2 a conflict should arise:
               <select name="sections:list">
                 <option value="">none</option>
                 <option selected="selected"
-                        value="birdwatching-1"> -- Birding</option>
-                <option value="birdwatching-2"> -- Birding</option>
+                        value="birdwatching-1"> -- Birding1</option>
+                <option value="birdwatching-2"> -- Birding2</option>
               </select>
             </td>
             <td>
               <select name="sections:list">
                 <option value="">none</option>
-                <option value="birdwatching-1"> -- Birding</option>
+                <option value="birdwatching-1"> -- Birding1</option>
                 <option selected="selected"
-                        value="birdwatching-2"> -- Birding</option>
+                        value="birdwatching-2"> -- Birding2</option>
               </select>
             </td>
             <td class="conflict">
