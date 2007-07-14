@@ -1500,7 +1500,7 @@ class CalendarSTOverlayView(CalendarOverlayView):
         # The unproxied object will only be used for annotations.
         person = removeSecurityProxy(person)
         annotations = IAnnotations(person)
-        return annotations.get(self.SHOW_TIMETABLE_KEY, True)
+        return annotations.get(self.SHOW_TIMETABLE_KEY, False)
 
 
 class CalendarListSubscriber(object):
@@ -1539,7 +1539,7 @@ class CalendarListSubscriber(object):
         # personal timetable
         unproxied_person = removeSecurityProxy(user) # for annotations
         annotations = IAnnotations(unproxied_person)
-        if annotations.get(CalendarSTOverlayView.SHOW_TIMETABLE_KEY, True):
+        if annotations.get(CalendarSTOverlayView.SHOW_TIMETABLE_KEY, False):
             yield (ttcalendar, '#9db8d2', '#7590ae')
             # Maybe we should change the colour to differ from the user's
             # personal calendar?
