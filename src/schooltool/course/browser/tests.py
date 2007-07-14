@@ -496,6 +496,7 @@ def doctest_ConflictDisplayMixin_no_timetables_terms():
         >>> app = setup.setUpSchoolToolSite()
         >>> view = ConflictDisplayMixin(app)
         >>> view.getSchema = lambda: None
+        >>> view.getTerm = lambda: "I am a term"
         >>> view.getAvailableItems = lambda: []
 
         >>> view.update()
