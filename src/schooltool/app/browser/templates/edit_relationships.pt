@@ -9,21 +9,6 @@
       
       <form method="post" tal:attributes="action request/URL" class="standalone">
 	<h3 i18n:translate="" tal:content="view/title" />
-	<fieldset tal:define="items view/getSelectedItems">
-	  <tal:if condition="items">
-	    <legend i18n:translate="" tal:content="view/current_title" />
-	    <tal:block replace="structure view/selected_table/render" />
-	    <div class="controls">
-	      <input type="submit" class="button-ok" name="REMOVE_ITEMS"
-		     value="Remove"
-		     title="Shortcut: Alt-R" accesskey="R"
-		     i18n:attributes="value; accesskey" />
-	    </div>
-	  </tal:if>
-	  <p tal:condition="not:items" i18n:translate="">
-	    There are none.
-	  </p>
-	</fieldset>
 	<fieldset>
 	  <legend i18n:translate="" tal:content="view/available_title" />
 	  <div class="item_list">
@@ -41,10 +26,26 @@
 	    </p>
 	  </div>
 	</fieldset>
+	<fieldset tal:define="items view/getSelectedItems">
+	  <tal:if condition="items">
+	    <legend i18n:translate="" tal:content="view/current_title" />
+	    <tal:block replace="structure view/selected_table/render" />
+	    <div class="controls">
+	      <input type="submit" class="button-cancel" name="REMOVE_ITEMS"
+		     value="Remove"
+		     title="Shortcut: Alt-R" accesskey="R"
+		     i18n:attributes="value; accesskey" />
+	    </div>
+	  </tal:if>
+	  <p tal:condition="not:items" i18n:translate="">
+	    There are none.
+	  </p>
+	</fieldset>
+
 	
 	<div class="controls">
-	  <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
-		 i18n:attributes="value cancel-button" />
+	  <input type="submit" class="button-ok" name="CANCEL" value="OK"
+		 i18n:attributes="value ok-button" />
 	</div>
       </form>
       

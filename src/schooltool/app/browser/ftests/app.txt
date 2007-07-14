@@ -208,16 +208,16 @@ Adding a teacher:
     >>> print manager.contents
     <BLANKLINE>
     ...
+      <legend>Available Instructors</legend>
+    ...
       <legend>Current Instructors</legend>
     ...
          <label for="remove_item.frog">Frog</label>
     ...
-      <legend>Available Instructors</legend>
-    ...
 
 Now Frog is in the Instructors div
 
-    >>> manager.getControl('Cancel').click()
+    >>> manager.getControl('OK').click()
     >>> print manager.contents
     <!DOCTYPE ...>
     ...
@@ -290,7 +290,7 @@ Frog can't see the section's calendar any more
 
 and he's no longer an instructor:
 
-    >>> manager.getControl('Cancel').click()
+    >>> manager.getControl('OK').click()
     >>> print manager.contents
     <!DOCTYPE ...>
     ...

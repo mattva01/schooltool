@@ -122,7 +122,7 @@ Now we can add those people to the section:
     >>> manager.getControl('Tom Hoffman').click()
     >>> manager.getControl('Claudia Richter').click()
     >>> manager.getControl('Add').click()
-    >>> manager.getControl('Cancel').click()
+    >>> manager.getControl('OK').click()
 
     >>> 'Paul Cardune' in manager.contents
     True
@@ -130,7 +130,7 @@ Now we can add those people to the section:
     >>> manager.getLink('edit instructors').click()
     >>> manager.getControl('Stephan Richter').click()
     >>> manager.getControl('Add').click()
-    >>> manager.getControl('Cancel').click()
+    >>> manager.getControl('OK').click()
 
 
 Instructor should be automatically capable of manipulating activities

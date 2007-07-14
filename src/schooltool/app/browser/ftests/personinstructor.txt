@@ -45,7 +45,7 @@ Let's make the frog a teacher:
     >>> manager.getLink('edit instructors').click()
     >>> manager.getControl(name='add_item.frog').value = True
     >>> manager.getControl('Add').click()
-    >>> manager.getControl('Cancel').click()
+    >>> manager.getControl('OK').click()
     >>> print manager.contents
     <!DOCTYPE ...>
     ...
