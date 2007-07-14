@@ -6,4 +6,7 @@
     <include package="schooltool.term" />
     <include package="schooltool.timetable" />
 
+    <!-- Provide local overrides of standard configurations-->
+    <includeOverrides package="schooltool.basicperson" file="overrides.zcml" />
+
 </configure>

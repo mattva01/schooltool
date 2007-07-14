@@ -13,4 +13,18 @@ Create a Basic Person
 
     >>> manager.getLink('Persons').click()
     >>> manager.getLink('New Person').click()
+    >>> manager.getControl('First name').value = "John"
+    >>> manager.getControl('Last name').value = "Petterson"
+    >>> manager.getControl('Gender').value = ['male']
+    >>> manager.getControl('Email').value = 'john@example.com'
+    >>> manager.getControl('Phone').value = '111-111-1111'
+    >>> manager.getControl('Birth date').value = '1980-01-01'
 
+    >>> manager.getControl('Username').value = "john"
+    >>> manager.getControl('Password').value = "pwd"
+    >>> manager.getControl('Confirm').value = "pwd"
+    >>> manager.getControl('Add').click()
+
+Go to the person list:
+
+    >>> manager.getLink('Persons').click()

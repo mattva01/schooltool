@@ -34,6 +34,7 @@ import schooltool.level.level
 
 def evolve(context):
     root = context.connection.root().get(ZopePublication.root_name, None)
+    import pdb; pdb.set_trace()
     for app in findObjectsProviding(root, ISchoolToolApplication):
         if 'levels' not in app:
             app['levels'] = schooltool.level.level.LevelContainer()
