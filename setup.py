@@ -55,6 +55,7 @@ ALLOWED_EXTENSIONS = ['conf','css', 'gif', 'ico', 'ics', 'js', 'mo', 'po', 'pt',
 # to avoid automatic accidents
 root_packages = ['schooltool.app',
                  'schooltool.attendance',
+                 'schooltool.basicperson',
                  'schooltool.calendar',
                  'schooltool.course',
                  'schooltool.dashboard',
