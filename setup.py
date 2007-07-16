@@ -206,6 +206,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     main = schooltool.paste.main:schooltool_app_factory
 
     [console_scripts]
+    start-schooltool-instance = schooltool.paste.run:main
     make-schooltool-instance = schooltool.paste.instance:make_schooltool_instance
 
     [paste.paster_create_template]

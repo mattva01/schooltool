@@ -1,7 +1,7 @@
 # Sample SchoolTool HTTP server configuration file
 
 # identify the component configuration used to define the site:
-site-definition school.zcml
+site-definition ${abspath}/school.zcml
 
 #
 # path /path/to/add
@@ -76,7 +76,7 @@ pid-file var/schooltool.pid
 #    error-log-file /var/log/schooltool/error.log
 #    error-log-file STDERR
 #
-error-log-file log/schooltool.log
+error-log-file ${abspath}/log/schooltool.log
 error-log-file STDERR
 
 #
@@ -96,7 +96,7 @@ error-log-file STDERR
 #    rest-access-log-file /var/log/schooltool/access.log
 #    rest-access-log-file STDOUT
 #
-rest-access-log-file log/rest-access.log
+rest-access-log-file ${abspath}/log/rest-access.log
 
 #
 # web-access-log-file
@@ -115,7 +115,7 @@ rest-access-log-file log/rest-access.log
 #    web-access-log-file /var/log/schooltool/access.log
 #    web-access-log-file STDOUT
 #
-web-access-log-file log/web-access.log
+web-access-log-file ${abspath}/log/web-access.log
 
 #
 # attendance-log-file
@@ -134,7 +134,7 @@ web-access-log-file log/web-access.log
 #    attendance-log-file /var/log/schooltool/attendance.log
 #    attendance-log-file STDOUT
 #
-attendance-log-file log/attendance.log
+attendance-log-file ${abspath}/log/attendance.log
 
 #
 # lang
@@ -179,7 +179,7 @@ attendance-log-file log/attendance.log
   #   quota size		default: no quota
   # </filestorage>
   <filestorage>
-    path var/Data.fs
+    path ${abspath}/var/Data.fs
   </filestorage>
 
   # <mappingstorage>		in-memory MappingStorage
