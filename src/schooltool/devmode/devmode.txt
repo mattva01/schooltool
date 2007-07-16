@@ -406,7 +406,7 @@ The 'PUT' view has a lot more information besides the standard information,
     <div class="indent">
     <div>
       <i>Registered at:</i>
-      <a href="...">Zope3/.../zope/app/http/configure.zcml</a>
+      <a href="...">.../zope/app/http/configure.zcml</a>
       <span class="small">
         (line ...)</span>
     </div>
@@ -431,7 +431,7 @@ a given container,
       <div class="indent" style="padding-bottom: 0.5em">
         <div>
           <i>Registered at:</i>
-          <a href="...">Zope3/.../schooltool/person/rest/configure.zcml</a>
+          <a href="...">.../schooltool/person/rest/configure.zcml</a>
           <span class="small">
             (line ...)</span>
         </div>
@@ -457,7 +457,7 @@ the modification adapter,
       <div class="indent" style="padding-bottom: 0.5em">
         <div>
           <i>Registered at:</i>
-          <a href="...">Zope3/.../schooltool/person/rest/configure.zcml</a>
+          <a href="...">.../schooltool/person/rest/configure.zcml</a>
           <span class="small">
             (line ...)</span>
         </div>
@@ -493,7 +493,7 @@ also get a list of containers from which the verb is valid:
       <div class="indent">
         <div>
           <i>Registered at:</i>
-          <a href="...">Zope3/.../zope/app/http/configure.zcml</a>
+          <a href="...">.../zope/app/http/configure.zcml</a>
           <span class="small">
             (line ...)</span>
         </div>
@@ -529,7 +529,7 @@ also get a list of containers from which the verb is valid:
 #         </div>
 #         <div>
 #           <i>Registered at:</i>
-#           <a href="...">Zope3/.../schooltool/app/rest/configure.zcml</a>
+#           <a href="...">.../schooltool/app/rest/configure.zcml</a>
 #           <span class="small">
 #            (line ...)</span>
 #         </div>
@@ -555,7 +555,7 @@ also get a list of containers from which the verb is valid:
 #       <div class="indent">
 #         <div>
 #           <i>Registered at:</i>
-#           <a href="...">Zope3/.../schooltool/app/rest/configure.zcml</a>
+#           <a href="...">.../schooltool/app/rest/configure.zcml</a>
 #           <span class="small">
 #             (line ...)</span>
 #         </div>
@@ -565,7 +565,7 @@ also get a list of containers from which the verb is valid:
 #         </div>
 #         <div>
 #           <i>Template:</i>
-#           Zope3/.../schooltool/app/rest/templates/acl.pt
+#           .../schooltool/app/rest/templates/acl.pt
 #         </div>
 #         <div>
 #           <i>Permission:</i>

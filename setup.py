@@ -194,9 +194,24 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zope.app.server',
                       'zope.app.generations',
                       'zope.app.securitypolicy',
-                      'zope.app.zcmlfiles'],
+                      'zope.app.zcmlfiles',
+                      'PasteDeploy',
+                      'PasteScript',
+                      'zope.paste',
+                      'WSGIUtils'],
     dependency_links=['http://ftp.schooltool.org/schooltool/eggs/',
                       'http://download.zope.org/distribution/'],
+    entry_points = """
+    [paste.app_factory]
+    main = schooltool.paste.main:schooltool_app_factory
+
+    [console_scripts]
+    start-schooltool-instance = schooltool.paste.run:main
+    make-schooltool-instance = schooltool.paste.instance:make_schooltool_instance
+
+    [paste.paster_create_template]
+    schooltool_deploy = schooltool.paste.templates:SchoolToolDeploy
+    """,
     package_data=package_data,
     include_package_data=True
     )

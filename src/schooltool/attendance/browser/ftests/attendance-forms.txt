@@ -261,7 +261,7 @@ attendance sparkline drawn along with the status symbol:
 
 It looks like this
 
-    >>> import Image
+    >>> from PIL import Image
     >>> import StringIO
     >>> image_file = StringIO.StringIO(image)
     >>> pil_image = Image.open(image_file)
