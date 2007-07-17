@@ -200,7 +200,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zope.app.securitypolicy',
                       'zope.app.zcmlfiles',
                       'PasteDeploy',
-                      'PasteScript',
+                      'PasteScript'],
     dependency_links=['http://ftp.schooltool.org/schooltool/eggs/',
                       'http://download.zope.org/distribution/'],
     entry_points = """
