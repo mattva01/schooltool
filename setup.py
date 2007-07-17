@@ -200,8 +200,6 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zope.app.zcmlfiles',
                       'PasteDeploy',
                       'PasteScript',
-                      'zope.paste',
-                      'WSGIUtils'],
     dependency_links=['http://ftp.schooltool.org/schooltool/eggs/',
                       'http://download.zope.org/distribution/'],
     entry_points = """
