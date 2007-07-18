@@ -82,12 +82,16 @@ def addCourse(title, description="", identifier=""):
     manager.getControl('Identifier').value = identifier
     manager.getControl('Add').click()
 
-def addSection(course):
+def addSection(course, title=None):
     """Add a section."""
     manager = logInManager()
     manager.getLink('Courses').click()
     manager.getLink(course).click()
     manager.getLink('New Section').click()
+    if title is not None:
+        manager.getLink('edit info').click()
+        manager.getControl('Title').value = title
+        manager.getControl('Apply').click()
 
 def setUpTimetabling(username):
     """Create the infrastructure for functional tests involving timetables.
