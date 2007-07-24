@@ -1,0 +1,14 @@
+<configure
+     xmlns:zcml="http://namespaces.zope.org/zcml"
+     xmlns:help="http://namespaces.zope.org/help"
+     zcml:condition="have context-help" >
+
+<help:register
+     id="daily_calendar"
+     title="Daily Calendar"
+     doc_path="daily_calendar.pt"
+     for="schooltool.app.interfaces.ISchoolToolCalendar"
+     class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic"
+     view="daily.html" />
+
+</configure>

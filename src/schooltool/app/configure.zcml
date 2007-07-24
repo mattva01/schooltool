@@ -225,6 +225,7 @@
 
   <include package=".browser" />
   <include package=".rest" />
+  <include package=".help" />
 
   <!-- XXX It feels wrong to tweak permissions of objects in a sibling. -->
 
