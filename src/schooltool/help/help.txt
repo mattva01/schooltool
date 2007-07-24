@@ -13,15 +13,7 @@ log in however.
     >>> manager.getControl('Password').value = 'schooltool'
     >>> manager.getControl('Log in').click()
 
-Now we are the calendar. A you can see there is no help link here, since there
-is no help for this link:
-
-    # I know this is a brittle test, but I do not want to overdo the test
-    # setup here.
-    >>> 'Context Help' in manager.contents
-    False
-
-But when we go to the person container, for example, we should be able to see
+When we go to the person container, for example, we should be able to see
 the help:
 
     >>> manager.getLink('persons').click()
