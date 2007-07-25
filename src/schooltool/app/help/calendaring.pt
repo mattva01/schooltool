@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" metal:use-macro="view/@@schooltool_macros/onlinehelp/page">
+      <head>
+      <title metal:fill-slot="title" i18n:translate="">Calendaring in SchoolTool</title>
+</head>
+<body metal:fill-slot="body" tal:omit-tag="">
+<h1 i18n:translate="">Calendaring in SchoolTool</h1>
+<p i18n:translate="">SchoolTool includes a full-featured calendaring system,
+similar to Apple iCal or Google Calendar, but capable of representing 
+complex school timetables, including rotating schedules.  Each person, 
+group, course section or resource (such as a room or a projector) has its 
+own calendar.  You may integrate multiple calendars into your personal 
+calendar views.</p>
+<h3 i18n:translate="">Parts of the standard calendar views</h3>
+<ul>
+<li i18n:translate=""><strong>Calendar table:</strong> fills the main 
+(lower-right) part of the page.  This represents the calendar for one day, 
+week, month or year, depending on the view..</li>
+<li i18n:translate=""><strong>Calendar navigation bar:</strong> immediately 
+above the calendar table.  Allows you to navigate forward or backward in time, 
+or to return to the current time.</li>
+<li i18n:translate=""><strong>Calendar title:</strong> immediately above the 
+calendar navigation bar, lists the owner of this calendar and the date for this 
+"page" of the calendar.</li>
+<li i18n:translate=""><strong>Left sidebar:</strong> for all calendars, this 
+contains a <code>Jump to...</code> section containing menus and links to allow 
+you to quickly navigate to a specific month, year or date.  <br />  If you 
+are logged in and viewing your own calendar, you will also see a 
+<code>Calendars</code> section at the top of the sidebar which allows you 
+to "overlay" events from other calendars in this view.  You may see 
+calendars for classes you teach or attend listed here already.</li>
+<li i18n:translate=""><strong>Day/week/month/year buttons:</strong> These 
+buttons allow you to switch between daily, weekly, monthly and annual 
+views.</li>
+</ul>

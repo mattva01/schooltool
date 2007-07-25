@@ -4,19 +4,29 @@
      zcml:condition="have context-help" >
 
 <help:register
+     id="calendaring"
+     title="Calendaring"
+     doc_path="calendaring.pt"
+     />
+
+<help:register
+     parent="calendaring"
      id="daily_calendar"
      title="Daily Calendar"
      doc_path="daily_calendar.pt"
      for="schooltool.app.interfaces.ISchoolToolCalendar"
      class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic"
-     view="daily.html" />
+     view="daily.html" 
+     />
 
 <help:register
+     parent="calendaring"
      id="weekly_calendar"
      title="Weekly Calendar"
      doc_path="weekly_calendar.pt"
      for="schooltool.app.interfaces.ISchoolToolCalendar"
      class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic"
-     view="weekly.html" />
+     view="weekly.html" 
+     />
 
 </configure>

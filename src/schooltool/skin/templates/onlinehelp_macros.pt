@@ -22,16 +22,16 @@
       @import url(./onlinehelp.css);
     </style>
 
-    <style type="text/css" media="all"
+   <style type="text/css" media="all"
            tal:content="string:@import url(${context/++resource++tree.css});">
       @import url(./tree.css);
     </style>
-
+    
     <style type="text/css" media="all"
            tal:content="string:@import url(${context/++resource++layout.css});">
       @import url(./layout.css);
     </style>
-
+    
     <style type="text/css" media="all"
            tal:content="string:@import url(${context/++resource++help.css});">
       @import url(./help.css);
