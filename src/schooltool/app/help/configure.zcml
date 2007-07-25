@@ -11,4 +11,12 @@
      class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic"
      view="daily.html" />
 
+<help:register
+     id="weekly_calendar"
+     title="Weekly Calendar"
+     doc_path="weekly_calendar.pt"
+     for="schooltool.app.interfaces.ISchoolToolCalendar"
+     class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic"
+     view="weekly.html" />
+
 </configure>

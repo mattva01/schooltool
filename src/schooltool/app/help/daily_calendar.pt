@@ -9,7 +9,7 @@
 <p i18n:translate="">This is the daily view of a calendar.  It might be your 
 calendar, or it might be the calendar of another person, group or resource in 
 your school.</p>
-<h2 i18n:translate="">Parts of the page</h2>
+<h3 i18n:translate="">Parts of the page</h3>
 <ul>
 <li i18n:translate=""><strong>Calendar table:</strong> fills the main 
 (lower-right) part of the page.  This represents the calendar for one day.  
@@ -31,7 +31,7 @@ calendars for classes you teach or attend listed here already.</li>
 buttons allow you to switch between daily, weekly, monthly and annual 
 views.</li>
 </ul>
-<h2 i18n:translate="">How do I...</h2>
+<h3 i18n:translate="">How do I...</h3>
 <ul>
 <li i18n:translate=""><strong>Create an event:</strong> click in the 
 calendar table at the start time for the event.  Or select <code>New 
@@ -45,10 +45,10 @@ under <code>Cal</code> and click <code>Apply</code>.</li>
 <li i18n:translate=""><strong>Adding or removing calendars to the 
 <code>Calendars</code> list:</strong> click on the <code>More...</code> 
 button.</li>
-<li i18n:translate=""><strong>Access a iCal format version of the 
+<li i18n:translate=""><strong>access a iCal format version of the 
 calendar:</strong>: Select <code>Open in iCal</code> from the Action menu.</li>
 <li i18n:translate=""><strong>Access an Atom feed version of the calendar:
-</strong> Append <code>/atom.xml</code> to the calendar's URL.</li>
+</strong> append <code>/atom.xml</code> to the calendar's URL.</li>
 </ul>
 </body>
 </html>
