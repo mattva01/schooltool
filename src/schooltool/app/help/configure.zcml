@@ -7,6 +7,7 @@
      id="calendaring"
      title="Calendaring"
      doc_path="calendaring.pt"
+     class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic"
      />
 
 <help:register
