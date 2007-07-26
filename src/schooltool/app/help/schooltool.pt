@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" metal:use-macro="view/@@schooltool_macros/onlinehelp/page">
+      <head>
+      <title metal:fill-slot="title" i18n:translate="">SchoolTool</title>
+</head>
+<body metal:fill-slot="body" tal:omit-tag="">
+<h1 i18n:translate="">SchoolTool</h1>
+<p i18n:translate="">SchoolTool is a free/libre administrative system for 
+schools around the world, funded by The Shuttleworth Foundation.</p>
+<h2 i18n:translate="">Standard User Interface Conventions in SchoolTool</h2>
+<ul>
+<li i18n:translate=""><strong>Red top bar</strong></li>
+<ul>
+<li i18n:translate=""><strong>Breadcrumbs:</strong> the links at the left hand side of the
+red bar show you where you are in SchoolTool's object hierarchy.  Note that 
+this doesn't necessarily lead you back to where you came from, but is 
+handy for taking you from more specific to more general parts of the 
+application.</li>
+<li i18n:translate=""><strong>Your name</strong> (if you're logged in):
+clicking on your name takes you 
+to a simple dashboard of relevant links.  From this page you can also 
+use the <code>Actions</code> menu to change preferences and other personal
+settings.</li>
+<li i18n:translate=""><strong>Log in/out:</strong> this logs you in or out.  
+It is a good idea to log out when you aren't using SchoolTool.</li>
+<li i18n:translate=""><strong>Help:</strong> if there is a help file for the 
+page you're looking at, you'll see this link.</li>
+</ul>
+<li i18n:translate=""><strong>Menus</strong></li>
+<ul>
+<li i18n:translate=""><strong>Navigation:</strong> this menu gives you some 
+basic options for accessing different parts of SchoolTool, such as the 
+index of persons or courses.  What you see here depends on your permissions 
+in the system.</li>
+<li i18n:translate=""><strong>Action:</strong> this menu contains a variety 
+of things that you can do on the current page.  The entries in this menu 
+change considerably based on what page you're viewing and what permissions 
+you have.</li>
+</ul>
+<li i18n:translate=""><strong>Above the red bar</strong></li>
+<ul>
+<li i18n:translate=""><strong>Logo & School Name:</strong> clicking in this 
+area will take you to the top of the school's site, usually the calendar 
+for the school.</li>
+<li i18n:translate=""><strong>Calendar day/week/month/year views:</strong>
+if you are viewing a calendar, you will find icons in the upper right hand 
+corner that will allow you to switch between calendar views.</li>
+<li i18n:translate=""><strong>Devmode menu:</strong> if you are a site 
+administrator and you've enabled "devmode" in schooltool.conf, you will 
+see a special menu in the upper right hand corner of the site.  You should 
+disable devmode in any production server.</li>
+</ul>
+</ul>
+</body>
+</html>

@@ -4,6 +4,14 @@
      zcml:condition="have context-help" >
 
 <help:register
+     id="schooltool"
+     title="SchoolTool"
+     doc_path="schooltool.pt"
+     class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic"
+     />
+
+<help:register
+     parent="schooltool"
      id="calendaring"
      title="Calendaring"
      doc_path="calendaring.pt"
@@ -11,7 +19,7 @@
      />
 
 <help:register
-     parent="calendaring"
+     parent="schooltool/calendaring"
      id="daily_calendar"
      title="Daily Calendar"
      doc_path="daily_calendar.pt"
@@ -21,7 +29,7 @@
      />
 
 <help:register
-     parent="calendaring"
+     parent="schooltool/calendaring"
      id="weekly_calendar"
      title="Weekly Calendar"
      doc_path="weekly_calendar.pt"
@@ -31,7 +39,7 @@
      />
 
 <help:register
-     parent="calendaring"
+     parent="schooltool/calendaring"
      id="monthly_calendar"
      title="Monthly Calendar"
      doc_path="monthly_calendar.pt"
@@ -41,7 +49,7 @@
      />
 
 <help:register
-     parent="calendaring"
+     parent="schooltool/calendaring"
      id="yearly_calendar"
      title="Yearly Calendar"
      doc_path="yearly_calendar.pt"
