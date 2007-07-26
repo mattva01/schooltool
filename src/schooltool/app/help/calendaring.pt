@@ -8,8 +8,10 @@
 <h1 i18n:translate="">Calendaring in SchoolTool</h1>
 <p i18n:translate="">SchoolTool includes a full-featured calendaring system,
 similar to Apple iCal or Google Calendar, but capable of representing 
-complex school timetables, including rotating schedules.  Each person, 
-group, course section or resource (such as a room or a projector) has its 
+complex school timetables, including rotating schedules.  SchoolTool is also 
+useful for simple resource scheduling, allowing you to manage room assignments,
+and booking shared resources like computers or projectors.  Each person, 
+group, course section or resource has its 
 own calendar.  You may integrate multiple calendars into your personal 
 calendar views.</p>
 <h3 i18n:translate="">Parts of the standard calendar views</h3>

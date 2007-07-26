@@ -2,20 +2,21 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" metal:use-macro="view/@@schooltool_macros/onlinehelp/page">
       <head>
-      <title metal:fill-slot="title" i18n:translate="">Weekly Calendar</title>
+      <title metal:fill-slot="title" i18n:translate="">Yearly Calendar</title>
 </head>
 <body metal:fill-slot="body" tal:omit-tag="">
-<h1 i18n:translate="">Weekly Calendar</h1>
-<p i18n:translate="">This is the weekly view of a calendar.  It might be your 
+<h1 i18n:translate="">Yearly Calendar</h1>
+<p i18n:translate="">This is the year view of a calendar.  It might be your 
 calendar, or it might be the calendar of another person, group or resource in 
 your school.  <a href="/++help++/calendaring">More calendaring help...</a></p>
 <h3 i18n:translate="">How do I...</h3>
 <ul>
+<li i18n:translate=""><strong>Know which days contain events: if the day has
+a blue background, there is at least one event that day.</li>
 <li i18n:translate=""><strong>View an individual day in more detail:</strong>
-click on the appropriate day in the blue row of the calendar table.</li>
-<li i18n:translate=""><strong>View details about an event or edit it:</strong>
-click on the event.  If you have the correct permissions for the event you 
-can edit it.</li>
+click on the day.</li>
+<li i18n:translate=""><strong>View an individual month:</strong> click on the 
+name of the month.</li>
 <li i18n:translate=""><strong>Create an event:</strong> select the day the
 event starts and create the event in the daily view.</li>
 <li i18n:translate=""><strong>Show or hide events in one of the calendars 

@@ -30,4 +30,24 @@
      view="weekly.html" 
      />
 
+<help:register
+     parent="calendaring"
+     id="monthly_calendar"
+     title="Monthly Calendar"
+     doc_path="monthly_calendar.pt"
+     for="schooltool.app.interfaces.ISchoolToolCalendar"
+     class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic"
+     view="monthly.html" 
+     />
+
+<help:register
+     parent="calendaring"
+     id="yearly_calendar"
+     title="Yearly Calendar"
+     doc_path="yearly_calendar.pt"
+     for="schooltool.app.interfaces.ISchoolToolCalendar"
+     class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic"
+     view="yearly.html" 
+     />
+
 </configure>

@@ -8,29 +8,7 @@
 <h1 i18n:translate="">Daily Calendar</h1>
 <p i18n:translate="">This is the daily view of a calendar.  It might be your 
 calendar, or it might be the calendar of another person, group or resource in 
-your school.</p>
-<h3 i18n:translate="">Parts of the page</h3>
-<ul>
-<li i18n:translate=""><strong>Calendar table:</strong> fills the main 
-(lower-right) part of the page.  This represents the calendar for one day.  
-Specific events for the day appear as notes on this table.</li>
-<li i18n:translate=""><strong>Calendar navigation bar:</strong> immediately 
-above the calendar table.  Allows you to navigate 1 day forward or backward, or
-to return to the current day.</li>
-<li i18n:translate=""><strong>Calendar title:</strong> immediately above the 
-calendar navigation bar, lists the owner of this calendar and the date for this 
-"page" of the calendar.</li>
-<li i18n:translate=""><strong>Left sidebar:</strong> for all calendars, this 
-contains a <code>Jump to...</code> section containing menus and links to allow 
-you to quickly navigate to a specific month, year or date.  <br />  If you 
-are logged in and viewing your own calendar, you will also see a 
-<code>Calendars</code> section at the top of the sidebar which allows you 
-to "overlay" events from other calendars in this view.  You may see 
-calendars for classes you teach or attend listed here already.</li>
-<li i18n:translate=""><strong>Day/week/month/year buttons:</strong> These 
-buttons allow you to switch between daily, weekly, monthly and annual 
-views.</li>
-</ul>
+your school.  <a href="/++help++/calendaring">More calendaring help...</a></p>
 <h3 i18n:translate="">How do I...</h3>
 <ul>
 <li i18n:translate=""><strong>Create an event:</strong> click in the 
