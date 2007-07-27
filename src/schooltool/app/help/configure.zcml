@@ -58,4 +58,14 @@
      view="yearly.html" 
      />
 
+<help:register
+     parent="schooltool/calendaring"
+     id="event_add"
+     title="Add Event"
+     doc_path="event_add.pt"
+     for="schooltool.app.interfaces.ISchoolToolCalendar"
+     class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic"
+     view="add.html" 
+     />
+
 </configure>

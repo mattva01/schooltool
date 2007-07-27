@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" metal:use-macro="view/@@schooltool_macros/onlinehelp/page">
+      <head>
+      <title metal:fill-slot="title" i18n:translate="">Add Event</title>
+</head>
+<body metal:fill-slot="body" tal:omit-tag="">
+<h1 i18n:translate="">Add Event</h1>
+<p i18n:translate="">This form has a few issues:</p>
+<ul>
+<li i18n:translate="">If you need to reserve a resource, such as a room or
+a projector, tracked by SchoolTool at your school, you should create an event 
+for the necessary time and check the <code>Book Resources</code> 
+checkbox at the bottom of the page.</li>
+<li i18n:translate="">The form ignores your preferences for time and date format.
+You must enter the event's start time in 24-hour or "military" time, and 
+the date is displayed in year-month-day format.</li>
+<li i18n:translate="">The <code>Location</code> field allows you to enter 
+a description of the location of the event, but this is not connected to the 
+reservation system.  If your school uses SchoolTool to manage room reservations 
+you need to check the <code>Book Resources</code> checkbox at the bottom
+of the form.</li>
+<li i18n:translate="">If your event repeats in some pattern, check the 
+<code>Recurring</code> box and fill out the new fields that appear.  In 
+certain circumstances (like if you change the original day of a weekly 
+recurring event) you may need to click the <code>Update form</code> button 
+to update the recurrence fields.</li>
+<li i18n:translate="">An "all day" event does not show up as a 24 hour event.
+It indicates that the day as a whole has some significance, like a birthday 
+or holiday.</li>
+<li i18n:translate="">"Exception dates" are specific dates a repeating event 
+skips, such as holidays.</li>
+</ul>
+</body>
+</html>
