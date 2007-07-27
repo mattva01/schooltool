@@ -68,4 +68,14 @@
      view="add.html" 
      />
 
+<help:register
+     parent="schooltool/calendaring"
+     id="event_edit"
+     title="Edit Event"
+     doc_path="event_edit.pt"
+     for="schooltool.app.interfaces.ISchoolToolCalendarEvent"
+     class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic"
+     view="edit.html" 
+     />
+
 </configure>
