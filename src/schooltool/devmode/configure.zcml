@@ -4,6 +4,13 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:apidoc="http://namespaces.zope.org/apidoc">
 
+  <!-- Register the skin for devmode -->
+  <interface
+      interface=".skin.ISchoolToolDevModeSkin"
+      type="zope.publisher.interfaces.browser.IBrowserSkinType"
+      name="SchoolToolDevMode"
+      />
+
   <!-- Setup schooltool as a top-level package in API doc -->
   <apidoc:rootModule module="schooltool" />
 

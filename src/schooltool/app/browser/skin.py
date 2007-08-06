@@ -73,15 +73,3 @@ class CalendarEventViewletManager(OrderedViewletManager):
     """Viewlet manager for displaying of additional event information."""
 
     implements(ICalendarEventContext)
-
-
-# did not move this into schooltool.skin because this actually
-# enables the skin, doesn't define it.
-def schoolToolTraverseSubscriber(app, event):
-    """A subscriber to BeforeTraverseEvent.
-
-    Sets the SchoolBell skin if the object traversed is a SchoolBell
-    application instance.
-    """
-    if IBrowserRequest.providedBy(event.request):
-        applySkin(event.request, ISchoolToolSkin)

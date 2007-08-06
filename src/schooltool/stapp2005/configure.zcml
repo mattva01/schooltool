@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
            i18n_domain="schooltool">
 
   <include package="schooltool.help" file="meta.zcml" />
@@ -13,6 +14,8 @@
   <include package="schooltool.help" />
   <include package="schooltool.term" />
   <include package="schooltool.timetable" />
+
+  <browser:defaultSkin name="SchoolTool" />
 
   <!-- Provide local overrides of standard configurations-->
   <includeOverrides package="schooltool.devmode" file="overrides.zcml" />

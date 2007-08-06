@@ -10,4 +10,6 @@
 
   <include package="schooltool.app.browser.ftests" file="brokenview-ftesting.zcml" />
 
+  <browser:defaultSkin name="SchoolTool" />
+
 </configure>

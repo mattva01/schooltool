@@ -70,11 +70,6 @@
 
   <!-- Skin and resources -->
 
-  <zope:subscriber
-      handler=".skin.schoolToolTraverseSubscriber"
-      for="schooltool.app.interfaces.ISchoolToolApplication zope.app.publication.interfaces.IBeforeTraverseEvent"
-      />
-
   <page
       name="calendar_macros"
       for="*"

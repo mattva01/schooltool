@@ -31,6 +31,7 @@ from zope.app.testing import setup
 from zope.publisher.browser import TestRequest
 from zope.app.publication.zopepublication import BeforeTraverseEvent
 
+
 def doctest_CalendarEventViewletManager():
     """Tests for CalendarEventViewletManager.
 
@@ -39,31 +40,6 @@ def doctest_CalendarEventViewletManager():
         >>> viewletManager = CalendarEventViewletManager(None, None, None)
         >>> ICalendarEventContext.providedBy(viewletManager)
         True
-
-    """
-
-def doctest_schoolToolTraverseSubscriber():
-    """Tests for schoolToolTraverseSubscriber.
-
-    We subscribe to Zope's BeforeTraverseEvent and apply the SchoolTool skin
-    whenever an ISchoolToolApplication is traversed during URL traversal.
-
-        >>> from schooltool.app.browser.skin import schoolToolTraverseSubscriber
-        >>> from schooltool.skin import ISchoolToolSkin
-        >>> from schooltool.app.app import SchoolToolApplication
-
-        >>> ob = SchoolToolApplication()
-        >>> request = TestRequest()
-        >>> ev = BeforeTraverseEvent(ob, request)
-        >>> schoolToolTraverseSubscriber(ob, ev)
-        >>> ISchoolToolSkin.providedBy(request)
-        True
-        >>> skin = list(providedBy(request).interfaces())[1]
-        >>> skin
-        <InterfaceClass schooltool.skin.skin.ISchoolToolSkin>
-        >>> pprint.pprint(skin.getBases())
-        (<InterfaceClass schooltool.skin.skin.ISchoolToolLayer>,
-         <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>)
 
     """
 

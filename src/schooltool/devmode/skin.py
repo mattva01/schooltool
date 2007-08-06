@@ -32,14 +32,3 @@ class IDevModeLayer(IBrowserRequest):
 
 class ISchoolToolDevModeSkin(IDevModeLayer, ISchoolToolSkin):
     """The SchoolBell devmode skin"""
-
-
-def schoolToolTraverseSubscriber(event):
-    """A subscriber to BeforeTraverseEvent.
-
-    Sets the SchoolBell skin if the object traversed is a SchoolBell
-    application instance.
-    """
-    if (ISchoolToolApplication.providedBy(event.object) and
-        IBrowserRequest.providedBy(event.request)):
-        applySkin(event.request, ISchoolToolDevModeSkin)
