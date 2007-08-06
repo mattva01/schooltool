@@ -5,7 +5,7 @@
      class="title">Title</a>
 </div>
 
-<div class="dropdown" tal:condition="not:view/link|nothing">
+<div class="dropdown contracted" tal:condition="not:view/link|nothing">
   <h3 class="title"
      tal:content="view/title"
      i18n:translate="">title</h3>
