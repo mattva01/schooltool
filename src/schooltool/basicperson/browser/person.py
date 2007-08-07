@@ -87,6 +87,7 @@ class PersonAddFormAdapter(object):
 class PersonAddView(BasicForm):
     """Person add form for basic persons."""
 
+    title = _("Add new person")
     template = ViewPageTemplateFile('templates/person_add.pt')
 
     form_fields = form.Fields(IPersonAddForm, render_context=False)
