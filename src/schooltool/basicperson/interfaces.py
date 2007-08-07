@@ -62,13 +62,14 @@ class IBasicPerson(Interface):
         )
 
     gradeclass = Choice(
-        title=_(u"Grade"),
+        title=_(u"Grade/Class", default="Group"),
         source="schooltool.basicperson.grade_class_source",
         required=False,
         )
 
     birth_date = Date(
         title=_(u"Birth date"),
+        description=_(u"(yyyy-mm-dd)"),
         required=False,
         )
 

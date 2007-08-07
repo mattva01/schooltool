@@ -55,14 +55,14 @@ class PersonView(BrowserView):
 
 class IPersonAddForm(IBasicPerson):
 
-    password = Password(
-        title=_("Password"),
-        required=False)
-
     username = TextLine(
         title=_("Username"),
         description=_("Username"),
         required=True)
+
+    password = Password(
+        title=_("Password"),
+        required=False)
 
 
 class PersonAddFormAdapter(object):
