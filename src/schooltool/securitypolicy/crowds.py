@@ -133,6 +133,9 @@ class ClerksCrowd(_GroupCrowd):
 class TeachersCrowd(_GroupCrowd):
     group = 'sb.group.teachers'
 
+class StudentsCrowd(_GroupCrowd):
+    group = 'sb.group.students'
+
 
 class ParentCrowdTemplate(Crowd):
     """A crowd that contains principals who are allowed to access the context."""
