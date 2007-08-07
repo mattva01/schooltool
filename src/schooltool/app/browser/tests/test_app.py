@@ -164,7 +164,7 @@ def doctest_LoginView():
         >>> request.response.getStatus()
         302
         >>> request.response.getHeader('Location')
-        'http://127.0.0.1/persons/frog/calendar'
+        'http://127.0.0.1/persons/frog/@@logindispatch'
         >>> auth.authenticate(request)
         <schooltool.app.security.Principal object at 0x...>
 

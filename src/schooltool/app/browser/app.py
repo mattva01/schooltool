@@ -197,10 +197,22 @@ class LoginView(BrowserView):
                     nexturl = self.request['nexturl']
                 elif person is not None:
                     nexturl = zapi.absoluteURL(
-                        ISchoolToolCalendar(person), self.request)
+                        person, self.request) + '/@@logindispatch'
                 else:
                     nexturl = zapi.absoluteURL(self.context, self.request)
                 self.request.response.redirect(nexturl)
+
+
+class LoginDispatchView(BrowserView):
+    """Redirects to the proper starting page after login.
+
+    By default the schooltool redirects to the persons calendar.
+    """
+
+    def __call__(self):
+        nexturl = zapi.absoluteURL(
+            ISchoolToolCalendar(self.context), self.request)
+        self.request.response.redirect(nexturl)
 
 
 class LogoutView(BrowserView):

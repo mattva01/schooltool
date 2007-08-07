@@ -209,6 +209,14 @@
       />
 
   <page
+      for="schooltool.person.interfaces.IPerson"
+      name="logindispatch"
+      layer="schooltool.skin.ISchoolToolLayer"
+      class=".app.LoginDispatchView"
+      permission="zope.Public"
+      />
+
+  <page
       for="*"
       name="logout.html"
       layer="schooltool.skin.ISchoolToolLayer"
