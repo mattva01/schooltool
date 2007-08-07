@@ -34,6 +34,7 @@ from zope.annotation.interfaces import IAttributeAnnotatable
 from schooltool.generations.tests import ContextStub
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.resource.interfaces import IResource
+from schooltool.relationship.interfaces import IRelationshipLinks
 
 
 class ResourceStub(object):
@@ -49,7 +50,6 @@ class ResourceStub(object):
         self.__annotations__['foo'] = 'init'
 
     def __conform__(self, iface):
-        from schooltool.relationship.interfaces import IRelationshipLinks
         if iface == IRelationshipLinks:
             return []
 
