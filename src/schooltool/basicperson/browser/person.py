@@ -34,6 +34,7 @@ from zope.publisher.browser import BrowserView
 from zope.schema import Password
 from zope.schema import TextLine
 from zope.schema.interfaces import ITitledTokenizedTerm
+from zope.app.form.interfaces import WidgetInputError
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPersonFactory
@@ -93,17 +94,28 @@ class PersonAddView(BasicForm):
     form_fields = form.Fields(IPersonAddForm, render_context=False)
     form_fields['password'].custom_widget = PasswordConfirmationWidget
 
-    @form.action(_("Apply"))
-    def handle_apply_action(self, action, data):
+    def username_validator(self, action, data):
+        errors = form.getWidgetsData(self.widgets, self.prefix, data)
+        if errors:
+            return errors # Probably some fields are missing.
+
+        widget = self.widgets['username']
         if data['username'] in self.context:
-            self.status = _("This username is already used!")
-            return None
+            error_msg = _("This username is already in use!")
+            error = WidgetInputError(widget.name, widget.label, error_msg)
+            widget._error = error
+            return [error]
 
         try:
             INameChooser(self.context).checkName(data['username'], None)
         except UserError:
-            self.status = _("Names cannot begin with '+' or '@' or contain '/'")
-            return None
+            error_msg = _("Names cannot begin with '+' or '@' or contain '/'")
+            error = WidgetInputError(widget.name, widget.label, error_msg)
+            widget._error = error
+            return [error]
+
+    @form.action(_("Apply"), validator=username_validator)
+    def handle_apply_action(self, action, data):
 
         person = self._factory(data['username'], data['first_name'],
                                data['last_name'])
