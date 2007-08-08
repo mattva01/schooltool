@@ -37,7 +37,7 @@ class IBasicPerson(Interface):
 
     first_name = TextLine(
         title=_(u"First name"),
-        required=False,
+        required=True,
         )
 
     last_name = TextLine(
