@@ -21,6 +21,24 @@
       title="Edit"
       />
 
+  <page
+      name="person_export.xml"
+      for="schooltool.person.interfaces.IPersonContainer"
+      class=".xml.PersonContainerXMLExportView"
+      permission="schooltool.edit"
+      menu="schooltool_actions"
+      title="Export Persons as XML"
+      />
+
+  <page
+      name="person_export.xml"
+      for="schooltool.person.interfaces.IPerson"
+      class=".xml.PersonXMLExportView"
+      permission="schooltool.edit"
+      menu="schooltool_actions"
+      title="Export Person as XML"
+      />
+
   <!-- list of persons -->
   <zope:adapter
       for="schooltool.basicperson.interfaces.IBasicPersonSource
@@ -37,5 +55,18 @@
 
   <!-- person add form adapter -->
   <zope:adapter factory=".person.PersonAddFormAdapter" />
+
+  <!-- Person xml export plugins -->
+  <zope:adapter
+      for="zope.interface.Interface
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".xml.PersonGroupDataExporterPlugin"
+      name="person_group_relationships" />
+
+  <zope:adapter
+      for="zope.interface.Interface
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".xml.GroupDataExporterPlugin"
+      name="group_list" />
 
 </configure>

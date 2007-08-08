@@ -1,0 +1,25 @@
+<person_export xmlns:tal="http://xml.zope.org/namespaces/tal"
+               xmlns:basic="http://schooltool.org/ns/model/0.1/basicperson"
+               xmlns="http://schooltool.org/ns/model/0.1">
+
+  <tal:block tal:repeat="exporter view/extra_data_exporters"
+             tal:replace="structure python: exporter.render(view.persons())" />
+
+  <persons tal:condition="view/persons">
+    <person tal:repeat="person view/persons">
+      <username tal:content="person/__name__" />
+      <title tal:content="person/title" />
+      <basic:first_name tal:content="person/first_name" />
+      <basic:last_name tal:content="person/last_name" />
+      <basic:gender tal:condition="person/gender" tal:content="person/gender" />
+      <basic:email tal:condition="person/email" tal:content="person/email" />
+      <basic:phone tal:condition="person/phone" tal:content="person/phone" />
+      <basic:birth_date tal:condition="person/birth_date" tal:content="person/birth_date" />
+
+      <tal:block tal:repeat="exporter view/person_data_exporters"
+                 tal:replace="structure python: exporter.render(person)" />
+
+    </person>
+  </persons>
+
+</person_export>

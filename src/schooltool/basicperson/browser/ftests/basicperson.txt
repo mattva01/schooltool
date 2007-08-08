@@ -51,3 +51,57 @@ And now we only have John in there:
     Traceback (most recent call last):
     ...
     LinkNotFoundError
+
+Now there even are person export views:
+
+    >>> manager.open('http://localhost/persons/@@person_export.xml')
+    >>> print manager.contents
+    <person_export xmlns:basic="http://schooltool.org/ns/model/0.1/basicperson"
+                   xmlns="http://schooltool.org/ns/model/0.1">
+      <groups>
+        <group>
+          <id>manager</id>
+          <title>Site Managers</title>
+          <description>Manager Group.</description>
+        </group>
+      </groups>
+      <persons>
+        <person>
+          <username>john</username>
+          <title>Petterson John</title>
+          <basic:first_name>John</basic:first_name>
+          <basic:last_name>Petterson</basic:last_name>
+          <basic:gender>male</basic:gender>
+          <basic:email>john@example.com</basic:email>
+          <basic:phone>111-111-1111</basic:phone>
+          <basic:birth_date>1980-01-01</basic:birth_date>
+        </person>
+        <person>
+          <username>manager</username>
+          <title>Administrator SchoolTool</title>
+          <basic:first_name>SchoolTool</basic:first_name>
+          <basic:last_name>Administrator</basic:last_name>
+          <groups>
+            <group id="manager" />
+          </groups>
+        </person>
+      </persons>
+    </person_export>
+
+    >>> manager.open('http://localhost/persons/john/@@person_export.xml')
+    >>> print manager.contents
+    <person_export xmlns:basic="http://schooltool.org/ns/model/0.1/basicperson"
+                   xmlns="http://schooltool.org/ns/model/0.1">
+      <persons>
+        <person>
+          <username>john</username>
+          <title>Petterson John</title>
+          <basic:first_name>John</basic:first_name>
+          <basic:last_name>Petterson</basic:last_name>
+          <basic:gender>male</basic:gender>
+          <basic:email>john@example.com</basic:email>
+          <basic:phone>111-111-1111</basic:phone>
+          <basic:birth_date>1980-01-01</basic:birth_date>
+        </person>
+      </persons>
+    </person_export>

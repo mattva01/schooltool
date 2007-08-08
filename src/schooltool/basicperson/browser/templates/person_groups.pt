@@ -1,0 +1,4 @@
+<groups tal:condition="view/groups">
+  <group tal:repeat="group view/groups"
+         tal:attributes="id group/__name__" />
+</groups>
