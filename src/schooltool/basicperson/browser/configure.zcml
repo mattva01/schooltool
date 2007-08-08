@@ -61,12 +61,14 @@
       for="zope.interface.Interface
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory=".xml.PersonGroupDataExporterPlugin"
-      name="person_group_relationships" />
+      name="person_group_relationships"
+      provides=".interfaces.IPersonDataExporterPlugin"/>
 
   <zope:adapter
       for="zope.interface.Interface
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory=".xml.GroupDataExporterPlugin"
-      name="group_list" />
+      name="group_list"
+      provides=".interfaces.IExtraDataExporterPlugin"/>
 
 </configure>
