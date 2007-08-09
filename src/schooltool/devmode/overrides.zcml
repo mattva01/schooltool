@@ -4,6 +4,9 @@
 
   <!-- apidoc overriding -->
 
+  <browser:resource
+      name="apidoc.css" file="apidoc.css" />
+
   <view
       name="apidoc" type="*"
       provides="zope.traversing.interfaces.ITraversable" for="*"
