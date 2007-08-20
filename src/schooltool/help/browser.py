@@ -32,6 +32,62 @@ from zope.app.publisher import browser
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserView
+from zope.app.onlinehelp.browser.tree import OnlineHelpTopicTreeView
+
+def sortById(x,y):
+    return cmp(x.id, y.id)
+
+class SchoolToolOnlineHelpTopicTreeView(OnlineHelpTopicTreeView):
+    """Online help topic tree view."""
+
+    def renderItemList(self, topic, intend):
+        """Render a 'ul' elements as childs of the 'ul' tree."""
+        res = []
+        intend = intend + "  "
+        res.append('%s<ul>' % intend)
+
+        for item in sorted(topic.getSubTopics(), sortById):
+
+            # expand if context is in tree
+            if self.isExpanded(topic):
+                res.append('  %s<li class="expand">' % intend)
+            else:
+                res.append('  %s<li>' % intend)
+
+            res.append(self.renderLink(item))
+            if len(item.getSubTopics()) > 0:
+                res.append('    %s%s' % (
+                    self.renderItemList(item, intend), intend))
+            res.append('  %s</li>' % intend)
+        res.append('%s</ul>' % intend)
+
+        return '\n'.join(res)
+
+    def renderTree(self, root):
+        """Render an ordered list 'ul' tree with a class name 'tree'."""
+        res = []
+        intend = "  "
+        res.append('<ul class="tree" id="tree">')
+        for topic in sorted(root.getSubTopics(), sortById):
+            # we don't show the default zope help
+            if topic.id in ['dev', 'ui', 'welcome', 'samples']:
+                continue
+
+            item = self.renderLink(topic)
+
+            # expand if context is in tree
+            if self.isExpanded(topic):
+                res.append('  <li class="expand">%s' % item)
+            else:
+                res.append('  <li>%s' % item)
+
+            if len(topic.getSubTopics()) > 0:
+                res.append(self.renderItemList(topic, intend))
+            res.append('  </li>')
+
+        res.append('<ul>')
+
+        return '\n'.join(res)
 
 class ContextHelpView(BrowserView):
 
