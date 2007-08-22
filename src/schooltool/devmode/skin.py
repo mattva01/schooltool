@@ -21,10 +21,13 @@ SchoolBell skin.
 
 $Id$
 """
-from zope.publisher.browser import applySkin
+from zope.interface import directlyProvidedBy
+from zope.interface import directlyProvides
 from zope.publisher.interfaces.browser import IBrowserRequest
+
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin import ISchoolToolSkin
+
 
 class IDevModeLayer(IBrowserRequest):
     """SchoolBell devmode layer."""
@@ -32,3 +35,14 @@ class IDevModeLayer(IBrowserRequest):
 
 class ISchoolToolDevModeSkin(IDevModeLayer, ISchoolToolSkin):
     """The SchoolBell devmode skin"""
+
+
+def schoolToolTraverseSubscriber(event):
+    """A subscriber to BeforeTraverseEvent.
+
+    Adds DevMode layer to the request.
+    """
+    if (ISchoolToolApplication.providedBy(event.object) and
+        IBrowserRequest.providedBy(event.request)):
+        directlyProvides(event.request,
+                         directlyProvidedBy(event.request) + IDevModeLayer)

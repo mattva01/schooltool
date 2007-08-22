@@ -17,6 +17,6 @@
   <!-- Provide local overrides of standard configurations-->
   <includeOverrides package="schooltool.devmode" file="overrides.zcml" />
 
-  <browser:defaultSkin name="SchoolToolDevMode" />
+  <browser:defaultSkin name="SchoolTool" />
 
 </configure>
