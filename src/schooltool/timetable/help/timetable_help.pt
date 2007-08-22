@@ -1,0 +1,133 @@
+<html>
+ <head>
+  <style type="text/css">
+   b {color: green}
+   h1,h2,h3,h4,h5,h6 {color: #191970}
+   ul {color: #300000}
+
+b.button 
+{
+color: #FFFFFF;
+background-color: #990000;
+border: thin solid #660000
+}
+
+div.example
+{
+background-color: #FFFF99;
+font-family:'Comic Sans MS',Skia,Apple Chancery,Fantasy;
+border: thin solid #000000
+}
+  </style>
+  <title>Timetable Help</title>
+ </head>
+
+ <body>
+  <p>
+  <h2>The Timetable Tool</h2>
+
+   The <b>timetable tool</b> is used to manage different school schedules. This tool can be accessed by dragging down the Navigation bar.
+
+  <h2>How to use the Timetable Tool</h2>
+   There are three options that you could choose from:
+   <ul>
+    <li>New Timetable (drag down the Actions bar to find it)</li>
+    <li>Delete (only used when a timetable is made)</li>
+    <li>Change (only used when a timbetable is made)</li>
+   </ul>
+  <h4>Making a New Timetable</h4>
+<ol>
+<!-- step 1 -->
+<li>
+   As explained in the previous text, dragging down the <b>Actions</b> bar will reveal the <b>New Timetable</b> option. Click on the link to get started.
+   <br/>
+   Type in the title of the timetable in the box next to the word <b>Title</b> and click <b>Next</b>. If you want to stop making a timetable, click on <b>Cancel</b>.
+</li>
+<br/>
+<!-- step 2 -->
+<li>
+   On the next step, you will see three buttons:
+   <ul>
+    <li>Days of the week</li>
+    <li>Rotating cycle</li>
+    <li>Cancel (Same as always)</li>
+   </ul>
+
+   Clicking on the <b>Days of the week</b> button will setup the timetable for every day of the week, while clicking on the <b>Rotating cycle</b> button will setup the timetable for the days you type in the text box.
+</li>
+<br/>
+<!-- step 3 -->
+<li>
+After clicking on one of the choices above, two other choices will be shown:
+ <ul>
+  <li>Same time each day</li>
+  <li>Different times</li>
+ </ul>
+When clicking on the <b>Same time each day</b> button, you will be required to type the time slots for each time needed (HH:MM -HH:MM *H stands for hours while M stands for minutes). Here's an example that you could type on the text box
+<br/><br/>
+<div class="example">
+9:30-10:25<br/>
+10:30-11:25
+</div>
+<br/>
+When clicking on the <b>Different times</b> button, two choices will appear:
+<ul>
+<li>Day of week</li>
+<li>Day in cycle</li>
+</ul>
+The <b>Day of week</b> button will display the whole week with a text box displayed below each of the names of the day. Similar to the <b>Same time each day</b> button, you will write the length of time of each class for each text box, each line representing a class.
+</li>
+<br/>
+<!-- step 4 -->
+<li>
+In this step, two buttons will be shown:
+<ul>
+<li>Have names</li>
+<li>Designated by time</li>
+</ul>
+When clicking on the <b>Have names</b> button, you will be expected to write a name for each class that you typed in the text box(es) in the previous step. here's an example:
+
+<div class="example">
+Biology<br/>
+Algebra II<br/>
+History<br/>
+French I
+</div>
+<br/>
+When clicking on the <b>Designated by time</b> button, the timetable application will name each class according to the time it starts and ends.
+</li>
+<br/>
+<!-- step 5 -->
+<li>
+<div style="border: thin solid #000000">
+This step is only available if you went through the steps for the 
+<b>Have names</b> button. If you did not click on the <b>Have names</b> button in the previous step, go to the next step.
+</div>
+<br/>
+In this step, the timetable application will ask, &quot;Is the sequence of periods each day the same or different?&quot; and two buttons will be shown called:
+<ul>
+<li>Same</li>
+<li>Different</li>
+</ul>
+<br/>
+When you click on the <b>Same</b> button, you will see two &quot;drag down&quot; boxes, each with a name that you typed in the previous step. The timetable application will ask you to place two period names in order by time by dragging the box down to the corresponding period name, starting from up to down. You will then click on the <b>Next</b> button. This step will setup the same schedule of periods for everyday.
+<br/><br/>
+When you click on the <b>Different</b> button, you will see five &quot;drag down&quot; boxes, each with a name that you typed in the previous step and the name of each day above the box. This option is the same as the <b>Same</b> button, but you will place the periods in order for each day. This step will setup the schedule for each day you organized.
+</li>
+<br/>
+<!-- step 6 -->
+<li>
+This is the last step for creating the timetable. In this step, the timetable application will ask you, &quot;Do you check student attendance for the day in a homeroom period or equivalent?&quot; You will then click on either of these buttons corresponding with your answer:
+<ul>
+<li>Yes</li>
+<li>No</li>
+</ul>
+If you click <b>Yes</b>, the timetable you setup during the setup will appear, with a checkbox next to each class. You will then check the boxes where the class is a homeroom class.
+<br/><br/>
+Now you have a working timetable!
+</li>
+<ol>
+ </body>
+</html>
+
+

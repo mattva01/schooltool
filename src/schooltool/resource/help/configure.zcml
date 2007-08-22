@@ -1,0 +1,16 @@
+<configure
+     xmlns:zcml="http://namespaces.zope.org/zcml"
+     xmlns:browser="http://namespaces.zope.org/browser"
+     xmlns:help="http://namespaces.zope.org/help"
+     zcml:condition="have context-help"
+     i18n_domain="schooltool" >
+
+<help:register
+     id="resourcehelp_index"
+     title="Resource Help"
+     doc_path="resource_help.pt"
+     for="schooltool.group.interfaces.IGroupContainer"
+     view="index.html"
+     class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic" />
+
+</configure>

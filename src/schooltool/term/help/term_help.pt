@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" metal:use-macro="view/@@schooltool_macros/onlinehelp/page">
+      <head>
+      <title metal:fill-slot="title" i18n:translate="">Term Search Help</title>
+</head>
+<body metal:fill-slot="body" tal:omit-tag="">
+<h1>The Term Tool</h1> 
+ <p>
+  The <b>Term</b> tool is used to add terms, including the <b>start date</b> and the <b>end date</b> of the term.
+ </p>
+ <h1>How to use the Term Tool</h1>
+ <p>
+  There are three boxes where you type:
+
+  <ol>
+   <li>The Title</li>
+   <li>The Start date</li>
+   <li>The End date</li>
+  </ol>
+The <b>Title</b> section is where you type in the title of the term.
+<br/><br/>
+
+The <b>Start date</b> section is where you type the date that the term started.<br/>
+The button "..." next to the Start date box will type in the present date in the box
+<br/><br/>
+
+The <b>End date</b> section is where you type the date that the term ended.<br/>
+The button "..." next to the End date box will type in the present date in the box
+
+</body>
+</html>
