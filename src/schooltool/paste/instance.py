@@ -16,6 +16,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
+import sys
 import paste.script.command
 
 
@@ -23,4 +24,7 @@ def make_schooltool_instance():
     commands = paste.script.command.get_commands()
     cmd = commands['create'].load()
     runner = cmd('create')
-    return runner.run(['-t', "schooltool_deploy"])
+    args = sys.argv[1:]
+    if "-t" not in args:
+        args += ['-t', "schooltool_deploy"]
+    return runner.run(args)
