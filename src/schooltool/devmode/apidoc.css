@@ -1,3 +1,11 @@
+body {
+    font: 0.8em Verdana, Helvetica, Arial, sans-serif;
+    background: white;
+    color: black;
+    margin: 1em;
+    padding: 0;
+}
+
 body.menu {
     padding: 0;
     margin: 0;
@@ -119,6 +127,7 @@ h4 {
     background: #d6d6d6;
     padding: 3px;
     font-size: 90%;
+    font-style: italic;
 }
 
 p.breadcrumbs {

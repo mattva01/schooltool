@@ -4,10 +4,23 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:apidoc="http://namespaces.zope.org/apidoc">
 
+  <!-- Register the skin for devmode -->
+  <interface
+      interface=".skin.ISchoolToolDevModeSkin"
+      type="zope.publisher.interfaces.browser.IBrowserSkinType"
+      name="SchoolToolDevMode"
+      />
+
   <!-- Setup schooltool as a top-level package in API doc -->
   <apidoc:rootModule module="schooltool" />
 
   <!-- Generic DevMode setup -->
+
+  <interface
+      interface="schooltool.devmode.skin.ISchoolToolDevModeSkin"
+      type="zope.publisher.interfaces.browser.IBrowserSkinType"
+      name="SchoolToolDevMode"
+      />
 
   <browser:viewlet
       name="devmode"
@@ -15,6 +28,7 @@
       manager="schooltool.skin.IHeaderManager"
       template="devmode.pt"
       permission="zope.View"
+      layer="schooltool.devmode.skin.IDevModeLayer"
       />
 
   <browser:viewlet
@@ -23,6 +37,7 @@
       manager="schooltool.skin.IJavaScriptManager"
       class=".devmode.DevmodeJavascriptViewlet"
       permission="zope.View"
+      layer="schooltool.devmode.skin.IDevModeLayer"
       />
 
   <browser:viewlet
@@ -31,18 +46,35 @@
       manager="schooltool.skin.ICSSManager"
       class=".devmode.DevmodeCSSViewlet"
       permission="zope.View"
+      layer="schooltool.devmode.skin.IDevModeLayer"
       />
 
   <!-- DevTools Menu configuration -->
 
   <browser:resource
-      name="devmode.css" file="devmode.css" />
+      name="devmode.css" file="devmode.css"
+      layer=".skin.IDevModeLayer"
+      />
 
   <browser:resource
-      name="box-bottom.png" file="box-bottom.png" />
+      name="box-bottom.png" file="box-bottom.png"
+      layer=".skin.IDevModeLayer"
+      />
 
   <browser:resource
-      name="switch.js" file="switch.js" />
+      name="varrow.png" file="varrow.png"
+      layer=".skin.IDevModeLayer"
+      />
+
+  <browser:resource
+      name="harrow.png" file="harrow.png"
+      layer=".skin.IDevModeLayer"
+      />
+
+  <browser:resource
+      name="switch.js" file="switch.js"
+      layer=".skin.IDevModeLayer"
+      />
 
   <!-- Introspector -->
   <browser:viewlet
@@ -50,10 +82,14 @@
       for="*"
       manager="schooltool.skin.ICSSManager"
       class=".devmode.IntrospectorCSSViewlet"
-      permission="zope.View" />
+      permission="zope.View"
+      layer="schooltool.devmode.skin.IDevModeLayer"
+      />
 
   <browser:resource
-      name="introspector.css" file="introspector.css" />
+      name="introspector.css" file="introspector.css"
+      layer=".skin.IDevModeLayer"
+      />
 
   <!-- Menu entries for Error Reporting Utility -->
 
@@ -61,20 +97,29 @@
       menu="schooltool_actions"
       for="zope.app.error.interfaces.IErrorReportingUtility"
       action="@@configure.html"
-      title="Configure" />
+      title="Configure"
+      layer="schooltool.devmode.skin.IDevModeLayer"
+      />
 
   <browser:menuItem
       menu="schooltool_actions"
       for="zope.app.error.interfaces.IErrorReportingUtility"
       action="@@index.html"
-      title="Error List" />
+      title="Error List"
+      layer=".skin.IDevModeLayer"
+      />
 
   <!-- apidoc customization -->
+  <browser:resource
+      name="apidoc.css" file="apidoc.css"
+      layer=".skin.IDevModeLayer"
+      />
 
   <browser:pages
       for="zope.app.apidoc.apidoc.APIDocumentation"
       class="zope.app.apidoc.browser.apidoc.APIDocumentationView"
-      permission="zope.app.apidoc.UseAPIDoc">
+      permission="zope.app.apidoc.UseAPIDoc"
+      layer="schooltool.devmode.skin.IDevModeLayer">
 
     <browser:page
         name="modulelist.html"
@@ -88,7 +133,9 @@
         permission="zope.app.apidoc.UseAPIDoc"
         class="schooltool.devmode.apidoc.InterfaceMenu"
         name="menu.html"
-        template="menu.pt" />
+        template="menu.pt"
+        layer="schooltool.devmode.skin.IDevModeLayer"
+        />
   </configure>
 
   <browser:page
@@ -96,7 +143,9 @@
       permission="zope.app.apidoc.UseAPIDoc"
       class="schooltool.devmode.apidoc.CodeMenu"
       name="menu.html"
-      template="code_menu.pt" />
+      template="code_menu.pt"
+      layer="schooltool.devmode.skin.IDevModeLayer"
+      />
 
   <configure package="zope.app.apidoc.bookmodule">
     <browser:page
@@ -114,20 +163,26 @@
       name="restdoc_macros"
       permission="zope.View"
       class=".restdoc.RESTDocMacros"
-      allowed_interface="zope.interface.common.mapping.IItemMapping" />
+      allowed_interface="zope.interface.common.mapping.IItemMapping"
+      layer="schooltool.devmode.skin.IDevModeLayer"
+      />
 
   <browser:page
       for="*"
       name="restdoc_details_macros"
       permission="zope.View"
-      template="restdoc_macros.pt" />
+      template="restdoc_macros.pt"
+      layer="schooltool.devmode.skin.IDevModeLayer"
+      />
 
   <browser:page
       for="zope.app.apidoc.codemodule.codemodule.CodeModule"
       permission="zope.app.apidoc.UseAPIDoc"
       class="schooltool.devmode.restdoc.RESTMenu"
       name="restmenu.html"
-      template="restmenu.pt" />
+      template="restmenu.pt"
+      layer="schooltool.devmode.skin.IDevModeLayer"
+      />
 
   <browser:page
       for="*"
