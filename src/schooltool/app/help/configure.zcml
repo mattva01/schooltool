@@ -12,6 +12,14 @@
 
 <help:register
      parent="schooltool"
+     id="admin"
+     title="Administration"
+     doc_path="admin.pt"
+     class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic"
+     />
+
+<help:register
+     parent="schooltool"
      id="calendaring"
      title="Calendaring"
      doc_path="calendaring.pt"
@@ -76,6 +84,16 @@
      for="schooltool.app.interfaces.ISchoolToolCalendarEvent"
      class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic"
      view="edit.html" 
+     />
+
+<help:register
+     parent="schooltool/calendaring"
+     id="calendar_selection"
+     title="Calendar Selection"
+     doc_path="calendar_selection.pt"
+     for="schooltool.basicperson.interfaces.IBasicPerson"
+     class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic"
+     view="calendar_selection.html"
      />
 
 </configure>

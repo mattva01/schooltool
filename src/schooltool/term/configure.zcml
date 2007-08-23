@@ -73,5 +73,6 @@
 
   <include package=".browser" />
   <include package=".rest" />
+  <include package=".help" />
 
 </configure>

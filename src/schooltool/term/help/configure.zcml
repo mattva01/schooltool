@@ -5,12 +5,24 @@
      zcml:condition="have context-help"
      i18n_domain="schooltool" >
 
-<help:register
-     id="term_index"
-     title="Term Search Help"
-     doc_path="term_help.pt"
-     for="schooltool.group.interfaces.IGroupContainer"
-     view="index.html"
-     class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic" />
+  <help:register
+      parent="schooltool/admin/term"
+      id="term_add"
+      title="Add a term"
+      doc_path="term_add.pt"
+      for="schooltool.term.interfaces.ITermContainer"
+      view="add.html"
+      class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic"
+      />
+
+  <help:register
+      parent="schooltool/admin"
+      id="term"
+      title="Terms"
+      doc_path="term_container.pt"
+      for="schooltool.term.interfaces.ITermContainer"
+      view="index.html"
+      class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic"
+      />
 
 </configure>
