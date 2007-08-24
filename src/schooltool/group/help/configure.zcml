@@ -6,8 +6,9 @@
   i18n_domain="schooltool">
 
     <help:register
+        parent="schooltool/organization"
         id="group"
-        title="Group Container - Contents"
+        title="Groups"
         doc_path="group_container.pt"
         for="schooltool.group.interfaces.IGroupContainer"
         view="index.html"

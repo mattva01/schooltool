@@ -2,29 +2,27 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" metal:use-macro="view/@@schooltool_macros/onlinehelp/page">
       <head>
-      <title metal:fill-slot="title" i18n:translate="">Person Container</title>
+      <title metal:fill-slot="title" i18n:translate="">Persons</title>
 </head>
-<body metal:fill-slot="body" tal:omit-tag="">
-
+<body metal:fill-slot="body" tal:omit-tag="" i18n:translate="">
+<h1>Persons</h1>
 <p>Use this page to browse and find individual persons.</p>
+<h3>How do I...</h3>
+<ul>
+<li><strong>Sort the list:</strong> Click on <code>First Name</code> or 
+<code>Last Name</code> to sort.</li>
 
-<p>To sort the list, click on the <b>Title</b> header, and change the order
-of persons from descending to ascending order.</p>
+<li><strong>Search for a user:</strong> Use the search field at the top
+of the page to look through all of the people in the system.  If you 
+want to filter by group, select the group in the adjacent drop-down list.</li>
 
-<p>To search for a user, use the <b>Search</b> box at the bottom of the page
-to look through all of the people in the system.</p>
+<li><strong>View the details of a person:</strong>  Click on the name.</li>
 
-<p>To view the details of a certain person, click on the name (or the
-<b>Display</b> link).</p>
+<li><strong>Browse for a person:</strong> Use the <code>Next 10</code> 
+(and <code>Previous</code>) and links in the blue bar.</li>
 
-<p>The <b>Edit</b> link next to the <b>Display</b> links to a page to edit the
-information of a certain user.</p>
-
-<p>Separate <q>batches</q> of the Person list can be accessed through the 
-<b>Next 10</b> (and <b>Previous</b>) and links in the blue bar.</p>
-
-<p>A <b>Show All</b> button is also there to show all of the people on a
-single page.</p>
-
+<li><strong>Show all students:</strong> Click <code>Show All</code> in the
+blue bar.</li>
+</ul>
 </body>
 </html>

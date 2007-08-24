@@ -6,8 +6,9 @@
   i18n_domain="schooltool">
 
   <help:register
+      parent="schooltool/organization"
       id="coursecontainer_index"
-      title="Course Container - Contents"
+      title="Courses"
       doc_path="course_container.pt"
       for="schooltool.course.interfaces.ICourseContainer"
       view="index.html"

@@ -20,6 +20,14 @@
 
 <help:register
      parent="schooltool"
+     id="organization"
+     title="Organization"
+     doc_path="org.pt"
+     class="zope.app.onlinehelp.onlinehelptopic.ZPTOnlineHelpTopic"
+     />
+
+<help:register
+     parent="schooltool"
      id="calendaring"
      title="Calendaring"
      doc_path="calendaring.pt"

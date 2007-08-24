@@ -1,2 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-foo
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" metal:use-macro="view/@@schooltool_macros/onlinehelp/page">
+      <head>
+      <title metal:fill-slot="title" i18n:translate="">Calendar Selection</title>
+</head>
+<body i18n:translate="" metal:fill-slot="body" tal:omit-tag="">
+<h1>Calendar Selection</h1>
+<p>You can add color-coded events from multiple calendars to your personal 
+calendar view.  You can add events from course sections you attend, groups, 
+other people, or even resources like classrooms or projectors.</p>
+<p>Some calendars are private or limited to certain groups.</p>
+<p>On the calendar selection form you are given lists of all the calendars 
+available to you.  This might be a long list.</p>
+<p>The "SchoolTool site-wide calendar" is intended to be used as the official 
+public calendar of the school.</p>
+<h3>How do I...</h3>
+<ul>
+<li><strong>Select or unselect several individual calendars of one 
+type:</strong> If you press the <code>Ctrl</code> button on your keyboard 
+while you select calendars from a list with your mouse, 
+you can select multiple calendars.</li>
+<li><strong>Select a range of calendars of one type:</strong> If you press the 
+<code>Shift</code> key while clicking on calendars, you can select a range.</li>
+</ul>
+</body>
+</html>

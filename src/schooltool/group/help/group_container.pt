@@ -2,9 +2,11 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" metal:use-macro="view/@@schooltool_macros/onlinehelp/page">
       <head>
-      <title metal:fill-slot="title" i18n:translate="">Person Container</title>
+      <title metal:fill-slot="title" i18n:translate="">Groups</title>
 </head>
-<body metal:fill-slot="body" tal:omit-tag="">
+<body metal:fill-slot="body" tal:omit-tag="" i18n:translate="">
+
+<h1>Groups</h1>
 
 <p>Use this page to keep track of <b>groups</b> of Persons.</p>
 
@@ -14,22 +16,25 @@ Administrators</b>, or <b>Clerks</b>).  They can be selected by the checkbox
 next to them and removed by pressing the <b>Delete</b> button at the bottom
 of the page.</p>
 
-<p>To look for for a group, use the search box to the left of the <b>Find
-Now</b> button to look through the entire list of groups for the search
-criterion.</p>
+<h3>How do I...</h3>
+<ul>
+<li><b>Look for for a group:</b> Use the search box to the left of the 
+<code>Find Now</code> button to look through the entire list of groups for
+the search criterion.  The <code>Clear</code> button empties the search box
+of current entries.</li>
 
-<p>The <b>Clear</b> button empties the search box of current entries.</p>
+<li><b>View the persons in a certain group:</b> Click on the name of the 
+group.</li>
 
-<p>To view the persons in a certain group, click on the name of the group.</p>
+<li><b>Sort the list:</b>  Click on the <code>Title</code> header to change 
+the order of groups from descending to ascending order, and vice versa.</li>
 
-<p>To sort the list, click on the <b>Title</b> header to change the order of
-groups from descending to ascending order, and vice versa.</p>
+<li><strong>Browse for a group:</strong> Use the <code>Next 10</code> 
+(and <code>Previous</code>) and links in the blue bar.</li>
 
-<p>Separate <q>batches</q> of the Group list can be accessed through the
-<b>Next 10</b> (and <b>Previous</b>) and links in the blue bar.</p>
-
-<p>A <b>Show All</b> button is also there to show all of the groups on a
-single page.</p>
+<li><strong>Show all groups:</strong> Click <code>Show All</code> in the
+blue bar.</li>
+</ul>
 
 </body>
 </html>

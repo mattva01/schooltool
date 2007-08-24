@@ -6,8 +6,9 @@
   i18n_domain="schooltool">
 
   <help:register
+      parent="schooltool/organization"
       id="personcontainer_index"
-      title="Person Container - Contents"
+      title="Persons"
       doc_path="person_container.pt"
       for="schooltool.person.interfaces.IPersonContainer"
       view="index.html"
