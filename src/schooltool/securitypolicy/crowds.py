@@ -44,6 +44,11 @@ class Crowd(object):
     def contains(self, principal):
         raise NotImplementedError()
 
+    def __str__(self):
+        return "<%s>" % self.__class__.__name__
+
+    __repr__ = __str__
+
 
 class AggregateCrowd(Crowd):
     """A base class for aggregating crowds.
@@ -60,6 +65,12 @@ class AggregateCrowd(Crowd):
 
     def crowdFactories(self):
         raise NotImplementedError("override this in subclasses")
+
+    def __str__(self):
+        crowds = [factory(self.context) for factory in self.crowdFactories()]
+        return "<AggregateCrowd crowds=%s>" % crowds
+
+    __repr__ = __str__
 
 
 class ConfigurableCrowd(Crowd):

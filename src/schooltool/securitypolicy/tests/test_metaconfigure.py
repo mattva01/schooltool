@@ -83,7 +83,7 @@ def doctest_registerCrowdAdapter():
         >>> obj = MyObject()
         >>> adapter = getAdapter(obj, ICrowd, name='perm')
         >>> adapter
-        <...Aggregate...>
+        <AggregateCrowd crowds=[]>
 
         >>> cru.objcrowds = {(IMyObject, 'perm'): ['crowd A', 'crowd B']}
         >>> adapter.crowdFactories()

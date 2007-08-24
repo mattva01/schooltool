@@ -63,7 +63,7 @@ def registerCrowdAdapter(iface, permission):
     """
     class AggregateUtilityCrowd(AggregateCrowd):
         def crowdFactories(self):
-            return getCrowdsUtility().objcrowds[(iface, permission)]
+            return getCrowdsUtility().objcrowds.get((iface, permission), [])
     provideAdapter(AggregateUtilityCrowd, provides=ICrowd, adapts=[iface],
                    name=permission)
 
