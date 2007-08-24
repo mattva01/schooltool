@@ -489,7 +489,7 @@ class XMLNode(object):
 
     def __str__(self):
         if self._node.type == "attribute":
-            return self.content
+            return self.content or ""
         else:
             return self._node.serialize()
 
