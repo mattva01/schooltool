@@ -596,7 +596,7 @@ project.
 It is really the section of the entire apidoc book. The menu provides you with
 a tree-based outline. One of the chapters is "Calendar", so let's have a look:
 
-    >>> browser.getLink('Calendar').click()
+    >>> browser.getLink('Calendar', url="calendar/show.html").click()
     >>> browser.contents
     '...SchoolBell calendaring library...'
 
