@@ -55,6 +55,7 @@ class ZCMLLayer(_ZCMLLayer):
 
     def __init__(self, *args, **kwargs):
         self.school_type = kwargs.pop("school_type", "")
+        kwargs['allow_teardown'] = True
         _ZCMLLayer.__init__(self, *args, **kwargs)
 
     def setUp(self):
