@@ -24,43 +24,44 @@ $Id$
 
 ##############################################################################
 # BBB: Make sure the old data object references are still there.
-from zope.deprecation import deprecated
+from zope.deferredimport.deferredmodule import deprecated
 
-from schooltool.app.app import SchoolToolApplication
-from schooltool.app.app import ApplicationPreferences
-deprecated(('SchoolToolApplication', 'ApplicationPreferences'),
-           'This class has moved to schooltool.app.app. '
-           'The reference will be gone in 0.15')
+deprecated('This class has moved to schooltool.app.app. '
+           'The reference will be gone in 0.15',
+           SchoolToolApplication='schooltool.app.app.SchoolToolApplication',
+           ApplicationPreferences='schooltool.app.app.ApplicationPreferences')
 
-from schooltool.app.overlay import \
-     CalendarOverlayInfo as CalendarAndTTOverlayInfo
-
-deprecated(('CalendarAndTTOverlayInfo',),
-           'This specific class has been deprecated. Use '
+deprecated('This specific class has been deprecated. Use '
            '`schooltool.app.overlay.CalendarOverlayInfo` and the '
            '`IShowTimetables` instead. '
-           'The reference will be gone in 0.15')
+           'The reference will be gone in 0.15',
+           CalendarAndTTOverlayInfo='CalendarOverlayInfo')
 
-from schooltool.person.person import PersonContainer, Person
-from schooltool.person.preference import PersonPreferences
-deprecated(('PersonContainer', 'Person', 'PersonPreferences'),
-           'This class has moved to schooltool.person.person. '
-           'The reference will be gone in 0.15')
+deprecated('This class has moved to schooltool.person.person. '
+           'The reference will be gone in 0.15',
+           PersonContainer='schooltool.person.person.PersonContainer',
+           Person='schooltool.person.person.Person',
+           PersonPreferences='schooltool.person.preference.PersonPreferences')
 
-from schooltool.group.group import GroupContainer, Group
-deprecated(('GroupContainer', 'Group'),
-           'This class has moved to schooltool.group.group. '
-           'The reference will be gone in 0.15')
+deprecated('This class has moved to schooltool.group.group. '
+           'The reference will be gone in 0.15',
+           GroupContainer='schooltool.group.group.GroupContainer',
+           Group='schooltool.group.group.Group')
 
-from schooltool.resource.resource import ResourceContainer, Resource
-deprecated(('ResourceContainer', 'Resource'),
-           'This class has moved to schooltool.resource.resource. '
-           'The reference will be gone in 0.15')
+deprecated('This class has moved to schooltool.resource.resource. '
+           'The reference will be gone in 0.15',
+           ResourceContainer='schooltool.resource.resource.ResourceContainer',
+           Resource='schooltool.resource.resource.Resource')
 
-from schooltool.course.course import CourseContainer, Course
-deprecated(('CourseContainer', 'Course'),
-           'This class has moved to schooltool.course.course. '
-           'The reference will be gone in 0.15')
+deprecated('This class has moved to schooltool.course.course. '
+           'The reference will be gone in 0.15',
+           CourseContainer='schooltool.course.course.CourseContainer',
+           Course='schooltool.course.course.CourseContainer')
+
+deprecated('This class has moved to schooltool.course.section. '
+           'The reference will be gone in 0.15',
+           SectionContainer="schooltool.course.section.SectionContainer",
+           Section="schooltool.course.section.Section")
 
 ##############################################################################
 
@@ -98,8 +99,3 @@ def registerTestSetup():
 
 registerTestSetup()
 del registerTestSetup
-
-from schooltool.course.section import SectionContainer, Section
-deprecated(('SectionContainer', 'Section'),
-           'This class has moved to schooltool.course.section. '
-           'The reference will be gone in 0.15')
