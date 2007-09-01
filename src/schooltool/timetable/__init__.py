@@ -127,7 +127,7 @@ schema.  See ITimetableSchema, ITimetableSchemaDay.
 $Id$
 """
 
-from sets import Set, ImmutableSet
+from sets import Set
 
 import zope.event
 from persistent import Persistent
@@ -143,12 +143,9 @@ from zope.app.generations.utility import findObjectsProviding
 
 from schooltool.calendar.simple import ImmutableCalendar
 
-# appease the gods of circular imports
-from schooltool.app.interfaces import ISchoolToolCalendarEvent
 from schooltool.app.interfaces import ISchoolToolCalendar
 
 from schooltool.timetable.interfaces import ITimetableCalendarEvent
-from schooltool.timetable.interfaces import IBookResources
 from schooltool.timetable.interfaces import ITimetable, ITimetableWrite
 from schooltool.timetable.interfaces import ITimetableDay, ITimetableDayWrite
 from schooltool.timetable.interfaces import ITimetableDict
@@ -169,7 +166,6 @@ from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.app import InitBase
 
 # Imports for ZODB compatibility
-from schooltool.timetable.model import BaseTimetableModel
 from schooltool.timetable.model import WeeklyTimetableModel
 from schooltool.timetable.model import SequentialDaysTimetableModel
 from schooltool.timetable.model import SequentialDayIdBasedTimetableModel
@@ -677,18 +673,15 @@ del registerTestSetup
 
 ##############################################################################
 # BBB: Make sure the old data object references are still there.
-from zope.deprecation import deprecated
+from zope.deferredimport.deferredmodule import deprecated
 
-from schooltool.term.term import TermContainer, Term
-deprecated(('TermContainer', 'Term'),
-           'This class has moved to schooltool.term.term. '
-           'The reference will be gone in 0.15')
+deprecated('This class has moved to schooltool.term.term. '
+           'The reference will be gone in 0.15',
+           TermContainer='schooltool.term.term.TermContainer',
+           Term='schooltool.term.term.Term')
 
-from schooltool.timetable.schema import (TimetableSchemaContainer,
-                                         TimetableSchema,
-                                         TimetableSchemaDay)
-
-deprecated(('TimetableSchemaContainer', 'TimetableSchema',
-            'TimetableSchemaDay'),
-           'This class has moved to schooltool.timetable.schema. '
-           'The reference will be gone in 0.15')
+deprecated('This class has moved to schooltool.timetable.schema. '
+           'The reference will be gone in 0.15',
+           TimetableSchemaContainer='schooltool.timetable.schema.TimetableSchemaContainer',
+           TimetableSchema='schooltool.timetable.schema.TimetableSchema',
+           TimetableSchemaDay='schooltool.timetable.schema.TimetableSchemaDay')

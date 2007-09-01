@@ -41,7 +41,6 @@ from zope.traversing.interfaces import IContainmentRoot
 from zope.app.session.interfaces import ISession
 from zope.publisher.interfaces.http import IHTTPRequest
 
-import schooltool.app # sacrifice to appease circular import gods
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common import parse_datetime
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot

@@ -30,7 +30,6 @@ from zope.component import getUtility
 
 from zc.catalog.catalogindex import ValueIndex
 
-import schooltool.app # Dead chicken to appease the circle of import gods
 from schooltool.person.person import Person
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.course.section import PersonInstructorsCrowd

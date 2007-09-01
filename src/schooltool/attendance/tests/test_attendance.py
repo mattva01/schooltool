@@ -43,7 +43,6 @@ from zope.security.management import newInteraction
 from zope.security.management import restoreInteraction
 from zope.publisher.browser import TestRequest
 
-import schooltool.app # Dead chicken to appease the circle of import gods
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.person.interfaces import IPerson
