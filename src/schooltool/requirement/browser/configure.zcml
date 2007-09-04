@@ -38,9 +38,30 @@
         template="templates/simple_edit.pt"
         permission="schooltool.edit"
         class="schooltool.requirement.browser.requirement.RequirementEditView"
-        menu="schooltool_actions"
-        title="Edit Requirement"
         />
+  
+    <navigationViewlet
+        name="edit-requirement"
+        for="schooltool.requirement.interfaces.IRequirement"
+        manager="schooltool.skin.IActionMenuManager"
+        template="templates/actionsViewlet.pt"
+        permission="schooltool.edit"
+        link="edit.html"
+        title="Edit Requirement"
+        order="10"
+        />
+  
+    <navigationViewlet
+        name="add-requirement"
+        for="schooltool.requirement.interfaces.IRequirement"
+        manager="schooltool.skin.IActionMenuManager"
+        template="templates/actionsViewlet.pt"
+        permission="schooltool.edit"
+        link="+/addRequirement.html"
+        title="New Requirement"
+        order="20"
+        />
+
   </configure>
 
   <page
@@ -65,12 +86,5 @@
       contents="zope.ManageContent"
       add="schooltool.edit"
       />
-
-  <menuItem
-      menu="schooltool_actions"
-      title="New Requirement"
-      for="schooltool.requirement.interfaces.IRequirement"
-      action="+/addRequirement.html"
-      />
-
+      
 </configure>
