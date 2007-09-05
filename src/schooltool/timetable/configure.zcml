@@ -177,7 +177,6 @@
 
   <include package=".browser" />
   <include package=".rest" />
-  <include package=".help" />
 
   <security:allow
       interface="schooltool.timetable.interfaces.ITimetableSchemaContainer"
