@@ -27,16 +27,45 @@ import os.path
 import paste.script.command
 
 
-def parse_args(argv):
+def parse_args():
     """Parse the command line arguments"""
-    parser = optparse.OptionParser(usage="usage: %prog INSTANCE")
-    options, args = parser.parse_args(argv)
-    if len(args) != 2:
+    parser = optparse.OptionParser(usage="usage: %prog INSTANCE [options]")
+    parser.add_option("--daemon",
+                      action="store_true",
+                      dest="start_daemon",
+                      help="Run in daemon (background) mode")
+    parser.add_option("--stop-daemon",
+                      action="store_true",
+                      dest="stop_daemon",
+                      help="Stop a daemonized server")
+    parser.add_option("--status",
+                      action="store_true",
+                      dest="show_status",
+                      help="Show the status of the (presumably daemonized) server")
+    options, args = parser.parse_args()
+    if len(args) != 1:
         parser.error("""Missing instance to start up! You can create one using make-scooltool-instance.""")
     return options, args
 
 
 def main():
-    options, args = parse_args(sys.argv)
-    conf_file = os.path.join(os.path.abspath(args[1]), 'schooltool.ini')
-    paste.script.command.run(['serve', conf_file])
+    options, args = parse_args()
+    instance_root = os.path.abspath(args[0])
+    conf_file = os.path.join(instance_root, "schooltool.ini")
+    pid_file = os.path.join(instance_root, "var", "schooltool.pid")
+    log_file = os.path.join(instance_root, "log", "paster.log")
+
+    extra_options = []
+    if options.start_daemon:
+        extra_options.append('--daemon')
+    if options.stop_daemon:
+        extra_options.append('--stop-daemon')
+    if options.show_status:
+        extra_options.append('--status')
+    if (options.start_daemon or
+        options.stop_daemon or
+        options.show_status):
+        extra_options.extend(['--pid-file=%s' % pid_file,
+                              '--log-file=%s' % log_file])
+
+    paste.script.command.run(['serve', conf_file] + extra_options)
