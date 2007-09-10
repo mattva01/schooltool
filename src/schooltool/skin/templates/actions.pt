@@ -3,7 +3,8 @@
                        actions view/context/@@view_get_menu/schooltool_actions">
 
 <div class="portlet">
-  <h4 tal:content="view/title">Actions</h4>
+  <h4 tal:content="view/title"
+      i18n:translate="">Actions</h4>
   <ul> <!-- old-style menu actions (obsolete) -->
     <li tal:repeat="view actions">
       <a tal:attributes="href

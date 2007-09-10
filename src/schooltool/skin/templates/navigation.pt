@@ -1,5 +1,6 @@
-<div class="dropdown contracted">
-  <h3 class="title">Navigation</h3>
+<div class="dropdown contracted"
+     i18n:domain="schooltool">
+  <h3 class="title" i18n:translate="">Navigation</h3>
   <tal:block repeat="viewlet options/viewlets"
 	     content="structure viewlet/render" />
 </div>
