@@ -4,7 +4,8 @@
                        actions view/context/@@view_get_menu/schooltool_actions">
 
   <div class="dropdown contracted">
-    <h3 class="title">Actions</h3>
+    <h3 class="title"
+        i18n:translate="">Actions</h3>
     <!-- old-style menu actions (obsolete) -->
     <a tal:repeat="view actions"
        tal:attributes="href string:${url}/${view/action}"
