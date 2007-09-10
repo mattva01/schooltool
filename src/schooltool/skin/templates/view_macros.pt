@@ -35,7 +35,7 @@
         <a class="main_logo" href=""
           tal:define="url context/schooltool:app/@@absolute_url"
           tal:attributes="href url">
-          <metal:block metal:define-slot="zonki">          
+          <metal:block metal:define-slot="zonki">
             <img src="logo.png" alt="SchoolTool" i18n:attributes="alt"
             tal:attributes="src context/++resource++zonki-regular.png"/>
           </metal:block>
@@ -50,11 +50,9 @@
           <tal:if condition="not:repeat/breadcrumb/start">&#187;</tal:if>
           <a tal:condition="breadcrumb/active"
              tal:attributes="href breadcrumb/url"
-             tal:content="breadcrumb/name"
-             i18n:translate="">Breadcrumb</a>
+             tal:content="breadcrumb/name">Breadcrumb</a>
           <span tal:condition="not: breadcrumb/active"
-                tal:content="breadcrumb/name"
-                i18n:translate="">Breadcrumb</span>
+                tal:content="breadcrumb/name">Breadcrumb</span>
         </tal:for>
         </div>
         <div
