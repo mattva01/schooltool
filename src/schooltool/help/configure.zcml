@@ -63,4 +63,13 @@
             crowds="anonymous"
             permission="schooltool.edit" />
 
+  <page
+      for="*"
+      name="getTopicTree"
+      permission="zope.View"
+      class=".browser.SchoolToolOnlineHelpTopicTreeView"
+      attribute="getTopicTree"
+      layer="schooltool.skin.skin.ISchoolToolLayer"
+      />
+
 </configure>

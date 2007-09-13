@@ -21,8 +21,6 @@
   <!-- Provide local overrides of standard configurations-->
   <includeOverrides package="schooltool.basicperson" file="overrides.zcml" />
   <includeOverrides package="schooltool.devmode" file="overrides.zcml" />
-  <includeOverrides package="schooltool.help" file="overrides.zcml" />
-
 
 </configure>
 
