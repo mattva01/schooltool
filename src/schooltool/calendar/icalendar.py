@@ -69,13 +69,13 @@ There is some trickery to make empty calendars work:
 $Id$
 """
 
+import pytz
 import datetime
 import calendar
 import re
 from cStringIO import StringIO
 from sets import Set
 
-import pytz
 from schooltool.calendar.simple import SimpleCalendarEvent
 from schooltool.calendar.vcal_dict import timezone_map
 
