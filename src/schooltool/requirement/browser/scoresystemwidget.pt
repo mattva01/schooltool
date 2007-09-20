@@ -5,16 +5,14 @@
   <span tal:replace="structure view/custom_widget" />
   <label for=""
       tal:attributes="for view/custom_widget/name"
-      tal:content="view/custom_widget/label"
-      i18n:translate="">
+      tal:content="view/custom_widget/label">
     Custom score system
   </label>
 </p>
 <p>
   <label for=""
       tal:attributes="for view/min_widget/name"
-      tal:content="view/min_widget/label"
-      i18n:translate="">
+      tal:content="view/min_widget/label">
     Min Score
   </label>
   <span tal:replace="structure view/min_widget" />
@@ -22,8 +20,7 @@
 <p>
   <label for=""
       tal:attributes="for view/max_widget/name"
-      tal:content="view/max_widget/label"
-      i18n:translate="">
+      tal:content="view/max_widget/label">
     Max Score
   </label>
   <span tal:replace="structure view/max_widget" />

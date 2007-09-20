@@ -11,7 +11,7 @@
        class="location">Location:
     <span tal:content="event/location" i18n:name="location">(location)</span>
   </div>
-  <div class="description" tal:content="structure event/description" i18n:translate="">
+  <div class="description" tal:content="structure event/description">
     (Description)
   </div>
 </div>

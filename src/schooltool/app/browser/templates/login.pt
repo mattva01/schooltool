@@ -27,7 +27,7 @@
       tal:attributes="value request/nexturl" />
 
     <p class="error" tal:condition="view/error"
-      tal:content="view/error" i18n:translate="">
+      tal:content="view/error">
       Incorrect username or password.
     </p>
 

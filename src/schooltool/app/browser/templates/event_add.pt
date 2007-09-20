@@ -1,7 +1,7 @@
 <tal:defs define="dummy view/update" />
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title" i18n:translate=""
+  <title metal:fill-slot="title"
          tal:content="view/title">Add/edit event</title>
   <script type="text/javascript" metal:fill-slot="extrahead">
     function recurrence_changed() {
@@ -247,8 +247,7 @@
                    />
             <label class="plain"
                    tal:attributes="for string:weekday_${term/token}"
-                   tal:content="python:view.weekdays_widget.textForValue(term)"
-                   i18n:translate=""/>
+                   tal:content="python:view.weekdays_widget.textForValue(term)" />
           </span>
         </fieldset>
         <!-- monthly box -->
@@ -269,14 +268,14 @@
             <input type="radio" name="field.monthly" value="weekday" id="monthly_w"
               tal:attributes="checked python:monthly_value == 'weekday'"/>
             <label for="monthly_w" class="plain" i18n:translate="">
-              <span tal:replace="view/getWeekDay" i18n:translate="" i18n:name="weekday" /> of
+              <span tal:replace="view/getWeekDay" i18n:name="weekday" /> of
               every month</label>
           </div>
           <div class="row" tal:condition="view/getLastWeekDay">
             <input type="radio" name="field.monthly" value="lastweekday" id="monthly_l"
               tal:attributes="checked python:monthly_value == 'lastweekday'"/>
             <label for="monthly_l" class="plain" i18n:translate="">
-              <span tal:replace="view/getLastWeekDay" i18n:translate="" i18n:name="" /> of
+              <span tal:replace="view/getLastWeekDay" i18n:name="" /> of
               every month</label>
           </div>
         </fieldset>
@@ -343,11 +342,11 @@
     <div class="controls">
       <input type="submit" class="button-ok" name="UPDATE_SUBMIT"
              tal:attributes="value view/submit_button_title"
-             i18n:attributes="value" title="Shortcut: Alt-A" accesskey="A" />
+             i18n:attributes="title" title="Shortcut: Alt-A" accesskey="A" />
       <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
              i18n:attributes="value cancel-button" />
       <a tal:condition="view/show_book_link"
-          tal:attributes="href string:${context/@@absolute_url}/booking.html"
+         tal:attributes="href string:${context/@@absolute_url}/booking.html"
          i18n:translate="">Book resources</a>
     </div>
   </form>

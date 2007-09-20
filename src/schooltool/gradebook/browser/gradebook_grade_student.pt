@@ -16,8 +16,7 @@
 
   <div class="message"
        tal:condition="view/message"
-       tal:content="view/message"
-       i18n:translate="">
+       tal:content="view/message">
     Message
   </div>
 

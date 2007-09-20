@@ -1,12 +1,12 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
   <title metal:fill-slot="title"
-         tal:content="view/title" i18n:translate="" />
+         tal:content="view/title" />
 </head>
 <body>
 
 <h1 metal:fill-slot="content-header"
-    tal:content="view/title" i18n:translate="" />
+    tal:content="view/title" />
 
 <metal:block metal:fill-slot="body"
              tal:define="owner_url context/__parent__/__parent__/@@absolute_url;
@@ -18,7 +18,7 @@
                      th_width python: '%d%%' % (10 / ncols);
                      td_width python: '%d%%' % (90 / ncols)">
     <tr>
-      <th tal:repeat="day context/keys" tal:content="day" i18n:translate=""
+      <th tal:repeat="day context/keys" tal:content="day"
           tal:attributes="width col_width" colspan="2" class="day">Day N</th>
     </tr>
     <tr tal:repeat="row view/rows"><tal:block tal:repeat="col row">

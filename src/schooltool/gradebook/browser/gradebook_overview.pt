@@ -51,14 +51,12 @@
     </tr>
     <tr class="Statistic" tal:repeat="stat view/statistics">
       <td class="name"
-          tal:content="stat/name"
-          i18n:translate="">
+          tal:content="stat/name">
         Quantity
       </td>
       <td class="value"
           tal:repeat="value stat/values"
-          tal:content="value"
-          i18n:translate="">
+          tal:content="value">
         50.0 %
       </td>
     </tr>

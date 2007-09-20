@@ -2,8 +2,7 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
   <title metal:fill-slot="title"
-         tal:content="string:${context/title} Contents"
-         i18n:translate="">
+         tal:content="string:${context/title} Contents">
     Contents
   </title>
 </head>
@@ -27,12 +26,12 @@
       tal:attributes="value request/RECURSIVE|nothing"/>recursive?
   </form>
   <tal:if condition="batch" define="depth python:int(request.get('DEPTH', 3))">
-    <div class="count">
-      <span i18n:translate="">Showing</span>
-      <span tal:content="python:len(batch)"/>
-      <span i18n:translate="">of</span>
-      <span tal:content="python:len(batch.list)"/>
-      <span i18n:translate="">items</span>
+    <div class="count" i18n:translate="">
+      Showing
+      <span i18n:name="count" tal:content="python:len(batch)"/>
+      of
+      <span i18n:name="total" tal:content="python:len(batch.list)"/>
+      items
     </div>
     <form method="post">
       <b>Depth:</b>
