@@ -7,6 +7,12 @@
 
   <include package="schooltool" />
 
+  <utility
+      name="schooltool.stap2005"
+      provides="zope.app.generations.interfaces.ISchemaManager"
+      component=".generations.schemaManager"
+      />
+
   <include package="schooltool.course" />
   <include xmlns:zcml="http://namespaces.zope.org/zcml"
            zcml:condition="have devmode"
