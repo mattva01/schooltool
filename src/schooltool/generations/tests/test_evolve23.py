@@ -55,8 +55,10 @@ def doctest_evolve():
       >>> beta = Person('beta', 'Beta')
       >>> app['persons']['alpha'] = alpha
       >>> alpha.__name__ = 'alpha'
+      >>> alpha.__parent__ = app
       >>> app['persons']['beta'] = beta
       >>> beta.__name__ = 'beta'
+      >>> beta.__parent__ = app
 
     Set the site:
       >>> from zope.app.component.hooks import setSite

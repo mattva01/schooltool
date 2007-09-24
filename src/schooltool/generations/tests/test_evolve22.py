@@ -58,8 +58,10 @@ def doctest_evolve():
       >>> beta = Group('Beta')
       >>> app['groups']['alpha'] = alpha
       >>> alpha.__name__ = 'alpha'
+      >>> alpha.__parent__ = app
       >>> app['groups']['beta'] = beta
       >>> beta.__name__ = 'beta'
+      >>> beta.__parent__ = app
 
     Set the site:
       >>> from zope.app.component.hooks import setSite
