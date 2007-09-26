@@ -89,21 +89,28 @@ class SchoolToolAuthenticationUtility(Persistent, Contained):
         """
         session = ISession(request)[self.session_name]
         if 'username' in session and 'password' in session:
-            if self._checkPassword(session['username'], session['password']):
+            if self._checkHashedPassword(session['username'], session['password']):
                 return self.getPrincipal('sb.person.' + session['username'])
 
         # Try HTTP basic too
         creds = ILoginPassword(request, None)
         if creds:
             login = creds.getLogin()
-            if self._checkPassword(login, creds.getPassword()):
+            if self._checkPlainTextPassword(login, creds.getPassword()):
                 return self.getPrincipal('sb.person.' + login)
 
-    def _checkPassword(self, username, password):
+    def _checkPlainTextPassword(self, username, password):
         app = getSchoolToolApplication()
         if username in app['persons']:
             person = app['persons'][username]
             return person.checkPassword(password)
+
+    def _checkHashedPassword(self, username, password):
+        app = getSchoolToolApplication()
+        if username in app['persons']:
+            person = app['persons'][username]
+            return (person._hashed_password is not None
+                    and password == person._hashed_password)
 
     def unauthenticatedPrincipal(self):
         """Return the unauthenticated principal, if one is defined."""
@@ -166,11 +173,13 @@ class SchoolToolAuthenticationUtility(Persistent, Contained):
         return next.getPrincipal(id)
 
     def setCredentials(self, request, username, password):
-        if not self._checkPassword(username, password):
+        # avoid circular imports
+        from schooltool.person.person import hash_password
+        if not self._checkPlainTextPassword(username, password):
             raise ValueError('bad credentials')
         session = ISession(request)[self.session_name]
         session['username'] = username
-        session['password'] = password
+        session['password'] = hash_password(password)
 
     def clearCredentials(self, request):
         session = ISession(request)[self.session_name]
