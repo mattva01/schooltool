@@ -70,50 +70,69 @@ System requirements
   need to specify the path to fonts in the configuration file.
 
 
-Building and installing SchoolTool from a source tarball
---------------------------------------------------------
+Building and running SchoolTool from a source tarball
+-----------------------------------------------------
 
-From the un-packed tarball you can use the familiar ./configure; make;
-make install dance. So, going through it:
+You need the basic C development tools:
 
-$ ./configure --prefix=${libs}
+$ sudo apt-get install build-essential
 
-where ${libs} is the location where you want to install the libraries
-(it can be anywhere).  For testing, ${libs} can simply be a directory
-in your home.  Otherwise you might want this to be /usr/local, /opt,
-or some other traditional location.
+You need the Python development libraries:
+
+$ sudo apt-get install python-dev python-profiler
+
+You need this unicode library:
+
+$ sudo apt-get install libicu-dev
+
+You also need the python imaging library:
+
+$ sudo apt-get install python-imaging
+
+You need the Python setuptools package. Unfortunately, you need a more
+recent version than ships with Gutsy. Fortunately, it isn't hard to
+install manually. Download ez_setup.py and run it with:
+
+$ sudo python ez_setup.py
+
+Run make to download and install all the required zope packages into
+the eggs folder:
 
 $ make
-$ make install
 
-Change directory to the installed libraries:
+Now test the installation by running:
 
-$ cd ${libs}
+$ make test ftest
 
-The next step requires an up to date install of the Python setuputils.  See:
+Create a fresh configuration file for yourself:
 
-http://peak.telecommunity.com/DevCenter/EasyInstall#installing-easy-install
+$ cp schooltool.conf.in schooltool.conf
 
-$ PYTHONPATH=lib/python easy_install -f http://download.zope.org/distribution --install-dir lib/python zc.table zc.datetimewidget hurry.query
+Edit it with your favorite editor. If you want to - uncomment the line
+that says devmode on. This allows you to add sample data, view the
+online docs and other useful things. You don't want to leave this on
+for a production server, however.
 
-Now from the installed libraries, we can test the installation by running:
+After saving your new schooltool.conf, start your server:
 
-$ ./bin/schooltooltest -ufv1
+$ make run
 
-Then create a schooltool instance (${instance} is the directory to create the
-instance in):
+Go to http://localhost:7080 to see your new server in action.
 
-$ ./bin/mkschooltoolinst -d${instance}
+Optional: To work with pdf generation, you need to pull a couple
+packages from the "universe" and "multiverse" repositories. Packages
+from these repositories are not supported by Canonical, but these
+should work fine.
 
-Change to the instance and test it:
+As a superuser (sudo) edit /etc/apt/sources.list to include this line
+deb http://us.archive.ubuntu.com/ubuntu/ gutsy universe multiverse
 
-$ cd ${instance}
-$ ./bin/test -ufv --testschooltool
+Then install the required package:
 
-Then you can start the server:
+$ sudo apt-get install msttcorefonts
 
-$ ./bin/schooltool
-
+In case you're wondering, we need these fonts to support unicode in
+our pdf's
 
 Building SchoolTool from a subversion checkout
 ----------------------------------------------
