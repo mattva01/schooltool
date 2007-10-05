@@ -1,4 +1,4 @@
-# Nepali translation for schooltool
+# Russian translation for schooltool
 # Copyright (c) 2007 Rosetta Contributors and Canonical Ltd 2007
 # This file is distributed under the same license as the schooltool package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2007.
@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2007-09-10 01:24+0000\n"
-"PO-Revision-Date: 2007-01-31 10:58+0000\n"
+"PO-Revision-Date: 2007-08-15 09:52+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: Nepali <ne@li.org>\n"
+"Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,11 +20,11 @@ msgstr ""
 #: /src/schooltool/commendation/browser.py:69
 #: /src/schooltool/commendation/commendation.py:73
 msgid "<unknown>"
-msgstr "अज्ञात"
+msgstr "<неизвестно>"
 
 #: /src/schooltool/commendation/commendation.py:89
 msgid "commendations"
-msgstr "प्रशंसाहरु"
+msgstr "рекомендации"
 
 #: /src/schooltool/commendation/configure.zcml:100
 #: /src/schooltool/commendation/configure.zcml:110
@@ -42,72 +42,72 @@ msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:48
 msgid "Title"
-msgstr "शिर्षक"
+msgstr "Заголовок"
 
 #: /src/schooltool/commendation/interfaces.py:49
 msgid "Title of the commendation."
-msgstr "प्रशंसाहरुको शिर्षक"
+msgstr "Заголовок рекомендации"
 
 #: /src/schooltool/commendation/interfaces.py:53
 msgid "Description"
-msgstr "वर्णन"
+msgstr "Описание"
 
 #: /src/schooltool/commendation/interfaces.py:54
 msgid "A detailed description of the commendation."
-msgstr "प्रशंसाको वूस्तित वर्णन  थप्नुहोस्"
+msgstr "Детальное описание рекомендации."
 
 #: /src/schooltool/commendation/interfaces.py:58
 msgid "Scope"
-msgstr "स्कोप"
+msgstr "Предел"
 
 #: /src/schooltool/commendation/interfaces.py:59
 msgid "The scope of the commendation."
-msgstr "प्रशंसाको स्कोप"
+msgstr "Пределы рекомендации"
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "community"
-msgstr "समुदाय"
+msgstr "сообщество"
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "group"
-msgstr "समूह"
+msgstr "группа"
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "school-wide"
-msgstr "स्कुल-वाइड"
+msgstr "школьный"
 
 #: /src/schooltool/commendation/interfaces.py:61
 msgid "national"
-msgstr "राष्ट्रिय"
+msgstr "национальный"
 
 #: /src/schooltool/commendation/interfaces.py:61
 msgid "global"
-msgstr "विश्वव्यापी"
+msgstr "глобальный"
 
 #: /src/schooltool/commendation/interfaces.py:61
 msgid "state"
-msgstr "राज्य"
+msgstr "состояние"
 
 #: /src/schooltool/commendation/interfaces.py:65
 msgid "Date"
-msgstr "मिति"
+msgstr "Дата"
 
 #: /src/schooltool/commendation/interfaces.py:66
 msgid "The date the commendation was issued."
-msgstr "प्रशंसा मिति निस्काशन गरियो।"
+msgstr "Дата"
 
 #: /src/schooltool/commendation/interfaces.py:71
 msgid "Grantor"
-msgstr "ग्रान्टर"
+msgstr "Даритель"
 
 #: /src/schooltool/commendation/interfaces.py:72
 msgid "The grantor of the commendation."
-msgstr "प्रशंसाको ग्रान्टर"
+msgstr "Даритель рекомендации"
 
 #: /src/schooltool/timetable/rest/__init__.py:266
 msgid "Unknown day id: %r"
-msgstr "अज्ञात दिन  id: %r"
+msgstr "Неизвестный код дня: %r"
 
 #: /src/schooltool/timetable/rest/__init__.py:272
 msgid "Unknown period id: %r"
-msgstr "अज्ञात अवधि  id: %r"
+msgstr "Неизвестный код периода: %r"

@@ -3,19 +3,25 @@
 # This file is distributed under the same license as the schooltool package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2006.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: Wed Jan 24 18:22:51 2007\n"
+"POT-Creation-Date: 2007-10-03 16:21+0000\n"
 "PO-Revision-Date: 2006-05-08 16:42+0000\n"
 "Last-Translator: bamuhrez <bamuhrez@gmail.com>\n"
 "Language-Team: Arabic <ar@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Rosetta-Export-Date: 2007-07-04 10:48:47+0000\n"
+"X-Launchpad-Export-Date: 2007-10-05 17:22+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#~ msgid "Add a new course"
+#~ msgstr "إضافة درس جديد"
+
+#~ msgid "Add a new section"
+#~ msgstr "إضافة فصل جديد"
 
 #: /src/schoolbell/app/interfaces.py:13
 msgid "Nickname"
@@ -61,412 +67,442 @@ msgstr ""
 msgid "Mailing address"
 msgstr ""
 
-#: /src/schooltool/app/browser/__init__.py:254
+#: /src/schooltool/app/browser/__init__.py:256
 #: /src/schooltool/person/browser/configure.zcml:26
+#: /src/schooltool/person/help/configure.zcml:8
 #: /src/schooltool/app/browser/templates/index.pt:11
 msgid "Persons"
 msgstr ""
 
-#: /src/schooltool/app/browser/__init__.py:259
+#: /src/schooltool/app/browser/__init__.py:261
 msgid "1 person"
 msgstr ""
 
-#: /src/schooltool/app/browser/__init__.py:261
+#. Default: ""
+#: /src/schooltool/app/browser/__init__.py:263
 msgid "${number} persons"
 msgstr ""
 
-#: /src/schooltool/app/browser/app.py:222
+#: /src/schooltool/app/browser/app.py:192
 msgid "Username or password is incorrect"
 msgstr ""
 
-#: /src/schooltool/app/browser/app.py:304
+#: /src/schooltool/app/browser/app.py:286
 msgid "Leaders"
 msgstr ""
 
-#: /src/schooltool/app/browser/app.py:305
+#: /src/schooltool/app/browser/app.py:287
 msgid "Current leaders"
 msgstr ""
 
-#: /src/schooltool/app/browser/app.py:306
+#: /src/schooltool/app/browser/app.py:288
 msgid "Available leaders"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:103
-msgid "March"
+#: /src/schooltool/app/browser/app.py:303
+msgid "school"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:103
-msgid "January"
+#: /src/schooltool/app/browser/cal.py:1004
+msgid "Next year"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:103
-msgid "February"
+#: /src/schooltool/app/browser/cal.py:1005
+msgid "Current year"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1034
+#: /src/schooltool/app/browser/cal.py:1006
+msgid "Previous year"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1071
 msgid "The next day"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1035
+#: /src/schooltool/app/browser/cal.py:1072
 msgid "Today"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1036
+#: /src/schooltool/app/browser/cal.py:1073
 msgid "The previous day"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:104
+#: /src/schooltool/app/browser/cal.py:117
+msgid "March"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:117
+msgid "January"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:117
+msgid "February"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:118
 msgid "June"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:104
+#: /src/schooltool/app/browser/cal.py:118
 msgid "May"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:104
+#: /src/schooltool/app/browser/cal.py:118
 msgid "April"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:105
+#: /src/schooltool/app/browser/cal.py:119
 msgid "August"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:105
+#: /src/schooltool/app/browser/cal.py:119
 msgid "September"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:105
+#: /src/schooltool/app/browser/cal.py:119
 msgid "July"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:106
+#: /src/schooltool/app/browser/cal.py:120
 msgid "October"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:106
-msgid "December"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:106
+#: /src/schooltool/app/browser/cal.py:120
 msgid "November"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:109
-#: /src/schooltool/person/interfaces.py:183
+#: /src/schooltool/app/browser/cal.py:120
+msgid "December"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:123
+#: /src/schooltool/person/interfaces.py:192
 #: /src/schooltool/timetable/browser/schema.py:95
-#: /src/schooltool/timetable/browser/schema.py:268
+#: /src/schooltool/timetable/browser/schema.py:265
 #: /src/schooltool/term/browser/term_add_edit.pt:94
 #: /src/schooltool/term/browser/term_add_edit.pt:120
 #: /src/schooltool/term/browser/term.pt:31
 msgid "Monday"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:109
+#: /src/schooltool/app/browser/cal.py:123
 #: /src/schooltool/timetable/browser/schema.py:96
-#: /src/schooltool/timetable/browser/schema.py:269
+#: /src/schooltool/timetable/browser/schema.py:266
 #: /src/schooltool/term/browser/term_add_edit.pt:96
 #: /src/schooltool/term/browser/term_add_edit.pt:121
 #: /src/schooltool/term/browser/term.pt:32
 msgid "Tuesday"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:109
+#: /src/schooltool/app/browser/cal.py:123
 #: /src/schooltool/timetable/browser/schema.py:97
-#: /src/schooltool/timetable/browser/schema.py:270
+#: /src/schooltool/timetable/browser/schema.py:267
 #: /src/schooltool/term/browser/term_add_edit.pt:98
 #: /src/schooltool/term/browser/term_add_edit.pt:122
 #: /src/schooltool/term/browser/term.pt:33
 msgid "Wednesday"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:109
+#: /src/schooltool/app/browser/cal.py:123
 #: /src/schooltool/timetable/browser/schema.py:98
-#: /src/schooltool/timetable/browser/schema.py:271
+#: /src/schooltool/timetable/browser/schema.py:268
 #: /src/schooltool/term/browser/term_add_edit.pt:100
 #: /src/schooltool/term/browser/term_add_edit.pt:123
 #: /src/schooltool/term/browser/term.pt:34
 msgid "Thursday"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:110
-#: /src/schooltool/person/interfaces.py:182
-#: /src/schooltool/timetable/browser/schema.py:274
-#: /src/schooltool/term/browser/term_add_edit.pt:106
-#: /src/schooltool/term/browser/term_add_edit.pt:126
-#: /src/schooltool/term/browser/term.pt:37
-msgid "Sunday"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:110
-#: /src/schooltool/timetable/browser/schema.py:273
+#: /src/schooltool/app/browser/cal.py:124
+#: /src/schooltool/person/interfaces.py:190
+#: /src/schooltool/timetable/browser/schema.py:270
 #: /src/schooltool/term/browser/term_add_edit.pt:104
 #: /src/schooltool/term/browser/term_add_edit.pt:125
 #: /src/schooltool/term/browser/term.pt:36
 msgid "Saturday"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:110
+#: /src/schooltool/app/browser/cal.py:124
+#: /src/schooltool/person/interfaces.py:191
+#: /src/schooltool/timetable/browser/schema.py:271
+#: /src/schooltool/term/browser/term_add_edit.pt:106
+#: /src/schooltool/term/browser/term_add_edit.pt:126
+#: /src/schooltool/term/browser/term.pt:37
+msgid "Sunday"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:124
 #: /src/schooltool/timetable/browser/schema.py:99
-#: /src/schooltool/timetable/browser/schema.py:272
+#: /src/schooltool/timetable/browser/schema.py:269
 #: /src/schooltool/term/browser/term_add_edit.pt:102
 #: /src/schooltool/term/browser/term_add_edit.pt:124
 #: /src/schooltool/term/browser/term.pt:35
 msgid "Friday"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:113
-#: /src/schooltool/app/browser/cal.py:1745
+#: /src/schooltool/app/browser/cal.py:127
+#: /src/schooltool/app/browser/cal.py:1787
 msgid "Mon"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:113
-#: /src/schooltool/app/browser/cal.py:1746
+#: /src/schooltool/app/browser/cal.py:127
+#: /src/schooltool/app/browser/cal.py:1788
 msgid "Tue"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:113
-#: /src/schooltool/app/browser/cal.py:1747
+#: /src/schooltool/app/browser/cal.py:127
+#: /src/schooltool/app/browser/cal.py:1789
 msgid "Wed"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:113
-#: /src/schooltool/app/browser/cal.py:1748
+#: /src/schooltool/app/browser/cal.py:127
+#: /src/schooltool/app/browser/cal.py:1790
 msgid "Thu"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:114
-#: /src/schooltool/app/browser/cal.py:1749
+#: /src/schooltool/app/browser/cal.py:128
+#: /src/schooltool/app/browser/cal.py:1791
 msgid "Fri"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:114
-#: /src/schooltool/app/browser/cal.py:1750
+#: /src/schooltool/app/browser/cal.py:128
+#: /src/schooltool/app/browser/cal.py:1792
 msgid "Sat"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:114
-#: /src/schooltool/app/browser/cal.py:1751
+#: /src/schooltool/app/browser/cal.py:128
+#: /src/schooltool/app/browser/cal.py:1793
 msgid "Sun"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1671
-#: /src/schooltool/app/interfaces.py:122
-#: /src/schooltool/app/interfaces.py:133
-#: /src/schooltool/course/interfaces.py:36
+#: /src/schooltool/app/browser/cal.py:1713
+#: /src/schooltool/app/interfaces.py:132
+#: /src/schooltool/app/interfaces.py:143
+#: /src/schooltool/course/interfaces.py:37
+#: /src/schooltool/course/interfaces.py:73
 #: /src/schooltool/dashboard/interfaces.py:44
 #: /src/schooltool/group/interfaces.py:43
 #: /src/schooltool/level/interfaces.py:75
 #: /src/schooltool/level/interfaces.py:142
 #: /src/schooltool/note/interfaces.py:42
-#: /src/schooltool/resource/interfaces.py:38
-#: /src/schooltool/term/browser/term.py:61
+#: /src/schooltool/resource/interfaces.py:40
+#: /src/schooltool/resource/types.py:60
+#: /src/schooltool/resource/types.py:77
+#: /src/schooltool/resource/types.py:101
+#: /src/schooltool/schoolyear/schoolyear.py:58
+#: /src/schooltool/schoolyear/schoolyear.py:59
+#: /src/schooltool/schoolyear/schoolyear.py:209
+#: /src/schooltool/schoolyear/schoolyear.py:210
+#: /src/schooltool/schoolyear/schoolyear.py:222
+#: /src/schooltool/schoolyear/schoolyear.py:223
+#: /src/schooltool/term/browser/term.py:71
 #: /src/schooltool/term/interfaces.py:40
 #: /src/schooltool/timetable/browser/ttwizard.py:241
 msgid "Title"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1674
-#: /src/schooltool/app/browser/templates/cal_monthly.pt:39
+#: /src/schooltool/app/browser/cal.py:1716
+#: /src/schooltool/app/browser/templates/cal_monthly.pt:38
 #: /src/schooltool/app/browser/templates/cal_weekly.pt:42
 msgid "All day"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1677
+#: /src/schooltool/app/browser/cal.py:1719
 #: /src/schooltool/gradebook/interfaces.py:54
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:29
 #: /src/schooltool/term/browser/emergency_select.pt:29
 msgid "Date"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1680
+#: /src/schooltool/app/browser/cal.py:1722
 msgid "Time"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1681
+#: /src/schooltool/app/browser/cal.py:1723
 msgid "Start time in 24h format"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1685
+#: /src/schooltool/app/browser/cal.py:1727
 msgid "Duration"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1690
+#: /src/schooltool/app/browser/cal.py:1732
 msgid "Duration Type"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1693
+#: /src/schooltool/app/browser/cal.py:1735
 #: /src/schooltool/app/browser/templates/event_add.pt:168
 msgid "Minutes"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1694
+#: /src/schooltool/app/browser/cal.py:1736
 #: /src/schooltool/app/browser/templates/event_add.pt:171
 msgid "Hours"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1695
+#: /src/schooltool/app/browser/cal.py:1737
 #: /src/schooltool/app/browser/templates/event_add.pt:175
 msgid "Days"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1698
+#: /src/schooltool/app/browser/cal.py:1740
+#: /src/schooltool/resource/types.py:69
 #: /src/schooltool/app/browser/templates/event.pt:48
-#: /src/schooltool/resource/browser/resource.pt:11
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:49
 msgid "Location"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1702
-#: /src/schooltool/course/interfaces.py:40
-#: /src/schooltool/course/interfaces.py:77
+#: /src/schooltool/app/browser/cal.py:1744
+#: /src/schooltool/course/interfaces.py:41
+#: /src/schooltool/course/interfaces.py:78
 #: /src/schooltool/gradebook/interfaces.py:38
 #: /src/schooltool/group/interfaces.py:47
 #: /src/schooltool/level/interfaces.py:147
-#: /src/schooltool/resource/interfaces.py:42
-#: /src/schooltool/timetable/browser/event.py:37
-#: /src/schooltool/timetable/browser/event.py:46
+#: /src/schooltool/resource/interfaces.py:50
+#: /src/schooltool/timetable/browser/event.py:39
+#: /src/schooltool/timetable/browser/event.py:48
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:24
 msgid "Description"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1707
+#: /src/schooltool/app/browser/cal.py:1749
 msgid "Recurring"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1711
+#: /src/schooltool/app/browser/cal.py:1753
 msgid "Recurs every"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1714
+#: /src/schooltool/app/browser/cal.py:1756
 msgid "Day"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1715
+#: /src/schooltool/app/browser/cal.py:1757
 msgid "Week"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1716
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:124
+#: /src/schooltool/app/browser/cal.py:1758
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:132
 msgid "Month"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1717
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:137
+#: /src/schooltool/app/browser/cal.py:1759
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:145
 msgid "Year"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1720
+#: /src/schooltool/app/browser/cal.py:1762
 msgid "Repeat every"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1725
+#: /src/schooltool/app/browser/cal.py:1767
 msgid "Range"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1728
+#: /src/schooltool/app/browser/cal.py:1770
 msgid "Count"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1729
+#: /src/schooltool/app/browser/cal.py:1771
 msgid "Until"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1730
+#: /src/schooltool/app/browser/cal.py:1772
 msgid "forever"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1733
+#: /src/schooltool/app/browser/cal.py:1775
 msgid "Number of events"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1737
-#: /src/schooltool/app/browser/templates/event_add.pt:304
+#: /src/schooltool/app/browser/cal.py:1779
+#: /src/schooltool/app/browser/templates/event_add.pt:303
 msgid "Repeat until"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1741
+#: /src/schooltool/app/browser/cal.py:1783
 msgid "Weekdays"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1744
+#: /src/schooltool/app/browser/cal.py:1786
 msgid "Weekday"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1754
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:53
-#: /src/schooltool/app/browser/templates/event_add.pt:257
+#: /src/schooltool/app/browser/cal.py:1796
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:54
+#: /src/schooltool/app/browser/templates/event_add.pt:256
 msgid "Monthly"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1762
+#: /src/schooltool/app/browser/cal.py:1804
 msgid "Exception dates"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1848
+#: /src/schooltool/app/browser/cal.py:1890
 msgid "same weekday"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1853
+#: /src/schooltool/app/browser/cal.py:1895
 msgid "1st"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1853
+#: /src/schooltool/app/browser/cal.py:1895
 msgid "4th"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1853
+#: /src/schooltool/app/browser/cal.py:1895
 msgid "3rd"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1853
+#: /src/schooltool/app/browser/cal.py:1895
 msgid "2nd"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1854
+#: /src/schooltool/app/browser/cal.py:1896
 msgid "5th"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1868
+#: /src/schooltool/app/browser/cal.py:1910
 msgid "last weekday"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1878
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:1920
 msgid "Last ${weekday}"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1901
-#: /src/schooltool/app/browser/cal.py:2210
-#: /src/schooltool/course/browser/section.py:150
+#: /src/schooltool/app/browser/cal.py:1943
+#: /src/schooltool/app/browser/cal.py:2256
 msgid "An error occurred."
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1934
+#: /src/schooltool/app/browser/cal.py:1976
 msgid "Invalid time"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1955
+#: /src/schooltool/app/browser/cal.py:1997
 msgid "End date is earlier than start date"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:1964
+#: /src/schooltool/app/browser/cal.py:2006
 msgid "Invalid date.  Please specify YYYY-MM-DD, one per line."
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:2012
+#: /src/schooltool/app/browser/cal.py:2054
 msgid "Add event"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:2013
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:43
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:90
+#: /src/schooltool/app/browser/cal.py:2055
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:19
+#: /src/schooltool/timetable/browser/templates/timetable-add.pt:38
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:81
 msgid "Add"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:2084
+#: /src/schooltool/app/browser/cal.py:2126
 msgid "Edit event"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:2085
+#: /src/schooltool/app/browser/cal.py:2127
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:29
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:81
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:185
@@ -475,180 +511,192 @@ msgstr ""
 msgid "Update"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:2216
-#: /src/schooltool/skin/form.py:77
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:2262
+#: /src/schooltool/skin/form.py:76
 msgid "Updated on ${date_time}"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:2555
-#: /src/schooltool/app/browser/configure.zcml:548
-#: /src/schooltool/app/configure.zcml:301
-#: /src/schooltool/resource/rest/resource.pt:14
+#: /src/schooltool/app/browser/cal.py:2705
+#: /src/schooltool/app/browser/configure.zcml:558
+#: /src/schooltool/app/configure.zcml:310
+#: /src/schooltool/resource/rest/resource.pt:13
 #: /src/schooltool/person/rest/person.pt:13
 msgid "Calendar"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:858
+#: /src/schooltool/app/browser/cal.py:457
+msgid "Unnamed Event"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:895
 msgid "Next week"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:859
+#: /src/schooltool/app/browser/cal.py:896
 msgid "Current week"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:860
+#: /src/schooltool/app/browser/cal.py:897
 msgid "Previous week"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:869
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:906
 msgid "${month}, ${year} (week ${week})"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:919
+#: /src/schooltool/app/browser/cal.py:956
 msgid "Next month"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:920
+#: /src/schooltool/app/browser/cal.py:957
 msgid "Current month"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:921
+#: /src/schooltool/app/browser/cal.py:958
 msgid "Previous month"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:929
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:966
 msgid "${month}, ${year}"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:951
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:988
 msgid "Week ${week_no}"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:967
-msgid "Next year"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:968
-msgid "Current year"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:969
-msgid "Previous year"
-msgstr ""
-
-#: /src/schooltool/app/browser/configure.zcml:137
+#: /src/schooltool/app/browser/configure.zcml:131
+#: /src/schooltool/skin/templates/actionsbar.pt:7
 msgid "Actions"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:184
-#: /src/schooltool/app/configure.zcml:287
-#: /src/schooltool/skin/templates/view_macros.pt:33
+#: /src/schooltool/app/browser/configure.zcml:178
+#: /src/schooltool/app/help/configure.zcml:6
+#: /src/schooltool/app/configure.zcml:296
+#: /src/schooltool/skin/templates/simple_edit.pt:7
+#: /src/schooltool/skin/templates/simple_add.pt:5
+#: /src/schooltool/skin/templates/container_delete.pt:11
+#: /src/schooltool/skin/templates/edit_form.pt:4
+#: /src/schooltool/skin/templates/view_macros.pt:39
 #: /src/schooltool/skin/templates/generic_macros.pt:8
+#: /src/schooltool/skin/templates/container.pt:11
+#: /src/schooltool/skin/templates/error.pt:8
+#: /src/schooltool/skin/templates/table_container.pt:11
+#: /src/schooltool/skin/templates/notfound.pt:7
+#: /src/schooltool/person/browser/person_edit.pt:9
+#: /src/schooltool/person/browser/person_preferences.pt:9
+#: /src/schooltool/person/browser/person_container_delete.pt:11
+#: /src/schooltool/person/browser/person-csvimport.pt:11
 msgid "SchoolTool"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:248
+#: /src/schooltool/app/browser/configure.zcml:258
 msgid "View Calendar"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:259
+#: /src/schooltool/app/browser/configure.zcml:270
 msgid "New Event"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:270
+#: /src/schooltool/app/browser/configure.zcml:281
 msgid "Open in iCal"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:281
+#: /src/schooltool/app/browser/configure.zcml:292
 msgid "Import Sections"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:292
+#: /src/schooltool/app/browser/configure.zcml:303
 msgid "Edit Leaders"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:303
+#: /src/schooltool/app/browser/configure.zcml:314
 msgid "Change Site Preferences"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:324
+#: /src/schooltool/app/browser/configure.zcml:335
 msgid "Calendar (Daily)"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:334
+#: /src/schooltool/app/browser/configure.zcml:345
 msgid "Calendar (Daily, PDF)"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:344
+#: /src/schooltool/app/browser/configure.zcml:355
 msgid "Calendar (Weekly)"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:354
+#: /src/schooltool/app/browser/configure.zcml:365
 msgid "Calendar (Weekly, PDF)"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:364
+#: /src/schooltool/app/browser/configure.zcml:375
 msgid "Calendar (Monthly)"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:374
+#: /src/schooltool/app/browser/configure.zcml:385
 msgid "Calendar (Monthly, PDF)"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:384
+#: /src/schooltool/app/browser/configure.zcml:395
 msgid "Calendar (Yearly)"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:394
+#: /src/schooltool/app/browser/configure.zcml:405
 msgid "Atom View"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:404
+#: /src/schooltool/app/browser/configure.zcml:415
 msgid "iCalendar"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:414
+#: /src/schooltool/app/browser/configure.zcml:425
 msgid "Free/Busy"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:444
+#: /src/schooltool/app/browser/configure.zcml:454
+#: /src/schooltool/app/help/configure.zcml:77
 msgid "Add Event"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:463
+#: /src/schooltool/app/browser/configure.zcml:473
+#: /src/schooltool/app/help/configure.zcml:87
 msgid "Edit Event"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:530
+#: /src/schooltool/app/browser/configure.zcml:540
 msgid "Browser UI"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:536
+#: /src/schooltool/app/browser/configure.zcml:546
 #: /src/schooltool/app/browser/templates/login.pt:3
 msgid "Login"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:542
+#: /src/schooltool/app/browser/configure.zcml:552
 #: /src/schooltool/app/rest/configure.zcml:255
 #: /src/schooltool/devmode/devmode.pt:17
 msgid "Errors"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:554
-#: /src/schooltool/skin/templates/navigation.pt:2
+#: /src/schooltool/app/browser/configure.zcml:564
+#: /src/schooltool/skin/templates/navigation.pt:3
 msgid "Navigation"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:560
+#: /src/schooltool/app/browser/configure.zcml:570
 #: /src/schooltool/app/rest/configure.zcml:261
 msgid "Application"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:566
+#: /src/schooltool/app/browser/configure.zcml:576
 msgid "Calendar Widget"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:572
+#: /src/schooltool/app/browser/configure.zcml:582
 msgid "Templates"
 msgstr ""
 
@@ -685,10 +733,12 @@ msgstr ""
 msgid "Unknown charset"
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:205
 msgid "Error in CSV data, line ${line_no}"
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:209
 #: /src/schooltool/app/browser/csvimport.py:516
 msgid "Conversion to unicode failed in line ${line_no}"
@@ -698,21 +748,25 @@ msgstr ""
 msgid "Row 2 is not empty"
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:328
 msgid ""
 "Wrong section header on line ${line_no} (it should contain a course id and "
 "an instructor id)"
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:354
 msgid ""
 "Malformed line ${line_no} (it should contain a day id and a period id)"
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:377
 msgid "Incomplete section description on line ${line}"
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:382
 msgid "No students in section (line ${line})"
 msgstr ""
@@ -723,14 +777,17 @@ msgid ""
 "schema id."
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:473
 msgid "The term ${term} does not exist."
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:480
 msgid "The timetable schema ${schema} does not exist."
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:511
 msgid "Error in timetable CSV data, line ${line_no}"
 msgstr ""
@@ -760,7 +817,8 @@ msgid "Invalid records: ${args}."
 msgstr ""
 
 #: /src/schooltool/app/browser/overlay.py:209
-#: /src/schooltool/term/browser/term.py:144
+#: /src/schooltool/term/browser/term.py:164
+#: /src/schooltool/term/browser/term.py:169
 msgid "Saved changes."
 msgstr ""
 
@@ -780,23 +838,24 @@ msgstr ""
 msgid "recurrent"
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/app/browser/pdfcal.py:211
-msgid "overlaid from %s"
+msgid "from the calendar of ${calendar_owner}"
 msgstr ""
 
-#: /src/schooltool/app/browser/pdfcal.py:278
+#: /src/schooltool/app/browser/pdfcal.py:280
 msgid "Daily calendar for %s"
 msgstr ""
 
-#: /src/schooltool/app/browser/pdfcal.py:292
+#: /src/schooltool/app/browser/pdfcal.py:294
 msgid "Weekly calendar for %s"
 msgstr ""
 
-#: /src/schooltool/app/browser/pdfcal.py:298
+#: /src/schooltool/app/browser/pdfcal.py:300
 msgid "Week %d (%s - %s), %d"
 msgstr ""
 
-#: /src/schooltool/app/browser/pdfcal.py:317
+#: /src/schooltool/app/browser/pdfcal.py:319
 msgid "Monthly calendar for %s"
 msgstr ""
 
@@ -813,7 +872,7 @@ msgid "General preferences"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:34
-#: /src/schooltool/person/browser/person_preferences.pt:22
+#: /src/schooltool/person/browser/person_preferences.pt:28
 msgid "Calendar Preferences"
 msgstr ""
 
@@ -839,14 +898,17 @@ msgstr ""
 
 #. Default: ""
 #. "This is an Atom formatted XML site feed. It is intended to be viewed\n"
+#. "      in a Newsreader or syndicated to another site. Please visit"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:43
 msgid "atom_description"
 msgstr ""
 
+#. Default: "Atom Enabled"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:47
 msgid "atom_enabled"
 msgstr ""
 
+#. Default: "for more info."
 #: /src/schooltool/app/browser/templates/cal_atom.pt:50
 msgid "atom_more_info"
 msgstr ""
@@ -859,58 +921,186 @@ msgstr ""
 msgid "[Valid Atom]"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:120
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:128
 msgid "Jump To ..."
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:206
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:215
 msgid "Tomorrow's Events"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:29
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:34
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:30
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:35
 msgid "Printable version"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:34
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:41
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:47
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:53
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:59
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:35
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:42
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:48
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:54
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:60
 msgid "<img alt=\"x\" src=\"${DYNAMIC_CONTENT}\" />"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:37
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:38
 msgid "View daily calendar"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:41
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:4
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:11
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:18
+#: /src/schooltool/app/browser/templates/event.pt:3
+#: /src/schooltool/app/browser/templates/cal_daily.pt:40
+#: /src/schooltool/requirement/browser/requirement.pt:11
+#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:4
+#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:11
+#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:31
+#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:40
+#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:50
+#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:59
+#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:79
+#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:60
+#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:86
+#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:11
+#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:14
+#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:19
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:3
+#: /src/schooltool/timetable/browser/templates/specialday_select.pt:18
+#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:11
+#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:14
+#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:19
+#: /src/schooltool/timetable/browser/templates/ttwizard_choice.pt:12
+#: /src/schooltool/timetable/browser/templates/ttwizard_choice.pt:15
+#: /src/schooltool/timetable/browser/templates/specialday_change.pt:21
+#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:4
+#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:9
+#: /src/schooltool/timetable/browser/templates/simpletts.pt:25
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:11
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:14
+#: /src/schooltool/timetable/browser/templates/timetableschema.pt:3
+#: /src/schooltool/timetable/browser/templates/timetableschema.pt:8
+#: /src/schooltool/timetable/browser/templates/timetableschema.pt:24
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:11
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:14
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:19
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:4
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:12
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:27
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:32
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:48
+#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:11
+#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:14
+#: /src/schooltool/timetable/browser/templates/timetable-add.pt:25
+#: /src/schooltool/timetable/browser/templates/timetable-add.pt:34
+#: /src/schooltool/level/browser/record.pt:4
+#: /src/schooltool/level/browser/record.pt:19
+#: /src/schooltool/level/browser/record.pt:39
+#: /src/schooltool/level/browser/record.pt:61
+#: /src/schooltool/level/browser/promotion.pt:4
+#: /src/schooltool/level/browser/promotion.pt:15
+#: /src/schooltool/devmode/restdoc_macros.pt:53
+#: /src/schooltool/dashboard/dashboard_manager.pt:13
+#: /src/schooltool/help/helptopic.pt:7
+#: /src/schooltool/help/helptopic.pt:14
+#: /src/schooltool/course/browser/templates/course.pt:48
+#: /src/schooltool/course/browser/templates/course.pt:49
+#: /src/schooltool/course/browser/templates/course_container.pt:4
+#: /src/schooltool/course/browser/templates/course_container.pt:9
+#: /src/schooltool/course/browser/templates/course_container.pt:37
+#: /src/schooltool/course/browser/templates/course_container.pt:63
+#: /src/schooltool/course/browser/templates/coursesviewlet.pt:10
+#: /src/schooltool/course/browser/templates/section_container.pt:4
+#: /src/schooltool/course/browser/templates/section_container.pt:11
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:11
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:14
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:50
+#: /src/schooltool/course/browser/templates/section_edit.pt:14
+#: /src/schooltool/course/browser/templates/section_edit.pt:19
+#: /src/schooltool/course/browser/templates/section_add.pt:13
+#: /src/schooltool/skin/templates/simple_edit.pt:20
+#: /src/schooltool/skin/templates/simple_edit.pt:25
+#: /src/schooltool/skin/templates/navigationViewlet.pt:1
+#: /src/schooltool/skin/templates/actions.pt:6
+#: /src/schooltool/skin/templates/actions.pt:10
+#: /src/schooltool/skin/templates/simple_add.pt:18
+#: /src/schooltool/skin/templates/simple_add.pt:23
+#: /src/schooltool/skin/templates/view_macros.pt:74
+#: /src/schooltool/skin/templates/view_macros.pt:79
+#: /src/schooltool/skin/templates/container.pt:4
+#: /src/schooltool/skin/templates/container.pt:15
+#: /src/schooltool/skin/templates/widget_macros.pt:5
+#: /src/schooltool/skin/templates/widget_macros.pt:10
+#: /src/schooltool/skin/templates/table_container.pt:4
+#: /src/schooltool/skin/templates/table_container.pt:15
+#: /src/schooltool/demographics/browser/menu_macros.pt:6
+#: /src/schooltool/demographics/browser/table.pt:4
+#: /src/schooltool/demographics/browser/table.pt:10
+#: /src/schooltool/person/browser/person_edit.pt:24
+#: /src/schooltool/person/browser/person_edit.pt:26
+#: /src/schooltool/person/browser/person-csvimport.pt:18
+#: /src/schooltool/person/browser/person-csvimport.pt:21
+#: /src/schooltool/attendance/browser/templates/controlpanel.pt:39
+#: /src/schooltool/attendance/browser/templates/controlpanelViewlet.pt:1
+#: /src/schooltool/attendance/browser/templates/real_time.pt:4
+#: /src/schooltool/attendance/browser/templates/real_time.pt:11
+#: /src/schooltool/attendance/browser/templates/real_time.pt:15
+#: /src/schooltool/attendance/browser/templates/real_time.pt:26
+#: /src/schooltool/attendance/browser/templates/no_section_meeting.pt:4
+#: /src/schooltool/attendance/browser/templates/no_section_meeting.pt:11
+#: /src/schooltool/attendance/browser/templates/student-attendance.pt:4
+#: /src/schooltool/attendance/browser/templates/student-attendance.pt:24
+#: /src/schooltool/attendance/browser/templates/student-attendance.pt:28
+#: /src/schooltool/attendance/browser/templates/student-attendance.pt:47
+#: /src/schooltool/attendance/browser/templates/student-attendance.pt:90
+#: /src/schooltool/attendance/browser/templates/student-attendance.pt:121
+#: /src/schooltool/attendance/browser/templates/student-attendance.pt:154
+#: /src/schooltool/attendance/browser/templates/retro.pt:4
+#: /src/schooltool/attendance/browser/templates/retro.pt:11
+#: /src/schooltool/attendance/browser/templates/retro.pt:15
+#: /src/schooltool/attendance/browser/templates/retro.pt:26
+#: /src/schooltool/attendance/browser/templates/retro.pt:78
+#: /src/schooltool/term/browser/emergency_select.pt:18
+#: /src/schooltool/term/browser/emergency2.pt:20
+#: /src/schooltool/term/browser/term_add_edit.pt:4
+#: /src/schooltool/term/browser/term_add_edit.pt:25
+#: /src/schooltool/term/browser/term_add_edit.pt:33
+#: /src/schooltool/term/browser/term_add_edit.pt:115
+#: /src/schooltool/term/browser/term_basic_add_edit.pt:4
+#: /src/schooltool/term/browser/term_basic_add_edit.pt:8
+#: /src/schooltool/term/browser/term_basic_add_edit.pt:15
+#: /src/schooltool/term/browser/term.pt:26
+#: /src/schooltool/schoolyear/templates/schoolyear_container.pt:3
+#: /src/schooltool/schoolyear/templates/schoolyear_container.pt:9
+msgid "${DYNAMIC_CONTENT}"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "Daily"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:43
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:44
 msgid "View weekly calendar"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:47
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:48
 #: /src/schooltool/app/browser/templates/event_add.pt:235
 msgid "Weekly"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:49
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:50
 msgid "View monthly calendar"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:55
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:56
 msgid "View yearly calendar"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:59
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:60
 msgid "Yearly"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:69
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:83
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:70
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:107
 msgid "Calendar for ${title} - ${calendar_title}"
 msgstr ""
 
@@ -931,7 +1121,7 @@ msgid "TT"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:26
-#: /src/schooltool/skin/templates/view_macros.pt:76
+#: /src/schooltool/skin/templates/view_macros.pt:82
 msgid "My Calendar"
 msgstr ""
 
@@ -981,85 +1171,100 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:84
 #: /src/schooltool/app/browser/templates/application_preferences.pt:56
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:43
+#: /src/schooltool/app/browser/templates/event_booking.pt:42
+#: /src/schooltool/app/browser/templates/event_booking.pt:57
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:19
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
 #: /src/schooltool/securitypolicy/browser/templates/access_control.pt:23
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:81
 #: /src/schooltool/course/browser/templates/section_edit.pt:51
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:90
 #: /src/schooltool/course/browser/templates/section_add.pt:64
 #: /src/schooltool/course/browser/templates/section_add.pt:69
 #: /src/schooltool/skin/templates/formlib_macros.pt:22
-#: /src/schooltool/skin/templates/simple_edit.pt:51
-#: /src/schooltool/skin/templates/simple_add.pt:55
+#: /src/schooltool/skin/templates/simple_edit.pt:57
+#: /src/schooltool/skin/templates/simple_add.pt:61
 #: /src/schooltool/note/note_add.pt:43
 #: /src/schooltool/demographics/browser/demographics_macros.pt:3
 #: /src/schooltool/demographics/browser/person_add.pt:8
-#: /src/schooltool/person/browser/person_preferences.pt:52
+#: /src/schooltool/person/browser/person_edit.pt:49
+#: /src/schooltool/person/browser/person_preferences.pt:58
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:70
+#: /src/schooltool/basicperson/browser/templates/person_add.pt:8
+#: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
 #: /src/schooltool/commendation/commendation_add.pt:33
+#: /src/schooltool/schoolyear/templates/schoolyear_add.pt:8
+#: /src/schooltool/schoolyear/templates/schoolyear_edit.pt:10
 msgid "A"
 msgstr ""
 
+#. Default: "Cancel"
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:87
 #: /src/schooltool/app/browser/templates/application_preferences.pt:59
-#: /src/schooltool/app/browser/templates/event_booking.pt:84
-#: /src/schooltool/app/browser/templates/event_add.pt:344
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:55
+#: /src/schooltool/app/browser/templates/event_add.pt:346
+#: /src/schooltool/resource/browser/container_delete.pt:29
 #: /src/schooltool/setupdata/setupdata.pt:25
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:67
-#: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:57
-#: /src/schooltool/gradebook/browser/gradebook_grade_activity.pt:61
+#: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:56
+#: /src/schooltool/gradebook/browser/gradebook_grade_activity.pt:60
 #: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:31
-#: /src/schooltool/timetable/browser/templates/simpletts.pt:63
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:109
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:42
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:65
+#: /src/schooltool/timetable/browser/templates/simpletts.pt:63
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:78
 #: /src/schooltool/sampledata/sampledata.pt:77
 #: /src/schooltool/securitypolicy/browser/templates/access_control.pt:26
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:93
 #: /src/schooltool/course/browser/templates/section_edit.pt:54
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:102
 #: /src/schooltool/course/browser/templates/section_add.pt:75
 #: /src/schooltool/skin/templates/formlib_macros.pt:25
-#: /src/schooltool/skin/templates/simple_edit.pt:54
-#: /src/schooltool/skin/templates/simple_add.pt:58
-#: /src/schooltool/skin/templates/container_delete.pt:29
+#: /src/schooltool/skin/templates/simple_edit.pt:60
+#: /src/schooltool/skin/templates/simple_add.pt:64
+#: /src/schooltool/skin/templates/container_delete.pt:34
 #: /src/schooltool/note/note_add.pt:46
 #: /src/schooltool/demographics/browser/demographics_macros.pt:9
 #: /src/schooltool/demographics/browser/person_add.pt:11
-#: /src/schooltool/person/browser/person_preferences.pt:55
-#: /src/schooltool/person/browser/person_container_delete.pt:32
+#: /src/schooltool/person/browser/person_edit.pt:52
+#: /src/schooltool/person/browser/person_preferences.pt:61
+#: /src/schooltool/person/browser/person_container_delete.pt:37
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:73
-#: /src/schooltool/term/browser/term-container-delete.pt:31
 #: /src/schooltool/term/browser/emergency_select.pt:42
 #: /src/schooltool/term/browser/emergency2.pt:43
+#: /src/schooltool/term/browser/term-container-delete.pt:31
+#: /src/schooltool/basicperson/browser/templates/person_add.pt:11
+#: /src/schooltool/basicperson/browser/templates/person_edit.pt:13
 #: /src/schooltool/commendation/commendation_add.pt:36
+#: /src/schooltool/schoolyear/templates/schoolyear_add.pt:11
+#: /src/schooltool/schoolyear/templates/schoolyear_edit.pt:13
 msgid "cancel-button"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:17
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:37
-msgid "R"
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:17
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:34
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:37
 msgid "Remove"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:23
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:34
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:37
+msgid "R"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:40
 #: /src/schooltool/gradebook/browser/activities_overview.pt:51
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:15
 #: /src/schooltool/course/browser/templates/course_container.pt:16
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:43
 #: /src/schooltool/course/browser/templates/section_container.pt:19
-#: /src/schooltool/skin/templates/container.pt:57
-#: /src/schooltool/skin/templates/table.pt:15
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:43
+#: /src/schooltool/skin/templates/container.pt:53
+#: /src/schooltool/skin/templates/table_container.pt:38
+#: /src/schooltool/demographics/browser/table.pt:34
+#: /src/schooltool/schoolyear/templates/schoolyear_container.pt:28
 msgid "There are none."
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:48
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:95
-msgid "There are none to add."
+#. Default: "OK"
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:47
+msgid "ok-button"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:15
@@ -1076,6 +1281,8 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
 #: /src/schooltool/level/browser/disconnectedlevelerror_info.pt:5
 #: /src/schooltool/level/browser/levellooperror_info.pt:5
+#: /src/schooltool/person/browser/person.pt:34
+#: /src/schooltool/basicperson/browser/templates/person_view.pt:27
 msgid "Details"
 msgstr ""
 
@@ -1150,74 +1357,98 @@ msgstr ""
 msgid "This section only applies when weekly recurrence is selected."
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_add.pt:258
+#: /src/schooltool/app/browser/templates/event_add.pt:257
 msgid "This section only applies when the monthly recurrence is selected."
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_add.pt:265
+#: /src/schooltool/app/browser/templates/event_add.pt:264
 msgid "Day ${monthday} of every month"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_add.pt:272
+#: /src/schooltool/app/browser/templates/event_add.pt:271
 msgid "${weekday} of every month"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_add.pt:279
-msgid "x of every month"
+#: /src/schooltool/app/browser/templates/event_add.pt:278
+msgid "${DYNAMIC_CONTENT} of every month"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_add.pt:289
+#: /src/schooltool/app/browser/templates/event_add.pt:288
 msgid "Repeat"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_add.pt:292
+#: /src/schooltool/app/browser/templates/event_add.pt:291
 msgid "times"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_add.pt:307
+#: /src/schooltool/app/browser/templates/event_add.pt:306
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:32
 #: /src/schooltool/term/browser/emergency_select.pt:32
 msgid "[popup calendar]"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_add.pt:325
+#: /src/schooltool/app/browser/templates/event_add.pt:324
 msgid "Repeat forever"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_add.pt:346
+#: /src/schooltool/app/browser/templates/event_add.pt:343
+msgid "Shortcut: Alt-A"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/event_add.pt:348
 msgid "Book resources"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:11
+#: /src/schooltool/app/browser/templates/event_booking.pt:12
 msgid "Resource Booking for ${title}"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:17
+#: /src/schooltool/app/browser/templates/event_booking.pt:18
 msgid "Title:"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:21
+#: /src/schooltool/app/browser/templates/event_booking.pt:22
 msgid "Starts:"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:25
+#: /src/schooltool/app/browser/templates/event_booking.pt:26
 msgid "Ends:"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:29
+#: /src/schooltool/app/browser/templates/event_booking.pt:30
 msgid "This is a recurring event!"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/event_booking.pt:38
+msgid "Booked resources"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:4
 msgid "Resource Booking"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:55
-msgid "Conflicting events"
+#: /src/schooltool/app/browser/templates/event_booking.pt:42
+msgid "UnBook"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:82
+#: /src/schooltool/app/browser/templates/event_booking.pt:51
+msgid "Available resources"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/event_booking.pt:57
 msgid "Book"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/event_booking.pt:61
+#: /src/schooltool/timetable/browser/templates/advancedtts.pt:51
+#: /src/schooltool/timetable/browser/templates/advancedtts.pt:155
+msgid "C"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/event_booking.pt:67
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:24
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:86
+msgid "There are none to add."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_info_viewlet.pt:12
@@ -1238,161 +1469,6 @@ msgstr ""
 msgid "Please log in"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/login.pt:29
-#: /src/schooltool/app/browser/templates/calendar_overlay.pt:36
-#: /src/schooltool/app/browser/templates/cal_monthly.pt:9
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:12
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:14
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:3
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:6
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:10
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:13
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:17
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:20
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:69
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:83
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:126
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:139
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:155
-#: /src/schooltool/app/browser/templates/cal_daily.pt:39
-#: /src/schooltool/app/browser/templates/event.pt:3
-#: /src/schooltool/app/browser/templates/calendar_selection.pt:19
-#: /src/schooltool/app/browser/templates/calendar_selection.pt:21
-#: /src/schooltool/app/browser/templates/cal_yearly.pt:16
-#: /src/schooltool/app/browser/templates/cal_yearly.pt:23
-#: /src/schooltool/app/browser/templates/event_add.pt:4
-#: /src/schooltool/app/browser/templates/event_add.pt:248
-#: /src/schooltool/app/browser/templates/event_add.pt:272
-#: /src/schooltool/app/browser/templates/event_add.pt:279
-#: /src/schooltool/app/browser/templates/event_add.pt:341
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:11
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:14
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:28
-#: /src/schooltool/app/browser/templates/event_info_viewlet.pt:14
-#: /src/schooltool/group/browser/group-csvimport.pt:13
-#: /src/schooltool/group/browser/group-csvimport.pt:16
-#: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:17
-#: /src/schooltool/gradebook/browser/gradebook_overview.pt:53
-#: /src/schooltool/gradebook/browser/gradebook_overview.pt:58
-#: /src/schooltool/gradebook/browser/categories.pt:19
-#: /src/schooltool/gradebook/browser/gradebook_grade_activity.pt:17
-#: /src/schooltool/requirement/browser/requirement.pt:4
-#: /src/schooltool/requirement/browser/requirement.pt:12
-#: /src/schooltool/requirement/browser/scoresystemwidget.pt:6
-#: /src/schooltool/requirement/browser/scoresystemwidget.pt:14
-#: /src/schooltool/requirement/browser/scoresystemwidget.pt:23
-#: /src/schooltool/requirement/browser/treenode.pt:1
-#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:11
-#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:14
-#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:19
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:99
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:152
-#: /src/schooltool/timetable/browser/templates/timetable.pt:3
-#: /src/schooltool/timetable/browser/templates/timetable.pt:8
-#: /src/schooltool/timetable/browser/templates/timetable.pt:21
-#: /src/schooltool/timetable/browser/templates/simpletts.pt:25
-#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:4
-#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:11
-#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:31
-#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:40
-#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:50
-#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:59
-#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:79
-#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:4
-#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:9
-#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:60
-#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:86
-#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:11
-#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:14
-#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:19
-#: /src/schooltool/timetable/browser/templates/specialday_select.pt:18
-#: /src/schooltool/timetable/browser/templates/ttwizard_choice.pt:12
-#: /src/schooltool/timetable/browser/templates/ttwizard_choice.pt:15
-#: /src/schooltool/timetable/browser/templates/specialday_change.pt:21
-#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:3
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:11
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:14
-#: /src/schooltool/timetable/browser/templates/timetableschema.pt:3
-#: /src/schooltool/timetable/browser/templates/timetableschema.pt:8
-#: /src/schooltool/timetable/browser/templates/timetableschema.pt:24
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:11
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:14
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:19
-#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:11
-#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:14
-#: /src/schooltool/level/browser/record.pt:4
-#: /src/schooltool/level/browser/record.pt:19
-#: /src/schooltool/level/browser/record.pt:39
-#: /src/schooltool/level/browser/record.pt:61
-#: /src/schooltool/level/browser/promotion.pt:4
-#: /src/schooltool/level/browser/promotion.pt:15
-#: /src/schooltool/devmode/restdoc_macros.pt:53
-#: /src/schooltool/dashboard/dashboard_manager.pt:13
-#: /src/schooltool/help/helptopic.pt:7
-#: /src/schooltool/help/helptopic.pt:14
-#: /src/schooltool/course/browser/templates/section_edit.pt:14
-#: /src/schooltool/course/browser/templates/section_edit.pt:19
-#: /src/schooltool/course/browser/templates/course.pt:48
-#: /src/schooltool/course/browser/templates/course.pt:49
-#: /src/schooltool/course/browser/templates/course_container.pt:4
-#: /src/schooltool/course/browser/templates/course_container.pt:9
-#: /src/schooltool/course/browser/templates/course_container.pt:44
-#: /src/schooltool/course/browser/templates/course_container.pt:70
-#: /src/schooltool/course/browser/templates/coursesviewlet.pt:8
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:11
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:14
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:50
-#: /src/schooltool/course/browser/templates/section_container.pt:4
-#: /src/schooltool/course/browser/templates/section_container.pt:11
-#: /src/schooltool/course/browser/templates/section_add.pt:13
-#: /src/schooltool/skin/templates/simple_edit.pt:14
-#: /src/schooltool/skin/templates/simple_edit.pt:19
-#: /src/schooltool/skin/templates/navigationViewlet.pt:1
-#: /src/schooltool/skin/templates/actionsViewlet.pt:2
-#: /src/schooltool/skin/templates/actions.pt:10
-#: /src/schooltool/skin/templates/simple_add.pt:12
-#: /src/schooltool/skin/templates/simple_add.pt:17
-#: /src/schooltool/skin/templates/view_macros.pt:42
-#: /src/schooltool/skin/templates/view_macros.pt:46
-#: /src/schooltool/skin/templates/view_macros.pt:68
-#: /src/schooltool/skin/templates/view_macros.pt:73
-#: /src/schooltool/skin/templates/container.pt:4
-#: /src/schooltool/skin/templates/container.pt:10
-#: /src/schooltool/skin/templates/widget_macros.pt:5
-#: /src/schooltool/skin/templates/widget_macros.pt:10
-#: /src/schooltool/demographics/browser/menu_macros.pt:6
-#: /src/schooltool/person/browser/person-csvimport.pt:13
-#: /src/schooltool/person/browser/person-csvimport.pt:16
-#: /src/schooltool/attendance/browser/templates/controlpanel.pt:48
-#: /src/schooltool/attendance/browser/templates/real_time.pt:4
-#: /src/schooltool/attendance/browser/templates/real_time.pt:11
-#: /src/schooltool/attendance/browser/templates/real_time.pt:15
-#: /src/schooltool/attendance/browser/templates/real_time.pt:26
-#: /src/schooltool/attendance/browser/templates/retro.pt:4
-#: /src/schooltool/attendance/browser/templates/retro.pt:11
-#: /src/schooltool/attendance/browser/templates/retro.pt:15
-#: /src/schooltool/attendance/browser/templates/retro.pt:26
-#: /src/schooltool/attendance/browser/templates/retro.pt:78
-#: /src/schooltool/attendance/browser/templates/controlpanelViewlet.pt:1
-#: /src/schooltool/attendance/browser/templates/no_section_meeting.pt:4
-#: /src/schooltool/attendance/browser/templates/no_section_meeting.pt:11
-#: /src/schooltool/attendance/browser/templates/student-attendance.pt:4
-#: /src/schooltool/attendance/browser/templates/student-attendance.pt:24
-#: /src/schooltool/attendance/browser/templates/student-attendance.pt:28
-#: /src/schooltool/attendance/browser/templates/student-attendance.pt:47
-#: /src/schooltool/attendance/browser/templates/student-attendance.pt:90
-#: /src/schooltool/attendance/browser/templates/student-attendance.pt:121
-#: /src/schooltool/attendance/browser/templates/student-attendance.pt:154
-#: /src/schooltool/term/browser/emergency_select.pt:18
-#: /src/schooltool/term/browser/emergency2.pt:20
-#: /src/schooltool/term/browser/term_add_edit.pt:4
-#: /src/schooltool/term/browser/term_add_edit.pt:25
-#: /src/schooltool/term/browser/term_add_edit.pt:33
-#: /src/schooltool/term/browser/term_add_edit.pt:115
-#: /src/schooltool/term/browser/term.pt:26
-msgid "${DYNAMIC_CONTENT}"
-msgstr ""
-
 #: /src/schooltool/app/browser/templates/login.pt:35
 msgid "User Information"
 msgstr ""
@@ -1409,92 +1485,112 @@ msgstr ""
 msgid "Your session has expired."
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/recevent_delete.pt:21
+#: /src/schooltool/app/browser/templates/recevent_delete.pt:19
 msgid "You are trying to delete a repeating event."
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/recevent_delete.pt:43
+#: /src/schooltool/app/browser/templates/recevent_delete.pt:4
+#: /src/schooltool/app/browser/templates/recevent_delete.pt:14
+msgid "Deleting a repeating event (${event_title})"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/recevent_delete.pt:41
 msgid "Current"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/recevent_delete.pt:45
+#: /src/schooltool/app/browser/templates/recevent_delete.pt:43
 msgid "Future"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/recevent_delete.pt:47
+#: /src/schooltool/app/browser/templates/recevent_delete.pt:45
 msgid "All"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/recevent_delete.pt:6
-#: /src/schooltool/app/browser/templates/recevent_delete.pt:16
-msgid "Deleting a repeating event (${event_title})"
+#: /src/schooltool/app/browser/templates/simple_event_delete.pt:18
+msgid "Are you sure you want to delete this event?"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/simple_event_delete.pt:30
+#: /src/schooltool/note/notes.pt:17
+msgid "Delete"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/simple_event_delete.pt:4
+#: /src/schooltool/app/browser/templates/simple_event_delete.pt:13
+msgid "Deleting an event (${event_title})"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:100
 #: /src/schooltool/resource/browser/resource-csvimport.pt:57
-#: /src/schooltool/group/browser/group-csvimport.pt:57
+#: /src/schooltool/group/browser/group-csvimport.pt:56
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:57
-#: /src/schooltool/person/browser/person-csvimport.pt:55
+#: /src/schooltool/person/browser/person-csvimport.pt:60
 msgid "Western (ISO-8859-15)"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:101
 #: /src/schooltool/resource/browser/resource-csvimport.pt:58
-#: /src/schooltool/group/browser/group-csvimport.pt:58
+#: /src/schooltool/group/browser/group-csvimport.pt:57
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:58
-#: /src/schooltool/person/browser/person-csvimport.pt:56
+#: /src/schooltool/person/browser/person-csvimport.pt:61
 msgid "Western (Windows-1252)"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:102
 #: /src/schooltool/resource/browser/resource-csvimport.pt:59
-#: /src/schooltool/group/browser/group-csvimport.pt:59
+#: /src/schooltool/group/browser/group-csvimport.pt:58
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:59
-#: /src/schooltool/person/browser/person-csvimport.pt:57
+#: /src/schooltool/person/browser/person-csvimport.pt:62
 msgid "Other (please specify)"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:106
 #: /src/schooltool/resource/browser/resource-csvimport.pt:63
-#: /src/schooltool/group/browser/group-csvimport.pt:63
+#: /src/schooltool/group/browser/group-csvimport.pt:62
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:63
-#: /src/schooltool/person/browser/person-csvimport.pt:61
+#: /src/schooltool/person/browser/person-csvimport.pt:66
 msgid "Other charset: ${other_charset}"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:110
 #: /src/schooltool/resource/browser/resource-csvimport.pt:67
-#: /src/schooltool/group/browser/group-csvimport.pt:67
+#: /src/schooltool/group/browser/group-csvimport.pt:66
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:67
-#: /src/schooltool/person/browser/person-csvimport.pt:65
+#: /src/schooltool/person/browser/person-csvimport.pt:70
 msgid "Input CSV Data"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:111
 #: /src/schooltool/resource/browser/resource-csvimport.pt:68
-#: /src/schooltool/group/browser/group-csvimport.pt:68
+#: /src/schooltool/group/browser/group-csvimport.pt:67
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:68
-#: /src/schooltool/person/browser/person-csvimport.pt:66
+#: /src/schooltool/person/browser/person-csvimport.pt:71
 msgid "CSV Data"
 msgstr ""
 
+#. Default: "Submit"
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:117
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:84
 #: /src/schooltool/app/browser/templates/application_preferences.pt:56
 #: /src/schooltool/resource/browser/resource-csvimport.pt:72
-#: /src/schooltool/group/browser/group-csvimport.pt:72
+#: /src/schooltool/group/browser/group-csvimport.pt:71
 #: /src/schooltool/level/browser/record.pt:29
 #: /src/schooltool/securitypolicy/browser/templates/access_control.pt:23
-#: /src/schooltool/course/browser/templates/section_edit.pt:51
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:72
+#: /src/schooltool/course/browser/templates/section_edit.pt:51
 #: /src/schooltool/skin/templates/formlib_macros.pt:22
-#: /src/schooltool/skin/templates/simple_edit.pt:51
+#: /src/schooltool/skin/templates/simple_edit.pt:57
 #: /src/schooltool/demographics/browser/demographics_macros.pt:3
 #: /src/schooltool/demographics/browser/demographics_macros.pt:6
 #: /src/schooltool/demographics/browser/person_add.pt:8
-#: /src/schooltool/person/browser/person-csvimport.pt:70
-#: /src/schooltool/person/browser/person_preferences.pt:52
+#: /src/schooltool/person/browser/person_edit.pt:49
+#: /src/schooltool/person/browser/person_preferences.pt:58
+#: /src/schooltool/person/browser/person-csvimport.pt:75
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:70
+#: /src/schooltool/basicperson/browser/templates/person_add.pt:8
+#: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
+#: /src/schooltool/schoolyear/templates/schoolyear_add.pt:8
+#: /src/schooltool/schoolyear/templates/schoolyear_edit.pt:10
 msgid "submit-button"
 msgstr ""
 
@@ -1533,9 +1629,9 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:49
 #: /src/schooltool/resource/browser/resource-csvimport.pt:29
-#: /src/schooltool/group/browser/group-csvimport.pt:30
+#: /src/schooltool/group/browser/group-csvimport.pt:29
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:29
-#: /src/schooltool/person/browser/person-csvimport.pt:29
+#: /src/schooltool/person/browser/person-csvimport.pt:34
 msgid "Example:"
 msgstr ""
 
@@ -1555,6 +1651,7 @@ msgstr ""
 #. "\"Wednesday\",\"C\"\n"
 #. "\"***\"\n"
 #. "\"johnny\"\n"
+#. "\"pete\""
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:51
 msgid ""
 "\n"
@@ -1598,41 +1695,41 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:89
 #: /src/schooltool/resource/browser/resource-csvimport.pt:46
-#: /src/schooltool/group/browser/group-csvimport.pt:46
+#: /src/schooltool/group/browser/group-csvimport.pt:45
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:46
-#: /src/schooltool/person/browser/person-csvimport.pt:44
+#: /src/schooltool/person/browser/person-csvimport.pt:49
 msgid "Upload CSV File"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:91
 #: /src/schooltool/resource/browser/resource-csvimport.pt:48
-#: /src/schooltool/group/browser/group-csvimport.pt:48
+#: /src/schooltool/group/browser/group-csvimport.pt:47
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:48
-#: /src/schooltool/person/browser/person-csvimport.pt:46
+#: /src/schooltool/person/browser/person-csvimport.pt:51
 msgid "CSV File"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:96
 #: /src/schooltool/resource/browser/resource-csvimport.pt:53
-#: /src/schooltool/group/browser/group-csvimport.pt:53
+#: /src/schooltool/group/browser/group-csvimport.pt:52
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:53
-#: /src/schooltool/person/browser/person-csvimport.pt:51
+#: /src/schooltool/person/browser/person-csvimport.pt:56
 msgid "Charset:"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:98
 #: /src/schooltool/resource/browser/resource-csvimport.pt:55
-#: /src/schooltool/group/browser/group-csvimport.pt:55
+#: /src/schooltool/group/browser/group-csvimport.pt:54
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:55
-#: /src/schooltool/person/browser/person-csvimport.pt:53
+#: /src/schooltool/person/browser/person-csvimport.pt:58
 msgid "Unicode (UTF-8)"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:99
 #: /src/schooltool/resource/browser/resource-csvimport.pt:56
-#: /src/schooltool/group/browser/group-csvimport.pt:56
+#: /src/schooltool/group/browser/group-csvimport.pt:55
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:56
-#: /src/schooltool/person/browser/person-csvimport.pt:54
+#: /src/schooltool/person/browser/person-csvimport.pt:59
 msgid "Western (ISO-8859-1)"
 msgstr ""
 
@@ -1640,16 +1737,48 @@ msgstr ""
 msgid "Calendar for %s"
 msgstr ""
 
-#: /src/schooltool/app/configure.zcml:293
+#: /src/schooltool/app/configure.zcml:302
 msgid "Security (General)"
 msgstr ""
 
-#: /src/schooltool/app/configure.zcml:308
+#: /src/schooltool/app/configure.zcml:317
 msgid "Booking Resources"
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:124
-#: /src/schooltool/app/interfaces.py:135
+#: /src/schooltool/app/help/configure.zcml:13
+msgid "Administration"
+msgstr ""
+
+#: /src/schooltool/app/help/configure.zcml:21
+msgid "Organization"
+msgstr ""
+
+#: /src/schooltool/app/help/configure.zcml:29
+msgid "Calendaring"
+msgstr ""
+
+#: /src/schooltool/app/help/configure.zcml:37
+msgid "Daily Calendar"
+msgstr ""
+
+#: /src/schooltool/app/help/configure.zcml:47
+msgid "Weekly Calendar"
+msgstr ""
+
+#: /src/schooltool/app/help/configure.zcml:57
+msgid "Monthly Calendar"
+msgstr ""
+
+#: /src/schooltool/app/help/configure.zcml:67
+msgid "Yearly Calendar"
+msgstr ""
+
+#: /src/schooltool/app/help/configure.zcml:97
+msgid "Calendar Selection"
+msgstr ""
+
+#: /src/schooltool/app/interfaces.py:134
+#: /src/schooltool/app/interfaces.py:145
 msgid ""
 "The name for the school or organization running\n"
 "            this server.  This will be displayed on the public calendar, "
@@ -1657,21 +1786,21 @@ msgid ""
 "            bottom of all pages and in the page title."
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:140
+#: /src/schooltool/app/interfaces.py:150
 msgid "Front Page Calendar"
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:141
+#: /src/schooltool/app/interfaces.py:151
 msgid ""
 "Display site-wide calendar as the front page of the\n"
 "            site."
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:158
+#: /src/schooltool/app/interfaces.py:168
 msgid "Show timetables"
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:159
+#: /src/schooltool/app/interfaces.py:169
 msgid ""
 "\n"
 "            An option that controls whether the timetable of this "
@@ -1680,40 +1809,55 @@ msgid ""
 "            "
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:42
+#: /src/schooltool/app/interfaces.py:41
 msgid "Required input is missing."
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:50
+#: /src/schooltool/app/interfaces.py:49
 msgid "Form input is not a file object"
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:51
-#: /src/schooltool/app/interfaces.py:55
+#: /src/schooltool/app/interfaces.py:50
+#: /src/schooltool/app/interfaces.py:54
 msgid "Invalid integer data"
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:52
+#: /src/schooltool/app/interfaces.py:51
 msgid "Invalid text data"
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:53
+#: /src/schooltool/app/interfaces.py:52
 msgid "Invalid textual data"
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:54
+#: /src/schooltool/app/interfaces.py:53
 msgid "Invalid unicode data"
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:56
+#: /src/schooltool/app/interfaces.py:55
 msgid "Invalid floating point data"
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:57
+#: /src/schooltool/app/interfaces.py:56
 msgid "Invalid datetime data"
 msgstr ""
 
-#: /src/schooltool/app/main.py:102
+#: /src/schooltool/app/main.py:101
+msgid ""
+"\n"
+"No storage defined in the configuration file.\n"
+"\n"
+"If you're using the default configuration file, please edit it now and\n"
+"uncomment one of the ZODB storage sections.\n"
+msgstr ""
+
+#: /src/schooltool/app/main.py:109
+msgid ""
+"\n"
+"This is not a SchoolTool 0.11 database file, aborting.\n"
+msgstr ""
+
+#: /src/schooltool/app/main.py:114
 msgid ""
 "\n"
 "This is not a SchoolTool 0.10 database file, aborting.\n"
@@ -1721,67 +1865,64 @@ msgid ""
 "Please run the standalone database upgrade script.\n"
 msgstr ""
 
-#: /src/schooltool/app/main.py:334
+#: /src/schooltool/app/main.py:346
 msgid "Going to background, daemon pid %d"
 msgstr ""
 
-#: /src/schooltool/app/main.py:389
-#: /src/schooltool/app/main.py:426
-#: /src/schooltool/app/main.py:429
+#: /src/schooltool/app/main.py:408
+#: /src/schooltool/app/main.py:445
+#: /src/schooltool/app/main.py:448
 msgid "%s: %s"
 msgstr ""
 
-#: /src/schooltool/app/main.py:390
+#: /src/schooltool/app/main.py:409
 msgid "Run %s -h for help."
 msgstr ""
 
-#: /src/schooltool/app/main.py:402
+#: /src/schooltool/app/main.py:421
 msgid "%s: daemon mode not supported on your operating system."
 msgstr ""
 
-#: /src/schooltool/app/main.py:421
+#: /src/schooltool/app/main.py:440
 msgid "Reading configuration from %s"
 msgstr ""
 
-#: /src/schooltool/app/main.py:473
-msgid "%s Manager"
-msgstr ""
-
-#: /src/schooltool/app/main.py:499
+#: /src/schooltool/app/main.py:545
 msgid "Startup time: %.3f sec real, %.3f sec CPU"
 msgstr ""
 
-#: /src/schooltool/app/main.py:537
+#. Default: ""
+#: /src/schooltool/app/main.py:583
 msgid ""
 "Could not initialize the database:\n"
 "%s"
 msgstr ""
 
-#: /src/schooltool/app/main.py:540
+#: /src/schooltool/app/main.py:586
 msgid ""
 "\n"
 "Perhaps another %s instance is using it?"
 msgstr ""
 
-#: /src/schooltool/app/main.py:608
+#: /src/schooltool/app/main.py:654
 msgid ""
 "Warning: could not find the reportlab library.\n"
 "PDF support disabled."
 msgstr ""
 
-#: /src/schooltool/app/main.py:613
+#: /src/schooltool/app/main.py:659
 msgid ""
 "Warning: font directory '%s' does not exist.\n"
 "PDF support disabled."
 msgstr ""
 
-#: /src/schooltool/app/main.py:621
+#: /src/schooltool/app/main.py:667
 msgid ""
 "Warning: font '%s' does not exist.\n"
 "PDF support disabled."
 msgstr ""
 
-#: /src/schooltool/app/main.py:75
+#: /src/schooltool/app/main.py:87
 msgid ""
 "\n"
 "Usage: %s [options]\n"
@@ -1798,27 +1939,12 @@ msgid ""
 "  --manage               only do management tasks, don't run the server\n"
 msgstr ""
 
-#: /src/schooltool/app/main.py:89
-msgid ""
-"\n"
-"No storage defined in the configuration file.\n"
-"\n"
-"If you're using the default configuration file, please edit it now and\n"
-"uncomment one of the ZODB storage sections.\n"
-msgstr ""
-
-#: /src/schooltool/app/main.py:97
-msgid ""
-"\n"
-"This is not a SchoolTool 0.11 database file, aborting.\n"
-msgstr ""
-
 #: /src/schooltool/app/rest/configure.zcml:244
 msgid "REST Interface"
 msgstr ""
 
 #: /src/schooltool/app/rest/templates/aoc.pt:10
-#: /src/schooltool/resource/rest/resource.pt:11
+#: /src/schooltool/resource/rest/resource.pt:10
 #: /src/schooltool/group/rest/group.pt:11
 #: /src/schooltool/level/rest/level.pt:12
 #: /src/schooltool/course/rest/course.pt:10
@@ -1831,28 +1957,30 @@ msgstr ""
 msgid "Welcome to the SchoolTool server"
 msgstr ""
 
-#: /src/schooltool/app/security.zcml:61
+#: /src/schooltool/app/security.zcml:66
 msgid "Everyone can view the application calendar."
 msgstr ""
 
-#: /src/schooltool/attendance/attendance.py:391
+#: /src/schooltool/attendance/attendance.py:388
 msgid "Explanation was accepted."
 msgstr ""
 
-#: /src/schooltool/attendance/attendance.py:393
+#: /src/schooltool/attendance/attendance.py:390
 msgid "Is not explanained yet."
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/attendance/attendance.py:513
 msgid "Was late for ${section} (${mins} minutes)."
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/attendance/attendance.py:519
 msgid "Was absent from ${section}."
 msgstr ""
 
 #: /src/schooltool/attendance/browser/attendance.py:428
-#: /src/schooltool/attendance/browser/attendance.py:754
+#: /src/schooltool/attendance/browser/attendance.py:755
 msgid "The arrival time you entered is invalid.  Please use HH:MM format"
 msgstr ""
 
@@ -1870,55 +1998,66 @@ msgstr ""
 msgid "You are not allowed to modify attendance information."
 msgstr ""
 
-#: /src/schooltool/attendance/browser/attendance.py:681
+#. Default: ""
+#: /src/schooltool/attendance/browser/attendance.py:682
 msgid "Added an explanation for $absence"
 msgstr ""
 
-#: /src/schooltool/attendance/browser/attendance.py:689
+#. Default: ""
+#: /src/schooltool/attendance/browser/attendance.py:690
 msgid "Resolved $absence"
 msgstr ""
 
-#: /src/schooltool/attendance/browser/attendance.py:692
+#. Default: ""
+#: /src/schooltool/attendance/browser/attendance.py:693
 msgid "Rejected explanation for $absence"
 msgstr ""
 
-#: /src/schooltool/attendance/browser/attendance.py:696
+#. Default: ""
+#: /src/schooltool/attendance/browser/attendance.py:697
 msgid "Made $absence a tardy"
 msgstr ""
 
-#: /src/schooltool/attendance/browser/attendance.py:707
+#. Default: ""
+#: /src/schooltool/attendance/browser/attendance.py:708
 msgid ""
 "Cannot add new explanation for $absence: old explanation not "
 "accepted/rejected"
 msgstr ""
 
-#: /src/schooltool/attendance/browser/attendance.py:718
+#. Default: ""
+#: /src/schooltool/attendance/browser/attendance.py:719
 msgid "There are no outstanding explanations to accept for $absence"
 msgstr ""
 
-#: /src/schooltool/attendance/browser/attendance.py:729
+#. Default: ""
+#: /src/schooltool/attendance/browser/attendance.py:730
 msgid "There are no outstanding explanations to reject for $absence"
 msgstr ""
 
-#: /src/schooltool/attendance/browser/attendance.py:745
+#. Default: ""
+#: /src/schooltool/attendance/browser/attendance.py:746
 msgid ""
 "$absence is not a homeroom absence, only homeroom absences can be converted "
 "into tardies"
 msgstr ""
 
-#: /src/schooltool/attendance/browser/attendance.py:762
+#. Default: ""
+#: /src/schooltool/attendance/browser/attendance.py:763
 msgid "Could not convert $absence absence intoa homeroom tardy"
 msgstr ""
 
-#: /src/schooltool/attendance/browser/attendance.py:795
+#: /src/schooltool/attendance/browser/attendance.py:796
 msgid "homeroom"
 msgstr ""
 
-#: /src/schooltool/attendance/browser/attendance.py:807
+#. Default: ""
+#: /src/schooltool/attendance/browser/attendance.py:808
 msgid "$date $time: absent from $section"
 msgstr ""
 
-#: /src/schooltool/attendance/browser/attendance.py:809
+#. Default: ""
+#: /src/schooltool/attendance/browser/attendance.py:810
 msgid "$date $time: late for $section, arrived on $late_arrival"
 msgstr ""
 
@@ -1938,6 +2077,10 @@ msgstr ""
 msgid "Attendance Panel"
 msgstr ""
 
+#: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:23
+msgid "Code"
+msgstr ""
+
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:4
 #: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:12
 msgid "Attendance preferences"
@@ -1951,15 +2094,15 @@ msgstr ""
 msgid "Students with unresolved absences"
 msgstr ""
 
-#: /src/schooltool/attendance/browser/templates/controlpanel.pt:41
+#: /src/schooltool/attendance/browser/templates/controlpanel.pt:32
 msgid "Person"
 msgstr ""
 
-#: /src/schooltool/attendance/browser/templates/controlpanel.pt:42
+#: /src/schooltool/attendance/browser/templates/controlpanel.pt:33
 msgid "Homeroom<br />absences"
 msgstr ""
 
-#: /src/schooltool/attendance/browser/templates/controlpanel.pt:43
+#: /src/schooltool/attendance/browser/templates/controlpanel.pt:34
 msgid "Section<br />absences"
 msgstr ""
 
@@ -1996,8 +2139,8 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/attendance/browser/templates/real_time.pt:4
-#: /src/schooltool/attendance/browser/templates/retro.pt:4
 #: /src/schooltool/attendance/browser/templates/no_section_meeting.pt:4
+#: /src/schooltool/attendance/browser/templates/retro.pt:4
 msgid "${section} attendance"
 msgstr ""
 
@@ -2081,6 +2224,7 @@ msgstr ""
 msgid "Unresolved unexplained absences"
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/attendance/browser/tests/test_attendance.py:277
 msgid "$title"
 msgstr ""
@@ -2122,29 +2266,146 @@ msgid ""
 "            explanation."
 msgstr ""
 
-#: /src/schooltool/batching/macros.pt:28
-#: /src/schooltool/batching/macros.pt:35
-msgid "Previous"
+#: /src/schooltool/basicperson/browser/configure.zcml:24
+msgid "Export Persons as XML"
 msgstr ""
 
-#: /src/schooltool/batching/macros.pt:36
-msgid "&laquo; <span>x</span> <span>${DYNAMIC_CONTENT}</span>"
+#: /src/schooltool/basicperson/browser/configure.zcml:33
+msgid "Export Person as XML"
 msgstr ""
 
-#: /src/schooltool/batching/macros.pt:46
-#: /src/schooltool/batching/macros.pt:51
-#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:35
-#: /src/schooltool/timetable/browser/templates/ttwizard.pt:20
-#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:41
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:30
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:39
-#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:20
-#: /src/schooltool/term/browser/term_add_edit.pt:60
-msgid "Next"
+#: /src/schooltool/basicperson/browser/person.py:104
+msgid "This username is already in use!"
 msgstr ""
 
-#: /src/schooltool/batching/macros.pt:51
-msgid "<span>x</span> &raquo;"
+#: /src/schooltool/basicperson/browser/person.py:112
+#: /src/schooltool/demographics/browser/personform.py:296
+#: /src/schooltool/schoolyear/schoolyear.py:243
+msgid "Names cannot begin with '+' or '@' or contain '/'"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:117
+#: /src/schooltool/basicperson/browser/person.py:165
+#: /src/schooltool/demographics/browser/personform.py:93
+#: /src/schooltool/demographics/browser/personform.py:286
+#: /src/schooltool/person/browser/person.py:176
+#: /src/schooltool/schoolyear/schoolyear.py:234
+#: /src/schooltool/schoolyear/schoolyear.py:282
+#: /src/schooltool/skin/form.py:55
+#: /src/schooltool/timetable/browser/event.py:74
+#: /src/schooltool/app/browser/templates/calendar_overlay.pt:46
+msgid "Apply"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:135
+#: /src/schooltool/basicperson/browser/person.py:169
+#: /src/schooltool/demographics/browser/personform.py:108
+#: /src/schooltool/demographics/browser/personform.py:317
+#: /src/schooltool/person/browser/person.py:186
+#: /src/schooltool/schoolyear/schoolyear.py:265
+#: /src/schooltool/schoolyear/schoolyear.py:286
+#: /src/schooltool/skin/form.py:84
+#: /src/schooltool/timetable/browser/event.py:79
+#: /src/schooltool/app/browser/templates/recevent_delete.pt:47
+#: /src/schooltool/app/browser/templates/simple_event_delete.pt:32
+#: /src/schooltool/app/browser/templates/event_booking.pt:61
+#: /src/schooltool/timetable/browser/templates/ttwizard.pt:22
+#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:37
+#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:43
+#: /src/schooltool/timetable/browser/templates/ttwizard_choice.pt:20
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:32
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:41
+#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:22
+msgid "Cancel"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:174
+msgid "Change information for ${fullname}"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:60
+#: /src/schooltool/basicperson/browser/person.py:61
+#: /src/schooltool/demographics/browser/personform.py:269
+#: /src/schooltool/demographics/browser/personform.py:270
+#: /src/schooltool/demographics/browser/table.py:65
+#: /src/schooltool/person/browser/person.py:284
+#: /src/schooltool/person/browser/person.py:285
+#: /src/schooltool/person/interfaces.py:78
+#: /src/schooltool/app/browser/templates/login.pt:38
+msgid "Username"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:65
+#: /src/schooltool/demographics/browser/personform.py:274
+#: /src/schooltool/person/browser/person.py:165
+#: /src/schooltool/person/browser/person.py:288
+#: /src/schooltool/app/browser/templates/login.pt:44
+msgid "Password"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:91
+msgid "Add new person"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:39
+#: /src/schooltool/demographics/interfaces.py:49
+msgid "First name"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:44
+#: /src/schooltool/demographics/interfaces.py:59
+msgid "Last name"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:49
+#: /src/schooltool/demographics/interfaces.py:119
+msgid "Gender"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:50
+#: /src/schooltool/demographics/interfaces.py:120
+msgid "male"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:50
+#: /src/schooltool/demographics/interfaces.py:120
+msgid "female"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:55
+msgid "Email"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:60
+msgid "Phone"
+msgstr ""
+
+#. Default: "Group"
+#: /src/schooltool/basicperson/interfaces.py:65
+msgid "Grade/Class"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:71
+#: /src/schooltool/demographics/interfaces.py:125
+msgid "Birth date"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:72
+msgid "(yyyy-mm-dd)"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:77
+#: /src/schooltool/demographics/interfaces.py:205
+msgid "Advisor"
+msgstr ""
+
+#: /src/schooltool/basicperson/person.py:92
+msgid "First Name"
+msgstr ""
+
+#: /src/schooltool/basicperson/person.py:99
+msgid "Last Name"
 msgstr ""
 
 #: /src/schooltool/commendation/commendation_add.pt:13
@@ -2156,36 +2417,39 @@ msgid "Add Commendation"
 msgstr ""
 
 #: /src/schooltool/configure.zcml:92
-#: /src/schooltool/app/browser/configure.zcml:202
-#: /src/schooltool/app/browser/configure.zcml:434
+#: /src/schooltool/app/browser/configure.zcml:196
+#: /src/schooltool/app/browser/configure.zcml:444
+#: /src/schooltool/person/browser/configure.zcml:148
+#: /src/schooltool/person/browser/configure.zcml:178
+#: /src/schooltool/demographics/browser/configure.zcml:13
 #: /src/schooltool/group/browser/configure.zcml:16
-#: /src/schooltool/group/browser/configure.zcml:106
-#: /src/schooltool/resource/browser/configure.zcml:17
-#: /src/schooltool/resource/browser/configure.zcml:90
-#: /src/schooltool/demographics/browser/configure.zcml:28
-#: /src/schooltool/course/browser/configure.zcml:58
-#: /src/schooltool/course/browser/configure.zcml:69
-#: /src/schooltool/course/browser/configure.zcml:103
-#: /src/schooltool/course/browser/configure.zcml:113
+#: /src/schooltool/group/browser/configure.zcml:105
+#: /src/schooltool/resource/browser/configure.zcml:54
+#: /src/schooltool/course/browser/configure.zcml:59
+#: /src/schooltool/course/browser/configure.zcml:70
+#: /src/schooltool/course/browser/configure.zcml:104
+#: /src/schooltool/course/browser/configure.zcml:114
 #: /src/schooltool/level/browser/configure.zcml:10
-#: /src/schooltool/level/browser/configure.zcml:127
-#: /src/schooltool/requirement/browser/configure.zcml:46
-#: /src/schooltool/term/browser/configure.zcml:8
-#: /src/schooltool/term/browser/configure.zcml:20
-#: /src/schooltool/term/browser/configure.zcml:53
-#: /src/schooltool/timetable/browser/configure.zcml:55
-#: /src/schooltool/timetable/browser/configure.zcml:65
-#: /src/schooltool/timetable/browser/configure.zcml:103
-#: /src/schooltool/timetable/browser/configure.zcml:121
-#: /src/schooltool/timetable/browser/configure.zcml:130
+#: /src/schooltool/level/browser/configure.zcml:126
+#: /src/schooltool/requirement/browser/configure.zcml:67
+#: /src/schooltool/term/browser/configure.zcml:9
+#: /src/schooltool/term/browser/configure.zcml:43
+#: /src/schooltool/timetable/browser/configure.zcml:110
+#: /src/schooltool/timetable/browser/configure.zcml:120
+#: /src/schooltool/timetable/browser/configure.zcml:158
+#: /src/schooltool/timetable/browser/configure.zcml:176
+#: /src/schooltool/timetable/browser/configure.zcml:192
+#: /src/schooltool/basicperson/browser/configure.zcml:6
 msgid "View"
 msgstr ""
 
 #: /src/schooltool/configure.zcml:93
-#: /src/schooltool/group/browser/configure.zcml:39
-#: /src/schooltool/resource/browser/configure.zcml:40
-#: /src/schooltool/course/browser/configure.zcml:143
-#: /src/schooltool/level/browser/configure.zcml:53
+#: /src/schooltool/group/browser/configure.zcml:38
+#: /src/schooltool/resource/browser/configure.zcml:76
+#: /src/schooltool/resource/browser/configure.zcml:107
+#: /src/schooltool/resource/browser/configure.zcml:143
+#: /src/schooltool/course/browser/configure.zcml:144
+#: /src/schooltool/level/browser/configure.zcml:52
 #: /src/schooltool/level/browser/level.pt:35
 #: /src/schooltool/level/browser/level.pt:35
 msgid "Edit Info"
@@ -2199,120 +2463,118 @@ msgstr ""
 msgid "Edit Calendar Overlays"
 msgstr ""
 
-#: /src/schooltool/course/browser/configure.zcml:130
+#: /src/schooltool/course/browser/configure.zcml:10
+msgid "Add a Course"
+msgstr ""
+
+#: /src/schooltool/course/browser/configure.zcml:131
 msgid "Add a Section"
 msgstr ""
 
-#: /src/schooltool/course/browser/configure.zcml:143
+#: /src/schooltool/course/browser/configure.zcml:144
 msgid "Edit Section Information"
 msgstr ""
 
-#: /src/schooltool/course/browser/configure.zcml:22
+#: /src/schooltool/course/browser/configure.zcml:23
+#: /src/schooltool/course/help/configure.zcml:8
 #: /src/schooltool/app/browser/templates/index.pt:12
 #: /src/schooltool/dashboard/term.pt:4
 #: /src/schooltool/course/browser/templates/section_container.pt:26
 msgid "Courses"
 msgstr ""
 
-#: /src/schooltool/course/browser/configure.zcml:34
+#: /src/schooltool/course/browser/configure.zcml:35
 #: /src/schooltool/dashboard/term.pt:10
 #: /src/schooltool/course/browser/templates/course.pt:18
 msgid "Sections"
 msgstr ""
 
-#: /src/schooltool/course/browser/configure.zcml:85
+#: /src/schooltool/course/browser/configure.zcml:86
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:21
 msgid "Import Courses"
 msgstr ""
 
-#: /src/schooltool/course/browser/configure.zcml:9
-msgid "Add a Course"
-msgstr ""
-
-#: /src/schooltool/course/browser/configure.zcml:96
+#: /src/schooltool/course/browser/configure.zcml:97
 msgid "New Course"
 msgstr ""
 
-#: /src/schooltool/course/browser/course.py:40
+#: /src/schooltool/course/browser/course.py:43
 msgid "Course index"
 msgstr "فهرس الدروس"
 
 #: /src/schooltool/course/browser/csvimport.py:39
 #: /src/schooltool/group/browser/csvimport.py:39
 #: /src/schooltool/person/browser/csvimport.py:43
-#: /src/schooltool/resource/browser/csvimport.py:39
+#: /src/schooltool/resource/browser/csvimport.py:46
 msgid "Insufficient data provided."
 msgstr ""
 
 #: /src/schooltool/course/browser/csvimport.py:43
 #: /src/schooltool/group/browser/csvimport.py:43
-#: /src/schooltool/resource/browser/csvimport.py:43
+#: /src/schooltool/resource/browser/csvimport.py:50
 msgid "Titles may not be empty"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:119
+#: /src/schooltool/course/browser/section.py:116
 msgid "No such course."
 msgstr "هذا الدرس غير متوفر"
 
-#: /src/schooltool/course/browser/section.py:129
+#: /src/schooltool/course/browser/section.py:124
 msgid "Need a course ID."
 msgstr "تحتاج لرقم الدرس"
 
-#: /src/schooltool/course/browser/section.py:134
-msgid "Add a Section to ${course}"
-msgstr ""
-
-#: /src/schooltool/course/browser/section.py:282
+#: /src/schooltool/course/browser/section.py:248
 #: /src/schooltool/course/browser/templates/section.pt:50
 #: /src/schooltool/course/browser/templates/section_container.pt:32
 msgid "Instructors"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:283
+#: /src/schooltool/course/browser/section.py:249
 msgid "Current Instructors"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:284
+#: /src/schooltool/course/browser/section.py:250
 msgid "Available Instructors"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:310
+#: /src/schooltool/course/browser/section.py:268
 #: /src/schooltool/gradebook/interfaces.py:75
+#: /src/schooltool/course/browser/templates/course_container.pt:45
+#: /src/schooltool/course/browser/templates/course_container.pt:70
 #: /src/schooltool/course/browser/templates/section.pt:69
-#: /src/schooltool/course/browser/templates/course_container.pt:52
-#: /src/schooltool/course/browser/templates/course_container.pt:77
 #: /src/schooltool/course/browser/templates/section_container.pt:77
 msgid "Students"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:311
+#: /src/schooltool/course/browser/section.py:269
 msgid "Current Students"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:312
+#: /src/schooltool/course/browser/section.py:270
 msgid "Available Students"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:342
-#: /src/schooltool/group/browser/configure.zcml:52
+#: /src/schooltool/course/browser/section.py:292
+#: /src/schooltool/group/help/configure.zcml:8
+#: /src/schooltool/group/browser/configure.zcml:51
 #: /src/schooltool/app/browser/templates/index.pt:13
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:56
 #: /src/schooltool/group/browser/groupsviewlet.pt:4
 msgid "Groups"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:343
-#: /src/schooltool/group/browser/group.py:61
+#: /src/schooltool/course/browser/section.py:293
+#: /src/schooltool/group/browser/group.py:60
 msgid "Current Groups"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:344
-#: /src/schooltool/group/browser/group.py:62
+#: /src/schooltool/course/browser/section.py:294
+#: /src/schooltool/group/browser/group.py:61
 msgid "Available Groups"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:366
-#: /src/schooltool/resource/browser/configure.zcml:54
+#: /src/schooltool/course/browser/section.py:316
+#: /src/schooltool/resource/browser/configure.zcml:161
 #: /src/schooltool/app/browser/templates/index.pt:14
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:70
 #: /src/schooltool/dashboard/school.pt:22
@@ -2320,16 +2582,15 @@ msgstr ""
 msgid "Resources"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:367
+#: /src/schooltool/course/browser/section.py:317
 msgid "Current Resources"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:368
-#: /src/schooltool/app/browser/templates/event_booking.pt:36
+#: /src/schooltool/course/browser/section.py:318
 msgid "Available Resources"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:74
+#: /src/schooltool/course/browser/section.py:67
 msgid "Section index"
 msgstr "قائمة الفصول"
 
@@ -2343,6 +2604,7 @@ msgstr ""
 #. Default: ""
 #. "Ancient History, Pre-history through 1000 A.D.\n"
 #. "US History\n"
+#. "World History, 1000 A.D. through the 20th century, text after a second comma"
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:31
 msgid ""
 "\n"
@@ -2367,6 +2629,8 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/course.pt:36
 #: /src/schooltool/demographics/browser/nameinfo_view.pt:11
+#: /src/schooltool/person/browser/person.pt:11
+#: /src/schooltool/basicperson/browser/templates/person_view.pt:11
 msgid "photo"
 msgstr ""
 
@@ -2379,14 +2643,14 @@ msgid "Sections Taught"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:27
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:80
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:71
 msgid ""
 "Conflict: <a href=\"${DYNAMIC_CONTENT}\">${DYNAMIC_CONTENT}</a> (${day_id}, "
 "${period_id})"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:32
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:85
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:76
 msgid "Conflict: <a href=\"${DYNAMIC_CONTENT}\">${DYNAMIC_CONTENT}</a>"
 msgstr ""
 
@@ -2431,7 +2695,7 @@ msgid "Change the students in this section by groups"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_add.pt:50
-#: /src/schooltool/skin/templates/simple_add.pt:45
+#: /src/schooltool/skin/templates/simple_add.pt:51
 msgid "Identifier (optional)"
 msgstr ""
 
@@ -2445,51 +2709,60 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:23
 #: /src/schooltool/course/browser/templates/section_add.pt:27
-#: /src/schooltool/skin/templates/simple_edit.pt:23
-#: /src/schooltool/skin/templates/simple_add.pt:22
+#: /src/schooltool/skin/templates/simple_edit.pt:29
+#: /src/schooltool/skin/templates/simple_add.pt:28
 msgid "There are ${num_errors} input errors."
 msgstr ""
 
-#: /src/schooltool/course/interfaces.py:37
+#: /src/schooltool/course/interfaces.py:38
 msgid "Title of the course."
 msgstr ""
 
-#: /src/schooltool/course/interfaces.py:42
+#: /src/schooltool/course/interfaces.py:43
 msgid "Description of the course."
 msgstr ""
 
-#: /src/schooltool/course/interfaces.py:65
+#: /src/schooltool/course/interfaces.py:66
 msgid "Label"
 msgstr ""
 
-#: /src/schooltool/course/interfaces.py:67
+#: /src/schooltool/course/interfaces.py:68
 msgid ""
 "An identifier for a section, made up of instructor\n"
 "            names, courses, and meeting time."
 msgstr ""
 
-#: /src/schooltool/course/interfaces.py:72
-#: /src/schooltool/attendance/browser/templates/attendance_preferences.pt:23
-msgid "Code"
+#: /src/schooltool/course/interfaces.py:75
+msgid "Title for the section."
 msgstr ""
 
-#: /src/schooltool/course/interfaces.py:74
-msgid "ID code for the section."
-msgstr ""
-
-#: /src/schooltool/course/interfaces.py:79
+#: /src/schooltool/course/interfaces.py:80
 msgid "Description of the section."
 msgstr ""
 
-#: /src/schooltool/course/section.py:63
-msgid "${instructors} -- ${courses}"
+#. Default: ""
+#: /src/schooltool/course/section.py:62
+msgid "${instructors} -- ${section_title}"
 msgstr ""
 
-#: /src/schooltool/course/security.zcml:50
+#: /src/schooltool/course/security.zcml:55
 msgid "Everyone can view section information and calendars"
 msgstr ""
 
-#: /src/schooltool/dashboard/dashboard.pt:120
+#: /src/schooltool/dashboard/configure.zcml:38
+msgid "My Sections"
+msgstr ""
+
+#: /src/schooltool/dashboard/configure.zcml:49
+msgid "Term Administration"
+msgstr ""
+
+#: /src/schooltool/dashboard/configure.zcml:60
+msgid "School Administration"
+msgstr ""
+
+#: /src/schooltool/dashboard/dashboard.pt:62
+#: /src/schooltool/dashboard/dashboard.pt:66
 msgid "Dashboard"
 msgstr ""
 
@@ -2502,169 +2775,113 @@ msgstr ""
 msgid "Weight"
 msgstr ""
 
-#: /src/schooltool/demographics/browser/configure.zcml:13
-msgid "New Person"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/configure.zcml:189
-msgid "Search"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/configure.zcml:199
+#: /src/schooltool/demographics/browser/configure.zcml:175
 msgid "Schooltool Person Menu"
+msgstr ""
+
+#: /src/schooltool/demographics/browser/configure.zcml:186
+#: /src/schooltool/demographics/browser/configure.zcml:247
+msgid "name info"
+msgstr ""
+
+#: /src/schooltool/demographics/browser/configure.zcml:192
+#: /src/schooltool/demographics/browser/configure.zcml:253
+msgid "demographics"
+msgstr ""
+
+#: /src/schooltool/demographics/browser/configure.zcml:198
+#: /src/schooltool/demographics/browser/configure.zcml:259
+msgid "schooldata"
+msgstr ""
+
+#: /src/schooltool/demographics/browser/configure.zcml:204
+#: /src/schooltool/demographics/browser/configure.zcml:265
+msgid "parent1"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/configure.zcml:210
 #: /src/schooltool/demographics/browser/configure.zcml:271
-msgid "name info"
+msgid "parent2"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/configure.zcml:216
 #: /src/schooltool/demographics/browser/configure.zcml:277
-msgid "demographics"
+msgid "emergency1"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/configure.zcml:222
 #: /src/schooltool/demographics/browser/configure.zcml:283
-msgid "schooldata"
+msgid "emergency2"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/configure.zcml:228
 #: /src/schooltool/demographics/browser/configure.zcml:289
-msgid "parent1"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/configure.zcml:234
-#: /src/schooltool/demographics/browser/configure.zcml:295
-msgid "parent2"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/configure.zcml:240
-#: /src/schooltool/demographics/browser/configure.zcml:301
-msgid "emergency1"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/configure.zcml:246
-#: /src/schooltool/demographics/browser/configure.zcml:307
-msgid "emergency2"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/configure.zcml:252
-#: /src/schooltool/demographics/browser/configure.zcml:313
 msgid "emergency3"
 msgstr ""
 
-#: /src/schooltool/demographics/browser/configure.zcml:260
+#: /src/schooltool/demographics/browser/configure.zcml:236
 msgid "Schooltool Person Display Menu"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/configure.zcml:37
-#: /src/schooltool/gradebook/browser/configure.zcml:51
-#: /src/schooltool/term/browser/configure.zcml:62
-msgid "Edit"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/demographics_macros.pt:6
 msgid "N"
 msgstr ""
 
-#: /src/schooltool/demographics/browser/personform.py:103
-msgid "Apply and Next"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/personform.py:114
-#: /src/schooltool/demographics/browser/personform.py:321
-#: /src/schooltool/person/browser/person.py:189
-#: /src/schooltool/skin/form.py:85
-#: /src/schooltool/timetable/browser/event.py:69
-#: /src/schooltool/app/browser/templates/recevent_delete.pt:49
-#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:37
-#: /src/schooltool/timetable/browser/templates/ttwizard.pt:22
-#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:43
-#: /src/schooltool/timetable/browser/templates/ttwizard_choice.pt:20
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:32
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:41
-#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:22
-msgid "Cancel"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/personform.py:157
+#. Default: ""
+#: /src/schooltool/demographics/browser/personform.py:151
 msgid "Change name information for ${fullname}"
 msgstr ""
 
-#: /src/schooltool/demographics/browser/personform.py:173
+#: /src/schooltool/demographics/browser/personform.py:167
 msgid "Change name"
 msgstr ""
 
-#: /src/schooltool/demographics/browser/personform.py:184
+#. Default: ""
+#: /src/schooltool/demographics/browser/personform.py:178
 msgid "Change demographics for ${fullname}"
 msgstr ""
 
-#: /src/schooltool/demographics/browser/personform.py:192
+#: /src/schooltool/demographics/browser/personform.py:186
 msgid "Demographics"
 msgstr ""
 
-#: /src/schooltool/demographics/browser/personform.py:203
+#. Default: ""
+#: /src/schooltool/demographics/browser/personform.py:197
 msgid "Change school data for ${fullname}"
 msgstr ""
 
-#: /src/schooltool/demographics/browser/personform.py:213
+#: /src/schooltool/demographics/browser/personform.py:207
 msgid "School data"
 msgstr ""
 
-#: /src/schooltool/demographics/browser/personform.py:231
+#. Default: ""
+#: /src/schooltool/demographics/browser/personform.py:225
 msgid "Change contact information for ${fullname}"
 msgstr ""
 
-#: /src/schooltool/demographics/browser/personform.py:239
+#: /src/schooltool/demographics/browser/personform.py:233
 msgid "Contact information"
 msgstr ""
 
-#: /src/schooltool/demographics/browser/personform.py:273
-#: /src/schooltool/demographics/browser/personform.py:274
-#: /src/schooltool/person/interfaces.py:78
-#: /src/schooltool/app/browser/templates/login.pt:38
-msgid "Username"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/personform.py:278
-#: /src/schooltool/person/browser/person.py:168
-#: /src/schooltool/app/browser/templates/login.pt:44
-msgid "Password"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/personform.py:293
+#: /src/schooltool/demographics/browser/personform.py:289
+#: /src/schooltool/person/browser/person.py:322
+#: /src/schooltool/schoolyear/schoolyear.py:237
 msgid "This username is already used!"
 msgstr ""
 
-#: /src/schooltool/demographics/browser/personform.py:300
-msgid "Names cannot begin with '+' or '@' or contain '/'"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/personform.py:354
+#: /src/schooltool/demographics/browser/personform.py:351
 msgid "Invalid teacher. Possible causes: deleted or renamed."
 msgstr ""
 
-#: /src/schooltool/demographics/browser/personform.py:386
+#: /src/schooltool/demographics/browser/personform.py:383
 msgid "Invalid group. Possible causes: deleted or renamed."
 msgstr ""
 
-#: /src/schooltool/demographics/browser/personform.py:99
-#: /src/schooltool/demographics/browser/personform.py:290
-#: /src/schooltool/person/browser/person.py:179
-#: /src/schooltool/skin/form.py:55
-#: /src/schooltool/timetable/browser/event.py:64
-#: /src/schooltool/app/browser/templates/calendar_overlay.pt:46
-msgid "Apply"
+#: /src/schooltool/demographics/browser/personform.py:97
+msgid "Apply and Next"
 msgstr ""
 
-#: /src/schooltool/demographics/browser/schooldata_view.pt:3
-#: /src/schooltool/demographics/browser/nameinfo_view.pt:3
-#: /src/schooltool/demographics/browser/display_form.pt:3
-msgid "Display"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/search.pt:31
+#: /src/schooltool/demographics/browser/search.pt:42
 msgid "There were no results."
 msgstr ""
 
@@ -2675,121 +2892,214 @@ msgid ""
 "name, use <em>*john*</em>."
 msgstr ""
 
-#: /src/schooltool/demographics/browser/table.pt:15
-msgid "There are no persons."
+#: /src/schooltool/demographics/browser/table.py:71
+#: /src/schooltool/demographics/interfaces.py:75
+#: /src/schooltool/person/browser/person.py:280
+#: /src/schooltool/person/browser/person.py:368
+#: /src/schooltool/person/interfaces.py:69
+msgid "Full name"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:120
-msgid "Gender"
+#: /src/schooltool/demographics/browser/table.py:76
+msgid "Birth"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:126
-msgid "Birth date"
+#: /src/schooltool/demographics/browser/table.py:82
+msgid "Enrollment"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:131
+#: /src/schooltool/demographics/browser/table.py:88
+msgid "Modified"
+msgstr ""
+
+#: /src/schooltool/demographics/browser/table.py:98
+#: /src/schooltool/demographics/browser/table.py:194
+#: /src/schooltool/person/browser/configure.zcml:168
+#: /src/schooltool/demographics/browser/configure.zcml:22
+#: /src/schooltool/gradebook/browser/configure.zcml:51
+#: /src/schooltool/term/browser/configure.zcml:52
+#: /src/schooltool/timetable/browser/configure.zcml:50
+#: /src/schooltool/basicperson/browser/configure.zcml:15
+msgid "Edit"
+msgstr ""
+
+#: /src/schooltool/demographics/browser/table.py:99
+#: /src/schooltool/demographics/browser/table.py:203
+#: /src/schooltool/demographics/browser/schooldata_view.pt:3
+#: /src/schooltool/demographics/browser/nameinfo_view.pt:3
+#: /src/schooltool/demographics/browser/display_form.pt:3
+msgid "Display"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:100
+msgid "English"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:101
+msgid "Spanish"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:102
+msgid "Chinese"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:103
+msgid "German"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:104
+msgid "Tagalog"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:105
+msgid "Vietnamese"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:106
+msgid "Italian"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:107
+msgid "Korean"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:108
+msgid "Russian"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:109
+msgid "Polish"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:110
+msgid "Arabic"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:130
 msgid "Ethnicity"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:137
+#: /src/schooltool/demographics/interfaces.py:136
 msgid "Primary language"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:143
+#: /src/schooltool/demographics/interfaces.py:142
 msgid "Special education"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:148
+#: /src/schooltool/demographics/interfaces.py:147
 msgid "Previous school"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:191
+#: /src/schooltool/demographics/interfaces.py:190
 msgid "ID"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:196
+#: /src/schooltool/demographics/interfaces.py:195
 msgid "Enrollment date"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:201
+#: /src/schooltool/demographics/interfaces.py:200
 msgid "Projected graduation year"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:206
-msgid "Advisor"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:212
+#: /src/schooltool/demographics/interfaces.py:211
 msgid "Team"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:218
+#: /src/schooltool/demographics/interfaces.py:217
 msgid "Health information"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:239
+#: /src/schooltool/demographics/interfaces.py:223
+msgid "parent"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:224
+msgid "guardian"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:225
+msgid "grandparent"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:226
+msgid "step-parent"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:227
+msgid "friend of family"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:228
+msgid "other"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:238
+#: /src/schooltool/demographics/utility.py:90
 #: /src/schooltool/gradebook/browser/gradebook_overview.pt:15
-#: /src/schooltool/gradebook/browser/gradebook_grade_activity.pt:32
+#: /src/schooltool/gradebook/browser/gradebook_grade_activity.pt:31
 #: /src/schooltool/attendance/browser/templates/real_time.pt:55
 #: /src/schooltool/attendance/browser/templates/retro.pt:35
 msgid "Name"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:244
+#: /src/schooltool/demographics/interfaces.py:243
 msgid "Relationship to student"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:250
+#: /src/schooltool/demographics/interfaces.py:249
 msgid "Street"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:255
+#: /src/schooltool/demographics/interfaces.py:254
 msgid "City"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:260
+#: /src/schooltool/demographics/interfaces.py:259
 msgid "State"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:265
+#: /src/schooltool/demographics/interfaces.py:264
 msgid "Postal code"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:270
+#: /src/schooltool/demographics/interfaces.py:269
 msgid "Home phone"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:275
+#: /src/schooltool/demographics/interfaces.py:274
 msgid "Work phone"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:280
+#: /src/schooltool/demographics/interfaces.py:279
 msgid "Cell phone"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:285
-#: /src/schooltool/note/configure.zcml:102
+#: /src/schooltool/demographics/interfaces.py:284
+#: /src/schooltool/resource/interfaces.py:55
+#: /src/schooltool/note/configure.zcml:131
 #: /src/schooltool/note/notes.pt:2
 msgid "Notes"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:295
+#: /src/schooltool/demographics/interfaces.py:294
 msgid "Text"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:296
+#: /src/schooltool/demographics/interfaces.py:295
 msgid "Full text search in name"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:301
+#: /src/schooltool/demographics/interfaces.py:300
 msgid "Name of parent"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:302
+#: /src/schooltool/demographics/interfaces.py:301
 msgid "Full text search in parent names"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:307
+#: /src/schooltool/demographics/interfaces.py:306
 msgid "Student ID"
 msgstr ""
 
@@ -2801,16 +3111,8 @@ msgstr ""
 msgid "Prefix such as Mr., Mrs."
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:49
-msgid "First name"
-msgstr ""
-
 #: /src/schooltool/demographics/interfaces.py:54
 msgid "Middle name"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:59
-msgid "Last name"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:64
@@ -2825,27 +3127,52 @@ msgstr ""
 msgid "Name by which the student prefers to be called"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:75
-#: /src/schooltool/person/interfaces.py:69
-msgid "Full name"
-msgstr ""
-
 #: /src/schooltool/demographics/interfaces.py:80
+#: /src/schooltool/person/browser/person.py:296
 #: /src/schooltool/person/interfaces.py:73
 msgid "Photo"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:82
+#: /src/schooltool/person/browser/person.py:298
 #: /src/schooltool/person/interfaces.py:75
 msgid "Photo (in JPEG format)"
 msgstr ""
 
-#: /src/schooltool/devmode/configure.zcml:89
-msgid "Configure"
+#: /src/schooltool/demographics/interfaces.py:92
+msgid "American Indian or Alaska Native"
 msgstr ""
 
-#: /src/schooltool/devmode/configure.zcml:97
+#: /src/schooltool/demographics/interfaces.py:93
+msgid "Asian"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:94
+msgid "Black or African American"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:95
+msgid "Native Hawaiian or Other Pacific Islander"
+msgstr ""
+
+#: /src/schooltool/demographics/interfaces.py:96
+msgid "White"
+msgstr ""
+
+#: /src/schooltool/demographics/overrides.zcml:22
+msgid "Search"
+msgstr ""
+
+#: /src/schooltool/demographics/utility.py:98
+msgid "Surname"
+msgstr ""
+
+#: /src/schooltool/devmode/configure.zcml:104
 msgid "Error List"
+msgstr ""
+
+#: /src/schooltool/devmode/configure.zcml:96
+msgid "Configure"
 msgstr ""
 
 #: /src/schooltool/devmode/devmode.pt:11
@@ -2908,31 +3235,18 @@ msgstr ""
 msgid "(inherited)"
 msgstr ""
 
-#: /src/schooltool/gradebook/browser/activities_overview.pt:46
-#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
-#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
-#: /src/schooltool/course/browser/templates/course_container.pt:59
-#: /src/schooltool/course/browser/templates/section_container.pt:83
-#: /src/schooltool/skin/templates/container.pt:46
-#: /src/schooltool/skin/templates/table.pt:10
-#: /src/schooltool/skin/templates/container_delete.pt:27
-#: /src/schooltool/demographics/browser/search.pt:26
-#: /src/schooltool/demographics/browser/table.pt:10
-#: /src/schooltool/person/browser/person_container_delete.pt:30
-#: /src/schooltool/term/browser/term-container-delete.pt:29
-msgid "delete-button"
-msgstr ""
-
-#: /src/schooltool/gradebook/browser/categories.pt:27
+#. Default: "Remove"
+#: /src/schooltool/gradebook/browser/categories.pt:26
 #: /src/schooltool/level/browser/record.pt:71
 #: /src/schooltool/level/browser/record.pt:86
 msgid "remove-button"
 msgstr ""
 
-#: /src/schooltool/gradebook/browser/categories.pt:36
+#. Default: "Add"
+#: /src/schooltool/gradebook/browser/categories.pt:35
 #: /src/schooltool/course/browser/templates/section_add.pt:64
 #: /src/schooltool/course/browser/templates/section_add.pt:69
-#: /src/schooltool/skin/templates/simple_add.pt:55
+#: /src/schooltool/skin/templates/simple_add.pt:61
 #: /src/schooltool/note/note_add.pt:43
 #: /src/schooltool/commendation/commendation_add.pt:33
 msgid "add-button"
@@ -2943,7 +3257,8 @@ msgstr ""
 msgid "Manage Activity Categories"
 msgstr ""
 
-#: /src/schooltool/gradebook/browser/categories.pt:45
+#. Default: "Change"
+#: /src/schooltool/gradebook/browser/categories.pt:44
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
 msgid "change-button"
 msgstr ""
@@ -2978,8 +3293,8 @@ msgstr ""
 
 #: /src/schooltool/gradebook/browser/configure.zcml:121
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:5
-#: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:5
 #: /src/schooltool/gradebook/browser/gradebook_overview.pt:5
+#: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:5
 #: /src/schooltool/gradebook/browser/gradebook_grade_activity.pt:5
 msgid "Gradebook"
 msgstr ""
@@ -3018,10 +3333,12 @@ msgstr ""
 msgid "N/A"
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/gradebook/browser/gradebook.py:170
 msgid "The grade $value for activity $name is not valid."
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/gradebook/browser/gradebook.py:238
 msgid "The grade $value for $name is not valid."
 msgstr ""
@@ -3055,16 +3372,17 @@ msgstr ""
 msgid "Max. Score"
 msgstr ""
 
+#. Default: "Update"
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:61
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:64
-#: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:54
-#: /src/schooltool/gradebook/browser/gradebook_grade_activity.pt:58
+#: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:53
+#: /src/schooltool/gradebook/browser/gradebook_grade_activity.pt:57
 msgid "update-button"
 msgstr ""
 
 #: /src/schooltool/gradebook/browser/gradebook_grade.pt:61
-#: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:54
-#: /src/schooltool/gradebook/browser/gradebook_grade_activity.pt:58
+#: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:53
+#: /src/schooltool/gradebook/browser/gradebook_grade_activity.pt:57
 msgid "U"
 msgstr ""
 
@@ -3077,7 +3395,7 @@ msgstr ""
 msgid "Grade ${name}"
 msgstr ""
 
-#: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:32
+#: /src/schooltool/gradebook/browser/gradebook_grade_student.pt:31
 msgid "Activity"
 msgstr ""
 
@@ -3086,44 +3404,44 @@ msgstr ""
 msgid "(sort)"
 msgstr ""
 
-#: /src/schooltool/gradebook/category.py:60
-msgid "Assignment"
-msgstr ""
-
-#: /src/schooltool/gradebook/category.py:61
-msgid "Essay"
-msgstr ""
-
-#: /src/schooltool/gradebook/category.py:62
-msgid "Exam"
-msgstr ""
-
-#: /src/schooltool/gradebook/category.py:63
-msgid "Homework"
-msgstr ""
-
-#: /src/schooltool/gradebook/category.py:64
-msgid "Journal"
-msgstr ""
-
-#: /src/schooltool/gradebook/category.py:65
-msgid "Lab"
-msgstr ""
-
-#: /src/schooltool/gradebook/category.py:66
-msgid "Presentation"
-msgstr ""
-
-#: /src/schooltool/gradebook/category.py:67
-msgid "Project"
-msgstr ""
-
 #: /src/schooltool/gradebook/configure.zcml:138
 msgid "Gradebook API"
 msgstr ""
 
 #: /src/schooltool/gradebook/configure.zcml:148
 msgid "Administration can grade students"
+msgstr ""
+
+#: /src/schooltool/gradebook/gradebook.py:186
+msgid "Assignment"
+msgstr ""
+
+#: /src/schooltool/gradebook/gradebook.py:187
+msgid "Essay"
+msgstr ""
+
+#: /src/schooltool/gradebook/gradebook.py:188
+msgid "Exam"
+msgstr ""
+
+#: /src/schooltool/gradebook/gradebook.py:189
+msgid "Homework"
+msgstr ""
+
+#: /src/schooltool/gradebook/gradebook.py:190
+msgid "Journal"
+msgstr ""
+
+#: /src/schooltool/gradebook/gradebook.py:191
+msgid "Lab"
+msgstr ""
+
+#: /src/schooltool/gradebook/gradebook.py:192
+msgid "Presentation"
+msgstr ""
+
+#: /src/schooltool/gradebook/gradebook.py:193
+msgid "Project"
 msgstr ""
 
 #: /src/schooltool/gradebook/interfaces.py:39
@@ -3158,40 +3476,40 @@ msgstr ""
 msgid "Students in this gradebook."
 msgstr ""
 
-#: /src/schooltool/group/browser/configure.zcml:116
+#: /src/schooltool/group/browser/configure.zcml:115
 msgid "Add/Remove Members"
 msgstr ""
 
-#: /src/schooltool/group/browser/configure.zcml:125
-#: /src/schooltool/group/browser/group-csvimport.pt:22
+#: /src/schooltool/group/browser/configure.zcml:124
+#: /src/schooltool/group/browser/group-csvimport.pt:21
 msgid "Import Groups"
 msgstr "تحميل المجموعات"
 
-#: /src/schooltool/group/browser/configure.zcml:26
+#: /src/schooltool/group/browser/configure.zcml:25
 msgid "Add a Group"
 msgstr ""
 
-#: /src/schooltool/group/browser/configure.zcml:39
+#: /src/schooltool/group/browser/configure.zcml:38
 msgid "Edit Group Information"
 msgstr ""
 
-#: /src/schooltool/group/browser/configure.zcml:76
+#: /src/schooltool/group/browser/configure.zcml:75
 msgid "Change Membership"
 msgstr ""
 
-#: /src/schooltool/group/browser/configure.zcml:91
+#: /src/schooltool/group/browser/configure.zcml:90
 msgid "New Group"
 msgstr ""
 
-#: /src/schooltool/group/browser/configure.zcml:98
+#: /src/schooltool/group/browser/configure.zcml:97
 msgid "A Group"
 msgstr ""
 
-#: /src/schooltool/group/browser/configure.zcml:98
+#: /src/schooltool/group/browser/configure.zcml:97
 msgid "SchoolBell Group"
 msgstr ""
 
-#: /src/schooltool/group/browser/group-csvimport.pt:25
+#: /src/schooltool/group/browser/group-csvimport.pt:24
 msgid ""
 "CSV data <strong>must</strong> include a group title and "
 "<strong>may</strong> include an optional group description. Any extra "
@@ -3201,7 +3519,8 @@ msgstr ""
 #. Default: ""
 #. "LUG, Linux Users Group\n"
 #. "Chess Club\n"
-#: /src/schooltool/group/browser/group-csvimport.pt:32
+#. "Sports Club, After-school sports club, <em>text after a second comma</em>"
+#: /src/schooltool/group/browser/group-csvimport.pt:31
 msgid ""
 "\n"
 "LUG, Linux Users Group\n"
@@ -3209,7 +3528,7 @@ msgid ""
 "Sports Club, After-school sports club, <em>text after a second comma</em>\n"
 msgstr ""
 
-#: /src/schooltool/group/browser/group-csvimport.pt:37
+#: /src/schooltool/group/browser/group-csvimport.pt:36
 msgid ""
 "The above example will create 3 groups titled 'LUG', 'Chess Club' and "
 "'Sports Club'. The first and last group will have the descriptions 'Linux "
@@ -3226,31 +3545,33 @@ msgstr ""
 msgid "Members"
 msgstr ""
 
-#: /src/schooltool/group/browser/group.pt:23
+#: /src/schooltool/group/browser/group.pt:20
 msgid "edit members"
 msgstr ""
 
-#: /src/schooltool/group/browser/group.pt:23
+#: /src/schooltool/group/browser/group.pt:20
 msgid "Change the people who are members of this group."
 msgstr ""
 
-#: /src/schooltool/group/browser/group.py:101
+#. Default: ""
+#: /src/schooltool/group/browser/group.py:100
 msgid "Members of ${group}"
 msgstr ""
 
-#: /src/schooltool/group/browser/group.py:102
+#: /src/schooltool/group/browser/group.py:101
 msgid "Current Members"
 msgstr ""
 
-#: /src/schooltool/group/browser/group.py:103
+#: /src/schooltool/group/browser/group.py:102
 msgid "Add Members"
 msgstr ""
 
-#: /src/schooltool/group/browser/group.py:50
+#: /src/schooltool/group/browser/group.py:49
 msgid "Group index"
 msgstr ""
 
-#: /src/schooltool/group/browser/group.py:60
+#. Default: ""
+#: /src/schooltool/group/browser/group.py:59
 msgid "Groups of ${person}"
 msgstr ""
 
@@ -3263,10 +3584,6 @@ msgstr ""
 msgid "edit groups"
 msgstr ""
 
-#: /src/schooltool/group/help/configure.zcml:8
-msgid "Group Container - Contents"
-msgstr ""
-
 #: /src/schooltool/group/interfaces.py:44
 msgid "Title of the group."
 msgstr ""
@@ -3275,6 +3592,7 @@ msgstr ""
 msgid "Description of the group."
 msgstr ""
 
+#. Default: "Calendar"
 #: /src/schooltool/group/rest/group.pt:14
 msgid "Private_calendar"
 msgstr ""
@@ -3303,34 +3621,34 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: /src/schooltool/level/browser/configure.zcml:102
+#: /src/schooltool/level/browser/configure.zcml:101
 msgid "Add a Level"
 msgstr ""
 
-#: /src/schooltool/level/browser/configure.zcml:114
+#: /src/schooltool/level/browser/configure.zcml:113
 msgid "Edit Level"
 msgstr ""
 
-#: /src/schooltool/level/browser/configure.zcml:137
+#: /src/schooltool/level/browser/configure.zcml:136
 #: /src/schooltool/level/browser/promotion.pt:10
 msgid "Student Management"
 msgstr ""
 
-#: /src/schooltool/level/browser/configure.zcml:164
+#: /src/schooltool/level/browser/configure.zcml:163
 msgid "Academic Record"
 msgstr ""
 
-#: /src/schooltool/level/browser/configure.zcml:19
+#: /src/schooltool/level/browser/configure.zcml:18
 #: /src/schooltool/app/browser/templates/index.pt:15
 #: /src/schooltool/dashboard/school.pt:4
 msgid "Levels"
 msgstr ""
 
-#: /src/schooltool/level/browser/configure.zcml:31
+#: /src/schooltool/level/browser/configure.zcml:30
 msgid "Validate Levels"
 msgstr ""
 
-#: /src/schooltool/level/browser/configure.zcml:42
+#: /src/schooltool/level/browser/configure.zcml:41
 msgid "New Level"
 msgstr ""
 
@@ -3369,15 +3687,15 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: /src/schooltool/level/browser/level.py:42
+#: /src/schooltool/level/browser/level.py:43
 msgid "Level index"
 msgstr ""
 
-#: /src/schooltool/level/browser/level.py:59
+#: /src/schooltool/level/browser/level.py:60
 msgid "Previous Level"
 msgstr ""
 
-#: /src/schooltool/level/browser/level.py:60
+#: /src/schooltool/level/browser/level.py:61
 msgid ""
 "The previous level in the school. If None, then there is no previous level."
 msgstr ""
@@ -3389,6 +3707,7 @@ msgid ""
 "Graphs</li> <li>Disconnected Levels</li> </ol>"
 msgstr ""
 
+#. Default: "Validate"
 #: /src/schooltool/level/browser/level_validation.pt:37
 msgid "validate-button"
 msgstr ""
@@ -3440,6 +3759,7 @@ msgstr ""
 msgid "Student Name (username)"
 msgstr ""
 
+#. Default: "Enroll"
 #: /src/schooltool/level/browser/promotion.pt:44
 msgid "enroll-button"
 msgstr ""
@@ -3460,6 +3780,7 @@ msgstr ""
 msgid "I"
 msgstr ""
 
+#. Default: "Apply"
 #: /src/schooltool/level/browser/promotion.pt:84
 #: /src/schooltool/level/browser/promotion.pt:128
 msgid "apply-button"
@@ -3486,6 +3807,7 @@ msgstr ""
 msgid "Work Item successfully finished."
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/level/browser/promotion.py:64
 msgid "Current Level: $level"
 msgstr ""
@@ -3532,6 +3854,7 @@ msgid ""
 "button below, the student's school career will be initialized."
 msgstr ""
 
+#. Default: "Initialize"
 #: /src/schooltool/level/browser/record.pt:99
 msgid "initialize-button"
 msgstr ""
@@ -3643,11 +3966,11 @@ msgid "Outcome of the level."
 msgstr ""
 
 #: /src/schooltool/level/promotion.py:130
-msgid "fail"
+msgid "withdraw"
 msgstr ""
 
 #: /src/schooltool/level/promotion.py:130
-msgid "withdraw"
+msgid "fail"
 msgstr ""
 
 #: /src/schooltool/level/promotion.py:130
@@ -3663,11 +3986,11 @@ msgstr ""
 msgid "The initial level of the student in the school."
 msgstr ""
 
-#: /src/schooltool/note/configure.zcml:108
+#: /src/schooltool/note/configure.zcml:137
 msgid "Notes (Rest)"
 msgstr ""
 
-#: /src/schooltool/note/configure.zcml:39
+#: /src/schooltool/note/configure.zcml:68
 msgid "New Note"
 msgstr ""
 
@@ -3708,29 +4031,26 @@ msgstr ""
 msgid "Add note"
 msgstr ""
 
-#: /src/schooltool/note/notes.pt:17
-msgid "Delete"
-msgstr ""
-
 #: /src/schooltool/note/notes.pt:8
 msgid "( p )"
 msgstr ""
 
-#: /src/schooltool/person/browser/configure.zcml:100
-msgid "Edit Password"
+#: /src/schooltool/person/browser/configure.zcml:160
+#: /src/schooltool/demographics/overrides.zcml:7
+msgid "New Person"
 msgstr ""
 
-#: /src/schooltool/person/browser/configure.zcml:149
-msgid "Person Container - Contents"
-msgstr ""
-
-#: /src/schooltool/person/browser/configure.zcml:78
-#: /src/schooltool/person/browser/person-csvimport.pt:22
+#: /src/schooltool/person/browser/configure.zcml:71
+#: /src/schooltool/person/browser/person-csvimport.pt:27
 msgid "Import Persons"
 msgstr "تحميل الاشخاص"
 
-#: /src/schooltool/person/browser/configure.zcml:89
+#: /src/schooltool/person/browser/configure.zcml:82
 msgid "Change Preferences"
+msgstr ""
+
+#: /src/schooltool/person/browser/configure.zcml:94
+msgid "Edit Password"
 msgstr ""
 
 #: /src/schooltool/person/browser/csvimport.py:47
@@ -3741,11 +4061,12 @@ msgstr ""
 msgid "fullname may not be empty"
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/person/browser/csvimport.py:62
 msgid "Duplicate username: ${username}"
 msgstr ""
 
-#: /src/schooltool/person/browser/person-csvimport.pt:25
+#: /src/schooltool/person/browser/person-csvimport.pt:30
 msgid ""
 "CSV data <strong>must</strong> contain a user name and a full name. An "
 "optional password <strong>may</strong> be included as well."
@@ -3754,7 +4075,8 @@ msgstr ""
 #. Default: ""
 #. "jjones, Jimmy Jones\n"
 #. "jbjones, Jim Bob Jones, r2m45J\n"
-#: /src/schooltool/person/browser/person-csvimport.pt:31
+#. "howard, Howard"
+#: /src/schooltool/person/browser/person-csvimport.pt:36
 msgid ""
 "\n"
 "jjones, Jimmy Jones\n"
@@ -3762,38 +4084,111 @@ msgid ""
 "howard, Howard\n"
 msgstr ""
 
-#: /src/schooltool/person/browser/person-csvimport.pt:36
+#: /src/schooltool/person/browser/person-csvimport.pt:4
+msgid "Upload SchoolTool persons as CSV"
+msgstr ""
+
+#: /src/schooltool/person/browser/person-csvimport.pt:41
 msgid ""
 "The above example will create three users, 'jjones', 'jbjones' and 'howard'. "
 "Of the three, only 'jbjones' has a password ('r2m45J') and will be able to "
 "login to the system. Note that passwords must be sent in plain text."
 msgstr ""
 
-#: /src/schooltool/person/browser/person-csvimport.pt:4
-msgid "Upload SchoolTool persons as CSV"
+#: /src/schooltool/person/browser/person.pt:15
+#: /src/schooltool/basicperson/browser/templates/person_view.pt:15
+msgid "Username:"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:177
+#: /src/schooltool/person/browser/person.pt:18
+msgid "edit name"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.pt:18
+msgid "Change this person's name, picture, or password"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.pt:4
+#: /src/schooltool/basicperson/browser/templates/person_view.pt:4
+msgid "Person info: ${title}"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.py:174
 msgid "Edit password"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:182
+#: /src/schooltool/person/browser/person.py:179
 msgid "No new password was supplied so original password is unchanged"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:187
+#: /src/schooltool/person/browser/person.py:184
 msgid "Changed password"
 msgstr ""
 
-#: /src/schooltool/person/browser/person_container_delete.pt:18
+#: /src/schooltool/person/browser/person.py:281
+#: /src/schooltool/person/browser/person.py:369
+#: /src/schooltool/person/interfaces.py:70
+msgid "Name that should be displayed"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.py:292
+#: /src/schooltool/person/browser/person.py:387
+msgid "Verify password"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.py:319
+msgid "Passwords do not match!"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.py:372
+msgid "New photo"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.py:374
+msgid "A small picture (about 48x48 pixels in JPEG format)"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.py:378
+msgid "Clear photo"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.py:380
+msgid "Check this to clear the photo"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.py:383
+msgid "New password"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.py:416
+msgid "Passwords do not match."
+msgstr ""
+
+#: /src/schooltool/person/browser/person.py:420
+msgid "Password was successfully changed!"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.py:443
+msgid "Person index"
+msgstr ""
+
+#: /src/schooltool/person/browser/person_container_delete.pt:23
 msgid "Sorry, you may not delete your own user account."
+msgstr ""
+
+#: /src/schooltool/person/browser/person_edit.pt:20
+msgid "Change info for ${user}"
+msgstr ""
+
+#: /src/schooltool/person/browser/person_edit.pt:4
+msgid "Edit person"
 msgstr ""
 
 #: /src/schooltool/person/browser/person_filter.pt:5
 msgid "All groups"
 msgstr ""
 
-#: /src/schooltool/person/browser/person_preferences.pt:14
+#: /src/schooltool/person/browser/person_preferences.pt:20
 msgid "Change preferences for ${user}"
 msgstr ""
 
@@ -3801,67 +4196,63 @@ msgstr ""
 msgid "Edit person preferences"
 msgstr ""
 
-#: /src/schooltool/person/interfaces.py:161
+#: /src/schooltool/person/interfaces.py:169
 msgid "Time Zone"
 msgstr ""
 
-#: /src/schooltool/person/interfaces.py:162
+#: /src/schooltool/person/interfaces.py:170
 msgid "Time Zone used to display your calendar"
 msgstr ""
 
-#: /src/schooltool/person/interfaces.py:166
-#: /src/schooltool/person/interfaces.py:167
+#: /src/schooltool/person/interfaces.py:174
+#: /src/schooltool/person/interfaces.py:175
 msgid "Time Format"
 msgstr ""
 
-#: /src/schooltool/person/interfaces.py:168
+#: /src/schooltool/person/interfaces.py:176
 msgid "HH:MM"
 msgstr ""
 
-#: /src/schooltool/person/interfaces.py:169
+#: /src/schooltool/person/interfaces.py:177
 msgid "HH:MM am/pm"
 msgstr ""
 
-#: /src/schooltool/person/interfaces.py:172
-#: /src/schooltool/person/interfaces.py:173
+#: /src/schooltool/person/interfaces.py:180
+#: /src/schooltool/person/interfaces.py:181
 msgid "Date Format"
 msgstr ""
 
-#: /src/schooltool/person/interfaces.py:174
+#: /src/schooltool/person/interfaces.py:182
 msgid "MM/DD/YY"
 msgstr ""
 
-#: /src/schooltool/person/interfaces.py:175
+#: /src/schooltool/person/interfaces.py:183
 msgid "YYYY-MM-DD"
 msgstr ""
 
-#: /src/schooltool/person/interfaces.py:176
+#: /src/schooltool/person/interfaces.py:184
 msgid "Day Month, Year"
 msgstr ""
 
-#: /src/schooltool/person/interfaces.py:180
+#: /src/schooltool/person/interfaces.py:188
 msgid "Week starts on:"
 msgstr ""
 
-#: /src/schooltool/person/interfaces.py:181
+#: /src/schooltool/person/interfaces.py:189
 msgid "Start display of weeks on Sunday or Monday"
 msgstr ""
 
-#: /src/schooltool/person/interfaces.py:194
+#: /src/schooltool/person/interfaces.py:203
 msgid "Show periods"
 msgstr ""
 
-#: /src/schooltool/person/interfaces.py:195
+#: /src/schooltool/person/interfaces.py:204
 msgid "Show period names in daily view"
 msgstr ""
 
-#: /src/schooltool/person/interfaces.py:198
-#: /src/schooltool/person/interfaces.py:199
+#: /src/schooltool/person/interfaces.py:207
+#: /src/schooltool/person/interfaces.py:208
 msgid "Make calendar public"
-msgstr ""
-
-#: /src/schooltool/person/interfaces.py:70
-msgid "Name that should be displayed"
 msgstr ""
 
 #: /src/schooltool/person/security.zcml:10
@@ -3882,7 +4273,7 @@ msgstr ""
 
 #: /src/schooltool/relationship/configure.zcml:33
 #: /src/schooltool/app/rest/configure.zcml:249
-#: /src/schooltool/resource/rest/resource.pt:8
+#: /src/schooltool/resource/rest/resource.pt:7
 #: /src/schooltool/group/rest/group.pt:8
 #: /src/schooltool/level/rest/level.pt:9
 #: /src/schooltool/course/rest/course.pt:7
@@ -3896,53 +4287,25 @@ msgid "Add a Requirement"
 msgstr ""
 
 #: /src/schooltool/requirement/browser/configure.zcml:32
-#: /src/schooltool/requirement/browser/configure.zcml:32
+#: /src/schooltool/requirement/browser/configure.zcml:43
 msgid "Edit Requirement"
 msgstr ""
 
-#: /src/schooltool/requirement/browser/configure.zcml:69
+#: /src/schooltool/requirement/browser/configure.zcml:54
 msgid "New Requirement"
 msgstr ""
 
-#: /src/schooltool/requirement/browser/requirement.pt:31
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:64
-#: /src/schooltool/skin/templates/filter.pt:4
-#: /src/schooltool/person/browser/person_filter.pt:11
-#: /src/schooltool/attendance/browser/templates/controlpanel.pt:33
-msgid "Find Now"
-msgstr ""
-
 #: /src/schooltool/requirement/browser/requirement.pt:33
-#: /src/schooltool/sampledata/sampledata.pt:69
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:66
-#: /src/schooltool/skin/templates/filter.pt:6
-#: /src/schooltool/person/browser/person_filter.pt:13
-#: /src/schooltool/attendance/browser/templates/controlpanel.pt:35
-msgid "Clear"
+#: /src/schooltool/course/browser/templates/course_container.pt:24
+#: /src/schooltool/skin/templates/container.pt:28
+#: /src/schooltool/skin/templates/table_container.pt:27
+#: /src/schooltool/demographics/browser/search.pt:30
+#: /src/schooltool/demographics/browser/table.pt:23
+#: /src/schooltool/schoolyear/templates/schoolyear_container.pt:22
+msgid "Showing ${count} of ${total} items"
 msgstr ""
 
-#: /src/schooltool/requirement/browser/requirement.pt:40
-#: /src/schooltool/course/browser/templates/course_container.pt:28
-#: /src/schooltool/skin/templates/container.pt:29
-#: /src/schooltool/skin/templates/table_macros.pt:6
-msgid "Showing"
-msgstr ""
-
-#: /src/schooltool/requirement/browser/requirement.pt:42
-#: /src/schooltool/course/browser/templates/course_container.pt:30
-#: /src/schooltool/skin/templates/container.pt:31
-#: /src/schooltool/skin/templates/table_macros.pt:8
-msgid "of"
-msgstr ""
-
-#: /src/schooltool/requirement/browser/requirement.pt:44
-#: /src/schooltool/course/browser/templates/course_container.pt:32
-#: /src/schooltool/skin/templates/container.pt:33
-#: /src/schooltool/skin/templates/table_macros.pt:10
-msgid "items"
-msgstr ""
-
-#: /src/schooltool/requirement/browser/requirement.py:54
+#: /src/schooltool/requirement/browser/requirement.py:55
 msgid "Requirement index"
 msgstr ""
 
@@ -3954,29 +4317,84 @@ msgstr ""
 msgid "Custom score system"
 msgstr ""
 
-#: /src/schooltool/resource/browser/configure.zcml:100
+#: /src/schooltool/resource/browser/configure.zcml:107
+msgid "Edit Location Information"
+msgstr ""
+
+#: /src/schooltool/resource/browser/configure.zcml:125
+msgid "Add an Equipment"
+msgstr ""
+
+#: /src/schooltool/resource/browser/configure.zcml:143
+msgid "Edit Equipment Information"
+msgstr ""
+
+#: /src/schooltool/resource/browser/configure.zcml:182
+msgid "New Resource"
+msgstr ""
+
+#: /src/schooltool/resource/browser/configure.zcml:189
+msgid "New Location"
+msgstr ""
+
+#: /src/schooltool/resource/browser/configure.zcml:196
+msgid "New Equipment"
+msgstr ""
+
+#: /src/schooltool/resource/browser/configure.zcml:203
+msgid "SchoolBell Resource"
+msgstr ""
+
+#: /src/schooltool/resource/browser/configure.zcml:203
+msgid "A Resource"
+msgstr ""
+
+#: /src/schooltool/resource/browser/configure.zcml:232
 #: /src/schooltool/resource/browser/resource-csvimport.pt:21
 msgid "Import Resources"
 msgstr ""
 
-#: /src/schooltool/resource/browser/configure.zcml:27
+#: /src/schooltool/resource/browser/configure.zcml:63
 msgid "Add a Resource"
 msgstr ""
 
-#: /src/schooltool/resource/browser/configure.zcml:40
+#: /src/schooltool/resource/browser/configure.zcml:76
 msgid "Edit Resource Information"
 msgstr ""
 
-#: /src/schooltool/resource/browser/configure.zcml:75
-msgid "New Resource"
+#: /src/schooltool/resource/browser/configure.zcml:91
+msgid "Add a Location"
 msgstr ""
 
-#: /src/schooltool/resource/browser/configure.zcml:82
-msgid "SchoolBell Resource"
+#: /src/schooltool/resource/browser/container_delete.pt:10
+#: /src/schooltool/skin/templates/container_delete.pt:15
+#: /src/schooltool/person/browser/person_container_delete.pt:15
+msgid "Are you sure you want to delete selected items?"
 msgstr ""
 
-#: /src/schooltool/resource/browser/configure.zcml:82
-msgid "A Resource"
+#: /src/schooltool/resource/browser/container_delete.pt:16
+#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:16
+#: /src/schooltool/skin/templates/container_delete.pt:21
+#: /src/schooltool/person/browser/person_container_delete.pt:21
+#: /src/schooltool/term/browser/term-container-delete.pt:16
+msgid "You have not selected any items."
+msgstr ""
+
+#. Default: "Confirm"
+#: /src/schooltool/resource/browser/container_delete.pt:27
+#: /src/schooltool/gradebook/browser/activities_overview.pt:46
+#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
+#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
+#: /src/schooltool/course/browser/templates/course_container.pt:52
+#: /src/schooltool/course/browser/templates/section_container.pt:83
+#: /src/schooltool/skin/templates/container_delete.pt:32
+#: /src/schooltool/skin/templates/container.pt:42
+#: /src/schooltool/skin/templates/table_container.pt:32
+#: /src/schooltool/demographics/browser/search.pt:35
+#: /src/schooltool/demographics/browser/table.pt:28
+#: /src/schooltool/person/browser/person_container_delete.pt:35
+#: /src/schooltool/term/browser/term-container-delete.pt:29
+msgid "delete-button"
 msgstr ""
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:24
@@ -3989,6 +4407,7 @@ msgstr ""
 #. Default: ""
 #. "PRJ302, Overhead Projector #302\n"
 #. "Main Auditorium\n"
+#. "LC-805, Laptop Computer #805, <em>text after a second comma</em>"
 #: /src/schooltool/resource/browser/resource-csvimport.pt:31
 msgid ""
 "\n"
@@ -4010,33 +4429,148 @@ msgstr ""
 msgid "Upload schooltool resources as CSV"
 msgstr ""
 
-#: /src/schooltool/resource/browser/resource.py:40
+#: /src/schooltool/resource/browser/resource.py:56
 msgid "Resource index"
 msgstr ""
 
-#: /src/schooltool/resource/interfaces.py:39
+#: /src/schooltool/resource/browser/resource_filter.pt:37
+#: /src/schooltool/requirement/browser/requirement.pt:21
+#: /src/schooltool/table/templates/filter.pt:4
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:55
+#: /src/schooltool/skin/templates/filter.pt:4
+#: /src/schooltool/person/browser/person_filter.pt:11
+#: /src/schooltool/attendance/browser/templates/controlpanel.pt:24
+msgid "Find Now"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource_filter.pt:39
+#: /src/schooltool/requirement/browser/requirement.pt:23
+#: /src/schooltool/sampledata/sampledata.pt:69
+#: /src/schooltool/table/templates/filter.pt:6
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:57
+#: /src/schooltool/skin/templates/filter.pt:6
+#: /src/schooltool/person/browser/person_filter.pt:13
+#: /src/schooltool/attendance/browser/templates/controlpanel.pt:26
+msgid "Clear"
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:100
+#: /src/schooltool/resource/types.py:113
+msgid "Manufacturer"
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:101
+msgid "Manufacturer of Equipment"
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:105
+#: /src/schooltool/resource/types.py:119
+msgid "Model"
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:106
+msgid "Model of Equipment"
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:110
+#: /src/schooltool/resource/types.py:125
+msgid "Serial Number"
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:111
+msgid "Serial Number of Equipment"
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:115
+#: /src/schooltool/resource/types.py:131
+msgid "Purchase Date"
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:116
+msgid "Purchase Date of Equipment"
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:123
+msgid "Id of the resource type."
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:124
+msgid ""
+"Used for lookup of named utilities that have resource\n"
+"        type specific information."
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:128
+#: /src/schooltool/resource/interfaces.py:136
+msgid "The title of a resource type."
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:129
+#: /src/schooltool/resource/interfaces.py:137
+msgid ""
+"A string that will be displayed to users in tables or\n"
+"        resource type selection widgets."
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:41
 msgid "Title of the resource."
 msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:44
+msgid "Resource Type"
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:45
+msgid "Type of resource"
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:52
 msgid "Description of the resource."
 msgstr ""
 
-#: /src/schooltool/resource/interfaces.py:47
-msgid "A Location."
+#: /src/schooltool/resource/interfaces.py:57
+msgid "Notes for the resource."
 msgstr ""
 
-#: /src/schooltool/resource/interfaces.py:48
-msgid "Indicate this resource is a location, like a classroom."
+#: /src/schooltool/resource/interfaces.py:80
+msgid "Location Type"
 msgstr ""
 
-#: /src/schooltool/resource/rest/resource.pt:17
+#: /src/schooltool/resource/interfaces.py:81
+msgid "Type of location (i.e. computer lab, class room, etc.)"
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:86
+#: /src/schooltool/resource/types.py:83
+msgid "Capacity"
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:87
+msgid "Capacity of the room"
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:95
+msgid "Equipment Type"
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:96
+msgid "Type of equipment (i.e. camcorder, computer, etc.)"
+msgstr ""
+
+#: /src/schooltool/resource/resource.py:55
+#: /src/schooltool/resource/types.py:55
+msgid "Resource"
+msgstr ""
+
+#. Default: "Calendar subscriptions"
+#: /src/schooltool/resource/rest/resource.pt:16
 #: /src/schooltool/group/rest/group.pt:17
 #: /src/schooltool/person/rest/person.pt:16
 msgid "Calendar_relationships"
 msgstr ""
 
-#: /src/schooltool/resource/rest/resource.pt:20
+#. Default: "Calendar ACL"
+#: /src/schooltool/resource/rest/resource.pt:19
 #: /src/schooltool/group/rest/group.pt:20
 #: /src/schooltool/person/rest/person.pt:19
 msgid "Calendar_ACL"
@@ -4052,6 +4586,15 @@ msgstr ""
 
 #: /src/schooltool/resource/security.zcml:7
 msgid "Everyone can view resource lists."
+msgstr ""
+
+#: /src/schooltool/resource/types.py:107
+#: /src/schooltool/resource/browser/resourcecontainer.pt:23
+msgid "Type"
+msgstr ""
+
+#: /src/schooltool/resource/types.py:93
+msgid "Equipment"
 msgstr ""
 
 #: /src/schooltool/restclient/restclient.py:644
@@ -4095,12 +4638,18 @@ msgstr ""
 msgid "View Dependencies"
 msgstr ""
 
-#: /src/schooltool/sbapp/browser/templates/generic_macros.pt:10
-msgid "Server Running SchoolBell"
+#: /src/schooltool/schoolyear/schoolyear.py:194
+msgid "School Year index"
 msgstr ""
 
-#: /src/schooltool/sbapp/browser/templates/generic_macros.pt:6
-msgid "SchoolBell"
+#: /src/schooltool/schoolyear/schoolyear.py:217
+#: /src/schooltool/schoolyear/schoolyear.py:218
+msgid "Id"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/schoolyear/schoolyear.py:291
+msgid "Change information for ${title}"
 msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/configure.zcml:6
@@ -4139,87 +4688,97 @@ msgstr ""
 msgid "No changes"
 msgstr ""
 
-#: /src/schooltool/skin/templates/container_delete.pt:10
-#: /src/schooltool/person/browser/person_container_delete.pt:10
-msgid "Are you sure you want to delete selected items?"
+#: /src/schooltool/skin/templates/error.pt:15
+msgid ""
+"An internal server error has occurred. This most likely means that you have "
+"found a bug in SchoolTool. Please report it on <a "
+"href=\"http://issues.schooltool.org\">the issue tracker</a>."
 msgstr ""
 
-#: /src/schooltool/skin/templates/error.pt:13
+#: /src/schooltool/skin/templates/error.pt:19
 msgid "Exception"
 msgstr ""
 
-#: /src/schooltool/skin/templates/error.pt:18
+#: /src/schooltool/skin/templates/error.pt:24
 msgid "Traceback"
 msgstr ""
 
 #: /src/schooltool/skin/templates/error.pt:3
-#: /src/schooltool/skin/templates/error.pt:6
+#: /src/schooltool/skin/templates/error.pt:12
 msgid "Server Error"
-msgstr ""
-
-#: /src/schooltool/skin/templates/error.pt:9
-msgid ""
-"An internal server error has occurred. This most likely means that you have "
-"found a bug in SchoolBell. Please report it on <a "
-"href=\"http://issues.schooltool.org\">the issue tracker</a>."
 msgstr ""
 
 #: /src/schooltool/skin/templates/generic_macros.pt:12
 msgid "Server Running SchoolTool"
 msgstr ""
 
-#: /src/schooltool/skin/templates/notfound.pt:13
+#: /src/schooltool/skin/templates/notfound.pt:14
+msgid "The page that you are trying to access is not available"
+msgstr ""
+
+#: /src/schooltool/skin/templates/notfound.pt:18
 msgid "Please note the following:"
 msgstr ""
 
-#: /src/schooltool/skin/templates/notfound.pt:16
+#: /src/schooltool/skin/templates/notfound.pt:21
 msgid "You might have misspelled the url"
 msgstr ""
 
-#: /src/schooltool/skin/templates/notfound.pt:17
+#: /src/schooltool/skin/templates/notfound.pt:22
 msgid "You might be trying to access a non-existing page"
 msgstr ""
 
 #: /src/schooltool/skin/templates/notfound.pt:3
-#: /src/schooltool/skin/templates/notfound.pt:6
+#: /src/schooltool/skin/templates/notfound.pt:11
 msgid "Not Found"
-msgstr ""
-
-#: /src/schooltool/skin/templates/notfound.pt:9
-msgid "The page that you are trying to access is not available"
 msgstr ""
 
 #: /src/schooltool/skin/templates/onlinehelp_macros.pt:55
 msgid "SchoolTool Onlinehelp"
 msgstr ""
 
-#: /src/schooltool/skin/templates/view_macros.pt:125
+#: /src/schooltool/skin/templates/simple_edit.pt:7
+#: /src/schooltool/skin/templates/simple_add.pt:5
+#: /src/schooltool/skin/templates/container_delete.pt:11
+#: /src/schooltool/skin/templates/edit_form.pt:4
+#: /src/schooltool/skin/templates/container.pt:11
+#: /src/schooltool/skin/templates/error.pt:8
+#: /src/schooltool/skin/templates/table_container.pt:11
+#: /src/schooltool/skin/templates/notfound.pt:7
+#: /src/schooltool/person/browser/person_edit.pt:9
+#: /src/schooltool/person/browser/person_preferences.pt:9
+#: /src/schooltool/person/browser/person_container_delete.pt:11
+#: /src/schooltool/person/browser/person-csvimport.pt:11
+msgid "<img src=\"${DYNAMIC_CONTENT}\" alt=\"x\" />"
+msgstr ""
+
+#: /src/schooltool/skin/templates/view_macros.pt:127
 msgid ""
 "&copy; The Shuttleworth Foundation 2003 - <span>2006</span>: Supporting "
 "Social Innovation."
 msgstr ""
 
-#: /src/schooltool/skin/templates/view_macros.pt:130
+#: /src/schooltool/skin/templates/view_macros.pt:132
 msgid "SchoolTool&trade; is a Trademark of The Shuttleworth Foundation."
 msgstr ""
 
-#: /src/schooltool/skin/templates/view_macros.pt:57
+#: /src/schooltool/skin/templates/view_macros.pt:63
 msgid "Log In"
 msgstr ""
 
-#: /src/schooltool/skin/templates/view_macros.pt:65
+#: /src/schooltool/skin/templates/view_macros.pt:71
 msgid "User:"
 msgstr ""
 
-#: /src/schooltool/skin/templates/view_macros.pt:79
+#: /src/schooltool/skin/templates/view_macros.pt:85
 msgid "Log Out"
 msgstr ""
 
-#: /src/schooltool/term/browser/configure.zcml:30
+#: /src/schooltool/term/browser/configure.zcml:20
 msgid "New Term"
 msgstr ""
 
-#: /src/schooltool/term/browser/configure.zcml:71
+#: /src/schooltool/term/browser/configure.zcml:61
 msgid "Cancel School in Emergency"
 msgstr ""
 
@@ -4227,10 +4786,12 @@ msgstr ""
 msgid "The replacement date you entered is invalid."
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/term/browser/emergency.py:123
 msgid "School cancelled due to emergency. Replacement day $replacement."
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/term/browser/emergency.py:133
 msgid "Replacement day for emergency day $emergency."
 msgstr ""
@@ -4286,25 +4847,27 @@ msgstr ""
 msgid "Are you sure you want to delete the selected terms?"
 msgstr ""
 
-#: /src/schooltool/term/browser/term.py:127
+#. Default: ""
+#: /src/schooltool/term/browser/term.py:140
 msgid "Change Term: $title"
 msgstr ""
 
-#: /src/schooltool/term/browser/term.py:163
+#: /src/schooltool/term/browser/term.py:188
 msgid "New term"
 msgstr ""
 
-#: /src/schooltool/term/browser/term.py:55
-#: /src/schooltool/term/browser/configure.zcml:40
+#: /src/schooltool/term/browser/term.py:58
+#: /src/schooltool/term/browser/configure.zcml:30
+#: /src/schooltool/term/help/configure.zcml:18
 #: /src/schooltool/dashboard/term.pt:16
 msgid "Terms"
 msgstr ""
 
-#: /src/schooltool/term/browser/term.py:63
+#: /src/schooltool/term/browser/term.py:73
 msgid "Start date"
 msgstr ""
 
-#: /src/schooltool/term/browser/term.py:65
+#: /src/schooltool/term/browser/term.py:75
 msgid "End date"
 msgstr ""
 
@@ -4323,6 +4886,7 @@ msgid "Add term"
 msgstr ""
 
 #: /src/schooltool/term/browser/term_add_edit.pt:158
+#: /src/schooltool/term/browser/term_basic_add_edit.pt:25
 msgid "Save changes"
 msgstr ""
 
@@ -4373,27 +4937,32 @@ msgstr ""
 msgid "Toggle the following days of week:"
 msgstr ""
 
+#: /src/schooltool/term/help/configure.zcml:8
+msgid "Add a term"
+msgstr ""
+
+#. Default: ""
 #: /src/schooltool/timetable/browser/__init__.py:345
 msgid "${object}'s timetable"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/__init__.py:756
+#: /src/schooltool/timetable/browser/__init__.py:916
 msgid "Invalid date. Please use YYYY-MM-DD format."
 msgstr ""
 
-#: /src/schooltool/timetable/browser/__init__.py:760
+#: /src/schooltool/timetable/browser/__init__.py:920
 msgid "The date does not belong to any term."
 msgstr ""
 
-#: /src/schooltool/timetable/browser/__init__.py:769
+#: /src/schooltool/timetable/browser/__init__.py:929
 msgid "Some values were invalid.  They are highlighted in red."
 msgstr ""
 
-#: /src/schooltool/timetable/browser/configure.zcml:112
+#: /src/schooltool/timetable/browser/configure.zcml:167
 msgid "Change Timetable for One Day"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/configure.zcml:139
+#: /src/schooltool/timetable/browser/configure.zcml:208
 msgid "New Timetable"
 msgstr ""
 
@@ -4401,14 +4970,19 @@ msgstr ""
 msgid "View Timetables"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/configure.zcml:31
-#: /src/schooltool/timetable/browser/configure.zcml:39
-#: /src/schooltool/timetable/browser/configure.zcml:47
+#: /src/schooltool/timetable/browser/configure.zcml:60
+msgid "Add Timetable"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/configure.zcml:70
+#: /src/schooltool/timetable/browser/configure.zcml:80
+#: /src/schooltool/timetable/browser/configure.zcml:90
+#: /src/schooltool/timetable/browser/configure.zcml:102
 #: /src/schooltool/course/browser/templates/section_container.pt:35
 msgid "Schedule"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/event.py:43
+#: /src/schooltool/timetable/browser/event.py:45
 msgid "Modify event information"
 msgstr ""
 
@@ -4421,28 +4995,31 @@ msgid "You must specify at least one period."
 msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:217
-#: /src/schooltool/timetable/browser/configure.zcml:76
+#: /src/schooltool/timetable/browser/configure.zcml:131
 #: /src/schooltool/dashboard/school.pt:16
 msgid "School Timetables"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/schema.py:300
+#: /src/schooltool/timetable/browser/schema.py:297
 msgid "Please select a value"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/schema.py:327
-#: /src/schooltool/timetable/browser/schema.py:334
+#. Default: ""
+#: /src/schooltool/timetable/browser/schema.py:324
+#: /src/schooltool/timetable/browser/schema.py:331
 msgid "Day ${number}"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/schema.py:357
+#: /src/schooltool/timetable/browser/schema.py:354
 msgid "Period 1"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/schema.py:367
+#. Default: ""
+#: /src/schooltool/timetable/browser/schema.py:364
 msgid "Period ${number}"
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/timetable/browser/schema.py:74
 msgid "Timetable schema ${schema}"
 msgstr ""
@@ -4490,13 +5067,29 @@ msgstr ""
 msgid "Create timetable schema"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:36
-msgid "First, please define the days and periods of the timetable."
+#: /src/schooltool/timetable/browser/templates/advancedtts.pt:3
+#: /src/schooltool/timetable/browser/templates/advancedtts.pt:6
+#: /src/schooltool/timetable/browser/templates/ttwizard.pt:3
+#: /src/schooltool/timetable/browser/templates/ttwizard.pt:6
+#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:3
+#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:6
+#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:3
+#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:6
+#: /src/schooltool/timetable/browser/templates/ttwizard_choice.pt:3
+#: /src/schooltool/timetable/browser/templates/ttwizard_choice.pt:6
+#: /src/schooltool/timetable/browser/templates/simpletts.pt:3
+#: /src/schooltool/timetable/browser/templates/simpletts.pt:6
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:3
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:6
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:3
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:6
+#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:3
+#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:6
+msgid "New timetable schema"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:51
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:155
-msgid "C"
+#: /src/schooltool/timetable/browser/templates/advancedtts.pt:36
+msgid "First, please define the days and periods of the timetable."
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:51
@@ -4574,37 +5167,40 @@ msgstr ""
 msgid "Are you sure you want to delete the selected school timetables?"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:16
-#: /src/schooltool/skin/templates/container_delete.pt:16
-#: /src/schooltool/person/browser/person_container_delete.pt:16
-#: /src/schooltool/term/browser/term-container-delete.pt:16
-msgid "You have not selected any items."
-msgstr ""
-
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:107
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:108
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:76
 msgid "Save"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:17
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:15
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:19
+#: /src/schooltool/timetable/browser/templates/timetable-add.pt:8
 msgid "There are no terms or timetable schemas defined."
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:25
+#: /src/schooltool/timetable/browser/templates/timetable-add.pt:16
 msgid "Choose schedule template"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:27
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:26
+#: /src/schooltool/timetable/browser/templates/timetable-add.pt:18
 msgid "For term(s):"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:4
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:11
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:4
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:12
 msgid "Scheduling for ${section}"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:46
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:30
+#: /src/schooltool/timetable/browser/templates/timetable-add.pt:27
 msgid "Using timetable:"
 msgstr ""
 
@@ -4691,6 +5287,10 @@ msgstr ""
 msgid "Proceed"
 msgstr ""
 
+#: /src/schooltool/timetable/browser/templates/timetable-add.pt:13
+msgid "Create a New Timetable"
+msgstr ""
+
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
 msgid "Default Timetable Schema:"
 msgstr ""
@@ -4709,25 +5309,21 @@ msgstr ""
 msgid "Homeroom"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:3
-#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:6
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:3
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:6
-#: /src/schooltool/timetable/browser/templates/ttwizard.pt:3
-#: /src/schooltool/timetable/browser/templates/ttwizard.pt:6
-#: /src/schooltool/timetable/browser/templates/simpletts.pt:3
-#: /src/schooltool/timetable/browser/templates/simpletts.pt:6
-#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:3
-#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:6
-#: /src/schooltool/timetable/browser/templates/ttwizard_choice.pt:3
-#: /src/schooltool/timetable/browser/templates/ttwizard_choice.pt:6
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:3
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:6
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:3
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:6
-#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:3
-#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:6
-msgid "New timetable schema"
+#: /src/schooltool/timetable/browser/templates/ttwizard.pt:20
+#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:35
+#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:41
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:30
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:39
+#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:20
+#: /src/schooltool/term/browser/term_add_edit.pt:60
+msgid "Next"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/ttwizard.pt:9
+msgid ""
+"This wizard presents you with a series of questions. You may alternatively "
+"create a <a href=\"simpleadd.html\">simple weekly timetable schema</a>, or "
+"use a more complex <a href=\"complexadd.html\">advanced adding form</a>."
 msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:261
@@ -4788,6 +5384,7 @@ msgid ""
 "Enter start and end times for each slot, one slot (HH:MM - HH:MM) per line."
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:428
 #: /src/schooltool/timetable/browser/ttwizard.py:470
 msgid "Not a valid time slot: $slot."
@@ -4803,6 +5400,7 @@ msgid ""
 "HH:MM) per line."
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:474
 msgid "Please enter at least one time slot for $day."
 msgstr ""
@@ -4829,6 +5427,7 @@ msgstr ""
 msgid "Enter names of periods, one per line."
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:581
 msgid "Please enter at least $number periods."
 msgstr ""
@@ -4858,6 +5457,7 @@ msgstr ""
 msgid "Please provide all periods."
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:656
 #: /src/schooltool/timetable/browser/ttwizard.py:714
 msgid "The following periods were selected more than once: $periods"
@@ -4867,6 +5467,7 @@ msgstr ""
 msgid "Please put the periods in order for each day:"
 msgstr ""
 
+#. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:710
 msgid "$period on day $day"
 msgstr ""
@@ -4897,17 +5498,11 @@ msgstr ""
 msgid "Unknown period id: %r"
 msgstr ""
 
-#: /src/schooltool/widget/password.py:40
-msgid ""
-"${password} <label for=\"${label}\" title=\"\">Confirm</label> ${confirm}"
+#. Default: "Confirm"
+#: /src/schooltool/widget/password.py:39
+msgid "confirm password"
 msgstr ""
 
-#: /src/schooltool/widget/password.py:52
+#: /src/schooltool/widget/password.py:56
 msgid "Supplied passwords are not identical"
 msgstr ""
-
-#~ msgid "Add a new course"
-#~ msgstr "إضافة درس جديد"
-
-#~ msgid "Add a new section"
-#~ msgstr "إضافة فصل جديد"

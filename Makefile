@@ -193,8 +193,8 @@ extract-rosetta-tarball:
 	    { echo ERROR: cowardly refusing to continue because translations.tmp exists; exit 1; }
 	mkdir translations.tmp
 	cd translations.tmp && tar -xzf ../rosetta-$(DOMAIN).tar.gz && mv */* .
-	set -e; for file in translations.tmp/*.po; do \
-	    dir=src/`echo $(DOMAIN) | sed s/\\\./\\\//g`/locales/`basename $${file} .po`/LC_MESSAGES; \
+	set -e; for file in translations.tmp/$(DOMAIN)-*.po; do \
+	    dir=src/`echo $(DOMAIN) | sed s/\\\./\\\//g`/locales/`basename $${file} .po | sed s/$(DOMAIN)-//g`/LC_MESSAGES; \
 	    [ -x $${dir} ] || mkdir -p $${dir}; \
 	    cp $${file} $${dir}/$(DOMAIN).po; \
 	    echo Updating $${dir}/$(DOMAIN).po; \
