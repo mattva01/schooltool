@@ -388,7 +388,7 @@ the only differing thing would be the local port number.
 Copyright information
 ---------------------
 
-SchoolTool is copyright (c) 2003--2006 Shuttleworth Foundation
+SchoolTool is copyright (c) 2003--2007 Shuttleworth Foundation
 
 All files in the src/schooltool directory are part of SchoolTool, and
 are (c) Shuttleworth Foundation, with the exception of translations in
