@@ -43,4 +43,4 @@ def evolve(context):
             continue
 
         for event in calendar:
-            event.__name__ = base64.encodestring(event.unique_id).replace('\n', '')
+            event.__name__ = base64.encodestring(event.unique_id.encode('utf-8')).replace('\n', '')

@@ -57,7 +57,7 @@ class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
     def __init__(self, *args, **kwargs):
         resources = kwargs.pop('resources', ())
         SimpleCalendarEvent.__init__(self, *args, **kwargs)
-        self.__name__ = base64.encodestring(self.unique_id).replace('\n', '')
+        self.__name__ = base64.encodestring(self.unique_id.encode('utf-8')).replace('\n', '')
         self._resources = ()
         for resource in resources:
             self.bookResource(resource)

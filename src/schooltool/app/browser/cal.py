@@ -186,7 +186,7 @@ class CalendarTraverser(object):
             return view
 
         try:
-            event_id = base64.decodestring(name)
+            event_id = base64.decodestring(name).decode("utf-8")
         except:
             raise NotFound(self.context, name, request)
 
