@@ -33,7 +33,7 @@ from zope.app.container.contained import Contained
 from zope.location.interfaces import ILocation
 from zope.app.security.interfaces import IAuthentication, ILoginPassword
 from zope.app.security.interfaces import IAuthenticatedGroup, IEveryoneGroup
-from zope.session.interfaces import ISession
+from zope.app.session.interfaces import ISession
 from zope.interface import implements
 from zope.component import adapts
 from zope.security.interfaces import IGroupAwarePrincipal
