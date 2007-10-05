@@ -1252,10 +1252,7 @@ class VEventParser(object):
             if self._getType('DTEND') != self._getType('DTSTART'):
                 raise ICalParseError("DTEND property should have the same type"
                                      " as DTSTART")
-            if self.hasProp('DURATION'):
-                raise ICalParseError("VEVENT cannot have both a DTEND"
-                                     " and a DURATION property")
-        if self.hasProp('DURATION'):
+        elif self.hasProp('DURATION'):
             if self._getType('DURATION') != 'DURATION':
                 raise ICalParseError("DURATION property should have type"
                                      " DURATION")

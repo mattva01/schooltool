@@ -886,21 +886,6 @@ class TestReadIcalendar(unittest.TestCase):
             ...             BEGIN:VEVENT
             ...             UID:hello
             ...             DTSTART;VALUE=DATE:20010201
-            ...             DTEND;VALUE=DATE:20010203
-            ...             DURATION:P1DT1H1M2S
-            ...             END:VEVENT
-            ...             END:VCALENDAR
-            ...             '''))
-            >>> list(read_icalendar(file))
-            Traceback (most recent call last):
-            ...
-            ICalParseError: VEVENT cannot have both a DTEND and a DURATION property
-
-            >>> file = StringIO(dedent('''\
-            ...             BEGIN:VCALENDAR
-            ...             BEGIN:VEVENT
-            ...             UID:hello
-            ...             DTSTART;VALUE=DATE:20010201
             ...             DURATION;VALUE=DAYS:P1DT1H1M2S
             ...             END:VEVENT
             ...             END:VCALENDAR
@@ -992,6 +977,25 @@ class TestReadIcalendar(unittest.TestCase):
             ...
             ICalParseError: Expected ':' in line:
             This is just plain text
+
+        If you pass both DTEND and DURATION, no errors are raised:
+
+            >>> file = StringIO(dedent('''\
+            ...             BEGIN:VCALENDAR
+            ...             BEGIN:VEVENT
+            ...             UID:hello
+            ...             DTSTART;VALUE=DATE:20010201
+            ...             DTEND;VALUE=DATE:20010203
+            ...             DURATION:P1D
+            ...             END:VEVENT
+            ...             END:VCALENDAR
+            ...             '''))
+            >>> event = list(read_icalendar(file))[0]
+
+        The DURATION is used, while DTEND gets ignored:
+
+            >>> event.duration
+            datetime.timedelta(1)
 
         """
 
