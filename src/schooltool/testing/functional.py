@@ -88,6 +88,7 @@ class ZCMLLayer(_ZCMLLayer):
         finally:
             uninstall_db_bootstrap_hook()
 
+
 def collect_ftests(package=None, level=None, layer=None, filenames=None):
     """Collect all functional doctest files in a given package.
 
