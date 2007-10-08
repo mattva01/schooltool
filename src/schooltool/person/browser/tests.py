@@ -475,12 +475,15 @@ def doctest_PersonFilterWidget():
 
         >>> from zope.app.catalog.interfaces import ICatalog
         >>> class IndexStub(object):
-        ...     documents_to_values = {}
-        >>> index = IndexStub()
+        ...     def __init__(self):
+        ...         self.documents_to_values = {}
+        >>> title_index = IndexStub()
+        >>> username_index = IndexStub()
 
         >>> class CatalogStub(dict):
         ...     def __init__(self):
-        ...         self['title'] = index
+        ...         self['title'] = title_index
+        ...         self['__name__'] = username_index
         >>> catalog = CatalogStub()
 
    Some persons:
@@ -511,12 +514,13 @@ def doctest_PersonFilterWidget():
 
         >>> class ContainerStub(dict):
         ...     def __init__(self):
-        ...         persons = [('alpha', [a]),
-        ...                    ('beta', [b, c]),
-        ...                    ('lambda', [b])]
-        ...         for id, (title, groups) in enumerate(persons):
-        ...             self[title] = PersonStub(title, groups, id)
-        ...             index.documents_to_values[id] = title
+        ...         persons = [('a1234','alpha', [a]),
+        ...                    ('a1235','beta', [b, c]),
+        ...                    ('a1236','lambda', [b])]
+        ...         for id, (username, title, groups) in enumerate(persons):
+        ...             self[username] = PersonStub(title, groups, id)
+        ...             title_index.documents_to_values[id] = title
+        ...             username_index.documents_to_values[id] = username
         ...     def __conform__(self, iface):
         ...         if iface == ICatalog:
         ...             return catalog
@@ -595,6 +599,12 @@ def doctest_PersonFilterWidget():
    The search is case insensitive:
 
         >>> request.form = {'SEARCH_TITLE': 'AlphA'}
+        >>> widget.filter(items)
+        [{'id': 0}]
+
+   The search also searches through usernames:
+
+        >>> request.form = {'SEARCH_TITLE': '1234'}
         >>> widget.filter(items)
         [{'id': 0}]
 
