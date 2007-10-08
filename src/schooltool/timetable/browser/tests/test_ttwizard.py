@@ -320,7 +320,8 @@ def doctest_CycleStep():
         >>> view.update()
         True
         >>> session['day_names']
-        [u'Monday', u'Tuesday', u'Wednesday', u'Thursday', u'Friday']
+        [u'Monday', u'Tuesday', u'Wednesday', u'Thursday', u'Friday',
+         u'Saturday', u'Sunday']
 
     """
 
@@ -540,37 +541,36 @@ def doctest_RotatingSlotEntryStep():
         >>> print view()
         <BLANKLINE>
         ...
-        <tr>
-          <th>Oneday</th>
-          <th>Twoday</th>
-        </tr>
-        <tr>
-          <td>
-            <textarea rows="12" cols="15" name="times.0">8:00 - 8:45
+            <tr>
+              <th>Oneday</th>
+              <th>Twoday</th>
+            </tr>
+            <tr>
+              <td>
+                <textarea rows="12" cols="15" name="times.0">8:00 - 8:45
         9:05 - 9:50
         </textarea>
-          </td>
-          <td>
-            <textarea rows="12" cols="15" name="times.1">8:00 - 8:45
+              </td>
+              <td>
+                <textarea rows="12" cols="15" name="times.1">8:00 - 8:45
         9:05 - 9:50
         </textarea>
-          </td>
-        </tr>
+              </td>
+            </tr>
         </table>
         ...
 
         >>> print view.error
         None
 
-    SlotEntryStep.update wants at least one slot on each day:
+    SlotEntryStep.update accepts days without any slots (so you could
+    have a day without lessons in the middle of the cycle, or have
+    lessons on Saturday, but not Sunday):
 
         >>> view.request.form['times.0'] = u'9:30 - 10:25'
         >>> view.request.form['times.1'] = u''
         >>> view.update()
-        False
-
-        >>> print translate(view.error)
-        Please enter at least one time slot for Twoday.
+        True
 
         >>> print view()
         <BLANKLINE>
@@ -628,7 +628,8 @@ def doctest_WeeklySlotEntryStep():
         >>> view.getSessionData()['cycle'] = 'weekly'
 
         >>> view.dayNames()
-        [u'Monday', u'Tuesday', u'Wednesday', u'Thursday', u'Friday']
+        [u'Monday', u'Tuesday', u'Wednesday', u'Thursday', u'Friday',
+         u'Saturday', u'Sunday']
 
     At first we get a table with one empty row of input fields:
 
@@ -638,7 +639,7 @@ def doctest_WeeklySlotEntryStep():
         <tr>
           <th>Monday</th>
           ...
-          <th>Friday</th>
+          <th>Sunday</th>
         </tr>
         <tr>
           <td>
@@ -652,6 +653,12 @@ def doctest_WeeklySlotEntryStep():
         9:05 - 9:50
         </textarea>
           </td>
+          <td>
+            <textarea rows="12" cols="15" name="times.5"></textarea>
+          </td>
+          <td>
+            <textarea rows="12" cols="15" name="times.6"></textarea>
+          </td>
         </tr>
         </table>
         ...
@@ -659,15 +666,12 @@ def doctest_WeeklySlotEntryStep():
         >>> print view.error
         None
 
-    SlotEntryStep.update wants at least one slot on each day:
+    SlotEntryStep.update accepts days without any slots:
 
         >>> view.request.form['times.0'] = u'9:30 - 10:25'
-        >>> view.request.form['times.1'] = u''
+        >>> view.request.form['times.5'] = u''
         >>> view.update()
-        False
-
-        >>> print translate(view.error)
-        Please enter at least one time slot for Tuesday.
+        True
 
         >>> print view()
         <BLANKLINE>
@@ -676,8 +680,9 @@ def doctest_WeeklySlotEntryStep():
           <td>
             <textarea rows="12" cols="15" name="times.0">9:30 - 10:25</textarea>
           </td>
+          ...
           <td>
-            <textarea rows="12" cols="15" name="times.1"></textarea>
+            <textarea rows="12" cols="15" name="times.5"></textarea>
           </td>
           ...
         </tr>
@@ -709,38 +714,9 @@ def doctest_WeeklySlotEntryStep():
          [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
           (datetime.time(10, 35), datetime.timedelta(0, 2700))],
          [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
-          (datetime.time(10, 35), datetime.timedelta(0, 2700))]]
-
-    If we choose a rotating timetable cycle and slots vary based on day of
-    week, each day must have the same number of slots.
-
-        >>> form = {'times.4': '9:15 - 10:10\n10:35 - 11:20\n11:30 - 12:15\n'}
-        >>> for i in range(0, 4):
-        ...     field_name = 'times.%d' % i
-        ...     form[field_name] = u'9:15 - 10:10\n10:35 - 11:20'
-        >>> request = TestRequest(form=form)
-        >>> view = WeeklySlotEntryStep(context, request)
-
-        >>> session = view.getSessionData()
-        >>> session['cycle'] = 'rotating'
-        >>> session['time_model'] = 'weekly'
-
-        >>> view.update()
-        False
-        >>> translate(view.error)
-        u'As you have selected a rotating timetable cycle and slots based on day of week, all days must have the same number of time periods.'
-
-    If we change the time model, the same data will pass:
-
-        >>> session['time_model'] = 'cycle_day'
-        >>> view.update()
-        True
-
-    Or we can delete that key altogether:
-
-        >>> del session['time_model']
-        >>> view.update()
-        True
+          (datetime.time(10, 35), datetime.timedelta(0, 2700))],
+         [],
+         []]
 
     The next page is the period naming step.
 

@@ -277,7 +277,7 @@ class CycleStep(ChoiceStep):
         if success and session['cycle'] == 'weekly':
             weekday_names = [translate(day_of_week_names[i],
                                        context=self.request)
-                             for i in range(5)]
+                             for i in range(7)]
             session['day_names'] = weekday_names
         return success
 
@@ -432,8 +432,11 @@ class SimpleSlotEntryStep(FormStep):
             self.error = _("Please enter at least one time slot.")
             return False
         session = self.getSessionData()
-        num_days = len(session['day_names'])
-        session['time_slots'] = [times] * num_days
+        if session.get('similar_days') and session['cycle'] == 'weekly':
+            session['time_slots'] = [times] * 5 + [[]] * 2
+        else:
+            num_days = len(session['day_names'])
+            session['time_slots'] = [times] * num_days
         return True
 
     def next(self):
@@ -456,6 +459,18 @@ class RotatingSlotEntryStep(Step):
     error = None
     example_intervals = '8:00 - 8:45\n9:05 - 9:50\n'
 
+    def days(self):
+        """Return a list of day ids/values for the view"""
+        for day_number in range(len(self.dayNames())):
+            day_id = "times.%s" % day_number
+            default = ""
+            if day_number < 5:
+                default = self.example_intervals
+
+            value = self.request.get(day_id, default)
+            yield {'id': day_id,
+                   'value': value}
+
     def dayNames(self):
         """Return the list of day names."""
         return self.getSessionData()['day_names']
@@ -469,10 +484,6 @@ class RotatingSlotEntryStep(Step):
             except ValueError, e:
                 self.error = _("Not a valid time slot: $slot.",
                                mapping={'slot': unicode(e.args[0])})
-                return False
-            if not times:
-                self.error = _("Please enter at least one time slot for $day.",
-                               mapping={'day': day_name})
                 return False
             result.append(times)
 
@@ -495,7 +506,7 @@ class WeeklySlotEntryStep(RotatingSlotEntryStep):
     def dayNames(self):
         """Return the list of day names."""
         return [translate(day_of_week_names[i], context=self.request)
-                for i in range(5)]
+                for i in range(7)]
 
     def update(self):
         """Store the slots in the session.
@@ -508,15 +519,8 @@ class WeeklySlotEntryStep(RotatingSlotEntryStep):
         if (result and session['cycle'] == 'rotating'
             and session.get('time_model') == 'weekly'):
             slots = session['time_slots']
-            assert len(slots) == 5 # Monday - Friday
+            assert len(slots) == 7 # Monday - Sunday
             num_slots = len(slots[0])
-            for day in slots[1:]:
-                if len(day) != num_slots:
-                    self.error = _('As you have selected a rotating timetable'
-                                   ' cycle and slots based on day of week,'
-                                   ' all days must have the same number'
-                                   ' of time periods.')
-                    return False
         return result
 
 

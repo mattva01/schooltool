@@ -98,11 +98,14 @@ We can examine its composition more easily by invoking the RESTive view.
       <timezone name="UTC"/>
       <model factory="WeeklyTimetableModel">
         <daytemplate>
-          <used when="default"/>
+          <used when="Friday Monday Thursday Tuesday Wednesday"/>
           <period duration="55" tstart="09:30"/>
           <period duration="55" tstart="10:30"/>
           <period duration="55" tstart="11:30"/>
           <period duration="55" tstart="12:30"/>
+        </daytemplate>
+        <daytemplate>
+          <used when="Saturday Sunday default"/>
         </daytemplate>
       </model>
       <day id="Monday">
@@ -134,6 +137,10 @@ We can examine its composition more easily by invoking the RESTive view.
         <period id="10:30-11:25"/>
         <period id="11:30-12:25"/>
         <period id="12:30-13:25"/>
+      </day>
+      <day id="Saturday">
+      </day>
+      <day id="Sunday">
       </day>
     </timetable>
 
@@ -463,6 +470,7 @@ Friday.
     ... 10:25-11:15
     ... 11:20-12:10
     ... """
+
     >>> manager.getControl('Next').click()
 
 Do periods have names or are they simply designated by time? Let's say that
@@ -550,7 +558,7 @@ The schema is now created:
           <period duration="55" tstart="12:30"/>
         </daytemplate>
         <daytemplate>
-          <used when="default"/>
+          <used when="Saturday Sunday default"/>
         </daytemplate>
       </model>
       <day id="Monday">
@@ -581,6 +589,125 @@ The schema is now created:
         <period id="C"/>
         <period id="D"/>
         <period id="E"/>
+      </day>
+      <day id="Saturday">
+      </day>
+      <day id="Sunday">
+      </day>
+    </timetable>
+
+
+Weekly timetable, lessons on saturday
+-------------------------------------
+
+Let's go to the timetable schema wizard:
+
+    >>> manager.getLink('School Timetables').click()
+    >>> manager.getLink('New Timetable').click()
+
+We enter a title and press Next
+
+    >>> manager.getControl('Title').value = 'Weekly 3'
+    >>> manager.getControl('Next').click()
+
+Does your school's timetable cycle use days of the week, or a rotating cycle?
+Let's choose weekly again.
+
+    >>> manager.getControl('Days of the week').click()
+
+Do classes begin and end at the same time each day in your school's timetable?
+Let's say that classes begin at different times:
+
+    >>> manager.getControl('Different times').click()
+
+Enter start and end times for each slot on each day, one slot (HH:MM -
+HH:MM) per line.  Let's add a few periods.  All days have the same
+periods. But this time let's add some periods on Saturday:
+
+    >>> periods = """\
+    ... 9:30-10:25
+    ... 10:30-11:25
+    ... 11:30-12:25
+    ... 12:30-13:25
+    ... """
+
+    >>> for day in range(6):
+    ...     manager.getControl(name='times.%s' % day).value = periods
+
+    >>> manager.getControl('Next').click()
+
+Do periods have names or are they simply designated by time? For now, let's
+say that periods are designated by time.
+
+    >>> manager.getControl('Designated by time').click()
+
+Do we use a homeroom period?  Let's say no:
+
+    >>> manager.getControl('No').click()
+
+The schema is now created:
+
+    >>> print rest(r"""
+    ... GET /ttschemas/weekly-3 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    Set-Cookie: ...
+    <BLANKLINE>
+    <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+      <title>Weekly 3</title>
+      <timezone name="UTC"/>
+      <model factory="WeeklyTimetableModel">
+        <daytemplate>
+          <used when="Friday Monday Saturday Thursday Tuesday Wednesday"/>
+          <period duration="55" tstart="09:30"/>
+          <period duration="55" tstart="10:30"/>
+          <period duration="55" tstart="11:30"/>
+          <period duration="55" tstart="12:30"/>
+        </daytemplate>
+        <daytemplate>
+          <used when="Sunday default"/>
+        </daytemplate>
+      </model>
+      <day id="Monday">
+        <period id="09:30-10:25"/>
+        <period id="10:30-11:25"/>
+        <period id="11:30-12:25"/>
+        <period id="12:30-13:25"/>
+      </day>
+      <day id="Tuesday">
+        <period id="09:30-10:25"/>
+        <period id="10:30-11:25"/>
+        <period id="11:30-12:25"/>
+        <period id="12:30-13:25"/>
+      </day>
+      <day id="Wednesday">
+        <period id="09:30-10:25"/>
+        <period id="10:30-11:25"/>
+        <period id="11:30-12:25"/>
+        <period id="12:30-13:25"/>
+      </day>
+      <day id="Thursday">
+        <period id="09:30-10:25"/>
+        <period id="10:30-11:25"/>
+        <period id="11:30-12:25"/>
+        <period id="12:30-13:25"/>
+      </day>
+      <day id="Friday">
+        <period id="09:30-10:25"/>
+        <period id="10:30-11:25"/>
+        <period id="11:30-12:25"/>
+        <period id="12:30-13:25"/>
+      </day>
+      <day id="Saturday">
+        <period id="09:30-10:25"/>
+        <period id="10:30-11:25"/>
+        <period id="11:30-12:25"/>
+        <period id="12:30-13:25"/>
+      </day>
+      <day id="Sunday">
       </day>
     </timetable>
 
@@ -714,7 +841,7 @@ The schema is now created:
           <period duration="55" tstart="12:30"/>
         </daytemplate>
         <daytemplate>
-          <used when="default"/>
+          <used when="Saturday Sunday default"/>
         </daytemplate>
       </model>
       <day id="A">
@@ -938,6 +1065,5 @@ again.
     >>> manager.getLink('New Timetable').click()
     >>> manager.getControl('Title')
     <Control name='field.title' type='text'>
-
 
 .. vim: ft=rest fdm=indent
