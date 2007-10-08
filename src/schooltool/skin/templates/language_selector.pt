@@ -1,5 +1,6 @@
-<tal:if condition="view/languages"
-        i18n:domain="schooltool">
+<div tal:condition="view/languages"
+     i18n:domain="schooltool"
+     id="language_selector">
   <tal:block repeat="lang view/languages">
     <tal:if condition="python:lang == view.selected_lang()">
       <span tal:content="lang">EN</span>
@@ -10,4 +11,4 @@
          tal:content="lang">EN</a>
     </tal:if>
   </tal:block>
-</tal:if>
+</div>

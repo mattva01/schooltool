@@ -146,6 +146,13 @@ FORM div.oneline-form div.value{
         font-size: 3em;
 }
 
+#header #language_selector {
+  float: right;
+  position: absolute;
+  right: 1em;
+  top: 4em;
+}
+
 #schooltool-name {
   margin: 3px 0 0 70px;
   padding: 0;
