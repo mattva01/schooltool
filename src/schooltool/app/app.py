@@ -27,14 +27,19 @@ import calendar
 from persistent import Persistent
 from persistent.dict import PersistentDict
 
+from zope.location.location import LocationProxy
+from zope.component import adapter
 from zope.component import adapts
 from zope.event import notify
+from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import classProvides
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from zope.schema.interfaces import IVocabularyFactory
 
 from zope.annotation.interfaces import IAttributeAnnotatable, IAnnotations
+from zope.app.applicationcontrol.interfaces import IApplicationControl
+from zope.app.applicationcontrol.applicationcontrol import applicationController
 from zope.app.component.hooks import getSite
 from zope.app.component.site import SiteManagerContainer
 from zope.app.container import sample
@@ -42,6 +47,7 @@ from zope.app.container.contained import NameChooser
 from zope.app.container.interfaces import INameChooser
 from zope.traversing.interfaces import IContainmentRoot
 
+from schooltool.traverser.traverser import AdapterTraverserPlugin
 from schooltool.app.overlay import ICalendarOverlayInfo
 from schooltool.app.interfaces import IPluginInit
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -300,3 +306,13 @@ class InitBase(object):
     def __call__(self):
         raise NotImplementedError("This method should be overriden by"
                                   " inheriting classes")
+
+
+ApplicationControlTraverserPlugin = AdapterTraverserPlugin(
+    'control', IApplicationControl)
+
+
+@adapter(ISchoolToolApplication)
+@implementer(IApplicationControl)
+def getApplicationControl(app=None):
+    return LocationProxy(applicationController, app, 'control')

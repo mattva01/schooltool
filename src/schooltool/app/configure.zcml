@@ -286,6 +286,19 @@
         set_schema="schooltool.app.overlay.ICalendarOverlayInfo"/>
   </class>
 
+  <adapter
+      factory=".app.getApplicationControl"
+      trusted="true"
+      />
+
+  <subscriber
+      for="schooltool.app.interfaces.ISchoolToolApplication
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".app.ApplicationControlTraverserPlugin"
+      permission="schooltool.edit"
+      />
+
   <!-- Documentation -->
 
   <configure

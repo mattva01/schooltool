@@ -530,6 +530,56 @@
       permission="schooltool.edit"
       />
 
+  <!-- Application Control -->
+
+  <page
+      for="zope.app.applicationcontrol.interfaces.IApplicationControl"
+      layer="schooltool.skin.ISchoolToolLayer"
+      name="ZODBControl.html"
+      template="templates/zodbcontrol.pt"
+      class="zope.app.applicationcontrol.browser.zodbcontrol.ZODBControlView"
+      permission="zope.ManageApplication"
+      menu="schooltool_actions"
+      title="ZODB Control"/>
+
+  <configure package="schooltool.skin">
+
+    <navigationViewlet
+      name="control"
+      for="*"
+      manager="schooltool.skin.INavigationManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.skin.TopLevelContainerNavigationViewlet"
+      permission="schooltool.edit"
+      link="control"
+      title="Application Control"
+      order="200"
+      />
+
+    <navigationViewlet
+      name="translation-domain"
+      for="zope.app.applicationcontrol.interfaces.IApplicationControl"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.edit"
+      link="TranslationDomain.html"
+      title="Translation Domains"
+      order="10"
+      />
+
+    <navigationViewlet
+      name="generations"
+      for="zope.app.applicationcontrol.interfaces.IApplicationControl"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.edit"
+      link="generations.html"
+      title="Generations"
+      order="20"
+      />
+
+  </configure>
+
   <!-- Documentation -->
 
   <configure

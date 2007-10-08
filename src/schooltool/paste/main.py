@@ -23,6 +23,9 @@ $Id$
 """
 import os
 
+from ZODB.ActivityMonitor import ActivityMonitor
+from ZODB.interfaces import IDatabase
+from zope.component import provideUtility
 from zope.app.wsgi import WSGIPublisherApplication
 from zope.app.publication.httpfactory import HTTPPublicationRequestFactory
 
@@ -35,6 +38,8 @@ class SchoolToolPublisherApplication(StandaloneServer, WSGIPublisherApplication)
         options = self.load_options(['schooltool', '-c', config_file])
         db = self.setup(options)
         self.requestFactory = factory(db)
+        provideUtility(db, IDatabase)
+        db.setActivityMonitor(ActivityMonitor())
 
 
 _st_app = None

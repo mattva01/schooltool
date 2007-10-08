@@ -1,0 +1,58 @@
+<tal:defs define="dummy view/update" />
+<html metal:use-macro="context/@@standard_macros/view"
+    i18n:domain="zope">
+  <head>
+    <title i18n:translate="">ZODB Controller</title>
+  </head>
+  <body>
+    <div id="message" metal:fill-slot="message">
+      <div class="row" tal:repeat="status view/update">
+         <div class="field" tal:content="status" i18n:translate=""/>
+      </div>
+    </div>
+    <div metal:fill-slot="body">
+      <form action="." method="post" tal:attributes="action request/URL">
+      <div class="row">
+        <table border="1">
+            <tr>
+              <th i18n:translate="">Pack</th>
+              <th i18n:translate="">Utility Name</th>
+              <th i18n:translate="">Database Name</th>
+              <th i18n:translate="">Size</th>
+            </tr>
+            <tr tal:repeat="db view/databases">
+              <td>
+                <input type="checkbox" name="dbs:list"
+                       tal:attributes="value db/utilName"/>
+              </td>
+              <td>
+                <span tal:replace="db/utilName"/>
+              </td>
+
+              <td>
+                <span tal:replace="db/dbName"/>
+              </td>
+              <td>
+                <span tal:replace="db/size"/>
+              </td>
+            </tr>
+        </table>
+
+        <div class="row">
+          <span class="label" i18n:translate="">Keep up to</span>
+          <span class="field">
+            <input type="text" size="4" name="days" value="0"
+                   tal:attributes="value request/days|string:0" />
+            <span tal:omit-tag="" i18n:translate="">days</span>
+          </span>
+          <div class="controls">
+            <input type="submit" name="PACK" value="Pack"
+                i18n:attributes="value pack-button"/>
+          </div>
+        </div>
+
+      </div>
+      </form>
+    </div>
+  </body>
+</html>
