@@ -1,4 +1,5 @@
-<div class="batch-navigation">
+<div class="batch-navigation"
+     i18n:domain="schooltool">
 
   <tal:if condition="view/needsBatch">
     <span tal:condition="not:view/previous_url" i18n:translate=""

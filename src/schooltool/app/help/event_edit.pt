@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" metal:use-macro="view/@@schooltool_macros/onlinehelp/page">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" metal:use-macro="view/@@schooltool_macros/onlinehelp/page"
+      i18n:domain="schooltool">
       <head>
       <title metal:fill-slot="title" i18n:translate="">Edit Event</title>
 </head>
