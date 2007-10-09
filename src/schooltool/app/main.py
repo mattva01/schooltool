@@ -38,7 +38,10 @@ import transaction
 import zope.app.component.hooks
 import zope.configuration.config
 import zope.configuration.xmlconfig
+from ZODB.ActivityMonitor import ActivityMonitor
+from ZODB.interfaces import IDatabase
 from zope.interface import directlyProvides, implements
+from zope.component import provideUtility
 from zope.component import provideAdapter, adapts
 from zope.event import notify
 from zope.server.taskthreads import ThreadedTaskDispatcher
@@ -605,6 +608,10 @@ class StandaloneServer(object):
             self.restoreManagerUser(app, options.manager_password)
             transaction.commit()
             connection.close()
+
+        provideUtility(db, IDatabase)
+        db.setActivityMonitor(ActivityMonitor())
+
         return db
 
     def beforeRun(self, options, db):
