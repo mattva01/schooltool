@@ -3,7 +3,7 @@
            xmlns:security="http://schooltool.org/securitypolicy"
            i18n_domain="schooltool">
 
-  <!-- Basically a copy of zope.app.securitypolicy/securitypolicy.zcml  -->
+  <!-- Basically a copy of zope.securitypolicy/securitypolicy.zcml  -->
   <securityPolicy
     component=".policy.SchoolToolSecurityPolicy" />
 

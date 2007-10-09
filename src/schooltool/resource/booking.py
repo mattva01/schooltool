@@ -22,7 +22,7 @@ Resource Booking caledar and events
 $Id$
 """
 from zope.interface import implements
-from zope.app.session.interfaces import ISession
+from zope.session.interfaces import ISession
 from zope.location.location import locate
 
 from schooltool.calendar.simple import ImmutableCalendar

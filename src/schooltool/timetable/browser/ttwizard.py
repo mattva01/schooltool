@@ -132,7 +132,7 @@ from zope.app.form.interfaces import WidgetsError
 from zope.publisher.browser import BrowserView
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.container.interfaces import INameChooser
-from zope.app.session.interfaces import ISession
+from zope.session.interfaces import ISession
 
 from schooltool.app.browser.cal import day_of_week_names
 from schooltool.app.interfaces import ISchoolToolApplication

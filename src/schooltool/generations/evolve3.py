@@ -29,7 +29,7 @@ from zope.app import zapi
 from zope.app.generations.utility import findObjectsProviding
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.security.interfaces import IUnauthenticatedGroup
-from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
+from zope.securitypolicy.interfaces import IPrincipalPermissionManager
 from schooltool.app.interfaces import ISchoolToolApplication
 
 def evolve(context):

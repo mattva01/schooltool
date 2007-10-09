@@ -55,7 +55,7 @@ from zope.app.form.utility import getWidgetsData
 from zope.publisher.browser import BrowserView
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.filerepresentation.interfaces import IWriteFile, IReadFile
-from zope.app.session.interfaces import ISession
+from zope.session.interfaces import ISession
 from zope.traversing.api import getPath
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.html.field import HtmlFragment

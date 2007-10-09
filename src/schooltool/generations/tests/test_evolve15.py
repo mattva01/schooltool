@@ -63,8 +63,8 @@ def doctest_removeLocalGrants():
 
         >>> obj = ObjectStub('object')
         >>> directlyProvides(obj, IAnnotations)
-        >>> from zope.app.securitypolicy.principalpermission import AnnotationPrincipalPermissionManager
-        >>> from zope.app.securitypolicy.principalrole import AnnotationPrincipalRoleManager
+        >>> from zope.securitypolicy.principalpermission import AnnotationPrincipalPermissionManager
+        >>> from zope.securitypolicy.principalrole import AnnotationPrincipalRoleManager
         >>> ppm = AnnotationPrincipalPermissionManager(obj)
         >>> ppm.grantPermissionToPrincipal('test.run', 'testrunner')
         >>> prm = AnnotationPrincipalRoleManager(obj)

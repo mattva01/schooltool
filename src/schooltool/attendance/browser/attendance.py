@@ -26,8 +26,6 @@ import datetime
 import itertools
 import pytz
 
-from zope.app.security.settings import PermissionSetting
-from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.app.form.interfaces import WidgetsError
 from zope.app.form.interfaces import IInputWidget
 from zope.app import zapi

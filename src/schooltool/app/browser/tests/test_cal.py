@@ -38,7 +38,7 @@ from zope.app.testing import setup, ztapi
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.publisher.browser import BrowserView
 from zope.traversing.interfaces import IContainmentRoot
-from zope.app.session.interfaces import ISession
+from zope.session.interfaces import ISession
 from zope.publisher.interfaces.http import IHTTPRequest
 
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -4243,7 +4243,7 @@ def doctest_CalendarViewBase():
 
     update() stores the last visited day in the session:
 
-        >>> from zope.app.session.interfaces import ISession
+        >>> from zope.session.interfaces import ISession
         >>> ISession(view.request)['calendar']['last_visited_day']
         datetime.date(2005, 1, 2)
 

@@ -585,7 +585,7 @@ def doctest_AttendanceCalendarEventViewlet():
         >>> class FakePrincipal:
         ...     id = 'manager'
 
-        >>> from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
+        >>> from zope.securitypolicy.interfaces import IPrincipalPermissionManager
         >>> ztapi.provideAdapter(ISection, IPrincipalPermissionManager,
         ...                      FakePermissionManager)
 

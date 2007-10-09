@@ -42,7 +42,7 @@ This generation converts all the old class paths to their new ones.
 
 $Id$
 """
-from zope.app.securitypolicy.securitymap import PersistentSecurityMap
+from zope.securitypolicy.securitymap import PersistentSecurityMap
 
 from schooltool.timetable import TIMETABLES_KEY
 from schooltool.timetable.interfaces import IHaveTimetables

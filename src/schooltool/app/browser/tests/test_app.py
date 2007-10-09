@@ -276,9 +276,9 @@ def doctest_hasPermissions():
     Set up for local grants:
 
         >>> from zope.annotation.interfaces import IAnnotatable
-        >>> from zope.app.securitypolicy.interfaces import \
+        >>> from zope.securitypolicy.interfaces import \
         ...                         IPrincipalPermissionManager
-        >>> from zope.app.securitypolicy.principalpermission import \
+        >>> from zope.securitypolicy.principalpermission import \
         ...                         AnnotationPrincipalPermissionManager
         >>> setup.setUpAnnotations()
         >>> setup.setUpTraversal()
@@ -289,7 +289,7 @@ def doctest_hasPermissions():
     Let's set the Zope security policy:
 
         >>> from zope.security.management import setSecurityPolicy
-        >>> from zope.app.securitypolicy.zopepolicy import ZopeSecurityPolicy
+        >>> from zope.securitypolicy.zopepolicy import ZopeSecurityPolicy
         >>> old = setSecurityPolicy(ZopeSecurityPolicy)
 
     Suppose we have a SchoolTool object:

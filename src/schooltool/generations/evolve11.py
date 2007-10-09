@@ -27,8 +27,6 @@ $Id$
 
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.generations.utility import findObjectsProviding
-from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
-from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
 
 from schooltool.app.interfaces import ISchoolToolApplication
 

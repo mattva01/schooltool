@@ -27,12 +27,12 @@ from schooltool.testing import registry
 
 # ----------------------------- Session setup ------------------------------
 from zope.publisher.interfaces import IRequest
-from zope.app.session.http import CookieClientIdManager
-from zope.app.session.interfaces import ISessionDataContainer
-from zope.app.session.interfaces import IClientId
-from zope.app.session.interfaces import IClientIdManager, ISession
-from zope.app.session.session import ClientId, Session
-from zope.app.session.session import PersistentSessionDataContainer
+from zope.session.http import CookieClientIdManager
+from zope.session.interfaces import ISessionDataContainer
+from zope.session.interfaces import IClientId
+from zope.session.interfaces import IClientIdManager, ISession
+from zope.session.session import ClientId, Session
+from zope.session.session import PersistentSessionDataContainer
 from zope.app.testing import ztapi
 def setUpSessions():
     """Set up the session machinery.

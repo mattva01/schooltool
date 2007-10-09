@@ -30,7 +30,7 @@ from zope.component import queryMultiAdapter
 from zope.component import queryUtility
 from zope.formlib import form
 from zope.app.zapi import absoluteURL
-from zope.app.session.interfaces import ISession
+from zope.session.interfaces import ISession
 from zope.app.form.browser import widget
 
 from schooltool.app.browser.app import BaseEditView
