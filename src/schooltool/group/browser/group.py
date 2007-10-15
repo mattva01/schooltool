@@ -27,7 +27,7 @@ from zope.security.checker import canAccess
 
 from zc.table import table
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin.containers import TableContainerView
 from schooltool.app.browser.app import BaseAddView, BaseEditView

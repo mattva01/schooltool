@@ -43,7 +43,7 @@ from schooltool.skin.form import EditForm
 from schooltool.widget.password import PasswordConfirmationWidget
 
 from schooltool.basicperson.interfaces import IBasicPerson
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 
 class PersonView(BrowserView):

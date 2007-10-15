@@ -24,7 +24,7 @@ $Id$
 from schooltool.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView
 from schooltool.course.course import Course
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 
 class CourseCSVImporter(BaseCSVImporter):

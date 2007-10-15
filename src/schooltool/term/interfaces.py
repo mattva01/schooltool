@@ -28,7 +28,7 @@ from zope.app.container import constraints
 from zope.app.container.interfaces import IContainer, IContained
 from zope.location.interfaces import ILocation
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.common import IDateRange
 
 

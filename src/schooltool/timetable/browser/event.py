@@ -31,7 +31,7 @@ from zope.html.field import HtmlFragment
 
 from schooltool.app.browser.cal import CalendarEventView
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 class IEditTimetableEvent(Interface):
 

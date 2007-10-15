@@ -38,7 +38,7 @@ from zope.security.checker import canAccess
 
 from pytz import timezone
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.person.interfaces import IPerson

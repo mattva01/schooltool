@@ -34,7 +34,7 @@ from schooltool.skin.form import AttributeEditForm
 from schooltool.traverser.traverser import SingleAttributeTraverserPlugin
 from schooltool.person.interfaces import IReadPerson
 from schooltool.demographics import interfaces
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.app.app import ISchoolToolApplication
 from schooltool.skin.form import BasicForm
 from schooltool.widget.password import PasswordConfirmationWidget

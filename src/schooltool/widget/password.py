@@ -3,7 +3,7 @@ from zope.app.form.browser.widget import renderElement
 from zope.app.form.interfaces import ConversionError
 from zope.i18n import translate
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 class PasswordConfirmationWidget(PasswordWidget):
     """Password Widget that uses two fields to confirm user input.

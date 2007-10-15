@@ -14,8 +14,8 @@ functional doctests, read Zope3/src/zope/app/ftests/doctest.txt
 
 The SchoolTool version is displayed on the page:
 
-    >>> import schooltool
-    >>> str(manager.contents).count(schooltool.get_version()) > 0
+    >>> import schooltool.common
+    >>> str(manager.contents).count(schooltool.common.get_version()) > 0
     True
 
 Let's create a person so that we can fool around with his calendar:

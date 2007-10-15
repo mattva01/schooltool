@@ -1,7 +1,7 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            i18n_domain="zope">
 
-  <include package="schooltool" />
+  <include package="schooltool.common" />
 
   <include package="schooltool.course" />
   <include package="schooltool.term" />

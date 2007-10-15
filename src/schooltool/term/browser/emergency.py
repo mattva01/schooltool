@@ -28,7 +28,7 @@ from zope.app import zapi
 from zope.publisher.browser import BrowserView
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.cal import CalendarEvent
 from schooltool.app.interfaces import ISchoolToolCalendar

@@ -33,7 +33,7 @@ from zope.publisher.browser import TestRequest
 from zope.app.testing import setup, ztapi
 from zope.publisher.browser import BrowserView
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.app.cal import CalendarEvent
 from schooltool.app.browser.pdfcal import PDFCalendarViewBase
 from schooltool.app.browser.pdfcal import setUpMSTTCoreFonts

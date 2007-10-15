@@ -29,7 +29,7 @@ from zope.interface import Attribute
 from zope.schema.interfaces import IIterableSource
 
 from schooltool.demographics.interfaces import SourceList
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 
 class IBasicPerson(Interface):

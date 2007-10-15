@@ -26,7 +26,7 @@ import datetime
 import zope.interface
 from zope import annotation
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.requirement import requirement
 from schooltool.traverser import traverser
 from schooltool.gradebook import interfaces

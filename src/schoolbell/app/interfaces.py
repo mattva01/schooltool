@@ -4,7 +4,7 @@ from zope.location.interfaces import ILocation
 from zope.interface import Interface
 from zope.schema import TextLine, Text
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 class IPersonDetails(Interface, ILocation):
     """Contacts details stored as an annotation on a Person."""

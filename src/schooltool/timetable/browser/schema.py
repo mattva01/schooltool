@@ -37,7 +37,7 @@ from zope.traversing.api import getParent, getName
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces.browser import IBrowserRequest
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.skin.containers import ContainerView, ContainerDeleteView
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences

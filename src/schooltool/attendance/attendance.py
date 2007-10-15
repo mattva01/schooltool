@@ -45,7 +45,7 @@ from zope.security.proxy import removeSecurityProxy
 from zope.publisher.interfaces import IApplicationRequest
 from zope.security.management import queryInteraction
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.person.interfaces import IPerson
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication

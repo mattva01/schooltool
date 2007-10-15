@@ -22,7 +22,7 @@ from zope import schema
 from zope.schema.interfaces import IIterableSource
 
 from schooltool.app.app import ISchoolToolApplication
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.person.interfaces import IPerson
 
 class IDemographicsPerson(IPerson):

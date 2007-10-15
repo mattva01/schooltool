@@ -8,7 +8,7 @@ from zope.lifecycleevent import ObjectModifiedEvent
 from zope.interface.common import idatetime
 from zope.app.pagetemplate import ViewPageTemplateFile
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 class BasicForm(form.FormBase):
     """Simple non-edit form in schooltool style.

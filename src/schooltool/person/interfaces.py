@@ -32,7 +32,7 @@ from zope.app import container
 from zope.annotation.interfaces import IAnnotatable, IAttributeAnnotatable
 from zope.location.interfaces import ILocation
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.group.interfaces import IGroupMember
 
 

@@ -38,7 +38,7 @@ from zope.app.security.interfaces import IAuthentication
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserPage
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences

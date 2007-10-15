@@ -33,7 +33,7 @@ from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.browser import ViewPreferences, same
 from schooltool.app.browser.interfaces import ICalendarProvider
 from schooltool.calendar.utils import parse_date, week_start
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 
 global disabled

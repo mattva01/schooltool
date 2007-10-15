@@ -28,7 +28,7 @@ from zope.app import zapi
 from zope.publisher import browser
 
 from schooltool.app import app
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.level import interfaces
 from schooltool.level.browser import promotion
 

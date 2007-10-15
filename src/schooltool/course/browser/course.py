@@ -32,7 +32,7 @@ from schooltool.app.relationships import URIInstruction, URISection
 from schooltool.app.membership import URIGroup, URIMembership
 from schooltool.relationship import getRelatedObjects
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 
 class CourseContainerView(ContainerView):

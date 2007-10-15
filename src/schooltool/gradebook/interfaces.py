@@ -24,7 +24,7 @@ __docformat__ = 'reStructuredText'
 
 import zope.interface
 from schooltool.requirement import interfaces, scoresystem
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 
 class IActivities(interfaces.IRequirement):

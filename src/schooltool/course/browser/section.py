@@ -38,7 +38,7 @@ from schooltool.timetable.interfaces import ITimetables
 from schooltool.skin.containers import ContainerView
 from schooltool.app.browser.app import BaseEditView
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.common import collect
 from schooltool.course.interfaces import ISection, ISectionContainer
 from schooltool.relationship.relationship import getRelatedObjects

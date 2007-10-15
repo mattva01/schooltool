@@ -28,7 +28,7 @@ from zope.schema.interfaces import IVocabularyFactory
 import z3c.optionstorage
 from z3c.optionstorage import vocabulary, interfaces
 from schooltool.app import app
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 VOCABULARY_NAME = 'schooltool.gradebook.activities'
 

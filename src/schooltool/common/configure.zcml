@@ -79,13 +79,13 @@
     <include package="zope.app.preference" />
     <include package="zope.app.renderer" />
     <include package="zope.app.tree" />
-    <include package=".sampledata" />
-    <include package=".setupdata" />
+    <include package="schooltool.sampledata" />
+    <include package="schooltool.setupdata" />
   </configure>
 
   <!-- Translations -->
 
-  <i18n:registerTranslations directory="locales" />
+  <i18n:registerTranslations directory="../locales" />
 
   <!-- Permissions -->
 
@@ -99,18 +99,18 @@
   <utility
       name="schooltool"
       provides="zope.app.generations.interfaces.ISchemaManager"
-      component=".generations.schemaManager"
+      component="schooltool.generations.schemaManager"
       />
 
   <!-- *Core* sub-packages -->
 
-  <include package=".skin" />
-  <include package=".relationship" />
-  <include package=".app" />
-  <include package=".person" />
-  <include package=".demographics" />
-  <include package=".group" />
-  <include package=".resource" />
-  <include package=".securitypolicy.browser" />
+  <include package="schooltool.skin" />
+  <include package="schooltool.relationship" />
+  <include package="schooltool.app" />
+  <include package="schooltool.person" />
+  <include package="schooltool.demographics" />
+  <include package="schooltool.group" />
+  <include package="schooltool.resource" />
+  <include package="schooltool.securitypolicy.browser" />
 
 </configure>

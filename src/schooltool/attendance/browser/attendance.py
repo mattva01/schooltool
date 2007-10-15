@@ -65,7 +65,7 @@ from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.attendance.interfaces import ISectionAttendanceRecord
 from schooltool.attendance.interfaces import ABSENT, TARDY, PRESENT, UNKNOWN
 from schooltool.attendance.interfaces import AttendanceError
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 
 class AttendancePreferencesView(BrowserView):

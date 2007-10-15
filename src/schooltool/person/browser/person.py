@@ -48,7 +48,7 @@ from zope.component import adapts
 from zope.app.catalog.interfaces import ICatalog
 from zope.app.intid.interfaces import IIntIds
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.skin.form import BasicForm
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPasswordWriter

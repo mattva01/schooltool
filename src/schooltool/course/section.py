@@ -35,7 +35,7 @@ from schooltool.app.app import InitBase
 from schooltool.group.interfaces import IBaseGroup as IGroup
 from schooltool.person.interfaces import IPerson
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.app import relationships
 from schooltool.course import interfaces, booking
 from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd

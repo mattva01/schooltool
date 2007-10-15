@@ -32,7 +32,7 @@ from zope.location.interfaces import ILocation
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import canAccess
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IShowTimetables

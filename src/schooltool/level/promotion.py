@@ -30,7 +30,7 @@ import zope.wfmc
 from zope import location
 from zope.annotation.interfaces import IAnnotations
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.app import app
 from schooltool.level import interfaces, record
 

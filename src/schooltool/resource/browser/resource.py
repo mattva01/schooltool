@@ -45,7 +45,7 @@ from schooltool.table.table import FilterWidget
 from schooltool.person.browser.person import PersonFilterWidget
 from schooltool.resource.interfaces import IResourceFactoryUtility
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 
 class ResourceContainerView(form.FormBase):

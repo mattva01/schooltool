@@ -39,7 +39,7 @@ from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.table.table import LocaleAwareGetterColumn
 from schooltool.table.table import url_cell_formatter
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 
 class Search(object):

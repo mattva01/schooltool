@@ -35,7 +35,7 @@ from schooltool.app.browser import ViewPreferences
 from schooltool.person.browser.person import PersonContainerView
 from schooltool.table.table import DependableCheckboxColumn
 from schooltool.demographics import interfaces
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 
 class PersonTable(PersonContainerView):

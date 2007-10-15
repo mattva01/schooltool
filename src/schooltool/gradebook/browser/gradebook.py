@@ -30,7 +30,7 @@ from schooltool.app import app
 from schooltool.gradebook import interfaces
 from schooltool.person.interfaces import IPerson
 from schooltool.requirement.scoresystem import UNSCORED
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 
 class GradebookOverview(object):

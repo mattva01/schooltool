@@ -529,3 +529,20 @@ class DateRange(object):
     def __contains__(self, date):
         return self.first <= date <= self.last
 
+
+_version = None
+
+def get_version():
+    global _version
+    if _version is not None:
+        return _version
+    import os
+    directory = os.path.split(__file__)[0]
+    f = open(os.path.join(directory, 'version.txt'), 'r')
+    result = f.read()
+    _version = result
+    f.close()
+    return result
+
+from zope.i18nmessageid import MessageFactory
+SchoolToolMessage = MessageFactory("schooltool")

@@ -26,7 +26,7 @@ import zope.schema
 from zope.app import form
 from zope.app.pagetemplate import ViewPageTemplateFile
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.requirement import interfaces, scoresystem
 
 class IWidgetData(interfaces.IRangedValuesScoreSystem):

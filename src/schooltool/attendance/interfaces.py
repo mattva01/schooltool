@@ -28,7 +28,7 @@ from zope.interface import Interface
 from zope.schema import Text, TextLine, Choice, List, Object
 from zope.schema import Date, Datetime, Timedelta, Dict, Int
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.course.interfaces import ISection
 
 

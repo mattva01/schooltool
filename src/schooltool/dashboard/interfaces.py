@@ -23,7 +23,7 @@ $Id$
 __docformat__ = 'reStructuredText'
 import zope.schema
 from zope.viewlet import interfaces
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 
 class IDashboard(interfaces.IViewletManager):

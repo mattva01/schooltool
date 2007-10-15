@@ -49,7 +49,7 @@ from schooltool.timetable import TimetableActivity
 from schooltool.timetable.interfaces import ITimetable, IOwnTimetables
 from schooltool.timetable.interfaces import ITimetables, IHaveTimetables
 from schooltool.traverser.interfaces import ITraverserPlugin
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 
 class TabindexMixin(object):

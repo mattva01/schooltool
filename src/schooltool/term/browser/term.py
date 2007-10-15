@@ -45,7 +45,7 @@ from schooltool.calendar.utils import next_month, week_start
 from schooltool.timetable import findRelatedTimetables
 from schooltool.term.interfaces import ITermContainer, ITerm
 from schooltool.term.term import Term
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 
 class TermContainerView(TableContainerView):

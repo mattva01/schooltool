@@ -64,7 +64,7 @@ from zope.component import queryAdapter
 from zc.table.column import GetterColumn
 from zc.table import table
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 from schooltool.skin.interfaces import IBreadcrumbInfo
 from schooltool.skin import breadcrumbs

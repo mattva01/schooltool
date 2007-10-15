@@ -28,7 +28,7 @@ from zope.app import container
 from zope.app.container.interfaces import IContainer, IContained
 from zope.app.container import constraints
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 class IGroupMember(zope.interface.Interface):
     """An object that knows the groups it is a member of."""

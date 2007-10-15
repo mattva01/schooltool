@@ -43,7 +43,7 @@ from schooltool.basicperson.advisor import Advising, URIAdvisor, URIAdvising, UR
 from schooltool.basicperson.interfaces import IAdvisor
 from schooltool.basicperson.interfaces import IStudent
 from schooltool.basicperson.interfaces import IBasicPerson
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 
 PERSON_CATALOG_KEY = 'schooltool.basicperson'

@@ -37,7 +37,7 @@ from zope.location.interfaces import ILocation
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
 from schooltool.calendar.interfaces import Unchanged
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 #
 # Time field used in timetabling interfaces

@@ -30,7 +30,7 @@ from zope.app.form.browser import add
 from zope.publisher import browser
 
 from schooltool.level import interfaces
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.app.browser import app
 from schooltool.skin.containers import TableContainerView
 

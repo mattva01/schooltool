@@ -27,7 +27,7 @@ from schooltool.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView
 from schooltool.person.person import Person
 from schooltool.person.interfaces import IPersonFactory
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 class PersonCSVImporter(BaseCSVImporter):
     """A Person CSV importer."""

@@ -28,7 +28,7 @@ import zope.app.container.constraints
 from zope.app import container
 from zope.app import zapi
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 
 class ILevelValidationError(zope.interface.Interface):

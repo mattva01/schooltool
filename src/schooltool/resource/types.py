@@ -29,7 +29,7 @@ from zope.interface import implements
 from zc.table.column import GetterColumn
 from zc.table.interfaces import ISortableColumn
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.resource.interfaces import (IResource, IResourceFactoryUtility,
                                             ILocation, IEquipment,

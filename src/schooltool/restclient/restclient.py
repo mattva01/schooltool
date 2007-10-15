@@ -32,7 +32,7 @@ import cgi
 from schooltool.common import UnicodeAwareException
 from schooltool.common import looks_like_a_uri
 from schooltool.common.xmlparsing import XMLDocument
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 __metaclass__ = type
 

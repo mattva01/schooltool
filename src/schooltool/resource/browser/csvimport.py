@@ -24,7 +24,7 @@ $Id$
 from schooltool.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView
 from schooltool.resource.resource import Resource, Location
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 
 def resourceFactory(self, title=u"", description=u"", isLocation=False):

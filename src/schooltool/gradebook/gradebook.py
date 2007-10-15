@@ -42,7 +42,7 @@ from schooltool.securitypolicy.crowds import AdministratorsCrowd
 
 from schooltool.gradebook import interfaces
 from schooltool.gradebook.category import getCategories
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 GRADEBOOK_SORTING_KEY = 'schooltool.gradebook.sorting'
 

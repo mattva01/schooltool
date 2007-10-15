@@ -38,7 +38,7 @@ from schooltool.app.interfaces import ICalendarParentCrowd
 from schooltool.resource import interfaces
 from schooltool.securitypolicy.crowds import ConfigurableCrowd
 from schooltool.securitypolicy.crowds import AuthenticatedCrowd
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 
 class ResourceContainer(btree.BTreeContainer):

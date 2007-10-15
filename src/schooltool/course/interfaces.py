@@ -27,7 +27,7 @@ from zope.app import container
 from zope.interface import Interface
 
 from schooltool.group.interfaces import IBaseGroup as IGroup
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 
 
 class ICourse(zope.interface.Interface):

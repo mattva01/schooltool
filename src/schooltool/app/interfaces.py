@@ -30,7 +30,7 @@ from zope.app import container
 from zope.location.interfaces import ILocation
 from zope.app.security.interfaces import IAuthentication, ILogout
 
-from schooltool import SchoolToolMessage as _
+from schooltool.common import SchoolToolMessage as _
 from schooltool.calendar.interfaces import IEditCalendar, ICalendarEvent
 from schooltool.person.interfaces import ICalendarDisplayPreferences
 

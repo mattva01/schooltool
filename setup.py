@@ -41,7 +41,7 @@ pkg_resources.require("setuptools>=0.6a11")
 from setuptools import setup, find_packages
 
 def get_version():
-    version_file = os.path.join(here, 'src', 'schooltool', 'version.txt')
+    version_file = os.path.join(here, 'src', 'schooltool', 'common', 'version.txt')
     f = open(version_file, 'r')
     result = f.read()
     f.close()
@@ -81,6 +81,7 @@ root_packages = ['schooltool.app',
                  'schooltool.traverser',
                  'schooltool.utility',
                  'schooltool.widget',
+                 'schooltool.common',
 
                  # The schooltool configurations we maintain
                  'schooltool.stapp2005',

@@ -5,7 +5,7 @@
 
   <include package="schooltool.help" file="meta.zcml" />
 
-  <include package="schooltool" />
+  <include package="schooltool.common" />
 
   <utility
       name="schooltool.stap2005"
