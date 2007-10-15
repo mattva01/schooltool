@@ -37,7 +37,7 @@ from schooltool.testing import setup as sbsetup
 from schooltool.testing.util import XMLCompareMixin
 from schooltool.testing.util import QuietLibxml2Mixin
 from schooltool.app.app import SimpleNameChooser
-from schooltool.xmlparsing import XMLParseError
+from schooltool.common.xmlparsing import XMLParseError
 from schooltool.group.group import Group
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.group.rest.group import GroupFileFactory, GroupContainerView

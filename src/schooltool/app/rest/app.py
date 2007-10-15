@@ -27,7 +27,7 @@ from zope.interface import implements
 from zope.app.container.interfaces import INameChooser
 from zope.filerepresentation.interfaces import IFileFactory, IWriteFile
 
-from schooltool.xmlparsing import XMLDocument
+from schooltool.common.xmlparsing import XMLDocument
 from schooltool.app.rest import View, Template
 from schooltool.app.interfaces import IWriteCalendar, ISchoolToolCalendar
 from schooltool.calendar.icalendar import convert_calendar_to_ical

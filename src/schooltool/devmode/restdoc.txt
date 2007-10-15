@@ -520,8 +520,10 @@ the dictionary:
             'name': u'',
             'provided': {'module': 'zope.filerepresentation.interfaces',
                          'name': 'IWriteFile'},
-            'required': [{'module': 'schooltool.devmode.devmode_txt',
-                          'name': 'IFile'}],
+            'required': [{'isInterface': True,
+                         'isType': False,
+                         'module': 'schooltool.devmode.devmode_txt',
+                         'name': 'IFile'}],
             'zcml': None},
    ...}
 
@@ -552,7 +554,9 @@ In addition to the 'edit' section, we should now have a 'create' section:
               'name': u'',
               'provided': {'module': 'zope.filerepresentation.interfaces',
                            'name': 'IFileFactory'},
-              'required': [{'module': 'schooltool.devmode.devmode_txt',
+              'required': [{'isInterface': True,
+                            'isType': False,
+                            'module': 'schooltool.devmode.devmode_txt',
                             'name': 'IFileContainer'}],
               'zcml': None},
    ...
@@ -572,7 +576,9 @@ Since most file factories use schemas, it is also retrieved when available:
               'name': u'',
               'provided': {'module': 'zope.filerepresentation.interfaces',
                            'name': 'IFileFactory'},
-              'required': [{'module': 'schooltool.devmode.devmode_txt',
+              'required': [{'isInterface': True,
+                            'isType': False,
+                            'module': 'schooltool.devmode.devmode_txt',
                             'name': 'IFileContainer'}],
               'zcml': None},
    ...

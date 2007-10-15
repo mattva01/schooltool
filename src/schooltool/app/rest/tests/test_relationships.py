@@ -42,8 +42,8 @@ from schooltool.relationship.annotatable import getRelationshipLinks
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.testing.util import XMLCompareMixin
 from schooltool.testing.util import QuietLibxml2Mixin
-from schooltool.xmlparsing import XMLParseError
-from schooltool.xmlparsing import XMLValidationError
+from schooltool.common.xmlparsing import XMLParseError
+from schooltool.common.xmlparsing import XMLValidationError
 from schooltool.testing import setup as sbsetup
 
 

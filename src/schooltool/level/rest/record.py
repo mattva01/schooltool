@@ -31,7 +31,7 @@ from zope.app import zapi
 from schooltool.app import app, rest
 from schooltool.level import interfaces
 from schooltool.traverser import traverser
-from schooltool.xmlparsing import XMLDocument
+from schooltool.common.xmlparsing import XMLDocument
 
 
 class PromotionHTTPTraverser(traverser.NameTraverserPlugin):

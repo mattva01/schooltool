@@ -23,7 +23,7 @@ except ImportError:
     sys.path.insert(0, os.path.normpath(os.path.join(os.path.dirname(__file__),
                                                      os.pardir, 'src')))
 
-from schooltool.xmlparsing import HTMLDocument, XMLParseError, XMLXPathError
+from schooltool.common.xmlparsing import HTMLDocument, XMLParseError, XMLXPathError
 
 def grep(expr, filename):
     try:

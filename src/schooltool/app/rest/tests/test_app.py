@@ -43,7 +43,7 @@ def doctest_ApplicationView():
 
     Lets test the XML output:
 
-        >>> from schooltool.xmlparsing import XMLDocument
+        >>> from schooltool.common.xmlparsing import XMLDocument
         >>> doc = XMLDocument(result)
         >>> doc.registerNs('xlink', 'http://www.w3.org/1999/xlink')
 

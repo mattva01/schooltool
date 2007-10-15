@@ -32,7 +32,7 @@ from zope.filerepresentation.interfaces import IFileFactory, IWriteFile
 from schooltool.app.rest import View, Template
 from schooltool.app.rest.app import GenericContainerView
 from schooltool.app.rest.errors import RestError
-from schooltool.xmlparsing import XMLDocument
+from schooltool.common.xmlparsing import XMLDocument
 from schooltool.common import parse_date, parse_time
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 from schooltool.timetable.interfaces import ITimetableModelFactory

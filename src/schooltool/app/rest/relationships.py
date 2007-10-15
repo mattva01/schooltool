@@ -31,7 +31,7 @@ from zope.publisher.interfaces import NotFound
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import ProxyFactory
 
-from schooltool.xmlparsing import XMLDocument
+from schooltool.common.xmlparsing import XMLDocument
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.rest import View, Template
 from schooltool.app.rest.errors import RestError

@@ -31,7 +31,7 @@ from schooltool.common import dedent
 from schooltool.testing.util import XMLCompareMixin
 from schooltool.testing.util import NiceDiffsMixin
 from schooltool.testing.util import QuietLibxml2Mixin
-from schooltool.xmlparsing import XMLParseError
+from schooltool.common.xmlparsing import XMLParseError
 
 __metaclass__ = type
 

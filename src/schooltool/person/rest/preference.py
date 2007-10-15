@@ -27,7 +27,7 @@ from zope.interface import implements
 from schooltool.app.rest import View, Template
 from schooltool.app.rest.errors import RestError
 from schooltool.traverser.traverser import AdapterTraverserPlugin
-from schooltool.xmlparsing import XMLDocument
+from schooltool.common.xmlparsing import XMLDocument
 
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonPreferences

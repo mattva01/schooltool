@@ -24,7 +24,7 @@ $Id$
 
 import sys
 import libxml2
-from schooltool.xmlparsing import HTMLDocument
+from schooltool.common.xmlparsing import HTMLDocument
 
 
 def on_error_callback(ctx, msg):

@@ -26,7 +26,7 @@ from zope.interface import Interface, Attribute, implements
 from zope.security.checker import ProxyFactory
 
 from schooltool.app.rest import View, Template
-from schooltool.xmlparsing import XMLDocument
+from schooltool.common.xmlparsing import XMLDocument
 from schooltool.traverser.traverser import AdapterTraverserPlugin
 from schooltool.note.interfaces import INotes, IHaveNotes
 from schooltool.note.note import Note

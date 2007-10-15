@@ -197,7 +197,7 @@
       />
 
   <view
-      for="schooltool.xmlparsing.IXMLError"
+      for="schooltool.common.xmlparsing.IXMLError"
       name="GET"
       factory=".errors.XMLErrorView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
