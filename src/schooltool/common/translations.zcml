@@ -5,7 +5,7 @@
 
   <include package="schooltool.help" file="meta.zcml" />
 
-  <include package="schooltool" />
+  <include package="schooltool.common" />
 
   <include package="schooltool.attendance" />
   <include package="schooltool.commendation" />
