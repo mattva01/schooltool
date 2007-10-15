@@ -7,9 +7,15 @@
     <include package="schooltool.term" />
     <include package="schooltool.timetable" />
 
+    <interface
+        interface="schooltool.basicperson.ftesting.IBasicPersonFtestingSkin"
+        type="zope.publisher.interfaces.browser.IBrowserSkinType"
+        name="BasicPerson"
+        />
+
     <!-- Provide local overrides of standard configurations-->
     <includeOverrides package="schooltool.basicperson" file="overrides.zcml" />
 
-    <browser:defaultSkin name="SchoolTool" />
+    <browser:defaultSkin name="BasicPerson" />
 
 </configure>

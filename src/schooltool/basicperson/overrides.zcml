@@ -33,6 +33,4 @@
 
   </configure>
 
-  <include package=".browser" file="overrides.zcml" />
-
 </configure>

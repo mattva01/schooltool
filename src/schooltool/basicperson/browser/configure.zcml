@@ -71,4 +71,12 @@
       name="group_list"
       provides=".interfaces.IExtraDataExporterPlugin"/>
 
+  <page
+     name="add.html"
+     for="schooltool.person.interfaces.IPersonContainer"
+     class=".person.PersonAddView"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="New Person"
+     layer=".skin.IBasicPersonLayer" />
+
 </configure>

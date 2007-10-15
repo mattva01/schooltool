@@ -16,25 +16,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-"""
-Functional Testing Utilities for basic person
-
-$Id$
-"""
-import os
-
-from schooltool.skin.skin import ISchoolToolSkin
-from schooltool.testing.functional import ZCMLLayer
-from schooltool.basicperson.browser.skin import IBasicPersonLayer
+from zope.publisher.interfaces.browser import IBrowserRequest
 
 
-class IBasicPersonFtestingSkin(IBasicPersonLayer, ISchoolToolSkin):
-    """Skin for Basic Person functional tests."""
-
-
-dir = os.path.abspath(os.path.dirname(__file__))
-filename = os.path.join(dir, 'ftesting.zcml')
-
-basicperson_functional_layer = ZCMLLayer(filename,
-                                  __name__,
-                                  'basicperson_functional_layer')
+class IBasicPersonLayer(IBrowserRequest):
+    """SchoolTool Basic Person layer."""

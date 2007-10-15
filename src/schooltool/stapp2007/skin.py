@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2007 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,24 +17,11 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Functional Testing Utilities for basic person
-
-$Id$
+SchoolTool 2007 skin.
 """
-import os
-
 from schooltool.skin.skin import ISchoolToolSkin
-from schooltool.testing.functional import ZCMLLayer
 from schooltool.basicperson.browser.skin import IBasicPersonLayer
 
 
-class IBasicPersonFtestingSkin(IBasicPersonLayer, ISchoolToolSkin):
-    """Skin for Basic Person functional tests."""
-
-
-dir = os.path.abspath(os.path.dirname(__file__))
-filename = os.path.join(dir, 'ftesting.zcml')
-
-basicperson_functional_layer = ZCMLLayer(filename,
-                                  __name__,
-                                  'basicperson_functional_layer')
+class ISchoolTool2007Skin(IBasicPersonLayer, ISchoolToolSkin):
+    """The SchoolTool2007 skin"""
