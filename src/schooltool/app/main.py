@@ -47,9 +47,10 @@ from zope.event import notify
 from zope.server.taskthreads import ThreadedTaskDispatcher
 from zope.publisher.interfaces.http import IHTTPRequest
 from zope.i18n.interfaces import IUserPreferredLanguages
+from zope.app.wsgi import WSGIPublisherApplication
 from zope.app.server.main import run
-from zope.app.server.wsgi import http
 from zope.app.appsetup import DatabaseOpened, ProcessStarting
+from zope.app.publication.httpfactory import HTTPPublicationRequestFactory
 from zope.app.publication.zopepublication import ZopePublication
 from zope.traversing.interfaces import IContainmentRoot
 from zope.app.container.contained import ObjectAddedEvent
@@ -62,13 +63,16 @@ from zope.app.intid import IntIds
 from zope.app.intid.interfaces import IIntIds
 from zope.app.component.interfaces import ISite
 from zope.app.component.site import LocalSiteManager
+from zope.server.http.wsgihttpserver import WSGIHTTPServer
+from zope.server.http.commonaccesslogger import CommonAccessLogger
+from zope.app.server.wsgi import ServerType
 
+from schooltool.app.rest import RestPublicationRequestFactory
 from schooltool.app.interfaces import ApplicationInitializationEvent
 from schooltool.app.interfaces import IPluginInit
 from schooltool.app.interfaces import ISchoolToolInitializationUtility
 from schooltool.app.app import SchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.rest import restServerType
 from schooltool.app.browser import pdfcal
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.app.interfaces import ICookieLanguageSelector
@@ -132,6 +136,35 @@ class IncompatibleDatabase(Exception):
 def die(message, exitcode=1):
     print >> sys.stderr, message
     sys.exit(exitcode)
+
+
+class SchoolToolPublisherApplication(WSGIPublisherApplication):
+
+    rest_enabled = False
+
+    def requestFactory(self, input_stream, env):
+        path_info = env.get('PATH_INFO', '')
+        prefix = '/api'
+        if self.rest_enabled:
+            if path_info.startswith(prefix):
+                env['PATH_INFO'] = path_info[len(prefix):]
+                return self.rest_factory(input_stream, env)
+
+            if '/++' + prefix in path_info:
+                env['PATH_INFO'] = path_info.replace('/++' + prefix, '/++')
+                return self.rest_factory(input_stream, env)
+
+        return self.http_factory(input_stream, env)
+
+    def __init__(self, db, factory=HTTPPublicationRequestFactory):
+        self.http_factory = factory(db)
+        self.rest_factory = RestPublicationRequestFactory(db)
+
+
+schooltool_server = ServerType(WSGIHTTPServer,
+                               SchoolToolPublisherApplication,
+                               CommonAccessLogger,
+                               8080, True)
 
 
 class Options(object):
@@ -622,18 +655,10 @@ class StandaloneServer(object):
         task_dispatcher.setThreadCount(options.config.thread_pool_size)
 
         for ip, port in options.config.web:
-            http.create('HTTP', task_dispatcher, db, port=port, ip=ip)
-
-        for ip, port in options.config.rest:
-            restServerType.create('REST', task_dispatcher, db,
-                                  port=port, ip=ip)
-
-        # TODO BBB: remove the folowing lines after a while.
-        # respecting options.config.listen is depreciated and for
-        # compatibility only.
-        for ip, port in options.config.listen:
-            restServerType.create('REST', task_dispatcher, db,
-                                  port=port, ip=ip)
+            server = schooltool_server.create('HTTP', task_dispatcher, db,
+                                              port=port, ip=ip)
+            if options.config.rest:
+                server.application.rest_enabled = True
 
         notify(ProcessStarting())
 

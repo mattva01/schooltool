@@ -34,6 +34,16 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile \
                                                 as Template # reexport
 
 
+class RestRequest(HTTPRequest):
+
+    def getApplicationURL(self, depth=0, path_only=False):
+        url = super(RestRequest, self).getApplicationURL(depth, path_only)
+        prefix = "api"
+        if not url.endswith("/"):
+            prefix = "/" + prefix
+        return  url + prefix
+
+
 class RestPublicationRequestFactory(object):
     """Request factory for the RESTive server.
 
@@ -49,7 +59,7 @@ class RestPublicationRequestFactory(object):
 
     def __call__(self, input_stream, env):
         """See `zope.app.publication.interfaces.IPublicationRequestFactory`"""
-        request = HTTPRequest(input_stream, env)
+        request = RestRequest(input_stream, env)
         request.setPublication(HTTPPublication(self.db))
 
         return request
@@ -74,5 +84,5 @@ class View(object):
 
     def HEAD(self):
         body = self.GET()
-        request.setHeader('Content-Length', len(body))
+        self.request.setHeader('Content-Length', len(body))
         return ""

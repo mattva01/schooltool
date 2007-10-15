@@ -22,11 +22,11 @@ Tests for infrastructure of restive views.
 $Id$
 """
 import unittest
+from schooltool.app.rest import RestRequest
 from StringIO import StringIO
 
 from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.app.publication.http import HTTPPublication
-from zope.publisher.http import HTTPRequest
 
 
 class Test(PlacelessSetup, unittest.TestCase):
@@ -49,7 +49,7 @@ class Test(PlacelessSetup, unittest.TestCase):
                        'whatnot'):
             self.__env['REQUEST_METHOD'] = method
             request = factory(StringIO(''), self.__env)
-            self.assertEqual(request.__class__, HTTPRequest)
+            self.assertEqual(request.__class__, RestRequest)
             self.assertEqual(request.publication.__class__, HTTPPublication)
 
 

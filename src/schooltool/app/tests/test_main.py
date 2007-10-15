@@ -35,6 +35,56 @@ from zope.interface import directlyProvides
 here = os.path.dirname(__file__)
 ftesting_zcml = os.path.join(here, '..', 'ftesting.zcml')
 
+
+def doctest_SchoolToolPublisherApplication_requestFactory():
+    """Tests for SchoolToolPublisherApplication.requestFactory.
+
+       >>> class RequestFactoryStub(object):
+       ...     def __init__(self, name):
+       ...         self.name = name
+       ...     def __call__(self, input_stream, env):
+       ...         return '<%s request>' % self.name
+
+       >>> from schooltool.app.main import SchoolToolPublisherApplication
+       >>> application = SchoolToolPublisherApplication(None)
+       >>> application.http_factory = RequestFactoryStub("Http")
+       >>> application.rest_factory = RequestFactoryStub("Rest")
+
+   requestFactory is a property that returns the appropriate request
+   factory depending on the PATH_INFO. If there is no PATH_INFO in the
+   environment - Http request factory is returned by default:
+
+       >>> application.requestFactory(None, {})
+       '<Http request>'
+
+   Actually - if rest_enabled was not set to be True - http request
+   factory is always returned:
+
+       >>> application.requestFactory(None, {'PATH_INFO': '/api'})
+       '<Http request>'
+
+   But if we set it to True, and try retrieving a url that starts with
+   /api, we should get a REST request factory:
+
+       >>> application.rest_enabled = True
+       >>> application.requestFactory(None, {'PATH_INFO': '/api/persons'})
+       '<Rest request>'
+
+    We even handle Zope3 virtual hosting:
+
+       >>> url = '/++vh++http:ignas.pov.lt:80/dynamic/++/api'
+       >>> application.requestFactory(None, {'PATH_INFO': url})
+       '<Rest request>'
+
+    Even with REST enabled non-api requests should still return our
+    usual request factory:
+
+       >>> application.requestFactory(None, {'PATH_INFO': '/persons/john'})
+       '<Http request>'
+
+    """
+
+
 def doctest_Options():
     """Tests for Options.
 

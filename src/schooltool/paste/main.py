@@ -23,18 +23,24 @@ $Id$
 """
 import os
 
-from zope.app.wsgi import WSGIPublisherApplication
 from zope.app.publication.httpfactory import HTTPPublicationRequestFactory
 
+from schooltool.app.rest import RestPublicationRequestFactory
+from schooltool.app.main import SchoolToolPublisherApplication
 from schooltool.app.main import StandaloneServer
 
 
-class SchoolToolPublisherApplication(StandaloneServer, WSGIPublisherApplication):
+class PasteSchoolToolPublisherApplication(StandaloneServer,
+                                          SchoolToolPublisherApplication):
 
     def __init__(self, config_file, factory=HTTPPublicationRequestFactory):
         options = self.load_options(['schooltool', '-c', config_file])
         db = self.setup(options)
-        self.requestFactory = factory(db)
+
+        if options.config.rest:
+            self.rest_enabled = True
+
+        super(PasteSchoolToolPublisherApplication, self).__init__(db, factory)
 
 
 _st_app = None
@@ -42,6 +48,6 @@ def schooltool_app_factory(global_conf, config_file):
     global _st_app
     if _st_app:
         return _st_app
-    _st_app = SchoolToolPublisherApplication(os.path.join(global_conf['here'],
-                                                          config_file))
+    _st_app = PasteSchoolToolPublisherApplication(os.path.join(global_conf['here'],
+                                                               config_file))
     return _st_app
