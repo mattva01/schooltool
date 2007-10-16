@@ -37,6 +37,10 @@ class Activities(requirement.Requirement):
     zope.interface.implements(interfaces.IActivities)
 
 
+class Worksheet(requirement.Requirement):
+    zope.interface.implements(interfaces.IWorksheet)
+
+
 class Activity(requirement.Requirement):
     zope.interface.implements(interfaces.IActivity)
 

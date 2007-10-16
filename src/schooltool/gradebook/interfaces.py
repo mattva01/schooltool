@@ -28,6 +28,11 @@ from schooltool.common import SchoolToolMessage as _
 
 
 class IActivities(interfaces.IRequirement):
+    '''A list of worksheets containing activities that must be fulfilled in a
+       course or section.'''
+
+
+class IWorksheet(interfaces.IRequirement):
     '''A list of activities that must be fulfilled in a course or section.'''
 
 
@@ -64,8 +69,15 @@ class IEditGradebook(zope.interface.Interface):
     def removeEvaluation(student, activity):
         """Remove evaluation."""
 
+    def setCurrentWorksheet(worksheet):
+        """Set the currently active worksheet."""
+        
 
 class IReadGradebook(zope.interface.Interface):
+
+    worksheets = zope.schema.List(
+        title=_('Worksheets'),
+        description=_('Worksheets in this gradebook.'))
 
     activities = zope.schema.List(
         title=_('Activities'),
@@ -81,7 +93,11 @@ class IReadGradebook(zope.interface.Interface):
     def getEvaluation(student, activity, default=None):
         """Get the evaluation of a student for a given activity."""
 
+    def getCurrentEvaluationsForStudent(student):
+        """Get the evaluations of the curretn worksheet for this student.
 
+        Return iterable of 2-tuples of the form (activity, evaluation).
+        """
     def getEvaluationsForStudent(student):
         """Get the evaluations of the section for this student.
 
@@ -93,6 +109,12 @@ class IReadGradebook(zope.interface.Interface):
 
         Return iterable of 2-tuples of the form (student, evaluation).
         """
+
+    def getCurrentWorksheet():
+        """Get the currently active worksheet."""
+
+    def getCurrentActivities():
+        """Get the activities for the currently active worksheet."""
 
     def getTotalScoreForStudent(student):
         """Compute the total score for a student.
@@ -137,3 +159,27 @@ class IStatistics(zope.interface.Interface):
 
     def calculateVariance(activity):
         """Calculate the variance of the activity."""
+
+
+class IMyGrades(zope.interface.Interface):
+    """The students gradebook for a section.
+
+    This interface provides an API that allows the studentto see their
+    grades for a section.
+    """
+    worksheets = zope.schema.List(
+        title=_('Worksheets'),
+        description=_('Worksheets in this gradebook.'))
+
+    def getEvaluation(student, activity, default=None):
+        """Get the evaluation of a student for a given activity."""
+
+    def getCurrentWorksheet():
+        """Get the currently active worksheet."""
+
+    def getCurrentActivities():
+        """Get the activities for the currently active worksheet."""
+
+    def setCurrentWorksheet(worksheet):
+        """Set the currently active worksheet."""
+

@@ -38,16 +38,26 @@ class GradebookOverview(object):
 
     def update(self):
         """Retrieve sorting information and store changes of it."""
-        person = IPerson(self.request.principal)
+        self.person = IPerson(self.request.principal)
         if 'sort_by' in self.request:
             sort_by = self.request['sort_by']
-            key, reverse = self.context.getSortKey(person)
+            key, reverse = self.context.getSortKey(self.person)
             if sort_by == key:
                 reverse = not reverse
             else:
                 reverse=False
-            self.context.setSortKey(person, (sort_by, reverse))
-        self.sortKey = self.context.getSortKey(person)
+            self.context.setSortKey(self.person, (sort_by, reverse))
+        self.sortKey = self.context.getSortKey(self.person)
+
+        """Handle change of current worksheet."""
+        if 'currentWorksheet' in self.request:
+            for worksheet in self.context.worksheets:
+                if worksheet.title == self.request['currentWorksheet']:
+                    self.context.setCurrentWorksheet(self.person, worksheet)
+                    break
+
+    def getCurrentWorksheet(self):
+        return self.context.getCurrentWorksheet(self.person)
 
     def activities(self):
         """Get  a list of all activities."""
@@ -55,27 +65,37 @@ class GradebookOverview(object):
             {'title': activity.title,
              'max':activity.scoresystem.getBestScore(),
              'hash': hash(IKeyReference(activity))}
-            for activity in self.context.activities]
+            for activity in self.context.getCurrentActivities(self.person)]
         return result
 
     def table(self):
         """Generate the table of grades."""
         activities = [(hash(IKeyReference(activity)), activity)
-                      for activity in self.context.activities]
+            for activity in self.context.getCurrentActivities(self.person)]
         gradebook = proxy.removeSecurityProxy(self.context)
         rows = []
         for student in self.context.students:
             grades = []
+            total = 0
+            count = 0
             for act_hash, activity in activities:
                 ev = gradebook.getEvaluation(student, activity)
                 if ev is not None:
                     grades.append({'activity': act_hash, 'value': ev.value})
+                    total += ev.value - ev.scoreSystem.min
+                    count += ev.scoreSystem.max - ev.scoreSystem.min
                 else:
                     grades.append({'activity': act_hash, 'value': '-'})
 
+            if count:
+                average = int((float(100 * total) / float(count)) + 0.5)
+            else:
+                average = None
+            
             rows.append(
                 {'student': {'title': student.title, 'id': student.username},
-                 'grades': grades})
+                 'grades': grades,
+                 'average': average})
 
         # Do the sorting
         key, reverse = self.sortKey
@@ -87,33 +107,6 @@ class GradebookOverview(object):
             return row['student']['title']
 
         return sorted(rows, key=generateKey, reverse=reverse)
-
-    def statistics(self):
-        """Calculate various statistical quantities for all activities."""
-        statistics = interfaces.IStatistics(self.context)
-        activities = self.context.activities
-        decimal = self.request.locale.numbers.getFormatter('decimal')
-        percent = self.request.locale.numbers.getFormatter('decimal')
-        stats = [
-            {'name': _('Average'), 'formatter': decimal,
-             'function': statistics.calculateAverage, 'values': []},
-            {'name': _('Percent Average'), 'formatter': percent,
-             'function': statistics.calculatePercentAverage, 'values': []},
-            {'name': _('Median'), 'formatter': decimal,
-             'function': statistics.calculateMedian, 'values': []},
-            {'name': _('Standard Deviation'), 'formatter': decimal,
-             'function': statistics.calculateStandardDeviation, 'values': []},
-            {'name': _('Variance'), 'formatter': decimal,
-             'function': statistics.calculateVariance, 'values': []},
-            ]
-        for act in activities:
-            for stat in stats:
-                value = stat['function'](act)
-                if not value:
-                    stat['values'].append(_('N/A'))
-                else:
-                    stat['values'].append(stat['formatter'].format(value))
-        return stats
 
 class GradeStudent(object):
     """Grading a single student."""
@@ -132,11 +125,11 @@ class GradeStudent(object):
             {'title': activity.title,
              'max': activity.scoresystem.getBestScore(),
              'hash': hash(IKeyReference(activity))}
-            for activity in self.context.activities]
+            for activity in self.context.getCurrentActivities(self.person)]
 
     def grades(self):
         activities = [(hash(IKeyReference(activity)), activity)
-                      for activity in self.context.activities]
+            for activity in self.context.getCurrentActivities(self.person)]
         student = self.student
         gradebook = proxy.removeSecurityProxy(self.context)
         for act_hash, activity in activities:
@@ -148,6 +141,8 @@ class GradeStudent(object):
                 yield {'activity': act_hash, 'value': value or ''}
 
     def update(self):
+        self.person = IPerson(self.request.principal)
+        
         if 'CANCEL' in self.request:
             self.request.response.redirect('index.html')
 
@@ -310,3 +305,40 @@ class Grade(object):
                     self.student, self.activity, score, evaluator)
 
             self.request.response.redirect('index.html')
+
+class MyGradesView(object):
+    """Student view of own grades."""
+
+    def update(self):
+        self.person = IPerson(self.request.principal)
+
+        """Handle change of current worksheet."""
+        if 'currentWorksheet' in self.request:
+            for worksheet in self.context.worksheets:
+                if worksheet.title == self.request['currentWorksheet']:
+                    self.context.setCurrentWorksheet(self.person, worksheet)
+                    break
+
+        self.table = []
+        total = 0
+        count = 0
+        for activity in self.context.getCurrentActivities(self.person):
+            activity = proxy.removeSecurityProxy(activity)
+            ev = self.context.getEvaluation(self.person, activity)
+            if ev:
+                grade = '%d/%d' % (ev.value, ev.scoreSystem.max)
+                total += ev.value - ev.scoreSystem.min
+                count += ev.scoreSystem.max - ev.scoreSystem.min
+            else:
+                grade = None
+            self.table.append({'activity': activity.title, 
+                               'possible': activity.scoresystem.max,
+                               'grade': grade})
+        if count:
+            self.average = int((float(100 * total) / float(count)) + 0.5)
+        else:
+            self.average = None
+
+    def getCurrentWorksheet(self):
+        return self.context.getCurrentWorksheet(self.person)
+

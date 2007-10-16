@@ -202,6 +202,10 @@ def section_activities_view(browser):
 
 def section_activities_edit(browser):
     section_activities_view(browser)
+    browser.getLink('New Worksheet').click()
+    browser.getControl('Title').value = 'Worksheet1'
+    browser.getControl('Add').click()
+    browser.getLink('Worksheet1').click()
     browser.getLink('New Activity').click()
     browser.getControl('Title').value = 'Natural History'
     browser.getControl('Identifier').value = 'nathist'
@@ -248,10 +252,11 @@ def course_activities_view(browser):
 
 def course_activities_edit(browser):
     course_activities_view(browser)
-    try:
-        browser.getLink('New Activity').click()
-    except LinkNotFoundError:
-        return False
+    browser.getLink('New Worksheet').click()
+    browser.getControl('Title').value = 'Worksheet1'
+    browser.getControl('Add').click()
+    browser.getLink('Worksheet1').click()
+    browser.getLink('New Activity').click()
     browser.getControl('Title').value = 'Natural History'
     browser.getControl('Identifier').value = 'nathist'
     browser.getControl('Custom score system').click()

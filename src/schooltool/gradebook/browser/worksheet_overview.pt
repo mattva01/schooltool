@@ -6,7 +6,7 @@
 <body>
 
 <h1 metal:fill-slot="content-header"
-    i18n:translate="">Activity Worksheets</h1>
+    i18n:translate="">Activities</h1>
 
 <metal:block metal:fill-slot="body"
              tal:define="activities view/activities">

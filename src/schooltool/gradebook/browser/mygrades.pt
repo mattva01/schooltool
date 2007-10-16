@@ -1,0 +1,56 @@
+<tal:tag condition="view/update" />
+<html metal:use-macro="context/@@standard_macros/page"
+      i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+    Gradebook
+  </title>
+</head>
+<body>
+<div metal:fill-slot="body">
+
+  <form method="post"
+        tal:attributes="action string:${context/@@absolute_url}">
+    <label for="currentWorksheet" i18n:translate="">Worksheet</label>
+    <select name="currentWorksheet"
+            onchange="this.form.submit()">
+      <tal:block repeat="worksheet context/worksheets">
+        <option value="1"
+            tal:condition="python:worksheet != view.getCurrentWorksheet()"
+            tal:attributes="value worksheet/title"
+            tal:content="worksheet/title" />
+        <option value="1" selected="selected"
+            tal:condition="python:worksheet == view.getCurrentWorksheet()"
+            tal:attributes="value worksheet/title"
+            tal:content="worksheet/title" />
+      </tal:block>
+    </select>
+    <br /><br />
+  </form>
+
+  <h3 tal:condition="view/average" 
+        tal:content="string: Current Grade: ${view/average}%">Average</h3>
+  <h3 tal:condition="not: view/average">Nothing Graded</h3>
+  <br />
+  <table class="grades" border="1">
+    <tr>
+     <th>
+       <div i18n:translate="">Activity</div>
+     </th>
+     <th>
+       <div i18n:translate="">Grade</div>
+     </th>
+    </tr>
+    <tr tal:repeat="row view/table">
+      <td>
+        <div tal:content="row/activity">Activity</div>
+      </td>
+      <td>
+        <div tal:content="row/grade">Grade</div>
+      </td>
+    </tr>
+  </table>
+
+</div>
+</body>
+</html>

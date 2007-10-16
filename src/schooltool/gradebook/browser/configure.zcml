@@ -61,6 +61,32 @@
         title="Edit"
         />
 
+    <addform
+        label="Add a Worksheet"
+        name="addWorksheet.html"
+        schema="schooltool.gradebook.interfaces.IWorksheet"
+        fields="title"
+        arguments="title"
+        content_factory="schooltool.gradebook.activity.Worksheet"
+        permission="schooltool.edit"
+        template="templates/simple_add.pt"
+        class="schooltool.gradebook.browser.activity.WorksheetAddView">
+      <widget field="description" height="5" />
+    </addform>
+
+    <editform
+        label="Edit Worksheet"
+        name="edit.html"
+        for="schooltool.gradebook.interfaces.IWorksheet"
+        schema="schooltool.gradebook.interfaces.IWorksheet"
+        fields="title"
+        permission="schooltool.edit"
+        template="templates/simple_edit.pt"
+        class="schooltool.gradebook.browser.activity.WorksheetEditView"
+        menu="schooltool_actions"
+        title="Edit"
+        />
+
   </configure>
 
   <page
@@ -71,17 +97,17 @@
       permission="schooltool.view"
       />
 
+  <page
+      name="index.html"
+      for="..interfaces.IWorksheet"
+      class=".activity.WorksheetView"
+      template="worksheet_overview.pt"
+      permission="schooltool.view"
+      />
+
   <defaultView
       for="..interfaces.IActivity"
       name="edit.html"
-      />
-
-  <menuItem
-      menu="schooltool_actions"
-      title="Activities"
-      for="schooltool.course.interfaces.ICourse"
-      action="activities/index.html"
-      permission="schooltool.view"
       />
 
   <menuItem
@@ -102,8 +128,16 @@
 
   <menuItem
       menu="schooltool_actions"
-      title="New Activity"
+      title="New Worksheet"
       for="..interfaces.IActivities"
+      action="+/addWorksheet.html"
+      permission="schooltool.edit"
+      />
+
+  <menuItem
+      menu="schooltool_actions"
+      title="New Activity"
+      for="..interfaces.IWorksheet"
       action="+/addActivity.html"
       permission="schooltool.edit"
       />
@@ -115,6 +149,14 @@
       for="..interfaces.IGradebook"
       class=".gradebook.GradebookOverview"
       template="gradebook_overview.pt"
+      permission="schooltool.view"
+      />
+
+  <page
+      name="index.html"
+      for="..interfaces.IMyGrades"
+      class=".gradebook.MyGradesView"
+      template="mygrades.pt"
       permission="schooltool.view"
       />
 

@@ -10,6 +10,8 @@
       template="dashboardpage.pt"
       permission="schooltool.view"
       />
+
+<!--
   <page
       name="dashboardContent"
       for="schooltool.app.interfaces.ISchoolToolApplication"
@@ -25,6 +27,7 @@
       permission="schooltool.view"
       class="schooltool.dashboard.dashboard.DashboardTabView"
       />
+-->
 
   <viewletManager
       name="schooltool.dashboard"
@@ -41,11 +44,12 @@
       manager=".interfaces.IDashboard"
       template="sections.pt"
       class=".dashboard.SectionsCategory"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       title="My Sections"
       weight="10"
       />
 
+<!--
   <navigationViewlet
       name="term_admin"
       for="*"
@@ -67,5 +71,6 @@
       title="School Administration"
       weight="200"
       />
+-->
 
 </configure>

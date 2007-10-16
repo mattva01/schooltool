@@ -3,7 +3,7 @@
   <title metal:fill-slot="title" tal:content="context/title" />
 </head>
 <body>
-<h1 metal:fill-slot="content-header">Dashboard</h1>
+<h1 metal:fill-slot="content-header">Gradebook</h1>
 
 <metal:block metal:fill-slot="body">
 <style type="text/css">

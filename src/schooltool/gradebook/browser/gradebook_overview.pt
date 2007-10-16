@@ -9,11 +9,34 @@
 <body>
 <div metal:fill-slot="body">
 
+  <form method="post"
+        tal:attributes="action string:${context/@@absolute_url}">
+    <label for="currentWorksheet" i18n:translate="">Worksheet</label>
+    <select name="currentWorksheet"
+            onchange="this.form.submit()">
+      <tal:block repeat="worksheet context/worksheets">
+        <option value="1"
+            tal:condition="python:worksheet != view.getCurrentWorksheet()"
+            tal:attributes="value worksheet/title"
+            tal:content="worksheet/title" />
+        <option value="1" selected="selected"
+            tal:condition="python:worksheet == view.getCurrentWorksheet()"
+            tal:attributes="value worksheet/title"
+            tal:content="worksheet/title" />
+      </tal:block>
+    </select>
+    <br /><br />
+  </form>
+
   <table class="grades" border="1">
     <tr>
      <th>
        <div i18n:translate="">Name</div>
        <a href="?sort_by=student" i18n:translate="">(sort)</a>
+     </th>
+     <th>
+       <div i18n:translate="">Average</div>
+       <a tal:condition="nothing" href="?sort_by=average" i18n:translate="">(sort)</a>
      </th>
      <th tal:repeat="activity view/activities">
        <div>
@@ -42,6 +65,11 @@
           Tom Hoffman
         </a>
       </td>
+      <td>
+	    <tal:if condition="row/average|nothing">
+	      <b><span tal:replace="row/average" />%</b>
+	    </tal:if>
+      </td>
       <td tal:repeat="grade row/grades">
         <a href=""
            tal:attributes="href
@@ -49,7 +77,7 @@
            tal:content="grade/value" />
       </td>
     </tr>
-    <tr class="Statistic" tal:repeat="stat view/statistics">
+    <tr tal:condition="nothing" class="Statistic" tal:repeat="stat view/statistics">
       <td class="name"
           tal:content="stat/name">
         Quantity

@@ -45,6 +45,7 @@ from schooltool.gradebook.category import getCategories
 from schooltool.common import SchoolToolMessage as _
 
 GRADEBOOK_SORTING_KEY = 'schooltool.gradebook.sorting'
+CURRENT_WORKSHEET_KEY = 'schooltool.gradebook.currentworksheet'
 
 
 class Gradebook(object):
@@ -57,13 +58,12 @@ class Gradebook(object):
         # To make URL creation happy
         self.__parent__ = context
         self.__name__ = 'gradebook'
-        # Make sure we are not having inherited requirements
+        # Establish worksheets and all activities
+        self.worksheets = list(interfaces.IActivities(context).values())
         self.activities = []
-        for activity in interfaces.IActivities(context).values():
-            if isinstance(
-                activity, requirement.requirement.InheritedRequirement):
-                activity = activity.original
-            self.activities.append(activity)
+        for worksheet in self.worksheets:
+            for activity in worksheet.values():
+                self.activities.append(activity)
         self.students = list(self.context.members)
 
     def _checkStudent(self, student):
@@ -76,13 +76,13 @@ class Gradebook(object):
         return proxy.removeSecurityProxy(student)
 
     def _checkActivity(self, activity):
-        if activity not in self.activities:
-            raise ValueError(
-                '%r is not part of this section.' %activity.title)
         # Remove security proxy, so that the object can be referenced and
         # adapters are not proxied. Note that the gradebook itself has
         # sufficient tight security.
-        return proxy.removeSecurityProxy(activity)
+        if activity in self.activities:
+            return proxy.removeSecurityProxy(activity)
+        raise ValueError(
+            '%r is not part of this section.' %activity.title)
 
     def hasEvaluation(self, student, activity):
         """See interfaces.IGradebook"""
@@ -114,6 +114,43 @@ class Gradebook(object):
         activity = self._checkActivity(activity)
         evaluations = requirement.interfaces.IEvaluations(student)
         del evaluations[activity]
+
+    def getCurrentWorksheet(self, person):
+        person = proxy.removeSecurityProxy(person)
+        ann = annotation.interfaces.IAnnotations(person)
+        if CURRENT_WORKSHEET_KEY not in ann:
+            ann[CURRENT_WORKSHEET_KEY] = persistent.dict.PersistentDict()
+        if self.worksheets:
+            default = self.worksheets[0]
+        else:
+            default = None
+        section_id = hash(IKeyReference(self.context))
+        return ann[CURRENT_WORKSHEET_KEY].get(section_id, default)
+
+    def setCurrentWorksheet(self, person, worksheet):
+        person = proxy.removeSecurityProxy(person)
+        worksheet = proxy.removeSecurityProxy(worksheet)
+        ann = annotation.interfaces.IAnnotations(person)
+        if CURRENT_WORKSHEET_KEY not in ann:
+            ann[CURRENT_WORKSHEET_KEY] = persistent.dict.PersistentDict()
+        section_id = hash(IKeyReference(self.context))
+        ann[CURRENT_WORKSHEET_KEY][section_id] = worksheet
+
+    def getCurrentActivities(self, person):
+        worksheet = self.getCurrentWorksheet(person)
+        if worksheet:
+            return list(worksheet.values())
+        else:
+            return []
+
+    def getCurrentEvaluationsForStudent(self, person, student):
+        """See interfaces.IGradebook"""
+        self._checkStudent(student)
+        evaluations = requirement.interfaces.IEvaluations(student)
+        activities = self.getCurrentActivities(person)
+        for activity, evaluation in evaluations.items():
+            if activity in activities:
+                yield activity, evaluation
 
     def getEvaluationsForStudent(self, student):
         """See interfaces.IGradebook"""
@@ -193,3 +230,56 @@ class GradebookInit(InitBase):
         dict.addValue('project', 'en', _('Project'))
         dict.setDefaultLanguage('en')
         dict.setDefaultKey('assignment')
+
+
+class MyGrades(object):
+
+    zope.interface.implements(interfaces.IMyGrades)
+    zope.component.adapts(course.interfaces.ISection)
+
+    def __init__(self, context):
+        self.context = context
+        # To make URL creation happy
+        self.__parent__ = context
+        self.__name__ = 'mygrades'
+        self.worksheets = list(interfaces.IActivities(context).values())
+
+    def getEvaluation(self, student, activity, default=None):
+        """See interfaces.IGradebook"""
+        evaluations = requirement.interfaces.IEvaluations(student)
+        evaluations = proxy.removeSecurityProxy(evaluations)
+        return evaluations.get(activity, default)
+
+    def getCurrentWorksheet(self, person):
+        person = proxy.removeSecurityProxy(person)
+        ann = annotation.interfaces.IAnnotations(person)
+        if CURRENT_WORKSHEET_KEY not in ann:
+            ann[CURRENT_WORKSHEET_KEY] = persistent.dict.PersistentDict()
+        if self.worksheets:
+            default = self.worksheets[0]
+        else:
+            default = None
+        section_id = hash(IKeyReference(self.context))
+        return ann[CURRENT_WORKSHEET_KEY].get(section_id, default)
+
+    def setCurrentWorksheet(self, person, worksheet):
+        person = proxy.removeSecurityProxy(person)
+        worksheet = proxy.removeSecurityProxy(worksheet)
+        ann = annotation.interfaces.IAnnotations(person)
+        if CURRENT_WORKSHEET_KEY not in ann:
+            ann[CURRENT_WORKSHEET_KEY] = persistent.dict.PersistentDict()
+        section_id = hash(IKeyReference(self.context))
+        ann[CURRENT_WORKSHEET_KEY][section_id] = worksheet
+
+    def getCurrentActivities(self, person):
+        worksheet = self.getCurrentWorksheet(person)
+        if worksheet:
+            return list(worksheet.values())
+        else:
+            return []
+
+
+# HTTP pluggable traverser plugin
+MyGradesTraverserPlugin = traverser.AdapterTraverserPlugin(
+    'mygrades', interfaces.IMyGrades)
+

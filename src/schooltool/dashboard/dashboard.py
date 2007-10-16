@@ -21,6 +21,7 @@
 $Id$
 """
 __docformat__ = 'reStructuredText'
+from zope.app import zapi
 import zope.component
 import zope.interface
 from zope.viewlet import manager, viewlet
@@ -29,6 +30,7 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 import schooltool.person
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.dashboard import interfaces
+from schooltool.securitypolicy.crowds import TeachersCrowd, StudentsCrowd
 
 
 class Dashboard(manager.ViewletManagerBase):
@@ -118,10 +120,26 @@ class PersonDashboardCategory(DashboardCategory):
         return self.context != None
 
 class SectionsCategory(PersonDashboardCategory):
+    """Dashboard area for the user's sections"""
+    @property
+    def isTeacher(self):
+        return TeachersCrowd(self.context).contains(self.request.principal)
+
+    @property
+    def isStudent(self):
+        return StudentsCrowd(self.context).contains(self.request.principal)
 
     def getSections(self):
         person = schooltool.person.interfaces.IPerson(self.request.principal)
         for section in ISchoolToolApplication(None)['sections'].values():
-            if person in section.members:
-                yield section
-
+            if self.isTeacher and not person in section.instructors:
+                continue
+            if self.isStudent and not person in section.members:
+                continue
+            url = zapi.absoluteURL(section, self.request)
+            if self.isTeacher:
+                url += '/gradebook'
+            elif self.isStudent:
+                url += '/mygrades'
+            title = '%s %s' % (list(section.courses)[0].title, section.title)
+            yield {'url': url, 'title': title}

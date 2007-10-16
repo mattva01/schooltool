@@ -83,93 +83,99 @@ default categories and register new ones in their favorite language.)
 Activities
 ----------
 
-Activities are items that can be graded. In other software they are also
-referred to as assignments or grading items. Activities can be defined for
-courses and sections.
+Activities are items that can be graded.  In other software they are also
+referred to as assignments or grading items.  Activities can be defined for
+courses and sections.  They are organized into worksheets to allow teachers
+to keep activities separate from quarter to quarter.  Worksheets could be used
+to keep assignments organized by type.  It's up to the teacher.
 
-Let's say we have an introductory algebra course:
+Let's create some people, a course and a section:
 
-    >>> from schooltool.course import course
+    >>> from schooltool.person import person
+    >>> from schooltool.course import course, section
+    >>> tom = person.Person('tom', 'Tom Hoffman')
+    >>> paul = person.Person('paul', 'Paul Cardune')
+    >>> claudia = person.Person('claudia', 'Claudia Richter')
+    >>> stephan = person.Person('stephan', 'Stephan Richter')
     >>> alg1 = course.Course('Alg1', 'Algebra 1')
+    >>> sectionA = section.Section('Alg1-A')
+    >>> alg1.sections.add(sectionA)
 
-We would like to mandate now that everyone teaching Algebra 1 must give a
-final exam. To do this we get the activities for the course,
+We add some students and a teacher to the class,
+
+    >>> sectionA.members.add(tom)
+    >>> sectionA.members.add(paul)
+    >>> sectionA.members.add(claudia)
+    >>> sectionA.instructors.add(stephan)
+
+We will deal with the most common case first.  Here, Stephan teaches a
+two week course in algebra, and he would like to have two worksheets,
+one for each week.  At first there will be no worksheets in the section.
 
     >>> from schooltool.gradebook import interfaces
-    >>> alg1_act = interfaces.IActivities(alg1)
+    >>> sectionA_act = interfaces.IActivities(sectionA)
+    >>> sectionA_act
+    Activities(u'Activities')
+    >>> list(sectionA_act.items())
+    []
 
-and then add the activity:
+We'll create two worksheets, while adding them to the section activities.
 
     >>> from schooltool.gradebook import activity
+    >>> sectionA_act['week1'] = activity.Worksheet(u'Week 1')
+    >>> week1 = sectionA_act['week1']
+    >>> sectionA_act['week2'] = activity.Worksheet(u'Week 2')
+    >>> week2 = sectionA_act['week2']
+    >>> list(sectionA_act.items())
+    [('week1', Worksheet(u'Week 1')), ('week2', Worksheet(u'Week 2'))]
+    
+Both worksheets start out empty.
+
+    >>> list(week1.items())
+    []
+    >>> list(week2.items())
+    []
+    
+We will add two activities to each worksheet, a homework assignment and
+a test.
+
     >>> from schooltool.requirement import scoresystem
-    >>> alg1_act['finalExam'] = activity.Activity(
+    >>> week1['homework'] = activity.Activity(
+    ...     title=u'HW 1',
+    ...     description=u'Week 1 Homework',
+    ...     category=u'Assginment',
+    ...     scoresystem=scoresystem.RangedValuesScoreSystem(max=10))
+    >>> hw1 = week1['homework']
+    >>> week1['quiz'] = activity.Activity(
+    ...     title=u'Quiz',
+    ...     description=u'End of Week Quiz',
+    ...     category=u'Exam',
+    ...     scoresystem=scoresystem.PercentScoreSystem)
+    >>> quiz = week1['quiz']
+    >>> week2['homework'] = activity.Activity(
+    ...     title=u'HW 2',
+    ...     description=u'Week 2 Homework',
+    ...     category=u'Assginment',
+    ...     scoresystem=scoresystem.RangedValuesScoreSystem(max=15))
+    >>> hw2 = week2['homework']
+    >>> week2['final'] = activity.Activity(
     ...     title=u'Final',
     ...     description=u'Final Exam',
     ...     category=u'Exam',
     ...     scoresystem=scoresystem.PercentScoreSystem)
-    >>> final = alg1_act['finalExam']
+    >>> final = week2['final']
 
 Besides the title and description, one must also specify the category and the
 score system. The category is used to group similar activities together and
 later facilitate in computing the final grade. The score system is an object
-describing the type of score that can be associated with the activity. In our
-case it will be a percentage.
+describing the type of score that can be associated with the activity.
+    
+Now we note that both worksheets have the activities in them.
 
-Now that we have created a course and added activities, let's now add a
-section:
-
-    >>> from schooltool.course import section
-    >>> sectionA = section.Section('Alg1-A')
-    >>> alg1.sections.add(sectionA)
-
-We also want to have some students in the class,
-
-    >>> from schooltool.person import person
-    >>> tom = person.Person('tom', 'Tom Hoffman')
-    >>> sectionA.members.add(tom)
-    >>> paul = person.Person('paul', 'Paul Cardune')
-    >>> sectionA.members.add(paul)
-    >>> claudia = person.Person('claudia', 'Claudia Richter')
-    >>> sectionA.members.add(claudia)
-
-as well as a teacher:
-
-    >>> stephan = person.Person('stephan', 'Stephan Richter')
-    >>> sectionA.instructors.add(stephan)
-
-Now we can add activities to the section using the same API as for the course:
-
-    >>> import datetime
-    >>> sectionA_act = interfaces.IActivities(sectionA)
-    >>> sectionA_act['hw1'] = activity.Activity(
-    ...     title=u'HW 1',
-    ...     description=u'Homework 1',
-    ...     category=u'Assginment',
-    ...     scoresystem=scoresystem.RangedValuesScoreSystem(max=10),
-    ...     date=datetime.date(2006, 2, 10))
-    >>> hw1 = sectionA_act['hw1']
-
-    >>> sectionA_act['hw2'] = activity.Activity(
-    ...     title=u'HW 2',
-    ...     description=u'Homework 2',
-    ...     category=u'Assginment',
-    ...     scoresystem=scoresystem.RangedValuesScoreSystem(max=15),
-    ...     date=datetime.date(2006, 4, 15))
-    >>> hw2 = sectionA_act['hw2']
-
-In this case we create a new score system. This is very typical for those type
-of assignments, since their score commonly varies. There is also an optional
-argument, ``date``, that allows you to specify the date of the activity. This
-can either be interpreted as the due date or the date an exam is taken.
-
-We can also look at the activities that we defined:
-
-    >>> sorted(sectionA_act.items())
-    [('finalExam', InheritedRequirement(<Activity u'Final'>)),
-     ('hw1', <Activity u'HW 1'>), ('hw2', <Activity u'HW 2'>)]
-
-As you can see, the section *always* inherits the activities from the
-course.
+    >>> list(week1.items())
+    [('homework', <Activity u'HW 1'>), ('quiz', <Activity u'Quiz'>)]
+    >>> list(week2.items())
+    [('homework', <Activity u'HW 2'>), ('final', <Activity u'Final'>)]
 
 
 Evaluations
@@ -180,12 +186,37 @@ grades using the gradebook.
 
     >>> from schooltool.gradebook import interfaces
     >>> gradebook = interfaces.IGradebook(sectionA)
+    
+Already the gradebook has worksheets which it got from the section.
+
+    >>> gradebook.worksheets
+    [Worksheet(u'Week 1'), Worksheet(u'Week 2')]
+    
+The current worksheet for the teacher will automatically be set to the first
+one.
+
+    >>> gradebook.getCurrentWorksheet(stephan)
+    Worksheet(u'Week 1')
+    >>> gradebook.getCurrentActivities(stephan)
+    [<Activity u'HW 1'>, <Activity u'Quiz'>]
+    
+We can change it to be the second worksheet.
+
+    >>> gradebook.setCurrentWorksheet(stephan, week2)
+    >>> gradebook.getCurrentWorksheet(stephan)
+    Worksheet(u'Week 2')
+    >>> gradebook.getCurrentActivities(stephan)
+    [<Activity u'HW 2'>, <Activity u'Final'>]
 
 Let's enter some grades:
 
     >>> gradebook.evaluate(student=tom, activity=hw1, score=8)
     >>> gradebook.evaluate(student=paul, activity=hw1, score=10)
     >>> gradebook.evaluate(student=claudia, activity=hw1, score=7)
+
+    >>> gradebook.evaluate(student=tom, activity=quiz, score=90)
+    >>> gradebook.evaluate(student=paul, activity=quiz, score=80)
+    >>> gradebook.evaluate(student=claudia, activity=quiz, score=99)
 
     >>> gradebook.evaluate(student=tom, activity=hw2, score=10)
     >>> gradebook.evaluate(student=paul, activity=hw2, score=12)
@@ -242,75 +273,84 @@ You can then also delete evaluations:
     >>> gradebook.hasEvaluation(student=tom, activity=hw1)
     False
 
-The gradebook also provides a simple, but powerful query function that allows
-you to look up the rows, columns or single cells of the virtual gradebook
-spreadsheet:
 
-    >>> sorted(gradebook.getEvaluationsForStudent(paul),
+Working with Worksheets
+-----------------------
+
+Now that we have created worksheets for our gradebook, added activities to
+them, and evaulated the activities, it's time to look at the methods that
+will facilitate the gradebook view in getting the info it needs.  We will
+assume the currently viewed worksheet is the one for week 1 and get the
+activities and evaluations for it.
+
+    >>> gradebook.setCurrentWorksheet(stephan, week1)
+    >>> sorted(gradebook.getCurrentActivities(stephan),
+    ...        key=lambda x: x.title)
+    [<Activity u'HW 1'>, <Activity u'Quiz'>]
+
+    >>> sorted(gradebook.getCurrentEvaluationsForStudent(stephan, paul),
     ...        key=lambda x: x[0].title)
-    [(<Activity u'Final'>, <Evaluation for <Activity u'Final'>, value=99>),
-     (<Activity u'HW 1'>, <Evaluation for <Activity u'HW 1'>, value=10>),
-     (<Activity u'HW 2'>, <Evaluation for <Activity u'HW 2'>, value=12>)]
+    [(<Activity u'HW 1'>, <Evaluation for <Activity u'HW 1'>, value=10>),
+     (<Activity u'Quiz'>, <Evaluation for <Activity u'Quiz'>, value=80>)]
 
-    >>> sorted(gradebook.getEvaluationsForActivity(hw2),
+For a given activity, we can query the grades for all students for that
+activity.  This represents a column of the worksheet
+
+    >>> sorted(gradebook.getEvaluationsForActivity(hw1),
     ...        key=lambda x: x[0].username)
-    [(<...Person ...>, <Evaluation for <Activity u'HW 2'>, value=14>),
-     (<...Person ...>, <Evaluation for <Activity u'HW 2'>, value=12>),
-     (<...Person ...>, <Evaluation for <Activity u'HW 2'>, value=10>)]
+    [(<...Person ...>, <Evaluation for <Activity u'HW 1'>, value=7>),
+     (<...Person ...>, <Evaluation for <Activity u'HW 1'>, value=10>)]
 
-    >>> gradebook.getEvaluation(tom, hw2)
-    <Evaluation for <Activity u'HW 2'>, value=10>
+Finally, we can get an evaluation for a student, activity pair, which
+represents a cell in the worksheet.
+
+    >>> gradebook.getEvaluation(paul, hw1)
+    <Evaluation for <Activity u'HW 1'>, value=10>
 
 Total score
 ~~~~~~~~~~~
 
-Let's calculate the total score for Paul. First we'll verify Paul's
-individual scores:
-
-    >>> sorted(gradebook.getEvaluationsForStudent(paul),
-    ...        key=lambda (activity, evaluation): activity.title)
-    [(<Activity u'Final'>, <Evaluation for <Activity u'Final'>, value=99>),
-     (<Activity u'HW 1'>, <Evaluation for <Activity u'HW 1'>, value=10>),
-     (<Activity u'HW 2'>, <Evaluation for <Activity u'HW 2'>, value=12>)]
-
-Let's review Paul's evaluations. For the Final activity, he received a
-score of 99 out of a 100. For HW 1 he received 10 out of a range of 0
-to 10, and for HW 2 he received a 12 out of a maximum of 15. We first
-convert all these to fractions (a number between 0 and 1) and then
-calculate the final grade as an average of the fractions, and then
-transformed to a percentile.
+Let's calculate the total score for Paul.  For the End of Week Quiz, he 
+received a score of 80 out of a 100, and for the Final, 99 out of 100.
+For HW 1 he received 10 out of a range of 0 to 10, and for HW 2 he
+received a 12 out of a maximum of 15.  We first convert all these to 
+fractions (a number between 0 and 1) and then calculate the final grade
+as an average of the fractions, and then transformed to a percentile.
 
 Let's do the calculation by hand first:
 
     >>> from decimal import Decimal
-    >>> (Decimal(99) / Decimal(100) + 
+    >>> (Decimal(80) / Decimal(100) + 
+    ...  Decimal(99) / Decimal(100) + 
     ...  Decimal(10) / Decimal(10) +
-    ...  Decimal(12) / Decimal(15)) / 3 * 100
-    Decimal("93.00")
+    ...  Decimal(12) / Decimal(15)) / 4 * 100
+    Decimal("89.7500")
 
 We have a method on the gradebook that can do this calculation:
 
     >>> gradebook.getTotalScoreForStudent(paul)
-    Decimal("93.00")
+    Decimal("89.7500")
 
 Tom doesn't have a complete set of grades (the HW 1 grade is missing):
 
     >>> sorted(gradebook.getEvaluationsForStudent(tom),
     ...        key=lambda (activity, evaluation): activity.title)
     [(<Activity u'Final'>, <Evaluation for <Activity u'Final'>, value=85>), 
-     (<Activity u'HW 2'>, <Evaluation for <Activity u'HW 2'>, value=10>)]
+     (<Activity u'HW 2'>, <Evaluation for <Activity u'HW 2'>, value=10>),
+     (<Activity u'Quiz'>, <Evaluation for <Activity u'Quiz'>, value=90>)]
 
 The total score will be an average of these scores, and the missing score
 does not count:
 
-    >>> (Decimal(85) / Decimal(100) + 
-    ...  Decimal(10) / Decimal(15)) / 2 * 100
-    Decimal("75.83333333333333333333333335")
+    >>> (Decimal(90) / Decimal(100) + 
+    ...  Decimal(85) / Decimal(100) + 
+    ...  Decimal(10) / Decimal(15)) / 3 * 100
+    Decimal("80.55555555555555555555555557")
 
 Our score calculation method will give us the same result:
 
     >>> gradebook.getTotalScoreForStudent(tom)
-    Decimal("75.83333333333333333333333335")
+    Decimal("80.55555555555555555555555557")
 
 Sorting by Column
 ~~~~~~~~~~~~~~~~~
