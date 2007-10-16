@@ -386,7 +386,7 @@ factory path:
     <div class="indent">
       <div>
         <i>Registered at:</i>
-        <a href="...">Zope3/.../schooltool/person/rest/configure.zcml</a>
+        <a href="...">.../schooltool/person/rest/configure.zcml</a>
        <span class="small">
          (line ...)</span>
       </div>
