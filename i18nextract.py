@@ -82,7 +82,7 @@ msgstr ""
 """
 
 def get_version():
-    version_file = os.path.join('src', 'schooltool', 'common', 'version.txt')
+    version_file = os.path.join('src', 'schooltool', 'version.txt')
     f = open(version_file, 'r')
     result = f.read()
     f.close()

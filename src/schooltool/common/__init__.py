@@ -538,7 +538,7 @@ def get_version():
         return _version
     import os
     directory = os.path.split(__file__)[0]
-    f = open(os.path.join(directory, 'version.txt'), 'r')
+    f = open(os.path.join(directory, '..', 'version.txt'), 'r')
     result = f.read()
     _version = result
     f.close()
