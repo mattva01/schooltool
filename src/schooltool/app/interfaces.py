@@ -223,3 +223,7 @@ class IPluginInit(zope.interface.Interface):
 
     def __call__():
         """Perform plugin specific initialization."""
+
+
+class ISchoolToolAuthenticationPlugin(ISchoolToolAuthentication):
+    """A plugin for local schooltool authentication utility. """

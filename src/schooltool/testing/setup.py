@@ -61,12 +61,18 @@ from zope.interface import directlyProvides
 from zope.app.component.hooks import setSite
 from zope.app.component.site import LocalSiteManager
 from zope.traversing.interfaces import IContainmentRoot
+from schooltool.app.security import PersonContainerAuthenticationPlugin
+from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
 def setUpSchoolToolSite():
     """This should only be called after ``placefulSetUp()``."""
     app = createSchoolToolApplication()
     directlyProvides(app, IContainmentRoot)
     app.setSiteManager(LocalSiteManager(app))
     setUpLocalAuth(app)
+
+    plugin = PersonContainerAuthenticationPlugin()
+    ztapi.provideUtility(ISchoolToolAuthenticationPlugin, plugin)
+
     setSite(app)
     return app
 

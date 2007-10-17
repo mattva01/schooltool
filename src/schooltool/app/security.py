@@ -26,9 +26,8 @@ import urllib
 
 from persistent import Persistent
 from zope.app import zapi
+from zope.component import getUtility
 from zope.app.component import getNextUtility
-from zope.app.component.interfaces import ISite
-from zope.app.component.site import LocalSiteManager
 from zope.app.container.contained import Contained
 from zope.location.interfaces import ILocation
 from zope.app.security.interfaces import IAuthentication, ILoginPassword
@@ -39,7 +38,8 @@ from zope.component import adapts
 from zope.security.interfaces import IGroupAwarePrincipal
 from zope.security.checker import ProxyFactory
 from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.annotation.interfaces import IAttributeAnnotatable
+from zope.app.component.interfaces import ISite
+from zope.app.component.site import LocalSiteManager
 
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolAuthentication
@@ -49,6 +49,7 @@ from schooltool.securitypolicy.crowds import Crowd
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ICalendarParentCrowd
 from schooltool.securitypolicy.crowds import ConfigurableCrowd, ParentCrowd
+from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
 
 
 class Principal(Contained):
@@ -66,21 +67,18 @@ class Principal(Contained):
             return self._person
 
 
-class SchoolToolAuthenticationUtility(Persistent, Contained):
-    """A local SchoolTool authentication utility.
-
-    This utility serves principals for groups and persons in the
-    nearest SchoolToolApplication instance.
-
-    It authenticates the requests containing usernames and passwords
-    in the session.
-    """
-
-    implements(ISchoolToolAuthentication, ILocation, IAttributeAnnotatable)
+class PersonContainerAuthenticationPlugin(object):
+    implements(ISchoolToolAuthenticationPlugin)
 
     person_prefix = "sb.person."
     group_prefix = "sb.group."
     session_name = "schooltool.auth"
+
+    def _checkPassword(self, username, password):
+        app = getSchoolToolApplication()
+        if username in app['persons']:
+            person = app['persons'][username]
+            return person.checkPassword(password)
 
     def authenticate(self, request):
         """Identify a principal for request.
@@ -118,15 +116,6 @@ class SchoolToolAuthenticationUtility(Persistent, Contained):
 
     def unauthorized(self, id, request):
         """Signal an authorization failure."""
-        if not IBrowserRequest.providedBy(request) or request.method == 'PUT':
-            next = getNextUtility(self, IAuthentication)
-            return next.unauthorized(id, request)
-        if str(request.URL).endswith('.ics'):
-            # Special case: testing shows that Mozilla Calendar does not send
-            # the Authorization header unless challenged.  It is pointless
-            # to redirect an iCalendar client to an HTML login form.
-            next = getNextUtility(self, IAuthentication)
-            return next.unauthorized(id, request)
         app = getSchoolToolApplication()
         app_url = zapi.absoluteURL(app, request)
         query_string = request.getHeader('QUERY_STRING')
@@ -168,9 +157,7 @@ class SchoolToolAuthenticationUtility(Persistent, Contained):
                 # Group membership is not supported in SB, so we don't bother
                 # filling in principal.groups.
                 return Principal(id, group.title)
-
-        next = getNextUtility(self, IAuthentication)
-        return next.getPrincipal(id)
+        return None
 
     def setCredentials(self, request, username, password):
         # avoid circular imports
@@ -188,6 +175,60 @@ class SchoolToolAuthenticationUtility(Persistent, Contained):
             del session['username']
         except KeyError:
             pass
+
+
+class SchoolToolAuthenticationUtility(Persistent, Contained):
+    """A local SchoolTool authentication utility.
+
+    This utility serves principals for groups and persons in the
+    nearest SchoolToolApplication instance.
+
+    It authenticates the requests containing usernames and passwords
+    in the session.
+    """
+
+    implements(ISchoolToolAuthentication, ILocation)
+
+    @property
+    def authPlugin(self):
+        return getUtility(ISchoolToolAuthenticationPlugin)
+
+    def authenticate(self, request):
+        return self.authPlugin.authenticate(request)
+
+    def unauthorized(self, id, request):
+        if not IBrowserRequest.providedBy(request) or request.method == 'PUT':
+            next = getNextUtility(self, IAuthentication)
+            return next.unauthorized(id, request)
+        if str(request.URL).endswith('.ics'):
+            # Special case: testing shows that Mozilla Calendar does not send
+            # the Authorization header unless challenged.  It is pointless
+            # to redirect an iCalendar client to an HTML login form.
+            next = getNextUtility(self, IAuthentication)
+            return next.unauthorized(id, request)
+        return self.authPlugin.unauthorized(id, request)
+
+    def unauthenticatedPrincipal(self):
+        """Return the unauthenticated principal, if one is defined."""
+        return self.authPlugin.unauthenticatedPrincipal()
+
+    def getPrincipal(self, id):
+        """Get principal meta-data.
+
+        Returns principals for groups and persons.
+        """
+        principal = self.authPlugin.getPrincipal(id)
+        if not principal:
+            next = getNextUtility(self, IAuthentication)
+            principal = next.getPrincipal(id)
+
+        return principal
+
+    def setCredentials(self, request, username, password):
+        self.authPlugin.setCredentials(request, username, password)
+
+    def clearCredentials(self, request):
+        self.authPlugin.clearCredentials(request)
 
     # See ILogout
     logout = clearCredentials

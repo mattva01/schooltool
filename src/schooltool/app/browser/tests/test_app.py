@@ -145,6 +145,12 @@ def doctest_LoginView():
         >>> from zope.app.security.interfaces import IAuthentication
         >>> auth = SchoolToolAuthenticationUtility()
         >>> ztapi.provideUtility(IAuthentication, auth)
+
+        >>> from schooltool.app.security import PersonContainerAuthenticationPlugin
+        >>> from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
+        >>> plugin = PersonContainerAuthenticationPlugin()
+        >>> ztapi.provideUtility(ISchoolToolAuthenticationPlugin, plugin)
+
         >>> auth.__parent__ = app
         >>> sbsetup.setUpSessions()
 
@@ -231,6 +237,11 @@ def doctest_LogoutView():
         >>> ztapi.provideUtility(IAuthentication, auth)
         >>> auth.__parent__ = app
         >>> sbsetup.setUpSessions()
+
+        >>> from schooltool.app.security import PersonContainerAuthenticationPlugin
+        >>> from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
+        >>> plugin = PersonContainerAuthenticationPlugin()
+        >>> ztapi.provideUtility(ISchoolToolAuthenticationPlugin, plugin)
 
     We have a request in an authenticated session:
 

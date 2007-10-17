@@ -84,6 +84,12 @@ Let's provide the location of auth:
     >>> root['frogpond'] = app
     >>> from schooltool.app.security import setUpLocalAuth
     >>> setUpLocalAuth(app, auth)
+
+    >>> from schooltool.app.security import PersonContainerAuthenticationPlugin
+    >>> from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
+    >>> plugin = PersonContainerAuthenticationPlugin()
+    >>> ztapi.provideUtility(ISchoolToolAuthenticationPlugin, plugin)
+
     >>> from zope.app.component.hooks import setSite
     >>> setSite(app)
 

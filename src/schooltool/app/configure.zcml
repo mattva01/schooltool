@@ -335,4 +335,8 @@
 
   </configure>
 
+  <utility
+      factory=".security.PersonContainerAuthenticationPlugin"
+      provides=".interfaces.ISchoolToolAuthenticationPlugin" />
+
 </configure>
