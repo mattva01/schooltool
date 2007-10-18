@@ -36,9 +36,6 @@ Test
 The list of persons should have a disabled checkbox next to the manager user
 
     >>> manager_browser.open('http://localhost/persons')
-    >>> f = open('/tmp/dump.html', 'w')
-    >>> f.write(manager_browser.contents)
-    >>> f.close()
 
     >>> for td in analyze.queryHTML('//table[@class="data"]//tr/td', manager_browser.contents):
     ...     print td

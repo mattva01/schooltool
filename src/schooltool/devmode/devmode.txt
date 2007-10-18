@@ -182,9 +182,6 @@ The final section of the introspector shows you a list of annotations, if they
 are inspectable. Since the attribute annotations are inspectable, we can see a
 range of annotation keys and their values:
 
-    >>> f = open('/tmp/dump.txt', 'w')
-    >>> f.write(browser.contents)
-    >>> f.close()
     >>> print browser.contents.strip()
     <!DOC...
     ...
