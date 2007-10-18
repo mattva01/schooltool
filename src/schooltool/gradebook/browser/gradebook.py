@@ -81,17 +81,19 @@ class GradebookOverview(object):
             for act_hash, activity in activities:
                 ev = gradebook.getEvaluation(student, activity)
                 if ev is not None:
-                    grades.append({'activity': act_hash, 'value': ev.value})
+                    grades.append({'activity': act_hash, 'value': ev.value,
+                                   'has_value': True})
                     total += ev.value - ev.scoreSystem.min
                     count += ev.scoreSystem.max - ev.scoreSystem.min
                 else:
-                    grades.append({'activity': act_hash, 'value': '-'})
+                    grades.append({'activity': act_hash, 'value': '-',
+                                   'has_value': False})
 
             if count:
                 average = int((float(100 * total) / float(count)) + 0.5)
             else:
                 average = None
-            
+
             rows.append(
                 {'student': {'title': student.title, 'id': student.username},
                  'grades': grades,
@@ -101,9 +103,13 @@ class GradebookOverview(object):
         key, reverse = self.sortKey
         def generateKey(row):
             if key != 'student':
-                grades = dict([(str(grade['activity']), grade['value'])
+                grades = dict([(str(grade['activity']), (grade['has_value'],
+                                                         grade['value']))
                                for grade in row['grades']])
-                return grades.get(key, row['student']['title'])
+                if not grades.get(key, [None])[0]:
+                    return (1, row['student']['title'])
+                else:
+                    return (0, grades.get(key)[1])
             return row['student']['title']
 
         return sorted(rows, key=generateKey, reverse=reverse)
