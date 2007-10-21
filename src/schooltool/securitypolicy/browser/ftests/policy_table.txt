@@ -125,7 +125,6 @@ Manager can see almost everything:
 
     >>> column(manager, 'student1', '1')
     course:              view  edit
-    course activities:   view  edit
     gradebook scores:    view
     group calendar:      view  edit
     group container:     view  edit
@@ -158,7 +157,6 @@ Create anonymous browser:
     >>> alien.open('http://localhost/')
     >>> column(alien, 'student1', '1')
     course:              view
-    course activities:   view
     gradebook scores:
     group calendar:
     group container:
@@ -189,7 +187,6 @@ Student looking at another student:
     >>> student1 = setup.logIn('student1', 'student1')
     >>> column(student1, 'student2', '1')
     course:              view
-    course activities:   view
     gradebook scores:
     group calendar:
     group container:
@@ -219,7 +216,6 @@ Student looking at himself (his section):
 
     >>> column(student1, 'student1', '1')
     course:              view
-    course activities:   view
     gradebook scores:
     group calendar:
     group container:
@@ -250,7 +246,6 @@ Student looking at another student and not his section:
     >>> student2 = setup.logIn('student2', 'student2')
     >>> column(student2, 'student1', '1')
     course:              view
-    course activities:   view
     gradebook scores:
     group calendar:
     group container:
@@ -281,7 +276,6 @@ Instructor looking at his student and section:
     >>> instructor = setup.logIn('instructor1', 'instructor1')
     >>> column(instructor, 'student1', '1')
     course:              view
-    course activities:   view
     gradebook scores:    view  edit
     group calendar:
     group container:
@@ -312,7 +306,6 @@ Group member:
     >>> teacher3 = setup.logIn('teacher3', 'teacher3')
     >>> column(teacher3, 'student1', '1')
     course:              view
-    course activities:   view
     gradebook scores:
     group calendar:      view
     group container:
@@ -343,7 +336,6 @@ Leader stuff:
     >>> leader = setup.logIn('teacher2', 'teacher2')
     >>> column(leader, 'student1', '1')
     course:              view  edit
-    course activities:   view  edit
     gradebook scores:
     group calendar:      view  edit
     group container:
@@ -398,7 +390,6 @@ Site wide access control:
     >>> manager.getControl('Apply').click()
     >>> column(alien, 'student1', '1')
     course:              view
-    course activities:   view
     gradebook scores:
     group calendar:
     group container:

@@ -19,13 +19,6 @@
   <!-- Activity Adapters -->
 
   <adapter
-      for="schooltool.course.interfaces.ICourse"
-      provides=".interfaces.IActivities"
-      factory=".activity.getCourseActivities"
-      trusted="true"
-      />
-
-  <adapter
       for="schooltool.course.interfaces.ISection"
       provides=".interfaces.IActivities"
       factory=".activity.getSectionActivities"
@@ -141,13 +134,6 @@
 
   <subscriber
       for="schooltool.course.interfaces.ISection
-           zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".activity.ActivitiesTraverserPlugin"
-      />
-
-  <subscriber
-      for="schooltool.course.interfaces.ICourse
            zope.publisher.interfaces.http.IHTTPRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".activity.ActivitiesTraverserPlugin"

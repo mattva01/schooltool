@@ -246,26 +246,6 @@ def course_edit(browser):
     return 'History 6' in browser.contents
 
 
-def course_activities_view(browser):
-    browser.open('http://localhost/courses/history6/activities')
-    return 'Activities' in browser.contents
-
-def course_activities_edit(browser):
-    course_activities_view(browser)
-    browser.getLink('New Worksheet').click()
-    browser.getControl('Title').value = 'Worksheet1'
-    browser.getControl('Add').click()
-    browser.getLink('Worksheet1').click()
-    browser.getLink('New Activity').click()
-    browser.getControl('Title').value = 'Natural History'
-    browser.getControl('Identifier').value = 'nathist'
-    browser.getControl('Custom score system').click()
-    browser.getControl('Add').click()
-    browser.getControl(name='delete:list').value = ['nathist']
-    browser.getControl('Delete').click()
-    return 'Activities' in browser.contents
-
-
 def schooltool_view(browser):
     browser.open('http://localhost/')
     return 'SchoolTool' in browser.contents
@@ -430,9 +410,6 @@ def raw_column(browser, subject, section):
               'course': (
               do_test(course_view, browser),
               do_test(course_edit, browser)),
-              'course activities': (
-              do_test(course_activities_view, browser),
-              do_test(course_activities_edit, browser)),
               'schooltool': (
               do_test(schooltool_view, browser),
               None),

@@ -48,9 +48,6 @@ def setUp(test):
         z3c.optionstorage.interfaces.IOptionStorage)
 
     zope.component.provideAdapter(
-        activity.getCourseActivities,
-        (course.interfaces.ICourse,), interfaces.IActivities)
-    zope.component.provideAdapter(
         activity.getSectionActivities,
         (course.interfaces.ISection,), interfaces.IActivities)
 

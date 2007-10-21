@@ -57,22 +57,6 @@ class Activity(requirement.Requirement):
     def __repr__(self):
         return '<%s %r>' %(self.__class__.__name__, self.title)
 
-def getCourseActivities(context):
-    '''IAttributeAnnotatable object to IActivities adapter.'''
-    annotations = annotation.interfaces.IAnnotations(context)
-    try:
-        return annotations[ACTIVITIES_KEY]
-    except KeyError:
-        activities = Activities(_('Activities'))
-        annotations[ACTIVITIES_KEY] = activities
-        zope.app.container.contained.contained(
-            activities, context, 'activities')
-        return activities
-
-# Convention to make adapter introspectable
-getCourseActivities.factory = Activities
-
-
 def getSectionActivities(context):
     '''IAttributeAnnotatable object to IActivities adapter.'''
     annotations = annotation.interfaces.IAnnotations(context)
@@ -82,8 +66,6 @@ def getSectionActivities(context):
         activities = Activities(_('Activities'))
         # Make sure that the sections activities include all the activities of
         # the courses as well
-        for course in context.courses:
-            activities.addBase(getCourseActivities(course))
         annotations[ACTIVITIES_KEY] = activities
         zope.app.container.contained.contained(
             activities, context, 'activities')
