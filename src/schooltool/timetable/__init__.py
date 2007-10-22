@@ -299,6 +299,9 @@ class TimetableDay(Persistent):
         activities = [act.replace(timetable=self.timetable)
                       for act in self.activities[period]]
         self.activities[period].clear()
+        # ping persistent dict, because we just modified a
+        # non-persistent set
+        self.activities[period] = self.activities[period]
         if send_events:
             for act in activities:
                 ev = TimetableActivityRemovedEvent(act, self.day_id, period)
@@ -315,6 +318,9 @@ class TimetableDay(Persistent):
         if activity.timetable is None:
             activity = activity.replace(timetable=self.timetable)
         self.activities[period].add(activity)
+        # ping persistent dict, because we just modified a
+        # non-persistent set
+        self.activities[period] = self.activities[period]
 
         if send_events:
             activity = activity.replace(timetable=self.timetable)
@@ -326,6 +332,9 @@ class TimetableDay(Persistent):
             raise ValueError("Key %r not in periods %r"
                              % (period, self.periods))
         self.activities[period].remove(value)
+        # ping persistent dict, because we just modified a
+        # non-persistent set
+        self.activities[period] = self.activities[period]
         if send_events:
             activity = value.replace(timetable=self.timetable)
             ev = TimetableActivityRemovedEvent(activity, self.day_id, period)
