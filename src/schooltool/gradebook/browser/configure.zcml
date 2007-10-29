@@ -97,14 +97,6 @@
       permission="schooltool.view"
       />
 
-  <page
-      name="index.html"
-      for="..interfaces.IWorksheet"
-      class=".activity.WorksheetView"
-      template="worksheet_overview.pt"
-      permission="schooltool.view"
-      />
-
   <defaultView
       for="..interfaces.IActivity"
       name="edit.html"
@@ -124,22 +116,6 @@
       for="..interfaces.IGradebook"
       action="../activities/index.html"
       permission="schooltool.view"
-      />
-
-  <menuItem
-      menu="schooltool_actions"
-      title="New Worksheet"
-      for="..interfaces.IActivities"
-      action="+/addWorksheet.html"
-      permission="schooltool.edit"
-      />
-
-  <menuItem
-      menu="schooltool_actions"
-      title="New Activity"
-      for="..interfaces.IWorksheet"
-      action="+/addActivity.html"
-      permission="schooltool.edit"
       />
 
   <!-- Gradebook -->

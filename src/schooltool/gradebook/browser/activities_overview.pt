@@ -6,13 +6,43 @@
 <body>
 
 <h1 metal:fill-slot="content-header"
-    i18n:translate="">Activity Worksheets</h1>
+    i18n:translate="">Activities</h1>
 
 <metal:block metal:fill-slot="body"
              tal:define="activities view/activities">
+  <div style="padding-bottom: 1em">
+    <a class="button-ok" href="" title="New Worksheet"
+       tal:attributes="href string:${context/@@absolute_url}/+/addWorksheet.html">
+       New Worksheet
+    </a>
+  </div>
   <form method="post"
         tal:attributes="action string:${context/@@absolute_url}">
     <input type="hidden" name="form-submitted" value="" />
+    <label for="currentWorksheet" i18n:translate="">Worksheet</label>
+    <select name="currentWorksheet"
+            onchange="this.form.submit()">
+      <tal:block repeat="worksheet view/worksheets">
+        <option value="1"
+            tal:condition="python:worksheet != view.currentWorksheet"
+            tal:attributes="value worksheet/title"
+            tal:content="worksheet/title" />
+        <option value="1" selected="selected"
+            tal:condition="python:worksheet == view.currentWorksheet"
+            tal:attributes="value worksheet/title"
+            tal:content="worksheet/title" />
+      </tal:block>
+    </select>
+    <a class="button-ok" href="" title="Edit Worksheet"
+       tal:attributes="href string:${view/currentWorksheet/@@absolute_url}/edit.html">
+       Edit
+    </a>
+    <div style="padding-bottom: 1em; padding-top: 1em">
+      <a class="button-ok" href="" title="New Worksheet"
+         tal:attributes="href string:${view/currentWorksheet/@@absolute_url}/+/addActivity.html">
+         New Activity
+      </a>
+    </div>
     <div tal:repeat="activity activities">
       <select name=""
               onchange="this.form.submit()"
@@ -48,8 +78,6 @@
              i18n:attributes="value delete-button;" />
     </div>
   </form>
-
-  <p tal:condition="not:activities" i18n:translate="">There are none.</p>
 
 </metal:block>
 </body>

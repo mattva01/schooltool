@@ -21,9 +21,12 @@
 $Id$
 """
 from zope.app import zapi
+from zope.app.form.browser.editview import EditView
 from zope.security.checker import canWrite
+
 from schooltool.app.browser import app
 from schooltool.gradebook import interfaces
+from schooltool.person.interfaces import IPerson
 from schooltool.requirement import requirement
 
 class ActivitiesView(object):
@@ -31,9 +34,18 @@ class ActivitiesView(object):
 
     __used_for__ = interfaces.IActivities
 
+    @property
+    def worksheets(self):
+        """Get  a list of all worksheets."""
+        return sorted(self.context.values(), key=lambda x: x.title)
+
+    @property
+    def currentWorksheet(self):
+        return self.context.getCurrentWorksheet(self.person)
+    
     def activities(self):
         pos = 0
-        for activity in self.context.values():
+        for activity in self.context.getCurrentActivities(self.person):
             pos += 1
             inherited = False
             if zapi.isinstance(activity, requirement.InheritedRequirement):
@@ -47,79 +59,71 @@ class ActivitiesView(object):
                    'pos': pos}
 
     def positions(self):
-        return range(1, len(self.context)+1)
+        return range(1, len(self.currentWorksheet)+1)
 
     def canModify(self):
         return canWrite(self.context, 'title')
 
     def update(self):
+        self.person = IPerson(self.request.principal)
+
         if 'DELETE' in self.request:
             for name in self.request.get('delete', []):
-                del self.context[name]
+                del self.currentWorksheet[name]
+
         elif 'form-submitted' in self.request:
             old_pos = 0
-            for activity in self.context.values():
+            for activity in self.context.getCurrentActivities(self.person):
                 old_pos += 1
                 name = zapi.name(activity)
                 if 'pos.'+name not in self.request:
                     continue
                 new_pos = int(self.request['pos.'+name])
                 if new_pos != old_pos:
-                    self.context.changePosition(name, new_pos-1)
-
-class WorksheetView(object):
-    """A Group Container view."""
-
-    __used_for__ = interfaces.IWorksheet
-
-    def activities(self):
-        pos = 0
-        for activity in self.context.values():
-            pos += 1
-            inherited = False
-            if zapi.isinstance(activity, requirement.InheritedRequirement):
-                inherited = True
-                activity = requirement.unwrapRequirement(activity)
-            yield {'name': zapi.name(activity),
-                   'title': activity.title,
-                   'inherited': inherited,
-                   'disabled': inherited and 'disabled' or '',
-                   'url': zapi.absoluteURL(activity, self.request),
-                   'pos': pos}
-
-    def positions(self):
-        return range(1, len(self.context)+1)
-
-    def canModify(self):
-        return canWrite(self.context, 'title')
-
-    def update(self):
-        if 'DELETE' in self.request:
-            for name in self.request.get('delete', []):
-                del self.context[name]
-        elif 'form-submitted' in self.request:
-            old_pos = 0
-            for activity in self.context.values():
-                old_pos += 1
-                name = zapi.name(activity)
-                if 'pos.'+name not in self.request:
-                    continue
-                new_pos = int(self.request['pos.'+name])
-                if new_pos != old_pos:
-                    self.context.changePosition(name, new_pos-1)
+                    self.currentWorksheet.changePosition(name, new_pos-1)
+        
+            """Handle change of current worksheet."""
+            if 'currentWorksheet' in self.request:
+                for worksheet in self.worksheets:
+                    if worksheet.title == self.request['currentWorksheet']:
+                        self.context.setCurrentWorksheet(self.person, worksheet)
+                        break
 
 
 class WorksheetAddView(app.BaseAddView):
     """A view for adding a worksheet."""
 
 
-class WorksheetEditView(app.BaseEditView):
-    """A view for editing worksheet info."""
-
-
 class ActivityAddView(app.BaseAddView):
     """A view for adding an activity."""
 
+    def nextURL(self):
+        return zapi.absoluteURL(self.context.context.__parent__, self.request)
 
-class ActivityEditView(app.BaseEditView):
+
+class BaseEditView(EditView):
+    """A base class for edit views that need special redirect."""
+
+    def update(self):
+        if 'CANCEL' in self.request:
+            self.request.response.redirect(self.nextURL())
+        else:
+            status = EditView.update(self)
+            if 'UPDATE_SUBMIT' in self.request and not self.errors:
+                self.request.response.redirect(self.nextURL())
+            return status
+            
+            
+class WorksheetEditView(BaseEditView):
+    """A view for editing worksheet info."""
+
+    def nextURL(self):
+        return zapi.absoluteURL(self.context.__parent__, self.request)
+
+
+class ActivityEditView(BaseEditView):
     """A view for editing activity info."""
+
+    def nextURL(self):
+        return zapi.absoluteURL(self.context.__parent__.__parent__, self.request)
+

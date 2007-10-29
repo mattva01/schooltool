@@ -28,16 +28,13 @@
   <!-- Activity Content and Security -->
 
   <class class=".activity.Activities">
-    <allow interface="zope.interface.common.mapping.IReadMapping" />
     <require
         permission="schooltool.view"
-        attributes="keys __iter__ values items __len__ addBase removeBase title"
+        interface=".interfaces.IActivities"
         />
     <require
         permission="schooltool.edit"
-        interface="zope.interface.common.mapping.IWriteMapping"
         set_schema=".interfaces.IActivities"
-        attributes="changePosition"
         />
   </class>
 
@@ -52,6 +49,7 @@
         permission="schooltool.edit"
         interface="zope.interface.common.mapping.IWriteMapping"
         set_schema=".interfaces.IWorksheet"
+        attributes="changePosition"
         />
   </class>
 

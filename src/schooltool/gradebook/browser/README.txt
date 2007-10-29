@@ -138,9 +138,14 @@ creating two worksheets, one for each week in our two week section.
     >>> 'Week 2' in stephan.contents
     True
 
-Now, let's go into the worksheet for week 1 and add some activities to it.
+Note that 'Week 1' is the currently selected worksheet.
 
-    >>> stephan.getLink('Week 1').click()
+    >>> '<option value="Week 1" selected="selected">Week 1</option>' in \
+    ...  stephan.contents
+    True
+
+Now, let's add some activities to it.
+
     >>> stephan.getLink('New Activity').click()
     >>> stephan.getControl('Title').value = 'HW 1'
     >>> stephan.getControl('Description').value = 'Homework 1'
@@ -169,14 +174,15 @@ but only out of 50. So let's edit it:
     >>> stephan.getControl('Maximum').value = '50'
     >>> stephan.getControl('Apply').click()
 
-    >>> stephan.getControl('Maximum').value
-    '50'
+Now let's change the current workskeet to 'Week 2'.
 
-We'll use the Activities breadcrumb to go into the worksheet for week 2
-and add some activities to it.
+    >>> stephan.open(stephan.url+'?form-submitted=&currentWorksheet=Week%202')
+    >>> '<option value="Week 2" selected="selected">Week 2</option>' in \
+    ...  stephan.contents
+    True
 
-    >>> stephan.getLink('Activities').click()
-    >>> stephan.getLink('Week 2').click()
+Now we'll add some activities to it.
+
     >>> stephan.getLink('New Activity').click()
     >>> stephan.getControl('Title').value = 'HW 2'
     >>> stephan.getControl('Description').value = 'Homework 2'
@@ -194,7 +200,7 @@ and add some activities to it.
     >>> stephan.getControl(
     ...     name='field.scoresystem.existing').value = ['100 Points']
     >>> stephan.getControl('Add').click()
-    >>> 'HW 2' in stephan.contents
+    >>> 'Final' in stephan.contents
     True
 
 Now that we have all our activities setup, we would like to rearrange their
@@ -203,14 +209,12 @@ list. In the browser you should usually just select the new position and some
 Javascript would submit the form. Since Javascript is not working in the
 tests, we submit, the form manually:
 
-    >>> stephan.getLink('Activities').click()
-    >>> stephan.getLink('Week 2').click()
     >>> stephan.open(stephan.url+'?form-submitted=&pos.Activity-3=3')
     >>> stephan.contents.find('HW 2') \
     ...     < stephan.contents.find('Final')
     True
 
-Finally, you can also delete activities that you have created:
+You can also delete activities that you have created:
 
     >>> stephan.getLink('New Activity').click()
     >>> stephan.getControl('Title').value = 'HW 3'
@@ -226,6 +230,14 @@ Finally, you can also delete activities that you have created:
     >>> stephan.getControl('Delete').click()
     >>> 'HW 3' in stephan.contents
     False
+
+Fianlly, let's change the current workskeet back to 'Week 1'.  This setting
+of current worksheet will be in effect for the gradebook as well.
+
+    >>> stephan.open(stephan.url+'?form-submitted=&currentWorksheet=Week%201')
+    >>> '<option value="Week 1" selected="selected">Week 1</option>' in \
+    ...  stephan.contents
+    True
 
 
 Grading

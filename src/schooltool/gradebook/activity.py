@@ -23,8 +23,12 @@ $Id$
 __docformat__ = 'reStructuredText'
 
 import datetime
+import persistent.dict
+
 import zope.interface
 from zope import annotation
+from zope.app.keyreference.interfaces import IKeyReference
+from zope.security import proxy
 
 from schooltool.common import SchoolToolMessage as _
 from schooltool.requirement import requirement
@@ -32,9 +36,42 @@ from schooltool.traverser import traverser
 from schooltool.gradebook import interfaces
 
 ACTIVITIES_KEY = 'schooltool.gradebook.activities'
+CURRENT_WORKSHEET_KEY = 'schooltool.gradebook.currentworksheet'
 
 class Activities(requirement.Requirement):
     zope.interface.implements(interfaces.IActivities)
+
+    @property
+    def worksheets(self):
+        return self.values()
+
+    def getCurrentWorksheet(self, person):
+        person = proxy.removeSecurityProxy(person)
+        ann = annotation.interfaces.IAnnotations(person)
+        if CURRENT_WORKSHEET_KEY not in ann:
+            ann[CURRENT_WORKSHEET_KEY] = persistent.dict.PersistentDict()
+        if self.worksheets:
+            default = self.worksheets[0]
+        else:
+            default = None
+        section_id = hash(IKeyReference(self.__parent__))
+        return ann[CURRENT_WORKSHEET_KEY].get(section_id, default)
+
+    def setCurrentWorksheet(self, person, worksheet):
+        person = proxy.removeSecurityProxy(person)
+        worksheet = proxy.removeSecurityProxy(worksheet)
+        ann = annotation.interfaces.IAnnotations(person)
+        if CURRENT_WORKSHEET_KEY not in ann:
+            ann[CURRENT_WORKSHEET_KEY] = persistent.dict.PersistentDict()
+        section_id = hash(IKeyReference(self.__parent__))
+        ann[CURRENT_WORKSHEET_KEY][section_id] = worksheet
+
+    def getCurrentActivities(self, person):
+        worksheet = self.getCurrentWorksheet(person)
+        if worksheet:
+            return list(worksheet.values())
+        else:
+            return []
 
 
 class Worksheet(requirement.Requirement):

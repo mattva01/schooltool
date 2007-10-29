@@ -205,7 +205,6 @@ def section_activities_edit(browser):
     browser.getLink('New Worksheet').click()
     browser.getControl('Title').value = 'Worksheet1'
     browser.getControl('Add').click()
-    browser.getLink('Worksheet1').click()
     browser.getLink('New Activity').click()
     browser.getControl('Title').value = 'Natural History'
     browser.getControl('Identifier').value = 'nathist'

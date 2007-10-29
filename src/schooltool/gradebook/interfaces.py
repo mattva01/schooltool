@@ -31,6 +31,15 @@ class IActivities(interfaces.IRequirement):
     '''A list of worksheets containing activities that must be fulfilled in a
        course or section.'''
 
+    def getCurrentWorksheet():
+        """Get the currently active worksheet."""
+
+    def setCurrentWorksheet(worksheet):
+        """Set the currently active worksheet."""
+
+    def getCurrentActivities():
+        """Get the activities for the currently active worksheet."""
+
 
 class IWorksheet(interfaces.IRequirement):
     '''A list of activities that must be fulfilled in a course or section.'''

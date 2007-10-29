@@ -60,7 +60,6 @@ Set up activities and put marks:
     >>> manager.getLink('New Worksheet').click()
     >>> manager.getControl('Title').value = 'SchoolTool worksheet'
     >>> manager.getControl('Add').click()
-    >>> manager.getLink('SchoolTool worksheet').click()
     >>> manager.getLink('New Activity').click()
     >>> manager.getControl('Title').value = 'SchoolTool origin'
     >>> manager.getControl('Custom score system').click()
@@ -409,7 +408,7 @@ Site wide access control:
     schooltool calendar: view
     schooltool info:
     section:             view
-    section activities:  view
+    section activities:  
     section attendance:
     section calendar:    view
     term:                view
