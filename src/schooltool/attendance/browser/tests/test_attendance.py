@@ -2034,7 +2034,7 @@ def doctest_StudentAttendanceView_makeTardy():
 
         >>> for err in view.errors:
         ...     print translate(err)
-        Could not convert THIS ABSENCE absence intoa homeroom tardy
+        Could not convert THIS ABSENCE absence into a homeroom tardy
 
     Only homeroom attendance records can be converted into tardies:
 

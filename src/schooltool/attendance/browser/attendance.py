@@ -759,7 +759,7 @@ class StudentAttendanceView(BrowserView, AttendanceInheritanceMixin):
             return True
         except AttendanceError:
             self.errors.append(_('Could not convert $absence absence into'
-                                 'a homeroom tardy', mapping=mapping))
+                                 ' a homeroom tardy', mapping=mapping))
             return False
 
     @property
