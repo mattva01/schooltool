@@ -33,20 +33,14 @@ from schooltool.app.browser.cal import CalendarEventView
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common import SchoolToolMessage as _
 
-class IEditTimetableEvent(Interface):
-
-    description = HtmlFragment(
-        title=_("Description"),
-        required=False)
-
 
 class TimetableEventEditView(CalendarEventView, form.Form):
 
     title = _("Modify event information")
 
-    form_fields = form.fields(Text(__name__='description',
-                                   title=_("Description"),
-                                   required=False))
+    form_fields = form.fields(HtmlFragment(__name__='description',
+                                           title=_("Description"),
+                                           required=False))
     template = ViewPageTemplateFile("templates/timetable_event_edit.pt")
 
     def setUpEditorWidget(self, editor):
