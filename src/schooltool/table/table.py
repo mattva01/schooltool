@@ -238,7 +238,7 @@ class SchoolToolTableFormatter(object):
     def setUp(self, items=None, ommit=[], filter=None, columns=None,
               columns_before=[], columns_after=[], sort_on=None, prefix="",
               formatters=[], table_formatter=table.FormFullFormatter,
-              batch_size=10):
+              batch_size=25):
 
         self.filter_widget = queryMultiAdapter((self.context, self.request),
                                                IFilterWidget)

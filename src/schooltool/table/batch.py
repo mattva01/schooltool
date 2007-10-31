@@ -32,7 +32,7 @@ class Batch(object):
 
     template = ViewPageTemplateFile("templates/batch.pt")
 
-    def __init__(self, formatter, batch_size=10):
+    def __init__(self, formatter, batch_size=25):
         self.formatter = formatter
 
         if formatter.prefix:
@@ -110,7 +110,7 @@ class Batch(object):
 
 class IterableBatch(Batch):
 
-    def __init__(self, items, request, extra_url=None, batch_size=10,
+    def __init__(self, items, request, extra_url=None, batch_size=25,
                  sort_by=None, name=None):
         self.context = None
         self.items = items

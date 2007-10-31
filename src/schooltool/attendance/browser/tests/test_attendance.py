@@ -3094,7 +3094,7 @@ def doctest_AttendancePanelView_update():
         >>> view.batch.start
         0
         >>> view.batch.size
-        10
+        25
         >>> [item['title'] for item in view.batch]
         ['Archangel', 'Person', 'Zorro']
         >>> [item['hr_absences'] for item in view.batch]

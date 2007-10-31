@@ -534,6 +534,18 @@ Now, let's test the paging, for that we'll need to create a profuse amount of re
     ... mool
     ... moom
     ... moon
+    ... mooo
+    ... moop
+    ... mooq
+    ... moor
+    ... moos
+    ... moot
+    ... moou
+    ... moov
+    ... moow
+    ... moox
+    ... mooy
+    ... mooz
     ... """
     >>> manager.getControl('CSV Data').value = moofest
     >>> manager.getControl('Submit').click()
@@ -551,14 +563,14 @@ Now let's create an event for the manager.
     >>> manager.getControl('Book Resources').selected = True
     >>> manager.getControl('Add').click()
 
-Now on to play with the paging! The default batch size is 10, keeping in mind the 2 reources created before
-the 11 item should be `mooi`.
+Now on to play with the paging! The default batch size is 25, keeping in mind the 2 reources created before
+the 11 item should be `moox`.
 
     >>> manager.getLink('2').click()
     >>> print manager.contents
     <BLANKLINE>
     ...
-    <input type="checkbox" name="add_item.mooi" id="add_item.mooi" />
+    <input type="checkbox" name="add_item.moox" id="add_item.moox" />
     ...
 
 Howevever, `mooa` should not be in the list.

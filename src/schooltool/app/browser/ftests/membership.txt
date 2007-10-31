@@ -75,7 +75,6 @@ Let's go to a group, and look at its members.
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('group001').click()
     >>> manager.getLink('edit members').click()
-    >>> manager.getLink('Show All').click()
 
     >>> '<title>group001</title>' in manager.contents
     True
