@@ -233,7 +233,7 @@ class RangedValuesScoreSystem(AbstractValuesScoreSystem):
         """See interfaces.IScoreSystem"""
         if score is UNSCORED:
             return True
-        return score >= self.min and score <= self.max
+        return score >= self.min
 
     def getBestScore(self):
         """See interfaces.IScoreSystem"""

@@ -255,10 +255,12 @@ Of course there are some safety precautions:
     ...
     ValueError: -8 is not a valid score.
 
+4. In the case of score systems providing IRangedValuesScoreSystem, a score
+   greater than the max is allowed in order to give the teacher the chance
+   to award extra credit.
+   
     >>> gradebook.evaluate(student=claudia, activity=hw2, score=16)
-    Traceback (most recent call last):
-    ...
-    ValueError: 16 is not a valid score.
+    >>> gradebook.evaluate(student=claudia, activity=hw2, score=14)
 
 There are a couple more management functions that can be used to maintain the
 evaluations. For example, you can ask whether an evaluation for a particular

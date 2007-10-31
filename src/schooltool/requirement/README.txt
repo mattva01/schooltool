@@ -862,7 +862,9 @@ default the minimum value is 0, so I could have skipped that argument and just
 provide a ``max`` keyword argument.
 
 Practically any numerical value in the range between the minimum and maximum
-value are valid scores:
+value are valid scores.  However, in the case of score systems that are based
+purely on a numeric range, we will allow a score higher than the max, thus
+allowing the teacher to assign extra credit:
 
   >>> quizScore.isValidScore(Decimal(-1))
   False
@@ -873,7 +875,7 @@ value are valid scores:
   >>> quizScore.isValidScore(Decimal(21))
   True
   >>> quizScore.isValidScore(Decimal("21.1"))
-  False
+  True
   >>> quizScore.isValidScore(scoresystem.UNSCORED)
   True
 

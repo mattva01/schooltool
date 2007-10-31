@@ -277,18 +277,18 @@ click on her name:
 
 Now we just enter the grades:
 
-    >>> stephan.getControl('HW 1').value = u'87'
+    >>> stephan.getControl('HW 1').value = u'-1'
     >>> stephan.getControl('Quiz').value = u'56'
     >>> stephan.getControl('Update').click()
 
 But since I entered an invlaid value for Homework 1, we get an error message:
 
-    >>> 'The grade 87 for activity HW 1 is not valid.' in stephan.contents
+    >>> 'The grade -1 for activity HW 1 is not valid.' in stephan.contents
     True
 
 Also note that all the other entered values should be retained:
 
-    >>> 'value="87"' in stephan.contents
+    >>> 'value="-1"' in stephan.contents
     True
     >>> 'value="56"' in stephan.contents
     True
@@ -351,18 +351,18 @@ click on the activity's name:
 Now we just enter the grades. Since Claudia has already a grade, we only need
 to grade Paul and Tom:
 
-    >>> stephan.getControl('Paul Cardune').value = u'190'
+    >>> stephan.getControl('Paul Cardune').value = u'-1'
     >>> stephan.getControl('Tom Hoffman').value = u'42'
     >>> stephan.getControl('Update').click()
 
 Again, we entered an invalid value, this time for Paul:
 
-    >>> 'The grade 190 for Paul Cardune is not valid.' in stephan.contents
+    >>> 'The grade -1 for Paul Cardune is not valid.' in stephan.contents
     True
 
 Also note that all the other entered values should be retained:
 
-    >>> 'value="190"' in stephan.contents
+    >>> 'value="-1"' in stephan.contents
     True
     >>> 'value="42"' in stephan.contents
     True
