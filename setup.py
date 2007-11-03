@@ -185,7 +185,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zope.viewlet',
                       'zope.app.file',
                       'zope.app.onlinehelp',
-                      'zope.app.apidoc == 3.4.1',
+                      'zope.app.apidoc',
                       'z3c.optionstorage',
                       'zope.wfmc',
                       'zope.app.wfmc',
@@ -201,8 +201,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'PasteDeploy',
                       'PasteScript',
                       'setuptools'],
-    dependency_links=['http://ftp.schooltool.org/schooltool/eggs/',
-                      'http://download.zope.org/distribution/'],
+    dependency_links=['http://ftp.schooltool.org/schooltool/eggs/'],
     entry_points = """
     [paste.app_factory]
     main = schooltool.paste.main:schooltool_app_factory
