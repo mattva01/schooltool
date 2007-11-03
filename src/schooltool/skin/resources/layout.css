@@ -425,6 +425,7 @@ A.button-ok {
 
 #column-left .portlet {
 	margin-top: 1em;
+        position: relative;
 }
 
 #column-left .portlet H4 {
