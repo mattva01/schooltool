@@ -333,9 +333,11 @@ class MyGradesView(object):
             activity = proxy.removeSecurityProxy(activity)
             ev = self.context.getEvaluation(self.person, activity)
             if ev:
-                grade = '%d/%d' % (ev.value, ev.scoreSystem.max)
-                total += ev.value - ev.scoreSystem.min
-                count += ev.scoreSystem.max - ev.scoreSystem.min
+                ss = ev.requirement.scoresystem
+                grade = '%d/%d' % (ev.value, ss.max)
+                
+                total += ev.value - ss.min
+                count += ss.max - ss.min
             else:
                 grade = None
             self.table.append({'activity': activity.title, 
