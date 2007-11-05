@@ -83,8 +83,9 @@ class GradebookOverview(object):
                 if ev is not None:
                     grades.append({'activity': act_hash, 'value': ev.value,
                                    'has_value': True})
-                    total += ev.value - ev.scoreSystem.min
-                    count += ev.scoreSystem.max - ev.scoreSystem.min
+                    ss = ev.requirement.scoresystem
+                    total += ev.value - ss.min
+                    count += ss.max - ss.min
                 else:
                     grades.append({'activity': act_hash, 'value': '-',
                                    'has_value': False})
