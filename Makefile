@@ -16,7 +16,7 @@ all: build
 .PHONY: build
 build:
 	test -d eggs || mkdir eggs
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) setup.py develop -S eggs --install-dir eggs
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) setup.py develop -S eggs --install-dir eggs --index http://download.zope.org/zope3.4
 	$(PYTHON) bin/remove-stale-bytecode.py
 
 .PHONY: buildbot-build
