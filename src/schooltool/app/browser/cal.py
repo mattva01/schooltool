@@ -2238,11 +2238,7 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
             return self.updateForm()
         elif 'CANCEL' in self.request:
             self.update_status = ''
-            if 'cancel_url' in self.request:
-                nextURL = self.request['cancel_url']
-                self.request.response.redirect(nextURL)
-            else:
-                self.request.response.redirect(self.nextURL())
+            self.request.response.redirect(self.nextURL())
             return self.update_status
         elif "UPDATE_SUBMIT" in self.request:
             # Replicating EditView functionality
@@ -2271,6 +2267,8 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
         """Return the URL to be displayed after the add operation."""
         if "field.book" in self.request:
             return absoluteURL(self.context, self.request) + '/booking.html'
+        elif self.request.get('cancel_url', None):
+            return self.request['cancel_url']
         else:
             return absoluteURL(self.context.__parent__, self.request)
 
