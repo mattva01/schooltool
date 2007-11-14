@@ -9,6 +9,16 @@
 <body>
 <div metal:fill-slot="body">
 
+  <div class="topmenu">
+    <ul>
+      <li tal:attributes="class section/css" 
+          tal:repeat="section view/getSections">
+        <a tal:attributes="href section/url" 
+           tal:content="structure section/title"/>
+      </li>
+    </ul>
+  </div>
+  <br />
   <form method="post"
         tal:attributes="action string:${context/@@absolute_url}">
     <label for="currentWorksheet" i18n:translate="">Worksheet</label>

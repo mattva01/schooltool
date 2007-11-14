@@ -25,15 +25,48 @@ import zope.schema
 from zope.security import proxy
 from zope.app import zapi
 from zope.app.keyreference.interfaces import IKeyReference
+from zope.viewlet import viewlet
 
 from schooltool.app import app
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.gradebook import interfaces
 from schooltool.person.interfaces import IPerson
 from schooltool.requirement.scoresystem import UNSCORED
+from schooltool.securitypolicy.crowds import TeachersCrowd, StudentsCrowd
 from schooltool.common import SchoolToolMessage as _
 
+GradebookCSSViewlet = viewlet.CSSViewlet("gradebook.css")
 
-class GradebookOverview(object):
+class SectionFinder(object):
+    """Base class for GradebookOverview and MyGradesView"""
+
+    @property
+    def isTeacher(self):
+        return TeachersCrowd(self.context).contains(self.request.principal)
+
+    @property
+    def isStudent(self):
+        return StudentsCrowd(self.context).contains(self.request.principal)
+
+    def getSections(self):
+        gradebook = proxy.removeSecurityProxy(self.context)
+        for section in ISchoolToolApplication(None)['sections'].values():
+            if self.isTeacher and not self.person in section.instructors:
+                continue
+            if self.isStudent and not self.person in section.members:
+                continue
+            url = zapi.absoluteURL(section, self.request)
+            if self.isTeacher:
+                url += '/gradebook'
+            elif self.isStudent:
+                url += '/mygrades'
+            title = '%s<br/>%s' % (list(section.courses)[0].title, section.title)
+            css = 'inactive-menu-item'
+            if section == gradebook.context:
+                css = 'active-menu-item'
+            yield {'url': url, 'title': title, 'css': css}
+
+class GradebookOverview(SectionFinder):
     """Gradebook Overview/Table"""
 
     def update(self):
@@ -313,7 +346,7 @@ class Grade(object):
 
             self.request.response.redirect('index.html')
 
-class MyGradesView(object):
+class MyGradesView(SectionFinder):
     """Student view of own grades."""
 
     def update(self):

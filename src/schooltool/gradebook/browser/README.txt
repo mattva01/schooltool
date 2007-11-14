@@ -482,14 +482,6 @@ alphabetically:
     ...     < stephan.contents.find('Tom')
     True
 
-Once I click on the name sort button (again), the order is reversed:
-
-    >>> stephan.getLink(url='sort_by=student').click()
-    >>> stephan.contents.find('Claudia') \
-    ...     > stephan.contents.find('Paul') \
-    ...     > stephan.contents.find('Tom')
-    True
-
 Then we want to sort by grade in Homework 1, so we should have:
 
     >>> import re

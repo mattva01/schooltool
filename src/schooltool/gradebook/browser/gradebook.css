@@ -1,0 +1,47 @@
+div.topmenu {
+      width: 100%;
+      height: 50px;
+      margin: 0px;
+      background-color: #eae8e3;
+      font-family: sans-serif;
+      border-bottom: 1px solid black;
+      font-weight: normal;
+}
+
+div.topmenu ul{ 
+      list-style: none;
+      padding: 0px;
+      margin: 0px;
+}
+
+div.topmenu li{ 
+      float: left;
+      font-weight: bold;
+      height: 50px;
+      border-top: 1px solid #900;
+      border-right: 1px solid #900;   
+}
+div.topmenu li.active-menu-item{
+      background-color: #999999;
+      height: 49px;
+}
+div.topmenu li.inactive-menu-item{ 
+/**/
+}
+div.topmenu li a{
+      text-decoration: none;
+      display: block;
+      padding: 5px 10px 5px 10px;
+      color: black;
+      text-decoration: none;
+}
+div.topmenu li a:visited {text-decoration:none;}
+div.topmenu li a:active {text-decoration:none;}
+div.topmenu li a:hover {
+      background-color: #eeeeee; 
+      color: #900;
+}
+div.topmenu li.active-menu-item a:hover { 
+      background-color: #aaaaaa;
+}
+
