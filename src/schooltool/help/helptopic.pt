@@ -5,13 +5,12 @@
       metal:use-macro="view/@@schooltool_macros/onlinehelp/page">
   <head>
           <title metal:fill-slot="title"
-                 i18n:translate=""
                  tal:content="context/title">Topic Title</title>
 </head>
 <body metal:fill-slot="body" tal:omit-tag="">
     <table class="header" width="100%">
       <tr>
-        <td class="title" tal:content="context/title" i18n:translate="">
+        <td class="title" tal:content="context/title">
           Topic Title
         </td>
         <td class="close">

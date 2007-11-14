@@ -45,8 +45,8 @@
               </tal:loop>
 
                 <a tal:attributes="href section/@@absolute_url">
-                  <span tal:replace="section/label" i18n:translate=""/>
-                  (<span tal:replace="section/title" i18n:translate=""/>)
+                  <span tal:replace="section/label" />
+                  (<span tal:replace="section/title" />)
                 </a>
               <p>
                   <span tal:replace="section/size" />

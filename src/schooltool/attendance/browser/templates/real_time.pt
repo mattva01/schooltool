@@ -1,18 +1,18 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
   <title metal:fill-slot="title" i18n:translate=""
-    ><span i18n:name="section" i18n:translate=""
+    ><span i18n:name="section"
            tal:replace="context/label"/> attendance</title>
 </head>
 <body>
 
 <metal:block metal:fill-slot="content-header">
 <h2 tal:condition="view/homeroom" i18n:translate="">Homeroom attendance for
-  <span i18n:name="section" tal:replace="context/label" i18n:translate="" />
+  <span i18n:name="section" tal:replace="context/label" />
   at <span i18n:name="date" tal:replace="view/date" />
   period <span i18n:name="period_id" tal:replace="view/period_id" /></h2>
 <h2 tal:condition="not:view/homeroom" i18n:translate="">Section attendance for
-  <span i18n:name="section" tal:replace="context/label" i18n:translate="" />
+  <span i18n:name="section_title" tal:replace="context/label" />
   at <span i18n:name="date" tal:replace="view/date" />
   period <span i18n:name="period_id" tal:replace="view/period_id" /></h2>
 </metal:block>
@@ -23,8 +23,7 @@
 <input type="hidden" name="date" tal:attributes="value view/date" />
 <input type="hidden" name="period_id" tal:attributes="value view/period_id" />
 
-<div class="error" tal:condition="view/error" tal:content="view/error"
-     i18n:translate="">
+<div class="error" tal:condition="view/error" tal:content="view/error">
 </div>
 
 <div class="attendance-legend">

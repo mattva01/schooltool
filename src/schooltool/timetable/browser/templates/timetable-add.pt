@@ -4,34 +4,34 @@
   </head>
   <body>
     <metal:block metal:fill-slot="body">
-      
+
       <p tal:condition="not:view/has_timetables"
 	 i18n:translate="">There are no terms or timetable schemas defined.</p>
-      
+
       <tal:if tal:condition="view/has_timetables">
 	<form tal:attributes="action request/URL" class="standalone" method="post">
 	  <h3 i18n:translate="">Create a New Timetable</h3>
 	  <fieldset tal:define="terms view/app/terms/values;
 				ttschemas view/app/ttschemas/values">
 	    <legend i18n:translate="">Choose schedule template</legend>
-	    
+
 	    <p i18n:translate="">For term(s):</p>
-	    
+
 	    <tal:loop tal:repeat="term terms/sortby:first">
 	      <input type="radio" name="terms"
 		     tal:attributes="value term/__name__;
 				     checked python:term in view.terms
 				     and 'checked' or None" />
-	      <span tal:content="term/title" i18n:translate="" />
+	      <span tal:content="term/title" />
 	    </tal:loop>
 	    <p i18n:translate="">Using timetable:</p>
-	    
+
 	    <tal:loop tal:repeat="ttschema ttschemas/sortby:title">
 	      <input type="radio" name="ttschema"
 		     tal:attributes="value ttschema/__name__;
 				     checked python:ttschema is view.ttschema
 				     and 'checked' or None" />
-	      <span tal:content="ttschema/title" i18n:translate="" />
+	      <span tal:content="ttschema/title" />
 	    </tal:loop>
 	  </fieldset>
 	  <div class="controls">

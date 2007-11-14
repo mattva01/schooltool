@@ -38,7 +38,7 @@
       <td>
         <a tal:attributes="
             href string:${item/person/@@absolute_url}/@@attendance.html"
-            i18n:translate="" tal:content="item/title" />
+           tal:content="item/title" />
       </td>
       <td class="num" tal:content="item/hr_absences" />
       <td class="num" tal:content="item/section_absences" />

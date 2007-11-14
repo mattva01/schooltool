@@ -1,7 +1,7 @@
 <metal:block use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 
   <metal:slot fill-slot="title">
-    <span tal:replace="context/title" i18n:translate="">
+    <span tal:replace="context/title">
       Student Management
     </span>
   </metal:slot>
@@ -12,7 +12,7 @@
 
   <metal:block metal:fill-slot="body">
 
-    <div id="message" i18n:translate=""
+    <div id="message"
          tal:define="message view/update"
          tal:content="message" tal:condition="message">
       Status Message

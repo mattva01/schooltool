@@ -18,7 +18,6 @@ add a replacement day to the term.
   <div class="error"
        tal:content="view/error"
        tal:condition="view/error"
-       i18n:translate=""
        />
 
   <p i18n:translate="">

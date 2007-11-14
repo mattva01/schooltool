@@ -1,23 +1,23 @@
 
 <metal:block define-macro="navigation" i18n:domain="schooltool">
   <div id="calendar-navigation-context">
-    <a id="calendar-navigation-context-previous" i18n:attributes="title"
+    <a id="calendar-navigation-context-previous"
        tal:attributes="href view/prev;
-                       title string:Go to ${view/prev_title}">
+                       title view/go_to_prev_title">
       <span tal:content="view/prev_title">
         Previous
       </span>
     </a>
-    <a id="calendar-navigation-context-current" i18n:attributes="title"
+    <a id="calendar-navigation-context-current"
        tal:attributes="href view/current;
-                       title string:Go to ${view/current_title}">
+                       title view/go_to_current_title">
       <span tal:content="view/current_title">
         Current
       </span>
     </a>
-    <a id="calendar-navigation-context-next" i18n:attributes="title"
+    <a id="calendar-navigation-context-next"
        tal:attributes="href view/next;
-                       title string:Go to ${view/next_title}">
+                       title view/go_to_next_title">
       <span tal:content="view/next_title">
         Next
       </span>

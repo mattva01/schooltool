@@ -1,12 +1,12 @@
 <metal:block use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 
   <metal:slot fill-slot="title">
-    <span tal:replace="context/title" i18n:translate="">Academic Record</span>
+    <span tal:replace="context/title">Academic Record</span>
   </metal:slot>
 
   <metal:block fill-slot="content-header">
     <h1 i18n:translate="">
-      Academic Record for <em tal:content="context/title" i18n:name="name" /> 
+      Academic Record for <em tal:content="context/title" i18n:name="name" />
     </h1>
   </metal:block>
 
@@ -16,7 +16,7 @@
     <form tal:attributes="action request/URL" method="post"
           enctype="multipart/form-data" class="standalone">
 
-      <div id="message" i18n:translate=""
+      <div id="message"
            tal:define="message view/updateStatus"
            tal:content="message" tal:condition="message">
         Status Message
@@ -24,19 +24,19 @@
 
       <fieldset>
         <div metal:use-macro="context/@@form_macros/widget_rows" />
-  
+
         <div class="controls">
-          <input type="submit" class="button-ok" name="UPDATE_SUBMIT" 
+          <input type="submit" class="button-ok" name="UPDATE_SUBMIT"
                  value="Apply" title="Shortcut: Alt-S" accesskey="S"
                  i18n:attributes="value submit-button; accesskey" />
         </div>
-  
+
       </fieldset>
     </form>
 
 
     <h3 i18n:translate="">Workflow</h3>
-    <div id="message" i18n:translate=""
+    <div id="message"
          tal:define="message view/updateProcess"
          tal:content="message" tal:condition="message">
       Status Message
@@ -50,29 +50,28 @@
       <div tal:repeat="view view/workitems">
         <form tal:attributes="action request/URL" method="post"
               class="standalone">
-        
+
           <input type="hidden" name="workitemId" value=""
                  tal:attributes="value view/context/zope:name" />
 
           <div class="row">
             <h5 tal:content="view/context/schema/__doc__" />
-          </div>  
+          </div>
 
-          <p tal:condition="view/extra|nothing" tal:content="view/extra"
-             i18n:translate="">
+          <p tal:condition="view/extra|nothing" tal:content="view/extra">
             Extra message.
           </p>
-      
+
           <fieldset>
             <div metal:use-macro="context/@@form_macros/widget_rows" />
           </fieldset>
-        
+
           <div class="controls">
-            <input type="submit" class="button-ok" name="WORKITEM_SUBMIT" 
+            <input type="submit" class="button-ok" name="WORKITEM_SUBMIT"
                    value="Finish" title="Shortcut: Alt-R" accesskey="W"
                    i18n:attributes="value remove-button; accesskey" />
           </div>
-        
+
         </form>
       </div>
 
@@ -83,7 +82,7 @@
 
       <form tal:attributes="action request/URL" method="post">
           <div class="controls">
-            <input type="submit" class="button-ok" name="REMOVE_SUBMIT" 
+            <input type="submit" class="button-ok" name="REMOVE_SUBMIT"
                    value="Remove" title="Shortcut: Alt-R" accesskey="W"
                    i18n:attributes="value remove-button; accesskey" />
           </div>
@@ -96,7 +95,7 @@
       </p>
       <form tal:attributes="action request/URL" method="post">
           <div class="controls">
-            <input type="submit" class="button-ok" name="INITIALIZE_SUBMIT" 
+            <input type="submit" class="button-ok" name="INITIALIZE_SUBMIT"
                    value="Initialize" title="Shortcut: Alt-W" accesskey="W"
                    i18n:attributes="value initialize-button; accesskey" />
           </div>

@@ -8,10 +8,10 @@
              tal:define="batch view/batch">
 
 <form method="post" tal:attributes="action request/URL" class="standalone">
-<h3 i18n:translate="" tal:content="view/title" />
+<h3 tal:content="view/title" />
 <fieldset tal:define="items view/getSelectedItems">
   <tal:if condition="items">
-    <legend i18n:translate="" tal:content="view/current_title" />
+    <legend tal:content="view/current_title" />
     <div tal:repeat="item items/sortby:title">
       <label>
         <input tal:attributes="name string:remove_item.${item/__name__}"
@@ -49,7 +49,7 @@
 </form>
 <form method="post" tal:attributes="action request/URL" class="standalone">
 <fieldset>
-  <legend i18n:translate="" tal:content="view/available_title" />
+  <legend tal:content="view/available_title" />
   <div class="item_list">
     <tal:block replace="structure view/batch/render" />
     <input type="text" name="SEARCH"

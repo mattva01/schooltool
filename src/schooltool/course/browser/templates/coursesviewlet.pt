@@ -10,7 +10,7 @@
           <a title=""
              tal:attributes="href section/@@absolute_url;
                              title section/description|section/title"
-             tal:content="section/label" i18n:translate=""></a>
+             tal:content="section/label"></a>
         </tal:if>
         <tal:if condition="not:item/section/can_access:title">
           <span tal:replace="item/title" />

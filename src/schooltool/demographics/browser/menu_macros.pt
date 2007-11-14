@@ -3,9 +3,7 @@
   <tal:block define="menu view/getMenu | nothing;" condition="menu">
   <div style="margin-bottom: 5px">
     <tal:block repeat="menuitem menu">
-      <a 
-        i18n:translate=""
-        tal:content="string:${menuitem/title}"
+      <a tal:content="string:${menuitem/title}"
         tal:attributes="
           href string:${menuitem/action};
           title menuitem/description;

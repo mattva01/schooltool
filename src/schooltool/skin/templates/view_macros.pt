@@ -71,14 +71,14 @@
               <tal:span i18n:translate="">User:</tal:span>
 
               <tal:if condition="not:person">
-                <span id="tools-zmi-principal" i18n:translate=""
+                <span id="tools-zmi-principal"
                   tal:content="user/title">ZMI Principal</span>
               </tal:if>
 
               <tal:if condition="person">
-                <a id="tools-principal" i18n:translate=""
-                  tal:attributes="href person/@@absolute_url"
-                  tal:content="user/title">Schoolbell Person</a> |
+                <a id="tools-principal"
+                   tal:attributes="href person/@@absolute_url"
+                   tal:content="user/title">Schoolbell Person</a> |
                 <a id="tools-calendar" i18n:translate=""
                   tal:attributes="href string:${person/@@absolute_url}/calendar"
                   >My Calendar</a> |

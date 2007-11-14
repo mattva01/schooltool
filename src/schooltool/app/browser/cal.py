@@ -896,6 +896,10 @@ class WeeklyCalendarView(CalendarViewBase):
     current_title = _("Current week")
     prev_title = _("Previous week")
 
+    go_to_next_title = _("Go to next week")
+    go_to_current_title = _("Go to current week")
+    go_to_prev_title = _("Go to previous week")
+
     def inCurrentPeriod(self, dt):
         # XXX wrong if week starts on Sunday.
         return dt.isocalendar()[:2] == self.cursor.isocalendar()[:2]
@@ -957,6 +961,10 @@ class MonthlyCalendarView(CalendarViewBase):
     current_title = _("Current month")
     prev_title = _("Previous month")
 
+    go_to_next_title = _("Go to next month")
+    go_to_current_title = _("Go to current month")
+    go_to_prev_title = _("Go to previous month")
+
     def inCurrentPeriod(self, dt):
         return (dt.year, dt.month) == (self.cursor.year, self.cursor.month)
 
@@ -1004,6 +1012,10 @@ class YearlyCalendarView(CalendarViewBase):
     next_title = _("Next year")
     current_title = _("Current year")
     prev_title = _("Previous year")
+
+    go_to_next_title = _("Go to next year")
+    go_to_current_title = _("Go to current year")
+    go_to_prev_title = _("Go to previous year")
 
     def pdfURL(self):
         return None
@@ -1071,6 +1083,10 @@ class DailyCalendarView(CalendarViewBase):
     next_title = _("The next day")
     current_title = _("Today")
     prev_title = _("The previous day")
+
+    go_to_next_title = _("Go to the next day")
+    go_to_current_title = _("Go to today")
+    go_to_prev_title = _("Go to the previous day")
 
     def inCurrentPeriod(self, dt):
         return dt == self.cursor

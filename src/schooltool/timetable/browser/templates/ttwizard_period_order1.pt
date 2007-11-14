@@ -8,11 +8,11 @@
 
 <form class="plain" method="POST" tal:attributes="action request/URL">
 
-  <p tal:condition="view/description" tal:content="view/description"
-     i18n:translate="">(informative text)</p>
+  <p tal:condition="view/description"
+     tal:content="view/description">(informative text)</p>
 
-  <div tal:condition="view/error" tal:content="view/error" class="error"
-       i18n:translate="">(error message)</div>
+  <div tal:condition="view/error" tal:content="view/error"
+       class="error">(error message)</div>
 
   <div class="row" tal:repeat="slotnr python:range(view.numPeriods())">
   <tal:block define="slot python:view.periods()[slotnr]">

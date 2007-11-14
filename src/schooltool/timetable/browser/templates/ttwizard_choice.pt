@@ -9,7 +9,7 @@
 
 <form class="plain" method="POST" tal:attributes="action request/URL">
 
-  <p tal:content="view/question" i18n:translate="">(Question)</p>
+  <p tal:content="view/question">(Question)</p>
 
   <div class="controls">
     <input tal:repeat="choice view/choices"

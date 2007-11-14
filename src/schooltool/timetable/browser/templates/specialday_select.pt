@@ -18,7 +18,6 @@ a certain date, or to cancel some periods altogether.
   <div class="error"
        tal:content="view/error"
        tal:condition="view/error"
-       i18n:translate=""
        />
 
   <p i18n:translate="">

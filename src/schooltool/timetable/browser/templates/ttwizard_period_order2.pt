@@ -8,15 +8,15 @@
 
 <form class="plain" method="POST" tal:attributes="action request/URL">
 
-  <p tal:condition="view/description" tal:content="view/description"
-     i18n:translate="">(informative text)</p>
+  <p tal:condition="view/description"
+     tal:content="view/description">(informative text)</p>
 
-  <div tal:condition="view/error" tal:content="view/error" class="error"
-       i18n:translate="">(error message)</div>
+  <div tal:condition="view/error" tal:content="view/error"
+       class="error">(error message)</div>
 
   <table>
     <tr>
-      <th tal:repeat="day view/days" tal:content="day" i18n:translate="" />
+      <th tal:repeat="day view/days" tal:content="day" />
     </tr>
     <tr tal:repeat="slotnr python: range(max(numslots))"
         tal:define="numslots view/numSlots">

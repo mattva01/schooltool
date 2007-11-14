@@ -3,7 +3,7 @@
   <title metal:fill-slot="title" i18n:translate="">
       Scheduling for <span i18n:name="section"
                            tal:define="section context/__parent__/__parent__"
-                           tal:replace="section/label" i18n:translate="" />
+                           tal:replace="section/label" />
   </title>
 </head>
 <body>
@@ -11,7 +11,7 @@
 <h1 metal:fill-slot="content-header" i18n:translate="">
   Scheduling for <span i18n:name="section"
                        tal:define="section context/__parent__/__parent__"
-                       tal:replace="section/label" i18n:translate="" />
+                       tal:replace="section/label" />
 </h1>
 
 <metal:block metal:fill-slot="body">
@@ -25,12 +25,12 @@
 		   ttschemas view/app/ttschemas/values">
     <div i18n:translate="">For term(s):</div>
       <strong tal:repeat="term terms/sortby:first"
-	      tal:content="term/title" i18n:translate="" />
+	      tal:content="term/title" />
 
     <div i18n:translate="">Using timetable:</div>
 
     <strong tal:repeat="ttschema ttschemas/sortby:title"
-            tal:content="ttschema/title" i18n:translate="" />
+            tal:content="ttschema/title" />
   </div>
 
 <form tal:attributes="action request/URL" class="plain" method="post">
@@ -45,7 +45,7 @@
   <table class="timetable">
     <tr>
       <tal:block repeat="day view/days">
-        <th class="day" tal:content="day/title" i18n:translate="">Day N</th>
+        <th class="day" tal:content="day/title">Day N</th>
       </tal:block>
     </tr>
     <tr>

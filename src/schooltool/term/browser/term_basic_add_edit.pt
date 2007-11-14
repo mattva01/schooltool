@@ -2,18 +2,18 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
   <title metal:fill-slot="title"
-         tal:content="view/title" i18n:translate="">Term</title>
+         tal:content="view/title">Term</title>
 </head>
 <body>
   <h1 metal:fill-slot="content-header"
-      tal:content="view/title" i18n:translate="">Term</h1>
+      tal:content="view/title">Term</h1>
 
 <metal:block metal:fill-slot="body">
 
 <form class="plain" method="post" tal:attributes="action request/URL">
 
 <div class="error" tal:condition="view/update_status"
-                  tal:content="view/update_status" i18n:translate="">
+     tal:content="view/update_status">
   [Status message]
 </div>
 
