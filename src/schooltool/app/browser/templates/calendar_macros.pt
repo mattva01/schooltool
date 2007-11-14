@@ -31,33 +31,28 @@
        tal:condition="view/pdfURL"
        tal:attributes="href view/pdfURL"
        title="Printable version"
-       i18n:attributes="title"
-       i18n:translate=""><img tal:attributes="
+       i18n:attributes="title"><img tal:attributes="
                                    src context/++resource++printer.png"
                           alt="Printable version" i18n:attributes="alt" /></a>
     <a id="calendar-navigation-day"
        tal:attributes="href python:view.calURL('daily')"
        title="View daily calendar"
-       i18n:attributes="title"
-       i18n:translate=""><img tal:attributes="src context/++resource++day.png"
+       i18n:attributes="title"><img tal:attributes="src context/++resource++day.png"
                               alt="Daily" i18n:attributes="alt" /></a>
     <a id="calendar-navigation-week"
        tal:attributes="href python:view.calURL('weekly')"
        title="View weekly calendar"
-       i18n:attributes="title"
-       i18n:translate=""><img tal:attributes="src context/++resource++week.png"
+       i18n:attributes="title"><img tal:attributes="src context/++resource++week.png"
                               alt="Weekly" i18n:attributes="alt" /></a>
     <a id="calendar-navigation-month"
        tal:attributes="href python:view.calURL('monthly')"
        title="View monthly calendar"
-       i18n:attributes="title"
-       i18n:translate=""><img tal:attributes="src context/++resource++month.png"
+       i18n:attributes="title"><img tal:attributes="src context/++resource++month.png"
                               alt="Monthly" i18n:attributes="alt" /></a>
     <a id="calendar-navigation-year"
        tal:attributes="href python:view.calURL('yearly')"
        title="View yearly calendar"
-       i18n:attributes="title"
-       i18n:translate=""><img tal:attributes="src context/++resource++year.png"
+       i18n:attributes="title"><img tal:attributes="src context/++resource++year.png"
                               alt="Yearly" i18n:attributes="alt" /></a>
   </div>
 </metal:block>

@@ -275,7 +275,7 @@
             <input type="radio" name="field.monthly" value="lastweekday" id="monthly_l"
               tal:attributes="checked python:monthly_value == 'lastweekday'"/>
             <label for="monthly_l" class="plain" i18n:translate="">
-              <span tal:replace="view/getLastWeekDay" i18n:name="" /> of
+              <span tal:replace="view/getLastWeekDay" i18n:name="weekday" /> of
               every month</label>
           </div>
         </fieldset>

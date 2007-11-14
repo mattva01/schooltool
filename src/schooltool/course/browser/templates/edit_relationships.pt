@@ -21,7 +21,8 @@
       <div tal:repeat="conflict python:view.getConflictingSections(item)"
            i18n:translate="">
         Conflict:
-        <a tal:content="conflict/section/label"
+        <a i18n:name="section"
+           tal:content="conflict/section/label"
            tal:attributes="href conflict/section/@@absolute_url" />
         (<span tal:replace="conflict/day_id" i18n:name="day_id" />,
          <span tal:replace="conflict/period_id" i18n:name="period_id" />)
@@ -29,7 +30,8 @@
       <div tal:repeat="conflict python:view.getConflictingEvents(item)"
            i18n:translate="">
         Conflict:
-        <a tal:content="conflict/title"
+        <a i18n:name="event"
+           tal:content="conflict/title"
            tal:attributes="href conflict/@@absolute_url" />
       </div>
     </div>
@@ -73,7 +75,8 @@
       <div tal:repeat="conflict python:view.getConflictingEvents(item)"
            i18n:translate="">
         Conflict:
-        <a tal:content="conflict/title"
+        <a i18n:name="event"
+           tal:content="conflict/title"
            tal:attributes="href conflict/@@absolute_url" />
       </div>
     </div>
