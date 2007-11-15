@@ -58,14 +58,9 @@
     </table>
 
     <div class="controls">
-      <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Update"
-             title="Shortcut: Alt-U" accesskey="U"
-             i18n:attributes="value update-button; accesskey" />
-      <input type="submit" class="button-ok" name="DELETE" value="Delete"
-             title="Shortcut: Alt-D" accesskey="D"
-             i18n:attributes="value update-button; accesskey" />
-      <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
-             i18n:attributes="value cancel-button" />
+      <tal:block metal:use-macro="view/@@standard_macros/update-button" />
+      <tal:block metal:use-macro="view/@@standard_macros/delete-button" />
+      <tal:block metal:use-macro="view/@@standard_macros/cancel-button" />
     </div>
 
   </form>

@@ -58,11 +58,7 @@
                  value="Book" tal:condition="batch"
                  title="Shortcut: Alt-A" accesskey="A"
                  i18n:attributes="value; accesskey" />
-          <input type="submit" class="button-cancel" name="CANCEL"
-                 value="Cancel"
-                 title="Shortcut: Alt-C" accesskey="C"
-                 i18n:attributes="value; accesskey" />
-
+          <tal:block metal:use-macro="view/@@standard_macros/cancel-button" />
         </div>
         <p tal:condition="not:batch" i18n:translate="">
           There are none to add.

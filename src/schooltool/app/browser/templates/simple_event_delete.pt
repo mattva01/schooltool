@@ -27,10 +27,8 @@
     </fieldset>
 
     <div class="controls">
-      <input class="button-cancel" type="submit" name="DELETE" value="Delete"
-             i18n:attributes="value" />
-      <input class="button-cancel" type="submit" name="CANCEL" value="Cancel"
-             i18n:attributes="value" />
+      <tal:block metal:use-macro="view/@@standard_macros/delete-button" />
+      <tal:block metal:use-macro="view/@@standard_macros/cancel-button" />
     </div>
   </form>
   </metal:block>

@@ -73,9 +73,8 @@
 
     </div>
     <div class="controls">
-      <input tal:condition="view/canModify" 
-             type="submit" class="button-cancel" name="DELETE" value="Delete"
-             i18n:attributes="value delete-button;" />
+      <tal:block tal:condition="view/canModify"
+                 metal:use-macro="view/@@standard_macros/delete-button" />
     </div>
   </form>
 

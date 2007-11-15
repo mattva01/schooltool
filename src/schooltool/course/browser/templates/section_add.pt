@@ -61,19 +61,12 @@
     </fieldset>
     <div class="controls">
       <tal:if condition="view/validCourse">
-        <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Add"
-               title="Shortcut: Alt-A" accesskey="A"
-               i18n:attributes="value add-button; accesskey" />
+        <tal:block metal:use-macro="view/@@standard_macros/add-button" />
       </tal:if>
       <tal:if condition="not:view/validCourse">
-        <input class="disabled button-ok" disabled="disabled"
-               type="submit" name="UPDATE_SUBMIT" value="Add"
-               title="Shortcut: Alt-A" accesskey="A"
-               i18n:attributes="value add-button; accesskey" />
+        <tal:block metal:use-macro="view/@@standard_macros/add-button-disabled" />
       </tal:if>
-
-      <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
-             i18n:attributes="value cancel-button" />
+      <tal:block metal:use-macro="view/@@standard_macros/cancel-button" />
     </div>
 
   </form>

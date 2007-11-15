@@ -30,11 +30,8 @@
     </fieldset>
 
     <div class="controls">
-      <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Add"
-             title="Shortcut: Alt-A" accesskey="A"
-             i18n:attributes="value add-button; accesskey" />
-      <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
-             i18n:attributes="value cancel-button" />
+      <tal:block metal:use-macro="view/@@standard_macros/add-button" />
+      <tal:block metal:use-macro="view/@@standard_macros/cancel-button" />
     </div>
   </form>
 </metal:block>
