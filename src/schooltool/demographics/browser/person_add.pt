@@ -5,11 +5,8 @@
 
   <metal:block use-macro="view/@@formlib_macros/edit">
     <metal:block fill-slot="controls">
-      <input type="submit" id="form.actions.apply" name="form.actions.apply" value="Add" class="button-ok" 
-        title="Shortcut: Alt-A" accesskey="A" 
-       i18n:attributes="value submit-button; accesskey" />
-     <input type="submit" id="form.actions.cancel" name="form.actions.cancel" value="Cancel" class="button-cancel" 
-       i18n:attributes="value cancel-button" />
+      <tal:block metal:use-macro="view/@@standard_macros/add-button-formlib" />
+      <tal:block metal:use-macro="view/@@standard_macros/cancel-button-formlib" />
     </metal:block>
   </metal:block>
 

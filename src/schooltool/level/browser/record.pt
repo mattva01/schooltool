@@ -26,9 +26,7 @@
         <div metal:use-macro="context/@@form_macros/widget_rows" />
 
         <div class="controls">
-          <input type="submit" class="button-ok" name="UPDATE_SUBMIT"
-                 value="Apply" title="Shortcut: Alt-S" accesskey="S"
-                 i18n:attributes="value submit-button; accesskey" />
+          <tal:block metal:use-macro="view/@@standard_macros/apply-button" />
         </div>
 
       </fieldset>

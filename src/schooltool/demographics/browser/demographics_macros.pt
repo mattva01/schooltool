@@ -1,11 +1,9 @@
 <metal:block define-macro="next_controls"
              i18n:domain="schooltool">
-        <input type="submit" id="form.actions.apply" name="form.actions.apply" value="Apply" class="button-ok" 
-          title="Shortcut: Alt-A" accesskey="A" 
-          i18n:attributes="value submit-button; accesskey" />
-        <input type="submit" id="form.actions.apply_next" name="form.actions.apply_and_next" value="Apply and Next" class="button-ok" 
-          title="Shortcut: Alt-N" accesskey="N" 
-          i18n:attributes="value submit-button; accesskey" />
-        <input type="submit" id="form.actions.cancel" name="form.actions.cancel" value="Cancel" class="button-cancel" 
-          i18n:attributes="value cancel-button" />
+  <tal:block metal:use-macro="view/@@standard_macros/apply-button-formlib" />
+  <input type="submit" id="form.actions.apply_next" name="form.actions.apply_and_next"
+         value="Apply and Next" class="button-ok"
+         title="Shortcut: Alt-N" accesskey="N"
+         i18n:attributes="value apply-and-next-button; accesskey" />
+  <tal:block metal:use-macro="view/@@standard_macros/cancel-button-formlib" />
 </metal:block>

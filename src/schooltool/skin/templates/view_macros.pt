@@ -157,7 +157,14 @@
 <metal:block define-macro="apply-button">
   <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Apply"
          title="Shortcut: Alt-A" accesskey="A"
-         i18n:attributes="value submit-button; accesskey" />
+         i18n:attributes="value apply-button; accesskey" />
+</metal:block>
+
+<metal:block define-macro="apply-button-formlib">
+  <input type="submit" id="form.actions.apply" name="form.actions.apply"
+         value="Apply" class="button-ok"
+         title="Shortcut: Alt-A" accesskey="A"
+         i18n:attributes="value apply-button; accesskey" />
 </metal:block>
 
 <metal:block define-macro="add-button">
@@ -173,13 +180,26 @@
          i18n:attributes="value add-button; accesskey" />
 </metal:block>
 
+<metal:block define-macro="add-button-formlib">
+  <input type="submit" id="form.actions.apply" name="form.actions.apply"
+         value="Add" class="button-ok"
+         title="Shortcut: Alt-A" accesskey="A"
+         i18n:attributes="value add-button; accesskey" />
+</metal:block>
+
 <metal:block define-macro="delete-button">
   <input type="submit" class="button-ok" name="DELETE" value="Delete"
          title="Shortcut: Alt-D" accesskey="D"
-         i18n:attributes="value update-button; accesskey" />
+         i18n:attributes="value delete-button; accesskey" />
 </metal:block>
 
 <metal:block define-macro="cancel-button">
   <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+         i18n:attributes="value cancel-button" />
+</metal:block>
+
+<metal:block define-macro="cancel-button-formlib">
+  <input type="submit" id="form.actions.cancel" name="form.actions.cancel"
+         value="Cancel" class="button-cancel"
          i18n:attributes="value cancel-button" />
 </metal:block>
