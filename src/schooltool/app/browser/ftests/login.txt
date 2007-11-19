@@ -50,13 +50,34 @@ Now we are authenticated:
     >>> 'Some User' in anonymous.contents
     True
 
+Let's check whether our POST data preservation facilities work:
+
+    >>> anonymous.open("http://localhost/persons/user/preferences")
+    >>> anonymous.getLink('Log Out').click()
+    >>> anonymous.goBack()
+
+Now let's enter some data:
+
+    >>> anonymous.getControl('Make calendar public').click()
+    >>> anonymous.getControl('Apply').click()
+
+We get a log in form:
+
+    >>> anonymous.getControl('Username').value = 'user'
+    >>> anonymous.getControl('Password').value = 'secret'
+    >>> anonymous.getControl('Log in').click()
+
+And the option we have clicked on is set:
+
+    >>> anonymous.getControl('Make calendar public').selected
+    True
+
 Now we can log out:
 
     >>> anonymous.getLink('Log Out').click()
 
 We are logged out:
 
-    >>> anonymous.getLink('Log in')
-    Traceback (most recent call last):
-    ...
-    LinkNotFoundError
+    >>> anonymous.getLink('Log In')
+    <Link text='Log In' url='http://localhost/@@login.html'>
+

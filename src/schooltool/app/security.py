@@ -37,6 +37,7 @@ from zope.interface import implements
 from zope.component import adapts
 from zope.security.interfaces import IGroupAwarePrincipal
 from zope.security.checker import ProxyFactory
+from zope.publisher.browser import FileUpload
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.app.component.interfaces import ISite
 from zope.app.component.site import LocalSiteManager
@@ -88,6 +89,7 @@ class PersonContainerAuthenticationPlugin(object):
         session = ISession(request)[self.session_name]
         if 'username' in session and 'password' in session:
             if self._checkHashedPassword(session['username'], session['password']):
+                self.restorePOSTData(request)
                 return self.getPrincipal('sb.person.' + session['username'])
 
         # Try HTTP basic too
@@ -114,15 +116,46 @@ class PersonContainerAuthenticationPlugin(object):
         """Return the unauthenticated principal, if one is defined."""
         return None
 
+    def storePOSTData(self, request):
+        session = ISession(request)[self.session_name]
+        method = request.get('REQUEST_METHOD')
+        if method == 'POST':
+            i = 0
+            while 'form%s' % i in session:
+                i += 1
+            form_id = 'form%s' % i
+            picklable_form = request.form.copy()
+            for k, v in request.form.items():
+                if isinstance(v, FileUpload):
+                    del picklable_form[k]
+            session[form_id] = picklable_form
+            return form_id
+
+    def restorePOSTData(self, request):
+        form_id = request.form.get('post_form')
+        if form_id:
+            session = ISession(request)[self.session_name]
+            form = session.get(form_id, None)
+            if form is not None:
+                request.form = form
+                del session[form_id]
+
     def unauthorized(self, id, request):
         """Signal an authorization failure."""
         app = getSchoolToolApplication()
         app_url = zapi.absoluteURL(app, request)
         query_string = request.getHeader('QUERY_STRING')
+        post_form_id = self.storePOSTData(request)
+
         if query_string:
             query_string = "?%s" % query_string
+            if post_form_id:
+                query_string += "&post_form=%s" % post_form_id
         else:
             query_string = ""
+            if post_form_id:
+                query_string += "?post_form=%s" % post_form_id
+
         full_url = "%s%s" % (str(request.URL), query_string)
         request.response.redirect("%s/@@login.html?forbidden=yes&nexturl=%s"
                                   % (app_url, urllib.quote(full_url)))
