@@ -167,13 +167,17 @@ def updateStudentCalendars(event):
     elif IRelationshipRemovedEvent.providedBy(event):
         if IPerson.providedBy(member):
             if calendar in member.overlaid_calendars:
+                for group in member.groups:
+                    if group in section.members:
+                        return
                 member.overlaid_calendars.remove(calendar)
 
         elif IGroup.providedBy(member):
             for person in member.members:
                 if IPerson.providedBy(person):
                     if calendar in person.overlaid_calendars:
-                        person.overlaid_calendars.remove(calendar)
+                        if person not in section.members:
+                            person.overlaid_calendars.remove(calendar)
 
 
 #
