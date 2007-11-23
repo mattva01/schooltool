@@ -61,7 +61,7 @@
 
           <tal:if condition="not:user/schooltool:authenticated">
             <a id="tools-login" i18n:translate=""
-              tal:attributes="href string:${url}/@@login.html">Log In</a>
+              tal:attributes="href string:${url}/auth/@@login.html">Log In</a>
           </tal:if>
 
           <tal:if condition="user/schooltool:authenticated"
@@ -83,7 +83,7 @@
                   tal:attributes="href string:${person/@@absolute_url}/calendar"
                   >My Calendar</a> |
                 <a id="tools-logout" i18n:translate=""
-                  tal:attributes="href string:${url}/@@logout.html"
+                  tal:attributes="href string:${url}/auth/@@logout.html"
                   >Log Out</a>
               </tal:if>
 

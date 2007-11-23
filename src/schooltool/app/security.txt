@@ -270,7 +270,7 @@ login page:
     >>> request.response.getStatus()
     302
     >>> request.response.getHeader('Location')
-    'http://127.0.0.1/frogpond/@@login.html?forbidden=yes&nexturl=http%3A//127.0.0.1'
+    'http://127.0.0.1/frogpond/auth/@@login.html?forbidden=yes&nexturl=http%3A//127.0.0.1'
 
 The URL is properly escaped
 
@@ -280,7 +280,7 @@ The URL is properly escaped
     >>> request.response.getStatus()
     302
     >>> request.response.getHeader('Location')
-    'http://127.0.0.1/frogpond/@@login.html?forbidden=yes&nexturl=/%2B%2Betc%2B%2Bsite'
+    'http://127.0.0.1/frogpond/auth/@@login.html?forbidden=yes&nexturl=/%2B%2Betc%2B%2Bsite'
 
 GET parameters are passed along:
 
@@ -291,7 +291,7 @@ GET parameters are passed along:
     >>> request.response.getStatus()
     302
     >>> request.response.getHeader('Location')
-    'http://127.0.0.1/frogpond/@@login.html?forbidden=yes&nexturl=/%2B%2Betc%2B%2Bsite%3Ffoo%3D10%26bar%3D20'
+    'http://127.0.0.1/frogpond/auth/@@login.html?forbidden=yes&nexturl=/%2B%2Betc%2B%2Bsite%3Ffoo%3D10%26bar%3D20'
 
 However it does that only for regular browser requests.  Other kinds of
 requests issue the default challenge by setting the response code to 401

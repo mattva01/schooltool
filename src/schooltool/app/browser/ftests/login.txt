@@ -79,5 +79,5 @@ Now we can log out:
 We are logged out:
 
     >>> anonymous.getLink('Log In')
-    <Link text='Log In' url='http://localhost/@@login.html'>
+    <Link text='Log In' url='http://localhost/auth/@@login.html'>
 

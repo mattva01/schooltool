@@ -151,7 +151,7 @@ class PersonContainerAuthenticationPlugin(object):
                 query_string += "?post_form=%s" % post_form_id
 
         full_url = "%s%s" % (str(request.URL), query_string)
-        request.response.redirect("%s/@@login.html?forbidden=yes&nexturl=%s"
+        request.response.redirect("%s/auth/@@login.html?forbidden=yes&nexturl=%s"
                                   % (app_url, urllib.quote(full_url)))
 
     def getPrincipal(self, id):

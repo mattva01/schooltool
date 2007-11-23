@@ -68,7 +68,7 @@ The frog cannot see the toad's personal info:
 
     >>> frog.open('http://localhost/persons/toad')
     >>> print frog.url
-    http://localhost/@@login.html?forbidden=yes&nexturl=...
+    http://localhost/auth/@@login.html?forbidden=yes&nexturl=...
 
 Let's make toad join the section:
 

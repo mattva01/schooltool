@@ -200,11 +200,11 @@
   <!-- Views for everything -->
 
   <page
-      for="*"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
       name="login.html"
       layer="schooltool.skin.ISchoolToolLayer"
       template="templates/login.pt"
-      class=".app.LoginView"
+      class=".app.ApplicationLoginView"
       permission="zope.Public"
       />
 
@@ -217,10 +217,10 @@
       />
 
   <page
-      for="*"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
       name="logout.html"
       layer="schooltool.skin.ISchoolToolLayer"
-      class=".app.LogoutView"
+      class=".app.ApplicationLogoutView"
       permission="zope.Public"
       />
 
@@ -655,6 +655,35 @@
            zope.publisher.interfaces.http.IHTTPRequest"
       factory=".app.SchoolBreadcrumbInfo"
       trusted="true"
+      permission="zope.Public"
+      />
+
+  <!-- Authentication adapter traverser and views -->
+
+  <zope:adapter
+      factory=".app.getAuthentication" />
+
+  <zope:subscriber
+     for="schooltool.app.interfaces.ISchoolToolApplication
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".app.SchoolToolAuthenticationTraverserPlugin"
+      />
+
+  <page
+      for="schooltool.app.interfaces.ISchoolToolAuthenticationPlugin"
+      name="login.html"
+      layer="schooltool.skin.ISchoolToolLayer"
+      template="templates/login.pt"
+      class=".app.LoginView"
+      permission="zope.Public"
+      />
+
+  <page
+      for="schooltool.app.interfaces.ISchoolToolAuthenticationPlugin"
+      name="logout.html"
+      layer="schooltool.skin.ISchoolToolLayer"
+      class=".app.LogoutView"
       permission="zope.Public"
       />
 

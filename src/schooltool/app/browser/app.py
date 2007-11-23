@@ -22,6 +22,8 @@ SchoolTool application views.
 $Id$
 """
 
+from zope.location.location import LocationProxy
+from zope.interface import implementer
 from zope.interface import implements
 from zope.security.interfaces import IParticipation
 from zope.security.management import getSecurityPolicy
@@ -33,6 +35,8 @@ from zope.app.form.browser.editview import EditView
 from zope.app.form.interfaces import IInputWidget
 from zope.app.form.interfaces import WidgetsError
 from zope.publisher.browser import BrowserView
+from zope.component import getUtility
+from zope.component import adapter
 from zope.component import queryMultiAdapter
 from zope.app.security.interfaces import IAuthentication
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
@@ -40,11 +44,13 @@ from zope.publisher.browser import BrowserPage
 
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.app import getSchoolToolApplication
+from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IAsset
 from schooltool.person.interfaces import IPerson
+from schooltool.traverser.traverser import AdapterTraverserPlugin
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.table import label_cell_formatter_factory
 from schooltool.table.interfaces import ITableFormatter
@@ -172,6 +178,24 @@ class RelationshipViewBase(BrowserView):
             batch_size=0)
 
 
+class ApplicationLoginView(BrowserView):
+    """Backwards compatible login view that redirects to the actual login view."""
+
+    def __call__(self):
+        nexturl = zapi.absoluteURL(self.context,
+                                   self.request) + '/auth/@@login.html'
+        self.request.response.redirect(nexturl)
+
+
+class ApplicationLogoutView(BrowserView):
+    """Backwards compatible logout view that redirects to the actual logout view."""
+
+    def __call__(self):
+        nexturl = zapi.absoluteURL(self.context,
+                                   self.request) + '/auth/@@logout.html'
+        self.request.response.redirect(nexturl)
+
+
 class LoginView(BrowserView):
     """A login view"""
 
@@ -199,7 +223,8 @@ class LoginView(BrowserView):
                     nexturl = zapi.absoluteURL(
                         person, self.request) + '/@@logindispatch'
                 else:
-                    nexturl = zapi.absoluteURL(self.context, self.request)
+                    nexturl = zapi.absoluteURL(ISchoolToolApplication(None),
+                                               self.request)
                 self.request.response.redirect(nexturl)
 
 
@@ -221,7 +246,8 @@ class LogoutView(BrowserView):
     def __call__(self):
         auth = zapi.getUtility(IAuthentication)
         auth.clearCredentials(self.request)
-        url = zapi.absoluteURL(self.context, self.request)
+        url = zapi.absoluteURL(ISchoolToolApplication(None),
+                               self.request)
         self.request.response.redirect(url)
 
 
@@ -301,3 +327,14 @@ class ViewRobot(BrowserPage):
 
 
 SchoolBreadcrumbInfo = CustomNameBreadCrumbInfo(_('school'))
+
+
+@adapter(ISchoolToolApplication)
+@implementer(ISchoolToolAuthenticationPlugin)
+def getAuthentication(app):
+    return LocationProxy(getUtility(ISchoolToolAuthenticationPlugin),
+                         app, 'auth')
+
+
+SchoolToolAuthenticationTraverserPlugin = AdapterTraverserPlugin(
+    'auth', ISchoolToolAuthenticationPlugin)
