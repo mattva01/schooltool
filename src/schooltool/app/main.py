@@ -32,6 +32,8 @@ import locale
 import gettext
 import logging
 import errno
+import pkg_resources
+from StringIO import StringIO
 
 import ZConfig
 import transaction
@@ -397,6 +399,25 @@ def initializeSchoolToolPlugins(event):
         initializer()
 
 
+def get_schooltool_plugin_configurations():
+    """Returns a list of tuples (configuration, handler).
+
+    Configuration is a string containing XML that will be included in
+    the config-schema.
+
+    Handler is a function that performs the actual work based on the
+    configuration.
+    """
+
+    plugin_configurations = list(pkg_resources.iter_entry_points(
+            'schooltool.plugin_configuration'))
+    return [entry.load().get_configuration()
+            for entry in plugin_configurations]
+
+
+plugin_configurations = get_schooltool_plugin_configurations()
+
+
 class StandaloneServer(object):
 
     ZCONFIG_SCHEMA = os.path.join(os.path.dirname(__file__),
@@ -411,15 +432,19 @@ class StandaloneServer(object):
 
     Options = Options
 
-    devmode = False
-
-    def configure(self):
+    def configure(self, options):
         """Configure Zope 3 components."""
         # Hook up custom component architecture calls
         zope.app.component.hooks.setHooks()
         context = zope.configuration.config.ConfigurationMachine()
-        if self.devmode:
+
+        for config, handler in plugin_configurations:
+            if handler is not None:
+                handler(options, context)
+
+        if options.config.devmode:
             context.provideFeature('devmode')
+
         zope.configuration.xmlconfig.registerCommonDirectives(context)
         context = zope.configuration.xmlconfig.file(
             self.siteConfigFile, context=context)
@@ -472,7 +497,14 @@ class StandaloneServer(object):
                 options.daemon = False
 
         # Read configuration file
-        schema = ZConfig.loadSchema(self.ZCONFIG_SCHEMA)
+        schema_string = open(self.ZCONFIG_SCHEMA).read()
+        plugins = [configuration
+                   for (configuration, handler) in plugin_configurations]
+        schema_string = schema_string % {'plugins': "\n".join(plugins)}
+        schema_file = StringIO(schema_string)
+
+        schema = ZConfig.loadSchemaFile(schema_file, self.ZCONFIG_SCHEMA)
+
         print _("Reading configuration from %s") % options.config_file
         try:
             options.config, handler = ZConfig.loadConfig(schema,
@@ -594,14 +626,11 @@ class StandaloneServer(object):
         # to lock the database file, and we don't want that.
         logging.getLogger('ZODB.lock_file').disabled = True
 
-        # Determine whether we are in developer's mode:
-        self.devmode = options.config.devmode
-
         # Process ZCML
         global SCHOOLTOOL_SITE_DEFINITION
         SCHOOLTOOL_SITE_DEFINITION = options.config.site_definition
         self.siteConfigFile = options.config.site_definition
-        self.configure()
+        self.configure(options)
 
         # Set language specified in the configuration
         setLanguage(options.config.lang)

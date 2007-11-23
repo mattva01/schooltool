@@ -284,4 +284,6 @@
     </example>
   </key>
 
+  %(plugins)s
+
 </schema>

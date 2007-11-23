@@ -336,6 +336,8 @@
   </configure>
 
   <utility
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      zcml:condition="not-have authentication"
       factory=".security.PersonContainerAuthenticationPlugin"
       provides=".interfaces.ISchoolToolAuthenticationPlugin" />
 
