@@ -75,12 +75,6 @@ class PersonContainerAuthenticationPlugin(object):
     group_prefix = "sb.group."
     session_name = "schooltool.auth"
 
-    def _checkPassword(self, username, password):
-        app = getSchoolToolApplication()
-        if username in app['persons']:
-            person = app['persons'][username]
-            return person.checkPassword(password)
-
     def authenticate(self, request):
         """Identify a principal for request.
 
