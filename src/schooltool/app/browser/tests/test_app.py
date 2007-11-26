@@ -221,8 +221,12 @@ def doctest_LogoutView():
     """
     Suppose we have a SchoolTool app and a person:
 
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
+        >>> from zope.component import provideAdapter
         >>> app = sbsetup.setUpSchoolToolSite()
         >>> persons = app['persons']
+        >>> provideAdapter(lambda context: app, adapts=[None],
+        ...                provides=ISchoolToolApplication)
 
         >>> from schooltool.person.person import Person
         >>> frog = Person('frog')
