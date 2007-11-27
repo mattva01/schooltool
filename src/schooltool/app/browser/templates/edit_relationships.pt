@@ -8,6 +8,15 @@
 		 tal:define="batch view/available_table/batch">
 
       <form method="post" tal:attributes="action request/URL" class="standalone">
+        <script>
+          function invertSelection(pattern) {
+            $("INPUT").each(function (index) {
+                if (this.name.substr(0, pattern.length) == pattern) {
+                  this.checked = !this.checked;
+                }
+             });
+          }
+        </script>
 	<h3 tal:content="view/title" />
 	<fieldset tal:define="items view/getSelectedItems">
 	  <tal:if condition="items">
@@ -18,6 +27,11 @@
 		     value="Remove"
 		     title="Shortcut: Alt-R" accesskey="R"
 		     i18n:attributes="value; accesskey" />
+	      <input onclick="invertSelection('remove_item')"
+                     type="button" class="button-ok"
+		     value="Invert Selection"
+                     i18n:attributes="value invert-selection-button"
+                     tal:condition="batch" />
 	    </div>
 	  </tal:if>
           <p tal:condition="not:items" i18n:translate="">
@@ -35,6 +49,11 @@
 		     value="Add" tal:condition="batch"
 		     title="Shortcut: Alt-A" accesskey="A"
 		     i18n:attributes="value; accesskey" />
+	      <input onclick="invertSelection('add_item')"
+                     type="button" class="button-ok"
+		     value="Invert Selection"
+                     i18n:attributes="value invert-selection-button"
+                     tal:condition="batch" />
 	    </div>
 	    <p tal:condition="not:batch" i18n:translate="">
 	      There are none to add.

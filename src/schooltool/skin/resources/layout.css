@@ -258,6 +258,7 @@ FORM.booking_form {
 INPUT[type=text],
 INPUT[type=password],
 INPUT[type=submit],
+INPUT[type=button],
 SELECT,
 TEXTAREA {
 	padding: 2px;
