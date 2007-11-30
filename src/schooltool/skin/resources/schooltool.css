@@ -406,33 +406,3 @@ div .dropdown a:hover {
   z-index:100;
   font-weight: bold;
 }
-
-/* styles for the gradebook */
-/* Styles for the zc tables */
-
-.gradebook TD {
-   border-style: solid;
-   border-width: 1px;
-   border-color: #000;
-}
-
-.gradebook TD span.today {
-   background-color: #EAFAE3;
-}
-
-tr.odd {
-    background-color: transparent;
-}
-
-tr.even {
-    background-color: #EAE8E3;
-}
-
-div.field-odd {
-   background-color: transparent;
-}
-
-div.field-even {
-    background-color: #EAE8E3;
-}
-
