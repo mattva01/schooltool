@@ -273,6 +273,10 @@ div.field-even {
     background-color: #EAE8E3;
 }
 
+table.data .zc-table-sortable {
+    cursor: pointer;
+}
+
 /*Styles for actions bar */
 
 #dropdowncontainer {
@@ -326,7 +330,7 @@ div .singleton a.title{
   }
 
 div .dropdown .title{
-  cursor: default;
+  cursor: pointer;
   font-size: 1em;
   padding-right: .5ex;
   padding-left: 15px;
