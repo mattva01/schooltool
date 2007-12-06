@@ -184,6 +184,8 @@ class ApplicationLoginView(BrowserView):
     def __call__(self):
         nexturl = zapi.absoluteURL(self.context,
                                    self.request) + '/auth/@@login.html'
+        if 'nexturl' in self.request:
+            nexturl += '?nexturl=' + self.request['nexturl']
         self.request.response.redirect(nexturl)
 
 
