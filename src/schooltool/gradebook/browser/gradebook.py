@@ -124,7 +124,7 @@ class GradebookOverview(SectionFinder):
                                    'has_value': False})
 
             if count:
-                average = int((float(100 * total) / float(count)) + 0.5)
+                average = str(int((float(100 * total) / float(count)) + 0.5))
             else:
                 average = None
 
