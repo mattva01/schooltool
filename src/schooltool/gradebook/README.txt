@@ -191,7 +191,14 @@ Already the gradebook has worksheets which it got from the section.
 
     >>> gradebook.worksheets
     [Worksheet(u'Week 1'), Worksheet(u'Week 2')]
-    
+
+Those worksheets have, int turn, the activities we added to them.
+
+    >>> gradebook.getWorksheetActivities(week1)
+    [<Activity u'HW 1'>, <Activity u'Quiz'>]
+    >>> gradebook.getWorksheetActivities(week2)
+    [<Activity u'HW 2'>, <Activity u'Final'>]
+
 The current worksheet for the teacher will automatically be set to the first
 one.
 

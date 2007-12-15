@@ -110,6 +110,12 @@ class GradebookBase(object):
         evaluations = requirement.interfaces.IEvaluations(student)
         del evaluations[activity]
 
+    def getWorksheetActivities(self, worksheet):
+        if worksheet:
+            return list(worksheet.values())
+        else:
+            return []
+
     def getCurrentWorksheet(self, person):
         person = proxy.removeSecurityProxy(person)
         ann = annotation.interfaces.IAnnotations(person)
@@ -133,10 +139,7 @@ class GradebookBase(object):
 
     def getCurrentActivities(self, person):
         worksheet = self.getCurrentWorksheet(person)
-        if worksheet:
-            return list(worksheet.values())
-        else:
-            return []
+        return self.getWorksheetActivities(worksheet)
 
     def getCurrentEvaluationsForStudent(self, person, student):
         """See interfaces.IGradebook"""

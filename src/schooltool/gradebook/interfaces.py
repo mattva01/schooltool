@@ -78,8 +78,8 @@ class IEditGradebook(zope.interface.Interface):
     def removeEvaluation(student, activity):
         """Remove evaluation."""
 
-    def setCurrentWorksheet(worksheet):
-        """Set the currently active worksheet."""
+    def setCurrentWorksheet(person, worksheet):
+        """Set the user's currently active worksheet."""
         
 
 class IReadGradebook(zope.interface.Interface):
@@ -119,11 +119,14 @@ class IReadGradebook(zope.interface.Interface):
         Return iterable of 2-tuples of the form (student, evaluation).
         """
 
-    def getCurrentWorksheet():
-        """Get the currently active worksheet."""
+    def getWorksheetActivities(worksheet):
+        """Get the activities for the given worksheet."""
 
-    def getCurrentActivities():
-        """Get the activities for the currently active worksheet."""
+    def getCurrentWorksheet(person):
+        """Get the user's currently active worksheet."""
+
+    def getCurrentActivities(person):
+        """Get the activities for the user's currently active worksheet."""
 
     def getSortKey(person):
         """Get the sortkey for the gradebook table."""
