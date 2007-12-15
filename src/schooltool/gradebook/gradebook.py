@@ -116,6 +116,20 @@ class GradebookBase(object):
         else:
             return []
 
+    def getWorksheetAverage(self, worksheet, student):
+        total = 0
+        count = 0
+        for activity in self.getWorksheetActivities(worksheet):
+            ev = self.getEvaluation(student, activity)
+            if ev is not None:
+                ss = ev.requirement.scoresystem
+                total += ev.value - ss.min
+                count += ss.max - ss.min
+        if count:
+            return int((float(100 * total) / float(count)) + 0.5)
+        else:
+            return 0
+
     def getCurrentWorksheet(self, person):
         person = proxy.removeSecurityProxy(person)
         ann = annotation.interfaces.IAnnotations(person)

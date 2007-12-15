@@ -103,30 +103,23 @@ class GradebookOverview(SectionFinder):
 
     def table(self):
         """Generate the table of grades."""
-        activities = [(hash(IKeyReference(activity)), activity)
-            for activity in self.context.getCurrentActivities(self.person)]
         gradebook = proxy.removeSecurityProxy(self.context)
+        worksheet = gradebook.getCurrentWorksheet(self.person)
+        activities = [(hash(IKeyReference(activity)), activity)
+            for activity in gradebook.getWorksheetActivities(worksheet)]
         rows = []
         for student in self.context.students:
             grades = []
-            total = 0
-            count = 0
             for act_hash, activity in activities:
                 ev = gradebook.getEvaluation(student, activity)
                 if ev is not None:
                     grades.append({'activity': act_hash, 'value': ev.value,
                                    'has_value': True})
-                    ss = ev.requirement.scoresystem
-                    total += ev.value - ss.min
-                    count += ss.max - ss.min
                 else:
                     grades.append({'activity': act_hash, 'value': '-',
                                    'has_value': False})
 
-            if count:
-                average = str(int((float(100 * total) / float(count)) + 0.5))
-            else:
-                average = None
+            average = str(gradebook.getWorksheetAverage(worksheet, student))
 
             rows.append(
                 {'student': {'title': student.title, 'id': student.username},

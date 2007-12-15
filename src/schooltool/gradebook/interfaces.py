@@ -122,6 +122,9 @@ class IReadGradebook(zope.interface.Interface):
     def getWorksheetActivities(worksheet):
         """Get the activities for the given worksheet."""
 
+    def getWorksheetAverage(worksheet, student):
+        """Calculate the average for the worksheet, student pair."""
+
     def getCurrentWorksheet(person):
         """Get the user's currently active worksheet."""
 

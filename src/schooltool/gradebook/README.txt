@@ -310,11 +310,17 @@ activity.  This represents a column of the worksheet
     [(<...Person ...>, <Evaluation for <Activity u'HW 1'>, value=7>),
      (<...Person ...>, <Evaluation for <Activity u'HW 1'>, value=10>)]
 
-Finally, we can get an evaluation for a student, activity pair, which
-represents a cell in the worksheet.
+We can get an evaluation for a student, activity pair, which represents 
+a cell in the worksheet.
 
     >>> gradebook.getEvaluation(paul, hw1)
     <Evaluation for <Activity u'HW 1'>, value=10>
+
+We can get a student average for the worksheet, an integer percentage that
+can later be used to formulate a letter grade.
+
+    >>> gradebook.getWorksheetAverage(week1, paul)
+    82
 
 
 Sorting by Column
