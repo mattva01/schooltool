@@ -262,7 +262,7 @@ appear.
 
     >>> 'HW 1' in stephan.contents and 'Quiz' in stephan.contents
     True
-    >>> 'HW 2' in stephan.contents or 'Final' in stephan.contents
+    >>> 'HW 2' in stephan.contents or 'Final</a>' in stephan.contents
     False
 
 
@@ -404,6 +404,20 @@ Of course, you can also abort the grading.
     >>> stephan.url
     'http://localhost/sections/1/gradebook/index.html'
 
+Let's enter some grades for the second worksheet, 'Week 2', so that we have
+some interesting numbers for the final grades view.
+
+    >>> stephan.open(stephan.url+'?form-submitted=&currentWorksheet=Week%202')
+    >>> stephan.getLink('HW 2').click()
+    >>> stephan.getControl('Paul Cardune').value = u'90'
+    >>> stephan.getControl('Tom Hoffman').value = u'72'
+    >>> stephan.getControl('Claudia Richter').value = u'42'
+    >>> stephan.getControl('Update').click()
+    
+We'll set the current worksheet back to week 1 for the rest of the tests.
+
+    >>> stephan.open(stephan.url+'?form-submitted=&currentWorksheet=Week%201')
+
 
 Entering Scores for a Cell (Student, Activity)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -499,6 +513,34 @@ Clicking it again, reverses the order:
     ...     < stephan.contents.find('Tom') \
     ...     < stephan.contents.find('Paul')
     True
+
+
+Final Grades
+------------
+
+Teachers will want a calculated final grade for each student in the section.
+The view for for this will present the user with a table of students with
+the average for each worksheet, the final calulated grade, an adjusted final
+grade (in letter form) and the adjustment amount and reason.
+
+    >>> stephan.open('http://localhost/sections/1/gradebook/final.html')
+    >>> print stephan.contents
+    <BLANKLINE>
+    ...Claudia Richter...
+    ...<td>86</td>...
+    ...<td>42</td>...
+    ...<td>2</td>...
+    ...<td>C</td>...
+    ...Paul Cardune...
+    ...<td>80</td>...
+    ...<td>90</td>...
+    ...<td>4</td>...
+    ...<td>A</td>...
+    ...Tom Hoffman...
+    ...<td>84</td>...
+    ...<td>72</td>...
+    ...<td>3</td>...
+    ...<td>B</td>...
 
 
 My Grades

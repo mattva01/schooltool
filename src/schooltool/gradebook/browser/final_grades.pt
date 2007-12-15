@@ -1,0 +1,66 @@
+<tal:tag condition="view/update" />
+<html metal:use-macro="context/@@standard_macros/page"
+      i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+    Gradebook
+  </title>
+</head>
+<body>
+<div metal:fill-slot="body">
+
+  <div class="topmenu">
+    <ul>
+      <li tal:attributes="class section/css" 
+          tal:repeat="section view/getSections">
+        <a tal:attributes="href section/url" 
+           tal:content="structure section/title"/>
+      </li>
+    </ul>
+  </div>
+  <br />
+  <a class="button-ok" title="Return to Gradebook"
+     tal:attributes="href string:${context/@@absolute_url}">
+     Return to Gradebook
+  </a>
+  <br /><br />
+  
+  <form method="post"
+        tal:attributes="action string:${context/@@absolute_url}/final.html">
+
+    <table class="grades" border="1">
+      <tr>
+       <th>Name</th>
+       <th tal:repeat="worksheet context/worksheets"
+           tal:content="worksheet/title" />
+       <th>Numeric Grade</th>
+       <th>Final Grade</th>
+       <th>Adjustment</th>
+       <th>Reason</th>
+      </tr>
+      <tr tal:repeat="row view/table">
+        <td tal:content="row/student/title" />
+        <td tal:repeat="grade row/grades"
+            tal:content="grade/value" />
+        <td tal:content="row/numeric" />
+        <td tal:content="row/final" />
+        <td>
+          <input type="text" size="2"
+                 tal:attributes="id row/adjustment/id;  
+                                 name row/adjustment/id; 
+                                 value row/adjustment/value" />
+        </td>
+        <td>
+          <input type="text" size="30"
+                 tal:attributes="id row/reason/id;  
+                                 name row/reason/id; 
+                                 value row/reason/value" />
+        </td>
+      </tr>
+    </table>
+
+  </form>
+
+</div>
+</body>
+</html>

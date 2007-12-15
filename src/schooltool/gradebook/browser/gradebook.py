@@ -37,6 +37,7 @@ from schooltool.common import SchoolToolMessage as _
 
 GradebookCSSViewlet = viewlet.CSSViewlet("gradebook.css")
 
+
 class SectionFinder(object):
     """Base class for GradebookOverview and MyGradesView"""
 
@@ -65,6 +66,7 @@ class SectionFinder(object):
             if section == gradebook.context:
                 css = 'active-menu-item'
             yield {'url': url, 'title': title, 'css': css}
+
 
 class GradebookOverview(SectionFinder):
     """Gradebook Overview/Table"""
@@ -140,6 +142,48 @@ class GradebookOverview(SectionFinder):
             return row['student']['title']
 
         return sorted(rows, key=generateKey, reverse=reverse)
+
+
+class FinalGradesView(SectionFinder):
+    """Final Grades Table for all students in the section"""
+
+    def table(self):
+        """Generate the table of grades."""
+        letter_grade = {4: 'A', 3: 'B', 2: 'C', 1: 'D', 0: 'E'}
+        gradebook = proxy.removeSecurityProxy(self.context)
+        rows = []
+        students = sorted(self.context.students, key=lambda x: x.title)
+        for student in students:
+            grades = []
+            for worksheet in gradebook.worksheets:
+                average = str(gradebook.getWorksheetAverage(worksheet, student))
+                grades.append({'value': average})
+            numeric = gradebook.getFinalGrade(student)
+            final = gradebook.getAdjustedFinalGrade(self.person, student)
+            adj_dict = gradebook.getFinalGradeAdjustment(self.person, student)
+            adj_id = 'adj_' + student.username
+            adj_value = adj_dict['adjustment']
+            if not adj_value:
+                adj_value = ''
+            else:
+                adj_value = str(adjustment)
+            reason_id = 'reason_' + student.username
+            reason_value = adj_dict['reason']
+
+            rows.append(
+                {'student': student,
+                 'grades': grades,
+                 'numeric': numeric,
+                 'final': letter_grade[final],
+                 'adjustment': {'id': adj_id, 'value': adj_value},
+                 'reason': {'id': reason_id, 'value': reason_value}})
+
+        return rows
+
+    def update(self):
+        """Retrieve final grade adjustments and store changes to them."""
+        self.person = IPerson(self.request.principal)
+
 
 class GradeStudent(object):
     """Grading a single student."""
@@ -338,6 +382,7 @@ class Grade(object):
                     self.student, self.activity, score, evaluator)
 
             self.request.response.redirect('index.html')
+
 
 class MyGradesView(SectionFinder):
     """Student view of own grades."""

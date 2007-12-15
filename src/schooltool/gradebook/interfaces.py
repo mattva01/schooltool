@@ -148,7 +148,7 @@ class IReadGradebook(zope.interface.Interface):
     def getFinalGradeAdjustment(person, student):
         """Get the final grade adjustment for the given student."""
 
-    def getFinalGrade(person, student):
+    def getFinalGrade(student):
         """Get the final grade for the given student."""
 
     def getAdjustedFinalGrade(person, student):

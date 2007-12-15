@@ -144,6 +144,14 @@
       />
 
   <page
+      name="final.html"
+      for="..interfaces.IGradebook"
+      class=".gradebook.FinalGradesView"
+      template="final_grades.pt"
+      permission="schooltool.view"
+      />
+
+  <page
       name="index.html"
       for="..interfaces.IMyGrades"
       class=".gradebook.MyGradesView"

@@ -224,7 +224,7 @@ class GradebookBase(object):
         student_id = hash(IKeyReference(student))
         adjustments[student_id] = {'adjustment': adjustment, 'reason': reason}
 
-    def getFinalGrade(self, person, student):
+    def getFinalGrade(self, student):
         total = 0
         for worksheet in self.worksheets:
             average = self.getWorksheetAverage(worksheet, student)
@@ -244,7 +244,7 @@ class GradebookBase(object):
         return final
 
     def getAdjustedFinalGrade(self, person, student):
-        final = self.getFinalGrade(person, student)
+        final = self.getFinalGrade(student)
         adjustment = self.getFinalGradeAdjustment(person, student)
         return final + adjustment['adjustment']
 

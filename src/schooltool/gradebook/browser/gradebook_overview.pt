@@ -35,6 +35,10 @@
             tal:content="worksheet/title" />
       </tal:block>
     </select>
+    <a class="button-ok" title="View Final Grades"
+       tal:attributes="href string:${context/@@absolute_url}/final.html">
+       View Final Grades
+    </a>
     <br /><br />
   </form>
 

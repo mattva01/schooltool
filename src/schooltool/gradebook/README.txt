@@ -379,7 +379,7 @@ First let's see what Paul's grades are for the two worksheets:
 Paul got a B in the first week and an A in the second week.  Averaging them
 together and rounding should yield an A.
     
-    >>> gradebook.getFinalGrade(stephan, paul)
+    >>> gradebook.getFinalGrade(paul)
     4
 
 Now let's say that Stephan felt that Paul's B in week 1 weighs more heavily
