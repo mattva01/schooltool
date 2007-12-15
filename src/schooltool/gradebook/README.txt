@@ -352,3 +352,51 @@ further. It is up to the view code to implement the rest of the sorting
 feature. This is because the view code can often be much more efficient in
 implement ordering.
 
+
+Final Grade Calulation
+----------------------
+
+It is important for the teacher to be able to present the student with a final
+grade at the end of a section.  We will calulate this for the teacher using
+the following formula:
+
+final grade = (4 * num(A) + 3 * num(B) + 2*num(C) + num(D)) / num(worksheets)
+
+This will be rounded to the nearest integer.  Then, the teacher will have the
+ability to adjust this value at his/her discretion with an integer adjustment
+value, usually either a 1 or -1, leaving:
+
+adjusted final grade = final grade + adjustment
+
+This number will be presented in the user interface as an A, B, C, D, or E.
+First let's see what Paul's grades are for the two worksheets:
+
+    >>> gradebook.getWorksheetAverage(week1, paul)
+    82
+    >>> gradebook.getWorksheetAverage(week2, paul)
+    97
+    
+Paul got a B in the first week and an A in the second week.  Averaging them
+together and rounding should yield an A.
+    
+    >>> gradebook.getFinalGrade(stephan, paul)
+    4
+
+Now let's say that Stephan felt that Paul's B in week 1 weighs more heavily
+than his A in the second week.  He could indicate this by setting an adjustment
+value for Paul of -1, stating the reason for the adjustment.
+
+    >>> adjustment = gradebook.getFinalGradeAdjustment(stephan, paul)
+    >>> sorted(adjustment.items())
+    [('adjustment', 0), ('reason', '')]
+    >>> gradebook.setFinalGradeAdjustment(stephan, paul, -1,
+    ...     'week 1 more important than week 2')
+    >>> adjustment = gradebook.getFinalGradeAdjustment(stephan, paul)
+    >>> sorted(adjustment.items())
+    [('adjustment', -1), ('reason', 'week 1 more important than week 2')]
+
+Paul's adjusted final grade will be a B.
+
+    >>> gradebook.getAdjustedFinalGrade(stephan, paul)
+    3
+

@@ -77,10 +77,10 @@ class IEditGradebook(zope.interface.Interface):
 
     def removeEvaluation(student, activity):
         """Remove evaluation."""
-
-    def setCurrentWorksheet(person, worksheet):
-        """Set the user's currently active worksheet."""
         
+    def setFinalGradeAdjustment(person, student, adjustment, reason):
+        """Set the final grade adjustment for the given student."""
+    
 
 class IReadGradebook(zope.interface.Interface):
 
@@ -128,6 +128,9 @@ class IReadGradebook(zope.interface.Interface):
     def getCurrentWorksheet(person):
         """Get the user's currently active worksheet."""
 
+    def setCurrentWorksheet(person, worksheet):
+        """Set the user's currently active worksheet."""
+
     def getCurrentActivities(person):
         """Get the activities for the user's currently active worksheet."""
 
@@ -141,6 +144,15 @@ class IReadGradebook(zope.interface.Interface):
         sort by student title or the hash of the activity. The second entry
         specifies whether the sorting is reversed.
         """
+
+    def getFinalGradeAdjustment(person, student):
+        """Get the final grade adjustment for the given student."""
+
+    def getFinalGrade(person, student):
+        """Get the final grade for the given student."""
+
+    def getAdjustedFinalGrade(person, student):
+        """Get the adjusted final grade for the given student."""
 
 
 class IGradebook(IReadGradebook, IEditGradebook):

@@ -46,6 +46,7 @@ from schooltool.common import SchoolToolMessage as _
 
 GRADEBOOK_SORTING_KEY = 'schooltool.gradebook.sorting'
 CURRENT_WORKSHEET_KEY = 'schooltool.gradebook.currentworksheet'
+FINAL_GRADE_ADJUSTMENT_KEY = 'schooltool.gradebook.finalgradeadjustment'
 
 
 class GradebookBase(object):
@@ -195,6 +196,57 @@ class GradebookBase(object):
             ann[GRADEBOOK_SORTING_KEY] = persistent.dict.PersistentDict()
         section_id = hash(IKeyReference(self.context))
         ann[GRADEBOOK_SORTING_KEY][section_id] = value
+
+    def getFinalGradeAdjustment(self, person, student):
+        person = proxy.removeSecurityProxy(person)
+        ann = annotation.interfaces.IAnnotations(person)
+        if FINAL_GRADE_ADJUSTMENT_KEY not in ann:
+            ann[FINAL_GRADE_ADJUSTMENT_KEY] = persistent.dict.PersistentDict()
+        section_id = hash(IKeyReference(self.context))
+        if section_id not in ann[FINAL_GRADE_ADJUSTMENT_KEY]:
+            return {'adjustment': 0, 'reason': ''}
+        else:
+            adjustments = ann[FINAL_GRADE_ADJUSTMENT_KEY][section_id]
+            student_id = hash(IKeyReference(student))
+            return adjustments.get(student_id, {'adjustment': 0, 'reason': ''})
+
+    def setFinalGradeAdjustment(self, person, student, adjustment, reason):
+        person = proxy.removeSecurityProxy(person)
+        ann = annotation.interfaces.IAnnotations(person)
+        if FINAL_GRADE_ADJUSTMENT_KEY not in ann:
+            ann[FINAL_GRADE_ADJUSTMENT_KEY] = persistent.dict.PersistentDict()
+        section_id = hash(IKeyReference(self.context))
+        if section_id not in ann[FINAL_GRADE_ADJUSTMENT_KEY]:
+            adjustments = persistent.dict.PersistentDict()
+            ann[FINAL_GRADE_ADJUSTMENT_KEY][section_id] = adjustments
+        else:
+            adjustments = ann[FINAL_GRADE_ADJUSTMENT_KEY][section_id]
+        student_id = hash(IKeyReference(student))
+        adjustments[student_id] = {'adjustment': adjustment, 'reason': reason}
+
+    def getFinalGrade(self, person, student):
+        total = 0
+        for worksheet in self.worksheets:
+            average = self.getWorksheetAverage(worksheet, student)
+            if average >= 90:
+                grade = 4
+            elif average >= 80:
+                grade = 3
+            elif average >= 70:
+                grade = 2
+            elif average >= 60:
+                grade = 1
+            else:
+                grade = 0
+            total = total + grade
+        num_worksheets = len(self.worksheets)
+        final = int((float(total) / float(len(self.worksheets))) + 0.5)
+        return final
+
+    def getAdjustedFinalGrade(self, person, student):
+        final = self.getFinalGrade(person, student)
+        adjustment = self.getFinalGradeAdjustment(person, student)
+        return final + adjustment['adjustment']
 
 
 class Gradebook(GradebookBase):
