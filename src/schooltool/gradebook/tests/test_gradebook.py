@@ -35,7 +35,7 @@ import schooltool.app
 import schooltool.requirement.testing
 from schooltool import course, person, requirement
 from schooltool.relationship.tests import setUpRelationships
-from schooltool.gradebook import activity, gradebook, statistic, interfaces
+from schooltool.gradebook import activity, gradebook, interfaces
 
 def setUp(test):
     setup.placefulSetUp()
@@ -52,7 +52,6 @@ def setUp(test):
         (course.interfaces.ISection,), interfaces.IActivities)
 
     zope.component.provideAdapter(gradebook.Gradebook)
-    zope.component.provideAdapter(statistic.Statistics)
 
 
 def tearDown(test):

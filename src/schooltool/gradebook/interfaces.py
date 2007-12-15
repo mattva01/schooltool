@@ -148,25 +148,6 @@ class IGradebook(IReadGradebook, IEditGradebook):
     """
 
 
-class IStatistics(zope.interface.Interface):
-    """Statistics for the gradebook"""
-
-    def calculateAverage(activity):
-        """Calculate the average of the activity."""
-
-    def calculatePercentAverage(activity):
-        """Calculate the average as a percentage for the activity."""
-
-    def calculateMedian(activity):
-        """Calculate the median of the activity."""
-
-    def calculateStandardDeviation(activity):
-        """Calculate the standard deviation of the activity."""
-
-    def calculateVariance(activity):
-        """Calculate the variance of the activity."""
-
-
 class IMyGrades(zope.interface.Interface):
     """The students gradebook for a section.
 

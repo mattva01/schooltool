@@ -105,23 +105,7 @@
       trusted="true"
       />
 
-
-  <!-- Statistics adapter -->
-
-  <class class=".statistic.Statistics">
-    <require
-        permission="schooltool.view"
-        interface=".interfaces.IStatistics" />
-  </class>
-
-  <adapter
-      for=".interfaces.IGradebook"
-      provides=".interfaces.IStatistics"
-      factory=".statistic.Statistics"
-      locate="true"
-      trusted="true"
-      />
-
+  <!-- Adapter to get the gradebook's section. -->
   <adapter
       for=".interfaces.IGradebook"
       provides="schooltool.course.interfaces.ISection"
