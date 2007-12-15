@@ -163,13 +163,6 @@ class GradebookBase(object):
             if activity in evaluations:
                 yield student, evaluations[activity]
 
-    def getTotalScoreForStudent(self, student):
-        """See interfaces.IGradebook"""
-        fractions = [
-            evaluation.scoreSystem.getFractionalValue(evaluation.value)
-            for activity, evaluation in self.getEvaluationsForStudent(student)]
-        return sum(fractions) / Decimal(len(fractions)) * Decimal(100)
-
     def getSortKey(self, person):
         person = proxy.removeSecurityProxy(person)
         ann = annotation.interfaces.IAnnotations(person)

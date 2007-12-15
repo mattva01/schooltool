@@ -125,12 +125,6 @@ class IReadGradebook(zope.interface.Interface):
     def getCurrentActivities():
         """Get the activities for the currently active worksheet."""
 
-    def getTotalScoreForStudent(student):
-        """Compute the total score for a student.
-
-        Return a percentile in the form of a decimal.
-        """
-
     def getSortKey(person):
         """Get the sortkey for the gradebook table."""
 

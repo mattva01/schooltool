@@ -309,50 +309,6 @@ represents a cell in the worksheet.
     >>> gradebook.getEvaluation(paul, hw1)
     <Evaluation for <Activity u'HW 1'>, value=10>
 
-Total score
-~~~~~~~~~~~
-
-Let's calculate the total score for Paul.  For the End of Week Quiz, he 
-received a score of 80 out of a 100, and for the Final, 99 out of 100.
-For HW 1 he received 10 out of a range of 0 to 10, and for HW 2 he
-received a 12 out of a maximum of 15.  We first convert all these to 
-fractions (a number between 0 and 1) and then calculate the final grade
-as an average of the fractions, and then transformed to a percentile.
-
-Let's do the calculation by hand first:
-
-    >>> from decimal import Decimal
-    >>> (Decimal(80) / Decimal(100) + 
-    ...  Decimal(99) / Decimal(100) + 
-    ...  Decimal(10) / Decimal(10) +
-    ...  Decimal(12) / Decimal(15)) / 4 * 100
-    Decimal("89.7500")
-
-We have a method on the gradebook that can do this calculation:
-
-    >>> gradebook.getTotalScoreForStudent(paul)
-    Decimal("89.7500")
-
-Tom doesn't have a complete set of grades (the HW 1 grade is missing):
-
-    >>> sorted(gradebook.getEvaluationsForStudent(tom),
-    ...        key=lambda (activity, evaluation): activity.title)
-    [(<Activity u'Final'>, <Evaluation for <Activity u'Final'>, value=85>), 
-     (<Activity u'HW 2'>, <Evaluation for <Activity u'HW 2'>, value=10>),
-     (<Activity u'Quiz'>, <Evaluation for <Activity u'Quiz'>, value=90>)]
-
-The total score will be an average of these scores, and the missing score
-does not count:
-
-    >>> (Decimal(90) / Decimal(100) + 
-    ...  Decimal(85) / Decimal(100) + 
-    ...  Decimal(10) / Decimal(15)) / 3 * 100
-    Decimal("80.55555555555555555555555557")
-
-Our score calculation method will give us the same result:
-
-    >>> gradebook.getTotalScoreForStudent(tom)
-    Decimal("80.55555555555555555555555557")
 
 Sorting by Column
 ~~~~~~~~~~~~~~~~~
