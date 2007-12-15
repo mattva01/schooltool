@@ -48,16 +48,11 @@ GRADEBOOK_SORTING_KEY = 'schooltool.gradebook.sorting'
 CURRENT_WORKSHEET_KEY = 'schooltool.gradebook.currentworksheet'
 
 
-class Gradebook(object):
-
-    zope.interface.implements(interfaces.IGradebook)
-    zope.component.adapts(course.interfaces.ISection)
-
+class GradebookBase(object):
     def __init__(self, context):
         self.context = context
         # To make URL creation happy
         self.__parent__ = context
-        self.__name__ = 'gradebook'
         # Establish worksheets and all activities
         self.worksheets = list(interfaces.IActivities(context).values())
         self.activities = []
@@ -192,9 +187,32 @@ class Gradebook(object):
         ann[GRADEBOOK_SORTING_KEY][section_id] = value
 
 
-# HTTP pluggable traverser plugin
+class Gradebook(GradebookBase):
+    zope.interface.implements(interfaces.IGradebook)
+    zope.component.adapts(course.interfaces.ISection)
+
+    def __init__(self, context):
+        super(Gradebook, self).__init__(context)
+        # To make URL creation happy
+        self.__name__ = 'gradebook'
+
+
+class MyGrades(GradebookBase):
+    zope.interface.implements(interfaces.IMyGrades)
+    zope.component.adapts(course.interfaces.ISection)
+
+    def __init__(self, context):
+        super(MyGrades, self).__init__(context)
+        # To make URL creation happy
+        self.__name__ = 'mygrades'
+
+
+# HTTP pluggable traverser plugins
 GradebookTraverserPlugin = traverser.AdapterTraverserPlugin(
     'gradebook', interfaces.IGradebook)
+
+MyGradesTraverserPlugin = traverser.AdapterTraverserPlugin(
+    'mygrades', interfaces.IMyGrades)
 
 
 def getGradebookSection(gradebook):
@@ -203,7 +221,6 @@ def getGradebookSection(gradebook):
 
 
 class GradebookEditorsCrowd(AggregateCrowd, ConfigurableCrowd):
-
     setting_key = 'administration_can_grade_students'
 
     def crowdFactories(self):
@@ -216,7 +233,6 @@ class GradebookEditorsCrowd(AggregateCrowd, ConfigurableCrowd):
 
 
 class GradebookInit(InitBase):
-
     def __call__(self):
         from schooltool.app.interfaces import ISchoolToolApplication
         dict = getCategories(self.app)
@@ -230,56 +246,4 @@ class GradebookInit(InitBase):
         dict.addValue('project', 'en', _('Project'))
         dict.setDefaultLanguage('en')
         dict.setDefaultKey('assignment')
-
-
-class MyGrades(object):
-
-    zope.interface.implements(interfaces.IMyGrades)
-    zope.component.adapts(course.interfaces.ISection)
-
-    def __init__(self, context):
-        self.context = context
-        # To make URL creation happy
-        self.__parent__ = context
-        self.__name__ = 'mygrades'
-        self.worksheets = list(interfaces.IActivities(context).values())
-
-    def getEvaluation(self, student, activity, default=None):
-        """See interfaces.IGradebook"""
-        evaluations = requirement.interfaces.IEvaluations(student)
-        evaluations = proxy.removeSecurityProxy(evaluations)
-        return evaluations.get(activity, default)
-
-    def getCurrentWorksheet(self, person):
-        person = proxy.removeSecurityProxy(person)
-        ann = annotation.interfaces.IAnnotations(person)
-        if CURRENT_WORKSHEET_KEY not in ann:
-            ann[CURRENT_WORKSHEET_KEY] = persistent.dict.PersistentDict()
-        if self.worksheets:
-            default = self.worksheets[0]
-        else:
-            default = None
-        section_id = hash(IKeyReference(self.context))
-        return ann[CURRENT_WORKSHEET_KEY].get(section_id, default)
-
-    def setCurrentWorksheet(self, person, worksheet):
-        person = proxy.removeSecurityProxy(person)
-        worksheet = proxy.removeSecurityProxy(worksheet)
-        ann = annotation.interfaces.IAnnotations(person)
-        if CURRENT_WORKSHEET_KEY not in ann:
-            ann[CURRENT_WORKSHEET_KEY] = persistent.dict.PersistentDict()
-        section_id = hash(IKeyReference(self.context))
-        ann[CURRENT_WORKSHEET_KEY][section_id] = worksheet
-
-    def getCurrentActivities(self, person):
-        worksheet = self.getCurrentWorksheet(person)
-        if worksheet:
-            return list(worksheet.values())
-        else:
-            return []
-
-
-# HTTP pluggable traverser plugin
-MyGradesTraverserPlugin = traverser.AdapterTraverserPlugin(
-    'mygrades', interfaces.IMyGrades)
 
