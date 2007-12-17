@@ -33,7 +33,7 @@
        <th>Name</th>
        <th tal:repeat="worksheet context/worksheets"
            tal:content="worksheet/title" />
-       <th>Numeric Grade</th>
+       <th>Calculated Grade</th>
        <th>Final Grade</th>
        <th>Adjustment</th>
        <th>Reason</th>
@@ -42,7 +42,7 @@
         <td tal:content="row/student/title" />
         <td tal:repeat="grade row/grades"
             tal:content="grade/value" />
-        <td tal:content="row/numeric" />
+        <td tal:content="row/calculated" />
         <td tal:content="row/final" />
         <td>
           <input type="text" size="2"

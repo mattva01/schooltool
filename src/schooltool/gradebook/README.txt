@@ -362,13 +362,13 @@ the following formula:
 
 final grade = (4 * num(A) + 3 * num(B) + 2*num(C) + num(D)) / num(worksheets)
 
-This will be rounded to the nearest integer.  Then, the teacher will have the
-ability to adjust this value at his/her discretion with an integer adjustment
-value, usually either a 1 or -1, leaving:
+This will be rounded to the nearest integer and mapped to a letter grade.
+We will hard-code this as 4 -> A, 3 -> B, ... 0 -> E until we have a customer 
+that needs it done differently.  
 
-adjusted final grade = final grade + adjustment
+The teacher will have the ability to override this value at his/her discretion 
+with a different letter grade, supplying a reason if they wish.
 
-This number will be presented in the user interface as an A, B, C, D, or E.
 First let's see what Paul's grades are for the two worksheets:
 
     >>> gradebook.getWorksheetAverage(week1, paul)
@@ -380,23 +380,23 @@ Paul got a B in the first week and an A in the second week.  Averaging them
 together and rounding should yield an A.
     
     >>> gradebook.getFinalGrade(paul)
-    4
+    'A'
 
 Now let's say that Stephan felt that Paul's B in week 1 weighs more heavily
-than his A in the second week.  He could indicate this by setting an adjustment
-value for Paul of -1, stating the reason for the adjustment.
+than his A in the second week.  He could indicate this by setting an override
+value for Paul of 'B', stating the reason for the adjustment.
 
     >>> adjustment = gradebook.getFinalGradeAdjustment(stephan, paul)
     >>> sorted(adjustment.items())
-    [('adjustment', 0), ('reason', '')]
-    >>> gradebook.setFinalGradeAdjustment(stephan, paul, -1,
+    [('adjustment', ''), ('reason', '')]
+    >>> gradebook.setFinalGradeAdjustment(stephan, paul, 'B',
     ...     'week 1 more important than week 2')
     >>> adjustment = gradebook.getFinalGradeAdjustment(stephan, paul)
     >>> sorted(adjustment.items())
-    [('adjustment', -1), ('reason', 'week 1 more important than week 2')]
+    [('adjustment', 'B'), ('reason', 'week 1 more important than week 2')]
 
 Paul's adjusted final grade will be a B.
 
     >>> gradebook.getAdjustedFinalGrade(stephan, paul)
-    3
+    'B'
 

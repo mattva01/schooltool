@@ -204,11 +204,11 @@ class GradebookBase(object):
             ann[FINAL_GRADE_ADJUSTMENT_KEY] = persistent.dict.PersistentDict()
         section_id = hash(IKeyReference(self.context))
         if section_id not in ann[FINAL_GRADE_ADJUSTMENT_KEY]:
-            return {'adjustment': 0, 'reason': ''}
+            return {'adjustment': '', 'reason': ''}
         else:
             adjustments = ann[FINAL_GRADE_ADJUSTMENT_KEY][section_id]
             student_id = hash(IKeyReference(student))
-            return adjustments.get(student_id, {'adjustment': 0, 'reason': ''})
+            return adjustments.get(student_id, {'adjustment': '', 'reason': ''})
 
     def setFinalGradeAdjustment(self, person, student, adjustment, reason):
         person = proxy.removeSecurityProxy(person)
@@ -241,12 +241,16 @@ class GradebookBase(object):
             total = total + grade
         num_worksheets = len(self.worksheets)
         final = int((float(total) / float(len(self.worksheets))) + 0.5)
-        return final
+        letter_grade = {4: 'A', 3: 'B', 2: 'C', 1: 'D', 0: 'E'}
+        return letter_grade[final]
 
     def getAdjustedFinalGrade(self, person, student):
         final = self.getFinalGrade(student)
         adjustment = self.getFinalGradeAdjustment(person, student)
-        return final + adjustment['adjustment']
+        if adjustment['adjustment']:
+            return adjustment['adjustment']
+        else:
+            return final
 
 
 class Gradebook(GradebookBase):

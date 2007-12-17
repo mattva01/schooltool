@@ -149,7 +149,6 @@ class FinalGradesView(SectionFinder):
 
     def table(self):
         """Generate the table of grades."""
-        letter_grade = {4: 'A', 3: 'B', 2: 'C', 1: 'D', 0: 'E'}
         gradebook = proxy.removeSecurityProxy(self.context)
         rows = []
         students = sorted(self.context.students, key=lambda x: x.title)
@@ -158,23 +157,19 @@ class FinalGradesView(SectionFinder):
             for worksheet in gradebook.worksheets:
                 average = str(gradebook.getWorksheetAverage(worksheet, student))
                 grades.append({'value': average})
-            numeric = gradebook.getFinalGrade(student)
+            calculated = gradebook.getFinalGrade(student)
             final = gradebook.getAdjustedFinalGrade(self.person, student)
             adj_dict = gradebook.getFinalGradeAdjustment(self.person, student)
             adj_id = 'adj_' + student.username
             adj_value = adj_dict['adjustment']
-            if not adj_value:
-                adj_value = ''
-            else:
-                adj_value = str(adjustment)
             reason_id = 'reason_' + student.username
             reason_value = adj_dict['reason']
 
             rows.append(
                 {'student': student,
                  'grades': grades,
-                 'numeric': numeric,
-                 'final': letter_grade[final],
+                 'calculated': calculated,
+                 'final': final,
                  'adjustment': {'id': adj_id, 'value': adj_value},
                  'reason': {'id': reason_id, 'value': reason_value}})
 
