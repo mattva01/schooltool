@@ -400,3 +400,12 @@ Paul's adjusted final grade will be a B.
     >>> gradebook.getAdjustedFinalGrade(stephan, paul)
     'B'
 
+Trying to set the adjustment to an illegal letter will yield a ValueError.
+
+    >>> gradebook.setFinalGradeAdjustment(stephan, paul, 'F',
+    ...     'week 1 more important than week 2')
+    Traceback (most recent call last):
+    ...
+    ValueError: Adjustment final grade 'F' is not a valid grade.
+
+

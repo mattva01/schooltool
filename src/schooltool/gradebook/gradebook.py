@@ -208,9 +208,14 @@ class GradebookBase(object):
         else:
             adjustments = ann[FINAL_GRADE_ADJUSTMENT_KEY][section_id]
             student_id = hash(IKeyReference(student))
-            return adjustments.get(student_id, {'adjustment': '', 'reason': ''})
+            return adjustments.get(student_id, 
+                {'adjustment': '', 'reason': ''})
 
     def setFinalGradeAdjustment(self, person, student, adjustment, reason):
+        if adjustment not in 'ABCDE':
+            raise ValueError(
+                "Adjustment final grade '%s' is not a valid grade." % 
+                adjustment)
         person = proxy.removeSecurityProxy(person)
         ann = annotation.interfaces.IAnnotations(person)
         if FINAL_GRADE_ADJUSTMENT_KEY not in ann:

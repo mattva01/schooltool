@@ -178,6 +178,20 @@ class FinalGradesView(SectionFinder):
     def update(self):
         """Retrieve final grade adjustments and store changes to them."""
         self.person = IPerson(self.request.principal)
+        gradebook = proxy.removeSecurityProxy(self.context)
+        students = sorted(self.context.students, key=lambda x: x.title)
+        self.error_message = ''
+        for student in students:
+            adj_id = 'adj_' + student.username
+            if adj_id in self.request:
+                adj_value = self.request[adj_id]
+                reason_value = self.request['reason_' + student.username]
+                try:
+                    gradebook.setFinalGradeAdjustment(self.person, student,
+                        adj_value, reason_value)
+                except ValueError, e:
+                    if not self.error_message:
+                        self.error_message = str(e)
 
 
 class GradeStudent(object):
