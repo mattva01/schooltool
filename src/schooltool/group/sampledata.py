@@ -22,13 +22,13 @@ Group sample data generation
 $Id$
 """
 
-import random
 from datetime import datetime, timedelta
 
 from pytz import utc
 from zope.interface import implements
 from zope.security.proxy import removeSecurityProxy
 
+from schooltool.sampledata import PortableRandom
 from schooltool.sampledata.interfaces import ISampleDataPlugin
 from schooltool.calendar.recurrent import DailyRecurrenceRule
 from schooltool.calendar.recurrent import WeeklyRecurrenceRule
@@ -61,7 +61,7 @@ class SampleGroups(object):
     n_groups = property(lambda self: len(self.group_titles))
 
     def generate(self, app, seed=None):
-        self.random = random.Random(seed)
+        self.random = PortableRandom(seed)
         n_members = self.n_groups * self.n_members_in_group
 
         student_ids = [id for id in app['persons'].keys()

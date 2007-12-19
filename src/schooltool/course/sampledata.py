@@ -22,11 +22,10 @@ Sample courses generation
 $Id$
 """
 
-import random
-
 from zope.interface import implements
 from zope.security.proxy import removeSecurityProxy
 
+from schooltool.sampledata import PortableRandom
 from schooltool.sampledata.interfaces import ISampleDataPlugin
 from schooltool.course.course import Course
 from schooltool.course.section import Section
@@ -34,7 +33,6 @@ from schooltool.app.relationships import Instruction, CourseSections
 from schooltool.app.relationships import URICourse, URISection
 from schooltool.app.membership import Membership
 from schooltool.relationship import getRelatedObjects
-from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable import TimetableActivity
 from schooltool.app.cal import CalendarEvent
@@ -75,8 +73,7 @@ class SampleSections(object):
 
     def generate(self, app, seed=None):
         app = removeSecurityProxy(app)
-        self.random = random.Random()
-        self.random.seed(str(seed) + self.name)
+        self.random = PortableRandom(str(seed) + self.name)
 
         # Create 5 sections for each teacher.
         sections = []
@@ -139,8 +136,7 @@ class SampleTimetables(object):
 
     def generate(self, app, seed=None):
         # Let's assign a period for each teacher's sections
-        self.random = random.Random()
-        self.random.seed(str(seed) + self.name)
+        self.random = PortableRandom(str(seed) + self.name)
         app = removeSecurityProxy(app)
         sections = {}
         for person in app['persons'].values():
@@ -191,8 +187,7 @@ class SampleSectionAssignments(object):
 
     def generate(self, app, seed=None):
         app = removeSecurityProxy(app)
-        self.random = random.Random()
-        self.random.seed(str(seed) + self.name)
+        self.random = PortableRandom(str(seed) + self.name)
 
         projectors = [resource
                       for resource in app['resources'].values()

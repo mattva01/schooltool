@@ -85,6 +85,7 @@ You need to define a plugin::
   import zope.interface
   from zope.annotation.interfaces import IAnnotations
   from schooltool.sampledata.interfaces import ISampleDataPlugin
+  from schooltool.sampledata import PortableRandom
 
   class PersonColorPlugin(object):
       zope.interface.implements(ISampleDataPlugin)
@@ -92,7 +93,7 @@ You need to define a plugin::
       dependencies = ('teachers', 'students')
 
       def generate(self, app, seed=None):
-          rng = random.Random(seed)
+          rng = PortableRandom(seed)
           for person in app['persons'].values():
               color = rng.choice(['red', 'green', 'blue'])
               IAnnotations(person)['favorite_color'] = color

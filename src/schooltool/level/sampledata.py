@@ -22,13 +22,12 @@ Timetable sample data generation
 $Id$
 """
 
-import random
-
 from zope.app import zapi
 from zope.interface import implements
 from zope.wfmc.interfaces import IProcessDefinition
 from zope.security.proxy import removeSecurityProxy
 
+from schooltool.sampledata import PortableRandom
 from schooltool.sampledata.interfaces import ISampleDataPlugin
 from schooltool.level.level import Level
 from schooltool.level.interfaces import IManagerWorkItems, IAcademicRecord
@@ -43,8 +42,7 @@ class SampleLevels(object):
     dependencies = ('students', )
 
     def generate(self, app, seed=None):
-        self.random = random.Random()
-        self.random.seed(str(seed) + self.name)
+        self.random = PortableRandom(str(seed) + self.name)
         levels = removeSecurityProxy(app['levels'])
         levels['12th-grade'] = Level('12th grade')
         levels['11th-grade'] = Level('11th grade',

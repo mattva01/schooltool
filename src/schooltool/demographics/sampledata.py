@@ -23,13 +23,13 @@ $Id$
 """
 
 import datetime
-import random
 import os
 
 from pytz import utc
 from zope.interface import implements
 from zope.security.proxy import removeSecurityProxy
 
+from schooltool.sampledata import PortableRandom
 from schooltool.sampledata.interfaces import ISampleDataPlugin
 from schooltool.sampledata.name import NameGenerator
 from schooltool.demographics.person import Person
@@ -39,8 +39,7 @@ from schooltool.common import DateRange
 
 class ChoiceGenerator(object):
     def __init__(self, seed, choices):
-        self.random = random.Random()
-        self.random.seed(seed)
+        self.random = PortableRandom(seed)
         self.choices = choices
 
     def generate(self):
@@ -144,7 +143,7 @@ class SamplePersonalEvents(object):
         return [line.strip() for line in lines]
 
     def generate(self, app, seed=None):
-        self.random = random.Random(seed)
+        self.random = PortableRandom(seed)
         event_titles = self._readLines('event_titles.txt')
         person_ids = [person for person in app['persons'].keys()
                       if person.startswith('student') or

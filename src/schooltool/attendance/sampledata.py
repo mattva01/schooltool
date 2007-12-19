@@ -23,7 +23,6 @@ $Id$
 """
 __docformat__ = 'reStructuredText'
 
-import random
 import datetime
 
 import transaction
@@ -33,6 +32,7 @@ from zope.security.proxy import removeSecurityProxy
 from schooltool.attendance.interfaces import IHomeroomAttendance
 from schooltool.attendance.interfaces import ISectionAttendance
 from schooltool.sampledata.interfaces import ISampleDataPlugin
+from schooltool.sampledata import PortableRandom
 from schooltool.timetable.interfaces import ICompositeTimetables
 
 
@@ -169,7 +169,7 @@ class SampleAttendancePlugin(object):
         # You cannot store proxied objects in the ZODB.  It is safe to
         # unwrap, since only managers can invoke sample data.
         self.app = removeSecurityProxy(app)
-        self.rng = random.Random(seed)
+        self.rng = PortableRandom(seed)
         self.term = app['terms'][self.term_to_use]
 
         # interval in which attendance records will be generated

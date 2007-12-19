@@ -22,7 +22,7 @@ SchoolTool person name generator
 $Id$
 """
 import os.path
-import random
+from schooltool.sampledata import PortableRandom
 
 
 class NameGenerator(object):
@@ -32,8 +32,7 @@ class NameGenerator(object):
     """
 
     def __init__(self, seed):
-        self.random = random.Random()
-        self.random.seed(seed)
+        self.random = PortableRandom(seed)
         self.first_names = self._readLines('first_names.txt')
         self.last_names = self._readLines('last_names.txt')
 
@@ -55,4 +54,4 @@ class NameGenerator(object):
         last_name = self.random.choice(self.last_names)
         full_name = "%s %s" % (first_name, last_name)
         return first_name, last_name, full_name
-    
+
