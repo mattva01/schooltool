@@ -54,7 +54,11 @@ class SampleDataView(BrowserView):
                 zapi.absoluteURL(self.context, self.request))
         if 'SUBMIT' in self.request:
             # TODO: maybe clear database here
-            self.times = generate(self.context, self.seed,
+            if self.seed is not None:
+                seed = hash(self.seed) % 2**32
+            else:
+                seed = None
+            self.times = generate(self.context, seed,
                                   pluginNames=self._getSelectedPlugins())
 
     def _getSelectedPlugins(self):
