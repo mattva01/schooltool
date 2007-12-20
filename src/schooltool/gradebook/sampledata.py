@@ -22,13 +22,12 @@ Sample courses generation
 $Id: sampledata.py 6565 2007-01-11 16:43:11Z ignas $
 """
 
-import random
-
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import implements
 from zope.security.proxy import removeSecurityProxy
 
 from schooltool.sampledata.interfaces import ISampleDataPlugin
+from schooltool.sampledata import PortableRandom
 from schooltool.course.section import Section
 from schooltool.gradebook.category import CategoryVocabulary
 from schooltool.gradebook.interfaces import IActivities, IGradebook
@@ -46,8 +45,7 @@ class SampleGrades(object):
     dependencies = ('sections',)
 
     def generate(self, app, seed=None):
-        self.random = random.Random()
-        self.random.seed(str(seed) + self.name)
+        self.random = PortableRandom(str(seed) + self.name)
         categories = CategoryVocabulary()
         project = [term for term in categories if term.title == 'Project'][0]
         exam = [term for term in categories if term.title == 'Exam'][0]
@@ -81,6 +79,6 @@ class SampleGrades(object):
                 for activity in activities:
                     score = self.random.randrange(60) + 41
                     evaluation = Evaluation(activity, activity.scoresystem, 
-                        score, teacher)
+                        score, removeSecurityProxy(teacher))
                     evaluations.addEvaluation(evaluation)
 
