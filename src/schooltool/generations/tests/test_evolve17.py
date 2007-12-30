@@ -175,7 +175,7 @@ def setUp(test):
 
 def tearDown(test):
     setup.placefulTearDown()
-    _d = {}
+    _d.clear()
 
 
 def test_suite():
