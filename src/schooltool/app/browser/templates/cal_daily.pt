@@ -9,8 +9,8 @@
          tal:attributes="style string:border: 1px ${event/color2} solid;;
                          background: ${event/color1};;">
       <h6>
-        <a tal:attributes="href event/viewLink"
-           tal:omit-tag="not:event/viewLink"
+        <a tal:attributes="href event/linkAllowed"
+           tal:omit-tag="not:event/linkAllowed"
            tal:content="event/title">(title)</a>
       </h6>
       <metal:block use-macro="template/macros/event-delete-button" />
@@ -94,8 +94,8 @@
   -->
 <metal:block define-macro="event-title-bar">
   <h6 tal:attributes="style string:background: ${event/color2}">
-    <a tal:attributes="href event/viewLink; title event/title"
-       tal:omit-tag="not:event/viewLink">
+    <a tal:attributes="href event/linkAllowed; title event/title"
+       tal:omit-tag="not:event/linkAllowed">
       <span tal:replace="event/shortTitle">(shortened title)</span>
       <span class="start-end"
             tal:define="start python:event.dtstarttz.strftime(view.time_fmt);

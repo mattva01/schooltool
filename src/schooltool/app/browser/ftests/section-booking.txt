@@ -49,9 +49,9 @@ Section events should be visible in the calendar of the resource:
     >>> manager = setup.logInManager()
     >>> manager.open('http://localhost/resources/a-resource/calendar/2005-09-07')
     >>> print analyze.queryHTML('id("content-body")', manager.contents)[0]
-    <div id="content-body">
+    <div id="content-body">    
     ...
-        <a href="http://localhost/resources/a-resource/calendar/..." title="History 6">
+        <a href="http://localhost/sections/1/calendar/..." title="History 6">
           History 6
           <span class="start-end">
             (<span>11:35</span>
@@ -64,7 +64,6 @@ Section events should be visible in the calendar of the resource:
 They are editable:
 
     >>> manager.getLink('History 6').click()
-    >>> manager.getLink('edit event').click()
     >>> manager.getControl('Description').value = "Assignement."
     >>> manager.getControl('Apply').click()
     >>> print analyze.queryHTML('id("content-body")', manager.contents)[0]
@@ -96,12 +95,11 @@ Let's look at it:
     >>> print analyze.queryHTML('id("content-body")', manager.contents)[0]
     <div id="content-body">
     ...
-        <a href="http://localhost/resources/a-resource/calendar/..." title="History 6">
+        <a href="http://localhost/sections/1/calendar/..." title="History 6">
           History 6
           <span class="start-end">
             (<span>11:35</span>
-               -
-             <span>12:20</span>)
+              - <span>12:20</span>)
           </span>
         </a>
     ...

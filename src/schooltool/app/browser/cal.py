@@ -37,9 +37,9 @@ from zope.interface import implements, Interface
 from zope.i18n import translate
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces import NotFound
-from zope.security.interfaces import Unauthorized
+from zope.security.interfaces import ForbiddenAttribute, Unauthorized
 from zope.security.proxy import removeSecurityProxy
-from zope.security.checker import canAccess
+from zope.security.checker import canAccess, canWrite
 from zope.schema import Date, TextLine, Choice, Int, Bool, List, Text
 from zope.schema.interfaces import RequiredMissing, ConstraintNotSatisfied
 from zope.app import zapi
@@ -367,6 +367,26 @@ class EventForDisplay(object):
                         zapi.absoluteURL(self.source_calendar, self.request),
                         self.unique_id,
                         self.dtstarttz.strftime('%Y-%m-%d'))
+                        
+    def linkAllowed(self):
+        """Return the URL where you can view/edit this event.
+        
+        Returns the URL where can you edit this event if the user can
+        edit it, otherwise returns the URL where you can view this event.                        
+        """
+
+        try:
+            if self.context.__parent__ is not None and \
+               (canWrite(self.context, 'title') or \
+               hasattr(self.context, 'original') and \
+               canWrite(self.context.original, 'title')):
+                return self.editLink()
+            else:
+                return self.viewLink()
+        except ForbiddenAttribute:
+        # this exception is raised when the event does not allow
+        # us to even check if the title is editable
+            return self.viewLink()
 
     def bookingLink(self):
         """Return the URL where you can book resources for this event.

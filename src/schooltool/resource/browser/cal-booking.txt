@@ -116,7 +116,7 @@ Frog should not be capable of booking any resources yet:
     >>> traceback.print_exception = print_exception
 
     >>> frog.handleErrors = False
-    >>> frog.getLink('edit resources').click()
+    >>> frog.getLink('Book resources').click()
     >>> print frog.contents
     <BLANKLINE>
     ...
@@ -161,7 +161,7 @@ We should see the resource as a booked resource:
 
     >>> frog.open('http://localhost/persons/frog/calendar/2005-02-04')
     >>> frog.getLink('Test event').click()
-    >>> frog.getLink('edit resources').click()
+    >>> frog.getLink('Book resources').click()
     >>> print frog.contents
     <BLANKLINE>
     ...
@@ -192,7 +192,7 @@ Frog should see the event in the resource calendar too:
     >>> print frog.contents
     <BLANKLINE>
     ...
-    <a href="http://localhost/resources/fish/calendar/ZHVtbXktdWlk"
+    <a href="http://localhost/persons/frog/calendar/ZHVtbXktdWlk/edit.html?date=2005-02-04"
        title="Test event">
       Test event
       <span class="start-end">
@@ -231,7 +231,7 @@ The fish should stay in the bookable resources list:
 
     >>> frog.open('http://localhost/persons/frog/calendar/2005-02-04')
     >>> frog.getLink('Test event').click()
-    >>> frog.getLink('edit resources').click()
+    >>> frog.getLink('Book resources').click()
     >>> print frog.contents
     <BLANKLINE>
     ...
@@ -312,7 +312,7 @@ Frog still can see the event:
 Yet mud is not booked anymore:
 
     >>> frog.getLink('Test event').click()
-    >>> frog.getLink('edit resources').click()
+    >>> frog.getLink('Book resources').click()
     >>> print frog.contents
     <BLANKLINE>
     ...
@@ -509,7 +509,7 @@ Stork should still be able to see his calendar:
     <BLANKLINE>
     ...
     <h6 ...>
-      <a href="http://localhost/persons/stork/calendar/c21hcnRpZS11aWQ%3D"
+      <a href="http://localhost/persons/stork/calendar/c21hcnRpZS11aWQ%3D/edit.html?date=2005-08-07"
          title="Mud bath">
         Mud bath
       ...

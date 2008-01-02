@@ -93,7 +93,6 @@ Now the teacher should be able to schedule a new event
 The teacher should be able to edit the event that they created.
 
     >>> teacher.getLink('Classroom Event').click()
-    >>> teacher.getLink('edit event').click()
     >>> teacher.getControl('Time').value = '09:00'
     >>> teacher.getControl('Update', index=1).click()
 
@@ -127,8 +126,7 @@ Now 'Leader' is the leader of the resource and should be able to edit it.
 
 The teacher should still be able to delete the event.
 
-    >>> teacher.getLink('Classroom Event').click()
-    >>> teacher.getLink('delete event').click()
+    >>> teacher.getLink('[X]').click()
     >>> teacher.getControl('Delete').click()
     >>> 'Classroom Event' in teacher.contents
     False

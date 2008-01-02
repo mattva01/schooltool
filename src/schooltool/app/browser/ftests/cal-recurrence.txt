@@ -50,7 +50,6 @@ And submit:
 Let's look back at the event edit view:
 
     >>> manager.getLink("Foo bar").click()
-    >>> manager.getLink("edit event").click()
 
 We see Sunday and Wednesday checked and Sunday disabled:
 
