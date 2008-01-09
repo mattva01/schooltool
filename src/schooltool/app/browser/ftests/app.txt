@@ -266,7 +266,7 @@ And Frog's overlay portlet shows the section:
             <td></td>
           </tr><tr style="background: #eed680"><td><input type="checkbox" name="overlay:list" checked value="/sections/1"></td>
             <td><input type="checkbox" name="overlay_timetables:list" value="/sections/1"></td>
-            <td style="width: 100%">Frog -- History (1)</td>
+            <td style="width: 100%">History (1)</td>
             <td><a class="go" style="background: #d1940c;
                 color: #d1940c" href="http://localhost/sections/1/calendar">...</a></td>
         </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/"></td>

@@ -1490,14 +1490,18 @@ class CalendarSTOverlayView(CalendarOverlayView):
             'checked_tt' - was this calendar owner's timetable checked for
             display?
         """
+        person = IPerson(self.request.principal)
         def getTitleOrLabel(item):
             object = item.calendar.__parent__
             if ISection.providedBy(object):
-                return removeSecurityProxy(object.label)
+                section = removeSecurityProxy(object)
+                if person in section.instructors:
+                    return section.title
+                else:
+                    return section.label
             else:
                 return item.calendar.title
 
-        person = IPerson(self.request.principal)
         items = [(item.calendar.title,
                   {'title': getTitleOrLabel(item),
                    'id': getPath(item.calendar.__parent__),
