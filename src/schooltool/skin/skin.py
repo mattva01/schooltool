@@ -192,7 +192,7 @@ class ActionMenuViewlet(object):
         return getMenu(self.menu, self.context, self.request)
 
 
-class NavigationViewletCrowd(Crowd):
+class NavigationViewletViewCrowd(Crowd):
     """A crowd for navigation viewlets.
 
     Checks permissions on the actual context rather than the parent. Parents
@@ -203,6 +203,15 @@ class NavigationViewletCrowd(Crowd):
     def contains(self, principal):
         context = self.context.actualContext()
         crowd = getAdapter(context, ICrowd, name='schooltool.view')
+        return crowd.contains(principal)
+
+
+class NavigationViewletEditCrowd(Crowd):
+    """A crowd for navigation viewlets."""
+
+    def contains(self, principal):
+        context = self.context.actualContext()
+        crowd = getAdapter(context, ICrowd, name='schooltool.edit')
         return crowd.contains(principal)
 
 

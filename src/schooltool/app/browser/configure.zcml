@@ -549,7 +549,7 @@
       for="*"
       manager="schooltool.skin.INavigationManager"
       template="templates/navigationViewlet.pt"
-      class="schooltool.skin.TopLevelContainerNavigationViewlet"
+      class="schooltool.skin.skin.NavigationViewlet "
       permission="schooltool.edit"
       link="control"
       title="Application Control"

@@ -264,7 +264,12 @@
   <zope:adapter
       for=".skin.NavigationViewlet"
       name="schooltool.view"
-      factory=".skin.NavigationViewletCrowd" />
+      factory=".skin.NavigationViewletViewCrowd" />
+
+  <zope:adapter
+      for=".skin.NavigationViewlet"
+      name="schooltool.edit"
+      factory=".skin.NavigationViewletEditCrowd" />
 
   <zope:view
       for="datetime.date"

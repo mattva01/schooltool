@@ -119,11 +119,12 @@ def doctest_NavigationViewlet_appURL():
 
     """
 
-def doctest_NavigationViewletCrowd():
-    """Tests for NavigationViewletCrowd.
+
+def doctest_NavigationViewletViewCrowd():
+    """Tests for NavigationViewletViewCrowd.
 
         >>> setup.placelessSetUp()
-        >>> from schooltool.skin.skin import NavigationViewletCrowd
+        >>> from schooltool.skin.skin import NavigationViewletViewCrowd
 
         >>> class StubCrowd(object):
         ...     def __init__(self, context):
@@ -144,7 +145,7 @@ def doctest_NavigationViewletCrowd():
     The crowd delegates the permission check to the ICrowd based on
     the actualContext object of the viewlet:
 
-        >>> crowd = NavigationViewletCrowd(ViewletStub())
+        >>> crowd = NavigationViewletViewCrowd(ViewletStub())
         >>> crowd.contains("The principal")
         'Crowd on Actual context object contains The principal'
 
