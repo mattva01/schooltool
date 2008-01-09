@@ -23,6 +23,7 @@ $Id$
 from zope.app import zapi
 from zope.app.form.browser.editview import EditView
 from zope.security.checker import canWrite
+from zope.security.interfaces import Unauthorized
 
 from schooltool.app.browser import app
 from schooltool.gradebook import interfaces
@@ -65,7 +66,12 @@ class ActivitiesView(object):
         return canWrite(self.context, 'title')
 
     def update(self):
-        self.person = IPerson(self.request.principal)
+        self.person = IPerson(self.request.principal, None)
+        if self.person is None:
+            # XXX ignas: i had to do this to make the tests pass,
+            # someone who knows what this code should do if the user
+            # is unauthenticated should add the relevant code
+            raise Unauthorized("You don't have the permission to do this.")
 
         if 'DELETE' in self.request:
             for name in self.request.get('delete', []):

@@ -346,12 +346,8 @@ def term_edit(browser):
 def do_test(func, *args):
     try:
         return bool(func(*args))
-    except Unauthorized, e:
+    except (Unauthorized, LinkNotFoundError, LookupError), e:
         return False
-    except Exception, e:
-        pass # XXX to be removed -- gintas
-#        import sys
-#        print >> sys.stderr, 'Failed:', func, args, e.__class__
 
 
 def raw_column(browser, subject, section):
