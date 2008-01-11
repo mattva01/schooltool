@@ -197,12 +197,14 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zope.securitypolicy',
                       'zope.app.zcmlfiles',
                       'zope.session',
+                      'schooltool.gradebook',
                       'PILwoTk',
                       'Reportlab',
                       'PasteDeploy',
                       'PasteScript',
                       'setuptools'],
-    dependency_links=['http://ftp.schooltool.org/schooltool/eggs/3.4'],
+    dependency_links=['http://ftp.schooltool.org/schooltool/eggs/3.4',
+                      'http://ftp.schooltool.org/schooltool/releases/nightly/'],
     entry_points = """
     [paste.app_factory]
     main = schooltool.paste.main:schooltool_app_factory
