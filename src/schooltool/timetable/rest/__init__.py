@@ -43,7 +43,7 @@ from schooltool.app.rest import View, Template
 from schooltool.app.rest.errors import RestError
 from schooltool.app.app import getSchoolToolApplication
 from zope.app.container.traversal import ItemTraverser
-from schooltool.common.xmlparsing import XMLDocument
+from schooltool.common.xmlparsing import LxmlDocument
 from schooltool.common import parse_date, parse_time
 from schooltool.timetable.interfaces import IHaveTimetables, ITimetables
 from schooltool.timetable.interfaces import ITimetableDict, ICompositeTimetables
@@ -240,46 +240,43 @@ class TimetableFileFactory(object):
 
         return self.parseXML(name, data)
 
+    nsmap = {'tt': 'http://schooltool.org/ns/timetable/0.1',
+             'xlink': 'http://www.w3.org/1999/xlink'}
+
     def parseXML(self, name, xml):
-        doc = XMLDocument(xml, self.schema)
+        doc = LxmlDocument(xml, self.schema)
 
+        time_period_id, schema_id = name.split(".")
+
+        app = getSchoolToolApplication()
+
+        if time_period_id not in app["terms"]:
+            raise RestError("Time period not defined: %s" % time_period_id)
         try:
-            doc.registerNs('tt', 'http://schooltool.org/ns/timetable/0.1')
-            doc.registerNs('xlink', 'http://www.w3.org/1999/xlink')
-
-            time_period_id, schema_id = name.split(".")
-
-            app = getSchoolToolApplication()
-
-            if time_period_id not in app["terms"]:
-                raise RestError("Time period not defined: %s" % time_period_id)
-            try:
-                tt = app["ttschemas"][schema_id].createTimetable()
-            except KeyError:
-                raise RestError("Timetable schema not defined: %s" % schema_id)
-            tznode = doc.query('/tt:timetable/tt:timezone')[0]
-            tt.timezone = tznode['name']
-            for day in doc.query('/tt:timetable/tt:day'):
-                day_id = day['id']
-                if day_id not in tt.keys():
+            tt = app["ttschemas"][schema_id].createTimetable()
+        except KeyError:
+            raise RestError("Timetable schema not defined: %s" % schema_id)
+        tznode = doc.xpath('/tt:timetable/tt:timezone', self.nsmap)[0]
+        tt.timezone = tznode.attrib['name']
+        for day in doc.xpath('/tt:timetable/tt:day', self.nsmap):
+            day_id = day.attrib['id']
+            if day_id not in tt.keys():
+                #XXX Ftest it!
+                raise RestError(_("Unknown day id: %r") % day_id)
+            ttday = tt[day_id]
+            for period in day.xpath('tt:period', self.nsmap):
+                period_id = period.attrib['id']
+                if period_id not in ttday.periods:
                     #XXX Ftest it!
-                    raise RestError(_("Unknown day id: %r") % day_id)
-                ttday = tt[day_id]
-                for period in day.query('tt:period'):
-                    period_id = period['id']
-                    if period_id not in ttday.periods:
-                        #XXX Ftest it!
-                        raise RestError(_("Unknown period id: %r") % period_id)
-                    for activity in period.query('tt:activity'):
-                        ttday.add(period_id, self._parseActivity(activity),
-                                  send_events=False)
-            all_periods = sets.Set()
-            for day_id, ttday in tt.items():
-                all_periods.update(ttday.keys())
-            for exc in doc.query('/tt:timetable/tt:exception'):
-                tt.exceptions.append(self._parseException(exc, all_periods))
-        finally:
-            doc.free()
+                    raise RestError(_("Unknown period id: %r") % period_id)
+                for activity in period.xpath('tt:activity', self.nsmap):
+                    ttday.add(period_id, self._parseActivity(activity),
+                              send_events=False)
+        all_periods = sets.Set()
+        for day_id, ttday in tt.items():
+            all_periods.update(ttday.keys())
+        for exc in doc.xpath('/tt:timetable/tt:exception', self.nsmap):
+            tt.exceptions.append(self._parseException(exc, all_periods))
 
         return tt
 
@@ -296,10 +293,10 @@ class TimetableFileFactory(object):
 
         There can be zero or more resource elements.
         """
-        title = activity_node['title']
+        title = activity_node.attrib['title']
         resources = []
-        for resource in activity_node.query('tt:resource'):
-            path = unquote_uri(resource['xlink:href'])
+        for resource in activity_node.xpath('tt:resource', self.nsmap):
+            path = unquote_uri(resource.attrib['{http://www.w3.org/1999/xlink}href'])
             try:
                 st_app = getSchoolToolApplication()
                 st_url = zapi.absoluteURL(st_app, self.request)
