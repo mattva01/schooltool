@@ -32,7 +32,7 @@ from zope.traversing.api import getPath
 
 from schooltool.calendar.icalendar import read_icalendar
 from schooltool.common import parse_date
-from schooltool.common.xmlparsing import XMLDocument
+from schooltool.common.xmlparsing import LxmlDocument
 from schooltool.app.rest import View
 from schooltool.app.rest.app import GenericContainerView
 from schooltool.app.rest.errors import RestError
@@ -169,35 +169,32 @@ class TermFileFactory(object):
 
     def parseXML(self, data, name=None):
 
-        doc = XMLDocument(data, self.schema)
-        try:
-            doc.registerNs('m', 'http://schooltool.org/ns/schooldays/0.1')
+        doc = LxmlDocument(data, self.schema)
+        nsmap = {'m': 'http://schooltool.org/ns/schooldays/0.1'}
 
-            schooldays = doc.query('/m:schooldays')[0]
-            first_attr = schooldays['first']
-            last_attr = schooldays['last']
+        schooldays = doc.xpath('/m:schooldays', nsmap)[0]
+        first_attr = schooldays.attrib['first']
+        last_attr = schooldays.attrib['last']
 
-            first = parse_date(first_attr)
-            last = parse_date(last_attr)
-            holidays = [parse_date(node.content)
-                        for node in doc.query('/m:schooldays/m:holiday/@date')]
+        first = parse_date(first_attr)
+        last = parse_date(last_attr)
+        holidays = [parse_date(node)
+                    for node in doc.xpath('/m:schooldays/m:holiday/@date', nsmap)]
 
-            node = doc.query('/m:schooldays/m:daysofweek')[0]
-            dows = [self._dow_map[d]
-                    for d in node.content.split()]
+        node = doc.xpath('/m:schooldays/m:daysofweek', nsmap)[0]
+        dows = [self._dow_map[d]
+                for d in node.text.split()]
 
-            node = doc.query('/m:schooldays/m:title')[0]
-            title = node.content
+        node = doc.xpath('/m:schooldays/m:title', nsmap)[0]
+        title = node.text
 
-            term = Term(title, first, last)
-            term.addWeekdays(*dows)
-            for holiday in holidays:
-                if holiday in term and term.isSchoolday(holiday):
-                    term.remove(holiday)
+        term = Term(title, first, last)
+        term.addWeekdays(*dows)
+        for holiday in holidays:
+            if holiday in term and term.isSchoolday(holiday):
+                term.remove(holiday)
 
-            return term
-        finally:
-            doc.free()
+        return term
 
 
 class TermFile(object):
