@@ -162,14 +162,14 @@ Let's do the edit:
       </div>
       <p class="hint"></p>
       <div class="field">
-        <input class="textType" id="field.title" name="field.title" size="20" type="text" value="Term 2"></div>
-      <div class="clear">&nbsp;</div>
+        <input class="textType" id="field.title" name="field.title" size="20" type="text" value="Term 2" /></div>
+      <div class="clear">&#160;</div>
     <BLANKLINE>
     <BLANKLINE>
       </div>
     <BLANKLINE>
       <div class="controls">
-        <input type="submit" class="button-ok" name="BASIC_UPDATE_SUBMIT" value="Save changes"></div>
+        <input type="submit" class="button-ok" name="BASIC_UPDATE_SUBMIT" value="Save changes" /></div>
     <BLANKLINE>
     </form>
     <BLANKLINE>

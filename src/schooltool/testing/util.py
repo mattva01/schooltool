@@ -22,7 +22,7 @@ Testing Utilities
 $Id$
 """
 __metaclass__ = type
-
+import sys
 import cgi
 import sets
 import difflib

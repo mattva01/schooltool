@@ -5,6 +5,8 @@ $Id$
 """
 
 import libxml2
+from lxml import etree
+
 from zope.interface import implements
 from zope.interface.common.interfaces import IException
 
@@ -15,22 +17,21 @@ from schooltool.common import to_unicode
 def validate_against_schema(schema, xml):
     """Return True iff the XML document conforms to the given RelaxNG schema.
 
-    Raises libxml2.parserError if the document is not well-formed.
+    Raises lxml.etree.XMLSyntaxError if the document is not well-formed.
     """
-
-    rngp = libxml2.relaxNGNewMemParserCtxt(schema, len(schema))
     try:
-        rngs = rngp.relaxNGParse()
-        ctxt = rngs.relaxNGNewValidCtxt()
-        doc = libxml2.parseDoc(xml)
-        try:
-            result = doc.relaxNGValidateDoc(ctxt)
-        finally:
-            doc.freeDoc()
-        return result == 0
-    finally:
-        # what does this do?
-        libxml2.relaxNGCleanupTypes()
+        relaxng_doc = etree.XML(schema)
+    except etree.XMLSyntaxError:
+        raise XMLSchemaError("Invalid RelaxNG schema.")
+
+    relaxng = etree.RelaxNG(relaxng_doc)
+
+    try:
+        doc = etree.XML(xml)
+    except etree.XMLSyntaxError:
+        raise XMLParseError("Ill-formed document.")
+
+    return relaxng.validate(doc)
 
 
 class XMLDocument(object):
@@ -128,16 +129,10 @@ class XMLDocument(object):
 
         """
         self._doc = self._xpathctx = None # __del__ wants them
-        if schema is not None:
-            try:
-                if not validate_against_schema(schema, body):
-                    raise XMLValidationError(
-                                "Document not valid according to schema.")
-            except libxml2.parserError, e:
-                if 'xmlRelaxNGParse' in str(e):
-                    raise XMLSchemaError("Invalid RelaxNG schema.")
-                else:
-                    raise XMLParseError("Ill-formed document.")
+        if (schema is not None and
+            not validate_against_schema(schema, body)):
+            raise XMLValidationError(
+                "Document not valid according to schema.")
 
         self._doc = self._parse(body)
         self._xpathctx = self._doc.xpathNewContext()
@@ -166,6 +161,7 @@ class XMLDocument(object):
             ...      <a xlink:type="simple" xlink:href="http://example.com" />
             ...   </sample>
             ... '''.lstrip())
+
             >>> doc.registerNs('sample', 'http://example.com/ns/samplens')
             >>> doc.registerNs('xlnk', 'http://www.w3.org/1999/xlink')
 

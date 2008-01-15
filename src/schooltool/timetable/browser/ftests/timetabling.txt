@@ -78,12 +78,12 @@ Now, for example, September 10th is checked, but the 9th is not:
 
     >>> print analyze.queryHTML('//input[@id="c9"]', manager.contents)[0]
     <input type="checkbox" name="holiday" class="chk"
-           onchange="javascript:update(9)" id="c9" value="2005-09-09">
+           onchange="javascript:update(9)" id="c9" value="2005-09-09" />
 
     >>> print analyze.queryHTML('//input[@id="c10"]', manager.contents)[0]
     <input type="checkbox" name="holiday" class="chk"
-           onchange="javascript:update(10)" checked id="c10"
-           value="2005-09-10">
+           onchange="javascript:update(10)" checked="checked" id="c10"
+           value="2005-09-10" />
 
 Finally, you click on the 'Add term' button.
 
@@ -223,7 +223,7 @@ A new section should have been created:
     >>> manager.getLink('Sections').click()
     >>> print analyze.queryHTML('//table/tr[2]', manager.contents)[0]
     <tr><td>
-        <input type="checkbox" name="delete.swimming--frog"></td>
+        <input type="checkbox" name="delete.swimming--frog" /></td>
       <td>
         <a href="http://localhost/courses/swimming">Swimming</a>
       </td>
@@ -379,7 +379,7 @@ this section too:
     >>> manager.open('http://localhost/'
     ...              'persons/frog/calendar/2005-09-07')
 
-    >>> print analyze.queryHTML('//h6[fn:contains(text(), "Swimming")]',
+    >>> print analyze.queryHTML('//h6[a[@title="Swimming"]]',
     ...                         manager.contents)[0]
     <h6 style="background: #7590ae">
       <a href="http://localhost/sections/swimming--frog/calendar/..." title="Swimming">

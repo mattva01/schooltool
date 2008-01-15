@@ -31,7 +31,7 @@ from schooltool.common import dedent
 from schooltool.testing.util import XMLCompareMixin
 from schooltool.testing.util import NiceDiffsMixin
 from schooltool.testing.util import QuietLibxml2Mixin
-from schooltool.common.xmlparsing import XMLParseError
+from lxml.etree import XMLSyntaxError
 
 __metaclass__ = type
 
@@ -189,7 +189,6 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         self.assertEquals(client.password, '42')
 
     def test_setServer(self):
-        from schooltool.restclient.restclient import SchoolToolClient
         server = 'example.com'
         port = 8081
         version = 'UnitTest/0.0'
@@ -208,7 +207,6 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         self.assertEquals(client.ssl, False)
 
     def test_setServer_SSL(self):
-        from schooltool.restclient.restclient import SchoolToolClient
         server = 'example.com'
         port = 8443
         version = 'UnitTest/0.0'
@@ -226,7 +224,6 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         self.assertEquals(client.ssl, True)
 
     def test_setUser(self):
-        from schooltool.restclient.restclient import SchoolToolClient
         client = self.newClient()
         client.setUser("gandalf", "123")
         self.assertEquals(client.user, "gandalf")
@@ -585,7 +582,7 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         self.assertEquals(conn.method, "DELETE")
 
     def test_getObjectRelationships(self):
-        from schooltool.restclient.restclient import RelationshipInfo, URIObject
+        from schooltool.restclient.restclient import URIObject
         from schooltool.restclient.restclient import URIMembership_uri
         from schooltool.restclient.restclient import URIGroup_uri
         URIMembership = URIObject(URIMembership_uri)
@@ -973,7 +970,6 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
                           None, '/whatever', 'Slackers')
 
     def test_createRelationship(self):
-        from schooltool.restclient.restclient import URIObject
         from schooltool.restclient.restclient import URIMembership_uri
         from schooltool.restclient.restclient import URIGroup_uri
         client = self.newClient(ResponseStub(201, 'Created',
@@ -997,7 +993,6 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         self.assertEqualsXML(conn.body, expected)
 
     def test_createRelationship_absolute_urls(self):
-        from schooltool.restclient.restclient import URIObject
         from schooltool.restclient.restclient import URIMembership_uri
         from schooltool.restclient.restclient import URIGroup_uri
         client = self.newClient(ResponseStub(201, 'Created',
@@ -1204,7 +1199,7 @@ class TestParseFunctions(NiceDiffsMixin, QuietLibxml2Mixin, unittest.TestCase):
     def test__parseContainer_errors(self):
         from schooltool.restclient.restclient import _parseContainer
         body = "<This is not XML"
-        self.assertRaises(XMLParseError, _parseContainer, body)
+        self.assertRaises(XMLSyntaxError, _parseContainer, body)
 
     def test__parseRelationships(self):
         from schooltool.restclient.restclient import _parseRelationships
@@ -1304,7 +1299,7 @@ class TestParseFunctions(NiceDiffsMixin, QuietLibxml2Mixin, unittest.TestCase):
         from schooltool.restclient.restclient import _parseRelationships
         from schooltool.restclient.restclient import SchoolToolError
         body = "<This is not XML"
-        self.assertRaises(XMLParseError, _parseRelationships, body, {})
+        self.assertRaises(XMLSyntaxError, _parseRelationships, body, {})
 
         # Two manage elements
         body = dedent("""
@@ -1337,7 +1332,6 @@ class TestParseFunctions(NiceDiffsMixin, QuietLibxml2Mixin, unittest.TestCase):
 
     def test__parsePersonInfo(self):
         from schooltool.restclient.restclient import _parsePersonInfo
-        from schooltool.restclient.restclient import SchoolToolError
         body = """
             <person xmlns:xlink="http://www.w3.org/1999/xlink"
                     xmlns="http://schooltool.org/ns/model/0.1">
@@ -1363,7 +1357,7 @@ class TestParseFunctions(NiceDiffsMixin, QuietLibxml2Mixin, unittest.TestCase):
         from schooltool.restclient.restclient import _parsePersonInfo
         from schooltool.restclient.restclient import SchoolToolError
         body = "<This is not XML"
-        self.assertRaises(XMLParseError, _parsePersonInfo, body)
+        self.assertRaises(XMLSyntaxError, _parsePersonInfo, body)
         body = """
             <person xmlns:xlink="http://www.w3.org/1999/xlink"
                     xmlns="http://schooltool.org/ns/model/0.1">
@@ -1385,7 +1379,6 @@ class TestParseFunctions(NiceDiffsMixin, QuietLibxml2Mixin, unittest.TestCase):
 
     def test__parseGroupInfo(self):
         from schooltool.restclient.restclient import _parseGroupInfo
-        from schooltool.restclient.restclient import SchoolToolError
         body = """
             <group xmlns:xlink="http://www.w3.org/1999/xlink"
                    xmlns="http://schooltool.org/ns/model/0.1">
@@ -1411,7 +1404,6 @@ class TestParseFunctions(NiceDiffsMixin, QuietLibxml2Mixin, unittest.TestCase):
 
     def test__parseLevelInfo(self):
         from schooltool.restclient.restclient import _parseLevelInfo
-        from schooltool.restclient.restclient import SchoolToolError
         body = """
             <level xmlns:xlink="http://www.w3.org/1999/xlink"
                    xmlns="http://schooltool.org/ns/model/0.1">
@@ -1528,7 +1520,6 @@ class TestPersonRef(SchoolToolClientTestMixin, unittest.TestCase):
         self.assertEquals(result.title, 'SchoolTool Manager')
 
     def test_setPassword(self):
-        from schooltool.restclient.restclient import SchoolToolError
         from schooltool.restclient.restclient import PersonRef
         client = self.newClient(ResponseStub(200, 'OK', 'Password set'))
         ref = PersonRef(client, '/persons/luser1')

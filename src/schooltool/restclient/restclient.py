@@ -28,10 +28,10 @@ import socket
 import urlparse
 import base64
 import cgi
+from lxml import etree
 
 from schooltool.common import UnicodeAwareException
 from schooltool.common import looks_like_a_uri
-from schooltool.common.xmlparsing import XMLDocument
 from schooltool.common import SchoolToolMessage as _
 
 __metaclass__ = type
@@ -599,12 +599,12 @@ def _parseContainer(body):
 
     Returns a list of tuples (object_title, object_href).
     """
-    doc = XMLDocument(body)
-    doc.registerNs('xlink', 'http://www.w3.org/1999/xlink')
+    doc = etree.XML(body)
     items = []
-    for node in doc.query("/container/items/item[@xlink:href]"):
-        href = node['xlink:href']
-        title = node.get('xlink:title', href.split('/')[-1])
+    for node in doc.xpath("/container/items/item[@xlink:href]",
+                          {'xlink': 'http://www.w3.org/1999/xlink'}):
+        href = node.get('{http://www.w3.org/1999/xlink}href')
+        title = node.get('{http://www.w3.org/1999/xlink}title', href.split('/')[-1])
         items.append((title, href))
     return items
 
@@ -618,19 +618,20 @@ def _parseRelationships(body, uriobjects=None):
     if uriobjects is None:
         uriobjects = {}
 
-    doc = XMLDocument(body)
-    doc.registerNs('xlink', 'http://www.w3.org/1999/xlink')
-    doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
+    doc = etree.XML(body)
+    nsmap = {'xlink': 'http://www.w3.org/1999/xlink',
+             'm': 'http://schooltool.org/ns/model/0.1'}
+
     relationships = []
-    for node in doc.query("/m:relationships/m:existing/m:relationship"):
-        href = node.get('xlink:href')
-        role_uri = node.get('xlink:role')
-        arcrole_uri = node.get('xlink:arcrole')
+    for node in doc.xpath("/m:relationships/m:existing/m:relationship", nsmap):
+        href = node.get('{http://www.w3.org/1999/xlink}href')
+        role_uri = node.get('{http://www.w3.org/1999/xlink}role')
+        arcrole_uri = node.get('{http://www.w3.org/1999/xlink}arcrole')
         if (not href
             or not looks_like_a_uri(role_uri)
             or not looks_like_a_uri(arcrole_uri)):
             continue
-        title = node.get('xlink:title', href.split('/')[-1])
+        title = node.get('{http://www.w3.org/1999/xlink}title', href.split('/')[-1])
         try:
             role = uriobjects[role_uri]
         except KeyError:
@@ -639,10 +640,10 @@ def _parseRelationships(body, uriobjects=None):
             arcrole = uriobjects[arcrole_uri]
         except KeyError:
             arcrole = uriobjects[arcrole_uri] = URIObject(arcrole_uri)
-        manage_nodes = node.query("m:manage/@xlink:href")
+        manage_nodes = node.xpath("m:manage/@xlink:href", nsmap)
         if len(manage_nodes) != 1:
             raise SchoolToolError(_("Could not parse relationship list"))
-        link_href = manage_nodes[0].content
+        link_href = manage_nodes[0]
         relationships.append(RelationshipInfo(arcrole, role, title,
                                               href, link_href))
     return relationships
@@ -650,24 +651,24 @@ def _parseRelationships(body, uriobjects=None):
 
 def _parsePersonInfo(body):
     """Parse the data provided by the person XML representation."""
-    doc = XMLDocument(body)
-    doc.registerNs('xlink', 'http://www.w3.org/1999/xlink')
-    doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
+    doc = etree.XML(body)
+    nsmap = {'xlink': 'http://www.w3.org/1999/xlink',
+             'm': 'http://schooltool.org/ns/model/0.1'}
     try:
-        node = doc.query("/m:person/m:title")[0]
-        return PersonInfo(node.content)
+        node = doc.xpath("/m:person/m:title", nsmap)[0]
+        return PersonInfo(node.text)
     except IndexError:
         raise SchoolToolError(_("Insufficient data in person info"))
 
 
 def _parseGroupInfo(body):
     """Parse the data provided by the group XML representation."""
-    doc = XMLDocument(body)
-    doc.registerNs('xlink', 'http://www.w3.org/1999/xlink')
-    doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
+    doc = etree.XML(body)
+    nsmap = {'xlink': 'http://www.w3.org/1999/xlink',
+             'm': 'http://schooltool.org/ns/model/0.1'}
     try:
-        title = doc.query("/m:group/m:title")[0].content
-        description = doc.query("/m:group/m:description")[0].content
+        title = doc.xpath("/m:group/m:title", nsmap)[0].text
+        description = doc.xpath("/m:group/m:description", nsmap)[0].text
         return GroupInfo(title, description)
     except IndexError:
         raise SchoolToolError(_("Insufficient data in group info"))
@@ -675,14 +676,14 @@ def _parseGroupInfo(body):
 
 def _parseLevelInfo(body):
     """Parse the data provided by the level XML representation."""
-    doc = XMLDocument(body)
-    doc.registerNs('xlink', 'http://www.w3.org/1999/xlink')
-    doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
+    doc = etree.XML(body)
+    nsmap = {'xlink': 'http://www.w3.org/1999/xlink',
+             'm': 'http://schooltool.org/ns/model/0.1'}
     try:
-        title = doc.query("/m:level/m:title")[0].content
-        isInitial_string = doc.query("/m:level/m:isInitial")[0].content
+        title = doc.xpath("/m:level/m:title", nsmap)[0].text
+        isInitial_string = doc.xpath("/m:level/m:isInitial", nsmap)[0].text
         isInitial = isInitial_string == "true"
-        nextLevel = doc.query("/m:level/m:nextLevel")[0].content
+        nextLevel = doc.xpath("/m:level/m:nextLevel", nsmap)[0].text
         return LevelInfo(title, isInitial, nextLevel)
     except IndexError:
         raise SchoolToolError(_("Insufficient data in level info"))

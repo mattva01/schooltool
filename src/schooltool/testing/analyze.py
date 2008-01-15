@@ -21,23 +21,11 @@ HTML Analyzation Tools
 
 $Id$
 """
-
-import sys
-import libxml2
-from schooltool.common.xmlparsing import HTMLDocument
-
-
-def on_error_callback(ctx, msg):
-    sys.stderr.write(msg)
+from lxml import etree
 
 
 def queryHTML(xpath, response):
-    """XXX write me a docstring please XXX"""
-    # We need to shut up libxml2, so it does not spew errors to stderr.
-    libxml2.registerErrorHandler(lambda ctx, error: None, None)
-    doc = HTMLDocument(response)
-    doc.registerNs('', 'http://www.w3.org/1999/xhtml')
-    result = [str(node) for node in doc.query(xpath)]
-    doc.free()
-    libxml2.registerErrorHandler(on_error_callback, None)
+    """A helper function to parse an html response and perform an xmpath query on it."""
+    doc = etree.HTML(response)
+    result = [etree.tostring(node, pretty_print=True) for node in doc.xpath(xpath)]
     return result

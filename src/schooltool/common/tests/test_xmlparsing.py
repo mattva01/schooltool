@@ -25,6 +25,7 @@ $Id$
 import unittest
 import libxml2
 from zope.testing.doctest import DocTestSuite
+from schooltool.common.xmlparsing import XMLParseError
 from schooltool.testing.util import QuietLibxml2Mixin
 
 
@@ -153,6 +154,7 @@ def test_validate_ill_formed_document():
           ...
         XMLSchemaError: Invalid RelaxNG schema.
 
+
     """
 
 
@@ -187,7 +189,7 @@ class TestRelaxNGValidation(QuietLibxml2Mixin, unittest.TestCase):
         self.assert_(not validate_against_schema(schema, badxml))
 
         notxml = 'who am I?'
-        self.assertRaises(libxml2.parserError,
+        self.assertRaises(XMLParseError,
                           validate_against_schema, schema, notxml)
 
 

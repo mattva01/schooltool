@@ -433,13 +433,13 @@ Let's see what the breadcrumbs are for this event:
     ...                         frog.contents)[0]
     <div class="breadcrumbs">
       <a href="http://localhost">school</a>
-      &raquo;
+      &#187;
       <a href="http://localhost/persons">persons</a>
-      &raquo;
+      &#187;
       <a href="http://localhost/persons/frog">Frog</a>
-      &raquo;
+      &#187;
       <a href="http://localhost/persons/frog/calendar">Calendar</a>
-      &raquo;
+      &#187;
       <a href="http://localhost/persons/frog/calendar/ZHVtbXktdWlk/edit.html">Important event</a>
     </div>
 

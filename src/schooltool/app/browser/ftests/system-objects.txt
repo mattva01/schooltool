@@ -40,12 +40,12 @@ The list of persons should have a disabled checkbox next to the manager user
     >>> for td in analyze.queryHTML('//table[@class="data"]//tr/td', manager_browser.contents):
     ...     print td
     <td>
-          <input type="checkbox" name="delete.manager" id="delete.manager" disabled></td>
+          <input type="checkbox" name="delete.manager" id="delete.manager" disabled="disabled" /></td>
     <td>
           <a href="http://localhost/persons/manager">SchoolTool Manager</a>
     </td>
     <td>
-          <input type="checkbox" name="delete.srichter" id="delete.srichter"></td>
+          <input type="checkbox" name="delete.srichter" id="delete.srichter" /></td>
     <td>
           <a href="http://localhost/persons/srichter">Stephan Richter</a>
     </td>
@@ -56,32 +56,32 @@ The list of groups should have a disabled checkbox next to the default groups
     >>> for td in analyze.queryHTML('//table[@class="data"]//tr/td', manager_browser.contents):
     ...     print td
     <td>
-          <input type="checkbox" name="delete.a-group" id="delete.a-group"></td>
+          <input type="checkbox" name="delete.a-group" id="delete.a-group" /></td>
     <td>
           <a href="http://localhost/groups/a-group">A Group</a>
     </td>
     <td>
-          <input type="checkbox" name="delete.clerks" id="delete.clerks" disabled></td>
+          <input type="checkbox" name="delete.clerks" id="delete.clerks" disabled="disabled" /></td>
     <td>
           <a href="http://localhost/groups/clerks">Clerks</a>
     </td>
     <td>
-          <input type="checkbox" name="delete.administrators" id="delete.administrators" disabled></td>
+          <input type="checkbox" name="delete.administrators" id="delete.administrators" disabled="disabled" /></td>
     <td>
           <a href="http://localhost/groups/administrators">School Administrators</a>
     </td>
     <td>
-          <input type="checkbox" name="delete.manager" id="delete.manager" disabled></td>
+          <input type="checkbox" name="delete.manager" id="delete.manager" disabled="disabled" /></td>
     <td>
           <a href="http://localhost/groups/manager">Site Managers</a>
     </td>
     <td>
-          <input type="checkbox" name="delete.students" id="delete.students" disabled></td>
+          <input type="checkbox" name="delete.students" id="delete.students" disabled="disabled" /></td>
     <td>
           <a href="http://localhost/groups/students">Students</a>
     </td>
     <td>
-          <input type="checkbox" name="delete.teachers" id="delete.teachers" disabled></td>
+          <input type="checkbox" name="delete.teachers" id="delete.teachers" disabled="disabled" /></td>
     <td>
           <a href="http://localhost/groups/teachers">Teachers</a>
     </td>

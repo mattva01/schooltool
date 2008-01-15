@@ -142,7 +142,7 @@ returned as a serialized string.
     ... </html>
     ... '''
 
-    >>> print analyze.queryHTML('html/body/h1', html)[0]
+    >>> print analyze.queryHTML('/html/body/h1', html)[0]
     <h1>This is my page!</h1>
 
 It works also with XHTML compliant documents.
@@ -158,6 +158,6 @@ It works also with XHTML compliant documents.
     ... </html>
     ... '''
 
-    >>> print analyze.queryHTML('html/body/h1', html)[0]
+    >>> print analyze.queryHTML('/html/body/h1', html)[0]
     <h1>This is my page!</h1>
 
