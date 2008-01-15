@@ -59,8 +59,8 @@ class CourseFileFactory(ApplicationObjectFileFactory):
 
     def parseDoc(self, doc):
         kwargs = {}
-        node = doc.query('/m:object')[0]
-        kwargs['title'] = node['title']
+        node = doc.xpath('/m:object', {"m": "http://schooltool.org/ns/model/0.1"})[0]
+        kwargs['title'] = node.get('title')
         kwargs['description'] = node.get('description')
         return kwargs
 

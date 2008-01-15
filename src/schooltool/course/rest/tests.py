@@ -56,7 +56,7 @@ def doctest_CourseFileFactory():
         ...              '''<object xmlns="http://schooltool.org/ns/model/0.1"
         ...                         title="New Course"/>''')
         >>> course.title
-        u'New Course'
+        'New Course'
         >>> course.description
 
         >>> course = factory("course2", None,
@@ -65,9 +65,9 @@ def doctest_CourseFileFactory():
         ...                         description="Newer, Better"/>''')
 
         >>> course.title
-        u'Newer Course'
+        'Newer Course'
         >>> course.description
-        u'Newer, Better'
+        'Newer, Better'
 
     """
 
@@ -92,9 +92,9 @@ def doctest_CourseFile():
         ...                       title="Herstory"
         ...                       description="Gender Aware History"/>''')
         >>> course.title
-        u'Herstory'
+        'Herstory'
         >>> course.description
-        u'Gender Aware History'
+        'Gender Aware History'
 
     """
 
@@ -151,9 +151,9 @@ def doctest_CourseContainerView():
         >>> len(courses)
         2
         >>> courses['Course'].title
-        u'new course'
+        'new course'
         >>> courses['Course'].description
-        u'something new'
+        'something new'
 
     """
 
@@ -208,7 +208,7 @@ def doctest_SectionFileFactory():
         ...                         title="New Section"
         ...                         course="history"/>''')
         >>> section.title
-        u'New Section'
+        'New Section'
         >>> section.description
 
         >>> section = factory("section2", None,
@@ -218,9 +218,9 @@ def doctest_SectionFileFactory():
         ...                         description="Newer, Better"/>''')
 
         >>> section.title
-        u'Newer Section'
+        'Newer Section'
         >>> section.description
-        u'Newer, Better'
+        'Newer, Better'
 
     """
 
@@ -246,9 +246,9 @@ def doctest_SectionFile():
         ...                       course="algebra"
         ...                       description="Still pretty good"/>''')
         >>> section.title
-        u'Section A'
+        'Section A'
         >>> section.description
-        u'Still pretty good'
+        'Still pretty good'
 
     """
 
@@ -307,9 +307,9 @@ def doctest_SectionContainerView():
         >>> len(sections)
         2
         >>> sections['Section'].title
-        u'new section'
+        'new section'
         >>> sections['Section'].description
-        u'something new'
+        'something new'
 
     """
 

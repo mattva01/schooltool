@@ -61,8 +61,8 @@ class PersonFileFactory(ApplicationObjectFileFactory):
     def parseDoc(self, doc):
         """Get values from document, and puts them into a dict."""
         kwargs = {}
-        node = doc.query('/m:object')[0]
-        kwargs['title'] = node['title']
+        node = doc.xpath('/m:object', {"m": "http://schooltool.org/ns/model/0.1"})[0]
+        kwargs['title'] = node.get('title')
         return kwargs
 
     def __call__(self, name, content_type, data):

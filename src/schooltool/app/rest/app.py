@@ -27,7 +27,7 @@ from zope.interface import implements
 from zope.app.container.interfaces import INameChooser
 from zope.filerepresentation.interfaces import IFileFactory, IWriteFile
 
-from schooltool.common.xmlparsing import XMLDocument
+from schooltool.common.xmlparsing import LxmlDocument
 from schooltool.app.rest import View, Template
 from schooltool.app.interfaces import IWriteCalendar, ISchoolToolCalendar
 from schooltool.calendar.icalendar import convert_calendar_to_ical
@@ -45,12 +45,8 @@ class ApplicationObjectFileFactory(object):
 
     def parseXML(self, data):
         """Get values from document, and put them into a dict."""
-        doc = XMLDocument(data, self.schema)
-        try:
-            doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
-            return self.parseDoc(doc)
-        finally:
-            doc.free()
+        doc = LxmlDocument(data, self.schema)
+        return self.parseDoc(doc)
 
     def __call__(self, name, content_type, data):
         return self.factory(**self.parseXML(data))

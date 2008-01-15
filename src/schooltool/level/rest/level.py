@@ -59,8 +59,8 @@ class LevelFileFactory(rest.app.ApplicationObjectFileFactory):
     def parseDoc(self, doc):
         kwargs = {}
         levels = app.getSchoolToolApplication()['levels']
-        node = doc.query('/m:object')[0]
-        kwargs['title'] = node['title']
+        node = doc.xpath('/m:object', {"m": "http://schooltool.org/ns/model/0.1"})[0]
+        kwargs['title'] = node.get('title')
         kwargs['isInitial'] = node.get('isInitial').lower() == u'true'
         levelid = node.get('nextLevel')
         try:
