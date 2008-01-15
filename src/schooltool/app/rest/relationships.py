@@ -31,7 +31,7 @@ from zope.publisher.interfaces import NotFound
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import ProxyFactory
 
-from schooltool.common.xmlparsing import XMLDocument
+from schooltool.common.xmlparsing import LxmlDocument
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.rest import View, Template
 from schooltool.app.rest.errors import RestError
@@ -147,16 +147,11 @@ class RelationshipsView(View):
         body = self.request.bodyStream.read()
         response = self.request.response
 
-        doc = XMLDocument(body, self.schema)
-        try:
-            doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
-            doc.registerNs('xlink', 'http://www.w3.org/1999/xlink')
-            node = doc.query('/m:relationship')[0]
-            rel_type = node['xlink:arcrole']
-            target_role = node['xlink:role']
-            path = unquote_uri(node['xlink:href'])
-        finally:
-            doc.free()
+        doc = LxmlDocument(body, self.schema)
+        node = doc.xpath('/m:relationship', {'m': 'http://schooltool.org/ns/model/0.1'})[0]
+        rel_type = node.get('{http://www.w3.org/1999/xlink}arcrole')
+        target_role = node.get('{http://www.w3.org/1999/xlink}role')
+        path = unquote_uri(node.get('{http://www.w3.org/1999/xlink}href'))
 
         try:
             schema = getUtility(IRelationshipSchema, rel_type)
