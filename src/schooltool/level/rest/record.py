@@ -31,7 +31,7 @@ from zope.app import zapi
 from schooltool.app import app, rest
 from schooltool.level import interfaces
 from schooltool.traverser import traverser
-from schooltool.common.xmlparsing import XMLDocument
+from schooltool.common.xmlparsing import LxmlDocument
 
 
 class PromotionHTTPTraverser(traverser.NameTraverserPlugin):
@@ -196,12 +196,12 @@ class SelectInitialLevelView(rest.View):
         # XXX not unit tested -- uncomment the following line for proof
         #raise NotImplementedError
         body = self.request.bodyStream.read()
-        doc = XMLDocument(body, self.schema)
-        doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
-        node = doc.query('/m:object')[0]
+        doc = LxmlDocument(body, self.schema)
+        node = doc.xpath('/m:object',
+                         {'m': 'http://schooltool.org/ns/model/0.1'})[0]
         levels = app.getSchoolToolApplication()['levels']
         try:
-            level = levels[node['initialLevel']]
+            level = levels[node.attrib['initialLevel']]
         except KeyError:
             raise rest.errors.RestError("No such level.")
         else:
@@ -241,10 +241,10 @@ class SetLevelOutcomeView(rest.View):
 
     def POST(self):
         body = self.request.bodyStream.read()
-        doc = XMLDocument(body, self.schema)
-        doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
-        node = doc.query('/m:object')[0]
+        doc = LxmlDocument(body, self.schema)
+        node = doc.xpath('/m:object',
+                         {'m': 'http://schooltool.org/ns/model/0.1'})[0]
         zope.security.proxy.removeSecurityProxy(self.context).finish(
-            node['outcome'])
+            node.attrib['outcome'])
 
         return "Outcome submitted."
