@@ -27,7 +27,7 @@ from zope.interface import implements
 from schooltool.app.rest import View, Template
 from schooltool.app.rest.errors import RestError
 from schooltool.traverser.traverser import AdapterTraverserPlugin
-from schooltool.common.xmlparsing import XMLDocument
+from schooltool.common.xmlparsing import LxmlDocument
 
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonPreferences
@@ -76,14 +76,11 @@ class PersonPreferencesView(View):
 
     def parseData(self, body):
         """Get values from document, and put them into a dict"""
-        doc = XMLDocument(body, self.schema)
+        doc = LxmlDocument(body, self.schema)
         results = {}
-        try:
-            doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
-            for preference in doc.query('/m:preferences/m:preference'):
-                results[preference['id']] = preference['value']
-        finally:
-            doc.free()
+        for preference in doc.xpath('/m:preferences/m:preference',
+                                    {'m': 'http://schooltool.org/ns/model/0.1'}):
+            results[preference.attrib['id']] = preference.attrib['value']
 
         return results
 
