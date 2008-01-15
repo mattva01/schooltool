@@ -26,7 +26,7 @@ from zope.interface import Interface, Attribute, implements
 from zope.security.checker import ProxyFactory
 
 from schooltool.app.rest import View, Template
-from schooltool.common.xmlparsing import XMLDocument
+from schooltool.common.xmlparsing import LxmlDocument
 from schooltool.traverser.traverser import AdapterTraverserPlugin
 from schooltool.note.interfaces import INotes, IHaveNotes
 from schooltool.note.note import Note
@@ -98,21 +98,16 @@ class NotesView(View):
 
     def POST(self):
         body = self.request.bodyStream.read()
-
-        doc = XMLDocument(body, self.schema)
-        try:
-            doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
-            for node in doc.query('/m:notes/m:note'):
-                self.createAndAdd(node)
-        finally:
-            doc.free()
-
+        doc = LxmlDocument(body, self.schema)
+        for node in doc.xpath('/m:notes/m:note',
+                              {'m': 'http://schooltool.org/ns/model/0.1'}):
+            self.createAndAdd(node)
         return ''
 
     def createAndAdd(self, node):
         owner = self.request.principal.id
-        note = Note(title=node['title'], body=node['body'],
-                    privacy=node['privacy'], owner=owner)
+        note = Note(title=node.get('title'), body=node.get('body'),
+                    privacy=node.get('privacy'), owner=owner)
 
         self._notes.add(note)
 

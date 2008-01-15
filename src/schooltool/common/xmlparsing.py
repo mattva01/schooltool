@@ -247,6 +247,14 @@ class XMLDocument(object):
         self.free()
 
 
+def LxmlDocument(body, schema=None):
+    if (schema is not None and
+        not validate_against_schema(schema, body)):
+        raise XMLValidationError(
+            "Document not valid according to schema.")
+    return etree.XML(body)
+
+
 class HTMLDocument(XMLDocument):
     r"""HTML document.
 
