@@ -32,7 +32,7 @@ from zope.filerepresentation.interfaces import IFileFactory, IWriteFile
 from schooltool.app.rest import View, Template
 from schooltool.app.rest.app import GenericContainerView
 from schooltool.app.rest.errors import RestError
-from schooltool.common.xmlparsing import XMLDocument
+from schooltool.common.xmlparsing import LxmlDocument
 from schooltool.common import parse_date, parse_time
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 from schooltool.timetable.interfaces import ITimetableModelFactory
@@ -211,131 +211,129 @@ class TimetableSchemaFileFactory(object):
          </grammar>
          """
 
+    nsmap = {'tt': 'http://schooltool.org/ns/timetable/0.1'}
+
     def __init__(self, container):
         self.container = container
 
     def setUpSchemaDays(self, timetable, days):
         for day in days:
-            day_id = day['id']
-            period_ids = [period['id']
-                          for period in day.query('tt:period')]
+            day_id = day.attrib['id']
+            period_ids = [period.attrib['id']
+                          for period in day.xpath('tt:period', self.nsmap)]
             if len(sets.Set(period_ids)) != len(period_ids):
                 raise RestError("Duplicate periods in schema")
 
-            homeroom_periods = [period['id']
-                                for period in day.query('tt:period[@homeroom]')]
+            homeroom_periods = [period.attrib['id']
+                                for period in day.xpath('tt:period[@homeroom]',
+                                                        self.nsmap)]
 
             timetable[day_id] = TimetableSchemaDay(period_ids, homeroom_periods)
 
     def parseXML(self, xml):
-        doc = XMLDocument(xml, self.schema)
+        doc = LxmlDocument(xml, self.schema)
+        days = doc.xpath('/tt:timetable/tt:day', self.nsmap)
+        day_ids = [day.attrib['id'] for day in days]
 
-        try:
-            doc.registerNs('tt', 'http://schooltool.org/ns/timetable/0.1')
-            days = doc.query('/tt:timetable/tt:day')
-            day_ids = [day['id'] for day in days]
+        model_node = doc.xpath('/tt:timetable/tt:model', self.nsmap)[0]
+        factory_id = model_node.attrib['factory']
 
-            model_node = doc.query('/tt:timetable/tt:model')[0]
-            factory_id = model_node['factory']
+        title = None
+        titles = doc.xpath('/tt:timetable/tt:title', self.nsmap)
+        if titles:
+            title_node = titles[0]
+            title = title_node.text
 
-            title = None
-            titles = doc.query('/tt:timetable/tt:title')
-            if titles:
-                title_node = titles[0]
-                title = title_node.content
+        tznode = doc.xpath('/tt:timetable/tt:timezone', self.nsmap)[0]
+        tzname = tznode.attrib['name']
 
-            tznode = doc.query('/tt:timetable/tt:timezone')[0]
-            tzname = tznode['name']
+        factory = zapi.queryUtility(ITimetableModelFactory, factory_id)
+        if factory is None:
+            raise RestError("Incorrect timetable model factory")
 
-            factory = zapi.queryUtility(ITimetableModelFactory, factory_id)
-            if factory is None:
-                raise RestError("Incorrect timetable model factory")
+        templates = doc.xpath('/tt:timetable/tt:model/tt:daytemplate', self.nsmap)
+        template_dict = {}
+        exceptions = {}
 
-            templates = doc.query('/tt:timetable/tt:model/tt:daytemplate')
-            template_dict = {}
-            exceptions = {}
+        for template in templates:
+            day = SchooldayTemplate()
+            day_list = []
 
-            for template in templates:
-                day = SchooldayTemplate()
-                day_list = []
+            used = template.xpath('tt:used', self.nsmap)[0].attrib['when']
+            # the used attribute might contain a date, a list of
+            # week days, or a string "default"
+            try:
+                date = parse_date(used)
+            except ValueError:
+                date = None
 
-                used = template.query('tt:used')[0]['when']
-                # the used attribute might contain a date, a list of
-                # week days, or a string "default"
+            # parse SchoolDayPeriods
+            for period in template.xpath('tt:period', self.nsmap):
+                tstart_str = period.attrib['tstart']
+                dur_str = period.attrib['duration']
+                period_id = period.get('id', None)
                 try:
-                    date = parse_date(used)
+                    tstart = parse_time(tstart_str)
+                    duration = datetime.timedelta(minutes=int(dur_str))
                 except ValueError:
-                    date = None
-
-                # parse SchoolDayPeriods
-                for period in template.query('tt:period'):
-                    tstart_str = period['tstart']
-                    dur_str = period['duration']
-                    period_id = period.get('id', None)
-                    try:
-                        tstart = parse_time(tstart_str)
-                        duration = datetime.timedelta(minutes=int(dur_str))
-                    except ValueError:
-                        raise RestError("Bad period")
-                    else:
-                        slot = SchooldaySlot(tstart, duration)
-                        day.add(slot)
-                        day_list.append((period_id, slot))
-
-                if date is not None:
-                    # if used contains a valid date - we treat the
-                    # template as an exception
-                    for period, slot in day_list:
-                        if period is None:
-                            raise RestError("Period for %d did not have an id"
-                                            % date)
-                    exceptions[date] = day_list
-                elif used == 'default':
-                    template_dict[None] = day
-                elif used in day_ids:
-                    template_dict[used] = day
+                    raise RestError("Bad period")
                 else:
-                    # if used is not "default" and is not a valid date
-                    # try processing it as if it was a list of weekdays
-                    for dow in used.split():
-                        try:
-                            template_dict[self.dows.index(dow)] = day
-                        except ValueError:
-                            raise RestError("Unrecognised day of week %r"
-                                            % dow)
+                    slot = SchooldaySlot(tstart, duration)
+                    day.add(slot)
+                    day_list.append((period_id, slot))
 
-            model = factory(day_ids, template_dict)
+            if date is not None:
+                # if used contains a valid date - we treat the
+                # template as an exception
+                for period, slot in day_list:
+                    if period is None:
+                        raise RestError("Period for %d did not have an id"
+                                        % date)
+                exceptions[date] = day_list
+            elif used == 'default':
+                template_dict[None] = day
+            elif used in day_ids:
+                template_dict[used] = day
+            else:
+                # if used is not "default" and is not a valid date
+                # try processing it as if it was a list of weekdays
+                for dow in used.split():
+                    try:
+                        template_dict[self.dows.index(dow)] = day
+                    except ValueError:
+                        raise RestError("Unrecognised day of week %r"
+                                        % dow)
 
-            for date, day in exceptions.items():
-                model.exceptionDays[date] = day
+        model = factory(day_ids, template_dict)
 
-            # Parse exceptionDayIds
-            exception_ids = doc.query('/tt:timetable/tt:model/tt:day')
-            for exception_id_tag in exception_ids:
-                used = exception_id_tag['when']
-                exception_id = exception_id_tag['id']
+        for date, day in exceptions.items():
+            model.exceptionDays[date] = day
 
-                try:
-                    date = parse_date(used)
-                except ValueError:
-                    raise RestError("Invalid date of an exception day")
+        # Parse exceptionDayIds
+        exception_ids = doc.xpath('/tt:timetable/tt:model/tt:day', self.nsmap)
+        for exception_id_tag in exception_ids:
+            used = exception_id_tag.attrib['when']
+            exception_id = exception_id_tag.attrib['id']
 
-                if exception_id not in model.timetableDayIds:
-                    raise RestError("Invalid date id of an exception day")
+            try:
+                date = parse_date(used)
+            except ValueError:
+                raise RestError("Invalid date of an exception day")
 
-                model.exceptionDayIds[date] = exception_id
+            if exception_id not in model.timetableDayIds:
+                raise RestError("Invalid date id of an exception day")
 
-            # create and set up the timetable
-            if len(sets.Set(day_ids)) != len(day_ids):
-                raise RestError("Duplicate days in schema")
+            model.exceptionDayIds[date] = exception_id
 
-            timetable = TimetableSchema(day_ids, title=title, model=model,
-                                        timezone=tzname)
-            self.setUpSchemaDays(timetable, days)
+        # create and set up the timetable
+        if len(sets.Set(day_ids)) != len(day_ids):
+            raise RestError("Duplicate days in schema")
 
-            return timetable
-        finally:
-            doc.free()
+        timetable = TimetableSchema(day_ids, title=title, model=model,
+                                    timezone=tzname)
+        self.setUpSchemaDays(timetable, days)
+
+        return timetable
 
     def __call__(self, name, content_type, data):
         if "." in name:
