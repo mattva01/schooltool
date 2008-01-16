@@ -30,7 +30,6 @@ from zope.testing.doctest import DocTestSuite
 from schooltool.common import dedent
 from schooltool.testing.util import XMLCompareMixin
 from schooltool.testing.util import NiceDiffsMixin
-from schooltool.testing.util import QuietLibxml2Mixin
 from lxml.etree import XMLSyntaxError
 
 __metaclass__ = type
@@ -126,14 +125,7 @@ class ResponseStub:
         return self._headers[name.lower()]
 
 
-class SchoolToolClientTestMixin(QuietLibxml2Mixin, XMLCompareMixin,
-                                NiceDiffsMixin):
-
-    def setUp(self):
-        self.setUpLibxml2()
-
-    def tearDown(self):
-        self.tearDownLibxml2()
+class SchoolToolClientTestMixin(XMLCompareMixin, NiceDiffsMixin):
 
     def newClient(self, response=None, error=None):
         from schooltool.restclient.restclient import SchoolToolClient
@@ -727,7 +719,7 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         conn = client._connections[1]
         self.assertEquals(conn.path, '/persons/root/password')
         self.assertEquals(conn.method, 'PUT')
-        self.assertEqualsXML(conn.body, 'foo')
+        self.assertEquals(conn.body, 'foo')
 
     def test_createPerson_overrides(self):
         from schooltool.restclient.restclient import PersonRef
@@ -1173,13 +1165,7 @@ class TestResponse(unittest.TestCase):
         self.assertRaises(EOFError, real_response.read)
 
 
-class TestParseFunctions(NiceDiffsMixin, QuietLibxml2Mixin, unittest.TestCase):
-
-    def setUp(self):
-        self.setUpLibxml2()
-
-    def tearDown(self):
-        self.tearDownLibxml2()
+class TestParseFunctions(NiceDiffsMixin, unittest.TestCase):
 
     def test__parseContainer(self):
         from schooltool.restclient.restclient import _parseContainer
@@ -1528,7 +1514,7 @@ class TestPersonRef(SchoolToolClientTestMixin, unittest.TestCase):
         self.assertEquals(conn.path, '/persons/luser1/password')
         self.assertEquals(conn.method, 'PUT')
         self.assertEquals(conn.headers['Content-Type'], 'text/plain')
-        self.assertEqualsXML(conn.body, 'wp')
+        self.assertEquals(conn.body, 'wp')
 
     def test_setPassword_with_errors(self):
         from schooltool.restclient.restclient import SchoolToolError
@@ -1545,7 +1531,7 @@ class TestPersonRef(SchoolToolClientTestMixin, unittest.TestCase):
         ref = PersonRef(client, '/persons/jfk')
         ref.setPhoto(body)
         conn = self.oneConnection(client)
-        self.assertEqualsXML(conn.body, body)
+        self.assertEquals(conn.body, body)
         self.assertEquals(conn.path, '/persons/jfk/photo')
         self.assertEquals(conn.headers['Content-Type'],
                           'application/octet-stream')
@@ -1558,7 +1544,7 @@ class TestPersonRef(SchoolToolClientTestMixin, unittest.TestCase):
         ref = PersonRef(client, '/persons/jfk')
         ref.setPhoto(body, 'image/png')
         conn = self.oneConnection(client)
-        self.assertEqualsXML(conn.body, body)
+        self.assertEquals(conn.body, body)
         self.assertEquals(conn.path, '/persons/jfk/photo')
         self.assertEquals(conn.headers['Content-Type'],
                           'image/png')
@@ -1591,7 +1577,7 @@ class TestPersonRef(SchoolToolClientTestMixin, unittest.TestCase):
         ref = PersonRef(client, '/persons/jfk')
         ref.initiatePromotion()
         conn = self.oneConnection(client)
-        self.assertEqualsXML(conn.body, "")
+        self.assertEquals(conn.body, "")
         self.assertEquals(conn.path, '/persons/jfk/promotion')
         self.assertEquals(conn.method, "PUT")
 

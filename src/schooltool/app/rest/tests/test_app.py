@@ -43,13 +43,15 @@ def doctest_ApplicationView():
 
     Lets test the XML output:
 
-        >>> from schooltool.common.xmlparsing import XMLDocument
-        >>> doc = XMLDocument(result)
-        >>> doc.registerNs('xlink', 'http://www.w3.org/1999/xlink')
+        >>> from schooltool.common.xmlparsing import LxmlDocument
+        >>> doc = LxmlDocument(result)
+        >>> nsmap = {'xlink': 'http://www.w3.org/1999/xlink'}
+        >>> type_attr = '{http://www.w3.org/1999/xlink}type'
+        >>> title_attr = '{http://www.w3.org/1999/xlink}title'
 
     There should only be one set of containers:
 
-        >>> nodes = doc.query('/schooltool/containers')
+        >>> nodes = doc.xpath('/schooltool/containers')
         >>> len(nodes)
         1
 
@@ -57,52 +59,50 @@ def doctest_ApplicationView():
 
     persons:
 
-        >>> persons = doc.query('/schooltool/containers/container'
-        ...                     '[@xlink:href="http://127.0.0.1/persons"]')[0]
-        >>> persons['xlink:type']
-        u'simple'
-        >>> persons['xlink:title']
-        u'persons'
+        >>> persons = doc.xpath('/schooltool/containers/container'
+        ...                     '[@xlink:href="http://127.0.0.1/persons"]', nsmap)[0]
+        >>> persons.attrib[type_attr]
+        'simple'
+        >>> persons.attrib[title_attr]
+        'persons'
 
     groups:
 
-        >>> groups = doc.query('/schooltool/containers/container'
-        ...                     '[@xlink:href="http://127.0.0.1/groups"]')[0]
-        >>> groups['xlink:type']
-        u'simple'
-        >>> groups['xlink:title']
-        u'groups'
+        >>> groups = doc.xpath('/schooltool/containers/container'
+        ...                    '[@xlink:href="http://127.0.0.1/groups"]', nsmap)[0]
+        >>> groups.attrib[type_attr]
+        'simple'
+        >>> groups.attrib[title_attr]
+        'groups'
 
     resources:
 
-        >>> resources = doc.query('/schooltool/containers/container'
-        ...                     '[@xlink:href="http://127.0.0.1/resources"]')[0]
-        >>> resources['xlink:type']
-        u'simple'
-        >>> resources['xlink:title']
-        u'resources'
+        >>> resources = doc.xpath('/schooltool/containers/container'
+        ...                       '[@xlink:href="http://127.0.0.1/resources"]', nsmap)[0]
+        >>> resources.attrib[type_attr]
+        'simple'
+        >>> resources.attrib[title_attr]
+        'resources'
 
     sections:
 
-        >>> sections = doc.query('/schooltool/containers/container'
-        ...                     '[@xlink:href="http://127.0.0.1/sections"]')[0]
-        >>> sections['xlink:type']
-        u'simple'
-        >>> sections['xlink:title']
-        u'sections'
+        >>> sections = doc.xpath('/schooltool/containers/container'
+        ...                      '[@xlink:href="http://127.0.0.1/sections"]', nsmap)[0]
+        >>> sections.attrib[type_attr]
+        'simple'
+        >>> sections.attrib[title_attr]
+        'sections'
 
     courses:
 
-        >>> courses = doc.query('/schooltool/containers/container'
-        ...                     '[@xlink:href="http://127.0.0.1/courses"]')[0]
-        >>> courses['xlink:type']
-        u'simple'
-        >>> courses['xlink:title']
-        u'courses'
+        >>> courses = doc.xpath('/schooltool/containers/container'
+        ...                     '[@xlink:href="http://127.0.0.1/courses"]', nsmap)[0]
+        >>> courses.attrib[type_attr]
+        'simple'
+        >>> courses.attrib[title_attr]
+        'courses'
 
     that's all of our containers:
-
-        >>> doc.free()
 
     XXX this is what our output should look like:
 

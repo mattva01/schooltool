@@ -53,9 +53,6 @@ System requirements
 - Python 2.4 (http://www.python.org/)
   (Debian users will need either python2.4 and python2.4-xml packages)
 
-- libxml2 Python bindings (http://xmlsoft.org/).  Windows users can find
-  binaries here:  http://users.skynet.be/sbi/libxml-python/
-
 - libicu-dev: International Components for Unicode libraries (http://icu.sourceforge.net/download/)
 
 - the Python Imaging Library (PIL) (http://www.pythonware.com/products/pil/)

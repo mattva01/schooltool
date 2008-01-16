@@ -35,7 +35,6 @@ from zope.traversing.interfaces import ITraversable
 
 from schooltool.testing import setup as sbsetup
 from schooltool.testing.util import XMLCompareMixin
-from schooltool.testing.util import QuietLibxml2Mixin
 from schooltool.app.app import SimpleNameChooser
 from schooltool.common.xmlparsing import XMLParseError
 from schooltool.group.group import Group
@@ -46,12 +45,11 @@ from schooltool.resource.rest.resource import ResourceFileFactory
 
 
 
-class ContainerViewTestMixin(XMLCompareMixin, QuietLibxml2Mixin):
+class ContainerViewTestMixin(XMLCompareMixin):
     """Common code for Container View tests"""
 
     def setUp(self):
         setup.placefulSetUp()
-        self.setUpLibxml2()
 
         from zope.filerepresentation.interfaces import IFileFactory
         ztapi.provideView(Interface, Interface, ITraversable, 'view',
@@ -70,7 +68,6 @@ class ContainerViewTestMixin(XMLCompareMixin, QuietLibxml2Mixin):
 
 
     def tearDown(self):
-        self.tearDownLibxml2()
         setup.placefulTearDown()
 
     def test_post(self, suffix="", view=None,

@@ -98,9 +98,6 @@ You can look at it
 
     >>> manager.getLink('2005 Fall').click()
 
-    # XXX: I don't like this for the test, but libxml2's `fn:contains`
-    #      function for XPath seems to always return true :-(
-
     >>> print analyze.queryHTML('//td[@class="schoolday"]', manager.contents)[1]
     <td class="schoolday">
       <label> 1 </label>

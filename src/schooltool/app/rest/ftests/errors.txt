@@ -1,12 +1,6 @@
 Error handling in REST views
 ============================
 
-We need to shut up libxml2, so it does not spew errors to stderr:
-
-   >>> import libxml2
-   >>> libxml2.registerErrorHandler(lambda ctx, error: None, None)
-   1
-
 Now, let's submit a well-formed but invalid XML document:
 
     >>> print rest("""
@@ -142,15 +136,3 @@ And what about NotFound errors?
     ... """)
     HTTP/1.1 404 Not Found
     Content-Length: 0
-
-
-Tear down
-=========
-
-Restore the libxml2 error handling:
-
-    >>> import sys
-    >>> def on_error_callback(ctx, msg, sys=sys):
-    ...     sys.stderr.write(msg)
-    >>> libxml2.registerErrorHandler(on_error_callback, None)
-    1

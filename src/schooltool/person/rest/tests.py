@@ -173,7 +173,7 @@ class TestPersonPasswordWriterView(ApplicationObjectViewTestMixin,
         response = request.response
 
         self.assertEquals(response.getStatus(), 200)
-        self.assertEqualsXML(result, "")
+        self.assertEquals(result, "")
         self.assert_(self.person.checkPassword("super-secret-password"))
 
 

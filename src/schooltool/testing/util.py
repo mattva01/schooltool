@@ -26,8 +26,10 @@ import sys
 import cgi
 import sets
 import difflib
-import libxml2
 import unittest
+from lxml import sax
+from lxml import etree
+from xml.sax.handler import ContentHandler
 from pprint import pformat
 from StringIO import StringIO
 
@@ -96,11 +98,6 @@ def normalize_xml(xml, recursively_sort=(), compact=False):
     expands shorthand notation of empty XML elements ("<br/>" becomes
     "<br></br>").
 
-    If an element has an attribute test:sort="children", the attribute is
-    removed and its immediate child nodes are sorted textually.  If the
-    attribute value is test:sort="recursively", the sorting happens at
-    all levels (unless specifically prohibited with test:sort="not").
-
     If recursively_sort is given, it is a sequence of tags that will have
     test:sort="recursively" automatically appended to their attribute lists in
     the text.  Use it when you cannot or do not want to modify the XML document
@@ -143,14 +140,14 @@ def normalize_xml(xml, recursively_sort=(), compact=False):
         def render(self, level):
             result = []
             indent = '  ' * level
-            line = '%s<%s' % (indent, self.tag)
+            line = '%s<%s' % (indent, self.tag[1])
             for attr in self.attrlist:
                 if len(line + attr) < 78:
                     line += attr
                 else:
                     result.append(line)
                     result.append('\n')
-                    line = '%s %s%s' % (indent, ' ' * len(self.tag), attr)
+                    line = '%s %s%s' % (indent, ' ' * len(self.tag[1]), attr)
             if self.children:
                 s = ''.join([child.render(level+1) for child in self.children])
             else:
@@ -159,11 +156,11 @@ def normalize_xml(xml, recursively_sort=(), compact=False):
                 result.append('%s/>\n' % line)
             elif (compact and len(self.children) == 1 and '<' not in s
                   and s.count('\n') == 1):
-                result.append('%s>%s</%s>\n' % (line, s.strip(), self.tag))
+                result.append('%s>%s</%s>\n' % (line, s.strip(), self.tag[1]))
             else:
                 result.append('%s>\n' % line)
                 result.append(s)
-                result.append('%s</%s>\n' % (indent, self.tag))
+                result.append('%s</%s>\n' % (indent, self.tag[1]))
             return ''.join(result)
 
         def finalize(self):
@@ -186,29 +183,29 @@ def normalize_xml(xml, recursively_sort=(), compact=False):
             else:
                 return ''
 
-    class Handler:
+    class Handler(ContentHandler):
 
         def __init__(self):
             self.level = 0
             self.result = []
             self.root = self.cur = Document()
             self.last_text = None
+            self._locator = None
+
+        def startElementNS(self, tag, qname, attrs):
+            self.startElement(tag, attrs)
+
+        def endElementNS(self, tag, qname):
+            self.endElement(tag)
 
         def startElement(self, tag, attrs):
             sort = sort_recursively = self.cur.sort_recursively
             if attrs:
-                if 'test:sort' in attrs:
-                    value = attrs['test:sort']
-                    del attrs['test:sort']
-                    if value == 'children':
-                        sort = True
-                    elif value == 'recursively':
-                        sort = sort_recursively = True
-                    elif value == 'not':
-                        sort = sort_recursively = False
+                if tag in recursively_sort:
+                    sort = sort_recursively = True
                 attrlist = attrs.items()
                 attrlist.sort()
-                attrlist = [' %s="%s"' % (k, cgi.escape(v, True))
+                attrlist = [' %s="%s"' % (k[1], cgi.escape(v, True))
                             for k, v in attrlist]
             else:
                 attrlist = []
@@ -236,15 +233,10 @@ def normalize_xml(xml, recursively_sort=(), compact=False):
     for tag in recursively_sort:
         xml = xml.replace('<%s' % tag,
                           '<%s test:sort="recursively"' % tag)
-    try:
-        handler = Handler()
-        ctx = libxml2.createPushParser(handler, "", 0, "")
-        ret = ctx.parseChunk(xml, len(xml), True)
-        if ret:
-            return "PARSE ERROR: %r\n%s" % (ret, xml)
-        return ''.join(handler.render())
-    except libxml2.parserError, e:
-        return "ERROR: %s" % e
+    handler = Handler()
+    tree = etree.XML(xml)
+    sax.saxify(tree, handler)
+    return ''.join(handler.render())
 
 
 def run_unit_tests(testcase):
@@ -364,28 +356,6 @@ def compareXML(result, expected, recursively_sort=()):
     else:
         print diff(expected, result)
         return False
-
-
-class QuietLibxml2Mixin:
-    """Text mixin that disables libxml2 error reporting.
-
-    Sadly the API of libxml2 does not allow us to restore the error reporting
-    function in tearDown.  <Insert derogatory comments here>
-    """
-
-    def setUpLibxml2(self):
-        import libxml2
-        libxml2.registerErrorHandler(lambda ctx, error: None, None)
-
-    def tearDownLibxml2(self):
-        import libxml2
-        # It's not possible to restore the error handler that was installed
-        # before (libxml2 API limitation), so we set up a generic one that
-        # prints everything to stdout.
-        def on_error_callback(ctx, msg):
-            sys.stderr.write(msg)
-        libxml2.registerErrorHandler(on_error_callback, None)
-
 
 
 class FakeRoot(object):

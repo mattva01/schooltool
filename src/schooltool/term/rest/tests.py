@@ -31,7 +31,6 @@ from zope.filerepresentation.interfaces import IFileFactory
 from zope.app.testing import ztapi, setup
 from zope.traversing.interfaces import IContainmentRoot
 
-from schooltool.testing.util import QuietLibxml2Mixin
 from schooltool.common import dedent
 
 
@@ -41,7 +40,7 @@ class DatetimeStub:
         return datetime.datetime(2004, 1, 2, 3, 4, 5)
 
 
-class TestTermView(QuietLibxml2Mixin, unittest.TestCase):
+class TestTermView(unittest.TestCase):
 
     def setUp(self):
         setup.placelessSetUp()
@@ -59,11 +58,9 @@ class TestTermView(QuietLibxml2Mixin, unittest.TestCase):
 
         self.view = TermView(self.term, TestRequest())
         self.view.datetime_hook = DatetimeStub()
-        self.setUpLibxml2()
 
     def tearDown(self):
         setup.placelessTearDown()
-        self.tearDownLibxml2()
 
     def test_get_empty(self):
         self.assertEqual(
@@ -112,15 +109,13 @@ class TestTermView(QuietLibxml2Mixin, unittest.TestCase):
             (expected + "END:VCALENDAR\n").replace("\n", "\r\n"))
 
 
-class TestTermFileFactory(QuietLibxml2Mixin, unittest.TestCase):
+class TestTermFileFactory(unittest.TestCase):
     def setUp(self):
         from schooltool.term.term import TermContainer
         from schooltool.term.rest.term import TermFileFactory
 
         self.terms = TermContainer()
         self.fileFactory = TermFileFactory(self.terms)
-        self.setUpLibxml2()
-
 
     def test_isDataICal(self):
         self.assert_(self.fileFactory.isDataICal("BEGIN:VCALENDAR"))
@@ -197,7 +192,7 @@ class TestTermFileFactory(QuietLibxml2Mixin, unittest.TestCase):
         self.assertRaises(RestError, self.fileFactory, "foo.bar", "", "")
 
 
-class TestTermFile(QuietLibxml2Mixin, unittest.TestCase):
+class TestTermFile(unittest.TestCase):
 
     def setUp(self):
         from schooltool.term.term import Term, TermContainer
@@ -215,8 +210,6 @@ class TestTermFile(QuietLibxml2Mixin, unittest.TestCase):
 
 
         self.file = TermFile(self.term)
-
-        self.setUpLibxml2()
 
     def test_write(self):
         calendar = dedent("""

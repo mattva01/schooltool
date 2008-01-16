@@ -33,12 +33,11 @@ from zope.traversing.interfaces import ITraversable
 from zope.traversing.interfaces import IContainmentRoot
 
 from schooltool.testing import setup as sbsetup
-from schooltool.testing.util import QuietLibxml2Mixin
 from schooltool.testing.util import XMLCompareMixin
 from schooltool.app.rest.errors import RestError
 
 
-class TimetableSchemaMixin(QuietLibxml2Mixin):
+class TimetableSchemaMixin(object):
 
     schema_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
@@ -115,10 +114,7 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
 
         directlyProvides(self.schemaContainer, IContainmentRoot)
 
-        self.setUpLibxml2()
-
     def tearDown(self):
-        self.tearDownLibxml2()
         setup.placelessTearDown()
 
     def createEmptySchema(self):

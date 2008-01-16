@@ -41,13 +41,12 @@ from schooltool.app.app import SimpleNameChooser
 from schooltool.relationship.annotatable import getRelationshipLinks
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.testing.util import XMLCompareMixin
-from schooltool.testing.util import QuietLibxml2Mixin
 from schooltool.common.xmlparsing import XMLParseError
 from schooltool.common.xmlparsing import XMLValidationError
 from schooltool.testing import setup as sbsetup
 
 
-class CommonSetupMixin(XMLCompareMixin, QuietLibxml2Mixin):
+class CommonSetupMixin(XMLCompareMixin):
 
     def setUp(self):
         from schooltool.group.group import Group
@@ -56,7 +55,6 @@ class CommonSetupMixin(XMLCompareMixin, QuietLibxml2Mixin):
 
         setup.placefulSetUp()
         setup.setUpAnnotations()
-        self.setUpLibxml2()
         setUpRelationships()
 
         ztapi.provideUtility(IRelationshipSchema,
@@ -88,7 +86,6 @@ class CommonSetupMixin(XMLCompareMixin, QuietLibxml2Mixin):
         Membership(group=self.new, member=self.person2)
 
     def tearDown(self):
-        self.tearDownLibxml2()
         setup.placefulTearDown()
 
 
