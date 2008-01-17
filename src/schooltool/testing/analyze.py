@@ -24,8 +24,15 @@ $Id$
 from lxml import etree
 
 
+def to_string(node):
+    if isinstance(node, basestring):
+        return node
+    else:
+        return etree.tostring(node, pretty_print=True)
+
+
 def queryHTML(xpath, response):
     """A helper function to parse an html response and perform an xmpath query on it."""
     doc = etree.HTML(response)
-    result = [etree.tostring(node, pretty_print=True) for node in doc.xpath(xpath)]
+    result = [to_string(node) for node in doc.xpath(xpath)]
     return result
