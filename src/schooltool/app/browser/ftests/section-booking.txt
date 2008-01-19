@@ -121,7 +121,6 @@ Let's look at it:
 
 There should be two resources available to add there:
 
-
     >>> manager.getLink('Mud').text
     'Mud'
     >>> manager.getLink('A resource').text
@@ -133,13 +132,26 @@ Let's add the Mud resource:
 
 We are now redirected to the event edit view:
 
-
     >>> manager.getControl('Title').value
     '09:30-10:25'
 
     >>> manager.getControl('Date').value
     '2005-09-07'
+    
+The resource should be displayed under a list in the event edit view:
 
+    >>> print analyze.queryHTML('id("content-body")', manager.contents)[0]
+    <div id="content-body"> 
+    ...
+    ...Booked Resources...
+    ...
+    ...Title...
+    ...Type...
+    ...
+    ...Mud...
+    ...Resource...
+    ...
+    
 And the resource is added:
 
     >>> manager.getLink('Book resources').click()

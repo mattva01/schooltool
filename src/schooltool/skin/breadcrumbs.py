@@ -25,10 +25,12 @@ import zope.component
 import zope.interface
 import zope.publisher.interfaces.http
 from zope.app import zapi
+from zope.component.interfaces import ComponentLookupError
 from zope.publisher import browser
 from zope.traversing.interfaces import IContainmentRoot
 
 from schooltool.common import SchoolToolMessage as _
+from schooltool.securitypolicy.interfaces import ICrowd
 from schooltool.skin import interfaces
 
 class Breadcrumbs(browser.BrowserView):
@@ -40,10 +42,17 @@ class Breadcrumbs(browser.BrowserView):
         objects = [self.context] + list(zapi.getParents(self.context))
         objects.reverse()
         for object in objects:
+            active = False
             info = zapi.getMultiAdapter((object, self.request),
                                         interfaces.IBreadcrumbInfo)
-            yield {'name': info.name, 'url': info.url, 'active': info.active}
-
+            crowd = zope.component.queryAdapter(object, ICrowd, 
+                                              name='schooltool.view')
+            if crowd is not None:
+                active = crowd.contains(self.request.principal)
+               
+            yield {'name': info.name, 'url': info.url, 
+                   'active': active}
+            
 
 class GenericBreadcrumbInfo(object):
     """A generic breadcrumb info adapter."""
