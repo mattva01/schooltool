@@ -196,6 +196,71 @@ def doctest_CalendarOverlayView_items():
     """
 
 
+def doctest_CalendarOverlayView_items_with_identical_titles():
+    """Tests for CalendarOverlayView.items().
+
+        >>> from schooltool.app.browser.overlay import CalendarOverlayView
+
+    We will need some persons and groups for the demonstration.
+
+        >>> from schooltool.group.group import Group
+        >>> from schooltool.person.person import Person
+        >>> app = setup.setUpSchoolToolSite()
+        >>> person = app['persons']['p1'] = Person('p1', title="Person")
+        >>> group1 = app['groups']['g1'] = Group(title="Group")
+        >>> group5 = app['groups']['g5'] = Group(title="Group")
+        >>> group3 = app['groups']['g3'] = Group(title="Group")
+        >>> group4 = app['groups']['g4'] = Group(title="Group")
+        >>> group2 = app['groups']['g2'] = Group(title="Group")
+
+    When the person has calendars in his overlay list
+
+        >>> from zope.publisher.browser import TestRequest
+        >>> from schooltool.app.security import Principal
+        >>> request = TestRequest()
+        >>> request.setPrincipal(Principal('', '', person))
+        >>> context = ISchoolToolCalendar(person)
+
+        >>> for group in app['groups'].values():
+        ...     link = person.overlaid_calendars.add(ISchoolToolCalendar(group))
+
+        >>> view = CalendarOverlayView(context, request)
+        >>> from zope.testing.doctestunit import pprint
+        >>> pprint(view.items())
+        [{'calendar': <schooltool.app.cal.Calendar object at ...>,
+          'checked': 'checked',
+          'color1': '#e0b6af',
+          'color2': '#c1665a',
+          'id': u'/groups/g1',
+          'title': 'Group'},
+         {'calendar': <schooltool.app.cal.Calendar object at ...>,
+          'checked': 'checked',
+          'color1': '#eed680',
+          'color2': '#d1940c',
+          'id': u'/groups/g2',
+          'title': 'Group'},
+         {'calendar': <schooltool.app.cal.Calendar object at ...>,
+          'checked': 'checked',
+          'color1': '#c5d2c8',
+          'color2': '#83a67f',
+          'id': u'/groups/g3',
+          'title': 'Group'},
+         {'calendar': <schooltool.app.cal.Calendar object at ...>,
+          'checked': 'checked',
+          'color1': '#efe0cd',
+          'color2': '#e0c39e',
+          'id': u'/groups/g4',
+          'title': 'Group'},
+         {'calendar': <schooltool.app.cal.Calendar object at ...>,
+          'checked': 'checked',
+          'color1': '#ada7c8',
+          'color2': '#887fa3',
+          'id': u'/groups/g5',
+          'title': 'Group'}]
+
+    """
+
+
 def doctest_CalendarSelectionView():
     """Tests for CalendarSelectionView
 

@@ -117,7 +117,7 @@ class CalendarOverlayView(BrowserView):
 
         """
         person = IPerson(self.request.principal)
-        items = [((item.calendar.title, item.calendar.__parent__.__name__),
+        items = [((item.calendar.title, getPath(item.calendar.__parent__)),
                   {'title': item.calendar.title,
                    'id': getPath(item.calendar.__parent__),
                    'calendar': item.calendar,
@@ -172,7 +172,7 @@ class CalendarSelectionView(BrowserView):
                      'title': obj.title,
                      'selected': calendar in user.overlaid_calendars,
                      'calendar': calendar})
-        return result
+        return sorted(result, key=lambda item: (item['title'], item['id']))
 
     def getApplicationCalendar(self):
         """Return the application calendar.
