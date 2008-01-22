@@ -107,12 +107,56 @@ def test_breadcrumbs():
 
       >>> crumbs = breadcrumbs.Breadcrumbs(sub1, request)
       >>> pprint(list(crumbs.crumbs))
-      [{'active': True,
+      [{'active': False,
+        'name': u'top',
+        'url': 'http://127.0.0.1'},
+       {'active': False,
+        'name': 'Sub-Object 1',
+        'url': 'http://127.0.0.1/sub1'}]
+
+    All the items are disabled, because there are no corwds that can
+    see them.
+
+    Let's add a crowd that will allow people to look at our Object:
+
+      >>> allow = True
+      >>> class CanSeeStuffCrowd(object):
+      ...     def __init__(self, context):
+      ...         self.context = context
+      ...
+      ...     def contains(self, principal):
+      ...         if self.context == sub1:
+      ...             return allow
+      ...         return False
+
+      >>> from schooltool.securitypolicy.interfaces import ICrowd
+      >>> zope.component.provideAdapter(CanSeeStuffCrowd,
+      ...                               provides=ICrowd,
+      ...                               adapts=[Object],
+      ...                               name='schooltool.view')
+
+    You can see the link to Sub-Object 1 now:
+
+      >>> crumbs = breadcrumbs.Breadcrumbs(sub1, request)
+      >>> pprint(list(crumbs.crumbs))
+      [{'active': False,
         'name': u'top',
         'url': 'http://127.0.0.1'},
        {'active': True,
         'name': 'Sub-Object 1',
         'url': 'http://127.0.0.1/sub1'}]
+
+    Let's forbid the access:
+
+      >>> allow = False
+      >>> pprint(list(crumbs.crumbs))
+      [{'active': False,
+        'name': u'top',
+        'url': 'http://127.0.0.1'},
+       {'active': False,
+        'name': 'Sub-Object 1',
+        'url': 'http://127.0.0.1/sub1'}]
+
     """
 
 
