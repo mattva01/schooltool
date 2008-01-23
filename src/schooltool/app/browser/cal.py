@@ -1502,7 +1502,7 @@ class CalendarSTOverlayView(CalendarOverlayView):
             else:
                 return item.calendar.title
 
-        items = [(item.calendar.title,
+        items = [((item.calendar.title, getPath(item.calendar.__parent__)),
                   {'title': getTitleOrLabel(item),
                    'id': getPath(item.calendar.__parent__),
                    'calendar': item.calendar,
