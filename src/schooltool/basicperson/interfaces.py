@@ -73,12 +73,6 @@ class IBasicPerson(Interface):
         required=False,
         )
 
-    advisor = Choice(
-        title=_(u"Advisor"),
-        source="schooltool.basicperson.advisor_source",
-        required=False,
-        )
-
 
 class IBasicPersonSource(IIterableSource):
     """Marker interface for sources that list basic persons."""
@@ -91,7 +85,11 @@ class IGroupSource(IIterableSource):
 
 class IStudent(Interface):
 
-    advisor = Attribute("""Advisor of a student.""")
+    advisor = Choice(
+        title=_(u"Advisor"),
+        source="schooltool.basicperson.advisor_source",
+        required=False,
+        )
 
 
 class IAdvisor(Interface):

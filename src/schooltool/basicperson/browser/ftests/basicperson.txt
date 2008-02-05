@@ -52,6 +52,15 @@ And now we only have John in there:
     ...
     LinkNotFoundError
 
+We can click on John and edit his record (we'll change it back as well):
+
+    >>> manager.getLink('John').click()
+    >>> manager.getLink('Edit').click()
+    >>> manager.getControl('First name').value = 'Johnny'
+    >>> manager.getControl('Apply').click()
+    >>> manager.getControl('First name').value = 'John'
+    >>> manager.getControl('Apply').click()
+
 Now there even are person export views:
 
     >>> manager.open('http://localhost/persons/@@person_export.xml')

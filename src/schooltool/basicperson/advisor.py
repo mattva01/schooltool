@@ -72,10 +72,18 @@ class PersonStudentAdapter(object):
     def __init__(self, context):
         self.context = context
 
-    @property
-    def advisor(self):
+    def getAdvisor(self):
         relationships = IRelationshipLinks(self.context)
-        advisors = relationships.getTargetsByRole(URIAdvisor, URIAdvising)
+        advisors = list(relationships.getTargetsByRole(URIAdvisor, URIAdvising))
         assert len(advisors) < 2
         advisors.append(None)
         return advisors[0]
+
+    def setAdvisor(self, advisor):
+        old_advisor = self.getAdvisor()
+        if old_advisor:
+            IAdvisor(old_advisor).removeStudent(self.context)
+        IAdvisor(advisor).addStudent(self.context)
+
+    advisor = property(getAdvisor, setAdvisor)
+

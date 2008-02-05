@@ -56,17 +56,6 @@ class BasicPerson(Person):
     gradeclass = None
     birth_date = None
 
-    def getAdvisor(self):
-        return IStudent(self).advisor
-
-    def setAdvisor(self, advisor):
-        old_advisor = IStudent(self).advisor
-        if old_advisor:
-            IAdvisor(old_advisor).removeStudent(self)
-        IAdvisor(advisor).addStudent(self)
-
-    advisor = property(getAdvisor, setAdvisor)
-
     def __init__(self, username, first_name, last_name,
                  email=None, phone=None):
         self.first_name = first_name

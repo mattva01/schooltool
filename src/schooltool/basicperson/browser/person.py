@@ -42,7 +42,7 @@ from schooltool.skin.form import BasicForm
 from schooltool.skin.form import EditForm
 from schooltool.widget.password import PasswordConfirmationWidget
 
-from schooltool.basicperson.interfaces import IBasicPerson
+from schooltool.basicperson.interfaces import IBasicPerson, IStudent
 from schooltool.common import SchoolToolMessage as _
 
 
@@ -174,7 +174,7 @@ class PersonEditView(EditForm):
         return _(u'Change information for ${fullname}',
                  mapping={'fullname': self.fullname()})
 
-    form_fields = form.Fields(IBasicPerson)
+    form_fields = form.Fields(IBasicPerson) + form.Fields(IStudent)
 
     def fullname(self):
         return self.context.title
