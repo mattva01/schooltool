@@ -2547,13 +2547,8 @@ class CalendarEventBookingView(CalendarEventView):
         if not canAccess(calendar, "expand"):
             return []
 
-        ttcalendar = ICompositeTimetables(resource).makeTimetableCalendar()
-        events = []
-
-        for cal in (calendar, ttcalendar):
-            evts = list(cal.expand(self.context.dtstart,
-                                   self.context.dtstart + self.context.duration))
-            events.extend(evts)
+        events = list(calendar.expand(self.context.dtstart,
+                                      self.context.dtstart + self.context.duration))
 
         return [EventForBookingDisplay(event)
                 for event in events
