@@ -455,7 +455,7 @@ Let's see what the breadcrumbs are for this event:
     <BLANKLINE>
               &#187;
     <BLANKLINE>
-              <span>Important event</span>
+              <a href="http://localhost/persons/frog/calendar/ZHVtbXktdWlk/edit.html">Important event</a>
     <BLANKLINE>
             </div>
     <BLANKLINE>
