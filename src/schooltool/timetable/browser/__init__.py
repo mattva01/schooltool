@@ -735,19 +735,9 @@ class TimetableEditView(TimetableSetupViewBase):
 
     def getTerms(self):
         """Return the chosen term."""
-        if 'terms' in self.request:
-            terms = getSchoolToolApplication()['terms']
-            requested_terms = []
-
-            # request['terms'] may be a list of strings or a single string, we
-            # need to handle both cases
-            try:
-                requested_terms = requested_terms + self.request['terms']
-            except TypeError:
-                requested_terms.append(self.request['terms'])
-            return [terms[term] for term in requested_terms]
-        else:
-            return [getNextTermForDate(datetime.date.today()),]
+        term_id, schooltt_id = self.context.__name__.split(".")
+        terms = getSchoolToolApplication()['terms']
+        return [terms[term_id]]
 
     def getDays(self, ttschema):
         """Return the current selection.

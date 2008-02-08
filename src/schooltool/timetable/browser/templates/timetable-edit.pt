@@ -23,9 +23,9 @@
 
   <div tal:define="terms view/app/terms/values;
 		   ttschemas view/app/ttschemas/values">
-    <div i18n:translate="">For term(s):</div>
-      <strong tal:repeat="term terms/sortby:first"
-	      tal:content="term/title" />
+    <div i18n:translate="">For term:</div>
+    <strong tal:repeat="term view/getTerms"
+            tal:content="term/title" />
 
     <div i18n:translate="">Using timetable:</div>
 
