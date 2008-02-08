@@ -3363,18 +3363,11 @@ def doctest_CalendarEventBookingView_getConflictingEvents():
         ...               Checker({'expand': 'zope.Public'},
         ...                       {'expand': 'zope.Public'}))
 
-        >>> class TimetableStub(object):
-        ...     def makeTimetableCalendar(self):
-        ...         return CalendarStub("timetable", [EventStub("tt")])
-
-        >>> from schooltool.timetable.interfaces import ICompositeTimetables
         >>> class ResourceStub(object):
-        ...     calendar = CalendarStub("calendar", [EventStub("cal")])
+        ...     calendar = CalendarStub("calendar", [EventStub("cal"), EventStub("tt")])
         ...     def __conform__(self, iface):
         ...         if iface is ISchoolToolCalendar:
         ...             return self.calendar
-        ...         elif iface is ICompositeTimetables:
-        ...             return TimetableStub()
 
         >>> context = EventStub("evt")
         >>> view = CalendarEventBookingView(context, TestRequest())
@@ -3382,7 +3375,6 @@ def doctest_CalendarEventBookingView_getConflictingEvents():
         >>> resource = ResourceStub()
         >>> conflicts = view.getConflictingEvents(resource)
         calendar.expand(2006-04-20 20:07:00+00:00, 2006-04-21 20:07:00+00:00)
-        timetable.expand(2006-04-20 20:07:00+00:00, 2006-04-21 20:07:00+00:00)
 
     All conflicting events are returned:
 
@@ -3391,10 +3383,9 @@ def doctest_CalendarEventBookingView_getConflictingEvents():
 
     If the event that is booking the resources is ignored:
 
-        >>> resource.calendar = CalendarStub("calendar", [context])
+        >>> resource.calendar = CalendarStub("calendar", [context, EventStub("tt")])
         >>> conflicts = view.getConflictingEvents(resource)
         calendar.expand(2006-04-20 20:07:00+00:00, 2006-04-21 20:07:00+00:00)
-        timetable.expand(2006-04-20 20:07:00+00:00, 2006-04-21 20:07:00+00:00)
 
         >>> [evt.unique_id for evt in conflicts]
         ['tt']
