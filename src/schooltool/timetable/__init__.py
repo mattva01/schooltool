@@ -686,11 +686,11 @@ from zope.deferredimport.deferredmodule import deprecated
 
 deprecated('This class has moved to schooltool.term.term. '
            'The reference will be gone in 0.15',
-           TermContainer='schooltool.term.term.TermContainer',
-           Term='schooltool.term.term.Term')
+           TermContainer='schooltool.term.term:TermContainer',
+           Term='schooltool.term.term:Term')
 
 deprecated('This class has moved to schooltool.timetable.schema. '
            'The reference will be gone in 0.15',
-           TimetableSchemaContainer='schooltool.timetable.schema.TimetableSchemaContainer',
-           TimetableSchema='schooltool.timetable.schema.TimetableSchema',
-           TimetableSchemaDay='schooltool.timetable.schema.TimetableSchemaDay')
+           TimetableSchemaContainer='schooltool.timetable.schema:TimetableSchemaContainer',
+           TimetableSchema='schooltool.timetable.schema:TimetableSchema',
+           TimetableSchemaDay='schooltool.timetable.schema:TimetableSchemaDay')

@@ -28,40 +28,40 @@ from zope.deferredimport.deferredmodule import deprecated
 
 deprecated('This class has moved to schooltool.app.app. '
            'The reference will be gone in 0.15',
-           SchoolToolApplication='schooltool.app.app.SchoolToolApplication',
-           ApplicationPreferences='schooltool.app.app.ApplicationPreferences')
+           SchoolToolApplication='schooltool.app.app:SchoolToolApplication',
+           ApplicationPreferences='schooltool.app.app:ApplicationPreferences')
 
 deprecated('This specific class has been deprecated. Use '
            '`schooltool.app.overlay.CalendarOverlayInfo` and the '
            '`IShowTimetables` instead. '
            'The reference will be gone in 0.15',
-           CalendarAndTTOverlayInfo='CalendarOverlayInfo')
+           CalendarAndTTOverlayInfo='schooltool.app.overlay:CalendarOverlayInfo')
 
 deprecated('This class has moved to schooltool.person.person. '
            'The reference will be gone in 0.15',
-           PersonContainer='schooltool.person.person.PersonContainer',
-           Person='schooltool.person.person.Person',
-           PersonPreferences='schooltool.person.preference.PersonPreferences')
+           PersonContainer='schooltool.person.person:PersonContainer',
+           Person='schooltool.person.person:Person',
+           PersonPreferences='schooltool.person.preference:PersonPreferences')
 
 deprecated('This class has moved to schooltool.group.group. '
            'The reference will be gone in 0.15',
-           GroupContainer='schooltool.group.group.GroupContainer',
-           Group='schooltool.group.group.Group')
+           GroupContainer='schooltool.group.group:GroupContainer',
+           Group='schooltool.group.group:Group')
 
 deprecated('This class has moved to schooltool.resource.resource. '
            'The reference will be gone in 0.15',
-           ResourceContainer='schooltool.resource.resource.ResourceContainer',
-           Resource='schooltool.resource.resource.Resource')
+           ResourceContainer='schooltool.resource.resource:ResourceContainer',
+           Resource='schooltool.resource.resource:Resource')
 
 deprecated('This class has moved to schooltool.course.course. '
            'The reference will be gone in 0.15',
-           CourseContainer='schooltool.course.course.CourseContainer',
-           Course='schooltool.course.course.CourseContainer')
+           CourseContainer='schooltool.course.course:CourseContainer',
+           Course='schooltool.course.course:CourseContainer')
 
 deprecated('This class has moved to schooltool.course.section. '
            'The reference will be gone in 0.15',
-           SectionContainer="schooltool.course.section.SectionContainer",
-           Section="schooltool.course.section.Section")
+           SectionContainer="schooltool.course.section:SectionContainer",
+           Section="schooltool.course.section:Section")
 
 ##############################################################################
 
