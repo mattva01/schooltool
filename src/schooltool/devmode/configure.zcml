@@ -95,7 +95,7 @@
 
   <browser:menuItem
       menu="schooltool_actions"
-      for="zope.app.error.interfaces.IErrorReportingUtility"
+      for="zope.error.error.IErrorReportingUtility"
       action="@@configure.html"
       title="Configure"
       layer="schooltool.devmode.skin.IDevModeLayer"
@@ -103,7 +103,7 @@
 
   <browser:menuItem
       menu="schooltool_actions"
-      for="zope.app.error.interfaces.IErrorReportingUtility"
+      for="zope.error.error.IErrorReportingUtility"
       action="@@index.html"
       title="Error List"
       layer=".skin.IDevModeLayer"
