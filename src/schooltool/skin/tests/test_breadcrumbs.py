@@ -40,6 +40,8 @@ def test_breadcrumbs():
     The default implementation is called ``GenericBreadcrumbInfo``. Here is
     how it works.
 
+      >>> from zope.security.management import newInteraction, endInteraction, restoreInteraction, setSecurityPolicy
+      >>> endInteraction()
       >>> class Object(object):
       ...     def __init__(self, parent=None, name=None):
       ...         self.__parent__ = parent
@@ -54,6 +56,20 @@ def test_breadcrumbs():
 
       >>> from zope.publisher.browser import TestRequest
       >>> request = TestRequest()
+
+    Let's stub the security policy:
+
+      >>> allow = False
+      >>> class FakeSecurityPolicy(object):
+      ...     def __init__(self, *participations):
+      ...         pass
+      ...     def checkPermission(self, permission, object):
+      ...         if (object == sub1 and permission == 'schooltool.view'):
+      ...             return allow
+      ...         return False
+
+      >>> old_policy = setSecurityPolicy(FakeSecurityPolicy)
+      >>> newInteraction(request)
 
     Now we can initialize the genreic info adapter:
 
@@ -117,23 +133,9 @@ def test_breadcrumbs():
     All the items are disabled, because there are no corwds that can
     see them.
 
-    Let's add a crowd that will allow people to look at our Object:
+    Let's allow looking at the Sub-Object 1:
 
       >>> allow = True
-      >>> class CanSeeStuffCrowd(object):
-      ...     def __init__(self, context):
-      ...         self.context = context
-      ...
-      ...     def contains(self, principal):
-      ...         if self.context == sub1:
-      ...             return allow
-      ...         return False
-
-      >>> from schooltool.securitypolicy.interfaces import ICrowd
-      >>> zope.component.provideAdapter(CanSeeStuffCrowd,
-      ...                               provides=ICrowd,
-      ...                               adapts=[Object],
-      ...                               name='schooltool.view')
 
     You can see the link to Sub-Object 1 now:
 
@@ -156,6 +158,8 @@ def test_breadcrumbs():
        {'active': False,
         'name': 'Sub-Object 1',
         'url': 'http://127.0.0.1/sub1'}]
+
+      >>> restoreInteraction()
 
     """
 
