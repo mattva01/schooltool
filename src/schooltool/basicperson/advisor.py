@@ -24,6 +24,7 @@ $Id$
 """
 from zope.component import adapts
 from zope.interface import implements
+from zope.security.proxy import removeSecurityProxy
 
 from schooltool.relationship.uri import URIObject
 from schooltool.relationship.relationship import RelationshipSchema
@@ -51,7 +52,7 @@ class PersonAdvisorAdapter(object):
     implements(IAdvisor)
 
     def __init__(self, context):
-        self.context = context
+        self.context = removeSecurityProxy(context)
 
     @property
     def students(self):
@@ -70,7 +71,7 @@ class PersonStudentAdapter(object):
     implements(IStudent)
 
     def __init__(self, context):
-        self.context = context
+        self.context = removeSecurityProxy(context)
 
     def getAdvisor(self):
         relationships = IRelationshipLinks(self.context)

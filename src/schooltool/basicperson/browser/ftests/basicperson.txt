@@ -9,7 +9,7 @@ A manager logs in
     >>> manager.handleErrors = False
     >>> manager.open('http://localhost/')
 
-Create a Basic Person
+Create a Basic Person, a teacher.
 
     >>> manager.getLink('Persons').click()
     >>> manager.getLink('New Person').click()
@@ -23,6 +23,9 @@ Create a Basic Person
     >>> manager.getControl('Username').value = "john"
     >>> manager.getControl('Password').value = "pwd"
     >>> manager.getControl('Confirm').value = "pwd"
+    >>> manager.getControl('Add').click()
+    >>> manager.getLink('edit groups').click()
+    >>> manager.getControl('Teachers').click()
     >>> manager.getControl('Add').click()
 
 Go to the person list:
@@ -73,6 +76,11 @@ Now there even are person export views:
           <title>Site Managers</title>
           <description>Manager Group.</description>
         </group>
+        <group>
+          <id>teachers</id>
+          <title>Teachers</title>
+          <description>Teachers.</description>
+        </group>
       </groups>
       <persons>
         <person>
@@ -84,6 +92,9 @@ Now there even are person export views:
           <basic:email>john@example.com</basic:email>
           <basic:phone>111-111-1111</basic:phone>
           <basic:birth_date>1980-01-01</basic:birth_date>
+          <groups>
+            <group id="teachers" />
+          </groups>
         </person>
         <person>
           <username>manager</username>
@@ -101,6 +112,13 @@ Now there even are person export views:
     >>> print manager.contents
     <person_export xmlns:basic="http://schooltool.org/ns/model/0.1/basicperson"
                    xmlns="http://schooltool.org/ns/model/0.1">
+      <groups>
+        <group>
+          <id>teachers</id>
+          <title>Teachers</title>
+          <description>Teachers.</description>
+        </group>
+      </groups>
       <persons>
         <person>
           <username>john</username>
@@ -111,6 +129,54 @@ Now there even are person export views:
           <basic:email>john@example.com</basic:email>
           <basic:phone>111-111-1111</basic:phone>
           <basic:birth_date>1980-01-01</basic:birth_date>
+          <groups>
+            <group id="teachers" />
+          </groups>
         </person>
       </persons>
     </person_export>
+
+Now let's create another teacher, Bob.
+
+    >>> manager.open('http://localhost/')
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+    >>> manager.getControl('First name').value = "Bob"
+    >>> manager.getControl('Last name').value = "Roberts"
+    >>> manager.getControl('Gender').value = ['male']
+    >>> manager.getControl('Email').value = 'bob@example.com'
+    >>> manager.getControl('Phone').value = '111-111-1111'
+    >>> manager.getControl('Birth date').value = '1980-01-01'
+
+    >>> manager.getControl('Username').value = "bob"
+    >>> manager.getControl('Password').value = "pwd"
+    >>> manager.getControl('Confirm').value = "pwd"
+    >>> manager.getControl('Add').click()
+    >>> manager.getLink('edit groups').click()
+    >>> manager.getControl('Teachers').click()
+    >>> manager.getControl('Add').click()
+
+Now, when we create a student, we will have two persons available to
+choose as an advisor.  We will choose John.
+
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+    >>> manager.getControl('First name').value = "Student"
+    >>> manager.getControl('Last name').value = "One"
+    >>> manager.getControl('Gender').value = ['male']
+    >>> manager.getControl('Email').value = 'student@example.com'
+    >>> manager.getControl('Phone').value = '111-111-1111'
+    >>> manager.getControl('Birth date').value = '1980-01-01'
+    >>> manager.getControl('Advisor').value = ['john']
+
+    >>> manager.getControl('Username').value = "student"
+    >>> manager.getControl('Password').value = "pwd"
+    >>> manager.getControl('Confirm').value = "pwd"
+    >>> manager.getControl('Add').click()
+
+We should be able to change the advisor to Bob with no problem.
+
+    >>> manager.getLink('Edit').click()
+    >>> manager.getControl('Advisor').value = ['bob']
+    >>> manager.getControl('Apply').click()
+

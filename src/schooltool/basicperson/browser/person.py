@@ -91,7 +91,8 @@ class PersonAddView(BasicForm):
     title = _("Add new person")
     template = ViewPageTemplateFile('templates/person_add.pt')
 
-    form_fields = form.Fields(IPersonAddForm, render_context=False)
+    form_fields = form.Fields(IPersonAddForm, render_context=False) + \
+                  form.Fields(IStudent)
     form_fields['password'].custom_widget = PasswordConfirmationWidget
 
     def username_validator(self, action, data):
