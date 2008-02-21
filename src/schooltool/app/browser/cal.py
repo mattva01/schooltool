@@ -367,12 +367,12 @@ class EventForDisplay(object):
                         zapi.absoluteURL(self.source_calendar, self.request),
                         self.unique_id,
                         self.dtstarttz.strftime('%Y-%m-%d'))
-                        
+
     def linkAllowed(self):
         """Return the URL where you can view/edit this event.
-        
+
         Returns the URL where can you edit this event if the user can
-        edit it, otherwise returns the URL where you can view this event.                        
+        edit it, otherwise returns the URL where you can view this event.
         """
 
         try:
