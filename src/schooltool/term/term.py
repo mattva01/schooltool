@@ -129,7 +129,6 @@ def getNextTermForDate(date):
         if date < term.first:
             after.append((term.first, term))
     if after:
-        return after[0][1]
         return min(after)[1]
     if before:
         return max(before)[1]

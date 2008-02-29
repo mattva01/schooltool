@@ -220,13 +220,14 @@ class TestGetTermForDate(unittest.TestCase):
         self.assert_(term.getNextTermForDate(date(2004, 12, 21)) is self.term2)
         self.assert_(term.getNextTermForDate(date(2005, 3, 17)) is self.term2)
         self.assert_(term.getNextTermForDate(date(2005, 11, 5)) is self.term2)
-        self.term3 = term.Term('Sample', date(2006, 1, 1), date(2006, 6, 1))
-        self.app["terms"]["term3"] = self.term3
-        self.assert_(term.getNextTermForDate(date(2005, 11, 5)) is self.term3)
+        self.term3 = term.Term('Sample', date(2005, 9, 1), date(2005, 12, 20))
+        self.app["terms"]['2005-fall'] = self.term3
+        self.assert_(term.getNextTermForDate(date(2005, 8, 30)) is self.term3)
         self.assert_(term.getNextTermForDate(date(2004, 8, 31)) is self.term1)
-        del self.app["terms"]["term3"]
+        self.assert_(term.getNextTermForDate(date(2004, 12, 22)) is self.term2)
         del self.app["terms"]['2004-fall']
         del self.app["terms"]['2005-spring']
+        del self.app["terms"]['2005-fall']
         self.assert_(term.getNextTermForDate(date(2004, 8, 31)) is None)
 
 
