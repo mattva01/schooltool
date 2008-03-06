@@ -7,6 +7,12 @@
 
   <include package="schooltool.common" />
 
+  <interface
+      interface=".skin.ISchoolTool2005Skin"
+      type="zope.publisher.interfaces.browser.IBrowserSkinType"
+      name="SchoolTool2005"
+      />
+
   <utility
       name="schooltool.stap2005"
       provides="zope.app.generations.interfaces.ISchemaManager"
@@ -21,7 +27,7 @@
   <include package="schooltool.term" />
   <include package="schooltool.timetable" />
 
-  <browser:defaultSkin name="SchoolTool" />
+  <browser:defaultSkin name="SchoolTool2005" />
 
   <!-- Provide local overrides of standard configurations-->
   <includeOverrides package="schooltool.devmode" file="overrides.zcml" />

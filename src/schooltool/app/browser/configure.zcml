@@ -498,6 +498,15 @@
       for="*"
       name="calendar_overlay"
       layer="schooltool.skin.ISchoolToolLayer"
+      class=".overlay.CalendarOverlayView"
+      template="templates/calendar_overlay.pt"
+      permission="zope.View"
+      />
+
+  <page
+      for="*"
+      name="calendar_overlay"
+      layer="schooltool.timetable.browser.skin.ITimetableLayer"
       class=".cal.CalendarSTOverlayView"
       template="templates/calendar_overlay.pt"
       permission="zope.View"

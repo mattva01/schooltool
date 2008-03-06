@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2007 Shuttleworth Foundation
+# Copyright (c) 2008 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,12 +17,12 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-SchoolTool 2007 skin.
+SchoolTool 2005 skin.
 """
 from schooltool.skin.skin import ISchoolToolSkin
 from schooltool.basicperson.browser.skin import IBasicPersonLayer
 from schooltool.timetable.browser.skin import ITimetableLayer
 
 
-class ISchoolTool2007Skin(ITimetableLayer, IBasicPersonLayer, ISchoolToolSkin):
-    """The SchoolTool2007 skin"""
+class ISchoolTool2005Skin(ITimetableLayer, IBasicPersonLayer, ISchoolToolSkin):
+    """The SchoolTool2005 skin"""
