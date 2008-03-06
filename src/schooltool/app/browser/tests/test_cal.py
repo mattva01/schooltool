@@ -5096,161 +5096,15 @@ class TestDailyCalendarRowsView_getPeriodsForDay(NiceDiffsMixin,
         self.assertEquals(len(view.getPeriodsForDay(date(2005, 6, 1))), 1)
 
 
-def doctest_CalendarSTOverlayView():
-    r"""Tests for CalendarSTOverlayView
-
-     Some setup:
-
-        >>> sbsetup.setUpCalendaring()
-
-        >>> from zope.component import provideAdapter
-        >>> from schooltool.app.app import ShowTimetables
-        >>> provideAdapter(ShowTimetables)
-
-        >>> from zope.interface import classImplements
-        >>> from zope.annotation.interfaces import IAttributeAnnotatable
-        >>> from schooltool.app.overlay import CalendarOverlayInfo
-        >>> classImplements(CalendarOverlayInfo, IAttributeAnnotatable)
-
-        >>> from schooltool.app.browser.cal import CalendarSTOverlayView
-        >>> View = SimpleViewClass('../templates/calendar_overlay.pt',
-        ...                        bases=(CalendarSTOverlayView,))
-
-    CalendarOverlayView is a view on anything.
-
-        >>> context = object()
-        >>> request = TestRequest()
-        >>> view = View(context, request)
-
-    It renders to an empty string unless its context is the calendar of the
-    authenticated user
-
-        >>> view()
-        u'\n'
-
-    If you are an authenticated user looking at your own calendar, this view
-    renders a calendar selection portlet.
-
-        >>> from schooltool.group.group import Group
-        >>> from schooltool.person.person import Person
-        >>> from schooltool.course.course import Course
-        >>> from schooltool.course.section import Section
-        >>> from schooltool.app.security import Principal
-        >>> app = sbsetup.setUpSchoolToolSite()
-        >>> person = app['persons']['whatever'] = Person('fred')
-        >>> group1 = app['groups']['g1'] = Group(title="Group 1")
-        >>> group2 = app['groups']['g2'] = Group(title="Group 2")
-        >>> history = app['courses']['c1'] = Course(title="History")
-        >>> section = app['sections']['s1'] = Section(title="History")
-        >>> history.sections.add(section)
-
-        >>> from schooltool.app.interfaces import IShowTimetables
-        >>> info = person.overlaid_calendars.add(
-        ...     ISchoolToolCalendar(group1), show=True)
-        >>> IShowTimetables(info).showTimetables = False
-        >>> info = person.overlaid_calendars.add(
-        ...     ISchoolToolCalendar(group2), show=False)
-        >>> info = person.overlaid_calendars.add(
-        ...     ISchoolToolCalendar(section), show=False)
-
-        >>> request = TestRequest()
-        >>> request.setPrincipal(Principal('id', 'title', person))
-        >>> view = View(ISchoolToolCalendar(person), request)
-
-        >>> print view()
-        <div id="portlet-calendar-overlay" class="portlet">
-        ...
-        ...<input type="checkbox" checked="checked" disabled="disabled" />...
-        ...<input type="checkbox" name="my_timetable" />...
-        ...My Calendar...
-        ...
-        ...<input type="checkbox" name="overlay:list"
-                  checked="checked" value="/groups/g1" />...
-        ...<input type="checkbox"
-                  name="overlay_timetables:list"
-                  value="/groups/g1" />...
-        ...
-        ...<input type="checkbox" name="overlay:list"
-                  value="/groups/g2" />...
-        ...<input type="checkbox" name="overlay_timetables:list"
-                  checked="checked" value="/groups/g2" />...
-        ...<td style="width: 100%">Group 2</td>...
-        ...
-        ...<input type="checkbox" name="overlay:list"
-                  value="/sections/s1" />...
-        ...<input type="checkbox" name="overlay_timetables:list"
-                  checked="checked" value="/sections/s1" />...
-        ...<td style="width: 100%"> -- History</td>...
-        ...
-        </div>
-
-    If the request has 'OVERLAY_APPLY', CalendarOverlayView applies your
-    changes
-
-        >>> request.form['overlay'] = [u'/groups/g2']
-        >>> request.form['overlay_timetables'] = [u'/groups/g1']
-        >>> request.form['OVERLAY_APPLY'] = u"Apply"
-        >>> print view()
-        <div id="portlet-calendar-overlay" class="portlet">
-        ...
-        ...<input type="checkbox" checked="checked" disabled="disabled" />...
-        ...<input type="checkbox" name="my_timetable" />...
-        ...My Calendar...
-        ...
-        ...<input type="checkbox" name="overlay:list"
-                  value="/groups/g1" />...
-        ...<input type="checkbox"
-                  name="overlay_timetables:list"
-                  checked="checked" value="/groups/g1" />...
-        ...
-        ...<input type="checkbox" name="overlay:list"
-                  checked="checked" value="/groups/g2" />...
-        ...<input type="checkbox" name="overlay_timetables:list"
-                  value="/groups/g2" />...
-        ...
-        </div>
-
-    It also redirects you to request.URL:
-
-        >>> request.response.getStatus()
-        302
-        >>> request.response.getHeader('Location')
-        'http://127.0.0.1'
-
-    There are two reasons for the redirect: first, part of the page template
-    just rendered might have become invalid when calendar overlay selection
-    changed, second, this lets the user refresh the page without having to
-    experience confirmation dialogs that say "Do you want to POST this form
-    again?".
-
-    If the request has 'OVERLAY_MORE', CalendarOverlayView redirects to
-    calendar_selection.html
-
-        >>> request = TestRequest()
-        >>> request.setPrincipal(Principal('id', 'title', person))
-        >>> request.form['OVERLAY_MORE'] = u"More..."
-        >>> view = View(ISchoolToolCalendar(person), request)
-        >>> content = view()
-        >>> request.response.getStatus()
-        302
-        >>> request.response.getHeader('Location')
-        'http://127.0.0.1/persons/fred/calendar_selection.html?nexturl=http%3A//127.0.0.1'
-
-    """
-
-
 def doctest_CalendarListSubscriber(self):
     """Tests for CalendarListSubscriber.
 
     This subscriber only has the getCalendars() method.
 
-    This subscriber lists timetable calendars and overlaid calendars
-    as well as the context calendar.  The color of each timetable
-    calendar is the same as of the corresponding personal calendar.
-
-    CalendarListSubscriber.getCalendars returns a list of calendars that
-    should be displayed.  This list always includes the context of
-    the subscriber, but it may also include other calendars as well.
+    CalendarListSubscriber.getCalendars returns a list of calendars
+    that should be displayed.  This list always includes the context
+    of the subscriber, but it may also include other calendars as
+    well.
 
     Some initial setup:
 
@@ -5266,44 +5120,37 @@ def doctest_CalendarListSubscriber(self):
         ...     __parent__ = property(_getParent)
 
         >>> from zope.interface import implements
-        >>> from schooltool.app.interfaces import IShowTimetables
         >>> class OverlayInfoStub:
-        ...     implements(IShowTimetables)
         ...
         ...     def __init__(self, title, color1, color2,
-        ...                  show=True, showTimetables=True):
+        ...                  show=True):
         ...         self.calendar = CalendarStub(title)
         ...         self.color1 = color1
         ...         self.color2 = color2
         ...         self.show = show
-        ...         self.showTimetables = showTimetables
 
         >>> from schooltool.person.interfaces import IPersonPreferences
         >>> from schooltool.app.interfaces import IHaveCalendar
         >>> from schooltool.app.cal import CALENDAR_KEY
         >>> from zope.interface import implements
         >>> from zope.annotation.interfaces import IAttributeAnnotatable
-        >>> from schooltool.timetable.interfaces import ICompositeTimetables
         >>> class PersonStub:
-        ...     implements(IAttributeAnnotatable, IHaveCalendar,
-        ...                ICompositeTimetables)
+        ...     implements(IAttributeAnnotatable, IHaveCalendar)
         ...     def __init__(self, title, calendar=None):
         ...         self.title = title
         ...         self.__annotations__= {CALENDAR_KEY: calendar}
-        ...     def makeTimetableCalendar(self):
-        ...         return CalendarStub(self.title + ' (timetable)')
         ...     def __conform__(self, interface):
         ...         if interface is IPersonPreferences:
         ...             return PreferenceStub()
         ...     overlaid_calendars = [
         ...         OverlayInfoStub('Other Calendar', 'red', 'blue',
-        ...                         True, False),
+        ...                         True),
         ...         OverlayInfoStub('Another Calendar', 'green', 'red',
-        ...                         False, True),
+        ...                         False),
         ...         OverlayInfoStub('Interesting Calendar', 'yellow', 'white',
-        ...                         True, True),
+        ...                         True),
         ...         OverlayInfoStub('Boring Calendar', 'brown', 'magenta',
-        ...                         False, False)]
+        ...                         False)]
 
         >>> class PreferenceStub:
         ...     def __init__(self):
@@ -5322,7 +5169,6 @@ def doctest_CalendarListSubscriber(self):
         >>> for c, col1, col2 in subscriber.getCalendars():
         ...     print '%s (%s, %s)' % (c.title, col1, col2)
         My Calendar (#9db8d2, #7590ae)
-        My Calendar (timetable) (#9db8d2, #7590ae)
 
     If the authenticated user is looking at his own calendar, then
     a list of overlaid calendars is taken into consideration
@@ -5341,37 +5187,16 @@ def doctest_CalendarListSubscriber(self):
         ...     print '%s (%s, %s)' % (c.title, col1, col2)
         My Calendar (#9db8d2, #7590ae)
         Other Calendar (red, blue)
-        Another Calendar (timetable) (green, red)
         Interesting Calendar (yellow, white)
-        Interesting Calendar (timetable) (yellow, white)
 
-    If the person has the current timetable display unchecked, the composite
-    timetable calendar is not included in the list:
-
-        >>> from zope.annotation.interfaces import IAnnotations
-        >>> annotations = IAnnotations(principal.person)
-        >>> from schooltool.app.browser.cal import CalendarSTOverlayView
-        >>> annotations[CalendarSTOverlayView.SHOW_TIMETABLE_KEY] = False
-
-        >>> for c, col1, col2 in subscriber.getCalendars():
-        ...     print '%s (%s, %s)' % (c.title, col1, col2)
-        My Calendar (#9db8d2, #7590ae)
-        Other Calendar (red, blue)
-        Another Calendar (timetable) (green, red)
-        Interesting Calendar (yellow, white)
-        Interesting Calendar (timetable) (yellow, white)
-
-        >>> annotations[CalendarSTOverlayView.SHOW_TIMETABLE_KEY] = True
-
-    Only the timetable is overlaid if the user is looking at someone else's
-    calendar:
+    Only the context calendar is shown if the user is looking at
+    someone else's calendar:
 
         >>> subscriber = CalendarListSubscriber(CalendarStub('Some Calendar'),
         ...                                     request)
         >>> for c, col1, col2 in subscriber.getCalendars():
         ...     print '%s (%s, %s)' % (c.title, col1, col2)
         Some Calendar (#9db8d2, #7590ae)
-        Some Calendar (timetable) (#9db8d2, #7590ae)
 
     """
 

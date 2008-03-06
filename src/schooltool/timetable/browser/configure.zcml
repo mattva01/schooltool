@@ -224,4 +224,20 @@
       permission="schooltool.edit"
       />
 
+   <zope:subscriber
+       for="schooltool.app.interfaces.ISchoolToolCalendar
+            zope.publisher.interfaces.http.IHTTPRequest"
+       provides="schooltool.app.browser.interfaces.ICalendarProvider"
+       factory=".overlay.TimetableCalendarListSubscriber"
+       />
+
+   <page
+       for="*"
+       name="calendar_overlay"
+       layer="schooltool.timetable.browser.skin.ITimetableLayer"
+       class="schooltool.timetable.browser.overlay.CalendarSTOverlayView"
+       template="templates/calendar_overlay.pt"
+       permission="zope.View"
+       />
+
 </configure>

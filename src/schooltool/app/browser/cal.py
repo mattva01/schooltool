@@ -26,7 +26,6 @@ import urllib
 import base64
 import calendar
 from datetime import datetime, date, time, timedelta
-from sets import Set
 
 import transaction
 from pytz import timezone, utc
@@ -43,7 +42,6 @@ from zope.security.checker import canAccess, canWrite
 from zope.schema import Date, TextLine, Choice, Int, Bool, List, Text
 from zope.schema.interfaces import RequiredMissing, ConstraintNotSatisfied
 from zope.app import zapi
-from zope.annotation.interfaces import IAnnotations
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.app.form.browser.add import AddView
 from zope.app.form.browser.editview import EditView
@@ -56,7 +54,6 @@ from zope.publisher.browser import BrowserView
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.filerepresentation.interfaces import IWriteFile, IReadFile
 from zope.session.interfaces import ISession
-from zope.traversing.api import getPath
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.html.field import HtmlFragment
 from zope.component import queryAdapter
@@ -72,13 +69,12 @@ from schooltool.table.table import CheckboxColumn
 from schooltool.table.interfaces import IFilterWidget
 from schooltool.app.browser import ViewPreferences, same
 from schooltool.app.browser import pdfcal
-from schooltool.app.browser.overlay import CalendarOverlayView
 from schooltool.app.browser.interfaces import ICalendarProvider
 from schooltool.app.browser.interfaces import IEventForDisplay
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
-from schooltool.app.interfaces import IHaveCalendar, IShowTimetables
+from schooltool.app.interfaces import IHaveCalendar
 from schooltool.table.batch import IterableBatch
 from schooltool.table.table import label_cell_formatter_factory
 from schooltool.calendar.interfaces import ICalendar
@@ -94,10 +90,8 @@ from schooltool.calendar.interfaces import IWeeklyRecurrenceRule
 from schooltool.calendar.utils import parse_date, parse_datetimetz
 from schooltool.calendar.utils import parse_time, weeknum_bounds
 from schooltool.calendar.utils import week_start, prev_month, next_month
-from schooltool.course.interfaces import ISection
 from schooltool.person.interfaces import IPerson, IPersonPreferences
 from schooltool.person.interfaces import vocabulary
-from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.term.term import getTermForDate
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.attendance.interfaces import IAttendanceCalendarEvent
@@ -1453,96 +1447,6 @@ class DailyCalendarRowsView(BrowserView):
         return time(hour, minute).strftime(prefs.timeformat)
 
 
-class CalendarSTOverlayView(CalendarOverlayView):
-    """View for the calendar overlay portlet.
-
-    Much like the original CalendarOverlayView in SchoolBell, this view allows
-    you to choose calendars to be displayed, but this one allows you to view
-    timetables of the calendar owners as well.
-
-    This view can be used with any context, but it gets rendered to an empty
-    string unless context is the calendar of the authenticated user.
-
-    Note that this view contains a self-posting form and handles submits that
-    contain 'OVERLAY_APPLY' or 'OVERLAY_MORE' in the request.
-    """
-
-    SHOW_TIMETABLE_KEY = 'schooltool.app.browser.cal.show_my_timetable'
-
-    def items(self):
-        """Return items to be shown in the calendar overlay.
-
-        Does not include "my calendar".
-
-        Each item is a dict with the following keys:
-
-            'title' - title of the calendar, or label for section calendars
-
-            'calendar' - the calendar object
-
-            'color1', 'color2' - colors assigned to this calendar
-
-            'id' - identifier for form controls
-
-            'checked' - was this item checked for display (either "checked" or
-            None)?
-
-            'checked_tt' - was this calendar owner's timetable checked for
-            display?
-        """
-        person = IPerson(self.request.principal)
-        def getTitleOrLabel(item):
-            object = item.calendar.__parent__
-            if ISection.providedBy(object):
-                section = removeSecurityProxy(object)
-                if person in section.instructors:
-                    return section.title
-                else:
-                    return section.label
-            else:
-                return item.calendar.title
-
-        items = [((item.calendar.title, getPath(item.calendar.__parent__)),
-                  {'title': getTitleOrLabel(item),
-                   'id': getPath(item.calendar.__parent__),
-                   'calendar': item.calendar,
-                   'checked': item.show and "checked" or '',
-                   'checked_tt':
-                       IShowTimetables(item).showTimetables and "checked" or '',
-                   'color1': item.color1,
-                   'color2': item.color2})
-                 for item in person.overlaid_calendars
-                 if canAccess(item.calendar, '__iter__')]
-        items.sort()
-        return [i[-1] for i in items]
-
-    def update(self):
-        """Process form submission."""
-        if 'OVERLAY_APPLY' in self.request:
-            person = IPerson(self.request.principal)
-            selected = Set(self.request.get('overlay_timetables', []))
-            for item in person.overlaid_calendars:
-                path = getPath(item.calendar.__parent__)
-                # XXX this is related to the issue
-                # http://issues.schooltool.org/issue391!
-                IShowTimetables(item).showTimetables = path in selected
-
-            # The unproxied object will only be used for annotations.
-            person = removeSecurityProxy(person)
-
-            annotations = IAnnotations(person)
-            annotations[self.SHOW_TIMETABLE_KEY] = bool('my_timetable'
-                                                        in self.request)
-        return CalendarOverlayView.update(self)
-
-    def myTimetableShown(self):
-        person = IPerson(self.request.principal)
-        # The unproxied object will only be used for annotations.
-        person = removeSecurityProxy(person)
-        annotations = IAnnotations(person)
-        return annotations.get(self.SHOW_TIMETABLE_KEY, False)
-
-
 class CalendarListSubscriber(object):
     """A subscriber that can tell which calendars should be displayed.
 
@@ -1563,26 +1467,15 @@ class CalendarListSubscriber(object):
         yield (self.context, '#9db8d2', '#7590ae')
 
         parent = zapi.getParent(self.context)
-        ttcalendar = ICompositeTimetables(parent).makeTimetableCalendar()
 
         user = IPerson(self.request.principal, None)
         if user is None:
-            yield (ttcalendar, '#9db8d2', '#7590ae')
             return # unauthenticated user
 
         unproxied_context = removeSecurityProxy(self.context)
         unproxied_calendar = removeSecurityProxy(ISchoolToolCalendar(user))
         if unproxied_context is not unproxied_calendar:
-            yield (ttcalendar, '#9db8d2', '#7590ae')
             return # user looking at the calendar of some other person
-
-        # personal timetable
-        unproxied_person = removeSecurityProxy(user) # for annotations
-        annotations = IAnnotations(unproxied_person)
-        if annotations.get(CalendarSTOverlayView.SHOW_TIMETABLE_KEY, False):
-            yield (ttcalendar, '#9db8d2', '#7590ae')
-            # Maybe we should change the colour to differ from the user's
-            # personal calendar?
 
         for item in user.overlaid_calendars:
             if canAccess(item.calendar, '__iter__'):
@@ -1590,11 +1483,6 @@ class CalendarListSubscriber(object):
                 if item.show:
                     yield (item.calendar, item.color1, item.color2)
 
-                # overlaid timetables
-                if IShowTimetables(item).showTimetables:
-                    owner = item.calendar.__parent__
-                    ttcalendar = ICompositeTimetables(owner).makeTimetableCalendar()
-                    yield (ttcalendar, item.color1, item.color2)
 
 #
 # Calendar modification views

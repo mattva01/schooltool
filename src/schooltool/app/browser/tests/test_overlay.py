@@ -52,9 +52,9 @@ def doctest_CalendarOverlayView():
 
     Some initial setup:
 
-        >>> from schooltool.app.browser.cal import CalendarSTOverlayView
+        >>> from schooltool.app.browser.overlay import CalendarOverlayView
         >>> View = SimpleViewClass('../templates/calendar_overlay.pt',
-        ...                        bases=(CalendarSTOverlayView,))
+        ...                        bases=(CalendarOverlayView,))
 
     CalendarOverlayView is a view on anything.
 
@@ -142,7 +142,6 @@ def doctest_CalendarOverlayView():
         'http://127.0.0.1/persons/fred/calendar_selection.html?nexturl=http%3A//127.0.0.1'
 
     """
-
 
 def doctest_CalendarOverlayView_items():
     """Tests for CalendarOverlayView.items().

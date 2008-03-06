@@ -504,15 +504,6 @@
       />
 
   <page
-      for="*"
-      name="calendar_overlay"
-      layer="schooltool.timetable.browser.skin.ITimetableLayer"
-      class=".cal.CalendarSTOverlayView"
-      template="templates/calendar_overlay.pt"
-      permission="zope.View"
-      />
-
-  <page
       for="schooltool.calendar.interfaces.ICalendar"
       name="daily_calendar_rows"
       layer="schooltool.skin.ISchoolToolLayer"
