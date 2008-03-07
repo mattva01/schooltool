@@ -637,6 +637,9 @@ class ITimetables(Interface):
 
     object = Attribute("The object these timetables are for.")
 
+    terms = Attribute(
+        """A list of terms this object was scheduled for.""")
+
     timetables = Object(
         schema=ITimetableDict,
         title=u"Private timetables of this object",

@@ -143,6 +143,7 @@ from zope.app.generations.utility import findObjectsProviding
 
 from schooltool.calendar.simple import ImmutableCalendar
 
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 
 from schooltool.timetable.interfaces import ITimetableCalendarEvent
@@ -579,6 +580,17 @@ class TimetablesAdapter(object):
         if self.timetables is None:
             self.timetables = annotations[TIMETABLES_KEY] = TimetableDict()
             self.timetables.__parent__ = context
+
+    @property
+    def terms(self):
+        term_container = ISchoolToolApplication(None)['terms']
+        term_ids = set()
+        for key in self.timetables.keys():
+            term_id = key.split('.')[0]
+            term_ids.add(term_id)
+        terms = [term_container[term_id]
+                 for term_id in term_ids]
+        return terms
 
 
 class CompositeTimetables(object):

@@ -816,6 +816,17 @@ class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
         ztapi.provideAdapter(IOwnTimetables, ITimetables,
                              TimetablesAdapter)
 
+        app = {}
+        app['terms'] = {'term1': "Term 1",
+                        'term2': "Term 2",
+                        'term3': "Term 3"}
+
+        from zope.component import provideAdapter
+        from schooltool.app.interfaces import ISchoolToolApplication
+        provideAdapter(lambda ctx: app,
+                       adapts=[None],
+                       provides=ISchoolToolApplication)
+
     def tearDown(self):
         setup.placefulTearDown()
 
@@ -827,6 +838,18 @@ class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
         verifyObject(ITimetables, tm)
         self.assert_(isinstance(tm.timetables, TimetableDict))
         self.assertEqual(tm.timetables.__parent__, content)
+
+    def test_terms(self):
+        from schooltool.timetable import TimetablesAdapter
+
+        content = ContentStub()
+        tm = TimetablesAdapter(content)
+        self.assertEqual(tm.terms, [])
+        tm.timetables['term1.foo'] = TimetableStub()
+        self.assertEqual(tm.terms, ["Term 1"])
+
+        tm.timetables['term2.bar'] = TimetableStub()
+        self.assertEqual(sorted(tm.terms), ["Term 1", "Term 2"])
 
 
 def doctest_CompositeTimetables():
