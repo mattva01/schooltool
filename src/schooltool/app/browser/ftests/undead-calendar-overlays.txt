@@ -38,7 +38,7 @@ Let's log in as the new user:
 Let's add the group's calendar to his calendar overlays:
 
     >>> srichter_browser.open('http://localhost/persons/srichter/calendar')
-    >>> srichter_browser.getControl('More...').click()
+    >>> srichter_browser.getControl('Manage...').click()
 
     >>> srichter_browser.getControl('A Group').selected = True
     >>> srichter_browser.getControl('Apply').click()

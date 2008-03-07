@@ -75,7 +75,7 @@ def person_attendance_edit(browser, subject):
 def calendar_overlays_edit(browser, subject):
     browser.open('http://localhost/persons/%s/calendar' % subject)
     browser.getControl('Apply').click()
-    browser.getControl('More...').click()
+    browser.getControl('Manage...').click()
     browser.getControl('SchoolTool site-wide calendar').click()
     browser.getControl('Apply').click()
     return 'Calendar for' in browser.contents

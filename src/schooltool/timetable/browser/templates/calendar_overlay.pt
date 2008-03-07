@@ -45,7 +45,7 @@
     <div class="controls">
       <input name="OVERLAY_APPLY" type="submit" value="Apply"
             i18n:attributes="value"/>
-      <input name="OVERLAY_MORE" type="submit" value="More..."
+      <input name="OVERLAY_MORE" type="submit" value="Manage..."
             i18n:attributes="value"/>
     </div>
   </form>

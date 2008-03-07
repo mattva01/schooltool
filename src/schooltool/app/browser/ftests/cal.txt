@@ -606,16 +606,16 @@ calendar, you will see a new portlet on the left:
           <input name="OVERLAY_APPLY" type="submit"
                  value="Apply" />
           <input name="OVERLAY_MORE" type="submit"
-                 value="More..." />
+                 value="Manage..." />
     ...
       </form>
     </div>
     ...
 
-Initially it contains only your own calendar.  You can click on "More..."
+Initially it contains only your own calendar.  You can click on "Manage..."
 and add other calendars to this list.
 
-    >>> frog.getControl('More...').click()
+    >>> frog.getControl('Manage...').click()
 
     >>> print frog.contents
     <BLANKLINE>
@@ -671,7 +671,7 @@ other built-in groups and the application calendar
 
 Let's remove the application calendar from the overlay
 
-    >>> frog.getControl('More...').click()
+    >>> frog.getControl('Manage...').click()
 
     >>> frog.getControl('SchoolTool site-wide calendar').click()
     >>> frog.getControl('Apply').click()
@@ -687,7 +687,7 @@ available in the overlay selection view:
 
 Demonstrate that it is there now:
 
-    >>> frog.getControl('More...').click()
+    >>> frog.getControl('Manage...').click()
     >>> frog.getControl('SchoolTool site-wide calendar')
     <ItemControl name='application' type='checkbox' optionValue='application' selected=False>
 
