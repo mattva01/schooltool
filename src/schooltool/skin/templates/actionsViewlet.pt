@@ -1,2 +1,2 @@
-  <a tal:attributes="href string:${context/@@absolute_url}/${view/link}"
-     tal:content="view/title">Title</a>
+  <div class="content-nav"><a tal:attributes="href string:${context/@@absolute_url}/${view/link}"
+       tal:content="view/title">Title</a></div>

@@ -425,42 +425,6 @@ Let's add a calendar through iCalendar PUT view (so we would know the event id):
     Set-Cookie: ...
     <BLANKLINE>
 
-Let's see what the breadcrumbs are for this event:
-
-    >>> frog.open('http://localhost/'
-    ...           'persons/frog/calendar/ZHVtbXktdWlk/edit.html')
-    >>> print analyze.queryHTML('//div[@class="breadcrumbs"]',
-    ...                         frog.contents)[0]
-    <div class="breadcrumbs">
-    <BLANKLINE>
-    <BLANKLINE>
-    <BLANKLINE>
-              <a href="http://localhost">school</a>
-    <BLANKLINE>
-    <BLANKLINE>
-              &#187;
-    <BLANKLINE>
-              <span>persons</span>
-    <BLANKLINE>
-    <BLANKLINE>
-              &#187;
-    <BLANKLINE>
-              <a href="http://localhost/persons/frog">Frog</a>
-    <BLANKLINE>
-    <BLANKLINE>
-              &#187;
-              <a href="http://localhost/persons/frog/calendar">Calendar</a>
-    <BLANKLINE>
-    <BLANKLINE>
-    <BLANKLINE>
-              &#187;
-    <BLANKLINE>
-              <a href="http://localhost/persons/frog/calendar/ZHVtbXktdWlk/edit.html">Important event</a>
-    <BLANKLINE>
-            </div>
-    <BLANKLINE>
-
-
 Let Frog modify this event:
 
     >>> frog.open('http://localhost/'

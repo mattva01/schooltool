@@ -3,10 +3,6 @@
                        actions view/context/@@view_get_menu/schooltool_actions">
   <table id="dropdowncontainer">
     <tr>
-      <td tal:content="structure provider:schooltool.NavigationMenu" />
-      <tal:block define="target view/__parent__/actualContext|nocall:context">
-        <td tal:content="structure provider:schooltool.ActionsMenu" />
-      </tal:block>
       <td tal:repeat="viewlet options/viewlets"
           tal:content="structure viewlet/render">viewlet</td>
     </tr>

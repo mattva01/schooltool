@@ -3,15 +3,12 @@
            tal:define="url view/context/@@absolute_url;
                        actions view/context/@@view_get_menu/schooltool_actions">
 
-  <div class="dropdown contracted">
-    <h3 class="title"
-        i18n:translate="">Actions</h3>
     <!-- old-style menu actions (obsolete) -->
-    <a tal:repeat="view actions"
-       tal:attributes="href string:${url}/${view/action}"
-       tal:content="view/title">Item one</a>
+    <div class="content-nav" tal:repeat="view actions">
+      <a tal:attributes="href string:${url}/${view/action}"
+         tal:content="view/title">Item one</a></div>
+
     <!-- new-style menu actions (yay!) -->
     <tal:block repeat="viewlet options/viewlets"
                content="structure viewlet/render" />
-  </div>
 </tal:block>

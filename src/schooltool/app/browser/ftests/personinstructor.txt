@@ -75,7 +75,7 @@ Let's make toad join the section:
     >>> manager.getLink('edit individuals').click()
     >>> manager.getControl(name='add_item.toad').value = True
     >>> manager.getControl('Add').click()
-    >>> manager.getLink('1').click()
+    >>> manager.getControl('OK').click()
 
 Now frog can see the demographics of toad alright:
 

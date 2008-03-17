@@ -1,6 +1,11 @@
-<div class="dropdown contracted"
-     i18n:domain="schooltool">
-  <h3 class="title" i18n:translate="">Navigation</h3>
-  <tal:block repeat="viewlet options/viewlets"
-	     content="structure viewlet/render" />
-</div>
+<span tal:repeat="viewlet options/viewlets"
+      tal:content="structure viewlet/render" />
+<tal:if condition="request/principal/schooltool:authenticated"
+        define="person request/principal/schooltool:person">
+  <span><a i18n:translate=""
+           tal:attributes="href string:${person/@@absolute_url}/calendar"
+           >My Calendar</a></span>
+</tal:if>
+<span><a i18n:translate=""
+         tal:attributes="href context/schooltool:app/@@absolute_url"
+         >SchoolTool</a></span>

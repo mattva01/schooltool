@@ -16,9 +16,11 @@ log in however.
 When we go to the person container, for example, we should be able to see
 the help:
 
-    >>> manager.getLink('persons').click()
+    >>> manager.getLink('Persons').click()
     >>> 'Context Help' in manager.contents
     True
+
+
 
 In reality, you would now click on the link and a new window should open with
 the content. Since our test-browser does not support Javascript, we have to do

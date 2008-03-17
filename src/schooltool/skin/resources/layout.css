@@ -21,8 +21,7 @@ head:first-child+BODY {
 }
 
 BODY {
-	margin: 0;
-	padding:0 ;
+        margin: 0px 0px;
 }
 
 /********************************************************* END: Base.css */
@@ -46,8 +45,7 @@ IMG {
 }
 
 A, A:link, A:visited, A:hover, A:active {
-	color: #314e6c;
-	font-weight: bold;
+        color: #304d6b;
 }
 
 H1, H2, H3, H4, H5, H6 {
@@ -124,6 +122,25 @@ FORM div.oneline-form div.value{
 }
 
 #header {
+  color: black;
+  padding: 5px;
+  font-size: 1.4em;
+
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  text-align: left;
+  background: #eae8e3;
+}
+
+#header > span {
+  display: inline;
+  padding: 5px;
+  padding-top: 10px;
+  padding-bottom: 5px;
+
+  border-top: none;
+  margin: 0px;
 }
 
 #header .logo IMG {
@@ -151,6 +168,36 @@ FORM div.oneline-form div.value{
   position: absolute;
   right: 1em;
   top: 4em;
+}
+
+#login {
+  background: #990000 url(toolbar-background.png) repeat-x scroll left top;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  color: white;
+  padding: .8ex 1.6ex;
+  margin-top: 0px;
+  font-size: .75em;
+  font-weight: bold;
+}
+
+#login-left {
+ display: inline;
+}
+
+#login-right {
+ display: inline;
+ float: right;
+}
+
+#login-logout a {
+  font-weight: bold;
+  color: lightblue;
+}
+
+#login-name {
+  font-weight: bold;
+  color: white;
 }
 
 #schooltool-name {
@@ -503,6 +550,36 @@ margin: -35px 0px 0px 0px;
 #content-header H1 {
 }
 
+
+#content {
+  margin: 10px 5px 0px;
+ }
+
+div#content-nav-group {
+ margin-top: -0.5em;
+
+ }
+
+div.content-nav {
+  background: #eae8e3;
+  color: black;
+  border: 1px solid #bab5ab;
+  padding: 0.2em 0.3em;
+  width: auto;
+  display: inline;
+  font-weight: bold;
+  font-size: 1em;
+  line-height: 2em;
+  white-space: nowrap;
+ }
+
+.clear {
+ height: .1em;
+ margin: 0;
+ padding: 0;
+ clear: both;
+}
+
 #content-body {
   margin-top: 20px;
 }
@@ -545,11 +622,14 @@ margin: -35px 0px 0px 0px;
 }
 
 #footer {
-	font-size: xx-small;
-	background: #eae8e3;
-	border-top: 1px solid #bab5ab;
-	border-bottom: 1px solid #bab5ab;
-	line-height: 1em;
+  padding: .9em 4em;
+  margin: 0em 0em 0em 0em;
+  background: #eae8e3;
+  text-align: center;
+  border-top: .1ex solid #bab5ab;
+  border-bottom: .1ex solid #bab5ab;
+  font-size: .8em;
+  clear: both;
 }
 
 #footer P {

@@ -31,79 +31,66 @@
   </head>
   <body>
     <div id="header">
-      <div class="logo">
-        <a class="main_logo" href=""
-          tal:define="url context/schooltool:app/@@absolute_url"
-          tal:attributes="href url">
-          <metal:block metal:define-slot="zonki">
-            <img src="logo.png" alt="SchoolTool" i18n:attributes="alt"
-            tal:attributes="src context/++resource++zonki-regular.png"/>
-          </metal:block>
-          <div id="schooltool-name"><span id="logo-left">School</span><span id="logo-right">Tool</span></div>
-          <div tal:content="context/schooltool:app/title" id="school-title">My Own School</div>
-        </a>
-        <tal:block replace="structure provider:schooltool.Header" />
-      </div>
-      <div class="tools">
-        <div class="breadcrumbs">
-        <tal:for tal:repeat="breadcrumb context/@@breadcrumbs/crumbs">
-          <tal:if condition="not:repeat/breadcrumb/start">&#187;</tal:if>
-          <a tal:condition="breadcrumb/active"
-             tal:attributes="href breadcrumb/url"
-             tal:content="breadcrumb/name">Breadcrumb</a>
-          <span tal:condition="not: breadcrumb/active"
-                tal:content="breadcrumb/name">Breadcrumb</span>
-        </tal:for>
-        </div>
-        <div
+
+      <tal:block tal:content="structure provider:schooltool.NavigationMenu" />
+      <tal:block replace="structure provider:schooltool.Header" />
+
+      <div id="login"
           tal:define="user request/principal;
                       url context/schooltool:app/@@absolute_url">
 
+        <div id="login-right">
+
           <tal:if condition="not:user/schooltool:authenticated">
             <a id="tools-login" i18n:translate=""
-              tal:attributes="href string:${url}/auth/@@login.html">Log In</a>
+               tal:attributes="href string:${url}/auth/@@login.html">Log In</a>
           </tal:if>
 
           <tal:if condition="user/schooltool:authenticated"
                   define="person user/schooltool:person">
             <span metal:define-macro="logged_user">
 
-              <tal:span i18n:translate="">User:</tal:span>
+              <tal:span i18n:translate="">Logged in as:</tal:span>
 
               <tal:if condition="not:person">
                 <span id="tools-zmi-principal"
-                  tal:content="user/title">ZMI Principal</span>
+                      tal:content="user/title">ZMI Principal</span>
               </tal:if>
 
               <tal:if condition="person">
                 <a id="tools-principal"
                    tal:attributes="href person/@@absolute_url"
                    tal:content="user/title">Schoolbell Person</a> |
-                <a id="tools-calendar" i18n:translate=""
-                  tal:attributes="href string:${person/@@absolute_url}/calendar"
-                  >My Calendar</a> |
                 <a id="tools-logout" i18n:translate=""
-                  tal:attributes="href string:${url}/auth/@@logout.html"
-                  >Log Out</a>
+                   tal:attributes="href string:${url}/auth/@@logout.html"
+                   >Log Out</a>
               </tal:if>
 
             </span>
           </tal:if>
 
           <!-- XXX either all modules should include Help, or core
-          should provide a dummy replacement, because eating errors is
-          a bad idea -->
+               should provide a dummy replacement, because eating errors is
+               a bad idea -->
           <tal:block replace="structure provider:schooltool.Help"
                      on-error="nothing" />
-
+        </div>
+        <div id="login-left">
+          <span>SchoolTool &mdash; free admnistration software for Lee High School</span>
         </div>
       </div>
     </div>
+
+    <tal:block define="target view/actualContext|nocall:context">
+      <div id="content-nav-group" tal:content="structure provider:schooltool.ActionsMenu" />
+    </tal:block>
+
+    <div id="action-bar">
+      <div metal:define-slot="actions-bar"
+           tal:replace="structure provider:schooltool.MenuBar" />
+    </div>
+
     <div id="columns">
-      <div id="action-bar">
-	<div metal:define-slot="actions-bar"
-	     tal:replace="structure provider:schooltool.MenuBar" />
-      </div>
       <metal:block define-slot="column-left">
         <metal:block define-slot="column-left-extra"/>
       </metal:block>

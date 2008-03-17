@@ -132,7 +132,8 @@ Schedule the section in the timetable:
     >>> manager.getControl(name='Monday.A').value = True
     >>> manager.getControl(name='Friday.B').value = True
     >>> manager.getControl('Save').click()
-    >>> manager.getLink('1').click()
+    >>> manager.getLink('Sections').click()
+    >>> manager.getLink('Math course (1)').click()
     >>> manager.getLink('View Timetables').click()
     >>> print manager.contents
     <BLANKLINE>

@@ -45,7 +45,7 @@ Section and resources:
     >>> manager.getLink('edit individuals').click()
     >>> manager.getControl('Student1').click()
     >>> manager.getControl('Add').click()
-    >>> manager.getLink('1').click()
+    >>> manager.getControl('OK').click()
     >>> manager.getLink('book resources').click()
     >>> manager.getControl('Time travel machine').click()
     >>> manager.getControl('Add').click()
@@ -67,7 +67,8 @@ Set up activities and put marks:
     >>> manager.getControl('Maximum').value = '5'
     >>> manager.getControl('Identifier').value = 'storig'
     >>> manager.getControl('Add').click()
-    >>> manager.getLink('1').click()
+    >>> manager.getLink('Sections').click()
+    >>> manager.getLink('History 6 (1)').click()
     >>> manager.getLink('Gradebook').click()
     >>> manager.getLink('SchoolTool origin').click()
     Traceback (most recent call last):

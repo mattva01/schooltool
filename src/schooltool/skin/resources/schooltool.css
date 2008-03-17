@@ -46,6 +46,15 @@ td.number {
     vertical-align: middle;
 }
 
+#header > span#header-selected {
+
+  background: white;
+  color: #990000;
+  font-weight: bold;
+  border: 1px solid #990000;
+
+}
+
 /* Terms */
 
 table.schooldaymodel {

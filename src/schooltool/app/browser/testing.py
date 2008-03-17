@@ -224,6 +224,20 @@ def setUp(test=None):
         skin.skin.IMenuBarMenuManager,
         name=name)
 
+    name = 'schooltool.NavigationMenu'
+    zope.component.provideAdapter(
+        manager.ViewletManager(name, skin.skin.INavigationManager),
+        (Interface, IDefaultBrowserLayer, IBrowserView),
+        skin.skin.INavigationManager,
+        name=name)
+
+    name = 'schooltool.ActionsMenu'
+    zope.component.provideAdapter(
+        manager.ViewletManager(name, skin.skin.IActionMenuManager),
+        (Interface, IDefaultBrowserLayer, IBrowserView),
+        skin.skin.IActionMenuManager,
+        name=name)
+
 
 def tearDown(test=None):
     """Tear down the test fixture for schooltool.app.browser doctests."""
