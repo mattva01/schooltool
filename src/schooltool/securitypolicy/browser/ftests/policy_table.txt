@@ -384,6 +384,7 @@ Make personal calendar public:
 Site wide access control:
 
     >>> manager.open('http://localhost/')
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Access Control').click()
 
     >>> manager.getControl('Everyone can view the application calendar').click()
