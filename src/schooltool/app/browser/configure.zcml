@@ -511,16 +511,15 @@
 
 
   <!--class=".overlay.CalendarOverlayView"-->
-  <configure package="schooltool.timetable.browser">
-    <page
-        for="*"
-        name="calendar_overlay"
-        layer="schooltool.skin.ISchoolToolLayer"
-        class="schooltool.timetable.browser.overlay.CalendarSTOverlayView"
-        template="templates/calendar_overlay.pt"
-        permission="zope.View"
-        />
-  </configure>
+      <!--class="schooltool.timetable.browser.overlay.CalendarSTOverlayView"-->
+  <page
+      for="*"
+      name="calendar_overlay"
+      layer="schooltool.skin.ISchoolToolLayer"
+      class=".overlay.CalendarOverlayView"
+      template="templates/calendar_overlay.pt"
+      permission="zope.View"
+      />
 
   <page
       for="schooltool.calendar.interfaces.ICalendar"

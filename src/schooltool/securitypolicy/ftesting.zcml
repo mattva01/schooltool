@@ -13,8 +13,14 @@
   <include package="schooltool.attendance" />
   <include package="schooltool.demographics" />
 
+  <interface
+      interface="schooltool.securitypolicy.ftesting.ISecurityFtestingSkin"
+      type="zope.publisher.interfaces.browser.IBrowserSkinType"
+      name="SecurityFtestingSkin"
+      />
+
   <includeOverrides package="schooltool.demographics" file="overrides.zcml" />
 
-  <browser:defaultSkin name="SchoolTool" />
+  <browser:defaultSkin name="SecurityFtestingSkin" />
 
 </configure>

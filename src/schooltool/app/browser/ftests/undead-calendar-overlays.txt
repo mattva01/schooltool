@@ -39,7 +39,7 @@ Let's log in as the new user:
 Let's add the group's calendar to his calendar overlays:
 
     >>> srichter_browser.open('http://localhost/persons/srichter/calendar')
-    >>> srichter_browser.getControl('Manage...').click()
+    >>> srichter_browser.getControl('More...').click()
 
     >>> srichter_browser.getControl('A Group').selected = True
     >>> srichter_browser.getControl('Apply').click()
@@ -68,5 +68,5 @@ It should disappear from the overlay list.
 
 User should still be capable of modifying his overlay list:
 
-    >>> srichter_browser.getControl(name='my_timetable').value = False
+    >>> srichter_browser.getControl(name="overlay:list").value = []
     >>> srichter_browser.getControl('Apply').click()
