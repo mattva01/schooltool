@@ -1,8 +1,9 @@
 
 div.devtools {
     position: fixed;
+    float: right;
     right: 0px;
-    top: 0px;
+    bottom: 0px;
     background: url(++resource++box-bottom.png) bottom left no-repeat;
     width: 200px;
     z-index: 99;

@@ -33,7 +33,6 @@
     <div id="header">
 
       <tal:block tal:content="structure provider:schooltool.NavigationMenu" />
-      <tal:block replace="structure provider:schooltool.Header" />
 
       <div id="login"
           tal:define="user request/principal;
@@ -65,6 +64,9 @@
                      a bad idea -->
                 <tal:block replace="structure provider:schooltool.Help"
                            on-error="nothing" /> |
+
+                <tal:block replace="structure provider:schooltool.Header" /> |
+
                 <a id="login-logout" i18n:translate=""
                    tal:attributes="href string:${url}/auth/@@logout.html"
                    >Log Out</a>
