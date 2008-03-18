@@ -29,6 +29,7 @@ Let's create a second person so that we can test access control.
 
 Also, let's create a group:
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('New Group').click()
 
@@ -59,7 +60,7 @@ And we should have permission to see the calendar:
 
 The daily view should be the default for a person's calendar:
 
-    >>> frog.getLink('My Calendar').click()
+    >>> frog.getLink('Calendar').click()
     >>> 'calendar-view-day' in frog.contents
     True
 
@@ -107,6 +108,7 @@ The section container view points to the timetable import form:
 
 This is a school, so we should add some courses
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Courses').click()
     >>> manager.getLink('New Course').click()
     >>> manager.getControl('Title').value = 'History'
@@ -148,7 +150,7 @@ Frog can't see the section's calendar by default
 Frog's overlay portlet has just his own calendar and application
 calendar:
 
-    >>> frog.getLink('My Calendar').click()
+    >>> frog.getLink('Calendar').click()
     >>> def print_portlet(contents):
     ...     print analyze.queryHTML(
     ...         'id("portlet-calendar-overlay")//table[@class="overlays"]', contents)[0]
@@ -184,7 +186,7 @@ As does Toad's:
     >>> toad.getControl('Password').value = 'doat'
     >>> toad.getControl('Log in').click()
 
-    >>> toad.getLink('My Calendar').click()
+    >>> toad.getLink('Calendar').click()
     >>> print_portlet(toad.contents)
     <table class="overlays">
       <tr><th style="text-align: center">
@@ -246,9 +248,7 @@ Toad should still be able to see the course view even though it is
 showing bits of frog's personal information as well as the section
 list:
 
-    >>> toad.getLink('SchoolTool').click()
-    >>> toad.getLink('Courses').click()
-    >>> toad.getLink('History').click()
+    >>> toad.open('http://localhost/courses/history')
     >>> print toad.url
     http://localhost/courses/history
 
@@ -260,7 +260,7 @@ Frog can see the calendar now
 
 And Frog's overlay portlet shows the section:
 
-    >>> frog.getLink('My Calendar').click()
+    >>> frog.getLink('Calendar').click()
     >>> print_portlet(frog.contents)
     <table class="overlays">
       <tr><th style="text-align: center">
@@ -314,7 +314,7 @@ and he's no longer an instructor:
 
 And the section's calendar is no longer in his overlay portlet.
 
-    >>> frog.getLink('My Calendar').click()
+    >>> frog.getLink('Calendar').click()
     >>> print_portlet(frog.contents)
     <table class="overlays">
       <tr><th style="text-align: center">

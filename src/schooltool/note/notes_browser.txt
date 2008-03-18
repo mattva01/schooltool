@@ -22,6 +22,7 @@ Test
 Add a note to the person
 
     >>> manager.open('http://localhost')
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Persons').click()
     >>> manager.getLink('person1').click()
     >>> manager.getLink('New Note').click()
@@ -119,6 +120,7 @@ Notes can also be deleted, but only by the person who created the note:
 #     ...
 #     LinkNotFoundError
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Persons').click()
     >>> manager.getLink('person1').click()
     >>> manager.getLink(url='DELETE_NOTE').click()

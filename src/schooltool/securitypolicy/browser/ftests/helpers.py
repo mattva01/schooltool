@@ -300,6 +300,7 @@ def timetables_edit(browser):
 
 def level_view(browser):
     browser.open('http://localhost/levels')
+    browser.getLink('Manage').click()
     browser.getLink('Levels').click()
     return 'Level index' in browser.contents
 

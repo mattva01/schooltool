@@ -51,18 +51,21 @@ Since we did not connect the two levels, validation should fail:
 If we connect `level1` to `level2` and also `level2` to `level1`, we get a
 loop validation error:
 
+    >>> browser.getLink('Manage').click()
     >>> browser.getLink('Levels').click()
     >>> browser.getLink('1st Grade').click()
     >>> browser.getLink('Edit Info').click()
     >>> browser.getControl('Next Level').value = ['level2']
     >>> browser.getControl('Apply').click()
 
+    >>> browser.getLink('Manage').click()
     >>> browser.getLink('Levels').click()
     >>> browser.getLink('2nd Grade').click()
     >>> browser.getLink('Edit Info').click()
     >>> browser.getControl('Next Level').value = ['level1']
     >>> browser.getControl('Apply').click()
 
+    >>> browser.getLink('Manage').click()
     >>> browser.getLink('Levels').click()
     >>> browser.getLink('Validate Levels').click()
     >>> browser.getControl('Validate').click()
@@ -79,12 +82,14 @@ loop validation error:
 Okay, so let's do what the error tells us and remove the link in `level2` to
 `level1`:
 
+    >>> browser.getLink('Manage').click()
     >>> browser.getLink('Levels').click()
     >>> browser.getLink('1st Grade').click()
     >>> browser.getLink('Edit Info').click()
     >>> browser.getControl('Previous Level').value = []
     >>> browser.getControl('Apply').click()
 
+    >>> browser.getLink('Manage').click()
     >>> browser.getLink('Levels').click()
     >>> browser.getLink('Validate Levels').click()
     >>> browser.getControl('Validate').click()
@@ -107,6 +112,7 @@ Before we can do anything, we have to create a student:
 Now we go to the manager group, and walk the student through the academic
 career:
 
+    >>> browser.getLink('Manage').click()
     >>> browser.getLink('Groups').click()
     >>> browser.getLink('Manager', url="groups/manager").click()
     >>> browser.getLink('Student Management').click()
@@ -391,6 +397,7 @@ workflow:
 
 We just need to make sure that all the workitems got deleted as well:
 
+    >>> browser.getLink('Manage').click()
     >>> browser.getLink('Groups').click()
     >>> browser.getLink('Manager', url='groups/manager').click()
     >>> browser.getLink('Student Management').click()

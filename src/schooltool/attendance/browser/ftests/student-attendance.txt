@@ -47,6 +47,7 @@ add a section:
 
 We also need a term and a timetable
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Terms').click()
     >>> manager.getLink('New Term').click()
     >>> manager.getControl('Title').value = '2005 Fall'
@@ -57,7 +58,8 @@ We also need a term and a timetable
     >>> manager.getControl('Saturday').click()
     >>> manager.getControl('Add term').click()
 
-    >>> manager.getLink('Timetables').click()
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
     >>> manager.getControl('Title').value = 'default'
     >>> manager.getControl('Next').click()
@@ -179,6 +181,7 @@ A student's page contains an "Attendance" action in the menu.
 
 Let's check the attendance panel:
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Attendance Panel').click()
     >>> 'Joniukas' in manager.contents
     True

@@ -45,6 +45,7 @@ def addPerson(name, username=None, password=None, groups=None, browser=None):
         password = username + 'pwd'
     if browser is None:
         browser = logInManager()
+    browser.getLink('Manage').click()
     browser.getLink('Persons').click()
     browser.getLink('New Person').click()
     browser.getControl('Full name').value = name
@@ -75,6 +76,7 @@ def addResource(title):
 def addCourse(title, description="", identifier=""):
     """Add a course."""
     manager = logInManager()
+    manager.getLink('Manage').click()
     manager.getLink('Courses').click()
     manager.getLink('New Course').click()
     manager.getControl('Title').value = title
@@ -85,6 +87,7 @@ def addCourse(title, description="", identifier=""):
 def addSection(course, title=None, instructors=[], members=[]):
     """Add a section."""
     manager = logInManager()
+    manager.getLink('Manage').click()
     manager.getLink('Courses').click()
     manager.getLink(course).click()
     manager.getLink('New Section').click()
@@ -111,6 +114,7 @@ def setUpTimetabling(username):
 
     # We will need a term and a School timetable:
     manager = logInManager()
+    manager.getLink('Manage').click()
     manager.getLink('Terms').click()
     manager.getLink('New Term').click()
 

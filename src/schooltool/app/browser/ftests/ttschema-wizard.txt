@@ -36,6 +36,7 @@ Weekly timetable
 
 Let's go to the `new timetable schema` wizard:
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
     >>> '<h1>New timetable schema</h1>' in manager.contents
@@ -152,6 +153,7 @@ Rotating timetable
 
 Let's do it again!
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
 
@@ -284,6 +286,7 @@ Rotating timetable, different daily period order
 
 Let's do it again!
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
 
@@ -415,6 +418,7 @@ Weekly timetable, named periods
 
 Let's go to the timetable schema wizard:
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
 
@@ -602,6 +606,7 @@ Weekly timetable, lessons on saturday
 
 Let's go to the timetable schema wizard:
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
 
@@ -719,6 +724,7 @@ Rotating timetable, different period times (per weekday)
 
 Let's do it again!
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
 
@@ -872,6 +878,7 @@ Rotating timetable, different period times (rotating day)
 
 Let's do it one last time!
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
 
@@ -1034,6 +1041,7 @@ The Cancel button
 
 Let's do it once more!
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
 
@@ -1046,6 +1054,7 @@ And now we suddenly realize that we don't need another schema.  We can't
 simply go away and forget about this wizard, because it remembers the
 last step we completed:
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
     >>> "Days of the week" in manager.contents

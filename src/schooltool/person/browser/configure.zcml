@@ -26,7 +26,7 @@
     <navigationViewlet
       name="persons"
       for="*"
-      manager="schooltool.skin.INavigationManager"
+      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
       template="templates/navigationViewlet.pt"
       class="schooltool.skin.TopLevelContainerNavigationViewlet"
       permission="schooltool.view"

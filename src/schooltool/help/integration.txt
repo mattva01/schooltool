@@ -9,6 +9,7 @@ Functional doctest for Online Help
 There are links to the online help if it is available:
 
     >>> manager.open('http://localhost/')
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Persons').click()
     >>> manager.getLink('Help').url
     "javascript:popUp('http://localhost/persons/@@index.html/++help++/@@contexthelp.html')"

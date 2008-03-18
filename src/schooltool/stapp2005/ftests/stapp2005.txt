@@ -11,5 +11,6 @@ A manager logs in
 
 Create a Basic Person
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Persons').click()
 

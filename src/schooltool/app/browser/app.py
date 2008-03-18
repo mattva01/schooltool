@@ -43,6 +43,8 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserPage
 
 from schooltool.common import SchoolToolMessage as _
+from schooltool.app.browser.interfaces import ISchoolMenuViewletManager
+from schooltool.app.browser.interfaces import IManageMenuViewletManager
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -54,6 +56,7 @@ from schooltool.traverser.traverser import AdapterTraverserPlugin
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.table import label_cell_formatter_factory
 from schooltool.table.interfaces import ITableFormatter
+from schooltool.skin.skin import OrderedViewletManager
 from schooltool.skin.breadcrumbs import CustomNameBreadCrumbInfo
 
 
@@ -320,6 +323,14 @@ class LeaderView(RelationshipViewBase):
 
     def getAvailableItemsContainer(self):
         return ISchoolToolApplication(None)['persons']
+
+
+class ManageView(BrowserView):
+    pass
+
+
+class ManageMenuViewletManager(OrderedViewletManager):
+    implements(IManageMenuViewletManager)
 
 
 class ViewRobot(BrowserPage):

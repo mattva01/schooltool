@@ -22,6 +22,7 @@ We go to the front page
 
 We add a group
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('New Group').click()
 
@@ -46,6 +47,7 @@ We look at the groups of the person we added
 
 We look at the members of the group
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('group1').click()
     >>> 'person1' in manager.contents
@@ -57,6 +59,7 @@ Test
 
 We delete the person
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Persons').click()
     >>> manager.getControl(name='delete.person').value = ['on']
     >>> manager.getControl('Delete').click()
@@ -64,6 +67,7 @@ We delete the person
 
 It is no longer there
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Persons').click()
     >>> 'person1' not in manager.contents
     True
@@ -71,6 +75,7 @@ It is no longer there
 We look at the members of the group (this used to cause internal errors in an
 earlier version of SchoolTool):
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('group1').click()
     >>> manager.headers['status']

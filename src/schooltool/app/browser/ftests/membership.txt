@@ -14,6 +14,7 @@ We need an application with a few groups and persons.
 
 A bunch of persons:
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Persons').click()
     >>> manager.getLink('Import Persons').click()
 
@@ -41,6 +42,7 @@ A bunch of persons:
 
 A bunch of groups:
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('Import Groups').click()
 
@@ -72,6 +74,7 @@ Group member view
 
 Let's go to a group, and look at its members.
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('group001').click()
     >>> manager.getLink('edit members').click()

@@ -68,7 +68,7 @@
   <browser:navigationViewlet
       name="attendance_control_panel"
       for="*"
-      manager="schooltool.skin.INavigationManager"
+      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
       template="templates/controlpanelViewlet.pt"
       class="schooltool.skin.NavigationViewlet"
       permission="schooltool.edit"

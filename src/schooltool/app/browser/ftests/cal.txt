@@ -23,6 +23,7 @@ Let's create a second person so that we can test access control.
 
 Also, let's create a group:
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('New Group').click()
 
@@ -47,7 +48,7 @@ We should find just a placeholder there.
     >>> frog.getControl('Password').value = 'pwd'
     >>> frog.getControl('Log in').click()
 
-    >>> frog.getLink('My Calendar').click()
+    >>> frog.getLink('Calendar').click()
     >>> frog.getLink('Open in iCal').click()
     >>> frog.headers['content-type']
     'text/calendar; charset=UTF-8'
@@ -556,7 +557,7 @@ SchoolTool lets users overlay calendars of other users and groups, and see all
 calendar events in one view.  When you are logged in, and you look at your own
 calendar, you will see a new portlet on the left:
 
-    >>> frog.getLink('My Calendar').click()
+    >>> frog.getLink('Calendar').click()
     >>> print frog.contents
     <BLANKLINE>
     ...
@@ -627,7 +628,7 @@ Reload the overlay list, and there we have all the groups:
 Now, you can see many calendars in the overlay portlet: animals,
 other built-in groups and the application calendar
 
-    >>> frog.getLink('My Calendar').click()
+    >>> frog.getLink('Calendar').click()
     >>> 'Animals' in frog.contents
     True
     >>> print analyze.queryHTML('//td[text()="SchoolTool"]', frog.contents)[0]
@@ -642,7 +643,7 @@ Let's remove the application calendar from the overlay
 
 Now the application calendar is no longer in the overlay portlet
 
-    >>> frog.getLink('My Calendar').click()
+    >>> frog.getLink('Calendar').click()
     >>> analyze.queryHTML('//td[text()="SchoolTool"]', frog.contents)
     []
 
@@ -672,13 +673,14 @@ And now it's gone
 Regression test for Issue243 (Calendars with identical titles are
 throwing system error):
 
-    >>> frog.getLink('My Calendar').click()
+    >>> frog.getLink('Calendar').click()
     >>> len(analyze.queryHTML('//td[text()="Clerks"]', frog.contents))
     1
 
 Rename the group so its title would be Managers:
 
     >>> manager.open('http://localhost')
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('Animals').click()
     >>> manager.getLink('Edit Info').click()
@@ -702,6 +704,7 @@ Rename the group back to Animals:
 Now, if there are events in the animals' and toad's calendars, you can
 see them:
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('Clerks').click()
     >>> manager.getLink('View Calendar').click()
@@ -713,7 +716,7 @@ see them:
     >>> manager.getControl('Duration').value = '30'
     >>> manager.getControl('Add').click()
 
-    >>> manager.getLink('SchoolTool').click()
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('Animals').click()
     >>> manager.getLink('View Calendar').click()
@@ -761,7 +764,7 @@ First of all, what is tomorrow?
 
 Now, let's add an event which will take place tomorrow:
 
-    >>> frog.getLink('My Calendar').click()
+    >>> frog.getLink('Calendar').click()
     >>> frog.getLink('New Event').click()
 
     >>> frog.getControl('Title').value = 'Important meeting'
@@ -772,7 +775,7 @@ Now, let's add an event which will take place tomorrow:
 
 We should see it in the calendar for today:
 
-    >>> frog.getLink('My Calendar').click()
+    >>> frog.getLink('Calendar').click()
     >>> print frog.contents
     <BLANKLINE>
     ...

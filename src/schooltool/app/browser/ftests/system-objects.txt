@@ -22,6 +22,7 @@ Setup
 Let us add a user and a group, so that container views have something besides
 the default system objects:
 
+    >>> manager_browser.getLink('Manage').click()
     >>> manager_browser.getLink('Groups').click()
     >>> manager_browser.getLink('New Group').click()
     >>> manager_browser.getControl('Title').value = 'A Group'

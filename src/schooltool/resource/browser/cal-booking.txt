@@ -254,7 +254,7 @@ Unless unbooked:
 When adding a new event we should get redirected to resource booking
 if Book Resources is checked:
 
-    >>> frog.getLink('My Calendar').click()
+    >>> frog.getLink('Calendar').click()
     >>> frog.getLink('New Event').click()
     >>> frog.getControl('Title').value = 'Sleeping'
     >>> frog.getControl('Date').value = '2005-02-03'
@@ -552,7 +552,7 @@ Now, let's test the paging, for that we'll need to create a profuse amount of re
 
 Now let's create an event for the manager.
 
-    >>> manager.getLink('My Calendar').click()
+    >>> manager.getLink('Calendar').click()
     >>> manager.getLink('New Event').click()
     >>> manager.getControl('Title').value = 'Moo Fest'
     >>> manager.getControl('Date').value = '2005-02-03'

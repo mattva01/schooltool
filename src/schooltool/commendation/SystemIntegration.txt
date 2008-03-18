@@ -239,6 +239,7 @@ Now we should be able to add commendations to
 
 - persons,
 
+  >>> manager.getLink('Manage').click()
   >>> manager.getLink('Persons').click()
   >>> manager.getLink('Tom Hoffman').click()
   >>> manager.getLink('Add Commendation').click()
@@ -261,6 +262,7 @@ Now we should be able to add commendations to
 
 - groups,
 
+  >>> manager.getLink('Manage').click()
   >>> manager.getLink('Groups').click()
   >>> manager.getLink('Students').click()
   >>> manager.getLink('Add Commendation')
@@ -270,6 +272,7 @@ Now we should be able to add commendations to
 
 - and sections.
 
+  >>> manager.getLink('Manage').click()
   >>> manager.getLink('Courses').click()
   >>> manager.getLink('Math 101').click()
   >>> manager.getLink('-- Math 101 (1)').click()

@@ -20,6 +20,7 @@ Setup
 
 We will need a user and a group:
 
+    >>> manager_browser.getLink('Manage').click()
     >>> manager_browser.getLink('Groups').click()
     >>> manager_browser.getLink('New Group').click()
     >>> manager_browser.getControl('Title').value = 'A Group'

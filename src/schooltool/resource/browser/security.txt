@@ -69,6 +69,7 @@ But he should not be able to add the events (even if he can guess the url):
 
 Now we will put these people into the teacher group
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('Teachers').click()
     >>> manager.getLink('edit members').click()
@@ -134,7 +135,7 @@ The teacher should still be able to delete the event.
 The teacher should also be able to schedule a new event from their
 personal calendar.
 
-    >>> teacher.getLink('My Calendar').click()
+    >>> teacher.getLink('Calendar').click()
     >>> teacher.getLink('New Event').click()
     >>> teacher.getControl('Title').value = 'Classroom Event'
     >>> teacher.getControl('Time').value = '09:00'
@@ -142,7 +143,7 @@ personal calendar.
     >>> teacher.getControl('Add').click()
     >>> teacher.getControl('Classroom').click()
     >>> teacher.getControl('Book').click()
-    >>> teacher.getLink('My Calendar').click()
+    >>> teacher.getLink('Calendar').click()
     >>> 'Classroom Event' in teacher.contents
     True
 

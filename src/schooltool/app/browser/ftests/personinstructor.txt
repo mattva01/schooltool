@@ -17,6 +17,7 @@ Let's create a coupe of persons who will be students and teachers:
 
 Also, let's create a group:
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('New Group').click()
 
@@ -28,6 +29,7 @@ Also, let's create a group:
 
 We'll need a course and a section:
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Courses').click()
     >>> manager.getLink('New Course').click()
     >>> manager.getControl('Title').value = 'History'

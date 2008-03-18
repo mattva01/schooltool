@@ -22,8 +22,9 @@ Interfaces for SchoolTool calendar browser views.
 $Id$
 """
 
-from zope.schema import Object, Datetime, TextLine, Bool, URI
-from zope.interface import Interface, Attribute
+from zope.viewlet.interfaces import IViewletManager
+from zope.schema import Object, Datetime, TextLine
+from zope.interface import Interface
 
 from schooltool.calendar.interfaces import ICalendar, ICalendarEvent
 
@@ -122,3 +123,11 @@ class ICalendarProvider(Interface):
 
 class ICalendarMenuViewlet(Interface):
     """Marker interface so we could use custom crowd for View Calendar menu item"""
+
+
+class IManageMenuViewletManager(IViewletManager):
+    """Provides a viewlet hook for the management menu items."""
+
+
+class ISchoolMenuViewletManager(IViewletManager):
+    """Provides a viewlet hook for the school menu items."""

@@ -11,6 +11,7 @@ A manager logs in
 
 Create a Basic Person
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Persons').click()
     >>> manager.getLink('New Person').click()
     >>> manager.getControl('First name').value = "John"
@@ -27,6 +28,7 @@ Create a Basic Person
 
 Go to the person list:
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Persons').click()
 
 Both of our users are in there:

@@ -10,6 +10,7 @@ A manager logs in
     >>> manager.open('http://localhost/')
 
 Create a term
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Terms').click()
     >>> manager.getLink('New Term').click()
     >>> manager.getControl('Title').value = 'Term 1'
@@ -51,6 +52,7 @@ So now we have one term
 What now if we cancel the deletion ?
 
 Create a term
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Terms').click()
     >>> manager.getLink('New Term').click()
     >>> manager.getControl('Title').value = 'Term 2'
@@ -86,6 +88,7 @@ With existing timetables related to the term
 
 Create the timetable:
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
     >>> manager.getLink('simple weekly timetable schema').click()
@@ -108,6 +111,7 @@ Create the timetable:
 
 Create a course:
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Courses').click()
     >>> manager.getLink('New Course').click()
     >>> manager.getControl(name='field.title').value = 'Math course'
@@ -132,6 +136,7 @@ Schedule the section in the timetable:
     >>> manager.getControl(name='Monday.A').value = True
     >>> manager.getControl(name='Friday.B').value = True
     >>> manager.getControl('Save').click()
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Sections').click()
     >>> manager.getLink('Math course (1)').click()
     >>> manager.getLink('View Timetables').click()
@@ -145,7 +150,9 @@ Schedule the section in the timetable:
     ...
 
 Let's do the edit:
-    >>> manager.getLink('Term').click()
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Terms').click()
     >>> manager.getLink('Term 2').click()
     >>> manager.getLink('Edit').click()
     >>> print analyze.queryHTML('id("content-body")', manager.contents)[0]
@@ -188,6 +195,7 @@ We just get the edition of the title as there is timetable related to this term.
 
 Let's try to delete:
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Terms').click()
     >>> manager.getControl(name='delete.term-2').value = True
     >>> manager.getControl('Delete').click()
@@ -207,7 +215,8 @@ Let's try to delete:
 
 So the timetables should be also deleted:
 
-    >>> manager.getLink('Section').click()
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Sections').click()
     >>> manager.getLink('1').click()
     >>> manager.getLink('View Timetables').click()
     >>> print manager.contents

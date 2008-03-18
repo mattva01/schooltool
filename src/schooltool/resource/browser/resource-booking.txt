@@ -31,7 +31,7 @@ And add a couple of resources to book:
 
 And a few events to our calendar:
 
-    >>> manager.getLink('My Calendar').click()
+    >>> manager.getLink('Calendar').click()
     >>> manager.getLink('New Event').click()
     >>> manager.getControl('Title').value = "Some big event"
     >>> manager.getControl('Date').value = "2005-01-15"

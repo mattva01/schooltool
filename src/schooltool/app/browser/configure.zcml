@@ -16,6 +16,13 @@
       class="schooltool.app.browser.skin.CalendarEventViewletManager"
       />
 
+  <viewletManager
+      name="schooltool.ManageMenu"
+      permission="zope.Public"
+      provides="schooltool.app.browser.interfaces.IManageMenuViewletManager"
+      class="schooltool.app.browser.app.ManageMenuViewletManager"
+      />
+
   <viewlet
       name="event-info"
       for="*"
@@ -82,6 +89,14 @@
       for="schooltool.app.interfaces.ISchoolToolApplication"
       permission="zope.View"
       class=".app.ViewRobot"
+      />
+
+  <page
+      name="manage.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      permission="schooltool.edit"
+      class=".app.ManageView"
+      template="templates/manage_menu.pt"
       />
 
   <resource name="day.png" file="resources/day.png"
@@ -549,11 +564,23 @@
   <configure package="schooltool.skin">
 
     <navigationViewlet
-      name="control"
+      name="manage"
       for="*"
       manager="schooltool.skin.INavigationManager"
       template="templates/navigationViewlet.pt"
-      class="schooltool.skin.skin.NavigationViewlet "
+      class="schooltool.skin.skin.NavigationViewlet"
+      permission="schooltool.edit"
+      link="manage.html"
+      title="Manage"
+      order="200"
+      />
+
+    <navigationViewlet
+      name="control"
+      for="*"
+      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.skin.skin.NavigationViewlet"
       permission="schooltool.edit"
       link="control"
       title="Application Control"
@@ -614,12 +641,6 @@
         title="Calendar"
         parent="schooltool/browser"
         doc_path="ftests/cal.txt" />
-
-    <apidoc:bookchapter
-        id="navigation"
-        title="Navigation"
-        parent="schooltool/browser"
-        doc_path="ftests/navigation.txt" />
 
     <apidoc:bookchapter
         id="app"

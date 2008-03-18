@@ -171,6 +171,7 @@ to whom we attach a bunch of commendations:
 Now we can go to the list of all commendations of the school and we should see
 both:
 
+  >>> manager.getLink('Manage').click()
   >>> manager.getLink('All Commendations').click()
 
   >>> print analyze.queryHTML('//div[@class="commendation"]',

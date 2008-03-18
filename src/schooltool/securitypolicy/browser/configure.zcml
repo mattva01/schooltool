@@ -17,7 +17,7 @@
     <navigationViewlet
         name="access_control_customisation"
         for="*"
-        manager="schooltool.skin.INavigationManager"
+        manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
         template="templates/navigationViewlet.pt"
         class="schooltool.skin.NavigationViewlet"
         permission="schooltool.edit"

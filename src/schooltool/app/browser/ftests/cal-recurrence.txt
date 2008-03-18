@@ -19,7 +19,7 @@ Let's set the timezone to Australia:
 
 Let go to the calendar, a particular day in fact:
 
-    >>> manager.getLink("My Calendar").click()
+    >>> manager.getLink("Calendar").click()
     >>> manager.open(manager.url + '/2006-01-01')
     >>> "Calendar for SchoolTool Manager - Sunday, January 1, 2006" \
     ... in manager.contents

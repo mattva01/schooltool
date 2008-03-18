@@ -23,7 +23,7 @@
     <navigationViewlet
       name="courses"
       for="*"
-      manager="schooltool.skin.INavigationManager"
+      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
       template="templates/navigationViewlet.pt"
       class="schooltool.skin.TopLevelContainerNavigationViewlet"
       permission="schooltool.view"
@@ -35,7 +35,7 @@
     <navigationViewlet
       name="sections"
       for="*"
-      manager="schooltool.skin.INavigationManager"
+      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
       template="templates/navigationViewlet.pt"
       class="schooltool.skin.TopLevelContainerNavigationViewlet"
       permission="schooltool.view"

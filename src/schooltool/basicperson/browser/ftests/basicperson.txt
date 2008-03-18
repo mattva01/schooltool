@@ -11,6 +11,7 @@ A manager logs in
 
 Create a Basic Person, a teacher.
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Persons').click()
     >>> manager.getLink('New Person').click()
     >>> manager.getControl('First name').value = "John"
@@ -30,6 +31,7 @@ Create a Basic Person, a teacher.
 
 Go to the person list:
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Persons').click()
 
 Both of our users are in there:
@@ -139,6 +141,7 @@ Now there even are person export views:
 Now let's create another teacher, Bob.
 
     >>> manager.open('http://localhost/')
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Persons').click()
     >>> manager.getLink('New Person').click()
     >>> manager.getControl('First name').value = "Bob"
@@ -159,6 +162,7 @@ Now let's create another teacher, Bob.
 Now, when we create a student, we will have two persons available to
 choose as an advisor.  We will choose John.
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Persons').click()
     >>> manager.getLink('New Person').click()
     >>> manager.getControl('First name').value = "Student"

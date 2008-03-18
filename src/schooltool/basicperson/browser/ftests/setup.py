@@ -36,6 +36,7 @@ def addPerson(firstname, lastname, username=None, password=None, groups=None, br
         password = username + 'pwd'
     if browser is None:
         browser = logInManager()
+    browser.getLink('Manage').click()
     browser.getLink('Persons').click()
     browser.getLink('New Person').click()
 

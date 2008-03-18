@@ -16,6 +16,7 @@ log in however.
 When we go to the person container, for example, we should be able to see
 the help:
 
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Persons').click()
     >>> 'Context Help' in manager.contents
     True

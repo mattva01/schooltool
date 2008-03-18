@@ -1,11 +1,8 @@
-<span tal:repeat="viewlet options/viewlets"
-      tal:content="structure viewlet/render" />
 <tal:if condition="request/principal/schooltool:authenticated"
         define="person request/principal/schooltool:person">
   <span><a i18n:translate=""
            tal:attributes="href string:${person/@@absolute_url}/calendar"
-           >My Calendar</a></span>
+           >Calendar</a></span>
 </tal:if>
-<span><a i18n:translate=""
-         tal:attributes="href context/schooltool:app/@@absolute_url"
-         >SchoolTool</a></span>
+<span tal:repeat="viewlet options/viewlets"
+      tal:content="structure viewlet/render" />
