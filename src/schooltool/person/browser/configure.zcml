@@ -66,6 +66,15 @@
       permission="schooltool.edit"
       />
 
+  <navigationViewlet
+      name="Home"
+      for="*"
+      manager="schooltool.skin.skin.INavigationManager"
+      template="home_tab_viewlet.pt"
+      permission="schooltool.view"
+      order="10"
+      />
+
   <configure package="schooltool.skin">
 
     <navigationViewlet
@@ -180,9 +189,17 @@
       for="..interfaces.IPerson"
       class=".person.PersonView"
       template="person.pt"
-      permission="zope.View"
+      permission="schooltool.view"
       menu="schooltool_actions"
       title="View"
+      />
+
+  <page
+      name="home.html"
+      for="*"
+      class=".person.HomeView"
+      template="home.pt"
+      permission="schooltool.view"
       />
 
   <zope:adapter

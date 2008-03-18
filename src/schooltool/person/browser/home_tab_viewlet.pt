@@ -1,0 +1,6 @@
+<tal:if condition="request/principal/schooltool:authenticated"
+        define="person request/principal/schooltool:person">
+  <span><a i18n:translate=""
+           tal:attributes="href string:${person/@@absolute_url}/home.html"
+           >Home</a></span>
+</tal:if>

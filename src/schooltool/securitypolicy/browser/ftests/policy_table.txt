@@ -525,6 +525,7 @@ Instructor should be able to see group which is member of his section:
     >>> instructor = setup.logIn('instructor1', 'instructor1')
     >>> instructor.open('http://localhost/')
     >>> instructor.getLink('Frog').click()
+    >>> instructor.getLink('View').click()
     >>> instructor.getLink('schooldata').click()
     >>> instructor.getLink('Frog -- History 6 (1)').click()
     >>> instructor.getLink('edit groups').click()

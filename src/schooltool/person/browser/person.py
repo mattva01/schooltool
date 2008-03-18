@@ -458,6 +458,9 @@ class PersonView(BrowserView):
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)
 
+class HomeView(PersonView):
+    """A Person's homepage."""
+
 
 class IPreferencesMenuViewlet(Interface):
     """Marker interface so we could use custom crowd for Preferences menu item"""
