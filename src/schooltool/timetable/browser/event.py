@@ -24,14 +24,34 @@ $Id$
 
 from zope.app import zapi
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.component import queryMultiAdapter
 from zope.interface import Interface
 from zope.schema import Text
 from zope.formlib import form
 from zope.html.field import HtmlFragment
 
+from schooltool.skin.containers import TableContainerView
 from schooltool.app.browser.cal import CalendarEventView
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common import SchoolToolMessage as _
+from schooltool.timetable.interfaces import ITimetableDict, ITimetable
+from schooltool.table.interfaces import ITableFormatter
+from schooltool.table.table import DependableCheckboxColumn
+from schooltool.table.table import url_cell_formatter
+
+class TimetableContainerView(TableContainerView):
+    """Timetable Container View."""
+
+    __used_for__ = ITimetableDict
+    delete_template = ViewPageTemplateFile("templates/timetable-container-delete.pt")
+    view_template = ViewPageTemplateFile("templates/timetable_list.pt")
+    index_title = _("Timetables")
+
+
+    def update(self):
+        if 'CONFIRM' in self.request:
+            for key in self.listIdsForDeletion():
+                del self.context[key]
 
 
 class TimetableEventEditView(CalendarEventView, form.Form):
@@ -73,3 +93,4 @@ class TimetableEventEditView(CalendarEventView, form.Form):
     @form.action(_("Cancel"), condition=form.haveInputWidgets)
     def handle_cancel_action(self, action, data):
         return self.redirect_to_parent()
+

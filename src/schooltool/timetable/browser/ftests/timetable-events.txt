@@ -98,11 +98,6 @@ calendar events are updated
     >>> manager.getControl(name="Monday.09:30-10:25").value = False
     >>> manager.getControl(name="Monday.10:30-11:25").value = True
     >>> manager.getControl("Save").click()
-    >>> print manager.contents
-    <BLANKLINE>
-    ...<th class="period" width="...">10:30-11:25</th>
-    <td class="activity" width="...">History 6</td>...
-
     >>> manager.open('http://localhost/sections/1/calendar/2006-01-02')
     >>> events = analyze.queryHTML('//span[@class="start-end"]', manager.contents)
     >>> for event in events: print event

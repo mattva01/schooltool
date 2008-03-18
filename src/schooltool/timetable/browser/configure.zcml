@@ -21,7 +21,7 @@
 
   <menuItem
       menu="schooltool_actions"
-      title="View Timetables"
+      title="Timetables"
       for="schooltool.timetable.interfaces.IOwnTimetables"
       action="timetables/index.html"
       />
@@ -47,16 +47,6 @@
       permission="schooltool.edit" />
 
   <configure package="schooltool.skin">
-    <navigationViewlet
-      name="edit-section-timetable"
-      for="schooltool.timetable.interfaces.ITimetable"
-      manager="schooltool.skin.IActionMenuManager"
-      template="templates/actionsViewlet.pt"
-      permission="schooltool.edit"
-      link="edit.html"
-      title="Edit"
-      order="10"
-      />
     <navigationViewlet
       name="add-timetable"
       for="schooltool.timetable.interfaces.ITimetableDict"
@@ -176,22 +166,16 @@
   <page
       name="index.html"
       for="schooltool.timetable.interfaces.ITimetable"
-      class=".TimetableView"
-      template="templates/timetable.pt"
-      permission="schooltool.view"
-      menu="zmi_views" title="View"
-      />
-
-  <page
-      name="edit.html"
-      for="schooltool.timetable.interfaces.ITimetable"
       class=".TimetableEditView"
+      template="templates/timetable-edit.pt"
       permission="schooltool.edit"
+      menu="zmi_views" title="View"
       />
 
   <page
       name="index.html"
       for="schooltool.timetable.interfaces.ITimetableDict"
+      class="schooltool.timetable.browser.event.TimetableContainerView"
       template="templates/timetable_list.pt"
       permission="schooltool.view"
       menu="zmi_views" title="View"
@@ -239,6 +223,16 @@
        template="templates/calendar_overlay.pt"
        permission="zope.View"
        />
+
+  <zope:adapter
+      for="schooltool.timetable.interfaces.ITimetableDict
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory="schooltool.table.table.FilterWidget" />
+
+  <zope:adapter
+      for="schooltool.timetable.interfaces.ITimetableDict
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory="schooltool.table.table.SchoolToolTableFormatter" />
 
    <!-- for term info -->
    <page

@@ -303,7 +303,7 @@ A new section should have been created:
 We should see a timetable in the section's timetable list:
 
     >>> manager.getLink('Swimming - Frog').click()
-    >>> manager.getLink('View Timetables').click()
+    >>> manager.getLink('Timetables').click()
 
     >>> manager.getLink('2005-fall.default')
     <Link text='2005-fall.default'
@@ -314,83 +314,79 @@ We can have a look at the timetable too, and see a few timetable activities:
     >>> manager.getLink('2005-fall.default').click()
 
     >>> print analyze.queryHTML('//table/tr[2]', manager.contents)[0]
-    <tr><th class="period" width="2%">A</th>
-          <td class="activity" width="18%">Swimming</td>
+    <tr><td>
+              <ul><li>
+                    <input class="activity" type="checkbox" checked="checked" id="Monday.A" value="Monday.A" name="Monday.A" /><label class="period" for="Monday.A">A</label>
+                  </li>
     <BLANKLINE>
-          <th class="period" width="2%">A</th>
-          <td class="activity" width="18%"></td>
     <BLANKLINE>
-          <th class="period" width="2%">A</th>
-          <td class="activity" width="18%"></td>
+                  <li>
+                    <input class="activity" type="checkbox" id="Monday.B" value="Monday.B" name="Monday.B" /><label class="period" for="Monday.B">B</label>
+                  </li>
     <BLANKLINE>
-          <th class="period" width="2%">A</th>
-          <td class="activity" width="18%"></td>
+	      </ul></td>
     <BLANKLINE>
-          <th class="period" width="2%">A</th>
-          <td class="activity" width="18%"></td>
+    <BLANKLINE>
+            <td>
+              <ul><li>
+                    <input class="activity" type="checkbox" id="Tuesday.A" value="Tuesday.A" name="Tuesday.A" /><label class="period" for="Tuesday.A">A</label>
+                  </li>
+    <BLANKLINE>
+    <BLANKLINE>
+                  <li>
+                    <input class="activity" type="checkbox" checked="checked" id="Tuesday.B" value="Tuesday.B" name="Tuesday.B" /><label class="period" for="Tuesday.B">B</label>
+                  </li>
+    <BLANKLINE>
+              </ul></td>
+    <BLANKLINE>
+    <BLANKLINE>
+            <td>
+              <ul><li>
+                    <input class="activity" type="checkbox" id="Wednesday.A" value="Wednesday.A" name="Wednesday.A" /><label class="period" for="Wednesday.A">A</label>
+                  </li>
+    <BLANKLINE>
+    <BLANKLINE>
+                  <li>
+                    <input class="activity" type="checkbox" id="Wednesday.B" value="Wednesday.B" name="Wednesday.B" /><label class="period" for="Wednesday.B">B</label>
+                  </li>
+    <BLANKLINE>
+              </ul></td>
+    <BLANKLINE>
+    <BLANKLINE>
+            <td>
+              <ul><li>
+                    <input class="activity" type="checkbox" id="Thursday.A" value="Thursday.A" name="Thursday.A" /><label class="period" for="Thursday.A">A</label>
+                  </li>
+    <BLANKLINE>
+    <BLANKLINE>
+                  <li>
+                    <input class="activity" type="checkbox" id="Thursday.B" value="Thursday.B" name="Thursday.B" /><label class="period" for="Thursday.B">B</label>
+                  </li>
+    <BLANKLINE>
+              </ul></td>
+    <BLANKLINE>
+    <BLANKLINE>
+            <td>
+              <ul><li>
+                    <input class="activity" type="checkbox" id="Friday.A" value="Friday.A" name="Friday.A" /><label class="period" for="Friday.A">A</label>
+                  </li>
+    <BLANKLINE>
+    <BLANKLINE>
+                  <li>
+                    <input class="activity" type="checkbox" id="Friday.B" value="Friday.B" name="Friday.B" /><label class="period" for="Friday.B">B</label>
+                  </li>
+    <BLANKLINE>
+              </ul></td>
+    <BLANKLINE>
         </tr>
 
-    >>> print analyze.queryHTML('//table/tr[3]', manager.contents)[0]
-    <tr><th class="period" width="2%">B</th>
-          <td class="activity" width="18%"></td>
-    <BLANKLINE>
-          <th class="period" width="2%">B</th>
-          <td class="activity" width="18%">Swimming</td>
-    <BLANKLINE>
-          <th class="period" width="2%">B</th>
-          <td class="activity" width="18%"></td>
-    <BLANKLINE>
-          <th class="period" width="2%">B</th>
-          <td class="activity" width="18%"></td>
-    <BLANKLINE>
-          <th class="period" width="2%">B</th>
-          <td class="activity" width="18%"></td>
-        </tr>
+We can also edit the timetable from the time table 
 
-We can also edit the timetable from the time table view.
-
-    >>> manager.getLink("Edit").click()
     >>> manager.getControl(name="Wednesday.A").value = True
     >>> manager.getControl(name="Monday.A").value = False
     >>> manager.getControl(name="Thursday.B").value = True
     >>> manager.getControl(name="Tuesday.B").value = False
     >>> manager.getControl("Save").click()
-
-And now the timetable is updated.
-
-    >>> print analyze.queryHTML('//table/tr[2]', manager.contents)[0]
-    <tr><th class="period" width="2%">A</th>
-          <td class="activity" width="18%"></td>
-    <BLANKLINE>
-          <th class="period" width="2%">A</th>
-          <td class="activity" width="18%"></td>
-    <BLANKLINE>
-          <th class="period" width="2%">A</th>
-          <td class="activity" width="18%">Swimming</td>
-    <BLANKLINE>
-          <th class="period" width="2%">A</th>
-          <td class="activity" width="18%"></td>
-    <BLANKLINE>
-          <th class="period" width="2%">A</th>
-          <td class="activity" width="18%"></td>
-        </tr>
-
-    >>> print analyze.queryHTML('//table/tr[3]', manager.contents)[0]
-    <tr><th class="period" width="2%">B</th>
-          <td class="activity" width="18%"></td>
-    <BLANKLINE>
-          <th class="period" width="2%">B</th>
-          <td class="activity" width="18%"></td>
-    <BLANKLINE>
-          <th class="period" width="2%">B</th>
-          <td class="activity" width="18%"></td>
-    <BLANKLINE>
-          <th class="period" width="2%">B</th>
-          <td class="activity" width="18%">Swimming</td>
-    <BLANKLINE>
-          <th class="period" width="2%">B</th>
-          <td class="activity" width="18%"></td>
-        </tr>
 
 We can add another timetable schema and then add another timetable for
 this section based on the new schema.
@@ -421,7 +417,6 @@ this section based on the new schema.
     >>> manager.getControl(name='ttschema').value = ['singleperiod']
     >>> manager.getControl('Add').click()
     >>> manager.getLink('2005-fall.singleperiod').click()
-    >>> manager.getLink('Edit').click()
 
 The activities should show up in the calendar of the users that are in
 this section too:

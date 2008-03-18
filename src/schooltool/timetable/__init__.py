@@ -188,6 +188,10 @@ class Timetable(Persistent):
 
     timezone = 'UTC'
 
+    @property
+    def title(self):
+        return self.__name__
+
     def __init__(self, day_ids):
         """Create a new empty timetable.
 

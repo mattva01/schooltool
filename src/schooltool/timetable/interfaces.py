@@ -412,6 +412,9 @@ class ITimetable(ILocation):
     A timetable represents the repeating lesson schedule for just one
     pupil, or one teacher, or one bookable resource.
     """
+    containers('.ITimetableDict')
+
+    title = TextLine(title=u"Title", required=True)
 
     model = Object(
         title=u"A timetable model this timetable should be used with.",
@@ -603,7 +606,7 @@ class ITimetableCalendarEvent(ISchoolToolCalendarEvent):
         schema=ITimetableActivity)
 
 
-class ITimetableDict(IContainer):
+class ITimetableDict(IContainer, ILocation):
     """Container for timetables.
 
     The id of the timetable is composed by joining term id and
@@ -611,6 +614,7 @@ class ITimetableDict(IContainer):
     means a timetable for a term "2005-fall" with a timetable schema
     "default".
     """
+    contains(ITimetable)
 
 
 class IHaveTimetables(Interface):
