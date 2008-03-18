@@ -1,0 +1,11 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Login</title>
+</head>
+<body>
+<metal:block metal:fill-slot="body">
+
+  <tal:block replace="structure provider:schooltool.ManageMenu" />
+
+</metal:block>
+</html>
