@@ -419,3 +419,12 @@ div .dropdown a:hover {
   z-index:100;
   font-weight: bold;
 }
+
+/* Terms for Timetables */
+.term0 { background-color: transparent; }
+.term1 { background-color: #9db8d2; }
+.term2 { background-color: #eed680; }
+.term3 { background-color: #c5d2c8; }
+.term4 { background-color: #e0b6af; }
+.term5 { background-color: #ada7c8; }
+.term6 { background-color: #7590ae; }

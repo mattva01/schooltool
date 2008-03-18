@@ -36,7 +36,6 @@ from zope.publisher.browser import BrowserView
 from zope.app import zapi
 from zope.app.publisher.browser.menu import getMenu
 
-from schooltool.timetable.browser.skin import ITimetableLayer
 from schooltool.app.interfaces import ICookieLanguageSelector
 from schooltool.securitypolicy.crowds import Crowd
 from schooltool.securitypolicy.interfaces import ICrowd
@@ -220,7 +219,7 @@ class ISchoolToolLayer(ILayer, IBrowserRequest):
     """SchoolTool layer."""
 
 
-class ISchoolToolSkin(ITimetableLayer, ISchoolToolLayer, IDefaultBrowserLayer):
+class ISchoolToolSkin(ISchoolToolLayer, IDefaultBrowserLayer):
     """The SchoolTool skin"""
 
 

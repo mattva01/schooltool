@@ -240,4 +240,16 @@
        permission="zope.View"
        />
 
+   <!-- for term info -->
+   <page
+       name="yearly.html"
+       layer="schooltool.timetable.browser.skin.ITimetableLayer"
+       for="schooltool.app.interfaces.ISchoolToolCalendar"
+       class=".cal.TimetablingYearlyCalendarView"
+       template="templates/timetable_cal_yearly.pt"
+       permission="schooltool.view"
+       menu="zmi_views"
+       title="Calendar (Yearly)"
+       />
+
 </configure>
