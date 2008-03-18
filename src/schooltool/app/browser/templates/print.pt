@@ -1,0 +1,10 @@
+<div class="content-nav" tal:condition="view/__parent__/pdfURL | nothing">
+
+  <a id="calendar-navigation-pdf"
+     tal:attributes="href view/__parent__/pdfURL"
+     title="Printable version"
+     i18n:attributes="title">
+    Printable PDF
+  </a>
+
+</div>

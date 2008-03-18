@@ -609,27 +609,29 @@ div.content-nav {
 */
 
 #calendar-navigation {
-    position: absolute;
-    top: 1em;
-    right: 1em;
-}
-
-#calendar-navigation-pdf,
-#calendar-navigation-day,
-#calendar-navigation-week,
-#calendar-navigation-month,
-#calendar-navigation-year {
     display: block;
-    margin: 2px;
-    float: left;
-    text-decoration: none;
-    border: 0;
-    padding: 0;
-    width: 24px;
 }
 
-#calendar-navigation-pdf {
-    margin-right: 16px;
+#calendar-navigation div a {
+    text-decoration: none;
+ }
+
+#calendar-navigation-daily,
+#calendar-navigation-weekly,
+#calendar-navigation-monthly,
+#calendar-navigation-yearly {
+    display: inline;
+    padding: 3px 4px;
+    float: right;
+    border-left: 1px solid #bab5ab;
+}
+
+
+#calendar-navigation-daily:hover,
+#calendar-navigation-weekly:hover,
+#calendar-navigation-monthly:hover,
+#calendar-navigation-yearly:hover {
+    background: #cfc9bc;
 }
 
 #calendar-navigation-context {
@@ -638,6 +640,7 @@ div.content-nav {
     margin: 1ex auto;
     vertical-align: middle;
     overflow: auto;
+    padding: 0px;
 }
 
 #calendar-navigation-context-previous,
@@ -645,8 +648,9 @@ div.content-nav {
 #calendar-navigation-context-next {
     display: block;
     text-decoration: none;
-    width: 33%;
     float: left;
+    padding: 3px 4px;
+    border-right: 1px solid #bab5ab;
 }
 
 #calendar-navigation-context-previous {

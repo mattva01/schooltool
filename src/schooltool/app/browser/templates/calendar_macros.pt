@@ -1,60 +1,42 @@
 
 <metal:block define-macro="navigation" i18n:domain="schooltool">
-  <div id="calendar-navigation-context">
-    <a id="calendar-navigation-context-previous"
-       tal:attributes="href view/prev;
-                       title view/go_to_prev_title">
-      <span tal:content="view/prev_title">
-        Previous
-      </span>
-    </a>
-    <a id="calendar-navigation-context-current"
-       tal:attributes="href view/current;
-                       title view/go_to_current_title">
-      <span tal:content="view/current_title">
-        Current
-      </span>
-    </a>
-    <a id="calendar-navigation-context-next"
-       tal:attributes="href view/next;
-                       title view/go_to_next_title">
-      <span tal:content="view/next_title">
-        Next
-      </span>
-    </a>
-  </div>
+  <a id="calendar-navigation-context-previous"
+     tal:attributes="href view/prev;
+                     title view/go_to_prev_title">
+    <span tal:replace="view/prev_title">Previous</span>
+  </a>
+  <a id="calendar-navigation-context-current"
+     tal:attributes="href view/current;
+                     title view/go_to_current_title">
+    <span tal:replace="view/current_title">Current</span>
+  </a>
+  <a id="calendar-navigation-context-next"
+     tal:attributes="href view/next;
+                     title view/go_to_next_title">
+    <span tal:replace="view/next_title">Next</span>
+  </a>
 </metal:block>
 
 <metal:block define-macro="mode" i18n:domain="schooltool">
-  <div id="calendar-navigation">
-    <a id="calendar-navigation-pdf"
-       tal:condition="view/pdfURL"
-       tal:attributes="href view/pdfURL"
-       title="Printable version"
-       i18n:attributes="title"><img tal:attributes="
-                                   src context/++resource++printer.png"
-                          alt="Printable version" i18n:attributes="alt" /></a>
-    <a id="calendar-navigation-day"
-       tal:attributes="href python:view.calURL('daily')"
-       title="View daily calendar"
-       i18n:attributes="title"><img tal:attributes="src context/++resource++day.png"
-                              alt="Daily" i18n:attributes="alt" /></a>
-    <a id="calendar-navigation-week"
-       tal:attributes="href python:view.calURL('weekly')"
-       title="View weekly calendar"
-       i18n:attributes="title"><img tal:attributes="src context/++resource++week.png"
-                              alt="Weekly" i18n:attributes="alt" /></a>
-    <a id="calendar-navigation-month"
-       tal:attributes="href python:view.calURL('monthly')"
-       title="View monthly calendar"
-       i18n:attributes="title"><img tal:attributes="src context/++resource++month.png"
-                              alt="Monthly" i18n:attributes="alt" /></a>
-    <a id="calendar-navigation-year"
-       tal:attributes="href python:view.calURL('yearly')"
-       title="View yearly calendar"
-       i18n:attributes="title"><img tal:attributes="src context/++resource++year.png"
-                              alt="Yearly" i18n:attributes="alt" /></a>
-  </div>
+    <div id="calendar-navigation">
+
+      <div id="calendar-navigation-daily">
+        <a tal:attributes="href python:view.calURL('daily')"
+           title="View daily calendar">Daily</a>
+      </div>
+      <div id="calendar-navigation-weekly">
+        <a tal:attributes="href python:view.calURL('weekly')"
+           title="View weekly calendar">Weekly</a>
+      </div>
+      <div id="calendar-navigation-monthly">
+        <a tal:attributes="href python:view.calURL('monthly')"
+           title="View monthly calendar">Monthly</a>
+      </div>
+      <div id="calendar-navigation-yearly">
+        <a tal:attributes="href python:view.calURL('yearly')"
+           title="View yearly calendar">Yearly</a>
+      </div>
+    </div>
 </metal:block>
 
 <metal:block define-macro="page" i18n:domain="schooltool">
@@ -95,14 +77,16 @@
           <metal:block define-slot="content-header"/>
         </div>
         <div id="content-body">
-         <div metal:use-macro="view/@@schooltool_macros/calendar/mode"/>
          <div class="calcontent">
            <h1 i18n:translate="">
              Calendar for <span tal:replace="context/title"
              i18n:name="title" /> - <span i18n:name="calendar_title"
              tal:replace="view/title" />
            </h1>
-           <div metal:use-macro="view/@@schooltool_macros/calendar/navigation" />
+           <div id="calendar-navigation-context">
+             <div metal:use-macro="view/@@schooltool_macros/calendar/mode"/>
+             <div metal:use-macro="view/@@schooltool_macros/calendar/navigation" />
+           </div>
            <div metal:define-slot="calendar-body"/>
          </div>
         </div>

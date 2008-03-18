@@ -10,5 +10,5 @@
                          onclick string:document.cookie='schooltool.lang=${lang};;path=/'"
          tal:content="lang">EN</a>
     </tal:if>
-  </tal:block>
+  </tal:block> |
 </div>

@@ -347,6 +347,16 @@
 
   </configure>
 
+
+  <navigationViewlet
+     name="pdf"
+     for="schooltool.app.interfaces.ISchoolToolCalendar"
+     manager="schooltool.skin.IActionMenuManager"
+     template="templates/print.pt"
+     permission="schooltool.view"
+     order="60"
+     />
+
   <page
       name="daily.html"
       for="schooltool.app.interfaces.ISchoolToolCalendar"
@@ -607,6 +617,7 @@
       title="Generations"
       order="20"
       />
+
 
   </configure>
 

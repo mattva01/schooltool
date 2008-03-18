@@ -92,6 +92,7 @@ Let's render the weekly calendar view:
     >>> frog.headers['status']
     '200 Ok'
 
+
 Now let's render the monthly calendar view:
 
     # XXX: There is no link in the app for this URL.
