@@ -9,6 +9,12 @@
   <include package="schooltool.term" />
   <include package="schooltool.timetable" />
 
-  <browser:defaultSkin name="SchoolTool" />
+  <interface
+      interface="schooltool.timetable.ftesting.ITimetableFtestingSkin"
+      type="zope.publisher.interfaces.browser.IBrowserSkinType"
+      name="SchoolToolTimetabling"
+      />
+
+  <browser:defaultSkin name="SchoolToolTimetabling" />
 
 </configure>

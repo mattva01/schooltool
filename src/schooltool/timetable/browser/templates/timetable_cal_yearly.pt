@@ -34,5 +34,15 @@
         </td>
       </tr>
     </table>
+    <div style="right: 0px; float: right; border: thin solid gray; position: fixed; right: 10px; top: 50%">
+        <div style="text-align: center; text-decoration: underline; font-weight: bold"> Legend </div>
+            <div tal:repeat="term python: view.terms.keys()">
+                   <div style="margin: 2px; padding: 2px"
+                        tal:content="term/title|nothing" 
+                         tal:attributes="class python:'term'+str(view.terms[term])">
+                    Term
+                    </div>
+            </div>
+    </div>
   </metal:block>
 </html>

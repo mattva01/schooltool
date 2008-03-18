@@ -66,10 +66,10 @@ Year:
 
     >>> frog.open('http://localhost/persons/frog/calendar/2005')
     >>> print_table_cell_for_day('2005-09-11')
-    <a href="http://localhost/persons/frog/calendar/2005-09-11" class="cal_yearly_day">11</a>
+    <a href="http://localhost/persons/frog/calendar/2005-09-11" class="term1">11</a>
 
     >>> print_table_cell_for_day('2005-09-12')
-    <a href="http://localhost/persons/frog/calendar/2005-09-12" class="cal_yearly_day_busy">12</a>
+    <a href="http://localhost/persons/frog/calendar/2005-09-12" class="term1">12</a>
 
 
 Tests for Time Table editing
