@@ -58,10 +58,14 @@
               </tal:if>
 
               <tal:if condition="person">
-                <a id="tools-principal"
-                   tal:attributes="href person/@@absolute_url"
-                   tal:content="user/title">Schoolbell Person</a> |
-                <a id="tools-logout" i18n:translate=""
+                <a id="login-name" tal:attributes="href person/@@absolute_url"
+                   tal:content="user/title">Schoolbell Person</a>
+                <!-- XXX either all modules should include Help, or core
+                     should provide a dummy replacement, because eating errors is
+                     a bad idea -->
+                <tal:block replace="structure provider:schooltool.Help"
+                           on-error="nothing" /> |
+                <a id="login-logout" i18n:translate=""
                    tal:attributes="href string:${url}/auth/@@logout.html"
                    >Log Out</a>
               </tal:if>
@@ -69,11 +73,6 @@
             </span>
           </tal:if>
 
-          <!-- XXX either all modules should include Help, or core
-               should provide a dummy replacement, because eating errors is
-               a bad idea -->
-          <tal:block replace="structure provider:schooltool.Help"
-                     on-error="nothing" />
         </div>
         <div id="login-left">
           <span>SchoolTool &mdash; free admnistration software for Lee High School</span>
@@ -112,12 +111,12 @@
           <metal:block
               use-macro="view/@@schooltool_macros/generic/serverinfo" />
           <span i18n:translate="">
-            &copy; The Shuttleworth Foundation 2003 - <span>2007</span>:
+            &copy; The <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a> 2003 - <span>2008</span>:
             Supporting Social Innovation.
           </span>
       </p>
       <p i18n:translate="">
-        SchoolTool&trade; is a Trademark of The Shuttleworth Foundation.
+        <a href="http://www.schooltool.org">SchoolTool</a>&trade; is a Trademark of The <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a>.
       </p>
     </div>
   </body>

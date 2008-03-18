@@ -71,13 +71,6 @@ PRE {
 
 /***************************************************** BEGIN: Layout.css */
 
-#footer {
-	width: 70%;
-	padding: 1em 15%;
-	margin-top: 2em;
-	margin-bottom: 1em;
-}
-
 #columns {
 	margin-bottom: 1em;
 }
@@ -123,14 +116,15 @@ FORM div.oneline-form div.value{
 
 #header {
   color: black;
-  padding: 5px;
+  padding: 0px;
   font-size: 1.4em;
 
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 5px;
+  padding-bottom: 0px;
 
   text-align: left;
   background: #eae8e3;
+
 }
 
 #header > span {
@@ -138,36 +132,22 @@ FORM div.oneline-form div.value{
   padding: 5px;
   padding-top: 10px;
   padding-bottom: 5px;
-
+  line-height: 1.5em;
   border-top: none;
   margin: 0px;
-}
-
-#header .logo IMG {
-	float: left;
-}
-
-#header .logo {
-	height: 30px;
-	padding: 10px;
-	vertical-align: middle;
-}
-
-#header .logo H1 {
-	margin: 0;
-}
-
-#header .logo .main_logo {
-        text-decoration: none;
-        color: #000;
-        font-size: 3em;
+  white-space: nowrap;
 }
 
 #header #language_selector {
   float: right;
   position: absolute;
   right: 1em;
-  top: 4em;
+  top: 5em;
+}
+
+#tools-help {
+  color: white;
+
 }
 
 #login {
@@ -176,8 +156,8 @@ FORM div.oneline-form div.value{
   border-bottom: 1px solid black;
   color: white;
   padding: .8ex 1.6ex;
-  margin-top: 0px;
-  font-size: .75em;
+  margin-top: 5px;
+  font-size: .55em;
   font-weight: bold;
 }
 
@@ -190,7 +170,7 @@ FORM div.oneline-form div.value{
  float: right;
 }
 
-#login-logout a {
+#login-logout {
   font-weight: bold;
   color: lightblue;
 }
@@ -198,24 +178,6 @@ FORM div.oneline-form div.value{
 #login-name {
   font-weight: bold;
   color: white;
-}
-
-#schooltool-name {
-  margin: 3px 0 0 70px;
-  padding: 0;
-  font-size: .75em;
-}
-
-#school-title {
-  margin-top: -2px;
-  margin-left: 70px;
-  color: #444;
-  font-size: .5em;
-}
-
-#header .tools {
-	text-align: right;
-	padding: 2px 1ex;
 }
 
 #header .breadcrumbs {
@@ -227,11 +189,6 @@ FORM div.oneline-form div.value{
 	width: 14em;
 	margin-bottom: 5em;
         margin-top: 2em;
-}
-
-#footer {
-	text-align: center;
-	clear: both;
 }
 
 /* Calendar Views */
@@ -556,7 +513,7 @@ margin: -35px 0px 0px 0px;
  }
 
 div#content-nav-group {
- margin-top: -0.5em;
+ margin-top: .2em;
 
  }
 
@@ -565,6 +522,7 @@ div.content-nav {
   color: black;
   border: 1px solid #bab5ab;
   padding: 0.2em 0.3em;
+  margin: 0 0 0 4px;
   width: auto;
   display: inline;
   font-weight: bold;
@@ -622,14 +580,16 @@ div.content-nav {
 }
 
 #footer {
-  padding: .9em 4em;
-  margin: 0em 0em 0em 0em;
+  padding: .9em 4em 0;
+  margin: 0;
   background: #eae8e3;
   text-align: center;
   border-top: .1ex solid #bab5ab;
   border-bottom: .1ex solid #bab5ab;
   font-size: .8em;
   clear: both;
+  width: 70%;
+  padding: 1em 15%;
 }
 
 #footer P {
@@ -1475,3 +1435,4 @@ PRE.traceback SPAN.source {
 /*********************************************************** END: Style.css */
 
 /* vi: sw=4 ts=4 noet
+
