@@ -197,10 +197,9 @@
       permission="zope.ManageContent"
       />
 
-  <!-- XXX: Ahhh! Why is this a view of the person? -->
   <page
       name="site-preferences.html"
-      for="schooltool.person.interfaces.IPerson"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
       class="schooltool.app.browser.app.ApplicationPreferencesView"
       template="templates/application_preferences.pt"
       permission="schooltool.edit"

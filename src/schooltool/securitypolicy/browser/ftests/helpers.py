@@ -251,7 +251,7 @@ def schooltool_view(browser):
 
 
 def schooltool_info_view(browser):
-    browser.open('http://localhost/persons/manager/@@site-preferences.html')
+    browser.open('http://localhost/@@site-preferences.html')
     return 'Change site preferences' in browser.contents
 
 def schooltool_info_edit(browser):

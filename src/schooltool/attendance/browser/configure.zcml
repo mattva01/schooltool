@@ -6,7 +6,7 @@
   <!-- XXX: The same hack (temporary?) as in ApplicationPreferences -->
   <browser:page
       name="site-preferences-codes.html"
-      for="schooltool.person.interfaces.IPerson"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
       class="schooltool.attendance.browser.attendance.AttendancePreferencesView"
       template="templates/attendance_preferences.pt"
       permission="schooltool.edit" />
