@@ -21,6 +21,7 @@
       permission="zope.Public"
       provides="schooltool.app.browser.interfaces.IManageMenuViewletManager"
       class="schooltool.app.browser.app.ManageMenuViewletManager"
+      template="templates/manage_menu_manager.pt"
       />
 
   <viewlet

@@ -1,0 +1,4 @@
+<div id="manage_menu">
+  <span tal:repeat="viewlet options/viewlets"
+        tal:replace="structure viewlet/render" />
+</div>

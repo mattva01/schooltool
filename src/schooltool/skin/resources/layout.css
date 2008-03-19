@@ -134,7 +134,7 @@ FORM div.oneline-form div.value{
   padding-bottom: 5px;
   line-height: 1.5em;
   border-top: none;
-  margin: 0px;
+  margin: 0px 0px 0px 5px;
   white-space: nowrap;
 }
 
@@ -411,9 +411,17 @@ A.button-ok {
         text-transform: capitalize;
 }
 
-#tools-zmi-principal {
-    font-style: italic;
-}
+
+#column-center .navigation_header {
+   display: block;
+   font-size: 2em;
+   white-space: nowrap;
+   margin-bottom: 4px;
+ }
+
+#manage_menu {
+
+ }
 
 /*
 * Left Column and portlets

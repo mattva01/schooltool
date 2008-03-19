@@ -1,4 +1,5 @@
   <a tal:attributes="href string:${view/appURL}/${view/link}"
      tal:content="view/title"
+     class="navigation_header"
      i18n:domain="schooltool">Title</a>
 
