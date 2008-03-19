@@ -19,7 +19,7 @@
 from datetime import date
 
 from zope.interface import directlyProvides
-from zope.app import zapi
+from zope.component import getUtility
 from zope.formlib import form
 from zc.table.interfaces import ISortableColumn
 from zc.table import column
@@ -30,6 +30,7 @@ from zope.i18n import translate
 from hurry.query.interfaces import IQuery
 from hurry.query import query
 from zope.security.proxy import removeSecurityProxy
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.app.browser import ViewPreferences
 from schooltool.person.browser.person import PersonContainerView
@@ -142,7 +143,7 @@ class SearchTable(form.FormBase, PersonTable):
         # - *a* matches "Alpha" but not "Beta"
         # - queries smaller than three letters result in a parsetree.ParseError
         #   exception.
-        q = zapi.getUtility(IQuery)
+        q = getUtility(IQuery)
         s = None
         fulltext = self.search_data['fulltext']
         if fulltext:
@@ -190,7 +191,7 @@ class EditColumn(column.Column):
     """
     def renderCell(self, item, formatter):
         return '<a href="%s">%s</a>' % (
-            zapi.absoluteURL(item, formatter.request) + '/nameinfo/@@edit.html',
+            absoluteURL(item, formatter.request) + '/nameinfo/@@edit.html',
             translate(_("Edit"), formatter.request))
 
 
@@ -199,7 +200,7 @@ class DisplayColumn(column.Column):
     """
     def renderCell(self, item, formatter):
         return '<a href="%s">%s</a>' % (
-            zapi.absoluteURL(item, formatter.request) + '/nameinfo',
+            absoluteURL(item, formatter.request) + '/nameinfo',
             translate(_("Display"), formatter.request))
 
 
@@ -214,7 +215,7 @@ class FullnameColumn(column.GetterColumn):
 
     def cell_formatter(self, value, item, formatter):
         return '<a href="%s">%s</a>' % (
-            zapi.absoluteURL(item, formatter.request) + '/nameinfo',
+            absoluteURL(item, formatter.request) + '/nameinfo',
             value)
 
 

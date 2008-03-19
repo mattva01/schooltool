@@ -32,7 +32,7 @@ from zope.component import getAdapter
 from schooltool.securitypolicy import metaconfigure as mc
 from schooltool.securitypolicy.metaconfigure import CrowdsUtility
 from schooltool.securitypolicy.interfaces import ICrowdsUtility
-from zope.app import zapi
+from zope.component import queryUtility
 
 
 def doctest_CrowdsUtility():
@@ -48,14 +48,14 @@ def doctest_getCrowdsUtility():
     """Doctest for getCrowdsUtility.
 
         >>> from schooltool.securitypolicy.metaconfigure import getCrowdsUtility
-        >>> zapi.queryUtility(ICrowdsUtility) is None
+        >>> queryUtility(ICrowdsUtility) is None
         True
 
         >>> cru = getCrowdsUtility()
         >>> print cru
         <schooltool.securitypolicy.metaconfigure.CrowdsUtility object ...>
 
-        >>> zapi.queryUtility(ICrowdsUtility) is cru
+        >>> queryUtility(ICrowdsUtility) is cru
         True
 
     """

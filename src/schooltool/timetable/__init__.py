@@ -132,10 +132,9 @@ from sets import Set
 import zope.event
 from persistent import Persistent
 from persistent.dict import PersistentDict
-from zope.component import adapts
+from zope.component import adapts, subscribers
 from zope.interface import directlyProvides, implements
 
-from zope.app import zapi
 from zope.annotation.interfaces import IAnnotations
 from zope.location.interfaces import ILocation
 from zope.traversing.api import getPath
@@ -622,7 +621,7 @@ class CompositeTimetables(object):
 
     def collectTimetableSourceObjects(self):
         objs = []
-        for adapter in zapi.subscribers((self.context, ), ITimetableSource):
+        for adapter in subscribers((self.context, ), ITimetableSource):
             objs.extend(adapter.getTimetableSourceObjects())
         return set(objs)
 

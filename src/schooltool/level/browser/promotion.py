@@ -23,10 +23,10 @@ $Id$
 """
 import zope.interface
 import zope.schema
-from zope.app import zapi
+from zope.component import getUtility
 from zope.publisher import browser
 from zope.app import form
-
+import zope.security.proxy
 from schooltool.app import app
 from schooltool.common import SchoolToolMessage as _
 from schooltool.level import interfaces, promotion
@@ -81,7 +81,7 @@ class PromotionWorkItemsView(browser.BrowserView):
         """Return PT-friendly list of students who need to be initialized"""
         manager = app.getSchoolToolApplication()['groups']['manager']
         for id, item in interfaces.IManagerWorkItems(manager).items():
-            if zapi.isinstance(item, promotion.SelectInitialLevel):
+            if zope.security.proxy.isinstance(item, promotion.SelectInitialLevel):
                 wfData = item.participant.activity.process.workflowRelevantData
                 yield {'id': id,
                        'student': wfData.student,
@@ -91,7 +91,7 @@ class PromotionWorkItemsView(browser.BrowserView):
         """Return PT-friendly list of students who need to be promoted"""
         manager = app.getSchoolToolApplication()['groups']['manager']
         for id, item in interfaces.IManagerWorkItems(manager).items():
-            if zapi.isinstance(item, promotion.SetLevelOutcome):
+            if zope.security.proxy.isinstance(item, promotion.SetLevelOutcome):
                 wfData = item.participant.activity.process.workflowRelevantData
                 yield {'id': id,
                        'level': wfData.level,
@@ -102,7 +102,7 @@ class PromotionWorkItemsView(browser.BrowserView):
         """Update the workflows."""
         if 'ENROLL_SUBMIT' in self.request:
             persons = app.getSchoolToolApplication()['persons']
-            pd = zapi.getUtility(zope.wfmc.interfaces.IProcessDefinition,
+            pd = getUtility(zope.wfmc.interfaces.IProcessDefinition,
                                  name='schooltool.promotion')
 
             if 'ids' not in self.request:

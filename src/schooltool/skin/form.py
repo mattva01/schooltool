@@ -1,12 +1,12 @@
 import pytz
 import datetime
-from zope.app import zapi
 from zope import event
 from zope.formlib import form
 from zope.formlib.interfaces import IAction
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.interface.common import idatetime
 from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -87,7 +87,7 @@ class EditForm(form.PageEditForm):
 
     def cancel_action(self, action, data):
         # redirect to parent
-        url = zapi.absoluteURL(self.actualContext(), self.request)
+        url = absoluteURL(self.actualContext(), self.request)
         self.request.response.redirect(url)
         return ''
 

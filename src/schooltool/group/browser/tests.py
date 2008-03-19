@@ -319,7 +319,7 @@ def doctest_GroupAddView():
 
     The `nextURL` method tells Zope 3 where you should be redirected after
     successfully adding a group.  We will pretend that `container` is located
-    at the root so that zapi.absoluteURL(container) returns 'http://127.0.0.1'.
+    at the root so that absoluteURL(container) returns 'http://127.0.0.1'.
 
         >>> directlyProvides(container, IContainmentRoot)
         >>> view.nextURL()

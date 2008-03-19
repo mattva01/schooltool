@@ -20,9 +20,9 @@
 Browser views for notes.
 """
 
-from zope.app import zapi
 from zope.publisher.browser import BrowserView
 from zope.app.form.browser.add import AddView
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.note.interfaces import IHaveNotes, INotes, INote
 from schooltool.note.note import Note
@@ -73,10 +73,10 @@ class NoteAddView(AddView):
 
     def update(self):
         if 'CANCEL' in self.request:
-            url = zapi.absoluteURL(self.context, self.request)
+            url = absoluteURL(self.context, self.request)
             self.request.response.redirect(url)
         return AddView.update(self)
 
     def nextURL(self):
         """See zope.app.container.interfaces.IAdding"""
-        return zapi.absoluteURL(self.context, self.request)
+        return absoluteURL(self.context, self.request)

@@ -24,9 +24,9 @@ import datetime
 
 from zope.i18n import translate
 from zope.security.proxy import removeSecurityProxy
-from zope.app import zapi
 from zope.publisher.browser import BrowserView
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.app import getSchoolToolApplication
@@ -75,7 +75,7 @@ class EmergencyDayView(BrowserView):
         self.template = self.date_template
         if 'CANCEL' in self.request:
             self.request.response.redirect(
-                zapi.absoluteURL(self.context, self.request))
+                absoluteURL(self.context, self.request))
             return
         if 'date' in self.request:
             try:
@@ -138,7 +138,7 @@ class EmergencyDayView(BrowserView):
                               msg, allday=True))
 
             self.request.response.redirect(
-                zapi.absoluteURL(self.context, self.request))
+                absoluteURL(self.context, self.request))
 
 
 

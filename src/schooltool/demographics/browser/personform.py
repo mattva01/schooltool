@@ -17,7 +17,6 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-from zope.app import zapi
 from zope.interface import implements
 from zope.formlib import form
 from zope.schema import TextLine, Password, getFields
@@ -28,6 +27,7 @@ from zope.schema.interfaces import ITitledTokenizedTerm
 from zope.publisher.browser import BrowserView
 from zope.component import getUtility
 from zope.exceptions.interfaces import UserError
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.skin.form import AttributeEditForm
@@ -65,7 +65,7 @@ class AttributeMenu(BrowserMenu):
 
     def getMenuItems(self, object, request):
         # all rather hackish, but functional
-        obj_url = zapi.absoluteURL(object.__parent__, request)
+        obj_url = absoluteURL(object.__parent__, request)
         items = super(AttributeMenu, self).getMenuItems(object, request)
         for item in items:
             action = item['action']
@@ -113,7 +113,7 @@ class PersonEditForm(AttributeEditForm):
         """Given current menu we're in, get the URL for the next one.
         """
         menu = self.getMenu()
-        base_url = zapi.absoluteURL(self.context, self.request)
+        base_url = absoluteURL(self.context, self.request)
         url =  base_url + '/@@' + self.__name__
         return_next = False
         for entry in menu:
@@ -121,7 +121,7 @@ class PersonEditForm(AttributeEditForm):
                 return entry['action']
             if entry['action'] == url:
                 return_next = True
-        url = zapi.absoluteURL(self.actualContext(), self.request)
+        url = absoluteURL(self.actualContext(), self.request)
         return url + '/nameinfo'
 
 nameinfo_traverser = SingleAttributeTraverserPlugin('nameinfo')
@@ -131,7 +131,7 @@ class PersonView(BrowserView):
     """The default view of the person. Redirects to the nameinfo view.
     """
     def __call__(self):
-        url = zapi.absoluteURL(self.context.nameinfo, self.request)
+        url = absoluteURL(self.context.nameinfo, self.request)
         return self.request.response.redirect(url)
 
 
@@ -140,7 +140,7 @@ class PersonEditView(BrowserView):
     of nameinfo.
     """
     def __call__(self):
-        url = (zapi.absoluteURL(self.context.nameinfo, self.request) +
+        url = (absoluteURL(self.context.nameinfo, self.request) +
                '/edit.html')
         return self.request.response.redirect(url)
 
@@ -309,7 +309,7 @@ class PersonAddView(BasicForm):
                           nameinfo_data)
 
         self.addPerson(person)
-        url = (zapi.absoluteURL(person, self.request) +
+        url = (absoluteURL(person, self.request) +
                '/demographics/@@edit.html')
         self.request.response.redirect(url)
         return ''
@@ -321,7 +321,7 @@ class PersonAddView(BasicForm):
         return self._redirect()
 
     def _redirect(self):
-        url = zapi.absoluteURL(self.context, self.request)
+        url = absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
         return ''
 

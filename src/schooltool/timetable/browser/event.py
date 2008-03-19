@@ -22,13 +22,13 @@ Views for timetable event.
 $Id$
 """
 
-from zope.app import zapi
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import queryMultiAdapter
 from zope.interface import Interface
 from zope.schema import Text
 from zope.formlib import form
 from zope.html.field import HtmlFragment
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.skin.containers import TableContainerView
 from schooltool.app.browser.cal import CalendarEventView
@@ -67,7 +67,7 @@ class TimetableEventEditView(CalendarEventView, form.Form):
         editor.editorWidth = 430
         editor.editorHeight = 300
         editor.toolbarConfiguration = "schooltool"
-        url = zapi.absoluteURL(ISchoolToolApplication(None), self.request)
+        url = absoluteURL(ISchoolToolApplication(None), self.request)
         editor.configurationPath = (url + '/@@/editor_config.js')
 
     def setUpWidgets(self, ignore_request=False):
@@ -81,7 +81,7 @@ class TimetableEventEditView(CalendarEventView, form.Form):
         CalendarEventView.__init__(self, context, request)
 
     def redirect_to_parent(self):
-        url = zapi.absoluteURL(self.context.__parent__, self.request)
+        url = absoluteURL(self.context.__parent__, self.request)
         self.request.response.redirect(url)
         return ''
 

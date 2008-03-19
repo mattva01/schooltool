@@ -29,9 +29,9 @@ from zope.component import queryAdapter
 from zope.component import queryMultiAdapter
 from zope.component import queryUtility
 from zope.formlib import form
-from zope.app.zapi import absoluteURL
 from zope.session.interfaces import ISession
 from zope.app.form.browser import widget
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.app.browser.app import BaseEditView
 from schooltool.resource.interfaces import IBookingCalendar

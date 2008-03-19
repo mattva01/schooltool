@@ -29,11 +29,12 @@ from zope.app.component.site import LocalSiteManager
 from zope.app.component.site import SiteManagerContainer
 from zope.app.container.interfaces import IContained
 from zope.app.testing import setup
-from zope.component import queryUtility
+from zope.component import queryUtility, getGlobalSiteManager
 from zope.interface import Interface
 from zope.interface import implements
 from zope.location.interfaces import ILocation
 from zope.testing import doctest
+from zope.traversing.api import traverse
 
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.app.interfaces import IHaveCalendar
@@ -77,8 +78,7 @@ def doctest_evolve():
       >>> app.setSiteManager(manager)
       >>> setSite(app)
 
-      >>> from zope.app import zapi
-      >>> default = zapi.traverse(app, '++etc++site/default')
+      >>> default = traverse(app, '++etc++site/default')
 
       >>> utility = UtilityStub('Local_utility_1')
       >>> default['Local_utility_1'] = utility
@@ -115,7 +115,7 @@ def doctest_evolve():
       True
 
       >>> utility = UtilityStub('Global_utility_1')
-      >>> zapi.getGlobalSiteManager().registerUtility(utility, IPersonFactory)
+      >>> getGlobalSiteManager().registerUtility(utility, IPersonFactory)
 
       >>> setSite(None)
       >>> evolve(context)

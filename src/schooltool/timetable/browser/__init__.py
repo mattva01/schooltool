@@ -25,13 +25,13 @@ import datetime
 import sets
 import re
 
-from zope.app import zapi
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
 from zope.interface import implements
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces import NotFound
 from zope.security.proxy import removeSecurityProxy
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
@@ -611,7 +611,7 @@ class TimetableAddForm(TimetableSetupViewBase):
 
             # TODO: find a better place to redirect to
             self.request.response.redirect(
-                zapi.absoluteURL(self.context, self.request))
+                absoluteURL(self.context, self.request))
         return self.template()
 
 
@@ -693,7 +693,7 @@ class SectionTimetableSetupView(TimetableSetupViewBase):
 
         if 'CANCEL' in self.request:
             self.request.response.redirect(
-                zapi.absoluteURL(self.context, self.request))
+                absoluteURL(self.context, self.request))
         if 'SAVE' in self.request:
             section = removeSecurityProxy(self.context)
             for key in self.ttkeys:
@@ -720,7 +720,7 @@ class SectionTimetableSetupView(TimetableSetupViewBase):
 
             # TODO: find a better place to redirect to
             self.request.response.redirect(
-                zapi.absoluteURL(
+                absoluteURL(
                     ITimetables(self.context).timetables[self.ttkeys[0]],
                     self.request))
 
@@ -784,7 +784,7 @@ class TimetableEditView(TimetableSetupViewBase):
 
         if 'CANCEL' in self.request:
             self.request.response.redirect(
-                zapi.absoluteURL(self.context, self.request))
+                absoluteURL(self.context, self.request))
         if 'SAVE' in self.request:
             for key in self.ttkeys:
                 if ITimetables(section).timetables.get(key, None):
@@ -810,7 +810,7 @@ class TimetableEditView(TimetableSetupViewBase):
 
             # TODO: find a better place to redirect to
             self.request.response.redirect(
-                zapi.absoluteURL(self.context,
+                absoluteURL(self.context,
                                  self.request))
 
         return self.template()
@@ -897,7 +897,7 @@ class SpecialDayView(BrowserView):
         self.template = self.select_template
         if 'CANCEL' in self.request:
             self.request.response.redirect(
-                zapi.absoluteURL(self.context, self.request))
+                absoluteURL(self.context, self.request))
             return
         if 'date' in self.request:
             try:
@@ -923,7 +923,7 @@ class SpecialDayView(BrowserView):
                     self.context.model.exceptionDays)
                 exceptionDays[self.date] = daytemplate
                 self.request.response.redirect(
-                    zapi.absoluteURL(self.context, self.request))
+                    absoluteURL(self.context, self.request))
 
 
     def timeplustd(self, t, td):

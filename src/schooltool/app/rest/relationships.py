@@ -22,7 +22,6 @@ RESTive views for relationships
 $Id$
 """
 
-from zope.app import zapi
 from zope.traversing.api import traverse
 from zope.traversing.interfaces import TraversalError
 from zope.component import getUtility
@@ -30,6 +29,7 @@ from zope.component.interfaces import ComponentLookupError
 from zope.publisher.interfaces import NotFound
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import ProxyFactory
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.common.xmlparsing import LxmlDocument
 from schooltool.app.app import getSchoolToolApplication
@@ -137,10 +137,10 @@ class RelationshipsView(View):
     # ModifyPermission to add members to groups.
 
     def listLinks(self):
-        return [{'traverse': zapi.absoluteURL(link.target, self.request),
+        return [{'traverse': absoluteURL(link.target, self.request),
                  'type': link.rel_type.uri,
                  'role': link.role.uri,
-                 'href': zapi.absoluteURL(link, self.request)}
+                 'href': absoluteURL(link, self.request)}
                 for link in self.context]
 
     def POST(self):
@@ -161,7 +161,7 @@ class RelationshipsView(View):
 
         try:
             sb_app = getSchoolToolApplication()
-            sb_url = zapi.absoluteURL(sb_app, self.request)
+            sb_url = absoluteURL(sb_app, self.request)
             path = path.replace("%s/" % sb_url, "")
             target = traverse(sb_app, path)
         except TraversalError, e:
@@ -185,10 +185,10 @@ class RelationshipsView(View):
         except DuplicateRelationship:
             raise RestError(
                 "Duplicate relationship between '%s' and '%s' of type '%s'" %
-                (zapi.absoluteURL(parent, self.request), path, rel_type))
+                (absoluteURL(parent, self.request), path, rel_type))
 
         link = self.context.find(my_role, target, target_role, rel_type)
-        location = zapi.absoluteURL(link, self.request)
+        location = absoluteURL(link, self.request)
 
         response.setHeader('Location', location)
         response.setStatus(201)
@@ -215,7 +215,7 @@ class LinkView(View):
     def info(self):
         return {'role': self.context.role.uri,
                 'arcrole': self.context.rel_type.uri,
-                'href': zapi.absoluteURL(self.context.target, self.request)}
+                'href': absoluteURL(self.context.target, self.request)}
 
     def DELETE(self):
         unrelate(self.context.rel_type,

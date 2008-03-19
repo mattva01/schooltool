@@ -22,10 +22,10 @@ Timetable sample data generation
 $Id$
 """
 
-from zope.app import zapi
 from zope.interface import implements
 from zope.wfmc.interfaces import IProcessDefinition
 from zope.security.proxy import removeSecurityProxy
+from zope.component import getUtility
 
 from schooltool.sampledata import PortableRandom
 from schooltool.sampledata.interfaces import ISampleDataPlugin
@@ -52,7 +52,7 @@ class SampleLevels(object):
         levels['9th-grade'] = Level('9th grade', isInitial=True,
                                     nextLevel=levels['10th-grade'])
 
-        pd = zapi.getUtility(IProcessDefinition, 'schooltool.promotion')
+        pd = getUtility(IProcessDefinition, 'schooltool.promotion')
 
         for personid in app['persons']:
             if personid.startswith('student'):

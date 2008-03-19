@@ -22,11 +22,10 @@ Timetabling Schema views.
 $Id$
 """
 from zope.i18n import translate
-from zope.component import adapts
+from zope.component import adapts, getUtility, queryUtility
 from zope.interface import Interface, implements
 from zope.schema import TextLine, Int
 from zope.schema.interfaces import RequiredMissing
-from zope.app import zapi
 from zope.app.container.interfaces import INameChooser
 from zope.app.form.interfaces import IInputWidget
 from zope.app.form.interfaces import WidgetsError
@@ -36,6 +35,7 @@ from zope.publisher.browser import BrowserView
 from zope.traversing.api import getParent, getName
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.common import SchoolToolMessage as _
 from schooltool.skin.containers import ContainerView, ContainerDeleteView
@@ -166,7 +166,7 @@ class SimpleTimetableSchemaAdd(BrowserView):
         for title, start, duration in periods:
             daytemplate.add(SchooldaySlot(start, duration))
 
-        factory = zapi.getUtility(ITimetableModelFactory,
+        factory = getUtility(ITimetableModelFactory,
                                   'WeeklyTimetableModel')
         model = factory(self.day_ids, {None: daytemplate})
         app = ISchoolToolApplication(None)
@@ -186,7 +186,7 @@ class SimpleTimetableSchemaAdd(BrowserView):
 
         if 'CANCEL' in self.request:
             self.request.response.redirect(
-                zapi.absoluteURL(self.context, self.request))
+                absoluteURL(self.context, self.request))
         elif 'CREATE' in self.request:
             periods = self.getPeriods()
             if self.error:
@@ -204,7 +204,7 @@ class SimpleTimetableSchemaAdd(BrowserView):
 
             self.context[name] = schema
             self.request.response.redirect(
-                zapi.absoluteURL(self.context, self.request))
+                absoluteURL(self.context, self.request))
 
         return self.template()
 
@@ -291,7 +291,7 @@ class AdvancedTimetableSchemaAdd(BrowserView, TabindexMixin):
 
         if 'CREATE' in self.request:
             data = getWidgetsData(self, self._schema)
-            factory = zapi.queryUtility(ITimetableModelFactory,
+            factory = queryUtility(ITimetableModelFactory,
                                         name=self.model_name)
             if factory is None:
                 self.model_error = _("Please select a value")
@@ -306,7 +306,7 @@ class AdvancedTimetableSchemaAdd(BrowserView, TabindexMixin):
                 #self.request.appLog(_("Timetable schema %s created") %
                 #               getPath(self.context[key]))
                 return self.request.response.redirect(
-                    zapi.absoluteURL(self.context, self.request))
+                    absoluteURL(self.context, self.request))
         return self.template()
 
     def rows(self):

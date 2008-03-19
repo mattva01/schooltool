@@ -30,7 +30,6 @@ from zc.table import table
 from zc.table import column
 from zc.table.interfaces import ISortableColumn
 from zc.table.column import GetterColumn
-from zope.app import zapi
 from zope.component import queryMultiAdapter
 from zope.security.proxy import removeSecurityProxy
 from zope.app.dependable.interfaces import IDependable
@@ -38,6 +37,7 @@ from zope.app.catalog.interfaces import ICatalog
 from zope.component import getUtility
 from zope.app.intid.interfaces import IIntIds
 from zope.component import queryUtility
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.table.batch import Batch
 from schooltool.table.interfaces import IFilterWidget
@@ -161,7 +161,7 @@ class DependableCheckboxColumn(CheckboxColumn):
 
 
 def url_cell_formatter(value, item, formatter):
-    url = zapi.absoluteURL(item, formatter.request)
+    url = absoluteURL(item, formatter.request)
     return '<a href="%s">%s</a>' % (url, value)
 
 

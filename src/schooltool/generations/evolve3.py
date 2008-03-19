@@ -25,11 +25,11 @@ unknown visitors from seeing it.
 $Id$
 """
 
-from zope.app import zapi
 from zope.app.generations.utility import findObjectsProviding
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.security.interfaces import IUnauthenticatedGroup
 from zope.securitypolicy.interfaces import IPrincipalPermissionManager
+from zope.component import queryUtility
 from schooltool.app.interfaces import ISchoolToolApplication
 
 def evolve(context):
@@ -39,7 +39,7 @@ def evolve(context):
     """
     root = context.connection.root().get(ZopePublication.root_name, None)
     for app in findObjectsProviding(root, ISchoolToolApplication):
-        unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
+        unauthenticated = queryUtility(IUnauthenticatedGroup)
 
         app_perms = IPrincipalPermissionManager(app)
         app_perms.grantPermissionToPrincipal(

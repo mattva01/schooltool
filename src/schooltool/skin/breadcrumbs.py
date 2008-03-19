@@ -24,10 +24,11 @@ __docformat__ = 'reStructuredText'
 import zope.component
 import zope.interface
 import zope.publisher.interfaces.http
-from zope.app import zapi
 from zope.publisher import browser
 from zope.traversing.interfaces import IContainmentRoot
 from zope.security.management import checkPermission
+from zope.traversing.browser.absoluteurl import absoluteURL
+from zope.traversing.api import getParents
 
 from schooltool.common import SchoolToolMessage as _
 from schooltool.skin import interfaces
@@ -39,11 +40,11 @@ class Breadcrumbs(browser.BrowserView):
 
     @property
     def crumbs(self):
-        objects = [self.context] + list(zapi.getParents(self.context))
+        objects = [self.context] + list(getParents(self.context))
         objects.reverse()
         for object in objects:
             active = False
-            info = zapi.getMultiAdapter((object, self.request),
+            info = zope.component.getMultiAdapter((object, self.request),
                                         interfaces.IBreadcrumbInfo)
 
             active = checkPermission('schooltool.view', object)
@@ -78,7 +79,7 @@ class GenericBreadcrumbInfo(object):
     @property
     def url(self):
         """See interfaces.IBreadcrumbInfo"""
-        return zapi.absoluteURL(self.context, self.request)
+        return absoluteURL(self.context, self.request)
 
 
 def CustomNameBreadCrumbInfo(name):

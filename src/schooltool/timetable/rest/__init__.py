@@ -25,7 +25,6 @@ $Id$
 import datetime
 import sets
 
-from zope.app import zapi
 from zope.event import notify
 from zope.component import adapts
 from zope.component import queryMultiAdapter
@@ -38,6 +37,7 @@ from zope.traversing.api import traverse
 from zope.traversing.interfaces import TraversalError
 from zope.app.http.put import NullResource
 from zope.lifecycleevent import ObjectCreatedEvent
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.app.rest import View, Template
 from schooltool.app.rest.errors import RestError
@@ -129,7 +129,7 @@ class TimetableReadView(View):
                         content_type="text/xml; charset=UTF-8")
 
     def absolutePath(self, obj):
-        return zapi.absoluteURL(obj, self.request)
+        return absoluteURL(obj, self.request)
 
 
 class TimetableFileFactory(object):
@@ -299,7 +299,7 @@ class TimetableFileFactory(object):
             path = unquote_uri(resource.attrib['{http://www.w3.org/1999/xlink}href'])
             try:
                 st_app = getSchoolToolApplication()
-                st_url = zapi.absoluteURL(st_app, self.request)
+                st_url = absoluteURL(st_app, self.request)
                 path = path.replace("%s/" % st_url, "")
                 res = traverse(st_app, path)
             except TraversalError, e:
@@ -504,7 +504,7 @@ class TimetableDictView(View):
         for timetable in self.getTimetables():
             term, schema = timetable.__name__.split(".")
             timetables.append({
-                'url': zapi.absoluteURL(timetable, self.request),
+                'url': absoluteURL(timetable, self.request),
                 'term': term,
                 'schema': schema})
         return timetables

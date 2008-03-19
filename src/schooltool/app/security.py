@@ -25,8 +25,7 @@ $Id$
 import urllib
 
 from persistent import Persistent
-from zope.app import zapi
-from zope.component import getUtility
+from zope.component import getUtility, queryUtility
 from zope.app.component import getNextUtility
 from zope.app.container.contained import Contained
 from zope.location.interfaces import ILocation
@@ -41,7 +40,8 @@ from zope.publisher.browser import FileUpload
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.app.component.interfaces import ISite
 from zope.app.component.site import LocalSiteManager
-
+from zope.traversing.browser.absoluteurl import absoluteURL
+from zope.traversing.api import traverse
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolAuthentication
 from schooltool.app.interfaces import IAsset
@@ -137,7 +137,7 @@ class PersonContainerAuthenticationPlugin(object):
     def unauthorized(self, id, request):
         """Signal an authorization failure."""
         app = getSchoolToolApplication()
-        app_url = zapi.absoluteURL(app, request)
+        app_url = absoluteURL(app, request)
         query_string = request.getHeader('QUERY_STRING')
         post_form_id = self.storePOSTData(request)
 
@@ -169,10 +169,10 @@ class PersonContainerAuthenticationPlugin(object):
                 for group in person.groups:
                     group_principal_id = self.group_prefix + group.__name__
                     principal.groups.append(group_principal_id)
-                authenticated = zapi.queryUtility(IAuthenticatedGroup)
+                authenticated = queryUtility(IAuthenticatedGroup)
                 if authenticated:
                     principal.groups.append(authenticated.id)
-                everyone = zapi.queryUtility(IEveryoneGroup)
+                everyone = queryUtility(IEveryoneGroup)
                 if everyone:
                     principal.groups.append(everyone.id)
                 return principal
@@ -275,7 +275,7 @@ def setUpLocalAuth(site, auth=None):
         site.setSiteManager(LocalSiteManager(site))
 
     # go to the site management folder
-    default = zapi.traverse(site, '++etc++site/default')
+    default = traverse(site, '++etc++site/default')
     # if we already have the auth utility registered, we're done
     if 'SchoolToolAuth' in default:
         return

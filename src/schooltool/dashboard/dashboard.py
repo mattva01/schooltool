@@ -21,7 +21,6 @@
 $Id$
 """
 __docformat__ = 'reStructuredText'
-from zope.app import zapi
 import zope.component
 import zope.interface
 from zope.viewlet import manager, viewlet
@@ -136,7 +135,7 @@ class SectionsCategory(PersonDashboardCategory):
                 continue
             if self.isStudent and not person in section.members:
                 continue
-            url = zapi.absoluteURL(section, self.request)
+            url = absoluteURL(section, self.request)
             if self.isTeacher:
                 url += '/gradebook'
             elif self.isStudent:

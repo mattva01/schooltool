@@ -22,7 +22,6 @@ course browser views.
 $Id$
 """
 from zope.security.proxy import removeSecurityProxy
-from zope.app import zapi
 from zope.app.component.hooks import getSite
 from zope.app.form.browser.add import AddView
 from zope.app.form.interfaces import WidgetsError
@@ -31,6 +30,7 @@ from zope.publisher.browser import BrowserView
 from zope.component import getMultiAdapter
 from zope.app.container.interfaces import INameChooser
 from zc.table import table
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.person.interfaces import IPerson
 from schooltool.group.interfaces import IGroup
@@ -132,7 +132,7 @@ class SectionAddView(AddView):
         self.context.add(section)
         self.course.sections.add(section)
         section.title = "%s (%s)" % (self.course.title, id)
-        self.request.response.redirect(zapi.absoluteURL(section, self.request))
+        self.request.response.redirect(absoluteURL(section, self.request))
 
 
 class SectionEditView(BaseEditView):

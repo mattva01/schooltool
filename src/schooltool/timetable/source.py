@@ -23,8 +23,7 @@ $Id$
 """
 from sets import Set
 from zope.interface import implements
-from zope.component import adapts
-from zope.app import zapi
+from zope.component import adapts, subscribers
 
 from schooltool.timetable.interfaces import IHaveTimetables
 from schooltool.timetable.interfaces import ICompositeTimetables
@@ -53,7 +52,7 @@ class BaseRelationshipTimetableSource(object):
         objects = getRelatedObjects(self.context, self.role)
         objs = []
         for obj in objects:
-            for adapter in zapi.subscribers((obj, ), ITimetableSource):
+            for adapter in subscribers((obj, ), ITimetableSource):
                 objs.extend(adapter.getTimetableSourceObjects())
 
         return list(set(objs))

@@ -21,9 +21,9 @@ Views for the setup data generation
 
 $Id: browser.py 5225 2005-10-12 18:02:40Z alga $
 """
-from zope.app import zapi
 from zope.publisher.browser import BrowserView
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.setupdata.generator import generate
@@ -44,7 +44,7 @@ class SetupDataView(BrowserView):
     def update(self):
         if 'CANCEL' in self.request:
             self.request.response.redirect(
-                zapi.absoluteURL(self.context, self.request))
+                absoluteURL(self.context, self.request))
         if 'SUBMIT' in self.request:
             # TODO: maybe clear database here
             self.times = generate(self.context)

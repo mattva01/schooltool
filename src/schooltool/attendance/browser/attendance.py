@@ -28,7 +28,6 @@ import pytz
 
 from zope.app.form.interfaces import WidgetsError
 from zope.app.form.interfaces import IInputWidget
-from zope.app import zapi
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.browser import IBrowserRequest
@@ -43,6 +42,7 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.security.proxy import removeSecurityProxy
 from zope.security import checkPermission
 from zope.i18n import translate
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.common import collect
 from schooltool.table.batch import IterableBatch
@@ -114,7 +114,7 @@ class AttendancePreferencesView(BrowserView):
 
     def update(self):
         if 'CANCEL' in self.request:
-            url = zapi.absoluteURL(self.context, self.request)
+            url = absoluteURL(self.context, self.request)
             self.request.response.redirect(url)
             return
         for arg in self.request.keys():
@@ -256,7 +256,7 @@ class AttendanceCalendarEventViewlet(object):
         if not ISection.providedBy(section):
             return None
         return '%s/attendance/%s/%s' % (
-                    zapi.absoluteURL(section, self.request),
+                    absoluteURL(section, self.request),
                     event_for_display.dtstarttz.date(),
                     calendar_event.period_id)
 
@@ -325,7 +325,7 @@ class AttendanceView(BrowserView):
             ar = self._getAttendanceRecord(ISectionAttendance(person))
             current_status = formatAttendanceRecord(ar)
             disabled_checkbox = ar.isPresent() or ar.isTardy()
-            section_url = zapi.absoluteURL(ISection(self.context),
+            section_url = absoluteURL(ISection(self.context),
                                    self.request)
             sparkline_url = '%s/@@sparkline.png?person=%s&date=%s' % \
                             (section_url, person.username, self.date)

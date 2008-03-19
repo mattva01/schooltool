@@ -21,10 +21,10 @@ course browser views.
 
 $Id$
 """
-from zope.app import zapi
 from zope.app.form.browser.add import AddView
 from zope.publisher.browser import BrowserView
 from zope.security.proxy import removeSecurityProxy
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.skin.containers import ContainerView
 from schooltool.course.interfaces import ICourse, ICourseContainer, ISection
@@ -53,7 +53,7 @@ class CourseAddView(AddView):
     """A view for adding Courses."""
 
     def nextURL(self):
-        return zapi.absoluteURL(self.context.context, self.request)
+        return absoluteURL(self.context.context, self.request)
 
     def update(self):
         if 'CANCEL' in self.request:

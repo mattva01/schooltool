@@ -29,7 +29,7 @@ interface schooltool.setupdata.interfaces.ISetupDataGeneratorPlugin.
 $Id: generator.py 5224 2005-10-12 17:38:34Z alga $
 """
 import time
-from zope.app import zapi
+from zope.component import getUtilitiesFor
 from schooltool.setupdata.interfaces import ISetupDataPlugin
 from schooltool.setupdata.interfaces import CyclicDependencyError
 
@@ -50,7 +50,7 @@ def generate(app):
     """
 
     plugins = dict([(obj.name, obj) for name, obj in
-                    zapi.getUtilitiesFor(ISetupDataPlugin)])
+                    getUtilitiesFor(ISetupDataPlugin)])
 
 
     # status is a dict plugin names as keys and statuses as values.

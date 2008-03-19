@@ -26,7 +26,7 @@ import zope.interface.common.mapping
 import zope.schema
 import zope.app.container.constraints
 from zope.app import container
-from zope.app import zapi
+from zope.traversing.api import getName
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -50,7 +50,7 @@ class LevelLoopError(LevelValidationError):
 
     def __init__(self, level):
         LevelValidationError.__init__(
-            self, 'Loop-Closing Level: ' + zapi.getName(level))
+            self, 'Loop-Closing Level: ' + getName(level))
         self.level = level
 
 class IDisconnectedLevelsError(ILevelValidationError):
@@ -64,7 +64,7 @@ class DisconnectedLevelsError(LevelValidationError):
 
     def __init__(self, levels):
         LevelValidationError.__init__(
-            self, ', '.join([zapi.getName(level) for level in levels]))
+            self, ', '.join([getName(level) for level in levels]))
         self.levels = levels
 
 

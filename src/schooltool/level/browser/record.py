@@ -24,7 +24,7 @@ $Id$
 import zope.security
 import zope.wfmc
 from zope.app import form
-from zope.app import zapi
+from zope.component import getUtility, getMultiAdapter
 from zope.publisher import browser
 
 from schooltool.app import app
@@ -59,7 +59,7 @@ class AcademicRecordView(browser.BrowserView):
     def updateProcess(self):
         """Update the workflow process."""
         if 'INITIALIZE_SUBMIT' in self.request:
-            pd = zapi.getUtility(zope.wfmc.interfaces.IProcessDefinition,
+            pd = getUtility(zope.wfmc.interfaces.IProcessDefinition,
                                  name='schooltool.promotion')
             process = pd()
             process.start(zope.security.proxy.removeSecurityProxy(self.context),
@@ -82,7 +82,7 @@ class AcademicRecordView(browser.BrowserView):
             manager = app.getSchoolToolApplication()['groups']['manager']
             for id, item in interfaces.IManagerWorkItems(manager).items():
                 if id in self.request['workitemId']:
-                    view = zapi.getMultiAdapter((item, self.request),
+                    view = getMultiAdapter((item, self.request),
                                                 promotion.IFinishSchemaWorkitem)
                     return view.finish()
 
@@ -101,7 +101,7 @@ class AcademicRecordView(browser.BrowserView):
         """Get workitems for this student"""
         manager = app.getSchoolToolApplication()['groups']['manager']
         return [
-            zapi.getMultiAdapter(
+            getMultiAdapter(
                 (item, self.request), promotion.IFinishSchemaWorkitem)
             for item in interfaces.IManagerWorkItems(manager).values()
             if (item.participant.activity.process.workflowRelevantData.student

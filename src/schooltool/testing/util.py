@@ -369,9 +369,9 @@ class FakeFolder(object):
 
 
 def fakePath(obj, path):
-    """Make zapi.absoluteURL(obj) return url.
+    """Make absoluteURL(obj) return url.
 
-        >>> from zope.app import zapi
+        >>> from zope.traversing.browser.absoluteurl import absoluteURL
         >>> from zope.app.testing import setup
         >>> setup.placelessSetUp()
         >>> setup.setUpTraversal()
@@ -379,7 +379,7 @@ def fakePath(obj, path):
         >>> class Stub: pass
         >>> obj = Stub()
         >>> fakePath(obj, '/dir/subdir/name')
-        >>> zapi.absoluteURL(obj, TestRequest())
+        >>> absoluteURL(obj, TestRequest())
         'http://127.0.0.1/dir/subdir/name'
 
         >>> setup.placelessTearDown()

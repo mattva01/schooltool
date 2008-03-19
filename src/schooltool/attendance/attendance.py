@@ -40,10 +40,10 @@ from zope.wfmc.interfaces import IActivity
 from zope.wfmc.interfaces import IProcessDefinition
 from zope.interface import implements
 from zope.component import adapts
-from zope.app import zapi
 from zope.security.proxy import removeSecurityProxy
 from zope.publisher.interfaces import IApplicationRequest
 from zope.security.management import queryInteraction
+from zope.component import queryUtility, getUtility
 
 from schooltool.common import SchoolToolMessage as _
 from schooltool.person.interfaces import IPerson
@@ -258,8 +258,8 @@ class AttendanceRecord(Persistent):
         return cmp(reprtuple(self), reprtuple(other))
 
     def _createWorkflow(self, person):
-        pd = zapi.getUtility(IProcessDefinition,
-                             name='schooltool.attendance.explanation')
+        pd = getUtility(IProcessDefinition,
+                        name='schooltool.attendance.explanation')
         pd().start(self, person)
 
     def isUnknown(self):

@@ -23,7 +23,7 @@ $Id$
 """
 import zope.interface
 
-from zope.app import zapi
+from zope.component import getMultiAdapter
 from zope.publisher.browser import BrowserView
 
 from zope.app import basicskin
@@ -41,6 +41,6 @@ class SchoolToolMacros(BrowserView):
         name = key + '_macros'
 
         if name in self.macro_pages:
-            return zapi.getMultiAdapter((self.context, self.request), name=name)
+            return getMultiAdapter((self.context, self.request), name=name)
 
         raise KeyError, key

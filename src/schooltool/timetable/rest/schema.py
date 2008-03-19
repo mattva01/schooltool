@@ -25,9 +25,9 @@ import sets
 import datetime
 
 from zope.interface import implements
-from zope.component import adapts
-from zope.app import zapi
+from zope.component import adapts, queryUtility
 from zope.filerepresentation.interfaces import IFileFactory, IWriteFile
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.app.rest import View, Template
 from schooltool.app.rest.app import GenericContainerView
@@ -44,7 +44,7 @@ class TimetableSchemaContainerView(GenericContainerView):
     """RESTive view of a TimetableSchemaContainer."""
 
     def items(self):
-        return [{'href': zapi.absoluteURL(self.context[key], self.request),
+        return [{'href': absoluteURL(self.context[key], self.request),
                  'title': self.context[key].__name__}
                 for key in self.context.keys()]
 
@@ -247,7 +247,7 @@ class TimetableSchemaFileFactory(object):
         tznode = doc.xpath('/tt:timetable/tt:timezone', self.nsmap)[0]
         tzname = tznode.attrib['name']
 
-        factory = zapi.queryUtility(ITimetableModelFactory, factory_id)
+        factory = queryUtility(ITimetableModelFactory, factory_id)
         if factory is None:
             raise RestError("Incorrect timetable model factory")
 

@@ -27,9 +27,9 @@ from pprint import pprint
 from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
-from zope.app import zapi
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.testing import setup, ztapi
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.testing import setup as sbsetup
@@ -210,7 +210,7 @@ def doctest_LoginView():
         >>> view.error
         >>> request.response.getStatus()
         302
-        >>> url = zapi.absoluteURL(app, request)
+        >>> url = absoluteURL(app, request)
         >>> request.response.getHeader('Location')
         'http://host/path'
 
@@ -267,7 +267,7 @@ def doctest_LogoutView():
 
         >>> request.response.getStatus()
         302
-        >>> url = zapi.absoluteURL(app, request)
+        >>> url = absoluteURL(app, request)
         >>> request.response.getHeader('Location') == url
         True
 

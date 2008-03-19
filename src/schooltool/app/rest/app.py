@@ -22,10 +22,10 @@ RESTive views for SchoolToolApplication
 $Id$
 """
 
-from zope.app import zapi
 from zope.interface import implements
 from zope.app.container.interfaces import INameChooser
 from zope.filerepresentation.interfaces import IFileFactory, IWriteFile
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.common.xmlparsing import LxmlDocument
 from schooltool.app.rest import View, Template
@@ -75,7 +75,7 @@ class ApplicationView(View):
                         content_type="text/xml; charset=UTF-8")
 
     def getContainers(self):
-        return [{'href': zapi.absoluteURL(self.context[key], self.request),
+        return [{'href': absoluteURL(self.context[key], self.request),
                  'title': key} for key in self.context.keys()]
 
 
@@ -89,7 +89,7 @@ class GenericContainerView(View):
         return self.context.__name__
 
     def items(self):
-        return [{'href': zapi.absoluteURL(self.context[key], self.request),
+        return [{'href': absoluteURL(self.context[key], self.request),
                  'title': self.context[key].title}
                 for key in self.context.keys()]
 
@@ -110,7 +110,7 @@ class GenericContainerView(View):
         factory = IFileFactory(self.context)
         item = factory(None, None, body)
         self.add(item)
-        location = zapi.absoluteURL(item, self.request)
+        location = absoluteURL(item, self.request)
 
         response.setStatus(201, 'Created')
         response.setHeader('Content-Type', 'text/plain; charset=UTF-8')

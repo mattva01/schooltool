@@ -124,7 +124,6 @@ from sets import Set
 from zope.interface import Interface
 from zope.schema import TextLine, Text, getFieldNamesInOrder
 from zope.i18n import translate
-from zope.app import zapi
 from zope.app.form.utility import setUpWidgets
 from zope.app.form.utility import getWidgetsData
 from zope.app.form.interfaces import IInputWidget
@@ -133,6 +132,7 @@ from zope.publisher.browser import BrowserView
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.container.interfaces import INameChooser
 from zope.session.interfaces import ISession
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.app.browser.cal import day_of_week_names
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -785,7 +785,7 @@ class FinalStep(Step):
         ttschema = self.createSchema()
         self.add(ttschema)
         self.request.response.redirect(
-            zapi.absoluteURL(self.context, self.request))
+            absoluteURL(self.context, self.request))
 
     def update(self):
         return True
@@ -919,7 +919,7 @@ class TimetableSchemaWizard(BrowserView):
         if 'CANCEL' in self.request:
             self.rememberLastStep(FirstStep(self.context, self.request))
             self.request.response.redirect(
-                    zapi.absoluteURL(self.context, self.request))
+                    absoluteURL(self.context, self.request))
             return
         current_step = self.getLastStep()
         if current_step.update():

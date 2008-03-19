@@ -27,9 +27,9 @@ $Id$
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.generations.utility import findObjectsProviding
 from zope.app.component.hooks import setSite
-from zope.app import zapi
 from zope.component import queryUtility
 from zope.app.container.interfaces import IContained
+from zope.traversing.api import traverse
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPersonFactory
@@ -40,8 +40,7 @@ def evolve(context):
     for app in findObjectsProviding(root, ISchoolToolApplication):
         setSite(app)
         manager = app.getSiteManager()
-        default = zapi.traverse(app, '++etc++site/default')
-
+        default = traverse(app, '++etc++site/default')
         local_utility = queryUtility(IPersonFactory, default=None)
         if (local_utility is not None and
             IContained.providedBy(local_utility) and

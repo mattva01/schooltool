@@ -28,7 +28,6 @@ from zope.schema.interfaces import ValidationError
 from zope.schema.interfaces import IIterableSource
 from zope.schema.interfaces import ITitledTokenizedTerm
 from zope.security.proxy import removeSecurityProxy
-from zope.app import zapi
 from zope.app.form.browser.add import AddView
 from zope.app.form.browser.source import SourceMultiCheckBoxWidget as SourceMultiCheckBoxWidget_
 from zope.app.form.browser.interfaces import ITerms
@@ -47,6 +46,7 @@ from zope.component import queryAdapter
 from zope.component import adapts
 from zope.app.catalog.interfaces import ICatalog
 from zope.app.intid.interfaces import IIntIds
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.common import SchoolToolMessage as _
 from schooltool.skin.form import BasicForm
@@ -103,7 +103,7 @@ class PersonPreferencesView(BrowserView):
 
     def update(self):
         if 'CANCEL' in self.request:
-            url = zapi.absoluteURL(self.person, self.request)
+            url = absoluteURL(self.person, self.request)
             self.request.response.redirect(url)
         elif 'UPDATE_SUBMIT' in self.request:
             try:
@@ -186,7 +186,7 @@ class PersonPasswordEditView(BasicForm):
     @form.action(_("Cancel"))
     def handle_cancel_action(self, action, data):
         # redirect to parent
-        url = zapi.absoluteURL(self.context, self.request)
+        url = absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
         return ''
 
@@ -354,14 +354,14 @@ class PersonAddView(AddView):
 
     def update(self):
         if 'CANCEL' in self.request:
-            url = zapi.absoluteURL(self.context, self.request)
+            url = absoluteURL(self.context, self.request)
             self.request.response.redirect(url)
 
         return AddView.update(self)
 
     def nextURL(self):
         """See zope.app.container.interfaces.IAdding"""
-        return zapi.absoluteURL(self.context, self.request)
+        return absoluteURL(self.context, self.request)
 
 
 class IPersonEditForm(Interface):
@@ -432,7 +432,7 @@ class PersonEditView(BrowserView):
                 self.clear_photo_widget.setRenderedValue(False)
 
         if 'CANCEL' in self.request:
-            url = zapi.absoluteURL(self.context, self.request)
+            url = absoluteURL(self.context, self.request)
             self.request.response.redirect(url)
 
 

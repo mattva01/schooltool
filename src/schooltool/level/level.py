@@ -25,10 +25,10 @@ import persistent
 import sets
 import zope.interface
 import zope.schema
-from zope.app import zapi
 from zope.app.container import contained, btree
 from zope.interface import classProvides
 from zope.schema.interfaces import IVocabularyFactory
+from zope.traversing.api import getName
 
 from schooltool.app import app
 from schooltool.level import interfaces
@@ -87,7 +87,7 @@ class LevelTerm(object):
 
     def __init__(self, level):
         self.value = level
-        self.token = zapi.getName(level)
+        self.token = getName(level)
         self.title = level.title
 
     def __repr__(self):

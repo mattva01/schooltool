@@ -35,7 +35,7 @@ $Id$
 import time
 
 import transaction
-from zope.app import zapi
+from zope.component import getUtilitiesFor
 
 from schooltool.sampledata.interfaces import ISampleDataPlugin
 from schooltool.sampledata.interfaces import CyclicDependencyError
@@ -57,7 +57,7 @@ def generate(app, seed=None, dry_run=False, pluginNames=[]):
     """
 
     plugins = dict([(obj.name, obj) for name, obj in
-                    zapi.getUtilitiesFor(ISampleDataPlugin)])
+                    getUtilitiesFor(ISampleDataPlugin)])
 
 
     # status is a dict plugin names as keys and statuses as values.

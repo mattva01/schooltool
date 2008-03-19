@@ -27,12 +27,13 @@ __docformat__ = 'reStructuredText'
 import zope.interface
 from zope import contentprovider
 from zope.app import onlinehelp
-from zope.app import zapi
 from zope.app.publisher import browser
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserView
 from zope.app.onlinehelp.browser.tree import OnlineHelpTopicTreeView
+from zope.component import getMultiAdapter
+from zope.traversing.api import getName, getParent
 
 def sortById(x,y):
     return cmp(x.id, y.id)
@@ -98,7 +99,7 @@ class ContextHelpView(BrowserView):
     def getContextualTopicView(self):
         """Retrieve and render the source of a context help topic """
         topic = self.contextHelpTopic
-        view = zapi.getMultiAdapter((topic, self.request), name='index.html')
+        view = getMultiAdapter((topic, self.request), name='index.html')
         return view()
 
     @property
@@ -110,8 +111,8 @@ class ContextHelpView(BrowserView):
         help_context = self.context.context
         self.topic = None
         if IBrowserView.providedBy(help_context):
-            name = zapi.getName(help_context)
-            help_context = zapi.getParent(help_context)
+            name = getName(help_context)
+            help_context = getParent(help_context)
         else:
             name = browser.queryDefaultViewName(help_context, self.request)
             if name is None:

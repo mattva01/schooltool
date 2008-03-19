@@ -27,7 +27,6 @@ import itertools
 from zope.interface import Interface
 from zope.schema import TextLine, Date
 
-from zope.app import zapi
 from zope.app.container.interfaces import INameChooser
 from zope.lifecycleevent import modified
 from zope.app.form.browser.add import AddView
@@ -37,6 +36,7 @@ from zope.app.form.utility import getWidgetsData
 from zope.app.form.utility import setUpEditWidgets
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserView
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.skin.containers import TableContainerView
 from schooltool.app.browser.cal import month_names
@@ -230,7 +230,7 @@ class TermAddView(AddView, TermEditViewMixin):
 
     def nextURL(self):
         """Return the location to visit once the term's been added."""
-        return zapi.absoluteURL(self.context, self.request)
+        return absoluteURL(self.context, self.request)
 
     def calendar(self):
         """Prepare the calendar for display.

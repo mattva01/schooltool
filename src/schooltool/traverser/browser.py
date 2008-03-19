@@ -21,14 +21,14 @@ Pluggable Traverser Implementation for the Browser
 
 $Id$
 """
-from zope.app import zapi
 from schooltool.traverser.traverser import PluggableTraverser
+from zope.app.publisher.browser import getDefaultViewName
 
 
 class PluggableBrowserTraverser(PluggableTraverser):
 
     def browserDefault(self, request):
         """See zope.publisher.browser.interfaces.IBrowserPublisher"""
-        view_name = zapi.getDefaultViewName(self.context, request)
+        view_name = getDefaultViewName(self.context, request)
         view_uri = "@@%s" %view_name
         return self.context, (view_uri,)

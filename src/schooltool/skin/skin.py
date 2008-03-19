@@ -22,7 +22,7 @@ SchoolTool skin.
 $Id$
 """
 
-from zope.component import getAdapter
+from zope.component import getAdapter, getMultiAdapter, subscribers
 from zope.interface import Interface, implements
 from zope.schema import Object
 from zope.i18n.interfaces import IUserPreferredLanguages
@@ -33,8 +33,8 @@ from zope.viewlet.manager import ViewletManagerBase
 from zope.viewlet.metadirectives import IViewletDirective
 from zope.configuration.fields import MessageID
 from zope.publisher.browser import BrowserView
-from zope.app import zapi
 from zope.app.publisher.browser.menu import getMenu
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.app.interfaces import ICookieLanguageSelector
 from schooltool.securitypolicy.crowds import Crowd
@@ -123,7 +123,7 @@ class NavigationViewlet(object):
         return ISchoolToolApplication(None)
 
     def appURL(self):
-        return zapi.absoluteURL(getSchoolToolApplication(), self.request)
+        return absoluteURL(getSchoolToolApplication(), self.request)
 
 
 class TopLevelContainerNavigationViewlet(NavigationViewlet):
@@ -151,7 +151,7 @@ class ActionMenuViewletManager(OrderedViewletManager):
     implements(IActionMenuContext, IActionMenuManager)
 
     def title(self):
-        breadcrumb = zapi.getMultiAdapter((self.context, self.request),
+        breadcrumb = getMultiAdapter((self.context, self.request),
                                           IBreadcrumbInfo)
         return breadcrumb.name
 
@@ -161,7 +161,7 @@ class ActionMenuViewletManager(OrderedViewletManager):
         Submenu items are registered as subscribers with interface
         ISubMenuItem.
         """
-        return list(zapi.subscribers((context, ), ISubMenuItem))
+        return list(subscribers((context, ), ISubMenuItem))
 
     def update(self):
         # set the right context for menu items that will be set up by

@@ -23,11 +23,11 @@ $Id$
 """
 import urllib
 
-from zope.app import zapi
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import queryMultiAdapter
 from zope.publisher.browser import BrowserView
 from zope.security.checker import canAccess
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.table.batch import IterableBatch
 from schooltool.table.table import DependableCheckboxColumn
@@ -86,7 +86,7 @@ class ContainerDeleteView(BrowserView):
             self.request.response.redirect(self.nextURL())
 
     def nextURL(self):
-        return zapi.absoluteURL(self.context, self.request)
+        return absoluteURL(self.context, self.request)
 
 
 class TableContainerView(BrowserView):

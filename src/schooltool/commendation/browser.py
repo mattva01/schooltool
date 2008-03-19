@@ -24,9 +24,10 @@ __docformat__ = 'reStructuredText'
 from zope import annotation
 from zope.app import container
 from zope.app import security
-from zope.app import zapi
 from zope.app.form.browser.add import AddView
 from zope.publisher import browser
+from zope.traversing.browser.absoluteurl import absoluteURL
+from zope.component import queryUtility, getUtility
 
 # Import the 'commendation' message id factory
 from schooltool.commendation import interfaces, commendation
@@ -56,7 +57,7 @@ class CommendationDetails(object):
     def grantor(self):
         # Here we try to look up the title for a principal, whose id we saved.
         # The first step is to look up the closest authentication utility.
-        auth = zapi.getUtility(security.interfaces.IAuthentication)
+        auth = getUtility(security.interfaces.IAuthentication)
 
         # We then try to find the principal. When, during initialization of
         # the commendation, no principal was found, we stored the string
@@ -132,7 +133,7 @@ class CommendationAddView(AddView):
 
     def nextURL(self):
         """See zope.app.container.interfaces.IAdding"""
-        return zapi.absoluteURL(self.context.__parent__, self.request)
+        return absoluteURL(self.context.__parent__, self.request)
 
 
 class CommendationsView(browser.BrowserView):

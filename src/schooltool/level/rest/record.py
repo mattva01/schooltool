@@ -26,7 +26,7 @@ import zope.component
 import zope.interface
 import zope.security
 import zope.wfmc
-from zope.app import zapi
+from zope.traversing.api import getName
 
 from schooltool.app import app, rest
 from schooltool.level import interfaces
@@ -150,7 +150,7 @@ class AcademicProcessCreator(object):
         self.record = record
 
     def create(self):
-        pd = zapi.getUtility(zope.wfmc.interfaces.IProcessDefinition,
+        pd = zope.component.getUtility(zope.wfmc.interfaces.IProcessDefinition,
                              name='schooltool.promotion')
         process = pd()
         process.start(
@@ -237,7 +237,7 @@ class SetLevelOutcomeView(rest.View):
     def level(self):
         process = zope.security.proxy.removeSecurityProxy(
             self.context).participant.activity.process
-        return zapi.getName(process.workflowRelevantData.level)
+        return getName(process.workflowRelevantData.level)
 
     def POST(self):
         body = self.request.bodyStream.read()

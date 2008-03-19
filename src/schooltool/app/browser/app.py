@@ -28,19 +28,19 @@ from zope.interface import implements
 from zope.security.interfaces import IParticipation
 from zope.security.management import getSecurityPolicy
 from zope.security.proxy import removeSecurityProxy
-from zope.app import zapi
 from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.app.form.browser.add import AddView
 from zope.app.form.browser.editview import EditView
 from zope.app.form.interfaces import IInputWidget
 from zope.app.form.interfaces import WidgetsError
 from zope.publisher.browser import BrowserView
-from zope.component import getUtility
+from zope.component import getUtility, getMultiAdapter
 from zope.component import adapter
 from zope.component import queryMultiAdapter
 from zope.app.security.interfaces import IAuthentication
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserPage
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.browser.interfaces import ISchoolMenuViewletManager
@@ -66,8 +66,8 @@ class ApplicationView(BrowserView):
     def update(self):
         prefs = IApplicationPreferences(getSchoolToolApplication())
         if prefs.frontPageCalendar:
-            url = zapi.absoluteURL(ISchoolToolCalendar(self.context),
-                                   self.request)
+            url = absoluteURL(ISchoolToolCalendar(self.context),
+                              self.request)
             self.request.response.redirect(url)
 
 
@@ -75,7 +75,7 @@ class BaseAddView(AddView):
     """Common functionality for adding groups and resources"""
 
     def nextURL(self):
-        return zapi.absoluteURL(self.context.context, self.request)
+        return absoluteURL(self.context.context, self.request)
 
     def update(self):
         if 'CANCEL' in self.request:
@@ -89,12 +89,12 @@ class BaseEditView(EditView):
 
     def update(self):
         if 'CANCEL' in self.request:
-            url = zapi.absoluteURL(self.context, self.request)
+            url = absoluteURL(self.context, self.request)
             self.request.response.redirect(url)
         else:
             status = EditView.update(self)
             if 'UPDATE_SUBMIT' in self.request and not self.errors:
-                url = zapi.absoluteURL(self.context, self.request)
+                url = absoluteURL(self.context, self.request)
                 self.request.response.redirect(url)
             return status
 
@@ -157,7 +157,7 @@ class RelationshipViewBase(BrowserView):
         return self.getSelectedItems()
 
     def update(self):
-        context_url = zapi.absoluteURL(self.context, self.request)
+        context_url = absoluteURL(self.context, self.request)
 
         if 'ADD_ITEMS' in self.request:
             for item in self.getAvailableItems():
@@ -185,7 +185,7 @@ class ApplicationLoginView(BrowserView):
     """Backwards compatible login view that redirects to the actual login view."""
 
     def __call__(self):
-        nexturl = zapi.absoluteURL(self.context,
+        nexturl = absoluteURL(self.context,
                                    self.request) + '/auth/@@login.html'
         if 'nexturl' in self.request:
             nexturl += '?nexturl=' + self.request['nexturl']
@@ -196,8 +196,8 @@ class ApplicationLogoutView(BrowserView):
     """Backwards compatible logout view that redirects to the actual logout view."""
 
     def __call__(self):
-        nexturl = zapi.absoluteURL(self.context,
-                                   self.request) + '/auth/@@logout.html'
+        nexturl = absoluteURL(self.context,
+                              self.request) + '/auth/@@logout.html'
         self.request.response.redirect(nexturl)
 
 
@@ -213,7 +213,7 @@ class LoginView(BrowserView):
     def update(self):
         if ('LOGIN' in self.request and 'username' in self.request and
             'password' in self.request):
-            auth = zapi.getUtility(IAuthentication)
+            auth = getUtility(IAuthentication)
             try:
                 auth.setCredentials(self.request, self.request['username'],
                                     self.request['password'])
@@ -225,10 +225,10 @@ class LoginView(BrowserView):
                 if 'nexturl' in self.request:
                     nexturl = self.request['nexturl']
                 elif person is not None:
-                    nexturl = zapi.absoluteURL(
+                    nexturl = absoluteURL(
                         person, self.request) + '/@@logindispatch'
                 else:
-                    nexturl = zapi.absoluteURL(ISchoolToolApplication(None),
+                    nexturl = absoluteURL(ISchoolToolApplication(None),
                                                self.request)
                 self.request.response.redirect(nexturl)
 
@@ -240,7 +240,7 @@ class LoginDispatchView(BrowserView):
     """
 
     def __call__(self):
-        nexturl = zapi.absoluteURL(
+        nexturl = absoluteURL(
             ISchoolToolCalendar(self.context), self.request)
         self.request.response.redirect(nexturl)
 
@@ -249,9 +249,9 @@ class LogoutView(BrowserView):
     """Clears the authentication creds from the session"""
 
     def __call__(self):
-        auth = zapi.getUtility(IAuthentication)
+        auth = getUtility(IAuthentication)
         auth.clearCredentials(self.request)
-        url = zapi.absoluteURL(ISchoolToolApplication(None),
+        url = absoluteURL(ISchoolToolApplication(None),
                                self.request)
         self.request.response.redirect(url)
 
@@ -278,7 +278,7 @@ class ApplicationPreferencesView(BrowserView):
 
     def update(self):
         if 'CANCEL' in self.request:
-            url = zapi.absoluteURL(self.context, self.request)
+            url = absoluteURL(self.context, self.request)
             self.request.response.redirect(url)
         elif 'UPDATE_SUBMIT' in self.request:
             try:
@@ -303,7 +303,7 @@ class ProbeParticipation:
 
 def hasPermissions(permissions, object, principalid):
     """Test if the principal has access according to the security policy."""
-    principal = zapi.getUtility(IAuthentication).getPrincipal(principalid)
+    principal = getUtility(IAuthentication).getPrincipal(principalid)
     participation = ProbeParticipation(principal)
     interaction = getSecurityPolicy()(participation)
     return [interaction.checkPermission(permission, object)

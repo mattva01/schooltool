@@ -27,9 +27,9 @@ from sets import Set
 
 from zope.interface import implements
 from zope.annotation.interfaces import IAttributeAnnotatable
-from zope.app import zapi
 from zope.app.container.btree import BTreeContainer
 from zope.app.container.contained import Contained
+from zope.traversing.api import getParent, getName
 
 from schooltool.timetable import Timetable, TimetableDay, findRelatedTimetables
 
@@ -170,5 +170,5 @@ def clearTimetablesOnDeletion(obj, event):
     """
     object = event.object
     for tt in findRelatedTimetables(obj):
-        ttdict = zapi.getParent(tt)
-        del ttdict[zapi.getName(tt)]
+        ttdict = getParent(tt)
+        del ttdict[getName(tt)]

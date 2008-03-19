@@ -21,10 +21,10 @@ Views for the sample data generation
 
 $Id$
 """
-from zope.app import zapi
 from zope.publisher.browser import BrowserView
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
-from zope.component import queryMultiAdapter
+from zope.component import queryMultiAdapter, getUtilitiesFor
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.sampledata.generator import generate
@@ -51,7 +51,7 @@ class SampleDataView(BrowserView):
                 self.seed = None
         if 'CANCEL' in self.request:
             self.request.response.redirect(
-                zapi.absoluteURL(self.context, self.request))
+                absoluteURL(self.context, self.request))
         if 'SUBMIT' in self.request:
             # TODO: maybe clear database here
             self.times = generate(self.context, self.seed,
@@ -66,7 +66,7 @@ class SampleDataView(BrowserView):
         selectedPlugins = self._getSelectedPlugins()
         times = generate(self.context, self.seed,
                          dry_run=True, pluginNames=selectedPlugins)
-        plugins = [obj for name, obj in zapi.getUtilitiesFor(ISampleDataPlugin)]
+        plugins = [obj for name, obj in getUtilitiesFor(ISampleDataPlugin)]
         result = []
         if 'CLEAR' in self.request:
             return plugins

@@ -17,10 +17,10 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-from zope.app import zapi
 from zope.app.component.hooks import getSite, setSite
 from zope.app.component.interfaces import ISite
 from zope.component import queryUtility
+from zope.traversing.api import traverse
 
 
 class UtilitySpecification(object):
@@ -56,7 +56,7 @@ class UtilitySpecification(object):
 
 def setUpUtilities(site, specs):
    manager = site.getSiteManager()
-   default = zapi.traverse(site, '++etc++site/default')
+   default = traverse(site, '++etc++site/default')
    for spec in specs:
        local_utility = getLocalUtility(default, spec)
        if local_utility is not None:

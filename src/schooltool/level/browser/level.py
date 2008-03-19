@@ -25,9 +25,10 @@ import zope.component
 import zope.interface
 import zope.schema
 from zope.security import proxy
-from zope.app import zapi
 from zope.app.form.browser import add
 from zope.publisher import browser
+from zope.traversing.browser.absoluteurl import absoluteURL
+from zope.traversing.api import getParent
 
 from schooltool.level import interfaces
 from schooltool.common import SchoolToolMessage as _
@@ -51,7 +52,7 @@ class LevelValidationView(browser.BrowserView):
             try:
                 self.context.validate()
             except interfaces.LevelValidationError, error:
-                return zapi.getMultiAdapter((error, self.request), name="info")
+                return zope.component.getMultiAdapter((error, self.request), name="info")
 
 
 class IEditLevelSchema(interfaces.ILevel):
@@ -89,7 +90,7 @@ class EditLevelAdapter(object):
             setattr(self.context, name, value)
 
     def getPreviousLevel(self):
-        parent = zapi.getParent(self.context)
+        parent = getParent(self.context)
         for level in parent.values():
             if level.nextLevel == self.context:
                 return level
@@ -101,7 +102,7 @@ class LevelAddView(add.AddView):
     """A view for adding Levels."""
 
     def nextURL(self):
-        return zapi.absoluteURL(self.context.context, self.request)
+        return absoluteURL(self.context.context, self.request)
 
     def update(self):
         if 'CANCEL' in self.request:

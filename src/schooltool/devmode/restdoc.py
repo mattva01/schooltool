@@ -28,7 +28,6 @@ import zope.interface
 from zope.component.registry import AdapterRegistration, SubscriptionRegistration
 from zope.publisher.interfaces.http import IHTTPRequest
 
-from zope.app import zapi
 from zope.app.apidoc import presentation, utilities, component
 from zope.app.apidoc.ifacemodule.browser import findAPIDocumentationRoot
 from zope.app.apidoc.classregistry import classRegistry
@@ -39,6 +38,8 @@ from zope.app.content.interfaces import IContentType
 from zope.filerepresentation.interfaces import IFileFactory, IWriteFile
 from zope.app.http.put import FilePUT
 from zope.publisher.browser import BrowserView
+from zope.component import queryUtility, getGlobalSiteManager, getUtilitiesFor, getUtility
+from zope.traversing.api import getName
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.traverser.interfaces import ITraverserPlugin
@@ -48,7 +49,7 @@ from schooltool.traverser.traverser import NullTraverserPluginTemplate
 
 def getHTTPViewRegistration(klass, name):
     """Return a view registration for the given object, type and name."""
-    gsm = zapi.getGlobalSiteManager()
+    gsm = getGlobalSiteManager()
     spec = zope.interface.implementedBy(klass)
     adapter = gsm.adapters.lookup(
         (spec, IHTTPRequest), zope.interface.Interface, name)
@@ -77,7 +78,7 @@ def getContainerInterfaces(klass):
 
 
 def getAdapters(spec, provided):
-    gsm = zapi.getGlobalSiteManager()
+    gsm = getGlobalSiteManager()
     factories = [
         factory
         for name, factory in gsm.adapters.lookupAll((spec,), provided)]
@@ -88,7 +89,7 @@ def getAdapters(spec, provided):
 
 
 def getNameTraversers(klass):
-    gsm = zapi.getGlobalSiteManager()
+    gsm = getGlobalSiteManager()
     spec = zope.interface.implementedBy(klass)
     factories = [f for f in gsm.adapters.subscriptions((spec, IHTTPRequest),
                                                        ITraverserPlugin)]
@@ -110,7 +111,7 @@ class RESTMenu(object):
         self.context.get('')
 
         results = []
-        for name, iface in zapi.getUtilitiesFor(IContentType):
+        for name, iface in getUtilitiesFor(IContentType):
 
             for path, klass in classRegistry.getClassesThatImplement(iface):
                 if path.startswith('zope'):
@@ -135,11 +136,11 @@ class RESTDocumentation(BrowserView):
             self.apidocRoot = ''
 
         # Ensure that the class registry is populated
-        zapi.getUtility(IDocumentationModule, 'Code').setup()
+        getUtility(IDocumentationModule, 'Code').setup()
 
         # We need the naked class for introspection everywhere.
         self.klass = classRegistry[context.getPath()]
-        self.name = zapi.getName(context)
+        self.name = getName(context)
 
 
     def getGETInfo(self):
@@ -317,7 +318,7 @@ class RESTDocumentation(BrowserView):
 
             adapter = None
             if AdapterTraverserPluginTemplate in factory.__bases__:
-                gsm = zapi.getGlobalSiteManager()
+                gsm = getGlobalSiteManager()
                 iface = factory.interface
                 spec = zope.interface.implementedBy(self.klass)
                 adapter = gsm.adapters.lookup(

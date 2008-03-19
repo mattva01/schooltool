@@ -29,8 +29,8 @@ from datetime import datetime, date, time, timedelta
 
 import transaction
 from pytz import timezone, utc
-from zope.component import queryMultiAdapter, adapts
-from zope.component import subscribers
+from zope.component import queryMultiAdapter, adapts, getMultiAdapter
+from zope.component import subscribers, getUtility, getMultiAdapter
 from zope.event import notify
 from zope.interface import implements, Interface
 from zope.i18n import translate
@@ -41,7 +41,6 @@ from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import canAccess, canWrite
 from zope.schema import Date, TextLine, Choice, Int, Bool, List, Text
 from zope.schema.interfaces import RequiredMissing, ConstraintNotSatisfied
-from zope.app import zapi
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.app.form.browser.add import AddView
 from zope.app.form.browser.editview import EditView
@@ -52,6 +51,7 @@ from zope.app.form.interfaces import WidgetInputError, WidgetsError
 from zope.app.form.utility import getWidgetsData
 from zope.publisher.browser import BrowserView
 from zope.traversing.browser.absoluteurl import absoluteURL
+from zope.traversing.api import getParent
 from zope.filerepresentation.interfaces import IWriteFile, IReadFile
 from zope.session.interfaces import ISession
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
@@ -329,12 +329,12 @@ class EventForDisplay(object):
         if IEditCalendar.providedBy(self.source_calendar):
             # display the link of the source calendar (the event is a
             # booking event)
-            return '%s/%s' % (zapi.absoluteURL(self.source_calendar, self.request),
+            return '%s/%s' % (absoluteURL(self.source_calendar, self.request),
                               urllib.quote(self.__name__))
 
         # if event is comming from an immutable (readonly) calendar,
         # display the absolute url of the event itself
-        return zapi.absoluteURL(self, self.request)
+        return absoluteURL(self, self.request)
 
 
     def editLink(self):
@@ -346,7 +346,7 @@ class EventForDisplay(object):
         if self.context.__parent__ is None:
             return None
         return '%s/edit.html?date=%s' % (
-                        zapi.absoluteURL(self.context, self.request),
+                        absoluteURL(self.context, self.request),
                         self.dtstarttz.strftime('%Y-%m-%d'))
 
     def deleteLink(self):
@@ -358,7 +358,7 @@ class EventForDisplay(object):
         if self.context.__parent__ is None:
             return None
         return '%s/delete.html?event_id=%s&date=%s' % (
-                        zapi.absoluteURL(self.source_calendar, self.request),
+                        absoluteURL(self.source_calendar, self.request),
                         self.unique_id,
                         self.dtstarttz.strftime('%Y-%m-%d'))
 
@@ -390,7 +390,7 @@ class EventForDisplay(object):
         if self.context.__parent__ is None:
             return None
         return '%s/booking.html?date=%s' % (
-                        zapi.absoluteURL(self.context, self.request),
+                        absoluteURL(self.context, self.request),
                         self.dtstarttz.strftime('%Y-%m-%d'))
 
     def renderShort(self):
@@ -484,7 +484,7 @@ class CalendarViewBase(BrowserView):
             return url + '.pdf'
 
     def dayTitle(self, day):
-        formatter = zapi.getMultiAdapter((day, self.request), name='fullDate')
+        formatter = getMultiAdapter((day, self.request), name='fullDate')
         return formatter()
 
     __url = None
@@ -1184,7 +1184,7 @@ class DailyCalendarView(CalendarViewBase):
 
         Returns a list, caches the answer for subsequent calls.
         """
-        view = zapi.getMultiAdapter((self.context, self.request),
+        view = getMultiAdapter((self.context, self.request),
                                     name='daily_calendar_rows')
         return view.calendarRows(self.cursor, self.starthour, self.endhour,
                                  events)
@@ -1466,7 +1466,7 @@ class CalendarListSubscriber(object):
         # personal calendar
         yield (self.context, '#9db8d2', '#7590ae')
 
-        parent = zapi.getParent(self.context)
+        parent = getParent(self.context)
 
         user = IPerson(self.request.principal, None)
         if user is None:
@@ -1770,7 +1770,7 @@ class CalendarEventViewMixin(object):
         editor.editorWidth = 430
         editor.editorHeight = 300
         editor.toolbarConfiguration = "schooltool"
-        url = zapi.absoluteURL(ISchoolToolApplication(None), self.request)
+        url = absoluteURL(ISchoolToolApplication(None), self.request)
         editor.configurationPath = (url + '/@@/editor_config.js')
 
     def weekdayChecked(self, weekday):
@@ -2265,9 +2265,9 @@ class CalendarEventBookingView(CalendarEventView):
         status = {}
         for conflict in conflicts:
             if conflict.context.__parent__ and conflict.context.__parent__.__parent__:
-                zapi.absoluteURL(self.context, self.request)
+                absoluteURL(self.context, self.request)
                 owner = conflict.context.__parent__.__parent__
-                url = zapi.absoluteURL(owner, self.request)
+                url = absoluteURL(owner, self.request)
             else:
                 owner = conflict.context.activity.owner
                 url = owner.absolute_url()
@@ -2619,7 +2619,7 @@ class CalendarEventBreadcrumbInfo(breadcrumbs.GenericBreadcrumbInfo):
     @property
     def url(self):
         name = urllib.quote(self.context.__name__.encode('utf-8'), "@+")
-        parent_info = zapi.getMultiAdapter(
+        parent_info = getMultiAdapter(
             (self.context.__parent__, self.request), IBreadcrumbInfo)
         return '%s/%s/edit.html' %(parent_info.url, name)
 

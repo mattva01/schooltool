@@ -21,7 +21,6 @@ Basic person browser views.
 
 $Id$
 """
-from zope.app import zapi
 from zope.app.container.interfaces import INameChooser
 from zope.app.form.browser.interfaces import ITerms
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
@@ -35,6 +34,7 @@ from zope.schema import Password
 from zope.schema import TextLine
 from zope.schema.interfaces import ITitledTokenizedTerm
 from zope.app.form.interfaces import WidgetInputError
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPersonFactory
@@ -129,7 +129,7 @@ class PersonAddView(BasicForm):
             groups = ISchoolToolApplication(None)['groups']
             person.groups.add(groups[person.gradeclass])
 
-        url = zapi.absoluteURL(person, self.request)
+        url = absoluteURL(person, self.request)
         self.request.response.redirect(url)
         return ''
 
@@ -140,7 +140,7 @@ class PersonAddView(BasicForm):
         return self._redirect()
 
     def _redirect(self):
-        url = zapi.absoluteURL(self.context, self.request)
+        url = absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
         return ''
 

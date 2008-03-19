@@ -27,7 +27,7 @@ import sys
 import unittest
 
 from zope.testing import doctest
-from zope.app import zapi
+from zope.component import getUtility
 from zope.testing import cleanup
 from zope.traversing.interfaces import IContainmentRoot
 from zope.interface import directlyProvides
@@ -604,7 +604,7 @@ def doctest_bootstrapSchoolTool():
     It has a local authentication utility
 
         >>> from zope.app.security.interfaces import IAuthentication
-        >>> zapi.getUtility(IAuthentication, context=app)
+        >>> getUtility(IAuthentication, context=app)
         <schooltool.app.security.SchoolToolAuthenticationUtility object at ...>
 
     It has an initial user (username 'manager', password 'schooltool')

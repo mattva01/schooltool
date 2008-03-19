@@ -21,8 +21,7 @@ Calendar overlay views for SchoolTool with timetabling enabled.
 
 $Id$
 """
-from zope.traversing.api import getPath
-from zope.app import zapi
+from zope.traversing.api import getPath, getParent
 from zope.annotation.interfaces import IAnnotations
 from zope.security.checker import canAccess
 from zope.security.proxy import removeSecurityProxy
@@ -141,7 +140,7 @@ class TimetableCalendarListSubscriber(object):
 
         Yields tuples (calendar, color1, color2).
         """
-        parent = zapi.getParent(self.context)
+        parent = getParent(self.context)
         ttcalendar = ICompositeTimetables(parent).makeTimetableCalendar()
 
         user = IPerson(self.request.principal, None)

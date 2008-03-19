@@ -27,8 +27,9 @@ import unittest
 from zope.interface import Interface, implements
 from zope.testing import doctest
 from zope.app.testing import setup, ztapi
-from zope.app import zapi
+from zope.component import getUtility
 from zope.traversing.interfaces import TraversalError
+from zope.traversing.api import traverse
 from zope.component.interfaces import ComponentLookupError
 from zope.app.security.interfaces import IAuthentication
 from zope.app.container.contained import ObjectAddedEvent
@@ -62,8 +63,8 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
         self.assertRaises(ComponentLookupError, self.app.getSiteManager)
         event = ObjectAddedEvent(self.app)
         authSetUpSubscriber(self.app, event)
-        auth = zapi.traverse(self.app, '++etc++site/default/SchoolToolAuth')
-        auth1 = zapi.getUtility(IAuthentication, context=self.app)
+        auth = traverse(self.app, '++etc++site/default/SchoolToolAuth')
+        auth1 = getUtility(IAuthentication, context=self.app)
         self.assert_(auth is auth1)
 
         # If we fire the event again, it does not fail.  Such events

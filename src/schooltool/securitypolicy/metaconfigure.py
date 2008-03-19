@@ -23,10 +23,10 @@ $Id$
 
 """
 
-from zope.app import zapi
 from zope.interface import implements
 from zope.component import provideAdapter, provideSubscriptionAdapter
 from zope.security.zcml import permission
+from zope.component import queryUtility, getGlobalSiteManager
 
 from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
 from schooltool.securitypolicy.interfaces import ICrowd
@@ -47,10 +47,10 @@ class CrowdsUtility(object):
 
 def getCrowdsUtility():
     """Helper - returns crowds utility and registers new one if missing."""
-    utility = zapi.queryUtility(ICrowdsUtility)
+    utility = queryUtility(ICrowdsUtility)
     if not utility:
         utility = CrowdsUtility()
-        zapi.getGlobalSiteManager().registerUtility(utility, ICrowdsUtility)
+        getGlobalSiteManager().registerUtility(utility, ICrowdsUtility)
     return utility
 
 
