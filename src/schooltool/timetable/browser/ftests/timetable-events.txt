@@ -106,3 +106,218 @@ calendar events are updated
     ...11:25...
     >>> for event in events: '09:30' not in event
     True
+
+
+Tests for timetable event blocks in weekly calendar view
+--------------------------------------------------------
+
+First to test how timetable events are displayed in the weekly calendar view,
+we need more courses and sections
+
+    >>> manager.open('http://localhost/courses')
+    >>> manager.getLink('New Course').click()
+    >>> setup.addCourse('English 6', 'English for the sixth class', 'english6')
+    >>> setup.addSection('English 6')
+
+    >>> manager.open('http://localhost/courses')
+    >>> manager.getLink('New Course').click()
+    >>> setup.addCourse('Math 6', 'Math for the sixth class', 'math6')
+    >>> setup.addSection('Math 6')
+
+    >>> manager.open('http://localhost/courses')
+    >>> manager.getLink('New Course').click()
+    >>> setup.addCourse('Science 6', 'Section for the sixth class', 'science6')
+    >>> setup.addSection('Science 6')
+
+
+    >>> manager.open('http://localhost/sections/2')
+    >>> manager.getLink('edit instructors').click()
+    >>> manager.getControl('Frog').selected = True
+    >>> manager.getControl('Add').click()
+
+    >>> manager.getLink('Schedule').click()
+    >>> manager.getControl(name="Monday.13:35-14:20").value = True
+    >>> manager.getControl(name="Tuesday.09:30-10:25").value = True
+    >>> manager.getControl(name="Wednesday.09:30-10:25").value = True
+    >>> manager.getControl(name="Friday.14:30-15:15").value = True
+    >>> manager.getControl('Save').click()
+
+
+    >>> manager.open('http://localhost/sections/3')
+    >>> manager.getLink('edit instructors').click()
+    >>> manager.getControl('Frog').selected = True
+    >>> manager.getControl('Add').click()
+
+    >>> manager.getLink('Schedule').click()
+    >>> manager.getControl(name="Monday.11:35-12:20").value = True
+    >>> manager.getControl(name="Wednesday.12:45-13:30").value = True
+    >>> manager.getControl(name="Thursday.10:30-11:25").value = True
+    >>> manager.getControl(name="Friday.11:35-12:20").value = True
+    >>> manager.getControl('Save').click()
+
+
+    >>> manager.open('http://localhost/sections/4')
+    >>> manager.getLink('edit instructors').click()
+    >>> manager.getControl('Frog').selected = True
+    >>> manager.getControl('Add').click()
+
+    >>> manager.getLink('Schedule').click()
+    >>> manager.getControl(name="Tuesday.14:30-15:15").value = True
+    >>> manager.getControl(name="Wednesday.14:30-15:15").value = True
+    >>> manager.getControl(name="Thursday.11:35-12:20").value = True
+    >>> manager.getControl(name="Friday.13:35-14:20").value = True
+    >>> manager.getControl('Save').click()
+
+    >>> frog.open('http://localhost/persons/frog/calendar/2005-w37')
+    >>> print analyze.queryHTML('id("content-body")', frog.contents)[0]
+    <div id="content-body">
+    ...
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+      ...<td valign="top">
+        ...<span>English 6</span>
+        ...(<span>09:30</span> - <span>10:25</span>)
+      ...</td>
+      ...<td valign="top">
+        ...<span>English 6</span>
+        ...(<span>09:30</span> - <span>10:25</span>)
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+    ...</tr><tr><div>
+      ...<td valign="top">
+        ...<span>History 6</span>
+    <BLANKLINE>
+        ...(<span>10:30</span> - <span>11:25</span>)
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+      ...<td valign="top">
+        ...<span>Math 6</span>
+        ...(<span>10:30</span> - <span>11:25</span>)
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+    ...</tr><tr><div>
+      ...<td valign="top">
+        ...<span>Math 6</span>
+        ...(<span>11:35</span> - <span>12:20</span>)
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+      ...<td valign="top">
+        ...<span>History 6</span>
+        ...(<span>11:35</span> - <span>12:20</span>)
+      ...</td>
+      ...<td valign="top">
+        ...<span>Science 6</span>
+        ...(<span>11:35</span> - <span>12:20</span>)
+      ...</td>
+      ...<td valign="top">
+        ...<span>Math 6</span>
+        ...(<span>11:35</span> - <span>12:20</span>)
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+    ...</tr><tr><div>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+      ...<td valign="top">
+        ...<span>Math 6</span>
+        ...(<span>12:45</span> - <span>13:30</span>)
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+    ...</tr><tr><div>
+      ...<td valign="top">
+        ...<span>English 6</span>
+        ...(<span>13:35</span> - <span>14:20</span>)
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+      ...<td valign="top">
+        ...<span>Science 6</span>
+        ...(<span>13:35</span> - <span>14:20</span>)
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+    ...</tr><tr><div>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+      ...<td valign="top">
+        ...<span>Science 6</span>
+        ...(<span>14:30</span> - <span>15:15</span>)
+      ...</td>
+      ...<td valign="top">
+        ...<span>Science 6</span>
+        ...(<span>14:30</span> - <span>15:15</span>)
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+      ...<td valign="top">
+        ...<span>English 6</span>
+        ...(<span>14:30</span> - <span>15:15</span>)
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+      ...<td valign="top">
+    <BLANKLINE>
+      ...</td>
+    ...
+    
+

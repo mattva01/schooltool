@@ -30,7 +30,7 @@ from datetime import datetime, date, time, timedelta
 import transaction
 from pytz import timezone, utc
 from zope.component import queryMultiAdapter, adapts, getMultiAdapter
-from zope.component import subscribers, getUtility, getMultiAdapter
+from zope.component import subscribers
 from zope.event import notify
 from zope.interface import implements, Interface
 from zope.i18n import translate
@@ -57,9 +57,7 @@ from zope.session.interfaces import ISession
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.html.field import HtmlFragment
 from zope.component import queryAdapter
-from zope.viewlet.interfaces import IViewletManager, IViewlet
-from zope.viewlet.manager import ViewletManagerBase
-from zope.viewlet.viewlet import ViewletBase
+from zope.viewlet.interfaces import IViewletManager
 
 from zc.table.column import GetterColumn
 from zc.table import table
@@ -70,6 +68,7 @@ from schooltool.skin.interfaces import IBreadcrumbInfo
 from schooltool.skin import breadcrumbs
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.interfaces import IFilterWidget
+from schooltool.app.cal import CalendarEvent
 from schooltool.app.browser import ViewPreferences, same
 from schooltool.app.browser import pdfcal
 from schooltool.app.browser.interfaces import ICalendarProvider
@@ -905,7 +904,7 @@ class DaysCache(object):
 class WeeklyCalendarView(CalendarViewBase):
     """A view that shows one week of the calendar."""
     implements(IHaveEventLegend)
-    
+
     __used_for__ = ISchoolToolCalendar
 
     cal_type = 'weekly'
@@ -917,6 +916,15 @@ class WeeklyCalendarView(CalendarViewBase):
     go_to_next_title = _("Go to next week")
     go_to_current_title = _("Go to current week")
     go_to_prev_title = _("Go to previous week")
+
+    non_timetable_template = ViewPageTemplateFile("templates/cal_weekly.pt")
+    timetable_template = ViewPageTemplateFile("templates/cal_weekly_timetable.pt")
+
+    def __call__(self):
+        app = getSchoolToolApplication()
+        if app['ttschemas'].default_id is not None:
+            return self.timetable_template()
+        return self.non_timetable_template()
 
     def inCurrentPeriod(self, dt):
         # XXX wrong if week starts on Sunday.
@@ -949,9 +957,158 @@ class WeeklyCalendarView(CalendarViewBase):
         """Return the current week as a list of CalendarDay objects."""
         return self.getWeek(self.cursor)
 
+    def cloneEvent(self, event):
+        """Returns a copy of an event so that it can be inserted into a list."""
+        new_event = EventForDisplay(CalendarEvent(event.dtstart,
+                                    event.duration,
+                                    event.title),
+                                    self.request, event.color1,
+                                    event.color2, event.source_calendar,
+                                    event.dtendtz.tzinfo)
+        new_event.linkAllowed = event.linkAllowed
+        new_event.allday = event.allday
+        return new_event
+
+    def getCurrentWeekEvents(self, eventCheck):
+        week = self.getWeek(self.cursor)
+        week_by_rows = []
+        start_times = []
+
+        for day in week:
+            for event in day.events:
+                if (eventCheck(event, day) and not
+                   (event.dtstart.hour, event.dtstart.minute) in start_times):
+                    start_times.append((event.dtstart.hour,
+                                        event.dtstart.minute))
+                    week_by_rows.append([])
+
+        start_times.sort()
+        for day in week:
+            events_in_day = []
+            for index in range(0, len(start_times)):
+                block = []
+                for event in week[day.date.weekday()].events:
+                    if (eventCheck(event, day) and
+                       (event.dtstart.hour, event.dtstart.minute) ==
+                        start_times[index] and
+                        event.dtstart.day == day.date.day):
+                        block.append(self.cloneEvent(event))
+
+                if block == []:
+                    block = [None]
+
+                events_in_day.append(block)
+
+            row_num = 0
+            for event in events_in_day:
+                week_by_rows[row_num].append(event)
+                row_num += 1
+
+        self.formatCurrentWeekEvents(week_by_rows)
+        return week_by_rows
+
+    def formatCurrentWeekEvents(self, week_by_rows):
+        """Formats a list of rows of events by deleting blank rows and extending
+           rows to fill the entire week."""
+        row_num = 0
+        while row_num < len(week_by_rows):
+            non_empty_row = False
+            while (len(week_by_rows[row_num]) > 0
+                  and len(week_by_rows[row_num]) < len(day_of_week_names)):
+                week_by_rows[row_num].append([])
+
+            for block in week_by_rows[row_num]:
+                for event in block:
+                    if event is not None:
+                        non_empty_row = True
+                        break
+
+            if non_empty_row:
+                row_num += 1
+            else:
+                del week_by_rows[row_num]
+
+    def getCurrentWeekNonTimetableEvents(self):
+        """Return the current week's events in formatted lists."""
+        eventCheck = lambda e, day: e is not None
+        return self.getCurrentWeekEvents(eventCheck)
+
+    def getCurrentWeekTimetableEvents(self):
+        """Return the current week's timetable events in formatted lists."""
+        week = self.getWeek(self.cursor)
+        week_by_rows = []
+        view = getMultiAdapter((self.context, self.request),
+                                name='daily_calendar_rows')
+
+        for day in week:
+            periods = view.getPeriods(day.date)
+            events_in_day = []
+            start_times = []
+
+            for period, tstart, duration in periods:
+                if not tstart in start_times:
+                    start_times.append(tstart)
+                    week_by_rows.append([])
+                if not tstart + duration in start_times:
+                    start_times.append(tstart + duration)
+                    week_by_rows.append([])
+
+            for index in range(0, len(start_times)-1):
+                block = []
+                for event in week[day.date.weekday()].events:
+                    if ((((start_times[index] < event.dtstart + event.duration
+                           and start_times[index] > event.dtstart) or
+                          (event.dtstart < start_times[index+1] and
+                           event.dtstart > start_times[index])) or
+                           event.dtstart == start_times[index]) and
+                           not event.allday):
+                        block.append(self.cloneEvent(event))
+                if block == []:
+                    block = [None]
+
+                events_in_day.append(block)
+
+            row_num = 0
+            for event in events_in_day:
+                week_by_rows[row_num].append(event)
+                row_num += 1
+
+        self.formatCurrentWeekEvents(week_by_rows)
+        return week_by_rows
+
+    def getCurrentWeekAllDayEvents(self):
+        """Return the current week's all day events in formatted lists."""
+        eventCheck = lambda e, day: e is not None and e.allday
+        return self.getCurrentWeekEvents(eventCheck)
+
+    def getCurrentWeekEventsBeforeTimetable(self):
+        """Return the current week's events that start before the timetable
+           events in formatted lists."""
+        view = getMultiAdapter((self.context, self.request),
+                                    name='daily_calendar_rows')
+        eventCheck = lambda e, day: (e is not None and not e.allday and
+                                    (view.getPeriods(day.date) == [] or
+                                     e.dtstart < view.getPeriods(day.date)[0][1]))
+        return self.getCurrentWeekEvents(eventCheck)
+
+    def getCurrentWeekEventsAfterTimetable(self):
+        """Return the current week's events that start after the timetable
+           events in formatted lists."""
+        view = getMultiAdapter((self.context, self.request),
+                                    name='daily_calendar_rows')
+        eventCheck = lambda e, day: (view.getPeriods(day.date) != [] and
+                                     e is not None and not e.allday and
+                                     e.dtstart + e.duration >
+                                     view.getPeriods(day.date)[-1][1] +
+                                     view.getPeriods(day.date)[-1][2])
+        return self.getCurrentWeekEvents(eventCheck)
+
 
 class AtomCalendarView(WeeklyCalendarView):
     """View the upcoming week's events in Atom formatted xml."""
+
+    def __call__(self):
+        return super(WeeklyCalendarView, self).__call__()
 
     def getCurrentWeek(self):
         """Return the current week as a list of CalendarDay objects."""
@@ -2647,4 +2804,4 @@ class CalendarMenuViewletCrowd(Crowd):
         return crowd.contains(principal)
 
 class ICalendarPortletViewletManager(IViewletManager):
-    """ Interface for the Calendar Portlet Viewlet Manager """ 
+    """ Interface for the Calendar Portlet Viewlet Manager """

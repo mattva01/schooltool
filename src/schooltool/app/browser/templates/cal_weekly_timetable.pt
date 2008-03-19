@@ -1,0 +1,138 @@
+<tal:defs define="status view/update" />
+<html metal:use-macro="view/@@schooltool_macros/calendar/page"
+      i18n:domain="schooltool">
+<metal:block metal:fill-slot="calendar-body">
+  <table id="calendar-view-week" cellpadding="0" cellspacing="0" width="99%"
+         tal:define="days view/getCurrentWeek"
+         tal:attributes="style string:table-layout: fixed;;">
+    <tr>
+      <tal:loop repeat="day days">
+        <th class="day-title" width="50"
+            tal:define="start repeat/day/start"
+            tal:attributes="class python:' '.join(filter(None, ['day-title',
+                                                   start and 'first' or '',
+                                                   day.today()]))">
+          <a tal:content="day/date/@@fullDate"
+             tal:attributes="href python:view.calURL('daily', day.date)" />
+        </th>
+      </tal:loop>
+    </tr>
+    <tal:loop repeat="period view/getCurrentWeekAllDayEvents">
+      <tr tal:condition="period">
+        <div tal:repeat="block period">
+          <td valign="top">
+            <div tal:repeat="event block">
+              <tal:if condition="event">
+                <a tal:attributes="title event/title; href event/linkAllowed">
+                  <span tal:content="event/shortTitle"/>
+                  <tal:if condition="not:event/allday">
+                    (<span tal:content="
+                               python: event.dtstart.astimezone(
+                                           view.timezone).strftime(view.time_fmt)"
+                           /> - <span tal:content="
+                               python:event.dtend.astimezone(
+                                           view.timezone).strftime(view.time_fmt)"/>)
+                  </tal:if>
+                  <tal:if condition="event/allday">
+                    (<span i18n:translate="">All day</span>)
+                  </tal:if>
+                </a>
+              </tal:if>
+            </div>
+          </td>
+        </div>
+      </tr>
+    </tal:loop>
+    <tal:loop repeat="period view/getCurrentWeekEventsBeforeTimetable">
+      <tr tal:condition="period">
+        <div tal:repeat="block period">
+          <td valign="top">
+            <div tal:repeat="event block">
+              <tal:if condition="event">
+                <a tal:attributes="
+                                   style string:background: ${event/color1};;
+                                                border-color: ${event/color2};
+                                   title event/title;
+                                   href event/linkAllowed">
+                  <span tal:content="event/shortTitle"/>
+                  <tal:if condition="not:event/allday">
+                    (<span tal:content="
+                               python: event.dtstart.astimezone(
+                                           view.timezone).strftime(view.time_fmt)"
+                           /> - <span tal:content="
+                               python:event.dtend.astimezone(
+                                           view.timezone).strftime(view.time_fmt)"/>)
+                  </tal:if>
+                  <tal:if condition="event/allday">
+                    (<span i18n:translate="">All day</span>)
+                  </tal:if>
+                </a>
+              </tal:if>
+            </div>
+          </td>
+        </div>
+      </tr>
+    </tal:loop>
+    <tal:loop repeat="period view/getCurrentWeekTimetableEvents">
+      <tr tal:condition="period">
+        <div tal:repeat="block period">
+          <td valign="top">
+            <div tal:repeat="event block">
+              <tal:if condition="event">
+                <a tal:attributes="
+                         style string:background: ${event/color1};;
+                                      border-color: ${event/color2};
+                         title event/title;
+                         href event/linkAllowed">
+                  <span tal:content="event/shortTitle"/>
+                  <tal:if condition="not:event/allday">
+                    (<span tal:content="
+                               python: event.dtstart.astimezone(
+                                           view.timezone).strftime(view.time_fmt)"
+                           /> - <span tal:content="
+                               python:event.dtend.astimezone(
+                                        view.timezone).strftime(view.time_fmt)"/>)
+                  </tal:if>
+                  <tal:if condition="event/allday">
+                    (<span i18n:translate="">All day</span>)
+                  </tal:if>
+                </a>
+              </tal:if>
+            </div>
+          </td>
+        </div>
+      </tr>
+    </tal:loop>
+    <tal:loop repeat="period view/getCurrentWeekEventsAfterTimetable">
+      <tr tal:condition="period">
+        <div tal:repeat="block period">
+          <td valign="top">
+            <div tal:repeat="event block">
+              <tal:if condition="event">
+                <a tal:attributes="
+                                   style string:background: ${event/color1};;
+                                                border-color: ${event/color2};
+                                   title event/title;
+                                   href event/linkAllowed">
+                  <span tal:content="event/shortTitle"/>
+                  <tal:if condition="not:event/allday">
+                    (<span tal:content="
+                               python: event.dtstart.astimezone(
+                                           view.timezone).strftime(view.time_fmt)"
+                           /> - <span tal:content="
+                               python:event.dtend.astimezone(
+                                           view.timezone).strftime(view.time_fmt)"/>)
+                  </tal:if>
+                  <tal:if condition="event/allday">
+                    (<span i18n:translate="">All day</span>)
+                  </tal:if>
+                </a>
+              </tal:if>
+            </div>
+          </td>
+        </div>
+      </tr>
+    </tal:loop>
+  </table>
+</metal:block>
+</html>
