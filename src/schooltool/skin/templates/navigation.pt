@@ -4,5 +4,5 @@
            tal:attributes="href string:${person/@@absolute_url}/calendar"
            >Calendar</a></span>
 </tal:if>
-<span tal:repeat="viewlet options/viewlets"
-      tal:content="structure viewlet/render" />
+<tal:block tal:repeat="viewlet options/viewlets"
+           tal:content="structure viewlet/render" />
