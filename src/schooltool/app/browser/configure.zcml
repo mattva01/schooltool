@@ -24,6 +24,25 @@
       template="templates/manage_menu_manager.pt"
       />
 
+  <viewletManager
+      name="schooltool.CalendarPortlet"
+      permission="zope.Public"
+      provides=".cal.ICalendarPortletViewletManager"
+      class="schooltool.skin.skin.OrderedViewletManager"
+      />
+
+  <viewlet
+      name="calendar-overlay"
+      for="*"
+      view=".interfaces.IHaveEventLegend"
+      class=".overlay.CalendarOverlayView"
+      manager=".cal.ICalendarPortletViewletManager"
+      template="templates/calendar_overlay.pt"
+      permission="zope.Public"
+      layer="schooltool.skin.ISchoolToolLayer"
+      order="10"
+      />
+
   <viewlet
       name="event-info"
       for="*"
@@ -516,18 +535,6 @@
       name="booking.html"
       layer="schooltool.skin.ISchoolToolLayer"
       class=".cal.CalendarEventBookingView"
-      permission="zope.View"
-      />
-
-
-  <!--class=".overlay.CalendarOverlayView"-->
-      <!--class="schooltool.timetable.browser.overlay.CalendarSTOverlayView"-->
-  <page
-      for="*"
-      name="calendar_overlay"
-      layer="schooltool.skin.ISchoolToolLayer"
-      class=".overlay.CalendarOverlayView"
-      template="templates/calendar_overlay.pt"
       permission="zope.View"
       />
 

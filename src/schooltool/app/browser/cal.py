@@ -57,6 +57,9 @@ from zope.session.interfaces import ISession
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.html.field import HtmlFragment
 from zope.component import queryAdapter
+from zope.viewlet.interfaces import IViewletManager, IViewlet
+from zope.viewlet.manager import ViewletManagerBase
+from zope.viewlet.viewlet import ViewletBase
 
 from zc.table.column import GetterColumn
 from zc.table import table
@@ -71,6 +74,7 @@ from schooltool.app.browser import ViewPreferences, same
 from schooltool.app.browser import pdfcal
 from schooltool.app.browser.interfaces import ICalendarProvider
 from schooltool.app.browser.interfaces import IEventForDisplay
+from schooltool.app.browser.interfaces import IHaveEventLegend
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
@@ -101,7 +105,6 @@ from schooltool.app.browser.interfaces import ICalendarMenuViewlet
 from schooltool.resource.interfaces import IBaseResource
 from schooltool.resource.interfaces import IBookingCalendar
 from schooltool.resource.interfaces import IResourceTypeInformation
-
 
 #
 # Constants
@@ -901,7 +904,8 @@ class DaysCache(object):
 
 class WeeklyCalendarView(CalendarViewBase):
     """A view that shows one week of the calendar."""
-
+    implements(IHaveEventLegend)
+    
     __used_for__ = ISchoolToolCalendar
 
     cal_type = 'weekly'
@@ -966,6 +970,7 @@ class AtomCalendarView(WeeklyCalendarView):
 
 class MonthlyCalendarView(CalendarViewBase):
     """Monthly calendar view."""
+    implements(IHaveEventLegend)
 
     __used_for__ = ISchoolToolCalendar
 
@@ -1086,6 +1091,7 @@ class DailyCalendarView(CalendarViewBase):
     the overlapping events are displayed side by side, and the size of
     the boxes illustrate the duration of the events.
     """
+    implements(IHaveEventLegend)
 
     __used_for__ = ISchoolToolCalendar
 
@@ -2639,3 +2645,6 @@ class CalendarMenuViewletCrowd(Crowd):
                              ICrowd,
                              name="schooltool.view")
         return crowd.contains(principal)
+
+class ICalendarPortletViewletManager(IViewletManager):
+    """ Interface for the Calendar Portlet Viewlet Manager """ 

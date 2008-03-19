@@ -71,7 +71,7 @@ def doctest_CalendarSTOverlayView():
 
         >>> context = object()
         >>> request = TestRequest()
-        >>> view = View(context, request)
+        >>> view = View(context, request, None, None)
 
     It renders to an empty string unless its context is the calendar of the
     authenticated user
@@ -106,7 +106,7 @@ def doctest_CalendarSTOverlayView():
 
         >>> request = TestRequest()
         >>> request.setPrincipal(Principal('id', 'title', person))
-        >>> view = View(ISchoolToolCalendar(person), request)
+        >>> view = View(ISchoolToolCalendar(person), request, None, None)
 
         >>> print view()
         <div id="portlet-calendar-overlay" class="portlet">
@@ -180,7 +180,7 @@ def doctest_CalendarSTOverlayView():
         >>> request = TestRequest()
         >>> request.setPrincipal(Principal('id', 'title', person))
         >>> request.form['OVERLAY_MORE'] = u"More..."
-        >>> view = View(ISchoolToolCalendar(person), request)
+        >>> view = View(ISchoolToolCalendar(person), request, None, None)
         >>> content = view()
         >>> request.response.getStatus()
         302

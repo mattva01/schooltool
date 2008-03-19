@@ -131,3 +131,6 @@ class IManageMenuViewletManager(IViewletManager):
 
 class ISchoolMenuViewletManager(IViewletManager):
     """Provides a viewlet hook for the school menu items."""
+
+class IHaveEventLegend(Interface):
+    """Classes implementing this interface will have an event legend showing."""

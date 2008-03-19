@@ -31,6 +31,7 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.location.interfaces import ILocation
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import canAccess
+from zope.viewlet.viewlet import ViewletBase
 
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.app import getSchoolToolApplication
@@ -39,7 +40,7 @@ from schooltool.app.interfaces import IShowTimetables
 from schooltool.person.interfaces import IPerson
 
 
-class CalendarOverlayView(BrowserView):
+class CalendarOverlayView(ViewletBase):
     """View for the calendar overlay portlet.
 
     This view can be used with any context, but it gets rendered to an empty
@@ -69,7 +70,7 @@ class CalendarOverlayView(BrowserView):
             >>> request = TestRequest()
             >>> person = Person()
             >>> context = ISchoolToolCalendar(person)
-            >>> view = CalendarOverlayView(context, request)
+            >>> view = CalendarOverlayView(context, request, None, None)
             >>> view.show_overlay()
             False
 

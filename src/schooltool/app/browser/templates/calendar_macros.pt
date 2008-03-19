@@ -217,8 +217,7 @@
   <metal:block use-macro="
       view/@@schooltool_macros/calendar/portlet-tomorrow-events"/>
 
-  <metal:block use-macro="
-      view/@@schooltool_macros/calendar/portlet-calendar-overlay"/>
+  <div tal:replace="structure provider:schooltool.CalendarPortlet"/>
 
   <metal:block use-macro="
       view/@@schooltool_macros/calendar/portlet-calendar-jumpto"/>
@@ -229,4 +228,3 @@
 </metal:block>
 
 <!-- END CALENDAR MACROS -->
-

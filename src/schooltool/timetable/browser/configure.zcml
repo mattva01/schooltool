@@ -215,14 +215,17 @@
        factory=".overlay.TimetableCalendarListSubscriber"
        />
 
-   <page
-       for="*"
-       name="calendar_overlay"
-       layer="schooltool.timetable.browser.skin.ITimetableLayer"
-       class="schooltool.timetable.browser.overlay.CalendarSTOverlayView"
-       template="templates/calendar_overlay.pt"
-       permission="zope.View"
-       />
+  <viewlet
+      name="calendar-overlay"
+      for="*"
+      view="schooltool.app.browser.interfaces.IHaveEventLegend"
+      class="schooltool.timetable.browser.overlay.CalendarSTOverlayView"
+      manager="schooltool.app.browser.cal.ICalendarPortletViewletManager"
+      template="templates/calendar_overlay.pt"
+      permission="zope.Public"
+      layer="schooltool.timetable.browser.skin.ITimetableLayer"
+      order="10"
+      />
 
   <zope:adapter
       for="schooltool.timetable.interfaces.ITimetableDict
