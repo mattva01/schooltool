@@ -75,10 +75,9 @@
 
             </span>
           </tal:if>
-
         </div>
         <div id="login-left">
-          <span>SchoolTool &mdash; free admnistration software for Lee High School</span>
+          <span>SchoolTool &mdash; free admnistration software for <span tal:replace="context/schooltool:app/title">Lee High School</span></span>
         </div>
       </div>
     </div>
