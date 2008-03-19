@@ -23,7 +23,7 @@ $Id$
 """
 import persistent
 import pytz
-import datetime
+from datetime import datetime
 
 import zope.interface
 from zope.annotation.interfaces import IAttributeAnnotatable

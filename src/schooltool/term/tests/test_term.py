@@ -23,13 +23,17 @@ $Id$
 """
 import calendar
 import unittest
-from datetime import date
+from pytz import timezone
+from datetime import date, datetime
 
+from zope.testing import doctest
+from zope.component import provideAdapter
 from zope.interface import implements
 from zope.interface.verify import verifyObject
 from zope.app.container.contained import Contained
 from zope.location.interfaces import ILocation
 from zope.app.testing.setup import placefulSetUp, placefulTearDown
+from zope.app.testing.setup import placelessSetUp, placelessTearDown
 
 from schooltool.term import interfaces, term
 from schooltool.testing import setup
@@ -231,8 +235,60 @@ class TestGetTermForDate(unittest.TestCase):
         self.assert_(term.getNextTermForDate(date(2004, 8, 31)) is None)
 
 
+def doctest_DateManagerUtility_today():
+    """Test for today.
+
+    Today returns the date of today, according to the application
+    prefered timezone:
+
+        >>> from schooltool.term.term import DateManagerUtility
+        >>> from schooltool.app.interfaces import IApplicationPreferences
+        >>> dm = DateManagerUtility()
+        >>> tz_name = "Europe/Vilnius"
+        >>> class PrefStub(object):
+        ...     @property
+        ...     def timezone(self):
+        ...         return tz_name
+
+        >>> class STAppStub(dict):
+        ...     def __init__(self, context):
+        ...         pass
+        ...     def __conform__(self, iface):
+        ...         if iface == IApplicationPreferences:
+        ...             return PrefStub()
+
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
+        >>> provideAdapter(STAppStub, adapts=[None], provides=ISchoolToolApplication)
+
+        >>> current_time = timezone('UTC').localize(datetime.utcnow())
+
+        >>> tz_name = 'Pacific/Midway'
+        >>> tz = timezone(tz_name)
+        >>> today_date = current_time.astimezone(tz).date()
+        >>> dm.today == today_date
+        True
+
+        >>> tz_name = 'Pacific/Funafuti'
+        >>> tz = timezone('Pacific/Funafuti')
+        >>> today_date = current_time.astimezone(tz).date()
+        >>> dm.today == today_date
+        True
+
+    """
+
+
+def setUp(test):
+    placelessSetUp()
+
+
+def tearDown(test):
+    placelessTearDown()
+
+
 def test_suite():
     suite = unittest.TestSuite()
+    suite.addTest(doctest.DocTestSuite(setUp=setUp,
+                                       tearDown=tearDown))
     suite.addTest(unittest.makeSuite(TestTerm))
     suite.addTest(unittest.makeSuite(TestTermContainer))
     suite.addTest(unittest.makeSuite(TestGetTermForDate))
