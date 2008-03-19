@@ -60,6 +60,11 @@
 
   </configure>
 
+  <!-- general utilities -->
+
+  <utility
+      factory=".term.DateManagerUtility" />
+
   <!-- security -->
 
   <security:allow

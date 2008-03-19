@@ -101,3 +101,11 @@ class ITermContainer(IContainer, ILocation):
     """
     constraints.contains(ITerm)
 
+
+class IDateManager(zope.interface.Interface):
+    """A class that handles dates and time.
+
+    It soes so taking the preferred timezone into account.
+    """
+
+    today = zope.interface.Attribute("The current day.")

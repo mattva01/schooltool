@@ -22,11 +22,15 @@ Term implementation
 $Id$
 """
 import persistent
+import pytz
+import datetime
 
 import zope.interface
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container import contained, btree
 
+from schooltool.app.interfaces import IApplicationPreferences
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.common import DateRange
 
@@ -135,3 +139,12 @@ def getNextTermForDate(date):
     return None
 
 
+class DateManagerUtility(object):
+    zope.interface.implements(interfaces.IDateManager)
+
+    @property
+    def today(self):
+        app = ISchoolToolApplication(None)
+        tzinfo = pytz.timezone(IApplicationPreferences(app).timezone)
+        dt = pytz.utc.localize(datetime.utcnow())
+        return dt.astimezone(tzinfo).date()
