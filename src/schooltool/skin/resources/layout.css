@@ -114,6 +114,15 @@ FORM div.oneline-form div.value{
   margin: 0;
 }
 
+form div.oneline-form {
+  padding: 3px;
+  margin-bottom: 3px;
+ }
+
+form div.oneline-form * {
+  vertical-align: middle;
+ }
+
 #header {
   color: black;
   padding: 0px;
@@ -127,7 +136,8 @@ FORM div.oneline-form div.value{
 
 }
 
-#header > span {
+#header > span,
+#header > a.navigation_header {
   display: inline;
   padding: 5px;
   padding-top: 10px;
@@ -151,6 +161,10 @@ FORM div.oneline-form div.value{
 #selected-language {
   font-weight: bold;
 
+ }
+
+#tools-login {
+  color: white;
  }
 
 #tools-help {

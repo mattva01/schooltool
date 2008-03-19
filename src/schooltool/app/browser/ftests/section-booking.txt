@@ -49,7 +49,7 @@ Section events should be visible in the calendar of the resource:
     >>> manager = setup.logInManager()
     >>> manager.open('http://localhost/resources/a-resource/calendar/2005-09-07')
     >>> print analyze.queryHTML('id("content-body")', manager.contents)[0]
-    <div id="content-body">    
+    <div id="content-body">
     ...
         <a href="http://localhost/sections/1/calendar/..." title="History 6">
           History 6
@@ -106,13 +106,12 @@ Let's look at it:
       <div class="description">Assignement.</div>
     ...
 
-    >>> manager.getLink('Resources').click()
+    >>> manager.getLink('Reservations').click()
     >>> manager.getLink('New Resource').click()
     >>> manager.getControl('Title').value = "Mud"
     >>> manager.getControl('Add').click()
 
-    >>> manager.getControl('Type').value = ['resource|Resource']
-    >>> manager.getControl('Search').click()
+    >>> manager.getLink('Resource', index=2).click()
 
     >>> manager.getControl(name='delete.mud').value = ['delete.mud']
     >>> manager.getControl(name='delete.a-resource').value = ['delete.a-resource']
@@ -137,11 +136,11 @@ We are now redirected to the event edit view:
 
     >>> manager.getControl('Date').value
     '2005-09-07'
-    
+
 The resource should be displayed under a list in the event edit view:
 
     >>> print analyze.queryHTML('id("content-body")', manager.contents)[0]
-    <div id="content-body"> 
+    <div id="content-body">
     ...
     ...Booked Resources...
     ...
@@ -151,7 +150,7 @@ The resource should be displayed under a list in the event edit view:
     ...Mud...
     ...Resource...
     ...
-    
+
 And the resource is added:
 
     >>> manager.getLink('Book resources').click()

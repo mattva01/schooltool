@@ -18,13 +18,12 @@ Creating Resources
 
 We can create generic resources
 
-    >>> manager.getLink('Resources').click()
+    >>> manager.getLink('Reservations').click()
 
     >>> manager.getLink('New Resource').click()
     >>> manager.getControl('Title').value = 'Book'
     >>> manager.getControl('Add').click()
-    >>> manager.getControl('Type').value = ['resource|Resource']
-    >>> manager.getControl('Search').click()
+    >>> manager.getLink('Resource', index=2).click()
     >>> 'Book' in manager.contents
     True
 
@@ -36,8 +35,7 @@ We can create Location resources, which also have a capacity option
     >>> manager.getControl('Type').value = ['']
     >>> manager.getControl('Capacity').value = '10'
     >>> manager.getControl('Add').click()
-    >>> manager.getControl('Type').value = ['location|class room']
-    >>> manager.getControl('Search').click()
+    >>> manager.getLink('class room').click()
     >>> 'Room 101' in manager.contents
     True
 
@@ -52,8 +50,7 @@ We can create Equipment resources also:
     >>> manager.getControl('Purchase Date') != None
     True
     >>> manager.getControl('Add').click()
-    >>> manager.getControl('Type').value = ['equipment|Projector']
-    >>> manager.getControl('Search').click()
+    >>> manager.getLink('Projector').click()
     >>> 'Projector 1' in manager.contents
     True
 
@@ -69,7 +66,6 @@ can choose an existing type from a drop down box.
     >>> manager.getControl('Purchase Date') != None
     True
     >>> manager.getControl('Add').click()
-    >>> manager.getControl('Type').value = ['equipment|Projector']
-    >>> manager.getControl('Search').click()
+    >>> manager.getLink('Projector').click()
     >>> 'Projector 2' in manager.contents
     True

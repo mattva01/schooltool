@@ -65,12 +65,11 @@ def addPerson(name, username=None, password=None, groups=None, browser=None):
 def addResource(title):
     """Add a resource."""
     manager = logInManager()
-    manager.getLink('Resources').click()
+    manager.getLink('Reservations').click()
     manager.getLink('New Resource').click()
     manager.getControl('Title').value = title
     manager.getControl('Add').click()
-    manager.getControl('Type').value = ['resource|Resource']
-    manager.getControl('Search').click()
+    manager.getLink('Resource', index=2).click()
     assert title in manager.contents
 
 def addCourse(title, description="", identifier=""):

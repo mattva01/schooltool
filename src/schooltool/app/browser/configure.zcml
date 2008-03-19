@@ -119,15 +119,6 @@
       template="templates/manage_menu.pt"
       />
 
-  <resource name="day.png" file="resources/day.png"
-            layer="schooltool.skin.ISchoolToolLayer" />
-  <resource name="week.png" file="resources/week.png"
-            layer="schooltool.skin.ISchoolToolLayer" />
-  <resource name="month.png" file="resources/month.png"
-            layer="schooltool.skin.ISchoolToolLayer" />
-  <resource name="year.png" file="resources/year.png"
-            layer="schooltool.skin.ISchoolToolLayer" />
-
   <!-- calwidget (external) -->
 
   <resource name="calwidget-calendar.js"

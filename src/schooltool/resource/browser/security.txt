@@ -23,13 +23,12 @@ Let's create several people who have different permissions for resource booking:
 
 Now lets create a resources that can be booked:
 
-    >>> manager.getLink('Resources').click()
+    >>> manager.getLink('Reservations').click()
 
     >>> manager.getLink('New Resource').click()
     >>> manager.getControl('Title').value = 'Classroom'
     >>> manager.getControl('Add').click()
-    >>> manager.getControl('Type').value = ['resource|Resource']
-    >>> manager.getControl('Search').click()
+    >>> manager.getLink('Resource', index=2).click()
     >>> manager.getLink('Classroom').click()
 
 Create new Browsers for 'Teacher' & 'Leader' and log them in
@@ -48,9 +47,8 @@ Our users are neither in the teacher group, nor leaders of
 the resource, but they should still be able to see the resource
 to know when it is in use because they are logged in.
 
-    >>> teacher.getLink('Resources').click()
-    >>> teacher.getControl('Type').value = ['resource|Resource']
-    >>> teacher.getControl('Search').click()
+    >>> teacher.getLink('Reservations').click()
+    >>> teacher.getLink("Resource").click()
     >>> teacher.getLink('Classroom').click()
     >>> teacher.url
     'http://localhost/resources/classroom'
@@ -79,9 +77,8 @@ Now we will put these people into the teacher group
 Now the teacher should be able to schedule a new event
 
     >>> teacher.open("http://localhost")
-    >>> teacher.getLink('Resources').click()
-    >>> teacher.getControl('Type').value = ['resource|Resource']
-    >>> teacher.getControl('Search').click()
+    >>> teacher.getLink('Reservations').click()
+    >>> teacher.getLink('Resource').click()
     >>> teacher.getLink('Classroom').click()
     >>> teacher.getLink('View Calendar').click()
     >>> teacher.getLink('New Event').click()
@@ -100,9 +97,8 @@ The teacher should be able to edit the event that they created.
 The leader should not be able to edit this event (yet) because the
 leader is not yet a member of the resource's leader list.
 
-    >>> leader.getLink('Resources').click()
-    >>> leader.getControl('Type').value = ['resource|Resource']
-    >>> leader.getControl('Search').click()
+    >>> leader.getLink('Reservations').click()
+    >>> leader.getLink('Resource').click()
     >>> leader.getLink('Classroom').click()
     >>> leader.getLink('View Calendar').click()
     >>> leader.getLink('Classroom Event').click()
@@ -162,19 +158,17 @@ Check to see that the classroom is booked as well.
 
 Create another Resource.
 
-    >>> manager.getLink('Resources').click()
+    >>> manager.getLink('Reservations').click()
     >>> manager.getLink('New Resource').click()
     >>> manager.getControl('Title').value = 'Lobby'
     >>> manager.getControl('Add').click()
-    >>> manager.getControl('Type').value = ['resource|Resource']
-    >>> manager.getControl('Search').click()
+    >>> manager.getLink("Resource", index=2).click()
     >>> manager.getLink('Classroom').click()
 
 Have Teacher book 'Lobby'
 
-    >>> teacher.getLink('Resources').click()
-    >>> teacher.getControl('Type').value = ['resource|Resource']
-    >>> teacher.getControl('Search').click()
+    >>> teacher.getLink('Reservations').click()
+    >>> teacher.getLink('Resource').click()
     >>> teacher.getLink('Lobby').click()
     >>> teacher.getLink('View Calendar').click()
     >>> teacher.getLink('New Event').click()

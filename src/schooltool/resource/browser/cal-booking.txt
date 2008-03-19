@@ -20,7 +20,7 @@ Let's create a person so that we can fool around with his calendar:
 
 Now let's create some resources that can be booked:
 
-    >>> manager.getLink('Resources').click()
+    >>> manager.getLink('Reservations').click()
 
     >>> manager.getLink('New Resource').click()
     >>> manager.getControl('Title').value = 'lilly'
@@ -29,45 +29,28 @@ Now let's create some resources that can be booked:
 After adding a lilly we should see the Resource in the resource type
 filter box available:
 
-    >>> print manager.contents
-    <BLANKLINE>
-    ...
-          <select id="SEARCH_TYPE" name="SEARCH_TYPE" size="1"
-                  onchange="javascript:this.form.submit()">
-                <option selected="1">Choose One</option>
-                <option disabled="disabled"
-                    class="dropdown-header"
-                    value="equipment|Equipment">Equipment</option>
-                <option disabled="disabled"
-                    class="dropdown-header"
-                    value="location|Location">Location</option>
-                <option disabled="disabled"
-                    class="dropdown-header"
-                    value="resource|Resource">Resource</option>
-                <option value="resource|Resource">Resource</option>
-    </select>
-    ...
+    >>> "<h3>Resource</h3>" in manager.contents
+    True
+    >>> "<h3>Location</h3>" in manager.contents
+    True
 
 Let's click on it:
 
-    >>> manager.getControl('Type').value = ['resource|Resource']
-    >>> manager.getControl('Search').click()
+    >>> manager.getLink('Resource', index=2).click()
     >>> 'lilly' in manager.contents
     True
 
     >>> manager.getLink('New Resource').click()
     >>> manager.getControl('Title').value = 'mud'
     >>> manager.getControl('Add').click()
-    >>> manager.getControl('Type').value = ['resource|Resource']
-    >>> manager.getControl('Search').click()
+    >>> manager.getLink('Resource', index=2).click()
     >>> 'mud' in manager.contents
     True
 
     >>> manager.getLink('New Resource').click()
     >>> manager.getControl('Title').value = 'fish'
     >>> manager.getControl('Add').click()
-    >>> manager.getControl('Type').value = ['resource|Resource']
-    >>> manager.getControl('Search').click()
+    >>> manager.getLink('Resource', index=2).click()
     >>> 'fish' in manager.contents
     True
 
@@ -397,9 +380,8 @@ Now let's allow frog access all resources:
 
     >>> manager.open('http://localhost')
 
-    >>> manager.getLink('Resources').click()
-    >>> manager.getControl('Type').value = ['resource|Resource']
-    >>> manager.getControl('Search').click()
+    >>> manager.getLink('Reservations').click()
+    >>> manager.getLink('Resource', index=2).click()
     >>> manager.getLink('mud').click()
     >>> manager.getLink('View Calendar').click()
 
@@ -494,8 +476,7 @@ Frog should still be able to see the resource's calendar
 Let's delete mud:
 
     >>> manager.open('http://localhost/resources/')
-    >>> manager.getControl('Type').value = ['resource|Resource']
-    >>> manager.getControl('Search').click()
+    >>> manager.getLink('Resource', index=2).click()
     >>> manager.getControl(name='delete.mud').value = True
     >>> manager.getControl('Delete').click()
     >>> manager.getControl('Confirm').click()

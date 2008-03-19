@@ -11,21 +11,19 @@ Let's log in:
 
 And add a couple of resources to book:
 
-    >>> manager.getLink('Resources').click()
+    >>> manager.getLink('Reservations').click()
     >>> manager.getLink('New Location').click()
     >>> manager.getControl('Title').value = 'mud'
     >>> manager.getControl(name='field.type.newSubType').value = 'Computer Lab'
     >>> manager.getControl('Add').click()
-    >>> manager.getControl('Type').value = ['location|Computer Lab']
-    >>> manager.getControl('Search').click()
+    >>> manager.getLink('Computer Lab').click()
     >>> 'mud' in manager.contents
     True
 
     >>> manager.getLink('New Resource').click()
     >>> manager.getControl('Title').value = 'fish'
     >>> manager.getControl('Add').click()
-    >>> manager.getControl('Type').value = ['resource|Resource']
-    >>> manager.getControl('Search').click()
+    >>> manager.getLink('Resource', index=2).click()
     >>> 'fish' in manager.contents
     True
 
@@ -52,9 +50,8 @@ And a few events to our calendar:
 
 And a couple of events to our resource calendars:
 
-    >>> manager.getLink('Resources').click()
-    >>> manager.getControl('Type').value = ['resource|Resource']
-    >>> manager.getControl('Search').click()
+    >>> manager.getLink('Reservations').click()
+    >>> manager.getLink('Resource', index=2).click()
     >>> manager.getLink('fish').click()
     >>> manager.getLink('View Calendar').click()
 
@@ -65,9 +62,8 @@ And a couple of events to our resource calendars:
     >>> manager.getControl('Add').click()
 
 
-    >>> manager.getLink('Resources').click()
-    >>> manager.getControl('Type').value = ['location|Computer Lab']
-    >>> manager.getControl('Search').click()
+    >>> manager.getLink('Reservations').click()
+    >>> manager.getLink('Computer Lab').click()
     >>> manager.getLink('mud').click()
     >>> manager.getLink('View Calendar').click()
 
@@ -80,9 +76,8 @@ And a couple of events to our resource calendars:
 Now if we go to the resource container and select both resources for
 booking:
 
-    >>> manager.getLink('Resources').click()
-    >>> manager.getControl('Type').value = ['resource|Resource']
-    >>> manager.getControl('Search').click()
+    >>> manager.getLink('Reservations').click()
+    >>> manager.getLink('Resource', index=2).click()
 
     >>> manager.getControl(name='delete.fish').value = ['delete.fish']
 

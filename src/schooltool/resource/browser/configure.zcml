@@ -100,8 +100,8 @@
         permission="schooltool.edit">
       <widget field="description" height="5" />
       <widget field="type"
-	      class="schooltool.resource.browser.resource.ResourceSubTypeWidget"
-	      utility="location"/>
+          class="schooltool.resource.browser.resource.ResourceSubTypeWidget"
+          utility="location"/>
     </addform>
 
     <editform
@@ -117,8 +117,8 @@
         title="Edit Info">
       <widget field="description" height="5" />
       <widget field="type"
-	      class="schooltool.resource.browser.resource.ResourceSubTypeWidget"
-	      utility="location"/>
+          class="schooltool.resource.browser.resource.ResourceSubTypeWidget"
+          utility="location"/>
     </editform>
 
     <!-- Equipment forms -->
@@ -136,8 +136,8 @@
         permission="schooltool.edit">
       <widget field="description" height="5" />
       <widget field="type"
-	      class="schooltool.resource.browser.resource.ResourceSubTypeWidget"
-	      utility="equipment"/>
+          class="schooltool.resource.browser.resource.ResourceSubTypeWidget"
+          utility="equipment"/>
     </addform>
 
     <editform
@@ -154,8 +154,8 @@
         title="Edit Info">
       <widget field="description" height="5" />
       <widget field="type"
-	      class="schooltool.resource.browser.resource.ResourceSubTypeWidget"
-	      utility="equipment"/>
+          class="schooltool.resource.browser.resource.ResourceSubTypeWidget"
+          utility="equipment"/>
     </editform>
 
     <navigationViewlet
@@ -166,7 +166,7 @@
       class="schooltool.skin.TopLevelContainerNavigationViewlet"
       permission="schooltool.view"
       link="resources"
-      title="Resources"
+      title="Reservations"
       order="60"
       />
 

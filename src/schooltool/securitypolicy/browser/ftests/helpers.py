@@ -138,7 +138,7 @@ def group_calendar_edit(browser):
 
 def resource_container_view(browser):
     browser.open('http://localhost/resources/')
-    return 'Resources' in browser.contents
+    return 'Reservations' in browser.contents
 
 def resource_container_edit(browser):
     resource_container_view(browser)
@@ -146,13 +146,11 @@ def resource_container_edit(browser):
     browser.getControl('Title').value = 'Test Resource'
     browser.getControl('Identifier').value = 'testresource'
     browser.getControl('Add').click()
-    browser.getControl('Type').value = ['resource|Resource']
-    browser.getControl('Search').click()
+    browser.getLink('Resource', index=2).click()
     browser.getControl(name='delete.testresource').value = True
     browser.getControl('Delete').click()
     browser.getControl('Confirm').click()
-    browser.getControl('Type').value = ['resource|Resource']
-    browser.getControl('Search').click()
+    browser.getLink('Resource', index=2).click()
     return 'Time travel machine' in browser.contents
 
 

@@ -38,7 +38,7 @@ And a group:
 
 And a resource:
 
-    >>> manager.getLink('Resources').click()
+    >>> manager.getLink('Reservations').click()
     >>> manager.getLink('New Resource').click()
 
     >>> manager.getControl('Title').value = 'Mud'
@@ -137,14 +137,14 @@ You can edit it
 
 Frog should be able to see the term in his yearly calendar view now.
 Let's make him a login so he can check.
-    
+
     >>> frog = Browser()
     >>> frog.addHeader('Authorization', 'Basic frog:pwd')
     >>> frog.handleErrors = False
     >>> frog.open("http://localhost/persons/frog/calendar/2005")
 
 There should be a legend that includes the term.
-   
+
     >>> print frog.contents
     <BLANKLINE>
     ...Legend...
@@ -153,7 +153,7 @@ There should be a legend that includes the term.
 The CSS class "term1" indicates Fall 2005 is colored in the "term1" style.
 The actual calendar days should also be styled "term1" where appropriate.
 The days not part of a term should be styled "term0".
-First we'll check if the terms start off coloured properly. 
+First we'll check if the terms start off coloured properly.
 
     >>> print frog.contents
     <BLANKLINE>
@@ -324,7 +324,7 @@ We can have a look at the timetable too, and see a few timetable activities:
                     <input class="activity" type="checkbox" id="Monday.B" value="Monday.B" name="Monday.B" /><label class="period" for="Monday.B">B</label>
                   </li>
     <BLANKLINE>
-	      </ul></td>
+          </ul></td>
     <BLANKLINE>
     <BLANKLINE>
             <td>
@@ -380,7 +380,7 @@ We can have a look at the timetable too, and see a few timetable activities:
     <BLANKLINE>
         </tr>
 
-We can also edit the timetable from the time table 
+We can also edit the timetable from the time table
 
     >>> manager.getControl(name="Wednesday.A").value = True
     >>> manager.getControl(name="Monday.A").value = False
@@ -436,7 +436,7 @@ this section too:
         </span>
       </a>
     </h6>
-    
+
 
 Deleting Timetable Schemas and Terms
 ------------------------------------
