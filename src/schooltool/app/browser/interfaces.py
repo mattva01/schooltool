@@ -121,6 +121,7 @@ class ICalendarProvider(Interface):
         Yields tuples (calendar, color1, color2).
         """
 
+
 class ICalendarMenuViewlet(Interface):
     """Marker interface so we could use custom crowd for View Calendar menu item"""
 
@@ -131,6 +132,7 @@ class IManageMenuViewletManager(IViewletManager):
 
 class ISchoolMenuViewletManager(IViewletManager):
     """Provides a viewlet hook for the school menu items."""
+
 
 class IHaveEventLegend(Interface):
     """Classes implementing this interface will have an event legend showing."""
