@@ -95,8 +95,8 @@ Let's provide the location of auth:
 
 Now, we get our local authentication service:
 
-    >>> from zope.app import zapi
-    >>> zapi.getUtility(IAuthentication, context=app) is auth
+    >>> from zope.component import getUtility
+    >>> getUtility(IAuthentication, context=app) is auth
     True
     >>> verifyObject(ISite, app)
     True
