@@ -27,19 +27,16 @@ from zope.component import provideUtility
 
 from schooltool.term.interfaces import IDateManager
 
+
 class DateManagerStub(object):
     implements(IDateManager)
 
-    def __init__(self, date):
-        self.date = date
-
-    @property
-    def today(self):
-        return self.date
+    def __init__(self, today, current_term):
+        self.today = today
+        self.current_term = current_term
 
 
-def setUpDateManagerStub(date=None):
-    if not date:
-        date = datetime.date(2005, 9, 20)
-    provideUtility(IDateManager,
-                   DateManagerStub(date))
+def setUpDateManagerStub(today=None, current_term=None):
+    if not today:
+        today = datetime.date(2005, 9, 20)
+    provideUtility(DateManagerStub(today, current_term))

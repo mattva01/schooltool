@@ -31,6 +31,8 @@ from zope.interface import implements
 
 from schooltool.relationship import RelationshipProperty
 from schooltool.app import membership
+from schooltool.app.relationships import URIInstruction
+from schooltool.app.relationships import URISection
 from schooltool.app.app import InitBase
 from schooltool.group.interfaces import IBaseGroup as IGroup
 from schooltool.person.interfaces import IPerson
@@ -42,7 +44,7 @@ from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
 from schooltool.course.interfaces import ISection
 from schooltool.app.security import ConfigurableCrowd
 from schooltool.relationship.relationship import getRelatedObjects
-from schooltool.course.interfaces import ILearner
+from schooltool.course.interfaces import ILearner, IInstructor
 
 
 class Section(Persistent, contained.Contained):
@@ -174,3 +176,15 @@ class PersonLearnerAdapter(object):
         for group in self.person.groups:
             for section in self._getSections(group):
                 yield section
+
+
+class PersonInstructorAdapter(object):
+    implements(IInstructor)
+    adapts(IPerson)
+
+    def __init__(self, person):
+        self.person = person
+
+    def sections(self):
+        return getRelatedObjects(self.person, URISection,
+                                 rel_type=URIInstruction)

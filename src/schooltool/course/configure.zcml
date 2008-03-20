@@ -143,6 +143,10 @@
   <adapter
       factory=".section.PersonLearnerAdapter" />
 
+  <!-- Instructor adapter -->
+  <adapter
+      factory=".section.PersonInstructorAdapter" />
+
   <!-- Views -->
   <include package=".browser" />
   <include package=".rest" />

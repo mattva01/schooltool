@@ -109,3 +109,4 @@ class IDateManager(zope.interface.Interface):
     """
 
     today = zope.interface.Attribute("The current day.")
+    current_term = zope.interface.Attribute("The active term.")

@@ -148,3 +148,7 @@ class DateManagerUtility(object):
         tzinfo = pytz.timezone(IApplicationPreferences(app).timezone)
         dt = pytz.utc.localize(datetime.utcnow())
         return dt.astimezone(tzinfo).date()
+
+    @property
+    def current_term(self):
+        return getNextTermForDate(self.today)

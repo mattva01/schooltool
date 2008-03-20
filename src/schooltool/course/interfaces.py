@@ -108,3 +108,9 @@ class ILearner(Interface):
 
     def sections():
         """List of all the sections this learner belongs to."""
+
+
+class IInstructor(Interface):
+
+    def sections():
+        """List of all the sections this instructor is teaching to."""
