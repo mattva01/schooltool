@@ -23,13 +23,28 @@ $Id$
 
 """
 from zope.interface import implements
+from zope.schema.interfaces import ITitledTokenizedTerm
+from zope.schema.interfaces import IVocabularyTokenized
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPerson
 from schooltool.group.interfaces import IGroup
 
+from schooltool.basicperson.browser.person import PersonTerm
+from schooltool.basicperson.browser.person import GroupTerm
 from schooltool.basicperson.interfaces import IGroupSource
 from schooltool.basicperson.interfaces import IBasicPersonSource
+
+
+class Term(object):
+    """Simplistic term that uses value as token.
+    """
+    implements(ITitledTokenizedTerm)
+
+    def __init__(self, value):
+        self.title = value
+        self.token = value
+        self.value = value
 
 
 class GradeClassSource(object):
@@ -46,14 +61,25 @@ class GradeClassSource(object):
 
     def __iter__(self):
         if IPerson.providedBy(self.context):
-            groups = [group.__name__
+            tokens = [group.__name__
                       for group in self.context.groups
                       if IGroup.providedBy(group)]
         else:
-            groups = list(ISchoolToolApplication(None)['groups'])
+            tokens = list(ISchoolToolApplication(None)['groups'])
 
-        for group in sorted(groups):
-            yield group
+        for token in sorted(tokens):
+            yield self.getTermByToken(token)
+
+    def getTermByToken(self, token):
+        app = ISchoolToolApplication(None)
+        gc = app['groups']
+        if token not in gc:
+            raise LookupError(token)
+        return GroupTerm(token)
+
+    def getTerm(self, value):
+        return GroupTerm(value)
+
 
 def gradeClassVocabularyFactory():
     return GradeClassSource
@@ -75,7 +101,18 @@ class AdvisorSource(object):
         app = ISchoolToolApplication(None)
         persons = app['groups']['teachers'].members
         for person in sorted(persons, key=lambda p: p.__name__):
-            yield person
+            yield PersonTerm(person)
+
+    def getTermByToken(self, token):
+        app = ISchoolToolApplication(None)
+        pc = app['persons']
+        if token not in pc:
+            raise LookupError(token)
+        return PersonTerm(pc[token])
+
+    def getTerm(self, value):
+        return PersonTerm(value)
+
 
 def advisorVocabularyFactory():
     return AdvisorSource

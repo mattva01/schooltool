@@ -21,13 +21,15 @@ Basic person browser views.
 
 $Id$
 """
+import zope.interface
 from zope.app.container.interfaces import INameChooser
 from zope.app.form.browser.interfaces import ITerms
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
 from zope.component import getUtility
 from zope.exceptions.interfaces import UserError
-from zope.formlib import form
+from z3c.form import form, field, button, validator
+from zope.formlib import form as formlibform
 from zope.interface import implements
 from zope.publisher.browser import BrowserView
 from zope.schema import Password
@@ -35,6 +37,8 @@ from zope.schema import TextLine
 from zope.schema.interfaces import ITitledTokenizedTerm
 from zope.app.form.interfaces import WidgetInputError
 from zope.traversing.browser.absoluteurl import absoluteURL
+
+from z3c.form.validator import SimpleFieldValidator
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPersonFactory
@@ -65,6 +69,10 @@ class IPersonAddForm(IBasicPerson):
         title=_("Password"),
         required=False)
 
+    confirm = Password(
+        title=_("Confirm"),
+        required=False)
+
 
 class PersonAddFormAdapter(object):
     implements(IPersonAddForm)
@@ -85,70 +93,71 @@ class PersonAddFormAdapter(object):
         return getattr(self.context, name)
 
 
-class PersonAddView(BasicForm):
-    """Person add form for basic persons."""
+# XXX: I don't know why ValidationError returns a docstring instead
+# of the actual error message it gets instantiated with, so I had to
+# subclass to get useful error messages.
+class UsernameValidationError(zope.schema.ValidationError):
+    """Validation error related to a username."""
+    def doc(self):
+        return str(self)
 
-    title = _("Add new person")
+
+class UsernameValidator(SimpleFieldValidator):
+
+    def validate(self, username):
+        if username in self.context:
+            raise UsernameValidationError(_("This username is already in use!"))
+        try:
+            INameChooser(self.context).checkName(username, None)
+        except UserError:
+            raise UsernameValidationError(_("Names cannot begin with '+' or '@' or contain '/'"))
+
+validator.WidgetValidatorDiscriminators(UsernameValidator,
+                                        field=IPersonAddForm['username'])
+
+
+class PersonAddView(form.AddForm):
+    """Person add form for basic persons."""
+    label = _("Add new person")
     template = ViewPageTemplateFile('templates/person_add.pt')
 
-    form_fields = form.Fields(IPersonAddForm, render_context=False) + \
-                  form.Fields(IStudent)
-    form_fields['password'].custom_widget = PasswordConfirmationWidget
+    fields = field.Fields(IPersonAddForm) + field.Fields(IStudent)
 
-    def username_validator(self, action, data):
-        errors = form.getWidgetsData(self.widgets, self.prefix, data)
+    def updateActions(self):
+        super(PersonAddView, self).updateActions()
+        self.actions['add'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
+    @button.buttonAndHandler(_('Add'), name='add')
+    def handleAdd(self, action):
+        data, errors = self.extractData()
         if errors:
-            return errors # Probably some fields are missing.
+            self.status = self.formErrorsMessage
+            return
+        if data['password'] != data['confirm']:
+            self.status = _(u"Passwords do not match")
+            return
+        obj = self.createAndAdd(data)
+        if obj is not None:
+            # mark only as finished if we get the new object
+            self._finishedAdd = True
 
-        widget = self.widgets['username']
-        if data['username'] in self.context:
-            error_msg = _("This username is already in use!")
-            error = WidgetInputError(widget.name, widget.label, error_msg)
-            widget._error = error
-            return [error]
-
-        try:
-            INameChooser(self.context).checkName(data['username'], None)
-        except UserError:
-            error_msg = _("Names cannot begin with '+' or '@' or contain '/'")
-            error = WidgetInputError(widget.name, widget.label, error_msg)
-            widget._error = error
-            return [error]
-
-    @form.action(_("Apply"), validator=username_validator)
-    def handle_apply_action(self, action, data):
-
+    def create(self, data):
         person = self._factory(data['username'], data['first_name'],
                                data['last_name'])
+        data.pop('confirm')
+        form.applyChanges(self, person, data)
+        self._person = person
+        return person
 
-        form.applyChanges(person, self.form_fields, data, self.adapters)
-        self.addPerson(person)
-
-        # Add the persons to his class
-        if person.gradeclass is not None:
-            groups = ISchoolToolApplication(None)['groups']
-            person.groups.add(groups[person.gradeclass])
-
-        url = absoluteURL(person, self.request)
-        self.request.response.redirect(url)
-        return ''
-
-    @form.action(_("Cancel"))
-    def handle_cancel_action(self, action, data):
-        # XXX validation upon cancellation doesn't make any sense
-        # how to make this work properly?
-        return self._redirect()
-
-    def _redirect(self):
-        url = absoluteURL(self.context, self.request)
-        self.request.response.redirect(url)
-        return ''
+    def nextURL(self):
+        return absoluteURL(self._person, self.request)
 
     @property
     def _factory(self):
         return getUtility(IPersonFactory)
 
-    def addPerson(self, person):
+    def add(self, person):
         """Add `person` to the container.
 
         Uses the username of `person` as the object ID (__name__).
@@ -157,28 +166,37 @@ class PersonAddView(BasicForm):
         self.context[name] = person
         return person
 
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        # XXX validation upon cancellation doesn't make any sense
+        # how to make this work properly?
+        url = absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
 
-class PersonEditView(EditForm):
+
+class PersonEditView(form.EditForm):
     """Edit form for basic person."""
+    form.extends(form.EditForm)
+    template = ViewPageTemplateFile('templates/person_add.pt')
 
-    template = ViewPageTemplateFile('templates/person_edit.pt')
+    fields = field.Fields(IBasicPerson) + field.Fields(IStudent)
 
-    @form.action(_('Apply'), name='apply')
-    def handle_apply(self, action, data):
-        self.edit_action(action, data)
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        # XXX validation upon cancellation doesn't make any sense
+        # how to make this work properly?
+        url = absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
 
-    @form.action(_('Cancel'), name='cancel')
-    def handle_cancel(self, action, data):
-        self.cancel_action(action, data)
+    def updateActions(self):
+        super(PersonEditView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
 
-    def title(self):
+    @property
+    def label(self):
         return _(u'Change information for ${fullname}',
-                 mapping={'fullname': self.fullname()})
-
-    form_fields = form.Fields(IBasicPerson) + form.Fields(IStudent)
-
-    def fullname(self):
-        return self.context.title
+                 mapping={'fullname': self.context.title})
 
 
 class PersonTerm(object):

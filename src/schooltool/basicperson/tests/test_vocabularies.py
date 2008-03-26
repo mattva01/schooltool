@@ -35,26 +35,29 @@ def doctest_GradeClassSource():
     If the context of a source is not a person, all groups from the
     group container are returned:
 
+        >>> from schooltool.group.interfaces import IGroup
+        >>> class GroupStub(object):
+        ...     implements(IGroup)
+        ...     def __init__(self, title):
+        ...         self.title = title
+        ...         self.__name__ = title.lower()
+
         >>> from schooltool.app.interfaces import ISchoolToolApplication
         >>> class STAppStub(dict):
         ...     def __init__(self, context):
-        ...         self['groups'] = {'a': None, 'b': None, 'some-group': None}
+        ...         self['groups'] = {'a': GroupStub('A'),
+        ...                           'b': GroupStub('B'),
+        ...                           'some-group': GroupStub('Some Group')}
 
         >>> provideAdapter(STAppStub, adapts=[None], provides=ISchoolToolApplication)
 
         >>> from schooltool.basicperson.vocabularies import GradeClassSource
         >>> source = GradeClassSource(None)
-        >>> [group for group in source]
+        >>> [group.token for group in source]
         ['a', 'b', 'some-group']
 
     If the context of the vocabulary is a person - list all the groups
     he belongs to as possible grade classes:
-
-        >>> from schooltool.group.interfaces import IGroup
-        >>> class GroupStub(object):
-        ...     implements(IGroup)
-        ...     def __init__(self, name):
-        ...         self.__name__ = name
 
         >>> class SectionStub(object):
         ...     def __init__(self, name):
@@ -64,13 +67,13 @@ def doctest_GradeClassSource():
         >>> class PersonStub(object):
         ...     implements(IPerson)
         ...     def __init__(self):
-        ...         self.groups = map(GroupStub, ['g2', 'g1'])
+        ...         self.groups = map(GroupStub, ['A', 'B'])
         ...         self.groups.extend(map(SectionStub, ['s1', 's2']))
 
         >>> person = PersonStub()
         >>> source = GradeClassSource(person)
-        >>> [group for group in source]
-        ['g1', 'g2']
+        >>> [group.token for group in source]
+        ['a', 'b']
 
     """
 
@@ -88,7 +91,7 @@ def doctest_AdvisorSource():
 
         >>> class PersonStub(object):
         ...     def __init__(self, name):
-        ...         self.__name__ = name
+        ...         self.__name__ = self.title = name
 
         >>> class STAppStub(dict):
         ...     def __init__(self, context):
@@ -100,7 +103,7 @@ def doctest_AdvisorSource():
 
         >>> from schooltool.basicperson.vocabularies import AdvisorSource
         >>> source = AdvisorSource(None)
-        >>> [person.__name__ for person in source]
+        >>> [person.value.__name__ for person in source]
         ['john', 'sarrah']
 
     """

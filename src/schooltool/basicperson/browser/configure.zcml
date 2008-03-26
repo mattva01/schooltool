@@ -79,4 +79,7 @@
      menu="schooltool_actions" title="New Person"
      layer=".skin.IBasicPersonLayer" />
 
+  <zope:adapter
+      factory=".person.UsernameValidator" />
+
 </configure>

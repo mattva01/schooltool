@@ -28,7 +28,6 @@ from zope.interface import Interface
 from zope.interface import Attribute
 from zope.schema.interfaces import IIterableSource
 
-from schooltool.demographics.interfaces import SourceList
 from schooltool.common import SchoolToolMessage as _
 
 
@@ -47,7 +46,7 @@ class IBasicPerson(Interface):
 
     gender = Choice(
         title=_(u"Gender"),
-        source=SourceList([_('male'), _('female')]),
+        values=[_('male'), _('female')],
         required=False,
         )
 

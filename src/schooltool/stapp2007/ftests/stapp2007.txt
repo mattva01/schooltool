@@ -19,7 +19,7 @@ Create a Basic Person
     >>> manager.getControl('Gender').value = ['male']
     >>> manager.getControl('Email').value = 'john@example.com'
     >>> manager.getControl('Phone').value = '111-111-1111'
-    >>> manager.getControl('Birth date').value = '1980-01-01'
+    >>> manager.getControl('Birth date').value = '80/01/01'
 
     >>> manager.getControl('Username').value = "john"
     >>> manager.getControl('Password').value = "pwd"

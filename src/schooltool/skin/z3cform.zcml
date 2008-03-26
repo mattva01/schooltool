@@ -1,0 +1,127 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:z3c="http://namespaces.zope.org/z3c">
+
+  <!-- form macros -->
+  <z3c:macro
+      name="form"
+      template="templates/z3c-schooltool-form.pt"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+  <z3c:macro
+      name="subform"
+      template="templates/z3c-schooltool-form.pt"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+
+  <configure package="z3c.formui">
+  <interface
+      interface="schooltool.skin.ISchoolToolLayer"
+      type="zope.publisher.interfaces.browser.IBrowserSkinType"
+      />
+
+  <browser:resource
+      name="div-form.css"
+      file="div-form.css"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+  <browser:viewlet
+      name="div-form.css"
+      for="*"
+      manager=".interfaces.ICSS"
+      class=".browser.DivFormCSSViewlet"
+      permission="zope.Public"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+
+  <!-- form macros -->
+  <z3c:macro
+      name="subform-display"
+      template="div-form-display.pt"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+  <z3c:macro
+      name="form-label"
+      macro="label"
+      template="div-form.pt"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+  <z3c:macro
+      name="form-required-info"
+      macro="required-info"
+      template="div-form.pt"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+  <z3c:macro
+      name="form-header"
+      macro="header"
+      template="div-form.pt"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+  <z3c:macro
+      name="form-errors"
+      macro="errors"
+      template="div-form.pt"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+  <z3c:macro
+      name="widget-rows"
+      macro="widget-rows"
+      template="div-form.pt"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+  <z3c:macro
+      name="widget-row"
+      macro="widget-row"
+      template="div-form.pt"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+  <z3c:macro
+      name="form-groups"
+      macro="groups"
+      template="div-form.pt"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+  <z3c:macro
+      name="form-buttons"
+      macro="buttons"
+      template="div-form.pt"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+
+  <!-- IContentTemplate -->
+  <z3c:template
+      template="div-form.pt"
+      for="z3c.form.interfaces.IInputForm"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+  <z3c:template
+      template="div-form-display.pt"
+      for="z3c.form.interfaces.IDisplayForm"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+
+  <!-- named IContentTemplate -->
+  <z3c:template
+      name="display"
+      template="div-form-display.pt"
+      for="z3c.form.interfaces.IForm"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+  <z3c:template
+      name="subform"
+      template="subform.pt"
+      for="z3c.form.interfaces.IForm"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+
+  <!-- named ILayoutTemplate -->
+  <z3c:layout
+      name="subform"
+      template="subform-layout.pt"
+      for="z3c.form.interfaces.IForm"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+  </configure>
+</configure>

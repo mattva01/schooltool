@@ -20,6 +20,7 @@
 from zope.interface import Interface, implements, Attribute
 from zope import schema
 from zope.schema.interfaces import IIterableSource
+from zope.schema.interfaces import ITitledTokenizedTerm
 
 from schooltool.app.app import ISchoolToolApplication
 from schooltool.common import SchoolToolMessage as _
@@ -87,6 +88,9 @@ class SourceList(list):
     """
     implements(IIterableSource)
 
+    ## def __init__(self, values=[]):
+    ##     for v in values:
+    ##         self.append(Term(v))
 
 ethnicitySource = SourceList([
     _('American Indian or Alaska Native'),

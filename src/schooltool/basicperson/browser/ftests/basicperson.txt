@@ -19,12 +19,13 @@ Create a Basic Person, a teacher.
     >>> manager.getControl('Gender').value = ['male']
     >>> manager.getControl('Email').value = 'john@example.com'
     >>> manager.getControl('Phone').value = '111-111-1111'
-    >>> manager.getControl('Birth date').value = '1980-01-01'
+    >>> manager.getControl('Birth date').value = '80/01/01'
 
     >>> manager.getControl('Username').value = "john"
     >>> manager.getControl('Password').value = "pwd"
     >>> manager.getControl('Confirm').value = "pwd"
     >>> manager.getControl('Add').click()
+
     >>> manager.getLink('edit groups').click()
     >>> manager.getControl('Teachers').click()
     >>> manager.getControl('Add').click()
@@ -149,7 +150,7 @@ Now let's create another teacher, Bob.
     >>> manager.getControl('Gender').value = ['male']
     >>> manager.getControl('Email').value = 'bob@example.com'
     >>> manager.getControl('Phone').value = '111-111-1111'
-    >>> manager.getControl('Birth date').value = '1980-01-01'
+    >>> manager.getControl('Birth date').value = '80/01/01'
 
     >>> manager.getControl('Username').value = "bob"
     >>> manager.getControl('Password').value = "pwd"
@@ -170,7 +171,7 @@ choose as an advisor.  We will choose John.
     >>> manager.getControl('Gender').value = ['male']
     >>> manager.getControl('Email').value = 'student@example.com'
     >>> manager.getControl('Phone').value = '111-111-1111'
-    >>> manager.getControl('Birth date').value = '1980-01-01'
+    >>> manager.getControl('Birth date').value = '80/01/01'
     >>> manager.getControl('Advisor').value = ['john']
 
     >>> manager.getControl('Username').value = "student"

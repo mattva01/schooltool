@@ -11,6 +11,9 @@
   <include package="zc.resourcelibrary" file="meta.zcml"/>
   <include package="schooltool.securitypolicy" file="meta.zcml" />
   <include package="schooltool.skin" file="meta.zcml" />
+  <include package="z3c.form" file="meta.zcml" />
+  <include package="z3c.macro" file="meta.zcml" />
+  <include package="z3c.template" file="meta.zcml" />
 
   <include package="zope.session" />
   <include package="zope.app.server" />
@@ -25,6 +28,9 @@
   <include package="zope.mimetype" />
   <include package="zope.file" />
   <include package="zope.html" />
+  <include package="z3c.form" />
+  <include package="z3c.formui" />
+  <include package="z3c.macro"/>
 
   <!-- set up an adapter from zope.i18n locale to a zope.ucol collator -->
 

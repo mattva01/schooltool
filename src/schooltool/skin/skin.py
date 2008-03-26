@@ -36,6 +36,10 @@ from zope.publisher.browser import BrowserView
 from zope.app.publisher.browser.menu import getMenu
 from zope.traversing.browser.absoluteurl import absoluteURL
 
+from z3c.form.interfaces import IFormLayer
+from z3c.formui.interfaces import IDivFormLayer
+from z3c.formui.interfaces import ICSS as IZ3cFormCSS
+
 from schooltool.app.interfaces import ICookieLanguageSelector
 from schooltool.securitypolicy.crowds import Crowd
 from schooltool.securitypolicy.interfaces import ICrowd
@@ -49,7 +53,7 @@ class IJavaScriptManager(IViewletManager):
     """Provides a viewlet hook for the javascript link entries."""
 
 
-class ICSSManager(IViewletManager):
+class ICSSManager(IZ3cFormCSS):
     """Provides a viewlet hook for the CSS link entries."""
 
 
@@ -215,7 +219,7 @@ class NavigationViewletEditCrowd(Crowd):
         return crowd.contains(principal)
 
 
-class ISchoolToolLayer(ILayer, IBrowserRequest):
+class ISchoolToolLayer(ILayer, IFormLayer, IBrowserRequest):
     """SchoolTool layer."""
 
 

@@ -3,6 +3,8 @@
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
+  <include file="z3cform.zcml" />
+
   <!-- Viewlet Managers -->
 
   <zope:interface
