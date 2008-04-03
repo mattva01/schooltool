@@ -89,7 +89,6 @@ root_packages = ['schooltool.app',
 
                  # only needed for tests
                  'schooltool.sampledata',
-                 'schooltool.requirement',
                  'schooltool.level',
                  ]
 
