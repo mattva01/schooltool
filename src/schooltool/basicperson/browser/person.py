@@ -164,6 +164,10 @@ class PersonAddView(form.AddForm):
         """
         name = person.username
         self.context[name] = person
+        # Add the persons to his class
+        if person.gradeclass is not None:
+            groups = ISchoolToolApplication(None)['groups']
+            person.groups.add(groups[person.gradeclass])
         return person
 
     @button.buttonAndHandler(_("Cancel"))
