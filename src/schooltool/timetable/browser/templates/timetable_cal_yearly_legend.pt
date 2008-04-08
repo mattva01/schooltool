@@ -1,0 +1,9 @@
+<div id="portlet-calendar-legend" class="portlet">
+  <h4 i18n:translate="">Displayed Terms</h4>
+  <div tal:repeat="term view/legend">
+    <div tal:content="term/title"
+         tal:attributes="class term/cssclass">
+      Term
+    </div>
+  </div>
+</div>

@@ -21,10 +21,12 @@ Timetable specific calendar views.
 
 $Id$
 """
+from zope.viewlet.interfaces import IViewlet
+from zope.interface import implements
+from zope.cachedescriptors.property import CachedProperty
 
 from schooltool.app.browser.cal import YearlyCalendarView
 from schooltool.term.term import getTermForDate
-from datetime import date, timedelta
 
 
 class TimetablingYearlyCalendarView(YearlyCalendarView):
@@ -33,17 +35,28 @@ class TimetablingYearlyCalendarView(YearlyCalendarView):
     def __init__(self, context, request):
         super(YearlyCalendarView, self).__init__(context,request)
         self.numterms = 1
-        self.terms = {None: 0}
+        self.calendar = None
+
+    @CachedProperty
+    def legend(self):
+        numterms = 1
+        legend = {}
+        for quarter in self.getYear(self.cursor):
+            for month in quarter:
+                for week in month:
+                    for day in week:
+                        term = getTermForDate(day.date)
+                        if term and not term in legend:
+                            legend[term] = self.numterms
+                            numterms += 1
+        return legend
 
     def renderRow(self, week, month):
         result = []
 
         for day in week:
             term = getTermForDate(day.date)
-            if not term in self.terms.keys():
-                self.terms[term]=self.numterms
-                self.numterms+=1
-            cssClass = "term%d" % self.terms[term]
+            cssClass = "term%d" % self.legend.get(term, 0)
 
             result.append('<td class="cal_yearly_day">')
             if day.date.month == month:
@@ -59,3 +72,13 @@ class TimetablingYearlyCalendarView(YearlyCalendarView):
 
         return "\n".join(result)
 
+
+class TermLegendViewlet(object):
+    implements(IViewlet)
+
+    def legend(self):
+        terms = self.__parent__.legend.items()
+        terms.sort(key=lambda t: t[0].first)
+        return [{'title': term.title,
+                 'cssclass': "legend-item term%s" % cssClass}
+                for term, cssClass in terms]

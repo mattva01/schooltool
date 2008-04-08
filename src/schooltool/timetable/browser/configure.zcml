@@ -226,6 +226,18 @@
       order="10"
       />
 
+  <viewlet
+      name="calendar-term-legend"
+      for="*"
+      class="schooltool.timetable.browser.cal.TermLegendViewlet"
+      view=".cal.TimetablingYearlyCalendarView"
+      manager="schooltool.app.browser.cal.ICalendarPortletViewletManager"
+      template="templates/timetable_cal_yearly_legend.pt"
+      permission="schooltool.view"
+      layer="schooltool.timetable.browser.skin.ITimetableLayer"
+      order="6"
+      />
+
   <zope:adapter
       for="schooltool.timetable.interfaces.ITimetableDict
            zope.publisher.interfaces.browser.IBrowserRequest"

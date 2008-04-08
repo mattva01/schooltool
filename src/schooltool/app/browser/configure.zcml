@@ -44,6 +44,16 @@
       />
 
   <viewlet
+      name="portlet-tomorrow-events"
+      for="*"
+      manager=".cal.ICalendarPortletViewletManager"
+      template="templates/portlet_tomorrow_events.pt"
+      permission="zope.Public"
+      layer="schooltool.skin.ISchoolToolLayer"
+      order="5"
+      />
+
+  <viewlet
       name="event-info"
       for="*"
       manager="schooltool.app.browser.skin.ICalendarEventViewletManager"

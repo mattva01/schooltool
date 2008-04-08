@@ -110,9 +110,20 @@
 /*  Popup Icon */
 
 .CalIcon {
-   vertical-align:middle; 
+    vertical-align:middle;
     cursor: pointer;
     cursor: hand;
     height:18px;
     width: 18px;
+}
+
+.legend-title{
+  text-align: center;
+  margin-top: 1ex;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.legend-item{
+
 }
