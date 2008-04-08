@@ -12,7 +12,7 @@
                              href event/context/@@absolute_url">
             <strong tal:content="
                 python: event.dtstart.astimezone(
-                            view.view.timezone).strftime('%H:%M')" />
+                            view.__parent__.timezone).strftime('%H:%M')" />
             <span tal:replace="event/shortTitle">Event</span>
           </a>
         </li>
