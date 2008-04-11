@@ -54,7 +54,7 @@ class GradeClassSource(object):
         self.context = context
 
     def __len__(self):
-        len(self.context.groups)
+        return len(self.context.groups)
 
     def __contains__(self, value):
         return True
@@ -95,7 +95,7 @@ class AdvisorSource(object):
         return True
 
     def __len__(self):
-        len(self.context.groups)
+        return len(self.context.groups)
 
     def __iter__(self):
         app = ISchoolToolApplication(None)
