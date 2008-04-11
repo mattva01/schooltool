@@ -43,7 +43,7 @@ def person_calendar_edit(browser, subject):
 
 def gradebook_scores_view(browser, section):
     browser.open('http://localhost/sections/%s' % section)
-    browser.getLink('Gradebook').click()
+    browser.getLink('Gradebook', index=1).click()
     return 'SchoolTool origin' in browser.contents
 
 def gradebook_scores_edit(browser, section):

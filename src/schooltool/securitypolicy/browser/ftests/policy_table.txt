@@ -71,7 +71,7 @@ Set up activities and put marks:
     >>> manager.getLink('Manage').click()
     >>> manager.getLink('Sections').click()
     >>> manager.getLink('History 6 (1)').click()
-    >>> manager.getLink('Gradebook').click()
+    >>> manager.getLink('Gradebook', index=1).click()
     >>> manager.getLink('SchoolTool origin').click()
     Traceback (most recent call last):
     ...
@@ -92,7 +92,7 @@ And try again:
     >>> manager.getLink('Courses').click()
     >>> manager.getLink('History 6').click()
     >>> manager.getLink('1').click()
-    >>> manager.getLink('Gradebook').click()
+    >>> manager.getLink('Gradebook', index=1).click()
     >>> manager.getLink('SchoolTool origin').click()
     >>> manager.getControl(name='student1').value = '8'
     >>> manager.getControl('Update').click()
