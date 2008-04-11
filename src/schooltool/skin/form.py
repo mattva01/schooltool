@@ -30,6 +30,7 @@ class BasicForm(form.FormBase):
         # optional
         return None
 
+
 class EditForm(form.PageEditForm):
     """Formlib-based edit form in schooltool style.
     """
@@ -90,6 +91,7 @@ class EditForm(form.PageEditForm):
         url = absoluteURL(self.actualContext(), self.request)
         self.request.response.redirect(url)
         return ''
+
 
 class AttributeEditForm(EditForm):
     """A form that can be used when editing an attribute of the actual
