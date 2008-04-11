@@ -156,7 +156,10 @@
 	    layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="zonki-angry.png" file="resources/zonki-angry.png"
 	    layer="schooltool.skin.ISchoolToolLayer" />
-	    
+
+  <resource name="bugs.gif" file="resources/bugs.gif"
+	    layer="schooltool.skin.ISchoolToolLayer" />
+
   <resource name="downarrow.png" file="resources/downarrow.png"
             layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="rightarrow.png" file="resources/rightarrow.png"

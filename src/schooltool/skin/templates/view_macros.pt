@@ -108,18 +108,24 @@
       <div class="clearer">&nbsp;</div>
     </div>
     <div id="footer">
+    <a href="https://bugs.edge.launchpad.net/schooltool/+filebug"
+     i18n:attributes="alt" alt="Report a bug on Launchpad.">
+    <img class="bug" tal:attributes="src context/++resource++bugs.gif" />
+    </a>
+    <img class="logo" tal:attributes="src context/++resource++zonki-regular.png" />
       <p>
         <strong tal:replace="context/schooltool:preferences/title"/>
           <metal:block
               use-macro="view/@@schooltool_macros/generic/serverinfo" />
+          <br />
           <span i18n:translate="">
             &copy; The <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a> 2003 - <span>2008</span>:
             Supporting Social Innovation.
           </span>
-      </p>
-      <p i18n:translate="">
+        <br />
         <a href="http://www.schooltool.org">SchoolTool</a>&trade; is a Trademark of The <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a>.
       </p>
+    <div class="clearer" />
     </div>
   </body>
 </html>

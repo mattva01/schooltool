@@ -18,6 +18,11 @@ any valuable data in your SchoolTool instance.
 </p>
 
 <p i18n:translate="">
+This creates a school of 1,000 students and data for 4 terms.  If you select 
+all options, it can take a <strong>long</strong> time.  Just let it run.
+</p>
+
+<p i18n:translate="">
 Setting a random seed allows you to to reproduce
 the same set of sample data by generating it again with the same value
 of the random seed.

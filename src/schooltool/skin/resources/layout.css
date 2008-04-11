@@ -610,20 +610,31 @@ div.content-nav {
 }
 
 #footer {
-  padding: .9em 4em 0;
-  margin: 0;
+  position: relative;
   background: #eae8e3;
-  text-align: center;
+  text-align: left;
   border-top: .1ex solid #bab5ab;
   border-bottom: .1ex solid #bab5ab;
   font-size: .8em;
   clear: both;
   width: 70%;
   padding: 1em 15%;
+  height: 65px;
 }
 
 #footer P {
-    margin: 0.5ex;
+    position: absolute;
+    left: 170px;
+}
+
+#footer IMG.logo {
+    position: absolute;
+    left: 10px;
+}
+
+#footer IMG.bug {
+    position: absolute;
+    left: 85px;
 }
 
 /*
