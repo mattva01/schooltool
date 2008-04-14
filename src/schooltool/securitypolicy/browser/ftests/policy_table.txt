@@ -51,59 +51,6 @@ Section and resources:
     >>> manager.getControl('Time travel machine').click()
     >>> manager.getControl('Add').click()
 
-Set up activities and put marks:
-
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('Courses').click()
-    >>> manager.getLink('History 6').click()
-    >>> manager.getLink('1').click()
-    >>> manager.getLink('Activities').click()
-    >>> manager.getLink('New Worksheet').click()
-    >>> manager.getControl('Title').value = 'SchoolTool worksheet'
-    >>> manager.getControl('Add').click()
-    >>> manager.getLink('New Activity').click()
-    >>> manager.getControl('Title').value = 'SchoolTool origin'
-    >>> manager.getControl('Custom score system').click()
-    >>> manager.getControl('Minimum').value = '1'
-    >>> manager.getControl('Maximum').value = '5'
-    >>> manager.getControl('Identifier').value = 'storig'
-    >>> manager.getControl('Add').click()
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('Sections').click()
-    >>> manager.getLink('History 6 (1)').click()
-    >>> manager.getLink('Gradebook', index=1).click()
-    >>> manager.getLink('SchoolTool origin').click()
-    Traceback (most recent call last):
-    ...
-    Unauthorized: ...
-
-Administration can't grade students by default, but can give itself
-the permission to do it:
-
-    >>> manager.open('http://localhost')
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('Access Control').click()
-    >>> manager.getControl('Administration can grade students').click()
-    >>> manager.getControl('Apply').click()
-
-And try again:
-
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('Courses').click()
-    >>> manager.getLink('History 6').click()
-    >>> manager.getLink('1').click()
-    >>> manager.getLink('Gradebook', index=1).click()
-    >>> manager.getLink('SchoolTool origin').click()
-    >>> manager.getControl(name='student1').value = '8'
-    >>> manager.getControl('Update').click()
-
-Let's set the setting back to cover our tracks:
-
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('Access Control').click()
-    >>> manager.getControl('Administration can grade students').click()
-    >>> manager.getControl('Apply').click()
-
 Set up leader for everything:
 
     >>> manager.open('http://localhost/')
@@ -130,7 +77,6 @@ Manager can see almost everything:
 
     >>> column(manager, 'student1', '1')
     course:              view  edit
-    gradebook scores:    view
     group calendar:      view  edit
     group container:     view  edit
     group data:          view  edit
@@ -162,7 +108,6 @@ Create anonymous browser:
     >>> alien.open('http://localhost/')
     >>> column(alien, 'student1', '1')
     course:              view
-    gradebook scores:
     group calendar:
     group container:
     group data:
@@ -192,7 +137,6 @@ Student looking at another student:
     >>> student1 = setup.logIn('student1', 'student1')
     >>> column(student1, 'student2', '1')
     course:              view
-    gradebook scores:
     group calendar:
     group container:
     group data:
@@ -221,7 +165,6 @@ Student looking at himself (his section):
 
     >>> column(student1, 'student1', '1')
     course:              view
-    gradebook scores:
     group calendar:
     group container:
     group data:
@@ -251,7 +194,6 @@ Student looking at another student and not his section:
     >>> student2 = setup.logIn('student2', 'student2')
     >>> column(student2, 'student1', '1')
     course:              view
-    gradebook scores:
     group calendar:
     group container:
     group data:
@@ -281,7 +223,6 @@ Instructor looking at his student and section:
     >>> instructor = setup.logIn('instructor1', 'instructor1')
     >>> column(instructor, 'student1', '1')
     course:              view
-    gradebook scores:    view  edit
     group calendar:
     group container:
     group data:
@@ -311,7 +252,6 @@ Group member:
     >>> teacher3 = setup.logIn('teacher3', 'teacher3')
     >>> column(teacher3, 'student1', '1')
     course:              view
-    gradebook scores:
     group calendar:      view
     group container:
     group data:          view
@@ -341,7 +281,6 @@ Leader stuff:
     >>> leader = setup.logIn('teacher2', 'teacher2')
     >>> column(leader, 'student1', '1')
     course:              view  edit
-    gradebook scores:
     group calendar:      view  edit
     group container:
     group data:          view  edit
@@ -396,7 +335,6 @@ Site wide access control:
     >>> manager.getControl('Apply').click()
     >>> column(alien, 'student1', '1')
     course:              view
-    gradebook scores:
     group calendar:
     group container:
     group data:

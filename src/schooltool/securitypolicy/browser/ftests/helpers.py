@@ -41,19 +41,6 @@ def person_calendar_edit(browser, subject):
     return 'Calendar for' in browser.contents
 
 
-def gradebook_scores_view(browser, section):
-    browser.open('http://localhost/sections/%s' % section)
-    browser.getLink('Gradebook', index=1).click()
-    return 'SchoolTool origin' in browser.contents
-
-def gradebook_scores_edit(browser, section):
-    gradebook_scores_view(browser, section)
-    browser.getLink('SchoolTool origin').click()
-    browser.getControl(name='student1').value = '2'
-    browser.getControl('Update').click()
-    return 'SchoolTool origin' in browser.contents
-
-
 def section_attendance_view(browser, section):
     browser.open('http://localhost/sections/%s/attendance/2005-09-12/09:30-10:25' % section)
     return 'Section attendance' in browser.contents
@@ -359,9 +346,6 @@ def raw_column(browser, subject, section):
               'person calendar': (
               do_test(person_calendar_view, browser, subject),
               do_test(person_calendar_edit, browser, subject)),
-              'gradebook scores': (
-              do_test(gradebook_scores_view, browser, section),
-              do_test(gradebook_scores_edit, browser, section)),
               'section attendance': (
               do_test(section_attendance_view, browser, section),
               do_test(section_attendance_edit, browser, section)),
