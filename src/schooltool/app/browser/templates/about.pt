@@ -1,0 +1,67 @@
+<html metal:use-macro="context/@@standard_macros/view"
+      i18n:domain="schooltool">
+<body>
+
+<h1 metal:fill-slot="content-header" 
+    i18n:translate="">About SchoolTool</h1>
+
+<div metal:fill-slot="body">
+
+<p i18n:translate="">SchoolTool is free administrative software for schools 
+around the world.  The goals of the project are to create a simple 
+turnkey student information system or managment information system for primary 
+and secondary schools, as well as a framework for building customized 
+applications and configurations for individual schools or states.</p>
+
+<p i18n:translate="">SchoolTool is built on a 100% open source software stack,
+written in <a href="http://python.org">Python</a> using the 
+<a href="http://zope.org">Zope 3</a> framework.</p>
+
+<p i18n:translate="">SchoolTool is licensed under the 
+<a href="http://www.gnu.org/licenses/gpl-2.0.html">GNU General Public 
+License, Version 2</a>.</p>
+
+<h2 i18n:translate="">For more information:</h2>
+
+<ul>
+<li i18n:translate=""><a href="http://schooltool.org">Website</a></li>
+<li i18n:translate=""><a href="https://launchpad.net/schooltool">Launchpad project page</a></li>
+<li i18n:translate=""><a href="http://lists.schooltool.org/mailman/listinfo">
+Mailing lists</a></li>
+<li i18n:translate="">IRC channel: #schooltool on freenode.net</li>
+</ul>
+
+<hr />
+
+<p i18n:translate=""><strong>Founder and funder:  </strong>
+<a href="http://markshuttleworth.com">Mark Shuttleworth</a></p>
+
+<p i18n:translate=""><strong>Project Manager:</strong>
+Tom Hoffman (<a href="mailto:hoffman@schooltool.org">email</a>)</p>
+
+<p i18n:translate=""><strong>Lead Developer:</strong>
+Ignas Mikalajūnas</p>
+
+<h2 i18n:translate="">Contributors:</h2>
+<ul>
+<li>Albertas Agejevas</li>
+<li>Steve Alexander</li>
+<li>Paul Carduner</li>
+<li>Chris Carey</li>
+<li>Alan Elkner</li>
+<li>Martijn Faassen</li>
+<li>Marius Gedminas</li>
+<li>William Johnston</li>
+<li>Gintautas Miliauskas</li>
+<li>Eldar Omuraliev</li>
+<li>Stephan Richter</li>
+<li>Jean-François Roche</li>
+<li>Andrew Rodriguez</li>
+<li>Brian Skahan</li>
+<li>Filip Sufitchi</li>
+<li> Tom von Schwerdtner</li>
+</ul>
+</div>
+</body>
+
+</html>

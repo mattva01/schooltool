@@ -197,6 +197,10 @@ form div.oneline-form * {
   color: white;
 }
 
+#about-link {
+  color: white;
+}
+
 #login-name {
   font-weight: bold;
   color: white;

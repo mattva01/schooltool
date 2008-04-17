@@ -77,7 +77,10 @@
           </tal:if>
         </div>
         <div id="login-left">
-          <span>SchoolTool &mdash; free administration software for <span tal:replace="context/schooltool:app/title">Lee High School</span></span>
+          <span>
+          <a id="about-link" tal:attributes="href string:${context/schooltool:app/@@absolute_url}/@@about.html">
+          SchoolTool</a> &mdash; free administration software for 
+          <span tal:replace="context/schooltool:app/title">Lee High School</span></span>
         </div>
       </div>
     </div>
@@ -110,9 +113,11 @@
     <div id="footer">
     <a href="https://bugs.launchpad.net/schooltool/+filebug"
      i18n:attributes="alt" alt="Report a bug on Launchpad.">
-    <img class="bug" tal:attributes="src context/++resource++bugs.gif" />
+      <img class="bug" tal:attributes="src context/++resource++bugs.gif" />
     </a>
-    <img class="logo" tal:attributes="src context/++resource++zonki-regular.png" />
+    <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/@@about.html">
+      <img class="logo" tal:attributes="src context/++resource++zonki-regular.png" />
+    </a>
       <p>
         <strong tal:replace="context/schooltool:preferences/title"/>
           <metal:block

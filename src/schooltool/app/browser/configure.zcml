@@ -258,6 +258,15 @@
       permission="zope.Public"
       />
 
+  <page
+      name="about.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class="schooltool.app.browser.app.ApplicationView"
+      template="templates/about.pt"
+      permission="zope.Public"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />      
+      
   <!-- Calendar views -->
 
   <!-- Sigh. Cannot specify multiple for and permission in subsscriber ;-( -->

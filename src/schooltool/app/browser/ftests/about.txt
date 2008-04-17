@@ -1,0 +1,11 @@
+Functional doctest for SchoolTool About Page
+============================================
+
+Does the about page exist?
+
+    >>> from zope.testbrowser.testing import Browser
+    >>> manager = Browser()
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/@@about.html')
+    >>> 'About SchoolTool' in manager.contents
+    True
