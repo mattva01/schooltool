@@ -108,7 +108,7 @@
       <div class="clearer">&nbsp;</div>
     </div>
     <div id="footer">
-    <a href="https://bugs.edge.launchpad.net/schooltool/+filebug"
+    <a href="https://bugs.launchpad.net/schooltool/+filebug"
      i18n:attributes="alt" alt="Report a bug on Launchpad.">
     <img class="bug" tal:attributes="src context/++resource++bugs.gif" />
     </a>

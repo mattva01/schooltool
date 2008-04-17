@@ -31,21 +31,6 @@
         <input type="checkbox" tal:attributes="name string:delete.${course/zope:name}" />
         <a tal:content="course/title"
            tal:attributes="href course/@@absolute_url">Some Object</a>
-        <ul tal:condition="course/sections|nothing" class="section-list">
-          <tal:for repeat="section course/sections/sortby:__name__">
-          <li tal:condition="section/can_access:label">
-            <a tal:content="section/label"
-               tal:attributes="href section/@@absolute_url;
-                               title section/title">
-              Some Object
-            </a>
-            <span class="hint">
-              (<span tal:replace="section/size"/>
-              <span i18n:translate="">Students</span>)
-            </span>
-          </li>
-          </tal:for>
-        </ul>
       </div>
       <div class="controls">
         <input type="submit" class="button-cancel" value="Delete"
