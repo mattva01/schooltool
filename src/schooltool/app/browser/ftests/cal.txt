@@ -632,20 +632,20 @@ other built-in groups and the application calendar
     >>> frog.getLink('Calendar').click()
     >>> 'Animals' in frog.contents
     True
-    >>> print analyze.queryHTML('//td[text()="SchoolTool"]', frog.contents)[0]
-    <td style="width: 100%">SchoolTool</td>
+    >>> print analyze.queryHTML('//td[text()="Your School"]', frog.contents)[0]
+    <td style="width: 100%">Your School</td>
 
 Let's remove the application calendar from the overlay
 
     >>> frog.getControl('More...').click()
 
-    >>> frog.getControl('SchoolTool site-wide calendar').click()
+    >>> frog.getControl('Your School site-wide calendar').click()
     >>> frog.getControl('Apply').click()
 
 Now the application calendar is no longer in the overlay portlet
 
     >>> frog.getLink('Calendar').click()
-    >>> analyze.queryHTML('//td[text()="SchoolTool"]', frog.contents)
+    >>> analyze.queryHTML('//td[text()="Your School"]', frog.contents)
     []
 
 If we restrict permissions on the application calendar, it will no longer be
@@ -654,7 +654,7 @@ available in the overlay selection view:
 Demonstrate that it is there now:
 
     >>> frog.getControl('More...').click()
-    >>> frog.getControl('SchoolTool site-wide calendar')
+    >>> frog.getControl('Your School site-wide calendar')
     <ItemControl name='application' type='checkbox' optionValue='application' selected=False>
 
 Restrict permissions on the application calendar
@@ -666,10 +666,10 @@ Restrict permissions on the application calendar
 And now it's gone
 
     >>> frog.reload()
-    >>> frog.getControl('SchoolTool site-wide calendar')
+    >>> frog.getControl('Your School site-wide calendar')
     Traceback (most recent call last):
     ...
-    LookupError: label 'SchoolTool site-wide calendar'
+    LookupError: label 'Your School site-wide calendar'
 
 Regression test for Issue243 (Calendars with identical titles are
 throwing system error):

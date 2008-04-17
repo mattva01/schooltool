@@ -78,7 +78,13 @@ def doctest_SchoolToolApplication():
 
         >>> from schooltool.app.app import getApplicationPreferences
         >>> getApplicationPreferences(app).title
-        'SchoolTool'
+        u'Your School'
+
+    We can set it to something else:
+
+        >>> getApplicationPreferences(app).title = "My School"
+        >>> getApplicationPreferences(app).title
+        'My School'
 
     Time settings for application:
 

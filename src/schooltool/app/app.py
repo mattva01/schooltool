@@ -31,6 +31,7 @@ from zope.location.location import LocationProxy
 from zope.component import adapter
 from zope.component import adapts
 from zope.event import notify
+from zope.i18n import translate
 from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import classProvides
@@ -58,6 +59,7 @@ from schooltool.app import relationships
 from schooltool.app.interfaces import IAsset
 from schooltool.app.interfaces import ISchoolToolInitializationUtility
 from schooltool.relationship.relationship import RelationshipProperty
+from schooltool.common import SchoolToolMessage as _
 
 
 SHOW_TIMETABLES_KEY = 'schooltool.timetable.showTimetables'
@@ -199,7 +201,17 @@ class ApplicationPreferences(Persistent):
 
     implements(IApplicationPreferences)
 
-    title = 'SchoolTool'
+    def getTitle(self):
+        # XXX avoid circular imports
+        from schooltool.attendance.attendance import getRequestFromInteraction
+        request = getRequestFromInteraction()
+        return (self.__dict__.get('title', None) or
+                translate(_('Your School'), context=request))
+
+    def setTitle(self, value):
+        self.__dict__['title'] = value
+
+    title = property(getTitle, setTitle)
 
     timezone = 'UTC'
 

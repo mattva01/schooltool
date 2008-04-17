@@ -97,7 +97,7 @@ def doctest_SchoolToolAPI_preferences():
         >>> app = sbsetup.setUpSchoolToolSite()
         >>> preferences = SchoolToolAPI(app).preferences
         >>> preferences.title
-        'SchoolTool'
+        u'Your School'
 
         >>> preferences is SchoolToolAPI(app['persons']).preferences
         True
