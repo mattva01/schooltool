@@ -78,7 +78,7 @@ class ResourceContainerView(form.FormBase):
     def getSubTypes(self):
         utilities = sorted(getUtilitiesFor(IResourceFactoryUtility))
 
-        self.types = []
+        types = []
         for name, utility in utilities:
             if IResourceSubTypes.providedBy(utility):
                 subTypeAdapter = utility
@@ -89,10 +89,12 @@ class ResourceContainerView(form.FormBase):
                     subTypeAdapter = subTypeAdapter()
 
             typeHeader = [name, utility.title, 'unclickable']
-            self.types.append(typeHeader)
-            for subtype in subTypeAdapter.types():
-                self.types.append([name, subtype, 'clickable'])
-        return self.types
+            subTypes = subTypeAdapter.types()
+            if subTypes:
+                types.append(typeHeader)
+                for subtype in subTypes:
+                    types.append([name, subtype, 'clickable'])
+        return types
 
     def listIdsForDeletion(self):
         return [key for key in self.context

@@ -31,8 +31,6 @@ filter box available:
 
     >>> "<h3>Resource</h3>" in manager.contents
     True
-    >>> "<h3>Location</h3>" in manager.contents
-    True
 
 Let's click on it:
 

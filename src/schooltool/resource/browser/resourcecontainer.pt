@@ -5,11 +5,6 @@
       Contents
     </title>
   </head>
-  <script type="text/javascript" metal:fill-slot="extrahead">
-    function searchSelected(selectedResource){
-    this.form.submit();
-    }
-  </script>
   <body>
 
     <h1 metal:fill-slot="content-header"
@@ -19,33 +14,33 @@
       <form method="GET" tal:attributes="action view/context/@@absolute_url">
 
         <!-- Type Searching -->
-        <div class="oneline-form" tal:define="subtypes view/getSubTypes">
-          <tal:block repeat="term subtypes"
-                     define="no_value_checker python:False">
-
-            <tal:block
-                define="optionValue python:'%s|%s'%(term[0],term[1]);
-                        optionContent python:term[1];
-                        clickable python:term[2]=='clickable';
-                        selected python:request.get('SEARCH_TYPE') == optionValue">
-              <tal:if condition="not: selected">
-                <span tal:condition="clickable">
-                  <a tal:content="optionContent"
-                     tal:attributes="href string:?SEARCH_TYPE=${optionValue}" />
-                </span>
-                <h3 tal:content="optionContent"
-                    tal:condition="not:clickable" />
-                <span tal:condition="python: not clickable and (subtypes.index(term) == len(subtypes)-1 or term[0] != subtypes[subtypes.index(term)+1][0])">None</span>
-              </tal:if>
-              <tal:if condition="selected">
-                <span tal:content="optionContent"
-                      tal:condition="clickable" />
-                <h3 tal:content="optionContent"
-                    tal:condition="not:clickable" />
-              </tal:if>
+        <tal:block>
+          <div class="oneline-form" tal:define="subtypes view/getSubTypes">
+            <tal:block repeat="term subtypes">
+              <tal:block
+                  define="optionValue python:'%s|%s'%(term[0],term[1]);
+                          optionContent python:term[1];
+                          clickable python:term[2]=='clickable';
+                          selected python:request.get('SEARCH_TYPE') == optionValue">
+                <tal:if condition="not: selected">
+                  <span tal:condition="clickable">
+                    <a tal:content="optionContent"
+                       tal:attributes="href string:?SEARCH_TYPE=${optionValue}" />
+                  </span>
+                  <h3 tal:content="optionContent"
+                      tal:condition="not:clickable" />
+                  <span tal:condition="python: not clickable and (subtypes.index(term) == len(subtypes)-1 or term[0] != subtypes[subtypes.index(term)+1][0])">None</span>
+                </tal:if>
+                <tal:if condition="selected">
+                  <span tal:content="optionContent"
+                        tal:condition="clickable" />
+                  <h3 tal:content="optionContent"
+                      tal:condition="not:clickable" />
+                </tal:if>
+              </tal:block>
             </tal:block>
-          </tal:block>
-        </div>
+          </div>
+        </tal:block>
 
         <!-- Filtering viewlet by type -->
         <div tal:define="factory view/getResourceUtility"
