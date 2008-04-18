@@ -79,6 +79,14 @@
      menu="schooltool_actions" title="New Person"
      layer=".skin.IBasicPersonLayer" />
 
+  <page
+      name="person-csvimport.html"
+      for="schooltool.person.interfaces.IPersonContainer"
+      class=".csvimport.BasicPersonCSVImportView"
+      template="templates/person-csvimport.pt"
+      permission="schooltool.edit"
+      layer=".skin.IBasicPersonLayer" />
+
   <zope:adapter
       factory=".person.UsernameValidator" />
 

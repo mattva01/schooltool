@@ -185,3 +185,30 @@ We should be able to change the advisor to Bob with no problem.
     >>> manager.getControl('Advisor').value = ['bob']
     >>> manager.getControl('Apply').click()
 
+By the way - CVS import views should still be working even when we are
+using this kind of person:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('Import Persons').click()
+    >>> csvtext = "steve, Steve, Smith, secret\npete, Pete, Marley"
+    >>> manager.getControl(name='csvtext').value = csvtext
+    >>> manager.getControl(name='charset').value = ['UTF-8']
+    >>> manager.getControl(name='UPDATE_SUBMIT').click()
+
+Now we have some additional persons in the database, let's look at one
+of them:
+
+    >>> manager.open('http://localhost/persons/steve/@@person_export.xml')
+    >>> print manager.contents
+    <person_export xmlns:basic="http://schooltool.org/ns/model/0.1/basicperson"
+                   xmlns="http://schooltool.org/ns/model/0.1">
+      <persons>
+        <person>
+          <username>steve</username>
+          <title>Smith Steve</title>
+          <basic:first_name>Steve</basic:first_name>
+          <basic:last_name>Smith</basic:last_name>
+        </person>
+      </persons>
+    </person_export>
