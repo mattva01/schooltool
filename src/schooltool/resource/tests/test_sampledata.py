@@ -58,10 +58,14 @@ def doctest_SampleResources():
         88
 
         >>> for i in range(64):
-        ...     assert ILocation.providedBy(app['resources']['room%02d' % i])
+        ...     location = app['resources']['room%02d' % i]
+        ...     assert ILocation.providedBy(location)
+        ...     assert location.type == 'Classroom'
 
         >>> for i in range(24):
-        ...     assert not ILocation.providedBy(app['resources']['projector%02d' % i])
+        ...     projector = app['resources']['projector%02d' % i]
+        ...     assert not ILocation.providedBy(projector)
+        ...     assert projector.type == "Projector"
 
 
     """

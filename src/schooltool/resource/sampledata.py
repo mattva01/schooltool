@@ -37,9 +37,9 @@ class SampleResources(object):
 
     def generate(self, app, seed=None):
         for i in range(64):
-            app['resources']['room%02d' % i] = Location(title='Room %02d' % i)
+            room = app['resources']['room%02d' % i] = Location(title='Room %02d' % i)
+            room.type = "Classroom"
         for i in range(24):
             resource = Resource(title='Projector %02d' % i)
-            app['resources']['projector%02d' % i] = resource
-
-
+            projector = app['resources']['projector%02d' % i] = resource
+            projector.type = "Projector"
