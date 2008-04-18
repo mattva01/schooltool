@@ -30,7 +30,7 @@ We also get an error if a line starts with a comma (no title)
     >>> csvtext = ", No username provided here, secret"
     >>> browser.getControl(name='csvtext').value = csvtext
     >>> browser.getControl(name='charset').value = ['UTF-8']
-    >>> browser.getControl(name='UPDATE_SUBMIT').click()    
+    >>> browser.getControl(name='UPDATE_SUBMIT').click()
     >>> 'Failed to import CSV text' in browser.contents
     True
     >>> 'username may not be empty' in browser.contents
@@ -43,7 +43,7 @@ Duplicate usernames are not imported, the error is noted to the user.
     >>> csvtext = "student1, Student 1, secret\nstudent2, Student 2, secret\nstudent1, Student 100"
     >>> browser.getControl(name='csvtext').value = csvtext
     >>> browser.getControl(name='charset').value = ['UTF-8']
-    >>> browser.getControl(name='UPDATE_SUBMIT').click()    
+    >>> browser.getControl(name='UPDATE_SUBMIT').click()
 
     >>> sorted([person for person in container])
     [u'another', u'aperson', u'manager', u'student1', u'student2']
