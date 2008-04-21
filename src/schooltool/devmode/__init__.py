@@ -5,7 +5,7 @@ import apidoc
 apidoc.patchZCMLModule()
 
 # Due to a different structure, the apidoc BASEDIR is no good.
-import schooltool
+import schooltool.app
 from os.path import dirname
 from zope.app.apidoc import utilities
-utilities.BASEDIR = dirname(dirname(dirname(schooltool.__file__)))
+utilities.BASEDIR = dirname(dirname(dirname(dirname(schooltool.app.__file__))))
