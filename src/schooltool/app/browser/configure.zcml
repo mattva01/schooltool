@@ -587,6 +587,17 @@
       menu="schooltool_actions"
       title="ZODB Control"/>
 
+  <navigationViewlet
+      name="calendar"
+      for="*"
+      manager="schooltool.skin.INavigationManager"
+      template="templates/calendar_tab_viewlet.pt"
+      class="schooltool.skin.skin.NavigationViewlet"
+      permission="schooltool.view"
+      title="Calendar"
+      order="30"
+      />
+
   <configure package="schooltool.skin">
 
     <navigationViewlet
