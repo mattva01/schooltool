@@ -2358,7 +2358,7 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
         """Return the URL to be displayed after the add operation."""
         if "field.book" in self.request:
             return absoluteURL(self.context, self.request) + '/booking.html'
-        elif self.request.get('cancel_url', None):
+        elif 'CANCEL' in self.request and self.request.get('cancel_url', None):
             return self.request['cancel_url']
         else:
             return absoluteURL(self.context.__parent__, self.request)
