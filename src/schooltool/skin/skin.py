@@ -119,6 +119,23 @@ class OrderedViewletManager(ViewletManagerBase):
         return [(name, viewlet) for (name, viewlet) in viewlets
                 if not IDisableViewlet.providedBy(viewlet)]
 
+    def render(self):
+        """See zope.contentprovider.interfaces.IContentProvider"""
+        # Now render the view
+        viewlets_with_content = []
+        for viewlet in self.viewlets:
+            content = viewlet.render()
+            if content and content.strip():
+                viewlets_with_content.append(viewlet)
+
+        # XXX we render the content twice, hope it's not affecting
+        # anything
+        if self.template:
+            return self.template(viewlets=viewlets_with_content)
+        else:
+            return u'\n'.join([viewlet.render()
+                               for viewlet in viewlets_with_content])
+
 
 class NavigationViewlet(object):
     """A navigation viewlet base class."""
