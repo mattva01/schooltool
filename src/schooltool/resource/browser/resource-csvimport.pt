@@ -30,16 +30,15 @@
 
 <pre i18n:translate="">
 PRJ302, Overhead Projector #302
-Main Auditorium
-LC-805, Laptop Computer #805, <em>text after a second comma</em>
+Main Auditorium,,location
+LC-805, Laptop Computer #805
 </pre>
         <p i18n:translate="">
           The above example will create 3 resources titled 'PRJ302',
           'Main Auditorium' and 'LC-805'.  The first and last
           resource will have the descriptions 'Overhead Projector #302' and
           'Laptop Computer #805' respectively.  The "Main Auditorium" resource
-          will have no description, and the "text after a second comma" text on
-          the third resource will be ignored.
+          will have no description, but will be a location.
         </p>
 
         <fieldset>

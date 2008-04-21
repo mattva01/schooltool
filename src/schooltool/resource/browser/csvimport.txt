@@ -1,0 +1,41 @@
+Tests for ResourceCSVImportView
+===============================
+
+Now we'll try a text import.  Note that the description is not required
+
+    >>> from zope.testbrowser.testing import Browser
+    >>> browser = Browser()
+    >>> browser.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> browser.open('http://localhost/resources/@@resource-csvimport.html')
+    >>> csvtext = """PRJ302, Overhead Projector #302
+    ... Main Auditorium,,location
+    ... LC-805, Laptop Computer #805"""
+    >>> browser.getControl(name='csvtext').value = csvtext
+    >>> browser.getControl(name='charset').value = ['UTF-8']
+    >>> browser.getControl(name='UPDATE_SUBMIT').click()
+
+    >>> root = getRootFolder()
+    >>> container = root['resources']
+    >>> sorted([resource for resource in container])
+    [u'lc805', u'main-auditorium', u'prj302']
+    >>> container['main-auditorium']
+    <schooltool.resource.resource.Location object at ...>
+
+If no data is provided, we naturally get an error
+
+    >>> browser.open('http://localhost/resources/@@resource-csvimport.html')
+    >>> browser.getControl(name='charset').value = ['UTF-8']
+    >>> browser.getControl(name='UPDATE_SUBMIT').click()
+    >>> 'No data provided' in browser.contents
+    True
+
+We also get an error if a line starts with a comma (no title)
+
+    >>> browser.open('http://localhost/resources/@@resource-csvimport.html')
+    >>> csvtext = ", No title provided"
+    >>> browser.getControl(name='csvtext').value = csvtext
+    >>> browser.getControl(name='charset').value = ['UTF-8']
+    >>> browser.getControl(name='UPDATE_SUBMIT').click()
+    >>> for div in analyze.queryHTML('//div[@class="error"]', browser.contents): print div
+    <div class="error">Failed to import CSV text</div>
+    <div class="error">Titles may not be empty</div>
