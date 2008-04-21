@@ -128,6 +128,8 @@ for package in all_packages:
                     package_data[package].append(file)
             break
 
+version = "FAKEVERSIONNUMBER"
+
 # Setup SchoolTool
 setup(
     name="schooltool",
@@ -151,7 +153,7 @@ interface.
 Any modern web browser is suitable for the web application interface.  The
 interface degrades gracefully, so a browser that does not support CSS or
 Javascript will be usable, although perhaps not very nice or convenient.""",
-    version=get_version(),
+    version=version,
     url='http://www.schooltool.org',
     license="GPL",
     maintainer="SchoolTool development team",
