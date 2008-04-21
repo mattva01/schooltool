@@ -77,16 +77,6 @@
       title="Schedule"
       order="10"
       />
-    <navigationViewlet
-      name="schedule-resource"
-      for="schooltool.resource.interfaces.IResource"
-      manager="schooltool.skin.IActionMenuManager"
-      template="templates/actionsViewlet.pt"
-      permission="schooltool.edit"
-      link="schedule.html"
-      title="Schedule"
-      order="10"
-      />
   </configure>
 
   <page
