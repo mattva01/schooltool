@@ -22,23 +22,68 @@
       name="SchoolToolDevMode"
       />
 
-  <browser:viewlet
-      name="devmode"
+  <configure package="schooltool.skin">
+
+    <browser:navigationViewlet
+      name="inspect"
       for="*"
-      manager="schooltool.skin.IHeaderManager"
-      template="devmode.pt"
-      permission="zope.View"
-      layer="schooltool.devmode.skin.IDevModeLayer"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.edit"
+      link="@@introspector.html"
+      title="Introspect"
+      order="200"
       />
 
-  <browser:viewlet
-      name="devmode_javascript"
+    <browser:navigationViewlet
+      name="errors"
       for="*"
-      manager="schooltool.skin.IJavaScriptManager"
-      class=".devmode.DevmodeJavascriptViewlet"
-      permission="zope.View"
-      layer="schooltool.devmode.skin.IDevModeLayer"
+      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.skin.skin.NavigationViewlet"
+      permission="schooltool.view"
+      link="++etc++site/default/RootErrorReportingUtility"
+      title="Errors"
+      order="210"
       />
+
+    <browser:navigationViewlet
+      name="api-docs"
+      for="*"
+      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.skin.skin.NavigationViewlet"
+      permission="schooltool.view"
+      link="++apidoc++/@@index.html"
+      title="API Docs"
+      order="220"
+      />
+
+    <browser:navigationViewlet
+      name="sample-data"
+      for="*"
+      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.skin.skin.NavigationViewlet"
+      permission="schooltool.view"
+      link="@@sampledata.html"
+      title="Sample data"
+      order="230"
+      />
+
+    <browser:navigationViewlet
+      name="setup-data"
+      for="*"
+      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.skin.skin.NavigationViewlet"
+      permission="schooltool.view"
+      link="@@setupdata.html"
+      title="Setup data"
+      order="240"
+      />
+
+  </configure>
 
   <browser:viewlet
       name="devmode_css"
@@ -53,26 +98,6 @@
 
   <browser:resource
       name="devmode.css" file="devmode.css"
-      layer=".skin.IDevModeLayer"
-      />
-
-  <browser:resource
-      name="box-bottom.png" file="box-bottom.png"
-      layer=".skin.IDevModeLayer"
-      />
-
-  <browser:resource
-      name="varrow.png" file="varrow.png"
-      layer=".skin.IDevModeLayer"
-      />
-
-  <browser:resource
-      name="harrow.png" file="harrow.png"
-      layer=".skin.IDevModeLayer"
-      />
-
-  <browser:resource
-      name="switch.js" file="switch.js"
       layer=".skin.IDevModeLayer"
       />
 

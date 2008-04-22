@@ -1,4 +1,8 @@
 
+#header {
+    background: #FAF8A3 none repeat scroll 0% 0%;
+}
+
 div.devtools {
     position: fixed;
     float: right;
