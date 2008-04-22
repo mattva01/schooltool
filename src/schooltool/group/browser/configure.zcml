@@ -78,7 +78,7 @@
       class=".group.GroupListView"
       permission="schooltool.edit"
       menu="schooltool_actions"
-      title="Change Membership"
+      title="Groups"
       />
 
   <containerViews
