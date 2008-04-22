@@ -14,14 +14,13 @@ SchoolTool site in your browser
 
 The developer mode should add an introspect button to the action menu:
 
-    >>> for item in analyze.queryHTML('//div[@class="content-nav"]', browser.contents):
-    ...     print item
-    <div class="content-nav">
-      <a href="http://localhost/calendar/add.html">New Event</a>
-    </div>
-    <div class="content-nav">
-      <a href="http://localhost/calendar/calendar.ics">Open in iCal</a>
-    </div>
+    >>> def print_actions(contents):
+    ...     print
+    ...     for item in analyze.queryHTML('//div[@class="content-nav"]', contents):
+    ...         print item
+    >>> print_actions(browser.contents)
+    <BLANKLINE>
+    ...
     <div class="content-nav">
       <a href="http://localhost/calendar/@@introspector.html">Introspect</a>
     </div>
