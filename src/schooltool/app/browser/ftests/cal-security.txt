@@ -51,7 +51,7 @@ Let the Frog add an ordinary event that takes place on 3rd February, 2005:
 Let's make Frog's calendar public:
 
     >>> frog.getLink('Frog').click()
-    >>> frog.getLink('Change Preferences').click()
+    >>> frog.getLink('Edit Preferences').click()
     >>> frog.getControl('Make calendar public').click()
     >>> frog.getControl('Apply').click()
 

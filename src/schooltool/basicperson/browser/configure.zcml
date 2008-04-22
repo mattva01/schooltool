@@ -36,7 +36,7 @@
       class=".xml.PersonXMLExportView"
       permission="schooltool.edit"
       menu="schooltool_actions"
-      title="Export Person as XML"
+      title="Export"
       />
 
   <!-- list of persons -->

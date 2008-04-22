@@ -313,7 +313,7 @@ Make personal calendar public:
 
     >>> student1.open('http://localhost')
     >>> student1.getLink('Student1').click()
-    >>> student1.getLink('Change Preferences').click()
+    >>> student1.getLink('Edit Preferences').click()
     >>> student1.getControl('Make calendar public').click()
     >>> student1.getControl('Apply').click()
     >>> helpers.person_calendar_view(alien, 'student1')

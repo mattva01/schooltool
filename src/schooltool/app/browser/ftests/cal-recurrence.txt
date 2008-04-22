@@ -10,7 +10,7 @@ Regression test for broken weekly recurrence in far-off-UTC timezones
 Let's go to the user preferences view:
 
     >>> manager.getLink("SchoolTool Manager").click()
-    >>> manager.getLink("Change Preferences").click()
+    >>> manager.getLink("Edit Preferences").click()
 
 Let's set the timezone to Australia:
 

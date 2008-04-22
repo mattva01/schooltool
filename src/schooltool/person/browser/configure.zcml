@@ -96,7 +96,7 @@
       class="schooltool.person.browser.person.PreferencesActionMenuViewlet"
       permission="schooltool.view"
       link="preferences"
-      title="Change Preferences"
+      title="Edit Preferences"
       order="20"
       />
 
@@ -108,7 +108,7 @@
       template="templates/actionsViewlet.pt"
       permission="schooltool.view"
       link="@@password_edit.html"
-      title="Edit Password"
+      title="Change Password"
       order="30"
       />
 

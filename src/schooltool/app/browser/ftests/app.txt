@@ -67,7 +67,7 @@ The daily view should be the default for a person's calendar:
 Let's make sure that we can see the SchoolTool preferences page:
 
     >>> frog.getLink('Frog').click()
-    >>> frog.getLink('Change Preferences').click()
+    >>> frog.getLink('Edit Preferences').click()
     >>> 'cal_periods' in frog.contents
     True
 
