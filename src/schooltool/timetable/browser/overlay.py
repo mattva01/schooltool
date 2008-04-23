@@ -21,11 +21,15 @@ Calendar overlay views for SchoolTool with timetabling enabled.
 
 $Id$
 """
+from zope.component import getUtility
+from zope.proxy import sameProxiedObjects
 from zope.traversing.api import getPath, getParent
 from zope.annotation.interfaces import IAnnotations
 from zope.security.checker import canAccess
 from zope.security.proxy import removeSecurityProxy
 
+from schooltool.term.interfaces import IDateManager
+from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.course.interfaces import ISection
 from schooltool.person.interfaces import IPerson
@@ -50,6 +54,54 @@ class CalendarSTOverlayView(CalendarOverlayView):
 
     SHOW_TIMETABLE_KEY = 'schooltool.app.browser.cal.show_my_timetable'
 
+    def split_overlaid_calendars(self):
+        person = IPerson(self.request.principal)
+        section_items = []
+        non_section_items = []
+
+        for item in person.overlaid_calendars:
+            if ISection.providedBy(item.calendar.__parent__):
+                section_items.append(item)
+            else:
+                non_section_items.append(item)
+
+        for item in list(section_items):
+            section = removeSecurityProxy(item.calendar.__parent__)
+            timetables = ITimetables(section).timetables
+            if not timetables:
+                section_items.remove(item)
+                non_section_items.append(item)
+
+        return section_items, non_section_items
+
+    def get_scheduled_terms(self, section_items):
+        terms = set()
+        for item in section_items:
+            section = removeSecurityProxy(item.calendar.__parent__)
+            terms.update(ITimetables(section).terms)
+        terms = [{'term': term,
+                  'items': []} for term in terms]
+        return sorted(terms, key=lambda t: t['term'].last, reverse=True)
+
+    def populate_terms(self, section_items):
+        terms = self.get_scheduled_terms(section_items)
+        if not terms:
+            return [], []
+
+        current_term = getUtility(IDateManager).current_term
+        for term in terms:
+            for item in section_items:
+                if term['term'] in ITimetables(item.calendar.__parent__).terms:
+                    term['items'].append(item)
+            term['expanded'] = sameProxiedObjects(term['term'], current_term)
+
+        try:
+            last_expanded = (n for n, item in enumerate(terms)
+                             if item['expanded']).next()
+            return terms[:last_expanded+1], terms[last_expanded+1:]
+        except StopIteration:
+            return terms, []
+
     def items(self):
         """Return items to be shown in the calendar overlay.
 
@@ -72,30 +124,48 @@ class CalendarSTOverlayView(CalendarOverlayView):
             display?
         """
         person = IPerson(self.request.principal)
-        def getTitleOrLabel(item):
-            object = item.calendar.__parent__
-            if ISection.providedBy(object):
-                section = removeSecurityProxy(object)
-                if person in section.instructors:
-                    return section.title
-                else:
-                    return section.label
-            else:
-                return item.calendar.title
 
-        items = [((item.calendar.title, getPath(item.calendar.__parent__)),
-                  {'title': getTitleOrLabel(item),
-                   'id': getPath(item.calendar.__parent__),
-                   'calendar': item.calendar,
-                   'checked': item.show and "checked" or '',
-                   'checked_tt':
-                       IShowTimetables(item).showTimetables and "checked" or '',
-                   'color1': item.color1,
-                   'color2': item.color2})
-                 for item in person.overlaid_calendars
-                 if canAccess(item.calendar, '__iter__')]
-        items.sort()
-        return [i[-1] for i in items]
+        def getTitleOrLabel(obj):
+            obj = removeSecurityProxy(obj)
+            if ISection.providedBy(obj):
+                if person in obj.instructors:
+                    return obj.title
+                else:
+                    return obj.label
+            else:
+                return obj.title
+
+        section_items, non_section_items = self.split_overlaid_calendars()
+        groups, more_groups = self.populate_terms(section_items)
+
+        items = {}
+
+        def make_overlay_item(item):
+            obj = item.calendar.__parent__
+            return ((item.calendar.title, getPath(obj)),
+                    {'title': getTitleOrLabel(obj),
+                     'id': getPath(obj),
+                     'calendar': item.calendar,
+                     'checked': item.show,
+                     'checked_tt': IShowTimetables(item).showTimetables,
+                     'color1': item.color1,
+                     'color2': item.color2})
+
+        def itemize(items):
+            overlays = sorted([make_overlay_item(item)
+                               for item in items
+                               if canAccess(item.calendar, '__iter__')])
+            return [overlay
+                    for key, overlay in overlays]
+
+        items['items'] = itemize(non_section_items)
+        items['groups'] = [{'title': group['term'].title,
+                            'items': itemize(group['items'])}
+                           for group in groups]
+        items['more_groups'] = [{'title': group['term'].title,
+                                 'items': itemize(group['items'])}
+                                for group in more_groups]
+        return items
 
     def update(self):
         """Process form submission."""

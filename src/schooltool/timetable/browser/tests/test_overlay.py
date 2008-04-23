@@ -30,21 +30,12 @@ from zope.publisher.browser import TestRequest
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.testing import ztapi
+from zope.component import adapts
+from zope.interface import implements
 
 from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.testing import setup as sbsetup
-
-
-# def setUp(test=None):
-#     browserSetUp(test)
-#     setup.setUpCalendaring()
-#
-#     from schooltool.app.overlay import CalendarOverlayInfo
-#     from schooltool.app.interfaces import IShowTimetables
-#     from schooltool.app.app import ShowTimetables
-#     ztapi.provideAdapter(CalendarOverlayInfo, IShowTimetables, ShowTimetables)
-#     classImplements(CalendarOverlayInfo, IAttributeAnnotatable)
 
 
 def doctest_CalendarSTOverlayView():
@@ -94,6 +85,17 @@ def doctest_CalendarSTOverlayView():
         >>> history = app['courses']['c1'] = Course(title="History")
         >>> section = app['sections']['s1'] = Section(title="History")
         >>> history.sections.add(section)
+
+        >>> from schooltool.course.interfaces import ISection
+        >>> from schooltool.timetable.interfaces import ITimetables
+        >>> class TimetablesStub(object):
+        ...     adapts(ISection)
+        ...     implements(ITimetables)
+        ...     def __init__(self, section):
+        ...         self.section = section
+        ...         self.terms = []
+        ...         self.timetables = {}
+        >>> provideAdapter(TimetablesStub)
 
         >>> from schooltool.app.interfaces import IShowTimetables
         >>> info = person.overlaid_calendars.add(
