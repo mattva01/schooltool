@@ -292,4 +292,14 @@
       permission="zope.View"
       />
 
+  <viewlet
+      name="portlet-tomorrow-events"
+      for="schooltool.resource.interfaces.IBookingCalendar"
+      manager="schooltool.app.browser.cal.ICalendarPortletViewletManager"
+      template="portlet_tomorrow_events.pt"
+      permission="zope.Public"
+      layer="schooltool.skin.ISchoolToolLayer"
+      order="5"
+      />
+
 </configure>
