@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2008 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,14 +17,20 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Generations for database version upgrades.
+Upgrade SchoolTool to generation 26.
 
-$Id$
+Touch all the objects so they would update references to classes that
+may have been moved to another module.
 """
 
-from zope.app.generations.generations import SchemaManager
+def evolve(context):
+    storage = context.connection._storage
+    next_oid = None
+    while True:
+        oid, tid, data, next_oid = storage.record_iternext(next_oid)
+        obj = context.connection.get(oid)
+        obj._p_activate()
+        obj._p_changed = True
 
-schemaManager = SchemaManager(
-    minimum_generation=26,
-    generation=26,
-    package_name='schooltool.generations')
+        if next_oid is None:
+            break
