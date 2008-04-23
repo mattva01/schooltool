@@ -9,16 +9,10 @@ A manager logs in.
     >>> manager.handleErrors = False
     >>> manager.open('http://localhost/')
 
-He sees an entry for Sample Data Generation in the Developer Tools box and
+He sees an entry for Sample Data Generation in the Manage menu and
 clicks on it
 
-    >>> print analyze.queryHTML("//div[@id='devtools']", manager.contents)[0]
-    <div id="devtools" style="display:none;">
-        <div class="body">
-          ...<a href="/@@sampledata.html">Sample data</a>...
-        </div>
-      </div>
-
+    >>> manager.getLink('Manage').click()
     >>> manager.getLink('Sample data').click()
 
 The Sample Data Generation page appears
