@@ -22,11 +22,14 @@ Upgrade SchoolTool to generation 26.
 Touch all the objects so they would update references to classes that
 may have been moved to another module.
 """
+import transaction
 
 def evolve(context):
     storage = context.connection._storage
     next_oid = None
+    n = 0
     while True:
+        n += 1
         oid, tid, data, next_oid = storage.record_iternext(next_oid)
         obj = context.connection.get(oid)
         obj._p_activate()
@@ -34,3 +37,8 @@ def evolve(context):
 
         if next_oid is None:
             break
+
+        if n % 10000 == 0:
+            # Some plugins can generate a lot of data, so we are
+            # using savepoints to save on memory consuption.
+            transaction.savepoint(optimistic=True)
