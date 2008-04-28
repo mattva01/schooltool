@@ -74,28 +74,3 @@ class BookMenu(bookmodule.browser.Menu):
     def getMenuLink(self, node):
         link = super(BookMenu, self).getMenuLink(node)
         return link and '../' + link or None
-
-
-def patchZCMLModule():
-    from schooltool.app import main
-    from zope.configuration import docutils, xmlconfig, config
-
-    def _makeDocStructure(self):
-        context = config.ConfigurationMachine()
-        context.provideFeature('devmode')
-        xmlconfig.registerCommonDirectives(context)
-        context = xmlconfig.file(main.SCHOOLTOOL_SITE_DEFINITION,
-                                 context=context,
-                                 execute=False)
-        namespaces, subdirs = docutils.makeDocStructures(context)
-
-        # Empty keys are not so good for a container
-        if namespaces.has_key(''):
-            namespaces['ALL'] = namespaces['']
-            del namespaces['']
-
-        # Some trivial caching
-        zcmlmodule.namespaces = namespaces
-        zcmlmodule.subdirs = subdirs
-
-    zcmlmodule.ZCMLModule._makeDocStructure = _makeDocStructure
