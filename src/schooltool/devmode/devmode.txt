@@ -311,7 +311,7 @@ SchoolTool interfaces. Zope 3 interfaces are purposefully excluded:
 You are now presented with a menu, where you can search for various
 interfaces. Let's search for the devmode interfaces:
 
-    >>> browser.getControl(name='search_str').value = 'devmode'
+    >>> browser.getControl(name='search_str').value = 'schooltool'
     >>> browser.getControl('Find').click()
 
 When the screen returns we should see our devmode layer and skin interface:
@@ -322,8 +322,8 @@ When the screen returns we should see our devmode layer and skin interface:
     <div>
       ...
       <div>
-        <a href="./schooltool.devmode.skin.IDevModeLayer/index.html"
-           target="main">st.devmode.skin.IDevModeLayer</a>
+        <a href="./schooltool.calendar.interfaces.ICalendar/index.html"
+           target="main">st.calendar.interfaces.ICalendar</a>
       </div>
       ...
     </div>
@@ -333,9 +333,9 @@ You can also see how "schooltool" is abbreviated as "st" to make the name
 shorter. Clicking on one of those results will give you the typical interface
 details screen:
 
-    >>> browser.getLink('st.devmode.skin.IDevModeLayer').click()
+    >>> browser.getLink('st.calendar.interfaces.ICalendar').click()
     >>> browser.contents
-    '...schooltool.devmode.skin.IDevModeLayer...'
+    '...schooltool.calendar.interfaces.ICalendar...'
 
 
 Code

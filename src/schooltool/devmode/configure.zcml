@@ -36,18 +36,6 @@
       />
 
     <browser:navigationViewlet
-      name="errors"
-      for="*"
-      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
-      template="templates/navigationViewlet.pt"
-      class="schooltool.skin.skin.NavigationViewlet"
-      permission="schooltool.view"
-      link="++etc++site/default/RootErrorReportingUtility"
-      title="Errors"
-      order="210"
-      />
-
-    <browser:navigationViewlet
       name="api-docs"
       for="*"
       manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
@@ -113,24 +101,6 @@
 
   <browser:resource
       name="introspector.css" file="introspector.css"
-      layer=".skin.IDevModeLayer"
-      />
-
-  <!-- Menu entries for Error Reporting Utility -->
-
-  <browser:menuItem
-      menu="schooltool_actions"
-      for="zope.error.error.IErrorReportingUtility"
-      action="@@configure.html"
-      title="Configure"
-      layer="schooltool.devmode.skin.IDevModeLayer"
-      />
-
-  <browser:menuItem
-      menu="schooltool_actions"
-      for="zope.error.error.IErrorReportingUtility"
-      action="@@index.html"
-      title="Error List"
       layer=".skin.IDevModeLayer"
       />
 

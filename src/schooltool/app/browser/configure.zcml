@@ -750,4 +750,38 @@
       permission="zope.Public"
       />
 
+  <!-- Link to Zope error reporting view for administrators -->
+
+  <configure package="schooltool.skin">
+
+    <navigationViewlet
+      name="errors"
+      for="*"
+      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.skin.skin.NavigationViewlet"
+      permission="schooltool.view"
+      link="++etc++site/default/RootErrorReportingUtility"
+      title="Errors"
+      order="210"
+      />
+
+  </configure>
+
+  <!-- Menu entries for Error Reporting Utility -->
+
+  <menuItem
+      menu="schooltool_actions"
+      for="zope.error.error.IErrorReportingUtility"
+      action="@@configure.html"
+      title="Configure"
+      />
+
+  <menuItem
+      menu="schooltool_actions"
+      for="zope.error.error.IErrorReportingUtility"
+      action="@@index.html"
+      title="Error List"
+      />
+
 </configure>
