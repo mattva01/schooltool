@@ -9,11 +9,11 @@
 
   <!-- Traversers -->
 
-  <subscriber
-      for="..interfaces.IHaveTimetables
-           zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".CompositeTimetableTraverser"
+  <adapterTraverserPlugin
+      for="..interfaces.IHaveTimetables"
+      layer="zope.publisher.interfaces.http.IHTTPRequest"
+      name="composite-timetables"
+      adapter="schooltool.timetable.interfaces.ICompositeTimetables"
       permission="zope.Public"
       />
 

@@ -26,16 +26,12 @@ from zope.interface import implements
 
 from schooltool.app.rest import View, Template
 from schooltool.app.rest.errors import RestError
-from schooltool.traverser.traverser import AdapterTraverserPlugin
 from schooltool.common.xmlparsing import LxmlDocument
 
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonPreferences
 from schooltool.person.rest.interfaces import IPersonPreferencesAdapter
 
-
-PersonPreferencesHTTPTraverser = AdapterTraverserPlugin(
-    'preferences', IPersonPreferencesAdapter)
 
 class PersonPreferencesAdapter(object):
     """Adapter of person to IPreferencesWriter"""
@@ -69,10 +65,6 @@ class PersonPreferencesView(View):
         </element>
       </start>
     </grammar>"""
-
-    def __init__(self, context, request):
-        View.__init__(self, context, request)
-        self.preferences = IPersonPreferences(context.person)
 
     def parseData(self, body):
         """Get values from document, and put them into a dict"""
@@ -111,6 +103,6 @@ class PersonPreferencesView(View):
         data = self.parseData(self.request.bodyStream.read())
         for name, value in data.items():
             self.validatePreference(name, value)
-            setattr(self.preferences, name, value)
+            setattr(self.context, name, value)
 
         return "Preferences updated"

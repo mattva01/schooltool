@@ -245,115 +245,6 @@ class TestPersonPhotoView(ApplicationObjectViewTestMixin,
         self.assertRaises(NotFound, view.GET)
 
 
-def doctest_PersonPasswordHttpTraverser():
-    r"""Tests for PersonPasswordHTTPTraverser.
-
-    This traverser allows you to access the password of the person:
-
-        >>> from schooltool.person.person import PersonPasswordWriter
-        >>> zope.component.provideAdapter(PersonPasswordWriter)
-
-        >>> from schooltool.person.rest.person import \
-        ...     PersonPasswordHTTPTraverser
-        >>> person = Person()
-        >>> request = TestRequest()
-
-        >>> traverser = PersonPasswordHTTPTraverser(person, request)
-        >>> traverser.context is person
-        True
-        >>> traverser.request is request
-        True
-
-    The traverser should implement ``ITraverserPlugin``:
-
-        >>> from schooltool.traverser.interfaces import ITraverserPlugin
-        >>> verifyObject(ITraverserPlugin, traverser)
-        True
-
-    Now access the password:
-
-        >>> traverser.publishTraverse(request, 'password')
-        <schooltool.person.person.PersonPasswordWriter ...>
-    """
-
-
-def doctest_PersonPhotoHttpTraverser():
-    r"""Tests for PersonPhotoHTTPTraverser.
-
-    This traverser allows you to access the photo of the person:
-
-        >>> from schooltool.person.rest.person import PersonPhotoAdapter
-        >>> zope.component.provideAdapter(PersonPhotoAdapter)
-
-        >>> person = Person()
-        >>> request = TestRequest()
-
-        >>> from schooltool.person.rest.person import PersonPhotoHTTPTraverser
-        >>> traverser = PersonPhotoHTTPTraverser(person, request)
-        >>> traverser.context is person
-        True
-        >>> traverser.request is request
-        True
-
-    The traverser should implement ``ITraverserPlugin``:
-
-        >>> from schooltool.traverser.interfaces import ITraverserPlugin
-        >>> verifyObject(ITraverserPlugin, traverser)
-        True
-
-    Now access the password:
-
-        >>> traverser.publishTraverse(request, 'photo')
-        <schooltool.person.rest.person.PersonPhotoAdapter ...>
-    """
-
-
-def doctest_PersonPreferencesHttpTraverser():
-    r"""Tests for PersonPreferencesHTTPTraverser.
-
-    PersonPreferencesHTTPTraverser allows you to access the preferences of the
-    person:
-
-        >>> from schooltool.person.rest.preference import \
-        ...     PersonPreferencesHTTPTraverser
-        >>> person = Person()
-        >>> request = TestRequest()
-
-        >>> from schooltool.person.preference import getPersonPreferences
-        >>> from schooltool.person.interfaces import IPersonPreferences
-        >>> setup.placelessSetUp()
-        >>> setup.setUpAnnotations()
-        >>> ztapi.provideAdapter(Person, IPersonPreferences,
-        ...                      getPersonPreferences)
-
-        >>> from schooltool.person.rest.preference import \
-        ...     PersonPreferencesAdapter
-        >>> zope.component.provideAdapter(PersonPreferencesAdapter)
-
-        >>> traverser = PersonPreferencesHTTPTraverser(person, request)
-        >>> traverser.context is person
-        True
-        >>> traverser.request is request
-        True
-
-    The traverser should implement ``ITraverserPlugin``:
-
-        >>> from schooltool.traverser.interfaces import ITraverserPlugin
-        >>> verifyObject(ITraverserPlugin, traverser)
-        True
-
-    Now access the preferences:
-
-        >>> traverser.publishTraverse(request, 'preferences')
-        <schooltool.person.rest.preference.PersonPreferencesAdapter ...>
-
-    Clean up:
-
-        >>> setup.placelessTearDown()
-
-    """
-
-
 def doctest_PersonPreferencesView():
     r"""Tests for PersonPreferencesView.
 
@@ -362,20 +253,10 @@ def doctest_PersonPreferencesView():
         >>> setup.placefulSetUp()
 
         >>> from schooltool.person.preference import getPersonPreferences
-        >>> from schooltool.person.interfaces import IPersonPreferences
-        >>> ztapi.provideAdapter(Person, IPersonPreferences,
-        ...                      getPersonPreferences)
-
-        >>> from schooltool.person.rest.preference import \
-        ...     PersonPreferencesAdapter
-        >>> zope.component.provideAdapter(PersonPreferencesAdapter)
-
-        >>> from schooltool.person.rest.preference import \
-        ...     PersonPreferencesHTTPTraverser
         >>> person = Person()
-        >>> traverser = PersonPreferencesHTTPTraverser(person, TestRequest())
-        >>> adapter = traverser.publishTraverse(TestRequest(), 'preferences')
-        >>> view = PersonPreferencesView(adapter, TestRequest())
+        >>> preferences = getPersonPreferences(person)
+        >>> view = PersonPreferencesView(preferences,
+        ...                              TestRequest())
 
         >>> print view.GET()
         <preferences xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -395,7 +276,7 @@ def doctest_PersonPreferencesView():
         ...        '  <preference id="timezone" value="US/Eastern"/>' \
         ...        '</preferences>'
 
-        >>> view = PersonPreferencesView(adapter, TestRequest(StringIO(body)))
+        >>> view = PersonPreferencesView(preferences, TestRequest(StringIO(body)))
         >>> view.PUT()
         'Preferences updated'
 
@@ -410,7 +291,7 @@ def doctest_PersonPreferencesView():
         ...        '  <preference id="fakepref" value="1"/>' \
         ...        '</preferences>'
 
-        >>> view = PersonPreferencesView(adapter, TestRequest(StringIO(body)))
+        >>> view = PersonPreferencesView(preferences, TestRequest(StringIO(body)))
         >>> view.PUT()
         Traceback (most recent call last):
         ...
@@ -423,7 +304,7 @@ def doctest_PersonPreferencesView():
         ...        '  <preference id="timezone" value="Tatooine/Mos Isley"/>' \
         ...        '</preferences>'
 
-        >>> view = PersonPreferencesView(adapter, TestRequest(StringIO(body)))
+        >>> view = PersonPreferencesView(preferences, TestRequest(StringIO(body)))
         >>> view.PUT()
         Traceback (most recent call last):
         ...

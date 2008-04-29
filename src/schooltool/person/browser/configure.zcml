@@ -134,11 +134,11 @@
       class=".person.PersonPhotoView"
       permission="schooltool.view" />
 
-  <zope:subscriber
-      for="..interfaces.IHavePreferences
-           zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".person.PreferencesTraverserPlugin"
+  <zope:adapterTraverserPlugin
+      for="..interfaces.IHavePreferences"
+      layer="zope.publisher.interfaces.http.IHTTPRequest"
+      name="preferences"
+      adapter="schooltool.person.interfaces.IPersonPreferences"
       permission="zope.Public"
       />
 

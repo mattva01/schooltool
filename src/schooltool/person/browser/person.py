@@ -56,7 +56,6 @@ from schooltool.person.interfaces import IPerson, IPersonFactory
 from schooltool.person.interfaces import IPersonPreferences
 from schooltool.person.interfaces import IPersonContainer, IPersonContained
 from schooltool.widget.password import PasswordConfirmationWidget
-from schooltool.traverser.traverser import AdapterTraverserPlugin
 from schooltool.table.table import IndexedFilterWidget
 from schooltool.table.table import IndexedTableFormatter
 from schooltool.skin.containers import TableContainerView
@@ -114,10 +113,6 @@ class PersonPreferencesView(BrowserView):
             for field in self.schema:
                 if field in data: # skip non-fields
                     setattr(self.context, field, data[field])
-
-
-PreferencesTraverserPlugin = AdapterTraverserPlugin(
-    'preferences', IPersonPreferences)
 
 
 # Should this be moved to a interface.py file ?

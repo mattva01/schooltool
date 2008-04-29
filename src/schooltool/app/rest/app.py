@@ -29,10 +29,9 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.common.xmlparsing import LxmlDocument
 from schooltool.app.rest import View, Template
-from schooltool.app.interfaces import IWriteCalendar, ISchoolToolCalendar
+from schooltool.app.interfaces import IWriteCalendar
 from schooltool.calendar.icalendar import convert_calendar_to_ical
 from schooltool.traverser.traverser import NullTraverserPlugin
-from schooltool.traverser.traverser import AdapterTraverserPlugin
 
 
 class ApplicationObjectFileFactory(object):

@@ -36,25 +36,18 @@
       permission="zope.Public"
       />
 
-  <subscriber
-      for="..interfaces.IHavePreferences
-           zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".preference.PersonPreferencesHTTPTraverser"
+  <adapterTraverserPlugin
+      for="..interfaces.IPerson"
+      layer="zope.publisher.interfaces.http.IHTTPRequest"
+      name="password"
+      adapter="schooltool.person.interfaces.IPasswordWriter"
       />
 
-  <subscriber
-      for="..interfaces.IPerson
-           zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".person.PersonPasswordHTTPTraverser"
-      />
-
-  <subscriber
-      for="..interfaces.IPerson
-           zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".person.PersonPhotoHTTPTraverser"
+  <adapterTraverserPlugin
+      for="..interfaces.IPerson"
+      layer="zope.publisher.interfaces.http.IHTTPRequest"
+      name="photo"
+      adapter="schooltool.person.rest.interfaces.IPersonPhoto"
       />
 
   <adapter
@@ -88,7 +81,7 @@
       />
 
   <view
-      for=".interfaces.IPersonPreferencesAdapter"
+      for="schooltool.person.interfaces.IPersonPreferences"
       name="PUT"
       factory=".preference.PersonPreferencesView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
@@ -96,7 +89,7 @@
       />
 
   <view
-      for=".interfaces.IPersonPreferencesAdapter"
+      for="schooltool.person.interfaces.IPersonPreferences"
       name="GET"
       factory=".preference.PersonPreferencesView"
       type="zope.publisher.interfaces.http.IHTTPRequest"

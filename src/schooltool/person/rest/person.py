@@ -29,10 +29,8 @@ from schooltool.app.rest import View, Template
 from schooltool.app.rest.app import ApplicationObjectFile
 from schooltool.app.rest.app import ApplicationObjectFileFactory
 from schooltool.app.rest.app import GenericContainerView
-from schooltool.traverser.traverser import AdapterTraverserPlugin
 
-from schooltool.person.interfaces import (IPersonContainer, IPerson,
-                                          IPasswordWriter)
+from schooltool.person.interfaces import (IPersonContainer, IPerson)
 from schooltool.person.person import Person
 from schooltool.person.rest.interfaces import IPersonPhoto
 
@@ -93,10 +91,6 @@ class PersonView(View):
     factory = PersonFile
 
 
-PersonPasswordHTTPTraverser = AdapterTraverserPlugin(
-    'password', IPasswordWriter)
-
-
 class PasswordWriterView(View):
     """A view that enables setting password of a Person."""
 
@@ -114,9 +108,6 @@ class PasswordWriterView(View):
         self.context.setPassword(password)
         self.request.response.setStatus("200")
         return ''
-
-
-PersonPhotoHTTPTraverser = AdapterTraverserPlugin('photo', IPersonPhoto)
 
 
 class PersonPhotoAdapter(object):

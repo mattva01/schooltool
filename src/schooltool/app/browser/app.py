@@ -34,7 +34,7 @@ from zope.app.form.browser.editview import EditView
 from zope.app.form.interfaces import IInputWidget
 from zope.app.form.interfaces import WidgetsError
 from zope.publisher.browser import BrowserView
-from zope.component import getUtility, getMultiAdapter
+from zope.component import getUtility
 from zope.component import adapter
 from zope.component import queryMultiAdapter
 from zope.app.security.interfaces import IAuthentication
@@ -43,7 +43,6 @@ from zope.publisher.browser import BrowserPage
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.common import SchoolToolMessage as _
-from schooltool.app.browser.interfaces import ISchoolMenuViewletManager
 from schooltool.app.browser.interfaces import IManageMenuViewletManager
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
@@ -52,7 +51,6 @@ from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IAsset
 from schooltool.person.interfaces import IPerson
-from schooltool.traverser.traverser import AdapterTraverserPlugin
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.table import label_cell_formatter_factory
 from schooltool.table.interfaces import ITableFormatter
@@ -347,7 +345,3 @@ SchoolBreadcrumbInfo = CustomNameBreadCrumbInfo(_('school'))
 def getAuthentication(app):
     return LocationProxy(getUtility(ISchoolToolAuthenticationPlugin),
                          app, 'auth')
-
-
-SchoolToolAuthenticationTraverserPlugin = AdapterTraverserPlugin(
-    'auth', ISchoolToolAuthenticationPlugin)

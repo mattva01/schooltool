@@ -45,13 +45,14 @@ from schooltool.app.app import getSchoolToolApplication
 from zope.app.container.traversal import ItemTraverser
 from schooltool.common.xmlparsing import LxmlDocument
 from schooltool.common import parse_date, parse_time
-from schooltool.timetable.interfaces import IHaveTimetables, ITimetables
+from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import ITimetableDict, ICompositeTimetables
 from schooltool.timetable import TimetableActivity, TimetableDict
 from schooltool.traverser import traverser
 from schooltool.app.rest.interfaces import ITimetableFileFactory
 from schooltool.app.rest.interfaces import INullTimetable
 from schooltool.common import unquote_uri
+from schooltool.common import SchoolToolMessage as _
 
 
 def parseDate(date_str):
@@ -419,10 +420,6 @@ class NullTimetablePUT(object):
         container[name] = timetable
         self.request.response.setStatus(201)
         return ''
-
-
-CompositeTimetableTraverser = traverser.AdapterTraverserPlugin(
-    'composite-timetables', ICompositeTimetables)
 
 
 class CompositeTimetablesPublishTraverse(object):

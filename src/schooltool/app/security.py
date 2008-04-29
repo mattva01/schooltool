@@ -126,13 +126,15 @@ class PersonContainerAuthenticationPlugin(object):
             return form_id
 
     def restorePOSTData(self, request):
-        form_id = request.form.get('post_form')
-        if form_id:
-            session = ISession(request)[self.session_name]
-            form = session.get(form_id, None)
-            if form is not None:
-                request.form = form
-                del session[form_id]
+        form = getattr(request, "form", None)
+        if form:
+            form_id = request.form.get('post_form')
+            if form_id:
+                session = ISession(request)[self.session_name]
+                form = session.get(form_id, None)
+                if form is not None:
+                    request.form = form
+                    del session[form_id]
 
     def unauthorized(self, id, request):
         """Signal an authorization failure."""
