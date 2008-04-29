@@ -28,13 +28,6 @@
       title="Edit"
       />
 
-  <zope:subscriber
-      for="schooltool.demographics.interfaces.IDemographicsPerson zope.publisher.interfaces.IPublisherRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".personform.nameinfo_traverser"
-      permission="zope.Public"
-      />
-
   <page
       for="..interfaces.INameInfo"
       name="edit.html"
@@ -47,14 +40,6 @@
       name="index.html"
       class=".personform.NameInfoDisplay"
       permission="schooltool.view"
-      />
-
-  <zope:subscriber
-      for="schooltool.demographics.interfaces.IDemographicsPerson
-           zope.publisher.interfaces.IPublisherRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".personform.demographics_traverser"
-      permission="zope.Public"
       />
 
   <page
@@ -71,14 +56,6 @@
       permission="schooltool.view"
       />
 
-  <zope:subscriber
-      for="schooltool.demographics.interfaces.IDemographicsPerson
-           zope.publisher.interfaces.IPublisherRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".personform.schooldata_traverser"
-      permission="zope.Public"
-      />
-
   <page
       for="..interfaces.ISchoolData"
       name="edit.html"
@@ -93,41 +70,45 @@
       permission="schooltool.view"
       />
 
-  <zope:subscriber
-      for="schooltool.demographics.interfaces.IDemographicsPerson
-           zope.publisher.interfaces.IPublisherRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".personform.parent1_traverser"
-      permission="zope.Public"
-      />
-  <zope:subscriber
-      for="schooltool.demographics.interfaces.IDemographicsPerson
-           zope.publisher.interfaces.IPublisherRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".personform.parent2_traverser"
-      permission="zope.Public"
-      />
-  <zope:subscriber
-      for="schooltool.demographics.interfaces.IDemographicsPerson
-           zope.publisher.interfaces.IPublisherRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".personform.emergency1_traverser"
-      permission="zope.Public"
-      />
-  <zope:subscriber
-      for="schooltool.demographics.interfaces.IDemographicsPerson
-           zope.publisher.interfaces.IPublisherRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".personform.emergency2_traverser"
-      permission="zope.Public"
-      />
-  <zope:subscriber
-      for="schooltool.demographics.interfaces.IDemographicsPerson
-           zope.publisher.interfaces.IPublisherRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".personform.emergency3_traverser"
-      permission="zope.Public"
-      />
+  <zope:singleAttributeTraverserPlugin
+      for="schooltool.demographics.interfaces.IDemographicsPerson"
+      name="parent1"
+      permission="zope.Public" />
+
+  <zope:singleAttributeTraverserPlugin
+      for="schooltool.demographics.interfaces.IDemographicsPerson"
+      name="parent2"
+      permission="zope.Public" />
+
+  <zope:singleAttributeTraverserPlugin
+      for="schooltool.demographics.interfaces.IDemographicsPerson"
+      name="emergency1"
+      permission="zope.Public" />
+
+  <zope:singleAttributeTraverserPlugin
+      for="schooltool.demographics.interfaces.IDemographicsPerson"
+      name="emergency2"
+      permission="zope.Public" />
+
+  <zope:singleAttributeTraverserPlugin
+      for="schooltool.demographics.interfaces.IDemographicsPerson"
+      name="emergency3"
+      permission="zope.Public" />
+
+  <zope:singleAttributeTraverserPlugin
+      for="schooltool.demographics.interfaces.IDemographicsPerson"
+      name="nameinfo"
+      permission="zope.Public" />
+
+  <zope:singleAttributeTraverserPlugin
+      for="schooltool.demographics.interfaces.IDemographicsPerson"
+      name="demographics"
+      permission="zope.Public" />
+
+  <zope:singleAttributeTraverserPlugin
+      for="schooltool.demographics.interfaces.IDemographicsPerson"
+      name="schooldata"
+      permission="zope.Public" />
 
   <page
       for="..interfaces.IContactInfo"

@@ -31,7 +31,6 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.skin.form import AttributeEditForm
-from schooltool.traverser.traverser import SingleAttributeTraverserPlugin
 from schooltool.person.interfaces import IReadPerson
 from schooltool.demographics import interfaces
 from schooltool.common import SchoolToolMessage as _
@@ -124,8 +123,6 @@ class PersonEditForm(AttributeEditForm):
         url = absoluteURL(self.actualContext(), self.request)
         return url + '/nameinfo'
 
-nameinfo_traverser = SingleAttributeTraverserPlugin('nameinfo')
-
 
 class PersonView(BrowserView):
     """The default view of the person. Redirects to the nameinfo view.
@@ -170,9 +167,6 @@ class NameInfoDisplay(PersonDisplayForm):
     form_fields = form_fields.omit('photo')
 
 
-demographics_traverser = SingleAttributeTraverserPlugin('demographics')
-
-
 class DemographicsEdit(PersonEditForm):
     def title(self):
         return _(u'Change demographics for ${fullname}',
@@ -185,9 +179,6 @@ class DemographicsDisplay(PersonDisplayForm):
     def title(self):
         return _(u'Demographics')
     form_fields = form.Fields(interfaces.IDemographics)
-
-
-schooldata_traverser = SingleAttributeTraverserPlugin('schooldata')
 
 
 class SchoolDataEdit(PersonEditForm):
@@ -207,13 +198,6 @@ class SchoolDataDisplay(PersonDisplayForm):
         return _(u'School data')
 
     form_fields = form.Fields(interfaces.ISchoolData)
-
-
-parent1_traverser = SingleAttributeTraverserPlugin('parent1')
-parent2_traverser = SingleAttributeTraverserPlugin('parent2')
-emergency1_traverser = SingleAttributeTraverserPlugin('emergency1')
-emergency2_traverser = SingleAttributeTraverserPlugin('emergency2')
-emergency3_traverser = SingleAttributeTraverserPlugin('emergency3')
 
 
 class ContactInfoEdit(PersonEditForm):

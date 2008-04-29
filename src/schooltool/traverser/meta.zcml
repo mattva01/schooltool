@@ -3,8 +3,15 @@
   <directive
       namespace="http://namespaces.zope.org/zope"
       name="adapterTraverserPlugin"
-      schema=".metadirectives.INameTraverserPlugin"
+      schema=".metadirectives.IAdapterTraverserPlugin"
       handler=".metaconfigure.adapterTraverserPlugin"
+      />
+
+  <directive
+      namespace="http://namespaces.zope.org/zope"
+      name="singleAttributeTraverserPlugin"
+      schema=".metadirectives.ISingleAttributeTraverserPlugin"
+      handler=".metaconfigure.singleAttributeTraverserPlugin"
       />
 
 </configure>
