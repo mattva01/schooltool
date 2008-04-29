@@ -37,11 +37,9 @@ from schooltool.app.rest import View, Template
 from schooltool.app.rest.errors import RestError
 from schooltool.common import unquote_uri
 from schooltool.relationship.uri import IURIObject
-from schooltool.relationship.interfaces import IRelationshipLinks
 from schooltool.relationship.interfaces import IRelationshipSchema
 from schooltool.relationship.relationship import relate, unrelate
 from schooltool.relationship.interfaces import DuplicateRelationship
-from schooltool.traverser.traverser import AdapterTraverserPlugin
 
 
 class RelationshipsView(View):
@@ -234,8 +232,6 @@ def LinkViewFactory(context, request):
     return ProxyFactory(LinkView(context, request))
 LinkViewFactory.factory = LinkView
 
-RelationshipsTraverser = AdapterTraverserPlugin(
-    'relationships', IRelationshipLinks)
 
 class LinkTraverser(object):
     """Allows traversing into links of IRelationshipLinks."""

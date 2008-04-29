@@ -187,10 +187,3 @@ class CalendarView(View):
 
 NullICSCalendarTraverserPlugin = NullTraverserPlugin('calendar.ics')
 NullVFBCalendarTraverserPlugin = NullTraverserPlugin('calendar.vfb')
-
-CalendarTraverserPlugin = AdapterTraverserPlugin(
-    'calendar', ISchoolToolCalendar)
-ICSCalendarTraverserPlugin = AdapterTraverserPlugin(
-    'calendar.ics', ISchoolToolCalendar)
-VFBCalendarTraverserPlugin = AdapterTraverserPlugin(
-    'calendar.vfb', ISchoolToolCalendar)

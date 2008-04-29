@@ -1,0 +1,10 @@
+<configure xmlns="http://namespaces.zope.org/meta">
+
+  <directive
+      namespace="http://namespaces.zope.org/zope"
+      name="adapterTraverserPlugin"
+      schema=".metadirectives.INameTraverserPlugin"
+      handler=".metaconfigure.adapterTraverserPlugin"
+      />
+
+</configure>

@@ -56,35 +56,35 @@
       permission="zope.Public"
       />
 
-  <subscriber
-      for="schooltool.app.interfaces.IHaveCalendar
-           zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".app.CalendarTraverserPlugin"
+  <adapterTraverserPlugin
+      for="schooltool.app.interfaces.IHaveCalendar"
+      layer="zope.publisher.interfaces.http.IHTTPRequest"
+      name="calendar.vfb"
+      adapter="schooltool.app.interfaces.ISchoolToolCalendar"
       permission="zope.Public"
       />
 
-  <subscriber
-      for="schooltool.app.interfaces.IHaveCalendar
-           zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".app.ICSCalendarTraverserPlugin"
+  <adapterTraverserPlugin
+      for="schooltool.app.interfaces.IHaveCalendar"
+      layer="zope.publisher.interfaces.http.IHTTPRequest"
+      name="calendar.ics"
+      adapter="schooltool.app.interfaces.ISchoolToolCalendar"
       permission="zope.Public"
       />
 
-  <subscriber
-      for="schooltool.app.interfaces.IHaveCalendar
-           zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".app.VFBCalendarTraverserPlugin"
+  <adapterTraverserPlugin
+      for="schooltool.app.interfaces.IHaveCalendar"
+      layer="zope.publisher.interfaces.http.IHTTPRequest"
+      name="calendar"
+      adapter="schooltool.app.interfaces.ISchoolToolCalendar"
       permission="zope.Public"
       />
 
-  <subscriber
-      for="zope.annotation.interfaces.IAnnotatable
-           zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".relationships.RelationshipsTraverser"
+  <adapterTraverserPlugin
+      for="zope.annotation.interfaces.IAnnotatable"
+      layer="zope.publisher.interfaces.http.IHTTPRequest"
+      name="relationships"
+      adapter="schooltool.relationship.interfaces.IRelationshipLinks"
       permission="zope.Public"
       />
 

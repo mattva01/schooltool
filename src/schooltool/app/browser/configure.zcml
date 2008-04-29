@@ -726,11 +726,12 @@
   <zope:adapter
       factory=".app.getAuthentication" />
 
-  <zope:subscriber
-     for="schooltool.app.interfaces.ISchoolToolApplication
-           zope.publisher.interfaces.browser.IBrowserRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".app.SchoolToolAuthenticationTraverserPlugin"
+
+  <zope:adapterTraverserPlugin
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      name="auth"
+      adapter="schooltool.app.interfaces.ISchoolToolAuthenticationPlugin"
       />
 
   <page
