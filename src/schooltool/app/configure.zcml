@@ -291,11 +291,11 @@
       trusted="true"
       />
 
-  <subscriber
-      for="schooltool.app.interfaces.ISchoolToolApplication
-           zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".app.ApplicationControlTraverserPlugin"
+  <adapterTraverserPlugin
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      layer="zope.publisher.interfaces.http.IHTTPRequest"
+      name="control"
+      adapter="zope.app.applicationcontrol.interfaces.IApplicationControl"
       permission="schooltool.edit"
       />
 

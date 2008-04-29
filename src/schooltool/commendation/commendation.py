@@ -31,7 +31,6 @@ from zope.app.container import btree, contained
 
 from schooltool.app import app
 from schooltool.commendation import interfaces
-from schooltool.traverser.traverser import AdapterTraverserPlugin
 from schooltool.commendation.interfaces import ICommendations
 from schooltool.commendation.interfaces import _
 
@@ -117,7 +116,3 @@ def cacheCommendation(commendation, event):
     if CommendationsCacheKey not in annotations:
         annotations[CommendationsCacheKey] = persistent.list.PersistentList()
     annotations[CommendationsCacheKey].append(commendation)
-
-
-CommendationsTraverserPlugin = AdapterTraverserPlugin(
-    'commendations', ICommendations)

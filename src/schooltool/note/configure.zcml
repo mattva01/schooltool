@@ -87,11 +87,11 @@
     <allow interface=".rest.INotesView" />
   </class>
 
-  <subscriber
-      for=".interfaces.IHaveNotes
-           zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".rest.NotesTraverser"
+  <adapterTraverserPlugin
+      for=".interfaces.IHaveNotes"
+      layer="zope.publisher.interfaces.http.IHTTPRequest"
+      name="notes"
+      adapter="schooltool.note.rest.INotesAdapter"
       />
 
   <view

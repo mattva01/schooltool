@@ -27,7 +27,6 @@ from zope.security.checker import ProxyFactory
 
 from schooltool.app.rest import View, Template
 from schooltool.common.xmlparsing import LxmlDocument
-from schooltool.traverser.traverser import AdapterTraverserPlugin
 from schooltool.note.interfaces import INotes, IHaveNotes
 from schooltool.note.note import Note
 
@@ -124,6 +123,3 @@ class NotesAdapter(object):
 
     def __init__(self, context):
         self.context = context
-
-
-NotesTraverser = AdapterTraverserPlugin('notes', INotesAdapter)

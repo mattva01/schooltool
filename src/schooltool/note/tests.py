@@ -23,13 +23,14 @@ $Id$
 """
 import unittest
 
-from zope.component import provideAdapter
 from zope.interface import implements
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
+from zope.component import provideAdapter
 
 from zope.annotation.interfaces import IAttributeAnnotatable
-from zope.app.testing import setup, ztapi
+from zope.app.testing import setup
 
 from schooltool.app.browser.testing import setUp, tearDown
 
@@ -80,8 +81,9 @@ def doctest_browser_NoteAddView():
         ...         return "http://localhost/frogpond/persons/milton"
         >>> from schooltool.note.interfaces import IHaveNotes, INotes
         >>> from zope.traversing.browser.interfaces import IAbsoluteURL
-        >>> ztapi.browserViewProviding(IHaveNotes, FakeURL, \
-        ...                            providing=IAbsoluteURL)
+        >>> provideAdapter(FakeURL,
+        ...                provides=IAbsoluteURL,
+        ...                adapts=(IHaveNotes, IBrowserRequest))
 
     Let's create an owner for our note.  We need an id for our person to test
     the AddView later on:
@@ -105,7 +107,7 @@ def doctest_browser_NoteAddView():
         >>> from zope.annotation.interfaces import IAnnotations
         >>> setup.setUpAnnotations()
         >>> from schooltool.note.note import getNotes
-        >>> ztapi.provideAdapter(IHaveNotes, INotes, getNotes)
+        >>> provideAdapter(getNotes, adapts=[IHaveNotes], provides=INotes)
 
     Let's try to add a note:
 
@@ -133,12 +135,10 @@ def doctest_rest_views():
 
     First we need a bit of standard set up:
 
-        >>> from zope.app.testing import ztapi
         >>> from zope.publisher.browser import TestRequest
         >>> from StringIO import StringIO
 
         >>> from schooltool.note.rest import NotesViewFactory
-        >>> from schooltool.note.rest import NotesTraverser
         >>> from schooltool.note.rest import NotesView
         >>> from schooltool.note.rest import NotesAdapter
 
@@ -148,7 +148,7 @@ def doctest_rest_views():
         >>> from zope.annotation.interfaces import IAnnotations
         >>> setup.setUpAnnotations()
         >>> setup.placefulSetUp()
-        >>> ztapi.provideAdapter(IHaveNotes, INotes, getNotes)
+        >>> provideAdapter(getNotes, adapts=[IHaveNotes], provides=INotes)
 
     We need an object that implements IHaveNotes.
 
@@ -165,9 +165,7 @@ def doctest_rest_views():
 
     And a little more set up:
 
-        >>> provideAdapter(NotesAdapter)
-        >>> traverser = NotesTraverser(person, request)
-        >>> adapter = traverser.publishTraverse(request, 'notes')
+        >>> adapter = NotesAdapter(person)
 
     We'll work on the person object, for now it has no notes:
 

@@ -63,11 +63,11 @@
 
   <!-- Browser UI -->
 
-  <subscriber
-      for=".interfaces.IHaveCommendations
-           zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".commendation.CommendationsTraverserPlugin"
+  <adapterTraverserPlugin
+      for=".interfaces.IHaveCommendations"
+      layer="zope.publisher.interfaces.http.IHTTPRequest"
+      name="commendations"
+      adapter="schooltool.commendation.interfaces.ICommendations"
       permission="zope.Public"
       />
 
