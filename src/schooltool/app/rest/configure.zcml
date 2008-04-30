@@ -97,19 +97,17 @@
       />
 
   <!-- the following are used by PUT requests on the normal web server -->
-  <subscriber
-      for="schooltool.app.interfaces.ISchoolToolCalendar
-           zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".app.NullICSCalendarTraverserPlugin"
+  <nullTraverserPlugin
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      layer="zope.publisher.interfaces.http.IHTTPRequest"
+      name="calendar.ics"
       permission="zope.Public"
       />
 
-  <subscriber
-      for="schooltool.app.interfaces.ISchoolToolCalendar
-           zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".app.NullVFBCalendarTraverserPlugin"
+  <nullTraverserPlugin
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      layer="zope.publisher.interfaces.http.IHTTPRequest"
+      name="calendar.vfb"
       permission="zope.Public"
       />
 

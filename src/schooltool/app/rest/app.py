@@ -31,7 +31,6 @@ from schooltool.common.xmlparsing import LxmlDocument
 from schooltool.app.rest import View, Template
 from schooltool.app.interfaces import IWriteCalendar
 from schooltool.calendar.icalendar import convert_calendar_to_ical
-from schooltool.traverser.traverser import NullTraverserPlugin
 
 
 class ApplicationObjectFileFactory(object):
@@ -182,7 +181,3 @@ class CalendarView(View):
         adapter = IWriteCalendar(self.context)
         adapter.write(data, charset)
         return ''
-
-
-NullICSCalendarTraverserPlugin = NullTraverserPlugin('calendar.ics')
-NullVFBCalendarTraverserPlugin = NullTraverserPlugin('calendar.vfb')

@@ -14,4 +14,11 @@
       handler=".metaconfigure.singleAttributeTraverserPlugin"
       />
 
+  <directive
+      namespace="http://namespaces.zope.org/zope"
+      name="nullTraverserPlugin"
+      schema=".metadirectives.INullTraverserPlugin"
+      handler=".metaconfigure.nullTraverserPlugin"
+      />
+
 </configure>
