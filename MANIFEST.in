@@ -5,5 +5,7 @@ recursive-include src *.css
 recursive-include src *.po
 recursive-include src *.mo
 recursive-include src *.txt
+recursive-include src *.png
+recursive-include src *.gif
 include version.txt
 include version.txt.in
