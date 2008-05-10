@@ -84,3 +84,49 @@ clean:
 	test -d src/lyceum.egg-info/ && rm -rf src/lyceum.egg-info/
 	find . \( -path './src/*.mo' -o -name '*.o' \
 	         -o -name '*.py[co]' \) -exec rm -f {} \;
+
+.PHONY: extract-translations
+extract-translations: build
+	bin/i18nextract --egg schooltool --domain schooltool --zcml schooltool/common/translations.zcml --output-file src/schooltool/locales/schooltool.pot
+	bin/i18nextract --egg schooltool.commendation --domain schooltool.commendation --zcml schooltool/commendation/translations.zcml --output-file src/schooltool/commendation/locales/schooltool.commendation.pot
+
+
+.PHONY: compile-translations
+compile-translations:
+	set -e; \
+	locales=src/schooltool/locales; \
+	for f in $${locales}/*/LC_MESSAGES/schooltool.po; do \
+	    msgfmt -o $${f%.po}.mo $$f;\
+	done
+	locales=src/schooltool/commendation/locales; \
+	for f in $${locales}/*/LC_MESSAGES/schooltool.commendation.po; do \
+	    msgfmt -o $${f%.po}.mo $$f;\
+	done
+
+
+.PHONY: update-translations
+update-translations: extract-translations
+	set -e; \
+	locales=src/schooltool/commendation/locales; \
+	for f in $${locales}/*/LC_MESSAGES/schooltool.commendation.po; do \
+	    msgmerge -qU $$f $${locales}/schooltool.commendation.pot ;\
+	done
+	locales=src/schooltool/locales; \
+	for f in $${locales}/*/LC_MESSAGES/schooltool.po; do \
+	    msgmerge -qU $$f $${locales}/schooltool.pot ;\
+	done
+	$(MAKE) PYTHON=$(PYTHON) compile-translations
+
+
+.PHONY: ubuntu-environment
+ubuntu-environment:
+	@if [ `whoami` != "root" ]; then { \
+	 echo "You must be root to create an environment."; \
+	 echo "I am running as $(shell whoami)"; \
+	 exit 3; \
+	} else { \
+	 apt-get install subversion build-essential python-all python-all-dev libc6-dev libicu-dev; \
+	 apt-get build-dep python-imaging; \
+	 apt-get build-dep python-libxml2 libxml2; \
+	 echo "Installation Complete: Next... Run 'make'."; \
+	} fi
