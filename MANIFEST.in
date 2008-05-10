@@ -1,3 +1,9 @@
+recursive-include src *.zcml
+recursive-include src *.js
+recursive-include src *.pt
+recursive-include src *.css
+recursive-include src *.po
 recursive-include src *.mo
+recursive-include src *.txt
 include version.txt
 include version.txt.in
