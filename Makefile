@@ -46,6 +46,17 @@ build-schooltool-instance:
 run: build
 	bin/start-schooltool-instance instance
 
+.PHONY: release
+release: compile-translations
+	echo -n `sed -e 's/\n//' version.txt.in` > version.txt
+	echo -n "_r" >> version.txt
+	bzr revno >> version.txt
+	bin/buildout setup setup.py sdist
+
+.PHONY: move-release
+move-release:
+	 mv dist/schooltool-*.tar.gz /home/ftp/pub/schooltool/releases/nightly
+
 .PHONY: coverage
 coverage: build
 	test -d coverage && rm -rf coverage

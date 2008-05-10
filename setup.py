@@ -40,13 +40,6 @@ pkg_resources.require("setuptools>=0.6a11")
 
 from setuptools import setup, find_packages
 
-def get_version():
-    version_file = os.path.join(here, 'src', 'schooltool', 'version.txt')
-    f = open(version_file, 'r')
-    result = f.read()
-    f.close()
-    return result
-
 # allowed extensions
 ALLOWED_EXTENSIONS = ['conf','css', 'gif', 'ico', 'ics', 'js', 'mo', 'po', 'pt',
                       'png', 'txt', 'xml', 'xpdl', 'zcml']
@@ -128,7 +121,10 @@ for package in all_packages:
                     package_data[package].append(file)
             break
 
-version = "FAKEVERSIONNUMBER"
+if os.path.exists("version.txt"):
+    version = open("version.txt").read().strip()
+else:
+    version = open("version.txt.in").read().strip()
 
 # Setup SchoolTool
 setup(
