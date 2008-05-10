@@ -1,1 +1,3 @@
 recursive-include src *.mo
+include version.txt
+include version.txt.in
