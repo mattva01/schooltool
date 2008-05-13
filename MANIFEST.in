@@ -8,5 +8,8 @@ recursive-include src *.txt
 recursive-include src *.png
 recursive-include src *.gif
 recursive-include src *.ico
+recursive-include src *.zcml_tmpl
+recursive-include src *.conf_tmpl
+recursive-include src *.ini
 include version.txt
 include version.txt.in
