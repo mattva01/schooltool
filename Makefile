@@ -90,7 +90,6 @@ extract-translations: build
 	bin/i18nextract --egg schooltool --domain schooltool --zcml schooltool/common/translations.zcml --output-file src/schooltool/locales/schooltool.pot
 	bin/i18nextract --egg schooltool.commendation --domain schooltool.commendation --zcml schooltool/commendation/translations.zcml --output-file src/schooltool/commendation/locales/schooltool.commendation.pot
 
-
 .PHONY: compile-translations
 compile-translations:
 	set -e; \
@@ -102,7 +101,6 @@ compile-translations:
 	for f in $${locales}/*/LC_MESSAGES/schooltool.commendation.po; do \
 	    msgfmt -o $${f%.po}.mo $$f;\
 	done
-
 
 .PHONY: update-translations
 update-translations: extract-translations
@@ -116,7 +114,6 @@ update-translations: extract-translations
 	    msgmerge -qU $$f $${locales}/schooltool.pot ;\
 	done
 	$(MAKE) PYTHON=$(PYTHON) compile-translations
-
 
 .PHONY: ubuntu-environment
 ubuntu-environment:
