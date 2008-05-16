@@ -66,11 +66,12 @@
 
   <adapter factory=".record.AcademicStatus" />
 
-  <subscriber
+  <adapter
       for="schooltool.person.interfaces.IPerson
            zope.publisher.interfaces.http.IHTTPRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".record.AcademicStatusTraverser"
+      name="academicStatus"
       permission="zope.Public"
       />
 
@@ -104,11 +105,12 @@
 
   <adapter factory=".record.AcademicHistory" />
 
-  <subscriber
+  <adapter
       for="schooltool.person.interfaces.IPerson
            zope.publisher.interfaces.http.IHTTPRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".record.AcademicHistoryTraverser"
+      name="academicHistory"
       permission="zope.Public"
       />
 
@@ -120,11 +122,12 @@
       permission="zope.Public"
       />
 
-  <subscriber
+  <adapter
       for="schooltool.person.interfaces.IPerson
            zope.publisher.interfaces.http.IHTTPRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".record.PromotionHTTPTraverser"
+      name="promotion"
       permission="zope.Public"
       />
 

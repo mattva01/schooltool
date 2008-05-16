@@ -40,15 +40,27 @@ class PluggableTraverser(object):
         self.request = request
 
     def publishTraverse(self, request, name):
-        # 1. Look at all the traverser plugins, whether they have an answer.
-        for traverser in subscribers((self.context, request),
-                                     interfaces.ITraverserPlugin):
+
+        # 1. Look for a named traverser plugin.
+        named_traverser = queryMultiAdapter((self.context, request),
+                                            interfaces.ITraverserPlugin,
+                                            name=name)
+        if named_traverser is not None:
+            try:
+                return named_traverser.publishTraverse(request, name)
+            except NotFound:
+                pass
+
+        # 2. Named traverser plugin was of no use, let's try a generic one.
+        traverser = queryMultiAdapter((self.context, request),
+                                      interfaces.ITraverserPlugin)
+        if traverser is not None:
             try:
                 return traverser.publishTraverse(request, name)
             except NotFound:
                 pass
 
-        # 2. The traversers did not have an answer, so let's see whether it is
+        # 3. The traversers did not have an answer, so let's see whether it is
         #    a view.
         view = queryMultiAdapter((self.context, request), name=name)
         if view is not None:

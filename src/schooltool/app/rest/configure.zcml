@@ -48,7 +48,7 @@
       permission="zope.Public"
       />
 
-  <subscriber
+  <adapter
       for="zope.app.container.interfaces.IReadContainer
            zope.publisher.interfaces.http.IHTTPRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"

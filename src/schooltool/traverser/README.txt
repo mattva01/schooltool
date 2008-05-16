@@ -45,12 +45,12 @@ But it failed. Why? Because we have not registered a plugin traverser yet that
 knows how to lookup attributes. This package provides such a traverser
 already, so we just have to register it:
 
-    >>> from zope.component import provideSubscriptionAdapter
+    >>> from zope.component import provideAdapter
     >>> from zope.publisher.interfaces import IPublisherRequest
     >>> from schooltool.traverser.traverser import AttributeTraverserPlugin
 
-    >>> provideSubscriptionAdapter(AttributeTraverserPlugin,
-    ...                            (IContent, IPublisherRequest))
+    >>> provideAdapter(AttributeTraverserPlugin,
+    ...                (IContent, IPublisherRequest))
 
 If we now try to lookup the attribute, we the value:
 
@@ -113,17 +113,17 @@ and we would like to be able to traverse
     >>> from schooltool.traverser.traverser import ContainerTraverserPlugin
     >>> from schooltool.traverser.interfaces import ITraverserPlugin
 
-    >>> provideSubscriptionAdapter(ContainerTraverserPlugin,
-    ...                            (IMyContainer, IPublisherRequest),
-    ...                            ITraverserPlugin)
+    >>> provideAdapter(ContainerTraverserPlugin,
+    ...                (IMyContainer, IPublisherRequest),
+    ...                ITraverserPlugin)
 
   * the ``foo`` attribute. Luckily we also have a predeveloped traverser for
     this:
 
     >>> from schooltool.traverser.traverser import \
     ...     SingleAttributeTraverserPlugin
-    >>> provideSubscriptionAdapter(SingleAttributeTraverserPlugin('foo'),
-    ...                            (IMyContainer, IPublisherRequest))
+    >>> provideAdapter(SingleAttributeTraverserPlugin('foo'),
+    ...                (IMyContainer, IPublisherRequest), name="foo")
 
 We can now use the pluggable traverser
 
@@ -172,9 +172,9 @@ take the following adapter:
 Now we register this adapter under the traversal name ``some``:
 
     >>> from schooltool.traverser.traverser import AdapterTraverserPlugin
-    >>> provideSubscriptionAdapter(
+    >>> provideAdapter(
     ...     AdapterTraverserPlugin('some', ISomeAdapter),
-    ...     (IMyContainer, IPublisherRequest))
+    ...     (IMyContainer, IPublisherRequest), name="some")
 
 So here is the result:
 

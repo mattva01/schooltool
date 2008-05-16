@@ -23,7 +23,7 @@ $Id$
 
 """
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
-from zope.component.zcml import subscriber
+from zope.component.zcml import adapter as handle_adapter
 
 from schooltool.traverser.traverser import NullTraverserPlugin
 from schooltool.traverser.traverser import SingleAttributeTraverserPlugin
@@ -35,39 +35,30 @@ def adapterTraverserPlugin(_context, for_, name, adapter,
                            layer=IDefaultBrowserLayer,
                            permission=None):
     factory = AdapterTraverserPlugin(name, adapter)
-    subscriber(_context,
-               for_=(for_, layer),
-               factory=factory,
-               provides=ITraverserPlugin,
-               permission=permission)
-    _context.action(discriminator=('traverserPlugin', for_, name, layer),
-                    callable=lambda: None,
-                    args=())
+    handle_adapter(_context, [factory],
+                   provides=ITraverserPlugin,
+                   for_=(for_, layer),
+                   permission=permission,
+                   name=name)
 
 
 def singleAttributeTraverserPlugin(_context, for_, name,
                            layer=IDefaultBrowserLayer,
                            permission=None):
     factory = SingleAttributeTraverserPlugin(name)
-    subscriber(_context,
-               for_=(for_, layer),
-               factory=factory,
-               provides=ITraverserPlugin,
-               permission=permission)
-    _context.action(discriminator=('traverserPlugin', for_, name, layer),
-                    callable=lambda: None,
-                    args=())
+    handle_adapter(_context, [factory],
+                   provides=ITraverserPlugin,
+                   for_=(for_, layer),
+                   permission=permission,
+                   name=name)
 
 
 def nullTraverserPlugin(_context, for_, name,
                            layer=IDefaultBrowserLayer,
                            permission=None):
     factory = NullTraverserPlugin(name)
-    subscriber(_context,
-               for_=(for_, layer),
-               factory=factory,
-               provides=ITraverserPlugin,
-               permission=permission)
-    _context.action(discriminator=('traverserPlugin', for_, name, layer),
-                    callable=lambda: None,
-                    args=())
+    handle_adapter(_context, [factory],
+                   provides=ITraverserPlugin,
+                   for_=(for_, layer),
+                   permission=permission,
+                   name=name)

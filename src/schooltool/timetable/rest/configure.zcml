@@ -17,11 +17,12 @@
       permission="zope.Public"
       />
 
-  <subscriber
+  <adapter
       for="..interfaces.IOwnTimetables
            zope.publisher.interfaces.http.IHTTPRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".TimetableTraverser"
+      name="timetables"
       permission="zope.Public"
       />
 
