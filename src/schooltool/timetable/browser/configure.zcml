@@ -10,10 +10,11 @@
         interface="schooltool.traverser.interfaces.ITraverserPlugin" />
   </zope:class>
 
-  <zope:subscriber
+  <zope:adapter
       for="schooltool.timetable.interfaces.IOwnTimetables
            zope.publisher.interfaces.browser.IBrowserRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      name="timetables"
       factory=".TimetablesTraverser"
       />
 

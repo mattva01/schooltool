@@ -25,6 +25,7 @@ must be written for every specific presentation type.
 $Id$
 """
 
+from zope.interface import Interface
 from zope.publisher.interfaces import IPublishTraverse
 
 
@@ -36,5 +37,19 @@ class IPluggableTraverser(IPublishTraverse):
     """
 
 
-class ITraverserPlugin(IPublishTraverse):
+class ITraverserPlugin(Interface):
     """A plugin for the pluggable traverser."""
+
+    def publishTraverse(request, name):
+        """Lookup a name
+
+        The 'request' argument is the publisher request object.  The
+        'name' argument is the name that is to be looked up; it must
+        be an ASCII string or Unicode object.
+
+        If a lookup is not possible, raise a NotFound error.
+
+        This method should return an object having the specified name and
+        `self` as parent. The method can use the request to determine the
+        correct object.
+        """

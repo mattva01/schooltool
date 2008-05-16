@@ -182,7 +182,7 @@
 
   <!-- Pluggable Traverser Plugins -->
 
-  <zope:subscriber
+  <zope:adapter
       for="zope.app.container.interfaces.IReadContainer
            zope.publisher.interfaces.browser.IBrowserRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
@@ -274,11 +274,12 @@
     <allow interface="schooltool.traverser.interfaces.ITraverserPlugin" />
   </zope:class>
 
-  <zope:subscriber
+  <zope:adapter
       for="schooltool.app.interfaces.IHaveCalendar
            zope.publisher.interfaces.browser.IBrowserRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".cal.ToCalendarTraverser"
+      name="calendar"
       />
 
   <zope:view
