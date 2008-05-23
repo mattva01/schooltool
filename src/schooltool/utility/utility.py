@@ -77,7 +77,7 @@ def setUpUtilities(site, specs):
 
 def getLocalUtility(default, spec):
     util = queryUtility(spec.iface, name=spec.utility_name, default=None)
-    if util is None or util.__parent__ is default:
+    if util is None or getattr(util, '__parent__', None) is default:
         return util
     else:
         return None
