@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:browser="http://namespaces.zope.org/browser"
            i18n_domain="zope">
@@ -6,6 +7,7 @@
   <include package="schooltool.course" />
   <include package="schooltool.timetable" />
   <include package="schooltool.term" />
+  <include package="schooltool.term" file="time_machine.zcml" />
 
   <browser:defaultSkin name="SchoolTool" />
 

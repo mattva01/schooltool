@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns:security="http://schooltool.org/securitypolicy"
+           i18n_domain="zope">
+
+  <!-- Time setting view setup -->
+
+  <class class="schooltool.term.tests.LocalDateManagerUtility">
+    <require
+        permission="schooltool.view"
+        interface="schooltool.term.interfaces.IDateManager"
+        />
+    <require
+        permission="schooltool.edit"
+        set_schema="schooltool.term.interfaces.IDateManager"
+        />
+  </class>
+
+  <browser:page
+     name="index.html"
+     for="schooltool.term.interfaces.IDateManager"
+     class="schooltool.term.tests.DateManagementView"
+     permission="schooltool.view" />
+
+  <adapter
+      factory="schooltool.term.tests.getDateManager" />
+
+  <adapterTraverserPlugin
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      layer="zope.publisher.interfaces.http.IHTTPRequest"
+      name="time"
+      adapter="schooltool.term.interfaces.IDateManager" />
+
+  <subscriber
+      for="schooltool.app.interfaces.ICatalogSetUpEvent"
+      handler="schooltool.term.tests.dateManagerSetupSubscriber"
+      />
+
+  <security:allow
+      interface="schooltool.term.interfaces.IDateManager"
+      crowds="administration"
+      permission="schooltool.view" />
+
+  <security:allow
+      interface="schooltool.term.interfaces.IDateManager"
+      crowds="administration"
+      permission="schooltool.edit" />
+
+</configure>

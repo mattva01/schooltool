@@ -21,11 +21,24 @@
 $Id$
 """
 import datetime
+from persistent import Persistent
 
+from zope.publisher.browser import BrowserView
+from zope.location.location import LocationProxy
+from zope.annotation.interfaces import IAnnotations
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.interface import implementer
 from zope.interface import implements
+from zope.component import adapter
+from zope.component import getUtility
 from zope.component import provideUtility
 
+from z3c.form import form, field
+
+from schooltool.utility.utility import UtilitySetUp
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.term.interfaces import IDateManager
+from schooltool.common import SchoolToolMessage as _
 
 
 class DateManagerStub(object):
@@ -40,3 +53,33 @@ def setUpDateManagerStub(today=None, current_term=None):
     if not today:
         today = datetime.date(2005, 9, 20)
     provideUtility(DateManagerStub(today, current_term))
+
+
+class LocalDateManagerUtility(Persistent, DateManagerStub):
+    implements(IDateManager)
+
+    def __init__(self):
+        self.today = datetime.date(2005, 2, 1)
+        self.current_term = None
+
+
+dateManagerSetupSubscriber = UtilitySetUp(
+    LocalDateManagerUtility, IDateManager)
+
+
+@implementer(IDateManager)
+@adapter(ISchoolToolApplication)
+def getDateManager(context):
+    return LocationProxy(getUtility(IDateManager), context, 'time')
+
+
+class DateManagementView(form.EditForm):
+    label = _("Set the date for the school")
+    template = ViewPageTemplateFile('date_management.pt')
+
+    form.extends(form.EditForm)
+    fields = field.Fields(IDateManager)
+
+    def updateActions(self):
+        super(DateManagementView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')

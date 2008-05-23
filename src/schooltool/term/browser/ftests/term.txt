@@ -9,6 +9,15 @@ A manager logs in
     >>> manager.handleErrors = False
     >>> manager.open('http://localhost/')
 
+Set the time:
+
+    >>> manager.open('http://localhost/time')
+    >>> manager.getControl('Today').value = "05/02/15"
+    >>> manager.getControl('Apply').click()
+
+    >>> 'Data successfully updated.' in manager.contents
+    True
+
 Create a term
     >>> manager.getLink('Manage').click()
     >>> manager.getLink('Terms').click()
