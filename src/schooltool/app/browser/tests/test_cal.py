@@ -1071,6 +1071,7 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> from schooltool.resource.booking import ResourceBookingCalendar
             >>> ztapi.provideAdapter(IResourceContainer, IBookingCalendar,
             ...                      ResourceBookingCalendar)
+            >>> setUpDateManagerStub(date(2005, 5, 13))
 
             >>> app['persons']['john'] = person = Person("john")
             >>> calendar = Calendar(person)
@@ -1112,6 +1113,7 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> registerCalendarHelperViews()
             >>> registerCalendarSubscribers()
             >>> sbsetup.setUpTimetabling()
+            >>> setUpDateManagerStub(date(2005, 5, 13))
 
             >>> calendar = Calendar(Person())
             >>> vb = CalendarViewBase(calendar, TestRequest())
@@ -1166,6 +1168,7 @@ class TestCalendarViewBase(unittest.TestCase):
         """Test for CalendarViewBase.getCalendars().
 
             >>> setup.placelessSetUp()
+            >>> setUpDateManagerStub(date(2005, 5, 13))
 
         getCalendars() only delegates the task to a ICalendarProvider
         subscriber.  We will provide a stub subscriber to test the
@@ -1245,6 +1248,7 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> registerCalendarSubscribers()
             >>> sbsetup.setUpSessions()
             >>> sbsetup.setUpTimetabling()
+            >>> setUpDateManagerStub(date(2005, 5, 13))
 
         CalendarViewBase.getEvents returns a list of wrapped calendar
         events.
@@ -4116,6 +4120,7 @@ class TestDailyCalendarView(unittest.TestCase):
             >>> registerCalendarSubscribers()
             >>> sbsetup.setUpSessions()
             >>> sbsetup.setUpTimetabling()
+            >>> setUpDateManagerStub(date(2005, 5, 13))
 
         DailyCalendarView.getAllDayEvents returns a list of wrapped
         all-day calendar events for the date of the view cursor.

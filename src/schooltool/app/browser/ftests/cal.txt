@@ -755,13 +755,17 @@ see your calendar, albeit without overlaid events:
 The Tomorrow's events box
 -------------------------
 
-Warning, this test might break if run exactly at midnight, as the
-value of 'tomorrow' jumps to the next day.
-
-First of all, what is tomorrow?
+First of all let's set the date:
 
     >>> from datetime import date
-    >>> tomorrow = date.today() + date.resolution
+    >>> today = date(2005, 5, 13)
+    >>> manager.open('http://localhost/time')
+    >>> manager.getControl('Today').value = "05/05/13"
+    >>> manager.getControl('Apply').click()
+
+And calculate tomorrow:
+
+    >>> tomorrow = today + date.resolution
 
 Now, let's add an event which will take place tomorrow:
 
@@ -777,26 +781,16 @@ Now, let's add an event which will take place tomorrow:
 We should see it in the calendar for today:
 
     >>> frog.getLink('Calendar').click()
-    >>> print frog.contents
-    <BLANKLINE>
-    ...
+    >>> print analyze.queryHTML('id("portlet-next-day-events")', frog.contents)[0]
     <div id="portlet-next-day-events" class="portlet">
-      <h4>Tomorrow's Events</h4>
-      <ul>
-    <BLANKLINE>
-         <li>
-           <a href="...
-              title="Important meeting"
-              style="color: #7590ae">
-             <strong>12:00</strong>
-             Important meeti...
-           </a>
-         </li>
-    <BLANKLINE>
-      </ul>
-    </div>
-    ...
-
+          <h4>Tomorrow's Events</h4>
+          <ul><li>
+              <a href="http://localhost/persons/frog/calendar/..." title="Important meeting" style="color: #7590ae">
+                <strong>12:00</strong>
+                Important meeti...
+              </a>
+            </li>
+    </ul></div>
 
 Now, let's take a look at the daily calendar for an arbitrary day.  It
 should have the event we have just created in the Tomorrow's events box.

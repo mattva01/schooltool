@@ -1,5 +1,5 @@
-  <tal:block define="next view/__parent__/nextDay;
-                     tomorrow python:next.today() + next.resolution;
+  <tal:block define="today view/__parent__/today;
+                     tomorrow python:today + today.resolution;
                      tevents python:view.__parent__.dayEvents(tomorrow)">
     <div id="portlet-next-day-events" class="portlet" tal:condition="tevents">
       <h4 i18n:translate="">Tomorrow's Events</h4>
