@@ -46,6 +46,7 @@ from schooltool.common import parse_datetime
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 from schooltool.timetable import SequentialDaysTimetableModel
 from schooltool.timetable.schema import TimetableSchema
+from schooltool.term.tests import setUpDateManagerStub
 from schooltool.testing.util import NiceDiffsMixin
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
 
@@ -93,10 +94,12 @@ class ApplicationStub(object):
         pass
 
 
+test_today = date(2005, 3, 13)
 def setUp(test=None):
     browserSetUp(test)
     sbsetup.setUpCalendaring()
     sbsetup.setUpSessions()
+    setUpDateManagerStub(test_today)
 
     ztapi.provideAdapter(Interface, ISchoolToolApplication,
                          ApplicationStub)
@@ -664,11 +667,11 @@ def doctest_CalendarDay():
 
     You can test a calendar day to see if its date is today
 
-        >>> day = CalendarDay(date.today())
+        >>> day = CalendarDay(test_today)
         >>> day.today()
         'today'
 
-        >>> day = CalendarDay(date.today() - date.resolution)
+        >>> day = CalendarDay(test_today - date.resolution)
         >>> day.today()
         ''
 
@@ -748,6 +751,8 @@ def getDaysStub(start, end):
 class TestCalendarViewBase(unittest.TestCase):
     # Legacy unit tests from SchoolTool.
 
+    today = date(2005, 6, 9)
+
     def setUp(self):
         setup.placefulSetUp()
 
@@ -758,6 +763,8 @@ class TestCalendarViewBase(unittest.TestCase):
         # Usually registered for IHavePreferences
         ztapi.provideAdapter(IPerson, IPersonPreferences,
                              getPersonPreferences)
+
+        setUpDateManagerStub(self.today)
 
     def tearDown(self):
         setup.placefulTearDown()
@@ -785,7 +792,7 @@ class TestCalendarViewBase(unittest.TestCase):
         request = TestRequest()
         view = CalendarViewBase(None, request)
         view.update()
-        self.assertEquals(view.cursor, date.today())
+        self.assertEquals(view.cursor, self.today)
 
     def test_update_explicit_date(self):
         from schooltool.app.browser.cal import CalendarViewBase
@@ -1499,8 +1506,8 @@ class TestCalendarViewBase(unittest.TestCase):
         cal = Calendar(Person())
         directlyProvides(cal, IContainmentRoot)
 
-        first_year = datetime.today().year - 2
-        last_year = datetime.today().year + 2
+        first_year = self.today.year - 2
+        last_year = self.today.year + 2
 
         view = CalendarViewBase(cal, TestRequest())
 
@@ -3448,6 +3455,8 @@ def doctest_getEvents_booking():
 
 class TestDailyCalendarView(unittest.TestCase):
 
+    today = date(2005, 3, 12)
+
     def setUp(self):
         setup.placefulSetUp()
         self.app = sbsetup.setUpSchoolToolSite()
@@ -3456,6 +3465,7 @@ class TestDailyCalendarView(unittest.TestCase):
         sbsetup.setUpSessions()
         sbsetup.setUpTimetabling()
         sbsetup.setUpCalendaring()
+        setUpDateManagerStub(self.today)
 
     def tearDown(self):
         setup.placefulTearDown()
@@ -3465,7 +3475,7 @@ class TestDailyCalendarView(unittest.TestCase):
 
         view = DailyCalendarView(ISchoolToolCalendar(Person()), TestRequest())
         view.update()
-        self.assertEquals(view.cursor, date.today())
+        self.assertEquals(view.cursor, self.today)
 
         from zope.publisher.interfaces import IRequest
         import zope.component
@@ -4222,7 +4232,7 @@ def doctest_CalendarViewBase():
     request or the session, it defaults to the current day:
 
         >>> view.update()
-        >>> view.cursor == date.today()
+        >>> view.cursor == test_today
         True
 
     The date can be provided in the request:
@@ -4284,7 +4294,7 @@ def doctest_DailyCalendarView():
         'http://127.0.0.1/calendar/2004-08-17'
         >>> view.next()
         'http://127.0.0.1/calendar/2004-08-19'
-        >>> view.current() == 'http://127.0.0.1/calendar/%s' % date.today()
+        >>> view.current() == 'http://127.0.0.1/calendar/%s' % test_today
         True
 
     inCurrentPeriod returns True for the same day only:
@@ -4323,7 +4333,7 @@ def doctest_WeeklyCalendarView():
         >>> view.next()
         'http://127.0.0.1/calendar/2004-w35'
         >>> fmt = 'http://127.0.0.1/calendar/%04d-w%02d'
-        >>> view.current() == fmt % date.today().isocalendar()[:2]
+        >>> view.current() == fmt % test_today.isocalendar()[:2]
         True
 
     getCurrentWeek is a shortcut for view.getWeek(view.cursor)
@@ -4379,7 +4389,7 @@ def doctest_MonthlyCalendarView():
         'http://127.0.0.1/calendar/2004-07'
         >>> view.next()
         'http://127.0.0.1/calendar/2004-09'
-        >>> dt = date.today().strftime("%Y-%m")
+        >>> dt = test_today.strftime("%Y-%m")
         >>> view.current() == 'http://127.0.0.1/calendar/%s' % dt
         True
 
@@ -4447,7 +4457,7 @@ def doctest_YearlyCalendarView():
         'http://127.0.0.1/calendar/2003'
         >>> view.next()
         'http://127.0.0.1/calendar/2005'
-        >>> expected = 'http://127.0.0.1/calendar/%d' % date.today().year
+        >>> expected = 'http://127.0.0.1/calendar/%d' % test_today.year
         >>> view.current() == expected
         True
 
@@ -4465,8 +4475,8 @@ def doctest_YearlyCalendarView():
 
     If the week includes today, that is indicated in a class attribute:
 
-        >>> week = view.getWeek(date.today())
-        >>> print view.renderRow(week, date.today().month)
+        >>> week = view.getWeek(test_today)
+        >>> print view.renderRow(week, test_today.month)
         <td...class="cal_yearly_day today">...
 
     inCurrentPeriod returns True for the same year only:
@@ -4534,6 +4544,9 @@ def doctest_AtomCalendarView():
         >>> registerCalendarHelperViews()
         >>> registerCalendarSubscribers()
 
+        >>> today = date(2005, 3, 13)
+        >>> setUpDateManagerStub(today)
+
         >>> from schooltool.app.browser.cal import AtomCalendarView
 
         >>> from schooltool.app.cal import Calendar
@@ -4544,11 +4557,13 @@ def doctest_AtomCalendarView():
 
     Populate the calendar:
 
-        >>> lastweek = CalendarEvent(datetime.now().replace(hour=12) -
+        >>> lastweek = CalendarEvent(datetime(today.year,
+        ...                                   today.month,
+        ...                                   today.day, hour=12) -
         ...                          timedelta(8),
         ...                          timedelta(hours=3), "Last Week")
-        >>> monday_date = (datetime.now().replace(hour=12) -
-        ...                timedelta(datetime.now().weekday()))
+        >>> monday_date = (datetime(today.year, today.month, today.day, hour=12) -
+        ...                timedelta(today.weekday()))
         >>> tuesday_date = monday_date + timedelta(1)
         >>> monday = CalendarEvent(monday_date,
         ...                        timedelta(hours=3), "Today")

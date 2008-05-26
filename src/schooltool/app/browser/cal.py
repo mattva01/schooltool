@@ -29,6 +29,7 @@ from datetime import datetime, date, time, timedelta
 
 import transaction
 from pytz import timezone, utc
+from zope.component import getUtility
 from zope.component import queryMultiAdapter, adapts, getMultiAdapter
 from zope.component import subscribers
 from zope.event import notify
@@ -95,6 +96,7 @@ from schooltool.calendar.utils import parse_time, weeknum_bounds
 from schooltool.calendar.utils import week_start, prev_month, next_month
 from schooltool.person.interfaces import IPerson, IPersonPreferences
 from schooltool.person.interfaces import vocabulary
+from schooltool.term.interfaces import IDateManager
 from schooltool.term.term import getTermForDate
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.attendance.interfaces import IAttendanceCalendarEvent
@@ -428,9 +430,7 @@ class CalendarDay(object):
 
     def today(self):
         """Return 'today' if self.date is today, otherwise return ''."""
-        # XXX shouldn't use date.today; it depends on the server's timezone
-        # which may not match user expectations
-        return self.date == date.today() and 'today' or ''
+        return self.date == getUtility(IDateManager).today and 'today' or ''
 
 
 #
@@ -544,9 +544,7 @@ class CalendarViewBase(BrowserView):
         dt = session.get('last_visited_day')
 
         if 'date' not in self.request:
-            # XXX shouldn't use date.today; it depends on the server's timezone
-            # which may not match user expectations
-            self.cursor = dt or date.today()
+            self.cursor = dt or getUtility(IDateManager).today
         else:
             # TODO: It would be nice not to b0rk when the date is invalid but
             # fall back to the current date, as if the date had not been
@@ -782,7 +780,7 @@ class CalendarViewBase(BrowserView):
 
     def getJumpToYears(self):
         """Return jump targets for five years centered on the current year."""
-        this_year = datetime.today().year
+        this_year = getUtility(IDateManager).today.year
         return [{'selected': year == this_year,
                  'label': year,
                  'href': self.calURL('yearly', date(year, 1, 1))}
@@ -945,9 +943,7 @@ class WeeklyCalendarView(CalendarViewBase):
 
     def current(self):
         """Return the link for the current week."""
-        # XXX shouldn't use date.today; it depends on the server's timezone
-        # which may not match user expectations
-        return self.calURL('weekly', date.today())
+        return self.calURL('weekly', getUtility(IDateManager).today)
 
     def next(self):
         """Return the link for the next week."""
@@ -1114,7 +1110,7 @@ class AtomCalendarView(WeeklyCalendarView):
         """Return the current week as a list of CalendarDay objects."""
         # XXX shouldn't use date.today; it depends on the server's timezone
         # which may not match user expectations
-        return self.getWeek(date.today())
+        return self.getWeek(getUtility(IDateManager).today)
 
     def w3cdtf_datetime(self, dt):
         # XXX: shouldn't assume the datetime is in UTC
@@ -1159,7 +1155,7 @@ class MonthlyCalendarView(CalendarViewBase):
         """Return the link for the current month."""
         # XXX shouldn't use date.today; it depends on the server's timezone
         # which may not match user expectations
-        return self.calURL('monthly', date.today())
+        return self.calURL('monthly', getUtility(IDateManager).today)
 
     def next(self):
         """Return the link for the next month."""
@@ -1210,7 +1206,7 @@ class YearlyCalendarView(CalendarViewBase):
         """Return the link for the current year."""
         # XXX shouldn't use date.today; it depends on the server's timezone
         # which may not match user expectations
-        return self.calURL('yearly', date.today())
+        return self.calURL('yearly', getUtility(IDateManager).today)
 
     def next(self):
         """Return the link for the next year."""
@@ -1279,7 +1275,7 @@ class DailyCalendarView(CalendarViewBase):
         """Return the link for today."""
         # XXX shouldn't use date.today; it depends on the server's timezone
         # which may not match user expectations
-        return self.calURL('daily', date.today())
+        return self.calURL('daily', getUtility(IDateManager).today)
 
     def next(self):
         """Return the link for the previous day."""
@@ -2159,7 +2155,7 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
         if "field.start_date" not in request:
             # XXX shouldn't use date.today; it depends on the server's timezone
             # which may not match user expectations
-            today = date.today().strftime("%Y-%m-%d")
+            today = getUtility(IDateManager).today.strftime("%Y-%m-%d")
             request.form["field.start_date"] = today
         super(AddView, self).__init__(context, request)
         self.setUpEditorWidget(self.description_widget)
