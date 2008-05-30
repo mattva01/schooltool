@@ -28,7 +28,6 @@ from cStringIO import StringIO
 from zope.component import subscribers
 from zope.publisher.browser import BrowserView
 from zope.i18n import translate
-from zope.security.proxy import removeSecurityProxy
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.browser import ViewPreferences, same
 from schooltool.app.browser.interfaces import ICalendarProvider

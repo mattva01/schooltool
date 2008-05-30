@@ -25,14 +25,11 @@ $Id$
 from zope.interface import Interface
 from zope.interface import implements
 from zope.schema import Object
-from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.viewlet.interfaces import IViewletManager
-from zope.publisher.browser import applySkin
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.app.browser.interfaces import IEventForDisplay
 from schooltool.skin.skin import OrderedViewletManager
-from schooltool.skin.skin import ISchoolToolSkin
 from schooltool.resource.interfaces import IBookingCalendarEvent
 
 

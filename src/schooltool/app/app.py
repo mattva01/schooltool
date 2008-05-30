@@ -33,8 +33,6 @@ from zope.component import adapts
 from zope.i18n import translate
 from zope.interface import implementer
 from zope.interface import implements
-from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
-from zope.schema.interfaces import IVocabularyFactory
 
 from zope.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 from zope.app.applicationcontrol.interfaces import IApplicationControl
@@ -51,11 +49,10 @@ from schooltool.app.interfaces import IPluginInit
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import IShowTimetables
-from schooltool.app.interfaces import ApplicationInitializationEvent
 from schooltool.app import relationships
 from schooltool.app.interfaces import IAsset
-from schooltool.app.interfaces import ISchoolToolInitializationUtility
 from schooltool.relationship.relationship import RelationshipProperty
+from schooltool.common import getRequestFromInteraction
 from schooltool.common import SchoolToolMessage as _
 
 
@@ -199,8 +196,6 @@ class ApplicationPreferences(Persistent):
     implements(IApplicationPreferences)
 
     def getTitle(self):
-        # XXX avoid circular imports
-        from schooltool.attendance.attendance import getRequestFromInteraction
         request = getRequestFromInteraction()
         return (self.__dict__.get('title', None) or
                 translate(_('Your School'), context=request))

@@ -47,7 +47,6 @@ from zope.traversing.api import getPath
 from schooltool.app.cal import CalendarEvent
 from schooltool.calendar.simple import ImmutableCalendar
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolCalendar
 
 from schooltool.timetable.interfaces import IWeekdayBasedTimetableModel

@@ -33,7 +33,6 @@ from schooltool.skin.containers import TableContainerView
 from schooltool.app.browser.app import BaseAddView, BaseEditView
 from schooltool.person.interfaces import IPerson
 from schooltool.course.interfaces import ISection
-from schooltool.resource.interfaces import IResource
 from schooltool.table.interfaces import ITableFormatter
 
 from schooltool.group.interfaces import IGroupMember

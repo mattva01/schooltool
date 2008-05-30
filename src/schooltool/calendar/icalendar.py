@@ -77,7 +77,6 @@ from cStringIO import StringIO
 from sets import Set
 
 from schooltool.calendar.simple import SimpleCalendarEvent
-from schooltool.calendar.vcal_dict import timezone_map
 
 
 EMPTY_CALENDAR_PLACEHOLDER = 'empty-calendar-placeholder@schooltool.org'

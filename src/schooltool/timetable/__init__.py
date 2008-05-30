@@ -470,13 +470,6 @@ class SchooldaySlot(object):
         return hash((self.tstart, self.duration))
 
 
-# BBB for ZODB
-# The hash function was changed, but an exmeriment showed that we're
-# alright, the identical slots will be collapsed in the
-# SchooldayTemplate.events set.
-SchooldayPeriod = SchooldaySlot
-
-
 class SchooldayTemplate(object):
 
     # TODO: ideally, schoolday template should be an object that takes
@@ -694,18 +687,3 @@ def registerTestSetup():
 
 registerTestSetup()
 del registerTestSetup
-
-##############################################################################
-# BBB: Make sure the old data object references are still there.
-from zope.deferredimport.deferredmodule import deprecated
-
-deprecated('This class has moved to schooltool.term.term. '
-           'The reference will be gone in 0.15',
-           TermContainer='schooltool.term.term:TermContainer',
-           Term='schooltool.term.term:Term')
-
-deprecated('This class has moved to schooltool.timetable.schema. '
-           'The reference will be gone in 0.15',
-           TimetableSchemaContainer='schooltool.timetable.schema:TimetableSchemaContainer',
-           TimetableSchema='schooltool.timetable.schema:TimetableSchema',
-           TimetableSchemaDay='schooltool.timetable.schema:TimetableSchemaDay')
