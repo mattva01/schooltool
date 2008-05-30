@@ -29,22 +29,17 @@ from zope.component import adapts
 from zope.component import getUtility
 from zope.exceptions.interfaces import UserError
 from z3c.form import form, field, button, validator
-from zope.formlib import form as formlibform
 from zope.interface import implements
 from zope.publisher.browser import BrowserView
 from zope.schema import Password
 from zope.schema import TextLine
 from zope.schema.interfaces import ITitledTokenizedTerm
-from zope.app.form.interfaces import WidgetInputError
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from z3c.form.validator import SimpleFieldValidator
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPersonFactory
-from schooltool.skin.form import BasicForm
-from schooltool.skin.form import EditForm
-from schooltool.widget.password import PasswordConfirmationWidget
 
 from schooltool.basicperson.interfaces import IBasicPerson, IStudent
 from schooltool.common import SchoolToolMessage as _
