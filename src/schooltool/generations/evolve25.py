@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2006 Shuttleworth Foundation
+# Copyright (c) 2008 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,37 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Upgrade SchoolTool to generation 21.
-
-Create workheet for section activities and move existing activities
-into that worksheet.
-
-$Id: evolve21.py 6527 2006-12-28 12:25:35Z ignas $
+Stub of the evolution script for generation 2.
 """
 
-import zope.event
-from zope.annotation.interfaces import IAnnotations
-from zope.app.container.interfaces import INameChooser
-from zope.app.publication.zopepublication import ZopePublication
-from zope.app.generations.utility import findObjectsProviding
-
-from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.gradebook.activity import Worksheet
-
-def evolve(context):
-    root = context.connection.root()[ZopePublication.root_name]
-    for app in findObjectsProviding(root, ISchoolToolApplication):
-        for section in app['sections'].values():
-            annotations = IAnnotations(section)
-            activities = annotations.get('schooltool.gradebook.activities')
-            if activities:
-                worksheet = Worksheet('Worksheet1')
-                for key, activity in list(activities.items()):
-                    activity.__parent__ = None
-                    worksheet[key] = activity
-                    activity.__parent__ = worksheet
-                    del activities[key]
-                nameChooser = INameChooser(activities)
-                name = nameChooser.chooseName('', worksheet)
-                activities[name] = worksheet
-
+from schooltool.generations.evolve1 import evolve

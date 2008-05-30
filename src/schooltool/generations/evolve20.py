@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2006 Shuttleworth Foundation
+# Copyright (c) 2008 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,35 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Upgrade SchoolTool to generation 20.
-
-Remove local IPersonFactory utility.
-
-$Id$
+Stub of the evolution script for generation 2.
 """
 
-from zope.app.publication.zopepublication import ZopePublication
-from zope.app.generations.utility import findObjectsProviding
-from zope.app.component.hooks import setSite
-from zope.component import queryUtility
-from zope.app.container.interfaces import IContained
-from zope.traversing.api import traverse
-
-from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.person.interfaces import IPersonFactory
-
-
-def evolve(context):
-    root = context.connection.root()[ZopePublication.root_name]
-    for app in findObjectsProviding(root, ISchoolToolApplication):
-        setSite(app)
-        manager = app.getSiteManager()
-        default = traverse(app, '++etc++site/default')
-        local_utility = queryUtility(IPersonFactory, default=None)
-        if (local_utility is not None and
-            IContained.providedBy(local_utility) and
-            local_utility.__parent__ is default):
-            name = local_utility.__name__
-            manager.unregisterUtility(local_utility, IPersonFactory)
-            del default[name]
-        setSite(None)
+from schooltool.generations.evolve1 import evolve

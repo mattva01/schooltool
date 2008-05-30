@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2006 Shuttleworth Foundation
+# Copyright (c) 2008 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,32 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Upgrade SchoolTool to generation 21.
-
-Remove local IPersonFactory utility.
-
-$Id$
+Stub of the evolution script for generation 2.
 """
 
-import zope.event
-from zope.app.publication.zopepublication import ZopePublication
-from zope.app.generations.utility import findObjectsProviding
-
-from schooltool.app.interfaces import ISchoolToolApplication
-
-
-def evolve(context):
-    root = context.connection.root()[ZopePublication.root_name]
-    for app in findObjectsProviding(root, ISchoolToolApplication):
-        for section in app['sections'].values():
-            from zope.annotation.interfaces import IAnnotations
-            annotations = IAnnotations(section)
-            timetables = annotations.get('schooltool.timetable.timetables')
-            if timetables:
-                for key, timetable in timetables.items():
-                    from schooltool.timetable import TimetableReplacedEvent
-                    event = TimetableReplacedEvent(section,
-                                                   key,
-                                                   old_timetable=None,
-                                                   new_timetable=timetable)
-                    zope.event.notify(event)
+from schooltool.generations.evolve1 import evolve

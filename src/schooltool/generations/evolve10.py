@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2006 Shuttleworth Foundation
+# Copyright (c) 2008 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,34 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Upgrade SchoolTool to generation 10.
-
-Put a timezone attribute on all timetables and school timetables.
-Take the timezone out of the schoolwide setting.
-
-$Id$
+Stub of the evolution script for generation 2.
 """
 
-from zope.app.publication.zopepublication import ZopePublication
-from zope.app.generations.utility import findObjectsProviding
-
-from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.interfaces import IApplicationPreferences
-from schooltool.timetable.interfaces import IHaveTimetables
-from schooltool.timetable import TimetablesAdapter
-
-
-def evolve(context):
-    root = context.connection.root()[ZopePublication.root_name]
-    for app in findObjectsProviding(root, ISchoolToolApplication):
-        tz = IApplicationPreferences(app).timezone
-
-        for tts in app['ttschemas'].values():
-            tts.timezone = tz
-
-        for tt in TimetablesAdapter(app).timetables.values():
-            tt.timezone = tz
-
-        for obj in findObjectsProviding(root, IHaveTimetables):
-            for tt in TimetablesAdapter(obj).timetables.values():
-                tt.timezone = tz
+from schooltool.generations.evolve1 import evolve

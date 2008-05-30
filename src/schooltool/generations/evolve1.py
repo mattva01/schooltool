@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2008 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,35 +17,10 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Upgrade SchoolTool to generation 1.
-
-The first incompatible change from generation 0 was introduced in rev 4128.
-
-$Id$
+Stub of the evolution script for generation 1.
 """
 
-from zope.app.publication.zopepublication import ZopePublication
-from zope.app.generations.utility import findObjectsProviding
-from persistent.dict import PersistentDict
-from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.timetable.interfaces import ITimetableModel
-
-
 def evolve(context):
-    root = context.connection.root().get(ZopePublication.root_name, None)
-    for app in findObjectsProviding(root, ISchoolToolApplication):
-        for schema in app['ttschemas'].values():
-            if ITimetableModel.providedBy(schema.model):
-                if not hasattr(schema.model, 'exceptionDays'):
-                    schema.model.exceptionDays = PersistentDict()
-                if not hasattr(schema.model, 'exceptionDayIds'):
-                    schema.model.exceptionDayIds = PersistentDict()
-        for object in (list(app['persons'].values()) +
-                       list(app['groups'].values()) +
-                       list(app['resources'].values())):
-            for timetable in object.timetables.values():
-                if ITimetableModel.providedBy(timetable.model):
-                    if not hasattr(timetable.model, 'exceptionDays'):
-                        timetable.model.exceptionDays = PersistentDict()
-                    if not hasattr(timetable.model, 'exceptionDayIds'):
-                        timetable.model.exceptionDayIds = PersistentDict()
+    raise NotImplementedError("Evolving from versions prior to 2008.04 is not"
+                              " supported! Please upgrade to SchoolTool"
+                              " version 2008.04 first.")
