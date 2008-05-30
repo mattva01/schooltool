@@ -470,12 +470,6 @@ def doctest_setup():
         >>> logger2.handlers
         [<logging.StreamHandler instance at 0x...>]
 
-    As well as an attendance logger:
-
-        >>> logger3 = logging.getLogger('attendance')
-        >>> logger3.handlers
-        [<logging.StreamHandler instance at 0x...>]
-
     The language adapter shouldn't have been installed:
 
         >>> from zope.i18n.interfaces import IUserPreferredLanguages
@@ -492,12 +486,12 @@ def doctest_setup():
     We better clean up logging before we leave:
 
         >>> logging.getLogger('ZODB.lock_file').disabled = False
-        >>> for logger in [logger1, logger2, logger3]:
+        >>> for logger in [logger1, logger2]:
         ...     del logger.handlers[:]
         ...     logger.propagate = True
         ...     logger.disabled = False
 
-        >>> for logger in [logger1, logger3]:
+        >>> for logger in [logger1]:
         ...     logger.setLevel(0)
 
         >>> cleanup.tearDown()
