@@ -25,6 +25,7 @@ from zope.interface import implements
 from zope.session.interfaces import ISession
 from zope.location.location import locate
 
+from schooltool.common import getRequestFromInteraction
 from schooltool.calendar.simple import ImmutableCalendar
 from schooltool.resource.interfaces import IBookingCalendar
 from schooltool.calendar.simple import SimpleCalendarEvent
@@ -34,7 +35,6 @@ from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPerson
 from schooltool.timetable import TimetableActivity
-from schooltool.attendance.attendance import getRequestFromInteraction
 from schooltool.traverser.traverser import NameTraverserPlugin
 
 

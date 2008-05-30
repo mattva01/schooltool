@@ -56,6 +56,7 @@ from schooltool.app import relationships
 from schooltool.app.interfaces import IAsset
 from schooltool.app.interfaces import ISchoolToolInitializationUtility
 from schooltool.relationship.relationship import RelationshipProperty
+from schooltool.common import getRequestFromInteraction
 from schooltool.common import SchoolToolMessage as _
 
 
@@ -199,8 +200,6 @@ class ApplicationPreferences(Persistent):
     implements(IApplicationPreferences)
 
     def getTitle(self):
-        # XXX avoid circular imports
-        from schooltool.attendance.attendance import getRequestFromInteraction
         request = getRequestFromInteraction()
         return (self.__dict__.get('title', None) or
                 translate(_('Your School'), context=request))
