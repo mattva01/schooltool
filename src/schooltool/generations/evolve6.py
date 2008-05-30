@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2008 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,23 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Upgrade SchoolTool to generation 6.
-
-Cleanup for http://issues.schooltool.org/issue369: remove stale
-calendar subscription relationships.
-
-$Id$
+Stub of the evolution script for generation 2.
 """
 
-from zope.app.publication.zopepublication import ZopePublication
-from zope.app.generations.utility import findObjectsProviding
-
-from schooltool.person.interfaces import IPerson
-
-
-def evolve(context):
-    root = context.connection.root()[ZopePublication.root_name]
-    for person in findObjectsProviding(root, IPerson):
-        for calendar_info in list(person.overlaid_calendars):
-            if calendar_info.calendar.__parent__.__parent__ is None:
-                person.overlaid_calendars.remove(calendar_info.calendar)
+from schooltool.generations.evolve1 import evolve

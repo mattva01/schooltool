@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2006 Shuttleworth Foundation
+# Copyright (c) 2008 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,40 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Upgrade SchoolTool to generation 23.
-
-Install catalog for persons and reindex them.
-
-$Id$
+Stub of the evolution script for generation 2.
 """
-from zope.app.generations.utility import findObjectsProviding
-from zope.app.publication.zopepublication import ZopePublication
-from zope.app.catalog.interfaces import ICatalog
-from zope.app.catalog.catalog import Catalog
-from zope.app.component.hooks import setSite
-from zope.app.intid import addIntIdSubscriber
 
-from zc.catalog.catalogindex import ValueIndex
-
-from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.utility.utility import setUpUtilities
-from schooltool.utility.utility import UtilitySpecification
-from schooltool.person.interfaces import IPerson
-
-
-def catalogSetUp(catalog):
-    catalog['__name__'] = ValueIndex('__name__', IPerson)
-    catalog['title'] = ValueIndex('title', IPerson)
-
-
-def evolve(context):
-    root = context.connection.root()[ZopePublication.root_name]
-    for app in findObjectsProviding(root, ISchoolToolApplication):
-        # install the utilities
-        setSite(app)
-        setUpUtilities(app, [UtilitySpecification(Catalog, ICatalog,
-                                                  'schooltool.person',
-                                                  setUp=catalogSetUp)])
-        # catalog all persons
-        for person in app['persons'].values():
-            addIntIdSubscriber(person, None)
+from schooltool.generations.evolve1 import evolve

@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2008 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,40 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Upgrade SchoolTool to generation 3.
-
-evolve2.py creates a site calendar, but the default permissions prevent
-unknown visitors from seeing it.
-
-$Id$
+Stub of the evolution script for generation 2.
 """
 
-from zope.app.generations.utility import findObjectsProviding
-from zope.app.publication.zopepublication import ZopePublication
-from zope.app.security.interfaces import IUnauthenticatedGroup
-from zope.securitypolicy.interfaces import IPrincipalPermissionManager
-from zope.component import queryUtility
-from schooltool.app.interfaces import ISchoolToolApplication
-
-def evolve(context):
-    """Set the site security policy to the SchoolTool 0.11 defaults.
-
-    See schooltool.app.applicationCalendarPermissionsSubscriber for details.
-    """
-    root = context.connection.root().get(ZopePublication.root_name, None)
-    for app in findObjectsProviding(root, ISchoolToolApplication):
-        unauthenticated = queryUtility(IUnauthenticatedGroup)
-
-        app_perms = IPrincipalPermissionManager(app)
-        app_perms.grantPermissionToPrincipal(
-            'schooltool.view', unauthenticated.id)
-        app_perms.grantPermissionToPrincipal(
-            'schooltool.viewCalendar', unauthenticated.id)
-
-        containers = ['persons', 'groups', 'resources', 'sections', 'courses']
-        for container in containers:
-            container_perms = IPrincipalPermissionManager(app[container])
-            container_perms.denyPermissionToPrincipal(
-                    'schooltool.view', unauthenticated.id)
-            container_perms.denyPermissionToPrincipal(
-                    'schooltool.viewCalendar', unauthenticated.id)
+from schooltool.generations.evolve1 import evolve

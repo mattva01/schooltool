@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2008 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,28 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Upgrade SchoolTool to generation 4.
-
-This generation ensures that all schooltool applications have a levels folder
-and a manager group.
-
-$Id$
+Stub of the evolution script for generation 2.
 """
 
-from zope.app.publication.zopepublication import ZopePublication
-from zope.app.generations.utility import findObjectsProviding
-from schooltool.app.interfaces import ISchoolToolApplication
-
-import schooltool.app
-import schooltool.level.level
-
-def evolve(context):
-    root = context.connection.root().get(ZopePublication.root_name, None)
-    for app in findObjectsProviding(root, ISchoolToolApplication):
-        if 'levels' not in app:
-            app['levels'] = schooltool.level.level.LevelContainer()
-
-        if 'manager' not in app['groups']:
-            app['groups']['manager'] = schooltool.app.Group(
-                u'Manager', u'Manager Group.')
-
+from schooltool.generations.evolve1 import evolve
