@@ -24,8 +24,6 @@ $Id$
 from zope.security.proxy import removeSecurityProxy
 from zope.app.component.hooks import getSite
 from zope.app.form.browser.add import AddView
-from zope.app.form.interfaces import WidgetsError
-from zope.app.form.utility import getWidgetsData
 from zope.publisher.browser import BrowserView
 from zope.component import getMultiAdapter
 from zope.app.container.interfaces import INameChooser

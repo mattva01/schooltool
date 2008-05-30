@@ -21,13 +21,11 @@ Timetable source adapters
 
 $Id$
 """
-from sets import Set
 from zope.interface import implements
 from zope.component import adapts, subscribers
 
 from schooltool.timetable.interfaces import IHaveTimetables
-from schooltool.timetable.interfaces import ICompositeTimetables
-from schooltool.timetable.interfaces import ITimetableSource, ITimetables
+from schooltool.timetable.interfaces import ITimetableSource
 from schooltool.relationship import getRelatedObjects
 from schooltool.app.membership import URIGroup
 from schooltool.app.relationships import URISection

@@ -24,7 +24,6 @@ $Id$
 from zope.component import getUtility
 
 from schooltool.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView
-from schooltool.person.person import Person
 from schooltool.person.interfaces import IPersonFactory
 
 from schooltool.common import SchoolToolMessage as _

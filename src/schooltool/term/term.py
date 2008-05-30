@@ -35,7 +35,6 @@ from schooltool.app.app import getSchoolToolApplication
 from schooltool.common import DateRange
 
 from schooltool.term import interfaces
-from schooltool.timetable import findRelatedTimetables
 
 
 class Term(DateRange, contained.Contained, persistent.Persistent):
