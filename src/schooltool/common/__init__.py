@@ -25,6 +25,8 @@ import locale
 import datetime
 import urllib
 
+from zope.publisher.interfaces import IApplicationRequest
+from zope.security.management import queryInteraction
 from zope.schema import Date
 from zope.interface import Interface, implements
 
@@ -543,6 +545,21 @@ def get_version():
     _version = result
     f.close()
     return result
+
+
+def getRequestFromInteraction(request_type=IApplicationRequest):
+    """Extract the browser request from the current interaction.
+
+    Returns None when there is no interaction, or when the interaction has no
+    participations that provide request_type.
+    """
+    interaction = queryInteraction()
+    if interaction is not None:
+        for participation in interaction.participations:
+            if request_type.providedBy(participation):
+                return participation
+    return None
+
 
 from zope.i18nmessageid import MessageFactory
 SchoolToolMessage = MessageFactory("schooltool")

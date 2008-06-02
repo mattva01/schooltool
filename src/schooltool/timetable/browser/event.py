@@ -23,9 +23,6 @@ $Id$
 """
 
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
-from zope.component import queryMultiAdapter
-from zope.interface import Interface
-from zope.schema import Text
 from zope.formlib import form
 from zope.html.field import HtmlFragment
 from zope.traversing.browser.absoluteurl import absoluteURL
@@ -34,10 +31,7 @@ from schooltool.skin.containers import TableContainerView
 from schooltool.app.browser.cal import CalendarEventView
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common import SchoolToolMessage as _
-from schooltool.timetable.interfaces import ITimetableDict, ITimetable
-from schooltool.table.interfaces import ITableFormatter
-from schooltool.table.table import DependableCheckboxColumn
-from schooltool.table.table import url_cell_formatter
+from schooltool.timetable.interfaces import ITimetableDict
 
 class TimetableContainerView(TableContainerView):
     """Timetable Container View."""

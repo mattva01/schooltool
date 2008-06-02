@@ -41,24 +41,6 @@ def person_calendar_edit(browser, subject):
     return 'Calendar for' in browser.contents
 
 
-def section_attendance_view(browser, section):
-    browser.open('http://localhost/sections/%s/attendance/2005-09-12/09:30-10:25' % section)
-    return 'Section attendance' in browser.contents
-
-def section_attendance_edit(browser, section):
-    section_attendance_view(browser, section)
-    browser.getControl('Submit').click()
-    return 'Section attendance' in browser.contents
-
-
-def person_attendance_view(browser, subject):
-    browser.open('http://localhost/persons/%s/@@attendance.html' % subject)
-    return 'Attendance of' in browser.contents
-
-def person_attendance_edit(browser, subject):
-    return False
-
-
 def calendar_overlays_edit(browser, subject):
     browser.open('http://localhost/persons/%s/calendar' % subject)
     browser.getControl('Apply').click()
@@ -346,12 +328,6 @@ def raw_column(browser, subject, section):
               'person calendar': (
               do_test(person_calendar_view, browser, subject),
               do_test(person_calendar_edit, browser, subject)),
-              'section attendance': (
-              do_test(section_attendance_view, browser, section),
-              do_test(section_attendance_edit, browser, section)),
-              'person attendance': (
-              do_test(person_attendance_view, browser, subject),
-              do_test(person_attendance_edit, browser, subject)),
               'overlay calendar': (
               None,
               do_test(calendar_overlays_edit, browser, subject)),

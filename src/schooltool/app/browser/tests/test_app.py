@@ -24,7 +24,6 @@ $Id$
 import unittest
 from pprint import pprint
 
-from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass

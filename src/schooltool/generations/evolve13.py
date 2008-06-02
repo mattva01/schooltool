@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2006 Shuttleworth Foundation
+# Copyright (c) 2008 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,12 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Upgrade SchoolTool to generation 13.
-
-$Id: evolve13.py 5946 2006-04-18 15:47:33Z ignas $
+Stub of the evolution script for generation 2.
 """
 
-def evolve(context):
-    # don't do anything anymore, but leave it in here since people may
-    # already have evolved to it
-    pass
+from schooltool.generations.evolve1 import evolve

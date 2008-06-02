@@ -27,12 +27,13 @@ from zope.interface import Interface, implements
 from zope.schema import TextLine, Int
 from zope.schema.interfaces import RequiredMissing
 from zope.app.container.interfaces import INameChooser
+from zope.app.form.interfaces import IWidgetInputError
 from zope.app.form.interfaces import IInputWidget
+from zope.app.form.interfaces import WidgetInputError
 from zope.app.form.interfaces import WidgetsError
 from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserView
-from zope.traversing.api import getParent, getName
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.traversing.browser.absoluteurl import absoluteURL

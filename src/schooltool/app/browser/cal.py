@@ -99,7 +99,6 @@ from schooltool.person.interfaces import vocabulary
 from schooltool.term.interfaces import IDateManager
 from schooltool.term.term import getTermForDate
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.attendance.interfaces import IAttendanceCalendarEvent
 from schooltool.securitypolicy.crowds import Crowd
 from schooltool.securitypolicy.interfaces import ICrowd
 from schooltool.app.browser.interfaces import ICalendarMenuViewlet
@@ -303,8 +302,6 @@ class EventForDisplay(object):
 
     @property
     def title(self):
-        if IAttendanceCalendarEvent.providedBy(self.context):
-            return translate(self.context.title, context=self.request)
         return self.context.title
 
     def getBooker(self):

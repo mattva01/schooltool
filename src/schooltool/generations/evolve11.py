@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2006 Shuttleworth Foundation
+# Copyright (c) 2008 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,21 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Upgrade SchoolTool to generation 11.
-
-Introduce new permission schooltool.viewAttendance and roles for groups
-(teachers, administrators, etc).
-
-$Id$
+Stub of the evolution script for generation 2.
 """
 
-from zope.app.publication.zopepublication import ZopePublication
-from zope.app.generations.utility import findObjectsProviding
-
-from schooltool.app.interfaces import ISchoolToolApplication
-
-
-def evolve(context):
-    # this used to evolve role and permission settings but this has
-    # become obsolete after the new security policy was put into place
-    return
+from schooltool.generations.evolve1 import evolve

@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2006 Shuttleworth Foundation
+# Copyright (c) 2008 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,30 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Upgrade SchoolTool to generation 19.
-
-Install catalog and reindex persons.
-
-$Id$
+Stub of the evolution script for generation 2.
 """
 
-import base64
-
-from zope.app.generations.utility import findObjectsProviding
-from zope.app.publication.zopepublication import ZopePublication
-
-from schooltool.app.interfaces import IHaveCalendar
-
-def evolve(context):
-    root = context.connection.root()[ZopePublication.root_name]
-    for obj in findObjectsProviding(root, IHaveCalendar):
-        if not hasattr(obj, '__annotations__'):
-            continue
-        calendar = obj.__annotations__.get('schooltool.app.calendar.Calendar',
-                                           None)
-
-        if not calendar:
-            continue
-
-        for event in calendar:
-            event.__name__ = base64.encodestring(event.unique_id.encode('utf-8')).replace('\n', '')
+from schooltool.generations.evolve1 import evolve
