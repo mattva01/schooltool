@@ -66,14 +66,38 @@ class ActivityStub(object):
 
 class TestTimetable(unittest.TestCase):
 
+    def setUp(self):
+        setup.placelessSetUp()
+
+        app = {}
+        app['terms'] = {'term1': "Term 1"}
+        app['ttschemas'] = {'stt1': "STT 1"}
+
+        from zope.component import provideAdapter
+        from schooltool.app.interfaces import ISchoolToolApplication
+        provideAdapter(lambda ctx: app,
+                       adapts=[None],
+                       provides=ISchoolToolApplication)
+
+    def tearDown(self):
+        setup.placelessTearDown()
+
     def test_interface(self):
         from schooltool.timetable import Timetable
         from schooltool.timetable.interfaces import ITimetable, ITimetableWrite
 
         t = Timetable(('1', '2'))
+        t.__name__ = "term1.stt1"
         verifyObject(ITimetable, t)
         verifyObject(ITimetableWrite, t)
         verifyObject(ILocation, t)
+
+    def test_term_and_schooltt(self):
+        from schooltool.timetable import Timetable
+        t = Timetable(('1', '2'))
+        t.__name__ = "term1.stt1"
+        self.assertEqual(t.term, "Term 1")
+        self.assertEqual(t.schooltt, "STT 1")
 
     def test_keys(self):
         from schooltool.timetable import Timetable

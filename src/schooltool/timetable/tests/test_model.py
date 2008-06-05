@@ -38,7 +38,6 @@ from zope.interface import implements
 
 from schooltool.testing.util import NiceDiffsMixin
 from schooltool.testing.util import diff
-from schooltool.testing.util import fakePath
 from schooltool.timetable.tests.test_timetable import TermStub
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences

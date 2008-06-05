@@ -34,6 +34,7 @@ from zope.app.container.constraints import contains, containers
 from zope.app.container.interfaces import IContainer, IContained
 from zope.location.interfaces import ILocation
 
+from schooltool.term.interfaces import ITerm
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
 from schooltool.calendar.interfaces import Unchanged
 
@@ -421,6 +422,14 @@ class ITimetable(ILocation):
         schema=ITimetableModel)
 
     timezone = TextLine(title=u"The name of a timezone of this timetable")
+
+    term = Object(
+        title=u"The term this timetable is for.",
+        schema=ITerm)
+
+    schooltt = Object(
+        title=u"The school timetable this timetable is for.",
+        schema=ITimetableSchema)
 
     def keys():
         """Return a sequence of identifiers for days within the timetable.
