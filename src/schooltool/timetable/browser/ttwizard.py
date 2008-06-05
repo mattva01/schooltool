@@ -137,15 +137,15 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from schooltool.app.browser.cal import day_of_week_names
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
+from schooltool.timetable.model import SequentialDayIdBasedTimetableModel
+from schooltool.timetable.model import SequentialDaysTimetableModel
+from schooltool.timetable.model import WeeklyTimetableModel
 from schooltool.timetable.browser import parse_time_range
 from schooltool.timetable.browser import format_time_range
 from schooltool.common import SchoolToolMessage as _
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.schema import TimetableSchema, TimetableSchemaDay
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot
-from schooltool.timetable import WeeklyTimetableModel
-from schooltool.timetable import SequentialDaysTimetableModel
-from schooltool.timetable import SequentialDayIdBasedTimetableModel
 
 
 def getSessionData(view):

@@ -25,7 +25,7 @@ $Id$
 import datetime
 
 from zope.interface import Interface, Attribute, implements
-from zope.schema import Field, Object, Int, TextLine, List, Set, Tuple
+from zope.schema import Field, Object, Int, TextLine, List, Tuple
 from zope.schema import Dict, Date, Timedelta
 from zope.schema import Iterable
 from zope.schema.interfaces import IField

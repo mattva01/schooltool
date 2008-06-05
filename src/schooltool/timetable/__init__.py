@@ -165,13 +165,6 @@ from schooltool.term.interfaces import ITerm
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.app import InitBase
 
-# Imports for ZODB compatibility
-from schooltool.timetable.model import WeeklyTimetableModel
-from schooltool.timetable.model import SequentialDaysTimetableModel
-from schooltool.timetable.model import SequentialDayIdBasedTimetableModel
-from schooltool.timetable.model import TimetableCalendarEvent
-
-
 ##############################################################################
 
 #

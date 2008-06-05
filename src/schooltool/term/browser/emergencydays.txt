@@ -34,7 +34,7 @@ We have a timetable schema to put the view on:
 
 The schemas have a model attribute:
 
-    >>> from schooltool.timetable import SequentialDaysTimetableModel
+    >>> from schooltool.timetable.model import SequentialDaysTimetableModel
     >>> default = createDayTemplate([(9, 0, 45),
     ...                              (10, 0, 45),
     ...                              (11, 0, 45),

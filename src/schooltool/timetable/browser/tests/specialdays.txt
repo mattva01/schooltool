@@ -27,7 +27,7 @@ The schema has a model attribute:
 
     >>> from schooltool.timetable.browser.tests.test_timetable import \
     ...      createDayTemplate
-    >>> from schooltool.timetable import SequentialDaysTimetableModel
+    >>> from schooltool.timetable.model import SequentialDaysTimetableModel
     >>> default = createDayTemplate([(9, 0, 45),
     ...                              (10, 0, 45),
     ...                              (11, 0, 45),

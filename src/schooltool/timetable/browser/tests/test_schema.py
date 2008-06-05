@@ -38,8 +38,8 @@ from schooltool.app.app import SimpleNameChooser
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.testing import setup as sbsetup
 from schooltool.testing.util import NiceDiffsMixin
-from schooltool.timetable import SequentialDaysTimetableModel
-from schooltool.timetable import WeeklyTimetableModel
+from schooltool.timetable.model import WeeklyTimetableModel
+from schooltool.timetable.model import SequentialDaysTimetableModel
 from schooltool.timetable.interfaces import ITimetableModelFactory
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.browser.tests.test_timetable import setUp, tearDown
@@ -461,7 +461,7 @@ def doctest_TimetableSchemaView():
 def doctest_SimpleTimetableSchemaAdd():
     r"""Doctest for the SimpleTimetableSchemaAdd view
 
-        >>> from schooltool.timetable import WeeklyTimetableModel
+        >>> from schooltool.timetable.model import WeeklyTimetableModel
         >>> from schooltool.timetable.interfaces import ITimetableModelFactory
         >>> ztapi.provideUtility(ITimetableModelFactory,
         ...                      WeeklyTimetableModel,
@@ -720,7 +720,7 @@ def doctest_SimpleTimetableSchemaAdd():
 def doctest_SimpleTimetableSchemaAdd_errors():
     r"""Doctest for the SimpleTimetableSchemaAdd view
 
-        >>> from schooltool.timetable import WeeklyTimetableModel
+        >>> from schooltool.timetable.model import WeeklyTimetableModel
         >>> from schooltool.timetable.interfaces import ITimetableModelFactory
         >>> ztapi.provideUtility(ITimetableModelFactory,
         ...                      WeeklyTimetableModel,

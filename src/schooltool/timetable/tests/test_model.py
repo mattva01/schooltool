@@ -199,7 +199,7 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
         occurs at 10:30-12:00.
         """
         from schooltool.timetable import SchooldayTemplate, SchooldaySlot
-        from schooltool.timetable import SequentialDaysTimetableModel
+        from schooltool.timetable.model import SequentialDaysTimetableModel
 
         t, td = time, timedelta
         template1 = SchooldayTemplate()
@@ -215,15 +215,15 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
         return model
 
     def test_interface(self):
-        from schooltool.timetable import SequentialDaysTimetableModel
+        from schooltool.timetable.model import SequentialDaysTimetableModel
         from schooltool.timetable.interfaces import IWeekdayBasedTimetableModel
 
         model = SequentialDaysTimetableModel(("A","B"), {None: 3})
         verifyObject(IWeekdayBasedTimetableModel, model)
 
     def test_eq(self):
-        from schooltool.timetable import SequentialDaysTimetableModel
-        from schooltool.timetable import WeeklyTimetableModel
+        from schooltool.timetable.model import SequentialDaysTimetableModel
+        from schooltool.timetable.model import WeeklyTimetableModel
         model = SequentialDaysTimetableModel(("A","B"), {1: 2, None: 3})
         model2 = SequentialDaysTimetableModel(("A","B"), {1: 2, None: 3})
         model3 = WeeklyTimetableModel(("A","B"), {1: 2, None: 3})
@@ -313,7 +313,7 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
                          diff(pformat(expected), pformat(result)))
 
     def test_schooldayStrategy_getDayId(self):
-        from schooltool.timetable import SequentialDaysTimetableModel
+        from schooltool.timetable.model import SequentialDaysTimetableModel
         from schooltool.term.term import Term
         from schooltool.timetable import SchooldayTemplate
 
@@ -519,7 +519,7 @@ class TestWeeklyTimetableModel(PlacelessSetup,
         ztapi.provideAdapter(None, ISchoolToolApplication, ApplicationStub())
 
     def test(self):
-        from schooltool.timetable import WeeklyTimetableModel
+        from schooltool.timetable.model import WeeklyTimetableModel
         from schooltool.timetable import SchooldayTemplate, SchooldaySlot
         from schooltool.timetable import Timetable, TimetableDay
         from schooltool.timetable import TimetableActivity
@@ -617,7 +617,7 @@ class TestWeeklyTimetableModel(PlacelessSetup,
                          diff(pformat(expected), pformat(result)))
 
     def test_not_enough_days(self):
-        from schooltool.timetable import WeeklyTimetableModel
+        from schooltool.timetable.model import WeeklyTimetableModel
         from schooltool.timetable import SchooldayTemplate, SchooldaySlot
         from schooltool.timetable import Timetable, TimetableDay
         template = SchooldayTemplate()
@@ -636,7 +636,7 @@ class TestWeeklyTimetableModel(PlacelessSetup,
         model.createCalendar(schooldays, tt)
 
     def test_schooldayStrategy(self):
-        from schooltool.timetable import WeeklyTimetableModel
+        from schooltool.timetable.model import WeeklyTimetableModel
         from schooltool.term.term import Term
         from schooltool.timetable import SchooldayTemplate
 
@@ -670,7 +670,7 @@ class TestWeeklyTimetableModel(PlacelessSetup,
 class TestTimetableCalendarEvent(unittest.TestCase):
 
     def test(self):
-        from schooltool.timetable import TimetableCalendarEvent
+        from schooltool.timetable.model import TimetableCalendarEvent
         from schooltool.timetable.interfaces import ITimetableCalendarEvent
 
         day_id = 'Day2'
@@ -690,7 +690,7 @@ class TestTimetableCalendarEvent(unittest.TestCase):
             self.assertRaises(AttributeError, setattr, ev, attr, object())
 
     def test_owner_resources(self):
-        from schooltool.timetable import TimetableCalendarEvent
+        from schooltool.timetable.model import TimetableCalendarEvent
         from schooltool.timetable.interfaces import ITimetableCalendarEvent
 
         day_id = 'Day2'

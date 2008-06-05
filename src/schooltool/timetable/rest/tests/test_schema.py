@@ -88,8 +88,8 @@ class TimetableSchemaMixin(object):
     def setUp(self):
         from schooltool.timetable.interfaces import ITimetableSchemaContainer
         from schooltool.timetable.rest.schema import TimetableSchemaFileFactory
-        from schooltool.timetable import SequentialDaysTimetableModel
-        from schooltool.timetable import SequentialDayIdBasedTimetableModel
+        from schooltool.timetable.model import SequentialDaysTimetableModel
+        from schooltool.timetable.model import SequentialDayIdBasedTimetableModel
         from schooltool.timetable.interfaces import ITimetableModelFactory
 
         self.app = sbsetup.createSchoolToolApplication()
@@ -127,7 +127,7 @@ class TimetableSchemaMixin(object):
         return schema
 
     def createExtendedSchema(self):
-        from schooltool.timetable import SequentialDaysTimetableModel
+        from schooltool.timetable.model import SequentialDaysTimetableModel
         from schooltool.timetable import SchooldaySlot, SchooldayTemplate
         from datetime import time, timedelta, date
 
@@ -259,7 +259,7 @@ class DayIdBasedModelMixin:
     def createExtendedSchema(self):
         from schooltool.timetable.schema import TimetableSchemaDay
         from schooltool.timetable.schema import TimetableSchema
-        from schooltool.timetable import SequentialDayIdBasedTimetableModel
+        from schooltool.timetable.model import SequentialDayIdBasedTimetableModel
         from schooltool.timetable import SchooldaySlot, SchooldayTemplate
         from datetime import time, timedelta, date
 

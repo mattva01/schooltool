@@ -44,7 +44,7 @@ from zope.publisher.interfaces.http import IHTTPRequest
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common import parse_datetime
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot
-from schooltool.timetable import SequentialDaysTimetableModel
+from schooltool.timetable.model import SequentialDaysTimetableModel
 from schooltool.timetable.schema import TimetableSchema
 from schooltool.term.tests import setUpDateManagerStub
 from schooltool.testing.util import NiceDiffsMixin
