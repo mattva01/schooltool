@@ -96,7 +96,6 @@ def doctest_TimetablesTraverser():
     """Tests for TimetablesTraverser.
 
         >>> from schooltool.timetable.browser import TimetablesTraverser
-        >>> from schooltool.timetable.interfaces import ITimetables
         >>> class TimetablesStub:
         ...     implements(ITimetables)
         ...     timetables = 'Timetables'
@@ -133,7 +132,6 @@ def doctest_TimetableView():
         >>> from schooltool.timetable.browser import TimetableView
         >>> from schooltool.timetable import Timetable
         >>> from schooltool.timetable import TimetableDay, TimetableActivity
-        >>> from schooltool.timetable.interfaces import ITimetables
 
         >>> from schooltool.course.section import Section as STSection
         >>> class Section(STSection):
@@ -279,7 +277,6 @@ def doctest_PersonTimetableSetupView():
         >>> ttschema = app["ttschemas"]["default"]
         >>> section_map = view.sectionMap(term, ttschema)
 
-        >>> from zope.testing.doctestunit import pprint
         >>> pprint(section_map)
         {('Mon', '10:00'): Set([]),
          ('Mon', '9:00'): Set([]),

@@ -526,7 +526,6 @@ def doctest_RotatingSlotEntryStep():
     r"""Unit test for RotatingSlotEntryStep
 
         >>> from schooltool.timetable.browser.ttwizard import RotatingSlotEntryStep
-        >>> from schooltool.timetable.browser.ttwizard import getSessionData
         >>> context = app['ttschemas']
         >>> request = TestRequest()
         >>> view = RotatingSlotEntryStep(context, request)
@@ -621,7 +620,6 @@ def doctest_WeeklySlotEntryStep():
     r"""Unit test for WeeklySlotEntryStep
 
         >>> from schooltool.timetable.browser.ttwizard import WeeklySlotEntryStep
-        >>> from schooltool.timetable.browser.ttwizard import getSessionData
         >>> context = app['ttschemas']
         >>> request = TestRequest()
         >>> view = WeeklySlotEntryStep(context, request)
@@ -1583,7 +1581,6 @@ def doctest_FinalStep_createSchema():
 
     However if we set a school preferred timezone and try again:
 
-        >>> from schooltool.app.interfaces import IApplicationPreferences
         >>> IApplicationPreferences(app).timezone = 'Australia/Canberra'
         >>> ttschema = view.createSchema()
         >>> ttschema.timezone

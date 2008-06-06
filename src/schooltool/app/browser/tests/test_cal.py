@@ -25,7 +25,6 @@ import unittest
 import calendar
 from datetime import datetime, date, timedelta, time
 from pytz import timezone, utc
-from schooltool.app.browser.cal import DailyCalendarView
 
 from zope.i18n import translate
 from zope.interface import Interface
@@ -35,7 +34,6 @@ from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.app.testing import setup, ztapi
-from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.publisher.browser import BrowserView
 from zope.traversing.interfaces import IContainmentRoot
 from zope.session.interfaces import ISession

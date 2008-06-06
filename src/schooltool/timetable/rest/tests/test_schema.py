@@ -326,7 +326,6 @@ class TestTimetableSchemaFileFactory(TimetableSchemaMixin, unittest.TestCase):
                           "foo.bar", "text/xml", self.schema_xml)
 
     def test_setUpSchemaDays_two_homerooms(self):
-        from schooltool.app.rest.errors import RestError
         two_homeroom_schema_xml = self.schema_xml.replace(
             '<period id="B">',
             '<period id="B" homeroom="">')

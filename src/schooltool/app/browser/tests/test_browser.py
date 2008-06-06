@@ -326,7 +326,6 @@ def doctest_ViewPrefences():
         >>> from schooltool.app.browser import ViewPreferences
         >>> from schooltool.person.interfaces import IPerson
         >>> from schooltool.person.interfaces import IPersonPreferences
-        >>> from schooltool.person.person import Person
         >>> import calendar
         >>> class PreferenceStub:
         ...     weekstart = calendar.MONDAY

@@ -38,7 +38,7 @@ from zope.interface import implements
 
 from schooltool.testing.util import NiceDiffsMixin
 from schooltool.testing.util import diff
-from schooltool.timetable.tests.test_timetable import TermStub
+from schooltool.term.tests.test_term import TermStub
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 
@@ -276,7 +276,7 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
 
     def test_createCalendar_exceptionDays(self):
         from schooltool.term.term import Term
-        from schooltool.timetable import SchooldayTemplate, SchooldaySlot
+        from schooltool.timetable import SchooldaySlot
 
         tt = self.createTimetable()
         model = self.createModel()
@@ -348,9 +348,7 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
 
 
     def test_periodsInDay_originalPeriodsInDay(self):
-        from schooltool.calendar.interfaces import ICalendar
         from schooltool.timetable import SchooldaySlot
-        from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 
         tt = self.createTimetable()
         model = self.createModel()
@@ -410,7 +408,6 @@ class TestSequentialDayIdBasedTimetableModel(PlacelessSetup,
 
     def test_createCalendar(self):
         from schooltool.calendar.interfaces import ICalendar
-        from schooltool.timetable import SchooldayTemplate, SchooldaySlot
         from schooltool.timetable.model import \
              SequentialDayIdBasedTimetableModel
 
@@ -690,7 +687,6 @@ class TestTimetableCalendarEvent(unittest.TestCase):
 
     def test_owner_resources(self):
         from schooltool.timetable.model import TimetableCalendarEvent
-        from schooltool.timetable.interfaces import ITimetableCalendarEvent
 
         day_id = 'Day2'
         period_id = 'Mathematics'

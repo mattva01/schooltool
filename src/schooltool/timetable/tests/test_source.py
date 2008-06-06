@@ -22,19 +22,11 @@ Unit tests for the schooltool.timetable.source module.
 $Id$
 """
 import unittest
-from sets import Set
 
-from zope.annotation.interfaces import IAttributeAnnotatable
-from zope.app.testing import setup, ztapi
+from zope.app.testing import setup
 from zope.testing import doctest
 from schooltool.timetable.tests.test_timetable import ContentStub, Parent
-from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import IOwnTimetables
-from schooltool.timetable.interfaces import IHaveTimetables
-from schooltool.timetable.interfaces import ICompositeTimetables
-from schooltool.timetable import CompositeTimetables
-from schooltool.timetable import TimetablesAdapter
-from zope.interface.verify import verifyObject
 
 
 def doctest_RelationshipTimetableSources(object):
@@ -105,7 +97,6 @@ def test_suite():
                                 optionflags=doctest.ELLIPSIS|doctest.REPORT_NDIFF|
                                             doctest.NORMALIZE_WHITESPACE|
                                             doctest.REPORT_ONLY_FIRST_FAILURE)
-    return suite
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')

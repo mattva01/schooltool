@@ -25,11 +25,8 @@ $Id$
 import unittest
 
 from zope.testing import doctest
-from zope.interface import classImplements
 from zope.publisher.browser import TestRequest
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
-from zope.annotation.interfaces import IAttributeAnnotatable
-from zope.app.testing import ztapi
 from zope.component import adapts
 from zope.interface import implements
 

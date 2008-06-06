@@ -409,7 +409,6 @@ def doctest_TimetableSchemaView():
         >>> from schooltool.timetable.browser.schema import TimetableSchemaView
         >>> from schooltool.timetable.schema import TimetableSchema
         >>> from schooltool.timetable.schema import TimetableSchemaDay
-        >>> from schooltool.timetable import TimetableActivity
 
         >>> app = sbsetup.setUpSchoolToolSite()
 
@@ -461,15 +460,9 @@ def doctest_TimetableSchemaView():
 def doctest_SimpleTimetableSchemaAdd():
     r"""Doctest for the SimpleTimetableSchemaAdd view
 
-        >>> from schooltool.timetable.model import WeeklyTimetableModel
-        >>> from schooltool.timetable.interfaces import ITimetableModelFactory
         >>> ztapi.provideUtility(ITimetableModelFactory,
         ...                      WeeklyTimetableModel,
         ...                      'WeeklyTimetableModel')
-        >>> from schooltool.timetable.interfaces import \
-        ...                           ITimetableSchemaContainer
-        >>> from schooltool.app.app import SimpleNameChooser
-        >>> from zope.app.container.interfaces import INameChooser
         >>> ztapi.provideAdapter(ITimetableSchemaContainer,
         ...                      INameChooser,
         ...                      SimpleNameChooser)
@@ -890,7 +883,6 @@ def doctest_TimetableDependentDeleteView():
 
         >>> from schooltool.timetable.schema import TimetableSchema
         >>> from schooltool.timetable.schema import TimetableSchemaDay
-        >>> from schooltool.testing.setup import createSchoolToolApplication
         >>> from schooltool.timetable.interfaces import IOwnTimetables
         >>> app = sbsetup.setUpSchoolToolSite()
         >>> directlyProvides(app, directlyProvidedBy(app) + IOwnTimetables)

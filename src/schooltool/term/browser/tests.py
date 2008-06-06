@@ -257,32 +257,6 @@ def doctest_TermAddView_add():
     '''
 
 
-def doctest_TermAddView_create():
-    '''Unit tests for TermAddView.create
-
-    `create` either returns view.term (if it has been successfully built
-    by `update` before), or raises a WidgetsError (because `_buildTerm`
-    discovered an error in the form).
-
-        >>> from schooltool.term.term import TermContainer
-        >>> from schooltool.term.browser.term import TermAddView
-        >>> context = TermContainer()
-        >>> request = TestRequest()
-        >>> view = TermAddView(context, request)
-
-        >>> view.term = object()
-        >>> view.create() is view.term
-        True
-
-        >>> view.term = None
-        >>> view.create()
-        Traceback (most recent call last):
-          ...
-        WidgetsError
-
-    '''
-
-
 def doctest_TermAddView_nextURL():
     '''Unit tests for TermAddView.nextURL
 

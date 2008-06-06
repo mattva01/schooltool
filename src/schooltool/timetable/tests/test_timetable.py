@@ -24,13 +24,12 @@ $Id$
 
 import unittest
 from sets import Set
-from datetime import time, timedelta, datetime, date
+from datetime import time, timedelta, date
 
 from persistent import Persistent
 from zope.app.testing import setup
 from zope.interface.verify import verifyObject
 from zope.interface import implements, directlyProvides
-from zope.traversing.api import getPath
 from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.app.testing import ztapi
 from zope.annotation.interfaces import IAttributeAnnotatable
@@ -38,7 +37,6 @@ from zope.location.interfaces import ILocation
 from zope.testing import doctest
 from zope.component import eventtesting
 
-from schooltool import timetable
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.timetable.interfaces import ITimetable, ITimetableActivity
@@ -49,7 +47,6 @@ from schooltool.app.membership import URIGroup, URIMember, URIMembership
 from schooltool.testing import setup as stsetup
 from schooltool.testing.util import NiceDiffsMixin
 from schooltool.testing.util import EqualsSortedMixin
-from schooltool.term.tests.test_term import TermStub
 
 class ActivityStub(object):
 
@@ -830,7 +827,6 @@ class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
 
     def setUp(self):
         from schooltool.relationship.tests import setUpRelationships
-        from schooltool.timetable.interfaces import ITimetableSource
         from schooltool.timetable import TimetablesAdapter
 
         self.site = setup.placefulSetUp(True)
@@ -961,7 +957,6 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
        ...                      TimetablesAdapter)
        >>> setup.setUpAnnotations()
 
-       >>> from schooltool.testing.setup import createSchoolToolApplication
        >>> from schooltool.timetable import findRelatedTimetables
        >>> app = stsetup.setUpSchoolToolSite()
        >>> directlyProvides(app, IOwnTimetables)
@@ -1081,7 +1076,6 @@ def doctest_findRelatedTimetables_forTerm():
        ...                      TimetablesAdapter)
        >>> setup.setUpAnnotations()
 
-       >>> from schooltool.testing.setup import createSchoolToolApplication
        >>> from schooltool.timetable import findRelatedTimetables
        >>> app = stsetup.setUpSchoolToolSite()
        >>> directlyProvides(app, IOwnTimetables)

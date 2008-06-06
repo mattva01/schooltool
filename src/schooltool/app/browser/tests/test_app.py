@@ -22,7 +22,6 @@ Tests for schooltool views.
 $Id$
 """
 import unittest
-from pprint import pprint
 
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest

@@ -99,7 +99,6 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         PlacefulSetup.setUp(self)
         self.app = sbsetup.setUpSchoolToolSite()
 
-        from schooltool.timetable.interfaces import IOwnTimetables
         from schooltool.course.section import Section
         from schooltool.resource.resource import Resource
         self.app["sections"]["history"] = self.section = Section("History")
@@ -303,7 +302,6 @@ def doctest_NullTimetablePUT():
         >>> from schooltool.timetable.interfaces import ITimetableDict
         >>> from schooltool.app.rest.interfaces import ITimetableFileFactory
         >>> from schooltool.timetable import Timetable
-        >>> from zope.publisher.interfaces.http import IHTTPRequest
         >>> class TimetableFileFactoryStub(object):
         ...     adapts(ITimetableDict)
         ...     implements(ITimetableFileFactory)
@@ -330,7 +328,6 @@ def doctest_NullTimetablePUT():
     where the new timetable is to be placed, and how it should be
     named.
 
-        >>> from StringIO import StringIO
         >>> from schooltool.timetable.rest import NullTimetablePUT
         >>> from schooltool.timetable.rest import NullTimetable
         >>> from schooltool.timetable import TimetableDict
