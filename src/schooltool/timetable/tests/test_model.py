@@ -754,6 +754,7 @@ def doctest_timetableEventHandlers():
         ...         return timetable_calendar
         >>> class TimetableStub(object):
         ...     __name__ = 'term.schema'
+        ...     term = 'Term for Fall 2006'
         ...     model = ModelStub()
         >>> from schooltool.app.interfaces import ISchoolToolCalendar
         >>> class CalendarStub(list):

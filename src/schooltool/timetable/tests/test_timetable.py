@@ -865,10 +865,12 @@ class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
         content = ContentStub()
         tm = TimetablesAdapter(content)
         self.assertEqual(tm.terms, [])
-        tm.timetables['term1.foo'] = TimetableStub()
+        tt1 = tm.timetables['term1.foo'] = TimetableStub()
+        tt1.term = "Term 1"
         self.assertEqual(tm.terms, ["Term 1"])
 
-        tm.timetables['term2.bar'] = TimetableStub()
+        tt2 = tm.timetables['term2.bar'] = TimetableStub()
+        tt2.term = "Term 2"
         self.assertEqual(sorted(tm.terms), ["Term 1", "Term 2"])
 
 

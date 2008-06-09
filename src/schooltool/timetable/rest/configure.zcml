@@ -35,14 +35,6 @@
       />
 
   <view
-      for="schooltool.timetable.interfaces.ICompositeTimetables"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
-      provides="zope.publisher.interfaces.IPublishTraverse"
-      factory=".CompositeTimetablesPublishTraverse"
-      permission="zope.Public"
-      />
-
-  <view
       for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides="zope.publisher.interfaces.http.IHTTPPublisher"

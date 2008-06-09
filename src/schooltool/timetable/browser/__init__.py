@@ -735,9 +735,7 @@ class TimetableEditView(TimetableSetupViewBase):
 
     def getTerms(self):
         """Return the chosen term."""
-        term_id, schooltt_id = self.context.__name__.split(".")
-        terms = getSchoolToolApplication()['terms']
-        return [terms[term_id]]
+        return [self.context.term]
 
     def getDays(self, ttschema):
         """Return the current selection.

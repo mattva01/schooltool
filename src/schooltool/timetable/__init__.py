@@ -582,14 +582,8 @@ class TimetablesAdapter(object):
 
     @property
     def terms(self):
-        term_container = ISchoolToolApplication(None)['terms']
-        term_ids = set()
-        for key in self.timetables.keys():
-            term_id = key.split('.')[0]
-            term_ids.add(term_id)
-        terms = [term_container[term_id]
-                 for term_id in term_ids]
-        return terms
+        return list(set([timetable.term
+                         for timetable in self.timetables.values()]))
 
 
 class CompositeTimetables(object):

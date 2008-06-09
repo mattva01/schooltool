@@ -46,7 +46,7 @@ from zope.app.container.traversal import ItemTraverser
 from schooltool.common.xmlparsing import LxmlDocument
 from schooltool.common import parse_date, parse_time
 from schooltool.timetable.interfaces import ITimetables
-from schooltool.timetable.interfaces import ITimetableDict, ICompositeTimetables
+from schooltool.timetable.interfaces import ITimetableDict
 from schooltool.timetable import TimetableActivity, TimetableDict
 from schooltool.traverser import traverser
 from schooltool.app.rest.interfaces import ITimetableFileFactory
@@ -375,18 +375,7 @@ class TimetableDictPublishTraverse(ItemTraverser):
         try:
             return itemTraverse.publishTraverse(request, name)
         except NotFound:
-            pass
-
-        app = getSchoolToolApplication()
-        try:
-            term, schema = name.split('.')
-        except ValueError:
-            pass
-        else:
-            if term in app['terms'] and schema in app['ttschemas']:
-                return NullTimetable(self.context, name)
-
-        raise NotFound(self.context, name, request)
+            return NullTimetable(self.context, name)
 
 
 class NullTimetablePUT(object):
@@ -422,71 +411,6 @@ class NullTimetablePUT(object):
         return ''
 
 
-class CompositeTimetablesPublishTraverse(object):
-    """Traverser for ICompositeTimetables objects
-
-    We need a timetabled object and a request:
-
-        >>> from schooltool.person.person import Person
-        >>> from zope.publisher.browser import TestRequest
-        >>> person = Person()
-        >>> request = TestRequest()
-
-    If we provide avalid name we should get the result of
-    timetabled.getCompositeTimetable:
-
-        >>> person.getCompositeTimetable = lambda term,schema: [term, schema]
-        >>> traverser = CompositeTimetablesPublishTraverse(person, request)
-        >>> traverser.publishTraverse(request, "term.schema")
-        ['term', 'schema']
-
-    If name is not valid (has too many dots for example) we should get
-    a NotFound exception:
-
-        >>> traverser.publishTraverse(request, "term.schema.aa")
-        Traceback (most recent call last):
-        ...
-        NotFound: Object: <schooltool.person.person.Person ...>,
-                  name: 'term.schema.aa'
-
-    If timetabled.getCompositeTimetable returns None we should get the
-    exception too:
-
-        >>> person.getCompositeTimetable = lambda term,schema: None
-        >>> traverser.publishTraverse(request, "term.schema")
-        Traceback (most recent call last):
-        ...
-        NotFound: Object: <schooltool.person.person.Person ...>,
-                  name: 'term.schema'
-
-    """
-
-    adapts(ICompositeTimetables, IHTTPRequest)
-    implements(IPublishTraverse)
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-
-    def publishTraverse(self, request, name):
-        # Note: the way the code is written now lets the user access
-        # existing timetables even if their name refers to a deleted
-        # term/schema. Not sure if that is a good or a bad thing.
-        try:
-            term, schema = name.split('.')
-            timetable = self.context.getCompositeTimetable(term, schema)
-        except ValueError:
-            raise NotFound(self.context, name, request)
-
-        if timetable:
-            return timetable
-
-        # XXX: An HTTP traverser is responsible for looking up views, which is
-        #      not done here.
-
-        raise NotFound(self.context, name, request)
-
-
 class TimetableDictView(View):
     """View for a timetable dict."""
 
@@ -499,11 +423,12 @@ class TimetableDictView(View):
     def _timetables(self):
         timetables = []
         for timetable in self.getTimetables():
-            term, schema = timetable.__name__.split(".")
+            term_id = timetable.term.__name__
+            schooltt_id = timetable.schooltt.__name__
             timetables.append({
                 'url': absoluteURL(timetable, self.request),
-                'term': term,
-                'schema': schema})
+                'term': term_id,
+                'schema': schooltt_id})
         return timetables
 
     timetables = property(_timetables)

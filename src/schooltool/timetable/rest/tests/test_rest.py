@@ -26,6 +26,7 @@ import unittest
 import datetime
 from StringIO import StringIO
 
+from zope.component import provideAdapter
 from zope.component import adapts
 from zope.app.testing import placelesssetup
 from zope.app.testing import ztapi, setup
@@ -37,6 +38,7 @@ from zope.publisher.browser import TestRequest
 from zope.publisher.interfaces.http import IHTTPRequest
 from zope.annotation.interfaces import IAttributeAnnotatable
 
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.testing.util import XMLCompareMixin
 from schooltool.testing import setup as sbsetup
 from schooltool.timetable import TimetablesAdapter
@@ -111,15 +113,17 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         self.term = self.app["terms"]["2003 fall"] = self.createTerm()
         self.term2 = self.app["terms"]["2004 fall"] = self.createTerm()
 
+        provideAdapter(lambda x: self.app, [None], ISchoolToolApplication)
+
         from schooltool.app.rest.interfaces import ITimetableFileFactory
         from schooltool.timetable.rest import TimetableFileFactory
         from schooltool.timetable import TimetablesAdapter
         from schooltool.timetable.interfaces import ITimetableDict
-        ztapi.provideAdapter((ITimetableDict, IHTTPRequest),
-                              ITimetableFileFactory,
-                              TimetableFileFactory)
-        ztapi.provideAdapter(IAttributeAnnotatable, ITimetables,
-                             TimetablesAdapter)
+        provideAdapter(TimetableFileFactory,
+                       [ITimetableDict, IHTTPRequest],
+                       ITimetableFileFactory)
+        provideAdapter(TimetablesAdapter, [IAttributeAnnotatable],
+                       ITimetables)
 
     def createTerm(self):
         from schooltool.term.term import Term
@@ -263,28 +267,6 @@ def doctest_TimetableDictPublishTraverse():
         >>> obj.name
         '2006-spring.default'
 
-    3. Undefined term and/or schema
-
-        >>> pt.publishTraverse(request, '2006-sprig.default')
-        Traceback (most recent call last):
-          ...
-        NotFound: Object: <...TimetableDict...>, name: '2006-sprig.default'
-
-        >>> pt.publishTraverse(request, '2006-spring.insane')
-        Traceback (most recent call last):
-          ...
-        NotFound: Object: <...TimetableDict...>, name: '2006-spring.insane'
-
-        >>> pt.publishTraverse(request, 'too.many.dots')
-        Traceback (most recent call last):
-          ...
-        NotFound: Object: <...TimetableDict...>, name: 'too.many.dots'
-
-        >>> pt.publishTraverse(request, 'no dots')
-        Traceback (most recent call last):
-          ...
-        NotFound: Object: <...TimetableDict...>, name: 'no dots'
-
     Cleanup:
 
         >>> setup.placefulTearDown()
@@ -377,6 +359,7 @@ class TestTimetableDictView(TimetableTestMixin, unittest.TestCase):
 
     def setUp(self):
         TimetableTestMixin.setUp(self)
+        
         self.tt = ITimetables(self.section).timetables["2003 fall.schema1"] \
                 = self.createEmpty()
 

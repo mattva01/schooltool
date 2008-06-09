@@ -46,7 +46,6 @@ from zope.traversing.api import getPath
 
 from schooltool.app.cal import CalendarEvent
 from schooltool.calendar.simple import ImmutableCalendar
-from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 
 from schooltool.timetable.interfaces import IWeekdayBasedTimetableModel
@@ -390,10 +389,7 @@ class PersistentTimetableCalendarEvent(CalendarEvent):
 def addEventsToCalendar(event):
     timetable = event.activity.timetable
 
-    term_id, schema_id = timetable.__name__.split(".")
-    terms = ISchoolToolApplication(None)["terms"]
-    term = terms[term_id]
-    calendar = timetable.model.createCalendar(term, timetable)
+    calendar = timetable.model.createCalendar(timetable.term, timetable)
     section_calendar = ISchoolToolCalendar(event.activity.owner)
     for cal_event in calendar:
         if (cal_event.activity == event.activity and
@@ -428,10 +424,7 @@ def handleTimetableRemovedEvent(event):
 
 def handleTimetableAddedEvent(event):
     timetable = event.new_timetable
-    term_id, schema_id = event.key.split(".")
-    terms = ISchoolToolApplication(None)["terms"]
-    term = terms[term_id]
-    calendar = timetable.model.createCalendar(term, timetable)
+    calendar = timetable.model.createCalendar(timetable.term, timetable)
 
     section_calendar = ISchoolToolCalendar(event.object)
     for cal_event in calendar:
