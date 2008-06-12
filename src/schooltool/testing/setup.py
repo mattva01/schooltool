@@ -57,10 +57,12 @@ def createSchoolToolApplication():
 
 
 # ----------------- Setup SchoolBell application as a site -----------------
+from zope.interface import Interface
 from zope.interface import directlyProvides
 from zope.app.component.hooks import setSite
 from zope.app.component.site import LocalSiteManager
 from zope.traversing.interfaces import IContainmentRoot
+from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.security import PersonContainerAuthenticationPlugin
 from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
 def setUpSchoolToolSite():
@@ -72,6 +74,7 @@ def setUpSchoolToolSite():
 
     plugin = PersonContainerAuthenticationPlugin()
     ztapi.provideUtility(ISchoolToolAuthenticationPlugin, plugin)
+    ztapi.provideAdapter(Interface, ISchoolToolApplication, getSchoolToolApplication)
 
     setSite(app)
     return app

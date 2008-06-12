@@ -22,7 +22,6 @@ course browser views.
 $Id$
 """
 from zope.security.proxy import removeSecurityProxy
-from zope.app.component.hooks import getSite
 from zope.app.form.browser.add import AddView
 from zope.publisher.browser import BrowserView
 from zope.component import getMultiAdapter
@@ -94,7 +93,7 @@ class SectionAddView(AddView):
     """A view for adding Sections."""
 
     def newSectionId(self):
-        app = getSite()
+        app = ISchoolToolApplication(None)
         sections = sorted(app['sections'].keys())
         if len(sections) == 0:
             return "1"
@@ -107,7 +106,7 @@ class SectionAddView(AddView):
         return name
 
     def getCourseFromId(self, cid):
-        app = getSite()
+        app = ISchoolToolApplication(None)
         try:
             return app['courses'][cid]
         except KeyError:
