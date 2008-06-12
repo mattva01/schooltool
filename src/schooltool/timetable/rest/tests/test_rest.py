@@ -139,12 +139,12 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         tt['Day 2'] = TimetableSchemaDay(['C', 'D'], ['C'])
         return tt
 
-    def createEmpty(self):
-        return self.schema.createTimetable()
+    def createEmpty(self, term=None):
+        return self.schema.createTimetable(term)
 
-    def createFull(self, owner=None):
+    def createFull(self, owner=None, term=None):
         from schooltool.timetable import TimetableActivity
-        tt = self.createEmpty()
+        tt = self.createEmpty(term)
         room1 = self.app["resources"]['room1']
         lab1 = self.app["resources"]['lab1']
         lab2 = self.app["resources"]['lab2']
@@ -359,9 +359,8 @@ class TestTimetableDictView(TimetableTestMixin, unittest.TestCase):
 
     def setUp(self):
         TimetableTestMixin.setUp(self)
-        
         self.tt = ITimetables(self.section).timetables["2003 fall.schema1"] \
-                = self.createEmpty()
+                = self.createEmpty(self.app['terms']['2003 fall'])
 
     def test_getTimetables(self):
         view = self.createView(ITimetables(self.section).timetables,

@@ -363,7 +363,7 @@ def doctest_SampleSectionAssignments():
         >>> Timetable = app['ttschemas'].getDefault().createTimetable
         >>> for sect in (s0, s1, s2, s3, s4, s5, s6, s7, s8):
         ...     timetables = ITimetables(sect).timetables
-        ...     tt = Timetable()
+        ...     tt = Timetable(app['terms']['2005-fall'])
         ...     for day in range(1, 7):
         ...         activity = TimetableActivity('Stuff', owner=sect)
         ...         tt['Day %d' % day].add('A', activity, send_events=False)

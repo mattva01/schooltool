@@ -85,16 +85,11 @@ class TestTimetable(unittest.TestCase):
 
         t = Timetable(('1', '2'))
         t.__name__ = "term1.stt1"
+        t.term = None
+        t.schooltt = None
         verifyObject(ITimetable, t)
         verifyObject(ITimetableWrite, t)
         verifyObject(ILocation, t)
-
-    def test_term_and_schooltt(self):
-        from schooltool.timetable import Timetable
-        t = Timetable(('1', '2'))
-        t.__name__ = "term1.stt1"
-        self.assertEqual(t.term, "Term 1")
-        self.assertEqual(t.schooltt, "STT 1")
 
     def test_keys(self):
         from schooltool.timetable import Timetable
@@ -990,7 +985,7 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
 
     Let's add a timetable to the app object:
 
-       >>> ITimetables(app).timetables['2006.simple'] = tts.createTimetable()
+       >>> ITimetables(app).timetables['2006.simple'] = tts.createTimetable(None)
        >>> findRelatedTimetables(tts)
        [<Timetable: ('A', 'B'),
         {'A': <schooltool.timetable.TimetableDay object at ...>,
@@ -998,7 +993,7 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
 
     Now, let's add a timetable of a different schema:
 
-       >>> ITimetables(app).timetables['2006.other'] = tts2.createTimetable()
+       >>> ITimetables(app).timetables['2006.other'] = tts2.createTimetable(None)
        >>> findRelatedTimetables(tts)
        [<Timetable: ('A', 'B'),
         {'A': <schooltool.timetable.TimetableDay object at ...>,
@@ -1020,19 +1015,19 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
        ...     directlyProvides(ob, IOwnTimetables)
 
        >>> adapter = ITimetables(app['persons']['p1'])
-       >>> adapter.timetables['2006.simple'] = tts.createTimetable()
-       >>> adapter.timetables['2005.simple'] = tts.createTimetable()
-       >>> adapter.timetables['2006.other'] = tts2.createTimetable()
+       >>> adapter.timetables['2006.simple'] = tts.createTimetable(None)
+       >>> adapter.timetables['2005.simple'] = tts.createTimetable(None)
+       >>> adapter.timetables['2006.other'] = tts2.createTimetable(None)
 
        >>> adapter = ITimetables(app['persons']['p2'])
-       >>> adapter.timetables['2006.simple'] = tts.createTimetable()
+       >>> adapter.timetables['2006.simple'] = tts.createTimetable(None)
 
        >>> adapter = ITimetables(app['groups']['g'])
-       >>> adapter.timetables['2006.simple'] = tts.createTimetable()
-       >>> adapter.timetables['2006.other'] = tts2.createTimetable()
+       >>> adapter.timetables['2006.simple'] = tts.createTimetable(None)
+       >>> adapter.timetables['2006.other'] = tts2.createTimetable(None)
 
        >>> adapter = ITimetables(app['resources']['r'])
-       >>> adapter.timetables['2006.simple'] = tts.createTimetable()
+       >>> adapter.timetables['2006.simple'] = tts.createTimetable(None)
 
     Let's see the timetables for this schema now:
 
@@ -1110,7 +1105,7 @@ def doctest_findRelatedTimetables_forTerm():
 
     Let's add a timetable to the app object:
 
-       >>> ITimetables(app).timetables['2005.simple'] = tts.createTimetable()
+       >>> ITimetables(app).timetables['2005.simple'] = tts.createTimetable(t1)
        >>> findRelatedTimetables(t1)
        [<Timetable: ('A', 'B'),
         {'A': <schooltool.timetable.TimetableDay object at ...>,
@@ -1118,7 +1113,7 @@ def doctest_findRelatedTimetables_forTerm():
 
     Now, let's add a timetable of a different term:
 
-       >>> ITimetables(app).timetables['2006.simple'] = tts.createTimetable()
+       >>> ITimetables(app).timetables['2006.simple'] = tts.createTimetable(t2)
        >>> findRelatedTimetables(t1)
        [<Timetable: ('A', 'B'),
         {'A': <schooltool.timetable.TimetableDay object at ...>,
@@ -1140,19 +1135,19 @@ def doctest_findRelatedTimetables_forTerm():
        ...     directlyProvides(ob, IOwnTimetables)
 
        >>> adapter = ITimetables(app['persons']['p1'])
-       >>> adapter.timetables['2005.simple'] = tts.createTimetable()
-       >>> adapter.timetables['2005.other'] = tts.createTimetable()
-       >>> adapter.timetables['2006.other'] = tts.createTimetable()
+       >>> adapter.timetables['2005.simple'] = tts.createTimetable(t1)
+       >>> adapter.timetables['2005.other'] = tts.createTimetable(t1)
+       >>> adapter.timetables['2006.other'] = tts.createTimetable(t2)
 
        >>> adapter = ITimetables(app['persons']['p2'])
-       >>> adapter.timetables['2005.simple'] = tts.createTimetable()
+       >>> adapter.timetables['2005.simple'] = tts.createTimetable(t1)
 
        >>> adapter = ITimetables(app['groups']['g'])
-       >>> adapter.timetables['2006.simple'] = tts.createTimetable()
-       >>> adapter.timetables['2005.simple'] = tts.createTimetable()
+       >>> adapter.timetables['2006.simple'] = tts.createTimetable(t2)
+       >>> adapter.timetables['2005.simple'] = tts.createTimetable(t1)
 
        >>> adapter = ITimetables(app['resources']['r'])
-       >>> adapter.timetables['2005.simple'] = tts.createTimetable()
+       >>> adapter.timetables['2005.simple'] = tts.createTimetable(t1)
 
     Let's see the timetables for this schema now:
 

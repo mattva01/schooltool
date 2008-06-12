@@ -354,11 +354,13 @@ class ITimetableSchema(IContained):
     def __getitem__(key):
         """Return a ITimetableSchemaDay for a given day id."""
 
-    def createTimetable():
+    def createTimetable(term):
         """Return a new empty timetable with the same structure.
 
         The new timetable has the same set of day_ids, and the sets of
         period ids within each day.  It has no activities.
+
+        The new timetable is bound to the term passed as the argument.
         """
 
 

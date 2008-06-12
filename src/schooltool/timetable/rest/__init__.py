@@ -254,7 +254,7 @@ class TimetableFileFactory(object):
         if time_period_id not in app["terms"]:
             raise RestError("Time period not defined: %s" % time_period_id)
         try:
-            tt = app["ttschemas"][schema_id].createTimetable()
+            tt = app["ttschemas"][schema_id].createTimetable(app["terms"][time_period_id])
         except KeyError:
             raise RestError("Timetable schema not defined: %s" % schema_id)
         tznode = doc.xpath('/tt:timetable/tt:timezone', self.nsmap)[0]

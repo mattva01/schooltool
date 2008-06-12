@@ -289,11 +289,12 @@ def doctest_PersonTimetableSetupView():
         >>> from schooltool.timetable.interfaces import ITimetables
         >>> from schooltool.timetable import TimetableActivity
         >>> ttkey = "2005-fall.default"
-        >>> ITimetables(math).timetables[ttkey] = ttschema.createTimetable()
+        >>> term = app["terms"]["2005-fall"]
+        >>> ITimetables(math).timetables[ttkey] = ttschema.createTimetable(term)
         >>> ITimetables(math).timetables[ttkey]['Tue'].add('10:00',
         ...                                   TimetableActivity('Math'))
 
-        >>> ITimetables(history).timetables[ttkey] = ttschema.createTimetable()
+        >>> ITimetables(history).timetables[ttkey] = ttschema.createTimetable(term)
         >>> ITimetables(history).timetables[ttkey]['Tue'].add('10:00',
         ...                                   TimetableActivity('History'))
 

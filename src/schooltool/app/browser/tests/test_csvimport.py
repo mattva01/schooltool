@@ -558,7 +558,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
 
         title = 'Philosophy - Lorch'
         section = self.app['sections']['oogabooga'] = Section(title=title)
-        tt = imp.ttschema.createTimetable()
+        tt = imp.ttschema.createTimetable(imp.term)
         ITimetables(section).timetables['fall.three-day'] = tt
 
         # real run

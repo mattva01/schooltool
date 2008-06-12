@@ -184,16 +184,6 @@ class Timetable(Persistent):
     def title(self):
         return self.__name__
 
-    @property
-    def term(self):
-        term_id = self.__name__.split('.')[0]
-        return ISchoolToolApplication(None)['terms'][term_id]
-
-    @property
-    def schooltt(self):
-        schooltt_id = self.__name__.split('.')[1]
-        return ISchoolToolApplication(None)['ttschemas'][schooltt_id]
-
     def __init__(self, day_ids):
         """Create a new empty timetable.
 

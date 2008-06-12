@@ -104,7 +104,7 @@ class TestTimetableSchema(unittest.TestCase):
         tts["A"] = TimetableSchemaDay(periods1)
         tts["B"] = TimetableSchemaDay(periods2, homeroom_period_ids=['Yellow'])
 
-        tt = tts.createTimetable()
+        tt = tts.createTimetable(None)
         self.assertEquals(tt.day_ids, tts.day_ids)
         self.assert_(tt.model is tts.model)
         self.assert_(tt.timezone == tts.timezone)

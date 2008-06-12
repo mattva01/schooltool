@@ -113,10 +113,12 @@ class TimetableSchema(Persistent, Contained):
             raise ValueError("Key %r not in day_ids %r" % (key, self.day_ids))
         self.days[key] = value
 
-    def createTimetable(self):
+    def createTimetable(self, term):
         new = Timetable(self.day_ids)
         new.model = self.model
         new.timezone = self.timezone
+        new.schooltt = self
+        new.term = term
         for day_id in self.day_ids:
             new[day_id] = TimetableDay(self[day_id].periods,
                                        self[day_id].homeroom_period_ids)

@@ -577,7 +577,7 @@ class TimetableAddForm(TimetableSetupViewBase):
 
     def __call__(self):
         context = removeSecurityProxy(self.context)
-        self.app = getSchoolToolApplication()        
+        self.app = getSchoolToolApplication()
         self.has_timetables = bool(self.app["terms"] and self.app["ttschemas"])
         if not self.has_timetables:
             return self.template()
@@ -588,27 +588,12 @@ class TimetableAddForm(TimetableSetupViewBase):
         if 'SUBMIT' in self.request:
             section = removeSecurityProxy(self.context)
             for key in self.ttkeys:
+                # XXX still depends on timetable ids for uniqueness
                 if context.get(key, None):
                     timetable = context[key]
                 else:
-                    timetable = self.ttschema.createTimetable()
+                    timetable = self.ttschema.createTimetable(term)
                     context[key] = timetable
-##                 for day_id, day in timetable.items():
-##                     for period_id, period in list(day.items()):
-##                         if '.'.join((day_id, period_id)) in self.request:
-##                             if not period:
-##                                 # XXX Resource list is being copied
-##                                 # from section as this view can't do
-##                                 # proper resource booking
-##                                 act = TimetableActivity(title=course_title,
-##                                                         owner=section,
-##                                                         resources=section.resources)
-##                                 day.add(period_id, act)
-##                         else:
-##                             if period:
-##                                 for act in list(period):
-##                                     day.remove(period_id, act)
-
             # TODO: find a better place to redirect to
             self.request.response.redirect(
                 absoluteURL(self.context, self.request))
@@ -700,7 +685,7 @@ class SectionTimetableSetupView(TimetableSetupViewBase):
                 if ITimetables(section).timetables.get(key, None):
                     timetable = ITimetables(section).timetables[key]
                 else:
-                    timetable = self.ttschema.createTimetable()
+                    timetable = self.ttschema.createTimetable(term)
                     ITimetables(section).timetables[key] = timetable
                 for day_id, day in timetable.items():
                     for period_id, period in list(day.items()):

@@ -903,8 +903,8 @@ def doctest_TimetableDependentDeleteView():
 
     Let's create a couple of timetables on the application:
 
-        >>> ITimetables(app).timetables['2006.simple'] = tts.createTimetable()
-        >>> ITimetables(app).timetables['2006.other'] = tts2.createTimetable()
+        >>> ITimetables(app).timetables['2006.simple'] = tts.createTimetable(None)
+        >>> ITimetables(app).timetables['2006.other'] = tts2.createTimetable(None)
 
     Now, we can run the view:
 

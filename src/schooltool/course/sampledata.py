@@ -126,8 +126,9 @@ class SampleTimetables(object):
 
     def assignPeriodToSection(self, app, period, section):
         course = getRelatedObjects(section, URICourse)[0]
-        for ttname in '2005-fall.simple', '2006-spring.simple':
-            timetable = app['ttschemas'].getDefault().createTimetable()
+        for term_id in ['2005-fall', '2006-spring']:
+            ttname = term_id + ".simple"
+            timetable = app['ttschemas'].getDefault().createTimetable(app["terms"][term_id])
             for day_id in timetable.keys():
                 activity = TimetableActivity(course.title, owner=section,
                                              resources=section.resources)
