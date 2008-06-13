@@ -18,9 +18,9 @@
 	    <p i18n:translate="">For term(s):</p>
 
 	    <tal:loop tal:repeat="term terms/sortby:first">
-	      <input type="radio" name="terms"
+	      <input type="radio" name="term"
 		     tal:attributes="value term/__name__;
-				     checked python:term in view.terms
+				     checked python:term is view.term
 				     and 'checked' or None" />
 	      <span tal:content="term/title" />
 	    </tal:loop>

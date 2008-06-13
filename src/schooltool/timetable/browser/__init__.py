@@ -26,6 +26,7 @@ import sets
 import re
 
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.component import getUtility
 from zope.component import adapts
 from zope.interface import implements
 from zope.publisher.browser import BrowserView
@@ -34,20 +35,20 @@ from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.app.app import getSchoolToolApplication
-from schooltool.app.interfaces import ISchoolToolCalendar
-from schooltool.app.membership import URIGroup, URIMember
+from schooltool.app.membership import URIGroup
 from schooltool.calendar.utils import parse_date, parse_time
 from schooltool.course.booking import URISection
 from schooltool.course.interfaces import ISection
 from schooltool.person.interfaces import IPerson
 from schooltool.relationship.relationship import getRelatedObjects
 from schooltool.resource.interfaces import IBaseResource
-from schooltool.term.term import getNextTermForDate, getTermForDate
+from schooltool.term.interfaces import IDateManager
+from schooltool.term.term import getTermForDate
 from schooltool.timetable import SchooldaySlot
 from schooltool.timetable import Timetable, TimetableDay
 from schooltool.timetable import TimetableActivity
 from schooltool.timetable.interfaces import ITimetable, IOwnTimetables
-from schooltool.timetable.interfaces import ITimetables, IHaveTimetables
+from schooltool.timetable.interfaces import ITimetables
 from schooltool.traverser.interfaces import ITraverserPlugin
 from schooltool.common import SchoolToolMessage as _
 
@@ -295,7 +296,6 @@ def format_timetable_for_presentation(timetable):
 
     First, let us create a timetable:
 
-      >>> from pprint import pprint
       >>> from schooltool.timetable import TimetableActivity
       >>> timetable = Timetable(['day 1', 'day 2', 'day 3'])
       >>> timetable['day 1'] = TimetableDay(['A', 'B'])
@@ -394,7 +394,7 @@ class TimetableConflictMixin(object):
             terms = getSchoolToolApplication()["terms"]
             return terms[self.request['term']]
         else:
-            return getNextTermForDate(datetime.date.today())
+            return getUtility(IDateManager).current_term
 
     def getSections(self, item):
         raise NotImplementedError(
@@ -559,21 +559,13 @@ class TimetableAddForm(TimetableSetupViewBase):
 
     template = ViewPageTemplateFile('templates/timetable-add.pt')
 
-    def getTerms(self):
+    def getTerm(self):
         """Return the chosen term."""
-        if 'terms' in self.request:
-            terms = getSchoolToolApplication()['terms']
-            requested_terms = []
-
-            # request['terms'] may be a list of strings or a single string, we
-            # need to handle both cases
-            try:
-                requested_terms = requested_terms + self.request['terms']
-            except TypeError:
-                requested_terms.append(self.request['terms'])
-            return [terms[term] for term in requested_terms]
+        if 'term' in self.request:
+            terms = getSchoolToolApplication()["terms"]
+            return terms[self.request['term']]
         else:
-            return [getNextTermForDate(datetime.date.today()),]
+            return getUtility(IDateManager).current_term
 
     def __call__(self):
         context = removeSecurityProxy(self.context)
@@ -581,18 +573,15 @@ class TimetableAddForm(TimetableSetupViewBase):
         self.has_timetables = bool(self.app["terms"] and self.app["ttschemas"])
         if not self.has_timetables:
             return self.template()
-        self.terms = self.getTerms()
+        self.term = self.getTerm()
         self.ttschema = self.getSchema()
-        self.ttkeys = ['.'.join((term.__name__, self.ttschema.__name__))
-                       for term in self.terms]
+        self.ttkeys = ['.'.join((self.term.__name__, self.ttschema.__name__))]
         if 'SUBMIT' in self.request:
             section = removeSecurityProxy(self.context)
             for key in self.ttkeys:
                 # XXX still depends on timetable ids for uniqueness
-                if context.get(key, None):
-                    timetable = context[key]
-                else:
-                    timetable = self.ttschema.createTimetable(term)
+                if key not in context:
+                    timetable = self.ttschema.createTimetable(self.term)
                     context[key] = timetable
             # TODO: find a better place to redirect to
             self.request.response.redirect(
@@ -627,7 +616,7 @@ class SectionTimetableSetupView(TimetableSetupViewBase):
                 requested_terms.append(self.request['terms'])
             return [terms[term] for term in requested_terms]
         else:
-            return [getNextTermForDate(datetime.date.today()),]
+            return [getUtility(IDateManager).current_term]
 
     def getDays(self, ttschema):
         """Return the current selection.

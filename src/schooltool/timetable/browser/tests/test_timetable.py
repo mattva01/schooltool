@@ -258,11 +258,11 @@ def doctest_PersonTimetableSetupView():
         True
 
     The default for a term is "the current term", or, if there's none, the
-    next one.  Since this depends on today's date, we can't explicitly test
-    it here.
+    next one.
 
-        >>> (view.getTerm() is app["terms"]["2005-spring"] or
-        ...  view.getTerm() is app["terms"]["2005-fall"])
+        >>> from schooltool.term.tests import setUpDateManagerStub
+        >>> setUpDateManagerStub(current_term=app["terms"]["2005-spring"])
+        >>> view.getTerm() is app["terms"]["2005-spring"]
         True
         >>> request.form['term'] = '2005-spring'
         >>> view.getTerm() is app["terms"]["2005-spring"]
@@ -647,12 +647,11 @@ def doctest_SectionTimetableSetupView():
     getTerms will give us a list of available terms from the request or a list
     with just the current term if we're working at a time not during any term.
 
-    Without any terms in the request we get the output of getNextTermForDate
-    today
+    Without any terms in the request we get the current term:
 
-        >>> import datetime
-        >>> from schooltool.term.term import getNextTermForDate
-        >>> getNextTermForDate(datetime.date.today()) in view.getTerms()
+        >>> from schooltool.term.tests import setUpDateManagerStub
+        >>> setUpDateManagerStub(current_term=app["terms"]["2005-fall"])
+        >>> view.getTerms()[0] is app["terms"]["2005-fall"]
         True
         >>> len(view.getTerms())
         1

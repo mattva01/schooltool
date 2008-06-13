@@ -37,6 +37,7 @@ from z3c.form import form, field
 
 from schooltool.utility.utility import UtilitySetUp
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.term.term import getNextTermForDate
 from schooltool.term.interfaces import IDateManager
 from schooltool.common import SchoolToolMessage as _
 
@@ -60,7 +61,10 @@ class LocalDateManagerUtility(Persistent, DateManagerStub):
 
     def __init__(self):
         self.today = datetime.date(2005, 2, 1)
-        self.current_term = None
+
+    @property
+    def current_term(self):
+        return getNextTermForDate(self.today)
 
 
 dateManagerSetupSubscriber = UtilitySetUp(

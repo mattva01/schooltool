@@ -142,7 +142,6 @@ from zope.app.generations.utility import findObjectsProviding
 
 from schooltool.calendar.simple import ImmutableCalendar
 
-from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 
 from schooltool.timetable.interfaces import ITimetableCalendarEvent
@@ -165,6 +164,8 @@ from schooltool.term.interfaces import ITerm
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.app import InitBase
 
+from schooltool.common import SchoolToolMessage as _
+
 ##############################################################################
 
 #
@@ -182,7 +183,10 @@ class Timetable(Persistent):
 
     @property
     def title(self):
-        return self.__name__
+        if self.term and self.schooltt:
+            return "%s.%s" % (self.term.__name__, self.schooltt.__name__)
+        else:
+            return _("Unbound timetable.")
 
     def __init__(self, day_ids):
         """Create a new empty timetable.
