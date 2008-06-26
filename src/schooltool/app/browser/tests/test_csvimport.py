@@ -241,10 +241,15 @@ class TestTimetableCSVImporter(unittest.TestCase):
 
         # Set up a name chooser to pick names for new sections.
         from schooltool.course.interfaces import ISectionContainer
-        from schooltool.app.app import SimpleNameChooser
+        from schooltool.course.browser.section import SectionNameChooser
         from zope.app.container.interfaces import INameChooser
         ztapi.provideAdapter(ISectionContainer, INameChooser,
-                             SimpleNameChooser)
+                             SectionNameChooser)
+
+        from schooltool.timetable.interfaces import ITimetableDict
+        from schooltool.timetable import TimetableNameChooser
+        ztapi.provideAdapter(ITimetableDict, INameChooser,
+                             TimetableNameChooser)
 
         self.app = app = setup.setUpSchoolToolSite()
 
@@ -378,8 +383,8 @@ class TestTimetableCSVImporter(unittest.TestCase):
         sections = self.app['sections']
 
         # Check out the created sections.
-        philosophy_lorch = sections['philosophy--lorch']
-        philosophy_guzman = sections['philosophy--guzman']
+        philosophy_lorch = sections['1']
+        philosophy_guzman = sections['2']
 
         self.assertEquals(list(philosophy_lorch.instructors),
                           [persons['lorch']])
@@ -394,7 +399,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.assert_(persons['lorch'] in philosophy_guzman.members)
 
         # Look at the timetables of the sections
-        lorch_tt = ITimetables(philosophy_lorch).timetables['summer.three-day']
+        lorch_tt = ITimetables(philosophy_lorch).timetables['1']
         self.assertEquals(len(list(lorch_tt.activities())), 3)
         # Look at a couple of periods.
         self.assertEquals(len(lorch_tt['Monday']['B']), 1)
@@ -517,14 +522,14 @@ class TestTimetableCSVImporter(unittest.TestCase):
                                     periods=periods, dry_run=False)
 
         # Check name
-        self.assertEquals(section.__name__, 'philosophy--lorch')
+        self.assertEquals(section.__name__, '1')
 
         # Check links
         self.assert_(course in section.courses)
         self.assert_(instructor in section.instructors)
 
         # Check timetable
-        tt = ITimetables(section).timetables['fall.three-day']
+        tt = ITimetables(section).timetables['1']
         self.assertEquals(len(tt.activities()), 2)
 
         # Check activities in timetable
@@ -545,7 +550,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         section2 = imp.createSection(course, instructor,
                                      periods=periods, dry_run=False)
         self.assert_(section2 is section)
-        self.assert_(ITimetables(section).timetables['fall.three-day'] is tt)
+        self.assert_(ITimetables(section).timetables['1'] is tt)
         self.assertEquals(len(tt.activities()), 2)
 
     def test_createSection_existing(self):
@@ -581,8 +586,8 @@ class TestTimetableCSVImporter(unittest.TestCase):
         imp.importChunk(lines, 5, dry_run=False)
         self.failIf(imp.errors.anyErrors(), imp.errors)
 
-        philosophy_curtin = self.app['sections']['philosophy--curtin']
-        tt = ITimetables(philosophy_curtin).timetables['fall.three-day']
+        philosophy_curtin = self.app['sections']['1']
+        tt = ITimetables(philosophy_curtin).timetables['1']
         activities = tt.activities()
         self.assertEquals(len(activities), 2)
 

@@ -83,7 +83,7 @@
 
   <adapter
       for=".interfaces.ISectionContainer"
-      factory="schooltool.app.app.SimpleNameChooser"
+      factory="schooltool.course.browser.section.SectionNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
   <!-- sample data -->

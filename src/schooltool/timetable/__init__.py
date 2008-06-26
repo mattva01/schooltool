@@ -132,12 +132,16 @@ from sets import Set
 import zope.event
 from persistent import Persistent
 from persistent.dict import PersistentDict
+from zope.proxy import sameProxiedObjects
 from zope.component import adapts, subscribers
-from zope.interface import directlyProvides, implements
+from zope.interface import implements
+from zope.interface import directlyProvides
 
 from zope.annotation.interfaces import IAnnotations
 from zope.location.interfaces import ILocation
 from zope.traversing.api import getPath
+from zope.app.container.interfaces import INameChooser
+from zope.app.container.contained import NameChooser
 from zope.app.generations.utility import findObjectsProviding
 
 from schooltool.calendar.simple import ImmutableCalendar
@@ -506,6 +510,32 @@ class SchooldayTemplate(object):
 #  Things for integrating timetabling into the core code.
 #
 
+class TimetableNameChooser(NameChooser):
+
+    implements(INameChooser)
+
+    def chooseName(self, name, obj):
+        """See INameChooser."""
+
+        i = 1
+        n = "1"
+        while n in self.context:
+            i += 1
+            n = unicode(i)
+        # Make sure the name is valid
+        self.checkName(n, obj)
+        return n
+
+
+class DuplicateTimetableError(ValueError):
+    """An error that is raised when you try to add a conflicting timetable.
+
+    Conflicting timetables are timetables that have the same school
+    timetable and term pair as any other timetable in the timetable
+    dict.
+    """
+
+
 class TimetableDict(PersistentDict):
 
     implements(ILocation, ITimetableDict)
@@ -515,10 +545,16 @@ class TimetableDict(PersistentDict):
 
     def __setitem__(self, key, value):
         assert ITimetable.providedBy(value)
-        keys = key.split(".")
-        if len(keys) != 2 or not keys[0] or not keys[1]:
-            raise ValueError("The key should be composed of a term id and a"
-                             " schema id separated with a . (got %r)" % key)
+
+        for k, v in self.items():
+            if (sameProxiedObjects(v.term, value.term) and
+                sameProxiedObjects(v.schooltt, value.schooltt) and
+                k != key):
+                raise DuplicateTimetableError("There already is a timetable "
+                                              "for term %s and section %s, but "
+                                              "it's key is %s!" % (v.term.__name__,
+                                                                   v.schooltt.__name__,
+                                                                   k))
         old_value = self.get(key)
         if old_value is not None:
             old_value.__parent__ = None
@@ -573,6 +609,12 @@ class TimetablesAdapter(object):
         if self.timetables is None:
             self.timetables = annotations[TIMETABLES_KEY] = TimetableDict()
             self.timetables.__parent__ = context
+
+    def lookup(self, term, schooltt):
+        for timetable in self.timetables.values():
+            if (timetable.term is term and
+                timetable.schooltt is schooltt):
+                return timetable
 
     @property
     def terms(self):
@@ -631,6 +673,14 @@ class CompositeTimetables(object):
         return result
 
 
+def getAllTimetables():
+    app = getSchoolToolApplication(None)
+    timetables = []
+    for ttowner in findObjectsProviding(app, IOwnTimetables):
+        timetables += ITimetables(ttowner).timetables.values()
+    return timetables
+
+
 def findRelatedTimetables(ob):
     """Finds all timetables in the app instance that use a given object
 
@@ -638,24 +688,23 @@ def findRelatedTimetables(ob):
 
     Returns a list of Timetable objects.
     """
+
     if ITerm.providedBy(ob):
-        index = 0
+        result = []
+        for tt in getAllTimetables():
+            if sameProxiedObjects(tt.term, ob):
+                result.append(tt)
+
     elif ITimetableSchema.providedBy(ob):
-        index = 1
+
+        result = []
+        for tt in getAllTimetables():
+            if sameProxiedObjects(tt.schooltt, ob):
+                result.append(tt)
+
     else:
         raise TypeError("Expected a Term or a TimetableSchema, got %r" %
                         (ob, ))
-
-    app = getSchoolToolApplication(ob)
-    timetables = []
-
-    for ttowner in findObjectsProviding(app, IOwnTimetables):
-        timetables += ITimetables(ttowner).timetables.values()
-
-    result = []
-    for tt in timetables:
-        if tt.__name__.split('.')[index] == ob.__name__:
-            result.append(tt)
 
     return result
 

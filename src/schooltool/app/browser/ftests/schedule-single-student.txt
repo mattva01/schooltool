@@ -175,13 +175,15 @@ Add timetables to sections
 Lets add a timetable for the first section:
 
     >>> print rest(r"""
-    ... PUT /sections/birdwatching-1/timetables/2005-fall.schema1 HTTP/1.1
+    ... PUT /sections/birdwatching-1/timetables/1 HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
     ...            xmlns:xlink="http://www.w3.org/1999/xlink">
     ...   <timezone name="UTC"/>
+    ...   <term id="2005-fall" />
+    ...   <schooltt id="schema1" />
     ...   <day id="Day 1">
     ...     <period id="A">
     ...     </period>
@@ -204,13 +206,15 @@ Lets add a timetable for the first section:
 For the second one:
 
     >>> print rest(r"""
-    ... PUT /sections/birdwatching-2/timetables/2005-fall.schema1 HTTP/1.1
+    ... PUT /sections/birdwatching-2/timetables/1 HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
     ...            xmlns:xlink="http://www.w3.org/1999/xlink">
     ...   <timezone name="UTC"/>
+    ...   <term id="2005-fall" />
+    ...   <schooltt id="schema1" />
     ...   <day id="Day 1">
     ...     <period id="A">
     ...       <activity title="Birdwatching 2"/>
@@ -233,13 +237,15 @@ For the second one:
 And the third one:
 
     >>> print rest(r"""
-    ... PUT /sections/birdwatching-3/timetables/2005-fall.schema1 HTTP/1.1
+    ... PUT /sections/birdwatching-3/timetables/1 HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
     ...            xmlns:xlink="http://www.w3.org/1999/xlink">
     ...   <timezone name="UTC"/>
+    ...   <term id="2005-fall" />
+    ...   <schooltt id="schema1" />
     ...   <day id="Day 1">
     ...     <period id="A">
     ...       <activity title="Birdwatching 3 (practice)"/>

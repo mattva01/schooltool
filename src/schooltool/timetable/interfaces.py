@@ -669,6 +669,8 @@ class ITimetables(Interface):
         getCompositeTimetable).
         """)
 
+    def lookup(term, schooltt):
+        """ """
 
 class ICompositeTimetables(Interface):
     """An interface for objects that have composite timetables."""

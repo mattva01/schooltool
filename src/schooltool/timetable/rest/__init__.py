@@ -205,6 +205,16 @@ class TimetableFileFactory(object):
                   <text />
                 </attribute>
               </element>
+              <element name="term">
+                <attribute name="id">
+                  <text />
+                </attribute>
+              </element>
+              <element name="schooltt">
+                <attribute name="id">
+                  <text />
+                </attribute>
+              </element>
               <oneOrMore>
                 <element name="day">
                   <ref name="idattr"/>
@@ -247,7 +257,11 @@ class TimetableFileFactory(object):
     def parseXML(self, name, xml):
         doc = LxmlDocument(xml, self.schema)
 
-        time_period_id, schema_id = name.split(".")
+        term_node = doc.xpath('/tt:timetable/tt:term', self.nsmap)[0]
+        time_period_id = term_node.attrib['id']
+
+        schooltt_node = doc.xpath('/tt:timetable/tt:schooltt', self.nsmap)[0]
+        schema_id = schooltt_node.attrib['id']
 
         app = getSchoolToolApplication()
 

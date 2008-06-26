@@ -140,8 +140,6 @@ class EmergencyDayView(BrowserView):
             self.request.response.redirect(
                 absoluteURL(self.context, self.request))
 
-
-
     def __call__(self):
         self.update()
         return self.template()

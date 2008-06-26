@@ -37,6 +37,7 @@ from zope.location.interfaces import ILocation
 from zope.testing import doctest
 from zope.component import eventtesting
 
+from schooltool.timetable import DuplicateTimetableError
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.timetable.interfaces import ITimetable, ITimetableActivity
@@ -724,6 +725,9 @@ class PersistentLocatableStub(Persistent):
 class TimetableStub(PersistentLocatableStub):
     implements(ITimetable)
 
+    def __init__(self, term, schooltt):
+        self.term, self.schooltt = term, schooltt
+
 
 class TestTimetableDict(EventTestMixin, unittest.TestCase):
 
@@ -741,20 +745,20 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
         from schooltool.timetable import TimetableDict
 
         td = TimetableDict()
-        item = TimetableStub()
-        td['aa.bb'] = item
-        self.assertEqual(item.__name__, ('aa.bb'))
+        item = TimetableStub("aa", "bb")
+        td['1'] = item
+        self.assertEqual(item.__name__, ('1'))
         self.assertEqual(item.__parent__, td)
-        self.assertEqual(item, td['aa.bb'])
+        self.assertEqual(item, td['1'])
 
-        item2 = TimetableStub()
-        td['aa.bb'] = item2
-        self.assertEqual(item2, td['aa.bb'])
+        item2 = TimetableStub("aa", "bb")
+        td['1'] = item2
+        self.assertEqual(item2, td['1'])
         self.assertEqual(item.__parent__, None)
         self.assertEqual(item.__name__, None)
 
-        del td['aa.bb']
-        self.assertRaises(KeyError, td.__getitem__, ('aa.bb'))
+        del td['1']
+        self.assertRaises(KeyError, td.__getitem__, '1')
         self.assertEqual(item2.__parent__, None)
         self.assertEqual(item2.__name__, None)
 
@@ -764,39 +768,39 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
 
         eventtesting.clearEvents()
         td = TimetableDict()
-        item = TimetableStub()
-        td['aa.bb'] = item
+        item = TimetableStub("aa", "bb")
+        td['1'] = item
         e = self.checkOneEventReceived()
         self.assert_(ITimetableReplacedEvent.providedBy(e))
         self.assert_(e.object is td.__parent__)
-        self.assertEquals(e.key, ('aa.bb'))
+        self.assertEquals(e.key, '1')
         self.assert_(e.old_timetable is None)
         self.assert_(e.new_timetable is item)
 
         eventtesting.clearEvents()
-        item2 = TimetableStub()
-        td['aa.bb'] = item2
+        item2 = TimetableStub("aa", "bb")
+        td['1'] = item2
         e = self.checkOneEventReceived()
         self.assert_(ITimetableReplacedEvent.providedBy(e))
         self.assert_(e.object is td.__parent__)
-        self.assertEquals(e.key, ('aa.bb'))
+        self.assertEquals(e.key, '1')
         self.assert_(e.old_timetable is item)
         self.assert_(e.new_timetable is item2)
 
         eventtesting.clearEvents()
-        del td['aa.bb']
+        del td['1']
         e = self.checkOneEventReceived()
         self.assert_(ITimetableReplacedEvent.providedBy(e))
         self.assert_(e.object is td.__parent__)
-        self.assertEquals(e.key, ('aa.bb'))
+        self.assertEquals(e.key, '1')
         self.assert_(e.old_timetable is item2)
         self.assert_(e.new_timetable is None)
 
     def test_clear(self):
         from schooltool.timetable import TimetableDict
         td = TimetableDict()
-        td['a.b'] = TimetableStub()
-        td['b.c'] = TimetableStub()
+        td['1'] = TimetableStub("a", "b")
+        td['2'] = TimetableStub("b", "c")
         eventtesting.clearEvents()
         td.clear()
         self.assertEquals(list(td.keys()), [])
@@ -806,15 +810,25 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
     def test_validation(self):
         from schooltool.timetable import TimetableDict
         td = TimetableDict()
-        self.assertRaises(ValueError, td.__setitem__, 'a.b.c',
-                          TimetableStub())
-        self.assertRaises(ValueError, td.__setitem__, 'abc',
-                          TimetableStub())
-        self.assertRaises(ValueError, td.__setitem__, 'c.',
-                          TimetableStub())
-        self.assertRaises(ValueError, td.__setitem__, '.c',
-                          TimetableStub())
-        td['a.c'] = TimetableStub()
+
+        class Stub(object):
+            def __init__(self, name):
+                self.__name__ = name
+
+        term1 = Stub("Term1")
+        term2 = Stub("Term2")
+        schooltt1 = Stub("SchoolTT1")
+        schooltt2 = Stub("SchoolTT2")
+
+        td['1'] = TimetableStub(term1, schooltt1)
+        td['1'] = TimetableStub(term1, schooltt1)
+        td['1'] = TimetableStub(term2, schooltt1)
+
+        self.assertRaises(DuplicateTimetableError, td.__setitem__, '2',
+                          TimetableStub(term2, schooltt1))
+
+        td['2'] = TimetableStub(term1, schooltt1)
+        td['3'] = TimetableStub(term1, schooltt2)
 
 
 class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
@@ -860,12 +874,10 @@ class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
         content = ContentStub()
         tm = TimetablesAdapter(content)
         self.assertEqual(tm.terms, [])
-        tt1 = tm.timetables['term1.foo'] = TimetableStub()
-        tt1.term = "Term 1"
+        tt1 = tm.timetables['1'] = TimetableStub("Term 1", "foo")
         self.assertEqual(tm.terms, ["Term 1"])
 
-        tt2 = tm.timetables['term2.bar'] = TimetableStub()
-        tt2.term = "Term 2"
+        tt2 = tm.timetables['2'] = TimetableStub("Term 2", "foo")
         self.assertEqual(sorted(tm.terms), ["Term 1", "Term 2"])
 
 
@@ -1015,19 +1027,19 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
        ...     directlyProvides(ob, IOwnTimetables)
 
        >>> adapter = ITimetables(app['persons']['p1'])
-       >>> adapter.timetables['2006.simple'] = tts.createTimetable(None)
-       >>> adapter.timetables['2005.simple'] = tts.createTimetable(None)
-       >>> adapter.timetables['2006.other'] = tts2.createTimetable(None)
+       >>> adapter.timetables['2006.simple'] = tts.createTimetable('2006')
+       >>> adapter.timetables['2005.simple'] = tts.createTimetable('2005')
+       >>> adapter.timetables['2006.other'] = tts2.createTimetable('2006')
 
        >>> adapter = ITimetables(app['persons']['p2'])
-       >>> adapter.timetables['2006.simple'] = tts.createTimetable(None)
+       >>> adapter.timetables['2006.simple'] = tts.createTimetable('2006')
 
        >>> adapter = ITimetables(app['groups']['g'])
-       >>> adapter.timetables['2006.simple'] = tts.createTimetable(None)
-       >>> adapter.timetables['2006.other'] = tts2.createTimetable(None)
+       >>> adapter.timetables['2006.simple'] = tts.createTimetable('2006')
+       >>> adapter.timetables['2006.other'] = tts2.createTimetable('2006')
 
        >>> adapter = ITimetables(app['resources']['r'])
-       >>> adapter.timetables['2006.simple'] = tts.createTimetable(None)
+       >>> adapter.timetables['2006.simple'] = tts.createTimetable('2006')
 
     Let's see the timetables for this schema now:
 
@@ -1097,6 +1109,11 @@ def doctest_findRelatedTimetables_forTerm():
        >>> tts["B"] = TimetableSchemaDay(periods1)
        >>> app['ttschemas']['simple'] = tts
 
+       >>> tts_other = TimetableSchema(days)
+       >>> tts_other["A"] = TimetableSchemaDay(periods1)
+       >>> tts_other["B"] = TimetableSchemaDay(periods1)
+       >>> app['ttschemas']['other'] = tts_other
+
     Now we can call our utility function.  Since our schema is not
     used, an empty list is returned:
 
@@ -1136,8 +1153,8 @@ def doctest_findRelatedTimetables_forTerm():
 
        >>> adapter = ITimetables(app['persons']['p1'])
        >>> adapter.timetables['2005.simple'] = tts.createTimetable(t1)
-       >>> adapter.timetables['2005.other'] = tts.createTimetable(t1)
-       >>> adapter.timetables['2006.other'] = tts.createTimetable(t2)
+       >>> adapter.timetables['2005.other'] = tts_other.createTimetable(t1)
+       >>> adapter.timetables['2006.other'] = tts_other.createTimetable(t2)
 
        >>> adapter = ITimetables(app['persons']['p2'])
        >>> adapter.timetables['2005.simple'] = tts.createTimetable(t1)

@@ -580,6 +580,11 @@ def doctest_SectionTimetableSetupView():
         >>> app = sbsetup.setUpSchoolToolSite()
         >>> ztapi.provideAdapter(IOwnTimetables, ITimetables,
         ...                      TimetablesAdapter)
+        >>> from zope.app.container.interfaces import INameChooser
+        >>> from schooltool.timetable.interfaces import ITimetableDict
+        >>> from schooltool.timetable import TimetableNameChooser
+        >>> ztapi.provideAdapter(ITimetableDict, INameChooser,
+        ...                      TimetableNameChooser)
 
         >>> from schooltool.course.section import Section as STSection
         >>> class Section(STSection):
@@ -695,15 +700,15 @@ def doctest_SectionTimetableSetupView():
         >>> request.response.getStatus()
         302
         >>> request.response.getHeader('location')
-        'http://127.0.0.1/sections/math/timetables/2005-fall.default'
+        'http://127.0.0.1/sections/math/timetables/1'
 
     An empty save request will create an empty timetable:
 
-        >>> ITimetables(math).timetables['2005-fall.default']
+        >>> ITimetables(math).timetables['1']
         <Timetable: ...>
-        >>> ITimetables(math).timetables['2005-fall.default']['Mon'].items()
+        >>> ITimetables(math).timetables['1']['Mon'].items()
         [('9:00', Set([])), ('10:00', Set([]))]
-        >>> ITimetables(math).timetables['2005-fall.default']['Tue'].items()
+        >>> ITimetables(math).timetables['1']['Tue'].items()
         [('9:00', Set([])), ('10:00', Set([]))]
 
     Let's add some scheduled classes:
@@ -722,17 +727,17 @@ def doctest_SectionTimetableSetupView():
         >>> view.request.response.getStatus()
         302
         >>> view.request.response.getHeader('location')
-        'http://127.0.0.1/sections/math/timetables/2005-fall.default'
+        'http://127.0.0.1/sections/math/timetables/1'
 
     Now we have a schedule for our course:
 
-        >>> ITimetables(math).timetables['2005-fall.default']['Mon']['9:00']
+        >>> ITimetables(math).timetables['1']['Mon']['9:00']
         Set([TimetableActivity('', ...
-        >>> ITimetables(math).timetables['2005-fall.default']['Mon']['10:00']
+        >>> ITimetables(math).timetables['1']['Mon']['10:00']
         Set([])
-        >>> ITimetables(math).timetables['2005-fall.default']['Tue']['9:00']
+        >>> ITimetables(math).timetables['1']['Tue']['9:00']
         Set([TimetableActivity('', ...
-        >>> ITimetables(math).timetables['2005-fall.default']['Tue']['10:00']
+        >>> ITimetables(math).timetables['1']['Tue']['10:00']
         Set([])
 
     All the periods that were 'ON' are now checked:
@@ -776,7 +781,7 @@ def doctest_SectionTimetableSetupView():
 
     Tuesday's Activity is no longer there:
 
-        >>> ITimetables(math).timetables['2005-fall.default']['Tue']['9:00']
+        >>> ITimetables(math).timetables['1']['Tue']['9:00']
         Set([])
 
     """

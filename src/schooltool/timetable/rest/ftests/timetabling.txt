@@ -545,13 +545,15 @@ And a section:
 We can now add a timetable for the person:
 
     >>> print rest(r"""
-    ... PUT /sections/birdwatching-1/timetables/2005-fall.schema1 HTTP/1.1
+    ... PUT /sections/birdwatching-1/timetables/1 HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
     ...            xmlns:xlink="http://www.w3.org/1999/xlink">
     ...   <timezone name="UTC"/>
+    ...   <term id="2005-fall" />
+    ...   <schooltt id="schema1" />
     ...   <day id="Day 1">
     ...     <period id="A">
     ...     </period>
@@ -575,7 +577,7 @@ We can now add a timetable for the person:
 It should be there:
 
     >>> print rest(r"""
-    ... GET /sections/birdwatching-1/timetables/2005-fall.schema1 HTTP/1.1
+    ... GET /sections/birdwatching-1/timetables/1 HTTP/1.1
     ... Authorization: Basic manager:schooltool""")
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -585,6 +587,8 @@ It should be there:
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
                xmlns:xlink="http://www.w3.org/1999/xlink">
       <timezone name="UTC"/>
+      <term id="2005-fall"/>
+      <schooltt id="schema1"/>
       <day id="Day 1">
         <period id="A">
         </period>
@@ -604,13 +608,15 @@ It should be there:
 Let's modify it:
 
     >>> print rest(r"""
-    ... PUT /sections/birdwatching-1/timetables/2005-fall.schema1 HTTP/1.1
+    ... PUT /sections/birdwatching-1/timetables/1 HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
     ...            xmlns:xlink="http://www.w3.org/1999/xlink">
     ...   <timezone name="UTC"/>
+    ...   <term id="2005-fall" />
+    ...   <schooltt id="schema1" />
     ...   <day id="Day 1">
     ...     <period id="A">
     ...     </period>
@@ -636,7 +642,7 @@ Let's modify it:
 The timetable should look different now:
 
     >>> print rest(r"""
-    ... GET /sections/birdwatching-1/timetables/2005-fall.schema1 HTTP/1.1
+    ... GET /sections/birdwatching-1/timetables/1 HTTP/1.1
     ... Authorization: Basic manager:schooltool""")
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -646,6 +652,8 @@ The timetable should look different now:
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
                xmlns:xlink="http://www.w3.org/1999/xlink">
       <timezone name="UTC"/>
+      <term id="2005-fall"/>
+      <schooltt id="schema1"/>
       <day id="Day 1">
         <period id="A">
         </period>
@@ -678,7 +686,7 @@ Let's look at the list of timetables we have now:
     <BLANKLINE>
     <timetables xmlns:xlink="http://www.w3.org/1999/xlink">
       <timetable xlink:type="simple" term="2005-fall"
-                 xlink:href="http://localhost/sections/birdwatching-1/timetables/2005-fall.schema1"
+                 xlink:href="http://localhost/sections/birdwatching-1/timetables/1"
                  schema="schema1"/>
     </timetables>
     <BLANKLINE>
@@ -686,7 +694,7 @@ Let's look at the list of timetables we have now:
 Let's delete it:
 
     >>> print rest(r"""
-    ... DELETE /sections/birdwatching-1/timetables/2005-fall.schema1 HTTP/1.1
+    ... DELETE /sections/birdwatching-1/timetables/1 HTTP/1.1
     ... Authorization: Basic manager:schooltool""")
     HTTP/1.1 200 Ok
     Content-Length: 0

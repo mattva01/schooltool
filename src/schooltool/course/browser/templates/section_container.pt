@@ -67,7 +67,7 @@
         <td>
           <tal:loop repeat="tt python: view.getTimetables(obj)">
             <span tal:condition="not:repeat/tt/start">, </span>
-            <a href="" tal:attributes="href string:${obj/@@absolute_url}/timetables/$tt"
+            <a href="" tal:attributes="href tt/@@absolute_url"
                tal:content="tt/title" />
           </tal:loop>
         </td>

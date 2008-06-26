@@ -424,12 +424,11 @@ class TimetableCSVImporter(object):
 
         # Create a timetable
         timetables = ITimetables(section).timetables
-        timetable_key = ".".join((self.term.__name__, self.ttschema.__name__))
-        if timetable_key not in timetables.keys():
+        tt = ITimetables(section).lookup(self.term, self.ttschema)
+        if tt is None:
+            chooser = INameChooser(timetables)
             tt = self.ttschema.createTimetable(self.term)
-            timetables[timetable_key] = tt
-        else:
-            tt = timetables[timetable_key]
+            timetables[chooser.chooseName("", tt)] = tt
 
         # Add timetable activities.
         for day_id, period_id in periods:

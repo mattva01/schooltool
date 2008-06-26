@@ -95,6 +95,11 @@
              interface="zope.app.container.interfaces.IReadContainer" />
   </class>
 
+  <adapter
+      for=".interfaces.ITimetableDict"
+      factory=".TimetableNameChooser"
+      provides="zope.app.container.interfaces.INameChooser" />
+
   <interface
       interface=".interfaces.ITimetableSchemaContainer"
       type="zope.app.content.interfaces.IContentType"

@@ -58,6 +58,8 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
                    xmlns:xlink="http://www.w3.org/1999/xlink">
           <timezone name="UTC"/>
+          <term id="2003 fall"/>
+          <schooltt id="schema1"/>
           <day id="Day 1">
             <period id="A" homeroom="">
             </period>
@@ -77,6 +79,8 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
                    xmlns:xlink="http://www.w3.org/1999/xlink">
           <timezone name="Europe/Vilnius"/>
+          <term id="2003 fall"/>
+          <schooltt id="schema1"/>
           <day id="Day 1">
             <period id="A" homeroom="">
               <activity title="Maths" />
@@ -173,8 +177,8 @@ class TestTimetableReadView(TimetableTestMixin, unittest.TestCase):
         self.assertEqualsXML(result, expected, recursively_sort=['timetable'])
 
     def test_get(self):
-        self.do_test_get(self.createEmpty(), self.empty_xml)
-        self.do_test_get(self.createFull(), self.full_xml)
+        self.do_test_get(self.createEmpty(self.term), self.empty_xml)
+        self.do_test_get(self.createFull(term=self.term), self.full_xml)
 
 
 class TestTimetableFileFactory(TimetableTestMixin, unittest.TestCase):

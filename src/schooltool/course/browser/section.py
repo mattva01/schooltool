@@ -21,10 +21,12 @@ course browser views.
 
 $Id$
 """
+from zope.interface import implements
 from zope.security.proxy import removeSecurityProxy
 from zope.app.form.browser.add import AddView
 from zope.publisher.browser import BrowserView
 from zope.component import getMultiAdapter
+from zope.app.container.contained import NameChooser
 from zope.app.container.interfaces import INameChooser
 from zc.table import table
 from zope.traversing.browser.absoluteurl import absoluteURL
@@ -65,7 +67,9 @@ class SectionContainerView(ContainerView):
 
     # XXX: very hacky, but necessary for now. :-(
     def getTimetables(self, obj):
-        return ITimetables(obj).timetables
+        timetables = sorted(ITimetables(obj).timetables.items())
+        return [timetable
+                for key, timetable in timetables]
 
 
 class SectionView(BrowserView):
@@ -89,21 +93,25 @@ class SectionView(BrowserView):
         return filter(IGroup.providedBy, self.context.members)
 
 
+class SectionNameChooser(NameChooser):
+
+    implements(INameChooser)
+
+    def chooseName(self, name, obj):
+        """See INameChooser."""
+
+        i = 1
+        n = "1"
+        while n in self.context:
+            i += 1
+            n = unicode(i)
+        # Make sure the name is valid
+        self.checkName(n, obj)
+        return n
+
+
 class SectionAddView(AddView):
     """A view for adding Sections."""
-
-    def newSectionId(self):
-        app = ISchoolToolApplication(None)
-        sections = sorted(app['sections'].keys())
-        if len(sections) == 0:
-            return "1"
-
-        name = sections[-1]
-        try:
-            name = str(int(name)+1)
-        except ValueError:
-            name = INameChooser(app['sections']).chooseName(name, None)
-        return name
 
     def getCourseFromId(self, cid):
         app = ISchoolToolApplication(None)
@@ -124,11 +132,10 @@ class SectionAddView(AddView):
         self.course = self.getCourseFromId(course_id)
 
     def __call__(self):
-        id = self.newSectionId()
-        section = Section(title=id)
+        section = Section()
         self.context.add(section)
         self.course.sections.add(section)
-        section.title = "%s (%s)" % (self.course.title, id)
+        section.title = "%s (%s)" % (self.course.title, section.__name__)
         self.request.response.redirect(absoluteURL(section, self.request))
 
 

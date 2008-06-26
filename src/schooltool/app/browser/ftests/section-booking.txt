@@ -14,13 +14,15 @@ Let's create a resource:
 and book it for our history class:
 
     >>> print rest("""
-    ... PUT  /sections/1/timetables/2005-fall.default HTTP/1.1
+    ... PUT  /sections/1/timetables/1 HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
     ...            xmlns:xlink="http://www.w3.org/1999/xlink">
     ...   <timezone name="UTC"/>
+    ...   <term id="2005-fall" />
+    ...   <schooltt id="default" />
     ...   <day id="Monday">
     ...     <period id="09:30-10:25">
     ...       <activity title="History 6">

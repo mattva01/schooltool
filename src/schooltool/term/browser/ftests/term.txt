@@ -153,7 +153,7 @@ Schedule the section in the timetable:
     <BLANKLINE>
     <BLANKLINE>
     ...
-       <a href="http://localhost/sections/1/timetables/term-2.simple-timetable">term-2.simple-timetable</a>
+       <a href="http://localhost/sections/1/timetables/1">term-2.simple-timetable</a>
     ...
 
 XXX we lost the title, it should be restored
@@ -194,7 +194,7 @@ Let's do the edit:
     </form>
     <BLANKLINE>
     <BLANKLINE>
-              </div>
+    </div>
 
 We just get the edition of the title as there is timetable related to this term.
 

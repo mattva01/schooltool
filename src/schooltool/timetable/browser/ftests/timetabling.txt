@@ -273,12 +273,12 @@ A new section should have been created:
     >>> manager.getLink('Sections').click()
     >>> print analyze.queryHTML('//table/tr[2]', manager.contents)[0]
     <tr><td>
-        <input type="checkbox" name="delete.swimming--frog" /></td>
+        <input type="checkbox" name="delete.1" /></td>
       <td>
         <a href="http://localhost/courses/swimming">Swimming</a>
       </td>
       <td>
-        <a href=".../sections/swimming--frog">Swimming - Frog</a>
+        <a href=".../sections/1">Swimming - Frog</a>
       </td>
       <td>
     <BLANKLINE>
@@ -289,7 +289,7 @@ A new section should have been created:
       <td>
     <BLANKLINE>
     <BLANKLINE>
-        <a href=".../sections/swimming--frog/timetables/2005-fall.default">2005-Fall.Default</a>
+        <a href=".../sections/1/timetables/1">2005-fall.default</a>
     <BLANKLINE>
       </td>
       <td>
@@ -307,7 +307,7 @@ We should see a timetable in the section's timetable list:
 
     >>> manager.getLink('2005-fall.default')
     <Link text='2005-fall.default'
-          url='.../sections/swimming--frog/timetables/2005-fall.default'>
+          url='.../sections/1/timetables/1'>
 
 We can have a look at the timetable too, and see a few timetable activities:
 
@@ -413,7 +413,7 @@ this section based on the new schema.
     >>> manager.getControl('Next').click()
     >>> manager.getControl('No').click()
 
-    >>> manager.open('http://localhost/sections/swimming--frog/timetables/addTimetable.html')
+    >>> manager.open('http://localhost/sections/1/timetables/addTimetable.html')
     >>> manager.getControl(name='ttschema').value = ['singleperiod']
     >>> manager.getControl('Add').click()
     >>> manager.getLink('2005-fall.singleperiod').click()
@@ -427,7 +427,7 @@ this section too:
     >>> print analyze.queryHTML('//h6[a[@title="Swimming"]]',
     ...                         manager.contents)[0]
     <h6 style="background: #7590ae">
-      <a href="http://localhost/sections/swimming--frog/calendar/..." title="Swimming">
+      <a href="http://localhost/sections/1/calendar/..." title="Swimming">
         Swimming
         <span class="start-end">
           (<span>09:00</span>
@@ -449,7 +449,8 @@ that schema are also deleted.
     >>> manager.getControl(name='delete.default').value = True
     >>> manager.getControl('Delete').click()
     >>> manager.getControl('Confirm').click()
-    >>> manager.open('http://localhost/sections/swimming--frog/timetables')
+
+    >>> manager.open('http://localhost/sections/1/timetables')
     >>> 'default' not in manager.contents
     True
 
@@ -460,7 +461,7 @@ Alternatively, we can delete terms and everything should work out as well.
     >>> manager.getControl(name='delete.2005-fall').value = True
     >>> manager.getControl("Delete").click()
     >>> manager.getControl("Confirm").click()
-    >>> manager.open('http://localhost/sections/swimming--frog/timetables')
+    >>> manager.open('http://localhost/sections/1/timetables')
     >>> '2005-fall' not in manager.contents
     True
 
