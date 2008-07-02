@@ -21,7 +21,7 @@
       name="add.html"
       for="..interfaces.ITermContainer"
       class=".term.TermAddView"
-      template="term_add_edit.pt"
+      template="templates/term_add_edit.pt"
       permission="schooltool.edit"
       menu="schooltool_actions" title="New Term"
       />
@@ -44,7 +44,7 @@
       name="index.html"
       for="..interfaces.ITerm"
       class=".term.TermView"
-      template="term.pt"
+      template="templates/term.pt"
       permission="schooltool.view"
       menu="zmi_views" title="View"
       />
@@ -53,7 +53,7 @@
       name="edit.html"
       for="..interfaces.ITerm"
       class=".term.TermEditView"
-      template="term_add_edit.pt"
+      template="templates/term_add_edit.pt"
       permission="schooltool.edit"
       menu="schooltool_actions" title="Edit"
       />

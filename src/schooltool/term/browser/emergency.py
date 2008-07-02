@@ -50,8 +50,8 @@ class EmergencyDayView(BrowserView):
     __used_for__ = ITerm
 
     template = None
-    date_template = ViewPageTemplateFile('emergency_select.pt')
-    replacement_template = ViewPageTemplateFile('emergency2.pt')
+    date_template = ViewPageTemplateFile('templates/emergency_select.pt')
+    replacement_template = ViewPageTemplateFile('templates/emergency2.pt')
 
     error = None
     date = None

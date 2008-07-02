@@ -53,7 +53,7 @@ class TermContainerView(TableContainerView):
 
     __used_for__ = ITermContainer
 
-    delete_template = ViewPageTemplateFile("term-container-delete.pt")
+    delete_template = ViewPageTemplateFile("templates/term-container-delete.pt")
 
     index_title = _("Terms")
 
@@ -129,8 +129,8 @@ class TermEditView(BrowserView, TermEditViewMixin):
 
     update_status = None
 
-    edit_template = ViewPageTemplateFile('term_add_edit.pt')
-    basic_edit_template = ViewPageTemplateFile('term_basic_add_edit.pt')
+    edit_template = ViewPageTemplateFile('templates/term_add_edit.pt')
+    basic_edit_template = ViewPageTemplateFile('templates/term_basic_add_edit.pt')
 
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)
