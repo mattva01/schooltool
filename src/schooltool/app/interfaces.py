@@ -34,12 +34,6 @@ from schooltool.common import SchoolToolMessage as _
 from schooltool.calendar.interfaces import IEditCalendar, ICalendarEvent
 from schooltool.person.interfaces import ICalendarDisplayPreferences
 
-
-# Dirty hacks that provide sensible i10n for widget error messages.
-# See issue #221 (http://issues.schooltool.org/issue221).
-from zope.schema.interfaces import RequiredMissing
-RequiredMissing.__doc__ = _("""Required input is missing.""")
-
 import zope.app.form.browser.textwidgets
 zope.app.form.browser.textwidgets._ = _
 # Here we do a particulary evil thing: we override the translation (_) function
