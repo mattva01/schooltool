@@ -491,6 +491,11 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         result = list(rule.apply(ev))
         self.assertEqual(result, expected)
 
+        # With an end datetime
+        rule = self.createRule(monthly="monthday", until=datetime(1979, 2, 17))
+        result = list(rule.apply(ev))
+        self.assertEqual(result, expected)
+
         # With a count
         rule = self.createRule(count=10)
         result = list(rule.apply(ev))

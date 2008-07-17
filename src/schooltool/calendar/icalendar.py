@@ -1097,6 +1097,9 @@ def parse_recurrence_rule(value):
     >>> parse_recurrence_rule('FREQ=DAILY;WHATEVER=IGNORED')
     DailyRecurrenceRule(1, None, None, ())
 
+    >>> parse_recurrence_rule('FREQ=MONTHLY;INTERVAL=1;UNTIL=20070102;BYMONTHDAY=3')
+    MonthlyRecurrenceRule(1, None, datetime.date(2007, 1, 2), (), 'monthday')
+
     """
     from schooltool.calendar.recurrent import DailyRecurrenceRule
     from schooltool.calendar.recurrent import YearlyRecurrenceRule
@@ -1116,10 +1119,9 @@ def parse_recurrence_rule(value):
     until = params.pop('UNTIL', None)
     if until is not None:
         if len(until) == 8:
-            until = datetime.datetime.combine(parse_date(until),
-                                              datetime.time(0, 0))
+            until = parse_date(until)
         else:
-            until = parse_date_time(until)
+            until = parse_date_time(until).date()
 
     # instantiate the corresponding recurrence rule
     freq = params.pop('FREQ', None)
