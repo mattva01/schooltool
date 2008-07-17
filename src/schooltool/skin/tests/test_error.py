@@ -64,8 +64,8 @@ def doctest_ErrorView():
         ...     raise exception
         ... except:
         ...     print view.traceback()
-        File "<span class="filename">&lt;doctest...ErrorView[...]&gt;</span>",
-        line <span class="lineno">2</span>, in <span class="method">?</span>
+        File "<span class="filename">&lt;doctest...doctest_ErrorView[...]&gt;</span>",
+          line <span class="lineno">2</span>, in <span class="method">...</span>
           <span class="source">raise exception</span>
 
     """
