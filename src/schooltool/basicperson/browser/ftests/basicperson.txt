@@ -88,7 +88,7 @@ Now there even are person export views:
       <persons>
         <person>
           <username>john</username>
-          <title>Petterson John</title>
+          <title>Petterson, John</title>
           <basic:first_name>John</basic:first_name>
           <basic:last_name>Petterson</basic:last_name>
           <basic:gender>male</basic:gender>
@@ -101,7 +101,7 @@ Now there even are person export views:
         </person>
         <person>
           <username>manager</username>
-          <title>Administrator SchoolTool</title>
+          <title>Administrator, SchoolTool</title>
           <basic:first_name>SchoolTool</basic:first_name>
           <basic:last_name>Administrator</basic:last_name>
           <groups>
@@ -125,7 +125,7 @@ Now there even are person export views:
       <persons>
         <person>
           <username>john</username>
-          <title>Petterson John</title>
+          <title>Petterson, John</title>
           <basic:first_name>John</basic:first_name>
           <basic:last_name>Petterson</basic:last_name>
           <basic:gender>male</basic:gender>
@@ -206,7 +206,7 @@ of them:
       <persons>
         <person>
           <username>steve</username>
-          <title>Smith Steve</title>
+          <title>Smith, Steve</title>
           <basic:first_name>Steve</basic:first_name>
           <basic:last_name>Smith</basic:last_name>
         </person>
