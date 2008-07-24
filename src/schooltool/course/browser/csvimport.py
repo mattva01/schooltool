@@ -21,6 +21,7 @@ csv importing.
 
 $Id$
 """
+from zope.exceptions.interfaces import UserError
 from schooltool.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView
 from schooltool.course.course import Course
 
@@ -48,10 +49,40 @@ class CourseCSVImporter(BaseCSVImporter):
         else:
             description = ''
 
-        obj = self.factory(title=data[0], description=description)
-        name = self.chooser.chooseName('', obj)
+        if len(data) > 2:
+            course_id = data[2]
+        else:
+            course_id = ''
+            for key, course in self.container.items():
+                if course.title == data[0]:
+                    course_id = key
+                    break
+
+        if course_id in self.container:
+            obj = self.container[course_id]
+            name = course_id
+        else:
+            obj = None
+
+        if not obj:
+            obj = self.factory(title=data[0], description=description)
+            try:
+                name = self.chooser.chooseName(course_id, obj)
+            except UserError, e:
+                msg = e.args[0]
+                self.errors.fields.append(_('Course "${course_title}" id "${invalid_id}"'
+                                            ' is invalid. ${error_message}',
+                                            mapping={'course_title': obj.title,
+                                                     'invalid_id': course_id,
+                                                     'error_message': msg}))
+                return
+
         if not dry_run:
-            self.container[name] = obj
+            if course_id in self.container:
+                obj.title = data[0]
+                obj.description = description
+            else:
+                self.container[name] = obj
 
 
 class CourseCSVImportView(BaseCSVImportView):
