@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<configure
+    xmlns="http://namespaces.zope.org/browser"
+    xmlns:zope="http://namespaces.zope.org/zope"
+    i18n_domain="schooltool">
+
+  <zope:adapter factory=".schoolyear.SchoolYearAddFormAdapter" />
+
+  <zope:adapterTraverserPlugin
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      name="schoolyears"
+      adapter="schooltool.schoolyear.interfaces.ISchoolYearContainer"
+      />
+
+  <configure package="schooltool.skin">
+
+    <navigationViewlet
+      name="schoolyears"
+      for="*"
+      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.skin.skin.NavigationViewlet"
+      permission="schooltool.edit"
+      link="schoolyears"
+      title="School Years"
+      order="0"
+      />
+
+    <page
+       name="index.html"
+       for="schooltool.schoolyear.interfaces.ISchoolYearContainer"
+       class="schooltool.schoolyear.browser.schoolyear.SchoolYearContainerView"
+       permission="schooltool.view"
+       />
+
+  </configure>
+
+  <zope:adapter
+      for="schooltool.schoolyear.interfaces.ISchoolYearContainer
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory="schooltool.table.table.SchoolToolTableFormatter" />
+
+  <zope:adapter
+      factory=".schoolyear.ScholYearContainerAbsoluteURLAdapter"
+      provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <zope:adapter
+      factory=".schoolyear.ScholYearContainerAbsoluteURLAdapter"
+      provides="zope.interface.Interface"
+      name="absolute_url"/>
+
+  <zope:adapter
+      for="schooltool.schoolyear.interfaces.ISchoolYearContainer
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory="schooltool.table.table.FilterWidget" />
+
+  <page
+     name="add.html"
+     for="schooltool.schoolyear.interfaces.ISchoolYearContainer"
+     class=".schoolyear.SchoolYearAddView"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="New School Year" />
+
+</configure>
