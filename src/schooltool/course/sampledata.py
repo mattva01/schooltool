@@ -33,6 +33,7 @@ from schooltool.app.relationships import Instruction, CourseSections
 from schooltool.app.relationships import URICourse, URISection
 from schooltool.app.membership import Membership
 from schooltool.relationship import getRelatedObjects
+from schooltool.term.interfaces import ITermContainer
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable import TimetableActivity
 from schooltool.app.cal import CalendarEvent
@@ -128,7 +129,7 @@ class SampleTimetables(object):
         course = getRelatedObjects(section, URICourse)[0]
         for term_id in ['2005-fall', '2006-spring']:
             ttname = term_id + ".simple"
-            timetable = app['ttschemas'].getDefault().createTimetable(app["terms"][term_id])
+            timetable = app['ttschemas'].getDefault().createTimetable(ITermContainer(app)[term_id])
             for day_id in timetable.keys():
                 activity = TimetableActivity(course.title, owner=section,
                                              resources=section.resources)

@@ -29,6 +29,7 @@ from pytz import timezone, utc
 from zope.i18n import translate
 from zope.interface import Interface
 from zope.interface import directlyProvides, implements
+from zope.component import provideAdapter
 from zope.component import provideSubscriptionAdapter
 from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
@@ -44,6 +45,8 @@ from schooltool.common import parse_datetime
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 from schooltool.timetable.model import SequentialDaysTimetableModel
 from schooltool.timetable.schema import TimetableSchema
+from schooltool.term.interfaces import ITermContainer
+from schooltool.term.term import getTermContainer
 from schooltool.term.tests import setUpDateManagerStub
 from schooltool.testing.util import NiceDiffsMixin
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
@@ -4837,7 +4840,9 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
         from schooltool.person.preference import getPersonPreferences
         from schooltool.person.interfaces import IPersonPreferences
         from schooltool.person.person import Person
-        ztapi.provideAdapter(Person, IPersonPreferences, getPersonPreferences)
+        provideAdapter(getPersonPreferences, [Person], IPersonPreferences)
+        from schooltool.term.term import getTermContainer
+        provideAdapter(getTermContainer, [Interface], ITermContainer)
 
         # set up the site
         app = sbsetup.setUpSchoolToolSite()
@@ -4862,8 +4867,9 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
 
         # set up terms
         from schooltool.term.term import Term
-        app['terms']['term'] = term = Term("Some term", date(2004, 9, 1),
-                                           date(2004, 12, 31))
+        terms = ITermContainer(app)
+        terms['term'] = term = Term("Some term", date(2004, 9, 1),
+                                    date(2004, 12, 31))
         term.add(date(2004, 11, 5))
 
     def tearDown(self):
@@ -5013,6 +5019,7 @@ class TestDailyCalendarRowsView_getPeriodsForDay(NiceDiffsMixin,
 
     def setUp(self):
         setup.placefulSetUp()
+        provideAdapter(getTermContainer, [Interface], ITermContainer)
         app = sbsetup.setUpSchoolToolSite()
 
         from schooltool.term.term import Term
@@ -5023,8 +5030,9 @@ class TestDailyCalendarRowsView_getPeriodsForDay(NiceDiffsMixin,
                                  ('D', time(15,0), timedelta(minutes=115)),]
         self.term2 = Term('Sample', date(2005, 1, 1), date(2005, 6, 1))
         self.term2.schooldays = []
-        app["terms"]['2004-fall'] = self.term1
-        app["terms"]['2005-spring'] = self.term2
+        terms = ITermContainer(app)
+        terms['2004-fall'] = self.term1
+        terms['2005-spring'] = self.term2
 
         class TimetableModelStub:
             def periodsInDay(this, schooldays, ttschema, date):
@@ -5103,7 +5111,7 @@ class TestDailyCalendarRowsView_getPeriodsForDay(NiceDiffsMixin,
     def test_getPeriodsForDayBetweenTerms(self):
         from schooltool.term.term import Term
         term3 = Term('Sample', date(2005, 6, 2), date(2005, 8, 1))
-        self.app["terms"]['2005-autumn'] = term3
+        ITermContainer(self.app)['2005-autumn'] = term3
         term3.schooldays = [('A', time(9,0), timedelta(minutes=115))]
         self.term2.schooldays = [('B', time(10,0), timedelta(minutes=115))]
 

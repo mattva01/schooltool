@@ -25,6 +25,8 @@ import unittest
 import datetime
 from StringIO import StringIO
 
+from zope.component import provideAdapter
+from zope.interface import Interface
 from zope.i18n import translate
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
@@ -32,6 +34,8 @@ from zope.app.testing import ztapi
 
 from schooltool.app.browser.testing import setUp as testSetUp, tearDown
 from schooltool.person.person import Person
+from schooltool.term.interfaces import ITermContainer
+from schooltool.term.term import getTermContainer
 from schooltool.testing import setup
 
 from schooltool.app.browser.csvimport import InvalidCSVError
@@ -139,6 +143,7 @@ class TestTimetableCSVImportView(unittest.TestCase):
     def setUp(self):
         setUp()
         self.app = setup.setUpSchoolToolSite()
+        provideAdapter(getTermContainer, [Interface], ITermContainer)
 
         from schooltool.timetable.schema import TimetableSchema
         from schooltool.timetable.schema import TimetableSchemaDay
@@ -148,9 +153,9 @@ class TestTimetableCSVImportView(unittest.TestCase):
         self.app['ttschemas']['three-day'] = ttschema
 
         from schooltool.term.term import Term
-        self.app['terms']['fall'] = Term("Fall term",
-                                         datetime.datetime(2004, 1, 1),
-                                         datetime.datetime(2004, 5, 1))
+        ITermContainer(self.app)['fall'] = Term("Fall term",
+                                                datetime.datetime(2004, 1, 1),
+                                                datetime.datetime(2004, 5, 1))
 
     def tearDown(self):
         tearDown()
@@ -251,6 +256,8 @@ class TestTimetableCSVImporter(unittest.TestCase):
         ztapi.provideAdapter(ITimetableDict, INameChooser,
                              TimetableNameChooser)
 
+        provideAdapter(getTermContainer, [Interface], ITermContainer)
+
         self.app = app = setup.setUpSchoolToolSite()
 
         self.course = app['courses']['philosophy'] = Course(title="Philosophy")
@@ -268,12 +275,12 @@ class TestTimetableCSVImporter(unittest.TestCase):
         term = Term("Summer term",
                     datetime.datetime(2004, 1, 1),
                     datetime.datetime(2004, 5, 1))
-        self.app["terms"]["summer"] = term
+        ITermContainer(self.app)["summer"] = term
 
         term2 = Term("Fall term",
                     datetime.datetime(2004, 1, 1),
                     datetime.datetime(2004, 5, 1))
-        self.app["terms"]["fall"] = term2
+        ITermContainer(self.app)["fall"] = term2
 
         # add some people and groups
         for title in ['Curtin', 'Lorch', 'Guzman']:
@@ -291,7 +298,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         from schooltool.app.browser.csvimport import TimetableCSVImporter
         importer = TimetableCSVImporter(self.app['sections'], charset=charset)
         if term is not None:
-            importer.term = self.app['terms'][term]
+            importer.term = ITermContainer(self.app)[term]
         if ttschema is not None:
             importer.ttschema = self.app['ttschemas'][ttschema]
         return importer

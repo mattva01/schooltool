@@ -33,6 +33,7 @@ from schooltool.app.app import SimpleNameChooser
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.course.interfaces import ISectionContainer
 from schooltool.course.section import Section
+from schooltool.term.interfaces import ITermContainer
 from schooltool.timetable import TimetableActivity
 from schooltool.timetable.interfaces import ITimetables
 
@@ -467,7 +468,7 @@ class TimetableCSVImporter(object):
         term_id, ttschema_id = row
 
         try:
-            self.term = self.app['terms'][term_id]
+            self.term = ITermContainer(self.app)[term_id]
         except KeyError:
             error_msg = _("The term ${term} does not exist.",
                           mapping={'term': term_id})

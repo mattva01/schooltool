@@ -10,6 +10,11 @@ First of all, we need an app object:
 
     >>> from schooltool.testing import setup as sbsetup
     >>> app = sbsetup.setUpSchoolToolSite()
+    >>> from schooltool.term.term import getTermContainer
+    >>> from schooltool.term.interfaces import ITermContainer
+    >>> from zope.interface import Interface
+    >>> from zope.component import provideAdapter
+    >>> provideAdapter(getTermContainer, [Interface], ITermContainer)
 
 We have a timetable schema to put the view on:
 
@@ -39,10 +44,10 @@ We will need a term:
 
     >>> import datetime
     >>> from schooltool.term.term import Term
-    >>> app["terms"]["2005-summer"] = Term('2005 summer',
-    ...                                    datetime.date(2005, 6, 1),
-    ...                                    datetime.date(2005, 8, 31))
-    >>> app["terms"]["2005-summer"].addWeekdays(0, 1, 2, 3, 4)
+    >>> ITermContainer(app)["2005-summer"] = Term('2005 summer',
+    ...                                           datetime.date(2005, 6, 1),
+    ...                                           datetime.date(2005, 8, 31))
+    >>> ITermContainer(app)["2005-summer"].addWeekdays(0, 1, 2, 3, 4)
 
 Now we can call the view.  First we get asked what day do we want to change:
 

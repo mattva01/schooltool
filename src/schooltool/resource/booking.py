@@ -34,6 +34,7 @@ from schooltool.resource.interfaces import IBookingTimetableEvent
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPerson
+from schooltool.term.interfaces import ITermContainer
 from schooltool.timetable import TimetableActivity
 from schooltool.traverser.traverser import NameTraverserPlugin
 
@@ -102,7 +103,7 @@ class ResourceBookingCalendar(ImmutableCalendar):
 
     def expand(self, start, end):
         app = ISchoolToolApplication(None)
-        terms = app["terms"]
+        terms = ITermContainer(app)
         school_timetables = app['ttschemas']
 
         events = []

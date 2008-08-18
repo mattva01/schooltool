@@ -32,7 +32,7 @@
       for="*"
       manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
       template="templates/navigationViewlet.pt"
-      class="schooltool.skin.TopLevelContainerNavigationViewlet"
+      class="schooltool.skin.skin.NavigationViewlet"
       permission="schooltool.view"
       link="terms"
       title="Terms"
@@ -76,5 +76,28 @@
       for="schooltool.term.interfaces.ITermContainer
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory="schooltool.table.table.SchoolToolTableFormatter " />
+
+  <zope:adapterTraverserPlugin
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      layer="zope.publisher.interfaces.http.IHTTPRequest"
+      name="terms"
+      adapter="schooltool.term.interfaces.ITermContainer"
+      />
+
+  <zope:adapterTraverserPlugin
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      name="terms"
+      adapter="schooltool.term.interfaces.ITermContainer"
+      />
+
+  <zope:adapter
+      factory=".term.TermContainerAbsoluteURLAdapter"
+      provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <zope:adapter
+      factory=".term.TermContainerAbsoluteURLAdapter"
+      provides="zope.interface.Interface"
+      name="absolute_url"/>
 
 </configure>

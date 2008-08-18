@@ -26,6 +26,8 @@ import pytz
 from datetime import datetime
 
 import zope.interface
+from zope.location.location import LocationProxy
+from zope.interface import implementer
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container import contained, btree
 
@@ -105,7 +107,7 @@ def getTermForDate(date):
 
     Returns None if `date` falls outside all terms.
     """
-    terms = getSchoolToolApplication()["terms"]
+    terms = interfaces.ITermContainer(None)
     for term in terms.values():
         if date in term:
             return term
@@ -122,7 +124,7 @@ def getNextTermForDate(date):
 
     Returns None if there are no terms.
     """
-    terms = getSchoolToolApplication()["terms"]
+    terms = interfaces.ITermContainer(None)
     before, after = [], []
     for term in terms.values():
         if date in term:
@@ -151,3 +153,9 @@ class DateManagerUtility(object):
     @property
     def current_term(self):
         return getNextTermForDate(self.today)
+
+
+@implementer(interfaces.ITermContainer)
+def getTermContainer(context):
+    app = ISchoolToolApplication(None)
+    return app['terms']

@@ -1085,6 +1085,12 @@ def doctest_findRelatedTimetables_forTerm():
        ...                      TimetablesAdapter)
        >>> setup.setUpAnnotations()
 
+       >>> from schooltool.term.term import getTermContainer
+       >>> from zope.component import provideAdapter
+       >>> from zope.interface import Interface
+       >>> from schooltool.term.interfaces import ITermContainer
+       >>> provideAdapter(getTermContainer, [Interface], ITermContainer)
+
        >>> from schooltool.timetable import findRelatedTimetables
        >>> app = stsetup.setUpSchoolToolSite()
        >>> directlyProvides(app, IOwnTimetables)
@@ -1092,10 +1098,10 @@ def doctest_findRelatedTimetables_forTerm():
     Let's create a couple of terms:
 
        >>> from schooltool.term.term import Term
-       >>> t1 = app['terms']['2005'] = Term('2005', date(2005, 1, 1),
-       ...                                  date(2005, 12, 31))
-       >>> t2 = app['terms']['2006'] = Term('2006', date(2006, 1, 1),
-       ...                                  date(2006, 12, 31))
+       >>> t1 = ITermContainer(app)['2005'] = Term('2005', date(2005, 1, 1),
+       ...                                         date(2005, 12, 31))
+       >>> t2 = ITermContainer(app)['2006'] = Term('2006', date(2006, 1, 1),
+       ...                                         date(2006, 12, 31))
 
     We'll also need a timetable schema:
 

@@ -39,13 +39,19 @@ from schooltool.skin.containers import TableContainerView
 from schooltool.common import SchoolToolMessage as _
 
 
-class ScholYearContainerAbsoluteURLAdapter(AbsoluteURL):
+class SchoolYearContainerAbsoluteURLAdapter(AbsoluteURL):
 
     adapts(ISchoolYearContainer, IBrowserRequest)
     implements(IAbsoluteURL)
 
     def _getContextName(self, context):
         return 'schoolyears'
+
+
+class SchoolYearAbsoluteURLAdapter(AbsoluteURL):
+
+    adapts(ISchoolYear, IBrowserRequest)
+    implements(IAbsoluteURL)
 
 
 class SchoolYearContainerView(TableContainerView):

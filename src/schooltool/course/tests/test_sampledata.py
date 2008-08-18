@@ -24,12 +24,16 @@ $Id$
 
 import unittest
 
+from zope.interface import Interface
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
 from zope.app.testing import setup
 from zope.app.testing import ztapi
+from zope.component import provideAdapter
 from zope.component import provideSubscriptionAdapter
 
+from schooltool.term.interfaces import ITermContainer
+from schooltool.term.term import getTermContainer
 from schooltool.testing import setup as stsetup
 from schooltool.relationship.tests import setUpRelationships
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -49,6 +53,7 @@ def setUp(test):
     stsetup.setUpTimetabling()
     stsetup.setUpCalendaring()
     stsetup.setUpApplicationPreferences()
+    provideAdapter(getTermContainer, [Interface], ITermContainer)
 
 
 def tearDown(test):
@@ -360,10 +365,11 @@ def doctest_SampleSectionAssignments():
 
         >>> from schooltool.timetable.interfaces import ITimetables
         >>> from schooltool.timetable import TimetableActivity
+        >>> from schooltool.term.interfaces import ITermContainer
         >>> Timetable = app['ttschemas'].getDefault().createTimetable
         >>> for sect in (s0, s1, s2, s3, s4, s5, s6, s7, s8):
         ...     timetables = ITimetables(sect).timetables
-        ...     tt = Timetable(app['terms']['2005-fall'])
+        ...     tt = Timetable(ITermContainer(app)['2005-fall'])
         ...     for day in range(1, 7):
         ...         activity = TimetableActivity('Stuff', owner=sect)
         ...         tt['Day %d' % day].add('A', activity, send_events=False)

@@ -42,11 +42,24 @@
       factory="schooltool.table.table.SchoolToolTableFormatter" />
 
   <zope:adapter
-      factory=".schoolyear.ScholYearContainerAbsoluteURLAdapter"
+      factory=".schoolyear.SchoolYearContainerAbsoluteURLAdapter"
       provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
 
   <zope:adapter
-      factory=".schoolyear.ScholYearContainerAbsoluteURLAdapter"
+      factory=".schoolyear.SchoolYearContainerAbsoluteURLAdapter"
+      provides="zope.interface.Interface"
+      name="absolute_url"/>
+
+  <zope:adapter
+      factory="zope.traversing.browser.absoluteurl.AbsoluteURL"
+      for="schooltool.schoolyear.interfaces.ISchoolYear
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <zope:adapter
+      factory="zope.traversing.browser.absoluteurl.AbsoluteURL"
+      for="schooltool.schoolyear.interfaces.ISchoolYear
+           zope.publisher.interfaces.browser.IBrowserRequest"
       provides="zope.interface.Interface"
       name="absolute_url"/>
 

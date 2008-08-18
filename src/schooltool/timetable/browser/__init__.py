@@ -35,6 +35,7 @@ from zope.publisher.interfaces import NotFound
 from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser.absoluteurl import absoluteURL
 
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.membership import URIGroup
 from schooltool.calendar.utils import parse_date, parse_time
@@ -43,6 +44,7 @@ from schooltool.course.interfaces import ISection
 from schooltool.person.interfaces import IPerson
 from schooltool.relationship.relationship import getRelatedObjects
 from schooltool.resource.interfaces import IBaseResource
+from schooltool.term.interfaces import ITermContainer
 from schooltool.term.interfaces import IDateManager
 from schooltool.term.term import getTermForDate
 from schooltool.timetable import SchooldaySlot
@@ -392,7 +394,7 @@ class TimetableConflictMixin(object):
     def getTerm(self):
         """Return the chosen term."""
         if 'term' in self.request:
-            terms = getSchoolToolApplication()["terms"]
+            terms = ITermContainer(self.context)
             return terms[self.request['term']]
         else:
             return getUtility(IDateManager).current_term
@@ -484,9 +486,16 @@ class TimetableSetupViewBase(BrowserView, TimetableConflictMixin):
 
         return list(days(ttschema))
 
+    @property
+    def ttschemas(self):
+        return ISchoolToolApplication(None)["ttschemas"]
+
+    @property
+    def terms(self):
+        return ITermContainer(self.context)
+
     def __call__(self):
-        self.app = getSchoolToolApplication()
-        self.has_timetables = bool(self.app["terms"] and self.app["ttschemas"])
+        self.has_timetables = bool(self.terms and self.ttschemas)
         if not self.has_timetables:
             return self.template()
 
@@ -557,7 +566,7 @@ class TimetableAddForm(TimetableSetupViewBase):
     def getTerm(self):
         """Return the chosen term."""
         if 'term' in self.request:
-            terms = getSchoolToolApplication()["terms"]
+            terms = ITermContainer(self.context)
             return terms[self.request['term']]
         else:
             return getUtility(IDateManager).current_term
@@ -569,8 +578,7 @@ class TimetableAddForm(TimetableSetupViewBase):
 
     def __call__(self):
         context = removeSecurityProxy(self.context)
-        self.app = getSchoolToolApplication()
-        self.has_timetables = bool(self.app["terms"] and self.app["ttschemas"])
+        self.has_timetables = bool(self.terms and self.ttschemas)
         if not self.has_timetables:
             return self.template()
         self.term = self.getTerm()
@@ -593,10 +601,10 @@ class SectionTimetableSetupView(TimetableSetupViewBase):
     template = ViewPageTemplateFile('templates/section-timetable-setup.pt')
 
     def singleSchema(self):
-        return len(self.app['ttschemas'].values()) == 1
+        return len(self.ttschemas.values()) == 1
 
     def singleTerm(self):
-        return len(self.app['terms'].values()) == 1
+        return len(ITermContainer(self.context).values()) == 1
 
     def addTimetable(self, timetable):
         tt_dict = ITimetables(self.context).timetables
@@ -607,7 +615,7 @@ class SectionTimetableSetupView(TimetableSetupViewBase):
     def getTerms(self):
         """Return the chosen term."""
         if 'terms' in self.request:
-            terms = getSchoolToolApplication()['terms']
+            terms = ITermContainer(self.context)
             requested_terms = []
 
             # request['terms'] may be a list of strings or a single string, we
@@ -654,14 +662,13 @@ class SectionTimetableSetupView(TimetableSetupViewBase):
         return list(days(ttschema))
 
     def __call__(self):
-        self.app = getSchoolToolApplication()
-        self.has_timetables = bool(self.app["terms"] and self.app["ttschemas"])
+        self.has_timetables = bool(self.terms and self.ttschemas)
         if not self.has_timetables:
             return self.template()
-        self.terms = self.getTerms()
+        self.selected_terms = self.getTerms()
         self.ttschema = self.getSchema()
         self.ttkeys = ['.'.join((term.__name__, self.ttschema.__name__))
-                       for term in self.terms]
+                       for term in self.selected_terms]
         self.days = self.getDays(self.ttschema)
         #XXX dumb, this doesn't space course names
         course_title = ''.join([course.title
@@ -673,7 +680,7 @@ class SectionTimetableSetupView(TimetableSetupViewBase):
         if 'SAVE' in self.request:
 
             section = removeSecurityProxy(self.context)
-            for term in self.terms:
+            for term in self.selected_terms:
                 timetable = ITimetables(section).lookup(term, self.ttschema)
                 if timetable is None:
                     timetable = self.ttschema.createTimetable(term)
@@ -739,8 +746,7 @@ class TimetableEditView(TimetableSetupViewBase):
         return list(days(ttschema))
 
     def __call__(self):
-        self.app = getSchoolToolApplication()
-        self.has_timetables = bool(self.app["terms"] and self.app["ttschemas"])
+        self.has_timetables = bool(self.terms and self.ttschemas)
         if not self.has_timetables:
             return self.template()
         self.days = self.getDays(self.context.schooltt)

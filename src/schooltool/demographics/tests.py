@@ -24,10 +24,14 @@ $Id$
 
 import unittest
 
+from zope.component import provideAdapter
+from zope.interface import Interface
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
 from zope.app.testing import setup
 
+from schooltool.term.interfaces import ITermContainer
+from schooltool.term.term import getTermContainer
 from schooltool.testing import setup as stsetup
 from schooltool.relationship.tests import setUpRelationships
 from schooltool.app.interfaces import ISchoolToolCalendar
@@ -36,6 +40,8 @@ from schooltool.app.interfaces import ISchoolToolCalendar
 def setUp(test):
     setup.placefulSetUp()
     stsetup.setUpCalendaring()
+    provideAdapter(getTermContainer, [Interface], ITermContainer)
+
 
 def tearDown(test):
     setup.placefulTearDown()

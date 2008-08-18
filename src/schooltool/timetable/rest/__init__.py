@@ -45,6 +45,7 @@ from schooltool.app.app import getSchoolToolApplication
 from zope.app.container.traversal import ItemTraverser
 from schooltool.common.xmlparsing import LxmlDocument
 from schooltool.common import parse_date, parse_time
+from schooltool.term.interfaces import ITermContainer
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import ITimetableDict
 from schooltool.timetable import TimetableActivity, TimetableDict
@@ -265,10 +266,10 @@ class TimetableFileFactory(object):
 
         app = getSchoolToolApplication()
 
-        if time_period_id not in app["terms"]:
+        if time_period_id not in ITermContainer(app):
             raise RestError("Time period not defined: %s" % time_period_id)
         try:
-            tt = app["ttschemas"][schema_id].createTimetable(app["terms"][time_period_id])
+            tt = app["ttschemas"][schema_id].createTimetable(ITermContainer(app)[time_period_id])
         except KeyError:
             raise RestError("Timetable schema not defined: %s" % schema_id)
         tznode = doc.xpath('/tt:timetable/tt:timezone', self.nsmap)[0]

@@ -26,6 +26,8 @@ import unittest
 from datetime import datetime
 
 from pytz import utc
+from zope.component import provideAdapter
+from zope.interface import Interface
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
 from zope.app.testing import setup
@@ -36,12 +38,15 @@ from schooltool.app.cal import getCalendar
 
 
 # Eek, st.group depends on st.term because of this import
+from schooltool.term.interfaces import ITermContainer
+from schooltool.term.term import getTermContainer
 from schooltool.term.term import getTermForDate
 
 
 def setUp(test):
     setup.placefulSetUp()
     stsetup.setUpCalendaring()
+    provideAdapter(getTermContainer, [Interface], ITermContainer)
 
 
 def tearDown(test):

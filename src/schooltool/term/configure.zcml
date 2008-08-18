@@ -16,6 +16,10 @@
       factory="schooltool.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
+  <adapter
+      for="*"
+      factory="schooltool.term.term.getTermContainer" />
+
   <interface
       interface=".interfaces.ITermContainer"
       type="zope.app.content.interfaces.IContentType"

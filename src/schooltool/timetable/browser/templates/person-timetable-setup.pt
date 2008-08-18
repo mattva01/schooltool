@@ -23,7 +23,7 @@
 
     <label for="term" i18n:translate="">Term</label>
     <select id="term" name="term"
-            tal:define="terms view/app/terms/values">
+            tal:define="terms view/terms/values">
       <option tal:repeat="term terms/sortby:first"
               tal:attributes="value term/__name__;
                               selected python:term is view.term
@@ -33,7 +33,7 @@
 
     <label for="ttschema" i18n:translate="">Schema</label>
     <select id="ttschema" name="ttschema"
-            tal:define="ttschemas view/app/ttschemas/values">
+            tal:define="ttschemas view/ttschemas/values">
       <option tal:repeat="ttschema ttschemas/sortby:__name__"
               tal:attributes="value ttschema/__name__;
                               selected python:ttschema is view.ttschema

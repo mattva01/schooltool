@@ -11,8 +11,8 @@
       <tal:if tal:condition="view/has_timetables">
 	<form tal:attributes="action request/URL" class="standalone" method="post">
 	  <h3 i18n:translate="">Create a New Timetable</h3>
-	  <fieldset tal:define="terms view/app/terms/values;
-				ttschemas view/app/ttschemas/values">
+	  <fieldset tal:define="terms view/terms/values;
+				ttschemas view/ttschemas/values">
 	    <legend i18n:translate="">Choose schedule template</legend>
 
 	    <p i18n:translate="">For term(s):</p>

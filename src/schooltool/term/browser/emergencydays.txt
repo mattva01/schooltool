@@ -12,6 +12,16 @@ Set up
 First of all, we need an app object:
 
     >>> app = sbsetup.setUpSchoolToolSite()
+    >>> from schooltool.term.interfaces import ITermContainer
+    >>> from schooltool.term.term import getTermContainer
+    >>> from zope.component import provideAdapter
+    >>> from zope.interface import Interface
+    >>> provideAdapter(getTermContainer, [Interface], ITermContainer)
+
+    >>> from schooltool.term.browser.term import TermContainerAbsoluteURLAdapter
+    >>> from zope.traversing.browser.interfaces import IAbsoluteURL
+    >>> provideAdapter(TermContainerAbsoluteURLAdapter, provides=IAbsoluteURL)
+    >>> provideAdapter(TermContainerAbsoluteURLAdapter, provides=Interface, name="absolute_url")
 
 We have a timetable schema to put the view on:
 
@@ -52,7 +62,8 @@ We will need a term:
     >>> term = Term('2005 summer',
     ...             datetime.date(2005, 6, 1),
     ...             datetime.date(2005, 8, 31))
-    >>> app["terms"]["2005-summer"] = term
+    >>> from schooltool.term.interfaces import ITermContainer
+    >>> ITermContainer(app)["2005-summer"] = term
     >>> term.addWeekdays(0, 1, 2, 3, 4, 5)
 
 Now we can create the view:

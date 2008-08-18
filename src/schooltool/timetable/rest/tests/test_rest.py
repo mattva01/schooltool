@@ -39,6 +39,7 @@ from zope.publisher.interfaces.http import IHTTPRequest
 from zope.annotation.interfaces import IAttributeAnnotatable
 
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.term.interfaces import ITermContainer
 from schooltool.testing.util import XMLCompareMixin
 from schooltool.testing import setup as sbsetup
 from schooltool.timetable import TimetablesAdapter
@@ -104,6 +105,9 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
     def setUp(self):
         PlacefulSetup.setUp(self)
         self.app = sbsetup.setUpSchoolToolSite()
+        from schooltool.term.term import getTermContainer
+        from zope.interface import Interface
+        provideAdapter(getTermContainer, [Interface], ITermContainer)
 
         from schooltool.course.section import Section
         from schooltool.resource.resource import Resource
@@ -113,9 +117,10 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         self.app["resources"]['lab2'] = Resource("Lab2")
         self.app["resources"][u'\u017eabas'] = Resource("Zabas")
 
+        terms = ITermContainer(self.app)
         self.schema = self.app["ttschemas"]["schema1"] = self.createSchema()
-        self.term = self.app["terms"]["2003 fall"] = self.createTerm()
-        self.term2 = self.app["terms"]["2004 fall"] = self.createTerm()
+        self.term = terms["2003 fall"] = self.createTerm()
+        self.term2 = terms["2004 fall"] = self.createTerm()
 
         provideAdapter(lambda x: self.app, [None], ISchoolToolApplication)
 
@@ -230,13 +235,16 @@ def doctest_TimetableDictPublishTraverse():
 
         >>> setup.placefulSetUp()
         >>> app = sbsetup.setUpSchoolToolSite()
+        >>> from schooltool.term.term import getTermContainer
+        >>> from zope.interface import Interface
+        >>> provideAdapter(getTermContainer, [Interface], ITermContainer)
 
         >>> from datetime import date
         >>> from schooltool.term.term import Term
         >>> from schooltool.timetable.schema import TimetableSchema
-        >>> app['terms']['2005-fall'] = Term('2005 Fall',
+        >>> ITermContainer(app)['2005-fall'] = Term('2005 Fall',
         ...         date(2005, 9, 1), date(2005, 12, 31))
-        >>> app['terms']['2006-spring'] = Term('2006 Spring',
+        >>> ITermContainer(app)['2006-spring'] = Term('2006 Spring',
         ...         date(2006, 2, 1), date(2006, 6, 30))
         >>> app['ttschemas']['default'] = TimetableSchema([])
 
@@ -364,7 +372,7 @@ class TestTimetableDictView(TimetableTestMixin, unittest.TestCase):
     def setUp(self):
         TimetableTestMixin.setUp(self)
         self.tt = ITimetables(self.section).timetables["2003 fall.schema1"] \
-                = self.createEmpty(self.app['terms']['2003 fall'])
+                = self.createEmpty(ITermContainer(self.app)['2003 fall'])
 
     def test_getTimetables(self):
         view = self.createView(ITimetables(self.section).timetables,

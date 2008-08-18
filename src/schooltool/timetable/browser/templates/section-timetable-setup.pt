@@ -20,8 +20,8 @@
 <tal:if tal:condition="view/has_timetables">
 <form tal:attributes="action request/URL" class="plain" method="post">
 
-  <fieldset tal:define="terms view/app/terms/values;
-                        ttschemas view/app/ttschemas/values">
+  <fieldset tal:define="terms view/terms/values;
+                        ttschemas view/ttschemas/values">
     <legend i18n:translate="">Choose schedule template</legend>
 
     <p i18n:translate="">For term(s):</p>
@@ -66,7 +66,7 @@
 
 <form tal:attributes="action request/URL" class="plain" method="post">
 
-  <tal:loop repeat="term view/terms">
+  <tal:loop repeat="term view/selected_terms">
     <input type="hidden" name="terms"
            tal:attributes="value term/__name__" />
   </tal:loop>

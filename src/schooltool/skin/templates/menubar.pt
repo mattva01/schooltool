@@ -1,6 +1,5 @@
 <tal:block i18n:domain="schooltool"
-           tal:define="url view/context/@@absolute_url;
-                       actions view/context/@@view_get_menu/schooltool_actions">
+           tal:define="url view/context/@@absolute_url">
   <table id="dropdowncontainer">
     <tr>
       <td tal:repeat="viewlet options/viewlets"

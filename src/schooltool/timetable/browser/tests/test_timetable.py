@@ -25,6 +25,7 @@ $Id$
 import unittest
 import datetime
 
+from zope.component import provideAdapter
 from zope.i18n import translate
 from zope.interface import implements
 from zope.publisher.browser import TestRequest
@@ -38,6 +39,7 @@ from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import IOwnTimetables
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.timetable import TimetablesAdapter
+from schooltool.term.interfaces import ITermContainer
 from schooltool.testing import setup as sbsetup
 
 
@@ -205,6 +207,10 @@ def doctest_PersonTimetableSetupView():
         >>> ztapi.provideAdapter(IOwnTimetables, ITimetables,
         ...                      TimetablesAdapter)
 
+        >>> from schooltool.term.term import getTermContainer
+        >>> from zope.interface import Interface
+        >>> provideAdapter(getTermContainer, [Interface], ITermContainer)
+
     and a Person from that application
 
         >>> from schooltool.person.person import Person
@@ -232,12 +238,14 @@ def doctest_PersonTimetableSetupView():
         >>> app["ttschemas"]["other"] = createSchema([], [])
 
         >>> from schooltool.term.term import Term
-        >>> app["terms"]["2005-spring"] = Term('2005 Spring',
-        ...                                    datetime.date(2004, 2, 1),
-        ...                                    datetime.date(2004, 6, 30))
-        >>> app["terms"]["2005-fall"] = Term('2005 Fall',
-        ...                                    datetime.date(2004, 9, 1),
-        ...                                    datetime.date(2004, 12, 31))
+        >>> from schooltool.term.interfaces import ITermContainer
+        >>> terms = ITermContainer(app)
+        >>> terms["2005-spring"] = Term('2005 Spring',
+        ...                             datetime.date(2004, 2, 1),
+        ...                             datetime.date(2004, 6, 30))
+        >>> terms["2005-fall"] = Term('2005 Fall',
+        ...                           datetime.date(2004, 9, 1),
+        ...                           datetime.date(2004, 12, 31))
 
     We can now create the view.
 
@@ -261,19 +269,20 @@ def doctest_PersonTimetableSetupView():
     next one.
 
         >>> from schooltool.term.tests import setUpDateManagerStub
-        >>> setUpDateManagerStub(current_term=app["terms"]["2005-spring"])
-        >>> view.getTerm() is app["terms"]["2005-spring"]
+        >>> terms = ITermContainer(app)
+        >>> setUpDateManagerStub(current_term=terms["2005-spring"])
+        >>> view.getTerm() is terms["2005-spring"]
         True
         >>> request.form['term'] = '2005-spring'
-        >>> view.getTerm() is app["terms"]["2005-spring"]
+        >>> view.getTerm() is terms["2005-spring"]
         True
         >>> request.form['term'] = '2005-fall'
-        >>> view.getTerm() is app["terms"]["2005-fall"]
+        >>> view.getTerm() is terms["2005-fall"]
         True
 
     sectionMap finds out which sections are scheduled in which timetable slots.
 
-        >>> term = app["terms"]["2005-fall"]
+        >>> term = terms["2005-fall"]
         >>> ttschema = app["ttschemas"]["default"]
         >>> section_map = view.sectionMap(term, ttschema)
 
@@ -289,7 +298,7 @@ def doctest_PersonTimetableSetupView():
         >>> from schooltool.timetable.interfaces import ITimetables
         >>> from schooltool.timetable import TimetableActivity
         >>> ttkey = "2005-fall.default"
-        >>> term = app["terms"]["2005-fall"]
+        >>> term = terms["2005-fall"]
         >>> ITimetables(math).timetables[ttkey] = ttschema.createTimetable(term)
         >>> ITimetables(math).timetables[ttkey]['Tue'].add('10:00',
         ...                                   TimetableActivity('Math'))
@@ -495,6 +504,9 @@ def doctest_PersonTimetableSetupView_no_timetables():
     We will need an application object
 
         >>> app = sbsetup.setUpSchoolToolSite()
+        >>> from schooltool.term.term import getTermContainer
+        >>> from zope.interface import Interface
+        >>> provideAdapter(getTermContainer, [Interface], ITermContainer)
 
     and a Person from that application
 
@@ -504,7 +516,7 @@ def doctest_PersonTimetableSetupView_no_timetables():
 
         >>> len(app['ttschemas'])
         0
-        >>> len(app['terms'])
+        >>> len(ITermContainer(app))
         0
 
     We can now create the view.
@@ -586,6 +598,10 @@ def doctest_SectionTimetableSetupView():
         >>> ztapi.provideAdapter(ITimetableDict, INameChooser,
         ...                      TimetableNameChooser)
 
+        >>> from schooltool.term.term import getTermContainer
+        >>> from zope.interface import Interface
+        >>> provideAdapter(getTermContainer, [Interface], ITermContainer)
+
         >>> from schooltool.course.section import Section as STSection
         >>> class Section(STSection):
         ...     implements(IOwnTimetables)
@@ -605,7 +621,8 @@ def doctest_SectionTimetableSetupView():
 
 
         >>> from schooltool.term.term import Term
-        >>> app["terms"]["2005-spring"] = Term('2005 Spring',
+        >>> from schooltool.term.interfaces import ITermContainer
+        >>> ITermContainer(app)["2005-spring"] = Term('2005 Spring',
         ...                                    datetime.date(2004, 2, 1),
         ...                                    datetime.date(2004, 6, 30))
 
@@ -628,9 +645,9 @@ def doctest_SectionTimetableSetupView():
     Another term and schema:
 
         >>> app["ttschemas"]["other"] = createSchema([], [])
-        >>> app["terms"]["2005-fall"] = Term('2005 Fall',
-        ...                                    datetime.date(2004, 9, 1),
-        ...                                    datetime.date(2004, 12, 31))
+        >>> ITermContainer(app)["2005-fall"] = Term('2005 Fall',
+        ...                                         datetime.date(2004, 9, 1),
+        ...                                         datetime.date(2004, 12, 31))
 
         >>> view.singleTerm()
         False
@@ -655,8 +672,8 @@ def doctest_SectionTimetableSetupView():
     Without any terms in the request we get the current term:
 
         >>> from schooltool.term.tests import setUpDateManagerStub
-        >>> setUpDateManagerStub(current_term=app["terms"]["2005-fall"])
-        >>> view.getTerms()[0] is app["terms"]["2005-fall"]
+        >>> setUpDateManagerStub(current_term=ITermContainer(app)["2005-fall"])
+        >>> view.getTerms()[0] is ITermContainer(app)["2005-fall"]
         True
         >>> len(view.getTerms())
         1

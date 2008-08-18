@@ -21,9 +21,9 @@
 
 <tal:if tal:condition="view/has_timetables">
 
-  <div tal:define="terms view/app/terms/values;
+  <div tal:define="terms view/terms/values;
                    term view/getTerm;
-		   ttschemas view/app/ttschemas/values">
+		   ttschemas view/ttschemas/values">
     <div i18n:translate="">For term:</div>
     <strong tal:content="term/title" />
 

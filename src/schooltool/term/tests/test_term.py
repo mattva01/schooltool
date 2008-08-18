@@ -28,6 +28,7 @@ from datetime import date, datetime
 
 from zope.testing import doctest
 from zope.component import provideAdapter
+from zope.interface import Interface
 from zope.interface import implements
 from zope.interface.verify import verifyObject
 from zope.app.container.contained import Contained
@@ -35,6 +36,8 @@ from zope.location.interfaces import ILocation
 from zope.app.testing.setup import placefulSetUp, placefulTearDown
 from zope.app.testing.setup import placelessSetUp, placelessTearDown
 
+from schooltool.term.term import getTermContainer
+from schooltool.term.interfaces import ITermContainer
 from schooltool.term import interfaces, term
 from schooltool.testing import setup
 
@@ -186,12 +189,14 @@ class TestGetTermForDate(unittest.TestCase):
 
     def setUp(self):
         placefulSetUp()
+        provideAdapter(getTermContainer, [Interface], ITermContainer)
         app = setup.setUpSchoolToolSite()
 
         self.term1 = term.Term('Sample', date(2004, 9, 1), date(2004, 12, 20))
         self.term2 = term.Term('Sample', date(2005, 1, 1), date(2005, 6, 1))
-        app["terms"]['2004-fall'] = self.term1
-        app["terms"]['2005-spring'] = self.term2
+        terms = ITermContainer(app)
+        terms['2004-fall'] = self.term1
+        terms['2005-spring'] = self.term2
 
         class TimetableModelStub:
             def periodsInDay(self, schooldays, ttschema, date):
@@ -225,13 +230,14 @@ class TestGetTermForDate(unittest.TestCase):
         self.assert_(term.getNextTermForDate(date(2005, 3, 17)) is self.term2)
         self.assert_(term.getNextTermForDate(date(2005, 11, 5)) is self.term2)
         self.term3 = term.Term('Sample', date(2005, 9, 1), date(2005, 12, 20))
-        self.app["terms"]['2005-fall'] = self.term3
+        terms = ITermContainer(self.app)
+        terms['2005-fall'] = self.term3
         self.assert_(term.getNextTermForDate(date(2005, 8, 30)) is self.term3)
         self.assert_(term.getNextTermForDate(date(2004, 8, 31)) is self.term1)
         self.assert_(term.getNextTermForDate(date(2004, 12, 22)) is self.term2)
-        del self.app["terms"]['2004-fall']
-        del self.app["terms"]['2005-spring']
-        del self.app["terms"]['2005-fall']
+        del terms['2004-fall']
+        del terms['2005-spring']
+        del terms['2005-fall']
         self.assert_(term.getNextTermForDate(date(2004, 8, 31)) is None)
 
 

@@ -29,6 +29,7 @@ from pytz import utc
 from zope.interface import implements
 from zope.security.proxy import removeSecurityProxy
 
+from schooltool.term.interfaces import ITermContainer
 from schooltool.sampledata import PortableRandom
 from schooltool.sampledata.interfaces import ISampleDataPlugin
 from schooltool.sampledata.name import NameGenerator
@@ -149,7 +150,7 @@ class SamplePersonalEvents(object):
                       if person.startswith('student') or
                          person.startswith('teacher')]
         dates = []
-        for term in app['terms'].values():
+        for term in ITermContainer(app).values():
             dates.append(term.first)
             dates.append(term.last)
         first = min(dates)

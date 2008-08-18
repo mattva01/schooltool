@@ -28,6 +28,7 @@ from pytz import utc
 from zope.interface import implements
 from zope.security.proxy import removeSecurityProxy
 
+from schooltool.term.interfaces import ITermContainer
 from schooltool.sampledata import PortableRandom
 from schooltool.sampledata.interfaces import ISampleDataPlugin
 from schooltool.calendar.recurrent import DailyRecurrenceRule
@@ -84,7 +85,7 @@ class SampleGroups(object):
             recurrenceRule = self.random.choice((DailyRecurrenceRule,
                                                  WeeklyRecurrenceRule,
                                                  MonthlyRecurrenceRule))
-            terms = removeSecurityProxy(app['terms'].values())
+            terms = ITermContainer(app).values()
             term = self.random.choice(terms)
             eventDate = term.first
             recurrence = recurrenceRule(until=term.last)
