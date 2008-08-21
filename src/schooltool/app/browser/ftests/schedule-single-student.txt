@@ -17,10 +17,28 @@ Overview
 Prologue
 --------
 
+A manager logs in
+
+    >>> from zope.testbrowser.testing import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/')
+
+We add a school year:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('New School Year').click()
+    >>> manager.getControl('Title').value = '2003'
+    >>> manager.getControl('First day').value = '03/09/01'
+    >>> manager.getControl('Last day').value = '03/10/15'
+    >>> manager.getControl('Add').click()
+
 Add a term:
 
     >>> print http(r"""
-    ... PUT /terms/2005-fall HTTP/1.1
+    ... PUT /schooltool.schoolyear/2003/2005-fall HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...

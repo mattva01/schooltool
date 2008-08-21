@@ -27,18 +27,22 @@ import datetime
 
 from zope.component import provideAdapter
 from zope.i18n import translate
+from zope.interface import Interface
 from zope.interface import implements
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.testing.doctestunit import pprint
 from zope.app.testing import ztapi
 
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
+from schooltool.schoolyear.schoolyear import getSchoolYearContainer
 from schooltool.app.browser import testing
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import IOwnTimetables
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.timetable import TimetablesAdapter
+from schooltool.term.term import getTermContainer
 from schooltool.term.interfaces import ITermContainer
 from schooltool.testing import setup as sbsetup
 
@@ -49,6 +53,8 @@ def setUp(test=None):
     sbsetup.setUpApplicationPreferences()
     ztapi.provideAdapter(None, ISchoolToolApplication,
                          getSchoolToolApplication)
+    provideAdapter(getTermContainer, [Interface], ITermContainer)
+    provideAdapter(getSchoolYearContainer)
 
 
 tearDown = testing.tearDown
@@ -207,10 +213,6 @@ def doctest_PersonTimetableSetupView():
         >>> ztapi.provideAdapter(IOwnTimetables, ITimetables,
         ...                      TimetablesAdapter)
 
-        >>> from schooltool.term.term import getTermContainer
-        >>> from zope.interface import Interface
-        >>> provideAdapter(getTermContainer, [Interface], ITermContainer)
-
     and a Person from that application
 
         >>> from schooltool.person.person import Person
@@ -237,8 +239,13 @@ def doctest_PersonTimetableSetupView():
         ...                                            ["9:00", "10:00"])
         >>> app["ttschemas"]["other"] = createSchema([], [])
 
+        >>> from schooltool.schoolyear.schoolyear import SchoolYear
+        >>> schoolyears = ISchoolYearContainer(app)
+        >>> schoolyears['2005'] = SchoolYear("2005",
+        ...                                  datetime.date(2004, 2, 1),
+        ...                                  datetime.date(2004, 12, 31))
+
         >>> from schooltool.term.term import Term
-        >>> from schooltool.term.interfaces import ITermContainer
         >>> terms = ITermContainer(app)
         >>> terms["2005-spring"] = Term('2005 Spring',
         ...                             datetime.date(2004, 2, 1),
@@ -504,9 +511,14 @@ def doctest_PersonTimetableSetupView_no_timetables():
     We will need an application object
 
         >>> app = sbsetup.setUpSchoolToolSite()
-        >>> from schooltool.term.term import getTermContainer
-        >>> from zope.interface import Interface
-        >>> provideAdapter(getTermContainer, [Interface], ITermContainer)
+
+    And a school year
+
+        >>> from schooltool.schoolyear.schoolyear import SchoolYear
+        >>> schoolyears = ISchoolYearContainer(app)
+        >>> schoolyears['2005'] = SchoolYear("2005",
+        ...                                  datetime.date(2004, 2, 1),
+        ...                                  datetime.date(2004, 12, 31))
 
     and a Person from that application
 
@@ -598,10 +610,6 @@ def doctest_SectionTimetableSetupView():
         >>> ztapi.provideAdapter(ITimetableDict, INameChooser,
         ...                      TimetableNameChooser)
 
-        >>> from schooltool.term.term import getTermContainer
-        >>> from zope.interface import Interface
-        >>> provideAdapter(getTermContainer, [Interface], ITermContainer)
-
         >>> from schooltool.course.section import Section as STSection
         >>> class Section(STSection):
         ...     implements(IOwnTimetables)
@@ -619,6 +627,12 @@ def doctest_SectionTimetableSetupView():
         ...                                            ["9:00", "10:00"],
         ...                                            ["9:00", "10:00"])
 
+
+        >>> from schooltool.schoolyear.schoolyear import SchoolYear
+        >>> schoolyears = ISchoolYearContainer(app)
+        >>> schoolyears['2005'] = SchoolYear("2005",
+        ...                                  datetime.date(2004, 2, 1),
+        ...                                  datetime.date(2004, 12, 31))
 
         >>> from schooltool.term.term import Term
         >>> from schooltool.term.interfaces import ITermContainer

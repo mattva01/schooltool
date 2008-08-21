@@ -18,28 +18,22 @@ Terms
 
 Initially there are no terms defined.
 
-    >>> print rest(r"""
-    ... GET /terms HTTP/1.1
-    ... Authorization: Basic manager:schooltool
-    ... """)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/xml; charset=UTF-8
-    Set-Cookie: ...
-    <BLANKLINE>
-    <container xmlns:xlink="http://www.w3.org/1999/xlink">
-      <name>terms</name>
-      <items>
-      </items>
-      <acl xlink:type="simple" xlink:title="ACL"
-           xlink:href="http://localhost/terms/acl"/>
-    </container>
-    <BLANKLINE>
+    >>> from zope.testbrowser.testing import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/')
 
-The manager can add one.
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('New School Year').click()
+    >>> manager.getControl('Title').value = '2003'
+    >>> manager.getControl('First day').value = '03/09/01'
+    >>> manager.getControl('Last day').value = '04/07/31'
+    >>> manager.getControl('Add').click()
 
     >>> print http(r"""
-    ... PUT /terms/2005-fall HTTP/1.1
+    ... PUT /schooltool.schoolyear/2003/2005-fall HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
@@ -61,7 +55,7 @@ The manager can add one.
 The new term is there
 
     >>> print rest(r"""
-    ... GET /terms HTTP/1.1
+    ... GET /schooltool.schoolyear/2003 HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
@@ -70,14 +64,14 @@ The new term is there
     Set-Cookie: ...
     <BLANKLINE>
     <container xmlns:xlink="http://www.w3.org/1999/xlink">
-      <name>terms</name>
+      <name>2003</name>
       <items>
         <item xlink:type="simple"
-              xlink:href="http://localhost/terms/2005-fall"
+              xlink:href="http://localhost/schooltool.schoolyear/2003/2005-fall"
               xlink:title="2005 Fall"/>
       </items>
       <acl xlink:type="simple" xlink:title="ACL"
-           xlink:href="http://localhost/terms/acl"/>
+           xlink:href="http://localhost/schooltool.schoolyear/2003/acl"/>
     </container>
     <BLANKLINE>
 
@@ -85,7 +79,7 @@ The new term is there
 You can look at it
 
     >>> print str(rest(r"""
-    ... GET /terms/2005-fall HTTP/1.1
+    ... GET /schooltool.schoolyear/2003/2005-fall HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... """)).replace("\r\n", "\n")
     HTTP/1.1 200 Ok
@@ -97,32 +91,32 @@ You can look at it
     PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
     VERSION:2.0
     BEGIN:VEVENT
-    UID:school-period-/terms/2005-fall@localhost
+    UID:school-period-/schooltool.schoolyear/2003/2005-fall@localhost
     SUMMARY:School Period
     DTSTART;VALUE=DATE:20030901
     DTEND;VALUE=DATE:20030908
     DTSTAMP:...
     END:VEVENT
     BEGIN:VEVENT
-    UID:schoolday-20030901-/terms/2005-fall@localhost
+    UID:schoolday-20030901-/schooltool.schoolyear/2003/2005-fall@localhost
     SUMMARY:Schoolday
     DTSTART;VALUE=DATE:20030901
     DTSTAMP:...
     END:VEVENT
     BEGIN:VEVENT
-    UID:schoolday-20030902-/terms/2005-fall@localhost
+    UID:schoolday-20030902-/schooltool.schoolyear/2003/2005-fall@localhost
     SUMMARY:Schoolday
     DTSTART;VALUE=DATE:20030902
     DTSTAMP:...
     END:VEVENT
     BEGIN:VEVENT
-    UID:schoolday-20030904-/terms/2005-fall@localhost
+    UID:schoolday-20030904-/schooltool.schoolyear/2003/2005-fall@localhost
     SUMMARY:Schoolday
     DTSTART;VALUE=DATE:20030904
     DTSTAMP:...
     END:VEVENT
     BEGIN:VEVENT
-    UID:schoolday-20030905-/terms/2005-fall@localhost
+    UID:schoolday-20030905-/schooltool.schoolyear/2003/2005-fall@localhost
     SUMMARY:Schoolday
     DTSTART;VALUE=DATE:20030905
     DTSTAMP:...
@@ -134,7 +128,7 @@ You can look at it
 You can edit it:
 
     >>> print rest(r"""
-    ... PUT /terms/2005-fall HTTP/1.1
+    ... PUT /schooltool.schoolyear/2003/2005-fall HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/calendar; charset=UTF-8
     ...
@@ -142,26 +136,26 @@ You can edit it:
     ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
     ... VERSION:2.0
     ... BEGIN:VEVENT
-    ... UID:school-period-/terms/2005-fall@localhost
+    ... UID:school-period-/schooltool.schoolyear/2003/2005-fall@localhost
     ... SUMMARY:School Period
     ... DTSTART;VALUE=DATE:20030901
     ... DTEND;VALUE=DATE:20030908
     ... DTSTAMP:20050511T145037Z
     ... END:VEVENT
     ... BEGIN:VEVENT
-    ... UID:schoolday-20030901-/terms/2005-fall@localhost
+    ... UID:schoolday-20030901-/schooltool.schoolyear/2003/2005-fall@localhost
     ... SUMMARY:Schoolday
     ... DTSTART;VALUE=DATE:20030901
     ... DTSTAMP:20050511T145037Z
     ... END:VEVENT
     ... BEGIN:VEVENT
-    ... UID:schoolday-20030902-/terms/2005-fall@localhost
+    ... UID:schoolday-20030902-/schooltool.schoolyear/2003/2005-fall@localhost
     ... SUMMARY:Schoolday
     ... DTSTART;VALUE=DATE:20030902
     ... DTSTAMP:20050511T145037Z
     ... END:VEVENT
     ... BEGIN:VEVENT
-    ... UID:schoolday-20030903-/terms/2005-fall@localhost
+    ... UID:schoolday-20030903-/schooltool.schoolyear/2003/2005-fall@localhost
     ... SUMMARY:Schoolday
     ... DTSTART;VALUE=DATE:20030903
     ... DTSTAMP:20050511T145037Z
@@ -178,7 +172,7 @@ Last two days should not be holidays now, and there should be an
 additional day:
 
     >>> print str(rest(r"""
-    ... GET /terms/2005-fall HTTP/1.1
+    ... GET /schooltool.schoolyear/2003/2005-fall HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... """)).replace("\r\n", "\n")
     HTTP/1.1 200 Ok
@@ -190,26 +184,26 @@ additional day:
     PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
     VERSION:2.0
     BEGIN:VEVENT
-    UID:school-period-/terms/2005-fall@localhost
+    UID:school-period-/schooltool.schoolyear/2003/2005-fall@localhost
     SUMMARY:School Period
     DTSTART;VALUE=DATE:20030901
     DTEND;VALUE=DATE:20030908
     DTSTAMP:...
     END:VEVENT
     BEGIN:VEVENT
-    UID:schoolday-20030901-/terms/2005-fall@localhost
+    UID:schoolday-20030901-/schooltool.schoolyear/2003/2005-fall@localhost
     SUMMARY:Schoolday
     DTSTART;VALUE=DATE:20030901
     DTSTAMP:...
     END:VEVENT
     BEGIN:VEVENT
-    UID:schoolday-20030902-/terms/2005-fall@localhost
+    UID:schoolday-20030902-/schooltool.schoolyear/2003/2005-fall@localhost
     SUMMARY:Schoolday
     DTSTART;VALUE=DATE:20030902
     DTSTAMP:...
     END:VEVENT
     BEGIN:VEVENT
-    UID:schoolday-20030903-/terms/2005-fall@localhost
+    UID:schoolday-20030903-/schooltool.schoolyear/2003/2005-fall@localhost
     SUMMARY:Schoolday
     DTSTART;VALUE=DATE:20030903
     DTSTAMP:...
@@ -220,7 +214,7 @@ additional day:
 We should be capable of deleting the term:
 
     >>> print rest(r"""
-    ... DELETE /terms/2005-fall HTTP/1.1
+    ... DELETE /schooltool.schoolyear/2003/2005-fall HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
@@ -231,7 +225,7 @@ We should be capable of deleting the term:
 The term should be gone now:
 
     >>> print rest(r"""
-    ... GET /terms HTTP/1.1
+    ... GET /schooltool.schoolyear/2003 HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
@@ -240,11 +234,11 @@ The term should be gone now:
     Set-Cookie: ...
     <BLANKLINE>
     <container xmlns:xlink="http://www.w3.org/1999/xlink">
-      <name>terms</name>
+      <name>2003</name>
       <items>
       </items>
       <acl xlink:type="simple" xlink:title="ACL"
-           xlink:href="http://localhost/terms/acl"/>
+           xlink:href="http://localhost/schooltool.schoolyear/2003/acl"/>
     </container>
     <BLANKLINE>
 
@@ -497,7 +491,7 @@ We will need at least one term (we have deleted the one inserted in the first
 test):
 
     >>> print http(r"""
-    ... PUT /terms/2005-fall HTTP/1.1
+    ... PUT /schooltool.schoolyear/2003/2005-fall HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...

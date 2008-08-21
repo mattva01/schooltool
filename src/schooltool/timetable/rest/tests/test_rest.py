@@ -108,6 +108,8 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         from schooltool.term.term import getTermContainer
         from zope.interface import Interface
         provideAdapter(getTermContainer, [Interface], ITermContainer)
+        from schooltool.schoolyear.schoolyear import getSchoolYearContainer
+        provideAdapter(getSchoolYearContainer)
 
         from schooltool.course.section import Section
         from schooltool.resource.resource import Resource
@@ -117,10 +119,17 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         self.app["resources"]['lab2'] = Resource("Lab2")
         self.app["resources"][u'\u017eabas'] = Resource("Zabas")
 
+        from schooltool.schoolyear.schoolyear import SchoolYear
+        from schooltool.schoolyear.interfaces import ISchoolYearContainer
+        schoolyears = ISchoolYearContainer(self.app)
+        schoolyears['2003'] = SchoolYear("2003",
+                                         datetime.date(2003, 1, 1),
+                                         datetime.date(2003, 12, 31))
+
         terms = ITermContainer(self.app)
         self.schema = self.app["ttschemas"]["schema1"] = self.createSchema()
-        self.term = terms["2003 fall"] = self.createTerm()
-        self.term2 = terms["2004 fall"] = self.createTerm()
+        self.term = terms["2003 fall"] = self.createTerm(9)
+        self.term2 = terms["2004 fall"] = self.createTerm(10)
 
         provideAdapter(lambda x: self.app, [None], ISchoolToolApplication)
 
@@ -134,11 +143,11 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         provideAdapter(TimetablesAdapter, [IAttributeAnnotatable],
                        ITimetables)
 
-    def createTerm(self):
+    def createTerm(self, month=9):
         from schooltool.term.term import Term
         return Term("2003 fall",
-                    datetime.date(2003, 9, 1),
-                    datetime.date(2003, 9, 30))
+                    datetime.date(2003, month, 1),
+                    datetime.date(2003, month, 30))
 
     def createSchema(self):
         from schooltool.timetable.schema import TimetableSchemaDay
@@ -238,8 +247,18 @@ def doctest_TimetableDictPublishTraverse():
         >>> from schooltool.term.term import getTermContainer
         >>> from zope.interface import Interface
         >>> provideAdapter(getTermContainer, [Interface], ITermContainer)
+        >>> from schooltool.schoolyear.schoolyear import getSchoolYearContainer
+        >>> provideAdapter(getSchoolYearContainer)
 
         >>> from datetime import date
+
+        >>> from schooltool.schoolyear.schoolyear import SchoolYear
+        >>> from schooltool.schoolyear.interfaces import ISchoolYearContainer
+        >>> schoolyears = ISchoolYearContainer(app)
+        >>> schoolyears['2005-2006'] = SchoolYear("2005-2006",
+        ...                                       date(2005, 9, 1),
+        ...                                       date(2006, 6, 30))
+
         >>> from schooltool.term.term import Term
         >>> from schooltool.timetable.schema import TimetableSchema
         >>> ITermContainer(app)['2005-fall'] = Term('2005 Fall',

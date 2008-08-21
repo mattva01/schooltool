@@ -4,18 +4,15 @@
     xmlns:zope="http://namespaces.zope.org/zope"
     i18n_domain="schooltool">
 
-  <configure package="schooltool.skin">
 
-    <page
-       name="index.html"
-       for="schooltool.term.interfaces.ITermContainer"
-       class="schooltool.term.browser.term.TermContainerView"
-       permission="schooltool.view"
-       menu="zmi_views"
-       title="View"
-       />
-
-  </configure>
+  <page
+      name="index.html"
+      for="schooltool.term.interfaces.ITermContainer"
+      class="schooltool.term.browser.term.TermContainerView"
+      permission="schooltool.view"
+      menu="zmi_views"
+      title="View"
+      />
 
   <page
       name="add.html"
@@ -25,20 +22,6 @@
       permission="schooltool.edit"
       menu="schooltool_actions" title="New Term"
       />
-
-  <configure package="schooltool.skin">
-    <navigationViewlet
-      name="terms"
-      for="*"
-      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
-      template="templates/navigationViewlet.pt"
-      class="schooltool.skin.skin.NavigationViewlet"
-      permission="schooltool.view"
-      link="terms"
-      title="Terms"
-      order="70"
-      />
-  </configure>
 
   <page
       name="index.html"
@@ -76,28 +59,5 @@
       for="schooltool.term.interfaces.ITermContainer
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory="schooltool.table.table.SchoolToolTableFormatter " />
-
-  <zope:adapterTraverserPlugin
-      for="schooltool.app.interfaces.ISchoolToolApplication"
-      layer="zope.publisher.interfaces.http.IHTTPRequest"
-      name="terms"
-      adapter="schooltool.term.interfaces.ITermContainer"
-      />
-
-  <zope:adapterTraverserPlugin
-      for="schooltool.app.interfaces.ISchoolToolApplication"
-      layer="zope.publisher.interfaces.browser.IBrowserRequest"
-      name="terms"
-      adapter="schooltool.term.interfaces.ITermContainer"
-      />
-
-  <zope:adapter
-      factory=".term.TermContainerAbsoluteURLAdapter"
-      provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
-
-  <zope:adapter
-      factory=".term.TermContainerAbsoluteURLAdapter"
-      provides="zope.interface.Interface"
-      name="absolute_url"/>
 
 </configure>

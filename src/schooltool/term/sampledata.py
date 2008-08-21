@@ -25,6 +25,8 @@ import zope.interface
 
 from schooltool.term.interfaces import ITermContainer
 from schooltool.term import term
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
+from schooltool.schoolyear.schoolyear import SchoolYear
 from schooltool.sampledata.interfaces import ISampleDataPlugin
 
 class SampleTerms(object):
@@ -36,6 +38,12 @@ class SampleTerms(object):
 
     def generate(self, app, seed=None):
         date = datetime.date
+
+        syc = ISchoolYearContainer(app)
+        syc['2005-2006'] = SchoolYear("2005-2006",
+                                      date(2005, 8, 22),
+                                      date(2006, 12, 22))
+
         fall = term.Term('2005-fall', date(2005, 8, 22), date(2005, 12, 23))
         fall.addWeekdays(0, 1, 2, 3, 4)
         terms = ITermContainer(app)
@@ -45,6 +53,6 @@ class SampleTerms(object):
         spring.addWeekdays(0, 1, 2, 3, 4)
         terms['2006-spring'] = spring
 
-        fall = term.Term('2006-fall', date(2006, 8, 21), date(2006, 12, 22))
+        fall = term.Term('2006-fall', date(2006, 9, 1), date(2006, 12, 22))
         fall.addWeekdays(0, 1, 2, 3, 4)
         terms['2006-fall'] = fall

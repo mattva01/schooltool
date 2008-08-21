@@ -297,15 +297,20 @@ def permissions_edit(browser):
 
 
 def term_view(browser):
-    browser.open('http://localhost/terms')
-    return 'Terms' in browser.contents # XXX not too specific -- gintas
+    browser.getLink('Manage').click()
+    browser.getLink('School Years').click()
+    browser.getLink('2005-2006').click()
+    return '2005-2006' in browser.contents # XXX not too specific -- gintas
 
 def term_edit(browser):
     term_view(browser)
+    browser.getLink('Manage').click()
+    browser.getLink('School Years').click()
+    browser.getLink('2005-2006').click()
     browser.getLink('New Term').click()
     browser.getControl('Title').value = 'SchoolTool summer term'
-    browser.getControl('Start date').value = '2006-06-01'
-    browser.getControl('End date').value = '2006-09-01'
+    browser.getControl('Start date').value = '2006-02-01'
+    browser.getControl('End date').value = '2006-03-01'
     browser.getControl('Next').click()
     browser.getControl('Add term').click()
     return 'SchoolTool summer term' in browser.contents

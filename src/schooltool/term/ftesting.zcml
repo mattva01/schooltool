@@ -7,6 +7,7 @@
   <include package="schooltool.course" />
   <include package="schooltool.timetable" />
   <include package="schooltool.term" />
+  <include package="schooltool.schoolyear" />
   <include package="schooltool.term" file="time_machine.zcml" />
 
   <browser:defaultSkin name="SchoolTool" />

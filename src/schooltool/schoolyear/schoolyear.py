@@ -76,6 +76,11 @@ class SchoolYearContainer(BTreeContainer):
         self.validateForOverlap(schoolyear)
         BTreeContainer.__setitem__(self, key, schoolyear)
 
+    def getActiveSchoolYear(self):
+        if self.values():
+            return self.values()[0]
+        return None
+
 
 class SchoolYear(BTreeContainer):
     implements(ITermContainer, ISchoolYear)

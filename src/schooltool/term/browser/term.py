@@ -24,8 +24,6 @@ $Id$
 import datetime
 import itertools
 
-from zope.component import adapts
-from zope.interface import implements
 from zope.interface import Interface
 from zope.schema import TextLine, Date
 
@@ -37,11 +35,7 @@ from zope.app.form.interfaces import WidgetsError
 from zope.app.form.utility import getWidgetsData
 from zope.app.form.utility import setUpEditWidgets
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
-from zope.publisher.interfaces.http import IHTTPRequest
-from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.browser import BrowserView
-from zope.traversing.browser.interfaces import IAbsoluteURL
-from zope.traversing.browser.absoluteurl import AbsoluteURL
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.skin.containers import TableContainerView
@@ -348,12 +342,3 @@ class TermRenderer(object):
             date += datetime.date.resolution
         return {'number': week_no,
                 'days': days}
-
-
-class TermContainerAbsoluteURLAdapter(AbsoluteURL):
-
-    adapts(ITermContainer, IHTTPRequest)
-    implements(IAbsoluteURL)
-
-    def _getContextName(self, context):
-        return 'terms'

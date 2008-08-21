@@ -68,7 +68,6 @@ class TestTimetable(unittest.TestCase):
         setup.placelessSetUp()
 
         app = {}
-        app['terms'] = {'term1': "Term 1"}
         app['ttschemas'] = {'stt1': "STT 1"}
 
         from zope.component import provideAdapter
@@ -846,9 +845,6 @@ class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
                              TimetablesAdapter)
 
         app = {}
-        app['terms'] = {'term1': "Term 1",
-                        'term2': "Term 2",
-                        'term3': "Term 3"}
 
         from zope.component import provideAdapter
         from schooltool.app.interfaces import ISchoolToolApplication
@@ -1091,9 +1087,21 @@ def doctest_findRelatedTimetables_forTerm():
        >>> from schooltool.term.interfaces import ITermContainer
        >>> provideAdapter(getTermContainer, [Interface], ITermContainer)
 
+       >>> from schooltool.schoolyear.schoolyear import getSchoolYearContainer
+       >>> provideAdapter(getSchoolYearContainer)
+
        >>> from schooltool.timetable import findRelatedTimetables
        >>> app = stsetup.setUpSchoolToolSite()
        >>> directlyProvides(app, IOwnTimetables)
+
+    Let's add a school year:
+
+        >>> from schooltool.schoolyear.schoolyear import SchoolYear
+        >>> from schooltool.schoolyear.interfaces import ISchoolYearContainer
+        >>> schoolyears = ISchoolYearContainer(app)
+        >>> schoolyears['2005-2006'] = SchoolYear("2005-2006",
+        ...                                       date(2005, 1, 1),
+        ...                                       date(2006, 12, 31))
 
     Let's create a couple of terms:
 

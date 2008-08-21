@@ -52,10 +52,19 @@ Terms are periods of time (such as semesters or trimesters) that also say which
 days are holidays and which are not.  You can define any number of terms -- and
 you have to have at least one if you want to use timetables.
 
-Initially there are no terms defined.
+Initially there are no schoolyears nor terms defined.
 
     >>> manager.getLink('Manage').click()
-    >>> manager.getLink('Terms').click()
+    >>> manager.getLink('School Years').click()
+    >>> '<p>There are none.</p>' in manager.contents
+    True
+
+    >>> manager.getLink('New School Year').click()
+    >>> manager.getControl('Title').value = '2005'
+    >>> manager.getControl('First day').value = '05/09/01'
+    >>> manager.getControl('Last day').value = '06/07/31'
+    >>> manager.getControl('Add').click()
+
     >>> '<p>There are none.</p>' in manager.contents
     True
 
@@ -92,7 +101,7 @@ Finally, you click on the 'Add term' button.
     >>> manager.getControl('Add term').click()
 
     >>> manager.url
-    'http://localhost/terms'
+    'http://localhost/schoolyears/2005'
     >>> '2005 Fall' in manager.contents
     True
 
@@ -457,7 +466,8 @@ that schema are also deleted.
 Alternatively, we can delete terms and everything should work out as well.
 
     >>> manager.getLink('Manage').click()
-    >>> manager.getLink("Terms").click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('2005').click()
     >>> manager.getControl(name='delete.2005-fall').value = True
     >>> manager.getControl("Delete").click()
     >>> manager.getControl("Confirm").click()

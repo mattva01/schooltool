@@ -125,7 +125,7 @@ Create anonymous browser:
     section:
     section activities:
     section calendar:
-    term:                view
+    term:
     timetables:          view
 
 Student looking at another student:
@@ -152,7 +152,7 @@ Student looking at another student:
     section:             view
     section activities:  view
     section calendar:    view
-    term:                view
+    term:
     timetables:          view
 
 Student looking at himself (his section):
@@ -178,7 +178,7 @@ Student looking at himself (his section):
     section:             view
     section activities:  view
     section calendar:    view
-    term:                view
+    term:
     timetables:          view
 
 Student looking at another student and not his section:
@@ -205,7 +205,7 @@ Student looking at another student and not his section:
     section:
     section activities:
     section calendar:
-    term:                view
+    term:
     timetables:          view
 
 Instructor looking at his student and section:
@@ -232,7 +232,7 @@ Instructor looking at his student and section:
     section:             view  edit
     section activities:  view  edit
     section calendar:    view  edit
-    term:                view
+    term:
     timetables:          view
 
 Group member:
@@ -259,7 +259,7 @@ Group member:
     section:
     section activities:
     section calendar:
-    term:                view
+    term:
     timetables:          view
 
 Leader stuff:
@@ -286,7 +286,7 @@ Leader stuff:
     section:
     section activities:
     section calendar:
-    term:                view
+    term:
     timetables:          view
 
 
@@ -338,7 +338,7 @@ Site wide access control:
     section:             view
     section activities:
     section calendar:    view
-    term:                view
+    term:
     timetables:          view
 
     >>> manager.getControl('Everyone can view section information and ').click()

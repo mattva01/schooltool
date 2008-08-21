@@ -185,9 +185,11 @@ def doctest_TermAddView_update():
 
     `update` sets view.term
 
-        >>> from schooltool.term.term import TermContainer
+        >>> from schooltool.schoolyear.schoolyear import SchoolYear
         >>> from schooltool.term.browser.term import TermAddView
-        >>> context = TermContainer()
+        >>> context = SchoolYear("sy",
+        ...                      datetime.date(2005, 9, 1),
+        ...                      datetime.date(2005, 10, 15))
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
         >>> view.update()
@@ -211,9 +213,11 @@ def doctest_TermAddView_create():
     by `update` before), or raises a WidgetsError (because `_buildTerm`
     discovered an error in the form).
 
-        >>> from schooltool.term.term import TermContainer
+        >>> from schooltool.schoolyear.schoolyear import SchoolYear
         >>> from schooltool.term.browser.term import TermAddView
-        >>> context = TermContainer()
+        >>> context = SchoolYear("sy",
+        ...                      datetime.date(2005, 9, 1),
+        ...                      datetime.date(2005, 10, 15))
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
 
@@ -235,15 +239,17 @@ def doctest_TermAddView_add():
 
     `add` adds the term to the term service.
 
-        >>> from schooltool.term.term import TermContainer
+        >>> from schooltool.schoolyear.schoolyear import SchoolYear
         >>> from schooltool.term.term import Term
         >>> from schooltool.term.browser.term import TermAddView
-        >>> context = TermContainer()
+        >>> context = SchoolYear("sy",
+        ...                      datetime.date(2005, 1, 1),
+        ...                      datetime.date(2005, 12, 31))
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
 
         >>> term = Term('Sample', datetime.date(2005, 1, 1),
-        ...                     datetime.date(2005, 12, 31))
+        ...                       datetime.date(2005, 12, 31))
         >>> view.add(term)
 
     The standard NameChooser adapter picks the name 'Term'.
@@ -262,9 +268,11 @@ def doctest_TermAddView_nextURL():
 
     `nextURL` returns the absolute url of its context.
 
-        >>> from schooltool.term.term import TermContainer
+        >>> from schooltool.schoolyear.schoolyear import SchoolYear
         >>> from schooltool.term.browser.term import TermAddView
-        >>> context = TermContainer()
+        >>> context = SchoolYear("sy",
+        ...                      datetime.date(2005, 9, 1),
+        ...                      datetime.date(2005, 10, 15))
         >>> directlyProvides(context, IContainmentRoot)
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
@@ -280,9 +288,11 @@ def doctest_TermEditViewMixin_buildTerm():
     We shall use TermAddView here -- it inherits TermEditViewMixin._buildTerm
     without changing it.
 
-        >>> from schooltool.term.term import TermContainer
+        >>> from schooltool.schoolyear.schoolyear import SchoolYear
         >>> from schooltool.term.browser.term import TermAddView
-        >>> context = TermContainer()
+        >>> context = SchoolYear("sy",
+        ...                      datetime.date(2005, 9, 1),
+        ...                      datetime.date(2005, 10, 15))
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
 
@@ -384,9 +394,11 @@ def doctest_TermEditViewMixin_buildTerm():
 def doctest_TermAddView_calendar():
     '''Unit tests for TermAddView.calendar
 
-        >>> from schooltool.term.term import TermContainer
+        >>> from schooltool.schoolyear.schoolyear import SchoolYear
         >>> from schooltool.term.browser.term import TermAddView
-        >>> context = TermContainer()
+        >>> context = SchoolYear("sy",
+        ...                      datetime.date(2005, 9, 1),
+        ...                      datetime.date(2005, 10, 15))
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
 

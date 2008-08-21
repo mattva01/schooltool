@@ -5,33 +5,20 @@
     i18n_domain="schooltool">
 
   <!-- Application hook -->
-  <adapter
-      for="schooltool.app.interfaces.ISchoolToolApplication"
-      factory=".TermInit"
-      name="schooltool.terms"
-      />
 
   <adapter
       for=".interfaces.ITermContainer"
       factory="schooltool.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
-  <adapter
-      for="*"
-      factory="schooltool.term.term.getTermContainer" />
-
   <interface
       interface=".interfaces.ITermContainer"
       type="zope.app.content.interfaces.IContentType"
       />
 
-  <class class=".term.TermContainer">
-    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
-    <require permission="schooltool.view"
-             attributes="keys values __iter__ __len__" />
-    <require permission="schooltool.edit"
-             interface="zope.app.container.interfaces.IWriteContainer" />
-  </class>
+  <adapter
+      for="*"
+      factory="schooltool.term.term.getTermContainer" />
 
   <interface
       interface=".interfaces.ITerm"

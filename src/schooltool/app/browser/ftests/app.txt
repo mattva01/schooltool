@@ -71,13 +71,9 @@ Let's make sure that we can see the SchoolTool preferences page:
     >>> 'cal_periods' in frog.contents
     True
 
-We should be able to see terms and schemas without authenticating:
+We should be able to see schemas without authenticating:
 
     >>> anonymous = Browser()
-    >>> anonymous.open('http://localhost/terms')
-    >>> anonymous.headers['status']
-    '200 Ok'
-
     >>> anonymous.open('http://localhost/ttschemas')
     >>> anonymous.headers['status']
     '200 Ok'

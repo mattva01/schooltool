@@ -103,7 +103,7 @@ class ResourceBookingCalendar(ImmutableCalendar):
 
     def expand(self, start, end):
         app = ISchoolToolApplication(None)
-        terms = ITermContainer(app)
+        terms = ITermContainer(app, {})
         school_timetables = app['ttschemas']
 
         events = []

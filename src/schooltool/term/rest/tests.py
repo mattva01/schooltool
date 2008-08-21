@@ -45,10 +45,12 @@ class TestTermView(unittest.TestCase):
     def setUp(self):
         setup.placelessSetUp()
         setup.setUpTraversal()
-        from schooltool.term.term import Term, TermContainer
+        from schooltool.term.term import Term
         from schooltool.term.rest.term import TermView
-
-        self.terms = TermContainer()
+        from schooltool.schoolyear.schoolyear import SchoolYear
+        self.terms = SchoolYear("2003",
+                                datetime.date(2003, 9, 1),
+                                datetime.date(2003, 12, 31))
         self.terms["calendar"] =  self.term = Term(
             "Test",
             datetime.date(2003, 9, 1),
@@ -111,10 +113,11 @@ class TestTermView(unittest.TestCase):
 
 class TestTermFileFactory(unittest.TestCase):
     def setUp(self):
-        from schooltool.term.term import TermContainer
         from schooltool.term.rest.term import TermFileFactory
-
-        self.terms = TermContainer()
+        from schooltool.schoolyear.schoolyear import SchoolYear
+        self.terms = SchoolYear("2003",
+                                datetime.date(2003, 9, 1),
+                                datetime.date(2003, 12, 31))
         self.fileFactory = TermFileFactory(self.terms)
 
     def test_isDataICal(self):
@@ -195,14 +198,17 @@ class TestTermFileFactory(unittest.TestCase):
 class TestTermFile(unittest.TestCase):
 
     def setUp(self):
-        from schooltool.term.term import Term, TermContainer
+        from schooltool.term.term import Term
+        from schooltool.schoolyear.schoolyear import SchoolYear
         from schooltool.term.interfaces import ITermContainer
         from schooltool.term.rest.term import TermFileFactory
         from schooltool.term.rest.term import TermFile
 
         ztapi.provideAdapter(ITermContainer, IFileFactory, TermFileFactory)
 
-        self.terms = TermContainer()
+        self.terms = SchoolYear("2003",
+                                datetime.date(2003, 9, 1),
+                                datetime.date(2003, 12, 31))
         self.terms["calendar"] =  self.term = Term(
             "Test",
             datetime.date(2003, 9, 1),

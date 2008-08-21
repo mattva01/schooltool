@@ -32,6 +32,7 @@ from zope.interface.verify import verifyObject
 from zope.testing import doctest
 from zope.app.testing import setup
 
+from schooltool.schoolyear.schoolyear import getSchoolYearContainer
 from schooltool.testing import setup as stsetup
 from schooltool.relationship.tests import setUpRelationships
 from schooltool.app.cal import getCalendar
@@ -47,6 +48,7 @@ def setUp(test):
     setup.placefulSetUp()
     stsetup.setUpCalendaring()
     provideAdapter(getTermContainer, [Interface], ITermContainer)
+    provideAdapter(getSchoolYearContainer)
 
 
 def tearDown(test):

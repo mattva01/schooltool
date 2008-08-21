@@ -745,7 +745,6 @@ def doctest_timetableEventHandlers():
         ...         return self
 
         >>> app = ApplicationStub()
-        >>> app['terms'] = {'term': 'Term for Fall 2006'}
         >>> ztapi.provideAdapter(None, ISchoolToolApplication, app)
         >>> timetable_calendar = []
         >>> class ModelStub(object):

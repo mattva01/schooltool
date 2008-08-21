@@ -291,9 +291,14 @@ Special days
 We need a term:
 
     >>> manager.getLink('Manage').click()
-    >>> manager.getLink('Terms').click()
-    >>> manager.getLink('New Term').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('New School Year').click()
+    >>> manager.getControl('Title').value = '2005'
+    >>> manager.getControl('First day').value = '05/05/01'
+    >>> manager.getControl('Last day').value = '05/10/15'
+    >>> manager.getControl('Add').click()
 
+    >>> manager.getLink('New Term').click()
     >>> manager.getControl('Title').value = '2005 Summer'
     >>> manager.getControl('Start date').value = '2005-06-01'
     >>> manager.getControl('End date').value = '2005-08-31'
@@ -351,7 +356,8 @@ Emergency Days
 Now let's make 2005-07-07 an emergency day:
 
     >>> manager.getLink('Manage').click()
-    >>> manager.getLink('Terms').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('2005').click()
     >>> manager.getLink('2005 Summer').click()
     >>> manager.getLink('Cancel School in Emergency').click()
 
@@ -453,7 +459,8 @@ The default schema selection is unset:
 Let's go back to the index of terms:
 
     >>> manager.getLink('Manage').click()
-    >>> manager.getLink('Terms').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('2005').click()
 
 Let's delete the term:
 
@@ -468,7 +475,7 @@ We get to the confirmation page:
     Are you sure you want to delete the selected terms?
     ...
             <input type="hidden" name="delete.2005-summer" />
-            <a href="http://localhost/terms/2005-summer">2005 Summer</a>.
+            <a href="http://localhost/schoolyears/2005/2005-summer">2005 Summer</a>.
             This term is used by 0 individual timetables.
     ...
 

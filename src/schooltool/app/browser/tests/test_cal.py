@@ -29,7 +29,6 @@ from pytz import timezone, utc
 from zope.i18n import translate
 from zope.interface import Interface
 from zope.interface import directlyProvides, implements
-from zope.component import provideAdapter
 from zope.component import provideSubscriptionAdapter
 from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
@@ -46,7 +45,6 @@ from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 from schooltool.timetable.model import SequentialDaysTimetableModel
 from schooltool.timetable.schema import TimetableSchema
 from schooltool.term.interfaces import ITermContainer
-from schooltool.term.term import getTermContainer
 from schooltool.term.tests import setUpDateManagerStub
 from schooltool.testing.util import NiceDiffsMixin
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
@@ -60,7 +58,10 @@ from schooltool.app.interfaces import ISchoolToolCalendar
 # Used in defining CalendarEventEditTestView
 from schooltool.app.browser.cal import CalendarEventEditView
 from schooltool.app.browser.cal import ICalendarEventEditForm
+from schooltool.app.browser.testing import layeredTestTearDown
+from schooltool.app.browser.testing import layeredTestSetup, makeLayeredSuite
 from schooltool.app.browser.testing import setUp as browserSetUp, tearDown
+from schooltool.app.testing import app_functional_layer
 from schooltool.testing import setup as sbsetup
 
 # Used for the PrincipalStub
@@ -3458,6 +3459,7 @@ def doctest_getEvents_booking():
 
     """
 
+
 class TestDailyCalendarView(unittest.TestCase):
 
     today = date(2005, 3, 12)
@@ -3493,7 +3495,7 @@ class TestDailyCalendarView(unittest.TestCase):
             def __call__(self):
                 return unicode(self.context.strftime("%A, %B%e, %Y"))
 
-        zope.component.provideAdapter(TestDateFormatterFullView, 
+        zope.component.provideAdapter(TestDateFormatterFullView,
                                           [date, IRequest], Interface, name='fullDate')
 
         view.request = TestRequest(form={'date': '2005-01-06'})
@@ -4833,20 +4835,8 @@ def doctest_EventDeleteView():
 class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
 
     def setUp(self):
-        setUp()
-        sbsetup.setUpCalendaring()
-
-        # set up adaptation (the view checks user preferences)
-        from schooltool.person.preference import getPersonPreferences
-        from schooltool.person.interfaces import IPersonPreferences
-        from schooltool.person.person import Person
-        provideAdapter(getPersonPreferences, [Person], IPersonPreferences)
-        from schooltool.term.term import getTermContainer
-        provideAdapter(getTermContainer, [Interface], ITermContainer)
-
-        # set up the site
-        app = sbsetup.setUpSchoolToolSite()
-
+        layeredTestSetup()
+        app = ISchoolToolApplication(None)
         self.person = app['persons']['person'] = Person('person')
 
         # set up the timetable schema
@@ -4865,6 +4855,11 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
 
         app['ttschemas']['default'] = schema
 
+        # set up schoolyear
+        from schooltool.schoolyear.schoolyear import SchoolYear
+        from schooltool.schoolyear.interfaces import ISchoolYearContainer
+        ISchoolYearContainer(app)['2004'] = SchoolYear("2004", date(2004, 9, 1), date(2004, 12, 31))
+
         # set up terms
         from schooltool.term.term import Term
         terms = ITermContainer(app)
@@ -4873,7 +4868,7 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
         term.add(date(2004, 11, 5))
 
     def tearDown(self):
-        tearDown()
+        layeredTestTearDown()
 
     def createSchema(self, days, *periods_for_each_day):
         """Create a timetable schema."""
@@ -5018,9 +5013,12 @@ class TestDailyCalendarRowsView_getPeriodsForDay(NiceDiffsMixin,
                                                  unittest.TestCase):
 
     def setUp(self):
-        setup.placefulSetUp()
-        provideAdapter(getTermContainer, [Interface], ITermContainer)
-        app = sbsetup.setUpSchoolToolSite()
+        layeredTestSetup()
+        app = ISchoolToolApplication(None)
+
+        from schooltool.schoolyear.schoolyear import SchoolYear
+        from schooltool.schoolyear.interfaces import ISchoolYearContainer
+        ISchoolYearContainer(app)['2004-2005'] = SchoolYear("2004-2005", date(2004, 9, 1), date(2005, 8, 1))
 
         from schooltool.term.term import Term
         self.term1 = Term('Sample', date(2004, 9, 1), date(2004, 12, 20))
@@ -5051,7 +5049,7 @@ class TestDailyCalendarRowsView_getPeriodsForDay(NiceDiffsMixin,
         self.app = app
 
     def tearDown(self):
-        setup.placefulTearDown()
+        layeredTestTearDown()
 
     def test_getPeriodsForDay_sameTZ(self):
         from schooltool.app.browser.cal import DailyCalendarRowsView
@@ -5327,8 +5325,12 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestCalendarViewBase))
     suite.addTest(unittest.makeSuite(TestDailyCalendarView))
     suite.addTest(unittest.makeSuite(TestGetRecurrenceRule))
-    suite.addTest(unittest.makeSuite(TestDailyCalendarRowsView))
-    suite.addTest(unittest.makeSuite(TestDailyCalendarRowsView_getPeriodsForDay))
+
+    suite.addTest(makeLayeredSuite(TestDailyCalendarRowsView,
+                                   app_functional_layer))
+    suite.addTest(makeLayeredSuite(TestDailyCalendarRowsView_getPeriodsForDay,
+                                   app_functional_layer))
+
     suite.addTest(doctest.DocTestSuite(
         setUp=setUp, tearDown=tearDown,
         optionflags=doctest.ELLIPSIS|doctest.REPORT_NDIFF|

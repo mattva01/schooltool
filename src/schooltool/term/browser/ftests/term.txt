@@ -18,9 +18,18 @@ Set the time:
     >>> 'Data successfully updated.' in manager.contents
     True
 
-Create a term
+And create a new school year:
+
     >>> manager.getLink('Manage').click()
-    >>> manager.getLink('Terms').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('New School Year').click()
+    >>> manager.getControl('Title').value = '2007'
+    >>> manager.getControl('First day').value = '07/01/01'
+    >>> manager.getControl('Last day').value = '07/12/15'
+    >>> manager.getControl('Add').click()
+
+Create a term
+
     >>> manager.getLink('New Term').click()
     >>> manager.getControl('Title').value = 'Term 1'
     >>> manager.getControl('Start date').value = '2007-07-01'
@@ -61,8 +70,10 @@ So now we have one term
 What now if we cancel the deletion ?
 
 Create a term
+
     >>> manager.getLink('Manage').click()
-    >>> manager.getLink('Terms').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('2007').click()
     >>> manager.getLink('New Term').click()
     >>> manager.getControl('Title').value = 'Term 2'
     >>> manager.getControl('Start date').value = '2007-07-01'
@@ -88,7 +99,7 @@ We cancel so the term is still there:
     ...
       <h1>Terms</h1>
     ...
-    <a href="http://localhost/terms/term-2">Term 2</a>
+    <a href="http://localhost/schoolyears/2007/term-2">Term 2</a>
     ...
 
 
@@ -164,14 +175,15 @@ XXX we lost the title, it should be restored
 Let's do the edit:
 
     >>> manager.getLink('Manage').click()
-    >>> manager.getLink('Terms').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('2007').click()
     >>> manager.getLink('Term 2').click()
     >>> manager.getLink('Edit').click()
     >>> print analyze.queryHTML('id("content-body")', manager.contents)[0]
     <div id="content-body">
     <BLANKLINE>
     <BLANKLINE>
-    <form class="plain" method="post" action="http://localhost/terms/term-2/@@edit.html">
+    <form class="plain" method="post" action="http://localhost/schoolyears/2007/term-2/@@edit.html">
     <BLANKLINE>
     <BLANKLINE>
     <BLANKLINE>
@@ -208,7 +220,8 @@ We just get the edition of the title as there is timetable related to this term.
 Let's try to delete:
 
     >>> manager.getLink('Manage').click()
-    >>> manager.getLink('Terms').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('2007').click()
     >>> manager.getControl(name='delete.term-2').value = True
     >>> manager.getControl('Delete').click()
     >>> 'Are you sure you want to delete the selected terms?' in manager.contents

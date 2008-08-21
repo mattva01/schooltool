@@ -28,6 +28,7 @@ from zope.interface.verify import verifyObject
 from zope.testing import doctest
 from zope.app.testing import setup
 
+from schooltool.schoolyear.schoolyear import getSchoolYearContainer
 from schooltool.term.term import getTermContainer
 from schooltool.term.interfaces import ITermContainer
 from schooltool.testing import setup as stsetup
@@ -35,6 +36,7 @@ from schooltool.testing import setup as stsetup
 def setUp(test):
     setup.placefulSetUp()
     provideAdapter(getTermContainer, [Interface], ITermContainer)
+    provideAdapter(getSchoolYearContainer)
 
 
 def tearDown(test):
@@ -72,7 +74,7 @@ def doctest_SampleTerms():
         >>> fall6 = ITermContainer(app)['2006-fall']
         >>> schooldays = [day for day in fall6 if fall6.isSchoolday(day)]
         >>> len(schooldays)
-        90
+        81
 
     They span these dates:
 
@@ -81,7 +83,7 @@ def doctest_SampleTerms():
         >>> print spring.first, spring.last
         2006-01-26 2006-08-31
         >>> print fall6.first, fall6.last
-        2006-08-21 2006-12-22
+        2006-09-01 2006-12-22
 
     """
 

@@ -46,6 +46,9 @@ class ISchoolYearContainer(IContainer, ILocation):
     """Container for school years"""
     constraints.contains(ISchoolYear)
 
+    def getActiveSchoolYear():
+        """Return the active schoolyear."""
+
 
 class ISubscriber(Interface):
     """An event handler implements this"""

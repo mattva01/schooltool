@@ -14,7 +14,9 @@ First of all, we need an app object:
     >>> from schooltool.term.interfaces import ITermContainer
     >>> from zope.interface import Interface
     >>> from zope.component import provideAdapter
+    >>> from schooltool.schoolyear.schoolyear import getSchoolYearContainer
     >>> provideAdapter(getTermContainer, [Interface], ITermContainer)
+    >>> provideAdapter(getSchoolYearContainer)
 
 We have a timetable schema to put the view on:
 
@@ -40,9 +42,17 @@ The schema has a model attribute:
     >>> ttschema.model = SequentialDaysTimetableModel(['Day 1', 'Day 2'],
     ...                                               {None: default})
 
-We will need a term:
+We will need a schoolyear and a term:
 
     >>> import datetime
+
+    >>> from schooltool.schoolyear.schoolyear import SchoolYear
+    >>> from schooltool.schoolyear.interfaces import ISchoolYearContainer
+    >>> schoolyears = ISchoolYearContainer(app)
+    >>> schoolyears['2005'] = SchoolYear("2005",
+    ...                                  datetime.date(2005, 2, 1),
+    ...                                  datetime.date(2005, 12, 31))
+
     >>> from schooltool.term.term import Term
     >>> ITermContainer(app)["2005-summer"] = Term('2005 summer',
     ...                                           datetime.date(2005, 6, 1),

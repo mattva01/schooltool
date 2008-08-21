@@ -114,7 +114,14 @@ def setUpTimetabling(username):
     # We will need a term and a School timetable:
     manager = logInManager()
     manager.getLink('Manage').click()
-    manager.getLink('Terms').click()
+
+    manager.getLink('School Years').click()
+    manager.getLink('New School Year').click()
+    manager.getControl('Title').value = '2005-2006'
+    manager.getControl('First day').value = '05/09/01'
+    manager.getControl('Last day').value = '06/07/15'
+    manager.getControl('Add').click()
+
     manager.getLink('New Term').click()
 
     manager.getControl('Title').value = '2005 Fall'

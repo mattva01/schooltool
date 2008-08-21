@@ -26,14 +26,12 @@ import pytz
 from datetime import datetime
 
 import zope.interface
-from zope.location.location import LocationProxy
 from zope.interface import implementer
-from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container import contained, btree
 
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.app import getSchoolToolApplication
 from schooltool.common import DateRange
 
 from schooltool.term import interfaces
@@ -98,8 +96,8 @@ class Term(DateRange, contained.Contained, persistent.Persistent):
 
 
 class TermContainer(btree.BTreeContainer):
+    """BBB: only there for backwards compatibility."""
 
-    zope.interface.implements(interfaces.ITermContainer, IAttributeAnnotatable)
 
 
 def getTermForDate(date):
@@ -107,7 +105,7 @@ def getTermForDate(date):
 
     Returns None if `date` falls outside all terms.
     """
-    terms = interfaces.ITermContainer(None)
+    terms = interfaces.ITermContainer(None, {})
     for term in terms.values():
         if date in term:
             return term
@@ -124,7 +122,7 @@ def getNextTermForDate(date):
 
     Returns None if there are no terms.
     """
-    terms = interfaces.ITermContainer(None)
+    terms = interfaces.ITermContainer(None, {})
     before, after = [], []
     for term in terms.values():
         if date in term:
@@ -158,4 +156,5 @@ class DateManagerUtility(object):
 @implementer(interfaces.ITermContainer)
 def getTermContainer(context):
     app = ISchoolToolApplication(None)
-    return app['terms']
+    syc = ISchoolYearContainer(app)
+    return syc.getActiveSchoolYear()
