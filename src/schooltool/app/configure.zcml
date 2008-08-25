@@ -341,4 +341,9 @@
       factory=".security.PersonContainerAuthenticationPlugin"
       provides=".interfaces.ISchoolToolAuthenticationPlugin" />
 
+  <!-- general utilities -->
+  <!-- XXX: move the code to schooltool.app too -->
+  <utility
+      factory="schooltool.term.term.DateManagerUtility" />
+
 </configure>

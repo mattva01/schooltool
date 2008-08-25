@@ -251,4 +251,12 @@
        title="Calendar (Yearly)"
        />
 
+  <page
+      for="schooltool.calendar.interfaces.ICalendar"
+      name="daily_calendar_rows"
+      layer="schooltool.timetable.browser.skin.ITimetableLayer"
+      class=".cal.DailyTimetableCalendarRowsView"
+      permission="zope.View"
+      />
+
 </configure>

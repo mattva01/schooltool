@@ -4889,14 +4889,13 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
         view = DailyCalendarRowsView(ISchoolToolCalendar(self.person), request)
         result = list(view.calendarRows(date(2004, 11, 5), 8, 19, events=[]))
 
-        expected = [("1", dt('08:00'), timedelta(hours=1)),
+        expected = [("8:00", dt('08:00'), timedelta(hours=1)),
                     ("9:00", dt('09:00'), timedelta(hours=1)),
-                    ("10:00", dt('10:00'), timedelta(minutes=15)),
-                    ("2", dt('10:15'), timedelta(hours=1)),
-                    ("11:15", dt('11:15'), timedelta(minutes=15)),
-                    ("3", dt('11:30'), timedelta(hours=1)),
-                    ("4", dt('12:30'), timedelta(hours=2)),
-                    ("14:30", dt('14:30'), timedelta(minutes=30)),
+                    ("10:00", dt('10:00'), timedelta(hours=1)),
+                    ("11:00", dt('11:00'), timedelta(hours=1)),
+                    ("12:00", dt('12:00'), timedelta(hours=1)),
+                    ("13:00", dt('13:00'), timedelta(hours=1)),
+                    ("14:00", dt('14:00'), timedelta(hours=1)),
                     ("15:00", dt('15:00'), timedelta(hours=1)),
                     ("16:00", dt('16:00'), timedelta(hours=1)),
                     ("17:00", dt('17:00'), timedelta(hours=1)),
@@ -4931,13 +4930,7 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
                     ('15:00', kmdt('15:00'),timedelta(0, 3600)),
                     ('16:00', kmdt('16:00'),timedelta(0, 3600)),
                     ('17:00', kmdt('17:00'),timedelta(0, 3600)),
-                    ('18:00', kmdt('18:00'),timedelta(0, 3600)),
-                    ('19:00', kmdt('19:00'),timedelta(0, 3600)),
-                    ('1',  kmdt("20:00"), timedelta(0, 3600)),
-                    ('21:00', kmdt("21:00"), timedelta(0, 4500)),
-                    ('2',  kmdt("22:15"), timedelta(0, 3600)),
-                    ('23:15', kmdt("23:15"), timedelta(0, 900)),
-                    ('3', kmdt("23:30"), timedelta(0, 1800))]
+                    ('18:00', kmdt('18:00'),timedelta(0, 3600))]
 
         self.assertEquals(result, expected)
 
@@ -4987,137 +4980,6 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
         prefs.timezone = 'Europe/Vilnius'
 
         self.assertEquals(view.getPersonTimezone(), timezone('Europe/Vilnius'))
-
-    def test_getPeriods(self):
-        from schooltool.app.browser.cal import DailyCalendarRowsView
-        request = TestRequest()
-        view = DailyCalendarRowsView(ISchoolToolCalendar(self.person), request)
-
-        # if no user has logged we should get an empty list
-        self.assertEquals(view.getPeriods(date(2005, 1, 1)), [])
-
-        # same if our user doesn't want to see periods in his calendar
-        request.setPrincipal(self.person)
-        IPersonPreferences(self.person).cal_periods = False
-        self.assertEquals(view.getPeriods(date(2005, 1, 1)), [])
-
-        # if currently logged in user wants to see periods, the
-        # parameter is passed to getPeriodsForDay method.
-        view.getPeriodsForDay = lambda cursor: ("Yep", cursor)
-        IPersonPreferences(self.person).cal_periods = True
-        self.assertEquals(view.getPeriods(date(2005, 1, 1)),
-                          ("Yep", date(2005, 1, 1)))
-
-
-class TestDailyCalendarRowsView_getPeriodsForDay(NiceDiffsMixin,
-                                                 unittest.TestCase):
-
-    def setUp(self):
-        layeredTestSetup()
-        app = ISchoolToolApplication(None)
-
-        from schooltool.schoolyear.schoolyear import SchoolYear
-        from schooltool.schoolyear.interfaces import ISchoolYearContainer
-        ISchoolYearContainer(app)['2004-2005'] = SchoolYear("2004-2005", date(2004, 9, 1), date(2005, 8, 1))
-
-        from schooltool.term.term import Term
-        self.term1 = Term('Sample', date(2004, 9, 1), date(2004, 12, 20))
-        self.term1.schooldays = [('A', time(9,0), timedelta(minutes=115)),
-                                 ('B', time(11,0), timedelta(minutes=115)),
-                                 ('C', time(13,0), timedelta(minutes=115)),
-                                 ('D', time(15,0), timedelta(minutes=115)),]
-        self.term2 = Term('Sample', date(2005, 1, 1), date(2005, 6, 1))
-        self.term2.schooldays = []
-        terms = ITermContainer(app)
-        terms['2004-fall'] = self.term1
-        terms['2005-spring'] = self.term2
-
-        class TimetableModelStub:
-            def periodsInDay(this, schooldays, ttschema, date):
-                if date not in schooldays:
-                    raise "This date is not in the current term!"
-                if ttschema == self.tt:
-                    return schooldays.schooldays
-                else:
-                    return []
-
-        tt = TimetableSchema([])
-        tt.model = TimetableModelStub()
-        tt.timezone = 'Europe/London'
-        self.tt = tt
-        app["ttschemas"]['default'] = tt
-        self.app = app
-
-    def tearDown(self):
-        layeredTestTearDown()
-
-    def test_getPeriodsForDay_sameTZ(self):
-        from schooltool.app.browser.cal import DailyCalendarRowsView
-        view = DailyCalendarRowsView(None, TestRequest())
-        uk = timezone('Europe/London')
-        view.getPersonTimezone = lambda: uk
-        delta = timedelta(minutes=115)
-        ukdt = lambda *args: uk.localize(datetime(*args))
-        self.assertEquals(view.getPeriodsForDay(date(2004, 10, 14)),
-                          [('A', ukdt(2004, 10, 14,  9, 0), delta),
-                           ('B', ukdt(2004, 10, 14, 11, 0), delta),
-                           ('C', ukdt(2004, 10, 14, 13, 0), delta),
-                           ('D', ukdt(2004, 10, 14, 15, 0), delta)])
-
-        # However, if there is no time period, we return []
-        self.assertEquals(view.getPeriodsForDay(date(2005, 10, 14)),
-                          [])
-
-        # If there is no timetable schema, we return []
-        self.app["ttschemas"].default_id = None
-        self.assertEquals(view.getPeriodsForDay(date(2004, 10, 14)),
-                          [])
-
-    def test_getPeriodsForDay_otherTZ(self):
-        from schooltool.app.browser.cal import DailyCalendarRowsView
-        view = DailyCalendarRowsView(None, TestRequest())
-        # Auckland is 12h ahead of London
-        view.getPersonTimezone = lambda: timezone('Pacific/Auckland')
-        uk = timezone('Europe/London')
-
-        delta = timedelta(minutes=115)
-        td = timedelta
-        ukdt = lambda *args: uk.localize(datetime(*args))
-        self.assertEquals(view.getPeriodsForDay(date(2004, 10, 14)),
-                          [('B', ukdt(2004, 10, 13, 12, 0), td(minutes=55)),
-                           ('C', ukdt(2004, 10, 13, 13, 0), delta),
-                           ('D', ukdt(2004, 10, 13, 15, 0), delta),
-                           ('A', ukdt(2004, 10, 14, 9, 0), delta),
-                           ('B', ukdt(2004, 10, 14, 11, 0), td(minutes=60))])
-
-        # However, if there is no time period, we return []
-        self.assertEquals(view.getPeriodsForDay(date(2005, 10, 14)),
-                          [])
-
-        # If there is no timetable schema, we return []
-        self.app["ttschemas"].default_id = None
-        self.assertEquals(view.getPeriodsForDay(date(2004, 10, 14)),
-                          [])
-
-    def test_getPeriodsForLastDayOfTerm(self):
-        from schooltool.app.browser.cal import DailyCalendarRowsView
-        view = DailyCalendarRowsView(None, TestRequest())
-        # We need the start date and the end date different
-        view.getPersonTimezone = lambda: timezone('America/Chicago')
-        self.assertEquals(view.getPeriodsForDay(date(2005, 6, 1)), [])
-
-    def test_getPeriodsForDayBetweenTerms(self):
-        from schooltool.term.term import Term
-        term3 = Term('Sample', date(2005, 6, 2), date(2005, 8, 1))
-        ITermContainer(self.app)['2005-autumn'] = term3
-        term3.schooldays = [('A', time(9,0), timedelta(minutes=115))]
-        self.term2.schooldays = [('B', time(10,0), timedelta(minutes=115))]
-
-        from schooltool.app.browser.cal import DailyCalendarRowsView
-        view = DailyCalendarRowsView(None, TestRequest())
-        # We need the start date and the end date different
-        view.getPersonTimezone = lambda: timezone('America/Chicago')
-        self.assertEquals(len(view.getPeriodsForDay(date(2005, 6, 1))), 1)
 
 
 def doctest_CalendarListSubscriber(self):
@@ -5325,12 +5187,8 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestCalendarViewBase))
     suite.addTest(unittest.makeSuite(TestDailyCalendarView))
     suite.addTest(unittest.makeSuite(TestGetRecurrenceRule))
-
     suite.addTest(makeLayeredSuite(TestDailyCalendarRowsView,
                                    app_functional_layer))
-    suite.addTest(makeLayeredSuite(TestDailyCalendarRowsView_getPeriodsForDay,
-                                   app_functional_layer))
-
     suite.addTest(doctest.DocTestSuite(
         setUp=setUp, tearDown=tearDown,
         optionflags=doctest.ELLIPSIS|doctest.REPORT_NDIFF|

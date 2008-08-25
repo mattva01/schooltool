@@ -21,10 +21,18 @@ Timetable specific calendar views.
 
 $Id$
 """
+from datetime import datetime, time, timedelta
+from pytz import timezone
+
 from zope.viewlet.interfaces import IViewlet
 from zope.interface import implements
 from zope.cachedescriptors.property import CachedProperty
 
+from schooltool.person.interfaces import IPersonPreferences
+from schooltool.person.interfaces import IPerson
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import ISchoolToolCalendar
+from schooltool.app.browser.cal import DailyCalendarRowsView
 from schooltool.app.browser.cal import YearlyCalendarView
 from schooltool.term.term import getTermForDate
 
@@ -82,3 +90,135 @@ class TermLegendViewlet(object):
         return [{'title': term.title,
                  'cssclass': "legend-item term%s" % cssClass}
                 for term, cssClass in terms]
+
+
+class DailyTimetableCalendarRowsView(DailyCalendarRowsView):
+    """Daily calendar rows view for SchoolTool.
+
+    This view differs from the original view in SchoolBell in that it can
+    also show day periods instead of hour numbers.
+    """
+
+    __used_for__ = ISchoolToolCalendar
+
+    def getPeriodsForDay(self, date):
+        """Return a list of timetable periods defined for `date`.
+
+        This function uses the default timetable schema and the appropriate time
+        period for `date`.
+
+        Retuns a list of (id, dtstart, duration) tuples.  The times
+        are timezone-aware and in the timezone of the timetable.
+
+        Returns an empty list if there are no periods defined for `date` (e.g.
+        if there is no default timetable schema, or `date` falls outside all
+        time periods, or it happens to be a holiday).
+        """
+        schooldays = getTermForDate(date)
+        ttcontainer = ISchoolToolApplication(None)['ttschemas']
+        if ttcontainer.default_id is None or schooldays is None:
+            return []
+        ttschema = ttcontainer.getDefault()
+        tttz = timezone(ttschema.timezone)
+        displaytz = self.getPersonTimezone()
+
+        # Find out the days in the timetable that our display date overlaps
+        daystart = displaytz.localize(datetime.combine(date, time(0)))
+        dayend = daystart + date.resolution
+        day1 = daystart.astimezone(tttz).date()
+        day2 = dayend.astimezone(tttz).date()
+
+        def resolvePeriods(date):
+            term = getTermForDate(date)
+            if not term:
+                return []
+
+            periods = ttschema.model.periodsInDay(term, ttschema, date)
+            result = []
+            for id, tstart, duration in  periods:
+                dtstart = datetime.combine(date, tstart)
+                dtstart = tttz.localize(dtstart)
+                result.append((id, dtstart, duration))
+            return result
+
+        periods = resolvePeriods(day1)
+        if day2 != day1:
+            periods += resolvePeriods(day2)
+
+        result = []
+
+        # Filter out periods outside date boundaries and chop off the
+        # ones overlapping them.
+        for id, dtstart, duration in periods:
+            if (dtstart + duration <= daystart) or (dayend <= dtstart):
+                continue
+            if dtstart < daystart:
+                duration -= daystart - dtstart
+                dtstart = daystart.astimezone(tttz)
+            if dayend < dtstart + duration:
+                duration = dayend - dtstart
+            result.append((id, dtstart, duration))
+
+        return result
+
+    def getPeriods(self, cursor):
+        """Return the date we get from getPeriodsForDay.
+
+        Checks user preferences, returns an empty list if no user is
+        logged in.
+        """
+        person = IPerson(self.request.principal, None)
+        if (person is not None and
+            IPersonPreferences(person).cal_periods):
+            return self.getPeriodsForDay(cursor)
+        else:
+            return []
+
+    def _addPeriodsToRows(self, rows, periods, events):
+        """Populate the row list with rows from periods."""
+        tz = self.getPersonTimezone()
+
+        # Put starts and ends of periods into rows
+        for period in periods:
+            period_id, pstart, duration = period
+            pend = (pstart + duration).astimezone(tz)
+            for point in rows[:]:
+                if pstart < point < pend:
+                    rows.remove(point)
+            if pstart not in rows:
+                rows.append(pstart)
+            if pend not in rows:
+                rows.append(pend)
+        rows.sort()
+        return rows
+
+    def calendarRows(self, cursor, starthour, endhour, events):
+        """Iterate over (title, start, duration) of time slots that make up
+        the daily calendar.
+
+        Returns a generator.
+        """
+        tz = self.getPersonTimezone()
+        periods = self.getPeriods(cursor)
+
+        daystart = tz.localize(datetime.combine(cursor, time()))
+        rows = [daystart + timedelta(hours=hour)
+                for hour in range(starthour, endhour+1)]
+
+        if periods:
+            rows = self._addPeriodsToRows(rows, periods, events)
+
+        calendarRows = []
+
+        start, row_ends = rows[0], rows[1:]
+        start = start.astimezone(tz)
+        for end in row_ends:
+            if periods and periods[0][1] == start:
+                period = periods.pop(0)
+                calendarRows.append((period[0], start, period[2]))
+            else:
+                duration = end - start
+                calendarRows.append(('%d:%02d' % (start.hour, start.minute),
+                                     start, duration))
+            start = end
+        return calendarRows
