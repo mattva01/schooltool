@@ -354,7 +354,10 @@ class MonthlyRecurrenceRule(RecurrenceRule):
                  monthly="monthday"):
         self._interval = interval
         self._count = count
-        self._until = until
+        if until and isinstance(until, datetime.datetime):
+            self._until = until.date()
+        else:
+            self._until = until
         self._exceptions = tuple(exceptions)
         self._monthly = monthly
         self._validate()

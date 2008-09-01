@@ -109,20 +109,121 @@ def doctest_CourseCSVImporter():
     Import some sample data
 
         >>> csvdata='''Course 1, Course 1 Description
-        ... Course2
-        ... Course3, Course 3 Description, Some extra data'''
+        ... Course2,,course-2
+        ... Course3, Course 3 Description'''
         >>> importer.importFromCSV(csvdata)
         True
 
     Check that the courses exist
 
         >>> [course for course in container]
-        [u'course-1', u'course2', u'course3']
+        [u'course-1', u'course-2', u'course3']
 
     Check that descriptions were imported properly
 
         >>> [course.description for course in container.values()]
         ['Course 1 Description', '', 'Course 3 Description']
+
+    """
+
+
+def doctest_CourseCSVImporter_invalid_id():
+    r"""Tests for CourseCSVImporter.
+
+    Create a course container and an importer
+
+        >>> from schooltool.course.browser.csvimport import CourseCSVImporter
+        >>> from schooltool.course.course import CourseContainer
+        >>> container = CourseContainer()
+        >>> importer = CourseCSVImporter(container, None)
+
+    Import some sample data
+
+        >>> csvdata='''Course 1, Course 1 Description, +foo'''
+        >>> importer.importFromCSV(csvdata)
+        False
+
+    We should get an error, because the id is invalid:
+
+        >>> for error in importer.errors.fields:
+        ...     print translate(error)
+        Course "Course 1" id "+foo" is invalid. Names cannot begin with '+' or '@' or contain '/'
+
+    """
+
+
+def doctest_CourseCSVImporter_reimport():
+    r"""Tests for CourseCSVImporter.
+
+    Create a course container and an importer
+
+        >>> from schooltool.course.browser.csvimport import CourseCSVImporter
+        >>> from schooltool.course.course import CourseContainer
+        >>> container = CourseContainer()
+        >>> importer = CourseCSVImporter(container, None)
+
+    Import some sample data
+
+        >>> csvdata='''Course 1, Course 1 Description
+        ... Course2,,course-2
+        ... Course3, Course 3 Description'''
+        >>> importer.importFromCSV(csvdata)
+        True
+
+    Check that the courses exist
+
+        >>> [course for course in container]
+        [u'course-1', u'course-2', u'course3']
+
+    Check that descriptions were imported properly
+
+        >>> [course.description for course in container.values()]
+        ['Course 1 Description', '', 'Course 3 Description']
+
+    Now import a different CSV with some courses matching:
+
+        >>> csvdata='''Course 1, Course Description
+        ... Course2, Now with description,course-2
+        ... Course4, Course 4 Description'''
+        >>> importer.importFromCSV(csvdata)
+        True
+
+    Check that the courses exist
+
+        >>> [course for course in container]
+        [u'course-1', u'course-2', u'course3', u'course4']
+
+    Check that descriptions were updated properly
+
+        >>> [course.description for course in container.values()]
+        ['Course Description', 'Now with description', 'Course 3 Description', 'Course 4 Description']
+
+    By the way - ID takes precedence over title so if we import:
+
+        >>> csvdata='''Course4, Description, course3'''
+        >>> importer.importFromCSV(csvdata)
+        True
+
+    We definitely get the same amount of courses
+
+        >>> [course for course in container]
+        [u'course-1', u'course-2', u'course3', u'course4']
+
+    But description and title of the course3 have been changed:
+
+        >>> container['course3'].title
+        'Course4'
+
+        >>> container['course3'].description
+        'Description'
+
+    While course 4 hasn't been modified:
+
+        >>> container['course4'].title
+        'Course4'
+
+        >>> container['course4'].description
+        'Course 4 Description'
 
     """
 
@@ -139,13 +240,13 @@ def doctest_CourseCSVImportView():
 
     Now we'll try a text import.  Note that the description is not required
 
-        >>> request.form = {'csvtext' : "A Course, The best Course\nAnother Course",
+        >>> request.form = {'csvtext' : "A Course, The best Course, some-course\nAnother Course",
         ...                 'charset' : 'UTF-8',
         ...                 'UPDATE_SUBMIT': 1}
         >>> view = CourseCSVImportView(container, request)
         >>> view.update()
-        >>> [course for course in container]
-        [u'a-course', u'another-course']
+        >>> sorted([course for course in container])
+        [u'another-course', u'some-course']
 
     If no data is provided, we naturally get an error
 

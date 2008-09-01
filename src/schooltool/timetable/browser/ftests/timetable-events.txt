@@ -169,155 +169,16 @@ we need more courses and sections
     >>> manager.getControl('Save').click()
 
     >>> frog.open('http://localhost/persons/frog/calendar/2005-w37')
-    >>> print analyze.queryHTML('id("content-body")', frog.contents)[0]
-    <div id="content-body">
-    ...
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-      ...<td valign="top">
-        ...<span>English 6</span>
-        ...(<span>09:30</span> - <span>10:25</span>)
-      ...</td>
-      ...<td valign="top">
-        ...<span>English 6</span>
-        ...(<span>09:30</span> - <span>10:25</span>)
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-    ...</tr><tr><div>
-      ...<td valign="top">
-        ...<span>History 6</span>
-    <BLANKLINE>
-        ...(<span>10:30</span> - <span>11:25</span>)
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-      ...<td valign="top">
-        ...<span>Math 6</span>
-        ...(<span>10:30</span> - <span>11:25</span>)
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-    ...</tr><tr><div>
-      ...<td valign="top">
-        ...<span>Math 6</span>
-        ...(<span>11:35</span> - <span>12:20</span>)
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-      ...<td valign="top">
-        ...<span>History 6</span>
-        ...(<span>11:35</span> - <span>12:20</span>)
-      ...</td>
-      ...<td valign="top">
-        ...<span>Science 6</span>
-        ...(<span>11:35</span> - <span>12:20</span>)
-      ...</td>
-      ...<td valign="top">
-        ...<span>Math 6</span>
-        ...(<span>11:35</span> - <span>12:20</span>)
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-    ...</tr><tr><div>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-      ...<td valign="top">
-        ...<span>Math 6</span>
-        ...(<span>12:45</span> - <span>13:30</span>)
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-    ...</tr><tr><div>
-      ...<td valign="top">
-        ...<span>English 6</span>
-        ...(<span>13:35</span> - <span>14:20</span>)
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-      ...<td valign="top">
-        ...<span>Science 6</span>
-        ...(<span>13:35</span> - <span>14:20</span>)
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-    ...</tr><tr><div>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-      ...<td valign="top">
-        ...<span>Science 6</span>
-        ...(<span>14:30</span> - <span>15:15</span>)
-      ...</td>
-      ...<td valign="top">
-        ...<span>Science 6</span>
-        ...(<span>14:30</span> - <span>15:15</span>)
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-      ...<td valign="top">
-        ...<span>English 6</span>
-        ...(<span>14:30</span> - <span>15:15</span>)
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-      ...<td valign="top">
-    <BLANKLINE>
-      ...</td>
-    ...
-    
+    >>> from schooltool.app.testing import format_weekly_calendar
+    >>> print format_weekly_calendar(frog.contents)
+    +----------------------------+-----------------------------+-------------------------------+------------------------------+----------------------------+------------------------------+----------------------------+
+    | Monday, September 12, 2005 | Tuesday, September 13, 2005 | Wednesday, September 14, 2005 | Thursday, September 15, 2005 | Friday, September 16, 2005 | Saturday, September 17, 2005 | Sunday, September 18, 2005 |
+    +----------------------------+-----------------------------+-------------------------------+------------------------------+----------------------------+------------------------------+----------------------------+
+    |                            | English 6, 09:30, 10:25     | English 6, 09:30, 10:25       |                              |                            |                              |                            |
+    | History 6, 10:30, 11:25    |                             |                               | Math 6, 10:30, 11:25         |                            |                              |                            |
+    | Math 6, 11:35, 12:20       |                             | History 6, 11:35, 12:20       | Science 6, 11:35, 12:20      | Math 6, 11:35, 12:20       |                              |                            |
+    |                            |                             | Math 6, 12:45, 13:30          |                              |                            |                              |                            |
+    | English 6, 13:35, 14:20    |                             |                               |                              | Science 6, 13:35, 14:20    |                              |                            |
+    |                            | Science 6, 14:30, 15:15     | Science 6, 14:30, 15:15       |                              | English 6, 14:30, 15:15    |                              |                            |
+    +----------------------------+-----------------------------+-------------------------------+------------------------------+----------------------------+------------------------------+----------------------------+
 

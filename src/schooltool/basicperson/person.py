@@ -66,7 +66,7 @@ class BasicPerson(Person):
 
     @property
     def title(self):
-        return "%s %s" % (self.last_name, self.first_name)
+        return "%s, %s" % (self.last_name, self.first_name)
 
 
 class PersonFactoryUtility(object):

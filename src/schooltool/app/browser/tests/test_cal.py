@@ -1948,8 +1948,8 @@ def doctest_CalendarEventAddView_add_validation():
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occurred.'
-        >>> view.errors                                # doctest: +ELLIPSIS
-        ConversionError: (u'Invalid datetime data', <...>)
+        >>> view.errors
+        ConversionError: (u'Invalid datetime data', ...)
         >>> view.error is None
         True
 
@@ -1965,8 +1965,8 @@ def doctest_CalendarEventAddView_add_validation():
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occurred.'
-        >>> view.errors                                # doctest: +ELLIPSIS
-        ConversionError: (u'Invalid integer data', <...>)
+        >>> view.errors
+        ConversionError: (u'Invalid integer data', ...)
         >>> view.error is None
         True
 

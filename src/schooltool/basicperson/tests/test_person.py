@@ -49,7 +49,7 @@ def doctest_BasicPerson():
          True
 
          >>> person.title
-         'Johnson Peter'
+         'Johnson, Peter'
 
     """
 
@@ -88,7 +88,7 @@ def doctest_PersonFactoryUtility_createManagerUser():
 
         >>> manager = utility.createManagerUser("manager_username", "SchoolTool")
         >>> manager.title
-        'Administrator SchoolTool'
+        'Administrator, SchoolTool'
         >>> manager.username
         'manager_username'
 
