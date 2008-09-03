@@ -225,7 +225,7 @@ class TermAddView(AddView, TermEditViewMixin):
     def add(self, content):
         """Add the object to the term container."""
         chooser = INameChooser(self.context)
-        name = chooser.chooseName(None, content)
+        name = chooser.chooseName("", content)
         self.context[name] = content
 
     def nextURL(self):
