@@ -93,7 +93,7 @@ class GenericContainerView(View):
 
     def add(self, obj):
         chooser = INameChooser(self.context)
-        name = chooser.chooseName(None, obj)
+        name = chooser.chooseName("", obj)
         self.context[name] = obj
 
     def POST(self):

@@ -38,7 +38,6 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserView
 from zope.traversing.browser.absoluteurl import absoluteURL
 
-from schooltool.skin.containers import TableContainerView
 from schooltool.app.browser.cal import month_names
 from schooltool.calendar.utils import parse_date
 from schooltool.calendar.utils import next_month, week_start
@@ -47,23 +46,6 @@ from schooltool.term.interfaces import ITermContainer, ITerm
 from schooltool.term.term import Term
 from schooltool.common import SchoolToolMessage as _
 
-
-class TermContainerView(TableContainerView):
-    """Term container view."""
-
-    __used_for__ = ITermContainer
-
-    delete_template = ViewPageTemplateFile("templates/term-container-delete.pt")
-
-    index_title = _("Terms")
-
-    def timetables(self, obj):
-        return findRelatedTimetables(obj)
-
-    def update(self):
-        if 'CONFIRM' in self.request:
-            for key in self.listIdsForDeletion():
-                del self.context[key]
 
 class ITermForm(Interface):
     """Form schema for ITerm add/edit views."""
@@ -225,7 +207,7 @@ class TermAddView(AddView, TermEditViewMixin):
     def add(self, content):
         """Add the object to the term container."""
         chooser = INameChooser(self.context)
-        name = chooser.chooseName(None, content)
+        name = chooser.chooseName("", content)
         self.context[name] = content
 
     def nextURL(self):

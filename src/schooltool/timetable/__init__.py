@@ -133,7 +133,9 @@ import zope.event
 from persistent import Persistent
 from persistent.dict import PersistentDict
 from zope.proxy import sameProxiedObjects
+from zope.component import adapter
 from zope.component import adapts, subscribers
+from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import directlyProvides
 
@@ -714,6 +716,18 @@ class TimetableInit(InitBase):
     def __call__(self):
         from schooltool.timetable.schema import TimetableSchemaContainer
         self.app['ttschemas'] = TimetableSchemaContainer()
+
+
+@adapter(ITimetableDict)
+@implementer(ITerm)
+def getTermForTimetableDict(ttdict):
+    return ITerm(ttdict.__parent__)
+
+
+@adapter(ITimetable)
+@implementer(ITerm)
+def getTermForTimetable(timetable):
+    return ITerm(timetable.__parent__)
 
 
 def registerTestSetup():

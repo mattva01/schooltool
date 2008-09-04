@@ -6,6 +6,19 @@
   <!-- Course Content Components -->
 
   <interface
+      interface=".interfaces.ICourseContainerContainer"
+      type="zope.app.content.interfaces.IContentType"
+      />
+
+  <class class=".course.CourseContainerContainer">
+    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <require permission="schooltool.view"
+             attributes="keys values items __iter__ __len__ has_key" />
+    <require permission="schooltool.edit"
+             interface="zope.app.container.interfaces.IWriteContainer" />
+  </class>
+
+  <interface
       interface=".interfaces.ICourseContainer"
       type="zope.app.content.interfaces.IContentType"
       />
@@ -42,6 +55,19 @@
 
 
   <!-- Section Content Components -->
+
+  <interface
+      interface=".interfaces.ISectionContainerContainer"
+      type="zope.app.content.interfaces.IContentType"
+      />
+
+  <class class=".section.SectionContainerContainer">
+    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <require permission="schooltool.view"
+             attributes="keys values items __iter__ __len__ has_key" />
+    <require permission="schooltool.edit"
+             interface="zope.app.container.interfaces.IWriteContainer" />
+  </class>
 
   <interface
       interface=".interfaces.ISectionContainer"
@@ -139,6 +165,31 @@
       component=".booking.URISection"
       name="http://schooltool.org/ns/sectionbooking/section" />
 
+  <adapter
+      factory=".course.getCourseContainer" />
+  <adapter
+      factory=".course.getCourseContainerForTerm" />
+
+  <adapter
+      factory=".course.getSchoolYearForCourse" />
+  <adapter
+      factory=".course.getSchoolYearForCourseContainer" />
+
+  <adapter
+      factory=".section.getSectionContainer" />
+  <adapter
+      factory=".section.getSchoolYearForSection" />
+  <adapter
+      factory=".section.getSchoolYearForSectionContainer" />
+  <adapter
+      factory=".section.getTermForSection" />
+  <adapter
+      factory=".section.getTermForSectionContainer" />
+  <adapter
+      factory=".section.getCourseContainerForSection" />
+  <adapter
+      factory=".section.getCourseContainerForSectionContainer" />
+
   <!-- Learner adapter -->
   <adapter
       factory=".section.PersonLearnerAdapter" />
@@ -149,7 +200,6 @@
 
   <!-- Views -->
   <include package=".browser" />
-  <include package=".rest" />
 
   <!-- Help files -->
   <include package=".help" />

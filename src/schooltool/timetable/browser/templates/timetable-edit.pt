@@ -17,12 +17,11 @@
 <metal:block metal:fill-slot="body">
 
 <p tal:condition="not:view/has_timetables"
-   i18n:translate="">There are no terms or timetable schemas defined.</p>
+   i18n:translate="">There are no timetable schemas defined.</p>
 
 <tal:if tal:condition="view/has_timetables">
 
-  <div tal:define="terms view/terms/values;
-                   term view/getTerm;
+  <div tal:define="term view/getTerm;
 		   ttschemas view/ttschemas/values">
     <div i18n:translate="">For term:</div>
     <strong tal:content="term/title" />

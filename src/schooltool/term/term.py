@@ -26,9 +26,11 @@ import pytz
 from datetime import datetime
 
 import zope.interface
+from zope.component import adapter
 from zope.interface import implementer
 from zope.app.container import contained, btree
 
+from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -158,3 +160,9 @@ def getTermContainer(context):
     app = ISchoolToolApplication(None)
     syc = ISchoolYearContainer(app)
     return syc.getActiveSchoolYear()
+
+
+@adapter(interfaces.ITerm)
+@implementer(ISchoolYear)
+def getSchoolYearForTerm(term):
+    return term.__parent__

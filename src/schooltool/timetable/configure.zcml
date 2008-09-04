@@ -96,6 +96,12 @@
   </class>
 
   <adapter
+      factory=".getTermForTimetableDict" />
+
+  <adapter
+      factory=".getTermForTimetable" />
+
+  <adapter
       for=".interfaces.ITimetableDict"
       factory=".TimetableNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />

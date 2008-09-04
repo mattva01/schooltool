@@ -21,18 +21,44 @@ course browser views.
 
 $Id$
 """
+from zope.interface import implements
+from zope.component import adapts
+from zope.component import getMultiAdapter
+from zope.component import getUtility
+from zope.app.container.interfaces import INameChooser
+from zope.app.intid.interfaces import IIntIds
 from zope.app.form.browser.add import AddView
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.browser import BrowserView
 from zope.security.proxy import removeSecurityProxy
+from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser.absoluteurl import absoluteURL
 
+from schooltool.term.interfaces import ITermContainer
+from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.skin.containers import ContainerView
+from schooltool.course.interfaces import ISectionContainer
 from schooltool.course.interfaces import ICourse, ICourseContainer, ISection
 from schooltool.app.relationships import URIInstruction, URISection
 from schooltool.app.membership import URIGroup, URIMembership
 from schooltool.relationship import getRelatedObjects
 
 from schooltool.common import SchoolToolMessage as _
+
+
+class CourseContainerAbsoluteURLAdapter(BrowserView):
+
+    adapts(ICourseContainer, IBrowserRequest)
+    implements(IAbsoluteURL)
+
+    def __str__(self):
+        container_id = int(self.context.__name__)
+        int_ids = getUtility(IIntIds)
+        container = int_ids.getObject(container_id)
+        url = str(getMultiAdapter((container, self.request), name='absolute_url'))
+        return url + '/courses'
+
+    __call__ = __str__
 
 
 class CourseContainerView(ContainerView):
@@ -42,11 +68,55 @@ class CourseContainerView(ContainerView):
 
     index_title = _("Course index")
 
+    @property
+    def school_year(self):
+        return ISchoolYear(self.context)
+
+
+from schooltool.course.section import Section
 
 class CourseView(BrowserView):
     """A view for courses."""
 
     __used_for__ = ICourse
+
+    @property
+    def school_year(self):
+        return ISchoolYear(self.context)
+
+    @property
+    def terms(self):
+        return ITermContainer(self.context)
+
+    def addSection(self, term):
+        sections = ISectionContainer(term)
+        section = Section()
+
+        chooser = INameChooser(sections)
+        name = chooser.chooseName('', section)
+        sections[name] = section
+        removeSecurityProxy(self.context).sections.add(section)
+        section.title = "%s (%s)" % (self.context.title, section.__name__)
+        return section
+
+    def update(self):
+        if 'ADD_SECTION' in self.request:
+            term_id = self.request.get('term', None)
+            if term_id is None:
+                self.error = _("Please select a term.")
+                return
+
+            term = self.terms.get(term_id, None)
+            if term is None:
+                self.error = _("Selected term does not exist.")
+                return
+
+            section = self.addSection(term)
+            self.request.response.redirect(absoluteURL(section, self.request))
+
+    def __call__(self):
+        self.update()
+        return self.index()
 
 
 class CourseAddView(AddView):

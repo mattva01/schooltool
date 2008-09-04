@@ -476,7 +476,6 @@ We get to the confirmation page:
     ...
             <input type="hidden" name="delete.2005-summer" />
             <a href="http://localhost/schoolyears/2005/2005-summer">2005 Summer</a>.
-            This term is used by 0 individual timetables.
     ...
 
 Let's proceed:
@@ -485,8 +484,8 @@ Let's proceed:
 
 We get back to the terms index page:
 
-    >>> '<h1>Terms</h1>' in manager.contents
-    True
+    >>> print analyze.queryHTML('//h1', manager.contents)[0]
+    <h1>2005</h1>
 
 But the deleted term is not there:
 

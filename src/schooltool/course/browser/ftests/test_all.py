@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2008 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,18 +17,15 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Functional tests for schooltool.securitypolicy
-
-$Id$
+Functional tests for schooltool.schoolyear
 """
-
 import unittest
 
 from schooltool.testing.functional import collect_ftests
-from schooltool.securitypolicy.ftesting import securitypolicy_functional_layer
+from schooltool.course.ftesting import course_functional_layer
 
 def test_suite():
-    return collect_ftests(layer=securitypolicy_functional_layer)
+    return collect_ftests(layer=course_functional_layer)
 
 
 if __name__ == '__main__':

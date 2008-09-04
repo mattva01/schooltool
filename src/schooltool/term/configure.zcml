@@ -20,6 +20,9 @@
       for="*"
       factory="schooltool.term.term.getTermContainer" />
 
+  <adapter
+      factory=".term.getSchoolYearForTerm" />
+
   <interface
       interface=".interfaces.ITerm"
       type="zope.app.content.interfaces.IContentType"

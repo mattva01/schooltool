@@ -1,0 +1,33 @@
+<tal:defs define="dummy view/update" />
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" tal:content="view/index_title">
+    Contents
+  </title>
+</head>
+<body>
+
+<span metal:fill-slot="zonki" i18n:translate="">
+  <img src="zonki.png" alt="SchoolTool" i18n:attributes="alt"
+    tal:attributes="src context/++resource++zonki-reading.png" />
+</span>
+
+<h1 metal:fill-slot="content-header"
+    tal:content="view/context/title">School Year Title</h1>
+<metal:block metal:fill-slot="body"
+             tal:define="canModify view/canModify">
+  <tal:block replace="structure provider:schooltool.SchoolYearMenu" />
+  <form method="post" tal:attributes="action string:${context/@@absolute_url}">
+    <tal:if condition="view/table/batch">
+      <tal:block replace="structure view/table/render" />
+      <div class="controls" tal:condition="canModify">
+        <input type="submit" class="button-cancel" value="Delete"
+               name="DELETE"
+               i18n:attributes="value delete-button;" />
+      </div>
+    </tal:if>
+  </form>
+  <p tal:condition="not:view/table/batch" i18n:translate="">There are none.</p>
+</metal:block>
+</body>
+</html>

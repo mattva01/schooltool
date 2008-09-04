@@ -23,6 +23,7 @@ $Id$
 """
 import unittest
 
+from zope.i18n import translate
 from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
@@ -598,7 +599,7 @@ def doctest_ConflictDisplayMixin_no_timetables_terms():
 
         >>> from schooltool.course.browser.section import ConflictDisplayMixin
         >>> app = setup.setUpSchoolToolSite()
-        >>> view = ConflictDisplayMixin(app)
+        >>> view = ConflictDisplayMixin()
         >>> view.getSchema = lambda: None
         >>> view.getTerm = lambda: "I am a term"
         >>> view.getAvailableItems = lambda: []
@@ -614,188 +615,6 @@ def doctest_ConflictDisplayMixin_no_timetables_terms():
         >>> view.update()
         >>> view.busy_periods
         []
-
-    """
-
-
-def doctest_ConflictDisplayMixin_getConflictingSections():
-    r"""Tests for ConflictDisplayMixin.getConflictingSections
-
-        >>> class SectionStub(object):
-        ...     def __init__(self, label):
-        ...         self.label = label
-        ...     def __repr__(self):
-        ...         return 'Section ' + self.label
-
-        >>> context = SectionStub('x')
-        >>> section1 = SectionStub('1')
-        >>> section2 = SectionStub('2')
-
-        >>> def getSectionsStub(item):
-        ...     print "Called getSections on", item
-        ...     return [context, section2]
-
-        >>> from schooltool.course.browser.section import ConflictDisplayMixin
-        >>> view = ConflictDisplayMixin(context)
-        >>> view.getSections = getSectionsStub
-        >>> view.busy_periods = [(('d1', 'a'), [section1]),
-        ...                      (('d2', 'b'), [section1, context]),
-        ...                      (('d4', 'd'), [section2]),
-        ...                      (('d3', 'c'), [section2])]
-
-        >>> for d in view.getConflictingSections('iTeM'):
-        ...     print sorted(d.items())
-        Called getSections on iTeM
-        [('day_id', 'd3'), ('period_id', 'c'), ('section', Section 2)]
-        [('day_id', 'd4'), ('period_id', 'd'), ('section', Section 2)]
-
-    Note that the results are sorted by (day_id, period, section.label).
-
-    """
-
-
-def doctest_ConflictDisplayMixin_findConflicts():
-    """Tests for ConflictDisplayMixin._findConflists
-
-        >>> from schooltool.course.browser.section import ConflictDisplayMixin
-        >>> view = ConflictDisplayMixin(None)
-        >>> view._findConflicts([], [])
-        []
-
-        >>> class EventStub(object):
-        ...     def __init__(self, start, duration, name):
-        ...         self.dtstart = start
-        ...         self.duration = duration
-        ...         self.name = name
-        ...     def __cmp__(self, other):
-        ...         return cmp(self.dtstart, other.dtstart)
-        ...     def __repr__(self):
-        ...         return self.name
-
-        >>> def e(s):
-        ...     events = []
-        ...     cur = None
-        ...     for time, char in enumerate(s):
-        ...         if cur and char == cur.name:
-        ...             cur.duration += 1
-        ...         elif char != '-':
-        ...             cur = EventStub(time, 1, char)
-        ...             events.append(cur)
-        ...     return events
-
-        >>> tte = e('---aaaaa----bbbbb----ccccc----ddddddd--')
-        >>> cal = e('---------xxx-----yy-----zzzz----q-w----')
-        >>> view._findConflicts(tte, cal)
-        [z, q, w]
-
-        >>> tte = e('--abcd-----eee------')
-        >>> cal = e('-xxxxxx--yyy-----zz-')
-        >>> view._findConflicts(tte, cal)
-        [x, y]
-
-    """
-
-
-def doctest_ConflictDisplayMixin_groupConflicts():
-    """Tests for ConflictDisplayMixin._groupConflicts
-
-    Given an empty list the function should return an empty list:
-
-        >>> from schooltool.course.browser.section import ConflictDisplayMixin
-        >>> view = ConflictDisplayMixin(None)
-        >>> view._groupConflicts([])
-        []
-
-    Events are considered unique if their unique_id's are different:
-
-        >>> class EventStub(object):
-        ...     def __init__(self, id):
-        ...         self.unique_id = id
-
-        >>> events = [EventStub(id) for id in "abcda"]
-
-        >>> sorted(e.unique_id for e in view._groupConflicts(events))
-        ['a', 'b', 'c', 'd']
-
-    """
-
-def doctest_ConflictDisplayMixin_getConflictingEvents():
-    """Tests for ConflictDisplayMixin.getConflictingEvents
-
-        >>> from schooltool.timetable.interfaces import ICompositeTimetables
-        >>> from schooltool.app.interfaces import ISchoolToolCalendar
-        >>> class TimetabledStub(object):
-        ...     def __init__(self, events):
-        ...         self.events = events
-        >>> class CompositeTimetablesStub(object):
-        ...     adapts(TimetabledStub)
-        ...     implements(ICompositeTimetables)
-        ...     def __init__(self, section):
-        ...         self.section = section
-        ...     def makeTimetableCalendar(self):
-        ...         return self.section.events
-        >>> provideAdapter(CompositeTimetablesStub)
-
-        >>> class CalendarStub(object):
-        ...     adapts(TimetabledStub)
-        ...     implements(ISchoolToolCalendar)
-        ...     def __init__(self, item):
-        ...         self.item = item
-        ...     def expand(self, start, end):
-        ...         print "Expanding from %s to %s" % (start, end)
-        ...         return self.item.events
-        >>> provideAdapter(CalendarStub)
-
-    First let's try it out with a section without events in its
-    timetable:
-
-        >>> from schooltool.course.browser.section import ConflictDisplayMixin
-        >>> view = ConflictDisplayMixin(TimetabledStub([]))
-        >>> view.getConflictingEvents(TimetabledStub([]))
-        []
-
-        >>> class EventStub(object):
-        ...     def __init__(self, start):
-        ...         self.dtstart = start
-        ...         self.duration = 3
-        ...     def __cmp__(self, other):
-        ...         return cmp(self.dtstart, other.dtstart)
-        ...     def __repr__(self):
-        ...         return "e%s" % self.dtstart
-
-    Any events in the item calendar are ignored and an empty list is
-    returned:
-
-        >>> events = [EventStub(start) for start in [30, 10, 20]]
-        >>> view.getConflictingEvents(TimetabledStub(events))
-        []
-
-    If there are no events in the item calendar, an empty list is
-    returned:
-
-        >>> view = ConflictDisplayMixin(TimetabledStub(events))
-        >>> view.getConflictingEvents(TimetabledStub([]))
-        Expanding from 10 to 33
-        []
-
-    The calendar was expanded from the dtstart of the first event till
-    the dtend of the last one. This works with only one event too:
-
-        >>> view = ConflictDisplayMixin(TimetabledStub(events[-1:]))
-        >>> view.getConflictingEvents(TimetabledStub([]))
-        Expanding from 20 to 23
-        []
-
-    If there are events in both calendars all unique conflicting
-    events are returned:
-
-        >>> more_events = [EventStub(start) for start in [25, 15]]
-        >>> view._findConflicts = lambda tte, cae: "conflicts between %s and %s" % (tte, cae)
-        >>> view._groupConflicts = lambda conflicts: "Grouped %s" % conflicts
-
-        >>> print view.getConflictingEvents(TimetabledStub(more_events))
-        Expanding from 20 to 23
-        Grouped conflicts between [e20] and [e25, e15]
 
     """
 
@@ -928,44 +747,6 @@ def doctest_SectionLearnerGroupView():
         >>> view.context.members = [smith, frogs]
         >>> [item.title for item in view.getSelectedItems()]
         ['frogs']
-
-    """
-
-
-def doctest_SectionResourceView():
-    """Tests for SectionResourceView.
-
-    First we need to set up some persons:
-
-        >>> from schooltool.app.interfaces import ISchoolToolApplication
-        >>> from schooltool.resource.resource import Resource
-        >>> school = setup.setUpSchoolToolSite()
-        >>> provideAdapter(lambda context: school, (None,), ISchoolToolApplication)
-        >>> resources = school['resources']
-        >>> directlyProvides(school, IContainmentRoot)
-        >>> rock = resources['rock'] = Resource('rock')
-        >>> stone = resources['stone'] = Resource('stone')
-        >>> boulder = resources['boulder'] = Resource('boulder')
-
-    getCollection plainly returns resources attribute of a section:
-
-        >>> from schooltool.course.browser.section import SectionResourceView
-        >>> class SectionStub(object):
-        ...     resources = [rock]
-        >>> view = SectionResourceView(SectionStub(), None)
-        >>> [item.title for item in view.getCollection()]
-        ['rock']
-
-    All resources that are not currently booked are considered
-    available:
-
-        >>> [item.title for item in view.getAvailableItems()]
-        ['boulder', 'stone']
-
-        >>> view.context.resources = []
-
-        >>> [item.title for item in view.getAvailableItems()]
-        ['boulder', 'rock', 'stone']
 
     """
 

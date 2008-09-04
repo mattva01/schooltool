@@ -3,7 +3,12 @@
   <title metal:fill-slot="title" tal:content="context/title" />
 </head>
 <body>
-<h1 metal:fill-slot="content-header"><span tal:replace="context/title" /></h1>
+<h1 metal:fill-slot="content-header"
+    i18n:translate="">
+  <span i18n:name="course" tal:replace="context/title" /> course for
+  <tal:block i18n:name="schoolyear"><a tal:attributes="href view/school_year/@@absolute_url"
+                                       tal:content="view/school_year/title">School Year</a></tal:block>
+</h1>
 
 <metal:block metal:fill-slot="body">
 
@@ -63,14 +68,22 @@
         </div>
       </div>
     </div>
-    <div class="controls">
-      <a class="button-ok" href="" title="New Section"
-        tal:attributes="href string:${context/schooltool:app/@@absolute_url}/sections/+/addSchoolToolSection.html?field.course_id=${context/__name__}">
-        New Section
-      </a>
-    </div>
-
-
+    <form tal:attributes="action request/URL" method="post">
+      <div class="controls">
+        <input class="button-ok"
+               type="submit" name="ADD_SECTION"
+               value="New Section"
+               i18n:attributes="value"/>
+        <label for="term">For term:
+        <select id="term" name="term"
+                tal:define="terms view/terms/values">
+          <option tal:repeat="term terms/sortby:last"
+                  tal:attributes="value term/__name__"
+                  tal:content="term/title" />
+        </select>
+        </label>
+      </div>
+    </form>
   </div>
 
 </metal:block>

@@ -4,16 +4,6 @@
     xmlns:zope="http://namespaces.zope.org/zope"
     i18n_domain="schooltool">
 
-
-  <page
-      name="index.html"
-      for="schooltool.term.interfaces.ITermContainer"
-      class="schooltool.term.browser.term.TermContainerView"
-      permission="schooltool.view"
-      menu="zmi_views"
-      title="View"
-      />
-
   <page
       name="add.html"
       for="..interfaces.ITermContainer"

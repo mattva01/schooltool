@@ -75,4 +75,21 @@
      permission="schooltool.edit"
      menu="schooltool_actions" title="New School Year" />
 
+  <page
+      name="index.html"
+      for="schooltool.schoolyear.interfaces.ISchoolYear"
+      class="schooltool.schoolyear.browser.schoolyear.SchoolYearView"
+      permission="schooltool.view"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <viewletManager
+      name="schooltool.SchoolYearMenu"
+      permission="zope.Public"
+      provides=".interfaces.ISchoolYearViewMenuViewletManager"
+      class=".schoolyear.SchoolYearViewMenuViewletManager"
+      template="templates/schoolyear_menu.pt"
+      />
+
 </configure>

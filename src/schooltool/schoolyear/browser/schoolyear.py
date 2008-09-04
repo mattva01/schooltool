@@ -32,9 +32,11 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from z3c.form import form, field, button
 
+from schooltool.schoolyear.browser.interfaces import ISchoolYearViewMenuViewletManager
 from schooltool.schoolyear.schoolyear import SchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
+from schooltool.skin.skin import OrderedViewletManager
 from schooltool.skin.containers import TableContainerView
 from schooltool.common import SchoolToolMessage as _
 
@@ -133,3 +135,24 @@ class SchoolYearAddView(form.AddForm):
         # how to make this work properly?
         url = absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
+
+
+class SchoolYearView(TableContainerView):
+    """School Year view."""
+
+    __used_for__ = ISchoolYear
+    delete_template = ViewPageTemplateFile("templates/term-delete.pt")
+    template = ViewPageTemplateFile("templates/schoolyear.pt")
+
+    index_title = _("School Year")
+
+    def update(self):
+        if 'CONFIRM' in self.request:
+            for key in self.listIdsForDeletion():
+                del self.context[key]
+
+
+class SchoolYearViewMenuViewletManager(OrderedViewletManager):
+    """Viewlet manager for displaying the various menus at the top of a page."""
+
+    implements(ISchoolYearViewMenuViewletManager)

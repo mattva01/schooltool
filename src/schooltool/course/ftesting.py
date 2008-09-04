@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2008 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,5 +17,15 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-There were RESTive views for SchoolTool timetabling
+Functional Testing Utilities for schoolyears
 """
+import os
+
+from schooltool.testing.functional import ZCMLLayer
+
+dir = os.path.abspath(os.path.dirname(__file__))
+filename = os.path.join(dir, 'ftesting.zcml')
+
+course_functional_layer = ZCMLLayer(filename,
+                                    __name__,
+                                    'course_functional_layer')

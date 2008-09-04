@@ -6,11 +6,15 @@
   <h1 metal:fill-slot="content-header" i18n:translate="">
     Section of
     <tal:loop tal:repeat="course context/courses" i18n:name="course">
-      <a href=""
-         tal:attributes="href course/@@absolute_url"
+      <a tal:attributes="href course/@@absolute_url"
          tal:content="course/title"/>
     </tal:loop>
     -- <span tal:replace="context/title" />
+    for
+    <tal:block i18n:name="term"><a tal:attributes="href view/term/@@absolute_url"
+                                   tal:content="view/term/title">Term</a></tal:block> of
+    <tal:block i18n:name="schoolyear"><a tal:attributes="href view/school_year/@@absolute_url"
+                                         tal:content="view/school_year/title">School Year</a></tal:block>
   </h1>
 
 <metal:block metal:fill-slot="body">

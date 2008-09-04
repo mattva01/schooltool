@@ -241,6 +241,8 @@ We will need to define a person who will be a learner.
 We will also need a course.
 
     >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('2005').click()
     >>> manager.getLink('Courses').click()
     >>> manager.getLink('New Course').click()
 
@@ -250,6 +252,9 @@ We will also need a course.
 We can import timetables using the CSV timetable import page.
 
     >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('2005').click()
+    >>> manager.getLink('2005 Fall').click()
     >>> manager.getLink('Sections').click()
     >>> manager.getLink('Import Sections').click()
 
@@ -262,7 +267,7 @@ As you can see, the form allows to submit the CSV data either by sending the
 file or typing/pasting it into a text area field.
 
     >>> manager.getControl('CSV Data').value = """\
-    ... "2005-fall","default"
+    ... "default"
     ... ""
     ... "swimming","frog"
     ... "Monday","A"
@@ -279,12 +284,16 @@ file or typing/pasting it into a text area field.
 A new section should have been created:
 
     >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('2005').click()
+    >>> manager.getLink('2005 Fall').click()
     >>> manager.getLink('Sections').click()
+
     >>> print analyze.queryHTML('//table/tr[2]', manager.contents)[0]
     <tr><td>
         <input type="checkbox" name="delete.1" /></td>
       <td>
-        <a href="http://localhost/courses/swimming">Swimming</a>
+        <a href="http://localhost/schoolyears/2005/courses/swimming">Swimming</a>
       </td>
       <td>
         <a href=".../sections/1">Swimming - Frog</a>
@@ -297,8 +306,6 @@ A new section should have been created:
       </td>
       <td>
     <BLANKLINE>
-    <BLANKLINE>
-        <a href=".../sections/1/timetables/1">2005-fall.default</a>
     <BLANKLINE>
       </td>
       <td>
@@ -422,7 +429,7 @@ this section based on the new schema.
     >>> manager.getControl('Next').click()
     >>> manager.getControl('No').click()
 
-    >>> manager.open('http://localhost/sections/1/timetables/addTimetable.html')
+    >>> manager.open('http://localhost/schoolyears/2005/2005-fall/sections/1/timetables/addTimetable.html')
     >>> manager.getControl(name='ttschema').value = ['singleperiod']
     >>> manager.getControl('Add').click()
     >>> manager.getLink('2005-fall.singleperiod').click()
@@ -436,7 +443,7 @@ this section too:
     >>> print analyze.queryHTML('//h6[a[@title="Swimming"]]',
     ...                         manager.contents)[0]
     <h6 style="background: #7590ae">
-      <a href="http://localhost/sections/1/calendar/..." title="Swimming">
+      <a href="http://localhost/schoolyears/2005/2005-fall/sections/1/calendar/..." title="Swimming">
         Swimming
         <span class="start-end">
           (<span>09:00</span>
@@ -447,8 +454,8 @@ this section too:
     </h6>
 
 
-Deleting Timetable Schemas and Terms
-------------------------------------
+Deleting Timetable Schemas
+--------------------------
 
 You can also delete timetable schemas and see that all the timetables related to
 that schema are also deleted.
@@ -459,20 +466,8 @@ that schema are also deleted.
     >>> manager.getControl('Delete').click()
     >>> manager.getControl('Confirm').click()
 
-    >>> manager.open('http://localhost/sections/1/timetables')
+    >>> manager.open('http://localhost/schoolyears/2005/2005-fall/sections/1/timetables')
     >>> 'default' not in manager.contents
-    True
-
-Alternatively, we can delete terms and everything should work out as well.
-
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('School Years').click()
-    >>> manager.getLink('2005').click()
-    >>> manager.getControl(name='delete.2005-fall').value = True
-    >>> manager.getControl("Delete").click()
-    >>> manager.getControl("Confirm").click()
-    >>> manager.open('http://localhost/sections/1/timetables')
-    >>> '2005-fall' not in manager.contents
     True
 
 Epilogue

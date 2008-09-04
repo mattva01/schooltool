@@ -27,9 +27,32 @@ Also, let's create a group:
     >>> 'Animals' in manager.contents
     True
 
-We'll need a course and a section:
+Add a school year
 
     >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('New School Year').click()
+    >>> manager.getControl('Title').value = '2007'
+    >>> manager.getControl('First day').value = '07/01/01'
+    >>> manager.getControl('Last day').value = '07/12/15'
+    >>> manager.getControl('Add').click()
+
+and a term
+
+    >>> manager.getLink('New Term').click()
+    >>> manager.getControl('Title').value = 'Term 1'
+    >>> manager.getControl('Start date').value = '2007-07-01'
+    >>> manager.getControl('End date').value = '2007-12-15'
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Saturday').click()
+    >>> manager.getControl('Sunday').click()
+    >>> manager.getControl('Add term').click()
+
+a course
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('2007').click()
     >>> manager.getLink('Courses').click()
     >>> manager.getLink('New Course').click()
     >>> manager.getControl('Title').value = 'History'
@@ -38,12 +61,14 @@ We'll need a course and a section:
     >>> 'History' in manager.contents
     True
 
+and a section
+
     >>> from schooltool.app.browser.ftests import setup
-    >>> setup.addSection('History')
+    >>> setup.addSection('History', '2007', 'Term 1')
 
 Let's make the frog a teacher:
 
-    >>> manager.open('http://localhost/sections/1')
+    >>> manager.open('http://localhost/schoolyears/2007/term-1/sections/1')
     >>> manager.getLink('edit instructors').click()
     >>> manager.getControl(name='add_item.frog').value = True
     >>> manager.getControl('Add').click()

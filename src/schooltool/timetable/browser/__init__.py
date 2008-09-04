@@ -44,6 +44,7 @@ from schooltool.course.interfaces import ISection
 from schooltool.person.interfaces import IPerson
 from schooltool.relationship.relationship import getRelatedObjects
 from schooltool.resource.interfaces import IBaseResource
+from schooltool.term.interfaces import ITerm
 from schooltool.term.interfaces import ITermContainer
 from schooltool.term.interfaces import IDateManager
 from schooltool.term.term import getTermForDate
@@ -342,21 +343,12 @@ class TimetableView(BrowserView):
 
     __used_for__ = ITimetable
 
-    def title(self):
-        timetabled = self.context.__parent__.__parent__
-        msg = _("${object}'s timetable",
-                mapping = {'object': timetabled.title})
-        return msg
-
     def rows(self):
         return format_timetable_for_presentation(self.context)
 
 
 class TimetableConflictMixin(object):
     """A mixin for views that check for booking conflicts."""
-
-    def sections(self):
-        return getSchoolToolApplication()['sections'].values()
 
     def sectionMap(self, term, ttschema):
         """Compute a mapping of timetable slots to sections.
@@ -384,7 +376,9 @@ class TimetableConflictMixin(object):
         If there are no timetable schemas, None is returned.
         """
         app = getSchoolToolApplication()
-        ttschemas = app["ttschemas"]
+        ttschemas = app.get("ttschemas", None)
+        if ttschemas is None:
+            return None
         ttschema_id = self.request.get('ttschema', ttschemas.default_id)
         ttschema = ttschemas.get(ttschema_id, None)
         if not ttschema and ttschemas:
@@ -393,11 +387,7 @@ class TimetableConflictMixin(object):
 
     def getTerm(self):
         """Return the chosen term."""
-        if 'term' in self.request:
-            terms = ITermContainer(self.context)
-            return terms[self.request['term']]
-        else:
-            return getUtility(IDateManager).current_term
+        return ITerm(self.context)
 
     def getSections(self, item):
         raise NotImplementedError(
@@ -417,146 +407,9 @@ class TimetableConflictMixin(object):
 class TimetableSetupViewBase(BrowserView, TimetableConflictMixin):
     """Common methods for setting up timetables."""
 
-    def allSections(self, section_map):
-        """Return a set of all sections that can be selected."""
-        sections = sets.Set()
-        for sectionset in section_map.itervalues():
-            sections.update(sectionset)
-        return sections
-
-    def getDays(self, ttschema, section_map):
-        """Return the current selection.
-
-        Returns a list of dicts with the following keys
-
-            title   -- title of the timetable day
-            periods -- list of timetable periods in that day
-
-        Each period is represented by a dict with the following keys
-
-            title    -- title of the period
-            sections -- all sections that are scheduled for this slot
-            selected -- a list of sections of which self.context is a member,
-                        or a list containing [None] if there are none.
-            in_group -- user is a member of a section as part of a group.
-
-        """
-
-        person_sections = self.getSections(self.context)
-        group_sections = self.getGroupSections()
-
-        def days(schema):
-            for day_id, day in schema.items():
-                yield {'title': day_id,
-                       'periods': list(periods(day_id, day))}
-
-        def sortedbytitle(seq, key=None):
-            l = list(seq)
-            if key is None:
-                l.sort(lambda x, y: cmp(x.title, y.title))
-            else:
-                l.sort(lambda x, y: cmp(x[key].title, y[key].title))
-            return l
-
-        def periods(day_id, day):
-            for period_id in day.periods:
-                sections = section_map[day_id, period_id]
-                sections = sortedbytitle(sections)
-                section_set = set(sections)
-
-                in_group = []
-                for group, section in group_sections:
-                    if section in section_set:
-                        in_group.append({'group': group,
-                                         'section': section})
-                in_group = sortedbytitle(in_group, 'section')
-
-                selected = []
-                if not in_group:
-                    selected = [section for section in person_sections
-                                if section in section_set]
-                    selected = sortedbytitle(selected)
-                if not selected:
-                    selected = [None]
-
-                yield {'title': period_id,
-                       'selected': selected,
-                       'sections': sections,
-                       'in_group': in_group}
-
-        return list(days(ttschema))
-
     @property
     def ttschemas(self):
         return ISchoolToolApplication(None)["ttschemas"]
-
-    @property
-    def terms(self):
-        return ITermContainer(self.context)
-
-    def __call__(self):
-        self.has_timetables = bool(self.terms and self.ttschemas)
-        if not self.has_timetables:
-            return self.template()
-
-        # TODO Are these really needed in view attributes?
-        self.term = self.getTerm()
-        self.ttschema = self.getSchema()
-        assert self.ttschema is not None, 'no timetable schema'
-        section_map = self.sectionMap(self.term, self.ttschema)
-
-        self.days = self.getDays(self.ttschema, section_map)
-        if 'SAVE' in self.request:
-            student = removeSecurityProxy(self.context)
-            all_sections = self.allSections(section_map)
-            selected = self.request.get('sections', [])
-            for section in all_sections:
-                want = section.__name__ in selected
-                have = student in section.members
-                if want and not have:
-                    section.members.add(student)
-                elif not want and have:
-                    section.members.remove(student)
-            self.days = self.getDays(self.ttschema, section_map)
-        return self.template()
-
-
-class ResourceTimetableSetupView(TimetableSetupViewBase):
-    """A view for scheduling a resource."""
-
-    __used_for__ = IBaseResource
-
-    template = ViewPageTemplateFile('templates/person-timetable-setup.pt')
-
-    def getSections(self, item):
-        return getRelatedObjects(item, URISection)
-
-    def getGroupSections(self):
-        return []
-
-
-class PersonTimetableSetupView(TimetableSetupViewBase):
-    """A view for scheduling a student.
-
-    This view displays a drop-down for every timetable period, listing the
-    sections scheduled for that period.  When the user submits the form, the
-    person is added to selected sections and removed from unselected ones.
-    """
-
-    __used_for__ = IPerson
-
-    template = ViewPageTemplateFile('templates/person-timetable-setup.pt')
-
-    def getSections(self, item):
-        return [section for section in getRelatedObjects(item, URIGroup)
-                if ISection.providedBy(section)]
-
-    def getGroupSections(self):
-        group_sections = []
-        for group in self.context.groups:
-            for section in self.getSections(group):
-                group_sections.append((group, section))
-        return group_sections
 
 
 class TimetableAddForm(TimetableSetupViewBase):
@@ -565,11 +418,7 @@ class TimetableAddForm(TimetableSetupViewBase):
 
     def getTerm(self):
         """Return the chosen term."""
-        if 'term' in self.request:
-            terms = ITermContainer(self.context)
-            return terms[self.request['term']]
-        else:
-            return getUtility(IDateManager).current_term
+        return ITerm(self.context)
 
     def addTimetable(self, timetable):
         chooser = INameChooser(self.context)
@@ -578,7 +427,7 @@ class TimetableAddForm(TimetableSetupViewBase):
 
     def __call__(self):
         context = removeSecurityProxy(self.context)
-        self.has_timetables = bool(self.terms and self.ttschemas)
+        self.has_timetables = bool(self.ttschemas)
         if not self.has_timetables:
             return self.template()
         self.term = self.getTerm()
@@ -603,30 +452,11 @@ class SectionTimetableSetupView(TimetableSetupViewBase):
     def singleSchema(self):
         return len(self.ttschemas.values()) == 1
 
-    def singleTerm(self):
-        return len(ITermContainer(self.context).values()) == 1
-
     def addTimetable(self, timetable):
         tt_dict = ITimetables(self.context).timetables
         chooser = INameChooser(tt_dict)
         name = chooser.chooseName('', timetable)
         tt_dict[name] = timetable
-
-    def getTerms(self):
-        """Return the chosen term."""
-        if 'terms' in self.request:
-            terms = ITermContainer(self.context)
-            requested_terms = []
-
-            # request['terms'] may be a list of strings or a single string, we
-            # need to handle both cases
-            try:
-                requested_terms = requested_terms + self.request['terms']
-            except TypeError:
-                requested_terms.append(self.request['terms'])
-            return [terms[term] for term in requested_terms]
-        else:
-            return [getUtility(IDateManager).current_term]
 
     def getDays(self, ttschema):
         """Return the current selection.
@@ -662,13 +492,12 @@ class SectionTimetableSetupView(TimetableSetupViewBase):
         return list(days(ttschema))
 
     def __call__(self):
-        self.has_timetables = bool(self.terms and self.ttschemas)
+        self.has_timetables = bool(self.ttschemas)
         if not self.has_timetables:
             return self.template()
-        self.selected_terms = self.getTerms()
         self.ttschema = self.getSchema()
-        self.ttkeys = ['.'.join((term.__name__, self.ttschema.__name__))
-                       for term in self.selected_terms]
+        self.term = ITerm(self.context)
+        self.ttkeys = ['.'.join((self.term.__name__, self.ttschema.__name__))]
         self.days = self.getDays(self.ttschema)
         #XXX dumb, this doesn't space course names
         course_title = ''.join([course.title
@@ -680,27 +509,26 @@ class SectionTimetableSetupView(TimetableSetupViewBase):
         if 'SAVE' in self.request:
 
             section = removeSecurityProxy(self.context)
-            for term in self.selected_terms:
-                timetable = ITimetables(section).lookup(term, self.ttschema)
-                if timetable is None:
-                    timetable = self.ttschema.createTimetable(term)
-                    self.addTimetable(timetable)
+            timetable = ITimetables(section).lookup(self.term, self.ttschema)
+            if timetable is None:
+                timetable = self.ttschema.createTimetable(self.term)
+                self.addTimetable(timetable)
 
-                for day_id, day in timetable.items():
-                    for period_id, period in list(day.items()):
-                        if '.'.join((day_id, period_id)) in self.request:
-                            if not period:
-                                # XXX Resource list is being copied
-                                # from section as this view can't do
-                                # proper resource booking
-                                act = TimetableActivity(title=course_title,
-                                                        owner=section,
-                                                        resources=section.resources)
-                                day.add(period_id, act)
-                        else:
-                            if period:
-                                for act in list(period):
-                                    day.remove(period_id, act)
+            for day_id, day in timetable.items():
+                for period_id, period in list(day.items()):
+                    if '.'.join((day_id, period_id)) in self.request:
+                        if not period:
+                            # XXX Resource list is being copied
+                            # from section as this view can't do
+                            # proper resource booking
+                            act = TimetableActivity(title=course_title,
+                                                    owner=section,
+                                                    resources=section.resources)
+                            day.add(period_id, act)
+                    else:
+                        if period:
+                            for act in list(period):
+                                day.remove(period_id, act)
 
             # TODO: find a better place to redirect to
             self.request.response.redirect(
@@ -746,7 +574,7 @@ class TimetableEditView(TimetableSetupViewBase):
         return list(days(ttschema))
 
     def __call__(self):
-        self.has_timetables = bool(self.terms and self.ttschemas)
+        self.has_timetables = bool(self.ttschemas)
         if not self.has_timetables:
             return self.template()
         self.days = self.getDays(self.context.schooltt)

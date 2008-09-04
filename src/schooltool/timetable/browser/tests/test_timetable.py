@@ -25,9 +25,10 @@ $Id$
 import unittest
 import datetime
 
+from zope.component import adapter
 from zope.component import provideAdapter
-from zope.i18n import translate
 from zope.interface import Interface
+from zope.interface import implementer
 from zope.interface import implements
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
@@ -155,443 +156,10 @@ def doctest_TimetableView():
         >>> request = TestRequest()
         >>> view = TimetableView(tt, request)
 
-    title() returns the view's title:
-
-        >>> translate(view.title())
-        u"Section's timetable"
-
     rows() delegates the job to format_timetable_for_presentation:
 
         >>> view.rows()
         [[{'period': 'A', 'activity': 'Something'}]]
-
-    """
-
-
-def doctest_ResourceTimetableSetupiew():
-    """Doctest for the ResourceTimetableSetupView.
-
-    ResourceTimetableSetupView inherits from TimetableSetupViewMixin
-    and implements these methods:
-
-    getGroupSections which plainly returns an empty list:
-
-        >>> from schooltool.timetable.browser import ResourceTimetableSetupView
-        >>> view = ResourceTimetableSetupView(None, None)
-        >>> view.getGroupSections()
-        []
-
-    and getSections, which returns all related sections of the item
-    passed as a parameter:
-
-        >>> from zope.component import adapts
-        >>> from zope.interface import implements
-        >>> from schooltool.relationship.interfaces import IRelationshipLinks
-        >>> from zope.component import provideAdapter
-        >>> class RelationshipLinks(object):
-        ...     adapts(None)
-        ...     implements(IRelationshipLinks)
-        ...     def __init__(self, context):
-        ...         self.context = context
-        ...     def getTargetsByRole(self, role, reltype):
-        ...         return ["Relation for %s of type %s" % (
-        ...                      self.context, role)]
-        >>> provideAdapter(RelationshipLinks)
-        >>> resource = "A book"
-        >>> view.getSections(resource)
-        ['Relation for A book of type <URIObject Section>']
-
-    """
-
-
-def doctest_PersonTimetableSetupView():
-    """Doctest for the PersonTimetableSetupView view
-
-    We will need an application object
-
-        >>> app = sbsetup.setUpSchoolToolSite()
-        >>> ztapi.provideAdapter(IOwnTimetables, ITimetables,
-        ...                      TimetablesAdapter)
-
-    and a Person from that application
-
-        >>> from schooltool.person.person import Person
-        >>> from schooltool.group.group import Group
-        >>> context = Person("student", "Steven Udent")
-        >>> app["persons"]["whatever"] = context
-        >>> app["groups"]["juniors"] = juniors = Group("Juniors")
-        >>> juniors.members.add(context)
-
-    We will need some sections
-
-        >>> from schooltool.course.section import Section as STSection
-        >>> class Section(STSection):
-        ...     implements(IOwnTimetables)
-        >>> app["sections"]["math"] = math = Section("Math")
-        >>> app["sections"]["biology"] = biology = Section("Biology")
-        >>> app["sections"]["physics"] = physics = Section("Physics")
-        >>> app["sections"]["history"] = history = Section("History")
-
-    We will also need a timetable schema, and a term.  Two of each, in fact.
-
-        >>> app["ttschemas"]["default"] = createSchema(["Mon", "Tue"],
-        ...                                            ["9:00", "10:00"],
-        ...                                            ["9:00", "10:00"])
-        >>> app["ttschemas"]["other"] = createSchema([], [])
-
-        >>> from schooltool.schoolyear.schoolyear import SchoolYear
-        >>> schoolyears = ISchoolYearContainer(app)
-        >>> schoolyears['2005'] = SchoolYear("2005",
-        ...                                  datetime.date(2004, 2, 1),
-        ...                                  datetime.date(2004, 12, 31))
-
-        >>> from schooltool.term.term import Term
-        >>> terms = ITermContainer(app)
-        >>> terms["2005-spring"] = Term('2005 Spring',
-        ...                             datetime.date(2004, 2, 1),
-        ...                             datetime.date(2004, 6, 30))
-        >>> terms["2005-fall"] = Term('2005 Fall',
-        ...                           datetime.date(2004, 9, 1),
-        ...                           datetime.date(2004, 12, 31))
-
-    We can now create the view.
-
-        >>> from schooltool.timetable.browser import PersonTimetableSetupView
-        >>> request = TestRequest()
-        >>> view = PersonTimetableSetupView(context, request)
-
-    There are two helper methods, getSchema and getTerm, that extract the
-    schema and term from the request, or pick suitable defaults.
-
-        >>> view.getSchema() is app["ttschemas"].getDefault()
-        True
-        >>> request.form['ttschema'] = 'other'
-        >>> view.getSchema() is app["ttschemas"]["other"]
-        True
-        >>> request.form['ttschema'] = 'default'
-        >>> view.getSchema() is app["ttschemas"]["default"]
-        True
-
-    The default for a term is "the current term", or, if there's none, the
-    next one.
-
-        >>> from schooltool.term.tests import setUpDateManagerStub
-        >>> terms = ITermContainer(app)
-        >>> setUpDateManagerStub(current_term=terms["2005-spring"])
-        >>> view.getTerm() is terms["2005-spring"]
-        True
-        >>> request.form['term'] = '2005-spring'
-        >>> view.getTerm() is terms["2005-spring"]
-        True
-        >>> request.form['term'] = '2005-fall'
-        >>> view.getTerm() is terms["2005-fall"]
-        True
-
-    sectionMap finds out which sections are scheduled in which timetable slots.
-
-        >>> term = terms["2005-fall"]
-        >>> ttschema = app["ttschemas"]["default"]
-        >>> section_map = view.sectionMap(term, ttschema)
-
-        >>> pprint(section_map)
-        {('Mon', '10:00'): Set([]),
-         ('Mon', '9:00'): Set([]),
-         ('Tue', '10:00'): Set([]),
-         ('Tue', '9:00'): Set([])}
-
-    It gets more interesting when sections actually have some scheduled
-    activities:
-
-        >>> from schooltool.timetable.interfaces import ITimetables
-        >>> from schooltool.timetable import TimetableActivity
-        >>> ttkey = "2005-fall.default"
-        >>> term = terms["2005-fall"]
-        >>> ITimetables(math).timetables[ttkey] = ttschema.createTimetable(term)
-        >>> ITimetables(math).timetables[ttkey]['Tue'].add('10:00',
-        ...                                   TimetableActivity('Math'))
-
-        >>> ITimetables(history).timetables[ttkey] = ttschema.createTimetable(term)
-        >>> ITimetables(history).timetables[ttkey]['Tue'].add('10:00',
-        ...                                   TimetableActivity('History'))
-
-        >>> section_map = view.sectionMap(term, ttschema)
-        >>> pprint(section_map)
-        {('Mon', '10:00'): Set([]),
-         ('Mon', '9:00'): Set([]),
-         ('Tue', '10:00'): Set([<schooltool...Section ...>]),
-         ('Tue', '9:00'): Set([])}
-
-    allSections simply takes a union of a number of sets containing sections.
-
-        >>> from sets import Set
-        >>> sections = view.allSections({1: Set([math]),
-        ...                              2: Set([math, biology]),
-        ...                              3: Set([])})
-        >>> sections = [s.title for s in sections]
-        >>> sections.sort()
-        >>> sections
-        ['Biology', 'Math']
-
-    getDays does most of the work
-
-        >>> def printDays(days):
-        ...     for day in days:
-        ...         print day['title']
-        ...         for period in day['periods']:
-        ...             sections = [s.title for s in period['sections']]
-        ...             selected = [s and s.title or "none"
-        ...                         for s in period['selected']]
-        ...             print "%7s: [%s] [%s]" % (period['title'],
-        ...                                       ', '.join(sections),
-        ...                                       ', '.join(selected))
-
-        >>> days = view.getDays(ttschema, section_map)
-        >>> printDays(days)
-        Mon
-           9:00: [] [none]
-          10:00: [] [none]
-        Tue
-           9:00: [] [none]
-          10:00: [History, Math] [none]
-
-        >>> math.members.add(context)
-
-        >>> days = view.getDays(ttschema, section_map)
-        >>> printDays(days)
-        Mon
-           9:00: [] [none]
-          10:00: [] [none]
-        Tue
-           9:00: [] [none]
-          10:00: [History, Math] [Math]
-
-    And finally, __call__ ties everything together -- it processes the form and
-    renders a page template.
-
-        >>> print view()
-        <BLANKLINE>
-        ...
-        <title> Scheduling for Steven Udent </title>
-        ...
-        <h1> Scheduling for Steven Udent </h1>
-        ...
-        <form class="plain" method="post" action="http://127.0.0.1">
-        ...
-            <label for="term">Term</label>
-            <select id="term" name="term">
-              <option value="2005-spring">2005 Spring</option>
-              <option selected="selected" value="2005-fall">2005 Fall</option>
-            </select>
-            <label for="ttschema">Schema</label>
-            <select id="ttschema" name="ttschema">
-              <option selected="selected" value="default">default</option>
-              <option value="other">other</option>
-            </select>
-        ...
-        </form>
-        <form class="plain" method="post" action="http://127.0.0.1">
-          <input type="hidden" name="term" value="2005-fall" />
-          <input type="hidden" name="ttschema" value="default" />
-        ...
-            <h2>Mon</h2>
-        ...
-                <th>9:00</th>
-                <td>
-                  <select name="sections:list">
-                    <option value="" selected="selected">none</option>
-                  </select>
-        ...
-            <h2>Tue</h2>
-        ...
-                <th>10:00</th>
-                <td>
-                  <select name="sections:list">
-                    <option value="">none</option>
-                    <option value="history"> -- History</option>
-                    <option selected="selected" value="math"> -- Math</option>
-                  </select>
-        ...
-        </form>
-        ...
-
-    If the form contains 'SAVE', the form gets processed.  Suppose we unselect
-    Math
-
-        >>> request.form['SAVE'] = 'Save'
-        >>> request.form['sections'] = ['']
-        >>> content = view()
-
-        >>> context in math.members
-        False
-
-    If we select it back
-
-        >>> request.form['SAVE'] = 'Save'
-        >>> request.form['sections'] = ['math']
-        >>> content = view()
-
-        >>> context in math.members
-        True
-
-        >>> math.members.remove(context)
-
-        >>> days = view.getDays(ttschema, section_map)
-        >>> printDays(days)
-        Mon
-           9:00: [] [none]
-          10:00: [] [none]
-        Tue
-           9:00: [] [none]
-          10:00: [History, Math] [none]
-
-    When people are members of a section as part of a form (group) we don't
-    allow changing that period from here.  They must be removed from the
-    group.
-
-        >>> math.members.add(juniors)
-
-        >>> print view()
-        <BLANKLINE>
-        ...
-        <title> Scheduling for Steven Udent </title>
-        ...
-            <h2>Tue</h2>
-        ...
-                <th>10:00</th>
-                <td>
-                  <a href="http://127.0.0.1/sections/math">Math</a>
-                  <span class="hint">
-                    <span>as part of</span>
-                    <a href="http://127.0.0.1/groups/juniors">Juniors</a>
-                  </span>
-                </td>
-        ...
-
-
-        >>> history.members.add(juniors)
-        >>> print view()
-        <BLANKLINE>
-        ...
-        <title> Scheduling for Steven Udent </title>
-        ...
-            <h2>Tue</h2>
-        ...
-        <BLANKLINE>
-              <tr class="conflict">
-                <th>10:00</th>
-                <td>
-                  <a href="http://127.0.0.1/sections/history">History</a>
-                  <span class="hint">
-                  <span>as part of</span>
-                  <a href="http://127.0.0.1/groups/juniors">Juniors</a>
-                </span>
-              </td>
-                <td>
-                  <a href="http://127.0.0.1/sections/math">Math</a>
-                  <span class="hint">
-                    <span>as part of</span>
-                    <a href="http://127.0.0.1/groups/juniors">Juniors</a>
-                  </span>
-                </td>
-              <td class="conflict">
-              Scheduling conflict.
-              </td>
-            </tr>
-        <BLANKLINE>
-        ...
-
-    """
-
-
-def doctest_PersonTimetableSetupView_no_timetables():
-    """Doctest for the PersonTimetableSetupView view
-
-    What if there are no terms/timetable schemas?
-
-    We will need an application object
-
-        >>> app = sbsetup.setUpSchoolToolSite()
-
-    And a school year
-
-        >>> from schooltool.schoolyear.schoolyear import SchoolYear
-        >>> schoolyears = ISchoolYearContainer(app)
-        >>> schoolyears['2005'] = SchoolYear("2005",
-        ...                                  datetime.date(2004, 2, 1),
-        ...                                  datetime.date(2004, 12, 31))
-
-    and a Person from that application
-
-        >>> from schooltool.person.person import Person
-        >>> context = Person("student", "Steven Udent")
-        >>> app["persons"]["whatever"] = context
-
-        >>> len(app['ttschemas'])
-        0
-        >>> len(ITermContainer(app))
-        0
-
-    We can now create the view.
-
-        >>> from schooltool.timetable.browser import PersonTimetableSetupView
-        >>> request = TestRequest()
-        >>> view = PersonTimetableSetupView(context, request)
-
-    getSchema returns None:
-
-        >>> print view.getSchema()
-        None
-
-    What does __call__ do?
-
-        >>> print view()
-        <BLANKLINE>
-        ...
-        <title> Scheduling for Steven Udent </title>
-        ...
-        <h1> Scheduling for Steven Udent </h1>
-        ...
-        <p>There are no terms or timetable schemas defined.</p>
-        ...
-
-    """
-
-
-def doctest_PersonTimetableSetupView_no_default_ttschema():
-    """Doctest for the PersonTimetableSetupView view
-
-    What if there is no default timetable schema?
-
-    We will need an application object
-
-        >>> app = sbsetup.setUpSchoolToolSite()
-
-    and a Person from that application
-
-        >>> from schooltool.person.person import Person
-        >>> context = Person("student", "Steven Udent")
-        >>> app["persons"]["whatever"] = context
-
-    There is one timetable schema, but it is not the default one.
-
-        >>> app["ttschemas"]["default"] = createSchema(["Mon", "Tue"],
-        ...                                            ["9:00", "10:00"],
-        ...                                            ["9:00", "10:00"])
-        >>> app["ttschemas"]["other"] = createSchema([], [])
-        >>> del app["ttschemas"]["default"]
-        >>> app["ttschemas"].default_id is None
-        True
-
-    We can now create the view.
-
-        >>> from schooltool.timetable.browser import PersonTimetableSetupView
-        >>> request = TestRequest()
-        >>> view = PersonTimetableSetupView(context, request)
-
-    What does getSchema return?
-
-        >>> view.getSchema() is app["ttschemas"]["other"]
-        True
 
     """
 
@@ -635,10 +203,18 @@ def doctest_SectionTimetableSetupView():
         ...                                  datetime.date(2004, 12, 31))
 
         >>> from schooltool.term.term import Term
-        >>> from schooltool.term.interfaces import ITermContainer
-        >>> ITermContainer(app)["2005-spring"] = Term('2005 Spring',
-        ...                                    datetime.date(2004, 2, 1),
-        ...                                    datetime.date(2004, 6, 30))
+        >>> term = Term('2005 Spring',
+        ...             datetime.date(2004, 2, 1),
+        ...             datetime.date(2004, 6, 30))
+        >>> ITermContainer(app)["2005-spring"] = term
+
+        >>> from schooltool.course.interfaces import ISection
+        >>> from schooltool.term.interfaces import ITerm
+        >>> @adapter(ISection)
+        ... @implementer(ITerm)
+        ... def getTerm(section):
+        ...     return term
+        >>> provideAdapter(getTerm)
 
     We can now create the view to look at the Math timetable
 
@@ -651,8 +227,6 @@ def doctest_SectionTimetableSetupView():
     option for terms or schemas:
 
         >>> view.app = app
-        >>> view.singleTerm()
-        True
         >>> view.singleSchema()
         True
 
@@ -663,8 +237,6 @@ def doctest_SectionTimetableSetupView():
         ...                                         datetime.date(2004, 9, 1),
         ...                                         datetime.date(2004, 12, 31))
 
-        >>> view.singleTerm()
-        False
         >>> view.singleSchema()
         False
 
@@ -679,36 +251,6 @@ def doctest_SectionTimetableSetupView():
         >>> request.form['ttschema'] = 'default'
         >>> view.getSchema() is app["ttschemas"]["default"]
         True
-
-    getTerms will give us a list of available terms from the request or a list
-    with just the current term if we're working at a time not during any term.
-
-    Without any terms in the request we get the current term:
-
-        >>> from schooltool.term.tests import setUpDateManagerStub
-        >>> setUpDateManagerStub(current_term=ITermContainer(app)["2005-fall"])
-        >>> view.getTerms()[0] is ITermContainer(app)["2005-fall"]
-        True
-        >>> len(view.getTerms())
-        1
-
-        >>> request.form['terms'] = ['2005-spring', '2005-fall']
-        >>> [t.__name__ for t in view.getTerms()]
-        [u'2005-spring', u'2005-fall']
-
-        >>> request.form['terms'] = ['2005-spring']
-        >>> [t.__name__ for t in view.getTerms()]
-        [u'2005-spring']
-
-        >>> request.form['terms'] = ['2005-fall']
-        >>> [t.__name__ for t in view.getTerms()]
-        [u'2005-fall']
-
-    Single terms may be returned as a single string, rather than a list:
-
-        >>> request.form['terms'] = '2005-spring'
-        >>> [t.__name__ for t in view.getTerms()]
-        [u'2005-spring']
 
     If we cancel the form, we get redirected to the section
 

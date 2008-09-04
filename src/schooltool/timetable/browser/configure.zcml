@@ -35,18 +35,6 @@
       class="schooltool.timetable.browser.SectionTimetableSetupView"
       permission="schooltool.edit" />
 
-  <page
-      name="schedule.html"
-      for="schooltool.person.interfaces.IPerson"
-      class="schooltool.timetable.browser.PersonTimetableSetupView"
-      permission="schooltool.edit" />
-
-  <page
-      name="schedule.html"
-      for="schooltool.resource.interfaces.IResource"
-      class="schooltool.timetable.browser.ResourceTimetableSetupView"
-      permission="schooltool.edit" />
-
   <configure package="schooltool.skin">
     <navigationViewlet
       name="add-timetable"
@@ -68,24 +56,7 @@
       title="Schedule"
       order="10"
       />
-    <navigationViewlet
-      name="schedule-student"
-      for="schooltool.person.interfaces.IPerson"
-      manager="schooltool.skin.IActionMenuManager"
-      template="templates/actionsViewlet.pt"
-      permission="schooltool.edit"
-      link="schedule.html"
-      title="Schedule"
-      order="10"
-      />
   </configure>
-
-  <page
-      name="schedule.html"
-      for="schooltool.resource.interfaces.IBaseResource"
-      class="schooltool.timetable.browser.ResourceTimetableSetupView"
-      permission="schooltool.view"
-      />
 
   <page
       name="index.html"
