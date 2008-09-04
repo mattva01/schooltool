@@ -55,23 +55,6 @@ There is a number of built-in groups (listed alphabetically)
     </container>
     <BLANKLINE>
 
-Initially there are no resources:
-
-    >>> print rest("""
-    ... GET /resources/ HTTP/1.1
-    ... Authorization: Basic manager:schooltool
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    <container xmlns:xlink="http://www.w3.org/1999/xlink">
-      <name>resources</name>
-      <items>
-      </items>
-      <acl xlink:type="simple" xlink:title="ACL"
-           xlink:href="http://localhost/resources/acl"/>
-    </container>
-    <BLANKLINE>
-
 One person:
 
     >>> print rest("""

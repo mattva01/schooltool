@@ -40,8 +40,6 @@ from schooltool.common.xmlparsing import XMLParseError
 from schooltool.group.group import Group
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.group.rest.group import GroupFileFactory, GroupContainerView
-from schooltool.resource.interfaces import IResourceContainer
-from schooltool.resource.rest.resource import ResourceFileFactory
 
 
 
@@ -58,9 +56,6 @@ class ContainerViewTestMixin(XMLCompareMixin):
                              SimpleNameChooser)
         ztapi.provideAdapter(IGroupContainer, IFileFactory,
                              GroupFileFactory)
-        ztapi.provideAdapter(IResourceContainer, IFileFactory,
-                             ResourceFileFactory)
-
 
         self.app = sbsetup.setUpSchoolToolSite()
         self.groupContainer = self.app['groups']
@@ -115,8 +110,6 @@ class FileFactoriesSetUp(PlacefulSetup):
         PlacefulSetup.setUp(self)
         ztapi.provideAdapter(IGroupContainer, IFileFactory,
                              GroupFileFactory)
-        ztapi.provideAdapter(IResourceContainer, IFileFactory,
-                             ResourceFileFactory)
 
 
 class ApplicationObjectViewTestMixin(ContainerViewTestMixin):
