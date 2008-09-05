@@ -125,7 +125,7 @@ def group_calendar_edit(browser):
 
 def resource_container_view(browser):
     browser.open('http://localhost/resources/')
-    return 'Reservations' in browser.contents
+    return 'Resource index' in browser.contents
 
 def resource_container_edit(browser):
     resource_container_view(browser)

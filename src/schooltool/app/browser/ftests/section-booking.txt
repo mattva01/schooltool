@@ -106,7 +106,8 @@ Let's look at it:
       <div class="description">Assignement.</div>
     ...
 
-    >>> manager.getLink('Reservations').click()
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Resources').click()
     >>> manager.getLink('New Resource').click()
     >>> manager.getControl('Title').value = "Mud"
     >>> manager.getControl('Add').click()

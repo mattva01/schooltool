@@ -38,7 +38,8 @@ And a group:
 
 And a resource:
 
-    >>> manager.getLink('Reservations').click()
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Resources').click()
     >>> manager.getLink('New Resource').click()
 
     >>> manager.getControl('Title').value = 'Mud'

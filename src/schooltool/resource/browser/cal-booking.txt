@@ -20,7 +20,8 @@ Let's create a person so that we can fool around with his calendar:
 
 Now let's create some resources that can be booked:
 
-    >>> manager.getLink('Reservations').click()
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Resources').click()
 
     >>> manager.getLink('New Resource').click()
     >>> manager.getControl('Title').value = 'lilly'
@@ -378,7 +379,8 @@ Now let's allow frog access all resources:
 
     >>> manager.open('http://localhost')
 
-    >>> manager.getLink('Reservations').click()
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Resources').click()
     >>> manager.getLink('Resource', index=2).click()
     >>> manager.getLink('mud').click()
     >>> manager.getLink('View Calendar').click()
