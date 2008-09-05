@@ -65,7 +65,8 @@ def addPerson(name, username=None, password=None, groups=None, browser=None):
 def addResource(title):
     """Add a resource."""
     manager = logInManager()
-    manager.getLink('Reservations').click()
+    manager.getLink('Manage').click()
+    manager.getLink('Resources').click()
     manager.getLink('New Resource').click()
     manager.getControl('Title').value = title
     manager.getControl('Add').click()

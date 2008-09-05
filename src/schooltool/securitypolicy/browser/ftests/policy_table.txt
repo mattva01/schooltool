@@ -34,7 +34,8 @@ Let's create some persons:
 Section and resources:
 
     >>> manager.getLink('SchoolTool').click()
-    >>> manager.getLink('Reservations').click()
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Resources').click()
     >>> manager.getLink('New Resource').click()
     >>> manager.getControl('Title').value = 'Time travel machine'
     >>> manager.getControl('Identifier').value = 'ttm'
@@ -60,7 +61,8 @@ Set up leader for everything:
     >>> manager.getLink('Edit Leaders').click()
     >>> manager.getControl('Teacher2').click()
     >>> manager.getControl('Add').click()
-    >>> manager.getLink('Reservations').click()
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Resources').click()
     >>> manager.getLink("Resource", index=2).click()
     >>> manager.getLink('Time travel machine').click()
     >>> manager.getLink('Edit Leaders').click()

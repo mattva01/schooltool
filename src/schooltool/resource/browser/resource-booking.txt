@@ -11,7 +11,8 @@ Let's log in:
 
 And add a couple of resources to book:
 
-    >>> manager.getLink('Reservations').click()
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Resources').click()
     >>> manager.getLink('New Location').click()
     >>> manager.getControl('Title').value = 'mud'
     >>> manager.getControl(name='field.type.newSubType').value = 'Computer Lab'
@@ -50,7 +51,8 @@ And a few events to our calendar:
 
 And a couple of events to our resource calendars:
 
-    >>> manager.getLink('Reservations').click()
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Resources').click()
     >>> manager.getLink('Resource', index=2).click()
     >>> manager.getLink('fish').click()
     >>> manager.getLink('View Calendar').click()
@@ -62,7 +64,8 @@ And a couple of events to our resource calendars:
     >>> manager.getControl('Add').click()
 
 
-    >>> manager.getLink('Reservations').click()
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Resources').click()
     >>> manager.getLink('Computer Lab').click()
     >>> manager.getLink('mud').click()
     >>> manager.getLink('View Calendar').click()
@@ -76,7 +79,8 @@ And a couple of events to our resource calendars:
 Now if we go to the resource container and select both resources for
 booking:
 
-    >>> manager.getLink('Reservations').click()
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Resources').click()
     >>> manager.getLink('Resource', index=2).click()
 
     >>> manager.getControl(name='delete.fish').value = ['delete.fish']

@@ -161,12 +161,12 @@
     <navigationViewlet
       name="resources"
       for="*"
-      manager="schooltool.skin.INavigationManager"
+      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
       template="templates/navigationViewlet.pt"
       class="schooltool.skin.TopLevelContainerNavigationViewlet"
       permission="schooltool.view"
       link="resources"
-      title="Reservations"
+      title="Resources"
       order="60"
       />
 
