@@ -707,9 +707,9 @@ def doctest_restoreManagerUser():
         >>> manager.checkPassword('schooltool')
         True
 
-    Manager is by default member of 'manager' group:
+    Manager is by default a super user:
 
-        >>> manager in app['groups']['manager'].members
+        >>> app['persons'].super_user is manager
         True
 
     To prevent this user from being deleted we add a dependency

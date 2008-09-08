@@ -155,6 +155,12 @@ class IPersonContainer(container.interfaces.IContainer):
 
     container.constraints.contains(IPerson)
 
+    super_user = zope.interface.Attribute(
+        """Absolute administrator for this schooltool instance.
+
+           A user that no matter which groups he is in or is not in has the
+           administrative privileges.""")
+
 
 class IPersonContained(IPerson, container.interfaces.IContained):
     """Person contained in an IPersonContainer."""

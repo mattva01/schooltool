@@ -59,6 +59,8 @@ class PersonContainer(btree.BTreeContainer):
 
     implements(interfaces.IPersonContainer, IAttributeAnnotatable)
 
+    super_user = None
+
     def __setitem__(self, key, person):
         """See `IWriteContainer`
 

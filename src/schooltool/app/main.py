@@ -597,9 +597,7 @@ class StandaloneServer(object):
             IDependable(manager).addDependent('')
         manager = app['persons'][MANAGER_USERNAME]
         manager.setPassword(password)
-        manager_group = app['groups']['manager']
-        if manager not in manager_group.members:
-            manager_group.members.add(manager)
+        app['persons'].super_user = manager
         setSite(None)
 
     def main(self, argv=sys.argv):
