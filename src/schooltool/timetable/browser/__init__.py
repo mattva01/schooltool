@@ -27,7 +27,6 @@ import re
 
 from zope.app.container.interfaces import INameChooser
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
-from zope.component import getUtility
 from zope.component import adapts
 from zope.interface import implements
 from zope.publisher.browser import BrowserView
@@ -37,16 +36,9 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.app import getSchoolToolApplication
-from schooltool.app.membership import URIGroup
 from schooltool.calendar.utils import parse_date, parse_time
-from schooltool.course.booking import URISection
 from schooltool.course.interfaces import ISection
-from schooltool.person.interfaces import IPerson
-from schooltool.relationship.relationship import getRelatedObjects
-from schooltool.resource.interfaces import IBaseResource
 from schooltool.term.interfaces import ITerm
-from schooltool.term.interfaces import ITermContainer
-from schooltool.term.interfaces import IDateManager
 from schooltool.term.term import getTermForDate
 from schooltool.timetable import SchooldaySlot
 from schooltool.timetable import Timetable, TimetableDay
