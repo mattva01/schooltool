@@ -29,6 +29,7 @@ from schooltool.table.interfaces import IBatch
 
 class Batch(object):
     """Batching mechanism for Tables"""
+    implements(IBatch)
 
     template = ViewPageTemplateFile("templates/batch.pt")
 

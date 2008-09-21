@@ -34,14 +34,15 @@ from zope.app.form.browser.editview import EditView
 from zope.app.form.interfaces import IInputWidget
 from zope.app.form.interfaces import WidgetsError
 from zope.publisher.browser import BrowserView
+from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component import adapter
-from zope.component import queryMultiAdapter
 from zope.app.security.interfaces import IAuthentication
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserPage
 from zope.traversing.browser.absoluteurl import absoluteURL
 
+from schooltool.calendar.icalendar import convert_calendar_to_ical
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.browser.interfaces import IManageMenuViewletManager
 from schooltool.app.app import getSchoolToolApplication
@@ -142,8 +143,8 @@ class RelationshipViewBase(BrowserView):
     def createTableFormatter(self, **kwargs):
         prefix = kwargs['prefix']
         container = self.getAvailableItemsContainer()
-        formatter = queryMultiAdapter((container, self.request),
-                                      ITableFormatter)
+        formatter = getMultiAdapter((container, self.request),
+                                    ITableFormatter)
         columns_before = [CheckboxColumn(prefix=prefix, title="")]
         formatters = [label_cell_formatter_factory(prefix)]
         formatter.setUp(formatters=formatters,
@@ -345,3 +346,71 @@ SchoolBreadcrumbInfo = CustomNameBreadCrumbInfo(_('school'))
 def getAuthentication(app):
     return LocationProxy(getUtility(ISchoolToolAuthenticationPlugin),
                          app, 'auth')
+
+
+def getCharset(content_type, default="UTF-8"):
+    """Get charset out of content-type
+
+        >>> getCharset('text/xml; charset=latin-1')
+        'latin-1'
+
+        >>> getCharset('text/xml; charset=yada-yada')
+        'yada-yada'
+
+        >>> getCharset('text/xml; charset=yada-yada; fo=ba')
+        'yada-yada'
+
+        >>> getCharset('text/plain')
+        'UTF-8'
+
+        >>> getCharset(None)
+        'UTF-8'
+
+    """
+    if not content_type:
+        return default
+
+    parts = content_type.split(";")
+    if len(parts) == 0:
+        return default
+
+    stripped_parts = [part.strip() for part in parts]
+
+    charsets = [part for part in stripped_parts
+                if part.startswith("charset=")]
+
+    if len(charsets) == 0:
+        return default
+
+    return charsets[0].split("=")[1]
+
+
+class HTTPCalendarView(BrowserView):
+    """Restive view for calendars"""
+
+    def GET(self):
+        data = "\r\n".join(convert_calendar_to_ical(self.context)) + "\r\n"
+        request = self.request
+        request.response.setHeader('Content-Type',
+                                   'text/calendar; charset=UTF-8')
+        request.response.setHeader('Content-Length', len(data))
+        request.response.setStatus(200)
+        return data
+
+    def PUT(self):
+        request = self.request
+
+        for name in request:
+            if name.startswith('HTTP_CONTENT_'):
+                # Unimplemented content header
+                request.response.setStatus(501)
+                return ''
+
+        body = self.request.bodyStream
+        data = body.read()
+        charset = getCharset(self.request.getHeader("Content-Type"))
+
+        from schooltool.app.interfaces import IWriteCalendar
+        adapter = IWriteCalendar(self.context)
+        adapter.write(data, charset)
+        return ''

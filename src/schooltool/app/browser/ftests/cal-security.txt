@@ -8,18 +8,18 @@ Set up
 
 We will obviously need a SchoolTool instance.
 
-    >>> from zope.testbrowser.testing import Browser
-    >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
-    >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/')
+    >>> manager = Browser('manager', 'schooltool')
 
     >>> 'SchoolTool' in manager.contents
     True
 
-Let's create a person so that we can fool around with his calendar:
+Some basic setup:
 
     >>> from schooltool.app.browser.ftests import setup
+    >>> setup.setUpBasicSchool()
+
+Let's create a person so that we can fool around with his calendar:
+
     >>> setup.addPerson('Frog', 'frog', 'pwd')
 
 Let's create more persons so that we can test access control.
@@ -32,12 +32,7 @@ Adding new events
 
 Let the Frog add an ordinary event that takes place on 3rd February, 2005:
 
-    >>> frog = Browser()
-    >>> frog.open('http://localhost/')
-    >>> frog.getLink('Log In').click()
-    >>> frog.getControl('Username').value = 'frog'
-    >>> frog.getControl('Password').value = 'pwd'
-    >>> frog.getControl('Log in').click()
+    >>> frog = Browser('frog', 'pwd', url='http://localhost/persons/frog/calendar')
 
     >>> frog.getLink('New Event').click()
 
@@ -57,15 +52,9 @@ Let's make Frog's calendar public:
 
 Toad should still not even see the new event links (but span tags instead):
 
-    >>> toad = Browser()
-    >>> toad.open('http://localhost/')
-    >>> toad.getLink('Log In').click()
-    >>> toad.getControl('Username').value = 'toad'
-    >>> toad.getControl('Password').value = 'doat'
-    >>> toad.getControl('Log in').click()
+    >>> toad = Browser('toad', 'doat')
 
     # Sigh, there is really no way to get to Frog's calendar :-(
-    >>> toad.handleErrors = False
     >>> toad.open('http://localhost/persons/frog/calendar/2005-02-03')
 
     >>> print toad.contents
@@ -94,8 +83,8 @@ link for it):
 Let's make Toad a manager (that should give him the permission to add
 events to Frog's calendar):
 
-    >>> manager.open('http://localhost/groups/manager/@@members_persons.html')
-    >>> manager.getControl('Toad').click()
+    >>> manager.open('http://localhost/persons/toad/@@groups.html')
+    >>> manager.getControl('Managers').click()
     >>> manager.getControl('Add').click()
 
 Now the Toad can add events to Frog's calendar:

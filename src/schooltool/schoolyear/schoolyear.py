@@ -78,7 +78,7 @@ class SchoolYearContainer(BTreeContainer):
 
     def getActiveSchoolYear(self):
         if self.values():
-            return self.values()[0]
+            return sorted(self.values(), key=lambda s: s.last)[-1]
         return None
 
 

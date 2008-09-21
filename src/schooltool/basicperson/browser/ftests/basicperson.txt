@@ -3,11 +3,10 @@ Basic Person
 
 A manager logs in
 
-    >>> from zope.testbrowser.testing import Browser
-    >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
-    >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/')
+    >>> manager = Browser('manager', 'schooltool')
+
+    >>> from schooltool.app.browser.ftests import setup
+    >>> setup.setUpBasicSchool()
 
 Create a Basic Person, a teacher.
 

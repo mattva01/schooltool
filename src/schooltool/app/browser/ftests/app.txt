@@ -27,18 +27,6 @@ Let's create a second person so that we can test access control.
 
     >>> addPerson('Toad', 'toad', 'doat')
 
-Also, let's create a group:
-
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('Groups').click()
-    >>> manager.getLink('New Group').click()
-
-    >>> manager.getControl('Title').value = 'Animals'
-    >>> manager.getControl('Add').click()
-
-    >>> 'Animals' in manager.contents
-    True
-
 Now we log in as the frog:
 
     >>> frog = Browser()
@@ -84,10 +72,6 @@ But you have to log in to see persons, groups, and other locations:
     >>> print anonymous.url
     http://localhost/auth/@@login.html?forbidden=yes&nexturl=...
 
-    >>> anonymous.open('http://localhost/groups')
-    >>> print anonymous.url
-    http://localhost/auth/@@login.html?forbidden=yes&nexturl=...
-
     >>> anonymous.open('http://localhost/resources')
     >>> print anonymous.url
     http://localhost/auth/@@login.html?forbidden=yes&nexturl=...
@@ -112,6 +96,20 @@ and a term
     >>> manager.getControl('Saturday').click()
     >>> manager.getControl('Sunday').click()
     >>> manager.getControl('Add term').click()
+
+then a  group:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('2007').click()
+    >>> manager.getLink('Groups').click()
+    >>> manager.getLink('New Group').click()
+
+    >>> manager.getControl('Title').value = 'Animals'
+    >>> manager.getControl('Add').click()
+
+    >>> 'Animals' in manager.contents
+    True
 
 Now let's add a course:
 

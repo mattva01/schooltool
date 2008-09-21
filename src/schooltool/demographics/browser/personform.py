@@ -29,6 +29,7 @@ from zope.component import getUtility
 from zope.exceptions.interfaces import UserError
 from zope.traversing.browser.absoluteurl import absoluteURL
 
+from schooltool.group.interfaces import IGroupContainer
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.skin.form import AttributeEditForm
 from schooltool.person.interfaces import IReadPerson
@@ -360,7 +361,7 @@ class GroupsTerm(object):
     implements(ITitledTokenizedTerm)
 
     def __init__(self, value):
-        groups = ISchoolToolApplication(None)['groups']
+        groups = IGroupContainer(ISchoolToolApplication(None))
         if value in groups:
             self.title = groups[value].title
         else:

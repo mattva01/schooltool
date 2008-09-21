@@ -118,6 +118,13 @@
   <include package="schooltool.demographics" />
   <include package="schooltool.group" />
   <include package="schooltool.resource" />
+  <include package="schooltool.term" />
+  <include package="schooltool.schoolyear" />
   <include package="schooltool.securitypolicy.browser" />
+
+  <adapter
+      for="zope.interface.Interface
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory="schooltool.table.table.NullTableFormatter " />
 
 </configure>

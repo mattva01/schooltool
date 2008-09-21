@@ -36,7 +36,7 @@ note_functional_layer = ZCMLLayer(filename,
                                   'note_functional_layer')
 
 def test_suite():
-    return collect_ftests(filenames=['notes_rest.txt', 'notes_browser.txt'],
+    return collect_ftests(filenames=['notes_browser.txt'],
                           layer=note_functional_layer)
 
 if __name__ == '__main__':

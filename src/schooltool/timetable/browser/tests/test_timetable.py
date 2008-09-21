@@ -185,7 +185,11 @@ def doctest_SectionTimetableSetupView():
     We will need a section
 
         >>> from schooltool.timetable.interfaces import ITimetables
-        >>> app["sections"]["math"] = math = Section("Math")
+        >>> from schooltool.course.section import SectionContainer
+        >>> from zope.location.location import locate
+        >>> sections = SectionContainer()
+        >>> locate(sections, app, 'sections')
+        >>> sections["math"] = math = Section("Math")
         >>> ITimetables(math).timetables.keys()
         []
 

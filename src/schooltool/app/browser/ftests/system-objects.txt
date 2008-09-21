@@ -11,18 +11,19 @@ interface.
 Setup
 -----
 
-    >>> from zope.testbrowser.testing import Browser
-    >>> manager_browser = Browser()
-    >>> manager_browser.addHeader('Authorization', 'Basic manager:schooltool')
-    >>> manager_browser.handleErrors = False
-    >>> manager_browser.open('http://localhost/')
-    >>> "SchoolTool" in manager_browser.contents
-    True
+    >>> manager_browser = Browser('manager', 'schooltool')
+
+Set up the basic school:
+
+    >>> from schooltool.app.browser.ftests.setup import setUpBasicSchool
+    >>> setUpBasicSchool()
 
 Let us add a user and a group, so that container views have something besides
 the default system objects:
 
     >>> manager_browser.getLink('Manage').click()
+    >>> manager_browser.getLink('School Years').click()
+    >>> manager_browser.getLink('2005-2006').click()
     >>> manager_browser.getLink('Groups').click()
     >>> manager_browser.getLink('New Group').click()
     >>> manager_browser.getControl('Title').value = 'A Group'
@@ -53,36 +54,36 @@ The list of persons should have a disabled checkbox next to the manager user
 
 The list of groups should have a disabled checkbox next to the default groups
 
-    >>> manager_browser.open('http://localhost/groups')
+    >>> manager_browser.open('http://localhost/schoolyears/2005-2006/groups')
     >>> for td in analyze.queryHTML('//table[@class="data"]//tr/td', manager_browser.contents):
     ...     print td
     <td>
           <input type="checkbox" name="delete.a-group" id="delete.a-group" /></td>
     <td>
-          <a href="http://localhost/groups/a-group">A Group</a>
+          <a href="http://localhost/schoolyears/2005-2006/groups/a-group">A Group</a>
     </td>
     <td>
           <input type="checkbox" name="delete.clerks" id="delete.clerks" disabled="disabled" /></td>
     <td>
-          <a href="http://localhost/groups/clerks">Clerks</a>
+          <a href="http://localhost/schoolyears/2005-2006/groups/clerks">Clerks</a>
     </td>
     <td>
           <input type="checkbox" name="delete.administrators" id="delete.administrators" disabled="disabled" /></td>
     <td>
-          <a href="http://localhost/groups/administrators">School Administrators</a>
+          <a href="http://localhost/schoolyears/2005-2006/groups/administrators">School Administrators</a>
     </td>
     <td>
           <input type="checkbox" name="delete.manager" id="delete.manager" disabled="disabled" /></td>
     <td>
-          <a href="http://localhost/groups/manager">Site Managers</a>
+          <a href="http://localhost/schoolyears/2005-2006/groups/manager">Site Managers</a>
     </td>
     <td>
           <input type="checkbox" name="delete.students" id="delete.students" disabled="disabled" /></td>
     <td>
-          <a href="http://localhost/groups/students">Students</a>
+          <a href="http://localhost/schoolyears/2005-2006/groups/students">Students</a>
     </td>
     <td>
           <input type="checkbox" name="delete.teachers" id="delete.teachers" disabled="disabled" /></td>
     <td>
-          <a href="http://localhost/groups/teachers">Teachers</a>
+          <a href="http://localhost/schoolyears/2005-2006/groups/teachers">Teachers</a>
     </td>

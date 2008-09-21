@@ -4,11 +4,6 @@ def registerTestSetup():
     from zope.interface import classImplements
     from schooltool.testing import registry
 
-    def addGroupContainer(app):
-        from schooltool.group import group
-        app['groups'] = group.GroupContainer()
-    registry.register('ApplicationContainers', addGroupContainer)
-
     def haveCalendar():
         from schooltool.group import group
         from schooltool.app.interfaces import IHaveCalendar

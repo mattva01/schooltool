@@ -6,6 +6,14 @@
 
   <zope:adapter factory=".schoolyear.SchoolYearAddFormAdapter" />
 
+  <zope:view
+      for="..interfaces.ISchoolYear"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory="schooltool.traverser.browser.PluggableBrowserTraverser"
+      permission="zope.Public"
+      />
+
   <zope:adapterTraverserPlugin
       for="schooltool.app.interfaces.ISchoolToolApplication"
       layer="zope.publisher.interfaces.browser.IBrowserRequest"

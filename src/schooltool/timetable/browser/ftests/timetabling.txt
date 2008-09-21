@@ -16,20 +16,31 @@ Overview
 Prologue
 --------
 
-    >>> from zope.testbrowser.testing import Browser
-    >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
-    >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/')
+    >>> manager = Browser('manager', 'schooltool')
 
 Let's create a person for use in tests:
 
     >>> from schooltool.app.browser.ftests.setup import addPerson
     >>> addPerson('Frog', 'frog', 'pwd')
 
+Add a schoolyear:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> '<p>There are none.</p>' in manager.contents
+    True
+
+    >>> manager.getLink('New School Year').click()
+    >>> manager.getControl('Title').value = '2005'
+    >>> manager.getControl('First day').value = '05/09/01'
+    >>> manager.getControl('Last day').value = '06/07/31'
+    >>> manager.getControl('Add').click()
+
 And a group:
 
     >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('2005').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('New Group').click()
 
@@ -52,18 +63,9 @@ Terms are periods of time (such as semesters or trimesters) that also say which
 days are holidays and which are not.  You can define any number of terms -- and
 you have to have at least one if you want to use timetables.
 
-Initially there are no schoolyears nor terms defined.
-
     >>> manager.getLink('Manage').click()
     >>> manager.getLink('School Years').click()
-    >>> '<p>There are none.</p>' in manager.contents
-    True
-
-    >>> manager.getLink('New School Year').click()
-    >>> manager.getControl('Title').value = '2005'
-    >>> manager.getControl('First day').value = '05/09/01'
-    >>> manager.getControl('Last day').value = '06/07/31'
-    >>> manager.getControl('Add').click()
+    >>> manager.getLink('2005').click()
 
     >>> '<p>There are none.</p>' in manager.contents
     True

@@ -41,8 +41,8 @@
 	<fieldset>
 	  <legend tal:content="view/available_title" />
 	  <div class="item_list">
-	    <tal:block replace="structure view/available_table/batch/render" />
-	    <tal:block replace="structure view/available_table/filter_widget/render" />
+	    <tal:block replace="structure view/available_table/batch/render|nothing" />
+	    <tal:block replace="structure view/available_table/filter_widget/render|nothing" />
 	    <tal:block replace="structure view/available_table/render" />
 	    <div class="controls">
 	      <input type="submit" class="button-ok" name="ADD_ITEMS"

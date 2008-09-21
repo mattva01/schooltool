@@ -32,6 +32,7 @@ from zope.app.intid.interfaces import IIntIds
 from zope.app.container import btree, contained
 
 from schooltool.term.interfaces import ITerm
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.relationship import RelationshipProperty
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -55,6 +56,15 @@ class CourseContainer(btree.BTreeContainer):
 
     zope.interface.implements(interfaces.ICourseContainer,
                               IAttributeAnnotatable)
+
+
+@adapter(ISchoolToolApplication)
+@implementer(ICourseContainer)
+def getCourseContainerForApp(app):
+    syc = ISchoolYearContainer(app)
+    sy = syc.getActiveSchoolYear()
+    if sy is not None:
+        return ICourseContainer(sy)
 
 
 @adapter(ISchoolYear)

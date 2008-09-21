@@ -168,6 +168,8 @@
   <adapter
       factory=".course.getCourseContainer" />
   <adapter
+      factory=".course.getCourseContainerForApp" />
+  <adapter
       factory=".course.getCourseContainerForTerm" />
 
   <adapter

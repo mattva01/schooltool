@@ -436,3 +436,68 @@ class AdvancedTimetableSchemaAdd(BrowserView, TabindexMixin):
                 slotfmt = format_time_range(slot.tstart, slot.duration)
                 result[idx][day] = slotfmt
         return result
+
+
+class TimetableSchemaXMLView(BrowserView):
+    """View for ITimetableSchema"""
+
+    dows = ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
+            'Friday', 'Saturday', 'Sunday']
+
+    template = ViewPageTemplateFile("templates/schema_export.pt",
+                                    content_type="text/xml; charset=UTF-8")
+
+    __call__ = template
+
+    def exceptiondayids(self):
+        result = []
+
+        for date, id in self.context.model.exceptionDayIds.items():
+            result.append({'when': str(date), 'id': id})
+
+        result.sort(lambda a, b: cmp((a['when'], a['id']),
+                                     (b['when'], b['id'])))
+        return result
+
+    def daytemplates(self):
+        items = self.context.items()
+        id = items[0][0]
+        result = []
+        for id, day in self.context.model.dayTemplates.items():
+            if id is None:
+                used = "default"
+            elif id in self.context.keys():
+                used = id
+            else:
+                used = self.dows[id]
+            periods = []
+            for period in day:
+                periods.append(
+                    {'id': None,
+                     'tstart': period.tstart.strftime("%H:%M"),
+                     'duration': period.duration.seconds / 60})
+            periods.sort()
+            for template in result:
+                if template['periods'] == periods:
+                    days = template['used'].split()
+                    days.append(used)
+                    days.sort()
+                    template['used'] = " ".join(days)
+                    break
+            else:
+                result.append({'used': used, 'periods': periods})
+
+        for date, day in self.context.model.exceptionDays.items():
+            periods = []
+            for period, slot in day:
+                periods.append(
+                    {'id': period,
+                     'tstart': slot.tstart.strftime("%H:%M"),
+                     'duration': slot.duration.seconds / 60})
+            periods.sort()
+            result.append({'used': str(date), 'periods': periods})
+
+        result.sort(lambda a, b: cmp((a['used'], a['periods']),
+                                     (b['used'], b['periods'])))
+
+        return result

@@ -54,11 +54,16 @@ def doctest_GroupListView():
     create some (empty) groups.
 
         >>> from schooltool.group.group import Group
-        >>> world = app['groups']['the_world'] = Group("Others")
-        >>> etria = app['groups']['etria'] = Group("Etria")
-        >>> pov = app['groups']['pov'] = Group("PoV")
-        >>> canonical = app['groups']['canonical'] = Group("Canonical")
-        >>> ms = app['groups']['ms'] = Group("The Enemy")
+        >>> from schooltool.group.group import GroupContainer
+        >>> from zope.component import provideAdapter
+        >>> from schooltool.group.interfaces import IGroupContainer
+        >>> gc = GroupContainer()
+        >>> provideAdapter(lambda x: gc, adapts=[None], provides=IGroupContainer)
+        >>> world = gc['the_world'] = Group("Others")
+        >>> etria = gc['etria'] = Group("Etria")
+        >>> pov = gc['pov'] = Group("PoV")
+        >>> canonical = gc['canonical'] = Group("Canonical")
+        >>> ms = gc['ms'] = Group("The Enemy")
 
     And we need a table formatter to display our groups:
 
@@ -158,7 +163,15 @@ def doctest_MemberListView():
         >>> app = setup.setUpSchoolToolSite()
         >>> from schooltool.app.interfaces import ISchoolToolApplication
         >>> provideAdapter(lambda context: app, (None,), ISchoolToolApplication)
-        >>> app['groups']['pov'] = pov
+
+        >>> from schooltool.group.group import GroupContainer
+        >>> from zope.component import provideAdapter
+        >>> from schooltool.group.interfaces import IGroupContainer
+        >>> gc = GroupContainer()
+        >>> gc.__parent__, gc.__name__ = app, 'groups'
+        >>> provideAdapter(lambda x: gc, adapts=[None], provides=IGroupContainer)
+
+        >>> gc['pov'] = pov
         >>> app['persons']['gintas'] = gintas
         >>> app['persons']['ignas'] = ignas
         >>> app['persons']['alga'] = alga
@@ -440,6 +453,7 @@ def doctest_GroupEditView():
 
     """
 
+
 def doctest_GroupCSVImporter():
     r"""Tests for GroupCSVImporter.
 
@@ -469,6 +483,7 @@ def doctest_GroupCSVImporter():
         ['Group 1 Description', '', 'Group 3 Description']
 
     """
+
 
 def doctest_GroupCSVImportView():
     r"""Tests for GroupCSVImportView
@@ -512,6 +527,7 @@ def doctest_GroupCSVImportView():
 
     """
 
+
 def doctest_GroupsViewlet():
     r"""Test for GroupsViewlet
 
@@ -535,7 +551,9 @@ def doctest_GroupsViewlet():
         >>> student_view = GroupsViewlet(student, TestRequest())
         >>> [group.title for group in student_view.memberOf()]
         ['Tenth Grade', 'Sports Team']
+
     """
+
 
 def test_suite():
     suite = unittest.TestSuite()

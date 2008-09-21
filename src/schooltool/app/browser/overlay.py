@@ -191,8 +191,6 @@ class CalendarSelectionView(BrowserView):
         return {}
 
     application = property(getApplicationCalendar)
-    persons = property(lambda self: self.getCalendars('persons'))
-    groups = property(lambda self: self.getCalendars('groups'))
     resources = property(lambda self: self.getCalendars('resources'))
 
     def update(self):
@@ -214,7 +212,7 @@ class CalendarSelectionView(BrowserView):
 
     def _updateSelection(self, user):
         """Apply calendar selection changes  for `user`."""
-        for container in 'persons', 'groups', 'resources':
+        for container in ['resources']:
             selected = Set(self.request.form.get(container, []))
             for item in self.getCalendars(container):
                 if item['id'] in selected and not item['selected']:

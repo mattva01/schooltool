@@ -268,6 +268,8 @@ Now we should be able to add commendations to
 - groups,
 
   >>> manager.getLink('Manage').click()
+  >>> manager.getLink('School Years').click()
+  >>> manager.getLink('2007').click()
   >>> manager.getLink('Groups').click()
   >>> manager.getLink('Students').click()
   >>> manager.getLink('Add Commendation')
@@ -297,7 +299,7 @@ one of the students, cannot add new commendations:
   ...
   Unauthorized: ...
 
-  >>> tom.open('http://localhost/groups/students/commendations/@@addCommendation.html')
+  >>> tom.open('http://localhost/schoolyears/2007/groups/students/commendations/@@addCommendation.html')
   Traceback (most recent call last):
   ...
   Unauthorized: ...
@@ -310,7 +312,7 @@ one of the students, cannot add new commendations:
 On the other hand, since the commendations are public, he can view them:
 
   >>> tom.open('http://localhost/persons/manager/commendations')
-  >>> tom.open('http://localhost/groups/students/commendations')
+  >>> tom.open('http://localhost/schoolyears/2007/groups/students/commendations')
   >>> tom.open('http://localhost/schoolyears/2007/winter/sections/1/commendations')
 
 And that's all.

@@ -9,15 +9,12 @@ XXX: Review with David Welsh for accuracy.
 Setup / Create Manager
 ----------------------
 
-    >>> from zope.testbrowser.testing import Browser
-    >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
-    >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/')
+    >>> manager = Browser('manager', 'schooltool')
 
 Let's create several people who have different permissions for resource booking:
 
-    >>> from schooltool.app.browser.ftests.setup import addPerson
+    >>> from schooltool.app.browser.ftests.setup import addPerson, setUpBasicSchool
+    >>> setUpBasicSchool()
     >>> addPerson('Teacher', 'teacher', 'pwd')
     >>> addPerson('Leader', 'leader', 'pwd')
 
@@ -33,15 +30,8 @@ Now lets create a resources that can be booked:
 
 Create new Browsers for 'Teacher' & 'Leader' and log them in
 
-    >>> teacher = Browser()
-    >>> teacher.addHeader('Authorization', 'Basic teacher:pwd')
-    >>> teacher.handleErrors = False
-    >>> teacher.open('http://localhost/')
-
-    >>> leader = Browser()
-    >>> leader.addHeader('Authorization', 'Basic leader:pwd')
-    >>> leader.handleErrors = False
-    >>> leader.open('http://localhost/')
+    >>> teacher = Browser('teacher', 'pwd')
+    >>> leader = Browser('leader', 'pwd')
 
 Our users are neither in the teacher group, nor leaders of
 the resource, but they should still be able to see the resource
@@ -53,8 +43,7 @@ to know when it is in use because they are logged in.
     >>> teacher.url
     'http://localhost/resources/classroom'
 
-The teacher (as an authenticated user) should be able to view the
-calendar for a resource.
+The teacher should be able to view the calendar for a resource.
 
     >>> teacher.getLink('View Calendar').click()
 
@@ -68,6 +57,8 @@ But he should not be able to add the events (even if he can guess the url):
 Now we will put these people into the teacher group
 
     >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('2005-2006').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('Teachers').click()
     >>> manager.getLink('edit members').click()

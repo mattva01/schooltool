@@ -6,11 +6,12 @@ Setup
 
 We need an application with a few groups and persons.
 
-    >>> from zope.testbrowser.testing import Browser
-    >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
-    >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/')
+    >>> manager = Browser('manager', 'schooltool')
+
+Set up the basic school:
+
+    >>> from schooltool.app.browser.ftests.setup import setUpBasicSchool
+    >>> setUpBasicSchool()
 
 A bunch of persons:
 
@@ -43,6 +44,8 @@ A bunch of persons:
 A bunch of groups:
 
     >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Year').click()
+    >>> manager.getLink('2005-2006').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('Import Groups').click()
 
@@ -75,6 +78,8 @@ Group member view
 Let's go to a group, and look at its members.
 
     >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Year').click()
+    >>> manager.getLink('2005-2006').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('group001').click()
     >>> manager.getLink('edit members').click()

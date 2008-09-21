@@ -78,6 +78,13 @@
       title="View"
       />
 
+  <page
+      name="export.xml"
+      for="schooltool.timetable.interfaces.ITimetableSchema"
+      class=".schema.TimetableSchemaXMLView"
+      permission="schooltool.view"
+      />
+
   <configure package="schooltool.skin">
     <navigationViewlet
       name="ttschemas"

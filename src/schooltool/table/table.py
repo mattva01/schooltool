@@ -200,6 +200,22 @@ class IndexedLocaleAwareGetterColumn(IndexedGetterColumn):
         return s and self._cached_collator.key(s)
 
 
+class NullTableFormatter(object):
+    implements(ITableFormatter)
+
+    filter_widget = None
+    batch = None
+
+    def __init__(self, context, request):
+        self.context, self.request = context, request
+
+    def setUp(self, **kwargs):
+        pass
+
+    def render(self):
+        return ""
+
+
 class SchoolToolTableFormatter(object):
     implements(ITableFormatter)
 

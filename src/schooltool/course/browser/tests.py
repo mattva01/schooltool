@@ -23,6 +23,7 @@ $Id$
 """
 import unittest
 
+from zope.location.location import locate
 from zope.i18n import translate
 from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
@@ -78,9 +79,8 @@ def doctest_CourseAddView():
         ...     fieldNames = ('title', 'description')
         ...     _factory = Course
 
-
-        >>> app = setup.setUpSchoolToolSite()
-        >>> container = app['courses']
+        >>> from schooltool.course.course import CourseContainer
+        >>> container = CourseContainer()
         >>> request = TestRequest()
         >>> context = AddingStub(container, request)
         >>> context = container
@@ -374,8 +374,14 @@ def doctest_SectionAddView():
 
         >>> app = setup.setUpSchoolToolSite()
         >>> directlyProvides(app, IContainmentRoot)
-        >>> sections = app['sections']
-        >>> courses = app['courses']
+        >>> from schooltool.course.section import SectionContainer
+        >>> sections = SectionContainer()
+        >>> locate(sections, app, 'sections')
+        >>> from schooltool.course.course import CourseContainer
+        >>> courses = CourseContainer()
+        >>> from schooltool.course.interfaces import ICourseContainer
+        >>> provideAdapter(lambda x: courses, adapts=[ISectionContainer],
+        ...                                   provides=ICourseContainer)
         >>> course = Course(title="Algebra I")
         >>> courses['algebraI'] = course
 
@@ -713,8 +719,11 @@ def doctest_SectionLearnerGroupView():
         >>> from schooltool.group.group import Group
         >>> school = setup.setUpSchoolToolSite()
         >>> provideAdapter(lambda context: school, (None,), ISchoolToolApplication)
-        >>> groups = school['groups']
         >>> directlyProvides(school, IContainmentRoot)
+        >>> from schooltool.group.group import GroupContainer
+        >>> from schooltool.group.interfaces import IGroupContainer
+        >>> groups = GroupContainer()
+        >>> provideAdapter(lambda context: groups, (None,), IGroupContainer)
         >>> frogs = groups['frogs'] = Group('frogs', 'Bunch of frogs')
         >>> lilies = groups['lilies'] = Group('lilies', 'Lillie pond')
         >>> bugs = groups['bugs'] = Group('bugs', "Lot's o Bugs")
@@ -761,7 +770,8 @@ def doctest_CoursesViewlet():
 
         >>> school = setup.setUpSchoolToolSite()
         >>> persons = school['persons']
-        >>> sections = school['sections']
+        >>> from schooltool.course.section import SectionContainer
+        >>> sections = SectionContainer()
 
         >>> persons['teacher'] = teacher = Person("Teacher")
         >>> teacher_view = CoursesViewlet(teacher, TestRequest())

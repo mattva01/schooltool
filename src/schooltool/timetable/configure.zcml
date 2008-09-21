@@ -187,7 +187,6 @@
   </configure>
 
   <include package=".browser" />
-  <include package=".rest" />
 
   <security:allow
       interface="schooltool.timetable.interfaces.ITimetableSchemaContainer"

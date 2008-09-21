@@ -1,13 +1,12 @@
 Functional test for instructor access to students' data
 =======================================================
 
-    >>> from zope.testbrowser.testing import Browser
-    >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
-    >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/')
-    >>> 'SchoolTool' in manager.contents
-    True
+    >>> manager = Browser('manager', 'schooltool')
+
+Set up the basic school:
+
+    >>> from schooltool.app.browser.ftests.setup import setUpBasicSchool
+    >>> setUpBasicSchool()
 
 Let's create a coupe of persons who will be students and teachers:
 
@@ -18,6 +17,8 @@ Let's create a coupe of persons who will be students and teachers:
 Also, let's create a group:
 
     >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Year').click()
+    >>> manager.getLink('2005-2006').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('New Group').click()
 
@@ -86,13 +87,8 @@ Let's make the frog a teacher:
 
 The frog cannot see the toad's personal info:
 
-    >>> frog = Browser()
-    >>> frog.open('http://localhost/')
-    >>> frog.getLink('Log In').click()
-    >>> frog.getControl('Username').value = 'frog'
-    >>> frog.getControl('Password').value = 'pwd'
-    >>> frog.getControl('Log in').click()
-
+    >>> frog = Browser('frog', 'pwd')
+    >>> frog.handleErrors = True
     >>> frog.open('http://localhost/persons/toad')
     >>> print frog.url
     http://localhost/auth/@@login.html?forbidden=yes&nexturl=...

@@ -1,10 +1,15 @@
 """
 High-level setup functions for functional tests.
-
-$Id$
 """
-
+from schooltool.testing.functional import TestBrowser
 from zope.testbrowser.testing import Browser
+
+
+def setUpBasicSchool():
+    addSchoolYear('2005-2006', '05/09/01', '06/07/15')
+    schoolyear = '2005-2006'
+    addTerm('Fall', '2005-09-01', '2006-01-31', '2005-2006')
+    addTerm('Spring', '2006-02-01', '2006-07-15', '2005-2006')
 
 
 def logInManager():
@@ -21,7 +26,7 @@ def logIn(username, password=None):
     """Create a Browser instance and log in."""
     if not password:
         password = username + 'pwd'
-    browser = Browser()
+    browser = TestBrowser()
     browser.handleErrors = False
     browser.open('http://localhost/')
     browser.getLink('Log In').click()
@@ -29,6 +34,8 @@ def logIn(username, password=None):
     browser.getControl('Password').value = password
     browser.getControl('Log in').click()
     assert 'Log Out' in browser.contents
+    browser.username = username
+    browser.password = password
     return browser
 
 

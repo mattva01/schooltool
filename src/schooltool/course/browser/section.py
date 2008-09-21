@@ -37,6 +37,7 @@ from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.person.interfaces import IPerson
+from schooltool.group.interfaces import IGroupContainer
 from schooltool.group.interfaces import IGroup
 from schooltool.term.interfaces import ITerm
 from schooltool.timetable.interfaces import ITimetables
@@ -45,6 +46,7 @@ from schooltool.skin.containers import ContainerView
 from schooltool.app.browser.app import BaseEditView
 
 from schooltool.common import SchoolToolMessage as _
+from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.interfaces import ISection, ISectionContainer
 from schooltool.course.section import Section
 from schooltool.app.browser.app import RelationshipViewBase
@@ -139,9 +141,8 @@ class SectionAddView(AddView):
     """A view for adding Sections."""
 
     def getCourseFromId(self, cid):
-        app = ISchoolToolApplication(None)
         try:
-            return app['courses'][cid]
+            return ICourseContainer(self.context.context)[cid]
         except KeyError:
             self.error = _("No such course.")
 
@@ -247,4 +248,4 @@ class SectionLearnerGroupView(RelationshipEditConfView):
         return filter(IGroup.providedBy, self.getCollection())
 
     def getAvailableItemsContainer(self):
-        return ISchoolToolApplication(None)['groups']
+        return IGroupContainer(self.context)

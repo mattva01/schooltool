@@ -66,3 +66,9 @@ class IGroupContained(IGroup, IContained):
     """Group contained in an IGroupContainer."""
 
     container.constraints.containers(IGroupContainer)
+
+
+class IGroupContainerContainer(container.interfaces.IContainer):
+    """Container of group containers."""
+
+    container.constraints.contains(IGroupContainer)
