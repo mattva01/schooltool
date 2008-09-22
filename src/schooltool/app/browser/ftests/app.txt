@@ -4,13 +4,7 @@ Functional doctest for SchoolTool
 This is a functional doctest for schooltool.  To find out more about
 functional doctests, read Zope3/src/zope/app/ftests/doctest.txt
 
-    >>> from zope.testbrowser.testing import Browser
-    >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
-    >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/')
-    >>> 'SchoolTool' in manager.contents
-    True
+    >>> manager = Browser('manager', 'schooltool')
 
 The SchoolTool version is displayed on the page:
 
@@ -62,6 +56,7 @@ Let's make sure that we can see the SchoolTool preferences page:
 We should be able to see schemas without authenticating:
 
     >>> anonymous = Browser()
+    >>> anonymous.handleErrors = True
     >>> anonymous.open('http://localhost/ttschemas')
     >>> anonymous.headers['status']
     '200 Ok'
@@ -150,6 +145,7 @@ Looking at the section:
 
 Frog can't see the section's calendar by default
 
+    >>> frog.handleErrors = True
     >>> frog.open('http://localhost/schoolyears/2007/term-1/sections/1/calendar')
     >>> print frog.url
     http://localhost/auth/@@login.html?forbidden=yes&nexturl=...
@@ -176,12 +172,7 @@ calendar:
 
 As does Toad's:
 
-    >>> toad = Browser()
-    >>> toad.open('http://localhost/')
-    >>> toad.getLink('Log In').click()
-    >>> toad.getControl('Username').value = 'toad'
-    >>> toad.getControl('Password').value = 'doat'
-    >>> toad.getControl('Log in').click()
+    >>> toad = Browser('toad', 'doat')
 
     >>> toad.getLink('Calendar').click()
     >>> print_portlet(toad.contents)

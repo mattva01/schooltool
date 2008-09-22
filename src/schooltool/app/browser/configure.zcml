@@ -260,6 +260,20 @@
       layer="schooltool.skin.ISchoolToolLayer"
       />
 
+  <page
+      name="title"
+      for="*"
+      class=".app.TitleView"
+      permission="zope.Public"
+      layer="schooltool.skin.ISchoolToolLayer" />
+
+  <page
+      name="link"
+      for="*"
+      layer="schooltool.skin.ISchoolToolLayer"
+      template="templates/link.pt"
+      permission="zope.Public"/>
+
   <!-- Calendar views -->
 
   <!-- Sigh. Cannot specify multiple for and permission in subsscriber ;-( -->

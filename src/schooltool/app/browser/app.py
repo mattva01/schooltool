@@ -414,3 +414,9 @@ class HTTPCalendarView(BrowserView):
         adapter = IWriteCalendar(self.context)
         adapter.write(data, charset)
         return ''
+
+
+class TitleView(BrowserView):
+
+    def __call__(self):
+        return self.context.title

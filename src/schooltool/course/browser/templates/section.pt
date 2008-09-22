@@ -1,20 +1,26 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title" tal:content="context/title" />
+  <title i18n:translate="">
+    Section of
+    <tal:loop tal:repeat="course context/courses" i18n:name="course">
+      <a tal:replace="structure course/@@title" />
+    </tal:loop>
+    -- <span i18n:name="section_title" tal:replace="structure context/@@title" />
+    for
+    <tal:block i18n:name="term" tal:replace="structure view/term/@@title"/> of
+    <tal:block i18n:name="schoolyear" tal:replace="structure view/school_year/@@title" />
+  </title>
 </head>
 <body>
   <h1 metal:fill-slot="content-header" i18n:translate="">
     Section of
     <tal:loop tal:repeat="course context/courses" i18n:name="course">
-      <a tal:attributes="href course/@@absolute_url"
-         tal:content="course/title"/>
+      <a tal:replace="structure course/@@link" />
     </tal:loop>
-    -- <span tal:replace="context/title" />
+    -- <span i18n:name="section_title" tal:replace="structure context/@@title" />
     for
-    <tal:block i18n:name="term"><a tal:attributes="href view/term/@@absolute_url"
-                                   tal:content="view/term/title">Term</a></tal:block> of
-    <tal:block i18n:name="schoolyear"><a tal:attributes="href view/school_year/@@absolute_url"
-                                         tal:content="view/school_year/title">School Year</a></tal:block>
+    <tal:block i18n:name="term" tal:replace="structure view/term/@@link"/> of
+    <tal:block i18n:name="schoolyear" tal:replace="structure view/school_year/@@link" />
   </h1>
 
 <metal:block metal:fill-slot="body">
