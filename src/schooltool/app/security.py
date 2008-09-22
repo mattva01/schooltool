@@ -178,14 +178,6 @@ class PersonContainerAuthenticationPlugin(object):
                 if everyone:
                     principal.groups.append(everyone.id)
                 return principal
-
-        if id.startswith(self.group_prefix):
-            group_name = id[len(self.group_prefix):]
-            if group_name in app['groups']:
-                group = app['groups'][group_name]
-                # Group membership is not supported in SB, so we don't bother
-                # filling in principal.groups.
-                return Principal(id, group.title)
         return None
 
     def setCredentials(self, request, username, password):
