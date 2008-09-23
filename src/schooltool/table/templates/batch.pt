@@ -13,7 +13,7 @@
 
   <div class="batch-extra-navigation">
 
-    <a tal:attributes="href string:${view/base_url}?batch_size.${view/name}=10"
+    <a tal:attributes="href string:${view/base_url}?batch_size${view/name}=10"
        tal:condition="python:view.size > 10"
        i18n:translate=""
        class="less">Show Less</a>

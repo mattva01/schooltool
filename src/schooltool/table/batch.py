@@ -61,7 +61,7 @@ class Batch(object):
     @property
     def needsBatch(self):
         there_are_more = self.full_size > self.size + self.start
-        there_were_before = self.start - self.size > 0
+        there_were_before = self.start > 0
         return there_are_more or there_were_before
 
     def __len__(self):
