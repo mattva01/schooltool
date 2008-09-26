@@ -751,6 +751,10 @@ class ITimetableSchemaContainer(IContainer, ILocation):
         """Return the default schema for the school"""
 
 
+class ITimetableSchemaContainerContainer(IContainer, ILocation):
+    contains(ITimetableSchemaContainer)
+
+
 class ITimetableSchemaContained(ITimetableSchema, IContained):
     """Timetable Schema contained in an ITimetableSchemaContainer."""
 

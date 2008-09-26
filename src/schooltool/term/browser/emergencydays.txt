@@ -22,38 +22,13 @@ Set up
 First of all, we need an app object:
 
     >>> app = sbsetup.setUpSchoolToolSite()
-
-We have a timetable schema to put the view on:
-
-    >>> from schooltool.timetable.browser import SpecialDayView
-    >>> ttschema = createSchema(['Day 1', 'Day 2'],
-    ...                         ['First',
-    ...                          'Second',
-    ...                          'Third',
-    ...                          'Fourth'],
-    ...                         ['First',
-    ...                          'Second',
-    ...                          'Third',
-    ...                          'Fourth'])
-    >>> app['ttschemas']['usual'] = ttschema
-    >>> ttschema1 = createSchema(['Day 1', 'Day 2', 'Day 3'],
-    ...                          ['First', 'Second', 'Third', 'Fourth'],
-    ...                          ['First', 'Second', 'Third', 'Fourth'],
-    ...                          ['First', 'Second', 'Third', 'Fourth'])
-    >>> app['ttschemas']['unusual'] = ttschema1
-
-The schemas have a model attribute:
-
-    >>> from schooltool.timetable.model import SequentialDaysTimetableModel
-    >>> default = createDayTemplate([(9, 0, 45),
-    ...                              (10, 0, 45),
-    ...                              (11, 0, 45),
-    ...                              (12, 0, 45)])
-    >>> ttschema.model = SequentialDaysTimetableModel(['Day 1', 'Day 2'],
-    ...                                               {None: default})
-    >>> ttschema1.model = SequentialDaysTimetableModel(
-    ...     ['Day 1', 'Day 2', 'Day 3'],
-    ...     {None: default})
+    >>> from schooltool.timetable.schema import TimetableSchemaContainer
+    >>> schemas = TimetableSchemaContainer()
+    >>> from zope.component import provideAdapter
+    >>> from schooltool.timetable.interfaces import ITimetableSchemaContainer
+    >>> provideAdapter(lambda x: schemas, adapts=[Interface], provides=ITimetableSchemaContainer)
+    >>> from zope.location.location import locate
+    >>> locate(schemas, app, 'ttschemas')
 
 We will need a schoolyear with a term:
 
@@ -73,6 +48,38 @@ We will need a schoolyear with a term:
     >>> from schooltool.term.interfaces import ITermContainer
     >>> ITermContainer(app)["2005-summer"] = term
     >>> term.addWeekdays(0, 1, 2, 3, 4, 5)
+
+We have a timetable schema to put the view on:
+
+    >>> from schooltool.timetable.browser import SpecialDayView
+    >>> ttschema = createSchema(['Day 1', 'Day 2'],
+    ...                         ['First',
+    ...                          'Second',
+    ...                          'Third',
+    ...                          'Fourth'],
+    ...                         ['First',
+    ...                          'Second',
+    ...                          'Third',
+    ...                          'Fourth'])
+    >>> schemas['usual'] = ttschema
+    >>> ttschema1 = createSchema(['Day 1', 'Day 2', 'Day 3'],
+    ...                          ['First', 'Second', 'Third', 'Fourth'],
+    ...                          ['First', 'Second', 'Third', 'Fourth'],
+    ...                          ['First', 'Second', 'Third', 'Fourth'])
+    >>> schemas['unusual'] = ttschema1
+
+The schemas have a model attribute:
+
+    >>> from schooltool.timetable.model import SequentialDaysTimetableModel
+    >>> default = createDayTemplate([(9, 0, 45),
+    ...                              (10, 0, 45),
+    ...                              (11, 0, 45),
+    ...                              (12, 0, 45)])
+    >>> ttschema.model = SequentialDaysTimetableModel(['Day 1', 'Day 2'],
+    ...                                               {None: default})
+    >>> ttschema1.model = SequentialDaysTimetableModel(
+    ...     ['Day 1', 'Day 2', 'Day 3'],
+    ...     {None: default})
 
 Now we can create the view:
 

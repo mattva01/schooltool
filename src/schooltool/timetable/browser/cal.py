@@ -34,6 +34,7 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.browser.cal import DailyCalendarRowsView
 from schooltool.app.browser.cal import YearlyCalendarView
+from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.term.term import getTermForDate
 
 
@@ -115,7 +116,9 @@ class DailyTimetableCalendarRowsView(DailyCalendarRowsView):
         time periods, or it happens to be a holiday).
         """
         schooldays = getTermForDate(date)
-        ttcontainer = ISchoolToolApplication(None)['ttschemas']
+        ttcontainer = ITimetableSchemaContainer(ISchoolToolApplication(None), None)
+        if ttcontainer is None:
+            return []
         if ttcontainer.default_id is None or schooldays is None:
             return []
         ttschema = ttcontainer.getDefault()

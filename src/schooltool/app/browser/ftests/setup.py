@@ -144,12 +144,14 @@ def addTerm(title, first, last, schoolyear):
     manager.getControl('Add term').click()
 
 
-def addDefaultSchoolTimetable():
+def addDefaultSchoolTimetable(schoolyear='2005-2006'):
     """Creates a school timetable used in some functional tests"""
 
     manager = logInManager()
 
     manager.getLink('Manage').click()
+    manager.getLink('School Years').click()
+    manager.getLink(schoolyear).click()
     manager.getLink('School Timetables').click()
     manager.getLink('New Timetable').click()
     manager.getLink('advanced adding form').click()
@@ -200,7 +202,7 @@ def setUpTimetabling(username):
 
     # Now the timetable:
 
-    manager.open('http://localhost/ttschemas')
+    manager.open('http://localhost/schoolyears/2005-2006/school_timetables')
     manager.getLink('New Timetable').click()
 
     manager.getControl('Title').value = 'default'

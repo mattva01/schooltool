@@ -25,16 +25,25 @@ from persistent import Persistent
 from persistent.dict import PersistentDict
 from sets import Set
 
+from zope.component import adapter
+from zope.component import getUtility
+from zope.interface import implementer
 from zope.interface import implements
 from zope.annotation.interfaces import IAttributeAnnotatable
+from zope.app.intid.interfaces import IIntIds
 from zope.app.container.btree import BTreeContainer
 from zope.app.container.contained import Contained
 from zope.traversing.api import getParent, getName
 
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
+from schooltool.schoolyear.interfaces import ISchoolYear
+from schooltool.term.interfaces import ITerm
 from schooltool.timetable import Timetable, TimetableDay, findRelatedTimetables
 
 from schooltool.timetable.interfaces import ITimetableSchema
 from schooltool.timetable.interfaces import ITimetableSchemaContained
+from schooltool.timetable.interfaces import ITimetableSchemaContainerContainer
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.interfaces import ITimetableSchemaDay
 from schooltool.timetable.interfaces import ITimetableSchemaWrite
@@ -136,6 +145,13 @@ class TimetableSchema(Persistent, Contained):
         return not self.__eq__(other)
 
 
+class TimetableSchemaContainerContainer(BTreeContainer):
+    """Container of Timetable Schema Containers."""
+
+    implements(ITimetableSchemaContainerContainer,
+               IAttributeAnnotatable)
+
+
 class TimetableSchemaContainer(BTreeContainer):
 
     implements(ITimetableSchemaContainer, IAttributeAnnotatable)
@@ -174,3 +190,45 @@ def clearTimetablesOnDeletion(obj, event):
     for tt in findRelatedTimetables(obj):
         ttdict = getParent(tt)
         del ttdict[getName(tt)]
+
+
+@adapter(ISchoolToolApplication)
+@implementer(ITimetableSchemaContainer)
+def getTimetableSchemaContainerForApp(app):
+    syc = ISchoolYearContainer(app)
+    sy = syc.getActiveSchoolYear()
+    if sy is not None:
+        return ITimetableSchemaContainer(sy)
+
+
+@adapter(ISchoolYear)
+@implementer(ITimetableSchemaContainer)
+def getTimetableSchemaContainer(sy):
+    int_ids = getUtility(IIntIds)
+    sy_id = str(int_ids.getId(sy))
+    app = ISchoolToolApplication(None)
+    cc = app['schooltool.timetable.schooltt'].get(sy_id, None)
+    if cc is None:
+        cc = app['schooltool.timetable.schooltt'][sy_id] = TimetableSchemaContainer()
+    return cc
+
+
+@adapter(ITerm)
+@implementer(ITimetableSchemaContainer)
+def getTimetableSchemaContainerForTerm(term):
+    return ITimetableSchemaContainer(ISchoolYear(term))
+
+
+@adapter(ITimetableSchemaContainer)
+@implementer(ISchoolYear)
+def getSchoolYearForTimetableSchemaContainer(ttschema_container):
+    container_id = int(ttschema_container.__name__)
+    int_ids = getUtility(IIntIds)
+    container = int_ids.getObject(container_id)
+    return container
+
+
+@adapter(ITimetableSchema)
+@implementer(ISchoolYear)
+def getSchoolYearForTTschema(ttschema):
+    return ISchoolYear(ttschema.__parent__)

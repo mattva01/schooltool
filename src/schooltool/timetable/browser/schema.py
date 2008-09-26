@@ -22,10 +22,13 @@ Timetabling Schema views.
 $Id$
 """
 from zope.i18n import translate
+from zope.component import getMultiAdapter
+from zope.component import getUtility
 from zope.component import adapts, getUtility, queryUtility
 from zope.interface import Interface, implements
 from zope.schema import TextLine, Int
 from zope.schema.interfaces import RequiredMissing
+from zope.app.intid.interfaces import IIntIds
 from zope.app.container.interfaces import INameChooser
 from zope.app.form.interfaces import IWidgetInputError
 from zope.app.form.interfaces import IInputWidget
@@ -36,6 +39,7 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.common import SchoolToolMessage as _
@@ -53,6 +57,21 @@ from schooltool.timetable.browser import TimetableView, TabindexMixin
 from schooltool.timetable.browser import fix_duplicates, parse_time_range
 from schooltool.timetable.browser import format_timetable_for_presentation
 from schooltool.timetable.browser import format_time_range
+
+
+class TimetableSchemaContainerAbsoluteURLAdapter(BrowserView):
+
+    adapts(ITimetableSchemaContainer, IBrowserRequest)
+    implements(IAbsoluteURL)
+
+    def __str__(self):
+        container_id = int(self.context.__name__)
+        int_ids = getUtility(IIntIds)
+        container = int_ids.getObject(container_id)
+        url = str(getMultiAdapter((container, self.request), name='absolute_url'))
+        return url + '/school_timetables'
+
+    __call__ = __str__
 
 
 class TimetableSchemaView(TimetableView):
@@ -167,8 +186,7 @@ class SimpleTimetableSchemaAdd(BrowserView):
         for title, start, duration in periods:
             daytemplate.add(SchooldaySlot(start, duration))
 
-        factory = getUtility(ITimetableModelFactory,
-                                  'WeeklyTimetableModel')
+        factory = getUtility(ITimetableModelFactory, 'WeeklyTimetableModel')
         model = factory(self.day_ids, {None: daytemplate})
         app = ISchoolToolApplication(None)
         tzname = IApplicationPreferences(app).timezone
@@ -293,7 +311,7 @@ class AdvancedTimetableSchemaAdd(BrowserView, TabindexMixin):
         if 'CREATE' in self.request:
             data = getWidgetsData(self, self._schema)
             factory = queryUtility(ITimetableModelFactory,
-                                        name=self.model_name)
+                                   name=self.model_name)
             if factory is None:
                 self.model_error = _("Please select a value")
             if not self.title_widget.error() and not self.model_error:

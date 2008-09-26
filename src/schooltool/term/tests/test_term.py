@@ -169,16 +169,6 @@ class TestGetTermForDate(unittest.TestCase):
         terms = ITermContainer(app)
         terms['2004-fall'] = self.term1
         terms['2005-spring'] = self.term2
-
-        class TimetableModelStub:
-            def periodsInDay(self, schooldays, ttschema, date):
-                return 'periodsInDay', schooldays, ttschema, date
-
-        from schooltool.timetable.schema import TimetableSchema
-        tt = TimetableSchema([])
-        tt.model = TimetableModelStub()
-        self.tt = tt
-        app["ttschemas"]['default'] = tt
         self.app = app
 
     def tearDown(self):

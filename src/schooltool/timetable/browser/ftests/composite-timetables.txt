@@ -42,7 +42,7 @@ Add a schoolyear and a term:
 Add Schema:
 
     >>> from schooltool.app.browser.ftests import setup
-    >>> setup.addDefaultSchoolTimetable()
+    >>> setup.addDefaultSchoolTimetable(schoolyear='2003')
 
 Add 2 groups:
 

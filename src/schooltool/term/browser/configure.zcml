@@ -58,4 +58,7 @@
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory="schooltool.table.table.SchoolToolTableFormatter " />
 
+  <zope:adapter
+      factory=".emergency.getTimetableSchemaContainerForTerm" />
+
 </configure>

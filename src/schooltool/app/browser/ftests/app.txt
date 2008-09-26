@@ -53,16 +53,10 @@ Let's make sure that we can see the SchoolTool preferences page:
     >>> 'cal_periods' in frog.contents
     True
 
-We should be able to see schemas without authenticating:
+But you have to log in to see persons, groups, and other locations:
 
     >>> anonymous = Browser()
     >>> anonymous.handleErrors = True
-    >>> anonymous.open('http://localhost/ttschemas')
-    >>> anonymous.headers['status']
-    '200 Ok'
-
-But you have to log in to see persons, groups, and other locations:
-
     >>> anonymous.open('http://localhost/persons')
     >>> print anonymous.url
     http://localhost/auth/@@login.html?forbidden=yes&nexturl=...

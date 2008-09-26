@@ -170,6 +170,13 @@ def doctest_SectionTimetableSetupView():
     We will need an application object
 
         >>> app = sbsetup.setUpSchoolToolSite()
+        >>> from schooltool.timetable.schema import TimetableSchemaContainer
+        >>> schemas = TimetableSchemaContainer()
+
+        >>> from schooltool.timetable.interfaces import ITimetableSchemaContainer
+        >>> ztapi.provideAdapter(Interface, ITimetableSchemaContainer,
+        ...                      lambda x: schemas)
+
         >>> ztapi.provideAdapter(IOwnTimetables, ITimetables,
         ...                      TimetablesAdapter)
         >>> from zope.app.container.interfaces import INameChooser
@@ -195,9 +202,9 @@ def doctest_SectionTimetableSetupView():
 
     We will also need a timetable schema, and a term.
 
-        >>> app["ttschemas"]["default"] = createSchema(["Mon", "Tue"],
-        ...                                            ["9:00", "10:00"],
-        ...                                            ["9:00", "10:00"])
+        >>> schemas["default"] = createSchema(["Mon", "Tue"],
+        ...                                   ["9:00", "10:00"],
+        ...                                   ["9:00", "10:00"])
 
 
         >>> from schooltool.schoolyear.schoolyear import SchoolYear
@@ -236,7 +243,7 @@ def doctest_SectionTimetableSetupView():
 
     Another term and schema:
 
-        >>> app["ttschemas"]["other"] = createSchema([], [])
+        >>> schemas["other"] = createSchema([], [])
         >>> ITermContainer(app)["2005-fall"] = Term('2005 Fall',
         ...                                         datetime.date(2004, 9, 1),
         ...                                         datetime.date(2004, 12, 31))
@@ -247,13 +254,13 @@ def doctest_SectionTimetableSetupView():
     We have getSchema from the Mixin class to get the schema from the request
     or choose a default.
 
-        >>> view.getSchema() is app["ttschemas"].getDefault()
+        >>> view.getSchema() is schemas.getDefault()
         True
         >>> request.form['ttschema'] = 'other'
-        >>> view.getSchema() is app["ttschemas"]["other"]
+        >>> view.getSchema() is schemas["other"]
         True
         >>> request.form['ttschema'] = 'default'
-        >>> view.getSchema() is app["ttschemas"]["default"]
+        >>> view.getSchema() is schemas["default"]
         True
 
     If we cancel the form, we get redirected to the section

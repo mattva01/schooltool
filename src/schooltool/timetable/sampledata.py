@@ -26,6 +26,7 @@ from zope.interface import implements
 
 from schooltool.sampledata.interfaces import ISampleDataPlugin
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot
+from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.schema import TimetableSchema, TimetableSchemaDay
 from schooltool.timetable.model import SequentialDayIdBasedTimetableModel
 
@@ -64,4 +65,4 @@ class SampleTimetableSchema(object):
         for idx, day_id in enumerate(day_ids):
             periods = period_ids[idx:] + period_ids[:idx]
             ttschema[day_id] = TimetableSchemaDay(periods, periods[0])
-        app['ttschemas']['simple'] = ttschema
+        ITimetableSchemaContainer(app)['simple'] = ttschema

@@ -40,6 +40,7 @@ from schooltool.timetable import SchooldaySlot
 from schooltool.timetable import SchooldayTemplate
 from schooltool.timetable import DuplicateTimetableError
 from schooltool.timetable.model import WeeklyTimetableModel
+from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.timetable.interfaces import ITimetable, ITimetableActivity
@@ -967,7 +968,23 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
        >>> app = ISchoolToolApplication(None)
        >>> directlyProvides(app, IOwnTimetables)
 
-    Let's create a timetable schema:
+    Let's creare a schoolyear and a couple of terms:
+
+       >>> from schooltool.schoolyear.schoolyear import SchoolYear
+       >>> from schooltool.schoolyear.interfaces import ISchoolYearContainer
+       >>> schoolyears = ISchoolYearContainer(app)
+       >>> schoolyears['2005-2006'] = SchoolYear("2005-2006",
+       ...                                       date(2005, 1, 1),
+       ...                                       date(2006, 12, 31))
+
+       >>> from schooltool.term.interfaces import ITermContainer
+       >>> from schooltool.term.term import Term
+       >>> t1 = ITermContainer(app)['2005'] = Term('2005', date(2005, 1, 1),
+       ...                                         date(2005, 12, 31))
+       >>> t2 = ITermContainer(app)['2006'] = Term('2006', date(2006, 1, 1),
+       ...                                         date(2006, 12, 31))
+
+    and a timetable schema:
 
        >>> from schooltool.timetable.schema import TimetableSchema
        >>> from schooltool.timetable.schema import TimetableSchemaDay
@@ -983,24 +1000,8 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
        >>> tts2["C"] = TimetableSchemaDay(periods1)
        >>> tts2["D"] = TimetableSchemaDay(periods1)
 
-       >>> app['ttschemas']['simple'] = tts
-       >>> app['ttschemas']['other'] = tts2
-
-    a schoolyear and a couple of terms:
-
-       >>> from schooltool.schoolyear.schoolyear import SchoolYear
-       >>> from schooltool.schoolyear.interfaces import ISchoolYearContainer
-       >>> schoolyears = ISchoolYearContainer(app)
-       >>> schoolyears['2005-2006'] = SchoolYear("2005-2006",
-       ...                                       date(2005, 1, 1),
-       ...                                       date(2006, 12, 31))
-
-       >>> from schooltool.term.interfaces import ITermContainer
-       >>> from schooltool.term.term import Term
-       >>> t1 = ITermContainer(app)['2005'] = Term('2005', date(2005, 1, 1),
-       ...                                         date(2005, 12, 31))
-       >>> t2 = ITermContainer(app)['2006'] = Term('2006', date(2006, 1, 1),
-       ...                                         date(2006, 12, 31))
+       >>> ITimetableSchemaContainer(app)['simple'] = tts
+       >>> ITimetableSchemaContainer(app)['other'] = tts2
 
     Now we can call our utility function.  Since our schema is not
     used, an empty list is returned:
@@ -1123,12 +1124,12 @@ def doctest_findRelatedTimetables_forTerm():
        >>> tts = TimetableSchema(days, model=makeTimetableModel())
        >>> tts["A"] = TimetableSchemaDay(periods1)
        >>> tts["B"] = TimetableSchemaDay(periods1)
-       >>> app['ttschemas']['simple'] = tts
+       >>> ITimetableSchemaContainer(app)['simple'] = tts
 
        >>> tts_other = TimetableSchema(days, model=makeTimetableModel())
        >>> tts_other["A"] = TimetableSchemaDay(periods1)
        >>> tts_other["B"] = TimetableSchemaDay(periods1)
-       >>> app['ttschemas']['other'] = tts_other
+       >>> ITimetableSchemaContainer(app)['other'] = tts_other
 
     Now we can call our utility function.  Since our schema is not
     used, an empty list is returned:

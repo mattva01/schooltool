@@ -18,13 +18,12 @@
 #
 """
 Tests for schooltool timetable schema views.
-
-$Id$
 """
-
 import unittest
 from pprint import pprint
 
+from zope.component import provideAdapter
+from zope.location.location import locate
 from zope.interface import Interface
 from zope.interface import directlyProvides
 from zope.interface import directlyProvidedBy
@@ -43,6 +42,7 @@ from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.testing import setup as sbsetup
 from schooltool.testing.util import XMLCompareMixin
 from schooltool.testing.util import NiceDiffsMixin
+from schooltool.timetable.schema import TimetableSchemaContainer
 from schooltool.timetable.model import WeeklyTimetableModel
 from schooltool.timetable.model import SequentialDaysTimetableModel
 from schooltool.timetable.interfaces import ITimetableModelFactory
@@ -63,6 +63,8 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
     def setUp(self):
         setUp()
         self.app = sbsetup.setUpSchoolToolSite()
+        self.ttschemas = TimetableSchemaContainer()
+        locate(self.ttschemas, self.app, 'ttschemas')
         IApplicationPreferences(self.app).timezone = 'Asia/Tokyo'
 
         # Register the timetable models
@@ -75,6 +77,9 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
         ztapi.provideAdapter(ITimetableSchemaContainer,
                              INameChooser,
                              SimpleNameChooser)
+        ztapi.provideAdapter(Interface,
+                             ITimetableSchemaContainer,
+                             lambda x: self.ttschemas)
 
     def tearDown(self):
         tearDown()
@@ -82,7 +87,7 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
     def createView(self, request=None):
         from schooltool.timetable.browser.schema import \
              AdvancedTimetableSchemaAdd
-        context = self.app["ttschemas"]
+        context = self.ttschemas
         context['default'] = createSchema(['Day 1'], ['Period 1'])
         if request is None:
             request = TestRequest()
@@ -472,6 +477,11 @@ def doctest_SimpleTimetableSchemaAdd():
         ...                      INameChooser,
         ...                      SimpleNameChooser)
 
+        >>> schemas = TimetableSchemaContainer()
+        >>> ztapi.provideAdapter(Interface,
+        ...                      ITimetableSchemaContainer,
+        ...                      lambda x: schemas)
+
     Suppose we have a SchoolTool instance, and create a view for its
     timetable schemas container:
 
@@ -481,7 +491,10 @@ def doctest_SimpleTimetableSchemaAdd():
         >>> request = TestRequest()
         >>> from schooltool.timetable.browser.schema import \
         ...      SimpleTimetableSchemaAdd
-        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
+        >>> view = SimpleTimetableSchemaAdd(schemas, request)
+
+        >>> from zope.location.location import locate
+        >>> locate(schemas, app, 'ttschemas')
 
     Let's render it.  There is a widget for title there:
 
@@ -530,7 +543,7 @@ def doctest_SimpleTimetableSchemaAdd():
         ...                             'field.period_name_4': '',
         ...                             'CREATE': 'Go'
         ...                            })
-        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
+        >>> view = SimpleTimetableSchemaAdd(schemas, request)
 
     getPeriods should extract a list of periods:
 
@@ -589,7 +602,7 @@ def doctest_SimpleTimetableSchemaAdd():
         ...                             'field.period_finish_2': '10:45',
         ...                             'CREATE': 'Go'
         ...                            })
-        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
+        >>> view = SimpleTimetableSchemaAdd(schemas, request)
 
         >>> pprint(view.getPeriods())
         [(u'9:00',
@@ -613,7 +626,7 @@ def doctest_SimpleTimetableSchemaAdd():
         ...                             'field.period_name_4': '',
         ...                             'CANCEL': 'Cancel'
         ...                            })
-        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
+        >>> view = SimpleTimetableSchemaAdd(schemas, request)
         >>> result = view()
         >>> list(view.context.keys())
         [u'default']
@@ -634,7 +647,7 @@ def doctest_SimpleTimetableSchemaAdd():
         ...                             'field.period_finish_3': '10:45',
         ...                             'field.period_name_4': '',
         ...                            })
-        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
+        >>> view = SimpleTimetableSchemaAdd(schemas, request)
         >>> view.getPeriods()
         [(u'Period 1',
           datetime.time(9, 0),
@@ -657,7 +670,7 @@ def doctest_SimpleTimetableSchemaAdd():
         ...                             'field.period_start_3': '11:00',
         ...                             'field.period_finish_3': '',
         ...                            })
-        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
+        >>> view = SimpleTimetableSchemaAdd(schemas, request)
         >>> view.getPeriods()
         [(u'Period 1',
           datetime.time(9, 0),
@@ -673,7 +686,7 @@ def doctest_SimpleTimetableSchemaAdd():
         ...                             'field.period_start_2': '10h',
         ...                             'field.period_finish_2': '',
         ...                            })
-        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
+        >>> view = SimpleTimetableSchemaAdd(schemas, request)
 
     getPeriods fails:
 
@@ -703,13 +716,13 @@ def doctest_SimpleTimetableSchemaAdd():
         ...                             'field.period_finish_1': '10:00',
         ...                             'CREATE': 'Create'
         ...                            })
-        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
+        >>> view = SimpleTimetableSchemaAdd(schemas, request)
         >>> from schooltool.timetable.schema import TimetableSchema
-        >>> app['ttschemas']['already'] = TimetableSchema([])
+        >>> schemas['already'] = TimetableSchema([])
         >>> result = view()
         >>> request.response.getStatus() == 302
         True
-        >>> 'already-2' in app['ttschemas']
+        >>> 'already-2' in schemas
         True
 
     """
@@ -727,7 +740,9 @@ def doctest_SimpleTimetableSchemaAdd_errors():
     Suppose we have a SchoolTool instance, and create a view for its
     timetable schemas container:
 
+        >>> from schooltool.timetable.schema import TimetableSchemaContainer
         >>> app = sbsetup.setUpSchoolToolSite()
+        >>> schemas = TimetableSchemaContainer()
 
     No name specified:
 
@@ -740,7 +755,7 @@ def doctest_SimpleTimetableSchemaAdd_errors():
         ...                            })
         >>> from schooltool.timetable.browser.schema import \
         ...      SimpleTimetableSchemaAdd
-        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
+        >>> view = SimpleTimetableSchemaAdd(schemas, request)
         >>> print view()
         <BLANKLINE>
         ...
@@ -783,7 +798,7 @@ def doctest_SimpleTimetableSchemaAdd_errors():
         ...                             'field.period_finish_1': '',
         ...                             'CREATE': 'Create'
         ...                            })
-        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
+        >>> view = SimpleTimetableSchemaAdd(schemas, request)
         >>> print view()
         <BLANKLINE>
         ...
@@ -810,24 +825,28 @@ def doctest_TimetableSchemaContainerView():
     We will need an application:
 
         >>> app = sbsetup.createSchoolToolApplication()
+        >>> schemas = TimetableSchemaContainer()
+        >>> provideAdapter(lambda x: schemas,
+        ...                adapts=[Interface],
+        ...                provides=ITimetableSchemaContainer)
 
     Some timetable schemas:
 
         >>> from schooltool.timetable.schema import TimetableSchema
-        >>> app["ttschemas"]["schema1"] = TimetableSchema([])
-        >>> app["ttschemas"]["schema2"] = TimetableSchema([])
+        >>> schemas["schema1"] = TimetableSchema([])
+        >>> schemas["schema2"] = TimetableSchema([])
 
     Let's create our view:
 
         >>> from schooltool.timetable.browser.schema import \
         ...      TimetableSchemaContainerView
         >>> from zope.publisher.browser import TestRequest
-        >>> view = TimetableSchemaContainerView(app["ttschemas"],
+        >>> view = TimetableSchemaContainerView(schemas,
         ...                                     TestRequest())
 
     The default ttschema id should be "schema1":
 
-        >>> app["ttschemas"].default_id
+        >>> schemas.default_id
         'schema1'
 
     If the view is submited without any data - the default ttschema
@@ -835,7 +854,7 @@ def doctest_TimetableSchemaContainerView():
 
         >>> view.update()
         ''
-        >>> app["ttschemas"].default_id
+        >>> schemas.default_id
         'schema1'
 
     We can change the default schema:
@@ -846,7 +865,7 @@ def doctest_TimetableSchemaContainerView():
         ...                                 })
         >>> view.update()
         ''
-        >>> app["ttschemas"].default_id
+        >>> schemas.default_id
         'schema2'
 
     We can set the default_id to none:
@@ -857,7 +876,7 @@ def doctest_TimetableSchemaContainerView():
         ...                                 })
         >>> view.update()
         ''
-        >>> app["ttschemas"].default_id is None
+        >>> schemas.default_id is None
         True
 
     """
@@ -890,6 +909,9 @@ def doctest_TimetableDependentDeleteView():
         >>> from schooltool.timetable.schema import TimetableSchemaDay
         >>> from schooltool.timetable.interfaces import IOwnTimetables
         >>> app = sbsetup.setUpSchoolToolSite()
+        >>> schemas = TimetableSchemaContainer()
+        >>> from zope.location.location import locate
+        >>> locate(schemas, app, "ttschemas")
         >>> directlyProvides(app, directlyProvidedBy(app) + IOwnTimetables)
 
         >>> days = ('A', 'B')
@@ -903,8 +925,8 @@ def doctest_TimetableDependentDeleteView():
         >>> tts2["C"] = TimetableSchemaDay(periods1)
         >>> tts2["D"] = TimetableSchemaDay(periods1)
 
-        >>> app['ttschemas']['simple'] = tts
-        >>> app['ttschemas']['other'] = tts2
+        >>> schemas['simple'] = tts
+        >>> schemas['other'] = tts2
 
     Let's create a couple of timetables on the application:
 
@@ -917,13 +939,12 @@ def doctest_TimetableDependentDeleteView():
         ...     import TimetableDependentDeleteView
         >>> request = TestRequest(form={'delete.simple': 'on',
         ...                             'CONFIRM': 'Confirm'})
-        >>> view = TimetableDependentDeleteView(app['ttschemas'],
-        ...                                           request)
+        >>> view = TimetableDependentDeleteView(schemas, request)
         >>> view.update()
 
     The timetable schema is deleted:
 
-        >>> list(app['ttschemas'].keys())
+        >>> list(schemas.keys())
         [u'other']
 
     Also, the dependent timetables have been deleted:
@@ -944,13 +965,12 @@ def doctest_TimetableDependentDeleteView():
         ...     import TimetableDependentDeleteView
         >>> request = TestRequest(form={'delete.other': 'on',
         ...                             'CANCEL': 'Cancel'})
-        >>> view = TimetableDependentDeleteView(app['ttschemas'],
-        ...                                           request)
+        >>> view = TimetableDependentDeleteView(schemas, request)
         >>> view.update()
 
     In that case, the data is unchanged:
 
-        >>> list(app['ttschemas'].keys())
+        >>> list(schemas.keys())
         [u'other']
         >>> ITimetables(app).timetables.keys()
         ['2006.other']
@@ -1018,7 +1038,7 @@ class TimetableSchemaMixin(object):
         from schooltool.timetable.interfaces import ITimetableModelFactory
 
         self.app = sbsetup.createSchoolToolApplication()
-        self.schemaContainer = self.app["ttschemas"]
+        self.schemaContainer = TimetableSchemaContainer()
 
         setup.placelessSetUp()
         setup.setUpTraversal()

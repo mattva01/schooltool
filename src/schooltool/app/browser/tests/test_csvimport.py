@@ -30,6 +30,7 @@ from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.app.testing import ztapi
 
+from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.browser.testing import setUp as testSetUp, tearDown
 from schooltool.app.browser.testing import layeredTestSetup, layeredTestTearDown, makeLayeredSuite
@@ -43,6 +44,7 @@ from schooltool.common import dedent
 from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.course import Course
 from schooltool.course.section import Section
+from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.interfaces import ITimetables
 
 __metaclass__ = type
@@ -163,7 +165,7 @@ class TestTimetableCSVImportView(unittest.TestCase):
         ttschema = TimetableSchema(["1","2","3"], model=model)
         for day in range(1, 4):
             ttschema[str(day)] = TimetableSchemaDay([str(day)])
-        self.app['ttschemas']['three-day'] = ttschema
+        ITimetableSchemaContainer(self.app)['three-day'] = ttschema
 
         from schooltool.term.term import Term
         term = Term("Fall term",
@@ -244,8 +246,8 @@ class TestTimetableCSVImportView(unittest.TestCase):
                                         " (incorrect charset?)."])
 
     def test_POST_utf8(self):
-        ttschema = self.app["ttschemas"][u'three-day']
-        self.app["ttschemas"][u'three-day \u263b'] = ttschema
+        ttschema = ITimetableSchemaContainer(self.app)[u'three-day']
+        ITimetableSchemaContainer(self.app)[u'three-day \u263b'] = ttschema
         tt_csv = StringIO('"three-day \xe2\x98\xbb"\n""\n""')
         view = self.createView(form={'csvfile': tt_csv,
                                      'charset': 'UTF-8',
@@ -302,7 +304,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
                                    model=model)
         for day in self.days:
             ttschema[day] = TimetableSchemaDay(self.periods)
-        self.app["ttschemas"]['three-day'] = ttschema
+        ITimetableSchemaContainer(self.app)['three-day'] = ttschema
 
         # add some people and groups
         for title in ['Curtin', 'Lorch', 'Guzman']:
@@ -322,7 +324,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         if term is not None:
             importer.term = ITermContainer(self.app)[term]
         if ttschema is not None:
-            importer.ttschema = self.app['ttschemas'][ttschema]
+            importer.ttschema = ITimetableSchemaContainer(ISchoolYear(self.sections))[ttschema]
         return importer
 
     def test_importSections(self):

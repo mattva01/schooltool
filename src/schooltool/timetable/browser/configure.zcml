@@ -85,20 +85,6 @@
       permission="schooltool.view"
       />
 
-  <configure package="schooltool.skin">
-    <navigationViewlet
-      name="ttschemas"
-      for="*"
-      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
-      template="templates/navigationViewlet.pt"
-      class="schooltool.skin.TopLevelContainerNavigationViewlet"
-      permission="schooltool.view"
-      link="ttschemas"
-      title="School Timetables"
-      order="80"
-      />
-  </configure>
-
   <page
       name="simpleadd.html"
       for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
@@ -236,5 +222,30 @@
       class=".cal.DailyTimetableCalendarRowsView"
       permission="zope.View"
       />
+
+  <navigationViewlet
+      name="school_timetables"
+      for="*"
+      manager="schooltool.schoolyear.browser.interfaces.ISchoolYearViewMenuViewletManager"
+      template="templates/link_to_school_timetables.pt"
+      permission="schooltool.view"
+      order="60"
+      />
+
+  <zope:adapterTraverserPlugin
+      for="schooltool.schoolyear.interfaces.ISchoolYear"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      name="school_timetables"
+      adapter="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      />
+
+  <zope:adapter
+      factory=".schema.TimetableSchemaContainerAbsoluteURLAdapter"
+      provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <zope:adapter
+      factory=".schema.TimetableSchemaContainerAbsoluteURLAdapter"
+      provides="zope.interface.Interface"
+      name="absolute_url"/>
 
 </configure>

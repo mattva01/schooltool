@@ -714,8 +714,8 @@ def findRelatedTimetables(ob):
 class TimetableInit(InitBase):
 
     def __call__(self):
-        from schooltool.timetable.schema import TimetableSchemaContainer
-        self.app['ttschemas'] = TimetableSchemaContainer()
+        from schooltool.timetable.schema import TimetableSchemaContainerContainer
+        self.app['schooltool.timetable.schooltt'] = TimetableSchemaContainerContainer()
 
 
 @adapter(ITimetableDict)
@@ -728,16 +728,3 @@ def getTermForTimetableDict(ttdict):
 @implementer(ITerm)
 def getTermForTimetable(timetable):
     return ITerm(timetable.__parent__)
-
-
-def registerTestSetup():
-    from schooltool.testing import registry
-
-    def addTTSchemasContainer(app):
-        from schooltool.timetable.schema import TimetableSchemaContainer
-        app['ttschemas'] = TimetableSchemaContainer()
-
-    registry.register('ApplicationContainers', addTTSchemasContainer)
-
-registerTestSetup()
-del registerTestSetup

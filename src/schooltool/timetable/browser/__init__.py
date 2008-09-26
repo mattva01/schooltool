@@ -43,6 +43,7 @@ from schooltool.term.term import getTermForDate
 from schooltool.timetable import SchooldaySlot
 from schooltool.timetable import Timetable, TimetableDay
 from schooltool.timetable import TimetableActivity
+from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.interfaces import ITimetable, IOwnTimetables
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.traverser.interfaces import ITraverserPlugin
@@ -368,7 +369,7 @@ class TimetableConflictMixin(object):
         If there are no timetable schemas, None is returned.
         """
         app = getSchoolToolApplication()
-        ttschemas = app.get("ttschemas", None)
+        ttschemas = ITimetableSchemaContainer(app, None)
         if ttschemas is None:
             return None
         ttschema_id = self.request.get('ttschema', ttschemas.default_id)
@@ -401,7 +402,7 @@ class TimetableSetupViewBase(BrowserView, TimetableConflictMixin):
 
     @property
     def ttschemas(self):
-        return ISchoolToolApplication(None)["ttschemas"]
+        return ITimetableSchemaContainer(ISchoolToolApplication(None))
 
 
 class TimetableAddForm(TimetableSetupViewBase):

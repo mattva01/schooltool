@@ -10,6 +10,11 @@ First of all, we need an app object:
 
     >>> from schooltool.testing import setup as sbsetup
     >>> app = sbsetup.setUpSchoolToolSite()
+    >>> from schooltool.timetable.schema import TimetableSchemaContainer
+    >>> schemas = TimetableSchemaContainer()
+    >>> from zope.location.location import locate
+    >>> locate(schemas, app, 'ttschemas')
+
     >>> from schooltool.term.term import getTermContainer
     >>> from schooltool.term.interfaces import ITermContainer
     >>> from zope.interface import Interface
@@ -28,7 +33,7 @@ We have a timetable schema to put the view on:
     ...                          'Second',
     ...                          'Third',
     ...                          'Fourth'])
-    >>> app['ttschemas']['usual'] = ttschema
+    >>> schemas['usual'] = ttschema
 
 The schema has a model attribute:
 

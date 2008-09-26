@@ -27,6 +27,7 @@ from zope.security.proxy import removeSecurityProxy
 from zope.app.container.interfaces import INameChooser
 from zope.publisher.browser import BrowserView
 
+from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.app import SimpleNameChooser
@@ -37,6 +38,7 @@ from schooltool.course.section import Section
 from schooltool.term.interfaces import ITerm
 from schooltool.term.interfaces import ITermContainer
 from schooltool.timetable import TimetableActivity
+from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.interfaces import ITimetables
 
 
@@ -472,7 +474,7 @@ class TimetableCSVImporter(object):
         self.term = ITerm(self.sections)
 
         try:
-            self.ttschema = self.app['ttschemas'][ttschema_id]
+            self.ttschema = ITimetableSchemaContainer(ISchoolYear(self.sections))[ttschema_id]
         except KeyError:
             error_msg = _("The timetable schema ${schema} does not exist.",
                           mapping={'schema': ttschema_id})

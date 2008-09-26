@@ -42,6 +42,7 @@ from zope.publisher.interfaces.http import IHTTPRequest
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common import parse_datetime
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot
+from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.model import SequentialDaysTimetableModel
 from schooltool.timetable.schema import TimetableSchema
 from schooltool.term.interfaces import ITermContainer
@@ -4839,6 +4840,11 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
         app = ISchoolToolApplication(None)
         self.person = app['persons']['person'] = Person('person')
 
+        # set up schoolyear
+        from schooltool.schoolyear.schoolyear import SchoolYear
+        from schooltool.schoolyear.interfaces import ISchoolYearContainer
+        ISchoolYearContainer(app)['2004'] = SchoolYear("2004", date(2004, 9, 1), date(2004, 12, 31))
+
         # set up the timetable schema
         days = ['A', 'B', 'C']
         schema = self.createSchema(days,
@@ -4853,12 +4859,7 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
         template.add(SchooldaySlot(time(12, 30), timedelta(hours=2)))
         schema.model = SequentialDaysTimetableModel(days, {None: template})
 
-        app['ttschemas']['default'] = schema
-
-        # set up schoolyear
-        from schooltool.schoolyear.schoolyear import SchoolYear
-        from schooltool.schoolyear.interfaces import ISchoolYearContainer
-        ISchoolYearContainer(app)['2004'] = SchoolYear("2004", date(2004, 9, 1), date(2004, 12, 31))
+        ITimetableSchemaContainer(app)['default'] = schema
 
         # set up terms
         from schooltool.term.term import Term

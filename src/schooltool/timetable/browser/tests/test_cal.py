@@ -28,6 +28,7 @@ from zope.publisher.browser import TestRequest
 from schooltool.common import parse_datetime
 from schooltool.person.interfaces import IPersonPreferences
 from schooltool.person.person import Person
+from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.schema import TimetableSchema
 from schooltool.timetable.model import SequentialDaysTimetableModel
 from schooltool.timetable import SchooldaySlot
@@ -50,6 +51,11 @@ class TestDailyTimetableCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
         app = ISchoolToolApplication(None)
         self.person = app['persons']['person'] = Person('person')
 
+        # set up schoolyear
+        from schooltool.schoolyear.schoolyear import SchoolYear
+        from schooltool.schoolyear.interfaces import ISchoolYearContainer
+        ISchoolYearContainer(app)['2004'] = SchoolYear("2004", date(2004, 9, 1), date(2004, 12, 31))
+
         # set up the timetable schema
         days = ['A', 'B', 'C']
         schema = self.createSchema(days,
@@ -64,12 +70,7 @@ class TestDailyTimetableCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
         template.add(SchooldaySlot(time(12, 30), timedelta(hours=2)))
         schema.model = SequentialDaysTimetableModel(days, {None: template})
 
-        app['ttschemas']['default'] = schema
-
-        # set up schoolyear
-        from schooltool.schoolyear.schoolyear import SchoolYear
-        from schooltool.schoolyear.interfaces import ISchoolYearContainer
-        ISchoolYearContainer(app)['2004'] = SchoolYear("2004", date(2004, 9, 1), date(2004, 12, 31))
+        ITimetableSchemaContainer(app)['default'] = schema
 
         # set up terms
         from schooltool.term.term import Term
@@ -256,7 +257,8 @@ class TestDailyTimetableCalendarRowsView_getPeriodsForDay(NiceDiffsMixin,
         tt.model = TimetableModelStub()
         tt.timezone = 'Europe/London'
         self.tt = tt
-        app["ttschemas"]['default'] = tt
+        ttschemas = ITimetableSchemaContainer(app)
+        ttschemas['default'] = tt
         self.app = app
 
     def tearDown(self):
@@ -281,7 +283,7 @@ class TestDailyTimetableCalendarRowsView_getPeriodsForDay(NiceDiffsMixin,
                           [])
 
         # If there is no timetable schema, we return []
-        self.app["ttschemas"].default_id = None
+        ITimetableSchemaContainer(self.app).default_id = None
         self.assertEquals(view.getPeriodsForDay(date(2004, 10, 14)),
                           [])
 
@@ -308,7 +310,7 @@ class TestDailyTimetableCalendarRowsView_getPeriodsForDay(NiceDiffsMixin,
                           [])
 
         # If there is no timetable schema, we return []
-        self.app["ttschemas"].default_id = None
+        ITimetableSchemaContainer(self.app).default_id = None
         self.assertEquals(view.getPeriodsForDay(date(2004, 10, 14)),
                           [])
 
