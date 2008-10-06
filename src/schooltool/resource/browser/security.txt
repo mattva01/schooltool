@@ -56,8 +56,6 @@ But he should not be able to add the events (even if he can guess the url):
 
 Now we will put these people into the teacher group
 
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('School Years').click()
     >>> manager.getLink('2005-2006').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('Teachers').click()

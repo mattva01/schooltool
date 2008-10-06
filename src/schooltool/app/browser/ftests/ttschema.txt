@@ -35,8 +35,6 @@ Setup
 
 The schema container is empty initially:
 
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('School Years').click()
     >>> manager.getLink('2005').click()
     >>> manager.getLink('School Timetables').click()
     >>> '<p>There are none.</p>' in manager.contents
@@ -48,8 +46,6 @@ Advanced timetable schema add view
 
 Let's go to the advanced 'New Timetable Schema' view:
 
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('School Years').click()
     >>> manager.getLink('2005').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
@@ -283,8 +279,6 @@ Special days
 
 We need a term:
 
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('School Years').click()
     >>> manager.getLink('2005').click()
     >>> manager.getLink('New Term').click()
     >>> manager.getControl('Title').value = '2005 Summer'
@@ -299,8 +293,6 @@ We need a term:
 
 We can shift the start and end times for periods for a certain day:
 
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('School Years').click()
     >>> manager.getLink('2005').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('other').click()
@@ -345,8 +337,6 @@ Emergency Days
 
 Now let's make 2005-07-07 an emergency day:
 
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('School Years').click()
     >>> manager.getLink('2005').click()
     >>> manager.getLink('2005 Summer').click()
     >>> manager.getLink('Cancel School in Emergency').click()
@@ -361,8 +351,6 @@ When we select the second date, the replacement day is registered:
 
 Now all periods for this day are cancelled:
 
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('School Years').click()
     >>> manager.getLink('2005').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('other').click()
@@ -406,8 +394,6 @@ But the replacement day now contains periods all-right:
 
 Let's go back to the index of the school timetables:
 
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('School Years').click()
     >>> manager.getLink('2005').click()
     >>> manager.getLink('School Timetables').click()
 
@@ -452,8 +438,6 @@ The default schema selection is unset:
 
 Let's go back to the index of terms:
 
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('School Years').click()
     >>> manager.getLink('2005').click()
 
 Let's delete the term:

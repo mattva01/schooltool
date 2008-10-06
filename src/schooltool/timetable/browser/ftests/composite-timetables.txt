@@ -46,9 +46,6 @@ Add Schema:
 
 Add 2 groups:
 
-
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('School Years').click()
     >>> manager.getLink('2003').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('New Group').click()
@@ -74,8 +71,6 @@ And a couple of sections:
 
 Let's add guys and boys to different sections:
 
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('School Years').click()
     >>> manager.getLink('2003').click()
     >>> manager.getLink('Courses').click()
     >>> manager.getLink('Birding').click()
@@ -84,8 +79,6 @@ Let's add guys and boys to different sections:
     >>> manager.getControl('Guys').click()
     >>> manager.getControl('Add').click()
 
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('School Years').click()
     >>> manager.getLink('2003').click()
     >>> manager.getLink('Courses').click()
     >>> manager.getLink('Birding').click()
@@ -96,8 +89,6 @@ Let's add guys and boys to different sections:
 
 Add section timetables:
 
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('School Years').click()
     >>> manager.getLink('2003').click()
     >>> manager.getLink('Courses').click()
     >>> manager.getLink('Birding').click()
@@ -110,8 +101,6 @@ Add section timetables:
     >>> manager.getControl('C').click()
     >>> manager.getControl('Save').click()
 
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('School Years').click()
     >>> manager.getLink('2003').click()
     >>> manager.getLink('Courses').click()
     >>> manager.getLink('Birding').click()

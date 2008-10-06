@@ -69,8 +69,6 @@ What now if we cancel the deletion ?
 
 Create a term
 
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('School Years').click()
     >>> manager.getLink('2007').click()
     >>> manager.getLink('New Term').click()
     >>> manager.getControl('Title').value = 'Term 2'

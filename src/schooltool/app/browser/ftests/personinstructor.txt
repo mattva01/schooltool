@@ -51,8 +51,6 @@ and a term
 
 a course
 
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('School Years').click()
     >>> manager.getLink('2007').click()
     >>> manager.getLink('Courses').click()
     >>> manager.getLink('New Course').click()

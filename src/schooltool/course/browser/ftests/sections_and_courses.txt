@@ -55,8 +55,6 @@ Let's add some terms:
 
 And now let's add a couple of courses:
 
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('School Years').click()
     >>> manager.getLink('2005-2006').click()
     >>> manager.getLink('Courses').click()
 

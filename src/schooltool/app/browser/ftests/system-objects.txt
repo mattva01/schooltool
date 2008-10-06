@@ -11,18 +11,15 @@ interface.
 Setup
 -----
 
-    >>> manager_browser = Browser('manager', 'schooltool')
-
 Set up the basic school:
 
     >>> from schooltool.app.browser.ftests.setup import setUpBasicSchool
     >>> setUpBasicSchool()
+    >>> manager_browser = Browser('manager', 'schooltool')
 
 Let us add a user and a group, so that container views have something besides
 the default system objects:
 
-    >>> manager_browser.getLink('Manage').click()
-    >>> manager_browser.getLink('School Years').click()
     >>> manager_browser.getLink('2005-2006').click()
     >>> manager_browser.getLink('Groups').click()
     >>> manager_browser.getLink('New Group').click()

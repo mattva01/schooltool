@@ -267,8 +267,6 @@ Now we should be able to add commendations to
 
 - groups,
 
-  >>> manager.getLink('Manage').click()
-  >>> manager.getLink('School Years').click()
   >>> manager.getLink('2007').click()
   >>> manager.getLink('Groups').click()
   >>> manager.getLink('Students').click()
@@ -279,8 +277,6 @@ Now we should be able to add commendations to
 
 - and sections.
 
-  >>> manager.getLink('Manage').click()
-  >>> manager.getLink('School Years').click()
   >>> manager.getLink('2007').click()
   >>> manager.getLink('Courses').click()
   >>> manager.getLink('Math 101').click()
