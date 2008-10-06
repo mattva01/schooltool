@@ -112,37 +112,6 @@
       factory="schooltool.course.browser.section.SectionNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
-  <!-- sample data -->
-  <configure
-      xmlns:zcml="http://namespaces.zope.org/zcml"
-      zcml:condition="have devmode">
-
-    <utility
-        factory=".sampledata.SampleCourses"
-        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
-        name="courses"
-        />
-
-    <utility
-        factory=".sampledata.SampleSections"
-        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
-        name="sections"
-        />
-
-    <utility
-        factory=".sampledata.SampleTimetables"
-        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
-        name="section_timetables"
-        />
-
-    <utility
-        factory=".sampledata.SampleSectionAssignments"
-        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
-        name="section_events"
-        />
-
-  </configure>
-
   <!-- Relationships -->
 
   <utility
