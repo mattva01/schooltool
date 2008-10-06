@@ -19,6 +19,8 @@
 """
 Views for school years and school year container implementation
 """
+from zope.viewlet.viewlet import ViewletBase
+from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.component import adapts
 from zope.schema import Date, TextLine
@@ -32,11 +34,16 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from z3c.form import form, field, button
 
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.demographics.browser.table import DateColumn
+from schooltool.table.table import url_cell_formatter
+from schooltool.table.table import DependableCheckboxColumn
 from schooltool.schoolyear.browser.interfaces import ISchoolYearViewMenuViewletManager
 from schooltool.schoolyear.schoolyear import SchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.skin.skin import OrderedViewletManager
+from schooltool.skin.containers import ContainerDeleteView
 from schooltool.skin.containers import TableContainerView
 from schooltool.common import SchoolToolMessage as _
 
@@ -56,12 +63,67 @@ class SchoolYearAbsoluteURLAdapter(AbsoluteURL):
     implements(IAbsoluteURL)
 
 
-class SchoolYearContainerView(TableContainerView):
+class SchoolYearContainerBaseView(object):
+
+    def canDeleteSchoolYears(self):
+        return len(self.listIdsForDeletion()) >= len(self.context)
+
+    def deletingActiveSchoolYear(self):
+        return self.context.getActiveSchoolYear().__name__ in self.listIdsForDeletion()
+
+
+class SchoolYearContainerDeleteView(ContainerDeleteView, SchoolYearContainerBaseView):
+    """A view for deleting items from container."""
+
+    def update(self):
+        if 'CONFIRM' in self.request:
+            for key in self.listIdsForDeletion():
+                if key != self.context.active_id:
+                    del self.context[key]
+            if self.deletingActiveSchoolYear():
+                del self.context[self.context.active_id]
+            self.request.response.redirect(self.nextURL())
+        elif 'CANCEL' in self.request:
+            self.request.response.redirect(self.nextURL())
+
+
+class SchoolYearContainerView(TableContainerView, SchoolYearContainerBaseView):
     """SchoolYear container view."""
 
     __used_for__ = ISchoolYearContainer
+    template = ViewPageTemplateFile("templates/schoolyear_container.pt")
 
     index_title = _("School Years")
+    error = None
+
+    def setUpTableFormatter(self, formatter):
+        columns_before = []
+        if self.canModify():
+            columns_before = [DependableCheckboxColumn(prefix="delete",
+                                                       name='delete_checkbox',
+                                                       title=u'')]
+        columns_after = [DateColumn(title="Starts", getter=lambda x, y: x.first),
+                         DateColumn(title="Ends", getter=lambda x, y: x.last)]
+        formatter.setUp(formatters=[url_cell_formatter],
+                        columns_before=columns_before,
+                        columns_after=columns_after)
+
+    def __call__(self):
+        if 'DELETE' in self.request:
+            if not self.deletingActiveSchoolYear():
+                return self.delete_template()
+            elif not self.canDeleteSchoolYears():
+                self.error = _("You can not delete the active school year."
+                               " Unless you are deleting all the school years.")
+            else:
+                return self.delete_template()
+
+        self.setUpTableFormatter(self.table)
+        return self.template()
+
+    def update(self):
+        if 'ACTIVATE_NEXT_SCHOOLYEAR' in self.request:
+            self.context.activateNextSchoolYear()
 
 
 class ISchoolYearAddForm(Interface):
@@ -156,3 +218,14 @@ class SchoolYearViewMenuViewletManager(OrderedViewletManager):
     """Viewlet manager for displaying the various menus at the top of a page."""
 
     implements(ISchoolYearViewMenuViewletManager)
+
+
+class ActiveSchoolYears(ViewletBase):
+
+    def activeSchoolYear(self):
+        """Return the active school year."""
+        return ISchoolYearContainer(ISchoolToolApplication(None)).getActiveSchoolYear()
+
+    def nextSchoolYear(self):
+        """Return the next school year."""
+        return ISchoolYearContainer(ISchoolToolApplication(None)).getNextSchoolYear()

@@ -19,6 +19,7 @@
 from datetime import date
 
 from zope.interface import directlyProvides
+from zope.component import queryMultiAdapter
 from zope.component import getUtility
 from zope.formlib import form
 from zc.table.interfaces import ISortableColumn
@@ -249,3 +250,9 @@ class DateColumn(column.GetterColumn):
             return date.min
         else:
             return self.getter(item, formatter)
+
+    def cell_formatter(self, maybe_date, item, formatter):
+        view = queryMultiAdapter((maybe_date, formatter.request),
+                                 name='mediumDate',
+                                 default=lambda: '')
+        return view()

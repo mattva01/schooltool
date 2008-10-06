@@ -42,6 +42,14 @@
        permission="schooltool.view"
        />
 
+    <page
+        name="delete.html"
+        for="schooltool.schoolyear.interfaces.ISchoolYearContainer"
+        class="schooltool.schoolyear.browser.schoolyear.SchoolYearContainerDeleteView"
+        template="templates/container_delete.pt"
+        permission="schooltool.edit"
+        />
+
   </configure>
 
   <zope:adapter
@@ -98,6 +106,16 @@
       provides=".interfaces.ISchoolYearViewMenuViewletManager"
       class=".schoolyear.SchoolYearViewMenuViewletManager"
       template="templates/schoolyear_menu.pt"
+      />
+
+  <navigationViewlet
+      name="SchoolYears"
+      for="*"
+      manager="schooltool.skin.skin.INavigationManager"
+      class=".schoolyear.ActiveSchoolYears"
+      template="templates/school_years_viewlet.pt"
+      permission="schooltool.view"
+      order="300"
       />
 
 </configure>

@@ -1,0 +1,48 @@
+<tal:defs define="dummy view/update" />
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" tal:content="view/index_title">
+    Contents
+  </title>
+</head>
+<body>
+
+<span metal:fill-slot="zonki" i18n:translate="">
+  <img src="zonki.png" alt="SchoolTool" i18n:attributes="alt"
+    tal:attributes="src context/++resource++zonki-reading.png" /> 
+</span>
+
+<h1 metal:fill-slot="content-header"
+    tal:content="view/index_title">Contents</h1>
+<metal:block metal:fill-slot="body"
+             tal:define="canModify view/canModify">
+  <div tal:condition="view/error"
+       class="error"
+       tal:content="view/error" />
+  <tal:block replace="structure view/table/batch/render" />
+  <form method="post" tal:attributes="action string:${context/@@absolute_url}">
+    <tal:if condition="view/table/batch">
+      <div class="count" i18n:translate="">
+        Showing
+        <span i18n:name="count" tal:content="view/table/batch/length"/>
+        of
+        <span i18n:name="total" tal:content="view/table/batch/full_size"/>
+        items
+      </div>
+        <tal:block replace="structure view/table/render" />
+        <div class="controls" tal:condition="canModify">
+          <input type="submit" class="button-cancel" value="Delete"
+                 name="DELETE"
+                 i18n:attributes="value delete-button;" />
+        </div>
+        <div class="controls" tal:condition="canModify">
+          <input type="submit" class="button-cancel" value="Activate next school year"
+                 name="ACTIVATE_NEXT_SCHOOLYEAR"
+                 i18n:attributes="value" />
+        </div>
+    </tal:if>
+  </form>
+  <p tal:condition="not:view/table/batch" i18n:translate="">There are none.</p>
+</metal:block>
+</body>
+</html>

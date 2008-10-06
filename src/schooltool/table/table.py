@@ -146,7 +146,8 @@ class DependableCheckboxColumn(CheckboxColumn):
         if self.hasDependents(item):
             return '<input type="checkbox" name="%s" id="%s" disabled="disabled" />' % (id, id)
         else:
-            return '<input type="checkbox" name="%s" id="%s" />' % (id, id)
+            checked = id in formatter.request and 'checked="checked"' or ''
+            return '<input type="checkbox" name="%s" id="%s" %s/>' % (id, id, checked)
 
     def hasDependents(self, item):
         # We cannot adapt security-proxied objects to IDependable.  Unwrapping

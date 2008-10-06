@@ -63,6 +63,79 @@ def doctest_SchoolYearContainer():
     """
 
 
+def doctest_SchoolYearContainer_schoolyear_activation():
+    """Test for school year activation in school year container
+
+       >>> app = ISchoolToolApplication(None)
+       >>> syc = ISchoolYearContainer(app)
+
+    When we have no school years both active school year and next
+    school year should return None:
+
+       >>> syc.getActiveSchoolYear() is None
+       True
+
+       >>> syc.getNextSchoolYear() is None
+       True
+
+    active_id should be None as well
+
+       >>> syc.active_id is None
+       True
+
+    but if we add a school year (it does not matter when it starts)
+
+        >>> sy1 = SchoolYear("2005-2006", date(2005, 9, 1), date(2006, 7, 15))
+        >>> syc['2005-2006'] = sy1
+
+    it automatically becomes active
+
+        >>> syc.getActiveSchoolYear() is sy1
+        True
+        >>> syc.active_id
+        '2005-2006'
+
+    though - next school year is still None
+
+        >>> syc.getNextSchoolYear() is None
+        True
+
+    if we will add another school year, one before the active one, it
+    will not get marked as the next school year
+
+        >>> sy0 = SchoolYear("2004-2005", date(2004, 9, 1), date(2005, 7, 15))
+        >>> syc['2004-2005'] = sy0
+
+        >>> syc.getNextSchoolYear() is None
+        True
+
+    next schol year must come *after* the active one
+
+        >>> sy2 = SchoolYear("2006-2007", date(2006, 9, 1), date(2007, 7, 15))
+        >>> syc['2006-2007'] = sy2
+
+        >>> syc.getNextSchoolYear() is sy2
+        True
+
+    we can't modify the active_id by hand
+
+        >>> syc.active_id = '2004-2005'
+        Traceback (most recent call last):
+        ...
+        AttributeError: can't set attribute
+
+    we must use the activateNextSchoolYear function that automatically
+    activates the next school year
+
+        >>> syc.activateNextSchoolYear()
+        >>> syc.getActiveSchoolYear() is sy2
+        True
+        >>> syc.getNextSchoolYear() is None
+        True
+
+    """
+
+
 def doctest_SchoolYear():
     """Test for SchoolYear
 
