@@ -25,13 +25,18 @@ from persistent import Persistent
 import zope.interface
 
 from zope.interface import implementer
+from zope.component import adapts
 from zope.component import adapter
 from zope.component import getUtility
 from zope.annotation.interfaces import IAttributeAnnotatable
+from zope.app.intid import addIntIdSubscriber
 from zope.app.intid.interfaces import IIntIds
+from zope.app.container.contained import ObjectAddedEvent
+from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.container import btree, contained
 
 from schooltool.term.interfaces import ITerm
+from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.relationship import RelationshipProperty
@@ -70,6 +75,7 @@ def getCourseContainerForApp(app):
 @adapter(ISchoolYear)
 @implementer(ICourseContainer)
 def getCourseContainer(sy):
+    addIntIdSubscriber(sy, ObjectAddedEvent(sy))
     int_ids = getUtility(IIntIds)
     sy_id = str(int_ids.getId(sy))
     app = ISchoolToolApplication(None)
@@ -118,3 +124,21 @@ class CourseInit(InitBase):
 
     def __call__(self):
         self.app['schooltool.course.course'] = CourseContainerContainer()
+
+
+class InitCoursesForNewSchoolYear(ObjectEventAdapterSubscriber):
+    adapts(IObjectAddedEvent, ISchoolYear)
+
+    def copyAllCourses(self, source, destination):
+        for id, course in source.items():
+            new_course = destination[course.__name__] = Course(course.title,
+                                                               course.description)
+
+    def __call__(self):
+        app = ISchoolToolApplication(None)
+        syc = ISchoolYearContainer(app)
+        active_schoolyear = syc.getActiveSchoolYear()
+
+        if active_schoolyear is not None:
+            self.copyAllCourses(ICourseContainer(active_schoolyear),
+                                ICourseContainer(self.object))

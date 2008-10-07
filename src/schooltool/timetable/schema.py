@@ -18,22 +18,25 @@
 #
 """
 Timetable Schemas
-
-$Id$
 """
+import cPickle
+from StringIO import StringIO
 from persistent import Persistent
 from persistent.dict import PersistentDict
 from sets import Set
 
+from zope.component import adapts
 from zope.component import adapter
 from zope.component import getUtility
 from zope.interface import implementer
 from zope.interface import implements
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.intid.interfaces import IIntIds
+from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.container.btree import BTreeContainer
 from zope.app.container.contained import Contained
 from zope.traversing.api import getParent, getName
+from zope.location.pickling import CopyPersistent
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
@@ -47,6 +50,7 @@ from schooltool.timetable.interfaces import ITimetableSchemaContainerContainer
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.interfaces import ITimetableSchemaDay
 from schooltool.timetable.interfaces import ITimetableSchemaWrite
+from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 
 
 class TimetableSchemaDay(Persistent):
@@ -232,3 +236,36 @@ def getSchoolYearForTimetableSchemaContainer(ttschema_container):
 @implementer(ISchoolYear)
 def getSchoolYearForTTschema(ttschema):
     return ISchoolYear(ttschema.__parent__)
+
+
+def locationCopy(loc):
+    tmp = StringIO()
+    persistent = CopyPersistent(loc)
+
+    # Pickle the object to a temporary file
+    pickler = cPickle.Pickler(tmp, 2)
+    pickler.persistent_id = persistent.id
+    pickler.dump(loc)
+
+    # Now load it back
+    tmp.seek(0)
+    unpickler = cPickle.Unpickler(tmp)
+    unpickler.persistent_load = persistent.load
+    return unpickler.load()
+
+
+class InitSchoolTimetablesForNewSchoolYear(ObjectEventAdapterSubscriber):
+    adapts(IObjectAddedEvent, ISchoolYear)
+
+    def __call__(self):
+        app = ISchoolToolApplication(None)
+        syc = ISchoolYearContainer(app)
+        active_schoolyear = syc.getActiveSchoolYear()
+
+        if active_schoolyear is not None:
+            new_container = ITimetableSchemaContainer(self.object)
+            old_container = ITimetableSchemaContainer(active_schoolyear)
+            for schooltt in old_container.values():
+                new_schooltt = locationCopy(schooltt)
+                new_schooltt.__parent__ = None
+                new_container[new_schooltt.__name__] = new_schooltt

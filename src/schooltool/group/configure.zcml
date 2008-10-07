@@ -57,7 +57,8 @@
       factory=".group.GroupInit"
       name="schooltool.group" />
 
-  <adapter factory=".group.InitGroupsForNewSchoolYear" />
+  <adapter factory=".group.InitGroupsForNewSchoolYear"
+           name="groups" />
   <adapter factory=".group.getGroupContainer" />
   <adapter factory=".group.getGroupContainerForApp" />
   <adapter factory=".group.getSchoolYearForGroupContainer" />

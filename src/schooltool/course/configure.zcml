@@ -160,6 +160,9 @@
       factory=".section.getCourseContainerForSection" />
   <adapter
       factory=".section.getCourseContainerForSectionContainer" />
+  <adapter
+      name="courses"
+      factory=".course.InitCoursesForNewSchoolYear" />
 
   <!-- Learner adapter -->
   <adapter
