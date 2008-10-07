@@ -208,6 +208,10 @@ class SchoolYearView(TableContainerView):
 
     index_title = _("School Year")
 
+    @property
+    def sorted_terms(self):
+        return sorted(self.context.values(), key=lambda t: t.last)
+
     def update(self):
         if 'CONFIRM' in self.request:
             for key in self.listIdsForDeletion():

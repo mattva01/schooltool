@@ -77,7 +77,7 @@ This is a school, so we should add a school year
 
 and a term
 
-    >>> manager.getLink('New Term').click()
+    >>> manager.getLink('Add a new term').click()
     >>> manager.getControl('Title').value = 'Term 1'
     >>> manager.getControl('Start date').value = '2007-07-01'
     >>> manager.getControl('End date').value = '2007-12-15'

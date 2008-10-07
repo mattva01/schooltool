@@ -62,13 +62,12 @@ days are holidays and which are not.  You can define any number of terms -- and
 you have to have at least one if you want to use timetables.
 
     >>> manager.getLink('2005').click()
-
-    >>> '<p>There are none.</p>' in manager.contents
-    True
+    >>> analyze.queryHTML('//div[@class="term"]', manager.contents)
+    []
 
 The manager can add one.
 
-    >>> manager.getLink('New Term').click()
+    >>> manager.getLink('Add a new term').click()
 
 First you have to specify the title and date.
 

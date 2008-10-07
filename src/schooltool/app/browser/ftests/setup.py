@@ -133,7 +133,7 @@ def addTerm(title, first, last, schoolyear):
     manager.getLink('School Years').click()
     manager.getLink(schoolyear).click()
 
-    manager.getLink('New Term').click()
+    manager.getLink('Add a new term').click()
     manager.getControl('Title').value = title
     manager.getControl('Start date').value = first
     manager.getControl('End date').value = last

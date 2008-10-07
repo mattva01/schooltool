@@ -280,7 +280,7 @@ Special days
 We need a term:
 
     >>> manager.getLink('2005').click()
-    >>> manager.getLink('New Term').click()
+    >>> manager.getLink('Add a new term').click()
     >>> manager.getControl('Title').value = '2005 Summer'
     >>> manager.getControl('Start date').value = '2005-06-01'
     >>> manager.getControl('End date').value = '2005-08-31'
@@ -463,7 +463,11 @@ Let's proceed:
 We get back to the terms index page:
 
     >>> print analyze.queryHTML('//h1', manager.contents)[0]
-    <h1>2005</h1>
+    <h1>
+      2005
+      (May 1, 2005&#8212;
+       Oct 15, 2005)
+    </h1>
 
 But the deleted term is not there:
 

@@ -35,7 +35,7 @@ We should be redirected to the school year view now:
 
 Let's add some terms:
 
-    >>> manager.getLink('New Term').click()
+    >>> manager.getLink('Add a new term').click()
     >>> manager.getControl('Title').value = 'Fall'
     >>> manager.getControl('Start date').value = '2005-09-01'
     >>> manager.getControl('End date').value = '2006-01-10'
@@ -44,7 +44,7 @@ Let's add some terms:
     >>> manager.getControl('Sunday').click()
     >>> manager.getControl('Add term').click()
 
-    >>> manager.getLink('New Term').click()
+    >>> manager.getLink('Add a new term').click()
     >>> manager.getControl('Title').value = 'Spring'
     >>> manager.getControl('Start date').value = '2006-01-11'
     >>> manager.getControl('End date').value = '2006-07-15'

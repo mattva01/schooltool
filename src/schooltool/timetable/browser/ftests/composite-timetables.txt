@@ -29,7 +29,7 @@ Add a schoolyear and a term:
     >>> manager.getControl('Last day').value = '04/07/31'
     >>> manager.getControl('Add').click()
 
-    >>> manager.getLink("New Term").click()
+    >>> manager.getLink("Add a new term").click()
     >>> manager.getControl("Title").value = "2005 Fall"
     >>> manager.getControl("Start date").value = "2003-09-01"
     >>> manager.getControl("End date").value = "2003-09-07"
