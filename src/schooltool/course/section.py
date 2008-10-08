@@ -25,6 +25,7 @@ from persistent import Persistent
 import zope.interface
 
 from zope.annotation.interfaces import IAttributeAnnotatable
+from zope.app.container.interfaces import IObjectRemovedEvent
 from zope.app.container import btree, contained
 from zope.component import adapts
 from zope.interface import implements
@@ -40,6 +41,7 @@ from schooltool.person.interfaces import IPerson
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app import relationships
 from schooltool.course import interfaces, booking
+from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
 from schooltool.course.interfaces import ICourseContainer
@@ -255,3 +257,12 @@ class PersonInstructorAdapter(object):
     def sections(self):
         return getRelatedObjects(self.person, URISection,
                                  rel_type=URIInstruction)
+
+
+class RemoveSectionsWhenTermIsDeleted(ObjectEventAdapterSubscriber):
+    adapts(IObjectRemovedEvent, ITerm)
+
+    def __call__(self):
+        section_container = ISectionContainer(self.object)
+        for section_id in list(section_container.keys()):
+            del section_container[section_id]

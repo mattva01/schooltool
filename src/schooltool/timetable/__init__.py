@@ -133,6 +133,7 @@ import zope.event
 from persistent import Persistent
 from persistent.dict import PersistentDict
 from zope.proxy import sameProxiedObjects
+from zope.component import queryAdapter
 from zope.component import adapter
 from zope.component import adapts, subscribers
 from zope.interface import implementer
@@ -677,10 +678,12 @@ class CompositeTimetables(object):
 
 def getAllTimetables():
     app = getSchoolToolApplication(None)
-    timetables = []
+    all_timetables = []
     for ttowner in findObjectsProviding(app, IOwnTimetables):
-        timetables += ITimetables(ttowner).timetables.values()
-    return timetables
+        timetables = queryAdapter(ttowner, ITimetables, None)
+        if timetables is not None:
+            all_timetables += timetables.timetables.values()
+    return all_timetables
 
 
 def findRelatedTimetables(ob):

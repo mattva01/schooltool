@@ -26,10 +26,13 @@ import pytz
 from datetime import datetime
 
 import zope.interface
+from zope.component import adapts
 from zope.component import adapter
 from zope.interface import implementer
+from zope.app.container.interfaces import IObjectRemovedEvent
 from zope.app.container import contained, btree
 
+from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.app.interfaces import IApplicationPreferences
@@ -166,3 +169,11 @@ def getTermContainer(context):
 @implementer(ISchoolYear)
 def getSchoolYearForTerm(term):
     return term.__parent__
+
+
+class RemoveTermsWhenSchoolYearIsDeleted(ObjectEventAdapterSubscriber):
+    adapts(IObjectRemovedEvent, ISchoolYear)
+
+    def __call__(self):
+        for term_id in list(self.object.keys()):
+            del self.object[term_id]

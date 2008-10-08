@@ -23,6 +23,10 @@
   <adapter
       factory=".term.getSchoolYearForTerm" />
 
+  <adapter
+      name="remove_terms_when_schoolyear_is_deleted"
+      factory=".term.RemoveTermsWhenSchoolYearIsDeleted" />
+
   <interface
       interface=".interfaces.ITerm"
       type="zope.app.content.interfaces.IContentType"
