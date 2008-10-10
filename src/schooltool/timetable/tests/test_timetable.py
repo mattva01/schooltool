@@ -966,7 +966,6 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
 
        >>> from schooltool.app.interfaces import ISchoolToolApplication
        >>> app = ISchoolToolApplication(None)
-       >>> directlyProvides(app, IOwnTimetables)
 
     Let's creare a schoolyear and a couple of terms:
 
@@ -1010,24 +1009,6 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
        >>> findRelatedTimetables(tts)
        []
 
-    Let's add a timetable to the app object:
-
-       >>> ITimetables(app).timetables['2006.simple'] = tts.createTimetable(t1)
-       >>> findRelatedTimetables(tts)
-       [<Timetable: ('A', 'B'),
-        {'A': <schooltool.timetable.TimetableDay object at ...>,
-         'B': <schooltool.timetable.TimetableDay object at ...>},
-         <schooltool.timetable.model.WeeklyTimetableModel object at ...>]
-
-    Now, let's add a timetable of a different schema:
-
-       >>> ITimetables(app).timetables['2006.other'] = tts2.createTimetable(t1)
-       >>> findRelatedTimetables(tts)
-       [<Timetable: ('A', 'B'),
-        {'A': <schooltool.timetable.TimetableDay object at ...>,
-         'B': <schooltool.timetable.TimetableDay object at ...>},
-         <schooltool.timetable.model.WeeklyTimetableModel object at ...>]
-
     Let's add some persons, groups and resources with timetables:
 
        >>> from schooltool.person.person import Person
@@ -1064,13 +1045,11 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
        [<Timetable: ('A', 'B'), ...>,
         <Timetable: ('A', 'B'), ...>,
         <Timetable: ('A', 'B'), ...>,
-        <Timetable: ('A', 'B'), ...>,
-        <Timetable: ('A', 'B'), ...>,
         <Timetable: ('A', 'B'), ...>]
 
        >>> [(tt.__parent__.__parent__.__name__, tt.__name__)
        ...   for tt in findRelatedTimetables(tts)]
-       [(None, '2006.simple'), (u'p1', '2006.simple'),
+       [(u'p1', '2006.simple'),
         (u'p1', '2005.simple'), (u'p2', '2006.simple'),
         (u'g', '2006.simple'), (u'r', '2006.simple')]
 
@@ -1078,12 +1057,11 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
 
        >>> findRelatedTimetables(tts2)
        [<Timetable: ('C', 'D'), ...>,
-        <Timetable: ('C', 'D'), ...>,
         <Timetable: ('C', 'D'), ...>]
 
        >>> [(tt.__parent__.__parent__.__name__, tt.__name__)
        ...   for tt in findRelatedTimetables(tts2)]
-       [(None, '2006.other'), (u'p1', '2006.other'), (u'g', '2006.other')]
+       [(u'p1', '2006.other'), (u'g', '2006.other')]
 
     """
 
@@ -1094,7 +1072,6 @@ def doctest_findRelatedTimetables_forTerm():
        >>> from schooltool.timetable import findRelatedTimetables
        >>> from schooltool.app.interfaces import ISchoolToolApplication
        >>> app = ISchoolToolApplication(None)
-       >>> directlyProvides(app, IOwnTimetables)
 
     Let's add a school year:
 
@@ -1137,24 +1114,6 @@ def doctest_findRelatedTimetables_forTerm():
        >>> findRelatedTimetables(t1)
        []
 
-    Let's add a timetable to the app object:
-
-       >>> ITimetables(app).timetables['2005.simple'] = tts.createTimetable(t1)
-       >>> findRelatedTimetables(t1)
-       [<Timetable: ('A', 'B'),
-        {'A': <schooltool.timetable.TimetableDay object at ...>,
-         'B': <schooltool.timetable.TimetableDay object at ...>},
-         <schooltool.timetable.model.WeeklyTimetableModel object at ...>]
-
-    Now, let's add a timetable of a different term:
-
-       >>> ITimetables(app).timetables['2006.simple'] = tts.createTimetable(t2)
-       >>> findRelatedTimetables(t1)
-       [<Timetable: ('A', 'B'),
-        {'A': <schooltool.timetable.TimetableDay object at ...>,
-         'B': <schooltool.timetable.TimetableDay object at ...>},
-         <schooltool.timetable.model.WeeklyTimetableModel object at ...>]
-
     Let's add some persons, groups and resources with timetables:
 
        >>> from schooltool.person.person import Person
@@ -1191,25 +1150,22 @@ def doctest_findRelatedTimetables_forTerm():
        [<Timetable: ('A', 'B'), ...>,
         <Timetable: ('A', 'B'), ...>,
         <Timetable: ('A', 'B'), ...>,
-        <Timetable: ('A', 'B'), ...>,
-        <Timetable: ('A', 'B'), ...>,
         <Timetable: ('A', 'B'), ...>]
 
        >>> [(tt.__parent__.__parent__.__name__, tt.__name__)
        ...   for tt in findRelatedTimetables(t1)]
-       [(None, '2005.simple'), (u'p1', '2005.other'), (u'p1', '2005.simple'),
+       [(u'p1', '2005.other'), (u'p1', '2005.simple'),
         (u'p2', '2005.simple'), (u'g', '2005.simple'), (u'r', '2005.simple')]
 
     Let's see the timetables of the other schema:
 
        >>> findRelatedTimetables(t2)
        [<Timetable: ('A', 'B'), ...>,
-        <Timetable: ('A', 'B'), ...>,
         <Timetable: ('A', 'B'), ...>]
 
        >>> [(tt.__parent__.__parent__.__name__, tt.__name__)
        ...   for tt in findRelatedTimetables(t2)]
-       [(None, '2006.simple'), (u'p1', '2006.other'), (u'g', '2006.simple')]
+       [(u'p1', '2006.other'), (u'g', '2006.simple')]
 
     """
 
