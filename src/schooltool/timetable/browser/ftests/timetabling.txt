@@ -127,17 +127,18 @@ You can edit it
     >>> manager.getControl('End date').value
     '2005-12-31'
 
-    >>> manager.getControl('Title').value = 'Fall 2005'
-    >>> manager.getControl('Start date').value = '2005-08-01'
+    >>> manager.getControl('Title').value = '2005 Fall'
+    >>> manager.getControl('Start date').value = '2005-09-01'
     >>> manager.getControl('End date').value = '2005-11-30'
     >>> manager.getControl('Save changes').click()
 
-    >>> 'Saved changes' in manager.contents
-    True
+    >>> print analyze.queryHTML('//div[@class="summary"]', manager.contents)[0]
+    <div class="summary">Data successfully updated.</div>
+
     >>> manager.getControl('Title').value
-    'Fall 2005'
+    '2005 Fall'
     >>> manager.getControl('Start date').value
-    '2005-08-01'
+    '2005-09-01'
     >>> manager.getControl('End date').value
     '2005-11-30'
 
@@ -153,6 +154,7 @@ There should be a legend that includes the term.
 
     >>> print frog.contents
     <BLANKLINE>
+    ...
     ...Displayed Terms...
     ...class="legend-item term1"...2005 Fall...
 

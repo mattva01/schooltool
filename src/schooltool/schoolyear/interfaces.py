@@ -46,6 +46,9 @@ class ISchoolYearContainer(IContainer, ILocation):
     """Container for school years"""
     constraints.contains(ISchoolYear)
 
+    def validateForOverlap(schoolyear):
+        """Validate school year for overlap with other school years."""
+
     def getActiveSchoolYear():
         """Return the active schoolyear."""
 
@@ -64,10 +67,23 @@ class TermOverlapError(Exception):
         self.overlapping_terms = overlapping_terms
 
     def __repr__(self):
-        return "Term '%s' overlaps with Term(s) (%s)" % (
-            self.term.title,
+        return "Date range you have selected overlaps with term(s) (%s)" % (
             ", ".join(sorted(term.title
                              for term in self.overlapping_terms)))
+
+    __str__ = __repr__
+
+
+class TermOverflowError(Exception):
+
+    def __init__(self, schoolyear, overflowing_terms):
+        self.schoolyear = schoolyear
+        self.overflowing_terms = overflowing_terms
+
+    def __repr__(self):
+        return "Date range you are trying to set is too small to contain following term(s) (%s)" % (
+            ", ".join(sorted(term.title
+                             for term in self.overflowing_terms)))
 
     __str__ = __repr__
 
@@ -79,9 +95,14 @@ class SchoolYearOverlapError(Exception):
         self.overlapping_schoolyears = overlapping_schoolyears
 
     def __repr__(self):
-        return "SchoolYear '%s' overlaps with SchoolYear(s) (%s)" % (
-            self.schoolyear.title,
-            ", ".join(sorted(schoolyear.title
-                             for schoolyear in self.overlapping_schoolyears)))
+        if self.schoolyear is not None:
+            title = "SchoolYear '%s'" % self.schoolyear.title
+        else:
+            title = "DateRange"
+
+        return  "%s overlaps with SchoolYear(s) (%s)" % (
+                title,
+                ", ".join(sorted(schoolyear.title
+                                 for schoolyear in self.overlapping_schoolyears)))
 
     __str__ = __repr__

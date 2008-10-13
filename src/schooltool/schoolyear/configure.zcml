@@ -7,7 +7,7 @@
   <class class=".schoolyear.SchoolYearContainer">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"
-             attributes="keys values __iter__ __len__ getActiveSchoolYear active_id" />
+             attributes="keys values __iter__ __len__ getActiveSchoolYear validateForOverlap active_id" />
     <require permission="schooltool.edit"
              interface="zope.app.container.interfaces.IWriteContainer" />
     <require permission="schooltool.edit"
@@ -40,6 +40,8 @@
 
   <adapter factory=".schoolyear.SchoolYearOverlapValidationSubscriber"
            name="validate_overlap"/>
+  <adapter factory=".schoolyear.SchoolYearTermOverflowValidationSubscriber"
+           name="validate_overflow"/>
 
   <adapter factory=".subscriber.ObjectEventAdapterSubscriberDispatcher" />
 

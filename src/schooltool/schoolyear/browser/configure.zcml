@@ -92,6 +92,13 @@
      menu="schooltool_actions" title="New School Year" />
 
   <page
+     name="edit.html"
+     for="schooltool.schoolyear.interfaces.ISchoolYear"
+     class=".schoolyear.SchoolYearEditView"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="Edit" />
+
+  <page
       name="index.html"
       for="schooltool.schoolyear.interfaces.ISchoolYear"
       class="schooltool.schoolyear.browser.schoolyear.SchoolYearView"
@@ -117,5 +124,14 @@
       permission="schooltool.view"
       order="300"
       />
+
+  <zope:adapter
+      factory=".schoolyear.AddSchoolYearOverlapValidator" />
+  <zope:adapter
+      factory=".schoolyear.EditSchoolYearValidator" />
+  <zope:adapter
+      factory=".schoolyear.OverlapErrorViewSnippet" />
+  <zope:adapter
+      factory=".schoolyear.OverflowErrorViewSnippet" />
 
 </configure>

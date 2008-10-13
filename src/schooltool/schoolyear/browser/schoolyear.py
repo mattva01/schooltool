@@ -20,7 +20,6 @@
 Views for school years and school year container implementation
 """
 from zope.viewlet.viewlet import ViewletBase
-from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.component import adapts
 from zope.schema import Date, TextLine
@@ -33,18 +32,27 @@ from zope.app.container.interfaces import INameChooser
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from z3c.form import form, field, button
+from z3c.form.util import getSpecification
+from z3c.form.validator import WidgetsValidatorDiscriminators
+from z3c.form.validator import InvariantsValidator
+from z3c.form.error import ErrorViewSnippet
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.demographics.browser.table import DateColumn
 from schooltool.table.table import url_cell_formatter
 from schooltool.table.table import DependableCheckboxColumn
 from schooltool.schoolyear.browser.interfaces import ISchoolYearViewMenuViewletManager
+from schooltool.schoolyear.schoolyear import validateScholYearForOverflow
+from schooltool.schoolyear.schoolyear import validateScholYearsForOverlap
 from schooltool.schoolyear.schoolyear import SchoolYear
+from schooltool.schoolyear.interfaces import TermOverflowError
+from schooltool.schoolyear.interfaces import SchoolYearOverlapError
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.skin.skin import OrderedViewletManager
 from schooltool.skin.containers import ContainerDeleteView
 from schooltool.skin.containers import TableContainerView
+from schooltool.common import DateRange
 from schooltool.common import SchoolToolMessage as _
 
 
@@ -170,7 +178,9 @@ class SchoolYearAddView(form.AddForm):
         if errors:
             self.status = self.formErrorsMessage
             return
+
         obj = self.createAndAdd(data)
+
         if obj is not None:
             # mark only as finished if we get the new object
             self._finishedAdd = True
@@ -193,10 +203,96 @@ class SchoolYearAddView(form.AddForm):
 
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
-        # XXX validation upon cancellation doesn't make any sense
-        # how to make this work properly?
         url = absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
+
+
+class SchoolYearEditView(form.EditForm):
+    """Edit form for basic person."""
+    form.extends(form.EditForm)
+    template = ViewPageTemplateFile('templates/schoolyear_add.pt')
+
+    fields = field.Fields(ISchoolYearAddForm)
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        url = absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
+
+    def updateActions(self):
+        super(SchoolYearEditView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
+    @property
+    def label(self):
+        return _(u'Change information for ${schoolyear_title}',
+                 mapping={'schoolyear_title': self.context.title})
+
+
+class AddSchoolYearOverlapValidator(InvariantsValidator):
+
+    def validateObject(self, obj):
+        errors = super(AddSchoolYearOverlapValidator, self).validateObject(obj)
+        dr = DateRange(obj.first, obj.last)
+        try:
+            validateScholYearsForOverlap(self.view.context, dr, None)
+        except SchoolYearOverlapError, e:
+            errors += (e, )
+        return errors
+
+WidgetsValidatorDiscriminators(
+    AddSchoolYearOverlapValidator,
+    view=SchoolYearAddView,
+    schema=getSpecification(ISchoolYearAddForm, force=True))
+
+
+class EditSchoolYearValidator(InvariantsValidator):
+
+    def validateObject(self, obj):
+        errors = super(EditSchoolYearValidator, self).validateObject(obj)
+        dr = DateRange(obj.first, obj.last)
+        try:
+            validateScholYearsForOverlap(self.view.context.__parent__, dr, self.view.context)
+        except SchoolYearOverlapError, e:
+            errors += (e, )
+
+        try:
+            validateScholYearForOverflow(dr, self.view.context)
+        except TermOverflowError, e:
+            errors += (e, )
+        return errors
+
+WidgetsValidatorDiscriminators(
+    EditSchoolYearValidator,
+    view=SchoolYearEditView,
+    schema=getSpecification(ISchoolYearAddForm, force=True))
+
+
+class OverlapErrorViewSnippet(ErrorViewSnippet):
+
+    adapts(SchoolYearOverlapError, None, None, None, None, None)
+
+    render = ViewPageTemplateFile("templates/school_year_overlap_error.pt")
+
+    def schoolyears(self):
+        return self.context.overlapping_schoolyears
+
+    def createMessage(self):
+        return self.context.__repr__()
+
+
+class OverflowErrorViewSnippet(ErrorViewSnippet):
+
+    adapts(TermOverflowError, None, None, None, None, None)
+
+    render = ViewPageTemplateFile("templates/term_overflow_error.pt")
+
+    def terms(self):
+        return self.context.overflowing_terms
+
+    def createMessage(self):
+        return self.context.__repr__()
 
 
 class SchoolYearView(TableContainerView):

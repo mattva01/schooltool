@@ -7,8 +7,7 @@
   <page
       name="add.html"
       for="..interfaces.ITermContainer"
-      class=".term.TermAddView"
-      template="templates/term_add_edit.pt"
+      class=".term.TermAddForm"
       permission="schooltool.edit"
       />
 
@@ -24,8 +23,7 @@
   <page
       name="edit.html"
       for="..interfaces.ITerm"
-      class=".term.TermEditView"
-      template="templates/term_add_edit.pt"
+      class=".term.TermEditForm"
       permission="schooltool.edit"
       menu="schooltool_actions" title="Edit"
       />
@@ -57,7 +55,28 @@
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory="schooltool.table.table.SchoolToolTableFormatter " />
 
+  <zope:class class=".widgets.CustomDateTextWidget">
+    <require
+        permission="zope.Public"
+        interface="z3c.form.interfaces.ITextWidget"
+        />
+  </zope:class>
+
   <zope:adapter
       factory=".emergency.getTimetableSchemaContainerForTerm" />
+  <zope:adapter
+      factory=".widgets.CustomDateDataConverter" />
+  <zope:adapter
+      factory=".errors.OverlapErrorViewSnippet" />
+  <zope:adapter
+      factory=".term.TermFormAdapter" />
+  <zope:adapter
+      factory=".term.AddTermFormValidator" />
+  <zope:adapter
+      factory=".term.EditTermFormValidator" />
+  <zope:adapter
+      factory=".term.FirstTermBoundsValidator" />
+  <zope:adapter
+      factory=".term.LastTermBoundsValidator" />
 
 </configure>

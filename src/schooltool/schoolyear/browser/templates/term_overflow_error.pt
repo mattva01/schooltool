@@ -1,0 +1,7 @@
+<div class="error" i18n:translate="">Date range you have selected is too small to contain following term(s):
+<tal:block i18n:name="terms">
+  <div tal:repeat="term view/terms">
+    <tal:block content="structure term/@@link" /> (<tal:block content="term/first/@@shortDate" /> &mdash; <tal:block content="term/last/@@shortDate" />)
+  </div>
+</tal:block>
+</div>

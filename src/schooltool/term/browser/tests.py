@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2008 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,473 +18,296 @@
 #
 """
 Tests for schooltool term views.
-
-$Id$
 """
-import datetime
 import unittest
+from datetime import date
 
-from zope.i18n import translate
 from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
-from zope.testing.doctestunit import pprint
-from zope.traversing.interfaces import IContainmentRoot
 
-from schooltool.timetable.browser.tests import test_timetable
+from schooltool.term.term import Term
+from schooltool.term.ftesting import term_functional_layer
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.skin.skin import ISchoolToolSkin
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
+from schooltool.schoolyear.schoolyear import SchoolYear
+from schooltool.schoolyear.testing import provideStubAdapter
+from schooltool.schoolyear.testing import provideStubUtility
+from schooltool.schoolyear.testing import setUp
+from schooltool.schoolyear.testing import tearDown
+from schooltool.term.browser.term import TermEditForm
+from schooltool.term.browser.term import TermAddForm
 
 
-def doctest_TermView_calendar():
-    '''Unit tests for TermAddView.calendar
+def doctest_TermAddForm():
+    """Test for term add view.
 
-        >>> from schooltool.term.term import Term
-        >>> from schooltool.term.browser.term import TermView
-        >>> context = Term('Sample', datetime.date(2004, 8, 1),
-        ...                        datetime.date(2004, 8, 31))
+    Let's add a school year
+
+        >>> app = ISchoolToolApplication(None)
+        >>> syc = ISchoolYearContainer(app)
+        >>> sy = syc['2005-2006'] = SchoolYear("2005-2006",
+        ...                               date(2005, 9, 1),
+        ...                               date(2006, 7, 16))
+
+    Fill in the form
+
         >>> request = TestRequest()
-        >>> view = TermView(context, request)
+        >>> directlyProvides(request, [ISchoolToolSkin])
+        >>> request.form = {'form.buttons.add' : u'Add',
+        ...                 'form.widgets.title': u'Fall',
+        ...                 'form.widgets.first': u'2005-09-01',
+        ...                 'form.widgets.last' : u'2005-12-31'}
 
-    This view has just one method, `calendar`, that invokes TermRenderer
-    to give a nice structure of lists and dicts for the page template.
+    And submit it
 
-        >>> test_timetable.print_cal(view.calendar())
-        *                        August 2004
-                 Mon Tue Wed Thu Fri Sat Sun
-        Week 31:                           1
-        Week 32:   2   3   4   5   6   7   8
-        Week 33:   9  10  11  12  13  14  15
-        Week 34:  16  17  18  19  20  21  22
-        Week 35:  23  24  25  26  27  28  29
-        Week 36:  30  31
-
-    '''
-
-
-def doctest_TermEditView_title():
-    '''Unit tests for TermEditView.title
-
-        >>> from schooltool.term.term import Term
-        >>> from schooltool.term.browser.term import TermEditView
-        >>> context = Term('Sample', datetime.date(2004, 8, 1),
-        ...                        datetime.date(2004, 8, 31))
-        >>> request = TestRequest()
-        >>> view = TermEditView(context, request)
-
-    view.title returns a Zope 3 I18N Message ID.
-
-        >>> view.title()
-        u'Change Term: $title'
-        >>> translate(view.title())
-        u'Change Term: Sample'
-
-    '''
-
-
-def doctest_TermEditView_calendar():
-    '''Unit tests for TermEditView.calendar
-
-        >>> from schooltool.term.term import Term
-        >>> from schooltool.term.browser.term import TermEditView
-        >>> context = Term('Sample', datetime.date(2004, 8, 4),
-        ...                        datetime.date(2004, 8, 6))
-        >>> request = TestRequest()
-        >>> view = TermEditView(context, request)
-
-    view.calendar() always renders view.term
-
-        >>> view.term = Term('Sample', datetime.date(2004, 8, 1),
-        ...                          datetime.date(2004, 8, 12))
-        >>> test_timetable.print_cal(view.calendar())
-        *                        August 2004
-                 Mon Tue Wed Thu Fri Sat Sun
-        Week 31:                           1
-        Week 32:   2   3   4   5   6   7   8
-        Week 33:   9  10  11  12
-
-    '''
-
-
-def doctest_TermEditView_update():
-    '''Unit tests for TermEditView.update
-
-        >>> from schooltool.term.term import Term
-        >>> from schooltool.term.browser.term import TermEditView
-        >>> context = Term('Sample', datetime.date(2004, 8, 4),
-        ...                        datetime.date(2004, 8, 6))
-        >>> request = TestRequest()
-        >>> view = TermEditView(context, request)
-
-    When there are no dates in the request, or when the dates are not valid,
-    view.update() sets self.term to self.context (so that the unchanged
-    term calendar is then rendered by view.calendar()).  It also sets
-    update_status.
-
+        >>> view = TermAddForm(sy, request)
         >>> view.update()
-        ''
-        >>> view.update_status
-        ''
-        >>> view.term is view.context
-        True
+        >>> view.widgets.errors
+        ()
 
-    If you call view.update again, it will notice that update_status is
-    set and do nothing.
+    Now we can look at our newly added term
 
-        >>> request.form['field.title'] = 'Sample'
-        >>> request.form['field.first'] = '2005-08-01'
-        >>> request.form['field.last'] = '2005-08-05'
+        >>> term = sy['fall']
+        >>> term.title, term.first, term.last
+        (u'Fall', datetime.date(2005, 9, 1), datetime.date(2005, 12, 31))
+
+    """
+
+
+def doctest_TermAddForm_overlap():
+    """Test for term add view when the new term overlaps an old one.
+
+     Let's add a school year
+
+        >>> app = ISchoolToolApplication(None)
+        >>> syc = ISchoolYearContainer(app)
+        >>> sy = syc['2005-2006'] = SchoolYear("2005-2006",
+        ...                                    date(2005, 9, 1),
+        ...                                    date(2006, 7, 16))
+
+     And one term
+
+        >>> sy['fall'] = Term("Fall",
+        ...                   date(2005, 9, 1),
+        ...                   date(2006, 7, 16))
+
+     Fill in the form providing a date range that overlaps the term we
+     just added
+
+        >>> request = TestRequest()
+        >>> directlyProvides(request, [ISchoolToolSkin])
+        >>> request.form = {'form.buttons.next' : u'Next',
+        ...                 'form.widgets.title': u'Spring',
+        ...                 'form.widgets.first': u'2005-09-01',
+        ...                 'form.widgets.last' : u'2005-12-31'}
+
+     And submit the form
+
+        >>> view = TermAddForm(sy, request)
         >>> view.update()
-        ''
-        >>> view.term is view.context
-        True
 
-    However if you reset update_status back to None, update will
+     We should get an error message
 
-        >>> view.update_status = None
+        >>> for error in view.widgets.errors: print error.render()
+        <div class="error">Date range you have selected overlaps with following terms:
+        <div> <a href="http://127.0.0.1/schoolyears/2005-2006/fall">Fall</a> (9/1/05 &mdash; 7/16/06) </div>
+        </div>
+
+     And only have the old term in the school year:
+
+        >>> list(sy.keys())
+        [u'fall']
+
+    """
+
+
+def doctest_TermAddForm_out_of_bounds():
+    """Test for term add view when adding a term that does not fit in the school year.
+
+    Let's add a school year
+
+       >>> app = ISchoolToolApplication(None)
+       >>> syc = ISchoolYearContainer(app)
+       >>> sy = syc['2005-2006'] = SchoolYear("2005-2006",
+       ...                                    date(2005, 9, 1),
+       ...                                    date(2006, 7, 16))
+
+    Fill in the form
+
+       >>> request = TestRequest()
+       >>> directlyProvides(request, [ISchoolToolSkin])
+       >>> request.form = {'form.buttons.next' : u'Next',
+       ...                 'form.widgets.title': u'Spring',
+       ...                 'form.widgets.first': u'2005-08-01',
+       ...                 'form.widgets.last' : u'2005-12-31'}
+
+    And submit it
+
+       >>> view = TermAddForm(sy, request)
+       >>> view.update()
+
+    We should get an error
+
+       >>> for error in view.widgets.errors: print error.render()
+       <div class="error">Date is not in the school year.</div>
+
+    The error should be displayed on the widget as well
+
+       >>> print view.widgets['first'].error.render()
+       <div class="error">Date is not in the school year.</div>
+
+    There should be no terms in the container
+
+       >>> list(sy.keys())
+       []
+
+    """
+
+
+def doctest_TermEditForm_overlap():
+    """Test for term editing form when making one term overlapping another.
+
+    Let's add a school year
+
+        >>> app = ISchoolToolApplication(None)
+        >>> syc = ISchoolYearContainer(app)
+        >>> sy = syc['2005-2006'] = SchoolYear("2005-2006",
+        ...                                    date(2005, 9, 1),
+        ...                                    date(2006, 7, 16))
+
+    And a couple of terms
+
+        >>> sy['fall'] = Term("Fall",
+        ...                   date(2005, 9, 1),
+        ...                   date(2006, 1, 1))
+
+        >>> term = sy['spring'] = Term("Spring",
+        ...                            date(2006, 1, 2),
+        ...                            date(2006, 7, 16))
+
+    Fill in the form
+
+        >>> request = TestRequest()
+        >>> directlyProvides(request, [ISchoolToolSkin])
+        >>> request.form = {'form.buttons.apply': u'Save changes',
+        ...                 'form.widgets.title': u'Spring',
+        ...                 'form.widgets.first': u'2006-01-01',
+        ...                 'form.widgets.last' : u'2006-07-16'}
+        >>> view = TermEditForm(term, request)
         >>> view.update()
-        ''
-        >>> view.term is view.context
-        False
-        >>> view.term.first
-        datetime.date(2005, 8, 1)
-        >>> view.term.last
-        datetime.date(2005, 8, 5)
 
-    If UPDATE_SUBMIT appears in the request, update changes view.context
-    and sends an ObjectModifiedEvent.
+    We should get an error
 
-        >>> import zope.event
-        >>> from zope.lifecycleevent.interfaces import IObjectModifiedEvent
-        >>> old_subscribers = zope.event.subscribers[:]
-        >>> def modified_handler(event):
-        ...     if IObjectModifiedEvent.providedBy(event):
-        ...         print "*** Object modified ***"
-        >>> zope.event.subscribers.append(modified_handler)
+        >>> for error in view.widgets.errors: print error.render()
+        <div class="error">Date range you have selected overlaps with following terms:
+        <div> <a href="http://127.0.0.1/schoolyears/2005-2006/fall">Fall</a> (9/1/05 &mdash; 1/1/06) </div>
+        </div>
 
-        >>> request.form['UPDATE_SUBMIT'] = 'Save'
-        >>> request.form['holiday'] = '2005-08-03'
-        >>> view.update_status = None
+    The term should not get modified
+
+        >>> term.first, term.last, term.title
+        (datetime.date(2006, 1, 2), datetime.date(2006, 7, 16), 'Spring')
+
+    """
+
+
+def doctest_TermEditForm_overflow():
+    """Test term editing form when making a term overflow a school year.
+
+    Let's add a school year
+
+        >>> app = ISchoolToolApplication(None)
+        >>> syc = ISchoolYearContainer(app)
+        >>> sy = syc['2005-2006'] = SchoolYear("2005-2006",
+        ...                                    date(2005, 9, 1),
+        ...                                    date(2006, 7, 16))
+
+    And a term
+
+        >>> term = sy['spring'] = Term("Spring",
+        ...                            date(2006, 1, 2),
+        ...                            date(2006, 7, 16))
+
+    Fill in the form
+
+        >>> request = TestRequest()
+        >>> directlyProvides(request, [ISchoolToolSkin])
+        >>> request.form = {'form.buttons.apply': u'Save changes',
+        ...                 'form.widgets.title': u'Spring',
+        ...                 'form.widgets.first': u'2006-01-02',
+        ...                 'form.widgets.last' : u'2006-07-17'}
+
+    And submit it
+
+        >>> view = TermEditForm(term, request)
         >>> view.update()
-        *** Object modified ***
-        u'Saved changes.'
-        >>> context.first
-        datetime.date(2005, 8, 1)
-        >>> context.last
-        datetime.date(2005, 8, 5)
-        >>> context.isSchoolday(datetime.date(2005, 8, 2))
-        True
-        >>> context.isSchoolday(datetime.date(2005, 8, 3))
-        False
 
-        >>> zope.event.subscribers[:] = old_subscribers
+    We should get an error
 
-    '''
+        >>> for error in view.widgets.errors: print error.render()
+        <div class="error">Date is not in the school year.</div>
+
+    And term should stay the same
+
+        >>> term.first, term.last, term.title
+        (datetime.date(2006, 1, 2), datetime.date(2006, 7, 16), 'Spring')
+
+    """
 
 
-def doctest_TermAddView_update():
-    '''Unit tests for TermAddView.update
+def doctest_TermEditForm_switch_dates():
+    """Test term editing form when making a term with first date after the last one.
 
-    `update` sets view.term
+    Let's add a school year
 
-        >>> from schooltool.schoolyear.schoolyear import SchoolYear
-        >>> from schooltool.term.browser.term import TermAddView
-        >>> context = SchoolYear("sy",
-        ...                      datetime.date(2005, 9, 1),
-        ...                      datetime.date(2005, 10, 15))
+        >>> app = ISchoolToolApplication(None)
+        >>> syc = ISchoolYearContainer(app)
+        >>> sy = syc['2005-2006'] = SchoolYear("2005-2006",
+        ...                                    date(2005, 9, 1),
+        ...                                    date(2006, 7, 16))
+
+    And add a term
+
+        >>> term = sy['spring'] = Term("Spring",
+        ...                            date(2006, 1, 2),
+        ...                            date(2006, 7, 16))
+
+    Fill in the form switching start and end dates
+
         >>> request = TestRequest()
-        >>> view = TermAddView(context, request)
+        >>> directlyProvides(request, [ISchoolToolSkin])
+        >>> request.form = {'form.buttons.apply': u'Save changes',
+        ...                 'form.widgets.title': u'Spring',
+        ...                 'form.widgets.first': u'2006-07-10',
+        ...                 'form.widgets.last' : u'2006-01-02'}
+
+    And submit it
+
+        >>> view = TermEditForm(term, request)
         >>> view.update()
-        >>> view.term is None
-        True
 
-        >>> request.form['field.title'] = 'Sample'
-        >>> request.form['field.first'] = '2005-09-01'
-        >>> request.form['field.last'] = '2005-10-15'
-        >>> view.update()
-        >>> view.term
-        <...Term object at ...>
+    We should get an error
 
-    '''
+        >>> for error in view.widgets.errors: print error.render()
+        <div class="error">Term must begin before it ends.</div>
 
+    And term should stay the same
 
-def doctest_TermAddView_create():
-    '''Unit tests for TermAddView.create
+        >>> term.first, term.last, term.title
+        (datetime.date(2006, 1, 2), datetime.date(2006, 7, 16), 'Spring')
 
-    `create` either returns view.term (if it has been successfully built
-    by `update` before), or raises a WidgetsError (because `_buildTerm`
-    discovered an error in the form).
-
-        >>> from schooltool.schoolyear.schoolyear import SchoolYear
-        >>> from schooltool.term.browser.term import TermAddView
-        >>> context = SchoolYear("sy",
-        ...                      datetime.date(2005, 9, 1),
-        ...                      datetime.date(2005, 10, 15))
-        >>> request = TestRequest()
-        >>> view = TermAddView(context, request)
-
-        >>> view.term = object()
-        >>> view.create() is view.term
-        True
-
-        >>> view.term = None
-        >>> view.create()
-        Traceback (most recent call last):
-          ...
-        WidgetsError
-
-    '''
-
-
-def doctest_TermAddView_add():
-    r'''Unit tests for TermAddView.add
-
-    `add` adds the term to the term service.
-
-        >>> from schooltool.schoolyear.schoolyear import SchoolYear
-        >>> from schooltool.term.term import Term
-        >>> from schooltool.term.browser.term import TermAddView
-        >>> context = SchoolYear("sy",
-        ...                      datetime.date(2005, 1, 1),
-        ...                      datetime.date(2005, 12, 31))
-        >>> request = TestRequest()
-        >>> view = TermAddView(context, request)
-
-        >>> term = Term('Sample', datetime.date(2005, 1, 1),
-        ...                       datetime.date(2005, 12, 31))
-        >>> view.add(term)
-
-    The standard NameChooser adapter picks the name 'Term'.
-
-        >>> print '\n'.join(context.keys())
-        Term
-
-        >>> context['Term'] is term
-        True
-
-    '''
-
-
-def doctest_TermAddView_nextURL():
-    '''Unit tests for TermAddView.nextURL
-
-    `nextURL` returns the absolute url of its context.
-
-        >>> from schooltool.schoolyear.schoolyear import SchoolYear
-        >>> from schooltool.term.browser.term import TermAddView
-        >>> context = SchoolYear("sy",
-        ...                      datetime.date(2005, 9, 1),
-        ...                      datetime.date(2005, 10, 15))
-        >>> directlyProvides(context, IContainmentRoot)
-        >>> request = TestRequest()
-        >>> view = TermAddView(context, request)
-        >>> view.nextURL()
-        'http://127.0.0.1'
-
-    '''
-
-
-def doctest_TermEditViewMixin_buildTerm():
-    '''Unit tests for TermEditViewMixin._buildTerm
-
-    We shall use TermAddView here -- it inherits TermEditViewMixin._buildTerm
-    without changing it.
-
-        >>> from schooltool.schoolyear.schoolyear import SchoolYear
-        >>> from schooltool.term.browser.term import TermAddView
-        >>> context = SchoolYear("sy",
-        ...                      datetime.date(2005, 9, 1),
-        ...                      datetime.date(2005, 10, 15))
-        >>> request = TestRequest()
-        >>> view = TermAddView(context, request)
-
-        >>> request.form['field.title'] = 'Sample'
-
-    When there are no dates in the request, or when the dates are not valid,
-    view._buildTerm() returns None.
-
-        >>> view._buildTerm()
-
-        >>> request.form['field.first'] = '2005-09-01'
-        >>> request.form['field.last'] = 'not a clue'
-        >>> view._buildTerm()
-
-        >>> request.form['field.first'] = 'bogus'
-        >>> request.form['field.last'] = '2005-12-31'
-        >>> view._buildTerm()
-
-        >>> request.form['field.first'] = '2005-12-31'
-        >>> request.form['field.last'] = '2005-09-01'
-        >>> view._buildTerm()
-
-    If the dates are valid, but the interval is not, you get None again.
-
-        >>> request.form['field.first'] = '2005-09-02'
-        >>> request.form['field.last'] = '2005-09-01'
-        >>> view._buildTerm()
-
-    When the dates describe a valid non-empty inclusive time interval,
-    view._buildTerm() returns a Term object.
-
-        >>> request.form['field.first'] = '2005-09-01'
-        >>> request.form['field.last'] = '2005-10-15'
-        >>> term = view._buildTerm()
-        >>> term.first
-        datetime.date(2005, 9, 1)
-        >>> term.last
-        datetime.date(2005, 10, 15)
-        >>> term.title
-        u'Sample'
-
-    When there are no indication about schooldays or holidays in the request,
-    all days are marked as schooldays.
-
-        >>> def print_holidays(term):
-        ...     all = True
-        ...     for day in term:
-        ...         if not term.isSchoolday(day):
-        ...             print "%s is a holiday" % day
-        ...             all = False
-        ...     if all:
-        ...         print "All days are schooldays."
-
-        >>> print_holidays(term)
-        All days are schooldays.
-
-        >>> request.form['holiday'] = u'2005-09-07'
-        >>> term = view._buildTerm()
-        >>> print_holidays(term)
-        2005-09-07 is a holiday
-
-        >>> request.form['holiday'] = [u'2005-10-02', u'2005-09-07']
-        >>> term = view._buildTerm()
-        >>> print_holidays(term)
-        2005-09-07 is a holiday
-        2005-10-02 is a holiday
-
-    Ill-formed or out-of-range dates are just ignored
-
-        >>> request.form['holiday'] = [u'2005-10-17', u'2005-09-07', u'foo!']
-        >>> term = view._buildTerm()
-        >>> print_holidays(term)
-        2005-09-07 is a holiday
-
-    The presence of 'TOGGLE_n' (where n is 0..6) in the request requests the
-    state of corresponding weekdays (0 = Monday, 6 = Sunday) to be toggled.
-
-        >>> request.form['holiday'] = [u'2005-10-02', u'2005-09-07']
-        >>> request.form['TOGGLE_0'] = [u'Monday']
-        >>> request.form['TOGGLE_6'] = [u'Sunday']
-        >>> term = view._buildTerm()
-        >>> print_holidays(term)
-        2005-09-04 is a holiday
-        2005-09-05 is a holiday
-        2005-09-07 is a holiday
-        2005-09-11 is a holiday
-        2005-09-12 is a holiday
-        2005-09-18 is a holiday
-        2005-09-19 is a holiday
-        2005-09-25 is a holiday
-        2005-09-26 is a holiday
-        2005-10-03 is a holiday
-        2005-10-09 is a holiday
-        2005-10-10 is a holiday
-
-    '''
-
-
-def doctest_TermAddView_calendar():
-    '''Unit tests for TermAddView.calendar
-
-        >>> from schooltool.schoolyear.schoolyear import SchoolYear
-        >>> from schooltool.term.browser.term import TermAddView
-        >>> context = SchoolYear("sy",
-        ...                      datetime.date(2005, 9, 1),
-        ...                      datetime.date(2005, 10, 15))
-        >>> request = TestRequest()
-        >>> view = TermAddView(context, request)
-
-    When there are no dates in the request, or when the dates are not valid,
-    view.caledar() returns None
-
-        >>> view.term = view._buildTerm()
-        >>> view.calendar()
-
-        >>> request.form['field.first'] = '2005-09-01'
-        >>> request.form['field.last'] = 'not a clue'
-        >>> view.term = view._buildTerm()
-        >>> view.calendar()
-
-        >>> request.form['field.first'] = 'bogus'
-        >>> request.form['field.last'] = '2005-12-31'
-        >>> view.term = view._buildTerm()
-        >>> view.calendar()
-
-        >>> request.form['field.first'] = '2005-12-31'
-        >>> request.form['field.last'] = '2005-09-01'
-        >>> view.term = view._buildTerm()
-        >>> view.calendar()
-
-        >>> request.form['field.first'] = '2005-09-02'
-        >>> request.form['field.last'] = '2005-09-01'
-        >>> view.term = view._buildTerm()
-        >>> view.calendar()
-
-    When the dates describe a valid non-empty inclusive time interval,
-    view.calendar() returns a list of dicts, one for each month.
-
-        >>> request.form['field.title'] = 'Sample'
-        >>> request.form['field.first'] = '2004-08-01'
-        >>> request.form['field.last'] = '2004-08-31'
-        >>> view.term = view._buildTerm()
-        >>> test_timetable.print_cal(view.calendar())
-        *                        August 2004
-                 Mon Tue Wed Thu Fri Sat Sun
-        Week 31:                           1
-        Week 32:   2   3   4   5   6   7   8
-        Week 33:   9  10  11  12  13  14  15
-        Week 34:  16  17  18  19  20  21  22
-        Week 35:  23  24  25  26  27  28  29
-        Week 36:  30  31
-
-    By Default, Saturday and Sunday are not school days:
-        >>> view.setDefaultHoliday()
-        >>> date = view.term.first
-        >>> while date <= view.term.last:
-        ...     if not view.term.isSchoolday(date):
-        ...         print date
-        ...     date += datetime.date.resolution
-        2004-08-01
-        2004-08-07
-        2004-08-08
-        2004-08-14
-        2004-08-15
-        2004-08-21
-        2004-08-22
-        2004-08-28
-        2004-08-29
-
-    '''
+    """
 
 
 def test_suite():
-    suite = unittest.TestSuite()
-    optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
-                   doctest.REPORT_ONLY_FIRST_FAILURE |
-                   doctest.NORMALIZE_WHITESPACE)
-    suite.addTest(doctest.DocTestSuite(
-        setUp=test_timetable.setUp, tearDown=test_timetable.tearDown,
-        optionflags=optionflags))
-    suite.addTest(doctest.DocFileSuite(
-        'emergencydays.txt',
-        setUp=test_timetable.setUp, tearDown=test_timetable.tearDown,
-        globs={'createSchema': test_timetable.createSchema,
-               'createDayTemplate': test_timetable.createDayTemplate,
-               'pprint': pprint},
-        optionflags=optionflags))
-    suite.addTest(doctest.DocFileSuite(
-        'termrenderer.txt',
-        setUp=test_timetable.setUp, tearDown=test_timetable.tearDown,
-        globs={'print_cal': test_timetable.print_cal},
-        optionflags=optionflags))
+    optionflags = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
+    suite = doctest.DocTestSuite(optionflags=optionflags,
+                                 extraglobs={'provideAdapter': provideStubAdapter,
+                                             'provideUtility': provideStubUtility},
+                                 setUp=setUp, tearDown=tearDown)
+    suite.layer = term_functional_layer
     return suite
 
 

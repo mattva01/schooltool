@@ -21,6 +21,7 @@ School year implementation
 """
 import rwproperty
 
+from zope.proxy import sameProxiedObjects
 from zope.event import notify
 from zope.exceptions.interfaces import UserError
 from zope.component import queryUtility
@@ -37,6 +38,7 @@ from schooltool.app.app import InitBase
 from schooltool.term.interfaces import IDateManager
 from schooltool.term.interfaces import ITermContainer
 from schooltool.schoolyear.subscriber import EventAdapterSubscriber
+from schooltool.schoolyear.interfaces import TermOverflowError
 from schooltool.schoolyear.interfaces import TermOverlapError
 from schooltool.schoolyear.interfaces import SchoolYearOverlapError
 from schooltool.schoolyear.interfaces import ISubscriber
@@ -233,28 +235,44 @@ class SchoolYearInit(InitBase):
         self.app[SCHOOLYEAR_CONTAINER_KEY] = SchoolYearContainer()
 
 
+def validateScholYearsForOverlap(syc, dr, schoolyear):
+    overlapping_schoolyears = []
+    for other_schoolyear in syc.values():
+        if (not sameProxiedObjects(other_schoolyear, schoolyear) and
+            dr.overlaps(IDateRange(other_schoolyear))):
+            overlapping_schoolyears.append(other_schoolyear)
+            if overlapping_schoolyears:
+                raise SchoolYearOverlapError(schoolyear,
+                                             overlapping_schoolyears)
+
+
 class SchoolYearOverlapValidationSubscriber(EventAdapterSubscriber):
     adapts(SchoolYearBeforeChangeEvent)
     implements(ISubscriber)
 
     def __call__(self):
-        dr = DateRange(*self.event.new_dates)
         syc = self.event.schoolyear.__parent__
+        dr = DateRange(*self.event.new_dates)
         if syc:
-            overlapping_schoolyears = []
-            for other_schoolyear in syc.values():
-                if (other_schoolyear is not self.event.schoolyear and
-                    dr.overlaps(IDateRange(other_schoolyear))):
-                    overlapping_schoolyears.append(other_schoolyear)
-            if overlapping_schoolyears:
-                raise SchoolYearOverlapError(self.event.schoolyear,
-                                             overlapping_schoolyears)
+            validateScholYearsForOverlap(syc, dr, self.event.schoolyear)
 
-# @adapter(TermBeforeChangeEvent)
-# @implementer(ISubscriber)
-# def termOverlapValidationSubscriber(term, new_dates, old_dates):
-#     dr = DateRange(*new_dates)
-#     term_container = term.__parent__
-#     for other_term in term_container.values():
-#         if dr.overlaps(other_term):
-#             raise ValueError("WTF OMG!")
+
+def validateScholYearForOverflow(dr, schoolyear):
+    overflowing_terms = []
+    for term in schoolyear.values():
+        if (term.first not in dr or
+            term.last not in dr):
+            overflowing_terms.append(term)
+    if overflowing_terms:
+        raise TermOverflowError(schoolyear, overflowing_terms)
+
+
+class SchoolYearTermOverflowValidationSubscriber(EventAdapterSubscriber):
+    adapts(SchoolYearBeforeChangeEvent)
+    implements(ISubscriber)
+
+    def __call__(self):
+        overflowing_terms = []
+        sy = self.event.schoolyear
+        dr = DateRange(*self.event.new_dates)
+        validateScholYearForOverflow(dr, sy)

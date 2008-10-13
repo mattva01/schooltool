@@ -171,7 +171,8 @@ def doctest_SchoolYear_first_before_last():
         >>> sy = SchoolYear("2005-2006", date(2005, 9, 1), date(2005, 7, 15))
         Traceback (most recent call last):
         ...
-        ValueError: Last date datetime.date(2005, 7, 15) less than first date datetime.date(2005, 9, 1)
+        ValueError: Last date datetime.date(2005, 7, 15) less than
+        first date datetime.date(2005, 9, 1)
 
    We cannot trick that constraint by sneakily trying to change the
    attributes after creation
@@ -180,7 +181,8 @@ def doctest_SchoolYear_first_before_last():
         >>> sy.first = date(2006, 9, 1)
         Traceback (most recent call last):
         ...
-        ValueError: Last date datetime.date(2006, 7, 15) less than first date datetime.date(2006, 9, 1)
+        ValueError: Last date datetime.date(2006, 7, 15) less than
+        first date datetime.date(2006, 9, 1)
 
         >>> sy.first
         datetime.date(2005, 9, 1)
@@ -188,7 +190,8 @@ def doctest_SchoolYear_first_before_last():
         >>> sy.last = date(2005, 7, 1)
         Traceback (most recent call last):
         ...
-        ValueError: Last date datetime.date(2005, 7, 1) less than first date datetime.date(2005, 9, 1)
+        ValueError: Last date datetime.date(2005, 7, 1) less than
+        first date datetime.date(2005, 9, 1)
 
         >>> sy.last
         datetime.date(2006, 7, 15)
@@ -243,7 +246,8 @@ def doctest_SchoolYearContainer_years_must_not_overlap():
         >>> sy1.last = date(2007, 1, 12)
         Traceback (most recent call last):
         ...
-        SchoolYearOverlapError: SchoolYear '2005-2006' overlaps with SchoolYear(s) (2006-2007)
+        SchoolYearOverlapError: SchoolYear '2005-2006' overlaps
+        with SchoolYear(s) (2006-2007)
 
         >>> sy1.last
         datetime.date(2006, 7, 15)
@@ -251,7 +255,8 @@ def doctest_SchoolYearContainer_years_must_not_overlap():
         >>> sy2.first = date(2005, 9, 1)
         Traceback (most recent call last):
         ...
-        SchoolYearOverlapError: SchoolYear '2006-2007' overlaps with SchoolYear(s) (2005-2006)
+        SchoolYearOverlapError: SchoolYear '2006-2007' overlaps
+        with SchoolYear(s) (2005-2006)
 
         >>> sy2.first
         datetime.date(2006, 9, 1)
@@ -276,26 +281,26 @@ def doctest_SchoolYear_terms_must_not_overlap():
         >>> syc['2005-2006']['fall_2'] = Term("Fall 2", date(2005, 9, 1), date(2006, 1, 12))
         Traceback (most recent call last):
         ...
-        TermOverlapError: Term 'Fall 2' overlaps with Term(s) (Fall)
+        TermOverlapError: Date range you have selected overlaps with term(s) (Fall)
 
-#     You can't work around the restriction by changing terms
-#     directly either:
+    You can't work around the restriction by changing terms
+    directly either:
 
-#         >>> fall.last = date(2006, 1, 17)
-#         Traceback (most recent call last):
-#         ...
-#         TermOverlapError: Term '2005-2006' overlaps with Term(s) (2006-2007)
+        >>> fall.last = date(2006, 1, 17)
+        Traceback (most recent call last):
+        ...
+        TermOverlapError: Date range you have selected overlaps with term(s) (Spring)
 
-#         >>> fall.last
-#         datetime.date(2006, 7, 15)
+        >>> fall.last
+        datetime.date(2006, 1, 12)
 
-#         >>> spring.first = date(2005, 10, 15)
-#         Traceback (most recent call last):
-#         ...
-#         TermOverlapError: Term '2006-2007' overlaps with Term(s) (2005-2006)
+        >>> spring.first = date(2005, 10, 15)
+        Traceback (most recent call last):
+        ...
+        TermOverlapError: Date range you have selected overlaps with term(s) (Fall)
 
-#         >>> spring.first
-#         datetime.date(2006, 9, 1)
+        >>> spring.first
+        datetime.date(2006, 1, 13)
 
     """
 
@@ -315,13 +320,10 @@ def doctest_SchoolYear_terms_must_be_fully_contained():
     But term dates are limited to the ones that are in the range of
     the school year:
 
-        >>> sy = SchoolYear("2006-2007", date(2006, 9, 1), date(2007, 7, 15))
-        >>> syc['2006-2007'] = sy
-
         >>> sy['fall'] = Term("Fall", date(2006, 8, 31), date(2007, 1, 12))
         Traceback (most recent call last):
         ...
-        UserError: Term can't start before the school year starts!
+        UserError: Term can't end after the school year ends!
 
         >>> sy['fall'] = Term("Fall", date(2006, 9, 1), date(2007, 7, 16))
         Traceback (most recent call last):
@@ -331,23 +333,25 @@ def doctest_SchoolYear_terms_must_be_fully_contained():
     You can't work around these limmitations by modifying the term
     after it was added:
 
-#         >>> sy['fall'] = date(2006, 9, 1)
-#         Traceback (most recent call last):
-#         ...
-#         TermDateNotInSchoolYear: ...
+        >>> sy['fall'].first = date(2005, 8, 1)
+        Traceback (most recent call last):
+        ...
+        TermDateNotInSchoolYear: ...
 
     Also you should be unable to shrink the school year without
     changing boundaries of the terms first:
 
-#         >>> sy.first = date(2005, 9, 1)
-#         Traceback (most recent call last):
-#         ...
-#         TermsOutOfBound: ...
+        >>> sy.first = date(2005, 9, 2)
+        Traceback (most recent call last):
+        ...
+        TermOverflowError: Date range you are trying to set is too small to
+        contain following term(s) (Fall)
 
-#         >>> sy.last = date(2006, 6, 15)
-#         Traceback (most recent call last):
-#         ...
-#         TermsOutOfBound: ...
+        >>> sy.last = date(2006, 6, 15)
+        Traceback (most recent call last):
+        ...
+        TermOverflowError: Date range you are trying to set is too small to
+        contain following term(s) (Spring)
 
     """
 

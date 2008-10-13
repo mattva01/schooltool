@@ -168,8 +168,6 @@ class PersonAddView(form.AddForm):
 
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
-        # XXX validation upon cancellation doesn't make any sense
-        # how to make this work properly?
         url = absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
 
@@ -183,8 +181,6 @@ class PersonEditView(form.EditForm):
 
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
-        # XXX validation upon cancellation doesn't make any sense
-        # how to make this work properly?
         url = absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
 

@@ -26,6 +26,12 @@
   <adapter
       name="remove_terms_when_schoolyear_is_deleted"
       factory=".term.RemoveTermsWhenSchoolYearIsDeleted" />
+  <adapter
+      name="term_overlap_validation"
+      factory=".term.TermOverlapValidationSubscriber" />
+  <adapter
+      name="term_overflow_validation"
+      factory=".term.TermOverflowValidationSubscriber" />
 
   <interface
       interface=".interfaces.ITerm"

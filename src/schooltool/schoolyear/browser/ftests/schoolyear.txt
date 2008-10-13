@@ -53,14 +53,5 @@ Let's add some terms:
     >>> manager.getControl('Sunday').click()
     >>> manager.getControl('Add term').click()
 
-
 TODO:
-Test error handling when adding a school year that overlaps this one
-Test error handling when adding term not contained in a schoolyear
-Test error handling for overlapping terms
-Test modifying a schoolyear
-Test error handling when shrinking a schoolyear so that terms do not fit
-Test error handling when making the school year overlap with another school year
-Test modifying a term
-Test error handling when modifying a term to overlap another term
-Test error handling when modifying a term to go over the start/end dates of a schoolyear
+Test error messages being shown

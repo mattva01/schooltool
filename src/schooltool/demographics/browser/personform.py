@@ -301,8 +301,6 @@ class PersonAddView(BasicForm):
 
     @form.action(_("Cancel"))
     def handle_cancel_action(self, action, data):
-        # XXX validation upon cancellation doesn't make any sense
-        # how to make this work properly?
         return self._redirect()
 
     def _redirect(self):

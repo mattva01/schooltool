@@ -114,3 +114,13 @@ class IDateManager(zope.interface.Interface):
         required=True)
 
     current_term = zope.interface.Attribute("The active term.")
+
+
+class TermDateNotInSchoolYear(Exception):
+
+    def __repr__(self):
+        return "Dates do not fit in school year!"
+
+    __str__ = __repr__
+
+
