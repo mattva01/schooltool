@@ -166,6 +166,9 @@
   <adapter
       name="remove_sections_when_term_is_deleted"
       factory=".section.RemoveSectionsWhenTermIsDeleted" />
+  <adapter
+      name="remove_courses_when_year_is_deleted"
+      factory=".course.RemoveCoursesWhenSchoolYearIsDeleted" />
 
   <!-- Learner adapter -->
   <adapter

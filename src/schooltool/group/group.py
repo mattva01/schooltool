@@ -22,6 +22,7 @@ Group objects
 __docformat__ = 'restructuredtext'
 from persistent import Persistent
 
+from zope.app.container.interfaces import IObjectRemovedEvent
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container import btree
 from zope.app.container.contained import Contained
@@ -227,3 +228,13 @@ class GroupCalendarEditorsCrowd(Crowd):
         # Fall back to schooltool.edit for IGroup
         crowd = getAdapter(self.context, ICrowd, name='schooltool.edit')
         return crowd.contains(principal)
+
+
+class RemoveGroupsWhenSchoolYearIsDeleted(ObjectEventAdapterSubscriber):
+    adapts(IObjectRemovedEvent, ISchoolYear)
+
+    def __call__(self):
+        group_container = IGroupContainer(self.object)
+        for group_id, group in list(group_container.items()):
+            IDependable(group).removeDependent('')
+            del group_container[group_id]

@@ -1,0 +1,67 @@
+Test for groups being removed properly when school year is gone
+===============================================================
+
+A manager logs in
+
+    >>> manager = Browser('manager', 'schooltool')
+
+Sets the time
+
+    >>> manager.open('http://localhost/time')
+    >>> manager.getControl('Today').value = "05/02/15"
+    >>> manager.getControl('Apply').click()
+
+    >>> 'Data successfully updated.' in manager.contents
+    True
+
+And creates a new school year:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('New School Year').click()
+    >>> manager.getControl('Title').value = '2005-2006'
+    >>> manager.getControl('First day').value = '05/09/01'
+    >>> manager.getControl('Last day').value = '06/07/15'
+    >>> manager.getControl('Add').click()
+
+Adds himself to a group
+
+    >>> manager.getLink('2005-2006').click()
+    >>> manager.getLink('Groups').click()
+    >>> manager.getLink('Clerks').click()
+    >>> manager.getLink('edit members').click()
+    >>> manager.getControl('SchoolTool Manager').click()
+    >>> manager.getControl('Add').click()
+
+Let's see if that worked
+
+    >>> manager.getLink('Home').click()
+    >>> for block in analyze.queryHTML("//div[@class='info-block person-groups']", manager.contents): print block
+    <div class="info-block person-groups">
+      <h5>Groups</h5>
+      <ul><li>
+            <a title="Clerks." href="http://localhost/schoolyears/2005-2006/groups/clerks">Clerks</a>
+          </li>
+      </ul><a class="modify" href="http://localhost/persons/manager/@@groups.html" title="Manage this person's memberships">
+         edit groups
+      </a>
+    </div>
+
+Now let's delete the school year:
+
+    >>> manager.getLink("Manage").click()
+    >>> manager.getLink("School Years").click()
+    >>> manager.getControl(name="delete.2005-2006").value = True
+    >>> manager.getControl("Delete").click()
+    >>> manager.getControl("Confirm").click()
+
+The group should not be in the group list of the manager user anymore:
+
+    >>> manager.getLink('Home').click()
+    >>> for block in analyze.queryHTML("//div[@class='info-block person-groups']", manager.contents): print block
+    <div class="info-block person-groups">
+      <h5>Groups</h5>
+      <a class="modify" href="http://localhost/persons/manager/@@groups.html" title="Manage this person's memberships">
+         edit groups
+      </a>
+    </div>

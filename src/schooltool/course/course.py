@@ -32,6 +32,7 @@ from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.intid import addIntIdSubscriber
 from zope.app.intid.interfaces import IIntIds
 from zope.app.container.contained import ObjectAddedEvent
+from zope.app.container.interfaces import IObjectRemovedEvent
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.container import btree, contained
 
@@ -142,3 +143,12 @@ class InitCoursesForNewSchoolYear(ObjectEventAdapterSubscriber):
         if active_schoolyear is not None:
             self.copyAllCourses(ICourseContainer(active_schoolyear),
                                 ICourseContainer(self.object))
+
+
+class RemoveCoursesWhenSchoolYearIsDeleted(ObjectEventAdapterSubscriber):
+    adapts(IObjectRemovedEvent, ISchoolYear)
+
+    def __call__(self):
+        course_container = ICourseContainer(self.object)
+        for course_id in list(course_container.keys()):
+            del course_container[course_id]

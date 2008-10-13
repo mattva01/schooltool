@@ -59,6 +59,8 @@
 
   <adapter factory=".group.InitGroupsForNewSchoolYear"
            name="groups" />
+  <adapter factory=".group.RemoveGroupsWhenSchoolYearIsDeleted"
+           name="groups" />
   <adapter factory=".group.getGroupContainer" />
   <adapter factory=".group.getGroupContainerForApp" />
   <adapter factory=".group.getSchoolYearForGroupContainer" />
