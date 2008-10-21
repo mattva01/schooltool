@@ -188,13 +188,12 @@ class IndexedGetterColumn(GetterColumn):
             items = sorters[0](items, formatter, start, stop, sorters[1:])
         else:
             items = list(items) # don't mutate original
-        getSortKey = self.getSortKey
 
-        # let's do decorate, sort, undecorate trick here
-        tmp_items = [(getSortKey(item, formatter), item) for item in items]
-        tmp_items.sort(
-            lambda a, b: multiplier*cmp(a[0], b[0]))
-        return [item for key, item in tmp_items]
+        items.sort(
+            cmp=lambda a, b: multiplier*cmp(a, b),
+            key=lambda i: self.getSortKey(i, formatter))
+
+        return items
 
     def getSortKey(self, item, formatter):
         id = item['id']
