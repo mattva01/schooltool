@@ -188,10 +188,11 @@ class IndexedGetterColumn(GetterColumn):
             items = sorters[0](items, formatter, start, stop, sorters[1:])
         else:
             items = list(items) # don't mutate original
+        getSortKey = self.getSortKey
 
         items.sort(
             cmp=lambda a, b: multiplier*cmp(a, b),
-            key=lambda i: self.getSortKey(i, formatter))
+            key=lambda item: getSortKey(item, formatter))
 
         return items
 
