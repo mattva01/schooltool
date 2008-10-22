@@ -266,6 +266,8 @@ class TermOverflowValidationSubscriber(EventAdapterSubscriber):
     implements(ISubscriber)
 
     def __call__(self):
+        if self.event.term.__parent__ is None:
+            return
         dr = IDateRange(self.event.term.__parent__)
         if (self.event.new_dates[0] not in dr or
             self.event.new_dates[1] not in dr):
