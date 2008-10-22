@@ -69,6 +69,7 @@ from zope.server.http.wsgihttpserver import WSGIHTTPServer
 from zope.server.http.commonaccesslogger import CommonAccessLogger
 from zope.app.server.wsgi import ServerType
 
+from schooltool.app.interfaces import ApplicationStartUpEvent
 from schooltool.app.interfaces import ApplicationInitializationEvent
 from schooltool.app.interfaces import IPluginInit
 from schooltool.app.interfaces import ISchoolToolInitializationUtility
@@ -649,6 +650,14 @@ class StandaloneServer(object):
             self.restoreManagerUser(app, options.manager_password)
             transaction.commit()
             connection.close()
+
+        # set up all the plugins
+        connection = db.open()
+        root = connection.root()
+        app = root[ZopePublication.root_name]
+        notify(ApplicationStartUpEvent(app))
+        transaction.commit()
+        connection.close()
 
         provideUtility(db, IDatabase)
         db.setActivityMonitor(ActivityMonitor())

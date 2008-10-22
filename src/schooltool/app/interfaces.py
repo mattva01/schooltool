@@ -62,6 +62,15 @@ class ApplicationInitializationEvent(ObjectEvent):
     zope.interface.implements(IApplicationInitializationEvent)
 
 
+class IApplicationStartUpEvent(IObjectEvent):
+    """The SchoolTool application has started up.
+
+    A hook for plugin initialization.
+    """
+
+class ApplicationStartUpEvent(ObjectEvent):
+    zope.interface.implements(IApplicationStartUpEvent)
+
 
 class ICatalogSetUpEvent(IObjectEvent):
     """The SchoolTool catalogs are being initialized.
