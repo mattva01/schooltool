@@ -75,6 +75,7 @@ root_packages = ['schooltool.app',
                  'schooltool.utility',
                  'schooltool.widget',
                  'schooltool.common',
+                 'schooltool.schoolyear',
 
                  # The schooltool configurations we maintain
                  'schooltool.stapp2005',
