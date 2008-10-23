@@ -35,18 +35,6 @@
       class="schooltool.timetable.browser.SectionTimetableSetupView"
       permission="schooltool.edit" />
 
-  <page
-      name="schedule.html"
-      for="schooltool.person.interfaces.IPerson"
-      class="schooltool.timetable.browser.PersonTimetableSetupView"
-      permission="schooltool.edit" />
-
-  <page
-      name="schedule.html"
-      for="schooltool.resource.interfaces.IResource"
-      class="schooltool.timetable.browser.ResourceTimetableSetupView"
-      permission="schooltool.edit" />
-
   <configure package="schooltool.skin">
     <navigationViewlet
       name="add-timetable"
@@ -68,24 +56,7 @@
       title="Schedule"
       order="10"
       />
-    <navigationViewlet
-      name="schedule-student"
-      for="schooltool.person.interfaces.IPerson"
-      manager="schooltool.skin.IActionMenuManager"
-      template="templates/actionsViewlet.pt"
-      permission="schooltool.edit"
-      link="schedule.html"
-      title="Schedule"
-      order="10"
-      />
   </configure>
-
-  <page
-      name="schedule.html"
-      for="schooltool.resource.interfaces.IBaseResource"
-      class="schooltool.timetable.browser.ResourceTimetableSetupView"
-      permission="schooltool.view"
-      />
 
   <page
       name="index.html"
@@ -107,19 +78,12 @@
       title="View"
       />
 
-  <configure package="schooltool.skin">
-    <navigationViewlet
-      name="ttschemas"
-      for="*"
-      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
-      template="templates/navigationViewlet.pt"
-      class="schooltool.skin.TopLevelContainerNavigationViewlet"
+  <page
+      name="export.xml"
+      for="schooltool.timetable.interfaces.ITimetableSchema"
+      class=".schema.TimetableSchemaXMLView"
       permission="schooltool.view"
-      link="ttschemas"
-      title="School Timetables"
-      order="80"
       />
-  </configure>
 
   <page
       name="simpleadd.html"
@@ -250,5 +214,38 @@
        menu="zmi_views"
        title="Calendar (Yearly)"
        />
+
+  <page
+      for="schooltool.calendar.interfaces.ICalendar"
+      name="daily_calendar_rows"
+      layer="schooltool.timetable.browser.skin.ITimetableLayer"
+      class=".cal.DailyTimetableCalendarRowsView"
+      permission="zope.View"
+      />
+
+  <navigationViewlet
+      name="school_timetables"
+      for="*"
+      manager="schooltool.schoolyear.browser.interfaces.ISchoolYearViewMenuViewletManager"
+      template="templates/link_to_school_timetables.pt"
+      permission="schooltool.view"
+      order="60"
+      />
+
+  <zope:adapterTraverserPlugin
+      for="schooltool.schoolyear.interfaces.ISchoolYear"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      name="school_timetables"
+      adapter="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      />
+
+  <zope:adapter
+      factory=".schema.TimetableSchemaContainerAbsoluteURLAdapter"
+      provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <zope:adapter
+      factory=".schema.TimetableSchemaContainerAbsoluteURLAdapter"
+      provides="zope.interface.Interface"
+      name="absolute_url"/>
 
 </configure>

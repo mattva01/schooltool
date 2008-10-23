@@ -22,9 +22,13 @@ Setup code for SchoolTool application browser unit tests
 $Id$
 """
 import os.path
+import unittest
+
 import zope.component
 import transaction
 from zope.interface import implements, Interface
+from zope.app.component.hooks import setSite
+from zope.app.testing.functional import FunctionalTestSetup
 from zope.app.testing import setup, ztapi
 from zope.app.form.interfaces import IInputWidget
 from zope.publisher.interfaces.browser import IBrowserRequest
@@ -244,3 +248,21 @@ def tearDown(test=None):
     transaction.abort()
     setup.placefulTearDown()
 
+
+def layeredTestSetup():
+    fts = FunctionalTestSetup()
+    fts.setUp()
+    app = fts.getRootFolder()
+    setSite(app)
+
+
+def layeredTestTearDown():
+    setSite(None)
+    fts = FunctionalTestSetup()
+    fts.tearDown()
+
+
+def makeLayeredSuite(klass, layer):
+    suite = unittest.makeSuite(klass)
+    suite.layer = layer
+    return suite

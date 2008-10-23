@@ -26,8 +26,10 @@ from zope.interface import implements
 from zope.schema.interfaces import ITitledTokenizedTerm
 from zope.schema.interfaces import IVocabularyTokenized
 
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPerson
+from schooltool.group.interfaces import IGroupContainer
 from schooltool.group.interfaces import IGroup
 
 from schooltool.basicperson.browser.person import PersonTerm
@@ -65,14 +67,15 @@ class GradeClassSource(object):
                       for group in self.context.groups
                       if IGroup.providedBy(group)]
         else:
-            tokens = list(ISchoolToolApplication(None)['groups'])
+            tokens = list(IGroupContainer(ISchoolToolApplication(None), {}))
 
         for token in sorted(tokens):
             yield self.getTermByToken(token)
 
     def getTermByToken(self, token):
-        app = ISchoolToolApplication(None)
-        gc = app['groups']
+        gc = IGroupContainer(ISchoolToolApplication(None))
+        if gc is None:
+            raise LookupError(token)
         if token not in gc:
             raise LookupError(token)
         return GroupTerm(token)
@@ -98,8 +101,10 @@ class AdvisorSource(object):
         return len(self.context.groups)
 
     def __iter__(self):
-        app = ISchoolToolApplication(None)
-        persons = app['groups']['teachers'].members
+        gc = IGroupContainer(ISchoolToolApplication(None), None)
+        if gc is None:
+            return
+        persons = gc['teachers'].members
         for person in sorted(persons, key=lambda p: p.__name__):
             yield PersonTerm(person)
 

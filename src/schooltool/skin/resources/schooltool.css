@@ -428,3 +428,13 @@ div .dropdown a:hover {
 .term4 { background-color: #e0b6af; }
 .term5 { background-color: #ada7c8; }
 .term6 { background-color: #7590ae; }
+
+#header .next_schoolyear {
+  color: #000000;
+  font-size: small;
+}
+
+#header .active_schoolyear {
+  color: #990000;
+  font-weight: bold;
+}

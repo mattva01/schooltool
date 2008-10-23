@@ -6,6 +6,19 @@
   <!-- Course Content Components -->
 
   <interface
+      interface=".interfaces.ICourseContainerContainer"
+      type="zope.app.content.interfaces.IContentType"
+      />
+
+  <class class=".course.CourseContainerContainer">
+    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <require permission="schooltool.view"
+             attributes="keys values items __iter__ __len__ has_key" />
+    <require permission="schooltool.edit"
+             interface="zope.app.container.interfaces.IWriteContainer" />
+  </class>
+
+  <interface
       interface=".interfaces.ICourseContainer"
       type="zope.app.content.interfaces.IContentType"
       />
@@ -42,6 +55,19 @@
 
 
   <!-- Section Content Components -->
+
+  <interface
+      interface=".interfaces.ISectionContainerContainer"
+      type="zope.app.content.interfaces.IContentType"
+      />
+
+  <class class=".section.SectionContainerContainer">
+    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <require permission="schooltool.view"
+             attributes="keys values items __iter__ __len__ has_key" />
+    <require permission="schooltool.edit"
+             interface="zope.app.container.interfaces.IWriteContainer" />
+  </class>
 
   <interface
       interface=".interfaces.ISectionContainer"
@@ -83,39 +109,8 @@
 
   <adapter
       for=".interfaces.ISectionContainer"
-      factory="schooltool.app.app.SimpleNameChooser"
+      factory="schooltool.course.browser.section.SectionNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
-
-  <!-- sample data -->
-  <configure
-      xmlns:zcml="http://namespaces.zope.org/zcml"
-      zcml:condition="have devmode">
-
-    <utility
-        factory=".sampledata.SampleCourses"
-        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
-        name="courses"
-        />
-
-    <utility
-        factory=".sampledata.SampleSections"
-        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
-        name="sections"
-        />
-
-    <utility
-        factory=".sampledata.SampleTimetables"
-        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
-        name="section_timetables"
-        />
-
-    <utility
-        factory=".sampledata.SampleSectionAssignments"
-        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
-        name="section_events"
-        />
-
-  </configure>
 
   <!-- Relationships -->
 
@@ -139,6 +134,42 @@
       component=".booking.URISection"
       name="http://schooltool.org/ns/sectionbooking/section" />
 
+  <adapter
+      factory=".course.getCourseContainer" />
+  <adapter
+      factory=".course.getCourseContainerForApp" />
+  <adapter
+      factory=".course.getCourseContainerForTerm" />
+
+  <adapter
+      factory=".course.getSchoolYearForCourse" />
+  <adapter
+      factory=".course.getSchoolYearForCourseContainer" />
+
+  <adapter
+      factory=".section.getSectionContainer" />
+  <adapter
+      factory=".section.getSchoolYearForSection" />
+  <adapter
+      factory=".section.getSchoolYearForSectionContainer" />
+  <adapter
+      factory=".section.getTermForSection" />
+  <adapter
+      factory=".section.getTermForSectionContainer" />
+  <adapter
+      factory=".section.getCourseContainerForSection" />
+  <adapter
+      factory=".section.getCourseContainerForSectionContainer" />
+  <adapter
+      name="courses"
+      factory=".course.InitCoursesForNewSchoolYear" />
+  <adapter
+      name="remove_sections_when_term_is_deleted"
+      factory=".section.RemoveSectionsWhenTermIsDeleted" />
+  <adapter
+      name="remove_courses_when_year_is_deleted"
+      factory=".course.RemoveCoursesWhenSchoolYearIsDeleted" />
+
   <!-- Learner adapter -->
   <adapter
       factory=".section.PersonLearnerAdapter" />
@@ -149,7 +180,6 @@
 
   <!-- Views -->
   <include package=".browser" />
-  <include package=".rest" />
 
   <!-- Help files -->
   <include package=".help" />

@@ -1,0 +1,125 @@
+Simple test for school years
+============================
+
+A manager logs in
+
+    >>> from zope.testbrowser.testing import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/')
+
+Sets the time
+
+    >>> manager.open('http://localhost/time')
+    >>> manager.getControl('Today').value = "05/02/15"
+    >>> manager.getControl('Apply').click()
+
+    >>> 'Data successfully updated.' in manager.contents
+    True
+
+And create a new school year:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('New School Year').click()
+    >>> manager.getControl('Title').value = '2005-2006'
+    >>> manager.getControl('First day').value = '05/09/01'
+    >>> manager.getControl('Last day').value = '06/07/15'
+    >>> manager.getControl('Add').click()
+
+We should be redirected to the school year view now:
+
+    >>> manager.url
+    'http://localhost/schoolyears/2005-2006'
+
+Let's add some terms:
+
+    >>> manager.getLink('Add a new term').click()
+    >>> manager.getControl('Title').value = 'Fall'
+    >>> manager.getControl('Start date').value = '2005-09-01'
+    >>> manager.getControl('End date').value = '2006-01-10'
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Saturday').click()
+    >>> manager.getControl('Sunday').click()
+    >>> manager.getControl('Add term').click()
+
+    >>> manager.getLink('Add a new term').click()
+    >>> manager.getControl('Title').value = 'Spring'
+    >>> manager.getControl('Start date').value = '2006-01-11'
+    >>> manager.getControl('End date').value = '2006-07-15'
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Saturday').click()
+    >>> manager.getControl('Sunday').click()
+    >>> manager.getControl('Add term').click()
+
+And now let's add a couple of courses:
+
+    >>> manager.getLink('2005-2006').click()
+    >>> manager.getLink('Courses').click()
+
+    >>> manager.url
+    'http://localhost/schoolyears/2005-2006/courses'
+
+    >>> manager.getLink('New Course').click()
+    >>> manager.getControl('Title').value = "History"
+    >>> manager.getControl('Add').click()
+
+    >>> manager.url
+    'http://localhost/schoolyears/2005-2006/courses'
+
+    >>> manager.getLink('New Course').click()
+    >>> manager.getControl('Title').value = "English"
+    >>> manager.getControl('Add').click()
+
+Now let's add some sections for our courses:
+
+    >>> manager.getLink('2005-2006').click()
+    >>> manager.getLink('Courses').click()
+    >>> manager.getLink('English').click()
+
+
+    >>> manager.url
+    'http://localhost/schoolyears/2005-2006/courses/english'
+
+    >>> manager.getControl('For term:').value = ['fall']
+    >>> manager.getControl('New Section').click()
+
+    >>> manager.url
+    'http://localhost/schoolyears/2005-2006/fall/sections/1'
+
+    >>> manager.getLink('English').click()
+    >>> manager.getControl('For term:').value = ['spring']
+    >>> manager.getControl('New Section').click()
+
+    >>> manager.url
+    'http://localhost/schoolyears/2005-2006/spring/sections/1'
+
+Let's remove the section that we added to the spring term now:
+
+    >>> manager.getLink('Spring').click()
+    >>> manager.getLink('Sections').click()
+    >>> manager.getControl(name='delete.1').value = True
+    >>> manager.getControl('Delete').click()
+    >>> manager.getControl('Confirm').click()
+
+add an instructor
+
+    >>> manager.getLink('2005-2006').click()
+    >>> manager.getLink('Fall').click()
+    >>> manager.getLink('Sections').click()
+    >>> manager.getLink('English (1)').click()
+    >>> manager.getLink('edit instructors').click()
+    >>> manager.getControl('SchoolTool Manager').click()
+    >>> manager.getControl('Add').click()
+    >>> manager.getControl('OK').click()
+
+and a student
+
+    >>> manager.getLink('edit individuals').click()
+    >>> manager.getControl('SchoolTool Manager').click()
+    >>> manager.getControl('Add').click()
+    >>> manager.getControl('OK').click()
+
+#     >>> from zope.testing.server import startServer
+#     >>> startServer(http, manager.url, 'manager', 'schooltool')

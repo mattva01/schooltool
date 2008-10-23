@@ -4,10 +4,10 @@ Demographics
 
 We can add a person:
 
-  >>> from zope.testbrowser.testing import Browser
-  >>> browser = Browser()
-  >>> browser.handleErrors = False
-  >>> browser.addHeader('Authorization', 'Basic manager:schooltool')
+  >>> from schooltool.app.browser.ftests.setup import setUpBasicSchool
+  >>> setUpBasicSchool()
+
+  >>> browser = Browser('manager', 'schooltool')
   >>> browser.open('http://localhost/persons/@@add.html')
   >>> browser.getControl(name='form.prefix').value = 'Mr'
   >>> browser.getControl(name='form.full_name').value = 'foobar'
@@ -293,7 +293,7 @@ Let's make delta the advisor of omega:
 
 Let's put omega in the omega team:
 
-  >>> browser.open("http://localhost/groups/+/addSchoolToolGroup.html")
+  >>> browser.open("http://localhost/schoolyears/2005-2006/groups/+/addSchoolToolGroup.html")
   >>> t = browser.getControl(name="field.title")
   >>> t.value = "Gamma"
   >>> browser.getControl("Add").click()
@@ -323,7 +323,7 @@ Let's try removing the advisor and see that nothing goes wrong:
 
 Now let's try removing the team and see that nothing goes wrong:
 
-  >>> browser.open("http://localhost/groups")
+  >>> browser.open("http://localhost/schoolyears/2005-2006/groups/")
   >>> delete = browser.getControl(name="delete.gamma")
   >>> delete.value = True
   >>> browser.getControl("Delete").click()

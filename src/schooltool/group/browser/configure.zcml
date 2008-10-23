@@ -48,18 +48,6 @@
         title="Edit Info"
         />
 
-    <navigationViewlet
-      name="groups"
-      for="*"
-      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
-      template="templates/navigationViewlet.pt"
-      class="schooltool.skin.TopLevelContainerNavigationViewlet"
-      permission="schooltool.view"
-      link="groups"
-      title="Groups"
-      order="20"
-      />
-
   </configure>
 
   <viewlet
@@ -134,11 +122,36 @@
   <zope:adapter
       for="schooltool.group.interfaces.IGroupContainer
            zope.publisher.interfaces.browser.IBrowserRequest"
-      factory="schooltool.table.table.IndexedFilterWidget" />
+      factory="schooltool.table.table.FilterWidget" />
 
   <zope:adapter
       for="schooltool.group.interfaces.IGroupContainer
            zope.publisher.interfaces.browser.IBrowserRequest"
-      factory="schooltool.table.table.IndexedTableFormatter " />
+      factory="schooltool.table.table.SchoolToolTableFormatter " />
+
+  <navigationViewlet
+      name="groups"
+      for="*"
+      manager="schooltool.schoolyear.browser.interfaces.ISchoolYearViewMenuViewletManager"
+      template="link_to_groups.pt"
+      permission="schooltool.view"
+      order="30"
+      />
+
+  <zope:adapter
+      factory=".group.GroupContainerAbsoluteURLAdapter"
+      provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <zope:adapter
+      factory=".group.GroupContainerAbsoluteURLAdapter"
+      provides="zope.interface.Interface"
+      name="absolute_url"/>
+
+  <zope:adapterTraverserPlugin
+      for="schooltool.schoolyear.interfaces.ISchoolYear"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      name="groups"
+      adapter="schooltool.group.interfaces.IGroupContainer"
+      />
 
 </configure>

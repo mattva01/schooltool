@@ -4,13 +4,7 @@ Functional doctest for SchoolTool
 This is a functional doctest for schooltool.  To find out more about
 functional doctests, read Zope3/src/zope/app/ftests/doctest.txt
 
-    >>> from zope.testbrowser.testing import Browser
-    >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
-    >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/')
-    >>> 'SchoolTool' in manager.contents
-    True
+    >>> manager = Browser('manager', 'schooltool')
 
 The SchoolTool version is displayed on the page:
 
@@ -26,18 +20,6 @@ Let's create a person so that we can fool around with his calendar:
 Let's create a second person so that we can test access control.
 
     >>> addPerson('Toad', 'toad', 'doat')
-
-Also, let's create a group:
-
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('Groups').click()
-    >>> manager.getLink('New Group').click()
-
-    >>> manager.getControl('Title').value = 'Animals'
-    >>> manager.getControl('Add').click()
-
-    >>> 'Animals' in manager.contents
-    True
 
 Now we log in as the frog:
 
@@ -71,24 +53,11 @@ Let's make sure that we can see the SchoolTool preferences page:
     >>> 'cal_periods' in frog.contents
     True
 
-We should be able to see terms and schemas without authenticating:
-
-    >>> anonymous = Browser()
-    >>> anonymous.open('http://localhost/terms')
-    >>> anonymous.headers['status']
-    '200 Ok'
-
-    >>> anonymous.open('http://localhost/ttschemas')
-    >>> anonymous.headers['status']
-    '200 Ok'
-
 But you have to log in to see persons, groups, and other locations:
 
+    >>> anonymous = Browser()
+    >>> anonymous.handleErrors = True
     >>> anonymous.open('http://localhost/persons')
-    >>> print anonymous.url
-    http://localhost/auth/@@login.html?forbidden=yes&nexturl=...
-
-    >>> anonymous.open('http://localhost/groups')
     >>> print anonymous.url
     http://localhost/auth/@@login.html?forbidden=yes&nexturl=...
 
@@ -96,19 +65,42 @@ But you have to log in to see persons, groups, and other locations:
     >>> print anonymous.url
     http://localhost/auth/@@login.html?forbidden=yes&nexturl=...
 
-The section container view points to the timetable import form:
-
-    >>> manager.open('http://localhost/sections')
-    >>> print manager.contents
-    <!DOCTYPE ...>
-    ...
-    ...<a href="http://localhost/sections/@@timetables-csvimport.html">Import
-    Sections</a>...
-    ...
-
-This is a school, so we should add some courses
+This is a school, so we should add a school year
 
     >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('New School Year').click()
+    >>> manager.getControl('Title').value = '2007'
+    >>> manager.getControl('First day').value = '07/01/01'
+    >>> manager.getControl('Last day').value = '07/12/15'
+    >>> manager.getControl('Add').click()
+
+and a term
+
+    >>> manager.getLink('Add a new term').click()
+    >>> manager.getControl('Title').value = 'Term 1'
+    >>> manager.getControl('Start date').value = '2007-07-01'
+    >>> manager.getControl('End date').value = '2007-12-15'
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Saturday').click()
+    >>> manager.getControl('Sunday').click()
+    >>> manager.getControl('Add term').click()
+
+then a  group:
+
+    >>> manager.getLink('2007').click()
+    >>> manager.getLink('Groups').click()
+    >>> manager.getLink('New Group').click()
+
+    >>> manager.getControl('Title').value = 'Animals'
+    >>> manager.getControl('Add').click()
+
+    >>> 'Animals' in manager.contents
+    True
+
+Now let's add a course:
+
+    >>> manager.getLink('2007').click()
     >>> manager.getLink('Courses').click()
     >>> manager.getLink('New Course').click()
     >>> manager.getControl('Title').value = 'History'
@@ -126,7 +118,7 @@ Let's see that course:
 Lets create a section to add to that course:
 
     >>> from schooltool.app.browser.ftests import setup
-    >>> setup.addSection('History')
+    >>> setup.addSection('History', '2007', 'Term 1')
 
 Looking at the section:
 
@@ -137,13 +129,14 @@ Looking at the section:
     ...
     ...Section of
     <BLANKLINE>
-          <a href="http://localhost/courses/history">History</a>
+          <a href="http://localhost/schoolyears/2007/courses/history">History</a>
     <BLANKLINE>
     ...
 
 Frog can't see the section's calendar by default
 
-    >>> frog.open('http://localhost/sections/1/calendar')
+    >>> frog.handleErrors = True
+    >>> frog.open('http://localhost/schoolyears/2007/term-1/sections/1/calendar')
     >>> print frog.url
     http://localhost/auth/@@login.html?forbidden=yes&nexturl=...
 
@@ -169,12 +162,7 @@ calendar:
 
 As does Toad's:
 
-    >>> toad = Browser()
-    >>> toad.open('http://localhost/')
-    >>> toad.getLink('Log In').click()
-    >>> toad.getControl('Username').value = 'toad'
-    >>> toad.getControl('Password').value = 'doat'
-    >>> toad.getControl('Log in').click()
+    >>> toad = Browser('toad', 'doat')
 
     >>> toad.getLink('Calendar').click()
     >>> print_portlet(toad.contents)
@@ -213,7 +201,7 @@ Now Frog is in the Instructors div
     ...
     ...Section of
     <BLANKLINE>
-          <a href="http://localhost/courses/history">History</a>
+          <a href="http://localhost/schoolyears/2007/courses/history">History</a>
     <BLANKLINE>
     ...
           <h3>Instructors</h3>
@@ -228,13 +216,13 @@ Toad should still be able to see the course view even though it is
 showing bits of frog's personal information as well as the section
 list:
 
-    >>> toad.open('http://localhost/courses/history')
+    >>> toad.open('http://localhost/schoolyears/2007/courses/history')
     >>> print toad.url
-    http://localhost/courses/history
+    http://localhost/schoolyears/2007/courses/history
 
 Frog can see the calendar now
 
-    >>> frog.open('http://localhost/sections/1/calendar')
+    >>> frog.open('http://localhost/schoolyears/2007/term-1/sections/1/calendar')
     >>> 'Calendar for History (1)' in frog.contents
     True
 
@@ -247,10 +235,10 @@ And Frog's overlay portlet shows the section:
             <td style="width: 100%">My Calendar</td>
             <td></td>
           </tr>
-      <tr style="background: #eed680"><td><input type="checkbox" name="overlay:list" checked="checked" value="/sections/1" /></td>
+      <tr style="background: #eed680"><td><input type="checkbox" name="overlay:list" checked="checked" value="/schooltool.course.section/.../1" /></td>
             <td style="width: 100%">History (1)</td>
             <td><a class="go" style="background: #d1940c;...
-                color: #d1940c" href="http://localhost/sections/1/calendar">...</a></td>
+                color: #d1940c" href="http://localhost/schoolyears/2007/term-1/sections/1/calendar">...</a></td>
         </tr>
       <tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked="checked" value="/" /></td>
             <td style="width: 100%">Your School</td>
@@ -266,7 +254,7 @@ If we fire Frog, in hopes of getting Salamander to step in:
 
 Frog can't see the section's calendar any more
 
-    >>> frog.open('http://localhost/sections/1/calendar')
+    >>> frog.open('http://localhost/schoolyears/2007/term-1/sections/1/calendar')
     >>> print frog.url
     http://localhost/auth/@@login.html?forbidden=yes&nexturl=...
 
@@ -310,7 +298,7 @@ Now toad is in the Students div
     ...
     ...Section of
     <BLANKLINE>
-        <a href="http://localhost/courses/history">History</a>
+        <a href="http://localhost/schoolyears/2007/courses/history">History</a>
     <BLANKLINE>
     ...
           <h3>Students</h3>
@@ -320,9 +308,9 @@ Now toad is in the Students div
 
 Toad can see the calendar now:
 
-    >>> toad.open('http://localhost/sections/1/calendar')
+    >>> toad.open('http://localhost/schoolyears/2007/term-1/sections/1/calendar')
     >>> print toad.url
-    http://localhost/sections/1/calendar
+    http://localhost/schoolyears/2007/term-1/sections/1/calendar
 
 And Toad's overlay portlet shows the section:
 
@@ -333,9 +321,9 @@ And Toad's overlay portlet shows the section:
             <td style="width: 100%">My Calendar</td>
             <td></td>
           </tr>
-      <tr style="background: #eed680"><td><input type="checkbox" name="overlay:list" checked="checked" value="/sections/1" /></td>
+      <tr style="background: #eed680"><td><input type="checkbox" name="overlay:list" checked="checked" value="/schooltool.course.section/.../1" /></td>
             <td style="width: 100%">History (1)</td>
-            <td><a class="go" style="..." href="http://localhost/sections/1/calendar">...</a></td>
+            <td><a class="go" style="..." href="http://localhost/schoolyears/2007/term-1/sections/1/calendar">...</a></td>
         </tr>
       <tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked="checked" value="/" /></td>
             <td style="width: 100%">Your School</td>
@@ -346,7 +334,7 @@ And Toad's overlay portlet shows the section:
 Though students can't see the section list (nor sections themselves) by
 default:
 
-    >>> frog.open('http://localhost/sections/1')
+    >>> frog.open('http://localhost/schoolyears/2007/term-1/sections/1')
     >>> print frog.url
     http://localhost/auth/@@login.html?forbidden=yes&nexturl=...
 
@@ -359,9 +347,9 @@ we can give them the permission:
 
 Students still aren't given the option to change the location:
 
-    >>> frog.open('http://localhost/sections/1')
+    >>> frog.open('http://localhost/schoolyears/2007/term-1/sections/1')
     >>> print frog.url
-    http://localhost/sections/1
+    http://localhost/schoolyears/2007/term-1/sections/1
     >>> "change location" not in frog.contents
     True
 

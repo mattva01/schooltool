@@ -30,6 +30,10 @@
       factory=".crowds.OwnerCrowd" />
 
   <security:crowd
+      name="superuser"
+      factory=".crowds.SuperUserCrowd" />
+
+  <security:crowd
       name="managers"
       factory=".crowds.ManagersCrowd" />
 

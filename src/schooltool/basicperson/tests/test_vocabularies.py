@@ -23,6 +23,7 @@ $Id$
 """
 import unittest
 
+from schooltool.group.interfaces import IGroupContainer
 from zope.app.testing import setup
 from zope.component import provideAdapter
 from zope.interface import implements
@@ -44,12 +45,16 @@ def doctest_GradeClassSource():
 
         >>> from schooltool.app.interfaces import ISchoolToolApplication
         >>> class STAppStub(dict):
+        ...     implements(ISchoolToolApplication)
         ...     def __init__(self, context):
         ...         self['groups'] = {'a': GroupStub('A'),
         ...                           'b': GroupStub('B'),
         ...                           'some-group': GroupStub('Some Group')}
 
-        >>> provideAdapter(STAppStub, adapts=[None], provides=ISchoolToolApplication)
+        >>> provideAdapter(STAppStub, adapts=[None])
+        >>> provideAdapter(lambda app: app['groups'],
+        ...                adapts=[ISchoolToolApplication],
+        ...                provides=IGroupContainer)
 
         >>> from schooltool.basicperson.vocabularies import GradeClassSource
         >>> source = GradeClassSource(None)
@@ -94,12 +99,16 @@ def doctest_AdvisorSource():
         ...         self.__name__ = self.title = name
 
         >>> class STAppStub(dict):
+        ...     implements(ISchoolToolApplication)
         ...     def __init__(self, context):
         ...         self['groups'] = {}
         ...         members = map(PersonStub, ['john', 'sarrah'])
         ...         self['groups']['teachers'] = GroupStub(members)
 
-        >>> provideAdapter(STAppStub, adapts=[None], provides=ISchoolToolApplication)
+        >>> provideAdapter(STAppStub, adapts=[None])
+        >>> provideAdapter(lambda app: app['groups'],
+        ...                adapts=[ISchoolToolApplication],
+        ...                provides=IGroupContainer)
 
         >>> from schooltool.basicperson.vocabularies import AdvisorSource
         >>> source = AdvisorSource(None)

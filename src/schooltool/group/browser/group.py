@@ -21,7 +21,13 @@ group views.
 
 $Id$
 """
+from zope.app.intid.interfaces import IIntIds
+from zope.traversing.browser.interfaces import IAbsoluteURL
+from zope.interface import implements
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.browser import BrowserView
+from zope.component import adapts
+from zope.component import getUtility
 from zope.component import getMultiAdapter
 from zope.security.checker import canAccess
 
@@ -38,6 +44,22 @@ from schooltool.table.interfaces import ITableFormatter
 from schooltool.group.interfaces import IGroupMember
 from schooltool.group.interfaces import IGroupContainer, IGroupContained
 from schooltool.app.browser.app import RelationshipViewBase
+
+
+
+class GroupContainerAbsoluteURLAdapter(BrowserView):
+
+    adapts(IGroupContainer, IBrowserRequest)
+    implements(IAbsoluteURL)
+
+    def __str__(self):
+        container_id = int(self.context.__name__)
+        int_ids = getUtility(IIntIds)
+        container = int_ids.getObject(container_id)
+        url = str(getMultiAdapter((container, self.request), name='absolute_url'))
+        return url + '/groups'
+
+    __call__ = __str__
 
 
 class GroupContainerView(TableContainerView):
@@ -65,7 +87,9 @@ class GroupListView(RelationshipViewBase):
                 if not ISection.providedBy(group)]
 
     def getAvailableItemsContainer(self):
-        return ISchoolToolApplication(None)['groups']
+        app = ISchoolToolApplication(None)
+        groups = IGroupContainer(app, {})
+        return groups
 
     def getCollection(self):
         return self.context.groups

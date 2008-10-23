@@ -18,14 +18,13 @@
 #
 """
 Tests for SchoolTool timetable schema wizard.
-
-$Id$
 """
 
 import unittest
 import datetime
 from pprint import pprint
 
+from zope.location.location import locate
 from zope.testing import doctest
 from zope.publisher.browser import TestRequest
 from zope.interface import Interface
@@ -42,6 +41,7 @@ from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.testing.setup import setUpApplicationPreferences
+from schooltool.timetable.schema import TimetableSchemaContainer
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.browser import format_time_range
 
@@ -75,6 +75,8 @@ def setUp(test):
                          getSchoolToolApplication)
 
     test.globs['app'] = setup.setUpSchoolToolSite()
+    test.globs['schemas'] = TimetableSchemaContainer()
+    locate(test.globs['schemas'], test.globs['app'], 'ttschemas')
 
 
 def tearDown(test):
@@ -109,7 +111,7 @@ def doctest_getSessionData():
     classes (and subclasses of the former).
 
         >>> from schooltool.timetable.browser.ttwizard import Step
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> step = Step(context, request)
         >>> data = step.getSessionData()
@@ -135,7 +137,7 @@ def doctest_ChoiceStep():
     """Unit test for ChoiceStep
 
         >>> from schooltool.timetable.browser.ttwizard import ChoiceStep
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = ChoiceStep(context, request)
 
@@ -189,7 +191,7 @@ def doctest_FormStep():
 
     The constructor sets up input widgets.
 
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = SampleFormStep(context, request)
         >>> view.a_field_widget
@@ -248,7 +250,7 @@ def doctest_FirstStep():
     """Unit test for FirstStep
 
         >>> from schooltool.timetable.browser.ttwizard import FirstStep
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = FirstStep(context, request)
 
@@ -290,7 +292,7 @@ def doctest_CycleStep():
     """Unit test for CycleStep
 
         >>> from schooltool.timetable.browser.ttwizard import CycleStep
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = CycleStep(context, request)
         >>> session = view.getSessionData()
@@ -330,7 +332,7 @@ def doctest_DayEntryStep():
     r"""Unit test for DayEntryStep
 
         >>> from schooltool.timetable.browser.ttwizard import DayEntryStep
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = DayEntryStep(context, request)
 
@@ -389,7 +391,7 @@ def doctest_IndependentDaysStep():
 
         >>> from schooltool.timetable.browser.ttwizard \
         ...                                         import IndependentDaysStep
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = IndependentDaysStep(context, request)
 
@@ -425,7 +427,7 @@ def doctest_SequentialModelStep():
     r"""Unit test for SequentialModelStep
 
         >>> from schooltool.timetable.browser.ttwizard import SequentialModelStep
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = SequentialModelStep(context, request)
 
@@ -450,7 +452,7 @@ def doctest_SimpleSlotEntryStep():
     r"""Unit test for SimpleSlotEntryStep
 
         >>> from schooltool.timetable.browser.ttwizard import SimpleSlotEntryStep
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = SimpleSlotEntryStep(context, request)
 
@@ -526,8 +528,7 @@ def doctest_RotatingSlotEntryStep():
     r"""Unit test for RotatingSlotEntryStep
 
         >>> from schooltool.timetable.browser.ttwizard import RotatingSlotEntryStep
-        >>> from schooltool.timetable.browser.ttwizard import getSessionData
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = RotatingSlotEntryStep(context, request)
 
@@ -621,8 +622,7 @@ def doctest_WeeklySlotEntryStep():
     r"""Unit test for WeeklySlotEntryStep
 
         >>> from schooltool.timetable.browser.ttwizard import WeeklySlotEntryStep
-        >>> from schooltool.timetable.browser.ttwizard import getSessionData
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = WeeklySlotEntryStep(context, request)
         >>> view.getSessionData()['cycle'] = 'weekly'
@@ -731,7 +731,7 @@ def doctest_NamedPeriodsStep():
 
         >>> from schooltool.timetable.browser.ttwizard \
         ...     import NamedPeriodsStep
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = NamedPeriodsStep(context, request)
 
@@ -768,7 +768,7 @@ def doctest_PeriodNamesStep():
     r"""Unit test for PeriodNamesStep
 
         >>> from schooltool.timetable.browser.ttwizard import PeriodNamesStep
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = PeriodNamesStep(context, request)
 
@@ -847,7 +847,7 @@ def doctest_PeriodSequenceSameStep():
 
         >>> from schooltool.timetable.browser.ttwizard \
         ...     import PeriodSequenceSameStep
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = PeriodSequenceSameStep(context, request)
 
@@ -870,7 +870,7 @@ def doctest_PeriodOrderSimple():
     """Unit test for PeriodOrderSimple view
 
         >>> from schooltool.timetable.browser.ttwizard import PeriodOrderSimple
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = PeriodOrderSimple(context, request)
 
@@ -1017,7 +1017,7 @@ def doctest_PeriodOrderComplex():
 
         >>> from schooltool.timetable.browser.ttwizard import \\
         ...     PeriodOrderComplex
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = PeriodOrderComplex(context, request)
 
@@ -1243,7 +1243,7 @@ def doctest_PeriodOrderComplex_weekly_rotating():
 
         >>> from schooltool.timetable.browser.ttwizard import \\
         ...     PeriodOrderComplex
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = PeriodOrderComplex(context, request)
 
@@ -1292,7 +1292,7 @@ def doctest_HomeroomStep():
     r"""Unit test for HomeroomStep
 
         >>> from schooltool.timetable.browser.ttwizard import HomeroomStep
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = HomeroomStep(context, request)
 
@@ -1318,7 +1318,7 @@ def doctest_HomeroomPeriodsStep():
 
         >>> from schooltool.timetable.browser.ttwizard \
         ...         import HomeroomPeriodsStep
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = HomeroomPeriodsStep(context, request)
 
@@ -1393,7 +1393,7 @@ def doctest_FinalStep():
     r"""Unit test for FinalStep
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = FinalStep(context, request)
 
@@ -1505,7 +1505,7 @@ def doctest_FinalStep_createSchema():
     r"""Unit test for FinalStep.createSchema
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = FinalStep(context, request)
         >>> data = view.getSessionData()
@@ -1583,7 +1583,6 @@ def doctest_FinalStep_createSchema():
 
     However if we set a school preferred timezone and try again:
 
-        >>> from schooltool.app.interfaces import IApplicationPreferences
         >>> IApplicationPreferences(app).timezone = 'Australia/Canberra'
         >>> ttschema = view.createSchema()
         >>> ttschema.timezone
@@ -1599,7 +1598,7 @@ def doctest_FinalStep_createSchema_different_order_on_different_days_weekly():
     each day.
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
-        >>> view = FinalStep(app['ttschemas'], TestRequest())
+        >>> view = FinalStep(schemas, TestRequest())
         >>> data = view.getSessionData()
 
         >>> from datetime import time, timedelta
@@ -1650,7 +1649,7 @@ def doctest_FinalStep_createSchema_different_order_on_different_days_cyclic():
     each day.
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
-        >>> view = FinalStep(app['ttschemas'], TestRequest())
+        >>> view = FinalStep(schemas, TestRequest())
         >>> data = view.getSessionData()
 
         >>> from datetime import time, timedelta
@@ -1708,7 +1707,7 @@ def doctest_FinalStep_createSchema_different_order_cyclic_weekly():
     order in each day.
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
-        >>> view = FinalStep(app['ttschemas'], TestRequest())
+        >>> view = FinalStep(schemas, TestRequest())
         >>> data = view.getSessionData()
 
         >>> from datetime import time, timedelta
@@ -1781,7 +1780,7 @@ def doctest_FinalStep_createSchema_different_times():
     each day.
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
-        >>> view = FinalStep(app['ttschemas'], TestRequest())
+        >>> view = FinalStep(schemas, TestRequest())
         >>> data = view.getSessionData()
 
         >>> from datetime import time, timedelta
@@ -1859,7 +1858,7 @@ def doctest_FinalStep_createSchema_with_homeroom():
     each day, homeroom periods.
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
-        >>> view = FinalStep(app['ttschemas'], TestRequest())
+        >>> view = FinalStep(schemas, TestRequest())
         >>> data = view.getSessionData()
 
         >>> from datetime import time, timedelta
@@ -1939,7 +1938,7 @@ def doctest_FinalStep_add():
     """Unit test for FinalStep.createSchema
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = FinalStep(context, request)
 
@@ -1958,7 +1957,7 @@ def doctest_TimetableSchemaWizard():
 
         >>> from schooltool.timetable.browser.ttwizard import \\
         ...                                     TimetableSchemaWizard
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = TimetableSchemaWizard(context, request)
 
@@ -2025,7 +2024,7 @@ def doctest_TimetableSchemaWizard_getLastStep():
 
         >>> from schooltool.timetable.browser.ttwizard import \\
         ...                                    TimetableSchemaWizard
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = TimetableSchemaWizard(context, request)
 
@@ -2050,7 +2049,7 @@ def doctest_TimetableSchemaWizard_rememberLastStep():
 
         >>> from schooltool.timetable.browser.ttwizard import \\
         ...                                     TimetableSchemaWizard
-        >>> context = app['ttschemas']
+        >>> context = schemas
         >>> request = TestRequest()
         >>> view = TimetableSchemaWizard(context, request)
 

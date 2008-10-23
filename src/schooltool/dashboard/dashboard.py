@@ -130,15 +130,15 @@ class SectionsCategory(PersonDashboardCategory):
 
     def getSections(self):
         person = schooltool.person.interfaces.IPerson(self.request.principal)
-        for section in ISchoolToolApplication(None)['sections'].values():
-            if self.isTeacher and not person in section.instructors:
-                continue
-            if self.isStudent and not person in section.members:
-                continue
+        instructor_of = schooltool.course.interfaces.IInstructor(person).sections()
+        for section in instructor_of:
             url = absoluteURL(section, self.request)
-            if self.isTeacher:
-                url += '/gradebook'
-            elif self.isStudent:
-                url += '/mygrades'
+            url += '/gradebook'
+            title = '%s %s' % (list(section.courses)[0].title, section.title)
+            yield {'url': url, 'title': title}
+        learner_of = schooltool.course.interfaces.ILearner(person).sections()
+        for section in learner_of:
+            url = absoluteURL(section, self.request)
+            url += '/mygrades'
             title = '%s %s' % (list(section.courses)[0].title, section.title)
             yield {'url': url, 'title': title}

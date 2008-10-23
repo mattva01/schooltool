@@ -3,11 +3,10 @@ Basic Person
 
 A manager logs in
 
-    >>> from zope.testbrowser.testing import Browser
-    >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
-    >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/')
+    >>> manager = Browser('manager', 'schooltool')
+
+    >>> from schooltool.app.browser.ftests import setup
+    >>> setup.setUpBasicSchool()
 
 Create a Basic Person, a teacher.
 
@@ -75,11 +74,6 @@ Now there even are person export views:
                    xmlns="http://schooltool.org/ns/model/0.1">
       <groups>
         <group>
-          <id>manager</id>
-          <title>Site Managers</title>
-          <description>Manager Group.</description>
-        </group>
-        <group>
           <id>teachers</id>
           <title>Teachers</title>
           <description>Teachers.</description>
@@ -104,9 +98,6 @@ Now there even are person export views:
           <title>Administrator, SchoolTool</title>
           <basic:first_name>SchoolTool</basic:first_name>
           <basic:last_name>Administrator</basic:last_name>
-          <groups>
-            <group id="manager" />
-          </groups>
         </person>
       </persons>
     </person_export>

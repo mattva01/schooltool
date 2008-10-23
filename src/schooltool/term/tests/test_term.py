@@ -28,6 +28,7 @@ from datetime import date, datetime
 
 from zope.testing import doctest
 from zope.component import provideAdapter
+from zope.interface import Interface
 from zope.interface import implements
 from zope.interface.verify import verifyObject
 from zope.app.container.contained import Contained
@@ -35,6 +36,11 @@ from zope.location.interfaces import ILocation
 from zope.app.testing.setup import placefulSetUp, placefulTearDown
 from zope.app.testing.setup import placelessSetUp, placelessTearDown
 
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
+from schooltool.schoolyear.schoolyear import SchoolYear
+from schooltool.schoolyear.schoolyear import getSchoolYearContainer
+from schooltool.term.term import getTermContainer
+from schooltool.term.interfaces import ITermContainer
 from schooltool.term import interfaces, term
 from schooltool.testing import setup
 
@@ -147,61 +153,22 @@ class TestTerm(unittest.TestCase):
         self.assertRaises(TypeError, cal.__contains__, 'some string')
 
 
-class TestTermContainer(unittest.TestCase):
-
-    def test_interface(self):
-        service = term.TermContainer()
-        verifyObject(interfaces.ITermContainer, service)
-
-    def test(self):
-        service = term.TermContainer()
-        self.assertEqual(list(service.keys()), [])
-
-        schooldays = TermStub()
-        service['2003 fall'] = schooldays
-        self.assertEqual(list(service.keys()), ['2003 fall'])
-        self.assert_('2003 fall' in service)
-        self.assert_('2004 spring' not in service)
-        self.assert_(service['2003 fall'] is schooldays)
-        self.assertEquals(schooldays.__name__, '2003 fall')
-        self.assert_(schooldays.__parent__ is service)
-
-        schooldays3 = TermStub()
-        service['2004 spring'] = schooldays3
-        self.assertEqual(sorted(service.keys()), ['2003 fall', '2004 spring'])
-        self.assert_('2004 spring' in service)
-        self.assert_(service['2004 spring'] is schooldays3)
-
-        del service['2003 fall']
-        self.assertEqual(list(service.keys()), ['2004 spring'])
-        self.assert_('2003 fall' not in service)
-        self.assert_('2004 spring' in service)
-        self.assertRaises(KeyError, lambda: service['2003 fall'])
-
-        # duplicate deletion
-        self.assertRaises(KeyError, service.__delitem__, '2003 fall')
-
-
 class TestGetTermForDate(unittest.TestCase):
 
     def setUp(self):
         placefulSetUp()
+        provideAdapter(getTermContainer, [Interface], ITermContainer)
+        provideAdapter(getSchoolYearContainer)
         app = setup.setUpSchoolToolSite()
+
+        schoolyear = SchoolYear("Sample", date(2004, 9, 1), date(2005, 12, 20))
+        ISchoolYearContainer(app)['2004-2005'] = schoolyear
 
         self.term1 = term.Term('Sample', date(2004, 9, 1), date(2004, 12, 20))
         self.term2 = term.Term('Sample', date(2005, 1, 1), date(2005, 6, 1))
-        app["terms"]['2004-fall'] = self.term1
-        app["terms"]['2005-spring'] = self.term2
-
-        class TimetableModelStub:
-            def periodsInDay(self, schooldays, ttschema, date):
-                return 'periodsInDay', schooldays, ttschema, date
-
-        from schooltool.timetable.schema import TimetableSchema
-        tt = TimetableSchema([])
-        tt.model = TimetableModelStub()
-        self.tt = tt
-        app["ttschemas"]['default'] = tt
+        terms = ITermContainer(app)
+        terms['2004-fall'] = self.term1
+        terms['2005-spring'] = self.term2
         self.app = app
 
     def tearDown(self):
@@ -225,13 +192,14 @@ class TestGetTermForDate(unittest.TestCase):
         self.assert_(term.getNextTermForDate(date(2005, 3, 17)) is self.term2)
         self.assert_(term.getNextTermForDate(date(2005, 11, 5)) is self.term2)
         self.term3 = term.Term('Sample', date(2005, 9, 1), date(2005, 12, 20))
-        self.app["terms"]['2005-fall'] = self.term3
+        terms = ITermContainer(self.app)
+        terms['2005-fall'] = self.term3
         self.assert_(term.getNextTermForDate(date(2005, 8, 30)) is self.term3)
         self.assert_(term.getNextTermForDate(date(2004, 8, 31)) is self.term1)
         self.assert_(term.getNextTermForDate(date(2004, 12, 22)) is self.term2)
-        del self.app["terms"]['2004-fall']
-        del self.app["terms"]['2005-spring']
-        del self.app["terms"]['2005-fall']
+        del terms['2004-fall']
+        del terms['2005-spring']
+        del terms['2005-fall']
         self.assert_(term.getNextTermForDate(date(2004, 8, 31)) is None)
 
 
@@ -290,7 +258,6 @@ def test_suite():
     suite.addTest(doctest.DocTestSuite(setUp=setUp,
                                        tearDown=tearDown))
     suite.addTest(unittest.makeSuite(TestTerm))
-    suite.addTest(unittest.makeSuite(TestTermContainer))
     suite.addTest(unittest.makeSuite(TestGetTermForDate))
     return suite
 

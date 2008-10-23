@@ -58,20 +58,8 @@ def doctest_SchoolToolApplication():
         >>> verifyObject(IPersonContainer, app['persons'])
         True
 
-        >>> from schooltool.group.interfaces import IGroupContainer
-        >>> verifyObject(IGroupContainer, app['groups'])
-        True
-
         >>> from schooltool.resource.interfaces import IResourceContainer
         >>> verifyObject(IResourceContainer, app['resources'])
-        True
-
-        >>> from schooltool.course.interfaces import ICourseContainer
-        >>> verifyObject(ICourseContainer, app['courses'])
-        True
-
-        >>> from schooltool.course.interfaces import ISectionContainer
-        >>> verifyObject(ISectionContainer, app['sections'])
         True
 
     Our ApplicationPreferences title should be 'SchoolTool' by default:
@@ -151,8 +139,6 @@ def test_suite():
                                      optionflags=doctest.ELLIPSIS),
                 doctest.DocTestSuite('schooltool.app.membership',
                                      optionflags=doctest.ELLIPSIS),
-                doctest.DocFileSuite('../README.txt',
-                                     optionflags=doctest.ELLIPSIS)
            ])
 
 

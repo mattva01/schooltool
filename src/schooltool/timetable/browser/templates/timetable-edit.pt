@@ -17,15 +17,14 @@
 <metal:block metal:fill-slot="body">
 
 <p tal:condition="not:view/has_timetables"
-   i18n:translate="">There are no terms or timetable schemas defined.</p>
+   i18n:translate="">There are no timetable schemas defined.</p>
 
 <tal:if tal:condition="view/has_timetables">
 
-  <div tal:define="terms view/app/terms/values;
-		   ttschemas view/app/ttschemas/values">
+  <div tal:define="term view/getTerm;
+		   ttschemas view/ttschemas/values">
     <div i18n:translate="">For term:</div>
-    <strong tal:repeat="term view/getTerms"
-            tal:content="term/title" />
+    <strong tal:content="term/title" />
 
     <div i18n:translate="">Using timetable:</div>
 
@@ -34,13 +33,6 @@
   </div>
 
 <form tal:attributes="action request/URL" class="plain" method="post">
-
-  <tal:loop repeat="term view/terms">
-    <input type="hidden" name="terms"
-           tal:attributes="value term/__name__" />
-  </tal:loop>
-  <input type="hidden" name="ttschema"
-         tal:attributes="value view/ttschema/__name__" />
 
   <table class="timetable">
     <tr>

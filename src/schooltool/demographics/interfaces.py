@@ -22,6 +22,7 @@ from zope import schema
 from zope.schema.interfaces import IIterableSource
 from zope.schema.interfaces import ITitledTokenizedTerm
 
+from schooltool.group.interfaces import IGroupContainer
 from schooltool.app.app import ISchoolToolApplication
 from schooltool.common import SchoolToolMessage as _
 from schooltool.person.interfaces import IPerson
@@ -166,8 +167,8 @@ class TeachersSource(object):
 
     def teachers(self):
         teachers = []
-        for teacher in ISchoolToolApplication(
-            None)['groups']['teachers'].members:
+        for teacher in IGroupContainer(
+            ISchoolToolApplication(None))['teachers'].members:
             teachers.append(teacher.__name__)
         return teachers
 
@@ -182,10 +183,10 @@ class GroupsSource(object):
     implements(IGroupsSource)
 
     def __iter__(self):
-        return iter(ISchoolToolApplication(None)['groups'].keys())
+        return iter(IGroupContainer(ISchoolToolApplication(None)).keys())
 
     def __len__(self):
-        return len(ISchoolToolApplication(None)['groups'].keys())
+        return len(IGroupContainer(ISchoolToolApplication(None)).keys())
 
 class ISchoolData(Interface):
     """School-specific data for a person.

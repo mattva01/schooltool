@@ -18,19 +18,16 @@
 #
 """
 Unit tests for the schooltool.timetable module.
-
-$Id$
 """
 
 import unittest
 from sets import Set
-from datetime import time, timedelta, datetime, date
+from datetime import time, timedelta, date
 
 from persistent import Persistent
 from zope.app.testing import setup
 from zope.interface.verify import verifyObject
 from zope.interface import implements, directlyProvides
-from zope.traversing.api import getPath
 from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.app.testing import ztapi
 from zope.annotation.interfaces import IAttributeAnnotatable
@@ -38,7 +35,12 @@ from zope.location.interfaces import ILocation
 from zope.testing import doctest
 from zope.component import eventtesting
 
-from schooltool import timetable
+from schooltool.group.interfaces import IGroupContainer
+from schooltool.timetable import SchooldaySlot
+from schooltool.timetable import SchooldayTemplate
+from schooltool.timetable import DuplicateTimetableError
+from schooltool.timetable.model import WeeklyTimetableModel
+from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.timetable.interfaces import ITimetable, ITimetableActivity
@@ -46,10 +48,16 @@ from schooltool.timetable.interfaces import IOwnTimetables
 from schooltool.relationship import RelationshipProperty
 from schooltool.app.membership import URIGroup, URIMember, URIMembership
 
-from schooltool.testing import setup as stsetup
 from schooltool.testing.util import NiceDiffsMixin
 from schooltool.testing.util import EqualsSortedMixin
-from schooltool.term.tests.test_term import TermStub
+
+
+def makeTimetableModel():
+    template = SchooldayTemplate()
+    template.add(SchooldaySlot(time(9, 0), timedelta(minutes=45)))
+    template.add(SchooldaySlot(time(10, 0), timedelta(minutes=45)))
+    return WeeklyTimetableModel(day_templates={None: template})
+
 
 class ActivityStub(object):
 
@@ -66,11 +74,29 @@ class ActivityStub(object):
 
 class TestTimetable(unittest.TestCase):
 
+    def setUp(self):
+        setup.placelessSetUp()
+
+        app = {}
+        app['ttschemas'] = {'stt1': "STT 1"}
+
+        from zope.component import provideAdapter
+        from schooltool.app.interfaces import ISchoolToolApplication
+        provideAdapter(lambda ctx: app,
+                       adapts=[None],
+                       provides=ISchoolToolApplication)
+
+    def tearDown(self):
+        setup.placelessTearDown()
+
     def test_interface(self):
         from schooltool.timetable import Timetable
         from schooltool.timetable.interfaces import ITimetable, ITimetableWrite
 
         t = Timetable(('1', '2'))
+        t.__name__ = "term1.stt1"
+        t.term = None
+        t.schooltt = None
         verifyObject(ITimetable, t)
         verifyObject(ITimetableWrite, t)
         verifyObject(ILocation, t)
@@ -708,6 +734,9 @@ class PersistentLocatableStub(Persistent):
 class TimetableStub(PersistentLocatableStub):
     implements(ITimetable)
 
+    def __init__(self, term, schooltt):
+        self.term, self.schooltt = term, schooltt
+
 
 class TestTimetableDict(EventTestMixin, unittest.TestCase):
 
@@ -725,20 +754,20 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
         from schooltool.timetable import TimetableDict
 
         td = TimetableDict()
-        item = TimetableStub()
-        td['aa.bb'] = item
-        self.assertEqual(item.__name__, ('aa.bb'))
+        item = TimetableStub("aa", "bb")
+        td['1'] = item
+        self.assertEqual(item.__name__, ('1'))
         self.assertEqual(item.__parent__, td)
-        self.assertEqual(item, td['aa.bb'])
+        self.assertEqual(item, td['1'])
 
-        item2 = TimetableStub()
-        td['aa.bb'] = item2
-        self.assertEqual(item2, td['aa.bb'])
+        item2 = TimetableStub("aa", "bb")
+        td['1'] = item2
+        self.assertEqual(item2, td['1'])
         self.assertEqual(item.__parent__, None)
         self.assertEqual(item.__name__, None)
 
-        del td['aa.bb']
-        self.assertRaises(KeyError, td.__getitem__, ('aa.bb'))
+        del td['1']
+        self.assertRaises(KeyError, td.__getitem__, '1')
         self.assertEqual(item2.__parent__, None)
         self.assertEqual(item2.__name__, None)
 
@@ -748,39 +777,39 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
 
         eventtesting.clearEvents()
         td = TimetableDict()
-        item = TimetableStub()
-        td['aa.bb'] = item
+        item = TimetableStub("aa", "bb")
+        td['1'] = item
         e = self.checkOneEventReceived()
         self.assert_(ITimetableReplacedEvent.providedBy(e))
         self.assert_(e.object is td.__parent__)
-        self.assertEquals(e.key, ('aa.bb'))
+        self.assertEquals(e.key, '1')
         self.assert_(e.old_timetable is None)
         self.assert_(e.new_timetable is item)
 
         eventtesting.clearEvents()
-        item2 = TimetableStub()
-        td['aa.bb'] = item2
+        item2 = TimetableStub("aa", "bb")
+        td['1'] = item2
         e = self.checkOneEventReceived()
         self.assert_(ITimetableReplacedEvent.providedBy(e))
         self.assert_(e.object is td.__parent__)
-        self.assertEquals(e.key, ('aa.bb'))
+        self.assertEquals(e.key, '1')
         self.assert_(e.old_timetable is item)
         self.assert_(e.new_timetable is item2)
 
         eventtesting.clearEvents()
-        del td['aa.bb']
+        del td['1']
         e = self.checkOneEventReceived()
         self.assert_(ITimetableReplacedEvent.providedBy(e))
         self.assert_(e.object is td.__parent__)
-        self.assertEquals(e.key, ('aa.bb'))
+        self.assertEquals(e.key, '1')
         self.assert_(e.old_timetable is item2)
         self.assert_(e.new_timetable is None)
 
     def test_clear(self):
         from schooltool.timetable import TimetableDict
         td = TimetableDict()
-        td['a.b'] = TimetableStub()
-        td['b.c'] = TimetableStub()
+        td['1'] = TimetableStub("a", "b")
+        td['2'] = TimetableStub("b", "c")
         eventtesting.clearEvents()
         td.clear()
         self.assertEquals(list(td.keys()), [])
@@ -790,15 +819,25 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
     def test_validation(self):
         from schooltool.timetable import TimetableDict
         td = TimetableDict()
-        self.assertRaises(ValueError, td.__setitem__, 'a.b.c',
-                          TimetableStub())
-        self.assertRaises(ValueError, td.__setitem__, 'abc',
-                          TimetableStub())
-        self.assertRaises(ValueError, td.__setitem__, 'c.',
-                          TimetableStub())
-        self.assertRaises(ValueError, td.__setitem__, '.c',
-                          TimetableStub())
-        td['a.c'] = TimetableStub()
+
+        class Stub(object):
+            def __init__(self, name):
+                self.__name__ = name
+
+        term1 = Stub("Term1")
+        term2 = Stub("Term2")
+        schooltt1 = Stub("SchoolTT1")
+        schooltt2 = Stub("SchoolTT2")
+
+        td['1'] = TimetableStub(term1, schooltt1)
+        td['1'] = TimetableStub(term1, schooltt1)
+        td['1'] = TimetableStub(term2, schooltt1)
+
+        self.assertRaises(DuplicateTimetableError, td.__setitem__, '2',
+                          TimetableStub(term2, schooltt1))
+
+        td['2'] = TimetableStub(term1, schooltt1)
+        td['3'] = TimetableStub(term1, schooltt2)
 
 
 class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
@@ -806,7 +845,6 @@ class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
 
     def setUp(self):
         from schooltool.relationship.tests import setUpRelationships
-        from schooltool.timetable.interfaces import ITimetableSource
         from schooltool.timetable import TimetablesAdapter
 
         self.site = setup.placefulSetUp(True)
@@ -817,9 +855,6 @@ class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
                              TimetablesAdapter)
 
         app = {}
-        app['terms'] = {'term1': "Term 1",
-                        'term2': "Term 2",
-                        'term3': "Term 3"}
 
         from zope.component import provideAdapter
         from schooltool.app.interfaces import ISchoolToolApplication
@@ -845,10 +880,10 @@ class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
         content = ContentStub()
         tm = TimetablesAdapter(content)
         self.assertEqual(tm.terms, [])
-        tm.timetables['term1.foo'] = TimetableStub()
+        tt1 = tm.timetables['1'] = TimetableStub("Term 1", "foo")
         self.assertEqual(tm.terms, ["Term 1"])
 
-        tm.timetables['term2.bar'] = TimetableStub()
+        tt2 = tm.timetables['2'] = TimetableStub("Term 2", "foo")
         self.assertEqual(sorted(tm.terms), ["Term 1", "Term 2"])
 
 
@@ -929,59 +964,50 @@ def doctest_CompositeTimetables():
 def doctest_findRelatedTimetables_forSchoolTimetables():
     """Tests for findRelatedTimetables() with school timetables
 
-       >>> from schooltool.timetable import TimetablesAdapter
-       >>> from schooltool.timetable.interfaces import ITimetables
-       >>> from schooltool.timetable.interfaces import IOwnTimetables
-       >>> setup.placefulSetUp()
-       >>> ztapi.provideAdapter(IOwnTimetables, ITimetables,
-       ...                      TimetablesAdapter)
-       >>> setup.setUpAnnotations()
+       >>> from schooltool.app.interfaces import ISchoolToolApplication
+       >>> app = ISchoolToolApplication(None)
 
-       >>> from schooltool.testing.setup import createSchoolToolApplication
-       >>> from schooltool.timetable import findRelatedTimetables
-       >>> app = stsetup.setUpSchoolToolSite()
-       >>> directlyProvides(app, IOwnTimetables)
+    Let's creare a schoolyear and a couple of terms:
 
-    Let's create a timetable schema:
+       >>> from schooltool.schoolyear.schoolyear import SchoolYear
+       >>> from schooltool.schoolyear.interfaces import ISchoolYearContainer
+       >>> schoolyears = ISchoolYearContainer(app)
+       >>> schoolyears['2005-2006'] = SchoolYear("2005-2006",
+       ...                                       date(2005, 1, 1),
+       ...                                       date(2006, 12, 31))
+
+       >>> from schooltool.term.interfaces import ITermContainer
+       >>> from schooltool.term.term import Term
+       >>> t1 = ITermContainer(app)['2005'] = Term('2005', date(2005, 1, 1),
+       ...                                         date(2005, 12, 31))
+       >>> t2 = ITermContainer(app)['2006'] = Term('2006', date(2006, 1, 1),
+       ...                                         date(2006, 12, 31))
+
+    and a timetable schema:
 
        >>> from schooltool.timetable.schema import TimetableSchema
        >>> from schooltool.timetable.schema import TimetableSchemaDay
 
        >>> days = ('A', 'B')
        >>> periods1 = ('Green', 'Blue')
-       >>> tts = TimetableSchema(days)
+       >>> tts = TimetableSchema(days, model=makeTimetableModel())
        >>> tts["A"] = TimetableSchemaDay(periods1)
        >>> tts["B"] = TimetableSchemaDay(periods1)
 
        >>> days = ('C', 'D')
-       >>> tts2 = TimetableSchema(days)
+       >>> tts2 = TimetableSchema(days, model=makeTimetableModel())
        >>> tts2["C"] = TimetableSchemaDay(periods1)
        >>> tts2["D"] = TimetableSchemaDay(periods1)
 
-       >>> app['ttschemas']['simple'] = tts
-       >>> app['ttschemas']['other'] = tts2
+       >>> ITimetableSchemaContainer(app)['simple'] = tts
+       >>> ITimetableSchemaContainer(app)['other'] = tts2
 
     Now we can call our utility function.  Since our schema is not
     used, an empty list is returned:
 
+       >>> from schooltool.timetable import findRelatedTimetables
        >>> findRelatedTimetables(tts)
        []
-
-    Let's add a timetable to the app object:
-
-       >>> ITimetables(app).timetables['2006.simple'] = tts.createTimetable()
-       >>> findRelatedTimetables(tts)
-       [<Timetable: ('A', 'B'),
-        {'A': <schooltool.timetable.TimetableDay object at ...>,
-         'B': <schooltool.timetable.TimetableDay object at ...>}, None>]
-
-    Now, let's add a timetable of a different schema:
-
-       >>> ITimetables(app).timetables['2006.other'] = tts2.createTimetable()
-       >>> findRelatedTimetables(tts)
-       [<Timetable: ('A', 'B'),
-        {'A': <schooltool.timetable.TimetableDay object at ...>,
-         'B': <schooltool.timetable.TimetableDay object at ...>}, None>]
 
     Let's add some persons, groups and resources with timetables:
 
@@ -991,27 +1017,27 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
 
        >>> app['persons']['p1'] = Person('p1')
        >>> app['persons']['p2'] = Person('p2')
-       >>> app['groups']['g'] = Group('friends')
+       >>> IGroupContainer(app)['g'] = Group('friends')
        >>> app['resources']['r'] = Resource('friends')
 
        >>> for ob in (app['persons']['p1'], app['persons']['p2'],
-       ...            app['groups']['g'], app['resources']['r']):
+       ...            IGroupContainer(app)['g'], app['resources']['r']):
        ...     directlyProvides(ob, IOwnTimetables)
 
        >>> adapter = ITimetables(app['persons']['p1'])
-       >>> adapter.timetables['2006.simple'] = tts.createTimetable()
-       >>> adapter.timetables['2005.simple'] = tts.createTimetable()
-       >>> adapter.timetables['2006.other'] = tts2.createTimetable()
+       >>> adapter.timetables['2006.simple'] = tts.createTimetable(t2)
+       >>> adapter.timetables['2005.simple'] = tts.createTimetable(t1)
+       >>> adapter.timetables['2006.other'] = tts2.createTimetable(t2)
 
        >>> adapter = ITimetables(app['persons']['p2'])
-       >>> adapter.timetables['2006.simple'] = tts.createTimetable()
+       >>> adapter.timetables['2006.simple'] = tts.createTimetable(t2)
 
-       >>> adapter = ITimetables(app['groups']['g'])
-       >>> adapter.timetables['2006.simple'] = tts.createTimetable()
-       >>> adapter.timetables['2006.other'] = tts2.createTimetable()
+       >>> adapter = ITimetables(IGroupContainer(app)['g'])
+       >>> adapter.timetables['2006.simple'] = tts.createTimetable(t2)
+       >>> adapter.timetables['2006.other'] = tts2.createTimetable(t2)
 
        >>> adapter = ITimetables(app['resources']['r'])
-       >>> adapter.timetables['2006.simple'] = tts.createTimetable()
+       >>> adapter.timetables['2006.simple'] = tts.createTimetable(t2)
 
     Let's see the timetables for this schema now:
 
@@ -1019,13 +1045,11 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
        [<Timetable: ('A', 'B'), ...>,
         <Timetable: ('A', 'B'), ...>,
         <Timetable: ('A', 'B'), ...>,
-        <Timetable: ('A', 'B'), ...>,
-        <Timetable: ('A', 'B'), ...>,
         <Timetable: ('A', 'B'), ...>]
 
        >>> [(tt.__parent__.__parent__.__name__, tt.__name__)
        ...   for tt in findRelatedTimetables(tts)]
-       [(None, '2006.simple'), (u'p1', '2006.simple'),
+       [(u'p1', '2006.simple'),
         (u'p1', '2005.simple'), (u'p2', '2006.simple'),
         (u'g', '2006.simple'), (u'r', '2006.simple')]
 
@@ -1033,42 +1057,39 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
 
        >>> findRelatedTimetables(tts2)
        [<Timetable: ('C', 'D'), ...>,
-        <Timetable: ('C', 'D'), ...>,
         <Timetable: ('C', 'D'), ...>]
 
        >>> [(tt.__parent__.__parent__.__name__, tt.__name__)
        ...   for tt in findRelatedTimetables(tts2)]
-       [(None, '2006.other'), (u'p1', '2006.other'), (u'g', '2006.other')]
+       [(u'p1', '2006.other'), (u'g', '2006.other')]
 
-    Clean up:
-
-       >>> setup.placefulTearDown()
     """
 
 
 def doctest_findRelatedTimetables_forTerm():
     """Tests for findRelatedTimetables() with terms as arguments
 
-       >>> from schooltool.timetable.interfaces import IOwnTimetables
-       >>> from schooltool.timetable import TimetablesAdapter
-       >>> from schooltool.timetable.interfaces import ITimetables
-       >>> setup.placefulSetUp()
-       >>> ztapi.provideAdapter(IOwnTimetables, ITimetables,
-       ...                      TimetablesAdapter)
-       >>> setup.setUpAnnotations()
-
-       >>> from schooltool.testing.setup import createSchoolToolApplication
        >>> from schooltool.timetable import findRelatedTimetables
-       >>> app = stsetup.setUpSchoolToolSite()
-       >>> directlyProvides(app, IOwnTimetables)
+       >>> from schooltool.app.interfaces import ISchoolToolApplication
+       >>> app = ISchoolToolApplication(None)
+
+    Let's add a school year:
+
+        >>> from schooltool.schoolyear.schoolyear import SchoolYear
+        >>> from schooltool.schoolyear.interfaces import ISchoolYearContainer
+        >>> schoolyears = ISchoolYearContainer(app)
+        >>> schoolyears['2005-2006'] = SchoolYear("2005-2006",
+        ...                                       date(2005, 1, 1),
+        ...                                       date(2006, 12, 31))
 
     Let's create a couple of terms:
 
        >>> from schooltool.term.term import Term
-       >>> t1 = app['terms']['2005'] = Term('2005', date(2005, 1, 1),
-       ...                                  date(2005, 12, 31))
-       >>> t2 = app['terms']['2006'] = Term('2006', date(2006, 1, 1),
-       ...                                  date(2006, 12, 31))
+       >>> from schooltool.term.interfaces import ITermContainer
+       >>> t1 = ITermContainer(app)['2005'] = Term('2005', date(2005, 1, 1),
+       ...                                         date(2005, 12, 31))
+       >>> t2 = ITermContainer(app)['2006'] = Term('2006', date(2006, 1, 1),
+       ...                                         date(2006, 12, 31))
 
     We'll also need a timetable schema:
 
@@ -1077,32 +1098,21 @@ def doctest_findRelatedTimetables_forTerm():
 
        >>> days = ('A', 'B')
        >>> periods1 = ('Green', 'Blue')
-       >>> tts = TimetableSchema(days)
+       >>> tts = TimetableSchema(days, model=makeTimetableModel())
        >>> tts["A"] = TimetableSchemaDay(periods1)
        >>> tts["B"] = TimetableSchemaDay(periods1)
-       >>> app['ttschemas']['simple'] = tts
+       >>> ITimetableSchemaContainer(app)['simple'] = tts
+
+       >>> tts_other = TimetableSchema(days, model=makeTimetableModel())
+       >>> tts_other["A"] = TimetableSchemaDay(periods1)
+       >>> tts_other["B"] = TimetableSchemaDay(periods1)
+       >>> ITimetableSchemaContainer(app)['other'] = tts_other
 
     Now we can call our utility function.  Since our schema is not
     used, an empty list is returned:
 
        >>> findRelatedTimetables(t1)
        []
-
-    Let's add a timetable to the app object:
-
-       >>> ITimetables(app).timetables['2005.simple'] = tts.createTimetable()
-       >>> findRelatedTimetables(t1)
-       [<Timetable: ('A', 'B'),
-        {'A': <schooltool.timetable.TimetableDay object at ...>,
-         'B': <schooltool.timetable.TimetableDay object at ...>}, None>]
-
-    Now, let's add a timetable of a different term:
-
-       >>> ITimetables(app).timetables['2006.simple'] = tts.createTimetable()
-       >>> findRelatedTimetables(t1)
-       [<Timetable: ('A', 'B'),
-        {'A': <schooltool.timetable.TimetableDay object at ...>,
-         'B': <schooltool.timetable.TimetableDay object at ...>}, None>]
 
     Let's add some persons, groups and resources with timetables:
 
@@ -1112,27 +1122,27 @@ def doctest_findRelatedTimetables_forTerm():
 
        >>> app['persons']['p1'] = Person('p1')
        >>> app['persons']['p2'] = Person('p2')
-       >>> app['groups']['g'] = Group('friends')
+       >>> IGroupContainer(app)['g'] = Group('friends')
        >>> app['resources']['r'] = Resource('friends')
 
        >>> for ob in (app['persons']['p1'], app['persons']['p2'],
-       ...            app['groups']['g'], app['resources']['r']):
+       ...            IGroupContainer(app)['g'], app['resources']['r']):
        ...     directlyProvides(ob, IOwnTimetables)
 
        >>> adapter = ITimetables(app['persons']['p1'])
-       >>> adapter.timetables['2005.simple'] = tts.createTimetable()
-       >>> adapter.timetables['2005.other'] = tts.createTimetable()
-       >>> adapter.timetables['2006.other'] = tts.createTimetable()
+       >>> adapter.timetables['2005.simple'] = tts.createTimetable(t1)
+       >>> adapter.timetables['2005.other'] = tts_other.createTimetable(t1)
+       >>> adapter.timetables['2006.other'] = tts_other.createTimetable(t2)
 
        >>> adapter = ITimetables(app['persons']['p2'])
-       >>> adapter.timetables['2005.simple'] = tts.createTimetable()
+       >>> adapter.timetables['2005.simple'] = tts.createTimetable(t1)
 
-       >>> adapter = ITimetables(app['groups']['g'])
-       >>> adapter.timetables['2006.simple'] = tts.createTimetable()
-       >>> adapter.timetables['2005.simple'] = tts.createTimetable()
+       >>> adapter = ITimetables(IGroupContainer(app)['g'])
+       >>> adapter.timetables['2006.simple'] = tts.createTimetable(t2)
+       >>> adapter.timetables['2005.simple'] = tts.createTimetable(t1)
 
        >>> adapter = ITimetables(app['resources']['r'])
-       >>> adapter.timetables['2005.simple'] = tts.createTimetable()
+       >>> adapter.timetables['2005.simple'] = tts.createTimetable(t1)
 
     Let's see the timetables for this schema now:
 
@@ -1140,29 +1150,22 @@ def doctest_findRelatedTimetables_forTerm():
        [<Timetable: ('A', 'B'), ...>,
         <Timetable: ('A', 'B'), ...>,
         <Timetable: ('A', 'B'), ...>,
-        <Timetable: ('A', 'B'), ...>,
-        <Timetable: ('A', 'B'), ...>,
         <Timetable: ('A', 'B'), ...>]
 
        >>> [(tt.__parent__.__parent__.__name__, tt.__name__)
        ...   for tt in findRelatedTimetables(t1)]
-       [(None, '2005.simple'), (u'p1', '2005.other'), (u'p1', '2005.simple'),
+       [(u'p1', '2005.other'), (u'p1', '2005.simple'),
         (u'p2', '2005.simple'), (u'g', '2005.simple'), (u'r', '2005.simple')]
 
     Let's see the timetables of the other schema:
 
        >>> findRelatedTimetables(t2)
        [<Timetable: ('A', 'B'), ...>,
-        <Timetable: ('A', 'B'), ...>,
         <Timetable: ('A', 'B'), ...>]
 
        >>> [(tt.__parent__.__parent__.__name__, tt.__name__)
        ...   for tt in findRelatedTimetables(t2)]
-       [(None, '2006.simple'), (u'p1', '2006.other'), (u'g', '2006.simple')]
-
-    Clean up:
-
-       >>> setup.placefulTearDown()
+       [(u'p1', '2006.other'), (u'g', '2006.simple')]
 
     """
 
@@ -1180,12 +1183,21 @@ def doctest_findRelatedTimetables_other():
 
     """
 
+from schooltool.timetable.ftesting import timetable_functional_layer
+from schooltool.schoolyear.testing import (setUp, tearDown,
+                                           provideStubUtility,
+                                           provideStubAdapter)
 
 def test_suite():
     suite = unittest.TestSuite()
     optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
                    doctest.NORMALIZE_WHITESPACE)
-    suite.addTest(doctest.DocTestSuite(optionflags=optionflags))
+    doctest_suite = doctest.DocTestSuite(optionflags=optionflags,
+                                         extraglobs={'provideAdapter': provideStubAdapter,
+                                                     'provideUtility': provideStubUtility},
+                                         setUp=setUp, tearDown=tearDown)
+    doctest_suite.layer = timetable_functional_layer
+    suite.addTest(doctest_suite)
     suite.addTest(unittest.makeSuite(TestTimetable))
     suite.addTest(unittest.makeSuite(TestTimetableDay))
     suite.addTest(unittest.makeSuite(TestTimetableActivity))

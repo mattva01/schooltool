@@ -38,8 +38,7 @@ from zope.interface import implements
 
 from schooltool.testing.util import NiceDiffsMixin
 from schooltool.testing.util import diff
-from schooltool.testing.util import fakePath
-from schooltool.timetable.tests.test_timetable import TermStub
+from schooltool.term.tests.test_term import TermStub
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 
@@ -199,7 +198,7 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
         occurs at 10:30-12:00.
         """
         from schooltool.timetable import SchooldayTemplate, SchooldaySlot
-        from schooltool.timetable import SequentialDaysTimetableModel
+        from schooltool.timetable.model import SequentialDaysTimetableModel
 
         t, td = time, timedelta
         template1 = SchooldayTemplate()
@@ -215,15 +214,15 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
         return model
 
     def test_interface(self):
-        from schooltool.timetable import SequentialDaysTimetableModel
+        from schooltool.timetable.model import SequentialDaysTimetableModel
         from schooltool.timetable.interfaces import IWeekdayBasedTimetableModel
 
         model = SequentialDaysTimetableModel(("A","B"), {None: 3})
         verifyObject(IWeekdayBasedTimetableModel, model)
 
     def test_eq(self):
-        from schooltool.timetable import SequentialDaysTimetableModel
-        from schooltool.timetable import WeeklyTimetableModel
+        from schooltool.timetable.model import SequentialDaysTimetableModel
+        from schooltool.timetable.model import WeeklyTimetableModel
         model = SequentialDaysTimetableModel(("A","B"), {1: 2, None: 3})
         model2 = SequentialDaysTimetableModel(("A","B"), {1: 2, None: 3})
         model3 = WeeklyTimetableModel(("A","B"), {1: 2, None: 3})
@@ -277,7 +276,7 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
 
     def test_createCalendar_exceptionDays(self):
         from schooltool.term.term import Term
-        from schooltool.timetable import SchooldayTemplate, SchooldaySlot
+        from schooltool.timetable import SchooldaySlot
 
         tt = self.createTimetable()
         model = self.createModel()
@@ -313,7 +312,7 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
                          diff(pformat(expected), pformat(result)))
 
     def test_schooldayStrategy_getDayId(self):
-        from schooltool.timetable import SequentialDaysTimetableModel
+        from schooltool.timetable.model import SequentialDaysTimetableModel
         from schooltool.term.term import Term
         from schooltool.timetable import SchooldayTemplate
 
@@ -349,9 +348,7 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
 
 
     def test_periodsInDay_originalPeriodsInDay(self):
-        from schooltool.calendar.interfaces import ICalendar
         from schooltool.timetable import SchooldaySlot
-        from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 
         tt = self.createTimetable()
         model = self.createModel()
@@ -411,7 +408,6 @@ class TestSequentialDayIdBasedTimetableModel(PlacelessSetup,
 
     def test_createCalendar(self):
         from schooltool.calendar.interfaces import ICalendar
-        from schooltool.timetable import SchooldayTemplate, SchooldaySlot
         from schooltool.timetable.model import \
              SequentialDayIdBasedTimetableModel
 
@@ -519,7 +515,7 @@ class TestWeeklyTimetableModel(PlacelessSetup,
         ztapi.provideAdapter(None, ISchoolToolApplication, ApplicationStub())
 
     def test(self):
-        from schooltool.timetable import WeeklyTimetableModel
+        from schooltool.timetable.model import WeeklyTimetableModel
         from schooltool.timetable import SchooldayTemplate, SchooldaySlot
         from schooltool.timetable import Timetable, TimetableDay
         from schooltool.timetable import TimetableActivity
@@ -617,7 +613,7 @@ class TestWeeklyTimetableModel(PlacelessSetup,
                          diff(pformat(expected), pformat(result)))
 
     def test_not_enough_days(self):
-        from schooltool.timetable import WeeklyTimetableModel
+        from schooltool.timetable.model import WeeklyTimetableModel
         from schooltool.timetable import SchooldayTemplate, SchooldaySlot
         from schooltool.timetable import Timetable, TimetableDay
         template = SchooldayTemplate()
@@ -636,7 +632,7 @@ class TestWeeklyTimetableModel(PlacelessSetup,
         model.createCalendar(schooldays, tt)
 
     def test_schooldayStrategy(self):
-        from schooltool.timetable import WeeklyTimetableModel
+        from schooltool.timetable.model import WeeklyTimetableModel
         from schooltool.term.term import Term
         from schooltool.timetable import SchooldayTemplate
 
@@ -670,7 +666,7 @@ class TestWeeklyTimetableModel(PlacelessSetup,
 class TestTimetableCalendarEvent(unittest.TestCase):
 
     def test(self):
-        from schooltool.timetable import TimetableCalendarEvent
+        from schooltool.timetable.model import TimetableCalendarEvent
         from schooltool.timetable.interfaces import ITimetableCalendarEvent
 
         day_id = 'Day2'
@@ -690,8 +686,7 @@ class TestTimetableCalendarEvent(unittest.TestCase):
             self.assertRaises(AttributeError, setattr, ev, attr, object())
 
     def test_owner_resources(self):
-        from schooltool.timetable import TimetableCalendarEvent
-        from schooltool.timetable.interfaces import ITimetableCalendarEvent
+        from schooltool.timetable.model import TimetableCalendarEvent
 
         day_id = 'Day2'
         period_id = 'Mathematics'
@@ -750,7 +745,6 @@ def doctest_timetableEventHandlers():
         ...         return self
 
         >>> app = ApplicationStub()
-        >>> app['terms'] = {'term': 'Term for Fall 2006'}
         >>> ztapi.provideAdapter(None, ISchoolToolApplication, app)
         >>> timetable_calendar = []
         >>> class ModelStub(object):
@@ -759,6 +753,7 @@ def doctest_timetableEventHandlers():
         ...         return timetable_calendar
         >>> class TimetableStub(object):
         ...     __name__ = 'term.schema'
+        ...     term = 'Term for Fall 2006'
         ...     model = ModelStub()
         >>> from schooltool.app.interfaces import ISchoolToolCalendar
         >>> class CalendarStub(list):

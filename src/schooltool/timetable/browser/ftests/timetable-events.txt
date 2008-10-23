@@ -23,7 +23,7 @@ Looks at his daily view:
     <div id="content-body">
     ...
       <h6 style="background: #...">
-        <a href="http://localhost/sections/1/calendar/..." title="History 6">
+        <a href="http://localhost/schoolyears/2005-2006/2005-fall/sections/1/calendar/..." title="History 6">
           History 6
           <span class="start-end">
             (<span>11:35</span>
@@ -82,7 +82,7 @@ First log in as manager.
 Now check the calendar for the 1 section.  We should have a
 class from 9:30 to 10:25.
 
-    >>> manager.open('http://localhost/sections/1/calendar/2006-01-02')
+    >>> manager.open('http://localhost/schoolyears/2005-2006/2005-fall/sections/1/calendar/2006-01-02')
     >>> events = analyze.queryHTML('//span[@class="start-end"]', manager.contents)
     >>> for event in events: print event
     <BLANKLINE>
@@ -94,11 +94,11 @@ class from 9:30 to 10:25.
 Now we will go and modify the schedule for 1 and see if the
 calendar events are updated
 
-    >>> manager.open('http://localhost/sections/1/@@schedule.html')
+    >>> manager.open('http://localhost/schoolyears/2005-2006/2005-fall/sections/1/@@schedule.html')
     >>> manager.getControl(name="Monday.09:30-10:25").value = False
     >>> manager.getControl(name="Monday.10:30-11:25").value = True
     >>> manager.getControl("Save").click()
-    >>> manager.open('http://localhost/sections/1/calendar/2006-01-02')
+    >>> manager.open('http://localhost/schoolyears/2005-2006/2005-fall/sections/1/calendar/2006-01-02')
     >>> events = analyze.queryHTML('//span[@class="start-end"]', manager.contents)
     >>> for event in events: print event
     <BLANKLINE>
@@ -114,23 +114,15 @@ Tests for timetable event blocks in weekly calendar view
 First to test how timetable events are displayed in the weekly calendar view,
 we need more courses and sections
 
-    >>> manager.open('http://localhost/courses')
-    >>> manager.getLink('New Course').click()
-    >>> setup.addCourse('English 6', 'English for the sixth class', 'english6')
-    >>> setup.addSection('English 6')
-
-    >>> manager.open('http://localhost/courses')
-    >>> manager.getLink('New Course').click()
-    >>> setup.addCourse('Math 6', 'Math for the sixth class', 'math6')
-    >>> setup.addSection('Math 6')
-
-    >>> manager.open('http://localhost/courses')
-    >>> manager.getLink('New Course').click()
-    >>> setup.addCourse('Science 6', 'Section for the sixth class', 'science6')
-    >>> setup.addSection('Science 6')
+    >>> setup.addCourse('English 6', '2005-2006', 'English for the sixth class', 'english6')
+    >>> setup.addSection('English 6', '2005-2006', '2005 Fall')
+    >>> setup.addCourse('Math 6', '2005-2006', 'Math for the sixth class', 'math6')
+    >>> setup.addSection('Math 6', '2005-2006', '2005 Fall')
+    >>> setup.addCourse('Science 6', '2005-2006', 'Science for the sixth class', 'science6')
+    >>> setup.addSection('Science 6', '2005-2006', '2005 Fall')
 
 
-    >>> manager.open('http://localhost/sections/2')
+    >>> manager.open('http://localhost/schoolyears/2005-2006/2005-fall/sections/2')
     >>> manager.getLink('edit instructors').click()
     >>> manager.getControl('Frog').selected = True
     >>> manager.getControl('Add').click()
@@ -143,7 +135,7 @@ we need more courses and sections
     >>> manager.getControl('Save').click()
 
 
-    >>> manager.open('http://localhost/sections/3')
+    >>> manager.open('http://localhost/schoolyears/2005-2006/2005-fall/sections/3')
     >>> manager.getLink('edit instructors').click()
     >>> manager.getControl('Frog').selected = True
     >>> manager.getControl('Add').click()
@@ -156,7 +148,7 @@ we need more courses and sections
     >>> manager.getControl('Save').click()
 
 
-    >>> manager.open('http://localhost/sections/4')
+    >>> manager.open('http://localhost/schoolyears/2005-2006/2005-fall/sections/4')
     >>> manager.getLink('edit instructors').click()
     >>> manager.getControl('Frog').selected = True
     >>> manager.getControl('Add').click()

@@ -2,14 +2,14 @@
 <head>
   <title metal:fill-slot="title" i18n:translate="">
     Timetables for <span i18n:name="object"
-                         tal:replace="context/__parent__/title" />
+                         tal:replace="context/__parent__/@@link" />
   </title>
 </head>
 <body>
 
 <h1 metal:fill-slot="content-header" i18n:translate="">
   Timetables for <span i18n:name="object"
-                       tal:replace="context/__parent__/title" />
+                       tal:replace="context/__parent__/@@link" />
 </h1>
 
 <metal:block metal:fill-slot="body">

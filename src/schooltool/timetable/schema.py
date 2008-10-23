@@ -18,26 +18,39 @@
 #
 """
 Timetable Schemas
-
-$Id$
 """
+import cPickle
+from StringIO import StringIO
 from persistent import Persistent
 from persistent.dict import PersistentDict
 from sets import Set
 
+from zope.component import adapts
+from zope.component import adapter
+from zope.component import getUtility
+from zope.interface import implementer
 from zope.interface import implements
 from zope.annotation.interfaces import IAttributeAnnotatable
+from zope.app.intid.interfaces import IIntIds
+from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.container.btree import BTreeContainer
 from zope.app.container.contained import Contained
 from zope.traversing.api import getParent, getName
+from zope.location.pickling import CopyPersistent
 
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
+from schooltool.schoolyear.interfaces import ISchoolYear
+from schooltool.term.interfaces import ITerm
 from schooltool.timetable import Timetable, TimetableDay, findRelatedTimetables
 
 from schooltool.timetable.interfaces import ITimetableSchema
 from schooltool.timetable.interfaces import ITimetableSchemaContained
+from schooltool.timetable.interfaces import ITimetableSchemaContainerContainer
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.interfaces import ITimetableSchemaDay
 from schooltool.timetable.interfaces import ITimetableSchemaWrite
+from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 
 
 class TimetableSchemaDay(Persistent):
@@ -113,10 +126,12 @@ class TimetableSchema(Persistent, Contained):
             raise ValueError("Key %r not in day_ids %r" % (key, self.day_ids))
         self.days[key] = value
 
-    def createTimetable(self):
+    def createTimetable(self, term):
         new = Timetable(self.day_ids)
         new.model = self.model
         new.timezone = self.timezone
+        new.schooltt = self
+        new.term = term
         for day_id in self.day_ids:
             new[day_id] = TimetableDay(self[day_id].periods,
                                        self[day_id].homeroom_period_ids)
@@ -132,6 +147,13 @@ class TimetableSchema(Persistent, Contained):
 
     def __ne__(self, other):
         return not self.__eq__(other)
+
+
+class TimetableSchemaContainerContainer(BTreeContainer):
+    """Container of Timetable Schema Containers."""
+
+    implements(ITimetableSchemaContainerContainer,
+               IAttributeAnnotatable)
 
 
 class TimetableSchemaContainer(BTreeContainer):
@@ -172,3 +194,78 @@ def clearTimetablesOnDeletion(obj, event):
     for tt in findRelatedTimetables(obj):
         ttdict = getParent(tt)
         del ttdict[getName(tt)]
+
+
+@adapter(ISchoolToolApplication)
+@implementer(ITimetableSchemaContainer)
+def getTimetableSchemaContainerForApp(app):
+    syc = ISchoolYearContainer(app)
+    sy = syc.getActiveSchoolYear()
+    if sy is not None:
+        return ITimetableSchemaContainer(sy)
+
+
+@adapter(ISchoolYear)
+@implementer(ITimetableSchemaContainer)
+def getTimetableSchemaContainer(sy):
+    int_ids = getUtility(IIntIds)
+    sy_id = str(int_ids.getId(sy))
+    app = ISchoolToolApplication(None)
+    cc = app['schooltool.timetable.schooltt'].get(sy_id, None)
+    if cc is None:
+        cc = app['schooltool.timetable.schooltt'][sy_id] = TimetableSchemaContainer()
+    return cc
+
+
+@adapter(ITerm)
+@implementer(ITimetableSchemaContainer)
+def getTimetableSchemaContainerForTerm(term):
+    return ITimetableSchemaContainer(ISchoolYear(term))
+
+
+@adapter(ITimetableSchemaContainer)
+@implementer(ISchoolYear)
+def getSchoolYearForTimetableSchemaContainer(ttschema_container):
+    container_id = int(ttschema_container.__name__)
+    int_ids = getUtility(IIntIds)
+    container = int_ids.getObject(container_id)
+    return container
+
+
+@adapter(ITimetableSchema)
+@implementer(ISchoolYear)
+def getSchoolYearForTTschema(ttschema):
+    return ISchoolYear(ttschema.__parent__)
+
+
+def locationCopy(loc):
+    tmp = StringIO()
+    persistent = CopyPersistent(loc)
+
+    # Pickle the object to a temporary file
+    pickler = cPickle.Pickler(tmp, 2)
+    pickler.persistent_id = persistent.id
+    pickler.dump(loc)
+
+    # Now load it back
+    tmp.seek(0)
+    unpickler = cPickle.Unpickler(tmp)
+    unpickler.persistent_load = persistent.load
+    return unpickler.load()
+
+
+class InitSchoolTimetablesForNewSchoolYear(ObjectEventAdapterSubscriber):
+    adapts(IObjectAddedEvent, ISchoolYear)
+
+    def __call__(self):
+        app = ISchoolToolApplication(None)
+        syc = ISchoolYearContainer(app)
+        active_schoolyear = syc.getActiveSchoolYear()
+
+        if active_schoolyear is not None:
+            new_container = ITimetableSchemaContainer(self.object)
+            old_container = ITimetableSchemaContainer(active_schoolyear)
+            for schooltt in old_container.values():
+                new_schooltt = locationCopy(schooltt)
+                new_schooltt.__parent__ = None
+                new_container[new_schooltt.__name__] = new_schooltt

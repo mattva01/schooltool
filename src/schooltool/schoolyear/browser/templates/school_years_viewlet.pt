@@ -1,0 +1,11 @@
+<a class="active_schoolyear"
+   tal:define="sy view/activeSchoolYear"
+   tal:condition="python:sy is not None"
+   tal:attributes="href sy/@@absolute_url"
+   tal:content="sy/@@title" />
+
+<a class="next_schoolyear"
+   tal:define="sy view/nextSchoolYear"
+   tal:condition="python:sy is not None"
+   tal:attributes="href sy/@@absolute_url"
+   tal:content="sy/@@title" />

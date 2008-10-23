@@ -132,8 +132,30 @@ class AnonymousCrowd(_GroupCrowd):
 
     group = 'zope.Anybody'
 
-class ManagersCrowd(_GroupCrowd):
+
+class SuperUserCrowd(Crowd):
+
+    def contains(self, principal):
+        from schooltool.app.browser import same # XXX
+        from schooltool.app.interfaces import ISchoolToolApplication
+        from schooltool.person.interfaces import IPerson
+        app = ISchoolToolApplication(None)
+        persons = app['persons']
+        person = IPerson(principal, None)
+        return person is not None and same(person, persons.super_user)
+
+
+class ManagerGroupCrowd(_GroupCrowd):
     group = 'sb.group.manager'
+
+
+class ManagersCrowd(Crowd):
+
+    def contains(self, principal):
+        managers_group = ManagerGroupCrowd(self.context)
+        super_users = SuperUserCrowd(self.context)
+        return super_users.contains(principal) or managers_group.contains(principal)
+
 
 class AdministratorsCrowd(_GroupCrowd):
     group = 'sb.group.administrators'

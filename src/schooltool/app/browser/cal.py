@@ -28,7 +28,8 @@ import calendar
 from datetime import datetime, date, time, timedelta
 
 import transaction
-from pytz import timezone, utc
+from pytz import utc
+from zope.component import getUtility
 from zope.component import queryMultiAdapter, adapts, getMultiAdapter
 from zope.component import subscribers
 from zope.event import notify
@@ -93,9 +94,9 @@ from schooltool.calendar.interfaces import IWeeklyRecurrenceRule
 from schooltool.calendar.utils import parse_date, parse_datetimetz
 from schooltool.calendar.utils import parse_time, weeknum_bounds
 from schooltool.calendar.utils import week_start, prev_month, next_month
-from schooltool.person.interfaces import IPerson, IPersonPreferences
+from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import vocabulary
-from schooltool.term.term import getTermForDate
+from schooltool.term.interfaces import IDateManager
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.securitypolicy.crowds import Crowd
 from schooltool.securitypolicy.interfaces import ICrowd
@@ -425,9 +426,7 @@ class CalendarDay(object):
 
     def today(self):
         """Return 'today' if self.date is today, otherwise return ''."""
-        # XXX shouldn't use date.today; it depends on the server's timezone
-        # which may not match user expectations
-        return self.date == date.today() and 'today' or ''
+        return self.date == getUtility(IDateManager).today and 'today' or ''
 
 
 #
@@ -451,6 +450,7 @@ class CalendarViewBase(BrowserView):
 
         # XXX Clean this up (use self.preferences in this and subclasses)
         prefs = ViewPreferences(request)
+        self.today = getUtility(IDateManager).today
         self.first_day_of_week = prefs.first_day_of_week
         self.time_fmt = prefs.timeformat
         self.dateformat = prefs.dateformat
@@ -541,9 +541,7 @@ class CalendarViewBase(BrowserView):
         dt = session.get('last_visited_day')
 
         if 'date' not in self.request:
-            # XXX shouldn't use date.today; it depends on the server's timezone
-            # which may not match user expectations
-            self.cursor = dt or date.today()
+            self.cursor = dt or self.today
         else:
             # TODO: It would be nice not to b0rk when the date is invalid but
             # fall back to the current date, as if the date had not been
@@ -779,7 +777,7 @@ class CalendarViewBase(BrowserView):
 
     def getJumpToYears(self):
         """Return jump targets for five years centered on the current year."""
-        this_year = datetime.today().year
+        this_year = self.today.year
         return [{'selected': year == this_year,
                  'label': year,
                  'href': self.calURL('yearly', date(year, 1, 1))}
@@ -919,7 +917,7 @@ class WeeklyCalendarView(CalendarViewBase):
 
     def __call__(self):
         app = getSchoolToolApplication()
-        if app['ttschemas'].default_id is not None:
+        if 'ttschemas' in app and app['ttschemas'].default_id is not None:
             return self.timetable_template()
         return self.non_timetable_template()
 
@@ -942,9 +940,7 @@ class WeeklyCalendarView(CalendarViewBase):
 
     def current(self):
         """Return the link for the current week."""
-        # XXX shouldn't use date.today; it depends on the server's timezone
-        # which may not match user expectations
-        return self.calURL('weekly', date.today())
+        return self.calURL('weekly', self.today)
 
     def next(self):
         """Return the link for the next week."""
@@ -1109,9 +1105,7 @@ class AtomCalendarView(WeeklyCalendarView):
 
     def getCurrentWeek(self):
         """Return the current week as a list of CalendarDay objects."""
-        # XXX shouldn't use date.today; it depends on the server's timezone
-        # which may not match user expectations
-        return self.getWeek(date.today())
+        return self.getWeek(self.today)
 
     def w3cdtf_datetime(self, dt):
         # XXX: shouldn't assume the datetime is in UTC
@@ -1156,7 +1150,7 @@ class MonthlyCalendarView(CalendarViewBase):
         """Return the link for the current month."""
         # XXX shouldn't use date.today; it depends on the server's timezone
         # which may not match user expectations
-        return self.calURL('monthly', date.today())
+        return self.calURL('monthly', self.today)
 
     def next(self):
         """Return the link for the next month."""
@@ -1207,7 +1201,7 @@ class YearlyCalendarView(CalendarViewBase):
         """Return the link for the current year."""
         # XXX shouldn't use date.today; it depends on the server's timezone
         # which may not match user expectations
-        return self.calURL('yearly', date.today())
+        return self.calURL('yearly', self.today)
 
     def next(self):
         """Return the link for the next year."""
@@ -1276,7 +1270,7 @@ class DailyCalendarView(CalendarViewBase):
         """Return the link for today."""
         # XXX shouldn't use date.today; it depends on the server's timezone
         # which may not match user expectations
-        return self.calURL('daily', date.today())
+        return self.calURL('daily', self.today)
 
     def next(self):
         """Return the link for the previous day."""
@@ -1472,103 +1466,11 @@ class DailyCalendarRowsView(BrowserView):
     This view differs from the original view in SchoolBell in that it can
     also show day periods instead of hour numbers.
     """
-
     __used_for__ = ISchoolToolCalendar
 
     def getPersonTimezone(self):
         """Return the prefered timezone of the user."""
         return ViewPreferences(self.request).timezone
-
-    def getPeriodsForDay(self, date):
-        """Return a list of timetable periods defined for `date`.
-
-        This function uses the default timetable schema and the appropriate time
-        period for `date`.
-
-        Retuns a list of (id, dtstart, duration) tuples.  The times
-        are timezone-aware and in the timezone of the timetable.
-
-        Returns an empty list if there are no periods defined for `date` (e.g.
-        if there is no default timetable schema, or `date` falls outside all
-        time periods, or it happens to be a holiday).
-        """
-        schooldays = getTermForDate(date)
-        ttcontainer = getSchoolToolApplication()['ttschemas']
-        if ttcontainer.default_id is None or schooldays is None:
-            return []
-        ttschema = ttcontainer.getDefault()
-        tttz = timezone(ttschema.timezone)
-        displaytz = self.getPersonTimezone()
-
-        # Find out the days in the timetable that our display date overlaps
-        daystart = displaytz.localize(datetime.combine(date, time(0)))
-        dayend = daystart + date.resolution
-        day1 = daystart.astimezone(tttz).date()
-        day2 = dayend.astimezone(tttz).date()
-
-        def resolvePeriods(date):
-            term = getTermForDate(date)
-            if not term:
-                return []
-
-            periods = ttschema.model.periodsInDay(term, ttschema, date)
-            result = []
-            for id, tstart, duration in  periods:
-                dtstart = datetime.combine(date, tstart)
-                dtstart = tttz.localize(dtstart)
-                result.append((id, dtstart, duration))
-            return result
-
-        periods = resolvePeriods(day1)
-        if day2 != day1:
-            periods += resolvePeriods(day2)
-
-        result = []
-
-        # Filter out periods outside date boundaries and chop off the
-        # ones overlapping them.
-        for id, dtstart, duration in periods:
-            if (dtstart + duration <= daystart) or (dayend <= dtstart):
-                continue
-            if dtstart < daystart:
-                duration -= daystart - dtstart
-                dtstart = daystart.astimezone(tttz)
-            if dayend < dtstart + duration:
-                duration = dayend - dtstart
-            result.append((id, dtstart, duration))
-
-        return result
-
-    def getPeriods(self, cursor):
-        """Return the date we get from getPeriodsForDay.
-
-        Checks user preferences, returns an empty list if no user is
-        logged in.
-        """
-        person = IPerson(self.request.principal, None)
-        if (person is not None and
-            IPersonPreferences(person).cal_periods):
-            return self.getPeriodsForDay(cursor)
-        else:
-            return []
-
-    def _addPeriodsToRows(self, rows, periods, events):
-        """Populate the row list with rows from periods."""
-        tz = self.getPersonTimezone()
-
-        # Put starts and ends of periods into rows
-        for period in periods:
-            period_id, pstart, duration = period
-            pend = (pstart + duration).astimezone(tz)
-            for point in rows[:]:
-                if pstart < point < pend:
-                    rows.remove(point)
-            if pstart not in rows:
-                rows.append(pstart)
-            if pend not in rows:
-                rows.append(pend)
-        rows.sort()
-        return rows
 
     def calendarRows(self, cursor, starthour, endhour, events):
         """Iterate over (title, start, duration) of time slots that make up
@@ -1577,27 +1479,18 @@ class DailyCalendarRowsView(BrowserView):
         Returns a generator.
         """
         tz = self.getPersonTimezone()
-        periods = self.getPeriods(cursor)
-
         daystart = tz.localize(datetime.combine(cursor, time()))
         rows = [daystart + timedelta(hours=hour)
                 for hour in range(starthour, endhour+1)]
-
-        if periods:
-            rows = self._addPeriodsToRows(rows, periods, events)
 
         calendarRows = []
 
         start, row_ends = rows[0], rows[1:]
         start = start.astimezone(tz)
         for end in row_ends:
-            if periods and periods[0][1] == start:
-                period = periods.pop(0)
-                calendarRows.append((period[0], start, period[2]))
-            else:
-                duration = end - start
-                calendarRows.append(('%d:%02d' % (start.hour, start.minute),
-                                     start, duration))
+            duration = end - start
+            calendarRows.append(('%d:%02d' % (start.hour, start.minute),
+                                 start, duration))
             start = end
         return calendarRows
 
@@ -2156,7 +2049,7 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
         if "field.start_date" not in request:
             # XXX shouldn't use date.today; it depends on the server's timezone
             # which may not match user expectations
-            today = date.today().strftime("%Y-%m-%d")
+            today = getUtility(IDateManager).today.strftime("%Y-%m-%d")
             request.form["field.start_date"] = today
         super(AddView, self).__init__(context, request)
         self.setUpEditorWidget(self.description_widget)

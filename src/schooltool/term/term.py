@@ -18,33 +18,99 @@
 #
 """
 Term implementation
-
-$Id$
 """
 import persistent
+import rwproperty
 import pytz
 from datetime import datetime
 
 import zope.interface
-from zope.annotation.interfaces import IAttributeAnnotatable
+from zope.event import notify
+from zope.proxy import sameProxiedObjects
+from zope.component import adapts
+from zope.component import adapter
+from zope.interface import implements
+from zope.interface import implementer
+from zope.app.container.interfaces import IObjectRemovedEvent
 from zope.app.container import contained, btree
 
+from schooltool.schoolyear.subscriber import EventAdapterSubscriber
+from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
+from schooltool.schoolyear.interfaces import TermOverlapError
+from schooltool.schoolyear.interfaces import ISubscriber
+from schooltool.schoolyear.interfaces import ISchoolYear
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.app import getSchoolToolApplication
+from schooltool.common import IDateRange
 from schooltool.common import DateRange
 
+from schooltool.term.interfaces import TermDateNotInSchoolYear
 from schooltool.term import interfaces
+from schooltool.common import SchoolToolMessage as _
+
+
+class TermBeforeChangeEvent(object):
+
+    def __init__(self, term, old_dates, new_dates):
+        self.term = term
+        self.old_dates = old_dates
+        self.new_dates = new_dates
+
+
+class TermAfterChangeEvent(object):
+
+    def __init__(self, term, old_dates, new_dates):
+        self.term = term
+        self.old_dates = old_dates
+        self.new_dates = new_dates
 
 
 class Term(DateRange, contained.Contained, persistent.Persistent):
-
     zope.interface.implements(interfaces.ITerm, interfaces.ITermWrite)
 
     def __init__(self, title, first, last):
-        super(Term, self).__init__(first, last)
         self.title = title
+        self._first = first
+        self._last = last
         self._schooldays = set()
+        if last < first:
+            raise ValueError("Last date %r less than first date %r" %
+                             (last, first))
+
+    @rwproperty.getproperty
+    def first(self):
+        return self._first
+
+    @rwproperty.setproperty
+    def first(self, new_first_date):
+        old_dates = (self._first, self._last)
+        new_dates = (new_first_date, self._last)
+
+        if self._last < new_first_date:
+            raise ValueError("Last date %r less than first date %r" %
+                             (self._last, new_first_date))
+
+        notify(TermBeforeChangeEvent(self, old_dates, new_dates))
+        self._first = new_first_date
+        notify(TermAfterChangeEvent(self, old_dates, new_dates))
+
+    @rwproperty.getproperty
+    def last(self):
+        return self._last
+
+    @rwproperty.setproperty
+    def last(self, new_last_date):
+        old_dates = (self._first, self._last)
+        new_dates = (self._first, new_last_date)
+
+        if new_last_date < self._first:
+            raise ValueError("Last date %r less than first date %r" %
+                             (new_last_date, self._first))
+
+        notify(TermBeforeChangeEvent(self, old_dates, new_dates))
+        self._last = new_last_date
+        notify(TermAfterChangeEvent(self, old_dates, new_dates))
 
     def _validate(self, date):
         if not date in self:
@@ -96,8 +162,7 @@ class Term(DateRange, contained.Contained, persistent.Persistent):
 
 
 class TermContainer(btree.BTreeContainer):
-
-    zope.interface.implements(interfaces.ITermContainer, IAttributeAnnotatable)
+    """BBB: only there for backwards compatibility."""
 
 
 def getTermForDate(date):
@@ -105,7 +170,7 @@ def getTermForDate(date):
 
     Returns None if `date` falls outside all terms.
     """
-    terms = getSchoolToolApplication()["terms"]
+    terms = interfaces.ITermContainer(None, {})
     for term in terms.values():
         if date in term:
             return term
@@ -122,7 +187,7 @@ def getNextTermForDate(date):
 
     Returns None if there are no terms.
     """
-    terms = getSchoolToolApplication()["terms"]
+    terms = interfaces.ITermContainer(None, {})
     before, after = [], []
     for term in terms.values():
         if date in term:
@@ -151,3 +216,59 @@ class DateManagerUtility(object):
     @property
     def current_term(self):
         return getNextTermForDate(self.today)
+
+
+@implementer(interfaces.ITermContainer)
+def getTermContainer(context):
+    app = ISchoolToolApplication(None)
+    syc = ISchoolYearContainer(app)
+    return syc.getActiveSchoolYear()
+
+
+@adapter(interfaces.ITerm)
+@implementer(ISchoolYear)
+def getSchoolYearForTerm(term):
+    return term.__parent__
+
+
+class RemoveTermsWhenSchoolYearIsDeleted(ObjectEventAdapterSubscriber):
+    adapts(IObjectRemovedEvent, ISchoolYear)
+
+    def __call__(self):
+        for term_id in list(self.object.keys()):
+            del self.object[term_id]
+
+
+def validateTermsForOverlap(sy, dr, term):
+    overlapping_terms = []
+    for other_term in sy.values():
+        if (not sameProxiedObjects(other_term, term) and
+            dr.overlaps(IDateRange(other_term))):
+            overlapping_terms.append(other_term)
+            if overlapping_terms:
+                raise TermOverlapError(term,
+                                       overlapping_terms)
+
+
+class TermOverlapValidationSubscriber(EventAdapterSubscriber):
+    adapts(TermBeforeChangeEvent)
+    implements(ISubscriber)
+
+    def __call__(self):
+        sy = self.event.term.__parent__
+        dr = DateRange(*self.event.new_dates)
+        if sy:
+            validateTermsForOverlap(sy, dr, self.event.term)
+
+
+class TermOverflowValidationSubscriber(EventAdapterSubscriber):
+    adapts(TermBeforeChangeEvent)
+    implements(ISubscriber)
+
+    def __call__(self):
+        if self.event.term.__parent__ is None:
+            return
+        dr = IDateRange(self.event.term.__parent__)
+        if (self.event.new_dates[0] not in dr or
+            self.event.new_dates[1] not in dr):
+            raise TermDateNotInSchoolYear(_("Term date is not in the school year."))

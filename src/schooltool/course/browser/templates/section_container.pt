@@ -2,14 +2,24 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
   <title metal:fill-slot="title"
-         tal:content="view/index_title">
-    Contents
+         i18n:translate="">
+    Section list for
+    <tal:block i18n:name="term"
+               tal:content="view/term/title" /> of
+    <tal:block i18n:name="schoolyear"
+               tal:content="view/school_year/title" />
   </title>
 </head>
 <body>
 
 <h1 metal:fill-slot="content-header"
-    tal:content="view/index_title">Contents</h1>
+    i18n:translate="">
+  Section list for
+  <tal:block i18n:name="term"><a tal:attributes="href view/term/@@absolute_url"
+                                 tal:content="view/term/title">Term</a></tal:block> of
+  <tal:block i18n:name="schoolyear"><a tal:attributes="href view/school_year/@@absolute_url"
+                                       tal:content="view/school_year/title">School Year</a></tal:block>
+</h1>
 
 <metal:block metal:fill-slot="body"
              tal:define="batch view/batch">
@@ -67,7 +77,7 @@
         <td>
           <tal:loop repeat="tt python: view.getTimetables(obj)">
             <span tal:condition="not:repeat/tt/start">, </span>
-            <a href="" tal:attributes="href string:${obj/@@absolute_url}/timetables/$tt"
+            <a href="" tal:attributes="href tt/@@absolute_url"
                tal:content="tt/title" />
           </tal:loop>
         </td>

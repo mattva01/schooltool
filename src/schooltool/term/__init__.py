@@ -21,28 +21,4 @@
 A term defines a range in time (e.g. September 1 to December 31, 2004) and for
 every day within that range it defines whether that day is a schoolday or a
 holiday.
-
-
-$Id$
 """
-from schooltool.app.app import InitBase
-
-
-class TermInit(InitBase):
-
-    def __call__(self):
-        from schooltool.term.term import TermContainer
-        self.app['terms'] = TermContainer()
-
-
-def registerTestSetup():
-    from schooltool.testing import registry
-
-    def addTermContainer(app):
-        from schooltool.term.term import TermContainer
-        app['terms'] = TermContainer()
-
-    registry.register('ApplicationContainers', addTermContainer)
-
-registerTestSetup()
-del registerTestSetup

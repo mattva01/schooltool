@@ -25,6 +25,7 @@ from persistent import Persistent
 import zope.interface
 
 from zope.annotation.interfaces import IAttributeAnnotatable
+from zope.app.container.interfaces import IObjectRemovedEvent
 from zope.app.container import btree, contained
 from zope.component import adapts
 from zope.interface import implements
@@ -40,7 +41,10 @@ from schooltool.person.interfaces import IPerson
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app import relationships
 from schooltool.course import interfaces, booking
+from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
+from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
+from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.interfaces import ISection
 from schooltool.app.security import ConfigurableCrowd
 from schooltool.relationship.relationship import getRelatedObjects
@@ -92,6 +96,71 @@ class Section(Persistent, contained.Contained):
                                      booking.URIResource)
 
 
+from zope.app.intid.interfaces import IIntIds
+from zope.component import getUtility
+from zope.component import adapter
+from zope.interface import implementer
+from schooltool.course.interfaces import ISectionContainer
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.term.interfaces import ITerm
+
+@adapter(ITerm)
+@implementer(ISectionContainer)
+def getSectionContainer(term):
+    int_ids = getUtility(IIntIds)
+    term_id = str(int_ids.getId(term))
+    app = ISchoolToolApplication(None)
+    sc = app['schooltool.course.section'].get(term_id, None)
+    if sc is None:
+        sc = app['schooltool.course.section'][term_id] = SectionContainer()
+    return sc
+
+
+@adapter(ISectionContainer)
+@implementer(ISchoolYear)
+def getSchoolYearForSectionContainer(section_container):
+    return ISchoolYear(ITerm(section_container))
+
+
+@adapter(ISection)
+@implementer(ISchoolYear)
+def getSchoolYearForSection(section):
+    return ISchoolYear(ITerm(section.__parent__))
+
+
+@adapter(ISectionContainer)
+@implementer(ITerm)
+def getTermForSectionContainer(section_container):
+    container_id = int(section_container.__name__)
+    int_ids = getUtility(IIntIds)
+    container = int_ids.getObject(container_id)
+    return container
+
+
+@adapter(ISection)
+@implementer(ITerm)
+def getTermForSection(section):
+    return ITerm(section.__parent__)
+
+
+@adapter(ISectionContainer)
+@implementer(ICourseContainer)
+def getCourseContainerForSectionContainer(section_container):
+    return ICourseContainer(ISchoolYear(section_container))
+
+
+@adapter(ISection)
+@implementer(ICourseContainer)
+def getCourseContainerForSection(section):
+    return ICourseContainer(ISchoolYear(section))
+
+
+class SectionContainerContainer(btree.BTreeContainer):
+    """Container of Section containers."""
+
+    zope.interface.implements(interfaces.ISectionContainerContainer)
+
+
 class SectionContainer(btree.BTreeContainer):
     """Container of Sections."""
 
@@ -102,7 +171,7 @@ class SectionContainer(btree.BTreeContainer):
 class SectionInit(InitBase):
 
     def __call__(self):
-        self.app['sections'] = SectionContainer()
+        self.app['schooltool.course.section'] = SectionContainerContainer()
 
 
 class InstructorsCrowd(Crowd):
@@ -188,3 +257,12 @@ class PersonInstructorAdapter(object):
     def sections(self):
         return getRelatedObjects(self.person, URISection,
                                  rel_type=URIInstruction)
+
+
+class RemoveSectionsWhenTermIsDeleted(ObjectEventAdapterSubscriber):
+    adapts(IObjectRemovedEvent, ITerm)
+
+    def __call__(self):
+        section_container = ISectionContainer(self.object)
+        for section_id in list(section_container.keys()):
+            del section_container[section_id]

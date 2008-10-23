@@ -1,0 +1,51 @@
+Test for courses being removed properly when school year is gone
+================================================================
+
+A manager logs in
+
+    >>> manager = Browser('manager', 'schooltool')
+
+Sets the time
+
+    >>> manager.open('http://localhost/time')
+    >>> manager.getControl('Today').value = "05/02/15"
+    >>> manager.getControl('Apply').click()
+
+    >>> 'Data successfully updated.' in manager.contents
+    True
+
+And creates a new school year:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('New School Year').click()
+    >>> manager.getControl('Title').value = '2005-2006'
+    >>> manager.getControl('First day').value = '05/09/01'
+    >>> manager.getControl('Last day').value = '06/07/15'
+    >>> manager.getControl('Add').click()
+
+Adds a course
+
+    >>> from schooltool.app.browser.ftests import setup
+    >>> setup.addCourse("History", "2005-2006")
+
+And makes himself a leader of that course
+
+    >>> manager.getLink('2005-2006').click()
+    >>> manager.getLink('Courses').click()
+    >>> manager.getLink('History').click()
+    >>> manager.getLink('Edit Leaders').click()
+    >>> manager.getControl('SchoolTool Manager').click()
+    >>> manager.getControl('Add').click()
+
+XXX How do we check the leadership?
+
+Now let's delete the school year:
+
+    >>> manager.getLink("Manage").click()
+    >>> manager.getLink("School Years").click()
+    >>> manager.getControl(name="delete.2005-2006").value = True
+    >>> manager.getControl("Delete").click()
+    >>> manager.getControl("Confirm").click()
+
+XXX How do we check it's gone?

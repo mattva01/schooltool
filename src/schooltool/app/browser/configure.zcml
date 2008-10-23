@@ -210,12 +210,6 @@
       layer="schooltool.skin.ISchoolToolLayer"
       />
 
-  <addMenuItem
-      title="SchoolTool"
-      class="schooltool.app.app.SchoolToolApplication"
-      permission="zope.ManageContent"
-      />
-
   <page
       name="site-preferences.html"
       for="schooltool.app.interfaces.ISchoolToolApplication"
@@ -223,7 +217,6 @@
       template="templates/application_preferences.pt"
       permission="schooltool.edit"
       />
-
 
   <!-- Make index.html the default ZMI view for ISchoolToolApplication -->
 
@@ -266,6 +259,20 @@
       permission="zope.Public"
       layer="schooltool.skin.ISchoolToolLayer"
       />
+
+  <page
+      name="title"
+      for="*"
+      class=".app.TitleView"
+      permission="zope.Public"
+      layer="schooltool.skin.ISchoolToolLayer" />
+
+  <page
+      name="link"
+      for="*"
+      layer="schooltool.skin.ISchoolToolLayer"
+      template="templates/link.pt"
+      permission="zope.Public"/>
 
   <!-- Calendar views -->
 

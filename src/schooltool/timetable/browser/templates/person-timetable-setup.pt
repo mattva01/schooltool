@@ -1,13 +1,13 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
   <title metal:fill-slot="title" i18n:translate="">
-    Scheduling for <span i18n:name="person" tal:replace="context/title" />
+    Scheduling for <span i18n:name="person" tal:replace="context/@@link" />
   </title>
 </head>
 <body>
 
 <h1 metal:fill-slot="content-header" i18n:translate="">
-  Scheduling for <span i18n:name="person" tal:replace="context/title" />
+  Scheduling for <span i18n:name="person" tal:replace="context/@@link" />
 </h1>
 
 <metal:block metal:fill-slot="body">
@@ -23,7 +23,7 @@
 
     <label for="term" i18n:translate="">Term</label>
     <select id="term" name="term"
-            tal:define="terms view/app/terms/values">
+            tal:define="terms view/terms/values">
       <option tal:repeat="term terms/sortby:first"
               tal:attributes="value term/__name__;
                               selected python:term is view.term
@@ -33,7 +33,7 @@
 
     <label for="ttschema" i18n:translate="">Schema</label>
     <select id="ttschema" name="ttschema"
-            tal:define="ttschemas view/app/ttschemas/values">
+            tal:define="ttschemas view/ttschemas/values">
       <option tal:repeat="ttschema ttschemas/sortby:__name__"
               tal:attributes="value ttschema/__name__;
                               selected python:ttschema is view.ttschema

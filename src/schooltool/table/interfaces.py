@@ -52,7 +52,7 @@ class ITableFormatter(Interface):
 
     filter_widget = Object(schema=IFilterWidget)
 
-    def setUp(items=None, filter=None, columns=None, columns_before=None,
+    def setUp(items=None, ommit=None, filter=None, columns=None, columns_before=None,
               columns_after=None, sort_on=None, prefix="", formatters=None,
               table_formatter=None, batch_size=10):
         """Populate the table with items, set up the variables for table formatter.

@@ -22,18 +22,26 @@ $Id$
 """
 import unittest
 
+from zope.component import provideAdapter
+from zope.interface import Interface
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
 from zope.app.testing import setup
 
+from schooltool.schoolyear.schoolyear import getSchoolYearContainer
+from schooltool.term.term import getTermContainer
+from schooltool.term.interfaces import ITermContainer
 from schooltool.testing import setup as stsetup
 
 def setUp(test):
     setup.placefulSetUp()
+    provideAdapter(getTermContainer, [Interface], ITermContainer)
+    provideAdapter(getSchoolYearContainer)
 
 
 def tearDown(test):
     setup.placefulTearDown()
+
 
 def doctest_SampleTerms():
     """A sample data plugin that creates terms
@@ -48,25 +56,25 @@ def doctest_SampleTerms():
 
         >>> app = stsetup.setUpSchoolToolSite()
         >>> plugin.generate(app, 42)
-        >>> len(app['terms'])
+        >>> len(ITermContainer(app))
         3
 
     These terms are 90 schooldays long:
 
-        >>> fall = app['terms']['2005-fall']
+        >>> fall = ITermContainer(app)['2005-fall']
         >>> schooldays = [day for day in fall if fall.isSchoolday(day)]
         >>> len(schooldays)
         90
 
-        >>> spring = app['terms']['2006-spring']
+        >>> spring = ITermContainer(app)['2006-spring']
         >>> schooldays = [day for day in spring if spring.isSchoolday(day)]
         >>> len(schooldays)
         156
 
-        >>> fall6 = app['terms']['2006-fall']
+        >>> fall6 = ITermContainer(app)['2006-fall']
         >>> schooldays = [day for day in fall6 if fall6.isSchoolday(day)]
         >>> len(schooldays)
-        90
+        81
 
     They span these dates:
 
@@ -75,7 +83,7 @@ def doctest_SampleTerms():
         >>> print spring.first, spring.last
         2006-01-26 2006-08-31
         >>> print fall6.first, fall6.last
-        2006-08-21 2006-12-22
+        2006-09-01 2006-12-22
 
     """
 

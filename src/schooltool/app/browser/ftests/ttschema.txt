@@ -22,15 +22,20 @@ Overview
 Setup
 -----
 
-    >>> from zope.testbrowser.testing import Browser
-    >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
-    >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/')
+    >>> from schooltool.app.browser.ftests.setup import setUpBasicSchool
+    >>> manager = Browser('manager', 'schooltool')
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('New School Year').click()
+    >>> manager.getControl('Title').value = '2005'
+    >>> manager.getControl('First day').value = '05/05/01'
+    >>> manager.getControl('Last day').value = '05/10/15'
+    >>> manager.getControl('Add').click()
 
 The schema container is empty initially:
 
-    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('2005').click()
     >>> manager.getLink('School Timetables').click()
     >>> '<p>There are none.</p>' in manager.contents
     True
@@ -41,7 +46,7 @@ Advanced timetable schema add view
 
 Let's go to the advanced 'New Timetable Schema' view:
 
-    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('2005').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
     >>> manager.getLink('advanced adding form').click()
@@ -142,22 +147,6 @@ be the default one:
 
     >>> '<option selected="selected" value="weekly">' in manager.contents
     True
-
-The unauthenticated user can also, surprisingly, see what is the
-default schema:
-
-    >>> anonymous = Browser()
-    >>> anonymous.handleErrors = False
-    >>> anonymous.open('http://localhost/ttschemas')
-
-    >>> print anonymous.contents
-    <BLANKLINE>
-    ...
-    <div class="row">
-      <label for="ttschema">Default Timetable Schema:</label>
-      <a href="http://localhost/ttschemas/weekly">weekly</a>
-    </div>
-    ...
 
 Lets add one more schema:
 
@@ -290,10 +279,8 @@ Special days
 
 We need a term:
 
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('Terms').click()
-    >>> manager.getLink('New Term').click()
-
+    >>> manager.getLink('2005').click()
+    >>> manager.getLink('Add a new term').click()
     >>> manager.getControl('Title').value = '2005 Summer'
     >>> manager.getControl('Start date').value = '2005-06-01'
     >>> manager.getControl('End date').value = '2005-08-31'
@@ -306,7 +293,7 @@ We need a term:
 
 We can shift the start and end times for periods for a certain day:
 
-    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('2005').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('other').click()
     >>> manager.getLink('Change Timetable for One Day').click()
@@ -350,8 +337,7 @@ Emergency Days
 
 Now let's make 2005-07-07 an emergency day:
 
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('Terms').click()
+    >>> manager.getLink('2005').click()
     >>> manager.getLink('2005 Summer').click()
     >>> manager.getLink('Cancel School in Emergency').click()
 
@@ -365,7 +351,7 @@ When we select the second date, the replacement day is registered:
 
 Now all periods for this day are cancelled:
 
-    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('2005').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('other').click()
     >>> manager.getLink('Change Timetable for One Day').click()
@@ -408,7 +394,7 @@ But the replacement day now contains periods all-right:
 
 Let's go back to the index of the school timetables:
 
-    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('2005').click()
     >>> manager.getLink('School Timetables').click()
 
 Let's delete the new schema:
@@ -424,7 +410,7 @@ We get to the confirmation page:
     Are you sure you want to delete the selected school timetables?
     ...
             <input type="hidden" name="delete.schema-2" />
-            <a href="http://localhost/ttschemas/schema-2">Schema 2</a>.
+            <a href="http://localhost/schoolyears/2005/school_timetables/schema-2">Schema 2</a>.
             This school timetable is used by 0 individual timetables.
     ...
 
@@ -452,8 +438,7 @@ The default schema selection is unset:
 
 Let's go back to the index of terms:
 
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('Terms').click()
+    >>> manager.getLink('2005').click()
 
 Let's delete the term:
 
@@ -468,8 +453,7 @@ We get to the confirmation page:
     Are you sure you want to delete the selected terms?
     ...
             <input type="hidden" name="delete.2005-summer" />
-            <a href="http://localhost/terms/2005-summer">2005 Summer</a>.
-            This term is used by 0 individual timetables.
+            <a href="http://localhost/schoolyears/2005/2005-summer">2005 Summer</a>.
     ...
 
 Let's proceed:
@@ -478,8 +462,12 @@ Let's proceed:
 
 We get back to the terms index page:
 
-    >>> '<h1>Terms</h1>' in manager.contents
-    True
+    >>> print analyze.queryHTML('//h1', manager.contents)[0]
+    <h1>
+      2005
+      (May 1, 2005&#8212;
+       Oct 15, 2005)
+    </h1>
 
 But the deleted term is not there:
 

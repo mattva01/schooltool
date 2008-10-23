@@ -12,17 +12,18 @@ Set up
 
 We go to the front page
 
-    >>> from zope.testbrowser.testing import Browser
-    >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
-    >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/')
-    >>> 'SchoolTool' in manager.contents
-    True
+    >>> manager = Browser('manager', 'schooltool')
+
+Set up a basic school:
+
+    >>> from schooltool.app.browser.ftests.setup import addPerson, setUpBasicSchool
+    >>> setUpBasicSchool()
 
 We add a group
 
     >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Year').click()
+    >>> manager.getLink('2005-2006').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('New Group').click()
 
@@ -34,7 +35,6 @@ We add a group
 
 We add a person
 
-    >>> from schooltool.app.browser.ftests.setup import addPerson
     >>> addPerson('person1', 'person', groups=['group1'])
 
 We look at the groups of the person we added
@@ -48,6 +48,8 @@ We look at the groups of the person we added
 We look at the members of the group
 
     >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Year').click()
+    >>> manager.getLink('2005-2006').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('group1').click()
     >>> 'person1' in manager.contents
@@ -76,6 +78,8 @@ We look at the members of the group (this used to cause internal errors in an
 earlier version of SchoolTool):
 
     >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Year').click()
+    >>> manager.getLink('2005-2006').click()
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('group1').click()
     >>> manager.headers['status']

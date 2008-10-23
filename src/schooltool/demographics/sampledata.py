@@ -29,6 +29,8 @@ from pytz import utc
 from zope.interface import implements
 from zope.security.proxy import removeSecurityProxy
 
+from schooltool.group.interfaces import IGroupContainer
+from schooltool.term.interfaces import ITermContainer
 from schooltool.sampledata import PortableRandom
 from schooltool.sampledata.interfaces import ISampleDataPlugin
 from schooltool.sampledata.name import NameGenerator
@@ -113,7 +115,7 @@ class SampleTeachers(object):
 
     def generate(self, app, seed=None):
         namegen = NameGenerator(str(seed) + self.name)
-        teachers = app['groups']['teachers']
+        teachers = IGroupContainer(app)['teachers']
         for count in range(self.power):
             person = self.personFactory(namegen, count)
             # Without removeSecurityProxy we can't add members a
@@ -149,7 +151,7 @@ class SamplePersonalEvents(object):
                       if person.startswith('student') or
                          person.startswith('teacher')]
         dates = []
-        for term in app['terms'].values():
+        for term in ITermContainer(app).values():
             dates.append(term.first)
             dates.append(term.last)
         first = min(dates)

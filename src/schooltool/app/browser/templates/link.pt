@@ -1,0 +1,1 @@
+<a tal:attributes="href context/@@absolute_url" tal:content="structure context/@@title" />

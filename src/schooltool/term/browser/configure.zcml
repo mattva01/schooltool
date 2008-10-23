@@ -4,47 +4,18 @@
     xmlns:zope="http://namespaces.zope.org/zope"
     i18n_domain="schooltool">
 
-  <configure package="schooltool.skin">
-
-    <page
-       name="index.html"
-       for="schooltool.term.interfaces.ITermContainer"
-       class="schooltool.term.browser.term.TermContainerView"
-       permission="schooltool.view"
-       menu="zmi_views"
-       title="View"
-       />
-
-  </configure>
-
   <page
       name="add.html"
       for="..interfaces.ITermContainer"
-      class=".term.TermAddView"
-      template="term_add_edit.pt"
+      class=".term.TermAddForm"
       permission="schooltool.edit"
-      menu="schooltool_actions" title="New Term"
       />
-
-  <configure package="schooltool.skin">
-    <navigationViewlet
-      name="terms"
-      for="*"
-      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
-      template="templates/navigationViewlet.pt"
-      class="schooltool.skin.TopLevelContainerNavigationViewlet"
-      permission="schooltool.view"
-      link="terms"
-      title="Terms"
-      order="70"
-      />
-  </configure>
 
   <page
       name="index.html"
       for="..interfaces.ITerm"
       class=".term.TermView"
-      template="term.pt"
+      template="templates/term.pt"
       permission="schooltool.view"
       menu="zmi_views" title="View"
       />
@@ -52,8 +23,7 @@
   <page
       name="edit.html"
       for="..interfaces.ITerm"
-      class=".term.TermEditView"
-      template="term_add_edit.pt"
+      class=".term.TermEditForm"
       permission="schooltool.edit"
       menu="schooltool_actions" title="Edit"
       />
@@ -67,6 +37,14 @@
       title="Cancel School in Emergency"
       />
 
+  <zope:view
+      for="schooltool.term.interfaces.ITerm"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory="schooltool.traverser.browser.PluggableBrowserTraverser"
+      permission="zope.Public"
+      />
+
   <zope:adapter
       for="schooltool.term.interfaces.ITermContainer
            zope.publisher.interfaces.browser.IBrowserRequest"
@@ -76,5 +54,29 @@
       for="schooltool.term.interfaces.ITermContainer
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory="schooltool.table.table.SchoolToolTableFormatter " />
+
+  <zope:class class=".widgets.CustomDateTextWidget">
+    <require
+        permission="zope.Public"
+        interface="z3c.form.interfaces.ITextWidget"
+        />
+  </zope:class>
+
+  <zope:adapter
+      factory=".emergency.getTimetableSchemaContainerForTerm" />
+  <zope:adapter
+      factory=".widgets.CustomDateDataConverter" />
+  <zope:adapter
+      factory=".errors.OverlapErrorViewSnippet" />
+  <zope:adapter
+      factory=".term.TermFormAdapter" />
+  <zope:adapter
+      factory=".term.AddTermFormValidator" />
+  <zope:adapter
+      factory=".term.EditTermFormValidator" />
+  <zope:adapter
+      factory=".term.FirstTermBoundsValidator" />
+  <zope:adapter
+      factory=".term.LastTermBoundsValidator" />
 
 </configure>

@@ -452,6 +452,9 @@ class IDateRange(Interface):
     def __len__():
         """Return the number of dates covered by the range."""
 
+    def overlaps(date_range):
+        """Return whether this daterange overlaps with the other daterange."""
+
 
 class DateRange(object):
     """A date range implementation using the standard datetime module.
@@ -530,6 +533,78 @@ class DateRange(object):
 
     def __contains__(self, date):
         return self.first <= date <= self.last
+
+    def overlaps(self, date_range):
+        """Return whether this daterange overlaps with the other daterange.
+
+           >>> from datetime import timedelta as td
+           >>> def parse_inverval(interval):
+           ...     first_date = datetime.date(2005, 1, 1)
+           ...     start = len(interval) - len(interval.lstrip())
+           ...     length = len(interval.strip())
+           ...     end = start + length - 1
+           ...     return DateRange(first_date + td(days=start),
+           ...                      first_date + td(days=end))
+
+           >>> interval = parse_inverval(' [===]  ')
+           >>> print interval.first, interval.last
+           2005-01-02 2005-01-06
+
+           >>> interval = parse_inverval('  [===]   ')
+           >>> print interval.first, interval.last
+           2005-01-03 2005-01-07
+
+           >>> def overlap(interval1, interval2):
+           ...     i1 = parse_inverval(interval1)
+           ...     i2 = parse_inverval(interval2)
+           ...     return i1.overlaps(i2)
+
+           >>> overlap(' [===]                     ',
+           ...         '       [===========]       ')
+           False
+
+           >>> overlap(' [====]                    ',
+           ...         '       [===========]       ')
+           False
+
+           >>> overlap(' [=====]                   ',
+           ...         '       [===========]       ')
+           True
+
+           >>> overlap(' [=======]                 ',
+           ...         '       [===========]       ')
+           True
+
+           >>> overlap('       [===========]       ',
+           ...         '       [===========]       ')
+           True
+
+           >>> overlap('        [=========]        ',
+           ...         '       [===========]       ')
+           True
+
+           >>> overlap('                [========] ',
+           ...         '       [===========]       ')
+           True
+
+           >>> overlap('                   [=====] ',
+           ...         '       [===========]       ')
+           True
+
+           >>> overlap('                    [====] ',
+           ...         '       [===========]       ')
+           False
+
+           >>> overlap('                     [===] ',
+           ...         '       [===========]       ')
+           False
+
+           >>> overlap('     [===============]     ',
+           ...         '       [===========]       ')
+           True
+
+        """
+        return self.last >= date_range.first and self.first <= date_range.last
 
 
 _version = None

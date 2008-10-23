@@ -22,12 +22,9 @@ taken.
 
 The usual setup
 
-    >>> from zope.testbrowser.testing import Browser
-    >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
-    >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/')
-
+    >>> from schooltool.app.browser.ftests.setup import setUpBasicSchool
+    >>> setUpBasicSchool()
+    >>> manager = Browser('manager', 'schooltool')
 
 Weekly timetable
 ----------------
@@ -36,7 +33,7 @@ Weekly timetable
 
 Let's go to the `new timetable schema` wizard:
 
-    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('2005-2006').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
     >>> '<h1>New timetable schema</h1>' in manager.contents
@@ -81,12 +78,12 @@ The timetable schema gets created. Now we see the newly created timetable
 schema in the list.
 
     >>> manager.getLink('Default')
-    <Link text='Default' url='http://localhost/ttschemas/default'>
+    <Link text='Default' url='http://localhost/schoolyears/2005-2006/school_timetables/default'>
 
-We can examine its composition more easily by invoking the RESTive view.
+We can examine its composition more easily by looking at it's xml export view.
 
-    >>> print rest(r"""
-    ... GET /ttschemas/default HTTP/1.1
+    >>> print http(r"""
+    ... GET /schoolyears/2005-2006/school_timetables/default/export.xml HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
@@ -153,7 +150,7 @@ Rotating timetable
 
 Let's do it again!
 
-    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('2005-2006').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
 
@@ -233,12 +230,12 @@ Period_B, while day C skips attendance.
 Now we see the newly created timetable schema in the list.
 
     >>> manager.getLink('Rotating')
-    <Link text='Rotating' url='http://localhost/ttschemas/rotating'>
+    <Link text='Rotating' url='http://localhost/schoolyears/2005-2006/school_timetables/rotating'>
 
-We can examine its composition more easily by invoking the RESTive view.
+We can examine its composition more easily by looking at it's xml export view.
 
-    >>> print rest(r"""
-    ... GET /ttschemas/rotating HTTP/1.1
+    >>> print http(r"""
+    ... GET /schoolyears/2005-2006/school_timetables/rotating/export.xml HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
@@ -286,7 +283,7 @@ Rotating timetable, different daily period order
 
 Let's do it again!
 
-    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('2005-2006').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
 
@@ -369,8 +366,8 @@ Do we use a homeroom period?  Let's say no:
 
 The schema is now created:
 
-    >>> print rest(r"""
-    ... GET /ttschemas/rotating-2 HTTP/1.1
+    >>> print http(r"""
+    ... GET /schoolyears/2005-2006/school_timetables/rotating-2/export.xml HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
@@ -418,7 +415,7 @@ Weekly timetable, named periods
 
 Let's go to the timetable schema wizard:
 
-    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('2005-2006').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
 
@@ -535,8 +532,8 @@ Do we use a homeroom period?  Let's say no:
 
 The schema is now created:
 
-    >>> print rest(r"""
-    ... GET /ttschemas/weekly-2 HTTP/1.1
+    >>> print http(r"""
+    ... GET /schoolyears/2005-2006/school_timetables/weekly-2/export.xml HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
@@ -606,7 +603,7 @@ Weekly timetable, lessons on saturday
 
 Let's go to the timetable schema wizard:
 
-    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('2005-2006').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
 
@@ -652,8 +649,8 @@ Do we use a homeroom period?  Let's say no:
 
 The schema is now created:
 
-    >>> print rest(r"""
-    ... GET /ttschemas/weekly-3 HTTP/1.1
+    >>> print http(r"""
+    ... GET /schoolyears/2005-2006/school_timetables/weekly-3/export.xml HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
@@ -724,7 +721,7 @@ Rotating timetable, different period times (per weekday)
 
 Let's do it again!
 
-    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('2005-2006').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
 
@@ -819,8 +816,8 @@ Do we use a homeroom period?  Let's say no:
 
 The schema is now created:
 
-    >>> print rest(r"""
-    ... GET /ttschemas/rotating-3 HTTP/1.1
+    >>> print http(r"""
+    ... GET /schoolyears/2005-2006/school_timetables/rotating-3/export.xml HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
@@ -878,7 +875,7 @@ Rotating timetable, different period times (rotating day)
 
 Let's do it one last time!
 
-    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('2005-2006').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
 
@@ -985,8 +982,8 @@ Do we use a homeroom period?  Let's say no:
 
 The schema is now created:
 
-    >>> print rest(r"""
-    ... GET /ttschemas/rotating-4 HTTP/1.1
+    >>> print http(r"""
+    ... GET /schoolyears/2005-2006/school_timetables/rotating-4/export.xml HTTP/1.1
     ... Authorization: Basic manager:schooltool
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
@@ -1041,7 +1038,7 @@ The Cancel button
 
 Let's do it once more!
 
-    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('2005-2006').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
 
@@ -1054,7 +1051,7 @@ And now we suddenly realize that we don't need another schema.  We can't
 simply go away and forget about this wizard, because it remembers the
 last step we completed:
 
-    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('2005-2006').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
     >>> "Days of the week" in manager.contents
@@ -1066,7 +1063,7 @@ However we can press the Cancel button and go back to the beginning
 
     >>> manager.getControl('Cancel').click()
     >>> manager.url
-    'http://localhost/ttschemas'
+    'http://localhost/schoolyears/2005-2006/school_timetables'
 
 If we now click on the New Timetable button, we'll see the first page
 again.

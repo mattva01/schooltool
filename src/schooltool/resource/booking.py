@@ -34,6 +34,8 @@ from schooltool.resource.interfaces import IBookingTimetableEvent
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPerson
+from schooltool.term.interfaces import ITermContainer
+from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable import TimetableActivity
 from schooltool.traverser.traverser import NameTraverserPlugin
 
@@ -85,9 +87,9 @@ class ResourceBookingCalendar(ImmutableCalendar):
         self.__name__ = 'booking'
         self.title = "Booking Calendar"
 
-    def createFullTimetable(self, school_timetable):
+    def createFullTimetable(self, school_timetable, term):
         """Create a timetable with an activity for every possible period"""
-        timetable = school_timetable.createTimetable()
+        timetable = school_timetable.createTimetable(term)
 
         # must be set so event ids would get generated properly, as
         # the ids use the absolutePath.
@@ -102,8 +104,8 @@ class ResourceBookingCalendar(ImmutableCalendar):
 
     def expand(self, start, end):
         app = ISchoolToolApplication(None)
-        terms = app["terms"]
-        school_timetables = app['ttschemas']
+        terms = ITermContainer(app, {})
+        school_timetables = ITimetableSchemaContainer(app, {})
 
         events = []
         for term in terms.values():
@@ -113,7 +115,8 @@ class ResourceBookingCalendar(ImmutableCalendar):
                 # skip non overlapping terms
                 continue
 
-            timetable = self.createFullTimetable(school_timetables.getDefault())
+            timetable = self.createFullTimetable(school_timetables.getDefault(),
+                                                 term)
             calendar = timetable.model.createCalendar(term, timetable,
                                                       start.date(),
                                                       end.date())

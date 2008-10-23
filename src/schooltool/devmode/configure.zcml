@@ -152,41 +152,6 @@
         />
   </configure>
 
-  <!-- RESTive API documentation -->
-  <browser:page
-      for="*"
-      name="restdoc_macros"
-      permission="zope.View"
-      class=".restdoc.RESTDocMacros"
-      allowed_interface="zope.interface.common.mapping.IItemMapping"
-      layer="schooltool.devmode.skin.IDevModeLayer"
-      />
-
-  <browser:page
-      for="*"
-      name="restdoc_details_macros"
-      permission="zope.View"
-      template="restdoc_macros.pt"
-      layer="schooltool.devmode.skin.IDevModeLayer"
-      />
-
-  <browser:page
-      for="zope.app.apidoc.codemodule.codemodule.CodeModule"
-      permission="zope.app.apidoc.UseAPIDoc"
-      class="schooltool.devmode.restdoc.RESTMenu"
-      name="restmenu.html"
-      template="restmenu.pt"
-      layer="schooltool.devmode.skin.IDevModeLayer"
-      />
-
-  <browser:page
-      for="*"
-      permission="zope.app.apidoc.UseAPIDoc"
-      class=".restdoc.RESTDocumentation"
-      name="restviews.html"
-      template="restdoc.pt"
-      />
-
   <security:allow
       crowds="administration"
       permission="zope.app.apidoc.UseAPIDoc" />

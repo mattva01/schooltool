@@ -22,18 +22,22 @@ $Id$
 """
 import datetime
 
+from zope.component import adapter
+from zope.interface import implementer
 from zope.i18n import translate
 from zope.security.proxy import removeSecurityProxy
 from zope.publisher.browser import BrowserView
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.traversing.browser.absoluteurl import absoluteURL
 
+from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.cal import CalendarEvent
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.calendar.utils import parse_date
 from schooltool.term.interfaces import ITerm
+from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable import SchooldayTemplate
 
 
@@ -50,8 +54,8 @@ class EmergencyDayView(BrowserView):
     __used_for__ = ITerm
 
     template = None
-    date_template = ViewPageTemplateFile('emergency_select.pt')
-    replacement_template = ViewPageTemplateFile('emergency2.pt')
+    date_template = ViewPageTemplateFile('templates/emergency_select.pt')
+    replacement_template = ViewPageTemplateFile('templates/emergency2.pt')
 
     error = None
     date = None
@@ -108,7 +112,7 @@ class EmergencyDayView(BrowserView):
             self.context.add(self.replacement)
 
             # Update all schemas
-            ttschemas = getSchoolToolApplication()['ttschemas']
+            ttschemas = ITimetableSchemaContainer(self.context)
             for schema in ttschemas.values():
                 model = schema.model
                 exceptionDays = removeSecurityProxy(model.exceptionDays)
@@ -140,8 +144,12 @@ class EmergencyDayView(BrowserView):
             self.request.response.redirect(
                 absoluteURL(self.context, self.request))
 
-
-
     def __call__(self):
         self.update()
         return self.template()
+
+
+@adapter(ITerm)
+@implementer(ITimetableSchemaContainer)
+def getTimetableSchemaContainerForTerm(term):
+    return ITimetableSchemaContainer(ISchoolYear(term))

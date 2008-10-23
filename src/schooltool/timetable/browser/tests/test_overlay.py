@@ -25,11 +25,8 @@ $Id$
 import unittest
 
 from zope.testing import doctest
-from zope.interface import classImplements
 from zope.publisher.browser import TestRequest
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
-from zope.annotation.interfaces import IAttributeAnnotatable
-from zope.app.testing import ztapi
 from zope.component import adapts
 from zope.interface import implements
 
@@ -38,158 +35,158 @@ from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.testing import setup as sbsetup
 
 
-def doctest_CalendarSTOverlayView():
-    r"""Tests for CalendarSTOverlayView
+# def doctest_CalendarSTOverlayView():
+#     r"""Tests for CalendarSTOverlayView
 
-     Some setup:
+#      Some setup:
 
-        >>> sbsetup.setUpCalendaring()
+#         >>> sbsetup.setUpCalendaring()
 
-        >>> from zope.component import provideAdapter
-        >>> from schooltool.app.app import ShowTimetables
-        >>> provideAdapter(ShowTimetables)
+#         >>> from zope.component import provideAdapter
+#         >>> from schooltool.app.app import ShowTimetables
+#         >>> provideAdapter(ShowTimetables)
 
-        >>> from zope.interface import classImplements
-        >>> from zope.annotation.interfaces import IAttributeAnnotatable
-        >>> from schooltool.app.overlay import CalendarOverlayInfo
-        >>> classImplements(CalendarOverlayInfo, IAttributeAnnotatable)
+#         >>> from zope.interface import classImplements
+#         >>> from zope.annotation.interfaces import IAttributeAnnotatable
+#         >>> from schooltool.app.overlay import CalendarOverlayInfo
+#         >>> classImplements(CalendarOverlayInfo, IAttributeAnnotatable)
 
-        >>> from schooltool.timetable.browser.overlay import CalendarSTOverlayView
-        >>> View = SimpleViewClass('../templates/calendar_overlay.pt',
-        ...                        bases=(CalendarSTOverlayView,))
+#         >>> from schooltool.timetable.browser.overlay import CalendarSTOverlayView
+#         >>> View = SimpleViewClass('../templates/calendar_overlay.pt',
+#         ...                        bases=(CalendarSTOverlayView,))
 
-    CalendarOverlayView is a view on anything.
+#     CalendarOverlayView is a view on anything.
 
-        >>> context = object()
-        >>> request = TestRequest()
-        >>> view = View(context, request, None, None)
+#         >>> context = object()
+#         >>> request = TestRequest()
+#         >>> view = View(context, request, None, None)
 
-    It renders to an empty string unless its context is the calendar of the
-    authenticated user
+#     It renders to an empty string unless its context is the calendar of the
+#     authenticated user
 
-        >>> view()
-        u'\n'
+#         >>> view()
+#         u'\n'
 
-    If you are an authenticated user looking at your own calendar, this view
-    renders a calendar selection portlet.
+#     If you are an authenticated user looking at your own calendar, this view
+#     renders a calendar selection portlet.
 
-        >>> from schooltool.group.group import Group
-        >>> from schooltool.person.person import Person
-        >>> from schooltool.course.course import Course
-        >>> from schooltool.course.section import Section
-        >>> from schooltool.app.security import Principal
-        >>> app = sbsetup.setUpSchoolToolSite()
-        >>> person = app['persons']['whatever'] = Person('fred')
-        >>> group1 = app['groups']['g1'] = Group(title="Group 1")
-        >>> group2 = app['groups']['g2'] = Group(title="Group 2")
-        >>> history = app['courses']['c1'] = Course(title="History")
-        >>> section = app['sections']['s1'] = Section(title="History")
-        >>> history.sections.add(section)
+#         >>> from schooltool.group.group import Group
+#         >>> from schooltool.person.person import Person
+#         >>> from schooltool.course.course import Course
+#         >>> from schooltool.course.section import Section
+#         >>> from schooltool.app.security import Principal
+#         >>> app = sbsetup.setUpSchoolToolSite()
+#         >>> person = app['persons']['whatever'] = Person('fred')
+#         >>> group1 = app['groups']['g1'] = Group(title="Group 1")
+#         >>> group2 = app['groups']['g2'] = Group(title="Group 2")
+#         >>> history = app['courses']['c1'] = Course(title="History")
+#         >>> section = app['sections']['s1'] = Section(title="History")
+#         >>> history.sections.add(section)
 
-        >>> from schooltool.course.interfaces import ISection
-        >>> from schooltool.timetable.interfaces import ITimetables
-        >>> class TimetablesStub(object):
-        ...     adapts(ISection)
-        ...     implements(ITimetables)
-        ...     def __init__(self, section):
-        ...         self.section = section
-        ...         self.terms = []
-        ...         self.timetables = {}
-        >>> provideAdapter(TimetablesStub)
+#         >>> from schooltool.course.interfaces import ISection
+#         >>> from schooltool.timetable.interfaces import ITimetables
+#         >>> class TimetablesStub(object):
+#         ...     adapts(ISection)
+#         ...     implements(ITimetables)
+#         ...     def __init__(self, section):
+#         ...         self.section = section
+#         ...         self.terms = []
+#         ...         self.timetables = {}
+#         >>> provideAdapter(TimetablesStub)
 
-        >>> from schooltool.app.interfaces import IShowTimetables
-        >>> info = person.overlaid_calendars.add(
-        ...     ISchoolToolCalendar(group1), show=True)
-        >>> IShowTimetables(info).showTimetables = False
-        >>> info = person.overlaid_calendars.add(
-        ...     ISchoolToolCalendar(group2), show=False)
-        >>> info = person.overlaid_calendars.add(
-        ...     ISchoolToolCalendar(section), show=False)
+#         >>> from schooltool.app.interfaces import IShowTimetables
+#         >>> info = person.overlaid_calendars.add(
+#         ...     ISchoolToolCalendar(group1), show=True)
+#         >>> IShowTimetables(info).showTimetables = False
+#         >>> info = person.overlaid_calendars.add(
+#         ...     ISchoolToolCalendar(group2), show=False)
+#         >>> info = person.overlaid_calendars.add(
+#         ...     ISchoolToolCalendar(section), show=False)
 
-        >>> request = TestRequest()
-        >>> request.setPrincipal(Principal('id', 'title', person))
-        >>> view = View(ISchoolToolCalendar(person), request, None, None)
+#         >>> request = TestRequest()
+#         >>> request.setPrincipal(Principal('id', 'title', person))
+#         >>> view = View(ISchoolToolCalendar(person), request, None, None)
 
-        >>> print view()
-        <div id="portlet-calendar-overlay" class="portlet">
-        ...
-        ...<input type="checkbox" checked="checked" disabled="disabled" />...
-        ...<input type="checkbox" name="my_timetable" />...
-        ...My Calendar...
-        ...
-        ...<input type="checkbox" name="overlay:list"
-                  checked="checked" value="/groups/g1" />...
-        ...<input type="checkbox"
-                  name="overlay_timetables:list"
-                  value="/groups/g1" />...
-        ...
-        ...<input type="checkbox" name="overlay:list"
-                  value="/groups/g2" />...
-        ...<input type="checkbox" name="overlay_timetables:list"
-                  checked="checked" value="/groups/g2" />...
-        ...<td style="width: 100%">Group 2</td>...
-        ...
-        ...<input type="checkbox" name="overlay:list"
-                  value="/sections/s1" />...
-        ...<input type="checkbox" name="overlay_timetables:list"
-                  checked="checked" value="/sections/s1" />...
-        ...<td style="width: 100%"> -- History</td>...
-        ...
-        </div>
+#         >>> print view()
+#         <div id="portlet-calendar-overlay" class="portlet">
+#         ...
+#         ...<input type="checkbox" checked="checked" disabled="disabled" />...
+#         ...<input type="checkbox" name="my_timetable" />...
+#         ...My Calendar...
+#         ...
+#         ...<input type="checkbox" name="overlay:list"
+#                   checked="checked" value="/groups/g1" />...
+#         ...<input type="checkbox"
+#                   name="overlay_timetables:list"
+#                   value="/groups/g1" />...
+#         ...
+#         ...<input type="checkbox" name="overlay:list"
+#                   value="/groups/g2" />...
+#         ...<input type="checkbox" name="overlay_timetables:list"
+#                   checked="checked" value="/groups/g2" />...
+#         ...<td style="width: 100%">Group 2</td>...
+#         ...
+#         ...<input type="checkbox" name="overlay:list"
+#                   value="/sections/s1" />...
+#         ...<input type="checkbox" name="overlay_timetables:list"
+#                   checked="checked" value="/sections/s1" />...
+#         ...<td style="width: 100%"> -- History</td>...
+#         ...
+#         </div>
 
-    If the request has 'OVERLAY_APPLY', CalendarOverlayView applies your
-    changes
+#     If the request has 'OVERLAY_APPLY', CalendarOverlayView applies your
+#     changes
 
-        >>> request.form['overlay'] = [u'/groups/g2']
-        >>> request.form['overlay_timetables'] = [u'/groups/g1']
-        >>> request.form['OVERLAY_APPLY'] = u"Apply"
-        >>> print view()
-        <div id="portlet-calendar-overlay" class="portlet">
-        ...
-        ...<input type="checkbox" checked="checked" disabled="disabled" />...
-        ...<input type="checkbox" name="my_timetable" />...
-        ...My Calendar...
-        ...
-        ...<input type="checkbox" name="overlay:list"
-                  value="/groups/g1" />...
-        ...<input type="checkbox"
-                  name="overlay_timetables:list"
-                  checked="checked" value="/groups/g1" />...
-        ...
-        ...<input type="checkbox" name="overlay:list"
-                  checked="checked" value="/groups/g2" />...
-        ...<input type="checkbox" name="overlay_timetables:list"
-                  value="/groups/g2" />...
-        ...
-        </div>
+#         >>> request.form['overlay'] = [u'/groups/g2']
+#         >>> request.form['overlay_timetables'] = [u'/groups/g1']
+#         >>> request.form['OVERLAY_APPLY'] = u"Apply"
+#         >>> print view()
+#         <div id="portlet-calendar-overlay" class="portlet">
+#         ...
+#         ...<input type="checkbox" checked="checked" disabled="disabled" />...
+#         ...<input type="checkbox" name="my_timetable" />...
+#         ...My Calendar...
+#         ...
+#         ...<input type="checkbox" name="overlay:list"
+#                   value="/groups/g1" />...
+#         ...<input type="checkbox"
+#                   name="overlay_timetables:list"
+#                   checked="checked" value="/groups/g1" />...
+#         ...
+#         ...<input type="checkbox" name="overlay:list"
+#                   checked="checked" value="/groups/g2" />...
+#         ...<input type="checkbox" name="overlay_timetables:list"
+#                   value="/groups/g2" />...
+#         ...
+#         </div>
 
-    It also redirects you to request.URL:
+#     It also redirects you to request.URL:
 
-        >>> request.response.getStatus()
-        302
-        >>> request.response.getHeader('Location')
-        'http://127.0.0.1'
+#         >>> request.response.getStatus()
+#         302
+#         >>> request.response.getHeader('Location')
+#         'http://127.0.0.1'
 
-    There are two reasons for the redirect: first, part of the page template
-    just rendered might have become invalid when calendar overlay selection
-    changed, second, this lets the user refresh the page without having to
-    experience confirmation dialogs that say "Do you want to POST this form
-    again?".
+#     There are two reasons for the redirect: first, part of the page template
+#     just rendered might have become invalid when calendar overlay selection
+#     changed, second, this lets the user refresh the page without having to
+#     experience confirmation dialogs that say "Do you want to POST this form
+#     again?".
 
-    If the request has 'OVERLAY_MORE', CalendarOverlayView redirects to
-    calendar_selection.html
+#     If the request has 'OVERLAY_MORE', CalendarOverlayView redirects to
+#     calendar_selection.html
 
-        >>> request = TestRequest()
-        >>> request.setPrincipal(Principal('id', 'title', person))
-        >>> request.form['OVERLAY_MORE'] = u"More..."
-        >>> view = View(ISchoolToolCalendar(person), request, None, None)
-        >>> content = view()
-        >>> request.response.getStatus()
-        302
-        >>> request.response.getHeader('Location')
-        'http://127.0.0.1/persons/fred/calendar_selection.html?nexturl=http%3A//127.0.0.1'
+#         >>> request = TestRequest()
+#         >>> request.setPrincipal(Principal('id', 'title', person))
+#         >>> request.form['OVERLAY_MORE'] = u"More..."
+#         >>> view = View(ISchoolToolCalendar(person), request, None, None)
+#         >>> content = view()
+#         >>> request.response.getStatus()
+#         302
+#         >>> request.response.getHeader('Location')
+#         'http://127.0.0.1/persons/fred/calendar_selection.html?nexturl=http%3A//127.0.0.1'
 
-    """
+#     """
 
 
 def doctest_TimetableCalendarListSubscriber(self):

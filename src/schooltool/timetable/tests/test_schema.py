@@ -23,12 +23,10 @@ $Id$
 """
 
 import unittest
-from datetime import date
 from sets import Set
 
 from zope.interface import implements
 from zope.interface.verify import verifyObject
-from zope.app.testing.setup import placefulSetUp, placefulTearDown
 
 from schooltool.timetable.interfaces import ITimetableSchema
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
@@ -37,8 +35,6 @@ from schooltool.timetable.interfaces import ITimetableSchemaWrite
 from schooltool.timetable.schema import TimetableSchema
 from schooltool.timetable.schema import TimetableSchemaContainer
 from schooltool.timetable.schema import TimetableSchemaDay
-
-from schooltool.testing import setup
 
 
 class DayStub:
@@ -108,7 +104,7 @@ class TestTimetableSchema(unittest.TestCase):
         tts["A"] = TimetableSchemaDay(periods1)
         tts["B"] = TimetableSchemaDay(periods2, homeroom_period_ids=['Yellow'])
 
-        tt = tts.createTimetable()
+        tt = tts.createTimetable(None)
         self.assertEquals(tt.day_ids, tts.day_ids)
         self.assert_(tt.model is tts.model)
         self.assert_(tt.timezone == tts.timezone)

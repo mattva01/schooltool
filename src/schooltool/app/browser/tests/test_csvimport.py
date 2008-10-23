@@ -30,14 +30,21 @@ from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.app.testing import ztapi
 
+from schooltool.schoolyear.interfaces import ISchoolYear
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.browser.testing import setUp as testSetUp, tearDown
+from schooltool.app.browser.testing import layeredTestSetup, layeredTestTearDown, makeLayeredSuite
+from schooltool.app.testing import app_functional_layer
+
 from schooltool.person.person import Person
-from schooltool.testing import setup
+from schooltool.term.interfaces import ITermContainer
 
 from schooltool.app.browser.csvimport import InvalidCSVError
 from schooltool.common import dedent
+from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.course import Course
 from schooltool.course.section import Section
+from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.interfaces import ITimetables
 
 __metaclass__ = type
@@ -137,30 +144,48 @@ def doctest_ImportErrorCollection():
 class TestTimetableCSVImportView(unittest.TestCase):
 
     def setUp(self):
-        setUp()
-        self.app = setup.setUpSchoolToolSite()
+        layeredTestSetup()
+        self.app = ISchoolToolApplication(None)
+
+        # set up school years
+        from schooltool.schoolyear.schoolyear import SchoolYear
+        from schooltool.schoolyear.interfaces import ISchoolYearContainer
+        ISchoolYearContainer(self.app)['2004'] = SchoolYear("2004",
+                                                            datetime.date(2004, 1, 1),
+                                                            datetime.date(2004, 12, 31))
 
         from schooltool.timetable.schema import TimetableSchema
         from schooltool.timetable.schema import TimetableSchemaDay
-        ttschema = TimetableSchema(["1","2","3"])
+        from schooltool.timetable.model import WeeklyTimetableModel
+        from schooltool.timetable import SchooldayTemplate
+        from schooltool.timetable import SchooldaySlot
+        template = SchooldayTemplate()
+        template.add(SchooldaySlot(datetime.time(9, 0), datetime.timedelta(minutes=45)))
+        model = WeeklyTimetableModel(day_templates={None: template})
+        ttschema = TimetableSchema(["1","2","3"], model=model)
         for day in range(1, 4):
             ttschema[str(day)] = TimetableSchemaDay([str(day)])
-        self.app['ttschemas']['three-day'] = ttschema
+        ITimetableSchemaContainer(self.app)['three-day'] = ttschema
 
         from schooltool.term.term import Term
-        self.app['terms']['fall'] = Term("Fall term",
-                                         datetime.datetime(2004, 1, 1),
-                                         datetime.datetime(2004, 5, 1))
+        term = Term("Fall term",
+                    datetime.date(2004, 1, 1),
+                    datetime.date(2004, 5, 1))
+        ITermContainer(self.app)['fall'] = term
+
+        from schooltool.course.interfaces import ISectionContainer
+        self.sections = ISectionContainer(term)
+
 
     def tearDown(self):
-        tearDown()
+        layeredTestTearDown()
 
     def createView(self, form=None):
         from schooltool.app.browser.csvimport import TimetableCSVImportView
         if form is None:
             form = {}
         request = TestRequest(form=form)
-        return TimetableCSVImportView(self.app, request)
+        return TimetableCSVImportView(self.sections, request)
 
     def test_getCharset(self):
         view = self.createView(form={'charset': 'UTF-8',
@@ -190,7 +215,7 @@ class TestTimetableCSVImportView(unittest.TestCase):
         self.failIf(view.success)
 
     def test_POST_csvfile(self):
-        tt_csv_text = '"fall","three-day"\n""\n""'
+        tt_csv_text = '"three-day"\n""\n""'
         tt_csv = StringIO(tt_csv_text)
         view = self.createView(form={'csvfile': tt_csv,
                                      'csvtext': tt_csv_text,
@@ -221,9 +246,9 @@ class TestTimetableCSVImportView(unittest.TestCase):
                                         " (incorrect charset?)."])
 
     def test_POST_utf8(self):
-        ttschema = self.app["ttschemas"][u'three-day']
-        self.app["ttschemas"][u'three-day \u263b'] = ttschema
-        tt_csv = StringIO('"fall","three-day \xe2\x98\xbb"\n""\n""')
+        ttschema = ITimetableSchemaContainer(self.app)[u'three-day']
+        ITimetableSchemaContainer(self.app)[u'three-day \u263b'] = ttschema
+        tt_csv = StringIO('"three-day \xe2\x98\xbb"\n""\n""')
         view = self.createView(form={'csvfile': tt_csv,
                                      'charset': 'UTF-8',
                                      'UPDATE_SUBMIT': 'Submit'})
@@ -237,38 +262,49 @@ class TestTimetableCSVImporter(unittest.TestCase):
     periods = ("A", "B", "C")
 
     def setUp(self):
-        setUp()
+        layeredTestSetup()
+        self.app = app = ISchoolToolApplication(None)
 
-        # Set up a name chooser to pick names for new sections.
+        # set up school years
+        from schooltool.schoolyear.schoolyear import SchoolYear
+        from schooltool.schoolyear.interfaces import ISchoolYearContainer
+        sy2004 = SchoolYear("2004",
+                            datetime.date(2004, 1, 1),
+                            datetime.date(2004, 12, 31))
+        ISchoolYearContainer(app)['2004'] = sy2004
+
+        self.courses = ICourseContainer(sy2004)
+        self.course = self.courses['philosophy'] = Course(title="Philosophy")
+
+        from schooltool.term.term import Term
+        term = Term("Summer term",
+                    datetime.date(2004, 1, 1),
+                    datetime.date(2004, 5, 1))
+        ITermContainer(self.app)["summer"] = term
+
+        term2 = Term("Fall term",
+                    datetime.date(2004, 5, 2),
+                    datetime.date(2004, 8, 1))
+        ITermContainer(self.app)["fall"] = term2
+
         from schooltool.course.interfaces import ISectionContainer
-        from schooltool.app.app import SimpleNameChooser
-        from zope.app.container.interfaces import INameChooser
-        ztapi.provideAdapter(ISectionContainer, INameChooser,
-                             SimpleNameChooser)
-
-        self.app = app = setup.setUpSchoolToolSite()
-
-        self.course = app['courses']['philosophy'] = Course(title="Philosophy")
-        self.section = app['sections']['section'] = Section(title="Something")
+        self.sections = ISectionContainer(term)
+        self.section = self.sections['section'] = Section(title="Something")
 
         # set a timetable schema
         from schooltool.timetable.schema import TimetableSchema
         from schooltool.timetable.schema import TimetableSchemaDay
-        ttschema = TimetableSchema(self.days)
+        from schooltool.timetable.model import WeeklyTimetableModel
+        from schooltool.timetable import SchooldayTemplate
+        from schooltool.timetable import SchooldaySlot
+        template = SchooldayTemplate()
+        template.add(SchooldaySlot(datetime.time(9, 0), datetime.timedelta(minutes=45)))
+        model = WeeklyTimetableModel(day_templates={None: template})
+        ttschema = TimetableSchema(self.days,
+                                   model=model)
         for day in self.days:
             ttschema[day] = TimetableSchemaDay(self.periods)
-        self.app["ttschemas"]['three-day'] = ttschema
-
-        from schooltool.term.term import Term
-        term = Term("Summer term",
-                    datetime.datetime(2004, 1, 1),
-                    datetime.datetime(2004, 5, 1))
-        self.app["terms"]["summer"] = term
-
-        term2 = Term("Fall term",
-                    datetime.datetime(2004, 1, 1),
-                    datetime.datetime(2004, 5, 1))
-        self.app["terms"]["fall"] = term2
+        ITimetableSchemaContainer(self.app)['three-day'] = ttschema
 
         # add some people and groups
         for title in ['Curtin', 'Lorch', 'Guzman']:
@@ -277,18 +313,18 @@ class TestTimetableCSVImporter(unittest.TestCase):
         for title in ['Math1', 'Math2', 'Math3',
                       'English1', 'English2', 'English3']:
             name = title.lower()
-            self.app['courses'][name] = Course(title)
+            self.courses[name] = Course(title)
 
     def tearDown(self):
-        tearDown()
+        layeredTestTearDown()
 
     def createImporter(self, term=None, ttschema=None, charset=None):
         from schooltool.app.browser.csvimport import TimetableCSVImporter
-        importer = TimetableCSVImporter(self.app['sections'], charset=charset)
+        importer = TimetableCSVImporter(self.sections, charset=charset)
         if term is not None:
-            importer.term = self.app['terms'][term]
+            importer.term = ITermContainer(self.app)[term]
         if ttschema is not None:
-            importer.ttschema = self.app['ttschemas'][ttschema]
+            importer.ttschema = ITimetableSchemaContainer(ISchoolYear(self.sections))[ttschema]
         return importer
 
     def test_importSections(self):
@@ -351,7 +387,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
     def test_importSections_functional(self):
         imp = self.createImporter()
         data = dedent("""\
-            "summer","three-day"
+            "three-day"
             "","",""
             "philosophy","lorch"
             "Monday","A"
@@ -375,11 +411,11 @@ class TestTimetableCSVImporter(unittest.TestCase):
         # are tested well individually.
 
         persons = self.app['persons']
-        sections = self.app['sections']
+        sections = self.sections
 
         # Check out the created sections.
-        philosophy_lorch = sections['philosophy--lorch']
-        philosophy_guzman = sections['philosophy--guzman']
+        philosophy_lorch = sections['1']
+        philosophy_guzman = sections['2']
 
         self.assertEquals(list(philosophy_lorch.instructors),
                           [persons['lorch']])
@@ -394,7 +430,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.assert_(persons['lorch'] in philosophy_guzman.members)
 
         # Look at the timetables of the sections
-        lorch_tt = ITimetables(philosophy_lorch).timetables['summer.three-day']
+        lorch_tt = ITimetables(philosophy_lorch).timetables['1']
         self.assertEquals(len(list(lorch_tt.activities())), 3)
         # Look at a couple of periods.
         self.assertEquals(len(lorch_tt['Monday']['B']), 1)
@@ -414,17 +450,11 @@ class TestTimetableCSVImporter(unittest.TestCase):
         imp.importHeader(["too", "many", "fields"])
         self.assertEquals(translate(imp.errors.generic[0]),
                           "The first row of the CSV file must contain"
-                          " the term id and the timetable schema id.")
-
-        # nonexistent term
-        imp = self.createImporter()
-        imp.importHeader(["winter", "three-day"])
-        self.assertEquals(translate(imp.errors.generic[0]),
-                          "The term winter does not exist.")
+                          " the timetable schema id.")
 
         # nonexistent timetable schema
         imp = self.createImporter()
-        imp.importHeader(["summer", "four-day"])
+        imp.importHeader(["four-day"])
         self.assertEquals(translate(imp.errors.generic[0]),
                           "The timetable schema four-day does not exist.")
 
@@ -502,7 +532,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
     def test_createSection(self):
         imp = self.createImporter(term='fall', ttschema='three-day')
 
-        course = self.app['courses']['philosophy']
+        course = self.courses['philosophy']
         instructor = self.app['persons']['lorch']
         periods = [('Monday', 'A'),
                    ('Tuesday', 'C')]
@@ -517,14 +547,14 @@ class TestTimetableCSVImporter(unittest.TestCase):
                                     periods=periods, dry_run=False)
 
         # Check name
-        self.assertEquals(section.__name__, 'philosophy--lorch')
+        self.assertEquals(section.__name__, '1')
 
         # Check links
         self.assert_(course in section.courses)
         self.assert_(instructor in section.instructors)
 
         # Check timetable
-        tt = ITimetables(section).timetables['fall.three-day']
+        tt = ITimetables(section).timetables['1']
         self.assertEquals(len(tt.activities()), 2)
 
         # Check activities in timetable
@@ -545,20 +575,20 @@ class TestTimetableCSVImporter(unittest.TestCase):
         section2 = imp.createSection(course, instructor,
                                      periods=periods, dry_run=False)
         self.assert_(section2 is section)
-        self.assert_(ITimetables(section).timetables['fall.three-day'] is tt)
+        self.assert_(ITimetables(section).timetables['1'] is tt)
         self.assertEquals(len(tt.activities()), 2)
 
     def test_createSection_existing(self):
         imp = self.createImporter(term='fall', ttschema='three-day')
 
-        course = self.app['courses']['philosophy']
+        course = self.courses['philosophy']
         instructor = self.app['persons']['lorch']
         periods = [('Monday', 'A'),
                    ('Tuesday', 'C')]
 
         title = 'Philosophy - Lorch'
-        section = self.app['sections']['oogabooga'] = Section(title=title)
-        tt = imp.ttschema.createTimetable()
+        section = self.sections['oogabooga'] = Section(title=title)
+        tt = imp.ttschema.createTimetable(imp.term)
         ITimetables(section).timetables['fall.three-day'] = tt
 
         # real run
@@ -581,8 +611,8 @@ class TestTimetableCSVImporter(unittest.TestCase):
         imp.importChunk(lines, 5, dry_run=False)
         self.failIf(imp.errors.anyErrors(), imp.errors)
 
-        philosophy_curtin = self.app['sections']['philosophy--curtin']
-        tt = ITimetables(philosophy_curtin).timetables['fall.three-day']
+        philosophy_curtin = self.sections['1']
+        tt = ITimetables(philosophy_curtin).timetables['1']
         activities = tt.activities()
         self.assertEquals(len(activities), 2)
 
@@ -756,8 +786,10 @@ class TestTimetableCSVImporter(unittest.TestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestTimetableCSVImportView))
-    suite.addTest(unittest.makeSuite(TestTimetableCSVImporter))
+    suite.addTest(makeLayeredSuite(TestTimetableCSVImportView,
+                                   app_functional_layer))
+    suite.addTest(makeLayeredSuite(TestTimetableCSVImporter,
+                                   app_functional_layer))
     suite.addTest(doctest.DocTestSuite(
         setUp=setUp, tearDown=tearDown,
         optionflags=doctest.ELLIPSIS|doctest.REPORT_NDIFF))

@@ -48,7 +48,9 @@ from zope.app.catalog.interfaces import ICatalog
 from zope.app.intid.interfaces import IIntIds
 from zope.traversing.browser.absoluteurl import absoluteURL
 
+from schooltool.group.interfaces import IGroupContainer
 from schooltool.common import SchoolToolMessage as _
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.skin.form import BasicForm
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPasswordWriter
@@ -207,9 +209,14 @@ class PersonFilterWidget(IndexedFilterWidget):
     template = ViewPageTemplateFile('person_filter.pt')
     parameters = ['SEARCH_TITLE', 'SEARCH_GROUP']
 
+    def groupContainer(self):
+        # XXX must know which group container to pick
+        app = ISchoolToolApplication(None)
+        return IGroupContainer(app, {})
+
     def groups(self):
         groups = []
-        for id, group in ISchoolToolApplication(None)['groups'].items():
+        for id, group in self.groupContainer().items():
             if len(group.members) > 0:
                 groups.append({'id': id,
                                'title': "%s (%s)" % (group.title, len(group.members))})
@@ -222,7 +229,7 @@ class PersonFilterWidget(IndexedFilterWidget):
             return items
 
         if 'SEARCH_GROUP' in self.request:
-            group = ISchoolToolApplication(None)['groups'].get(self.request['SEARCH_GROUP'])
+            group = self.groupContainer().get(self.request['SEARCH_GROUP'])
             if group:
                 int_ids = getUtility(IIntIds)
                 keys = set([int_ids.queryId(person)
@@ -323,7 +330,8 @@ class PersonAddView(AddView):
 
     def getAllGroups(self):
         """Return a list of all groups in the system."""
-        return ISchoolToolApplication(None)['groups'].values()
+        gc = IGroupContainer(ISchoolToolApplication(None), {})
+        return gc.values()
 
     def create(self, title, username, password, photo):
         person = self._factory(username=username, title=title)

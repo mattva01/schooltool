@@ -1,0 +1,169 @@
+Simple test for school years
+============================
+
+A manager logs in
+
+    >>> manager = Browser('manager', 'schooltool')
+
+Sets the time
+
+    >>> manager.open('http://localhost/time')
+    >>> manager.getControl('Today').value = "05/02/15"
+    >>> manager.getControl('Apply').click()
+
+    >>> 'Data successfully updated.' in manager.contents
+    True
+
+And create a new school year:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('New School Year').click()
+    >>> manager.getControl('Title').value = '2005-2006'
+    >>> manager.getControl('First day').value = '05/09/01'
+    >>> manager.getControl('Last day').value = '06/07/15'
+    >>> manager.getControl('Add').click()
+
+We should be redirected to the school year view now:
+
+    >>> manager.url
+    'http://localhost/schoolyears/2005-2006'
+
+As this school year has been automatically marked as active, we should
+see a tab pointing to it:
+
+    >>> def listTabs(contents):
+    ...     for link in analyze.queryHTML("id('header')//a[@class='active_schoolyear']", contents):
+    ...         print link
+    ...     for link in analyze.queryHTML("id('header')//a[@class='next_schoolyear']", contents):
+    ...         print link
+
+    >>> listTabs(manager.contents)
+    <a class="active_schoolyear" href="http://localhost/schoolyears/2005-2006">2005-2006</a>
+
+Let's add one more school year:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('New School Year').click()
+    >>> manager.getControl('Title').value = '2006-2007'
+    >>> manager.getControl('First day').value = '06/09/01'
+    >>> manager.getControl('Last day').value = '07/07/15'
+    >>> manager.getControl('Add').click()
+
+Now we should have two tabs, one pointing to this school year, and the
+other one pointing to the next one:
+
+    >>> listTabs(manager.contents)
+    <a class="active_schoolyear" href="http://localhost/schoolyears/2005-2006">2005-2006</a>
+    <a class="next_schoolyear" href="http://localhost/schoolyears/2006-2007">2006-2007</a>
+
+If we'd add another school year, no new tabs would be added, because
+tabs are only shown for the active school year and the one that goes
+after it.
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('New School Year').click()
+    >>> manager.getControl('Title').value = '2007-2008'
+    >>> manager.getControl('First day').value = '07/09/01'
+    >>> manager.getControl('Last day').value = '08/07/15'
+    >>> manager.getControl('Add').click()
+
+    >>> listTabs(manager.contents)
+    <a class="active_schoolyear" href="http://localhost/schoolyears/2005-2006">2005-2006</a>
+    <a class="next_schoolyear" href="http://localhost/schoolyears/2006-2007">2006-2007</a>
+
+You can activate the next school year by clicking a button in the
+school year container view:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getControl('Activate next school year').click()
+
+Now tabs have shifted and are displaying 2006-2007 school year as
+active, and 2007-2008 school year as next:
+
+    >>> listTabs(manager.contents)
+    <a class="active_schoolyear" href="http://localhost/schoolyears/2006-2007">2006-2007</a>
+    <a class="next_schoolyear" href="http://localhost/schoolyears/2007-2008">2007-2008</a>
+
+Let's delete the 2005-2006 school year:
+
+    >>> manager.getControl(name='delete.2005-2006').value = True
+    >>> manager.getControl('Delete').click()
+    >>> manager.getControl('Confirm').click()
+
+We should have only 2 school years left now:
+
+    >>> for item in analyze.queryHTML('//table[@class="data"]/tbody//tr', manager.contents): print item
+    <tr class="odd"><td>
+          <input type="checkbox" name="delete.2006-2007" id="delete.2006-2007" /></td>
+        <td>
+          <a href="http://localhost/schoolyears/2006-2007">2006-2007</a>
+        </td>
+        <td>
+          Sep 1, 2006
+        </td>
+        <td>
+          Jul 15, 2007
+        </td>
+    </tr>
+    <tr class="even"><td>
+          <input type="checkbox" name="delete.2007-2008" id="delete.2007-2008" /></td>
+        <td>
+          <a href="http://localhost/schoolyears/2007-2008">2007-2008</a>
+        </td>
+        <td>
+          Sep 1, 2007
+        </td>
+        <td>
+          Jul 15, 2008
+        </td>
+    </tr>
+
+The system will not allow us to delete the active school year:
+
+    >>> manager.getControl(name='delete.2006-2007').value = True
+    >>> manager.getControl('Delete').click()
+
+    >>> print analyze.queryHTML('//div[@class="error"]', manager.contents)[0]
+    <div class="error">You can not delete the active school year.
+     Unless you are deleting all the school years.</div>
+
+The checkbox should stay checked even if the operation has failed:
+
+    >>> for item in analyze.queryHTML('//table[@class="data"]/tbody//tr', manager.contents): print item
+    <tr class="odd"><td>
+          <input type="checkbox" name="delete.2006-2007" id="delete.2006-2007" checked="checked" /></td>
+        <td>
+          <a href="http://localhost/schoolyears/2006-2007">2006-2007</a>
+        </td>
+        <td>
+          Sep 1, 2006
+        </td>
+        <td>
+          Jul 15, 2007
+        </td>
+    </tr>
+    <tr class="even"><td>
+          <input type="checkbox" name="delete.2007-2008" id="delete.2007-2008" /></td>
+        <td>
+          <a href="http://localhost/schoolyears/2007-2008">2007-2008</a>
+        </td>
+        <td>
+          Sep 1, 2007
+        </td>
+        <td>
+          Jul 15, 2008
+        </td>
+    </tr>
+
+Though if we will secet both - the active school year and the next
+one, we should be able to do it:
+
+    >>> manager.getControl(name='delete.2007-2008').value = True
+    >>> manager.getControl('Delete').click()
+    >>> manager.getControl('Confirm').click()
+    >>> analyze.queryHTML('//table[@class="data"]/tbody//tr', manager.contents)
+    []

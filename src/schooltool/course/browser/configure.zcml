@@ -20,31 +20,16 @@
         <widget field="description" height="5" />
     </addform>
 
-    <navigationViewlet
+  </configure>
+
+  <navigationViewlet
       name="courses"
       for="*"
-      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
-      template="templates/navigationViewlet.pt"
-      class="schooltool.skin.TopLevelContainerNavigationViewlet"
+      manager="schooltool.schoolyear.browser.interfaces.ISchoolYearViewMenuViewletManager"
+      template="templates/link_to_courses.pt"
       permission="schooltool.view"
-      link="courses"
-      title="Courses"
       order="40"
       />
-
-    <navigationViewlet
-      name="sections"
-      for="*"
-      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
-      template="templates/navigationViewlet.pt"
-      class="schooltool.skin.TopLevelContainerNavigationViewlet"
-      permission="schooltool.view"
-      link="sections"
-      title="Sections"
-      order="50"
-      />
-
-  </configure>
 
   <viewlet
       name="coursesinfo"
@@ -164,14 +149,6 @@
       />
 
   <page
-      name="resources.html"
-      for="..interfaces.ISection"
-      class=".section.SectionResourceView"
-      template="templates/edit_relationships.pt"
-      permission="schooltool.edit"
-      />
-
-  <page
       name="learners.html"
       for="..interfaces.ISection"
       class=".section.SectionLearnerView"
@@ -196,5 +173,51 @@
       for="schooltool.course.interfaces.ICourseContainer
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory="schooltool.table.table.SchoolToolTableFormatter " />
+
+  <zope:adapterTraverserPlugin
+      for="schooltool.schoolyear.interfaces.ISchoolYear"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      name="courses"
+      adapter="schooltool.course.interfaces.ICourseContainer"
+      />
+
+  <zope:adapter
+      factory=".course.CourseContainerAbsoluteURLAdapter"
+      provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <zope:adapter
+      factory=".course.CourseContainerAbsoluteURLAdapter"
+      provides="zope.interface.Interface"
+      name="absolute_url"/>
+
+  <zope:adapterTraverserPlugin
+      for="schooltool.term.interfaces.ITerm"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      name="sections"
+      adapter="schooltool.course.interfaces.ISectionContainer"
+      />
+
+  <zope:adapter
+      factory=".section.SectionContainerAbsoluteURLAdapter"
+      provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <zope:adapter
+      factory=".section.SectionContainerAbsoluteURLAdapter"
+      provides="zope.interface.Interface"
+      name="absolute_url"/>
+
+
+  <configure package="schooltool.skin">
+    <navigationViewlet
+      name="sections"
+      for="schooltool.term.interfaces.ITerm"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.view"
+      link="sections"
+      title="Sections"
+      order="10"
+      />
+    </configure>
 
 </configure>

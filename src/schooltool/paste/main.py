@@ -25,7 +25,6 @@ import os
 
 from zope.app.publication.httpfactory import HTTPPublicationRequestFactory
 
-from schooltool.app.rest import RestPublicationRequestFactory
 from schooltool.app.main import SchoolToolPublisherApplication
 from schooltool.app.main import StandaloneServer
 

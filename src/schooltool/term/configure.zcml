@@ -5,11 +5,6 @@
     i18n_domain="schooltool">
 
   <!-- Application hook -->
-  <adapter
-      for="schooltool.app.interfaces.ISchoolToolApplication"
-      factory=".TermInit"
-      name="schooltool.terms"
-      />
 
   <adapter
       for=".interfaces.ITermContainer"
@@ -21,13 +16,22 @@
       type="zope.app.content.interfaces.IContentType"
       />
 
-  <class class=".term.TermContainer">
-    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
-    <require permission="schooltool.view"
-             attributes="keys values __iter__ __len__" />
-    <require permission="schooltool.edit"
-             interface="zope.app.container.interfaces.IWriteContainer" />
-  </class>
+  <adapter
+      for="*"
+      factory="schooltool.term.term.getTermContainer" />
+
+  <adapter
+      factory=".term.getSchoolYearForTerm" />
+
+  <adapter
+      name="remove_terms_when_schoolyear_is_deleted"
+      factory=".term.RemoveTermsWhenSchoolYearIsDeleted" />
+  <adapter
+      name="term_overlap_validation"
+      factory=".term.TermOverlapValidationSubscriber" />
+  <adapter
+      name="term_overflow_validation"
+      factory=".term.TermOverflowValidationSubscriber" />
 
   <interface
       interface=".interfaces.ITerm"
@@ -60,11 +64,6 @@
 
   </configure>
 
-  <!-- general utilities -->
-
-  <utility
-      factory=".term.DateManagerUtility" />
-
   <!-- security -->
 
   <security:allow
@@ -77,7 +76,6 @@
       permission="schooltool.edit" />
 
   <include package=".browser" />
-  <include package=".rest" />
   <include package=".help" />
 
 </configure>

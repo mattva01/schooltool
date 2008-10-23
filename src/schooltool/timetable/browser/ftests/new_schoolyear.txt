@@ -1,0 +1,125 @@
+Test for school timetables getting copied from the active school year to the new one
+====================================================================================
+
+A manager logs in
+
+    >>> manager = Browser('manager', 'schooltool')
+
+Sets the time
+
+    >>> manager.open('http://localhost/time')
+    >>> manager.getControl('Today').value = "05/02/15"
+    >>> manager.getControl('Apply').click()
+
+    >>> 'Data successfully updated.' in manager.contents
+    True
+
+And create a new school year:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('New School Year').click()
+    >>> manager.getControl('Title').value = '2005-2006'
+    >>> manager.getControl('First day').value = '05/09/01'
+    >>> manager.getControl('Last day').value = '06/07/15'
+    >>> manager.getControl('Add').click()
+
+Now let's add a timetable schema to it:
+
+    >>> manager.getLink('2005-2006').click()
+    >>> manager.getLink('School Timetables').click()
+    >>> manager.getLink('New Timetable').click()
+    >>> manager.getLink('simple weekly timetable schema').click()
+
+    >>> manager.getControl(name='field.period_name_1').value = 'A'
+    >>> manager.getControl(name='field.period_start_1').value = '9:00'
+    >>> manager.getControl(name='field.period_finish_1').value = '10:00'
+
+    >>> manager.getControl(name='field.period_name_2').value = 'B'
+    >>> manager.getControl(name='field.period_start_2').value = '10:30'
+    >>> manager.getControl(name='field.period_finish_2').value = '11:30'
+
+    >>> manager.getControl('Create').click()
+
+The schema is there now:
+
+    >>> manager.open('http://localhost/schoolyears/2005-2006/school_timetables/default/export.xml')
+    >>> print manager.contents
+    <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+      <title>default</title>
+      <timezone name="UTC"/>
+      <model factory="WeeklyTimetableModel">
+        <daytemplate>
+          <used when="default"/>
+          <period duration="60" tstart="09:00"/>
+          <period duration="60" tstart="10:30"/>
+        </daytemplate>
+      </model>
+      <day id="Monday">
+        <period id="A"/>
+        <period id="B"/>
+      </day>
+      <day id="Tuesday">
+        <period id="A"/>
+        <period id="B"/>
+      </day>
+      <day id="Wednesday">
+        <period id="A"/>
+        <period id="B"/>
+      </day>
+      <day id="Thursday">
+        <period id="A"/>
+        <period id="B"/>
+      </day>
+      <day id="Friday">
+        <period id="A"/>
+        <period id="B"/>
+      </day>
+    </timetable>
+
+Let's add one more school year:
+
+    >>> manager.open('http://localhost/')
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('New School Year').click()
+    >>> manager.getControl('Title').value = '2006-2007'
+    >>> manager.getControl('First day').value = '06/09/01'
+    >>> manager.getControl('Last day').value = '07/07/15'
+    >>> manager.getControl('Add').click()
+
+Now this school year should have our school timetable copied:
+
+    >>> manager.open('http://localhost/schoolyears/2006-2007/school_timetables/default/export.xml')
+    >>> print manager.contents
+    <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+      <title>default</title>
+      <timezone name="UTC"/>
+      <model factory="WeeklyTimetableModel">
+        <daytemplate>
+          <used when="default"/>
+          <period duration="60" tstart="09:00"/>
+          <period duration="60" tstart="10:30"/>
+        </daytemplate>
+      </model>
+      <day id="Monday">
+        <period id="A"/>
+        <period id="B"/>
+      </day>
+      <day id="Tuesday">
+        <period id="A"/>
+        <period id="B"/>
+      </day>
+      <day id="Wednesday">
+        <period id="A"/>
+        <period id="B"/>
+      </day>
+      <day id="Thursday">
+        <period id="A"/>
+        <period id="B"/>
+      </day>
+      <day id="Friday">
+        <period id="A"/>
+        <period id="B"/>
+      </day>
+    </timetable>

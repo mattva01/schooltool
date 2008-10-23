@@ -102,25 +102,8 @@ def doctest_GroupInit():
 
     it adds a container for groups
 
-        >>> app['groups']
-        <schooltool.group.group.GroupContainer object at ...>
-
-    and a few built-in groups
-
-        >>> for name, group in sorted(app['groups'].items()):
-        ...     print '%-15s %-25s %s' % (name, group.title, group.description)
-        administrators  School Administrators     School Administrators.
-        clerks          Clerks                    Clerks.
-        manager         Site Managers             Manager Group.
-        students        Students                  Students.
-        teachers        Teachers                  Teachers.
-
-    These new groups are required for the application to function properly.  To
-    express that requirement we add explicit dependencies:
-
-        >>> from zope.app.dependable.interfaces import IDependable
-        >>> for group in app['groups'].values():
-        ...     assert IDependable(group).dependents() == (u'/groups/',)
+        >>> app['schooltool.group']
+        <schooltool.group.group.GroupContainerContainer object at ...>
 
     Clean up
 

@@ -69,7 +69,7 @@ from zope.server.http.wsgihttpserver import WSGIHTTPServer
 from zope.server.http.commonaccesslogger import CommonAccessLogger
 from zope.app.server.wsgi import ServerType
 
-from schooltool.app.rest import RestPublicationRequestFactory
+from schooltool.app.interfaces import ApplicationStartUpEvent
 from schooltool.app.interfaces import ApplicationInitializationEvent
 from schooltool.app.interfaces import IPluginInit
 from schooltool.app.interfaces import ISchoolToolInitializationUtility
@@ -142,25 +142,8 @@ def die(message, exitcode=1):
 
 class SchoolToolPublisherApplication(WSGIPublisherApplication):
 
-    rest_enabled = False
-
-    def requestFactory(self, input_stream, env):
-        path_info = env.get('PATH_INFO', '')
-        prefix = '/api'
-        if self.rest_enabled:
-            if path_info.startswith(prefix):
-                env['PATH_INFO'] = path_info[len(prefix):]
-                return self.rest_factory(input_stream, env)
-
-            if '/++' + prefix in path_info:
-                env['PATH_INFO'] = path_info.replace('/++' + prefix, '/++')
-                return self.rest_factory(input_stream, env)
-
-        return self.http_factory(input_stream, env)
-
     def __init__(self, db, factory=HTTPPublicationRequestFactory):
-        self.http_factory = factory(db)
-        self.rest_factory = RestPublicationRequestFactory(db)
+        self.requestFactory = factory(db)
 
 
 schooltool_server = ServerType(WSGIHTTPServer,
@@ -597,9 +580,7 @@ class StandaloneServer(object):
             IDependable(manager).addDependent('')
         manager = app['persons'][MANAGER_USERNAME]
         manager.setPassword(password)
-        manager_group = app['groups']['manager']
-        if manager not in manager_group.members:
-            manager_group.members.add(manager)
+        app['persons'].super_user = manager
         setSite(None)
 
     def main(self, argv=sys.argv):
@@ -669,6 +650,14 @@ class StandaloneServer(object):
             self.restoreManagerUser(app, options.manager_password)
             transaction.commit()
             connection.close()
+
+        # set up all the plugins
+        connection = db.open()
+        root = connection.root()
+        app = root[ZopePublication.root_name]
+        notify(ApplicationStartUpEvent(app))
+        transaction.commit()
+        connection.close()
 
         provideUtility(db, IDatabase)
         db.setActivityMonitor(ActivityMonitor())

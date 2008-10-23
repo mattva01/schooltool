@@ -23,6 +23,7 @@ $Id$
 """
 import unittest
 
+from zope.interface import implements
 from zope.component import provideAdapter
 from zope.app.testing import setup
 from zope.testing import doctest
@@ -135,12 +136,16 @@ def doctest_GroupTerm():
         ...     def __init__(self, title):
         ...         self.title = title
 
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
         >>> class STAppStub(dict):
+        ...     implements(ISchoolToolApplication)
         ...     def __init__(self, context):
         ...         self['groups'] = {'teachers': GroupStub('Teachers')}
 
-        >>> from schooltool.app.interfaces import ISchoolToolApplication
-        >>> provideAdapter(STAppStub, adapts=[None], provides=ISchoolToolApplication)
+        >>> provideAdapter(STAppStub, adapts=[None])
+        >>> from schooltool.group.interfaces import IGroupContainer
+        >>> provideAdapter(lambda app: app['groups'], adapts=[ISchoolToolApplication],
+        ...                provides=IGroupContainer)
 
         >>> from schooltool.basicperson.browser.person import GroupTerm
         >>> term = GroupTerm("teachers")

@@ -25,6 +25,7 @@
            package="schooltool.devmode" />
   <include package="schooltool.help" />
   <include package="schooltool.term" />
+  <include package="schooltool.schoolyear" />
   <include package="schooltool.timetable" />
   <include package="schooltool.basicperson" />
 

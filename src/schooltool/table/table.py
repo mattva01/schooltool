@@ -146,7 +146,8 @@ class DependableCheckboxColumn(CheckboxColumn):
         if self.hasDependents(item):
             return '<input type="checkbox" name="%s" id="%s" disabled="disabled" />' % (id, id)
         else:
-            return '<input type="checkbox" name="%s" id="%s" />' % (id, id)
+            checked = id in formatter.request and 'checked="checked"' or ''
+            return '<input type="checkbox" name="%s" id="%s" %s/>' % (id, id, checked)
 
     def hasDependents(self, item):
         # We cannot adapt security-proxied objects to IDependable.  Unwrapping
@@ -211,6 +212,22 @@ class IndexedLocaleAwareGetterColumn(IndexedGetterColumn):
             self._cached_collator = ICollator(formatter.request.locale)
         s = super(IndexedLocaleAwareGetterColumn, self).getSortKey(item, formatter)
         return s and self._cached_collator.key(s)
+
+
+class NullTableFormatter(object):
+    implements(ITableFormatter)
+
+    filter_widget = None
+    batch = None
+
+    def __init__(self, context, request):
+        self.context, self.request = context, request
+
+    def setUp(self, **kwargs):
+        pass
+
+    def render(self):
+        return ""
 
 
 class SchoolToolTableFormatter(object):

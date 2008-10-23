@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<configure
+    xmlns="http://namespaces.zope.org/browser"
+    xmlns:zope="http://namespaces.zope.org/zope"
+    i18n_domain="schooltool">
+
+  <zope:adapter factory=".schoolyear.SchoolYearAddFormAdapter" />
+
+  <zope:view
+      for="..interfaces.ISchoolYear"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory="schooltool.traverser.browser.PluggableBrowserTraverser"
+      permission="zope.Public"
+      />
+
+  <zope:adapterTraverserPlugin
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      name="schoolyears"
+      adapter="schooltool.schoolyear.interfaces.ISchoolYearContainer"
+      />
+
+  <configure package="schooltool.skin">
+
+    <navigationViewlet
+      name="schoolyears"
+      for="*"
+      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.skin.skin.NavigationViewlet"
+      permission="schooltool.edit"
+      link="schoolyears"
+      title="School Years"
+      order="0"
+      />
+
+    <page
+       name="index.html"
+       for="schooltool.schoolyear.interfaces.ISchoolYearContainer"
+       class="schooltool.schoolyear.browser.schoolyear.SchoolYearContainerView"
+       permission="schooltool.view"
+       />
+
+    <page
+        name="delete.html"
+        for="schooltool.schoolyear.interfaces.ISchoolYearContainer"
+        class="schooltool.schoolyear.browser.schoolyear.SchoolYearContainerDeleteView"
+        template="templates/container_delete.pt"
+        permission="schooltool.edit"
+        />
+
+  </configure>
+
+  <zope:adapter
+      for="schooltool.schoolyear.interfaces.ISchoolYearContainer
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory="schooltool.table.table.SchoolToolTableFormatter" />
+
+  <zope:adapter
+      factory=".schoolyear.SchoolYearContainerAbsoluteURLAdapter"
+      provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <zope:adapter
+      factory=".schoolyear.SchoolYearContainerAbsoluteURLAdapter"
+      provides="zope.interface.Interface"
+      name="absolute_url"/>
+
+  <zope:adapter
+      factory="zope.traversing.browser.absoluteurl.AbsoluteURL"
+      for="schooltool.schoolyear.interfaces.ISchoolYear
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <zope:adapter
+      factory="zope.traversing.browser.absoluteurl.AbsoluteURL"
+      for="schooltool.schoolyear.interfaces.ISchoolYear
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.interface.Interface"
+      name="absolute_url"/>
+
+  <zope:adapter
+      for="schooltool.schoolyear.interfaces.ISchoolYearContainer
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory="schooltool.table.table.FilterWidget" />
+
+  <page
+     name="add.html"
+     for="schooltool.schoolyear.interfaces.ISchoolYearContainer"
+     class=".schoolyear.SchoolYearAddView"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="New School Year" />
+
+  <page
+     name="edit.html"
+     for="schooltool.schoolyear.interfaces.ISchoolYear"
+     class=".schoolyear.SchoolYearEditView"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="Edit" />
+
+  <page
+      name="index.html"
+      for="schooltool.schoolyear.interfaces.ISchoolYear"
+      class="schooltool.schoolyear.browser.schoolyear.SchoolYearView"
+      permission="schooltool.view"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <viewletManager
+      name="schooltool.SchoolYearMenu"
+      permission="zope.Public"
+      provides=".interfaces.ISchoolYearViewMenuViewletManager"
+      class=".schoolyear.SchoolYearViewMenuViewletManager"
+      template="templates/schoolyear_menu.pt"
+      />
+
+  <navigationViewlet
+      name="SchoolYears"
+      for="*"
+      manager="schooltool.skin.skin.INavigationManager"
+      class=".schoolyear.ActiveSchoolYears"
+      template="templates/school_years_viewlet.pt"
+      permission="schooltool.view"
+      order="300"
+      />
+
+  <zope:adapter
+      factory=".schoolyear.AddSchoolYearOverlapValidator" />
+  <zope:adapter
+      factory=".schoolyear.EditSchoolYearValidator" />
+  <zope:adapter
+      factory=".schoolyear.OverlapErrorViewSnippet" />
+  <zope:adapter
+      factory=".schoolyear.OverflowErrorViewSnippet" />
+
+</configure>

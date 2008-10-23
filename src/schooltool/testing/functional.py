@@ -25,7 +25,10 @@ $Id$
 import os
 import unittest
 
+from zope.testbrowser.testing import Browser
+from zope.testing.server import startServer
 from zope.testing import doctest
+from zope.app.testing.functional import HTTPCaller
 from zope.app.testing.functional import ZCMLLayer as _ZCMLLayer
 from zope.app.testing.functional import FunctionalTestSetup
 from zope.app.testing.functional import FunctionalDocFileSuite
@@ -33,7 +36,6 @@ from zope.app.appsetup.interfaces import IDatabaseOpenedEvent
 import zope.event
 
 from schooltool.testing import analyze
-from schooltool.app.rest.ftests import rest
 
 
 def find_ftesting_zcml():
@@ -89,6 +91,27 @@ class ZCMLLayer(_ZCMLLayer):
             uninstall_db_bootstrap_hook()
 
 
+class TestBrowser(Browser):
+
+    username = None
+    password = None
+
+    def __init__(self, username=None, password=None, url='http://localhost/'):
+        super(TestBrowser, self).__init__()
+        self.username = username
+        self.password = password
+        if username and password:
+            self.addHeader('Authorization',
+                           'Basic %s:%s' % (self.username, self.password))
+        self.handleErrors = False
+        self.open(url)
+
+    def serve(self, url=None):
+        if url is None:
+            url = self.url
+        startServer(HTTPCaller(), url, self.username, self.password)
+
+
 def collect_ftests(package=None, level=None, layer=None, filenames=None):
     """Collect all functional doctest files in a given package.
 
@@ -109,7 +132,7 @@ def collect_ftests(package=None, level=None, layer=None, filenames=None):
         suite = FunctionalDocFileSuite(filename, package=package,
                                        optionflags=optionflags,
                                        globs={'analyze': analyze,
-                                              'rest': rest})
+                                              'Browser': TestBrowser})
         if level is not None:
             suite.level = level
         if layer is None:

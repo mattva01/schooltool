@@ -18,27 +18,21 @@
 #
 """
 Unit tests for schooltool.demographics.sampledata
-
-$Id$
 """
 
 import unittest
 
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
-from zope.app.testing import setup
 
-from schooltool.testing import setup as stsetup
-from schooltool.relationship.tests import setUpRelationships
+from schooltool.group.interfaces import IGroupContainer
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 
-
-def setUp(test):
-    setup.placefulSetUp()
-    stsetup.setUpCalendaring()
-
-def tearDown(test):
-    setup.placefulTearDown()
+from schooltool.schoolyear.testing import (setUp, tearDown,
+                                           provideStubUtility,
+                                           provideStubAdapter)
+from schooltool.demographics.browser.ftests import demographics_functional_layer
 
 
 def doctest_SampleStudents():
@@ -56,14 +50,14 @@ def doctest_SampleStudents():
         >>> plugin.power
         1000
 
-        >>> app = stsetup.setUpSchoolToolSite()
-        >>> len(app['persons'])
-        0
+        >>> app = ISchoolToolApplication(None)
+        >>> len(app['persons']) # Manager is there already
+        1
 
         >>> plugin.generate(app, 42)
 
         >>> len(app['persons'])
-        1000
+        1001
 
         >>> for i in range(5):
         ...     print app['persons']['student%03d' % i].title
@@ -85,8 +79,6 @@ def doctest_SampleStudents():
 def doctest_SampleTeachers():
     """A sample data plugin that generates students
 
-        >>> setUpRelationships()
-
         >>> from schooltool.demographics.sampledata import SampleTeachers
         >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
         >>> plugin = SampleTeachers()
@@ -101,11 +93,12 @@ def doctest_SampleTeachers():
     This plugin creates a number of teachers and adds them to the
     Teachers group.
 
-        >>> from schooltool.group.group import Group
-        >>> app = stsetup.setUpSchoolToolSite()
-        >>> teachers = app['groups']['teachers'] = Group('Teachers')
-        >>> len(app['persons'])
-        0
+        >>> app = ISchoolToolApplication(None)
+        >>> from schooltool.term.sampledata import SampleTerms
+        >>> SampleTerms().generate(app)
+        >>> teachers = IGroupContainer(app)['teachers']
+        >>> len(app['persons']) # Manager is already there
+        1
         >>> len(teachers.members)
         0
 
@@ -137,17 +130,13 @@ def doctest_SampleTeachers():
 def doctest_SamplePersonalEvents():
     """A sample data plugin that generates random personal events.
 
-        >>> setUpRelationships()
-
         >>> from schooltool.demographics.sampledata import SamplePersonalEvents
         >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
         >>> plugin = SamplePersonalEvents()
         >>> verifyObject(ISampleDataPlugin, plugin)
         True
 
-        >>> from schooltool.group.group import Group
-        >>> app = stsetup.setUpSchoolToolSite()
-        >>> app['groups']['teachers'] = Group('Teachers')
+        >>> app = ISchoolToolApplication(None)
 
         >>> from schooltool.demographics.sampledata import SampleStudents
         >>> from schooltool.demographics.sampledata import SampleTeachers
@@ -157,9 +146,9 @@ def doctest_SamplePersonalEvents():
         >>> plugin_teachers = SampleTeachers()
         >>> plugin_teachers.power = 3
         >>> plugin_terms = SampleTerms()
+        >>> plugin_terms.generate(app, 42)
         >>> plugin_students.generate(app, 42)
         >>> plugin_teachers.generate(app, 42)
-        >>> plugin_terms.generate(app, 42)
 
     Probability of person having event on any day in percents:
 
@@ -250,10 +239,13 @@ def doctest_PersonFactoryUtility_createManagerUser():
 
 
 def test_suite():
-    return unittest.TestSuite([
-        doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
-                             optionflags=doctest.ELLIPSIS),
-        ])
+    optionflags = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
+    suite = doctest.DocTestSuite(optionflags=optionflags,
+                                 extraglobs={'provideAdapter': provideStubAdapter,
+                                             'provideUtility': provideStubUtility},
+                                 setUp=setUp, tearDown=tearDown)
+    suite.layer = demographics_functional_layer
+    return suite
 
 
 if __name__ == '__main__':

@@ -25,7 +25,7 @@ $Id$
 import datetime
 
 from zope.interface import Interface, Attribute, implements
-from zope.schema import Field, Object, Int, TextLine, List, Set, Tuple
+from zope.schema import Field, Object, Int, TextLine, List, Tuple
 from zope.schema import Dict, Date, Timedelta
 from zope.schema import Iterable
 from zope.schema.interfaces import IField
@@ -34,6 +34,7 @@ from zope.app.container.constraints import contains, containers
 from zope.app.container.interfaces import IContainer, IContained
 from zope.location.interfaces import ILocation
 
+from schooltool.term.interfaces import ITerm
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
 from schooltool.calendar.interfaces import Unchanged
 
@@ -353,11 +354,13 @@ class ITimetableSchema(IContained):
     def __getitem__(key):
         """Return a ITimetableSchemaDay for a given day id."""
 
-    def createTimetable():
+    def createTimetable(term):
         """Return a new empty timetable with the same structure.
 
         The new timetable has the same set of day_ids, and the sets of
         period ids within each day.  It has no activities.
+
+        The new timetable is bound to the term passed as the argument.
         """
 
 
@@ -421,6 +424,14 @@ class ITimetable(ILocation):
         schema=ITimetableModel)
 
     timezone = TextLine(title=u"The name of a timezone of this timetable")
+
+    term = Object(
+        title=u"The term this timetable is for.",
+        schema=ITerm)
+
+    schooltt = Object(
+        title=u"The school timetable this timetable is for.",
+        schema=ITimetableSchema)
 
     def keys():
         """Return a sequence of identifiers for days within the timetable.
@@ -658,6 +669,8 @@ class ITimetables(Interface):
         getCompositeTimetable).
         """)
 
+    def lookup(term, schooltt):
+        """ """
 
 class ICompositeTimetables(Interface):
     """An interface for objects that have composite timetables."""
@@ -736,6 +749,10 @@ class ITimetableSchemaContainer(IContainer, ILocation):
 
     def getDefault():
         """Return the default schema for the school"""
+
+
+class ITimetableSchemaContainerContainer(IContainer, ILocation):
+    contains(ITimetableSchemaContainer)
 
 
 class ITimetableSchemaContained(ITimetableSchema, IContained):

@@ -22,10 +22,13 @@ Timetabling Schema views.
 $Id$
 """
 from zope.i18n import translate
+from zope.component import getMultiAdapter
+from zope.component import getUtility
 from zope.component import adapts, getUtility, queryUtility
 from zope.interface import Interface, implements
 from zope.schema import TextLine, Int
 from zope.schema.interfaces import RequiredMissing
+from zope.app.intid.interfaces import IIntIds
 from zope.app.container.interfaces import INameChooser
 from zope.app.form.interfaces import IWidgetInputError
 from zope.app.form.interfaces import IInputWidget
@@ -36,6 +39,7 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.common import SchoolToolMessage as _
@@ -53,6 +57,21 @@ from schooltool.timetable.browser import TimetableView, TabindexMixin
 from schooltool.timetable.browser import fix_duplicates, parse_time_range
 from schooltool.timetable.browser import format_timetable_for_presentation
 from schooltool.timetable.browser import format_time_range
+
+
+class TimetableSchemaContainerAbsoluteURLAdapter(BrowserView):
+
+    adapts(ITimetableSchemaContainer, IBrowserRequest)
+    implements(IAbsoluteURL)
+
+    def __str__(self):
+        container_id = int(self.context.__name__)
+        int_ids = getUtility(IIntIds)
+        container = int_ids.getObject(container_id)
+        url = str(getMultiAdapter((container, self.request), name='absolute_url'))
+        return url + '/school_timetables'
+
+    __call__ = __str__
 
 
 class TimetableSchemaView(TimetableView):
@@ -167,8 +186,7 @@ class SimpleTimetableSchemaAdd(BrowserView):
         for title, start, duration in periods:
             daytemplate.add(SchooldaySlot(start, duration))
 
-        factory = getUtility(ITimetableModelFactory,
-                                  'WeeklyTimetableModel')
+        factory = getUtility(ITimetableModelFactory, 'WeeklyTimetableModel')
         model = factory(self.day_ids, {None: daytemplate})
         app = ISchoolToolApplication(None)
         tzname = IApplicationPreferences(app).timezone
@@ -293,7 +311,7 @@ class AdvancedTimetableSchemaAdd(BrowserView, TabindexMixin):
         if 'CREATE' in self.request:
             data = getWidgetsData(self, self._schema)
             factory = queryUtility(ITimetableModelFactory,
-                                        name=self.model_name)
+                                   name=self.model_name)
             if factory is None:
                 self.model_error = _("Please select a value")
             if not self.title_widget.error() and not self.model_error:
@@ -435,4 +453,69 @@ class AdvancedTimetableSchemaAdd(BrowserView, TabindexMixin):
             for idx, slot in enumerate(template):
                 slotfmt = format_time_range(slot.tstart, slot.duration)
                 result[idx][day] = slotfmt
+        return result
+
+
+class TimetableSchemaXMLView(BrowserView):
+    """View for ITimetableSchema"""
+
+    dows = ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
+            'Friday', 'Saturday', 'Sunday']
+
+    template = ViewPageTemplateFile("templates/schema_export.pt",
+                                    content_type="text/xml; charset=UTF-8")
+
+    __call__ = template
+
+    def exceptiondayids(self):
+        result = []
+
+        for date, id in self.context.model.exceptionDayIds.items():
+            result.append({'when': str(date), 'id': id})
+
+        result.sort(lambda a, b: cmp((a['when'], a['id']),
+                                     (b['when'], b['id'])))
+        return result
+
+    def daytemplates(self):
+        items = self.context.items()
+        id = items[0][0]
+        result = []
+        for id, day in self.context.model.dayTemplates.items():
+            if id is None:
+                used = "default"
+            elif id in self.context.keys():
+                used = id
+            else:
+                used = self.dows[id]
+            periods = []
+            for period in day:
+                periods.append(
+                    {'id': None,
+                     'tstart': period.tstart.strftime("%H:%M"),
+                     'duration': period.duration.seconds / 60})
+            periods.sort()
+            for template in result:
+                if template['periods'] == periods:
+                    days = template['used'].split()
+                    days.append(used)
+                    days.sort()
+                    template['used'] = " ".join(days)
+                    break
+            else:
+                result.append({'used': used, 'periods': periods})
+
+        for date, day in self.context.model.exceptionDays.items():
+            periods = []
+            for period, slot in day:
+                periods.append(
+                    {'id': period,
+                     'tstart': slot.tstart.strftime("%H:%M"),
+                     'duration': slot.duration.seconds / 60})
+            periods.sort()
+            result.append({'used': str(date), 'periods': periods})
+
+        result.sort(lambda a, b: cmp((a['used'], a['periods']),
+                                     (b['used'], b['periods'])))
+
         return result

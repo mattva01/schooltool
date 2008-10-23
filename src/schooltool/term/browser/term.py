@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2008 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,52 +18,41 @@
 #
 """
 Timetabling Term views.
-
-$Id$
 """
 import datetime
 import itertools
 
+from zope.component import adapts
+from zope.interface.exceptions import Invalid
+from zope.interface import implements
 from zope.interface import Interface
 from zope.schema import TextLine, Date
-
+from zope.schema import ValidationError
 from zope.app.container.interfaces import INameChooser
-from zope.lifecycleevent import modified
-from zope.app.form.browser.add import AddView
-from zope.app.form.browser.submit import Update
-from zope.app.form.interfaces import WidgetsError
-from zope.app.form.utility import getWidgetsData
-from zope.app.form.utility import setUpEditWidgets
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserView
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.traversing.browser.absoluteurl import absoluteURL
 
-from schooltool.skin.containers import TableContainerView
+from z3c.form.util import getSpecification
+from z3c.form.validator import NoInputData
+from z3c.form.validator import WidgetsValidatorDiscriminators
+from z3c.form import form, field, button
+from z3c.form.validator import SimpleFieldValidator
+from z3c.form.validator import WidgetValidatorDiscriminators
+from z3c.form.validator import InvariantsValidator
+
+from schooltool.schoolyear.interfaces import TermOverlapError
 from schooltool.app.browser.cal import month_names
 from schooltool.calendar.utils import parse_date
 from schooltool.calendar.utils import next_month, week_start
-from schooltool.timetable import findRelatedTimetables
-from schooltool.term.interfaces import ITermContainer, ITerm
+from schooltool.term.browser.widgets import CustomDateFieldTextWidget
+from schooltool.term.interfaces import ITerm
+from schooltool.term.term import validateTermsForOverlap
 from schooltool.term.term import Term
+from schooltool.common import IDateRange
+from schooltool.common import DateRange
 from schooltool.common import SchoolToolMessage as _
 
-
-class TermContainerView(TableContainerView):
-    """Term container view."""
-
-    __used_for__ = ITermContainer
-
-    delete_template = ViewPageTemplateFile("term-container-delete.pt")
-
-    index_title = _("Terms")
-
-    def timetables(self, obj):
-        return findRelatedTimetables(obj)
-
-    def update(self):
-        if 'CONFIRM' in self.request:
-            for key in self.listIdsForDeletion():
-                del self.context[key]
 
 class ITermForm(Interface):
     """Form schema for ITerm add/edit views."""
@@ -73,6 +62,20 @@ class ITermForm(Interface):
     first = Date(title=_("Start date"))
 
     last = Date(title=_("End date"))
+
+
+class TermFormAdapter(object):
+    implements(ITermForm)
+    adapts(ITerm)
+
+    def __init__(self, context):
+        self.__dict__['context'] = context
+
+    def __setattr__(self, name, value):
+        setattr(self.context, name, value)
+
+    def __getattr__(self, name):
+        return getattr(self.context, name)
 
 
 class TermView(BrowserView):
@@ -89,22 +92,17 @@ class TermView(BrowserView):
         return TermRenderer(self.context).calendar()
 
 
-class TermEditViewMixin(object):
-    """Mixin for Term add/edit views."""
+class TermFormBase(object):
 
-    def _buildTerm(self):
-        """Build a Term object from form values.
+    @property
+    def showNext(self):
+        return self.preview_term is None
 
-        Returns None if the form doesn't contain enough information.
-        """
-        try:
-            data = getWidgetsData(self, ITermForm)
-        except WidgetsError:
-            return None
-        try:
-            term = Term(data['title'], data['first'], data['last'])
-        except ValueError:
-            return None # date range invalid
+    @property
+    def showRefresh(self):
+        return not self.showNext
+
+    def setHolidays(self, term):
         term.addWeekdays(0, 1, 2, 3, 4, 5, 6)
         holidays = self.request.form.get('holiday', [])
         if not isinstance(holidays, list):
@@ -117,131 +115,227 @@ class TermEditViewMixin(object):
         toggle = [n for n in range(7) if ('TOGGLE_%d' % n) in self.request]
         if toggle:
             term.toggleWeekdays(*toggle)
+
+
+class TermAddForm(form.AddForm, TermFormBase):
+    """Add form for school terms."""
+
+    label = _("Add new term")
+    template = ViewPageTemplateFile('templates/term_add.pt')
+
+    fields = field.Fields(ITermForm)
+    fields['first'].widgetFactory = CustomDateFieldTextWidget
+    fields['last'].widgetFactory = CustomDateFieldTextWidget
+
+    @property
+    def preview_term(self):
+        data, errors = self.extractData()
+        self.updateWidgets()
+        if errors:
+            return None
+        term = Term(data['title'], data['first'], data['last'])
+        self.setHolidays(term)
+        return TermRenderer(term).calendar()
+
+    def updateActions(self):
+        super(TermAddForm, self).updateActions()
+        for button_id in ['refresh', 'next', 'add']:
+            button = self.actions.get(button_id)
+            if button is not None:
+                button.addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
+    @button.buttonAndHandler(_('Refresh'), name='refresh',
+                             condition=lambda form: form.showRefresh)
+    def handleRefresh(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        self._finishedAdd = False
+
+    @button.buttonAndHandler(_('Next'), name='next',
+                             condition=lambda form: form.showNext)
+    def next(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        self._finishedAdd = False
+
+    @button.buttonAndHandler(_('Add term'), name='add',
+                             condition=lambda form: form.showRefresh)
+    def handleAdd(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        obj = self.createAndAdd(data)
+        if obj is not None:
+            # mark only as finished if we get the new object
+            self._finishedAdd = True
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        url = absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
+
+    def create(self, data):
+        term = Term(data['title'], data['first'], data['last'])
+        form.applyChanges(self, term, data)
+        self.setHolidays(term)
+        return term
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request)
+
+    def add(self, term):
+        """Add `term` to the container."""
+        chooser = INameChooser(self.context)
+        name = chooser.chooseName("", term)
+        self.context[name] = term
         return term
 
 
-class TermEditView(BrowserView, TermEditViewMixin):
-    """Edit view for terms."""
+class TermEditForm(form.EditForm, TermFormBase):
+    """Edit form for basic person."""
+    template = ViewPageTemplateFile('templates/term_add.pt')
 
-    __used_for__ = ITerm
+    fields = field.Fields(ITermForm)
+    fields['first'].widgetFactory = CustomDateFieldTextWidget
+    fields['last'].widgetFactory = CustomDateFieldTextWidget
 
-    creating = False
-
-    update_status = None
-
-    edit_template = ViewPageTemplateFile('term_add_edit.pt')
-    basic_edit_template = ViewPageTemplateFile('term_basic_add_edit.pt')
-
-    def __init__(self, context, request):
-        BrowserView.__init__(self, context, request)
-        setUpEditWidgets(self, ITermForm)
-
-    def title(self):
-        title = _("Change Term: $title",
-                  mapping={'title': self.context.title})
-        return title
-
-    def __call__(self):
-        relatedTT = findRelatedTimetables(self.context)
-        if relatedTT:
-            return self.basic_edit_template()
+    @property
+    def preview_term(self):
+        data, errors = self.extractData()
+        self.updateWidgets()
+        if errors:
+            term = self.context
         else:
-            return self.edit_template()
+            term = Term(data['title'], data['first'], data['last'])
+            self.setHolidays(term)
+        return TermRenderer(term).calendar()
 
-    def update(self):
-        if self.update_status is not None:
-            return self.update_status # We've been called before.
-        self.update_status = ''
-        self.term = self._buildTerm()
-        if self.term is None:
-            self.term = self.context
-        if Update in self.request:
-            self.context.reset(self.term.first, self.term.last)
-            for day in self.term:
-                if self.term.isSchoolday(day):
-                    self.context.add(day)
-            modified(self.context)
-            self.update_status = _("Saved changes.")
-        elif 'BASIC_UPDATE_SUBMIT' in self.request:
-            title = self.request.get('field.title')
-            if title:
-                self.context.title = title
-                self.update_status = _("Saved changes.")
-        return self.update_status
+    def updateActions(self):
+        super(TermEditForm, self).updateActions()
+        for button_id in ['refresh', 'apply']:
+            button = self.actions.get(button_id)
+            if button is not None:
+                button.addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
 
-    def calendar(self):
-        """Prepare the calendar for display.
+    @button.buttonAndHandler(_('Refresh'), name='refresh',
+                             condition=lambda form: form.showRefresh)
+    def handleRefresh(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
 
-        Returns a structure composed of lists and dicts, see `TermRenderer`
-        for more details.
-        """
-        return TermRenderer(self.term).calendar()
+        self._finishedAdd = False
+
+    def applyChanges(self, data):
+        changes = super(TermEditForm, self).applyChanges(data)
+        self.setHolidays(self.context)
+        return changes
+
+    @button.buttonAndHandler(_('Save changes'), name='apply')
+    def handleApply(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        changes = self.applyChanges(data)
+        self.status = self.successMessage
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        url = absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
+
+    @property
+    def label(self):
+        return _(u'Change information for ${term_title}',
+                 mapping={'term_title': self.context.title})
 
 
-class TermAddView(AddView, TermEditViewMixin):
-    """Adding view for terms."""
+class AddTermFormValidator(InvariantsValidator):
 
-    __used_for__ = ITermContainer
+    def validateObject(self, obj):
+        errors = super(AddTermFormValidator, self).validateObject(obj)
+        try:
+            dr = DateRange(obj.first, obj.last)
+            try:
+                validateTermsForOverlap(self.view.context, dr, None)
+            except TermOverlapError, e:
+                errors += (e, )
+        except ValueError, e:
+            errors += (Invalid(_("Term must begin before it ends.")), )
+        except NoInputData:
+            return errors
+        return errors
 
-    creating = True
+WidgetsValidatorDiscriminators(
+    AddTermFormValidator,
+    view=TermAddForm,
+    schema=getSpecification(ITermForm, force=True))
 
-    title = _("New term")
 
-    # Since this view is registered via <browser:page>, and not via
-    # <browser:addform>, we need to set up some attributes for AddView.
-    schema = ITermForm
-    _arguments = ()
-    _keyword_arguments = ()
-    _set_before_add = ()
-    _set_after_add = ()
+class EditTermFormValidator(InvariantsValidator):
 
-    def setDefaultHoliday(self):
-        """
-        Set Saturday and Sunday as default holiday
-        """
-        date = self.term.first
-        while date <= self.term.last:
-            if date.isoweekday() in [6, 7]:
-                if self.term.isSchoolday(date):
-                    self.term.remove(date)
-            date += datetime.date.resolution
+    def validateObject(self, obj):
+        errors = super(EditTermFormValidator, self).validateObject(obj)
+        try:
+            dr = DateRange(obj.first, obj.last)
+            try:
+                validateTermsForOverlap(self.view.context.__parent__, dr,
+                                        self.view.context)
+            except TermOverlapError, e:
+                errors += (e, )
+        except ValueError, e:
+            errors += (Invalid(_("Term must begin before it ends.")), )
+        except NoInputData:
+            return errors
+        return errors
 
-    def update(self):
-        """Process the form."""
-        self.term = self._buildTerm()
-        if self.term: # we process the term after clicking the next button
-            self.setDefaultHoliday()
-        return AddView.update(self)
+WidgetsValidatorDiscriminators(
+    EditTermFormValidator,
+    view=TermEditForm,
+    schema=getSpecification(ITermForm, force=True))
 
-    def create(self):
-        """Create the object to be added.
 
-        We already have it, actually -- unless there was an error in the form.
-        """
-        if self.term is None:
-            raise WidgetsError([])
-        return self.term
+class DateOutOfYearBounds(ValidationError):
+    """Date is not in the school year."""
 
-    def add(self, content):
-        """Add the object to the term container."""
-        chooser = INameChooser(self.context)
-        name = chooser.chooseName("", content)
-        self.context[name] = content
 
-    def nextURL(self):
-        """Return the location to visit once the term's been added."""
-        return absoluteURL(self.context, self.request)
+class TermBoundsValidator(SimpleFieldValidator):
 
-    def calendar(self):
-        """Prepare the calendar for display.
+    def validate(self, value):
+        super(TermBoundsValidator, self).validate(value)
+        from schooltool.schoolyear.interfaces import ISchoolYear
+        if ISchoolYear.providedBy(self.view.context):
+            sy = self.view.context
+        else:
+            sy = self.view.context.__parent__
 
-        Returns None if the form doesn't contain enough information.  Otherwise
-        returns a structure composed of lists and dicts (see `TermRenderer`
-        for more details).
-        """
-        if self.term is None:
-            return None
-        return TermRenderer(self.term).calendar()
+        if value not in IDateRange(sy):
+            raise DateOutOfYearBounds(self.view.context, value)
+
+
+class FirstTermBoundsValidator(TermBoundsValidator):
+    pass
+
+WidgetValidatorDiscriminators(
+    FirstTermBoundsValidator,
+    field=ITermForm['first'])
+
+
+class LastTermBoundsValidator(TermBoundsValidator):
+    pass
+
+WidgetValidatorDiscriminators(
+    LastTermBoundsValidator,
+    field=ITermForm['last'])
 
 
 class TermRenderer(object):

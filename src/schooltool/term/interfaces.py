@@ -108,5 +108,19 @@ class IDateManager(zope.interface.Interface):
     It soes so taking the preferred timezone into account.
     """
 
-    today = zope.interface.Attribute("The current day.")
+    today = zope.schema.Date(
+        title=u"Today",
+        description=u"""The current day.""",
+        required=True)
+
     current_term = zope.interface.Attribute("The active term.")
+
+
+class TermDateNotInSchoolYear(Exception):
+
+    def __repr__(self):
+        return "Dates do not fit in school year!"
+
+    __str__ = __repr__
+
+

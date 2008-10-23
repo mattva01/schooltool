@@ -75,43 +75,6 @@
       title="New Note"
       />
 
-  <!-- REST API -->
-
-  <class class=".rest.NotesAdapter">
-    <allow attributes="context" />
-  </class>
-
-  <adapter factory=".rest.NotesAdapter" />
-
-  <class class=".rest.NotesView">
-    <allow interface=".rest.INotesView" />
-  </class>
-
-  <adapterTraverserPlugin
-      for=".interfaces.IHaveNotes"
-      layer="zope.publisher.interfaces.http.IHTTPRequest"
-      name="notes"
-      adapter="schooltool.note.rest.INotesAdapter"
-      />
-
-  <view
-      for=".rest.INotesAdapter"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      factory=".rest.NotesViewFactory"
-      allowed_interface=".rest.INotesView"
-      permission="zope.Public"
-      name="GET"
-      />
-
-  <view
-      for=".rest.INotesAdapter"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      factory=".rest.NotesViewFactory"
-      allowed_interface=".rest.INotesView"
-      permission="zope.Public"
-      name="POST"
-      />
-
   <security:crowd
       name="note_viewers"
       factory=".note.NoteCrowd" />

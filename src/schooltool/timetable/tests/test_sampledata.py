@@ -26,7 +26,7 @@ import unittest
 
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
-from zope.app.testing import setup, ztapi
+from zope.app.testing import setup
 
 from schooltool.testing import setup as stsetup
 
@@ -51,17 +51,25 @@ def doctest_SampleTimetableSchema():
         True
 
         >>> app = stsetup.setUpSchoolToolSite()
+        >>> from schooltool.timetable.schema import TimetableSchemaContainer
+        >>> schemas = TimetableSchemaContainer()
+        >>> from zope.component import provideAdapter
+        >>> from zope.interface import Interface
+        >>> from schooltool.timetable.interfaces import ITimetableSchemaContainer
+        >>> provideAdapter(lambda x: schemas,
+        ...                adapts=[Interface],
+        ...                provides=ITimetableSchemaContainer)
         >>> IApplicationPreferences(app).timezone = 'Europe/Vilnius'
 
     This plugin creates a timetable schema:
 
         >>> plugin.generate(app, 42)
-        >>> len(app['ttschemas'])
+        >>> len(schemas)
         1
 
     The day ids on the timetable schema and on the timetable model are set:
 
-        >>> schema = app['ttschemas']['simple']
+        >>> schema = schemas['simple']
         >>> schema.day_ids
         ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6']
         >>> schema.model.timetableDayIds
@@ -96,7 +104,7 @@ def doctest_SampleTimetableSchema():
 
     The default timetable schema is set:
 
-        >>> app['ttschemas'].getDefault()
+        >>> schemas.getDefault()
         <schooltool.timetable.schema.TimetableSchema object at ...>
 
     The schema's timezone is correctly set from the app preferences:

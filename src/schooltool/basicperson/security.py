@@ -22,6 +22,7 @@ Lyceum specific security code.
 $Id$
 
 """
+from schooltool.group.interfaces import IGroupContainer
 from schooltool.securitypolicy.crowds import ConfigurableCrowd
 from schooltool.app.interfaces import ISchoolToolApplication
 
@@ -32,7 +33,7 @@ class PersonInfoViewersCrowd(ConfigurableCrowd):
     setting_key = 'everyone_can_view_person_info'
 
     def contains(self, principal):
-        teachers = ISchoolToolApplication(None)['groups']['teachers']
+        teachers = IGroupContainer(ISchoolToolApplication(None))['teachers']
         groups = list(self.context.groups)
         return (ConfigurableCrowd.contains(self, principal) or
                 teachers in groups)

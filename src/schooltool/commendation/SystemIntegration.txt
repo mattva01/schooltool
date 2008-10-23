@@ -227,13 +227,18 @@ Now that we are locked in, we have to create
 
   >>> setup.addPerson('Tom Hoffman', 'tha1', 'myohmy')
 
+- a scholyear and a term,
+
+   >>> setup.addSchoolYear('2007', '07/01/01', '07/12/31')
+   >>> setup.addTerm('Winter', '2007-01-01', '2007-06-01', schoolyear='2007')
+
 - a course,
 
-  >>> setup.addCourse('Math 101', 'Basic Math', 'math101')
+  >>> setup.addCourse('Math 101', '2007', 'Basic Math', 'math101')
 
 - and a section.
 
-  >>> setup.addSection('Math 101')  
+  >>> setup.addSection('Math 101', '2007', 'Winter')
 
 Now we should be able to add commendations to
 
@@ -262,7 +267,7 @@ Now we should be able to add commendations to
 
 - groups,
 
-  >>> manager.getLink('Manage').click()
+  >>> manager.getLink('2007').click()
   >>> manager.getLink('Groups').click()
   >>> manager.getLink('Students').click()
   >>> manager.getLink('Add Commendation')
@@ -272,7 +277,7 @@ Now we should be able to add commendations to
 
 - and sections.
 
-  >>> manager.getLink('Manage').click()
+  >>> manager.getLink('2007').click()
   >>> manager.getLink('Courses').click()
   >>> manager.getLink('Math 101').click()
   >>> manager.getLink('-- Math 101 (1)').click()
@@ -290,12 +295,12 @@ one of the students, cannot add new commendations:
   ...
   Unauthorized: ...
 
-  >>> tom.open('http://localhost/groups/students/commendations/@@addCommendation.html')
+  >>> tom.open('http://localhost/schoolyears/2007/groups/students/commendations/@@addCommendation.html')
   Traceback (most recent call last):
   ...
   Unauthorized: ...
 
-  >>> tom.open('http://localhost/sections/1/commendations/@@addCommendation.html')
+  >>> tom.open('http://localhost/schoolyears/2007/winter/sections/1/commendations/@@addCommendation.html')
   Traceback (most recent call last):
   ...
   Unauthorized: ...
@@ -303,7 +308,7 @@ one of the students, cannot add new commendations:
 On the other hand, since the commendations are public, he can view them:
 
   >>> tom.open('http://localhost/persons/manager/commendations')
-  >>> tom.open('http://localhost/groups/students/commendations')
-  >>> tom.open('http://localhost/sections/1/commendations')
+  >>> tom.open('http://localhost/schoolyears/2007/groups/students/commendations')
+  >>> tom.open('http://localhost/schoolyears/2007/winter/sections/1/commendations')
 
 And that's all.

@@ -6,6 +6,19 @@
   <include package=".help" />
 
   <interface
+      interface=".interfaces.IGroupContainerContainer"
+      type="zope.app.content.interfaces.IContentType"
+      />
+
+  <class class=".group.GroupContainerContainer">
+    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <require permission="schooltool.view"
+             attributes="keys values items __iter__ __len__" />
+    <require permission="schooltool.edit"
+             interface="zope.app.container.interfaces.IWriteContainer" />
+  </class>
+
+  <interface
       interface=".interfaces.IGroupContainer"
       type="zope.app.content.interfaces.IContentType"
       />
@@ -44,31 +57,15 @@
       factory=".group.GroupInit"
       name="schooltool.group" />
 
-  <!-- Catalog set up -->
-  <subscriber
-      for="schooltool.app.interfaces.ICatalogSetUpEvent"
-      handler=".group.catalogSetUpSubscriber"
-      />
-
-  <adapter
-      for=".interfaces.IGroupContainer"
-      factory=".group.getGroupContainerCatalog"
-      provides="zope.app.catalog.interfaces.ICatalog" />
+  <adapter factory=".group.InitGroupsForNewSchoolYear"
+           name="groups" />
+  <adapter factory=".group.RemoveGroupsWhenSchoolYearIsDeleted"
+           name="groups" />
+  <adapter factory=".group.getGroupContainer" />
+  <adapter factory=".group.getGroupContainerForApp" />
+  <adapter factory=".group.getSchoolYearForGroupContainer" />
+  <adapter factory=".group.getGroupContainerForSection" />
 
   <include package=".browser" />
-  <include package=".rest" />
-
-  <!-- sample data -->
-  <configure
-      xmlns:zcml="http://namespaces.zope.org/zcml"
-      zcml:condition="have devmode">
-
-    <utility
-        factory=".sampledata.SampleGroups"
-        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
-        name="groups"
-        />
-
-  </configure>
 
 </configure>

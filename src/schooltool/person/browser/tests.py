@@ -29,6 +29,7 @@ from zope.testing import doctest
 from zope.app.testing import setup, ztapi
 from zope.traversing.interfaces import IContainmentRoot
 
+from schooltool.group.interfaces import IGroupContainer
 from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.testing import setup as sbsetup
 
@@ -237,7 +238,6 @@ def doctest_PersonAddView():
 
     Let's create a PersonContainer
 
-        >>> from schooltool.app.app import SchoolToolApplication
         >>> app = sbsetup.setUpSchoolToolSite()
         >>> pc = app['persons']
 
@@ -246,6 +246,14 @@ def doctest_PersonAddView():
         >>> provideAdapter(lambda context: app,
         ...                adapts=[None],
         ...                provides=ISchoolToolApplication)
+
+    And a group container:
+
+        >>> from schooltool.group.group import GroupContainer
+        >>> gc = GroupContainer()
+        >>> provideAdapter(lambda context: gc,
+        ...                adapts=[ISchoolToolApplication],
+        ...                provides=IGroupContainer)
 
     Now let's create a PersonAddView for the container
 
@@ -314,7 +322,7 @@ def doctest_PersonAddView():
     group:
 
         >>> from schooltool.group.group import Group
-        >>> pov = app['groups']['pov'] = Group('PoV')
+        >>> pov = IGroupContainer(app)['pov'] = Group('PoV')
 
     Now, let's create and render a view:
 
@@ -571,6 +579,10 @@ def doctest_PersonFilterWidget():
         ...         self['groups'] = {'a': a, 'b': b, 'c': c}
         >>> from zope.component import provideAdapter
         >>> provideAdapter(StubApplication)
+        >>> from schooltool.group.interfaces import IGroupContainer
+        >>> provideAdapter(lambda app: app['groups'],
+        ...                adapts=[ISchoolToolApplication],
+        ...                provides=IGroupContainer)
 
         >>> items = [{'id': 0},
         ...          {'id': 1},

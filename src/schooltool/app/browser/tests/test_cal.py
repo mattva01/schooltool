@@ -25,7 +25,6 @@ import unittest
 import calendar
 from datetime import datetime, date, timedelta, time
 from pytz import timezone, utc
-from schooltool.app.browser.cal import DailyCalendarView
 
 from zope.i18n import translate
 from zope.interface import Interface
@@ -35,7 +34,6 @@ from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.app.testing import setup, ztapi
-from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.publisher.browser import BrowserView
 from zope.traversing.interfaces import IContainmentRoot
 from zope.session.interfaces import ISession
@@ -44,8 +42,11 @@ from zope.publisher.interfaces.http import IHTTPRequest
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common import parse_datetime
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot
-from schooltool.timetable import SequentialDaysTimetableModel
+from schooltool.timetable.interfaces import ITimetableSchemaContainer
+from schooltool.timetable.model import SequentialDaysTimetableModel
 from schooltool.timetable.schema import TimetableSchema
+from schooltool.term.interfaces import ITermContainer
+from schooltool.term.tests import setUpDateManagerStub
 from schooltool.testing.util import NiceDiffsMixin
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
 
@@ -58,7 +59,10 @@ from schooltool.app.interfaces import ISchoolToolCalendar
 # Used in defining CalendarEventEditTestView
 from schooltool.app.browser.cal import CalendarEventEditView
 from schooltool.app.browser.cal import ICalendarEventEditForm
+from schooltool.app.browser.testing import layeredTestTearDown
+from schooltool.app.browser.testing import layeredTestSetup, makeLayeredSuite
 from schooltool.app.browser.testing import setUp as browserSetUp, tearDown
+from schooltool.app.testing import app_functional_layer
 from schooltool.testing import setup as sbsetup
 
 # Used for the PrincipalStub
@@ -93,10 +97,12 @@ class ApplicationStub(object):
         pass
 
 
+test_today = date(2005, 3, 13)
 def setUp(test=None):
     browserSetUp(test)
     sbsetup.setUpCalendaring()
     sbsetup.setUpSessions()
+    setUpDateManagerStub(test_today)
 
     ztapi.provideAdapter(Interface, ISchoolToolApplication,
                          ApplicationStub)
@@ -664,11 +670,11 @@ def doctest_CalendarDay():
 
     You can test a calendar day to see if its date is today
 
-        >>> day = CalendarDay(date.today())
+        >>> day = CalendarDay(test_today)
         >>> day.today()
         'today'
 
-        >>> day = CalendarDay(date.today() - date.resolution)
+        >>> day = CalendarDay(test_today - date.resolution)
         >>> day.today()
         ''
 
@@ -748,6 +754,8 @@ def getDaysStub(start, end):
 class TestCalendarViewBase(unittest.TestCase):
     # Legacy unit tests from SchoolTool.
 
+    today = date(2005, 6, 9)
+
     def setUp(self):
         setup.placefulSetUp()
 
@@ -758,6 +766,8 @@ class TestCalendarViewBase(unittest.TestCase):
         # Usually registered for IHavePreferences
         ztapi.provideAdapter(IPerson, IPersonPreferences,
                              getPersonPreferences)
+
+        setUpDateManagerStub(self.today)
 
     def tearDown(self):
         setup.placefulTearDown()
@@ -785,7 +795,7 @@ class TestCalendarViewBase(unittest.TestCase):
         request = TestRequest()
         view = CalendarViewBase(None, request)
         view.update()
-        self.assertEquals(view.cursor, date.today())
+        self.assertEquals(view.cursor, self.today)
 
     def test_update_explicit_date(self):
         from schooltool.app.browser.cal import CalendarViewBase
@@ -1064,6 +1074,7 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> from schooltool.resource.booking import ResourceBookingCalendar
             >>> ztapi.provideAdapter(IResourceContainer, IBookingCalendar,
             ...                      ResourceBookingCalendar)
+            >>> setUpDateManagerStub(date(2005, 5, 13))
 
             >>> app['persons']['john'] = person = Person("john")
             >>> calendar = Calendar(person)
@@ -1105,6 +1116,7 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> registerCalendarHelperViews()
             >>> registerCalendarSubscribers()
             >>> sbsetup.setUpTimetabling()
+            >>> setUpDateManagerStub(date(2005, 5, 13))
 
             >>> calendar = Calendar(Person())
             >>> vb = CalendarViewBase(calendar, TestRequest())
@@ -1159,6 +1171,7 @@ class TestCalendarViewBase(unittest.TestCase):
         """Test for CalendarViewBase.getCalendars().
 
             >>> setup.placelessSetUp()
+            >>> setUpDateManagerStub(date(2005, 5, 13))
 
         getCalendars() only delegates the task to a ICalendarProvider
         subscriber.  We will provide a stub subscriber to test the
@@ -1238,6 +1251,7 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> registerCalendarSubscribers()
             >>> sbsetup.setUpSessions()
             >>> sbsetup.setUpTimetabling()
+            >>> setUpDateManagerStub(date(2005, 5, 13))
 
         CalendarViewBase.getEvents returns a list of wrapped calendar
         events.
@@ -1499,8 +1513,8 @@ class TestCalendarViewBase(unittest.TestCase):
         cal = Calendar(Person())
         directlyProvides(cal, IContainmentRoot)
 
-        first_year = datetime.today().year - 2
-        last_year = datetime.today().year + 2
+        first_year = self.today.year - 2
+        last_year = self.today.year + 2
 
         view = CalendarViewBase(cal, TestRequest())
 
@@ -3446,7 +3460,10 @@ def doctest_getEvents_booking():
 
     """
 
+
 class TestDailyCalendarView(unittest.TestCase):
+
+    today = date(2005, 3, 12)
 
     def setUp(self):
         setup.placefulSetUp()
@@ -3456,6 +3473,7 @@ class TestDailyCalendarView(unittest.TestCase):
         sbsetup.setUpSessions()
         sbsetup.setUpTimetabling()
         sbsetup.setUpCalendaring()
+        setUpDateManagerStub(self.today)
 
     def tearDown(self):
         setup.placefulTearDown()
@@ -3465,7 +3483,7 @@ class TestDailyCalendarView(unittest.TestCase):
 
         view = DailyCalendarView(ISchoolToolCalendar(Person()), TestRequest())
         view.update()
-        self.assertEquals(view.cursor, date.today())
+        self.assertEquals(view.cursor, self.today)
 
         from zope.publisher.interfaces import IRequest
         import zope.component
@@ -3478,7 +3496,7 @@ class TestDailyCalendarView(unittest.TestCase):
             def __call__(self):
                 return unicode(self.context.strftime("%A, %B%e, %Y"))
 
-        zope.component.provideAdapter(TestDateFormatterFullView, 
+        zope.component.provideAdapter(TestDateFormatterFullView,
                                           [date, IRequest], Interface, name='fullDate')
 
         view.request = TestRequest(form={'date': '2005-01-06'})
@@ -4106,6 +4124,7 @@ class TestDailyCalendarView(unittest.TestCase):
             >>> registerCalendarSubscribers()
             >>> sbsetup.setUpSessions()
             >>> sbsetup.setUpTimetabling()
+            >>> setUpDateManagerStub(date(2005, 5, 13))
 
         DailyCalendarView.getAllDayEvents returns a list of wrapped
         all-day calendar events for the date of the view cursor.
@@ -4222,7 +4241,7 @@ def doctest_CalendarViewBase():
     request or the session, it defaults to the current day:
 
         >>> view.update()
-        >>> view.cursor == date.today()
+        >>> view.cursor == test_today
         True
 
     The date can be provided in the request:
@@ -4284,7 +4303,7 @@ def doctest_DailyCalendarView():
         'http://127.0.0.1/calendar/2004-08-17'
         >>> view.next()
         'http://127.0.0.1/calendar/2004-08-19'
-        >>> view.current() == 'http://127.0.0.1/calendar/%s' % date.today()
+        >>> view.current() == 'http://127.0.0.1/calendar/%s' % test_today
         True
 
     inCurrentPeriod returns True for the same day only:
@@ -4323,7 +4342,7 @@ def doctest_WeeklyCalendarView():
         >>> view.next()
         'http://127.0.0.1/calendar/2004-w35'
         >>> fmt = 'http://127.0.0.1/calendar/%04d-w%02d'
-        >>> view.current() == fmt % date.today().isocalendar()[:2]
+        >>> view.current() == fmt % test_today.isocalendar()[:2]
         True
 
     getCurrentWeek is a shortcut for view.getWeek(view.cursor)
@@ -4379,7 +4398,7 @@ def doctest_MonthlyCalendarView():
         'http://127.0.0.1/calendar/2004-07'
         >>> view.next()
         'http://127.0.0.1/calendar/2004-09'
-        >>> dt = date.today().strftime("%Y-%m")
+        >>> dt = test_today.strftime("%Y-%m")
         >>> view.current() == 'http://127.0.0.1/calendar/%s' % dt
         True
 
@@ -4447,7 +4466,7 @@ def doctest_YearlyCalendarView():
         'http://127.0.0.1/calendar/2003'
         >>> view.next()
         'http://127.0.0.1/calendar/2005'
-        >>> expected = 'http://127.0.0.1/calendar/%d' % date.today().year
+        >>> expected = 'http://127.0.0.1/calendar/%d' % test_today.year
         >>> view.current() == expected
         True
 
@@ -4465,8 +4484,8 @@ def doctest_YearlyCalendarView():
 
     If the week includes today, that is indicated in a class attribute:
 
-        >>> week = view.getWeek(date.today())
-        >>> print view.renderRow(week, date.today().month)
+        >>> week = view.getWeek(test_today)
+        >>> print view.renderRow(week, test_today.month)
         <td...class="cal_yearly_day today">...
 
     inCurrentPeriod returns True for the same year only:
@@ -4534,6 +4553,9 @@ def doctest_AtomCalendarView():
         >>> registerCalendarHelperViews()
         >>> registerCalendarSubscribers()
 
+        >>> today = date(2005, 3, 13)
+        >>> setUpDateManagerStub(today)
+
         >>> from schooltool.app.browser.cal import AtomCalendarView
 
         >>> from schooltool.app.cal import Calendar
@@ -4544,11 +4566,13 @@ def doctest_AtomCalendarView():
 
     Populate the calendar:
 
-        >>> lastweek = CalendarEvent(datetime.now().replace(hour=12) -
+        >>> lastweek = CalendarEvent(datetime(today.year,
+        ...                                   today.month,
+        ...                                   today.day, hour=12) -
         ...                          timedelta(8),
         ...                          timedelta(hours=3), "Last Week")
-        >>> monday_date = (datetime.now().replace(hour=12) -
-        ...                timedelta(datetime.now().weekday()))
+        >>> monday_date = (datetime(today.year, today.month, today.day, hour=12) -
+        ...                timedelta(today.weekday()))
         >>> tuesday_date = monday_date + timedelta(1)
         >>> monday = CalendarEvent(monday_date,
         ...                        timedelta(hours=3), "Today")
@@ -4812,19 +4836,14 @@ def doctest_EventDeleteView():
 class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
 
     def setUp(self):
-        setUp()
-        sbsetup.setUpCalendaring()
-
-        # set up adaptation (the view checks user preferences)
-        from schooltool.person.preference import getPersonPreferences
-        from schooltool.person.interfaces import IPersonPreferences
-        from schooltool.person.person import Person
-        ztapi.provideAdapter(Person, IPersonPreferences, getPersonPreferences)
-
-        # set up the site
-        app = sbsetup.setUpSchoolToolSite()
-
+        layeredTestSetup()
+        app = ISchoolToolApplication(None)
         self.person = app['persons']['person'] = Person('person')
+
+        # set up schoolyear
+        from schooltool.schoolyear.schoolyear import SchoolYear
+        from schooltool.schoolyear.interfaces import ISchoolYearContainer
+        ISchoolYearContainer(app)['2004'] = SchoolYear("2004", date(2004, 9, 1), date(2004, 12, 31))
 
         # set up the timetable schema
         days = ['A', 'B', 'C']
@@ -4840,16 +4859,17 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
         template.add(SchooldaySlot(time(12, 30), timedelta(hours=2)))
         schema.model = SequentialDaysTimetableModel(days, {None: template})
 
-        app['ttschemas']['default'] = schema
+        ITimetableSchemaContainer(app)['default'] = schema
 
         # set up terms
         from schooltool.term.term import Term
-        app['terms']['term'] = term = Term("Some term", date(2004, 9, 1),
-                                           date(2004, 12, 31))
+        terms = ITermContainer(app)
+        terms['term'] = term = Term("Some term", date(2004, 9, 1),
+                                    date(2004, 12, 31))
         term.add(date(2004, 11, 5))
 
     def tearDown(self):
-        tearDown()
+        layeredTestTearDown()
 
     def createSchema(self, days, *periods_for_each_day):
         """Create a timetable schema."""
@@ -4870,14 +4890,13 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
         view = DailyCalendarRowsView(ISchoolToolCalendar(self.person), request)
         result = list(view.calendarRows(date(2004, 11, 5), 8, 19, events=[]))
 
-        expected = [("1", dt('08:00'), timedelta(hours=1)),
+        expected = [("8:00", dt('08:00'), timedelta(hours=1)),
                     ("9:00", dt('09:00'), timedelta(hours=1)),
-                    ("10:00", dt('10:00'), timedelta(minutes=15)),
-                    ("2", dt('10:15'), timedelta(hours=1)),
-                    ("11:15", dt('11:15'), timedelta(minutes=15)),
-                    ("3", dt('11:30'), timedelta(hours=1)),
-                    ("4", dt('12:30'), timedelta(hours=2)),
-                    ("14:30", dt('14:30'), timedelta(minutes=30)),
+                    ("10:00", dt('10:00'), timedelta(hours=1)),
+                    ("11:00", dt('11:00'), timedelta(hours=1)),
+                    ("12:00", dt('12:00'), timedelta(hours=1)),
+                    ("13:00", dt('13:00'), timedelta(hours=1)),
+                    ("14:00", dt('14:00'), timedelta(hours=1)),
                     ("15:00", dt('15:00'), timedelta(hours=1)),
                     ("16:00", dt('16:00'), timedelta(hours=1)),
                     ("17:00", dt('17:00'), timedelta(hours=1)),
@@ -4912,13 +4931,7 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
                     ('15:00', kmdt('15:00'),timedelta(0, 3600)),
                     ('16:00', kmdt('16:00'),timedelta(0, 3600)),
                     ('17:00', kmdt('17:00'),timedelta(0, 3600)),
-                    ('18:00', kmdt('18:00'),timedelta(0, 3600)),
-                    ('19:00', kmdt('19:00'),timedelta(0, 3600)),
-                    ('1',  kmdt("20:00"), timedelta(0, 3600)),
-                    ('21:00', kmdt("21:00"), timedelta(0, 4500)),
-                    ('2',  kmdt("22:15"), timedelta(0, 3600)),
-                    ('23:15', kmdt("23:15"), timedelta(0, 900)),
-                    ('3', kmdt("23:30"), timedelta(0, 1800))]
+                    ('18:00', kmdt('18:00'),timedelta(0, 3600))]
 
         self.assertEquals(result, expected)
 
@@ -4968,132 +4981,6 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
         prefs.timezone = 'Europe/Vilnius'
 
         self.assertEquals(view.getPersonTimezone(), timezone('Europe/Vilnius'))
-
-    def test_getPeriods(self):
-        from schooltool.app.browser.cal import DailyCalendarRowsView
-        request = TestRequest()
-        view = DailyCalendarRowsView(ISchoolToolCalendar(self.person), request)
-
-        # if no user has logged we should get an empty list
-        self.assertEquals(view.getPeriods(date(2005, 1, 1)), [])
-
-        # same if our user doesn't want to see periods in his calendar
-        request.setPrincipal(self.person)
-        IPersonPreferences(self.person).cal_periods = False
-        self.assertEquals(view.getPeriods(date(2005, 1, 1)), [])
-
-        # if currently logged in user wants to see periods, the
-        # parameter is passed to getPeriodsForDay method.
-        view.getPeriodsForDay = lambda cursor: ("Yep", cursor)
-        IPersonPreferences(self.person).cal_periods = True
-        self.assertEquals(view.getPeriods(date(2005, 1, 1)),
-                          ("Yep", date(2005, 1, 1)))
-
-
-class TestDailyCalendarRowsView_getPeriodsForDay(NiceDiffsMixin,
-                                                 unittest.TestCase):
-
-    def setUp(self):
-        setup.placefulSetUp()
-        app = sbsetup.setUpSchoolToolSite()
-
-        from schooltool.term.term import Term
-        self.term1 = Term('Sample', date(2004, 9, 1), date(2004, 12, 20))
-        self.term1.schooldays = [('A', time(9,0), timedelta(minutes=115)),
-                                 ('B', time(11,0), timedelta(minutes=115)),
-                                 ('C', time(13,0), timedelta(minutes=115)),
-                                 ('D', time(15,0), timedelta(minutes=115)),]
-        self.term2 = Term('Sample', date(2005, 1, 1), date(2005, 6, 1))
-        self.term2.schooldays = []
-        app["terms"]['2004-fall'] = self.term1
-        app["terms"]['2005-spring'] = self.term2
-
-        class TimetableModelStub:
-            def periodsInDay(this, schooldays, ttschema, date):
-                if date not in schooldays:
-                    raise "This date is not in the current term!"
-                if ttschema == self.tt:
-                    return schooldays.schooldays
-                else:
-                    return []
-
-        tt = TimetableSchema([])
-        tt.model = TimetableModelStub()
-        tt.timezone = 'Europe/London'
-        self.tt = tt
-        app["ttschemas"]['default'] = tt
-        self.app = app
-
-    def tearDown(self):
-        setup.placefulTearDown()
-
-    def test_getPeriodsForDay_sameTZ(self):
-        from schooltool.app.browser.cal import DailyCalendarRowsView
-        view = DailyCalendarRowsView(None, TestRequest())
-        uk = timezone('Europe/London')
-        view.getPersonTimezone = lambda: uk
-        delta = timedelta(minutes=115)
-        ukdt = lambda *args: uk.localize(datetime(*args))
-        self.assertEquals(view.getPeriodsForDay(date(2004, 10, 14)),
-                          [('A', ukdt(2004, 10, 14,  9, 0), delta),
-                           ('B', ukdt(2004, 10, 14, 11, 0), delta),
-                           ('C', ukdt(2004, 10, 14, 13, 0), delta),
-                           ('D', ukdt(2004, 10, 14, 15, 0), delta)])
-
-        # However, if there is no time period, we return []
-        self.assertEquals(view.getPeriodsForDay(date(2005, 10, 14)),
-                          [])
-
-        # If there is no timetable schema, we return []
-        self.app["ttschemas"].default_id = None
-        self.assertEquals(view.getPeriodsForDay(date(2004, 10, 14)),
-                          [])
-
-    def test_getPeriodsForDay_otherTZ(self):
-        from schooltool.app.browser.cal import DailyCalendarRowsView
-        view = DailyCalendarRowsView(None, TestRequest())
-        # Auckland is 12h ahead of London
-        view.getPersonTimezone = lambda: timezone('Pacific/Auckland')
-        uk = timezone('Europe/London')
-
-        delta = timedelta(minutes=115)
-        td = timedelta
-        ukdt = lambda *args: uk.localize(datetime(*args))
-        self.assertEquals(view.getPeriodsForDay(date(2004, 10, 14)),
-                          [('B', ukdt(2004, 10, 13, 12, 0), td(minutes=55)),
-                           ('C', ukdt(2004, 10, 13, 13, 0), delta),
-                           ('D', ukdt(2004, 10, 13, 15, 0), delta),
-                           ('A', ukdt(2004, 10, 14, 9, 0), delta),
-                           ('B', ukdt(2004, 10, 14, 11, 0), td(minutes=60))])
-
-        # However, if there is no time period, we return []
-        self.assertEquals(view.getPeriodsForDay(date(2005, 10, 14)),
-                          [])
-
-        # If there is no timetable schema, we return []
-        self.app["ttschemas"].default_id = None
-        self.assertEquals(view.getPeriodsForDay(date(2004, 10, 14)),
-                          [])
-
-    def test_getPeriodsForLastDayOfTerm(self):
-        from schooltool.app.browser.cal import DailyCalendarRowsView
-        view = DailyCalendarRowsView(None, TestRequest())
-        # We need the start date and the end date different
-        view.getPersonTimezone = lambda: timezone('America/Chicago')
-        self.assertEquals(view.getPeriodsForDay(date(2005, 6, 1)), [])
-
-    def test_getPeriodsForDayBetweenTerms(self):
-        from schooltool.term.term import Term
-        term3 = Term('Sample', date(2005, 6, 2), date(2005, 8, 1))
-        self.app["terms"]['2005-autumn'] = term3
-        term3.schooldays = [('A', time(9,0), timedelta(minutes=115))]
-        self.term2.schooldays = [('B', time(10,0), timedelta(minutes=115))]
-
-        from schooltool.app.browser.cal import DailyCalendarRowsView
-        view = DailyCalendarRowsView(None, TestRequest())
-        # We need the start date and the end date different
-        view.getPersonTimezone = lambda: timezone('America/Chicago')
-        self.assertEquals(len(view.getPeriodsForDay(date(2005, 6, 1))), 1)
 
 
 def doctest_CalendarListSubscriber(self):
@@ -5301,8 +5188,8 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestCalendarViewBase))
     suite.addTest(unittest.makeSuite(TestDailyCalendarView))
     suite.addTest(unittest.makeSuite(TestGetRecurrenceRule))
-    suite.addTest(unittest.makeSuite(TestDailyCalendarRowsView))
-    suite.addTest(unittest.makeSuite(TestDailyCalendarRowsView_getPeriodsForDay))
+    suite.addTest(makeLayeredSuite(TestDailyCalendarRowsView,
+                                   app_functional_layer))
     suite.addTest(doctest.DocTestSuite(
         setUp=setUp, tearDown=tearDown,
         optionflags=doctest.ELLIPSIS|doctest.REPORT_NDIFF|

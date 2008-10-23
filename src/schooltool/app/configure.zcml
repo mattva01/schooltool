@@ -221,10 +221,27 @@
              set_schema=".interfaces.IApplicationPreferences" />
   </class>
 
+  <class class="schooltool.relationship.relationship.LinkSet">
+    <allow
+       interface="schooltool.relationship.interfaces.IRelationshipLinks"
+       />
+  </class>
+
+  <class class="schooltool.relationship.relationship.Link">
+    <allow
+       interface="schooltool.relationship.interfaces.IRelationshipLink"
+       />
+  </class>
+
+  <class class="schooltool.relationship.uri.URIObject">
+    <allow
+       interface="schooltool.relationship.uri.IURIObject"
+       />
+  </class>
+
   <!-- Views -->
 
   <include package=".browser" />
-  <include package=".rest" />
   <include package=".help" />
 
   <!-- XXX It feels wrong to tweak permissions of objects in a sibling. -->
@@ -340,5 +357,99 @@
       zcml:condition="not-have authentication"
       factory=".security.PersonContainerAuthenticationPlugin"
       provides=".interfaces.ISchoolToolAuthenticationPlugin" />
+
+  <!-- general utilities -->
+  <!-- XXX: move the code to schooltool.app too -->
+  <utility
+      factory="schooltool.term.term.DateManagerUtility" />
+
+  <!-- Temporary refugees from rest configure.zcml -->
+
+  <view
+      for="zope.interface.Interface"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schooltool.traverser.traverser.PluggableTraverser"
+      permission="zope.Public"
+      />
+
+  <view
+      for=".interfaces.ISchoolToolApplication"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schooltool.traverser.traverser.PluggableTraverser"
+      permission="zope.Public"
+      />
+
+  <view
+      for=".interfaces.ISchoolToolCalendar"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schooltool.traverser.traverser.PluggableTraverser"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for="zope.app.container.interfaces.IReadContainer
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory="zope.app.http.traversal.ContainerTraverser"
+      permission="zope.Public"
+      />
+
+  <adapterTraverserPlugin
+      for="schooltool.app.interfaces.IHaveCalendar"
+      layer="zope.publisher.interfaces.http.IHTTPRequest"
+      name="calendar.vfb"
+      adapter="schooltool.app.interfaces.ISchoolToolCalendar"
+      permission="zope.Public"
+      />
+
+  <adapterTraverserPlugin
+      for="schooltool.app.interfaces.IHaveCalendar"
+      layer="zope.publisher.interfaces.http.IHTTPRequest"
+      name="calendar.ics"
+      adapter="schooltool.app.interfaces.ISchoolToolCalendar"
+      permission="zope.Public"
+      />
+
+  <adapterTraverserPlugin
+      for="schooltool.app.interfaces.IHaveCalendar"
+      layer="zope.publisher.interfaces.http.IHTTPRequest"
+      name="calendar"
+      adapter="schooltool.app.interfaces.ISchoolToolCalendar"
+      permission="zope.Public"
+      />
+
+  <!-- the following are used by PUT requests on the normal web server -->
+  <nullTraverserPlugin
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      layer="zope.publisher.interfaces.http.IHTTPRequest"
+      name="calendar.ics"
+      permission="zope.Public"
+      />
+
+  <nullTraverserPlugin
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      layer="zope.publisher.interfaces.http.IHTTPRequest"
+      name="calendar.vfb"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      name="GET"
+      factory=".browser.app.HTTPCalendarView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      name="PUT"
+      factory=".browser.app.HTTPCalendarView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
 
 </configure>

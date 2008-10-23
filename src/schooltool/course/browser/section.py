@@ -21,40 +21,53 @@ course browser views.
 
 $Id$
 """
+from zope.interface import implements
 from zope.security.proxy import removeSecurityProxy
-from zope.app.component.hooks import getSite
+from zope.app.intid.interfaces import IIntIds
 from zope.app.form.browser.add import AddView
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.browser import BrowserView
+from zope.component import adapts
+from zope.component import getUtility
 from zope.component import getMultiAdapter
+from zope.app.container.contained import NameChooser
 from zope.app.container.interfaces import INameChooser
 from zc.table import table
+from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.person.interfaces import IPerson
+from schooltool.group.interfaces import IGroupContainer
 from schooltool.group.interfaces import IGroup
+from schooltool.term.interfaces import ITerm
 from schooltool.timetable.interfaces import ITimetables
+from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.skin.containers import ContainerView
 from schooltool.app.browser.app import BaseEditView
 
 from schooltool.common import SchoolToolMessage as _
-from schooltool.common import collect
+from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.interfaces import ISection, ISectionContainer
-from schooltool.relationship.relationship import getRelatedObjects
-from schooltool.app.membership import URIGroup
-from schooltool.app.relationships import URISection
-from schooltool.course import booking
 from schooltool.course.section import Section
-from schooltool.app.interfaces import ISchoolToolCalendar
-from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.timetable.browser import TimetableConflictMixin
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.table.interfaces import ITableFormatter
 
 
-def same(a, b):
-    """Check if two possibly proxied objects are one and the same."""
-    return removeSecurityProxy(a) is removeSecurityProxy(b)
+class SectionContainerAbsoluteURLAdapter(BrowserView):
+
+    adapts(ISectionContainer, IBrowserRequest)
+    implements(IAbsoluteURL)
+
+    def __str__(self):
+        container_id = int(self.context.__name__)
+        int_ids = getUtility(IIntIds)
+        container = int_ids.getObject(container_id)
+        url = str(getMultiAdapter((container, self.request), name='absolute_url'))
+        return url + '/sections'
+
+    __call__ = __str__
 
 
 class SectionContainerView(ContainerView):
@@ -62,17 +75,34 @@ class SectionContainerView(ContainerView):
 
     __used_for__ = ISectionContainer
 
-    index_title = _("Section index")
+    @property
+    def term(self):
+        return ITerm(self.context)
+
+    @property
+    def school_year(self):
+        return ISchoolYear(self.context)
 
     # XXX: very hacky, but necessary for now. :-(
     def getTimetables(self, obj):
-        return ITimetables(obj).timetables
+        return []
+        timetables = sorted(ITimetables(obj).timetables.items())
+        return [timetable
+                for key, timetable in timetables]
 
 
 class SectionView(BrowserView):
     """A view for courses providing a list of sections."""
 
     __used_for__ = ISection
+
+    @property
+    def term(self):
+        return ITerm(self.context)
+
+    @property
+    def school_year(self):
+        return ISchoolYear(self.context)
 
     def renderPersonTable(self):
         persons = ISchoolToolApplication(None)['persons']
@@ -90,26 +120,29 @@ class SectionView(BrowserView):
         return filter(IGroup.providedBy, self.context.members)
 
 
+class SectionNameChooser(NameChooser):
+
+    implements(INameChooser)
+
+    def chooseName(self, name, obj):
+        """See INameChooser."""
+
+        i = 1
+        n = "1"
+        while n in self.context:
+            i += 1
+            n = unicode(i)
+        # Make sure the name is valid
+        self.checkName(n, obj)
+        return n
+
+
 class SectionAddView(AddView):
     """A view for adding Sections."""
 
-    def newSectionId(self):
-        app = getSite()
-        sections = sorted(app['sections'].keys())
-        if len(sections) == 0:
-            return "1"
-
-        name = sections[-1]
-        try:
-            name = str(int(name)+1)
-        except ValueError:
-            name = INameChooser(app['sections']).chooseName(name, None)
-        return name
-
     def getCourseFromId(self, cid):
-        app = getSite()
         try:
-            return app['courses'][cid]
+            return ICourseContainer(self.context.context)[cid]
         except KeyError:
             self.error = _("No such course.")
 
@@ -125,11 +158,10 @@ class SectionAddView(AddView):
         self.course = self.getCourseFromId(course_id)
 
     def __call__(self):
-        id = self.newSectionId()
-        section = Section(title=id)
+        section = Section()
         self.context.add(section)
         self.course.sections.add(section)
-        section.title = "%s (%s)" % (self.course.title, id)
+        section.title = "%s (%s)" % (self.course.title, section.__name__)
         self.request.response.redirect(absoluteURL(section, self.request))
 
 
@@ -141,81 +173,6 @@ class SectionEditView(BaseEditView):
 
 class ConflictDisplayMixin(TimetableConflictMixin):
     """A mixin for use in views that display event conflicts."""
-
-    def __init__(self, context):
-        self.context = context
-
-    def getConflictingSections(self, item):
-        """Return a sequence of sections that conflict with item.
-
-        update(), which sets self.busy_periods, should be called before
-        invoking this method.
-        """
-        result = []
-        for section in self.getSections(item):
-            if same(section, self.context):
-                continue
-            for (day_id, period_id), sections in self.busy_periods:
-                if section in sections:
-                    result.append({'day_id': day_id,
-                                   'period_id': period_id,
-                                   'section': section})
-        result.sort(key=lambda x: (x['day_id'], x['period_id'],
-                                   x['section'].label))
-        return result
-
-    def getSections(self, items):
-        raise NotImplementedError("Subclasses should override this method.")
-
-    @collect
-    def _findConflicts(self, timetable_events, calendar_events):
-        """Returns calendar events that intersect with section timetable events.
-
-        This method expects timetable_events list to be ordered by dtstart.
-        """
-        calendar_events = sorted(calendar_events, reverse=True)
-        def before(a, b):
-            return (a.dtstart + a.duration) <= b.dtstart
-
-        for ttevent in timetable_events:
-            while calendar_events:
-                if before(ttevent, calendar_events[-1]):
-                    break
-                elif before(calendar_events[-1], ttevent):
-                    calendar_events.pop()
-                else:
-                    # conflict!
-                    yield calendar_events.pop()
-
-    def _groupConflicts(self, conflicts):
-        """Generate a list of unique events out of a list of expanded events."""
-        uniques = {}
-        for event in conflicts:
-            uniques.setdefault(event.unique_id, event)
-        return uniques.values()
-
-    def getConflictingEvents(self, item):
-        """Return a list of conflicting events.
-
-        Conflicting events are events that occur in the item calendar
-        at some time that is booked/taken by section timetable event.
-        """
-        calendar = ISchoolToolCalendar(item)
-        ctt = ICompositeTimetables(self.context)
-
-        timetable_events = sorted(ctt.makeTimetableCalendar())
-
-        if not timetable_events:
-            return []
-
-        first = timetable_events[0]
-        last = timetable_events[-1]
-        calendar_events = calendar.expand(first.dtstart,
-                                          last.dtstart + last.duration)
-
-        conflicts = self._findConflicts(timetable_events, calendar_events)
-
-        return self._groupConflicts(conflicts)
 
     def update(self):
         """Set self.busy_periods."""
@@ -247,10 +204,6 @@ class SectionInstructorView(RelationshipEditConfView, ConflictDisplayMixin):
     current_title = _("Current Instructors")
     available_title = _("Available Instructors")
 
-    def getSections(self, item):
-        return [section for section in getRelatedObjects(item, URISection)
-                if ISection.providedBy(section)]
-
     def getCollection(self):
         return self.context.instructors
 
@@ -266,10 +219,6 @@ class SectionLearnerView(RelationshipEditConfView):
     title = _("Students")
     current_title = _("Current Students")
     available_title = _("Available Students")
-
-    def getSections(self, item):
-        return [section for section in getRelatedObjects(item, URIGroup)
-                if ISection.providedBy(section)]
 
     def getCollection(self):
         return self.context.members
@@ -291,10 +240,6 @@ class SectionLearnerGroupView(RelationshipEditConfView):
     current_title = _("Current Groups")
     available_title = _("Available Groups")
 
-    def getSections(self, item):
-        return [section for section in getRelatedObjects(item, URIGroup)
-                if ISection.providedBy(section)]
-
     def getCollection(self):
         return self.context.members
 
@@ -303,23 +248,4 @@ class SectionLearnerGroupView(RelationshipEditConfView):
         return filter(IGroup.providedBy, self.getCollection())
 
     def getAvailableItemsContainer(self):
-        return ISchoolToolApplication(None)['groups']
-
-
-class SectionResourceView(RelationshipEditConfView):
-    """View for adding learners to a Section."""
-
-    __used_for__ = ISection
-
-    title = _("Resources")
-    current_title = _("Current Resources")
-    available_title = _("Available Resources")
-
-    def getSections(self, item):
-        return getRelatedObjects(item, booking.URISection)
-
-    def getCollection(self):
-        return self.context.resources
-
-    def getAvailableItemsContainer(self):
-        return ISchoolToolApplication(None)['resources']
+        return IGroupContainer(self.context)

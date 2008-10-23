@@ -9,9 +9,45 @@ Set up
     >>> sbsetup.setUpCalendaring()
     >>> sbsetup.setUpApplicationPreferences()
 
+    >>> from schooltool.term.interfaces import ITermContainer
+    >>> from schooltool.term.term import getTermContainer
+    >>> from zope.component import provideAdapter
+    >>> from zope.interface import Interface
+    >>> provideAdapter(getTermContainer, [Interface], ITermContainer)
+
+    >>> from schooltool.schoolyear.schoolyear import getSchoolYearContainer
+    >>> provideAdapter(getSchoolYearContainer)
+
+
 First of all, we need an app object:
 
     >>> app = sbsetup.setUpSchoolToolSite()
+    >>> from schooltool.timetable.schema import TimetableSchemaContainer
+    >>> schemas = TimetableSchemaContainer()
+    >>> from zope.component import provideAdapter
+    >>> from schooltool.timetable.interfaces import ITimetableSchemaContainer
+    >>> provideAdapter(lambda x: schemas, adapts=[Interface], provides=ITimetableSchemaContainer)
+    >>> from zope.location.location import locate
+    >>> locate(schemas, app, 'ttschemas')
+
+We will need a schoolyear with a term:
+
+    >>> import datetime
+
+    >>> from schooltool.schoolyear.schoolyear import SchoolYear
+    >>> from schooltool.schoolyear.interfaces import ISchoolYearContainer
+    >>> sy = SchoolYear("2005",
+    ...                 datetime.date(2005, 1, 1),
+    ...                 datetime.date(2005, 12, 31))
+    >>> ISchoolYearContainer(app)['2005'] = sy
+
+    >>> from schooltool.term.term import Term
+    >>> term = Term('2005 summer',
+    ...             datetime.date(2005, 6, 1),
+    ...             datetime.date(2005, 8, 31))
+    >>> from schooltool.term.interfaces import ITermContainer
+    >>> ITermContainer(app)["2005-summer"] = term
+    >>> term.addWeekdays(0, 1, 2, 3, 4, 5)
 
 We have a timetable schema to put the view on:
 
@@ -25,16 +61,16 @@ We have a timetable schema to put the view on:
     ...                          'Second',
     ...                          'Third',
     ...                          'Fourth'])
-    >>> app['ttschemas']['usual'] = ttschema
+    >>> schemas['usual'] = ttschema
     >>> ttschema1 = createSchema(['Day 1', 'Day 2', 'Day 3'],
     ...                          ['First', 'Second', 'Third', 'Fourth'],
     ...                          ['First', 'Second', 'Third', 'Fourth'],
     ...                          ['First', 'Second', 'Third', 'Fourth'])
-    >>> app['ttschemas']['unusual'] = ttschema1
+    >>> schemas['unusual'] = ttschema1
 
 The schemas have a model attribute:
 
-    >>> from schooltool.timetable import SequentialDaysTimetableModel
+    >>> from schooltool.timetable.model import SequentialDaysTimetableModel
     >>> default = createDayTemplate([(9, 0, 45),
     ...                              (10, 0, 45),
     ...                              (11, 0, 45),
@@ -44,16 +80,6 @@ The schemas have a model attribute:
     >>> ttschema1.model = SequentialDaysTimetableModel(
     ...     ['Day 1', 'Day 2', 'Day 3'],
     ...     {None: default})
-
-We will need a term:
-
-    >>> import datetime
-    >>> from schooltool.term.term import Term
-    >>> term = Term('2005 summer',
-    ...             datetime.date(2005, 6, 1),
-    ...             datetime.date(2005, 8, 31))
-    >>> app["terms"]["2005-summer"] = term
-    >>> term.addWeekdays(0, 1, 2, 3, 4, 5)
 
 Now we can create the view:
 
@@ -174,7 +200,7 @@ The user gets redirected:
     >>> request.response.getStatus()
     302
     >>> request.response.getHeader('location')
-    'http://127.0.0.1/terms/2005-summer'
+    'http://127.0.0.1/schooltool.schoolyear/2005/2005-summer'
 
 The replacement day gets added to the calendar, and the emergency day gets an
 empty day template:
@@ -274,7 +300,7 @@ redirected:
     >>> request.response.getStatus()
     302
     >>> request.response.getHeader('location')
-    'http://127.0.0.1/terms/2005-summer'
+    'http://127.0.0.1/schooltool.schoolyear/2005/2005-summer'
 
 
 Errors

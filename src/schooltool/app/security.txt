@@ -140,19 +140,12 @@ raised:
     PrincipalLookupError: sb.person.nonexistent
 
 
-The groups of the SchoolBell instance are also principals:
-
-    >>> from schooltool.group.group import GroupContainer
-    >>> app['groups'] = GroupContainer()
+Let's add a group:
 
     >>> from schooltool.group.group import Group
     >>> group = Group()
     >>> group.title = "The Management"
-    >>> app['groups']['management'] = group
-
-    >>> g1 = auth.getPrincipal('sb.group.management')
-    >>> g1.title
-    'The Management'
+    >>> group.__name__ = "management"
     >>> group.members.add(person)
 
 And the user principal has a list ids of group principals he belongs
@@ -163,7 +156,7 @@ to.  This list is used by the security policy:
     >>> verifyObject(IGroupAwarePrincipal, p)
     True
     >>> p.groups
-    [u'sb.group.management']
+    ['sb.group.management']
 
 If the global principals like IEveryoneGroup, IAuthenticatedGroup are
 defined, they are added to the list of groups of a principal, too:
@@ -180,7 +173,7 @@ defined, they are added to the list of groups of a principal, too:
 
     >>> p = auth.getPrincipal('sb.person.frog')
     >>> p.groups
-    [u'sb.group.management', 'zope.authenticated', 'zope.everybody']
+    ['sb.group.management', 'zope.authenticated', 'zope.everybody']
 
 
 authenticate

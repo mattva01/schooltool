@@ -53,6 +53,12 @@ class ICourseContainer(container.interfaces.IContainer):
     container.constraints.contains(ICourse)
 
 
+class ICourseContainerContainer(container.interfaces.IContainer):
+    """Container of Courses."""
+
+    container.constraints.contains(ICourseContainer)
+
+
 class ICourseContained(ICourse, container.interfaces.IContained):
     """Courses contained in an ICourseContainer."""
 
@@ -96,6 +102,12 @@ class ISectionContainer(container.interfaces.IContainer):
     """A container for Sections."""
 
     container.constraints.contains(ISection)
+
+
+class ISectionContainerContainer(container.interfaces.IContainer):
+    """A container for Section containers."""
+
+    container.constraints.contains(ISectionContainer)
 
 
 class ISectionContained(ISection, container.interfaces.IContained):

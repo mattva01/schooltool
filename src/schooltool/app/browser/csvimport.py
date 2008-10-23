@@ -27,13 +27,18 @@ from zope.security.proxy import removeSecurityProxy
 from zope.app.container.interfaces import INameChooser
 from zope.publisher.browser import BrowserView
 
+from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.app import SimpleNameChooser
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.interfaces import ISectionContainer
 from schooltool.course.section import Section
+from schooltool.term.interfaces import ITerm
+from schooltool.term.interfaces import ITermContainer
 from schooltool.timetable import TimetableActivity
+from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.interfaces import ITimetables
 
 
@@ -267,7 +272,7 @@ class TimetableCSVImporter(object):
 
         At the top of the file there should be a header row:
 
-        timetable_schema_id, term_id
+        timetable_schema_id
 
         Then an empty line should follow, and the remaining CSV data should
         consist of chunks like this:
@@ -332,7 +337,7 @@ class TimetableCSVImporter(object):
             return
         course_id, instructor_id = row[:2]
 
-        course = self.app['courses'].get(course_id, None)
+        course = ICourseContainer(self.sections).get(course_id, None)
         if course is None:
             self.errors.courses.append(course_id)
 
@@ -404,7 +409,7 @@ class TimetableCSVImporter(object):
 
         # Create or pick a section.
         section_title = '%s - %s' % (course.title, instructor.title)
-        for sctn in self.app['sections'].values():
+        for sctn in self.sections.values():
             # Look for an existing section with the same title.
             if sctn.title == section_title:
                 section = sctn
@@ -424,12 +429,11 @@ class TimetableCSVImporter(object):
 
         # Create a timetable
         timetables = ITimetables(section).timetables
-        timetable_key = ".".join((self.term.__name__, self.ttschema.__name__))
-        if timetable_key not in timetables.keys():
-            tt = self.ttschema.createTimetable()
-            timetables[timetable_key] = tt
-        else:
-            tt = timetables[timetable_key]
+        tt = ITimetables(section).lookup(self.term, self.ttschema)
+        if tt is None:
+            chooser = INameChooser(timetables)
+            tt = self.ttschema.createTimetable(self.term)
+            timetables[chooser.chooseName("", tt)] = tt
 
         # Add timetable activities.
         for day_id, period_id in periods:
@@ -459,23 +463,18 @@ class TimetableCSVImporter(object):
 
         Sets self.term and self.ttschema.
         """
-        if len(row) != 2:
+        if len(row) != 1:
             self.errors.generic.append(
                     _("The first row of the CSV file must contain"
-                      " the term id and the timetable schema id."))
+                      " the timetable schema id."))
             return
 
-        term_id, ttschema_id = row
+        ttschema_id = row[0]
+
+        self.term = ITerm(self.sections)
 
         try:
-            self.term = self.app['terms'][term_id]
-        except KeyError:
-            error_msg = _("The term ${term} does not exist.",
-                          mapping={'term': term_id})
-            self.errors.generic.append(error_msg)
-
-        try:
-            self.ttschema = self.app['ttschemas'][ttschema_id]
+            self.ttschema = ITimetableSchemaContainer(ISchoolYear(self.sections))[ttschema_id]
         except KeyError:
             error_msg = _("The timetable schema ${schema} does not exist.",
                           mapping={'schema': ttschema_id})
