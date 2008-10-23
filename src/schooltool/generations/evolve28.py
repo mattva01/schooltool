@@ -124,10 +124,16 @@ def evolve(context):
             terms = sorted(app['terms'].values(), key=lambda t: t.first)
             if not terms:
                 today = date.today()
-                terms = [Term(today - timedelta(60), today + timedelta(60))]
+                term = Term("A Term", today - timedelta(60), today + timedelta(60))
+                term.__name__ = "term"
+                terms = [term]
 
             sy = SchoolYear("", terms[0].first, terms[-1].last)
-            sy.title = "%s-%s" % (sy.first.strftime("%Y"), sy.last.strftime("%Y"))
+            start, end = sy.first.strftime("%Y"), sy.last.strftime("%Y")
+            if start != end:
+                sy.title = "%s-%s" % (sy.first.strftime("%Y"), sy.last.strftime("%Y"))
+            else:
+                sy.title = start
             syc._SampleContainer__data[sy.title] = sy
             sy.__parent__ = syc
             sy.__name__ = sy.title
