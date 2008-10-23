@@ -11,6 +11,7 @@ recursive-include src *.ico
 recursive-include src *.zcml_tmpl
 recursive-include src *.conf_tmpl
 recursive-include src *.ini
+recursive-include src *.conf
 recursive-include src *.xml
 include version.txt
 include version.txt.in
