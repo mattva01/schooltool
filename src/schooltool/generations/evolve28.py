@@ -21,6 +21,7 @@ Upgrade SchoolTool to generation 28.
 """
 from persistent.dict import PersistentDict
 from datetime import timedelta, date
+import transaction
 
 from zope.proxy import sameProxiedObjects
 from zope.app.generations.utility import findObjectsProviding
@@ -35,6 +36,7 @@ from zope.app.intid.interfaces import IIntIds
 from schooltool.group.group import GroupContainerContainer
 from schooltool.term.term import Term
 from schooltool.timetable import TimetablesAdapter
+from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import ITimetableCalendarEvent
 from schooltool.timetable.schema import TimetableSchemaContainerContainer
 from schooltool.schoolyear.interfaces import TermOverlapError
@@ -68,13 +70,6 @@ def setSchoolTimetableContainer(sy, ttschemas):
     sy_id = str(int_ids.getId(sy))
     app = ISchoolToolApplication(None)
     app['schooltool.timetable.schooltt'][sy_id] = ttschemas
-
-
-def setSectionContainer(term, sections):
-    int_ids = getUtility(IIntIds)
-    term_id = str(int_ids.getId(term))
-    app = ISchoolToolApplication(None)
-    app['schooltool.course.section'][term_id] = sections
 
 
 def moveTimetables(section, term, new_section):
@@ -176,10 +171,26 @@ def evolve(context):
             # section was scheduled for, or only into the terms in the
             # last school year if it was not scheduled yet
             app['schooltool.course.section'] = SectionContainerContainer()
+
             sections = app['sections']
-            del app._SampleContainer__data['sections']
-            setSectionContainer(terms[0], sections)
+            jc = app.get('schooltool.lyceum.journal', None)
+            int_ids = getUtility(IIntIds)
+
             for name, section in sections.items():
+                timetables = ITimetables(section)
+                if timetables.timetables:
+                    terms = sorted(timetables.terms, key=lambda t: t.first)
+                else:
+                    terms = sorted(sy.values(), key=lambda t: t.first)
+
+                ISectionContainer(terms[0])[name] = section
+                if jc is not None:
+                    journal_id = str(int_ids.getId(section))
+                    jcd = jc.get(name, None)
+                    if jcd is not None:
+                        del jc[name]
+                        jc[journal_id] = jcd
+
                 for term in terms[1:]:
                     sc = ISectionContainer(term)
                     new_section = Section(section.title, section.description)
@@ -194,6 +205,8 @@ def evolve(context):
                     sc[name] = new_section
                     moveTimetables(section, term, new_section)
                     moveCalendars(section, term, new_section)
+                    # XXX maybe move grades?
+                transaction.savepoint(optimistic=True)
+            del app._SampleContainer__data['sections']
     finally:
         setSite(old_site)
-
