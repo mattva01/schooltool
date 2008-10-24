@@ -285,30 +285,29 @@ A new section should have been created:
 
     >>> print analyze.queryHTML('//table/tr[2]', manager.contents)[0]
     <tr><td>
-        <input type="checkbox" name="delete.1" /></td>
-      <td>
-        <a href="http://localhost/schoolyears/2005/courses/swimming">Swimming</a>
-      </td>
-      <td>
-        <a href=".../sections/1">Swimming - Frog</a>
-      </td>
-      <td>
+              <input type="checkbox" name="delete.1" /></td>
+            <td>
+              <a href="http://localhost/schoolyears/2005/courses/swimming">Swimming</a>
+            </td>
+            <td>
+              <a href="http://localhost/schoolyears/2005/2005-fall/sections/1">Swimming - Frog</a>
+            </td>
+            <td>
     <BLANKLINE>
     <BLANKLINE>
-        <a href="http://localhost/persons/frog">Frog</a>
+                <a href="http://localhost/persons/frog">Frog</a>
     <BLANKLINE>
-      </td>
-      <td>
-    <BLANKLINE>
-    <BLANKLINE>
-      </td>
-      <td>
-        <span class="hint">
-          (1
-          <span>Students</span>)
-        </span>
-      </td>
-    </tr>
+            </td>
+            <td>
+                <a href="http://localhost/schoolyears/2005/2005-fall/sections/1/timetables/1">2005-fall.default</a>
+            </td>
+            <td>
+              <span class="hint">
+                (1
+                <span>Students</span>)
+              </span>
+            </td>
+          </tr>
 
 We should see a timetable in the section's timetable list:
 

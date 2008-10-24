@@ -28,6 +28,7 @@ from zope.annotation.interfaces import IAnnotations
 from zope.security.checker import canAccess
 from zope.security.proxy import removeSecurityProxy
 
+from schooltool.term.interfaces import ITerm
 from schooltool.term.interfaces import IDateManager
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import ICompositeTimetables
@@ -65,20 +66,12 @@ class CalendarSTOverlayView(CalendarOverlayView):
             else:
                 non_section_items.append(item)
 
-        for item in list(section_items):
-            section = removeSecurityProxy(item.calendar.__parent__)
-            timetables = ITimetables(section).timetables
-            if not timetables:
-                section_items.remove(item)
-                non_section_items.append(item)
-
         return section_items, non_section_items
 
     def get_scheduled_terms(self, section_items):
         terms = set()
         for item in section_items:
-            section = removeSecurityProxy(item.calendar.__parent__)
-            terms.update(ITimetables(section).terms)
+            terms.add(ITerm(removeSecurityProxy(item.calendar.__parent__)))
         terms = [{'term': term,
                   'items': []} for term in terms]
         return sorted(terms, key=lambda t: t['term'].last, reverse=True)
@@ -91,7 +84,8 @@ class CalendarSTOverlayView(CalendarOverlayView):
         current_term = getUtility(IDateManager).current_term
         for term in terms:
             for item in section_items:
-                if term['term'] in ITimetables(item.calendar.__parent__).terms:
+                if sameProxiedObjects(term['term'],
+                                      ITerm(item.calendar.__parent__)):
                     term['items'].append(item)
             term['expanded'] = sameProxiedObjects(term['term'], current_term)
 

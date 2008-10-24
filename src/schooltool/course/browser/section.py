@@ -85,10 +85,12 @@ class SectionContainerView(ContainerView):
 
     # XXX: very hacky, but necessary for now. :-(
     def getTimetables(self, obj):
+        tt_adapter = ITimetables(obj, None)
+        if tt_adapter is not None:
+            timetables = sorted(tt_adapter.timetables.items())
+            return [timetable
+                    for key, timetable in timetables]
         return []
-        timetables = sorted(ITimetables(obj).timetables.items())
-        return [timetable
-                for key, timetable in timetables]
 
 
 class SectionView(BrowserView):
