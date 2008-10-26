@@ -529,6 +529,14 @@ def doctest_EventForDisplay_editLink():
         >>> print e.editLink()
         http://127.0.0.1/calendar/eHl6enk%3D/edit.html?date=2005-09-27
 
+    A back-link may be specified.
+
+        >>> e = EventForDisplay(event, request, color1, color2, calendar,
+        ...                     timezone('Asia/Tokyo'),
+        ...                     parent_view_link='http://foo/bar.html')
+        >>> print e.editLink()
+        http://127.0.0.1/calendar/eHl6enk%3D/edit.html?date=2005-09-27&back_url=http%3A//foo/bar.html&cancel_url=http%3A//foo/bar.html
+
     """
 
 
@@ -563,6 +571,14 @@ def doctest_EventForDisplay_deleteLink():
         ...                     timezone('Asia/Tokyo'))
         >>> print e.deleteLink()
         http://127.0.0.1/calendar/delete.html?event_id=xyzzy&date=2005-12-13
+
+    A back-link may be specified.
+
+        >>> e = EventForDisplay(event, request, color1, color2, calendar,
+        ...                     timezone('Asia/Tokyo'),
+        ...                     parent_view_link='http://foo/bar.html')
+        >>> print e.deleteLink()
+        http://127.0.0.1/calendar/delete.html?event_id=xyzzy&date=2005-12-13&back_url=http%3A//foo/bar.html
 
     """
 
@@ -1118,7 +1134,8 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> sbsetup.setUpTimetabling()
             >>> setUpDateManagerStub(date(2005, 5, 13))
 
-            >>> calendar = Calendar(Person())
+            >>> person = app['persons']['ignas'] = Person(u'Ignas')
+            >>> calendar = Calendar(person)
             >>> vb = CalendarViewBase(calendar, TestRequest())
 
         Pigeonholer returns an empty list if the interval list is empty:
@@ -1258,7 +1275,8 @@ class TestCalendarViewBase(unittest.TestCase):
 
             >>> from schooltool.app.browser.cal import CalendarViewBase
             >>> from schooltool.app.cal import Calendar
-            >>> cal1 = Calendar(Person())
+            >>> person = app['persons']['ignas'] = Person(u'Ignas')
+            >>> cal1 = Calendar(person)
             >>> cal1.addEvent(createEvent('2005-02-26 19:39', '1h', 'code'))
             >>> cal1.addEvent(createEvent('2005-02-20 16:00', '1h', 'walk'))
             >>> view = CalendarViewBase(cal1, TestRequest())
@@ -1369,6 +1387,7 @@ class TestCalendarViewBase(unittest.TestCase):
         e8 = createEvent('2004-08-15 00:00', '0sec', "e8")
 
         cal = Calendar(Person())
+        directlyProvides(cal, IContainmentRoot)
         for e in [e0, e2, e3, e4, e5, e6, e7, e8]:
             cal.addEvent(e)
 
@@ -1414,6 +1433,7 @@ class TestCalendarViewBase(unittest.TestCase):
         e4 = createEvent('2004-08-12 02:00', '1h', "e4")
 
         cal = Calendar(Person())
+        directlyProvides(cal, IContainmentRoot)
         for e in [e0, e1, e2, e3, e4]:
             cal.addEvent(e)
 
@@ -1482,6 +1502,7 @@ class TestCalendarViewBase(unittest.TestCase):
         event = createEvent('2004-08-10', "1d", "e0", allday=True)
 
         cal = Calendar(Person())
+        directlyProvides(cal, IContainmentRoot)
         cal.addEvent(event)
 
         request = TestRequest()
@@ -3419,6 +3440,7 @@ def doctest_getEvents_booking():
 
         >>> person = Person(u"frog")
         >>> calendar = ISchoolToolCalendar(person)
+        >>> directlyProvides(calendar, IContainmentRoot)
         >>> resource = Resource(u"mud")
 
         >>> event = createEvent('2005-02-26 19:39', '1h', 'code')
@@ -3639,6 +3661,7 @@ class TestDailyCalendarView(unittest.TestCase):
         ev3 = createEvent('2004-08-12 14:00', '2h', "ev3")
         ev4 = createEvent('2004-08-11 14:00', '3d', "ev4")
         cal = ISchoolToolCalendar(Person())
+        directlyProvides(cal, IContainmentRoot)
         for e in [ev1, ev2, ev3, ev4]:
             cal.addEvent(e)
         view = DailyCalendarView(cal, TestRequest())
@@ -3659,6 +3682,7 @@ class TestDailyCalendarView(unittest.TestCase):
         ev3 = createEvent('2004-08-12 14:00', '2h', "ev3")
         ev4 = createEvent('2004-08-11 14:00', '3d', "ev4")
         cal = ISchoolToolCalendar(Person())
+        directlyProvides(cal, IContainmentRoot)
         for e in [ev1, ev2, ev3, ev4]:
             cal.addEvent(e)
         view = DailyCalendarView(cal, TestRequest())
@@ -3694,6 +3718,7 @@ class TestDailyCalendarView(unittest.TestCase):
 
         person = Person(title="Da Boss")
         cal = ISchoolToolCalendar(person)
+        directlyProvides(cal, IContainmentRoot)
         view = DailyCalendarView(cal, TestRequest())
         view.cursor = date(2004, 8, 12)
 
@@ -3759,6 +3784,7 @@ class TestDailyCalendarView(unittest.TestCase):
 
         person = Person(title="Da Boss")
         cal = ISchoolToolCalendar(person)
+        directlyProvides(cal, IContainmentRoot)
         view = DailyCalendarView(cal, TestRequest())
         view.cursor = date(2004, 8, 12)
         view.calendarRows = lambda evs: iter([
@@ -3791,6 +3817,7 @@ class TestDailyCalendarView(unittest.TestCase):
 
         person = Person(title="Da Boss")
         cal = ISchoolToolCalendar(person)
+        directlyProvides(cal, IContainmentRoot)
         def createView():
             view = DailyCalendarView(cal, TestRequest())
             view.cursor = date(2004, 8, 12)
@@ -3910,6 +3937,7 @@ class TestDailyCalendarView(unittest.TestCase):
 
         person = Person(title="Da Boss")
         cal = ISchoolToolCalendar(person)
+        directlyProvides(cal, IContainmentRoot)
         view = DailyCalendarView(cal, TestRequest())
         view.cursor = date(2004, 8, 12)
         view.starthour = 0
@@ -3929,6 +3957,7 @@ class TestDailyCalendarView(unittest.TestCase):
         # Some setup.
         person = Person(title="Da Boss")
         cal = ISchoolToolCalendar(person)
+        directlyProvides(cal, IContainmentRoot)
         view = DailyCalendarView(cal, TestRequest())
         view.cursor = date(2004, 1, 1)
         view._getCurrentTime = lambda: utc.localize(datetime(2004, 1, 1, 13, 0))
@@ -3956,6 +3985,7 @@ class TestDailyCalendarView(unittest.TestCase):
         # Some setup.
         person = Person(title="Da Boss")
         cal = ISchoolToolCalendar(person)
+        directlyProvides(cal, IContainmentRoot)
         view = DailyCalendarView(cal, TestRequest())
         view.cursor = date(2004, 8, 12)
 
@@ -4132,7 +4162,8 @@ class TestDailyCalendarView(unittest.TestCase):
             >>> from schooltool.app.browser.cal import DailyCalendarView
             >>> from schooltool.app.cal import Calendar
             >>> from schooltool.person.person import Person
-            >>> cal = Calendar(Person())
+            >>> person = app['persons']['ignas'] = Person(u'Ignas')
+            >>> cal = Calendar(person)
             >>> cal.addEvent(createEvent('2005-02-20 16:00', '1h',
             ...      'A Birthday', allday=True))
             >>> cal.addEvent(createEvent('2005-02-20 16:00', '1h', 'walk'))

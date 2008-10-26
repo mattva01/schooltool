@@ -338,8 +338,11 @@
       <input type="hidden" tal:condition="request/cancel_url|nothing"
              tal:attributes="value request/cancel_url"
              name="cancel_url" />
+      <input type="hidden" tal:condition="request/back_url|nothing"
+             tal:attributes="value request/back_url"
+             name="back_url" />
     </fieldset>
-          
+
     <div class="resources" tal:condition="view/show_book_link">
       <fieldset>
         <legend i18n:translate="">Booked Resources</legend>
@@ -349,7 +352,7 @@
             <th align="left">Type</th>
           </tr>
           <tal:loop repeat="resource context/resources">
-            <tr>        
+            <tr>
               <td>
                 <p tal:replace="resource/title">resource title</p>
               </td>
@@ -358,16 +361,16 @@
               </td>
             </tr>
           </tal:loop>
-        </table>          
-        
+        </table>
+
         <p tal:condition="not:context/resources">No Resources Booked</p>
         <br />
-        
+
         <a tal:attributes="href string:${context/@@absolute_url}/booking.html"
            i18n:translate="">Book resources</a>
       </fieldset>
-    </div>        
-    
+    </div>
+
     <div class="controls">
       <input type="submit" class="button-ok" name="UPDATE_SUBMIT"
              tal:attributes="value view/submit_button_title"

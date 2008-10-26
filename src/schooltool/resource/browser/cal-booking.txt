@@ -174,7 +174,7 @@ Frog should see the event in the resource calendar too:
     >>> print frog.contents
     <BLANKLINE>
     ...
-    <a href="http://localhost/persons/frog/calendar/ZHVtbXktdWlk/edit.html?date=2005-02-04"
+    <a href="http://localhost/persons/frog/calendar/ZHVtbXktdWlk/edit.html?date=2005-02-04&amp;back_url=http%3A//localhost/resources/fish/calendar&amp;cancel_url=http%3A//localhost/resources/fish/calendar"
        title="Test event">
       Test event
       <span class="start-end">
@@ -490,7 +490,7 @@ Stork should still be able to see his calendar:
     <BLANKLINE>
     ...
     <h6 ...>
-      <a href="http://localhost/persons/stork/calendar/c21hcnRpZS11aWQ%3D/edit.html?date=2005-08-07"
+      <a href="http://localhost/persons/stork/calendar/c21hcnRpZS11aWQ%3D/edit.html?date=2005-08-07&amp;back_url=http%3A//localhost/persons/stork/calendar&amp;cancel_url=http%3A//localhost/persons/stork/calendar"
          title="Mud bath">
         Mud bath
       ...

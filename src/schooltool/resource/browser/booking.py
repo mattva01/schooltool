@@ -105,21 +105,34 @@ class CalendarEventBookOneResourceView(BrowserView):
             cal.addEvent(event)
 
         if event:
-            for res_id, resource in app["resources"].items():
-                if res_id == self.request['resource_id']:
-                    resource_calendar = ISchoolToolCalendar(resource)
-                    if not canAccess(resource_calendar, "addEvent"):
-                        raise Unauthorized("You don't have the right to"
-                                           " book this resource!")
-                    event.bookResource(resource)
+            resource = app["resources"].get(self.request['resource_id'])
+            if resource is not None:
+                resource_calendar = ISchoolToolCalendar(resource)
+                if not canAccess(resource_calendar, "addEvent"):
+                    raise Unauthorized("You don't have the right to"
+                                       " book this resource!")
+                event.bookResource(resource)
         self.request.response.redirect(self.nextURL(event))
 
     def nextURL(self, event):
         """Return the URL to be displayed after the add operation."""
         calURL = absoluteURL(event.__parent__, self.request)
-        cancel_url = calURL+'/delete.html?event_id=%s&date=%s&DELETE=Delete' % (
-            event.unique_id,
-            event.dtstart.strftime("%Y-%m-%d"))
-        url = "%s/edit.html?cancel_url=%s" % (absoluteURL(event, self.request),
-                                              urllib.quote(cancel_url))
+
+        back_url = ''
+        app = ISchoolToolApplication(None)
+        resource = app["resources"].get(self.request['resource_id'])
+        if resource is not None:
+            back_url = urllib.quote(absoluteURL(
+                ISchoolToolCalendar(resource), self.request))
+
+        cancel_url = (
+            calURL + '/delete.html' +
+            '?event_id=%s' % event.unique_id +
+            '&date=%s' % event.dtstart.strftime("%Y-%m-%d") +
+            '&back_url=%s' % back_url +
+            '&DELETE=Delete')
+        url = "%s/edit.html?back_url=%s&cancel_url=%s" % (
+            absoluteURL(event, self.request),
+            back_url,
+            urllib.quote(cancel_url))
         return url
