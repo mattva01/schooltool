@@ -73,6 +73,10 @@ class IEventForDisplay(ICalendarEvent):
         several overlaid calendars.
         """)
 
+    parent_view_link = TextLine(
+        title=u"View link",
+        description=u"""Link to the view which displays this event""")
+
     color1 = TextLine(
         title=u"Color used for display (1)",
         description=u"""

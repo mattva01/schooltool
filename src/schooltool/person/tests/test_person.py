@@ -180,10 +180,6 @@ def doctest_PersonPreferences():
 
         >>> prefs.cal_periods
         True
-        >>> prefs.timezone
-        'UTC'
-        >>> prefs.weekstart
-        0
 
     Need to have prefs.__parent__ refer to the person it's attached to:
 

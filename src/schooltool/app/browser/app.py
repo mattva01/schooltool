@@ -67,7 +67,11 @@ class ApplicationView(BrowserView):
         if prefs.frontPageCalendar:
             url = absoluteURL(ISchoolToolCalendar(self.context),
                               self.request)
-            self.request.response.redirect(url)
+        else:
+            url = absoluteURL(self.context,
+                              self.request) + '/auth/@@login.html'
+        self.request.response.redirect(url)
+
 
 
 class BaseAddView(AddView):

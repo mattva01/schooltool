@@ -29,25 +29,40 @@ import calendar
 from datetime import datetime, date, timedelta
 
 from zope.testing import doctest
+from zope.interface import implements
 from zope.publisher.browser import TestRequest
 from zope.app.testing import setup, ztapi
 from zope.publisher.browser import BrowserView
+from zope.annotation.interfaces import IAttributeAnnotatable
 
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.cal import CalendarEvent
 from schooltool.app.browser.pdfcal import PDFCalendarViewBase
 from schooltool.app.browser.pdfcal import setUpMSTTCoreFonts
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.person.person import Person
-from schooltool.person.interfaces import IPerson
-from schooltool.person.interfaces import IPersonPreferences
 from schooltool.resource.resource import Resource
 from schooltool.testing import setup as sbsetup
+from schooltool.app.app import getApplicationPreferences
+
+
+class ApplicationStub(object):
+    implements(ISchoolToolApplication, IAttributeAnnotatable)
+    def __init__(self):
+        pass
 
 
 def pdfSetUp(test=None):
     setup.placefulSetUp()
     sbsetup.setUpCalendaring()
+    app = ApplicationStub()
+    ztapi.provideAdapter(None, ISchoolToolApplication,
+                         lambda x: app)
+    ztapi.provideAdapter(ISchoolToolApplication,
+                         IApplicationPreferences,
+                         getApplicationPreferences)
 
 
 def pdfTearDown(test=None):
@@ -103,13 +118,8 @@ def doctest_PDFCalendarViewBase_getTimezone():
 
     We need some extra setup here:
 
-        >>> from schooltool.person.interfaces import IPerson
-        >>> from schooltool.person.interfaces import IPersonPreferences
-        >>> from schooltool.person.preference import getPersonPreferences
         >>> from schooltool.app.interfaces import ISchoolToolCalendar
         >>> setup.setUpAnnotations()
-        >>> ztapi.provideAdapter(IPerson, IPersonPreferences,
-        ...                      getPersonPreferences)
 
         >>> request = TestRequest(form={'date': '2005-07-08'})
         >>> person = Person(title="Mr. Smith")
@@ -117,10 +127,8 @@ def doctest_PDFCalendarViewBase_getTimezone():
         >>> view.getTimezone()
         <UTC>
 
-        >>> from schooltool.app.browser.tests.test_cal import PrincipalStub
-        >>> principal = PrincipalStub()
-        >>> IPersonPreferences(IPerson(principal)).timezone = "Europe/Vilnius"
-        >>> request.setPrincipal(principal)
+        >>> app = ISchoolToolApplication(None)
+        >>> IApplicationPreferences(app).timezone = "Europe/Vilnius"
 
         >>> from pytz import timezone
         >>> view.getTimezone() == timezone('Europe/Vilnius')
@@ -319,22 +327,15 @@ def doctest_PDFCalendarViewBase_dayEvents_timezone():
 
     First' let's someone setup the user a timezone:
 
-        >>> from schooltool.person.interfaces import IPerson
-        >>> from schooltool.person.interfaces import IPersonPreferences
-        >>> from schooltool.person.preference import getPersonPreferences
         >>> from schooltool.app.interfaces import ISchoolToolCalendar
         >>> setup.setUpAnnotations()
-        >>> ztapi.provideAdapter(IPerson, IPersonPreferences,
-        ...                      getPersonPreferences)
-        >>> from schooltool.app.browser.tests.test_cal import PrincipalStub
-        >>> principal = PrincipalStub()
-        >>> IPersonPreferences(IPerson(principal)).timezone = "Europe/Vilnius"
+        >>> app = ISchoolToolApplication(None)
+        >>> IApplicationPreferences(app).timezone = "Europe/Vilnius"
 
     Let's create a calendar and a view:
 
         >>> calendar = ISchoolToolCalendar(Person(title="Mr. Smith"))
         >>> request = TestRequest()
-        >>> request.setPrincipal(principal)
         >>> view = StubbedBaseView(calendar, request)
 
     Let's add several edge-case events to the user's calendar:
@@ -373,20 +374,13 @@ def doctest_PDFCalendarViewBase_dayEvents_timezone():
 def doctest_PDFCalendarViewBase_buildEventTable():
     """Tests for buildEventTable.
 
-        >>> from schooltool.person.interfaces import IPerson
-        >>> from schooltool.person.interfaces import IPersonPreferences
-        >>> from schooltool.person.preference import getPersonPreferences
         >>> from schooltool.app.interfaces import ISchoolToolCalendar
         >>> setup.setUpAnnotations()
-        >>> ztapi.provideAdapter(IPerson, IPersonPreferences,
-        ...                      getPersonPreferences)
-        >>> from schooltool.app.browser.tests.test_cal import PrincipalStub
-        >>> principal = PrincipalStub()
-        >>> IPersonPreferences(IPerson(principal)).timezone = "Europe/Vilnius"
+        >>> app = ISchoolToolApplication(None)
+        >>> IApplicationPreferences(app).timezone = "Europe/Vilnius"
 
         >>> calendar = ISchoolToolCalendar(Person(title="Mr. Smith"))
         >>> request = TestRequest(form={'date': '2005-07-08'})
-        >>> request.setPrincipal(principal)
         >>> view = StubbedBaseView(calendar, request)
         >>> view.configureStyles()
 

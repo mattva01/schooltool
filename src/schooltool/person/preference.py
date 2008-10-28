@@ -42,10 +42,6 @@ class PersonPreferences(Persistent):
     __name__ = 'preferences'
     __parent__ = None
 
-    timezone = "UTC"
-    dateformat = "%Y-%m-%d"
-    timeformat = "%H:%M"
-    weekstart = calendar.MONDAY
     # XXX: Only available in schooltool, but that's okay for now.
     cal_periods = True
     cal_public = False
