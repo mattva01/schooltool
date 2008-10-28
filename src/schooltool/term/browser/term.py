@@ -341,7 +341,7 @@ WidgetValidatorDiscriminators(
 class TermRenderer(object):
     """Helper for rendering ITerms."""
 
-    first_day_of_week = 0 # Monday  TODO: get from IPersonPreferences
+    first_day_of_week = 0 # Monday  TODO: get from IApplicationPreferences
 
     def __init__(self, term):
         self.term = term

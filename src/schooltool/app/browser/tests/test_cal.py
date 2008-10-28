@@ -38,6 +38,7 @@ from zope.publisher.browser import BrowserView
 from zope.traversing.interfaces import IContainmentRoot
 from zope.session.interfaces import ISession
 from zope.publisher.interfaces.http import IHTTPRequest
+from zope.annotation.interfaces import IAttributeAnnotatable
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common import parse_datetime
@@ -49,6 +50,8 @@ from schooltool.term.interfaces import ITermContainer
 from schooltool.term.tests import setUpDateManagerStub
 from schooltool.testing.util import NiceDiffsMixin
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
+from schooltool.app.interfaces import IApplicationPreferences
+from schooltool.app.app import getApplicationPreferences
 
 # Used in defining CalendarEventAddTestView
 from schooltool.app.browser.cal import CalendarEventAddView
@@ -69,8 +72,6 @@ from schooltool.testing import setup as sbsetup
 # XXX: Bad, it depends on the person package.
 from schooltool.person.person import Person, PersonContainer
 from schooltool.person.interfaces import IPerson
-from schooltool.person.preference import getPersonPreferences
-from schooltool.person.interfaces import IPersonPreferences
 
 # Used when registering CalendarProvider subscribers/stubs
 from schooltool.app.browser.cal import CalendarListSubscriber
@@ -92,8 +93,8 @@ def dt(timestr):
 
 
 class ApplicationStub(object):
-    implements(ISchoolToolApplication, IContainmentRoot)
-    def __init__(self, context):
+    implements(ISchoolToolApplication, IAttributeAnnotatable, IContainmentRoot)
+    def __init__(self):
         pass
 
 
@@ -103,9 +104,9 @@ def setUp(test=None):
     sbsetup.setUpCalendaring()
     sbsetup.setUpSessions()
     setUpDateManagerStub(test_today)
-
-    ztapi.provideAdapter(Interface, ISchoolToolApplication,
-                         ApplicationStub)
+    app = ApplicationStub()
+    ztapi.provideAdapter(None, ISchoolToolApplication,
+                         lambda x: app)
 
 
 class EventStub(object):
@@ -779,9 +780,11 @@ class TestCalendarViewBase(unittest.TestCase):
         registerCalendarHelperViews()
         registerCalendarSubscribers()
 
-        # Usually registered for IHavePreferences
-        ztapi.provideAdapter(IPerson, IPersonPreferences,
-                             getPersonPreferences)
+        ztapi.provideAdapter(ISchoolToolApplication,
+                             IApplicationPreferences,
+                             getApplicationPreferences)
+        app = ApplicationStub()
+        ztapi.provideAdapter(None, ISchoolToolApplication, lambda x: app)
 
         setUpDateManagerStub(self.today)
 
@@ -843,9 +846,9 @@ class TestCalendarViewBase(unittest.TestCase):
     def test_dayTitle(self):
         from schooltool.app.browser.cal import CalendarViewBase
 
-        # Usually registered for IHavePreferences
-        ztapi.provideAdapter(IPerson, IPersonPreferences,
-                             getPersonPreferences)
+        ztapi.provideAdapter(ISchoolToolApplication,
+                             IApplicationPreferences,
+                             getApplicationPreferences)
 
         from zope.publisher.interfaces import IRequest
         import zope.component
@@ -890,7 +893,6 @@ class TestCalendarViewBase(unittest.TestCase):
         from schooltool.app.cal import Calendar
 
         request = TestRequest()
-        request.setPrincipal(PrincipalStub())
 
         cal = Calendar(None)
         view = CalendarViewBase(cal, request)
@@ -898,7 +900,7 @@ class TestCalendarViewBase(unittest.TestCase):
         self.assertEquals(view.time_fmt, '%H:%M')
 
         # change our preferences
-        prefs = IPersonPreferences(request.principal._person)
+        prefs = IApplicationPreferences(ISchoolToolApplication(None))
         prefs.weekstart = pycalendar.SUNDAY
         prefs.timeformat = "%I:%M %p"
 
@@ -3267,10 +3269,9 @@ def doctest_TestCalendarEventBookingView():
 
         >>> setup.setUpAnnotations()
 
-        # Usually registered for IHavePreferences
-        >>> ztapi.provideAdapter(IPerson, IPersonPreferences,
-        ...                      getPersonPreferences)
-        >>> request.setPrincipal(person)
+        >>> ztapi.provideAdapter(ISchoolToolApplication,
+        ...                      IApplicationPreferences,
+        ...                      getApplicationPreferences)
         >>> view = CalendarEventBookingView(event, request)
         >>> view.getAvailableItemsContainer = stubItemsContainer
         >>> view.filter = lambda list: list
@@ -3288,7 +3289,7 @@ def doctest_TestCalendarEventBookingView():
     new view.  Note that we need to create a new view because 'start' and 'end'
     are set in __init__:
 
-        >>> prefs = IPersonPreferences(person)
+        >>> prefs = IApplicationPreferences(ISchoolToolApplication(None))
         >>> prefs.timeformat = '%I:%M %p'
         >>> prefs.dateformat = '%d %B, %Y'
         >>> view = CalendarEventBookingView(event, request)
@@ -5005,13 +5006,6 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
         # when there is no principal - the default timezone should be
         # returned
         self.assertEquals(view.getPersonTimezone(), timezone('UTC'))
-
-        # but when there is one, we should return his prefered timezone
-        request.setPrincipal(self.person)
-        prefs = IPersonPreferences(self.person)
-        prefs.timezone = 'Europe/Vilnius'
-
-        self.assertEquals(view.getPersonTimezone(), timezone('Europe/Vilnius'))
 
 
 def doctest_CalendarListSubscriber(self):
