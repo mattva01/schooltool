@@ -22,6 +22,7 @@ Views for school years and school year container implementation
 from zope.viewlet.viewlet import ViewletBase
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.component import adapts
+from zope.security import checkPermission
 from zope.schema import Date, TextLine
 from zope.interface import implements
 from zope.interface import Interface
@@ -328,4 +329,6 @@ class ActiveSchoolYears(ViewletBase):
 
     def nextSchoolYear(self):
         """Return the next school year."""
-        return ISchoolYearContainer(ISchoolToolApplication(None)).getNextSchoolYear()
+        syc = ISchoolYearContainer(ISchoolToolApplication(None))
+        if checkPermission("schooltool.edit", syc):
+            return syc.getNextSchoolYear()
