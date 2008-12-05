@@ -192,13 +192,6 @@ class TestDailyTimetableCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
         # returned
         self.assertEquals(view.getPersonTimezone(), timezone('UTC'))
 
-        # but when there is one, we should return his prefered timezone
-        request.setPrincipal(self.person)
-        prefs = IPersonPreferences(self.person)
-        prefs.timezone = 'Europe/Vilnius'
-
-        self.assertEquals(view.getPersonTimezone(), timezone('Europe/Vilnius'))
-
     def test_getPeriods(self):
         from schooltool.timetable.browser.cal import DailyTimetableCalendarRowsView
 

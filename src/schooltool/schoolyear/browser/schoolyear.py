@@ -24,6 +24,7 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.component import adapts
 from zope.security import checkPermission
 from zope.schema import Date, TextLine
+from zope.interface.exceptions import Invalid
 from zope.interface import implements
 from zope.interface import Interface
 from zope.traversing.browser.absoluteurl import AbsoluteURL
@@ -34,6 +35,7 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from z3c.form import form, field, button
 from z3c.form.util import getSpecification
+from z3c.form.validator import NoInputData
 from z3c.form.validator import WidgetsValidatorDiscriminators
 from z3c.form.validator import InvariantsValidator
 from z3c.form.error import ErrorViewSnippet
@@ -235,11 +237,16 @@ class AddSchoolYearOverlapValidator(InvariantsValidator):
 
     def validateObject(self, obj):
         errors = super(AddSchoolYearOverlapValidator, self).validateObject(obj)
-        dr = DateRange(obj.first, obj.last)
         try:
-            validateScholYearsForOverlap(self.view.context, dr, None)
-        except SchoolYearOverlapError, e:
-            errors += (e, )
+            dr = DateRange(obj.first, obj.last)
+            try:
+                validateScholYearsForOverlap(self.view.context, dr, None)
+            except SchoolYearOverlapError, e:
+                errors += (e, )
+        except ValueError, e:
+            errors += (Invalid(_("School year must begin before it ends.")), )
+        except NoInputData:
+            return errors
         return errors
 
 WidgetsValidatorDiscriminators(
@@ -252,16 +259,21 @@ class EditSchoolYearValidator(InvariantsValidator):
 
     def validateObject(self, obj):
         errors = super(EditSchoolYearValidator, self).validateObject(obj)
-        dr = DateRange(obj.first, obj.last)
         try:
-            validateScholYearsForOverlap(self.view.context.__parent__, dr, self.view.context)
-        except SchoolYearOverlapError, e:
-            errors += (e, )
+            dr = DateRange(obj.first, obj.last)
+            try:
+                validateScholYearsForOverlap(self.view.context.__parent__, dr, self.view.context)
+            except SchoolYearOverlapError, e:
+                errors += (e, )
 
-        try:
-            validateScholYearForOverflow(dr, self.view.context)
-        except TermOverflowError, e:
-            errors += (e, )
+            try:
+                validateScholYearForOverflow(dr, self.view.context)
+            except TermOverflowError, e:
+                errors += (e, )
+        except ValueError, e:
+            errors += (Invalid(_("School year must begin before it ends.")), )
+        except NoInputData:
+            return errors
         return errors
 
 WidgetsValidatorDiscriminators(

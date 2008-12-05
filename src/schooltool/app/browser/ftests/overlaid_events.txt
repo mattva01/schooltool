@@ -1,0 +1,237 @@
+Functional doctest for overlaid event edition and deletion
+==========================================================
+
+This test checks that redirects work correctly when editing and
+deleting events in overlaid calendars.
+
+Setup
+-----
+
+    >>> manager = Browser('manager', 'schooltool')
+
+Let's create a teacher:
+
+    >>> from schooltool.app.browser.ftests.setup import addPerson, setUpBasicSchool
+    >>> setUpBasicSchool()
+    >>> addPerson('Teacher', 'teacher', 'pwd')
+    >>> teacher = Browser('teacher', 'pwd')
+
+Now lets create a resource that can be booked:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Resources').click()
+
+    >>> manager.getLink('New Resource').click()
+    >>> manager.getControl('Title').value = 'Mug'
+    >>> manager.getControl('Add').click()
+
+Allow teacher to manage Mug.
+
+    >>> manager.getLink("Resource", index=2).click()
+    >>> manager.getLink('Mug').click()
+    >>> manager.getLink('Edit Leaders').click()
+    >>> manager.getControl('Teacher').click()
+    >>> manager.getControl('Add').click()
+    >>> manager.getControl('OK').click()
+
+Create several events in Mug's calendar.
+
+    >>> manager.getLink('View Calendar').click()
+    >>> manager.getLink('New Event').click()
+    >>> manager.getControl('Title').value = 'Mugging'
+    >>> manager.getControl('Time').value = '08:00'
+    >>> manager.getControl('Add').click()
+
+    >>> manager.getLink('New Event').click()
+    >>> manager.getControl('Title').value = 'Tea time'
+    >>> manager.getControl('Time').value = '12:00'
+    >>> manager.getControl('Add').click()
+
+Add another event on teachers calendar.
+
+    >>> teacher.getLink('Calendar').click()
+    >>> teacher.getLink('New Event').click()
+    >>> teacher.getControl('Title').value = 'Teaching'
+    >>> teacher.getControl('Time').value = '09:00'
+    >>> teacher.getControl('Add').click()
+
+Test event edition
+------------------
+
+And overlay the teacher's calendar with one of the resources.
+
+    >>> teacher.getControl(name='OVERLAY_MORE').click()
+    >>> teacher.getControl(name='resources:list').value = ['mug']
+    >>> teacher.getControl('Apply').click()
+
+Teacher can see all three events.
+
+    >>> print teacher.contents
+    <BLANKLINE>
+    ...
+    <a ... title="Mugging">
+      Mugging
+      <span class="start-end">
+        (<span>08:00</span>
+          - <span>09:00</span>)
+      </span>
+    </a>
+    ...
+    <a ... title="Teaching">
+      Teaching
+      <span class="start-end">
+        (<span>09:00</span>
+          - <span>10:00</span>)
+      </span>
+    </a>
+    ...
+    <a ... title="Tea time">
+      Tea time
+      <span class="start-end">
+        (<span>12:00</span>
+          - <span>13:00</span>)
+      </span>
+    </a>
+    ...
+
+After editing the events teacher is returned to the overlaid calendar.
+
+    >>> teacher.getLink('Mugging').click()
+    >>> teacher.getControl('Update', index=1).click()
+    >>> print teacher.contents
+    <BLANKLINE>
+    ...
+    <title> Calendar for Teacher ... </title>
+    ...
+
+    >>> teacher.getLink('Mugging').click()
+    >>> teacher.getControl('Cancel').click()
+    >>> print teacher.contents
+    <BLANKLINE>
+    ...
+    <title> Calendar for Teacher ... </title>
+    ...
+
+    >>> teacher.getLink('Teaching').click()
+    >>> teacher.getControl('Update', index=1).click()
+    >>> print teacher.contents
+    <BLANKLINE>
+    ...
+    <title> Calendar for Teacher ... </title>
+    ...
+
+    >>> teacher.getLink('Teaching').click()
+    >>> teacher.getControl('Cancel').click()
+    >>> print teacher.contents
+    <BLANKLINE>
+    ...
+    <title> Calendar for Teacher ... </title>
+    ...
+
+If the teacher edits the Mugging event from Mug's calendar, he is
+returned to the Mug's calendar.
+
+    >>> teacher.getLink(url='mug/calendar').click()
+    >>> print teacher.contents
+    <BLANKLINE>
+    ...
+    <title> Calendar for Mug ... </title>
+    ...
+
+    >>> teacher.getLink('Mugging').click()
+    >>> teacher.getControl('Update', index=1).click()
+    >>> print teacher.contents
+    <BLANKLINE>
+    ...
+    <title> Calendar for Mug ... </title>
+    ...
+
+    >>> teacher.getLink('Mugging').click()
+    >>> teacher.getControl('Cancel').click()
+    >>> print teacher.contents
+    <BLANKLINE>
+    ...
+    <title> Calendar for Mug ... </title>
+    ...
+
+Test event deletion
+-------------------
+
+Same goes for the event deletion.
+
+    >>> teacher.getLink('Calendar').click()
+    >>> print teacher.contents
+    <BLANKLINE>
+    ...
+    <title> Calendar for Teacher ... </title>
+    ...
+
+    >>> teacher.getLink(url='calendar/delete', index=0).click()
+    >>> print teacher.contents
+    <BLANKLINE>
+    ...
+    Deleting an event (Mugging)
+    ...
+
+    >>> teacher.getControl('Cancel').click()
+    >>> print teacher.contents
+    <BLANKLINE>
+    ...
+    <title> Calendar for Teacher ... </title>
+    ...
+
+    >>> teacher.getLink(url='calendar/delete', index=0).click()
+    >>> teacher.getControl('Delete').click()
+    >>> print teacher.contents
+    <BLANKLINE>
+    ...
+    <title> Calendar for Teacher ... </title>
+    ...
+
+    >>> teacher.getLink(url='calendar/delete', index=0).click()
+    >>> print teacher.contents
+    <BLANKLINE>
+    ...
+    Deleting an event (Teaching)
+    ...
+
+    >>> teacher.getControl('Cancel').click()
+    >>> print teacher.contents
+    <BLANKLINE>
+    ...
+    <title> Calendar for Teacher ... </title>
+    ...
+
+    >>> teacher.getLink(url='calendar/delete', index=0).click()
+    >>> teacher.getControl('Delete').click()
+    >>> print teacher.contents
+    <BLANKLINE>
+    ...
+    <title> Calendar for Teacher ... </title>
+    ...
+
+Event deletion in Mug's calendar returns to the Mug's calendar.
+
+    >>> teacher.getLink(url='mug/calendar').click()
+    >>> teacher.getLink(url='calendar/delete', index=0).click()
+    >>> print teacher.contents
+    <BLANKLINE>
+    ...
+    Deleting an event (Tea time)
+    ...
+
+    >>> teacher.getControl('Cancel').click()
+    >>> print teacher.contents
+    <BLANKLINE>
+    ...
+    <title> Calendar for Mug ... </title>
+    ...
+
+    >>> teacher.getLink(url='calendar/delete', index=0).click()
+    >>> teacher.getControl('Delete').click()
+    >>> print teacher.contents
+    <BLANKLINE>
+    ...
+    <title> Calendar for Mug ... </title>
+    ...
+

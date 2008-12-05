@@ -7,10 +7,10 @@ Regression test for broken weekly recurrence in far-off-UTC timezones
     >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
     >>> manager.open('http://localhost/')
 
-Let's go to the user preferences view:
+Let's go to the app preferences view:
 
-    >>> manager.getLink("SchoolTool Manager").click()
-    >>> manager.getLink("Edit Preferences").click()
+    >>> manager.getLink("Manage").click()
+    >>> manager.getLink("Change Site Preferences").click()
 
 Let's set the timezone to Australia:
 

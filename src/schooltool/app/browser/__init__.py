@@ -40,7 +40,7 @@ from pytz import timezone
 
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.interfaces import IApplicationPreferences
-from schooltool.app.app import getSchoolToolApplication
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonPreferences
 
@@ -73,7 +73,7 @@ class SchoolToolAPI(object):
             </a>
 
         """
-        return getSchoolToolApplication()
+        return ISchoolToolApplication(None)
     app = property(app)
 
     def person(self):
@@ -268,15 +268,11 @@ class ViewPreferences(object):
     """Preference class to attach to views."""
 
     def __init__(self, request):
-        person = IPerson(request.principal, None)
-        if person is not None:
-            prefs = IPersonPreferences(person)
-        else:
-            try:
-                app = getSchoolToolApplication()
-                prefs = IApplicationPreferences(app)
-            except (ValueError, TypeError):
-                prefs = None
+        try:
+            app = ISchoolToolApplication(None)
+            prefs = IApplicationPreferences(app)
+        except (ValueError, TypeError):
+            prefs = None
 
         if prefs is not None:
             self.dateformat = prefs.dateformat
