@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <page
+     name="import.html"
+     for="schooltool.app.interfaces.ISchoolToolApplication"
+     template="templates/import.pt"
+     class=".simporter.MegaImporter"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="Excel Import" />
+
+</configure>

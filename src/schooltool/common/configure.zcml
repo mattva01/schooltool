@@ -121,6 +121,7 @@
   <include package="schooltool.term" />
   <include package="schooltool.schoolyear" />
   <include package="schooltool.securitypolicy.browser" />
+  <include package="schooltool.export" />
 
   <adapter
       for="zope.interface.Interface
