@@ -192,6 +192,8 @@ class SchoolTimetableImporter(object):
         return row
 
     def import_school_timetables(self, wb):
+        if 'School Timetables' not in wb.sheet_names():
+            return
         sh = wb.sheet_by_name('School Timetables')
 
         for row in range(0, sh.nrows):
@@ -230,6 +232,8 @@ class MegaImporter(BrowserView, SchoolTimetableImporter):
         return datetime.datetime(*dt).date()
 
     def import_school_years(self, wb):
+        if 'School Years' not in wb.sheet_names():
+            return
         sh = wb.sheet_by_name('School Years')
 
         for row in range(1, sh.nrows):
@@ -255,6 +259,8 @@ class MegaImporter(BrowserView, SchoolTimetableImporter):
         sy[term.__name__] = term
 
     def import_terms(self, wb):
+        if 'Terms' not in wb.sheet_names():
+            return
         sh = wb.sheet_by_name('Terms')
 
         for row in range(1, sh.nrows):
@@ -312,6 +318,8 @@ class MegaImporter(BrowserView, SchoolTimetableImporter):
             rc[resource.__name__] = resource
 
     def import_resources(self, wb):
+        if 'Resources' not in wb.sheet_names():
+            return
         sh = wb.sheet_by_name('Resources')
 
         for row in range(1, sh.nrows):
@@ -331,6 +339,8 @@ class MegaImporter(BrowserView, SchoolTimetableImporter):
         person.phone = data['phone']
         person.birth_date = data['birth_date']
         person.gender = data['gender']
+        if data['password']:
+            person.setPassword(data['password'])
         return person
 
     def addPerson(self, person, data):
@@ -343,10 +353,14 @@ class MegaImporter(BrowserView, SchoolTimetableImporter):
             person.phone = data['phone']
             person.birth_date = data['birth_date']
             person.gender = data['gender']
+            if data['password']:
+                person.setPassword(data['password'])
         else:
             pc[person.username] = person
 
     def import_persons(self, wb):
+        if 'Persons' not in wb.sheet_names():
+            return
         sh = wb.sheet_by_name('Persons')
 
         for row in range(1, sh.nrows):
@@ -360,6 +374,7 @@ class MegaImporter(BrowserView, SchoolTimetableImporter):
             data['phone'] = sh.cell_value(rowx=row, colx=4)
             data['birth_date'] = self.getDateFromCell(wb, sh, row, 5, default=None)
             data['gender'] = sh.cell_value(rowx=row, colx=6)
+            data['password'] = sh.cell_value(rowx=row, colx=7)
             person = self.createPerson(data)
             self.addPerson(person, data)
 
@@ -376,6 +391,8 @@ class MegaImporter(BrowserView, SchoolTimetableImporter):
         cc[course.__name__] = course
 
     def import_courses(self, wb):
+        if 'Courses' not in wb.sheet_names():
+            return
         sh = wb.sheet_by_name('Courses')
 
         for row in range(1, sh.nrows):
@@ -497,6 +514,8 @@ class MegaImporter(BrowserView, SchoolTimetableImporter):
         return row
 
     def import_sections(self, wb):
+        if 'Sections' not in wb.sheet_names():
+            return
         sh = wb.sheet_by_name('Sections')
 
         for row in range(0, sh.nrows):
@@ -546,6 +565,8 @@ class MegaImporter(BrowserView, SchoolTimetableImporter):
         return row
 
     def import_groups(self, wb):
+        if 'Groups' not in wb.sheet_names():
+            return
         sh = wb.sheet_by_name('Groups')
 
         for row in range(0, sh.nrows):
