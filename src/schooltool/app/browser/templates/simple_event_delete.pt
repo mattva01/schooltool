@@ -23,6 +23,8 @@
            tal:attributes="value request/event_id" />
     <input type="hidden" name="date"
            tal:attributes="value request/date" />
+    <input type="hidden" name="back_url"
+           tal:attributes="value request/back_url|nothing" />
 
     </fieldset>
 

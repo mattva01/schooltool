@@ -270,9 +270,10 @@ class EventForDisplay(object):
     cssClass = 'event'  # at the moment no other classes are used
 
     def __init__(self, event, request, color1, color2, source_calendar,
-                 timezone):
+                 timezone, parent_view_link=''):
         self.request = request
         self.source_calendar = source_calendar
+        self.parent_view_link = parent_view_link
         if canAccess(source_calendar, '__iter__'):
             # Due to limitations in the default Zope 3 security
             # policy, a calendar event inherits permissions from the
@@ -345,9 +346,15 @@ class EventForDisplay(object):
         """
         if self.context.__parent__ is None:
             return None
-        return '%s/edit.html?date=%s' % (
-                        absoluteURL(self.context, self.request),
-                        self.dtstarttz.strftime('%Y-%m-%d'))
+
+        url = '%s/edit.html?date=%s' % (
+            absoluteURL(self.context, self.request),
+            self.dtstarttz.strftime('%Y-%m-%d'))
+
+        back_url = urllib.quote(self.parent_view_link)
+        if back_url:
+            url = '%s&back_url=%s&cancel_url=%s' % (url, back_url, back_url)
+        return url
 
     def deleteLink(self):
         """Return the URL where you can delete this event.
@@ -357,10 +364,15 @@ class EventForDisplay(object):
         """
         if self.context.__parent__ is None:
             return None
-        return '%s/delete.html?event_id=%s&date=%s' % (
-                        absoluteURL(self.source_calendar, self.request),
-                        self.unique_id,
-                        self.dtstarttz.strftime('%Y-%m-%d'))
+
+        url = '%s/delete.html?event_id=%s&date=%s' % (
+            absoluteURL(self.source_calendar, self.request),
+            self.unique_id,
+            self.dtstarttz.strftime('%Y-%m-%d'))
+        back_url = urllib.quote(self.parent_view_link)
+        if back_url:
+            url = '%s&back_url=%s' % (url, back_url)
+        return url
 
     def linkAllowed(self):
         """Return the URL where you can view/edit this event.
@@ -670,6 +682,7 @@ class CalendarViewBase(BrowserView):
         `start_dt` and `end_dt` (datetime objects) are bounds (half-open) for
         the result.
         """
+        view_link = absoluteURL(self.context, self.request)
         for calendar, color1, color2 in self.getCalendars():
             for event in calendar.expand(start_dt, end_dt):
                 if (same(event.__parent__, self.context) and
@@ -682,7 +695,8 @@ class CalendarViewBase(BrowserView):
                     # could compare them.
                     continue
                 yield EventForDisplay(event, self.request, color1, color2,
-                                      calendar, self.timezone)
+                                      calendar, self.timezone,
+                                      parent_view_link=view_link)
 
     def getDays(self, start, end):
         """Get a list of CalendarDay objects for a selected period of time.
@@ -1580,8 +1594,9 @@ class EventDeleteView(BrowserView):
 
     def _redirectBack(self):
         """Redirect to the current calendar's daily view."""
-        url = absoluteURL(self.context, self.request)
-        self.request.response.redirect(url)
+        self.request.response.redirect(
+            self.request.get('back_url') or
+            absoluteURL(self.context, self.request))
 
     def _deleteRepeatingEvent(self, event, date):
         """Delete a repeating event."""
@@ -2248,10 +2263,11 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
         """Return the URL to be displayed after the add operation."""
         if "field.book" in self.request:
             return absoluteURL(self.context, self.request) + '/booking.html'
-        elif 'CANCEL' in self.request and self.request.get('cancel_url', None):
-            return self.request['cancel_url']
+        elif 'CANCEL' in self.request and self.request.get('cancel_url'):
+            return self.request.get('cancel_url')
         else:
-            return absoluteURL(self.context.__parent__, self.request)
+            return (self.request.get('back_url') or
+                    absoluteURL(self.context.__parent__, self.request))
 
 
 class EventForBookingDisplay(object):

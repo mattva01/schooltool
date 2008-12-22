@@ -198,7 +198,7 @@ class ICalendarDisplayPreferences(zope.interface.Interface):
                                (calendar.MONDAY, _("Monday"))]))
 
 
-class IPersonPreferences(ICalendarDisplayPreferences):
+class IPersonPreferences(zope.interface.Interface):
     """Preferences stored in an annotation on a person."""
 
     __parent__ = zope.interface.Attribute(

@@ -162,7 +162,7 @@ class PersonAddView(form.AddForm):
         self.context[name] = person
         # Add the persons to his class
         if person.gradeclass is not None:
-            groups = ISchoolToolApplication(None)['groups']
+            groups = IGroupContainer(ISchoolToolApplication(None))
             person.groups.add(groups[person.gradeclass])
         return person
 

@@ -38,6 +38,7 @@ from zope.publisher.browser import BrowserView
 from zope.traversing.interfaces import IContainmentRoot
 from zope.session.interfaces import ISession
 from zope.publisher.interfaces.http import IHTTPRequest
+from zope.annotation.interfaces import IAttributeAnnotatable
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common import parse_datetime
@@ -49,6 +50,8 @@ from schooltool.term.interfaces import ITermContainer
 from schooltool.term.tests import setUpDateManagerStub
 from schooltool.testing.util import NiceDiffsMixin
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
+from schooltool.app.interfaces import IApplicationPreferences
+from schooltool.app.app import getApplicationPreferences
 
 # Used in defining CalendarEventAddTestView
 from schooltool.app.browser.cal import CalendarEventAddView
@@ -69,8 +72,6 @@ from schooltool.testing import setup as sbsetup
 # XXX: Bad, it depends on the person package.
 from schooltool.person.person import Person, PersonContainer
 from schooltool.person.interfaces import IPerson
-from schooltool.person.preference import getPersonPreferences
-from schooltool.person.interfaces import IPersonPreferences
 
 # Used when registering CalendarProvider subscribers/stubs
 from schooltool.app.browser.cal import CalendarListSubscriber
@@ -92,8 +93,8 @@ def dt(timestr):
 
 
 class ApplicationStub(object):
-    implements(ISchoolToolApplication, IContainmentRoot)
-    def __init__(self, context):
+    implements(ISchoolToolApplication, IAttributeAnnotatable, IContainmentRoot)
+    def __init__(self):
         pass
 
 
@@ -103,9 +104,9 @@ def setUp(test=None):
     sbsetup.setUpCalendaring()
     sbsetup.setUpSessions()
     setUpDateManagerStub(test_today)
-
-    ztapi.provideAdapter(Interface, ISchoolToolApplication,
-                         ApplicationStub)
+    app = ApplicationStub()
+    ztapi.provideAdapter(None, ISchoolToolApplication,
+                         lambda x: app)
 
 
 class EventStub(object):
@@ -529,6 +530,14 @@ def doctest_EventForDisplay_editLink():
         >>> print e.editLink()
         http://127.0.0.1/calendar/eHl6enk%3D/edit.html?date=2005-09-27
 
+    A back-link may be specified.
+
+        >>> e = EventForDisplay(event, request, color1, color2, calendar,
+        ...                     timezone('Asia/Tokyo'),
+        ...                     parent_view_link='http://foo/bar.html')
+        >>> print e.editLink()
+        http://127.0.0.1/calendar/eHl6enk%3D/edit.html?date=2005-09-27&back_url=http%3A//foo/bar.html&cancel_url=http%3A//foo/bar.html
+
     """
 
 
@@ -563,6 +572,14 @@ def doctest_EventForDisplay_deleteLink():
         ...                     timezone('Asia/Tokyo'))
         >>> print e.deleteLink()
         http://127.0.0.1/calendar/delete.html?event_id=xyzzy&date=2005-12-13
+
+    A back-link may be specified.
+
+        >>> e = EventForDisplay(event, request, color1, color2, calendar,
+        ...                     timezone('Asia/Tokyo'),
+        ...                     parent_view_link='http://foo/bar.html')
+        >>> print e.deleteLink()
+        http://127.0.0.1/calendar/delete.html?event_id=xyzzy&date=2005-12-13&back_url=http%3A//foo/bar.html
 
     """
 
@@ -763,9 +780,11 @@ class TestCalendarViewBase(unittest.TestCase):
         registerCalendarHelperViews()
         registerCalendarSubscribers()
 
-        # Usually registered for IHavePreferences
-        ztapi.provideAdapter(IPerson, IPersonPreferences,
-                             getPersonPreferences)
+        ztapi.provideAdapter(ISchoolToolApplication,
+                             IApplicationPreferences,
+                             getApplicationPreferences)
+        app = ApplicationStub()
+        ztapi.provideAdapter(None, ISchoolToolApplication, lambda x: app)
 
         setUpDateManagerStub(self.today)
 
@@ -827,9 +846,9 @@ class TestCalendarViewBase(unittest.TestCase):
     def test_dayTitle(self):
         from schooltool.app.browser.cal import CalendarViewBase
 
-        # Usually registered for IHavePreferences
-        ztapi.provideAdapter(IPerson, IPersonPreferences,
-                             getPersonPreferences)
+        ztapi.provideAdapter(ISchoolToolApplication,
+                             IApplicationPreferences,
+                             getApplicationPreferences)
 
         from zope.publisher.interfaces import IRequest
         import zope.component
@@ -874,7 +893,6 @@ class TestCalendarViewBase(unittest.TestCase):
         from schooltool.app.cal import Calendar
 
         request = TestRequest()
-        request.setPrincipal(PrincipalStub())
 
         cal = Calendar(None)
         view = CalendarViewBase(cal, request)
@@ -882,7 +900,7 @@ class TestCalendarViewBase(unittest.TestCase):
         self.assertEquals(view.time_fmt, '%H:%M')
 
         # change our preferences
-        prefs = IPersonPreferences(request.principal._person)
+        prefs = IApplicationPreferences(ISchoolToolApplication(None))
         prefs.weekstart = pycalendar.SUNDAY
         prefs.timeformat = "%I:%M %p"
 
@@ -1118,7 +1136,8 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> sbsetup.setUpTimetabling()
             >>> setUpDateManagerStub(date(2005, 5, 13))
 
-            >>> calendar = Calendar(Person())
+            >>> person = app['persons']['ignas'] = Person(u'Ignas')
+            >>> calendar = Calendar(person)
             >>> vb = CalendarViewBase(calendar, TestRequest())
 
         Pigeonholer returns an empty list if the interval list is empty:
@@ -1258,7 +1277,8 @@ class TestCalendarViewBase(unittest.TestCase):
 
             >>> from schooltool.app.browser.cal import CalendarViewBase
             >>> from schooltool.app.cal import Calendar
-            >>> cal1 = Calendar(Person())
+            >>> person = app['persons']['ignas'] = Person(u'Ignas')
+            >>> cal1 = Calendar(person)
             >>> cal1.addEvent(createEvent('2005-02-26 19:39', '1h', 'code'))
             >>> cal1.addEvent(createEvent('2005-02-20 16:00', '1h', 'walk'))
             >>> view = CalendarViewBase(cal1, TestRequest())
@@ -1369,6 +1389,7 @@ class TestCalendarViewBase(unittest.TestCase):
         e8 = createEvent('2004-08-15 00:00', '0sec', "e8")
 
         cal = Calendar(Person())
+        directlyProvides(cal, IContainmentRoot)
         for e in [e0, e2, e3, e4, e5, e6, e7, e8]:
             cal.addEvent(e)
 
@@ -1414,6 +1435,7 @@ class TestCalendarViewBase(unittest.TestCase):
         e4 = createEvent('2004-08-12 02:00', '1h', "e4")
 
         cal = Calendar(Person())
+        directlyProvides(cal, IContainmentRoot)
         for e in [e0, e1, e2, e3, e4]:
             cal.addEvent(e)
 
@@ -1482,6 +1504,7 @@ class TestCalendarViewBase(unittest.TestCase):
         event = createEvent('2004-08-10', "1d", "e0", allday=True)
 
         cal = Calendar(Person())
+        directlyProvides(cal, IContainmentRoot)
         cal.addEvent(event)
 
         request = TestRequest()
@@ -3246,10 +3269,9 @@ def doctest_TestCalendarEventBookingView():
 
         >>> setup.setUpAnnotations()
 
-        # Usually registered for IHavePreferences
-        >>> ztapi.provideAdapter(IPerson, IPersonPreferences,
-        ...                      getPersonPreferences)
-        >>> request.setPrincipal(person)
+        >>> ztapi.provideAdapter(ISchoolToolApplication,
+        ...                      IApplicationPreferences,
+        ...                      getApplicationPreferences)
         >>> view = CalendarEventBookingView(event, request)
         >>> view.getAvailableItemsContainer = stubItemsContainer
         >>> view.filter = lambda list: list
@@ -3267,7 +3289,7 @@ def doctest_TestCalendarEventBookingView():
     new view.  Note that we need to create a new view because 'start' and 'end'
     are set in __init__:
 
-        >>> prefs = IPersonPreferences(person)
+        >>> prefs = IApplicationPreferences(ISchoolToolApplication(None))
         >>> prefs.timeformat = '%I:%M %p'
         >>> prefs.dateformat = '%d %B, %Y'
         >>> view = CalendarEventBookingView(event, request)
@@ -3419,6 +3441,7 @@ def doctest_getEvents_booking():
 
         >>> person = Person(u"frog")
         >>> calendar = ISchoolToolCalendar(person)
+        >>> directlyProvides(calendar, IContainmentRoot)
         >>> resource = Resource(u"mud")
 
         >>> event = createEvent('2005-02-26 19:39', '1h', 'code')
@@ -3639,6 +3662,7 @@ class TestDailyCalendarView(unittest.TestCase):
         ev3 = createEvent('2004-08-12 14:00', '2h', "ev3")
         ev4 = createEvent('2004-08-11 14:00', '3d', "ev4")
         cal = ISchoolToolCalendar(Person())
+        directlyProvides(cal, IContainmentRoot)
         for e in [ev1, ev2, ev3, ev4]:
             cal.addEvent(e)
         view = DailyCalendarView(cal, TestRequest())
@@ -3659,6 +3683,7 @@ class TestDailyCalendarView(unittest.TestCase):
         ev3 = createEvent('2004-08-12 14:00', '2h', "ev3")
         ev4 = createEvent('2004-08-11 14:00', '3d', "ev4")
         cal = ISchoolToolCalendar(Person())
+        directlyProvides(cal, IContainmentRoot)
         for e in [ev1, ev2, ev3, ev4]:
             cal.addEvent(e)
         view = DailyCalendarView(cal, TestRequest())
@@ -3694,6 +3719,7 @@ class TestDailyCalendarView(unittest.TestCase):
 
         person = Person(title="Da Boss")
         cal = ISchoolToolCalendar(person)
+        directlyProvides(cal, IContainmentRoot)
         view = DailyCalendarView(cal, TestRequest())
         view.cursor = date(2004, 8, 12)
 
@@ -3759,6 +3785,7 @@ class TestDailyCalendarView(unittest.TestCase):
 
         person = Person(title="Da Boss")
         cal = ISchoolToolCalendar(person)
+        directlyProvides(cal, IContainmentRoot)
         view = DailyCalendarView(cal, TestRequest())
         view.cursor = date(2004, 8, 12)
         view.calendarRows = lambda evs: iter([
@@ -3791,6 +3818,7 @@ class TestDailyCalendarView(unittest.TestCase):
 
         person = Person(title="Da Boss")
         cal = ISchoolToolCalendar(person)
+        directlyProvides(cal, IContainmentRoot)
         def createView():
             view = DailyCalendarView(cal, TestRequest())
             view.cursor = date(2004, 8, 12)
@@ -3910,6 +3938,7 @@ class TestDailyCalendarView(unittest.TestCase):
 
         person = Person(title="Da Boss")
         cal = ISchoolToolCalendar(person)
+        directlyProvides(cal, IContainmentRoot)
         view = DailyCalendarView(cal, TestRequest())
         view.cursor = date(2004, 8, 12)
         view.starthour = 0
@@ -3929,6 +3958,7 @@ class TestDailyCalendarView(unittest.TestCase):
         # Some setup.
         person = Person(title="Da Boss")
         cal = ISchoolToolCalendar(person)
+        directlyProvides(cal, IContainmentRoot)
         view = DailyCalendarView(cal, TestRequest())
         view.cursor = date(2004, 1, 1)
         view._getCurrentTime = lambda: utc.localize(datetime(2004, 1, 1, 13, 0))
@@ -3956,6 +3986,7 @@ class TestDailyCalendarView(unittest.TestCase):
         # Some setup.
         person = Person(title="Da Boss")
         cal = ISchoolToolCalendar(person)
+        directlyProvides(cal, IContainmentRoot)
         view = DailyCalendarView(cal, TestRequest())
         view.cursor = date(2004, 8, 12)
 
@@ -4132,7 +4163,8 @@ class TestDailyCalendarView(unittest.TestCase):
             >>> from schooltool.app.browser.cal import DailyCalendarView
             >>> from schooltool.app.cal import Calendar
             >>> from schooltool.person.person import Person
-            >>> cal = Calendar(Person())
+            >>> person = app['persons']['ignas'] = Person(u'Ignas')
+            >>> cal = Calendar(person)
             >>> cal.addEvent(createEvent('2005-02-20 16:00', '1h',
             ...      'A Birthday', allday=True))
             >>> cal.addEvent(createEvent('2005-02-20 16:00', '1h', 'walk'))
@@ -4974,13 +5006,6 @@ class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
         # when there is no principal - the default timezone should be
         # returned
         self.assertEquals(view.getPersonTimezone(), timezone('UTC'))
-
-        # but when there is one, we should return his prefered timezone
-        request.setPrincipal(self.person)
-        prefs = IPersonPreferences(self.person)
-        prefs.timezone = 'Europe/Vilnius'
-
-        self.assertEquals(view.getPersonTimezone(), timezone('Europe/Vilnius'))
 
 
 def doctest_CalendarListSubscriber(self):

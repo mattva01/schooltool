@@ -79,8 +79,8 @@ and a term
 
     >>> manager.getLink('Add a new term').click()
     >>> manager.getControl('Title').value = 'Term 1'
-    >>> manager.getControl('Start date').value = '2007-07-01'
-    >>> manager.getControl('End date').value = '2007-12-15'
+    >>> manager.getControl('Start date').value = '07/07/01'
+    >>> manager.getControl('End date').value = '07/12/15'
     >>> manager.getControl('Next').click()
     >>> manager.getControl('Saturday').click()
     >>> manager.getControl('Sunday').click()
