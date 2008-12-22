@@ -14,7 +14,7 @@ the teacher and student meet.
 
    >>> from schooltool.app.browser.ftests import setup
    >>> setup.addSchoolYear('2007', '07/01/01', '07/12/31')
-   >>> setup.addTerm('Winter', '2007-01-01', '2007-06-01', schoolyear='2007')
+   >>> setup.addTerm('Winter', '07/01/01', '07/06/01', schoolyear='2007')
    >>> setup.addPerson(u'Teacher', 'teacher', 'pwd', groups=['teachers'])
    >>> setup.addPerson(u'Student', 'student', 'pwd', groups=['students'])
    >>> setup.addCourse('course1', '2007')

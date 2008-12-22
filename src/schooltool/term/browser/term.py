@@ -124,8 +124,8 @@ class TermAddForm(form.AddForm, TermFormBase):
     template = ViewPageTemplateFile('templates/term_add.pt')
 
     fields = field.Fields(ITermForm)
-    fields['first'].widgetFactory = CustomDateFieldTextWidget
-    fields['last'].widgetFactory = CustomDateFieldTextWidget
+#     fields['first'].widgetFactory = CustomDateFieldTextWidget
+#     fields['last'].widgetFactory = CustomDateFieldTextWidget
 
     @property
     def preview_term(self):
@@ -202,8 +202,8 @@ class TermEditForm(form.EditForm, TermFormBase):
     template = ViewPageTemplateFile('templates/term_add.pt')
 
     fields = field.Fields(ITermForm)
-    fields['first'].widgetFactory = CustomDateFieldTextWidget
-    fields['last'].widgetFactory = CustomDateFieldTextWidget
+#     fields['first'].widgetFactory = CustomDateFieldTextWidget
+#     fields['last'].widgetFactory = CustomDateFieldTextWidget
 
     @property
     def preview_term(self):
