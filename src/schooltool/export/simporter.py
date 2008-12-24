@@ -30,7 +30,6 @@ from zope.publisher.browser import BrowserView
 
 from schooltool.resource.resource import Resource
 from schooltool.resource.resource import Location
-from schooltool.resource.interfaces import IResourceContainer
 from schooltool.group.group import Group
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.timetable import TimetableActivity
@@ -60,7 +59,111 @@ from schooltool.common import SchoolToolMessage as _
 
 
 no_date = object()
-class SchoolTimetableImporter(object):
+
+class ImporterBase(object):
+
+    def __init__(self, context, request):
+        self.context, self.request = context, request
+
+    def getDateFromCell(self, wb, sheet, row, col, default=no_date):
+        try:
+            dt = xlrd.xldate_as_tuple(sheet.cell_value(rowx=row, colx=col), wb.datemode)
+        except:
+            if default is not no_date:
+                return default
+            else:
+                self.errors.append("%s%s has no date in it!" % (chr(col + ord('A')), row + 1))
+                return datetime.datetime.utcnow().date()
+        return datetime.datetime(*dt).date()
+
+
+class SchoolYearImporter(ImporterBase):
+
+    def createSchoolYear(self, data):
+        syc = ISchoolYearContainer(self.context)
+        sy = SchoolYear(data['title'], data['first'], data['last'])
+        sy.__name__ = data['__name__']
+        return sy
+
+    def addSchoolYear(self, sy, data):
+        syc = ISchoolYearContainer(self.context)
+        if sy.__name__ is None:
+            sy.__name__ = SimpleNameChooser(syc).chooseName('', sy)
+        syc[sy.__name__] = sy
+
+    def import_school_years(self, wb):
+        if 'School Years' not in wb.sheet_names():
+            return
+        sh = wb.sheet_by_name('School Years')
+
+        for row in range(1, sh.nrows):
+            data = {}
+            data['title'] = sh.cell_value(rowx=row, colx=0)
+            data['__name__'] = sh.cell_value(rowx=row, colx=1)
+            data['first'] = self.getDateFromCell(wb, sh, row, 2)
+            data['last'] = self.getDateFromCell(wb, sh, row, 3)
+            sy = self.createSchoolYear(data)
+            self.addSchoolYear(sy, data)
+
+
+class TermImporter(ImporterBase):
+
+    def createTerm(self, data):
+        term = Term(data['title'], data['first'], data['last'])
+        term.__name__ = data['__name__']
+        term.addWeekdays(*range(7))
+        return term
+
+    def addTerm(self, term, data):
+        syc = ISchoolYearContainer(self.context)
+        sy = syc[data['school_year']]
+        if term.__name__ is None:
+            term.__name__ = SimpleNameChooser(sy).chooseName('', term)
+        sy[term.__name__] = term
+
+    def import_terms(self, wb):
+        if 'Terms' not in wb.sheet_names():
+            return
+        sh = wb.sheet_by_name('Terms')
+
+        for row in range(1, sh.nrows):
+            if sh.cell_value(rowx=row, colx=0) == '':
+                break
+            data = {}
+            data['school_year'] = sh.cell_value(rowx=row, colx=0)
+            data['__name__'] = sh.cell_value(rowx=row, colx=1)
+            data['title'] = sh.cell_value(rowx=row, colx=2)
+            data['first'] = self.getDateFromCell(wb, sh, row, 3)
+            data['last'] = self.getDateFromCell(wb, sh, row, 4)
+
+            term = self.createTerm(data)
+            self.addTerm(term, data)
+
+        row += 1
+        if sh.cell_value(rowx=row, colx=0) == 'Holidays':
+            row += 1
+            for row in range(row + 1, sh.nrows):
+                if sh.cell_value(rowx=row, colx=0) == '':
+                    break
+                holiday_region = DateRange(self.getDateFromCell(wb, sh, row, 0),
+                                           self.getDateFromCell(wb, sh, row, 1))
+                for day in holiday_region:
+                    for sy in ISchoolYearContainer(self.context).values():
+                        for term in sy.values():
+                            if day in term:
+                                term.remove(day)
+
+        row += 1
+        if sh.cell_value(rowx=row, colx=0) == 'Weekends':
+            row += 2
+            for col in range(7):
+                if sh.cell_value(rowx=row, colx=col) != '':
+                    for sy in ISchoolYearContainer(self.context).values():
+                        for term in sy.values():
+                            term.removeWeekdays(col)
+
+
+class SchoolTimetableImporter(ImporterBase):
 
     dows = ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
             'Friday', 'Saturday', 'Sunday']
@@ -201,103 +304,7 @@ class SchoolTimetableImporter(object):
                 row = self.import_school_timetable(sh, row)
 
 
-class MegaImporter(BrowserView, SchoolTimetableImporter):
-
-    def __init__(self, context, request):
-        BrowserView.__init__(self, context, request)
-        self.errors = []
-        self.success = []
-
-    def createSchoolYear(self, data):
-        syc = ISchoolYearContainer(self.context)
-        sy = SchoolYear(data['title'], data['first'], data['last'])
-        sy.__name__ = data['__name__']
-        return sy
-
-    def addSchoolYear(self, sy, data):
-        syc = ISchoolYearContainer(self.context)
-        if sy.__name__ is None:
-            sy.__name__ = SimpleNameChooser(syc).chooseName('', sy)
-        syc[sy.__name__] = sy
-
-    def getDateFromCell(self, wb, sheet, row, col, default=no_date):
-        try:
-            dt = xlrd.xldate_as_tuple(sheet.cell_value(rowx=row, colx=col), wb.datemode)
-        except:
-            if default is not no_date:
-                return default
-            else:
-                self.errors.append("%s%s has no date in it!" % (chr(col + ord('A')), row + 1))
-                return datetime.datetime.utcnow().date()
-        return datetime.datetime(*dt).date()
-
-    def import_school_years(self, wb):
-        if 'School Years' not in wb.sheet_names():
-            return
-        sh = wb.sheet_by_name('School Years')
-
-        for row in range(1, sh.nrows):
-            data = {}
-            data['title'] = sh.cell_value(rowx=row, colx=0)
-            data['__name__'] = sh.cell_value(rowx=row, colx=1)
-            data['first'] = self.getDateFromCell(wb, sh, row, 2)
-            data['last'] = self.getDateFromCell(wb, sh, row, 3)
-            sy = self.createSchoolYear(data)
-            self.addSchoolYear(sy, data)
-
-    def createTerm(self, data):
-        term = Term(data['title'], data['first'], data['last'])
-        term.__name__ = data['__name__']
-        term.addWeekdays(*range(7))
-        return term
-
-    def addTerm(self, term, data):
-        syc = ISchoolYearContainer(self.context)
-        sy = syc[data['school_year']]
-        if term.__name__ is None:
-            term.__name__ = SimpleNameChooser(sy).chooseName('', term)
-        sy[term.__name__] = term
-
-    def import_terms(self, wb):
-        if 'Terms' not in wb.sheet_names():
-            return
-        sh = wb.sheet_by_name('Terms')
-
-        for row in range(1, sh.nrows):
-            if sh.cell_value(rowx=row, colx=0) == '':
-                break
-            data = {}
-            data['school_year'] = sh.cell_value(rowx=row, colx=0)
-            data['__name__'] = sh.cell_value(rowx=row, colx=1)
-            data['title'] = sh.cell_value(rowx=row, colx=2)
-            data['first'] = self.getDateFromCell(wb, sh, row, 3)
-            data['last'] = self.getDateFromCell(wb, sh, row, 4)
-
-            term = self.createTerm(data)
-            self.addTerm(term, data)
-
-        row += 1
-        if sh.cell_value(rowx=row, colx=0) == 'Holidays':
-            row += 1
-            for row in range(row + 1, sh.nrows):
-                if sh.cell_value(rowx=row, colx=0) == '':
-                    break
-                holiday_region = DateRange(self.getDateFromCell(wb, sh, row, 0),
-                                           self.getDateFromCell(wb, sh, row, 1))
-                for day in holiday_region:
-                    for sy in ISchoolYearContainer(self.context).values():
-                        for term in sy.values():
-                            if day in term:
-                                term.remove(day)
-
-        row += 1
-        if sh.cell_value(rowx=row, colx=0) == 'Weekends':
-            row += 2
-            for col in range(7):
-                if sh.cell_value(rowx=row, colx=col) != '':
-                    for sy in ISchoolYearContainer(self.context).values():
-                        for term in sy.values():
-                            term.removeWeekdays(col)
+class ResourceImporter(ImporterBase):
 
     def createResource(self, data):
         res_types = {'Location': Location,
@@ -331,6 +338,9 @@ class MegaImporter(BrowserView, SchoolTimetableImporter):
             data['title'] = sh.cell_value(rowx=row, colx=2)
             resource = self.createResource(data)
             self.addResource(resource, data)
+
+
+class PersonImporter(ImporterBase):
 
     def createPerson(self, data):
         from schooltool.basicperson.person import BasicPerson
@@ -378,6 +388,9 @@ class MegaImporter(BrowserView, SchoolTimetableImporter):
             person = self.createPerson(data)
             self.addPerson(person, data)
 
+
+class CourseImporter(ImporterBase):
+
     def createCourse(self, data):
         course = Course(data['title'], data['description'])
         course.__name__ = data['__name__']
@@ -405,6 +418,9 @@ class MegaImporter(BrowserView, SchoolTimetableImporter):
             data['description'] = sh.cell_value(rowx=row, colx=3)
             course = self.createCourse(data)
             self.addCourse(course, data)
+
+
+class SectionImporter(ImporterBase):
 
     def createSection(self, data):
         syc = ISchoolYearContainer(self.context)
@@ -522,6 +538,9 @@ class MegaImporter(BrowserView, SchoolTimetableImporter):
             if sh.cell_value(rowx=row, colx=0) == 'Section*':
                 row = self.import_section(sh, row)
 
+
+class GroupImporter(ImporterBase):
+
     def createGroup(self, data):
         syc = ISchoolYearContainer(self.context)
         gc = IGroupContainer(syc[data['school_year']])
@@ -573,6 +592,14 @@ class MegaImporter(BrowserView, SchoolTimetableImporter):
             if sh.cell_value(rowx=row, colx=0) == 'Group*':
                 row = self.import_group(sh, row)
 
+
+class MegaImporter(BrowserView):
+
+    def __init__(self, context, request):
+        BrowserView.__init__(self, context, request)
+        self.errors = []
+        self.success = []
+
     def getWorkbook(self):
         xlsfile = self.request.get('xlsfile', '')
         if xlsfile:
@@ -593,14 +620,14 @@ class MegaImporter(BrowserView, SchoolTimetableImporter):
 
         sp = transaction.savepoint(optimistic=True)
 
-        self.import_school_years(wb)
-        self.import_terms(wb)
-        self.import_school_timetables(wb)
-        self.import_resources(wb)
-        self.import_persons(wb)
-        self.import_courses(wb)
-        self.import_sections(wb)
-        self.import_groups(wb)
+        SchoolYearImporter(self.context, self.request).import_school_years(wb)
+        TermImporter(self.context, self.request).import_terms(wb)
+        SchoolTimetableImporter(self.context, self.request).import_school_timetables(wb)
+        ResourceImporter(self.context, self.request).import_resources(wb)
+        PersonImporter(self.context, self.request).import_persons(wb)
+        CourseImporter(self.context, self.request).import_courses(wb)
+        SectionImporter(self.context, self.request).import_sections(wb)
+        GroupImporter(self.context, self.request).import_groups(wb)
 
         if self.errors:
             sp.rollback()
