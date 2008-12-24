@@ -91,7 +91,7 @@ class SchoolYearImporter(ImporterBase):
             sy.__name__ = SimpleNameChooser(syc).chooseName('', sy)
         syc[sy.__name__] = sy
 
-    def import_school_years(self, wb):
+    def process(self, wb):
         if 'School Years' not in wb.sheet_names():
             return
         sh = wb.sheet_by_name('School Years')
@@ -121,7 +121,7 @@ class TermImporter(ImporterBase):
             term.__name__ = SimpleNameChooser(sy).chooseName('', term)
         sy[term.__name__] = term
 
-    def import_terms(self, wb):
+    def process(self, wb):
         if 'Terms' not in wb.sheet_names():
             return
         sh = wb.sheet_by_name('Terms')
@@ -294,7 +294,7 @@ class SchoolTimetableImporter(ImporterBase):
 
         return row
 
-    def import_school_timetables(self, wb):
+    def process(self, wb):
         if 'School Timetables' not in wb.sheet_names():
             return
         sh = wb.sheet_by_name('School Timetables')
@@ -324,7 +324,7 @@ class ResourceImporter(ImporterBase):
                 resource.__name__ = INameChooser(rc).chooseName('', resource)
             rc[resource.__name__] = resource
 
-    def import_resources(self, wb):
+    def process(self, wb):
         if 'Resources' not in wb.sheet_names():
             return
         sh = wb.sheet_by_name('Resources')
@@ -368,7 +368,7 @@ class PersonImporter(ImporterBase):
         else:
             pc[person.username] = person
 
-    def import_persons(self, wb):
+    def process(self, wb):
         if 'Persons' not in wb.sheet_names():
             return
         sh = wb.sheet_by_name('Persons')
@@ -403,7 +403,7 @@ class CourseImporter(ImporterBase):
             course.__name__ = SimpleNameChooser(cc).chooseName('', course)
         cc[course.__name__] = course
 
-    def import_courses(self, wb):
+    def process(self, wb):
         if 'Courses' not in wb.sheet_names():
             return
         sh = wb.sheet_by_name('Courses')
@@ -529,7 +529,7 @@ class SectionImporter(ImporterBase):
 
         return row
 
-    def import_sections(self, wb):
+    def process(self, wb):
         if 'Sections' not in wb.sheet_names():
             return
         sh = wb.sheet_by_name('Sections')
@@ -583,7 +583,7 @@ class GroupImporter(ImporterBase):
                 group.members.add(removeSecurityProxy(member))
         return row
 
-    def import_groups(self, wb):
+    def process(self, wb):
         if 'Groups' not in wb.sheet_names():
             return
         sh = wb.sheet_by_name('Groups')
@@ -620,14 +620,17 @@ class MegaImporter(BrowserView):
 
         sp = transaction.savepoint(optimistic=True)
 
-        SchoolYearImporter(self.context, self.request).import_school_years(wb)
-        TermImporter(self.context, self.request).import_terms(wb)
-        SchoolTimetableImporter(self.context, self.request).import_school_timetables(wb)
-        ResourceImporter(self.context, self.request).import_resources(wb)
-        PersonImporter(self.context, self.request).import_persons(wb)
-        CourseImporter(self.context, self.request).import_courses(wb)
-        SectionImporter(self.context, self.request).import_sections(wb)
-        GroupImporter(self.context, self.request).import_groups(wb)
+        importers = [SchoolYearImporter,
+                     TermImporter,
+                     SchoolTimetableImporter,
+                     ResourceImporter,
+                     PersonImporter,
+                     CourseImporter,
+                     SectionImporter,
+                     GroupImporter]
+
+        for importer in importers:
+            importer(self.context, self.request).process(wb)
 
         if self.errors:
             sp.rollback()
