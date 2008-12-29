@@ -64,20 +64,40 @@ class ImporterBase(object):
 
     def __init__(self, context, request):
         self.context, self.request = context, request
+        self.errors = []
 
-    def getDateFromCell(self, wb, sheet, row, col, default=no_date):
+    def error(self, col, row, message):
+        self.errors.append("%s %s%s %s" % (self.sheet_name,
+                                           chr(col + ord('A')),
+                                           row,
+                                           message))
+
+    def getDateFromCell(self, sheet, row, col, default=no_date):
         try:
-            dt = xlrd.xldate_as_tuple(sheet.cell_value(rowx=row, colx=col), wb.datemode)
+            dt = xlrd.xldate_as_tuple(sheet.cell_value(rowx=row, colx=col), self.wb.datemode)
         except:
             if default is not no_date:
                 return default
             else:
-                self.errors.append("%s%s has no date in it!" % (chr(col + ord('A')), row + 1))
+                self.error(col, row + 1, "has no date in it!")
                 return datetime.datetime.utcnow().date()
         return datetime.datetime(*dt).date()
 
+    @property
+    def sheet(self):
+        if self.sheet_name not in self.wb.sheet_names():
+            return
+        return self.wb.sheet_by_name(self.sheet_name)
+
+    def import_data(self, wb):
+        self.wb = wb
+        if self.sheet:
+            return self.process()
+
 
 class SchoolYearImporter(ImporterBase):
+
+    sheet_name = 'School Years'
 
     def createSchoolYear(self, data):
         syc = ISchoolYearContainer(self.context)
@@ -91,22 +111,21 @@ class SchoolYearImporter(ImporterBase):
             sy.__name__ = SimpleNameChooser(syc).chooseName('', sy)
         syc[sy.__name__] = sy
 
-    def process(self, wb):
-        if 'School Years' not in wb.sheet_names():
-            return
-        sh = wb.sheet_by_name('School Years')
-
+    def process(self):
+        sh = self.sheet
         for row in range(1, sh.nrows):
             data = {}
             data['title'] = sh.cell_value(rowx=row, colx=0)
             data['__name__'] = sh.cell_value(rowx=row, colx=1)
-            data['first'] = self.getDateFromCell(wb, sh, row, 2)
-            data['last'] = self.getDateFromCell(wb, sh, row, 3)
+            data['first'] = self.getDateFromCell(sh, row, 2)
+            data['last'] = self.getDateFromCell(sh, row, 3)
             sy = self.createSchoolYear(data)
             self.addSchoolYear(sy, data)
 
 
 class TermImporter(ImporterBase):
+
+    sheet_name = 'Terms'
 
     def createTerm(self, data):
         term = Term(data['title'], data['first'], data['last'])
@@ -121,10 +140,8 @@ class TermImporter(ImporterBase):
             term.__name__ = SimpleNameChooser(sy).chooseName('', term)
         sy[term.__name__] = term
 
-    def process(self, wb):
-        if 'Terms' not in wb.sheet_names():
-            return
-        sh = wb.sheet_by_name('Terms')
+    def process(self):
+        sh = self.sheet
 
         for row in range(1, sh.nrows):
             if sh.cell_value(rowx=row, colx=0) == '':
@@ -133,8 +150,8 @@ class TermImporter(ImporterBase):
             data['school_year'] = sh.cell_value(rowx=row, colx=0)
             data['__name__'] = sh.cell_value(rowx=row, colx=1)
             data['title'] = sh.cell_value(rowx=row, colx=2)
-            data['first'] = self.getDateFromCell(wb, sh, row, 3)
-            data['last'] = self.getDateFromCell(wb, sh, row, 4)
+            data['first'] = self.getDateFromCell(sh, row, 3)
+            data['last'] = self.getDateFromCell(sh, row, 4)
 
             term = self.createTerm(data)
             self.addTerm(term, data)
@@ -145,8 +162,8 @@ class TermImporter(ImporterBase):
             for row in range(row + 1, sh.nrows):
                 if sh.cell_value(rowx=row, colx=0) == '':
                     break
-                holiday_region = DateRange(self.getDateFromCell(wb, sh, row, 0),
-                                           self.getDateFromCell(wb, sh, row, 1))
+                holiday_region = DateRange(self.getDateFromCell(sh, row, 0),
+                                           self.getDateFromCell(sh, row, 1))
                 for day in holiday_region:
                     for sy in ISchoolYearContainer(self.context).values():
                         for term in sy.values():
@@ -164,6 +181,8 @@ class TermImporter(ImporterBase):
 
 
 class SchoolTimetableImporter(ImporterBase):
+
+    sheet_name = 'School Timetables'
 
     dows = ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
             'Friday', 'Saturday', 'Sunday']
@@ -294,17 +313,16 @@ class SchoolTimetableImporter(ImporterBase):
 
         return row
 
-    def process(self, wb):
-        if 'School Timetables' not in wb.sheet_names():
-            return
-        sh = wb.sheet_by_name('School Timetables')
-
+    def process(self):
+        sh = self.sheet
         for row in range(0, sh.nrows):
             if sh.cell_value(rowx=row, colx=0) == 'School Timetable':
                 row = self.import_school_timetable(sh, row)
 
 
 class ResourceImporter(ImporterBase):
+
+    sheet_name = 'Resources'
 
     def createResource(self, data):
         res_types = {'Location': Location,
@@ -324,11 +342,8 @@ class ResourceImporter(ImporterBase):
                 resource.__name__ = INameChooser(rc).chooseName('', resource)
             rc[resource.__name__] = resource
 
-    def process(self, wb):
-        if 'Resources' not in wb.sheet_names():
-            return
-        sh = wb.sheet_by_name('Resources')
-
+    def process(self):
+        sh = self.sheet
         for row in range(1, sh.nrows):
             if sh.cell_value(rowx=row, colx=0) == '':
                 break
@@ -341,6 +356,8 @@ class ResourceImporter(ImporterBase):
 
 
 class PersonImporter(ImporterBase):
+
+    sheet_name = 'Persons'
 
     def createPerson(self, data):
         from schooltool.basicperson.person import BasicPerson
@@ -368,11 +385,8 @@ class PersonImporter(ImporterBase):
         else:
             pc[person.username] = person
 
-    def process(self, wb):
-        if 'Persons' not in wb.sheet_names():
-            return
-        sh = wb.sheet_by_name('Persons')
-
+    def process(self):
+        sh = self.sheet
         for row in range(1, sh.nrows):
             if sh.cell_value(rowx=row, colx=0) == '':
                 break
@@ -382,7 +396,7 @@ class PersonImporter(ImporterBase):
             data['last_name'] = sh.cell_value(rowx=row, colx=2)
             data['email'] = sh.cell_value(rowx=row, colx=3)
             data['phone'] = sh.cell_value(rowx=row, colx=4)
-            data['birth_date'] = self.getDateFromCell(wb, sh, row, 5, default=None)
+            data['birth_date'] = self.getDateFromCell(sh, row, 5, default=None)
             data['gender'] = sh.cell_value(rowx=row, colx=6)
             data['password'] = sh.cell_value(rowx=row, colx=7)
             person = self.createPerson(data)
@@ -390,6 +404,8 @@ class PersonImporter(ImporterBase):
 
 
 class CourseImporter(ImporterBase):
+
+    sheet_name = 'Courses'
 
     def createCourse(self, data):
         course = Course(data['title'], data['description'])
@@ -403,11 +419,8 @@ class CourseImporter(ImporterBase):
             course.__name__ = SimpleNameChooser(cc).chooseName('', course)
         cc[course.__name__] = course
 
-    def process(self, wb):
-        if 'Courses' not in wb.sheet_names():
-            return
-        sh = wb.sheet_by_name('Courses')
-
+    def process(self):
+        sh = self.sheet
         for row in range(1, sh.nrows):
             if sh.cell_value(rowx=row, colx=0) == '':
                 break
@@ -421,6 +434,8 @@ class CourseImporter(ImporterBase):
 
 
 class SectionImporter(ImporterBase):
+
+    sheet_name = 'Sections'
 
     def createSection(self, data):
         syc = ISchoolYearContainer(self.context)
@@ -529,17 +544,16 @@ class SectionImporter(ImporterBase):
 
         return row
 
-    def process(self, wb):
-        if 'Sections' not in wb.sheet_names():
-            return
-        sh = wb.sheet_by_name('Sections')
-
+    def process(self):
+        sh = self.sheet
         for row in range(0, sh.nrows):
             if sh.cell_value(rowx=row, colx=0) == 'Section*':
                 row = self.import_section(sh, row)
 
 
 class GroupImporter(ImporterBase):
+
+    sheet_name = 'Groups'
 
     def createGroup(self, data):
         syc = ISchoolYearContainer(self.context)
@@ -583,11 +597,8 @@ class GroupImporter(ImporterBase):
                 group.members.add(removeSecurityProxy(member))
         return row
 
-    def process(self, wb):
-        if 'Groups' not in wb.sheet_names():
-            return
-        sh = wb.sheet_by_name('Groups')
-
+    def process(self):
+        sh = self.sheet
         for row in range(0, sh.nrows):
             if sh.cell_value(rowx=row, colx=0) == 'Group*':
                 row = self.import_group(sh, row)
@@ -630,7 +641,9 @@ class MegaImporter(BrowserView):
                      GroupImporter]
 
         for importer in importers:
-            importer(self.context, self.request).process(wb)
+            imp = importer(self.context, self.request)
+            imp.import_data(wb)
+            self.errors.extend(imp.errors)
 
         if self.errors:
             sp.rollback()
