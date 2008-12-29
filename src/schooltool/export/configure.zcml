@@ -7,7 +7,7 @@
      name="import.html"
      for="schooltool.app.interfaces.ISchoolToolApplication"
      template="templates/import.pt"
-     class=".simporter.MegaImporter"
+     class=".importer.MegaImporter"
      permission="schooltool.edit"
      menu="schooltool_actions" title="Excel Import" />
 
