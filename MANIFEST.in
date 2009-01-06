@@ -13,5 +13,7 @@ recursive-include src *.conf_tmpl
 recursive-include src *.ini
 recursive-include src *.conf
 recursive-include src *.xml
+recursive-include src *.xpdl
+recursive-include src *.ics
 include version.txt
 include version.txt.in
