@@ -114,11 +114,11 @@ Tests for timetable event blocks in weekly calendar view
 First to test how timetable events are displayed in the weekly calendar view,
 we need more courses and sections
 
-    >>> setup.addCourse('English 6', '2005-2006', 'English for the sixth class', 'english6')
+    >>> setup.addCourse('English 6', '2005-2006', 'English for the sixth class')
     >>> setup.addSection('English 6', '2005-2006', '2005 Fall')
-    >>> setup.addCourse('Math 6', '2005-2006', 'Math for the sixth class', 'math6')
+    >>> setup.addCourse('Math 6', '2005-2006', 'Math for the sixth class')
     >>> setup.addSection('Math 6', '2005-2006', '2005 Fall')
-    >>> setup.addCourse('Science 6', '2005-2006', 'Science for the sixth class', 'science6')
+    >>> setup.addCourse('Science 6', '2005-2006', 'Science for the sixth class')
     >>> setup.addSection('Science 6', '2005-2006', '2005 Fall')
 
 

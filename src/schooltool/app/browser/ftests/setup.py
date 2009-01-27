@@ -80,7 +80,7 @@ def addResource(title):
     manager.getLink('Resource', index=2).click()
     assert title in manager.contents
 
-def addCourse(title, schoolyear, description="", identifier=""):
+def addCourse(title, schoolyear, description=""):
     """Add a course."""
     manager = logInManager()
     manager.getLink('Manage').click()
@@ -90,7 +90,6 @@ def addCourse(title, schoolyear, description="", identifier=""):
     manager.getLink('New Course').click()
     manager.getControl('Title').value = title
     manager.getControl('Description').value = description
-    manager.getControl('Identifier').value = identifier
     manager.getControl('Add').click()
 
 def addSection(course, schoolyear, term, title=None, instructors=[], members=[]):
@@ -227,7 +226,7 @@ def setUpTimetabling(username):
     manager.open('http://localhost/schoolyears/2005-2006/courses')
     manager.getLink('New Course').click()
 
-    addCourse('History 6', '2005-2006', 'History for the sixth class', 'history6')
+    addCourse('History 6', '2005-2006', 'History for the sixth class')
 
     # And a section:
     addSection('History 6', '2005-2006', '2005 Fall')
