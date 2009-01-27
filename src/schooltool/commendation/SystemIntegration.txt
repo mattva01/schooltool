@@ -234,7 +234,7 @@ Now that we are locked in, we have to create
 
 - a course,
 
-  >>> setup.addCourse('Math 101', '2007', 'Basic Math', 'math101')
+  >>> setup.addCourse('Math 101', '2007', 'Basic Math')
 
 - and a section.
 

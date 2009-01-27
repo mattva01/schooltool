@@ -45,17 +45,6 @@
         <div class="label">Extra bottom</div>
         <div class="field"><input type="text" style="width:100%" /></div>
       </div>
-
-      <div class="row">
-        <div class="label">
-          <label for="add_name" i18n:translate="">Identifier
-            (optional)
-          </label>
-        </div>
-        <div class="field">
-          <input id="add_name" type="text" name="add_input_name"
-                 tal:attributes="value context/contentName" />
-        </div>
     </fieldset>
     <div class="controls">
       <tal:block metal:use-macro="view/@@standard_macros/add-button" />

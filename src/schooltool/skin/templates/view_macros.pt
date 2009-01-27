@@ -187,7 +187,7 @@
 </metal:block>
 
 <metal:block define-macro="delete-button">
-  <input type="submit" class="button-ok" name="DELETE" value="Delete"
+  <input type="submit" class="button-cancel" name="DELETE" value="Delete"
          title="Shortcut: Alt-D" accesskey="D"
          i18n:attributes="value delete-button; accesskey" />
 </metal:block>
