@@ -15,6 +15,9 @@ src/schoolbell/locales/ne/LC_MESSAGES/*.mo
 src/schoolbell/locales/pt/LC_MESSAGES/*.mo
 src/schooltool/commendation/locales/ne/LC_MESSAGES/*.mo
 src/schooltool/commendation/locales/pt/LC_MESSAGES/*.mo
+src/schooltool/generations/tests/Data27.fs.index
+src/schooltool/generations/tests/Data27.fs.lock
+src/schooltool/generations/tests/Data27.fs.tmp
 src/schooltool/locales/af/LC_MESSAGES/*.mo
 src/schooltool/locales/am/LC_MESSAGES/*.mo
 src/schooltool/locales/an/LC_MESSAGES/*.mo
