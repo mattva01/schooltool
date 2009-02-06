@@ -28,11 +28,11 @@
         </p>
 
         <p i18n:translate="">
-          The first row of the file must contain the name of the
-          <strong>term</strong> and the <strong>timetable schema</strong> which
-          will be used for the new timetables.  The second row should be empty.
-          After that, several section descriptions may follow.  They are
-          separated by an empty line.
+          The first row of the file must contain the id of the 
+          <strong>timetable schema</strong> which will be used for the new 
+          timetables.  The second row should be empty.  After that, 
+          several section descriptions may follow.  They are separated by 
+          an extra carriage return (i.e., a blank line).
         </p>
 
         <p i18n:translate="">
@@ -49,7 +49,7 @@
         <p i18n:translate="">Example:</p>
 
 <pre i18n:translate="">
-"2005-fall","three-day"
+"three-day"
 "","",""
 "philosophy","lorch"
 "Monday","A"
