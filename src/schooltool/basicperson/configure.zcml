@@ -41,9 +41,6 @@
   <adapter
       factory=".advisor.PersonAdvisorAdapter" />
 
-  <adapter
-      factory=".advisor.PersonStudentAdapter" />
-
   <utility
      factory=".vocabularies.gradeClassVocabularyFactory"
      provides="zope.schema.interfaces.IVocabularyFactory"

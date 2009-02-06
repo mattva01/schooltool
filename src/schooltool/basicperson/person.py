@@ -41,7 +41,6 @@ from schooltool.relationship.interfaces import IRelationshipLinks
 
 from schooltool.basicperson.advisor import Advising, URIAdvisor, URIAdvising, URIStudent
 from schooltool.basicperson.interfaces import IAdvisor
-from schooltool.basicperson.interfaces import IStudent
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.common import SchoolToolMessage as _
 
@@ -52,8 +51,11 @@ PERSON_CATALOG_KEY = 'schooltool.basicperson'
 class BasicPerson(Person):
     implements(IBasicPerson)
 
+    prefix = None
+    middle_name = None
+    suffix = None
+    preferred_name = None
     gender = None
-    gradeclass = None
     birth_date = None
 
     def __init__(self, username, first_name, last_name,

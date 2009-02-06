@@ -32,7 +32,6 @@ from schooltool.relationship.interfaces import IRelationshipLinks
 
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.basicperson.interfaces import IAdvisor
-from schooltool.basicperson.interfaces import IStudent
 
 
 URIAdvising = URIObject('http://schooltool.org/ns/advising',
@@ -64,27 +63,4 @@ class PersonAdvisorAdapter(object):
 
     def removeStudent(self, student):
         Advising.unlink(student=student, advisor=self.context)
-
-
-class PersonStudentAdapter(object):
-    adapts(IBasicPerson)
-    implements(IStudent)
-
-    def __init__(self, context):
-        self.context = removeSecurityProxy(context)
-
-    def getAdvisor(self):
-        relationships = IRelationshipLinks(self.context)
-        advisors = list(relationships.getTargetsByRole(URIAdvisor, URIAdvising))
-        assert len(advisors) < 2
-        advisors.append(None)
-        return advisors[0]
-
-    def setAdvisor(self, advisor):
-        old_advisor = self.getAdvisor()
-        if old_advisor:
-            IAdvisor(old_advisor).removeStudent(self.context)
-        IAdvisor(advisor).addStudent(self.context)
-
-    advisor = property(getAdvisor, setAdvisor)
 

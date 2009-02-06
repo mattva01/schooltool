@@ -31,8 +31,7 @@ from zope.exceptions.interfaces import UserError
 from z3c.form import form, field, button, validator
 from zope.interface import implements
 from zope.publisher.browser import BrowserView
-from zope.schema import Password
-from zope.schema import TextLine
+from zope.schema import Password, TextLine, Choice
 from zope.schema.interfaces import ITitledTokenizedTerm
 from zope.traversing.browser.absoluteurl import absoluteURL
 
@@ -42,7 +41,7 @@ from schooltool.group.interfaces import IGroupContainer
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPersonFactory
 
-from schooltool.basicperson.interfaces import IBasicPerson, IStudent
+from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.common import SchoolToolMessage as _
 
 
@@ -117,7 +116,7 @@ class PersonAddView(form.AddForm):
     label = _("Add new person")
     template = ViewPageTemplateFile('templates/person_add.pt')
 
-    fields = field.Fields(IPersonAddForm) + field.Fields(IStudent)
+    fields = field.Fields(IPersonAddForm)
 
     def updateActions(self):
         super(PersonAddView, self).updateActions()
@@ -160,10 +159,6 @@ class PersonAddView(form.AddForm):
         """
         name = person.username
         self.context[name] = person
-        # Add the persons to his class
-        if person.gradeclass is not None:
-            groups = IGroupContainer(ISchoolToolApplication(None))
-            person.groups.add(groups[person.gradeclass])
         return person
 
     @button.buttonAndHandler(_("Cancel"))
@@ -177,7 +172,7 @@ class PersonEditView(form.EditForm):
     form.extends(form.EditForm)
     template = ViewPageTemplateFile('templates/person_add.pt')
 
-    fields = field.Fields(IBasicPerson) + field.Fields(IStudent)
+    fields = field.Fields(IBasicPerson)
 
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
