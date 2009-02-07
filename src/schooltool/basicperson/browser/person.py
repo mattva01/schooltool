@@ -56,6 +56,11 @@ class PersonView(BrowserView):
 
 class IPersonAddForm(IBasicPerson):
 
+    advisor = Choice(
+        title=_(u"Advisor"),
+        source="schooltool.basicperson.advisor_source",
+        required=False)
+
     username = TextLine(
         title=_("Username"),
         description=_("Username"),
@@ -142,7 +147,10 @@ class PersonAddView(form.AddForm):
         person = self._factory(data['username'], data['first_name'],
                                data['last_name'])
         data.pop('confirm')
+        advisor = data.pop('advisor')
         form.applyChanges(self, person, data)
+        if advisor is not None:
+            person.advisors.add(advisor)
         self._person = person
         return person
 

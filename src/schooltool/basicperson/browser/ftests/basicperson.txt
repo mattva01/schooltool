@@ -17,7 +17,6 @@ Create a Basic Person, a teacher.
     >>> manager.getControl('Last name').value = "Petterson"
     >>> manager.getControl('Gender').value = ['male']
     >>> manager.getControl('Birth date').value = '80/01/01'
-
     >>> manager.getControl('Username').value = "john"
     >>> manager.getControl('Password').value = "pwd"
     >>> manager.getControl('Confirm').value = "pwd"
@@ -186,3 +185,26 @@ of them:
         </person>
       </persons>
     </person_export>
+
+Let's add another person, this time setting the advisor in the add form.
+
+    >>> manager.open('http://localhost')
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+    >>> manager.getControl('First name').value = "Student"
+    >>> manager.getControl('Last name').value = "Two"
+    >>> manager.getControl('Gender').value = ['male']
+    >>> manager.getControl('Birth date').value = '80/01/01'
+    >>> manager.getControl('Advisor').value = ['bob']
+    >>> manager.getControl('Username').value = "student2"
+    >>> manager.getControl('Password').value = "pwd"
+    >>> manager.getControl('Confirm').value = "pwd"
+    >>> manager.getControl('Add').click()
+
+We can check that the advisor appears in the new person's advisors view.
+
+    >>> manager.getLink('Advisors').click()
+    >>> analyze.printQuery("id('content-body')/form/fieldset[1]//tbody//label", manager.contents)
+    <label for="remove_item.bob">Bob</label>
+
