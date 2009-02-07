@@ -25,10 +25,12 @@ import zope.interface
 from zope.app.container.interfaces import INameChooser
 from zope.app.form.browser.interfaces import ITerms
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.component import adapter
 from zope.component import adapts
 from zope.component import getUtility
 from zope.exceptions.interfaces import UserError
 from z3c.form import form, field, button, validator
+from zope.interface import implementer
 from zope.interface import implements
 from zope.publisher.browser import BrowserView
 from zope.schema import Password
@@ -40,8 +42,10 @@ from z3c.form.validator import SimpleFieldValidator
 
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.person.interfaces import IPersonContainer
 from schooltool.person.interfaces import IPersonFactory
 
+from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IBasicPerson, IStudent
 from schooltool.common import SchoolToolMessage as _
 
@@ -49,6 +53,11 @@ from schooltool.common import SchoolToolMessage as _
 class PersonView(BrowserView):
 
     template = ViewPageTemplateFile('templates/person_view.pt')
+
+    @property
+    def demographics(self):
+        from schooltool.basicperson.interfaces import IDemographics
+        return IDemographics(self.context)
 
     def __call__(self):
         return self.template()
@@ -111,13 +120,25 @@ class UsernameValidator(SimpleFieldValidator):
 validator.WidgetValidatorDiscriminators(UsernameValidator,
                                         field=IPersonAddForm['username'])
 
+class PersonForm(object):
 
-class PersonAddView(form.AddForm):
+    def generateExtraFields(self):
+        field_descriptions = IDemographicsFields(ISchoolToolApplication(None))
+        fields = field.Fields()
+        for field_desc in field_descriptions.values():
+            fields += field_desc.makeField()
+        return fields
+
+
+class PersonAddView(form.AddForm, PersonForm):
     """Person add form for basic persons."""
     label = _("Add new person")
     template = ViewPageTemplateFile('templates/person_add.pt')
 
-    fields = field.Fields(IPersonAddForm) + field.Fields(IStudent)
+    def update(self):
+        self.fields = field.Fields(IPersonAddForm) + field.Fields(IStudent)
+        self.fields += self.generateExtraFields()
+        super(PersonAddView, self).update()
 
     def updateActions(self):
         super(PersonAddView, self).updateActions()
@@ -172,12 +193,15 @@ class PersonAddView(form.AddForm):
         self.request.response.redirect(url)
 
 
-class PersonEditView(form.EditForm):
+class PersonEditView(form.EditForm, PersonForm):
     """Edit form for basic person."""
     form.extends(form.EditForm)
     template = ViewPageTemplateFile('templates/person_add.pt')
 
-    fields = field.Fields(IBasicPerson) + field.Fields(IStudent)
+    def update(self):
+        self.fields = field.Fields(IBasicPerson) + field.Fields(IStudent)
+        self.fields += self.generateExtraFields()
+        super(PersonEditView, self).update()
 
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
