@@ -438,3 +438,9 @@ div .dropdown a:hover {
   color: #990000;
   font-weight: bold;
 }
+
+/* colors for table cells and warning message */
+td.changed_bg { background-color: #90ee90; }
+td.error_bg { background-color: #f66; }
+td.warning_bg { background-color: yellow; }
+div.warning_bg { background-color: yellow; }
