@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <page
+     name="import.html"
+     for="schooltool.app.interfaces.ISchoolToolApplication"
+     template="templates/import.pt"
+     class=".importer.MegaImporter"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="Excel Import" />
+
+  <page
+     name="export.xls"
+     for="schooltool.app.interfaces.ISchoolToolApplication"
+     class=".export.MegaExporter"
+     permission="schooltool.edit" />
+
+  <zope:configure package="schooltool.skin">
+    <navigationViewlet
+        name="export"
+        for="schooltool.app.interfaces.ISchoolToolApplication"
+        manager="schooltool.skin.IActionMenuManager"
+        template="templates/actionsViewlet.pt"
+        permission="schooltool.edit"
+        link="export.xls"
+        title="XLS Export"
+        order="10" />
+  </zope:configure>
+
+</configure>

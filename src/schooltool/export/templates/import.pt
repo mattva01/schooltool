@@ -1,0 +1,40 @@
+<tal:defs define="update view/update" />
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+  <head>
+    <title metal:fill-slot="title" i18n:translate="">
+      Upload SchoolTool as XLS
+    </title>
+  </head>
+  <body>
+
+  <span metal:fill-slot="zonki" i18n:translate="">
+    <img src="zonki.png" alt="SchoolTool" i18n:attributes="alt"
+      tal:attributes="src context/++resource++zonki-question.png" />
+  </span>
+
+    <metal:block metal:fill-slot="body">
+
+      <div class="info" tal:condition="view/success">
+        <p tal:repeat="msg view/success" tal:content="msg" />
+      </div>
+      <div class="error" tal:condition="view/errors"
+           tal:repeat="err view/errors" tal:content="err" />
+
+      <form method="POST" enctype="multipart/form-data" class="standalone"
+        tal:attributes="action request/URL">
+
+        <fieldset>
+          <legend i18n:translate="">Upload XLS File</legend>
+          <div class="row">
+            <label for="xlsfile" i18n:translate="">XLS File</label>
+            <input id="xlsfile" type="file" name="xlsfile"/>
+          </div>
+        </fieldset>
+        <div class="controls">
+          <input name="UPDATE_SUBMIT" class="button-ok" type="submit"
+                 value="Submit" i18n:attributes="value submit-button" />
+        </div>
+      </form>
+    </metal:block>
+  </body>
+</html>

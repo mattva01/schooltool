@@ -1,0 +1,24 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           i18n_domain="zope">
+
+  <include package="schooltool.common" />
+  <include package="schooltool.course" />
+  <include package="schooltool.term" />
+  <include package="schooltool.schoolyear" />
+  <include package="schooltool.term" file="time_machine.zcml" />
+  <include package="schooltool.timetable" />
+  <include package="schooltool.basicperson" />
+
+  <interface
+      interface="schooltool.export.ftesting.IExportImportFtestingSkin"
+      type="zope.publisher.interfaces.browser.IBrowserSkinType"
+      name="ImportExport"
+      />
+
+  <!-- Provide local overrides of standard configurations-->
+  <includeOverrides package="schooltool.basicperson" file="overrides.zcml" />
+
+  <browser:defaultSkin name="ImportExport" />
+
+</configure>
