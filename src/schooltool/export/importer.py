@@ -28,6 +28,9 @@ from zope.component import queryUtility
 from zope.security.proxy import removeSecurityProxy
 from zope.publisher.browser import BrowserView
 
+from schooltool.basicperson.interfaces import IDemographicsFields
+from schooltool.basicperson.interfaces import IDemographics
+from schooltool.basicperson.demographics import DateFieldDescription
 from schooltool.resource.resource import Resource
 from schooltool.resource.resource import Location
 from schooltool.group.group import Group
@@ -44,6 +47,7 @@ from schooltool.timetable.schema import TimetableSchema
 from schooltool.timetable.schema import TimetableSchemaDay
 from schooltool.term.interfaces import ITerm
 from schooltool.term.term import Term
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.app import SimpleNameChooser
 from schooltool.schoolyear.schoolyear import SchoolYear
@@ -361,7 +365,9 @@ class PersonImporter(ImporterBase):
 
     def createPerson(self, data):
         from schooltool.basicperson.person import BasicPerson
-        person = BasicPerson(data['__name__'], data['first_name'], data['last_name'])
+        person = BasicPerson(data['__name__'],
+                             data['first_name'],
+                             data['last_name'])
         person.email = data['email']
         person.phone = data['phone']
         person.birth_date = data['birth_date']
@@ -387,6 +393,8 @@ class PersonImporter(ImporterBase):
 
     def process(self):
         sh = self.sheet
+        app = ISchoolToolApplication(None)
+        fields = IDemographicsFields(app)
         for row in range(1, sh.nrows):
             if sh.cell_value(rowx=row, colx=0) == '':
                 break
@@ -398,8 +406,22 @@ class PersonImporter(ImporterBase):
             data['phone'] = sh.cell_value(rowx=row, colx=4)
             data['birth_date'] = self.getDateFromCell(sh, row, 5, default=None)
             data['gender'] = sh.cell_value(rowx=row, colx=6)
+            if data['gender'] == '':
+                data['gender'] = None
             data['password'] = sh.cell_value(rowx=row, colx=7)
+
             person = self.createPerson(data)
+
+            demographics = IDemographics(person)
+            for n, field in enumerate(fields.values()):
+                if isinstance(field, DateFieldDescription):
+                    value = self.getDateFromCell(sh, row, n + 8, default=None)
+                else:
+                    value = sh.cell_value(rowx=row, colx=n + 8)
+                if value == '':
+                    value = None
+                demographics[field.name] = value
+
             self.addPerson(person, data)
 
 

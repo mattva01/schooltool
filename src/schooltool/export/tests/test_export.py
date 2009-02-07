@@ -24,6 +24,7 @@ from datetime import date
 
 from zope.testing import doctest
 
+from schooltool.basicperson.interfaces import IDemographics
 from schooltool.basicperson.person import BasicPerson
 from schooltool.person.person import Person
 from schooltool.export.export import MegaExporter, merge_date_ranges
@@ -57,8 +58,21 @@ def setUpSchool(app):
     teacher = pc['teacher'] = BasicPerson("teacher", "Mister", "T")
     s1 = pc['john'] = BasicPerson("john", "John", "Peterson")
     s2 = pc['pete'] = BasicPerson("pete", "Pete", "Johnson")
+    d1 = IDemographics(s1)
+    d1['ID'] = "112323"
+    d1['ethnicity'] = u'Asian'
+    d1['language'] = "English"
+    d1['placeofbirth'] = "Humptington"
+    d1['citizenship'] = "US"
+    d2 = IDemographics(s2)
+    d2['ID'] = "333655"
+    d2['ethnicity'] = u'White'
+    d2['language'] = "Brittish"
+    d2['placeofbirth'] = "Providence"
+    d2['citizenship'] = "UK"
 
     course = ICourseContainer(sy)['c1'] = Course("History")
+
 
 def doctest_format_school_years():
     """
@@ -148,12 +162,73 @@ def doctest_format_persons():
         >>> app = ISchoolToolApplication(None)
         >>> setUpSchool(app)
         >>> exporter = MegaExporter(app, None)
-        >>> for row in exporter.format_persons(): print row
-        [Header('User Name'), Header('First Name'), Header('Last Name'), Header('Email'), Header('Phone'), Header('Birth Date'), Header('Gender')]
-        [Text(u'john'), Text('John'), Text('Peterson'), Text(None), Text(None), Date(None), Text(None)]
-        [Text(u'manager'), Text('SchoolTool'), Text('Administrator'), Text(None), Text(None), Date(None), Text(None)]
-        [Text(u'pete'), Text('Pete'), Text('Johnson'), Text(None), Text(None), Date(None), Text(None)]
-        [Text(u'teacher'), Text('Mister'), Text('T'), Text(None), Text(None), Date(None), Text(None)]
+        >>> from zope.testing.doctestunit import pprint
+        >>> for row in exporter.format_persons(): pprint(row)
+        [Header('User Name'),
+         Header('First Name'),
+         Header('Last Name'),
+         Header('Email'),
+         Header('Phone'),
+         Header('Birth Date'),
+         Header('Gender'),
+         Header('Password'),
+         Header('ID'),
+         Header('Ethnicity'),
+         Header('Language'),
+         Header('Place of birth'),
+         Header('Citizenship')]
+        [Text(u'john'),
+         Text('John'),
+         Text('Peterson'),
+         Text(None),
+         Text(None),
+         Date(None),
+         Text(None),
+         Text(None),
+         Text('112323'),
+         Text(u'Asian'),
+         Text('English'),
+         Text('Humptington'),
+         Text('US')]
+        [Text(u'manager'),
+         Text('SchoolTool'),
+         Text('Administrator'),
+         Text(None),
+         Text(None),
+         Date(None),
+         Text(None),
+         Text(None),
+         Text(None),
+         Text(None),
+         Text(None),
+         Text(None),
+         Text(None)]
+        [Text(u'pete'),
+         Text('Pete'),
+         Text('Johnson'),
+         Text(None),
+         Text(None),
+         Date(None),
+         Text(None),
+         Text(None),
+         Text('333655'),
+         Text(u'White'),
+         Text('Brittish'),
+         Text('Providence'),
+         Text('UK')]
+        [Text(u'teacher'),
+         Text('Mister'),
+         Text('T'),
+         Text(None),
+         Text(None),
+         Date(None),
+         Text(None),
+         Text(None),
+         Text(None),
+         Text(None),
+         Text(None),
+         Text(None),
+         Text(None)]
 
     """
 

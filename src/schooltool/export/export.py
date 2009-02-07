@@ -24,12 +24,14 @@ from StringIO import StringIO
 import datetime
 from operator import attrgetter
 
-from zope.interface import implements
-from zope.interface import Interface
 from zope.security.proxy import removeSecurityProxy
 from zope.publisher.browser import BrowserView
 
+from schooltool.basicperson.demographics import DateFieldDescription
+from schooltool.basicperson.interfaces import IDemographics
+from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.group.interfaces import IGroupContainer
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IAsset
 from schooltool.schoolyear.interfaces import ISchoolYear
@@ -390,7 +392,25 @@ class MegaExporter(SchoolTimetableExportView):
                   ('Email', Text, attrgetter('email')),
                   ('Phone', Text, attrgetter('phone')),
                   ('Birth Date', Date, attrgetter('birth_date')),
-                  ('Gender', Text, attrgetter('gender'))]
+                  ('Gender', Text, attrgetter('gender')),
+                  ('Password', Text, lambda p: None)]
+
+        def demographics_getter(attribute):
+            def getter(person):
+                demographics = IDemographics(person)
+                return demographics[attribute]
+            return getter
+
+        app = ISchoolToolApplication(None)
+        demographics_fields = IDemographicsFields(app)
+        for field in demographics_fields.values():
+            title = field.title
+            format = Text
+            if isinstance(field, DateFieldDescription):
+                format = Date
+            getter = demographics_getter(field.name)
+            fields.append((title, format, getter))
+
         items = self.context['persons'].values()
         return self.format_table(fields, items)
 
