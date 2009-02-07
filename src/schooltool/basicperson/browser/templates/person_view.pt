@@ -26,6 +26,8 @@
       <div class="info-block">
         <h5 i18n:translate="">Details</h5>
       </div>
+      <strong i18n:translate="">Ethnicity:</strong>
+      <span tal:replace="view/demographics/ethnicity"></span>
       <tal:block tal:replace="structure provider:schooltool.person.Info"/>
     </div>
 

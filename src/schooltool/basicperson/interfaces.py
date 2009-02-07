@@ -21,6 +21,8 @@ Lyceum person interfaces.
 
 $Id$
 """
+from zope.app.container.interfaces import IContainer
+from zope.app.container.interfaces import IOrderedContainer
 from zope.schema import Date
 from zope.schema import Choice
 from zope.schema import TextLine
@@ -100,3 +102,15 @@ class IAdvisor(Interface):
 
     def removeStudent(student):
         """Remove this student from the advised students list."""
+
+
+class IDemographics(IContainer):
+    """Demographics data storage for a person.
+
+    Stores any kind of data defined by field descriptions that are set
+    up for the person container.
+    """
+
+
+class IDemographicsFields(IOrderedContainer):
+    """Demographics field storage."""
