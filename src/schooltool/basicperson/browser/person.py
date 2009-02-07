@@ -38,6 +38,7 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from z3c.form.validator import SimpleFieldValidator
 
 from schooltool.group.interfaces import IGroupContainer
+from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPersonFactory
 
@@ -250,3 +251,52 @@ class GroupTerms(TermsBase):
     """Displaying groups."""
 
     factory = GroupTerm
+
+
+class PersonAdvisorView(RelationshipViewBase):
+    """View class for adding/removing advisors to/from a person."""
+
+    __used_for__ = IBasicPerson
+
+    current_title = _("Current Advisors")
+    available_title = _("Add Advisors")
+
+    @property
+    def title(self):
+        return _("Advisors of ${person}", 
+            mapping={'person': self.context.title})
+
+    def getSelectedItems(self):
+        """Return a list of current advisors."""
+        return self.context.advisors
+
+    def getAvailableItemsContainer(self):
+        return ISchoolToolApplication(None)['persons']
+
+    def getCollection(self):
+        return self.context.advisors
+
+
+class PersonAdviseeView(RelationshipViewBase):
+    """View class for adding/removing advisees to/from a person."""
+
+    __used_for__ = IBasicPerson
+
+    current_title = _("Current Advisees")
+    available_title = _("Add Advisees")
+
+    @property
+    def title(self):
+        return _("Advisees of ${person}", 
+            mapping={'person': self.context.title})
+
+    def getSelectedItems(self):
+        """Return a list of current advisees."""
+        return self.context.advisees
+
+    def getAvailableItemsContainer(self):
+        return ISchoolToolApplication(None)['persons']
+
+    def getCollection(self):
+        return self.context.advisees
+

@@ -73,6 +73,10 @@ class IBasicPerson(Interface):
         required=False,
         )
 
+    advisors = Attribute("""Advisors of the person""")
+
+    advisees = Attribute("""Advisees of the person""")
+
 
 class IBasicPersonSource(IIterableSource):
     """Marker interface for sources that list basic persons."""

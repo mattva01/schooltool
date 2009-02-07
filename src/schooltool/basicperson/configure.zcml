@@ -38,9 +38,6 @@
       handler=".person.catalogSetUpSubscriber"
       />
 
-  <adapter
-      factory=".advisor.PersonAdvisorAdapter" />
-
   <utility
      factory=".vocabularies.gradeClassVocabularyFactory"
      provides="zope.schema.interfaces.IVocabularyFactory"

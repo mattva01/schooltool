@@ -39,6 +39,24 @@
       title="Export"
       />
 
+  <page
+      name="advisors.html"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      class=".person.PersonAdvisorView"
+      permission="schooltool.edit"
+      menu="schooltool_actions"
+      title="Advisors"
+      />
+
+  <page
+      name="advisees.html"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      class=".person.PersonAdviseeView"
+      permission="schooltool.edit"
+      menu="schooltool_actions"
+      title="Advisees"
+      />
+
   <!-- list of persons -->
   <zope:adapter
       for="schooltool.basicperson.interfaces.IBasicPersonSource
