@@ -3,11 +3,7 @@ Without existing timetables related to the term
 
 A manager logs in
 
-    >>> from zope.testbrowser.testing import Browser
-    >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
-    >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/')
+    >>> manager = Browser('manager', 'schooltool')
 
 Set the time:
 
