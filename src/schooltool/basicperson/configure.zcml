@@ -2,6 +2,7 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:browser="http://namespaces.zope.org/browser"
            xmlns:i18n="http://namespaces.zope.org/i18n"
+	   xmlns:security="http://schooltool.org/securitypolicy"
            i18n_domain="schooltool">
 
   <class class=".person.BasicPerson">
@@ -28,15 +29,43 @@
         set_attributes="modified" />
   </class>
 
+  <security:allow
+     interface="schooltool.basicperson.interfaces.IFieldDescription"
+     crowds="administration"
+     permission="schooltool.edit" />
+
+  <class class=".demographics.DemographicsFields">
+    <implements interface="schooltool.basicperson.interfaces.IDemographicsFields" />
+    <require
+       permission="schooltool.edit"
+       interface="schooltool.basicperson.interfaces.IDemographicsFields"
+       set_schema="schooltool.basicperson.interfaces.IDemographicsFields" />
+  </class>
+
+  <class class=".demographics.FieldDescription"> <!--XXX-->
+    <allow attributes="name title required makeField" />
+  </class>
+  <class class=".demographics.TextFieldDescription">
+    <allow attributes="name title required makeField" />
+  </class>
+
+  <class class=".demographics.DateFieldDescription">
+    <allow attributes="name title required makeField" />
+  </class>
+
+  <class class=".demographics.EnumFieldDescription">
+    <allow attributes="name title required makeField" />
+  </class>
+  
   <adapter
-      factory=".person.BasicPersonCalendarCrowd"
-      provides="schooltool.app.interfaces.ICalendarParentCrowd"
-      name="schooltool.view" />
+     factory=".person.BasicPersonCalendarCrowd"
+     provides="schooltool.app.interfaces.ICalendarParentCrowd"
+     name="schooltool.view" />
 
   <subscriber
-      for="schooltool.app.interfaces.ICatalogSetUpEvent"
-      handler=".person.catalogSetUpSubscriber"
-      />
+     for="schooltool.app.interfaces.ICatalogSetUpEvent"
+     handler=".person.catalogSetUpSubscriber"
+     />
 
   <adapter
       factory=".advisor.PersonAdvisorAdapter" />

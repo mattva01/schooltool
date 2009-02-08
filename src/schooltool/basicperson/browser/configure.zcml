@@ -78,16 +78,40 @@
      permission="schooltool.edit"
      menu="schooltool_actions" title="New Person"
      layer=".skin.IBasicPersonLayer" />
-
   <page
-      name="person-csvimport.html"
-      for="schooltool.person.interfaces.IPersonContainer"
-      class=".csvimport.BasicPersonCSVImportView"
-      template="templates/person-csvimport.pt"
-      permission="schooltool.edit"
-      layer=".skin.IBasicPersonLayer" />
+     name="person-csvimport.html"
+     for="schooltool.person.interfaces.IPersonContainer"
+     class=".csvimport.BasicPersonCSVImportView"
+     template="templates/person-csvimport.pt"
+     permission="schooltool.edit"
+     layer=".skin.IBasicPersonLayer" />
 
   <zope:adapter
-      factory=".person.UsernameValidator" />
+     factory=".person.UsernameValidator" />
+
+  <!-- DEMOGRAPHICS -->
+  <zope:adapterTraverserPlugin
+     for="schooltool.app.interfaces.ISchoolToolApplication"
+     layer="zope.publisher.interfaces.http.IHTTPRequest"
+     name="demographics"
+     adapter="schooltool.basicperson.demographics.IDemographicsFields"
+     permission="zope.Public"
+     />
+
+  <page
+     name="index.html"
+     for="schooltool.basicperson.interfaces.IDemographicsFields"
+     class=".demographics.DemographicsView"
+     template="templates/demographics-view.pt"
+     permission="schooltool.edit"
+     />
+
+  <page
+     name="add.html"
+     for="schooltool.basicperson.interfaces.IDemographicsFields"
+     class=".demographics.TextFieldDescriptionAddView"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="New Text Field" />
+
 
 </configure>

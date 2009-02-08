@@ -23,11 +23,14 @@ $Id$
 """
 from zope.app.container.interfaces import IContainer
 from zope.app.container.interfaces import IOrderedContainer
+from zope.configuration.fields import PythonIdentifier
 from zope.schema import Date
 from zope.schema import Choice
 from zope.schema import TextLine
+from zope.schema import Bool
 from zope.interface import Interface
 from zope.interface import Attribute
+from zope.location.interfaces import ILocation
 from zope.schema.interfaces import IIterableSource
 
 from schooltool.common import SchoolToolMessage as _
@@ -97,6 +100,7 @@ class IAdvisor(Interface):
 
     students = Attribute("""Students being advised by the advisor.""")
 
+
     def addStudent(student):
         """Add a student to the advised students list."""
 
@@ -114,3 +118,19 @@ class IDemographics(IContainer):
 
 class IDemographicsFields(IOrderedContainer):
     """Demographics field storage."""
+
+class IFieldDescription(ILocation):
+    """Demographics field."""
+    title = TextLine(
+        title = _(u"Title"),
+        description = _(u"The title of this Field Description"),
+        required = True)
+    name = PythonIdentifier(
+        title = _(u"Name"),
+        description = _(u"The name of this Field Description"),
+        required = True)
+    required = Bool(
+        title = _(u"Required"),
+        description = _(u"Whether this Field is required or not"),
+        required = True)
+        

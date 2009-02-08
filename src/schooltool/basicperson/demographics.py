@@ -43,6 +43,7 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.basicperson.interfaces import IDemographics
+from schooltool.basicperson.interfaces import IFieldDescription
 
 
 class IDemographicsForm(Interface):
@@ -145,10 +146,11 @@ def getDemographicsFields(app):
 
 
 class FieldDescription(Persistent):
-
-    def __init__(self, name, title):
-        self.name, self.title = name, title
-        self.required = False
+    implements(IFieldDescription)
+    __name__ = None
+    __parent__ = None
+    def __init__(self, name, title, required=False):
+        self.name, self.title,self.required = name, title, required
 
 
 class EnumFieldDescription(FieldDescription):
@@ -181,6 +183,6 @@ class TextFieldDescription(FieldDescription):
     def makeField(self):
         form_field = TextLine(title=unicode(self.title))
         form_field.required = self.required
-        form_field.__name__ = self.name
+        form_field.__name__ = str(self.name)
         form_field.interface = IDemographicsForm
         return field.Fields(form_field)
