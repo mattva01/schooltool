@@ -186,7 +186,8 @@ of them:
       </persons>
     </person_export>
 
-Let's add another person, this time setting the advisor in the add form.
+Let's add another person, this time setting the group and the advisor in the
+add form.
 
     >>> manager.open('http://localhost')
     >>> manager.getLink('Manage').click()
@@ -196,11 +197,18 @@ Let's add another person, this time setting the advisor in the add form.
     >>> manager.getControl('Last name').value = "Two"
     >>> manager.getControl('Gender').value = ['male']
     >>> manager.getControl('Birth date').value = '80/01/01'
+    >>> manager.getControl('Group').value = ['students']
     >>> manager.getControl('Advisor').value = ['bob']
     >>> manager.getControl('Username').value = "student2"
     >>> manager.getControl('Password').value = "pwd"
     >>> manager.getControl('Confirm').value = "pwd"
     >>> manager.getControl('Add').click()
+
+We can check that the group appears in the new person's groups view.
+
+    >>> manager.getLink('Groups').click()
+    >>> analyze.printQuery("id('content-body')/form/fieldset[1]//tbody//label", manager.contents)
+    <label for="remove_item.students">Students</label>
 
 We can check that the advisor appears in the new person's advisors view.
 

@@ -56,6 +56,11 @@ class PersonView(BrowserView):
 
 class IPersonAddForm(IBasicPerson):
 
+    group = Choice(
+        title=_(u"Group"),
+        source="schooltool.basicperson.group_source",
+        required=False)
+
     advisor = Choice(
         title=_(u"Advisor"),
         source="schooltool.basicperson.advisor_source",
@@ -147,8 +152,11 @@ class PersonAddView(form.AddForm):
         person = self._factory(data['username'], data['first_name'],
                                data['last_name'])
         data.pop('confirm')
+        group = data.pop('group')
         advisor = data.pop('advisor')
         form.applyChanges(self, person, data)
+        if group is not None:
+            person.groups.add(group)
         if advisor is not None:
             person.advisors.add(advisor)
         self._person = person
@@ -249,9 +257,8 @@ class GroupTerm(object):
     implements(ITitledTokenizedTerm)
 
     def __init__(self, value):
-        groups = IGroupContainer(ISchoolToolApplication(None))
-        self.title = groups[value].title
-        self.token = value
+        self.title = value.title
+        self.token = value.__name__
         self.value = value
 
 

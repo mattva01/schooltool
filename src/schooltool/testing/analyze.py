@@ -37,6 +37,7 @@ def queryHTML(xpath, response):
     result = [to_string(node) for node in doc.xpath(xpath)]
     return result
 
+
 def printQuery(xpath, response):
     """Helper function to print xpath query results on an html response"""
     for result in queryHTML(xpath, response):

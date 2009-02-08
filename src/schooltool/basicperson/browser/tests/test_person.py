@@ -135,6 +135,7 @@ def doctest_GroupTerm():
         >>> class GroupStub(object):
         ...     def __init__(self, title):
         ...         self.title = title
+        ...         self.__name__ = title
 
         >>> from schooltool.app.interfaces import ISchoolToolApplication
         >>> class STAppStub(dict):
@@ -148,13 +149,13 @@ def doctest_GroupTerm():
         ...                provides=IGroupContainer)
 
         >>> from schooltool.basicperson.browser.person import GroupTerm
-        >>> term = GroupTerm("teachers")
+        >>> term = GroupTerm(GroupStub("teachers"))
         >>> term.title
-        'Teachers'
+        'teachers'
         >>> term.token
         'teachers'
         >>> term.value
-        'teachers'
+        <schooltool.basicperson.browser.tests.test_person.GroupStub object at ...>
 
     """
 
