@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           xmlns:grok="http://namespaces.zope.org/grok"
+           i18n_domain="schooltool">
+
+  <class class=".contact.Contact">
+    <require
+        permission="schooltool.edit"
+        set_schema="schooltool.contact.interfaces.IContact" />
+    <require
+        permission="schooltool.view"
+        interface="schooltool.contact.interfaces.IContact" />
+  </class>
+
+  <class class=".contact.ContactContainer">
+    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <require permission="schooltool.view"
+             attributes="keys values items __iter__ __len__ has_key" />
+    <require permission="schooltool.edit"
+             interface="zope.app.container.interfaces.IWriteContainer" />
+  </class>
+
+  <include package="schooltool.contact.browser" />
+
+  <adapter factory=".contact.ContactAppStartup"
+           name="schooltool.contact.contacts_startup"/>
+
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".contact.ContactInit"
+      name="schooltool.contact.contact" />
+
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".contact.getContactContainer" />
+
+  <include package="grokcore.component" file="meta.zcml" />
+  <include package="grokcore.view" file="meta.zcml" />
+  <include package="grokcore.view" />
+  <grok:grok package="." />
+
+</configure>

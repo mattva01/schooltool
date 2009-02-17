@@ -1,0 +1,57 @@
+Contacts
+========
+
+We can add contacts:
+
+    >>> browser = Browser('manager', 'schooltool')
+    >>> browser.getLink('Manage').click()
+
+    >>> browser.getLink('Contacts').click()
+    >>> browser.getLink('New Contact').click()
+    >>> browser.getControl('Prefix').value = 'Mr'
+    >>> browser.getControl('First name').value = 'John'
+    >>> browser.getControl('Middle name').value = 'J'
+    >>> browser.getControl('Last name').value = 'Johansen'
+    >>> browser.getControl('Suffix').value = 'Jr'
+    >>> browser.getControl('Address line 1').value = 'Frog lane 13'
+    >>> browser.getControl('Address line 2').value = ''
+    >>> browser.getControl('City').value = 'Toadtown'
+    >>> browser.getControl('State').value = 'Arizona'
+    >>> browser.getControl('Country').value = 'USA'
+    >>> browser.getControl('Postal code').value = '556677'
+    >>> browser.getControl('Email').value = 'frog@example.com'
+    >>> browser.getControl('Home phone').value = '055555555'
+    >>> browser.getControl('Work phone').value = '066666666'
+    >>> browser.getControl('Mobile phone').value = '077777777'
+    >>> browser.getControl('Language').value = 'Lithuanian'
+
+    >>> browser.getControl('Add').click()
+
+After adding a contact we get redirected to the contact list:
+
+    >>> browser.printQuery("id('content-body')/form/table/tbody//tr")
+    <tr class="odd"><td>
+          <input type="checkbox" name="delete.Contact" id="delete.Contact" /></td>
+        <td>
+          <a href="http://localhost/contacts/Contact">John</a>
+        </td>
+        <td>
+          Johansen
+        </td>
+    </tr>
+
+If you click on the contact and click edit - you can change the
+information:
+
+    >>> browser.getLink('John').click()
+    >>> browser.getLink('Edit').click()
+    >>> browser.getControl('Email').value = 'johny@example.com'
+    >>> browser.getControl('Apply').click()
+    >>> browser.printQuery("id('form')//div[@class='summary']")
+    <div class="summary">Data successfully updated.</div>
+
+We can see that the new data is in the Display view of the contact:
+
+    >>> browser.getLink('View').click()
+    >>> browser.printQuery("id('form-widgets-email')")
+    <span id="form-widgets-email" class="text-widget textline-field">johny@example.com</span>
