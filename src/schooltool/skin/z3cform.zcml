@@ -5,6 +5,11 @@
 
   <!-- form macros -->
   <z3c:macro
+      name="display"
+      template="templates/z3c-schooltool-display.pt"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+  <z3c:macro
       name="form"
       template="templates/z3c-schooltool-form.pt"
       layer="schooltool.skin.ISchoolToolLayer"
