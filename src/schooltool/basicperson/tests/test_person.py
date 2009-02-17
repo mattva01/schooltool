@@ -35,16 +35,7 @@ def doctest_BasicPerson():
          >>> from schooltool.basicperson.person import BasicPerson
          >>> person = BasicPerson("peter", "Peter", "Johnson")
 
-         >>> from zope.component import provideAdapter
          >>> from schooltool.basicperson.interfaces import IBasicPerson
-         >>> from schooltool.basicperson.interfaces import IStudent
-         >>> from zope.interface import implements
-         >>> class StudentStub(object):
-         ...     implements(IStudent)
-         ...     def __init__(self, context):
-         ...         pass
-         ...     advisor = "John"
-         >>> provideAdapter(StudentStub, adapts=[IBasicPerson], provides=IStudent)
          >>> verifyObject(IBasicPerson, person)
          True
 

@@ -38,16 +38,10 @@
       handler=".person.catalogSetUpSubscriber"
       />
 
-  <adapter
-      factory=".advisor.PersonAdvisorAdapter" />
-
-  <adapter
-      factory=".advisor.PersonStudentAdapter" />
-
   <utility
-     factory=".vocabularies.gradeClassVocabularyFactory"
+     factory=".vocabularies.groupVocabularyFactory"
      provides="zope.schema.interfaces.IVocabularyFactory"
-     name="schooltool.basicperson.grade_class_source" />
+     name="schooltool.basicperson.group_source" />
 
   <utility
      factory=".vocabularies.advisorVocabularyFactory"

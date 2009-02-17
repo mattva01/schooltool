@@ -30,8 +30,8 @@ from zope.interface import implements
 from zope.testing import doctest
 
 
-def doctest_GradeClassSource():
-    """Tests for GradeClassSource
+def doctest_GroupSource():
+    """Tests for GroupSource
 
     If the context of a source is not a person, all groups from the
     group container are returned:
@@ -49,15 +49,15 @@ def doctest_GradeClassSource():
         ...     def __init__(self, context):
         ...         self['groups'] = {'a': GroupStub('A'),
         ...                           'b': GroupStub('B'),
-        ...                           'some-group': GroupStub('Some Group')}
+        ...                           'some-group': GroupStub('Some-Group')}
 
         >>> provideAdapter(STAppStub, adapts=[None])
         >>> provideAdapter(lambda app: app['groups'],
         ...                adapts=[ISchoolToolApplication],
         ...                provides=IGroupContainer)
 
-        >>> from schooltool.basicperson.vocabularies import GradeClassSource
-        >>> source = GradeClassSource(None)
+        >>> from schooltool.basicperson.vocabularies import GroupSource
+        >>> source = GroupSource(None)
         >>> [group.token for group in source]
         ['a', 'b', 'some-group']
 
@@ -76,7 +76,7 @@ def doctest_GradeClassSource():
         ...         self.groups.extend(map(SectionStub, ['s1', 's2']))
 
         >>> person = PersonStub()
-        >>> source = GradeClassSource(person)
+        >>> source = GroupSource(person)
         >>> [group.token for group in source]
         ['a', 'b']
 

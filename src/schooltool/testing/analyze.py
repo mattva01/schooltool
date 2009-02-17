@@ -32,7 +32,14 @@ def to_string(node):
 
 
 def queryHTML(xpath, response):
-    """A helper function to parse an html response and perform an xmpath query on it."""
+    """Helper function to perform an xpath query on an html response"""
     doc = etree.HTML(response)
     result = [to_string(node) for node in doc.xpath(xpath)]
     return result
+
+
+def printQuery(xpath, response):
+    """Helper function to print xpath query results on an html response"""
+    for result in queryHTML(xpath, response):
+        print result
+

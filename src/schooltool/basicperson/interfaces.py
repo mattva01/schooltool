@@ -23,11 +23,8 @@ $Id$
 """
 from zope.app.container.interfaces import IContainer
 from zope.app.container.interfaces import IOrderedContainer
-from zope.schema import Date
-from zope.schema import Choice
-from zope.schema import TextLine
-from zope.interface import Interface
-from zope.interface import Attribute
+from zope.schema import Date, Choice, TextLine, Bytes
+from zope.interface import Interface, Attribute
 from zope.schema.interfaces import IIterableSource
 
 from schooltool.common import SchoolToolMessage as _
@@ -36,9 +33,19 @@ from schooltool.common import SchoolToolMessage as _
 class IBasicPerson(Interface):
     """Marker interface for Lyceum specific person."""
 
+    prefix = TextLine(
+        title=_(u"Prefix"),
+        required=False,
+        )
+
     first_name = TextLine(
         title=_(u"First name"),
         required=True,
+        )
+
+    middle_name = TextLine(
+        title=_(u"Middle name"),
+        required=False,
         )
 
     last_name = TextLine(
@@ -46,25 +53,19 @@ class IBasicPerson(Interface):
         required=True,
         )
 
+    suffix = TextLine(
+        title=_(u"Suffix"),
+        required=False,
+        )
+
+    preferred_name = TextLine(
+        title=_(u"Preferred name"),
+        required=False,
+        )
+
     gender = Choice(
         title=_(u"Gender"),
         values=[_('male'), _('female')],
-        required=False,
-        )
-
-    email = TextLine(
-        title=_(u"Email"),
-        required=False,
-        )
-
-    phone = TextLine(
-        title=_(u"Phone"),
-        required=False,
-        )
-
-    gradeclass = Choice(
-        title=_(u"Grade/Class", default="Group"),
-        source="schooltool.basicperson.grade_class_source",
         required=False,
         )
 
@@ -74,6 +75,10 @@ class IBasicPerson(Interface):
         required=False,
         )
 
+    advisors = Attribute("""Advisors of the person""")
+
+    advisees = Attribute("""Advisees of the person""")
+
 
 class IBasicPersonSource(IIterableSource):
     """Marker interface for sources that list basic persons."""
@@ -82,15 +87,6 @@ class IBasicPersonSource(IIterableSource):
 # XXX should be in skin or common, or more properly - core
 class IGroupSource(IIterableSource):
     """Marker interface for sources that list schooltool groups."""
-
-
-class IStudent(Interface):
-
-    advisor = Choice(
-        title=_(u"Advisor"),
-        source="schooltool.basicperson.advisor_source",
-        required=False,
-        )
 
 
 class IAdvisor(Interface):
