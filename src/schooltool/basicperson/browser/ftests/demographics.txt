@@ -1,0 +1,200 @@
+Customizable demographics
+=========================
+
+A manager logs in
+
+    >>> manager = Browser('manager', 'schooltool')
+
+    >>> from schooltool.app.browser.ftests import setup
+    >>> setup.setUpBasicSchool()
+
+Create a person with some demographics fields filled in:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+    >>> manager.getControl('First name').value = "John"
+    >>> manager.getControl('Last name').value = "Petterson"
+    >>> manager.getControl('Gender').value = ['male']
+    >>> manager.getControl('Birth date').value = '80/01/01'
+    >>> manager.getControl('Username').value = "john"
+    >>> manager.getControl('Password').value = "pwd"
+    >>> manager.getControl('Confirm').value = "pwd"
+
+    >>> manager.getControl('ID').value = "001122"
+    >>> manager.getControl('Ethnicity').displayValue = ['Black or African American']
+    >>> manager.getControl('Language').value = "English"
+    >>> manager.getControl('Place of birth').value = "South Hampton"
+    >>> manager.getControl('Citizenship').value = 'US'
+
+    >>> manager.getControl('Add').click()
+
+All the fields will get properly set, and you can see them in the
+person edit view:
+
+    >>> manager.getLink('Edit').click()
+    >>> manager.getControl('ID').value
+    '001122'
+    >>> manager.getControl('Ethnicity').displayValue
+    ['Black or African American']
+    >>> manager.getControl('Language').value
+    'English'
+    >>> manager.getControl('Place of birth').value
+    'South Hampton'
+    >>> manager.getControl('Citizenship').value
+    'US'
+
+We can change it:
+
+    >>> manager.getControl('Ethnicity').displayValue = ['Asian']
+    >>> manager.getControl('Apply').click()
+
+Let's make sure new values got set:
+
+    >>> manager.getLink('View').click()
+    >>> labels = manager.queryHTML('//div[@class="row"]/div[@class="label"]//span/text()')
+    >>> values = manager.queryHTML('//div[@class="row"]/div[@class="widget"]//span/text()')
+    >>> from schooltool.app.testing import format_table
+    >>> print format_table(zip(labels, values))
+    +----------------+---------------+
+    | First name     | John          |
+    | Last name      | Petterson     |
+    | Gender         | male          |
+    | Birth date     | 80/01/01      |
+    | ID             | 001122        |
+    | Ethnicity      | Asian         |
+    | Language       | English       |
+    | Place of birth | South Hampton |
+    | Citizenship    | US            |
+    +----------------+---------------+
+
+Demographics schema is flexible, so you can add/remove/change the
+fields that are in it:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Demographics').click()
+    >>> manager.printQuery("id('content-body')/form/div")
+    <div>
+          ...<option value="1" selected="selected">1</option>...<input
+               type="checkbox" name="delete:list" value="ID" /><a href="http://localhost/demographics/ID">ID</a>
+    </div>
+    <div>
+          ...<option value="2" selected="selected">2</option>...<input
+               type="checkbox" name="delete:list" value="ethnicity" /><a href="http://localhost/demographics/ethnicity">ethnicity</a>
+    </div>
+    <div>
+          ...<option value="3" selected="selected">3</option>...<input
+               type="checkbox" name="delete:list" value="language" /><a href="http://localhost/demographics/language">language</a>
+    </div>
+    <div>
+          ...<option value="4" selected="selected">4</option>...<input
+                type="checkbox" name="delete:list" value="placeofbirth" /><a href="http://localhost/demographics/placeofbirth">placeofbirth</a>
+    </div>
+    <div>
+          ...<option value="5" selected="selected">5</option>...<input
+                type="checkbox" name="delete:list" value="citizenship" /><a href="http://localhost/demographics/citizenship">citizenship</a>
+    </div>
+
+Let's make language the second field:
+
+    >>> manager.getControl(name='pos.language').displayValue = ['2']
+    >>> manager.getControl('Apply').click()
+    >>> manager.printQuery("id('content-body')/form/div/a")
+    <a href="http://localhost/demographics/ID">ID</a>
+    <a href="http://localhost/demographics/language">language</a>
+    <a href="http://localhost/demographics/ethnicity">ethnicity</a>
+    <a href="http://localhost/demographics/placeofbirth">placeofbirth</a>
+    <a href="http://localhost/demographics/citizenship">citizenship</a>
+
+And delete the place of birth field:
+
+    >>> manager.getControl(name='delete:list').value = ['placeofbirth']
+    >>> manager.getControl('Delete').click()
+    >>> manager.printQuery("id('content-body')/form/div/a")
+    <a href="http://localhost/demographics/ID">ID</a>
+    <a href="http://localhost/demographics/language">language</a>
+    <a href="http://localhost/demographics/ethnicity">ethnicity</a>
+    <a href="http://localhost/demographics/citizenship">citizenship</a>
+
+Now if we'd go to the person add form - the order of the fields would
+be different:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+    >>> manager.printQuery('//div[@class="row"]/div[@class="label"]//span/text()')
+    Prefix
+    First name *
+    Middle name
+    Last name *
+    Suffix
+    Preferred name
+    Gender
+    Birth date
+    Group
+    Advisor
+    Username *
+    Password
+    Confirm
+    ID
+    Language
+    Ethnicity
+    Citizenship
+
+Let's try making some fields required, and maybe even changing them:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Demographics').click()
+    >>> manager.getLink('ethnicity').click()
+    >>> manager.getLink('Edit').click()
+    >>> print manager.getControl('List of values').value
+    American Indian or Alaska Native
+    Asian
+    Black or African American
+    Native Hawaiian or Other Pasific Islander
+    White
+
+Let's make the field required, and add Martians to it:
+
+    >>> values = manager.getControl('List of values').value.splitlines()
+    >>> manager.getControl('List of values').value = "\n".join(values + ['Martians'])
+    >>> manager.getControl('yes').click()
+    >>> manager.getControl('Apply').click()
+
+Now if we go to the add person form, we should see the additional
+value in the select box, and have the field required:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+    >>> manager.printQuery('//div[@class="row"]/div[@class="label"]//span/text()')
+    Prefix
+    First name *
+    Middle name
+    Last name *
+    Suffix
+    Preferred name
+    Gender
+    Birth date
+    Group
+    Advisor
+    Username *
+    Password
+    Confirm
+    ID
+    Language
+    Ethnicity *
+    Citizenship
+
+    >>> manager.getControl('Ethnicity').displayOptions
+    ['American Indian or Alaska Native',
+     'Asian',
+     'Black or African American',
+     'Native Hawaiian or Other Pasific Islander',
+     'White',
+     'Martians']
+
+TODO
+Test values being unset if you remove a field
+Test export
+Test import

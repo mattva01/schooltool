@@ -36,9 +36,4 @@
       for="schooltool.app.interfaces.ISchoolToolApplication"
       factory=".contact.getContactContainer" />
 
-  <include package="grokcore.component" file="meta.zcml" />
-  <include package="grokcore.view" file="meta.zcml" />
-  <include package="grokcore.view" />
-  <grok:grok package="." />
-
 </configure>

@@ -6,9 +6,7 @@
   </metal:block>
 
   <metal:block fill-slot="content-header">
-    <h1 tal:content="context/title" />
-    <strong i18n:translate="">Username:</strong>
-    <span tal:replace="context/zope:name">not_doe</span>
+    <div metal:use-macro="macro:display" />
     <br />
 
   </metal:block>
@@ -21,8 +19,6 @@
       <div class="info-block">
         <h5 i18n:translate="">Details</h5>
       </div>
-      <strong i18n:translate="">Ethnicity:</strong>
-      <span tal:replace="view/demographics/ethnicity"></span>
       <tal:block tal:replace="structure provider:schooltool.person.Info"/>
     </div>
 

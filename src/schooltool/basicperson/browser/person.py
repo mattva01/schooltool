@@ -25,7 +25,6 @@ import zope.interface
 from zope.app.container.interfaces import INameChooser
 from zope.app.form.browser.interfaces import ITerms
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
-from zope.component import adapter
 from zope.component import adapts
 from zope.component import getUtility
 from zope.exceptions.interfaces import UserError
@@ -49,19 +48,6 @@ from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IBasicPerson
 
 from schooltool.common import SchoolToolMessage as _
-
-
-class PersonView(BrowserView):
-
-    template = ViewPageTemplateFile('templates/person_view.pt')
-
-    @property
-    def demographics(self):
-        from schooltool.basicperson.interfaces import IDemographics
-        return IDemographics(self.context)
-
-    def __call__(self):
-        return self.template()
 
 
 class IPersonAddForm(IBasicPerson):
@@ -139,6 +125,24 @@ class PersonForm(object):
         for field_desc in field_descriptions.values():
             fields += field_desc.makeField()
         return fields
+
+
+class PersonView(form.DisplayForm, PersonForm):
+
+    template = ViewPageTemplateFile('templates/person_view.pt')
+
+    @property
+    def label(self):
+        return self.context.title
+
+    def update(self):
+        self.fields = field.Fields(IBasicPerson)
+        self.fields += self.generateExtraFields()
+        super(PersonView, self).update()
+
+    def __call__(self):
+        self.update()
+        return self.render()
 
 
 class PersonAddView(form.AddForm, PersonForm):

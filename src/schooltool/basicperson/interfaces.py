@@ -17,14 +17,15 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Lyceum person interfaces.
-
-$Id$
+SchoolTool basic person interfaces.
 """
 from zope.app.container.interfaces import IContainer
 from zope.app.container.interfaces import IOrderedContainer
-from zope.schema import Date, Choice, TextLine, Bytes
+from zope.schema import Date, Choice, TextLine, Bool
+from zope.configuration.fields import PythonIdentifier
 from zope.interface import Interface, Attribute
+
+from zope.schema import List
 from zope.schema.interfaces import IIterableSource
 
 from schooltool.common import SchoolToolMessage as _
@@ -93,6 +94,7 @@ class IAdvisor(Interface):
 
     students = Attribute("""Students being advised by the advisor.""")
 
+
     def addStudent(student):
         """Add a student to the advised students list."""
 
@@ -110,3 +112,26 @@ class IDemographics(IContainer):
 
 class IDemographicsFields(IOrderedContainer):
     """Demographics field storage."""
+
+
+class IFieldDescription(Interface):
+    """Demographics field."""
+
+    title = TextLine(
+        title = _(u"Title"),
+        description = _(u"The title of this Field Description"))
+
+    name = PythonIdentifier(
+        title = _(u"Name"),
+        description = _(u"The name of this Field Description"))
+
+    required = Bool(
+        title = _(u"Required"),
+        description = _(u"Whether this Field is required or not"))
+
+
+class IEnumFieldDescription(IFieldDescription):
+    """Enumeration demographics field."""
+
+    items = List(
+        title = _('List of values'))

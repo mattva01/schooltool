@@ -45,14 +45,12 @@
             <tal:block repeat="widget view/widgets/values">
               <div id="" class="row"
                    tal:attributes="id string:${widget/id}-row"
-                   tal:condition="python:widget.mode != 'hidden'">
+                   tal:condition="python:widget.mode != 'hidden' and widget.value">
                 <metal:widget-row define-macro="widget-row">
                   <div class="label">
                     <label tal:attributes="for widget/id">
                       <span i18n:translate=""
                             tal:content="widget/label">label</span>
-                      <span class="required"
-                            tal:condition="widget/required">*</span>
                     </label>
                   </div>
                   <div class="widget" tal:content="structure widget/render">
