@@ -30,7 +30,12 @@
         <p i18n:translate="">
           The first row of the file must contain the id of the 
           <strong>timetable schema</strong> which will be used for the new 
-          timetables.  The second row should be empty.  After that, 
+          timetables.  The id of a timetable schema can be found by going to
+          its view page under School Timetables for the school year.
+        </p>
+
+        <p i18n:translate="">
+          The second row should be empty.  After that, 
           several section descriptions may follow.  They are separated by 
           an extra carriage return (i.e., a blank line).
         </p>

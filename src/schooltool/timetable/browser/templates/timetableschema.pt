@@ -14,6 +14,8 @@
 
   <p tal:condition="view/timezone"
      tal:content="string:Timezone: ${view/timezone}"/>
+  <h3 tal:content="string:Timetable ID: ${view/context/__name__}">Timetable ID</h3>
+  <br />
   <table class="timetable"
          tal:define="ncols python:len(context.keys()) or 1;
                      col_width python:'%d%%' % (100 / ncols);
