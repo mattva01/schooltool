@@ -165,10 +165,12 @@ def doctest_format_persons():
         >>> from zope.testing.doctestunit import pprint
         >>> for row in exporter.format_persons(): pprint(row)
         [Header('User Name'),
+         Header('Prefix'),
          Header('First Name'),
+         Header('Middle Name'),
          Header('Last Name'),
-         Header('Email'),
-         Header('Phone'),
+         Header('Suffix'),
+         Header('Preferred Name'),
          Header('Birth Date'),
          Header('Gender'),
          Header('Password'),
@@ -178,7 +180,9 @@ def doctest_format_persons():
          Header('Place of birth'),
          Header('Citizenship')]
         [Text(u'john'),
+         Text(None),
          Text('John'),
+         Text(None),
          Text('Peterson'),
          Text(None),
          Text(None),
@@ -191,7 +195,9 @@ def doctest_format_persons():
          Text('Humptington'),
          Text('US')]
         [Text(u'manager'),
+         Text(None),
          Text('SchoolTool'),
+         Text(None),
          Text('Administrator'),
          Text(None),
          Text(None),
@@ -204,7 +210,9 @@ def doctest_format_persons():
          Text(None),
          Text(None)]
         [Text(u'pete'),
+         Text(None),
          Text('Pete'),
+         Text(None),
          Text('Johnson'),
          Text(None),
          Text(None),
@@ -217,7 +225,9 @@ def doctest_format_persons():
          Text('Providence'),
          Text('UK')]
         [Text(u'teacher'),
+         Text(None),
          Text('Mister'),
+         Text(None),
          Text('T'),
          Text(None),
          Text(None),

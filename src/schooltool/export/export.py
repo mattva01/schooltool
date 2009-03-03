@@ -387,10 +387,12 @@ class MegaExporter(SchoolTimetableExportView):
 
     def format_persons(self):
         fields = [('User Name', Text, attrgetter('__name__')),
+                  ('Prefix', Text, attrgetter('prefix')),
                   ('First Name', Text, attrgetter('first_name')),
+                  ('Middle Name', Text, attrgetter('middle_name')),
                   ('Last Name', Text, attrgetter('last_name')),
-                  ('Email', Text, attrgetter('email')),
-                  ('Phone', Text, attrgetter('phone')),
+                  ('Suffix', Text, attrgetter('suffix')),
+                  ('Preferred Name', Text, attrgetter('preferred_name')),
                   ('Birth Date', Date, attrgetter('birth_date')),
                   ('Gender', Text, attrgetter('gender')),
                   ('Password', Text, lambda p: None)]

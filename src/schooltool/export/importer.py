@@ -363,31 +363,31 @@ class PersonImporter(ImporterBase):
 
     sheet_name = 'Persons'
 
+    def applyData(self, person, data):
+        person.prefix = data['prefix']
+        person.first_name = data['first_name']
+        person.middle_name = data['middle_name']
+        person.last_name = data['last_name']
+        person.suffix = data['suffix']
+        person.preferred_name = data['preferred_name']
+        person.birth_date = data['birth_date']
+        person.gender = data['gender']
+        if data['password']:
+            person.setPassword(data['password'])
+
     def createPerson(self, data):
         from schooltool.basicperson.person import BasicPerson
         person = BasicPerson(data['__name__'],
                              data['first_name'],
                              data['last_name'])
-        person.email = data['email']
-        person.phone = data['phone']
-        person.birth_date = data['birth_date']
-        person.gender = data['gender']
-        if data['password']:
-            person.setPassword(data['password'])
+        self.applyData(person, data)
         return person
 
     def addPerson(self, person, data):
         pc = self.context['persons']
         if person.username in pc:
             person = pc[person.username]
-            person.first_name = data['first_name']
-            person.last_name = data['last_name']
-            person.email = data['email']
-            person.phone = data['phone']
-            person.birth_date = data['birth_date']
-            person.gender = data['gender']
-            if data['password']:
-                person.setPassword(data['password'])
+            self.applyData(person, data)
         else:
             pc[person.username] = person
 
@@ -400,24 +400,26 @@ class PersonImporter(ImporterBase):
                 break
             data = {}
             data['__name__'] = sh.cell_value(rowx=row, colx=0)
-            data['first_name'] = sh.cell_value(rowx=row, colx=1)
-            data['last_name'] = sh.cell_value(rowx=row, colx=2)
-            data['email'] = sh.cell_value(rowx=row, colx=3)
-            data['phone'] = sh.cell_value(rowx=row, colx=4)
-            data['birth_date'] = self.getDateFromCell(sh, row, 5, default=None)
-            data['gender'] = sh.cell_value(rowx=row, colx=6)
+            data['prefix'] = sh.cell_value(rowx=row, colx=1)
+            data['first_name'] = sh.cell_value(rowx=row, colx=2)
+            data['middle_name'] = sh.cell_value(rowx=row, colx=3)
+            data['last_name'] = sh.cell_value(rowx=row, colx=4)
+            data['suffix'] = sh.cell_value(rowx=row, colx=5)
+            data['preferred_name'] = sh.cell_value(rowx=row, colx=6)
+            data['birth_date'] = self.getDateFromCell(sh, row, 7, default=None)
+            data['gender'] = sh.cell_value(rowx=row, colx=8)
             if data['gender'] == '':
                 data['gender'] = None
-            data['password'] = sh.cell_value(rowx=row, colx=7)
+            data['password'] = sh.cell_value(rowx=row, colx=9)
 
             person = self.createPerson(data)
 
             demographics = IDemographics(person)
             for n, field in enumerate(fields.values()):
                 if isinstance(field, DateFieldDescription):
-                    value = self.getDateFromCell(sh, row, n + 8, default=None)
+                    value = self.getDateFromCell(sh, row, n + 10, default=None)
                 else:
-                    value = sh.cell_value(rowx=row, colx=n + 8)
+                    value = sh.cell_value(rowx=row, colx=n + 10)
                 if value == '':
                     value = None
                 demographics[field.name] = value
