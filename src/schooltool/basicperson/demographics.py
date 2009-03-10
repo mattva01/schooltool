@@ -25,6 +25,7 @@ from persistent import Persistent
 from zope.schema._field import Choice
 from zope.schema._field import Date
 from zope.schema import TextLine
+from zope.location.location import Location
 from zope.location.location import locate
 from zope.interface import Interface
 from zope.interface import implements
@@ -40,9 +41,11 @@ from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.app.app import InitBase
 from schooltool.app.interfaces import IApplicationStartUpEvent
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.basicperson.interfaces import IEnumFieldDescription
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.basicperson.interfaces import IDemographics
+from schooltool.basicperson.interfaces import IFieldDescription
 
 
 class IDemographicsForm(Interface):
@@ -144,43 +147,38 @@ def getDemographicsFields(app):
     return app['schooltool.basicperson.demographics_fields']
 
 
-class FieldDescription(Persistent):
+class FieldDescription(Persistent, Location):
+    implements(IFieldDescription)
 
-    def __init__(self, name, title):
-        self.name, self.title = name, title
-        self.required = False
+    def __init__(self, name, title, required=False):
+        self.name, self.title,self.required = name, title, required
+
+    def setUpField(self, form_field):
+        form_field.required = self.required
+        form_field.__name__ = str(self.name)
+        form_field.interface = IDemographicsForm
+        return field.Fields(form_field)
 
 
 class EnumFieldDescription(FieldDescription):
+    implements(IEnumFieldDescription)
 
     items = []
 
     def makeField(self):
-        form_field = Choice(
-            title=unicode(self.title),
-            values=self.items
-            )
-        form_field.required = self.required
-        form_field.__name__ = self.name
-        form_field.interface = IDemographicsForm
-        return field.Fields(form_field)
+        return self.setUpField(Choice(
+                title=unicode(self.title),
+                values=self.items
+                ))
 
 
 class DateFieldDescription(FieldDescription):
 
     def makeField(self):
-        form_field = Date(title=unicode(self.title))
-        form_field.required = self.required
-        form_field.__name__ = self.name
-        form_field.interface = IDemographicsForm
-        return field.Fields(form_field)
+        return self.setUpField(Date(title=unicode(self.title)))
 
 
 class TextFieldDescription(FieldDescription):
 
     def makeField(self):
-        form_field = TextLine(title=unicode(self.title))
-        form_field.required = self.required
-        form_field.__name__ = self.name
-        form_field.interface = IDemographicsForm
-        return field.Fields(form_field)
+        return self.setUpField(TextLine(title=unicode(self.title)))

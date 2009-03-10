@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <page
+      name="index.html"
+      for="schooltool.contact.interfaces.IContact"
+      class=".contact.ContactView"
+      permission="schooltool.view"
+      menu="schooltool_actions"
+      title="View"
+      />
+
+  <page
+      name="edit.html"
+      for="schooltool.contact.interfaces.IContact"
+      class=".contact.ContactEditView"
+      permission="schooltool.edit"
+      menu="schooltool_actions"
+      title="Edit"
+      />
+
+  <page
+     name="add.html"
+     for="schooltool.contact.interfaces.IContactContainer"
+     class=".contact.ContactAddView"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="New Contact" />
+
+  <configure package="schooltool.skin">
+
+    <navigationViewlet
+      name="contacts"
+      for="*"
+      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.skin.skin.NavigationViewlet"
+      permission="schooltool.edit"
+      link="contacts"
+      title="Contacts"
+      order="60"
+      />
+
+    <page
+        name="index.html"
+        for="schooltool.contact.interfaces.IContactContainer"
+        class="schooltool.contact.browser.contact.ContactContainerView"
+        template="templates/container.pt"
+        permission="schooltool.view"
+        menu="zmi_views"
+        title="View"
+        />
+
+  </configure>
+
+  <zope:adapterTraverserPlugin
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      name="contacts"
+      adapter="schooltool.contact.interfaces.IContactContainer"
+      />
+
+  <zope:adapter
+      factory=".contact.ContactContainerAbsoluteURLAdapter"
+      provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <zope:adapter
+      factory=".contact.ContactContainerAbsoluteURLAdapter"
+      provides="zope.interface.Interface"
+      name="absolute_url"/>
+
+  <zope:adapter
+      for="schooltool.contact.interfaces.IContactContainer
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".contact.ContactTableFormatter " />
+
+</configure>

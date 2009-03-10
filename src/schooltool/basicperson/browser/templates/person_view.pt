@@ -6,14 +6,7 @@
   </metal:block>
 
   <metal:block fill-slot="content-header">
-
-    <tal:if condition="context/photo">
-      <img src="photo" class="person-photo" alt="photo" i18n:attributes="alt"
-           tal:attributes="src string:${context/@@absolute_url}/photo" />
-    </tal:if>
-    <h1 tal:content="context/title" />
-    <strong i18n:translate="">Username:</strong>
-    <span tal:replace="context/zope:name">not_doe</span>
+    <div metal:use-macro="macro:display" />
     <br />
 
   </metal:block>
@@ -26,8 +19,6 @@
       <div class="info-block">
         <h5 i18n:translate="">Details</h5>
       </div>
-      <strong i18n:translate="">Ethnicity:</strong>
-      <span tal:replace="view/demographics/ethnicity"></span>
       <tal:block tal:replace="structure provider:schooltool.person.Info"/>
     </div>
 

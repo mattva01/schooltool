@@ -18,7 +18,8 @@
              tal:define="canModify view/canModify">
   <tal:block replace="structure view/table/batch/render" />
   <form method="post" tal:attributes="action string:${context/@@absolute_url}">
-    <tal:block tal:replace="structure view/table/filter_widget/render" />
+    <tal:block tal:condition="view/table/filter_widget"
+               tal:replace="structure view/table/filter_widget/render" />
     <tal:if condition="view/table/batch">
       <div class="count" i18n:translate="">
         Showing

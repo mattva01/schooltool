@@ -35,6 +35,7 @@ from zope.app.testing.functional import FunctionalDocFileSuite
 from zope.app.appsetup.interfaces import IDatabaseOpenedEvent
 import zope.event
 
+from schooltool.testing.analyze import queryHTML
 from schooltool.testing import analyze
 
 
@@ -110,6 +111,13 @@ class TestBrowser(Browser):
         if url is None:
             url = self.url
         startServer(HTTPCaller(), url, self.username, self.password)
+
+    def queryHTML(self, query):
+        return queryHTML(query, self.contents)
+
+    def printQuery(self, query):
+        for item in queryHTML(query, self.contents):
+            print item
 
 
 def collect_ftests(package=None, level=None, layer=None, filenames=None):

@@ -49,7 +49,7 @@ class Term(object):
         self.value = value
 
 
-class GradeClassSource(object):
+class GroupSource(object):
     implements(IGroupSource)
 
     def __init__(self, context):
@@ -63,14 +63,13 @@ class GradeClassSource(object):
 
     def __iter__(self):
         if IPerson.providedBy(self.context):
-            tokens = [group.__name__
-                      for group in self.context.groups
+            groups = [group for group in self.context.groups
                       if IGroup.providedBy(group)]
         else:
-            tokens = list(IGroupContainer(ISchoolToolApplication(None), {}))
+            groups = list(IGroupContainer(ISchoolToolApplication(None), {}).values())
 
-        for token in sorted(tokens):
-            yield self.getTermByToken(token)
+        for group in sorted(groups, key=lambda g: g.__name__):
+            yield GroupTerm(group)
 
     def getTermByToken(self, token):
         gc = IGroupContainer(ISchoolToolApplication(None))
@@ -78,14 +77,14 @@ class GradeClassSource(object):
             raise LookupError(token)
         if token not in gc:
             raise LookupError(token)
-        return GroupTerm(token)
+        return GroupTerm(gc[token])
 
     def getTerm(self, value):
         return GroupTerm(value)
 
 
-def gradeClassVocabularyFactory():
-    return GradeClassSource
+def groupVocabularyFactory():
+    return GroupSource
 
 
 class AdvisorSource(object):
@@ -98,7 +97,7 @@ class AdvisorSource(object):
         return True
 
     def __len__(self):
-        return len(self.context.groups)
+        return len(self.context.advisors)
 
     def __iter__(self):
         gc = IGroupContainer(ISchoolToolApplication(None), None)

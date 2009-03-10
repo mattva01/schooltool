@@ -2,6 +2,7 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:browser="http://namespaces.zope.org/browser"
            xmlns:i18n="http://namespaces.zope.org/i18n"
+	   xmlns:security="http://schooltool.org/securitypolicy"
            i18n_domain="schooltool">
 
   <class class=".person.BasicPerson">
@@ -28,26 +29,54 @@
         set_attributes="modified" />
   </class>
 
+  <security:allow
+     interface="schooltool.basicperson.interfaces.IFieldDescription"
+     crowds="administration"
+     permission="schooltool.edit" />
+
+  <class class=".demographics.DemographicsFields">
+    <implements interface="schooltool.basicperson.interfaces.IDemographicsFields" />
+    <require
+       permission="schooltool.edit"
+       interface="schooltool.basicperson.interfaces.IDemographicsFields"
+       set_schema="schooltool.basicperson.interfaces.IDemographicsFields" />
+  </class>
+
+  <class class=".demographics.TextFieldDescription">
+    <allow interface="zope.location.interfaces.ILocation" />
+    <allow interface="schooltool.basicperson.interfaces.IFieldDescription" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.basicperson.interfaces.IFieldDescription" />
+  </class>
+
+  <class class=".demographics.DateFieldDescription">
+    <allow interface="zope.location.interfaces.ILocation" />
+    <allow interface="schooltool.basicperson.interfaces.IFieldDescription" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.basicperson.interfaces.IFieldDescription" />
+  </class>
+
+  <class class=".demographics.EnumFieldDescription">
+    <allow interface="zope.location.interfaces.ILocation" />
+    <allow interface="schooltool.basicperson.interfaces.IEnumFieldDescription" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.basicperson.interfaces.IEnumFieldDescription" />
+  </class>
+
   <adapter
-      factory=".person.BasicPersonCalendarCrowd"
-      provides="schooltool.app.interfaces.ICalendarParentCrowd"
-      name="schooltool.view" />
+     factory=".person.BasicPersonCalendarCrowd"
+     provides="schooltool.app.interfaces.ICalendarParentCrowd"
+     name="schooltool.view" />
 
   <subscriber
-      for="schooltool.app.interfaces.ICatalogSetUpEvent"
-      handler=".person.catalogSetUpSubscriber"
-      />
-
-  <adapter
-      factory=".advisor.PersonAdvisorAdapter" />
-
-  <adapter
-      factory=".advisor.PersonStudentAdapter" />
+     for="schooltool.app.interfaces.ICatalogSetUpEvent"
+     handler=".person.catalogSetUpSubscriber"
+     />
 
   <utility
-     factory=".vocabularies.gradeClassVocabularyFactory"
+     factory=".vocabularies.groupVocabularyFactory"
      provides="zope.schema.interfaces.IVocabularyFactory"
-     name="schooltool.basicperson.grade_class_source" />
+     name="schooltool.basicperson.group_source" />
 
   <utility
      factory=".vocabularies.advisorVocabularyFactory"

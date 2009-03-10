@@ -17,22 +17,10 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Lyceum advisor relationship.
-
-$Id$
-
+BasicPerson advisor relationship.
 """
-from zope.component import adapts
-from zope.interface import implements
-from zope.security.proxy import removeSecurityProxy
-
-from schooltool.relationship.uri import URIObject
 from schooltool.relationship.relationship import RelationshipSchema
-from schooltool.relationship.interfaces import IRelationshipLinks
-
-from schooltool.basicperson.interfaces import IBasicPerson
-from schooltool.basicperson.interfaces import IAdvisor
-from schooltool.basicperson.interfaces import IStudent
+from schooltool.relationship.uri import URIObject
 
 
 URIAdvising = URIObject('http://schooltool.org/ns/advising',
@@ -45,46 +33,3 @@ URIAdvisor = URIObject('http://schooltool.org/ns/advising/advisor',
 Advising = RelationshipSchema(URIAdvising,
                               advisor=URIAdvisor,
                               student=URIStudent)
-
-
-class PersonAdvisorAdapter(object):
-    adapts(IBasicPerson)
-    implements(IAdvisor)
-
-    def __init__(self, context):
-        self.context = removeSecurityProxy(context)
-
-    @property
-    def students(self):
-        relationships = IRelationshipLinks(self.context)
-        return relationships.getTargetsByRole(URIStudent, URIAdvising)
-
-    def addStudent(self, student):
-        Advising(student=student, advisor=self.context)
-
-    def removeStudent(self, student):
-        Advising.unlink(student=student, advisor=self.context)
-
-
-class PersonStudentAdapter(object):
-    adapts(IBasicPerson)
-    implements(IStudent)
-
-    def __init__(self, context):
-        self.context = removeSecurityProxy(context)
-
-    def getAdvisor(self):
-        relationships = IRelationshipLinks(self.context)
-        advisors = list(relationships.getTargetsByRole(URIAdvisor, URIAdvising))
-        assert len(advisors) < 2
-        advisors.append(None)
-        return advisors[0]
-
-    def setAdvisor(self, advisor):
-        old_advisor = self.getAdvisor()
-        if old_advisor:
-            IAdvisor(old_advisor).removeStudent(self.context)
-        IAdvisor(advisor).addStudent(self.context)
-
-    advisor = property(getAdvisor, setAdvisor)
-

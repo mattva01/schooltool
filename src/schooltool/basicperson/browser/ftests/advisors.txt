@@ -1,0 +1,142 @@
+Person Advisors/Advisees
+========================
+
+This file will test the functionality of adding the advisor and advisee
+relationship to a person using the UI.
+
+We log in as a manager
+
+    >>> manager = Browser('manager', 'schooltool')
+    >>> from schooltool.app.browser.ftests import setup
+    >>> setup.setUpBasicSchool()
+
+We will create two teachers and two students.
+
+    >>> from schooltool.basicperson.browser.ftests.setup import addPerson
+    >>> addPerson('Teacher1', 'One', 'teacher1', 'pwd', ['teachers'])
+    >>> addPerson('Teacher2', 'Two', 'teacher2', 'pwd', ['teachers'])
+    >>> addPerson('Student1', 'One', 'student1', 'pwd', ['students'])
+    >>> addPerson('Student2', 'Two', 'student2', 'pwd', ['students'])
+
+We'll view the advisors for student1.
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('Student1').click()
+    >>> manager.getLink('Advisors').click()
+
+We'll check that the student does not currently have any advisors.
+
+    >>> analyze.printQuery("id('content-body')/form/fieldset[1]/p", manager.contents)
+    <p>
+      There are none.
+    </p>
+
+Also, we see the list of available advisors.
+
+    >>> analyze.printQuery("id('content-body')/form/fieldset[2]//tbody//label", manager.contents)
+    <label for="add_item.manager">SchoolTool</label>
+    <label for="add_item.teacher1">Teacher1</label>
+    <label for="add_item.student1">Student1</label>
+    <label for="add_item.teacher2">Teacher2</label>
+    <label for="add_item.student2">Student2</label>
+
+Now we'll add teacher1 as an advisor.
+
+    >>> manager.getControl('Teacher1').click()
+    >>> manager.getControl('Add').click()
+
+We see teacher1 is now in the advisors for student1.
+
+    >>> analyze.printQuery("id('content-body')/form/fieldset[1]//tbody//label", manager.contents)
+    <label for="remove_item.teacher1">Teacher1</label>
+
+Also, we see that teacher1 is no longer available to be added as an advisor.
+
+    >>> analyze.printQuery("id('content-body')/form/fieldset[2]//tbody//label", manager.contents)
+    <label for="add_item.manager">SchoolTool</label>
+    <label for="add_item.student1">Student1</label>
+    <label for="add_item.teacher2">Teacher2</label>
+    <label for="add_item.student2">Student2</label>
+
+We'll view the advisees for teacher1.
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('Teacher1').click()
+    >>> manager.getLink('Advisees').click()
+
+We see that student1 is in the list of advisees.
+
+    >>> analyze.printQuery("id('content-body')/form/fieldset[1]//tbody//label", manager.contents)
+    <label for="remove_item.student1">Student1</label>
+
+Also, we see that student1 is not available to be added as an advisee.
+
+    >>> analyze.printQuery("id('content-body')/form/fieldset[2]//tbody//label", manager.contents)
+    <label for="add_item.manager">SchoolTool</label>
+    <label for="add_item.teacher1">Teacher1</label>
+    <label for="add_item.teacher2">Teacher2</label>
+    <label for="add_item.student2">Student2</label>
+
+We'll add student2 as an advisee and remove student1.
+
+    >>> manager.getControl('Student2').click()
+    >>> manager.getControl('Add').click()
+    >>> manager.getControl('Student1').click()
+    >>> manager.getControl('Remove').click()
+
+We see that student2 is in the list of advisees and student1 is not.
+
+    >>> analyze.printQuery("id('content-body')/form/fieldset[1]//tbody//label", manager.contents)
+    <label for="remove_item.student2">Student2</label>
+
+Also, we see that student2 is not available to be added as an advisee.
+
+    >>> analyze.printQuery("id('content-body')/form/fieldset[2]//tbody//label", manager.contents)
+    <label for="add_item.manager">SchoolTool</label>
+    <label for="add_item.teacher1">Teacher1</label>
+    <label for="add_item.student1">Student1</label>
+    <label for="add_item.teacher2">Teacher2</label>
+
+Finally, we'll view the advisors for student2.
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('Student2').click()
+    >>> manager.getLink('Advisors').click()
+
+We see that teacher1 is in the list of advisors.
+
+    >>> analyze.printQuery("id('content-body')/form/fieldset[1]//tbody//label", manager.contents)
+    <label for="remove_item.teacher1">Teacher1</label>
+
+Also, we see that teacher1 is not available to be added as an advisor.
+
+    >>> analyze.printQuery("id('content-body')/form/fieldset[2]//tbody//label", manager.contents)
+    <label for="add_item.manager">SchoolTool</label>
+    <label for="add_item.student1">Student1</label>
+    <label for="add_item.teacher2">Teacher2</label>
+    <label for="add_item.student2">Student2</label>
+
+We'll remove teacher1 as an advisor.
+
+    >>> manager.getControl('Teacher1').click()
+    >>> manager.getControl('Remove').click()
+
+We see that student2 no longer has any advisors.
+
+    >>> analyze.printQuery("id('content-body')/form/fieldset[1]/p", manager.contents)
+    <p>
+      There are none.
+    </p>
+
+Also, we see the list of available advisors has teacher1.
+
+    >>> analyze.printQuery("id('content-body')/form/fieldset[2]//tbody//label", manager.contents)
+    <label for="add_item.manager">SchoolTool</label>
+    <label for="add_item.teacher1">Teacher1</label>
+    <label for="add_item.student1">Student1</label>
+    <label for="add_item.teacher2">Teacher2</label>
+    <label for="add_item.student2">Student2</label>
+

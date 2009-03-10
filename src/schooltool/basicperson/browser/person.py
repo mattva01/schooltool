@@ -25,7 +25,6 @@ import zope.interface
 from zope.app.container.interfaces import INameChooser
 from zope.app.form.browser.interfaces import ITerms
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
-from zope.component import adapter
 from zope.component import adapts
 from zope.component import getUtility
 from zope.exceptions.interfaces import UserError
@@ -33,37 +32,35 @@ from z3c.form import form, field, button, validator
 from zope.interface import implementer
 from zope.interface import implements
 from zope.publisher.browser import BrowserView
-from zope.schema import Password
-from zope.schema import TextLine
+from zope.schema import Password, TextLine, Choice
 from zope.schema.interfaces import ITitledTokenizedTerm
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from z3c.form.validator import SimpleFieldValidator
 
 from schooltool.group.interfaces import IGroupContainer
+from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPersonContainer
 from schooltool.person.interfaces import IPersonFactory
 
 from schooltool.basicperson.interfaces import IDemographicsFields
-from schooltool.basicperson.interfaces import IBasicPerson, IStudent
+from schooltool.basicperson.interfaces import IBasicPerson
+
 from schooltool.common import SchoolToolMessage as _
 
 
-class PersonView(BrowserView):
-
-    template = ViewPageTemplateFile('templates/person_view.pt')
-
-    @property
-    def demographics(self):
-        from schooltool.basicperson.interfaces import IDemographics
-        return IDemographics(self.context)
-
-    def __call__(self):
-        return self.template()
-
-
 class IPersonAddForm(IBasicPerson):
+
+    group = Choice(
+        title=_(u"Group"),
+        source="schooltool.basicperson.group_source",
+        required=False)
+
+    advisor = Choice(
+        title=_(u"Advisor"),
+        source="schooltool.basicperson.advisor_source",
+        required=False)
 
     username = TextLine(
         title=_("Username"),
@@ -130,13 +127,31 @@ class PersonForm(object):
         return fields
 
 
+class PersonView(form.DisplayForm, PersonForm):
+
+    template = ViewPageTemplateFile('templates/person_view.pt')
+
+    @property
+    def label(self):
+        return self.context.title
+
+    def update(self):
+        self.fields = field.Fields(IBasicPerson)
+        self.fields += self.generateExtraFields()
+        super(PersonView, self).update()
+
+    def __call__(self):
+        self.update()
+        return self.render()
+
+
 class PersonAddView(form.AddForm, PersonForm):
     """Person add form for basic persons."""
     label = _("Add new person")
     template = ViewPageTemplateFile('templates/person_add.pt')
 
     def update(self):
-        self.fields = field.Fields(IPersonAddForm) + field.Fields(IStudent)
+        self.fields = field.Fields(IPersonAddForm)
         self.fields += self.generateExtraFields()
         super(PersonAddView, self).update()
 
@@ -163,7 +178,13 @@ class PersonAddView(form.AddForm, PersonForm):
         person = self._factory(data['username'], data['first_name'],
                                data['last_name'])
         data.pop('confirm')
+        group = data.pop('group')
+        advisor = data.pop('advisor')
         form.applyChanges(self, person, data)
+        if group is not None:
+            person.groups.add(group)
+        if advisor is not None:
+            person.advisors.add(advisor)
         self._person = person
         return person
 
@@ -181,10 +202,6 @@ class PersonAddView(form.AddForm, PersonForm):
         """
         name = person.username
         self.context[name] = person
-        # Add the persons to his class
-        if person.gradeclass is not None:
-            groups = IGroupContainer(ISchoolToolApplication(None))
-            person.groups.add(groups[person.gradeclass])
         return person
 
     @button.buttonAndHandler(_("Cancel"))
@@ -199,7 +216,7 @@ class PersonEditView(form.EditForm, PersonForm):
     template = ViewPageTemplateFile('templates/person_add.pt')
 
     def update(self):
-        self.fields = field.Fields(IBasicPerson) + field.Fields(IStudent)
+        self.fields = field.Fields(IBasicPerson)
         self.fields += self.generateExtraFields()
         super(PersonEditView, self).update()
 
@@ -269,9 +286,8 @@ class GroupTerm(object):
     implements(ITitledTokenizedTerm)
 
     def __init__(self, value):
-        groups = IGroupContainer(ISchoolToolApplication(None))
-        self.title = groups[value].title
-        self.token = value
+        self.title = value.title
+        self.token = value.__name__
         self.value = value
 
 
@@ -279,3 +295,52 @@ class GroupTerms(TermsBase):
     """Displaying groups."""
 
     factory = GroupTerm
+
+
+class PersonAdvisorView(RelationshipViewBase):
+    """View class for adding/removing advisors to/from a person."""
+
+    __used_for__ = IBasicPerson
+
+    current_title = _("Current Advisors")
+    available_title = _("Add Advisors")
+
+    @property
+    def title(self):
+        return _("Advisors of ${person}", 
+            mapping={'person': self.context.title})
+
+    def getSelectedItems(self):
+        """Return a list of current advisors."""
+        return self.context.advisors
+
+    def getAvailableItemsContainer(self):
+        return ISchoolToolApplication(None)['persons']
+
+    def getCollection(self):
+        return self.context.advisors
+
+
+class PersonAdviseeView(RelationshipViewBase):
+    """View class for adding/removing advisees to/from a person."""
+
+    __used_for__ = IBasicPerson
+
+    current_title = _("Current Advisees")
+    available_title = _("Add Advisees")
+
+    @property
+    def title(self):
+        return _("Advisees of ${person}", 
+            mapping={'person': self.context.title})
+
+    def getSelectedItems(self):
+        """Return a list of current advisees."""
+        return self.context.advisees
+
+    def getAvailableItemsContainer(self):
+        return ISchoolToolApplication(None)['persons']
+
+    def getCollection(self):
+        return self.context.advisees
+

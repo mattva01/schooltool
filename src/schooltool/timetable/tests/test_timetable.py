@@ -1047,11 +1047,10 @@ def doctest_findRelatedTimetables_forSchoolTimetables():
         <Timetable: ('A', 'B'), ...>,
         <Timetable: ('A', 'B'), ...>]
 
-       >>> [(tt.__parent__.__parent__.__name__, tt.__name__)
-       ...   for tt in findRelatedTimetables(tts)]
-       [(u'p1', '2006.simple'),
-        (u'p1', '2005.simple'), (u'p2', '2006.simple'),
-        (u'g', '2006.simple'), (u'r', '2006.simple')]
+       >>> sorted([(tt.__parent__.__parent__.__name__, tt.__name__)
+       ...          for tt in findRelatedTimetables(tts)])
+       [(u'g', '2006.simple'), (u'p1', '2005.simple'), (u'p1', '2006.simple'),
+        (u'p2', '2006.simple'), (u'r', '2006.simple')]
 
     Let's see the timetables of the other schema:
 
@@ -1152,10 +1151,10 @@ def doctest_findRelatedTimetables_forTerm():
         <Timetable: ('A', 'B'), ...>,
         <Timetable: ('A', 'B'), ...>]
 
-       >>> [(tt.__parent__.__parent__.__name__, tt.__name__)
-       ...   for tt in findRelatedTimetables(t1)]
-       [(u'p1', '2005.other'), (u'p1', '2005.simple'),
-        (u'p2', '2005.simple'), (u'g', '2005.simple'), (u'r', '2005.simple')]
+       >>> sorted([(tt.__parent__.__parent__.__name__, tt.__name__)
+       ...         for tt in findRelatedTimetables(t1)])
+       [(u'g', '2005.simple'), (u'p1', '2005.other'), (u'p1', '2005.simple'),
+        (u'p2', '2005.simple'), (u'r', '2005.simple')]
 
     Let's see the timetables of the other schema:
 

@@ -17,17 +17,15 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Lyceum person interfaces.
-
-$Id$
+SchoolTool basic person interfaces.
 """
 from zope.app.container.interfaces import IContainer
 from zope.app.container.interfaces import IOrderedContainer
-from zope.schema import Date
-from zope.schema import Choice
-from zope.schema import TextLine
-from zope.interface import Interface
-from zope.interface import Attribute
+from zope.schema import Date, Choice, TextLine, Bool
+from zope.configuration.fields import PythonIdentifier
+from zope.interface import Interface, Attribute
+
+from zope.schema import List
 from zope.schema.interfaces import IIterableSource
 
 from schooltool.common import SchoolToolMessage as _
@@ -36,14 +34,34 @@ from schooltool.common import SchoolToolMessage as _
 class IBasicPerson(Interface):
     """Marker interface for Lyceum specific person."""
 
+    prefix = TextLine(
+        title=_(u"Prefix"),
+        required=False,
+        )
+
     first_name = TextLine(
         title=_(u"First name"),
         required=True,
         )
 
+    middle_name = TextLine(
+        title=_(u"Middle name"),
+        required=False,
+        )
+
     last_name = TextLine(
         title=_(u"Last name"),
         required=True,
+        )
+
+    suffix = TextLine(
+        title=_(u"Suffix"),
+        required=False,
+        )
+
+    preferred_name = TextLine(
+        title=_(u"Preferred name"),
+        required=False,
         )
 
     gender = Choice(
@@ -52,27 +70,15 @@ class IBasicPerson(Interface):
         required=False,
         )
 
-    email = TextLine(
-        title=_(u"Email"),
-        required=False,
-        )
-
-    phone = TextLine(
-        title=_(u"Phone"),
-        required=False,
-        )
-
-    gradeclass = Choice(
-        title=_(u"Grade/Class", default="Group"),
-        source="schooltool.basicperson.grade_class_source",
-        required=False,
-        )
-
     birth_date = Date(
         title=_(u"Birth date"),
         description=_(u"(yyyy-mm-dd)"),
         required=False,
         )
+
+    advisors = Attribute("""Advisors of the person""")
+
+    advisees = Attribute("""Advisees of the person""")
 
 
 class IBasicPersonSource(IIterableSource):
@@ -84,18 +90,10 @@ class IGroupSource(IIterableSource):
     """Marker interface for sources that list schooltool groups."""
 
 
-class IStudent(Interface):
-
-    advisor = Choice(
-        title=_(u"Advisor"),
-        source="schooltool.basicperson.advisor_source",
-        required=False,
-        )
-
-
 class IAdvisor(Interface):
 
     students = Attribute("""Students being advised by the advisor.""")
+
 
     def addStudent(student):
         """Add a student to the advised students list."""
@@ -114,3 +112,26 @@ class IDemographics(IContainer):
 
 class IDemographicsFields(IOrderedContainer):
     """Demographics field storage."""
+
+
+class IFieldDescription(Interface):
+    """Demographics field."""
+
+    title = TextLine(
+        title = _(u"Title"),
+        description = _(u"The title of this Field Description"))
+
+    name = PythonIdentifier(
+        title = _(u"Name"),
+        description = _(u"The name of this Field Description"))
+
+    required = Bool(
+        title = _(u"Required"),
+        description = _(u"Whether this Field is required or not"))
+
+
+class IEnumFieldDescription(IFieldDescription):
+    """Enumeration demographics field."""
+
+    items = List(
+        title = _('List of values'))

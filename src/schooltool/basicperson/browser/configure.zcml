@@ -39,6 +39,24 @@
       title="Export"
       />
 
+  <page
+      name="advisors.html"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      class=".person.PersonAdvisorView"
+      permission="schooltool.edit"
+      menu="schooltool_actions"
+      title="Advisors"
+      />
+
+  <page
+      name="advisees.html"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      class=".person.PersonAdviseeView"
+      permission="schooltool.edit"
+      menu="schooltool_actions"
+      title="Advisees"
+      />
+
   <!-- list of persons -->
   <zope:adapter
       for="schooltool.basicperson.interfaces.IBasicPersonSource
@@ -78,16 +96,123 @@
      permission="schooltool.edit"
      menu="schooltool_actions" title="New Person"
      layer=".skin.IBasicPersonLayer" />
-
   <page
-      name="person-csvimport.html"
-      for="schooltool.person.interfaces.IPersonContainer"
-      class=".csvimport.BasicPersonCSVImportView"
-      template="templates/person-csvimport.pt"
-      permission="schooltool.edit"
-      layer=".skin.IBasicPersonLayer" />
+     name="person-csvimport.html"
+     for="schooltool.person.interfaces.IPersonContainer"
+     class=".csvimport.BasicPersonCSVImportView"
+     template="templates/person-csvimport.pt"
+     permission="schooltool.edit"
+     layer=".skin.IBasicPersonLayer" />
 
   <zope:adapter
-      factory=".person.UsernameValidator" />
+     factory=".person.UsernameValidator" />
+
+  <!-- DEMOGRAPHICS -->
+  <configure package="schooltool.skin">
+
+    <navigationViewlet
+      name="demographics"
+      for="*"
+      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.skin.skin.NavigationViewlet"
+      permission="schooltool.edit"
+      link="demographics"
+      title="Demographics"
+      order="15"
+      />
+
+  </configure>
+
+  <zope:adapterTraverserPlugin
+     for="schooltool.app.interfaces.ISchoolToolApplication"
+     layer="zope.publisher.interfaces.http.IHTTPRequest"
+     name="demographics"
+     adapter="schooltool.basicperson.demographics.IDemographicsFields"
+     permission="zope.Public"
+     />
+
+  <page
+     name="index.html"
+     for="schooltool.basicperson.interfaces.IDemographicsFields"
+     class=".demographics.DemographicsView"
+     template="templates/demographics-view.pt"
+     permission="schooltool.edit"
+     />
+
+  <page
+     name="addText.html"
+     for="schooltool.basicperson.interfaces.IDemographicsFields"
+     class=".demographics.TextFieldDescriptionAddView"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="New Text Field" />
+
+  <page
+     name="addDate.html"
+     for="schooltool.basicperson.interfaces.IDemographicsFields"
+     class=".demographics.DateFieldDescriptionAddView"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="New Date Field" />
+
+  <page
+     name="addEnum.html"
+     for="schooltool.basicperson.interfaces.IDemographicsFields"
+     class=".demographics.EnumFieldDescriptionAddView"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="New Enum Field" />
+
+  <page
+     name="edit.html"
+     for="schooltool.basicperson.demographics.TextFieldDescription"
+     class=".demographics.FieldDescriptionEditView"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="Edit" />
+
+  <page
+     name="edit.html"
+     for="schooltool.basicperson.demographics.DateFieldDescription"
+     class=".demographics.FieldDescriptionEditView"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="Edit" />
+
+  <page
+     name="edit.html"
+     for="schooltool.basicperson.demographics.EnumFieldDescription"
+     class=".demographics.EnumFieldDescriptionEditView"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="Edit" />
+
+  <page
+     name="index.html"
+     for="schooltool.basicperson.demographics.TextFieldDescription"
+     class=".demographics.TextFieldDescriptionView"
+     permission="schooltool.view"
+     menu="schooltool_actions" title="View" />
+
+  <page
+     name="index.html"
+     for="schooltool.basicperson.demographics.DateFieldDescription"
+     class=".demographics.DateFieldDescriptionView"
+     permission="schooltool.view"
+     menu="schooltool_actions" title="View" />
+
+  <page
+     name="index.html"
+     for="schooltool.basicperson.demographics.EnumFieldDescription"
+     class=".demographics.EnumFieldDescriptionView"
+     permission="schooltool.view"
+     menu="schooltool_actions" title="View" />
+
+  <zope:adapter
+      factory=".demographics.DemographicsFieldsAbsoluteURLAdapter"
+      provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <zope:adapter
+      factory=".demographics.DemographicsFieldsAbsoluteURLAdapter"
+      provides="zope.interface.Interface"
+      name="absolute_url"/>
+
+  <zope:adapter
+      factory=".demographics.CustomEnumDataConverter" />
 
 </configure>

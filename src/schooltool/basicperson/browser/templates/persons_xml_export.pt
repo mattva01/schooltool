@@ -12,8 +12,6 @@
       <basic:first_name tal:content="person/first_name" />
       <basic:last_name tal:content="person/last_name" />
       <basic:gender tal:condition="person/gender" tal:content="person/gender" />
-      <basic:email tal:condition="person/email" tal:content="person/email" />
-      <basic:phone tal:condition="person/phone" tal:content="person/phone" />
       <basic:birth_date tal:condition="person/birth_date" tal:content="person/birth_date" />
 
       <tal:block tal:repeat="exporter view/person_data_exporters"
