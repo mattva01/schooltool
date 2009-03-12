@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2009 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,14 +17,22 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Generations for database version upgrades.
+Upgrade SchoolTool to generation 29.
 
-$Id$
+Remove unused attributes from person schema.
 """
+from zope.app.generations.utility import findObjectsProviding
+from zope.app.publication.zopepublication import ZopePublication
 
-from zope.app.generations.generations import SchemaManager
+from schooltool.app.interfaces import ISchoolToolApplication
 
-schemaManager = SchemaManager(
-    minimum_generation=29,
-    generation=29,
-    package_name='schooltool.generations')
+def evolve(context):
+    root = context.connection.root().get(ZopePublication.root_name, None)
+
+    for app in findObjectsProviding(root, ISchoolToolApplication):
+        persons = app['persons']
+        for person in persons.values():
+            del person.email
+            del person.phone
+            if hasattr(person, 'gradeclass'):
+                del person.gradeclass
