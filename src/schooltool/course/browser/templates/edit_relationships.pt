@@ -1,103 +1,91 @@
 <tal:defs define="update view/update" />
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
-<head>
-  <title metal:fill-slot="title" tal:content="context/title" />
-</head>
-<body>
-<metal:block metal:fill-slot="body"
-             tal:define="batch view/batch">
+  <head>
+    <title i18n:translate="">
+      Section of
+      <tal:loop tal:repeat="course context/courses" i18n:name="course">
+        <a tal:replace="structure course/@@title" />
+      </tal:loop>
+      -- <span i18n:name="section_title" tal:replace="structure context/@@title" />
+      for
+      <tal:block i18n:name="term" tal:replace="structure view/term/@@title"/> of
+      <tal:block i18n:name="schoolyear" tal:replace="structure view/school_year/@@title" />
+    </title>
+  </head>
+  <body>
+    <h1 metal:fill-slot="content-header" i18n:translate="">
+      Section of
+      <tal:loop tal:repeat="course context/courses" i18n:name="course">
+        <a tal:replace="structure course/@@link" />
+      </tal:loop>
+      -- <span i18n:name="section_title" tal:replace="structure context/@@title" />
+      for
+      <tal:block i18n:name="term" tal:replace="structure view/term/@@link"/> of
+      <tal:block i18n:name="schoolyear" tal:replace="structure view/school_year/@@link" />
+    </h1>
+    <metal:block metal:fill-slot="body"
+		 tal:define="batch view/available_table/batch">
 
-<form method="post" tal:attributes="action request/URL" class="standalone">
-<h3 tal:content="view/title" />
-<fieldset tal:define="items view/getSelectedItems">
-  <tal:if condition="items">
-    <legend tal:content="view/current_title" />
-    <div tal:repeat="item items/sortby:title">
-      <label>
-        <input tal:attributes="name string:remove_item.${item/__name__}"
-          type="checkbox" />
-        <span tal:replace="item/title" />
-      </label>
-      <div tal:repeat="conflict python:view.getConflictingSections(item)"
-           i18n:translate="">
-        Conflict:
-        <a i18n:name="section"
-           tal:content="conflict/section/label"
-           tal:attributes="href conflict/section/@@absolute_url" />
-        (<span tal:replace="conflict/day_id" i18n:name="day_id" />,
-         <span tal:replace="conflict/period_id" i18n:name="period_id" />)
-      </div>
-      <div tal:repeat="conflict python:view.getConflictingEvents(item)"
-           i18n:translate="">
-        Conflict:
-        <a i18n:name="event"
-           tal:content="conflict/title"
-           tal:attributes="href conflict/@@absolute_url" />
-      </div>
-    </div>
-    <div class="controls">
-      <input type="submit" class="button-ok" name="REMOVE_ITEMS"
-        value="Remove"
-        title="Shortcut: Alt-R" accesskey="R"
-        i18n:attributes="value; accesskey" />
-    </div>
-  </tal:if>
-  <p tal:condition="not:items" i18n:translate="">
-    There are none.
-  </p>
-</fieldset>
-</form>
-<form method="post" tal:attributes="action request/URL" class="standalone">
-<fieldset>
-  <legend tal:content="view/available_title" />
-  <div class="item_list">
-    <tal:block replace="structure view/batch/render" />
-    <input type="text" name="SEARCH"
-      tal:attributes="value request/SEARCH|nothing"/>
-    <input type="submit" name="SEARCH_BUTTON" value="Find Now"
-      i18n:attributes="value"/>
-    <input type="submit" name="CLEAR_SEARCH" value="Clear"
-      i18n:attributes="value"/>
-    <div tal:repeat="item batch" tal:condition="batch">
-      <label>
-        <input tal:attributes="name string:add_item.${item/__name__}"
-               type="checkbox" />
-        <span tal:replace="item/title" />
-      </label>
-      <div tal:repeat="conflict python:view.getConflictingSections(item)"
-           i18n:translate="">
-        Conflict:
-        <a tal:content="conflict/section/label"
-           tal:attributes="href conflict/section/@@absolute_url" />
-        (<span tal:replace="conflict/day_id" i18n:name="day_id" />,
-         <span tal:replace="conflict/period_id" i18n:name="period_id" />)
-      </div>
-      <div tal:repeat="conflict python:view.getConflictingEvents(item)"
-           i18n:translate="">
-        Conflict:
-        <a i18n:name="event"
-           tal:content="conflict/title"
-           tal:attributes="href conflict/@@absolute_url" />
-      </div>
-    </div>
-    <div class="controls">
-      <input type="submit" class="button-ok" name="ADD_ITEMS"
-        value="Add" tal:condition="batch"
-        title="Shortcut: Alt-A" accesskey="A"
-        i18n:attributes="value; accesskey" />
-    </div>
-    <p tal:condition="not:batch" i18n:translate="">
-      There are none to add.
-    </p>
-  </div>
-</fieldset>
+      <form method="post" tal:attributes="action request/URL" class="standalone">
+        <script>
+          function invertSelection(pattern) {
+            $("INPUT").each(function (index) {
+                if (this.name.substr(0, pattern.length) == pattern) {
+                  this.checked = !this.checked;
+                }
+             });
+          }
+        </script>
+	<h3 tal:content="structure view/title" />
+	<fieldset tal:define="items view/getSelectedItems">
+	  <tal:if condition="items">
+	    <legend tal:content="view/current_title" />
+	    <tal:block replace="structure view/selected_table/render" />
+	    <div class="controls">
+	      <input type="submit" class="button-cancel" name="REMOVE_ITEMS"
+		     value="Remove"
+		     title="Shortcut: Alt-R" accesskey="R"
+		     i18n:attributes="value; accesskey" />
+	      <input onclick="invertSelection('remove_item')"
+                     type="button" class="button-ok"
+		     value="Invert Selection"
+                     i18n:attributes="value invert-selection-button"
+                     tal:condition="batch" />
+	    </div>
+	  </tal:if>
+          <p tal:condition="not:items" i18n:translate="">
+            There are none.
+          </p>
+	</fieldset>
+	<fieldset>
+	  <legend tal:content="view/available_title" />
+	  <div class="item_list">
+	    <tal:block replace="structure view/available_table/batch/render|nothing" />
+	    <tal:block replace="structure view/available_table/filter_widget/render|nothing" />
+	    <tal:block replace="structure view/available_table/render" />
+	    <div class="controls">
+	      <input type="submit" class="button-ok" name="ADD_ITEMS"
+		     value="Add" tal:condition="batch"
+		     title="Shortcut: Alt-A" accesskey="A"
+		     i18n:attributes="value; accesskey" />
+	      <input onclick="invertSelection('add_item')"
+                     type="button" class="button-ok"
+		     value="Invert Selection"
+                     i18n:attributes="value invert-selection-button"
+                     tal:condition="batch" />
+	    </div>
+	    <p tal:condition="not:batch" i18n:translate="">
+	      There are none to add.
+	    </p>
+	  </div>
+	</fieldset>
 
-<div class="controls">
-  <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
-         i18n:attributes="value cancel-button" />
-</div>
-</form>
+	<div class="controls">
+          <input type="submit" class="button-ok" name="CANCEL" value="OK"
+                 i18n:attributes="value ok-button" />
+	</div>
+      </form>
 
-</metal:block>
-</body>
+    </metal:block>
+  </body>
 </html>

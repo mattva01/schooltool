@@ -3,11 +3,7 @@ Simple test for school years
 
 A manager logs in
 
-    >>> from zope.testbrowser.testing import Browser
-    >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
-    >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/')
+    >>> manager = Browser('manager', 'schooltool')
 
 Sets the time
 
@@ -110,6 +106,20 @@ add an instructor
     >>> manager.getLink('Sections').click()
     >>> manager.getLink('English (1)').click()
     >>> manager.getLink('edit instructors').click()
+
+here we can see that the header of this view is displaying all the
+relevant information
+
+    >>> manager.printQuery("id('content-header')/h1")
+    <h1>
+          Section of
+          <a href="http://localhost/schoolyears/2005-2006/courses/english">English</a>
+          -- English (1)
+          for
+          <a href="http://localhost/schoolyears/2005-2006/fall">Fall</a> of
+          <a href="http://localhost/schoolyears/2005-2006">2005-2006</a>
+    </h1>
+
     >>> manager.getControl('SchoolTool Manager').click()
     >>> manager.getControl('Add').click()
     >>> manager.getControl('OK').click()
@@ -120,6 +130,3 @@ and a student
     >>> manager.getControl('SchoolTool Manager').click()
     >>> manager.getControl('Add').click()
     >>> manager.getControl('OK').click()
-
-#     >>> from zope.testing.server import startServer
-#     >>> startServer(http, manager.url, 'manager', 'schooltool')

@@ -23,6 +23,7 @@ $Id$
 """
 from zope.interface import implements
 from zope.security.proxy import removeSecurityProxy
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.intid.interfaces import IIntIds
 from zope.app.form.browser.add import AddView
 from zope.publisher.interfaces.browser import IBrowserRequest
@@ -191,6 +192,16 @@ class ConflictDisplayMixin(TimetableConflictMixin):
 
 class RelationshipEditConfView(RelationshipViewBase, ConflictDisplayMixin):
     """A relationship editing view that displays conflicts."""
+
+    __call__ = ViewPageTemplateFile('templates/edit_relationships.pt')
+
+    @property
+    def term(self):
+        return ITerm(self.context)
+
+    @property
+    def school_year(self):
+        return ISchoolYear(self.context)
 
     def update(self):
         RelationshipViewBase.update(self)
