@@ -42,6 +42,9 @@ def parse_args():
                       action="store_true",
                       dest="show_status",
                       help="Show the status of the (presumably daemonized) server")
+    parser.add_option("--user",
+                      dest="user",
+                      help="Run %prog as user. (If started as root)")
     options, args = parser.parse_args()
     if len(args) != 1:
         parser.error("""Missing instance to start up! You can create one using make-scooltool-instance.""")
@@ -62,6 +65,8 @@ def main():
         extra_options.append('--stop-daemon')
     if options.show_status:
         extra_options.append('--status')
+    if options.user:
+        extra_options.append('--user=%s' % options.user)
     if (options.start_daemon or
         options.stop_daemon or
         options.show_status):
