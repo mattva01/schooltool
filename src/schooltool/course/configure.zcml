@@ -178,6 +178,10 @@
   <adapter
       factory=".section.PersonInstructorAdapter" />
 
+  <!-- Validators -->
+  <adapter factory=".section.SectionLinkContinuinityValidationSubscriber"
+           name="validate_term_continuinity"/>
+
   <!-- Views -->
   <include package=".browser" />
 

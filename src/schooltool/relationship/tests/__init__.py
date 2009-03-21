@@ -60,7 +60,7 @@ class URIStub(object):
         return cmp(self.uri, other.uri)
 
 
-def setUp():
+def setUp(test=None):
     """Set up for schooltool.relationship doctests.
 
     Calls Zope's placelessSetUp, sets up annotations and relationships.
@@ -70,7 +70,7 @@ def setUp():
     setUpRelationships()
 
 
-def tearDown():
+def tearDown(test=None):
     """Tear down for schooltool.relationshp doctests."""
     setup.placelessTearDown()
 
