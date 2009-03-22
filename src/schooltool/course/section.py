@@ -27,7 +27,7 @@ import zope.interface
 
 from zope.event import notify
 from zope.annotation.interfaces import IAttributeAnnotatable
-from zope.app.container.interfaces import IObjectRemovedEvent
+from zope.app.container.interfaces import IObjectRemovedEvent, INameChooser
 from zope.app.container import btree, contained
 from zope.component import adapts
 from zope.interface import implements
@@ -393,3 +393,21 @@ class SectionLinkContinuinityValidationSubscriber(EventAdapterSubscriber):
                                   ISchoolYear(second_term)):
             raise InvalidSectionLinkException(
                 _("Cannot link sections in different school years"))
+
+
+def copySection(section, target_term):
+    """Create a copy of a section in a desired term."""
+    section_copy = Section(section.title, section.description)
+    sections = ISectionContainer(target_term)
+    name = section.__name__
+    if name in sections:
+        name = INameChooser(sections).chooseName(name, section_copy)
+    sections[name] = section_copy
+    for course in section.courses:
+        section_copy.courses.add(course)
+    for instructor in section.instructors:
+        section_copy.instructors.add(instructor)
+    for member in section.members:
+        section_copy.members.add(member)
+    return section_copy
+

@@ -186,6 +186,68 @@ def doctest_Section_linking_schoolyears():
     """
 
 
+def doctest_copySection():
+    r"""Test for copySection.
+
+        >>> from schooltool.course.section import Section
+        >>> from schooltool.course.course import Course
+        >>> from schooltool.person.person import Person
+
+    Create a section with a course, instructor and several members.
+
+        >>> year = setUpSchoolYear(2000)
+        >>> setUpTerms(year, 2)
+
+        >>> section = Section('English A')
+        >>> section.instructors.add(Person('teacher', 'Mr. Jones'))
+        >>> section.members.add(Person('first','First'))
+        >>> section.members.add(Person('second','Second'))
+        >>> section.members.add(Person('third','Third'))
+        >>> section.courses.add(Course(title="English"))
+        >>> ISectionContainer(year['Term1'])['Sec1'] = section
+
+    Let's copy it to another term.
+
+        >>> from schooltool.course.section import copySection
+
+        >>> new_section = copySection(section, year['Term2'])
+
+    Sectoin's copy was created.
+
+        >>> new_section is not section
+        True
+
+    Sec1 was available as section id in the new term, so it was preserved.
+
+        >>> print new_section.__name__
+        Sec1
+
+    Courses, instructors and members were copied.
+
+        >>> for course in new_section.courses:
+        ...     print course.title
+        English
+
+        >>> for person in new_section.instructors:
+        ...     print person.title
+        Mr. Jones
+
+        >>> for person in new_section.members:
+        ...     print person.title
+        First
+        Second
+        Third
+
+    If original section's __name__ is already present in the target term, an
+    alternative is chosen.
+
+        >>> other_section = copySection(section, year['Term2'])
+        >>> print other_section.__name__
+        1
+
+    """
+
+
 def test_suite():
     optionflags = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
     suite = doctest.DocTestSuite(optionflags=optionflags,
