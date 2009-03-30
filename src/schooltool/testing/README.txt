@@ -183,12 +183,12 @@ Let's build a short pdf story.
 
 There are several helpers for testing the stories.
 
-    >>> from schooltool.testing import pdf
+    >>> from schooltool.testing.pdf import StoryXML
 
-The tools aim to build a human readable XML representation of the
+The tool aims to build a human readable XML representation of the
 story.  There is a helper which prints the formatted XML:
 
-    >>> pdf.printStoryXML(story)
+    >>> StoryXML(story).printXML()
     <story>
     <Paragraph>Hello world</Paragraph>
     <PageBreak/>
@@ -197,24 +197,27 @@ story.  There is a helper which prints the formatted XML:
 
 As with HTML analyzation tools, there are helpers for XPath queries:
 
-    >>> pdf.queryStory('//Paragraph', story)
-    ['<Paragraph>Hello world</Paragraph>',
-     '<Paragraph>A new page</Paragraph>']
+    >>> parser = StoryXML(story)
 
-    >>> pdf.printQuery('//Paragraph', story)
+    >>> parser.printXML('//Paragraph')
     <Paragraph>Hello world</Paragraph>
     <Paragraph>A new page</Paragraph>
 
-These helpers also work on single platypus flowables:
+    >>> parser.query('//Paragraph')
+    ['<Paragraph>Hello world</Paragraph>',
+     '<Paragraph>A new page</Paragraph>']
 
-    >>> pdf.printStoryXML(Paragraph('Some text', style))
+If these helpers are not sufficient, we can use the raw XML document.
+
+    >>> parser.document
+    <...ElementTree object ...>
+
+These helpers also work on single platypus flowables.
+
+    >>> flowable = Paragraph('Some text', style)
+    >>> StoryXML(flowable).printXML()
     <story>
     <Paragraph>Some text</Paragraph>
     </story>
 
-If these helpers are not sufficient, we can build the raw XML document.
-
-    >>> document = pdf.getStoryXML(story)
-    >>> document
-    <...ElementTree object ...>
 

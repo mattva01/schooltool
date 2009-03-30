@@ -30,6 +30,25 @@ from reportlab.lib import units
 from reportlab import platypus
 
 
+def buildTableFlowable():
+    para_style = ParagraphStyle(name='Test', fontName='Times-Roman')
+
+    data = [
+        ['text',
+         platypus.paragraph.Paragraph('Text', para_style)],
+        [['several', 'items in a cell'],
+         platypus.flowables.Image('table_img.png')],
+    ]
+    return platypus.tables.Table(data)
+
+
+def buildNestedTables():
+    data = [
+        ['A table with another table inside!'],
+        [buildTableFlowable()]]
+    return platypus.tables.LongTable(data)
+
+
 def buildTestStory():
     para_style = ParagraphStyle(name='Test', fontName='Times-Roman')
 
@@ -75,46 +94,27 @@ def buildTestStory():
     flowables.append(platypus.flowables.UseUpSpace())
     flowables.append(platypus.flowables.Macro('print "foo"'))
 
+    flowables.append(buildNestedTables())
     return flowables
 
 
-def buildTableFlowable():
-    para_style = ParagraphStyle(name='Test', fontName='Times-Roman')
-
-    data = [
-        ['text',
-         platypus.paragraph.Paragraph('Text', para_style)],
-        [['several', 'items in a cell'],
-         platypus.flowables.Image('file.png')],
-    ]
-    return platypus.tables.Table(data)
-
-
-def buildNestedTables():
-    data = [
-        ['A table with another table inside!'],
-        [buildTableFlowable()]]
-    return platypus.tables.LongTable(data)
-
-
-def doctest_XML_building():
-    r"""Tests for getStoryXML and printStoryXML.
+def doctest_StoryXML():
+    r"""Tests for StoryXML document building and printing
 
         >>> story = buildTestStory()
 
-    getStoryXML builds an XML element tree with some some basic flowable
+    StoryXML builds an XML element tree with some some basic flowable
     parameters.
 
-        >>> from schooltool.testing.pdf import getStoryXML
-        >>> doc = getStoryXML(story)
+        >>> from schooltool.testing.pdf import StoryXML
+        >>> parser = StoryXML(story)
 
-        >>> doc
+        >>> parser.document
         <...ElementTree object ...>
 
-    printStoryXML builds and prints the XML tree.
+    StoryXML.printXML prints the XML tree.
 
-        >>> from schooltool.testing.pdf import printStoryXML
-        >>> printStoryXML(story)
+        >>> parser.printXML()
         <story>
           Some
           text
@@ -140,12 +140,6 @@ def doctest_XML_building():
           <CondPageBreak height="144.0"/>
           <Spacer width="216.0" height="72.0"/>
           <AnchorFlowable name="My anchor"/>
-        </story>
-
-    Test printing of tables.
-
-        >>> printStoryXML(buildNestedTables())
-        <story>
           <LongTable>
           <tr>
             <td>A table with another table inside!</td>
@@ -159,34 +153,26 @@ def doctest_XML_building():
               <tr>
                 <td>several
                     items in a cell</td>
-                <td><Image filename="file.png" width="None" height="None"/></td>
+                <td><Image filename="table_img.png" width="None" height="None"/></td>
               </tr>
             </Table></td>
             </tr>
           </LongTable>
         </story>
 
-    """
+    We can pass an XPath query to printXML.
 
-
-def doctest_XML_query_helpers():
-    r"""Tests for queryStory and printQuery.
-
-        >>> story = buildTestStory()
-
-    queryStory builds the XML and performs xpath query on it.
-
-        >>> from schooltool.testing.pdf import queryStory
-        >>> queryStory('//Image', story)
-        ['<Image filename="logo.png" width="None" height="72.0"/>',
-         '<Image filename="file.png" width="None" height="None"/>']
-
-    printQuery is a helper which also prints the results:
-
-        >>> from schooltool.testing.pdf import printQuery
-        >>> printQuery('//Image', story)
+        >>> parser.printXML('//Image')
         <Image filename="logo.png" width="None" height="72.0"/>
         <Image filename="file.png" width="None" height="None"/>
+        <Image filename="table_img.png" width="None" height="None"/>
+
+    Or use SimpleXML.query to obtain a list of results.
+
+        >>> parser.query('//Image')
+        ['<Image filename="logo.png" width="None" height="72.0"/>',
+         '<Image filename="file.png" width="None" height="None"/>',
+         '<Image filename="table_img.png" width="None" height="None"/>']
 
     """
 

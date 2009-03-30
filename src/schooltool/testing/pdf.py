@@ -30,36 +30,33 @@ from lxml import etree
 from reportlab import platypus
 
 
-def getStoryXML(story):
-    """Build human readable XML from a story of Reportlab flowables"""
-    parser = Parser(formatters=_xml_formatters,
-                    default=format_classname_xml)
-    text = u'<story>\n%s\n</story>' % parser(story)
-    return etree.parse(StringIO(text.encode('UTF-8')))
 
+class StoryXML(object):
 
-def printStoryXML(story):
-    print etree.tostring(getStoryXML(story),
-                         pretty_print=True)
+    document = None # XML document representing the story
 
-def queryStory(xpath, story):
-    """Perform an XPath query on XML built from the story of
-    Reportlab flowables"""
-    doc = getStoryXML(story)
-    result = []
-    for node in doc.xpath(xpath):
-        if isinstance(node, basestring):
-            result.append(node)
-        else:
-            result.append(etree.tostring(node, pretty_print=True))
-    return [s.strip() for s in result]
+    def __init__(self, story):
+        parser = Parser(formatters=_xml_formatters,
+                        default=format_classname_xml)
+        xml_text = u'<story>\n%s\n</story>' % parser(story)
+        self.document = etree.parse(StringIO(xml_text.encode('UTF-8')))
+        self._text = etree.tostring(self.document, pretty_print=True)
 
+    def query(self, xpath):
+        result = []
+        for node in self.document.xpath(xpath):
+            if isinstance(node, basestring):
+                result.append(node)
+            else:
+                result.append(etree.tostring(node, pretty_print=True))
+        return [s.strip() for s in result]
 
-def printQuery(xpath, story):
-    """Print results of XPath query on XML built from the story of
-    Reportlab flowables"""
-    for entry in queryStory(xpath, story):
-        print entry
+    def printXML(self, xpath=''):
+        if not xpath:
+            print self._text
+            return
+        for entry in self.query(xpath):
+            print entry
 
 
 null_formatter = lambda parser, flowable: u''
