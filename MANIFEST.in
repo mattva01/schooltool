@@ -16,5 +16,6 @@ recursive-include src *.xml
 recursive-include src *.fs
 recursive-include src *.xpdl
 recursive-include src *.ics
+recursive-include src *.xls
 include version.txt
 include version.txt.in
