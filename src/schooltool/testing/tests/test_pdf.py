@@ -132,8 +132,8 @@ def doctest_XML_building():
                       hAlign="CENTER" vAlign="BOTTOM"/>
           <Image filename="logo.png" width="None" height="72.0"/>
           <ParagraphAndImage xpad="72.0" ypad="3">
-          <Image filename="file.png" width="None" height="None"/>
-          <Paragraph>Text</Paragraph>
+            <Image filename="file.png" width="None" height="None"/>
+            <Paragraph>Text</Paragraph>
           </ParagraphAndImage>
           <PageBreak/>
           <SlowPageBreak/>

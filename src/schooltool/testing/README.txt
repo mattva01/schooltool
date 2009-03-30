@@ -161,3 +161,60 @@ It works also with XHTML compliant documents.
     >>> print analyze.queryHTML('/html/body/h1', html)[0]
     <h1>This is my page!</h1>
 
+
+Reportlab PDF story testing
+---------------------------
+
+Schooltool PDF reports utilize Reportlab platypus module.  A report is
+built from a list of platypus flowables known as as 'story'.
+
+Let's build a short pdf story.
+
+    >>> from reportlab.lib.styles import ParagraphStyle
+    >>> from reportlab.platypus.paragraph import Paragraph
+    >>> from reportlab.platypus.flowables import PageBreak
+
+    >>> style = ParagraphStyle(name='Test', fontName='Times-Roman')
+
+    >>> story = [
+    ...     Paragraph('Hello world', style),
+    ...     PageBreak(),
+    ...     Paragraph('A new page', style)]
+
+There are several helpers for testing the stories.
+
+    >>> from schooltool.testing import pdf
+
+The tools aim to build a human readable XML representation of the
+story.  There is a helper which prints the formatted XML:
+
+    >>> pdf.printStoryXML(story)
+    <story>
+    <Paragraph>Hello world</Paragraph>
+    <PageBreak/>
+    <Paragraph>A new page</Paragraph>
+    </story>
+
+As with HTML analyzation tools, there are helpers for XPath queries:
+
+    >>> pdf.queryStory('//Paragraph', story)
+    ['<Paragraph>Hello world</Paragraph>',
+     '<Paragraph>A new page</Paragraph>']
+
+    >>> pdf.printQuery('//Paragraph', story)
+    <Paragraph>Hello world</Paragraph>
+    <Paragraph>A new page</Paragraph>
+
+These helpers also work on single platypus flowables:
+
+    >>> pdf.printStoryXML(Paragraph('Some text', style))
+    <story>
+    <Paragraph>Some text</Paragraph>
+    </story>
+
+If these helpers are not sufficient, we can build the raw XML document.
+
+    >>> document = pdf.getStoryXML(story)
+    >>> document
+    <...ElementTree object ...>
+
