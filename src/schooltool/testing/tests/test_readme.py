@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Testing the package.
+Test suite for README-style tests.
 
 $Id$
 """
@@ -27,9 +27,12 @@ from zope.testing import doctest
 
 
 def test_suite():
+    optionflags = (doctest.NORMALIZE_WHITESPACE |
+                   doctest.ELLIPSIS |
+                   doctest.REPORT_NDIFF)
     return unittest.TestSuite((
-        doctest.DocFileSuite('README.txt',
-                             optionflags=doctest.NORMALIZE_WHITESPACE),
+        doctest.DocFileSuite('../README.txt',
+                             optionflags=optionflags),
         ))
 
 if __name__ == '__main__':
