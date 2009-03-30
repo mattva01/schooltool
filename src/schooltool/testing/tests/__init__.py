@@ -28,7 +28,7 @@ from zope.testing import doctest
 
 def test_suite():
     return unittest.TestSuite((
-        doctest.DocFileSuite('README.txt',
+        doctest.DocFileSuite('../README.txt',
                              optionflags=doctest.NORMALIZE_WHITESPACE),
         ))
 
