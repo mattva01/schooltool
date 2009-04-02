@@ -159,7 +159,7 @@
      for="schooltool.basicperson.interfaces.IDemographicsFields"
      class=".demographics.EnumFieldDescriptionAddView"
      permission="schooltool.edit"
-     menu="schooltool_actions" title="New Enum Field" />
+     menu="schooltool_actions" title="New Selection List Field" />
 
   <page
      name="edit.html"
