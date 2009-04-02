@@ -115,6 +115,7 @@
   <include package="schooltool.relationship" />
   <include package="schooltool.app" />
   <include package="schooltool.person" />
+  <include package="schooltool.contact" />
   <include package="schooltool.demographics" />
   <include package="schooltool.group" />
   <include package="schooltool.resource" />
