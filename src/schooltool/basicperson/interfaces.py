@@ -122,8 +122,8 @@ class IFieldDescription(Interface):
         description = _(u"The title of this Field Description"))
 
     name = PythonIdentifier(
-        title = _(u"Name"),
-        description = _(u"The name of this Field Description"))
+        title = _(u"ID"),
+        description = _(u"Unique ID of this Field Description"))
 
     required = Bool(
         title = _(u"Required"),
