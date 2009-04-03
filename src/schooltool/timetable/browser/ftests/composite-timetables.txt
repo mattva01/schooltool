@@ -25,14 +25,14 @@ Add a schoolyear and a term:
     >>> manager.getLink('School Years').click()
     >>> manager.getLink('New School Year').click()
     >>> manager.getControl('Title').value = '2003'
-    >>> manager.getControl('First day').value = '03/09/01'
-    >>> manager.getControl('Last day').value = '04/07/31'
+    >>> manager.getControl('First day').value = '2003-09-01'
+    >>> manager.getControl('Last day').value = '2004-07-31'
     >>> manager.getControl('Add').click()
 
     >>> manager.getLink("Add a new term").click()
     >>> manager.getControl("Title").value = "2005 Fall"
-    >>> manager.getControl("Start date").value = "03/09/01"
-    >>> manager.getControl("End date").value = "03/09/07"
+    >>> manager.getControl("Start date").value = "2003-09-01"
+    >>> manager.getControl("End date").value = "2003-09-07"
     >>> manager.getControl("Next").click()
 
     >>> manager.getControl("Sunday").click()

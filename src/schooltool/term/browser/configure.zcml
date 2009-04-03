@@ -1,8 +1,23 @@
 <?xml version="1.0"?>
 <configure
     xmlns="http://namespaces.zope.org/browser"
+    xmlns:z3c="http://namespaces.zope.org/z3c"
     xmlns:zope="http://namespaces.zope.org/zope"
     i18n_domain="schooltool">
+
+  <z3c:widgetTemplate
+      mode="input"
+      widget=".widgets.IDateTextWidget"
+      layer="schooltool.skin.skin.ISchoolToolLayer"
+      template="templates/date-input.pt"
+      />
+
+  <zope:adapter
+      factory=".widgets.CustomDateFieldTextWidget"
+      provides="z3c.form.interfaces.IFieldWidget"
+      for="zope.schema.interfaces.IDate
+           schooltool.skin.skin.ISchoolToolLayer"
+      />
 
   <page
       name="add.html"

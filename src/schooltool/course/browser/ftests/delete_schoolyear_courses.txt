@@ -8,7 +8,7 @@ A manager logs in
 Sets the time
 
     >>> manager.open('http://localhost/time')
-    >>> manager.getControl('Today').value = "05/02/15"
+    >>> manager.getControl('Today').value = "2005-02-15"
     >>> manager.getControl('Apply').click()
 
     >>> 'Data successfully updated.' in manager.contents
@@ -20,8 +20,8 @@ And creates a new school year:
     >>> manager.getLink('School Years').click()
     >>> manager.getLink('New School Year').click()
     >>> manager.getControl('Title').value = '2005-2006'
-    >>> manager.getControl('First day').value = '05/09/01'
-    >>> manager.getControl('Last day').value = '06/07/15'
+    >>> manager.getControl('First day').value = '2005-09-01'
+    >>> manager.getControl('Last day').value = '2006-07-15'
     >>> manager.getControl('Add').click()
 
 Adds a course

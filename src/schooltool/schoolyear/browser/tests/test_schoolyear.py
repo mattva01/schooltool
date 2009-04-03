@@ -69,8 +69,8 @@ def doctest_SchoolYearAddView():
 
         >>> request.form = {'form.buttons.add'  : u'Add',
         ...                 'form.widgets.title': u'2005-2006',
-        ...                 'form.widgets.first': u'05/09/01',
-        ...                 'form.widgets.last' : u'06/07/15'}
+        ...                 'form.widgets.first': u'2005-09-01',
+        ...                 'form.widgets.last' : u'2006-07-15'}
 
     And add the school year
 
@@ -90,8 +90,8 @@ def doctest_SchoolYearAddView():
 
         >>> request.form = {'form.buttons.cancel'  : u'Cancel',
         ...                 'form.widgets.title': u'',
-        ...                 'form.widgets.first': u'05/09/01',
-        ...                 'form.widgets.last' : u'06/07/15'}
+        ...                 'form.widgets.first': u'2005-09-01',
+        ...                 'form.widgets.last' : u'2006-07-15'}
         >>> view = SchoolYearAddView(syc, request)
         >>> view.update()
 
@@ -124,8 +124,8 @@ def doctest_SchoolYearAddView_overlap():
         >>> directlyProvides(request, [ISchoolToolSkin])
         >>> request.form = {'form.buttons.add'  : u'Add',
         ...                 'form.widgets.title': u'2006-2007',
-        ...                 'form.widgets.first': u'06/07/15',
-        ...                 'form.widgets.last' : u'07/07/15'}
+        ...                 'form.widgets.first': u'2006-07-15',
+        ...                 'form.widgets.last' : u'2007-07-15'}
 
     And submit it
 
@@ -136,7 +136,7 @@ def doctest_SchoolYearAddView_overlap():
 
         >>> for error in view.widgets.errors: print error.render()
         <div class="error">Date range you have selected overlaps with following school years:
-        <div> <a href="http://127.0.0.1/schoolyears/2005-2006">2005-2006</a> (9/1/05 &mdash; 7/16/06) </div>
+        <div> <a href="http://127.0.0.1/schoolyears/2005-2006">2005-2006</a> (2005-09-01 &mdash; 2006-07-16) </div>
         </div>
 
     There still should be only one school year in the container:
@@ -167,8 +167,8 @@ def doctest_SchoolYearEditView():
         >>> directlyProvides(request, [ISchoolToolSkin])
         >>> request.form = {'form.buttons.apply'  : u'Apply',
         ...                 'form.widgets.title': u'2006-2007',
-        ...                 'form.widgets.first': u'06/07/15',
-        ...                 'form.widgets.last' : u'07/07/15'}
+        ...                 'form.widgets.first': u'2006-07-15',
+        ...                 'form.widgets.last' : u'2007-07-15'}
 
     And submit it
 
@@ -190,8 +190,8 @@ def doctest_SchoolYearEditView():
 
         >>> request.form = {'form.buttons.cancel': u'Cancel',
         ...                 'form.widgets.title' : u'',
-        ...                 'form.widgets.first' : u'05/09/01',
-        ...                 'form.widgets.last'  : u'06/07/15'}
+        ...                 'form.widgets.first' : u'2005-09-01',
+        ...                 'form.widgets.last'  : u'2006-07-15'}
 
     So we'd get redirected back to the container view:
 
@@ -232,8 +232,8 @@ def doctest_SchoolYearEditView_shrink():
         >>> directlyProvides(request, [ISchoolToolSkin])
         >>> request.form = {'form.buttons.apply': u'Apply',
         ...                 'form.widgets.title': u'2006-2007',
-        ...                 'form.widgets.first': u'05/09/01',
-        ...                 'form.widgets.last' : u'06/07/15'}
+        ...                 'form.widgets.first': u'2005-09-01',
+        ...                 'form.widgets.last' : u'2006-07-15'}
 
     Then we submit the form
 
@@ -244,7 +244,7 @@ def doctest_SchoolYearEditView_shrink():
 
         >>> for error in view.widgets.errors: print error.render()
         <div class="error">Date range you have selected is too small to contain following term(s):
-        <div> <a href="http://127.0.0.1/schoolyears/2005-2006/spring">Spring</a> (1/14/06 &mdash; 7/16/06) </div>
+        <div> <a href="http://127.0.0.1/schoolyears/2005-2006/spring">Spring</a> (2006-01-14 &mdash; 2006-07-16) </div>
         </div>
 
     The school year should not get modified
@@ -279,8 +279,8 @@ def doctest_SchoolYearEditView_overlap():
         >>> directlyProvides(request, [ISchoolToolSkin])
         >>> request.form = {'form.buttons.apply': u'Apply',
         ...                 'form.widgets.title': u'2006-2007',
-        ...                 'form.widgets.first': u'06/07/15',
-        ...                 'form.widgets.last' : u'07/07/15'}
+        ...                 'form.widgets.first': u'2006-07-15',
+        ...                 'form.widgets.last' : u'2007-07-15'}
 
     And submit it
 
@@ -291,7 +291,7 @@ def doctest_SchoolYearEditView_overlap():
 
         >>> for error in view.widgets.errors: print error.render()
         <div class="error">Date range you have selected overlaps with following school years:
-        <div> <a href="http://127.0.0.1/schoolyears/2005-2006">2005-2006</a> (9/1/05 &mdash; 7/16/06) </div>
+        <div> <a href="http://127.0.0.1/schoolyears/2005-2006">2005-2006</a> (2005-09-01 &mdash; 2006-07-16) </div>
         </div>
 
     And the school year will not get modified

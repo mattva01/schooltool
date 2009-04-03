@@ -34,16 +34,16 @@ Add a school year
     >>> manager.getLink('School Years').click()
     >>> manager.getLink('New School Year').click()
     >>> manager.getControl('Title').value = '2007'
-    >>> manager.getControl('First day').value = '07/01/01'
-    >>> manager.getControl('Last day').value = '07/12/15'
+    >>> manager.getControl('First day').value = '2007-01-01'
+    >>> manager.getControl('Last day').value = '2007-12-15'
     >>> manager.getControl('Add').click()
 
 and a term
 
     >>> manager.getLink('Add a new term').click()
     >>> manager.getControl('Title').value = 'Term 1'
-    >>> manager.getControl('Start date').value = '07/07/01'
-    >>> manager.getControl('End date').value = '07/12/15'
+    >>> manager.getControl('Start date').value = '2007-07-01'
+    >>> manager.getControl('End date').value = '2007-12-15'
     >>> manager.getControl('Next').click()
     >>> manager.getControl('Saturday').click()
     >>> manager.getControl('Sunday').click()

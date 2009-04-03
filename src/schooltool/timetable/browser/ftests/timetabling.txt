@@ -32,8 +32,8 @@ Add a schoolyear:
 
     >>> manager.getLink('New School Year').click()
     >>> manager.getControl('Title').value = '2005'
-    >>> manager.getControl('First day').value = '05/09/01'
-    >>> manager.getControl('Last day').value = '06/07/31'
+    >>> manager.getControl('First day').value = '2005-09-01'
+    >>> manager.getControl('Last day').value = '2006-07-31'
     >>> manager.getControl('Add').click()
 
 And a group:
@@ -73,8 +73,8 @@ The manager can add one.
 First you have to specify the title and date.
 
     >>> manager.getControl('Title').value = '2005 Fall'
-    >>> manager.getControl('Start date').value = '05/09/01'
-    >>> manager.getControl('End date').value = '05/12/31'
+    >>> manager.getControl('Start date').value = '2005-09-01'
+    >>> manager.getControl('End date').value = '2005-12-31'
     >>> manager.getControl('Next').click()
 
 Then you can click on a couple of the toggle buttons to mark all Saturdays and
@@ -124,13 +124,13 @@ You can edit it
     >>> manager.getControl('Title').value
     '2005 Fall'
     >>> manager.getControl('Start date').value
-    '05/09/01'
+    '2005-09-01'
     >>> manager.getControl('End date').value
-    '05/12/31'
+    '2005-12-31'
 
     >>> manager.getControl('Title').value = '2005 Fall'
-    >>> manager.getControl('Start date').value = '05/09/01'
-    >>> manager.getControl('End date').value = '05/11/30'
+    >>> manager.getControl('Start date').value = '2005-09-01'
+    >>> manager.getControl('End date').value = '2005-11-30'
     >>> manager.getControl('Save changes').click()
 
     >>> print analyze.queryHTML('//div[@class="summary"]', manager.contents)[0]
@@ -139,9 +139,9 @@ You can edit it
     >>> manager.getControl('Title').value
     '2005 Fall'
     >>> manager.getControl('Start date').value
-    '05/09/01'
+    '2005-09-01'
     >>> manager.getControl('End date').value
-    '05/11/30'
+    '2005-11-30'
 
 Frog should be able to see the term in his yearly calendar view now.
 Let's make him a login so he can check.

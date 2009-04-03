@@ -24,26 +24,37 @@ from zope.component import adapts
 from zope.interface import implements
 from zope.interface import Interface
 
+from zc.datetimewidget.datetimewidget import DateWidget
+
+from z3c.form.converter import BaseDataConverter
+from z3c.form.converter import FormatterValidationError
+from z3c.form.browser.text import TextWidget
+from z3c.form.widget import FieldWidget
+
 from schooltool.common import parse_date
+from schooltool.common import SchoolToolMessage as _
 
 
 class IDateTextWidget(Interface):
     pass
 
 
-from z3c.form.browser.text import TextWidget
-class CustomDateTextWidget(TextWidget):
+class CustomDateTextWidget(TextWidget, DateWidget):
     implements(IDateTextWidget)
+
+    def date_selector_button(self):
+        real_name = self.name
+        self.name = self.id
+        result = self._render("")
+        self.name = real_name
+        return result
 
 
 def CustomDateFieldTextWidget(field, request):
     """IFieldWidget factory for MyWidget."""
-    from z3c.form.widget import FieldWidget
     return FieldWidget(field, CustomDateTextWidget(request))
 
 
-from z3c.form.converter import BaseDataConverter
-from z3c.form.converter import FormatterValidationError
 class CustomDateDataConverter(BaseDataConverter):
     """A special data converter for iso dates."""
 
@@ -62,4 +73,5 @@ class CustomDateDataConverter(BaseDataConverter):
         try:
             return parse_date(value)
         except ValueError, err:
-            raise FormatterValidationError(err.args[0], value)
+            raise FormatterValidationError(_("The datetime string did not match the pattern yyyy-mm-dd"),
+                                           value)

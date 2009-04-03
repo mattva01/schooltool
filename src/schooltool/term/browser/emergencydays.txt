@@ -308,7 +308,7 @@ Errors
 
 If date is invalid, the user sees a nice error:
 
-    >>> request = TestRequest(form={'date': '07/09/05'})
+    >>> request = TestRequest(form={'date': '2007-09-05'})
     >>> view = EmergencyDayView(term, request)
     >>> print view()
     <BLANKLINE>
