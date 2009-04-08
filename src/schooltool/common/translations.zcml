@@ -13,7 +13,6 @@
   <include package="schooltool.devmode" />
   <include package="schooltool.gradebook" />
   <include package="schooltool.help" />
-  <include package="schooltool.level" />
   <include package="schooltool.note" />
   <include package="schooltool.requirement" />
   <include package="schooltool.term" />

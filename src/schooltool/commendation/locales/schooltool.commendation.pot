@@ -1,0 +1,115 @@
+# SchoolTool - common information systems platform for school administration
+# Copyright (c) 2007    Shuttleworth Foundation
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+msgid ""
+msgstr ""
+"Project-Id-Version: SchoolTool Version SVN\n"
+"POT-Creation-Date: Wed Apr  8 03:34:58 2009\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: i18nextract.py\n"
+
+#: /build/schooltool/src/schooltool/commendation/browser.py:70
+#: /build/schooltool/src/schooltool/commendation/commendation.py:72
+msgid "<unknown>"
+msgstr ""
+
+#: /build/schooltool/src/schooltool/commendation/commendation.py:88
+msgid "commendations"
+msgstr ""
+
+#: /build/schooltool/src/schooltool/commendation/configure.zcml:100
+#: /build/schooltool/src/schooltool/commendation/configure.zcml:110
+msgid "Add Commendation"
+msgstr ""
+
+#: /build/schooltool/src/schooltool/commendation/configure.zcml:128
+msgid "All Commendations"
+msgstr ""
+
+#: /build/schooltool/src/schooltool/commendation/configure.zcml:82
+#: /build/schooltool/src/schooltool/commendation/configure.zcml:92
+msgid "View Commendations"
+msgstr ""
+
+#: /build/schooltool/src/schooltool/commendation/interfaces.py:48
+msgid "Title"
+msgstr ""
+
+#: /build/schooltool/src/schooltool/commendation/interfaces.py:49
+msgid "Title of the commendation."
+msgstr ""
+
+#: /build/schooltool/src/schooltool/commendation/interfaces.py:53
+msgid "Description"
+msgstr ""
+
+#: /build/schooltool/src/schooltool/commendation/interfaces.py:54
+msgid "A detailed description of the commendation."
+msgstr ""
+
+#: /build/schooltool/src/schooltool/commendation/interfaces.py:58
+msgid "Scope"
+msgstr ""
+
+#: /build/schooltool/src/schooltool/commendation/interfaces.py:59
+msgid "The scope of the commendation."
+msgstr ""
+
+#: /build/schooltool/src/schooltool/commendation/interfaces.py:60
+msgid "group"
+msgstr ""
+
+#: /build/schooltool/src/schooltool/commendation/interfaces.py:60
+msgid "community"
+msgstr ""
+
+#: /build/schooltool/src/schooltool/commendation/interfaces.py:60
+msgid "school-wide"
+msgstr ""
+
+#: /build/schooltool/src/schooltool/commendation/interfaces.py:61
+msgid "national"
+msgstr ""
+
+#: /build/schooltool/src/schooltool/commendation/interfaces.py:61
+msgid "global"
+msgstr ""
+
+#: /build/schooltool/src/schooltool/commendation/interfaces.py:61
+msgid "state"
+msgstr ""
+
+#: /build/schooltool/src/schooltool/commendation/interfaces.py:65
+msgid "Date"
+msgstr ""
+
+#: /build/schooltool/src/schooltool/commendation/interfaces.py:66
+msgid "The date the commendation was issued."
+msgstr ""
+
+#: /build/schooltool/src/schooltool/commendation/interfaces.py:71
+msgid "Grantor"
+msgstr ""
+
+#: /build/schooltool/src/schooltool/commendation/interfaces.py:72
+msgid "The grantor of the commendation."
+msgstr ""
+
