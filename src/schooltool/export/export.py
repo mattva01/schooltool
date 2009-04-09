@@ -69,8 +69,6 @@ class ExcelExportView(BrowserView):
         return 1 + offset + len(items)
 
     def skipRow(self, ws, offset):
-        self.write(ws, offset + 1, 0, "")
-        self.write(ws, offset + 1, 1, "")
         return offset + 1
 
     def listFields(self, item, accessors, ws, offset):
@@ -453,26 +451,30 @@ class MegaExporter(SchoolTimetableExportView):
         if not timetables:
             return offset
         timetables.sort(key=lambda t: t.schooltt.__name__)
-        self.write_header(ws, offset, 0,  "Timetables", merge=1)
-        offset += 1
-
         for timetable in timetables:
             self.write_header(ws, offset, 0,  "School Timetable")
             self.write(ws, offset, 1,  timetable.schooltt.__name__)
+            offset += 1
+
+            self.write_header(ws, offset, 0,  "Day")
+            self.write_header(ws, offset, 1,  "Period ID")
+            self.write_header(ws, offset, 2,  "Location ID")
+            offset += 1
+
             for n, (day_id, period_id, activity) in enumerate(timetable.activities()):
                 for event in ISchoolToolCalendar(section):
                     if ITimetableCalendarEvent.providedBy(event):
                         if event.activity == activity:
                             resource = event.resources[0]
                             break
-                self.write(ws, offset + n + 1, 0,  day_id)
-                self.write(ws, offset + n + 1, 1,  period_id)
-                self.write(ws, offset + n + 1, 2,  resource.__name__)
-            offset += 2 + len(timetable.activities())
+                self.write(ws, offset + n, 0,  day_id)
+                self.write(ws, offset + n, 1,  period_id)
+                self.write(ws, offset + n, 2,  resource.__name__)
+            offset += 1 + len(timetable.activities())
         return offset
 
     def format_section(self, section, ws, offset):
-        fields = [lambda i: ("Section*", i.title, None),
+        fields = [lambda i: ("Section Title", i.title, None),
                   lambda i: ("ID", i.__name__, None),
                   lambda i: ("School Year", ISchoolYear(i).__name__, None),
                   lambda i: ("Term", ITerm(i).__name__, None),
@@ -500,7 +502,7 @@ class MegaExporter(SchoolTimetableExportView):
                     row = self.format_section(section, ws, row) + 1
 
     def format_group(self, group, ws, offset):
-        fields = [lambda i: ("Group*", i.title, None),
+        fields = [lambda i: ("Group Title", i.title, None),
                   lambda i: ("ID", i.__name__, None),
                   lambda i: ("School Year", ISchoolYear(i.__parent__).__name__, None),
                   lambda i: ("Description", i.description, None)]

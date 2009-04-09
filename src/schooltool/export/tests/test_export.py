@@ -301,24 +301,23 @@ def doctest_MegaExporter_export_section():
         >>> len = exporter.format_section(section, ws, offset)
 
         >>> print ws.format()
-        +-------------+---------+
-        | Section*    | Section |
-        | ID          | s1      |
-        | School Year | 2005    |
-        | Term        | spring  |
-        | Description |         |
-        |             |         |
-        | Courses     |         |
-        | c1          |         |
-        |             |         |
-        | Students    |         |
-        | John        |         |
-        | Pete        |         |
-        |             |         |
-        | Instructors |         |
-        | Mister T    |         |
-        |             |         |
-        +-------------+---------+
+        +---------------+---------+
+        | Section Title | Section |
+        | ID            | s1      |
+        | School Year   | 2005    |
+        | Term          | spring  |
+        | Description   |         |
+        |               |         |
+        | Courses       |         |
+        | c1            |         |
+        |               |         |
+        | Students      |         |
+        | John          |         |
+        | Pete          |         |
+        |               |         |
+        | Instructors   |         |
+        | Mister T      |         |
+        +---------------+---------+
 
     """
 

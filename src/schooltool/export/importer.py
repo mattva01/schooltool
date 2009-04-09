@@ -493,6 +493,7 @@ class SectionImporter(ImporterBase):
         timetable = schema.createTimetable(ITerm(section))
         timetables = ITimetables(section).timetables
         timetables[schema_id] = timetable
+        row += 1
         resources = {}
         for row in range(row + 1, sh.nrows):
             if sh.cell_value(rowx=row, colx=0) == '':
@@ -562,8 +563,7 @@ class SectionImporter(ImporterBase):
                 section.instructors.add(removeSecurityProxy(instructor))
 
         row += 1
-        if sh.cell_value(rowx=row, colx=0) == 'Timetables':
-            row += 1
+        if sh.cell_value(rowx=row, colx=0) == 'School Timetable':
             row = self.import_timetables(sh, row, section)
 
         return row
@@ -571,7 +571,7 @@ class SectionImporter(ImporterBase):
     def process(self):
         sh = self.sheet
         for row in range(0, sh.nrows):
-            if sh.cell_value(rowx=row, colx=0) == 'Section*':
+            if sh.cell_value(rowx=row, colx=0) == 'Section Title':
                 row = self.import_section(sh, row)
 
 
@@ -624,7 +624,7 @@ class GroupImporter(ImporterBase):
     def process(self):
         sh = self.sheet
         for row in range(0, sh.nrows):
-            if sh.cell_value(rowx=row, colx=0) == 'Group*':
+            if sh.cell_value(rowx=row, colx=0) == 'Group Title':
                 row = self.import_group(sh, row)
 
 

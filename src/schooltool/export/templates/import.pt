@@ -22,7 +22,17 @@
 
       <form method="POST" enctype="multipart/form-data" class="standalone"
         tal:attributes="action request/URL">
-
+        <h3>
+          Import Data
+        </h3>
+        <p i18n:translate="">
+          If you want to - you can download an empty annotated example of the data:
+          <a i18n:name="link-to-empty-data-file" href="empty_data.xls"
+             tal:attributes="href context/++resource++empty_data.xls">empty_data.xls</a>
+          or a sample data file:
+          <a i18n:name="link-to-sample-data-file" href="sample_data.xls"
+             tal:attributes="href context/++resource++sample_data.xls">sample_data.xls</a>
+        </p>
         <fieldset>
           <legend i18n:translate="">Upload XLS File</legend>
           <div class="row">
