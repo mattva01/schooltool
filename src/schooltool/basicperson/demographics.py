@@ -34,6 +34,8 @@ from zope.component import adapts
 from zope.component import adapter
 from zope.app.container.btree import BTreeContainer
 from zope.app.container.ordered import OrderedContainer
+from zope.schema.vocabulary import SimpleVocabulary
+from zope.schema.vocabulary import SimpleTerm
 
 from z3c.form import field
 
@@ -160,6 +162,21 @@ class FieldDescription(Persistent, Location):
         return field.Fields(form_field)
 
 
+class IDNAVocabulary(SimpleVocabulary):
+
+    def createTerm(cls, *args):
+        """Create a single term from data.
+
+        Encode the value using idna encoding so it would look sane in
+        the form if it's ascii, but still work if it uses unicode.
+        """
+        value = args[0]
+        token = value.encode('idna')
+        title = value
+        return SimpleTerm(value, token, title)
+    createTerm = classmethod(createTerm)
+
+
 class EnumFieldDescription(FieldDescription):
     implements(IEnumFieldDescription)
 
@@ -168,7 +185,7 @@ class EnumFieldDescription(FieldDescription):
     def makeField(self):
         return self.setUpField(Choice(
                 title=unicode(self.title),
-                values=self.items
+                vocabulary=IDNAVocabulary.fromValues(self.items)
                 ))
 
 

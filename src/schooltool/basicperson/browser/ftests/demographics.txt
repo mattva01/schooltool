@@ -194,6 +194,29 @@ value in the select box, and have the field required:
      'White',
      'Martians']
 
+We can use unicode in select boxes too:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Demographics').click()
+    >>> manager.getLink('ethnicity').click()
+    >>> manager.getLink('Edit').click()
+
+    >>> values = manager.getControl('List of values').value.splitlines()
+    >>> manager.getControl('List of values').value = "\n".join(values + ['N\xc3\xb6rds'])
+    >>> manager.getControl('Apply').click()
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+    >>> manager.getControl('Ethnicity').displayOptions
+    ['American Indian or Alaska Native',
+     'Asian',
+     'Black or African American',
+     'Native Hawaiian or Other Pasific Islander',
+     'White',
+     'Martians',
+     'N\xc3\xb6rds']
+
 TODO
 Test values being unset if you remove a field
 Test export
