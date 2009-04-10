@@ -9,7 +9,7 @@
      template="templates/import.pt"
      class=".importer.MegaImporter"
      permission="schooltool.edit"
-     menu="schooltool_actions" title="Excel Import" />
+     menu="schooltool_actions" title="XLS Import" />
 
   <page
      name="export.xls"

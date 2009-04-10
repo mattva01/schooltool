@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Tests for SchoolTool excel export views.
+Tests for SchoolTool XLS export views.
 """
 import unittest
 from datetime import date

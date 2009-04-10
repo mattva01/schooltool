@@ -22,16 +22,38 @@
 
       <form method="POST" enctype="multipart/form-data" class="standalone"
         tal:attributes="action request/URL">
-        <h3>
+        <h3 i18n:translate="">
           Import Data
         </h3>
         <p i18n:translate="">
-          If you want to - you can download an empty annotated example of the data:
+          In addition to entering data through SchoolTool's web interface, you
+          can also import data from a spreadsheet using this template:
           <a i18n:name="link-to-empty-data-file" href="empty_data.xls"
-             tal:attributes="href context/++resource++empty_data.xls">empty_data.xls</a>
-          or a sample data file:
+             tal:attributes="href context/++resource++empty_data.xls">empty_data.xls</a>.
+        </p>
+        <p i18n:translate="">
+          Data included in the spreadsheet will be added to data in the system;
+          importing will not cause data to be removed.
+        </p>
+        <p i18n:translate="">
+          Note that the import system does not handle duplicated data very well
+          outside of the persons worksheet.  That is, if you try to import a
+          school year, for example, that already exists in the system, the
+          import will fail with an error.  Simply remove the duplicate data from
+          the spreadsheet and run the import again.  We're working on making
+          this process even smoother.
+        </p>
+
+        <p i18n:translate="">
+          For people interested in testing and exploring SchoolTool, we provide
+          a set of sample data:
           <a i18n:name="link-to-sample-data-file" href="sample_data.xls"
-             tal:attributes="href context/++resource++sample_data.xls">sample_data.xls</a>
+             tal:attributes="href context/++resource++sample_data.xls">sample_data.xls</a>.
+        </p>
+        <p i18n:translate="">
+          If you are importing your own
+          data, we highly recommend downloading the sample spreadsheet as a
+          reference.
         </p>
         <fieldset>
           <legend i18n:translate="">Upload XLS File</legend>
