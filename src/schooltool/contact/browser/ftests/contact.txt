@@ -1,13 +1,14 @@
 Contacts
 ========
 
-We can add contacts:
-
     >>> browser = Browser('manager', 'schooltool')
     >>> browser.getLink('Manage').click()
 
+Let's try and add a contact:
+
     >>> browser.getLink('Contacts').click()
     >>> browser.getLink('New Contact').click()
+
     >>> browser.getControl('Prefix').value = 'Mr'
     >>> browser.getControl('First name').value = 'John'
     >>> browser.getControl('Middle name').value = 'J'
@@ -19,7 +20,7 @@ We can add contacts:
     >>> browser.getControl('State').value = 'Arizona'
     >>> browser.getControl('Country').value = 'USA'
     >>> browser.getControl('Postal code').value = '556677'
-    >>> browser.getControl('Email').value = 'frog@example.com'
+    >>> browser.getControl('Email').value = 'john@example.com'
     >>> browser.getControl('Home phone').value = '055555555'
     >>> browser.getControl('Work phone').value = '066666666'
     >>> browser.getControl('Mobile phone').value = '077777777'
@@ -55,3 +56,52 @@ We can see that the new data is in the Display view of the contact:
     >>> browser.getLink('View').click()
     >>> browser.printQuery("id('form-widgets-email')")
     <span id="form-widgets-email" class="text-widget textline-field">johny@example.com</span>
+
+We can add contacts directly to persons:
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Persons').click()
+    >>> browser.getLink('SchoolTool Manager').click()
+    >>> browser.getLink('Add Contact').click()
+
+    >>> browser.getControl('First name').value = 'Peter'
+    >>> browser.getControl('Last name').value = 'Peterson'
+    >>> browser.getControl('Address line 1').value = 'Frog lane 14'
+    >>> browser.getControl('City').value = 'Toadtown'
+    >>> browser.getControl('Email').value = 'peter@example.com'
+
+    >>> browser.getControl('Add').click()
+
+And attach existing contact entries to a person as well:
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Persons').click()
+    >>> browser.getLink('SchoolTool Manager').click()
+    >>> browser.getLink('Manage Contacts').click()
+    >>> browser.getControl('John').click()
+    >>> browser.getControl('Add').click()
+
+Both contacts should be assigned now:
+
+    >>> browser.printQuery("id('content-body')/form/fieldset[1]//tbody//tr")
+    <tr class="odd"><td>
+          <input type="checkbox" name="remove_item.Contact" id="remove_item.Contact" /></td>
+        <td>
+          <label for="remove_item.Contact">John</label>
+        </td>
+        <td>
+          Johansen
+        </td>
+    </tr>
+    <tr class="even"><td>
+          <input type="checkbox" name="remove_item.Contact-2" id="remove_item.Contact-2" /></td>
+        <td>
+          <label for="remove_item.Contact-2">Peter</label>
+        </td>
+        <td>
+          Peterson
+        </td>
+    </tr>
+
+# TODO add link to "assign existing contact" in the add+assign form, add link to "add new contact" in the "assign form"
+# TODO add first name, last name, street address columns to contact listing views

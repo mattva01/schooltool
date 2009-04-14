@@ -13,6 +13,15 @@
       />
 
   <page
+      name="manage_contacts.html"
+      for="schooltool.person.interfaces.IPerson"
+      class=".relationship.ContactManagementView"
+      permission="schooltool.edit"
+      menu="schooltool_actions"
+      title="Manage Contacts"
+      />
+
+  <page
       name="edit.html"
       for="schooltool.contact.interfaces.IContact"
       class=".contact.ContactEditView"
@@ -27,6 +36,13 @@
      class=".contact.ContactAddView"
      permission="schooltool.edit"
      menu="schooltool_actions" title="New Contact" />
+
+  <page
+     name="add_contact.html"
+     for="schooltool.person.interfaces.IPerson"
+     class=".contact.PersonContactAddView"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="Add Contact" />
 
   <configure package="schooltool.skin">
 

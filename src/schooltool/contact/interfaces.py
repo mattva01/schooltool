@@ -23,6 +23,7 @@ Contact interfaces
 from zope.app.container.constraints import contains
 from zope.app.container.constraints import containers
 from zope.app.container.interfaces import IContained
+from zope.interface import Attribute
 from zope.interface import Interface
 from zope.schema import TextLine
 from zope.schema.interfaces import IContainer
@@ -60,6 +61,8 @@ class IContact(Interface):
 
     language = TextLine(title=_(u"Language"), required=False)
 
+    persons = Attribute("Persons attached to this contact (see IRelationshipProperty)")
+
 
 class IContactContainer(IContainer):
     """Container of contacts."""
@@ -71,3 +74,9 @@ class IContactContained(IContact, IContained):
     """Contact contained in an IContactContainer."""
 
     containers(IContactContainer)
+
+
+class IContactable(Interface):
+    """Object that can have contacts."""
+
+    contacts = Attribute("Contacts (see IRelationshipProperty)")

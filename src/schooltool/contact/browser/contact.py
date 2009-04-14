@@ -20,6 +20,7 @@
 """
 Contact browser views.
 """
+from zope.security.proxy import removeSecurityProxy
 from zope.interface import directlyProvides
 from zope.interface import implements
 from zope.component import getMultiAdapter
@@ -38,6 +39,7 @@ from z3c.form import form, field, button
 from schooltool.table.table import SchoolToolTableFormatter
 from schooltool.skin.containers import TableContainerView
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.contact.interfaces import IContactable
 from schooltool.contact.interfaces import IContactContainer
 from schooltool.contact.contact import Contact
 from schooltool.contact.interfaces import IContact
@@ -102,6 +104,25 @@ class ContactAddView(form.AddForm):
     def handle_cancel_action(self, action):
         url = absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
+
+
+class PersonContactAddView(ContactAddView):
+    """Contact add form that assigns the contact to a person."""
+
+    form.extends(ContactAddView)
+
+    @property
+    def label(self):
+        return _("Add new contact for ${person}",
+                 mapping={'person': self.context.title})
+
+    def add(self, contact):
+        """Add `contact` to the container. And assign it to the person."""
+        contact_container = IContactContainer(ISchoolToolApplication(None))
+        name = INameChooser(contact_container).chooseName('', contact)
+        contact_container[name] = contact
+        IContactable(removeSecurityProxy(self.context)).contacts.add(contact)
+        return contact
 
 
 class ContactEditView(form.EditForm):

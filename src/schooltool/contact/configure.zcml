@@ -6,6 +6,8 @@
            i18n_domain="schooltool">
 
   <class class=".contact.Contact">
+    <implements
+        interface="zope.annotation.interfaces.IAttributeAnnotatable" />
     <require
         permission="schooltool.edit"
         set_schema="schooltool.contact.interfaces.IContact" />
@@ -31,6 +33,10 @@
       for="schooltool.app.interfaces.ISchoolToolApplication"
       factory=".contact.ContactInit"
       name="schooltool.contact.contact" />
+
+  <adapter
+      for="schooltool.person.interfaces.IPerson"
+      factory=".contact.Contactable" />
 
   <adapter
       for="schooltool.app.interfaces.ISchoolToolApplication"
