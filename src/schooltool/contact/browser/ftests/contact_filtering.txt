@@ -1,0 +1,82 @@
+Filtering of contacts in contact listing views
+==============================================
+
+    >>> browser = Browser('manager', 'schooltool')
+    >>> browser.getLink('Manage').click()
+
+Let's add a bunch of contacts:
+
+    >>> from schooltool.contact.browser.ftests import addContact
+    >>> for i in range(20):
+    ...     addContact("Logan %s" % i, "Brown %s" % i, "Street %s" % i)
+
+They should be visible in the contact list now:
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Contacts').click()
+    >>> browser.printQuery("id('content-body')/form/table/tbody//tr/td/a")
+    <a href="http://localhost/contacts/Contact">Logan 0</a>
+    <a href="http://localhost/contacts/Contact-2">Logan 1</a>
+    <a href="http://localhost/contacts/Contact-11">Logan 10</a>
+    <a href="http://localhost/contacts/Contact-12">Logan 11</a>
+    <a href="http://localhost/contacts/Contact-13">Logan 12</a>
+    <a href="http://localhost/contacts/Contact-14">Logan 13</a>
+    <a href="http://localhost/contacts/Contact-15">Logan 14</a>
+    <a href="http://localhost/contacts/Contact-16">Logan 15</a>
+    <a href="http://localhost/contacts/Contact-17">Logan 16</a>
+    <a href="http://localhost/contacts/Contact-18">Logan 17</a>
+    <a href="http://localhost/contacts/Contact-19">Logan 18</a>
+    <a href="http://localhost/contacts/Contact-20">Logan 19</a>
+    <a href="http://localhost/contacts/Contact-3">Logan 2</a>
+    <a href="http://localhost/contacts/Contact-4">Logan 3</a>
+    <a href="http://localhost/contacts/Contact-5">Logan 4</a>
+    <a href="http://localhost/contacts/Contact-6">Logan 5</a>
+    <a href="http://localhost/contacts/Contact-7">Logan 6</a>
+    <a href="http://localhost/contacts/Contact-8">Logan 7</a>
+    <a href="http://localhost/contacts/Contact-9">Logan 8</a>
+    <a href="http://localhost/contacts/Contact-10">Logan 9</a>
+
+Let's filter out all the contacts whose names contain "Logan 1":
+
+    >>> browser.getControl(name='SEARCH_FIRST_NAME').value = "Logan 1"
+    >>> browser.getControl('Find Now').click()
+
+Only persons that match are in the list now:
+
+    >>> browser.printQuery("id('content-body')/form/table/tbody//tr/td/a")
+    <a href="http://localhost/contacts/Contact-2">Logan 1</a>
+    <a href="http://localhost/contacts/Contact-11">Logan 10</a>
+    <a href="http://localhost/contacts/Contact-12">Logan 11</a>
+    <a href="http://localhost/contacts/Contact-13">Logan 12</a>
+    <a href="http://localhost/contacts/Contact-14">Logan 13</a>
+    <a href="http://localhost/contacts/Contact-15">Logan 14</a>
+    <a href="http://localhost/contacts/Contact-16">Logan 15</a>
+    <a href="http://localhost/contacts/Contact-17">Logan 16</a>
+    <a href="http://localhost/contacts/Contact-18">Logan 17</a>
+    <a href="http://localhost/contacts/Contact-19">Logan 18</a>
+    <a href="http://localhost/contacts/Contact-20">Logan 19</a>
+
+We can filter by last name too:
+
+    >>> browser.getControl(name='SEARCH_LAST_NAME').value = "Brown 19"
+    >>> browser.getControl('Find Now').click()
+    >>> browser.printQuery("id('content-body')/form/table/tbody//tr/td/a")
+    <a href="http://localhost/contacts/Contact-20">Logan 19</a>
+
+The same search form has appeared in the contact management page, but
+the LAST_NAME input field should contain the last name of the user in
+it by default:
+
+    >>> browser.getLink('Home').click()
+    >>> browser.getLink('Manage Contacts').click()
+    >>> browser.printQuery("id('filter_widget')")
+    <div id="filter_widget">
+      <input type="text" name="SEARCH_FIRST_NAME"
+       /><input type="text" name="SEARCH_LAST_NAME"
+                value="Administrator"
+       /><input type="submit" name="SEARCH_BUTTON" value="Find Now"
+       /><input type="submit" name="CLEAR_SEARCH" value="Clear" /></div>
+
+This is because most of the time contact person for a student is his relative.
+
+

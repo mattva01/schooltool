@@ -20,6 +20,8 @@
 """
 Contact browser views.
 """
+import urllib
+
 from zope.security.proxy import removeSecurityProxy
 from zope.interface import directlyProvides
 from zope.interface import implements
@@ -36,6 +38,7 @@ from zc.table.interfaces import ISortableColumn
 from zc.table.column import GetterColumn
 from z3c.form import form, field, button
 
+from schooltool.table.table import FilterWidget
 from schooltool.table.table import SchoolToolTableFormatter
 from schooltool.skin.containers import TableContainerView
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -183,3 +186,48 @@ class ContactTableFormatter(SchoolToolTableFormatter):
 
     def sortOn(self):
         return (("first_name", False),)
+
+
+class ContactFilterWidget(FilterWidget):
+
+    template = ViewPageTemplateFile('templates/filter.pt')
+    parameters = ['SEARCH_FIRST_NAME', 'SEARCH_LAST_NAME']
+
+    def filter(self, items):
+        if 'CLEAR_SEARCH' in self.request:
+            for parameter in self.parameters:
+                self.request.form[parameter] = ''
+            return items
+
+        if 'SEARCH_FIRST_NAME' in self.request:
+            searchstr = self.request['SEARCH_FIRST_NAME'].lower()
+            items = [item for item in items
+                     if searchstr in item.first_name.lower()]
+
+        if 'SEARCH_LAST_NAME' in self.request:
+            searchstr = self.request['SEARCH_LAST_NAME'].lower()
+            items = [item for item in items
+                     if searchstr in item.last_name.lower()]
+
+        return items
+
+    def active(self):
+        for parameter in self.parameters:
+            if parameter in self.request:
+                return True
+        return False
+
+    def extra_url(self):
+        url = ""
+        for parameter in self.parameters:
+            if parameter in self.request:
+                url += '&%s=%s' % (parameter, self.request.get(parameter))
+        return url
+
+
+class ManageContactsActionViewlet(object):
+
+    @property
+    def link(self):
+        return "@@manage_contacts.html?%s" % (
+            urllib.urlencode([('SEARCH_LAST_NAME', self.context.last_name)]))

@@ -26,6 +26,7 @@ def addContact(firstname, lastname, address='', email='', browser=None):
     if browser is None:
         browser = TestBrowser('manager', 'schooltool')
 
+    browser.getLink('Manage').click()
     browser.getLink('Contacts').click()
     browser.getLink('New Contact').click()
 

@@ -35,7 +35,7 @@
       name="schooltool.contact.contact" />
 
   <adapter
-      for="schooltool.person.interfaces.IPerson"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
       factory=".contact.Contactable" />
 
   <adapter

@@ -12,7 +12,7 @@ Let's try and add a contact:
     >>> browser.getControl('Prefix').value = 'Mr'
     >>> browser.getControl('First name').value = 'John'
     >>> browser.getControl('Middle name').value = 'J'
-    >>> browser.getControl('Last name').value = 'Johansen'
+    >>> browser.getControl('Last name').value = 'Administrator'
     >>> browser.getControl('Suffix').value = 'Jr'
     >>> browser.getControl('Address line 1').value = 'Frog lane 13'
     >>> browser.getControl('Address line 2').value = ''
@@ -37,7 +37,7 @@ After adding a contact we get redirected to the contact list:
           <a href="http://localhost/contacts/Contact">John</a>
         </td>
         <td>
-          Johansen
+          Administrator
         </td>
     </tr>
 
@@ -59,9 +59,7 @@ We can see that the new data is in the Display view of the contact:
 
 We can add contacts directly to persons:
 
-    >>> browser.getLink('Manage').click()
-    >>> browser.getLink('Persons').click()
-    >>> browser.getLink('SchoolTool Manager').click()
+    >>> browser.getLink('Home').click()
     >>> browser.getLink('Add Contact').click()
 
     >>> browser.getControl('First name').value = 'Peter'
@@ -74,9 +72,7 @@ We can add contacts directly to persons:
 
 And attach existing contact entries to a person as well:
 
-    >>> browser.getLink('Manage').click()
-    >>> browser.getLink('Persons').click()
-    >>> browser.getLink('SchoolTool Manager').click()
+    >>> browser.getLink('Home').click()
     >>> browser.getLink('Manage Contacts').click()
     >>> browser.getControl('John').click()
     >>> browser.getControl('Add').click()
@@ -90,7 +86,7 @@ Both contacts should be assigned now:
           <label for="remove_item.Contact">John</label>
         </td>
         <td>
-          Johansen
+          Administrator
         </td>
     </tr>
     <tr class="even"><td>
@@ -103,5 +99,5 @@ Both contacts should be assigned now:
         </td>
     </tr>
 
-# TODO add link to "assign existing contact" in the add+assign form, add link to "add new contact" in the "assign form"
 # TODO add first name, last name, street address columns to contact listing views
+# TODO add link to "assign existing contact" in the add+assign form, add link to "add new contact" in the "assign form"

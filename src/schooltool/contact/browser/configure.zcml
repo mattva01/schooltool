@@ -14,11 +14,9 @@
 
   <page
       name="manage_contacts.html"
-      for="schooltool.person.interfaces.IPerson"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
       class=".relationship.ContactManagementView"
       permission="schooltool.edit"
-      menu="schooltool_actions"
-      title="Manage Contacts"
       />
 
   <page
@@ -39,7 +37,7 @@
 
   <page
      name="add_contact.html"
-     for="schooltool.person.interfaces.IPerson"
+     for="schooltool.basicperson.interfaces.IBasicPerson"
      class=".contact.PersonContactAddView"
      permission="schooltool.edit"
      menu="schooltool_actions" title="Add Contact" />
@@ -68,6 +66,17 @@
         title="View"
         />
 
+    <navigationViewlet
+      name="manage-contacts"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      class="schooltool.contact.browser.contact.ManageContactsActionViewlet"
+      permission="schooltool.edit"
+      title="Manage Contacts"
+      order="30"
+      />
+
   </configure>
 
   <zope:adapterTraverserPlugin
@@ -90,5 +99,10 @@
       for="schooltool.contact.interfaces.IContactContainer
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory=".contact.ContactTableFormatter " />
+
+  <zope:adapter
+      for="schooltool.contact.interfaces.IContactContainer
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".contact.ContactFilterWidget" />
 
 </configure>

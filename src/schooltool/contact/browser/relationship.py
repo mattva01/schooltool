@@ -21,7 +21,7 @@
 Contact relationship views.
 """
 from zope.security.proxy import removeSecurityProxy
-from schooltool.person.interfaces import IPerson
+from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.browser.app import RelationshipViewBase
 
@@ -33,7 +33,7 @@ from schooltool.common import SchoolToolMessage as _
 class ContactManagementView(RelationshipViewBase):
     """View class for adding/removing contacts to/from a person."""
 
-    __used_for__ = IPerson
+    __used_for__ = IBasicPerson
 
     current_title = _("Assigned Contacts")
     available_title = _("Available Contacts")

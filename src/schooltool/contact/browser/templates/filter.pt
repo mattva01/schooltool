@@ -1,0 +1,12 @@
+<tal:block i18n:domain="schooltool">
+  <div id="filter_widget">
+    <input type="text" name="SEARCH_FIRST_NAME"
+           tal:attributes="value request/SEARCH_FIRST_NAME|nothing"/>
+    <input type="text" name="SEARCH_LAST_NAME"
+           tal:attributes="value request/SEARCH_LAST_NAME|nothing"/>
+    <input type="submit" name="SEARCH_BUTTON" value="Find Now"
+           i18n:attributes="value"/>
+    <input type="submit" name="CLEAR_SEARCH" value="Clear"
+           i18n:attributes="value"/>
+  </div>
+</tal:block>
