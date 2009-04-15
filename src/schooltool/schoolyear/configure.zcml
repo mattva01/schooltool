@@ -20,10 +20,10 @@
       />
 
   <class class=".schoolyear.SchoolYear">
-    <require permission="schooltool.view"
-             interface=".interfaces.ISchoolYear" />
+    <allow interface="schooltool.schoolyear.interfaces.IReadSchoolYear" />
     <require permission="schooltool.edit"
-             set_schema=".interfaces.ISchoolYear" />
+             interface="schooltool.schoolyear.interfaces.IWriteSchoolYear"
+             set_schema="schooltool.schoolyear.interfaces.IReadSchoolYear" />
   </class>
 
   <adapter

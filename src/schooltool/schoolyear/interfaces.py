@@ -22,6 +22,8 @@ School year implementation
 from zope.interface import Interface
 from zope.schema import Date, TextLine
 from zope.location.interfaces import ILocation
+from zope.app.container.interfaces import IWriteContainer
+from zope.app.container.interfaces import IReadContainer
 from zope.app.container.interfaces import IContainer
 from zope.app.container import constraints
 
@@ -29,8 +31,11 @@ from schooltool.term.interfaces import ITermContainer
 from schooltool.common import SchoolToolMessage as _
 
 
-class ISchoolYear(ITermContainer):
-    """School year"""
+class IWriteSchoolYear(IWriteContainer):
+    """An interface for the write aspects of a container."""
+
+
+class IReadSchoolYear(IReadContainer, ILocation):
 
     title = TextLine(
         title=_("Title"))
@@ -40,6 +45,10 @@ class ISchoolYear(ITermContainer):
 
     last = Date(
         title=u"The last day of the period covered.")
+
+
+class ISchoolYear(IWriteSchoolYear, IReadSchoolYear, ITermContainer):
+    """School year"""
 
 
 class ISchoolYearContainer(IContainer, ILocation):
