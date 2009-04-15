@@ -379,7 +379,7 @@
       for="zope.app.container.interfaces.IContainer"
       class="schooltool.skin.containers.ContainerDeleteView"
       template="templates/container_delete.pt"
-      permission="zope.View"
+      permission="schooltool.edit"
       />
 
   </configure>
