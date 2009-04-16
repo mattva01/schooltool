@@ -38,6 +38,8 @@ from zc.table.interfaces import ISortableColumn
 from zc.table.column import GetterColumn
 from z3c.form import form, field, button
 
+from schooltool.table.interfaces import ITableFormatter
+from schooltool.table.table import url_cell_formatter
 from schooltool.table.table import FilterWidget
 from schooltool.table.table import SchoolToolTableFormatter
 from schooltool.skin.containers import TableContainerView
@@ -169,6 +171,21 @@ class ContactContainerView(TableContainerView):
     index_title = _("Contact index")
 
 
+def format_street_address(item, formatter):
+
+    address_parts = []
+    for attribute in ['address_line_1',
+                      'address_line_2',
+                      'city',
+                      'state',
+                      'country',
+                      'postal_code']:
+        address_part = getattr(item, attribute, None)
+        if address_part is not None:
+            address_parts.append(address_part)
+    return ", ".join(address_parts)
+
+
 class ContactTableFormatter(SchoolToolTableFormatter):
 
     def columns(self):
@@ -179,10 +196,14 @@ class ContactTableFormatter(SchoolToolTableFormatter):
         directlyProvides(first_name, ISortableColumn)
         last_name = GetterColumn(name='last_name',
                                  title=_(u"Last Name"),
+                                 cell_formatter=url_cell_formatter,
                                  getter=lambda i, f: i.last_name,
                                  subsort=True)
         directlyProvides(last_name, ISortableColumn)
-        return [first_name, last_name]
+        address = GetterColumn(name='address',
+                               title=_(u"Address"),
+                               getter=format_street_address)
+        return [first_name, last_name, address]
 
     def sortOn(self):
         return (("first_name", False),)

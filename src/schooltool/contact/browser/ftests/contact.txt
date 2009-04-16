@@ -37,7 +37,10 @@ After adding a contact we get redirected to the contact list:
           <a href="http://localhost/contacts/Contact">John</a>
         </td>
         <td>
-          Administrator
+          <a href="http://localhost/contacts/Contact">Administrator</a>
+        </td>
+        <td>
+          Frog lane 13, Toadtown, Arizona, USA, 556677
         </td>
     </tr>
 
@@ -86,7 +89,10 @@ Both contacts should be assigned now:
           <label for="remove_item.Contact">John</label>
         </td>
         <td>
-          Administrator
+          <a href="http://localhost/contacts/Contact">Administrator</a>
+        </td>
+        <td>
+          Frog lane 13, Toadtown, Arizona, USA, 556677
         </td>
     </tr>
     <tr class="even"><td>
@@ -95,9 +101,11 @@ Both contacts should be assigned now:
           <label for="remove_item.Contact-2">Peter</label>
         </td>
         <td>
-          Peterson
+          <a href="http://localhost/contacts/Contact-2">Peterson</a>
+        </td>
+        <td>
+          Frog lane 14, Toadtown
         </td>
     </tr>
 
-# TODO add first name, last name, street address columns to contact listing views
 # TODO add link to "assign existing contact" in the add+assign form, add link to "add new contact" in the "assign form"

@@ -36,7 +36,7 @@ class ContactManagementView(RelationshipViewBase):
     __used_for__ = IBasicPerson
 
     current_title = _("Assigned Contacts")
-    available_title = _("Available Contacts")
+    available_title = _("Assign existing contact")
 
     @property
     def title(self):
