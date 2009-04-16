@@ -376,7 +376,7 @@ A.button-ok {
     color: white;
     text-decoration: none;
     margin: 5px;
-    padding: 2px 5px;
+    padding: 2px 5px 4px 5px;
 }
 
 .button-ok {
@@ -1479,6 +1479,14 @@ PRE.traceback SPAN.expr {
 
 PRE.traceback SPAN.source {
     color: black;
+}
+
+/* Contact management view */
+
+#filter_widget .widget {
+    float: left;
+    margin-right: 5px;
+    padding-bottom: 10px
 }
 
 /*********************************************************** END: Style.css */
