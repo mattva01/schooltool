@@ -1481,6 +1481,14 @@ PRE.traceback SPAN.source {
     color: black;
 }
 
+/* Contact management view */
+
+#filter_widget .widget {
+    float: left;
+    margin-right: 5px;
+    padding-bottom: 10px
+}
+
 /*********************************************************** END: Style.css */
 
 /* vi: sw=4 ts=4 noet

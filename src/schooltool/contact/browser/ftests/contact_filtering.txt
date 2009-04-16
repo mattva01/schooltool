@@ -71,10 +71,17 @@ it by default:
     >>> browser.getLink('Contacts').click()
     >>> browser.printQuery("id('filter_widget')")
     <div id="filter_widget">
-      <input type="text" name="SEARCH_FIRST_NAME"
-       /><input type="text" name="SEARCH_LAST_NAME"
-                value="Administrator"
-       /><input type="submit" name="SEARCH_BUTTON" value="Find Now"
-       /><input type="submit" name="CLEAR_SEARCH" value="Clear" /></div>
+        <div class="row">
+          <div class="widget">
+            <p class="hint"><label for="SEARCH_FIRST_NAME">First name</label></p>
+            <input type="text" id="SEARCH_FIRST_NAME" name="SEARCH_FIRST_NAME" /></div>
+          <div class="widget">
+            <p class="hint"><label for="SEARCH_LAST_NAME">Last name</label></p>
+            <input type="text" id="SEARCH_LAST_NAME" name="SEARCH_LAST_NAME" value="Administrator" /></div>
+        </div>
+        <div class="controls" style="clear: both">
+          <input class="button-ok" type="submit" name="SEARCH_BUTTON" value="Find Now"
+        /><input class="button-cancel" type="submit" name="CLEAR_SEARCH" value="Clear" /></div>
+      </div>
 
 This is because most of the time contact person for a student is his relative.
