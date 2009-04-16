@@ -68,7 +68,7 @@ the LAST_NAME input field should contain the last name of the user in
 it by default:
 
     >>> browser.getLink('Home').click()
-    >>> browser.getLink('Manage Contacts').click()
+    >>> browser.getLink('Contacts').click()
     >>> browser.printQuery("id('filter_widget')")
     <div id="filter_widget">
       <input type="text" name="SEARCH_FIRST_NAME"

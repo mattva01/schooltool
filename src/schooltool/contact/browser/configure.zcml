@@ -39,8 +39,7 @@
      name="add_contact.html"
      for="schooltool.basicperson.interfaces.IBasicPerson"
      class=".contact.PersonContactAddView"
-     permission="schooltool.edit"
-     menu="schooltool_actions" title="Add Contact" />
+     permission="schooltool.edit" />
 
   <configure package="schooltool.skin">
 
@@ -73,7 +72,7 @@
       template="templates/actionsViewlet.pt"
       class="schooltool.contact.browser.contact.ManageContactsActionViewlet"
       permission="schooltool.edit"
-      title="Manage Contacts"
+      title="Contacts"
       order="30"
       />
 

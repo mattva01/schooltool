@@ -20,6 +20,7 @@
 """
 Contact relationship views.
 """
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.security.proxy import removeSecurityProxy
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -35,6 +36,7 @@ class ContactManagementView(RelationshipViewBase):
 
     __used_for__ = IBasicPerson
 
+    __call__ = ViewPageTemplateFile('templates/manage_contacts.pt')
     current_title = _("Assigned Contacts")
     available_title = _("Assign existing contact")
 
