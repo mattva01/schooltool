@@ -462,14 +462,17 @@ class MegaExporter(SchoolTimetableExportView):
             offset += 1
 
             for n, (day_id, period_id, activity) in enumerate(timetable.activities()):
+                resource = None
                 for event in ISchoolToolCalendar(section):
                     if ITimetableCalendarEvent.providedBy(event):
                         if event.activity == activity:
-                            resource = event.resources[0]
+                            if event.resources:
+                                resource = event.resources[0]
                             break
                 self.write(ws, offset + n, 0,  day_id)
                 self.write(ws, offset + n, 1,  period_id)
-                self.write(ws, offset + n, 2,  resource.__name__)
+                if resource is not None:
+                    self.write(ws, offset + n, 2,  resource.__name__)
             offset += 1 + len(timetable.activities())
         return offset
 
