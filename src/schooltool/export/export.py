@@ -476,8 +476,6 @@ class MegaExporter(SchoolTimetableExportView):
     def format_section(self, section, ws, offset):
         fields = [lambda i: ("Section Title", i.title, None),
                   lambda i: ("ID", i.__name__, None),
-                  lambda i: ("School Year", ISchoolYear(i).__name__, None),
-                  lambda i: ("Term", ITerm(i).__name__, None),
                   lambda i: ("Description", i.description, None)]
 
         offset = self.listFields(section, fields, ws, offset)
@@ -491,12 +489,21 @@ class MegaExporter(SchoolTimetableExportView):
         return offset
 
     def export_sections(self, wb):
-        ws = wb.add_sheet("Sections")
         school_years = sorted(ISchoolYearContainer(self.context).values(),
                               key=lambda s: s.first)
-        row = 0
+
         for school_year in sorted(school_years, key=lambda i: i.last):
             for term in sorted(school_year.values(), key=lambda i: i.last):
+                row = 0
+                ws = wb.add_sheet("Sections %s %s" % (school_year.__name__,
+                                                      term.__name__))
+
+                self.write_header(ws, row, 0,  "School Year")
+                self.write(ws, row, 1,  school_year.__name__)
+                self.write_header(ws, row, 2,  "Term")
+                self.write(ws, row, 3,  term.__name__)
+
+                row += 2
                 sections = removeSecurityProxy(ISectionContainer(term))
                 for section in sorted(sections.values(), key=lambda i: i.__name__):
                     row = self.format_section(section, ws, row) + 1

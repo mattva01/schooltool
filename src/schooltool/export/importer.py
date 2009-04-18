@@ -459,12 +459,7 @@ class CourseImporter(ImporterBase):
 
 class SectionImporter(ImporterBase):
 
-    sheet_name = 'Sections'
-
-    def createSection(self, data):
-        syc = ISchoolYearContainer(self.context)
-        sy = syc[data['school_year']]
-        term = sy[data['term']]
+    def createSection(self, data, year, term):
         sc = ISectionContainer(term)
         if data['__name__'] in sc:
             section = sc[data['__name__']]
@@ -475,10 +470,7 @@ class SectionImporter(ImporterBase):
             section.__name__ = data['__name__']
         return section
 
-    def addSection(self, section, data):
-        syc = ISchoolYearContainer(self.context)
-        sy = syc[data['school_year']]
-        term = sy[data['term']]
+    def addSection(self, section, data, year, term):
         sc = ISectionContainer(term)
         if section.__name__ is None:
             section.__name__ = SimpleNameChooser(sc).chooseName('', section)
@@ -519,17 +511,15 @@ class SectionImporter(ImporterBase):
                 break
         return row
 
-    def import_section(self, sh, row):
+    def import_section(self, sh, row, year, term):
         data = {}
         data['title'] = sh.cell_value(rowx=row, colx=1)
         data['__name__'] = sh.cell_value(rowx=row+1, colx=1)
-        data['school_year'] = sh.cell_value(rowx=row+2, colx=1)
-        data['term'] = sh.cell_value(rowx=row+3, colx=1)
         data['description'] = sh.cell_value(rowx=row+4, colx=1)
-        section = self.createSection(data)
-        self.addSection(section, data)
+        section = self.createSection(data, year, term)
+        self.addSection(section, data, year, term)
 
-        row += 6
+        row += 4
         if sh.cell_value(rowx=row, colx=0) == 'Courses':
             row += 1
             for row in range(row, sh.nrows):
@@ -540,6 +530,7 @@ class SectionImporter(ImporterBase):
                 section.courses.add(removeSecurityProxy(course))
         else:
             self.errors.append("%s has no courses in A%s" % (data['title'], row + 1))
+            return row
 
         row += 1
         pc = self.context['persons']
@@ -569,10 +560,30 @@ class SectionImporter(ImporterBase):
         return row
 
     def process(self):
-        sh = self.sheet
-        for row in range(0, sh.nrows):
-            if sh.cell_value(rowx=row, colx=0) == 'Section Title':
-                row = self.import_section(sh, row)
+        app = ISchoolToolApplication(None)
+        schoolyears = ISchoolYearContainer(app)
+        for sheet_name in self.sheet_names:
+            sheet = self.wb.sheet_by_name(sheet_name)
+            if sheet.cell_value(rowx=0, colx=0) != 'School Year':
+               continue
+
+            year_id = sheet.cell_value(rowx=0, colx=1)
+            year = schoolyears[year_id]
+            term_id = sheet.cell_value(rowx=0, colx=3)
+            term = year[term_id]
+
+            for row in range(2, sheet.nrows):
+                if sheet.cell_value(rowx=row, colx=0) == 'Section Title':
+                    row = self.import_section(sheet, row, year, term)
+
+    def import_data(self, wb):
+        self.wb = wb
+        self.sheet_names = []
+        for sheet_name in self.wb.sheet_names():
+            if sheet_name.startswith('Section'):
+                self.sheet_names.append(sheet_name)
+        if self.sheet_names:
+            return self.process()
 
 
 class GroupImporter(ImporterBase):

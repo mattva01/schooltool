@@ -304,8 +304,6 @@ def doctest_MegaExporter_export_section():
         +---------------+---------+
         | Section Title | Section |
         | ID            | s1      |
-        | School Year   | 2005    |
-        | Term          | spring  |
         | Description   |         |
         |               |         |
         | Courses       |         |
