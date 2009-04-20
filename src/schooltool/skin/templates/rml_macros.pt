@@ -34,7 +34,7 @@
         <lines tal:content="view/footer/rule" />
 
         <image tal:attributes="
-            file string:${view/context/@@absolute_url}/@@/schooltool-report-logo.png;
+            file string:${context/schooltool:app/@@absolute_url}/@@/schooltool-report-logo.png;
             x view/footer/logo/x;
             y view/footer/logo/y;
             height view/footer/logo/height"
