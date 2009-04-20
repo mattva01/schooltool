@@ -109,6 +109,8 @@ def doctest_StoryXML():
         >>> from schooltool.testing.pdf import StoryXML
         >>> parser = StoryXML(story)
 
+    The XML document can be accessed directly:
+
         >>> parser.document
         <...ElementTree object ...>
 

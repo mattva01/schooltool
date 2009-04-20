@@ -30,7 +30,6 @@ from lxml import etree
 from reportlab import platypus
 
 
-
 class StoryXML(object):
 
     document = None # XML document representing the story

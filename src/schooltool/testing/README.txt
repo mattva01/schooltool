@@ -207,17 +207,23 @@ As with HTML analyzation tools, there are helpers for XPath queries:
     ['<Paragraph>Hello world</Paragraph>',
      '<Paragraph>A new page</Paragraph>']
 
-If these helpers are not sufficient, we can use the raw XML document.
+If these helpers are not sufficient, we can use XML document directly.
 
     >>> parser.document
     <...ElementTree object ...>
 
-These helpers also work on single platypus flowables.
+    >>> for child in parser.document.getroot().iterchildren():
+    ...     if child.text:
+    ...        print child.text
+    Hello world
+    A new page
+
+StoryXML helpers also work on single platypus flowables.
 
     >>> flowable = Paragraph('Some text', style)
+
     >>> StoryXML(flowable).printXML()
     <story>
     <Paragraph>Some text</Paragraph>
     </story>
-
 
