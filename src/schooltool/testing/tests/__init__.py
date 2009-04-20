@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2009 Shuttleworth Foundation
+# Copyright (c) 2005 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,22 +17,20 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Functional testing utilites for Contacts.
+Testing the package.
+
+$Id$
 """
-from schooltool.testing.functional import TestBrowser
 
-def addContact(firstname, lastname, address='', email='', browser=None):
+import unittest
+from zope.testing import doctest
 
-    if browser is None:
-        browser = TestBrowser('manager', 'schooltool')
 
-    browser.getLink('Manage').click()
-    browser.getLink('Contacts').click()
-    browser.getLink('New Contact').click()
+def test_suite():
+    return unittest.TestSuite((
+        doctest.DocFileSuite('../README.txt',
+                             optionflags=doctest.NORMALIZE_WHITESPACE),
+        ))
 
-    browser.getControl('First name').value = firstname
-    browser.getControl('Last name').value = lastname
-    browser.getControl('Address line 1').value = address
-    browser.getControl('Email').value = email
-
-    browser.getControl('Add').click()
+if __name__ == '__main__':
+    unittest.main(default='test_suite')

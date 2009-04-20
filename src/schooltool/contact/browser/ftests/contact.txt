@@ -1,17 +1,18 @@
 Contacts
 ========
 
-We can add contacts:
-
     >>> browser = Browser('manager', 'schooltool')
     >>> browser.getLink('Manage').click()
 
+Let's try and add a contact:
+
     >>> browser.getLink('Contacts').click()
     >>> browser.getLink('New Contact').click()
+
     >>> browser.getControl('Prefix').value = 'Mr'
     >>> browser.getControl('First name').value = 'John'
     >>> browser.getControl('Middle name').value = 'J'
-    >>> browser.getControl('Last name').value = 'Johansen'
+    >>> browser.getControl('Last name').value = 'Administrator'
     >>> browser.getControl('Suffix').value = 'Jr'
     >>> browser.getControl('Address line 1').value = 'Frog lane 13'
     >>> browser.getControl('Address line 2').value = ''
@@ -19,7 +20,7 @@ We can add contacts:
     >>> browser.getControl('State').value = 'Arizona'
     >>> browser.getControl('Country').value = 'USA'
     >>> browser.getControl('Postal code').value = '556677'
-    >>> browser.getControl('Email').value = 'frog@example.com'
+    >>> browser.getControl('Email').value = 'john@example.com'
     >>> browser.getControl('Home phone').value = '055555555'
     >>> browser.getControl('Work phone').value = '066666666'
     >>> browser.getControl('Mobile phone').value = '077777777'
@@ -36,7 +37,10 @@ After adding a contact we get redirected to the contact list:
           <a href="http://localhost/contacts/Contact">John</a>
         </td>
         <td>
-          Johansen
+          <a href="http://localhost/contacts/Contact">Administrator</a>
+        </td>
+        <td>
+          Frog lane 13, Toadtown, Arizona, USA, 556677
         </td>
     </tr>
 
@@ -55,3 +59,52 @@ We can see that the new data is in the Display view of the contact:
     >>> browser.getLink('View').click()
     >>> browser.printQuery("id('form-widgets-email')")
     <span id="form-widgets-email" class="text-widget textline-field">johny@example.com</span>
+
+We can add contacts directly to persons:
+
+    >>> browser.getLink('Home').click()
+    >>> browser.getLink('Contacts').click()
+    >>> browser.getLink('Create new contact').click()
+
+    >>> browser.getControl('First name').value = 'Peter'
+    >>> browser.getControl('Last name').value = 'Peterson'
+    >>> browser.getControl('Address line 1').value = 'Frog lane 14'
+    >>> browser.getControl('City').value = 'Toadtown'
+    >>> browser.getControl('Email').value = 'peter@example.com'
+
+    >>> browser.getControl('Add').click()
+
+And attach existing contact entries to a person as well:
+
+    >>> browser.getLink('Home').click()
+    >>> browser.getLink('Contacts').click()
+    >>> browser.getControl('John').click()
+    >>> browser.getControl('Assign').click()
+
+Both contacts should be assigned now:
+
+    >>> browser.printQuery("id('content-body')/form/fieldset[1]//tbody//tr")
+    <tr class="odd"><td>
+          <input type="checkbox" name="remove_item.Contact" id="remove_item.Contact" /></td>
+        <td>
+          <label for="remove_item.Contact">John</label>
+        </td>
+        <td>
+          <a href="http://localhost/contacts/Contact">Administrator</a>
+        </td>
+        <td>
+          Frog lane 13, Toadtown, Arizona, USA, 556677
+        </td>
+    </tr>
+    <tr class="even"><td>
+          <input type="checkbox" name="remove_item.Contact-2" id="remove_item.Contact-2" /></td>
+        <td>
+          <label for="remove_item.Contact-2">Peter</label>
+        </td>
+        <td>
+          <a href="http://localhost/contacts/Contact-2">Peterson</a>
+        </td>
+        <td>
+          Frog lane 14, Toadtown
+        </td>
+    </tr>

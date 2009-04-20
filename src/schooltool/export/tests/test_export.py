@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Tests for SchoolTool excel export views.
+Tests for SchoolTool XLS export views.
 """
 import unittest
 from datetime import date
@@ -301,24 +301,21 @@ def doctest_MegaExporter_export_section():
         >>> len = exporter.format_section(section, ws, offset)
 
         >>> print ws.format()
-        +-------------+---------+
-        | Section*    | Section |
-        | ID          | s1      |
-        | School Year | 2005    |
-        | Term        | spring  |
-        | Description |         |
-        |             |         |
-        | Courses     |         |
-        | c1          |         |
-        |             |         |
-        | Students    |         |
-        | John        |         |
-        | Pete        |         |
-        |             |         |
-        | Instructors |         |
-        | Mister T    |         |
-        |             |         |
-        +-------------+---------+
+        +---------------+---------+
+        | Section Title | Section |
+        | ID            | s1      |
+        | Description   |         |
+        |               |         |
+        | Courses       |         |
+        | c1            |         |
+        |               |         |
+        | Students      |         |
+        | John          |         |
+        | Pete          |         |
+        |               |         |
+        | Instructors   |         |
+        | Mister T      |         |
+        +---------------+---------+
 
     """
 

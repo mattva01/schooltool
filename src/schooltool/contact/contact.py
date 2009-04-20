@@ -33,9 +33,12 @@ from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationStartUpEvent
 from schooltool.app.app import InitBase
+from schooltool.contact.interfaces import IContactable
 from schooltool.contact.interfaces import IContactContained
 from schooltool.contact.interfaces import IContactContainer
 from schooltool.relationship.uri import URIObject
+from schooltool.relationship.relationship import BoundRelationshipProperty
+from schooltool.relationship.relationship import RelationshipProperty
 from schooltool.relationship.relationship import RelationshipSchema
 
 
@@ -78,6 +81,35 @@ class Contact(Persistent, Contained):
     work_phone = None
     mobile_phone = None
     language = None
+
+    persons = RelationshipProperty(URIContact,
+                                   my_role=URIContact,
+                                   other_role=URIPerson)
+
+
+class ContextRelationshipProperty(RelationshipProperty):
+    """Context relationship property."""
+
+    def __get__(self, instance, owner):
+        """Bind the property to the context of an instance."""
+        if instance is None:
+            return self
+        else:
+            return BoundRelationshipProperty(instance.context,
+                                             self.rel_type,
+                                             self.my_role,
+                                             self.other_role)
+
+
+class Contactable(object):
+    implements(IContactable)
+
+    contacts = ContextRelationshipProperty(URIContact,
+                                           my_role=URIPerson,
+                                           other_role=URIContact)
+
+    def __init__(self, context):
+        self.context = context
 
 
 class ContactAppStartup(ObjectEventAdapterSubscriber):

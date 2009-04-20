@@ -57,8 +57,8 @@ def doctest_TermAddForm():
         >>> directlyProvides(request, [ISchoolToolSkin])
         >>> request.form = {'form.buttons.add' : u'Add',
         ...                 'form.widgets.title': u'Fall',
-        ...                 'form.widgets.first': u'05/09/01',
-        ...                 'form.widgets.last' : u'05/12/31'}
+        ...                 'form.widgets.first': u'2005-09-01',
+        ...                 'form.widgets.last' : u'2005-12-31'}
 
     And submit it
 
@@ -100,8 +100,8 @@ def doctest_TermAddForm_overlap():
         >>> directlyProvides(request, [ISchoolToolSkin])
         >>> request.form = {'form.buttons.next' : u'Next',
         ...                 'form.widgets.title': u'Spring',
-        ...                 'form.widgets.first': u'05/09/01',
-        ...                 'form.widgets.last' : u'05/12/31'}
+        ...                 'form.widgets.first': u'2005-09-01',
+        ...                 'form.widgets.last' : u'2005-12-31'}
 
      And submit the form
 
@@ -112,7 +112,7 @@ def doctest_TermAddForm_overlap():
 
         >>> for error in view.widgets.errors: print error.render()
         <div class="error">Date range you have selected overlaps with following terms:
-        <div> <a href="http://127.0.0.1/schoolyears/2005-2006/fall">Fall</a> (9/1/05 &mdash; 7/16/06) </div>
+        <div> <a href="http://127.0.0.1/schoolyears/2005-2006/fall">Fall</a> (2005-09-01 &mdash; 2006-07-16) </div>
         </div>
 
      And only have the old term in the school year:
@@ -140,8 +140,8 @@ def doctest_TermAddForm_out_of_bounds():
        >>> directlyProvides(request, [ISchoolToolSkin])
        >>> request.form = {'form.buttons.next' : u'Next',
        ...                 'form.widgets.title': u'Spring',
-       ...                 'form.widgets.first': u'05/08/01',
-       ...                 'form.widgets.last' : u'05/12/31'}
+       ...                 'form.widgets.first': u'2005-08-01',
+       ...                 'form.widgets.last' : u'2005-12-31'}
 
     And submit it
 
@@ -193,8 +193,8 @@ def doctest_TermEditForm_overlap():
         >>> directlyProvides(request, [ISchoolToolSkin])
         >>> request.form = {'form.buttons.apply': u'Save changes',
         ...                 'form.widgets.title': u'Spring',
-        ...                 'form.widgets.first': u'06/01/01',
-        ...                 'form.widgets.last' : u'06/07/16'}
+        ...                 'form.widgets.first': u'2006-01-01',
+        ...                 'form.widgets.last' : u'2006-07-16'}
         >>> view = TermEditForm(term, request)
         >>> view.update()
 
@@ -202,7 +202,7 @@ def doctest_TermEditForm_overlap():
 
         >>> for error in view.widgets.errors: print error.render()
         <div class="error">Date range you have selected overlaps with following terms:
-        <div> <a href="http://127.0.0.1/schoolyears/2005-2006/fall">Fall</a> (9/1/05 &mdash; 1/1/06) </div>
+        <div> <a href="http://127.0.0.1/schoolyears/2005-2006/fall">Fall</a> (2005-09-01 &mdash; 2006-01-01) </div>
         </div>
 
     The term should not get modified
@@ -236,8 +236,8 @@ def doctest_TermEditForm_overflow():
         >>> directlyProvides(request, [ISchoolToolSkin])
         >>> request.form = {'form.buttons.apply': u'Save changes',
         ...                 'form.widgets.title': u'Spring',
-        ...                 'form.widgets.first': u'06/01/02',
-        ...                 'form.widgets.last' : u'06/07/17'}
+        ...                 'form.widgets.first': u'2006-01-02',
+        ...                 'form.widgets.last' : u'2006-07-17'}
 
     And submit it
 
@@ -280,8 +280,8 @@ def doctest_TermEditForm_switch_dates():
         >>> directlyProvides(request, [ISchoolToolSkin])
         >>> request.form = {'form.buttons.apply': u'Save changes',
         ...                 'form.widgets.title': u'Spring',
-        ...                 'form.widgets.first': u'06/07/10',
-        ...                 'form.widgets.last' : u'06/01/02'}
+        ...                 'form.widgets.first': u'2006-07-10',
+        ...                 'form.widgets.last' : u'2006-01-02'}
 
     And submit it
 

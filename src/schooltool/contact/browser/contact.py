@@ -20,6 +20,9 @@
 """
 Contact browser views.
 """
+import urllib
+
+from zope.security.proxy import removeSecurityProxy
 from zope.interface import directlyProvides
 from zope.interface import implements
 from zope.component import getMultiAdapter
@@ -35,9 +38,13 @@ from zc.table.interfaces import ISortableColumn
 from zc.table.column import GetterColumn
 from z3c.form import form, field, button
 
+from schooltool.table.interfaces import ITableFormatter
+from schooltool.table.table import url_cell_formatter
+from schooltool.table.table import FilterWidget
 from schooltool.table.table import SchoolToolTableFormatter
 from schooltool.skin.containers import TableContainerView
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.contact.interfaces import IContactable
 from schooltool.contact.interfaces import IContactContainer
 from schooltool.contact.contact import Contact
 from schooltool.contact.interfaces import IContact
@@ -104,6 +111,25 @@ class ContactAddView(form.AddForm):
         self.request.response.redirect(url)
 
 
+class PersonContactAddView(ContactAddView):
+    """Contact add form that assigns the contact to a person."""
+
+    form.extends(ContactAddView)
+
+    @property
+    def label(self):
+        return _("Add new contact for ${person}",
+                 mapping={'person': self.context.title})
+
+    def add(self, contact):
+        """Add `contact` to the container. And assign it to the person."""
+        contact_container = IContactContainer(ISchoolToolApplication(None))
+        name = INameChooser(contact_container).chooseName('', contact)
+        contact_container[name] = contact
+        IContactable(removeSecurityProxy(self.context)).contacts.add(contact)
+        return contact
+
+
 class ContactEditView(form.EditForm):
     """Edit form for basic contact."""
     form.extends(form.EditForm)
@@ -145,6 +171,21 @@ class ContactContainerView(TableContainerView):
     index_title = _("Contact index")
 
 
+def format_street_address(item, formatter):
+
+    address_parts = []
+    for attribute in ['address_line_1',
+                      'address_line_2',
+                      'city',
+                      'state',
+                      'country',
+                      'postal_code']:
+        address_part = getattr(item, attribute, None)
+        if address_part is not None:
+            address_parts.append(address_part)
+    return ", ".join(address_parts)
+
+
 class ContactTableFormatter(SchoolToolTableFormatter):
 
     def columns(self):
@@ -155,10 +196,59 @@ class ContactTableFormatter(SchoolToolTableFormatter):
         directlyProvides(first_name, ISortableColumn)
         last_name = GetterColumn(name='last_name',
                                  title=_(u"Last Name"),
+                                 cell_formatter=url_cell_formatter,
                                  getter=lambda i, f: i.last_name,
                                  subsort=True)
         directlyProvides(last_name, ISortableColumn)
-        return [first_name, last_name]
+        address = GetterColumn(name='address',
+                               title=_(u"Address"),
+                               getter=format_street_address)
+        return [first_name, last_name, address]
 
     def sortOn(self):
         return (("first_name", False),)
+
+
+class ContactFilterWidget(FilterWidget):
+
+    template = ViewPageTemplateFile('templates/filter.pt')
+    parameters = ['SEARCH_FIRST_NAME', 'SEARCH_LAST_NAME']
+
+    def filter(self, items):
+        if 'CLEAR_SEARCH' in self.request:
+            for parameter in self.parameters:
+                self.request.form[parameter] = ''
+            return items
+
+        if 'SEARCH_FIRST_NAME' in self.request:
+            searchstr = self.request['SEARCH_FIRST_NAME'].lower()
+            items = [item for item in items
+                     if searchstr in item.first_name.lower()]
+
+        if 'SEARCH_LAST_NAME' in self.request:
+            searchstr = self.request['SEARCH_LAST_NAME'].lower()
+            items = [item for item in items
+                     if searchstr in item.last_name.lower()]
+
+        return items
+
+    def active(self):
+        for parameter in self.parameters:
+            if parameter in self.request:
+                return True
+        return False
+
+    def extra_url(self):
+        url = ""
+        for parameter in self.parameters:
+            if parameter in self.request:
+                url += '&%s=%s' % (parameter, self.request.get(parameter))
+        return url
+
+
+class ManageContactsActionViewlet(object):
+
+    @property
+    def link(self):
+        return "@@manage_contacts.html?%s" % (
+            urllib.urlencode([('SEARCH_LAST_NAME', self.context.last_name)]))

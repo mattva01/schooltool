@@ -84,13 +84,13 @@ def doctest_DateFormatterView():
 
         >>> view = DateFormatterShortView(date, english_request)
         >>> view()
-        u'12/1/06'
+        '2006-12-01'
 
-    and in French:
+    even in french the short format is ISO format:
 
         >>> view = DateFormatterShortView(date, french_request)
         >>> view()
-        u'01/12/06'
+        '2006-12-01'
 
     """
 

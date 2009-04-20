@@ -1,0 +1,108 @@
+Test for sample data import
+---------------------------
+
+Let's import a subset of the sample data:
+
+    >>> browser = Browser('manager', 'schooltool')
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('XLS Import').click()
+    >>> import pkg_resources
+    >>> browser.getControl('XLS File').add_file(
+    ...     pkg_resources.resource_stream('schooltool.export.ftests', 'test_data.xls'),
+    ...     'application/excel',
+    ...     'sample_data.xls')
+    >>> browser.getControl('Submit').click()
+
+Let's check the data. We have 4 terms:
+
+    >>> browser.getLink('2006-2008').click()
+    >>> browser.printQuery("id('content-body')/form//div/a")
+    <a href="http://localhost/schoolyears/2006-2008/2006-fall">2006 Fall</a>
+          (Sep 1, 2006&#8212;
+          Jan 26, 2007)
+    <a href="http://localhost/schoolyears/2006-2008/2007-spring">2007 Spring</a>
+          (Jan 29, 2007&#8212;
+          Jun 15, 2007)
+    <a href="http://localhost/schoolyears/2006-2008/2007-fall">2007 Fall</a>
+          (Sep 1, 2007&#8212;
+          Jan 27, 2008)
+    <a href="http://localhost/schoolyears/2006-2008/2008-spring">2008 Spring</a>
+          (Jan 28, 2008&#8212;
+          Jun 20, 2008)
+
+Some sections:
+
+    >>> browser.getLink('2006 Fall').click()
+    >>> browser.getLink('Sections').click()
+    >>> browser.printQuery("id('content-body')//table/tr[2]/td")
+    <td>
+      <input type="checkbox" name="delete.art_a_2006-fall_teacher010_000" /></td>
+    <td>
+      <a href="http://localhost/schoolyears/2006-2008/courses/art_a">Art A</a>
+    </td>
+    <td>
+      <a href="http://localhost/schoolyears/2006-2008/2006-fall/sections/art_a_2006-fall_teacher010_000">Art A (0)</a>
+    </td>
+    <td>
+        <a href="http://localhost/persons/teacher010">Walsh, Isabel</a>
+    </td>
+    <td>
+        <a href="http://localhost/schoolyears/2006-2008/2006-fall/sections/art_a_2006-fall_teacher010_000/timetables/simple">2006-fall.simple</a>
+    </td>
+    <td>
+      <span class="hint">
+        (44 <span>Students</span>)
+      </span>
+    </td>
+
+    >>> len(browser.queryHTML("id('content-body')//table/tr"))
+    26
+
+And some students:
+
+    >>> browser.getLink("Art A (0)", url="art_a_2006-fall_teacher010_000").click()
+    >>> browser.printQuery("id('section-view')//table/tbody/tr/td[1]/a")
+    <a href="http://localhost/persons/student228">Andy</a>
+    <a href="http://localhost/persons/student994">Lea</a>
+    <a href="http://localhost/persons/student978">David</a>
+    <a href="http://localhost/persons/student036">Krzysztof</a>
+    <a href="http://localhost/persons/student806">Eleanor</a>
+    <a href="http://localhost/persons/student841">Matthew</a>
+    <a href="http://localhost/persons/student694">Jorge</a>
+    <a href="http://localhost/persons/student388">Leonie</a>
+    <a href="http://localhost/persons/student603">Philippa</a>
+    <a href="http://localhost/persons/student463">Ed</a>
+    <a href="http://localhost/persons/student927">Jean</a>
+    <a href="http://localhost/persons/student658">Vanessa</a>
+    <a href="http://localhost/persons/student432">Sean</a>
+    <a href="http://localhost/persons/student359">Mathias</a>
+    <a href="http://localhost/persons/student596">Tobias</a>
+    <a href="http://localhost/persons/student594">Anna</a>
+    <a href="http://localhost/persons/student929">Sophie</a>
+    <a href="http://localhost/persons/student145">Agnieszka</a>
+    <a href="http://localhost/persons/student402">Pip</a>
+    <a href="http://localhost/persons/student604">Ellie</a>
+    <a href="http://localhost/persons/student699">Caitlin</a>
+    <a href="http://localhost/persons/student838">Louise</a>
+    <a href="http://localhost/persons/student047">Fabian</a>
+    <a href="http://localhost/persons/student278">Jozef</a>
+    <a href="http://localhost/persons/student898">Anthony</a>
+    <a href="http://localhost/persons/student623">Sem</a>
+    <a href="http://localhost/persons/student056">Alexis</a>
+    <a href="http://localhost/persons/student808">Ryan</a>
+    <a href="http://localhost/persons/student336">Kayleigh</a>
+    <a href="http://localhost/persons/student067">Jose</a>
+    <a href="http://localhost/persons/student684">Rob</a>
+    <a href="http://localhost/persons/student185">Carolina</a>
+    <a href="http://localhost/persons/student675">Georgina</a>
+    <a href="http://localhost/persons/student752">Lisa</a>
+    <a href="http://localhost/persons/student767">Manuel</a>
+    <a href="http://localhost/persons/student552">Al</a>
+    <a href="http://localhost/persons/student075">Daniel</a>
+    <a href="http://localhost/persons/student554">Ricky</a>
+    <a href="http://localhost/persons/student411">Betty</a>
+    <a href="http://localhost/persons/student368">Drew</a>
+    <a href="http://localhost/persons/student089">Diego</a>
+    <a href="http://localhost/persons/student450">Georgina</a>
+    <a href="http://localhost/persons/student198">Claudia</a>
+    <a href="http://localhost/persons/student428">Joe</a>

@@ -29,8 +29,8 @@ Setup
     >>> manager.getLink('School Years').click()
     >>> manager.getLink('New School Year').click()
     >>> manager.getControl('Title').value = '2005'
-    >>> manager.getControl('First day').value = '05/05/01'
-    >>> manager.getControl('Last day').value = '05/10/15'
+    >>> manager.getControl('First day').value = '2005-05-01'
+    >>> manager.getControl('Last day').value = '2005-10-15'
     >>> manager.getControl('Add').click()
 
 The schema container is empty initially:
@@ -282,8 +282,8 @@ We need a term:
     >>> manager.getLink('2005').click()
     >>> manager.getLink('Add a new term').click()
     >>> manager.getControl('Title').value = '2005 Summer'
-    >>> manager.getControl('Start date').value = '05/06/01'
-    >>> manager.getControl('End date').value = '05/08/31'
+    >>> manager.getControl('Start date').value = '2005-06-01'
+    >>> manager.getControl('End date').value = '2005-08-31'
     >>> manager.getControl('Next').click()
 
     >>> manager.getControl('Saturday').click()

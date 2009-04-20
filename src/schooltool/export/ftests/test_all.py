@@ -17,22 +17,16 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Functional testing utilites for Contacts.
+Functional tests for schooltool.export
 """
-from schooltool.testing.functional import TestBrowser
+import unittest
 
-def addContact(firstname, lastname, address='', email='', browser=None):
+from schooltool.testing.functional import collect_ftests
+from schooltool.export.ftesting import export_functional_layer
 
-    if browser is None:
-        browser = TestBrowser('manager', 'schooltool')
+def test_suite():
+    return collect_ftests(layer=export_functional_layer, level=2)
 
-    browser.getLink('Manage').click()
-    browser.getLink('Contacts').click()
-    browser.getLink('New Contact').click()
 
-    browser.getControl('First name').value = firstname
-    browser.getControl('Last name').value = lastname
-    browser.getControl('Address line 1').value = address
-    browser.getControl('Email').value = email
-
-    browser.getControl('Add').click()
+if __name__ == '__main__':
+    unittest.main(defaultTest='test_suite')

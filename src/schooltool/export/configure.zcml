@@ -9,7 +9,7 @@
      template="templates/import.pt"
      class=".importer.MegaImporter"
      permission="schooltool.edit"
-     menu="schooltool_actions" title="Excel Import" />
+     menu="schooltool_actions" title="XLS Import" />
 
   <page
      name="export.xls"
@@ -28,5 +28,15 @@
         title="XLS Export"
         order="10" />
   </zope:configure>
+
+  <resource
+      name="sample_data.xls" file="sample_data.xls"
+      layer="schooltool.skin.skin.ISchoolToolLayer"
+      />
+
+  <resource
+      name="empty_data.xls" file="empty_data.xls"
+      layer="schooltool.skin.skin.ISchoolToolLayer"
+      />
 
 </configure>

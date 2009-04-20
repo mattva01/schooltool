@@ -207,7 +207,7 @@
 #     >>> from datetime import date
 #     >>> today = date(2005, 5, 13)
 #     >>> manager.open('http://localhost/time')
-#     >>> manager.getControl('Today').value = "05/05/13"
+#     >>> manager.getControl('Today').value = "2005-05-13"
 #     >>> manager.getControl('Apply').click()
 
 # And calculate tomorrow:

@@ -55,17 +55,8 @@
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory="schooltool.table.table.SchoolToolTableFormatter " />
 
-  <zope:class class=".widgets.CustomDateTextWidget">
-    <require
-        permission="zope.Public"
-        interface="z3c.form.interfaces.ITextWidget"
-        />
-  </zope:class>
-
   <zope:adapter
       factory=".emergency.getTimetableSchemaContainerForTerm" />
-  <zope:adapter
-      factory=".widgets.CustomDateDataConverter" />
   <zope:adapter
       factory=".errors.OverlapErrorViewSnippet" />
   <zope:adapter

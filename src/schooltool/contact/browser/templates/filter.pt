@@ -1,0 +1,29 @@
+<tal:block i18n:domain="schooltool">
+  <div id="filter_widget">
+    <div class="row">
+      <div class="widget">
+        <p class="hint"><label for="SEARCH_FIRST_NAME">First name</label></p>
+        <input type="text"
+               id="SEARCH_FIRST_NAME"
+               name="SEARCH_FIRST_NAME"
+               tal:attributes="value request/SEARCH_FIRST_NAME|nothing"/>
+      </div>
+      <div class="widget">
+        <p class="hint"><label for="SEARCH_LAST_NAME">Last name</label></p>
+        <input type="text"
+               id="SEARCH_LAST_NAME"
+               name="SEARCH_LAST_NAME"
+               tal:attributes="value request/SEARCH_LAST_NAME|nothing"/>
+      </div>
+    </div>
+
+    <div class="controls" style="clear: both">
+      <input class="button-ok"
+             type="submit" name="SEARCH_BUTTON" value="Find Now"
+             i18n:attributes="value"/>
+      <input class="button-cancel"
+             type="submit" name="CLEAR_SEARCH" value="Clear"
+             i18n:attributes="value"/>
+    </div>
+  </div>
+</tal:block>

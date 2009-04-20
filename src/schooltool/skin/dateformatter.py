@@ -71,6 +71,4 @@ class DateFormatterShortView( BrowserView, LocaleLookupMixin):
     """Formats the date using the 'short' format"""
 
     def __call__(self):
-        locale = self.getLocale()
-        formatter = locale.dates.getFormatter('date','short')
-        return formatter.format(self.context)
+        return self.context.strftime("%Y-%m-%d")

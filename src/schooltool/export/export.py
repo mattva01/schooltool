@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-SchoolTool excel export views.
+SchoolTool XLS export views.
 """
 import xlwt
 from StringIO import StringIO
@@ -69,8 +69,6 @@ class ExcelExportView(BrowserView):
         return 1 + offset + len(items)
 
     def skipRow(self, ws, offset):
-        self.write(ws, offset + 1, 0, "")
-        self.write(ws, offset + 1, 1, "")
         return offset + 1
 
     def listFields(self, item, accessors, ws, offset):
@@ -453,29 +451,34 @@ class MegaExporter(SchoolTimetableExportView):
         if not timetables:
             return offset
         timetables.sort(key=lambda t: t.schooltt.__name__)
-        self.write_header(ws, offset, 0,  "Timetables", merge=1)
-        offset += 1
-
         for timetable in timetables:
             self.write_header(ws, offset, 0,  "School Timetable")
             self.write(ws, offset, 1,  timetable.schooltt.__name__)
+            offset += 1
+
+            self.write_header(ws, offset, 0,  "Day")
+            self.write_header(ws, offset, 1,  "Period ID")
+            self.write_header(ws, offset, 2,  "Location ID")
+            offset += 1
+
             for n, (day_id, period_id, activity) in enumerate(timetable.activities()):
+                resource = None
                 for event in ISchoolToolCalendar(section):
                     if ITimetableCalendarEvent.providedBy(event):
                         if event.activity == activity:
-                            resource = event.resources[0]
+                            if event.resources:
+                                resource = event.resources[0]
                             break
-                self.write(ws, offset + n + 1, 0,  day_id)
-                self.write(ws, offset + n + 1, 1,  period_id)
-                self.write(ws, offset + n + 1, 2,  resource.__name__)
-            offset += 2 + len(timetable.activities())
+                self.write(ws, offset + n, 0,  day_id)
+                self.write(ws, offset + n, 1,  period_id)
+                if resource is not None:
+                    self.write(ws, offset + n, 2,  resource.__name__)
+            offset += 1 + len(timetable.activities())
         return offset
 
     def format_section(self, section, ws, offset):
-        fields = [lambda i: ("Section*", i.title, None),
+        fields = [lambda i: ("Section Title", i.title, None),
                   lambda i: ("ID", i.__name__, None),
-                  lambda i: ("School Year", ISchoolYear(i).__name__, None),
-                  lambda i: ("Term", ITerm(i).__name__, None),
                   lambda i: ("Description", i.description, None)]
 
         offset = self.listFields(section, fields, ws, offset)
@@ -489,18 +492,27 @@ class MegaExporter(SchoolTimetableExportView):
         return offset
 
     def export_sections(self, wb):
-        ws = wb.add_sheet("Sections")
         school_years = sorted(ISchoolYearContainer(self.context).values(),
                               key=lambda s: s.first)
-        row = 0
+
         for school_year in sorted(school_years, key=lambda i: i.last):
             for term in sorted(school_year.values(), key=lambda i: i.last):
+                row = 0
+                ws = wb.add_sheet("Sections %s %s" % (school_year.__name__,
+                                                      term.__name__))
+
+                self.write_header(ws, row, 0,  "School Year")
+                self.write(ws, row, 1,  school_year.__name__)
+                self.write_header(ws, row, 2,  "Term")
+                self.write(ws, row, 3,  term.__name__)
+
+                row += 2
                 sections = removeSecurityProxy(ISectionContainer(term))
                 for section in sorted(sections.values(), key=lambda i: i.__name__):
                     row = self.format_section(section, ws, row) + 1
 
     def format_group(self, group, ws, offset):
-        fields = [lambda i: ("Group*", i.title, None),
+        fields = [lambda i: ("Group Title", i.title, None),
                   lambda i: ("ID", i.__name__, None),
                   lambda i: ("School Year", ISchoolYear(i.__parent__).__name__, None),
                   lambda i: ("Description", i.description, None)]

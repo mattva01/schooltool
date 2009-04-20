@@ -45,7 +45,6 @@ from schooltool.schoolyear.interfaces import TermOverlapError
 from schooltool.app.browser.cal import month_names
 from schooltool.calendar.utils import parse_date
 from schooltool.calendar.utils import next_month, week_start
-from schooltool.term.browser.widgets import CustomDateFieldTextWidget
 from schooltool.term.interfaces import ITerm
 from schooltool.term.term import validateTermsForOverlap
 from schooltool.term.term import Term
@@ -124,8 +123,6 @@ class TermAddForm(form.AddForm, TermFormBase):
     template = ViewPageTemplateFile('templates/term_add.pt')
 
     fields = field.Fields(ITermForm)
-#     fields['first'].widgetFactory = CustomDateFieldTextWidget
-#     fields['last'].widgetFactory = CustomDateFieldTextWidget
 
     @property
     def preview_term(self):
@@ -202,8 +199,6 @@ class TermEditForm(form.EditForm, TermFormBase):
     template = ViewPageTemplateFile('templates/term_add.pt')
 
     fields = field.Fields(ITermForm)
-#     fields['first'].widgetFactory = CustomDateFieldTextWidget
-#     fields['last'].widgetFactory = CustomDateFieldTextWidget
 
     @property
     def preview_term(self):
