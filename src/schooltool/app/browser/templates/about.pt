@@ -42,12 +42,17 @@ Tom Hoffman (<a href="mailto:hoffman@schooltool.org">email</a>)</p>
 <p i18n:translate=""><strong>Lead Developer:</strong>
 Ignas Mikalajūnas</p>
 
-<p i18n:translate=""><strong>Release Manager:</strong>
-Brian Sutherland</p>
+<h2 i18n:translate="">Release Managers:</h2>
+<ul>
+  <li>Brian Sutherland</li>
+  <li>Gediminas Paulauskas</li>
+</ul>
 
 <h2 i18n:translate="">Contributors:</h2>
 <ul>
 <li>Albertas Agejevas</li>
+<li>Douglas Cerna</li>
+<li>Justas Sadzevičius</li>
 <li>Steve Alexander</li>
 <li>Paul Carduner</li>
 <li>Chris Carey</li>
@@ -62,7 +67,7 @@ Brian Sutherland</p>
 <li>Andrew Rodriguez</li>
 <li>Brian Skahan</li>
 <li>Filip Sufitchi</li>
-<li> Tom von Schwerdtner</li>
+<li>Tom von Schwerdtner</li>
 </ul>
 </div>
 </body>
