@@ -29,7 +29,7 @@ from zope.publisher.browser import BrowserView
 from zope.app import basicskin
 
 class StandardMacros(basicskin.standardmacros.StandardMacros):
-    macro_pages = ('view_macros', 'dialog_macros',)
+    macro_pages = ('view_macros', 'dialog_macros', 'rml_macros', )
 
 
 class SchoolToolMacros(BrowserView):
