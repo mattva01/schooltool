@@ -1,0 +1,101 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE document SYSTEM "rml_1_0.dtd" [
+  <!ENTITY pound   "&#xA3;">
+]>
+<metal:block
+  xmlns:tal="http://xml.zope.org/namespaces/tal"
+  xmlns:metal="http://xml.zope.org/namespaces/metal"
+  xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+  metal:define-macro="report" i18n:domain="schooltool">
+<document>
+
+  <template tal:attributes="
+      pageSize view/pageSize;
+      leftMargin view/leftMargin;
+      rightMargin view/rightMargin;
+      topMargin view/topMargin;
+      bottomMargin view/bottomMargin;
+      title view/title"
+      author="SchoolTool">
+
+    <pageTemplate id="main">
+      <pageGraphics>
+        <setFont name="Times_New_Roman" size="18"/>
+
+        <drawCenteredString
+            tal:condition="view/title"
+            tal:attributes="
+              x view/header/title/x;
+              y view/header/title/y"
+            tal:content="view/title">[TITLE]</drawCenteredString>
+
+        <stroke color="grey"/>
+        <lineMode width="1" cap="round"/>
+        <lines tal:content="view/footer/rule" />
+
+        <image tal:attributes="
+            file string:${view/context/@@absolute_url}/@@/schooltool-report-logo.png;
+            x view/footer/logo/x;
+            y view/footer/logo/y;
+            height view/footer/logo/height"
+            preserveAspectRatio="True" />
+
+        <setFont name="Times_New_Roman" tal:attributes="
+            size view/footer/font_height"/>
+
+        <place tal:attributes="
+            x view/footer/center_place/x;
+            y view/footer/center_place/y;
+            width view/footer/center_place/width;
+            height view/footer/center_place/height">
+          <para style="_footer_page_number"
+            i18n:translate="">Page <pageNumber i18n:name="page_number"/></para>
+        </place>
+
+        <tal:block condition="view/footer_text">
+          <drawRightString
+              tal:attributes="
+                x view/footer/right_str/x;
+                y view/footer/right_str/y"
+              tal:content="view/footer_text">[TEXT]</drawRightString>
+          <drawRightString
+              tal:attributes="
+                x view/footer/right_str_2/x;
+                y view/footer/right_str_2/y"
+              tal:content="view/report_date/@@shortDate">[DATE]</drawRightString>
+        </tal:block>
+        <tal:block condition="not:view/footer_text">
+          <drawRightString
+              tal:attributes="
+                x view/footer/right_str/x;
+                y view/footer/right_str/y"
+              tal:content="view/report_date/@@shortDate">[DATE]</drawRightString>
+        </tal:block>
+
+      </pageGraphics>
+
+      <frame id="default" tal:attributes="
+          x1 view/frame/x;
+          y1 view/frame/y;
+          width view/frame/width;
+          height view/frame/height" />
+    </pageTemplate>
+
+  </template>
+
+  <stylesheet>
+    <initialize>
+      <alias id="style.normal" value="style.Normal"/>
+      <metal:block metal:define-slot="extra_initialize" />
+    </initialize>
+    <paraStyle name="_footer_page_number"
+        alignment="center" fontName="Times_New_Roman"
+        tal:attributes="fontSize view/footer/font_height" />
+    <metal:block metal:define-slot="stylesheet" />
+  </stylesheet>
+
+  <story metal:define-slot="story" />
+
+</document>
+
+</metal:block>
