@@ -128,7 +128,7 @@ While PDF views will always be disabled when SchoolBell is running as a
 content object in Zope 3, it may be possible to enable PDF views for this
 test.  We shall try to enable them.
 
-    >>> from schooltool.app.browser.tests.test_pdfcal import tryToSetUpReportLab
+    >>> from schooltool.app.tests.test_pdf import tryToSetUpReportLab
     >>> pdf_enabled = tryToSetUpReportLab()
 
     >>> if pdf_enabled:

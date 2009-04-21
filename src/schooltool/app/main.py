@@ -75,7 +75,7 @@ from schooltool.app.interfaces import IPluginInit
 from schooltool.app.interfaces import ISchoolToolInitializationUtility
 from schooltool.app.app import SchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.browser import pdfcal
+from schooltool.app import pdf
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.app.interfaces import ICookieLanguageSelector
 from schooltool.app.interfaces import CatalogSetUpEvent
@@ -710,14 +710,14 @@ class StandaloneServer(object):
                                   % fontdir)
             return
 
-        for font_file in pdfcal.font_map.values():
+        for font_file in pdf.font_map.values():
             font_path = os.path.join(fontdir, font_file)
             if not os.path.exists(font_path):
                 print >> sys.stderr, _("Warning: font '%s' does not exist.\n"
                                        "PDF support disabled.") % font_path
                 return
 
-        pdfcal.setUpMSTTCoreFonts(fontdir)
+        pdf.setUpMSTTCoreFonts(fontdir)
 
 
 if __name__ == '__main__':

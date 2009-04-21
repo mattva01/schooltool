@@ -22,8 +22,6 @@ Tests for SchoolBell calendaring views.
 $Id$
 """
 
-import os
-import sys
 import unittest
 import calendar
 from datetime import datetime, date, timedelta
@@ -39,8 +37,6 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.cal import CalendarEvent
-from schooltool.app.browser.pdfcal import PDFCalendarViewBase
-from schooltool.app.browser.pdfcal import setUpMSTTCoreFonts
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.person.person import Person
 from schooltool.resource.resource import Resource
@@ -69,20 +65,20 @@ def pdfTearDown(test=None):
     setup.placefulTearDown()
 
 
-class StubbedBaseView(PDFCalendarViewBase):
-    """A subclass of PDFCalendarViewBase for use in tests."""
-
-    title = _("Calendar for %s")
-
-    def getCalendars(self):
-        return [self.context]
-
-    def buildEventTables(self, date):
-        events = self.dayEvents(date)
-        return events and [self.buildDayTable(events)] or []
-
-    def dateTitle(self, date):
-        return date.isoformat()
+##class StubbedBaseView(PDFCalendarViewBase):
+##    """A subclass of PDFCalendarViewBase for use in tests."""
+##
+##    title = _("Calendar for %s")
+##
+##    def getCalendars(self):
+##        return [self.context]
+##
+##    def buildEventTables(self, date):
+##        events = self.dayEvents(date)
+##        return events and [self.buildDayTable(events)] or []
+##
+##    def dateTitle(self, date):
+##        return date.isoformat()
 
 
 def doctest_PDFCalendarViewBase():
@@ -655,106 +651,6 @@ def doctest_MonthlyPDFCalendarView():
     """
 
 
-def doctest_setUpMSTTCoreFonts():
-    r"""TrueType font setup tests.
-
-        >>> from schooltool.app.browser import pdfcal
-
-    The actual setup has been done at import-time by the test_suite function.
-    We only test the results here.
-
-    Let's check that the TrueType fonts have been configured:
-
-        >>> from reportlab.pdfbase import pdfmetrics
-
-        >>> pdfmetrics.getFont('Times_New_Roman')
-        <reportlab.pdfbase.ttfonts.TTFont instance at ...>
-        >>> pdfmetrics.getFont('Times_New_Roman_Bold')
-        <reportlab.pdfbase.ttfonts.TTFont instance at ...>
-        >>> pdfmetrics.getFont('Times_New_Roman_Italic')
-        <reportlab.pdfbase.ttfonts.TTFont instance at ...>
-        >>> pdfmetrics.getFont('Times_New_Roman_Bold_Italic')
-        <reportlab.pdfbase.ttfonts.TTFont instance at ...>
-
-        >>> pdfmetrics.getFont('Arial_Normal')
-        <reportlab.pdfbase.ttfonts.TTFont instance at ...>
-        >>> pdfmetrics.getFont('Arial_Bold')
-        <reportlab.pdfbase.ttfonts.TTFont instance at ...>
-        >>> pdfmetrics.getFont('Arial_Italic')
-        <reportlab.pdfbase.ttfonts.TTFont instance at ...>
-        >>> pdfmetrics.getFont('Arial_Bold_Italic')
-        <reportlab.pdfbase.ttfonts.TTFont instance at ...>
-
-    For our Serif font (normal paragraphs), the bold/italic mappings
-    are registered:
-
-        >>> from reportlab.lib.fonts import tt2ps, ps2tt
-
-        >>> tt2ps('Times_New_Roman', 0, 0)
-        'Times_New_Roman'
-        >>> tt2ps('Times_New_Roman', 1, 0)
-        'Times_New_Roman_Bold'
-        >>> tt2ps('Times_New_Roman', 0, 1)
-        'Times_New_Roman_Italic'
-        >>> tt2ps('Times_New_Roman', 1, 1)
-        'Times_New_Roman_Bold_Italic'
-
-        >>> ps2tt('Times_New_Roman')
-        ('times_new_roman', 0, 0)
-        >>> ps2tt('Times_New_Roman_Bold')
-        ('times_new_roman', 1, 0)
-        >>> ps2tt('Times_New_Roman_Italic')
-        ('times_new_roman', 0, 1)
-        >>> ps2tt('Times_New_Roman_Bold_Italic')
-        ('times_new_roman', 1, 1)
-
-        >>> tt2ps('Arial_Normal', 0, 0)
-        'Arial_Normal'
-        >>> tt2ps('Arial_Normal', 1, 0)
-        'Arial_Bold'
-        >>> tt2ps('Arial_Normal', 0, 1)
-        'Arial_Italic'
-        >>> tt2ps('Arial_Normal', 1, 1)
-        'Arial_Bold_Italic'
-
-        >>> ps2tt('Arial_Normal')
-        ('arial_normal', 0, 0)
-        >>> ps2tt('Arial_Bold')
-        ('arial_normal', 1, 0)
-        >>> ps2tt('Arial_Italic')
-        ('arial_normal', 0, 1)
-        >>> ps2tt('Arial_Bold_Italic')
-        ('arial_normal', 1, 1)
-
-        >>> pdfcal.SANS
-        'Arial_Normal'
-        >>> pdfcal.SANS_OBLIQUE
-        'Arial_Italic'
-        >>> pdfcal.SANS_BOLD
-        'Arial_Bold'
-        >>> pdfcal.SERIF
-        'Times_New_Roman'
-
-# XXX This part fails on Windows, I don't yet know why.
-#    If the fonts can not be found, setUpMSTTCoreFonts() will
-#    raise an exception:
-#
-#        >>> import reportlab.rl_config
-#        >>> real_path = reportlab.rl_config.TTFSearchPath[-1]
-#        >>> del reportlab.rl_config.TTFSearchPath[-1]
-#
-#        >>> pdfcal.setUpMSTTCoreFonts('/definitely/nonexistent')
-#        Traceback (most recent call last):
-#          ...
-#        TTFError: Can't open file "....ttf"
-#
-#    Clean up:
-#
-#        >>> reportlab.rl_config.TTFSearchPath.append(real_path)
-
-    """
-
-
 def test_getCalendars(self):
     """Test for PDFCalendarViewBase.getCalendars().
 
@@ -787,40 +683,8 @@ def test_getCalendars(self):
     """
 
 
-def tryToSetUpReportLab():
-    """Try to set up reportlab.
-
-    Returns True without doing anything if pdfcal.disabled is False.
-
-    Tries to guess the location of fonts.  Returns True on success,
-    False if reportlab is not available or fonts could not be found.
-
-    If something breaks during setUpMSTTCoreFonts, the exception
-    will be propagated up.
-    """
-    try:
-        import reportlab
-    except ImportError:
-        return False # We don't have reportlab, so we can't get anywhere.
-
-    from schooltool.app.browser import pdfcal
-    if not pdfcal.disabled:
-        return True # Assume that reportlab has been configured already.
-
-    # Heuristic to try and find the TrueType fonts.
-    font_dirs = ['/usr/share/fonts/truetype/msttcorefonts', # Debian
-	         '/usr/share/fonts/corefonts', # SuSE
-                 '/usr/X11R6/lib/X11/fonts/drakfont/ttf/', # Mandrake
-                 r'C:\WINDOWS\Fonts']
-    for font_dir in font_dirs:
-        if os.path.exists(os.path.join(font_dir, 'arial.ttf')):
-            setUpMSTTCoreFonts(font_dir)
-            return True
-    else:
-        return False
-
-
 def test_suite():
+    from schooltool.app.tests.test_pdf import tryToSetUpReportLab
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite('schooltool.app.browser.pdfcal'))
     success = tryToSetUpReportLab()

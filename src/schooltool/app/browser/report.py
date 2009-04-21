@@ -31,7 +31,7 @@ from zope.publisher.browser import BrowserView
 from zope.i18n import translate
 from z3c.rml import rml2pdf
 from schooltool.common import SchoolToolMessage as _
-from schooltool.app.browser import pdfcal
+from schooltool.app import pdf
 from schooltool.app.interfaces import ISchoolToolApplication
 
 
@@ -68,7 +68,7 @@ class PDFView(BrowserView):
         response.setHeader('Content-Disposition', disposition)
 
     def __call__(self):
-        if pdfcal.disabled:
+        if not pdf.isEnabled():
             return translate(self.pdf_disabled_text, context=self.request)
         filename = _quoteUrl(self.filename)
         xml = self.template()
