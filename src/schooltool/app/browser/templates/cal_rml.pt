@@ -1,0 +1,89 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE document SYSTEM "rml_1_0.dtd" [
+  <!ENTITY pound   "&#xA3;">
+]>
+
+<document
+  xmlns:tal="http://xml.zope.org/namespaces/tal"
+  xmlns:metal="http://xml.zope.org/namespaces/metal"
+  xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+  metal:use-macro="context/@@rml_macros/report"
+  i18n:domain="schooltool">
+
+<stylesheet>
+  <metal:block fill-slot="extra_initialize">
+  </metal:block>
+  <metal:block fill-slot="stylesheet">
+
+    <paraStyle
+      name="normal"
+      fontName="Arial_Normal"
+      fontSize="10"
+      leading="12"/>
+
+    <paraStyle
+      name="h1"
+      parent="Normal"
+      fontName="Arial_Bold"
+      fontSize="14"
+      alignment="center"
+      leading="22"
+      spaceAfter="6"/>
+
+    <paraStyle
+      name="h2"
+      parent="h1"
+      fontSize="12"
+      spaceBefore="16"/>
+
+    <blockTableStyle id="events">
+    	<lineStyle kind="OUTLINE"
+          colorName="black" thickness="0.25"
+          start="0,0" stop="-1,-1" />
+    	<lineStyle kind="INNERGRID"
+          colorName="black" thickness="0.25"
+          start="0,0" stop="-1,-1" />
+        <blockValign value="top" start="0,0" stop="0,-1"/>
+    </blockTableStyle>
+  </metal:block>
+</stylesheet>
+
+<story metal:fill-slot="story">
+
+  <para style="h1"
+    tal:condition="view/subtitle" tal:content="view/subtitle" />
+
+  <tal:block repeat="table view/tables">
+    <tal:block condition="table/rows">
+      <para style="h2" tal:content="table/title" />
+
+      <blockTable colWidths="2.5cm,15cm" style="events">
+        <tr tal:repeat="row table/rows">
+          <td><para style="normal" tal:content="row/time" /></td>
+          <td>
+            <para style="normal" tal:content="row/title" />
+            <para style="normal"
+              tal:condition="row/description">
+              <em tal:content="structure row/description" />
+            </para>
+            <para style="normal"
+              tal:condition="row/location">
+              Location: <tal:block content="row/location" />
+            </para>
+            <para style="normal"
+              tal:condition="row/resources">
+              Booked resources: <tal:block content="row/resources" />
+            </para>
+            <para style="normal"
+              tal:condition="row/tags">
+              (<tal:block content="row/tags" />)
+            </para>
+          </td>
+        </tr>
+      </blockTable>
+    </tal:block>
+  </tal:block>
+
+</story>
+
+</document>
