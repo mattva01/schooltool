@@ -66,8 +66,7 @@ class DailyPDFCalendarView(ReportPDFView):
         return translate(
             self.title_template, context=self.request) % self.owner
 
-    @property
-    def calendar_date(self):
+    def getDate(self):
         if 'date' in self.request:
             return parse_date(self.request['date'])
         else:
@@ -93,7 +92,7 @@ class DailyPDFCalendarView(ReportPDFView):
         return calendars
 
     def tables(self):
-        return [self.buildDayTable(self.calendar_date)]
+        return [self.buildDayTable(self.getDate())]
 
     def eventTags(self, event):
         tags = []
@@ -126,7 +125,9 @@ class DailyPDFCalendarView(ReportPDFView):
                                             dtend.strftime('%H:%M'))
 
             row = {
-                'event': event,
+                'title': event.title,
+                'description': event.description,
+                'location': event.location,
                 'time': time_text,
                 'resources': ', '.join([
                     resource.title for resource in event.resources]),
@@ -182,15 +183,16 @@ class WeeklyPDFCalendarView(DailyPDFCalendarView):
 
     @property
     def subtitle(self):
-        date = self.calendar_date
+        date = self.getDate()
         year, week = date.isocalendar()[:2]
         start = week_start(date, 0) # TODO: first_day_of_week
-        end = start + datetime.timedelta(weeks=1)
+        end = (start + datetime.timedelta(weeks=1) -
+               datetime.timedelta(days=1))
         template = translate(_("Week %d (%s - %s), %d"), context=self.request)
         return template % (week, start, end, year)
 
     def tables(self):
-        start = week_start(self.calendar_date, 0) # TODO: first_day_of_week
+        start = week_start(self.getDate(), 0) # TODO: first_day_of_week
         return [self.buildDayTable(start + datetime.timedelta(days=weekday))
                 for weekday in range(7)]
 
@@ -202,12 +204,12 @@ class MonthlyPDFCalendarView(WeeklyPDFCalendarView):
     @property
     def subtitle(self):
         from schooltool.app.browser.cal import month_names
-        date = self.calendar_date
+        date = self.getDate()
         month_name = translate(month_names[date.month], context=self.request)
         return "%s, %d" % (month_name, date.year)
 
     def tables(self):
-        date = self.calendar_date
+        date = self.getDate()
         day = datetime.date(date.year, date.month, 1)
         tables = []
         while day.month == date.month:

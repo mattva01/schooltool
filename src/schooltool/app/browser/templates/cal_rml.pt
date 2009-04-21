@@ -60,15 +60,15 @@
       <blockTable colWidths="2.5cm,15cm" style="events">
         <tr tal:repeat="row table/rows">
           <td><para style="normal" tal:content="row/time" /></td>
-          <td tal:define="event row/event">
-            <para style="normal" tal:content="event/title" />
+          <td>
+            <para style="normal" tal:content="row/title" />
             <para style="normal"
-              tal:condition="event/description">
-              <em tal:content="structure event/description" />
+              tal:condition="row/description">
+              <em tal:content="structure row/description" />
             </para>
             <para style="normal"
-              tal:condition="event/location">
-              Location: <tal:block content="event/location" />
+              tal:condition="row/location">
+              Location: <tal:block content="row/location" />
             </para>
             <para style="normal"
               tal:condition="row/resources">
