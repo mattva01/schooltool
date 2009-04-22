@@ -1,6 +1,7 @@
 <?xml version="1.0" standalone="no" ?>
 <!DOCTYPE document SYSTEM "rml_1_0.dtd" [
   <!ENTITY pound   "&#xA3;">
+  <!ENTITY nbsp    "&#160;">
 ]>
 
 <document
