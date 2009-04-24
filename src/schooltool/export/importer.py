@@ -114,12 +114,20 @@ class SchoolYearImporter(ImporterBase):
 
     def createSchoolYear(self, data):
         syc = ISchoolYearContainer(self.context)
-        sy = SchoolYear(data['title'], data['first'], data['last'])
-        sy.__name__ = data['__name__']
+        name = data['__name__']
+        if name in syc:
+            sy = syc[name]
+            sy.first = data['first']
+            sy.last = data['last']
+        else:
+            sy = SchoolYear(data['title'], data['first'], data['last'])
+            sy.__name__ = name
         return sy
 
     def addSchoolYear(self, sy, data):
         syc = ISchoolYearContainer(self.context)
+        if sy.__name__ in syc:
+            return
         if sy.__name__ is None:
             sy.__name__ = SimpleNameChooser(syc).chooseName('', sy)
         syc[sy.__name__] = sy
@@ -141,14 +149,24 @@ class TermImporter(ImporterBase):
     sheet_name = 'Terms'
 
     def createTerm(self, data):
-        term = Term(data['title'], data['first'], data['last'])
-        term.__name__ = data['__name__']
+        syc = ISchoolYearContainer(self.context)
+        sy = syc[data['school_year']]
+        name = data['__name__']
+        if name in sy:
+            term = sy[name]
+            term.first = data['first']
+            term.last = data['last']
+        else:
+            term = Term(data['title'], data['first'], data['last'])
+            term.__name__ = data['__name__']
         term.addWeekdays(*range(7))
         return term
 
     def addTerm(self, term, data):
         syc = ISchoolYearContainer(self.context)
         sy = syc[data['school_year']]
+        if term.__name__ in sy:
+            return
         if term.__name__ is None:
             term.__name__ = SimpleNameChooser(sy).chooseName('', term)
         sy[term.__name__] = term
@@ -442,13 +460,23 @@ class CourseImporter(ImporterBase):
     sheet_name = 'Courses'
 
     def createCourse(self, data):
-        course = Course(data['title'], data['description'])
-        course.__name__ = data['__name__']
+        syc = ISchoolYearContainer(self.context)
+        cc = ICourseContainer(syc[data['school_year']])
+        name = data['__name__']
+        if name in cc:
+            course = cc[name]
+            course.title = data['title']
+            course.description = data['description']
+        else:
+            course = Course(data['title'], data['description'])
+            course.__name__ = data['__name__']
         return course
 
     def addCourse(self, course, data):
         syc = ISchoolYearContainer(self.context)
         cc = ICourseContainer(syc[data['school_year']])
+        if course.__name__ in cc:
+            return
         if course.__name__ is None:
             course.__name__ = SimpleNameChooser(cc).chooseName('', course)
         cc[course.__name__] = course
@@ -537,7 +565,8 @@ class SectionImporter(ImporterBase):
                     break
                 course_id = sh.cell_value(rowx=row, colx=0)
                 course = ICourseContainer(section)[course_id]
-                section.courses.add(removeSecurityProxy(course))
+                if course not in section.courses:
+                    section.courses.add(removeSecurityProxy(course))
         else:
             self.errors.append("%s has no courses in A%s" % (data['title'], row + 1))
             return row
@@ -551,7 +580,8 @@ class SectionImporter(ImporterBase):
                     break
                 username = sh.cell_value(rowx=row, colx=0)
                 member = pc[username]
-                section.members.add(removeSecurityProxy(member))
+                if member not in section.members:
+                    section.members.add(removeSecurityProxy(member))
 
         row += 1
         if sh.cell_value(rowx=row, colx=0) == 'Instructors':
@@ -561,7 +591,8 @@ class SectionImporter(ImporterBase):
                     break
                 username = sh.cell_value(rowx=row, colx=0)
                 instructor = pc[username]
-                section.instructors.add(removeSecurityProxy(instructor))
+                if instructor not in section.instructors:
+                    section.instructors.add(removeSecurityProxy(instructor))
 
         row += 1
         if sh.cell_value(rowx=row, colx=0) == 'School Timetable':
@@ -639,7 +670,8 @@ class GroupImporter(ImporterBase):
                     break
                 username = sh.cell_value(rowx=row, colx=0)
                 member = pc[username]
-                group.members.add(removeSecurityProxy(member))
+                if member not in group.members:
+                    group.members.add(removeSecurityProxy(member))
         return row
 
     def process(self):
