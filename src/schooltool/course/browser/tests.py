@@ -506,6 +506,149 @@ def doctest_SectionEditView():
     """
 
 
+def doctest_SectionMemberCSVImporter():
+    r"""Tests for SectionMemberCSVImporter.
+
+    First we need to set up some persons:
+
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
+        >>> from schooltool.person.person import Person
+        >>> from schooltool.course.section import PersonLearnerAdapter
+        >>> school = setup.setUpSchoolToolSite()
+        >>> provideAdapter(lambda context: school, (None,), ISchoolToolApplication)
+        >>> persons = school['persons']
+        >>> directlyProvides(school, IContainmentRoot)
+        >>> smith = persons['smith'] = Person('smith', 'John Smith')
+        >>> [section.title for section in PersonLearnerAdapter(smith).sections()]
+        []
+        >>> jones = persons['jones'] = Person('jones', 'Sally Jones')
+        >>> [section.title for section in PersonLearnerAdapter(jones).sections()]
+        []
+        >>> stevens = persons['stevens'] = Person('stevens', 'Bob Stevens')
+        >>> [section.title for section in PersonLearnerAdapter(stevens).sections()]
+        []
+    
+    Create a section and an importer
+
+        >>> from schooltool.course.browser.csvimport import SectionMemberCSVImporter
+        >>> from schooltool.course.section import Section
+        >>> section = Section('Section title', 'Section description')
+        >>> [person.username for person in section.members]
+        []
+        >>> importer = SectionMemberCSVImporter(section, None)
+
+    Import some sample data
+
+        >>> csvdata='''smith
+        ... stevens'''
+        >>> importer.importFromCSV(csvdata)
+        True
+
+    Check that the persons were added to the section members:
+
+        >>> [person.username for person in section.members]
+        ['smith', 'stevens']
+        >>> [section.title for section in PersonLearnerAdapter(smith).sections()]
+        ['Section title']
+        >>> [section.title for section in PersonLearnerAdapter(jones).sections()]
+        []
+        >>> [section.title for section in PersonLearnerAdapter(stevens).sections()]
+        ['Section title']
+
+    Create another section and another importer
+
+        >>> another_section = Section('Another section', 'Another description')
+        >>> [person.username for person in another_section.members]
+        []
+        >>> another_importer = SectionMemberCSVImporter(another_section, None)
+
+    Import some more data
+
+        >>> csvdata='''stevens
+        ... jones'''
+        >>> another_importer.importFromCSV(csvdata)
+        True
+
+    Check that the persons were added to the another section members:
+
+        >>> [person.username for person in another_section.members]
+        ['stevens', 'jones']
+        >>> [section.title for section in PersonLearnerAdapter(smith).sections()]
+        ['Section title']
+        >>> [section.title for section in PersonLearnerAdapter(jones).sections()]
+        ['Another section']
+        >>> [section.title for section in PersonLearnerAdapter(stevens).sections()]
+        ['Section title', 'Another section']
+
+    """
+
+
+def doctest_SectionMemberCSVImportView():
+    r"""Tests for SectionMemberCSVImportView
+
+    First we need to set up some persons:
+
+        >>> from zope.i18n import translate
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
+        >>> from schooltool.person.person import Person
+        >>> school = setup.setUpSchoolToolSite()
+        >>> provideAdapter(lambda context: school, (None,), ISchoolToolApplication)
+        >>> persons = school['persons']
+        >>> directlyProvides(school, IContainmentRoot)
+        >>> smith = persons['smith'] = Person('smith', 'John Smith')
+        >>> jones = persons['jones'] = Person('jones', 'Sally Jones')
+        >>> stevens = persons['stevens'] = Person('stevens', 'Bob Stevens')
+
+    We'll create a section member csv import view
+
+        >>> from schooltool.course.browser.csvimport import \
+        ...      SectionMemberCSVImportView
+        >>> from schooltool.course.section import Section
+        >>> from zope.publisher.browser import TestRequest
+        >>> section = Section('Section title', 'Section description')
+        >>> request = TestRequest()
+
+    Now we'll try a text import.
+
+        >>> request.form = {
+        ...     'csvtext' : 'stevens\n',
+        ...     'charset' : 'UTF-8',
+        ...     'UPDATE_SUBMIT': 1}
+        >>> view = SectionMemberCSVImportView(section, request)
+        >>> view.update()
+        >>> [person.username for person in section.members]
+        ['stevens']
+
+    If no data is provided, we naturally get an error
+
+        >>> request.form = {'charset' : 'UTF-8', 'UPDATE_SUBMIT': 1}
+        >>> view.update()
+        >>> view.errors
+        [u'No data provided']
+
+    We also get an error if a line doesn't have a username
+
+        >>> request.form = {'csvtext' : " ,stevens\njones,Sally",
+        ...                 'charset' : 'UTF-8',
+        ...                 'UPDATE_SUBMIT': 1}
+        >>> view = SectionMemberCSVImportView(section, request)
+        >>> view.update()
+        >>> view.errors
+        [u'Failed to import CSV text', u'User names must not be empty.']
+
+    Or if the username is not in the persons container
+
+        >>> request.form = {'csvtext' : "foobar\nstevens\njones",
+        ...                 'charset' : 'UTF-8',
+        ...                 'UPDATE_SUBMIT': 1}
+        >>> view = SectionMemberCSVImportView(section, request)
+        >>> view.update()
+        >>> [translate(error) for error in view.errors]
+        [u'Failed to import CSV text', u'"foobar" is not a valid username.']
+
+    """
+
+
 def doctest_ConflictDisplayMixin():
     r"""Tests for ConflictDisplayMixin.
 

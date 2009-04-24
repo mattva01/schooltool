@@ -119,6 +119,16 @@
       title="Import Groups"
       />
 
+  <page
+      name="member-csvimport.html"
+      for="schooltool.group.interfaces.IGroup"
+      class=".csvimport.GroupMemberCSVImportView"
+      template="group-member-csvimport.pt"
+      permission="schooltool.edit"
+      menu="schooltool_actions"
+      title="Import Groups Members"
+      />
+
   <zope:adapter
       for="schooltool.group.interfaces.IGroupContainer
            zope.publisher.interfaces.browser.IBrowserRequest"

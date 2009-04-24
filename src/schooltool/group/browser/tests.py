@@ -528,6 +528,148 @@ def doctest_GroupCSVImportView():
     """
 
 
+def doctest_GroupMemberCSVImporter():
+    r"""Tests for GroupMemberCSVImporter.
+
+    First we need to set up some persons:
+
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
+        >>> from schooltool.person.person import Person
+        >>> school = setup.setUpSchoolToolSite()
+        >>> provideAdapter(lambda context: school, (None,), ISchoolToolApplication)
+        >>> persons = school['persons']
+        >>> directlyProvides(school, IContainmentRoot)
+        >>> smith = persons['smith'] = Person('smith', 'John Smith')
+        >>> [group.title for group in smith.groups]
+        []
+        >>> jones = persons['jones'] = Person('jones', 'Sally Jones')
+        >>> [group.title for group in jones.groups]
+        []
+        >>> stevens = persons['stevens'] = Person('stevens', 'Bob Stevens')
+        >>> [group.title for group in stevens.groups]
+        []
+    
+    Create a group and an importer
+
+        >>> from schooltool.group.browser.csvimport import GroupMemberCSVImporter
+        >>> from schooltool.group.group import Group
+        >>> group = Group('Group title', 'Group description')
+        >>> [person.username for person in group.members]
+        []
+        >>> importer = GroupMemberCSVImporter(group, None)
+
+    Import some sample data
+
+        >>> csvdata='''smith
+        ... stevens'''
+        >>> importer.importFromCSV(csvdata)
+        True
+
+    Check that the persons were added to the group members:
+
+        >>> [person.username for person in group.members]
+        ['smith', 'stevens']
+        >>> [group.title for group in smith.groups]
+        ['Group title']
+        >>> [group.title for group in jones.groups]
+        []
+        >>> [group.title for group in stevens.groups]
+        ['Group title']
+
+    Create another group and another importer
+
+        >>> another_group = Group('Another group', 'Another description')
+        >>> [person.username for person in another_group.members]
+        []
+        >>> another_importer = GroupMemberCSVImporter(another_group, None)
+
+    Import some more data
+
+        >>> csvdata='''stevens
+        ... jones'''
+        >>> another_importer.importFromCSV(csvdata)
+        True
+
+    Check that the persons were added to the another group members:
+
+        >>> [person.username for person in another_group.members]
+        ['stevens', 'jones']
+        >>> [group.title for group in smith.groups]
+        ['Group title']
+        >>> [group.title for group in jones.groups]
+        ['Another group']
+        >>> [group.title for group in stevens.groups]
+        ['Group title', 'Another group']
+
+    """
+
+
+def doctest_GroupMemberCSVImportView():
+    r"""Tests for GroupMemberCSVImportView
+
+    First we need to set up some persons:
+
+        >>> from zope.i18n import translate
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
+        >>> from schooltool.person.person import Person
+        >>> school = setup.setUpSchoolToolSite()
+        >>> provideAdapter(lambda context: school, (None,), ISchoolToolApplication)
+        >>> persons = school['persons']
+        >>> directlyProvides(school, IContainmentRoot)
+        >>> smith = persons['smith'] = Person('smith', 'John Smith')
+        >>> jones = persons['jones'] = Person('jones', 'Sally Jones')
+        >>> stevens = persons['stevens'] = Person('stevens', 'Bob Stevens')
+
+    We'll create a group member csv import view
+
+        >>> from schooltool.group.browser.csvimport import \
+        ...      GroupMemberCSVImportView
+        >>> from schooltool.group.group import Group
+        >>> from zope.publisher.browser import TestRequest
+        >>> group = Group('Group title', 'Group description')
+        >>> request = TestRequest()
+
+    Now we'll try a text import.
+
+        >>> request.form = {
+        ...     'csvtext' : 'stevens\n',
+        ...     'charset' : 'UTF-8',
+        ...     'UPDATE_SUBMIT': 1}
+        >>> view = GroupMemberCSVImportView(group, request)
+        >>> view.update()
+        >>> [person.username for person in group.members]
+        ['stevens']
+
+    If no data is provided, we naturally get an error
+
+        >>> request.form = {'charset' : 'UTF-8', 'UPDATE_SUBMIT': 1}
+        >>> view.update()
+        >>> view.errors
+        [u'No data provided']
+
+    We also get an error if a line doesn't have a username
+
+        >>> request.form = {'csvtext' : " ,stevens\njones,Sally",
+        ...                 'charset' : 'UTF-8',
+        ...                 'UPDATE_SUBMIT': 1}
+        >>> view = GroupMemberCSVImportView(group, request)
+        >>> view.update()
+        >>> view.errors
+        [u'Failed to import CSV text', u'User names must not be empty.']
+
+    Or if the username is not in the persons container
+
+        >>> request.form = {'csvtext' : "foobar\nstevens\njones",
+        ...                 'charset' : 'UTF-8',
+        ...                 'UPDATE_SUBMIT': 1}
+        >>> view = GroupMemberCSVImportView(group, request)
+        >>> view.update()
+        >>> [translate(error) for error in view.errors]
+        [u'Failed to import CSV text', u'"foobar" is not a valid username.']
+
+    """
+
+
 def doctest_GroupsViewlet():
     r"""Test for GroupsViewlet
 

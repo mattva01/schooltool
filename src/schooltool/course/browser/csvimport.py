@@ -22,6 +22,8 @@ csv importing.
 $Id$
 """
 from zope.exceptions.interfaces import UserError
+from zope.security.proxy import removeSecurityProxy
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView
 from schooltool.course.course import Course
 
@@ -89,3 +91,37 @@ class CourseCSVImportView(BaseCSVImportView):
     """View for Course CSV importer."""
 
     importer_class = CourseCSVImporter
+
+
+class SectionMemberCSVImporter(BaseCSVImporter):
+    """Section Member CSV Importer"""
+
+    def createAndAdd(self, data, dry_run=True):
+        """Create persons and add them to the section learners."""
+
+        if len(data) < 1:
+            self.errors.fields.append(_('Insufficient data provided.'))
+            return
+
+        if not data[0]:
+            self.errors.fields.append(_('User names must not be empty.'))
+            return
+
+        app = ISchoolToolApplication(None)
+        person_container = app['persons']
+        username = data[0]
+
+        if username not in person_container:
+            self.errors.fields.append(_('"${username}" is not a valid username.',
+                                        mapping={'username': username}))
+            return
+
+        user = person_container[username]
+        if not dry_run:
+            removeSecurityProxy(self.container.members).add(removeSecurityProxy(user))
+
+
+class SectionMemberCSVImportView(BaseCSVImportView):
+    """View for Section Member CSV importer."""
+
+    importer_class = SectionMemberCSVImporter

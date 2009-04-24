@@ -21,6 +21,8 @@ csv importing.
 
 $Id$
 """
+from zope.security.proxy import removeSecurityProxy
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView
 from schooltool.group.group import Group
 
@@ -58,3 +60,37 @@ class GroupCSVImportView(BaseCSVImportView):
     """View for Group CSV importer."""
 
     importer_class = GroupCSVImporter
+
+
+class GroupMemberCSVImporter(BaseCSVImporter):
+    """Group Member CSV Importer"""
+
+    def createAndAdd(self, data, dry_run=True):
+        """Create objects and add them to the container."""
+
+        if len(data) < 1:
+            self.errors.fields.append(_('Insufficient data provided.'))
+            return
+
+        if not data[0]:
+            self.errors.fields.append(_('User names must not be empty.'))
+            return
+
+        app = ISchoolToolApplication(None)
+        person_container = app['persons']
+        username = data[0]
+
+        if username not in person_container:
+            self.errors.fields.append(_('"${username}" is not a valid username.',
+                                        mapping={'username': username}))
+            return
+
+        user = person_container[username]
+        if not dry_run:
+            removeSecurityProxy(self.container.members).add(removeSecurityProxy(user))
+
+
+class GroupMemberCSVImportView(BaseCSVImportView):
+    """View for Group Member CSV importer."""
+
+    importer_class = GroupMemberCSVImporter

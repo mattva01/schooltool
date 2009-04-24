@@ -141,6 +141,17 @@
   </editform>
 
   <page
+      name="member-csvimport.html"
+      for="schooltool.course.interfaces.ISection"
+      class=".csvimport.SectionMemberCSVImportView"
+      template="section-member-csvimport.pt"
+      permission="schooltool.edit"
+      menu="schooltool_actions"
+      title="Import Section Members"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+
+  <page
       name="instructors.html"
       for="..interfaces.ISection"
       class=".section.SectionInstructorView"
