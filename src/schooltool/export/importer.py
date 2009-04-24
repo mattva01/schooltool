@@ -63,12 +63,21 @@ from schooltool.common import SchoolToolMessage as _
 
 
 no_date = object()
+no_data = object()
 
 class ImporterBase(object):
 
     def __init__(self, context, request):
         self.context, self.request = context, request
         self.errors = []
+
+    def getCellValue(self, sheet, row, col, default=no_data):
+        try:
+            return sheet.cell_value(rowx=row, colx=col)
+        except IndexError:
+            if default != no_data:
+                return default
+            raise
 
     def error(self, col, row, message):
         self.errors.append("%s %s%s %s" % (self.sheet_name,
@@ -161,7 +170,7 @@ class TermImporter(ImporterBase):
             self.addTerm(term, data)
 
         row += 1
-        if sh.cell_value(rowx=row, colx=0) == 'Holidays':
+        if self.getCellValue(sh, row, 0, '') == 'Holidays':
             row += 1
             for row in range(row + 1, sh.nrows):
                 if sh.cell_value(rowx=row, colx=0) == '':
@@ -175,7 +184,7 @@ class TermImporter(ImporterBase):
                                 term.remove(day)
 
         row += 1
-        if sh.cell_value(rowx=row, colx=0) == 'Weekends':
+        if self.getCellValue(sh, row, 0, '') == 'Weekends':
             row += 2
             for col in range(7):
                 if sh.cell_value(rowx=row, colx=col) != '':
@@ -267,7 +276,7 @@ class SchoolTimetableImporter(ImporterBase):
         data['model'] = sh.cell_value(rowx=row+3, colx=1)
 
         row += 5
-        if sh.cell_value(rowx=row, colx=0) == 'Day Templates':
+        if self.getCellValue(sh, row, 0, '') == 'Day Templates':
             data['templates'] = []
             row += 1
             for row in range(row, sh.nrows):
@@ -284,7 +293,7 @@ class SchoolTimetableImporter(ImporterBase):
             self.errors.append("%s has no day templates in A%s" % (data['title'], row + 1))
 
         row += 1
-        if sh.cell_value(rowx=row, colx=0) == 'Days':
+        if self.getCellValue(sh, row, 0, '') == 'Days':
             data['days'] = []
             homeroom_start = sh.ncols
             for col in range(2, sh.ncols):
@@ -312,8 +321,9 @@ class SchoolTimetableImporter(ImporterBase):
         else:
             self.errors.append("%s has no days in A%s" % (data['title'], row + 1))
 
-        school_timetable = self.createSchoolTimetable(data)
-        self.addSchoolTimetable(school_timetable, data)
+        if not self.errors:
+            school_timetable = self.createSchoolTimetable(data)
+            self.addSchoolTimetable(school_timetable, data)
 
         return row
 
