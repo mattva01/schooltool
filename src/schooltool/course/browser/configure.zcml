@@ -97,6 +97,16 @@
       />
 
   <page
+      name="copy_sections.html"
+      for="..interfaces.ISectionContainer"
+      class=".section.SectionCopyingView"
+      template="templates/copy_sections.pt"
+      permission="schooltool.view"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <page
       name="index.html"
       for="..interfaces.ISection"
       class=".section.SectionView"
@@ -217,6 +227,17 @@
       link="sections"
       title="Sections"
       order="10"
+      />
+
+    <navigationViewlet
+      name="sections-copy"
+      for="schooltool.course.interfaces.ISectionContainer"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.edit"
+      link="@@copy_sections.html"
+      title="Copy from prev. term"
+      order="50"
       />
     </configure>
 

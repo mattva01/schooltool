@@ -45,16 +45,20 @@ class ContainerView(BrowserView):
 
     """
 
+    @property
+    def container(self):
+        return self.context
+
     def update(self):
         if 'SEARCH' in self.request and 'CLEAR_SEARCH' not in self.request:
             searchstr = self.request['SEARCH'].lower()
-            results = [item for item in self.context.values()
+            results = [item for item in self.container.values()
                        if searchstr in item.title.lower()]
             search_string = self.request['SEARCH'].encode('utf-8')
             extra_url = "&SEARCH=%s" % urllib.quote_plus(search_string)
         else:
             self.request.form['SEARCH'] = ''
-            results = self.context.values()
+            results = self.container.values()
             extra_url = ""
 
         self.batch = IterableBatch(results, self.request, sort_by='title',
@@ -62,31 +66,35 @@ class ContainerView(BrowserView):
 
     @property
     def canModify(self):
-        return canAccess(self.context, '__delitem__')
+        return canAccess(self.container, '__delitem__')
 
 
 class ContainerDeleteView(BrowserView):
     """A view for deleting items from container."""
 
+    @property
+    def container(self):
+        return self.context
+
     def listIdsForDeletion(self):
-        return [key for key in self.context
+        return [key for key in self.container
                 if "delete.%s" % key in self.request]
 
     def _listItemsForDeletion(self):
-        return [self.context[key] for key in self.listIdsForDeletion()]
+        return [self.container[key] for key in self.listIdsForDeletion()]
 
     itemsToDelete = property(_listItemsForDeletion)
 
     def update(self):
         if 'CONFIRM' in self.request:
             for key in self.listIdsForDeletion():
-                del self.context[key]
+                del self.container[key]
             self.request.response.redirect(self.nextURL())
         elif 'CANCEL' in self.request:
             self.request.response.redirect(self.nextURL())
 
     def nextURL(self):
-        return absoluteURL(self.context, self.request)
+        return absoluteURL(self.container, self.request)
 
 
 class TableContainerView(BrowserView):
