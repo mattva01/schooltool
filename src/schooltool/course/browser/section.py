@@ -45,11 +45,13 @@ from schooltool.timetable.interfaces import ITimetables
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.skin.containers import ContainerView
 from schooltool.app.browser.app import BaseEditView
+from schooltool.term.term import getPreviousTerm
 
 from schooltool.common import SchoolToolMessage as _
 from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.interfaces import ISection, ISectionContainer
 from schooltool.course.section import Section
+from schooltool.course.section import copySection
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.timetable.browser import TimetableConflictMixin
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -92,6 +94,57 @@ class SectionContainerView(ContainerView):
             return [timetable
                     for key, timetable in timetables]
         return []
+
+
+class SectionCopyingView(SectionContainerView):
+    """A view to copy sections from the previous term."""
+
+    __used_for__ = ISectionContainer
+
+    @property
+    def container(self):
+        term = self.prev_term
+        if term is None:
+            return None
+        return ISectionContainer(term)
+
+    @property
+    def prev_term(self):
+        return getPreviousTerm(self.term)
+
+    @property
+    def select_all_boxes_js(self):
+        if self.container is None:
+            return ''
+        keys = ['"copy.%s"' % section.__name__
+                for section in self.batch
+                if not section.next]
+        return """
+            var section_keys = new Array(
+                %s
+            );
+
+            function selectAll(value) {
+                for (key in section_keys) {
+                    box = document.getElementById(section_keys[key]);
+                    if (box) {
+                        box.checked = value;
+                    }
+                }
+            }
+        """ % ','.join(keys)
+
+    def update(self):
+        if self.container is None:
+            return
+        if 'COPY' in self.request:
+            for name, section in self.container.items():
+                key = 'copy.%s' % name
+                if key in self.request and not section.next:
+                    section = removeSecurityProxy(section)
+                    new_section = copySection(section, self.term)
+                    section.next = new_section
+        SectionContainerView.update(self)
 
 
 class SectionView(BrowserView):

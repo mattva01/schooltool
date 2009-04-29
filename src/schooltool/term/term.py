@@ -203,6 +203,32 @@ def getNextTermForDate(date):
     return None
 
 
+def getPreviousTerm(term):
+    """Get the next term in the same SchoolYear.
+
+    The limitation is imposed as SchoolYears are strictly separated
+    entities (for archival purposes).
+    """
+    prev_terms = [t for t in ISchoolYear(term).values()
+                  if t.last < term.first]
+    if prev_terms:
+        return sorted(prev_terms, key=lambda t: t.last)[-1]
+    return None
+
+
+def getNextTerm(term):
+    """Get the next term in the same SchoolYear.
+
+    The limitation is imposed as SchoolYears are strictly separated
+    entities (for archival purposes).
+    """
+    next_terms = [t for t in ISchoolYear(term).values()
+                  if t.first > term.last]
+    if next_terms:
+        return sorted(next_terms, key=lambda t: t.first)[0]
+    return None
+
+
 class DateManagerUtility(object):
     zope.interface.implements(interfaces.IDateManager)
 

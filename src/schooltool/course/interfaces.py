@@ -97,6 +97,15 @@ class ISection(IGroup):
     size = zope.interface.Attribute(
         """The number of member students in the section.""")
 
+    previous = zope.interface.Attribute(
+        """The previous section.""")
+
+    next = zope.interface.Attribute(
+        """The next section.""")
+
+    linked_sections = zope.interface.Attribute(
+        """Chain of sections linked by previous/next with this one.""")
+
 
 class ISectionContainer(container.interfaces.IContainer):
     """A container for Sections."""

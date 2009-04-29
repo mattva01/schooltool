@@ -25,6 +25,8 @@ import unittest
 from zope.testing import doctest
 from zope.interface.verify import verifyObject
 
+from schooltool.relationship.tests import setUp, tearDown
+
 
 def doctest_CourseContainer():
     r"""Schooltool toplevel container for Courses.
@@ -46,6 +48,7 @@ def doctest_CourseContainer():
         Traceback (most recent call last):
           ...
         InvalidItemType: ...
+
     """
 
 
@@ -74,9 +77,7 @@ def doctest_Course():
 
     To test the relationship we need to do some setup:
 
-        >>> from schooltool.relationship.tests import setUp, tearDown
         >>> from schooltool.app.relationships import enforceCourseSectionConstraint
-        >>> setUp()
         >>> import zope.event
         >>> old_subscribers = zope.event.subscribers[:]
         >>> zope.event.subscribers.append(enforceCourseSectionConstraint)
@@ -131,15 +132,12 @@ def doctest_Course():
     That's it:
 
         >>> zope.event.subscribers[:] = old_subscribers
-        >>> tearDown()
+
     """
 
 
 def doctest_Section():
     r"""Tests for course section groups.
-
-        >>> from schooltool.relationship.tests import setUp, tearDown
-        >>> setUp()
 
         >>> from schooltool.course.section import Section
         >>> section = Section(title="section 1", description="advanced")
@@ -237,18 +235,222 @@ def doctest_Section():
         US History
         English
 
-    We're done:
+    """
 
-        >>> tearDown()
+
+def doctest_Section_linking():
+    r"""Tests for course section linking properties (previous, next and
+    linked_sections)
+
+    The purpose of this test is to check that:
+    * sections can be linked via Section.previous and Section.next.
+    * Section.linked_sections return sections linked with the Section
+      in a correct order.
+    * it is impossible to create linking loops.
+
+        >>> from schooltool.course.section import Section
+
+        >>> def section_link_str(s):
+        ...     return '%s <- %s -> %s' % (
+        ...         not s.previous and 'None' or s.previous.title,
+        ...         s.title,
+        ...         not s.next and 'None' or s.next.title)
+
+        >>> def print_sections(sections):
+        ...     '''Print prev and next links for all sections in section_list'''
+        ...     for s in sections:
+        ...         print section_link_str(s)
+
+        >>> def print_linked(section_list):
+        ...     '''Print linked sections for all sections in section_list'''
+        ...     for section in section_list:
+        ...         linked_str = ', '.join(
+        ...             [s.title for s in section.linked_sections])
+        ...         print section.title, 'spans:', linked_str
+
+    Create some sections.
+
+        >>> sections = [Section('Sec0'), Section('Sec1'), Section('Sec2')]
+
+    By default sections are not linked.
+
+        >>> print_sections(sections)
+        None <- Sec0 -> None
+        None <- Sec1 -> None
+        None <- Sec2 -> None
+
+    And each section spans only itself.
+
+        >>> print_linked(sections)
+        Sec0 spans: Sec0
+        Sec1 spans: Sec1
+        Sec2 spans: Sec2
+
+    Assign s0 as previous section to s1.  s0 'next' section is also updated.
+    A list of linked sections updated for s0 and s1.
+
+        >>> sections[1].previous = sections[0]
+
+        >>> print_sections(sections)
+        None <- Sec0 -> Sec1
+        Sec0 <- Sec1 -> None
+        None <- Sec2 -> None
+
+        >>> print_linked(sections)
+        Sec0 spans: Sec0, Sec1
+        Sec1 spans: Sec0, Sec1
+        Sec2 spans: Sec2
+
+    Assign s2 as next section to s1.
+
+        >>> sections[1].next = sections[2]
+
+        >>> print_sections(sections)
+        None <- Sec0 -> Sec1
+        Sec0 <- Sec1 -> Sec2
+        Sec1 <- Sec2 -> None
+
+        >>> print_linked(sections)
+        Sec0 spans: Sec0, Sec1, Sec2
+        Sec1 spans: Sec0, Sec1, Sec2
+        Sec2 spans: Sec0, Sec1, Sec2
+
+    Let's test section unlinking...
+
+        >>> sections[1].previous = None
+        >>> print_sections(sections)
+        None <- Sec0 -> None
+        None <- Sec1 -> Sec2
+        Sec1 <- Sec2 -> None
+
+        >>> print_linked(sections)
+        Sec0 spans: Sec0
+        Sec1 spans: Sec1, Sec2
+        Sec2 spans: Sec1, Sec2
+
+        >>> sections[2].previous = None
+        >>> print_sections(sections)
+        None <- Sec0 -> None
+        None <- Sec1 -> None
+        None <- Sec2 -> None
+
+        >>> print_linked(sections)
+        Sec0 spans: Sec0
+        Sec1 spans: Sec1
+        Sec2 spans: Sec2
+
+    And now some extreme cases.  Try the section as next/prev to itself.
+
+        >>> sections[0].previous = sections[0]
+        Traceback (most recent call last):
+        ...
+        InvalidSectionLinkException: Cannot assign section as previous to itself
+
+        >>> sections[0].next = sections[0]
+        Traceback (most recent call last):
+        ...
+        InvalidSectionLinkException: Cannot assign section as next to itself
+
+    Create a long list of linked sections.
+
+        >>> sections = [Section('Sec0')]
+        >>> for n in range(5):
+        ...     new_sec = Section('Sec%d' % (n+1))
+        ...     new_sec.previous = sections[-1]
+        ...     sections.append(new_sec)
+
+        >>> print_sections(sections)
+        None <- Sec0 -> Sec1
+        Sec0 <- Sec1 -> Sec2
+        Sec1 <- Sec2 -> Sec3
+        Sec2 <- Sec3 -> Sec4
+        Sec3 <- Sec4 -> Sec5
+        Sec4 <- Sec5 -> None
+
+    Try to introduce a loop by assigning a previous section.
+
+        >>> sections[4].previous = sections[1]
+
+    Note that sections 2 and 3 are removed from the linked list thus avoiding
+    the loop.
+
+        >>> print_sections(sections)
+        None <- Sec0 -> Sec1
+        Sec0 <- Sec1 -> Sec4
+        None <- Sec2 -> None
+        None <- Sec3 -> None
+        Sec1 <- Sec4 -> Sec5
+        Sec4 <- Sec5 -> None
+
+        >>> [s.title for s in sections[0].linked_sections]
+        ['Sec0', 'Sec1', 'Sec4', 'Sec5']
+
+    Let's reubild the list of 5 linked sections.
+
+        >>> sections[4].previous = sections[3]
+        >>> sections[3].previous = sections[2]
+        >>> sections[2].previous = sections[1]
+
+        >>> print_linked(sections)
+        Sec0 spans: Sec0, Sec1, Sec2, Sec3, Sec4, Sec5
+        Sec1 spans: Sec0, Sec1, Sec2, Sec3, Sec4, Sec5
+        Sec2 spans: Sec0, Sec1, Sec2, Sec3, Sec4, Sec5
+        Sec3 spans: Sec0, Sec1, Sec2, Sec3, Sec4, Sec5
+        Sec4 spans: Sec0, Sec1, Sec2, Sec3, Sec4, Sec5
+        Sec5 spans: Sec0, Sec1, Sec2, Sec3, Sec4, Sec5
+
+
+    Try to introduce a loop by assigning a next section.
+
+        >>> sections[1].next = sections[4]
+
+    Note that sections 2 and 3 are removed from the linked list thus avoiding
+    the loop again.
+
+        >>> print_sections(sections)
+        None <- Sec0 -> Sec1
+        Sec0 <- Sec1 -> Sec4
+        None <- Sec2 -> None
+        None <- Sec3 -> None
+        Sec1 <- Sec4 -> Sec5
+        Sec4 <- Sec5 -> None
+
+        >>> [s.title for s in sections[0].linked_sections]
+        ['Sec0', 'Sec1', 'Sec4', 'Sec5']
+
+    Let's reubild the list of 5 linked sections.
+
+        >>> sections[3].next = sections[4]
+        >>> sections[2].next = sections[3]
+        >>> sections[1].next = sections[2]
+
+        >>> print_linked(sections)
+        Sec0 spans: Sec0, Sec1, Sec2, Sec3, Sec4, Sec5
+        Sec1 spans: Sec0, Sec1, Sec2, Sec3, Sec4, Sec5
+        Sec2 spans: Sec0, Sec1, Sec2, Sec3, Sec4, Sec5
+        Sec3 spans: Sec0, Sec1, Sec2, Sec3, Sec4, Sec5
+        Sec4 spans: Sec0, Sec1, Sec2, Sec3, Sec4, Sec5
+        Sec5 spans: Sec0, Sec1, Sec2, Sec3, Sec4, Sec5
+
+    And try to introduce another loop.
+
+        >>> sections[0].previous = sections[3]
+
+    Sections between Sec0 and Sec3 were unlinked to avoid the loop.
+
+        >>> print_linked(sections)
+        Sec0 spans: Sec3, Sec0
+        Sec1 spans: Sec1
+        Sec2 spans: Sec2
+        Sec3 spans: Sec3, Sec0
+        Sec4 spans: Sec4, Sec5
+        Sec5 spans: Sec4, Sec5
 
     """
 
 
 def doctest_PersonInstructorCrowd():
     """Unit test for the PersonInstructorCrowd
-
-        >>> from schooltool.relationship.tests import setUp, tearDown
-        >>> setUp()
 
     We'll need a section, a group, and a couple of persons:
 
@@ -284,17 +486,11 @@ def doctest_PersonInstructorCrowd():
         >>> PersonInstructorsCrowd(p2).contains(p1)
         False
 
-    Cleanup.
-
-        >>> tearDown()
     """
 
 
 def doctest_PersonLearnerAdapter(self):
     """Tests for PersonLearnerAdapter.
-
-        >>> from schooltool.relationship.tests import setUp, tearDown
-        >>> setUp()
 
     We'll need a person, a group, and a couple of sections:
 
@@ -320,16 +516,14 @@ def doctest_PersonLearnerAdapter(self):
         >>> [section.title for section in learner.sections()]
         ['section 1', 'section 2']
 
-    Cleanup.
-
-        >>> tearDown()
     """
 
 
 def test_suite():
-    return unittest.TestSuite([
-                doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
-           ])
+    optionflags = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
+    suite = doctest.DocTestSuite(optionflags=optionflags,
+                                 setUp=setUp, tearDown=tearDown)
+    return suite
 
 
 if __name__ == '__main__':

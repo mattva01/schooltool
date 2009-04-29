@@ -22,13 +22,17 @@ Section implementation
 $Id$
 """
 from persistent import Persistent
+import rwproperty
 import zope.interface
 
+from zope.event import notify
 from zope.annotation.interfaces import IAttributeAnnotatable
-from zope.app.container.interfaces import IObjectRemovedEvent
+from zope.app.container.interfaces import IObjectRemovedEvent, INameChooser
 from zope.app.container import btree, contained
 from zope.component import adapts
 from zope.interface import implements
+from zope.proxy import sameProxiedObjects
+from zope.security.proxy import removeSecurityProxy
 
 from schooltool.relationship import RelationshipProperty
 from schooltool.app import membership
@@ -41,7 +45,9 @@ from schooltool.person.interfaces import IPerson
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app import relationships
 from schooltool.course import interfaces, booking
+from schooltool.schoolyear.subscriber import EventAdapterSubscriber
 from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
+from schooltool.schoolyear.interfaces import ISubscriber
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
 from schooltool.course.interfaces import ICourseContainer
@@ -51,12 +57,25 @@ from schooltool.relationship.relationship import getRelatedObjects
 from schooltool.course.interfaces import ILearner, IInstructor
 
 
+class InvalidSectionLinkException(Exception):
+    pass
+
+
+class SectionBeforeLinkingEvent(object):
+    def __init__(self, first, second):
+        self.first = first
+        self.second = second
+
+
 class Section(Persistent, contained.Contained):
 
     zope.interface.implements(interfaces.ISectionContained,
                               IAttributeAnnotatable)
 
     _location = None
+
+    _previous = None
+    _next = None
 
     def __init__(self, title="Section", description=None, schedule=None):
         self.title = title
@@ -78,6 +97,89 @@ class Section(Persistent, contained.Contained):
             elif IGroup.providedBy(member):
                 size = size + len(member.members)
         return size
+
+    def _unlinkRangeTo(self, other):
+        """Unlink sections between self and the other in self.linked_sections."""
+        linked = self.linked_sections
+        if other not in linked or self is other:
+            return
+        idx_first, idx_last = sorted([linked.index(self), linked.index(other)])
+        linked[idx_first]._next = None
+        for section in linked[idx_first+1:idx_last]:
+            section._previous = None
+            section._next = None
+        linked[idx_last]._previous = None
+
+    @rwproperty.getproperty
+    def previous(self):
+        return self._previous
+
+    @rwproperty.setproperty
+    def previous(self, new):
+        new = removeSecurityProxy(new)
+        if new is self._previous:
+            return
+        if new is self:
+            raise InvalidSectionLinkException(
+                _('Cannot assign section as previous to itself'))
+
+        notify(SectionBeforeLinkingEvent(new, self))
+
+        if new is not None:
+            self._unlinkRangeTo(new)
+
+        old_prev = self._previous
+        self._previous = None
+        if old_prev is not None:
+            old_prev.next = None
+        self._previous = new
+
+        if new is not None:
+            new.next = self
+
+    @rwproperty.getproperty
+    def next(self):
+        return self._next
+
+    @rwproperty.setproperty
+    def next(self, new):
+        new = removeSecurityProxy(new)
+        if new is self._next:
+            return
+        if new is self:
+            raise InvalidSectionLinkException(
+                _('Cannot assign section as next to itself'))
+
+        notify(SectionBeforeLinkingEvent(self, new))
+
+        if new is not None:
+            self._unlinkRangeTo(new)
+
+        old_next = self._next
+        self._next = None
+        if old_next is not None:
+            old_next.previous = None
+        self._next = new
+
+        if new is not None:
+            new.previous = self
+
+    @property
+    def linked_sections(self):
+        sections = [self]
+
+        pit = self.previous
+        while pit:
+            sections.insert(0, pit)
+            pit = pit.previous
+
+        nit = self.next
+        while nit:
+            sections.append(nit)
+            nit = nit.next
+
+        return sections
+
 
     instructors = RelationshipProperty(relationships.URIInstruction,
                                        relationships.URISection,
@@ -266,3 +368,46 @@ class RemoveSectionsWhenTermIsDeleted(ObjectEventAdapterSubscriber):
         section_container = ISectionContainer(self.object)
         for section_id in list(section_container.keys()):
             del section_container[section_id]
+
+
+class SectionLinkContinuinityValidationSubscriber(EventAdapterSubscriber):
+    adapts(SectionBeforeLinkingEvent)
+    implements(ISubscriber)
+
+    def __call__(self):
+        if (self.event.first is None or
+            self.event.second is None):
+            return # unlinking sections
+
+        first_term = ITerm(self.event.first)
+        second_term = ITerm(self.event.second)
+        if sameProxiedObjects(first_term, second_term):
+            raise InvalidSectionLinkException(
+                _("Cannot link sections in same term"))
+
+        if first_term.first > second_term.first:
+            raise InvalidSectionLinkException(
+                _("Sections are not in subsequent terms"))
+
+        if not sameProxiedObjects(ISchoolYear(first_term),
+                                  ISchoolYear(second_term)):
+            raise InvalidSectionLinkException(
+                _("Cannot link sections in different school years"))
+
+
+def copySection(section, target_term):
+    """Create a copy of a section in a desired term."""
+    section_copy = Section(section.title, section.description)
+    sections = ISectionContainer(target_term)
+    name = section.__name__
+    if name in sections:
+        name = INameChooser(sections).chooseName(name, section_copy)
+    sections[name] = section_copy
+    for course in section.courses:
+        section_copy.courses.add(course)
+    for instructor in section.instructors:
+        section_copy.instructors.add(instructor)
+    for member in section.members:
+        section_copy.members.add(member)
+    return section_copy
+

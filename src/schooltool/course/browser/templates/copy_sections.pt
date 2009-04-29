@@ -1,0 +1,169 @@
+<tal:define define="dummy view/update"/>
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title"
+         i18n:translate="">
+    Copy sections to
+    <tal:block i18n:name="term"
+               tal:content="view/term/title" /> of
+    <tal:block i18n:name="schoolyear"
+               tal:content="view/school_year/title" />
+  </title>
+</head>
+<body>
+
+<h1 metal:fill-slot="content-header" i18n:translate="">
+  Copy sections
+  <tal:block condition="view/prev_term">
+    from
+    <tal:block i18n:name="prev_term">
+      <a tal:replace="structure view/prev_term/@@link">Term</a>
+    </tal:block>
+    of
+    <tal:block i18n:name="schoolyear">
+      <a tal:attributes="href view/school_year/@@absolute_url"
+         tal:content="view/school_year/title">School Year</a>
+    </tal:block>
+  </tal:block>
+  to
+  <a tal:replace="structure view/term/@@link" i18n:name="term">Term</a>
+</h1>
+
+<metal:block metal:fill-slot="body">
+
+
+<tal:block condition="not:view/prev_term">
+  <h2 i18n:translate="">
+    There is no (previous) term in
+    <tal:block i18n:name="schoolyear">
+      <a tal:attributes="href view/school_year/@@absolute_url"
+         tal:content="view/school_year/title">School Year</a>
+    </tal:block>
+    to copy sections from.
+  </h2>
+</tal:block>
+
+<tal:block condition="view/prev_term">
+
+<script language="javascript" tal:content="view/select_all_boxes_js" />
+<script language="javascript">
+  function invertSelection(pattern) {
+    $("INPUT").each(function (index) {
+        if (this.name.substr(0, pattern.length) == pattern) {
+          this.checked = !this.checked;
+        }
+     });
+  }
+</script>
+
+<tal:block define="batch view/batch">
+  <tal:block replace="structure batch/render" />
+  <div metal:use-macro="view/@@view_macros/batch-search"/>
+  <p tal:condition="not:batch" i18n:translate="">There are none.</p>
+
+  <tal:block condition="batch">
+    <div class="controls">
+      <input onclick="selectAll(true)"
+             type="button" class="button-ok"
+             value="Select All Visible"
+             i18n:attributes="value select-all-visible-button"/>
+      <input onclick="selectAll(false)"
+             type="button" class="button-ok"
+             value="Select None"
+             i18n:attributes="value select-none-button"/>
+      <input onclick="invertSelection('copy')"
+             type="button" class="button-ok"
+             value="Invert Selection"
+             i18n:attributes="value invert-selection-button"/>
+    </div>
+  </tal:block>
+
+  <form method="post" tal:condition="batch">
+    <table class="container">
+      <tr class="header">
+        <th i18n:translate="">
+        </th>
+        <th i18n:translate="">
+          Courses
+        </th>
+        <th i18n:translate="">
+          Section in
+          <tal:block i18n:name="term" content="view/prev_term/title"/>
+        </th>
+        <th i18n:translate="">
+          Instructors
+        </th>
+        <th i18n:translate="">
+          Schedule
+        </th>
+        <th i18n:translate="">
+          Current Size
+        </th>
+      </tr>
+      <tr tal:repeat="obj batch">
+        <td>
+          <tal:block condition="obj/next">
+            <span i18n:translate="">Copied</span>
+
+          </tal:block>
+          <tal:block condition="not:obj/next">
+            <input type="checkbox"
+                   tal:attributes="name string:copy.${obj/zope:name};
+                                   id string:copy.${obj/zope:name};" />
+          </tal:block>
+        </td>
+        <td>
+          <a tal:repeat="course obj/courses"
+             tal:attributes="href course/@@absolute_url"
+             tal:content="course/title">
+              Some Object
+          </a>
+        </td>
+        <td>
+          <a tal:attributes="href obj/@@absolute_url"
+             tal:content="obj/title">
+              Some Object
+          </a>
+        </td>
+        <td>
+          <tal:loop repeat="instructor obj/instructors">
+            <span tal:condition="not:repeat/instructor/start">, </span>
+            <a href="" tal:attributes="href instructor/@@absolute_url"
+               tal:content="instructor/title" />
+          </tal:loop>
+        </td>
+        <td>
+          <tal:loop repeat="tt python: view.getTimetables(obj)">
+            <span tal:condition="not:repeat/tt/start">, </span>
+            <a href="" tal:attributes="href tt/@@absolute_url"
+               tal:content="tt/title" />
+          </tal:loop>
+        </td>
+        <td>
+          <span class="hint">
+            (<span tal:replace="obj/size"/>
+            <span i18n:translate="">Students</span>)
+          </span>
+        </td>
+      </tr>
+    </table>
+
+    <input type="hidden" name="SEARCH"
+      tal:attributes="value request/SEARCH|nothing"/>
+
+    <input type="hidden" name="batch_size"
+      tal:attributes="value request/batch_size"
+      tal:condition="request/batch_size|nothing"/>
+
+    <div class="controls">
+      <input type="submit" class="button-cancel" name="COPY" value="Copy"
+             i18n:attributes="value copy-button" />
+    </div>
+  </form>
+
+</tal:block>
+</tal:block>
+
+</metal:block>
+</body>
+</html>
