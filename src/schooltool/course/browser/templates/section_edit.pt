@@ -56,6 +56,55 @@
 
     <div class="separator"></div>
 
+    <fieldset>
+      <legend i18n:translate="">Linked sections</legend>
+
+      <div class="row" tal:define="section context/previous">
+        <div class="label" i18n:translate="">Previous</div>
+        <p class="hint" i18n:translate="">
+          Section in the previous term.
+        </p>
+        <div class="field" tal:condition="section">
+          <tal:block i18n:translate="">
+            <tal:block i18n:name="section_title"
+              tal:replace="structure section/title" />
+            for
+            <tal:block i18n:name="term"
+               tal:replace="structure section/@@index.html/term/title"/>
+          </tal:block>
+          <input type="submit" class="button-cancel"
+            name="UNLINK_PREVIOUS" value="Unlink"
+            i18n:attributes="value unlink-section-button" />
+        </div>
+        <div class="field" tal:condition="not:section" i18n:translate="">
+          Not linked.
+        </div>
+      </div>
+
+      <div class="row" tal:define="section context/next">
+        <div class="label" i18n:translate="">Next</div>
+        <p class="hint" i18n:translate="">
+          Section in the next term.
+        </p>
+        <div class="field" tal:condition="section">
+          <tal:block i18n:translate="">
+            <tal:block i18n:name="section_title"
+              tal:replace="structure section/title" />
+            for
+            <tal:block i18n:name="term"
+               tal:replace="structure section/@@index.html/term/title"/>
+          </tal:block>
+          <input type="submit" class="button-cancel"
+            name="UNLINK_NEXT" value="Unlink"
+            i18n:attributes="value unlink-section-button" />
+        </div>
+        <div class="field" tal:condition="not:section" i18n:translate="">
+          Not linked.
+        </div>
+      </div>
+
+    </fieldset>
+
   </form>
 
 </div>

@@ -225,6 +225,15 @@ class SectionEditView(BaseEditView):
 
     __used_for__ = ISection
 
+    def update(self):
+        if 'UNLINK_NEXT' in self.request:
+            section = removeSecurityProxy(self.context)
+            section.next = None
+        elif 'UNLINK_PREVIOUS' in self.request:
+            section = removeSecurityProxy(self.context)
+            section.previous = None
+        BaseEditView.update(self)
+
 
 class ConflictDisplayMixin(TimetableConflictMixin):
     """A mixin for use in views that display event conflicts."""
