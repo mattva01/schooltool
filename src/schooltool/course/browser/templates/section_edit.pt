@@ -67,7 +67,7 @@
         <div class="field" tal:condition="section">
           <tal:block i18n:translate="">
             <tal:block i18n:name="section_title"
-              tal:replace="structure section/title" />
+              tal:replace="structure section/@@link" />
             for
             <tal:block i18n:name="term"
                tal:replace="structure section/@@index.html/term/title"/>
@@ -76,8 +76,20 @@
             name="UNLINK_PREVIOUS" value="Unlink"
             i18n:attributes="value unlink-section-button" />
         </div>
-        <div class="field" tal:condition="not:section" i18n:translate="">
-          Not linked.
+        <div class="field" tal:condition="not:section">
+          <tal:block condition="view/previous_term" i18n:translate="">
+            <a tal:attributes="
+                href string:${view/context/@@absolute_url}/@@link_previous.html"
+                i18n:translate="">
+              Pick a section from
+              <tal:block content="view/previous_term/title" i18n:name="term">
+                TERM
+              </tal:block>
+            </a>
+          </tal:block>
+          <tal:block condition="not:view/previous_term" i18n:translate="">
+            Not linked.
+          </tal:block>
         </div>
       </div>
 
@@ -89,7 +101,7 @@
         <div class="field" tal:condition="section">
           <tal:block i18n:translate="">
             <tal:block i18n:name="section_title"
-              tal:replace="structure section/title" />
+              tal:replace="structure section/@@link" />
             for
             <tal:block i18n:name="term"
                tal:replace="structure section/@@index.html/term/title"/>
@@ -99,7 +111,19 @@
             i18n:attributes="value unlink-section-button" />
         </div>
         <div class="field" tal:condition="not:section" i18n:translate="">
-          Not linked.
+          <tal:block condition="view/next_term" i18n:translate="">
+            <a tal:attributes="
+                href string:${view/context/@@absolute_url}/@@link_next.html"
+                i18n:translate="">
+              Pick a section from
+              <tal:block content="view/next_term/title" i18n:name="term">
+                TERM
+              </tal:block>
+            </a>
+          </tal:block>
+          <tal:block condition="not:view/next_term" i18n:translate="">
+            Not linked.
+          </tal:block>
         </div>
       </div>
 

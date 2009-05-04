@@ -1,0 +1,143 @@
+<tal:define define="dummy view/update"/>
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title"
+         i18n:translate="">
+    Copy sections to
+    <tal:block i18n:name="term"
+               tal:content="view/term/title" /> of
+    <tal:block i18n:name="schoolyear"
+               tal:content="view/school_year/title" />
+  </title>
+</head>
+<body>
+
+<h1 metal:fill-slot="content-header" i18n:translate="">
+  Link
+    <tal:block i18n:name="section">
+      <a tal:replace="structure view/context/title">Section</a>
+    </tal:block>,
+    <tal:block i18n:name="term">
+      <a tal:replace="structure view/term/@@link">Term</a>
+    </tal:block>
+  with a section in
+    <tal:block i18n:name="target_term">
+      <a tal:replace="structure view/target_term/@@link">Term</a>
+    </tal:block>
+
+</h1>
+
+<metal:block metal:fill-slot="body">
+
+
+<tal:block condition="not:view/target_term">
+  <h2 i18n:translate="">
+    There is no valid term in
+    <tal:block i18n:name="schoolyear">
+      <a tal:attributes="href view/school_year/@@absolute_url"
+         tal:content="view/school_year/title">School Year</a>
+    </tal:block>
+    to pick a section from.
+  </h2>
+</tal:block>
+
+<tal:block condition="view/target_term">
+
+<tal:block define="batch view/batch">
+  <tal:block replace="structure batch/render" />
+  <div metal:use-macro="view/@@view_macros/batch-search"/>
+  <p tal:condition="not:batch" i18n:translate="">There are none.</p>
+
+  <div class="error" tal:define="error view/error" tal:condition="error">
+    <p tal:content="error">ERROR MESSAGE</p>
+  </div>
+
+  <form method="post">
+    <tal:block condition="batch">
+
+    <table class="container">
+      <tr class="header">
+        <th i18n:translate="">
+        </th>
+        <th i18n:translate="">
+          Courses
+        </th>
+        <th i18n:translate="">
+          Section in
+          <tal:block i18n:name="term" content="view/target_term/title"/>
+        </th>
+        <th i18n:translate="">
+          Instructors
+        </th>
+        <th i18n:translate="">
+          Schedule
+        </th>
+        <th i18n:translate="">
+          Current Size
+        </th>
+      </tr>
+      <tr tal:repeat="obj batch">
+        <td>
+          <input type="radio" name="LINK_SECTION"
+                 tal:attributes="value string:${obj/zope:name}"/>
+        </td>
+        <td>
+          <a tal:repeat="course obj/courses"
+             tal:attributes="href course/@@absolute_url"
+             tal:content="course/title">
+              Some Object
+          </a>
+        </td>
+        <td>
+          <a tal:attributes="href obj/@@absolute_url"
+             tal:content="obj/title">
+              Some Object
+          </a>
+        </td>
+        <td>
+          <tal:loop repeat="instructor obj/instructors">
+            <span tal:condition="not:repeat/instructor/start">, </span>
+            <a href="" tal:attributes="href instructor/@@absolute_url"
+               tal:content="instructor/title" />
+          </tal:loop>
+        </td>
+        <td>
+          <tal:loop repeat="tt python: view.getTimetables(obj)">
+            <span tal:condition="not:repeat/tt/start">, </span>
+            <a href="" tal:attributes="href tt/@@absolute_url"
+               tal:content="tt/title" />
+          </tal:loop>
+        </td>
+        <td>
+          <span class="hint">
+            (<span tal:replace="obj/size"/>
+            <span i18n:translate="">Students</span>)
+          </span>
+        </td>
+      </tr>
+    </table>
+
+    <input type="hidden" name="SEARCH"
+      tal:attributes="value request/SEARCH|nothing"/>
+
+    <input type="hidden" name="batch_size"
+      tal:attributes="value request/batch_size"
+      tal:condition="request/batch_size|nothing"/>
+
+    </tal:block>
+
+    <div class="controls">
+      <input type="submit" class="button-ok" name="LINK" value="Link"
+             tal:condition="view/batch"
+             i18n:attributes="value link-section-button" />
+      <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+             i18n:attributes="value cancel-button" />
+    </div>
+  </form>
+
+</tal:block>
+</tal:block>
+
+</metal:block>
+</body>
+</html>

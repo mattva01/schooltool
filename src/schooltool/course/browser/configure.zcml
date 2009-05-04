@@ -107,6 +107,26 @@
       />
 
   <page
+      name="link_next.html"
+      for="..interfaces.ISection"
+      class=".section.SectionLinkNextView"
+      template="templates/link_section.pt"
+      permission="schooltool.view"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <page
+      name="link_previous.html"
+      for="..interfaces.ISection"
+      class=".section.SectionLinkPreviousView"
+      template="templates/link_section.pt"
+      permission="schooltool.view"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <page
       name="index.html"
       for="..interfaces.ISection"
       class=".section.SectionView"
