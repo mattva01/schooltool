@@ -6,10 +6,14 @@ Now we'll try a text import.  Note that the description is not required
     >>> browser = Browser()
     >>> browser.addHeader('Authorization', 'Basic manager:schooltool')
     >>> browser.open('http://localhost/persons/@@person-csvimport.html')
-    >>> csvtext = "aperson, A Person, secret\nanother, A Nother Person With No Password"
+    >>> csvtext = "aperson, A Person, secret\nanother, A Nother Person With No Password\n\n\n"
     >>> browser.getControl(name='csvtext').value = csvtext
     >>> browser.getControl(name='charset').value = ['UTF-8']
     >>> browser.getControl(name='UPDATE_SUBMIT').click()
+    >>> analyze.printQuery('//div[@class="info"]', browser.contents)
+    <div class="info">
+      <p>CSV text imported successfully.</p>
+    </div>
 
     >>> root = getRootFolder()
     >>> container = root['persons']
@@ -31,10 +35,9 @@ We also get an error if a line starts with a comma (no title)
     >>> browser.getControl(name='csvtext').value = csvtext
     >>> browser.getControl(name='charset').value = ['UTF-8']
     >>> browser.getControl(name='UPDATE_SUBMIT').click()
-    >>> 'Failed to import CSV text' in browser.contents
-    True
-    >>> 'username may not be empty' in browser.contents
-    True
+    >>> analyze.printQuery("//div[@class='error']", browser.contents)
+    <div class="error">Failed to import CSV text</div>
+    <div class="error">username may not be empty</div>
 
 
 Duplicate usernames are not imported, the error is noted to the user.
@@ -47,7 +50,41 @@ Duplicate usernames are not imported, the error is noted to the user.
 
     >>> sorted([person for person in container])
     [u'another', u'aperson', u'manager', u'student1', u'student2']
-    >>> 'Failed to import CSV text' in browser.contents
-    True
-    >>> 'Duplicate username: student1' in browser.contents
-    True
+    >>> analyze.printQuery("//div[@class='error']", browser.contents)
+    <div class="error">Failed to import CSV text</div>
+    <div class="error">Duplicate username: student1, Student 100</div>
+    >>> analyze.printQuery("id('csvtext')", browser.contents)
+    <textarea name="csvtext" id="csvtext" cols="50" rows="10">student1, Student 1, secret
+      student2, Student 2, secret
+      student1, Student 100</textarea>
+
+
+Usernames cannot begin with '+' or '@' and cannot contain '/'
+characters either:
+
+    >>> csvtext = "@@index.html, Steve, Smith, secret\npeter, Pete, Marley\n\n\n"
+    >>> browser.getControl(name='csvtext').value = csvtext
+    >>> browser.getControl(name='charset').value = ['UTF-8']
+    >>> browser.getControl(name='UPDATE_SUBMIT').click()
+    >>> analyze.printQuery("//div[@class='error']", browser.contents)
+    <div class="error">Failed to import CSV text</div>
+    <div class="error">Names cannot begin with '+' or '@' or contain '/'</div>
+    >>> analyze.printQuery("id('csvtext')", browser.contents)
+    <textarea name="csvtext" id="csvtext" cols="50" rows="10">@@index.html, Steve, Smith, secret
+    peter, Pete, Marley
+    <BLANKLINE>
+    <BLANKLINE>
+    </textarea>
+    >>> csvtext = "steven, Steven, Smith, secret\npete/marley, Pete, Marley\n\n\n"
+    >>> browser.getControl(name='csvtext').value = csvtext
+    >>> browser.getControl(name='charset').value = ['UTF-8']
+    >>> browser.getControl(name='UPDATE_SUBMIT').click()
+    >>> analyze.printQuery("//div[@class='error']", browser.contents)
+    <div class="error">Failed to import CSV text</div>
+    <div class="error">Names cannot begin with '+' or '@' or contain '/'</div>
+    >>> analyze.printQuery("id('csvtext')", browser.contents)
+    <textarea name="csvtext" id="csvtext" cols="50" rows="10">steven, Steven, Smith, secret
+    pete/marley, Pete, Marley
+    <BLANKLINE>
+    <BLANKLINE>
+    </textarea>

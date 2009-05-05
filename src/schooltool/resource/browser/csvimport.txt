@@ -9,7 +9,7 @@ Now we'll try a text import.  Note that the description is not required
     >>> browser.open('http://localhost/resources/@@resource-csvimport.html')
     >>> csvtext = """PRJ302, Overhead Projector #302
     ... Main Auditorium,,location
-    ... LC-805, Laptop Computer #805"""
+    ... LC-805, Laptop Computer #805\n\n\n"""
     >>> browser.getControl(name='csvtext').value = csvtext
     >>> browser.getControl(name='charset').value = ['UTF-8']
     >>> browser.getControl(name='UPDATE_SUBMIT').click()
@@ -39,3 +39,5 @@ We also get an error if a line starts with a comma (no title)
     >>> for div in analyze.queryHTML('//div[@class="error"]', browser.contents): print div
     <div class="error">Failed to import CSV text</div>
     <div class="error">Titles may not be empty</div>
+    >>> analyze.printQuery("id('csvtext')", browser.contents)
+    <textarea name="csvtext" id="csvtext" cols="50" rows="10">, No title provided</textarea>

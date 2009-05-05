@@ -131,6 +131,7 @@ class BaseCSVImportView(BrowserView):
 
         ok = True
         if csvtext:
+            self.csvtext = csvtext
             self.importer.charset = None
             ok = self.importer.importFromCSV(csvtext)
             if ok:
@@ -223,7 +224,7 @@ class BaseCSVImporter(object):
         one of attributes of self.errors have been set, and that no changes to
         the database have been applied.
         """
-        rows = self.parseCSVRows(csvdata.splitlines())
+        rows = self.parseCSVRows(csvdata.strip().splitlines())
         if rows is None:
             return False
 

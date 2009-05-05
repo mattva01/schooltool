@@ -22,6 +22,8 @@ CSV import view for BasicPerson.
 $Id$
 """
 from zope.component import getUtility
+from zope.app.container.interfaces import INameChooser
+from zope.exceptions.interfaces import UserError
 
 from schooltool.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView
 from schooltool.person.interfaces import IPersonFactory
@@ -66,6 +68,13 @@ class BasicPersonCSVImporter(BaseCSVImporter):
         if username in self.container:
             error_msg = _("Duplicate username: ${username}",
                           mapping={'username' : ', '.join(data)})
+            self.errors.fields.append(error_msg)
+            return
+
+        try:
+            INameChooser(self.container).checkName(username, None)
+        except UserError:
+            error_msg = _("Names cannot begin with '+' or '@' or contain '/'")
             self.errors.fields.append(error_msg)
             return
 
