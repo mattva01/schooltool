@@ -185,6 +185,7 @@ class TimetableSchemaContainer(BTreeContainer):
     def getDefault(self):
         return self[self.default_id]
 
+
 def clearTimetablesOnDeletion(obj, event):
     """
     This event subscriber for term and schema will remove all timetable
