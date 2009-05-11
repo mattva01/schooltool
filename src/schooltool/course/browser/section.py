@@ -296,10 +296,12 @@ class SectionEditView(BaseEditView):
         if 'UNLINK_NEXT' in self.request:
             section = removeSecurityProxy(self.context)
             section.next = None
+            return ''
         elif 'UNLINK_PREVIOUS' in self.request:
             section = removeSecurityProxy(self.context)
             section.previous = None
-        BaseEditView.update(self)
+            return ''
+        return BaseEditView.update(self)
 
 
 class ConflictDisplayMixin(TimetableConflictMixin):
