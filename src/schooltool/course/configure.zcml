@@ -169,6 +169,9 @@
   <adapter
       name="remove_courses_when_year_is_deleted"
       factory=".course.RemoveCoursesWhenSchoolYearIsDeleted" />
+  <adapter
+      name="unlink_section_when_deleted"
+      factory=".section.UnlinkSectionWhenDeleted" />
 
   <!-- Learner adapter -->
   <adapter

@@ -21,7 +21,9 @@ course browser views.
 
 $Id$
 """
+
 from zope.interface import implements
+from zope.i18n import translate
 from zope.security.proxy import removeSecurityProxy
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.intid.interfaces import IIntIds
@@ -45,7 +47,7 @@ from schooltool.timetable.interfaces import ITimetables
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.skin.containers import ContainerView
 from schooltool.app.browser.app import BaseEditView
-from schooltool.term.term import getPreviousTerm
+from schooltool.term.term import getPreviousTerm, getNextTerm
 
 from schooltool.common import SchoolToolMessage as _
 from schooltool.course.interfaces import ICourseContainer
@@ -147,6 +149,63 @@ class SectionCopyingView(SectionContainerView):
         SectionContainerView.update(self)
 
 
+class SectionLinkNextView(SectionContainerView):
+    """A view to link a section to one in the next term."""
+
+    __used_for__ = ISectionContainer
+
+    error = u''
+
+    @property
+    def container(self):
+        term = self.target_term
+        if term is None:
+            return None
+        return ISectionContainer(term)
+
+    @property
+    def target_term(self):
+        return getNextTerm(self.term)
+
+    def link(self, target_section):
+        section = removeSecurityProxy(self.context)
+        target_section = removeSecurityProxy(target_section)
+        section.next = target_section
+
+    def update(self):
+        if 'CANCEL' in self.request:
+            self.request.response.redirect(self.nextURL())
+        if self.container is None:
+            return
+        if 'LINK' in self.request:
+            section_name = self.request.get('LINK_SECTION')
+            section = self.container.get(section_name)
+            if section_name is None or section is None:
+                self.error = translate(_('No section selected.'),
+                                       context=self.request)
+            else:
+                self.link(section)
+                self.request.response.redirect(self.nextURL())
+        SectionContainerView.update(self)
+
+    def nextURL(self):
+        return '%s/@@edit.html' % absoluteURL(self.context, self.request)
+
+
+class SectionLinkPreviousView(SectionLinkNextView):
+    """A view to link a section to one in the previous term."""
+
+    @property
+    def target_term(self):
+        return getPreviousTerm(self.term)
+
+    def link(self, target_section):
+        section = removeSecurityProxy(self.context)
+        target_section = removeSecurityProxy(target_section)
+        section.previous = target_section
+
+
+
 class SectionView(BrowserView):
     """A view for courses providing a list of sections."""
 
@@ -225,6 +284,25 @@ class SectionEditView(BaseEditView):
     """View for editing Sections."""
 
     __used_for__ = ISection
+
+    @property
+    def next_term(self):
+        return getNextTerm(ITerm(self.context))
+
+    @property
+    def previous_term(self):
+        return getPreviousTerm(ITerm(self.context))
+
+    def update(self):
+        if 'UNLINK_NEXT' in self.request:
+            section = removeSecurityProxy(self.context)
+            section.next = None
+            return ''
+        elif 'UNLINK_PREVIOUS' in self.request:
+            section = removeSecurityProxy(self.context)
+            section.previous = None
+            return ''
+        return BaseEditView.update(self)
 
 
 class ConflictDisplayMixin(TimetableConflictMixin):
