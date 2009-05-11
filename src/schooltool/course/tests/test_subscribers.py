@@ -110,14 +110,16 @@ def doctest_Section_linking_terms():
         >>> s2_t2.previous = s1_t3
         Traceback (most recent call last):
         ...
-        InvalidSectionLinkException: Sections are not in subsequent terms
+        InvalidSectionLinkException:
+        Sections must be in consecutive terms
 
     Or set next section in the past.
 
         >>> s2_t2.next = s1_t1
         Traceback (most recent call last):
         ...
-        InvalidSectionLinkException: Sections are not in subsequent terms
+        InvalidSectionLinkException:
+        Sections must be in consecutive terms
 
     Notice that though we tried to link Sec2 with Sec1, we didn't change it's
     linked_sections, becouse all our assigments were invalid.
@@ -128,22 +130,20 @@ def doctest_Section_linking_terms():
         Term 2, Sec1
         Term 3, Sec1
 
-    Let's test an unusual case: continue Section 1 from Term 1 as Section 2
-    in the last term.
+    Sections can be linked only in terms next to each other.  Try to link
+    section in term 3 with section in term 1.
 
         >>> s2_t3.previous = s1_t1
+        Traceback (most recent call last):
+        ...
+        InvalidSectionLinkException:
+        Sections must be in consecutive terms
 
-    Section 2 in third term now continues Section 1.
-
-        >>> for s in s1_t1.linked_sections:
-        ...     print '%s, %s' % (ITerm(s).title, s.title)
-        Term 1, Sec1
-        Term 3, Sec2
-
-    Section 1 now spans only terms 2 and 3.
+    Linking failed, so nothing changed in linked_sections.
 
         >>> for s in s1_t2.linked_sections:
         ...     print '%s, %s' % (ITerm(s).title, s.title)
+        Term 1, Sec1
         Term 2, Sec1
         Term 3, Sec1
 

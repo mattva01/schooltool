@@ -55,6 +55,7 @@ from schooltool.course.interfaces import ISection
 from schooltool.app.security import ConfigurableCrowd
 from schooltool.relationship.relationship import getRelatedObjects
 from schooltool.course.interfaces import ILearner, IInstructor
+from schooltool.term.term import getNextTerm
 
 
 class InvalidSectionLinkException(Exception):
@@ -370,6 +371,14 @@ class RemoveSectionsWhenTermIsDeleted(ObjectEventAdapterSubscriber):
             del section_container[section_id]
 
 
+class UnlinkSectionWhenDeleted(ObjectEventAdapterSubscriber):
+    adapts(IObjectRemovedEvent, ISection)
+
+    def __call__(self):
+        self.object.previous = None
+        self.object.next = None
+
+
 class SectionLinkContinuinityValidationSubscriber(EventAdapterSubscriber):
     adapts(SectionBeforeLinkingEvent)
     implements(ISubscriber)
@@ -385,14 +394,14 @@ class SectionLinkContinuinityValidationSubscriber(EventAdapterSubscriber):
             raise InvalidSectionLinkException(
                 _("Cannot link sections in same term"))
 
-        if first_term.first > second_term.first:
-            raise InvalidSectionLinkException(
-                _("Sections are not in subsequent terms"))
-
         if not sameProxiedObjects(ISchoolYear(first_term),
                                   ISchoolYear(second_term)):
             raise InvalidSectionLinkException(
                 _("Cannot link sections in different school years"))
+
+        if not sameProxiedObjects(getNextTerm(first_term), second_term):
+            raise InvalidSectionLinkException(
+                _("Sections must be in consecutive terms"))
 
 
 def copySection(section, target_term):
