@@ -468,7 +468,7 @@ def doctest_GroupCSVImporter():
 
         >>> csvdata='''Group 1, Group 1 Description
         ... Group2
-        ... Group3, Group 3 Description, Some extra data'''
+        ... Group3, Group 3 Description, Some extra data\n\n\n'''
         >>> importer.importFromCSV(csvdata)
         True
 
@@ -561,7 +561,7 @@ def doctest_GroupMemberCSVImporter():
     Import some sample data
 
         >>> csvdata='''smith
-        ... stevens'''
+        ... stevens\n\n\n'''
         >>> importer.importFromCSV(csvdata)
         True
 
@@ -586,7 +586,7 @@ def doctest_GroupMemberCSVImporter():
     Import some more data
 
         >>> csvdata='''stevens
-        ... jones'''
+        ... jones\n\n\n'''
         >>> another_importer.importFromCSV(csvdata)
         True
 
@@ -632,7 +632,7 @@ def doctest_GroupMemberCSVImportView():
     Now we'll try a text import.
 
         >>> request.form = {
-        ...     'csvtext' : 'stevens\n',
+        ...     'csvtext' : 'stevens\n\n\n',
         ...     'charset' : 'UTF-8',
         ...     'UPDATE_SUBMIT': 1}
         >>> view = GroupMemberCSVImportView(group, request)
@@ -649,7 +649,7 @@ def doctest_GroupMemberCSVImportView():
 
     We also get an error if a line doesn't have a username
 
-        >>> request.form = {'csvtext' : " ,stevens\njones,Sally",
+        >>> request.form = {'csvtext' : " ,stevens\njones,Sally\n\n",
         ...                 'charset' : 'UTF-8',
         ...                 'UPDATE_SUBMIT': 1}
         >>> view = GroupMemberCSVImportView(group, request)

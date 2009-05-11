@@ -111,7 +111,7 @@ def doctest_CourseCSVImporter():
 
         >>> csvdata='''Course 1, Course 1 Description
         ... Course2,,course-2
-        ... Course3, Course 3 Description'''
+        ... Course3, Course 3 Description\n\n\n'''
         >>> importer.importFromCSV(csvdata)
         True
 
@@ -167,7 +167,7 @@ def doctest_CourseCSVImporter_reimport():
 
         >>> csvdata='''Course 1, Course 1 Description
         ... Course2,,course-2
-        ... Course3, Course 3 Description'''
+        ... Course3, Course 3 Description\n\n\n'''
         >>> importer.importFromCSV(csvdata)
         True
 
@@ -185,7 +185,7 @@ def doctest_CourseCSVImporter_reimport():
 
         >>> csvdata='''Course 1, Course Description
         ... Course2, Now with description,course-2
-        ... Course4, Course 4 Description'''
+        ... Course4, Course 4 Description\n\n\n'''
         >>> importer.importFromCSV(csvdata)
         True
 
@@ -540,7 +540,7 @@ def doctest_SectionMemberCSVImporter():
     Import some sample data
 
         >>> csvdata='''smith
-        ... stevens'''
+        ... stevens\n\n\n'''
         >>> importer.importFromCSV(csvdata)
         True
 
@@ -565,7 +565,7 @@ def doctest_SectionMemberCSVImporter():
     Import some more data
 
         >>> csvdata='''stevens
-        ... jones'''
+        ... jones\n\n\n'''
         >>> another_importer.importFromCSV(csvdata)
         True
 

@@ -464,6 +464,10 @@ def doctest_PersonCSVImporter():
         >>> importer.createAndAdd([u'jdoe', u'Jim Doe'], False)
         >>> [translate(error) for error in importer.errors.fields]
         [u'Duplicate username: jdoe, Jim Doe']
+        >>> importer.errors.fields = []
+        >>> importer.createAndAdd([u'@@index.html', u'Jim Doe'], False)
+        >>> [translate(error) for error in importer.errors.fields]
+        [u"Names cannot begin with '+' or '@' or contain '/'"]
 
     """
 

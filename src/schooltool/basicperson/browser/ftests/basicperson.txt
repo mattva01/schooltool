@@ -164,10 +164,51 @@ using this kind of person:
     >>> manager.getLink('Manage').click()
     >>> manager.getLink('Persons').click()
     >>> manager.getLink('Import Persons').click()
-    >>> csvtext = "steve, Steve, Smith, secret\npete, Pete, Marley"
+    >>> csvtext = "jjones, Jimmy, Jones\njbjones, Jim Bob, Jones, r2m45J\n,Howard,Jobs"
     >>> manager.getControl(name='csvtext').value = csvtext
     >>> manager.getControl(name='charset').value = ['UTF-8']
     >>> manager.getControl(name='UPDATE_SUBMIT').click()
+    >>> analyze.printQuery("//div[@class='error']", manager.contents)
+    <div class="error">Failed to import CSV text</div>
+    <div class="error">username may not be empty</div>
+    >>> analyze.printQuery("id('csvtext')", manager.contents)
+    <textarea name="csvtext" id="csvtext" cols="50" rows="10">jjones, Jimmy, Jones
+      jbjones, Jim Bob, Jones, r2m45J
+      ,Howard,Jobs</textarea>
+    >>> csvtext = "@@index.html, Steve, Smith, secret\npete, Pete, Marley\n\n\n"
+    >>> manager.getControl(name='csvtext').value = csvtext
+    >>> manager.getControl(name='charset').value = ['UTF-8']
+    >>> manager.getControl(name='UPDATE_SUBMIT').click()
+    >>> analyze.printQuery("//div[@class='error']", manager.contents)
+    <div class="error">Failed to import CSV text</div>
+    <div class="error">Names cannot begin with '+' or '@' or contain '/'</div>
+    >>> analyze.printQuery("id('csvtext')", manager.contents)
+    <textarea name="csvtext" id="csvtext" cols="50" rows="10">@@index.html, Steve, Smith, secret
+    pete, Pete, Marley
+    <BLANKLINE>
+    <BLANKLINE>
+    </textarea>
+    >>> csvtext = "steve, Steve, Smith, secret\npete/marley, Pete, Marley\n\n\n"
+    >>> manager.getControl(name='csvtext').value = csvtext
+    >>> manager.getControl(name='charset').value = ['UTF-8']
+    >>> manager.getControl(name='UPDATE_SUBMIT').click()
+    >>> analyze.printQuery("//div[@class='error']", manager.contents)
+    <div class="error">Failed to import CSV text</div>
+    <div class="error">Names cannot begin with '+' or '@' or contain '/'</div>
+    >>> analyze.printQuery("id('csvtext')", manager.contents)
+    <textarea name="csvtext" id="csvtext" cols="50" rows="10">steve, Steve, Smith, secret
+    pete/marley, Pete, Marley
+    <BLANKLINE>
+    <BLANKLINE>
+    </textarea>
+    >>> csvtext = "steve, Steve, Smith, secret\npete, Pete, Marley\n\n\n"
+    >>> manager.getControl(name='csvtext').value = csvtext
+    >>> manager.getControl(name='charset').value = ['UTF-8']
+    >>> manager.getControl(name='UPDATE_SUBMIT').click()
+    >>> analyze.printQuery('//div[@class="info"]', manager.contents)
+    <div class="info">
+      <p>CSV text imported successfully.</p>
+    </div>
 
 Now we have some additional persons in the database, let's look at one
 of them:

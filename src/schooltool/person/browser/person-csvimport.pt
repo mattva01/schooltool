@@ -68,7 +68,8 @@ howard, Howard
         <fieldset>
           <legend i18n:translate="">Input CSV Data</legend>
           <label for="csvtext" i18n:translate="">CSV Data</label>
-          <textarea name="csvtext" id="csvtext" cols="50" rows="10"></textarea>
+          <textarea name="csvtext" id="csvtext" cols="50" rows="10"
+                    tal:content="view/csvtext|nothing"></textarea>
         </fieldset>
         <div class="controls">
           <input name="UPDATE_SUBMIT" class="button-ok" type="submit"
