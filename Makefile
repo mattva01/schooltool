@@ -3,7 +3,7 @@
 # Makefile for SchoolTool
 #
 
-BOOTSTRAP_PYTHON=python2.4
+BOOTSTRAP_PYTHON=python2.5
 
 .PHONY: all
 all: build
