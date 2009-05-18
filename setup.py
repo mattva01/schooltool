@@ -120,29 +120,15 @@ for package in all_packages:
     for root_package in root_packages:
         if package.startswith(root_package):
             package_data[package] = []
-            includes = []
             package_dir = os.path.join(here, 'src', *package.split('.'))
             for root, dirs, files in os.walk(package_dir):
-                if dir in set(dirs):
-                    if dir.startswith('.'):
-                        dirs.remove(dir)
-                prefix = []
-                r = root
-                while r != package_dir:
-                    r, dir = os.path.split(r)
-                    prefix.insert(0, dir)
-                    assert r.startswith(package_dir)
-                if prefix:
-                    prefix = os.path.join(*prefix)
+                prefix = root[len(package_dir)+1:]
                 for file in files:
-                    for ext in ALLOWED_EXTENSIONS:
-                        if file.endswith('.%s' % ext) and not file.startswith('.'):
-                            break
-                    else:
-                        continue
-                    if prefix:
+                    name, ext = os.path.splitext(file)
+                    if (ext[1:] in ALLOWED_EXTENSIONS
+                        and not file.startswith('.')):
                         file = os.path.join(prefix, file)
-                    package_data[package].append(file)
+                        package_data[package].append(file)
             break
 
 if os.path.exists("version.txt"):
