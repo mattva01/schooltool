@@ -73,15 +73,10 @@ coverage-reports-html:
 
 .PHONY: clean
 clean:
-	test -d bin && rm -rf bin
-	test -d develop-eggs && rm -rf develop-eggs
-	test -d parts && rm -rf parts
-	test -d python && rm -rf python
-	test -f .installed.cfg && rm .installed.cfg
-	test -f ID && rm ID
-	test -f TAGS && rm TAGS
-	test -f tags && rm tags
-	test -d src/lyceum.egg-info/ && rm -rf src/lyceum.egg-info/
+	rm -rf bin develop-eggs parts python
+	rm -rf build dist
+	rm -f .installed.cfg
+	rm -f ID TAGS tags
 	find . \( -path './src/*.mo' -o -name '*.o' \
 	         -o -name '*.py[co]' \) -exec rm -f {} \;
 
