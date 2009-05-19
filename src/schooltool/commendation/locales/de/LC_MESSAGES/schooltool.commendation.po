@@ -7,38 +7,38 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2007-09-10 01:24+0000\n"
-"PO-Revision-Date: 2007-07-25 18:41+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: Mon May 18 22:05:11 2009\n"
+"PO-Revision-Date: 2008-03-02 12:38+0000\n"
+"Last-Translator: Martin Lettner <m.lettner@gmail.com>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2007-10-05 17:22+0000\n"
+"X-Launchpad-Export-Date: 2009-05-18 17:10+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: /src/schooltool/commendation/browser.py:69
-#: /src/schooltool/commendation/commendation.py:73
+#: /src/schooltool/commendation/browser.py:70
+#: /src/schooltool/commendation/commendation.py:72
 msgid "<unknown>"
 msgstr "<Unbekannt>"
 
-#: /src/schooltool/commendation/commendation.py:89
+#: /src/schooltool/commendation/commendation.py:88
 msgid "commendations"
-msgstr "Auszeichnungen"
+msgstr "Bewertungen"
 
 #: /src/schooltool/commendation/configure.zcml:100
 #: /src/schooltool/commendation/configure.zcml:110
 msgid "Add Commendation"
-msgstr ""
+msgstr "positive Bewertung hinzufügen"
 
 #: /src/schooltool/commendation/configure.zcml:128
 msgid "All Commendations"
-msgstr ""
+msgstr "Alle Bewertungen"
 
 #: /src/schooltool/commendation/configure.zcml:82
 #: /src/schooltool/commendation/configure.zcml:92
 msgid "View Commendations"
-msgstr ""
+msgstr "Bewertungen anzeigen"
 
 #: /src/schooltool/commendation/interfaces.py:48
 msgid "Title"
@@ -46,7 +46,7 @@ msgstr "Titel"
 
 #: /src/schooltool/commendation/interfaces.py:49
 msgid "Title of the commendation."
-msgstr "Titel der Auszeichnung."
+msgstr "Titel der Bewertung"
 
 #: /src/schooltool/commendation/interfaces.py:53
 msgid "Description"
@@ -54,31 +54,31 @@ msgstr "Beschreibung"
 
 #: /src/schooltool/commendation/interfaces.py:54
 msgid "A detailed description of the commendation."
-msgstr "Eine detaillierte Beschreibung der Empfehlung."
+msgstr "Eine detaillierte Beschreibung der Bewertung"
 
 #: /src/schooltool/commendation/interfaces.py:58
 msgid "Scope"
-msgstr ""
+msgstr "Bereich"
 
 #: /src/schooltool/commendation/interfaces.py:59
 msgid "The scope of the commendation."
-msgstr ""
-
-#: /src/schooltool/commendation/interfaces.py:60
-msgid "community"
-msgstr ""
+msgstr "Der Bereich der Bewertung."
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "group"
-msgstr ""
+msgstr "Gruppe"
+
+#: /src/schooltool/commendation/interfaces.py:60
+msgid "community"
+msgstr "Gemeinschaft"
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "school-wide"
-msgstr ""
+msgstr "schulweit"
 
 #: /src/schooltool/commendation/interfaces.py:61
 msgid "national"
-msgstr ""
+msgstr "bundesweit"
 
 #: /src/schooltool/commendation/interfaces.py:61
 msgid "global"
@@ -86,28 +86,20 @@ msgstr "weltweit"
 
 #: /src/schooltool/commendation/interfaces.py:61
 msgid "state"
-msgstr ""
+msgstr "Bundesland"
 
 #: /src/schooltool/commendation/interfaces.py:65
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: /src/schooltool/commendation/interfaces.py:66
 msgid "The date the commendation was issued."
-msgstr "Datum, an dem die Auszeichnung ausgestellt wurde."
+msgstr "Datum, an dem die Bewertung ausgestellt wurde."
 
 #: /src/schooltool/commendation/interfaces.py:71
 msgid "Grantor"
-msgstr ""
+msgstr "Bewerter"
 
 #: /src/schooltool/commendation/interfaces.py:72
 msgid "The grantor of the commendation."
-msgstr ""
-
-#: /src/schooltool/timetable/rest/__init__.py:266
-msgid "Unknown day id: %r"
-msgstr ""
-
-#: /src/schooltool/timetable/rest/__init__.py:272
-msgid "Unknown period id: %r"
-msgstr ""
+msgstr "Aussteller der Bewertung."

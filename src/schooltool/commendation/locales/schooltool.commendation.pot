@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: SchoolTool Version SVN\n"
-"POT-Creation-Date: Wed Apr  8 03:34:58 2009\n"
+"POT-Creation-Date: Tue May 19 16:33:24 2009\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -26,90 +26,90 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: i18nextract.py\n"
 
-#: /build/schooltool/src/schooltool/commendation/browser.py:70
-#: /build/schooltool/src/schooltool/commendation/commendation.py:72
+#: /src/schooltool/commendation/browser.py:70
+#: /src/schooltool/commendation/commendation.py:72
 msgid "<unknown>"
 msgstr ""
 
-#: /build/schooltool/src/schooltool/commendation/commendation.py:88
+#: /src/schooltool/commendation/commendation.py:88
 msgid "commendations"
 msgstr ""
 
-#: /build/schooltool/src/schooltool/commendation/configure.zcml:100
-#: /build/schooltool/src/schooltool/commendation/configure.zcml:110
+#: /src/schooltool/commendation/configure.zcml:100
+#: /src/schooltool/commendation/configure.zcml:110
 msgid "Add Commendation"
 msgstr ""
 
-#: /build/schooltool/src/schooltool/commendation/configure.zcml:128
+#: /src/schooltool/commendation/configure.zcml:128
 msgid "All Commendations"
 msgstr ""
 
-#: /build/schooltool/src/schooltool/commendation/configure.zcml:82
-#: /build/schooltool/src/schooltool/commendation/configure.zcml:92
+#: /src/schooltool/commendation/configure.zcml:82
+#: /src/schooltool/commendation/configure.zcml:92
 msgid "View Commendations"
 msgstr ""
 
-#: /build/schooltool/src/schooltool/commendation/interfaces.py:48
+#: /src/schooltool/commendation/interfaces.py:48
 msgid "Title"
 msgstr ""
 
-#: /build/schooltool/src/schooltool/commendation/interfaces.py:49
+#: /src/schooltool/commendation/interfaces.py:49
 msgid "Title of the commendation."
 msgstr ""
 
-#: /build/schooltool/src/schooltool/commendation/interfaces.py:53
+#: /src/schooltool/commendation/interfaces.py:53
 msgid "Description"
 msgstr ""
 
-#: /build/schooltool/src/schooltool/commendation/interfaces.py:54
+#: /src/schooltool/commendation/interfaces.py:54
 msgid "A detailed description of the commendation."
 msgstr ""
 
-#: /build/schooltool/src/schooltool/commendation/interfaces.py:58
+#: /src/schooltool/commendation/interfaces.py:58
 msgid "Scope"
 msgstr ""
 
-#: /build/schooltool/src/schooltool/commendation/interfaces.py:59
+#: /src/schooltool/commendation/interfaces.py:59
 msgid "The scope of the commendation."
 msgstr ""
 
-#: /build/schooltool/src/schooltool/commendation/interfaces.py:60
+#: /src/schooltool/commendation/interfaces.py:60
 msgid "group"
 msgstr ""
 
-#: /build/schooltool/src/schooltool/commendation/interfaces.py:60
+#: /src/schooltool/commendation/interfaces.py:60
 msgid "community"
 msgstr ""
 
-#: /build/schooltool/src/schooltool/commendation/interfaces.py:60
+#: /src/schooltool/commendation/interfaces.py:60
 msgid "school-wide"
 msgstr ""
 
-#: /build/schooltool/src/schooltool/commendation/interfaces.py:61
+#: /src/schooltool/commendation/interfaces.py:61
 msgid "national"
 msgstr ""
 
-#: /build/schooltool/src/schooltool/commendation/interfaces.py:61
+#: /src/schooltool/commendation/interfaces.py:61
 msgid "global"
 msgstr ""
 
-#: /build/schooltool/src/schooltool/commendation/interfaces.py:61
+#: /src/schooltool/commendation/interfaces.py:61
 msgid "state"
 msgstr ""
 
-#: /build/schooltool/src/schooltool/commendation/interfaces.py:65
+#: /src/schooltool/commendation/interfaces.py:65
 msgid "Date"
 msgstr ""
 
-#: /build/schooltool/src/schooltool/commendation/interfaces.py:66
+#: /src/schooltool/commendation/interfaces.py:66
 msgid "The date the commendation was issued."
 msgstr ""
 
-#: /build/schooltool/src/schooltool/commendation/interfaces.py:71
+#: /src/schooltool/commendation/interfaces.py:71
 msgid "Grantor"
 msgstr ""
 
-#: /build/schooltool/src/schooltool/commendation/interfaces.py:72
+#: /src/schooltool/commendation/interfaces.py:72
 msgid "The grantor of the commendation."
 msgstr ""
 
