@@ -59,6 +59,8 @@ Add 2 groups:
 And create a person so that we can fool around with his calendar:
 
     >>> setup.addPerson('John', 'john', 'pwd', ['boys', 'guys'])
+    >>> setup.addPerson('Billie', 'billie', 'pwd', ['boys'])
+    >>> setup.addPerson('Bob', 'bob', 'pwd', ['guys'])
 
 Add a course:
 
@@ -71,20 +73,40 @@ And a couple of sections:
 
 Let's add guys and boys to different sections:
 
+    >>> from lxml import etree
+    >>> def clickCheckboxes(browser, prefix='', value=True):
+    ...     doc = etree.HTML(browser.contents)
+    ...     names = doc.xpath(
+    ...         '//input[@type="checkbox" and'
+    ...         '        starts-with(./@name, "%s")]/@name' % prefix)
+    ...     for name in names:
+    ...         browser.getControl(name=name).value = value
+    ...         print '[%s]' % (value and 'V' or ' '), name
+
     >>> manager.getLink('2003').click()
     >>> manager.getLink('Courses').click()
     >>> manager.getLink('Birding').click()
     >>> manager.getLink('Birding1').click()
-    >>> manager.getLink('edit groups').click()
-    >>> manager.getControl('Guys').click()
+    >>> manager.getLink('edit individuals').click()
+    >>> manager.getControl(name='SEARCH_GROUP').displayValue=['Guys']
+    >>> manager.getControl('Find Now').click()
+    >>> clickCheckboxes(manager, prefix='add_item')
+    [V] add_item.bob
+    [V] add_item.john
+
     >>> manager.getControl('Add').click()
 
     >>> manager.getLink('2003').click()
     >>> manager.getLink('Courses').click()
     >>> manager.getLink('Birding').click()
     >>> manager.getLink('Birding2').click()
-    >>> manager.getLink('edit groups').click()
-    >>> manager.getControl('Boys').click()
+    >>> manager.getLink('edit individuals').click()
+    >>> manager.getControl(name='SEARCH_GROUP').displayValue=['Boys']
+    >>> manager.getControl('Find Now').click()
+    >>> clickCheckboxes(manager, prefix='add_item')
+    [V] add_item.billie
+    [V] add_item.john
+
     >>> manager.getControl('Add').click()
 
 Add section timetables:

@@ -291,36 +291,59 @@ def doctest_SectionView():
         >>> section = Section()
         >>> request = TestRequest()
         >>> view = SectionView(section, request)
-        >>> view.getPersons()
-        []
-        >>> view.getGroups()
-        []
 
-    Let's create some students and a group:
+    Stub the app.
 
-        >>> from schooltool.group.group import Group
-        >>> from schooltool.person.person import Person
+        >>> from schooltool.person.person import Person, PersonContainer
+
+        >>> class AppStub(dict):
+        ...    pass
+        >>> app = AppStub(persons=PersonContainer())
+
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
+        >>> provideAdapter(lambda x: app,
+        ...                adapts=(None,),
+        ...                provides=ISchoolToolApplication)
+
+    Stub a table formatter.
+
+        >>> class TableFormatterStub():
+        ...     def __init__(self, container, request):
+        ...         self.container = container
+        ...     def setUp(self, table_formatter=None, items=[], batch_size=0):
+        ...         self.items = items
+        ...         self.table_formatter = table_formatter
+        ...     def render(self):
+        ...         print 'Rendering persons from %s, using %s:' % (
+        ...             self.container, self.table_formatter)
+        ...         for item in self.items:
+        ...             print item.title
+
+        >>> from zope.publisher.interfaces.http import IHTTPRequest
+        >>> from schooltool.person.interfaces import IPersonContainer
+
+        >>> from schooltool.table.interfaces import ITableFormatter
+        >>> provideAdapter(lambda p, r: TableFormatterStub(p, r),
+        ...                adapts=(IPersonContainer, IHTTPRequest),
+        ...                provides=ITableFormatter)
+
+    Let's add some students.
+
         >>> person1 = Person(title='Person1')
         >>> person2 = Person(title='Person2')
         >>> person3 = Person(title='Person3')
-        >>> person4 = Person(title='Person4')
-        >>> form = Group('Form1')
-        >>> form.members.add(person3)
-        >>> form.members.add(person4)
-
-    Let's add the individuals and the group to the section:
-
         >>> section.members.add(person1)
         >>> section.members.add(person2)
-        >>> section.members.add(form)
-        >>> view = SectionView(section, request)
-        >>> [p.title for p in view.getPersons()]
-        ['Person1', 'Person2']
-        >>> [g.title for g in view.getGroups()]
-        ['Form1']
+        >>> section.members.add(person3)
 
-    TODO in the future we should probably prevent users being direct memebers
-    of a section if they're transitive members.
+    And render the person table.
+
+        >>> view.renderPersonTable()
+        Rendering persons from <...PersonContainer ...>,
+        using <class 'zc.table.table.StandaloneFullFormatter'>:
+        Person1
+        Person2
+        Person3
 
     """
 
@@ -527,7 +550,7 @@ def doctest_SectionMemberCSVImporter():
         >>> stevens = persons['stevens'] = Person('stevens', 'Bob Stevens')
         >>> [section.title for section in PersonLearnerAdapter(stevens).sections()]
         []
-    
+
     Create a section and an importer
 
         >>> from schooltool.course.browser.csvimport import SectionMemberCSVImporter
@@ -853,56 +876,6 @@ def doctest_SectionLearnerView():
     """
 
 
-def doctest_SectionLearnerGroupView():
-    """Tests for SectionLearnerGroupView.
-
-    First we need to set up some groups:
-
-        >>> from schooltool.app.interfaces import ISchoolToolApplication
-        >>> from schooltool.group.group import Group
-        >>> school = setup.setUpSchoolToolSite()
-        >>> provideAdapter(lambda context: school, (None,), ISchoolToolApplication)
-        >>> directlyProvides(school, IContainmentRoot)
-        >>> from schooltool.group.group import GroupContainer
-        >>> from schooltool.group.interfaces import IGroupContainer
-        >>> groups = GroupContainer()
-        >>> provideAdapter(lambda context: groups, (None,), IGroupContainer)
-        >>> frogs = groups['frogs'] = Group('frogs', 'Bunch of frogs')
-        >>> lilies = groups['lilies'] = Group('lilies', 'Lillie pond')
-        >>> bugs = groups['bugs'] = Group('bugs', "Lot's o Bugs")
-
-    getCollection plainly returns members attribute of a section:
-
-        >>> from schooltool.course.browser.section import SectionLearnerGroupView
-        >>> class SectionStub(object):
-        ...     members = [frogs]
-        >>> view = SectionLearnerGroupView(SectionStub(), None)
-        >>> [item.title for item in view.getCollection()]
-        ['frogs']
-
-    All groups that are not in the selected learner list are
-    considered available:
-
-        >>> [item.title for item in view.getAvailableItems()]
-        ['bugs', 'lilies']
-
-        >>> view.context.members = []
-
-        >>> [item.title for item in view.getAvailableItems()]
-        ['bugs', 'frogs', 'lilies']
-
-    Any non-person members should be skipped when displaying selected
-    items:
-
-        >>> from schooltool.person.person import Person
-        >>> smith = Person('smith', 'John Smith')
-        >>> view.context.members = [smith, frogs]
-        >>> [item.title for item in view.getSelectedItems()]
-        ['frogs']
-
-    """
-
-
 def doctest_CoursesViewlet():
     r"""Test for CoursesViewlet
 
@@ -1001,9 +974,11 @@ def doctest_CoursesViewlet():
 
 def test_suite():
     suite = unittest.TestSuite()
+    optionflags = (doctest.ELLIPSIS |
+                   doctest.NORMALIZE_WHITESPACE |
+                   doctest.REPORT_NDIFF)
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
-                                       optionflags=doctest.ELLIPSIS|
-                                                   doctest.REPORT_NDIFF))
+                                       optionflags=optionflags))
     return suite
 
 

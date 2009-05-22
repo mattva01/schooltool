@@ -197,14 +197,6 @@
       permission="schooltool.edit"
       />
 
-  <page
-      name="learner-groups.html"
-      for="..interfaces.ISection"
-      class=".section.SectionLearnerGroupView"
-      template="templates/edit_relationships.pt"
-      permission="schooltool.edit"
-      />
-
   <zope:adapter
       for="schooltool.course.interfaces.ICourseContainer
            zope.publisher.interfaces.browser.IBrowserRequest"
