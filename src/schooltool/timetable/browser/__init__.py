@@ -25,6 +25,7 @@ import datetime
 import sets
 import re
 
+from zope.security.proxy import removeSecurityProxy
 from zope.app.container.interfaces import INameChooser
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
@@ -351,16 +352,21 @@ class TimetableConflictMixin(object):
         (non-composite) timetable during that timetable period.
         """
         from schooltool.timetable import findRelatedTimetables
-        timetables = set(findRelatedTimetables(term) +
-                         findRelatedTimetables(ttschema))
+
         section_map = {}
         for day_id, day in ttschema.items():
             for period_id in day.periods:
                 section_map[day_id, period_id] = sets.Set()
 
-        for timetable in timetables:
+        term_tables = [removeSecurityProxy(tt)
+                       for tt in findRelatedTimetables(term)]
+
+        for timetable in findRelatedTimetables(ttschema):
+            if removeSecurityProxy(timetable) not in term_tables:
+                continue
             for day_id, period_id, activity in timetable.activities():
                 section_map[day_id, period_id].add(timetable.__parent__.__parent__)
+
         return section_map
 
     def getSchema(self):
