@@ -680,7 +680,7 @@ def getAllTimetables():
     app = getSchoolToolApplication(None)
     all_timetables = []
     for ttowner in findObjectsProviding(app, IOwnTimetables):
-        timetables = queryAdapter(ttowner, ITimetables, None)
+        timetables = queryAdapter(ttowner, ITimetables, default=None)
         if timetables is not None:
             all_timetables += timetables.timetables.values()
     return all_timetables
