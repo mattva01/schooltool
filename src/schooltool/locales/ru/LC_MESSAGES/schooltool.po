@@ -7,107 +7,25 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: Mon May 18 22:05:03 2009\n"
-"PO-Revision-Date: 2009-05-16 11:13+0000\n"
-"Last-Translator: Alexander Telenga <telenga@gmail.com>\n"
+"POT-Creation-Date: 2009-05-19 16:33+0000\n"
+"PO-Revision-Date: 2009-05-24 08:30+0000\n"
+"Last-Translator: DooMka <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-05-18 17:08+0000\n"
+"X-Launchpad-Export-Date: 2009-05-26 13:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
-
-#: /src/schooltool/gradebook/browser/configure.zcml:113
-msgid "Add a Worksheet"
-msgstr "Добавить рабочий лист"
-
-#: /src/schooltool/gradebook/browser/configure.zcml:125
-#, fuzzy
-msgid "Add a Report Worksheet"
-msgstr "Добавить рабочий лист"
-
-#: /src/schooltool/gradebook/browser/configure.zcml:137
-msgid "Edit Worksheet"
-msgstr "Редактировать рабочий лист"
-
-#: /src/schooltool/gradebook/browser/configure.zcml:149
-#, fuzzy
-msgid "Edit Report Worksheet"
-msgstr "Редактировать рабочий лист"
-
-#: /src/schooltool/gradebook/browser/configure.zcml:213
-#, fuzzy
-msgid "New Report Activity"
-msgstr "Новый вид деятельность"
 
 #: /src/schooltool/gradebook/browser/configure.zcml:251
 msgid "Gradebook"
 msgstr "Журнал успеваемости"
 
-#: /src/schooltool/gradebook/browser/configure.zcml:260
-#, fuzzy
-msgid "New Report Worksheet"
-msgstr "Новый рабочий лист"
-
-#: /src/schooltool/gradebook/browser/configure.zcml:267
-msgid "New Worksheet"
-msgstr "Новый рабочий лист"
-
-#: /src/schooltool/gradebook/browser/configure.zcml:274
-#, fuzzy
-msgid "Export XLS"
-msgstr "Экспорт"
-
-#: /src/schooltool/gradebook/browser/configure.zcml:281
-#: /src/schooltool/gradebook/browser/configure.zcml:304
-msgid "Return to Gradebook"
-msgstr "Вернуться в журнал успеваемости"
-
 #: /src/schooltool/gradebook/browser/configure.zcml:290
 #: /src/schooltool/gradebook/browser/configure.zcml:320
 msgid "New Activity"
 msgstr "Новый вид деятельность"
-
-#: /src/schooltool/gradebook/browser/configure.zcml:297
-#: /src/schooltool/gradebook/browser/configure.zcml:327
-msgid "New External Activity"
-msgstr "Новый вид дополнительных занятий"
-
-#: /src/schooltool/gradebook/browser/configure.zcml:313
-msgid "Worksheets"
-msgstr "Рабочие листы"
-
-#: /src/schooltool/gradebook/browser/configure.zcml:334
-msgid "Manage Activities"
-msgstr "Редактировать виды деятельности"
-
-#: /src/schooltool/gradebook/browser/configure.zcml:341
-msgid "Weight Categories"
-msgstr "Весовые категории"
-
-#: /src/schooltool/gradebook/browser/configure.zcml:350
-msgid "Update Grades"
-msgstr "Обновить оценки"
-
-#: /src/schooltool/gradebook/browser/configure.zcml:419
-#: /src/schooltool/gradebook/browser/configure.zcml:437
-#, fuzzy
-msgid "Deploy Report Worksheet"
-msgstr "Удалить рабочий лист"
-
-#: /src/schooltool/gradebook/browser/configure.zcml:444
-msgid "Layout Report Card"
-msgstr ""
-
-#: /src/schooltool/gradebook/browser/configure.zcml:469
-#: /src/schooltool/gradebook/browser/configure.zcml:486
-msgid "Print Report Card"
-msgstr ""
-
-#: /src/schooltool/gradebook/browser/configure.zcml:72
-msgid "Report Sheet Templates"
-msgstr ""
 
 #: /src/schooltool/gradebook/configure.zcml:258
 msgid "Gradebook API"
@@ -116,10 +34,6 @@ msgstr "API учебного журнала"
 #: /src/schooltool/gradebook/configure.zcml:268
 msgid "Administration can grade students"
 msgstr "Администрация может оценивать студентов (учеников)"
-
-#: /src/schooltool/app/app.py:201
-msgid "Your School"
-msgstr "Ваша школа"
 
 #: /src/schooltool/app/browser/__init__.py:256
 #: /src/schooltool/person/help/person_container.pt:6
@@ -193,18 +107,6 @@ msgstr "Текущий месяц"
 #: /src/schooltool/app/browser/cal.py:1143
 msgid "Previous month"
 msgstr "Прошедший месяц"
-
-#: /src/schooltool/app/browser/cal.py:1145
-msgid "Go to next month"
-msgstr "Перейти к следующему месяцу"
-
-#: /src/schooltool/app/browser/cal.py:1146
-msgid "Go to current month"
-msgstr "Перейти к текущему месяцу"
-
-#: /src/schooltool/app/browser/cal.py:1147
-msgid "Go to previous month"
-msgstr "Перейти к предыдущему месяцу"
 
 #: /src/schooltool/app/browser/cal.py:115
 msgid "August"
@@ -289,18 +191,6 @@ msgstr "Текущий год"
 msgid "Previous year"
 msgstr "Предыдущий год"
 
-#: /src/schooltool/app/browser/cal.py:1197
-msgid "Go to next year"
-msgstr "Перейти к следующему году"
-
-#: /src/schooltool/app/browser/cal.py:1198
-msgid "Go to current year"
-msgstr "Перейти к текущему году"
-
-#: /src/schooltool/app/browser/cal.py:1199
-msgid "Go to previous year"
-msgstr "Перейти к предыдущему году"
-
 #: /src/schooltool/app/browser/cal.py:120
 #: /src/schooltool/person/interfaces.py:196
 #: /src/schooltool/timetable/browser/schema.py:289
@@ -375,20 +265,9 @@ msgstr "Сегодня"
 msgid "The previous day"
 msgstr "Предыдущий день"
 
-#: /src/schooltool/app/browser/cal.py:1269
-msgid "Go to the next day"
-msgstr "Перейти к следующему дню"
-
-#: /src/schooltool/app/browser/cal.py:1270
-msgid "Go to today"
-msgstr "Перейти к текущему дню"
-
-#: /src/schooltool/app/browser/cal.py:1271
-msgid "Go to the previous day"
-msgstr "Перейти к предыдущему дню"
-
 #: /src/schooltool/app/browser/cal.py:1709
-#: /src/schooltool/app/interfaces.py:135 /src/schooltool/app/interfaces.py:146
+#: /src/schooltool/app/interfaces.py:135
+#: /src/schooltool/app/interfaces.py:146
 #: /src/schooltool/basicperson/interfaces.py:121
 #: /src/schooltool/course/interfaces.py:37
 #: /src/schooltool/course/interfaces.py:79
@@ -396,7 +275,8 @@ msgstr "Перейти к предыдущему дню"
 #: /src/schooltool/group/interfaces.py:43
 #: /src/schooltool/note/interfaces.py:42
 #: /src/schooltool/resource/interfaces.py:40
-#: /src/schooltool/resource/types.py:60 /src/schooltool/resource/types.py:77
+#: /src/schooltool/resource/types.py:60
+#: /src/schooltool/resource/types.py:77
 #: /src/schooltool/resource/types.py:101
 #: /src/schooltool/schoolyear/browser/schoolyear.py:143
 #: /src/schooltool/schoolyear/interfaces.py:41
@@ -620,7 +500,8 @@ msgid "Update"
 msgstr "Обновить"
 
 #. Default: ""
-#: /src/schooltool/app/browser/cal.py:2254 /src/schooltool/skin/form.py:77
+#: /src/schooltool/app/browser/cal.py:2254
+#: /src/schooltool/skin/form.py:77
 msgid "Updated on ${date_time}"
 msgstr "Обновлено ${date_time}"
 
@@ -646,18 +527,6 @@ msgstr "Текущая неделя"
 #: /src/schooltool/app/browser/cal.py:923
 msgid "Previous week"
 msgstr "Предыдущая неделя"
-
-#: /src/schooltool/app/browser/cal.py:925
-msgid "Go to next week"
-msgstr "Перейти к следующей неделе"
-
-#: /src/schooltool/app/browser/cal.py:926
-msgid "Go to current week"
-msgstr "Перейти к текущей неделе"
-
-#: /src/schooltool/app/browser/cal.py:927
-msgid "Go to previous week"
-msgstr "Перейти к предыдущей неделе"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:945
@@ -833,7 +702,8 @@ msgstr ""
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:360
-msgid "Malformed line ${line_no} (it should contain a day id and a period id)"
+msgid ""
+"Malformed line ${line_no} (it should contain a day id and a period id)"
 msgstr ""
 "Недосформированная строка ${line_no} (она должна содержать id дня и id "
 "периода)"
@@ -847,12 +717,6 @@ msgstr "Неполное описание раздела в строке ${line}
 #: /src/schooltool/app/browser/csvimport.py:388
 msgid "No students in section (line ${line})"
 msgstr "Нет студентов в разделе  (строка ${line})"
-
-#: /src/schooltool/app/browser/csvimport.py:469
-msgid "The first row of the CSV file must contain the timetable schema id."
-msgstr ""
-"Первая строка CSV-файла должна содержать в себе идентификатор схемы "
-"расписания"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:480
@@ -925,96 +789,6 @@ msgstr "Календарь на день для %s"
 msgid "PDF support is disabled.  It can be enabled by your administrator."
 msgstr "Поддержка PDF отключена. Она может быть включена администратором."
 
-#: /src/schooltool/app/browser/templates/about.pt:10
-msgid ""
-"SchoolTool is free administrative software for schools around the world. The "
-"goals of the project are to create a simple turnkey student information "
-"system or managment information system for primary and secondary schools, as "
-"well as a framework for building customized applications and configurations "
-"for individual schools or states."
-msgstr ""
-"SchoolTool - это свободное программное обеспечение для управления школами по "
-"всему миру. Целью этого проекта является как создание \"под ключ\" простой "
-"информационной системы об учениках или информационной системы управления "
-"начальной и средней школой, так и создание фреймворка для написания "
-"собственных приложений и конфигураций для конкретной школы или другого "
-"учебного заведения."
-
-#: /src/schooltool/app/browser/templates/about.pt:16
-msgid ""
-"SchoolTool is built on a 100% open source software stack, written in <a href="
-"\"http://python.org\">Python</a> using the <a href=\"http://zope.org\">Zope "
-"3</a> framework."
-msgstr ""
-"SchoolTool  - это на 100% \"open source\" приложение, написанное на <a href="
-"\"http://python.org\">Python</a> с использованием фреймворка <a href="
-"\"http://zope.org\">Zope 3</a>."
-
-#: /src/schooltool/app/browser/templates/about.pt:20
-msgid ""
-"SchoolTool is licensed under the <a href=\"http://www.gnu.org/licenses/gpl-"
-"2.0.html\">GNU General Public License, Version 2</a>."
-msgstr ""
-"SchoolTool лицензируется на условиях <a href=\"http://www.gnu.org/licenses/"
-"gpl-2.0.html\">GNU General Public License, Version 2</a>."
-
-#: /src/schooltool/app/browser/templates/about.pt:24
-msgid "For more information:"
-msgstr "Для дополнительной информации"
-
-#: /src/schooltool/app/browser/templates/about.pt:27
-msgid "<a href=\"http://schooltool.org\">Website</a>"
-msgstr ""
-"<a href=\"http://schooltool.org\">Официальный сайт проекта Schooltool</a>"
-
-#: /src/schooltool/app/browser/templates/about.pt:28
-msgid "<a href=\"https://launchpad.net/schooltool\">Launchpad project page</a>"
-msgstr ""
-"<a href=\"https://launchpad.net/schooltool\">Официальный сайт проекта "
-"Launchpad</a>"
-
-#: /src/schooltool/app/browser/templates/about.pt:29
-msgid ""
-"<a href=\"http://lists.schooltool.org/mailman/listinfo\"> Mailing lists</a>"
-msgstr ""
-"<a href=\"http://lists.schooltool.org/mailman/listinfo\">Список рассылки</a>"
-
-#: /src/schooltool/app/browser/templates/about.pt:31
-msgid "IRC channel: #schooltool on freenode.net"
-msgstr "IRC-канал: #schooltool на freenode.net"
-
-#: /src/schooltool/app/browser/templates/about.pt:36
-msgid ""
-"<strong>Founder and funder: </strong> <a href=\"http://markshuttleworth.com"
-"\">Mark Shuttleworth</a>"
-msgstr ""
-"<strong>Основатель и спонсор: </strong> <a href=\"http://markshuttleworth.com"
-"\">Марк Шаттлворт</a>"
-
-#: /src/schooltool/app/browser/templates/about.pt:39
-msgid ""
-"<strong>Project Manager:</strong> Tom Hoffman (<a href=\"mailto:"
-"hoffman@schooltool.org\">email</a>)"
-msgstr ""
-"<strong>Менеджер проекта:</strong> Том Хоффман(<a href=\"mailto:"
-"hoffman@schooltool.org\">email</a>)"
-
-#: /src/schooltool/app/browser/templates/about.pt:42
-msgid "<strong>Lead Developer:</strong> Ignas Mikalajūnas"
-msgstr "<strong>Ведущий разработчик:</strong> Игнас Микалаюнас"
-
-#: /src/schooltool/app/browser/templates/about.pt:45
-msgid "Release Managers:"
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/about.pt:5
-msgid "About SchoolTool"
-msgstr "О SchoolTool"
-
-#: /src/schooltool/app/browser/templates/about.pt:51
-msgid "Contributors:"
-msgstr ""
-
 #: /src/schooltool/app/browser/templates/application_preferences.pt:13
 msgid "Change site preferences"
 msgstr "Изменить параметры сайта"
@@ -1038,18 +812,6 @@ msgstr "Schooltool"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:22
 msgid "Events for"
 msgstr "События для"
-
-#. Default: ""
-#.  "This is an Atom formatted XML site feed. It is intended to be viewed\n"
-#.  "      in a Newsreader or syndicated to another site. Please visit"
-#: /src/schooltool/app/browser/templates/cal_atom.pt:43
-msgid "atom_description"
-msgstr ""
-
-#. Default: "Atom Enabled"
-#: /src/schooltool/app/browser/templates/cal_atom.pt:47
-msgid "atom_enabled"
-msgstr ""
 
 #. Default: "for more info."
 #: /src/schooltool/app/browser/templates/cal_atom.pt:50
@@ -1199,7 +961,8 @@ msgstr "Еженедельно"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:236
 msgid "This section only applies when weekly recurrence is selected."
-msgstr "Эта секция используется только когда выбрано еженедельное повторение."
+msgstr ""
+"Эта секция используется только когда выбрано еженедельное повторение."
 
 #: /src/schooltool/app/browser/templates/event_add.pt:257
 msgid "This section only applies when the monthly recurrence is selected."
@@ -1225,10 +988,6 @@ msgstr "раз"
 #: /src/schooltool/app/browser/templates/event_add.pt:324
 msgid "Repeat forever"
 msgstr "Повторять всегда"
-
-#: /src/schooltool/app/browser/templates/event_add.pt:348
-msgid "Booked Resources"
-msgstr "Заказанные ресурсы"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:369
 msgid "Book resources"
@@ -1315,11 +1074,6 @@ msgstr "Войти"
 msgid "Your session has expired."
 msgstr "Время вашего сеанса истекло."
 
-#: /src/schooltool/app/browser/templates/manage_menu.pt:3
-#: /src/schooltool/app/browser/configure.zcml:608
-msgid "Manage"
-msgstr ""
-
 #: /src/schooltool/app/browser/templates/menu_view.pt:3
 #: /src/schooltool/app/browser/templates/login.pt:3
 #: /src/schooltool/app/browser/configure.zcml:670
@@ -1368,27 +1122,6 @@ msgstr ""
 "Вы можете создать CSV-файл в таблице и экспортировать его в формат CSV "
 "(Значения, Разделённые Запятыми). Ниже описывается структура таблицы."
 
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:30
-msgid ""
-"The first row of the file must contain the id of the <strong>timetable "
-"schema</strong> which will be used for the new timetables. The id of a "
-"timetable schema can be found by going to its view page under School "
-"Timetables for the school year."
-msgstr ""
-"Первая строка файла должна содержать идентификатор <strong>схемы расписания</"
-"strong>, которая будет использоваться для создания новых расписаний. "
-"Идентификатор расписания можно найти на странице просмотра под \"Школьными "
-"расписаниями\" на учебный год."
-
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:37
-msgid ""
-"The second row should be empty. After that, several section descriptions may "
-"follow. They are separated by an extra carriage return (i.e., a blank line)."
-msgstr ""
-"Следующая строка должна быть пустой. После неё может идти несколько описаний "
-"разделов. Все они отделяются друг от друга дополнительным символом возврата "
-"каретки (т.е. пустой строкой)."
-
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:4
 msgid "Upload SchoolTool timetable as CSV"
 msgstr "Загрузить расписание SchoolTool в формате CSV"
@@ -1397,8 +1130,8 @@ msgstr "Загрузить расписание SchoolTool в формате CSV
 msgid ""
 "Each section description's first row contains the <strong>course id</strong> "
 "and the <strong>instructor id</strong> for the new section. Then a number of "
-"rows, each containing a <strong>day id</strong> and a <strong>period id</"
-"strong>, follows. The list of period descriptions is terminated by three "
+"rows, each containing a <strong>day id</strong> and a <strong>period "
+"id</strong>, follows. The list of period descriptions is terminated by three "
 "asterisks ('***') in the first column. After the terminator, any number of "
 "<strong>person ids</strong> may follow, the denoted persons will be added to "
 "the section as learners."
@@ -1410,44 +1143,6 @@ msgstr ""
 "новой строки. После такого разделителя может следовать любое количество "
 "<strong>id людей</strong>, которые будут добавлены в раздел в качестве "
 "учащихся."
-
-#. Default: ""
-#.  "\"three-day\"\n"
-#.  "\"\",\"\",\"\"\n"
-#.  "\"philosophy\",\"lorch\"\n"
-#.  "\"Monday\",\"A\"\n"
-#.  "\"Monday\",\"B\"\n"
-#.  "\"Tuesday\",\"C\"\n"
-#.  "\"***\"\n"
-#.  "\"johnny\"\n"
-#.  "\"billy\"\n"
-#.  "\"\"\n"
-#.  "\"literature\",\"guzman\"\n"
-#.  "\"Wednesday\",\"B\"\n"
-#.  "\"Wednesday\",\"C\"\n"
-#.  "\"***\"\n"
-#.  "\"johnny\"\n"
-#.  "\"pete\""
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:56
-msgid ""
-"\n"
-"\"three-day\"\n"
-"\"\",\"\",\"\"\n"
-"\"philosophy\",\"lorch\"\n"
-"\"Monday\",\"A\"\n"
-"\"Monday\",\"B\"\n"
-"\"Tuesday\",\"C\"\n"
-"\"***\"\n"
-"\"johnny\"\n"
-"\"billy\"\n"
-"\"\"\n"
-"\"literature\",\"guzman\"\n"
-"\"Wednesday\",\"B\"\n"
-"\"Wednesday\",\"C\"\n"
-"\"***\"\n"
-"\"johnny\"\n"
-"\"pete\"\n"
-msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:74
 msgid ""
@@ -1466,19 +1161,20 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:83
 msgid ""
 "Note that only ids of objects are to be used in the file, not titles. If a "
-"row ends with empty cells (e.g., <em>\"philosophy\",\"lorch\",\"\",\"\"</"
-"em>), those cells will be discarded. You may separate section descriptions "
-"by more than one line. In the list of learners, only the first column "
-"containing the person ids is processed, the other columns are ignored. You "
-"can import the same data several times without any side effects."
+"row ends with empty cells (e.g., "
+"<em>\"philosophy\",\"lorch\",\"\",\"\"</em>), those cells will be discarded. "
+"You may separate section descriptions by more than one line. In the list of "
+"learners, only the first column containing the person ids is processed, the "
+"other columns are ignored. You can import the same data several times "
+"without any side effects."
 msgstr ""
 "Обратите внимание, что в файле используются только id объектов, но не "
-"заголовки. Если строка оканчивается пустыми секциями (напр., <em>\"philosophy"
-"\",\"lorch\",\"\",\"\"</em>), то эти секции будут откинуты. Вы можете "
-"разделить описывающие разделы более, чем одной строкой. В списке учащихся "
-"будет принята только первая колонка, содержащая id людей, а остальные "
-"колонки будут игнорированы. Вы можете импортировать одни и те же данные "
-"несколько раз без побочных эффектов."
+"заголовки. Если строка оканчивается пустыми секциями (напр., "
+"<em>\"philosophy\",\"lorch\",\"\",\"\"</em>), то эти секции будут откинуты. "
+"Вы можете разделить описывающие разделы более, чем одной строкой. В списке "
+"учащихся будет принята только первая колонка, содержащая id людей, а "
+"остальные колонки будут игнорированы. Вы можете импортировать одни и те же "
+"данные несколько раз без побочных эффектов."
 
 #: /src/schooltool/app/configure.zcml:332
 msgid "Security (General)"
@@ -1526,12 +1222,12 @@ msgid ""
 "calendars available to you. This might be a long list.</p> <p>The "
 "\"SchoolTool site-wide calendar\" is intended to be used as the official "
 "public calendar of the school.</p> <h3>How do I...</h3> <ul> "
-"<li><strong>Select or unselect several individual calendars of one type:</"
-"strong> If you press the <code>Ctrl</code> button on your keyboard while you "
-"select calendars from a list with your mouse, you can select multiple "
-"calendars.</li> <li><strong>Select a range of calendars of one type:</"
-"strong> If you press the <code>Shift</code> key while clicking on calendars, "
-"you can select a range.</li> </ul>"
+"<li><strong>Select or unselect several individual calendars of one "
+"type:</strong> If you press the <code>Ctrl</code> button on your keyboard "
+"while you select calendars from a list with your mouse, you can select "
+"multiple calendars.</li> <li><strong>Select a range of calendars of one "
+"type:</strong> If you press the <code>Shift</code> key while clicking on "
+"calendars, you can select a range.</li> </ul>"
 msgstr ""
 
 #: /src/schooltool/app/help/calendaring.pt:6
@@ -1554,8 +1250,8 @@ msgid ""
 "immediately above the calendar table. Allows you to navigate forward or "
 "backward in time, or to return to the current time.</li> "
 "<li><strong>Calendar title:</strong> immediately above the calendar "
-"navigation bar, lists the owner of this calendar and the date for this \"page"
-"\" of the calendar.</li> <li><strong>Left sidebar:</strong> for all "
+"navigation bar, lists the owner of this calendar and the date for this "
+"\"page\" of the calendar.</li> <li><strong>Left sidebar:</strong> for all "
 "calendars, this contains a <code>Jump to...</code> section containing menus "
 "and links to allow you to quickly navigate to a specific month, year or "
 "date. <br /> If you are logged in and viewing your own calendar, you will "
@@ -1596,12 +1292,12 @@ msgid ""
 "Event Information form.</li> <li><strong>Show or hide events in one of the "
 "calendars listed under <code>Calendars</code>:</strong> check or uncheck the "
 "box under <code>Cal</code> and click <code>Apply</code>.</li> "
-"<li><strong>Adding or removing calendars to the <code>Calendars</code> list:"
-"</strong> click on the <code>More...</code> button.</li> <li><strong>access "
-"a iCal format version of the calendar:</strong>: Select <code>Open in iCal</"
-"code> from the Action menu.</li> <li><strong>Access an Atom feed version of "
-"the calendar: </strong> append <code>/atom.xml</code> to the calendar's URL."
-"</li> </ul>"
+"<li><strong>Adding or removing calendars to the <code>Calendars</code> "
+"list:</strong> click on the <code>More...</code> button.</li> "
+"<li><strong>access a iCal format version of the calendar:</strong>: Select "
+"<code>Open in iCal</code> from the Action menu.</li> <li><strong>Access an "
+"Atom feed version of the calendar: </strong> append <code>/atom.xml</code> "
+"to the calendar's URL.</li> </ul>"
 msgstr ""
 
 #: /src/schooltool/app/help/event_add.pt:10
@@ -1676,8 +1372,8 @@ msgstr "Добавить событие"
 
 #: /src/schooltool/app/help/event_edit.pt:12
 msgid ""
-"If you need to edit a resource reservation, click the <code>Book resources</"
-"code> link at the bottom of the form."
+"If you need to edit a resource reservation, click the <code>Book "
+"resources</code> link at the bottom of the form."
 msgstr ""
 "Если вам необходимо изменить бронь для ресурса щелкните <code>Забронировать "
 "Ресурс</code> внизу формы"
@@ -1698,25 +1394,26 @@ msgstr "Календарь на месяц"
 msgid ""
 "<h1>Monthly Calendar</h1> <p>This is the monthly view of a calendar. It "
 "might be your calendar, or it might be the calendar of another person, group "
-"or resource in your school. <a href=\"/++help++/schooltool/calendaring"
-"\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
-"<li><strong>View an individual day or event in more detail:</strong> click "
-"on the appropriate day on the calendar.</li> <li><strong>View an individual "
-"week:</strong> Click on the appropriate week number in blue in the leftmost "
-"column of the calendar.</li> <li><strong>Create an event:</strong> select "
-"<code>New Event</code> from the <code>Actions</code> menu.</li> "
-"<li><strong>Show or hide events in one of the calendars listed under "
-"<code>Calendars</code>:</strong> check or uncheck the box under <code>Cal</"
-"code> and click <code>Apply</code>.</li> <li><strong>Adding or removing "
-"calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make weeks start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
+"or resource in your school. <a "
+"href=\"/++help++/schooltool/calendaring\">More calendaring help...</a></p> "
+"<h3>How do I...</h3> <ul> <li><strong>View an individual day or event in "
+"more detail:</strong> click on the appropriate day on the calendar.</li> "
+"<li><strong>View an individual week:</strong> Click on the appropriate week "
+"number in blue in the leftmost column of the calendar.</li> "
+"<li><strong>Create an event:</strong> select <code>New Event</code> from the "
+"<code>Actions</code> menu.</li> <li><strong>Show or hide events in one of "
+"the calendars listed under <code>Calendars</code>:</strong> check or uncheck "
+"the box under <code>Cal</code> and click <code>Apply</code>.</li> "
+"<li><strong>Adding or removing calendars to the <code>Calendars</code> "
+"list:</strong> click on the <code>More...</code> button.</li> "
+"<li><strong>Make weeks start on the correct day:</strong> the first day of "
+"the week varies in different parts of the world. If SchoolTool isn't set up "
+"correctly for you, click on your name in the red bar at the top of the page. "
+"Then click on the <code>Actions</code> menu and select <code>Change "
+"Preferences</code>. Pick the correct \"Week starts on\" day and hit "
+"<code>Apply</code>.</li> <li><strong>Access a iCal format version of the "
+"calendar:</strong>: select <code>Open in iCal</code> from the Action "
+"menu.</li> </ul>"
 msgstr ""
 
 #: /src/schooltool/app/help/org.pt:6
@@ -1740,16 +1437,16 @@ msgid ""
 "the links at the left hand side of the red bar show you where you are in "
 "SchoolTool's object hierarchy. Note that this doesn't necessarily lead you "
 "back to where you came from, but is handy for taking you from more specific "
-"to more general parts of the application.</li> <li><strong>Your name</"
-"strong> (if you're logged in): clicking on your name takes you to a simple "
-"dashboard of relevant links. From this page you can also use the "
-"<code>Actions</code> menu to change preferences and other personal settings."
-"</li> <li><strong>Log in/out:</strong> this logs you in or out. It is a good "
-"idea to log out when you aren't using SchoolTool.</li> <li><strong>Help:</"
-"strong> if there is a help file for the page you're looking at, you'll see "
-"this link.</li> </ul> <li><strong>Menus</strong></li> <ul> "
-"<li><strong>Navigation:</strong> this menu gives you some basic options for "
-"accessing different parts of SchoolTool, such as the index of persons or "
+"to more general parts of the application.</li> <li><strong>Your "
+"name</strong> (if you're logged in): clicking on your name takes you to a "
+"simple dashboard of relevant links. From this page you can also use the "
+"<code>Actions</code> menu to change preferences and other personal "
+"settings.</li> <li><strong>Log in/out:</strong> this logs you in or out. It "
+"is a good idea to log out when you aren't using SchoolTool.</li> "
+"<li><strong>Help:</strong> if there is a help file for the page you're "
+"looking at, you'll see this link.</li> </ul> <li><strong>Menus</strong></li> "
+"<ul> <li><strong>Navigation:</strong> this menu gives you some basic options "
+"for accessing different parts of SchoolTool, such as the index of persons or "
 "courses. What you see here depends on your permissions in the system.</li> "
 "<li><strong>Action:</strong> this menu contains a variety of things that you "
 "can do on the current page. The entries in this menu change considerably "
@@ -1759,11 +1456,11 @@ msgid ""
 "school's site, usually the calendar for the school.</li> "
 "<li><strong>Calendar day/week/month/year views:</strong> if you are viewing "
 "a calendar, you will find icons in the upper right hand corner that will "
-"allow you to switch between calendar views.</li> <li><strong>Devmode menu:</"
-"strong> if you are a site administrator and you've enabled \"devmode\" in "
-"schooltool.conf, you will see a special menu in the upper right hand corner "
-"of the site. You should disable devmode in any production server.</li> </ul> "
-"</ul>"
+"allow you to switch between calendar views.</li> <li><strong>Devmode "
+"menu:</strong> if you are a site administrator and you've enabled "
+"\"devmode\" in schooltool.conf, you will see a special menu in the upper "
+"right hand corner of the site. You should disable devmode in any production "
+"server.</li> </ul> </ul>"
 msgstr ""
 
 #: /src/schooltool/app/help/weekly_calendar.pt:6
@@ -1783,17 +1480,17 @@ msgid ""
 "for the event you can edit it.</li> <li><strong>Create an event:</strong> "
 "select the day the event starts and create the event in the daily view.</li> "
 "<li><strong>Show or hide events in one of the calendars listed under "
-"<code>Calendars</code>:</strong> check or uncheck the box under <code>Cal</"
-"code> and click <code>Apply</code>.</li> <li><strong>Adding or removing "
-"calendars to the <code>Calendars</code> list:</strong> click on the "
+"<code>Calendars</code>:</strong> check or uncheck the box under "
+"<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
+"removing calendars to the <code>Calendars</code> list:</strong> click on the "
 "<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
 "correct day:</strong> the first day of the week varies in different parts of "
 "the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
+"in the red bar at the top of the page. Then click on the "
+"<code>Actions</code> menu and select <code>Change Preferences</code>. Pick "
+"the correct \"Week starts on\" day and hit <code>Apply</code>.</li> "
+"<li><strong>Access a iCal format version of the calendar:</strong>: select "
+"<code>Open in iCal</code> from the Action menu.</li> </ul>"
 msgstr ""
 
 #: /src/schooltool/app/help/yearly_calendar.pt:6
@@ -1809,24 +1506,25 @@ msgid ""
 "calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>Know which "
 "days contain events: if the day has a blue background, there is at least one "
 "event that day.</strong></li> <li><strong>View an individual day in more "
-"detail:</strong> click on the day.</li> <li><strong>View an individual month:"
-"</strong> click on the name of the month.</li> <li><strong>Create an event:</"
-"strong> select the day the event starts and create the event in the daily "
-"view.</li> <li><strong>Show or hide events in one of the calendars listed "
-"under <code>Calendars</code>:</strong> check or uncheck the box under "
+"detail:</strong> click on the day.</li> <li><strong>View an individual "
+"month:</strong> click on the name of the month.</li> <li><strong>Create an "
+"event:</strong> select the day the event starts and create the event in the "
+"daily view.</li> <li><strong>Show or hide events in one of the calendars "
+"listed under <code>Calendars</code>:</strong> check or uncheck the box under "
 "<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
 "removing calendars to the <code>Calendars</code> list:</strong> click on the "
 "<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
 "correct day:</strong> the first day of the week varies in different parts of "
 "the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
+"in the red bar at the top of the page. Then click on the "
+"<code>Actions</code> menu and select <code>Change Preferences</code>. Pick "
+"the correct \"Week starts on\" day and hit <code>Apply</code>.</li> "
+"<li><strong>Access a iCal format version of the calendar:</strong>: select "
+"<code>Open in iCal</code> from the Action menu.</li> </ul>"
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:137 /src/schooltool/app/interfaces.py:148
+#: /src/schooltool/app/interfaces.py:137
+#: /src/schooltool/app/interfaces.py:148
 msgid ""
 "The name for the school or organization running\n"
 "            this server.  This will be displayed on the public calendar, "
@@ -1866,7 +1564,8 @@ msgstr ""
 msgid "Form input is not a file object"
 msgstr "Данные формы должны быть файловым объектом"
 
-#: /src/schooltool/app/interfaces.py:44 /src/schooltool/app/interfaces.py:48
+#: /src/schooltool/app/interfaces.py:44
+#: /src/schooltool/app/interfaces.py:48
 msgid "Invalid integer data"
 msgstr "Недопустимые данные для целого"
 
@@ -1928,7 +1627,8 @@ msgstr ""
 msgid "Going to background, daemon pid %d"
 msgstr "Переход в фоновый режим, pid демона %d"
 
-#: /src/schooltool/app/main.py:452 /src/schooltool/app/main.py:496
+#: /src/schooltool/app/main.py:452
+#: /src/schooltool/app/main.py:496
 #: /src/schooltool/app/main.py:499
 msgid "%s: %s"
 msgstr "%s: %s"
@@ -2021,34 +1721,9 @@ msgstr ""
 msgid "Everyone can view the application calendar."
 msgstr "Все могут просматривать календарь."
 
-#: /src/schooltool/basicperson/browser/configure.zcml:143
-msgid "New Text Field"
-msgstr "Новое текстовое поле"
-
-#: /src/schooltool/basicperson/browser/configure.zcml:150
-msgid "New Date Field"
-msgstr "Новое поле данных"
-
-#: /src/schooltool/basicperson/browser/configure.zcml:157
-#, fuzzy
-msgid "New Selection List Field"
-msgstr "Новое текстовое поле"
-
 #: /src/schooltool/basicperson/browser/configure.zcml:24
 msgid "Export Persons as XML"
 msgstr "Экспорт людей в XML"
-
-#: /src/schooltool/basicperson/browser/configure.zcml:33
-msgid "Export"
-msgstr "Экспорт"
-
-#: /src/schooltool/basicperson/browser/configure.zcml:42
-msgid "Advisors"
-msgstr "Консультанты"
-
-#: /src/schooltool/basicperson/browser/configure.zcml:51
-msgid "Advisees"
-msgstr "Обучаемые"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:45
 #: /src/schooltool/course/browser/csvimport.py:42
@@ -2065,14 +1740,6 @@ msgstr "Предоставлено недостаточно данных."
 msgid "username may not be empty"
 msgstr "необходимо указать имя пользователя"
 
-#: /src/schooltool/basicperson/browser/csvimport.py:53
-msgid "first name may not be empty"
-msgstr "имя не может быть пустым"
-
-#: /src/schooltool/basicperson/browser/csvimport.py:57
-msgid "last name may not be empty"
-msgstr "фамилия не может быть пустой"
-
 #. Default: ""
 #: /src/schooltool/basicperson/browser/csvimport.py:69
 #: /src/schooltool/person/browser/csvimport.py:63
@@ -2086,10 +1753,6 @@ msgstr "Повторяющееся имя пользователя: ${username}"
 msgid "Names cannot begin with '+' or '@' or contain '/'"
 msgstr "Имена не могут начинаться с  '+' или '@' или содержать '/'"
 
-#: /src/schooltool/basicperson/browser/demographics.py:133
-msgid "Add new Field"
-msgstr "Добавить новое поле"
-
 #: /src/schooltool/basicperson/browser/demographics.py:153
 #: /src/schooltool/basicperson/browser/demographics.py:200
 #: /src/schooltool/basicperson/browser/person.py:207
@@ -2101,7 +1764,8 @@ msgstr "Добавить новое поле"
 #: /src/schooltool/person/browser/person.py:183
 #: /src/schooltool/schoolyear/browser/schoolyear.py:207
 #: /src/schooltool/schoolyear/browser/schoolyear.py:220
-#: /src/schooltool/skin/form.py:85 /src/schooltool/term/browser/term.py:175
+#: /src/schooltool/skin/form.py:85
+#: /src/schooltool/term/browser/term.py:175
 #: /src/schooltool/term/browser/term.py:246
 #: /src/schooltool/timetable/browser/event.py:87
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:47
@@ -2115,11 +1779,6 @@ msgstr "Добавить новое поле"
 msgid "Cancel"
 msgstr "Отмена"
 
-#. Default: ""
-#: /src/schooltool/basicperson/browser/demographics.py:212
-msgid "Change information for ${field_title}"
-msgstr "Изменить информацию для ${field_title}"
-
 #: /src/schooltool/basicperson/browser/person.py:111
 msgid "This username is already in use!"
 msgstr "Это имя пользователя уже используется!"
@@ -2128,40 +1787,10 @@ msgstr "Это имя пользователя уже используется!"
 msgid "Add new person"
 msgstr "Добавить нового человека"
 
-#: /src/schooltool/basicperson/browser/person.py:170
-msgid "Passwords do not match"
-msgstr "Пароли не совпадают"
-
 #. Default: ""
 #: /src/schooltool/basicperson/browser/person.py:235
 msgid "Change information for ${fullname}"
 msgstr "Изменить информацию о ${fullname}"
-
-#: /src/schooltool/basicperson/browser/person.py:305
-msgid "Current Advisors"
-msgstr "Текущие консультанты"
-
-#: /src/schooltool/basicperson/browser/person.py:306
-msgid "Add Advisors"
-msgstr "Добавить консультантов"
-
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:310
-msgid "Advisors of ${person}"
-msgstr "Консультанты для ${person}"
-
-#: /src/schooltool/basicperson/browser/person.py:329
-msgid "Current Advisees"
-msgstr "Текущие обучаемые"
-
-#: /src/schooltool/basicperson/browser/person.py:330
-msgid "Add Advisees"
-msgstr "Добавить обучаемых"
-
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:334
-msgid "Advisees of ${person}"
-msgstr "Обучаемый ${person}"
 
 #: /src/schooltool/basicperson/browser/person.py:56
 msgid "Group"
@@ -2192,58 +1821,10 @@ msgstr "Имя пользователя"
 msgid "Password"
 msgstr "Пароль"
 
-#: /src/schooltool/basicperson/browser/person.py:75
-msgid "Confirm"
-msgstr "Подтвердить"
-
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:29
-msgid ""
-"CSV data <strong>must</strong> contain a user name a first name and a last "
-"name. An optional password <strong>may</strong> be included as well."
-msgstr ""
-"Данные CSV <strong>обязаны</strong> содержать имя пользователя, имя и "
-"фамилию. Так же <strong>может</strong> присутствовать необязательный пароль."
-
-#. Default: ""
-#.  "jjones, Jimmy, Jones\n"
-#.  "jbjones, Jim Bob, Jones, r2m45J\n"
-#.  "howard, Howard, Jobs"
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:35
-msgid ""
-"\n"
-"jjones, Jimmy, Jones\n"
-"jbjones, Jim Bob, Jones, r2m45J\n"
-"howard, Howard, Jobs\n"
-msgstr ""
-"\n"
-"jjones, Jimmy, Jones\n"
-"jbjones, Jim Bob, Jones, r2m45J\n"
-"howard, Howard, Jobs\n"
-
-#: /src/schooltool/basicperson/interfaces.py:122
-msgid "The title of this Field Description"
-msgstr ""
-
 #: /src/schooltool/basicperson/interfaces.py:125
 #: /src/schooltool/demographics/interfaces.py:195
 msgid "ID"
 msgstr "ID"
-
-#: /src/schooltool/basicperson/interfaces.py:126
-msgid "Unique ID of this Field Description"
-msgstr ""
-
-#: /src/schooltool/basicperson/interfaces.py:129
-msgid "Required"
-msgstr ""
-
-#: /src/schooltool/basicperson/interfaces.py:130
-msgid "Whether this Field is required or not"
-msgstr ""
-
-#: /src/schooltool/basicperson/interfaces.py:137
-msgid "List of values"
-msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:38
 #: /src/schooltool/contact/interfaces.py:36
@@ -2372,56 +1953,6 @@ msgstr "Изменить перекрытия календарей"
 msgid "View"
 msgstr "Просмотр"
 
-#: /src/schooltool/contact/browser/configure.zcml:31
-#, fuzzy
-msgid "New Contact"
-msgstr "Добавить новый контакт"
-
-#: /src/schooltool/contact/browser/configure.zcml:46
-#: /src/schooltool/contact/browser/configure.zcml:68
-#, fuzzy
-msgid "Contacts"
-msgstr "Количество"
-
-#. Default: ""
-#: /src/schooltool/contact/browser/contact.py:121
-#, fuzzy
-msgid "Add new contact for ${person}"
-msgstr "Добавить новый контакт"
-
-#. Default: ""
-#: /src/schooltool/contact/browser/contact.py:151
-msgid "Change information for ${first_name} ${last_name}"
-msgstr "Изменить информацию для ${first_name} ${last_name}"
-
-#: /src/schooltool/contact/browser/contact.py:171
-msgid "Contact index"
-msgstr ""
-
-#: /src/schooltool/contact/browser/contact.py:204
-#, fuzzy
-msgid "Address"
-msgstr "Адрес 1"
-
-#: /src/schooltool/contact/browser/contact.py:71
-msgid "Add new contact"
-msgstr "Добавить новый контакт"
-
-#: /src/schooltool/contact/browser/relationship.py:40
-#, fuzzy
-msgid "Assigned Contacts"
-msgstr "Назначение"
-
-#: /src/schooltool/contact/browser/relationship.py:41
-msgid "Assign existing contact"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/contact/browser/relationship.py:45
-#, fuzzy
-msgid "Manage contacts of ${person}"
-msgstr "Группы ${person}"
-
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:45
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:26
@@ -2433,32 +1964,6 @@ msgstr "R"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:26
 msgid "Remove"
 msgstr "Удалить"
-
-#. Default: "Invert Selection"
-#: /src/schooltool/contact/browser/templates/manage_contacts.pt:31
-#: /src/schooltool/contact/browser/templates/manage_contacts.pt:62
-#: /src/schooltool/course/browser/templates/copy_sections.pt:74
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:49
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:71
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:30
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:52
-msgid "invert-selection-button"
-msgstr ""
-
-#: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
-#, fuzzy
-msgid "Create contact"
-msgstr "Добавить новый контакт"
-
-#: /src/schooltool/contact/browser/templates/manage_contacts.pt:45
-#, fuzzy
-msgid "Create new contact"
-msgstr "Добавить новый контакт"
-
-#: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
-#, fuzzy
-msgid "Assign"
-msgstr "Назначение"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:67
@@ -2484,14 +1989,6 @@ msgstr "Нечего добавить"
 msgid "ok-button"
 msgstr "ОК"
 
-#: /src/schooltool/contact/interfaces.py:42
-msgid "Address line 1"
-msgstr "Адрес 1"
-
-#: /src/schooltool/contact/interfaces.py:44
-msgid "Address line 2"
-msgstr "Адрес 2"
-
 #: /src/schooltool/contact/interfaces.py:46
 #: /src/schooltool/demographics/interfaces.py:259
 msgid "City"
@@ -2501,10 +1998,6 @@ msgstr "Город"
 #: /src/schooltool/demographics/interfaces.py:264
 msgid "State"
 msgstr "Область"
-
-#: /src/schooltool/contact/interfaces.py:50
-msgid "Country"
-msgstr "Страна"
 
 #: /src/schooltool/contact/interfaces.py:52
 #: /src/schooltool/demographics/interfaces.py:269
@@ -2525,14 +2018,6 @@ msgstr "Домашний  телефон"
 msgid "Work phone"
 msgstr "Рабочий  телефон"
 
-#: /src/schooltool/contact/interfaces.py:60
-msgid "Mobile phone"
-msgstr "Мобильный телефон"
-
-#: /src/schooltool/contact/interfaces.py:62
-msgid "Language"
-msgstr "Язык"
-
 #: /src/schooltool/course/browser/configure.zcml:10
 msgid "Add a Course"
 msgstr "Добавить курс"
@@ -2545,66 +2030,19 @@ msgstr "Добавить раздел"
 msgid "Edit Section Information"
 msgstr "Редактировать информацию о секции"
 
-#: /src/schooltool/course/browser/configure.zcml:263
-msgid "Copy from prev. term"
-msgstr ""
-
 #: /src/schooltool/course/browser/configure.zcml:82
 msgid "New Course"
 msgstr "Новый курс"
 
-#: /src/schooltool/course/browser/course.py:106
-msgid "Please select a term."
-msgstr ""
-
-#: /src/schooltool/course/browser/course.py:111
-msgid "Selected term does not exist."
-msgstr ""
-
 #: /src/schooltool/course/browser/course.py:69
 msgid "Course index"
 msgstr "Указатель предметов"
-
-#: /src/schooltool/course/browser/csvimport.py:107
-#: /src/schooltool/group/browser/csvimport.py:76
-#, fuzzy
-msgid "User names must not be empty."
-msgstr "необходимо указать имя пользователя"
-
-#. Default: ""
-#: /src/schooltool/course/browser/csvimport.py:115
-#: /src/schooltool/group/browser/csvimport.py:84
-#, fuzzy
-msgid "\"${username}\" is not a valid username."
-msgstr "Недопустимый вес $value."
 
 #: /src/schooltool/course/browser/csvimport.py:46
 #: /src/schooltool/group/browser/csvimport.py:45
 #: /src/schooltool/resource/browser/csvimport.py:50
 msgid "Titles may not be empty"
 msgstr "Необходимо указать заголовок"
-
-#. Default: ""
-#: /src/schooltool/course/browser/csvimport.py:75
-msgid ""
-"Course \"${course_title}\" id \"${invalid_id}\" is invalid. ${error_message}"
-msgstr ""
-
-#: /src/schooltool/course/browser/section-member-csvimport.pt:21
-#: /src/schooltool/course/browser/configure.zcml:173
-#, fuzzy
-msgid "Import Section Members"
-msgstr "Импортировать разделы"
-
-#: /src/schooltool/course/browser/section-member-csvimport.pt:4
-#, fuzzy
-msgid "Upload SchoolTool section members as CSV"
-msgstr "Загрузить расписание SchoolTool в формате CSV"
-
-#: /src/schooltool/course/browser/section.py:184
-#, fuzzy
-msgid "No section selected."
-msgstr "Не выбрано"
 
 #: /src/schooltool/course/browser/section.py:262
 msgid "No such course."
@@ -2666,48 +2104,6 @@ msgstr "Нынешние группы"
 msgid "Available Groups"
 msgstr "Свободные группы"
 
-#: /src/schooltool/course/browser/templates/copy_sections.pt:106
-msgid "Copied"
-msgstr ""
-
-#. Default: "Copy"
-#: /src/schooltool/course/browser/templates/copy_sections.pt:159
-#, fuzzy
-msgid "copy-button"
-msgstr "ОК"
-
-#: /src/schooltool/course/browser/templates/copy_sections.pt:29
-msgid "Copy sections from ${prev_term} of ${schoolyear} to ${term}"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/copy_sections.pt:38
-msgid "There is no (previous) term in ${schoolyear} to copy sections from."
-msgstr ""
-
-#. Default: "Select All Visible"
-#: /src/schooltool/course/browser/templates/copy_sections.pt:66
-#, fuzzy
-msgid "select-all-visible-button"
-msgstr "Удалить"
-
-#. Default: "Select None"
-#: /src/schooltool/course/browser/templates/copy_sections.pt:70
-#, fuzzy
-msgid "select-none-button"
-msgstr "Удалить"
-
-#: /src/schooltool/course/browser/templates/copy_sections.pt:9
-#: /src/schooltool/course/browser/templates/link_section.pt:9
-#, fuzzy
-msgid "Copy sections to ${term} of ${schoolyear}"
-msgstr "Курсы для ${schoolyear}"
-
-#: /src/schooltool/course/browser/templates/copy_sections.pt:91
-#: /src/schooltool/course/browser/templates/link_section.pt:67
-#, fuzzy
-msgid "Section in ${term}"
-msgstr "Секции не найдены: ${args}."
-
 #: /src/schooltool/course/browser/templates/copy_sections.pt:96
 #: /src/schooltool/course/browser/templates/section_container.pt:45
 #: /src/schooltool/course/browser/templates/link_section.pt:72
@@ -2726,37 +2122,6 @@ msgstr "Текущий размер"
 msgid "Import Courses"
 msgstr "Импортировать предметы"
 
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:24
-msgid ""
-"CSV data <strong>must</strong> include a course title,<strong>may</strong> "
-"include an optional course description and <strong>may</strong> include an "
-"optional course id."
-msgstr ""
-
-#. Default: ""
-#.  "Ancient History, Pre-history through 1000 A.D.\n"
-#.  "US History,,us-history\n"
-#.  "World History, 1000 A.D. through the 20th century, history-world"
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:32
-msgid ""
-"\n"
-"Ancient History, Pre-history through 1000 A.D.\n"
-"US History,,us-history\n"
-"World History, 1000 A.D. through the 20th century, history-world\n"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:37
-msgid ""
-"The above example will create 3 courses titled 'Ancient History', 'US "
-"History' and 'World History'. The first and last course will have the "
-"descriptions 'Pre-history through 1000 A.D.' and '1000 A.D. through the 20th "
-"century' respectively. The Second course will have no description. The "
-"second and the third course will have their ids set to us-history and "
-"history-world. If you will upload a CSV with titles or ids that are already "
-"present in the database, existing courses will be updated. Ids take "
-"precedence when determining which course should be updated."
-msgstr ""
-
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:4
 msgid "Upload schooltool courses as CSV"
 msgstr "Загрузить предметы SchoolTool в формате CSV"
@@ -2772,64 +2137,13 @@ msgstr "фото"
 msgid "students"
 msgstr "студенты"
 
-#: /src/schooltool/course/browser/templates/course.pt:73
-msgid "New Section"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/course.pt:9
-msgid "${course} course for ${schoolyear}"
-msgstr "${course} курс для ${schoolyear}"
-
-#: /src/schooltool/course/browser/templates/course_container.pt:12
-msgid "Courses for ${schoolyear}"
-msgstr "Курсы для ${schoolyear}"
-
 #: /src/schooltool/course/browser/templates/coursesviewlet.pt:4
 msgid "Sections Taught"
 msgstr "Пройденные разделы"
 
-#. Default: "Link"
-#: /src/schooltool/course/browser/templates/link_section.pt:130
-#, fuzzy
-msgid "link-section-button"
-msgstr "Удалить"
-
-#: /src/schooltool/course/browser/templates/link_section.pt:24
-msgid "Link ${section}, ${term} with a section in ${target_term}"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/link_section.pt:36
-msgid "There is no valid term in ${schoolyear} to pick a section from."
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section.pt:11
-#: /src/schooltool/course/browser/templates/section.pt:25
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:12
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:24
-msgid "Section of ${course} -- ${section_title} for ${term} of ${schoolyear}"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section.pt:114
-msgid "edit individuals"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section.pt:114
-msgid "Change the students in this section individually"
-msgstr ""
-
 #: /src/schooltool/course/browser/templates/section.pt:121
 msgid "Change the students in this section by groups"
 msgstr "Изменить список учащихся (группами)"
-
-#: /src/schooltool/course/browser/templates/section.pt:36
-#, fuzzy
-msgid "Previous: ${course} -- ${section_title} for ${term}"
-msgstr "${instructors} -- ${section_title}"
-
-#: /src/schooltool/course/browser/templates/section.pt:47
-#, fuzzy
-msgid "Next: ${course} -- ${section_title} for ${term}"
-msgstr "${instructors} -- ${section_title}"
 
 #: /src/schooltool/course/browser/templates/section.pt:58
 msgid "edit info"
@@ -2862,78 +2176,22 @@ msgstr "Идентификатор (опционально)"
 msgid "Section"
 msgstr "Раздел"
 
-#: /src/schooltool/course/browser/templates/section_container.pt:9
-#: /src/schooltool/course/browser/templates/section_container.pt:20
-msgid "Section list for ${term} of ${schoolyear}"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:124
-msgid "x x"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:60
-#, fuzzy
-msgid "Linked sections"
-msgstr "Мои разделы"
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:63
-#, fuzzy
-msgid "Previous"
-msgstr "Предыдущий год"
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:64
-#, fuzzy
-msgid "Section in the previous term."
-msgstr "Перейти к предыдущему дню"
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:72
-#: /src/schooltool/course/browser/templates/section_edit.pt:106
-msgid "${section_title} for ${term}"
-msgstr ""
-
-#. Default: "Unlink"
-#: /src/schooltool/course/browser/templates/section_edit.pt:75
-#: /src/schooltool/course/browser/templates/section_edit.pt:109
-msgid "unlink-section-button"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:85
-#: /src/schooltool/course/browser/templates/section_edit.pt:119
-msgid "Pick a section from ${term}"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:85
-#: /src/schooltool/course/browser/templates/section_edit.pt:119
-#, fuzzy
-msgid "<a href=\"${DYNAMIC_CONTENT}\">x</a>"
-msgstr "<img src=\"${DYNAMIC_CONTENT}\" alt=\"x\" />"
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:90
-#: /src/schooltool/course/browser/templates/section_edit.pt:124
-#, fuzzy
-msgid "Not linked."
-msgstr "Не выбрано"
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:98
-msgid "Section in the next term."
-msgstr ""
-
 #: /src/schooltool/course/help/course_container.pt:10
 msgid ""
-"<h1>Courses</h1> <p>Use this page to organize courses listed in the system.</"
-"p> <h3>How do I...</h3> <ul> <li><strong>Look for for a course:</strong> Use "
-"the search box to the left of the <code>Find Now</code> button to look "
-"through the entire list of courses for the search criterion. The "
-"<code>Clear</code> button empties the search box of current entries.</li> "
-"<li><strong>Show a list of the different sections of a course:</strong> "
-"click on the name of the course.</li> <li><strong>Show the lists of students "
-"in a particular class:</strong> Click on the <code>teacher -- course</code> "
-"link. The number of students is also listed next to the teacher and the "
-"course.</li> <li><strong>Navigate through the courses:</strong> Separate "
-"<q>batches</q> of the Course list can be accessed through the <code>Next 10</"
-"code> (and <code>Previous</code>) and links in the blue bar. A <code>Show "
-"All</code> button is also there to show all of the courses on a single page."
-"</li> </ul>"
+"<h1>Courses</h1> <p>Use this page to organize courses listed in the "
+"system.</p> <h3>How do I...</h3> <ul> <li><strong>Look for for a "
+"course:</strong> Use the search box to the left of the <code>Find Now</code> "
+"button to look through the entire list of courses for the search criterion. "
+"The <code>Clear</code> button empties the search box of current "
+"entries.</li> <li><strong>Show a list of the different sections of a "
+"course:</strong> click on the name of the course.</li> <li><strong>Show the "
+"lists of students in a particular class:</strong> Click on the <code>teacher "
+"-- course</code> link. The number of students is also listed next to the "
+"teacher and the course.</li> <li><strong>Navigate through the "
+"courses:</strong> Separate <q>batches</q> of the Course list can be accessed "
+"through the <code>Next 10</code> (and <code>Previous</code>) and links in "
+"the blue bar. A <code>Show All</code> button is also there to show all of "
+"the courses on a single page.</li> </ul>"
 msgstr ""
 
 #: /src/schooltool/course/interfaces.py:38
@@ -2961,26 +2219,6 @@ msgstr "Название раздела."
 #: /src/schooltool/course/interfaces.py:86
 msgid "Description of the section."
 msgstr "Описание раздела."
-
-#: /src/schooltool/course/section.py:125
-msgid "Cannot assign section as previous to itself"
-msgstr ""
-
-#: /src/schooltool/course/section.py:152
-msgid "Cannot assign section as next to itself"
-msgstr ""
-
-#: /src/schooltool/course/section.py:395
-msgid "Cannot link sections in same term"
-msgstr ""
-
-#: /src/schooltool/course/section.py:400
-msgid "Cannot link sections in different school years"
-msgstr ""
-
-#: /src/schooltool/course/section.py:404
-msgid "Sections must be in consecutive terms"
-msgstr ""
 
 #. Default: ""
 #: /src/schooltool/course/section.py:88
@@ -3053,11 +2291,6 @@ msgstr "Курсы"
 msgid "Schooltool Person Menu"
 msgstr "Личное меню Schooltool"
 
-#: /src/schooltool/demographics/browser/configure.zcml:167
-#: /src/schooltool/demographics/browser/configure.zcml:228
-msgid "name info"
-msgstr ""
-
 #: /src/schooltool/demographics/browser/configure.zcml:173
 #: /src/schooltool/demographics/browser/configure.zcml:234
 msgid "demographics"
@@ -3097,15 +2330,6 @@ msgstr ""
 msgid "Schooltool Person Display Menu"
 msgstr "Персональное меню SchoolTool"
 
-#: /src/schooltool/demographics/browser/demographics_macros.pt:4
-msgid "N"
-msgstr ""
-
-#. Default: "Apply and Next"
-#: /src/schooltool/demographics/browser/demographics_macros.pt:4
-msgid "apply-and-next-button"
-msgstr ""
-
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:149
 msgid "Change name information for ${fullname}"
@@ -3114,16 +2338,6 @@ msgstr "Изменить информацию об имени для ${fullname}
 #: /src/schooltool/demographics/browser/personform.py:165
 msgid "Change name"
 msgstr "Изменить имя"
-
-#. Default: ""
-#: /src/schooltool/demographics/browser/personform.py:173
-msgid "Change demographics for ${fullname}"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/personform.py:181
-#: /src/schooltool/basicperson/browser/configure.zcml:113
-msgid "Demographics"
-msgstr ""
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:189
@@ -3353,7 +2567,8 @@ msgid "Cell phone"
 msgstr "Мобильный  телефон"
 
 #: /src/schooltool/demographics/interfaces.py:289
-#: /src/schooltool/resource/interfaces.py:55 /src/schooltool/note/notes.pt:2
+#: /src/schooltool/resource/interfaces.py:55
+#: /src/schooltool/note/notes.pt:2
 #: /src/schooltool/note/configure.zcml:94
 msgid "Notes"
 msgstr "Заметки"
@@ -3418,10 +2633,6 @@ msgstr "Поиск"
 msgid "Surname"
 msgstr "Фамилия"
 
-#: /src/schooltool/devmode/configure.zcml:27
-msgid "Introspect"
-msgstr ""
-
 #: /src/schooltool/devmode/devmode.pt:11
 msgid "Developer Tools"
 msgstr "Средства разработчика"
@@ -3451,15 +2662,6 @@ msgstr "Образцы данных"
 msgid "Setup data"
 msgstr "Установочные данные"
 
-#: /src/schooltool/export/configure.zcml:21
-msgid "XLS Export"
-msgstr "Экспорт из XLS"
-
-#: /src/schooltool/export/configure.zcml:6
-#, fuzzy
-msgid "XLS Import"
-msgstr "Экспорт из XLS"
-
 #: /src/schooltool/export/templates/import.pt:11
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:11
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:11
@@ -3483,76 +2685,6 @@ msgstr "Экспорт из XLS"
 msgid "SchoolTool"
 msgstr "SchoolTool"
 
-#: /src/schooltool/export/templates/import.pt:11
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:11
-#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:11
-#: /src/schooltool/person/browser/person_container_delete.pt:11
-#: /src/schooltool/person/browser/person-csvimport.pt:11
-#: /src/schooltool/person/browser/person_edit.pt:9
-#: /src/schooltool/person/browser/person_preferences.pt:9
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:11
-#: /src/schooltool/skin/templates/container.pt:11
-#: /src/schooltool/skin/templates/simple_edit.pt:7
-#: /src/schooltool/skin/templates/notfound.pt:7
-#: /src/schooltool/skin/templates/simple_add.pt:5
-#: /src/schooltool/skin/templates/table_container.pt:11
-#: /src/schooltool/skin/templates/error.pt:8
-#: /src/schooltool/skin/templates/edit_form.pt:4
-#: /src/schooltool/skin/templates/container_delete.pt:11
-msgid "<img src=\"${DYNAMIC_CONTENT}\" alt=\"x\" />"
-msgstr "<img src=\"${DYNAMIC_CONTENT}\" alt=\"x\" />"
-
-#: /src/schooltool/export/templates/import.pt:25
-#, fuzzy
-msgid "Import Data"
-msgstr "Импортировать расписание"
-
-#: /src/schooltool/export/templates/import.pt:31
-msgid ""
-"In addition to entering data through SchoolTool's web interface, you can "
-"also import data from a spreadsheet using this template: ${link-to-empty-"
-"data-file}."
-msgstr ""
-
-#: /src/schooltool/export/templates/import.pt:34
-msgid ""
-"Data included in the spreadsheet will be added to data in the system; "
-"importing will not cause data to be removed."
-msgstr ""
-
-#: /src/schooltool/export/templates/import.pt:38
-msgid ""
-"Note that the import system does not handle duplicated data very well "
-"outside of the persons worksheet. That is, if you try to import a school "
-"year, for example, that already exists in the system, the import will fail "
-"with an error. Simply remove the duplicate data from the spreadsheet and run "
-"the import again. We're working on making this process even smoother."
-msgstr ""
-
-#: /src/schooltool/export/templates/import.pt:4
-msgid "Upload SchoolTool as XLS"
-msgstr ""
-
-#: /src/schooltool/export/templates/import.pt:50
-msgid ""
-"For people interested in testing and exploring SchoolTool, we provide a set "
-"of sample data: ${link-to-sample-data-file}."
-msgstr ""
-
-#: /src/schooltool/export/templates/import.pt:53
-msgid ""
-"If you are importing your own data, we highly recommend downloading the "
-"sample spreadsheet as a reference."
-msgstr ""
-
-#: /src/schooltool/export/templates/import.pt:59
-msgid "Upload XLS File"
-msgstr "Загрузить XLS-файл"
-
-#: /src/schooltool/export/templates/import.pt:61
-msgid "XLS File"
-msgstr "XLS-файл"
-
 #. Default: "Submit"
 #: /src/schooltool/export/templates/import.pt:66
 #: /src/schooltool/resource/browser/resource-csvimport.pt:72
@@ -3570,11 +2702,6 @@ msgstr "кнопка-послать"
 #: /src/schooltool/group/browser/configure.zcml:103
 msgid "Add/Remove Members"
 msgstr "Добавить/удалить участников"
-
-#: /src/schooltool/group/browser/configure.zcml:122
-#, fuzzy
-msgid "Import Groups Members"
-msgstr "Импортировать группы"
 
 #: /src/schooltool/group/browser/configure.zcml:25
 msgid "Add a Group"
@@ -3603,18 +2730,18 @@ msgstr "Импортировать группы"
 
 #: /src/schooltool/group/browser/group-csvimport.pt:24
 msgid ""
-"CSV data <strong>must</strong> include a group title and <strong>may</"
-"strong> include an optional group description. Any extra information will be "
-"discarded."
+"CSV data <strong>must</strong> include a group title and "
+"<strong>may</strong> include an optional group description. Any extra "
+"information will be discarded."
 msgstr ""
-"CSV-данные <strong>должны</strong> включать название группы и <strong>могут</"
-"strong> включать дополнительное описание группы. Прочая информация "
-"отбрасывается."
+"CSV-данные <strong>должны</strong> включать название группы и "
+"<strong>могут</strong> включать дополнительное описание группы. Прочая "
+"информация отбрасывается."
 
 #. Default: ""
-#.  "LUG, Linux Users Group\n"
-#.  "Chess Club\n"
-#.  "Sports Club, After-school sports club, <em>text after a second comma</em>"
+#. "LUG, Linux Users Group\n"
+#. "Chess Club\n"
+#. "Sports Club, After-school sports club, <em>text after a second comma</em>"
 #: /src/schooltool/group/browser/group-csvimport.pt:31
 msgid ""
 "\n"
@@ -3631,28 +2758,6 @@ msgid ""
 "group will have no description, and the extra \"text after a second comma\" "
 "text on the third group will be ignored."
 msgstr ""
-
-#: /src/schooltool/group/browser/group-csvimport.pt:4
-msgid "Upload SchoolTool groups as CSV"
-msgstr ""
-
-#: /src/schooltool/group/browser/group-member-csvimport.pt:21
-#, fuzzy
-msgid "Import Group Members"
-msgstr "Импортировать группы"
-
-#: /src/schooltool/group/browser/group-member-csvimport.pt:4
-#, fuzzy
-msgid "Upload SchoolTool group members as CSV"
-msgstr "Загрузить расписание SchoolTool в формате CSV"
-
-#: /src/schooltool/group/browser/group.pt:16
-msgid "Members"
-msgstr "Участники"
-
-#: /src/schooltool/group/browser/group.pt:20
-msgid "edit members"
-msgstr "Редактировать участников"
 
 #: /src/schooltool/group/browser/group.pt:20
 msgid "Change the people who are members of this group."
@@ -3681,31 +2786,28 @@ msgid "Groups of ${person}"
 msgstr "Группы ${person}"
 
 #: /src/schooltool/group/browser/groupsviewlet.pt:15
-msgid "Manage this person's memberships"
-msgstr ""
-
-#: /src/schooltool/group/browser/groupsviewlet.pt:15
 #: /src/schooltool/course/browser/templates/section.pt:121
 msgid "edit groups"
 msgstr "редактировать группы"
 
 #: /src/schooltool/group/help/group_container.pt:8
 msgid ""
-"<h1>Groups</h1> <p>Use this page to keep track of <b>groups</b> of Persons.</"
-"p> <p><b>Groups</b> that have been added are not part of the essential "
-"groups (<b>Teachers</b>, <b>Students</b>, <b>Site Managers</b>, <b>School "
-"Administrators</b>, or <b>Clerks</b>). They can be selected by the checkbox "
-"next to them and removed by pressing the <b>Delete</b> button at the bottom "
-"of the page.</p> <h3>How do I...</h3> <ul> <li><b>Look for for a group:</b> "
-"Use the search box to the left of the <code>Find Now</code> button to look "
-"through the entire list of groups for the search criterion. The <code>Clear</"
-"code> button empties the search box of current entries.</li> <li><b>View the "
-"persons in a certain group:</b> Click on the name of the group.</li> "
-"<li><b>Sort the list:</b> Click on the <code>Title</code> header to change "
-"the order of groups from descending to ascending order, and vice versa.</li> "
-"<li><strong>Browse for a group:</strong> Use the <code>Next 10</code> (and "
-"<code>Previous</code>) and links in the blue bar.</li> <li><strong>Show all "
-"groups:</strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
+"<h1>Groups</h1> <p>Use this page to keep track of <b>groups</b> of "
+"Persons.</p> <p><b>Groups</b> that have been added are not part of the "
+"essential groups (<b>Teachers</b>, <b>Students</b>, <b>Site Managers</b>, "
+"<b>School Administrators</b>, or <b>Clerks</b>). They can be selected by the "
+"checkbox next to them and removed by pressing the <b>Delete</b> button at "
+"the bottom of the page.</p> <h3>How do I...</h3> <ul> <li><b>Look for for a "
+"group:</b> Use the search box to the left of the <code>Find Now</code> "
+"button to look through the entire list of groups for the search criterion. "
+"The <code>Clear</code> button empties the search box of current "
+"entries.</li> <li><b>View the persons in a certain group:</b> Click on the "
+"name of the group.</li> <li><b>Sort the list:</b> Click on the "
+"<code>Title</code> header to change the order of groups from descending to "
+"ascending order, and vice versa.</li> <li><strong>Browse for a "
+"group:</strong> Use the <code>Next 10</code> (and <code>Previous</code>) and "
+"links in the blue bar.</li> <li><strong>Show all groups:</strong> Click "
+"<code>Show All</code> in the blue bar.</li> </ul>"
 msgstr ""
 
 #: /src/schooltool/group/interfaces.py:44
@@ -3760,17 +2862,14 @@ msgstr "Текст"
 msgid "Body of the note."
 msgstr "Текст заметки."
 
-#: /src/schooltool/note/interfaces.py:50 /src/schooltool/note/note_add.pt:24
+#: /src/schooltool/note/interfaces.py:50
+#: /src/schooltool/note/note_add.pt:24
 msgid "Privacy"
 msgstr "Параметры конфиденциальности"
 
 #: /src/schooltool/note/note_add.pt:13
 msgid "Note"
 msgstr "Заметка"
-
-#: /src/schooltool/note/note_add.pt:24
-msgid "Who can view the note"
-msgstr ""
 
 #: /src/schooltool/note/note_add.pt:30
 msgid "Private"
@@ -3793,19 +2892,11 @@ msgstr "Удалить"
 msgid "( p )"
 msgstr ""
 
-#: /src/schooltool/person/browser/configure.zcml:103
-msgid "Change Password"
-msgstr "Изменить пароль"
-
 #: /src/schooltool/person/browser/configure.zcml:169
 #: /src/schooltool/basicperson/browser/configure.zcml:92
 #: /src/schooltool/demographics/overrides.zcml:7
 msgid "New Person"
 msgstr "Добавить нового человека"
-
-#: /src/schooltool/person/browser/configure.zcml:91
-msgid "Edit Preferences"
-msgstr ""
 
 #: /src/schooltool/person/browser/csvimport.py:52
 msgid "fullname may not be empty"
@@ -3834,18 +2925,6 @@ msgstr "Сменить имя этого человека, фотографию 
 msgid "Details"
 msgstr "Подробнее"
 
-#: /src/schooltool/person/browser/home.pt:4
-#: /src/schooltool/person/browser/person.pt:4
-#: /src/schooltool/basicperson/browser/templates/person_view.pt:4
-msgid "Person info: ${title}"
-msgstr ""
-
-#: /src/schooltool/person/browser/person-csvimport.pt:26
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:26
-#: /src/schooltool/person/browser/configure.zcml:80
-msgid "Import Persons"
-msgstr "Импорт персон"
-
 #: /src/schooltool/person/browser/person-csvimport.pt:29
 msgid ""
 "CSV data <strong>must</strong> contain a user name and a full name. An "
@@ -3855,20 +2934,15 @@ msgstr ""
 "Также <strong>может</strong> быть указан пароль."
 
 #. Default: ""
-#.  "jjones, Jimmy Jones\n"
-#.  "jbjones, Jim Bob Jones, r2m45J\n"
-#.  "howard, Howard"
+#. "jjones, Jimmy Jones\n"
+#. "jbjones, Jim Bob Jones, r2m45J\n"
+#. "howard, Howard"
 #: /src/schooltool/person/browser/person-csvimport.pt:35
 msgid ""
 "\n"
 "jjones, Jimmy Jones\n"
 "jbjones, Jim Bob Jones, r2m45J\n"
 "howard, Howard\n"
-msgstr ""
-
-#: /src/schooltool/person/browser/person-csvimport.pt:4
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:4
-msgid "Upload SchoolTool persons as CSV"
 msgstr ""
 
 #: /src/schooltool/person/browser/person-csvimport.pt:40
@@ -4022,29 +3096,12 @@ msgstr "(гггг-мм-дд)"
 msgid "Day Month, Year"
 msgstr "День, Месяц, Год"
 
-#: /src/schooltool/person/interfaces.py:194
-msgid "Week starts on:"
-msgstr "Неделя начинается с:"
-
 #: /src/schooltool/person/interfaces.py:195
 msgid "Start display of weeks on Sunday or Monday"
 msgstr "Начинать показывать недели с воскресенья или понедельника"
 
-#: /src/schooltool/person/interfaces.py:209
-msgid "Show periods"
-msgstr "Показывать периоды"
-
 #: /src/schooltool/person/interfaces.py:210
 msgid "Show period names in daily view"
-msgstr ""
-
-#: /src/schooltool/person/interfaces.py:213
-#: /src/schooltool/person/interfaces.py:214
-msgid "Make calendar public"
-msgstr "Опубликовать календарь"
-
-#: /src/schooltool/person/security.zcml:10
-msgid "Everyone can view info of persons"
 msgstr ""
 
 #: /src/schooltool/person/security.zcml:15
@@ -4055,24 +3112,8 @@ msgstr ""
 msgid "Persons can change their own passwords"
 msgstr ""
 
-#: /src/schooltool/person/security.zcml:5
-msgid "Everyone can view the list of persons"
-msgstr ""
-
 #: /src/schooltool/relationship/configure.zcml:33
 msgid "Relationships"
-msgstr ""
-
-#: /src/schooltool/resource/browser/configure.zcml:115
-msgid "Edit Location Information"
-msgstr "Редактировать информацию о местоположении"
-
-#: /src/schooltool/resource/browser/configure.zcml:133
-msgid "Add an Equipment"
-msgstr ""
-
-#: /src/schooltool/resource/browser/configure.zcml:151
-msgid "Edit Equipment Information"
 msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:190
@@ -4091,18 +3132,6 @@ msgstr "Новое оборудование"
 msgid "A Resource"
 msgstr "Ресурс"
 
-#: /src/schooltool/resource/browser/configure.zcml:211
-msgid "SchoolBell Resource"
-msgstr ""
-
-#: /src/schooltool/resource/browser/configure.zcml:71
-msgid "Add a Resource"
-msgstr ""
-
-#: /src/schooltool/resource/browser/configure.zcml:84
-msgid "Edit Resource Information"
-msgstr ""
-
 #: /src/schooltool/resource/browser/configure.zcml:99
 msgid "Add a Location"
 msgstr "Добавить расположение"
@@ -4113,18 +3142,6 @@ msgstr "Добавить расположение"
 msgid "Are you sure you want to delete selected items?"
 msgstr "Вы уверены, что хотите удалить выбранные записи?"
 
-#: /src/schooltool/resource/browser/resource-csvimport.pt:21
-#: /src/schooltool/resource/browser/configure.zcml:240
-msgid "Import Resources"
-msgstr ""
-
-#: /src/schooltool/resource/browser/resource-csvimport.pt:24
-msgid ""
-"CSV data <strong>must</strong> include a resource title and <strong>may</"
-"strong> include an optional resource description. Any extra information will "
-"be discarded."
-msgstr ""
-
 #: /src/schooltool/resource/browser/resource-csvimport.pt:29
 #: /src/schooltool/group/browser/group-csvimport.pt:29
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:30
@@ -4133,31 +3150,6 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:54
 msgid "Example:"
 msgstr "Например:"
-
-#. Default: ""
-#.  "PRJ302, Overhead Projector #302\n"
-#.  "Main Auditorium,,location\n"
-#.  "LC-805, Laptop Computer #805"
-#: /src/schooltool/resource/browser/resource-csvimport.pt:31
-msgid ""
-"\n"
-"PRJ302, Overhead Projector #302\n"
-"Main Auditorium,,location\n"
-"LC-805, Laptop Computer #805\n"
-msgstr ""
-
-#: /src/schooltool/resource/browser/resource-csvimport.pt:36
-msgid ""
-"The above example will create 3 resources titled 'PRJ302', 'Main Auditorium' "
-"and 'LC-805'. The first and last resource will have the descriptions "
-"'Overhead Projector #302' and 'Laptop Computer #805' respectively. The "
-"\"Main Auditorium\" resource will have no description, but will be a "
-"location."
-msgstr ""
-
-#: /src/schooltool/resource/browser/resource-csvimport.pt:4
-msgid "Upload schooltool resources as CSV"
-msgstr ""
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:45
 #: /src/schooltool/group/browser/group-csvimport.pt:45
@@ -4280,10 +3272,6 @@ msgstr "Ввод CSV данных"
 msgid "CSV Data"
 msgstr "CSV данные"
 
-#: /src/schooltool/resource/browser/resource.py:56
-msgid "Resource index"
-msgstr ""
-
 #: /src/schooltool/resource/browser/resource_filter.pt:37
 #: /src/schooltool/contact/browser/templates/filter.pt:21
 #: /src/schooltool/table/templates/filter.pt:4
@@ -4323,37 +3311,10 @@ msgstr ""
 msgid "Model of Equipment"
 msgstr ""
 
-#: /src/schooltool/resource/interfaces.py:110
-#: /src/schooltool/resource/types.py:125
-msgid "Serial Number"
-msgstr "Серийный номер"
-
-#: /src/schooltool/resource/interfaces.py:111
-msgid "Serial Number of Equipment"
-msgstr ""
-
-#: /src/schooltool/resource/interfaces.py:115
-#: /src/schooltool/resource/types.py:131
-msgid "Purchase Date"
-msgstr ""
-
-#: /src/schooltool/resource/interfaces.py:116
-msgid "Purchase Date of Equipment"
-msgstr ""
-
-#: /src/schooltool/resource/interfaces.py:123
-msgid "Id of the resource type."
-msgstr ""
-
 #: /src/schooltool/resource/interfaces.py:124
 msgid ""
 "Used for lookup of named utilities that have resource\n"
 "        type specific information."
-msgstr ""
-
-#: /src/schooltool/resource/interfaces.py:128
-#: /src/schooltool/resource/interfaces.py:136
-msgid "The title of a resource type."
 msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:129
@@ -4363,29 +3324,9 @@ msgid ""
 "        resource type selection widgets."
 msgstr ""
 
-#: /src/schooltool/resource/interfaces.py:41
-msgid "Title of the resource."
-msgstr ""
-
 #: /src/schooltool/resource/interfaces.py:44
 msgid "Resource Type"
 msgstr "Тип ресурса"
-
-#: /src/schooltool/resource/interfaces.py:45
-msgid "Type of resource"
-msgstr ""
-
-#: /src/schooltool/resource/interfaces.py:52
-msgid "Description of the resource."
-msgstr ""
-
-#: /src/schooltool/resource/interfaces.py:57
-msgid "Notes for the resource."
-msgstr ""
-
-#: /src/schooltool/resource/interfaces.py:80
-msgid "Location Type"
-msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:81
 msgid "Type of location (i.e. computer lab, class room, etc.)"
@@ -4400,29 +3341,8 @@ msgstr ""
 msgid "Capacity of the room"
 msgstr ""
 
-#: /src/schooltool/resource/interfaces.py:95
-msgid "Equipment Type"
-msgstr ""
-
 #: /src/schooltool/resource/interfaces.py:96
 msgid "Type of equipment (i.e. camcorder, computer, etc.)"
-msgstr ""
-
-#: /src/schooltool/resource/resource.py:55
-#: /src/schooltool/resource/types.py:55
-msgid "Resource"
-msgstr ""
-
-#: /src/schooltool/resource/security.zcml:12
-msgid "Everyone can view resource information."
-msgstr ""
-
-#: /src/schooltool/resource/security.zcml:17
-msgid "Everyone can view resource calendars."
-msgstr ""
-
-#: /src/schooltool/resource/security.zcml:7
-msgid "Everyone can view resource lists."
 msgstr ""
 
 #: /src/schooltool/resource/types.py:107
@@ -4439,81 +3359,19 @@ msgid ""
 "Do not do this if you have any valuable data in your SchoolTool instance."
 msgstr ""
 
-#: /src/schooltool/sampledata/sampledata.pt:20
-msgid ""
-"This creates a school of 1,000 students and data for 4 terms. If you select "
-"all options, it can take a <strong>long</strong> time. Just let it run."
-msgstr ""
-
 #: /src/schooltool/sampledata/sampledata.pt:25
 msgid ""
 "Setting a random seed allows you to to reproduce the same set of sample data "
 "by generating it again with the same value of the random seed."
 msgstr ""
 
-#: /src/schooltool/sampledata/sampledata.pt:3
-#: /src/schooltool/sampledata/sampledata.pt:9
-msgid "Sample Data Generation"
-msgstr ""
-
 #: /src/schooltool/sampledata/sampledata.pt:42
 msgid "Plugins"
 msgstr "Модули"
 
-#: /src/schooltool/sampledata/sampledata.pt:71
-msgid "View Dependencies"
-msgstr ""
-
 #: /src/schooltool/sampledata/sampledata.pt:80
 #: /src/schooltool/setupdata/setupdata.pt:23
 msgid "Generate"
-msgstr ""
-
-#: /src/schooltool/schoolyear/browser/configure.zcml:87
-msgid "New School Year"
-msgstr "Новый учебный год"
-
-#: /src/schooltool/schoolyear/browser/schoolyear.py:107
-#: /src/schooltool/schoolyear/browser/configure.zcml:26
-msgid "School Years"
-msgstr "Учебные годы"
-
-#: /src/schooltool/schoolyear/browser/schoolyear.py:127
-msgid ""
-"You can not delete the active school year. Unless you are deleting all the "
-"school years."
-msgstr ""
-
-#: /src/schooltool/schoolyear/browser/schoolyear.py:168
-msgid "Add new school year"
-msgstr "Добавить новый учебный год"
-
-#. Default: ""
-#: /src/schooltool/schoolyear/browser/schoolyear.py:232
-msgid "Change information for ${schoolyear_title}"
-msgstr "Изменить информацию для ${schoolyear_title}"
-
-#: /src/schooltool/schoolyear/browser/schoolyear.py:247
-#: /src/schooltool/schoolyear/browser/schoolyear.py:274
-msgid "School year must begin before it ends."
-msgstr ""
-
-#: /src/schooltool/schoolyear/browser/schoolyear.py:318
-msgid "School Year"
-msgstr "Учебный год"
-
-#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:18
-msgid "${schoolyear_title} (${start_date}&mdash; ${end_date})"
-msgstr ""
-
-#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:30
-msgid ""
-"<input type=\"checkbox\" name=\"${DYNAMIC_CONTENT}\" id=\"${DYNAMIC_CONTENT}"
-"\" /> ${term_title} (${start_date}&mdash; ${end_date})"
-msgstr ""
-
-#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:41
-msgid "Add a new term"
 msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:29
@@ -4523,30 +3381,6 @@ msgstr ""
 #: /src/schooltool/skin/templates/container.pt:28
 #: /src/schooltool/skin/templates/table_container.pt:28
 msgid "Showing ${count} of ${total} items"
-msgstr ""
-
-#. Default: "Delete"
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:34
-#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:34
-#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:27
-#: /src/schooltool/resource/browser/container_delete.pt:27
-#: /src/schooltool/course/browser/templates/course_container.pt:40
-#: /src/schooltool/course/browser/templates/section_container.pt:93
-#: /src/schooltool/demographics/browser/search.pt:35
-#: /src/schooltool/demographics/browser/table.pt:28
-#: /src/schooltool/person/browser/person_container_delete.pt:35
-#: /src/schooltool/term/browser/templates/term-container-delete.pt:29
-#: /src/schooltool/skin/templates/container.pt:42
-#: /src/schooltool/skin/templates/table_container.pt:33
-#: /src/schooltool/skin/templates/container_delete.pt:32
-#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
-#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
-#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
-msgid "delete-button"
-msgstr "Удалить"
-
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:39
-msgid "Activate next school year"
 msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:45
@@ -4563,11 +3397,6 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:15
 msgid "There are none."
 msgstr "нет"
-
-#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:10
-#: /src/schooltool/term/browser/templates/term-container-delete.pt:10
-msgid "Are you sure you want to delete the selected terms?"
-msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/term-delete.pt:16
 #: /src/schooltool/resource/browser/container_delete.pt:16
@@ -4636,12 +3465,8 @@ msgstr "Без изменений"
 #: /src/schooltool/skin/templates/error.pt:15
 msgid ""
 "An internal server error has occurred. This most likely means that you have "
-"found a bug in SchoolTool. Please report it on <a href=\"http://issues."
-"schooltool.org\">the issue tracker</a>."
-msgstr ""
-
-#: /src/schooltool/skin/templates/error.pt:19
-msgid "Exception"
+"found a bug in SchoolTool. Please report it on <a "
+"href=\"http://issues.schooltool.org\">the issue tracker</a>."
 msgstr ""
 
 #: /src/schooltool/skin/templates/error.pt:20
@@ -4653,16 +3478,8 @@ msgstr ""
 msgid "Server Error"
 msgstr "Ошибка сервера."
 
-#: /src/schooltool/skin/templates/generic_macros.pt:12
-msgid "Server Running SchoolTool"
-msgstr ""
-
 #: /src/schooltool/skin/templates/notfound.pt:14
 msgid "The page that you are trying to access is not available"
-msgstr ""
-
-#: /src/schooltool/skin/templates/notfound.pt:18
-msgid "Please note the following:"
 msgstr ""
 
 #: /src/schooltool/skin/templates/notfound.pt:21
@@ -4678,58 +3495,13 @@ msgstr ""
 msgid "Not Found"
 msgstr "Не найден"
 
-#: /src/schooltool/skin/templates/onlinehelp_macros.pt:55
-msgid "SchoolTool Onlinehelp"
-msgstr ""
-
-#: /src/schooltool/skin/templates/rml_macros.pt:52
-#, fuzzy
-msgid "Page ${page_number}"
-msgstr "День ${number}"
-
-#: /src/schooltool/skin/templates/view_macros.pt:114
-msgid "Report a bug on Launchpad."
-msgstr "Соббщить об ошибке в Launchpad"
-
-#: /src/schooltool/skin/templates/view_macros.pt:126
-msgid ""
-"&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
-"Foundation</a> 2003 - <span>2008</span>: Supporting Social Innovation."
-msgstr ""
-
 #: /src/schooltool/skin/templates/view_macros.pt:45
 msgid "Log In"
 msgstr "Войти"
 
-#: /src/schooltool/skin/templates/view_macros.pt:53
-msgid "Logged in as:"
-msgstr "Вы вошли в систему как:"
-
 #: /src/schooltool/skin/templates/view_macros.pt:71
 msgid "Log Out"
 msgstr "Выйти"
-
-#: /src/schooltool/skin/widgets.py:76
-msgid "The datetime string did not match the pattern yyyy-mm-dd"
-msgstr ""
-
-#: /src/schooltool/table/templates/batch.pt:16
-msgid "Show Less"
-msgstr ""
-
-#: /src/schooltool/table/templates/batch.pt:21
-msgid "Show All"
-msgstr "Показать всё"
-
-#: /src/schooltool/table/templates/batch.pt:29
-#: /src/schooltool/table/templates/batch.pt:35
-msgid "Next &raquo;"
-msgstr ""
-
-#: /src/schooltool/table/templates/batch.pt:5
-#: /src/schooltool/table/templates/batch.pt:7
-msgid "&laquo; Previous"
-msgstr ""
 
 #: /src/schooltool/term/browser/configure.zcml:31
 msgid "Cancel School in Emergency"
@@ -4772,12 +3544,6 @@ msgstr ""
 msgid "Please enter the replacement date below."
 msgstr "Пожалуйста, введите ниже изменяемую дату"
 
-#: /src/schooltool/term/browser/templates/emergency2.pt:3
-#: /src/schooltool/term/browser/templates/emergency_select.pt:3
-#: /src/schooltool/term/browser/templates/emergency_select.pt:6
-msgid "Emergency day"
-msgstr ""
-
 #: /src/schooltool/term/browser/templates/emergency2.pt:32
 msgid "Replacement"
 msgstr ""
@@ -4809,7 +3575,8 @@ msgid "[popup calendar]"
 msgstr "[календарь]"
 
 #: /src/schooltool/term/browser/templates/term_add.pt:34
-msgid "Please specify which days are school days, and which days are holidays."
+msgid ""
+"Please specify which days are school days, and which days are holidays."
 msgstr ""
 
 #: /src/schooltool/term/browser/templates/term_add.pt:41
@@ -4831,20 +3598,6 @@ msgstr "Праздники"
 msgid "Toggle the following days of week:"
 msgstr ""
 
-#: /src/schooltool/term/browser/templates/term_add.pt:75
-#: /src/schooltool/term/browser/templates/term.pt:26
-msgid "${month} ${year}"
-msgstr ""
-
-#: /src/schooltool/term/browser/templates/term_add.pt:90
-#: /src/schooltool/term/browser/templates/term.pt:41
-msgid "Week ${week_number}"
-msgstr "Неделя ${week_number}"
-
-#: /src/schooltool/term/browser/term.py:122
-msgid "Add new term"
-msgstr ""
-
 #: /src/schooltool/term/browser/term.py:145
 #: /src/schooltool/term/browser/term.py:222
 msgid "Refresh"
@@ -4861,23 +3614,9 @@ msgstr "Обновить"
 msgid "Next"
 msgstr "Следующий"
 
-#: /src/schooltool/term/browser/term.py:163
-msgid "Add term"
-msgstr ""
-
 #: /src/schooltool/term/browser/term.py:237
 msgid "Save changes"
 msgstr "Сохранить изменения"
-
-#. Default: ""
-#: /src/schooltool/term/browser/term.py:253
-msgid "Change information for ${term_title}"
-msgstr "Изменить информацию для ${term_title}"
-
-#: /src/schooltool/term/browser/term.py:268
-#: /src/schooltool/term/browser/term.py:291
-msgid "Term must begin before it ends."
-msgstr ""
 
 #: /src/schooltool/term/browser/term.py:61
 msgid "Start date"
@@ -4886,18 +3625,6 @@ msgstr "Дата начала"
 #: /src/schooltool/term/browser/term.py:63
 msgid "End date"
 msgstr "Дата окончания"
-
-#: /src/schooltool/term/help/configure.zcml:8
-msgid "Add a term"
-msgstr ""
-
-#: /src/schooltool/term/help/term_add.pt:6
-msgid "Term Search Help"
-msgstr ""
-
-#: /src/schooltool/term/help/term_container.pt:6
-msgid "Terms in SchoolTool"
-msgstr ""
 
 #: /src/schooltool/term/help/term_container.pt:8
 msgid ""
@@ -4910,29 +3637,13 @@ msgid ""
 "school, but you cannot express a relationship between terms.</p> <h3>How do "
 "I...</h3> <ul> <li><strong>Add a term:</strong> Select <code>New Term</code> "
 "from the <code>Actions</code> menu.</li> <li><strong>Edit a term:</strong> "
-"Click on the term. Then select <code>Edit</code> from the <code>Actions</"
-"code> menu.</li> <li><strong>Delete a term:</strong> Check the box next to "
-"the name of the term and click <code>Delete</code>. Only delete terms if you "
-"have made a mistake while creating them but you have not used them yet. You "
-"should <strong>not</strong> delete terms simply because they are over, or "
-"you will lose important data.</li> </ul>"
+"Click on the term. Then select <code>Edit</code> from the "
+"<code>Actions</code> menu.</li> <li><strong>Delete a term:</strong> Check "
+"the box next to the name of the term and click <code>Delete</code>. Only "
+"delete terms if you have made a mistake while creating them but you have not "
+"used them yet. You should <strong>not</strong> delete terms simply because "
+"they are over, or you will lose important data.</li> </ul>"
 msgstr ""
-
-#: /src/schooltool/term/term.py:300
-msgid "Term date is not in the school year."
-msgstr ""
-
-#: /src/schooltool/term/tests/__init__.py:81
-msgid "Set the date for the school"
-msgstr ""
-
-#: /src/schooltool/timetable/__init__.py:196
-msgid "Unbound timetable."
-msgstr ""
-
-#: /src/schooltool/timetable/browser/__init__.py:694
-msgid "Invalid date. Please use YYYY-MM-DD format."
-msgstr "Недопустимая дата. Пожалуйста, используйте формат YYYY-MM-DD"
 
 #: /src/schooltool/timetable/browser/__init__.py:698
 msgid "The date does not belong to any term."
@@ -4953,11 +3664,6 @@ msgstr "Новое расписание"
 #: /src/schooltool/timetable/browser/configure.zcml:39
 msgid "Add Timetable"
 msgstr "Добавить расписание"
-
-#: /src/schooltool/timetable/browser/event.py:42
-#: /src/schooltool/timetable/browser/configure.zcml:23
-msgid "Timetables"
-msgstr "Расписания"
 
 #: /src/schooltool/timetable/browser/event.py:53
 msgid "Modify event information"
@@ -4995,11 +3701,6 @@ msgstr "Период 1"
 msgid "Period ${number}"
 msgstr "Период ${number}"
 
-#. Default: ""
-#: /src/schooltool/timetable/browser/schema.py:94
-msgid "Timetable schema ${schema}"
-msgstr "Схема расписания ${schema}"
-
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:114
 msgid ""
 "Timetable day always coincides with the day of week (i.e. on Mondays the "
@@ -5016,8 +3717,8 @@ msgstr ""
 msgid ""
 "Third, define the time and duration of periods when they fall on certain "
 "days of week. Use one of the the following format: <tt>HH:MM</tt> (also, "
-"don't forget to specify the duration in the text box below) or <tt>HH:MM-HH:"
-"MM</tt> (when you want to specify both endpoints explicitly, e.g., 9:30-"
+"don't forget to specify the duration in the text box below) or <tt>HH:MM-"
+"HH:MM</tt> (when you want to specify both endpoints explicitly, e.g., 9:30-"
 "10:15). It is not necessary to define all periods for all days of week, "
 "omissions will just cause that period to be skipped if it happens to fall on "
 "that day of week. If the list of periods is not up to date with the changes "
@@ -5039,10 +3740,6 @@ msgid ""
 "Finally, make sure the information in this form is correct, because the only "
 "way to correct it will be to remove this timetable schema and recreate it."
 msgstr ""
-
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:197
-msgid "Create timetable schema"
-msgstr "Создать схему расписания"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:36
 msgid "First, please define the days and periods of the timetable."
@@ -5094,16 +3791,6 @@ msgstr "Календарь расписания"
 msgid "TT"
 msgstr "Расп"
 
-#: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:66
-msgid ""
-"<a href=\"#\" onclick=\"$('#more_overlays').toggle();return false;\">More..."
-"</a>"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:95
-msgid "Manage..."
-msgstr ""
-
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:101
 msgid ""
 "Note: if a section appears in more than one slot, all of them have to be set "
@@ -5126,11 +3813,6 @@ msgstr "Предмет"
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:34
 msgid "Schema"
 msgstr "Схема"
-
-#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:4
-#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:10
-msgid "Scheduling for ${person}"
-msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:43
 msgid "Choose"
@@ -5157,22 +3839,6 @@ msgstr "Конфликт."
 #: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:10
 msgid "Are you sure you want to delete the selected school timetables?"
 msgstr "Вы действительно хотите удалить выбранное школьное расписание?"
-
-#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:17
-#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:19
-msgid "There are no timetable schemas defined."
-msgstr ""
-
-#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:24
-msgid "Choose school timetable to use"
-msgstr "Выберите школьное расписание"
-
-#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:4
-#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:11
-#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:4
-#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:12
-msgid "Scheduling for ${section}"
-msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:81
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:107
@@ -5201,40 +3867,9 @@ msgstr "Название периода (необяз.)"
 msgid "Period start time"
 msgstr "Начало периода"
 
-#: /src/schooltool/timetable/browser/templates/simpletts.pt:38
-msgid "Period end time"
-msgstr ""
-
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:60
 msgid "Create"
 msgstr "Создать"
-
-#: /src/schooltool/timetable/browser/templates/specialday_change.pt:13
-msgid ""
-"You can adjust the start and end times of periods for ${date} in the form "
-"below. In order to remove a period from the day, just delete the period's "
-"start and end times."
-msgstr ""
-
-#: /src/schooltool/timetable/browser/templates/specialday_change.pt:28
-msgid "Period title"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/templates/specialday_change.pt:29
-msgid "Original start"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/templates/specialday_change.pt:30
-msgid "Original end"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/templates/specialday_change.pt:31
-msgid "New start"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/templates/specialday_change.pt:32
-msgid "New end"
-msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:62
 msgid "Modify"
@@ -5257,30 +3892,6 @@ msgstr ""
 msgid "Choose a special day"
 msgstr "Выберите особый день"
 
-#: /src/schooltool/timetable/browser/templates/timetable-add.pt:13
-msgid "Create a New Timetable"
-msgstr "Создать новое расписание"
-
-#: /src/schooltool/timetable/browser/templates/timetable-add.pt:15
-msgid "Select school timetable to use"
-msgstr "Выбрать школьное расписание"
-
-#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:10
-msgid "Are you sure you want to delete the selected timetables?"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:26
-msgid "For term:"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:29
-msgid "Using timetable:"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
-msgid "Default Timetable Schema:"
-msgstr ""
-
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:46
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:53
 msgid "Not Selected"
@@ -5290,11 +3901,6 @@ msgstr "Не выбрано"
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
 msgid "change-button"
 msgstr "Изменить"
-
-#: /src/schooltool/timetable/browser/templates/timetable_list.pt:4
-#: /src/schooltool/timetable/browser/templates/timetable_list.pt:11
-msgid "Timetables for ${object}"
-msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetableschema.pt:33
 msgid "Homeroom"
@@ -5306,27 +3912,6 @@ msgid ""
 "create a <a href=\"simpleadd.html\">simple weekly timetable schema</a>, or "
 "use a more complex <a href=\"complexadd.html\">advanced adding form</a>."
 msgstr ""
-
-#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:3
-#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:6
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:3
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:6
-#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:3
-#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:6
-#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:3
-#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:6
-#: /src/schooltool/timetable/browser/templates/ttwizard_choice.pt:3
-#: /src/schooltool/timetable/browser/templates/ttwizard_choice.pt:6
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:3
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:6
-#: /src/schooltool/timetable/browser/templates/simpletts.pt:3
-#: /src/schooltool/timetable/browser/templates/simpletts.pt:6
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:3
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:6
-#: /src/schooltool/timetable/browser/templates/ttwizard.pt:3
-#: /src/schooltool/timetable/browser/templates/ttwizard.pt:6
-msgid "New timetable schema"
-msgstr "Новая схема расписания"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:261
 msgid ""
@@ -5363,10 +3948,6 @@ msgstr ""
 msgid "Same time each day"
 msgstr "Одно и то же время каждый день"
 
-#: /src/schooltool/timetable/browser/ttwizard.py:326
-msgid "Different times"
-msgstr "Различное время"
-
 #: /src/schooltool/timetable/browser/ttwizard.py:345
 msgid ""
 "Do start and end times vary based on the day of the week (Monday - Friday) "
@@ -5386,32 +3967,18 @@ msgid ""
 "Enter start and end times for each slot, one slot (HH:MM - HH:MM) per line."
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/timetable/browser/ttwizard.py:428
-#: /src/schooltool/timetable/browser/ttwizard.py:485
-msgid "Not a valid time slot: $slot."
-msgstr ""
-
 #: /src/schooltool/timetable/browser/ttwizard.py:432
 msgid "Please enter at least one time slot."
 msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:456
 msgid ""
-"Enter start and end times for each slot on each day, one slot (HH:MM - HH:"
-"MM) per line."
+"Enter start and end times for each slot on each day, one slot (HH:MM - "
+"HH:MM) per line."
 msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:532
 msgid "Do periods have names or are they simply designated by time?"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/ttwizard.py:535
-msgid "Have names"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/ttwizard.py:536
-msgid "Designated by time"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:572
@@ -5429,10 +3996,6 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:613
 msgid "Is the sequence of periods each day the same or different?"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/ttwizard.py:615
-msgid "Same"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:616
@@ -5456,11 +4019,6 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:678
 msgid "Please put the periods in order for each day:"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/timetable/browser/ttwizard.py:714
-msgid "$period on day $day"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:735
@@ -5490,262 +4048,1421 @@ msgstr "подтвердите пароль"
 msgid "Supplied passwords are not identical"
 msgstr "Введённые пароли не совпадают"
 
-#~ msgid "Activities"
-#~ msgstr "Виды деятельности"
-
-#, fuzzy
-#~ msgid "Sheet1"
-#~ msgstr "Улица"
-
-#, fuzzy
-#~ msgid "Add new activity"
-#~ msgstr "Добавить вид деятельности"
-
-#~ msgid "Add an External Activity"
-#~ msgstr "Добавить дополнительные занятия"
-
-#~ msgid "Edit External Activity"
-#~ msgstr "Редактировать дополнительный занятия"
-
-#~ msgid "$value is not a valid weight."
-#~ msgstr "Недопустимый вес $value."
-
-#~ msgid "Category weights must add up to 100."
-#~ msgstr "Веса категорий в сумме не должны превышать 100."
-
-#~ msgid "The external activity couldn't be found"
-#~ msgstr "Дополнительные занятия не найдены"
-
-#~ msgid "External Activity"
-#~ msgstr "Дополнительные занятия"
-
-#~ msgid "The external activity"
-#~ msgstr "Дополнительные занятия"
-
-#~ msgid "remove-button"
-#~ msgstr "Удалить"
-
-#~ msgid "add-button"
-#~ msgstr "Добавить"
-
-#~ msgid "Manage Activity Categories"
-#~ msgstr "Изменить категории"
-
-#~ msgid "Categories"
-#~ msgstr "Категории"
-
-#~ msgid "New Category"
-#~ msgstr "Новая категория"
-
-#~ msgid "Default Category"
-#~ msgstr "Категория по умолчанию"
-
-#~ msgid "Categories successfully deleted."
-#~ msgstr "Категории успешно удалены."
-
-#~ msgid "Category successfully added."
-#~ msgstr "Категория успешно добавлена"
-
-#~ msgid "Default category successfully changed."
-#~ msgstr "Категория по умолчанию успешно сменена."
-
-#, fuzzy
-#~ msgid "Summary"
-#~ msgstr "Воскресенье"
-
-#, fuzzy
-#~ msgid "Template"
-#~ msgstr "Шаблоны"
-
-#, fuzzy
-#~ msgid "Deploy Report Worksheet Template"
-#~ msgstr "Удалить рабочий лист"
-
-#~ msgid "The grade $value for activity $name is not valid."
-#~ msgstr "Оценка $value за вид деятельности $name неправильна."
-
-#~ msgid "The grade $value for $name is not valid."
-#~ msgstr "Оценка $value для $name некорректна"
-
-#~ msgid "Student Name"
-#~ msgstr "Имя ученика"
-
-#~ msgid "Activity Name"
-#~ msgstr "Название вида деятельности"
-
-#~ msgid "(Due) Date"
-#~ msgstr "До (дата)"
-
-#~ msgid "Modification Date"
-#~ msgstr "Дата изменения"
-
-#~ msgid "Max. Score"
-#~ msgstr "Макс. балл"
-
-#~ msgid "Grade ${name}"
-#~ msgstr "Оценка ${name}"
-
-#~ msgid "(sort)"
-#~ msgstr "(сортировка)"
-
-#~ msgid "Total"
-#~ msgstr "Итого"
-
-#~ msgid "Apply a grade for all students:"
-#~ msgstr "Поставить оценки всем студентам:"
-
-#, fuzzy
-#~ msgid "New Column"
-#~ msgstr "Новый курс"
-
-#~ msgid "Activity"
-#~ msgstr "Вид деятельности"
-
-#~ msgid "Grade"
-#~ msgstr "Класс"
-
-#, fuzzy
-#~ msgid "Student"
-#~ msgstr "Студенты"
-
-#, fuzzy
-#~ msgid "Report Cards"
-#~ msgstr "Импортировать предметы"
-
-#, fuzzy
-#~ msgid "Existing Score System"
-#~ msgstr "Существующая система оценивания"
-
-#~ msgid "Delete Worksheet"
-#~ msgstr "Удалить рабочий лист"
-
-#~ msgid "Worksheet"
-#~ msgstr "Рабочий лист"
-
-#~ msgid "Assignment"
-#~ msgstr "Назначение"
-
-#~ msgid "Essay"
-#~ msgstr "Реферат"
-
-#~ msgid "Exam"
-#~ msgstr "Экзамен"
-
-#~ msgid "Homework"
-#~ msgstr "Домашняя работа"
-
-#~ msgid "Journal"
-#~ msgstr "Журнал"
-
-#~ msgid "Lab"
-#~ msgstr "Лабораторная"
-
-#~ msgid "Presentation"
-#~ msgstr "Презентация"
-
-#~ msgid "Project"
-#~ msgstr "Проект"
-
-#, fuzzy
-#~ msgid "Due Date"
-#~ msgstr "До (дата)"
-
-#~ msgid "A detailed description of the activity."
-#~ msgstr "Подробное описание деятельности."
-
-#~ msgid "Category"
-#~ msgstr "Категория"
-
-#~ msgid "The activity category"
-#~ msgstr "Категория деятельности"
-
-#~ msgid "Scoresystem"
-#~ msgstr "Система оценивания"
-
-#~ msgid "The activity scoresystem."
-#~ msgstr "Система оценивания занятий."
-
-#, fuzzy
-#~ msgid "Columns"
-#~ msgstr "Количество"
-
-#~ msgid "Worksheets in this gradebook."
-#~ msgstr "Рабочие листы в этом журнале отметок."
-
-#~ msgid "Activities in this gradebook."
-#~ msgstr "Занятия в этом журнале отметок."
-
-#~ msgid "Students in this gradebook."
-#~ msgstr "Ученики в этом журнале отметок."
-
-#~ msgid "External Activity Source"
-#~ msgstr "Источник дополнительных занятий"
-
-#~ msgid "The registration name of the source"
-#~ msgstr "Регистрационное имя источника"
-
-#~ msgid "External Activity ID"
-#~ msgstr "Идентификатор дополнительных занятий"
-
-#~ msgid "A unique identifier for the external activity"
-#~ msgstr "Уникальный идентификатор для дополнительных занятий"
-
-#~ msgid "Points"
-#~ msgstr "Очки"
-
-#~ msgid "Points value to calculate the activity grade"
-#~ msgstr "Очки для подсчёта оценки деятельности"
-
-#~ msgid "A brief title of the external activities source"
-#~ msgstr "Краткое название источника дополнительных занятий"
-
-#~ msgid "A brief title of the external activity."
-#~ msgstr "Краткое название дополнительных занятий."
-
-#~ msgid "A detailed description of the external activity."
-#~ msgstr "Подробное описание дополнительных занятий."
-
-#~ msgid "Requirement index"
-#~ msgstr "Список требований"
-
-#~ msgid "Required input is missing."
-#~ msgstr "Не введены требуемые данные"
-
-#~ msgid "Exisiting Score System"
-#~ msgstr "Существующая система оценивания"
-
-#~ msgid "Custom score system"
-#~ msgstr "Пользовательская система оценивания"
-
-#~ msgid "Edit Activity"
-#~ msgstr "Редактировать вид деятельности"
-
-#~ msgid "Average"
-#~ msgstr "Среднее"
-
-#~ msgid "Location: %s"
-#~ msgstr "Размещение: %s"
-
-#~ msgid "Booked resources: %s"
-#~ msgstr "Закрепленные ресурсы: %s"
-
-#~ msgid "Calendar for %s"
-#~ msgstr "Календарь для %s"
-
-#~ msgid "Change the resources for this section."
-#~ msgstr "Изменить ресурсы для этого раздела"
-
-#~ msgid "book resources"
-#~ msgstr "книжные ресурсы"
-
-#~ msgid "View Final Grades"
-#~ msgstr "Просмотреть итоговые оценки"
-
-#~ msgid "<strong>Release Manager:</strong> Brian Sutherland"
-#~ msgstr "<strong>Управляющий выпуском:</strong> Brian Sutherland"
-
-#~ msgid "New Enum Field"
-#~ msgstr "Новое перечислимое поле"
-
-#~ msgid "Excel Import"
-#~ msgstr "Импорт в Excel"
+#: /src/schooltool/gradebook/browser/configure.zcml:113
+msgid "Add a Worksheet"
+msgstr "Добавить рабочий лист"
+
+#: /src/schooltool/gradebook/browser/configure.zcml:125
+msgid "Add a Report Worksheet"
+msgstr "Добавить лист отчта"
+
+#: /src/schooltool/gradebook/browser/configure.zcml:137
+msgid "Edit Worksheet"
+msgstr "Редактировать рабочий лист"
+
+#: /src/schooltool/gradebook/browser/configure.zcml:149
+msgid "Edit Report Worksheet"
+msgstr "Править лист отчёта"
+
+#: /src/schooltool/gradebook/browser/configure.zcml:213
+msgid "New Report Activity"
+msgstr "Новый отчёт"
+
+#: /src/schooltool/gradebook/browser/configure.zcml:260
+msgid "New Report Worksheet"
+msgstr "Новый лист отчёта"
+
+#: /src/schooltool/gradebook/browser/configure.zcml:267
+msgid "New Worksheet"
+msgstr "Новый рабочий лист"
+
+#: /src/schooltool/gradebook/browser/configure.zcml:274
+msgid "Export XLS"
+msgstr "экспортировать XLS"
+
+#: /src/schooltool/gradebook/browser/configure.zcml:281
+#: /src/schooltool/gradebook/browser/configure.zcml:304
+msgid "Return to Gradebook"
+msgstr "Вернуться в журнал успеваемости"
+
+#: /src/schooltool/gradebook/browser/configure.zcml:297
+#: /src/schooltool/gradebook/browser/configure.zcml:327
+msgid "New External Activity"
+msgstr "Новый вид дополнительных занятий"
+
+#: /src/schooltool/gradebook/browser/configure.zcml:313
+msgid "Worksheets"
+msgstr "Рабочие листы"
+
+#: /src/schooltool/gradebook/browser/configure.zcml:334
+msgid "Manage Activities"
+msgstr "Редактировать виды деятельности"
+
+#: /src/schooltool/gradebook/browser/configure.zcml:341
+msgid "Weight Categories"
+msgstr "Весовые категории"
+
+#: /src/schooltool/gradebook/browser/configure.zcml:350
+msgid "Update Grades"
+msgstr "Обновить оценки"
+
+#: /src/schooltool/gradebook/browser/configure.zcml:419
+#: /src/schooltool/gradebook/browser/configure.zcml:437
+msgid "Deploy Report Worksheet"
+msgstr ""
+
+#: /src/schooltool/gradebook/browser/configure.zcml:444
+msgid "Layout Report Card"
+msgstr ""
+
+#: /src/schooltool/gradebook/browser/configure.zcml:469
+#: /src/schooltool/gradebook/browser/configure.zcml:486
+msgid "Print Report Card"
+msgstr "Печатать карточку отчёта"
+
+#: /src/schooltool/gradebook/browser/configure.zcml:72
+msgid "Report Sheet Templates"
+msgstr "Шаблоны отчётов"
+
+#: /src/schooltool/app/app.py:201
+msgid "Your School"
+msgstr "Ваша школа"
+
+#: /src/schooltool/app/browser/cal.py:1145
+msgid "Go to next month"
+msgstr "Перейти к следующему месяцу"
+
+#: /src/schooltool/app/browser/cal.py:1146
+msgid "Go to current month"
+msgstr "Перейти к текущему месяцу"
+
+#: /src/schooltool/app/browser/cal.py:1147
+msgid "Go to previous month"
+msgstr "Перейти к предыдущему месяцу"
+
+#: /src/schooltool/app/browser/cal.py:1197
+msgid "Go to next year"
+msgstr "Перейти к следующему году"
+
+#: /src/schooltool/app/browser/cal.py:1198
+msgid "Go to current year"
+msgstr "Перейти к текущему году"
+
+#: /src/schooltool/app/browser/cal.py:1199
+msgid "Go to previous year"
+msgstr "Перейти к предыдущему году"
+
+#: /src/schooltool/app/browser/cal.py:1269
+msgid "Go to the next day"
+msgstr "Перейти к следующему дню"
+
+#: /src/schooltool/app/browser/cal.py:1270
+msgid "Go to today"
+msgstr "Перейти к текущему дню"
+
+#: /src/schooltool/app/browser/cal.py:1271
+msgid "Go to the previous day"
+msgstr "Перейти к предыдущему дню"
+
+#: /src/schooltool/app/browser/cal.py:925
+msgid "Go to next week"
+msgstr "Перейти к следующей неделе"
+
+#: /src/schooltool/app/browser/cal.py:926
+msgid "Go to current week"
+msgstr "Перейти к текущей неделе"
+
+#: /src/schooltool/app/browser/cal.py:927
+msgid "Go to previous week"
+msgstr "Перейти к предыдущей неделе"
+
+#: /src/schooltool/app/browser/csvimport.py:469
+msgid "The first row of the CSV file must contain the timetable schema id."
+msgstr ""
+"Первая строка CSV-файла должна содержать в себе идентификатор схемы "
+"расписания"
+
+#: /src/schooltool/app/browser/templates/about.pt:10
+msgid ""
+"SchoolTool is free administrative software for schools around the world. The "
+"goals of the project are to create a simple turnkey student information "
+"system or managment information system for primary and secondary schools, as "
+"well as a framework for building customized applications and configurations "
+"for individual schools or states."
+msgstr ""
+"SchoolTool - это свободное программное обеспечение для управления школами по "
+"всему миру. Целью этого проекта является как создание \"под ключ\" простой "
+"информационной системы об учениках или информационной системы управления "
+"начальной и средней школой, так и создание фреймворка для написания "
+"собственных приложений и конфигураций для конкретной школы или другого "
+"учебного заведения."
+
+#: /src/schooltool/app/browser/templates/about.pt:16
+msgid ""
+"SchoolTool is built on a 100% open source software stack, written in <a "
+"href=\"http://python.org\">Python</a> using the <a "
+"href=\"http://zope.org\">Zope 3</a> framework."
+msgstr ""
+"SchoolTool  - это на 100% \"open source\" приложение, написанное на <a "
+"href=\"http://python.org\">Python</a> с использованием фреймворка <a "
+"href=\"http://zope.org\">Zope 3</a>."
+
+#: /src/schooltool/app/browser/templates/about.pt:20
+msgid ""
+"SchoolTool is licensed under the <a href=\"http://www.gnu.org/licenses/gpl-"
+"2.0.html\">GNU General Public License, Version 2</a>."
+msgstr ""
+"SchoolTool лицензируется на условиях <a "
+"href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GNU General Public "
+"License, Version 2</a>."
+
+#: /src/schooltool/app/browser/templates/about.pt:24
+msgid "For more information:"
+msgstr "Для дополнительной информации"
+
+#: /src/schooltool/app/browser/templates/about.pt:27
+msgid "<a href=\"http://schooltool.org\">Website</a>"
+msgstr ""
+"<a href=\"http://schooltool.org\">Официальный сайт проекта Schooltool</a>"
+
+#: /src/schooltool/app/browser/templates/about.pt:28
+msgid ""
+"<a href=\"https://launchpad.net/schooltool\">Launchpad project page</a>"
+msgstr ""
+"<a href=\"https://launchpad.net/schooltool\">Официальный сайт проекта "
+"Launchpad</a>"
+
+#: /src/schooltool/app/browser/templates/about.pt:29
+msgid ""
+"<a href=\"http://lists.schooltool.org/mailman/listinfo\"> Mailing lists</a>"
+msgstr ""
+"<a href=\"http://lists.schooltool.org/mailman/listinfo\">Список рассылки</a>"
+
+#: /src/schooltool/app/browser/templates/about.pt:31
+msgid "IRC channel: #schooltool on freenode.net"
+msgstr "IRC-канал: #schooltool на freenode.net"
+
+#: /src/schooltool/app/browser/templates/about.pt:36
+msgid ""
+"<strong>Founder and funder: </strong> <a "
+"href=\"http://markshuttleworth.com\">Mark Shuttleworth</a>"
+msgstr ""
+"<strong>Основатель и спонсор: </strong> <a "
+"href=\"http://markshuttleworth.com\">Марк Шаттлворт</a>"
+
+#: /src/schooltool/app/browser/templates/about.pt:39
+msgid ""
+"<strong>Project Manager:</strong> Tom Hoffman (<a "
+"href=\"mailto:hoffman@schooltool.org\">email</a>)"
+msgstr ""
+"<strong>Менеджер проекта:</strong> Том Хоффман(<a "
+"href=\"mailto:hoffman@schooltool.org\">email</a>)"
+
+#: /src/schooltool/app/browser/templates/about.pt:42
+msgid "<strong>Lead Developer:</strong> Ignas Mikalajūnas"
+msgstr "<strong>Ведущий разработчик:</strong> Игнас Микалаюнас"
+
+#: /src/schooltool/app/browser/templates/about.pt:45
+msgid "Release Managers:"
+msgstr "Ответственные за выпуск"
+
+#: /src/schooltool/app/browser/templates/about.pt:5
+msgid "About SchoolTool"
+msgstr "О SchoolTool"
+
+#: /src/schooltool/app/browser/templates/about.pt:51
+msgid "Contributors:"
+msgstr ""
+
+#. Default: ""
+#. "This is an Atom formatted XML site feed. It is intended to be viewed\n"
+#. "      in a Newsreader or syndicated to another site. Please visit"
+#: /src/schooltool/app/browser/templates/cal_atom.pt:43
+msgid "atom_description"
+msgstr ""
+
+#. Default: "Atom Enabled"
+#: /src/schooltool/app/browser/templates/cal_atom.pt:47
+msgid "atom_enabled"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/event_add.pt:348
+msgid "Booked Resources"
+msgstr "Заказанные ресурсы"
+
+#: /src/schooltool/app/browser/templates/manage_menu.pt:3
+#: /src/schooltool/app/browser/configure.zcml:608
+msgid "Manage"
+msgstr "Управление"
+
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:30
+msgid ""
+"The first row of the file must contain the id of the <strong>timetable "
+"schema</strong> which will be used for the new timetables. The id of a "
+"timetable schema can be found by going to its view page under School "
+"Timetables for the school year."
+msgstr ""
+"Первая строка файла должна содержать идентификатор <strong>схемы "
+"расписания</strong>, которая будет использоваться для создания новых "
+"расписаний. Идентификатор расписания можно найти на странице просмотра под "
+"\"Школьными расписаниями\" на учебный год."
+
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:37
+msgid ""
+"The second row should be empty. After that, several section descriptions may "
+"follow. They are separated by an extra carriage return (i.e., a blank line)."
+msgstr ""
+"Следующая строка должна быть пустой. После неё может идти несколько описаний "
+"разделов. Все они отделяются друг от друга дополнительным символом возврата "
+"каретки (т.е. пустой строкой)."
+
+#. Default: ""
+#. "\"three-day\"\n"
+#. "\"\",\"\",\"\"\n"
+#. "\"philosophy\",\"lorch\"\n"
+#. "\"Monday\",\"A\"\n"
+#. "\"Monday\",\"B\"\n"
+#. "\"Tuesday\",\"C\"\n"
+#. "\"***\"\n"
+#. "\"johnny\"\n"
+#. "\"billy\"\n"
+#. "\"\"\n"
+#. "\"literature\",\"guzman\"\n"
+#. "\"Wednesday\",\"B\"\n"
+#. "\"Wednesday\",\"C\"\n"
+#. "\"***\"\n"
+#. "\"johnny\"\n"
+#. "\"pete\""
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:56
+msgid ""
+"\n"
+"\"three-day\"\n"
+"\"\",\"\",\"\"\n"
+"\"philosophy\",\"lorch\"\n"
+"\"Monday\",\"A\"\n"
+"\"Monday\",\"B\"\n"
+"\"Tuesday\",\"C\"\n"
+"\"***\"\n"
+"\"johnny\"\n"
+"\"billy\"\n"
+"\"\"\n"
+"\"literature\",\"guzman\"\n"
+"\"Wednesday\",\"B\"\n"
+"\"Wednesday\",\"C\"\n"
+"\"***\"\n"
+"\"johnny\"\n"
+"\"pete\"\n"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/configure.zcml:143
+msgid "New Text Field"
+msgstr "Новое текстовое поле"
+
+#: /src/schooltool/basicperson/browser/configure.zcml:150
+msgid "New Date Field"
+msgstr "Новое поле данных"
+
+#: /src/schooltool/basicperson/browser/configure.zcml:157
+msgid "New Selection List Field"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/configure.zcml:33
+msgid "Export"
+msgstr "Экспорт"
+
+#: /src/schooltool/basicperson/browser/configure.zcml:42
+msgid "Advisors"
+msgstr "Консультанты"
+
+#: /src/schooltool/basicperson/browser/configure.zcml:51
+msgid "Advisees"
+msgstr "Обучаемые"
+
+#: /src/schooltool/basicperson/browser/csvimport.py:53
+msgid "first name may not be empty"
+msgstr "имя не может быть пустым"
+
+#: /src/schooltool/basicperson/browser/csvimport.py:57
+msgid "last name may not be empty"
+msgstr "фамилия не может быть пустой"
+
+#: /src/schooltool/basicperson/browser/demographics.py:133
+msgid "Add new Field"
+msgstr "Добавить новое поле"
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/demographics.py:212
+msgid "Change information for ${field_title}"
+msgstr "Изменить информацию для ${field_title}"
+
+#: /src/schooltool/basicperson/browser/person.py:170
+msgid "Passwords do not match"
+msgstr "Пароли не совпадают"
+
+#: /src/schooltool/basicperson/browser/person.py:305
+msgid "Current Advisors"
+msgstr "Текущие консультанты"
+
+#: /src/schooltool/basicperson/browser/person.py:306
+msgid "Add Advisors"
+msgstr "Добавить консультантов"
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:310
+msgid "Advisors of ${person}"
+msgstr "Консультанты для ${person}"
+
+#: /src/schooltool/basicperson/browser/person.py:329
+msgid "Current Advisees"
+msgstr "Текущие обучаемые"
+
+#: /src/schooltool/basicperson/browser/person.py:330
+msgid "Add Advisees"
+msgstr "Добавить обучаемых"
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:334
+msgid "Advisees of ${person}"
+msgstr "Обучаемый ${person}"
+
+#: /src/schooltool/basicperson/browser/person.py:75
+msgid "Confirm"
+msgstr "Подтвердить"
+
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:29
+msgid ""
+"CSV data <strong>must</strong> contain a user name a first name and a last "
+"name. An optional password <strong>may</strong> be included as well."
+msgstr ""
+"Данные CSV <strong>обязаны</strong> содержать имя пользователя, имя и "
+"фамилию. Так же <strong>может</strong> присутствовать необязательный пароль."
+
+#. Default: ""
+#. "jjones, Jimmy, Jones\n"
+#. "jbjones, Jim Bob, Jones, r2m45J\n"
+#. "howard, Howard, Jobs"
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:35
+msgid ""
+"\n"
+"jjones, Jimmy, Jones\n"
+"jbjones, Jim Bob, Jones, r2m45J\n"
+"howard, Howard, Jobs\n"
+msgstr ""
+"\n"
+"jjones, Jimmy, Jones\n"
+"jbjones, Jim Bob, Jones, r2m45J\n"
+"howard, Howard, Jobs\n"
+
+#: /src/schooltool/basicperson/interfaces.py:122
+msgid "The title of this Field Description"
+msgstr "Наименование этого поля описания"
+
+#: /src/schooltool/basicperson/interfaces.py:126
+msgid "Unique ID of this Field Description"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:129
+msgid "Required"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:130
+msgid "Whether this Field is required or not"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:137
+msgid "List of values"
+msgstr "Список значений"
+
+#: /src/schooltool/contact/browser/configure.zcml:31
+msgid "New Contact"
+msgstr "Новый контакт"
+
+#: /src/schooltool/contact/browser/configure.zcml:46
+#: /src/schooltool/contact/browser/configure.zcml:68
+msgid "Contacts"
+msgstr "Контакты"
+
+#. Default: ""
+#: /src/schooltool/contact/browser/contact.py:121
+msgid "Add new contact for ${person}"
+msgstr "Добавить новые контакты для ${person}"
+
+#. Default: ""
+#: /src/schooltool/contact/browser/contact.py:151
+msgid "Change information for ${first_name} ${last_name}"
+msgstr "Изменить информацию для ${first_name} ${last_name}"
+
+#: /src/schooltool/contact/browser/contact.py:171
+msgid "Contact index"
+msgstr "Индекс контакта"
+
+#: /src/schooltool/contact/browser/contact.py:204
+msgid "Address"
+msgstr "Адресс"
+
+#: /src/schooltool/contact/browser/contact.py:71
+msgid "Add new contact"
+msgstr "Добавить новый контакт"
+
+#: /src/schooltool/contact/browser/relationship.py:40
+msgid "Assigned Contacts"
+msgstr "Подписанные контакты"
+
+#: /src/schooltool/contact/browser/relationship.py:41
+msgid "Assign existing contact"
+msgstr "Подписать существующий контакт"
+
+#. Default: ""
+#: /src/schooltool/contact/browser/relationship.py:45
+msgid "Manage contacts of ${person}"
+msgstr "Управлять контактами принадлежащими ${person}"
+
+#. Default: "Invert Selection"
+#: /src/schooltool/contact/browser/templates/manage_contacts.pt:31
+#: /src/schooltool/contact/browser/templates/manage_contacts.pt:62
+#: /src/schooltool/course/browser/templates/copy_sections.pt:74
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:49
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:71
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:30
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:52
+msgid "invert-selection-button"
+msgstr "кнопка инвертирования выбора"
+
+#: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
+msgid "Create contact"
+msgstr "создать контакт"
+
+#: /src/schooltool/contact/browser/templates/manage_contacts.pt:45
+msgid "Create new contact"
+msgstr "Создать новый контакт"
+
+#: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
+msgid "Assign"
+msgstr "Подписать"
+
+#: /src/schooltool/contact/interfaces.py:42
+msgid "Address line 1"
+msgstr "Адрес 1"
+
+#: /src/schooltool/contact/interfaces.py:44
+msgid "Address line 2"
+msgstr "Адрес 2"
+
+#: /src/schooltool/contact/interfaces.py:50
+msgid "Country"
+msgstr "Страна"
+
+#: /src/schooltool/contact/interfaces.py:60
+msgid "Mobile phone"
+msgstr "Мобильный телефон"
+
+#: /src/schooltool/contact/interfaces.py:62
+msgid "Language"
+msgstr "Язык"
+
+#: /src/schooltool/course/browser/configure.zcml:263
+msgid "Copy from prev. term"
+msgstr ""
+
+#: /src/schooltool/course/browser/course.py:106
+msgid "Please select a term."
+msgstr ""
+
+#: /src/schooltool/course/browser/course.py:111
+msgid "Selected term does not exist."
+msgstr ""
+
+#: /src/schooltool/course/browser/csvimport.py:107
+#: /src/schooltool/group/browser/csvimport.py:76
+msgid "User names must not be empty."
+msgstr "Имя пользователя не должно быть пустым"
+
+#. Default: ""
+#: /src/schooltool/course/browser/csvimport.py:115
+#: /src/schooltool/group/browser/csvimport.py:84
+msgid "\"${username}\" is not a valid username."
+msgstr "\"${username}\" не является разрешённым именем пользователя."
+
+#. Default: ""
+#: /src/schooltool/course/browser/csvimport.py:75
+msgid ""
+"Course \"${course_title}\" id \"${invalid_id}\" is invalid. ${error_message}"
+msgstr ""
+
+#: /src/schooltool/course/browser/section-member-csvimport.pt:21
+#: /src/schooltool/course/browser/configure.zcml:173
+msgid "Import Section Members"
+msgstr ""
+
+#: /src/schooltool/course/browser/section-member-csvimport.pt:4
+msgid "Upload SchoolTool section members as CSV"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:184
+msgid "No section selected."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/copy_sections.pt:106
+msgid "Copied"
+msgstr "Скопировано"
+
+#. Default: "Copy"
+#: /src/schooltool/course/browser/templates/copy_sections.pt:159
+msgid "copy-button"
+msgstr "кнопка копирования"
+
+#: /src/schooltool/course/browser/templates/copy_sections.pt:29
+msgid "Copy sections from ${prev_term} of ${schoolyear} to ${term}"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/copy_sections.pt:38
+msgid "There is no (previous) term in ${schoolyear} to copy sections from."
+msgstr ""
+
+#. Default: "Select All Visible"
+#: /src/schooltool/course/browser/templates/copy_sections.pt:66
+msgid "select-all-visible-button"
+msgstr "кнопка выбора всех видимых"
+
+#. Default: "Select None"
+#: /src/schooltool/course/browser/templates/copy_sections.pt:70
+msgid "select-none-button"
+msgstr "конка пустого выбора"
+
+#: /src/schooltool/course/browser/templates/copy_sections.pt:9
+#: /src/schooltool/course/browser/templates/link_section.pt:9
+msgid "Copy sections to ${term} of ${schoolyear}"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/copy_sections.pt:91
+#: /src/schooltool/course/browser/templates/link_section.pt:67
+msgid "Section in ${term}"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:24
+msgid ""
+"CSV data <strong>must</strong> include a course title,<strong>may</strong> "
+"include an optional course description and <strong>may</strong> include an "
+"optional course id."
+msgstr ""
+
+#. Default: ""
+#. "Ancient History, Pre-history through 1000 A.D.\n"
+#. "US History,,us-history\n"
+#. "World History, 1000 A.D. through the 20th century, history-world"
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:32
+msgid ""
+"\n"
+"Ancient History, Pre-history through 1000 A.D.\n"
+"US History,,us-history\n"
+"World History, 1000 A.D. through the 20th century, history-world\n"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:37
+msgid ""
+"The above example will create 3 courses titled 'Ancient History', 'US "
+"History' and 'World History'. The first and last course will have the "
+"descriptions 'Pre-history through 1000 A.D.' and '1000 A.D. through the 20th "
+"century' respectively. The Second course will have no description. The "
+"second and the third course will have their ids set to us-history and "
+"history-world. If you will upload a CSV with titles or ids that are already "
+"present in the database, existing courses will be updated. Ids take "
+"precedence when determining which course should be updated."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/course.pt:73
+msgid "New Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/course.pt:9
+msgid "${course} course for ${schoolyear}"
+msgstr "${course} курс для ${schoolyear}"
+
+#: /src/schooltool/course/browser/templates/course_container.pt:12
+msgid "Courses for ${schoolyear}"
+msgstr "Курсы для ${schoolyear}"
+
+#. Default: "Link"
+#: /src/schooltool/course/browser/templates/link_section.pt:130
+msgid "link-section-button"
+msgstr "кнопка выбора ссылки"
+
+#: /src/schooltool/course/browser/templates/link_section.pt:24
+msgid "Link ${section}, ${term} with a section in ${target_term}"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_section.pt:36
+msgid "There is no valid term in ${schoolyear} to pick a section from."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section.pt:11
+#: /src/schooltool/course/browser/templates/section.pt:25
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:12
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:24
+msgid "Section of ${course} -- ${section_title} for ${term} of ${schoolyear}"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section.pt:114
+msgid "edit individuals"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section.pt:114
+msgid "Change the students in this section individually"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section.pt:36
+msgid "Previous: ${course} -- ${section_title} for ${term}"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section.pt:47
+msgid "Next: ${course} -- ${section_title} for ${term}"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_container.pt:9
+#: /src/schooltool/course/browser/templates/section_container.pt:20
+msgid "Section list for ${term} of ${schoolyear}"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_edit.pt:124
+msgid "x x"
+msgstr "хх"
+
+#: /src/schooltool/course/browser/templates/section_edit.pt:60
+msgid "Linked sections"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_edit.pt:63
+msgid "Previous"
+msgstr "предыдущий"
+
+#: /src/schooltool/course/browser/templates/section_edit.pt:64
+msgid "Section in the previous term."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_edit.pt:72
+#: /src/schooltool/course/browser/templates/section_edit.pt:106
+msgid "${section_title} for ${term}"
+msgstr ""
+
+#. Default: "Unlink"
+#: /src/schooltool/course/browser/templates/section_edit.pt:75
+#: /src/schooltool/course/browser/templates/section_edit.pt:109
+msgid "unlink-section-button"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_edit.pt:85
+#: /src/schooltool/course/browser/templates/section_edit.pt:119
+msgid "Pick a section from ${term}"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_edit.pt:85
+#: /src/schooltool/course/browser/templates/section_edit.pt:119
+msgid "<a href=\"${DYNAMIC_CONTENT}\">x</a>"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_edit.pt:90
+#: /src/schooltool/course/browser/templates/section_edit.pt:124
+msgid "Not linked."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_edit.pt:98
+msgid "Section in the next term."
+msgstr ""
+
+#: /src/schooltool/course/section.py:125
+msgid "Cannot assign section as previous to itself"
+msgstr ""
+
+#: /src/schooltool/course/section.py:152
+msgid "Cannot assign section as next to itself"
+msgstr ""
+
+#: /src/schooltool/course/section.py:395
+msgid "Cannot link sections in same term"
+msgstr ""
+
+#: /src/schooltool/course/section.py:400
+msgid "Cannot link sections in different school years"
+msgstr ""
+
+#: /src/schooltool/course/section.py:404
+msgid "Sections must be in consecutive terms"
+msgstr ""
+
+#: /src/schooltool/demographics/browser/configure.zcml:167
+#: /src/schooltool/demographics/browser/configure.zcml:228
+msgid "name info"
+msgstr ""
+
+#: /src/schooltool/demographics/browser/demographics_macros.pt:4
+msgid "N"
+msgstr ""
+
+#. Default: "Apply and Next"
+#: /src/schooltool/demographics/browser/demographics_macros.pt:4
+msgid "apply-and-next-button"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/demographics/browser/personform.py:173
+msgid "Change demographics for ${fullname}"
+msgstr ""
+
+#: /src/schooltool/demographics/browser/personform.py:181
+#: /src/schooltool/basicperson/browser/configure.zcml:113
+msgid "Demographics"
+msgstr ""
+
+#: /src/schooltool/devmode/configure.zcml:27
+msgid "Introspect"
+msgstr ""
+
+#: /src/schooltool/export/configure.zcml:21
+msgid "XLS Export"
+msgstr "Экспорт из XLS"
+
+#: /src/schooltool/export/configure.zcml:6
+msgid "XLS Import"
+msgstr ""
+
+#: /src/schooltool/export/templates/import.pt:11
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:11
+#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:11
+#: /src/schooltool/person/browser/person_container_delete.pt:11
+#: /src/schooltool/person/browser/person-csvimport.pt:11
+#: /src/schooltool/person/browser/person_edit.pt:9
+#: /src/schooltool/person/browser/person_preferences.pt:9
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:11
+#: /src/schooltool/skin/templates/container.pt:11
+#: /src/schooltool/skin/templates/simple_edit.pt:7
+#: /src/schooltool/skin/templates/notfound.pt:7
+#: /src/schooltool/skin/templates/simple_add.pt:5
+#: /src/schooltool/skin/templates/table_container.pt:11
+#: /src/schooltool/skin/templates/error.pt:8
+#: /src/schooltool/skin/templates/edit_form.pt:4
+#: /src/schooltool/skin/templates/container_delete.pt:11
+msgid "<img src=\"${DYNAMIC_CONTENT}\" alt=\"x\" />"
+msgstr "<img src=\"${DYNAMIC_CONTENT}\" alt=\"x\" />"
+
+#: /src/schooltool/export/templates/import.pt:25
+msgid "Import Data"
+msgstr ""
+
+#: /src/schooltool/export/templates/import.pt:31
+msgid ""
+"In addition to entering data through SchoolTool's web interface, you can "
+"also import data from a spreadsheet using this template: ${link-to-empty-"
+"data-file}."
+msgstr ""
+
+#: /src/schooltool/export/templates/import.pt:34
+msgid ""
+"Data included in the spreadsheet will be added to data in the system; "
+"importing will not cause data to be removed."
+msgstr ""
+
+#: /src/schooltool/export/templates/import.pt:38
+msgid ""
+"Note that the import system does not handle duplicated data very well "
+"outside of the persons worksheet. That is, if you try to import a school "
+"year, for example, that already exists in the system, the import will fail "
+"with an error. Simply remove the duplicate data from the spreadsheet and run "
+"the import again. We're working on making this process even smoother."
+msgstr ""
+
+#: /src/schooltool/export/templates/import.pt:4
+msgid "Upload SchoolTool as XLS"
+msgstr ""
+
+#: /src/schooltool/export/templates/import.pt:50
+msgid ""
+"For people interested in testing and exploring SchoolTool, we provide a set "
+"of sample data: ${link-to-sample-data-file}."
+msgstr ""
+
+#: /src/schooltool/export/templates/import.pt:53
+msgid ""
+"If you are importing your own data, we highly recommend downloading the "
+"sample spreadsheet as a reference."
+msgstr ""
+
+#: /src/schooltool/export/templates/import.pt:59
+msgid "Upload XLS File"
+msgstr "Загрузить XLS-файл"
+
+#: /src/schooltool/export/templates/import.pt:61
+msgid "XLS File"
+msgstr "XLS-файл"
+
+#: /src/schooltool/group/browser/configure.zcml:122
+msgid "Import Groups Members"
+msgstr ""
+
+#: /src/schooltool/group/browser/group-csvimport.pt:4
+msgid "Upload SchoolTool groups as CSV"
+msgstr ""
+
+#: /src/schooltool/group/browser/group-member-csvimport.pt:21
+msgid "Import Group Members"
+msgstr ""
+
+#: /src/schooltool/group/browser/group-member-csvimport.pt:4
+msgid "Upload SchoolTool group members as CSV"
+msgstr ""
+
+#: /src/schooltool/group/browser/group.pt:16
+msgid "Members"
+msgstr "Участники"
+
+#: /src/schooltool/group/browser/group.pt:20
+msgid "edit members"
+msgstr "Редактировать участников"
+
+#: /src/schooltool/group/browser/groupsviewlet.pt:15
+msgid "Manage this person's memberships"
+msgstr ""
+
+#: /src/schooltool/note/note_add.pt:24
+msgid "Who can view the note"
+msgstr ""
+
+#: /src/schooltool/person/browser/configure.zcml:103
+msgid "Change Password"
+msgstr "Изменить пароль"
+
+#: /src/schooltool/person/browser/configure.zcml:91
+msgid "Edit Preferences"
+msgstr ""
+
+#: /src/schooltool/person/browser/home.pt:4
+#: /src/schooltool/person/browser/person.pt:4
+#: /src/schooltool/basicperson/browser/templates/person_view.pt:4
+msgid "Person info: ${title}"
+msgstr ""
+
+#: /src/schooltool/person/browser/person-csvimport.pt:26
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:26
+#: /src/schooltool/person/browser/configure.zcml:80
+msgid "Import Persons"
+msgstr "Импорт персон"
+
+#: /src/schooltool/person/browser/person-csvimport.pt:4
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:4
+msgid "Upload SchoolTool persons as CSV"
+msgstr ""
+
+#: /src/schooltool/person/interfaces.py:194
+msgid "Week starts on:"
+msgstr "Неделя начинается с:"
+
+#: /src/schooltool/person/interfaces.py:209
+msgid "Show periods"
+msgstr "Показывать периоды"
+
+#: /src/schooltool/person/interfaces.py:213
+#: /src/schooltool/person/interfaces.py:214
+msgid "Make calendar public"
+msgstr "Опубликовать календарь"
+
+#: /src/schooltool/person/security.zcml:10
+msgid "Everyone can view info of persons"
+msgstr ""
+
+#: /src/schooltool/person/security.zcml:5
+msgid "Everyone can view the list of persons"
+msgstr ""
+
+#: /src/schooltool/resource/browser/configure.zcml:115
+msgid "Edit Location Information"
+msgstr "Редактировать информацию о местоположении"
+
+#: /src/schooltool/resource/browser/configure.zcml:133
+msgid "Add an Equipment"
+msgstr ""
+
+#: /src/schooltool/resource/browser/configure.zcml:151
+msgid "Edit Equipment Information"
+msgstr ""
+
+#: /src/schooltool/resource/browser/configure.zcml:211
+msgid "SchoolBell Resource"
+msgstr ""
+
+#: /src/schooltool/resource/browser/configure.zcml:71
+msgid "Add a Resource"
+msgstr ""
+
+#: /src/schooltool/resource/browser/configure.zcml:84
+msgid "Edit Resource Information"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource-csvimport.pt:21
+#: /src/schooltool/resource/browser/configure.zcml:240
+msgid "Import Resources"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource-csvimport.pt:24
+msgid ""
+"CSV data <strong>must</strong> include a resource title and "
+"<strong>may</strong> include an optional resource description. Any extra "
+"information will be discarded."
+msgstr ""
+
+#. Default: ""
+#. "PRJ302, Overhead Projector #302\n"
+#. "Main Auditorium,,location\n"
+#. "LC-805, Laptop Computer #805"
+#: /src/schooltool/resource/browser/resource-csvimport.pt:31
+msgid ""
+"\n"
+"PRJ302, Overhead Projector #302\n"
+"Main Auditorium,,location\n"
+"LC-805, Laptop Computer #805\n"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource-csvimport.pt:36
+msgid ""
+"The above example will create 3 resources titled 'PRJ302', 'Main Auditorium' "
+"and 'LC-805'. The first and last resource will have the descriptions "
+"'Overhead Projector #302' and 'Laptop Computer #805' respectively. The "
+"\"Main Auditorium\" resource will have no description, but will be a "
+"location."
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource-csvimport.pt:4
+msgid "Upload schooltool resources as CSV"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:56
+msgid "Resource index"
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:110
+#: /src/schooltool/resource/types.py:125
+msgid "Serial Number"
+msgstr "Серийный номер"
+
+#: /src/schooltool/resource/interfaces.py:111
+msgid "Serial Number of Equipment"
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:115
+#: /src/schooltool/resource/types.py:131
+msgid "Purchase Date"
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:116
+msgid "Purchase Date of Equipment"
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:123
+msgid "Id of the resource type."
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:128
+#: /src/schooltool/resource/interfaces.py:136
+msgid "The title of a resource type."
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:41
+msgid "Title of the resource."
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:45
+msgid "Type of resource"
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:52
+msgid "Description of the resource."
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:57
+msgid "Notes for the resource."
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:80
+msgid "Location Type"
+msgstr ""
+
+#: /src/schooltool/resource/interfaces.py:95
+msgid "Equipment Type"
+msgstr ""
+
+#: /src/schooltool/resource/resource.py:55
+#: /src/schooltool/resource/types.py:55
+msgid "Resource"
+msgstr ""
+
+#: /src/schooltool/resource/security.zcml:12
+msgid "Everyone can view resource information."
+msgstr ""
+
+#: /src/schooltool/resource/security.zcml:17
+msgid "Everyone can view resource calendars."
+msgstr ""
+
+#: /src/schooltool/resource/security.zcml:7
+msgid "Everyone can view resource lists."
+msgstr ""
+
+#: /src/schooltool/sampledata/sampledata.pt:20
+msgid ""
+"This creates a school of 1,000 students and data for 4 terms. If you select "
+"all options, it can take a <strong>long</strong> time. Just let it run."
+msgstr ""
+
+#: /src/schooltool/sampledata/sampledata.pt:3
+#: /src/schooltool/sampledata/sampledata.pt:9
+msgid "Sample Data Generation"
+msgstr ""
+
+#: /src/schooltool/sampledata/sampledata.pt:71
+msgid "View Dependencies"
+msgstr ""
+
+#: /src/schooltool/schoolyear/browser/configure.zcml:87
+msgid "New School Year"
+msgstr "Новый учебный год"
+
+#: /src/schooltool/schoolyear/browser/schoolyear.py:107
+#: /src/schooltool/schoolyear/browser/configure.zcml:26
+msgid "School Years"
+msgstr "Учебные годы"
+
+#: /src/schooltool/schoolyear/browser/schoolyear.py:127
+msgid ""
+"You can not delete the active school year. Unless you are deleting all the "
+"school years."
+msgstr ""
+
+#: /src/schooltool/schoolyear/browser/schoolyear.py:168
+msgid "Add new school year"
+msgstr "Добавить новый учебный год"
+
+#. Default: ""
+#: /src/schooltool/schoolyear/browser/schoolyear.py:232
+msgid "Change information for ${schoolyear_title}"
+msgstr "Изменить информацию для ${schoolyear_title}"
+
+#: /src/schooltool/schoolyear/browser/schoolyear.py:247
+#: /src/schooltool/schoolyear/browser/schoolyear.py:274
+msgid "School year must begin before it ends."
+msgstr ""
+
+#: /src/schooltool/schoolyear/browser/schoolyear.py:318
+msgid "School Year"
+msgstr "Учебный год"
+
+#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:18
+msgid "${schoolyear_title} (${start_date}&mdash; ${end_date})"
+msgstr ""
+
+#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:30
+msgid ""
+"<input type=\"checkbox\" name=\"${DYNAMIC_CONTENT}\" "
+"id=\"${DYNAMIC_CONTENT}\" /> ${term_title} (${start_date}&mdash; ${end_date})"
+msgstr ""
+
+#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:41
+msgid "Add a new term"
+msgstr ""
+
+#. Default: "Delete"
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:34
+#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:34
+#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:27
+#: /src/schooltool/resource/browser/container_delete.pt:27
+#: /src/schooltool/course/browser/templates/course_container.pt:40
+#: /src/schooltool/course/browser/templates/section_container.pt:93
+#: /src/schooltool/demographics/browser/search.pt:35
+#: /src/schooltool/demographics/browser/table.pt:28
+#: /src/schooltool/person/browser/person_container_delete.pt:35
+#: /src/schooltool/term/browser/templates/term-container-delete.pt:29
+#: /src/schooltool/skin/templates/container.pt:42
+#: /src/schooltool/skin/templates/table_container.pt:33
+#: /src/schooltool/skin/templates/container_delete.pt:32
+#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
+#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
+#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
+msgid "delete-button"
+msgstr "Удалить"
+
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:39
+msgid "Activate next school year"
+msgstr ""
+
+#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:10
+#: /src/schooltool/term/browser/templates/term-container-delete.pt:10
+msgid "Are you sure you want to delete the selected terms?"
+msgstr ""
+
+#: /src/schooltool/skin/templates/error.pt:19
+msgid "Exception"
+msgstr ""
+
+#: /src/schooltool/skin/templates/generic_macros.pt:12
+msgid "Server Running SchoolTool"
+msgstr ""
+
+#: /src/schooltool/skin/templates/notfound.pt:18
+msgid "Please note the following:"
+msgstr ""
+
+#: /src/schooltool/skin/templates/onlinehelp_macros.pt:55
+msgid "SchoolTool Onlinehelp"
+msgstr ""
+
+#: /src/schooltool/skin/templates/rml_macros.pt:52
+msgid "Page ${page_number}"
+msgstr ""
+
+#: /src/schooltool/skin/templates/view_macros.pt:114
+msgid "Report a bug on Launchpad."
+msgstr "Соббщить об ошибке в Launchpad"
+
+#: /src/schooltool/skin/templates/view_macros.pt:126
+msgid ""
+"&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+"Foundation</a> 2003 - <span>2008</span>: Supporting Social Innovation."
+msgstr ""
+
+#: /src/schooltool/skin/templates/view_macros.pt:53
+msgid "Logged in as:"
+msgstr "Вы вошли в систему как:"
+
+#: /src/schooltool/skin/widgets.py:76
+msgid "The datetime string did not match the pattern yyyy-mm-dd"
+msgstr ""
+
+#: /src/schooltool/table/templates/batch.pt:16
+msgid "Show Less"
+msgstr ""
+
+#: /src/schooltool/table/templates/batch.pt:21
+msgid "Show All"
+msgstr "Показать всё"
+
+#: /src/schooltool/table/templates/batch.pt:29
+#: /src/schooltool/table/templates/batch.pt:35
+msgid "Next &raquo;"
+msgstr ""
+
+#: /src/schooltool/table/templates/batch.pt:5
+#: /src/schooltool/table/templates/batch.pt:7
+msgid "&laquo; Previous"
+msgstr ""
+
+#: /src/schooltool/term/browser/templates/emergency2.pt:3
+#: /src/schooltool/term/browser/templates/emergency_select.pt:3
+#: /src/schooltool/term/browser/templates/emergency_select.pt:6
+msgid "Emergency day"
+msgstr ""
+
+#: /src/schooltool/term/browser/templates/term_add.pt:75
+#: /src/schooltool/term/browser/templates/term.pt:26
+msgid "${month} ${year}"
+msgstr ""
+
+#: /src/schooltool/term/browser/templates/term_add.pt:90
+#: /src/schooltool/term/browser/templates/term.pt:41
+msgid "Week ${week_number}"
+msgstr "Неделя ${week_number}"
+
+#: /src/schooltool/term/browser/term.py:122
+msgid "Add new term"
+msgstr ""
+
+#: /src/schooltool/term/browser/term.py:163
+msgid "Add term"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/term/browser/term.py:253
+msgid "Change information for ${term_title}"
+msgstr "Изменить информацию для ${term_title}"
+
+#: /src/schooltool/term/browser/term.py:268
+#: /src/schooltool/term/browser/term.py:291
+msgid "Term must begin before it ends."
+msgstr ""
+
+#: /src/schooltool/term/help/configure.zcml:8
+msgid "Add a term"
+msgstr ""
+
+#: /src/schooltool/term/help/term_add.pt:6
+msgid "Term Search Help"
+msgstr ""
+
+#: /src/schooltool/term/help/term_container.pt:6
+msgid "Terms in SchoolTool"
+msgstr ""
+
+#: /src/schooltool/term/term.py:300
+msgid "Term date is not in the school year."
+msgstr ""
+
+#: /src/schooltool/term/tests/__init__.py:81
+msgid "Set the date for the school"
+msgstr ""
+
+#: /src/schooltool/timetable/__init__.py:196
+msgid "Unbound timetable."
+msgstr ""
+
+#: /src/schooltool/timetable/browser/__init__.py:694
+msgid "Invalid date. Please use YYYY-MM-DD format."
+msgstr "Недопустимая дата. Пожалуйста, используйте формат YYYY-MM-DD"
+
+#: /src/schooltool/timetable/browser/event.py:42
+#: /src/schooltool/timetable/browser/configure.zcml:23
+msgid "Timetables"
+msgstr "Расписания"
+
+#. Default: ""
+#: /src/schooltool/timetable/browser/schema.py:94
+msgid "Timetable schema ${schema}"
+msgstr "Схема расписания ${schema}"
+
+#: /src/schooltool/timetable/browser/templates/advancedtts.pt:197
+msgid "Create timetable schema"
+msgstr "Создать схему расписания"
+
+#: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:66
+msgid ""
+"<a href=\"#\" onclick=\"$('#more_overlays').toggle();return "
+"false;\">More...</a>"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:95
+msgid "Manage..."
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:4
+#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:10
+msgid "Scheduling for ${person}"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:17
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:19
+msgid "There are no timetable schemas defined."
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:24
+msgid "Choose school timetable to use"
+msgstr "Выберите школьное расписание"
+
+#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:4
+#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:11
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:4
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:12
+msgid "Scheduling for ${section}"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/simpletts.pt:38
+msgid "Period end time"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/specialday_change.pt:13
+msgid ""
+"You can adjust the start and end times of periods for ${date} in the form "
+"below. In order to remove a period from the day, just delete the period's "
+"start and end times."
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/specialday_change.pt:28
+msgid "Period title"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/specialday_change.pt:29
+msgid "Original start"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/specialday_change.pt:30
+msgid "Original end"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/specialday_change.pt:31
+msgid "New start"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/specialday_change.pt:32
+msgid "New end"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/timetable-add.pt:13
+msgid "Create a New Timetable"
+msgstr "Создать новое расписание"
+
+#: /src/schooltool/timetable/browser/templates/timetable-add.pt:15
+msgid "Select school timetable to use"
+msgstr "Выбрать школьное расписание"
+
+#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:10
+msgid "Are you sure you want to delete the selected timetables?"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:26
+msgid "For term:"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:29
+msgid "Using timetable:"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
+msgid "Default Timetable Schema:"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/timetable_list.pt:4
+#: /src/schooltool/timetable/browser/templates/timetable_list.pt:11
+msgid "Timetables for ${object}"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:3
+#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:6
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:3
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:6
+#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:3
+#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:6
+#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:3
+#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:6
+#: /src/schooltool/timetable/browser/templates/ttwizard_choice.pt:3
+#: /src/schooltool/timetable/browser/templates/ttwizard_choice.pt:6
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:3
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:6
+#: /src/schooltool/timetable/browser/templates/simpletts.pt:3
+#: /src/schooltool/timetable/browser/templates/simpletts.pt:6
+#: /src/schooltool/timetable/browser/templates/advancedtts.pt:3
+#: /src/schooltool/timetable/browser/templates/advancedtts.pt:6
+#: /src/schooltool/timetable/browser/templates/ttwizard.pt:3
+#: /src/schooltool/timetable/browser/templates/ttwizard.pt:6
+msgid "New timetable schema"
+msgstr "Новая схема расписания"
+
+#: /src/schooltool/timetable/browser/ttwizard.py:326
+msgid "Different times"
+msgstr "Различное время"
+
+#. Default: ""
+#: /src/schooltool/timetable/browser/ttwizard.py:428
+#: /src/schooltool/timetable/browser/ttwizard.py:485
+msgid "Not a valid time slot: $slot."
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:535
+msgid "Have names"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:536
+msgid "Designated by time"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/ttwizard.py:615
+msgid "Same"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/timetable/browser/ttwizard.py:714
+msgid "$period on day $day"
+msgstr ""

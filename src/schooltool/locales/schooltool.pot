@@ -26,96 +26,96 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: i18nextract.py\n"
 
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:113
+#: /src/schooltool/gradebook/browser/configure.zcml:113
 msgid "Add a Worksheet"
 msgstr ""
 
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:125
+#: /src/schooltool/gradebook/browser/configure.zcml:125
 msgid "Add a Report Worksheet"
 msgstr ""
 
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:137
+#: /src/schooltool/gradebook/browser/configure.zcml:137
 msgid "Edit Worksheet"
 msgstr ""
 
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:149
+#: /src/schooltool/gradebook/browser/configure.zcml:149
 msgid "Edit Report Worksheet"
 msgstr ""
 
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:213
+#: /src/schooltool/gradebook/browser/configure.zcml:213
 msgid "New Report Activity"
 msgstr ""
 
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:251
+#: /src/schooltool/gradebook/browser/configure.zcml:251
 msgid "Gradebook"
 msgstr ""
 
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:260
+#: /src/schooltool/gradebook/browser/configure.zcml:260
 msgid "New Report Worksheet"
 msgstr ""
 
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:267
+#: /src/schooltool/gradebook/browser/configure.zcml:267
 msgid "New Worksheet"
 msgstr ""
 
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:274
+#: /src/schooltool/gradebook/browser/configure.zcml:274
 msgid "Export XLS"
 msgstr ""
 
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:281
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:304
+#: /src/schooltool/gradebook/browser/configure.zcml:281
+#: /src/schooltool/gradebook/browser/configure.zcml:304
 msgid "Return to Gradebook"
 msgstr ""
 
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:290
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:320
+#: /src/schooltool/gradebook/browser/configure.zcml:290
+#: /src/schooltool/gradebook/browser/configure.zcml:320
 msgid "New Activity"
 msgstr ""
 
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:297
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:327
+#: /src/schooltool/gradebook/browser/configure.zcml:297
+#: /src/schooltool/gradebook/browser/configure.zcml:327
 msgid "New External Activity"
 msgstr ""
 
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:313
+#: /src/schooltool/gradebook/browser/configure.zcml:313
 msgid "Worksheets"
 msgstr ""
 
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:334
+#: /src/schooltool/gradebook/browser/configure.zcml:334
 msgid "Manage Activities"
 msgstr ""
 
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:341
+#: /src/schooltool/gradebook/browser/configure.zcml:341
 msgid "Weight Categories"
 msgstr ""
 
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:350
+#: /src/schooltool/gradebook/browser/configure.zcml:350
 msgid "Update Grades"
 msgstr ""
 
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:419
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:437
+#: /src/schooltool/gradebook/browser/configure.zcml:419
+#: /src/schooltool/gradebook/browser/configure.zcml:437
 msgid "Deploy Report Worksheet"
 msgstr ""
 
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:444
+#: /src/schooltool/gradebook/browser/configure.zcml:444
 msgid "Layout Report Card"
 msgstr ""
 
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:469
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:486
+#: /src/schooltool/gradebook/browser/configure.zcml:469
+#: /src/schooltool/gradebook/browser/configure.zcml:486
 msgid "Print Report Card"
 msgstr ""
 
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:72
+#: /src/schooltool/gradebook/browser/configure.zcml:72
 msgid "Report Sheet Templates"
 msgstr ""
 
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/configure.zcml:258
+#: /src/schooltool/gradebook/configure.zcml:258
 msgid "Gradebook API"
 msgstr ""
 
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/configure.zcml:268
+#: /src/schooltool/gradebook/configure.zcml:268
 msgid "Administration can grade students"
 msgstr ""
 
@@ -2015,7 +2015,7 @@ msgstr ""
 #: /src/schooltool/course/browser/configure.zcml:109
 #: /src/schooltool/course/browser/configure.zcml:119
 #: /src/schooltool/course/browser/configure.zcml:129
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/requirement/browser/configure.zcml:16
+#: /src/schooltool/requirement/browser/configure.zcml:16
 #: /src/schooltool/timetable/browser/configure.zcml:61
 #: /src/schooltool/timetable/browser/configure.zcml:71
 #: /src/schooltool/timetable/browser/configure.zcml:102
@@ -2613,8 +2613,8 @@ msgid "Weight"
 msgstr ""
 
 #: /src/schooltool/dashboard/school.pt:10
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:49
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:83
+#: /src/schooltool/gradebook/browser/configure.zcml:49
+#: /src/schooltool/gradebook/browser/configure.zcml:83
 msgid "Activity Categories"
 msgstr ""
 
@@ -2788,10 +2788,10 @@ msgstr ""
 #: /src/schooltool/demographics/browser/configure.zcml:22
 #: /src/schooltool/term/browser/configure.zcml:23
 #: /src/schooltool/schoolyear/browser/configure.zcml:94
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:137
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:149
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:197
-#: /home/menesis/.buildout/eggs/schooltool.gradebook-0.5.0dev_r63-py2.5.egg/schooltool/gradebook/browser/configure.zcml:220
+#: /src/schooltool/gradebook/browser/configure.zcml:137
+#: /src/schooltool/gradebook/browser/configure.zcml:149
+#: /src/schooltool/gradebook/browser/configure.zcml:197
+#: /src/schooltool/gradebook/browser/configure.zcml:220
 #: /src/schooltool/basicperson/browser/configure.zcml:15
 #: /src/schooltool/basicperson/browser/configure.zcml:164
 #: /src/schooltool/basicperson/browser/configure.zcml:171
