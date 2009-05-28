@@ -109,6 +109,12 @@ if sys.argv[1] in ('build', 'install'):
         compile_translations('src/schooltool/locales')
         compile_translations('src/schooltool/commendation/locales')
 
+if sys.argv[1] == 'clean':
+    for mo in glob.glob('src/schooltool/locales/*/LC_MESSAGES/*.mo'):
+        os.unlink(mo)
+    for mo in glob.glob('src/schooltool/commendation/locales/*/LC_MESSAGES/*.mo'):
+        os.unlink(mo)
+
 # Packages we want to non-recursively include
 package_data = {'schooltool': ['*.zcml', 'version.txt']}
 
