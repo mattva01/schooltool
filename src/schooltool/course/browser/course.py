@@ -88,6 +88,18 @@ class CourseView(BrowserView):
     def terms(self):
         return ITermContainer(self.context)
 
+    @property
+    def details(self):
+        details = []
+        for name in ['course_id', 'government_id', 'credits']:
+            value = getattr(self.context, name)
+            if value is not None and unicode(value).strip():
+                details.append({
+                    'title': ICourse[name].title,
+                    'value': value,
+                    })
+        return details
+
     def addSection(self, term):
         sections = ISectionContainer(term)
         section = Section()

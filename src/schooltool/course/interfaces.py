@@ -46,6 +46,22 @@ class ICourse(zope.interface.Interface):
         """The Sections that implement this course material,
            see schooltool.relationship.interfaces.IRelationshipProperty.""")
 
+    course_id = zope.schema.TextLine(
+        title=_("Course ID"),
+        required=False,
+        description=_("Localy used course identifier."))
+
+    government_id = zope.schema.TextLine(
+        title=_("Goverment ID"),
+        required=False,
+        description=_("Course identifier used by the government."))
+
+    credits = zope.schema.Int(
+        title=_("Credits"),
+        required=False,
+        description=_("Amount of credits for this course."))
+
+
 
 class ICourseContainer(container.interfaces.IContainer):
     """Container of Courses."""

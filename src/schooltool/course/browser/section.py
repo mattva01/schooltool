@@ -40,8 +40,6 @@ from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.person.interfaces import IPerson
-from schooltool.group.interfaces import IGroupContainer
-from schooltool.group.interfaces import IGroup
 from schooltool.term.interfaces import ITerm
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.schoolyear.interfaces import ISchoolYear
@@ -223,16 +221,10 @@ class SectionView(BrowserView):
         persons = ISchoolToolApplication(None)['persons']
         formatter = getMultiAdapter((persons, self.request), ITableFormatter)
         formatter.setUp(table_formatter=table.StandaloneFullFormatter,
-                        items=self.getPersons(),
+                        items=[removeSecurityProxy(person)
+                               for person in self.context.members],
                         batch_size=0)
         return formatter.render()
-
-    def getPersons(self):
-        return map(removeSecurityProxy,
-                   filter(IPerson.providedBy, self.context.members))
-
-    def getGroups(self):
-        return filter(IGroup.providedBy, self.context.members)
 
 
 class SectionNameChooser(NameChooser):
@@ -373,23 +365,3 @@ class SectionLearnerView(RelationshipEditConfView):
 
     def getAvailableItemsContainer(self):
         return ISchoolToolApplication(None)['persons']
-
-
-class SectionLearnerGroupView(RelationshipEditConfView):
-    """View for adding learners to a Section."""
-
-    __used_for__ = ISection
-
-    title = _("Groups")
-    current_title = _("Current Groups")
-    available_title = _("Available Groups")
-
-    def getCollection(self):
-        return self.context.members
-
-    def getSelectedItems(self):
-        """Return a list of selected members."""
-        return filter(IGroup.providedBy, self.getCollection())
-
-    def getAvailableItemsContainer(self):
-        return IGroupContainer(self.context)

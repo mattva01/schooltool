@@ -66,13 +66,13 @@ There are some constraints: Only objects providing IGroup can be groups.
       ...
     InvalidRelationship: Groups must provide IGroup.
 
-You may not create cyclic memberships.
+You may not create cyclic memberships as support is dropped now for
+group-to-group Membership relationships.
 
     >>> Membership(member=admins, group=developers)
-    >>> Membership(member=developers, group=admins)
     Traceback (most recent call last):
       ...
-    InvalidRelationship: No cycles are allowed.
+    InvalidRelationship: Groups cannot be members of a group anymore.
 
 You may not create ill-formed relationships
 
@@ -152,6 +152,8 @@ def enforceMembershipConstraints(event):
         raise InvalidRelationship("Resources cannot be members of a group.")
     if not IGroup.providedBy(event[URIGroup]):
         raise InvalidRelationship('Groups must provide IGroup.')
+    if IGroup.providedBy(event[URIMember]):
+        raise InvalidRelationship("Groups cannot be members of a group anymore.")
     if isTransitiveMember(event[URIGroup], event[URIMember]):
         raise InvalidRelationship('No cycles are allowed.')
 

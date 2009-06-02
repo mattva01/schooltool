@@ -1,0 +1,46 @@
+<html metal:use-macro="context/@@standard_macros/view"
+      i18n:domain="schooltool">
+<body>
+<div metal:fill-slot="body">
+
+<div metal:define-macro="body">
+
+  <form tal:attributes="action request/URL" method="post"
+        enctype="multipart/form-data" class="standalone">
+
+    <div metal:define-macro="formbody">
+
+      <h3 tal:condition="view/label"
+          tal:content="view/label"
+          metal:define-slot="heading"
+          >Edit something</h3>
+
+      <p tal:define="status view/update"
+         tal:condition="status" tal:content="status" />
+
+      <p tal:condition="view/errors" i18n:translate="">
+        There are <strong tal:content="python:len(view.errors)"
+                          i18n:name="num_errors">6</strong> input errors.
+      </p>
+
+      <div metal:define-slot="extra_info" tal:replace="nothing">
+      </div>
+
+      <fieldset>
+        <div metal:use-macro="context/@@form_macros/widget_rows" />
+      </fieldset>
+    </div>
+
+    <div class="controls">
+      <tal:block metal:use-macro="view/@@standard_macros/apply-button" />
+      <tal:block metal:use-macro="view/@@standard_macros/cancel-button" />
+    </div>
+
+
+  </form>
+
+</div>
+
+</div>
+</body>
+</html>

@@ -22,6 +22,20 @@
 
   </configure>
 
+  <editform
+      label="Edit Course Information"
+      name="edit.html"
+      schema="..interfaces.ICourse"
+      for="..interfaces.ICourse"
+      fields="title description course_id government_id credits"
+      template="templates/course_edit.pt"
+      permission="schooltool.edit"
+      class="schooltool.app.browser.app.BaseEditView"
+      menu="schooltool_actions"
+      title="Edit Info">
+    <widget field="description" height="5" />
+  </editform>
+
   <navigationViewlet
       name="courses"
       for="*"
@@ -193,14 +207,6 @@
       name="learners.html"
       for="..interfaces.ISection"
       class=".section.SectionLearnerView"
-      template="templates/edit_relationships.pt"
-      permission="schooltool.edit"
-      />
-
-  <page
-      name="learner-groups.html"
-      for="..interfaces.ISection"
-      class=".section.SectionLearnerGroupView"
       template="templates/edit_relationships.pt"
       permission="schooltool.edit"
       />
