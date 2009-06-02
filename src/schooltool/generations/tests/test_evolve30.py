@@ -127,9 +127,12 @@ def doctest_evolve30():
         >>> courses = app['courses'] = btree.BTreeContainer()
         >>> courses['c1'] = CourseStub()
         >>> courses['c2'] = CourseStub()
+        >>> courses['c3'] = CourseStub()
+        >>> courses['c3'].course_id = 'custom'
         >>> list(courses.values())
         [<CourseStub(__name__="c1", course_id="None")>,
-         <CourseStub(__name__="c2", course_id="None")>]
+         <CourseStub(__name__="c2", course_id="None")>,
+         <CourseStub(__name__="c3", course_id="custom")>]
 
     Let's evolve now.
 
@@ -154,7 +157,8 @@ def doctest_evolve30():
 
         >>> list(courses.values())
         [<CourseStub(__name__="c1", course_id="c1")>,
-         <CourseStub(__name__="c2", course_id="c2")>]
+         <CourseStub(__name__="c2", course_id="c2")>,
+         <CourseStub(__name__="c3", course_id="custom")>]
 
     """
 

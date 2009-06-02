@@ -65,4 +65,5 @@ def evolve(context):
     # Courses gained several new attributes, fill in their course_id
     courses = findObjectsProviding(root, ICourse)
     for course in courses:
-        course.course_id = course.__name__
+        if getattr(course, 'course_id', None) is None:
+            course.course_id = course.__name__
