@@ -25,6 +25,7 @@ from zope.app.testing import setup
 from zope.testing import doctest
 from zope.interface import implements
 from zope.app.container import btree
+from zope.app.container.contained import Contained
 from zope.component import provideHandler
 
 from schooltool.relationship.tests import setUpRelationships
@@ -36,10 +37,20 @@ from schooltool.relationship.interfaces import IRelationshipRemovedEvent
 from schooltool.relationship.interfaces import IRelationshipAddedEvent
 from schooltool.relationship.relationship import relate
 from schooltool.app.membership import URIMember, URIGroup, URIMembership
+from schooltool.course.interfaces import ICourse
 
 
 class AppStub(btree.BTreeContainer):
     implements(ISchoolToolApplication)
+
+
+class CourseStub(Contained):
+    implements(ICourse)
+    course_id = None
+
+    def __repr__(self):
+        return '<CourseStub(__name__="%s", course_id="%s")>' % (
+            self.__name__, self.course_id)
 
 
 def printRelationshipAdded(event):
@@ -111,6 +122,15 @@ def doctest_evolve30():
         >>> addMember(persons['bill'], sections['section_2'])
         >>> addMember(persons['pete'], sections['section_2'])
 
+    We will also update course ids, so let's set up some.
+
+        >>> courses = app['courses'] = btree.BTreeContainer()
+        >>> courses['c1'] = CourseStub()
+        >>> courses['c2'] = CourseStub()
+        >>> list(courses.values())
+        [<CourseStub(__name__="c1", course_id="None")>,
+         <CourseStub(__name__="c2", course_id="None")>]
+
     Let's evolve now.
 
         >>> provideHandler(printRelationshipAdded,
@@ -129,6 +149,12 @@ def doctest_evolve30():
         <BLANKLINE>
         ADD:     John, Johny to   Section TWO
         REMOVE:     Students from Section TWO
+
+    Course ids are also updated.
+
+        >>> list(courses.values())
+        [<CourseStub(__name__="c1", course_id="c1")>,
+         <CourseStub(__name__="c2", course_id="c2")>]
 
     """
 

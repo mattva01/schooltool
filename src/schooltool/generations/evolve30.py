@@ -27,6 +27,7 @@ from zope.app.generations.utility import findObjectsProviding
 from zope.app.publication.zopepublication import ZopePublication
 
 from schooltool.group.interfaces import IGroup
+from schooltool.course.interfaces import ICourse
 from schooltool.relationship.interfaces import IRelationshipLinks
 from schooltool.relationship.relationship import getRelatedObjects
 from schooltool.relationship.relationship import relate, unrelate
@@ -38,6 +39,7 @@ def evolve(context):
 
     savepoint_counter = 0
 
+    # Groups are no longer allowed as members of a section.
     groups = findObjectsProviding(root, IGroup)
     for group in groups:
         targets = getRelatedObjects(
@@ -60,3 +62,7 @@ def evolve(context):
         if savepoint_counter % 2000 == 0:
             transaction.savepoint(optimistic=True)
 
+    # Courses gained several new attributes, fill in their course_id
+    courses = findObjectsProviding(root, ICourse)
+    for course in courses:
+        course.course_id = course.__name__
