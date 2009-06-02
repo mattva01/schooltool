@@ -330,7 +330,7 @@ def doctest_SectionView():
 
     Stub a table formatter.
 
-        >>> class TableFormatterStub():
+        >>> class TableFormatterStub(object):
         ...     def __init__(self, container, request):
         ...         self.container = container
         ...     def setUp(self, table_formatter=None, items=[], batch_size=0):
