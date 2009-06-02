@@ -15,9 +15,19 @@
   <tal:block replace="structure context/@@notes|nothing"/>
 
   <div id="course-view">
-    <p class="description" tal:content="context/description"/>
+    <p tal:condition="context/description" class="description" tal:content="context/description"/>
 
-    <div class="sections">
+    <div class="info-block"
+         tal:define="details view/details"
+         tal:condition="details">
+      <h3 i18n:translate="">Details</h3>
+      <p tal:repeat="detail details">
+        <tal:block content="detail/title"/>:
+        <tal:block content="detail/value" />
+      </p>
+    </div>
+
+    <div class="info-block">
 
       <div tal:define="sections context/sections">
         <h3 i18n:translate="">Sections</h3>

@@ -64,6 +64,29 @@ def doctest_CourseView():
         >>> request = TestRequest()
         >>> view = CourseView(course, request)
 
+    And look at the course details.
+
+        >>> print view.details
+        []
+
+    Add some details and check again.
+
+        >>> course.course_id = u'Course1'
+        >>> course.government_id = u'GovC1'
+        >>> course.credits = 1
+        >>> [sorted(detail.items()) for detail in view.details]
+        [[('title', u'Course ID'),    ('value', u'Course1')],
+         [('title', u'Goverment ID'), ('value', u'GovC1')],
+         [('title', u'Credits'),      ('value', 1)]]
+
+    Empty values are hidden.
+
+        >>> course.course_id = u''
+        >>> course.government_id = u'   '
+        >>> course.credits = 0
+        >>> [sorted(detail.items()) for detail in view.details]
+        [[('title', u'Credits'), ('value', 0)]]
+
     """
 
 

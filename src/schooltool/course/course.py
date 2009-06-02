@@ -116,6 +116,10 @@ class Course(Persistent, contained.Contained, Asset):
                                     relationships.URICourse,
                                     relationships.URISectionOfCourse)
 
+    course_id = None
+    government_id = None
+    credits = None
+
     def __init__(self, title=None, description=None):
         self.title = title
         self.description = description
