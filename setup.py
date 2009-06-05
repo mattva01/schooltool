@@ -32,6 +32,8 @@ if sys.version_info < (2, 4):
     print >> sys.stderr, 'Your python is %s' % sys.version
     sys.exit(1)
 
+import glob
+
 import site
 site.addsitedir(os.path.join(here, 'eggs'))
 
@@ -39,6 +41,9 @@ import pkg_resources
 pkg_resources.require("setuptools>=0.6a11")
 
 from setuptools import setup, find_packages
+from distutils import log
+from distutils.util import newer
+from distutils.spawn import find_executable
 
 # allowed extensions
 ALLOWED_EXTENSIONS = ['conf','css', 'gif', 'ico', 'ics', 'js', 'mo', 'po', 'pt',
@@ -88,6 +93,28 @@ root_packages = ['schooltool.app',
                  'schooltool.level',
                  ]
 
+def compile_translations(locales_dir):
+    "Compile *.po files to *.mo files in the same directory."
+    for po in glob.glob('%s/*/LC_MESSAGES/*.po' % locales_dir):
+        mo = po[:-3] + '.mo'
+        if newer(po, mo):
+            log.info('Compile: %s -> %s' % (po, mo))
+            os.system('msgfmt -o %s %s' % (mo, po))
+
+if sys.argv[1] in ('build', 'install'):
+    if not find_executable('msgfmt'):
+        log.warn("GNU gettext msgfmt utility not found!")
+        log.warn("Skip compiling po files.")
+    else:
+        compile_translations('src/schooltool/locales')
+        compile_translations('src/schooltool/commendation/locales')
+
+if sys.argv[1] == 'clean':
+    for mo in glob.glob('src/schooltool/locales/*/LC_MESSAGES/*.mo'):
+        os.unlink(mo)
+    for mo in glob.glob('src/schooltool/commendation/locales/*/LC_MESSAGES/*.mo'):
+        os.unlink(mo)
+
 # Packages we want to non-recursively include
 package_data = {'schooltool': ['*.zcml', 'version.txt']}
 
@@ -99,29 +126,15 @@ for package in all_packages:
     for root_package in root_packages:
         if package.startswith(root_package):
             package_data[package] = []
-            includes = []
             package_dir = os.path.join(here, 'src', *package.split('.'))
             for root, dirs, files in os.walk(package_dir):
-                if dir in set(dirs):
-                    if dir.startswith('.'):
-                        dirs.remove(dir)
-                prefix = []
-                r = root
-                while r != package_dir:
-                    r, dir = os.path.split(r)
-                    prefix.insert(0, dir)
-                    assert r.startswith(package_dir)
-                if prefix:
-                    prefix = os.path.join(*prefix)
+                prefix = root[len(package_dir)+1:]
                 for file in files:
-                    for ext in ALLOWED_EXTENSIONS:
-                        if file.endswith('.%s' % ext) and not file.startswith('.'):
-                            break
-                    else:
-                        continue
-                    if prefix:
+                    name, ext = os.path.splitext(file)
+                    if (ext[1:] in ALLOWED_EXTENSIONS
+                        and not file.startswith('.')):
                         file = os.path.join(prefix, file)
-                    package_data[package].append(file)
+                        package_data[package].append(file)
             break
 
 if os.path.exists("version.txt"):
