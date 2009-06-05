@@ -168,7 +168,14 @@ class ContactContainerView(TableContainerView):
 
     __used_for__ = IContactContainer
 
+    delete_template = ViewPageTemplateFile('templates/contacts_delete.pt')
     index_title = _("Contact index")
+
+    @property
+    def itemsToDelete(self):
+        return sorted(
+            TableContainerView._listItemsForDeletion(self),
+            key=lambda obj: '%s %s' % (obj.last_name, obj.first_name))
 
 
 def format_street_address(item, formatter):

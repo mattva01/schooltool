@@ -108,3 +108,53 @@ Both contacts should be assigned now:
           Frog lane 14, Toadtown
         </td>
     </tr>
+
+Let's test contact deletion.
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Contacts').click()
+    >>> browser.getControl(name='delete.Contact').value = True
+    >>> browser.getControl(name='delete.Contact-2').value = True
+    >>> browser.getControl('Delete').click()
+    >>> browser.printQuery("//title | //form/li")
+    <title> Delete items </title>
+    <li>
+      <input type="hidden" name="delete.Contact" /><span>John</span>
+      <a href="http://localhost/contacts/Contact">Administrator</a>
+    </li>
+    <li>
+      <input type="hidden" name="delete.Contact-2" /><span>Peter</span>
+      <a href="http://localhost/contacts/Contact-2">Peterson</a>
+    </li>
+
+We can cancel deletion and navigate back to the contact list.
+
+    >>> browser.getControl('Cancel').click()
+    >>> browser.printQuery("//title")
+    <title>Contact index</title>
+
+    >>> browser.getControl(name='delete.Contact').value = False
+    >>> browser.getControl(name='delete.Contact-2').value = True
+    >>> browser.getControl('Delete').click()
+    >>> browser.printQuery("//form/li")
+    <li>
+      <input type="hidden" name="delete.Contact-2" /><span>Peter</span>
+      <a href="http://localhost/contacts/Contact-2">Peterson</a>
+    </li>
+
+Confirm deletion of Peter Peterson.
+
+    >>> browser.getControl('Confirm').click()
+    >>> browser.printQuery("//form//tbody//tr")
+    <tr class="odd"><td>
+        <input type="checkbox" name="delete.Contact" id="delete.Contact" /></td>
+        <td>
+          <a href="http://localhost/contacts/Contact">John</a>
+        </td>
+        <td>
+          <a href="http://localhost/contacts/Contact">Administrator</a>
+        </td>
+        <td>
+          Frog lane 13, Toadtown, Arizona, USA, 556677
+        </td>
+    </tr>
