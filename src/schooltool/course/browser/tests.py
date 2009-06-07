@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #
 # SchoolTool - common information systems platform for school administration
 # Copyright (c) 2005 Shuttleworth Foundation
@@ -264,24 +265,25 @@ def doctest_CourseCSVImportView():
 
     Now we'll try a text import.  Note that the description is not required
 
-        >>> request.form = {'csvtext' : "A Course, The best Course, some-course\nAnother Course",
+        >>> request.form = {'csvtext' : u"A Course, The best Course, some-course\nAnother Course\nEspañol, Descripción, spanish\n\n",
         ...                 'charset' : 'UTF-8',
         ...                 'UPDATE_SUBMIT': 1}
         >>> view = CourseCSVImportView(container, request)
         >>> view.update()
         >>> sorted([course for course in container])
-        [u'another-course', u'some-course']
+        [u'another-course', u'some-course', u'spanish']
 
     If no data is provided, we naturally get an error
 
         >>> request.form = {'charset' : 'UTF-8', 'UPDATE_SUBMIT': 1}
+        >>> view = CourseCSVImportView(container, request)
         >>> view.update()
         >>> view.errors
         [u'No data provided']
 
     We also get an error if a line starts with a comma (no title)
 
-        >>> request.form = {'csvtext' : ", No title provided here",
+        >>> request.form = {'csvtext' : u", No title provided here",
         ...                 'charset' : 'UTF-8',
         ...                 'UPDATE_SUBMIT': 1}
         >>> view = CourseCSVImportView(container, request)
@@ -657,7 +659,7 @@ def doctest_SectionMemberCSVImportView():
     Now we'll try a text import.
 
         >>> request.form = {
-        ...     'csvtext' : 'stevens\n',
+        ...     'csvtext' : u'stevens\n',
         ...     'charset' : 'UTF-8',
         ...     'UPDATE_SUBMIT': 1}
         >>> view = SectionMemberCSVImportView(section, request)
@@ -668,13 +670,14 @@ def doctest_SectionMemberCSVImportView():
     If no data is provided, we naturally get an error
 
         >>> request.form = {'charset' : 'UTF-8', 'UPDATE_SUBMIT': 1}
+        >>> view = SectionMemberCSVImportView(section, request)
         >>> view.update()
         >>> view.errors
         [u'No data provided']
 
     We also get an error if a line doesn't have a username
 
-        >>> request.form = {'csvtext' : " ,stevens\njones,Sally",
+        >>> request.form = {'csvtext' : u" ,stevens\njones,Sally",
         ...                 'charset' : 'UTF-8',
         ...                 'UPDATE_SUBMIT': 1}
         >>> view = SectionMemberCSVImportView(section, request)
@@ -684,7 +687,7 @@ def doctest_SectionMemberCSVImportView():
 
     Or if the username is not in the persons container
 
-        >>> request.form = {'csvtext' : "foobar\nstevens\njones",
+        >>> request.form = {'csvtext' : u"foobar\nstevens\njones",
         ...                 'charset' : 'UTF-8',
         ...                 'UPDATE_SUBMIT': 1}
         >>> view = SectionMemberCSVImportView(section, request)

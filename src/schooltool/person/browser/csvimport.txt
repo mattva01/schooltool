@@ -6,7 +6,7 @@ Now we'll try a text import.  Note that the description is not required
     >>> browser = Browser()
     >>> browser.addHeader('Authorization', 'Basic manager:schooltool')
     >>> browser.open('http://localhost/persons/@@person-csvimport.html')
-    >>> csvtext = "aperson, A Person, secret\nanother, A Nother Person With No Password\n\n\n"
+    >>> csvtext = "aperson, A Person, secret\nanother, A Nother Person With No Password\nchowa, Doña Chowa\n\n"
     >>> browser.getControl(name='csvtext').value = csvtext
     >>> browser.getControl(name='charset').value = ['UTF-8']
     >>> browser.getControl(name='UPDATE_SUBMIT').click()
@@ -18,7 +18,7 @@ Now we'll try a text import.  Note that the description is not required
     >>> root = getRootFolder()
     >>> container = root['persons']
     >>> sorted([person for person in container])
-    [u'another', u'aperson', u'manager']
+    [u'another', u'aperson', u'chowa', u'manager']
 
 If no data is provided, we naturally get an error
 
@@ -49,7 +49,7 @@ Duplicate usernames are not imported, the error is noted to the user.
     >>> browser.getControl(name='UPDATE_SUBMIT').click()
 
     >>> sorted([person for person in container])
-    [u'another', u'aperson', u'manager', u'student1', u'student2']
+    [u'another', u'aperson', u'chowa', u'manager', u'student1', u'student2']
     >>> analyze.printQuery("//div[@class='error']", browser.contents)
     <div class="error">Failed to import CSV text</div>
     <div class="error">Duplicate username: student1, Student 100</div>

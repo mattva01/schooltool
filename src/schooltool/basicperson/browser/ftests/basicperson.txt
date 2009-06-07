@@ -175,7 +175,7 @@ using this kind of person:
     <textarea name="csvtext" id="csvtext" cols="50" rows="10">jjones, Jimmy, Jones
       jbjones, Jim Bob, Jones, r2m45J
       ,Howard,Jobs</textarea>
-    >>> csvtext = "@@index.html, Steve, Smith, secret\npete, Pete, Marley\n\n\n"
+    >>> csvtext = "@@index.html, Steve, Smith, secret\npete, Pete, Marley\nchowa, Chowa, Doña\n\n\n"
     >>> manager.getControl(name='csvtext').value = csvtext
     >>> manager.getControl(name='charset').value = ['UTF-8']
     >>> manager.getControl(name='UPDATE_SUBMIT').click()
@@ -185,10 +185,11 @@ using this kind of person:
     >>> analyze.printQuery("id('csvtext')", manager.contents)
     <textarea name="csvtext" id="csvtext" cols="50" rows="10">@@index.html, Steve, Smith, secret
     pete, Pete, Marley
+    chowa, Chowa, Do...a
     <BLANKLINE>
     <BLANKLINE>
     </textarea>
-    >>> csvtext = "steve, Steve, Smith, secret\npete/marley, Pete, Marley\n\n\n"
+    >>> csvtext = "steve, Steve, Smith, secret\npete/marley, Pete, Marley\nchowa, Chowa, Doña\n\n\n"
     >>> manager.getControl(name='csvtext').value = csvtext
     >>> manager.getControl(name='charset').value = ['UTF-8']
     >>> manager.getControl(name='UPDATE_SUBMIT').click()
@@ -198,10 +199,11 @@ using this kind of person:
     >>> analyze.printQuery("id('csvtext')", manager.contents)
     <textarea name="csvtext" id="csvtext" cols="50" rows="10">steve, Steve, Smith, secret
     pete/marley, Pete, Marley
+    chowa, Chowa, Do...a
     <BLANKLINE>
     <BLANKLINE>
     </textarea>
-    >>> csvtext = "steve, Steve, Smith, secret\npete, Pete, Marley\n\n\n"
+    >>> csvtext = "steve, Steve, Smith, secret\npete, Pete, Marley\nchowa, Chowa, Doña\n\n\n"
     >>> manager.getControl(name='csvtext').value = csvtext
     >>> manager.getControl(name='charset').value = ['UTF-8']
     >>> manager.getControl(name='UPDATE_SUBMIT').click()
@@ -257,3 +259,21 @@ We can check that the advisor appears in the new person's advisors view.
     >>> analyze.printQuery("id('content-body')/form/fieldset[1]//tbody//label", manager.contents)
     <label for="remove_item.bob">Bob</label>
 
+We can fill the New Person form with Unicode text:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+    >>> manager.getControl('First name').value = "Pedro José"
+    >>> manager.getControl('Last name').value = "Martínez Pérez"
+    >>> manager.getControl('Gender').value = ['male']
+    >>> manager.getControl('Birth date').value = '1970-05-01'
+
+    >>> manager.getControl('Username').value = "pedro"
+    >>> manager.getControl('Password').value = "pwd"
+    >>> manager.getControl('Confirm').value = "pwd"
+    >>> manager.getControl('Add').click()
+
+    >>> analyze.printQuery("//div[@class='content-nav'][10]/a",
+    ...                    manager.contents)
+    <a href="http://localhost/persons/pedro/@@manage_contacts.html?SEARCH_LAST_NAME=Mart%C3%ADnez+P%C3%A9rez">Contacts</a>
