@@ -32,6 +32,8 @@ class IRelationshipProperty(Interface):
     my_role = Attribute("""Role of the object with this property""")
     other_role = Attribute("""Role of other objects in this relationship""")
     this = Attribute("""The object that this property is bound to.""")
+    relationships = Attribute(
+        """A list of RelationshipInfo helpers for all related objects.""")
 
     def __nonzero__():
         """Are there any related objects?
@@ -53,6 +55,14 @@ class IRelationshipProperty(Interface):
         """Unlink a relationship with `other`."""
 
 
+class IRelationshipInfo(Interface):
+    """Non-persistent helper to access relationship extra information."""
+
+    source = Attribute("""Source object of the relationship.""")
+    target = Attribute("""Target object of the relationship.""")
+    extra_info = Attribute("""Extra information that was passed to `relate`.""")
+
+
 class IRelationshipLink(Interface):
     """One half of a relationship.
 
@@ -64,7 +74,11 @@ class IRelationshipLink(Interface):
     target = Attribute("""The other member of the relationship.""")
     role = Attribute("""Role of `target`.""")
     my_role = Attribute("""Role of the object that has this link.""")
-    extra_info = Attribute("""Extra information that was passed to `relate`.""")
+    extra_info = Attribute("""Extra information that was passed to `relate`.
+
+        Be careful to keep extra info in sync on both links of the
+        relationship.
+        """)
 
 
 class IRelationshipLinks(Interface):
