@@ -94,8 +94,8 @@ from schooltool.calendar.interfaces import IWeeklyRecurrenceRule
 from schooltool.calendar.utils import parse_date, parse_datetimetz
 from schooltool.calendar.utils import parse_time, weeknum_bounds
 from schooltool.calendar.utils import week_start, prev_month, next_month
+from schooltool.app.utils import vocabulary
 from schooltool.person.interfaces import IPerson
-from schooltool.person.interfaces import vocabulary
 from schooltool.term.interfaces import IDateManager
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.securitypolicy.crowds import Crowd
