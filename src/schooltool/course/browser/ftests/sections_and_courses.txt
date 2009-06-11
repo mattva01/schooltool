@@ -66,6 +66,10 @@ And now let's add a couple of courses:
 
     >>> manager.getLink('New Course').click()
     >>> manager.getControl('Title').value = "English"
+    >>> manager.getControl('Description').value = "English course description"
+    >>> manager.getControl('Course ID').value = "english"
+    >>> manager.getControl('Goverment ID').value = "english101"
+    >>> manager.getControl('Credits').value = "4"
     >>> manager.getControl('Add').click()
 
 Now let's add some sections for our courses:
@@ -74,9 +78,22 @@ Now let's add some sections for our courses:
     >>> manager.getLink('Courses').click()
     >>> manager.getLink('English').click()
 
-
     >>> manager.url
     'http://localhost/schoolyears/2005-2006/courses/english'
+
+    >>> manager.printQuery("id('course-view')/div[@class='info-block']/p")
+    <p>
+      Course ID:
+      english
+    </p>
+    <p>
+      Goverment ID:
+      english101
+    </p>
+    <p>
+      Credits:
+      4
+    </p>
 
     >>> manager.getControl('For term:').value = ['fall']
     >>> manager.getControl('New Section').click()
