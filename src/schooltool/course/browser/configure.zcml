@@ -11,7 +11,7 @@
         label="Add a Course"
         name="addSchoolToolCourse.html"
         schema="schooltool.course.interfaces.ICourse"
-        fields="title description"
+        fields="title description course_id government_id credits"
         set_before_add="title"
         content_factory="schooltool.course.course.Course"
         permission="schooltool.edit"
