@@ -34,6 +34,7 @@ from zope.interface import implements
 import zope.event
 
 from schooltool.relationship.interfaces import IRelationshipLinks
+from schooltool.relationship.interfaces import IRelationshipInfo
 from schooltool.relationship.interfaces import IRelationshipLink
 from schooltool.relationship.interfaces import IRelationshipProperty
 from schooltool.relationship.interfaces import IBeforeRelationshipEvent
@@ -283,23 +284,29 @@ class RelationshipSchema(object):
 class RelationshipProperty(object):
     """Relationship property.
 
+        >>> from zope.annotation.interfaces import IAttributeAnnotatable
+        >>> from schooltool.relationship.tests import URIStub
+        >>> from schooltool.relationship.tests import setUpRelationships
+        >>> setUpRelationships()
+
     Instead of calling global functions and passing URIs around you can define
     a property on an object and use it to create and query relationships:
 
-        >>> class SomeClass(object): # must be a new-style class
-        ...     friends = RelationshipProperty('example:Friendship',
-        ...                                    'example:Friend',
-        ...                                    'example:Friend')
+        >>> class SomeClass(object):
+        ...     implements(IAttributeAnnotatable)
+        ...     friends = RelationshipProperty(URIStub('example:Friendship'),
+        ...                                    URIStub('example:Friend'),
+        ...                                    URIStub('example:Friend'))
 
     The property is introspectable, although that's not very useful
 
-        >>> SomeClass.friends.rel_type
+        >>> SomeClass.friends.rel_type.uri
         'example:Friendship'
 
-        >>> SomeClass.friends.my_role
+        >>> SomeClass.friends.my_role.uri
         'example:Friend'
 
-        >>> SomeClass.friends.other_role
+        >>> SomeClass.friends.other_role.uri
         'example:Friend'
 
     IRelationshipProperty defines things you can do with a relationship
@@ -358,9 +365,9 @@ class BoundRelationshipProperty(object):
     @property
     def relationships(self):
         linkset = IRelationshipLinks(self.this).getLinksByRole(self.other_role)
-        for link in linkset:
-            if link.rel_type == self.rel_type:
-                yield RelationshipInfo(this, link)
+        return [RelationshipInfo(self.this, link)
+                for link in linkset
+                if link.rel_type == self.rel_type]
 
     def add(self, other, extra_info=None):
         """Establish a relationship between `self.this` and `other`."""
@@ -380,18 +387,11 @@ class RelationshipInfo(object):
 
         >>> from zope.component import provideAdapter
         >>> from schooltool.relationship.tests import setUp, tearDown
+        >>> from schooltool.relationship.tests import setUpRelationships
         >>> from schooltool.relationship.tests import SomeObject
         >>> from schooltool.relationship.tests import URIStub
         >>> setUp()
-
-        >>> storage = {}
-        >>> def getLinkSet(o):
-        ...     if o._name not in storage:
-        ...         storage[o._name] = LinkSet()
-        ...     return storage[o._name]
-        >>> provideAdapter(getLinkSet,
-        ...                adapts=(SomeObject,),
-        ...                provides=IRelationshipLinks)
+        >>> setUpRelationships()
 
     Say we relate two objects.
 
@@ -431,9 +431,11 @@ class RelationshipInfo(object):
 
     """
 
-    def __init__(self, this, link):
+    implements(IRelationshipInfo)
+
+    def __init__(self, this, link_to_other):
         self._this = this
-        self._link = link
+        self._link = link_to_other
 
     @property
     def source(self):

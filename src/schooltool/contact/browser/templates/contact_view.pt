@@ -2,7 +2,30 @@
   <body>
     <metal:nothing metal:fill-slot="content-header" />
     <metal:block metal:fill-slot="body">
-      <div metal:use-macro="macro:display" />
+      <div metal:use-macro="macro:display">
+        <metal:block metal:fill-slot="above-buttons">
+
+          <div>
+          <fieldset tal:define="relationships view/relationships"
+                    tal:condition="relationships">
+            <tal:block repeat="info relationships">
+
+<div class="row" tal:condition="info/relationship" i18n:translate="">
+  <span tal:replace="info/getRelationshipTitle" i18n:name="relationship" />
+  of
+  <a tal:replace="structure info/__parent__/@@link" i18n:name="person" />
+</div>
+<div class="row" tal:condition="not:info/relationship" i18n:translate="">
+  Contact of
+  <a tal:replace="structure info/__parent__/@@link" i18n:name="person" />
+</div>
+
+            </tal:block>
+          </fieldset>
+          </div>
+
+        </metal:block>
+      </div>
     </metal:block>
   </body>
 </html>

@@ -16,6 +16,17 @@
         interface="schooltool.contact.interfaces.IContact" />
   </class>
 
+  <class class=".contact.ContactPersonInfo">
+    <implements
+        interface="zope.annotation.interfaces.IAttributeAnnotatable" />
+    <require
+        permission="schooltool.edit"
+        set_schema="schooltool.contact.interfaces.IContactPersonInfo" />
+    <require
+        permission="schooltool.view"
+        interface="schooltool.contact.interfaces.IContactPersonInfo" />
+  </class>
+
   <class class=".contact.ContactContainer">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"

@@ -1,0 +1,6 @@
+<fieldset>
+  <legend tal:condition="view/person" i18n:translate="">
+    Contact of <span tal:replace="view/person/title" i18n:name="person" />
+  </legend>
+  <div metal:use-macro="macro:widget-rows" />
+</fieldset>

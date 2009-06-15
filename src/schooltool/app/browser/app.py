@@ -159,6 +159,17 @@ class RelationshipViewBase(BrowserView):
     def getOmmitedItems(self):
         return self.getSelectedItems()
 
+    def setUpTables(self):
+        self.available_table = self.createTableFormatter(
+            ommit=self.getOmmitedItems(),
+            prefix="add_item")
+
+        self.selected_table = self.createTableFormatter(
+            filter=lambda l: l,
+            items=self.getSelectedItems(),
+            prefix="remove_item",
+            batch_size=0)
+
     def update(self):
         context_url = absoluteURL(self.context, self.request)
 
@@ -173,15 +184,7 @@ class RelationshipViewBase(BrowserView):
         elif 'CANCEL' in self.request:
             self.request.response.redirect(context_url)
 
-        self.available_table = self.createTableFormatter(
-            ommit=self.getOmmitedItems(),
-            prefix="add_item")
-
-        self.selected_table = self.createTableFormatter(
-            filter=lambda l: l,
-            items=self.getSelectedItems(),
-            prefix="remove_item",
-            batch_size=0)
+        self.setUpTables()
 
 
 class ApplicationLoginView(BrowserView):

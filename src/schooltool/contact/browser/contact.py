@@ -36,7 +36,7 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from zc.table.interfaces import ISortableColumn
 from zc.table.column import GetterColumn
-from z3c.form import form, field, button
+from z3c.form import form, subform, field, button
 
 from schooltool.table.interfaces import ITableFormatter
 from schooltool.table.table import url_cell_formatter
@@ -46,8 +46,10 @@ from schooltool.skin.containers import TableContainerView
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.contact.interfaces import IContactable
 from schooltool.contact.interfaces import IContactContainer
-from schooltool.contact.contact import Contact
+from schooltool.contact.interfaces import IContactPersonInfo
+from schooltool.contact.contact import ContactPersonInfo
 from schooltool.contact.interfaces import IContact
+from schooltool.contact.contact import Contact
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -71,6 +73,10 @@ class ContactAddView(form.AddForm):
     label = _("Add new contact")
     template = ViewPageTemplateFile('templates/contact_add.pt')
     fields = field.Fields(IContact)
+
+    def __init__(self, *args, **kw):
+        super(ContactAddView, self).__init__(*args, **kw)
+        self.subforms = []
 
     def updateActions(self):
         super(ContactAddView, self).updateActions()
@@ -111,6 +117,35 @@ class ContactAddView(form.AddForm):
         self.request.response.redirect(url)
 
 
+class ContactPersonInfoSubForm(subform.EditSubForm):
+    """Form for editing additional person's contact information."""
+
+    template = ViewPageTemplateFile('templates/contactperson_subform.pt')
+    fields = field.Fields(IContactPersonInfo)
+    prefix = 'person_contact'
+
+    changed = False
+
+    @property
+    def person(self):
+        return self.context.__parent__
+
+    @button.handler(form.EditForm.buttons['apply'])
+    def handleApply(self, action):
+        data, errors = self.widgets.extract()
+        if errors:
+            # XXX: we don't handle errors for now
+            pass
+        content = self.getContent()
+        changed = form.applyChanges(self, content, data)
+        self.changed = bool(changed)
+
+    @button.handler(ContactAddView.buttons['add'])
+    def handleAdd(self, action):
+        # Pretty, isn't it?
+        self.handleApply.func(self, action)
+
+
 class PersonContactAddView(ContactAddView):
     """Contact add form that assigns the contact to a person."""
 
@@ -121,12 +156,27 @@ class PersonContactAddView(ContactAddView):
         return _("Add new contact for ${person}",
                  mapping={'person': self.context.title})
 
+    def update(self):
+        # Create contact_info object for adding
+        self.contact_info = ContactPersonInfo()
+        # Add person contact.
+        super(PersonContactAddView, self).update()
+        # Update contact info.
+        self.subforms = [
+            ContactPersonInfoSubForm(self.contact_info, self.request, self),
+            ]
+        for subform in self.subforms:
+            subform.update()
+
     def add(self, contact):
-        """Add `contact` to the container. And assign it to the person."""
+        """Add `contact` to the container and assign it to the person."""
         contact_container = IContactContainer(ISchoolToolApplication(None))
         name = INameChooser(contact_container).chooseName('', contact)
         contact_container[name] = contact
-        IContactable(removeSecurityProxy(self.context)).contacts.add(contact)
+
+        context = removeSecurityProxy(self.context)
+        self.contact_info.__parent__ = context
+        IContactable(context).contacts.add(contact, self.contact_info)
         return contact
 
 
@@ -140,6 +190,20 @@ class ContactEditView(form.EditForm):
     def handle_cancel_action(self, action):
         url = absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
+
+    def update(self):
+        super(ContactEditView, self).update()
+        self.subforms = []
+        for relationship_info in self.context.persons.relationships:
+            subform = ContactPersonInfoSubForm(
+                relationship_info.extra_info, self.request, self)
+            prefix = unicode(relationship_info.target.__name__).encode('punycode')
+            subform.prefix += '.%s' % prefix
+            subform.update()
+            # One more hack.
+            if subform.changed and self.status == self.noChangesMessage:
+                self.status = self.successMessage
+            self.subforms.append(subform)
 
     def updateActions(self):
         super(ContactEditView, self).updateActions()
@@ -157,6 +221,10 @@ class ContactView(form.DisplayForm):
     """Display form for basic contact."""
     template = ViewPageTemplateFile('templates/contact_view.pt')
     fields = field.Fields(IContact)
+
+    def relationships(self):
+        return [relationship_info.extra_info
+                for relationship_info in self.context.persons.relationships]
 
     def __call__(self):
         self.update()
@@ -193,9 +261,7 @@ def format_street_address(item, formatter):
     return ", ".join(address_parts)
 
 
-class ContactTableFormatter(SchoolToolTableFormatter):
-
-    def columns(self):
+def contact_table_collumns():
         first_name = GetterColumn(name='first_name',
                                   title=_(u"First Name"),
                                   getter=lambda i, f: i.first_name,
@@ -211,6 +277,11 @@ class ContactTableFormatter(SchoolToolTableFormatter):
                                title=_(u"Address"),
                                getter=format_street_address)
         return [first_name, last_name, address]
+
+
+class ContactTableFormatter(SchoolToolTableFormatter):
+
+    columns = lambda self: contact_table_collumns()
 
     def sortOn(self):
         return (("first_name", False),)

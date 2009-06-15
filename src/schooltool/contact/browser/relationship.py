@@ -22,13 +22,46 @@ Contact relationship views.
 """
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.security.proxy import removeSecurityProxy
+from zope.component import getMultiAdapter
+from zc.table.column import GetterColumn
+
+from schooltool.common import SchoolToolMessage as _
+from schooltool.relationship.relationship import IRelationshipLinks
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.browser.app import RelationshipViewBase
 
+from schooltool.contact.interfaces import IContactPersonInfo
 from schooltool.contact.interfaces import IContactable
 from schooltool.contact.interfaces import IContactContainer
-from schooltool.common import SchoolToolMessage as _
+from schooltool.contact.contact import URIPerson, URIContact
+from schooltool.contact.contact import URIContactRelationship
+from schooltool.contact.contact import ContactPersonInfo
+from schooltool.contact.browser.contact import contact_table_collumns
+from schooltool.app.browser.app import RelationshipViewBase
+
+
+def make_relationship_collumn_getter(person=None):
+    def format_item(item, formatter):
+        if person is None:
+            return u''
+        item = removeSecurityProxy(item)
+        try:
+            links = IRelationshipLinks(person)
+            link = links.find(
+                URIPerson, item, URIContact, URIContactRelationship)
+        except ValueError:
+            return u''
+        return link.extra_info.getRelationshipTitle()
+    return format_item
+
+
+def assigned_contacts_columns(person=None):
+    first_name, last_name, address = contact_table_collumns()
+    relationship = GetterColumn(
+        name='relationship',
+        title=_(u"Relationship"),
+        getter=make_relationship_collumn_getter(person))
+    return [first_name, last_name, relationship, address]
 
 
 class ContactManagementView(RelationshipViewBase):
@@ -53,3 +86,23 @@ class ContactManagementView(RelationshipViewBase):
 
     def getCollection(self):
         return IContactable(removeSecurityProxy(self.context)).contacts
+
+    def add(self, item):
+        """Add an item to the list of selected items."""
+        collection = removeSecurityProxy(self.getCollection())
+        info = ContactPersonInfo()
+        info.__parent__ = removeSecurityProxy(self.context)
+        collection.add(item, info)
+
+    def setUpTables(self):
+        self.available_table = self.createTableFormatter(
+            ommit=self.getOmmitedItems(),
+            prefix="add_item")
+
+        self.selected_table = self.createTableFormatter(
+            filter=lambda l: l,
+            items=self.getSelectedItems(),
+            columns=assigned_contacts_columns(self.context),
+            prefix="remove_item",
+            batch_size=0)
+

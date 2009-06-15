@@ -20,6 +20,7 @@
 """
 Contact interfaces
 """
+import zope.schema
 from zope.app.container.constraints import contains
 from zope.app.container.constraints import containers
 from zope.app.container.interfaces import IContained
@@ -29,6 +30,7 @@ from zope.schema import TextLine
 from zope.schema.interfaces import IContainer
 
 from schooltool.common import SchoolToolMessage as _
+from schooltool.app.utils import vocabulary
 
 
 class IContact(Interface):
@@ -62,6 +64,27 @@ class IContact(Interface):
     language = TextLine(title=_(u"Language"), required=False)
 
     persons = Attribute("Persons attached to this contact (see IRelationshipProperty)")
+
+
+class IContactPersonInfo(Interface):
+    """Information about a contact of a person."""
+
+    __parent__ = Attribute("""The person.""")
+
+    relationship = zope.schema.Choice(
+        title=_(u"Relationship"),
+        description=_("Contact's relationship with the person"),
+        vocabulary=vocabulary([
+            ('parent', _("Parent")),
+            ('step_parent', _("Step-parent")),
+            ('foster_parent', _("Foster parent")),
+            ('guardian', _("Guardian")),
+            ('sibling', _("Sibling")),
+            ]),
+        required=False)
+
+    def getRelationshipTitle():
+        """Return a title from the vocabulary for the selected relationship."""
 
 
 class IContactContainer(IContainer):

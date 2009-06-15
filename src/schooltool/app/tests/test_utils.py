@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2009 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,14 +17,18 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Generations for database version upgrades.
-
-$Id$
+Unit tests for schooltool.app.utils.
 """
+import unittest
 
-from zope.app.generations.generations import SchemaManager
+from zope.testing import doctest
 
-schemaManager = SchemaManager(
-    minimum_generation=31,
-    generation=31,
-    package_name='schooltool.generations')
+
+def test_suite():
+    return unittest.TestSuite([
+        doctest.DocTestSuite('schooltool.app.utils'),
+        ])
+
+
+if __name__ == '__main__':
+    unittest.main(defaultTest='test_suite')

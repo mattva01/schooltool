@@ -259,11 +259,136 @@ def doctest_unrelateAll():
     """
 
 
+def doctest_BoundRelationshipProperty():
+    """Tests for BoundRelationshipProperty.
+
+        >>> from schooltool.relationship.tests import setUp, tearDown
+        >>> setUp()
+
+    Set up two types of membership.
+
+        >>> role_student = URIStub('example:Student')
+        >>> role_instructor = URIStub('example:Instructor')
+        >>> role_course = URIStub('example:Course')
+
+        >>> uri_attending = URIStub('example:Attending')
+        >>> uri_instruction = URIStub('example:Instruction')
+
+        >>> from schooltool.relationship import RelationshipSchema
+        >>> Instruction = RelationshipSchema(uri_instruction,
+        ...                                  instructor=role_instructor,
+        ...                                  course=role_course)
+        >>> Attending = RelationshipSchema(uri_attending,
+        ...                                student=role_student,
+        ...                                course=role_course)
+
+    Create Course and Person classes.  We will use the RelationshipProperty
+    that should bind to an instance as BoundRelationshipProperty.
+
+        >>> from schooltool.relationship.tests import SomeObject
+        >>> from schooltool.relationship.relationship import RelationshipProperty
+
+        >>> class Course(SomeObject):
+        ...     students = RelationshipProperty(
+        ...         uri_attending, role_course, role_student)
+        ...     instructors = RelationshipProperty(
+        ...         uri_instruction, role_course, role_instructor)
+
+        >>> class Person(SomeObject):
+        ...     attends = RelationshipProperty(
+        ...         uri_attending, role_student, role_course)
+        ...     instructs = RelationshipProperty(
+        ...         uri_instruction, role_instructor, role_course)
+
+    Set up a course with several students.
+
+        >>> course_a = Course('course A')
+
+        >>> john, peter, cathy = students = [
+        ...     Person(name) for name in ['John', 'Peter', 'Cathy']]
+        >>> for student in students:
+        ...     Attending(student=student, course=course_a)
+
+    Set up a teacher that instructs the two courses.
+
+        >>> teacher = Person('William')
+        >>> course_b = Course('course B')
+        >>> Instruction(instructor=teacher, course=course_a)
+        >>> Instruction(instructor=teacher, course=course_b)
+
+    We're done with preparations.
+
+    Check that relationship properties were bound.
+
+        >>> course_a.students
+        <schooltool.relationship.relationship.BoundRelationshipProperty object ...>
+        >>> teacher.instructs
+        <schooltool.relationship.relationship.BoundRelationshipProperty object ...>
+
+    They can be used to add and remove relationships, can be iterated to obtain
+    related objects and have other useful methods.
+
+        >>> bool(course_b.students)
+        False
+
+        >>> for student in students:
+        ...     course_b.students.add(student)
+
+        >>> len(course_b.students)
+        3
+
+        >>> course_b.students.remove(john)
+
+        >>> len(course_b.students)
+        2
+
+        >>> bool(course_b.students)
+        True
+
+        >>> list(course_b.students)
+        [Peter, Cathy]
+
+    You can also obtain RelationshipInfo helpers for related objects.
+
+        >>> course_a.instructors.relationships
+        [<schooltool.relationship.relationship.RelationshipInfo object ...>]
+
+        >>> rel_info = course_a.instructors.relationships[0]
+        >>> rel_info.source
+        course A
+        >>> rel_info.target
+        William
+
+    Notice that 'source' in RelationshipInfo is the instace that
+    BoundRelationshipProperty is bound to.  Let's look at the info for a class
+    that William teaches.
+
+        >>> list(teacher.instructs)
+        [course A, course B]
+
+        >>> rel_info = teacher.instructs.relationships[0]
+        >>> rel_info.source
+        William
+        >>> rel_info.target
+        course A
+
+    Finally, let's check that BoundRelationshipProperty.relationships are
+    filtered correctly.
+
+        >>> [info.target for info in course_b.students.relationships]
+        [Peter, Cathy]
+        >>> [info.target for info in course_b.instructors.relationships]
+        [William]
+
+    """
+
+
 def test_suite():
+    optionflags = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
     return unittest.TestSuite([
                 doctest.DocFileSuite('../README.txt'),
                 doctest.DocTestSuite('schooltool.relationship.relationship'),
-                doctest.DocTestSuite(),
+                doctest.DocTestSuite(optionflags=optionflags),
            ])
 
 if __name__ == '__main__':
