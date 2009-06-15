@@ -25,6 +25,7 @@ an IRelationshipLinks adapter.  There is a default adapter registered for
 all IAnnotatable objects that uses Zope 3 annotations.
 """
 
+import rwproperty
 from BTrees.OOBTree import OOBTree
 from persistent import Persistent
 from persistent.list import PersistentList
@@ -33,6 +34,7 @@ from zope.interface import implements
 import zope.event
 
 from schooltool.relationship.interfaces import IRelationshipLinks
+from schooltool.relationship.interfaces import IRelationshipInfo
 from schooltool.relationship.interfaces import IRelationshipLink
 from schooltool.relationship.interfaces import IRelationshipProperty
 from schooltool.relationship.interfaces import IBeforeRelationshipEvent
@@ -282,23 +284,29 @@ class RelationshipSchema(object):
 class RelationshipProperty(object):
     """Relationship property.
 
+        >>> from zope.annotation.interfaces import IAttributeAnnotatable
+        >>> from schooltool.relationship.tests import URIStub
+        >>> from schooltool.relationship.tests import setUpRelationships
+        >>> setUpRelationships()
+
     Instead of calling global functions and passing URIs around you can define
     a property on an object and use it to create and query relationships:
 
-        >>> class SomeClass(object): # must be a new-style class
-        ...     friends = RelationshipProperty('example:Friendship',
-        ...                                    'example:Friend',
-        ...                                    'example:Friend')
+        >>> class SomeClass(object):
+        ...     implements(IAttributeAnnotatable)
+        ...     friends = RelationshipProperty(URIStub('example:Friendship'),
+        ...                                    URIStub('example:Friend'),
+        ...                                    URIStub('example:Friend'))
 
     The property is introspectable, although that's not very useful
 
-        >>> SomeClass.friends.rel_type
+        >>> SomeClass.friends.rel_type.uri
         'example:Friendship'
 
-        >>> SomeClass.friends.my_role
+        >>> SomeClass.friends.my_role.uri
         'example:Friend'
 
-        >>> SomeClass.friends.other_role
+        >>> SomeClass.friends.other_role.uri
         'example:Friend'
 
     IRelationshipProperty defines things you can do with a relationship
@@ -354,6 +362,13 @@ class BoundRelationshipProperty(object):
         return iter(getRelatedObjects(self.this, self.other_role,
                                       self.rel_type))
 
+    @property
+    def relationships(self):
+        linkset = IRelationshipLinks(self.this).getLinksByRole(self.other_role)
+        return [RelationshipInfo(self.this, link)
+                for link in linkset
+                if link.rel_type == self.rel_type]
+
     def add(self, other, extra_info=None):
         """Establish a relationship between `self.this` and `other`."""
         relate(self.rel_type, (self.this, self.my_role),
@@ -363,6 +378,89 @@ class BoundRelationshipProperty(object):
         """Unlink a relationship between `self.this` and `other`."""
         unrelate(self.rel_type, (self.this, self.my_role),
                                 (other, self.other_role))
+
+
+class RelationshipInfo(object):
+    """Ugly implementation of access to relationship extra information.
+
+    Setup:
+
+        >>> from zope.component import provideAdapter
+        >>> from schooltool.relationship.tests import setUp, tearDown
+        >>> from schooltool.relationship.tests import setUpRelationships
+        >>> from schooltool.relationship.tests import SomeObject
+        >>> from schooltool.relationship.tests import URIStub
+        >>> setUp()
+        >>> setUpRelationships()
+
+    Say we relate two objects.
+
+        >>> URIMembership = URIStub('example:Membership')
+        >>> URIMember = URIStub('example:Member')
+        >>> URIGroup = URIStub('example:Group')
+
+        >>> a = SomeObject('a')
+        >>> b = SomeObject('b')
+
+        >>> relate(URIMembership, (a, URIMember), (b, URIGroup))
+
+    Two links were created, one for each object.
+
+        >>> link_to_b = list(IRelationshipLinks(a))[0]
+        >>> link_to_a = list(IRelationshipLinks(b))[0]
+
+    We will now construct a RelationshipInfo with object and it's link.
+
+        >>> info_a = RelationshipInfo(a, link_to_b)
+        >>> info_a.source
+        a
+
+        >>> info_a.target
+        b
+
+        >>> print info_a.extra_info
+        None
+
+    Setting extra_info updates both links.
+
+        >>> info_a.extra_info = 'extra'
+        >>> link_to_a.extra_info
+        'extra'
+        >>> link_to_b.extra_info
+        'extra'
+
+    """
+
+    implements(IRelationshipInfo)
+
+    def __init__(self, this, link_to_other):
+        self._this = this
+        self._link = link_to_other
+
+    @property
+    def source(self):
+        return self._this
+
+    @property
+    def target(self):
+        return self._link.target
+
+    @rwproperty.getproperty
+    def extra_info(self):
+        return self._link.extra_info
+
+    @rwproperty.setproperty
+    def extra_info(self, value):
+        this_link = self._link
+
+        links_of_target = IRelationshipLinks(self._link.target)
+        # If links_of_target.find raises a ValueError, our data structures are
+        # out of sync.
+        other_link = links_of_target.find(
+            this_link.role, self._this, this_link.my_role, this_link.rel_type)
+
+        this_link.extra_info = value
+        other_link.extra_info = value
 
 
 class Link(Persistent, Contained):

@@ -138,6 +138,11 @@ class TableContainerView(BrowserView):
         if 'CONFIRM' in self.request:
             for key in self.listIdsForDeletion():
                 del self.context[key]
+        # XXX: Update table formatter.  It should be set up in __call__, after
+        #      update(), if rendering the correct template.  But as update is
+        #      called from template for some genuine reason, I'll just stick
+        #      it here for now.  I hope to find some time to fix this later on.
+        self.setUpTableFormatter(self.table)
 
     def canModify(self):
         return canAccess(self.context, '__delitem__')

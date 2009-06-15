@@ -1,6 +1,7 @@
 #
+#
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2009 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,14 +18,22 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Generations for database version upgrades.
-
-$Id$
+SchoolTool application views.
 """
 
-from zope.app.generations.generations import SchemaManager
+import zope.schema
 
-schemaManager = SchemaManager(
-    minimum_generation=31,
-    generation=31,
-    package_name='schooltool.generations')
+
+def vocabulary(choices):
+    """Create a SimpleVocabulary from a list of values and titles.
+
+    >>> v = vocabulary([('value1', u"Title for value1"),
+    ...                 ('value2', u"Title for value2")])
+    >>> for term in v:
+    ...   print term.value, '|', term.token, '|', term.title
+    value1 | value1 | Title for value1
+    value2 | value2 | Title for value2
+
+    """
+    return zope.schema.vocabulary.SimpleVocabulary(
+        [zope.schema.vocabulary.SimpleTerm(v, title=t) for v, t in choices])

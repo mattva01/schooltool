@@ -227,8 +227,9 @@ def doctest_TableContainerView():
 
         >>> view.canModify = lambda: True
         >>> result = view()
-        Setting up table formatter: {'columns_before': [<....DependableCheckboxColumn object at ...>],
-                                     'formatters': [<function url_cell_formatter at ...>]}
+        Setting up table formatter:
+            {'columns_before': [<....DependableCheckboxColumn object at ...>],
+             'formatters': [<function url_cell_formatter at ...>]}
 
         >>> result
         'The table template.'
@@ -261,6 +262,9 @@ def doctest_TableContainerView():
     These two should be gone after update:
 
         >>> view.update()
+        Setting up table formatter:
+            {'columns_before': [<...DependableCheckboxColumn ...>],
+             'formatters': [<function url_cell_formatter ...>]}
         >>> ids = [key for key in personContainer]
         >>> ids.sort()
         >>> ids

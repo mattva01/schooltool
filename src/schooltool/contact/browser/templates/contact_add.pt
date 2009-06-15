@@ -2,7 +2,13 @@
   <body>
     <metal:nothing metal:fill-slot="content-header" />
     <metal:block metal:fill-slot="body">
-      <div metal:use-macro="macro:form" />
+      <div metal:use-macro="macro:form">
+        <metal:block metal:fill-slot="above-buttons">
+          <tal:block
+              repeat="form view/subforms"
+              content="structure form/render" />
+        </metal:block>
+      </div>
     </metal:block>
   </body>
 </html>

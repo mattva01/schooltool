@@ -19,7 +19,10 @@
 """
 Upgrade SchoolTool to generation 30.
 
-Remove unused attributes from person schema.
+Groups are no longer allowed as members of a section, so add members of a group
+directly to the section.
+
+Also, courses gained several new attributes, so fill in their course_id.
 """
 import transaction
 

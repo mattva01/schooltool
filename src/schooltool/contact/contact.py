@@ -33,6 +33,7 @@ from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationStartUpEvent
 from schooltool.app.app import InitBase
+from schooltool.contact.interfaces import IContactPersonInfo
 from schooltool.contact.interfaces import IContactable
 from schooltool.contact.interfaces import IContactContained
 from schooltool.contact.interfaces import IContactContainer
@@ -43,7 +44,8 @@ from schooltool.relationship.relationship import RelationshipSchema
 
 
 URIContactRelationship = URIObject('http://schooltool.org/ns/contact',
-                                   'Contact', 'The contact relationship.')
+                                   'Contact relationship',
+                                   'The contact relationship.')
 
 URIContact = URIObject('http://schooltool.org/ns/contact/contact',
                        'Contact', 'A contact relationship contact record role.')
@@ -51,7 +53,8 @@ URIContact = URIObject('http://schooltool.org/ns/contact/contact',
 URIPerson = URIObject('http://schooltool.org/ns/contact/person',
                       'Person', 'A contact relationship person role.')
 
-Contact = RelationshipSchema(URIContact, contact=URIContact, person=URIPerson)
+Contact = RelationshipSchema(URIContactRelationship,
+                             contact=URIContact, person=URIPerson)
 
 
 class ContactContainer(BTreeContainer):
@@ -82,9 +85,26 @@ class Contact(Persistent, Contained):
     mobile_phone = None
     language = None
 
-    persons = RelationshipProperty(URIContact,
+    persons = RelationshipProperty(URIContactRelationship,
                                    my_role=URIContact,
                                    other_role=URIPerson)
+
+
+class ContactPersonInfo(Persistent, Contained):
+    """Additional information about contact of a specific person."""
+
+    implements(IContactPersonInfo)
+
+    __parent__ = None
+    relationship = None
+
+    def getRelationshipTitle(self):
+        vocabulary = IContactPersonInfo['relationship'].vocabulary
+        try:
+            term = vocabulary.getTerm(self.relationship)
+        except LookupError:
+            return u''
+        return term.title
 
 
 class ContextRelationshipProperty(RelationshipProperty):
@@ -104,7 +124,7 @@ class ContextRelationshipProperty(RelationshipProperty):
 class Contactable(object):
     implements(IContactable)
 
-    contacts = ContextRelationshipProperty(URIContact,
+    contacts = ContextRelationshipProperty(URIContactRelationship,
                                            my_role=URIPerson,
                                            other_role=URIContact)
 

@@ -4,6 +4,9 @@ Contacts
     >>> browser = Browser('manager', 'schooltool')
     >>> browser.getLink('Manage').click()
 
+    >>> from schooltool.contact.browser.ftests import addPerson
+    >>> addPerson('Bill Student', 'student', 'pwd')
+
 Let's try and add a contact:
 
     >>> browser.getLink('Contacts').click()
@@ -72,6 +75,9 @@ We can add contacts directly to persons:
     >>> browser.getControl('City').value = 'Toadtown'
     >>> browser.getControl('Email').value = 'peter@example.com'
 
+    >>> relationship = browser.getControl('Relationship')
+    >>> relationship.value = ['parent']
+
     >>> browser.getControl('Add').click()
 
 And attach existing contact entries to a person as well:
@@ -83,6 +89,14 @@ And attach existing contact entries to a person as well:
 
 Both contacts should be assigned now:
 
+    >>> browser.printQuery("id('content-body')/form/fieldset[1]//thead//th")
+    <th>
+    </th>
+    <th> <span ...> First Name</span> <img ... alt="(descending)" /></th>
+    <th> <span ...> Last Name</span> <img ... alt="(sortable)" /></th>
+    <th> Relationship </th>
+    <th> Address </th>
+
     >>> browser.printQuery("id('content-body')/form/fieldset[1]//tbody//tr")
     <tr class="odd"><td>
           <input type="checkbox" name="remove_item.Contact" id="remove_item.Contact" /></td>
@@ -91,6 +105,8 @@ Both contacts should be assigned now:
         </td>
         <td>
           <a href="http://localhost/contacts/Contact">Administrator</a>
+        </td>
+        <td>
         </td>
         <td>
           Frog lane 13, Toadtown, Arizona, USA, 556677
@@ -105,6 +121,113 @@ Both contacts should be assigned now:
           <a href="http://localhost/contacts/Contact-2">Peterson</a>
         </td>
         <td>
+          Parent
+        </td>
+        <td>
           Frog lane 14, Toadtown
+        </td>
+    </tr>
+
+
+Contacts can be assigned to multiple persons.
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Persons').click()
+    >>> browser.getLink('Student').click()
+    >>> browser.getLink('Contacts').click()
+
+    >>> browser.getControl('Clear').click()
+    >>> browser.getControl('John').click()
+    >>> browser.getControl('Assign').click()
+
+Now we can see two persons when we navigate to contact's view.
+
+    >>> browser.getLink(url='Contact').click()
+
+    >>> browser.printQuery("id('content-body')//form//fieldset//div")
+    <BLANKLINE>
+    ...
+    ...First name...
+    ...John...
+    ...Last name...
+    ...Administrator...
+    ...
+    <div class="row">
+      Contact of
+      <a href="http://localhost/persons/manager">Administrator, SchoolTool</a>
+    </div>
+    <div class="row">
+      Contact of
+      <a href="http://localhost/persons/student">Student, Bill</a>
+    </div>
+
+Let's change the relationship with Bill.
+
+    >>> browser.getLink('Edit').click()
+
+    >>> relationship = browser.getControl('Relationship', index=1)
+    >>> relationship.value = ['parent']
+    >>> browser.getControl('Apply').click()
+
+    >>> browser.getLink('View').click()
+    >>> browser.printQuery("id('content-body')//form//fieldset//div")
+    <BLANKLINE>
+    ...
+    <div class="row">
+      Contact of
+      <a href="http://localhost/persons/manager">Administrator, SchoolTool</a>
+    </div>
+    <div class="row">
+      Parent of
+      <a href="http://localhost/persons/student">Student, Bill</a>
+    </div>
+
+Let's test contact deletion.
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Contacts').click()
+    >>> browser.getControl(name='delete.Contact').value = True
+    >>> browser.getControl(name='delete.Contact-2').value = True
+    >>> browser.getControl('Delete').click()
+    >>> browser.printQuery("//title | //form/li")
+    <title> Delete items </title>
+    <li>
+      <input type="hidden" name="delete.Contact" /><span>John</span>
+      <a href="http://localhost/contacts/Contact">Administrator</a>
+    </li>
+    <li>
+      <input type="hidden" name="delete.Contact-2" /><span>Peter</span>
+      <a href="http://localhost/contacts/Contact-2">Peterson</a>
+    </li>
+
+We can cancel deletion and navigate back to the contact list.
+
+    >>> browser.getControl('Cancel').click()
+    >>> browser.printQuery("//title")
+    <title>Contact index</title>
+
+    >>> browser.getControl(name='delete.Contact').value = False
+    >>> browser.getControl(name='delete.Contact-2').value = True
+    >>> browser.getControl('Delete').click()
+    >>> browser.printQuery("//form/li")
+    <li>
+      <input type="hidden" name="delete.Contact-2" /><span>Peter</span>
+      <a href="http://localhost/contacts/Contact-2">Peterson</a>
+    </li>
+
+Confirm deletion of Peter Peterson.
+
+    >>> browser.getControl('Confirm').click()
+    >>> browser.printQuery("//form//tbody//tr")
+    <tr class="odd"><td>
+        <input type="checkbox" name="delete.Contact" id="delete.Contact" /></td>
+        <td>
+          <a href="http://localhost/contacts/Contact">John</a>
+        </td>
+        <td>
+          <a href="http://localhost/contacts/Contact">Administrator</a>
+        </td>
+        <td>
+          Frog lane 13, Toadtown, Arizona, USA, 556677
         </td>
     </tr>
