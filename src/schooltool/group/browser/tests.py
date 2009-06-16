@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #
 # SchoolTool - common information systems platform for school administration
 # Copyright (c) 2005 Shuttleworth Foundation
@@ -500,17 +501,18 @@ def doctest_GroupCSVImportView():
     Now we'll try a text import.  Note that the description is not required
 
         >>> request.form = {
-        ...     'csvtext' : 'A Group, The best Group\nAnother Group',
+        ...     'csvtext' : u'A Group, The best Group\nAnother Group\nEspañol, Spanish Group\n\n\n',
         ...     'charset' : 'UTF-8',
         ...     'UPDATE_SUBMIT': 1}
         >>> view = GroupCSVImportView(container, request)
         >>> view.update()
         >>> [group for group in container]
-        [u'a-group', u'another-group']
+        [u'a-group', u'another-group', u'espa\xe3ol']
 
     If no data is provided, we naturally get an error
 
         >>> request.form = {'charset' : 'UTF-8', 'UPDATE_SUBMIT': 1}
+        >>> view = GroupCSVImportView(container, request)
         >>> view.update()
         >>> view.errors
         [u'No data provided']

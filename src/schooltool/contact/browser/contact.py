@@ -329,4 +329,5 @@ class ManageContactsActionViewlet(object):
     @property
     def link(self):
         return "@@manage_contacts.html?%s" % (
-            urllib.urlencode([('SEARCH_LAST_NAME', self.context.last_name)]))
+            urllib.urlencode([('SEARCH_LAST_NAME',
+                               self.context.last_name.encode("utf-8"))]))

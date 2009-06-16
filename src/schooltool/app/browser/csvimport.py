@@ -132,8 +132,9 @@ class BaseCSVImportView(BrowserView):
         ok = True
         if csvtext:
             self.csvtext = csvtext
-            self.importer.charset = None
-            ok = self.importer.importFromCSV(csvtext)
+            default_charset = "utf-8"
+            self.importer.charset = default_charset
+            ok = self.importer.importFromCSV(csvtext.encode(default_charset))
             if ok:
                 self.success.append(_("CSV text imported successfully."))
             else:

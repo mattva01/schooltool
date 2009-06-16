@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #
 # SchoolTool - common information systems platform for school administration
 # Copyright (c) 2005 Shuttleworth Foundation
@@ -90,24 +91,25 @@ def doctest_ResourceCSVImportView():
 
     Now we'll try a text import.  Note that the description is not required
 
-        >>> request.form = {'csvtext' : "A Resource, The best Resource\nAnother Resource",
+        >>> request.form = {'csvtext' : u"A Resource, The best Resource\nAnother Resource\nRecurso en Español, Spanish resource\n\n\n",
         ...                 'charset' : 'UTF-8',
         ...                 'UPDATE_SUBMIT': 1}
         >>> view = ResourceCSVImportView(container, request)
         >>> view.update()
         >>> [resource for resource in container]
-        [u'a-resource', u'another-resource']
+        [u'a-resource', u'another-resource', u'recurso-en-espa\xe3ol']
 
     If no data is provided, we naturally get an error
 
         >>> request.form = {'charset' : 'UTF-8', 'UPDATE_SUBMIT': 1}
+        >>> view = ResourceCSVImportView(container, request)
         >>> view.update()
         >>> view.errors
         [u'No data provided']
 
     We also get an error if a line starts with a comma (no title)
 
-        >>> request.form = {'csvtext' : ", No title provided here",
+        >>> request.form = {'csvtext' : u", No title provided here",
         ...                 'charset' : 'UTF-8',
         ...                 'UPDATE_SUBMIT': 1}
         >>> view = ResourceCSVImportView(container, request)
