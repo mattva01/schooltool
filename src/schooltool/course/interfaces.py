@@ -52,7 +52,7 @@ class ICourse(zope.interface.Interface):
         description=_("Localy used course identifier."))
 
     government_id = zope.schema.TextLine(
-        title=_("Goverment ID"),
+        title=_("Government ID"),
         required=False,
         description=_("Course identifier used by the government."))
 
