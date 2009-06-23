@@ -76,6 +76,10 @@
                      tal:condition="python:widget.mode == 'hidden'"
                      tal:replace="structure widget/render" />
             </tal:block>
+
+            <div metal:define-slot="extra-widgets" tal:replace="nothing">
+            </div>
+
           </fieldset>
         </metal:widget-rows>
         <metal:groups define-macro="groups">
@@ -102,9 +106,11 @@
       <div metal:define-macro="buttons">
         <div class="buttons controls"
              metal:define-slot="bottom-buttons">
-          <input tal:repeat="action view/actions/values"
-                 tal:replace="structure action/render"
-                 />
+          <tal:block condition="view/actions|nothing">
+            <input tal:repeat="action view/actions/values"
+                   tal:replace="structure action/render"
+                   />
+          </tal:block>
         </div>
       </div>
     </metal:buttons>
