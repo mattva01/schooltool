@@ -48,12 +48,14 @@ def vocabulary_titled(items):
     ...         self.__name__ = name
     ...         self.title = title
 
-    >>> v = vocabulary_titled([Item('value1', u"Title for value1"),
-    ...                        Item('value2', u"Title for value2")])
+    >>> v = vocabulary_titled([Item(u'thevalue1', u"Title for value1"),
+    ...                        Item(u'\xc5\xa0amas', u"Title for value2")])
     >>> for term in v:
     ...   print term.value, '|', term.token, '|', term.title
-    value1 | value1 | Title for value1
-    value2 | value2 | Title for value2
+    thevalue1- | thevalue1- | Title for value1
+    amas-uea5t | amas-uea5t | Title for value2
 
     """
-    return vocabulary([(item.__name__, item.title) for item in items])
+    return vocabulary(
+        [(unicode(item.__name__).encode('punycode'), item.title)
+         for item in items])
