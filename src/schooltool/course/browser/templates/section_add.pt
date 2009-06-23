@@ -1,77 +1,13 @@
-<html metal:use-macro="context/@@standard_macros/page"
-      i18n:domain="schooltool">
-<body>
-<div metal:fill-slot="body">
-
-<div metal:define-macro="addform">
-
-  <form tal:attributes="action request/URL"
-        method="post" enctype="multipart/form-data" class="standalone">
-
-    <fieldset metal:define-macro="formbody">
-
-      <h3 tal:condition="view/label"
-          tal:content="view/label"
-          metal:define-slot="heading"
-          >Edit something</h3>
-
-      <p tal:define="error view/error|nothing"
-         tal:condition="error"
-         tal:content="error" />
-
-      <p tal:define="status view/update"
-         tal:condition="status"
-         tal:content="status" />
-
-      <p tal:condition="view/errors" i18n:translate="">
-        There are <strong tal:content="python:len(view.errors)"
-                          i18n:name="num_errors">6</strong> input errors.
-      </p>
-
-      <div metal:define-slot="extra_info" tal:replace="nothing">
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+  <body>
+    <metal:nothing metal:fill-slot="content-header" />
+    <metal:block metal:fill-slot="body">
+      <div metal:use-macro="macro:form">
+        <metal:block metal:fill-slot="extra-widgets">
+          <tal:block content="structure view/course_subform/render" />
+          <tal:block content="structure view/term_subform/render" />
+        </metal:block>
       </div>
-
-      <div class="row" metal:define-slot="extra_top" tal:replace="nothing">
-        <div class="label">Extra top</div>
-        <div class="label"><input type="text" style="width:100%" /></div>
-      </div>
-
-      <div metal:use-macro="context/@@form_macros/widget_rows" />
-
-      <div class="separator"></div>
-
-      <div class="row" metal:define-slot="extra_bottom" tal:replace="nothing">
-        <div class="label">Extra bottom</div>
-        <div class="field"><input type="text" style="width:100%" /></div>
-      </div>
-
-      <div class="row">
-        <div class="label">
-          <label for="add_name" i18n:translate="">Identifier
-            (optional)
-          </label>
-        </div>
-        <div class="field">
-          <input id="add_name" type="text" name="add_input_name"
-                 tal:attributes="value view/newSectionId" />
-        </div>
-        <input id="field.course_id" name="field.course_id" type="hidden"
-               value=""
-               tal:attributes="value request/field.course_id|nothing" />
-    </fieldset>
-    <div class="controls">
-      <tal:if condition="view/validCourse">
-        <tal:block metal:use-macro="view/@@standard_macros/add-button" />
-      </tal:if>
-      <tal:if condition="not:view/validCourse">
-        <tal:block metal:use-macro="view/@@standard_macros/add-button-disabled" />
-      </tal:if>
-      <tal:block metal:use-macro="view/@@standard_macros/cancel-button" />
-    </div>
-
-  </form>
-</div>
-
-</div>
-</body>
+    </metal:block>
+  </body>
 </html>

@@ -141,6 +141,8 @@
       factory=".course.getCourseContainerForApp" />
   <adapter
       factory=".course.getCourseContainerForTerm" />
+  <adapter
+      factory=".course.getCourseContainerForCourse" />
 
   <adapter
       factory=".course.getSchoolYearForCourse" />

@@ -73,8 +73,6 @@ class CourseContainerView(ContainerView):
         return ISchoolYear(self.context)
 
 
-from schooltool.course.section import Section
-
 class CourseView(BrowserView):
     """A view for courses."""
 
@@ -83,10 +81,6 @@ class CourseView(BrowserView):
     @property
     def school_year(self):
         return ISchoolYear(self.context)
-
-    @property
-    def terms(self):
-        return ITermContainer(self.context)
 
     @property
     def details(self):
@@ -99,36 +93,6 @@ class CourseView(BrowserView):
                     'value': value,
                     })
         return details
-
-    def addSection(self, term):
-        sections = ISectionContainer(term)
-        section = Section()
-
-        chooser = INameChooser(sections)
-        name = chooser.chooseName('', section)
-        sections[name] = section
-        removeSecurityProxy(self.context).sections.add(section)
-        section.title = "%s (%s)" % (self.context.title, section.__name__)
-        return section
-
-    def update(self):
-        if 'ADD_SECTION' in self.request:
-            term_id = self.request.get('term', None)
-            if term_id is None:
-                self.error = _("Please select a term.")
-                return
-
-            term = self.terms.get(term_id, None)
-            if term is None:
-                self.error = _("Selected term does not exist.")
-                return
-
-            section = self.addSection(term)
-            self.request.response.redirect(absoluteURL(section, self.request))
-
-    def __call__(self):
-        self.update()
-        return self.index()
 
 
 class CourseAddView(AddView):

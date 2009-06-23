@@ -22,6 +22,11 @@ course browser views.
 $Id$
 """
 
+from collections import defaultdict
+
+import zope.event
+import zope.schema
+import zope.interface
 from zope.interface import implements
 from zope.i18n import translate
 from zope.security.proxy import removeSecurityProxy
@@ -38,6 +43,9 @@ from zope.app.container.interfaces import INameChooser
 from zc.table import table
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser.absoluteurl import absoluteURL
+from z3c.form import form, subform, field, widget, datamanager, button
+from z3c.form.action import ActionErrorOccurred
+from z3c.form.interfaces import ActionExecutionError
 
 from schooltool.person.interfaces import IPerson
 from schooltool.term.interfaces import ITerm
@@ -45,10 +53,12 @@ from schooltool.timetable.interfaces import ITimetables
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.skin.containers import ContainerView
 from schooltool.app.browser.app import BaseEditView
+from schooltool.term.interfaces import IDateManager
 from schooltool.term.term import getPreviousTerm, getNextTerm
+from schooltool.app.utils import vocabulary_titled
 
 from schooltool.common import SchoolToolMessage as _
-from schooltool.course.interfaces import ICourseContainer
+from schooltool.course.interfaces import ICourse, ICourseContainer
 from schooltool.course.interfaces import ISection, ISectionContainer
 from schooltool.course.section import Section
 from schooltool.course.section import copySection
@@ -244,32 +254,229 @@ class SectionNameChooser(NameChooser):
         return n
 
 
-class SectionAddView(AddView):
+class SectionAddView(form.AddForm):
     """A view for adding Sections."""
 
-    def getCourseFromId(self, cid):
-        try:
-            return ICourseContainer(self.context.context)[cid]
-        except KeyError:
-            self.error = _("No such course.")
+    default_term = None
+    default_course = None
+    subforms = None
+    _created_obj = None
 
-    def __init__(self, context, request):
-        super(AddView, self).__init__(context, request)
+    template = ViewPageTemplateFile('templates/section_add.pt')
 
-        try:
-            course_id = request['field.course_id']
-        except KeyError:
-            self.error = _("Need a course ID.")
-            return
+    # Note that we also omit the title field, it will be auto-generated
+    # See concerns raised in https://bugs.launchpad.net/schooltool/+bug/389283
+    fields = field.Fields(ISection).omit(
+        'title',
+        'label', 'instructors', 'members', 'courses', 'size',
+        'previous', 'next', 'linked_sections')
 
-        self.course = self.getCourseFromId(course_id)
+    def update(self):
+        super(SectionAddView, self).update()
+        self._finishedAdd = False
 
-    def __call__(self):
+        course_id = self.default_course and self.default_course.__name__ or None
+        self.course_subform = NewSectionCoursesSubform(
+            self.context, self.request, self,
+            default_course_id=course_id)
+        self.term_subform = NewSectionTermsSubform(
+            self.context, self.request, self,
+            default_term=self.default_term)
+
+        self.course_subform.update()
+        self.term_subform.update()
+
+        if (self.course_subform.errors or
+            self.term_subform.errors or
+            self.widgets.errors):
+            self.status = self.formErrorsMessage
+        elif self._created_obj:
+            self.add(self._created_obj)
+            self._finishedAdd = True
+
+    def create(self, data):
         section = Section()
-        self.context.add(section)
-        self.course.sections.add(section)
-        section.title = "%s (%s)" % (self.course.title, section.__name__)
-        self.request.response.redirect(absoluteURL(section, self.request))
+        form.applyChanges(self, section, data)
+        return section
+
+    def add(self, section):
+        """Add `contact` to the container.
+
+        Uses the username of `contact` as the object ID (__name__).
+        """
+
+        course = self.course_subform.course
+        terms = self.term_subform.terms
+        if course is None or not terms:
+            return None
+
+        # add the section to the first term
+        sections = ISectionContainer(terms[0])
+        name = INameChooser(sections).chooseName('', section)
+        sections[name] = section
+        section.courses.add(removeSecurityProxy(course))
+
+        # overwrite section title.
+        section.title = "%s (%s)" % (course.title, section.__name__)
+
+        # copy and link section in other selected terms
+        for term in terms[1:]:
+            new_section = copySection(section, term)
+            new_section.previous = section
+            section = new_section
+        self._finishedAdd = False
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request)
+
+    @button.buttonAndHandler(_('Add'), name='add')
+    def handleAdd(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        # Note we skip immediate adding of the object,
+        # because we want to check subforms for errors first.
+        self._created_obj = self.create(data)
+
+    @button.buttonAndHandler(_("Cancel"), name='cancel')
+    def handle_cancel_action(self, action):
+        url = absoluteURL(self.context, self.request)
+        self.request.response.redirect(self.nextURL())
+
+    def updateActions(self):
+        super(SectionAddView, self).updateActions()
+        self.actions['add'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
+
+class NewSectionTermsSubform(subform.EditSubForm):
+    template = ViewPageTemplateFile('templates/basic_subform.pt')
+    prefix = 'terms'
+
+    errors = None
+    span = None
+
+    def __init__(self, *args, **kw):
+        default_term = kw.pop('default_term', None)
+        super(NewSectionTermsSubform, self).__init__(*args, **kw)
+
+        if default_term is None:
+            default_term = getUtility(IDateManager).current_term
+        self.setUpFields(default_term)
+
+    def setUpFields(self, default_term):
+        terms = ISchoolYear(self.context)
+        self.vocabulary=vocabulary_titled(terms.values())
+        self.span = defaultdict(lambda:default_term.__name__)
+        self._addTermChoice('starts', _("Starts in term"))
+        self._addTermChoice('ends', _("Ends in term"))
+
+    def _addTermChoice(self, name, title):
+        schema_field = zope.schema.Choice(
+            __name__=name, title=title,
+            required=True,
+            vocabulary=self.vocabulary,
+            default=self.span[name])
+        self.fields += field.Fields(schema_field)
+
+    def getContent(self):
+        return self.span
+
+    @property
+    def terms(self):
+        if self.errors:
+            return []
+        terms = ISchoolYear(self.context)
+        starts = terms[self.span['starts']]
+        ends = terms[self.span['ends']]
+        return [term for term in terms.values()
+                if (term.first >= starts.first and
+                    term.last <= ends.last)]
+
+    @button.handler(SectionAddView.buttons['add'])
+    def handleAdd(self, action):
+        data, self.errors = self.widgets.extract()
+        if self.errors:
+            return
+        changed = form.applyChanges(self, self.getContent(), data)
+        terms = ISchoolYear(self.context)
+        starts = terms[self.span['starts']]
+        ends = terms[self.span['ends']]
+        if starts.first > ends.first:
+            # XXX: this is a workaround for a bug in z3c.form: subforms do
+            #      not handle action execution errors properly.
+            #      The bug is fixed in z3c.form 2.0, as far as I know.
+            widget_name = '%s.widgets.ends:list' % self.prefix
+            error = ActionExecutionError(zope.interface.Invalid(
+                _('Starting term ($starts_in) is later than ending term ($ends_in)',
+                  mapping={'starts_in': starts.title,
+                           'ends_in': ends.title})))
+            zope.event.notify(ActionErrorOccurred(action, error))
+
+
+# XXX: TODO: Add "--no value--" to the course selector dropdown in
+#      NewSectionCoursesSubform, once we depend on z3c.form 2.0.
+
+
+class NewSectionCoursesSubform(subform.EditSubForm):
+    template = ViewPageTemplateFile('templates/basic_subform.pt')
+    prefix = 'courses'
+
+    errors = None
+    values = None
+
+    def __init__(self, *args, **kw):
+        default_course_id = kw.pop('default_course_id', None)
+        super(NewSectionCoursesSubform, self).__init__(*args, **kw)
+        courses = ICourseContainer(self.context)
+        self.vocabulary=vocabulary_titled(courses.values())
+        self.values = {'course': default_course_id}
+        schema_field = zope.schema.Choice(
+            __name__='course', title=_('Course'),
+            required=True, vocabulary=self.vocabulary)
+        self.fields += field.Fields(schema_field)
+        datamanager.DictionaryField(self.values, schema_field)
+
+    def getContent(self):
+        return self.values
+
+    @property
+    def course(self):
+        course_id = self.values.get('course')
+        if course_id is None:
+            return None
+        courses = ICourseContainer(self.context)
+        if course_id not in courses:
+            return None
+        return courses[course_id]
+
+    @button.handler(SectionAddView.buttons['add'])
+    def handleAdd(self, action):
+        data, self.errors = self.widgets.extract()
+        if self.errors:
+            return
+        changed = form.applyChanges(self, self.getContent(), data)
+
+
+class AddSectionForTerm(SectionAddView):
+    """A view for adding Sections for a term."""
+
+    form.extends(SectionAddView)
+
+    def __init__(self, *args, **kw):
+        super(AddSectionForTerm, self).__init__(*args, **kw)
+        self.default_term = ITerm(self.context)
+
+
+class AddSectionForCourse(SectionAddView):
+    """A view for adding Sections for a course."""
+
+    form.extends(SectionAddView)
+
+    def __init__(self, *args, **kw):
+        super(AddSectionForCourse, self).__init__(*args, **kw)
+        self.default_course = ICourse(self.context)
 
 
 class SectionEditView(BaseEditView):
