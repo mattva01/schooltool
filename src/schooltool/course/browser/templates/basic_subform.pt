@@ -1,0 +1,9 @@
+
+  <tal:block repeat="widget view/widgets/values">
+     <div id="" class="row"
+      tal:attributes="id string:${widget/id}-row"
+       tal:condition="python:widget.mode != 'hidden'">
+       <div metal:use-macro="macro:widget-row" />
+     </div>
+  </tal:block>
+
