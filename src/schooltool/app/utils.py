@@ -37,3 +37,23 @@ def vocabulary(choices):
     """
     return zope.schema.vocabulary.SimpleVocabulary(
         [zope.schema.vocabulary.SimpleTerm(v, title=t) for v, t in choices])
+
+
+def vocabulary_titled(items):
+    """Create a SimpleVocabulary from a list of objects having __name__ and
+    title attributes.  Such items are common in many containers in SchoolTool.
+
+    >>> class Item(object):
+    ...     def __init__(self, name, title):
+    ...         self.__name__ = name
+    ...         self.title = title
+
+    >>> v = vocabulary_titled([Item('value1', u"Title for value1"),
+    ...                        Item('value2', u"Title for value2")])
+    >>> for term in v:
+    ...   print term.value, '|', term.token, '|', term.title
+    value1 | value1 | Title for value1
+    value2 | value2 | Title for value2
+
+    """
+    return vocabulary([(item.__name__, item.title) for item in items])
