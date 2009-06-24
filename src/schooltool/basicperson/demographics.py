@@ -120,7 +120,7 @@ def setUpDefaultDemographics(app):
     dfs['ethnicity'].items = [u'American Indian or Alaska Native',
                               u'Asian',
                               u'Black or African American',
-                              u'Native Hawaiian or Other Pasific Islander',
+                              u'Native Hawaiian or Other Pacific Islander',
                               u'White']
     dfs['language'] = TextFieldDescription('language', 'Language')
     dfs['placeofbirth'] = TextFieldDescription('placeofbirth', 'Place of birth')

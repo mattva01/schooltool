@@ -78,22 +78,6 @@
         </div>
       </div>
     </div>
-    <form tal:attributes="action request/URL" method="post">
-      <div class="controls">
-        <input class="button-ok"
-               type="submit" name="ADD_SECTION"
-               value="New Section"
-               i18n:attributes="value"/>
-        <label for="term">For term:
-        <select id="term" name="term"
-                tal:define="terms view/terms/values">
-          <option tal:repeat="term terms/sortby:last"
-                  tal:attributes="value term/__name__"
-                  tal:content="term/title" />
-        </select>
-        </label>
-      </div>
-    </form>
   </div>
 
 </metal:block>

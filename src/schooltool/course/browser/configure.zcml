@@ -157,18 +157,25 @@
       add="schooltool.edit"
       />
 
-  <addform
-      label="Add a Section"
-      name="addSchoolToolSection.html"
-      schema="..interfaces.ISection"
-      fields="title description"
-      set_before_add="title"
-      template="templates/section_add.pt"
-      content_factory="..section.Section"
+  <page
+      name="addSection.html"
+      for="..interfaces.ICourse"
+      class=".section.AddSectionForCourse"
       permission="schooltool.edit"
-      class=".section.SectionAddView">
-    <widget field="description" height="2" />
-  </addform>
+      menu="schooltool_actions"
+      title="New Section"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+
+  <page
+      name="addSection.html"
+      for="..interfaces.ISectionContainer"
+      class=".section.AddSectionForTerm"
+      permission="schooltool.edit"
+      menu="schooltool_actions"
+      title="New Section"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
 
   <editform
       label="Edit Section Information"

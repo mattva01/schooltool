@@ -151,7 +151,7 @@ Let's try making some fields required, and maybe even changing them:
     American Indian or Alaska Native
     Asian
     Black or African American
-    Native Hawaiian or Other Pasific Islander
+    Native Hawaiian or Other Pacific Islander
     White
 
 Let's make the field required, and add Martians to it:
@@ -190,7 +190,7 @@ value in the select box, and have the field required:
     ['American Indian or Alaska Native',
      'Asian',
      'Black or African American',
-     'Native Hawaiian or Other Pasific Islander',
+     'Native Hawaiian or Other Pacific Islander',
      'White',
      'Martians']
 
@@ -212,7 +212,7 @@ We can use unicode in select boxes too:
     ['American Indian or Alaska Native',
      'Asian',
      'Black or African American',
-     'Native Hawaiian or Other Pasific Islander',
+     'Native Hawaiian or Other Pacific Islander',
      'White',
      'Martians',
      'N\xc3\xb6rds']

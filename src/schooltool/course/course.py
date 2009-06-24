@@ -92,6 +92,12 @@ def getCourseContainerForTerm(term):
     return ICourseContainer(ISchoolYear(term))
 
 
+@adapter(ICourse)
+@implementer(ICourseContainer)
+def getCourseContainerForCourse(course):
+    return course.__parent__
+
+
 @adapter(ICourseContainer)
 @implementer(ISchoolYear)
 def getSchoolYearForCourseContainer(course_container):
