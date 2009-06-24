@@ -26,7 +26,8 @@ from zope.testing import doctest
 
 def test_suite():
     return unittest.TestSuite([
-        doctest.DocTestSuite('schooltool.app.utils'),
+        doctest.DocTestSuite('schooltool.app.utils',
+                             optionflags=doctest.ELLIPSIS),
         ])
 
 
