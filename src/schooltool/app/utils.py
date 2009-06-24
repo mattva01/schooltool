@@ -48,14 +48,14 @@ def vocabulary_titled(items):
     ...         self.__name__ = name
     ...         self.title = title
     ...     def __repr__(self):
-    ...         return '<Item %s>' % __name__
+    ...         return '<Item "%s">' % self.title
 
-    >>> v = vocabulary_titled([Item(u'thevalue1', u"Title for value1"),
-    ...                        Item(u'\xc5\xa0amas', u"Title for value2")])
+    >>> v = vocabulary_titled([Item(u'thevalue1', u"Title one"),
+    ...                        Item(u'\xc5\xa0amas', u"Title two")])
     >>> for term in v:
     ...   print term.value, '|', term.token, '|', term.title
-    thevalue1- | <Item thevalue1-> | Title for value1
-    amas-uea5t | <Item amas-uea5t> | Title for value2
+    <Item "Title one"> | thevalue1- | Title one
+    <Item "Title two"> | amas-uea5t | Title two
 
     """
     return zope.schema.vocabulary.SimpleVocabulary(
