@@ -1,6 +1,7 @@
 """
 High-level setup functions for functional tests.
 """
+from lxml import etree
 from schooltool.testing.functional import TestBrowser
 from zope.testbrowser.testing import Browser
 
@@ -100,8 +101,17 @@ def addSection(course, schoolyear, term, title=None, instructors=[], members=[])
     manager.getLink(schoolyear).click()
     manager.getLink('Courses').click()
     manager.getLink(course).click()
-    manager.getControl('For term:').displayValue = [term]
-    manager.getControl('New Section').click()
+    manager.getLink('New Section').click()
+    manager.getControl('Starts in term').displayValue = [term]
+    manager.getControl('Ends in term').displayValue = [term]
+    manager.getControl('Add').click()
+
+    # XXX: boy oh boy, will this slow the tests down.
+    #      Somebody should rewrite the whole method to use CSV import.
+    doc = etree.HTML(manager.contents)
+    links = doc.xpath("id('content-body')//a[contains(.,'%s')]/@href" % course)
+    manager.getLink(url=sorted(links)[-1]).click()
+
     if title is not None:
         manager.getLink('edit info').click()
         manager.getControl('Title').value = title

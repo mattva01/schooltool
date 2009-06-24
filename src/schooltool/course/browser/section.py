@@ -275,10 +275,9 @@ class SectionAddView(form.AddForm):
         super(SectionAddView, self).update()
         self._finishedAdd = False
 
-        course_id = self.default_course and self.default_course.__name__ or None
         self.course_subform = NewSectionCoursesSubform(
             self.context, self.request, self,
-            default_course_id=course_id)
+            default_course=self.default_course)
         self.term_subform = NewSectionTermsSubform(
             self.context, self.request, self,
             default_term=self.default_term)
@@ -362,13 +361,18 @@ class NewSectionTermsSubform(subform.EditSubForm):
         super(NewSectionTermsSubform, self).__init__(*args, **kw)
 
         if default_term is None:
-            default_term = getUtility(IDateManager).current_term
+            selected_year = removeSecurityProxy(ISchoolYear(self.context))
+            active_term = getUtility(IDateManager).current_term
+            if (active_term is not None and
+                ISchoolYear(active_term) is selected_year):
+                default_term = active_term
+
         self.setUpFields(default_term)
 
     def setUpFields(self, default_term):
         terms = ISchoolYear(self.context)
         self.vocabulary=vocabulary_titled(terms.values())
-        self.span = defaultdict(lambda:default_term.__name__)
+        self.span = defaultdict(lambda:default_term)
         self._addTermChoice('starts', _("Starts in term"))
         self._addTermChoice('ends', _("Ends in term"))
 
@@ -378,6 +382,7 @@ class NewSectionTermsSubform(subform.EditSubForm):
             required=True,
             vocabulary=self.vocabulary,
             default=self.span[name])
+
         self.fields += field.Fields(schema_field)
 
     def getContent(self):
@@ -388,11 +393,9 @@ class NewSectionTermsSubform(subform.EditSubForm):
         if self.errors:
             return []
         terms = ISchoolYear(self.context)
-        starts = terms[self.span['starts']]
-        ends = terms[self.span['ends']]
         return [term for term in terms.values()
-                if (term.first >= starts.first and
-                    term.last <= ends.last)]
+                if (term.first >= self.span['starts'].first and
+                    term.last <= self.span['ends'].last)]
 
     @button.handler(SectionAddView.buttons['add'])
     def handleAdd(self, action):
@@ -400,9 +403,8 @@ class NewSectionTermsSubform(subform.EditSubForm):
         if self.errors:
             return
         changed = form.applyChanges(self, self.getContent(), data)
-        terms = ISchoolYear(self.context)
-        starts = terms[self.span['starts']]
-        ends = terms[self.span['ends']]
+        starts = self.span['starts']
+        ends = self.span['ends']
         if starts.first > ends.first:
             # XXX: this is a workaround for a bug in z3c.form: subforms do
             #      not handle action execution errors properly.
@@ -427,11 +429,11 @@ class NewSectionCoursesSubform(subform.EditSubForm):
     values = None
 
     def __init__(self, *args, **kw):
-        default_course_id = kw.pop('default_course_id', None)
+        default_course = kw.pop('default_course', None)
         super(NewSectionCoursesSubform, self).__init__(*args, **kw)
         courses = ICourseContainer(self.context)
         self.vocabulary=vocabulary_titled(courses.values())
-        self.values = {'course': default_course_id}
+        self.values = {'course': default_course}
         schema_field = zope.schema.Choice(
             __name__='course', title=_('Course'),
             required=True, vocabulary=self.vocabulary)
@@ -443,13 +445,7 @@ class NewSectionCoursesSubform(subform.EditSubForm):
 
     @property
     def course(self):
-        course_id = self.values.get('course')
-        if course_id is None:
-            return None
-        courses = ICourseContainer(self.context)
-        if course_id not in courses:
-            return None
-        return courses[course_id]
+        return self.values.get('course')
 
     @button.handler(SectionAddView.buttons['add'])
     def handleAdd(self, action):
