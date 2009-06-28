@@ -134,20 +134,33 @@ def doctest_CourseCSVImporter():
     Import some sample data
 
         >>> csvdata='''Course 1, Course 1 Description
-        ... Course2,,course-2
-        ... Course3, Course 3 Description\n\n\n'''
+        ... Course2,,course2_local,course2_gov,5   
+        ... Course3, Course 3 Description,,,10
+        ... Course 4, Course 4 description, local_course4, gov_course4\n\n\n'''
         >>> importer.importFromCSV(csvdata)
         True
 
     Check that the courses exist
 
         >>> [course for course in container]
-        [u'course-1', u'course-2', u'course3']
+        [u'course-1', u'course2_local', u'course3', u'local_course4']
 
     Check that descriptions were imported properly
 
+        >>> [course.title for course in container.values()]
+        ['Course 1', 'Course2', 'Course3', 'Course 4']
+        
         >>> [course.description for course in container.values()]
-        ['Course 1 Description', '', 'Course 3 Description']
+        ['Course 1 Description', '', 'Course 3 Description', 'Course 4 description']
+        
+        >>> [course.course_id for course in container.values()]
+        [None, 'course2_local', None, 'local_course4']
+        
+        >>> [course.government_id for course in container.values()]
+        [None, 'course2_gov', None, 'gov_course4']
+
+        >>> [course.credits for course in container.values()]
+        [None, 5, 10, None]
 
     """
 
@@ -177,6 +190,33 @@ def doctest_CourseCSVImporter_invalid_id():
     """
 
 
+def doctest_CourseCSVImporter_invalid_credits():
+    r"""Tests for CourseCSVImporter.
+
+    Create a course container and an importer
+
+        >>> from schooltool.course.browser.csvimport import CourseCSVImporter
+        >>> from schooltool.course.course import CourseContainer
+        >>> container = CourseContainer()
+        >>> importer = CourseCSVImporter(container, None)
+
+    Import some sample data
+
+        >>> csvdata='''Course 1, Course 1 Description, course1_local, , 34.3
+        ... Course2,,,,invalid'''
+        >>> importer.importFromCSV(csvdata)
+        False
+
+    We should get an error, because the credits value is not integer:
+
+        >>> for error in importer.errors.fields:
+        ...     print translate(error)
+        Course "Course 1" credits "34.3" value is invalid.
+        Course "Course2" credits "invalid" value is invalid.
+
+    """
+
+
 def doctest_CourseCSVImporter_reimport():
     r"""Tests for CourseCSVImporter.
 
@@ -190,25 +230,46 @@ def doctest_CourseCSVImporter_reimport():
     Import some sample data
 
         >>> csvdata='''Course 1, Course 1 Description
-        ... Course2,,course-2
-        ... Course3, Course 3 Description\n\n\n'''
+        ... Course2,,course-2, course-2-gov, 10   ,
+        ... Course3, Course 3 Description,,course-3-gov\n\n\n'''
         >>> importer.importFromCSV(csvdata)
         True
+
 
     Check that the courses exist
 
         >>> [course for course in container]
         [u'course-1', u'course-2', u'course3']
 
+    Check that titles were imported properly
+
+        >>> [course.title for course in container.values()]
+        ['Course 1', 'Course2', 'Course3']
+
     Check that descriptions were imported properly
 
         >>> [course.description for course in container.values()]
         ['Course 1 Description', '', 'Course 3 Description']
 
+    Check that course ids were imported properly
+
+        >>> [course.course_id for course in container.values()]
+        [None, 'course-2', None]
+
+    Check that goverment ids were imported properly
+
+        >>> [course.government_id for course in container.values()]
+        [None, 'course-2-gov', 'course-3-gov']
+
+    Check that credits were imported properly
+
+        >>> [course.credits for course in container.values()]
+        [None, 10, None]
+
     Now import a different CSV with some courses matching:
 
         >>> csvdata='''Course 1, Course Description
-        ... Course2, Now with description,course-2
+        ... Course2,             ,course-2,,20
         ... Course4, Course 4 Description\n\n\n'''
         >>> importer.importFromCSV(csvdata)
         True
@@ -221,7 +282,12 @@ def doctest_CourseCSVImporter_reimport():
     Check that descriptions were updated properly
 
         >>> [course.description for course in container.values()]
-        ['Course Description', 'Now with description', 'Course 3 Description', 'Course 4 Description']
+        ['Course Description', '', 'Course 3 Description', 'Course 4 Description']
+
+    Check that credits were imported properly
+
+        >>> [course.credits for course in container.values()]
+        [None, 20, None, None]
 
     By the way - ID takes precedence over title so if we import:
 
@@ -265,13 +331,19 @@ def doctest_CourseCSVImportView():
 
     Now we'll try a text import.  Note that the description is not required
 
-        >>> request.form = {'csvtext' : u"A Course, The best Course, some-course\nAnother Course\nEspañol, Descripción, spanish\n\n",
+        >>> request.form = {'csvtext' : u"A Course, The best Course, some-course\nAnother Course,,,,5\nEspañol, Descripción, spanish, spanish-gov, 20\n\n",
         ...                 'charset' : 'UTF-8',
         ...                 'UPDATE_SUBMIT': 1}
         >>> view = CourseCSVImportView(container, request)
         >>> view.update()
         >>> sorted([course for course in container])
         [u'another-course', u'some-course', u'spanish']
+        >>> [container[key].course_id for key in sorted(container)]
+        [None, u'some-course', u'spanish']
+        >>> [container[key].government_id for key in sorted(container)]
+        [None, None, u'spanish-gov']
+        >>> [container[key].credits for key in sorted(container)]
+        [5, None, 20]
 
     If no data is provided, we naturally get an error
 
