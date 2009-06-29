@@ -23,13 +23,14 @@ $Id$
 """
 import unittest
 import calendar
+from pprint import pprint
 from datetime import datetime, date, timedelta, time
 from pytz import timezone, utc
 
 from zope.i18n import translate
 from zope.interface import Interface
 from zope.interface import directlyProvides, implements
-from zope.component import provideSubscriptionAdapter
+from zope.component import provideAdapter, provideSubscriptionAdapter
 from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
@@ -76,6 +77,10 @@ from schooltool.person.interfaces import IPerson
 # Used when registering CalendarProvider subscribers/stubs
 from schooltool.app.browser.cal import CalendarListSubscriber
 from schooltool.app.browser.interfaces import ICalendarProvider
+
+# Used in tests
+from schooltool.app.browser.cal import EventForDisplay
+from schooltool.app.browser.cal import CalendarDay
 
 
 class PrincipalStub:
@@ -316,7 +321,6 @@ def doctest_CalendarTraverser():
 def doctest_EventForDisplay():
     """A wrapper for calendar events.
 
-        >>> from schooltool.app.browser.cal import EventForDisplay
         >>> from schooltool.resource.resource import Resource
         >>> person = Person("p1")
         >>> calendar = ISchoolToolCalendar(person)
@@ -665,7 +669,6 @@ def doctest_EventForBookingDisplay():
 def doctest_CalendarDay():
     """A calendar day is a set of events that took place on a particular day.
 
-        >>> from schooltool.app.browser.cal import CalendarDay
         >>> day1 = CalendarDay(date(2004, 8, 5))
         >>> day1.date
         datetime.date(2004, 8, 5)
@@ -759,7 +762,6 @@ def registerCalendarHelperViews():
 
 def getDaysStub(start, end):
     """Stub for CalendarViewBase.getDays."""
-    from schooltool.app.browser.cal import CalendarDay
     days = []
     day = start
     while day < end:
@@ -4399,6 +4401,165 @@ def doctest_WeeklyCalendarView():
     """
 
 
+class SimpleEventStub(object):
+    def __init__(self, dtstart, duration, title, allday):
+        self.dtstart = dtstart
+        self.duration = duration
+        self.title = title
+        self.allday = allday
+
+
+def makeEventForDisplay(y, m, d, h, min, title='', duration=None, allday=False):
+    if duration is None:
+        duration = timedelta(0, 3600)
+    ev = SimpleEventStub(datetime(y, m, d, h, min, tzinfo=utc),
+                         duration, title, allday)
+    return EventForDisplay(
+        ev, 'request', 'color1', 'color2', ISchoolToolCalendar(Person()),
+        ev.dtstart.tzinfo)
+
+
+def setUpWeekForCalendar():
+    sun = CalendarDay(datetime(2009, 06, 21))
+    mon = CalendarDay(datetime(2009, 06, 22))
+    tue = CalendarDay(datetime(2009, 06, 23))
+    wed = CalendarDay(datetime(2009, 06, 24), events=[
+        makeEventForDisplay(2009, 06, 24, 10, 15, title='3a'),
+        makeEventForDisplay(2009, 06, 24, 12, 15, title='3b'),
+        ])
+    thu = CalendarDay(datetime(2009, 06, 25), events=[
+        makeEventForDisplay(2009, 06, 25, 10, 45, title='4a'),
+        makeEventForDisplay(2009, 06, 25, 10, 45, title='4b'),
+        makeEventForDisplay(2009, 06, 25, 12, 15, title='4c'),
+        ])
+    fri = CalendarDay(datetime(2009, 06, 26), events=[
+        makeEventForDisplay(2009, 06, 26, 10, 00, title='allday', allday=True)])
+    sat = CalendarDay(datetime(2009, 06, 27))
+    return [sun, mon, tue, wed, thu, fri, sat]
+
+
+def doctest_WeeklyCalendarView_getCurrentWeekEvents():
+    """Tests for WeeklyCalendarView.getCurrentWeekEvents
+
+        >>> from schooltool.app.browser.cal import WeeklyCalendarView
+
+        >>> from schooltool.app.cal import Calendar
+        >>> calendar = Calendar(Person())
+        >>> directlyProvides(calendar, IContainmentRoot)
+
+        >>> this_week = []
+        >>> class ViewForTest(WeeklyCalendarView):
+        ...     cursor = None
+        ...     getWeek = lambda self, cursor: this_week
+
+    Populate this week with events and look at the calendar.
+
+        >>> this_week[:] = setUpWeekForCalendar()
+        >>> from schooltool.app.browser.cal import short_day_of_week_names
+        >>> day_names = [translate(short_day_of_week_names[day.date.weekday()])
+        ...              for day in this_week]
+        >>> def print_table(events):
+        ...     print '     |'.join(day_names)
+        ...     for slot in events:
+        ...         print '|'.join(
+        ...             ['%7s ' % ', '.join([e and e.title or '' for e in evs])
+        ...              for evs in slot])
+
+        >>> view = ViewForTest(calendar, TestRequest())
+        >>> print_table(view.getCurrentWeekEvents(lambda e, day: True))
+        Sun     |Mon     |Tue     |Wed     |Thu     |Fri     |Sat
+                |        |        |        |        | allday |
+                |        |        |     3a |        |        |
+                |        |        |        | 4a, 4b |        |
+                |        |        |     3b |     4c |        |
+
+    """
+
+
+def doctest_WeeklyCalendarView_getCurrentWeekTimetableEvents():
+    """Tests for WeeklyCalendarView.getCurrentWeekTimetableEvents
+
+        >>> from schooltool.app.browser.cal import WeeklyCalendarView
+
+        >>> from schooltool.app.cal import Calendar
+        >>> calendar = Calendar(Person())
+        >>> directlyProvides(calendar, IContainmentRoot)
+
+        >>> def format_events(events):
+        ...     if isinstance(events, EventForDisplay):
+        ...         return '%d:%d %s' % (
+        ...             events.dtstart.hour, events.dtstart.minute, events.title)
+        ...     elif hasattr(events, '__iter__'):
+        ...         return [format_events(e) for e in events]
+        ...     else:
+        ...         return events
+
+        >>> def print_table(events):
+        ...     print '     |'.join(day_names)
+        ...     for slot in events:
+        ...         print '|'.join(
+        ...             ['%7s ' % ', '.join([e and e.title or '' for e in evs])
+        ...              for evs in slot])
+
+        >>> this_week = []
+        >>> class ViewForTest(WeeklyCalendarView):
+        ...     cursor = None
+        ...     getWeek = lambda self, cursor: this_week
+
+    Set up the timetable view.
+
+        >>> def makePeriodTuple(day, h, m):
+        ...     starts = datetime(2009, 06, day, h, m, tzinfo=utc)
+        ...     return ('period', starts, timedelta(0, 3600))
+
+        >>> periods = {
+        ...     str(date(2009, 06, 22)):
+        ...         [makePeriodTuple(22, 10, 45),
+        ...          makePeriodTuple(22, 11, 45),
+        ...          makePeriodTuple(22, 12, 45),
+        ...         ],
+        ...     str(date(2009, 06, 23)):
+        ...         [makePeriodTuple(23, 8, 0),
+        ...         ],
+        ...     str(date(2009, 06, 24)):
+        ...         [makePeriodTuple(24, 9, 15),
+        ...          makePeriodTuple(24, 10, 15),
+        ...          makePeriodTuple(24, 11, 15),
+        ...          makePeriodTuple(24, 12, 15),
+        ...         ],
+        ...     str(date(2009, 06, 25)):
+        ...         [makePeriodTuple(25, 12, 15),
+        ...         ],
+        ... }
+
+        >>> class CalendarRowsStub(object):
+        ...     getPeriods = lambda self, date: periods.get(str(date.date()), [])
+        >>> daily_calendar_rows = CalendarRowsStub()
+
+        >>> provideAdapter(lambda c, r: daily_calendar_rows,
+        ...                adapts=(ISchoolToolCalendar, IHTTPRequest),
+        ...                provides=Interface,
+        ...                name='daily_calendar_rows')
+
+    Populate this week with events and look at the calendar.
+
+        >>> this_week[:] = setUpWeekForCalendar()
+        >>> from schooltool.app.browser.cal import short_day_of_week_names
+        >>> day_names = [translate(short_day_of_week_names[day.date.weekday()])
+        ...              for day in this_week]
+
+        >>> view = ViewForTest(calendar, TestRequest())
+        >>> events = format_events(view.getCurrentWeekTimetableEvents())
+
+        >>> for period in events:
+        ...    print period
+        [[None], [None], [None], ['12:15 4c'], [], [], []]
+        [[None], ['10:15 3a'], [], [], [], [], []]
+        [['12:15 3b'], [], [], [], [], [], []]
+
+    """
+
+
 def doctest_MonthlyCalendarView():
     """Tests for MonthlyCalendarView.
 
@@ -4591,7 +4752,6 @@ def doctest_AtomCalendarView():
         >>> from schooltool.app.browser.cal import AtomCalendarView
 
         >>> from schooltool.app.cal import Calendar
-        >>> from schooltool.app.browser.cal import CalendarDay
         >>> person = Person()
         >>> calendar = Calendar(person)
         >>> directlyProvides(person, IContainmentRoot)
@@ -5120,7 +5280,6 @@ def doctest_DaysCache():
     a list of dates.  Since it is expensive, we want to see when exactly
     it gets called.
 
-        >>> from schooltool.app.browser.cal import CalendarDay
         >>> def expensive_getDays(first, last):
         ...     print "Computing days from %s to %s" % (first, last)
         ...     return getDaysStub(first, last)

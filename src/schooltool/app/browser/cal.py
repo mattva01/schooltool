@@ -931,6 +931,9 @@ class WeeklyCalendarView(CalendarViewBase):
 
     def __call__(self):
         app = getSchoolToolApplication()
+        # XXX ttshemas were removed from app in evolve28.
+        #     timetable_template can be killed now (maybe?).
+        #     All related code should go to land of no return.
         if 'ttschemas' in app and app['ttschemas'].default_id is not None:
             return self.timetable_template()
         return self.non_timetable_template()
@@ -994,7 +997,7 @@ class WeeklyCalendarView(CalendarViewBase):
             events_in_day = []
             for index in range(0, len(start_times)):
                 block = []
-                for event in week[day.date.weekday()].events:
+                for event in day.events:
                     if (eventCheck(event, day) and
                        (event.dtstart.hour, event.dtstart.minute) ==
                         start_times[index] and
@@ -1062,7 +1065,7 @@ class WeeklyCalendarView(CalendarViewBase):
 
             for index in range(0, len(start_times)-1):
                 block = []
-                for event in week[day.date.weekday()].events:
+                for event in day.events:
                     if ((((start_times[index] < event.dtstart + event.duration
                            and start_times[index] > event.dtstart) or
                           (event.dtstart < start_times[index+1] and
