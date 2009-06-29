@@ -4553,9 +4553,9 @@ def doctest_WeeklyCalendarView_getCurrentWeekTimetableEvents():
 
         >>> for period in events:
         ...    print period
-        [[None], [None], [None], ['12:15 4c'], [], [], []]
-        [[None], ['10:15 3a'], [], [], [], [], []]
-        [['12:15 3b'], [], [], [], [], [], []]
+        [[None], [None], [None], [None], ['12:15 4c'], [], []]
+        [[None], [None], ['10:15 3a'], [], [], [], []]
+        [[None], ['12:15 3b'], [], [], [], [], []]
 
     """
 

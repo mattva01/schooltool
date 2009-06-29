@@ -1050,10 +1050,14 @@ class WeeklyCalendarView(CalendarViewBase):
         view = getMultiAdapter((self.context, self.request),
                                 name='daily_calendar_rows')
 
+        empty_begin_days = 0
         for day in week:
             periods = view.getPeriods(day.date)
             events_in_day = []
             start_times = []
+
+            if periods == [] and week_by_rows == []:
+                empty_begin_days += 1
 
             for period, tstart, duration in periods:
                 if not tstart in start_times:
@@ -1084,6 +1088,20 @@ class WeeklyCalendarView(CalendarViewBase):
                 row_num += 1
 
         self.formatCurrentWeekEvents(week_by_rows)
+
+        if empty_begin_days > 0:
+           old_week_by_rows = week_by_rows
+           new_week_by_rows = []
+           for week_by_row in old_week_by_rows:
+               new_week_by_row = []
+               for i in range(0,empty_begin_days):
+                   new_week_by_row.append([None])
+               j = 0
+               while j < len(week_by_row)-empty_begin_days:
+                   new_week_by_row.append(week_by_row[j])
+                   j += 1
+               new_week_by_rows.append(new_week_by_row)
+           week_by_rows = new_week_by_rows
         return week_by_rows
 
     def getCurrentWeekAllDayEvents(self):
