@@ -365,6 +365,9 @@ class EventForDisplay(object):
         if self.context.__parent__ is None:
             return None
 
+        if not IEditCalendar.providedBy(self.source_calendar):
+            return None
+
         url = '%s/delete.html?event_id=%s&date=%s' % (
             absoluteURL(self.source_calendar, self.request),
             self.unique_id,
