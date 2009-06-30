@@ -211,8 +211,8 @@ def doctest_CourseCSVImporter_invalid_credits():
 
         >>> for error in importer.errors.fields:
         ...     print translate(error)
-        Course "Course 1" credits "34.3" value is invalid.
-        Course "Course2" credits "invalid" value is invalid.
+        Course "Course 1" credits "34.3" value must be an integer.
+        Course "Course2" credits "invalid" value must be an integer.
 
     """
 

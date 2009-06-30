@@ -79,7 +79,7 @@ class CourseCSVImporter(BaseCSVImporter):
                 credits = int(data[4])
             except (ValueError,):
                 self.errors.fields.append(_('Course "${course_title}" credits "${invalid_credits}" value'
-                                            ' is invalid.',
+                                            ' must be an integer.',
                                             mapping={'course_title': data[0],
                                                      'invalid_credits': data[4]}))
                 return
