@@ -1,0 +1,6 @@
+<textarea
+    id="" name=""
+    tal:attributes="id view/id;
+                    name view/name"
+    tal:content="view/value" />
+<script tal:replace="structure view/script" />
