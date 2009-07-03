@@ -103,10 +103,6 @@ class HTMLFragmentWidget(object):
     id = FieldProperty(IHTMLFragmentWidget['id'])
 
 
-class IFckeditorWidget(form.interfaces.IWidget):
-    pass
-
-
 class IFCKConfig(Interface):
 
     width = zope.schema.Int(
@@ -124,6 +120,15 @@ class IFCKConfig(Interface):
     path = zope.schema.TextLine(
         title=_(u"Configuration path"),
         description=_(u"Path to the FCKconfiguration javascript file."))
+
+
+
+class IFckeditorWidget(form.interfaces.IWidget):
+
+    config = zope.schema.Object(
+        title=_(u"Configuration"),
+        description=_(u"FCK editor configuration."),
+        schema=IFCKConfig)
 
 
 class FckeditorWidget(Widget, HTMLFragmentWidget):
@@ -153,7 +158,7 @@ class FckeditorWidget(Widget, HTMLFragmentWidget):
             </script>
             ''' % {
             'id': self.id,
-            'variable': 'oFCKeditor_%d' % hash(self.name),
+            'variable': 'oFCKeditor_%s' % str(hash(self.name)).replace('-', 'u'),
             'width': config.width,
             'height': config.height,
             'toolbar': config.toolbar,
@@ -186,27 +191,24 @@ class FCKConfig(object):
         self.path = (url + '/@@/editor_config.js')
 
 
-# Set the default configuration for FckeditorWidget
+# The default configuration for FckeditorWidget
 Fckeditor_config = ComputedWidgetAttribute(
     FCKConfig,
+    request=ISchoolToolLayer,
     widget=IFckeditorWidget,
     )
 
 
-# EditFormFCKConfig is intended to be an example of how you can
-# customize the look of the FCKeditor in your form.
 class EditFormFCKConfig(FCKConfig):
     width = 306
     height = 200
+
 
 # XXX: EditFormFCKConfig will now be applied to all add and edit forms.
 #      This is wrong, but we do not have standard SchoolTool add/edit
 #      z3c.forms yet, like we do with formlib; as a result, we do not have
 #      standard interfaces (for example ISchooltoolAddForm) that we could
 #      hook the config on.
-#
-# Note that you *may* not need to fill in all discriminators, the full set is here
-# just for example.  Specifying widget and view interfaces would have sufficed.
 Fckeditor_addform_config = ComputedWidgetAttribute(
     EditFormFCKConfig,
     context=None,
