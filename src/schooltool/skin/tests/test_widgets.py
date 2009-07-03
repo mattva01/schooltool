@@ -18,8 +18,6 @@
 #
 """
 Unit tests for common widgets.
-
-$Id$
 """
 import unittest
 
