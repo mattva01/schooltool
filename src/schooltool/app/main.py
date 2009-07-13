@@ -475,18 +475,27 @@ class PluginActionSorter(object):
         return self.result
 
 
+def executePluginActions(actions):
+    failed = []
+    for action in actions:
+        try:
+            action()
+        except:
+            failed.append(action)
+    if failed:
+        print >> sys.stderr, _("Failed to execute:"), failed
+
+
 def initializeSchoolToolPlugins(event):
     adapters = getAdapters((event.object, ), IPluginInit)
     sorter = PluginActionSorter(adapters)
-    for action in sorter():
-        action()
+    executePluginActions(sorter())
 
 
 def startSchoolToolPlugins(event):
     adapters = getAdapters((event.object, ), IPluginStartUp)
     sorter = PluginActionSorter(adapters)
-    for action in sorter():
-        action()
+    executePluginActions(sorter())
 
 
 def get_schooltool_plugin_configurations():

@@ -32,7 +32,7 @@ from zope.app.container.btree import BTreeContainer
 from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationStartUpEvent
-from schooltool.app.app import InitBase
+from schooltool.app.app import InitBase, StartUpBase
 from schooltool.contact.interfaces import IContactPersonInfo
 from schooltool.contact.interfaces import IContactable
 from schooltool.contact.interfaces import IContactContained
@@ -132,12 +132,10 @@ class Contactable(object):
         self.context = context
 
 
-class ContactAppStartup(ObjectEventAdapterSubscriber):
-    adapts(IApplicationStartUpEvent, ISchoolToolApplication)
-
+class ContactAppStartup(StartUpBase):
     def __call__(self):
-        if 'schooltool.contact' not in self.object:
-            self.object['schooltool.contact'] = ContactContainer()
+        if 'schooltool.contact' not in self.app:
+            self.app['schooltool.contact'] = ContactContainer()
 
 
 class ContactInit(InitBase):

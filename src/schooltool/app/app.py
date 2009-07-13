@@ -32,7 +32,7 @@ from zope.component import adapter
 from zope.component import adapts
 from zope.i18n import translate
 from zope.interface import implementer
-from zope.interface import implements
+from zope.interface import implements, implementsOnly
 
 from zope.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 from zope.app.applicationcontrol.interfaces import IApplicationControl
@@ -301,6 +301,7 @@ class SchoolToolInitializationUtility(object):
 
 
 class ActionBase(object):
+    adapts(ISchoolToolApplication)
     implements(IPluginInit)
 
     after = ()
@@ -315,11 +316,11 @@ class ActionBase(object):
 
 
 class InitBase(ActionBase):
-    implements(IPluginInit)
+    implementsOnly(IPluginInit)
 
 
 class StartUpBase(ActionBase):
-    implements(IPluginStartUp)
+    implementsOnly(IPluginStartUp)
 
 
 @adapter(ISchoolToolApplication)
