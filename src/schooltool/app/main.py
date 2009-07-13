@@ -34,6 +34,7 @@ import logging
 import errno
 import pkg_resources
 from StringIO import StringIO
+from collections import defaultdict
 
 import ZConfig
 import transaction
@@ -71,7 +72,7 @@ from zope.app.server.wsgi import ServerType
 
 from schooltool.app.interfaces import ApplicationStartUpEvent
 from schooltool.app.interfaces import ApplicationInitializationEvent
-from schooltool.app.interfaces import IPluginInit
+from schooltool.app.interfaces import IPluginInit, IPluginStartUp
 from schooltool.app.interfaces import ISchoolToolInitializationUtility
 from schooltool.app.app import SchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -375,11 +376,117 @@ def daemonize():
     os.dup(0)
 
 
-def initializeSchoolToolPlugins(event):
+class PluginDependency(object):
 
-    for name, initializer in getAdapters((event.object, ),
-                                         IPluginInit):
-        initializer()
+    def __init__(self, plugin, name,
+                 other_plugin=None, other_name=None,
+                 inverse=False):
+        self.plugin, self.name = plugin, name
+        self.other_plugin, self.other_name = other_plugin, other_name
+        self.inverse = inverse
+
+    def __str__(self):
+        direction = '_before_'
+        if self.inverse:
+            direction = '_after_'
+        if self.other_plugin:
+            return ('%(plugin)s named "%(name)s" must be executed '
+                    '%(before_or_after)s %(other)s named "%(other_name)s".' % {
+                        'plugin': self.plugin,
+                        'name': self.name,
+                        'other': self.other_plugin,
+                        'other_name': self.other_name,
+                        'before_or_after': direction,
+                        })
+        return ('%(plugin)s named "%(name)s" must be executed '
+                '%(before_or_after)s another.' % {
+                    'plugin': self.plugin,
+                    'name': self.name,
+                    'before_or_after': direction,
+                    })
+
+
+class CyclicPluginActionOrderException(Exception):
+
+    def __init__(self, dependencies):
+        self.dependencies = dependencies
+
+    def __repr__(self):
+        return (_("Cannot resolve plugin action order:\n") +
+                '\n'.join([str(dep) for dep in self.dependencies]))
+
+    __str__ = __repr__
+
+
+class PluginActionSorter(object):
+    new, open, closed = 'new', 'open', 'closed'
+    status = None
+    result = None
+    dependencies = None
+    adapters = None
+
+    def __init__(self, adapters):
+        self.adapters = list(adapters)
+        self.dependencies = defaultdict(lambda:list())
+        cache = dict(self.adapters)
+        for name, plugin in self.adapters:
+            for after in list(plugin.after):
+                self.dependencies[name].append(
+                    PluginDependency(cache[after], after))
+            for before in list(plugin.before):
+                self.dependencies[before].append(
+                    PluginDependency(plugin, name, inverse=True))
+
+    def _visit(self, adapter):
+        name, plugin = adapter
+        if self.status[name] == self.new:
+            self.status[name] = self.open
+            for dependency in self.dependencies[name]:
+                errors = self._visit((dependency.name, dependency.plugin))
+                if errors is not None:
+                    if not dependency.inverse:
+                        return errors + [PluginDependency(
+                            dependency.plugin, dependency.name,
+                            plugin, name,
+                            )]
+                    else:
+                        return errors + [PluginDependency(
+                            plugin, name,
+                            dependency.plugin, dependency.name,
+                            inverse=True
+                            )]
+            self.result.append(plugin)
+            self.status[name] = self.closed
+
+        elif self.status[name] == self.closed:
+            return None # already visited
+
+        elif self.status[name] == self.open:
+            return [] # a cyclic dependency
+
+    def __call__(self):
+        self.status = dict([(name, self.new)
+                            for name, plugin in self.adapters])
+        self.result = []
+        for adapter in self.adapters:
+            errors = self._visit(adapter)
+            if errors is not None:
+                raise CyclicPluginActionOrderException(errors)
+        return self.result
+
+
+def initializeSchoolToolPlugins(event):
+    adapters = getAdapters((event.object, ), IPluginInit)
+    sorter = PluginActionSorter(adapters)
+    for action in sorter():
+        action()
+
+
+def startSchoolToolPlugins(event):
+    adapters = getAdapters((event.object, ), IPluginStartUp)
+    sorter = PluginActionSorter(adapters)
+    for action in sorter():
+        action()
 
 
 def get_schooltool_plugin_configurations():

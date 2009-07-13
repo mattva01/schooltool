@@ -222,10 +222,27 @@ class ISchoolToolInitializationUtility(zope.interface.Interface):
         """Perform school specific initialization. """
 
 
-class IPluginInit(zope.interface.Interface):
+class IPluginAction(zope.interface.Interface):
+
+    after = zope.interface.Attribute(
+        """A list of action adapter names.
+        This action must be executed after them.""")
+
+    before = zope.interface.Attribute(
+        """A list of action adapter names.
+        This action must be executed before them.""")
 
     def __call__():
-        """Perform plugin specific initialization."""
+        """Perform plugin specific set up."""
+
+
+class IPluginInit(IPluginAction):
+    """Perform plugin initialization when setting up the SchoolTool
+    application."""
+
+
+class IPluginStartUp(IPluginAction):
+    """Execute plugin specific code on application startup."""
 
 
 class ISchoolToolAuthenticationPlugin(ISchoolToolAuthentication):
