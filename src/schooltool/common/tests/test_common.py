@@ -67,6 +67,7 @@ class TestHelpers(unittest.TestCase):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.common'))
+    suite.addTest(DocTestSuite('schooltool.common.inlinept'))
     suite.addTest(unittest.makeSuite(TestHelpers))
     return suite
 
