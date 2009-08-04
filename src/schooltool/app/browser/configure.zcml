@@ -180,6 +180,16 @@
       trusted="yes"
       />
 
+
+  <zope:adapter
+      for="*
+           zope.publisher.interfaces.browser.IBrowserRequest
+           .report.ReportPDFView"
+      provides="schooltool.app.browser.interfaces.IReportPageTemplate"
+      name="default"
+      factory=".report.DefaultPageTemplate"
+      />
+
   <!-- Pluggable Traverser Plugins -->
 
   <zope:adapter

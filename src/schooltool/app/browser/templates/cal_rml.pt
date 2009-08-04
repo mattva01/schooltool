@@ -11,6 +11,10 @@
   metal:use-macro="context/@@rml_macros/report"
   i18n:domain="schooltool">
 
+<metal:block fill-slot="page_templates">
+  <tal:block content="structure view/use_template/default" />
+</metal:block>
+
 <stylesheet>
   <metal:block fill-slot="extra_initialize">
   </metal:block>
@@ -49,7 +53,7 @@
   </metal:block>
 </stylesheet>
 
-<story metal:fill-slot="story">
+<story firstPageTemplate="default" metal:fill-slot="story">
 
   <para style="h1"
     tal:condition="view/subtitle" tal:content="view/subtitle" />

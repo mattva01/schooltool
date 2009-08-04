@@ -140,3 +140,13 @@ class ISchoolMenuViewletManager(IViewletManager):
 
 class IHaveEventLegend(Interface):
     """Classes implementing this interface will have an event legend showing."""
+
+
+class IReportPageTemplate(Interface):
+
+    def stylesheet():
+        """Render the stylesheet contents."""
+
+    def __call__():
+        """Render the page template itself."""
+
