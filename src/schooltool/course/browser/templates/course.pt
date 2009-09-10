@@ -29,20 +29,21 @@
 
     <div class="info-block">
 
-      <div tal:define="sections context/sections">
+      <div>
         <h3 i18n:translate="">Sections</h3>
         <div class="section-list">
-          <tal:loop repeat="section sections/sortby:label">
-          <tal:if condition="section/can_access:label">
+          <tal:loop repeat="item view/sections">
+          <tal:if condition="item/section/can_access:label">
 
             <tal:comment condition="nothing">
                XXX This should be moved into a macro
             </tal:comment>
 
             <div class="section"
-                 tal:define="instructors section/instructors|nothing;
-                             learners section/learners|nothing;
-                             calendar section/calendar|nothing">
+                 tal:define="instructors item/section/instructors|nothing;
+                             learners item/section/learners|nothing;
+                             calendar item/section/calendar|nothing;
+                             section item/section">
 
               <tal:loop repeat="instructor instructors">
                 <tal:if condition="instructor/can_access:photo">
@@ -61,7 +62,9 @@
 
                 <a tal:attributes="href section/@@absolute_url">
                   <span tal:replace="section/label" />
-                  (<span tal:replace="section/title" />)
+                  <tal:block condition="item/term">
+                    (<span tal:replace="item/term/title" />)
+                  </tal:block>
                 </a>
               <p>
                   <span tal:replace="section/size" />

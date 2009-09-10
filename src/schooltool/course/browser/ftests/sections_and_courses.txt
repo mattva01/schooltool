@@ -109,11 +109,11 @@ Now let's add some sections for our courses:
     >>> manager.getControl('Add').click()
 
     >>> manager.printQuery("id('course-view')//div[@class='section-list']//a")
-    <a href="http://localhost/schoolyears/2005-2006/spring/sections/1">
-      -- English (1) (English (1))
-    </a>
     <a href="http://localhost/schoolyears/2005-2006/fall/sections/1">
-      -- English (1) (English (1))
+      -- English (1) (Fall)
+    </a>
+    <a href="http://localhost/schoolyears/2005-2006/spring/sections/1">
+      -- English (1) (Spring)
     </a>
 
 Let's remove the section that we added to the spring term now:
@@ -197,10 +197,10 @@ We can now see that the section spans both terms.
     >>> manager.getLink('History').click()
     >>> manager.printQuery("id('course-view')//div[@class='section-list']//a")
     <a href="http://localhost/schoolyears/2005-2006/fall/sections/2">
-      -- History (2) (History (2))
+      -- History (2) (Fall)
     </a>
     <a href="http://localhost/schoolyears/2005-2006/spring/sections/2">
-      -- History (2) (History (2))
+      -- History (2) (Spring)
     </a>
 
     >>> manager.getLink('History (2)', index=0).click()

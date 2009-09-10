@@ -34,7 +34,7 @@ from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser.absoluteurl import absoluteURL
 
-from schooltool.term.interfaces import ITermContainer
+from schooltool.term.interfaces import ITermContainer, ITerm
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.skin.containers import ContainerView
 from schooltool.course.interfaces import ISectionContainer
@@ -93,6 +93,21 @@ class CourseView(BrowserView):
                     'value': value,
                     })
         return details
+
+    @property
+    def sections(self):
+        items = []
+        for section in self.context.sections:
+            term = ITerm(section, None)
+            items.append({
+                'section': section,
+                'term': term,
+                })
+        def sortKey(item):
+            return u'%s%s%s' % (item['section'].label,
+                                item['term'].first,
+                                item['section'].__name__)
+        return sorted(items, key=sortKey)
 
 
 class CourseAddView(AddView):
