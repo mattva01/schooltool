@@ -104,9 +104,13 @@ class CourseView(BrowserView):
                 'term': term,
                 })
         def sortKey(item):
-            return u'%s%s%s' % (item['section'].label,
-                                item['term'].first,
-                                item['section'].__name__)
+            # I consider it acceptable to violate security for sorting purposes
+            # in this case.
+            section = removeSecurityProxy(item['section'])
+            term = removeSecurityProxy(item['term'])
+            return u'%s%s%s' % (section.label,
+                                term.first,
+                                section.__name__)
         return sorted(items, key=sortKey)
 
 
