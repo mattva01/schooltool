@@ -365,6 +365,9 @@ class EventForDisplay(object):
         if self.context.__parent__ is None:
             return None
 
+        if not IEditCalendar.providedBy(self.source_calendar):
+            return None
+
         url = '%s/delete.html?event_id=%s&date=%s' % (
             absoluteURL(self.source_calendar, self.request),
             self.unique_id,
@@ -931,6 +934,9 @@ class WeeklyCalendarView(CalendarViewBase):
 
     def __call__(self):
         app = getSchoolToolApplication()
+        # XXX ttshemas were removed from app in evolve28.
+        #     timetable_template can be killed now (maybe?).
+        #     All related code should go to land of no return.
         if 'ttschemas' in app and app['ttschemas'].default_id is not None:
             return self.timetable_template()
         return self.non_timetable_template()
@@ -994,7 +1000,7 @@ class WeeklyCalendarView(CalendarViewBase):
             events_in_day = []
             for index in range(0, len(start_times)):
                 block = []
-                for event in week[day.date.weekday()].events:
+                for event in day.events:
                     if (eventCheck(event, day) and
                        (event.dtstart.hour, event.dtstart.minute) ==
                         start_times[index] and
@@ -1047,10 +1053,14 @@ class WeeklyCalendarView(CalendarViewBase):
         view = getMultiAdapter((self.context, self.request),
                                 name='daily_calendar_rows')
 
+        empty_begin_days = 0
         for day in week:
             periods = view.getPeriods(day.date)
             events_in_day = []
             start_times = []
+
+            if periods == [] and week_by_rows == []:
+                empty_begin_days += 1
 
             for period, tstart, duration in periods:
                 if not tstart in start_times:
@@ -1062,7 +1072,7 @@ class WeeklyCalendarView(CalendarViewBase):
 
             for index in range(0, len(start_times)-1):
                 block = []
-                for event in week[day.date.weekday()].events:
+                for event in day.events:
                     if ((((start_times[index] < event.dtstart + event.duration
                            and start_times[index] > event.dtstart) or
                           (event.dtstart < start_times[index+1] and
@@ -1081,6 +1091,20 @@ class WeeklyCalendarView(CalendarViewBase):
                 row_num += 1
 
         self.formatCurrentWeekEvents(week_by_rows)
+
+        if empty_begin_days > 0:
+           old_week_by_rows = week_by_rows
+           new_week_by_rows = []
+           for week_by_row in old_week_by_rows:
+               new_week_by_row = []
+               for i in range(0,empty_begin_days):
+                   new_week_by_row.append([None])
+               j = 0
+               while j < len(week_by_row)-empty_begin_days:
+                   new_week_by_row.append(week_by_row[j])
+                   j += 1
+               new_week_by_rows.append(new_week_by_row)
+           week_by_rows = new_week_by_rows
         return week_by_rows
 
     def getCurrentWeekAllDayEvents(self):
