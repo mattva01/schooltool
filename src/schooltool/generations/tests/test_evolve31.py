@@ -88,7 +88,7 @@ def doctest_evolve31():
         >>> URIBoring = URIStub('Uninteresting relationship')
         >>> contact(persons['will'], persons['pete'], rel_type=URIBoring)
 
-8    Let's evolve now.
+    Let's evolve now.
 
         >>> provideHandler(printRelationshipAdded,
         ...                [IRelationshipAddedEvent])
