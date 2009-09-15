@@ -38,6 +38,10 @@ class CourseCSVImporter(BaseCSVImporter):
     def createAndAdd(self, data, dry_run=True):
         """Create objects and add them to the container."""
 
+        course_id = None
+        government_id = None
+        credits = None
+
         if len(data) < 1:
             self.errors.fields.append(_('Insufficient data provided.'))
             return
@@ -52,9 +56,9 @@ class CourseCSVImporter(BaseCSVImporter):
             description = ''
 
         if len(data) > 2:
-            course_id = data[2]
+            if data[2]:
+                course_id = data[2]
         else:
-            course_id = ''
             for key, course in self.container.items():
                 if course.title == data[0]:
                     course_id = key
@@ -66,8 +70,25 @@ class CourseCSVImporter(BaseCSVImporter):
         else:
             obj = None
 
+        if len(data) > 3:
+            if data[3]:
+                government_id = data[3]
+
+        if len(data) > 4:
+            try:
+                credits = int(data[4])
+            except (ValueError,):
+                self.errors.fields.append(_('Course "${course_title}" credits "${invalid_credits}" value'
+                                            ' must be an integer.',
+                                            mapping={'course_title': data[0],
+                                                     'invalid_credits': data[4]}))
+                return
+
         if not obj:
             obj = self.factory(title=data[0], description=description)
+            obj.course_id = course_id
+            obj.government_id = government_id
+            obj.credits = credits
             try:
                 name = self.chooser.chooseName(course_id, obj)
             except UserError, e:
@@ -83,6 +104,9 @@ class CourseCSVImporter(BaseCSVImporter):
             if course_id in self.container:
                 obj.title = data[0]
                 obj.description = description
+                obj.course_id = course_id
+                obj.government_id = government_id
+                obj.credits = credits
             else:
                 self.container[name] = obj
 
