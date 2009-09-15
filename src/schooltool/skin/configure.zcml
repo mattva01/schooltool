@@ -178,7 +178,7 @@
             layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="rightarrow.png" file="resources/rightarrow.png"
             layer="schooltool.skin.ISchoolToolLayer" />
-  
+
   <resource name="layout.css" file="resources/layout.css"
 	    layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="print.css" file="resources/print.css"
@@ -201,15 +201,15 @@
   <resource name="sidebar-background-top.png"
 	    file="resources/sidebar-background-top.png"
 	    layer="schooltool.skin.ISchoolToolLayer" />
-  
+
   <resource name="previous.png" file="resources/previous.png"
 	    layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="next.png" file="resources/next.png"
 	    layer="schooltool.skin.ISchoolToolLayer" />
-  
+
   <resource name="printer.png" file="resources/printer.png"
 	    layer="schooltool.skin.ISchoolToolLayer" />
-  
+
   <resource name="delete.png" file="resources/delete.png"
             layer="schooltool.skin.ISchoolToolLayer" />
 
@@ -346,5 +346,54 @@
         interface="z3c.form.interfaces.ITextWidget"
         />
   </zope:class>
+
+  <zope:class class=".widgets.FckeditorWidget">
+    <require
+        permission="zope.Public"
+        interface=".widgets.IFckeditorWidget"
+        />
+  </zope:class>
+
+  <zope:class class=".widgets.FCKConfig">
+    <require
+        permission="zope.Public"
+        interface=".widgets.IFCKConfig"
+        />
+  </zope:class>
+
+  <zope:adapter
+      factory=".widgets.FckeditorFieldWidget"
+      for="zope.html.field.IHtmlFragmentField
+           z3c.form.interfaces.IFormLayer"
+      />
+
+  <z3c:widgetTemplate
+      mode="display"
+      widget=".widgets.IFckeditorWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      template="templates/fckwidget_display.pt"
+      />
+
+  <z3c:widgetTemplate
+      mode="input"
+      widget=".widgets.IFckeditorWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      template="templates/fckwidget_input.pt"
+      />
+
+  <zope:adapter
+      factory=".widgets.Fckeditor_config"
+      name="config"
+      />
+
+  <zope:adapter
+      factory=".widgets.Fckeditor_addform_config"
+      name="config"
+      />
+
+  <zope:adapter
+      factory=".widgets.Fckeditor_editform_config"
+      name="config"
+      />
 
 </configure>
