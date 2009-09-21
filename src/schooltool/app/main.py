@@ -476,14 +476,11 @@ class PluginActionSorter(object):
 
 
 def executePluginActions(actions):
-    failed = []
     for action in actions:
         try:
             action()
-        except:
-            failed.append(action)
-    if failed:
-        print >> sys.stderr, _("Failed to execute:"), failed
+        except Exception, exception:
+            print >> sys.stderr, "Failed to execute %s: %s" % (action, exception)
 
 
 def initializeSchoolToolPlugins(event):
