@@ -32,7 +32,7 @@ from zope.component import adapter
 from zope.component import adapts
 from zope.i18n import translate
 from zope.interface import implementer
-from zope.interface import implements
+from zope.interface import implements, implementsOnly
 
 from zope.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 from zope.app.applicationcontrol.interfaces import IApplicationControl
@@ -45,7 +45,7 @@ from zope.app.container.interfaces import INameChooser
 from zope.traversing.interfaces import IContainmentRoot
 
 from schooltool.app.overlay import ICalendarOverlayInfo
-from schooltool.app.interfaces import IPluginInit
+from schooltool.app.interfaces import IPluginInit, IPluginStartUp
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import IShowTimetables
@@ -300,9 +300,12 @@ class SchoolToolInitializationUtility(object):
         """
 
 
-class InitBase(object):
-
+class ActionBase(object):
+    adapts(ISchoolToolApplication)
     implements(IPluginInit)
+
+    after = ()
+    before = ()
 
     def __init__(self, app):
         self.app = app
@@ -310,6 +313,14 @@ class InitBase(object):
     def __call__(self):
         raise NotImplementedError("This method should be overriden by"
                                   " inheriting classes")
+
+
+class InitBase(ActionBase):
+    implementsOnly(IPluginInit)
+
+
+class StartUpBase(ActionBase):
+    implementsOnly(IPluginStartUp)
 
 
 @adapter(ISchoolToolApplication)

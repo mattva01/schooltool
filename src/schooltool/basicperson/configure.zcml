@@ -88,11 +88,11 @@
   <adapter factory=".demographics.getPersonDemographics" />
   <adapter factory=".demographics.DemographicsFormAdapter" />
   <adapter factory=".demographics.getDemographicsFields" />
-  <adapter factory=".demographics.DemographicsAppStartup"
-           name="schooltool.basicperson.demographics_startup"/>
   <adapter
-      for="schooltool.app.interfaces.ISchoolToolApplication"
       factory=".demographics.DemographicsInit"
+      name="schooltool.basicperson.demographics" />
+  <adapter
+      factory=".demographics.DemographicsAppStartup"
       name="schooltool.basicperson.demographics" />
 
 </configure>

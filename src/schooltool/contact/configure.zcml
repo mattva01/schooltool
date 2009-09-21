@@ -37,11 +37,11 @@
 
   <include package="schooltool.contact.browser" />
 
-  <adapter factory=".contact.ContactAppStartup"
-           name="schooltool.contact.contacts_startup"/>
+  <adapter
+      factory=".contact.ContactAppStartup"
+      name="schooltool.contact.contact" />
 
   <adapter
-      for="schooltool.app.interfaces.ISchoolToolApplication"
       factory=".contact.ContactInit"
       name="schooltool.contact.contact" />
 

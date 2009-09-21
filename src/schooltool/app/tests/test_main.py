@@ -736,11 +736,130 @@ def test_setUpLogger():
     """
 
 
+
+def doctest_CyclicPluginActionOrderException():
+    """Tests for CyclicPluginActionOrderException.
+
+    This exception converts a list of PluginDependency items to a human
+    readable format.
+
+       >>> from schooltool.app.main import PluginDependency
+       >>> from schooltool.app.main import CyclicPluginActionOrderException
+
+       >>> class PluginStub(object):
+       ...     def __init__(self, name):
+       ...         self.name = name
+       ...     def __repr__(self):
+       ...         return '<%s>' % self.name
+
+       >>> dependencies = [
+       ...     PluginDependency(PluginStub('alpha'), 'A',
+       ...                      PluginStub('beta'), 'B'),
+       ...     PluginDependency(PluginStub('gamma'), 'G',
+       ...                      PluginStub('delta'), 'D',
+       ...                      inverse=True),
+       ...     PluginDependency(PluginStub('omega'), 'O')]
+
+       >>> exception = CyclicPluginActionOrderException(dependencies)
+
+       >>> print exception
+       Cannot resolve plugin action order:
+       <alpha> named "A" must be executed _before_ <beta> named "B".
+       <gamma> named "G" must be executed _after_ <delta> named "D".
+       <omega> named "O" must be executed _before_ another.
+
+    """
+
+
+def doctest_PluginActionSorter():
+    """Tests for PluginActionSorter.
+
+    The purpose of PluginActionSorter is to resolve the order in which
+    the plugin actions should be executed.
+
+        >>> from schooltool.app.main import PluginActionSorter
+
+        >>> class ActionStub(object):
+        ...     def __init__(self, exec_after, name, exec_before):
+        ...         self.name = name
+        ...         self.after = exec_after
+        ...         self.before = exec_before
+        ...     def __repr__(self):
+        ...         return '<action %s>' % self.name
+
+    The sorter takes a list of (adapter_name, factory) tuples that can be
+    obtained with getAdapters.
+
+        >>> actions = [
+        ...     ActionStub([], 'C', []),
+        ...     ActionStub([], 'A', ['B']),
+        ...     ActionStub([], 'B', []),
+        ...     ActionStub(['A'], 'Q', []),
+        ...     ]
+
+        >>> sorter = PluginActionSorter([(a.name, a) for a in actions])
+
+    The sorter tries to maintain the original order of plugins if possible.
+
+        >>> print sorter()
+        [<action C>, <action A>, <action B>, <action Q>]
+
+    When the order cannot be maintained, plugins are sorted by their
+    execution dependencies.
+
+        >>> actions = [
+        ...     ActionStub([], 'A', []),
+        ...     ActionStub([], 'B', []),
+        ...     ActionStub(['D'], 'C', []),
+        ...     ActionStub(['B'], 'D', ['A']),
+        ...     ]
+
+        >>> sorter = PluginActionSorter([(a.name, a) for a in actions])
+        >>> print sorter()
+        [<action B>, <action D>, <action A>, <action C>]
+
+    In case of invalid dependencies, an exception is thrown.
+
+        >>> actions = [
+        ...     ActionStub([], 'A', []),
+        ...     ActionStub(['A'], 'B', ['A']),
+        ...     ]
+        >>> sorter = PluginActionSorter([(a.name, a) for a in actions])
+        >>> print sorter()
+        Traceback (most recent call last):
+        ...
+        CyclicPluginActionOrderException: Cannot resolve plugin action order:
+        <action A> named "A" must be executed _before_ <action B> named "B".
+        <action A> named "A" must be executed _after_ <action B> named "B".
+
+    The sorter also detects dependency cycles.
+
+        >>> actions = [
+        ...     ActionStub([], 'A', ['B']),
+        ...     ActionStub([], 'B', []),
+        ...     ActionStub(['B'], 'C', ['A']),
+        ...     ]
+
+        >>> sorter = PluginActionSorter([(a.name, a) for a in actions])
+        >>> print sorter()
+        Traceback (most recent call last):
+        ...
+        CyclicPluginActionOrderException: Cannot resolve plugin action order:
+        <action B> named "B" must be executed _after_ <action A> named "A".
+        <action B> named "B" must be executed _before_ <action C> named "C".
+        <action A> named "A" must be executed _after_ <action C> named "C".
+
+    """
+
+
 def test_suite():
+    optionflags = (doctest.ELLIPSIS |
+                   doctest.NORMALIZE_WHITESPACE |
+                   doctest.REPORT_NDIFF)
     return unittest.TestSuite([
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
                 doctest.DocTestSuite('schooltool.app.main',
-                                     optionflags=doctest.ELLIPSIS),
+                                     optionflags=optionflags),
            ])
 
 if __name__ == '__main__':

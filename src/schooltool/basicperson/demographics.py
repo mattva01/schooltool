@@ -40,7 +40,7 @@ from zope.schema.vocabulary import SimpleTerm
 from z3c.form import field
 
 from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
-from schooltool.app.app import InitBase
+from schooltool.app.app import InitBase, StartUpBase
 from schooltool.app.interfaces import IApplicationStartUpEvent
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.basicperson.interfaces import IEnumFieldDescription
@@ -127,14 +127,12 @@ def setUpDefaultDemographics(app):
     dfs['citizenship'] = TextFieldDescription('citizenship', 'Citizenship')
 
 
-class DemographicsAppStartup(ObjectEventAdapterSubscriber):
-    adapts(IApplicationStartUpEvent, ISchoolToolApplication)
-
+class DemographicsAppStartup(StartUpBase):
     def __call__(self):
-        if 'schooltool.basicperson.demographics_fields' not in self.object:
-            setUpDefaultDemographics(self.object)
-        if 'schooltool.basicperson.demographics_data' not in self.object:
-            self.object['schooltool.basicperson.demographics_data'] = PersonDemographicsDataContainer()
+        if 'schooltool.basicperson.demographics_fields' not in self.app:
+            setUpDefaultDemographics(self.app)
+        if 'schooltool.basicperson.demographics_data' not in self.app:
+            self.app['schooltool.basicperson.demographics_data'] = PersonDemographicsDataContainer()
 
 
 class DemographicsInit(InitBase):
