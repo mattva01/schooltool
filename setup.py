@@ -225,6 +225,8 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'xlwt',
                       'xlrd',
                       'setuptools'],
+    tests_require=['zope.testing',
+                   'schooltool.lyceum.journal'],
     dependency_links=['http://ftp.schooltool.org/schooltool/eggs/3.4',
                       'http://ftp.schooltool.org/schooltool/releases/nightly/'],
     entry_points = """
