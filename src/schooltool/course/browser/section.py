@@ -47,6 +47,7 @@ from z3c.form import form, subform, field, widget, datamanager, button
 from z3c.form.action import ActionErrorOccurred
 from z3c.form.interfaces import ActionExecutionError
 
+from schooltool.common import SchoolToolMessage as _
 from schooltool.person.interfaces import IPerson
 from schooltool.term.interfaces import ITerm
 from schooltool.timetable.interfaces import ITimetables
@@ -55,9 +56,8 @@ from schooltool.skin.containers import ContainerView
 from schooltool.app.browser.app import BaseEditView
 from schooltool.term.interfaces import IDateManager
 from schooltool.term.term import getPreviousTerm, getNextTerm
+from schooltool.term.term import listTerms
 from schooltool.app.utils import vocabulary_titled
-
-from schooltool.common import SchoolToolMessage as _
 from schooltool.course.interfaces import ICourse, ICourseContainer
 from schooltool.course.interfaces import ISection, ISectionContainer
 from schooltool.course.section import Section
@@ -370,8 +370,8 @@ class NewSectionTermsSubform(subform.EditSubForm):
         self.setUpFields(default_term)
 
     def setUpFields(self, default_term):
-        terms = ISchoolYear(self.context)
-        self.vocabulary=vocabulary_titled(terms.values())
+        terms = listTerms(self.context)
+        self.vocabulary=vocabulary_titled(terms)
         self.span = defaultdict(lambda:default_term)
         self._addTermChoice('starts', _("Starts in term"))
         self._addTermChoice('ends', _("Ends in term"))
@@ -392,8 +392,8 @@ class NewSectionTermsSubform(subform.EditSubForm):
     def terms(self):
         if self.errors:
             return []
-        terms = ISchoolYear(self.context)
-        return [term for term in terms.values()
+        terms = listTerms(self.context)
+        return [term for term in terms
                 if (term.first >= self.span['starts'].first and
                     term.last <= self.span['ends'].last)]
 

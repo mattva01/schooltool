@@ -203,16 +203,22 @@ def getNextTermForDate(date):
     return None
 
 
+def listTerms(context):
+    """List terms of a schoolyear in a chronological order."""
+    terms = interfaces.ITermContainer(context, {})
+    return sorted(terms.values(), key=lambda t: t.first)
+
+
 def getPreviousTerm(term):
     """Get the next term in the same SchoolYear.
 
     The limitation is imposed as SchoolYears are strictly separated
     entities (for archival purposes).
     """
-    prev_terms = [t for t in ISchoolYear(term).values()
+    prev_terms = [t for t in listTerms(term)
                   if t.last < term.first]
     if prev_terms:
-        return sorted(prev_terms, key=lambda t: t.last)[-1]
+        return prev_terms[-1]
     return None
 
 
@@ -222,10 +228,10 @@ def getNextTerm(term):
     The limitation is imposed as SchoolYears are strictly separated
     entities (for archival purposes).
     """
-    next_terms = [t for t in ISchoolYear(term).values()
+    next_terms = [t for t in listTerms(term)
                   if t.first > term.last]
     if next_terms:
-        return sorted(next_terms, key=lambda t: t.first)[0]
+        return next_terms[0]
     return None
 
 

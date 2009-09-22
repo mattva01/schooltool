@@ -245,6 +245,85 @@ def doctest_DateManagerUtility_today():
     """
 
 
+def createSchoolYearWith3Terms():
+    sy = SchoolYear("Sample", date(2009, 9, 1), date(2010, 05, 20))
+    sy['a-term1'] = term.Term('Term 1',
+        date(2009, 9, 1), date(2009, 12, 20))
+    sy['b-term3'] = term.Term('Term 3',
+        date(2010, 3, 16), date(2010, 5, 20))
+    sy['c-term2'] = term.Term('Term 2',
+        date(2010, 1, 1), date(2010, 3, 15))
+    return sy
+
+
+def doctest_listTerms():
+    """Test for listTerms.
+
+    Stub adapter that obtains the term container.
+
+        >>> sy = createSchoolYearWith3Terms()
+        >>> provideAdapter(lambda context: sy, [Interface], ITermContainer)
+
+    Show that listTerm lists terms chronologically.
+
+        >>> context = object()
+        >>> [t.title for t in term.listTerms(context)]
+        ['Term 1', 'Term 2', 'Term 3']
+
+    """
+
+
+def doctest_getPreviousTerm_getNextTerm():
+    """Test for getPreviousTerm and getNextTerm
+
+    Stub adapter that obtains the term container.
+
+        >>> sy = createSchoolYearWith3Terms()
+        >>> provideAdapter(lambda context: sy, [Interface], ITermContainer)
+
+        >>> def printTerm(term):
+        ...     if term is None:
+        ...         print 'None'
+        ...     else:
+        ...         print '%s:' % term.title, term.first, '-', term.last
+
+        >>> app = object()
+        >>> t1, t2, t3 = term.listTerms(app)
+
+    So, we'll start with this term:
+
+        >>> printTerm(t1)
+        Term 1: 2009-09-01 - 2009-12-20
+
+    And print several next terms.
+
+        >>> printTerm(term.getNextTerm(t1))
+        Term 2: 2010-01-01 - 2010-03-15
+
+        >>> printTerm(term.getNextTerm(t2))
+        Term 3: 2010-03-16 - 2010-05-20
+
+    There are no terms after Term 3.
+
+        >>> printTerm(term.getNextTerm(t3))
+        None
+
+    Now let's check previous terms.
+
+        >>> printTerm(term.getPreviousTerm(t3))
+        Term 2: 2010-01-01 - 2010-03-15
+
+        >>> printTerm(term.getPreviousTerm(t2))
+        Term 1: 2009-09-01 - 2009-12-20
+
+    No terms before Term 1.
+
+        >>> printTerm(term.getPreviousTerm(t1))
+        None
+
+    """
+
+
 def setUp(test):
     placelessSetUp()
 
