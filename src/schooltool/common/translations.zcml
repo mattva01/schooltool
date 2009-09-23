@@ -11,10 +11,8 @@
   <include package="schooltool.course" />
   <include package="schooltool.dashboard" />
   <include package="schooltool.devmode" />
-  <include package="schooltool.gradebook" />
   <include package="schooltool.help" />
   <include package="schooltool.note" />
-  <include package="schooltool.requirement" />
   <include package="schooltool.term" />
   <include package="schooltool.timetable" />
   <include package="schooltool.basicperson" />
