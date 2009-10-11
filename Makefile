@@ -77,8 +77,9 @@ clean:
 	rm -rf build dist
 	rm -f .installed.cfg
 	rm -f ID TAGS tags
-	find . \( -path './src/*.mo' -o -name '*.o' \
-	         -o -name '*.py[co]' \) -exec rm -f {} \;
+	find . -name '*.py[co]' -exec rm -f {} \;
+	find . -name '*.mo' -exec rm -f {} +
+	find . -name 'LC_MESSAGES' -exec rmdir -p --ignore-fail-on-non-empty {} +
 
 .PHONY: extract-translations
 extract-translations: build
@@ -89,24 +90,26 @@ extract-translations: build
 compile-translations:
 	set -e; \
 	locales=src/schooltool/locales; \
-	for f in $${locales}/*/LC_MESSAGES/schooltool.po; do \
-	    msgfmt -o $${f%.po}.mo $$f;\
+	for f in $${locales}/*.po; do \
+	    mkdir -p $${f%.po}/LC_MESSAGES; \
+	    msgfmt -o $${f%.po}/LC_MESSAGES/schooltool.mo $$f;\
 	done
 	locales=src/schooltool/commendation/locales; \
-	for f in $${locales}/*/LC_MESSAGES/schooltool.commendation.po; do \
-	    msgfmt -o $${f%.po}.mo $$f;\
+	for f in $${locales}/*.po; do \
+	    mkdir -p $${f%.po}/LC_MESSAGES; \
+	    msgfmt -o $${f%.po}/LC_MESSAGES/schooltool.commendation.mo $$f;\
 	done
 
 .PHONY: update-translations
 update-translations: extract-translations
 	set -e; \
-	locales=src/schooltool/commendation/locales; \
-	for f in $${locales}/*/LC_MESSAGES/schooltool.commendation.po; do \
-	    msgmerge -qU $$f $${locales}/schooltool.commendation.pot ;\
-	done
 	locales=src/schooltool/locales; \
-	for f in $${locales}/*/LC_MESSAGES/schooltool.po; do \
+	for f in $${locales}/*.po; do \
 	    msgmerge -qU $$f $${locales}/schooltool.pot ;\
+	done
+	locales=src/schooltool/commendation/locales; \
+	for f in $${locales}/*.po; do \
+	    msgmerge -qU $$f $${locales}/schooltool.commendation.pot ;\
 	done
 	$(MAKE) PYTHON=$(PYTHON) compile-translations
 
