@@ -32,8 +32,6 @@ if sys.version_info < (2, 4):
     print >> sys.stderr, 'Your python is %s' % sys.version
     sys.exit(1)
 
-import glob
-
 import site
 site.addsitedir(os.path.join(here, 'eggs'))
 
@@ -93,27 +91,34 @@ root_packages = ['schooltool.app',
                  'schooltool.level',
                  ]
 
-def compile_translations(locales_dir):
-    "Compile *.po files to *.mo files in the same directory."
-    for po in glob.glob('%s/*/LC_MESSAGES/*.po' % locales_dir):
-        mo = po[:-3] + '.mo'
+from glob import glob
+
+def compile_translations(domain):
+    "Compile *.po files to *.mo files"
+    locales_dir = 'src/%s/locales' % (domain.replace('.', '/'))
+    for po in glob('%s/*.po' % locales_dir):
+        lang = os.path.basename(po)[:-3]
+        mo = "%s/%s/LC_MESSAGES/%s.mo" % (locales_dir, lang, domain)
         if newer(po, mo):
             log.info('Compile: %s -> %s' % (po, mo))
+            os.makedirs(os.path.dirname(mo))
             os.system('msgfmt -o %s %s' % (mo, po))
 
-if sys.argv[1] in ('build', 'install'):
+if len(sys.argv) > 1 and sys.argv[1] in ('build', 'install'):
     if not find_executable('msgfmt'):
         log.warn("GNU gettext msgfmt utility not found!")
         log.warn("Skip compiling po files.")
     else:
-        compile_translations('src/schooltool/locales')
-        compile_translations('src/schooltool/commendation/locales')
+        compile_translations('schooltool')
+        compile_translations('schooltool.commendation')
 
-if sys.argv[1] == 'clean':
-    for mo in glob.glob('src/schooltool/locales/*/LC_MESSAGES/*.mo'):
+if len(sys.argv) > 1 and sys.argv[1] == 'clean':
+    for mo in glob('src/schooltool/locales/*/LC_MESSAGES/*.mo'):
         os.unlink(mo)
-    for mo in glob.glob('src/schooltool/commendation/locales/*/LC_MESSAGES/*.mo'):
+        os.removedirs(os.path.dirname(mo))
+    for mo in glob('src/schooltool/commendation/locales/*/LC_MESSAGES/*.mo'):
         os.unlink(mo)
+        os.removedirs(os.path.dirname(mo))
 
 # Packages we want to non-recursively include
 package_data = {'schooltool': ['*.zcml', 'version.txt']}
@@ -142,7 +147,6 @@ if os.path.exists("version.txt"):
 else:
     version = open("version.txt.in").read().strip()
 
-# Setup SchoolTool
 setup(
     name="schooltool",
     description="A common information systems platform for school administration.",
