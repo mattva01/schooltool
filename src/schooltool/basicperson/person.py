@@ -34,7 +34,7 @@ from schooltool.person.person import Person
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.course.section import PersonInstructorsCrowd
 from schooltool.person.person import PersonCalendarCrowd
-from schooltool.table.table import IndexedLocaleAwareGetterColumn
+from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
 from schooltool.utility.utility import UtilitySetUp
 from schooltool.table.table import url_cell_formatter
 from schooltool.relationship.interfaces import IRelationshipLinks

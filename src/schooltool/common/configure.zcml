@@ -123,10 +123,6 @@
   <include package="schooltool.schoolyear" />
   <include package="schooltool.securitypolicy.browser" />
   <include package="schooltool.export" />
-
-  <adapter
-      for="zope.interface.Interface
-           zope.publisher.interfaces.browser.IBrowserRequest"
-      factory="schooltool.table.table.NullTableFormatter " />
+  <include package="schooltool.table" />
 
 </configure>

@@ -33,6 +33,7 @@ class PersonInfoViewersCrowd(ConfigurableCrowd):
     setting_key = 'everyone_can_view_person_info'
 
     def contains(self, principal):
+        # XXX: if groups are not set up yet, IGroupContainer fails
         teachers = IGroupContainer(ISchoolToolApplication(None))['teachers']
         groups = list(self.context.groups)
         return (ConfigurableCrowd.contains(self, principal) or

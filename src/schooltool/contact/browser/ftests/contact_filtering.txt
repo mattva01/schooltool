@@ -4,6 +4,17 @@ Filtering of contacts in contact listing views
     >>> browser = Browser('manager', 'schooltool')
     >>> browser.getLink('Manage').click()
 
+Rename administrator.
+
+    >>> browser.getLink('Persons').click()
+    >>> browser.getLink('Administrator').click()
+    >>> browser.getLink('Edit').click()
+    >>> browser.getControl('First name').value = "Pedro"
+    >>> browser.getControl('Middle name').value = "José Martínez"
+    >>> browser.getControl('Last name').value = "Pérez"
+    >>> browser.getControl('Gender').value = ['male']
+    >>> browser.getControl('Apply').click()
+
 Let's add a bunch of contacts:
 
     >>> from schooltool.contact.browser.ftests import addContact
@@ -35,6 +46,7 @@ They should be visible in the contact list now:
     <a href="http://localhost/contacts/Contact-8">Logan 7</a>
     <a href="http://localhost/contacts/Contact-9">Logan 8</a>
     <a href="http://localhost/contacts/Contact-10">Logan 9</a>
+    <a href="http://localhost/persons/manager/contact">Pedro</a>
 
 Let's filter out all the contacts whose names contain "Logan 1":
 
@@ -69,7 +81,16 @@ it by default:
 
     >>> browser.getLink('Home').click()
     >>> browser.getLink('Contacts').click()
-    >>> browser.printQuery("id('filter_widget')")
+
+    >>> analyze.printQuery("//div[@class='content-nav']/a",
+    ...                    browser.contents)
+    <a href="http://localhost/persons/manager/contact/@@index.html">View</a>
+    <a href="http://localhost/persons/manager/contact/@@edit.html">Edit</a>
+    <a href="http://localhost/persons/manager/@@manage_contacts.html?SEARCH_LAST_NAME=P%C3%A9rez">Manage Contacts</a>
+
+    >>> browser.getLink('Manage Contacts').click()
+    >>> analyze.printQuery("id('filter_widget')",
+    ...                    browser.contents)
     <div id="filter_widget">
         <div class="row">
           <div class="widget">
@@ -77,7 +98,7 @@ it by default:
             <input type="text" id="SEARCH_FIRST_NAME" name="SEARCH_FIRST_NAME" /></div>
           <div class="widget">
             <p class="hint"><label for="SEARCH_LAST_NAME">Last name</label></p>
-            <input type="text" id="SEARCH_LAST_NAME" name="SEARCH_LAST_NAME" value="Administrator" /></div>
+            <input type="text" id="SEARCH_LAST_NAME" name="SEARCH_LAST_NAME" value="P&#195;&#169;rez" /></div>
         </div>
         <div class="controls" style="clear: both">
           <input class="button-ok" type="submit" name="SEARCH_BUTTON" value="Find Now"

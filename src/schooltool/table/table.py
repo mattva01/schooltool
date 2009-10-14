@@ -26,23 +26,22 @@ from zope.interface import implements
 from zope.interface import directlyProvides
 from zope.i18n.interfaces.locales import ICollator
 from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.component import queryMultiAdapter
+from zope.security.proxy import removeSecurityProxy
+from zope.app.dependable.interfaces import IDependable
+from zope.traversing.browser.absoluteurl import absoluteURL
+
 from zc.table import table
 from zc.table import column
 from zc.table.interfaces import ISortableColumn
 from zc.table.column import GetterColumn
-from zope.component import queryMultiAdapter
-from zope.security.proxy import removeSecurityProxy
-from zope.app.dependable.interfaces import IDependable
-from zope.app.catalog.interfaces import ICatalog
-from zope.component import getUtility
-from zope.app.intid.interfaces import IIntIds
-from zope.component import queryUtility
-from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.table.batch import Batch
 from schooltool.table.interfaces import IFilterWidget
 from schooltool.table.interfaces import ITableFormatter
-from schooltool.table.interfaces import IIndexedColumn
+from schooltool.table.interfaces import ICheckboxColumn
+
+from schooltool.common import SchoolToolMessage as _
 
 
 class FilterWidget(object):
@@ -81,56 +80,63 @@ class FilterWidget(object):
         return ''
 
 
-class IndexedFilterWidget(FilterWidget):
+def label_cell_formatter_factory(prefix="", id_getter=None):
+    if id_getter is None:
+        id_getter = stupid_form_key
+    def label_cell_formatter(value, item, formatter):
+        return '<label for="%s">%s</label>' % (
+            ".".join(filter(None, [prefix, id_getter(item)])), value)
+    return label_cell_formatter
 
-    def filter(self, list):
-        catalog = ICatalog(self.context)
-        index = catalog['title']
-        if 'SEARCH' in self.request and 'CLEAR_SEARCH' not in self.request:
-            searchstr = self.request['SEARCH'].lower()
-            results = []
-            for item in list:
-                title = index.documents_to_values[item['id']]
-                if searchstr in title.lower():
-                    results.append(item)
-        else:
-            self.request.form['SEARCH'] = ''
-            results = list
 
-        return results
+def stupid_form_key(item):
+    """Simple form key that uses item's __name__.
+    Very unsafe: __name__ is expected to be a unicode string that contains
+    who knows what.
+    """
+    return item.__name__
+
+
+def simple_form_key(item):
+    """Unique form key for items contained within a single container."""
+    name = getattr(item, '__name__', None)
+    if name is None:
+        return None
+    key = unicode(name).encode('punycode')
+    key = urllib.quote(key)
+    return key
 
 
 class CheckboxColumn(column.Column):
     """A columns with a checkbox
 
     The name and id of the checkbox are composed of the prefix keyword
-    argument and __name__ of the item being displayed.
+    argument and __name__ (or other value if form_id_builder is specified) of
+    the item being displayed.
     """
-    def __init__(self, prefix, name=None, title=None, isDisabled=None):
+    implements(ICheckboxColumn)
+
+    def __init__(self, prefix, name=None, title=None,
+                 isDisabled=None, id_getter=None):
         super(CheckboxColumn, self).__init__(name=name, title=title)
-        self.prefix = prefix
         if isDisabled:
             self.isDisabled = isDisabled
+        self.prefix = prefix
+        if id_getter is None:
+            self.id_getter = stupid_form_key
+        else:
+            self.id_getter = id_getter
 
     def isDisabled(self, item):
         return False
 
     def renderCell(self, item, formatter):
         if not self.isDisabled(item):
-            id = "%s.%s" % (self.prefix, item.__name__)
-            return '<input type="checkbox" name="%s" id="%s" />' % (id, id)
+            form_id = ".".join(filter(None, [self.prefix, self.id_getter(item)]))
+            return '<input type="checkbox" name="%s" id="%s" />' % (
+                form_id, form_id)
         else:
             return ''
-
-
-def label_cell_formatter_factory(prefix=""):
-    if prefix:
-        prefix = prefix + "."
-    def label_cell_formatter(value, item, formatter):
-        return '<label for="%s%s">%s</label>' % (prefix,
-                                                 item.__name__,
-                                                 value)
-    return label_cell_formatter
 
 
 class DependableCheckboxColumn(CheckboxColumn):
@@ -140,14 +146,22 @@ class DependableCheckboxColumn(CheckboxColumn):
     argument and __name__ of the item being displayed.
     """
 
-    def renderCell(self, item, formatter):
-        id = "%s.%s" % (self.prefix, item.__name__)
+    def __init__(self, *args, **kw):
+        kw = dict(kw)
+        self.show_disabled = kw.pop('show_disabled', True)
+        super(DependableCheckboxColumn, self).__init__(*args, **kw)
 
+    def renderCell(self, item, formatter):
+        form_id = ".".join(filter(None, [self.prefix, self.id_getter(item)]))
         if self.hasDependents(item):
-            return '<input type="checkbox" name="%s" id="%s" disabled="disabled" />' % (id, id)
+            if self.show_disabled:
+                return '<input type="checkbox" name="%s" id="%s" disabled="disabled" />' % (form_id, form_id)
+            else:
+                return ''
         else:
-            checked = id in formatter.request and 'checked="checked"' or ''
-            return '<input type="checkbox" name="%s" id="%s" %s/>' % (id, id, checked)
+            checked = form_id in formatter.request and 'checked="checked"' or ''
+            return '<input type="checkbox" name="%s" id="%s" %s/>' % (
+                form_id, form_id, checked)
 
     def hasDependents(self, item):
         # We cannot adapt security-proxied objects to IDependable.  Unwrapping
@@ -177,43 +191,6 @@ class LocaleAwareGetterColumn(GetterColumn):
         return s and collator.key(s)
 
 
-class IndexedGetterColumn(GetterColumn):
-    implements(IIndexedColumn, ISortableColumn)
-
-    def __init__(self, **kwargs):
-        self.index = kwargs.pop('index')
-        super(IndexedGetterColumn, self).__init__(**kwargs)
-
-    def _sort(self, items, formatter, start, stop, sorters, multiplier):
-        if self.subsort and sorters:
-            items = sorters[0](items, formatter, start, stop, sorters[1:])
-        else:
-            items = list(items) # don't mutate original
-        getSortKey = self.getSortKey
-
-        items.sort(
-            cmp=lambda a, b: multiplier*cmp(a, b),
-            key=lambda item: getSortKey(item, formatter))
-
-        return items
-
-    def getSortKey(self, item, formatter):
-        id = item['id']
-        index = item['catalog'][self.index]
-        return index.documents_to_values[id]
-
-
-class IndexedLocaleAwareGetterColumn(IndexedGetterColumn):
-
-    _cached_collator = None
-
-    def getSortKey(self, item, formatter):
-        if not self._cached_collator:
-            self._cached_collator = ICollator(formatter.request.locale)
-        s = super(IndexedLocaleAwareGetterColumn, self).getSortKey(item, formatter)
-        return s and self._cached_collator.key(s)
-
-
 class NullTableFormatter(object):
     implements(ITableFormatter)
 
@@ -241,7 +218,7 @@ class SchoolToolTableFormatter(object):
 
     def columns(self):
         title = GetterColumn(name='title',
-                             title=u"Title",
+                             title=_(u"Title"),
                              getter=lambda i, f: i.title,
                              subsort=True)
         directlyProvides(title, ISortableColumn)
@@ -321,96 +298,3 @@ class SchoolToolTableFormatter(object):
         formatter.cssClasses['table'] = 'data'
         return formatter()
 
-
-class IndexedTableFormatter(SchoolToolTableFormatter):
-
-    def columns(self):
-        return [IndexedGetterColumn(name='title',
-                                    title=u"Title",
-                                    getter=lambda i, f: i.title,
-                                    cell_formatter=url_cell_formatter,
-                                    index='title')]
-
-    def items(self):
-        """Return a list of index dicts for all the items in the context container"""
-        catalog = ICatalog(self.context)
-        index = catalog.values()[0]
-        results = []
-        for id, value in index.documents_to_values.items():
-            results.append({
-                    'id': id,
-                    'catalog': catalog})
-        return results
-
-    def ommit(self, items, ommited_items):
-        ommited_items = self.indexItems(ommited_items)
-        ommited_ids = set([item['id'] for item in ommited_items])
-        return [item for item in items
-                if item['id'] not in ommited_ids]
-
-    def indexItems(self, items):
-        """Convert a list of objects to a list of index dicts"""
-        int_ids = getUtility(IIntIds)
-        catalog = ICatalog(self.context)
-        results = []
-        for item in items:
-            results.append({
-                    'id': int_ids.getId(item),
-                    'catalog': catalog})
-        return results
-
-    def wrapColumn(self, column):
-        """Wrap a normal column to work with index dicts"""
-        if ISortableColumn.providedBy(column):
-            original_getSortKey = column.getSortKey
-            def unindexingGetSortKey(item, formatter):
-                item = queryUtility(IIntIds).getObject(item['id'])
-                return original_getSortKey(item, formatter)
-            column.getSortKey = unindexingGetSortKey
-
-        return column
-
-    def wrapColumns(self, columns):
-        """Wrap all not indexed columns to work with index dicts"""
-        wrapped_columns = []
-        for column in columns:
-            if IIndexedColumn.providedBy(column):
-                wrapped_columns.append(column)
-            else:
-                wrapped_columns.append(self.wrapColumn(column))
-        return wrapped_columns
-
-    def setUp(self, **kwargs):
-        items = kwargs.pop('items', None)
-        columns = kwargs.pop('columns', None)
-        columns_before = kwargs.pop('columns_before', [])
-        columns_after = kwargs.pop('columns_after', [])
-
-        if items is not None:
-            items = self.indexItems(items)
-        if columns is None:
-            columns = self.columns()
-
-        super(IndexedTableFormatter, self).setUp(items=items,
-                columns=self.wrapColumns(columns),
-                columns_before=self.wrapColumns(columns_before),
-                columns_after=self.wrapColumns(columns_after),
-                **kwargs)
-
-    def wrapGetItems(self, getItems):
-        def unindexingGetItems():
-            for item in getItems():
-                item = queryUtility(IIntIds).getObject(item['id'])
-                yield item
-        return unindexingGetItems
-
-    def render(self):
-        formatter = self._table_formatter(
-            self.context, self.request, self._items,
-            columns=self._columns,
-            batch_start=self.batch.start, batch_size=self.batch.size,
-            sort_on=self._sort_on,
-            prefix=self.prefix)
-        formatter.cssClasses['table'] = 'data'
-        formatter.getItems = self.wrapGetItems(formatter.getItems)
-        return formatter()

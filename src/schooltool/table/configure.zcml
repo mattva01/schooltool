@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           i18n_domain="schooltool">
+
+  <adapter
+      for="zope.interface.Interface
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".table.NullTableFormatter " />
+
+  <adapter factory=".catalog.getIndexedColumn " />
+  <adapter factory=".catalog.getIndexedSortableColumn " />
+
+</configure>

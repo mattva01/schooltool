@@ -26,22 +26,38 @@ from zope.component import adapter
 from zope.component import adapts
 from zope.interface import implementer
 from zope.interface import implements
+from zope.app.component.hooks import getSite, setSite
 from zope.app.container.contained import Contained
 from zope.app.container.btree import BTreeContainer
+from zope.app.catalog.interfaces import ICatalog
+from zope.app.intid.interfaces import IIntIds
+from zope.component import getUtility, queryUtility
+
+from zc.catalog.catalogindex import ValueIndex
+from zc.catalog.extentcatalog import Catalog
+from zc.catalog.extentcatalog import FilterExtent
 
 from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationStartUpEvent
+from schooltool.app.interfaces import CatalogSetUpEvent
 from schooltool.app.app import InitBase, StartUpBase
+from schooltool.utility.utility import UtilitySetUp
 from schooltool.contact.interfaces import IContactPersonInfo
 from schooltool.contact.interfaces import IContactable
-from schooltool.contact.interfaces import IContactContained
+from schooltool.contact.interfaces import IContact, IContactContained
 from schooltool.contact.interfaces import IContactContainer
+from schooltool.contact.interfaces import IUniqueFormKey
 from schooltool.relationship.uri import URIObject
 from schooltool.relationship.relationship import BoundRelationshipProperty
 from schooltool.relationship.relationship import RelationshipProperty
 from schooltool.relationship.relationship import RelationshipSchema
+from schooltool.table.catalog import ConvertingIndex
+from schooltool.table.catalog import FilterImplementing
+from schooltool.table.table import simple_form_key
 
+
+CONTACT_CATALOG_KEY = 'schooltool.contact'
 
 URIContactRelationship = URIObject('http://schooltool.org/ns/contact',
                                    'Contact relationship',
@@ -147,3 +163,28 @@ class ContactInit(InitBase):
 @adapter(ISchoolToolApplication)
 def getContactContainer(app):
     return app['schooltool.contact']
+
+
+@adapter(IContact)
+@implementer(IUniqueFormKey)
+def getContactFormKey(contact):
+    doc_id = getUtility(IIntIds).getId(contact)
+    return 'contacts.%s%x' % (simple_form_key(contact), doc_id)
+
+
+def catalogFactory():
+    return Catalog(FilterExtent(FilterImplementing(IContact)))
+
+
+def catalogSetUp(catalog):
+    catalog['form_keys'] = ConvertingIndex(converter=IUniqueFormKey)
+    catalog['first_name'] = ValueIndex('first_name')
+    catalog['last_name'] = ValueIndex('last_name')
+
+
+catalogSetUpSubscriber = UtilitySetUp(
+    catalogFactory, ICatalog, CONTACT_CATALOG_KEY, setUp=catalogSetUp)
+
+
+def getContactCatalog(container):
+    return getUtility(ICatalog, CONTACT_CATALOG_KEY)

@@ -23,6 +23,7 @@ $Id$
 """
 from zope.schema import Object
 from zope.interface import Interface
+from zc.table.interfaces import IColumn
 
 
 class IBatch(Interface):
@@ -75,4 +76,9 @@ class IIndexedColumn(Interface):
     catalog - the catalog that is storing relevant indexes
     key     - the key by which the object can be retrieved from the context
 
+    XXX: information is a bit outdated
     """
+
+class ICheckboxColumn(IColumn):
+    """A column with a checkbox."""
+

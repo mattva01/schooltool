@@ -276,4 +276,5 @@ We can fill the New Person form with Unicode text:
 
     >>> analyze.printQuery("//div[@class='content-nav'][10]/a",
     ...                    manager.contents)
-    <a href="http://localhost/persons/pedro/@@manage_contacts.html?SEARCH_LAST_NAME=Mart%C3%ADnez+P%C3%A9rez">Contacts</a>
+    <a href="http://localhost/persons/pedro/contact">Contacts</a>
+

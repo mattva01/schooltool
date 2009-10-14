@@ -29,6 +29,24 @@
       />
 
   <page
+      name="index.html"
+      for="schooltool.contact.basicperson.IBoundContact"
+      class=".basicperson.ContactOverviewView"
+      permission="schooltool.view"
+      menu="schooltool_actions"
+      title="View"
+      />
+
+  <page
+      name="edit.html"
+      for="schooltool.contact.basicperson.IBoundContact"
+      class=".basicperson.BoundContactEditView"
+      permission="schooltool.edit"
+      menu="schooltool_actions"
+      title="Edit"
+      />
+
+  <page
      name="add.html"
      for="schooltool.contact.interfaces.IContactContainer"
      class=".contact.ContactAddView"
@@ -53,6 +71,18 @@
       link="contacts"
       title="Contacts"
       order="60"
+     />
+
+    <navigationViewlet
+      name="self-contact-info"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      class="schooltool.skin.skin.ActionMenuViewlet"
+      permission="schooltool.view"
+      link="contact"
+      title="Contacts"
+      order="30"
       />
 
     <page
@@ -65,17 +95,41 @@
         title="View"
         />
 
+  </configure>
+
+  <navigationViewlet
+    name="manage-contacts"
+    for="schooltool.contact.basicperson.IBoundContact"
+    manager="schooltool.skin.IActionMenuManager"
+    template="templates/actionsViewlet.pt"
+    class="schooltool.contact.browser.basicperson.ManageContactsActionViewlet"
+    permission="schooltool.edit"
+    title="Manage Contacts"
+    order="30"
+    />
+
+  <navigationViewlet
+    name="contact-info-to-container"
+    for="schooltool.contact.interfaces.IContact"
+    manager="schooltool.skin.IActionMenuManager"
+    template="templates/actionsViewlet.pt"
+    class="schooltool.contact.browser.contact.ContactBackToContainerViewlet"
+    permission="schooltool.view"
+    title="Other Contacts"
+    order="40"
+    />
+
+  <configure package="schooltool.skin">
     <navigationViewlet
-      name="manage-contacts"
-      for="schooltool.basicperson.interfaces.IBasicPerson"
+      name="contact-info-to-container"
+      for="schooltool.contact.basicperson.IBoundContact"
       manager="schooltool.skin.IActionMenuManager"
       template="templates/actionsViewlet.pt"
-      class="schooltool.contact.browser.contact.ManageContactsActionViewlet"
-      permission="schooltool.edit"
-      title="Contacts"
-      order="30"
+      class="schooltool.skin.skin.DisableNavigationViewlet"
+      permission="schooltool.view"
+      title="Other Contacts"
+      order="40"
       />
-
   </configure>
 
   <zope:adapterTraverserPlugin
@@ -83,6 +137,13 @@
       layer="zope.publisher.interfaces.browser.IBrowserRequest"
       name="contacts"
       adapter="schooltool.contact.interfaces.IContactContainer"
+      />
+
+  <zope:adapterTraverserPlugin
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      name="contact"
+      adapter="schooltool.contact.interfaces.IContact"
       />
 
   <zope:adapter

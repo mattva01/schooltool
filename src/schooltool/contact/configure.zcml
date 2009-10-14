@@ -16,6 +16,17 @@
         interface="schooltool.contact.interfaces.IContact" />
   </class>
 
+  <class class=".basicperson.BoundContact">
+    <implements
+        interface="zope.annotation.interfaces.IAttributeAnnotatable" />
+    <require
+        permission="schooltool.edit"
+        set_schema="schooltool.contact.basicperson.IBoundContact" />
+    <require
+        permission="schooltool.view"
+        interface="schooltool.contact.basicperson.IBoundContact" />
+  </class>
+
   <class class=".contact.ContactPersonInfo">
     <implements
         interface="zope.annotation.interfaces.IAttributeAnnotatable" />
@@ -52,5 +63,37 @@
   <adapter
       for="schooltool.app.interfaces.ISchoolToolApplication"
       factory=".contact.getContactContainer" />
+
+  <adapter
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      factory=".basicperson.getBoundContact" />
+
+   <adapter
+      factory=".basicperson.PersonAddedSubsciber"
+      name="autovivify_person_contact" />
+
+   <adapter
+      factory=".basicperson.PersonModifiedSubsciber"
+      name="notify_person_contact_modified" />
+
+   <adapter
+      factory=".basicperson.PersonRemovedSubsciber"
+      name="notify_person_contact_removed" />
+
+  <subscriber
+     for="schooltool.app.interfaces.ICatalogSetUpEvent"
+     handler=".contact.catalogSetUpSubscriber"
+     />
+
+  <adapter
+      for=".interfaces.IContactContainer"
+      provides="zope.app.catalog.interfaces.ICatalog"
+      factory=".contact.getContactCatalog" />
+
+   <adapter
+      factory=".contact.getContactFormKey" />
+
+   <adapter
+      factory=".basicperson.getBoundContactFormKey" />
 
 </configure>
