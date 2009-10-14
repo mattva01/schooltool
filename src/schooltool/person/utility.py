@@ -18,7 +18,7 @@
 #
 from schooltool.person.person import Person
 from schooltool.table.table import url_cell_formatter
-from schooltool.table.table import IndexedLocaleAwareGetterColumn
+from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
 
 
 class PersonFactoryUtility(object):

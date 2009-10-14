@@ -19,7 +19,7 @@
           }
         </script>
 	<h3 tal:content="view/title" />
-	<fieldset tal:define="items view/getSelectedItems">
+	<fieldset tal:define="items view/getSelectedItemIds">
 	  <tal:if condition="items">
 	    <legend tal:content="view/current_title" />
 	    <tal:block replace="structure view/selected_table/render" />

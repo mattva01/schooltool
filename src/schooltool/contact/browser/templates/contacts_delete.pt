@@ -23,11 +23,13 @@
   <ul tal:condition="objects">
     <form method="post">
       <li tal:repeat="obj objects">
-        <input type="hidden" tal:attributes="name string:delete.${obj/zope:name}" />
         <span tal:content="obj/first_name">FirstName</span>
         <a tal:content="obj/last_name"
            tal:attributes="href obj/@@absolute_url">LastName</a>
       </li>
+      <tal:block repeat="key view/listFormKeysForDeletion">
+        <input type="hidden" tal:attributes="name key" />
+      </tal:block>
       <div class="controls">
         <input type="submit" class="button-cancel" name="CONFIRM" value="Confirm"
                i18n:attributes="value delete-button;" />

@@ -1,0 +1,87 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+  <body>
+    <metal:nothing metal:fill-slot="content-header" />
+    <metal:block metal:fill-slot="body">
+
+
+  <h1 i18n:translate="">Contact information for
+      <a tal:replace="structure context/__parent__/@@link"
+         i18n:name="person"/>
+  </h1>
+
+  <tal:block define="relationships view/getRelationships"
+             condition="relationships">
+    <tal:block repeat="info relationships">
+      <div tal:condition="info/relationship" i18n:translate="">
+        <span tal:replace="info/getRelationshipTitle" i18n:name="relationship" />
+        of
+        <a tal:replace="structure info/__parent__/@@link" i18n:name="person" />
+      </div>
+      <div tal:condition="not:info/relationship" i18n:translate="">
+        Contact of
+        <a tal:replace="structure info/__parent__/@@link" i18n:name="person" />
+      </div>
+     </tal:block>
+  </tal:block>
+
+  <tal:block define="contact view/getPerson">
+    <metal:block define-macro="contact_information">
+      <div class="info-block">
+        <tal:block condition="contact/address">
+          <h4 i18n:translate="">Address</h4>
+          <p tal:content="contact/address" />
+        </tal:block>
+
+        <tal:block condition="contact/emails">
+          <h4 i18n:translate="">Email</h4>
+          <p tal:content="contact/emails" />
+        </tal:block>
+
+        <tal:block condition="contact/phones">
+          <h4 i18n:translate="">Phones</h4>
+          <p>
+            <tal:block tal:repeat="phone contact/phones">
+              <span tal:content="phone" /><tal:block condition="not:repeat/phone/end">,&nbsp;</tal:block>
+            </tal:block>
+          </p>
+        </tal:block>
+
+        <tal:block condition="contact/languages">
+          <h4 i18n:translate="">Spoken Languages</h4>
+          <p tal:content="contact/languages" />
+        </tal:block>
+      </div>
+    </metal:block>
+  </tal:block>
+
+  <tal:block define="contacts view/getContacts" condition="contacts">
+    <br />
+    <h1 i18n:translate="">Contacts</h1>
+    <br />
+
+    <div tal:repeat="contact contacts">
+      <div class="person-info">
+
+        <fieldset>
+            <div class="person-info">
+              <h2>
+                 <tal:block condition="contact/relationship">
+                   <span tal:replace="contact/relationship" />,
+                 </tal:block>
+                 <tal:block content="contact/name" />
+              </h2>
+              <a tal:attributes="href contact/link"
+                 i18n:translate="">(View Details)</a>
+
+              <metal:block use-macro="template/macros/contact_information" />
+            </div>
+        </fieldset>
+
+      </div>
+    </div>
+  </tal:block>
+
+
+    </metal:block>
+  </body>
+</html>

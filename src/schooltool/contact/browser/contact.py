@@ -20,19 +20,22 @@
 """
 Contact browser views.
 """
-import urllib
-
-from zope.security.proxy import removeSecurityProxy
 from zope.interface import directlyProvides
 from zope.interface import implements
 from zope.component import getMultiAdapter
 from zope.component import adapts
+from zope.component import getUtility
+from zope.schema import getFieldNamesInOrder
+from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser import absoluteURL
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.browser import BrowserView
 from zope.app.container.interfaces import INameChooser
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.app.catalog.interfaces import ICatalog
+from zope.app.intid.interfaces import IIntIds
+from zope.app.catalog.interfaces import ICatalog
 
 from zc.table.interfaces import ISortableColumn
 from zc.table.column import GetterColumn
@@ -40,13 +43,17 @@ from z3c.form import form, subform, field, button
 
 from schooltool.table.interfaces import ITableFormatter
 from schooltool.table.table import url_cell_formatter
-from schooltool.table.table import FilterWidget
-from schooltool.table.table import SchoolToolTableFormatter
+from schooltool.table.table import DependableCheckboxColumn
+from schooltool.table.catalog import FilterWidget
+from schooltool.table.catalog import IndexedTableFormatter
+from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
 from schooltool.skin.containers import TableContainerView
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.contact.interfaces import IContactable
 from schooltool.contact.interfaces import IContactContainer
 from schooltool.contact.interfaces import IContactPersonInfo
+from schooltool.contact.interfaces import IAddress
+from schooltool.contact.interfaces import IUniqueFormKey
 from schooltool.contact.contact import ContactPersonInfo
 from schooltool.contact.interfaces import IContact
 from schooltool.contact.contact import Contact
@@ -197,6 +204,7 @@ class ContactEditView(form.EditForm):
         for relationship_info in self.context.persons.relationships:
             subform = ContactPersonInfoSubForm(
                 relationship_info.extra_info, self.request, self)
+            # XXX: should also apply at least urllib.quote here:
             prefix = unicode(relationship_info.target.__name__).encode('punycode')
             subform.prefix += '.%s' % prefix
             subform.update()
@@ -212,7 +220,7 @@ class ContactEditView(form.EditForm):
 
     @property
     def label(self):
-        return _(u'Change information for ${first_name} ${last_name}',
+        return _(u'Change contact information for ${first_name} ${last_name}',
                  mapping={'first_name': self.context.first_name,
                           'last_name': self.context.last_name})
 
@@ -245,16 +253,39 @@ class ContactContainerView(TableContainerView):
             TableContainerView._listItemsForDeletion(self),
             key=lambda obj: '%s %s' % (obj.last_name, obj.first_name))
 
+    def setUpTableFormatter(self, formatter):
+        columns_before = []
+        if self.canModify():
+            columns_before = [
+                DependableCheckboxColumn(
+                    prefix="delete",
+                    name='delete_checkbox',
+                    title=u'',
+                    id_getter=IUniqueFormKey,
+                    show_disabled=False)]
+        formatter.setUp(columns_before=columns_before)
+
+    def listIdsForDeletion(self):
+        int_ids = getUtility(IIntIds)
+        return [int_ids.getObject(intid).__name__
+                for intid in self.listIntIdsForDeletion()]
+
+    def listFormKeysForDeletion(self):
+        catalog = ICatalog(self.context)
+        index = catalog['form_keys']
+        return ['delete.%s' % index.documents_to_values[intid]
+                for intid in self.listIntIdsForDeletion()]
+
+    def listIntIdsForDeletion(self):
+        catalog = ICatalog(self.context)
+        index = catalog['form_keys']
+        return [intid for intid in catalog.extent
+                if 'delete.%s' % index.documents_to_values[intid] in self.request]
+
 
 def format_street_address(item, formatter):
-
     address_parts = []
-    for attribute in ['address_line_1',
-                      'address_line_2',
-                      'city',
-                      'state',
-                      'country',
-                      'postal_code']:
+    for attribute in getFieldNamesInOrder(IAddress):
         address_part = getattr(item, attribute, None)
         if address_part is not None:
             address_parts.append(address_part)
@@ -262,24 +293,27 @@ def format_street_address(item, formatter):
 
 
 def contact_table_collumns():
-        first_name = GetterColumn(name='first_name',
-                                  title=_(u"First Name"),
-                                  getter=lambda i, f: i.first_name,
-                                  subsort=True)
-        directlyProvides(first_name, ISortableColumn)
-        last_name = GetterColumn(name='last_name',
-                                 title=_(u"Last Name"),
-                                 cell_formatter=url_cell_formatter,
-                                 getter=lambda i, f: i.last_name,
-                                 subsort=True)
-        directlyProvides(last_name, ISortableColumn)
+        first_name = IndexedLocaleAwareGetterColumn(
+            index='first_name',
+            name='first_name',
+            cell_formatter=url_cell_formatter,
+            title=_(u'First Name'),
+            getter=lambda i, f: i.first_name,
+            subsort=True)
+        last_name = IndexedLocaleAwareGetterColumn(
+            index='last_name',
+            name='last_name',
+            cell_formatter=url_cell_formatter,
+            title=_(u'Last Name'),
+            getter=lambda i, f: i.last_name,
+            subsort=True)
         address = GetterColumn(name='address',
                                title=_(u"Address"),
                                getter=format_street_address)
         return [first_name, last_name, address]
 
 
-class ContactTableFormatter(SchoolToolTableFormatter):
+class ContactTableFormatter(IndexedTableFormatter):
 
     columns = lambda self: contact_table_collumns()
 
@@ -298,15 +332,21 @@ class ContactFilterWidget(FilterWidget):
                 self.request.form[parameter] = ''
             return items
 
+        catalog = ICatalog(self.context)
+
         if 'SEARCH_FIRST_NAME' in self.request:
+            # XXX: applying normalized catalog queries would be nicer
+            fn_idx = catalog['first_name']
             searchstr = self.request['SEARCH_FIRST_NAME'].lower()
             items = [item for item in items
-                     if searchstr in item.first_name.lower()]
+                     if searchstr in fn_idx.documents_to_values[item['id']].lower()]
 
         if 'SEARCH_LAST_NAME' in self.request:
+            # XXX: applying normalized catalog queries would be nicer
+            ln_idx = catalog['last_name']
             searchstr = self.request['SEARCH_LAST_NAME'].lower()
             items = [item for item in items
-                     if searchstr in item.last_name.lower()]
+                     if searchstr in ln_idx.documents_to_values[item['id']].lower()]
 
         return items
 
@@ -324,10 +364,9 @@ class ContactFilterWidget(FilterWidget):
         return url
 
 
-class ManageContactsActionViewlet(object):
-
+class ContactBackToContainerViewlet(object):
     @property
     def link(self):
-        return "@@manage_contacts.html?%s" % (
-            urllib.urlencode([('SEARCH_LAST_NAME',
-                               self.context.last_name.encode("utf-8"))]))
+        container = IContactContainer(ISchoolToolApplication(None))
+        return absoluteURL(container, self.request)
+
