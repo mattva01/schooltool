@@ -32,17 +32,13 @@ from zope.configuration.fields import PythonIdentifier
 class ICrowdsUtility(Interface):
     """Crowds Utility holds registered security information"""
 
-    crowdmap = Dict(
-        title=u"Crowd Map",
+    factories = Dict(
+        title=u"Crowd Factories",
         description=u"Maps crowd names to crowd factories")
 
-    objcrowds = Dict(
-        title=u"Object Crowd Factories",
-        description=u"Maps (interface, permission)s to crowd factories")
-
-    permcrowds = Dict(
-        title=u"Permission Crowd Factories",
-        description=u"Maps permissions to crowd factories")
+    crowds = Dict(
+        title=u"Permission Crowds",
+        description=u"Maps (permission, interface)s to crowd names")
 
 
 class ICrowd(Interface):

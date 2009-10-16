@@ -36,13 +36,25 @@ from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
 from schooltool.app.interfaces import ISchoolToolApplication
 
 
+class CrowdNotRegistered(Exception):
+    pass
+
+
 class CrowdsUtility(object):
     implements(ICrowdsUtility)
 
     def __init__(self):
-        self.crowdmap = {}   # crowd_name -> crowd_factory
-        self.objcrowds = {}  # (interface, permission) -> crowd_factory
-        self.permcrowds = {} # permission -> crowd_factory
+        self.factories = {}
+        self.crowds = {}
+
+    def getFactories(self, permission, interface):
+        names = self.crowds.get((permission, interface), [])
+        factories = []
+        for name in names:
+            if name not in self.factories:
+                raise CrowdNotRegistered(name)
+            factories.append(self.factories[name])
+        return factories
 
 
 def getCrowdsUtility():
@@ -54,52 +66,47 @@ def getCrowdsUtility():
     return utility
 
 
-def registerCrowdAdapter(iface, permission):
-    """Register an adapter to ICrowd for iface.
+def registerCrowdAdapter(permission, interface):
+    """Register an adapter to ICrowd for interface.
 
     The adapter dynamically retrieves the list of crowds from the
     global objcrowds.  You should not call this function several times
-    for the same (iface, permission).
+    for the same (permission, interface).
     """
     class AggregateUtilityCrowd(AggregateCrowd):
         def crowdFactories(self):
-            return getCrowdsUtility().objcrowds.get((iface, permission), [])
-    provideAdapter(AggregateUtilityCrowd, provides=ICrowd, adapts=[iface],
+            return getCrowdsUtility().getFactories(permission, interface)
+
+    provideAdapter(AggregateUtilityCrowd, provides=ICrowd, adapts=[interface],
                    name=permission)
 
 
 def handle_crowd(name, factory):
     """Handler for the ZCML <crowd> directive."""
-    getCrowdsUtility().crowdmap[name] = factory
+    getCrowdsUtility().factories[name] = factory
 
 
-def handle_allow(iface, crowdname, permission):
+def handle_allow(crowdname, permission, interface):
     """Handler for the ZCML <allow> directive.
 
-    iface is the interface for which the security declaration is issued,
+    interface is the interface for which the security declaration is issued,
     crowdname is a string,
     permission is an identifier for a permission.
 
-    The function registers the given crowd factory in the ICrowdsUtility
-    utility and registers an adapter to ICrowd if it was not registered before.
+    The function registers the given crowd factory in the ICrowdsUtility.
 
-    iface may be None.  In that case permcrowds is updated instead.
+    An adapter to ICrowd is provided if interface is specified.
     """
 
     utility = getCrowdsUtility()
-    # Postpone the named crowd lookup for the runtime, if you will
-    # misspell the name of the crowd in our allow declaration, it will
-    # go unnoticed untill someone will try to use that crowd
-    factory_getter = lambda (context): utility.crowdmap[crowdname](context)
-    if iface is None:
-        utility.permcrowds.setdefault(permission, []).append(factory_getter)
-        return
 
-    objcrowds = utility.objcrowds
-    if (iface, permission) not in objcrowds:
-        registerCrowdAdapter(iface, permission)
-        objcrowds[(iface, permission)] = []
-    objcrowds[(iface, permission)].append(factory_getter)
+    discriminator = (permission, interface)
+    if discriminator not in utility.crowds:
+        utility.crowds[discriminator] = []
+        if interface is not None:
+            registerCrowdAdapter(permission, interface)
+
+    utility.crowds[discriminator].append(crowdname)
 
 
 def crowd(_context, name, factory):
@@ -110,14 +117,15 @@ def crowd(_context, name, factory):
 
 def allow(_context, interface=None, crowds=None, permission=None):
     for crowd in crowds:
-        _context.action(discriminator=('allow', interface, crowd, permission),
+        _context.action(discriminator=('allow', crowd, permission, interface),
                         callable=handle_allow,
-                        args=(interface, crowd, permission))
+                        args=(crowd, permission, interface))
 
 
 def deny(_context, interface=None, crowds=None, permission=None):
+    # XXX: Deny directive needs documentation.
     for crowd in crowds:
-        _context.action(discriminator=('allow', interface, crowd, permission),
+        _context.action(discriminator=('allow', crowd, permission, interface),
                         callable=lambda: None,
                         args=())
 
@@ -158,9 +166,9 @@ def setting(_context, key=None, text=None, default=None):
 
 
 def handle_aggregate_crowd(name, crowd_names):
-    crowdmap = getCrowdsUtility().crowdmap
+    factories = getCrowdsUtility().factories
     try:
-        crowds = [crowdmap[crowd_name] for crowd_name in crowd_names]
+        crowds = [factories[crowd_name] for crowd_name in crowd_names]
     except KeyError:
         raise ValueError("invalid crowd id", crowd_name)
 
