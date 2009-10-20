@@ -101,7 +101,9 @@ def compile_translations(domain):
         mo = "%s/%s/LC_MESSAGES/%s.mo" % (locales_dir, lang, domain)
         if newer(po, mo):
             log.info('Compile: %s -> %s' % (po, mo))
-            os.makedirs(os.path.dirname(mo))
+            messages_dir = os.path.dirname(mo)
+            if not os.path.isdir(messages_dir):
+                os.makedirs(messages_dir)
             os.system('msgfmt -o %s %s' % (mo, po))
 
 if len(sys.argv) > 1 and sys.argv[1] in ('build', 'install'):
