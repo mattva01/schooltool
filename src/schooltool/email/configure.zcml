@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <class class="schooltool.email.mail.EmailContainer">
+    <allow interface="schooltool.email.interfaces.IReadEmailContainer" />
+    <require permission="schooltool.edit"
+             interface="schooltool.email.interfaces.IWriteEmailContainer"
+             set_schema="schooltool.email.interfaces.IReadEmailContainer" />
+   </class>
+
+   <class class="schooltool.email.mail.Email">
+     <allow interface="schooltool.email.interfaces.IEmail" />
+     <require permission="schooltool.edit"
+              set_schema="schooltool.email.interfaces.IEmail" />
+   </class>
+
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory="schooltool.email.mail.getEmailContainer" />
+
+  <adapter
+      factory="schooltool.email.mail.EmailInit"
+      name="schooltool.email" />
+
+  <adapter
+      factory="schooltool.email.mail.EmailAppStartup"
+      name="schooltool.email" />
+
+  <utility
+      factory="schooltool.email.mail.EmailUtility"
+      />
+
+  <include package="schooltool.email.browser" />
+
+</configure>

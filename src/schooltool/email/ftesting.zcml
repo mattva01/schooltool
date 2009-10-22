@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           i18n_domain="schooltool">
+
+  <include package="schooltool.common" />
+
+  <browser:defaultSkin name="SchoolTool" />
+
+  <utility
+      factory="schooltool.email.browser.ftests.StubEmailUtility"
+      />
+
+</configure>
