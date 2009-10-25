@@ -2,18 +2,14 @@
   <div id="filter_widget">
     <div class="row">
       <div class="widget">
-        <p class="hint">
-          <label i18n:translate="" for="SEARCH_FIRST_NAME">First name</label>
-        </p>
+        <p class="hint"><label i18n:translate="" for="SEARCH_FIRST_NAME">First name</label></p>
         <input type="text"
                id="SEARCH_FIRST_NAME"
                name="SEARCH_FIRST_NAME"
                tal:attributes="value request/SEARCH_FIRST_NAME|nothing"/>
       </div>
       <div class="widget">
-        <p class="hint">
-          <label i18n:translate="" for="SEARCH_LAST_NAME">Last name</label>
-        </p>
+        <p class="hint"><label i18n:translate="" for="SEARCH_LAST_NAME">Last name</label></p>
         <input type="text"
                id="SEARCH_LAST_NAME"
                name="SEARCH_LAST_NAME"
