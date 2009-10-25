@@ -143,10 +143,10 @@ class ISchoolYearAddForm(Interface):
         title=_("Title"))
 
     first = Date(
-        title=u"First day")
+        title=_(u"First day"))
 
     last = Date(
-        title=u"Last day")
+        title=_(u"Last day"))
 
 
 class SchoolYearAddFormAdapter(object):

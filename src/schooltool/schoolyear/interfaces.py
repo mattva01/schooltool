@@ -41,10 +41,10 @@ class IReadSchoolYear(IReadContainer, ILocation):
         title=_("Title"))
 
     first = Date(
-        title=u"The first day of the period of time covered.")
+        title=_(u"The first day of the period of time covered."))
 
     last = Date(
-        title=u"The last day of the period covered.")
+        title=_(u"The last day of the period covered."))
 
 
 class ISchoolYear(IWriteSchoolYear, IReadSchoolYear, ITermContainer):

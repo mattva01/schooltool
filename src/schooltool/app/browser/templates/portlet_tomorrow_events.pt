@@ -2,7 +2,7 @@
                      tomorrow python:today + today.resolution;
                      tevents python:view.__parent__.dayEvents(tomorrow)">
     <div id="portlet-next-day-events" class="portlet" tal:condition="tevents">
-      <h4 i18n:translate="">Tomorrow's Events</h4>
+      <h4 i18n:translate="" i18n:domain="schooltool">Tomorrow's Events</h4>
       <ul>
       <tal:loop tal:repeat="event tevents">
         <li tal:condition="python: event.dtstart.date() == tomorrow">

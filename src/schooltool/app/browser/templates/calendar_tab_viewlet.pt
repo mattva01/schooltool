@@ -1,6 +1,7 @@
 <tal:if condition="request/principal/schooltool:authenticated"
         define="person request/principal/schooltool:person">
   <span><a i18n:translate=""
+           i18n:domain="schooltool"
            class="navigation_header"
            tal:attributes="href string:${person/@@absolute_url}/calendar"
            >Calendar</a></span>
