@@ -113,8 +113,10 @@ class SchoolYearContainerView(TableContainerView, SchoolYearContainerBaseView):
             columns_before = [DependableCheckboxColumn(prefix="delete",
                                                        name='delete_checkbox',
                                                        title=u'')]
-        columns_after = [DateColumn(title="Starts", getter=lambda x, y: x.first),
-                         DateColumn(title="Ends", getter=lambda x, y: x.last)]
+        columns_after = [DateColumn(title=_("Starts"),
+                                    getter=lambda x, y: x.first),
+                         DateColumn(title=_("Ends"),
+                                    getter=lambda x, y: x.last)]
         formatter.setUp(formatters=[url_cell_formatter],
                         columns_before=columns_before,
                         columns_after=columns_after)
