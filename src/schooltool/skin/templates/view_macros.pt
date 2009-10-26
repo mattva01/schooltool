@@ -79,7 +79,7 @@
         <div id="login-left">
           <span>
           <a id="about-link" tal:attributes="href string:${context/schooltool:app/@@absolute_url}/@@about.html">
-          SchoolTool</a> &mdash; free administration software for 
+          SchoolTool</a> &mdash; <span i18n:translate="">free administration software for</span> 
           <span tal:replace="context/schooltool:app/title">Lee High School</span></span>
         </div>
       </div>
@@ -120,15 +120,18 @@
     </a>
       <p>
         <strong tal:replace="context/schooltool:preferences/title"/>
-          <metal:block
-              use-macro="view/@@schooltool_macros/generic/serverinfo" />
+        -
+        <metal:block
+            use-macro="view/@@schooltool_macros/generic/serverinfo" />
           <br />
           <span i18n:translate="">
             &copy; The <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a> 2003 - <span>2009</span>:
             Supporting Social Innovation.
           </span>
         <br />
+        <span i18n:translate="">
         <a href="http://www.schooltool.org">SchoolTool</a>&trade; is a Trademark of The <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a>.
+        </span>
       </p>
     <div class="clearer" />
     </div>
@@ -136,6 +139,7 @@
 </html>
 </metal:block>
 
+<metal:block i18n:domain="schooltool">
 <metal:block define-macro="batch-search">
   <form method="post" class="batch-search">
     <input id="batch-search-box" type="text" name="SEARCH"
@@ -150,46 +154,46 @@
 <metal:block define-macro="update-button">
   <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Update"
          title="Shortcut: Alt-U" accesskey="U"
-         i18n:attributes="value update-button; accesskey" />
+         i18n:attributes="value update-button; accesskey; title" />
 </metal:block>
 
 <metal:block define-macro="apply-button">
   <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Apply"
          title="Shortcut: Alt-A" accesskey="A"
-         i18n:attributes="value apply-button; accesskey" />
+         i18n:attributes="value apply-button; accesskey; title" />
 </metal:block>
 
 <metal:block define-macro="apply-button-formlib">
   <input type="submit" id="form.actions.apply" name="form.actions.apply"
          value="Apply" class="button-ok"
          title="Shortcut: Alt-A" accesskey="A"
-         i18n:attributes="value apply-button; accesskey" />
+         i18n:attributes="value apply-button; accesskey; title" />
 </metal:block>
 
 <metal:block define-macro="add-button">
   <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Add"
          title="Shortcut: Alt-A" accesskey="A"
-         i18n:attributes="value add-button; accesskey" />
+         i18n:attributes="value add-button; accesskey; title" />
 </metal:block>
 
 <metal:block define-macro="add-button-disabled">
   <input class="disabled button-ok" disabled="disabled"
          type="submit" name="UPDATE_SUBMIT" value="Add"
          title="Shortcut: Alt-A" accesskey="A"
-         i18n:attributes="value add-button; accesskey" />
+         i18n:attributes="value add-button; accesskey; title" />
 </metal:block>
 
 <metal:block define-macro="add-button-formlib">
   <input type="submit" id="form.actions.apply" name="form.actions.apply"
          value="Add" class="button-ok"
          title="Shortcut: Alt-A" accesskey="A"
-         i18n:attributes="value add-button; accesskey" />
+         i18n:attributes="value add-button; accesskey; title" />
 </metal:block>
 
 <metal:block define-macro="delete-button">
   <input type="submit" class="button-cancel" name="DELETE" value="Delete"
          title="Shortcut: Alt-D" accesskey="D"
-         i18n:attributes="value delete-button; accesskey" />
+         i18n:attributes="value delete-button; accesskey; title" />
 </metal:block>
 
 <metal:block define-macro="cancel-button">
@@ -201,4 +205,5 @@
   <input type="submit" id="form.actions.cancel" name="form.actions.cancel"
          value="Cancel" class="button-cancel"
          i18n:attributes="value cancel-button" />
+</metal:block>
 </metal:block>

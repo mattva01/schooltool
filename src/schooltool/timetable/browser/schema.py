@@ -126,7 +126,7 @@ class SimpleTimetableSchemaAdd(BrowserView):
     def __init__(self, content, request):
         BrowserView.__init__(self, content, request)
         self._schema = {}
-        self._schema['title'] = TextLine(__name__='title', title=u"Title")
+        self._schema['title'] = TextLine(__name__='title', title=_(u"Title"))
         for nr in range(1, self._nrperiods + 1):
             pname = 'period_name_%s' % nr
             pstart = 'period_start_%s' % nr
@@ -265,8 +265,8 @@ class TimetableDependentDeleteView(ContainerDeleteView):
 
 class IAdvancedTimetableSchemaAddSchema(Interface):
 
-    title = TextLine(title=u"Title", required=False)
-    duration = Int(title=u"Duration", description=u"Duration in minutes",
+    title = TextLine(title=_(u"Title"), required=False)
+    duration = Int(title=_(u"Duration"), description=_(u"Duration in minutes"),
                    required=False)
 
 
