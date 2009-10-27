@@ -44,7 +44,7 @@ from distutils.util import newer
 from distutils.spawn import find_executable
 
 # allowed extensions
-ALLOWED_EXTENSIONS = ['conf','css', 'gif', 'ico', 'ics', 'js', 'mo', 'po', 'pt',
+ALLOWED_EXTENSIONS = ['conf','css', 'gif', 'ico', 'ics', 'js', 'po', 'pt',
                       'png', 'txt', 'xml', 'xpdl', 'zcml']
 
 # Define packages we want to recursively include, we do this explicitly here
