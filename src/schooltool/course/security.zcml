@@ -21,19 +21,6 @@
       name="configurable_section_viewers"
       factory=".section.SectionCalendarSettingCrowd" />
 
-  <zope:adapter
-      trusted="yes"
-      factory=".section.SectionCalendarViewers"
-      provides="schooltool.app.interfaces.ICalendarParentCrowd"
-      name="schooltool.view" />
-
-  <zope:adapter
-      trusted="yes"
-      for=".interfaces.ISection"
-      factory=".section.InstructorsCrowd"
-      provides="schooltool.app.interfaces.ICalendarParentCrowd"
-      name="schooltool.edit" />
-
   <allow
       interface="schooltool.course.interfaces.ISectionContainer"
       crowds="administration configurable_section_viewers"
@@ -80,5 +67,119 @@
       interface="schooltool.person.interfaces.IPerson"
       crowds="person_instructors"
       permission="schooltool.view" />
+
+  <!-- Security descriptions -->
+
+  <describe_group name="schooltool.course-courses"
+      title="Courses"
+      description="A course in SchoolTool describes a set curriculum
+                   taught in a section."
+  />
+
+  <describe_action
+      group="schooltool.course-courses" name="list" title="List"
+      order="10"
+      interface="schooltool.course.interfaces.ICourseContainer"
+      permission="schooltool.view"
+  />
+
+  <describe_action
+      group="schooltool.course-courses" name="create_delete" title="Create/Delete"
+      order="20"
+      interface="schooltool.course.interfaces.ICourseContainer"
+      permission="schooltool.edit"
+  />
+
+  <describe_action
+      group="schooltool.course-courses" name="view" title="View"
+      order="30"
+      interface="schooltool.course.interfaces.ICourse"
+      permission="schooltool.view"
+  />
+
+  <describe_action
+      group="schooltool.course-courses" name="modify" title="Modify"
+      order="40"
+      interface="schooltool.course.interfaces.ICourse"
+      permission="schooltool.edit"
+  />
+
+  <describe_group name="schooltool.course-sections"
+      title="Sections"
+      description="A section is a set of one or more learners
+                   who meet during a term."
+  />
+
+  <describe_action
+      group="schooltool.course-sections" name="list" title="List"
+      order="10"
+      interface="schooltool.course.interfaces.ISectionContainer"
+      permission="schooltool.view"
+  />
+
+  <describe_action
+      group="schooltool.course-sections" name="create_delete" title="Create/Delete"
+      order="20"
+      interface="schooltool.course.interfaces.ISectionContainer"
+      permission="schooltool.edit"
+  />
+
+  <describe_action
+      group="schooltool.course-sections" name="view" title="View"
+      order="30"
+      interface="schooltool.course.interfaces.ISection"
+      permission="schooltool.view"
+  />
+
+  <describe_action
+      group="schooltool.course-sections" name="modify" title="Modify"
+      order="40"
+      interface="schooltool.course.interfaces.ISection"
+      permission="schooltool.edit"
+  />
+
+  <describe_action
+      group="schooltool.course-sections" name="view_calendar"
+      title="View calendar"
+      order="50"
+      interface="schooltool.app.interfaces.ISchoolToolCalendar"
+      permission="schooltool.view"
+  />
+
+  <describe_action
+      group="schooltool.course-sections" name="change_calendar"
+      title="Change calendar"
+      order="60"
+      interface="schooltool.app.interfaces.ISchoolToolCalendar"
+      permission="schooltool.edit"
+  />
+
+  <!-- Parent crowds -->>
+
+  <zope:adapter
+      trusted="yes"
+      factory=".section.SectionCalendarViewers"
+      provides="schooltool.app.interfaces.ICalendarParentCrowd"
+      name="schooltool.view" />
+
+  <zope:adapter
+      trusted="yes"
+      for=".interfaces.ISection"
+      factory=".section.InstructorsCrowd"
+      provides="schooltool.app.interfaces.ICalendarParentCrowd"
+      name="schooltool.edit" />
+
+  <switch_description
+     group="schooltool.course-sections"
+     crowd_factory="schooltool.app.security.CalendarViewersCrowd"
+     use_crowd_factory=".section.SectionCalendarViewers"
+  />
+
+  <switch_description
+     group="schooltool.course-sections"
+     crowd_factory="schooltool.app.security.CalendarEditorsCrowd"
+     use_crowd_factory=".section.InstructorsCrowd"
+  />
+
 
 </configure>

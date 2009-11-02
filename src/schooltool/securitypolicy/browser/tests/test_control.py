@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2006 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,22 +17,19 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Functional Testing Utilities for securitypolicy
+Tests for customisation of SchoolTool security policy.
 
 $Id$
 """
-import os
 
-from schooltool.testing.functional import ZCMLLayer
-from schooltool.timetable.browser.skin import ITimetableLayer
-from schooltool.skin.skin import ISchoolToolSkin
+import unittest
+from zope.testing import doctest
+from zope.app.testing import setup
 
-class ISecurityFtestingSkin(ITimetableLayer, ISchoolToolSkin):
-    """ Skin for securitypolicy testing. """
 
-dir = os.path.abspath(os.path.dirname(__file__))
-filename = os.path.join(dir, 'ftesting.zcml')
-
-securitypolicy_functional_layer = ZCMLLayer(filename,
-                                            __name__,
-                                            'securitypolicy_functional_layer')
+def test_suite():
+    optionflags = (doctest.ELLIPSIS |
+                   doctest.NORMALIZE_WHITESPACE |
+                   doctest.REPORT_NDIFF)
+    return unittest.TestSuite([
+            doctest.DocTestSuite(optionflags=optionflags)])

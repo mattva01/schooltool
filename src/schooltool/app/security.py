@@ -34,6 +34,7 @@ from zope.app.security.interfaces import IAuthenticatedGroup, IEveryoneGroup
 from zope.session.interfaces import ISession
 from zope.interface import implements
 from zope.component import adapts
+from schooltool.group.interfaces import IGroupContainer
 from zope.security.interfaces import IGroupAwarePrincipal
 from zope.security.checker import ProxyFactory
 from zope.publisher.browser import FileUpload
@@ -46,11 +47,15 @@ from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolAuthentication
 from schooltool.app.interfaces import IAsset
 from schooltool.person.interfaces import IPerson
-from schooltool.securitypolicy.crowds import Crowd
+from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ICalendarParentCrowd
+from schooltool.securitypolicy.interfaces import ICrowdDescription
+from schooltool.securitypolicy.crowds import Crowd, Description
+from schooltool.securitypolicy.crowds import ManagerGroupCrowd
 from schooltool.securitypolicy.crowds import ConfigurableCrowd, ParentCrowd
-from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
+
+from schooltool.common import SchoolToolMessage as _
 
 
 class Principal(Contained):
@@ -288,7 +293,7 @@ def authSetUpSubscriber(app, event):
 
 
 class ApplicationCalendarCrowd(ConfigurableCrowd):
-    adapts(ISchoolToolApplication)
+
     setting_key = 'everyone_can_view_app_calendar'
 
 
@@ -303,7 +308,66 @@ CalendarEditorsCrowd = ParentCrowd(
 class LeaderCrowd(Crowd):
     """A crowd that contains leaders of an object."""
 
+    title = _(u'Leaders')
+    description = _(u'Assigned leaders.')
+
     def contains(self, principal):
         assert IAsset.providedBy(self.context)
         person = IPerson(principal, None)
         return person in self.context.leaders
+
+
+class GroupCrowdDescription(Description):
+    implements(ICrowdDescription)
+
+    group = None
+
+    def __init__(self, crowd, action, group):
+        self.crowd, self.action, self.group = crowd, action, group
+
+    @property
+    def user_group(self):
+        if self.crowd.group is None:
+            return None
+        return self.getGroup(self.crowd.group)
+
+    def getGroup(self, group_principal_id):
+        prefix = PersonContainerAuthenticationPlugin.group_prefix
+        if not group_principal_id.startswith(prefix):
+            return None
+        groups = IGroupContainer(getSchoolToolApplication(), None)
+        if groups is None:
+            return None
+        group_id = group_principal_id[len(prefix):]
+        return groups.get(group_id, None)
+
+    @property
+    def title(self):
+        group = self.user_group
+        if group is None:
+            return ''
+        return group.title
+
+    @property
+    def description(self):
+        group = self.user_group
+        if group is None:
+            return ''
+        return _(u'"$group" group.',
+                 mapping={'group': group.title})
+
+
+class ManagersCrowdDescription(GroupCrowdDescription):
+
+    @property
+    def user_group(self):
+        return self.getGroup(ManagerGroupCrowd.group)
+
+    @property
+    def description(self):
+        group = self.user_group
+        if group is None:
+            return ''
+        return _(u'"$group" group and the super user.',
+                 mapping={'group': group.title})
+

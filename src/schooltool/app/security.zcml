@@ -2,6 +2,14 @@
 <configure xmlns="http://schooltool.org/securitypolicy"
            xmlns:zope="http://namespaces.zope.org/zope">
 
+  <describe_crowd
+      crowd_factory="schooltool.securitypolicy.crowds._GroupCrowd"
+      factory=".security.GroupCrowdDescription" />
+
+  <describe_crowd
+      crowd_factory="schooltool.securitypolicy.crowds.ManagersCrowd"
+      factory=".security.ManagersCrowdDescription" />
+
   <crowd
       name="leaders"
       factory=".security.LeaderCrowd" />
@@ -40,11 +48,6 @@
 
   <!-- Security declarations for calendaring -->
 
-  <zope:adapter
-      factory=".security.ApplicationCalendarCrowd"
-      provides=".security.ICalendarParentCrowd"
-      name="schooltool.view" />
-
   <crowd
       name="calendar_viewers"
       factory=".security.CalendarViewersCrowd" />
@@ -68,5 +71,55 @@
       text="Everyone can view the application calendar."
       default="True"
       />
+
+  <!-- Security descriptions -->
+
+  <describe_group name="schooltool.app"
+    title="SchoolTool application" />
+
+  <describe_action
+     group="schooltool.app" name="view" title="Access"
+     order="10"
+     interface="schooltool.app.interfaces.ISchoolToolApplication"
+     permission="schooltool.view"
+  />
+
+  <describe_action
+     group="schooltool.app" name="modify"
+     title="Manage school settings and configuration"
+     order="20"
+     interface="schooltool.app.interfaces.ISchoolToolApplication"
+     permission="schooltool.edit"
+  />
+
+  <describe_action
+     group="schooltool.app" name="view_calendar"
+     title="View calendar"
+     order="50"
+     interface="schooltool.app.interfaces.ISchoolToolCalendar"
+     permission="schooltool.view"
+  />
+
+  <describe_action
+     group="schooltool.app" name="change_calendar"
+     title="Change calendar"
+     order="60"
+     interface="schooltool.app.interfaces.ISchoolToolCalendar"
+     permission="schooltool.edit"
+  />
+
+  <!-- Parent crowds -->
+
+  <zope:adapter
+      factory=".security.ApplicationCalendarCrowd"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      provides=".security.ICalendarParentCrowd"
+      name="schooltool.view" />
+
+  <switch_description
+     group="schooltool.app"
+     crowd_factory="schooltool.app.security.CalendarViewersCrowd"
+     use_crowd_factory="schooltool.app.security.ApplicationCalendarCrowd"
+  />
 
 </configure>

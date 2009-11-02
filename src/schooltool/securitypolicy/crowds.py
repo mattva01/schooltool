@@ -25,16 +25,43 @@ $Id$
 
 from zope.interface import implements
 from zope.security.proxy import removeSecurityProxy
-from zope.component import adapts, queryAdapter
+from zope.component import adapts, queryAdapter, queryMultiAdapter
+from zope.app.container.contained import Contained
 
 from schooltool.securitypolicy.interfaces import ICrowd
 from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
+from schooltool.securitypolicy.interfaces import ICrowdToDescribe
+from schooltool.securitypolicy.interfaces import (
+    IDescription, IDescriptionGroup, IGroupAction, ICrowdDescription)
+
+from schooltool.common import SchoolToolMessage as _
+
+
+class Description(Contained):
+    implements(IDescription)
+
+    title = u''
+    description = u''
+
+
+class DescriptionGroup(Description):
+    implements(IDescriptionGroup)
+
+
+class GroupAction(Description):
+    implements(IGroupAction)
+
+    interface = None
+    permission = None
 
 
 class Crowd(object):
     """An abstract base class for crowds."""
 
     implements(ICrowd)
+
+    title = u''
+    description = u''
 
     def __init__(self, context):
         # As crowds are used in our security policy we have to trust
@@ -82,17 +109,23 @@ class ConfigurableCrowd(Crowd):
 
     setting_key = None # override in subclasses
 
-    def contains(self, principal):
-        """Return the value of the related setting (True or False)."""
-        # XXX avoid a circular import
+    @property
+    def settings(self):
+        # XXX: Avoid a circular import.  Very naughty.
         from schooltool.app.interfaces import ISchoolToolApplication
         app = ISchoolToolApplication(None)
-        customizations = IAccessControlCustomisations(app)
-        return customizations.get(self.setting_key)
+        return IAccessControlCustomisations(app)
+
+    def contains(self, principal):
+        """Return the value of the related setting (True or False)."""
+        return self.settings.get(self.setting_key)
 
 
 class EverybodyCrowd(Crowd):
     """A crowd that contains absolutely everybody."""
+
+    title = _(u'Everybody')
+    description = _(u'Everybody, including users that are not logged in.')
 
     def contains(self, principal):
         return True
@@ -125,15 +158,25 @@ class _GroupCrowd(Crowd):
 class AuthenticatedCrowd(_GroupCrowd):
     """Authenticated users."""
 
+    title = _(u'Authenticated user')
+    description = _(u'All logged in users.')
+
     group = 'zope.Authenticated'
+
 
 class AnonymousCrowd(_GroupCrowd):
     """Anonymous users."""
+
+    title = _(u'Anybody')
+    description = _(u'Users who did not log in')
 
     group = 'zope.Anybody'
 
 
 class SuperUserCrowd(Crowd):
+
+    title = _(u'Super user')
+    description = _(u'The super user - owner of this SchoolTool application.')
 
     def contains(self, principal):
         from schooltool.app.browser import same # XXX
@@ -170,6 +213,12 @@ class StudentsCrowd(_GroupCrowd):
     group = 'sb.group.students'
 
 
+class AdministrationCrowd(AggregateCrowd):
+
+    def crowdFactories(self):
+        return [AdministratorsCrowd, ClerksCrowd, ManagersCrowd]
+
+
 class ParentCrowdTemplate(Crowd):
     """A crowd that contains principals who are allowed to access the context."""
 
@@ -191,3 +240,59 @@ def ParentCrowd(interface, permission):
                 (ParentCrowdTemplate,),
                 {'interface': interface,
                  'permission': permission})
+
+
+class CrowdDescription(Description):
+    implements(ICrowdDescription)
+
+    def __init__(self, crowd, action, group):
+        self.crowd, self.action, self.group = crowd, action, group
+
+
+class DefaultCrowdDescription(Description):
+    implements(ICrowdDescription)
+
+    def __init__(self, crowd, action, group):
+        self.crowd, self.action, self.group = crowd, action, group
+        if hasattr(self.crowd, 'title'):
+            self.title = self.crowd.title
+        if hasattr(self.crowd, 'description'):
+            self.description = self.crowd.description
+
+
+def getCrowdDescription(crowd, action, group):
+    crowd_to_describe = queryMultiAdapter(
+        (crowd, action, group),
+        ICrowdToDescribe,
+        default=None)
+    if crowd_to_describe is None:
+        return None
+    description = queryMultiAdapter(
+        (crowd_to_describe, action, group),
+        ICrowdDescription,
+        default=None)
+
+    return description
+
+
+class AggregateCrowdDescription(CrowdDescription):
+
+    @property
+    def description(self):
+        return u', '.join([d.title for d in self.getDescriptions()
+                           if d.title])
+
+    def getFactories(self):
+        return self.crowd.crowdFactories()
+
+    def getDescriptions(self):
+        factories = self.getFactories()
+        descriptions =[
+            getCrowdDescription(factory(None), self.action, self.group)
+            for factory in factories]
+        return filter(None, descriptions)
+
+
+def defaultCrowdToDescribe(crowd, action, group):
+    return crowd
+

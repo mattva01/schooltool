@@ -5,6 +5,8 @@
            xmlns:grok="http://namespaces.zope.org/grok"
            i18n_domain="schooltool">
 
+  <include file="security.zcml" />
+
   <class class=".contact.Contact">
     <implements
         interface="zope.annotation.interfaces.IAttributeAnnotatable" />

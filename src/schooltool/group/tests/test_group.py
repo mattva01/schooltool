@@ -112,39 +112,6 @@ def doctest_GroupInit():
     """
 
 
-def doctest_GroupInstructorsCrowd():
-    """Tests for GroupInstructorsCrowd.
-
-        >>> from schooltool.group.group import GroupInstructorsCrowd
-        >>> from schooltool.person.interfaces import IPerson
-        >>> from schooltool.relationship.interfaces import IRelationshipLinks
-        >>> class SectionStub(object):
-        ...     members = ['good_group']
-        >>> section = SectionStub()
-        >>> class PersonLinksStub(object): 
-        ...     def getTargetsByRole(self, role, rel_type):
-        ...         print 'Relation: %s of type %s' % (role, rel_type)
-        ...         return [section] # person is instructor of the 'section'
-        >>> class PersonStub(object):
-        ...     def __conform__(self, it):
-        ...         if it is IRelationshipLinks:
-        ...             return PersonLinksStub()
-        >>> class PrincipalStub(object):
-        ...     def __conform__(self, it):
-        ...         if it is IPerson:
-        ...             return PersonStub()
-        >>> principal = PrincipalStub()
-        >>> gic = GroupInstructorsCrowd('bad_group')
-        >>> gic.contains(principal)
-        Relation: <URIObject Section> of type <URIObject Instruction>
-        False
-        >>> gic = GroupInstructorsCrowd('good_group')
-        >>> gic.contains(principal)
-        Relation: <URIObject Section> of type <URIObject Instruction>
-        True
-    """
-
-
 def doctest_GroupCalendarViewersCrowd():
     """Tests for ConfigurableCrowd.
 
@@ -169,6 +136,13 @@ def doctest_GroupCalendarViewersCrowd():
         >>> provideAdapter(lambda context: AppStub(),
         ...                adapts=[None],
         ...                provides=ISchoolToolApplication)
+
+        >>> from schooltool.person.interfaces import IPerson
+        >>> class PrincipalStub(object):
+        ...     def __init__(self, name):
+        ...         self.name = name
+        ...     def __conform__(self, iface):
+        ...         if iface == IPerson: return "IPerson(%s)" % self.name
 
         >>> from schooltool.group.group import GroupCalendarViewersCrowd
 
@@ -195,13 +169,6 @@ def doctest_GroupCalendarViewersCrowd():
         True
 
     If setting is set to False, we should still check for membership:
-
-        >>> from schooltool.person.interfaces import IPerson
-        >>> class PrincipalStub(object):
-        ...     def __init__(self, name):
-        ...         self.name = name
-        ...     def __conform__(self, iface):
-        ...         if iface == IPerson: return "IPerson(%s)" % self.name
 
         >>> setting = False
         >>> crowd.contains(PrincipalStub("Principal"))

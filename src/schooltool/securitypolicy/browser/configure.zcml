@@ -1,7 +1,18 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:security="http://schooltool.org/securitypolicy"
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
+
+  <page
+      name="security.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      permission="schooltool.edit"
+      class=".control.SecurityDescriptions"
+      template="templates/security_descriptions.pt"
+      menu="schooltool_actions"
+      title="View Access Rights"
+      />
 
   <page
       name="access_control.html"
@@ -26,5 +37,36 @@
         order="100"
         />
   </configure>
+
+  <zope:adapter
+     for="schooltool.securitypolicy.interfaces.ICrowdDescription
+          * zope.publisher.interfaces.http.IHTTPRequest
+          * * *"
+     provides="zope.interface.Interface"
+     factory=".control.CrowdDescriptionSnippets" />
+
+  <zope:adapter
+     for="schooltool.securitypolicy.interfaces.ICrowdDescription
+          * zope.publisher.interfaces.http.IHTTPRequest
+          schooltool.securitypolicy.crowds.ConfigurableCrowd
+          * *"
+     provides="zope.interface.Interface"
+     factory=".control.AccessSettingSnippets" />
+
+  <zope:adapter
+     for="schooltool.securitypolicy.crowds.AggregateCrowdDescription
+          * zope.publisher.interfaces.http.IHTTPRequest
+          * * *"
+     provides="zope.interface.Interface"
+     factory=".control.AggregatedSnippets" />
+
+  <zope:adapter
+     for="schooltool.securitypolicy.crowds.AggregateCrowdDescription
+          .control.SecurityDescriptions
+          zope.publisher.interfaces.http.IHTTPRequest
+          schooltool.securitypolicy.crowds.AdministrationCrowd
+          * *"
+     provides="zope.interface.Interface"
+     factory=".control.AdministrationSnippets" />
 
 </configure>

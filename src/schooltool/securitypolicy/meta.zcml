@@ -21,6 +21,24 @@
       />
 
     <directive
+      name="describe_group"
+      schema=".metadirectives.IDescribeGroup"
+      handler=".metaconfigure.describe_group"
+      />
+
+    <directive
+      name="describe_action"
+      schema=".metadirectives.IDescribeAction"
+      handler=".metaconfigure.describe_action"
+      />
+
+    <directive
+      name="describe_crowd"
+      schema=".metadirectives.IDescribeCrowd"
+      handler=".metaconfigure.describe_crowd"
+      />
+
+    <directive
       name="setting"
       schema=".metadirectives.ISettingDirective"
       handler=".metaconfigure.setting"
@@ -30,6 +48,12 @@
       name="aggregate_crowd"
       schema=".metadirectives.IAggregateCrowdDirective"
       handler=".metaconfigure.aggregate_crowd"
+      />
+
+    <directive
+      name="switch_description"
+      schema=".metadirectives.ISwitchDescription"
+      handler=".metaconfigure.switch_description"
       />
 
   </directives>

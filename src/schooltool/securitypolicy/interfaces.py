@@ -24,21 +24,32 @@ $Id$
 """
 
 from zope.interface import Interface
-from zope.schema import Dict, Bool, TextLine
+from zope import schema
 from zope.interface import Attribute
 from zope.configuration.fields import PythonIdentifier
+from zope.app.container.interfaces import IContained
+
+from schooltool.common import SchoolToolMessage as _
 
 
 class ICrowdsUtility(Interface):
     """Crowds Utility holds registered security information"""
 
-    factories = Dict(
+    factories = schema.Dict(
         title=u"Crowd Factories",
         description=u"Maps crowd names to crowd factories")
 
-    crowds = Dict(
+    crowds = schema.Dict(
         title=u"Permission Crowds",
         description=u"Maps (permission, interface)s to crowd names")
+
+    # TODO: update interface, it's out of date
+
+
+class IDescriptionUtility(Interface):
+    """Access rights description utility"""
+
+    # TODO: describe fields
 
 
 class ICrowd(Interface):
@@ -46,6 +57,10 @@ class ICrowd(Interface):
 
     A crowd need only support one operation -- a membership test.
     """
+
+    title = schema.TextLine(title=u"Title", required=False)
+
+    description = schema.Text(title=u"Description", required=False)
 
     def contains(principal):
         """Return True if principal is in the crowd."""
@@ -71,8 +86,9 @@ class IAccessControlSetting(Interface):
                            For example: 'members_manage_groups',
                            'teachers_edit_person_info'
                            """)
-    default = Bool(title=u"The default value for the setting.")
-    text = TextLine(title=u"Description of the setting for the user interface.")
+    default = schema.Bool(title=u"The default value for the setting.")
+    text = schema.TextLine(
+        title=u"Description of the setting for the user interface.")
 
     def getValue():
         """Return the value of the setting.
@@ -83,3 +99,39 @@ class IAccessControlSetting(Interface):
 
     def setValue(value):
         """Set the value of the setting."""
+
+
+class IDescription(IContained):
+    """Base interface for a description object."""
+
+    title = schema.TextLine(
+        title=_("Title"),
+        description=_("Title of the group."))
+
+    description = schema.Text(
+        title=_("Description"),
+        required=False)
+
+
+class IDescriptionGroup(IDescription):
+    """A group of access descriptions."""
+
+
+class IGroupAction(IDescription):
+    """Actions that given permission enables on an object implementing
+    given interface.
+    """
+
+    interface = Attribute(u"Interface")
+
+    permission = schema.TextLine(
+        title=u"Permission",
+        required=True)
+
+
+class ICrowdToDescribe(Interface):
+    """Adapt to this interface to get the crowd to describe."""
+
+
+class ICrowdDescription(IDescription):
+    """Description of a crowd."""

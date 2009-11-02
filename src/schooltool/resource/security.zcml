@@ -45,13 +45,81 @@
       crowds="administration leaders"
       permission="schooltool.edit" />
 
+  <!-- Security descriptions -->
+
+  <describe_group name="schooltool.resource"
+      title="Reservations"
+      description="Resources are locations or objects within a school.
+                   SchoolTool's calendar can function as a reservation
+                   and tracking system for resources."
+  />
+
+  <describe_action
+     group="schooltool.resource" name="list" title="List/Search resources"
+     order="10"
+     interface="schooltool.resource.interfaces.IResourceContainer"
+     permission="schooltool.view"
+  />
+
+  <describe_action
+     group="schooltool.resource" name="add_remove" title="Add/Remove resources"
+     order="20"
+     interface="schooltool.resource.interfaces.IResourceContainer"
+     permission="schooltool.edit"
+  />
+
+  <describe_action
+     group="schooltool.resource" name="view" title="View a resource"
+     order="30"
+     interface="schooltool.resource.interfaces.IBaseResource"
+     permission="schooltool.view"
+  />
+
+  <describe_action
+     group="schooltool.resource" name="modify" title="Modify a resource"
+     order="40"
+     interface="schooltool.resource.interfaces.IBaseResource"
+     permission="schooltool.edit"
+  />
+
+  <describe_action
+     group="schooltool.resource" name="view_calendar"
+     title="View reservation calendar"
+     order="50"
+     interface="schooltool.app.interfaces.ISchoolToolCalendar"
+     permission="schooltool.view"
+  />
+
+  <describe_action
+     group="schooltool.resource" name="change_calendar"
+     title="Schedule reservation via calendar"
+     order="60"
+     interface="schooltool.app.interfaces.ISchoolToolCalendar"
+     permission="schooltool.edit"
+  />
+
+  <!-- Parent crowds -->
+
   <zope:adapter
       factory=".resource.ResourceCalendarViewersCrowd"
       provides="schooltool.app.security.ICalendarParentCrowd"
       name="schooltool.view" />
+
   <zope:adapter
       factory=".resource.ResourceCalendarEditorsCrowd"
       provides="schooltool.app.security.ICalendarParentCrowd"
       name="schooltool.edit" />
+
+  <switch_description
+     group="schooltool.resource"
+     crowd_factory="schooltool.app.security.CalendarViewersCrowd"
+     use_crowd_factory=".resource.ResourceCalendarViewersCrowd"
+  />
+
+  <switch_description
+     group="schooltool.resource"
+     crowd_factory="schooltool.app.security.CalendarEditorsCrowd"
+     use_crowd_factory=".resource.ResourceCalendarEditorsCrowd"
+  />
 
 </configure>

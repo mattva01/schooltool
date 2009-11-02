@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<configure xmlns="http://schooltool.org/securitypolicy"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <allow
+      interface="schooltool.contact.interfaces.IContactContainer"
+      crowds="administration"
+      permission="schooltool.view" />
+
+  <crowd
+      name="contact_person_instructors"
+      factory="schooltool.contact.contact.ContactPersonInstructorsCrowd" />
+
+  <allow
+      interface="schooltool.contact.interfaces.IContact"
+      crowds="administration contact_person_instructors"
+      permission="schooltool.view" />
+
+  <allow
+      interface="schooltool.contact.basicperson.IBoundContact"
+      crowds="administration owner person_info_viewers contact_person_instructors"
+      permission="schooltool.view" />
+
+  <!-- Security descriptions -->
+
+  <describe_group name="schooltool.contact" klass=".contact.ContactGroup" />
+
+  <describe_action
+     group="schooltool.contact" name="list" title="List/Search"
+     order="10"
+     interface="schooltool.contact.interfaces.IContactContainer"
+     permission="schooltool.view"
+  />
+
+  <describe_action
+     group="schooltool.contact" name="manage_contacts"
+     title="Manage user's contacts"
+     description="Assign / remove contacts of a user,
+                  define user's relationship with a contact."
+     order="20"
+     interface="schooltool.person.interfaces.IPerson"
+     permission="schooltool.edit"
+  />
+
+  <describe_action
+     group="schooltool.contact" name="create_delete"
+     title="Create/Delete an external contact"
+     order="30"
+     interface="schooltool.app.interfaces.ISchoolToolApplication"
+     permission="schooltool.edit"
+  />
+
+  <describe_action
+     group="schooltool.contact" name="view"
+     title="View an external contact"
+     order="40"
+     interface="schooltool.contact.interfaces.IContact"
+     permission="schooltool.view"
+  />
+
+  <describe_action
+     group="schooltool.contact" name="modify"
+     title="Modify an external contact"
+     order="50"
+     interface="schooltool.app.interfaces.ISchoolToolApplication"
+     permission="schooltool.edit"
+  />
+
+  <describe_action
+     group="schooltool.contact" name="view_bound"
+     title="View user's contact information"
+     order="60"
+     interface="schooltool.contact.basicperson.IBoundContact"
+     permission="schooltool.view"
+  />
+
+  <describe_action
+     group="schooltool.contact" name="modify_bound"
+     title="Modify user's contact information"
+     order="70"
+     interface="schooltool.person.interfaces.IPerson"
+     permission="schooltool.edit"
+  />
+
+  <describe_crowd
+      group="schooltool.contact"
+      action="view_bound"
+      crowd="owner"
+      title="User"
+      description="The user himself."
+      />
+
+</configure>
