@@ -60,11 +60,6 @@
       crowds="owner"
       permission="schooltool.editCalendarOverlays" />
 
-  <zope:adapter
-      factory=".person.PersonCalendarCrowd"
-      provides="schooltool.app.interfaces.ICalendarParentCrowd"
-      name="schooltool.view" />
-
   <allow
       interface="schooltool.person.interfaces.IPersonPreferences"
       crowds="administration owner"
@@ -78,5 +73,107 @@
       interface="schooltool.person.interfaces.IPasswordWriter"
       crowds="administration person_password_writers"
       permission="schooltool.edit" />
+
+  <describe_group name="schooltool.person" title="Users" />
+
+  <describe_action
+     group="schooltool.person" name="list" title="List/Search"
+     order="10"
+     interface="schooltool.person.interfaces.IPersonContainer"
+     permission="schooltool.view"
+  />
+
+  <describe_action
+     group="schooltool.person" name="create_delete" title="Create/Delete"
+     order="20"
+     interface="schooltool.person.interfaces.IPersonContainer"
+     permission="schooltool.edit"
+  />
+
+  <describe_action
+     group="schooltool.person" name="view" title="View"
+     order="30"
+     interface="schooltool.person.interfaces.IPerson"
+     permission="schooltool.view"
+  />
+
+  <describe_action
+     group="schooltool.person" name="modify" title="Modify"
+     order="40"
+     interface="schooltool.person.interfaces.IPerson"
+     permission="schooltool.edit"
+  />
+
+  <describe_action
+     group="schooltool.person" name="change_password" title="Change password"
+     order="41"
+     interface="schooltool.person.interfaces.IPasswordWriter"
+     permission="schooltool.edit"
+  />
+
+  <describe_action
+     group="schooltool.person" name="view_prefs" title="View preferences"
+     order="50"
+     interface="schooltool.person.interfaces.IPersonPreferences"
+     permission="schooltool.view"
+  />
+
+  <describe_action
+     group="schooltool.person" name="edit_prefs" title="Change preferences"
+     order="51"
+     interface="schooltool.person.interfaces.IPersonPreferences"
+     permission="schooltool.edit"
+  />
+
+  <describe_action
+     group="schooltool.person" name="view_calendar"
+     title="View calendar"
+     order="60"
+     interface="schooltool.app.interfaces.ISchoolToolCalendar"
+     permission="schooltool.view"
+  />
+
+  <describe_action
+     group="schooltool.person" name="change_calendar"
+     title="Change calendar"
+     order="70"
+     interface="schooltool.app.interfaces.ISchoolToolCalendar"
+     permission="schooltool.edit"
+  />
+
+  <describe_action
+     group="schooltool.person" name="edit_overlays"
+     title="Manage visible calendars"
+     order="80"
+     interface="schooltool.person.interfaces.IPerson"
+     permission="schooltool.editCalendarOverlays"
+  />
+
+  <describe_crowd
+      group="schooltool.person"
+      crowd="owner"
+      title="User"
+      description="The user himself."
+      />
+
+  <!-- Parent crowds -->
+
+  <zope:adapter
+      factory=".person.PersonCalendarCrowd"
+      provides="schooltool.app.interfaces.ICalendarParentCrowd"
+      name="schooltool.view" />
+
+  <switch_description
+     group="schooltool.person"
+     crowd_factory="schooltool.app.security.CalendarViewersCrowd"
+     use_crowd_factory=".person.PersonCalendarCrowd"
+  />
+
+  <describe_crowd
+      group="schooltool.person"
+      crowd_factory=".person.PublicCalendarCrowd"
+      title="Calendar is public"
+      description="Everybody, if the calendar is made public in user preferences."
+      />
 
 </configure>

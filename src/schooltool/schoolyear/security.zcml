@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<configure xmlns="http://schooltool.org/securitypolicy"
+           xmlns:zope="http://namespaces.zope.org/zope">
+
+  <!-- Security descriptions -->
+
+  <describe_group name="schooltool.schoolyear" title="School Years" />
+
+  <describe_action
+     group="schooltool.schoolyear" name="list" title="List"
+     order="10"
+     interface="schooltool.app.interfaces.ISchoolToolApplication"
+     permission="schooltool.view"
+  />
+
+  <describe_action
+     group="schooltool.schoolyear" name="create_delete" title="Create/Delete"
+     order="20"
+     interface="schooltool.app.interfaces.ISchoolToolApplication"
+     permission="schooltool.edit"
+  />
+
+  <describe_action
+     group="schooltool.schoolyear" name="activate"
+     title="Activate current school year"
+     order="21"
+     interface="schooltool.app.interfaces.ISchoolToolApplication"
+     permission="schooltool.edit"
+  />
+
+  <describe_action
+     group="schooltool.schoolyear" name="view" title="View"
+     order="30"
+     interface="schooltool.app.interfaces.ISchoolToolApplication"
+     permission="schooltool.view"
+  />
+
+  <describe_action
+     group="schooltool.schoolyear" name="modify" title="Modify"
+     order="40"
+     interface="schooltool.app.interfaces.ISchoolToolApplication"
+     permission="schooltool.edit"
+  />
+
+</configure>

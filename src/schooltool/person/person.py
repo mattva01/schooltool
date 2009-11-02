@@ -48,7 +48,7 @@ from schooltool.app.security import ICalendarParentCrowd
 from schooltool.securitypolicy.crowds import ConfigurableCrowd
 from schooltool.person.interfaces import IPersonPreferences
 from schooltool.person.interfaces import IPasswordWriter
-from schooltool.securitypolicy.crowds import OwnerCrowd
+from schooltool.securitypolicy.crowds import OwnerCrowd, AggregateCrowd
 from schooltool.utility.utility import UtilitySetUp
 
 PERSON_CATALOG_KEY = 'schooltool.person'
@@ -155,13 +155,18 @@ class PersonInit(InitBase):
         self.app['persons'] = PersonContainer()
 
 
-class PersonCalendarCrowd(Crowd):
+class PublicCalendarCrowd(Crowd):
+    def contains(self, principal):
+        cal_public = IPersonPreferences(self.context).cal_public
+        return cal_public
+
+
+class PersonCalendarCrowd(AggregateCrowd):
     adapts(IPerson)
     implements(ICalendarParentCrowd)
 
-    def contains(self, principal):
-        cal_public = IPersonPreferences(self.context).cal_public
-        return cal_public or self.context == IPerson(principal, None)
+    def crowdFactories(self):
+        return [PublicCalendarCrowd, OwnerCrowd]
 
 
 def getCalendarOwner(calendar):

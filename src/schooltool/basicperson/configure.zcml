@@ -2,8 +2,9 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:browser="http://namespaces.zope.org/browser"
            xmlns:i18n="http://namespaces.zope.org/i18n"
-	   xmlns:security="http://schooltool.org/securitypolicy"
            i18n_domain="schooltool">
+
+  <include file="security.zcml" />
 
   <class class=".person.BasicPerson">
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />
@@ -28,11 +29,6 @@
         permission="schooltool.edit"
         set_attributes="modified" />
   </class>
-
-  <security:allow
-     interface="schooltool.basicperson.interfaces.IFieldDescription"
-     crowds="administration"
-     permission="schooltool.edit" />
 
   <class class=".demographics.DemographicsFields">
     <implements interface="schooltool.basicperson.interfaces.IDemographicsFields" />

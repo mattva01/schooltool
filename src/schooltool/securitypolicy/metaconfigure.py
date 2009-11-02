@@ -27,22 +27,52 @@ from zope.interface import implements
 from zope.component import provideAdapter, provideSubscriptionAdapter
 from zope.security.zcml import permission
 from zope.component import queryUtility, getGlobalSiteManager
+from zope.component import zcml
+from zope.app.container.btree import BTreeContainer
 
 from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
 from schooltool.securitypolicy.interfaces import ICrowd
 from schooltool.securitypolicy.interfaces import ICrowdsUtility
+from schooltool.securitypolicy.interfaces import IDescriptionUtility
+from schooltool.securitypolicy.interfaces import ICrowdToDescribe
+from schooltool.securitypolicy.interfaces import ICrowdDescription
 from schooltool.securitypolicy.interfaces import IAccessControlSetting
 from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.securitypolicy.crowds import DescriptionGroup
+from schooltool.securitypolicy.crowds import GroupAction
+from schooltool.securitypolicy.crowds import CrowdDescription
+
+
+# ZCML execution order
+ZCML_REGISTER_DESCRIPTION_GROUPS       = 10100
+ZCML_REGISTER_DESCRIPTION_ACTIONS      = 10200
+ZCML_REGISTER_CROWD_DESCRIPTIONS       = 10300
+ZCML_REGISTER_DESCRIPTION_SWITCHING    = 10400
+
+
+class CrowdNotRegistered(Exception):
+    pass
 
 
 class CrowdsUtility(object):
     implements(ICrowdsUtility)
 
     def __init__(self):
-        self.crowdmap = {}   # crowd_name -> crowd_factory
-        self.objcrowds = {}  # (interface, permission) -> crowd_factory
-        self.permcrowds = {} # permission -> crowd_factory
+        self.factories = {}
+        self.crowds = {}
+
+    def getCrowdNames(self, permission, interface):
+        return self.crowds.get((permission, interface), [])
+
+    def getFactory(self, crowd_name):
+        if crowd_name not in self.factories:
+            raise CrowdNotRegistered(crowd_name)
+        return self.factories[crowd_name]
+
+    def getFactories(self, permission, interface):
+        names = self.getCrowdNames(permission, interface)
+        return [self.getFactory(name) for name in names]
 
 
 def getCrowdsUtility():
@@ -54,52 +84,75 @@ def getCrowdsUtility():
     return utility
 
 
-def registerCrowdAdapter(iface, permission):
-    """Register an adapter to ICrowd for iface.
+class DescriptionUtility(object):
+    implements(IDescriptionUtility)
+
+    def __init__(self):
+        self.groups = BTreeContainer()
+        self.actions_by_group = BTreeContainer()
+
+
+def getDescriptionUtility():
+    """Helper - returns crowd description utility and registers
+    a new one if missing.
+    """
+    utility = queryUtility(IDescriptionUtility)
+    if not utility:
+        utility = DescriptionUtility()
+        getGlobalSiteManager().registerUtility(utility, IDescriptionUtility)
+    return utility
+
+
+class AggregateUtilityCrowd(AggregateCrowd):
+    interface = None
+    permission = None
+
+    def crowdFactories(self):
+        return getCrowdsUtility().getFactories(self.permission, self.interface)
+
+
+def registerCrowdAdapter(permission, interface):
+    """Register an adapter to ICrowd for interface.
 
     The adapter dynamically retrieves the list of crowds from the
     global objcrowds.  You should not call this function several times
-    for the same (iface, permission).
+    for the same (permission, interface).
     """
-    class AggregateUtilityCrowd(AggregateCrowd):
-        def crowdFactories(self):
-            return getCrowdsUtility().objcrowds.get((iface, permission), [])
-    provideAdapter(AggregateUtilityCrowd, provides=ICrowd, adapts=[iface],
+    aggregator_class = type(
+        str('%s_%s' % (AggregateUtilityCrowd.__name__, interface.__name__)),
+        (AggregateUtilityCrowd, ),
+        {'interface': interface, 'permission': permission})
+
+    provideAdapter(aggregator_class, provides=ICrowd, adapts=[interface],
                    name=permission)
 
 
 def handle_crowd(name, factory):
     """Handler for the ZCML <crowd> directive."""
-    getCrowdsUtility().crowdmap[name] = factory
+    getCrowdsUtility().factories[name] = factory
 
 
-def handle_allow(iface, crowdname, permission):
+def handle_allow(crowdname, permission, interface):
     """Handler for the ZCML <allow> directive.
 
-    iface is the interface for which the security declaration is issued,
+    interface is the interface for which the security declaration is issued,
     crowdname is a string,
     permission is an identifier for a permission.
 
-    The function registers the given crowd factory in the ICrowdsUtility
-    utility and registers an adapter to ICrowd if it was not registered before.
+    The function registers the given crowd factory in the ICrowdsUtility.
 
-    iface may be None.  In that case permcrowds is updated instead.
+    An adapter to ICrowd is provided if interface is specified.
     """
 
     utility = getCrowdsUtility()
-    # Postpone the named crowd lookup for the runtime, if you will
-    # misspell the name of the crowd in our allow declaration, it will
-    # go unnoticed untill someone will try to use that crowd
-    factory_getter = lambda (context): utility.crowdmap[crowdname](context)
-    if iface is None:
-        utility.permcrowds.setdefault(permission, []).append(factory_getter)
-        return
 
-    objcrowds = utility.objcrowds
-    if (iface, permission) not in objcrowds:
-        registerCrowdAdapter(iface, permission)
-        objcrowds[(iface, permission)] = []
-    objcrowds[(iface, permission)].append(factory_getter)
+    discriminator = (permission, interface)
+    if discriminator not in utility.crowds:
+        utility.crowds[discriminator] = []
+        if interface is not None:
+            registerCrowdAdapter(permission, interface)
+
+    utility.crowds[discriminator].append(crowdname)
 
 
 def crowd(_context, name, factory):
@@ -110,14 +163,15 @@ def crowd(_context, name, factory):
 
 def allow(_context, interface=None, crowds=None, permission=None):
     for crowd in crowds:
-        _context.action(discriminator=('allow', interface, crowd, permission),
+        _context.action(discriminator=('allow', crowd, permission, interface),
                         callable=handle_allow,
-                        args=(interface, crowd, permission))
+                        args=(crowd, permission, interface))
 
 
 def deny(_context, interface=None, crowds=None, permission=None):
+    # XXX: Deny directive needs documentation.
     for crowd in crowds:
-        _context.action(discriminator=('allow', interface, crowd, permission),
+        _context.action(discriminator=('allow', crowd, permission, interface),
                         callable=lambda: None,
                         args=())
 
@@ -158,9 +212,9 @@ def setting(_context, key=None, text=None, default=None):
 
 
 def handle_aggregate_crowd(name, crowd_names):
-    crowdmap = getCrowdsUtility().crowdmap
+    factories = getCrowdsUtility().factories
     try:
-        crowds = [crowdmap[crowd_name] for crowd_name in crowd_names]
+        crowds = [factories[crowd_name] for crowd_name in crowd_names]
     except KeyError:
         raise ValueError("invalid crowd id", crowd_name)
 
@@ -173,3 +227,196 @@ def handle_aggregate_crowd(name, crowd_names):
 def aggregate_crowd(_context, name, crowds):
     _context.action(discriminator=('crowd', name),
                     callable=handle_aggregate_crowd, args=(name, crowds))
+
+
+def handle_group(name, group):
+    util = getDescriptionUtility()
+    util.groups[name] = group
+    group.__name__ = name
+    group.__parent__ = util.groups
+
+
+def describe_group(_context, name=None, title=None, description=None, klass=None):
+    if klass is None and title is None:
+        raise TypeError("Must specify title or klass.")
+
+    if klass is None:
+        klass = DescriptionGroup
+
+    new_class = type(str('%s_%s' % (klass.__name__, name.capitalize())),
+                     (klass, ), {})
+    group = new_class()
+    if title is not None:
+        group.title = title
+    if description is not None:
+        group.description = description
+
+    _context.action(discriminator=('describe_group', name),
+                    callable=handle_group,
+                    args=(name, group),
+                    order=ZCML_REGISTER_DESCRIPTION_GROUPS)
+
+
+def handle_action(group_name, name, action):
+    util = getDescriptionUtility()
+    if group_name not in util.actions_by_group:
+        util.actions_by_group[group_name]=BTreeContainer()
+    util.actions_by_group[group_name][name] = action
+    action.__name__ = name
+    action.__parent__ = util.actions_by_group[group_name]
+
+
+def describe_action(_context, group=None, name=None, order=0,
+                    interface=None, permission='',
+                    title=None, description=None, klass=None):
+    if klass is None and title is None:
+        raise TypeError("Must specify title or klass.")
+
+    if klass is None:
+        klass = GroupAction
+
+    new_class = type(str('%s_%s' % (klass.__name__, name.capitalize())),
+                     (klass, ), {})
+    action = new_class()
+    if title is not None:
+        action.title = title
+    if description is not None:
+        action.description = description
+    if interface is not None:
+        action.interface = interface
+    if permission is not None:
+        action.permission = permission
+    action.order = order
+
+    _context.action(discriminator=('describe_action', group, name),
+                    callable=handle_action,
+                    args=(group, name, action),
+                    order=ZCML_REGISTER_DESCRIPTION_ACTIONS)
+
+
+def handle_crowd_description(context, group_id, action_id,
+                             interface, permission_id,
+                             crowd_getter, description_factory):
+    util = getDescriptionUtility()
+
+    group = None
+    if group_id is not None:
+        group = util.groups[group_id]
+
+    action = None
+    if action_id is not None:
+        action = util.actions_by_group[group_id][action_id]
+
+    crowd_factory = crowd_getter()
+
+    provideAdapter(description_factory,
+                   provides=ICrowdDescription,
+                   adapts=[crowd_factory,
+                           action and action.__class__ or None,
+                           group and group.__class__ or None,
+                           ])
+
+
+def describe_crowd(_context, group=None, action=None,
+                   interface=None, permission=None,
+                   crowd=None, crowd_factory=None,
+                   factory=None, title=None, description=None):
+
+    if crowd is not None and crowd_factory is not None:
+        raise TypeError("Must specify either crowd or crowd_factory.")
+
+    if action is not None and group is None:
+        raise TypeError("Must specify group when specifying action.")
+
+    if crowd is not None:
+        crowd_getter = lambda: getCrowdsUtility().getFactory(crowd)
+    elif crowd_factory is not None:
+        crowd_getter = lambda: crowd_factory
+    else:
+        crowd_getter = lambda: None
+
+    if factory is None:
+        if title is None and description is None:
+            raise TypeError("Must specify either description factory"
+                            " or title/description.")
+        factory = CrowdDescription
+
+    factory_dict = {}
+    if title is not None:
+        factory_dict['title'] = title
+    if description is not None:
+        factory_dict['description'] = description
+    new_factory = type(factory.__name__, (factory, ), factory_dict)
+
+    discriminator = ('describe_crowd', group, action,
+                     interface, permission, crowd, crowd_factory)
+
+    _context.action(discriminator=discriminator,
+                    callable=handle_crowd_description,
+                    args=(_context, group, action,
+                          interface, permission, crowd_getter,
+                          new_factory),
+                    order=ZCML_REGISTER_CROWD_DESCRIPTIONS)
+
+
+def handle_switch_description(context, group_id, action_id,
+                              crowd_getter, replacement_crowd_getter):
+    util = getDescriptionUtility()
+
+    group = None
+    if group_id is not None:
+        group = util.groups[group_id]
+
+    action = None
+    if action_id is not None:
+        action = util.actions_by_group[group_id][action_id]
+
+    replacement = replacement_crowd_getter()
+    unpack_replacement = lambda crowd, action, group: replacement(crowd)
+
+    provideAdapter(unpack_replacement,
+                   provides=ICrowdToDescribe,
+                   adapts=[crowd_getter(),
+                           action and action.__class__ or None,
+                           group and group.__class__ or None,
+                           ])
+
+
+def switch_description(_context,
+                       group=None, action=None,
+                       crowd=None, crowd_factory=None,
+                       use_crowd=None, use_crowd_factory=None):
+
+    if crowd is not None and crowd_factory is not None:
+        raise TypeError("Must specify either crowd or crowd_factory.")
+
+    if use_crowd is not None and use_crowd_factory is not None:
+        raise TypeError("Must specify either use_crowd or use_crowd_factory.")
+
+    if action is not None and group is None:
+        raise TypeError("Must specify group when specifying action.")
+
+    if crowd is not None:
+        crowd_getter = lambda: getCrowdsUtility().getFactory(crowd)
+    elif crowd_factory is not None:
+        crowd_getter = lambda: crowd_factory
+    else:
+        crowd_getter = lambda: None
+
+    if use_crowd is not None:
+        replacement_crowd_getter = lambda: getCrowdsUtility().getFactory(use_crowd)
+    elif use_crowd_factory is not None:
+        replacement_crowd_getter = lambda: use_crowd_factory
+    else:
+        replacement_crowd_getter = lambda: None
+
+    discriminator = ('switch_description', group, action,
+                     crowd, crowd_factory, use_crowd, use_crowd_factory)
+
+    _context.action(discriminator=discriminator,
+                    callable=handle_switch_description,
+                    args=(_context, group, action,
+                          crowd_getter, replacement_crowd_getter),
+                    order=ZCML_REGISTER_DESCRIPTION_SWITCHING)
+
+

@@ -37,9 +37,9 @@ class SchoolToolSecurityPolicy(ParanoidSecurityPolicy):
         """Return True if principal has permission on object."""
 
         # Check the generic, interface-independent permissions.
-        crowdclasses = getCrowdsUtility().permcrowds.get(permission, [])
-        if crowdclasses:
-            return self.checkCrowds(crowdclasses, obj)
+        factories = getCrowdsUtility().getFactories(permission, None)
+        if factories:
+            return self.checkCrowds(factories, obj)
 
         # No quick method worked, look up the crowd by adaptation.
         return self.checkByAdaptation(permission, obj)
@@ -60,11 +60,11 @@ class SchoolToolSecurityPolicy(ParanoidSecurityPolicy):
         else:
             return False
 
-    def checkCrowds(self, crowdclasses, obj):
+    def checkCrowds(self, factories, obj):
         """Check if an object is in any of the given crowds."""
         for participation in self.participations:
-            for crowdcls in crowdclasses:
-                crowd = crowdcls(obj)
+            for factory in factories:
+                crowd = factory(obj)
                 if crowd.contains(participation.principal):
                     return True
         return False

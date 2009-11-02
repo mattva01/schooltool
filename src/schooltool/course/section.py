@@ -279,12 +279,19 @@ class SectionInit(InitBase):
 
 class InstructorsCrowd(Crowd):
     """Crowd of instructors of a section."""
+
+    title = _(u'Instructors')
+    description = _(u'Instructors of the section.')
+
     def contains(self, principal):
         return IPerson(principal, None) in ISection(self.context).instructors
 
 
 class PersonInstructorsCrowd(Crowd):
     """Crowd of instructors of a person."""
+
+    title = _(u'Instructors')
+    description = _(u'Instructors of a person in any of his sections.')
 
     def _getSections(self, ob):
         return [section for section in getRelatedObjects(ob, membership.URIGroup)
@@ -293,15 +300,9 @@ class PersonInstructorsCrowd(Crowd):
     def contains(self, principal):
         user = IPerson(principal, None)
         person = IPerson(self.context)
-        # First check the the sections a pupil is in directly
         for section in self._getSections(person):
             if user in section.instructors:
                 return True
-        # Now check the section membership via groups
-        for group in person.groups:
-            for section in self._getSections(group):
-                if user in section.instructors:
-                    return True
         return False
 
 
@@ -312,6 +313,10 @@ class LearnersCrowd(Crowd):
     learners.
     """
     adapts(ISection)
+
+    title = _(u'Learners')
+    description = _(u'Students of the section.')
+
     def contains(self, principal):
         return IPerson(principal, None) in self.context.members
 
@@ -344,10 +349,6 @@ class PersonLearnerAdapter(object):
         # First check the the sections a pupil is in directly
         for section in self._getSections(self.person):
             yield section
-        # Now check the section membership via groups
-        for group in self.person.groups:
-            for section in self._getSections(group):
-                yield section
 
 
 class PersonInstructorAdapter(object):

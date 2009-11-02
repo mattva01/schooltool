@@ -456,30 +456,25 @@ def doctest_PersonInstructorCrowd():
 
         >>> from schooltool.course.section import Section
         >>> from schooltool.person.person import Person
-        >>> from schooltool.group.group import Group
         >>> section = Section(title="section 1", description="advanced")
         >>> teacher = Person('teacher', 'Mr. Jones')
         >>> p1 = Person('p1','First')
         >>> p2 = Person('p2','Second')
-        >>> group = Group('group','Group')
 
-    Let the first pupil be a direct member of the section, and the
-    second -- via a group:
+    Let the first pupil be a direct member of the section taught by Mr. Jones.
 
         >>> section.instructors.add(teacher)
         >>> section.members.add(p1)
-        >>> section.members.add(group)
-        >>> group.members.add(p2)
 
-    The PersonInstructorCrowd should contain teacher for both p1 and p2:
+    The PersonInstructorCrowd should contain the teacher for p1, but not p2:
 
         >>> from schooltool.course.section import PersonInstructorsCrowd
         >>> PersonInstructorsCrowd(p1).contains(teacher)
         True
         >>> PersonInstructorsCrowd(p2).contains(teacher)
-        True
+        False
 
-    However, non-teachers are not in the crowd:
+    Non-teachers are not in the crowd:
 
         >>> PersonInstructorsCrowd(p2).contains(p2)
         False
@@ -500,14 +495,11 @@ def doctest_PersonLearnerAdapter(self):
         >>> section1 = Section(title="section 1", description="advanced")
         >>> section2 = Section(title="section 2", description="advanced")
         >>> student = Person('student', 'Mr. Peter')
-        >>> group = Group('group','Group')
 
-     Let's add the student to the first section directly, and to the
-     second section through his group:
+     Let's add the student to the two sections.
 
         >>> section1.members.add(student)
-        >>> section2.members.add(group)
-        >>> group.members.add(student)
+        >>> section2.members.add(student)
 
     sections method of the adapter should list us both sections:
 

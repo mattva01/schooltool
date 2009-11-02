@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<configure xmlns="http://schooltool.org/securitypolicy"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <allow
+     interface="schooltool.basicperson.interfaces.IFieldDescription"
+     crowds="administration"
+     permission="schooltool.edit" />
+
+  <!-- Security descriptions -->
+
+  <describe_group
+     name="schooltool.basicperson-demographics"
+     title="Demographics" />
+
+  <describe_action
+     group="schooltool.basicperson-demographics" name="manage"
+     title="Manage"
+     description="Create, delete demographics fields and change their order."
+     order="10"
+     interface="schooltool.app.interfaces.ISchoolToolApplication"
+     permission="schooltool.edit"
+  />
+
+  <describe_action
+     group="schooltool.basicperson-demographics" name="edit_field"
+     title="Edit fields"
+     order="20"
+     interface="schooltool.basicperson.interfaces.IFieldDescription"
+     permission="schooltool.edit"
+  />
+
+  <describe_action
+     group="schooltool.basicperson-demographics" name="view_demographics"
+     title="View user demographics"
+     description="View user's demographics information"
+     order="30"
+     interface="schooltool.person.interfaces.IPerson"
+     permission="schooltool.view"
+  />
+
+  <describe_action
+     group="schooltool.basicperson-demographics" name="edit_demographics"
+     title="Modify user demographics"
+     description="Modify user's demographics information."
+     order="40"
+     interface="schooltool.person.interfaces.IPerson"
+     permission="schooltool.edit"
+  />
+
+
+</configure>

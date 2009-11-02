@@ -1,0 +1,5 @@
+<p i18n:domain="schooltool" i18n:translate="">
+  Access setting:
+  <tal:block content="view/text" i18n:name="setting">The Setting</tal:block>
+  (<tal:block content="view/status" i18n:name="status">Enabled</tal:block>)
+</p>

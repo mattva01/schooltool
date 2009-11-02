@@ -37,7 +37,7 @@ class AccessControlCustomisations(Persistent):
     def __init__(self):
         self._settings = PersistentDict()
 
-    def _getSetting(self, key):
+    def getSetting(self, key):
         for setting in self:
             if setting.key == key:
                 return setting
@@ -46,10 +46,10 @@ class AccessControlCustomisations(Persistent):
                            " associated with this key.")
 
     def get(self, key):
-        return self._settings.get(key, self._getSetting(key).default)
+        return self._settings.get(key, self.getSetting(key).default)
 
     def set(self, key, value):
-        if self._getSetting(key):
+        if self.getSetting(key):
             self._settings[key] = value
 
     def __iter__(self):
