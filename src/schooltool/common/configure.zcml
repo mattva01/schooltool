@@ -124,5 +124,11 @@
   <include package="schooltool.securitypolicy.browser" />
   <include package="schooltool.export" />
   <include package="schooltool.table" />
+  <include package="schooltool.email" />
+
+  <adapter
+      for="zope.interface.Interface
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory="schooltool.table.table.NullTableFormatter " />
 
 </configure>

@@ -44,7 +44,7 @@ from distutils.util import newer
 from distutils.spawn import find_executable
 
 # allowed extensions
-ALLOWED_EXTENSIONS = ['conf','css', 'gif', 'ico', 'ics', 'js', 'mo', 'po', 'pt',
+ALLOWED_EXTENSIONS = ['conf','css', 'gif', 'ico', 'ics', 'js', 'po', 'pt',
                       'png', 'txt', 'xml', 'xpdl', 'zcml']
 
 # Define packages we want to recursively include, we do this explicitly here
@@ -57,6 +57,7 @@ root_packages = ['schooltool.app',
                  'schooltool.dashboard',
                  'schooltool.devmode',
                  'schooltool.demographics',
+                 'schooltool.email',
                  'schooltool.export',
                  'schooltool.generations',
                  'schooltool.group',
@@ -101,7 +102,9 @@ def compile_translations(domain):
         mo = "%s/%s/LC_MESSAGES/%s.mo" % (locales_dir, lang, domain)
         if newer(po, mo):
             log.info('Compile: %s -> %s' % (po, mo))
-            os.makedirs(os.path.dirname(mo))
+            messages_dir = os.path.dirname(mo)
+            if not os.path.isdir(messages_dir):
+                os.makedirs(messages_dir)
             os.system('msgfmt -o %s %s' % (mo, po))
 
 if len(sys.argv) > 1 and sys.argv[1] in ('build', 'install'):
@@ -193,6 +196,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zc.catalog',
                       'hurry.query',
                       'zc.datetimewidget',
+                      'zope.component<=3.6.0dev',
                       'zope.ucol',
                       'zope.html',
                       'zope.file',

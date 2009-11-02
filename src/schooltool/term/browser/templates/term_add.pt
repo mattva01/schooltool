@@ -67,7 +67,7 @@
                      i18n:attributes="value" />
             </p>
 
-            <p>Click on a day to toggle its state.</p>
+            <p i18n:translate="">Click on a day to toggle its state.</p>
 
             <table class="schooldaymodel" tal:repeat="month calendar">
               <tr>
