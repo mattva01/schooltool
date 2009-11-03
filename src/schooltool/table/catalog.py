@@ -20,7 +20,8 @@
 
 from persistent import Persistent
 
-from zope.interface import implements, implementer, classImplements
+from zope.interface import implements, implementsOnly
+from zope.interface import implementer, classImplements
 from zope.component import adapter
 from zope.component import getUtility, queryUtility
 from zope.i18n.interfaces.locales import ICollator
@@ -34,6 +35,7 @@ from zc.catalog.interfaces import IValueIndex, IExtentCatalog
 from zc.table.interfaces import IColumn, ISortableColumn
 from zc.table.column import GetterColumn
 
+from schooltool.table.interfaces import IIndexedTableFormatter
 from schooltool.table.interfaces import IIndexedColumn
 from schooltool.table.table import FilterWidget
 from schooltool.table.table import SchoolToolTableFormatter
@@ -132,6 +134,7 @@ class IndexedLocaleAwareGetterColumn(IndexedGetterColumn):
 
 
 class IndexedTableFormatter(SchoolToolTableFormatter):
+    implementsOnly(IIndexedTableFormatter)
 
     def columns(self):
         return [IndexedGetterColumn(name='title',
@@ -201,20 +204,20 @@ def makeIndexedColumn(mixins, column, *args, **kw):
     return new_column
 
 
-def _unindex(indexed_item):
+def unindex(indexed_item):
     return queryUtility(IIntIds).getObject(indexed_item['id'])
 
 
 class RenderUnindexingMixin(object):
     def renderCell(self, indexed_item, formatter):
         return super(RenderUnindexingMixin, self).renderCell(
-            _unindex(indexed_item), formatter)
+            unindex(indexed_item), formatter)
 
 
 class SortUnindexingMixin(object):
     def getSortKey(self, indexed_item, formatter):
         super(SortUnindexingMixin, self).getSortKey(
-            _unindex(indexed_item), formatter)
+            unindex(indexed_item), formatter)
 
 
 @adapter(IColumn)

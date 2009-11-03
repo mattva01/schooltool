@@ -66,6 +66,12 @@ class ITableFormatter(Interface):
         """Render the table for display in a view."""
 
 
+class IIndexedTableFormatter(ITableFormatter):
+
+    def indexItems(items):
+        """Return a list of indexed items"""
+
+
 class IIndexedColumn(Interface):
     """A column that operates on index dicts instead of objects.
 
