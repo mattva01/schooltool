@@ -5,9 +5,9 @@ SchoolTool - a common information systems platform for school administration.
 
 Website: http://www.schooltool.org/
 
-Mailing list: http://lists.schooltool.org/mailman/listinfo/schooltool
+Mailing list: https://launchpad.net/~schooltoolers
 
-Bug tracker: http://issues.schooltool.org/
+Bug tracker: http://bugs.launchpad.net/schooltool
 
 
 Default Login and Password
@@ -24,23 +24,7 @@ Overview
 --------
 
 SchoolTool is an open source school management information system.  It is
-a distributed client/server system.  The SchoolTool server presents two
-interfaces to clients:
-
-  - a traditional web application interface, usable with an ordinary browser.
-
-  - HTTP-based programming interface suitable for fat clients, adhering to
-    the Representational State Transfer (REST) architectural style (see
-    http://rest.blueoxen.net/).
-
-The web application interface is the primary one.  The RESTive interface is
-there for potential interoperability with other systems and fat clients to
-perform data entry that is inconvenient to do via the web application
-interface.
-
-There are several clients that demonstrate the usage of the REST interface
-(a command-line client that is used for functional tests, a wxWidgets GUI
-client, and a command-line client for data import).
+a distributed client/server system.
 
 Any modern web browser is suitable for the web application interface.  The
 interface degrades gracefully, so a browser that does not support CSS or
@@ -50,16 +34,11 @@ Javascript will be usable, although perhaps not very nice or convenient.
 System requirements
 -------------------
 
-- Python 2.4 (http://www.python.org/)
-  (Debian users will need either python2.4 and python2.4-xml packages)
+- Python 2.5 (http://www.python.org/)
 
 - libicu-dev: International Components for Unicode libraries (http://icu.sourceforge.net/download/)
 
 - the Python Imaging Library (PIL) (http://www.pythonware.com/products/pil/)
-
-- (usually included) Zope 3.2 (http://www.zope.org/Products/Zope3)
-  In most cases the current Zope is included with a SchoolTool download,
-  the exception being a "minimal" tarball distribution.
 
 - (optional) the ReportLab Toolkit (http://www.reportlab.org), and
   Arial and Times New Roman TrueType fonts.  ReportLab is only needed if
@@ -85,12 +64,6 @@ $ sudo apt-get install libicu-dev
 You also need the python imaging library:
 
 $ sudo apt-get install python-imaging
-
-You need the Python setuptools package. Unfortunately, you need a more
-recent version than ships with Gutsy. Fortunately, it isn't hard to
-install manually. Download ez_setup.py and run it with:
-
-$ sudo python ez_setup.py
 
 Run make to download and install all the required zope packages into
 the eggs folder:
@@ -122,7 +95,7 @@ from these repositories are not supported by Canonical, but these
 should work fine.
 
 As a superuser (sudo) edit /etc/apt/sources.list to include this line
-deb http://us.archive.ubuntu.com/ubuntu/ gutsy universe multiverse
+deb http://us.archive.ubuntu.com/ubuntu/ karmic universe multiverse
 
 Then install the required package:
 
@@ -203,58 +176,6 @@ Project structure (subversion checkout only)
         tests/          unit tests for the schooltool.rest package
     schoolbell/         Python package 'schoolbell'
 
-
-Egg dependencies and checkouts
-------------------------------
-
-Schooltool depends on various extensions to Zope 3 that have been
-packaged as Python eggs. Sometimes it is important to be able to change
-these eggs and make checkins to them during Schooltool dependencies.
-
-What will follow is an example pertaining to the zc.resourcelibrary
-package. Note that in order to follow these instructions you need to
-have a recent version of setuptools installed (post a11). The most
-easy way to do this is to use ez_setup.py, here:
-
-http://peak.telecommunity.com/DevCenter/EasyInstall#installing-easy-install
-
-Remove the previously installed egg:
-
-$ cd Zope3/src
-$ rm zc.resourcelibrary*
-
-Now do a writeable checkout of zc.resourcelibrary somewhere, for
-instance in the schooltool root directory:
-
-$ cd ../..
-$ svn co svn+ssh://svn.zope.org/repos/main/zc.resourcelibrary/trunk zc.resourcelibrary
-
-Then install zc.resourcelibrary into Zope3/src in development mode:
-
-$ cd zc.resourcelibrary
-$ PYTHONPATH=../Zope3/src/ python setup.py develop --install-dir ../Zope3/src/
-
-(For some reason running this command from within the
-zc.resourcelibrary directory seems to be required.)
-
-You can test an development egg dependency with a command like this,
-in the Zope3 directory:
-
-$ cd ..
-$ cd Zope3
-$ python2.4 test.py --test-path=../zc.resourcelibrary/src/ -s zc.resourcelibrary
-
-(this assumes that zc.resourcelibrary has been checked out in the
-schooltool root directory)
-
-Some notes on running the tests:
-
-* to run the Zope 3 functional tests, first do a `make inplace` in the
-  Zope 3 checkout. zc.resourcelibrary has functional tests.
-
-* Note that the tests will fail as these are functional
-  tests. zc.resourcelibrary did not have its configure.zcml or
-  meta.zcml installed into Zope 3's package includes.
 
 Testing
 -------
@@ -345,19 +266,15 @@ this command:
 
 Translation files live in src/schooltool/locales.  There is a
 directory for each language that contains a subdirectory called
-LC_MESSAGES that contains the .po files and the compiled .mo files.
+LC_MESSAGES that contains the compiled .mo files.
 The .mo files must be present if schooltool is to use them and are
 built by the command:
 
-  $ make update-translations
+  $ make compile-translations
 
-XXX: At present there is no easy way of compiling .mo files in the
-     tarball and the _source_ tarball does not contain them.
-
-To start a new translation, create a language directory and
-LC_MESSAGES and use src/schooltool/locales/*.pot as a templates (copy
-them to the new directory and rename them as .po).  Generate .mo files
-with msgfmt (or by calling make update-translations).
+To start a new translation, use src/schooltool/locales/schooltool.pot as a
+template (copy it to YOUR_LANG.po).  Generate .mo files with msgfmt (or by
+calling make compile-translations).
 
 
 Virtual hosting
@@ -404,12 +321,12 @@ the only differing thing would be the local port number.
 Copyright information
 ---------------------
 
-SchoolTool is copyright (c) 2003--2007 Shuttleworth Foundation
+SchoolTool is copyright (c) 2003--2009 Shuttleworth Foundation
 
 All files in the src/schooltool directory are part of SchoolTool, and
 are (c) Shuttleworth Foundation, with the exception of translations in
 src/schooltool/locales, which are under the copyright of their
-original contributors via LaunchPad at http://launchpad.net.
+original contributors via Launchpad at http://launchpad.net .
 
 Unless otherwise stated, files in src/schooltool are released under the
 terms of the GNU General Public License as published by the Free
