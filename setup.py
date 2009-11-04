@@ -25,19 +25,7 @@ import os
 
 here = os.path.dirname(__file__)
 
-# Check python version
 import sys
-if sys.version_info < (2, 4):
-    print >> sys.stderr, '%s: need Python 2.4 or later.' % sys.argv[0]
-    print >> sys.stderr, 'Your python is %s' % sys.version
-    sys.exit(1)
-
-import site
-site.addsitedir(os.path.join(here, 'eggs'))
-
-import pkg_resources
-pkg_resources.require("setuptools>=0.6a11")
-
 from setuptools import setup, find_packages
 from distutils import log
 from distutils.util import newer
@@ -196,7 +184,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zc.catalog',
                       'hurry.query',
                       'zc.datetimewidget',
-                      'zope.component<=3.6.0dev',
+                      'zope.component<3.6.0',
                       'zope.ucol',
                       'zope.html',
                       'zope.file',
