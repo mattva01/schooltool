@@ -2120,22 +2120,6 @@ msgstr "以 CSV 形式上传 SchoolTool 组群"
 msgid "Group index"
 msgstr "组群索引"
 
-#: /src/schooltool/group/browser/group.py:81
-msgid "Current Groups"
-msgstr "当前组群"
-
-#: /src/schooltool/group/browser/group.py:82
-msgid "Available Groups"
-msgstr "有效组群"
-
-#: /src/schooltool/group/browser/groupsviewlet.pt:15
-msgid "edit groups"
-msgstr "编辑组群"
-
-#: /src/schooltool/group/browser/groupsviewlet.pt:15
-msgid "Manage this person's memberships"
-msgstr "管理该人员的组群属性"
-
 #: /src/schooltool/group/browser/groupsviewlet.pt:4
 #: /src/schooltool/group/help/group_container.pt:6
 #: /src/schooltool/app/browser/templates/index.pt:13
@@ -3273,16 +3257,6 @@ msgstr "已出书的资料"
 #: /src/schooltool/app/browser/templates/event_booking.pt:12
 msgid "Resource Booking for ${title}"
 msgstr "${title} 参考资料"
-
-#: /src/schooltool/app/browser/templates/index.pt:13
-#: /src/schooltool/group/browser/groupsviewlet.pt:4
-#: /src/schooltool/group/browser/link_to_groups.pt:1
-#: /src/schooltool/group/help/group_container.pt:6
-#: /src/schooltool/group/security.zcml:53
-#: /src/schooltool/group/help/configure.zcml:8
-#: /src/schooltool/group/browser/configure.zcml:63
-msgid "Groups"
-msgstr "组群"
 
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
 #: /src/schooltool/app/browser/configure.zcml:619

@@ -5132,36 +5132,6 @@ msgstr "Секции должны находиться в последовате
 msgid "name info"
 msgstr "name info"
 
-#: /src/schooltool/demographics/browser/configure.zcml:179
-#: /src/schooltool/demographics/browser/configure.zcml:240
-msgid "schooldata"
-msgstr "schooldata"
-
-#: /src/schooltool/demographics/browser/configure.zcml:185
-#: /src/schooltool/demographics/browser/configure.zcml:246
-msgid "parent1"
-msgstr "Родитель (опекун) 1"
-
-#: /src/schooltool/demographics/browser/configure.zcml:191
-#: /src/schooltool/demographics/browser/configure.zcml:252
-msgid "parent2"
-msgstr "Родитель (опекун) 2"
-
-#: /src/schooltool/demographics/browser/configure.zcml:197
-#: /src/schooltool/demographics/browser/configure.zcml:258
-msgid "emergency1"
-msgstr "emergency1"
-
-#: /src/schooltool/demographics/browser/configure.zcml:203
-#: /src/schooltool/demographics/browser/configure.zcml:264
-msgid "emergency2"
-msgstr "emergency2"
-
-#: /src/schooltool/demographics/browser/configure.zcml:209
-#: /src/schooltool/demographics/browser/configure.zcml:270
-msgid "emergency3"
-msgstr "emergency3"
-
 #: /src/schooltool/demographics/browser/demographics_macros.pt:4
 msgid "Shortcut: Alt-N"
 msgstr ""

@@ -5168,14 +5168,6 @@ msgid ""
 "in a section."
 msgstr ""
 
-#: /src/schooltool/dashboard/school.pt:22
-#: /src/schooltool/course/browser/templates/section.pt:69
-#: /src/schooltool/app/browser/templates/calendar_selection.pt:42
-#: /src/schooltool/app/browser/templates/index.pt:14
-#: /src/schooltool/resource/browser/configure.zcml:169
-msgid "Resources"
-msgstr "Prostředky"
-
 #: /src/schooltool/demographics/browser/configure.zcml:156
 msgid "Schooltool Person Menu"
 msgstr "Nabídka osoby na SchoolToolu"

@@ -4120,30 +4120,10 @@ msgstr "Alterar"
 msgid "All day event"
 msgstr "Evento que dura todo o dia"
 
-#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:21
-#: /src/schooltool/app/browser/templates/event.pt:20
-msgid "This is a recurring event."
-msgstr "Este é um evento recorrente"
-
-#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:38
-#: /src/schooltool/app/browser/templates/event.pt:37
-msgid "Starts"
-msgstr "Inícios"
-
-#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:43
-#: /src/schooltool/app/browser/templates/event.pt:42
-msgid "Ends"
-msgstr "Términos"
-
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:54
 #: /src/schooltool/app/browser/templates/event.pt:53
 msgid "edit event"
 msgstr "editar evento"
-
-#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:54
-#: /src/schooltool/app/browser/templates/event.pt:53
-msgid "Change the details of this event"
-msgstr "Mude os detalhes deste evento"
 
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:65
 #: /src/schooltool/app/browser/templates/event.pt:64
@@ -4154,11 +4134,6 @@ msgstr "Recursos agendados"
 #: /src/schooltool/app/browser/templates/event.pt:72
 msgid "edit resources"
 msgstr "editar recursos"
-
-#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:81
-#: /src/schooltool/app/browser/templates/event.pt:80
-msgid "delete event"
-msgstr "deletar evento"
 
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:4
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:11
