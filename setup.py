@@ -223,8 +223,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'setuptools'],
     tests_require=['zope.testing',
                    'schooltool.lyceum.journal'],
-    dependency_links=['http://ftp.schooltool.org/schooltool/eggs/3.4',
-                      'http://ftp.schooltool.org/schooltool/releases/nightly/'],
+    dependency_links=['http://ftp.schooltool.org/schooltool/1.2/'],
     entry_points = """
     [paste.app_factory]
     main = schooltool.paste.main:schooltool_app_factory
