@@ -22,6 +22,7 @@ Lyceum specific security code.
 $Id$
 
 """
+from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.securitypolicy.crowds import ConfigurableCrowd
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -37,7 +38,7 @@ class PersonInfoViewersCrowd(ConfigurableCrowd):
         if container is None or 'teachers' not in container:
             return False
         teachers = container['teachers']
-        groups = list(self.context.groups)
+        groups = list(IBasicPerson(self.context).groups)
         return (ConfigurableCrowd.contains(self, principal) or
                 teachers in groups)
 

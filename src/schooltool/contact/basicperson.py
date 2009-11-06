@@ -110,6 +110,11 @@ def getBoundContact(context):
     return contact
 
 
+@implementer(IBasicPerson)
+def getPerson(contact):
+    return contact.__parent__
+
+
 class PersonAddedSubsciber(ObjectEventAdapterSubscriber):
     adapts(IObjectAddedEvent, IBasicPerson)
 
