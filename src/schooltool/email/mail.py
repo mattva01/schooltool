@@ -86,14 +86,14 @@ class EmailContainer(BTreeContainer):
 
 
 class EmailAppStartup(StartUpBase):
-    
+
     def __call__(self):
         if EMAIL_KEY not in self.app:
             self.app[EMAIL_KEY] = EmailContainer()
 
 
 class EmailInit(InitBase):
-    
+
     def __call__(self):
         self.app[EMAIL_KEY] = EmailContainer()
 
@@ -197,6 +197,9 @@ class EmailUtility(object):
                                    'addresses': ', '.join(addresses)})
             connection.quit()
             return False
+        # XXX: SMTPDataError is not caught yet.
+        #      For one, invalid recipient list may cause it (code 555)
+
         if result:
             addresses = [address for address in email.to_addresses
                          if address in result.keys()]
