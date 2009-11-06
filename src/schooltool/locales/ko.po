@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-11-02 15:50+0000\n"
-"PO-Revision-Date: 2009-11-04 07:36+0000\n"
+"PO-Revision-Date: 2009-11-05 05:09+0000\n"
 "Last-Translator: import05 <trigem7220@gmail.com>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-11-04 08:27+0000\n"
+"X-Launchpad-Export-Date: 2009-11-05 08:31+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/browser/__init__.py:261
@@ -341,7 +341,7 @@ msgstr ""
 #: /src/schooltool/app/browser/cal.py:1747
 #: /src/schooltool/timetable/browser/schema.py:269
 msgid "Duration"
-msgstr ""
+msgstr "기간"
 
 #: /src/schooltool/app/browser/cal.py:1752
 msgid "Duration Type"
@@ -419,7 +419,7 @@ msgstr "카운트"
 
 #: /src/schooltool/app/browser/cal.py:1791
 msgid "Until"
-msgstr ""
+msgstr "까지"
 
 #: /src/schooltool/app/browser/cal.py:1792
 msgid "forever"
@@ -801,7 +801,7 @@ msgstr "저장사항을 변경합니다."
 
 #: /src/schooltool/app/browser/pdfcal.py:100
 msgid "recurrent"
-msgstr ""
+msgstr "재발"
 
 #. Default: ""
 #: /src/schooltool/app/browser/pdfcal.py:104
@@ -4903,11 +4903,11 @@ msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:57
 msgid "Notes for the resource."
-msgstr ""
+msgstr "리소스에 대한 정보"
 
 #: /src/schooltool/resource/interfaces.py:80
 msgid "Location Type"
-msgstr ""
+msgstr "위치 유형"
 
 #: /src/schooltool/resource/interfaces.py:81
 msgid "Type of location (i.e. computer lab, class room, etc.)"
@@ -4916,7 +4916,7 @@ msgstr ""
 #: /src/schooltool/resource/interfaces.py:86
 #: /src/schooltool/resource/types.py:83
 msgid "Capacity"
-msgstr ""
+msgstr "용량"
 
 #: /src/schooltool/resource/interfaces.py:87
 msgid "Capacity of the room"
@@ -4924,7 +4924,7 @@ msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:95
 msgid "Equipment Type"
-msgstr ""
+msgstr "장비 유형"
 
 #: /src/schooltool/resource/interfaces.py:96
 msgid "Type of equipment (i.e. camcorder, computer, etc.)"
@@ -4933,7 +4933,7 @@ msgstr ""
 #: /src/schooltool/resource/resource.py:55
 #: /src/schooltool/resource/types.py:55
 msgid "Resource"
-msgstr ""
+msgstr "자료"
 
 #: /src/schooltool/resource/security.zcml:12
 msgid "Everyone can view resource information."
@@ -4984,11 +4984,11 @@ msgstr ""
 
 #: /src/schooltool/resource/types.py:107
 msgid "Type"
-msgstr ""
+msgstr "유형"
 
 #: /src/schooltool/resource/types.py:93
 msgid "Equipment"
-msgstr ""
+msgstr "장비"
 
 #: /src/schooltool/sampledata/sampledata.pt:14
 msgid ""
@@ -5011,42 +5011,42 @@ msgstr ""
 #: /src/schooltool/sampledata/sampledata.pt:3
 #: /src/schooltool/sampledata/sampledata.pt:9
 msgid "Sample Data Generation"
-msgstr ""
+msgstr "샘플 데이터 생성"
 
 #: /src/schooltool/sampledata/sampledata.pt:42
 msgid "Plugins"
-msgstr ""
+msgstr "Plugins"
 
 #: /src/schooltool/sampledata/sampledata.pt:71
 msgid "View Dependencies"
-msgstr ""
+msgstr "종속성 보기"
 
 #: /src/schooltool/sampledata/sampledata.pt:80
 #: /src/schooltool/setupdata/setupdata.pt:23
 msgid "Generate"
-msgstr ""
+msgstr "생성"
 
 #: /src/schooltool/schoolyear/browser/configure.zcml:87
 msgid "New School Year"
-msgstr ""
+msgstr "새로운 학년"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:107
 #: /src/schooltool/schoolyear/security.zcml:7
 #: /src/schooltool/schoolyear/browser/configure.zcml:26
 msgid "School Years"
-msgstr ""
+msgstr "학년"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:116
 #: /src/schooltool/app/browser/templates/event.pt:37
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:38
 msgid "Starts"
-msgstr ""
+msgstr "시작"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:118
 #: /src/schooltool/app/browser/templates/event.pt:42
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:43
 msgid "Ends"
-msgstr ""
+msgstr "끝"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:129
 msgid ""
@@ -5056,11 +5056,11 @@ msgstr ""
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:148
 msgid "First day"
-msgstr ""
+msgstr "첫 날"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:151
 msgid "Last day"
-msgstr ""
+msgstr "마지막 날"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:170
 msgid "Add new school year"
@@ -5132,7 +5132,7 @@ msgstr "사용함"
 #: /src/schooltool/securitypolicy/browser/configure.zcml:17
 #: /src/schooltool/securitypolicy/browser/configure.zcml:28
 msgid "Access Control"
-msgstr ""
+msgstr "액세스 제어"
 
 #: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:4
 msgid "Access setting: ${setting} (${status})"
@@ -5272,7 +5272,7 @@ msgstr ""
 #. Default: "Update"
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "update-button"
-msgstr ""
+msgstr "업데이트버튼"
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "U"
@@ -5282,7 +5282,7 @@ msgstr "U"
 #: /src/schooltool/skin/templates/view_macros.pt:161
 #: /src/schooltool/skin/templates/view_macros.pt:167
 msgid "apply-button"
-msgstr ""
+msgstr "적용 버튼"
 
 #. Default: "Add"
 #: /src/schooltool/skin/templates/view_macros.pt:174
@@ -5321,7 +5321,7 @@ msgstr "넓이"
 
 #: /src/schooltool/skin/widgets.py:110
 msgid "Editor frame width"
-msgstr ""
+msgstr "프레임 너비 수정"
 
 #: /src/schooltool/skin/widgets.py:113
 msgid "Height"
@@ -5329,7 +5329,7 @@ msgstr "높이"
 
 #: /src/schooltool/skin/widgets.py:114
 msgid "Editor frame height"
-msgstr ""
+msgstr "프레임 높이 수정"
 
 #: /src/schooltool/skin/widgets.py:117
 msgid "Toolbar configuration"
@@ -5456,7 +5456,7 @@ msgstr "범례 :"
 #: /src/schooltool/term/browser/templates/term.pt:13
 #: /src/schooltool/term/browser/templates/term_add.pt:42
 msgid "Schoolday"
-msgstr ""
+msgstr "Schoolday"
 
 #: /src/schooltool/term/browser/templates/term.pt:14
 #: /src/schooltool/term/browser/templates/term_add.pt:43
@@ -5534,15 +5534,15 @@ msgstr "종료일"
 
 #: /src/schooltool/term/help/configure.zcml:8
 msgid "Add a term"
-msgstr ""
+msgstr "용어 추가"
 
 #: /src/schooltool/term/help/term_add.pt:6
 msgid "Term Search Help"
-msgstr ""
+msgstr "용어 검색 도움말"
 
 #: /src/schooltool/term/help/term_container.pt:6
 msgid "Terms in SchoolTool"
-msgstr ""
+msgstr "SchoolTool에 이용 약관"
 
 #: /src/schooltool/term/help/term_container.pt:8
 msgid ""
@@ -5569,7 +5569,7 @@ msgstr ""
 
 #: /src/schooltool/term/tests/__init__.py:81
 msgid "Set the date for the school"
-msgstr ""
+msgstr "설정 학교 날짜"
 
 #: /src/schooltool/timetable/__init__.py:196
 msgid "Unbound timetable."
@@ -5614,7 +5614,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:215
 msgid "You must specify at least one period."
-msgstr ""
+msgstr "하나 이상의 기간을 지정해야 합니다."
 
 #: /src/schooltool/timetable/browser/schema.py:236
 #: /src/schooltool/dashboard/school.pt:16
@@ -5691,7 +5691,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:197
 msgid "Create timetable schema"
-msgstr ""
+msgstr "시간표 스키마 생성"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:36
 msgid "First, please define the days and periods of the timetable."
@@ -5705,11 +5705,11 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:51
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:155
 msgid "C"
-msgstr ""
+msgstr "C"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:58
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:58
 msgid "Remove this day"
@@ -5717,11 +5717,11 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:84
 msgid "Add day"
-msgstr ""
+msgstr "일 추가"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:87
 msgid "Add period"
-msgstr ""
+msgstr "기간 추가"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:94
 msgid "Second, select the way timetable days are aligned with calendar days."
@@ -5729,7 +5729,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:14
 msgid "Cal"
-msgstr ""
+msgstr "Cal"
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:14
 msgid "Personal calendar"
@@ -5741,7 +5741,7 @@ msgstr "스케쥴 일정"
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:17
 msgid "TT"
-msgstr ""
+msgstr "TT"
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:66
 msgid ""
@@ -5919,7 +5919,7 @@ msgstr "새로운 시간표 작성"
 
 #: /src/schooltool/timetable/browser/templates/timetable-add.pt:15
 msgid "Select school timetable to use"
-msgstr ""
+msgstr "사용할 시간표를 선택하세요"
 
 #: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:10
 msgid "Are you sure you want to delete the selected timetables?"
@@ -5945,7 +5945,7 @@ msgstr "선택되지 않음"
 #. Default: "Change"
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
 msgid "change-button"
-msgstr ""
+msgstr "변경버튼"
 
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:4
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:11
@@ -6003,7 +6003,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:300
 msgid "Please enter at least one day name."
-msgstr ""
+msgstr "최소한 하루에 이름은 입력하세요"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:306
 msgid "Please make sure the day names are unique."
@@ -6017,7 +6017,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:325
 msgid "Same time each day"
-msgstr ""
+msgstr "매일 같은 시간에"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:326
 msgid "Different times"
