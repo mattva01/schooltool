@@ -28,7 +28,7 @@ from schooltool.timetable.browser.skin import ITimetableLayer
 from schooltool.skin.skin import ISchoolToolSkin
 
 class ISecurityFtestingSkin(ITimetableLayer, ISchoolToolSkin):
-    """ Skin for securitypolicy testing. """ 
+    """ Skin for securitypolicy testing. """
 
 dir = os.path.abspath(os.path.dirname(__file__))
 filename = os.path.join(dir, 'ftesting.zcml')

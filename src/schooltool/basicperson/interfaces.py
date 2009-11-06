@@ -24,6 +24,7 @@ from zope.app.container.interfaces import IOrderedContainer
 from zope.schema import Date, Choice, TextLine, Bool
 from zope.configuration.fields import PythonIdentifier
 from zope.interface import Interface, Attribute
+from zope.annotation.interfaces import IAnnotations
 
 from zope.schema import List
 from zope.schema.interfaces import IIterableSource

@@ -123,6 +123,8 @@ from schooltool.group.interfaces import IBaseGroup as IGroup
 from schooltool.person.interfaces import IPerson
 from schooltool.securitypolicy.crowds import Crowd
 
+from schooltool.common import SchoolToolMessage as _
+
 
 URIMembership = URIObject('http://schooltool.org/ns/membership',
                           'Membership', 'The membership relationship.')
@@ -258,6 +260,9 @@ class GroupMemberCrowd(Crowd):
     """
 
     adapts(IGroup)
+
+    title = _(u'Members')
+    description = _(u'Members of the group.')
 
     def contains(self, principal):
         return IPerson(principal, None) in self.context.members

@@ -1,0 +1,2 @@
+  <div class="content-nav"><a tal:attributes="href view/link"
+       tal:content="view/title">Title</a></div>

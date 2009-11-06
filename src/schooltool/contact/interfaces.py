@@ -21,6 +21,7 @@
 Contact interfaces
 """
 import zope.schema
+from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container.constraints import contains
 from zope.app.container.constraints import containers
 from zope.app.container.interfaces import IContained
@@ -33,13 +34,21 @@ from schooltool.common import SchoolToolMessage as _
 from schooltool.app.utils import vocabulary
 
 
-class IContact(Interface):
+class IContactPerson(Interface):
+    """Name of a person."""
 
     prefix = TextLine(title=_(u"Prefix"), required=False)
+
     first_name = TextLine(title=_(u"First name"))
+
     middle_name = TextLine(title=_(u"Middle name"), required=False)
+
     last_name = TextLine(title=_(u"Last name"))
+
     suffix = TextLine(title=_(u"Suffix"), required=False)
+
+
+class IAddress(Interface):
 
     address_line_1 = TextLine(title=_(u"Address line 1"), required=False)
 
@@ -53,7 +62,13 @@ class IContact(Interface):
 
     postal_code = TextLine(title=_(u"Postal code"), required=False)
 
+
+class IEmails(Interface):
+
     email = TextLine(title=_(u"Email"), required=False)
+
+
+class IPhones(Interface):
 
     home_phone = TextLine(title=_(u"Home phone"), required=False)
 
@@ -61,13 +76,24 @@ class IContact(Interface):
 
     mobile_phone = TextLine(title=_(u"Mobile phone"), required=False)
 
+
+class ILanguages(Interface):
+
     language = TextLine(title=_(u"Language"), required=False)
+
+
+class IContactInformation(IAddress, IEmails, IPhones, ILanguages):
+    """Collection of parts that define the contact information."""
+
+
+class IContact(IContactPerson, IContactInformation, IAttributeAnnotatable):
 
     persons = Attribute("Persons attached to this contact (see IRelationshipProperty)")
 
 
+# XXX: naming is becoming confusing.  Rename to IContactRelationshipInfo.
 class IContactPersonInfo(Interface):
-    """Information about a contact of a person."""
+    """Information about a contact - person relationship."""
 
     __parent__ = Attribute("""The person.""")
 
@@ -103,3 +129,8 @@ class IContactable(Interface):
     """Object that can have contacts."""
 
     contacts = Attribute("Contacts (see IRelationshipProperty)")
+
+
+class IUniqueFormKey(Interface):
+    """Adapt a contact to this interface to obtain a unique form key."""
+

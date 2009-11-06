@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:security="http://schooltool.org/securitypolicy"
     i18n_domain="schooltool">
+
+  <include file="security.zcml" />
 
   <class class=".schoolyear.SchoolYearContainer">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />

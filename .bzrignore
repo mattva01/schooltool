@@ -1,6 +1,7 @@
 ./build
 ./bin
 ./develop-eggs
+./dist
 ./parts
 ./python
 ./.installed.cfg
@@ -18,3 +19,6 @@
 ./src/schooltool/generations/tests/Data27.fs.*
 ./src/schooltool/locales/*
 ./src/schooltool/commendation/locales/*
+./ID
+./TAGS
+./tags

@@ -12,6 +12,11 @@
       factory=".customisation.getAccessControlCustomisations"
       provides=".interfaces.IAccessControlCustomisations" />
 
+  <adapter
+      for=".interfaces.ICrowd * *"
+      provides=".interfaces.ICrowdToDescribe"
+      factory=".crowds.defaultCrowdToDescribe" />
+
   <!-- Some basic crowds -->
   <security:crowd
       name="everybody"
@@ -49,9 +54,9 @@
       name="teachers"
       factory=".crowds.TeachersCrowd" />
 
-  <security:aggregate_crowd
+  <security:crowd
       name="administration"
-      crowds="administrators clerks managers" />
+      factory=".crowds.AdministrationCrowd" />
 
   <security:allow
       crowds="everybody"
@@ -68,5 +73,19 @@
   <security:allow
       crowds="everybody"
       permission="zope.app.dublincore.view" />
+
+  <security:describe_crowd
+      crowd_factory=".crowds.Crowd"
+      factory=".crowds.DefaultCrowdDescription" />
+
+  <security:describe_crowd
+      crowd_factory=".crowds.AggregateCrowd"
+      factory=".crowds.AggregateCrowdDescription" />
+
+  <!--security:describe_crowd
+      crowd="administration"
+      title="Administration"
+      description="School administration."
+      / -->
 
 </configure>

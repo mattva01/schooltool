@@ -4,13 +4,12 @@
 
   <include package="schooltool.common" />
 
+  <include package="schooltool.basicperson" />
   <include package="schooltool.course" />
   <include package="schooltool.term" />
+  <include package="schooltool.term" file="time_machine.zcml" />
   <include package="schooltool.schoolyear" />
   <include package="schooltool.timetable" />
-  <include package="schooltool.gradebook" />
-  <include package="schooltool.requirement" />
-  <include package="schooltool.level" />
   <include package="schooltool.demographics" />
 
   <interface
@@ -19,7 +18,8 @@
       name="SecurityFtestingSkin"
       />
 
-  <includeOverrides package="schooltool.demographics" file="overrides.zcml" />
+  <!-- Provide local overrides of standard configurations-->
+  <includeOverrides package="schooltool.basicperson" file="overrides.zcml" />
 
   <browser:defaultSkin name="SecurityFtestingSkin" />
 

@@ -87,12 +87,13 @@ def test_SchoolToolSecurityPolicy_checkPermission():
     ---------------------------------
 
         >>> checkcrowds_returns = True
-        >>> cru.permcrowds['perm'] = ['crowd factory']
+        >>> cru.factories = {'the crowd': 'crowd factory'}
+        >>> cru.crowds[('perm', None)] = ['the crowd']
         >>> sp.checkPermission('perm', obj)
         checkCrowds(['crowd factory'], <...Obj object ...>)
         True
 
-    Another case: there is a crowd in permcrowds but checkCrowds
+    Another case: there is a registered crowd for the permission, but checkCrowds
     fails:
 
         >>> checkcrowds_returns = False

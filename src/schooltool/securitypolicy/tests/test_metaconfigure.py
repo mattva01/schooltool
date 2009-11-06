@@ -23,12 +23,12 @@ $Id$
 """
 
 import unittest
+from pprint import pprint
 from zope.testing import doctest
 from zope.interface import implements, Interface
 from zope.interface.verify import verifyObject
 from zope.app.testing import setup
-from zope.app.testing import ztapi
-from zope.component import getAdapter
+from zope.component import getAdapter, provideUtility
 from schooltool.securitypolicy import metaconfigure as mc
 from schooltool.securitypolicy.metaconfigure import CrowdsUtility
 from schooltool.securitypolicy.interfaces import ICrowdsUtility
@@ -67,14 +67,20 @@ def doctest_registerCrowdAdapter():
         >>> from schooltool.securitypolicy import metaconfigure
         >>> from schooltool.securitypolicy.interfaces import ICrowd
         >>> cru = CrowdsUtility()
-        >>> ztapi.provideUtility(ICrowdsUtility, cru)
+
+        >>> cru.factories = {
+        ...     'crowd A': 'Factory A',
+        ...     'crowd B': 'Factory B',
+        ...     }
+        
+        >>> provideUtility(cru, provides=ICrowdsUtility)
 
         >>> class IMyObject(Interface):
         ...     pass
 
     Let's invoke registerCrowdAdapter:
 
-        >>> metaconfigure.registerCrowdAdapter(IMyObject, 'perm')
+        >>> metaconfigure.registerCrowdAdapter('perm', IMyObject)
 
     An adapter should have been registered.
 
@@ -85,9 +91,9 @@ def doctest_registerCrowdAdapter():
         >>> adapter
         <AggregateCrowd crowds=[]>
 
-        >>> cru.objcrowds = {(IMyObject, 'perm'): ['crowd A', 'crowd B']}
+        >>> cru.crowds = {('perm', IMyObject): ['crowd A', 'crowd B']}
         >>> adapter.crowdFactories()
-        ['crowd A', 'crowd B']
+        ['Factory A', 'Factory B']
 
     """
 
@@ -97,12 +103,12 @@ def doctest_handle_crowd():
 
         >>> from schooltool.securitypolicy.metaconfigure import handle_crowd
         >>> cru = CrowdsUtility()
-        >>> ztapi.provideUtility(ICrowdsUtility, cru)
+        >>> provideUtility(cru, provides=ICrowdsUtility)
 
         >>> handle_crowd('cr1', 'fac1')
-        >>> print sorted(cru.crowdmap.keys())
+        >>> print sorted(cru.factories.keys())
         ['cr1']
-        >>> cru.crowdmap['cr1']
+        >>> cru.factories['cr1']
         'fac1'
     """
 
@@ -113,58 +119,69 @@ def doctest_handle_allow():
         >>> from schooltool.securitypolicy import metaconfigure as mc
 
         >>> cru = CrowdsUtility()
-        >>> cru.crowdmap = {'cr1': (lambda x: 'fac1'),
-        ...                 'cr2': (lambda x: 'fac2'),
-        ...                 'cr3': (lambda x: 'fac3')}
-        >>> ztapi.provideUtility(ICrowdsUtility, cru)
-        >>> def registerCrowdAdapterStub(iface, permission):
+        >>> cru.factories = {'cr1': 'Factory 1',
+        ...                  'cr2': 'Factory 2',
+        ...                  'cr3': 'Factory 3'}
+
+        >>> provideUtility(cru, provides=ICrowdsUtility)
+        >>> def registerCrowdAdapterStub(permission, iface):
         ...     print 'registerCrowdAdapter' + str((iface, permission))
 
         >>> mc.registerCrowdAdapter = registerCrowdAdapterStub
 
     First check a simple declaration:
 
-        >>> def printCrowds(crowds):
-        ...     for key, factories in crowds.items():
-        ...         print key, [fac(None) for fac in factories]
-
-        >>> mc.handle_allow('iface', 'cr1', 'my.permission')
+        >>> mc.handle_allow('cr1', 'my.permission', 'iface')
         registerCrowdAdapter('iface', 'my.permission')
-        >>> mc.handle_allow('iface', 'cr2', 'my.permission')
+        >>> mc.handle_allow('cr2', 'my.permission', 'iface')
 
-        >>> printCrowds(cru.objcrowds)
-        ('iface', 'my.permission') ['fac1', 'fac2']
+        >>> def printCrowds():
+        ...     for discriminator, names in sorted(cru.crowds.items()):
+        ...         print '%s: %s' % (discriminator, names)
+
+        >>> printCrowds()
+        ('my.permission', 'iface'): ['cr1', 'cr2']
 
     Another call will not invoke registerCrowdAdapter again:
 
-        >>> mc.handle_allow('iface', 'cr3', 'my.permission')
-        >>> printCrowds(cru.objcrowds)
-        ('iface', 'my.permission') ['fac1', 'fac2', 'fac3']
+        >>> mc.handle_allow('cr3', 'my.permission', 'iface')
+        >>> printCrowds()
+        ('my.permission', 'iface'): ['cr1', 'cr2', 'cr3']
 
-     Passing a name that does not exist yet to the allow declaration
-     will work as the actual lookup is postponed:
+    Crowd factories for the registered permission/interface pair
+    can be obtained:
 
-        >>> mc.handle_allow('iface', 'cr4', 'my.permission')
-        >>> cru.objcrowds
-        {('iface', 'my.permission'):
-         [<function ...>, <function ...>, <function ...>, <function ...>]}
+        >>> cru.getFactories('my.permission', 'iface')
+        ['Factory 1', 'Factory 2', 'Factory 3']
 
-     But if you will try actually accessing it you will get a key error:
+    Passing a name that does not exist yet to the allow declaration
+    will work as the actual lookup is postponed:
 
-        >>> printCrowds(cru.objcrowds)
+        >>> mc.handle_allow('cr4', 'my.permission', 'iface')
+        >>> printCrowds()
+        ('my.permission', 'iface'): ['cr1', 'cr2', 'cr3', 'cr4']
+
+    But if you try to look up crowd factories you will get a key error:
+
+        >>> cru.getFactories('my.permission', 'iface')
         Traceback (most recent call last):
         ...
-        KeyError: 'cr4'
+        CrowdNotRegistered: cr4
 
     Let's check the case when an interface is not provided:
 
-        >>> mc.handle_allow(None, 'cr1', 'my.permission')
-        >>> printCrowds(cru.permcrowds)
-        my.permission ['fac1']
+        >>> mc.handle_allow('cr1', 'my.permission', None)
+        >>> printCrowds()
+        ('my.permission', None): ['cr1']
+        ('my.permission', 'iface'): ['cr1', 'cr2', 'cr3', 'cr4']
 
-        >>> mc.handle_allow(None, 'cr2', 'my.permission')
-        >>> printCrowds(cru.permcrowds)
-        my.permission ['fac1', 'fac2']
+        >>> mc.handle_allow('cr2', 'my.permission', None)
+        >>> printCrowds()
+        ('my.permission', None): ['cr1', 'cr2']
+        ('my.permission', 'iface'): ['cr1', 'cr2', 'cr3', 'cr4']
+
+        >>> cru.getFactories('my.permission', None)
+        ['Factory 1', 'Factory 2']
 
     """
 
@@ -188,6 +205,7 @@ def doctest_crowd():
           <function handle_crowd at ...>
           ('ipqs', 'ipqsfactory')
         ---
+
     """
 
 
@@ -195,14 +213,14 @@ def doctest_handle_aggregate_crowd():
     """Doctests for handle_aggregate_crowd.
 
         >>> cru = CrowdsUtility()
-        >>> cru.crowdmap['old1'] = 'crowd A'
-        >>> cru.crowdmap['old2'] = 'crowd B'
-        >>> ztapi.provideUtility(ICrowdsUtility, cru)
+        >>> cru.factories['old1'] = 'crowd A'
+        >>> cru.factories['old2'] = 'crowd B'
+        >>> provideUtility(cru, provides=ICrowdsUtility)
 
         >>> from schooltool.securitypolicy import metaconfigure
         >>> metaconfigure.handle_aggregate_crowd('newcrowd', ['old1', 'old2'])
 
-        >>> factory = cru.crowdmap['newcrowd']
+        >>> factory = cru.factories['newcrowd']
         >>> factory(None).crowdFactories()
         ['crowd A', 'crowd B']
 
@@ -229,13 +247,13 @@ def doctest_allow():
         >>> from schooltool.securitypolicy.metaconfigure import allow
         >>> _context = ContextStub()
         >>> allow(_context, 'interface', ['ipqs', 'ecug'], 'do')
-        ('allow', 'interface', 'ipqs', 'do')
+        ('allow', 'ipqs', 'do', 'interface')
           <function handle_allow ...>
-          ('interface', 'ipqs', 'do')
+          ('ipqs', 'do', 'interface')
         ---
-        ('allow', 'interface', 'ecug', 'do')
+        ('allow', 'ecug', 'do', 'interface')
           <function handle_allow ...>
-          ('interface', 'ecug', 'do')
+          ('ecug', 'do', 'interface')
         ---
 
     """
@@ -330,8 +348,10 @@ class Fixture(object):
 
 def test_suite():
     f = Fixture()
+    optionflags = (doctest.ELLIPSIS |
+                   doctest.NORMALIZE_WHITESPACE |
+                   doctest.REPORT_NDIFF)
     return unittest.TestSuite([
-            doctest.DocTestSuite(optionflags=doctest.ELLIPSIS |
-                                             doctest.NORMALIZE_WHITESPACE,
+            doctest.DocTestSuite(optionflags=optionflags,
                                  setUp=f.setUp, tearDown=f.tearDown)])
 

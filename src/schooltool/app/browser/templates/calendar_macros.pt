@@ -22,18 +22,26 @@
 
       <div id="calendar-navigation-daily">
         <a tal:attributes="href python:view.calURL('daily')"
+           i18n:translate=""
+           i18n:attributes="title"
            title="View daily calendar">Daily</a>
       </div>
       <div id="calendar-navigation-weekly">
         <a tal:attributes="href python:view.calURL('weekly')"
+           i18n:translate=""
+           i18n:attributes="title"
            title="View weekly calendar">Weekly</a>
       </div>
       <div id="calendar-navigation-monthly">
         <a tal:attributes="href python:view.calURL('monthly')"
+           i18n:translate=""
+           i18n:attributes="title"
            title="View monthly calendar">Monthly</a>
       </div>
       <div id="calendar-navigation-yearly">
         <a tal:attributes="href python:view.calURL('yearly')"
+           i18n:translate=""
+           i18n:attributes="title"
            title="View yearly calendar">Yearly</a>
       </div>
     </div>

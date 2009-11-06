@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:security="http://schooltool.org/securitypolicy"
     i18n_domain="schooltool">
+
+  <include file="security.zcml" />
 
   <!-- Application hook -->
 
@@ -63,17 +64,6 @@
         />
 
   </configure>
-
-  <!-- security -->
-
-  <security:allow
-      interface="schooltool.term.interfaces.ITermContainer"
-      crowds="everybody"
-      permission="schooltool.view" />
-  <security:allow
-      interface="schooltool.term.interfaces.ITermContainer"
-      crowds="administration"
-      permission="schooltool.edit" />
 
   <include package=".browser" />
   <include package=".help" />

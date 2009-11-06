@@ -14,7 +14,7 @@ Let's go to the app preferences view:
 
 Let's set the timezone to Australia:
 
-    >>> manager.getControl("Time Zone").value = ["Australia/Canberra"]
+    >>> manager.getControl("Time Zone").value = ["Australia/Sydney"]
     >>> manager.getControl("Apply").click()
 
 Let go to the calendar, a particular day in fact:

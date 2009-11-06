@@ -27,10 +27,6 @@
       factory=".group.GroupViewersCrowd" />
 
   <crowd
-      name="group_instructors"
-      factory=".group.GroupInstructorsCrowd" />
-
-  <crowd
       name="group_list_viewers"
       factory=".group.GroupContainerViewersCrowd" />
 
@@ -45,12 +41,65 @@
 
   <allow
       interface="schooltool.group.interfaces.IGroup"
-      crowds="administration leaders group_viewers group_instructors"
+      crowds="administration leaders group_viewers"
       permission="schooltool.view" />
   <allow
       interface="schooltool.group.interfaces.IGroup"
       crowds="administration leaders"
       permission="schooltool.edit" />
+
+  <!-- Security descriptions -->
+
+  <describe_group name="schooltool.group"
+      title="Groups"
+      description="Groups are essentially sets of users."
+  />
+
+  <describe_action
+     group="schooltool.group" name="list" title="List"
+     order="10"
+     interface="schooltool.group.interfaces.IGroupContainer"
+     permission="schooltool.view"
+  />
+
+  <describe_action
+     group="schooltool.group" name="create_delete" title="Create/Delete"
+     order="20"
+     interface="schooltool.group.interfaces.IGroupContainer"
+     permission="schooltool.edit"
+  />
+
+  <describe_action
+     group="schooltool.group" name="view" title="View"
+     order="30"
+     interface="schooltool.group.interfaces.IGroup"
+     permission="schooltool.view"
+  />
+
+  <describe_action
+     group="schooltool.group" name="modify" title="Modify"
+     order="40"
+     interface="schooltool.group.interfaces.IGroup"
+     permission="schooltool.edit"
+  />
+
+  <describe_action
+     group="schooltool.group" name="view_calendar"
+     title="View calendar"
+     order="50"
+     interface="schooltool.app.interfaces.ISchoolToolCalendar"
+     permission="schooltool.view"
+  />
+
+  <describe_action
+     group="schooltool.group" name="change_calendar"
+     title="Change calendar"
+     order="60"
+     interface="schooltool.app.interfaces.ISchoolToolCalendar"
+     permission="schooltool.edit"
+  />
+
+  <!-- Parent crowds -->
 
   <zope:adapter
       factory=".group.GroupCalendarViewersCrowd"
@@ -61,5 +110,22 @@
       factory=".group.GroupCalendarEditorsCrowd"
       provides="schooltool.app.interfaces.ICalendarParentCrowd"
       name="schooltool.edit" />
+
+  <switch_description
+     group="schooltool.group"
+     crowd_factory="schooltool.app.security.CalendarViewersCrowd"
+     use_crowd_factory=".group.GroupCalendarViewersCrowd"
+  />
+
+  <switch_description
+     group="schooltool.group"
+     crowd_factory="schooltool.app.security.CalendarEditorsCrowd"
+     use_crowd_factory=".group.GroupCalendarEditorsCrowd"
+  />
+
+  <describe_crowd
+      crowd_factory=".group.GroupCalendarEditorsCrowd"
+      factory=".group.GroupCalendarEditorsCrowdDescription"
+  />
 
 </configure>

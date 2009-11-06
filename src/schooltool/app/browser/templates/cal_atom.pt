@@ -10,10 +10,9 @@
 
   <div xmlns="http://www.w3.org/1999/xhtml">
     <a xmlns="http://www.w3.org/1999/xhtml"
-      href=""
-      tal:attributes="href string:http://www.schooltool.org">
-      <img title="Schooltool" src="" alt="[Schooltool.org]" 
-           border="0" i18n:attributes="alt;title"
+      href="http://www.schooltool.org">
+      <img src="" alt="SchoolTool" 
+           border="0" i18n:attributes="alt"
            tal:attributes="src context/++resource++logo.png"/>
     </a>
   </div>

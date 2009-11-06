@@ -33,7 +33,10 @@ class PersonInfoViewersCrowd(ConfigurableCrowd):
     setting_key = 'everyone_can_view_person_info'
 
     def contains(self, principal):
-        teachers = IGroupContainer(ISchoolToolApplication(None))['teachers']
+        container = IGroupContainer(ISchoolToolApplication(None), None)
+        if container is None or 'teachers' not in container:
+            return False
+        teachers = container['teachers']
         groups = list(self.context.groups)
         return (ConfigurableCrowd.contains(self, principal) or
                 teachers in groups)

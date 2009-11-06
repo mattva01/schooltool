@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<configure xmlns="http://schooltool.org/securitypolicy"
+           xmlns:zope="http://namespaces.zope.org/zope">
+
+
+  <!-- security -->
+
+  <allow
+      interface="schooltool.term.interfaces.ITermContainer"
+      crowds="everybody"
+      permission="schooltool.view" />
+  <allow
+      interface="schooltool.term.interfaces.ITermContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
+
+  <!-- Security descriptions -->
+
+  <describe_group name="schooltool.term" title="Terms" />
+
+  <describe_action
+     group="schooltool.term" name="list" title="List"
+     order="10"
+     interface="schooltool.term.interfaces.ITermContainer"
+     permission="schooltool.view"
+  />
+
+  <describe_action
+     group="schooltool.term" name="create_delete" title="Create/Delete"
+     order="20"
+     interface="schooltool.term.interfaces.ITermContainer"
+     permission="schooltool.edit"
+  />
+
+  <describe_action
+     group="schooltool.term" name="view" title="View"
+     order="30"
+     interface="schooltool.term.interfaces.ITermContainer"
+     permission="schooltool.view"
+  />
+
+  <describe_action
+     group="schooltool.term" name="modify" title="Modify"
+     order="40"
+     interface="schooltool.term.interfaces.ITermContainer"
+     permission="schooltool.edit"
+  />
+
+</configure>

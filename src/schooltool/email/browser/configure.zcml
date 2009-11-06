@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <!-- Pages -->
+
+  <page
+     name="index.html"
+     for="schooltool.email.interfaces.IEmailContainer"
+     class="schooltool.email.browser.email.EmailContainerView"
+     permission="schooltool.edit"
+     />
+
+  <page
+     name="settings.html"
+     for="schooltool.email.interfaces.IEmailContainer"
+     class="schooltool.email.browser.email.EmailSettingsEditView"
+     permission="schooltool.edit" />
+
+  <page
+     name="index.html"
+     for="schooltool.email.interfaces.IEmail"
+     class="schooltool.email.browser.email.EmailView"
+     permission="schooltool.edit" />
+
+  <page
+     name="send_test.html"
+     for="schooltool.email.interfaces.IEmailContainer"
+     class="schooltool.email.browser.email.SendEmailView"
+     permission="schooltool.edit" />
+
+  <!-- Table Formatter and Form Adapters -->
+
+  <zope:adapter
+      for="schooltool.email.interfaces.IEmailContainer
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory="schooltool.email.browser.email.EmailContainerViewTableFormatter"
+      />
+
+  <zope:adapter
+      factory="schooltool.email.browser.email.EmailSettingsEditFormAdapter" />
+
+  <zope:adapter
+      factory="schooltool.email.browser.email.EmailDisplayFormAdapter" />
+
+  <zope:adapter
+      factory="schooltool.email.browser.email.SendEmailFormAdapter" />
+
+  <!-- Viewlets -->
+
+  <configure package="schooltool.skin">
+
+    <navigationViewlet
+        name="email"
+        for="*"
+        manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
+        template="templates/navigationViewlet.pt"
+        class="schooltool.skin.skin.NavigationViewlet"
+        permission="schooltool.edit"
+        link="email"
+        title="Outgoing Email"
+        order="205"
+        />
+
+    <navigationViewlet
+        name="queue"
+        for="schooltool.email.interfaces.IEmailContainer"
+        manager="schooltool.skin.IActionMenuManager"
+        template="templates/actionsViewlet.pt"
+        class="schooltool.email.browser.email.QueueActionMenuViewlet"
+        permission="schooltool.edit"
+        link="index.html"
+        order="0" />
+
+    <navigationViewlet
+        name="settings"
+        for="schooltool.email.interfaces.IEmailContainer"
+        manager="schooltool.skin.IActionMenuManager"
+        template="templates/actionsViewlet.pt"
+        class="schooltool.skin.skin.ActionMenuViewlet"
+        permission="schooltool.edit"
+        link="settings.html"
+        title="Settings"
+        order="100" />
+
+    <navigationViewlet
+        name="send_test"
+        for="schooltool.email.interfaces.IEmailContainer"
+        manager="schooltool.skin.IActionMenuManager"
+        template="templates/actionsViewlet.pt"
+        class="schooltool.skin.skin.ActionMenuViewlet"
+        permission="schooltool.edit"
+        link="send_test.html"
+        title="Send Test"
+        order="200" />
+
+  </configure>
+
+  <!-- Traversal -->
+
+  <zope:adapterTraverserPlugin
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      name="email"
+      adapter="schooltool.email.interfaces.IEmailContainer"
+      />
+
+  <zope:adapter
+      factory="schooltool.email.browser.email.EmailContainerAbsoluteURLAdapter"
+      provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <zope:adapter
+      factory="schooltool.email.browser.email.EmailContainerAbsoluteURLAdapter"
+      provides="zope.interface.Interface"
+      name="absolute_url"/>
+
+
+</configure>

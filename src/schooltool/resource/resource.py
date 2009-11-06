@@ -36,7 +36,7 @@ from schooltool.app.security import LeaderCrowd
 from schooltool.securitypolicy.crowds import TeachersCrowd
 from schooltool.app.interfaces import ICalendarParentCrowd
 from schooltool.resource import interfaces
-from schooltool.securitypolicy.crowds import ConfigurableCrowd
+from schooltool.securitypolicy.crowds import ConfigurableCrowd, AggregateCrowd
 from schooltool.securitypolicy.crowds import AuthenticatedCrowd
 from schooltool.common import SchoolToolMessage as _
 
@@ -105,25 +105,25 @@ class ResourceContainerViewersCrowd(ConfigurableCrowd):
     setting_key = 'everyone_can_view_resource_list'
 
 
-class ResourceCalendarViewersCrowd(ConfigurableCrowd):
-
-    adapts(interfaces.IBaseResource)
-    implements(ICalendarParentCrowd)
+class ResourceCalendarViewersSettingCrowd(ConfigurableCrowd):
 
     setting_key = "everyone_can_view_resource_calendar"
 
-    def contains(self, principal):
-        return (ConfigurableCrowd.contains(self, principal) or
-                LeaderCrowd(self.context).contains(principal) or
-                AuthenticatedCrowd(self.context).contains(principal) or
-                TeachersCrowd(self.context).contains(principal))
 
-
-class ResourceCalendarEditorsCrowd(LeaderCrowd):
+class ResourceCalendarViewersCrowd(AggregateCrowd):
 
     adapts(interfaces.IBaseResource)
     implements(ICalendarParentCrowd)
 
-    def contains(self, principal):
-        return (LeaderCrowd.contains(self, principal) or
-                TeachersCrowd(self.context).contains(principal))
+    def crowdFactories(self):
+        return [ResourceCalendarViewersSettingCrowd,
+                LeaderCrowd, AuthenticatedCrowd, TeachersCrowd]
+
+
+class ResourceCalendarEditorsCrowd(AggregateCrowd):
+
+    adapts(interfaces.IBaseResource)
+    implements(ICalendarParentCrowd)
+
+    def crowdFactories(self):
+        return [LeaderCrowd, TeachersCrowd]

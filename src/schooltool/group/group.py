@@ -57,7 +57,9 @@ from schooltool.relationship.relationship import getRelatedObjects
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
-from schooltool.securitypolicy.crowds import Crowd
+from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
+from schooltool.securitypolicy.crowds import AggregateCrowdDescription
+from schooltool.securitypolicy.metaconfigure import getCrowdsUtility
 from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
 from schooltool.securitypolicy.interfaces import ICrowd
 
@@ -181,36 +183,20 @@ class GroupViewersCrowd(ConfigurableCrowd):
     setting_key = 'everyone_can_view_group_info'
 
 
-class GroupInstructorsCrowd(Crowd):
-    implements(ICrowd)
-    adapts(interfaces.IGroup)
-
-    def contains(self, principal):
-        person = IPerson(principal, None)
-        if not person:
-            return False
-        person_sections = getRelatedObjects(person, URISection,
-                                            rel_type=URIInstruction)
-        group = self.context
-        for section in person_sections:
-            if group in section.members:
-                return True
-        return False
+class GroupCalendarSettingCrowd(ConfigurableCrowd):
+    setting_key = 'everyone_can_view_group_calendar'
 
 
-class GroupCalendarViewersCrowd(Crowd):
+class GroupCalendarViewersCrowd(AggregateCrowd):
     implements(ICalendarParentCrowd)
     adapts(interfaces.IGroup)
 
-    def contains(self, principal):
-        """Return the value of the related setting (True or False)."""
-        app = ISchoolToolApplication(None)
-        customizations = IAccessControlCustomisations(app)
-        setting = customizations.get('everyone_can_view_group_calendar')
+    def crowdFactories(self):
+        return [GroupCalendarSettingCrowd, GroupMemberCrowd, LeaderCrowd]
 
-        return (setting
-                or GroupMemberCrowd(self.context).contains(principal)
-                or LeaderCrowd(self.context).contains(principal))
+
+class GroupCalendarMemberSettingCrowd(ConfigurableCrowd):
+    setting_key = 'members_can_edit_group_calendar'
 
 
 class GroupCalendarEditorsCrowd(Crowd):
@@ -219,15 +205,21 @@ class GroupCalendarEditorsCrowd(Crowd):
 
     def contains(self, principal):
         """Return the value of the related setting (True or False)."""
-        app = ISchoolToolApplication(None)
-        customizations = IAccessControlCustomisations(app)
-        setting = customizations.get('members_can_edit_group_calendar')
-        if setting and GroupMemberCrowd(self.context).contains(principal):
+        if (GroupCalendarMemberSettingCrowd(self.context).contains(principal) and
+            GroupMemberCrowd(self.context).contains(principal)):
             return True
 
         # Fall back to schooltool.edit for IGroup
         crowd = getAdapter(self.context, ICrowd, name='schooltool.edit')
         return crowd.contains(principal)
+
+
+class GroupCalendarEditorsCrowdDescription(AggregateCrowdDescription):
+
+    def getFactories(self):
+        crowd_util = getCrowdsUtility()
+        crowds = crowd_util.getFactories('schooltool.edit', interfaces.IGroup)
+        return [GroupCalendarMemberSettingCrowd] + crowds
 
 
 class RemoveGroupsWhenSchoolYearIsDeleted(ObjectEventAdapterSubscriber):

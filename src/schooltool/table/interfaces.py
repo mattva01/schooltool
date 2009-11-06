@@ -23,6 +23,7 @@ $Id$
 """
 from zope.schema import Object
 from zope.interface import Interface
+from zc.table.interfaces import IColumn
 
 
 class IBatch(Interface):
@@ -65,6 +66,12 @@ class ITableFormatter(Interface):
         """Render the table for display in a view."""
 
 
+class IIndexedTableFormatter(ITableFormatter):
+
+    def indexItems(items):
+        """Return a list of indexed items"""
+
+
 class IIndexedColumn(Interface):
     """A column that operates on index dicts instead of objects.
 
@@ -75,4 +82,9 @@ class IIndexedColumn(Interface):
     catalog - the catalog that is storing relevant indexes
     key     - the key by which the object can be retrieved from the context
 
+    XXX: information is a bit outdated
     """
+
+class ICheckboxColumn(IColumn):
+    """A column with a checkbox."""
+
