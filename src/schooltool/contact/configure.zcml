@@ -70,10 +70,6 @@
       for="schooltool.basicperson.interfaces.IBasicPerson"
       factory=".basicperson.getBoundContact" />
 
-  <adapter
-      for="schooltool.contact.basicperson.IBoundContact"
-      factory=".basicperson.getPerson" />
-
    <adapter
       factory=".basicperson.PersonAddedSubsciber"
       name="autovivify_person_contact" />
