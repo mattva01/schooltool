@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-11-02 15:50+0000\n"
-"PO-Revision-Date: 2009-11-05 05:09+0000\n"
+"PO-Revision-Date: 2009-11-10 12:11+0000\n"
 "Last-Translator: import05 <trigem7220@gmail.com>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-11-05 08:31+0000\n"
+"X-Launchpad-Export-Date: 2009-11-11 04:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/browser/__init__.py:261
@@ -295,7 +295,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:1218
 msgid "Current year"
-msgstr ""
+msgstr "현재 년도"
 
 #: /src/schooltool/app/browser/cal.py:1221
 msgid "Go to next year"
@@ -915,11 +915,11 @@ msgstr "일반 환경 설정"
 #: /src/schooltool/app/browser/templates/application_preferences.pt:34
 #: /src/schooltool/person/browser/person_preferences.pt:28
 msgid "Calendar Preferences"
-msgstr ""
+msgstr "캘린더 환경설정"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:4
 msgid "Edit site preferences"
-msgstr ""
+msgstr "사이트 환경 설정 편집"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:14
 #: /src/schooltool/app/help/schooltool.pt:6
@@ -946,7 +946,7 @@ msgstr ""
 #: /src/schooltool/app/help/configure.zcml:6
 #: /src/schooltool/app/configure.zcml:330
 msgid "SchoolTool"
-msgstr ""
+msgstr "SchoolTool"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:21
 msgid "Events for"
@@ -1083,7 +1083,7 @@ msgstr "제거"
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:49
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:71
 msgid "invert-selection-button"
-msgstr ""
+msgstr "선택 반전 버튼"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:37
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:38
@@ -1306,11 +1306,11 @@ msgstr "이것은 반복되는 이벤트"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:38
 msgid "Booked resources"
-msgstr ""
+msgstr "자원 예약"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:4
 msgid "Resource Booking"
-msgstr ""
+msgstr "리소스 예약"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:42
 msgid "UnBook"
@@ -1420,11 +1420,11 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:41
 msgid "Current"
-msgstr ""
+msgstr "현재"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:43
 msgid "Future"
-msgstr ""
+msgstr "미래"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:45
 msgid "All"
@@ -1432,7 +1432,7 @@ msgstr "모두"
 
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:18
 msgid "Are you sure you want to delete this event?"
-msgstr ""
+msgstr "이 이벤트를 삭제하시겠습니까?"
 
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:4
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:13
@@ -1578,7 +1578,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:4
 msgid "Upload SchoolTool timetable as CSV"
-msgstr ""
+msgstr "CSV로 SchoolTool 시간표 업로드"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:43
 msgid ""
@@ -1667,7 +1667,7 @@ msgstr ""
 #: /src/schooltool/person/browser/person-csvimport.pt:48
 #: /src/schooltool/resource/browser/resource-csvimport.pt:45
 msgid "Upload CSV File"
-msgstr ""
+msgstr "CSV 파일 업로드"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:96
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:50
@@ -1678,7 +1678,7 @@ msgstr ""
 #: /src/schooltool/person/browser/person-csvimport.pt:50
 #: /src/schooltool/resource/browser/resource-csvimport.pt:47
 msgid "CSV File"
-msgstr ""
+msgstr "CSV 파일"
 
 #: /src/schooltool/app/configure.zcml:336
 msgid "Security (General)"
@@ -1686,7 +1686,7 @@ msgstr ""
 
 #: /src/schooltool/app/configure.zcml:351
 msgid "Booking Resources"
-msgstr ""
+msgstr "예약 정보"
 
 #: /src/schooltool/app/help/admin.pt:6
 msgid "SchoolTool Administration"
@@ -1760,7 +1760,7 @@ msgstr ""
 
 #: /src/schooltool/app/help/configure.zcml:13
 msgid "Administration"
-msgstr ""
+msgstr "행정"
 
 #: /src/schooltool/app/help/configure.zcml:21
 msgid "Organization"
@@ -1768,12 +1768,12 @@ msgstr ""
 
 #: /src/schooltool/app/help/configure.zcml:29
 msgid "Calendaring"
-msgstr ""
+msgstr "일정"
 
 #: /src/schooltool/app/help/daily_calendar.pt:6
 #: /src/schooltool/app/help/configure.zcml:37
 msgid "Daily Calendar"
-msgstr ""
+msgstr "일일 일정"
 
 #: /src/schooltool/app/help/daily_calendar.pt:8
 msgid ""
@@ -1853,7 +1853,7 @@ msgstr ""
 #: /src/schooltool/app/browser/configure.zcml:524
 #: /src/schooltool/app/help/configure.zcml:77
 msgid "Add Event"
-msgstr ""
+msgstr "이벤트 추가"
 
 #: /src/schooltool/app/help/event_edit.pt:12
 msgid ""
@@ -1871,7 +1871,7 @@ msgstr ""
 #: /src/schooltool/app/help/monthly_calendar.pt:6
 #: /src/schooltool/app/help/configure.zcml:57
 msgid "Monthly Calendar"
-msgstr ""
+msgstr "월간 일정"
 
 #: /src/schooltool/app/help/monthly_calendar.pt:8
 msgid ""
@@ -1947,7 +1947,7 @@ msgstr ""
 #: /src/schooltool/app/help/weekly_calendar.pt:6
 #: /src/schooltool/app/help/configure.zcml:47
 msgid "Weekly Calendar"
-msgstr ""
+msgstr "주간 일정"
 
 #: /src/schooltool/app/help/weekly_calendar.pt:8
 msgid ""
@@ -2038,32 +2038,32 @@ msgstr ""
 
 #: /src/schooltool/app/interfaces.py:43
 msgid "Form input is not a file object"
-msgstr ""
+msgstr "폼 입력 파일의 개체가 아닙니다."
 
 #: /src/schooltool/app/interfaces.py:44
 #: /src/schooltool/app/interfaces.py:48
 msgid "Invalid integer data"
-msgstr ""
+msgstr "잘못된 정수 데이터"
 
 #: /src/schooltool/app/interfaces.py:45
 msgid "Invalid text data"
-msgstr ""
+msgstr "잘못된 텍스트 데이터"
 
 #: /src/schooltool/app/interfaces.py:46
 msgid "Invalid textual data"
-msgstr ""
+msgstr "잘못된 텍스트 데이터"
 
 #: /src/schooltool/app/interfaces.py:47
 msgid "Invalid unicode data"
-msgstr ""
+msgstr "잘못된 유니코드 데이터"
 
 #: /src/schooltool/app/interfaces.py:49
 msgid "Invalid floating point data"
-msgstr ""
+msgstr "잘못된 소수점 데이터"
 
 #: /src/schooltool/app/interfaces.py:50
 msgid "Invalid datetime data"
-msgstr ""
+msgstr "잘못된 날짜시간 데이터"
 
 #: /src/schooltool/app/main.py:111
 msgid ""
@@ -2169,11 +2169,11 @@ msgstr ""
 #: /src/schooltool/app/membership.py:264
 #: /src/schooltool/group/browser/group.pt:16
 msgid "Members"
-msgstr ""
+msgstr "회원"
 
 #: /src/schooltool/app/membership.py:265
 msgid "Members of the group."
-msgstr ""
+msgstr "그룹의 구성원"
 
 #: /src/schooltool/app/security.py:312
 msgid "Assigned leaders."
@@ -2194,11 +2194,11 @@ msgstr ""
 #: /src/schooltool/group/security.zcml:94
 #: /src/schooltool/course/security.zcml:149
 msgid "Change calendar"
-msgstr ""
+msgstr "일정 변경"
 
 #: /src/schooltool/app/security.zcml:69
 msgid "Everyone can view the application calendar."
-msgstr ""
+msgstr "캘린더 응용 프로그램을 모두 볼 수 있습니다."
 
 #: /src/schooltool/app/security.zcml:77
 msgid "SchoolTool application"
@@ -2217,15 +2217,15 @@ msgstr ""
 #: /src/schooltool/group/security.zcml:86
 #: /src/schooltool/course/security.zcml:141
 msgid "View calendar"
-msgstr ""
+msgstr "캘린더 보기"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:143
 msgid "New Text Field"
-msgstr ""
+msgstr "새 텍스트 필드"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:150
 msgid "New Date Field"
-msgstr ""
+msgstr "새 날짜 필드"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:157
 msgid "New Selection List Field"
@@ -2237,7 +2237,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:33
 msgid "Export"
-msgstr ""
+msgstr "출력"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:42
 msgid "Advisors"
@@ -2285,7 +2285,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/demographics.py:133
 msgid "Add new Field"
-msgstr ""
+msgstr "새 필드를 추가"
 
 #: /src/schooltool/basicperson/browser/demographics.py:153
 #: /src/schooltool/basicperson/browser/demographics.py:200
@@ -2315,7 +2315,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:32
 #: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:41
 msgid "Cancel"
-msgstr ""
+msgstr "취소"
 
 #. Default: ""
 #: /src/schooltool/basicperson/browser/demographics.py:212
@@ -2328,11 +2328,11 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:150
 msgid "Add new person"
-msgstr ""
+msgstr "새로운 인원 추가"
 
 #: /src/schooltool/basicperson/browser/person.py:170
 msgid "Passwords do not match"
-msgstr ""
+msgstr "비밀번호가 일치하지 않습니다."
 
 #. Default: ""
 #: /src/schooltool/basicperson/browser/person.py:235
@@ -2367,12 +2367,12 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:56
 msgid "Group"
-msgstr ""
+msgstr "그룹"
 
 #: /src/schooltool/basicperson/browser/person.py:61
 #: /src/schooltool/demographics/interfaces.py:210
 msgid "Advisor"
-msgstr ""
+msgstr "관리자"
 
 #: /src/schooltool/basicperson/browser/person.py:66
 #: /src/schooltool/basicperson/browser/person.py:67
@@ -2386,7 +2386,7 @@ msgstr ""
 #: /src/schooltool/person/interfaces.py:64
 #: /src/schooltool/app/browser/templates/login.pt:38
 msgid "Username"
-msgstr ""
+msgstr "사용자이름"
 
 #: /src/schooltool/basicperson/browser/person.py:71
 #: /src/schooltool/demographics/browser/personform.py:259
@@ -2394,11 +2394,11 @@ msgstr ""
 #: /src/schooltool/person/browser/person.py:293
 #: /src/schooltool/app/browser/templates/login.pt:44
 msgid "Password"
-msgstr ""
+msgstr "비밀번호"
 
 #: /src/schooltool/basicperson/browser/person.py:75
 msgid "Confirm"
-msgstr ""
+msgstr "확인"
 
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:7
@@ -2477,7 +2477,7 @@ msgstr ""
 #: /src/schooltool/basicperson/interfaces.py:126
 #: /src/schooltool/demographics/interfaces.py:195
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: /src/schooltool/basicperson/interfaces.py:127
 msgid "Unique ID of this Field Description"
@@ -2506,7 +2506,7 @@ msgstr ""
 #: /src/schooltool/demographics/interfaces.py:51
 #: /src/schooltool/contact/browser/templates/filter.pt:5
 msgid "First name"
-msgstr ""
+msgstr "이름"
 
 #: /src/schooltool/basicperson/interfaces.py:49
 #: /src/schooltool/contact/interfaces.py:44
@@ -2535,22 +2535,22 @@ msgstr ""
 #: /src/schooltool/basicperson/interfaces.py:69
 #: /src/schooltool/demographics/interfaces.py:124
 msgid "Gender"
-msgstr ""
+msgstr "성별"
 
 #: /src/schooltool/basicperson/interfaces.py:70
 #: /src/schooltool/demographics/interfaces.py:125
 msgid "male"
-msgstr ""
+msgstr "남성"
 
 #: /src/schooltool/basicperson/interfaces.py:70
 #: /src/schooltool/demographics/interfaces.py:125
 msgid "female"
-msgstr ""
+msgstr "여성"
 
 #: /src/schooltool/basicperson/interfaces.py:75
 #: /src/schooltool/demographics/interfaces.py:130
 msgid "Birth date"
-msgstr ""
+msgstr "생년월일"
 
 #: /src/schooltool/basicperson/interfaces.py:76
 msgid "(yyyy-mm-dd)"
@@ -2572,7 +2572,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Edit fields"
-msgstr ""
+msgstr "필드 편집"
 
 #: /src/schooltool/basicperson/security.zcml:34
 msgid "View user demographics"
@@ -2663,11 +2663,11 @@ msgstr "주소록 관리"
 #: /src/schooltool/contact/browser/configure.zcml:111
 #: /src/schooltool/contact/browser/configure.zcml:123
 msgid "Other Contacts"
-msgstr ""
+msgstr "다른 연락처"
 
 #: /src/schooltool/contact/browser/configure.zcml:49
 msgid "New Contact"
-msgstr ""
+msgstr "새 연락처"
 
 #. Default: ""
 #: /src/schooltool/contact/browser/contact.py:163
@@ -2690,7 +2690,7 @@ msgstr "주소"
 
 #: /src/schooltool/contact/browser/contact.py:80
 msgid "Add new contact"
-msgstr ""
+msgstr "새로운 연락처 추가"
 
 #: /src/schooltool/contact/browser/relationship.py:75
 #: /src/schooltool/contact/interfaces.py:101
@@ -4620,11 +4620,11 @@ msgstr ""
 
 #: /src/schooltool/person/interfaces.py:168
 msgid "HH:MM"
-msgstr ""
+msgstr "HH:MM"
 
 #: /src/schooltool/person/interfaces.py:169
 msgid "HH:MM am/pm"
-msgstr ""
+msgstr "HH:MM 오전/오후"
 
 #: /src/schooltool/person/interfaces.py:172
 #: /src/schooltool/person/interfaces.py:173
@@ -4633,11 +4633,11 @@ msgstr ""
 
 #: /src/schooltool/person/interfaces.py:174
 msgid "MM/DD/YY"
-msgstr ""
+msgstr "MM/DD/YY"
 
 #: /src/schooltool/person/interfaces.py:175
 msgid "YYYY-MM-DD"
-msgstr ""
+msgstr "YYYY-MM-DD"
 
 #: /src/schooltool/person/interfaces.py:176
 msgid "Day Month, Year"
@@ -4752,7 +4752,7 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:190
 msgid "New Resource"
-msgstr ""
+msgstr "새로운 리소스"
 
 #: /src/schooltool/resource/browser/configure.zcml:197
 msgid "New Location"
@@ -4772,7 +4772,7 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:71
 msgid "Add a Resource"
-msgstr ""
+msgstr "리소스 추가"
 
 #: /src/schooltool/resource/browser/configure.zcml:84
 msgid "Edit Resource Information"
@@ -4821,43 +4821,43 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:56
 msgid "Resource index"
-msgstr ""
+msgstr "리소스 색인"
 
 #: /src/schooltool/resource/help/resource_help.pt:6
 msgid "Resource Help"
-msgstr ""
+msgstr "리소스 도움말"
 
 #: /src/schooltool/resource/interfaces.py:100
 #: /src/schooltool/resource/types.py:113
 msgid "Manufacturer"
-msgstr ""
+msgstr "제조 업체"
 
 #: /src/schooltool/resource/interfaces.py:101
 msgid "Manufacturer of Equipment"
-msgstr ""
+msgstr "제조 장비"
 
 #: /src/schooltool/resource/interfaces.py:105
 #: /src/schooltool/resource/types.py:119
 msgid "Model"
-msgstr ""
+msgstr "모델"
 
 #: /src/schooltool/resource/interfaces.py:106
 msgid "Model of Equipment"
-msgstr ""
+msgstr "모델 장비"
 
 #: /src/schooltool/resource/interfaces.py:110
 #: /src/schooltool/resource/types.py:125
 msgid "Serial Number"
-msgstr ""
+msgstr "일련 번호"
 
 #: /src/schooltool/resource/interfaces.py:111
 msgid "Serial Number of Equipment"
-msgstr ""
+msgstr "장비 일련번호"
 
 #: /src/schooltool/resource/interfaces.py:115
 #: /src/schooltool/resource/types.py:131
 msgid "Purchase Date"
-msgstr ""
+msgstr "구매 날짜"
 
 #: /src/schooltool/resource/interfaces.py:116
 msgid "Purchase Date of Equipment"
@@ -4891,7 +4891,7 @@ msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:44
 msgid "Resource Type"
-msgstr ""
+msgstr "리소스 유형"
 
 #: /src/schooltool/resource/interfaces.py:45
 msgid "Type of resource"
@@ -4960,7 +4960,7 @@ msgstr ""
 
 #: /src/schooltool/resource/security.zcml:64
 msgid "Add/Remove resources"
-msgstr ""
+msgstr "리소스 추가/삭제"
 
 #: /src/schooltool/resource/security.zcml:7
 msgid "Everyone can view resource lists."
@@ -4968,7 +4968,7 @@ msgstr ""
 
 #: /src/schooltool/resource/security.zcml:71
 msgid "View a resource"
-msgstr ""
+msgstr "리소스 보기"
 
 #: /src/schooltool/resource/security.zcml:78
 msgid "Modify a resource"
@@ -5113,7 +5113,7 @@ msgstr ""
 
 #: /src/schooltool/schoolyear/security.zcml:23
 msgid "Activate current school year"
-msgstr ""
+msgstr "현재 활성화 학년"
 
 #: /src/schooltool/securitypolicy/browser/configure.zcml:7
 msgid "View Access Rights"
@@ -5140,7 +5140,7 @@ msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:4
 msgid "Access Rights"
-msgstr ""
+msgstr "액세스 권한"
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:57
 msgid "Legend"
@@ -6139,15 +6139,15 @@ msgstr ""
 
 #: /src/schooltool/timetable/security.zcml:16
 msgid "School timetables"
-msgstr ""
+msgstr "학교 시간표"
 
 #: /src/schooltool/timetable/security.zcml:46
 msgid "Assign timetables"
-msgstr ""
+msgstr "할당 시간표"
 
 #: /src/schooltool/timetable/security.zcml:54
 msgid "Change schedule"
-msgstr ""
+msgstr "일정 변경"
 
 #. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39

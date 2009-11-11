@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-11-02 15:50+0000\n"
-"PO-Revision-Date: 2009-11-04 07:04+0000\n"
-"Last-Translator: Keruskerfuerst <armin_mohring@web.de>\n"
+"PO-Revision-Date: 2009-11-10 18:21+0000\n"
+"Last-Translator: Torsten Franz <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-11-04 08:27+0000\n"
+"X-Launchpad-Export-Date: 2009-11-11 04:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -5236,11 +5236,11 @@ msgstr ""
 #: /src/schooltool/group/security.zcml:94
 #: /src/schooltool/course/security.zcml:149
 msgid "Change calendar"
-msgstr ""
+msgstr "Kalender ändern"
 
 #: /src/schooltool/app/security.zcml:77
 msgid "SchoolTool application"
-msgstr ""
+msgstr "SchoolTool Anwendung"
 
 #: /src/schooltool/app/security.zcml:80
 msgid "Access"
@@ -5248,14 +5248,14 @@ msgstr ""
 
 #: /src/schooltool/app/security.zcml:87
 msgid "Manage school settings and configuration"
-msgstr ""
+msgstr "Bearbeite Schuleinstellungen und -konfiguration"
 
 #: /src/schooltool/app/security.zcml:95
 #: /src/schooltool/person/security.zcml:128
 #: /src/schooltool/group/security.zcml:86
 #: /src/schooltool/course/security.zcml:141
 msgid "View calendar"
-msgstr ""
+msgstr "Kalender anzeigen"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:143
 msgid "New Text Field"
@@ -5392,7 +5392,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Edit fields"
-msgstr ""
+msgstr "Felder bearbeiten"
 
 #: /src/schooltool/basicperson/security.zcml:34
 msgid "View user demographics"
@@ -5945,7 +5945,7 @@ msgstr ""
 
 #: /src/schooltool/email/browser/configure.zcml:76
 msgid "Settings"
-msgstr ""
+msgstr "Einstellungen"
 
 #: /src/schooltool/email/browser/configure.zcml:87
 msgid "Send Test"
@@ -5959,7 +5959,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:102
 #: /src/schooltool/email/interfaces.py:93
 msgid "Port of the SMTP service. Using 25 by default."
-msgstr ""
+msgstr "Port vom SMTP Dienst. Nutze 25 standardmäßig."
 
 #: /src/schooltool/email/browser/email.py:109
 #: /src/schooltool/email/interfaces.py:100
@@ -5972,7 +5972,7 @@ msgstr ""
 
 #: /src/schooltool/email/browser/email.py:114
 msgid "Current password to authenticate to the SMTP server."
-msgstr ""
+msgstr "Aktuelles Passwort zum Identifizieren beim SMTP Dienst."
 
 #: /src/schooltool/email/browser/email.py:118
 #: /src/schooltool/email/interfaces.py:104
@@ -5982,7 +5982,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:119
 #: /src/schooltool/email/interfaces.py:105
 msgid "The password to authenticate to the SMTP server."
-msgstr ""
+msgstr "Das Passwort zum Identifizieren beim SMTP Dienst."
 
 #: /src/schooltool/email/browser/email.py:123
 msgid "Confirm New Password"
@@ -5990,7 +5990,7 @@ msgstr ""
 
 #: /src/schooltool/email/browser/email.py:124
 msgid "Verification for the new password."
-msgstr ""
+msgstr "Verifikation für das neue Passwort."
 
 #: /src/schooltool/email/browser/email.py:128
 #: /src/schooltool/email/interfaces.py:109
@@ -6004,7 +6004,7 @@ msgstr ""
 
 #: /src/schooltool/email/browser/email.py:170
 msgid "Change Email Settings"
-msgstr ""
+msgstr "E-Mail Einstellungen ändern"
 
 #: /src/schooltool/email/browser/email.py:194
 msgid "Unset"
@@ -6021,7 +6021,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:457
 #: /src/schooltool/email/interfaces.py:40
 msgid "The sender address"
-msgstr ""
+msgstr "Die Senderadresse"
 
 #: /src/schooltool/email/browser/email.py:212
 #: /src/schooltool/email/browser/email.py:345
@@ -6044,7 +6044,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:218
 #: /src/schooltool/email/interfaces.py:71
 msgid "Date and time when the message was created"
-msgstr ""
+msgstr "Datum und Zeit, als die Nachricht erstellt wurde"
 
 #: /src/schooltool/email/browser/email.py:222
 #: /src/schooltool/email/browser/email.py:351
@@ -6057,21 +6057,21 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:465
 #: /src/schooltool/email/interfaces.py:54
 msgid "Subject of the message"
-msgstr ""
+msgstr "Betreff der Nachricht"
 
 #: /src/schooltool/email/browser/email.py:228
 #: /src/schooltool/email/browser/email.py:470
 #: /src/schooltool/email/interfaces.py:50
 msgid "Body of the message"
-msgstr ""
+msgstr "Inhalt der Nachricht"
 
 #: /src/schooltool/email/browser/email.py:232
 msgid "Email Status"
-msgstr ""
+msgstr "E-Mail Status"
 
 #: /src/schooltool/email/browser/email.py:233
 msgid "Status of the message"
-msgstr ""
+msgstr "Status von der Nachricht"
 
 #: /src/schooltool/email/browser/email.py:237
 #: /src/schooltool/email/browser/email.py:363
@@ -6084,7 +6084,7 @@ msgstr ""
 
 #: /src/schooltool/email/browser/email.py:263
 msgid "Email View"
-msgstr ""
+msgstr "E-Mail Ansicht"
 
 #: /src/schooltool/email/browser/email.py:273
 msgid "Retry"
@@ -6134,7 +6134,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:203
 #: /src/schooltool/email/browser/email.py:452
 msgid "Current status of the SchoolTool email service"
-msgstr ""
+msgstr "Aktueller Status vom E-Mail Dienst des SchoolTools"
 
 #: /src/schooltool/email/browser/email.py:96
 #: /src/schooltool/email/interfaces.py:87
@@ -6158,15 +6158,15 @@ msgstr ""
 
 #: /src/schooltool/email/browser/templates/email_delete.pt:15
 msgid "Are you sure you want to delete the selected emails?"
-msgstr ""
+msgstr "Bist Du sicher, dass Du die ausgewählten E-Mails löschen willst?"
 
 #: /src/schooltool/email/interfaces.py:44
 msgid "Recipient addresses"
-msgstr ""
+msgstr "Empfängeradressen"
 
 #: /src/schooltool/email/interfaces.py:45
 msgid "Recipient address"
-msgstr ""
+msgstr "Empfängeradresse"
 
 #: /src/schooltool/email/interfaces.py:59
 msgid "Code for the status of the message"
@@ -6174,35 +6174,35 @@ msgstr ""
 
 #: /src/schooltool/email/interfaces.py:63
 msgid "Status Parameters"
-msgstr ""
+msgstr "Status Parameter"
 
 #: /src/schooltool/email/interfaces.py:64
 msgid "Parameters for the status of the message"
-msgstr ""
+msgstr "Parameter für den Status der Nachricht"
 
 #: /src/schooltool/email/interfaces.py:65
 msgid "Parameter key"
-msgstr ""
+msgstr "Parameter Schlüssel"
 
 #: /src/schooltool/email/interfaces.py:66
 msgid "Parameter value"
-msgstr ""
+msgstr "Parameter Wert"
 
 #: /src/schooltool/email/interfaces.py:74
 msgid "Sent on"
-msgstr ""
+msgstr "Gesendet am"
 
 #: /src/schooltool/email/interfaces.py:75
 msgid "Date and time when the message was sent"
-msgstr ""
+msgstr "Datum und Zeit, als die Nachricht gesendet wurde"
 
 #: /src/schooltool/email/mail.py:52
 msgid "The SchoolTool mail service is disabled"
-msgstr ""
+msgstr "Der SchoolTool Maildienst ist deaktiviert"
 
 #: /src/schooltool/email/mail.py:53
 msgid "Couldn't connect to the SMTP server (${info})"
-msgstr ""
+msgstr "Kann nicht zum SMTP-Server (${info}) verbinden"
 
 #: /src/schooltool/email/mail.py:54
 msgid "Error sending HELO to the SMTP server (${info})"
@@ -6210,7 +6210,7 @@ msgstr ""
 
 #: /src/schooltool/email/mail.py:55
 msgid "Couldn't login as ($username) to SMTP server (${info})"
-msgstr ""
+msgstr "Kann nicht mit ($username) auf den SMTP-Server (${info}) einloggen"
 
 #: /src/schooltool/email/mail.py:56
 msgid "The server (${info}) rejected the From address: ${from_address}"
