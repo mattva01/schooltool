@@ -1,5 +1,12 @@
+~~~~~~~
 CHANGES
 ~~~~~~~
+
+1.2.1dev
+==================
+
+* Traceback trying to view student's contacts (https://launchpad.net/bugs/475586)
+
 
 1.2.0 (2009-11-04)
 ==================
