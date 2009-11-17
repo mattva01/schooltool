@@ -25,10 +25,10 @@ import socket
 import sys
 import base64
 from StringIO import StringIO
+from textwrap import dedent
 from xml.sax import make_parser
 from xml.sax.handler import feature_namespaces
 
-from schooltool.common import dedent
 from schooltool.testing.util import diff
 
 __metaclass__ = type
@@ -94,7 +94,7 @@ class ResponseStub:
         elif self.request.resource == "/binfile":
             self._data = "(binary data)"
         elif self.request.resource == "/doc.xml":
-            self._data = dedent(u"""
+            self._data = dedent(u"""\
                 <index xmlns:xlink="http://www.w3.org/1999/xlink">
                   <student xlink:type="simple"
                            xlink:href="student1"
@@ -171,7 +171,7 @@ class TestClient(unittest.TestCase):
         self.client.server = 'localhost'
         self.client.links = False
         self.client.do_get("/")
-        self.assertEmitted(dedent("""
+        self.assertEmitted(dedent("""\
             200 OK
             Content-Type: text/plain
             Welcome"""))
@@ -181,7 +181,7 @@ class TestClient(unittest.TestCase):
         self.client.ssl = False
         self.client.connectionFactory = HTTPStub
         self.client.do_get("/")
-        self.assertEmitted(dedent("""
+        self.assertEmitted(dedent("""\
             200 OK
             Content-Type: text/plain
             Welcome"""))
@@ -348,7 +348,7 @@ class TestClient(unittest.TestCase):
         self.client.do_accept("text/xml, text/plain,  text/*   ")
         self.assertEmitted('text/xml, text/plain, text/*')
 
-    def test_accept(self):
+    def test_user(self):
         self.assertEqual(self.client.user, None)
         self.assertEqual(self.client.password, "")
         self.client.do_user(" ")
@@ -379,7 +379,7 @@ class TestClient(unittest.TestCase):
         self.client.server = 'localhost'
         self.client.links = False
         self.client.do_get("/")
-        self.assertEmitted(dedent("""
+        self.assertEmitted(dedent("""\
             200 OK
             Content-Type: text/plain
             Welcome"""))
@@ -389,7 +389,7 @@ class TestClient(unittest.TestCase):
     def test_get_binary(self):
         self.client.server = 'localhost'
         self.client.do_get("/binfile")
-        self.assertEmitted(dedent("""
+        self.assertEmitted(dedent("""\
             200 OK
             Content-Type: application/octet-stream
             Resource is not text, use save <filename> to save it"""))
@@ -463,7 +463,7 @@ class TestClient(unittest.TestCase):
         self.emitted = ""
         self.client.resources = ['x']
         doit('/place_to_put_things')
-        self.assertEmitted(dedent("""
+        self.assertEmitted(dedent("""\
             End data with a line containing just a single period.
             200 OK
             Content-Type: text/plain
@@ -477,7 +477,7 @@ class TestClient(unittest.TestCase):
         lines = ['.', '..', '...', 'foo']
         self.client.input_hook = lambda prompt: lines.pop()
         doit('/place_to_put_things text/x-plain')
-        self.assertEmitted(dedent("""
+        self.assertEmitted(dedent("""\
             End data with a line containing just a single period.
             200 OK
             Content-Type: text/plain
@@ -492,14 +492,14 @@ class TestClient(unittest.TestCase):
         self.emitted = ""
         self.client.input_hook = raise_eof
         doit('/place_to_put_things')
-        self.assertEmitted(dedent("""
+        self.assertEmitted(dedent("""\
             End data with a line containing just a single period.
             Unexpected EOF -- %s aborted""") % what.upper())
 
         self.emitted = ""
         self.client.input_hook = lambda prompt: '.'
         doit('/binfile')
-        self.assertEmitted(dedent("""
+        self.assertEmitted(dedent("""\
             End data with a line containing just a single period.
             200 OK
             Content-Type: application/octet-stream
@@ -517,7 +517,7 @@ class TestClient(unittest.TestCase):
         self.emitted = ""
         self.client.resources = ['x']
         self.client.do_delete('/delete_me')
-        self.assertEmitted(dedent("""
+        self.assertEmitted(dedent("""\
             200 OK
             Content-Type: text/plain
             DELETE"""))
@@ -546,7 +546,7 @@ class TestClient(unittest.TestCase):
     def test_request_shows_headers(self):
         self.client.headers = True
         self.client._request('GET', '/')
-        self.assertEmitted(dedent("""
+        self.assertEmitted(dedent("""\
             200 OK
             Content-Type: text/plain
             X-Random-Server-Header: 42
@@ -575,7 +575,7 @@ class TestClient(unittest.TestCase):
     def test_links_get(self):
         self.assertEqual(self.client.links, True)
         self.client.do_get("/doc.xml")
-        self.assertEmitted(dedent(u"""
+        self.assertEmitted(dedent(u"""\
             200 OK
             Content-Type: text/xml; charset=UTF-8
             <index xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -595,7 +595,7 @@ class TestClient(unittest.TestCase):
 
         self.emitted = ""
         self.client.do_get("/")
-        self.assertEmitted(dedent("""
+        self.assertEmitted(dedent("""\
             200 OK
             Content-Type: text/plain
             Welcome"""))
@@ -607,7 +607,7 @@ class TestClient(unittest.TestCase):
         self.emitted = ""
         self.client.resources = ['/doc.xml']
         self.client.do_follow('1')
-        self.assertEmitted(dedent(u"""
+        self.assertEmitted(dedent(u"""\
             200 OK
             Content-Type: text/xml; charset=UTF-8
             <index xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -663,7 +663,7 @@ class TestXLinkHandler(unittest.TestCase):
         self.parser.setFeature(feature_namespaces, 1)
 
     def test_simple(self):
-        link = dedent("""
+        link = dedent("""\
             <top xmlns:xlink="http://www.w3.org/1999/xlink">
               <tag xlink:type="simple"
                    xlink:title="foo"

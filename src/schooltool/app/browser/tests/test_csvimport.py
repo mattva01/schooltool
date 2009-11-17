@@ -24,6 +24,7 @@ $Id$
 import unittest
 import datetime
 from StringIO import StringIO
+from textwrap import dedent
 
 from zope.i18n import translate
 from zope.publisher.browser import TestRequest
@@ -40,7 +41,6 @@ from schooltool.person.person import Person
 from schooltool.term.interfaces import ITermContainer
 
 from schooltool.app.browser.csvimport import InvalidCSVError
-from schooltool.common import dedent
 from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.course import Course
 from schooltool.course.section import Section

@@ -138,35 +138,6 @@ def parse_datetime(s):
     return datetime.datetime(y, m, d, hh, mm, ss, ssssss)
 
 
-def dedent(text):
-    r"""Remove leading indentation from triple-quoted strings.
-
-    Example:
-
-        >>> dedent('''
-        ...     some text
-        ...     is here
-        ...        with maybe some indents
-        ...     ''')
-        ...
-        'some text\nis here\n   with maybe some indents\n'
-
-    Corner cases (mixing tabs and spaces, lines that are indented less than
-    the first line) are not handled yet.
-    """
-    lines = text.splitlines()
-    first, limit = 0, len(lines)
-    while first < limit and not lines[first]:
-        first += 1
-    if first >= limit:
-        return ''
-    firstline = lines[first]
-    indent, limit = 0, len(firstline)
-    while indent < limit and firstline[indent] in (' ', '\t'):
-        indent += 1
-    return '\n'.join([line[indent:] for line in lines[first:]])
-
-
 def to_unicode(s):
     r"""Convert a UTF-8 string to Unicode.
 
@@ -422,6 +393,8 @@ def collect(fn):
         return list(fn(*args, **kw))
     collector.__name__ = fn.__name__
     collector.__doc__ = fn.__doc__
+    collector.__dict__ = fn.__dict__
+    collector.__module__ = fn.__module__
     return collector
 
 
