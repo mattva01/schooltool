@@ -77,7 +77,6 @@ root_packages = ['schooltool.app',
 
                  # only needed for tests
                  'schooltool.sampledata',
-                 'schooltool.level',
                  ]
 
 from glob import glob
@@ -184,8 +183,6 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zope.app.onlinehelp',
                       'zope.app.apidoc',
                       'z3c.optionstorage',
-                      'zope.wfmc',
-                      'zope.app.wfmc',
                       'zope.server',
                       'zope.app.wsgi',
                       'zope.app.server',
