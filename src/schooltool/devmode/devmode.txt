@@ -265,8 +265,6 @@ The modules available in the SchoolTool API documentation are:
     <Link text='Interfaces' url='.../++apidoc++/Interface/@@menu.html'>
     >>> browser.getLink('Code')
     <Link text='Code' url='.../++apidoc++/Code/@@menu.html'>
-    >>> browser.getLink('RESTive Views')
-    <Link text='RESTive Views' url='.../++apidoc++/Code/@@restmenu.html'>
     >>> browser.getLink('Book')
     <Link text='Book' url='.../++apidoc++/Book/schooltool/@@menu.html'>
 

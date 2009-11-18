@@ -277,9 +277,6 @@ def format_time_range(start, duration):
         return '%s-%s' % (start.strftime('%H:%M'), ends)
 
 
-# XXX: copied this from schooltool-0.9.rest.timetable
-# Remove this once there is a thing like that in REST
-# alga 2005-05-12
 def format_timetable_for_presentation(timetable):
     """Prepare a timetable for presentation with Page Templates.
 

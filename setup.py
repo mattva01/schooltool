@@ -143,19 +143,7 @@ setup(
     description="A common information systems platform for school administration.",
     long_description="""
 SchoolTool is an open source school management information system.  It is
-a distributed client/server system.  The SchoolTool server presents two
-interfaces to clients:
-
-  - a traditional web application interface, usable with an ordinary browser.
-
-  - HTTP-based programming interface suitable for fat clients, adhering to
-    the Representational State Transfer (REST) architectural style (see
-    http://rest.blueoxen.net/).
-
-The web application interface is the primary one.  The RESTive interface is
-there for potential interoperability with other systems and fat clients to
-perform data entry that is inconvenient to do via the web application
-interface.
+a web application, usable with an ordinary browser.
 
 Any modern web browser is suitable for the web application interface.  The
 interface degrades gracefully, so a browser that does not support CSS or

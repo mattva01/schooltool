@@ -24,7 +24,7 @@ Overview
 --------
 
 SchoolTool is an open source school management information system.  It is
-a distributed client/server system.
+a web application, usable with an ordinary browser.
 
 Any modern web browser is suitable for the web application interface.  The
 interface degrades gracefully, so a browser that does not support CSS or
@@ -171,9 +171,6 @@ Project structure (subversion checkout only)
         resources/      resource files (images, stylesheets)
         templates/      page templates
         tests/          unit tests for the schooltool.browser package
-      rest/             RESTive views for the server
-        templates/      page templates
-        tests/          unit tests for the schooltool.rest package
     schoolbell/         Python package 'schoolbell'
 
 
