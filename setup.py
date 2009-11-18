@@ -25,19 +25,7 @@ import os
 
 here = os.path.dirname(__file__)
 
-# Check python version
 import sys
-if sys.version_info < (2, 4):
-    print >> sys.stderr, '%s: need Python 2.4 or later.' % sys.argv[0]
-    print >> sys.stderr, 'Your python is %s' % sys.version
-    sys.exit(1)
-
-import site
-site.addsitedir(os.path.join(here, 'eggs'))
-
-import pkg_resources
-pkg_resources.require("setuptools>=0.6a11")
-
 from setuptools import setup, find_packages
 from distutils import log
 from distutils.util import newer
@@ -175,8 +163,8 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     version=version,
     url='http://www.schooltool.org',
     license="GPL",
-    maintainer="SchoolTool development team",
-    maintainer_email="schooltool-dev@schooltool.org",
+    maintainer="SchoolTool Developers",
+    maintainer_email="schooltool-developers@lists.launchpad.net",
     platforms=["any"],
     classifiers=["Development Status :: 5 - Production/Stable",
     "Environment :: Web Environment",
@@ -196,7 +184,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zc.catalog',
                       'hurry.query',
                       'zc.datetimewidget',
-                      'zope.component<=3.6.0dev',
+                      'zope.component<3.6.0',
                       'zope.ucol',
                       'zope.html',
                       'zope.file',
@@ -221,7 +209,6 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zope.app.session',
                       'zope.session',
                       'rwproperty',
-                      'schooltool.gradebook',
                       'z3c.form',
                       'z3c.formui',
                       'z3c.rml',
@@ -235,8 +222,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'setuptools'],
     tests_require=['zope.testing',
                    'schooltool.lyceum.journal'],
-    dependency_links=['http://ftp.schooltool.org/schooltool/eggs/3.4',
-                      'http://ftp.schooltool.org/schooltool/releases/nightly/'],
+    dependency_links=['http://ftp.schooltool.org/schooltool/1.2/'],
     entry_points = """
     [paste.app_factory]
     main = schooltool.paste.main:schooltool_app_factory

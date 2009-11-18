@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-05-19 16:33+0000\n"
-"PO-Revision-Date: 2009-10-07 00:02+0000\n"
+"PO-Revision-Date: 2009-10-14 20:24+0000\n"
 "Last-Translator: Simon Vidmar <Unknown>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-10-12 07:04+0000\n"
+"X-Launchpad-Export-Date: 2009-10-15 06:50+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/commendation/browser.py:70
@@ -82,7 +82,7 @@ msgstr "Obseg"
 
 #: /src/schooltool/commendation/interfaces.py:59
 msgid "The scope of the commendation."
-msgstr ""
+msgstr "Področje pohvale."
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "community"
@@ -98,8 +98,8 @@ msgstr "Datum, ko je bila izdana pohvala."
 
 #: /src/schooltool/commendation/interfaces.py:71
 msgid "Grantor"
-msgstr ""
+msgstr "Podeljevalec"
 
 #: /src/schooltool/commendation/interfaces.py:72
 msgid "The grantor of the commendation."
-msgstr ""
+msgstr "Podeljevalec pohvale"

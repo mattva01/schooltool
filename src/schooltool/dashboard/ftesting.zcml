@@ -8,7 +8,6 @@
   <include package="schooltool.term" />
   <include package="schooltool.schoolyear" />
   <include package="schooltool.timetable" />
-  <include package="schooltool.requirement" />
   <include package="schooltool.dashboard" />
 
   <browser:defaultSkin name="SchoolTool" />
