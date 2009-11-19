@@ -37,7 +37,6 @@ from zope.app.publisher.browser.menu import getMenu
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from z3c.form.interfaces import IFormLayer
-from z3c.formui.interfaces import IDivFormLayer
 from z3c.formui.interfaces import ICSS as IZ3cFormCSS
 
 from schooltool.app.interfaces import ICookieLanguageSelector

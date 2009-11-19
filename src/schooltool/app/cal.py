@@ -242,7 +242,6 @@ class WriteCalendar(object):
 def clearCalendarOnDeletion(event):
     """When you delete an object, it's calendar should be cleared
 
-        >>> from zope.app.testing import setup
         >>> from schooltool.relationship.tests import setUp, tearDown
         >>> from schooltool.testing.setup import setUpCalendaring
 

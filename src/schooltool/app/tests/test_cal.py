@@ -50,7 +50,7 @@ def doctest_CalendarEvent():
     CalendarEvents are almost like SimpleCalendarEvents, the main difference
     is that CalendarEvents are mutable and IContained.
 
-        >>> from schooltool.app.cal import CalendarEvent, Calendar
+        >>> from schooltool.app.cal import CalendarEvent
 
         >>> event = CalendarEvent(datetime(2005, 2, 7, 16, 24),
         ...                       timedelta(hours=3),

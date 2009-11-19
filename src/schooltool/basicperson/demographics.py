@@ -39,9 +39,7 @@ from zope.schema.vocabulary import SimpleTerm
 
 from z3c.form import field
 
-from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.app.app import InitBase, StartUpBase
-from schooltool.app.interfaces import IApplicationStartUpEvent
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.basicperson.interfaces import IEnumFieldDescription
 from schooltool.basicperson.interfaces import IDemographicsFields

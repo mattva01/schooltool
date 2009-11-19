@@ -23,7 +23,6 @@ $Id$
 """
 import unittest
 
-from zope.component import provideAdapter
 from zope.app.testing import setup
 from zope.testing import doctest
 

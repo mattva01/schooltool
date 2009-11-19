@@ -21,8 +21,12 @@
 $Id$
 """
 __docformat__ = 'reStructuredText'
+
 import unittest
+from pprint import pprint
+
 from zope.testing import doctest, doctestunit
+
 from schooltool.app.browser.testing import setUp, tearDown
 
 def test_breadcrumbs():

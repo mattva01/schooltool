@@ -22,7 +22,7 @@ $Id$
 """
 import unittest
 
-from zope.testing import doctest, doctestunit
+from zope.testing import doctest
 from zope.testing.doctestunit import pprint
 
 from zope.app.intid.interfaces import IIntIds

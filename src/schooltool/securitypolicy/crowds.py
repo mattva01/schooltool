@@ -25,7 +25,7 @@ $Id$
 
 from zope.interface import implements
 from zope.security.proxy import removeSecurityProxy
-from zope.component import adapts, queryAdapter, queryMultiAdapter
+from zope.component import queryAdapter, queryMultiAdapter
 from zope.app.container.contained import Contained
 
 from schooltool.securitypolicy.interfaces import ICrowd

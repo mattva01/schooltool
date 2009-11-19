@@ -24,16 +24,12 @@ $Id$
 """
 import unittest
 
-from zope.location.location import locate
 from zope.i18n import translate
 from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.app.container.browser.adding import Adding
 from zope.traversing.interfaces import IContainmentRoot
-from zope.app.testing import ztapi
-from zope.component import adapts
-from zope.interface import implements
 from zope.component import provideAdapter
 
 from schooltool.app.browser.testing import setUp, tearDown

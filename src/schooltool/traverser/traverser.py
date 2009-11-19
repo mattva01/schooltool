@@ -23,7 +23,7 @@ $Id$
 """
 
 from zope.interface import implements
-from zope.component import subscribers, queryAdapter, queryMultiAdapter
+from zope.component import queryAdapter, queryMultiAdapter
 from zope.publisher.interfaces import NotFound
 
 from schooltool.traverser import interfaces

@@ -21,7 +21,6 @@ Person Preferences implementation
 
 $Id$
 """
-import calendar
 
 from persistent import Persistent
 from zope.interface import implements

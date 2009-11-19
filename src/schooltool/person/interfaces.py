@@ -30,7 +30,6 @@ import zope.schema
 import zope.app.container.constraints
 from zope.app import container
 from zope.annotation.interfaces import IAnnotatable, IAttributeAnnotatable
-from zope.location.interfaces import ILocation
 
 from schooltool.app.utils import vocabulary
 from schooltool.common import SchoolToolMessage as _

@@ -2,7 +2,6 @@ import pytz
 import datetime
 from zope import event
 from zope.formlib import form
-from zope.formlib.interfaces import IAction
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.interface.common import idatetime
 from zope.app.pagetemplate import ViewPageTemplateFile

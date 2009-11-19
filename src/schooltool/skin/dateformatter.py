@@ -21,7 +21,6 @@
 $Id$
 """
 from zope.publisher.browser import BrowserView
-from zope.interface import implements
 
 from zope.i18n.locales import Locale
 from zope.i18n.locales import LocaleIdentity

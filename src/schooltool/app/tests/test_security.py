@@ -24,19 +24,13 @@ $Id$
 
 import unittest
 
-from zope.interface import Interface, implements
 from zope.testing import doctest
 from zope.app.testing import setup, ztapi
 from zope.component import getUtility
-from zope.traversing.interfaces import TraversalError
 from zope.traversing.api import traverse
 from zope.component.interfaces import ComponentLookupError
 from zope.app.security.interfaces import IAuthentication
 from zope.app.container.contained import ObjectAddedEvent
-
-from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
-from schooltool.testing import setup as sbsetup
 
 
 class TestAuthSetUpSubscriber(unittest.TestCase):

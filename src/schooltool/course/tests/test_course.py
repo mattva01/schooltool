@@ -157,7 +157,6 @@ def doctest_Section():
     We'll add an instructor to the section.
 
         >>> from schooltool.person.person import Person
-        >>> from schooltool.person.interfaces import IPerson
         >>> teacher = Person('teacher', 'Mr. Jones')
         >>> section.instructors.add(teacher)
 
@@ -491,7 +490,6 @@ def doctest_PersonLearnerAdapter(self):
 
         >>> from schooltool.course.section import Section
         >>> from schooltool.person.person import Person
-        >>> from schooltool.group.group import Group
         >>> section1 = Section(title="section 1", description="advanced")
         >>> section2 = Section(title="section 2", description="advanced")
         >>> student = Person('student', 'Mr. Peter')

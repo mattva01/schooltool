@@ -23,9 +23,7 @@ $Id$
 import datetime
 from persistent import Persistent
 
-from zope.publisher.browser import BrowserView
 from zope.location.location import LocationProxy
-from zope.annotation.interfaces import IAnnotations
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.interface import implementer
 from zope.interface import implements

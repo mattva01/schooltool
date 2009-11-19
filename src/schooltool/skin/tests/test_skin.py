@@ -23,13 +23,11 @@ $Id$
 """
 
 import unittest
-import pprint
 
-from zope.interface import providedBy, Interface, implements
+from zope.interface import Interface, implements
 from zope.testing import doctest
 from zope.app.testing import setup
 from zope.publisher.browser import TestRequest
-from zope.app.publication.zopepublication import BeforeTraverseEvent
 from zope.component import provideAdapter, adapts
 
 from schooltool.testing.setup import setUpSchoolToolSite

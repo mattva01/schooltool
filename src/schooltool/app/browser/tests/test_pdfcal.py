@@ -23,7 +23,6 @@ $Id$
 """
 
 import unittest
-import calendar
 from pprint import pprint
 from datetime import datetime, date, timedelta
 
@@ -31,13 +30,11 @@ from zope.testing import doctest
 from zope.interface import implements
 from zope.publisher.browser import TestRequest
 from zope.app.testing import setup, ztapi
-from zope.publisher.browser import BrowserView
 from zope.annotation.interfaces import IAttributeAnnotatable
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.calendar.utils import parse_date
-from schooltool.common import SchoolToolMessage as _
 from schooltool.app.cal import CalendarEvent
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.person.person import Person
@@ -62,7 +59,7 @@ def stub_cal_class(klass, extra_calendars=[]):
         def getCalendars(self):
             return [self.context] + extra_calendars
         def dateTitle(self):
-            return parse_date(view.request['date'])
+            return parse_date(self.request['date'])
     return StubbedCalendarView
 
 

@@ -28,7 +28,6 @@ from zope.app.publication.zopepublication import ZopePublication
 
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.relationship.interfaces import IRelationshipLinks
-from schooltool.relationship.relationship import getRelatedObjects
 from schooltool.relationship.relationship import relate, unrelate
 from schooltool.contact.contact import URIContactRelationship
 from schooltool.contact.contact import URIContact, URIPerson

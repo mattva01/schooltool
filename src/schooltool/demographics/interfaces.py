@@ -20,7 +20,6 @@
 from zope.interface import Interface, implements, Attribute
 from zope import schema
 from zope.schema.interfaces import IIterableSource
-from zope.schema.interfaces import ITitledTokenizedTerm
 
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.app.app import ISchoolToolApplication

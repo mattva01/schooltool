@@ -37,10 +37,8 @@ from schooltool.person.person import PersonCalendarCrowd
 from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
 from schooltool.utility.utility import UtilitySetUp
 from schooltool.table.table import url_cell_formatter
-from schooltool.relationship.interfaces import IRelationshipLinks
 from schooltool.relationship import RelationshipProperty
 from schooltool.basicperson.advisor import URIAdvisor, URIAdvising, URIStudent
-from schooltool.basicperson.interfaces import IAdvisor
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.common import SchoolToolMessage as _
 

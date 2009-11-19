@@ -41,7 +41,6 @@ def doctest_PersonContainerView():
         >>> from schooltool.person.browser.person import \
         ...     PersonContainerView
         >>> from schooltool.person.person import Person, PersonContainer
-        >>> from schooltool.person.interfaces import IPerson
         >>> setup.setUpAnnotations()
 
         >>> personContainer = PersonContainer()

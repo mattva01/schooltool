@@ -23,7 +23,6 @@ $Id$
 """
 import unittest
 import calendar
-from pprint import pprint
 from datetime import datetime, date, timedelta, time
 from pytz import timezone, utc
 
@@ -46,7 +45,6 @@ from schooltool.common import parse_datetime
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.model import SequentialDaysTimetableModel
-from schooltool.timetable.schema import TimetableSchema
 from schooltool.term.interfaces import ITermContainer
 from schooltool.term.tests import setUpDateManagerStub
 from schooltool.testing.util import NiceDiffsMixin
@@ -321,7 +319,6 @@ def doctest_CalendarTraverser():
 def doctest_EventForDisplay():
     """A wrapper for calendar events.
 
-        >>> from schooltool.resource.resource import Resource
         >>> person = Person("p1")
         >>> calendar = ISchoolToolCalendar(person)
         >>> event = createEvent('2004-01-02 14:45:50', '5min', 'yawn')
@@ -1594,7 +1591,6 @@ def doctest_CalendarEventView():
         >>> from schooltool.app.cal import CalendarEvent
         >>> from schooltool.app.cal import Calendar
         >>> from schooltool.app.browser.cal import CalendarEventView
-        >>> from schooltool.app.browser.cal import makeRecurrenceRule
         >>> cal = Calendar(Person())
         >>> event = CalendarEvent(datetime(2002, 2, 3, 12, 30),
         ...                       timedelta(minutes=59), "Event")
@@ -3438,7 +3434,6 @@ def doctest_getEvents_booking():
     events.
 
         >>> from schooltool.app.browser.cal import CalendarViewBase
-        >>> from schooltool.app.cal import Calendar
         >>> from schooltool.resource.resource import Resource
 
         >>> person = Person(u"frog")

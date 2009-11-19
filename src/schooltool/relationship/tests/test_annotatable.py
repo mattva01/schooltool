@@ -35,14 +35,11 @@ def doctest_getRelationshipLinks():
 
     We need to set up Zope 3 annotations
 
-        >>> from zope.app.testing import setup
         >>> setup.placelessSetUp()
         >>> setup.setUpAnnotations()
 
     We need to have an annotatable object
 
-        >>> from zope.interface import implements
-        >>> from zope.annotation.interfaces import IAttributeAnnotatable
         >>> class SomeAnnotatable(object):
         ...     implements(IAttributeAnnotatable)
 

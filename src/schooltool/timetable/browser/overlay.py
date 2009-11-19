@@ -30,7 +30,6 @@ from zope.security.proxy import removeSecurityProxy
 
 from schooltool.term.interfaces import ITerm
 from schooltool.term.interfaces import IDateManager
-from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.course.interfaces import ISection
 from schooltool.person.interfaces import IPerson

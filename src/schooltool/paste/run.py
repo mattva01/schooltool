@@ -21,7 +21,6 @@ SchoolTool run script that
 
 $Id$
 """
-import sys
 import optparse
 import os.path
 import paste.script.command

@@ -22,8 +22,7 @@ $Id$
 """
 import unittest
 
-from zope.testing import doctest, doctestunit
-from zope.testing.doctestunit import pprint
+from zope.testing import doctest
 from zope.component import provideAdapter
 
 from schooltool.app.browser.testing import setUp, tearDown

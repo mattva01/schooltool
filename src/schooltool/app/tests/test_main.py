@@ -42,7 +42,6 @@ def doctest_Options():
     The only interesting thing Options does is find the default configuration
     file.
 
-        >>> import os
         >>> from schooltool.app.main import Options
         >>> options = Options()
         >>> options.config_file

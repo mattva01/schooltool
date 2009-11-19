@@ -37,7 +37,6 @@ from z3c.rml import rml2pdf
 from schooltool.common import SchoolToolMessage as _
 from schooltool.common.inlinept import InlinePageTemplate
 from schooltool.app import pdf
-from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.browser.interfaces import IReportPageTemplate
 
 

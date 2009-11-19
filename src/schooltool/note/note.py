@@ -46,6 +46,7 @@ import zope.interface
 from zope.annotation.interfaces import IAnnotations
 
 from schooltool.note import interfaces
+from schooltool.person.interfaces import IPerson
 
 
 def getNotes(context):

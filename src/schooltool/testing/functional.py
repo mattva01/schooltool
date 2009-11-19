@@ -30,7 +30,6 @@ from zope.testing.server import startServer
 from zope.testing import doctest
 from zope.app.testing.functional import HTTPCaller
 from zope.app.testing.functional import ZCMLLayer as _ZCMLLayer
-from zope.app.testing.functional import FunctionalTestSetup
 from zope.app.testing.functional import FunctionalDocFileSuite
 from zope.app.appsetup.interfaces import IDatabaseOpenedEvent
 import zope.event

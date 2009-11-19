@@ -39,7 +39,6 @@ from schooltool.timetable.browser import format_time_range
 from schooltool.timetable.interfaces import ITimetableCalendarEvent
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
-from schooltool.term.interfaces import ITerm
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.term.interfaces import ITermContainer
 from schooltool.course.interfaces import ICourseContainer

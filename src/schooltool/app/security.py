@@ -33,7 +33,6 @@ from zope.app.security.interfaces import IAuthentication, ILoginPassword
 from zope.app.security.interfaces import IAuthenticatedGroup, IEveryoneGroup
 from zope.session.interfaces import ISession
 from zope.interface import implements
-from zope.component import adapts
 from schooltool.group.interfaces import IGroupContainer
 from zope.security.interfaces import IGroupAwarePrincipal
 from zope.security.checker import ProxyFactory
@@ -48,7 +47,6 @@ from schooltool.app.interfaces import ISchoolToolAuthentication
 from schooltool.app.interfaces import IAsset
 from schooltool.person.interfaces import IPerson
 from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
-from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ICalendarParentCrowd
 from schooltool.securitypolicy.interfaces import ICrowdDescription
 from schooltool.securitypolicy.crowds import Crowd, Description

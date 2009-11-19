@@ -71,7 +71,6 @@ $Id$
 
 import pytz
 import datetime
-import calendar
 import re
 from cStringIO import StringIO
 from sets import Set
@@ -146,7 +145,6 @@ def convert_event_to_ical(event):
     All-day events have DTSTART as a date:
 
         >>> from schooltool.calendar.recurrent import WeeklyRecurrenceRule
-        >>> from schooltool.calendar.recurrent import DailyRecurrenceRule
         >>> event = SimpleCalendarEvent(datetime(2005, 2, 11, 0, 0, 0),
         ...                             timedelta(days=2), "iCal tests",
         ...                             recurrence=WeeklyRecurrenceRule(),

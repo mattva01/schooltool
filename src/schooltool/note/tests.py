@@ -29,7 +29,6 @@ from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.component import provideAdapter
 
-from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.testing import setup
 
 from schooltool.app.browser.testing import setUp, tearDown
@@ -104,7 +103,6 @@ def doctest_browser_NoteAddView():
 
     We need to set up an adapter for notes
 
-        >>> from zope.annotation.interfaces import IAnnotations
         >>> setup.setUpAnnotations()
         >>> from schooltool.note.note import getNotes
         >>> provideAdapter(getNotes, adapts=[IHaveNotes], provides=INotes)

@@ -32,7 +32,6 @@ from zope.i18n import translate
 from zope.security.proxy import removeSecurityProxy
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.intid.interfaces import IIntIds
-from zope.app.form.browser.add import AddView
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.browser import BrowserView
 from zope.component import adapts
@@ -43,7 +42,7 @@ from zope.app.container.interfaces import INameChooser
 from zc.table import table
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser.absoluteurl import absoluteURL
-from z3c.form import form, subform, field, widget, datamanager, button
+from z3c.form import form, subform, field, datamanager, button
 from z3c.form.action import ActionErrorOccurred
 from z3c.form.interfaces import ActionExecutionError
 

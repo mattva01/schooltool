@@ -26,7 +26,6 @@ import zope.interface
 import zope.schema
 from zope.app import container
 from zope.app.container.interfaces import IContainer, IContained
-from zope.app.container import constraints
 
 from schooltool.common import SchoolToolMessage as _
 

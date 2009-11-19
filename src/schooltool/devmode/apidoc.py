@@ -29,7 +29,7 @@ import zope.app.apidoc.ifacemodule.menu
 import zope.app.apidoc.codemodule.browser.menu
 import zope.app.apidoc.bookmodule.browser
 from zope.app.apidoc import apidoc
-from zope.app.apidoc import ifacemodule, codemodule, bookmodule, zcmlmodule
+from zope.app.apidoc import ifacemodule, codemodule, bookmodule
 from zope.app.apidoc.browser.skin import APIDOC
 
 from schooltool.devmode.skin import IDevModeLayer

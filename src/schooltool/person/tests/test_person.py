@@ -22,11 +22,9 @@ Unit tests for schooltool.person.person.
 $Id$
 """
 import unittest
-from pprint import pprint
 
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
-from zope.app.container.contained import ObjectAddedEvent
 from zope.app.testing import setup
 
 from schooltool.person.person import Person

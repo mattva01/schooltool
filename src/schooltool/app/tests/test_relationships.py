@@ -22,7 +22,6 @@ Unit tests for schooltool.app.relationships
 $Id$
 """
 
-from pprint import pprint
 import unittest
 
 from zope.testing import doctest
@@ -87,9 +86,7 @@ def doctest_CourseSections():
 
     Lets import the pieces of CourseSections
 
-        >>> from schooltool.app.relationships import URICourseSections, URICourse
         >>> from schooltool.app.relationships import CourseSections
-        >>> from schooltool.app.relationships import URISectionOfCourse
         >>> from schooltool.app.relationships import enforceCourseSectionConstraint
 
     Relationship tests require some setup:

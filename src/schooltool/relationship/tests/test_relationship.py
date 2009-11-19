@@ -37,7 +37,6 @@ def doctest_relate():
 
         >>> from zope.interface import implements
         >>> from schooltool.relationship.interfaces import IRelationshipLinks
-        >>> from schooltool.relationship.relationship import Link
 
         >>> class Relatable:
         ...     implements(IRelationshipLinks)
@@ -379,6 +378,8 @@ def doctest_BoundRelationshipProperty():
         [Peter, Cathy]
         >>> [info.target for info in course_b.instructors.relationships]
         [William]
+
+        >>> tearDown()
 
     """
 

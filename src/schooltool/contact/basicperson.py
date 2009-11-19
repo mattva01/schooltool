@@ -22,7 +22,6 @@ Contact information of a Person.
 
 Glue between schooltool.basicperson and schooltool.contact.
 """
-import rwproperty
 
 from zope.component import getUtility
 from zope.component import adapter, adapts
@@ -39,16 +38,12 @@ from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.event import notify
 
-from schooltool.schoolyear.subscriber import EventAdapterSubscriber
 from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
-from schooltool.schoolyear.interfaces import ISubscriber
 from schooltool.contact.interfaces import IContact
 from schooltool.contact.contact import Contact
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.contact.interfaces import IUniqueFormKey
 from schooltool.table.table import simple_form_key
-
-from schooltool.common import SchoolToolMessage as _
 
 
 PERSON_CONTACT_KEY = 'schooltool.contact.basicperson'
