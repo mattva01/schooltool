@@ -220,8 +220,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'xlwt',
                       'xlrd',
                       'setuptools'],
-    tests_require=['zope.testing',
-                   'schooltool.lyceum.journal'],
+    tests_require=['zope.testing'],
     dependency_links=['http://ftp.schooltool.org/schooltool/1.2/'],
     entry_points = """
     [paste.app_factory]
