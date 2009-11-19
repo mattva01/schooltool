@@ -120,7 +120,7 @@ ubuntu-environment:
 	 echo "I am running as $(shell whoami)"; \
 	 exit 3; \
 	} else { \
-	 apt-get install subversion build-essential python-all python-all-dev libc6-dev libicu-dev; \
+	 apt-get install bzr build-essential python-all python-all-dev libc6-dev libicu-dev; \
 	 apt-get build-dep python-imaging; \
 	 echo "Installation Complete: Next... Run 'make'."; \
 	} fi

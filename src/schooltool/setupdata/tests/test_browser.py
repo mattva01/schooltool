@@ -18,10 +18,7 @@
 #
 """
 Unit tests for schooltool.setupdata.generator
-
-$Id: test_browser.py 5644 2006-01-16 21:21:00Z mg $
 """
-
 
 import unittest
 from pprint import pprint
