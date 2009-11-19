@@ -122,6 +122,5 @@ ubuntu-environment:
 	} else { \
 	 apt-get install subversion build-essential python-all python-all-dev libc6-dev libicu-dev; \
 	 apt-get build-dep python-imaging; \
-	 apt-get build-dep python-libxml2 libxml2; \
 	 echo "Installation Complete: Next... Run 'make'."; \
 	} fi

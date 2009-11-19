@@ -146,9 +146,7 @@ def to_unicode(s):
         >>> to_unicode('\xc4\x84\xc5\xbeuol\xc5\xb3')
         u'\u0104\u017euol\u0173'
 
-    For convenience, to_unicode accepts None as the argument value.  This makes
-    it easier to use it with libxml2 functions such as nsProp, which return
-    None for missing attribute values.
+    For convenience, to_unicode accepts None as the argument value.
 
         >>> to_unicode(None) is None
         True
