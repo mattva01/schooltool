@@ -138,26 +138,6 @@ def parse_datetime(s):
     return datetime.datetime(y, m, d, hh, mm, ss, ssssss)
 
 
-def to_unicode(s):
-    r"""Convert a UTF-8 string to Unicode.
-
-    Example:
-
-        >>> to_unicode('\xc4\x84\xc5\xbeuol\xc5\xb3')
-        u'\u0104\u017euol\u0173'
-
-    For convenience, to_unicode accepts None as the argument value.
-
-        >>> to_unicode(None) is None
-        True
-
-    """
-    if s is None:
-        return None
-    else:
-        return unicode(s, 'UTF-8')
-
-
 locale_charset = locale.getpreferredencoding()
 
 
