@@ -173,8 +173,14 @@ def evolve(context):
             app['schooltool.course.section'] = SectionContainerContainer()
 
             sections = app['sections']
-            jc = app.get('schooltool.lyceum.journal', None)
             int_ids = getUtility(IIntIds)
+
+            jc = None
+            try:
+                import schooltool.lyceum.journal
+                jc = app.get('schooltool.lyceum.journal', None)
+            except:
+                pass
 
             for name, section in sections.items():
                 timetables = ITimetables(section)
