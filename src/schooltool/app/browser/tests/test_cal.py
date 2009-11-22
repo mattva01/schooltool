@@ -18,8 +18,6 @@
 #
 """
 Tests for SchoolTool-specific calendar views.
-
-$Id$
 """
 import unittest
 import calendar
@@ -33,7 +31,7 @@ from zope.component import provideAdapter, provideSubscriptionAdapter
 from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
-from zope.app.testing import setup, ztapi
+from zope.app.testing import setup
 from zope.publisher.browser import BrowserView
 from zope.traversing.interfaces import IContainmentRoot
 from zope.session.interfaces import ISession
@@ -108,8 +106,7 @@ def setUp(test=None):
     sbsetup.setUpSessions()
     setUpDateManagerStub(test_today)
     app = ApplicationStub()
-    ztapi.provideAdapter(None, ISchoolToolApplication,
-                         lambda x: app)
+    provideAdapter(lambda x: app, (None,), ISchoolToolApplication)
 
 
 class EventStub(object):
@@ -166,7 +163,10 @@ def doctest_ToCalendarTraverser():
     We can also get the calendar as iCalendar:
 
         >>> from schooltool.app.interfaces import ISchoolToolCalendar
-        >>> ztapi.browserView(ISchoolToolCalendar, 'calendar.ics', BrowserView)
+        >>> from zope.publisher.interfaces.browser import IDefaultBrowserLayer
+        >>> provideAdapter(BrowserView,
+        ...                (ISchoolToolCalendar, IDefaultBrowserLayer),
+        ...                Interface, 'calendar.ics')
         >>> view = traverser.publishTraverse(request, 'calendar.ics')
         >>> view.context is ISchoolToolCalendar(traverser.context)
         True
@@ -189,7 +189,6 @@ def doctest_CalendarTraverser():
     CalendarTraverser allows you to traverse directly various calendar views:
 
         >>> from schooltool.app.browser.cal import CalendarTraverser
-        >>> from schooltool.app.cal import Calendar
         >>> cal = Calendar(None)
         >>> request = TestRequest()
         >>> traverser = CalendarTraverser(cal, request)
@@ -303,7 +302,6 @@ def doctest_CalendarTraverser():
 
     You can traverse into calendar events by their unique id:
 
-        >>> from schooltool.app.cal import CalendarEvent
         >>> event = CalendarEvent(datetime(2002, 2, 2, 2, 2),
         ...                       timedelta(hours=2), "Some event",
         ...                       unique_id="it's me!")
@@ -502,7 +500,6 @@ def doctest_EventForDisplay_editLink():
     """Test for EventForDisplay.editLink.
 
         >>> from schooltool.app.browser.cal import EventForDisplay
-        >>> from schooltool.app.cal import Calendar, CalendarEvent
         >>> event = CalendarEvent(datetime(2005, 9, 26, 21, 2),
         ...                       timedelta(hours=1), "Clickety-click",
         ...                       unique_id='xyzzy')
@@ -753,8 +750,10 @@ def registerCalendarHelperViews():
     """Register the real DailyCalendarRowsView for use by other views."""
     from schooltool.app.browser.cal import DailyCalendarRowsView
     from schooltool.app.interfaces import ISchoolToolCalendar
-    ztapi.browserView(ISchoolToolCalendar, 'daily_calendar_rows',
-                      DailyCalendarRowsView)
+    from zope.publisher.interfaces.browser import IDefaultBrowserLayer
+    provideAdapter(DailyCalendarRowsView,
+                   (ISchoolToolCalendar, IDefaultBrowserLayer), Interface,
+                   'daily_calendar_rows')
 
 
 def getDaysStub(start, end):
@@ -779,11 +778,10 @@ class TestCalendarViewBase(unittest.TestCase):
         registerCalendarHelperViews()
         registerCalendarSubscribers()
 
-        ztapi.provideAdapter(ISchoolToolApplication,
-                             IApplicationPreferences,
-                             getApplicationPreferences)
+        provideAdapter(getApplicationPreferences,
+                       (ISchoolToolApplication,), IApplicationPreferences)
         app = ApplicationStub()
-        ztapi.provideAdapter(None, ISchoolToolApplication, lambda x: app)
+        provideAdapter(lambda x: app, (None,), ISchoolToolApplication)
 
         setUpDateManagerStub(self.today)
 
@@ -845,9 +843,8 @@ class TestCalendarViewBase(unittest.TestCase):
     def test_dayTitle(self):
         from schooltool.app.browser.cal import CalendarViewBase
 
-        ztapi.provideAdapter(ISchoolToolApplication,
-                             IApplicationPreferences,
-                             getApplicationPreferences)
+        provideAdapter(getApplicationPreferences,
+                       (ISchoolToolApplication,), IApplicationPreferences)
 
         from zope.publisher.interfaces import IRequest
         import zope.component
@@ -1084,13 +1081,12 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> setup.placefulSetUp()
             >>> app = sbsetup.setUpSchoolToolSite()
             >>> directlyProvides(app, IContainmentRoot)
-            >>> ztapi.provideAdapter(Interface, ISchoolToolApplication,
-            ...                      lambda x: app)
+            >>> provideAdapter(lambda x: app, (None,), ISchoolToolApplication)
             >>> from schooltool.resource.interfaces import IBookingCalendar
             >>> from schooltool.resource.interfaces import IResourceContainer
             >>> from schooltool.resource.booking import ResourceBookingCalendar
-            >>> ztapi.provideAdapter(IResourceContainer, IBookingCalendar,
-            ...                      ResourceBookingCalendar)
+            >>> provideAdapter(ResourceBookingCalendar,
+            ...                (IResourceContainer,), IBookingCalendar)
             >>> setUpDateManagerStub(date(2005, 5, 13))
 
             >>> app['persons']['john'] = person = Person("john")
@@ -1303,7 +1299,6 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> view.timezone.tzname(datetime.now())
             'UTC'
 
-            >>> from schooltool.app.cal import CalendarEvent
             >>> for i in range(0, 24):
             ...     cal1.addEvent(CalendarEvent(datetime(2002, 2, 1, i),
             ...                       timedelta(minutes=59), "day1-" + str(i)))
@@ -1588,8 +1583,6 @@ def doctest_CalendarEventView():
 
     We'll create a simple event view.
 
-        >>> from schooltool.app.cal import CalendarEvent
-        >>> from schooltool.app.cal import Calendar
         >>> from schooltool.app.browser.cal import CalendarEventView
         >>> cal = Calendar(Person())
         >>> event = CalendarEvent(datetime(2002, 2, 3, 12, 30),
@@ -3267,9 +3260,8 @@ def doctest_TestCalendarEventBookingView():
 
         >>> setup.setUpAnnotations()
 
-        >>> ztapi.provideAdapter(ISchoolToolApplication,
-        ...                      IApplicationPreferences,
-        ...                      getApplicationPreferences)
+        >>> provideAdapter(getApplicationPreferences,
+        ...                (ISchoolToolApplication,), IApplicationPreferences)
         >>> view = CalendarEventBookingView(event, request)
         >>> view.getAvailableItemsContainer = stubItemsContainer
         >>> view.filter = lambda list: list
@@ -5199,7 +5191,6 @@ def doctest_CalendarListSubscriber(self):
         >>> from schooltool.person.interfaces import IPersonPreferences
         >>> from schooltool.app.interfaces import IHaveCalendar
         >>> from schooltool.app.cal import CALENDAR_KEY
-        >>> from zope.interface import implements
         >>> from zope.annotation.interfaces import IAttributeAnnotatable
         >>> class PersonStub:
         ...     implements(IAttributeAnnotatable, IHaveCalendar)
@@ -5228,7 +5219,6 @@ def doctest_CalendarListSubscriber(self):
 
     A simple check:
 
-        >>> from schooltool.app.browser.cal import CalendarListSubscriber
         >>> import calendar as pycalendar
         >>> calendar = CalendarStub('My Calendar')
         >>> request = TestRequest()
@@ -5240,7 +5230,6 @@ def doctest_CalendarListSubscriber(self):
     If the authenticated user is looking at his own calendar, then
     a list of overlaid calendars is taken into consideration
 
-        >>> from schooltool.person.interfaces import IPerson
         >>> class PrincipalStub:
         ...     def __init__(self):
         ...         self.person = PersonStub('x', calendar=calendar)

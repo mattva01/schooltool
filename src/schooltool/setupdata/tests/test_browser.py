@@ -25,8 +25,9 @@ from pprint import pprint
 
 from zope.interface import implements
 from zope.testing import doctest
-from zope.app.testing import setup, ztapi
+from zope.app.testing import setup
 from zope.publisher.browser import TestRequest
+from zope.component import provideUtility
 from schooltool.testing.setup import setUpSchoolToolSite
 from schooltool.testing.setup import setUpApplicationPreferences
 from schooltool.setupdata.tests.test_generator import DummyPlugin
@@ -55,8 +56,8 @@ def doctest_SetupDataView_update():
 
         >>> p1 = DummySetupPlugin("work", ())
         >>> p2 = DummySetupPlugin("play", ("work", ))
-        >>> ztapi.provideUtility(ISetupDataPlugin, p1, 'work')
-        >>> ztapi.provideUtility(ISetupDataPlugin, p2, 'play')
+        >>> provideUtility(p1, ISetupDataPlugin, 'work')
+        >>> provideUtility(p2, ISetupDataPlugin, 'play')
 
     If we fill in the seed and press the submit button, we get setup
     data plugins called.
@@ -110,8 +111,8 @@ def doctest_SetupDataView__call__():
         >>> from schooltool.setupdata.interfaces import ISetupDataPlugin
         >>> p1 = DummySetupPlugin("work", ())
         >>> p2 = DummySetupPlugin("play", ("work", ))
-        >>> ztapi.provideUtility(ISetupDataPlugin, p1, 'work')
-        >>> ztapi.provideUtility(ISetupDataPlugin, p2, 'play')
+        >>> provideUtility(p1, ISetupDataPlugin, 'work')
+        >>> provideUtility(p2, ISetupDataPlugin, 'play')
 
     Let's create an application object and a view:
 

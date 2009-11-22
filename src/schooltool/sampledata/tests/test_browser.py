@@ -18,8 +18,6 @@
 #
 """
 Unit tests for schooltool.sampledata.generator
-
-$Id$
 """
 
 
@@ -27,8 +25,9 @@ import unittest
 from pprint import pprint
 
 from zope.testing import doctest
-from zope.app.testing import setup, ztapi
+from zope.app.testing import setup
 from zope.publisher.browser import TestRequest
+from zope.component import provideUtility
 from schooltool.testing.setup import setUpSchoolToolSite
 from schooltool.testing.setup import setUpApplicationPreferences
 import schooltool.app.browser.testing
@@ -78,8 +77,8 @@ def doctest_SampleDataView_update():
         >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
         >>> p1 = DummyPlugin("work", ())
         >>> p2 = DummyPlugin("play", ("work", ))
-        >>> ztapi.provideUtility(ISampleDataPlugin, p1, 'work')
-        >>> ztapi.provideUtility(ISampleDataPlugin, p2, 'play')
+        >>> provideUtility(p1, ISampleDataPlugin, 'work')
+        >>> provideUtility(p2, ISampleDataPlugin, 'play')
 
     If we fill in the seed and press the submit button, we get sample
     data plugins called.
@@ -136,8 +135,8 @@ def doctest_SampleDataView__call__():
         >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
         >>> p1 = DummyPlugin("work", ())
         >>> p2 = DummyPlugin("play", ("work", ))
-        >>> ztapi.provideUtility(ISampleDataPlugin, p1, 'work')
-        >>> ztapi.provideUtility(ISampleDataPlugin, p2, 'play')
+        >>> provideUtility(p1, ISampleDataPlugin, 'work')
+        >>> provideUtility(p2, ISampleDataPlugin, 'play')
 
     Let's create an application object and a view:
 

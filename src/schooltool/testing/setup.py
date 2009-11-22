@@ -17,9 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-SchoolBell Testing Support
-
-$Id$
+SchoolTool Testing Support
 """
 __docformat__ = 'restructuredtext'
 from schooltool.app.security import setUpLocalAuth
@@ -27,23 +25,22 @@ from schooltool.testing import registry
 
 # ----------------------------- Session setup ------------------------------
 from zope.publisher.interfaces import IRequest
+from zope.component import provideAdapter, provideUtility
 from zope.session.http import CookieClientIdManager
 from zope.session.interfaces import ISessionDataContainer
-from zope.session.interfaces import IClientId
 from zope.session.interfaces import IClientIdManager, ISession
 from zope.session.session import ClientId, Session
 from zope.session.session import PersistentSessionDataContainer
-from zope.app.testing import ztapi
 def setUpSessions():
     """Set up the session machinery.
 
     Do this after placelessSetUp().
     """
-    ztapi.provideAdapter(IRequest, IClientId, ClientId)
-    ztapi.provideAdapter(IRequest, ISession, Session)
-    ztapi.provideUtility(IClientIdManager, CookieClientIdManager())
+    provideAdapter(ClientId)
+    provideAdapter(Session, (IRequest,), ISession)
+    provideUtility(CookieClientIdManager(), IClientIdManager)
     sdc = PersistentSessionDataContainer()
-    ztapi.provideUtility(ISessionDataContainer, sdc)
+    provideUtility(sdc, ISessionDataContainer)
 
 
 # --------------------- Create a SchoolBell application --------------------
@@ -64,7 +61,6 @@ from zope.app.component.site import LocalSiteManager
 from zope.traversing.interfaces import IContainmentRoot
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.security import PersonContainerAuthenticationPlugin
-from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
 def setUpSchoolToolSite():
     """This should only be called after ``placefulSetUp()``."""
     app = createSchoolToolApplication()
@@ -73,8 +69,8 @@ def setUpSchoolToolSite():
     setUpLocalAuth(app)
 
     plugin = PersonContainerAuthenticationPlugin()
-    ztapi.provideUtility(ISchoolToolAuthenticationPlugin, plugin)
-    ztapi.provideAdapter(Interface, ISchoolToolApplication, getSchoolToolApplication)
+    provideUtility(plugin)
+    provideAdapter(getSchoolToolApplication, (Interface,), ISchoolToolApplication)
 
     setSite(app)
     return app
@@ -84,20 +80,16 @@ from schooltool.app.interfaces import IHaveCalendar
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.cal import getCalendar
 def setUpCalendaring():
-    ztapi.provideAdapter(IHaveCalendar, ISchoolToolCalendar, getCalendar)
+    provideAdapter(getCalendar, (IHaveCalendar,), ISchoolToolCalendar)
     registry.setupCalendarComponents()
 
 
 # -------------- Setup Timetable Adapter and set IHaveTimetable ------------
-from schooltool.timetable.interfaces import IHaveTimetables, ITimetables
-from schooltool.timetable.interfaces import IOwnTimetables, ICompositeTimetables
 from schooltool.timetable import TimetablesAdapter
 from schooltool.timetable import CompositeTimetables
 def setUpTimetabling():
-    ztapi.provideAdapter(IOwnTimetables, ITimetables, TimetablesAdapter)
-    ztapi.provideAdapter(IHaveTimetables,
-                         ICompositeTimetables,
-                         CompositeTimetables)
+    provideAdapter(TimetablesAdapter)
+    provideAdapter(CompositeTimetables)
     registry.setupTimetablesComponents()
 
 
@@ -107,5 +99,6 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.app import getApplicationPreferences
 def setUpApplicationPreferences():
     """A utility method for setting up the ApplicationPreferences adapter."""
-    ztapi.provideAdapter(ISchoolToolApplication, IApplicationPreferences,
-                         getApplicationPreferences)
+    provideAdapter(getApplicationPreferences,
+                   (ISchoolToolApplication,), IApplicationPreferences)
+

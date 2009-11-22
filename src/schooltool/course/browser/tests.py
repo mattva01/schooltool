@@ -19,8 +19,6 @@
 #
 """
 Unit tests for course and section views.
-
-$Id$
 """
 import unittest
 
@@ -394,9 +392,7 @@ def doctest_SectionView():
         >>> app = AppStub(persons=PersonContainer())
 
         >>> from schooltool.app.interfaces import ISchoolToolApplication
-        >>> provideAdapter(lambda x: app,
-        ...                adapts=(None,),
-        ...                provides=ISchoolToolApplication)
+        >>> provideAdapter(lambda x: app, (None,), ISchoolToolApplication)
 
     Stub a table formatter.
 

@@ -22,7 +22,7 @@ Tests for schooltool timetable schema views.
 import unittest
 from pprint import pprint
 
-from zope.component import provideAdapter
+from zope.component import provideAdapter, provideHandler, provideUtility
 from zope.location.location import locate
 from zope.interface import Interface
 from zope.interface import directlyProvides
@@ -32,9 +32,7 @@ from zope.publisher.browser import TestRequest
 from zope.traversing.interfaces import ITraversable
 from zope.traversing.interfaces import IContainmentRoot
 from zope.testing import doctest
-from zope.app.container.interfaces import INameChooser
-from zope.app.testing import ztapi, setup
-from zope.annotation.interfaces import IAttributeAnnotatable
+from zope.app.testing import setup
 from zope.traversing import namespace
 
 from schooltool.app.app import SimpleNameChooser
@@ -68,18 +66,14 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
         IApplicationPreferences(self.app).timezone = 'Asia/Tokyo'
 
         # Register the timetable models
-        ztapi.provideUtility(ITimetableModelFactory,
-                             SequentialDaysTimetableModel,
-                             'SequentialDaysTimetableModel')
-        ztapi.provideUtility(ITimetableModelFactory,
-                             WeeklyTimetableModel,
-                             'WeeklyTimetableModel')
-        ztapi.provideAdapter(ITimetableSchemaContainer,
-                             INameChooser,
-                             SimpleNameChooser)
-        ztapi.provideAdapter(Interface,
-                             ITimetableSchemaContainer,
-                             lambda x: self.ttschemas)
+        provideUtility(SequentialDaysTimetableModel,
+                       ITimetableModelFactory,
+                       'SequentialDaysTimetableModel')
+        provideUtility(WeeklyTimetableModel,
+                       ITimetableModelFactory,
+                       'WeeklyTimetableModel')
+        provideAdapter(SimpleNameChooser, (ITimetableSchemaContainer,))
+        provideAdapter(lambda x: self.ttschemas, (Interface,), ITimetableSchemaContainer)
 
     def tearDown(self):
         tearDown()
@@ -470,17 +464,13 @@ def doctest_TimetableSchemaView():
 def doctest_SimpleTimetableSchemaAdd():
     r"""Doctest for the SimpleTimetableSchemaAdd view
 
-        >>> ztapi.provideUtility(ITimetableModelFactory,
-        ...                      WeeklyTimetableModel,
-        ...                      'WeeklyTimetableModel')
-        >>> ztapi.provideAdapter(ITimetableSchemaContainer,
-        ...                      INameChooser,
-        ...                      SimpleNameChooser)
-
+        >>> provideUtility(WeeklyTimetableModel,
+        ...                ITimetableModelFactory,
+        ...                'WeeklyTimetableModel')
+        >>> provideAdapter(SimpleNameChooser, (ITimetableSchemaContainer,))
         >>> schemas = TimetableSchemaContainer()
-        >>> ztapi.provideAdapter(Interface,
-        ...                      ITimetableSchemaContainer,
-        ...                      lambda x: schemas)
+        >>> provideAdapter(lambda x: schemas,
+        ...                (Interface,), ITimetableSchemaContainer)
 
     Suppose we have a SchoolTool instance, and create a view for its
     timetable schemas container:
@@ -493,7 +483,6 @@ def doctest_SimpleTimetableSchemaAdd():
         ...      SimpleTimetableSchemaAdd
         >>> view = SimpleTimetableSchemaAdd(schemas, request)
 
-        >>> from zope.location.location import locate
         >>> locate(schemas, app, 'ttschemas')
 
     Let's render it.  There is a widget for title there:
@@ -733,9 +722,9 @@ def doctest_SimpleTimetableSchemaAdd_errors():
 
         >>> from schooltool.timetable.model import WeeklyTimetableModel
         >>> from schooltool.timetable.interfaces import ITimetableModelFactory
-        >>> ztapi.provideUtility(ITimetableModelFactory,
-        ...                      WeeklyTimetableModel,
-        ...                      'WeeklyTimetableModel')
+        >>> provideUtility(WeeklyTimetableModel,
+        ...                ITimetableModelFactory,
+        ...                'WeeklyTimetableModel')
 
     Suppose we have a SchoolTool instance, and create a view for its
     timetable schemas container:
@@ -894,14 +883,13 @@ def doctest_TimetableDependentDeleteView():
         >>> from schooltool.timetable import TimetablesAdapter
         >>> from schooltool.timetable.interfaces import ITimetables
         >>> setup.placefulSetUp()
-        >>> ztapi.provideAdapter(IAttributeAnnotatable, ITimetables,
-        ...                      TimetablesAdapter)
+        >>> provideAdapter(TimetablesAdapter)
         >>> setup.setUpAnnotations()
         >>> from schooltool.timetable.schema import clearTimetablesOnDeletion
         >>> from schooltool.timetable.interfaces import ITimetableSchema
         >>> from zope.app.container.interfaces import IObjectRemovedEvent
-        >>> ztapi.subscribe([ITimetableSchema, IObjectRemovedEvent], None,
-        ...                 clearTimetablesOnDeletion)
+        >>> provideHandler(clearTimetablesOnDeletion,
+        ...                (ITimetableSchema, IObjectRemovedEvent))
 
     Now, let's create a couple of timetables to operate on:
 
@@ -910,7 +898,6 @@ def doctest_TimetableDependentDeleteView():
         >>> from schooltool.timetable.interfaces import IOwnTimetables
         >>> app = sbsetup.setUpSchoolToolSite()
         >>> schemas = TimetableSchemaContainer()
-        >>> from zope.location.location import locate
         >>> locate(schemas, app, "ttschemas")
         >>> directlyProvides(app, directlyProvidedBy(app) + IOwnTimetables)
 
@@ -1043,16 +1030,15 @@ class TimetableSchemaMixin(object):
         setup.placelessSetUp()
         setup.setUpTraversal()
 
-        ztapi.provideUtility(ITimetableModelFactory,
-                             SequentialDaysTimetableModel,
-                             "SequentialDaysTimetableModel")
+        provideUtility(SequentialDaysTimetableModel,
+                       ITimetableModelFactory,
+                       "SequentialDaysTimetableModel")
 
-        ztapi.provideUtility(ITimetableModelFactory,
-                             SequentialDayIdBasedTimetableModel,
-                             "SequentialDayIdBasedTimetableModel")
+        provideUtility(SequentialDayIdBasedTimetableModel,
+                       ITimetableModelFactory,
+                       "SequentialDayIdBasedTimetableModel")
 
-        ztapi.provideView(Interface, Interface, ITraversable, 'view',
-                          namespace.view)
+        provideAdapter(namespace.view, (None,), ITraversable, 'view')
 
         directlyProvides(self.schemaContainer, IContainmentRoot)
 

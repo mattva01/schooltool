@@ -18,8 +18,6 @@
 #
 """
 Tests for schooltool timetabling views.
-
-$Id$
 """
 
 import unittest
@@ -33,7 +31,6 @@ from zope.interface import implements
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.testing.doctestunit import pprint
-from zope.app.testing import ztapi
 
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.schoolyear.schoolyear import getSchoolYearContainer
@@ -52,8 +49,7 @@ def setUp(test=None):
     testing.setUp(test)
     sbsetup.setUpTimetabling()
     sbsetup.setUpApplicationPreferences()
-    ztapi.provideAdapter(None, ISchoolToolApplication,
-                         getSchoolToolApplication)
+    provideAdapter(getSchoolToolApplication, (None,), ISchoolToolApplication)
     provideAdapter(getTermContainer, [Interface], ITermContainer)
     provideAdapter(getSchoolYearContainer)
 
@@ -174,16 +170,13 @@ def doctest_SectionTimetableSetupView():
         >>> schemas = TimetableSchemaContainer()
 
         >>> from schooltool.timetable.interfaces import ITimetableSchemaContainer
-        >>> ztapi.provideAdapter(Interface, ITimetableSchemaContainer,
-        ...                      lambda x: schemas)
+        >>> provideAdapter(lambda x: schemas,
+        ...                (Interface,) , ITimetableSchemaContainer)
 
-        >>> ztapi.provideAdapter(IOwnTimetables, ITimetables,
-        ...                      TimetablesAdapter)
-        >>> from zope.app.container.interfaces import INameChooser
+        >>> provideAdapter(TimetablesAdapter)
         >>> from schooltool.timetable.interfaces import ITimetableDict
         >>> from schooltool.timetable import TimetableNameChooser
-        >>> ztapi.provideAdapter(ITimetableDict, INameChooser,
-        ...                      TimetableNameChooser)
+        >>> provideAdapter(TimetableNameChooser, (ITimetableDict, ))
 
         >>> from schooltool.course.section import Section as STSection
         >>> class Section(STSection):

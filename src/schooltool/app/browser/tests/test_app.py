@@ -18,16 +18,15 @@
 #
 """
 Tests for schooltool views.
-
-$Id$
 """
 import unittest
 
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
-from zope.app.testing import setup, ztapi
+from zope.app.testing import setup
 from zope.traversing.browser.absoluteurl import absoluteURL
+from zope.component import provideAdapter, provideUtility
 
 from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.testing import setup as sbsetup
@@ -46,9 +45,8 @@ def doctest_ApplicationView():
 
         >>> app = sbsetup.setUpSchoolToolSite()
 
-        >>> ztapi.provideAdapter(ISchoolToolApplication,
-        ...                      IApplicationPreferences,
-        ...                      getApplicationPreferences)
+        >>> provideAdapter(getApplicationPreferences,
+        ...                (ISchoolToolApplication,), IApplicationPreferences)
 
     Now let's create a view
 
@@ -92,8 +90,8 @@ def doctest_LoginView():
 
         >>> from schooltool.app.interfaces import IHaveCalendar
         >>> from schooltool.app.interfaces import ISchoolToolCalendar
-        >>> ztapi.provideAdapter(IHaveCalendar, ISchoolToolCalendar,
-        ...                      getCalendarWithNakedObject)
+        >>> provideAdapter(getCalendarWithNakedObject,
+        ...                (IHaveCalendar,), ISchoolToolCalendar)
 
         >>> from schooltool.testing import registry
         >>> registry.setupCalendarComponents()
@@ -101,9 +99,8 @@ def doctest_LoginView():
         >>> from schooltool.app.interfaces import ISchoolToolApplication
         >>> from schooltool.app.interfaces import IApplicationPreferences
         >>> from schooltool.app.app import getApplicationPreferences
-        >>> ztapi.provideAdapter(ISchoolToolApplication,
-        ...                      IApplicationPreferences,
-        ...                      getApplicationPreferences)
+        >>> provideAdapter(getApplicationPreferences,
+        ...                (ISchoolToolApplication,), IApplicationPreferences)
 
     We have to set up a security checker for person objects:
 
@@ -145,12 +142,11 @@ def doctest_LoginView():
         >>> from schooltool.app.security import SchoolToolAuthenticationUtility
         >>> from zope.app.security.interfaces import IAuthentication
         >>> auth = SchoolToolAuthenticationUtility()
-        >>> ztapi.provideUtility(IAuthentication, auth)
+        >>> provideUtility(auth, IAuthentication)
 
         >>> from schooltool.app.security import PersonContainerAuthenticationPlugin
-        >>> from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
         >>> plugin = PersonContainerAuthenticationPlugin()
-        >>> ztapi.provideUtility(ISchoolToolAuthenticationPlugin, plugin)
+        >>> provideUtility(plugin)
 
         >>> auth.__parent__ = app
         >>> sbsetup.setUpSessions()
@@ -239,14 +235,13 @@ def doctest_LogoutView():
         >>> from schooltool.app.security import SchoolToolAuthenticationUtility
         >>> from zope.app.security.interfaces import IAuthentication
         >>> auth = SchoolToolAuthenticationUtility()
-        >>> ztapi.provideUtility(IAuthentication, auth)
+        >>> provideUtility(auth, IAuthentication)
         >>> auth.__parent__ = app
         >>> sbsetup.setUpSessions()
 
         >>> from schooltool.app.security import PersonContainerAuthenticationPlugin
-        >>> from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
         >>> plugin = PersonContainerAuthenticationPlugin()
-        >>> ztapi.provideUtility(ISchoolToolAuthenticationPlugin, plugin)
+        >>> provideUtility(plugin)
 
     We have a request in an authenticated session:
 
@@ -298,9 +293,8 @@ def doctest_hasPermissions():
         ...                         AnnotationPrincipalPermissionManager
         >>> setup.setUpAnnotations()
         >>> setup.setUpTraversal()
-        >>> ztapi.provideAdapter(IAnnotatable, IPrincipalPermissionManager,
-        ...                      AnnotationPrincipalPermissionManager)
-
+        >>> provideAdapter(AnnotationPrincipalPermissionManager,
+        ...                (IAnnotatable,), IPrincipalPermissionManager)
 
     Let's set the Zope security policy:
 
@@ -365,9 +359,8 @@ def doctest_ApplicationPreferencesView():
         >>> from schooltool.app.interfaces import ISchoolToolApplication
 
         >>> setup.setUpAnnotations()
-        >>> ztapi.provideAdapter(ISchoolToolApplication,
-        ...                      IApplicationPreferences,
-        ...                      getApplicationPreferences)
+        >>> provideAdapter(getApplicationPreferences,
+        ...                (ISchoolToolApplication,), IApplicationPreferences)
 
     Make sure we can create a view:
 

@@ -18,16 +18,15 @@
 #
 """
 Tests for Person views.
-
-$Id$
 """
 import unittest
 
 from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
-from zope.app.testing import setup, ztapi
+from zope.app.testing import setup
 from zope.traversing.interfaces import IContainmentRoot
+from zope.component import provideAdapter
 
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.app.browser.testing import setUp, tearDown
@@ -232,8 +231,7 @@ def doctest_PersonAddView():
         ...
         >>> from schooltool.person.interfaces import IPersonContainer
         >>> from zope.traversing.browser.interfaces import IAbsoluteURL
-        >>> ztapi.browserViewProviding(IPersonContainer, FakeURL, \
-        ...                            providing=IAbsoluteURL)
+        >>> provideAdapter(FakeURL, (IPersonContainer,), IAbsoluteURL)
 
     Let's create a PersonContainer
 

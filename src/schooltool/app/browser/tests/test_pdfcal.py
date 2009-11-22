@@ -18,18 +18,18 @@
 #
 """
 Tests for SchoolBell calendaring views.
-
-$Id$
 """
 
+import sys
 import unittest
 from pprint import pprint
 from datetime import datetime, date, timedelta
 
+from zope.component import provideAdapter
 from zope.testing import doctest
 from zope.interface import implements
 from zope.publisher.browser import TestRequest
-from zope.app.testing import setup, ztapi
+from zope.app.testing import setup
 from zope.annotation.interfaces import IAttributeAnnotatable
 
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -448,11 +448,9 @@ def pdfSetUp(test=None):
     setup.placefulSetUp()
     sbsetup.setUpCalendaring()
     app = ApplicationStub()
-    ztapi.provideAdapter(None, ISchoolToolApplication,
-                         lambda x: app)
-    ztapi.provideAdapter(ISchoolToolApplication,
-                         IApplicationPreferences,
-                         getApplicationPreferences)
+    provideAdapter(lambda x: app, (None,), ISchoolToolApplication)
+    provideAdapter(getApplicationPreferences,
+                   (ISchoolToolApplication,), IApplicationPreferences)
 
 
 def pdfTearDown(test=None):

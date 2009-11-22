@@ -18,15 +18,14 @@
 #
 """
 Unit tests for schooltool.sampledata.generator
-
-$Id$
 """
 
 import unittest
 
 from zope.testing import doctest
 from zope.interface import implements
-from zope.app.testing import setup, ztapi
+from zope.app.testing import setup
+from zope.component import provideUtility
 
 from schooltool.sampledata.interfaces  import ISampleDataPlugin
 
@@ -56,9 +55,9 @@ def doctest_generate():
         >>> p1 = DummyPlugin("p1", ())
         >>> p2 = DummyPlugin("p2", ())
         >>> p3 = DummyPlugin("p3", ())
-        >>> ztapi.provideUtility(ISampleDataPlugin, p1, 'p1')
-        >>> ztapi.provideUtility(ISampleDataPlugin, p2, 'p2')
-        >>> ztapi.provideUtility(ISampleDataPlugin, p3, 'p3')
+        >>> provideUtility(p1, ISampleDataPlugin, 'p1')
+        >>> provideUtility(p2, ISampleDataPlugin, 'p2')
+        >>> provideUtility(p3, ISampleDataPlugin, 'p3')
 
     Now, let's run the generator:
 

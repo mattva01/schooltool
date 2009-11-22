@@ -18,8 +18,6 @@
 #
 """
 SchoolTool application views.
-
-$Id$
 """
 
 import urllib
@@ -31,9 +29,11 @@ import transaction
 from pytz import utc
 from zope.component import getUtility
 from zope.component import queryMultiAdapter, adapts, getMultiAdapter
+from zope.component import provideAdapter
 from zope.component import subscribers
 from zope.event import notify
 from zope.interface import implements, Interface
+from zope.interface import directlyProvides
 from zope.i18n import translate
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces import NotFound
@@ -66,7 +66,8 @@ from zc.table import table
 from schooltool.common import SchoolToolMessage as _
 
 from schooltool.skin.interfaces import IBreadcrumbInfo
-from schooltool.skin import breadcrumbs
+from schooltool.skin.breadcrumbs import GenericBreadcrumbInfo
+from schooltool.skin.breadcrumbs import CustomNameBreadCrumbInfo
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.interfaces import IFilterWidget
 from schooltool.app.cal import CalendarEvent
@@ -2629,12 +2630,11 @@ def enableICalendarUpload(ical_view):
     So, to hook up iCalendar uploads, the simplest way is to register an
     adapter for CalendarICalendarView that provides IWriteFile.
 
-        >>> from zope.app.testing import setup, ztapi
+        >>> from zope.app.testing import setup
         >>> setup.placelessSetUp()
 
     We have a calendar that provides IEditCalendar.
 
-        >>> from schooltool.calendar.interfaces import IEditCalendar
         >>> from schooltool.app.cal import Calendar
         >>> calendar = Calendar(None)
 
@@ -2646,7 +2646,7 @@ def enableICalendarUpload(ical_view):
         ...         pass
         ...     def write(self, data):
         ...         print 'real adapter got %r' % data
-        >>> ztapi.provideAdapter(IEditCalendar, IWriteFile, RealAdapter)
+        >>> provideAdapter(RealAdapter, (IEditCalendar,), IWriteFile)
 
     We have a fake view on that calendar
 
@@ -2666,7 +2666,7 @@ def enableICalendarUpload(ical_view):
     return IWriteFile(ical_view.context)
 
 
-class CalendarEventBreadcrumbInfo(breadcrumbs.GenericBreadcrumbInfo):
+class CalendarEventBreadcrumbInfo(GenericBreadcrumbInfo):
     """Calendar Event Breadcrumb Info
 
     First, set up a parent:
@@ -2678,8 +2678,7 @@ class CalendarEventBreadcrumbInfo(breadcrumbs.GenericBreadcrumbInfo):
 
       >>> calendar = Object()
       >>> from zope.traversing.interfaces import IContainmentRoot
-      >>> import zope.interface
-      >>> zope.interface.directlyProvides(calendar, IContainmentRoot)
+      >>> directlyProvides(calendar, IContainmentRoot)
 
     Now setup the event:
 
@@ -2692,12 +2691,9 @@ class CalendarEventBreadcrumbInfo(breadcrumbs.GenericBreadcrumbInfo):
 
     Now register the breadcrumb info component and other setup:
 
-      >>> import zope.component
-      >>> import zope.interface
-      >>> from schooltool.skin import interfaces, breadcrumbs
-      >>> zope.component.provideAdapter(breadcrumbs.GenericBreadcrumbInfo,
-      ...                              (Object, TestRequest),
-      ...                              interfaces.IBreadcrumbInfo)
+      >>> provideAdapter(GenericBreadcrumbInfo,
+      ...                (Object, TestRequest),
+      ...                IBreadcrumbInfo)
 
       >>> from zope.app.testing import setup
       >>> setup.setUpTraversal()
@@ -2716,7 +2712,7 @@ class CalendarEventBreadcrumbInfo(breadcrumbs.GenericBreadcrumbInfo):
             (self.context.__parent__, self.request), IBreadcrumbInfo)
         return '%s/%s/edit.html' %(parent_info.url, name)
 
-CalendarBreadcrumbInfo = breadcrumbs.CustomNameBreadCrumbInfo(_('Calendar'))
+CalendarBreadcrumbInfo = CustomNameBreadCrumbInfo(_('Calendar'))
 
 
 class CalendarActionMenuViewlet(object):

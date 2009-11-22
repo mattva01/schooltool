@@ -27,11 +27,10 @@ from pprint import pprint
 from zope.location.location import locate
 from zope.testing import doctest
 from zope.publisher.browser import TestRequest
+from zope.component import provideAdapter
 from zope.interface import Interface
 from zope.schema import TextLine
 from zope.i18n import translate
-from zope.app.testing import ztapi
-from zope.app.container.interfaces import INameChooser
 
 from schooltool.testing import setup
 from schooltool.app.browser import testing as schooltool_setup
@@ -46,16 +45,6 @@ from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.browser import format_time_range
 
 
-def setUpNameChoosers():
-    """Set up name choosers.
-
-    This particular test module is only interested in name chooser
-    for ITimetableSchemaContainer.
-    """
-    ztapi.provideAdapter(ITimetableSchemaContainer, INameChooser,
-                         SimpleNameChooser)
-
-
 def setUp(test):
     """Test setup.
 
@@ -68,11 +57,10 @@ def setUp(test):
     schooltool_setup.setUp(test)
     setup.setUpSessions()
     setUpApplicationPreferences()
-    setUpNameChoosers()
-    ztapi.provideAdapter(ISchoolToolApplication, IApplicationPreferences,
-                         getApplicationPreferences)
-    ztapi.provideAdapter(None, ISchoolToolApplication,
-                         getSchoolToolApplication)
+    provideAdapter(SimpleNameChooser, (ITimetableSchemaContainer,))
+    provideAdapter(getApplicationPreferences,
+                   (ISchoolToolApplication,), IApplicationPreferences)
+    provideAdapter(getSchoolToolApplication, (None,), ISchoolToolApplication)
 
     test.globs['app'] = setup.setUpSchoolToolSite()
     test.globs['schemas'] = TimetableSchemaContainer()

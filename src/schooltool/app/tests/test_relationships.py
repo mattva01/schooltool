@@ -18,15 +18,12 @@
 #
 """
 Unit tests for schooltool.app.relationships
-
-$Id$
 """
 
 import unittest
 
 from zope.testing import doctest
 from zope.interface import implements
-from zope.app.testing import ztapi
 from zope.component import provideAdapter
 
 from schooltool.app.interfaces import IShowTimetables
@@ -50,9 +47,8 @@ class ShowTimetablesStub(object):
 def doctest_Instruction():
     r"""Tests for Instruction URIs and methods
 
-        >>> from schooltool.app.relationships import *
-
         >>> from schooltool.relationship.tests import setUp, tearDown
+        >>> from schooltool.app.relationships import enforceInstructionConstraints
         >>> setUp()
         >>> import zope.event
         >>> old_subscribers = zope.event.subscribers[:]
@@ -70,6 +66,7 @@ def doctest_Instruction():
     There are some constraints: Only objects providing ISection can be
     Sections.
 
+        >>> from schooltool.app.relationships import Instruction
         >>> Instruction(instructor=jonas, section=petras)
         Traceback (most recent call last):
         ...
@@ -195,9 +192,9 @@ def doctest_updateInstructorCalendars():
         ...                adapts=(ISection,),
         ...                provides=ISchoolToolCalendar)
 
-        >>> from schooltool.app.overlay import CalendarOverlayInfo
-        >>> ztapi.provideAdapter(CalendarOverlayInfo, IShowTimetables,
-        ...                      ShowTimetablesStub)
+        >>> from schooltool.app.overlay import ICalendarOverlayInfo
+        >>> provideAdapter(ShowTimetablesStub,
+        ...                (ICalendarOverlayInfo,), IShowTimetables)
 
         >>> class AddEventStub(dict):
         ...     rel_type = URIInstruction
@@ -308,9 +305,9 @@ def doctest_updateStudentCalendars():
         ...                adapts=(ISection,),
         ...                provides=ISchoolToolCalendar)
 
-        >>> from schooltool.app.overlay import CalendarOverlayInfo
-        >>> ztapi.provideAdapter(CalendarOverlayInfo, IShowTimetables,
-        ...                      ShowTimetablesStub)
+        >>> from schooltool.app.overlay import ICalendarOverlayInfo
+        >>> provideAdapter(ShowTimetablesStub,
+        ...                (ICalendarOverlayInfo,), IShowTimetables)
 
 
         >>> class AddEventStub(dict):
