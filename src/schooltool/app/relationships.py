@@ -18,9 +18,6 @@
 #
 """
 Relationship URIs and utilities for schooltool
-
-$Id$
-
 """
 
 from schooltool.course.interfaces import ICourse, ISection

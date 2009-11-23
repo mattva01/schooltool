@@ -18,8 +18,6 @@
 #
 """
 Pluggable Traverser Implementation
-
-$Id$
 """
 
 from zope.interface import implements

@@ -18,8 +18,6 @@
 #
 """
 Tests for customisation of SchoolTool security policy.
-
-$Id$
 """
 
 import unittest

@@ -18,10 +18,7 @@
 #
 """
 Basic person browser views.
-
-$Id$
 """
-import zope.interface
 from zope.app.container.interfaces import INameChooser
 from zope.app.form.browser.interfaces import ITerms
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
@@ -31,6 +28,7 @@ from zope.exceptions.interfaces import UserError
 from z3c.form import form, field, button, validator
 from zope.interface import implements
 from zope.schema import Password, TextLine, Choice
+from zope.schema import ValidationError
 from zope.schema.interfaces import ITitledTokenizedTerm
 from zope.traversing.browser.absoluteurl import absoluteURL
 
@@ -94,7 +92,7 @@ class PersonAddFormAdapter(object):
 # XXX: I don't know why ValidationError returns a docstring instead
 # of the actual error message it gets instantiated with, so I had to
 # subclass to get useful error messages.
-class UsernameValidationError(zope.schema.ValidationError):
+class UsernameValidationError(ValidationError):
     """Validation error related to a username."""
     def doc(self):
         return str(self)

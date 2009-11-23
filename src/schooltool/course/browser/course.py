@@ -18,8 +18,6 @@
 #
 """
 course browser views.
-
-$Id$
 """
 from zope.interface import implements
 from zope.component import adapts

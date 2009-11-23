@@ -18,8 +18,6 @@
 #
 """
 Resource Booking caledar and events
-
-$Id$
 """
 from zope.interface import implements
 from zope.session.interfaces import ISession

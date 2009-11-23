@@ -18,8 +18,6 @@
 #
 """
 Unit tests for basic person.
-
-$Id$
 """
 import unittest
 

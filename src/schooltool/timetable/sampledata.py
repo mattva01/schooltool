@@ -18,8 +18,6 @@
 #
 """
 Timetable sample data generation
-
-$Id$
 """
 import datetime
 from zope.interface import implements

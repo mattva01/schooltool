@@ -18,8 +18,6 @@
 #
 """
 Tests for DateFormatter views.
-
-$Id$
 """
 import unittest
 import datetime

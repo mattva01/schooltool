@@ -18,8 +18,6 @@
 #
 """
 Person Preferences implementation
-
-$Id$
 """
 
 from persistent import Persistent

@@ -18,9 +18,6 @@
 #
 """
 Sources and vocabularies for form fields.
-
-$Id$
-
 """
 from zope.interface import implements
 from zope.schema.interfaces import ITitledTokenizedTerm

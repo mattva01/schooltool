@@ -18,8 +18,6 @@
 #
 """
 Unit tests for schooltool.app.main.
-
-$Id$
 """
 
 import os

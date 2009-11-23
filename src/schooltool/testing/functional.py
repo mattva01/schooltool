@@ -18,8 +18,6 @@
 #
 """
 Functional Testing Utilities
-
-$Id$
 """
 
 import os

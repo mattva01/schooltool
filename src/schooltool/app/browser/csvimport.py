@@ -18,8 +18,6 @@
 #
 """
 SchoolTool application views.
-
-$Id$
 """
 import csv
 

@@ -17,8 +17,6 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """Testing utilities for testing Term related code.
-
-$Id$
 """
 import datetime
 from persistent import Persistent

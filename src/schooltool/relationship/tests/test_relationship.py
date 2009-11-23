@@ -18,8 +18,6 @@
 #
 """
 Unit tests for schooltool.relationship
-
-$Id$
 """
 
 import unittest

@@ -18,8 +18,6 @@
 #
 """
 SchoolTool skin.
-
-$Id$
 """
 
 from zope.component import getAdapter, getMultiAdapter, subscribers

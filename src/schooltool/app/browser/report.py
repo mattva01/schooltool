@@ -18,8 +18,6 @@
 #
 """
 SchoolTool PDF report views.
-
-$Id$
 """
 
 import urllib
@@ -44,7 +42,7 @@ def _quoteUrl(url):
     if not url:
         return url
     if type(url) is unicode:
-        encoded = directive.encode('UTF-8')
+        encoded = url.encode('UTF-8')
     else:
         encoded = str(url)
     return urllib.quote(encoded)

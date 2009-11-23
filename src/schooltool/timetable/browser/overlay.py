@@ -18,8 +18,6 @@
 #
 """
 Calendar overlay views for SchoolTool with timetabling enabled.
-
-$Id$
 """
 from zope.component import getUtility
 from zope.proxy import sameProxiedObjects

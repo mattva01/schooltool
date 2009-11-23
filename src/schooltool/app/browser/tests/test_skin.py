@@ -18,8 +18,6 @@
 #
 """
 Tests for schooltool.app.browser.skin.
-
-$Id$
 """
 
 import unittest

@@ -18,8 +18,6 @@
 #
 """
 Unit tests for schooltool.note
-
-$Id$
 """
 import unittest
 

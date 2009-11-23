@@ -17,8 +17,6 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """Commendation Browser Views
-
-$Id$
 """
 __docformat__ = 'reStructuredText'
 from zope import annotation

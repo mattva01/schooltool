@@ -18,9 +18,6 @@
 #
 """
 SchoolTool security policy crowds.
-
-$Id$
-
 """
 
 from zope.interface import implements

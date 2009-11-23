@@ -18,9 +18,6 @@
 #
 """
 Lyceum person specific code.
-
-$Id$
-
 """
 from zope.interface import implements
 from zope.component import adapts

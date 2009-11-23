@@ -16,10 +16,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-"""Breadcrumbs tests
-
-$Id$
-"""
+"""Breadcrumbs tests"""
 __docformat__ = 'reStructuredText'
 
 import unittest
@@ -53,8 +50,8 @@ def test_breadcrumbs():
 
       >>> root = Object()
       >>> from zope.traversing.interfaces import IContainmentRoot
-      >>> import zope.interface
-      >>> zope.interface.directlyProvides(root, IContainmentRoot)
+      >>> from zope.interface import directlyProvides
+      >>> directlyProvides(root, IContainmentRoot)
 
       >>> sub1 = Object(root, 'sub1')
 
@@ -116,10 +113,9 @@ def test_breadcrumbs():
 
     Let's now register the breadcrumb info as an adapter:
 
-      >>> import zope.component
-      >>> import zope.interface
       >>> from schooltool.skin import interfaces
-      >>> zope.component.provideAdapter(breadcrumbs.GenericBreadcrumbInfo,
+      >>> from zope.component import provideAdapter
+      >>> provideAdapter(breadcrumbs.GenericBreadcrumbInfo,
       ...                              (Object, TestRequest),
       ...                              interfaces.IBreadcrumbInfo)
 

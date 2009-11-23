@@ -18,9 +18,6 @@
 #
 """
 SchoolTool metaconfiguration code.
-
-$Id$
-
 """
 
 from zope.interface import implements

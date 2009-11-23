@@ -18,8 +18,6 @@
 #
 """
 Unit tests for course and section implementations.
-
-$Id$
 """
 import unittest
 from zope.testing import doctest

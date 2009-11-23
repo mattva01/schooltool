@@ -65,8 +65,6 @@ There is some trickery to make empty calendars work:
     >>> list(read_icalendar(ical_file_as_string))
     []
 
-
-$Id$
 """
 
 import pytz

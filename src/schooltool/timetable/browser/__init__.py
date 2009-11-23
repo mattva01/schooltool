@@ -18,14 +18,11 @@
 #
 """
 SchoolTool timetabling views.
-
-$Id$
 """
 import datetime
 import sets
 import re
 
-from zope.security.proxy import removeSecurityProxy
 from zope.app.container.interfaces import INameChooser
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts

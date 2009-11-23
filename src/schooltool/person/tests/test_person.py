@@ -18,8 +18,6 @@
 #
 """
 Unit tests for schooltool.person.person.
-
-$Id$
 """
 import unittest
 

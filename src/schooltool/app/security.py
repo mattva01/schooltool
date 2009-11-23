@@ -18,8 +18,6 @@
 #
 """
 SchoolTool security infrastructure
-
-$Id$
 """
 
 import urllib

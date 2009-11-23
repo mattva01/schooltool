@@ -18,8 +18,6 @@
 #
 """
 Tests for schooltool.app.browser.skin.
-
-$Id$
 """
 
 import unittest
@@ -130,8 +128,6 @@ def doctest_NavigationViewletViewCrowd():
         ...     def contains(self, principal):
         ...         return "Crowd on %s contains %s" % (self.context, principal)
 
-        >>> from zope.component import provideAdapter
-        >>> from zope.interface import Interface
         >>> from schooltool.securitypolicy.interfaces import ICrowd
         >>> provideAdapter(StubCrowd,
         ...                (Interface, ), ICrowd, name='schooltool.view')

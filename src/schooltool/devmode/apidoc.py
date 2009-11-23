@@ -18,16 +18,10 @@
 #
 """
 API doc views
-
-$Id$
 """
 __docformat__ = 'restructuredtext'
 
-import zope.interface
-
-import zope.app.apidoc.ifacemodule.menu
-import zope.app.apidoc.codemodule.browser.menu
-import zope.app.apidoc.bookmodule.browser
+from zope.interface import directlyProvides
 from zope.app.apidoc import apidoc
 from zope.app.apidoc import ifacemodule, codemodule, bookmodule
 from zope.app.apidoc.browser.skin import APIDOC
@@ -41,7 +35,7 @@ class schooltoolApidocNamespace(apidoc.apidocNamespace):
         super(schooltoolApidocNamespace, self).__init__(ob, request)
         # A small hack to ensure that SchoolTool stuff is available.
         if request:
-            zope.interface.directlyProvides(
+            directlyProvides(
                 request, [IDevModeLayer, APIDOC])
 
     def traverse(self, name, ignore):

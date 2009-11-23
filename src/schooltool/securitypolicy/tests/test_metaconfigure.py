@@ -18,8 +18,6 @@
 #
 """
 Unit tests for schooltool.securitypolicy.metaconfigure
-
-$Id$
 """
 
 import unittest
@@ -114,8 +112,6 @@ def doctest_handle_crowd():
 
 def doctest_handle_allow():
     """Tests for handle_allow.
-
-        >>> from schooltool.securitypolicy import metaconfigure as mc
 
         >>> cru = CrowdsUtility()
         >>> cru.factories = {'cr1': 'Factory 1',

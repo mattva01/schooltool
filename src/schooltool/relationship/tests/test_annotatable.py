@@ -18,8 +18,6 @@
 #
 """
 Unit tests for schooltool.relationship.annotatable
-
-$Id$
 """
 
 import unittest

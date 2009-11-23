@@ -18,8 +18,6 @@
 #
 """
 SchoolTool application interfaces
-
-$Id$
 """
 
 import datetime
