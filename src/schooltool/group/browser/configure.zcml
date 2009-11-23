@@ -82,14 +82,6 @@
       action="+/addSchoolToolGroup.html"
       />
 
-  <addMenuItem
-      title="SchoolBell Group"
-      description="A Group"
-      class="..group.Group"
-      permission="schooltool.edit"
-      view="addSchoolToolGroup.html"
-      />
-
   <page
       name="index.html"
       for="..interfaces.IGroup"
