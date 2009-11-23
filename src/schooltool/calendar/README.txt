@@ -19,11 +19,21 @@ Features
 - You can display several calendars in a single view by using calendar
   composition.
 
-- It supports recurring events.
+- It supports recurring events (daily, weekly, monthly and yearly).
+
+Things that are not currently supported:
+
+- Timezone handling (UTC times are converted into server's local time in the
+  iCalendar parser, but that's all).
+
+- All-day events (that is, events that only specify the date but not the time).
+
+- Informing the user when uploaded iCalendar files use features that are not
+  supported by SchoolTool.
 
 
-Quick overview
---------------
+Modules
+-------
 
 At the moment schooltool.calendar contains building blocks for calendaring
 in your own application.
@@ -44,10 +54,7 @@ your own calendar and event classes easier.
 schooltool.calendar.icalendar lets you parse and generate iCalendar (RFC 2445)
 files.
 
-schooltool.calendar.browser defines some browser views for calendars.  It is
-very lean at the moment.
-
-  TODO: flesh out browser views.
+schooltool.calendar.browser defines some browser views for calendars.
 
 schooltool.calendar.recurrent defines some recurrence rules that let you
 describe events recurring daily, weekly, monthly or yearly.
