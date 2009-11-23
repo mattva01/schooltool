@@ -136,6 +136,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     tests_require=['zope.testing'],
     dependency_links=['http://ftp.schooltool.org/schooltool/1.2/'],
     include_package_data=True,
+    zip_safe=False,
     entry_points = """
     [paste.app_factory]
     main = schooltool.paste.main:schooltool_app_factory
