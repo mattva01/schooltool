@@ -104,12 +104,13 @@ $ sudo apt-get install msttcorefonts
 In case you're wondering, we need these fonts to support unicode in
 our pdf's
 
-Building SchoolTool from a subversion checkout
+
+Building SchoolTool from a checkout
 ----------------------------------------------
 
-Run 'make build extract-translations update-translations' to build the
-necessary extension modules and translations.  You will need to have gettext
-installed to compile the translations.
+Run 'make compile-translations' to build the necessary extension modules and
+translations.  You will need to have gettext installed to compile the
+translations.
 
 It is a good idea to run 'make test' and 'make ftest' to check if all the
 essential unit and functional tests pass.
@@ -118,10 +119,7 @@ essential unit and functional tests pass.
 Running SchoolTool
 ------------------
 
-The top-level project directory contains the following executable Python
-scripts:
-
-  schooltool-server.py      starts the SchoolTool server
+Run 'make run'
 
 The SchoolTool server automatically creates an empty database if it cannot find
 an existing one.  You can customize the location of the database and a few
@@ -142,12 +140,12 @@ The default web application port is 7080.  Once the server is running, you can
 connect to it with a web browser.
 
 
-Project structure (subversion checkout only)
+Project structure (checkout only)
 --------------------------------------------
 
   GPL                   the GNU General Public License, version 2
-  README                this file
-  RELEASE               release notes for the latest release
+  README.txt            this file
+  CHANGES.txt           release notes for the latest release
 
   Makefile              makefile for building extension modules
   setup.py              distutils setup script for building extension modules
@@ -155,7 +153,6 @@ Project structure (subversion checkout only)
   remove-stale-bytecode.py
                         script to remove stale *.pyc files
 
-  schooltool-server.py  script to start the SchoolTool server
   schooltool.conf.in    sample configuration file
 
   build/                temporary files are placed here during build process
@@ -164,14 +161,6 @@ Project structure (subversion checkout only)
   doc/                  documentation
   src/                  source code
     schooltool/         Python package 'schooltool'
-      main.py           the SchoolTool server
-      *.py              other modules (see docstrings)
-      tests/            unit tests for the schooltool package
-      browser/          web application views for the server
-        resources/      resource files (images, stylesheets)
-        templates/      page templates
-        tests/          unit tests for the schooltool.browser package
-    schoolbell/         Python package 'schoolbell'
 
 
 Testing
@@ -188,11 +177,11 @@ functional tests.
 
 To run all unit tests, do
 
-  python test.py -pv
+  python test.py -pv -u
 
 To run all functional tests, do
 
-  python test.py -fpv
+  python test.py -pv -f
 
 The test runner has more options and features.  To find out about them, do
 
@@ -226,29 +215,6 @@ for syntax highlighting source files.
 
 The HTML version of coverage reports is published nightly at
 http://source.schooltool.org/coverage/
-
-There are some other helpful make targets:
-
-  make coverage-report-list
-
-    Lists all non-test modules from the schooltool package that contain
-    untested code.
-
-  make coverage-report
-
-    Like 'make coverage-report-list', but is somewhat slower and also
-    shows the number of untested lines in each module.
-
-  make vi-coverage-reports
-
-    Launches vi for all coverage reports listed by 'make
-    coverage-report-list'.  Type />>>>>> to search for untested code,
-    then type :next to look at the next report.
-
-  make edit-coverage-reports
-
-    Like 'make vi-coverage-reports' but uses $EDITOR rather than
-    hardcoding 'vi'.
 
 
 Translation
