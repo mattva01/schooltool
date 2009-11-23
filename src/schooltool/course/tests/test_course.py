@@ -55,7 +55,7 @@ def doctest_CourseContainer():
 def doctest_Course():
     r"""Tests for Courses
 
-    Courses are similar to SchoolBell groups but have sections instead of
+    Courses are similar to SchoolTool groups but have sections instead of
     members.
 
         >>> from schooltool.course.course import Course

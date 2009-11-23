@@ -43,7 +43,7 @@ def setUpSessions():
     provideUtility(sdc, ISessionDataContainer)
 
 
-# --------------------- Create a SchoolBell application --------------------
+# --------------------- Create a SchoolTool application --------------------
 from schooltool.app.app import SchoolToolApplication
 def createSchoolToolApplication():
     """Create a ``SchoolToolApplication`` instance with all its high-level
@@ -53,7 +53,7 @@ def createSchoolToolApplication():
     return app
 
 
-# ----------------- Setup SchoolBell application as a site -----------------
+# ----------------- Setup SchoolTool application as a site -----------------
 from zope.interface import Interface
 from zope.interface import directlyProvides
 from zope.app.component.hooks import setSite

@@ -52,7 +52,7 @@ We should find just a placeholder there.
     <BLANKLINE>
     BEGIN:VCALENDAR
     VERSION:2.0
-    PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+    PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
     BEGIN:VEVENT
     UID:empty-calendar-placeholder@schooltool.org
     SUMMARY:Empty calendar
@@ -74,7 +74,7 @@ Now just the VFREEBUSY component of calendar
     <BLANKLINE>
     BEGIN:VCALENDAR
     VERSION:2.0
-    PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+    PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
     METHOD:PUBLISH
     BEGIN:VFREEBUSY
     END:VFREEBUSY
@@ -124,7 +124,7 @@ The atom view should be here
     ...
     </feed>
 
-While PDF views will always be disabled when SchoolBell is running as a
+While PDF views will always be disabled when SchoolTool is running as a
 content object in Zope 3, it may be possible to enable PDF views for this
 test.  We shall try to enable them.
 
@@ -210,7 +210,7 @@ let's use an aliased URL (directly on the person rather than on the calendar):
     <BLANKLINE>
     BEGIN:VCALENDAR
     VERSION:2.0
-    PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+    PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
     ...BEGIN:VEVENT
     UID:...
     SUMMARY:Sleeping
@@ -228,7 +228,7 @@ And lets make sure that time is listed as BUSY
     <BLANKLINE>
     BEGIN:VCALENDAR
     VERSION:2.0
-    PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+    PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
     METHOD:PUBLISH
     BEGIN:VFREEBUSY
     FREEBUSY:20050203T010000/20050203T09200000Z
@@ -317,7 +317,7 @@ road, let's create a recurring event.
     ...
     ... BEGIN:VCALENDAR
     ... VERSION:2.0
-    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+    ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
     ... BEGIN:VEVENT
     ... UID:lalala/fooo
     ... SUMMARY:Sleep alot
@@ -408,7 +408,7 @@ Let's add a calendar through iCalendar PUT view (so we would know the event id):
     ...
     ... BEGIN:VCALENDAR
     ... VERSION:2.0
-    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+    ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
     ... BEGIN:VEVENT
     ... UID:dummy-uid
     ... SUMMARY:Important event
@@ -525,7 +525,7 @@ We can try and put an updated calendar:
     ...
     ... BEGIN:VCALENDAR
     ... VERSION:2.0
-    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+    ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
     ... BEGIN:VEVENT
     ... UID:empty-calendar-placeholder@schooltool.org
     ... SUMMARY:Empty calendar

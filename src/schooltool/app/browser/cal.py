@@ -1502,7 +1502,7 @@ class DailyCalendarView(CalendarViewBase):
 class DailyCalendarRowsView(BrowserView):
     """Daily calendar rows view for SchoolTool.
 
-    This view differs from the original view in SchoolBell in that it can
+    This view differs from the original view in SchoolTool in that it can
     also show day periods instead of hour numbers.
     """
     __used_for__ = ISchoolToolCalendar

@@ -1,11 +1,11 @@
 ==================================
-SchoolBell security infrastructure
+SchoolTool security infrastructure
 ==================================
 
 General design
 --------------
 
-The security system of SchoolBell consists of:
+The security system of SchoolTool consists of:
 
  * SchoolToolAuthenticationUtility
  * views for login/logout
@@ -18,7 +18,7 @@ according to the data stored in the session.
 The security policy is documented in src/schooltool/securitypolicy/README.txt
 
 
-SchoolBell authentication utility
+SchoolTool authentication utility
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -54,7 +54,7 @@ SchoolBell authentication utility
     >>> provideUtility(sdc, ISessionDataContainer, 'schooltool.auth')
 
 
-SchoolBell is a possible site:
+SchoolTool is a possible site:
 
     >>> from zope.interface.verify import verifyObject
     >>> from zope.app.component.interfaces import IPossibleSite, ISite

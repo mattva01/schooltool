@@ -17,9 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-SchoolBell calendaring objects.
-
-$Id$
+SchoolTool calendaring objects.
 """
 import base64
 
@@ -168,7 +166,7 @@ class WriteCalendar(object):
         >>> adapter.write('''\
         ... BEGIN:VCALENDAR
         ... VERSION:2.0
-        ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
         ... BEGIN:VEVENT
         ... UID:some-random-uid@example.com
         ... SUMMARY:LAN party
@@ -189,7 +187,7 @@ class WriteCalendar(object):
         >>> adapter.write('''\
         ... BEGIN:VCALENDAR
         ... VERSION:2.0
-        ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
         ... BEGIN:VEVENT
         ... UID:some-random-uid@example.com
         ... SUMMARY:LAN party %s

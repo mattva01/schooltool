@@ -287,6 +287,6 @@ function createCalendarWidget() {
         icon = '';
     }
 
-    // Edited to match SchoolBell styling
+    // Edited to match SchoolTool styling
     document.write('<input name="' + idtag + '" id="' + idtag + '" type="text" class="textType" size="20" value="" ' + readOnly + ' ' + clicking + ' />' +  icon + '<br /><div id="' + idtag + 'Div" style="background: #ffffff; position: absolute; display:none;"></div>');
 }

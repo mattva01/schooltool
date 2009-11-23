@@ -1,4 +1,4 @@
-SchoolBell calendaring library
+SchoolTool calendaring library
 ==============================
 
 schooltool.calendar is a calendaring library for Zope 3.
@@ -132,7 +132,7 @@ datetime range.
 Storage of calendars
 --------------------
 
-SchoolBell was designed to allow flexibility in calendar storage: calendars
+SchoolTool was designed to allow flexibility in calendar storage: calendars
 may be stored in the ZODB, in a relational database, as iCalendar files on
 disk, or computed on the fly from some other data source.
 
@@ -209,14 +209,14 @@ a calendar object, you can create one as follows:
     >>> len(sample_calendar)
     3
 
-You can create an iCalendar file from a SchoolBell calendar.
+You can create an iCalendar file from a SchoolTool calendar.
 
     >>> from schooltool.calendar.icalendar import convert_calendar_to_ical
     >>> lines = convert_calendar_to_ical(sample_calendar)
     >>> print "\n".join(lines)                          # doctest: +ELLIPSIS
     BEGIN:VCALENDAR
     VERSION:2.0
-    PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+    PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
     BEGIN:VEVENT
     UID:20050211T140836Z-19135-1013-8968-3@muskatas
     ...
@@ -239,7 +239,7 @@ file objects are opened in text mode.
 iCalendar is a large specification, and schooltool.calendar supports only a
 subset of it.  This subset should be enough to interoperate with most open
 source calendaring software, but you should keep in mind that reading an
-iCalendar file into SchoolBell objects and writing it back is a lossy
+iCalendar file into SchoolTool objects and writing it back is a lossy
 transformation.
 
 

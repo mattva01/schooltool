@@ -41,7 +41,7 @@ from schooltool.app.browser.overlay import CalendarOverlayView
 class CalendarSTOverlayView(CalendarOverlayView):
     """View for the calendar overlay portlet.
 
-    Much like the original CalendarOverlayView in SchoolBell, this view allows
+    Much like the original CalendarOverlayView in SchoolTool, this view allows
     you to choose calendars to be displayed, but this one allows you to view
     timetables of the calendar owners as well.
 

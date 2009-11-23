@@ -387,7 +387,7 @@ a tree-based outline. One of the chapters is "Calendar", so let's have a look:
 
     >>> browser.getLink('Calendar', url="calendar/show.html").click()
     >>> browser.contents
-    '...SchoolBell calendaring library...'
+    '...SchoolTool calendaring library...'
 
 
 Sample Data
