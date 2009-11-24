@@ -19,8 +19,6 @@
 
 from persistent import Persistent
 from zope.app.container.contained import Contained
-from zope.app.intid.interfaces import IIntIds
-from zope.app.intid import IntIds
 from zope.app.catalog.interfaces import ICatalog
 from zope.app.catalog.catalog import Catalog
 from zope.app.catalog.text import TextIndex
@@ -31,7 +29,7 @@ from zope.interface import directlyProvides
 
 from zc.table.interfaces import ISortableColumn
 
-from schooltool.utility import UtilitySpecification, UtilitySetUp
+from schooltool.utility import UtilitySetUp
 
 from schooltool.demographics.interfaces import ISearch
 from schooltool.demographics.person import Person

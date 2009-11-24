@@ -17,9 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.app.app.
-
-$Id$
+Unit tests for schooltool.app.cal.
 """
 
 import unittest
@@ -50,7 +48,7 @@ def doctest_CalendarEvent():
     CalendarEvents are almost like SimpleCalendarEvents, the main difference
     is that CalendarEvents are mutable and IContained.
 
-        >>> from schooltool.app.cal import CalendarEvent, Calendar
+        >>> from schooltool.app.cal import CalendarEvent
 
         >>> event = CalendarEvent(datetime(2005, 2, 7, 16, 24),
         ...                       timedelta(hours=3),

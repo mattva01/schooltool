@@ -1,11 +1,11 @@
 ==================================
-SchoolBell security infrastructure
+SchoolTool security infrastructure
 ==================================
 
 General design
 --------------
 
-The security system of SchoolBell consists of:
+The security system of SchoolTool consists of:
 
  * SchoolToolAuthenticationUtility
  * views for login/logout
@@ -18,7 +18,7 @@ according to the data stored in the session.
 The security policy is documented in src/schooltool/securitypolicy/README.txt
 
 
-SchoolBell authentication utility
+SchoolTool authentication utility
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -33,26 +33,28 @@ SchoolBell authentication utility
 
     >>> from zope.app.security.principalregistry import principalRegistry
     >>> from zope.app.security.interfaces import IAuthentication
-    >>> from zope.app.testing import ztapi
-    >>> ztapi.provideUtility(IAuthentication, principalRegistry)
+    >>> from zope.component import provideUtility
+    >>> provideUtility(principalRegistry, IAuthentication)
 
     Session setup:
 
+    >>> from zope.component import provideAdapter
+    >>> from zope.publisher.interfaces import IRequest
     >>> from zope.session.session import ClientId, Session
     >>> from zope.session.session import PersistentSessionDataContainer
-    >>> from zope.publisher.interfaces import IRequest
     >>> from zope.session.http import CookieClientIdManager
     >>> from zope.session.interfaces import ISessionDataContainer
     >>> from zope.session.interfaces import IClientId
     >>> from zope.session.interfaces import IClientIdManager, ISession
-    >>> ztapi.provideAdapter(IRequest, IClientId, ClientId)
-    >>> ztapi.provideAdapter(IRequest, ISession, Session)
-    >>> ztapi.provideUtility(IClientIdManager, CookieClientIdManager())
+    >>> provideAdapter(ClientId)
+    >>> provideAdapter(Session, (IRequest,), ISession)
+
+    >>> provideUtility(CookieClientIdManager(), IClientIdManager)
     >>> sdc = PersistentSessionDataContainer()
-    >>> ztapi.provideUtility(ISessionDataContainer, sdc, 'schooltool.auth')
+    >>> provideUtility(sdc, ISessionDataContainer, 'schooltool.auth')
 
 
-SchoolBell is a possible site:
+SchoolTool is a possible site:
 
     >>> from zope.interface.verify import verifyObject
     >>> from zope.app.component.interfaces import IPossibleSite, ISite
@@ -88,7 +90,7 @@ Let's provide the location of auth:
     >>> from schooltool.app.security import PersonContainerAuthenticationPlugin
     >>> from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
     >>> plugin = PersonContainerAuthenticationPlugin()
-    >>> ztapi.provideUtility(ISchoolToolAuthenticationPlugin, plugin)
+    >>> provideUtility(plugin, ISchoolToolAuthenticationPlugin)
 
     >>> from zope.app.component.hooks import setSite
     >>> setSite(app)
@@ -167,9 +169,9 @@ defined, they are added to the list of groups of a principal, too:
     >>> from zope.app.security.principalregistry import EverybodyGroup
 
     >>> authenticated = AuthenticatedGroup('zope.authenticated', '', '')
-    >>> ztapi.provideUtility(IAuthenticatedGroup, authenticated)
+    >>> provideUtility(authenticated, IAuthenticatedGroup)
     >>> everyone = EverybodyGroup('zope.everybody', 'All users', '')
-    >>> ztapi.provideUtility(IEveryoneGroup, everyone)
+    >>> provideUtility(everyone, IEveryoneGroup)
 
     >>> p = auth.getPrincipal('sb.person.frog')
     >>> p.groups
@@ -244,7 +246,7 @@ authentication (by trying to adapt the request to ILoginPassword):
     ...         self.context.unauthorized("basic realm=%s" % realm)
     ...
     >>> class IFrogMarker(Interface): pass
-    >>> ztapi.provideAdapter(IFrogMarker, ILoginPassword, Adapter)
+    >>> provideAdapter(Adapter, (IFrogMarker,), ILoginPassword)
     >>> request = TestRequest()
     >>> directlyProvides(request, IFrogMarker)
 

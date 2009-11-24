@@ -18,8 +18,6 @@
 #
 """
 SchoolTool application interfaces
-
-$Id$
 """
 
 import datetime
@@ -37,8 +35,6 @@ from zope.location.interfaces import ILocation
 from schooltool.term.interfaces import ITerm
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
 from schooltool.calendar.interfaces import Unchanged
-
-from schooltool.common import SchoolToolMessage as _
 
 #
 # Time field used in timetabling interfaces

@@ -18,14 +18,11 @@
 #
 """
 course browser views.
-
-$Id$
 """
 from zope.interface import implements
 from zope.component import adapts
 from zope.component import getMultiAdapter
 from zope.component import getUtility
-from zope.app.container.interfaces import INameChooser
 from zope.app.intid.interfaces import IIntIds
 from zope.app.form.browser.add import AddView
 from zope.publisher.interfaces.browser import IBrowserRequest
@@ -34,10 +31,9 @@ from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser.absoluteurl import absoluteURL
 
-from schooltool.term.interfaces import ITermContainer, ITerm
+from schooltool.term.interfaces import ITerm
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.skin.containers import ContainerView
-from schooltool.course.interfaces import ISectionContainer
 from schooltool.course.interfaces import ICourse, ICourseContainer, ISection
 from schooltool.app.relationships import URIInstruction, URISection
 from schooltool.app.membership import URIGroup, URIMembership

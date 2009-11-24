@@ -29,11 +29,11 @@ from zope.app.testing import setup
 from zope.interface.verify import verifyObject
 from zope.interface import implements, directlyProvides
 from zope.app.testing.placelesssetup import PlacelessSetup
-from zope.app.testing import ztapi
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.location.interfaces import ILocation
 from zope.testing import doctest
 from zope.component import eventtesting
+from zope.component import provideAdapter
 
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.timetable import SchooldaySlot
@@ -80,7 +80,6 @@ class TestTimetable(unittest.TestCase):
         app = {}
         app['ttschemas'] = {'stt1': "STT 1"}
 
-        from zope.component import provideAdapter
         from schooltool.app.interfaces import ISchoolToolApplication
         provideAdapter(lambda ctx: app,
                        adapts=[None],
@@ -851,12 +850,10 @@ class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
         setup.setUpAnnotations()
         setUpRelationships()
 
-        ztapi.provideAdapter(IOwnTimetables, ITimetables,
-                             TimetablesAdapter)
+        provideAdapter(TimetablesAdapter)
 
         app = {}
 
-        from zope.component import provideAdapter
         from schooltool.app.interfaces import ISchoolToolApplication
         provideAdapter(lambda ctx: app,
                        adapts=[None],

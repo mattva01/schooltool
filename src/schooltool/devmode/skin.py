@@ -17,9 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-SchoolBell skin.
-
-$Id$
+SchoolTool skin.
 """
 from zope.interface import directlyProvidedBy
 from zope.interface import directlyProvides
@@ -30,11 +28,11 @@ from schooltool.skin import ISchoolToolSkin
 
 
 class IDevModeLayer(IBrowserRequest):
-    """SchoolBell devmode layer."""
+    """SchoolTool devmode layer."""
 
 
 class ISchoolToolDevModeSkin(IDevModeLayer, ISchoolToolSkin):
-    """The SchoolBell devmode skin"""
+    """The SchoolTool devmode skin"""
 
 
 def schoolToolTraverseSubscriber(event):

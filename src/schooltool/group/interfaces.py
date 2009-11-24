@@ -18,37 +18,34 @@
 #
 """
 Group interfaces
-
-$Id$
 """
 
-import zope.interface
-import zope.schema
-from zope.app import container
+from zope.interface import Interface, Attribute
+from zope.schema import TextLine, Text
 from zope.app.container.interfaces import IContainer, IContained
-from zope.app.container import constraints
+from zope.app.container.constraints import contains, containers
 
 from schooltool.common import SchoolToolMessage as _
 
-class IGroupMember(zope.interface.Interface):
+class IGroupMember(Interface):
     """An object that knows the groups it is a member of."""
 
-    groups = zope.interface.Attribute("""Groups (see IRelationshipProperty)""")
+    groups = Attribute("""Groups (see IRelationshipProperty)""")
 
 
-class IBaseGroup(zope.interface.Interface):
+class IBaseGroup(Interface):
     """Group."""
 
-    title = zope.schema.TextLine(
+    title = TextLine(
         title=_("Title"),
         description=_("Title of the group."))
 
-    description = zope.schema.Text(
+    description = Text(
         title=_("Description"),
         required=False,
         description=_("Description of the group."))
 
-    members = zope.interface.Attribute(
+    members = Attribute(
         """Members of the group (see IRelationshipProperty)""")
 
 
@@ -59,16 +56,16 @@ class IGroup(IBaseGroup):
 class IGroupContainer(IContainer):
     """Container of groups."""
 
-    container.constraints.contains(IGroup)
+    contains(IGroup)
 
 
 class IGroupContained(IGroup, IContained):
     """Group contained in an IGroupContainer."""
 
-    container.constraints.containers(IGroupContainer)
+    containers(IGroupContainer)
 
 
-class IGroupContainerContainer(container.interfaces.IContainer):
+class IGroupContainerContainer(IContainer):
     """Container of group containers."""
 
-    container.constraints.contains(IGroupContainer)
+    contains(IGroupContainer)

@@ -208,14 +208,6 @@
       action="+/addSchoolToolEquipment.html"
       />
 
-  <addMenuItem
-      title="SchoolBell Resource"
-      description="A Resource"
-      class="..resource.Resource"
-      permission="schooltool.edit"
-      view="addSchoolToolResource.html"
-      />
-
   <page
       name="index.html"
       for="..interfaces.IResource"

@@ -265,8 +265,6 @@ The modules available in the SchoolTool API documentation are:
     <Link text='Interfaces' url='.../++apidoc++/Interface/@@menu.html'>
     >>> browser.getLink('Code')
     <Link text='Code' url='.../++apidoc++/Code/@@menu.html'>
-    >>> browser.getLink('RESTive Views')
-    <Link text='RESTive Views' url='.../++apidoc++/Code/@@restmenu.html'>
     >>> browser.getLink('Book')
     <Link text='Book' url='.../++apidoc++/Book/schooltool/@@menu.html'>
 
@@ -389,7 +387,7 @@ a tree-based outline. One of the chapters is "Calendar", so let's have a look:
 
     >>> browser.getLink('Calendar', url="calendar/show.html").click()
     >>> browser.contents
-    '...SchoolBell calendaring library...'
+    '...SchoolTool calendaring library...'
 
 
 Sample Data

@@ -18,17 +18,16 @@
 #
 """
 Unit tests for schooltool.app.browser.csvimport
-
-$Id$
 """
 import unittest
 import datetime
 from StringIO import StringIO
+from textwrap import dedent
 
+from zope.component import provideAdapter
 from zope.i18n import translate
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
-from zope.app.testing import ztapi
 
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -40,7 +39,6 @@ from schooltool.person.person import Person
 from schooltool.term.interfaces import ITermContainer
 
 from schooltool.app.browser.csvimport import InvalidCSVError
-from schooltool.common import dedent
 from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.course import Course
 from schooltool.course.section import Section
@@ -53,10 +51,8 @@ __metaclass__ = type
 def setUp(test=None):
     testSetUp(test)
 
-    from zope.annotation.interfaces import IAttributeAnnotatable
     from schooltool.timetable import TimetablesAdapter
-    ztapi.provideAdapter(IAttributeAnnotatable, ITimetables,
-                         TimetablesAdapter)
+    provideAdapter(TimetablesAdapter)
 
 
 def doctest_BaseCSVImporter():

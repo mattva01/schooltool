@@ -24,7 +24,6 @@ site-definition ${abspath}/school.zcml
 #
 
 #
-#
 # ssl_certificate certificate
 #
 #   Specifies a certificate in PEM format which contains a certificate and
@@ -78,25 +77,6 @@ pid-file var/schooltool.pid
 #
 error-log-file ${abspath}/log/schooltool.log
 error-log-file STDERR
-
-#
-# rest-access-log-file
-#
-#   Specifies the path of a file used for an Apache combined format
-#   access log for the RESTive API server.  Special values STDERR and
-#   STDOUT mean standard error and standard output respectively.
-#
-#   You can specify more than one log file.  All messages will be duplicated
-#   to all the log files.
-#
-# Default:
-#    rest-access-log-file STDOUT
-#
-# Examples:
-#    rest-access-log-file /var/log/schooltool/access.log
-#    rest-access-log-file STDOUT
-#
-rest-access-log-file ${abspath}/log/rest-access.log
 
 #
 # web-access-log-file

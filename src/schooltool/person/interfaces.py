@@ -18,26 +18,22 @@
 #
 """
 Person interfaces
-
-$Id$
 """
 import calendar
 import pytz
 
-import zope.interface
-import zope.schema
-
-import zope.app.container.constraints
-from zope.app import container
+from zope.app.container.interfaces import IContained, IContainer
+from zope.app.container.constraints import containers, contains
 from zope.annotation.interfaces import IAnnotatable, IAttributeAnnotatable
-from zope.location.interfaces import ILocation
+from zope.interface import Interface, Attribute
+from zope.schema import Bool, Bytes, Choice, TextLine
 
 from schooltool.app.utils import vocabulary
 from schooltool.common import SchoolToolMessage as _
 from schooltool.group.interfaces import IGroupMember
 
 
-class IPasswordWriter(zope.interface.Interface):
+class IPasswordWriter(Interface):
     """Interface for setting a password for a person."""
 
     def setPassword(password):
@@ -51,20 +47,20 @@ class IHavePreferences(IAnnotatable):
 class IReadPerson(IGroupMember):
     """Publically accessible part of IPerson."""
 
-    title = zope.schema.TextLine(
+    title = TextLine(
         title=_("Full name"),
         description=_("Name that should be displayed"))
 
-    photo = zope.schema.Bytes(
+    photo = Bytes(
         title=_("Photo"),
         required=False,
         description=_("""Photo (in JPEG format)"""))
 
-    username = zope.schema.TextLine(
+    username = TextLine(
         title=_("Username"))
 
     # XXX: Should not be here. At most this could be in an adapter.
-    overlaid_calendars = zope.interface.Attribute(
+    overlaid_calendars = Attribute(
         """Additional calendars to overlay.
 
             A user may select a number of calendars that should be displayed in
@@ -91,7 +87,7 @@ class IReadPerson(IGroupMember):
         """Compare two persons."""
 
 
-class IWritePerson(zope.interface.Interface):
+class IWritePerson(Interface):
     """Protected part of IPerson."""
 
     def setPassword(password):
@@ -116,7 +112,7 @@ class IPerson(IReadPerson, IWritePerson, IAttributeAnnotatable):
     """
 
 
-class IPersonFactory(zope.interface.Interface):
+class IPersonFactory(Interface):
 
     def __call__(*args, **kw):
         """Create a new Person instance."""
@@ -136,39 +132,39 @@ class IPersonFactory(zope.interface.Interface):
         """Return the default sort order for persons."""
 
 
-class IPersonContainer(container.interfaces.IContainer):
+class IPersonContainer(IContainer):
     """Container of persons."""
 
-    container.constraints.contains(IPerson)
+    contains(IPerson)
 
-    super_user = zope.interface.Attribute(
+    super_user = Attribute(
         """Absolute administrator for this schooltool instance.
 
            A user that no matter which groups he is in or is not in has the
            administrative privileges.""")
 
 
-class IPersonContained(IPerson, container.interfaces.IContained):
+class IPersonContained(IPerson, IContained):
     """Person contained in an IPersonContainer."""
 
-    container.constraints.containers(IPersonContainer)
+    containers(IPersonContainer)
 
 
-class ICalendarDisplayPreferences(zope.interface.Interface):
+class ICalendarDisplayPreferences(Interface):
     """Preferences for displaying calendar events."""
 
-    timezone = zope.schema.Choice(
+    timezone = Choice(
         title=_("Time Zone"),
         description=_("Time Zone used to display your calendar"),
         values=pytz.common_timezones)
 
-    timeformat = zope.schema.Choice(
+    timeformat = Choice(
         title=_("Time Format"),
         description=_("Time Format"),
         vocabulary=vocabulary([("%H:%M", _("HH:MM")),
                                ("%I:%M %p", _("HH:MM am/pm"))]))
 
-    dateformat = zope.schema.Choice(
+    dateformat = Choice(
         title=_("Date Format"),
         description=_("Date Format"),
         vocabulary=vocabulary([("%m/%d/%y", _("MM/DD/YY")),
@@ -176,7 +172,7 @@ class ICalendarDisplayPreferences(zope.interface.Interface):
                                ("%d %B, %Y", _("Day Month, Year"))]))
 
     # SUNDAY and MONDAY are integers, 6 and 0 respectivley
-    weekstart = zope.schema.Choice(
+    weekstart = Choice(
         title=_("Week starts on:"),
         description=_("Start display of weeks on Sunday or Monday"),
         vocabulary=vocabulary([(calendar.SATURDAY, _("Saturday")),
@@ -184,17 +180,17 @@ class ICalendarDisplayPreferences(zope.interface.Interface):
                                (calendar.MONDAY, _("Monday"))]))
 
 
-class IPersonPreferences(zope.interface.Interface):
+class IPersonPreferences(Interface):
     """Preferences stored in an annotation on a person."""
 
-    __parent__ = zope.interface.Attribute(
+    __parent__ = Attribute(
         """Person who owns these preferences""")
 
     # XXX: Only available in SchoolTool, but that's ok for now.
-    cal_periods = zope.schema.Bool(
+    cal_periods = Bool(
         title=_("Show periods"),
         description=_("Show period names in daily view"))
 
-    cal_public = zope.schema.Bool(
+    cal_public = Bool(
         title=_("Make calendar public"),
         description=_("Make calendar public"))

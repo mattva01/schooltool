@@ -1388,7 +1388,7 @@ def doctest_VCalendar():
         >>> example_ical = dedent('''
         ... BEGIN:VCALENDAR
         ... VERSION:2.0
-        ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
         ...
         ... BEGIN:VTIMEZONE
         ... TZID:Europe/Berlin
@@ -1419,7 +1419,7 @@ def doctest_VCalendar():
         >>> example_ical = dedent('''
         ... BEGIN:VCALENDAR
         ... VERSION:2.0
-        ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
         ...
         ... BEGIN:VTIMEZONE
         ... TZID:Europe/Berlin
@@ -1465,7 +1465,7 @@ def doctest_ical_reader_empty_summary():
         >>> events = list(read_icalendar('''\
         ... BEGIN:VCALENDAR
         ... VERSION:2.0
-        ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
         ... BEGIN:VEVENT
         ... UID:some-random-uid@example.com
         ... DTSTART:20050226T160000
@@ -1483,7 +1483,7 @@ def doctest_ical_reader_empty_summary():
         >>> events = list(read_icalendar('''\
         ... BEGIN:VCALENDAR
         ... VERSION:2.0
-        ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
         ... BEGIN:VEVENT
         ... UID:some-random-uid@example.com
         ... SUMMARY:LAN party %s
@@ -1509,7 +1509,7 @@ def doctest_read_icalendar_all_day():
         >>> events = list(read_icalendar('''\
         ... BEGIN:VCALENDAR
         ... VERSION:2.0
-        ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
         ... BEGIN:VEVENT
         ... SUMMARY:All day event
         ... UID:some-random-uid@example.com

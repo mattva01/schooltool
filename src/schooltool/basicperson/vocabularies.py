@@ -18,15 +18,10 @@
 #
 """
 Sources and vocabularies for form fields.
-
-$Id$
-
 """
 from zope.interface import implements
 from zope.schema.interfaces import ITitledTokenizedTerm
-from zope.schema.interfaces import IVocabularyTokenized
 
-from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPerson
 from schooltool.group.interfaces import IGroupContainer

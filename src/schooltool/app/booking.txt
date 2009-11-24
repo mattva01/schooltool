@@ -1,5 +1,5 @@
 ==============================
-Resource booking in SchoolBell
+Resource booking in SchoolTool
 ==============================
 
 Overview
@@ -7,7 +7,7 @@ Overview
 
 Every calendar event may indicate that one or more resources (e.g., projectors,
 rooms) are needed for this event.  We call this "resource booking" in
-SchoolBell.  When a resource is booked, the calendar event is automatically
+SchoolTool.  When a resource is booked, the calendar event is automatically
 added to the resource's calendar, and is kept in sync.
 
 

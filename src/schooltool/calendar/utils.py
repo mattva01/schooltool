@@ -17,11 +17,9 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Utility functions for SchoolBell calendaring.
+Utility functions for SchoolTool calendaring.
 
 These include various date manipulation routines.
-
-$Id$
 """
 
 import re

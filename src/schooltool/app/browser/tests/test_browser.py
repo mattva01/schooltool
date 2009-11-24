@@ -18,16 +18,15 @@
 #
 """
 Tests for schooltool views.
-
-$Id$
 """
 import unittest
 
 from zope.interface import implements
 from zope.testing import doctest
+from zope.component import provideAdapter
 from zope.interface.verify import verifyObject
 from zope.location.interfaces import ILocation
-from zope.app.testing import ztapi, setup
+from zope.app.testing import setup
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.dependable.interfaces import IDependable
 from zope.i18n import translate
@@ -86,9 +85,8 @@ def doctest_SchoolToolAPI_preferences():
         >>> from schooltool.app.interfaces import ISchoolToolApplication
         >>> from schooltool.app.interfaces import IApplicationPreferences
         >>> from schooltool.app.app import getApplicationPreferences
-        >>> ztapi.provideAdapter(ISchoolToolApplication,
-        ...                      IApplicationPreferences,
-        ...                      getApplicationPreferences)
+        >>> provideAdapter(getApplicationPreferences,
+        ...                (ISchoolToolApplication,), IApplicationPreferences)
 
     'context/schooltool:preferences' returns an ApplicationPreferences object
     for the nearest ISchoolToolApplication
@@ -378,9 +376,8 @@ def doctest_ViewPrefences():
         >>> app = sbsetup.setUpSchoolToolSite()
         >>> from schooltool.app.interfaces import IApplicationPreferences
         >>> from schooltool.app.interfaces import ISchoolToolApplication
-        >>> ztapi.provideAdapter(ISchoolToolApplication,
-        ...                      IApplicationPreferences,
-        ...                      getApplicationPreferences)
+        >>> provideAdapter(getApplicationPreferences,
+        ...                (ISchoolToolApplication,), IApplicationPreferences)
         >>> aprefs = IApplicationPreferences(app)
         >>> aprefs.timezone = 'Europe/Moscow'
         >>> aprefs.dateformat = '%m/%d/%y'

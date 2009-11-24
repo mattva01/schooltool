@@ -18,8 +18,6 @@
 #
 """
 SchoolTool application views.
-
-$Id$
 """
 import csv
 
@@ -36,7 +34,6 @@ from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.interfaces import ISectionContainer
 from schooltool.course.section import Section
 from schooltool.term.interfaces import ITerm
-from schooltool.term.interfaces import ITermContainer
 from schooltool.timetable import TimetableActivity
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.interfaces import ITimetables

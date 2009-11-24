@@ -17,9 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Calendar overlay views for the SchoolBell application.
-
-$Id$
+Calendar overlay views for the SchoolTool application.
 """
 
 import urllib

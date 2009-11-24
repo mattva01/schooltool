@@ -23,24 +23,19 @@ Contact objects
 from persistent import Persistent
 
 from zope.component import adapter
-from zope.component import adapts
 from zope.interface import implementer
 from zope.interface import implements
-from zope.app.component.hooks import getSite, setSite
 from zope.app.container.contained import Contained
 from zope.app.container.btree import BTreeContainer
 from zope.app.catalog.interfaces import ICatalog
 from zope.app.intid.interfaces import IIntIds
-from zope.component import getUtility, queryUtility
+from zope.component import getUtility
 
 from zc.catalog.catalogindex import ValueIndex
 from zc.catalog.extentcatalog import Catalog
 from zc.catalog.extentcatalog import FilterExtent
 
-from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.interfaces import IApplicationStartUpEvent
-from schooltool.app.interfaces import CatalogSetUpEvent
 from schooltool.app.app import InitBase, StartUpBase
 from schooltool.utility.utility import UtilitySetUp
 from schooltool.contact.interfaces import IContactPersonInfo

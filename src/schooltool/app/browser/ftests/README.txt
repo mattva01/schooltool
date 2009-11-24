@@ -1,7 +1,7 @@
-Functional doctests for SchoolBell
+Functional doctests for SchoolTool
 ==================================
 
-This directory contains functional tests for SchoolBell.  Most of them
+This directory contains functional tests for SchoolTool.  Most of them
 are functional doctests.  To learn more about them, read
 Zope3/src/zope/app/ftests/doctest.txt
 

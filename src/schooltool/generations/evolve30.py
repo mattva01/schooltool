@@ -31,7 +31,6 @@ from zope.app.publication.zopepublication import ZopePublication
 
 from schooltool.group.interfaces import IGroup
 from schooltool.course.interfaces import ICourse
-from schooltool.relationship.interfaces import IRelationshipLinks
 from schooltool.relationship.relationship import getRelatedObjects
 from schooltool.relationship.relationship import relate, unrelate
 from schooltool.app.membership import URIMember, URIGroup, URIMembership

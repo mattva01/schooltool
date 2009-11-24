@@ -17,19 +17,14 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-SchoolBell calendar views.
-
-$Id$
+SchoolTool calendar views.
 """
 
 import datetime
-from cStringIO import StringIO
 
 from zope.component import subscribers
-from zope.publisher.browser import BrowserView
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.i18n import translate
-from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.browser import ViewPreferences, same
 from schooltool.app.browser.interfaces import ICalendarProvider
 from schooltool.calendar.utils import parse_date, week_start
