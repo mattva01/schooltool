@@ -99,8 +99,14 @@ clean:
 
 .PHONY: extract-translations
 extract-translations: build
-	bin/i18nextract --egg schooltool --domain schooltool --zcml-egg schooltool --zcml schooltool/common/translations.zcml --output-file src/schooltool/locales/schooltool.pot
-	bin/i18nextract --egg schooltool --domain schooltool.commendation --zcml-egg schooltool --zcml schooltool/commendation/translations.zcml --output-file src/schooltool/commendation/locales/schooltool.commendation.pot
+	bin/i18nextract --egg schooltool \
+	                --domain schooltool \
+	                --zcml schooltool/common/translations.zcml \
+	                --output-file src/schooltool/locales/schooltool.pot
+	bin/i18nextract --egg schooltool \
+	                --domain schooltool.commendation \
+	                --zcml schooltool/commendation/translations.zcml \
+	                --output-file src/schooltool/commendation/locales/schooltool.commendation.pot
 
 .PHONY: compile-translations
 compile-translations:
