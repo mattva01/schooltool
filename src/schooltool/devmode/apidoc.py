@@ -21,6 +21,9 @@ API doc views
 """
 __docformat__ = 'restructuredtext'
 
+import zope.app.apidoc.ifacemodule.menu
+import zope.app.apidoc.bookmodule.browser
+import zope.app.apidoc.codemodule.browser.menu
 from zope.interface import directlyProvides
 from zope.app.apidoc import apidoc
 from zope.app.apidoc import ifacemodule, codemodule, bookmodule
@@ -40,7 +43,6 @@ class schooltoolApidocNamespace(apidoc.apidocNamespace):
 
     def traverse(self, name, ignore):
         return apidoc.handleNamespace(self.context, name)
-
 
 
 class InterfaceMenu(ifacemodule.menu.Menu):
