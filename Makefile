@@ -4,6 +4,7 @@
 #
 
 BOOTSTRAP_PYTHON=python2.5
+INSTANCE_TYPE=schooltool
 
 .PHONY: all
 all: build
@@ -41,7 +42,7 @@ ftest: build
 
 .PHONY: build-schooltool-instance
 build-schooltool-instance:
-	bin/make-schooltool-instance instance instance_type=schooltool.stapp2007
+	bin/make-schooltool-instance instance instance_type=$(INSTANCE_TYPE)
 
 .PHONY: run
 run: build

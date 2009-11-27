@@ -7,6 +7,11 @@ CHANGES
 
 * Traceback trying to view student's contacts (https://launchpad.net/bugs/475586)
 
+Dev features
+------------
+
+* Automatic plugin inclusion
+* buildout.cfg, Makefile refactorings
 
 1.2.0 (2009-11-04)
 ==================
