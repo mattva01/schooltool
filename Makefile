@@ -61,17 +61,33 @@ move-release:
 
 .PHONY: coverage
 coverage: build
+	test -d parts/test/coverage && ! test -d coverage && mv parts/test/coverage . || true
 	rm -rf coverage
-	bin/test -u --coverage=coverage
+	bin/test --at-level 2 -u --coverage=coverage
 	mv parts/test/coverage .
-	@cd coverage && ls | grep -v tests | xargs grep -c '^>>>>>>' | grep -v ':0$$'
 
 .PHONY: coverage-reports-html
-coverage-reports-html:
+coverage-reports-html coverage/reports:
+	test -d parts/test/coverage && ! test -d coverage && mv parts/test/coverage . || true
 	rm -rf coverage/reports
 	mkdir coverage/reports
-	bin/coverage
+	bin/coverage coverage coverage/reports
 	ln -s schooltool.html coverage/reports/index.html
+
+.PHONY: ftest-coverage
+ftest-coverage: build
+	test -d parts/test/ftest-coverage && ! test -d ftest-coverage && mv parts/test/ftest-coverage . || true
+	rm -rf ftest-coverage
+	bin/test --at-level 2 -f --coverage=ftest-coverage
+	mv parts/test/ftest-coverage .
+
+.PHONY: ftest-coverage-reports-html
+ftest-coverage-reports-html ftest-coverage/reports:
+	test -d parts/test/ftest-coverage && ! test -d ftest-coverage && mv parts/test/ftest-coverage . || true
+	rm -rf ftest-coverage/reports
+	mkdir ftest-coverage/reports
+	bin/coverage ftest-coverage ftest-coverage/reports
+	ln -s schooltool.html ftest-coverage/reports/index.html
 
 .PHONY: clean
 clean:
@@ -85,8 +101,14 @@ clean:
 
 .PHONY: extract-translations
 extract-translations: build
-	bin/i18nextract --egg schooltool --domain schooltool --zcml-egg schooltool --zcml schooltool/common/translations.zcml --output-file src/schooltool/locales/schooltool.pot
-	bin/i18nextract --egg schooltool --domain schooltool.commendation --zcml-egg schooltool --zcml schooltool/commendation/translations.zcml --output-file src/schooltool/commendation/locales/schooltool.commendation.pot
+	bin/i18nextract --egg schooltool \
+	                --domain schooltool \
+	                --zcml schooltool/common/translations.zcml \
+	                --output-file src/schooltool/locales/schooltool.pot
+	bin/i18nextract --egg schooltool \
+	                --domain schooltool.commendation \
+	                --zcml schooltool/commendation/translations.zcml \
+	                --output-file src/schooltool/commendation/locales/schooltool.commendation.pot
 
 .PHONY: compile-translations
 compile-translations:
@@ -124,6 +146,5 @@ ubuntu-environment:
 	} else { \
 	 apt-get install bzr build-essential python-all python-all-dev libc6-dev libicu-dev; \
 	 apt-get build-dep python-imaging; \
-	 apt-get build-dep python-libxml2 libxml2; \
 	 echo "Installation Complete: Next... Run 'make'."; \
 	} fi

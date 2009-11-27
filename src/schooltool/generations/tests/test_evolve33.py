@@ -20,14 +20,11 @@
 Unit tests for schooltool.generations.evolve32
 """
 import unittest
-from pprint import pprint
-
-from persistent.interfaces import IPersistent
 
 from zope.testing import doctest
 from zope.app.testing import setup
 
-from zope.component import getUtility, queryUtility, provideUtility
+from zope.component import queryUtility, provideUtility
 from zope.component import provideAdapter
 from zope.interface import implements
 from zope.app import intid

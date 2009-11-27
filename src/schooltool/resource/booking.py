@@ -18,14 +18,11 @@
 #
 """
 Resource Booking caledar and events
-
-$Id$
 """
 from zope.interface import implements
 from zope.session.interfaces import ISession
 from zope.location.location import locate
 
-from schooltool.common import getRequestFromInteraction
 from schooltool.calendar.simple import ImmutableCalendar
 from schooltool.resource.interfaces import IBookingCalendar
 from schooltool.calendar.simple import SimpleCalendarEvent

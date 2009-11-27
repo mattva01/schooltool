@@ -27,7 +27,7 @@ import unittest
 from zope.interface import directlyProvides
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
-from zope.app.testing import setup, ztapi
+from zope.app.testing import setup
 from zope.traversing.interfaces import IContainmentRoot
 from zope.interface import implements
 

@@ -18,12 +18,9 @@
 #
 """
 Unit tests for schooltool.securitypolicy.metaconfigure
-
-$Id$
 """
 
 import unittest
-from pprint import pprint
 from zope.testing import doctest
 from zope.interface import implements, Interface
 from zope.interface.verify import verifyObject
@@ -115,8 +112,6 @@ def doctest_handle_crowd():
 
 def doctest_handle_allow():
     """Tests for handle_allow.
-
-        >>> from schooltool.securitypolicy import metaconfigure as mc
 
         >>> cru = CrowdsUtility()
         >>> cru.factories = {'cr1': 'Factory 1',

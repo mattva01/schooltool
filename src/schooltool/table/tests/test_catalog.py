@@ -16,13 +16,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-"""Table tests
-
-$Id$
+"""Catalog tests
 """
 import unittest
 
-from zope.testing import doctest, doctestunit
+from zope.testing import doctest
 from zope.testing.doctestunit import pprint
 
 from zope.app.intid.interfaces import IIntIds

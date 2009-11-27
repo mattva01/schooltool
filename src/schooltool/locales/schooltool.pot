@@ -3965,10 +3965,6 @@ msgstr ""
 msgid "A Group"
 msgstr ""
 
-#: /src/schooltool/group/browser/configure.zcml:85
-msgid "SchoolBell Group"
-msgstr ""
-
 #: /src/schooltool/group/browser/group-csvimport.pt:21
 #: /src/schooltool/group/browser/configure.zcml:112
 msgid "Import Groups"
@@ -4445,10 +4441,6 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:211
 msgid "A Resource"
-msgstr ""
-
-#: /src/schooltool/resource/browser/configure.zcml:211
-msgid "SchoolBell Resource"
 msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:71

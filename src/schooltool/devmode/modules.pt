@@ -21,11 +21,6 @@
         </a>
       </li>
       <li>
-        <a href="Code/@@restmenu.html" target="menu" i18n:translate="">
-          RESTive Views
-        </a>
-      </li>
-      <li>
         <a href="Book/schooltool/@@menu.html" target="menu" i18n:translate="">
           Book
         </a>

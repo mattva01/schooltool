@@ -44,23 +44,18 @@ from schooltool.app.interfaces import ICalendarParentCrowd
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.membership import GroupMemberCrowd
 from schooltool.app.membership import URIMembership, URIMember, URIGroup
-from schooltool.app.relationships import URIInstruction
-from schooltool.app.relationships import URISection
 from schooltool.app.security import ConfigurableCrowd
 from schooltool.app.security import LeaderCrowd
 from schooltool.course.interfaces import ISection
 from schooltool.group import interfaces
 from schooltool.group.interfaces import IGroupContainer
-from schooltool.person.interfaces import IPerson
 from schooltool.relationship import RelationshipProperty
-from schooltool.relationship.relationship import getRelatedObjects
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
 from schooltool.securitypolicy.crowds import AggregateCrowdDescription
 from schooltool.securitypolicy.metaconfigure import getCrowdsUtility
-from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
 from schooltool.securitypolicy.interfaces import ICrowd
 
 

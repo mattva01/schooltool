@@ -18,9 +18,8 @@
 #
 """
 High-level setup functions for functional tests relating to basicperson..
-
-$Id: setup.py 7114 2007-07-18 17:42:18Z pcardune $
 """
+
 from schooltool.app.browser.ftests.setup import logInManager
 
 def addPerson(firstname, lastname, username=None, password=None, groups=None, browser=None):

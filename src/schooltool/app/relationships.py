@@ -18,9 +18,6 @@
 #
 """
 Relationship URIs and utilities for schooltool
-
-$Id$
-
 """
 
 from schooltool.course.interfaces import ICourse, ISection
@@ -158,7 +155,6 @@ def updateStudentCalendars(event):
             for person in member.members:
                 # we don't handle nested groups any more so there
                 # shouldn't be more than one layer of groups
-                # TODO make sure nested groups are not possible via REST
                 if IPerson.providedBy(person) and \
                         calendar not in person.overlaid_calendars:
                     overlay_info = person.overlaid_calendars.add(calendar)

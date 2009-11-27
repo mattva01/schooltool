@@ -46,7 +46,7 @@ CalendarICalendarView can export calendars in iCalendar format
     >>> pprint(lines)
     ['BEGIN:VCALENDAR\r\n',
      'VERSION:2.0\r\n',
-     'PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN\r\n',
+     'PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN\r\n',
      'BEGIN:VEVENT\r\n',
      'UID:12345678-5432@example.com\r\n',
      'SUMMARY:doctests\r\n',
@@ -81,7 +81,7 @@ We can also render just the Free/Busy component of iCal
     >>> pprint(lines)
     ['BEGIN:VCALENDAR\r\n',
      'VERSION:2.0\r\n',
-     'PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN\r\n',
+     'PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN\r\n',
      'METHOD:PUBLISH\r\n',
      'BEGIN:VFREEBUSY\r\n',
      'FREEBUSY:20041216T114616/20041216T12461600Z\r\n',

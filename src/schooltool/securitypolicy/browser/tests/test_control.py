@@ -18,13 +18,10 @@
 #
 """
 Tests for customisation of SchoolTool security policy.
-
-$Id$
 """
 
 import unittest
 from zope.testing import doctest
-from zope.app.testing import setup
 
 
 def test_suite():

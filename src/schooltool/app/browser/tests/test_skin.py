@@ -18,18 +18,11 @@
 #
 """
 Tests for schooltool.app.browser.skin.
-
-$Id$
 """
 
 import unittest
-import pprint
 
-from zope.interface import providedBy
 from zope.testing import doctest
-from zope.app.testing import setup
-from zope.publisher.browser import TestRequest
-from zope.app.publication.zopepublication import BeforeTraverseEvent
 
 
 def doctest_CalendarEventViewletManager():

@@ -18,21 +18,16 @@
 #
 """
 Tests for schooltool views.
-
-$Id$
 """
 
 import unittest
 
 from zope.testing import doctest
 from zope.interface import classImplements
-from zope.publisher.browser import TestRequest
-from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
+from zope.component import provideAdapter
 from zope.annotation.interfaces import IAttributeAnnotatable
-from zope.app.testing import ztapi
 
 from schooltool.app.browser.testing import setUp as browserSetUp, tearDown
-from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.testing import setup
 
 
@@ -41,9 +36,8 @@ def setUp(test=None):
     setup.setUpCalendaring()
 
     from schooltool.app.overlay import CalendarOverlayInfo
-    from schooltool.app.interfaces import IShowTimetables
     from schooltool.app.app import ShowTimetables
-    ztapi.provideAdapter(CalendarOverlayInfo, IShowTimetables, ShowTimetables)
+    provideAdapter(ShowTimetables)
     classImplements(CalendarOverlayInfo, IAttributeAnnotatable)
 
 
@@ -266,10 +260,8 @@ def setUp(test=None):
 #         >>> from schooltool.app.interfaces import ISchoolToolApplication
 #         >>> from schooltool.app.interfaces import IApplicationPreferences
 #         >>> from schooltool.app.app import getApplicationPreferences
-#         >>> from zope.app.testing import ztapi
-#         >>> ztapi.provideAdapter(ISchoolToolApplication,
-#         ...                      IApplicationPreferences,
-#         ...                      getApplicationPreferences)
+#         >>> provideAdapter(getApplicationPreferences,
+#         ...                (ISchoolToolApplication,), IApplicationPreferences)
 #         >>> from schooltool.app.browser.overlay import CalendarSelectionView
 #         >>> View = SimpleViewClass('../templates/calendar_selection.pt',
 #         ...                        bases=(CalendarSelectionView,))

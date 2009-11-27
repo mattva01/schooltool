@@ -26,7 +26,6 @@ from zope.testing import doctest
 from zope.interface import implements
 from zope.app.container import btree
 from zope.component import provideHandler
-from zope.annotation.interfaces import IAttributeAnnotatable
 
 from schooltool.relationship.tests import setUpRelationships
 from schooltool.generations.tests import ContextStub
@@ -37,9 +36,7 @@ from schooltool.relationship.interfaces import IRelationshipLinks
 from schooltool.relationship.interfaces import IRelationshipRemovedEvent
 from schooltool.relationship.interfaces import IRelationshipAddedEvent
 from schooltool.relationship.relationship import relate
-from schooltool.contact.contact import URIContactRelationship
 from schooltool.contact.contact import URIContact, URIPerson
-from schooltool.relationship.relationship import getRelatedObjects
 
 
 class AppStub(btree.BTreeContainer):

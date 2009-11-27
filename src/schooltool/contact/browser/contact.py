@@ -20,7 +20,6 @@
 """
 Contact browser views.
 """
-from zope.interface import directlyProvides
 from zope.interface import implements
 from zope.component import getMultiAdapter
 from zope.component import adapts
@@ -37,11 +36,9 @@ from zope.app.catalog.interfaces import ICatalog
 from zope.app.intid.interfaces import IIntIds
 from zope.app.catalog.interfaces import ICatalog
 
-from zc.table.interfaces import ISortableColumn
 from zc.table.column import GetterColumn
 from z3c.form import form, subform, field, button
 
-from schooltool.table.interfaces import ITableFormatter
 from schooltool.table.table import url_cell_formatter
 from schooltool.table.table import DependableCheckboxColumn
 from schooltool.table.catalog import FilterWidget

@@ -36,8 +36,7 @@ The are several obvious advantages of the activity-centric workflow model:
 Now that I hopefully have convinced you that the WfMC workflow is the way to
 go, let's have a look on how to create a workflow and integrate it into your
 software. Note that I am not providing any unit tests here, because there are
-excellent examples in ``Zope3/src/zope/wfmc/*.txt`` and
-``schooltool/src/schooltool/level/README.txt``.
+excellent examples in ``Zope3/src/zope/wfmc/*.txt``.
 
 
 Developing the Workflow Process

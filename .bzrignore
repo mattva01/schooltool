@@ -22,3 +22,5 @@
 ./ID
 ./TAGS
 ./tags
+./coverage
+./ftest-coverage

@@ -16,12 +16,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-"""Language dpendent date formatting.
-
-$Id$
+"""Language independent date formatting.
 """
 from zope.publisher.browser import BrowserView
-from zope.interface import implements
 
 from zope.i18n.locales import Locale
 from zope.i18n.locales import LocaleIdentity

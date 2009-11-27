@@ -112,7 +112,7 @@ Now the Toad can add events to Frog's calendar:
 #     ...
 #     ... BEGIN:VCALENDAR
 #     ... VERSION:2.0
-#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
 #     ... BEGIN:VEVENT
 #     ... UID:dummy-uid
 #     ... SUMMARY:Empty calendar
@@ -211,7 +211,7 @@ Now the Toad can add events to Frog's calendar:
 #     ...
 #     ... BEGIN:VCALENDAR
 #     ... VERSION:2.0
-#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
 #     ... BEGIN:VEVENT
 #     ... UID:empty-calendar-placeholder@schooltool.org
 #     ... SUMMARY:Empty calendar
@@ -252,7 +252,7 @@ Now the Toad can add events to Frog's calendar:
 #     ...
 #     ... BEGIN:VCALENDAR
 #     ... VERSION:2.0
-#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
 #     ... BEGIN:VEVENT
 #     ... UID:some-uid@example.com
 #     ... SUMMARY:Sample event
@@ -283,7 +283,7 @@ Now the Toad can add events to Frog's calendar:
 #     ...
 #     ... BEGIN:VCALENDAR
 #     ... VERSION:2.0
-#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
 #     ... BEGIN:VEVENT
 #     ... UID:some-uid@example.com
 #     ... SUMMARY:Sample event
@@ -316,7 +316,7 @@ Now the Toad can add events to Frog's calendar:
 #     ...
 #     ... BEGIN:VCALENDAR
 #     ... VERSION:2.0
-#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
 #     ... BEGIN:VEVENT
 #     ... UID:some-uid@example.com
 #     ... SUMMARY:Sample event (modified)
@@ -339,7 +339,7 @@ Now the Toad can add events to Frog's calendar:
 #     ...
 #     ... BEGIN:VCALENDAR
 #     ... VERSION:2.0
-#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
 #     ... BEGIN:VEVENT
 #     ... UID:empty-calendar-placeholder@schooltool.org
 #     ... SUMMARY:Empty calendar
@@ -362,7 +362,7 @@ Now the Toad can add events to Frog's calendar:
 #     ...
 #     ... BEGIN:VCALENDAR
 #     ... VERSION:2.0
-#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
 #     ... BEGIN:VEVENT
 #     ... UID:some-uid2@example.com
 #     ... SUMMARY:New event
@@ -400,7 +400,7 @@ Now the Toad can add events to Frog's calendar:
 #     ...
 #     ... BEGIN:VCALENDAR
 #     ... VERSION:2.0
-#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
 #     ... BEGIN:VEVENT
 #     ... UID:some-uid@example.com
 #     ... SUMMARY:Sample event
@@ -423,7 +423,7 @@ Now the Toad can add events to Frog's calendar:
 #     ...
 #     ... BEGIN:VCALENDAR
 #     ... VERSION:2.0
-#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
 #     ... BEGIN:VEVENT
 #     ... UID:some-uid@example.com
 #     ... SUMMARY:Sample event (modified)
@@ -446,7 +446,7 @@ Now the Toad can add events to Frog's calendar:
 #     ...
 #     ... BEGIN:VCALENDAR
 #     ... VERSION:2.0
-#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
 #     ... BEGIN:VEVENT
 #     ... UID:some-uid@example.com
 #     ... SUMMARY:Sample event (modified)

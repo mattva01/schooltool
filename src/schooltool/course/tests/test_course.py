@@ -18,8 +18,6 @@
 #
 """
 Unit tests for course and section implementations.
-
-$Id$
 """
 import unittest
 from zope.testing import doctest
@@ -55,7 +53,7 @@ def doctest_CourseContainer():
 def doctest_Course():
     r"""Tests for Courses
 
-    Courses are similar to SchoolBell groups but have sections instead of
+    Courses are similar to SchoolTool groups but have sections instead of
     members.
 
         >>> from schooltool.course.course import Course
@@ -157,7 +155,6 @@ def doctest_Section():
     We'll add an instructor to the section.
 
         >>> from schooltool.person.person import Person
-        >>> from schooltool.person.interfaces import IPerson
         >>> teacher = Person('teacher', 'Mr. Jones')
         >>> section.instructors.add(teacher)
 
@@ -491,7 +488,6 @@ def doctest_PersonLearnerAdapter(self):
 
         >>> from schooltool.course.section import Section
         >>> from schooltool.person.person import Person
-        >>> from schooltool.group.group import Group
         >>> section1 = Section(title="section 1", description="advanced")
         >>> section2 = Section(title="section 2", description="advanced")
         >>> student = Person('student', 'Mr. Peter')

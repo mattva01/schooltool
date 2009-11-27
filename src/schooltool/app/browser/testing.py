@@ -18,15 +18,13 @@
 #
 """
 Setup code for SchoolTool application browser unit tests
-
-$Id$
 """
 import os.path
 import unittest
 
-import zope.component
 import transaction
 from zope.interface import implements, Interface
+from zope.component import provideAdapter, provideUtility
 from zope.app.component.hooks import setSite
 from zope.app.testing.functional import FunctionalTestSetup
 from zope.app.testing import setup, ztapi
@@ -136,10 +134,10 @@ def setUp(test=None):
     ztapi.provideView(None, None, ITraversable, 'resource', resource)
 
     # schooltool: namespace in tal
-    ztapi.provideAdapter(None, IPathAdapter, SchoolToolAPI, 'schooltool')
+    provideAdapter(SchoolToolAPI, (None,), IPathAdapter, 'schooltool')
 
     # sortby: namespace in tal
-    ztapi.provideAdapter(None, IPathAdapter, SortBy, 'sortby')
+    provideAdapter(SortBy, (None,), IPathAdapter, 'sortby')
 
     # standard_macros, schooltool_macros and schooltool_navigation
     ztapi.browserView(None, 'standard_macros', StandardMacros)
@@ -177,19 +175,19 @@ def setUp(test=None):
 
     # menus
     ztapi.browserView(None, 'view_get_menu', MenuAccessView)
-    ztapi.provideUtility(IBrowserMenu, BrowserMenuStub('zmi_views'),
-                         'zmi_views')
-    ztapi.provideUtility(IBrowserMenu, BrowserMenuStub('schooltool_actions'),
-                         'schooltool_actions')
+    provideUtility(BrowserMenuStub('zmi_views'), IBrowserMenu,
+                   'zmi_views')
+    provideUtility(BrowserMenuStub('schooltool_actions'), IBrowserMenu,
+                   'schooltool_actions')
 
     # breadcrumbs
-    zope.component.provideAdapter(
+    provideAdapter(
         breadcrumbs.Breadcrumbs,
         (Interface, IDefaultBrowserLayer),
         Interface,
         name='breadcrumbs')
 
-    zope.component.provideAdapter(
+    provideAdapter(
         breadcrumbs.GenericBreadcrumbInfo)
 
     # `provider` TALES namespaces
@@ -201,42 +199,42 @@ def setUp(test=None):
     from zope.viewlet import manager
     from schooltool import skin
     name = 'schooltool.Header'
-    zope.component.provideAdapter(
+    provideAdapter(
         manager.ViewletManager(name, skin.IHeaderManager),
         (Interface, IDefaultBrowserLayer, IBrowserView),
         skin.IHeaderManager,
         name=name)
 
     name = 'schooltool.JavaScript'
-    zope.component.provideAdapter(
+    provideAdapter(
         manager.ViewletManager(name, skin.IJavaScriptManager),
         (Interface, IDefaultBrowserLayer, IBrowserView),
         skin.IJavaScriptManager,
         name=name)
 
     name = 'schooltool.CSS'
-    zope.component.provideAdapter(
+    provideAdapter(
         manager.ViewletManager(name, skin.ICSSManager),
         (Interface, IDefaultBrowserLayer, IBrowserView),
         skin.ICSSManager,
         name=name)
 
     name = 'schooltool.MenuBar'
-    zope.component.provideAdapter(
+    provideAdapter(
         manager.ViewletManager(name, skin.skin.IMenuBarMenuManager),
         (Interface, IDefaultBrowserLayer, IBrowserView),
         skin.skin.IMenuBarMenuManager,
         name=name)
 
     name = 'schooltool.NavigationMenu'
-    zope.component.provideAdapter(
+    provideAdapter(
         manager.ViewletManager(name, skin.skin.INavigationManager),
         (Interface, IDefaultBrowserLayer, IBrowserView),
         skin.skin.INavigationManager,
         name=name)
 
     name = 'schooltool.ActionsMenu'
-    zope.component.provideAdapter(
+    provideAdapter(
         manager.ViewletManager(name, skin.skin.IActionMenuManager),
         (Interface, IDefaultBrowserLayer, IBrowserView),
         skin.skin.IActionMenuManager,

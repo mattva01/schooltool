@@ -17,22 +17,16 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-course browser views.
-
-$Id$
+SchoolTool section views
 """
 
 from collections import defaultdict
 
-import zope.event
-import zope.schema
-import zope.interface
-from zope.interface import implements
+from zope.interface import implements, Invalid
 from zope.i18n import translate
 from zope.security.proxy import removeSecurityProxy
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.intid.interfaces import IIntIds
-from zope.app.form.browser.add import AddView
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.browser import BrowserView
 from zope.component import adapts
@@ -40,10 +34,12 @@ from zope.component import getUtility
 from zope.component import getMultiAdapter
 from zope.app.container.contained import NameChooser
 from zope.app.container.interfaces import INameChooser
+from zope.event import notify
+from zope.schema import Choice
 from zc.table import table
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser.absoluteurl import absoluteURL
-from z3c.form import form, subform, field, widget, datamanager, button
+from z3c.form import form, subform, field, datamanager, button
 from z3c.form.action import ActionErrorOccurred
 from z3c.form.interfaces import ActionExecutionError
 
@@ -377,7 +373,7 @@ class NewSectionTermsSubform(subform.EditSubForm):
         self._addTermChoice('ends', _("Ends in term"))
 
     def _addTermChoice(self, name, title):
-        schema_field = zope.schema.Choice(
+        schema_field = Choice(
             __name__=name, title=title,
             required=True,
             vocabulary=self.vocabulary,
@@ -410,11 +406,11 @@ class NewSectionTermsSubform(subform.EditSubForm):
             #      not handle action execution errors properly.
             #      The bug is fixed in z3c.form 2.0, as far as I know.
             widget_name = '%s.widgets.ends:list' % self.prefix
-            error = ActionExecutionError(zope.interface.Invalid(
+            error = ActionExecutionError(Invalid(
                 _('Starting term ($starts_in) is later than ending term ($ends_in)',
                   mapping={'starts_in': starts.title,
                            'ends_in': ends.title})))
-            zope.event.notify(ActionErrorOccurred(action, error))
+            notify(ActionErrorOccurred(action, error))
 
 
 # XXX: TODO: Add "--no value--" to the course selector dropdown in
@@ -434,7 +430,7 @@ class NewSectionCoursesSubform(subform.EditSubForm):
         courses = ICourseContainer(self.context)
         self.vocabulary=vocabulary_titled(courses.values())
         self.values = {'course': default_course}
-        schema_field = zope.schema.Choice(
+        schema_field = Choice(
             __name__='course', title=_('Course'),
             required=True, vocabulary=self.vocabulary)
         self.fields += field.Fields(schema_field)

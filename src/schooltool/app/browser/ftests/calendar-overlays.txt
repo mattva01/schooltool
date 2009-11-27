@@ -284,7 +284,7 @@
 #     ...
 #     ... BEGIN:VCALENDAR
 #     ... VERSION:2.0
-#     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+#     ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
 #     ... BEGIN:VEVENT
 #     ... UID:important@event
 #     ... SUMMARY:Important event

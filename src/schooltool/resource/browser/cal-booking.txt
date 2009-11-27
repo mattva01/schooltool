@@ -73,7 +73,7 @@ and set up a calendar for Frog:
     ...
     ... BEGIN:VCALENDAR
     ... VERSION:2.0
-    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+    ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
     ... BEGIN:VEVENT
     ... UID:dummy-uid
     ... SUMMARY:Test event
@@ -346,7 +346,7 @@ Let's do some event clashing, first we set up some overlapping events:
     ...
     ... BEGIN:VCALENDAR
     ... VERSION:2.0
-    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+    ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
     ... BEGIN:VEVENT
     ... UID:dummy-uid1
     ... SUMMARY:Test event1
@@ -422,7 +422,7 @@ The boss decides to take a mud bath, so he creates an event.
     ...
     ... BEGIN:VCALENDAR
     ... VERSION:2.0
-    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+    ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
     ... BEGIN:VEVENT
     ... UID:smartie-uid
     ... SUMMARY:Mud bath

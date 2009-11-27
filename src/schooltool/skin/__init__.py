@@ -17,8 +17,6 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """Skin package for SchoolTool.
-
-$Id: breadcrumbs.py 5675 2006-01-23 03:08:51Z srichter $
 """
 
 from skin import ISchoolToolLayer, ISchoolToolSkin

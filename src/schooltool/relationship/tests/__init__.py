@@ -27,8 +27,6 @@ relationships work for IAttributeAnnotatable objects.
 
 This module also contains some stub objects for use in tests (SomeObject and
 SomeContained).
-
-$Id$
 """
 
 from zope.app.testing import setup
@@ -84,10 +82,9 @@ def setUpRelationships():
     you're done).  You should also call zope.app.testing.setup.setUpAnnotations
     to get a complete test fixture.
     """
-    from zope.app.testing import ztapi
     from zope.annotation.interfaces import IAnnotatable
+    from zope.component import provideAdapter
     from schooltool.relationship.interfaces import IRelationshipLinks
     from schooltool.relationship.annotatable import getRelationshipLinks
-    ztapi.provideAdapter(IAnnotatable, IRelationshipLinks,
-                         getRelationshipLinks)
+    provideAdapter(getRelationshipLinks, (IAnnotatable,), IRelationshipLinks)
 

@@ -17,8 +17,6 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-from zope.app.component.hooks import getSite, setSite
-from zope.app.component.interfaces import ISite
 from zope.component import queryUtility
 from zope.traversing.api import traverse
 

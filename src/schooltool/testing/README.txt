@@ -1,5 +1,5 @@
 ==========================
-SchoolBell Testing Support
+SchoolTool Testing Support
 ==========================
 
 This package basically splits into two parts, an abstract test-setup registry

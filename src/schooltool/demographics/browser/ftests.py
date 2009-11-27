@@ -18,8 +18,6 @@
 #
 """
 Functional tests for schooltool.demographics.
-
-$Id: ftests.py 6562 2007-01-11 13:05:38Z ignas $
 """
 
 import unittest

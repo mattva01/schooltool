@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2008    Shuttleworth Foundation,
+# Copyright (c) 2008, 2009 Shuttleworth Foundation,
 #                       Brian Sutherland
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,64 +21,13 @@
 """
 SchoolTool setup script.
 """
-import os
-
-here = os.path.dirname(__file__)
 
 import sys
+import os
 from setuptools import setup, find_packages
 from distutils import log
 from distutils.util import newer
 from distutils.spawn import find_executable
-
-# allowed extensions
-ALLOWED_EXTENSIONS = ['conf','css', 'gif', 'ico', 'ics', 'js', 'po', 'pt',
-                      'png', 'txt', 'xml', 'xpdl', 'zcml']
-
-# Define packages we want to recursively include, we do this explicitly here
-# to avoid automatic accidents
-root_packages = ['schooltool.app',
-                 'schooltool.attendance',
-                 'schooltool.basicperson',
-                 'schooltool.calendar',
-                 'schooltool.course',
-                 'schooltool.dashboard',
-                 'schooltool.devmode',
-                 'schooltool.demographics',
-                 'schooltool.email',
-                 'schooltool.export',
-                 'schooltool.generations',
-                 'schooltool.group',
-                 'schooltool.help',
-                 'schooltool.locales',
-                 'schooltool.note',
-                 'schooltool.paste',
-                 'schooltool.person',
-                 'schooltool.resource',
-                 'schooltool.relationship',
-                 'schooltool.securitypolicy',
-                 'schooltool.setupdata',
-                 'schooltool.skin',
-                 'schooltool.table',
-                 'schooltool.contact',
-                 'schooltool.term',
-                 'schooltool.tests',
-                 'schooltool.testing',
-                 'schooltool.timetable',
-                 'schooltool.traverser',
-                 'schooltool.utility',
-                 'schooltool.widget',
-                 'schooltool.common',
-                 'schooltool.schoolyear',
-
-                 # The schooltool configurations we maintain
-                 'schooltool.stapp2005',
-                 'schooltool.stapp2007',
-
-                 # only needed for tests
-                 'schooltool.sampledata',
-                 'schooltool.level',
-                 ]
 
 from glob import glob
 
@@ -111,28 +60,6 @@ if len(sys.argv) > 1 and sys.argv[1] == 'clean':
         os.unlink(mo)
         os.removedirs(os.path.dirname(mo))
 
-# Packages we want to non-recursively include
-package_data = {'schooltool': ['*.zcml', 'version.txt']}
-
-# filter packages eliminating things that don't match
-# XXX - the next for loop is pretty insane and inefficient. Feel free to fix it
-# all it does is find the files in each package that need to be included.
-all_packages = set(find_packages('src'))
-for package in all_packages:
-    for root_package in root_packages:
-        if package.startswith(root_package):
-            package_data[package] = []
-            package_dir = os.path.join(here, 'src', *package.split('.'))
-            for root, dirs, files in os.walk(package_dir):
-                prefix = root[len(package_dir)+1:]
-                for file in files:
-                    name, ext = os.path.splitext(file)
-                    if (ext[1:] in ALLOWED_EXTENSIONS
-                        and not file.startswith('.')):
-                        file = os.path.join(prefix, file)
-                        package_data[package].append(file)
-            break
-
 if os.path.exists("version.txt"):
     version = open("version.txt").read().strip()
 else:
@@ -143,19 +70,7 @@ setup(
     description="A common information systems platform for school administration.",
     long_description="""
 SchoolTool is an open source school management information system.  It is
-a distributed client/server system.  The SchoolTool server presents two
-interfaces to clients:
-
-  - a traditional web application interface, usable with an ordinary browser.
-
-  - HTTP-based programming interface suitable for fat clients, adhering to
-    the Representational State Transfer (REST) architectural style (see
-    http://rest.blueoxen.net/).
-
-The web application interface is the primary one.  The RESTive interface is
-there for potential interoperability with other systems and fat clients to
-perform data entry that is inconvenient to do via the web application
-interface.
+a web application, usable with an ordinary browser.
 
 Any modern web browser is suitable for the web application interface.  The
 interface degrades gracefully, so a browser that does not support CSS or
@@ -176,8 +91,8 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     "Topic :: Education",
     "Topic :: Office/Business :: Scheduling"],
     package_dir={'': 'src'},
+    packages=find_packages('src'),
     namespace_packages=["schooltool"],
-    packages=package_data.keys(),
     install_requires=['pytz',
                       'zc.resourcelibrary',
                       'zc.table',
@@ -197,8 +112,6 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zope.app.apidoc',
                       'z3c.optionstorage',
                       'z3c.autoinclude',
-                      'zope.wfmc',
-                      'zope.app.wfmc',
                       'zope.server',
                       'zope.app.wsgi',
                       'zope.app.server',
@@ -221,9 +134,10 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'xlwt',
                       'xlrd',
                       'setuptools'],
-    tests_require=['zope.testing',
-                   'schooltool.lyceum.journal'],
+    tests_require=['zope.testing'],
     dependency_links=['http://ftp.schooltool.org/schooltool/1.2/'],
+    include_package_data=True,
+    zip_safe=False,
     entry_points = """
     [paste.app_factory]
     main = schooltool.paste.main:schooltool_app_factory
@@ -241,6 +155,4 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     schooltool = schooltool.stapp2007
 
     """,
-    package_data=package_data,
-    include_package_data=True
     )

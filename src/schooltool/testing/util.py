@@ -18,11 +18,8 @@
 #
 """
 Testing Utilities
-
-$Id$
 """
 __metaclass__ = type
-import sys
 import cgi
 import sets
 import difflib
@@ -372,6 +369,7 @@ def fakePath(obj, path):
     """Make absoluteURL(obj) return url.
 
         >>> from zope.traversing.browser.absoluteurl import absoluteURL
+        >>> from zope.publisher.browser import TestRequest
         >>> from zope.app.testing import setup
         >>> setup.placelessSetUp()
         >>> setup.setUpTraversal()

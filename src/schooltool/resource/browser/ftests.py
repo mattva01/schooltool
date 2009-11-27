@@ -18,8 +18,6 @@
 #
 """
 Functional tests for schooltool.resource.
-
-$Id: ftests.py $
 """
 import unittest
 

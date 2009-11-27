@@ -18,8 +18,6 @@
 #
 """
 SchoolTool PDF report views.
-
-$Id$
 """
 
 import urllib
@@ -37,7 +35,6 @@ from z3c.rml import rml2pdf
 from schooltool.common import SchoolToolMessage as _
 from schooltool.common.inlinept import InlinePageTemplate
 from schooltool.app import pdf
-from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.browser.interfaces import IReportPageTemplate
 
 
@@ -45,7 +42,7 @@ def _quoteUrl(url):
     if not url:
         return url
     if type(url) is unicode:
-        encoded = directive.encode('UTF-8')
+        encoded = url.encode('UTF-8')
     else:
         encoded = str(url)
     return urllib.quote(encoded)

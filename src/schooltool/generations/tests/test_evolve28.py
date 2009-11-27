@@ -50,8 +50,8 @@ def FileStorage27():
     return FileStorage(data_fs)
 
 
-def doctest_Foo():
-    """Foo bas
+def doctest_evolve28():
+    """Test evolve28
 
        >>> storage = DemoStorage(base=FileStorage27())
        >>> db = DB(storage, database_name="")
@@ -66,7 +66,6 @@ def doctest_Foo():
        >>> sy = app['schooltool.schoolyear'][u'2008-2009']
        >>> sy.title, sy.first, sy.last
        ('2008-2009', datetime.date(2008, 10, 1), datetime.date(2009, 1, 16))
-
 
        >>> transaction.abort()
        >>> context.connection.close()

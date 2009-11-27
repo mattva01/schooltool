@@ -18,8 +18,6 @@
 #
 """
 Person browser views.
-
-$Id$
 """
 from zope.interface import Interface
 from zope.publisher.interfaces import NotFound
@@ -50,7 +48,6 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.common import SchoolToolMessage as _
-from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.skin.form import BasicForm
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPasswordWriter
