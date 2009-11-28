@@ -38,17 +38,15 @@
                          style string:top: ${hour/top}em;; height: ${hour/height}em;; cursor: pointer;
                          class string:hour ${repeat/hour/parity}${active}">
       <a class="event-new" style="width:100%; height:100%;"
-         i18n:attributes="title"
          tal:attributes="href url;
-                         title string:Add new event starting at ${hour/title}"
+                         title hour/full_title"
          tal:content="hour/title">HH:MM</a>
     </div>
     <div class="hour"
          tal:condition="not:view/canAddEvents"
          tal:attributes="style string:top: ${hour/top}em;; height: ${hour/height}em;
                          class string:hour ${repeat/hour/parity}">
-      <span class="event-new" style="width:100%; height:100%;" title=""
-         i18n:attributes="title"
+      <span class="event-new" style="width:100%; height:100%;"
          tal:content="hour/title">HH:MM</span>
     </div>
 </tal:each_row>

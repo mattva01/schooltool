@@ -56,7 +56,8 @@ So now we have one term
     >>> print analyze.queryHTML('//h1', manager.contents)[0]
     <h1>
       2007
-      (Jan 1, 2007&#8212;
+      (Jan 1, 2007
+      &#8212;
        Dec 15, 2007)
     </h1>
 
@@ -90,13 +91,15 @@ We cancel so the term is still there:
     >>> print analyze.queryHTML('//h1', manager.contents)[0]
     <h1>
       2007
-      (Jan 1, 2007&#8212;
+      (Jan 1, 2007
+      &#8212;
        Dec 15, 2007)
     </h1>
 
     >>> print analyze.queryHTML('//div[@class="term"]', manager.contents)[0]
     <div class="term">
        <input type="checkbox" name="delete.term-2" id="delete.term-2" /><a href="http://localhost/schoolyears/2007/term-2">Term 2</a>
-       (Jul 1, 2007&#8212;
+       (Jul 1, 2007
+       &#8212;
         Jul 12, 2007)
     </div>
