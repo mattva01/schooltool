@@ -71,7 +71,6 @@ import pytz
 import datetime
 import re
 from cStringIO import StringIO
-from sets import Set
 
 from schooltool.calendar.simple import SimpleCalendarEvent
 
@@ -1188,7 +1187,7 @@ class VEventParser(object):
         'RECUR': parse_recurrence_rule,
     }
 
-    singleton_properties = Set([
+    singleton_properties = set([
         'DTSTAMP',
         'DTSTART',
         'UID',
@@ -1210,8 +1209,8 @@ class VEventParser(object):
         'URL',
     ])
 
-    rdate_types = Set(['DATE', 'DATE-TIME', 'PERIOD'])
-    exdate_types = Set(['DATE', 'DATE-TIME'])
+    rdate_types = set(['DATE', 'DATE-TIME', 'PERIOD'])
+    exdate_types = set(['DATE', 'DATE-TIME'])
 
     def __init__(self):
         self._props = {}

@@ -563,8 +563,7 @@ class LinkSet(Persistent, Contained):
 
     We got them in the container now:
 
-        >>> from sets import Set
-        >>> Set(linkset) == Set([link1, link2]) # order is not preserved
+        >>> set(linkset) == set([link1, link2]) # order is not preserved
         True
 
     You can look for links for a specific relationship
@@ -594,7 +593,7 @@ class LinkSet(Persistent, Contained):
     You can remove links
 
         >>> linkset.remove(link2)
-        >>> Set(linkset) == Set([link1])
+        >>> set(linkset) == set([link1])
         True
 
     The links are removed from the cache too:
@@ -613,7 +612,7 @@ class LinkSet(Persistent, Contained):
     You can remove all links
 
         >>> linkset.clear()
-        >>> Set(linkset) == Set([])
+        >>> set(linkset) == set([])
         True
 
     The cache has been cleared too:

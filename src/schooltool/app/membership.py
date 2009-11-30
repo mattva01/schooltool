@@ -51,12 +51,11 @@ You can create memberships this way:
 
 You can find all members of a group, or groups of a persons this way:
 
-    >>> from sets import Set
     >>> from schooltool.relationship import getRelatedObjects
     >>> from schooltool.app.membership import URIMember, URIGroup
-    >>> Set(getRelatedObjects(developers, URIMember)) == Set([jonas, petras])
+    >>> set(getRelatedObjects(developers, URIMember)) == set([jonas, petras])
     True
-    >>> Set(getRelatedObjects(petras, URIGroup)) == Set([admins, developers])
+    >>> set(getRelatedObjects(petras, URIGroup)) == set([admins, developers])
     True
 
 There are some constraints: Only objects providing IGroup can be groups.
@@ -109,8 +108,6 @@ That's all.
     >>> tearDown()
 
 """
-
-import sets
 
 from zope.component import adapts
 
@@ -212,7 +209,7 @@ def isTransitiveMember(obj, group):
     # find all transitive groups of `obj` and see whether `group` is one of
     # them.  It does not matter if we use breadth-first or depth-first search.
     queue = [obj]
-    seen = sets.Set([id(obj)])
+    seen = set([id(obj)])
     while queue:
         cur_obj = queue.pop() # therefore DFS; change to pop(0) to get BFS
         for new_group in getRelatedObjects(cur_obj, URIGroup):

@@ -18,12 +18,9 @@
 #
 """
 Unit tests for the schooltool.timetable.schema module.
-
-$Id$
 """
 
 import unittest
-from sets import Set
 
 from zope.interface import implements
 from zope.interface.verify import verifyObject
@@ -49,10 +46,10 @@ class TestTimetableSchemaDay(unittest.TestCase):
 
         self.assertEquals(list(td.periods), ['a', 'b', 'c'])
         self.assertEquals(list(td.keys()), ['a', 'b', 'c'])
-        self.assertEquals(list(td.items()), [('a', Set()),
-                                             ('b', Set()),
-                                             ('c', Set())])
-        self.assertEquals(td['b'], Set())
+        self.assertEquals(list(td.items()), [('a', set()),
+                                             ('b', set()),
+                                             ('c', set())])
+        self.assertEquals(td['b'], set())
         self.assertRaises(KeyError, td.__getitem__, 'x')
 
 

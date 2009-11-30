@@ -117,9 +117,7 @@ Step 16 needs the following data:
     - a list of periods for each day ID
     - a list of day templates (weekday -> period_id -> start time & duration)
 
-$Id$
 """
-from sets import Set
 
 from zope.interface import Interface
 from zope.schema import TextLine, Text, getFieldNamesInOrder
@@ -300,7 +298,7 @@ class DayEntryStep(FormStep):
             self.error = _("Please enter at least one day name.")
             return False
 
-        seen = Set()
+        seen = set()
         for day in day_names:
             if day in seen:
                 self.error = _("Please make sure the day names are unique.")
@@ -585,7 +583,7 @@ class PeriodNamesStep(FormStep):
             self.error = _("Please enter at least $number periods.",
                            mapping={'number': min_periods})
             return False
-        seen = Set()
+        seen = set()
         for period in periods:
             if period in seen:
                 self.error = _("Please make sure the period names are unique.")
@@ -649,8 +647,8 @@ class PeriodOrderSimple(Step):
             result.append(self.request[name])
 
         # Validate that all periods are selected
-        seen = Set()
-        errors = Set()
+        seen = set()
+        errors = set()
         for period in result:
             if period not in seen:
                 seen.add(period)
@@ -704,9 +702,9 @@ class PeriodOrderComplex(Step):
             result.append(day)
 
         # Validate that all periods are selected
-        errors = Set()
+        errors = set()
         for i, day in enumerate(self.days()):
-            seen = Set()
+            seen = set()
             for period in result[i]:
                 if period not in seen:
                     seen.add(period)
