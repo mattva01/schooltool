@@ -20,7 +20,6 @@
 SchoolTool timetabling views.
 """
 import datetime
-import sets
 import re
 
 from zope.app.container.interfaces import INameChooser
@@ -144,11 +143,11 @@ def fix_duplicates(names):
       ['a', 'b', 'b (3)', 'a (2)', 'b (2)', 'b (2) (2)']
 
     """
-    seen = sets.Set(names)
+    seen = set(names)
     if len(seen) == len(names):
         return names    # no duplicates
     result = []
-    used = sets.Set()
+    used = set()
     for name in names:
         if name in used:
             n = 2
@@ -350,7 +349,7 @@ class TimetableConflictMixin(object):
         section_map = {}
         for day_id, day in ttschema.items():
             for period_id in day.periods:
-                section_map[day_id, period_id] = sets.Set()
+                section_map[day_id, period_id] = set()
 
         term_tables = [removeSecurityProxy(tt)
                        for tt in findRelatedTimetables(term)]

@@ -23,7 +23,6 @@ import cPickle
 from StringIO import StringIO
 from persistent import Persistent
 from persistent.dict import PersistentDict
-from sets import Set
 
 from zope.component import adapts
 from zope.component import adapter
@@ -71,12 +70,12 @@ class TimetableSchemaDay(Persistent):
         return self.periods
 
     def items(self):
-        return [(period, Set()) for period in self.periods]
+        return [(period, set()) for period in self.periods]
 
     def __getitem__(self, period):
         if period not in self.periods:
             raise KeyError(period)
-        return Set()
+        return set()
 
     def __eq__(self, other):
         if ITimetableSchemaDay.providedBy(other):

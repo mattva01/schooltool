@@ -284,9 +284,9 @@ def doctest_SectionTimetableSetupView():
         >>> ITimetables(math).timetables['1']
         <Timetable: ...>
         >>> ITimetables(math).timetables['1']['Mon'].items()
-        [('9:00', Set([])), ('10:00', Set([]))]
+        [('9:00', set([])), ('10:00', set([]))]
         >>> ITimetables(math).timetables['1']['Tue'].items()
-        [('9:00', Set([])), ('10:00', Set([]))]
+        [('9:00', set([])), ('10:00', set([]))]
 
     Let's add some scheduled classes:
 
@@ -309,13 +309,13 @@ def doctest_SectionTimetableSetupView():
     Now we have a schedule for our course:
 
         >>> ITimetables(math).timetables['1']['Mon']['9:00']
-        Set([TimetableActivity('', ...
+        set([TimetableActivity('', ...
         >>> ITimetables(math).timetables['1']['Mon']['10:00']
-        Set([])
+        set([])
         >>> ITimetables(math).timetables['1']['Tue']['9:00']
-        Set([TimetableActivity('', ...
+        set([TimetableActivity('', ...
         >>> ITimetables(math).timetables['1']['Tue']['10:00']
-        Set([])
+        set([])
 
     All the periods that were 'ON' are now checked:
 
@@ -359,7 +359,7 @@ def doctest_SectionTimetableSetupView():
     Tuesday's Activity is no longer there:
 
         >>> ITimetables(math).timetables['1']['Tue']['9:00']
-        Set([])
+        set([])
 
     """
 

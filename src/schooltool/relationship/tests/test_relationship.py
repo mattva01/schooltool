@@ -229,25 +229,24 @@ def doctest_unrelateAll():
 
     Also, we got a bunch of events
 
-        >>> from sets import Set
         >>> from schooltool.relationship.interfaces \
         ...         import IBeforeRemovingRelationshipEvent
         >>> from schooltool.relationship.interfaces \
         ...         import IRelationshipRemovedEvent
-        >>> before_removal_events = Set([
+        >>> before_removal_events = set([
         ...         (e.rel_type, (e.participant1, e.role1.uri),
         ...                      (e.participant2, e.role2.uri))
         ...         for e in events
         ...         if IBeforeRemovingRelationshipEvent.providedBy(e)])
-        >>> before_removal_events == Set(relationships)
+        >>> before_removal_events == set(relationships)
         True
 
-        >>> removal_events = Set([(e.rel_type,
+        >>> removal_events = set([(e.rel_type,
         ...                        (e.participant1, e.role1.uri),
         ...                        (e.participant2, e.role2.uri))
         ...                       for e in events
         ...                       if IRelationshipRemovedEvent.providedBy(e)])
-        >>> removal_events == Set(relationships)
+        >>> removal_events == set(relationships)
         True
 
         >>> zope.event.subscribers[:] = old_subscribers
