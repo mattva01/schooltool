@@ -1445,6 +1445,9 @@ class DailyCalendarView(CalendarViewBase):
             active = start <= self._getCurrentTime() < end
 
             yield {'title': title,
+                   'full_title': translate(_("Add new event starting at "
+                                             "${title}",
+                                             mapping={"title": title})),
                    'cols': tuple(cols),
                    'time': start.strftime("%H:%M"),
                    'active': active,

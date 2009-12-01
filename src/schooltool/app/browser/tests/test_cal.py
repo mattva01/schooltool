@@ -3820,27 +3820,33 @@ class TestDailyCalendarView(unittest.TestCase):
                           [{'duration': 60, 'time': '10:00',
                             'title': '10:00', 'cols': (None,),
                             'top': 0.0, 'height': 4.0,
-                            'active': False},
+                            'active': False,
+                            'full_title': u'Add new event starting at 10:00'},
                            {'duration': 60, 'time': '11:00',
                             'title': '11:00', 'cols': (None,),
                             'top': 4.0, 'height': 4.0,
-                            'active': False},
+                            'active': False,
+                            'full_title': u'Add new event starting at 11:00'},
                            {'duration': 60, 'time': '12:00',
                             'title': '12:00', 'cols': (None,),
                             'top': 8.0, 'height': 4.0,
-                            'active': False},
+                            'active': False,
+                            'full_title': u'Add new event starting at 12:00'},
                            {'duration': 60, 'time': '13:00',
                             'title': '13:00', 'cols': (None,),
                             'top': 12.0, 'height': 4.0,
-                            'active': False},
+                            'active': False,
+                            'full_title': u'Add new event starting at 13:00'},
                            {'duration': 60, 'time': '14:00',
                             'title': '14:00', 'cols': (None,),
                             'top': 16.0, 'height': 4.0,
-                            'active': False},
+                            'active': False,
+                            'full_title': u'Add new event starting at 14:00'},
                            {'duration': 60, 'time': '15:00',
                             'title': '15:00', 'cols': (None,),
                             'top': 20.0, 'height': 4.0,
-                            'active': False},
+                            'active': False,
+                            'full_title': u'Add new event starting at 15:00'},
                             ])
 
         ev1 = createEvent('2004-08-12 12:00', '2h', "Meeting")
@@ -3855,6 +3861,7 @@ class TestDailyCalendarView(unittest.TestCase):
                 del d['top']
                 del d['height']
                 del d['active']
+                del d['full_title']
             return l
 
         result = clearMisc(result)
@@ -3967,7 +3974,8 @@ class TestDailyCalendarView(unittest.TestCase):
                             'height': 4.0,
                             'duration': 60,
                             'time': '13:00',
-                            'active': True}])
+                            'active': True,
+                            'full_title': u'Add new event starting at 13:00'}])
 
     def test_getHours_short_periods(self):
         from schooltool.app.browser.cal import DailyCalendarView

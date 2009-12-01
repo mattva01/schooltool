@@ -9,10 +9,10 @@
 <metal:block metal:fill-slot="body">
 
 <p i18n:translate="">
-You have selected <span tal:replace="view/date"/> as the emergency
-day.  Now please select the replacement day.  The selection below
-consists of non-schooldays in this term following the emergency day
-and several days after the term.
+You have selected <span i18n:name="date" tal:replace="view/date"/> as
+the emergency day.  Now please select the replacement day.  The
+selection below consists of non-schooldays in this term following the
+emergency day and several days after the term.
 </p>
 
 <form class="plain" method="POST" tal:attributes="action request/URL">

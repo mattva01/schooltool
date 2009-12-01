@@ -77,7 +77,7 @@
             i18n:attributes="value unlink-section-button" />
         </div>
         <div class="field" tal:condition="not:section">
-          <tal:block condition="view/previous_term" i18n:translate="">
+          <tal:block condition="view/previous_term">
             <a tal:attributes="
                 href string:${view/context/@@absolute_url}/@@link_previous.html"
                 i18n:translate="">
@@ -110,8 +110,8 @@
             name="UNLINK_NEXT" value="Unlink"
             i18n:attributes="value unlink-section-button" />
         </div>
-        <div class="field" tal:condition="not:section" i18n:translate="">
-          <tal:block condition="view/next_term" i18n:translate="">
+        <div class="field" tal:condition="not:section">
+          <tal:block condition="view/next_term">
             <a tal:attributes="
                 href string:${view/context/@@absolute_url}/@@link_next.html"
                 i18n:translate="">

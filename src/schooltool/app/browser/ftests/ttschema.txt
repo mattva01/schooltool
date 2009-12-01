@@ -465,7 +465,8 @@ We get back to the terms index page:
     >>> print analyze.queryHTML('//h1', manager.contents)[0]
     <h1>
       2005
-      (May 1, 2005&#8212;
+      (May 1, 2005
+      &#8212;
        Oct 15, 2005)
     </h1>
 
