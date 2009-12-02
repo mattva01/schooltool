@@ -123,11 +123,7 @@ Timetable schemas
 A timetable schema is like a timetable that has no activities and no exeptions.
 You can create an empty timetable by calling the createTimetable method of a
 schema.  See ITimetableSchema, ITimetableSchemaDay.
-
-$Id$
 """
-
-from sets import Set
 
 import zope.event
 from persistent import Persistent
@@ -289,7 +285,7 @@ class TimetableDay(Persistent):
         self.homeroom_period_ids = homeroom_period_ids
         self.activities = PersistentDict()
         for p in periods:
-            self.activities[p] = Set() # MaybePersistentKeysSet()
+            self.activities[p] = set() # MaybePersistentKeysSet()
 
     def keys(self):
         return self.periods
@@ -356,7 +352,7 @@ class TimetableDay(Persistent):
         if self.homeroom_period_ids != other.homeroom_period_ids:
             return False
         for period in self.periods:
-            if Set(self.activities[period]) != Set(other.activities[period]):
+            if set(self.activities[period]) != set(other.activities[period]):
                 return False
         return True
 
@@ -484,7 +480,7 @@ class SchooldayTemplate(object):
     implements(ISchooldayTemplate, ISchooldayTemplateWrite)
 
     def __init__(self):
-        self.events = Set()
+        self.events = set()
 
     def __iter__(self):
         return iter(sorted(self.events))

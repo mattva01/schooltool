@@ -21,7 +21,6 @@ Checks for the unit tests.
 """
 
 import sys
-import sets
 import logging
 
 name_of_test = str
@@ -144,7 +143,6 @@ class LoggingChecks:
 
     This class looks for the following fiddlings:
 
-      import logging
       logging.getLogger('foo').disabled = True
       logging.getLogger('foo').propagate = False
       logging.getLogger('foo').setLevel(bar)
@@ -163,8 +161,8 @@ class LoggingChecks:
         if new_snapshot != self.snapshot:
             warn("%s changed logging configuration" % name_of_test(test))
             if self.verbose:
-                old_loggers = sets.Set(self.snapshot.keys())
-                new_loggers = sets.Set(new_snapshot.keys())
+                old_loggers = set(self.snapshot.keys())
+                new_loggers = set(new_snapshot.keys())
                 for name in sorted(old_loggers | new_loggers):
                     if name not in new_loggers:
                         warn("  logger %s disappeared" % name)
@@ -177,7 +175,6 @@ class LoggingChecks:
                             warn("  logger %s was changed" % name)
 
     def makeSnapshot(self):
-        import logging
         info = {}
         for name, logger in logging.root.manager.loggerDict.items():
             if isinstance(logger, logging.PlaceHolder):
