@@ -1,0 +1,11 @@
+[buildout]
+extends = versions.cfg
+          base.cfg
+find-links = http://ftp.schooltool.org/schooltool/1.2/dev/
+             http://ftp.schooltool.org/schooltool/1.2/
+versions = versions
+develop = .
+
+[schooltool]
+eggs += schooltool
+

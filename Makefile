@@ -3,30 +3,21 @@
 # Makefile for SchoolTool
 #
 
-BOOTSTRAP_PYTHON=python2.5
-INSTANCE_TYPE=schooltool
+BOOTSTRAP_PYTHON = python2.5
+INSTANCE_TYPE = schooltool
 
-.PHONY: all
-all: build
+BUILDOUT_FLAGS =
+
+.DEFAULT_GOAL = build
 
 .PHONY: build
-build:
-	test -f bin/buildout || $(MAKE) BOOTSTRAP_PYTHON=$(BOOTSTRAP_PYTHON) bootstrap
-	test -f bin/test || $(MAKE) buildout
-	test -d instance || $(MAKE) build-schooltool-instance
-
-.PHONY: bootstrap
-bootstrap:
-	$(BOOTSTRAP_PYTHON) bootstrap.py
-
-.PHONY: buildout
-buildout:
-	bin/buildout
+build: buildout instance
 
 .PHONY: update
-update: build
-	bzr up
-	bin/buildout -n
+update: bin/buildout
+	test ! -f versions.cfg.in || rm versions.cfg.in
+	bzr up || true
+	$(MAKE) buildout BUILDOUT_FLAGS=-n
 
 .PHONY: test
 test: build
@@ -40,24 +31,54 @@ testall: build
 ftest: build
 	bin/test -f
 
-.PHONY: build-schooltool-instance
-build-schooltool-instance:
-	bin/make-schooltool-instance instance instance_type=$(INSTANCE_TYPE)
-
 .PHONY: run
 run: build
 	bin/start-schooltool-instance instance
 
-.PHONY: release
-release:
-	echo -n `sed -e 's/\n//' version.txt.in` > version.txt
-	echo -n "_r" >> version.txt
-	bzr revno >> version.txt
-	bin/buildout setup setup.py sdist
+instance:
+	$(MAKE) buildout
+	bin/make-schooltool-instance instance instance_type=$(INSTANCE_TYPE)
 
-.PHONY: move-release
-move-release:
-	 mv dist/schooltool-*.tar.gz /home/ftp/pub/schooltool/releases/nightly
+.PHONY: bootstrap
+bootstrap:
+	$(MAKE) buildout.cfg
+	$(BOOTSTRAP_PYTHON) bootstrap.py
+
+bin/buildout:
+	$(MAKE) bootstrap
+
+.PHONY: buildout
+buildout: .run.buildout
+
+.run.buildout: bin/buildout version.txt setup.py versions.cfg base.cfg buildout.cfg
+	bin/buildout $(BUILDOUT_FLAGS)
+	touch .run.buildout
+
+buildout.cfg:
+	$(MAKE) versions.cfg
+	cp buildout.cfg.in buildout.cfg
+	touch buildout.cfg
+
+versions.cfg.in:
+	wget http://ftp.schooltool.org/schooltool/1.2/versions.cfg -O versions.cfg.in
+	test -s versions.cfg.in && touch versions.cfg.in
+
+versions.cfg: versions.cfg.in
+	# test if versions.cfg exists or it can be created.
+	test -f versions.cfg || test -s versions.cfg.in && touch versions.cfg
+	# update version.cfg only if it changed on server
+	@if [ -s versions.cfg.in ] && [ "`diff versions.cfg versions.cfg.in`" ]; \
+	then \
+	    cp versions.cfg.in versions.cfg; \
+	    touch versions.cfg; \
+	fi
+
+version.txt: version.txt.in .bzr/branch/last-revision
+	echo -n `cat version.txt.in`_r`bzr revno` >> version.txt
+
+.PHONY: release
+release: version.txt.in
+	bin/buildout setup setup.py sdist
 
 .PHONY: coverage
 coverage: build
@@ -91,6 +112,10 @@ ftest-coverage-reports-html ftest-coverage/reports:
 
 .PHONY: clean
 clean:
+	test ! -f .run.buildout || rm .run.buildout
+	test ! -f versions.cfg || rm versions.cfg
+	test ! -f versions.cfg.in || rm versions.cfg.in
+	test ! -f version.txt || rm version.txt
 	rm -rf bin develop-eggs parts python
 	rm -rf build dist
 	rm -f .installed.cfg
