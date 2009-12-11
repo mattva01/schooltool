@@ -8,24 +8,32 @@ INSTANCE_TYPE = schooltool
 
 BUILDOUT_FLAGS =
 
-.DEFAULT_GOAL = build
-
 .PHONY: build
 build: buildout instance
 
+.PHONY: bootstrap
+bootstrap:
+	$(BOOTSTRAP_PYTHON) bootstrap.py
+
+bin/buildout:
+	$(MAKE) bootstrap
+
+buildout: bin/buildout setup.py base.cfg buildout.cfg
+	bin/buildout $(BUILDOUT_FLAGS)
+	touch buildout
+
 .PHONY: update
 update: bin/buildout
-	test ! -f versions.cfg.in || rm versions.cfg.in
-	bzr up || true
+	bzr up
 	$(MAKE) buildout BUILDOUT_FLAGS=-n
+
+.PHONY: testall
+testall: build
+	bin/test-all
 
 .PHONY: test
 test: build
 	bin/test -u
-
-.PHONY: testall
-testall: build
-	bin/test
 
 .PHONY: ftest
 ftest: build
@@ -39,45 +47,9 @@ instance:
 	$(MAKE) buildout
 	bin/make-schooltool-instance instance instance_type=$(INSTANCE_TYPE)
 
-.PHONY: bootstrap
-bootstrap:
-	$(MAKE) buildout.cfg
-	$(BOOTSTRAP_PYTHON) bootstrap.py
-
-bin/buildout:
-	$(MAKE) bootstrap
-
-.PHONY: buildout
-buildout: .run.buildout
-
-.run.buildout: bin/buildout version.txt setup.py versions.cfg base.cfg buildout.cfg
-	bin/buildout $(BUILDOUT_FLAGS)
-	touch .run.buildout
-
-buildout.cfg:
-	$(MAKE) versions.cfg
-	cp buildout.cfg.in buildout.cfg
-	touch buildout.cfg
-
-versions.cfg.in:
-	wget http://ftp.schooltool.org/schooltool/1.2/versions.cfg -O versions.cfg.in
-	test -s versions.cfg.in && touch versions.cfg.in
-
-versions.cfg: versions.cfg.in
-	# test if versions.cfg exists or it can be created.
-	test -f versions.cfg || test -s versions.cfg.in && touch versions.cfg
-	# update version.cfg only if it changed on server
-	@if [ -s versions.cfg.in ] && [ "`diff versions.cfg versions.cfg.in`" ]; \
-	then \
-	    cp versions.cfg.in versions.cfg; \
-	    touch versions.cfg; \
-	fi
-
-version.txt: version.txt.in .bzr/branch/last-revision
-	echo -n `cat version.txt.in`_r`bzr revno` >> version.txt
-
 .PHONY: release
-release: version.txt.in
+release: bin/buildout
+	echo -n `cat version.txt.in`_r`bzr revno` >> version.txt
 	bin/buildout setup setup.py sdist
 
 .PHONY: coverage
@@ -112,10 +84,8 @@ ftest-coverage-reports-html ftest-coverage/reports:
 
 .PHONY: clean
 clean:
-	test ! -f .run.buildout || rm .run.buildout
-	test ! -f versions.cfg || rm versions.cfg
-	test ! -f versions.cfg.in || rm versions.cfg.in
-	test ! -f version.txt || rm version.txt
+	rm -f buildout
+	rm -f version.txt
 	rm -rf bin develop-eggs parts python
 	rm -rf build dist
 	rm -f .installed.cfg
@@ -123,6 +93,11 @@ clean:
 	find . -name '*.py[co]' -exec rm -f {} \;
 	find . -name '*.mo' -exec rm -f {} +
 	find . -name 'LC_MESSAGES' -exec rmdir -p --ignore-fail-on-non-empty {} +
+
+.PHONY: realclean
+realclean: clean
+	rm -rf eggs
+	rm -rf instance
 
 .PHONY: extract-translations
 extract-translations: build
