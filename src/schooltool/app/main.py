@@ -787,6 +787,7 @@ class StandaloneServer(object):
         for ip, port in options.config.web:
             server = schooltool_server.create('HTTP', task_dispatcher, db,
                                               port=port, ip=ip)
+            # XXX: we do not support REST anymore.  I think this is a leftover.
             if options.config.rest:
                 server.application.rest_enabled = True
 
