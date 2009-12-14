@@ -503,10 +503,9 @@ class SectionTimetableSetupView(TimetableSetupViewBase):
                                 for course in self.context.courses])
 
         if 'CANCEL' in self.request:
-            self.request.response.redirect(
-                absoluteURL(self.context, self.request))
-        if 'SAVE' in self.request:
+            self.request.response.redirect(self.nextURL())
 
+        if 'SAVE' in self.request:
             section = removeSecurityProxy(self.context)
             timetable = ITimetables(section).lookup(self.term, self.ttschema)
             if timetable is None:
@@ -529,13 +528,12 @@ class SectionTimetableSetupView(TimetableSetupViewBase):
                             for act in list(period):
                                 day.remove(period_id, act)
 
-            # TODO: find a better place to redirect to
-            self.request.response.redirect(
-                absoluteURL(
-                    list(ITimetables(self.context).timetables.values())[0],
-                    self.request))
+            self.request.response.redirect(self.nextURL())
 
         return self.template()
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request)
 
 
 class TimetableEditView(TimetableSetupViewBase):

@@ -284,7 +284,7 @@ def doctest_SectionTimetableSetupView():
         >>> request.response.getStatus()
         302
         >>> request.response.getHeader('location')
-        'http://127.0.0.1/sections/math/timetables/1'
+        'http://127.0.0.1/sections/math'
 
     An empty save request will create an empty timetable:
 
@@ -311,7 +311,7 @@ def doctest_SectionTimetableSetupView():
         >>> view.request.response.getStatus()
         302
         >>> view.request.response.getHeader('location')
-        'http://127.0.0.1/sections/math/timetables/1'
+        'http://127.0.0.1/sections/math'
 
     Now we have a schedule for our course:
 
