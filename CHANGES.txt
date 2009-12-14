@@ -1,17 +1,13 @@
-~~~~~~~
 CHANGES
 ~~~~~~~
 
 1.2.1dev
 ==================
 
-* Traceback trying to view student's contacts (https://launchpad.net/bugs/475586)
-
-Dev features
-------------
-
+* Traceback trying to view student's contacts https://launchpad.net/bugs/475586
+* Section scheduling view now returns to section on save https://launchpad.net/bugs/485616
 * Automatic plugin inclusion
-* buildout.cfg, Makefile refactorings
+
 
 1.2.0 (2009-11-04)
 ==================
