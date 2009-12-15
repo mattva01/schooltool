@@ -9,14 +9,11 @@ INSTANCE_TYPE=schooltool
 BUILDOUT_FLAGS=
 
 .PHONY: build
-build: buildout instance
+build: buildout
 
 .PHONY: bootstrap
-bootstrap:
+bootstrap bin/buildout:
 	$(BOOTSTRAP_PYTHON) bootstrap.py
-
-bin/buildout:
-	$(MAKE) bootstrap
 
 buildout: bin/buildout setup.py base.cfg buildout.cfg
 	bin/buildout $(BUILDOUT_FLAGS)
@@ -44,7 +41,7 @@ instance:
 	bin/make-schooltool-instance instance instance_type=$(INSTANCE_TYPE)
 
 .PHONY: run
-run: build
+run: build instance
 	bin/start-schooltool-instance instance
 
 .PHONY: release
