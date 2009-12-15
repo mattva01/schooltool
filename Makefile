@@ -5,8 +5,10 @@
 
 BOOTSTRAP_PYTHON=python2.5
 INSTANCE_TYPE=schooltool
-
 BUILDOUT_FLAGS=
+
+.PHONY: all
+all: build
 
 .PHONY: build
 build: buildout
