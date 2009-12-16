@@ -48,12 +48,12 @@ run: build instance
 
 .PHONY: release
 release: bin/buildout
-	echo -n `cat version.txt.in`_r`bzr revno` >> version.txt
+	echo -n `cat version.txt.in`_r`bzr revno` > version.txt
 	bin/buildout setup setup.py sdist
 
 .PHONY: move-release
 move-release:
-	mv dist/schooltool-*.tar.gz /home/ftp/pub/schooltool/releases/nightly
+	mv -v dist/schooltool-*.tar.gz /home/ftp/pub/schooltool/1.2/dev
 
 .PHONY: coverage
 coverage: build
