@@ -4,58 +4,56 @@
 #
 
 BOOTSTRAP_PYTHON=python2.5
+INSTANCE_TYPE=schooltool
+BUILDOUT_FLAGS=
 
 .PHONY: all
 all: build
 
 .PHONY: build
-build:
-	test -f bin/buildout || $(MAKE) BOOTSTRAP_PYTHON=$(BOOTSTRAP_PYTHON) bootstrap
-	test -f bin/test || $(MAKE) buildout
-	test -d instance || $(MAKE) build-schooltool-instance
+build: buildout
 
 .PHONY: bootstrap
-bootstrap:
+bootstrap bin/buildout:
 	$(BOOTSTRAP_PYTHON) bootstrap.py
 
-.PHONY: buildout
-buildout:
-	bin/buildout
+buildout: bin/buildout setup.py base.cfg buildout.cfg
+	bin/buildout $(BUILDOUT_FLAGS)
+	touch buildout
 
 .PHONY: update
-update: build
-	bin/buildout -n
+update: bin/buildout
+	bzr up
+	$(MAKE) buildout BUILDOUT_FLAGS=-n
+
+.PHONY: testall
+testall: build
+	bin/test-all
 
 .PHONY: test
 test: build
 	bin/test -u
 
-.PHONY: testall
-testall: build
-	bin/test
-
 .PHONY: ftest
 ftest: build
 	bin/test -f
 
-.PHONY: build-schooltool-instance
-build-schooltool-instance:
-	bin/make-schooltool-instance instance instance_type=schooltool.stapp2007
+instance:
+	$(MAKE) buildout
+	bin/make-schooltool-instance instance instance_type=$(INSTANCE_TYPE)
 
 .PHONY: run
-run: build
+run: build instance
 	bin/start-schooltool-instance instance
 
 .PHONY: release
-release:
-	echo -n `sed -e 's/\n//' version.txt.in` > version.txt
-	echo -n "_r" >> version.txt
-	bzr revno >> version.txt
+release: bin/buildout
+	echo -n `cat version.txt.in`_r`bzr revno` > version.txt
 	bin/buildout setup setup.py sdist
 
 .PHONY: move-release
 move-release:
-	 mv dist/schooltool-*.tar.gz /home/ftp/pub/schooltool/releases/nightly
+	mv -v dist/schooltool-*.tar.gz /home/ftp/pub/schooltool/1.2/dev
 
 .PHONY: coverage
 coverage: build
@@ -89,6 +87,8 @@ ftest-coverage-reports-html ftest-coverage/reports:
 
 .PHONY: clean
 clean:
+	rm -f buildout
+	rm -f version.txt
 	rm -rf bin develop-eggs parts python
 	rm -rf build dist
 	rm -f .installed.cfg
@@ -96,6 +96,11 @@ clean:
 	find . -name '*.py[co]' -exec rm -f {} \;
 	find . -name '*.mo' -exec rm -f {} +
 	find . -name 'LC_MESSAGES' -exec rmdir -p --ignore-fail-on-non-empty {} +
+
+.PHONY: realclean
+realclean: clean
+	rm -rf eggs
+	rm -rf instance
 
 .PHONY: extract-translations
 extract-translations: build

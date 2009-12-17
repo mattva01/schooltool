@@ -24,7 +24,7 @@ HOME = os.path.expanduser('~')
 
 def get_available_types():
     instance_types = list(pkg_resources.iter_entry_points('schooltool.instance_type'))
-    return [entry.load().__name__ for entry in instance_types]
+    return [(entry.name, entry.module_name) for entry in instance_types]
 
 available_types = get_available_types()
 
@@ -35,9 +35,11 @@ class SchoolToolDeploy(Template):
 
     vars = [
         var('instance_type', """SchoolTool instance type to use. Available types -
-  %s""" % "\n  ".join(available_types), default=available_types[-1])]
+  %s""" % "\n  ".join([t[0] for t in available_types]),
+            default=available_types[-1][0])]
 
     def check_vars(self, vars, cmd):
         vars = super(SchoolToolDeploy, self).check_vars(vars, cmd)
+        vars['instance_package'] = dict(available_types)[vars['instance_type']]
         vars['abspath'] = os.path.join(os.path.abspath(cmd.options.output_dir), vars['project'])
         return vars

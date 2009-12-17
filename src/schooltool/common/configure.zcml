@@ -113,6 +113,7 @@
   <include package="schooltool.skin" />
   <include package="schooltool.relationship" />
   <include package="schooltool.app" />
+  <include package="schooltool.course" />
   <include package="schooltool.person" />
   <include package="schooltool.contact" />
   <include package="schooltool.demographics" />

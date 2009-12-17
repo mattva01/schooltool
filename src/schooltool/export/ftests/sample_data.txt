@@ -18,17 +18,21 @@ Let's check the data. We have 4 terms:
     >>> browser.getLink('2006-2008').click()
     >>> browser.printQuery("id('content-body')/form//div/a")
     <a href="http://localhost/schoolyears/2006-2008/2006-fall">2006 Fall</a>
-          (Sep 1, 2006&#8212;
-          Jan 26, 2007)
+            (Sep 1, 2006
+            &#8212;
+            Jan 26, 2007)
     <a href="http://localhost/schoolyears/2006-2008/2007-spring">2007 Spring</a>
-          (Jan 29, 2007&#8212;
-          Jun 15, 2007)
+            (Jan 29, 2007
+            &#8212;
+            Jun 15, 2007)
     <a href="http://localhost/schoolyears/2006-2008/2007-fall">2007 Fall</a>
-          (Sep 1, 2007&#8212;
-          Jan 27, 2008)
+            (Sep 1, 2007
+            &#8212;
+            Jan 27, 2008)
     <a href="http://localhost/schoolyears/2006-2008/2008-spring">2008 Spring</a>
-          (Jan 28, 2008&#8212;
-          Jun 20, 2008)
+            (Jan 28, 2008
+            &#8212;
+            Jun 20, 2008)
 
 Some sections:
 

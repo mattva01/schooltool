@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<span metal:fill-slot="zonki" i18n:translate="">
+<span metal:fill-slot="zonki">
   <img src="zonki.png" alt="SchoolTool" i18n:attributes="alt"
     tal:attributes="src context/++resource++zonki-question.png" /> 
 </span>

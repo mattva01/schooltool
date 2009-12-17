@@ -6,6 +6,8 @@
   <include package="schooltool.help" file="meta.zcml" />
 
   <include package="schooltool.common" />
+  <include package="z3c.autoinclude" file="meta.zcml" />
+  <includePlugins package="schooltool" file="plugin.zcml" />
 
   <interface
       interface=".skin.ISchoolTool2007Skin"
@@ -19,13 +21,10 @@
       component=".generations.schemaManager"
       />
 
-  <include package="schooltool.course" />
   <include xmlns:zcml="http://namespaces.zope.org/zcml"
            zcml:condition="have devmode"
            package="schooltool.devmode" />
   <include package="schooltool.help" />
-  <include package="schooltool.term" />
-  <include package="schooltool.schoolyear" />
   <include package="schooltool.timetable" />
   <include package="schooltool.basicperson" />
 
