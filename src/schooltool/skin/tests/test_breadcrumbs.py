@@ -42,8 +42,9 @@ def test_breadcrumbs():
     how it works.
 
       >>> from zope.security.management import newInteraction, endInteraction, restoreInteraction, setSecurityPolicy
+      >>> from zope.location.location import Location
       >>> endInteraction()
-      >>> class Object(object):
+      >>> class Object(Location):
       ...     def __init__(self, parent=None, name=None):
       ...         self.__parent__ = parent
       ...         self.__name__ = name

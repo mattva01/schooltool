@@ -21,7 +21,7 @@ Resource Booking caledar and events
 """
 from zope.interface import implements
 from zope.session.interfaces import ISession
-from zope.location.location import locate
+from zope.location.location import Location, locate
 
 from schooltool.calendar.simple import ImmutableCalendar
 from schooltool.resource.interfaces import IBookingCalendar
@@ -75,7 +75,7 @@ def getSelectedResourceCalendars(request):
     return resource_calendars
 
 
-class ResourceBookingCalendar(ImmutableCalendar):
+class ResourceBookingCalendar(ImmutableCalendar, Location):
     implements(IBookingCalendar)
 
     def __init__(self, context):

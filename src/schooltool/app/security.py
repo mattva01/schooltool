@@ -36,7 +36,7 @@ from zope.security.interfaces import IGroupAwarePrincipal
 from zope.security.checker import ProxyFactory
 from zope.publisher.browser import FileUpload
 from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.app.component.interfaces import ISite
+from zope.location.interfaces import ISite
 from zope.app.component.site import LocalSiteManager
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.traversing.api import traverse

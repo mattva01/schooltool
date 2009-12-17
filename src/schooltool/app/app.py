@@ -151,7 +151,7 @@ class SimpleNameChooser(NameChooser):
         >>> chooser.chooseName('@notallowed', obj)
         Traceback (most recent call last):
           ...
-        UserError: Names cannot begin with '+' or '@' or contain '/'
+        ValueError: Names cannot begin with '+' or '@' or contain '/'
 
     If the name generated from the title gets shortened too much, we
     generate a name from the name of the context container instead:

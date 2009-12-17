@@ -236,7 +236,7 @@ class LoginView(BrowserView):
                 else:
                     nexturl = absoluteURL(ISchoolToolApplication(None),
                                                self.request)
-                self.request.response.redirect(nexturl)
+                self.request.response.redirect(nexturl, trusted=True)
 
 
 class LoginDispatchView(BrowserView):

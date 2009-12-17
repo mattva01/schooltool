@@ -64,7 +64,7 @@ from zope.component import getAdapters
 from zope.interface import directlyProvidedBy
 from zope.app.intid import IntIds
 from zope.app.intid.interfaces import IIntIds
-from zope.app.component.interfaces import ISite
+from zope.location.interfaces import ISite
 from zope.app.component.site import LocalSiteManager
 from zope.server.http.wsgihttpserver import WSGIHTTPServer
 from zope.server.http.commonaccesslogger import CommonAccessLogger

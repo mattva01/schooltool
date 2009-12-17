@@ -91,7 +91,7 @@ class CourseCSVImporter(BaseCSVImporter):
             obj.credits = credits
             try:
                 name = self.chooser.chooseName(course_id, obj)
-            except UserError, e:
+            except ValueError, e:
                 msg = e.args[0]
                 self.errors.fields.append(_('Course "${course_title}" id "${invalid_id}"'
                                             ' is invalid. ${error_message}',

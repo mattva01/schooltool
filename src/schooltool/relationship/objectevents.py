@@ -27,8 +27,8 @@ This module contains event subscribers for IObjectRemovedEvent (and, soon,
 others) that update relationships on these changes.
 """
 
+from zope.proxy import getProxiedObject
 from zope.app.container.interfaces import IObjectRemovedEvent
-from zope.app.container.contained import getProxiedObject
 from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 
 from schooltool.relationship.interfaces import IRelationshipLinks

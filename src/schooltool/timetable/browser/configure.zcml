@@ -75,7 +75,7 @@
       template="templates/schooltt-delete.pt"
       permission="schooltool.edit"
       menu="zmi_views"
-      title="View"
+      title="Delete"
       />
 
   <page

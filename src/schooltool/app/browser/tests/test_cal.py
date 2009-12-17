@@ -1947,7 +1947,7 @@ def doctest_CalendarEventAddView_add_validation():
         >>> view.update()
         u'An error occurred.'
         >>> view.errors
-        WidgetInputError: ('title', u'Title', )
+        WidgetInputError: ('title', u'Title', RequiredMissing())
         >>> view.error is None
         True
 
@@ -1997,7 +1997,7 @@ def doctest_CalendarEventAddView_add_validation():
         >>> view.update()
         u'An error occurred.'
         >>> view.errors
-        WidgetInputError: ('title', u'Title', )
+        WidgetInputError: ('title', u'Title', RequiredMissing())
         ConversionError: (u'Invalid time', None)
         >>> view.error is None
         True
@@ -2014,7 +2014,7 @@ def doctest_CalendarEventAddView_add_validation():
         >>> view.update()
         u'An error occurred.'
         >>> view.errors
-        WidgetInputError: ('title', u'Title', )
+        WidgetInputError: ('title', u'Title', RequiredMissing())
         ConversionError: (u'Invalid time', None)
         >>> view.error is None
         True
@@ -2411,7 +2411,7 @@ def doctest_CalendarEventAddView_cross_validation():
         >>> view.update()
         u'An error occurred.'
         >>> view.errors
-        WidgetInputError: ('interval', u'Repeat every', )
+        WidgetInputError: ('interval', u'Repeat every', RequiredMissing())
         >>> view.error is None
         True
 
@@ -2432,7 +2432,8 @@ def doctest_CalendarEventAddView_cross_validation():
         >>> view.update()
         u'An error occurred.'
         >>> view.errors
-        WidgetInputError: ('until', u'Repeat until', End date is earlier than start date)
+        WidgetInputError: ('until', u'Repeat until',
+            ConstraintNotSatisfied(u'End date is earlier than start date'))
         >>> view.error is None
         True
 
@@ -2762,8 +2763,8 @@ def doctest_CalendarEventEditView_updateForm():
         >>> view.update()
         u'An error occurred.'
         >>> print view.errors
-        WidgetInputError: ('start_date', u'Date', )
-        WidgetInputError: ('start_time', u'Time', )
+        WidgetInputError: ('start_date', u'Date', RequiredMissing())
+        WidgetInputError: ('start_time', u'Time', RequiredMissing())
         >>> print view.error
         None
 

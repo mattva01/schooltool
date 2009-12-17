@@ -18,7 +18,7 @@ bootstrap:
 bin/buildout:
 	$(MAKE) bootstrap
 
-buildout: bin/buildout setup.py base.cfg buildout.cfg
+buildout: bin/buildout setup.py base.cfg buildout.cfg versions.cfg
 	bin/buildout $(BUILDOUT_FLAGS)
 	touch buildout
 

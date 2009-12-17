@@ -50,7 +50,7 @@ arbitrary containers, such as a regular folder:
   >>> constraints.checkObject(folder.Folder(), u'goodjob', goodjob)
   Traceback (most recent call last):
   ...
-  InvalidContainerType: (<zope.app.folder.folder.Folder ...>,
+  InvalidContainerType: (<zope.site.folder.Folder ...>,
                          (<InterfaceClass ...ICommendations>,))
 
 The ``ICommendations`` interface also needs an implementation, since the
