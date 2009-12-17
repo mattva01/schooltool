@@ -787,8 +787,6 @@ class StandaloneServer(object):
         for ip, port in options.config.web:
             server = schooltool_server.create('HTTP', task_dispatcher, db,
                                               port=port, ip=ip)
-            if options.config.rest:
-                server.application.rest_enabled = True
 
         notify(ProcessStarting())
 
