@@ -32,6 +32,8 @@
   <include package="z3c.formui" />
   <include package="z3c.macro"/>
 
+  <include package="zope.location" />
+
   <!-- set up an adapter from zope.i18n locale to a zope.ucol collator -->
 
   <adapter
