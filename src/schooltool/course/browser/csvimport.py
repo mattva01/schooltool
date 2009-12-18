@@ -21,7 +21,6 @@ csv importing.
 
 $Id$
 """
-from zope.exceptions.interfaces import UserError
 from zope.security.proxy import removeSecurityProxy
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView

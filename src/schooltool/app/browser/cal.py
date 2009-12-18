@@ -336,7 +336,7 @@ class EventForDisplay(object):
 
         # if event is comming from an immutable (readonly) calendar,
         # display the absolute url of the event itself
-        return absoluteURL(self, self.request)
+        return absoluteURL(self.context, self.request)
 
 
     def editLink(self):

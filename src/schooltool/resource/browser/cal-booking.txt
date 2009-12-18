@@ -84,7 +84,10 @@ and set up a calendar for Frog:
     ... END:VCALENDAR
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
+    Cache-Control: no-cache="Set-Cookie,Set-Cookie2"
     Content-Length: 0
+    Expires: ...
+    Pragma: no-cache
     Set-Cookie: ...
     <BLANKLINE>
 

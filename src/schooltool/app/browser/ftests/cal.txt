@@ -423,7 +423,6 @@ Let's add a calendar through iCalendar PUT view (so we would know the event id):
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: 0
-    Set-Cookie: ...
     <BLANKLINE>
 
 Let Frog modify this event:
