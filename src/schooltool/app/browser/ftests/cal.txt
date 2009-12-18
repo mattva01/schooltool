@@ -539,7 +539,6 @@ We can try and put an updated calendar:
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: 0
-    Set-Cookie: ...
     <BLANKLINE>
 
 This should have cleared the calendar.
