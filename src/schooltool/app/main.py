@@ -141,14 +141,8 @@ def die(message, exitcode=1):
     sys.exit(exitcode)
 
 
-class SchoolToolPublisherApplication(WSGIPublisherApplication):
-
-    def __init__(self, db, factory=HTTPPublicationRequestFactory):
-        self.requestFactory = factory(db)
-
-
 schooltool_server = ServerType(WSGIHTTPServer,
-                               SchoolToolPublisherApplication,
+                               WSGIPublisherApplication,
                                CommonAccessLogger,
                                8080, True)
 
