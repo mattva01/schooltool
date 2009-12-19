@@ -50,6 +50,7 @@ run: build instance
 release: bin/buildout
 	echo -n `cat version.txt.in`_r`bzr revno` > version.txt
 	bin/buildout setup setup.py sdist
+	rm version.txt
 
 .PHONY: move-release
 move-release:
@@ -87,7 +88,6 @@ ftest-coverage-reports-html ftest-coverage/reports:
 
 .PHONY: clean
 clean:
-	rm -f version.txt
 	rm -rf bin develop-eggs parts python
 	rm -rf build dist
 	rm -f .installed.cfg
