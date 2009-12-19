@@ -11,24 +11,21 @@ BUILDOUT_FLAGS=
 all: build
 
 .PHONY: build
-build: buildout
+build: bin/test
 
 .PHONY: bootstrap
 bootstrap bin/buildout:
 	$(BOOTSTRAP_PYTHON) bootstrap.py
 
-buildout: bin/buildout setup.py base.cfg buildout.cfg
+.PHONY: buildout
+buildout bin/test: bin/buildout setup.py base.cfg buildout.cfg
 	bin/buildout $(BUILDOUT_FLAGS)
-	touch buildout
+	@touch --no-create bin/test
 
 .PHONY: update
 update: bin/buildout
 	bzr up
 	$(MAKE) buildout BUILDOUT_FLAGS=-n
-
-.PHONY: testall
-testall: build
-	bin/test-all
 
 .PHONY: test
 test: build
@@ -37,6 +34,10 @@ test: build
 .PHONY: ftest
 ftest: build
 	bin/test -f
+
+.PHONY: testall
+testall: build
+	bin/test --at-level 2
 
 instance:
 	$(MAKE) buildout
