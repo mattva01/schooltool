@@ -74,7 +74,7 @@ class NoteAddView(AddView):
     def update(self):
         if 'CANCEL' in self.request:
             url = absoluteURL(self.context, self.request)
-            self.request.response.redirect(url, trusted=True)
+            self.request.response.redirect(url)
         return AddView.update(self)
 
     def nextURL(self):

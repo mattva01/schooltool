@@ -200,7 +200,8 @@ def doctest_LoginView():
         >>> request = TestRequest(form={'username': 'frog',
         ...                             'password': 'pond',
         ...                             'nexturl': 'http://host/path',
-        ...                             'LOGIN': 'Log in'})
+        ...                             'LOGIN': 'Log in'},
+        ...                       environ={'HTTP_HOST': 'host'})
         >>> request.setPrincipal(StubPrincipal())
         >>> view = View(app, request)
         >>> content = view()
@@ -210,6 +211,19 @@ def doctest_LoginView():
         >>> url = absoluteURL(app, request)
         >>> request.response.getHeader('Location')
         'http://host/path'
+
+    But we cannot specify a different server.
+        >>> request = TestRequest(form={'username': 'frog',
+        ...                             'password': 'pond',
+        ...                             'nexturl': 'http://FAKE/path',
+        ...                             'LOGIN': 'Log in'},
+        ...                       environ={'HTTP_HOST': 'host'})
+        >>> request.setPrincipal(StubPrincipal())
+        >>> view = View(app, request)
+        >>> content = view()
+        Traceback (most recent call last):
+        ...
+        ValueError: Untrusted redirect to host 'FAKE' not allowed.
 
     """
 
