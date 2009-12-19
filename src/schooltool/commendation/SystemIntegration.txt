@@ -250,12 +250,14 @@ Now we should be able to add commendations to
   >>> manager.getLink('Add Commendation').click()
   >>> manager.getControl('Title').value = 'Good Job!'
   >>> manager.getControl('Description').value = 'You did a very good job.'
+  >>> manager.getControl('Scope').displayValue = ['group']
+
   >>> manager.getControl('Add').click()
+  >>> analyze.printQuery('//div[@class="error"]', manager.contents)
+  <BLANKLINE>
 
   >>> manager.getLink('View Commendations').click()
-
-  >>> print analyze.queryHTML('//div[@class="commendation"]',
-  ...                         manager.contents)[0]
+  >>> analyze.printQuery('//div[@class="commendation"]', manager.contents)
   <div class="commendation">
     <h3>Good Job!</h3>
     <div style="font-size: 60%">
