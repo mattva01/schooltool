@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: SchoolTool development\n"
-"POT-Creation-Date: Tue Dec  1 17:28:34 2009\n"
+"POT-Creation-Date: Mon Dec 14 17:54:41 2009\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -860,43 +860,43 @@ msgid "For more information:"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:27
-msgid "<a href=\"http://schooltool.org\">Website</a>"
+msgid "Website"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:28
-msgid "<a href=\"https://launchpad.net/schooltool\">Launchpad project page</a>"
+msgid "Launchpad project page"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:29
-msgid "<a href=\"http://lists.schooltool.org/mailman/listinfo\"> Mailing lists</a>"
+msgid "Mailing list"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/about.pt:31
+#: /src/schooltool/app/browser/templates/about.pt:30
 msgid "IRC channel: #schooltool on freenode.net"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/about.pt:36
-msgid "<strong>Founder and funder: </strong> <a href=\"http://markshuttleworth.com\">Mark Shuttleworth</a>"
+#: /src/schooltool/app/browser/templates/about.pt:35
+msgid "Founder and funder:"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/about.pt:39
-msgid "<strong>Project Manager:</strong> Tom Hoffman (<a href=\"mailto:hoffman@schooltool.org\">email</a>)"
+#: /src/schooltool/app/browser/templates/about.pt:38
+msgid "Project Manager:"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/about.pt:42
-msgid "<strong>Lead Developer:</strong> Ignas Mikalaj\305\253nas"
+#: /src/schooltool/app/browser/templates/about.pt:41
+msgid "Lead Developer:"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/about.pt:45
-msgid "Release Managers:"
+#: /src/schooltool/app/browser/templates/about.pt:44
+msgid "Release Manager:"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/about.pt:47
+msgid "Contributors:"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:5
 msgid "About SchoolTool"
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/about.pt:51
-msgid "Contributors:"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:13

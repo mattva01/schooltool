@@ -36,9 +36,6 @@ class PasteSchoolToolPublisherApplication(StandaloneServer,
         options = self.load_options(['schooltool', '-c', config_file])
         db = self.setup(options)
 
-        if options.config.rest:
-            self.rest_enabled = True
-
         super(PasteSchoolToolPublisherApplication, self).__init__(db, factory)
 
 
