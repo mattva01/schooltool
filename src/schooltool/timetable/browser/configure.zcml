@@ -18,15 +18,6 @@
       factory=".TimetablesTraverser"
       />
 
-  <!-- Menu Items -->
-
-  <menuItem
-      menu="schooltool_actions"
-      title="Timetables"
-      for="schooltool.timetable.interfaces.IOwnTimetables"
-      action="timetables/index.html"
-      />
-
   <!-- Views -->
 
   <page
