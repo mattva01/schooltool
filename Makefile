@@ -17,7 +17,7 @@ bootstrap bin/buildout:
 	$(BOOTSTRAP_PYTHON) bootstrap.py
 
 .PHONY: buildout
-buildout bin/test: bin/buildout setup.py base.cfg buildout.cfg versions.cfg
+buildout bin/test: bin/buildout setup.py base.cfg buildout.cfg
 	bin/buildout $(BUILDOUT_FLAGS)
 	@touch --no-create bin/test
 
