@@ -28,9 +28,9 @@ from zope.app.generations.utility import findObjectsProviding
 from zope.app.publication.zopepublication import ZopePublication
 from zope.site.hooks import getSite, setSite
 from zope.app.container.contained import ObjectAddedEvent
-from zope.app.intid import addIntIdSubscriber
+from zope.intid import addIntIdSubscriber
 from zope.component import getUtility
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 
 from schooltool.group.group import GroupContainerContainer
 from schooltool.term.term import Term

@@ -26,7 +26,7 @@ from zope.interface import implements, Invalid
 from zope.i18n import translate
 from zope.security.proxy import removeSecurityProxy
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.browser import BrowserView
 from zope.component import adapts

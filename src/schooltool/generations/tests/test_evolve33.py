@@ -27,9 +27,10 @@ from zope.app.testing import setup
 from zope.component import queryUtility, provideUtility
 from zope.component import provideAdapter
 from zope.interface import implements
-from zope.app import intid
+from zope.intid import IntIds
+from zope.intid.interfaces import IIntIds
 from zope.app.folder import Folder
-from zope.app.catalog.interfaces import ICatalog
+from zope.catalog.interfaces import ICatalog
 from zope.app.container import btree
 from zope.site.hooks import getSite, setSite
 
@@ -63,7 +64,7 @@ def doctest_evolve33():
 
     We'll need int ids.
 
-        >>> provideUtility(intid.IntIds(), intid.interfaces.IIntIds)
+        >>> provideUtility(IntIds(), IIntIds)
 
     Also an adapter to obtain the contact, and adapter to create form keys.
 

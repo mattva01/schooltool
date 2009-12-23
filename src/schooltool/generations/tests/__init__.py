@@ -65,7 +65,7 @@ def catalogSetUp(test):
     # Provide the int id subscribers:
 
     from zope.component import provideHandler
-    from zope.app.intid import addIntIdSubscriber, removeIntIdSubscriber
+    from zope.intid import addIntIdSubscriber, removeIntIdSubscriber
     from zope.location.interfaces import ILocation
     from zope.app.container.interfaces import IObjectAddedEvent
     from zope.app.container.interfaces import IObjectRemovedEvent
@@ -76,9 +76,9 @@ def catalogSetUp(test):
 
     # And the catalog subscribers:
 
-    from zope.app.catalog import catalog
-    from zope.app.catalog.interfaces import ICatalogIndex
-    from zope.app.intid.interfaces import IIntIdAddedEvent,\
+    from zope.catalog import catalog
+    from zope.catalog.interfaces import ICatalogIndex
+    from zope.intid.interfaces import IIntIdAddedEvent,\
          IIntIdRemovedEvent
     from zope.lifecycleevent.interfaces import IObjectModifiedEvent
     provideHandler(catalog.indexAdded,

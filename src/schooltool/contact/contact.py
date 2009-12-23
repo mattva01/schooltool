@@ -27,8 +27,8 @@ from zope.interface import implementer
 from zope.interface import implements
 from zope.app.container.contained import Contained
 from zope.app.container.btree import BTreeContainer
-from zope.app.catalog.interfaces import ICatalog
-from zope.app.intid.interfaces import IIntIds
+from zope.catalog.interfaces import ICatalog
+from zope.intid.interfaces import IIntIds
 from zope.component import getUtility
 
 from zc.catalog.catalogindex import ValueIndex

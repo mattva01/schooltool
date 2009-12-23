@@ -13,7 +13,7 @@
   <adapter
       for="schooltool.person.interfaces.IPersonContainer"
       factory=".person.getPersonContainerCatalog"
-      provides="zope.app.catalog.interfaces.ICatalog" />
+      provides="zope.catalog.interfaces.ICatalog" />
 
   <configure
       xmlns:zcml="http://namespaces.zope.org/zcml"

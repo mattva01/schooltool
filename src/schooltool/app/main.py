@@ -60,8 +60,8 @@ from zope.site.hooks import setSite, setHooks
 from zope.component import getUtility
 from zope.component import getAdapters
 from zope.interface import directlyProvidedBy
-from zope.app.intid import IntIds
-from zope.app.intid.interfaces import IIntIds
+from zope.intid import IntIds
+from zope.intid.interfaces import IIntIds
 from zope.location.interfaces import ISite
 from zope.site import LocalSiteManager
 from zope.server.http.wsgihttpserver import WSGIHTTPServer

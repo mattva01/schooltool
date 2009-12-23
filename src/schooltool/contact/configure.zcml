@@ -89,7 +89,7 @@
 
   <adapter
       for=".interfaces.IContactContainer"
-      provides="zope.app.catalog.interfaces.ICatalog"
+      provides="zope.catalog.interfaces.ICatalog"
       factory=".contact.getContactCatalog" />
 
    <adapter

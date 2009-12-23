@@ -29,8 +29,8 @@ from zope.app.container.contained import Contained
 from zope.app.container.contained import ObjectAddedEvent
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.dependable.interfaces import IDependable
-from zope.app.intid import addIntIdSubscriber
-from zope.app.intid.interfaces import IIntIds
+from zope.intid import addIntIdSubscriber
+from zope.intid.interfaces import IIntIds
 from zope.component import adapter
 from zope.component import adapts
 from zope.component import getAdapter

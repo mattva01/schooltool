@@ -22,8 +22,8 @@
   <include package="zope.viewlet" />
   <include package="zope.formlib" />
   <include package="zope.keyreference" />
-  <include package="zope.app.intid" />
-  <include package="zope.app.catalog" />
+  <include package="zope.intid" />
+  <include package="zope.catalog" />
   <include package="zope.app.file" />
   <include package="zope.mimetype" />
   <include package="zope.file" />

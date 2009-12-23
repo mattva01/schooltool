@@ -28,7 +28,7 @@ from zope.component import adapter, adapts
 from zope.interface import implements, implementer
 from zope.annotation.interfaces import IAnnotations
 from zope.security.proxy import removeSecurityProxy
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.app.container.interfaces import IContained
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.container.interfaces import IObjectRemovedEvent

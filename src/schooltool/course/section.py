@@ -199,7 +199,7 @@ class Section(Persistent, contained.Contained):
                                      booking.URIResource)
 
 
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.component import adapter
 from zope.interface import implementer

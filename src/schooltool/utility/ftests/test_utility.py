@@ -10,8 +10,8 @@ def doctest_utilityRegistration():
     We set up the IntIds utility::
 
       >>> from schooltool.utility import UtilitySetUp
-      >>> from zope.app.intid import IntIds
-      >>> from zope.app.intid.interfaces import IIntIds
+      >>> from zope.intid import IntIds
+      >>> from zope.intid.interfaces import IIntIds
       >>> setup = UtilitySetUp(IntIds, IIntIds)
 
       >>> from schooltool.app.interfaces import CatalogSetUpEvent
@@ -40,14 +40,14 @@ def doctest_multipleUtilityRegistration():
 
     Let's import the information needed to set up the IntIds utility first::
 
-      >>> from zope.app.intid import IntIds
-      >>> from zope.app.intid.interfaces import IIntIds
+      >>> from zope.intid import IntIds
+      >>> from zope.intid.interfaces import IIntIds
 
     And now for the catalog::
 
-      >>> from zope.app.catalog.catalog import Catalog
-      >>> from zope.app.catalog.interfaces import ICatalog
-      >>> from zope.app.catalog.field import FieldIndex
+      >>> from zope.catalog.catalog import Catalog
+      >>> from zope.catalog.interfaces import ICatalog
+      >>> from zope.catalog.field import FieldIndex
 
     We'll define the catalog setup function that creates the index::
 

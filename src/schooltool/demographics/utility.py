@@ -19,10 +19,10 @@
 
 from persistent import Persistent
 from zope.app.container.contained import Contained
-from zope.app.catalog.interfaces import ICatalog
-from zope.app.catalog.catalog import Catalog
-from zope.app.catalog.text import TextIndex
-from zope.app.catalog.field import FieldIndex
+from zope.catalog.interfaces import ICatalog
+from zope.catalog.catalog import Catalog
+from zope.catalog.text import TextIndex
+from zope.catalog.field import FieldIndex
 from zope.interface import implements
 from zope.component import adapts
 from zope.interface import directlyProvides
