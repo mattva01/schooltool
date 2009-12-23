@@ -26,8 +26,7 @@ import transaction
 from zope.proxy import sameProxiedObjects
 from zope.app.generations.utility import findObjectsProviding
 from zope.app.publication.zopepublication import ZopePublication
-from zope.app.component.hooks import setSite
-from zope.app.component.hooks import getSite
+from zope.site.hooks import getSite, setSite
 from zope.app.container.contained import ObjectAddedEvent
 from zope.app.intid import addIntIdSubscriber
 from zope.component import getUtility

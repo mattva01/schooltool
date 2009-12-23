@@ -56,8 +56,8 @@ def createSchoolToolApplication():
 # ----------------- Setup SchoolTool application as a site -----------------
 from zope.interface import Interface
 from zope.interface import directlyProvides
-from zope.app.component.hooks import setSite
-from zope.app.component.site import LocalSiteManager
+from zope.site.hooks import setSite
+from zope.site import LocalSiteManager
 from zope.traversing.interfaces import IContainmentRoot
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.security import PersonContainerAuthenticationPlugin

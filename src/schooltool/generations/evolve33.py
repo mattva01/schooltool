@@ -23,7 +23,7 @@ Evolution script to create contact information for existing persons.
 """
 from zope.app.generations.utility import findObjectsProviding
 from zope.app.publication.zopepublication import ZopePublication
-from zope.app.component.hooks import getSite, setSite
+from zope.site.hooks import getSite, setSite
 from zope.component import getUtility
 from zope.app.catalog.interfaces import ICatalog
 
